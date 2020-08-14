@@ -2,163 +2,173 @@ Return-Path: <SRS0=xFXP=BY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53FEFC433E1
-	for <linux-media@archiver.kernel.org>; Fri, 14 Aug 2020 16:30:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 622E0C433E3
+	for <linux-media@archiver.kernel.org>; Fri, 14 Aug 2020 16:37:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2E08C2074D
-	for <linux-media@archiver.kernel.org>; Fri, 14 Aug 2020 16:30:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3CE3B20838
+	for <linux-media@archiver.kernel.org>; Fri, 14 Aug 2020 16:37:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1597423055;
+	bh=0g9CZo8Ndam+eSVPVRM+IZULiLJEXVDvyRpJ2PipWxs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=yUoG/NNyHqxUGF3TkbSgGwWJD41vh9bb8xs1LQSEpFVSTKroHIj1Kk/ZsKA6IwbVo
+	 gA1IeZAeTdpiNHiBPblwao6gioovhKnN2eI8St22wlEDtgRrnYrVwa+/iuDsk53GfL
+	 zoHOjiC86Mv56r/jKOKsqme/gUQ7cFnEjXgWTtBw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728412AbgHNQa3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 Aug 2020 12:30:29 -0400
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:58597 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728099AbgHNQa1 (ORCPT
+        id S1727895AbgHNQha (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 14 Aug 2020 12:37:30 -0400
+Received: from mail-il1-f193.google.com ([209.85.166.193]:44764 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726632AbgHNQh1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 14 Aug 2020 12:30:27 -0400
-Received: from [37.160.38.175] (port=40734 helo=[192.168.42.162])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1k6cay-0001mB-F9; Fri, 14 Aug 2020 18:30:20 +0200
-Subject: Re: [PATCH] dt-bindings: Whitespace clean-ups in schema files
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
-        <linux-remoteproc@vger.kernel.org>,
-        Linux HWMON List <linux-hwmon@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
-        Linux Input <linux-input@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux-ALSA <alsa-devel@alsa-project.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>
-References: <20200812203618.2656699-1-robh@kernel.org>
- <d5808e9c-07fe-1c28-b9a6-a16abe9df458@lucaceresoli.net>
- <CAL_JsqKekx0VO4NROwLrgrU8+L584HaLHM9i3kCZvU+g5myeGw@mail.gmail.com>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <f1963eb9-283f-e903-2a3a-4f324d71d418@lucaceresoli.net>
-Date:   Fri, 14 Aug 2020 18:30:17 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Fri, 14 Aug 2020 12:37:27 -0400
+Received: by mail-il1-f193.google.com with SMTP id j9so8931998ilc.11;
+        Fri, 14 Aug 2020 09:37:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=S8Y/V4Si1WfvlF1LOT6Jq+FPkz/jjzFd3zUw+PXGrW0=;
+        b=il0wOQuNcrz57C4qXCS+17yEiQK/MnKI6kUERnS9wpRRClyffbcbSRM0A1Qw9DHGc1
+         glAat/i86xgaxGeEB4IffG6vL9pfO4Zuy8jYfJ8ie03DvvUIm7/47JmoypOQJMLbfxU+
+         zyiF8/xKSMcGxRsWmmhoNdAjoPXd98TrzsePrSUD8Nn+kFPenS4pzN+vrnwmaxbrGdoX
+         8MztYKqH+6p86KsPBVV4Z5ZMwUqjayPlX+qMyBCHV9L3RNwUpB98+0qJk65Pl/v/T3Gz
+         rYPWrlMtsiN8vpk3HLhO14UMBq41CxsPgg4AVZA6g0O2FEZnaAu/IjC1eENZV5TkPdI1
+         njNw==
+X-Gm-Message-State: AOAM5314RtD3QQlpDYOUumTcNaOnE3CJquu3WEA/fTSLrzDdNMUBhiSL
+        IxEf51gu87t2perCoX5jljo=
+X-Google-Smtp-Source: ABdhPJyhlcGye/3L9pxJ4SzgPIFlWL6VZMywnuPGNAJ5yjhQq511Y8SdFXHwnbXUP1ZYQqM7De7daw==
+X-Received: by 2002:a92:1545:: with SMTP id v66mr3241142ilk.251.1597423045737;
+        Fri, 14 Aug 2020 09:37:25 -0700 (PDT)
+Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
+        by smtp.gmail.com with ESMTPSA id p21sm4415956ioj.10.2020.08.14.09.37.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Aug 2020 09:37:24 -0700 (PDT)
+Received: by 42.do-not-panic.com (Postfix, from userid 1000)
+        id B4D474075D; Fri, 14 Aug 2020 16:37:23 +0000 (UTC)
+Date:   Fri, 14 Aug 2020 16:37:23 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Lukas Middendorf <kernel@tuxforce.de>
+Cc:     Anand Jain <anand.jain@oracle.com>, linux-btrfs@vger.kernel.org,
+        Antti Palosaari <crope@iki.fi>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org
+Subject: Re: Is request_firmware() really safe to call in resume callback
+ when /usr/lib/firmware is on btrfs?
+Message-ID: <20200814163723.GC4332@42.do-not-panic.com>
+References: <c79e24a5-f808-d1f0-1f09-ee6f135d9679@tuxforce.de>
+ <20200813163749.GV4332@42.do-not-panic.com>
+ <0b1621bf-fc82-1a56-c11f-c5c46677e59e@tuxforce.de>
+ <20200813221348.GB4332@42.do-not-panic.com>
+ <fc887e06-874c-79d8-0607-4e27ae788446@tuxforce.de>
 MIME-Version: 1.0
-In-Reply-To: <CAL_JsqKekx0VO4NROwLrgrU8+L584HaLHM9i3kCZvU+g5myeGw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fc887e06-874c-79d8-0607-4e27ae788446@tuxforce.de>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
-
-On 14/08/20 16:51, Rob Herring wrote:
-> On Thu, Aug 13, 2020 at 4:31 AM Luca Ceresoli <luca@lucaceresoli.net> wrote:
->>
->> Hi Rob,
->>
->> On 12/08/20 22:36, Rob Herring wrote:
->>> Clean-up incorrect indentation, extra spaces, long lines, and missing
->>> EOF newline in schema files. Most of the clean-ups are for list
->>> indentation which should always be 2 spaces more than the preceding
->>> keyword.
->>>
->>> Found with yamllint (which I plan to integrate into the checks).
->>
->> [...]
->>
->>> diff --git a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
->>> index 3d4e1685cc55..28c6461b9a9a 100644
->>> --- a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
->>> +++ b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
->>> @@ -95,10 +95,10 @@ allOf:
->>>        # Devices without builtin crystal
->>>        properties:
->>>          clock-names:
->>> -            minItems: 1
->>> -            maxItems: 2
->>> -            items:
->>> -              enum: [ xin, clkin ]
->>> +          minItems: 1
->>> +          maxItems: 2
->>> +          items:
->>> +            enum: [ xin, clkin ]
->>>          clocks:
->>>            minItems: 1
->>>            maxItems: 2
->>
->> Thanks for noticing, LGTM.
->>
->> [...]
->>
->>> diff --git a/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml b/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
->>> index d7dac16a3960..36dc7b56a453 100644
->>> --- a/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
->>> +++ b/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
->>> @@ -33,8 +33,8 @@ properties:
->>>      $ref: /schemas/types.yaml#/definitions/uint32
->>>
->>>    touchscreen-min-pressure:
->>> -    description: minimum pressure on the touchscreen to be achieved in order for the
->>> -                 touchscreen driver to report a touch event.
->>> +    description: minimum pressure on the touchscreen to be achieved in order
->>> +      for the touchscreen driver to report a touch event.
->>
->> Out of personal taste, I find the original layout more pleasant and
->> readable. This third option is also good, especially for long descriptions:
->>
->>   description:
->>     minimum pressure on the touchscreen to be achieved in order for the
->>     touchscreen driver to report a touch event.
->>
->> At first glance yamllint seems to support exactly these two by default:
->>
->>> With indentation: {spaces: 4, check-multi-line-strings: true}
+On Fri, Aug 14, 2020 at 01:38:40PM +0200, Lukas Middendorf wrote:
+> Hey Louis,
 > 
-> Turning on check-multi-line-strings results in 10K+ warnings, so no.
+> On 14/08/2020 00:13, Luis Chamberlain wrote:
+> > On Thu, Aug 13, 2020 at 11:53:36PM +0200, Lukas Middendorf wrote:
+> > > With "not used" I mean that the device has been recognized, the si2168
+> > > module is loaded and si2168_probe() has been called on the device, but I
+> > > have not started a media player which actually plays a DVB-C stream.
+> > > Therefore si2168_init() has never been called and the firmware has never
+> > > been requested or loaded to the device.
+> > > 
+> > > On resume si2168_init() will be called (although I don't think this actually
+> > > is really necessary)
+> > 
+> > Indeed, that seems odd given its not on probe. So yet another possible
+> > si2168 bug. Or another way to put it: your cache calls are not needed
+> > if you remove that si2168_init() if init was not called yet. So simply
+> > extending the data structure for the driver and seting a bool flag to
+> > true if init was called should do the trick.
+> > 
+> > Then the two cache calls would not be needed.
 > 
-> The other issue is the style ruamel.yaml wants to write out is as the
-> patch does above. This matters when doing some scripted
-> transformations where we read in the files and write them back out. I
-> can somewhat work around that by first doing a pass with no changes
-> and then another pass with the actual changes, but that's completely
-> scriptable. Hopefully, ruamel learns to preserve the style better.
+> I already thought about a way to remove the firmware load on suspend if it
+> has not happened earlier. But I saw no way to distinguish between calls to
+> si2168_init() during resume and calls to si2168_init() at the start of
+> device usage.
+> 
+> In contrast to struct dvb_tuner_ops the relevant struct dvb_frontend_ops has
+> no separate members "suspend" and "resume" to store callbacks to be called
+> instead of sleep and init during suspend and resume. Changing the behavior
+> of si2168 would likely include some bigger architectural work on the
+> dvb_frontend system to extend dvb_frontend_ops.
+> It might be possible to just put nothing into dvb_frontend_ops.init but
+> instead populate the dvb_tuner_ops part of the struct, but those pointers
+> might already be populated externally for some other use.
+> 
+> If I try to do this on my very first kernel contribution without in-depth
+> knowledge of how the dvb drivers really work, this will likely just explode,
+> if not for me then for somebody else with different hardware.
 
-Kind of sad, but I understand the reason as far as my understanding of
-the yaml world allows. Thanks for the explanation.
+Indeed, the dvb init is called from dvb, so your two patches are good
+for now I think.
 
-[For idt,versaclock5.yaml, plus an overview of whole patch]
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+> > > If the kernel does not already know that the files
+> > > are not present without access to the file system, the system just freezes.
+> > 
+> > It is not clear to me what this means. Can you clarify?
+> > 
+> > > > >      e) having the firmware files not installed freezes the system during
+> > > > > resume if the content of /usr/lib/firmware has not been listed before
+> > > > > suspend (e.g. installing the nvidia driver, so the nouveau driver does not
+> > > > > access this directory)
+> > > > 
+> > > > That may be the same issue as in b) assuming that you meant you didn't
+> > > > use the dvb device, and that the firmware load issue is from nouveau.
+> > > 
+> > > This is actually just the inverted case of b).
+> > > The only real relevance of the nouveau driver here is that its (perfectly
+> > > working) firmware caching on suspend actually seems to be equivalent to
+> > > manually running "ls" on the firmware directory and afterwards the kernel
+> > > also knows whether or not the si2168 firmware files are present without file
+> > > system access.
+> > 
+> > OK.. I still don't get it, so let me see if we can decipher what you
+> > mean here.
+> > 
+> > If the firmware is *not* present for the si2168 driver and the device
+> > has *not* been used yet you get a system freeze which you cannot recover
+> > from, but only if you are *not* using a driver which also caches its
+> > firmware already?
+> 
+> Yes, this is exactly what I wanted to say.
+> 
 
--- 
-Luca
+OK great.. but..
+
+> A new installation of Fedora 32 without firmware files 
+
+Fedora 32 comes with no firmware at all? Are you sure? How about your
+wifi?
+
+> and with nouveau did
+> not show my freeze problem. Installing either the firmware files or the
+> nvidia driver started the freeze during resume.
+
+Here now you say that if you install either the firmware files for
+either si2168 or nouveau can cause a freeze, meanwhile what I wrote
+above and you agreed is what you meant, says that the freeze happens
+only if you *don't* have the firmware for nouveau present *and* you
+also don't have the any other firmware present.
+
+You also clarify here your freeze happens on resume only. Is that right?
+Never on suspend, but if the freeze happens, it happens only on resume?
+
+The actual case where you reach a freeze is still not clear yet. Let's
+try to clarify this.
+
+  Luis
