@@ -4,104 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F655C433E1
-	for <linux-media@archiver.kernel.org>; Sat, 15 Aug 2020 22:07:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AE60C433E1
+	for <linux-media@archiver.kernel.org>; Sat, 15 Aug 2020 23:12:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 893D7205CB
-	for <linux-media@archiver.kernel.org>; Sat, 15 Aug 2020 22:07:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3FC40206B2
+	for <linux-media@archiver.kernel.org>; Sat, 15 Aug 2020 23:12:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728585AbgHOWHC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 15 Aug 2020 18:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45610 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728376AbgHOVus (ORCPT
+        id S1728059AbgHOXMo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 15 Aug 2020 19:12:44 -0400
+Received: from smtp13.smtpout.orange.fr ([80.12.242.135]:18752 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726184AbgHOXMo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 15 Aug 2020 17:50:48 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EE7C08EC65
-        for <linux-media@vger.kernel.org>; Sat, 15 Aug 2020 03:37:59 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dafna)
-        with ESMTPSA id 1514229A949
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-To:     linux-media@vger.kernel.org
-Cc:     laurent.pinchart@ideasonboard.com, dafna.hirschfeld@collabora.com,
-        helen.koike@collabora.com, ezequiel@collabora.com,
-        hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
-        sakari.ailus@linux.intel.com, linux-rockchip@lists.infradead.org,
-        mchehab@kernel.org, tfiga@chromium.org
-Subject: [PATCH v2 10/14] media: staging: rkisp1: isp: add a warning and debugfs var for irq delay
-Date:   Sat, 15 Aug 2020 12:37:30 +0200
-Message-Id: <20200815103734.31153-11-dafna.hirschfeld@collabora.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200815103734.31153-1-dafna.hirschfeld@collabora.com>
-References: <20200815103734.31153-1-dafna.hirschfeld@collabora.com>
+        Sat, 15 Aug 2020 19:12:44 -0400
+Received: from localhost.localdomain ([93.22.149.115])
+        by mwinf5d71 with ME
+        id FiCf230082VdYtp03iCf2V; Sat, 15 Aug 2020 08:12:40 +0200
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 15 Aug 2020 08:12:40 +0200
+X-ME-IP: 93.22.149.115
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     sean@mess.org, mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] media: mceusb: Avoid GFP_ATOMIC where it is not needed
+Date:   Sat, 15 Aug 2020 08:12:37 +0200
+Message-Id: <20200815061237.765171-1-christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The signal RKISP1_CIF_ISP_FRAME is set when the ISP completes
-outputting the frame to the next block in the pipeline.
-In order to keep buffer synchronization we assume that the
-RKISP1_CIF_ISP_V_START signal never arrives together with the
-RKISP1_CIF_ISP_FRAME signal.
-In case those signals arrive together then the code is not able to
-tell if the RKISP1_CIF_ISP_FRAME signal relates to the frame of
-the current v-start or the previous. This patch adds a WARN_ONCE
-and a debugfs var to catch it.
+There is no point in using GFP_ATOMIC here.
+It is a probe function, and GFP_KERNEL is already used the line before
+and the line after.
 
-Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Use GFP_KERNEL instead.
+
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- drivers/staging/media/rkisp1/rkisp1-common.h | 1 +
- drivers/staging/media/rkisp1/rkisp1-dev.c    | 2 ++
- drivers/staging/media/rkisp1/rkisp1-isp.c    | 5 +++++
- 3 files changed, 8 insertions(+)
+ drivers/media/rc/mceusb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/rkisp1/rkisp1-common.h b/drivers/staging/media/rkisp1/rkisp1-common.h
-index 79edece6ee77..5aed0e37850a 100644
---- a/drivers/staging/media/rkisp1/rkisp1-common.h
-+++ b/drivers/staging/media/rkisp1/rkisp1-common.h
-@@ -228,6 +228,7 @@ struct rkisp1_debug {
- 	unsigned long outform_size_error;
- 	unsigned long img_stabilization_size_error;
- 	unsigned long inform_size_error;
-+	unsigned long irq_delay;
- 	unsigned long mipi_error;
- 	unsigned long stats_error;
- 	unsigned long stop_timeout[2];
-diff --git a/drivers/staging/media/rkisp1/rkisp1-dev.c b/drivers/staging/media/rkisp1/rkisp1-dev.c
-index a0eb8f08708b..557de940286b 100644
---- a/drivers/staging/media/rkisp1/rkisp1-dev.c
-+++ b/drivers/staging/media/rkisp1/rkisp1-dev.c
-@@ -445,6 +445,8 @@ static void rkisp1_debug_init(struct rkisp1_device *rkisp1)
- 			     &debug->img_stabilization_size_error);
- 	debugfs_create_ulong("inform_size_error", 0444,  debug->debugfs_dir,
- 			     &debug->inform_size_error);
-+	debugfs_create_ulong("irq_delay", 0444,  debug->debugfs_dir,
-+			     &debug->irq_delay);
- 	debugfs_create_ulong("mipi_error", 0444, debug->debugfs_dir,
- 			     &debug->mipi_error);
- 	debugfs_create_ulong("stats_error", 0444, debug->debugfs_dir,
-diff --git a/drivers/staging/media/rkisp1/rkisp1-isp.c b/drivers/staging/media/rkisp1/rkisp1-isp.c
-index 1ffe7cc7bb12..33cfad19dde2 100644
---- a/drivers/staging/media/rkisp1/rkisp1-isp.c
-+++ b/drivers/staging/media/rkisp1/rkisp1-isp.c
-@@ -1118,6 +1118,11 @@ void rkisp1_isp_isr(struct rkisp1_device *rkisp1)
- 		 */
- 		rkisp1->isp.frame_sequence++;
- 		rkisp1_isp_queue_event_sof(&rkisp1->isp);
-+		if (status & RKISP1_CIF_ISP_FRAME) {
-+			WARN_ONCE(1, "irq delay is too long, buffers might not be in sync\n");
-+			rkisp1->debug.irq_delay++;
-+		}
-+	}
+diff --git a/drivers/media/rc/mceusb.c b/drivers/media/rc/mceusb.c
+index f9616158bcf4..98681ba10428 100644
+--- a/drivers/media/rc/mceusb.c
++++ b/drivers/media/rc/mceusb.c
+@@ -1726,7 +1726,7 @@ static int mceusb_dev_probe(struct usb_interface *intf,
+ 		goto mem_alloc_fail;
  
- 	if (status & RKISP1_CIF_ISP_PIC_SIZE_ERROR) {
- 		/* Clear pic_size_error */
+ 	ir->pipe_in = pipe;
+-	ir->buf_in = usb_alloc_coherent(dev, maxp, GFP_ATOMIC, &ir->dma_in);
++	ir->buf_in = usb_alloc_coherent(dev, maxp, GFP_KERNEL, &ir->dma_in);
+ 	if (!ir->buf_in)
+ 		goto buf_in_alloc_fail;
+ 
 -- 
-2.17.1
+2.25.1
 
