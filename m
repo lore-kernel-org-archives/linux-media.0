@@ -2,105 +2,140 @@ Return-Path: <SRS0=xPRW=BZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0B55C433E3
-	for <linux-media@archiver.kernel.org>; Sat, 15 Aug 2020 21:59:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 739AFC433E3
+	for <linux-media@archiver.kernel.org>; Sat, 15 Aug 2020 22:02:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CD9DB22D06
-	for <linux-media@archiver.kernel.org>; Sat, 15 Aug 2020 21:59:49 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RTB9HEWh"
+	by mail.kernel.org (Postfix) with ESMTP id 4FA542053B
+	for <linux-media@archiver.kernel.org>; Sat, 15 Aug 2020 22:02:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729605AbgHOV7r (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 15 Aug 2020 17:59:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45642 "EHLO
+        id S1728082AbgHOWB6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 15 Aug 2020 18:01:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726415AbgHOVvi (ORCPT
+        with ESMTP id S1728752AbgHOVvZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 15 Aug 2020 17:51:38 -0400
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D493C06135D
-        for <linux-media@vger.kernel.org>; Fri, 14 Aug 2020 19:19:58 -0700 (PDT)
-Received: by mail-ot1-x341.google.com with SMTP id q9so9100168oth.5
-        for <linux-media@vger.kernel.org>; Fri, 14 Aug 2020 19:19:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kotVL2MVQP+yaUdPHEdye5LclV8vVVPvzmwQlj45VGA=;
-        b=RTB9HEWhawVWaOVivVEaeJlv0EDtpps/Dvnysqh+sfXQcrhgY36YW5WMpXVQ3E03De
-         BfHJGAyPOioZ7kOWqdSQIe2pfq2XEO7q/+kCJMd7WFieWUtZm5DmOQH0cMzm3OFrDfl6
-         KSF238ON/iriNpjcgkGO8ZZoC2u79B/Xqgw0TVxTQHwU7JtRGkNPhW8vro7AdN+J0S0v
-         xEYUfZVTrcRl3KH3h2RjbwjC7XM0wFl01LmOcUK+u1taG15uYnn7vGR4pA0VoNqSagns
-         N92QFNP5r9ZaE4etZxVqeRGuIt0/ShuHjQ7LIzmqB3JKtaouIOCqUaQVSS8jCnKy63HB
-         eR4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kotVL2MVQP+yaUdPHEdye5LclV8vVVPvzmwQlj45VGA=;
-        b=qQKIVkf4ItpFvNM+yf3wb/z1Frl70L3kt5332jTyX15wfG+Jmdjhasj/qMTe5oqWb4
-         4Fn+RzfrdzTgKGdGHLb85sPU8US60fqgJGPSrk3pOzaUh2KhZp6GHa93pCYnNlGY85Ux
-         fQzOQacE8qPNnibJGmkaJtbx9BVogK+d+vmIolMF06Cjh85QgXFFcXYp9pVeLBQ+K+ci
-         p2hdeAhkemC3hscVRQxaVUBmjQt+3ZSteuX1cAnHzRPXYqyyHcdS0RbbQmOwgDjtG2De
-         hbjuov9A4TL6V6mn9f2F7YBOwYn+JPg+OJw2FzpDkm82ynskXJsx32KHxFpTtI65Iv+j
-         IiAw==
-X-Gm-Message-State: AOAM531Q6zhfsMa9NB2/8dSZhzoXF6aKp1Kvc/Oe6LfBKdUE+A9Nihwm
-        lbpBgFLqAi55LmzPtDo+LbBySAYhAuSv/Dba+jJ9nQ==
-X-Google-Smtp-Source: ABdhPJy+n0F6ds6KPCecQRLWeKyt7/kkaH52AH58xx1rQoWzIvkR4h1GmHPPbdbsDbWnnwEdgh+f7kNaM9jPgYlAeKo=
-X-Received: by 2002:a9d:6f8f:: with SMTP id h15mr3758994otq.221.1597457997320;
- Fri, 14 Aug 2020 19:19:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200814142516.148934-1-ezequiel@collabora.com>
-In-Reply-To: <20200814142516.148934-1-ezequiel@collabora.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Fri, 14 Aug 2020 19:19:45 -0700
-Message-ID: <CALAqxLWytSnPugPH2Ux5=C_bzC0DLGKQyB+Szcp4LOVfhKPFqg@mail.gmail.com>
-Subject: Re: [PATCH] dma-buf: heap-helpers: Set dma-buf exporter name
-To:     Ezequiel Garcia <ezequiel@collabora.com>
-Cc:     linux-media <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "Andrew F . Davis" <afd@ti.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@kernel.org>,
-        Brian Starkey <Brian.Starkey@arm.com>, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
+        Sat, 15 Aug 2020 17:51:25 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CADE5C08E81F
+        for <linux-media@vger.kernel.org>; Sat, 15 Aug 2020 03:37:56 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dafna)
+        with ESMTPSA id 6833828D80C
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+To:     linux-media@vger.kernel.org
+Cc:     laurent.pinchart@ideasonboard.com, dafna.hirschfeld@collabora.com,
+        helen.koike@collabora.com, ezequiel@collabora.com,
+        hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
+        sakari.ailus@linux.intel.com, linux-rockchip@lists.infradead.org,
+        mchehab@kernel.org, tfiga@chromium.org
+Subject: [PATCH v2 00/14] media: staging: rkisp1: various bug fixes
+Date:   Sat, 15 Aug 2020 12:37:20 +0200
+Message-Id: <20200815103734.31153-1-dafna.hirschfeld@collabora.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Aug 14, 2020 at 7:25 AM Ezequiel Garcia <ezequiel@collabora.com> wrote:
->
-> Currently the heap helper uses DEFINE_DMA_BUF_EXPORT_INFO,
-> which uses KBUILD_MODNAME for the dma_buf_export_info.exp_name.
->
-> This effectively makes all dma-bufs exported by the heap
-> helper as coming from "heap-helpers", instead of the actual heap name
-> (cma, system, etc).
->
-> Fix this by adding a dma-heap name getter, and then setting
-> dma_buf_export_info.exp_name.
->
-> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+Fix various bugs mainly in params and stats. The patchset fixes
+buffers synchronization issues discussed
+https://patchwork.kernel.org/patch/11066513/#23544763
 
-Untested, but looks sane to me.
+As discussed with Tomasz, we decide that in order to keep the code
+simple, we assume that the v-start signal (RKISP1_CIF_ISP_V_START)
+and the frame-out signal RKISP1_CIF_ISP_FRAME don't arrive together.
+So when v-starts arrives the frame sequence is incremented and
+when frame-out arrives, the stats and params isr are called.
+Also the frame sequence of the params buffer should be the frame to
+which the params are applied.
 
-Acked-by: John Stultz <john.stultz@linaro.org>
+The params node needs to apply the first params buffer when
+the streaming from main/selfpath starts before the first frame arrive
+so that the first buffer will configure the first frame.
+The way it is implemented is that the first buffer queued
+to the params node is not added to the list but instead a local copy
+is saved and the buffer returns to userspace immediately.
+Then the local copy is applied when main/selfpath stream starts.
+This implementation is buggy for the following reasons:
 
-On a slightly related note, I'm starting to regret the current
-heap-helpers approach (Andrew probably gets an "I told you so" there
-:). While it avoids a lot of duplication, it's really an all or
-nothing approach, and doesn't really compare well to other drm style
-helper functions.  I may eventually try to break the system and cma
-implementations out of the helper code and try to consider a different
-approach to avoid the duplication.
+- The first params buffer is applied and returned to userspace even if
+userspace never calls to streamon on the params node.
+- If the first params buffer is queued after the stream started on the
+params node then it will return to userspace but will never be used.
+- The frame_sequence of the first buffer is set to -1 if the main/selfpath
+did not start streaming.
 
-thanks
--john
+To fix this, the buffers are added to the buffers list on qbuf and
+then when a stream start from selfpath/mainpath the first buffer is removed
+from the list, applied and returned to userspace. This is done only
+if the params node is also streaming.
+
+Testing:
+I added a code to libcamera that sets the red, blue, and green gain
+interchangeably. The frames are then saved to files.
+To run the code:
+
+git clone --single-branch --branch rkisp1-tests-for-params-fixes-patchset https://gitlab.collabora.com/dafna/libcamera.git
+cd libcamera
+ninja  -C build install
+meson test rkisp1-ramzor -C build
+
+Then adding debug prints in the params node in the kernel
+that prints the gain values and the current frame
+http://ix.io/2ue3
+
+Then playing frames with
+
+ffplay -f rawvideo -pixel_format nv12 -video_size 640x480 build/frame-bla-<FRAME-NUM>.bin
+
+and looking that the frame color matches the debug prints.
+
+changes from v1:
+- patch 1 from v1 is removed
+- patch 3 from v1 (now patch 5) which refactor the stop_streaming params cb
+is changed according to discussion with Tomasz
+- 12 new patches added
+
+
+Dafna Hirschfeld (14):
+  media: staging: rkisp1: call params isr only upon frame out
+  media: staging: rkisp1: params: use rkisp1_param_set_bits to set reg
+    in isr
+  media: staging: rkisp1: params: use the new effect value in cproc
+    config
+  media: staging: rkisp1: params: don't release lock in isr before
+    buffer is done
+  media: staging: rkisp1: params: upon stream stop, iterate a local list
+    to return the buffers
+  media: staging: rkisp1: params: in the isr, return if buffer list is
+    empty
+  media: staging: rkisp1: params: avoid using buffer if params is not
+    streaming
+  media: staging: rkisp1: params: set vb.sequence to be the isp's
+    frame_sequence + 1
+  media: staging: rkisp1: remove atomic operations for frame sequence
+  media: staging: rkisp1: isp: add a warning and debugfs var for irq
+    delay
+  media: staging: rkisp1: isp: don't enable signal
+    RKISP1_CIF_ISP_FRAME_IN
+  media: staging: rkisp1: stats: protect write to 'is_streaming' in
+    start_streaming cb
+  media: staging: rkisp1: call media_pipeline_start/stop from stats and
+    params
+  media: staging: rkisp1: params: no need to lock default config
+
+ drivers/staging/media/rkisp1/rkisp1-capture.c |   2 +-
+ drivers/staging/media/rkisp1/rkisp1-common.h  |  10 +-
+ drivers/staging/media/rkisp1/rkisp1-dev.c     |   2 +
+ drivers/staging/media/rkisp1/rkisp1-isp.c     |  39 +++---
+ drivers/staging/media/rkisp1/rkisp1-params.c  | 124 ++++++++----------
+ drivers/staging/media/rkisp1/rkisp1-stats.c   |  14 +-
+ 6 files changed, 96 insertions(+), 95 deletions(-)
+
+-- 
+2.17.1
+
