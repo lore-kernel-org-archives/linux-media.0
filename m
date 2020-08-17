@@ -2,207 +2,195 @@ Return-Path: <SRS0=xaSx=B3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88FF1C433E3
-	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 22:04:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5A87C433E1
+	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 22:20:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 70C022072E
-	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 22:04:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BBC242072D
+	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 22:20:38 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=xilinx.onmicrosoft.com header.i=@xilinx.onmicrosoft.com header.b="jU6cu30m"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729765AbgHQWE6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Aug 2020 18:04:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39186 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729277AbgHQWE5 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Aug 2020 18:04:57 -0400
-Received: from mail.tuxforce.de (tuxforce.de [IPv6:2a00:5080:1:16d::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBDA4C061342;
-        Mon, 17 Aug 2020 15:04:56 -0700 (PDT)
-Received: from linux-2.fritz.box (2001-4dd5-ac5b-0-c3ce-e3c9-ac3c-4f69.ipv6dyn.netcologne.de [IPv6:2001:4dd5:ac5b:0:c3ce:e3c9:ac3c:4f69])
-        by mail.tuxforce.de (Postfix) with ESMTPSA id BAAE0520089;
-        Tue, 18 Aug 2020 00:04:51 +0200 (CEST)
-From:   Lukas Middendorf <kernel@tuxforce.de>
-Subject: Re: Is request_firmware() really safe to call in resume callback when
- /usr/lib/firmware is on btrfs?
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Anand Jain <anand.jain@oracle.com>, linux-btrfs@vger.kernel.org,
-        Antti Palosaari <crope@iki.fi>,
+        id S1728692AbgHQWUa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Aug 2020 18:20:30 -0400
+Received: from mail-dm6nam10on2074.outbound.protection.outlook.com ([40.107.93.74]:5441
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728512AbgHQWU3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 17 Aug 2020 18:20:29 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YY4HUTzxK7qtfVHkFvR8w5CeZvIteWNq+0ueU0fosb6irCurq3KVRWkzMXWXDvBAGIcLBBgV+dcTfmuCB/YjhK66HqryB7Z/0vP2pEgKzID8Z4MOTld+ods8TuTqZAYYnUtEKKLuLSPKS/ikEj6iEt/lbPSJsET5eSlpthmiPfQfZ2Q8L9YzFi1CxWqaPwsj131EiKjpne4Iogeeds8YJzVFpibu+lvmzgtlBWdqNKbvUC8BUdVLzNEagii+M3H16o4mwT8KwGIAge9RaBAaddr7VzIqfQez6mqN4tS96VIWcG4yR6f94D5Ca9DBp8AZq1XDedT+UQizkXRVqeMmdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hioMwHOE4j9zeZjYslsqsV6u5rLTPuq6KncbYIgQZuQ=;
+ b=cX6HhVUvcEvhxtAuTOoS8/fvhwRivu1kEET6BW2TIbtbuDYxsEwZhN7sETJqrJTWUcmorKodKtkfyP0oFjd7cinyBIPE+awrZHH5bxO9uKmYJ6QvPT7Gd1ikEwvm+dkWxKK3U2mEA7XTFW+wL5mB84N0f92k4uy8DzXGOy6ZwK0ccrCsR1WSQjwmFwsjrXXPYePJvJaqYX+3jGI1VdmeW4MODkmnTk3P3bjZuy9YUtA6fzFbVfYgswIpMpLJT9zcVBEiCenUa5nFiyv0dqdqf9aVLmHYSZQiX7z0zVNFMfN/zaUKgeiWS9++UyVJ9UAxrChi4nDBYMgiCy8TyZ19Vg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.60.83) smtp.rcpttodomain=ideasonboard.com smtp.mailfrom=xilinx.com;
+ dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
+ not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hioMwHOE4j9zeZjYslsqsV6u5rLTPuq6KncbYIgQZuQ=;
+ b=jU6cu30mbO72S4YEJVKU5AhwRK7HuT5JOU8Olq0qIj0afk2qGc6nkFg53W5ry7bwICchxFhQ8Uor9Tk4R9Iqr5CFQUws/XKpMCkjqQUz1r88id5egsr7xTaARyqGltzuSoEHGfIG0QlVe2tJgpapjAYHPb965OZQ0iEW23EgZA8=
+Received: from SN6PR16CA0043.namprd16.prod.outlook.com (2603:10b6:805:ca::20)
+ by BN7PR02MB5155.namprd02.prod.outlook.com (2603:10b6:408:22::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3283.16; Mon, 17 Aug
+ 2020 22:20:25 +0000
+Received: from SN1NAM02FT0023.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:805:ca:cafe::d2) by SN6PR16CA0043.outlook.office365.com
+ (2603:10b6:805:ca::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3283.15 via Frontend
+ Transport; Mon, 17 Aug 2020 22:20:25 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.60.83)
+ smtp.mailfrom=xilinx.com; ideasonboard.com; dkim=none (message not signed)
+ header.d=none;ideasonboard.com; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
+Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
+ SN1NAM02FT0023.mail.protection.outlook.com (10.97.4.236) with Microsoft SMTP
+ Server id 15.20.3283.16 via Frontend Transport; Mon, 17 Aug 2020 22:20:25
+ +0000
+Received: from [149.199.38.66] (port=40145 helo=smtp.xilinx.com)
+        by xsj-pvapsmtpgw01 with esmtp (Exim 4.90)
+        (envelope-from <hyun.kwon@xilinx.com>)
+        id 1k7nU8-0007E5-29; Mon, 17 Aug 2020 15:20:08 -0700
+Received: from [127.0.0.1] (helo=localhost)
+        by smtp.xilinx.com with smtp (Exim 4.63)
+        (envelope-from <hyun.kwon@xilinx.com>)
+        id 1k7nUO-0001Pj-PA; Mon, 17 Aug 2020 15:20:24 -0700
+Received: from [172.19.2.244] (helo=xsjhyunkubuntu)
+        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
+        (envelope-from <hyun.kwon@xilinx.com>)
+        id 1k7nUI-0001FI-Ak; Mon, 17 Aug 2020 15:20:18 -0700
+Received: by xsjhyunkubuntu (Postfix, from userid 13638)
+        id F172B2C69AC; Mon, 17 Aug 2020 15:15:05 -0700 (PDT)
+Date:   Mon, 17 Aug 2020 15:15:05 -0700
+From:   Hyun Kwon <hyun.kwon@xilinx.com>
+To:     Jacopo Mondi <jacopo+renesas@jmondi.org>
+Cc:     "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-References: <c79e24a5-f808-d1f0-1f09-ee6f135d9679@tuxforce.de>
- <20200813163749.GV4332@42.do-not-panic.com>
- <0b1621bf-fc82-1a56-c11f-c5c46677e59e@tuxforce.de>
- <20200813221348.GB4332@42.do-not-panic.com>
- <fc887e06-874c-79d8-0607-4e27ae788446@tuxforce.de>
- <20200814163723.GC4332@42.do-not-panic.com>
- <a79f1a0c-012d-bebe-c9c7-b505f59079c2@tuxforce.de>
- <20200817152056.GD4332@42.do-not-panic.com>
-Message-ID: <9e5c716e-1736-9890-54be-75739ea5462f@tuxforce.de>
-Date:   Tue, 18 Aug 2020 00:04:51 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>,
+        "sakari.ailus@iki.fi" <sakari.ailus@iki.fi>,
+        "hverkuil@xs4all.nl" <hverkuil@xs4all.nl>,
+        "manivannan.sadhasivam@linaro.org" <manivannan.sadhasivam@linaro.org>
+Subject: Re: [PATCH 4/4] media: i2c: max9286: Remove cached formats
+Message-ID: <20200817221505.GA21736@xilinx.com>
+References: <20200817143540.247340-1-jacopo+renesas@jmondi.org>
+ <20200817143540.247340-5-jacopo+renesas@jmondi.org>
 MIME-Version: 1.0
-In-Reply-To: <20200817152056.GD4332@42.do-not-panic.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200817143540.247340-5-jacopo+renesas@jmondi.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
+X-TM-AS-User-Approved-Sender: Yes;Yes
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 774806e7-6474-40a3-f53a-08d842fbbd28
+X-MS-TrafficTypeDiagnostic: BN7PR02MB5155:
+X-Microsoft-Antispam-PRVS: <BN7PR02MB51558AB704B85E21D740CD32D65F0@BN7PR02MB5155.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:4502;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: PY9hvcwxxhkjW1RrvCRxZWtsGHi4NBdg2Gdso2N8kBqWx9O7cRQWs3JqxD4bJeVgrmh1V7mmXRG5+R0l+f64+HHRfZdw2YA626qpFfiSS14aRM3qw5m44ei/Qk/qarZ9PCcc4RSTd78C7YnWS/7FzVIo7rnfS7L6368Elnlp7666ttfnWy2ejSGwQktvJYx8ERvdpG4Wj8ajfJ6FOWgUltlRhEYldlCffKM/br8Bn2LDManPbyOJyDBidHDVH/rx9H7hmYzv5LuDPP+hQTtkuz6NLS4jXcQylGRvCqEkljjIak+w/OPlAm6+3C7jh65H6wdPkTMBm4GE1nLoJL9De+HlDCFSo7v7cXZ5chF64ijJl/V8cjcpPELHrpe1YFTwJ2G5srp0zetaRmsOu+NanA==
+X-Forefront-Antispam-Report: CIP:149.199.60.83;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapsmtpgw01;PTR:unknown-60-83.xilinx.com;CAT:NONE;SFS:(136003)(346002)(396003)(376002)(39860400002)(46966005)(4326008)(8936002)(2906002)(26005)(70206006)(1076003)(36756003)(426003)(54906003)(478600001)(2616005)(44832011)(186003)(82740400003)(81166007)(8676002)(316002)(42186006)(6266002)(336012)(7416002)(70586007)(33656002)(5660300002)(82310400002)(356005)(83380400001)(47076004);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Aug 2020 22:20:25.0657
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 774806e7-6474-40a3-f53a-08d842fbbd28
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0023.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR02MB5155
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 17/08/2020 17:20, Luis Chamberlain wrote:
-> On Fri, Aug 14, 2020 at 11:59:36PM +0200, Lukas Middendorf wrote:
->> On 14/08/2020 18:37, Luis Chamberlain wrote:
->>> On Fri, Aug 14, 2020 at 01:38:40PM +0200, Lukas Middendorf wrote:
->>>>> If the firmware is *not* present for the si2168 driver and the device
->>>>> has *not* been used yet you get a system freeze which you cannot recover
->>>>> from, but only if you are *not* using a driver which also caches its
->>>>> firmware already?
->>>>
->>>> Yes, this is exactly what I wanted to say.
->>>>
->>>
->>> OK great.. but..
->>>
->>>> A new installation of Fedora 32 without firmware files
->>>
->>> Fedora 32 comes with no firmware at all? Are you sure? How about your
->>> wifi?
->>
->> Fedora does come with firmware files for many devices (wifi, nouveau, …) but
->> not for dvb devices. Firmware for the si2168 has to be installed as an extra
->> package dvb-firmware from rpmfusion. When I talk about "no firmware files"
->> or "install the firmware files" I mean the si2168 (and other dvb hardware)
->> firmware files only. The nouveau firmware files are always present.
-> 
-> OK so how do you know that other firmware is not getting loaded or cached?
+Hi Jacopo,
 
-dmesg with firmware_class debug output enabled
+Thanks for sharing!
 
+On Mon, Aug 17, 2020 at 07:35:40AM -0700, Jacopo Mondi wrote:
+> Now that the image stream formats are retrieved from the remote
+> sources there's no need to cache them in the driver structure.
 > 
-> Other than checking kernel logs you can rm -rf /lib/firmware/ and then
-> only place the files you want to test.
+> Remove the cached mbus frame formats and their initialization.
 > 
->>>> and with nouveau did
->>>> not show my freeze problem. Installing either the firmware files or the
->>>> nvidia driver started the freeze during resume.
->>>
->>> Here now you say that if you install either the firmware files for
->>> either si2168 or nouveau can cause a freeze,
->>
->> no, I'm talking just about the firmware files for si2168
+> Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+> ---
+>  drivers/media/i2c/max9286.c | 17 -----------------
+>  1 file changed, 17 deletions(-)
 > 
-> OK so if you install the firmware files of si2168 you do run into a
-> freeze, and this freeze happens on resume from suspend?
-> 
-> Without the si2168 firmware the freeze does not happen.
-> 
-> Is that right?
-> 
->> In the case that I *don't* have the firmware files for si2168 (!) present it
->> happens only if no other firmware is cached on suspend (in my case by the
->> nouveau driver). No statement made about cases where the si2168 firmware
->> file is present.
-> 
-> OK this statement is clear and is very different from the one I made
-> above.
-> 
-> But note, that this is true, how are you *sure* that no other firmware
-> other than nouveau is being used? What about wifi? or bluetooth?
+> diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
+> index a4e23396c4b6..97dfee767bbf 100644
+> --- a/drivers/media/i2c/max9286.c
+> +++ b/drivers/media/i2c/max9286.c
+> @@ -160,8 +160,6 @@ struct max9286_priv {
+>  	struct v4l2_ctrl_handler ctrls;
+>  	struct v4l2_ctrl *pixelrate;
+>  
+> -	struct v4l2_mbus_framefmt fmt[MAX9286_N_SINKS];
+> -
+>  	/* Protects controls and fmt structures */
+>  	struct mutex mutex;
+>  
+> @@ -758,18 +756,6 @@ static const struct v4l2_subdev_ops max9286_subdev_ops = {
+>  	.pad		= &max9286_pad_ops,
+>  };
+>  
+> -static void max9286_init_format(struct v4l2_mbus_framefmt *fmt)
+> -{
+> -	fmt->width		= 1280;
+> -	fmt->height		= 800;
+> -	fmt->code		= MEDIA_BUS_FMT_UYVY8_1X16;
 
-I don't have wifi or bluetooth enabled in the BIOS. If I don't use the 
-nouveau driver, "dmesg | grep firmware" is completely empty after boot 
-except for the kernel command line part "ddebug_query=module 
-firmware_class +pmf". After suspend + resume I just get two lines for 
-the calls to cache and uncache firmwares. If any other firmware is used, 
-it is apparently not using the standard firmware loader.
-If I rename the directory /usr/lib/firmware everything seems to work as 
-before (nouveau and si2168 not loaded) and I don't see any complaints 
-about missing firmware in dmesg.
+There's one more hardcoded place left. This had some implication on output
+format, MAX9286_DATATYPE_YUV422_8BIT, which is programmed at 0x12.
+Now, this patch set can potentially result in a mismatch between bus format
+and acutal programmed format.
 
-If I enable my secondary rtl8125 Ethernet controller in the BIOS (I only 
-tested this now, I always had it disabled previously), I can see its 
-firmware being loaded on boot and cached on suspend. This then has an 
-effect on my freeze problem identical to using the nouveau driver.
+Thanks,
+-hyun
 
->>> You also clarify here your freeze happens on resume only. Is that right?
->>> Never on suspend, but if the freeze happens, it happens only on resume?
->>
->> Correct. I have not seen a freeze on suspend. It only happens on resume.
+> -	fmt->colorspace		= V4L2_COLORSPACE_SRGB;
+> -	fmt->field		= V4L2_FIELD_NONE;
+> -	fmt->ycbcr_enc		= V4L2_YCBCR_ENC_DEFAULT;
+> -	fmt->quantization	= V4L2_QUANTIZATION_DEFAULT;
+> -	fmt->xfer_func		= V4L2_XFER_FUNC_DEFAULT;
+> -}
+> -
+>  static int max9286_open(struct v4l2_subdev *subdev, struct v4l2_subdev_fh *fh)
+>  {
+>  	struct max9286_priv *priv = sd_to_max9286(subdev);
+> @@ -834,9 +820,6 @@ static int max9286_v4l2_register(struct max9286_priv *priv)
+>  
+>  	/* Configure V4L2 for the MAX9286 itself */
+>  
+> -	for (i = 0; i < MAX9286_N_SINKS; i++)
+> -		max9286_init_format(&priv->fmt[i]);
+> -
+>  	v4l2_i2c_subdev_init(&priv->sd, priv->client, &max9286_subdev_ops);
+>  	priv->sd.internal_ops = &max9286_subdev_internal_ops;
+>  	priv->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+> -- 
+> 2.27.0
 > 
-> OK this is only if and only if you haven't used the si2168 device,
-> right? And since this is related to si2168 we know that even if you
-> don't use the si2168 device its function which calls to load firmware
-> *does* get called on resume, even though that same function was not
-> called on probe, as the device is not used.
-> 
-> If true, then the race to freeze here happens on resume against btrfs.
-> 
-> And is the firmware present or not in this case, in which the freeze
-> happens?
-
-A freeze can happen on resume with and without the si2168 firmware files 
-installed. It however is easier to hit the freeze with the firmware 
-files installed. Without the firmware files present the freeze happens 
-only if no other driver uses the firmware loader.
-
->>> The actual case where you reach a freeze is still not clear yet. Let's
->>> try to clarify this.
->>
->> OK, let's try that again. To freeze during resume all of 1-4 has to be true:
->> 1. /usr/lib/firmware is on btrfs
->> 2. my Hauppauge WinTV-dualHD USB DVB tuner (contains si2168) is connected
->> 3. have not actively used the tuner
->> 4. any of the following cases:
->> 4a) si2168 firmware not installed + nouveau driver not used + have not run
->> "ls -R /usr/lib/firmware" before suspend
->> 4b) firmware file installed + not run "cat /usr/lib/firmware/dvb*"
->> 4c) firmware file installed + not run "ls -R /usr/lib/firmware" + not
->> nouveau driver
-> 
-> OK perfect, now the next question to clarify is *are you sure* that no
-> other firmware is used, other than si2168 and nouveau?
-
-I'm totally sure that no other firmware is used through the standard 
-firmware loader. I'm also almost sure that no firmware from 
-/usr/lib/firmware is used though any other means.
-
->> Not leading to a freeze is:
->>
->> A: si2168 firmware not installed + nouveau driver used
->> B: si2168 firmware not installed + run "ls -R /usr/lib/firmware" before
->> suspend
->> C: used the tuner before suspend (or tried to use, in case that the si2168
->> firmware is not installed)
->> D: using my patches with firmware_request_cache()
->> E: si2168 firmware installed + "ls -R /usr/lib/firmware" + "cat
->> /usr/lib/firmware/dvb*"
->> F: si2168 firmware installed + nouveau driver used + "cat
->> /usr/lib/firmware/dvb*"
->>
->> I verified all cases again to make sure I was not remembering anything
->> wrong.
-> 
-> This helps, thanks so much, now we'll have to write a reproducer, thanks
-> for the report!!
-
-Will you do it yourself or do you expect me to do anything for this?
-
->> The nouveau driver in use seems to be equivalent to running "ls -R
->> /usr/lib/firmware" before suspend.
->>
->> All the cases seem to boil down to:
->> It freezes if the file system has to be accessed to list the content of
->> /usr/lib/firmware or to read the si2168 firmware file
-> 
-> Let's confirm first whether or not your system is using other firmware
-> files too or not.
-
-I confirmed that above. Why is this so important, anyway?
-
-Lukas
