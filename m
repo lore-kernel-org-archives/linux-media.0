@@ -1,139 +1,264 @@
-Return-Path: <SRS0=cygN=CE=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=xaSx=B3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9B66C433DF
-	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 17:47:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93BD8C433E4
+	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 18:42:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 894C520737
-	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 17:47:56 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=vanguardiasur-com-ar.20150623.gappssmtp.com header.i=@vanguardiasur-com-ar.20150623.gappssmtp.com header.b="HEdiitSK"
+	by mail.kernel.org (Postfix) with ESMTP id 7049D204EC
+	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 18:42:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726952AbgHZRrz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 26 Aug 2020 13:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33564 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726838AbgHZRrs (ORCPT
+        id S1731699AbgHQSmd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Aug 2020 14:42:33 -0400
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:45407 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388098AbgHQP5L (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 26 Aug 2020 13:47:48 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06903C061756
-        for <linux-media@vger.kernel.org>; Wed, 26 Aug 2020 10:47:47 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id a26so4075228ejc.2
-        for <linux-media@vger.kernel.org>; Wed, 26 Aug 2020 10:47:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DZhvz/VcmtyOV5FpCQGhe3jSJp/wS6UPaYcPASL+W/w=;
-        b=HEdiitSKEBxMSHU8oTLa3sOT98ZqvBgSHQoEa8wKCD7Bep9IfA3SmowbtjCNMgkw9i
-         jku1yi1AxvYbxckP53qA3tB5mi0Xeepx/+gdavzei1K18KH4XJJ7ql/2GL6DWC7FoP0J
-         DFVlciGxbX1urrNma8ZDr07/YRWt/Uy8XWkxyo6yHLhilLIZNM9TZ2slZHDFGktyk3/Q
-         9E9A0VZvOP44jHPNyTpdKN92CKWEsGHxifxkxymJ/Nlu23ojN81Emuo0TqlFKCCQ0/bZ
-         QVpX4GgvoQA463xPcCxrkOn6bIi3vIyOL5CtkIXlfdLEfYTsyzwlhbzOju+HDjTrlITC
-         zxLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DZhvz/VcmtyOV5FpCQGhe3jSJp/wS6UPaYcPASL+W/w=;
-        b=QRjkShInU2hKQLP4xw73EmUOT71k/v07D5rG5HP4S2DlH/BZLGJZjxnpUVJCcWLLiZ
-         WCs2DG9PMQTFJXhI3uTHSimYmCN49zTZWCgjesJF849QuciYPpTbTbtVb4KrSfUDyBRN
-         Vy4kM2XN318OF3rnYNR8whDV5m0QHP9aPbiU+pRL0uEO64XRYZSVblR2bh3zoivDO+JR
-         czVSdIRMzUFP07TgxwSuzV2ajrnX7JzpNPt38sJAf9F6lxaRKTRwPbEqKX7hpkDEn8HV
-         jHxMcdQmpKAN3z0o3G81d4S4m9avHDP+Kk+jAhDXtchPDfqNM2sjKrqs1BeYqBXR53Ju
-         AHLw==
-X-Gm-Message-State: AOAM530dgqWjB4wjY8qG2kdkk0R0hT3f51ikHK4/Czz6Cp4V1JyBMF+g
-        Q6aDsdhJuQNSRw5wuFdET0e8ptNMS9JNgIzL2/vDNA==
-X-Google-Smtp-Source: ABdhPJzus1ddDpcAB3sDL3goLET4zr36SFUC2Lm7kSX43cr3KBZpmMROLLbNpz+1kIMWiaUywpNuyma7UHpBq/QSea8=
-X-Received: by 2002:a17:906:c10c:: with SMTP id do12mr13194774ejc.92.1598464066662;
- Wed, 26 Aug 2020 10:47:46 -0700 (PDT)
+        Mon, 17 Aug 2020 11:57:11 -0400
+X-Originating-IP: 93.34.118.233
+Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id E14B040004;
+        Mon, 17 Aug 2020 15:56:59 +0000 (UTC)
+From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
+To:     robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-media@vger.kernel.org, Leon Luo <leonl@leopardimaging.com>
+Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>, mchehab@kernel.org,
+        sakari.ailus@linux.intel.com, hverkuil-cisco@xs4all.nl,
+        laurent.pinchart@ideasonboard.com,
+        linux-renesas-soc@vger.kernel.org
+Subject: 
+Date:   Mon, 17 Aug 2020 18:00:37 +0200
+Message-Id: <20200817160037.255972-1-jacopo+renesas@jmondi.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <1583589765-19344-1-git-send-email-hexiaolong2008@gmail.com>
-In-Reply-To: <1583589765-19344-1-git-send-email-hexiaolong2008@gmail.com>
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date:   Wed, 26 Aug 2020 14:47:35 -0300
-Message-ID: <CAAEAJfA0w+xs95vnOiFnnMPpzh-0qJDey95bXdbv27O98cpWHA@mail.gmail.com>
-Subject: Re: [v2] dma-buf: heaps: bugfix for selftest failure
-To:     Leon He <hexiaolong2008@gmail.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-kselftest@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linaro-mm-sig@lists.linaro.org, Leon He <leon.he@unisoc.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Leon, Shuah,
+Subject: [PATCH] dt-bindings: media: imx274: Convert to json-schema
 
-Thanks for the fix. I had this issue pending to fix,
-but have been lazy about it, I appreciate you are taking care of it!
+Convert the imx274 bindings document to json-schema and update
+the MAINTAINERS file accordingly.
 
-On Sat, 7 Mar 2020 at 11:03, Leon He <hexiaolong2008@gmail.com> wrote:
->
-> From: Leon He <leon.he@unisoc.com>
->
-> There are two errors in the dmabuf-heap selftest:
-> 1. The 'char name[5]' was not initialized to zero, which will cause
->    strcmp(name, "vgem") failed in check_vgem().
-> 2. The return value of test_alloc_errors() should be reversed, other-
->    wise the while loop in main() will be broken.
->
-> Signed-off-by: Leon He <leon.he@unisoc.com>
-> ---
->  tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
-> index cd5e1f6..836b185 100644
-> --- a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
-> +++ b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
-> @@ -22,7 +22,7 @@
->  static int check_vgem(int fd)
->  {
->         drm_version_t version = { 0 };
-> -       char name[5];
-> +       char name[5] = { 0 };
->         int ret;
->
+Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+---
+ .../bindings/media/i2c/sony,imx214.txt        |  53 --------
+ .../bindings/media/i2c/sony,imx214.yaml       | 124 ++++++++++++++++++
+ MAINTAINERS                                   |   2 +-
+ 3 files changed, 125 insertions(+), 54 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/media/i2c/sony,imx214.txt
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/sony,imx214.yaml
 
-As Shuah already mentioned, I think we want to use strncmp
-to be on the safe side.
+diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx214.txt b/Documentation/devicetree/bindings/media/i2c/sony,imx214.txt
+deleted file mode 100644
+index f11f28a5fda4..000000000000
+--- a/Documentation/devicetree/bindings/media/i2c/sony,imx214.txt
++++ /dev/null
+@@ -1,53 +0,0 @@
+-* Sony 1/3.06-Inch 13.13Mp CMOS Digital Image Sensor
+-
+-The Sony imx214 is a 1/3.06-inch CMOS active pixel digital image sensor with
+-an active array size of 4224H x 3200V. It is programmable through an I2C
+-interface.
+-Image data is sent through MIPI CSI-2, through 2 or 4 lanes at a maximum
+-throughput of 1.2Gbps/lane.
+-
+-
+-Required Properties:
+-- compatible: Shall be "sony,imx214".
+-- reg: I2C bus address of the device. Depending on how the sensor is wired,
+-       it shall be <0x10> or <0x1a>;
+-- enable-gpios: GPIO descriptor for the enable pin.
+-- vdddo-supply: Chip digital IO regulator (1.8V).
+-- vdda-supply: Chip analog regulator (2.7V).
+-- vddd-supply: Chip digital core regulator (1.12V).
+-- clocks: Reference to the xclk clock.
+-- clock-frequency: Frequency of the xclk clock.
+-
+-Optional Properties:
+-- flash-leds: See ../video-interfaces.txt
+-- lens-focus: See ../video-interfaces.txt
+-
+-The imx214 device node shall contain one 'port' child node with
+-an 'endpoint' subnode. For further reading on port node refer to
+-Documentation/devicetree/bindings/media/video-interfaces.txt.
+-
+-Required Properties on endpoint:
+-- data-lanes: check ../video-interfaces.txt
+-- link-frequencies: check ../video-interfaces.txt
+-- remote-endpoint: check ../video-interfaces.txt
+-
+-Example:
+-
+-	camera-sensor@1a {
+-		compatible = "sony,imx214";
+-		reg = <0x1a>;
+-		vdddo-supply = <&pm8994_lvs1>;
+-		vddd-supply = <&camera_vddd_1v12>;
+-		vdda-supply = <&pm8994_l17>;
+-		lens-focus = <&ad5820>;
+-		enable-gpios = <&msmgpio 25 GPIO_ACTIVE_HIGH>;
+-		clocks = <&mmcc CAMSS_MCLK0_CLK>;
+-		clock-frequency = <24000000>;
+-		port {
+-			imx214_ep: endpoint {
+-				data-lanes = <1 2 3 4>;
+-				link-frequencies = /bits/ 64 <480000000>;
+-				remote-endpoint = <&csiphy0_ep>;
+-			};
+-		};
+-	};
+diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx214.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx214.yaml
+new file mode 100644
+index 000000000000..ddd4627214b1
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/sony,imx214.yaml
+@@ -0,0 +1,124 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/sony,imx214.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Sony 1/3.06-Inch 13.13Mp CMOS Digital Image Sensor
++
++maintainers:
++  - Ricardo Ribalda <ribalda@kernel.org>
++
++description: -|
++  The Sony imx214 is a 1/3.06-inch CMOS active pixel digital image sensor with
++  an active array size of 4224H x 3200V. It is programmable through an I2C
++  interface.  Image data is sent through MIPI CSI-2, through 2 or 4 lanes at a
++  maximum throughput of 1.2Gbps/lane.
++
++properties:
++  compatible:
++    const: sony,imx214
++
++  reg:
++    description: -|
++      I2C device address. Depends on how the sensor is wired, it shall be
++    enum:
++      - 0x10
++      - 0x1a
++
++  clocks:
++    description: Reference to the xclk clock.
++    maxItems: 1
++
++  clock-frequency:
++    description: Frequency of the xclk clock in Hz.
++
++  enable-gpios:
++    description: GPIO descriptor for the enable pin.
++    maxItems: 1
++
++  vdddo-supply:
++    description: Chip digital IO regulator (1.8V).
++    maxItems: 1
++
++  vdda-supply:
++    description: Chip analog regulator (2.7V).
++    maxItems: 1
++
++  vddd-supply:
++    description: Chip digital core regulator (1.12V).
++    maxItems: 1
++
++  flash-leds:
++    description: See ../video-interfaces.txt
++
++  lens-focus:
++    description: See ../video-interfaces.txt
++
++  port:
++    type: object
++    description: |
++      The device node must contain one 'port' child node for its digital output
++      video port, in accordance with the video interface bindings defined in
++      Documentation/devicetree/bindings/media/video-interfaces.txt.
++
++    properties:
++      endpoint:
++        type: object
++        properties:
++          remote-endpoint:
++            description: See ../video-interfaces.txt
++
++          data-lanes:
++            description: See ../video-interfaces.txt
++
++          link-frequencies:
++            description: See ../video-interfaces.txt
++
++        required:
++          - data-lanes
++          - link-frequencies
++
++    additionalProperties: false
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-frequency
++  - enable-gpios
++  - vdddo-supply
++  - vdda-supply
++  - vddd-supply
++  - port
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    i2c0 {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        camera-sensor@1a {
++            compatible = "sony,imx214";
++            reg = <0x1a>;
++            vdddo-supply = <&pm8994_lvs1>;
++            vddd-supply = <&camera_vddd_1v12>;
++            vdda-supply = <&pm8994_l17>;
++            lens-focus = <&ad5820>;
++            enable-gpios = <&msmgpio 25 GPIO_ACTIVE_HIGH>;
++            clocks = <&camera_clk>;
++            clock-frequency = <24000000>;
++
++            port {
++                imx214_ep: endpoint {
++                    data-lanes = <1 2 3 4>;
++                    link-frequencies = /bits/ 64 <480000000>;
++                    remote-endpoint = <&csiphy0_ep>;
++                };
++            };
++        };
++    };
++
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 6c8e98238a7b..d1a6173d3b64 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15918,7 +15918,7 @@ M:	Ricardo Ribalda <ribalda@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ T:	git git://linuxtv.org/media_tree.git
+-F:	Documentation/devicetree/bindings/media/i2c/sony,imx214.txt
++F:	Documentation/devicetree/bindings/media/i2c/sony,imx214.yaml
+ F:	drivers/media/i2c/imx214.c
 
->         version.name_len = 4;
-> @@ -357,7 +357,7 @@ static int test_alloc_errors(char *heap_name)
->         if (heap_fd >= 0)
->                 close(heap_fd);
->
-> -       return ret;
-> +       return !ret;
+ SONY IMX219 SENSOR DRIVER
+--
+2.27.0
 
-I agree with Shuah, this change makes no sense, just drop it.
-
-I think the fact this test was broken and nobody noticed
-uncovers the fact that the test isn't being run.
-
-Any reason why this test isn't a regular TARGET?
-Or any idea how we can make sure this is run by CIs
-and any other testing system?
-
-Thanks!
-Ezequiel
-
->  }
->
->  int main(void)
-> --
-> 2.7.4
->
