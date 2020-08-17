@@ -2,114 +2,165 @@ Return-Path: <SRS0=xaSx=B3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38403C433E1
-	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 08:08:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8FDEC433DF
+	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 08:28:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 220F52080D
-	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 08:08:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 778482063A
+	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 08:28:02 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="I1AE04mm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727003AbgHQIIC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Aug 2020 04:08:02 -0400
-Received: from relay9-d.mail.gandi.net ([217.70.183.199]:52071 "EHLO
-        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726768AbgHQIIC (ORCPT
+        id S1728388AbgHQI15 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Aug 2020 04:27:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52966 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728406AbgHQI1u (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Aug 2020 04:08:02 -0400
-X-Originating-IP: 93.34.118.233
-Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id BB259FF80B;
-        Mon, 17 Aug 2020 08:07:55 +0000 (UTC)
-Date:   Mon, 17 Aug 2020 10:11:38 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: media: ov772x: Document endpoint
- properties
-Message-ID: <20200817081138.dog5lhpmszbu2mgc@uno.localdomain>
-References: <1596454753-13612-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1596454753-13612-2-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CA+V-a8sjxL-rbYAti8Djj2ch2+Zf+88_wNjbZHzKVBB66aZJ0g@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CA+V-a8sjxL-rbYAti8Djj2ch2+Zf+88_wNjbZHzKVBB66aZJ0g@mail.gmail.com>
+        Mon, 17 Aug 2020 04:27:50 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51166C061343
+        for <linux-media@vger.kernel.org>; Mon, 17 Aug 2020 01:27:49 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id 9so12515290wmj.5
+        for <linux-media@vger.kernel.org>; Mon, 17 Aug 2020 01:27:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=dHHx8tCCD/f7cY2UrgoF5DI2HEp6u7sbKILLzlEPxJo=;
+        b=I1AE04mm3Cu7IVOIi8qpjZg6MCi5n70hUykAwGaeJFE7bwTb1gQIAVIHzAEv+Y5Omw
+         RgkVQw4b5L5iE8LKIL7w01TK18n0Ok1yjMshCjuYyWy0LDrw0ZsaQo8TfFAmVNpxY1tH
+         Jm+2/+r+1CQygJMbY13/L1uQGIz5EhYgNSN3Il0PbNQnO13KFO4TlExBROgkRBXhTCJF
+         joeA2bowB5XNZJKTSt/puj/2resoPZsPs33XpWLXO0gzTkPQoMru2iaMbszx+kjWKAwe
+         vx/b2t17P5kYM0HlbPra4N5Pxr/TZ/Do62wZQDPDy1P1yYu2JTZAAMWYEKaS4Pv9d6hH
+         DWgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=dHHx8tCCD/f7cY2UrgoF5DI2HEp6u7sbKILLzlEPxJo=;
+        b=Cjh/4sORSDR1E55Usf0A/SuPlCtFRJxSRYbkRcUtMfEGtkV+MHFWwnRd08YWc4R/BW
+         2Z8o8/AvAYi0UhVGVwOhpKtKvEFSKw3f9Siu7zxNvs4YOpbL1BNhVLMRsuqakrQlHUkI
+         KY7aiUH3SC5UsSKQ6PzY/4ibJJ7lbe0p6fJS1bE0ceg4ZaSUO8n0bL9gCCjrRyxkaI9x
+         4yDioP9jVSMY1HehuY7FQHw8LQ4X/ocy0uO5IPvFxIgpjW1t8jf2H4cPVMT+/AS+hGbB
+         gR7Q41izQd/0dXsVdveHxSOEgJrp6mz0iAEEouQTCxFt8mfjRvdee0Kto1CQENV12PJm
+         qSPw==
+X-Gm-Message-State: AOAM530DF24gI4qyXJuOtyfFNAJTYnCkDH/zLG/AtB+YLndkzU58528h
+        Z0Gm9rQhMij4Hhkh2tx5oQCHqw==
+X-Google-Smtp-Source: ABdhPJygsWhnExsJ/xP1fb11YBvOMxcj7El2Fr8xMQQ66XknjoVoYJbBPz4hWT/idFpM2qhQ3mVQ2A==
+X-Received: by 2002:a05:600c:202:: with SMTP id 2mr12754388wmi.147.1597652868062;
+        Mon, 17 Aug 2020 01:27:48 -0700 (PDT)
+Received: from localhost.localdomain ([195.24.90.54])
+        by smtp.gmail.com with ESMTPSA id h5sm33270888wrc.97.2020.08.17.01.27.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Aug 2020 01:27:47 -0700 (PDT)
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Cc:     Elliot Berman <eberman@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Subject: [PATCH v2 1/2] firmware: qcom_scm: Add memory protect virtual address ranges
+Date:   Mon, 17 Aug 2020 11:27:22 +0300
+Message-Id: <20200817082723.17458-2-stanimir.varbanov@linaro.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200817082723.17458-1-stanimir.varbanov@linaro.org>
+References: <20200817082723.17458-1-stanimir.varbanov@linaro.org>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello Prabhakar,
+This adds a new SCM memprotect command to set virtual address ranges.
 
-On Sat, Aug 15, 2020 at 11:34:33AM +0100, Lad, Prabhakar wrote:
-> Hi Jacopo,
->
-> On Mon, Aug 3, 2020 at 12:39 PM Lad Prabhakar
-> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> >
-> > Document endpoint properties required for parallel interface
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> >  .../devicetree/bindings/media/i2c/ov772x.txt     | 16 ++++++++++++++++
-> >  1 file changed, 16 insertions(+)
-> >
-> I see you already have a patch for YAML conversion for OV772x binding
-> [1], if you plan to post a v2 would you be OK to pick these changes as
-> part of your conversion changes ?
+Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+---
+ drivers/firmware/qcom_scm.c | 24 ++++++++++++++++++++++++
+ drivers/firmware/qcom_scm.h |  1 +
+ include/linux/qcom_scm.h    |  8 +++++++-
+ 3 files changed, 32 insertions(+), 1 deletion(-)
 
-Sure thing, I'll add the following properties to the series!
+diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+index 0e7233a20f34..dec8dc42a6bc 100644
+--- a/drivers/firmware/qcom_scm.c
++++ b/drivers/firmware/qcom_scm.c
+@@ -757,6 +757,30 @@ int qcom_scm_iommu_secure_ptbl_init(u64 addr, u32 size, u32 spare)
+ }
+ EXPORT_SYMBOL(qcom_scm_iommu_secure_ptbl_init);
+ 
++int qcom_scm_mem_protect_video_var(u32 cp_start, u32 cp_size,
++				   u32 cp_nonpixel_start,
++				   u32 cp_nonpixel_size)
++{
++	int ret;
++	struct qcom_scm_desc desc = {
++		.svc = QCOM_SCM_SVC_MP,
++		.cmd = QCOM_SCM_MP_VIDEO_VAR,
++		.arginfo = QCOM_SCM_ARGS(4, QCOM_SCM_VAL, QCOM_SCM_VAL,
++					 QCOM_SCM_VAL, QCOM_SCM_VAL),
++		.args[0] = cp_start,
++		.args[1] = cp_size,
++		.args[2] = cp_nonpixel_start,
++		.args[3] = cp_nonpixel_size,
++		.owner = ARM_SMCCC_OWNER_SIP,
++	};
++	struct qcom_scm_res res;
++
++	ret = qcom_scm_call(__scm->dev, &desc, &res);
++
++	return ret ? : res.result[0];
++}
++EXPORT_SYMBOL(qcom_scm_mem_protect_video_var);
++
+ static int __qcom_scm_assign_mem(struct device *dev, phys_addr_t mem_region,
+ 				 size_t mem_sz, phys_addr_t src, size_t src_sz,
+ 				 phys_addr_t dest, size_t dest_sz)
+diff --git a/drivers/firmware/qcom_scm.h b/drivers/firmware/qcom_scm.h
+index d9ed670da222..14da834ac593 100644
+--- a/drivers/firmware/qcom_scm.h
++++ b/drivers/firmware/qcom_scm.h
+@@ -97,6 +97,7 @@ extern int scm_legacy_call(struct device *dev, const struct qcom_scm_desc *desc,
+ #define QCOM_SCM_MP_RESTORE_SEC_CFG		0x02
+ #define QCOM_SCM_MP_IOMMU_SECURE_PTBL_SIZE	0x03
+ #define QCOM_SCM_MP_IOMMU_SECURE_PTBL_INIT	0x04
++#define QCOM_SCM_MP_VIDEO_VAR			0x08
+ #define QCOM_SCM_MP_ASSIGN			0x16
+ 
+ #define QCOM_SCM_SVC_OCMEM		0x0f
+diff --git a/include/linux/qcom_scm.h b/include/linux/qcom_scm.h
+index 3d6a24697761..ba45537f688b 100644
+--- a/include/linux/qcom_scm.h
++++ b/include/linux/qcom_scm.h
+@@ -77,11 +77,13 @@ extern bool qcom_scm_restore_sec_cfg_available(void);
+ extern int qcom_scm_restore_sec_cfg(u32 device_id, u32 spare);
+ extern int qcom_scm_iommu_secure_ptbl_size(u32 spare, size_t *size);
+ extern int qcom_scm_iommu_secure_ptbl_init(u64 addr, u32 size, u32 spare);
++extern int qcom_scm_mem_protect_video_var(u32 cp_start, u32 cp_size,
++					  u32 cp_nonpixel_start,
++					  u32 cp_nonpixel_size);
+ extern int qcom_scm_assign_mem(phys_addr_t mem_addr, size_t mem_sz,
+ 			       unsigned int *src,
+ 			       const struct qcom_scm_vmperm *newvm,
+ 			       unsigned int dest_cnt);
+-
+ extern bool qcom_scm_ocmem_lock_available(void);
+ extern int qcom_scm_ocmem_lock(enum qcom_scm_ocmem_client id, u32 offset,
+ 			       u32 size, u32 mode);
+@@ -128,6 +130,10 @@ static inline int qcom_scm_iommu_secure_ptbl_size(u32 spare, size_t *size)
+ 		{ return -ENODEV; }
+ static inline int qcom_scm_iommu_secure_ptbl_init(u64 addr, u32 size, u32 spare)
+ 		{ return -ENODEV; }
++extern inline int qcom_scm_mem_protect_video_var(u32 cp_start, u32 cp_size,
++						 u32 cp_nonpixel_start,
++						 u32 cp_nonpixel_size)
++		{ return -ENODEV; }
+ static inline int qcom_scm_assign_mem(phys_addr_t mem_addr, size_t mem_sz,
+ 		unsigned int *src, const struct qcom_scm_vmperm *newvm,
+ 		unsigned int dest_cnt) { return -ENODEV; }
+-- 
+2.17.1
 
-Thanks
-  j
-
->
-> [1] https://www.spinics.net/lists/linux-media/msg173201.html
->
-> Cheers,
-> Prabhakar
->
-> > diff --git a/Documentation/devicetree/bindings/media/i2c/ov772x.txt b/Documentation/devicetree/bindings/media/i2c/ov772x.txt
-> > index 0b3ede5b8e6a..1f4153484717 100644
-> > --- a/Documentation/devicetree/bindings/media/i2c/ov772x.txt
-> > +++ b/Documentation/devicetree/bindings/media/i2c/ov772x.txt
-> > @@ -21,6 +21,22 @@ subnode for its digital output video port, in accordance with the video
-> >  interface bindings defined in Documentation/devicetree/bindings/media/
-> >  video-interfaces.txt.
-> >
-> > +Endpoint node required properties for parallel connection are:
-> > +- remote-endpoint: a phandle to the bus receiver's endpoint node.
-> > +- bus-width: shall be set to <8> for 8 bits parallel bus
-> > +            or <10> for 10 bits parallel bus
-> > +- data-shift: shall be set to <2> for 8 bits parallel bus
-> > +             (lines 9:2 are used) or <0> for 10 bits parallel bus
-> > +- hsync-active: active state of the HSYNC signal, 0/1 for LOW/HIGH respectively.
-> > +               (Not required for bus-type equal 6)
-> > +- vsync-active: active state of the VSYNC signal, 0/1 for LOW/HIGH respectively.
-> > +               (Not required for bus-type equal 6)
-> > +- pclk-sample: sample data on rising (1) or falling (0) edge of the pixel clock
-> > +              signal. (Not required for bus-type equal 6)
-> > +- bus-type: data bus type. Possible values are:
-> > +           5 - Parallel
-> > +           6 - Bt.656
-> > +
-> >  Example:
-> >
-> >  &i2c0 {
-> > --
-> > 2.17.1
-> >
