@@ -7,36 +7,36 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7D1CC433DF
-	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 18:05:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02BBEC433E4
+	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 18:06:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C9DF120758
-	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 18:05:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DA9FA20789
+	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 18:06:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388500AbgHQQJQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Aug 2020 12:09:16 -0400
-Received: from mga07.intel.com ([134.134.136.100]:20293 "EHLO mga07.intel.com"
+        id S2388484AbgHQQIz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Aug 2020 12:08:55 -0400
+Received: from mga06.intel.com ([134.134.136.31]:20641 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388461AbgHQQI5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Aug 2020 12:08:57 -0400
-IronPort-SDR: Injr4Y/ptjOHetW5waHF6BfFWEtnEauSFpiodiK+P9zpE+WfLwooG5jD+vq87+zGKeFv8xdFHl
- 2qOPaXPrU8Pg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9716"; a="219062300"
+        id S2388464AbgHQQIp (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 17 Aug 2020 12:08:45 -0400
+IronPort-SDR: FTnNcr5/UCG3w7KyQ3KbKlVm+dLnlE5MwpxSrnJseRXn2pBmqlV8Z9wYTT4KqBCwqQ6NYZkrL6
+ UFrPybXOfZ3Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9716"; a="216264528"
 X-IronPort-AV: E=Sophos;i="5.76,324,1592895600"; 
-   d="scan'208";a="219062300"
+   d="scan'208";a="216264528"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2020 09:08:45 -0700
-IronPort-SDR: FbmxnCJ7QRR08ot5Xx0raqwe8YRFX/24jMZrmrqb8UkRXOwldubSC5FbTrbRLjHZ19ct+Z3tjr
- kIHONMewEdQA==
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2020 09:08:36 -0700
+IronPort-SDR: VfStKSPlBwaXtG6S8SU21yUfMJ8N9IV4At10zyYjJ/8o2yLHYkWruVac9Dfj5tAmptyD827N65
+ 79XEGeMYnHiQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.76,324,1592895600"; 
-   d="scan'208";a="336321306"
+   d="scan'208";a="496528929"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga007.jf.intel.com with ESMTP; 17 Aug 2020 09:08:43 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 17 Aug 2020 09:08:34 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 2EE3E16D; Mon, 17 Aug 2020 19:08:43 +0300 (EEST)
+        id 7689B16D; Mon, 17 Aug 2020 19:08:33 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -45,12 +45,10 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Bingbu Cao <bingbu.cao@intel.com>,
         Tian Shu Qiu <tian.shu.qiu@intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH v2 07/10] media: ipu3-cio2: Get rid of pci_set_master() duplication
-Date:   Mon, 17 Aug 2020 19:07:30 +0300
-Message-Id: <20200817160734.12402-7-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 01/10] media: ipu3-cio2: Simplify cleanup code
+Date:   Mon, 17 Aug 2020 19:07:24 +0300
+Message-Id: <20200817160734.12402-1-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200817160734.12402-1-andriy.shevchenko@linux.intel.com>
-References: <20200817160734.12402-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -58,59 +56,41 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-It's unclear why driver repeats the code from PCI core.
-Drop it for good.
+The code looks more nicer if we use:
+	while (i--)
+instead:
+	for (i = i - 1; i >= 0; i--)
+
+This would also allow making 'i' unsigned again.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
-v2: new patch
- drivers/media/pci/intel/ipu3/ipu3-cio2.c | 26 +++++-------------------
- 1 file changed, 5 insertions(+), 21 deletions(-)
+v2: converted i to unsigned (Sakari)
+ drivers/media/pci/intel/ipu3/ipu3-cio2.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-index 7bcde3ba8f6e..57310d7874ce 100644
+index 92f5eadf2c99..cb74d49934f1 100644
 --- a/drivers/media/pci/intel/ipu3/ipu3-cio2.c
 +++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-@@ -1711,24 +1711,6 @@ static void cio2_queues_exit(struct cio2_device *cio2)
+@@ -847,7 +847,7 @@ static int cio2_vb2_buf_init(struct vb2_buffer *vb)
+ 	unsigned int lops = DIV_ROUND_UP(pages + 1, entries_per_page);
+ 	struct sg_table *sg;
+ 	struct sg_dma_page_iter sg_iter;
+-	int i, j;
++	unsigned int i, j;
  
- /**************** PCI interface ****************/
- 
--static int cio2_pci_config_setup(struct pci_dev *dev)
--{
--	u16 pci_command;
--	int r = pci_enable_msi(dev);
--
--	if (r) {
--		dev_err(&dev->dev, "failed to enable MSI (%d)\n", r);
--		return r;
--	}
--
--	pci_read_config_word(dev, PCI_COMMAND, &pci_command);
--	pci_command |= PCI_COMMAND_MEMORY | PCI_COMMAND_MASTER |
--		PCI_COMMAND_INTX_DISABLE;
--	pci_write_config_word(dev, PCI_COMMAND, pci_command);
--
--	return 0;
--}
--
- static int cio2_pci_probe(struct pci_dev *pci_dev,
- 			  const struct pci_device_id *id)
- {
-@@ -1774,9 +1756,11 @@ static int cio2_pci_probe(struct pci_dev *pci_dev,
- 		return -ENODEV;
- 	}
- 
--	r = cio2_pci_config_setup(pci_dev);
--	if (r)
--		return -ENODEV;
-+	r = pci_enable_msi(pci_dev);
-+	if (r) {
-+		dev_err(&pci_dev->dev, "failed to enable MSI (%d)\n", r);
-+		return r;
-+	}
- 
- 	r = cio2_fbpt_init_dummy(cio2);
- 	if (r)
+ 	if (lops <= 0 || lops > CIO2_MAX_LOPS) {
+ 		dev_err(dev, "%s: bad buffer size (%i)\n", __func__,
+@@ -887,7 +887,7 @@ static int cio2_vb2_buf_init(struct vb2_buffer *vb)
+ 	b->lop[i][j] = cio2->dummy_page_bus_addr >> PAGE_SHIFT;
+ 	return 0;
+ fail:
+-	for (i--; i >= 0; i--)
++	while (i--)
+ 		dma_free_coherent(dev, CIO2_PAGE_SIZE,
+ 				  b->lop[i], b->lop_bus_addr[i]);
+ 	return -ENOMEM;
 -- 
 2.28.0
 
