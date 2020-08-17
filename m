@@ -2,40 +2,42 @@ Return-Path: <SRS0=xaSx=B3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3BF7C433E1
-	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 18:40:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB66BC433E1
+	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 18:46:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A040D20578
-	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 18:40:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D0A2E204EC
+	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 18:46:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391327AbgHQSkX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Aug 2020 14:40:23 -0400
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:38819 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730909AbgHQP55 (ORCPT
+        id S2390781AbgHQSq6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Aug 2020 14:46:58 -0400
+Received: from relay10.mail.gandi.net ([217.70.178.230]:47963 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388035AbgHQPzo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Aug 2020 11:57:57 -0400
-X-Originating-IP: 93.34.118.233
+        Mon, 17 Aug 2020 11:55:44 -0400
 Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id A5B7A1BF208;
-        Mon, 17 Aug 2020 15:57:51 +0000 (UTC)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id D6271240012;
+        Mon, 17 Aug 2020 15:55:39 +0000 (UTC)
 From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
 To:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-media@vger.kernel.org
+        linux-media@vger.kernel.org,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
 Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>, mchehab@kernel.org,
         sakari.ailus@linux.intel.com, hverkuil-cisco@xs4all.nl,
         laurent.pinchart@ideasonboard.com,
         linux-renesas-soc@vger.kernel.org
-Subject: [PATCH] dt-bindings: media: mt9v111: Convert to json-schema
-Date:   Mon, 17 Aug 2020 18:01:29 +0200
-Message-Id: <20200817160129.256085-1-jacopo+renesas@jmondi.org>
+Subject: [PATCH 3/3] dt-bindings: media: ov772x: Document endpoint props
+Date:   Mon, 17 Aug 2020 17:59:10 +0200
+Message-Id: <20200817155910.255883-4-jacopo+renesas@jmondi.org>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200817155910.255883-1-jacopo+renesas@jmondi.org>
+References: <20200817155910.255883-1-jacopo+renesas@jmondi.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -43,172 +45,83 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Convert the mt9v111 bindings document to json-schema and update
-the MAINTAINERS file accordingly.
+Document endpoint properties for the parallel bus type and
+add them to the example.
+
+Specify a few constraints:
+- If the bus type is BT.656 no hsync or vsycn polarities can be
+  specified.
+- If the bus width is 10 bits, not data-shift can be applied.
 
 Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 ---
- .../bindings/media/i2c/aptina,mt9v111.txt     | 46 ----------
- .../bindings/media/i2c/aptina,mt9v111.yaml    | 83 +++++++++++++++++++
- MAINTAINERS                                   |  2 +-
- 3 files changed, 84 insertions(+), 47 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/media/i2c/aptina,mt9v111.txt
- create mode 100644 Documentation/devicetree/bindings/media/i2c/aptina,mt9v111.yaml
+ .../devicetree/bindings/media/i2c/ov772x.yaml | 43 +++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/aptina,mt9v111.txt b/Documentation/devicetree/bindings/media/i2c/aptina,mt9v111.txt
-deleted file mode 100644
-index bd896e9f67d1..000000000000
---- a/Documentation/devicetree/bindings/media/i2c/aptina,mt9v111.txt
-+++ /dev/null
-@@ -1,46 +0,0 @@
--* Aptina MT9V111 CMOS sensor
------------------------------
--
--The Aptina MT9V111 is a 1/4-Inch VGA-format digital image sensor with a core
--based on Aptina MT9V011 sensor and an integrated Image Flow Processor (IFP).
--
--The sensor has an active pixel array of 640x480 pixels and can output a number
--of image resolution and formats controllable through a simple two-wires
--interface.
--
--Required properties:
----------------------
--
--- compatible: shall be "aptina,mt9v111".
--- clocks: reference to the system clock input provider.
--
--Optional properties:
----------------------
--
--- enable-gpios: output enable signal, pin name "OE#". Active low.
--- standby-gpios: low power state control signal, pin name "STANDBY".
--  Active high.
--- reset-gpios: chip reset signal, pin name "RESET#". Active low.
--
--The device node must contain one 'port' child node with one 'endpoint' child
--sub-node for its digital output video port, in accordance with the video
--interface bindings defined in:
--Documentation/devicetree/bindings/media/video-interfaces.txt
--
--Example:
----------
--
--        &i2c1 {
--                camera@48 {
--                        compatible = "aptina,mt9v111";
--                        reg = <0x48>;
--
--                        clocks = <&camera_clk>;
--
--                        port {
--                                mt9v111_out: endpoint {
--                                        remote-endpoint = <&ceu_in>;
--                                };
--                        };
--                };
--        };
-diff --git a/Documentation/devicetree/bindings/media/i2c/aptina,mt9v111.yaml b/Documentation/devicetree/bindings/media/i2c/aptina,mt9v111.yaml
-new file mode 100644
-index 000000000000..54cc136aa239
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/aptina,mt9v111.yaml
-@@ -0,0 +1,83 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/aptina,mt9v111.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/Documentation/devicetree/bindings/media/i2c/ov772x.yaml b/Documentation/devicetree/bindings/media/i2c/ov772x.yaml
+index 75dad40f70cc..3fad5dffd19a 100644
+--- a/Documentation/devicetree/bindings/media/i2c/ov772x.yaml
++++ b/Documentation/devicetree/bindings/media/i2c/ov772x.yaml
+@@ -50,9 +50,47 @@ properties:
+           bus-type:
+             enum: [5, 6]
+ 
++          bus-width:
++            enum: [8, 10]
++            default: 10
 +
-+title: Aptina MT9V111 CMOS sensor
++          data-shift:
++            enum: [0, 2]
++            default: 0
 +
-+maintainers:
-+  - Jacopo Mondi <jacopo@jmondi.org>
++          hsync-active:
++            enum: [0, 1]
++            default: 1
 +
-+description: -|
-+  The Aptina MT9V111 is a 1/4-Inch VGA-format digital image sensor with a core
-+  based on Aptina MT9V011 sensor and an integrated Image Flow Processor (IFP).
++          vsync-active:
++            enum: [0, 1]
++            default: 1
 +
-+  The sensor has an active pixel array of 640x480 pixels and can output a number
-+  of image resolution and formats controllable through a simple two-wires
-+  interface.
++          pclk-sample:
++            enum: [0, 1]
++            default: 1
 +
-+properties:
-+  compatible:
-+    const: aptina,mt9v111
+           remote-endpoint:
+             description: A phandle to the bus receiver's endpoint node.
+ 
++        allOf:
++          - if:
++              properties:
++                bus-type:
++                  const: 6
++            then:
++                properties:
++                  hsync-active: false
++                  vsync-active: false
 +
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  enable-gpios:
-+    description: Enable signal, pin name "OE#". Active low.
-+    maxItems: 1
-+
-+  standby-gpios:
-+    description: Low power state control signal, pin name "STANBY". Active high.
-+    maxItems: 1
-+
-+  reset-gpios:
-+    description: Chip reset signal, pin name "RESET#". Active low.
-+    maxItems: 1
-+
-+  port:
-+    type: object
-+    description: |
-+      The device node must contain one 'port' child node for its digital output
-+      video port, in accordance with the video interface bindings defined in
-+      Documentation/devicetree/bindings/media/video-interfaces.txt.
-+
-+    properties:
-+      endpoint:
-+        type: object
-+        properties:
-+          remote-endpoint:
-+            description: A phandle to the bus receiver's endpoint node.
-+
-+    additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - port
-+
-+examples:
-+  - |
-+    i2c0 {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        camera@48 {
-+            compatible = "aptina,mt9v111";
-+            reg = <0x48>;
-+            clocks = <&camera_clk>;
-+
-+            port {
-+                mt9v111_out: endpoint {
-+                    remote-endpoint = <&ceu_in>;
-+                };
-+            };
-+        };
-+    };
-+
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5392f00cec46..18bc4427e6b0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11688,7 +11688,7 @@ M:	Jacopo Mondi <jacopo@jmondi.org>
- L:	linux-media@vger.kernel.org
- S:	Maintained
- T:	git git://linuxtv.org/media_tree.git
--F:	Documentation/devicetree/bindings/media/i2c/aptina,mt9v111.txt
-+F:	Documentation/devicetree/bindings/media/i2c/aptina,mt9v111.yaml
- F:	drivers/media/i2c/mt9v111.c
-
- MULTIFUNCTION DEVICES (MFD)
---
++          - if:
++              properties:
++                bus-width:
++                  const: 10
++            then:
++                properties:
++                  data-shift:
++                    const: 0
+         required:
+           - bus-type
+ 
+@@ -82,6 +120,11 @@ examples:
+             port {
+                 ov772x_0: endpoint {
+                     bus-type = <5>;
++                    vsync-active = <0>;
++                    hsync-active = <0>;
++                    pclk-sample = <0>;
++                    bus-width = <8>;
++                    data-shift = <0>;
+                     remote-endpoint = <&vcap1_in0>;
+                 };
+             };
+-- 
 2.27.0
 
