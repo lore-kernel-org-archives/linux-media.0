@@ -2,236 +2,230 @@ Return-Path: <SRS0=xaSx=B3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2DBBC433DF
-	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 08:33:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E75EC433DF
+	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 08:59:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BA7B020758
-	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 08:33:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 256C9207DF
+	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 08:59:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G+OGmYQU"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ggP3x2Kb"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726772AbgHQIdY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Aug 2020 04:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53698 "EHLO
+        id S1728152AbgHQI7U (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Aug 2020 04:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727027AbgHQIc2 (ORCPT
+        with ESMTP id S1726930AbgHQI7T (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Aug 2020 04:32:28 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695D2C061388;
-        Mon, 17 Aug 2020 01:32:28 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id 17so7874069pfw.9;
-        Mon, 17 Aug 2020 01:32:28 -0700 (PDT)
+        Mon, 17 Aug 2020 04:59:19 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51D9C061389
+        for <linux-media@vger.kernel.org>; Mon, 17 Aug 2020 01:59:18 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id r2so14155850wrs.8
+        for <linux-media@vger.kernel.org>; Mon, 17 Aug 2020 01:59:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=OgN4FVVdP+EhF1ujYvTAQgNw3tvzSDcv5PzN1nKoLuc=;
-        b=G+OGmYQUjJZaSBW599D9vY0hPs94/Lop1UOM2gXnC5C5A9cCtXpjONVn1i+sitqopr
-         C6QFvCQrDDlfGGbeKehlkkR8D8AigWvjD11BLEGjbnQJARgwwbhhh0dBL+m9XAWSNvGG
-         ru2idW+bSSWAfidBKho1MHJPLwjgis1BdFrFmbFv1/1IPW3r4C42XMZ9QgWDJmP+LD5C
-         BTOX58DZl3IpHyiXg78Mrs2shPellbY9nb9FuFnJdx13sseRH8H07V0ad7hqZDpiaOZh
-         0522u31TrE/vN+Fo8X3VIEhYe/34+8euK34fC+iPOdZsum5qDKZ9c4PaEhI87kd5yOgt
-         kCZQ==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=Jdr7HG0I+BWc3UfIli5Unc2Xw8mJlIZM3+wr92pTL+Q=;
+        b=ggP3x2KbPgJvf3ElMuqNvM2/4ujwMxF5id0JY5GtBhqdHn9xgkL32MKe3Jpb5e5Z33
+         M8qU6uDMkQONjSiYJ4J2DPo+OS2an3lViX7IMXunQG8h3RdDDeacBn31ZfydREdry7ho
+         uPd9dkxOPFT+DWttd4BxWXEJRyG9Ph6y6JQ5pg+FLT0B/pv49RVAXZh53LnJIw8oH1PW
+         rN31FCTa/tm0Iz9kCPKYRL1y02FgGAU/yYpA3TbV2RjYeoEVIBoHQ0ZGeQEXbWShm6rq
+         XEh5KDhtvId38eD6LoILxn8+bPJTHeSaIrkn/XIvL5/la9qo8+Ld4cTyqPcES0QncyPR
+         Kbng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=OgN4FVVdP+EhF1ujYvTAQgNw3tvzSDcv5PzN1nKoLuc=;
-        b=f4ABF+HRVP73cqttRGtl4kF4hWyyoOsplIbdoL4Was1b9ZG6Y+YfE9b5Gjq87IocEJ
-         HvD82u3ZYVXacbUCHR0fm1GbMHTe/PIFqRBSTS67Le81YlcYXKPmDa4z7EhXlDXsj5aS
-         FF/9cuuAjAUkFz77EhZ1+ezhbm8T8CuNkMJEUcz5PnulNKoR8yyeq9L+WrADLcTr0qJ7
-         ovn5w9hM4ZGSHh6vFjxhk5KdWFKSr62KLbGs7NQFiCazRgcx1SsXEmFWUzm9X2pEsbq6
-         cfOcW/xCngUAAw6tFldC8rTqZGYg8CPuSw5N8NzoVnpckwCQByxz8XKIX19hfKEji8Fa
-         HVVA==
-X-Gm-Message-State: AOAM533Ml1TRF36b2JcpsMopRpQdBTN5OJUK+w/UytSKE41lkQXDT70I
-        BarXg/mMWYKoMNcbst3QIXE=
-X-Google-Smtp-Source: ABdhPJwwfZ0fHwlnBF6kQnAMSh56m3wQvU5v1Vuu1X+2GqVpq3FIn/BLzSHwu7Xxc2LDektsBe2c4Q==
-X-Received: by 2002:a63:161a:: with SMTP id w26mr2718287pgl.211.1597653147908;
-        Mon, 17 Aug 2020 01:32:27 -0700 (PDT)
-Received: from localhost.localdomain ([49.207.202.98])
-        by smtp.gmail.com with ESMTPSA id b15sm18448351pft.116.2020.08.17.01.32.24
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Jdr7HG0I+BWc3UfIli5Unc2Xw8mJlIZM3+wr92pTL+Q=;
+        b=bBe+kE1P30a5/5wFQ69bDkXYJMMCrmKXDqcvwDohMSc5RHjeTYzJt12tZ39Ot7gLpv
+         4hFLcSxxP6EWWDnV4kGHJevomp05WOVw94IpeGYZinyEmAy1m5fpxzafHkkgXJtkiQDC
+         zZ7w373hCjmmNXuwG3hSdLoK3H9hb2dg5r/qb/m34XGYBj6jIMc2pTxK+Y347iAZ7VS5
+         9tfvctyJ4IwJGPHp7rGeOKfS/GR0X+ppCKnNWlwh18NfQuxid6v7bm1A5EnBRG5A2UUy
+         51goVmzhIJPVQyduJqBSGSkssX0sp3+5tS+wu07AttXn0rE2zoYBRhe57CRruYNmjFEq
+         OG0Q==
+X-Gm-Message-State: AOAM532ruGKYsvV8p64Sx1+fp9eMAVy2wXHobbbstIoNUfc61qPLw4x8
+        E0RqcWJb9r6rOLmaBSw8kPJpwp7jEieoKCq9
+X-Google-Smtp-Source: ABdhPJzVkyM8/q4NPkgLATpzzXOY7f2bMYtgtvyz2/FwWFcC+myOFqG7+SqccStg6rIjtSK9jIG2Yg==
+X-Received: by 2002:adf:c981:: with SMTP id f1mr14181945wrh.14.1597654757224;
+        Mon, 17 Aug 2020 01:59:17 -0700 (PDT)
+Received: from localhost.localdomain ([195.24.90.54])
+        by smtp.gmail.com with ESMTPSA id z127sm29439883wme.44.2020.08.17.01.59.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Aug 2020 01:32:27 -0700 (PDT)
-From:   Allen Pais <allen.lkml@gmail.com>
-To:     mchehab@kernel.org, maintainers@bluecherrydvr.com,
-        patrice.chotard@st.com
-Cc:     keescook@chromium.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Allen Pais <allen.lkml@gmail.com>,
-        Romain Perier <romain.perier@gmail.com>
-Subject: [PATCH 05/11] media: ttpci: convert tasklets to use new tasklet_setup() API
-Date:   Mon, 17 Aug 2020 14:01:47 +0530
-Message-Id: <20200817083153.22218-6-allen.lkml@gmail.com>
+        Mon, 17 Aug 2020 01:59:16 -0700 (PDT)
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Subject: [PATCH v2] v4l2-ctrl: Add VP9 codec levels
+Date:   Mon, 17 Aug 2020 11:58:52 +0300
+Message-Id: <20200817085852.20415-1-stanimir.varbanov@linaro.org>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200817083153.22218-1-allen.lkml@gmail.com>
-References: <20200817083153.22218-1-allen.lkml@gmail.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In preparation for unconditionally passing the
-struct tasklet_struct pointer to all tasklet
-callbacks, switch to using the new tasklet_setup()
-and from_tasklet() to pass the tasklet pointer explicitly.
+Add menu control for VP9 codec levels. A total of 14 levels are
+defined for Profile 0 (8bit) and Profile 2 (10bit). Each level
+is a set of constrained bitstreams coded with targeted resolutions,
+frame rates, and bitrates.
 
-Signed-off-by: Romain Perier <romain.perier@gmail.com>
-Signed-off-by: Allen Pais <allen.lkml@gmail.com>
+The definitions have been taken from webm project [1].
+
+[1] https://www.webmproject.org/vp9/levels/
+
+Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 ---
- drivers/media/pci/ttpci/av7110.c      | 20 ++++++++++----------
- drivers/media/pci/ttpci/budget-ci.c   | 15 ++++++++-------
- drivers/media/pci/ttpci/budget-core.c |  6 +++---
- 3 files changed, 21 insertions(+), 20 deletions(-)
+v2: Added links to webmproject in commit message and docs.
 
-diff --git a/drivers/media/pci/ttpci/av7110.c b/drivers/media/pci/ttpci/av7110.c
-index bf36b1e22b63..885e6bc40c19 100644
---- a/drivers/media/pci/ttpci/av7110.c
-+++ b/drivers/media/pci/ttpci/av7110.c
-@@ -357,9 +357,9 @@ static inline void start_debi_dma(struct av7110 *av7110, int dir,
- 		irdebi(av7110, DEBISWAB, addr, 0, len);
- }
+ .../media/v4l/ext-ctrls-codec.rst             | 43 +++++++++++++++++++
+ drivers/media/v4l2-core/v4l2-ctrls.c          | 21 +++++++++
+ include/uapi/linux/v4l2-controls.h            | 17 ++++++++
+ 3 files changed, 81 insertions(+)
+
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+index d0d506a444b1..23a45172404a 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+@@ -3316,6 +3316,49 @@ enum v4l2_mpeg_video_vp9_profile -
+     * - ``V4L2_MPEG_VIDEO_VP9_PROFILE_3``
+       - Profile 3
  
--static void debiirq(unsigned long cookie)
-+static void debiirq(struct tasklet_struct *t)
- {
--	struct av7110 *av7110 = (struct av7110 *)cookie;
-+	struct av7110 *av7110 = from_tasklet(av7110, t, debi_tasklet);
- 	int type = av7110->debitype;
- 	int handle = (type >> 8) & 0x1f;
- 	unsigned int xfer = 0;
-@@ -458,9 +458,9 @@ static void debiirq(unsigned long cookie)
- }
++.. _v4l2-mpeg-video-vp9-level:
++
++``V4L2_CID_MPEG_VIDEO_VP9_LEVEL (enum)``
++
++enum v4l2_mpeg_video_vp9_level -
++    This control allows selecting the level for VP9 encoder.
++    This is also used to enumerate supported levels by VP9 encoder or decoder.
++    More information can be found at
++    `webmproject <https://www.webmproject.org/vp9/levels/>`__. Possible values are:
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++
++    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_1_0``
++      - Level 1
++    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_1_1``
++      - Level 1.1
++    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_2_0``
++      - Level 2
++    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_2_1``
++      - Level 2.1
++    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_3_0``
++      - Level 3
++    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_3_1``
++      - Level 3.1
++    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_4_0``
++      - Level 4
++    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_4_1``
++      - Level 4.1
++    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_5_0``
++      - Level 5
++    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_5_1``
++      - Level 5.1
++    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_5_2``
++      - Level 5.2
++    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_6_0``
++      - Level 6
++    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_6_1``
++      - Level 6.1
++    * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_6_2``
++      - Level 6.2
++
  
- /* irq from av7110 firmware writing the mailbox register in the DPRAM */
--static void gpioirq(unsigned long cookie)
-+static void gpioirq(struct tasklet_struct *t)
- {
--	struct av7110 *av7110 = (struct av7110 *)cookie;
-+	struct av7110 *av7110 = from_tasklet(av7110, t, gpio_tasklet);
- 	u32 rxbuf, txbuf;
- 	int len;
+ High Efficiency Video Coding (HEVC/H.265) Control Reference
+ ===========================================================
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
+index 3f3fbcd60cc6..359dc737053d 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls.c
+@@ -474,6 +474,23 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
+ 		"3",
+ 		NULL,
+ 	};
++	static const char * const vp9_level[] = {
++		"1",
++		"1.1",
++		"2",
++		"2.1",
++		"3",
++		"3.1",
++		"4",
++		"4.1",
++		"5",
++		"5.1",
++		"5.2",
++		"6",
++		"6.1",
++		"6.2",
++		NULL,
++	};
  
-@@ -1230,9 +1230,9 @@ static int budget_stop_feed(struct dvb_demux_feed *feed)
- 	return status;
- }
+ 	static const char * const flash_led_mode[] = {
+ 		"Off",
+@@ -685,6 +702,8 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
+ 		return vp8_profile;
+ 	case V4L2_CID_MPEG_VIDEO_VP9_PROFILE:
+ 		return vp9_profile;
++	case V4L2_CID_MPEG_VIDEO_VP9_LEVEL:
++		return vp9_level;
+ 	case V4L2_CID_JPEG_CHROMA_SUBSAMPLING:
+ 		return jpeg_chroma_subsampling;
+ 	case V4L2_CID_DV_TX_MODE:
+@@ -938,6 +957,7 @@ const char *v4l2_ctrl_get_name(u32 id)
+ 	case V4L2_CID_MPEG_VIDEO_VPX_P_FRAME_QP:		return "VPX P-Frame QP Value";
+ 	case V4L2_CID_MPEG_VIDEO_VP8_PROFILE:			return "VP8 Profile";
+ 	case V4L2_CID_MPEG_VIDEO_VP9_PROFILE:			return "VP9 Profile";
++	case V4L2_CID_MPEG_VIDEO_VP9_LEVEL:			return "VP9 Level";
+ 	case V4L2_CID_MPEG_VIDEO_VP8_FRAME_HEADER:		return "VP8 Frame Header";
  
--static void vpeirq(unsigned long cookie)
-+static void vpeirq(struct tasklet_struct *t)
- {
--	struct av7110 *budget = (struct av7110 *)cookie;
-+	struct av7110 *budget = from_tasklet(budget, t, vpe_tasklet);
- 	u8 *mem = (u8 *) (budget->grabbing);
- 	u32 olddma = budget->ttbp;
- 	u32 newdma = saa7146_read(budget->dev, PCI_VDP3);
-@@ -2518,7 +2518,7 @@ static int av7110_attach(struct saa7146_dev* dev,
- 		saa7146_write(dev, NUM_LINE_BYTE3, (TS_HEIGHT << 16) | TS_WIDTH);
- 		saa7146_write(dev, MC2, MASK_04 | MASK_20);
- 
--		tasklet_init(&av7110->vpe_tasklet, vpeirq, (unsigned long) av7110);
-+		tasklet_setup(&av7110->vpe_tasklet, vpeirq);
- 
- 	} else if (budgetpatch) {
- 		spin_lock_init(&av7110->feedlock1);
-@@ -2599,7 +2599,7 @@ static int av7110_attach(struct saa7146_dev* dev,
- 		saa7146_write(dev, MC1, (MASK_13 | MASK_29));
- 
- 		/* end of budgetpatch register initialization */
--		tasklet_init (&av7110->vpe_tasklet,  vpeirq,  (unsigned long) av7110);
-+		tasklet_setup(&av7110->vpe_tasklet,  vpeirq);
- 	} else {
- 		saa7146_write(dev, PCI_BT_V1, 0x1c00101f);
- 		saa7146_write(dev, BCS_CTRL, 0x80400040);
-@@ -2614,8 +2614,8 @@ static int av7110_attach(struct saa7146_dev* dev,
- 		saa7146_write(dev, GPIO_CTRL, 0x000000);
- 	}
- 
--	tasklet_init (&av7110->debi_tasklet, debiirq, (unsigned long) av7110);
--	tasklet_init (&av7110->gpio_tasklet, gpioirq, (unsigned long) av7110);
-+	tasklet_setup(&av7110->debi_tasklet, debiirq);
-+	tasklet_setup(&av7110->gpio_tasklet, gpioirq);
- 
- 	mutex_init(&av7110->pid_mutex);
- 
-diff --git a/drivers/media/pci/ttpci/budget-ci.c b/drivers/media/pci/ttpci/budget-ci.c
-index 77b102b8a013..d59d18647371 100644
---- a/drivers/media/pci/ttpci/budget-ci.c
-+++ b/drivers/media/pci/ttpci/budget-ci.c
-@@ -99,9 +99,10 @@ struct budget_ci {
- 	u8 tuner_pll_address; /* used for philips_tdm1316l configs */
+ 	/* HEVC controls */
+@@ -1294,6 +1314,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
+ 	case V4L2_CID_MPEG_VIDEO_VPX_GOLDEN_FRAME_SEL:
+ 	case V4L2_CID_MPEG_VIDEO_VP8_PROFILE:
+ 	case V4L2_CID_MPEG_VIDEO_VP9_PROFILE:
++	case V4L2_CID_MPEG_VIDEO_VP9_LEVEL:
+ 	case V4L2_CID_DETECT_MD_MODE:
+ 	case V4L2_CID_MPEG_VIDEO_HEVC_PROFILE:
+ 	case V4L2_CID_MPEG_VIDEO_HEVC_LEVEL:
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index 62271418c1be..1b0bc79c1bc3 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -650,6 +650,23 @@ enum v4l2_mpeg_video_vp9_profile {
+ 	V4L2_MPEG_VIDEO_VP9_PROFILE_2				= 2,
+ 	V4L2_MPEG_VIDEO_VP9_PROFILE_3				= 3,
  };
++#define V4L2_CID_MPEG_VIDEO_VP9_LEVEL			(V4L2_CID_MPEG_BASE+513)
++enum v4l2_mpeg_video_vp9_level {
++	V4L2_MPEG_VIDEO_VP9_LEVEL_1_0	= 0,
++	V4L2_MPEG_VIDEO_VP9_LEVEL_1_1	= 1,
++	V4L2_MPEG_VIDEO_VP9_LEVEL_2_0	= 2,
++	V4L2_MPEG_VIDEO_VP9_LEVEL_2_1	= 3,
++	V4L2_MPEG_VIDEO_VP9_LEVEL_3_0	= 4,
++	V4L2_MPEG_VIDEO_VP9_LEVEL_3_1	= 5,
++	V4L2_MPEG_VIDEO_VP9_LEVEL_4_0	= 6,
++	V4L2_MPEG_VIDEO_VP9_LEVEL_4_1	= 7,
++	V4L2_MPEG_VIDEO_VP9_LEVEL_5_0	= 8,
++	V4L2_MPEG_VIDEO_VP9_LEVEL_5_1	= 9,
++	V4L2_MPEG_VIDEO_VP9_LEVEL_5_2	= 10,
++	V4L2_MPEG_VIDEO_VP9_LEVEL_6_0	= 11,
++	V4L2_MPEG_VIDEO_VP9_LEVEL_6_1	= 12,
++	V4L2_MPEG_VIDEO_VP9_LEVEL_6_2	= 13,
++};
  
--static void msp430_ir_interrupt(unsigned long data)
-+static void msp430_ir_interrupt(struct tasklet_struct *t)
- {
--	struct budget_ci *budget_ci = (struct budget_ci *) data;
-+	struct budget_ci_ir *ir = from_tasklet(ir, t, msp430_irq_tasklet);
-+	struct budget_ci *budget_ci = container_of(ir, typeof(*budget_ci), ir);
- 	struct rc_dev *dev = budget_ci->ir.dev;
- 	u32 command = ttpci_budget_debiread(&budget_ci->budget, DEBINOSWAP, DEBIADDR_IR, 2, 1, 0) >> 8;
+ /* CIDs for HEVC encoding. */
  
-@@ -229,8 +230,7 @@ static int msp430_ir_init(struct budget_ci *budget_ci)
- 
- 	budget_ci->ir.dev = dev;
- 
--	tasklet_init(&budget_ci->ir.msp430_irq_tasklet, msp430_ir_interrupt,
--		     (unsigned long) budget_ci);
-+	tasklet_setup(&budget_ci->ir.msp430_irq_tasklet, msp430_ir_interrupt);
- 
- 	SAA7146_IER_ENABLE(saa, MASK_06);
- 	saa7146_setgpio(saa, 3, SAA7146_GPIO_IRQHI);
-@@ -348,9 +348,10 @@ static int ciintf_slot_ts_enable(struct dvb_ca_en50221 *ca, int slot)
- 	return 0;
- }
- 
--static void ciintf_interrupt(unsigned long data)
-+static void ciintf_interrupt(struct tasklet_struct *t)
- {
--	struct budget_ci *budget_ci = (struct budget_ci *) data;
-+	struct budget_ci *budget_ci = from_tasklet(budget_ci, t,
-+						   ciintf_irq_tasklet);
- 	struct saa7146_dev *saa = budget_ci->budget.dev;
- 	unsigned int flags;
- 
-@@ -491,7 +492,7 @@ static int ciintf_init(struct budget_ci *budget_ci)
- 
- 	// Setup CI slot IRQ
- 	if (budget_ci->ci_irq) {
--		tasklet_init(&budget_ci->ciintf_irq_tasklet, ciintf_interrupt, (unsigned long) budget_ci);
-+		tasklet_setup(&budget_ci->ciintf_irq_tasklet, ciintf_interrupt);
- 		if (budget_ci->slot_status != SLOTSTATUS_NONE) {
- 			saa7146_setgpio(saa, 0, SAA7146_GPIO_IRQLO);
- 		} else {
-diff --git a/drivers/media/pci/ttpci/budget-core.c b/drivers/media/pci/ttpci/budget-core.c
-index 293867b9e796..d405eea5c37f 100644
---- a/drivers/media/pci/ttpci/budget-core.c
-+++ b/drivers/media/pci/ttpci/budget-core.c
-@@ -171,9 +171,9 @@ static int budget_read_fe_status(struct dvb_frontend *fe,
- 	return ret;
- }
- 
--static void vpeirq(unsigned long data)
-+static void vpeirq(struct tasklet_struct *t)
- {
--	struct budget *budget = (struct budget *) data;
-+	struct budget *budget = from_tasklet(budget, t, vpe_tasklet);
- 	u8 *mem = (u8 *) (budget->grabbing);
- 	u32 olddma = budget->ttbp;
- 	u32 newdma = saa7146_read(budget->dev, PCI_VDP3);
-@@ -519,7 +519,7 @@ int ttpci_budget_init(struct budget *budget, struct saa7146_dev *dev,
- 	/* upload all */
- 	saa7146_write(dev, GPIO_CTRL, 0x000000);
- 
--	tasklet_init(&budget->vpe_tasklet, vpeirq, (unsigned long) budget);
-+	tasklet_setup(&budget->vpe_tasklet, vpeirq);
- 
- 	/* frontend power on */
- 	if (bi->type != BUDGET_FS_ACTIVY)
 -- 
 2.17.1
 
