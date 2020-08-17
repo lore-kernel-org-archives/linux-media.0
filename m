@@ -2,77 +2,133 @@ Return-Path: <SRS0=xaSx=B3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FA54C433E3
-	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 10:17:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78FEBC433E1
+	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 10:22:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 404FE20758
-	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 10:17:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5FE8A207DE
+	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 10:22:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726792AbgHQKR2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Aug 2020 06:17:28 -0400
-Received: from mga04.intel.com ([192.55.52.120]:33940 "EHLO mga04.intel.com"
+        id S1728035AbgHQKWi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Aug 2020 06:22:38 -0400
+Received: from mga05.intel.com ([192.55.52.43]:17819 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726165AbgHQKR1 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Aug 2020 06:17:27 -0400
-IronPort-SDR: FySa7dAlmE2NcsMbQ6GaOHg+L7B3GtOogbnK3J8CfTaRZwV7HvMiuUL9MmmRScezwQbGGj/2DQ
- VsunIg4ey90g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9715"; a="152075591"
+        id S1728029AbgHQKWa (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 17 Aug 2020 06:22:30 -0400
+IronPort-SDR: EWAw+k/qt96TbiyDQodBfd3aqwKEl6LeJE8MYyYvmraJ0Yy7KD2gUMbSm/sXzVyEUqNQ8ovVSF
+ l0a+plv/7ObQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9715"; a="239493833"
 X-IronPort-AV: E=Sophos;i="5.76,322,1592895600"; 
-   d="scan'208";a="152075591"
+   d="scan'208";a="239493833"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2020 03:17:26 -0700
-IronPort-SDR: ETaTozTXbyvP4M1kZirBs7O6X035KZoNu83itkq/vXWiZt/LNdmlY1zLX8pImFhd2Y4rYwSYZs
- 83pDgOZj5ktA==
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2020 03:22:29 -0700
+IronPort-SDR: OA44cBuLyYK9qJcYKy84xRkmNXXpjE64mN2MIOgCv8Wzpk1D2brDdJ/cfVyMxZLM5BLZgV0SP+
+ Upi1CD8Yyqzw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.76,322,1592895600"; 
-   d="scan'208";a="326368878"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga008.jf.intel.com with ESMTP; 17 Aug 2020 03:17:22 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1k7bgy-009HUC-Nf; Mon, 17 Aug 2020 12:44:36 +0300
-Date:   Mon, 17 Aug 2020 12:44:36 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bingbu Cao <bingbu.cao@linux.intel.com>
-Cc:     Yong Zhi <yong.zhi@intel.com>,
+   d="scan'208";a="319666852"
+Received: from ipu5-build.bj.intel.com (HELO [10.238.232.196]) ([10.238.232.196])
+  by fmsmga004.fm.intel.com with ESMTP; 17 Aug 2020 03:22:27 -0700
+Subject: Re: [PATCH v1 5/7] media: ipu3-cio2: Replace infinite loop by one
+ with clear exit condition
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Yong Zhi <yong.zhi@intel.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Bingbu Cao <bingbu.cao@intel.com>,
         Tian Shu Qiu <tian.shu.qiu@intel.com>,
         linux-media@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: Re: [PATCH v1 6/7] media: ipu3-cio2: Use readl_poll_timeout() helper
-Message-ID: <20200817094436.GF1891694@smile.fi.intel.com>
 References: <20200814163017.35001-1-andriy.shevchenko@linux.intel.com>
- <20200814163017.35001-6-andriy.shevchenko@linux.intel.com>
- <6b739304-7d12-016f-f42a-089c8fe7efac@linux.intel.com>
+ <20200814163017.35001-5-andriy.shevchenko@linux.intel.com>
+From:   Bingbu Cao <bingbu.cao@linux.intel.com>
+Message-ID: <aa68f5ec-359c-70ce-ecf6-ee013497230a@linux.intel.com>
+Date:   Mon, 17 Aug 2020 18:21:23 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6b739304-7d12-016f-f42a-089c8fe7efac@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200814163017.35001-5-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Aug 17, 2020 at 05:27:33PM +0800, Bingbu Cao wrote:
-> On 8/15/20 12:30 AM, Andy Shevchenko wrote:
-> > We may use special helper macro to poll IO till condition or timeout occurs.
 
-> > +	ret = readl_poll_timeout(dma, value, value & CIO2_CDMAC0_DMA_HALTED, 4000, 2000000);
+
+On 8/15/20 12:30 AM, Andy Shevchenko wrote:
+> Refactor cio2_buffer_done() to get rid of infinite loop by replacing it by one
+> with clear exit condition. This change also allows to check for an error ahead.
 > 
-> This line is too long, need a break, others look good for me.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/media/pci/intel/ipu3/ipu3-cio2.c | 24 +++++++++++-------------
+>  1 file changed, 11 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
+> index eee7f841050d..f4175dc1501a 100644
+> --- a/drivers/media/pci/intel/ipu3/ipu3-cio2.c
+> +++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
+> @@ -541,7 +541,7 @@ static void cio2_buffer_done(struct cio2_device *cio2, unsigned int dma_chan)
+>  {
+>  	struct device *dev = &cio2->pci_dev->dev;
+>  	struct cio2_queue *q = cio2->cur_queue;
+> -	int buffers_found = 0;
+> +	struct cio2_fbpt_entry *const entry;
+No 'const' here.
 
-checkpatch doesn't complain, but if you insist, I'll split it in v2.
+>  	u64 ns = ktime_get_ns();
+>  
+>  	if (dma_chan >= CIO2_QUEUES) {
+> @@ -549,15 +549,18 @@ static void cio2_buffer_done(struct cio2_device *cio2, unsigned int dma_chan)
+>  		return;
+>  	}
+>  
+> +	entry = &q->fbpt[q->bufs_first * CIO2_MAX_LOPS];
+> +	if (entry->first_entry.ctrl & CIO2_FBPT_CTRL_VALID) {
+> +		dev_warn(&cio2->pci_dev->dev,
+> +			 "no ready buffers found on DMA channel %u\n",
+> +			 dma_chan);
+> +		return;
+> +	}
+> +
+>  	/* Find out which buffer(s) are ready */
+>  	do {
+> -		struct cio2_fbpt_entry *const entry =
+> -			&q->fbpt[q->bufs_first * CIO2_MAX_LOPS];
+>  		struct cio2_buffer *b;
+>  
+> -		if (entry->first_entry.ctrl & CIO2_FBPT_CTRL_VALID)
+> -			break;
+> -
+>  		b = q->bufs[q->bufs_first];
+>  		if (b) {
+>  			unsigned int bytes = entry[1].second_entry.num_of_bytes;
+> @@ -579,13 +582,8 @@ static void cio2_buffer_done(struct cio2_device *cio2, unsigned int dma_chan)
+>  		atomic_inc(&q->frame_sequence);
+>  		cio2_fbpt_entry_init_dummy(cio2, entry);
+>  		q->bufs_first = (q->bufs_first + 1) % CIO2_MAX_BUFFERS;
+> -		buffers_found++;
+> -	} while (1);
+> -
+> -	if (buffers_found == 0)
+> -		dev_warn(&cio2->pci_dev->dev,
+> -			 "no ready buffers found on DMA channel %u\n",
+> -			 dma_chan);
+> +		entry = &q->fbpt[q->bufs_first * CIO2_MAX_LOPS];
+> +	} while (!(entry->first_entry.ctrl & CIO2_FBPT_CTRL_VALID));
+>  }
+>  
+>  static void cio2_queue_event_sof(struct cio2_device *cio2, struct cio2_queue *q)
+> 
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Best regards,
+Bingbu Cao
