@@ -7,41 +7,41 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1E06C433DF
-	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 14:37:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF3D3C433E1
+	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 14:37:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AEA4A2076E
-	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 14:37:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B7FEA2076E
+	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 14:37:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="oL8xZ3uk"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="cOI0XVAx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726917AbgHROh3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 18 Aug 2020 10:37:29 -0400
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:60459 "EHLO
-        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726145AbgHROhX (ORCPT
+        id S1727000AbgHROhb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 18 Aug 2020 10:37:31 -0400
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:36829 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727890AbgHROhX (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 18 Aug 2020 10:37:23 -0400
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id 82jnkV8V2uuXO82jpkcevN; Tue, 18 Aug 2020 16:37:21 +0200
+        id 82jnkV8V2uuXO82jpkcevX; Tue, 18 Aug 2020 16:37:21 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1597761441; bh=irTPz7VAgrPkVcy8x74VB4PbDNhcURoddb11tRSn5bk=;
+        t=1597761441; bh=VT1phX6EYaOI2Ic/hMC9iaTZUXrMxXUqdljNRuY8DPQ=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=oL8xZ3ukMOngATrBvAtRGAjDTaCy9zpWUofH7TKTuEBNdOMSPD91jJsFwJHZ6KLSH
-         ee11OTGg2+gAU74KdlmeNzXDBjhBSfmWMVM4mG7K96jkw33J9TUB8hwPK1b81VL28/
-         riB38oV8fai/13EyucxF+Ql3Rn5Y+7Lsc/khIQsshdjHV8ETxnvjx1eOQ9nZHeimBO
-         Y59zT+19OX5TTUlRkK60QPuuzxM2//V6PEnNXAa1qKYe2zZpno3rhydJgSWG+lRsUL
-         VJ8l3noDsDFX8aYqhhHAR5toMWFbBAXwUSqui91O7u2OE0AxlI5o5oM9Ceiyd92L65
-         NUqSVYzfV3wNg==
+        b=cOI0XVAxun1cfCKmFu8QbBIVC/cizaPhjgoYszkQ9tqxrEo8lurXalff7hBpEFGvx
+         OobylfdOeIbFzumxObLVZgaUmc1JKHHWSo6+HIps9vbYp/IKYYeE2qRQiBnLH2FDX1
+         XrUrz3vHbSnJNARDNHd9BHsH03j7C5GTpGOJnPE3wQSV3S3Gmaplqbifb8E/uqgo5H
+         /wEM7r28NWhI3aQTEmN9HC+MTvK67HCw2dAJBXjwMRZRD5QZd0J1yihBABqKNbKqqS
+         nboFP9/8Ih83arCRK4NG98GfeqGEy+OTdqdmifxJbSO23m27SNwxh3GyXAZFauepmy
+         t6VbD6re+w5qg==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Dikshita Agarwal <dikshita@codeaurora.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCHv2 02/12] vivid: add read-only int32 control
-Date:   Tue, 18 Aug 2020 16:37:09 +0200
-Message-Id: <20200818143719.102128-3-hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv2 04/12] videodev2.h: add V4L2_BUF_CAP_SUPPORTS_RO_REQUESTS
+Date:   Tue, 18 Aug 2020 16:37:11 +0200
+Message-Id: <20200818143719.102128-5-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200818143719.102128-1-hverkuil-cisco@xs4all.nl>
 References: <20200818143719.102128-1-hverkuil-cisco@xs4all.nl>
@@ -56,95 +56,87 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This read-only int32 control is used to test read-only controls in
-combination with requests. It is set by the driver to the buffer sequence
-counter module 256.
+This patch adds support for the V4L2_BUF_CAP_SUPPORTS_RO_REQUESTS
+flag. This flag is used for Read-Only Requests.
+
+Based on a patch from Yunfei Dong <yunfei.dong@mediatek.com>.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/test-drivers/vivid/vivid-core.h       |  1 +
- drivers/media/test-drivers/vivid/vivid-ctrls.c      | 13 +++++++++++++
- .../media/test-drivers/vivid/vivid-kthread-cap.c    | 10 ++++++----
- 3 files changed, 20 insertions(+), 4 deletions(-)
+ drivers/media/common/videobuf2/videobuf2-core.c | 3 +++
+ drivers/media/common/videobuf2/videobuf2-v4l2.c | 4 +++-
+ drivers/media/v4l2-core/v4l2-mem2mem.c          | 3 ++-
+ include/media/videobuf2-core.h                  | 1 +
+ include/uapi/linux/videodev2.h                  | 1 +
+ 5 files changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/test-drivers/vivid/vivid-core.h b/drivers/media/test-drivers/vivid/vivid-core.h
-index 99e69b8f770f..058a12c6890e 100644
---- a/drivers/media/test-drivers/vivid/vivid-core.h
-+++ b/drivers/media/test-drivers/vivid/vivid-core.h
-@@ -230,6 +230,7 @@ struct vivid_dev {
- 	struct v4l2_ctrl		*string;
- 	struct v4l2_ctrl		*bitmask;
- 	struct v4l2_ctrl		*int_menu;
-+	struct v4l2_ctrl		*ro_int32;
- 	struct v4l2_ctrl		*test_pattern;
- 	struct v4l2_ctrl		*colorspace;
- 	struct v4l2_ctrl		*rgb_range_cap;
-diff --git a/drivers/media/test-drivers/vivid/vivid-ctrls.c b/drivers/media/test-drivers/vivid/vivid-ctrls.c
-index 334130568dcb..f16910ceaa77 100644
---- a/drivers/media/test-drivers/vivid/vivid-ctrls.c
-+++ b/drivers/media/test-drivers/vivid/vivid-ctrls.c
-@@ -33,6 +33,7 @@
- #define VIVID_CID_U16_MATRIX		(VIVID_CID_CUSTOM_BASE + 9)
- #define VIVID_CID_U8_4D_ARRAY		(VIVID_CID_CUSTOM_BASE + 10)
- #define VIVID_CID_AREA			(VIVID_CID_CUSTOM_BASE + 11)
-+#define VIVID_CID_RO_INTEGER		(VIVID_CID_CUSTOM_BASE + 12)
+diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+index f544d3393e9d..5194056129de 100644
+--- a/drivers/media/common/videobuf2/videobuf2-core.c
++++ b/drivers/media/common/videobuf2/videobuf2-core.c
+@@ -2354,6 +2354,9 @@ int vb2_core_queue_init(struct vb2_queue *q)
+ 	if (WARN_ON(q->requires_requests && !q->supports_requests))
+ 		return -EINVAL;
  
- #define VIVID_CID_VIVID_BASE		(0x00f00000 | 0xf000)
- #define VIVID_CID_VIVID_CLASS		(0x00f00000 | 1)
-@@ -280,6 +281,17 @@ static const struct v4l2_ctrl_config vivid_ctrl_area = {
- 	.p_def.p_const = &area,
- };
- 
-+static const struct v4l2_ctrl_config vivid_ctrl_ro_int32 = {
-+	.ops = &vivid_user_gen_ctrl_ops,
-+	.id = VIVID_CID_RO_INTEGER,
-+	.name = "Read-Only Integer 32 Bits",
-+	.type = V4L2_CTRL_TYPE_INTEGER,
-+	.flags = V4L2_CTRL_FLAG_READ_ONLY,
-+	.min = 0,
-+	.max = 255,
-+	.step = 1,
-+};
++	if (WARN_ON(q->supports_ro_requests && !q->supports_requests))
++		return -EINVAL;
 +
- /* Framebuffer Controls */
+ 	INIT_LIST_HEAD(&q->queued_list);
+ 	INIT_LIST_HEAD(&q->done_list);
+ 	spin_lock_init(&q->done_lock);
+diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+index 30caad27281e..9471320caaa0 100644
+--- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
++++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+@@ -717,7 +717,9 @@ static void fill_buf_caps(struct vb2_queue *q, u32 *caps)
+ 	if (q->allow_cache_hints && q->io_modes & VB2_MMAP)
+ 		*caps |= V4L2_BUF_CAP_SUPPORTS_MMAP_CACHE_HINTS;
+ #ifdef CONFIG_MEDIA_CONTROLLER_REQUEST_API
+-	if (q->supports_requests)
++	if (q->supports_ro_requests)
++		*caps |= V4L2_BUF_CAP_SUPPORTS_RO_REQUESTS;
++	else if (q->supports_requests)
+ 		*caps |= V4L2_BUF_CAP_SUPPORTS_REQUESTS;
+ #endif
+ }
+diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
+index 95a8f2dc5341..48f87cfe2f63 100644
+--- a/drivers/media/v4l2-core/v4l2-mem2mem.c
++++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+@@ -713,7 +713,8 @@ int v4l2_m2m_qbuf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
  
- static int vivid_fb_s_ctrl(struct v4l2_ctrl *ctrl)
-@@ -1590,6 +1602,7 @@ int vivid_create_controls(struct vivid_dev *dev, bool show_ccs_cap,
- 	dev->string = v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_string, NULL);
- 	dev->bitmask = v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_bitmask, NULL);
- 	dev->int_menu = v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_int_menu, NULL);
-+	dev->ro_int32 = v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_ro_int32, NULL);
- 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_area, NULL);
- 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u32_array, NULL);
- 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u16_matrix, NULL);
-diff --git a/drivers/media/test-drivers/vivid/vivid-kthread-cap.c b/drivers/media/test-drivers/vivid/vivid-kthread-cap.c
-index 01a9d671b947..cf7f62bfcf2f 100644
---- a/drivers/media/test-drivers/vivid/vivid-kthread-cap.c
-+++ b/drivers/media/test-drivers/vivid/vivid-kthread-cap.c
-@@ -426,6 +426,7 @@ static void vivid_fillbuff(struct vivid_dev *dev, struct vivid_buffer *buf)
- 		is_loop = true;
+ 	vq = v4l2_m2m_get_vq(m2m_ctx, buf->type);
+ 	if (V4L2_TYPE_IS_CAPTURE(vq->type) &&
+-	    (buf->flags & V4L2_BUF_FLAG_REQUEST_FD)) {
++	    (buf->flags & V4L2_BUF_FLAG_REQUEST_FD) &&
++	    !vq->supports_ro_requests) {
+ 		dprintk("%s: requests cannot be used with capture buffers\n",
+ 			__func__);
+ 		return -EPERM;
+diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
+index 52ef92049073..af7ecff725a5 100644
+--- a/include/media/videobuf2-core.h
++++ b/include/media/videobuf2-core.h
+@@ -575,6 +575,7 @@ struct vb2_queue {
+ 	unsigned int			allow_zero_bytesused:1;
+ 	unsigned int		   quirk_poll_must_check_waiting_for_buffers:1;
+ 	unsigned int			supports_requests:1;
++	unsigned int			supports_ro_requests:1;
+ 	unsigned int			requires_requests:1;
+ 	unsigned int			uses_qbuf:1;
+ 	unsigned int			uses_requests:1;
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index c7b70ff53bc1..7226d6d3c1e4 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -963,6 +963,7 @@ struct v4l2_requestbuffers {
+ #define V4L2_BUF_CAP_SUPPORTS_ORPHANED_BUFS		(1 << 4)
+ #define V4L2_BUF_CAP_SUPPORTS_M2M_HOLD_CAPTURE_BUF	(1 << 5)
+ #define V4L2_BUF_CAP_SUPPORTS_MMAP_CACHE_HINTS		(1 << 6)
++#define V4L2_BUF_CAP_SUPPORTS_RO_REQUESTS		(1 << 7)
  
- 	buf->vb.sequence = dev->vid_cap_seq_count;
-+	v4l2_ctrl_s_ctrl(dev->ro_int32, buf->vb.sequence & 0xff);
- 	if (dev->field_cap == V4L2_FIELD_ALTERNATE) {
- 		/*
- 		 * 60 Hz standards start with the bottom field, 50 Hz standards
-@@ -515,10 +516,11 @@ static void vivid_fillbuff(struct vivid_dev *dev, struct vivid_buffer *buf)
- 		mutex_unlock(dev->ctrl_hdl_user_aud.lock);
- 		tpg_gen_text(tpg, basep, line++ * line_height, 16, str);
- 		mutex_lock(dev->ctrl_hdl_user_gen.lock);
--		snprintf(str, sizeof(str), " int32 %d, int64 %lld, bitmask %08x ",
--			dev->int32->cur.val,
--			*dev->int64->p_cur.p_s64,
--			dev->bitmask->cur.val);
-+		snprintf(str, sizeof(str), " int32 %d, ro_int32 %d, int64 %lld, bitmask %08x ",
-+			 dev->int32->cur.val,
-+			 dev->ro_int32->cur.val,
-+			 *dev->int64->p_cur.p_s64,
-+			 dev->bitmask->cur.val);
- 		tpg_gen_text(tpg, basep, line++ * line_height, 16, str);
- 		snprintf(str, sizeof(str), " boolean %d, menu %s, string \"%s\" ",
- 			dev->boolean->cur.val,
+ /**
+  * struct v4l2_plane - plane info for multi-planar buffers
 -- 
 2.27.0
 
