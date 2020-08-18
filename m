@@ -2,398 +2,184 @@ Return-Path: <SRS0=pHRl=B4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9CF6C433E1
-	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 07:46:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 619D5C433E8
+	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 07:51:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9CBFA20738
-	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 07:46:17 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="mUxAmzYy"
+	by mail.kernel.org (Postfix) with ESMTP id 4973C20825
+	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 07:51:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726676AbgHRHqP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 18 Aug 2020 03:46:15 -0400
-Received: from mailout4.samsung.com ([203.254.224.34]:34214 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726635AbgHRHp6 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 18 Aug 2020 03:45:58 -0400
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20200818074555epoutp04ee7e602b0f15f34e7973bf768b753a0d~sTR0d6N2n3248532485epoutp04G
-        for <linux-media@vger.kernel.org>; Tue, 18 Aug 2020 07:45:55 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20200818074555epoutp04ee7e602b0f15f34e7973bf768b753a0d~sTR0d6N2n3248532485epoutp04G
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1597736755;
-        bh=Zxep55EI+fppSvUl8AKpPiN+7XzgmmMwtuEKgBYUiB0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mUxAmzYyDZXN2OVAnK8fTCoKkWip8Z8iRYkD9O7mrmmoP5+z5Tdqfn++6UPySz9Pj
-         RliTkdCeTmZ3bd6VXHSjuOtXToXhD9WwSTEcDg9nKdPq8ln6vYlbULEUdAPqF0Jd4P
-         V6tUQT+pm4lN53XzIDYMA1jIYtbv9QBVgcKzk+ts=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
-        20200818074554epcas2p1744ee5e7179005b3e00bb6e7d517dc66~sTRz3Wuvn1835918359epcas2p1D;
-        Tue, 18 Aug 2020 07:45:54 +0000 (GMT)
-Received: from epsmges2p1.samsung.com (unknown [182.195.40.181]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4BW2yn2rp7zMqYkb; Tue, 18 Aug
-        2020 07:45:53 +0000 (GMT)
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        27.CD.19322.1378B3F5; Tue, 18 Aug 2020 16:45:53 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200818074553epcas2p240c2129fb8186f53e03abb0a0725461c~sTRyXolaO2912929129epcas2p2J;
-        Tue, 18 Aug 2020 07:45:53 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200818074552epsmtrp2846013684148a5d9ba9ca9a6e668269c~sTRyWiEey3172931729epsmtrp2V;
-        Tue, 18 Aug 2020 07:45:52 +0000 (GMT)
-X-AuditID: b6c32a45-797ff70000004b7a-eb-5f3b87318684
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A7.6D.08382.0378B3F5; Tue, 18 Aug 2020 16:45:52 +0900 (KST)
-Received: from Dabang.dsn.sec.samsung.com (unknown [12.36.155.59]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200818074552epsmtip258a1346d0159ab3ee30e951ffa88b795~sTRyEiSmV2522325223epsmtip2d;
-        Tue, 18 Aug 2020 07:45:52 +0000 (GMT)
-From:   Hyesoo Yu <hyesoo.yu@samsung.com>
-To:     sumit.semwal@linaro.org
-Cc:     minchan@kernel.org, akpm@linux-foundation.org,
-        iamjoonsoo.kim@lge.com, joaodias@google.com, linux-mm@kvack.org,
-        pullip.cho@samsung.com, surenb@google.com, vbabka@suse.cz,
-        afd@ti.com, benjamin.gaignard@linaro.org, lmark@codeaurora.org,
-        labbott@redhat.com, Brian.Starkey@arm.com, john.stultz@linaro.org,
-        christian.koenig@amd.com, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, Hyesoo Yu <hyesoo.yu@samsung.com>
-Subject: [PATCH 2/3] dma-buf: heaps: add chunk heap to dmabuf heaps
-Date:   Tue, 18 Aug 2020 17:04:14 +0900
-Message-Id: <20200818080415.7531-3-hyesoo.yu@samsung.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200818080415.7531-1-hyesoo.yu@samsung.com>
+        id S1726617AbgHRHvn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 18 Aug 2020 03:51:43 -0400
+Received: from mga07.intel.com ([134.134.136.100]:36067 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726391AbgHRHvn (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 18 Aug 2020 03:51:43 -0400
+IronPort-SDR: miBir/xaCGkIRbMId22e/PjVetFulUeF34tZVriGa9eiCHdALiXoDat/eCfUNKWFsB4Uhg5jPj
+ U+/AMjANWjrg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9716"; a="219174024"
+X-IronPort-AV: E=Sophos;i="5.76,326,1592895600"; 
+   d="scan'208";a="219174024"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2020 00:51:42 -0700
+IronPort-SDR: O7IbCjQr4XUbwiQF5whfNvBdUcO2/Z69nS32nzJifLg4ENj9Q+JQzu7duTgzBxxOFAjuIv+CP/
+ xDqHIdilxU+g==
+X-IronPort-AV: E=Sophos;i="5.76,326,1592895600"; 
+   d="scan'208";a="328896449"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2020 00:51:39 -0700
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id 0708A2064F; Tue, 18 Aug 2020 10:51:37 +0300 (EEST)
+Date:   Tue, 18 Aug 2020 10:51:36 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Cc:     linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH 2/2] rcar-csi2: Use V4L2 async helpers to create the
+ notifier
+Message-ID: <20200818075136.GO24582@paasikivi.fi.intel.com>
+References: <20200807111619.3664763-1-niklas.soderlund+renesas@ragnatech.se>
+ <20200807111619.3664763-3-niklas.soderlund+renesas@ragnatech.se>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Te0xTZxTfd297W3S4a0X8VuboypYNHNgWi1/RMo2M3bkRWIhbIsm6Du6A
-        rK+0RWEki4gIIu9u6AAV9uBZwlYQ0FGZlY1aX7wkZKKMMpg6EQIDYQiu9GrGf79zzu93ft85
-        Xw4X5xVy+NwkjZHWa5QqIbGG1XLJPyRQnLVDIVp4QqJJRxEHlTeaCXTY5iCQ09EN0MTwz2x0
-        pvM6G/XPThJo6Vg3G9UezyDQowonjq4uBqLa9nkM/dM/gqG+8+UEyv3xLBvdMT9ho9LLAxiq
-        mp3koOW8iwBlWjs5yHF7hoNMvRUEKkvPB7s2UZm9SwRlPm0GVF9+HkZVWJIpS90xgrJMF3Oo
-        nIl+jBoaaCco+8lFFjV8vAujbi2P4tTkhZsEld9cB6irFZ0cqmuwFaNmLC9Hk/tVOxNpZTyt
-        F9CaOG18kiZBLnwvRrFHIQ0RiQPFMrRdKNAo1bRcGP5+dGBEksq1C6HggFKV7EpFKw0G4daw
-        nXptspEWJGoNRrmQ1sWrdGKxLsigVBuSNQlBcVp1qFgkkkhdzE9UiVW5YTqbPMX0Uz/rEMgL
-        zgEeXEhug/W5c0QOWMPlkW0AzsyPcphgGsD7putsJpgD8ErrL+CZZKb+V4wpWAG8aE3HmeCR
-        S9JQS6ywCPJ1aG+uciu8SB94oqbG3Qona1lwwDToLmwg98CJ9gx8BbPI12C23c5awZ6kDPZM
-        lbAZO19YVHbbxedyPchQOFYvYyjr4eVv/nTTcRcl42yZ+xGQrPeAhSYLvsKHZDhsP/km02YD
-        vN/VzGEwH848tBIMPgivHXGyGe0RAHtKbj4tBMPS8Sy3L076w8bzW5mWfrDz96e262D2pSUO
-        k/aE2Ud5jNAPdlSdZjH4RehsyGIzFAqOlPgxm8oDcLrLyi4EgtJVw5SuGqb0f98KgNcBb1pn
-        UCfQBolOvPp/LcB9GgFvtwHTxFSQDWBcYAOQiwu9PD+1b1fwPOOVqV/Qeq1Cn6yiDTYgdW26
-        COdvjNO6bktjVIilkpAQkUyKpCESJNzkqX6l+2MemaA00p/TtI7WP9NhXA/+ISwqEvSEhWoL
-        qgNfCr3bsDf6+YwzP9SNXHv3XLH4gxPvfPXHPtbS2EP/yRZnsXTb7I60jgHf4oLRUxdS09VN
-        EW8dfnW66BTm0xhXXhm1gNdd8fNSB8sXb8QexdcdTEmS3B35cGJwWLNL0hTebP+3sumzPin+
-        tczHNi+tHPy+fC5VkpZZIvJVVDs+Wu43U9/ZBW8Qt57z2owKrK29MuRxI3Fh7e5vhV1BW74s
-        Hy94zNX+tU9dyb8XlQuF++36zd4pxoCNTv7jLS/EOmPHeL/xqwvP5YKhHIk5gWyLGa+Zmh83
-        FKzPdPwdUxV5J0L+YO8slhSpCF0Ia/EfPzCU9qC+495avbeQZUhUigNwvUH5H5NjC5ujBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Ra0xSYRjHe885HI401gltvmqzRtOWW4Zl9VpptbY8NbNc37oZ1fFSogha
-        SWWE2QXEVLqJldiK5WVdmJWl1QKaQMZMrdnSXHadaWpK6QxLZG19++/5/Z7n/+GhcMFzIpBK
-        Tc9iZeniNCHJI+5ZhLPmi04uTxQVqSNRv6OYiy7dqiGRyuwgUbejGaC+rnoOKrc6OajN1U8i
-        9+lmDqrU5JHol6EbR01j81FlwwiGhtveY6j14SUSFdy+y0Hvav5wkN7+GkNGVz8XjWufApT/
-        yMpFjs4hLtK1GEhUdqwQrPJn8lvcJFNzpQYwrYVajDGYshlT1WmSMf0o4TLqvjaM6XjdQDK2
-        i2ME06VpxJi34x9wpv/xK5IprK0CTJPBymUa2+9jzJApeBO9hbdiD5uWup+VLYjZyUsxFsRI
-        zdEHdXfaCCXQLlIDHwrSkXCo+hmmBjxKQNcDWPyygvCCAKgfsmPe7Au7jls5XskFYLlDw/UA
-        kp4LbbVG4Ml+dBC8cOPGpITTFgJabraTHuBLr4F9DXm4JxN0CDxls0028Oko+HLgPMfbMAsW
-        l3VOHKIoH3oZ/FQd5RkLJpS6hjrMq0+H9tKPk6v4hJ53twwvArT+P6T/DxkAVgUCWKlckiyR
-        R0gj0tkD4XKxRJ6dnhy+O0NiApP/DptXB+5XDYSbAUYBM4AULvTj77ItTRTw94hzFKwsI1GW
-        ncbKzSCIIoT+/PbMih0COlmcxe5jWSkr+0cxyidQiTUlLc9ykjO3hk11SBzHS066SWGMujrn
-        Q+QXFVv2bU1C0JjhnTLiqWLUh3tG9PV79kpXbsgjRzxv/5ty1x/ntMWquJbS+lSdZmeFtrVS
-        81BZmRiqXyTNwfoWP1joTjqnTwiNFfHqZ3SonMrqsVErNjhSe/Z3HG2OXjc7cHWK0ZLrLF9n
-        P1GYYVzvwm3JuXP8lRvzBzLj30cVDD+e8iaB/bn5VrDad8nS3ICuhMsdPbrg8OsdcV9CYjcQ
-        n16datzuriih5/QeWhup0CqKUtngHlf3UXlvr+jzeZWzc29Sz5Fa9ALu1Rf4fbNP79nGb99x
-        7yq/eVD3JDbTojgcOoW9JiTkKeKIMFwmF/8F/6eiT14DAAA=
-X-CMS-MailID: 20200818074553epcas2p240c2129fb8186f53e03abb0a0725461c
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20200818074553epcas2p240c2129fb8186f53e03abb0a0725461c
-References: <20200818080415.7531-1-hyesoo.yu@samsung.com>
-        <CGME20200818074553epcas2p240c2129fb8186f53e03abb0a0725461c@epcas2p2.samsung.com>
+In-Reply-To: <20200807111619.3664763-3-niklas.soderlund+renesas@ragnatech.se>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch adds support for a chunk heap that allows for buffers
-that are made up of a list of fixed size chunks taken from a CMA.
-Chunk sizes are configuratd when the heaps are created.
+Hi Niklas,
 
-Signed-off-by: Hyesoo Yu <hyesoo.yu@samsung.com>
----
- drivers/dma-buf/heaps/Kconfig      |   9 ++
- drivers/dma-buf/heaps/Makefile     |   1 +
- drivers/dma-buf/heaps/chunk_heap.c | 222 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 232 insertions(+)
- create mode 100644 drivers/dma-buf/heaps/chunk_heap.c
+On Fri, Aug 07, 2020 at 01:16:19PM +0200, Niklas Söderlund wrote:
+> The V4L2 async framework helpers now populates the async notifier with
+> endpoint matching information and there is no need to do this manually
+> in the R-Car CSI-2 driver, switch to using the provided helper.
+> 
+> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+> ---
+>  drivers/media/platform/rcar-vin/rcar-csi2.c | 48 +++++----------------
+>  1 file changed, 11 insertions(+), 37 deletions(-)
+> 
+> diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
+> index c6cc4f473a077899..f0067ff21d5d9d33 100644
+> --- a/drivers/media/platform/rcar-vin/rcar-csi2.c
+> +++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
+> @@ -362,7 +362,6 @@ struct rcar_csi2 {
+>  	struct media_pad pads[NR_OF_RCAR_CSI2_PAD];
+>  
+>  	struct v4l2_async_notifier notifier;
+> -	struct v4l2_async_subdev asd;
+>  	struct v4l2_subdev *remote;
+>  
+>  	struct v4l2_mbus_framefmt mf;
+> @@ -774,9 +773,11 @@ static const struct v4l2_async_notifier_operations rcar_csi2_notify_ops = {
+>  	.unbind = rcsi2_notify_unbind,
+>  };
+>  
+> -static int rcsi2_parse_v4l2(struct rcar_csi2 *priv,
+> -			    struct v4l2_fwnode_endpoint *vep)
+> +static int rcar_csi2_parse_v4l2(struct device *dev,
+> +				struct v4l2_fwnode_endpoint *vep,
+> +				struct v4l2_async_subdev *asd)
+>  {
+> +	struct rcar_csi2 *priv = dev_get_drvdata(dev);
+>  	unsigned int i;
+>  
+>  	/* Only port 0 endpoint 0 is valid. */
+> @@ -806,53 +807,26 @@ static int rcsi2_parse_v4l2(struct rcar_csi2 *priv,
+>  		}
+>  	}
+>  
+> +	dev_dbg(priv->dev, "Found '%pOF'\n", to_of_node(asd->match.fwnode));
+> +
+>  	return 0;
+>  }
+>  
+>  static int rcsi2_parse_dt(struct rcar_csi2 *priv)
+>  {
+> -	struct device_node *ep;
+> -	struct v4l2_fwnode_endpoint v4l2_ep = { .bus_type = 0 };
+>  	int ret;
+>  
+> -	ep = of_graph_get_endpoint_by_regs(priv->dev->of_node, 0, 0);
+> -	if (!ep) {
+> -		dev_err(priv->dev, "Not connected to subdevice\n");
+> -		return -EINVAL;
+> -	}
+> -
+> -	ret = v4l2_fwnode_endpoint_parse(of_fwnode_handle(ep), &v4l2_ep);
+> -	if (ret) {
+> -		dev_err(priv->dev, "Could not parse v4l2 endpoint\n");
+> -		of_node_put(ep);
+> -		return -EINVAL;
+> -	}
+> -
+> -	ret = rcsi2_parse_v4l2(priv, &v4l2_ep);
+> -	if (ret) {
+> -		of_node_put(ep);
+> -		return ret;
+> -	}
+> -
+> -	priv->asd.match.fwnode =
+> -		fwnode_graph_get_remote_endpoint(of_fwnode_handle(ep));
+> -	priv->asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
+> -
+> -	of_node_put(ep);
+> -
+>  	v4l2_async_notifier_init(&priv->notifier);
+>  
+> -	ret = v4l2_async_notifier_add_subdev(&priv->notifier, &priv->asd);
+> -	if (ret) {
+> -		fwnode_handle_put(priv->asd.match.fwnode);
+> +	ret = v4l2_async_notifier_parse_fwnode_endpoints_by_port(
+> +			priv->dev, &priv->notifier,
+> +			sizeof(struct v4l2_async_subdev), 0,
+> +			rcar_csi2_parse_v4l2);
 
-diff --git a/drivers/dma-buf/heaps/Kconfig b/drivers/dma-buf/heaps/Kconfig
-index a5eef06..98552fa 100644
---- a/drivers/dma-buf/heaps/Kconfig
-+++ b/drivers/dma-buf/heaps/Kconfig
-@@ -12,3 +12,12 @@ config DMABUF_HEAPS_CMA
- 	  Choose this option to enable dma-buf CMA heap. This heap is backed
- 	  by the Contiguous Memory Allocator (CMA). If your system has these
- 	  regions, you should say Y here.
-+
-+config DMABUF_HEAPS_CHUNK
-+	tristate "DMA-BUF CHUNK Heap"
-+	depends on DMABUF_HEAPS && DMA_CMA
-+	help
-+	  Choose this option to enable dma-buf CHUNK heap. This heap is backed
-+	  by the Contiguous Memory Allocator (CMA) and allocate the buffers that
-+	  are made up to a list of fixed size chunks tasken from CMA. Chunk sizes
-+	  are configurated when the heaps are created.
-diff --git a/drivers/dma-buf/heaps/Makefile b/drivers/dma-buf/heaps/Makefile
-index 6e54cde..3b2a0986 100644
---- a/drivers/dma-buf/heaps/Makefile
-+++ b/drivers/dma-buf/heaps/Makefile
-@@ -2,3 +2,4 @@
- obj-y					+= heap-helpers.o
- obj-$(CONFIG_DMABUF_HEAPS_SYSTEM)	+= system_heap.o
- obj-$(CONFIG_DMABUF_HEAPS_CMA)		+= cma_heap.o
-+obj-$(CONFIG_DMABUF_HEAPS_CHUNK)	+= chunk_heap.o
-diff --git a/drivers/dma-buf/heaps/chunk_heap.c b/drivers/dma-buf/heaps/chunk_heap.c
-new file mode 100644
-index 0000000..1eefaec
---- /dev/null
-+++ b/drivers/dma-buf/heaps/chunk_heap.c
-@@ -0,0 +1,222 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * ION Memory Allocator chunk heap exporter
-+ *
-+ * Copyright (c) 2020 Samsung Electronics Co., Ltd.
-+ * Author: <hyesoo.yu@samsung.com> for Samsung Electronics.
-+ */
-+
-+#include <linux/platform_device.h>
-+#include <linux/cma.h>
-+#include <linux/device.h>
-+#include <linux/dma-buf.h>
-+#include <linux/dma-heap.h>
-+#include <linux/dma-contiguous.h>
-+#include <linux/err.h>
-+#include <linux/errno.h>
-+#include <linux/highmem.h>
-+#include <linux/module.h>
-+#include <linux/slab.h>
-+#include <linux/scatterlist.h>
-+#include <linux/sched/signal.h>
-+#include <linux/of_reserved_mem.h>
-+#include <linux/of.h>
-+
-+#include "heap-helpers.h"
-+
-+struct chunk_heap {
-+	struct dma_heap *heap;
-+	phys_addr_t base;
-+	phys_addr_t size;
-+	atomic_t cur_pageblock_idx;
-+	unsigned int max_num_pageblocks;
-+	unsigned int order;
-+};
-+
-+static void chunk_heap_free(struct heap_helper_buffer *buffer)
-+{
-+	struct chunk_heap *chunk_heap = dma_heap_get_drvdata(buffer->heap);
-+	pgoff_t pg;
-+
-+	for (pg = 0; pg < buffer->pagecount; pg++)
-+		__free_pages(buffer->pages[pg], chunk_heap->order);
-+	kvfree(buffer->pages);
-+	kfree(buffer);
-+}
-+
-+static inline unsigned long chunk_get_next_pfn(struct chunk_heap *chunk_heap)
-+{
-+	unsigned long i = atomic_inc_return(&chunk_heap->cur_pageblock_idx) %
-+		chunk_heap->max_num_pageblocks;
-+
-+	return PHYS_PFN(chunk_heap->base) + i * pageblock_nr_pages;
-+}
-+
-+static int chunk_alloc_pages(struct chunk_heap *chunk_heap, struct page **pages,
-+			     unsigned int order, unsigned int count)
-+{
-+	unsigned long base;
-+	unsigned int i = 0, nr_block = 0, nr_elem, ret;
-+
-+	while (count) {
-+		/*
-+		 * If the number of scanned page block is the same as max block,
-+		 * the tries of allocation fails.
-+		 */
-+		if (nr_block++ == chunk_heap->max_num_pageblocks) {
-+			ret = -ENOMEM;
-+			goto err_bulk;
-+		}
-+		base = chunk_get_next_pfn(chunk_heap);
-+		nr_elem = min_t(unsigned int, count, pageblock_nr_pages >> order);
-+		ret = alloc_pages_bulk(base, base + pageblock_nr_pages, MIGRATE_CMA,
-+				       GFP_KERNEL, order, nr_elem, pages + i);
-+		if (ret < 0)
-+			goto err_bulk;
-+
-+		i += ret;
-+		count -= ret;
-+	}
-+
-+	return 0;
-+
-+err_bulk:
-+	while (i-- > 0)
-+		__free_pages(pages[i], order);
-+
-+	return ret;
-+}
-+
-+static int chunk_heap_allocate(struct dma_heap *heap, unsigned long len,
-+			     unsigned long fd_flags, unsigned long heap_flags)
-+{
-+
-+	struct chunk_heap *chunk_heap = dma_heap_get_drvdata(heap);
-+	struct heap_helper_buffer *helper_buffer;
-+	struct dma_buf *dmabuf;
-+	unsigned int count = DIV_ROUND_UP(len, PAGE_SIZE << chunk_heap->order);
-+	int ret = -ENOMEM;
-+
-+	helper_buffer = kzalloc(sizeof(*helper_buffer), GFP_KERNEL);
-+	if (!helper_buffer)
-+		return ret;
-+
-+	init_heap_helper_buffer(helper_buffer, chunk_heap_free);
-+
-+	helper_buffer->heap = heap;
-+	helper_buffer->size = ALIGN(len, PAGE_SIZE << chunk_heap->order);
-+	helper_buffer->pagecount = count;
-+	helper_buffer->pages = kvmalloc_array(helper_buffer->pagecount,
-+					      sizeof(*helper_buffer->pages), GFP_KERNEL);
-+	if (!helper_buffer->pages)
-+		goto err0;
-+
-+	ret = chunk_alloc_pages(chunk_heap, helper_buffer->pages,
-+				chunk_heap->order, helper_buffer->pagecount);
-+	if (ret < 0)
-+		goto err1;
-+
-+	dmabuf = heap_helper_export_dmabuf(helper_buffer, fd_flags);
-+	if (IS_ERR(dmabuf)) {
-+		ret = PTR_ERR(dmabuf);
-+		goto err2;
-+	}
-+
-+	helper_buffer->dmabuf = dmabuf;
-+
-+	ret = dma_buf_fd(dmabuf, fd_flags);
-+	if (ret < 0) {
-+		dma_buf_put(dmabuf);
-+		return ret;
-+	}
-+
-+	return ret;
-+
-+err2:
-+	while (count-- > 0)
-+		__free_pages(helper_buffer->pages[count], chunk_heap->order);
-+err1:
-+	kvfree(helper_buffer->pages);
-+err0:
-+	kfree(helper_buffer);
-+
-+	return ret;
-+}
-+
-+static void rmem_remove_callback(void *p)
-+{
-+	of_reserved_mem_device_release((struct device *)p);
-+}
-+
-+static const struct dma_heap_ops chunk_heap_ops = {
-+	.allocate = chunk_heap_allocate,
-+};
-+
-+static int chunk_heap_probe(struct platform_device *pdev)
-+{
-+	struct chunk_heap *chunk_heap;
-+	struct reserved_mem *rmem;
-+	struct device_node *rmem_np;
-+	struct dma_heap_export_info exp_info;
-+	unsigned int alignment;
-+	int ret;
-+
-+	ret = of_reserved_mem_device_init(&pdev->dev);
-+	if (ret || !pdev->dev.cma_area) {
-+		dev_err(&pdev->dev, "The CMA reserved area is not assigned (ret %d)", ret);
-+		return -EINVAL;
-+	}
-+
-+	ret = devm_add_action(&pdev->dev, rmem_remove_callback, &pdev->dev);
-+	if (ret) {
-+		of_reserved_mem_device_release(&pdev->dev);
-+		return ret;
-+	}
-+
-+	rmem_np = of_parse_phandle(pdev->dev.of_node, "memory-region", 0);
-+	rmem = of_reserved_mem_lookup(rmem_np);
-+
-+	chunk_heap = devm_kzalloc(&pdev->dev, sizeof(*chunk_heap), GFP_KERNEL);
-+	if (!chunk_heap)
-+		return -ENOMEM;
-+
-+	chunk_heap->base = rmem->base;
-+	chunk_heap->size = rmem->size;
-+	chunk_heap->max_num_pageblocks = rmem->size >> (pageblock_order + PAGE_SHIFT);
-+
-+	of_property_read_u32(pdev->dev.of_node, "alignment", &alignment);
-+	chunk_heap->order = get_order(alignment);
-+
-+	exp_info.name = rmem->name;
-+	exp_info.ops = &chunk_heap_ops;
-+	exp_info.priv = chunk_heap;
-+
-+	chunk_heap->heap = dma_heap_add(&exp_info);
-+	if (IS_ERR(chunk_heap->heap))
-+		return PTR_ERR(chunk_heap->heap);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id chunk_heap_of_match[] = {
-+	{ .compatible = "dma_heap,chunk", },
-+	{ },
-+};
-+
-+MODULE_DEVICE_TABLE(of, chunk_heap_of_match);
-+
-+static struct platform_driver chunk_heap_driver = {
-+	.driver		= {
-+		.name	= "chunk_heap",
-+		.of_match_table = chunk_heap_of_match,
-+	},
-+	.probe		= chunk_heap_probe,
-+};
-+
-+static int __init chunk_heap_init(void)
-+{
-+	return platform_driver_register(&chunk_heap_driver);
-+}
-+module_init(chunk_heap_init);
-+MODULE_DESCRIPTION("DMA-BUF Chunk Heap");
-+MODULE_LICENSE("GPL v2");
+Please don't. We'd rather like to remove that helper that necessitates the
+use of deprecated behaviour. This driver is the last user left actually.
+
+Could you see an example in drivers/media/pci/intel/ipu3/ipu3-cio2.c on how
+to make this more condensed?
+
+There's more code left than with that helper as there are multiple things
+done here, and a few of these things interact at least in the general case:
+
+- setting binding defaults (missing here),
+
+- parsing the DT as well as storing the configuration you need (should you
+  not use the V4L2 EP as such),
+
+- getting the remote and
+
+- registration of the subdev in the notifier.
+
+You should also set the bus_type field if you know that in advance --- I
+believe you do.
+
+> +	if (ret)
+>  		return ret;
+> -	}
+>  
+>  	priv->notifier.ops = &rcar_csi2_notify_ops;
+>  
+> -	dev_dbg(priv->dev, "Found '%pOF'\n",
+> -		to_of_node(priv->asd.match.fwnode));
+> -
+>  	ret = v4l2_async_subdev_notifier_register(&priv->subdev,
+>  						  &priv->notifier);
+>  	if (ret)
+
 -- 
-2.7.4
+Kind regards,
 
+Sakari Ailus
