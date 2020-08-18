@@ -2,128 +2,104 @@ Return-Path: <SRS0=pHRl=B4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E743C433DF
-	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 13:37:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C730C433E1
+	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 13:56:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1FB1E207DA
-	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 13:37:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1597757822;
-	bh=axA6OGzpfyAZ/ezh8rhvucD/432ettQbcxBBNuhqQS4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=lzZbZe5s44HbFLoxfiMPKVcOlVd8z5Ikvg5bU9K2hy6ti64D9aTeFeLzY4mAG6blT
-	 k5IqL77nRvoTTcB+IrwmXKVe3hV1aCl3NKHBjqZW3ToGKo0t6WDvjnNP9G45PYsxai
-	 4IrRHgaXfnA2cyHE3ANDqx3A6rzSKRh5RZFkosz0=
+	by mail.kernel.org (Postfix) with ESMTP id 1A9EA206B5
+	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 13:56:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726846AbgHRNgm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 18 Aug 2020 09:36:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45428 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726633AbgHRNf7 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 18 Aug 2020 09:35:59 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6452C206B5;
-        Tue, 18 Aug 2020 13:35:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597757758;
-        bh=axA6OGzpfyAZ/ezh8rhvucD/432ettQbcxBBNuhqQS4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XeI/bnsFVetWO5lL/OkgNUHswpSU5zOg2XvqCYrdWkntnL+afrwkThFU8cKWd9s7Y
-         OZIBPPYoklGiXzclyOpu6hpmv2GSI22XdYfjjjwmbqg/tdmYWf74w2VXe3qrlHbbwc
-         4tCPlMNCZG/54dTWiilZEEMvI2yktQU+vTu+iQ2s=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-media@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/7] media: exynos4-is: no need to check return value of debugfs_create functions
-Date:   Tue, 18 Aug 2020 15:36:04 +0200
-Message-Id: <20200818133608.462514-3-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200818133608.462514-1-gregkh@linuxfoundation.org>
+        id S1726786AbgHRN4a convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 18 Aug 2020 09:56:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726605AbgHRN4T (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 18 Aug 2020 09:56:19 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD00CC061389
+        for <linux-media@vger.kernel.org>; Tue, 18 Aug 2020 06:56:18 -0700 (PDT)
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1k825w-0001mv-Mx; Tue, 18 Aug 2020 15:56:08 +0200
+Received: from pza by lupine with local (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1k825w-0001Hd-BR; Tue, 18 Aug 2020 15:56:08 +0200
+Message-ID: <94002fe8f460de93ab3d9ba7e5bae6ee2c1f6b64.camel@pengutronix.de>
+Subject: Re: [PATCH 2/7] media: coda: no need to check return value of
+ debugfs_create functions
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 18 Aug 2020 15:56:08 +0200
+In-Reply-To: <20200818133608.462514-2-gregkh@linuxfoundation.org>
 References: <20200818133608.462514-1-gregkh@linuxfoundation.org>
+         <20200818133608.462514-2-gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.30.5-1.1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When calling debugfs functions, there is no need to ever check the
-return value.  The function can work or not, but the code logic should
-never do something different based on this.
+On Tue, 2020-08-18 at 15:36 +0200, Greg Kroah-Hartman wrote:
+> When calling debugfs functions, there is no need to ever check the
+> return value.  The function can work or not, but the code logic should
+> never do something different based on this.
+>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: linux-media@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Cc: Kyungmin Park <kyungmin.park@samsung.com>
-Cc: Sylwester Nawrocki <s.nawrocki@samsung.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Kukjin Kim <kgene@kernel.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: linux-media@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-samsung-soc@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/media/platform/exynos4-is/fimc-is.c | 17 ++++-------------
- 1 file changed, 4 insertions(+), 13 deletions(-)
+Thank you,
 
-diff --git a/drivers/media/platform/exynos4-is/fimc-is.c b/drivers/media/platform/exynos4-is/fimc-is.c
-index a474014f0a0f..019bb47df915 100644
---- a/drivers/media/platform/exynos4-is/fimc-is.c
-+++ b/drivers/media/platform/exynos4-is/fimc-is.c
-@@ -756,18 +756,12 @@ static void fimc_is_debugfs_remove(struct fimc_is *is)
- 	is->debugfs_entry = NULL;
- }
- 
--static int fimc_is_debugfs_create(struct fimc_is *is)
-+static void fimc_is_debugfs_create(struct fimc_is *is)
- {
--	struct dentry *dentry;
--
- 	is->debugfs_entry = debugfs_create_dir("fimc_is", NULL);
- 
--	dentry = debugfs_create_file("fw_log", S_IRUGO, is->debugfs_entry,
--				     is, &fimc_is_fops);
--	if (!dentry)
--		fimc_is_debugfs_remove(is);
--
--	return is->debugfs_entry == NULL ? -EIO : 0;
-+	debugfs_create_file("fw_log", S_IRUGO, is->debugfs_entry, is,
-+			    &fimc_is_fops);
- }
- 
- static int fimc_is_runtime_resume(struct device *dev);
-@@ -853,9 +847,7 @@ static int fimc_is_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		goto err_pm;
- 
--	ret = fimc_is_debugfs_create(is);
--	if (ret < 0)
--		goto err_sd;
-+	fimc_is_debugfs_create(is);
- 
- 	ret = fimc_is_request_firmware(is, FIMC_IS_FW_FILENAME);
- 	if (ret < 0)
-@@ -868,7 +860,6 @@ static int fimc_is_probe(struct platform_device *pdev)
- 
- err_dfs:
- 	fimc_is_debugfs_remove(is);
--err_sd:
- 	fimc_is_unregister_subdevs(is);
- err_pm:
- 	pm_runtime_put_noidle(dev);
--- 
-2.28.0
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+
+regards
+Philipp
+
+> ---
+>  drivers/media/platform/coda/coda-common.c | 5 -----
+>  1 file changed, 5 deletions(-)
+> 
+> diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
+> index 3ab3d976d8ca..9020be29d8f2 100644
+> --- a/drivers/media/platform/coda/coda-common.c
+> +++ b/drivers/media/platform/coda/coda-common.c
+> @@ -1937,9 +1937,6 @@ int coda_alloc_aux_buf(struct coda_dev *dev, struct coda_aux_buf *buf,
+>  		buf->blob.size = size;
+>  		buf->dentry = debugfs_create_blob(name, 0644, parent,
+>  						  &buf->blob);
+> -		if (!buf->dentry)
+> -			dev_warn(dev->dev,
+> -				 "failed to create debugfs entry %s\n", name);
+>  	}
+>  
+>  	return 0;
+> @@ -3211,8 +3208,6 @@ static int coda_probe(struct platform_device *pdev)
+>  	ida_init(&dev->ida);
+>  
+>  	dev->debugfs_root = debugfs_create_dir("coda", NULL);
+> -	if (!dev->debugfs_root)
+> -		dev_warn(&pdev->dev, "failed to create debugfs root\n");
+>  
+>  	/* allocate auxiliary per-device buffers for the BIT processor */
+>  	if (dev->devtype->product == CODA_DX6) {
 
