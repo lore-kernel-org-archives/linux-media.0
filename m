@@ -2,104 +2,111 @@ Return-Path: <SRS0=pHRl=B4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C730C433E1
-	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 13:56:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28C89C433E3
+	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 14:37:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1A9EA206B5
-	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 13:56:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 098752080C
+	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 14:37:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1597761441;
+	bh=C0TU5voCSZcY/KUxBE86zeqxNC2ZXHOu6W9sJlJ37Ak=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=Li+NrnKKlvJVnUV4fve5fEsvyszPNkdIXWOp077as8UYhUdpJdm9Pzi8epAvD1DiP
+	 495kajZkej1RPD2gHkm0ajdFUTJ4XmmM1KKlOfXGCw7qQvu+ceiNsvwHP+kv1j1tcu
+	 2pTD9f9dCQfNkye2hRX/Y2Ot9mXzXk2Xh6FY0p5A=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726786AbgHRN4a convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 18 Aug 2020 09:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726605AbgHRN4T (ORCPT
+        id S1727887AbgHROhU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 18 Aug 2020 10:37:20 -0400
+Received: from mail-io1-f48.google.com ([209.85.166.48]:33634 "EHLO
+        mail-io1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726145AbgHROhT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 18 Aug 2020 09:56:19 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD00CC061389
-        for <linux-media@vger.kernel.org>; Tue, 18 Aug 2020 06:56:18 -0700 (PDT)
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1k825w-0001mv-Mx; Tue, 18 Aug 2020 15:56:08 +0200
-Received: from pza by lupine with local (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1k825w-0001Hd-BR; Tue, 18 Aug 2020 15:56:08 +0200
-Message-ID: <94002fe8f460de93ab3d9ba7e5bae6ee2c1f6b64.camel@pengutronix.de>
-Subject: Re: [PATCH 2/7] media: coda: no need to check return value of
- debugfs_create functions
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tue, 18 Aug 2020 10:37:19 -0400
+Received: by mail-io1-f48.google.com with SMTP id g14so21468317iom.0;
+        Tue, 18 Aug 2020 07:37:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KvDiFSHCMP00JRwPpFIepjmdNNs7NQxVpXYCSaohcWE=;
+        b=mFPreDZKV4vHYBF0Yi9lRSvvKBWSlaWYIXQeN6p7mHAZkoKTZwTQNbxhBwUs1ur3G3
+         m5IFCVGubhjDKDl6j1tT1aXsTigDGZevp3iJsxj60Bki8CozHYEHYGsE3nSWZZCoucuo
+         lu5wUL7lDTOrW+zBpRYpO+KcTEi+lE61uPdl75xYbIiHkKwao2fNzCqBdXsy8GL97Rvi
+         16AFS0gHhMMmn4Qqm3ZBsuIGEqYD5sJerj77rE+4CgfjcaIo2IeH4kkhnosyOW7wHSAE
+         kl5VJ5IQDgRaV/1onoeiHfYcHBB5wQCeOBQKMbz+AaoWVABqx4Gr6QcH8dUxTycvJeRw
+         pULA==
+X-Gm-Message-State: AOAM532P/LEI58ErhYaoO5zdTt4bdK47FtXe7FSe+gTIDx4IEGc+NwRD
+        iIdjodZNwhC08FiJDQfDDCk=
+X-Google-Smtp-Source: ABdhPJxnn2B0WzR309SekP4oYLzfek0uIR9zSY77kfpMtT2egbp4JP9sX7OBycX0RREH5J0lgPswRA==
+X-Received: by 2002:a5d:9943:: with SMTP id v3mr16086981ios.51.1597761438176;
+        Tue, 18 Aug 2020 07:37:18 -0700 (PDT)
+Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
+        by smtp.gmail.com with ESMTPSA id y11sm10913813iot.23.2020.08.18.07.37.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Aug 2020 07:37:16 -0700 (PDT)
+Received: by 42.do-not-panic.com (Postfix, from userid 1000)
+        id A04904046C; Tue, 18 Aug 2020 14:37:15 +0000 (UTC)
+Date:   Tue, 18 Aug 2020 14:37:15 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Lukas Middendorf <kernel@tuxforce.de>
+Cc:     Anand Jain <anand.jain@oracle.com>, linux-btrfs@vger.kernel.org,
+        Antti Palosaari <crope@iki.fi>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 18 Aug 2020 15:56:08 +0200
-In-Reply-To: <20200818133608.462514-2-gregkh@linuxfoundation.org>
-References: <20200818133608.462514-1-gregkh@linuxfoundation.org>
-         <20200818133608.462514-2-gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.30.5-1.1 
+Subject: Re: Is request_firmware() really safe to call in resume callback
+ when /usr/lib/firmware is on btrfs?
+Message-ID: <20200818143715.GF4332@42.do-not-panic.com>
+References: <c79e24a5-f808-d1f0-1f09-ee6f135d9679@tuxforce.de>
+ <20200813163749.GV4332@42.do-not-panic.com>
+ <0b1621bf-fc82-1a56-c11f-c5c46677e59e@tuxforce.de>
+ <20200813221348.GB4332@42.do-not-panic.com>
+ <fc887e06-874c-79d8-0607-4e27ae788446@tuxforce.de>
+ <20200814163723.GC4332@42.do-not-panic.com>
+ <a79f1a0c-012d-bebe-c9c7-b505f59079c2@tuxforce.de>
+ <20200817152056.GD4332@42.do-not-panic.com>
+ <9e5c716e-1736-9890-54be-75739ea5462f@tuxforce.de>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9e5c716e-1736-9890-54be-75739ea5462f@tuxforce.de>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, 2020-08-18 at 15:36 +0200, Greg Kroah-Hartman wrote:
-> When calling debugfs functions, there is no need to ever check the
-> return value.  The function can work or not, but the code logic should
-> never do something different based on this.
->
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: linux-media@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-Thank you,
-
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-
-regards
-Philipp
-
-> ---
->  drivers/media/platform/coda/coda-common.c | 5 -----
->  1 file changed, 5 deletions(-)
+On Tue, Aug 18, 2020 at 12:04:51AM +0200, Lukas Middendorf wrote:
+> On 17/08/2020 17:20, Luis Chamberlain wrote:
+> A freeze can happen on resume with and without the si2168 firmware files
+> installed. It however is easier to hit the freeze with the firmware files
+> installed. Without the firmware files present the freeze happens only if no
+> other driver uses the firmware loader.
 > 
-> diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
-> index 3ab3d976d8ca..9020be29d8f2 100644
-> --- a/drivers/media/platform/coda/coda-common.c
-> +++ b/drivers/media/platform/coda/coda-common.c
-> @@ -1937,9 +1937,6 @@ int coda_alloc_aux_buf(struct coda_dev *dev, struct coda_aux_buf *buf,
->  		buf->blob.size = size;
->  		buf->dentry = debugfs_create_blob(name, 0644, parent,
->  						  &buf->blob);
-> -		if (!buf->dentry)
-> -			dev_warn(dev->dev,
-> -				 "failed to create debugfs entry %s\n", name);
->  	}
->  
->  	return 0;
-> @@ -3211,8 +3208,6 @@ static int coda_probe(struct platform_device *pdev)
->  	ida_init(&dev->ida);
->  
->  	dev->debugfs_root = debugfs_create_dir("coda", NULL);
-> -	if (!dev->debugfs_root)
-> -		dev_warn(&pdev->dev, "failed to create debugfs root\n");
->  
->  	/* allocate auxiliary per-device buffers for the BIT processor */
->  	if (dev->devtype->product == CODA_DX6) {
+> > 
+> > This helps, thanks so much, now we'll have to write a reproducer, thanks
+> > for the report!!
+> 
+> Will you do it yourself or do you expect me to do anything for this?
 
+I meant to imply that we'd do this, now that we understand the problem. Thanks
+for your report!
+
+> > > The nouveau driver in use seems to be equivalent to running "ls -R
+> > > /usr/lib/firmware" before suspend.
+> > > 
+> > > All the cases seem to boil down to:
+> > > It freezes if the file system has to be accessed to list the content of
+> > > /usr/lib/firmware or to read the si2168 firmware file
+> > 
+> > Let's confirm first whether or not your system is using other firmware
+> > files too or not.
+> 
+> I confirmed that above. Why is this so important, anyway?
+
+A reproducer is easier to write if the actual file neeed is not needed.
+That's all.
+
+  Luis
