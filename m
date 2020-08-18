@@ -2,145 +2,192 @@ Return-Path: <SRS0=pHRl=B4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F369C433E3
-	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 14:37:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CE51C433E5
+	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 14:37:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DA61B207DA
-	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 14:37:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2E2E6207DA
+	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 14:37:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="CGq7QfGI"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="pXIT/kty"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727873AbgHROhb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 18 Aug 2020 10:37:31 -0400
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:43011 "EHLO
-        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727000AbgHROhX (ORCPT
+        id S1727910AbgHROhc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 18 Aug 2020 10:37:32 -0400
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:50585 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727896AbgHROhY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 18 Aug 2020 10:37:23 -0400
+        Tue, 18 Aug 2020 10:37:24 -0400
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id 82jnkV8V2uuXO82jokcevB; Tue, 18 Aug 2020 16:37:20 +0200
+        id 82jnkV8V2uuXO82jpkcew1; Tue, 18 Aug 2020 16:37:21 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1597761441; bh=M6LeDk4CJSSSzGixbCqBtXnAaLvbaDpBpM7YyOyfwD0=;
+        t=1597761441; bh=fOG75HIP+EF9pGp26Mn9ojSGNwrexItK78pswOM0QZc=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=CGq7QfGIyuP0nCzuvL+HwxaYmMdgl2foLT2rPOfiIIo9+QD1KDXi0s2w4q2gox/Eo
-         rQ7VFjKitr/rjG7QxGJGdd3E4kF0tJGo0iwvlDxmInG3I/PZ5/Izr+5109cHc0VB3/
-         8m/b2/JuozIw3oVDFyoieLbzaR+wB1B8Bm0c3QNsM33U1qs/bHYjb1VbkpdulBhymC
-         Yiq869FKRxcj/F6Vts4WWu/QciMcu+mqAS+jj6gKo65XRq0+fDaTc4a6YvInmswoFI
-         11xsC+gPDXJbSKuRO730DA3FogzRpG4DvzO2JkK/zqVF/q1hP8+Vz2D7stjKVSzf/q
-         OOk6FmfmJGAuw==
+        b=pXIT/ktyXFYoXCli9QnZt6hwAXt7gnkeBXQ4LlKy4dkVsir81P0oJoDvStx4VTGWx
+         KBPPRe9WFkB///IoyWNH8tVnKCto4U/9RHwXl3HsDc8Aq+V3+Kq/scdR8XuUsdhW99
+         IVNGhfxXzSNMq1YsTxKzXVtGZyaOB8yxNs++7CveuTlhhStxmmC8OgwcwOS8aAGd7g
+         vBx3CF82IulQbCNELR48HiaDMbVZH9aITfB7qR92dS3+F2H/DIDn4Oe6ZAhRA4kLl5
+         +U7GY54XTRuZJBg9heUA6Gq57sqJzirIkbuejqwDAkAFizTETr3GgVSvpKb8W5lXGh
+         V3h7Hx0sHV8NA==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Dikshita Agarwal <dikshita@codeaurora.org>
-Subject: [PATCHv2 00/12] Add support for read-only requests
-Date:   Tue, 18 Aug 2020 16:37:07 +0200
-Message-Id: <20200818143719.102128-1-hverkuil-cisco@xs4all.nl>
+        Dikshita Agarwal <dikshita@codeaurora.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv2 09/12] v4l2-mem2mem.c: add v4l2_m2m_request_validate()
+Date:   Tue, 18 Aug 2020 16:37:16 +0200
+Message-Id: <20200818143719.102128-10-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200818143719.102128-1-hverkuil-cisco@xs4all.nl>
+References: <20200818143719.102128-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfA0k2tI+AHClOJ99FFOT8pgIXTj8/BfkUuKUAUzo3ZMByzTjo28bOSrG78gds6jsLKcJwRVoTfJXUJPf5mf2fl57zpZsTnfdTop9q2TtEi4VKKjAv443
- DQfYy1wCw4QWHvvIo7V7j9JyqVQv2rzQvCSBd/NDSflB469oFOvlt4XSXV7iMkZRgmoe4/QSvXezTu6Q73eXG7HzH0jyCwFwZCOaV79E3fWyR6WSho3EgwyJ
- 5lAR/Svz9kc6NXAz+JnSK1rgByjb87PxjhIKhA/+pjJVAi3OTMuckjf1JaPAW52cME1wmIdjngUSLDBRYu5AXcl7OHkk7ESmaOSYMz78kn0=
+X-CMAE-Envelope: MS4wfCuwSrPvT4fumm6uq5Q5WMyOX6OnYFqvqUTKnnAc42oTX5UrWuzWMQXEHZ0Xwab3bjAqBvapkeMtcnah8py0+THUdibAVA3JlkwbJKBA3FfrJVRuZCf9
+ MutHBxYoEallZtP/q0OB2XnCJYFdu6h4EqCQrwiCWra8okfqXdZAkac5bbCbmkYM4fe4xJG4EgawT0xEbOL5+hT3oI9SgWjgRVgJ29iPievIqXhZJd6d629a
+ vLCVQBuRiPUnJBSOtzjJGfW8g2/2zvya2zTX+mLp3FNEr3SVaCewyR1Wov6ClyHz5BVDVJeeN6e+zXNlMbcW5xoP9uhUmaOfWpjS5OYLoWNoNuaLH/wbAw26
+ Wji31XDc
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Read-only requests do not contain any configuration values when queued
-(only buffers can be part of a read-only request), but they do allow the
-driver to associate additional information with the completed request.
+Add the new helper function v4l2_m2m_request_validate().
 
-This is useful to e.g. add per-frame metadata such as HDMI InfoFrames to
-a captured buffer.
+This function adds a control handler object if it is missing
+in the request.
 
-While working on this I discovered that the Request API is also missing a
-feature: if userspace did not set any controls, then the request object
-will not contain a control object (that's created only if the user sets a
-control in the request).
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ drivers/media/v4l2-core/v4l2-mem2mem.c | 42 +++++++++++++++++++++++---
+ include/media/v4l2-mem2mem.h           | 28 ++++++++++++++++-
+ 2 files changed, 65 insertions(+), 5 deletions(-)
 
-This is fine for e.g. stateless codecs since they require that each request
-contains controls, so this is always done. And this is also the reason that
-this hasn't been a problem before, since the Request API is almost exclusively
-used by stateless codecs.
-
-But for e.g. vivid this means that the completed request does not contain
-any controls in the request with the values of the time that the frame was
-captured (or output).
-
-In addition, if a driver needs to set a status control, then that control
-won't be part of the request either.
-
-This series adds a v4l2_ctrl_request_add_handler() function that can be
-called in the req_validate() callback of the request. If the request
-doesn't contain a control object, then it will add a new one.
-
-This series adds read-only request support to vivid, vim2m and vicodec, and
-adds new helper functions to vb2 (vb2_request_buffer_first) and v4l2-mem2mem.c
-(v4l2_m2m_request_validate).
-
-In addition, the first patch of this series adds debugfs support to the
-media device to be able to keep track of outstanding requests and request
-objects. Without this it is next to impossible to check if all requests and
-request objects are properly released after all file handles are closed.
-
-This series supersedes this old RFC series:
-
-https://patchwork.linuxtv.org/project/linux-media/cover/20200728094851.121933-1-hverkuil-cisco@xs4all.nl/
-
-I'll also post an RFC patch for v4l-utils that adds support for this to
-v4l2-ctl and v4l2-compliance.
-
-Regards,
-
-	Hans
-
-
-Hans Verkuil (12):
-  media/mc: keep track of outstanding requests
-  vivid: add read-only int32 control
-  media: document read-only requests
-  videodev2.h: add V4L2_BUF_CAP_SUPPORTS_RO_REQUESTS
-  videobuf2-core: add vb2_request_buffer_first()
-  v4l2-ctrls.c: add v4l2_ctrl_request_add_handler
-  vivid: call v4l2_ctrl_request_add_handler()
-  vivid: add ro_requests module option
-  v4l2-mem2mem.c: add v4l2_m2m_request_validate()
-  vim2m: use v4l2_m2m_request_validate()
-  vim2m: support read-only requests on the capture queue
-  vicodec: add support for read-only requests
-
- Documentation/admin-guide/media/vivid.rst     | 10 +++
- .../mediactl/media-request-ioc-queue.rst      |  5 ++
- .../media/mediactl/request-api.rst            | 11 +++
- .../media/v4l/vidioc-reqbufs.rst              |  6 ++
- .../media/common/videobuf2/videobuf2-core.c   | 22 ++++++
- .../media/common/videobuf2/videobuf2-v4l2.c   |  4 +-
- drivers/media/mc/mc-device.c                  | 27 +++++++
- drivers/media/mc/mc-devnode.c                 | 13 ++++
- drivers/media/mc/mc-request.c                 |  8 ++-
- .../media/test-drivers/vicodec/vicodec-core.c | 70 +++++++++----------
- drivers/media/test-drivers/vim2m.c            | 13 +++-
- drivers/media/test-drivers/vivid/vivid-core.c | 52 ++++++++++++++
- drivers/media/test-drivers/vivid/vivid-core.h |  1 +
- .../media/test-drivers/vivid/vivid-ctrls.c    | 13 ++++
- .../test-drivers/vivid/vivid-kthread-cap.c    | 10 +--
- drivers/media/v4l2-core/v4l2-ctrls.c          | 35 ++++++++++
- drivers/media/v4l2-core/v4l2-mem2mem.c        | 45 ++++++++++--
- include/media/media-device.h                  |  9 +++
- include/media/media-devnode.h                 |  4 ++
- include/media/media-request.h                 |  2 +
- include/media/v4l2-ctrls.h                    | 21 ++++++
- include/media/v4l2-mem2mem.h                  | 28 +++++++-
- include/media/videobuf2-core.h                |  8 +++
- include/uapi/linux/videodev2.h                |  1 +
- 24 files changed, 368 insertions(+), 50 deletions(-)
-
+diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
+index 48f87cfe2f63..b8d7746a0c21 100644
+--- a/drivers/media/v4l2-core/v4l2-mem2mem.c
++++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+@@ -20,6 +20,7 @@
+ #include <media/v4l2-device.h>
+ #include <media/v4l2-fh.h>
+ #include <media/v4l2-event.h>
++#include <media/v4l2-ctrls.h>
+ 
+ MODULE_DESCRIPTION("Mem to mem device framework for videobuf");
+ MODULE_AUTHOR("Pawel Osciak, <pawel@osciak.com>");
+@@ -1230,6 +1231,35 @@ void v4l2_m2m_buf_copy_metadata(const struct vb2_v4l2_buffer *out_vb,
+ }
+ EXPORT_SYMBOL_GPL(v4l2_m2m_buf_copy_metadata);
+ 
++int v4l2_m2m_request_validate(struct media_request *req)
++{
++	struct vb2_buffer *vb = vb2_request_buffer_first(req);
++	struct v4l2_m2m_ctx *m2m_ctx;
++	int ret;
++
++	if (!vb)
++		return -ENOENT;
++
++	if (V4L2_TYPE_IS_OUTPUT(vb->vb2_queue->type))
++		m2m_ctx = container_of(vb->vb2_queue,
++				       struct v4l2_m2m_ctx,
++				       out_q_ctx.q);
++	else
++		m2m_ctx = container_of(vb->vb2_queue,
++				       struct v4l2_m2m_ctx,
++				       cap_q_ctx.q);
++
++	WARN_ON_ONCE(!m2m_ctx->req_ctrl_handler);
++
++	/*
++	 * Add a control handler object if it was missing in the request.
++	 */
++	ret = v4l2_ctrl_request_add_handler(req, m2m_ctx->req_ctrl_handler,
++					    vb->vb2_queue->supports_ro_requests);
++	return ret ? ret : vb2_request_validate(req);
++}
++EXPORT_SYMBOL_GPL(v4l2_m2m_request_validate);
++
+ void v4l2_m2m_request_queue(struct media_request *req)
+ {
+ 	struct media_request_object *obj, *obj_safe;
+@@ -1253,10 +1283,14 @@ void v4l2_m2m_request_queue(struct media_request *req)
+ 		if (vb2_request_object_is_buffer(obj)) {
+ 			/* Sanity checks */
+ 			vb = container_of(obj, struct vb2_buffer, req_obj);
+-			WARN_ON(!V4L2_TYPE_IS_OUTPUT(vb->vb2_queue->type));
+-			m2m_ctx_obj = container_of(vb->vb2_queue,
+-						   struct v4l2_m2m_ctx,
+-						   out_q_ctx.q);
++			if (V4L2_TYPE_IS_OUTPUT(vb->vb2_queue->type))
++				m2m_ctx_obj = container_of(vb->vb2_queue,
++							   struct v4l2_m2m_ctx,
++							   out_q_ctx.q);
++			else
++				m2m_ctx_obj = container_of(vb->vb2_queue,
++							   struct v4l2_m2m_ctx,
++							   cap_q_ctx.q);
+ 			WARN_ON(m2m_ctx && m2m_ctx_obj != m2m_ctx);
+ 			m2m_ctx = m2m_ctx_obj;
+ 		}
+diff --git a/include/media/v4l2-mem2mem.h b/include/media/v4l2-mem2mem.h
+index 98753f00df7e..e1274d0550d0 100644
+--- a/include/media/v4l2-mem2mem.h
++++ b/include/media/v4l2-mem2mem.h
+@@ -84,6 +84,8 @@ struct v4l2_m2m_queue_ctx {
+  * @last_src_buf: indicate the last source buffer for draining
+  * @next_buf_last: next capture queud buffer will be tagged as last
+  * @has_stopped: indicate the device has been stopped
++ * @req_ctrl_handler: the control handler to use with requests.
++ *	Must be set when using v4l2_m2m_request_validate().
+  * @m2m_dev: opaque pointer to the internal data to handle M2M context
+  * @cap_q_ctx: Capture (output to memory) queue context
+  * @out_q_ctx: Output (input from memory) queue context
+@@ -106,6 +108,7 @@ struct v4l2_m2m_ctx {
+ 	struct vb2_v4l2_buffer		*last_src_buf;
+ 	bool				next_buf_last;
+ 	bool				has_stopped;
++	struct v4l2_ctrl_handler	*req_ctrl_handler;
+ 
+ 	/* internal use only */
+ 	struct v4l2_m2m_dev		*m2m_dev;
+@@ -809,8 +812,31 @@ void v4l2_m2m_buf_copy_metadata(const struct vb2_v4l2_buffer *out_vb,
+ 				struct vb2_v4l2_buffer *cap_vb,
+ 				bool copy_frame_flags);
+ 
+-/* v4l2 request helper */
++/* v4l2 request helpers */
+ 
++/**
++ * v4l2_m2m_request_validate() - validate the request
++ *
++ * @req: the request
++ *
++ * This validates the request. If the request does not contain a
++ * control handler object, then this object is created. This function
++ * can be set as the media_device req_validate op. If the driver
++ * already requires (and checks) that one or more controls must be present
++ * in the request, then there is no need to use this function.
++ *
++ * If this helper is called, then the driver must set the @req_ctrl_handler
++ * field of struct v4l2_m2m_ctx.
++ */
++int v4l2_m2m_request_validate(struct media_request *req);
++
++/**
++ * v4l2_m2m_request_queue() - queue the request
++ *
++ * @req: the request
++ *
++ * Set this function as the media_device req_queue op.
++ */
+ void v4l2_m2m_request_queue(struct media_request *req);
+ 
+ /* v4l2 ioctl helpers */
 -- 
 2.27.0
 
