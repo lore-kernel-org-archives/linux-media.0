@@ -7,198 +7,143 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A9C2C433E1
-	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 14:37:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 579EEC433DF
+	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 14:37:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 445C62080C
-	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 14:37:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3767E20866
+	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 14:37:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="NzRkt0GX"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="gvXXdzxt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727889AbgHROhf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 18 Aug 2020 10:37:35 -0400
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:52029 "EHLO
-        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727899AbgHROhX (ORCPT
+        id S1727897AbgHROhg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 18 Aug 2020 10:37:36 -0400
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:43841 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727891AbgHROhX (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 18 Aug 2020 10:37:23 -0400
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id 82jnkV8V2uuXO82jqkcewL; Tue, 18 Aug 2020 16:37:22 +0200
+        id 82jnkV8V2uuXO82jpkcevT; Tue, 18 Aug 2020 16:37:21 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1597761442; bh=gKaFXl2Yd18gOgP8eY4gteEKy3374ENDrhfq4+1jX9k=;
+        t=1597761441; bh=nXE++WV7vSTYUsAx1anAj5g+i8ZYaSIMkXK58BSLnyk=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=NzRkt0GXRy3wP9Evi9mcOEW7UGCVRbOzyhHEs0bcDb+H9HD9PlBuI39OXxkPABajL
-         5C2Ol8qAjho2HSeChDW6L2lzzKk0t8yfCpkhZIrlNJjsMriVFxvKEMdgkkXoLoIfOb
-         /avlJM3oqiy14MiF10KbmwSe3224GZZtcAogUbO/mhdAeSZrE7RH/mpyns6jejVqb8
-         e5teUYFEpgtKgvXev5aDNrMIm9YbWDlX+b4n1KsZzhLeg4sZAYr4NT1uCdEO8DC2dS
-         CkvH8r8PmN4PsZdoazIu/RF9vMXrhg7Hel9Q46yWvZZnfQ8ndjhxl1nc8ofL/pE9mj
-         HuclntPrz1nlA==
+        b=gvXXdzxt4Q/dqFT6Q+zMQIsM4e+QmrKEHuF6qwhMgipQdJav6mDvFICexBfvXXYuY
+         QT0t1esKEaph1Ey8yvi0zhyzPaFxQlaHmWMymfZxYuLVymVFVD5M5I7xUX7e7u9Q/9
+         q1pEhBssgEo9LymrZKwtYaE2QdjhClyiipjyTvFKs94vLAfIE+kCsrhM0S84Q1pyfy
+         jqJ/FQumhUyLxwKlh7Il7LOS7vale03vFwzcvjLtFdt5op0wvcK8uSwmgolTk3qG/K
+         RzJJ8uG7OvzN1tPJKJhLfFD1PmiEdTJKRxuvsUpfkIRmvBGzIBENdxZFfrsjkwgeFq
+         Jow+lVmWfQIHg==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Dikshita Agarwal <dikshita@codeaurora.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCHv2 12/12] vicodec: add support for read-only requests
-Date:   Tue, 18 Aug 2020 16:37:19 +0200
-Message-Id: <20200818143719.102128-13-hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv2 03/12] media: document read-only requests
+Date:   Tue, 18 Aug 2020 16:37:10 +0200
+Message-Id: <20200818143719.102128-4-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200818143719.102128-1-hverkuil-cisco@xs4all.nl>
 References: <20200818143719.102128-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfP7+giVF2yARMvQzXdrB71WPzNzQPnB2vBNV1zfb1go6qlHWCQCw4uRfchZzAtnyfp0sjerWlDwxlnd+NRkCSGe+Ssx86NCHGizcu7rYZjJtzqBclj53
- r5W8DV3IokiHycHwkfLGx7GvawPyJu7LvgeL0v+J5Zub5V9htD1Y7Lvh9xeGR9Cd4EmXY/ZOgOaWpXOFuskI4fyg06+A9NTsUNGJHKcnAJEnkBnNbpMlquh6
- RSPY9OPI6N0AfK25Z0Ua34xg2WwfPoGnKMLfHaEK/11FnxpdlEvGGMBQWw4nEX0/ro4KOZzEG/+iGxGiB8Qu7HaGmA2IF0gVJ8N25ZZqX0btdRWZiCCj9pku
- dZHPYtPI
+X-CMAE-Envelope: MS4wfCuwSrPvT4fumm6uq5Q5WMyOX6OnYFqvqUTKnnAc42oTX5UrWuzWMQXEHZ0Xwab3bjAqBvapkeMtcnah8py0+THUdibAVA3JlkwbJKBA3FfrJVRuZCf9
+ MutHBxYoEallZtP/q0OB2XnCJYFdu6h4EqCQrwiCWra8okfqXdZAkac5bbCbmkYM4fe4xJG4EgawT0xEbOL5+hT3oI9SgWjgRVgJ29iPievIqXhZJd6d629a
+ vLCVQBuRiPUnJBSOtzjJGfW8g2/2zvya2zTX+mLp3FNEr3SVaCewyR1Wov6ClyHz5BVDVJeeN6e+zXNlMbcW5xoP9uhUmaOfWpjS5OYLoWNoNuaLH/wbAw26
+ Wji31XDc
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support for read-only requests for the stateless decoder capture
-queue in order to test this feature.
+This patch documents reaed-only requests, including the new
+V4L2_BUF_CAP_SUPPORTS_RO_REQUESTS capability flag.
+
+Based in part on a patch from Yunfei Dong <yunfei.dong@mediatek.com>.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- .../media/test-drivers/vicodec/vicodec-core.c | 70 +++++++++----------
- 1 file changed, 34 insertions(+), 36 deletions(-)
+ .../media/mediactl/media-request-ioc-queue.rst        |  5 +++++
+ .../userspace-api/media/mediactl/request-api.rst      | 11 +++++++++++
+ .../userspace-api/media/v4l/vidioc-reqbufs.rst        |  6 ++++++
+ 3 files changed, 22 insertions(+)
 
-diff --git a/drivers/media/test-drivers/vicodec/vicodec-core.c b/drivers/media/test-drivers/vicodec/vicodec-core.c
-index 71928e30dae8..c377d5fdfd07 100644
---- a/drivers/media/test-drivers/vicodec/vicodec-core.c
-+++ b/drivers/media/test-drivers/vicodec/vicodec-core.c
-@@ -267,6 +267,11 @@ static int device_process(struct vicodec_ctx *ctx,
- 	if (ctx->is_stateless) {
- 		struct media_request *src_req = src_vb->vb2_buf.req_obj.req;
+diff --git a/Documentation/userspace-api/media/mediactl/media-request-ioc-queue.rst b/Documentation/userspace-api/media/mediactl/media-request-ioc-queue.rst
+index ad55b6b32616..4ed1b3585ce1 100644
+--- a/Documentation/userspace-api/media/mediactl/media-request-ioc-queue.rst
++++ b/Documentation/userspace-api/media/mediactl/media-request-ioc-queue.rst
+@@ -76,6 +76,11 @@ queued directly and you next try to queue a request, or vice versa.
+ A request must contain at least one buffer, otherwise this ioctl will
+ return an ``ENOENT`` error.
  
-+		/*
-+		 * Apply request controls if any.
-+		 * The dst_vb queue has read-only requests, so no need to
-+		 * setup any controls for that buffer.
-+		 */
- 		ret = v4l2_ctrl_request_setup(src_req, &ctx->hdl);
- 		if (ret)
- 			return ret;
-@@ -408,11 +413,12 @@ static void device_run(void *priv)
- 	struct vb2_v4l2_buffer *src_buf, *dst_buf;
- 	struct vicodec_q_data *q_src, *q_dst;
- 	u32 state;
--	struct media_request *src_req;
-+	struct media_request *src_req, *dst_req;
++If the :ref:`buffer capabilities <v4l2-buf-capabilities>` indicate that
++only read-only requests are supported, then the request can only contain
++buffers. If anything else is present then this ioctl will return an
++``EINVAL`` error.
++
+ Return Value
+ ============
  
- 	src_buf = v4l2_m2m_next_src_buf(ctx->fh.m2m_ctx);
- 	dst_buf = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
- 	src_req = src_buf->vb2_buf.req_obj.req;
-+	dst_req = dst_buf->vb2_buf.req_obj.req;
+diff --git a/Documentation/userspace-api/media/mediactl/request-api.rst b/Documentation/userspace-api/media/mediactl/request-api.rst
+index 37d9442a541e..88bfe8b735e8 100644
+--- a/Documentation/userspace-api/media/mediactl/request-api.rst
++++ b/Documentation/userspace-api/media/mediactl/request-api.rst
+@@ -53,6 +53,13 @@ with different configurations in advance, knowing that the configuration will be
+ applied when needed to get the expected result. Configuration values at the time
+ of request completion are also available for reading.
  
- 	q_src = get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_OUTPUT);
- 	q_dst = get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE);
-@@ -452,6 +458,8 @@ static void device_run(void *priv)
- 	spin_unlock(ctx->lock);
- 	if (ctx->is_stateless && src_req)
- 		v4l2_ctrl_request_complete(src_req, &ctx->hdl);
-+	if (ctx->is_stateless && dst_req)
-+		v4l2_ctrl_request_complete(dst_req, &ctx->hdl);
++In some cases it does not make sense for user-space to associate configuration
++values with a frame, instead it only makes sense to retrieving configuration
++values at the time of request completion. In that case read-only requests can be
++used that only allow buffers to be queued and not configuration values. Which
++type of requests (regular or read-only) are supported is signalled through
++:ref:`buffer capabilities <v4l2-buf-capabilities>`.
++
+ General Usage
+ -------------
  
- 	if (ctx->is_enc)
- 		v4l2_m2m_job_finish(dev->stateful_enc.m2m_dev, ctx->fh.m2m_ctx);
-@@ -1733,6 +1741,8 @@ static int queue_init(void *priv, struct vb2_queue *src_vq,
- 	dst_vq->mem_ops = &vb2_vmalloc_memops;
- 	dst_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
- 	dst_vq->lock = src_vq->lock;
-+	dst_vq->supports_requests = ctx->is_stateless;
-+	dst_vq->supports_ro_requests = ctx->is_stateless;
+@@ -95,6 +102,10 @@ A queued request cannot be modified anymore.
+    output buffers, not for capture buffers. Attempting to add a capture buffer
+    to a request will result in an ``EBADR`` error.
  
- 	return vb2_queue_init(dst_vq);
- }
-@@ -1910,6 +1920,7 @@ static int vicodec_open(struct file *file)
- 	} else if (ctx->is_stateless) {
- 		ctx->fh.m2m_ctx = v4l2_m2m_ctx_init(dev->stateless_dec.m2m_dev,
- 						    ctx, &queue_init);
-+		ctx->fh.m2m_ctx->req_ctrl_handler = hdl;
- 		ctx->lock = &dev->stateless_dec.lock;
- 	} else {
- 		ctx->fh.m2m_ctx = v4l2_m2m_ctx_init(dev->stateful_dec.m2m_dev,
-@@ -1952,34 +1963,19 @@ static int vicodec_release(struct file *file)
++If the buffer type supports only read-only requests, and the request contains
++configuration values such as controls, then ``EINVAL`` is returned since no
++configuration values are allowed when submitting a read-only request.
++
+ If the request contains configurations for multiple entities, individual drivers
+ may synchronize so the requested pipeline's topology is applied before the
+ buffers are processed. Media controller drivers do a best effort implementation
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst b/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
+index 75d894d9c36c..13454146d5fc 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
+@@ -134,6 +134,7 @@ aborting or finishing any DMA in progress, an implicit
+ .. _V4L2-BUF-CAP-SUPPORTS-ORPHANED-BUFS:
+ .. _V4L2-BUF-CAP-SUPPORTS-M2M-HOLD-CAPTURE-BUF:
+ .. _V4L2-BUF-CAP-SUPPORTS-MMAP-CACHE-HINTS:
++.. _V4L2-BUF-CAP-SUPPORTS-RO-REQUESTS:
  
- static int vicodec_request_validate(struct media_request *req)
- {
--	struct media_request_object *obj;
-+	struct vb2_buffer *vb = vb2_request_buffer_first(req);
- 	struct v4l2_ctrl_handler *parent_hdl, *hdl;
--	struct vicodec_ctx *ctx = NULL;
-+	struct vicodec_ctx *ctx;
- 	struct v4l2_ctrl *ctrl;
--	unsigned int count;
--
--	list_for_each_entry(obj, &req->objects, list) {
--		struct vb2_buffer *vb;
--
--		if (vb2_request_object_is_buffer(obj)) {
--			vb = container_of(obj, struct vb2_buffer, req_obj);
--			ctx = vb2_get_drv_priv(vb->vb2_queue);
--
--			break;
--		}
--	}
+ .. cssclass:: longtable
  
--	if (!ctx) {
--		pr_err("No buffer was provided with the request\n");
-+	if (!vb) {
-+		dev_info(req->mdev->dev,
-+			 "No buffer was provided with the request\n");
- 		return -ENOENT;
- 	}
-+	ctx = vb2_get_drv_priv(vb->vb2_queue);
+@@ -154,6 +155,7 @@ aborting or finishing any DMA in progress, an implicit
+     * - ``V4L2_BUF_CAP_SUPPORTS_REQUESTS``
+       - 0x00000008
+       - This buffer type supports :ref:`requests <media-request-api>`.
++        This flag is mutually exclusive with ``V4L2_BUF_CAP_SUPPORTS_RO_REQUESTS``.
+     * - ``V4L2_BUF_CAP_SUPPORTS_ORPHANED_BUFS``
+       - 0x00000010
+       - The kernel allows calling :ref:`VIDIOC_REQBUFS` while buffers are still
+@@ -172,6 +174,10 @@ aborting or finishing any DMA in progress, an implicit
+         :ref:`V4L2_FLAG_MEMORY_NON_CONSISTENT <V4L2-FLAG-MEMORY-NON-CONSISTENT>`,
+         :ref:`V4L2_BUF_FLAG_NO_CACHE_INVALIDATE <V4L2-BUF-FLAG-NO-CACHE-INVALIDATE>` and
+         :ref:`V4L2_BUF_FLAG_NO_CACHE_CLEAN <V4L2-BUF-FLAG-NO-CACHE-CLEAN>`.
++    * - ``V4L2_BUF_CAP_SUPPORTS_RO_REQUESTS``
++      - 0x00000080
++      - This buffer type supports read-only :ref:`requests <media-request-api>`.
++        This flag is mutually exclusive with ``V4L2_BUF_CAP_SUPPORTS_REQUESTS``.
  
--	count = vb2_request_buffer_cnt(req);
--	if (!count) {
--		v4l2_info(&ctx->dev->v4l2_dev,
--			  "No buffer was provided with the request\n");
--		return -ENOENT;
--	} else if (count > 1) {
-+	if (vb2_request_buffer_cnt(req) > 1) {
- 		v4l2_info(&ctx->dev->v4l2_dev,
- 			  "More than one buffer was provided with the request\n");
- 		return -EINVAL;
-@@ -1987,21 +1983,23 @@ static int vicodec_request_validate(struct media_request *req)
  
- 	parent_hdl = &ctx->hdl;
- 
--	hdl = v4l2_ctrl_request_hdl_find(req, parent_hdl);
--	if (!hdl) {
--		v4l2_info(&ctx->dev->v4l2_dev, "Missing codec control\n");
--		return -ENOENT;
--	}
--	ctrl = v4l2_ctrl_request_hdl_ctrl_find(hdl,
--					       vicodec_ctrl_stateless_state.id);
--	v4l2_ctrl_request_hdl_put(hdl);
--	if (!ctrl) {
--		v4l2_info(&ctx->dev->v4l2_dev,
--			  "Missing required codec control\n");
--		return -ENOENT;
-+	if (vb->vb2_queue->is_output) {
-+		hdl = v4l2_ctrl_request_hdl_find(req, parent_hdl);
-+		if (!hdl) {
-+			v4l2_info(&ctx->dev->v4l2_dev, "Missing codec control\n");
-+			return -ENOENT;
-+		}
-+		ctrl = v4l2_ctrl_request_hdl_ctrl_find(hdl,
-+						       vicodec_ctrl_stateless_state.id);
-+		v4l2_ctrl_request_hdl_put(hdl);
-+		if (!ctrl) {
-+			v4l2_info(&ctx->dev->v4l2_dev,
-+				  "Missing required codec control\n");
-+			return -ENOENT;
-+		}
- 	}
- 
--	return vb2_request_validate(req);
-+	return v4l2_m2m_request_validate(req);
- }
- 
- static const struct v4l2_file_operations vicodec_fops = {
+ Return Value
 -- 
 2.27.0
 
