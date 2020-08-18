@@ -2,111 +2,164 @@ Return-Path: <SRS0=pHRl=B4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28C89C433E3
-	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 14:37:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02D49C433E1
+	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 14:37:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 098752080C
-	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 14:37:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1597761441;
-	bh=C0TU5voCSZcY/KUxBE86zeqxNC2ZXHOu6W9sJlJ37Ak=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=Li+NrnKKlvJVnUV4fve5fEsvyszPNkdIXWOp077as8UYhUdpJdm9Pzi8epAvD1DiP
-	 495kajZkej1RPD2gHkm0ajdFUTJ4XmmM1KKlOfXGCw7qQvu+ceiNsvwHP+kv1j1tcu
-	 2pTD9f9dCQfNkye2hRX/Y2Ot9mXzXk2Xh6FY0p5A=
+	by mail.kernel.org (Postfix) with ESMTP id D18DF2080C
+	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 14:37:26 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="ZIUyUvZ/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727887AbgHROhU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 18 Aug 2020 10:37:20 -0400
-Received: from mail-io1-f48.google.com ([209.85.166.48]:33634 "EHLO
-        mail-io1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726145AbgHROhT (ORCPT
+        id S1727901AbgHROhZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 18 Aug 2020 10:37:25 -0400
+Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:43291 "EHLO
+        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727893AbgHROhX (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 18 Aug 2020 10:37:19 -0400
-Received: by mail-io1-f48.google.com with SMTP id g14so21468317iom.0;
-        Tue, 18 Aug 2020 07:37:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KvDiFSHCMP00JRwPpFIepjmdNNs7NQxVpXYCSaohcWE=;
-        b=mFPreDZKV4vHYBF0Yi9lRSvvKBWSlaWYIXQeN6p7mHAZkoKTZwTQNbxhBwUs1ur3G3
-         m5IFCVGubhjDKDl6j1tT1aXsTigDGZevp3iJsxj60Bki8CozHYEHYGsE3nSWZZCoucuo
-         lu5wUL7lDTOrW+zBpRYpO+KcTEi+lE61uPdl75xYbIiHkKwao2fNzCqBdXsy8GL97Rvi
-         16AFS0gHhMMmn4Qqm3ZBsuIGEqYD5sJerj77rE+4CgfjcaIo2IeH4kkhnosyOW7wHSAE
-         kl5VJ5IQDgRaV/1onoeiHfYcHBB5wQCeOBQKMbz+AaoWVABqx4Gr6QcH8dUxTycvJeRw
-         pULA==
-X-Gm-Message-State: AOAM532P/LEI58ErhYaoO5zdTt4bdK47FtXe7FSe+gTIDx4IEGc+NwRD
-        iIdjodZNwhC08FiJDQfDDCk=
-X-Google-Smtp-Source: ABdhPJxnn2B0WzR309SekP4oYLzfek0uIR9zSY77kfpMtT2egbp4JP9sX7OBycX0RREH5J0lgPswRA==
-X-Received: by 2002:a5d:9943:: with SMTP id v3mr16086981ios.51.1597761438176;
-        Tue, 18 Aug 2020 07:37:18 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id y11sm10913813iot.23.2020.08.18.07.37.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Aug 2020 07:37:16 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id A04904046C; Tue, 18 Aug 2020 14:37:15 +0000 (UTC)
-Date:   Tue, 18 Aug 2020 14:37:15 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Lukas Middendorf <kernel@tuxforce.de>
-Cc:     Anand Jain <anand.jain@oracle.com>, linux-btrfs@vger.kernel.org,
-        Antti Palosaari <crope@iki.fi>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Subject: Re: Is request_firmware() really safe to call in resume callback
- when /usr/lib/firmware is on btrfs?
-Message-ID: <20200818143715.GF4332@42.do-not-panic.com>
-References: <c79e24a5-f808-d1f0-1f09-ee6f135d9679@tuxforce.de>
- <20200813163749.GV4332@42.do-not-panic.com>
- <0b1621bf-fc82-1a56-c11f-c5c46677e59e@tuxforce.de>
- <20200813221348.GB4332@42.do-not-panic.com>
- <fc887e06-874c-79d8-0607-4e27ae788446@tuxforce.de>
- <20200814163723.GC4332@42.do-not-panic.com>
- <a79f1a0c-012d-bebe-c9c7-b505f59079c2@tuxforce.de>
- <20200817152056.GD4332@42.do-not-panic.com>
- <9e5c716e-1736-9890-54be-75739ea5462f@tuxforce.de>
+        Tue, 18 Aug 2020 10:37:23 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id 82jnkV8V2uuXO82jpkcevl; Tue, 18 Aug 2020 16:37:21 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1597761441; bh=xqdJRbuSdQkV7q4CgLZt44sTo7bQDe8a40AMdT92bsM=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
+        b=ZIUyUvZ/NBaUJij72IeHYZ2mKQL0oeVPbJmBRrsh9EW04NG5srzsCzZnvBaiuRK2Z
+         Zv9/CWBXbAMNayYO8zH/6fpPJNyYwykxwHSY50l+n7IdQDJWjNDyZGpxOL5nHOH6+l
+         wwkPafx40kN3eqsuuSmua4t9M6AyciPpgocO48hw+OT9H970w/vqfcbm+xVZNTWOWZ
+         XJnhIUbrtK9qPYNfXztr6qvHiD+O/N/gMRx1b9s4G1CbsUVk4lVMo4Mc91dxnfm+kN
+         Kh9Zh4hj31f9EE/LFZsKCvtY9O8yJQCe/sAMG3CrnhY9cDgafMur2A8X9Cd+252UPe
+         5mMce51Eaz+4g==
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Cc:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Dikshita Agarwal <dikshita@codeaurora.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv2 06/12] v4l2-ctrls.c: add v4l2_ctrl_request_add_handler
+Date:   Tue, 18 Aug 2020 16:37:13 +0200
+Message-Id: <20200818143719.102128-7-hverkuil-cisco@xs4all.nl>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200818143719.102128-1-hverkuil-cisco@xs4all.nl>
+References: <20200818143719.102128-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9e5c716e-1736-9890-54be-75739ea5462f@tuxforce.de>
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4wfCuwSrPvT4fumm6uq5Q5WMyOX6OnYFqvqUTKnnAc42oTX5UrWuzWMQXEHZ0Xwab3bjAqBvapkeMtcnah8py0+THUdibAVA3JlkwbJKBA3FfrJVRuZCf9
+ MutHBxYoEallZtP/q0OB2XnCJYFdu6h4EqCQrwiCWra8okfqXdZAkac5bbCbmkYM4fe4xJG4EgawT0xEbOL5+hT3oI9SgWjgRVgJ29iPievIqXhZJd6d629a
+ vLCVQBuRiPUnJBSOtzjJGfW8g2/2zvya2zTX+mLp3FNEr3SVaCewyR1Wov6ClyHz5BVDVJeeN6e+zXNlMbcW5xoP9uhUmaOfWpjS5OYLoWNoNuaLH/wbAw26
+ Wji31XDc
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Aug 18, 2020 at 12:04:51AM +0200, Lukas Middendorf wrote:
-> On 17/08/2020 17:20, Luis Chamberlain wrote:
-> A freeze can happen on resume with and without the si2168 firmware files
-> installed. It however is easier to hit the freeze with the firmware files
-> installed. Without the firmware files present the freeze happens only if no
-> other driver uses the firmware loader.
-> 
-> > 
-> > This helps, thanks so much, now we'll have to write a reproducer, thanks
-> > for the report!!
-> 
-> Will you do it yourself or do you expect me to do anything for this?
+Add a new v4l2_ctrl_request_add_handler() function that can be called in
+req_validate() to add a control handler request object if needed.
 
-I meant to imply that we'd do this, now that we understand the problem. Thanks
-for your report!
+This is needed if the driver needs to set controls in the request,
 
-> > > The nouveau driver in use seems to be equivalent to running "ls -R
-> > > /usr/lib/firmware" before suspend.
-> > > 
-> > > All the cases seem to boil down to:
-> > > It freezes if the file system has to be accessed to list the content of
-> > > /usr/lib/firmware or to read the si2168 firmware file
-> > 
-> > Let's confirm first whether or not your system is using other firmware
-> > files too or not.
-> 
-> I confirmed that above. Why is this so important, anyway?
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ drivers/media/mc/mc-request.c        |  3 ++-
+ drivers/media/v4l2-core/v4l2-ctrls.c | 35 ++++++++++++++++++++++++++++
+ include/media/v4l2-ctrls.h           | 21 +++++++++++++++++
+ 3 files changed, 58 insertions(+), 1 deletion(-)
 
-A reproducer is easier to write if the actual file neeed is not needed.
-That's all.
+diff --git a/drivers/media/mc/mc-request.c b/drivers/media/mc/mc-request.c
+index 3b013deaeb06..d66711964429 100644
+--- a/drivers/media/mc/mc-request.c
++++ b/drivers/media/mc/mc-request.c
+@@ -417,7 +417,8 @@ int media_request_object_bind(struct media_request *req,
+ 
+ 	spin_lock_irqsave(&req->lock, flags);
+ 
+-	if (WARN_ON(req->state != MEDIA_REQUEST_STATE_UPDATING))
++	if (WARN_ON(req->state != MEDIA_REQUEST_STATE_UPDATING &&
++		    req->state != MEDIA_REQUEST_STATE_VALIDATING))
+ 		goto unlock;
+ 
+ 	obj->req = req;
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
+index 3f3fbcd60cc6..8a3f2b2027e4 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls.c
+@@ -4345,6 +4345,41 @@ void v4l2_ctrl_request_complete(struct media_request *req,
+ }
+ EXPORT_SYMBOL(v4l2_ctrl_request_complete);
+ 
++int v4l2_ctrl_request_add_handler(struct media_request *req,
++				  struct v4l2_ctrl_handler *main_hdl,
++				  bool is_ro_request)
++{
++	struct media_request_object *obj;
++	struct v4l2_ctrl_handler *new_hdl;
++	int ret = 0;
++
++	if (!req || !main_hdl)
++		return 0;
++
++	if (WARN_ON(req->state != MEDIA_REQUEST_STATE_VALIDATING))
++		return -EBUSY;
++
++	/* If a request object is found, then do nothing. */
++	obj = media_request_object_find(req, &req_ops, main_hdl);
++	if (obj) {
++		media_request_object_put(obj);
++		return is_ro_request ? -EINVAL : 0;
++	}
++
++	/* Create a new request so the driver can return controls */
++	new_hdl = kzalloc(sizeof(*new_hdl), GFP_KERNEL);
++	if (!new_hdl)
++		return -ENOMEM;
++
++	ret = v4l2_ctrl_handler_init(new_hdl, (main_hdl->nr_of_buckets - 1) * 8);
++	if (!ret)
++		ret = v4l2_ctrl_request_bind(req, new_hdl, main_hdl);
++	if (ret)
++		kfree(new_hdl);
++	return ret;
++}
++EXPORT_SYMBOL(v4l2_ctrl_request_add_handler);
++
+ int v4l2_ctrl_request_setup(struct media_request *req,
+ 			     struct v4l2_ctrl_handler *main_hdl)
+ {
+diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
+index f40e2cbb21d3..f0ee6f860798 100644
+--- a/include/media/v4l2-ctrls.h
++++ b/include/media/v4l2-ctrls.h
+@@ -1254,6 +1254,27 @@ int v4l2_ctrl_request_setup(struct media_request *req,
+ void v4l2_ctrl_request_complete(struct media_request *req,
+ 				struct v4l2_ctrl_handler *parent);
+ 
++/**
++ * v4l2_ctrl_request_add_handler - Add a control handler request object
++ *
++ * @req: The request
++ * @parent: The parent control handler ('priv' in media_request_object_find())
++ * @is_ro_request: this is a read-only request
++ *
++ * If the user created a request without controls, but the driver wants to
++ * set controls for the request, then this function can be called in the
++ * req_validate function. If there is no control handler object in the
++ * request, then this will add one. Now the driver can set controls
++ * and when v4l2_ctrl_request_complete() is called they will be automatically
++ * copied into the request.
++ *
++ * If @is_ro_request is true, then if there *is* a control handler object
++ * in the request, then this function will return -EINVAL.
++ */
++int v4l2_ctrl_request_add_handler(struct media_request *req,
++				  struct v4l2_ctrl_handler *parent,
++				  bool is_ro_request);
++
+ /**
+  * v4l2_ctrl_request_hdl_find - Find the control handler in the request
+  *
+-- 
+2.27.0
 
-  Luis
