@@ -1,79 +1,123 @@
-Return-Path: <SRS0=xaSx=B3=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=pHRl=B4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3429C433E8
-	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 22:27:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2ECF0C433DF
+	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 01:37:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BE9F32072D
-	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 22:27:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 03A0A207BB
+	for <linux-media@archiver.kernel.org>; Tue, 18 Aug 2020 01:37:57 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="PpDkXzww"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728110AbgHQW04 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Aug 2020 18:26:56 -0400
-Received: from mail.v3.sk ([167.172.186.51]:54084 "EHLO shell.v3.sk"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726793AbgHQW0y (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Aug 2020 18:26:54 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id 6D40BDFA74;
-        Mon, 17 Aug 2020 22:08:02 +0000 (UTC)
-Received: from shell.v3.sk ([127.0.0.1])
-        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id ApFcZkuIBkNP; Mon, 17 Aug 2020 22:08:01 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id A3534DF92E;
-        Mon, 17 Aug 2020 22:08:00 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at zimbra.v3.sk
-Received: from shell.v3.sk ([127.0.0.1])
-        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 0gOhhw_Uly4c; Mon, 17 Aug 2020 22:08:00 +0000 (UTC)
-Received: from localhost (unknown [109.183.109.54])
-        by zimbra.v3.sk (Postfix) with ESMTPSA id 58D58DF880;
-        Mon, 17 Aug 2020 22:08:00 +0000 (UTC)
-From:   Lubomir Rintel <lkundrak@v3.sk>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
-        Jonathan Corbet <corbet@lwn.net>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/4] media: marvell-ccic: Add support for runtime PM
-Date:   Tue, 18 Aug 2020 00:08:46 +0200
-Message-Id: <20200817220850.401287-1-lkundrak@v3.sk>
-X-Mailer: git-send-email 2.26.2
+        id S1726689AbgHRBh4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Aug 2020 21:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43838 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726314AbgHRBhw (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 17 Aug 2020 21:37:52 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60EE8C061342
+        for <linux-media@vger.kernel.org>; Mon, 17 Aug 2020 18:37:52 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id g15so4551274plj.6
+        for <linux-media@vger.kernel.org>; Mon, 17 Aug 2020 18:37:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VKh9IL3wAtvMWfoyCMPIJCvNUxcYwDemhkEsAUpJ8lo=;
+        b=PpDkXzwwJnQbFULXuaCZmFAzHkMYds94xj9YOEbRQIDZP94f5AIguahC9HLAqMzfqe
+         HZo+oLLrI8WjWPoEUYBDKMzFALzRY0smgK2z8FhA0gTW6+15QKk+sBnRoiloCW4HD1Tg
+         /lbl1EzXVpT9Bbqf4asPikFMaMTCUurQjIIik=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VKh9IL3wAtvMWfoyCMPIJCvNUxcYwDemhkEsAUpJ8lo=;
+        b=Y9U7nmhoMM8Pd8q9OmMlY4L1YPnp7DsHLuRNohRday6UnhjibJwEzjadLoZiFDc8rR
+         oaGpM0dzARXC3ScwW4Mq+lRAMtoV30eLEORZMgSkXhSYjv8ul+cy9KaQMTZ0uU/UT9To
+         BcUSBw0u90H+V8VxDDen9oM38oH3Bi5ENRJ/277SDrqaNTpNPHLOoZMY3iPKNumh67d4
+         B9Vt64Ub1KtcjafiXUCx1JdA+fLuhiYBX47JgZBfBxOtfD9ZgDxRqlO5rkyKYftGKDzp
+         J4WuvuZbp7UtdkYcBy0pRG8a9AolvNJAU/Kww8FcF0vZHH/b6xQzKSkNcodqs/O89JT2
+         J97w==
+X-Gm-Message-State: AOAM530UaXAnScUL0Xx1vRSTrrrVf8PyqumBOZ/JPj+S2uuLNsTGKLNH
+        yd9IMfn6Tmk+kxb3cn9/zU4CFw==
+X-Google-Smtp-Source: ABdhPJwBgf3Py2LgsmCVLyQWvxnS2N46UEoOPZjDMDI6aKwBwSdp/Daf1fAgtWB28KQKG/yQd4XxNg==
+X-Received: by 2002:a17:90b:1c06:: with SMTP id oc6mr14032262pjb.182.1597714671684;
+        Mon, 17 Aug 2020 18:37:51 -0700 (PDT)
+Received: from localhost ([2401:fa00:8f:203:f693:9fff:fef4:a930])
+        by smtp.gmail.com with ESMTPSA id e8sm21616835pfd.34.2020.08.17.18.37.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Aug 2020 18:37:50 -0700 (PDT)
+From:   David Stevens <stevensd@chromium.org>
+To:     Gerd Hoffmann <kraxel@redhat.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Stevens <stevensd@chromium.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        virtio-dev@lists.oasis-open.org
+Subject: [PATCH v6 0/3] Support virtio cross-device resources
+Date:   Tue, 18 Aug 2020 10:37:41 +0900
+Message-Id: <20200818013744.3327271-1-stevensd@chromium.org>
+X-Mailer: git-send-email 2.28.0.220.ged08abb693-goog
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This is a second version of the patch set that enable runtime PM for
-mmp-camera. The ultimate goal is to conserve power on MMP3 where the
-camera block lives on a separate power island whose genpd should be
-turned off when the camera is not in use.
+This patchset implements the current proposal for virtio cross-device
+resource sharing [1]. It will be used to import virtio resources into
+the virtio-video driver currently under discussion [2]. The patch
+under consideration to add support in the virtio-video driver is [3].
+It uses the APIs from v3 of this series, but the changes to update it
+are relatively minor.
 
-The previous version of the set contained only one patch, that is now
-last in the set. It was modified to move clock handling to the runtime
-PM callbacks:
+This patchset adds a new flavor of dma-bufs that supports querying the
+underlying virtio object UUID, as well as adding support for exporting
+resources from virtgpu.
 
-  [PATCH v2 4/4] media: marvell-ccic: add support for runtime PM
+[1] https://markmail.org/thread/2ypjt5cfeu3m6lxu
+[2] https://markmail.org/thread/p5d3k566srtdtute
+[3] https://markmail.org/thread/j4xlqaaim266qpks
 
-The previous two are new and they lay foundation for the patch 4/4:
+v5 -> v6 changes:
+ - Fix >80 character comment
 
-  [PATCH v2 2/4] media: marvell-ccic: mmp: get rid of mmpcam_devices list
-  [PATCH v2 3/4] media: marvell-ccic: mmp: use generic dev_pm_ops
+David Stevens (3):
+  virtio: add dma-buf support for exported objects
+  virtio-gpu: add VIRTIO_GPU_F_RESOURCE_UUID feature
+  drm/virtio: Support virtgpu exported resources
 
-The first one is not strictly related to the rest, it just makes things
-a bit nicer for the version of marvell-ccic found on the Cafe chip and
-consistent with what's done for mmp-camera:
+ drivers/gpu/drm/virtio/virtgpu_drv.c   |  3 +
+ drivers/gpu/drm/virtio/virtgpu_drv.h   | 20 ++++++
+ drivers/gpu/drm/virtio/virtgpu_kms.c   |  4 ++
+ drivers/gpu/drm/virtio/virtgpu_prime.c | 96 +++++++++++++++++++++++++-
+ drivers/gpu/drm/virtio/virtgpu_vq.c    | 55 +++++++++++++++
+ drivers/virtio/Makefile                |  2 +-
+ drivers/virtio/virtio.c                |  6 ++
+ drivers/virtio/virtio_dma_buf.c        | 82 ++++++++++++++++++++++
+ include/linux/virtio.h                 |  1 +
+ include/linux/virtio_dma_buf.h         | 37 ++++++++++
+ include/uapi/linux/virtio_gpu.h        | 19 +++++
+ 11 files changed, 321 insertions(+), 4 deletions(-)
+ create mode 100644 drivers/virtio/virtio_dma_buf.c
+ create mode 100644 include/linux/virtio_dma_buf.h
 
-  [PATCH v2 1/4] media: cafe-driver: use drvdata instead of back-casting
-
-Please take a look and consider applying.
-
-Thank you
-Lubo
+-- 
+2.28.0.220.ged08abb693-goog
 
