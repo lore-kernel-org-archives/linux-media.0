@@ -2,148 +2,78 @@ Return-Path: <SRS0=Rva/=B5=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8D5BC433E1
-	for <linux-media@archiver.kernel.org>; Wed, 19 Aug 2020 13:54:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3569C433E3
+	for <linux-media@archiver.kernel.org>; Wed, 19 Aug 2020 13:55:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A5E6C2075E
-	for <linux-media@archiver.kernel.org>; Wed, 19 Aug 2020 13:54:50 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="dC8PMbBD"
+	by mail.kernel.org (Postfix) with ESMTP id BCC2B2076E
+	for <linux-media@archiver.kernel.org>; Wed, 19 Aug 2020 13:55:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728530AbgHSNyt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 19 Aug 2020 09:54:49 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:58444 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726961AbgHSNys (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 19 Aug 2020 09:54:48 -0400
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6440C29E;
-        Wed, 19 Aug 2020 15:54:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1597845281;
-        bh=ZqBfMDMSKa5X/szF7RfnDQDJrt4q2W1U8MQZSEOCOO8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dC8PMbBDd77raytOmFSRlll3+T+zxR5N6Pq4zGBDzetA/3IiC25Sp+59vDmLf9Zcw
-         opdRB8HXOWD6NuxNlmvdCCs8aL7yGClWsJa2Erj7MkCLRkiXyrw60YbC4gVBT2dwP0
-         HdUiJqDMwuSuq16Q6OwPk5AwcLOgs0HQ+QiicfWI=
-Date:   Wed, 19 Aug 2020 16:54:23 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jacopo Mondi <jacopo+renesas@jmondi.org>
-Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-media@vger.kernel.org,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>, mchehab@kernel.org,
-        sakari.ailus@linux.intel.com, hverkuil-cisco@xs4all.nl,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH 3/3] dt-bindings: media: ov772x: Document endpoint props
-Message-ID: <20200819135423.GL6049@pendragon.ideasonboard.com>
-References: <20200818122012.37956-1-jacopo+renesas@jmondi.org>
- <20200818122012.37956-4-jacopo+renesas@jmondi.org>
+        id S1728571AbgHSNzC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 19 Aug 2020 09:55:02 -0400
+Received: from verein.lst.de ([213.95.11.211]:37889 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726961AbgHSNzB (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 19 Aug 2020 09:55:01 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 8062B68BEB; Wed, 19 Aug 2020 15:54:55 +0200 (CEST)
+Date:   Wed, 19 Aug 2020 15:54:55 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Tomasz Figa <tfiga@chromium.org>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Joonyoung Shim <jy0922.shim@samsung.com>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Pawel Osciak <pawel@osciak.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
+        Roedel <joro@8bytes.org>," <iommu@lists.linux-foundation.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        alsa-devel@alsa-project.org,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        linux-ia64@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-parisc@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        nouveau@lists.freedesktop.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-nvme@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, netdev@vger.kernel.org,
+        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
+        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>
+Subject: Re: [PATCH 05/28] media/v4l2: remove
+ V4L2-FLAG-MEMORY-NON-CONSISTENT
+Message-ID: <20200819135454.GA17098@lst.de>
+References: <20200819065555.1802761-1-hch@lst.de> <20200819065555.1802761-6-hch@lst.de> <CAAFQd5COLxjydDYrfx47ht8tj-aNPiaVnC+WyQA7nvpW4gs=ww@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200818122012.37956-4-jacopo+renesas@jmondi.org>
+In-Reply-To: <CAAFQd5COLxjydDYrfx47ht8tj-aNPiaVnC+WyQA7nvpW4gs=ww@mail.gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jacopo,
-
-Thank you for the patch.
-
-On Tue, Aug 18, 2020 at 02:20:12PM +0200, Jacopo Mondi wrote:
-> Document endpoint properties for the parallel bus type and
-> add them to the example.
+On Wed, Aug 19, 2020 at 01:16:51PM +0200, Tomasz Figa wrote:
+> Hi Christoph,
 > 
-> Specify a few constraints:
-> - If the bus type is BT.656 no hsync or vsycn polarities can be
->   specified.
-> - If the bus width is 10 bits, not data-shift can be applied.
+> On Wed, Aug 19, 2020 at 8:56 AM Christoph Hellwig <hch@lst.de> wrote:
+> >
+> > The V4L2-FLAG-MEMORY-NON-CONSISTENT flag is entirely unused,
 > 
-> Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
-> ---
->  .../devicetree/bindings/media/i2c/ov772x.yaml | 43 +++++++++++++++++++
->  1 file changed, 43 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/media/i2c/ov772x.yaml b/Documentation/devicetree/bindings/media/i2c/ov772x.yaml
-> index 75dad40f70cc..3fad5dffd19a 100644
-> --- a/Documentation/devicetree/bindings/media/i2c/ov772x.yaml
-> +++ b/Documentation/devicetree/bindings/media/i2c/ov772x.yaml
-> @@ -50,9 +50,47 @@ properties:
->            bus-type:
->              enum: [5, 6]
-> 
-> +          bus-width:
-> +            enum: [8, 10]
-> +            default: 10
-> +
-> +          data-shift:
-> +            enum: [0, 2]
-> +            default: 0
-> +
-> +          hsync-active:
-> +            enum: [0, 1]
-> +            default: 1
-> +
-> +          vsync-active:
-> +            enum: [0, 1]
-> +            default: 1
-> +
-> +          pclk-sample:
-> +            enum: [0, 1]
-> +            default: 1
-> +
->            remote-endpoint:
->              description: A phandle to the bus receiver's endpoint node.
-> 
-> +        allOf:
-> +          - if:
-> +              properties:
-> +                bus-type:
-> +                  const: 6
-> +            then:
-> +                properties:
-> +                  hsync-active: false
-> +                  vsync-active: false
-> +
-> +          - if:
-> +              properties:
-> +                bus-width:
-> +                  const: 10
-> +            then:
-> +                properties:
-> +                  data-shift:
-> +                    const: 0
+> Could you explain what makes you think it's unused? It's a feature of
+> the UAPI generally supported by the videobuf2 framework and relied on
+> by Chromium OS to get any kind of reasonable performance when
+> accessing V4L2 buffers in the userspace.
 
-I'd add a blank line here.
-
->          required:
->            - bus-type
-
-Should some of the properties be required ? Possibly conditioned on
-bus-type ?
-
-> 
-> @@ -82,6 +120,11 @@ examples:
->              port {
->                  ov772x_0: endpoint {
->                      bus-type = <5>;
-> +                    vsync-active = <0>;
-> +                    hsync-active = <0>;
-> +                    pclk-sample = <0>;
-> +                    bus-width = <8>;
-> +                    data-shift = <0>;
->                      remote-endpoint = <&vcap1_in0>;
->                  };
->              };
-
--- 
-Regards,
-
-Laurent Pinchart
+Because it doesn't do anything except on PARISC and non-coherent MIPS,
+so by definition it isn't used by any of these media drivers.
