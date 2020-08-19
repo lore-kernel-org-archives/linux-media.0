@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-12.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5216C433E1
-	for <linux-media@archiver.kernel.org>; Wed, 19 Aug 2020 06:56:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7B18C433DF
+	for <linux-media@archiver.kernel.org>; Wed, 19 Aug 2020 06:56:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A0C7820825
-	for <linux-media@archiver.kernel.org>; Wed, 19 Aug 2020 06:56:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AD2E12083B
+	for <linux-media@archiver.kernel.org>; Wed, 19 Aug 2020 06:56:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="UdYV4uHp"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="vH6bxrET"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726980AbgHSG42 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 19 Aug 2020 02:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36588 "EHLO
+        id S1727108AbgHSG4r (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 19 Aug 2020 02:56:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726890AbgHSG4V (ORCPT
+        with ESMTP id S1727079AbgHSG4o (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 19 Aug 2020 02:56:21 -0400
+        Wed, 19 Aug 2020 02:56:44 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28807C061389;
-        Tue, 18 Aug 2020 23:56:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA911C061389;
+        Tue, 18 Aug 2020 23:56:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=5I0Wekw7PGkNV3dZaIEsA8c8Eplwzl97xo8vYosQxdI=; b=UdYV4uHpyw9x3F5rwAWsVUPFE0
-        Hqm02Lgcb3b7szXHtRYFh2Q2mQ0XgXJIRXZnNarHY8BTFPY/yfILYo9XBcRi7QMB28ipLhHbeYlLZ
-        mACjmpKK8MPjiLf3dQYi0vBMkZJd/+MdUBQ3P1z7bbLGarn+eG74rMpDjApvZcefIfvlujyIZSqxu
-        wHrDyEJGotoW7dL28Oiu4mTNTADO4SZxq3ID/xa3uKrXpchLC5U0otmEnB0C95mcVGd+TWrgeSorS
-        YoshIRrHigr4PRqKUustXCWc2qvmN6xs6AZEOX38KVFTfpoTISa6SdfuLtcuYFCOYm/EHyRiUeiPJ
-        oIt3VQVw==;
+        bh=AizzKTdergNVxrKhEOEhnPghjjTSMqeAtkqlKtBp/X0=; b=vH6bxrETaqMxdx4mGW1el0GaJ+
+        NSVeG0+Sh1NWGRby+YHyglVGxyHksQXNJYqQqa9ssWp4C4h3A+SYPLZMdV23zRnCpgPJjJXWg/Lay
+        3Ir0i12xQJQKx7lVNo97rQppxb+/aS4MuRXBMNs7gGALVE09O6cPX3LkEQjclkpmeIpQ/9EXrohw6
+        a3zeu5THytGVk9DlrVgqJzLNHCGD7lD1uWGzwx0UVCF58MT7u8xcpVGUZDh4889T2ZMrTXNwMfMwr
+        bxy2SfXAPCiFeopJuD84TIjMcyqgAV5sWCTNtUbG+Z7AAKkhx870HN70mDO5NY/psIClSv4j5Qpt6
+        Qd6PhpeA==;
 Received: from [2001:4bb8:198:f3b2:86b6:2277:f429:37a1] (helo=localhost)
         by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1k8I0x-0008LJ-Vp; Wed, 19 Aug 2020 06:56:04 +0000
+        id 1k8I1E-0008Od-IN; Wed, 19 Aug 2020 06:56:21 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -58,9 +58,9 @@ Cc:     Tom Lendacky <thomas.lendacky@amd.com>, linux-doc@vger.kernel.org,
         netdev@vger.kernel.org, linux-nvme@lists.infradead.org,
         linux-scsi@vger.kernel.org, linux-mm@kvack.org,
         alsa-devel@alsa-project.org
-Subject: [PATCH 04/28] net/au1000-eth: stop using DMA_ATTR_NON_CONSISTENT
-Date:   Wed, 19 Aug 2020 08:55:31 +0200
-Message-Id: <20200819065555.1802761-5-hch@lst.de>
+Subject: [PATCH 12/28] dma-direct: remove dma_direct_{alloc,free}_pages
+Date:   Wed, 19 Aug 2020 08:55:39 +0200
+Message-Id: <20200819065555.1802761-13-hch@lst.de>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200819065555.1802761-1-hch@lst.de>
 References: <20200819065555.1802761-1-hch@lst.de>
@@ -72,57 +72,149 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The au1000-eth driver contains none of the manual cache synchronization
-required for using DMA_ATTR_NON_CONSISTENT.  From what I can tell it
-can be used on both dma coherent and non-coherent DMA platforms, but
-I suspect it has been buggy on the non-coherent platforms all along.
+Just merge these helpers into the main dma_direct_{alloc,free} routines,
+as the additional checks are always false for the two callers.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- drivers/net/ethernet/amd/au1000_eth.c | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+ arch/x86/kernel/amd_gart_64.c |  6 +++---
+ include/linux/dma-direct.h    |  4 ----
+ kernel/dma/direct.c           | 39 ++++++++++++++---------------------
+ kernel/dma/pool.c             |  2 +-
+ 4 files changed, 19 insertions(+), 32 deletions(-)
 
-diff --git a/drivers/net/ethernet/amd/au1000_eth.c b/drivers/net/ethernet/amd/au1000_eth.c
-index 75dbd221dc594b..19e195420e2434 100644
---- a/drivers/net/ethernet/amd/au1000_eth.c
-+++ b/drivers/net/ethernet/amd/au1000_eth.c
-@@ -1131,10 +1131,9 @@ static int au1000_probe(struct platform_device *pdev)
- 	/* Allocate the data buffers
- 	 * Snooping works fine with eth on all au1xxx
+diff --git a/arch/x86/kernel/amd_gart_64.c b/arch/x86/kernel/amd_gart_64.c
+index e89031e9c84761..adbf616d35d15d 100644
+--- a/arch/x86/kernel/amd_gart_64.c
++++ b/arch/x86/kernel/amd_gart_64.c
+@@ -468,7 +468,7 @@ gart_alloc_coherent(struct device *dev, size_t size, dma_addr_t *dma_addr,
+ {
+ 	void *vaddr;
+ 
+-	vaddr = dma_direct_alloc_pages(dev, size, dma_addr, flag, attrs);
++	vaddr = dma_direct_alloc(dev, size, dma_addr, flag, attrs);
+ 	if (!vaddr ||
+ 	    !force_iommu || dev->coherent_dma_mask <= DMA_BIT_MASK(24))
+ 		return vaddr;
+@@ -480,7 +480,7 @@ gart_alloc_coherent(struct device *dev, size_t size, dma_addr_t *dma_addr,
+ 		goto out_free;
+ 	return vaddr;
+ out_free:
+-	dma_direct_free_pages(dev, size, vaddr, *dma_addr, attrs);
++	dma_direct_free(dev, size, vaddr, *dma_addr, attrs);
+ 	return NULL;
+ }
+ 
+@@ -490,7 +490,7 @@ gart_free_coherent(struct device *dev, size_t size, void *vaddr,
+ 		   dma_addr_t dma_addr, unsigned long attrs)
+ {
+ 	gart_unmap_page(dev, dma_addr, size, DMA_BIDIRECTIONAL, 0);
+-	dma_direct_free_pages(dev, size, vaddr, dma_addr, attrs);
++	dma_direct_free(dev, size, vaddr, dma_addr, attrs);
+ }
+ 
+ static int no_agp;
+diff --git a/include/linux/dma-direct.h b/include/linux/dma-direct.h
+index 738485b3578062..6a96a8ecac7cbc 100644
+--- a/include/linux/dma-direct.h
++++ b/include/linux/dma-direct.h
+@@ -80,10 +80,6 @@ void *dma_direct_alloc(struct device *dev, size_t size, dma_addr_t *dma_handle,
+ 		gfp_t gfp, unsigned long attrs);
+ void dma_direct_free(struct device *dev, size_t size, void *cpu_addr,
+ 		dma_addr_t dma_addr, unsigned long attrs);
+-void *dma_direct_alloc_pages(struct device *dev, size_t size,
+-		dma_addr_t *dma_handle, gfp_t gfp, unsigned long attrs);
+-void dma_direct_free_pages(struct device *dev, size_t size, void *cpu_addr,
+-		dma_addr_t dma_addr, unsigned long attrs);
+ int dma_direct_get_sgtable(struct device *dev, struct sg_table *sgt,
+ 		void *cpu_addr, dma_addr_t dma_addr, size_t size,
+ 		unsigned long attrs);
+diff --git a/kernel/dma/direct.c b/kernel/dma/direct.c
+index 1123e767f4315f..8da9a62dd9a72c 100644
+--- a/kernel/dma/direct.c
++++ b/kernel/dma/direct.c
+@@ -151,13 +151,18 @@ static struct page *__dma_direct_alloc_pages(struct device *dev, size_t size,
+ 	return page;
+ }
+ 
+-void *dma_direct_alloc_pages(struct device *dev, size_t size,
++void *dma_direct_alloc(struct device *dev, size_t size,
+ 		dma_addr_t *dma_handle, gfp_t gfp, unsigned long attrs)
+ {
+ 	struct page *page;
+ 	void *ret;
+ 	int err;
+ 
++	if (!IS_ENABLED(CONFIG_ARCH_HAS_DMA_SET_UNCACHED) &&
++	    !IS_ENABLED(CONFIG_DMA_DIRECT_REMAP) &&
++	    dma_alloc_need_uncached(dev, attrs))
++		return arch_dma_alloc(dev, size, dma_handle, gfp, attrs);
++
+ 	size = PAGE_ALIGN(size);
+ 
+ 	if (dma_should_alloc_from_pool(dev, gfp, attrs)) {
+@@ -251,11 +256,18 @@ void *dma_direct_alloc_pages(struct device *dev, size_t size,
+ 	return NULL;
+ }
+ 
+-void dma_direct_free_pages(struct device *dev, size_t size, void *cpu_addr,
+-		dma_addr_t dma_addr, unsigned long attrs)
++void dma_direct_free(struct device *dev, size_t size,
++		void *cpu_addr, dma_addr_t dma_addr, unsigned long attrs)
+ {
+ 	unsigned int page_order = get_order(size);
+ 
++	if (!IS_ENABLED(CONFIG_ARCH_HAS_DMA_SET_UNCACHED) &&
++	    !IS_ENABLED(CONFIG_DMA_DIRECT_REMAP) &&
++	    dma_alloc_need_uncached(dev, attrs)) {
++		arch_dma_free(dev, size, cpu_addr, dma_addr, attrs);
++		return;
++	}
++
+ 	/* If cpu_addr is not from an atomic pool, dma_free_from_pool() fails */
+ 	if (dma_should_free_from_pool(dev, attrs) &&
+ 	    dma_free_from_pool(dev, cpu_addr, PAGE_ALIGN(size)))
+@@ -279,27 +291,6 @@ void dma_direct_free_pages(struct device *dev, size_t size, void *cpu_addr,
+ 	dma_free_contiguous(dev, dma_direct_to_page(dev, dma_addr), size);
+ }
+ 
+-void *dma_direct_alloc(struct device *dev, size_t size,
+-		dma_addr_t *dma_handle, gfp_t gfp, unsigned long attrs)
+-{
+-	if (!IS_ENABLED(CONFIG_ARCH_HAS_DMA_SET_UNCACHED) &&
+-	    !IS_ENABLED(CONFIG_DMA_DIRECT_REMAP) &&
+-	    dma_alloc_need_uncached(dev, attrs))
+-		return arch_dma_alloc(dev, size, dma_handle, gfp, attrs);
+-	return dma_direct_alloc_pages(dev, size, dma_handle, gfp, attrs);
+-}
+-
+-void dma_direct_free(struct device *dev, size_t size,
+-		void *cpu_addr, dma_addr_t dma_addr, unsigned long attrs)
+-{
+-	if (!IS_ENABLED(CONFIG_ARCH_HAS_DMA_SET_UNCACHED) &&
+-	    !IS_ENABLED(CONFIG_DMA_DIRECT_REMAP) &&
+-	    dma_alloc_need_uncached(dev, attrs))
+-		arch_dma_free(dev, size, cpu_addr, dma_addr, attrs);
+-	else
+-		dma_direct_free_pages(dev, size, cpu_addr, dma_addr, attrs);
+-}
+-
+ #if defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE) || \
+     defined(CONFIG_SWIOTLB)
+ void dma_direct_sync_sg_for_device(struct device *dev,
+diff --git a/kernel/dma/pool.c b/kernel/dma/pool.c
+index 6bc74a2d51273e..222cebf1f10548 100644
+--- a/kernel/dma/pool.c
++++ b/kernel/dma/pool.c
+@@ -86,7 +86,7 @@ static int atomic_pool_expand(struct gen_pool *pool, size_t pool_size,
+ #endif
+ 	/*
+ 	 * Memory in the atomic DMA pools must be unencrypted, the pools do not
+-	 * shrink so no re-encryption occurs in dma_direct_free_pages().
++	 * shrink so no re-encryption occurs in dma_direct_free().
  	 */
--	aup->vaddr = (u32)dma_alloc_attrs(&pdev->dev, MAX_BUF_SIZE *
-+	aup->vaddr = (u32)dma_alloc_coherent(&pdev->dev, MAX_BUF_SIZE *
- 					  (NUM_TX_BUFFS + NUM_RX_BUFFS),
--					  &aup->dma_addr, 0,
--					  DMA_ATTR_NON_CONSISTENT);
-+					  &aup->dma_addr, 0);
- 	if (!aup->vaddr) {
- 		dev_err(&pdev->dev, "failed to allocate data buffers\n");
- 		err = -ENOMEM;
-@@ -1310,9 +1309,8 @@ static int au1000_probe(struct platform_device *pdev)
- err_remap2:
- 	iounmap(aup->mac);
- err_remap1:
--	dma_free_attrs(&pdev->dev, MAX_BUF_SIZE * (NUM_TX_BUFFS + NUM_RX_BUFFS),
--			(void *)aup->vaddr, aup->dma_addr,
--			DMA_ATTR_NON_CONSISTENT);
-+	dma_free_coherent(&pdev->dev, MAX_BUF_SIZE * (NUM_TX_BUFFS + NUM_RX_BUFFS),
-+			(void *)aup->vaddr, aup->dma_addr);
- err_vaddr:
- 	free_netdev(dev);
- err_alloc:
-@@ -1344,9 +1342,8 @@ static int au1000_remove(struct platform_device *pdev)
- 		if (aup->tx_db_inuse[i])
- 			au1000_ReleaseDB(aup, aup->tx_db_inuse[i]);
- 
--	dma_free_attrs(&pdev->dev, MAX_BUF_SIZE * (NUM_TX_BUFFS + NUM_RX_BUFFS),
--			(void *)aup->vaddr, aup->dma_addr,
--			DMA_ATTR_NON_CONSISTENT);
-+	dma_free_coherent(&pdev->dev, MAX_BUF_SIZE * (NUM_TX_BUFFS + NUM_RX_BUFFS),
-+			(void *)aup->vaddr, aup->dma_addr);
- 
- 	iounmap(aup->macdma);
- 	iounmap(aup->mac);
+ 	ret = set_memory_decrypted((unsigned long)page_to_virt(page),
+ 				   1 << order);
 -- 
 2.28.0
 
