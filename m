@@ -2,235 +2,88 @@ Return-Path: <SRS0=Rva/=B5=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F13BC433E4
-	for <linux-media@archiver.kernel.org>; Wed, 19 Aug 2020 18:06:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A598C433E1
+	for <linux-media@archiver.kernel.org>; Wed, 19 Aug 2020 18:14:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4F26320658
-	for <linux-media@archiver.kernel.org>; Wed, 19 Aug 2020 18:06:31 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=es-iitr-ac-in.20150623.gappssmtp.com header.i=@es-iitr-ac-in.20150623.gappssmtp.com header.b="BEFAAR8M"
+	by mail.kernel.org (Postfix) with ESMTP id 0FEC020658
+	for <linux-media@archiver.kernel.org>; Wed, 19 Aug 2020 18:14:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1597860852;
+	bh=QYBuIuEm2ugvBD7nOVhqIOoABVuY8EssjEfLEHT6Y2o=;
+	h=Date:From:To:Subject:References:In-Reply-To:List-ID:From;
+	b=RG2Neqfwa7BP3GieAo3jAWeW+UKOvobGDCMf9FcLWAV8mZI3fa06a/ZgD1NW40nUn
+	 bqoPPOkdAez8S/NRa2/mz+1kGMavqfX7l9gL6ZcKhwCyryQjBQMsbPJEDuNQkq8BO8
+	 xfmapoMJTrF1wU9MpfL/zsYjd5SFfR6gxMynipo0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726935AbgHSSGa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 19 Aug 2020 14:06:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55584 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726946AbgHSSFR (ORCPT
+        id S1726689AbgHSSOI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 19 Aug 2020 14:14:08 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:42672 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725997AbgHSSOH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 19 Aug 2020 14:05:17 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE26C061757
-        for <linux-media@vger.kernel.org>; Wed, 19 Aug 2020 11:05:17 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id 2so1462204pjx.5
-        for <linux-media@vger.kernel.org>; Wed, 19 Aug 2020 11:05:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=es-iitr-ac-in.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Myk1HtWNfMPMH6mEsQn60wKu3fbOFzXiNMNij+F/fos=;
-        b=BEFAAR8MyoIxxx+igVHbbPaDJnsuviiG++309FQfr/cS43lp+JqFtnDa+7fDIohDbq
-         w+T/a135DyuxywUD1oltM3KnNAV5z77uRsrpCagXQHy7//9nmOFnm/NziWqcmCdX2u4d
-         x7sDD0GCrBENSmRxoiNj0JiFhbJc7Mp/t9dT94k+Vo9JQX5WeCDh2Psz8/fTMXdrjBEb
-         2jnod+/vh743GzLDstutDeiEIDFhKhIXEebwzc5vZteiKuiYckfhlkSa60J5oA4r27o+
-         LHkyzNYqXfd0tD5bOnAIbVyS2Xsbqv4epqrZAdtuHTbvLz6bIMok11bOkskvOVnfKEeE
-         QAMg==
+        Wed, 19 Aug 2020 14:14:07 -0400
+Received: by mail-ed1-f68.google.com with SMTP id df16so18892817edb.9;
+        Wed, 19 Aug 2020 11:14:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=Myk1HtWNfMPMH6mEsQn60wKu3fbOFzXiNMNij+F/fos=;
-        b=EBL+ihMnveH7CEOSHUaj/TxcHYfFLLx+5zYG50JbO4vwx1xl6+lFa94YAdiMWwN0PJ
-         4JqjVufGwDsDB/nKfAyQOPsvJUUbqKK8wst3ObjY2ngC+VI53ZhQdaFMq85hUG792TdN
-         MZPf0nv+6lDsceG5R64gngF7q/luwQ3wknIkehgCZCLg2OvZJCbcfut/vLuJytD/BmOo
-         MmUuV2/Azi+fxLcICNfz950/xLue5Z5gesbhxlHZqrizx4jHzCOMv3tx5QfMfxbsaFd4
-         9KvWCX6UKIahDYPSxhqd5SWeJ2OKAxaGMnsj5LSOXqsNJhUjvAXNBVbUhLYKwxpjQMd/
-         OC2A==
-X-Gm-Message-State: AOAM530AsA2Qti4olFVnyEUEiqoK+gs+HEYVgHgLeCETjmu2U5YVFU64
-        0GQ6lazAmpyNx8HrU4Llj/BRyw==
-X-Google-Smtp-Source: ABdhPJyCF6pSzhOSPzo3kzgKW1dmCArD3GflbjqS+gar3ADhQpRU4N4E7ONKEES3VzeqFSvr3z5nXw==
-X-Received: by 2002:a17:902:bc8a:: with SMTP id bb10mr19731292plb.74.1597860316960;
-        Wed, 19 Aug 2020 11:05:16 -0700 (PDT)
-Received: from kaaira-HP-Pavilion-Notebook ([103.113.213.179])
-        by smtp.gmail.com with ESMTPSA id z25sm29482106pfn.159.2020.08.19.11.05.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Aug 2020 11:05:15 -0700 (PDT)
-From:   Kaaira Gupta <kgupta@es.iitr.ac.in>
-To:     Helen Koike <helen.koike@collabora.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TUMql2k18FTxjS/+xzZXm3YL9WZCKUoPkdoTZwrxrK8=;
+        b=Xte9k78t/JlQPcbVz8+Uu3VT/a5SDqF6g7nTtQppEj4Zn+kt7VyIBgGP1J3QRCzhpb
+         8lhfnJ2pAUW9kOtMOYA928zW0rQu0vbRmyRf7CXiCCuWb0BHtB8dVDC2cMH07zzKDifT
+         uOVU89FIgdOvaAs+8E/iIiIuj1rzHm5ap0IFpNtS/Byh35GTdzIL4DrJR9Q48ULRNxjT
+         0XwoOFMoTStaDy4aXu5XTh8PgqJ8uCT7GKQddpLZEP+4kv37GqMVVaVlWuQIxzeztg47
+         Z4lc7MUk7lLhiILbDSp/A/2E4ANHnLI0Kv3zuc1lLMzW0cfu40agwQ0vmvRaFH4ihlDh
+         lNOQ==
+X-Gm-Message-State: AOAM531wuejfYUwH8ienyS/xD44nu9ejHJkXvkagM6ANHrOsCDhXAp0e
+        i5QRL2FUqSZ7Xz3gMOJjuis=
+X-Google-Smtp-Source: ABdhPJzm9IKPaPX6c5msiAAQTSoc8HBbQJ1lELbzrQFuIrCSQOQG4wOpSWFZZFYs6II6k/SaJfvFlg==
+X-Received: by 2002:a50:ee92:: with SMTP id f18mr26020037edr.80.1597860845273;
+        Wed, 19 Aug 2020 11:14:05 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.216])
+        by smtp.googlemail.com with ESMTPSA id qk30sm19144565ejb.125.2020.08.19.11.14.04
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 19 Aug 2020 11:14:04 -0700 (PDT)
+Date:   Wed, 19 Aug 2020 20:14:02 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     Kaaira Gupta <kgupta@es.iitr.ac.in>
-Subject: [PATCH v3 4/9] media: vimc: Separate starting stream from pipeline initialisation
-Date:   Wed, 19 Aug 2020 23:34:37 +0530
-Message-Id: <20200819180442.11630-5-kgupta@es.iitr.ac.in>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200819180442.11630-1-kgupta@es.iitr.ac.in>
-References: <20200819180442.11630-1-kgupta@es.iitr.ac.in>
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v3] ARM: s3c24xx: drop s3c-camif setup platform code
+Message-ID: <20200819181402.GB394@kozik-lap>
+References: <20200817164836.4613-1-krzk@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200817164836.4613-1-krzk@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Separate the process of initialising pipeline array from starting
-streaming for all entities in path of a stream. This is needed because
-multiple streams can stream, but only one pipeline object is needed.
+On Mon, Aug 17, 2020 at 06:48:36PM +0200, Krzysztof Kozlowski wrote:
+> The s3c-camif driver setup platform code does not have any users so it
+> can be safely removed.
+> 
+> Along with the code W=1 compile warnings go away:
+> 
+>     arch/arm/mach-s3c24xx/setup-camif.c:28:5: warning: no previous prototype for 's3c_camif_gpio_get' [-Wmissing-prototypes]
+>     arch/arm/mach-s3c24xx/setup-camif.c:56:6: warning: no previous prototype for 's3c_camif_gpio_put' [-Wmissing-prototypes]
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> 
+> ---
 
-Process frames only for those entities in a pipeline which are
-streaming. This is known through their use counts.
+Applied to samsung-soc for S3C cleanup.
 
-Signed-off-by: Kaaira Gupta <kgupta@es.iitr.ac.in>
----
- .../media/test-drivers/vimc/vimc-streamer.c   | 95 ++++++++++++++++---
- 1 file changed, 83 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/media/test-drivers/vimc/vimc-streamer.c b/drivers/media/test-drivers/vimc/vimc-streamer.c
-index c1644d69686d..cc40ecabe95a 100644
---- a/drivers/media/test-drivers/vimc/vimc-streamer.c
-+++ b/drivers/media/test-drivers/vimc/vimc-streamer.c
-@@ -40,33 +40,30 @@ static void vimc_streamer_pipeline_terminate(struct vimc_stream *stream)
- }
- 
- /**
-- * vimc_streamer_pipeline_init - Initializes the stream structure
-+ * vimc_streamer_stream_start - Starts streaming for all entities
-+ * in a stream
-  *
-- * @stream: the pointer to the stream structure to be initialized
-  * @ved:    the pointer to the vimc entity initializing the stream
-  *
-- * Initializes the stream structure. Walks through the entity graph to
-- * construct the pipeline used later on the streamer thread.
-- * Calls vimc_streamer_s_stream() to enable stream in all entities of
-- * the pipeline.
-+ * Walks through the entity graph to call vimc_streamer_s_stream()
-+ * to enable stream in all entities in path of a stream.
-  *
-  * Return: 0 if success, error code otherwise.
-  */
--static int vimc_streamer_pipeline_init(struct vimc_stream *stream,
--				       struct vimc_ent_device *ved)
-+static int vimc_streamer_stream_start(struct vimc_stream *stream,
-+				      struct vimc_ent_device *ved)
- {
- 	struct media_entity *entity;
- 	struct video_device *vdev;
- 	struct v4l2_subdev *sd;
-+	int stream_size = 0;
- 	int ret = 0;
- 
--	stream->pipe_size = 0;
--	while (stream->pipe_size < VIMC_STREAMER_PIPELINE_MAX_SIZE) {
-+	while (stream_size < VIMC_STREAMER_PIPELINE_MAX_SIZE) {
- 		if (!ved) {
- 			vimc_streamer_pipeline_terminate(stream);
- 			return -EINVAL;
- 		}
--		stream->ved_pipeline[stream->pipe_size++] = ved;
- 
- 		if (is_media_entity_v4l2_subdev(ved->ent)) {
- 			sd = media_entity_to_v4l2_subdev(ved->ent);
-@@ -104,6 +101,73 @@ static int vimc_streamer_pipeline_init(struct vimc_stream *stream,
- 					    entity);
- 			ved = video_get_drvdata(vdev);
- 		}
-+		stream_size++;
-+	}
-+
-+	vimc_streamer_pipeline_terminate(stream);
-+	return -EINVAL;
-+}
-+
-+/**
-+ * vimc_streamer_pipeline_init - Initialises pipeline and pipe size
-+ *
-+ * @stream: the pointer to the stream structure
-+ * @ved:    the pointer to the vimc entity initializing the stream pipeline
-+ *
-+ * Walks through the entity graph to initialise ved_pipeline and updates
-+ * pipe_size too.
-+ *
-+ * Return: 0 if success, error code otherwise.
-+ */
-+static int vimc_streamer_pipeline_init(struct vimc_stream *stream,
-+				       struct vimc_ent_device *ved)
-+{
-+	struct media_entity *entity;
-+	struct media_device *mdev;
-+	struct media_graph graph;
-+	struct video_device *vdev;
-+	struct v4l2_subdev *sd;
-+	int ret;
-+
-+	entity = ved->ent;
-+	mdev = entity->graph_obj.mdev;
-+
-+	ret = media_graph_walk_init(&graph, mdev);
-+	if (ret)
-+		return ret;
-+
-+	media_graph_walk_start(&graph, entity);
-+
-+	/*
-+	 * Start pipeline array initialisation from RAW Capture only to get
-+	 * entities in the correct order of their frame processing.
-+	 */
-+	if (!strncmp(entity->name, "RGB", 3)) {
-+		entity = media_graph_walk_next(&graph);
-+		mdev = entity->graph_obj.mdev;
-+		media_graph_walk_cleanup(&graph);
-+
-+		ret = media_graph_walk_init(&graph, mdev);
-+		if (ret)
-+			return ret;
-+		media_graph_walk_start(&graph, entity);
-+	}
-+
-+	while (stream->pipe_size < VIMC_STREAMER_PIPELINE_MAX_SIZE) {
-+		if (is_media_entity_v4l2_subdev(entity)) {
-+			sd = media_entity_to_v4l2_subdev(entity);
-+			ved = v4l2_get_subdevdata(sd);
-+		} else {
-+			vdev = container_of(entity, struct video_device, entity);
-+			ved = video_get_drvdata(vdev);
-+		}
-+		stream->ved_pipeline[stream->pipe_size++] = ved;
-+		entity = media_graph_walk_next(&graph);
-+
-+		if (!strcmp(entity->name, stream->ved_pipeline[0]->ent->name)) {
-+			media_graph_walk_cleanup(&graph);
-+			return 0;
-+		}
- 	}
- 
- 	vimc_streamer_pipeline_terminate(stream);
-@@ -138,8 +202,11 @@ static int vimc_streamer_thread(void *data)
- 
- 		for (i = stream->pipe_size - 1; i >= 0; i--) {
- 			ved = stream->ved_pipeline[i];
--			ret = ved->process_frame(ved);
- 
-+			if (atomic_read(&ved->use_count) == 0)
-+				continue;
-+
-+			ret = ved->process_frame(ved);
- 			if (ret)
- 				break;
- 		}
-@@ -179,6 +246,10 @@ int vimc_streamer_s_stream(struct vimc_stream *stream,
- 		if (stream->kthread)
- 			return 0;
- 
-+		ret = vimc_streamer_stream_start(stream, ved);
-+		if (ret)
-+			return ret;
-+
- 		ret = vimc_streamer_pipeline_init(stream, ved);
- 		if (ret)
- 			return ret;
--- 
-2.17.1
+Best regards,
+Krzysztof
 
