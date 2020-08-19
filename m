@@ -2,84 +2,111 @@ Return-Path: <SRS0=Rva/=B5=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79ADAC433DF
-	for <linux-media@archiver.kernel.org>; Wed, 19 Aug 2020 17:51:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71B7FC433E1
+	for <linux-media@archiver.kernel.org>; Wed, 19 Aug 2020 18:05:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 531D4207DE
-	for <linux-media@archiver.kernel.org>; Wed, 19 Aug 2020 17:51:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1597859515;
-	bh=G1v8Y0rM+ilZYs/g4rxUC1FVBPLyodeBTtIrGaLV2n4=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=DUIjZjWOb8POEQA3fCw1BDmka1BWLwGuGucAWIKeqdNexe4PUkyskq4ZF/W9Dtz/9
-	 0ttWYTLCZAwNSRQhP/3HaB9KBtCi7Kdb3hOJFvQ6IHMt843OLw3ZopuON4vYYcc21w
-	 mpAk+Ab17cgYx1cgvfMYkdouGl8dezMPFjScIJ7U=
+	by mail.kernel.org (Postfix) with ESMTP id 4D86D20786
+	for <linux-media@archiver.kernel.org>; Wed, 19 Aug 2020 18:05:05 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=es-iitr-ac-in.20150623.gappssmtp.com header.i=@es-iitr-ac-in.20150623.gappssmtp.com header.b="Vmzz/Jtf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726732AbgHSRvq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 19 Aug 2020 13:51:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51682 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726578AbgHSRvo (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 19 Aug 2020 13:51:44 -0400
-Received: from kozik-lap.mshome.net (unknown [194.230.155.216])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AE7BB2067C;
-        Wed, 19 Aug 2020 17:51:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597859504;
-        bh=G1v8Y0rM+ilZYs/g4rxUC1FVBPLyodeBTtIrGaLV2n4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=JCUogtEYZ/8me7HZojvQkJGKHBPzVDG7FKXGO0QrAiz4XeJt3D6ux8801PWaBqMjN
-         lqwTqO7vQd007s8BHaffjdoma815t5YCzuSxokNZwaOa4jMcUBLr3h3cPMdEOpv32c
-         hbK97T6qJHGN4zn6Hc1OuFU+TU5qyGr6RSuEx1KY=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [RESEND PATCH 1/2] dma-buf: Fix kerneldoc of dma_buf_set_name()
-Date:   Wed, 19 Aug 2020 19:51:33 +0200
-Message-Id: <20200819175134.19261-1-krzk@kernel.org>
+        id S1726867AbgHSSFB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 19 Aug 2020 14:05:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726795AbgHSSE5 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 19 Aug 2020 14:04:57 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96720C061383
+        for <linux-media@vger.kernel.org>; Wed, 19 Aug 2020 11:04:57 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id i10so6231790pgk.1
+        for <linux-media@vger.kernel.org>; Wed, 19 Aug 2020 11:04:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=es-iitr-ac-in.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kKcbDGsNXR/gUklWkntLlTLukPDw/mCQ/tOLvh4gtJ4=;
+        b=Vmzz/Jtfk2Larct/OXM2pnmdcVgqLMnpREk70dA9TyIm/f662ExqccWAvE4DUqtkxO
+         /s0gT7nsm5r4NnV5uSzed/Gt56BKj5QYl6Zm4xvVgBAluEeFTQArvf8i3Sq6qDmqSiyk
+         Byn7r1F1RZ39UKGAsozjBnRv5rIa+1JUSpiDgattAQYK3LqG1WCcdWKuBCmdsES1GPN5
+         ONBSaT6mm9czyXVttvVu5GQwdLir3b5FY2un8oQz95jR2A/qbNQT3z7bg8GuvZbdUlS2
+         g2tA1bkXxbGC6IydU00lA5tx9U/1tDS8eSe35CBQwPQxaTxbYTerwaBmHv7cDSaRGlxe
+         5joQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kKcbDGsNXR/gUklWkntLlTLukPDw/mCQ/tOLvh4gtJ4=;
+        b=HOCyJab0gmzom7sgb8dvzpFa/NLMqnwM1VYE4EUB0zdsAigd0q3+e8+CGyvc9fAhER
+         PG4aLFab+nkXP/PHRQ0GK33WByQASQJklAc6ZhOaCbwr1J0cwRZOasu/3CX1ZYdtvRTW
+         uWgqd3O4bZolqJqlwzgp/U4C0Sb+LBm1W8mLlGGz1iN5nDcegoYuztg7/Eq0F5dD6Tgu
+         wz5mXaf2sJftOaPk+wYX7FQVnQ+QsmgajsxxVVQc1XvM9RIHafkySe2a0oCqFaqzuvw/
+         XmkoFR+Qkasjk5DaOMmXqJ4nf4SOwzrjaa0icabgq//eELJt1SxEJ7K5KliWcSslmnOC
+         NQig==
+X-Gm-Message-State: AOAM530pgBglwfwwkFgIFVSvquZN0tGS70nNL7xOPA4yW8L9xOQtYtTL
+        jIppTN9eH/g9M2Pm6hSkKX8IAg==
+X-Google-Smtp-Source: ABdhPJwVu6qVxIIVFgfKqWQWjA2uJZVuytQa+8PmCKDyu8yT7laq5ieXz5k4k76qnd5zlf9kiFNoAw==
+X-Received: by 2002:a65:4148:: with SMTP id x8mr17294005pgp.245.1597860296649;
+        Wed, 19 Aug 2020 11:04:56 -0700 (PDT)
+Received: from kaaira-HP-Pavilion-Notebook ([103.113.213.179])
+        by smtp.gmail.com with ESMTPSA id o15sm29967669pfu.167.2020.08.19.11.04.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Aug 2020 11:04:56 -0700 (PDT)
+From:   Kaaira Gupta <kgupta@es.iitr.ac.in>
+To:     Helen Koike <helen.koike@collabora.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc:     Kaaira Gupta <kgupta@es.iitr.ac.in>
+Subject: [PATCH v3 0/9] media: vimc: Multiple stream support in vimc
+Date:   Wed, 19 Aug 2020 23:34:33 +0530
+Message-Id: <20200819180442.11630-1-kgupta@es.iitr.ac.in>
 X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix W=1 compile warnings (invalid kerneldoc):
+This series adds supoort for two (or more) capture devices to be 
+connected to the same sensors and run simultaneously.
 
-    drivers/dma-buf/dma-buf.c:328: warning: Function parameter or member 'dmabuf' not described in 'dma_buf_set_name'
+Changes since v2:
+	- This series introduces new patches, namely patch 1, 2, 4, 5,
+	  7, and 9 to shift multiple captures to operate at a single
+	  thread.
 
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
----
- drivers/dma-buf/dma-buf.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Kaaira Gupta (7):
+  media: vimc: Move get_source_entity to vimc-common
+  media: vimc: Add get_frame callback
+  media: vimc: Separate starting stream from pipeline initialisation
+  media: vimc: Separate closing of stream and thread
+  media: vimc: Dynamically allocate stream struct
+  media: vimc: Join pipeline if one already exists
+  media: vimc: Run multiple captures on same thread
 
-diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index 1699a8e309ef..58564d82a3a2 100644
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -316,9 +316,9 @@ static __poll_t dma_buf_poll(struct file *file, poll_table *poll)
-  * name of the dma-buf if the same piece of memory is used for multiple
-  * purpose between different devices.
-  *
-- * @dmabuf [in]     dmabuf buffer that will be renamed.
-- * @buf:   [in]     A piece of userspace memory that contains the name of
-- *                  the dma-buf.
-+ * @dmabuf: [in]     dmabuf buffer that will be renamed.
-+ * @buf:    [in]     A piece of userspace memory that contains the name of
-+ *                   the dma-buf.
-  *
-  * Returns 0 on success. If the dma-buf buffer is already attached to
-  * devices, return -EBUSY.
+Niklas Söderlund (2):
+  media: vimc: Add usage count to subdevices
+  media: vimc: Serialize vimc_streamer_s_stream()
+
+ .../media/test-drivers/vimc/vimc-capture.c    |  42 +++-
+ drivers/media/test-drivers/vimc/vimc-common.c |  14 ++
+ drivers/media/test-drivers/vimc/vimc-common.h |  21 +-
+ .../media/test-drivers/vimc/vimc-debayer.c    |  26 ++-
+ drivers/media/test-drivers/vimc/vimc-scaler.c |  25 +-
+ drivers/media/test-drivers/vimc/vimc-sensor.c |  17 +-
+ .../media/test-drivers/vimc/vimc-streamer.c   | 213 ++++++++++++------
+ .../media/test-drivers/vimc/vimc-streamer.h   |   2 +
+ 8 files changed, 271 insertions(+), 89 deletions(-)
+
 -- 
 2.17.1
 
