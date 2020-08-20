@@ -7,46 +7,48 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13DD2C433DF
-	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 00:05:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8A41C433E1
+	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 00:06:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E71C9208C7
-	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 00:05:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B10AB208E4
+	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 00:06:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1597881917;
-	bh=Bj3DVBVlYSQg01Azg3GPbjL/vH1bmbuoq0bMb+Oz7H4=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=1mejzi8bxn/xrfaNNs85IELPXJJLDp/lh2WFvTCvqhurwWMwbQWN4Vr9o/pQmM0vw
-	 spROUF9g43FaVor1eSmC1lkmbn04LaUGuc3cDt7QEhmIRVSEaSy8Tade74xodSzkZl
-	 z2cB1rXeZBdCOav5dfcTJEw/hznzhCAzwPOVZ2Gs=
+	s=default; t=1597881981;
+	bh=n1+9m2n7172uOMg3lvseFpnMd+Ks2CYysIdtH0BAK0c=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=HgTtlvZG241kXK51Gi0bvYZx39cJRe2hQ0OpfllcSHnddIG/UwIzNysyix1cJnihc
+	 AeYjr7Nx1TbTFLoEQw5Zw7ml68VM2HWFNTGvuVSdyCKBPNAtH51Y9tvW3Op15kUE+/
+	 3oq2Jexx4VoR3RZWdV74xf8zWSbjdgYiO8GmIcGs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728420AbgHTAFF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 19 Aug 2020 20:05:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34382 "EHLO mail.kernel.org"
+        id S1728393AbgHTAGK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 19 Aug 2020 20:06:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33900 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728417AbgHTAEJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 19 Aug 2020 20:04:09 -0400
+        id S1728226AbgHTADx (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 19 Aug 2020 20:03:53 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BDDB6207FB;
-        Thu, 20 Aug 2020 00:04:07 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B867C214F1;
+        Thu, 20 Aug 2020 00:03:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597881848;
-        bh=Bj3DVBVlYSQg01Azg3GPbjL/vH1bmbuoq0bMb+Oz7H4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ggkCsRXIl0kz2RtU7lpZfiflddfs83beidKR5avRitHj9FsXoSIGpAFwjXZO9Gavg
-         tWAV76nNcDQqL+5dR/Y6Finpt9C95xBf3yCcWC4flNcEzNyJyqTVbFz1Wk9Mw+RLQ/
-         /E3wo6kOecm1l96jD5SiwapxRhtA7/DAYqgEhE6g=
+        s=default; t=1597881832;
+        bh=n1+9m2n7172uOMg3lvseFpnMd+Ks2CYysIdtH0BAK0c=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Htfe4RwHbajfiq0aoogIPeyyx5EXAflkLoD6LWDspyiCXPPW76UU5Tmd4kNhW1yVe
+         0XTmgTQ8/R01LMNFeNFvwJ+JDKYeCGa6tg1GRSU3RSH3Z7TCImiWDX9LuEfGBb2oun
+         oRnF+ufW1DUAk7is3iIRZdxCQ7uDDG0V2yFfRKp8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Chuhong Yuan <hslester96@gmail.com>, Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 01/10] media: budget-core: Improve exception handling in budget_register()
-Date:   Wed, 19 Aug 2020 20:03:57 -0400
-Message-Id: <20200820000406.216050-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 02/11] media: budget-core: Improve exception handling in budget_register()
+Date:   Wed, 19 Aug 2020 20:03:39 -0400
+Message-Id: <20200820000348.215911-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200820000348.215911-1-sashal@kernel.org>
+References: <20200820000348.215911-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -72,7 +74,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 8 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/media/pci/ttpci/budget-core.c b/drivers/media/pci/ttpci/budget-core.c
-index e9674b40007c1..6107c469efa07 100644
+index 6d42dcfd4825b..e7bdfc4e4aa83 100644
 --- a/drivers/media/pci/ttpci/budget-core.c
 +++ b/drivers/media/pci/ttpci/budget-core.c
 @@ -386,20 +386,25 @@ static int budget_register(struct budget *budget)
