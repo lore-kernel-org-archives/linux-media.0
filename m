@@ -2,59 +2,59 @@ Return-Path: <SRS0=344h=B6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40713C433E1
-	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 12:59:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29EA4C433E3
+	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 12:59:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1896B20674
-	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 12:59:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0A73B20658
+	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 12:59:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="RRO5W51x"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="LU18Zw2M"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729269AbgHTM7Q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 20 Aug 2020 08:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32948 "EHLO
+        id S1729127AbgHTM7P (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 20 Aug 2020 08:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728857AbgHTM7J (ORCPT
+        with ESMTP id S1730125AbgHTM6f (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 20 Aug 2020 08:59:09 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C11C061345
-        for <linux-media@vger.kernel.org>; Thu, 20 Aug 2020 05:58:36 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id t14so1504714wmi.3
-        for <linux-media@vger.kernel.org>; Thu, 20 Aug 2020 05:58:36 -0700 (PDT)
+        Thu, 20 Aug 2020 08:58:35 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AE6C061342
+        for <linux-media@vger.kernel.org>; Thu, 20 Aug 2020 05:58:32 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id x5so1510093wmi.2
+        for <linux-media@vger.kernel.org>; Thu, 20 Aug 2020 05:58:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bjjzUyjqxUTgADSqZ4AEGlgmQLd6hH97YwJfRgNRrW4=;
-        b=RRO5W51xetH2hSun5LBxUXBN+1ILaB2b2Woui8OkARAIJOlWdAQPA7dyKZnP5p75IR
-         HtXeQut75Cu1xU071fRPLL2WhuwWTLGPbpEUHf4Nocft9Nn8RF5eXeCU1+s4NMqG1hzF
-         s/MSh2oHQLOWDc2mz55ji2AgsvjxWddxefAUs=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=yCjIPpaJfayHhXIqbXAAfMExGhce6Cm5F89REM3R1U0=;
+        b=LU18Zw2Mo6zCN9DJWkCsqXp4H565UtUP2k69oaoX8bH2UNEtAJ6L6CFzY0ICqHlTjm
+         ZNyN/TKFwtwFDiMz7R7Zjz8Zsndy47pxlH/aK4F+vSyCgceG+sBv/cpcNqkNKsQlJpuP
+         UgG04n4F+PfIVRESEMO2QhUeiOz09ZjPfMLR8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bjjzUyjqxUTgADSqZ4AEGlgmQLd6hH97YwJfRgNRrW4=;
-        b=QkIyny9QFkwvLCEVR5hEk6qhtqI2iC8gzn1tq1vJbKIqWooPDrpeDLtxlpxcOeuxVI
-         kyuqfhpLQl03Sxx9UQqQzktOYb8CDxy9X1ihW/WrQbnanTca+Tk+veYu5ttD+2XyB4TN
-         7wWp64xqdfKJpnDmvW5qqoc20A7GUoEayNMmrjVrRAMKgvLO3ciUUSdpMDR4cKqP+TrW
-         aUTYWOFuGWo2RN1waSK9LWPCtiPhSOWRCsXmW562s2GckIKY+IPnyV0D12Cy1gVjx48a
-         YA9sTwczDrz1ayLsAQjTmJlszuZge/F5kS74HDsZYw7Vl9Y5dVMUG8Wy6kZJxbcvlkV5
-         8MAw==
-X-Gm-Message-State: AOAM5333w98hENMWoZUrxZ5BbYoh0DzxWXDljl4jxRAAksgt83EVCkpG
-        m7KPoFGr7BUnZRn+zl7n43CXtTBPJVCHTTU8
-X-Google-Smtp-Source: ABdhPJxBvtfxib5dNL686AtnsEgnavbEPNHEvjkC1eMzOzqRPR+lmo2H3iHzsR6k2KoeFiZn1iJ/wQ==
-X-Received: by 2002:a05:600c:224e:: with SMTP id a14mr3518439wmm.80.1597928309945;
-        Thu, 20 Aug 2020 05:58:29 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=yCjIPpaJfayHhXIqbXAAfMExGhce6Cm5F89REM3R1U0=;
+        b=tdlppgR83D/8ARdPdk0ZKl9mHxf71vfSWDTg/jYfnfL9HjVK/YijePq8hNVKrJlAku
+         nEZRYd9Hyd4uwphAt3okXSElG0/JFhs8JaYqYhf7DN7sKCcLG2SJhJOOfqWdACCzb2Bf
+         Ogl9ObQqHeWBdIq6AZa0nzAPTQpCLqmc1QOIarmgB/n5WwzK4ZdhUZN4dIbQNVEg1lPK
+         xP6Rou/A9c9lHjngLhS7s3C2NJoH6+b2TmzBjXKgkrYRSWVar9fhyFAaGVJZ8YK26ZJ0
+         abdoiS7xk6L27xolkf/L9m/MLppulcGMVBJU4qRpa7/yJOiqYShuRQCC67dWNJetBEnu
+         LcNg==
+X-Gm-Message-State: AOAM530ssnmM26NaBbL+NWXNYp9y9vR3FHqzPiHbmYv+/K4nXpkzFLYf
+        7BRPLeA2EoL8IHDYVR59slTJaZLvE0bCT5nG
+X-Google-Smtp-Source: ABdhPJzFeQpDI7ZUKZvzzMkjStrT2UwRfn8F9nsNPSXgchIqOP9BiV9Huk+moA+VZ3LTbVE6D2/l6Q==
+X-Received: by 2002:a1c:4104:: with SMTP id o4mr3411522wma.101.1597928311239;
+        Thu, 20 Aug 2020 05:58:31 -0700 (PDT)
 Received: from tfiga.c.googlers.com.com (88.140.78.34.bc.googleusercontent.com. [34.78.140.88])
-        by smtp.gmail.com with ESMTPSA id o66sm4517760wmb.27.2020.08.20.05.58.29
+        by smtp.gmail.com with ESMTPSA id o66sm4517760wmb.27.2020.08.20.05.58.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Aug 2020 05:58:29 -0700 (PDT)
+        Thu, 20 Aug 2020 05:58:30 -0700 (PDT)
 From:   Tomasz Figa <tfiga@chromium.org>
 To:     linux-media@vger.kernel.org
 Cc:     Mauro Carvalho hehab <mchehab+huawei@kernel.org>,
@@ -64,10 +64,12 @@ Cc:     Mauro Carvalho hehab <mchehab+huawei@kernel.org>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         Pawel Osciak <pawel@osciak.com>,
         Tomasz Figa <tfiga@chromium.org>
-Subject: [PATCH 0/3] Clean the videobuf2 maintainer list
-Date:   Thu, 20 Aug 2020 12:58:22 +0000
-Message-Id: <20200820125825.224788-1-tfiga@chromium.org>
+Subject: [PATCH 2/3] MAINTAINERS: Remove Kyungmin from the maintainers list of videobuf2
+Date:   Thu, 20 Aug 2020 12:58:24 +0000
+Message-Id: <20200820125825.224788-3-tfiga@chromium.org>
 X-Mailer: git-send-email 2.28.0.220.ged08abb693-goog
+In-Reply-To: <20200820125825.224788-1-tfiga@chromium.org>
+References: <20200820125825.224788-1-tfiga@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -75,28 +77,32 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Currently the MAINTAINERS file lists 3 maintainers and 1 reviewer for
-the VIDEOBUF2 FRAMEWORK entry. From the list, two people have been
-inactive for several years. This series tries to clean the list to
-ensure that the framework has only active maintainers.
+According to [1], there has been no email posted from him to the
+linux-media mailing list since Feb 2013.
 
-The series proposes removing Kyungmin Park and Pawel Osciak from the
-maintainers list. I know both of the people in person and am well aware
-of their achievements for the framework in the past. However, the
-framework needs to move forward and thus, it needs active maintainers.
+Note: The linked archive seems to lack messages newer than the middle of
+2019, but it is the only archive that offers search by name. A manual
+look through the messages after that time confirms the observation.
 
-Therefore, I'd like the people in question to comment on their plans
-regarding the maintenance of this framework or lack of thereof (and thus
-being fine with the removal).
+[1] https://www.mail-archive.com/search?a=1&l=linux-media%40vger.kernel.org&haswords=&x=7&y=20&from=Kyungmin+Park&subject=&datewithin=1d&date=&notwords=&o=newest
 
-Tomasz Figa (3):
-  MAINTAINERS: Make Tomasz the main maintainer of videobuf2
-  MAINTAINERS: Remove Kyungmin from the maintainers list of videobuf2
-  MAINTAINERS: Remove Pawel from the maintainers list of videobuf2
+Signed-off-by: Tomasz Figa <tfiga@chromium.org>
+---
+ MAINTAINERS | 1 -
+ 1 file changed, 1 deletion(-)
 
- MAINTAINERS | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8623365ad0d5..e756cd4751ce 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -18300,7 +18300,6 @@ VIDEOBUF2 FRAMEWORK
+ M:	Tomasz Figa <tfiga@chromium.org>
+ M:	Pawel Osciak <pawel@osciak.com>
+ M:	Marek Szyprowski <m.szyprowski@samsung.com>
+-M:	Kyungmin Park <kyungmin.park@samsung.com>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ F:	drivers/media/common/videobuf2/*
 -- 
 2.28.0.220.ged08abb693-goog
 
