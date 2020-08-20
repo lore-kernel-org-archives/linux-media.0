@@ -5,51 +5,50 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78806C433E4
-	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 00:07:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 364E5C433E1
+	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 00:08:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4E50A207FB
-	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 00:07:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 06FD0208C7
+	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 00:08:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1597882028;
-	bh=KsG7lhYjGtEOo5pRqW4HDh0Yda+6027PDm5WZMqw23Q=;
+	s=default; t=1597882089;
+	bh=7BLz4oHXor+cAmkcYWWb+qAE5oH/+YW+t/smg2v2l1w=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=qjmKgFI5jnCMwWHI5y3iO5L/IbTDhsNp9EaSfjQZcUku30WDB8V4ZKYYw75YXBfLm
-	 gAf9s+Of5ZzRcz+t1sQTFdXuw9beP+gKopp2/DHvQQKXBiVMVwxio3Um2okSnYcBKX
-	 8lHeC6Mao/pfE91AVVmqy6B87nOMQFbJ/S87s9c0=
+	b=zbdYqqzz6ufcswS77UNMNFNNa9iWBa2aBEDT74aYcu7P8tuYpToXjM2SR5LnF1lEp
+	 1FCKMybse7uIzKjxHFk7oMlQnSWGHtmdRcksjaxILjJJj3U4iTLsAM1hzrTG2BQovu
+	 bE4gZgsv5oBlR5ACmbwDZ3bRwqSxps9SGPESOB4k=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728356AbgHTAGv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 19 Aug 2020 20:06:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33406 "EHLO mail.kernel.org"
+        id S1728358AbgHTAII (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 19 Aug 2020 20:08:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60734 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728306AbgHTADf (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 19 Aug 2020 20:03:35 -0400
+        id S1728211AbgHTADH (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 19 Aug 2020 20:03:07 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0E256207FB;
-        Thu, 20 Aug 2020 00:03:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 55848214F1;
+        Thu, 20 Aug 2020 00:03:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597881814;
-        bh=KsG7lhYjGtEOo5pRqW4HDh0Yda+6027PDm5WZMqw23Q=;
+        s=default; t=1597881787;
+        bh=7BLz4oHXor+cAmkcYWWb+qAE5oH/+YW+t/smg2v2l1w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P/V8AUaJizyZwv4rJ675bg6KDPLHA+YAzdZ+HusadRagT4NyvZjp+2ibeqRMHtyhv
-         6j8cC4gtWs5CFHdT/+2kt8g24+0h4GzB37O2EZA2EG5QkFogTMtaPWhjae6rBVOaWK
-         JI7e44YvMM/HLgCutAclpAM65GQ1Oy53mZgOb+m0=
+        b=Di3OQ9bqSicXx66Uj4eUe525DnrJ11xYv6Tah8gIs1YJFPsVzEf+WSPotYxEfFBBL
+         cSA86/z9FvRjAuIPgUQinecaMu5ry38tol8HvIXdinRD+89h9SVA0rX/4vL6LJuLLb
+         bvWu6Uep35B/nJNcluSBJuwVy9W0YQ+sGnWOSTJg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Evgeny Novikov <novikov@ispras.ru>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Chuhong Yuan <hslester96@gmail.com>, Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 04/13] media: vpss: clean up resources in init
-Date:   Wed, 19 Aug 2020 20:03:19 -0400
-Message-Id: <20200820000328.215755-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 03/18] media: budget-core: Improve exception handling in budget_register()
+Date:   Wed, 19 Aug 2020 20:02:46 -0400
+Message-Id: <20200820000302.215560-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200820000328.215755-1-sashal@kernel.org>
-References: <20200820000328.215755-1-sashal@kernel.org>
+In-Reply-To: <20200820000302.215560-1-sashal@kernel.org>
+References: <20200820000302.215560-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -59,64 +58,54 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Evgeny Novikov <novikov@ispras.ru>
+From: Chuhong Yuan <hslester96@gmail.com>
 
-[ Upstream commit 9c487b0b0ea7ff22127fe99a7f67657d8730ff94 ]
+[ Upstream commit fc0456458df8b3421dba2a5508cd817fbc20ea71 ]
 
-If platform_driver_register() fails within vpss_init() resources are not
-cleaned up. The patch fixes this issue by introducing the corresponding
-error handling.
+budget_register() has no error handling after its failure.
+Add the missed undo functions for error handling to fix it.
 
-Found by Linux Driver Verification project (linuxtesting.org).
-
-Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
+Signed-off-by: Sean Young <sean@mess.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/davinci/vpss.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+ drivers/media/pci/ttpci/budget-core.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/davinci/vpss.c b/drivers/media/platform/davinci/vpss.c
-index 2ee4cd9e6d80f..d984f45c03149 100644
---- a/drivers/media/platform/davinci/vpss.c
-+++ b/drivers/media/platform/davinci/vpss.c
-@@ -514,19 +514,31 @@ static void vpss_exit(void)
+diff --git a/drivers/media/pci/ttpci/budget-core.c b/drivers/media/pci/ttpci/budget-core.c
+index b3dc45b91101d..9b545c7431685 100644
+--- a/drivers/media/pci/ttpci/budget-core.c
++++ b/drivers/media/pci/ttpci/budget-core.c
+@@ -383,20 +383,25 @@ static int budget_register(struct budget *budget)
+ 	ret = dvbdemux->dmx.add_frontend(&dvbdemux->dmx, &budget->hw_frontend);
  
- static int __init vpss_init(void)
- {
-+	int ret;
+ 	if (ret < 0)
+-		return ret;
++		goto err_release_dmx;
+ 
+ 	budget->mem_frontend.source = DMX_MEMORY_FE;
+ 	ret = dvbdemux->dmx.add_frontend(&dvbdemux->dmx, &budget->mem_frontend);
+ 	if (ret < 0)
+-		return ret;
++		goto err_release_dmx;
+ 
+ 	ret = dvbdemux->dmx.connect_frontend(&dvbdemux->dmx, &budget->hw_frontend);
+ 	if (ret < 0)
+-		return ret;
++		goto err_release_dmx;
+ 
+ 	dvb_net_init(&budget->dvb_adapter, &budget->dvb_net, &dvbdemux->dmx);
+ 
+ 	return 0;
 +
- 	if (!request_mem_region(VPSS_CLK_CTRL, 4, "vpss_clock_control"))
- 		return -EBUSY;
- 
- 	oper_cfg.vpss_regs_base2 = ioremap(VPSS_CLK_CTRL, 4);
- 	if (unlikely(!oper_cfg.vpss_regs_base2)) {
--		release_mem_region(VPSS_CLK_CTRL, 4);
--		return -ENOMEM;
-+		ret = -ENOMEM;
-+		goto err_ioremap;
- 	}
- 
- 	writel(VPSS_CLK_CTRL_VENCCLKEN |
--		     VPSS_CLK_CTRL_DACCLKEN, oper_cfg.vpss_regs_base2);
-+	       VPSS_CLK_CTRL_DACCLKEN, oper_cfg.vpss_regs_base2);
-+
-+	ret = platform_driver_register(&vpss_driver);
-+	if (ret)
-+		goto err_pd_register;
-+
-+	return 0;
- 
--	return platform_driver_register(&vpss_driver);
-+err_pd_register:
-+	iounmap(oper_cfg.vpss_regs_base2);
-+err_ioremap:
-+	release_mem_region(VPSS_CLK_CTRL, 4);
++err_release_dmx:
++	dvb_dmxdev_release(&budget->dmxdev);
++	dvb_dmx_release(&budget->demux);
 +	return ret;
  }
- subsys_initcall(vpss_init);
- module_exit(vpss_exit);
+ 
+ static void budget_unregister(struct budget *budget)
 -- 
 2.25.1
 
