@@ -2,79 +2,203 @@ Return-Path: <SRS0=344h=B6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB0B0C433E3
-	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 10:26:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BD89C433E1
+	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 10:30:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9B6C22075E
-	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 10:26:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6335620738
+	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 10:30:51 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=mg.codeaurora.org header.i=@mg.codeaurora.org header.b="n0hk8sDr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729023AbgHTK0C (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 20 Aug 2020 06:26:02 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:60482 "EHLO
-        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730394AbgHTKZ6 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 20 Aug 2020 06:25:58 -0400
-Received: from valkosipuli.localdomain (valkosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::80:2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1727770AbgHTKap (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 20 Aug 2020 06:30:45 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:44784 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730786AbgHTKaP (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 20 Aug 2020 06:30:15 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1597919414; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=km9nW3C7eCummePhEdybTk2b7eYw/T0nXcPSw02yQc8=;
+ b=n0hk8sDr4cs9t9stgwDMnjmr9lCNczMDtk5q6KbPssIJWWtNZ2sn45PQqlGLaGnuLoPiKaQV
+ wCjgV1LXH+t2CDCpuOtEX6seodmuIJu7D/DNnwLfNdeCL7dtnyT79c9oZdg5uxCon/7I+gu6
+ mKI7JNlsuJRoXqaATXT7MYzY+OU=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI3ZjU0NiIsICJsaW51eC1tZWRpYUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 5f3e50a5f37da9fb0ef5cced (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 20 Aug 2020 10:29:57
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 427F8C433A0; Thu, 20 Aug 2020 10:29:56 +0000 (UTC)
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id CA57F634C89
-        for <linux-media@vger.kernel.org>; Thu, 20 Aug 2020 13:24:47 +0300 (EEST)
-Received: from sailus by valkosipuli.localdomain with local (Exim 4.92)
-        (envelope-from <sakari.ailus@retiisi.org.uk>)
-        id 1k8hkV-0002od-Kj
-        for linux-media@vger.kernel.org; Thu, 20 Aug 2020 13:24:47 +0300
-Date:   Thu, 20 Aug 2020 13:24:47 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     linux-media@vger.kernel.org
-Subject: [GIT FIXES FOR 5.9] Dependency fixes
-Message-ID: <20200820102447.GE7145@valkosipuli.retiisi.org.uk>
+        (Authenticated sender: rojay)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 099F2C433CA;
+        Thu, 20 Aug 2020 10:29:55 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Thu, 20 Aug 2020 15:59:54 +0530
+From:   rojay@codeaurora.org
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     wsa@kernel.org, dianders@chromium.org,
+        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
+        mka@chromium.org, akashast@codeaurora.org,
+        msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
+        rnayak@codeaurora.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH 1/2] i2c: i2c-qcom-geni: Add tx_dma, rx_dma and xfer_len
+ to geni_i2c_dev struct
+In-Reply-To: <159780835380.334488.10270114810481187992@swboyd.mtv.corp.google.com>
+References: <20200814095540.32115-1-rojay@codeaurora.org>
+ <20200814095540.32115-2-rojay@codeaurora.org>
+ <159780835380.334488.10270114810481187992@swboyd.mtv.corp.google.com>
+Message-ID: <872641764c4a03b92c8f2dafe6f2764a@codeaurora.org>
+X-Sender: rojay@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+Hi Stephen,
 
-Here are a few small Kconfig fixes that fix build breakages.
+Thanks for reviewing the patches.
 
-Please pull.
+On 2020-08-19 09:09, Stephen Boyd wrote:
+> Quoting Roja Rani Yarubandi (2020-08-14 02:55:39)
+>> Adding tx_dma, rx_dma and xfer length in geni_i2c_dev struct to
+>> store DMA mapping data to enhance its scope. For example during
+>> shutdown callback to unmap DMA mapping, these new struct members
+>> can be used as part of geni_se_tx_dma_unprep and
+>> geni_se_rx_dma_unprep calls.
+> 
+> Please read about how to write commit text from kernel docs[1]. Hint,
+> use imperative mood.
+> 
 
+Ok, will update the commit text.
 
-The following changes since commit 9123e3a74ec7b934a4a099e98af6a61c2f80bbf5:
+>> 
+>> Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
+>> ---
+>>  drivers/i2c/busses/i2c-qcom-geni.c | 23 +++++++++++++----------
+>>  1 file changed, 13 insertions(+), 10 deletions(-)
+>> 
+>> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c 
+>> b/drivers/i2c/busses/i2c-qcom-geni.c
+>> index 7f130829bf01..53ca41f76080 100644
+>> --- a/drivers/i2c/busses/i2c-qcom-geni.c
+>> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+>> @@ -86,6 +86,9 @@ struct geni_i2c_dev {
+>>         u32 clk_freq_out;
+>>         const struct geni_i2c_clk_fld *clk_fld;
+>>         int suspended;
+>> +       dma_addr_t tx_dma;
+>> +       dma_addr_t rx_dma;
+>> +       u32 xfer_len;
+> 
+> Why not size_t?
+> 
 
-  Linux 5.9-rc1 (2020-08-16 13:04:57 -0700)
+Will change it to size_t.
 
-are available in the Git repository at:
+>>  };
+>> 
+>>  struct geni_i2c_err_log {
+>> @@ -352,12 +355,11 @@ static void geni_i2c_tx_fsm_rst(struct 
+>> geni_i2c_dev *gi2c)
+>>  static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct 
+>> i2c_msg *msg,
+>>                                 u32 m_param)
+>>  {
+>> -       dma_addr_t rx_dma;
+>>         unsigned long time_left;
+>>         void *dma_buf = NULL;
+>>         struct geni_se *se = &gi2c->se;
+>> -       size_t len = msg->len;
+>> 
+>> +       gi2c->xfer_len = msg->len;
+> 
+> I'd prefer to keep the local variable and then have
+> 
+> 	len = gi2c->xfer_len = msg->len;
+> 
 
-  git://linuxtv.org/sailus/media_tree.git tags/fixes-5.9-1-signed
+Ok, will keep the local variable.
 
-for you to fetch changes up to 341dc3019ce40b06f5fc434b9e99673c70a3bcda:
+>>         if (!of_machine_is_compatible("lenovo,yoga-c630"))
+>>                 dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
+>> 
+>> @@ -366,9 +368,10 @@ static int geni_i2c_rx_one_msg(struct 
+>> geni_i2c_dev *gi2c, struct i2c_msg *msg,
+>>         else
+>>                 geni_se_select_mode(se, GENI_SE_FIFO);
+>> 
+>> -       writel_relaxed(len, se->base + SE_I2C_RX_TRANS_LEN);
+>> +       writel_relaxed(gi2c->xfer_len, se->base + 
+>> SE_I2C_RX_TRANS_LEN);
+> 
+> So that all this doesn't have to change.
+> 
+>> 
+>> -       if (dma_buf && geni_se_rx_dma_prep(se, dma_buf, len, &rx_dma)) 
+>> {
+>> +       if (dma_buf && geni_se_rx_dma_prep(se, dma_buf, 
+>> gi2c->xfer_len,
+>> +                                          &gi2c->rx_dma)) {
+>>                 geni_se_select_mode(se, GENI_SE_FIFO);
+>>                 i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
+>>                 dma_buf = NULL;
+>> @@ -384,7 +387,7 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev 
+>> *gi2c, struct i2c_msg *msg,
+>>         if (dma_buf) {
+>>                 if (gi2c->err)
+>>                         geni_i2c_rx_fsm_rst(gi2c);
+>> -               geni_se_rx_dma_unprep(se, rx_dma, len);
+>> +               geni_se_rx_dma_unprep(se, gi2c->rx_dma, 
+>> gi2c->xfer_len);
+>>                 i2c_put_dma_safe_msg_buf(dma_buf, msg, !gi2c->err);
+>>         }
+>> 
+>> @@ -394,12 +397,11 @@ static int geni_i2c_rx_one_msg(struct 
+>> geni_i2c_dev *gi2c, struct i2c_msg *msg,
+>>  static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct 
+>> i2c_msg *msg,
+>>                                 u32 m_param)
+>>  {
+>> -       dma_addr_t tx_dma;
+>>         unsigned long time_left;
+>>         void *dma_buf = NULL;
+>>         struct geni_se *se = &gi2c->se;
+>> -       size_t len = msg->len;
+>> 
+>> +       gi2c->xfer_len = msg->len;
+> 
+> Same comment.
+> 
 
-  max9286: Depend on OF_GPIO (2020-08-20 13:11:02 +0300)
+Ok.
 
-----------------------------------------------------------------
-V4L2 fixes for 5.9
+>>         if (!of_machine_is_compatible("lenovo,yoga-c630"))
+>>                 dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
+>> 
+> 
+> [1]
+> https://www.kernel.org/doc/html/latest/process/submitting-patches.html#describe-your-changes
 
-----------------------------------------------------------------
-Jacopo Mondi (1):
-      media: i2c: imx214: select V4L2_FWNODE
-
-Sakari Ailus (1):
-      max9286: Depend on OF_GPIO
-
- drivers/media/i2c/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
--- 
-Sakari Ailus
+Thanks,
+Roja
