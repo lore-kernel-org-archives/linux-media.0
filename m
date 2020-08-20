@@ -2,111 +2,81 @@ Return-Path: <SRS0=344h=B6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C3BCC433E3
-	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 16:53:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 417D3C433DF
+	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 16:54:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 449D92072D
-	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 16:53:14 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="juPlfhg3"
+	by mail.kernel.org (Postfix) with ESMTP id 274FA208C7
+	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 16:54:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730352AbgHTQxM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 20 Aug 2020 12:53:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40860 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729881AbgHTQxI (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 20 Aug 2020 12:53:08 -0400
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563EBC061385;
-        Thu, 20 Aug 2020 09:53:05 -0700 (PDT)
-Received: by mail-qt1-x842.google.com with SMTP id w9so1667632qts.6;
-        Thu, 20 Aug 2020 09:53:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Fhzx8KwwpeQJ5G+vL21g25GrjAt+ixzDYHjelVEfNvE=;
-        b=juPlfhg3k0rzoOmVhQGgWNhjP93HI6I6CQQI/nBnJBm8DLwBlxZ8b3M4vdsNv1CxSu
-         86TSooDC11o8h2jjA64w5RkPugRKCxQd7BUMc/TmbXHh5P3sxOjNaOpjmvzSwCClyVI9
-         0xZymLvBQOgyL2ppfj6hvhZEgewM8UWc/bThXY86pAyb45CpDWr7p1bQic5XKq1O4GRS
-         UhxQcOvI8SWoVoGIOh4iZjag1NZmh/5zmCViQv6t5kLa+bMsxBjH6FggazqDm0ldRV+Q
-         uHy3RsBXcow2lApQE5g0LM0+MxUwp90jJvo+q8yjinqJwDViVQFexoq9mRyzV8+2oDBy
-         ChYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Fhzx8KwwpeQJ5G+vL21g25GrjAt+ixzDYHjelVEfNvE=;
-        b=VonLjdHLDpFGhPsgajGETtKTwf2xmYwwtEtQ+GI5OrWDvF/F01ozLFcrySf1nFBI6U
-         xE0zF+o9lItzWD5uVD9u8QuQYByyNOAwi0J0zH8FdAc8SlJnrgXcb9KM9pMb6KV19lhW
-         u9ObucQYpkuVKiUKz3otewL7CZgTuY+wRdIVWzRj5TNFj6Bj66qCtOxrqlvEN7MHtw2/
-         G15yAgEQBrtIunQgtIOfvkLGTBkq0idJ5nqyT+pYUih1/aAkVoioBTwP/GQCFIGJSAze
-         3qOONESf8pJ1+0W/cg/V3P5wbl+Yn6LgJ8br0FJkZ6OzVmWZrt2/SGbLrzNQ/DjRNJRC
-         uuFQ==
-X-Gm-Message-State: AOAM5335gaGIgNGTjzTaREuIsYG9tsf9UBiJfB+vAjDSoQjb2YnEZAoM
-        InWoYtPwTHtSs4DIeadGNJJVAFNMSK+ypg==
-X-Google-Smtp-Source: ABdhPJyvtsnkq3ihC1UTFHnyZkG+qbwgy0v5X/i2yoY+dnV59Q+6G/oMe77e4SapitYg942XJGpWKg==
-X-Received: by 2002:ac8:3a26:: with SMTP id w35mr3617092qte.124.1597942384460;
-        Thu, 20 Aug 2020 09:53:04 -0700 (PDT)
-Received: from tong-desktop.local ([2601:5c0:c100:b9d:a169:4fca:c1d6:b7b4])
-        by smtp.googlemail.com with ESMTPSA id 128sm2706753qkk.101.2020.08.20.09.53.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Aug 2020 09:53:04 -0700 (PDT)
-From:   Tong Zhang <ztong0001@gmail.com>
-To:     isely@pobox.com, mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hverkuil@xs4all.nl
-Cc:     ztong0001@gmail.com
-Subject: [PATCH v3] media: pvrusb2: fix parsing error
-Date:   Thu, 20 Aug 2020 12:52:40 -0400
-Message-Id: <20200820165239.8510-1-ztong0001@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <aed971ed-bd8e-eaed-b2ee-80e9654f24cd@xs4all.nl>
-References: <aed971ed-bd8e-eaed-b2ee-80e9654f24cd@xs4all.nl>
+        id S1730380AbgHTQyV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 20 Aug 2020 12:54:21 -0400
+Received: from verein.lst.de ([213.95.11.211]:43094 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730001AbgHTQyO (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 20 Aug 2020 12:54:14 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id CF00868AFE; Thu, 20 Aug 2020 18:54:07 +0200 (CEST)
+Date:   Thu, 20 Aug 2020 18:54:07 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Tomasz Figa <tfiga@chromium.org>
+Cc:     Christoph Hellwig <hch@lst.de>, alsa-devel@alsa-project.org,
+        linux-ia64@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        nouveau@lists.freedesktop.org, linux-nvme@lists.infradead.org,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        linux-mm@kvack.org,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        Joonyoung Shim <jy0922.shim@samsung.com>,
+        linux-scsi@vger.kernel.org,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Pawel Osciak <pawel@osciak.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
+        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-parisc@vger.kernel.org, netdev@vger.kernel.org,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
+        Roedel <joro@8bytes.org>," <iommu@lists.linux-foundation.org>
+Subject: Re: [PATCH 05/28] media/v4l2: remove
+ V4L2-FLAG-MEMORY-NON-CONSISTENT
+Message-ID: <20200820165407.GD12693@lst.de>
+References: <20200819065555.1802761-1-hch@lst.de> <20200819065555.1802761-6-hch@lst.de> <CAAFQd5COLxjydDYrfx47ht8tj-aNPiaVnC+WyQA7nvpW4gs=ww@mail.gmail.com> <20200819135454.GA17098@lst.de> <CAAFQd5BuXP7t3d-Rwft85j=KTyXq7y4s24mQxLr=VoY9krEGZw@mail.gmail.com> <20200820044347.GA4533@lst.de> <20200820052004.GA5305@lst.de> <CAAFQd5CFiA2WBaaPQ9ezvMjYZfNw37c42UEy9Pk7kJyCi1mLzQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAFQd5CFiA2WBaaPQ9ezvMjYZfNw37c42UEy9Pk7kJyCi1mLzQ@mail.gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-pvr2_std_str_to_id() returns 0 on failure and 1 on success,
-however the caller is checking failure case using <0
+On Thu, Aug 20, 2020 at 12:05:29PM +0200, Tomasz Figa wrote:
+> The UAPI and V4L2/videobuf2 changes are in good shape and the only
+> wrong part is the use of DMA API, which was based on an earlier email
+> guidance anyway, and a change to the synchronization part . I find
+> conclusions like the above insulting for people who put many hours
+> into designing and implementing the related functionality, given the
+> complexity of the videobuf2 framework and how ill-defined the DMA API
+> was, and would feel better if such could be avoided in future
+> communication.
 
-Co-developed-by: Hans Verkuil<hverkuil@xs4all.nl>
-Signed-off-by: Tong Zhang <ztong0001@gmail.com>
----
+It wasn't meant to be too insulting, but I found this out when trying
+to figure out how to just disable it.  But it also ends up using
+the actual dma attr flags for it's own consistency checks, so just
+not setting the flag did not turn out to work that easily.
 
-v2: return -EINVAL as suggested by Hans Verkuil<hverkuil@xs4all.nl>.
-I also rebased the code on v5.9-rc1.
-v3: remove unused variable
-
- drivers/media/usb/pvrusb2/pvrusb2-hdw.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-index 1cfb7cf64131..f4a727918e35 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-@@ -864,10 +864,9 @@ static int ctrl_std_sym_to_val(struct pvr2_ctrl *cptr,
- 			       const char *bufPtr,unsigned int bufSize,
- 			       int *mskp,int *valp)
- {
--	int ret;
- 	v4l2_std_id id;
--	ret = pvr2_std_str_to_id(&id,bufPtr,bufSize);
--	if (ret < 0) return ret;
-+	if (!pvr2_std_str_to_id(&id, bufPtr, bufSize))
-+		return -EINVAL;
- 	if (mskp) *mskp = id;
- 	if (valp) *valp = id;
- 	return 0;
--- 
-2.25.1
-
+But in general it helps to add a few more people to the Cc list for
+such things that do stranger things.  Especially if you think you did
+it based on the advice of those people.
