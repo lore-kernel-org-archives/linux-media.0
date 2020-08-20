@@ -2,70 +2,109 @@ Return-Path: <SRS0=344h=B6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B61A7C433E3
-	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 10:36:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44EDBC433E3
+	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 10:38:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9D9E320855
-	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 10:36:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1B9862075E
+	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 10:38:11 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="BFnROfHv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731815AbgHTKgO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 20 Aug 2020 06:36:14 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:13347 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731299AbgHTKgI (ORCPT
+        id S1731903AbgHTKiJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 20 Aug 2020 06:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39206 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731902AbgHTKiF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 20 Aug 2020 06:36:08 -0400
-Received: from ironmsg07-lv.qualcomm.com (HELO ironmsg07-lv.qulacomm.com) ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 20 Aug 2020 03:36:08 -0700
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg07-lv.qulacomm.com with ESMTP/TLS/AES256-SHA; 20 Aug 2020 03:36:06 -0700
-Received: from c-rojay-linux.qualcomm.com ([10.206.21.80])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 20 Aug 2020 16:05:26 +0530
-Received: by c-rojay-linux.qualcomm.com (Postfix, from userid 88981)
-        id DB9311F44; Thu, 20 Aug 2020 16:05:25 +0530 (IST)
-From:   Roja Rani Yarubandi <rojay@codeaurora.org>
-To:     wsa@kernel.org
-Cc:     swboyd@chromium.org, dianders@chromium.org,
-        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
-        mka@chromium.org, akashast@codeaurora.org,
-        msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
-        rnayak@codeaurora.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        Roja Rani Yarubandi <rojay@codeaurora.org>
-Subject: [PATCH V2 0/2] Implement Shutdown callback for i2c
-Date:   Thu, 20 Aug 2020 16:05:20 +0530
-Message-Id: <20200820103522.26242-1-rojay@codeaurora.org>
-X-Mailer: git-send-email 2.26.2
+        Thu, 20 Aug 2020 06:38:05 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122FCC061757
+        for <linux-media@vger.kernel.org>; Thu, 20 Aug 2020 03:38:05 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8242323D;
+        Thu, 20 Aug 2020 12:38:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1597919883;
+        bh=BQNkOma8SsW/FO16mrdQ9tYjEcWbEHtz6mOlFPPGBjI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BFnROfHvAvOLIliOMzWLZUkxhxYusVtnG8RLdZ7bIloBeKnvLbeREzjTxa8eNIyl6
+         Qw2/k4MewMxY0k1FTi1tYkX8vpg51RsXCphKjgAlRjSrwVOlaMLTlsJmJwQxWy+9g+
+         AM/0sM8752ED3ip196JIpgIMlUjn9NlmiRje2P/I=
+Date:   Thu, 20 Aug 2020 13:37:46 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     linux-media@vger.kernel.org, Fabio Estevam <festevam@gmail.com>
+Subject: Re: [PATCH] media: uvc: Silence shift-out-of-bounds warning
+Message-ID: <20200820103746.GD6593@pendragon.ideasonboard.com>
+References: <20200818235406.GE2360@pendragon.ideasonboard.com>
+ <20200819000340.11616-1-laurent.pinchart@ideasonboard.com>
+ <68984fef-1e18-9394-9e68-becabf83c85f@acm.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <68984fef-1e18-9394-9e68-becabf83c85f@acm.org>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Store DMA mapping data in geni_i2c_dev struct.
-Implement Shutdown callback for geni i2c driver.
+Hi Bart,
 
-Changes in V2:
- - Changed commit text.
- - As per Stephen's comments added separate function for stop transfer.
+On Wed, Aug 19, 2020 at 08:25:27PM -0700, Bart Van Assche wrote:
+> On 2020-08-18 17:03, Laurent Pinchart wrote:
+> > UBSAN reports a shift-out-of-bounds warning in uvc_get_le_value(). The
+> > report is correct, but the issue should be harmless as the computed
+> > value isn't used when the shift is negative. This may however cause
+> > incorrect behaviour if a negative shift could generate adverse side
+> > effects (such as a trap on some architectures for instance).
+> > 
+> > Regardless of whether that may happen or not, silence the warning as a
+> > full WARN backtrace isn't nice.
+> > 
+> > Reported-by: Bart Van Assche <bvanassche@acm.org>
+> > Fixes: c0efd232929c ("V4L/DVB (8145a): USB Video Class driver")
+> > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > ---
+> >  drivers/media/usb/uvc/uvc_ctrl.c | 6 +++++-
+> >  1 file changed, 5 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+> > index 6c37aa018ad5..b2cdee0f7763 100644
+> > --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> > +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> > @@ -773,12 +773,16 @@ static s32 uvc_get_le_value(struct uvc_control_mapping *mapping,
+> >  	offset &= 7;
+> >  	mask = ((1LL << bits) - 1) << offset;
+> >  
+> > -	for (; bits > 0; data++) {
+> > +	while (1) {
+> >  		u8 byte = *data & mask;
+> >  		value |= offset > 0 ? (byte >> offset) : (byte << (-offset));
+> >  		bits -= 8 - (offset > 0 ? offset : 0);
+> > +		if (bits <= 0)
+> > +			break;
+> > +
+> >  		offset -= 8;
+> >  		mask = (1 << bits) - 1;
+> > +		data++;
+> >  	}
+> >  
+> >  	/* Sign-extend the value if needed. */
+> 
+> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+> 
+> Thanks for having addressed this quickly!
 
-Roja Rani Yarubandi (2):
-  i2c: i2c-qcom-geni: Store DMA mapping data in geni_i2c_dev struct
-  i2c: i2c-qcom-geni: Add shutdown callback for i2c
-
- drivers/i2c/busses/i2c-qcom-geni.c | 50 ++++++++++++++++++++++++++++++
- include/linux/qcom-geni-se.h       |  5 +++
- 2 files changed, 55 insertions(+)
+You're welcome. Would you be able to test the patch to ensure it fixes
+the issue on your system (and that there are no observable side effects)
+?
 
 -- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-of Code Aurora Forum, hosted by The Linux Foundation
+Regards,
 
+Laurent Pinchart
