@@ -2,224 +2,181 @@ Return-Path: <SRS0=344h=B6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF672C433DF
-	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 10:31:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6276C433E1
+	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 10:31:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BFA222075E
-	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 10:31:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9D29420738
+	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 10:31:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=mg.codeaurora.org header.i=@mg.codeaurora.org header.b="A+TW/c3p"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="QFNCCjnh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728562AbgHTKa7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 20 Aug 2020 06:30:59 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:51052 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729099AbgHTKay (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 20 Aug 2020 06:30:54 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1597919454; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=ql6arR92ZpN3KaOepeFprHVy/tHtOfo4QUNFyLkpyYg=;
- b=A+TW/c3pVlfm4h4fThN5anr/tTFsuNkVg5YZzSn6+/hfqKJ1XmRXStw711w2mptkgexSjjfw
- sw9Ahfl3OxCmJYDGcrZ7TaC8E8M4hLTiX1OjfwpWULrJcrd/Hhhh1P+cLzrkta0OQ4meW+vL
- tNj92ec6xG6l/f6g6lcpzL4ls9E=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI3ZjU0NiIsICJsaW51eC1tZWRpYUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
- 5f3e50ca949572eafbcdf08a (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 20 Aug 2020 10:30:34
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id BF527C43391; Thu, 20 Aug 2020 10:30:33 +0000 (UTC)
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: rojay)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 4D61CC433C6;
-        Thu, 20 Aug 2020 10:30:33 +0000 (UTC)
+        id S1731435AbgHTKbh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 20 Aug 2020 06:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38172 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730281AbgHTKbS (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 20 Aug 2020 06:31:18 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14715C061383
+        for <linux-media@vger.kernel.org>; Thu, 20 Aug 2020 03:31:18 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id c16so1843412ejx.12
+        for <linux-media@vger.kernel.org>; Thu, 20 Aug 2020 03:31:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FU3+CiJFzLHmOFDuQMwlaisWRGuHRN+5AV6txupwZrU=;
+        b=QFNCCjnhRiVXX1RwHJMrjJrm3FMIDmNx/PgDGVaGoYPr2orRHBTBO48N0vE/bjgnJ+
+         SYuYytDiRhiYZtZgJZ7z4/4vPKus2MwWgTKmnlMmLZQ4o8gAgDqGKHg0dO0uTStdh95b
+         tHYxvzFh9iEVHBmlKA/EhqmNwNT52r2I3xUhk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FU3+CiJFzLHmOFDuQMwlaisWRGuHRN+5AV6txupwZrU=;
+        b=s5QI2cHNnMxM/j7i/eAasdichhkDq5+0Iqfi56+h7hlJbDBa3qeRyZa9diig1DWjJd
+         ERulTyAPhK0KU227/OKtmNzqgHzjtg2tCmU2Vx66+MunAI1YaaISpuJn5BEoQy51q9xl
+         cfW6/EG0qRAIxybhoqo8tUn4VhO0maw9IpTjgnev9L1syoB8B3sqkrv9mo3CFOQFWCP8
+         RpD5c9h8I4H+hKTiTfPyr1uyxn1UrKQZFrLTedaIM82NvVoMD7b/fW8fEsOMxIZhQ5N/
+         zJ1e20XLrUzyaD5CpT8Bo0dWOjv2Mgk1AdySFzWSrcrhiKq2WrqsipgxCAtcM2C+KrQ3
+         tytw==
+X-Gm-Message-State: AOAM531NA5GFYOAO3yu0o4BFOz7a5mU1JENwTh+ugIkdk7Tb5tKfxpGj
+        L7KTblJrcVusXnBD3d5r5fQbIVe5tIlthEss
+X-Google-Smtp-Source: ABdhPJyD2KJfXqgossnPdw+7DrqGKx20Sdv2grICUlbZ3sFTuAqtqi9dkuelujsLBWq04SR3JAto6w==
+X-Received: by 2002:a17:906:37d2:: with SMTP id o18mr2487470ejc.162.1597919476477;
+        Thu, 20 Aug 2020 03:31:16 -0700 (PDT)
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
+        by smtp.gmail.com with ESMTPSA id d2sm1204959ejm.19.2020.08.20.03.31.15
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Aug 2020 03:31:16 -0700 (PDT)
+Received: by mail-wr1-f45.google.com with SMTP id 88so1534284wrh.3
+        for <linux-media@vger.kernel.org>; Thu, 20 Aug 2020 03:31:15 -0700 (PDT)
+X-Received: by 2002:a5d:6744:: with SMTP id l4mr2717742wrw.105.1597919084826;
+ Thu, 20 Aug 2020 03:24:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 20 Aug 2020 16:00:33 +0530
-From:   rojay@codeaurora.org
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     wsa@kernel.org, dianders@chromium.org,
-        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
-        mka@chromium.org, akashast@codeaurora.org,
-        msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
-        rnayak@codeaurora.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH 2/2] i2c: i2c-qcom-geni: Add shutdown callback for i2c
-In-Reply-To: <159780863669.334488.18038785498966010175@swboyd.mtv.corp.google.com>
-References: <20200814095540.32115-1-rojay@codeaurora.org>
- <20200814095540.32115-3-rojay@codeaurora.org>
- <159780863669.334488.18038785498966010175@swboyd.mtv.corp.google.com>
-Message-ID: <d4c78c0cfde0f9276c524124ca18893f@codeaurora.org>
-X-Sender: rojay@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+References: <20200819065555.1802761-1-hch@lst.de> <20200819065555.1802761-6-hch@lst.de>
+ <CAAFQd5COLxjydDYrfx47ht8tj-aNPiaVnC+WyQA7nvpW4gs=ww@mail.gmail.com>
+ <62e4f4fc-c8a5-3ee8-c576-fe7178cb4356@arm.com> <CAAFQd5AcCTDguB2C9KyDiutXWoEvBL8tL7+a==Uo8vj_8CLOJw@mail.gmail.com>
+ <2b32f1d8-16f7-3352-40a5-420993d52fb5@arm.com> <20200820050214.GA4815@lst.de>
+In-Reply-To: <20200820050214.GA4815@lst.de>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Thu, 20 Aug 2020 12:24:31 +0200
+X-Gmail-Original-Message-ID: <CAAFQd5AknYpP5BamC=wJkEJyO-q47V6Gc+HT65h6B+HyT+-xjQ@mail.gmail.com>
+Message-ID: <CAAFQd5AknYpP5BamC=wJkEJyO-q47V6Gc+HT65h6B+HyT+-xjQ@mail.gmail.com>
+Subject: Re: [PATCH 05/28] media/v4l2: remove V4L2-FLAG-MEMORY-NON-CONSISTENT
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Robin Murphy <robin.murphy@arm.com>, alsa-devel@alsa-project.org,
+        linux-ia64@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        nouveau@lists.freedesktop.org, linux-nvme@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        linux-mm@kvack.org, Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        Joonyoung Shim <jy0922.shim@samsung.com>,
+        linux-scsi@vger.kernel.org,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Pawel Osciak <pawel@osciak.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "list@263.net:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
+        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-parisc@vger.kernel.org, netdev@vger.kernel.org,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 2020-08-19 09:13, Stephen Boyd wrote:
-> Quoting Roja Rani Yarubandi (2020-08-14 02:55:40)
->> If the hardware is still accessing memory after SMMU translation
->> is disabled(as part of smmu shutdown callback), then the
-> 
-> Put a space before (
-> 
+On Thu, Aug 20, 2020 at 7:02 AM Christoph Hellwig <hch@lst.de> wrote:
+>
+> On Wed, Aug 19, 2020 at 03:07:04PM +0100, Robin Murphy wrote:
+> >> FWIW, I asked back in time what the plan is for non-coherent
+> >> allocations and it seemed like DMA_ATTR_NON_CONSISTENT and
+> >> dma_sync_*() was supposed to be the right thing to go with. [2] The
+> >> same thread also explains why dma_alloc_pages() isn't suitable for the
+> >> users of dma_alloc_attrs() and DMA_ATTR_NON_CONSISTENT.
+> >
+> > AFAICS even back then Christoph was implying getting rid of NON_CONSISTENT
+> > and *replacing* it with something streaming-API-based - i.e. this series -
+> > not encouraging mixing the existing APIs. It doesn't seem impossible to
+> > implement a remapping version of this new dma_alloc_pages() for
+> > IOMMU-backed ops if it's really warranted (although at that point it seems
+> > like "non-coherent" vb2-dc starts to have significant conceptual overlap
+> > with vb2-sg).
+>
+> You can alway vmap the returned pages from dma_alloc_pages, but it will
+> make cache invalidation hell - you'll need to use
+> invalidate_kernel_vmap_range and flush_kernel_vmap_range to properly
+> handle virtually indexed caches.
+>
+> Or with remapping you mean using the iommu do de-scatter/gather?
 
-Ok.
+Ideally, both.
 
->> IOVAs(I/O virtual address) which it was using will go on the bus
-> 
-> Put a space before (
-> 
->> as the physical addresses which will result in unknown crashes
->> like NoC/interconnect errors.
->> 
->> So, adding shutdown callback to i2c driver to unmap DMA mappings
->> during system "reboot" or "shutdown".
->> 
-> 
-> Deserves a Fixes: tag if it's fixing a problem, which it looks like it
-> is.
-> 
+For remapping in the CPU sense, there are drivers which rely on a
+contiguous kernel mapping of the vb2 buffers, which was provided by
+dma_alloc_attrs(). I think they could be reworked to work on single
+pages, but that would significantly complicate the code. At the same
+time, such drivers would actually benefit from a cached mapping,
+because they often have non-bursty, random access patterns.
 
-It is not fixing a problem. We are anticipating a problem and 
-implementing
-Shutdown callback.
+Then, in the IOMMU sense, the whole idea of videobuf2-dma-contig is to
+rely on the DMA API to always provide device-contiguous memory, as
+required by the hardware which only has a single pointer and size.
 
->> Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
->> ---
->>  drivers/i2c/busses/i2c-qcom-geni.c | 36 
->> ++++++++++++++++++++++++++++++
->>  include/linux/qcom-geni-se.h       |  5 +++++
-> 
-> I'd prefer this is squashed with the previous patch. The first patch
-> doesn't really stand on its own anyway.
-> 
+>
+> You can implement that trivially implement it yourself for the iommu
+> case:
+>
+> {
+>         merge_boundary = dma_get_merge_boundary(dev);
+>         if (!merge_boundary || merge_boundary > chunk_size - 1) {
+>                 /* can't coalesce */
+>                 return -EINVAL;
+>         }
+>
+>
+>         nents = DIV_ROUND_UP(total_size, chunk_size);
+>         sg = sgl_alloc();
+>         for_each_sgl() {
+>                 sg->page = __alloc_pages(get_order(chunk_size))
+>                 sg->len = chunk_size;
+>         }
+>         dma_map_sg(sg, DMA_ATTR_SKIP_CPU_SYNC);
+>         // you are guaranteed to get a single dma_addr out
+> }
+>
+> Of course this still uses the scatterlist structure with its annoying
+> mix of input and output parametes, so I'd rather not expose it as
+> an official API at the DMA layer.
 
-Sorry, I did not understand.
-First patch can be compiled independently.
+The problem with the above open coded approach is that it requires
+explicit handling of the non-IOMMU and IOMMU cases and this is exactly
+what we don't want to have in vb2 and what was actually the job of the
+DMA API to hide. Is the plan to actually move the IOMMU handling out
+of the DMA API?
 
->>  2 files changed, 41 insertions(+)
->> 
->> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c 
->> b/drivers/i2c/busses/i2c-qcom-geni.c
->> index 53ca41f76080..749c225f95c4 100644
->> --- a/drivers/i2c/busses/i2c-qcom-geni.c
->> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
->> @@ -613,6 +613,41 @@ static int geni_i2c_remove(struct platform_device 
->> *pdev)
->>         return 0;
->>  }
->> 
->> +static void geni_i2c_shutdown(struct platform_device *pdev)
->> +{
->> +       int ret;
->> +       struct geni_i2c_dev *gi2c = platform_get_drvdata(pdev);
->> +       struct geni_se *se = &gi2c->se;
->> +       u32 dma;
->> +       u32 dma_dbg_reg;
-> 
-> Typically this is just called 'val'.
-> 
+Do you think we could instead turn it into a dma_alloc_noncoherent()
+helper, which has similar semantics as dma_alloc_attrs() and handles
+the various corner cases (e.g. invalidate_kernel_vmap_range and
+flush_kernel_vmap_range) to achieve the desired functionality without
+delegating the "hell", as you called it, to the users?
 
-Ok.
-
->> +
->> +       ret = pm_runtime_get_sync(gi2c->se.dev);
->> +       if (ret < 0) {
->> +               dev_err(gi2c->se.dev, "Failed to resume device:%d\n", 
->> ret);
-> 
-> Maybe just write: "Failed to resume device\n"? Not sure anyone cares
-> what the error code is. And if they did, it would be connected to the
-> colon so it will be hard to read. Add a space after colon if you want 
-> to
-> keep the return value please.
-> 
-
-Ok, will add space after colon.
-
->> +               return;
->> +       }
->> +
->> +       dma = readl_relaxed(se->base + SE_GENI_DMA_MODE_EN);
->> +       if (dma) {
->> +               dma_dbg_reg = readl_relaxed(gi2c->se.base + 
->> SE_DMA_DEBUG_REG0);
->> +               if (dma_dbg_reg & DMA_TX_ACTIVE) {
->> +                       geni_i2c_abort_xfer(gi2c);
->> +                       gi2c->cur_wr = 0;
->> +                       if (gi2c->err)
->> +                               geni_i2c_tx_fsm_rst(gi2c);
->> +                       geni_se_tx_dma_unprep(se, gi2c->tx_dma, 
->> gi2c->xfer_len);
->> +               }
->> +               if (dma_dbg_reg & DMA_RX_ACTIVE) {
->> +                       geni_i2c_abort_xfer(gi2c);
->> +                       gi2c->cur_rd = 0;
->> +                       if (gi2c->err)
->> +                               geni_i2c_rx_fsm_rst(gi2c);
->> +                       geni_se_rx_dma_unprep(se, gi2c->rx_dma, 
->> gi2c->xfer_len);
->> +               }
-> 
-> Can this be a function? It sort of seems like we should be doing the
-> same sort of stuff if we're canceling a DMA transaction in flight.
-> 
-
-Ok. Will make the changes.
-
->> +       }
->> +       pm_runtime_put_sync_suspend(gi2c->se.dev);
->> +}
->> +
->>  static int __maybe_unused geni_i2c_runtime_suspend(struct device 
->> *dev)
->>  {
->>         int ret;
->> diff --git a/include/linux/qcom-geni-se.h 
->> b/include/linux/qcom-geni-se.h
->> index dd464943f717..acad69be747d 100644
->> --- a/include/linux/qcom-geni-se.h
->> +++ b/include/linux/qcom-geni-se.h
->> @@ -77,6 +77,7 @@ struct geni_se {
->>  #define SE_DMA_RX_FSM_RST              0xd58
->>  #define SE_HW_PARAM_0                  0xe24
->>  #define SE_HW_PARAM_1                  0xe28
->> +#define SE_DMA_DEBUG_REG0              0xe40
->> 
->>  /* GENI_FORCE_DEFAULT_REG fields */
->>  #define FORCE_DEFAULT  BIT(0)
->> @@ -207,6 +208,10 @@ struct geni_se {
->>  #define RX_GENI_CANCEL_IRQ             BIT(11)
->>  #define RX_GENI_GP_IRQ_EXT             GENMASK(13, 12)
->> 
->> +/* DMA DEBUG Register fields */
-> 
-> Please follow other style, ie. SE_DMA_DEBUG_REG0 fields
-> 
-
-Ok.
-
->> +#define DMA_TX_ACTIVE                  BIT(0)
->> +#define DMA_RX_ACTIVE                  BIT(1)
->> +
->>  /* SE_HW_PARAM_0 fields */
->>  #define TX_FIFO_WIDTH_MSK              GENMASK(29, 24)
->>  #define TX_FIFO_WIDTH_SHFT             24
+Best regards,
+Tomasz
