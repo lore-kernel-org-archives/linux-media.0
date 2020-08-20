@@ -2,181 +2,117 @@ Return-Path: <SRS0=344h=B6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6276C433E1
-	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 10:31:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2FC6C433DF
+	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 10:36:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9D29420738
-	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 10:31:38 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="QFNCCjnh"
+	by mail.kernel.org (Postfix) with ESMTP id 8BCA320639
+	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 10:36:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731435AbgHTKbh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 20 Aug 2020 06:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38172 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730281AbgHTKbS (ORCPT
+        id S1731210AbgHTKgN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 20 Aug 2020 06:36:13 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:27234 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731217AbgHTKgI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 20 Aug 2020 06:31:18 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14715C061383
-        for <linux-media@vger.kernel.org>; Thu, 20 Aug 2020 03:31:18 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id c16so1843412ejx.12
-        for <linux-media@vger.kernel.org>; Thu, 20 Aug 2020 03:31:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FU3+CiJFzLHmOFDuQMwlaisWRGuHRN+5AV6txupwZrU=;
-        b=QFNCCjnhRiVXX1RwHJMrjJrm3FMIDmNx/PgDGVaGoYPr2orRHBTBO48N0vE/bjgnJ+
-         SYuYytDiRhiYZtZgJZ7z4/4vPKus2MwWgTKmnlMmLZQ4o8gAgDqGKHg0dO0uTStdh95b
-         tHYxvzFh9iEVHBmlKA/EhqmNwNT52r2I3xUhk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FU3+CiJFzLHmOFDuQMwlaisWRGuHRN+5AV6txupwZrU=;
-        b=s5QI2cHNnMxM/j7i/eAasdichhkDq5+0Iqfi56+h7hlJbDBa3qeRyZa9diig1DWjJd
-         ERulTyAPhK0KU227/OKtmNzqgHzjtg2tCmU2Vx66+MunAI1YaaISpuJn5BEoQy51q9xl
-         cfW6/EG0qRAIxybhoqo8tUn4VhO0maw9IpTjgnev9L1syoB8B3sqkrv9mo3CFOQFWCP8
-         RpD5c9h8I4H+hKTiTfPyr1uyxn1UrKQZFrLTedaIM82NvVoMD7b/fW8fEsOMxIZhQ5N/
-         zJ1e20XLrUzyaD5CpT8Bo0dWOjv2Mgk1AdySFzWSrcrhiKq2WrqsipgxCAtcM2C+KrQ3
-         tytw==
-X-Gm-Message-State: AOAM531NA5GFYOAO3yu0o4BFOz7a5mU1JENwTh+ugIkdk7Tb5tKfxpGj
-        L7KTblJrcVusXnBD3d5r5fQbIVe5tIlthEss
-X-Google-Smtp-Source: ABdhPJyD2KJfXqgossnPdw+7DrqGKx20Sdv2grICUlbZ3sFTuAqtqi9dkuelujsLBWq04SR3JAto6w==
-X-Received: by 2002:a17:906:37d2:: with SMTP id o18mr2487470ejc.162.1597919476477;
-        Thu, 20 Aug 2020 03:31:16 -0700 (PDT)
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
-        by smtp.gmail.com with ESMTPSA id d2sm1204959ejm.19.2020.08.20.03.31.15
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Aug 2020 03:31:16 -0700 (PDT)
-Received: by mail-wr1-f45.google.com with SMTP id 88so1534284wrh.3
-        for <linux-media@vger.kernel.org>; Thu, 20 Aug 2020 03:31:15 -0700 (PDT)
-X-Received: by 2002:a5d:6744:: with SMTP id l4mr2717742wrw.105.1597919084826;
- Thu, 20 Aug 2020 03:24:44 -0700 (PDT)
+        Thu, 20 Aug 2020 06:36:08 -0400
+Received: from ironmsg07-lv.qualcomm.com (HELO ironmsg07-lv.qulacomm.com) ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 20 Aug 2020 03:36:06 -0700
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg07-lv.qulacomm.com with ESMTP/TLS/AES256-SHA; 20 Aug 2020 03:36:04 -0700
+Received: from c-rojay-linux.qualcomm.com ([10.206.21.80])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 20 Aug 2020 16:05:28 +0530
+Received: by c-rojay-linux.qualcomm.com (Postfix, from userid 88981)
+        id 5D9CC1F62; Thu, 20 Aug 2020 16:05:27 +0530 (IST)
+From:   Roja Rani Yarubandi <rojay@codeaurora.org>
+To:     wsa@kernel.org
+Cc:     swboyd@chromium.org, dianders@chromium.org,
+        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
+        mka@chromium.org, akashast@codeaurora.org,
+        msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
+        rnayak@codeaurora.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        Roja Rani Yarubandi <rojay@codeaurora.org>
+Subject: [PATCH V2 1/2] i2c: i2c-qcom-geni: Store DMA mapping data in geni_i2c_dev struct
+Date:   Thu, 20 Aug 2020 16:05:21 +0530
+Message-Id: <20200820103522.26242-2-rojay@codeaurora.org>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200820103522.26242-1-rojay@codeaurora.org>
+References: <20200820103522.26242-1-rojay@codeaurora.org>
 MIME-Version: 1.0
-References: <20200819065555.1802761-1-hch@lst.de> <20200819065555.1802761-6-hch@lst.de>
- <CAAFQd5COLxjydDYrfx47ht8tj-aNPiaVnC+WyQA7nvpW4gs=ww@mail.gmail.com>
- <62e4f4fc-c8a5-3ee8-c576-fe7178cb4356@arm.com> <CAAFQd5AcCTDguB2C9KyDiutXWoEvBL8tL7+a==Uo8vj_8CLOJw@mail.gmail.com>
- <2b32f1d8-16f7-3352-40a5-420993d52fb5@arm.com> <20200820050214.GA4815@lst.de>
-In-Reply-To: <20200820050214.GA4815@lst.de>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Thu, 20 Aug 2020 12:24:31 +0200
-X-Gmail-Original-Message-ID: <CAAFQd5AknYpP5BamC=wJkEJyO-q47V6Gc+HT65h6B+HyT+-xjQ@mail.gmail.com>
-Message-ID: <CAAFQd5AknYpP5BamC=wJkEJyO-q47V6Gc+HT65h6B+HyT+-xjQ@mail.gmail.com>
-Subject: Re: [PATCH 05/28] media/v4l2: remove V4L2-FLAG-MEMORY-NON-CONSISTENT
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Robin Murphy <robin.murphy@arm.com>, alsa-devel@alsa-project.org,
-        linux-ia64@vger.kernel.org,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        nouveau@lists.freedesktop.org, linux-nvme@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        linux-mm@kvack.org, Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        linux-scsi@vger.kernel.org,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Pawel Osciak <pawel@osciak.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "list@263.net:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
-        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-parisc@vger.kernel.org, netdev@vger.kernel.org,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Aug 20, 2020 at 7:02 AM Christoph Hellwig <hch@lst.de> wrote:
->
-> On Wed, Aug 19, 2020 at 03:07:04PM +0100, Robin Murphy wrote:
-> >> FWIW, I asked back in time what the plan is for non-coherent
-> >> allocations and it seemed like DMA_ATTR_NON_CONSISTENT and
-> >> dma_sync_*() was supposed to be the right thing to go with. [2] The
-> >> same thread also explains why dma_alloc_pages() isn't suitable for the
-> >> users of dma_alloc_attrs() and DMA_ATTR_NON_CONSISTENT.
-> >
-> > AFAICS even back then Christoph was implying getting rid of NON_CONSISTENT
-> > and *replacing* it with something streaming-API-based - i.e. this series -
-> > not encouraging mixing the existing APIs. It doesn't seem impossible to
-> > implement a remapping version of this new dma_alloc_pages() for
-> > IOMMU-backed ops if it's really warranted (although at that point it seems
-> > like "non-coherent" vb2-dc starts to have significant conceptual overlap
-> > with vb2-sg).
->
-> You can alway vmap the returned pages from dma_alloc_pages, but it will
-> make cache invalidation hell - you'll need to use
-> invalidate_kernel_vmap_range and flush_kernel_vmap_range to properly
-> handle virtually indexed caches.
->
-> Or with remapping you mean using the iommu do de-scatter/gather?
+Store DMA mapping data in geni_i2c_dev struct to enhance DMA mapping
+data scope. For example during shutdown callback to unmap DMA mapping,
+this stored DMA mapping data can be used to call geni_se_tx_dma_unprep
+and geni_se_rx_dma_unprep functions.
 
-Ideally, both.
+Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
+---
+Changes in V2:
+ - As per Stephen's comments, changed commit text, fixed minor nitpicks.
 
-For remapping in the CPU sense, there are drivers which rely on a
-contiguous kernel mapping of the vb2 buffers, which was provided by
-dma_alloc_attrs(). I think they could be reworked to work on single
-pages, but that would significantly complicate the code. At the same
-time, such drivers would actually benefit from a cached mapping,
-because they often have non-bursty, random access patterns.
+ drivers/i2c/busses/i2c-qcom-geni.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Then, in the IOMMU sense, the whole idea of videobuf2-dma-contig is to
-rely on the DMA API to always provide device-contiguous memory, as
-required by the hardware which only has a single pointer and size.
+diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+index 7f130829bf01..1fda5c7c2cfc 100644
+--- a/drivers/i2c/busses/i2c-qcom-geni.c
++++ b/drivers/i2c/busses/i2c-qcom-geni.c
+@@ -86,6 +86,9 @@ struct geni_i2c_dev {
+ 	u32 clk_freq_out;
+ 	const struct geni_i2c_clk_fld *clk_fld;
+ 	int suspended;
++	dma_addr_t tx_dma;
++	dma_addr_t rx_dma;
++	size_t xfer_len;
+ };
+ 
+ struct geni_i2c_err_log {
+@@ -358,6 +361,7 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ 	struct geni_se *se = &gi2c->se;
+ 	size_t len = msg->len;
+ 
++	gi2c->xfer_len = msg->len;
+ 	if (!of_machine_is_compatible("lenovo,yoga-c630"))
+ 		dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
+ 
+@@ -384,6 +388,7 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ 	if (dma_buf) {
+ 		if (gi2c->err)
+ 			geni_i2c_rx_fsm_rst(gi2c);
++		gi2c->rx_dma = rx_dma;
+ 		geni_se_rx_dma_unprep(se, rx_dma, len);
+ 		i2c_put_dma_safe_msg_buf(dma_buf, msg, !gi2c->err);
+ 	}
+@@ -400,6 +405,7 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ 	struct geni_se *se = &gi2c->se;
+ 	size_t len = msg->len;
+ 
++	gi2c->xfer_len = msg->len;
+ 	if (!of_machine_is_compatible("lenovo,yoga-c630"))
+ 		dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
+ 
+@@ -429,6 +435,7 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ 	if (dma_buf) {
+ 		if (gi2c->err)
+ 			geni_i2c_tx_fsm_rst(gi2c);
++		gi2c->tx_dma = tx_dma;
+ 		geni_se_tx_dma_unprep(se, tx_dma, len);
+ 		i2c_put_dma_safe_msg_buf(dma_buf, msg, !gi2c->err);
+ 	}
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
+of Code Aurora Forum, hosted by The Linux Foundation
 
->
-> You can implement that trivially implement it yourself for the iommu
-> case:
->
-> {
->         merge_boundary = dma_get_merge_boundary(dev);
->         if (!merge_boundary || merge_boundary > chunk_size - 1) {
->                 /* can't coalesce */
->                 return -EINVAL;
->         }
->
->
->         nents = DIV_ROUND_UP(total_size, chunk_size);
->         sg = sgl_alloc();
->         for_each_sgl() {
->                 sg->page = __alloc_pages(get_order(chunk_size))
->                 sg->len = chunk_size;
->         }
->         dma_map_sg(sg, DMA_ATTR_SKIP_CPU_SYNC);
->         // you are guaranteed to get a single dma_addr out
-> }
->
-> Of course this still uses the scatterlist structure with its annoying
-> mix of input and output parametes, so I'd rather not expose it as
-> an official API at the DMA layer.
-
-The problem with the above open coded approach is that it requires
-explicit handling of the non-IOMMU and IOMMU cases and this is exactly
-what we don't want to have in vb2 and what was actually the job of the
-DMA API to hide. Is the plan to actually move the IOMMU handling out
-of the DMA API?
-
-Do you think we could instead turn it into a dma_alloc_noncoherent()
-helper, which has similar semantics as dma_alloc_attrs() and handles
-the various corner cases (e.g. invalidate_kernel_vmap_range and
-flush_kernel_vmap_range) to achieve the desired functionality without
-delegating the "hell", as you called it, to the users?
-
-Best regards,
-Tomasz
