@@ -2,110 +2,73 @@ Return-Path: <SRS0=344h=B6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9212DC433DF
-	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 00:14:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5603DC433E1
+	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 01:31:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 62A0A2075E
-	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 00:14:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1597882489;
-	bh=sXZ8Yu1jQFz3zs2GX8AIx26bfdTxIQt72kwnooGnfdg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=RJGDGEnny1idqNe8HzR/Kb3odgsQrdLExDjTqJE6K0zsVmFNi2XaZA56XlgFNh/mk
-	 BrU98x/e5AxFNT+iXlEM3lhu+4yoRDqp2Z8G8LvGXf19rGv0I2uQs71FnGS2YGHBvA
-	 XjDYHy/KtMS0rqRgo6ARI8kog5mcX1CKiMOmqBOE=
+	by mail.kernel.org (Postfix) with ESMTP id 3545B207FB
+	for <linux-media@archiver.kernel.org>; Thu, 20 Aug 2020 01:31:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727077AbgHTAOr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 19 Aug 2020 20:14:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57456 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726466AbgHTABW (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 19 Aug 2020 20:01:22 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2F4DA207DA;
-        Thu, 20 Aug 2020 00:01:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597881682;
-        bh=sXZ8Yu1jQFz3zs2GX8AIx26bfdTxIQt72kwnooGnfdg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yyNM6vY0e7WrVUqeJUziGR2QTKHtMRZ/UBsvmtGK1ZACpNyWrfN7diuSLAEIlYL9i
-         h/HKYdyTLhYkTReFbE3abZRda3cbZqrOHUU44eIF2gVlJXOlatnHqU14/Ex54JOTzN
-         dIaRTtfF6oGyw6zQWHvBdKSRVsQsL2hVo+M0bK4E=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Chuhong Yuan <hslester96@gmail.com>, Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 03/27] media: budget-core: Improve exception handling in budget_register()
-Date:   Wed, 19 Aug 2020 20:00:52 -0400
-Message-Id: <20200820000116.214821-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200820000116.214821-1-sashal@kernel.org>
-References: <20200820000116.214821-1-sashal@kernel.org>
+        id S1726772AbgHTBbZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 19 Aug 2020 21:31:25 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:38233 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726435AbgHTBbY (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 19 Aug 2020 21:31:24 -0400
+Received: (qmail 202460 invoked by uid 1000); 19 Aug 2020 21:31:22 -0400
+Date:   Wed, 19 Aug 2020 21:31:22 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-media@vger.kernel.org, linux-uvc-devel@lists.sourceforge.net,
+        Sakari Ailus <sakari.ailus@iki.fi>
+Subject: Re: Protecting uvcvideo againt USB device disconnect [Was: Re:
+ Protecting usb_set_interface() against device removal]
+Message-ID: <20200820013122.GA202178@rowland.harvard.edu>
+References: <b0a7247c-bed3-934b-2c73-7f4b0adb5e75@roeck-us.net>
+ <20200815020739.GB52242@rowland.harvard.edu>
+ <20200816003315.GA13826@roeck-us.net>
+ <20200816121816.GC32174@pendragon.ideasonboard.com>
+ <9bb20ed7-b156-f6c2-4d25-6acac1a0021b@roeck-us.net>
+ <20200816235155.GA7729@pendragon.ideasonboard.com>
+ <0684b71c-8ac5-8962-cbd5-c0bcaa8b6881@xs4all.nl>
+ <20200819013002.GL2360@pendragon.ideasonboard.com>
+ <20200819230851.GA222844@roeck-us.net>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200819230851.GA222844@roeck-us.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Chuhong Yuan <hslester96@gmail.com>
+On Wed, Aug 19, 2020 at 04:08:51PM -0700, Guenter Roeck wrote:
 
-[ Upstream commit fc0456458df8b3421dba2a5508cd817fbc20ea71 ]
+> usb_set_interface() should not be called anymore after uvc_disconnect(),
+> or at east I think so (is that documented anywhere ?).
 
-budget_register() has no error handling after its failure.
-Add the missed undo functions for error handling to fix it.
+It may be documented somewhere, but basically it goes without saying.  
 
-Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
-Signed-off-by: Sean Young <sean@mess.org>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/media/pci/ttpci/budget-core.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+A main feature of the device model design is that drivers get bound to 
+devices by having their probe routine called, and they get unbound by 
+having their disconnect routine called.  It should go without saying 
+that once a driver is unbound from a device, it must not communicate 
+with that device any more.
 
-diff --git a/drivers/media/pci/ttpci/budget-core.c b/drivers/media/pci/ttpci/budget-core.c
-index fadbdeeb44955..293867b9e7961 100644
---- a/drivers/media/pci/ttpci/budget-core.c
-+++ b/drivers/media/pci/ttpci/budget-core.c
-@@ -369,20 +369,25 @@ static int budget_register(struct budget *budget)
- 	ret = dvbdemux->dmx.add_frontend(&dvbdemux->dmx, &budget->hw_frontend);
- 
- 	if (ret < 0)
--		return ret;
-+		goto err_release_dmx;
- 
- 	budget->mem_frontend.source = DMX_MEMORY_FE;
- 	ret = dvbdemux->dmx.add_frontend(&dvbdemux->dmx, &budget->mem_frontend);
- 	if (ret < 0)
--		return ret;
-+		goto err_release_dmx;
- 
- 	ret = dvbdemux->dmx.connect_frontend(&dvbdemux->dmx, &budget->hw_frontend);
- 	if (ret < 0)
--		return ret;
-+		goto err_release_dmx;
- 
- 	dvb_net_init(&budget->dvb_adapter, &budget->dvb_net, &dvbdemux->dmx);
- 
- 	return 0;
-+
-+err_release_dmx:
-+	dvb_dmxdev_release(&budget->dmxdev);
-+	dvb_dmx_release(&budget->demux);
-+	return ret;
- }
- 
- static void budget_unregister(struct budget *budget)
--- 
-2.25.1
+It might be nice if this requirement could be enforced (say in the USB 
+core), but doing so is impractical.  It would require every I/O request 
+to include some sort of cookie proving that the caller is authorized to 
+make the request.  That's not how the kernel works; it trusts drivers 
+to generally do the right thing without constant checking.
 
+Alan Stern
