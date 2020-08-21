@@ -7,54 +7,54 @@ X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B96BC433E3
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1674C433E4
 	for <linux-media@archiver.kernel.org>; Fri, 21 Aug 2020 10:38:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 26A0F20738
+	by mail.kernel.org (Postfix) with ESMTP id C19FF207DA
 	for <linux-media@archiver.kernel.org>; Fri, 21 Aug 2020 10:38:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="eyjzs6Dv"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="baUyyaPk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728203AbgHUKiS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1728745AbgHUKiS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Fri, 21 Aug 2020 06:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36482 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728745AbgHUKhU (ORCPT
+        with ESMTP id S1728691AbgHUKhQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 21 Aug 2020 06:37:20 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5A4C061343
-        for <linux-media@vger.kernel.org>; Fri, 21 Aug 2020 03:37:20 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id f5so689423plr.9
-        for <linux-media@vger.kernel.org>; Fri, 21 Aug 2020 03:37:20 -0700 (PDT)
+        Fri, 21 Aug 2020 06:37:16 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE654C06138B
+        for <linux-media@vger.kernel.org>; Fri, 21 Aug 2020 03:37:16 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id s15so804915pgc.8
+        for <linux-media@vger.kernel.org>; Fri, 21 Aug 2020 03:37:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=qeCw5SHhSURz002CCjWwXJ+voNEnpmlB74TZQPNY2mk=;
-        b=eyjzs6DvTt93/s/iw/vdrInZBoRwwczVMGIMjRohCUaR8glc+mZKV9T15v0aN6XOax
-         qUSmgxwnX3s2wnYAU6dhqvjCenKdVS+37U3Pa9cRqcSnE/vYQnSeX2vxANglqN8AHHXX
-         eEUShw4o7MMmh4+5UpI4BwEHPKqSCDDbNaBeo=
+        bh=NTmGXWmoAkqQ//i02Xxg3wsdKsf3MX10rBoHCy6DAbE=;
+        b=baUyyaPk4NuuofUuSsVJuHgmGDxxanAd0ZY79R+lMaJcZ9CfNOz6gM7k2a/r0LdAUL
+         O7FOXH/vRZBl6sFZEa0rbk4P/3LxT0sDb2Wwr/UrVdYmcyznnXe9Th62EW4EUnMRCPTc
+         7NyEY1qRj8kFjlNlIthQsFEwMk6uKrSSyZ2O4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=qeCw5SHhSURz002CCjWwXJ+voNEnpmlB74TZQPNY2mk=;
-        b=lAR9C5ooa/ESeoTaQOyDl90UYHHNYc+G9WYdNYjFOD6fI9lMtf26WAVY4m5wdOCIxW
-         Q6+DHMIS/NYrapwOR+8hY+pFLrYCDqPCQeYopPuyXuE3Z2aPv0assV1uwMtnTHNMp7a8
-         lu2PimuSSdfOT90LGTE2RMD4z3oO8d7jXNpxNvptXUg76v7rWkz0ep1SJCVpfcPx5SxZ
-         cZkWv+vDna+b7+3pXDsMbfXbuv8BuedQPRexAqRWMcCynPvBG1WegMThLAvC+KYxlFFR
-         wjA6rIAKQUdql2YXykgXkvBJE73Rp2kUkeZJhyNlomkKV5haAtQDJJPDK6IdPUZoAaPX
-         VPdQ==
-X-Gm-Message-State: AOAM533eMRaoOAZ1OlbNf/vWaLtOLbVm3GVk+SZ8NXi+mUfRCb753ohl
-        sB571OBNjR9l2hCpfqZWrEEhWQ==
-X-Google-Smtp-Source: ABdhPJxWsCfHREyNSan+olqL30atRwJo5/+vE1d3bcoj+3viNyXCtesXVTygLNadw20+sUboqGrdiA==
-X-Received: by 2002:a17:90a:a58d:: with SMTP id b13mr2000471pjq.55.1598006239562;
-        Fri, 21 Aug 2020 03:37:19 -0700 (PDT)
+        bh=NTmGXWmoAkqQ//i02Xxg3wsdKsf3MX10rBoHCy6DAbE=;
+        b=Izr+9iveIuj/DwkjNOR//jh93vpL0z1s9BkXoKPwGoVYOYmklSP0K6wurBRMFh21Cy
+         BxJF/LseM1m4z+MlK6Jry4b6AclUGFG78PqCFzLksFtTRpQbuv/7dXeIuzwRVGOFYy3i
+         mjphBkm3c7s1TghRGi7MOdlK0cbPbWjlBlFYhDl8lHQsNK+5HR20M+N4YZO2/um/5pFZ
+         Ta1r3U4RiTOqpaUStv45Tidi1dJXHZG8XGWDeZhM5wlvJvY48HQ+FqnImELWM+gRlid9
+         CwqE7YaX9N2YYRuUTheaxCT9hDg3SIcemIFLn2wNE/IuhpYr/hvqLV8709refJv+4QsJ
+         5YvA==
+X-Gm-Message-State: AOAM533XIv86xByQ1ysW5pRN3DdAatlxbf2BcUjmcieeOZ96lZEYCfDL
+        jzSS/3PyCQh6q8lNHI7t7RABGQ==
+X-Google-Smtp-Source: ABdhPJyF/baDtWFr/TfueZNpoHPnrddg19+ju6pSWd/HAlX12nToqpklR0u9IZ/HlwBZRtPLTiMw4Q==
+X-Received: by 2002:a63:5049:: with SMTP id q9mr1897800pgl.219.1598006236301;
+        Fri, 21 Aug 2020 03:37:16 -0700 (PDT)
 Received: from acourbot.tok.corp.google.com ([2401:fa00:8f:203:eeb1:d7ff:fe57:b7e5])
-        by smtp.gmail.com with ESMTPSA id y20sm2081525pfn.183.2020.08.21.03.37.16
+        by smtp.gmail.com with ESMTPSA id y20sm2081525pfn.183.2020.08.21.03.37.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Aug 2020 03:37:18 -0700 (PDT)
+        Fri, 21 Aug 2020 03:37:15 -0700 (PDT)
 From:   Alexandre Courbot <acourbot@chromium.org>
 To:     Tiffany Lin <tiffany.lin@mediatek.com>,
         Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
@@ -65,9 +65,9 @@ To:     Tiffany Lin <tiffany.lin@mediatek.com>,
 Cc:     linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Alexandre Courbot <acourbot@chromium.org>
-Subject: [PATCH v4 14/17] media: mtk-vcodec: venc: use platform data for ENUM_FRAMESIZES
-Date:   Fri, 21 Aug 2020 19:36:05 +0900
-Message-Id: <20200821103608.2310097-15-acourbot@chromium.org>
+Subject: [PATCH v4 13/17] media: mtk-vcodec: venc: set OUTPUT buffers field to V4L2_FIELD_NONE
+Date:   Fri, 21 Aug 2020 19:36:04 +0900
+Message-Id: <20200821103608.2310097-14-acourbot@chromium.org>
 X-Mailer: git-send-email 2.28.0.297.g1956fa8f8d-goog
 In-Reply-To: <20200821103608.2310097-1-acourbot@chromium.org>
 References: <20200821103608.2310097-1-acourbot@chromium.org>
@@ -78,70 +78,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-vidioc_enum_framesizes() assumes that all encoders support H.264 and VP8,
-which is not necessarily true and requires to duplicate information about
-the supported codecs which is already stored in the platform data.
-
-Fix this by referring to the platform data to find out whether a given
-format is supported. Since the supported sizes are all the same
-regardless of the format, we can then return a copy of a static value if
-the format is supported.
+A default value of 0 means V4L2_FIELD_ANY, which is not correct.
+Reported by v4l2-compliance.
 
 Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
+Acked-by: Tiffany Lin <tiffany.lin@mediatek.com>
 ---
- .../platform/mtk-vcodec/mtk_vcodec_enc.c      | 24 ++++++++-----------
- 1 file changed, 10 insertions(+), 14 deletions(-)
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
 diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
-index 1a981d842c19..f8d4fbe927f9 100644
+index f833aee4a06f..1a981d842c19 100644
 --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
 +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
-@@ -26,17 +26,9 @@
+@@ -893,8 +893,17 @@ static void vb2ops_venc_stop_streaming(struct vb2_queue *q)
+ 	ctx->state = MTK_STATE_FREE;
+ }
  
- static void mtk_venc_worker(struct work_struct *work);
- 
--static const struct mtk_codec_framesizes mtk_venc_framesizes[] = {
--	{
--		.fourcc	= V4L2_PIX_FMT_H264,
--		.stepwise = { MTK_VENC_MIN_W, MTK_VENC_MAX_W, 16,
--			      MTK_VENC_MIN_H, MTK_VENC_MAX_H, 16 },
--	},
--	{
--		.fourcc = V4L2_PIX_FMT_VP8,
--		.stepwise = { MTK_VENC_MIN_W, MTK_VENC_MAX_W, 16,
--			      MTK_VENC_MIN_H, MTK_VENC_MAX_H, 16 },
--	},
-+static const struct v4l2_frmsize_stepwise mtk_venc_framesizes = {
-+	MTK_VENC_MIN_W, MTK_VENC_MAX_W, 16,
-+	MTK_VENC_MIN_H, MTK_VENC_MAX_H, 16,
- };
- 
- #define NUM_SUPPORTED_FRAMESIZE ARRAY_SIZE(mtk_venc_framesizes)
-@@ -134,17 +126,21 @@ static int vidioc_enum_fmt(struct v4l2_fmtdesc *f,
- static int vidioc_enum_framesizes(struct file *file, void *fh,
- 				  struct v4l2_frmsizeenum *fsize)
- {
-+	const struct mtk_vcodec_enc_pdata *pdata =
-+		fh_to_ctx(fh)->dev->venc_pdata;
- 	int i = 0;
- 
- 	if (fsize->index != 0)
- 		return -EINVAL;
- 
--	for (i = 0; i < NUM_SUPPORTED_FRAMESIZE; ++i) {
--		if (fsize->pixel_format != mtk_venc_framesizes[i].fourcc)
-+	for (i = 0; i < pdata->num_capture_formats; ++i) {
-+		const struct mtk_video_fmt *fmt = &pdata->capture_formats[i];
++static int vb2ops_venc_buf_out_validate(struct vb2_buffer *vb)
++{
++	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
 +
-+		if (fsize->pixel_format != fmt->fourcc)
- 			continue;
- 
- 		fsize->type = V4L2_FRMSIZE_TYPE_STEPWISE;
--		fsize->stepwise = mtk_venc_framesizes[i].stepwise;
-+		fsize->stepwise = mtk_venc_framesizes;
- 		return 0;
- 	}
- 
++	vbuf->field = V4L2_FIELD_NONE;
++	return 0;
++}
++
+ static const struct vb2_ops mtk_venc_vb2_ops = {
+ 	.queue_setup		= vb2ops_venc_queue_setup,
++	.buf_out_validate	= vb2ops_venc_buf_out_validate,
+ 	.buf_prepare		= vb2ops_venc_buf_prepare,
+ 	.buf_queue		= vb2ops_venc_buf_queue,
+ 	.wait_prepare		= vb2_ops_wait_prepare,
 -- 
 2.28.0.297.g1956fa8f8d-goog
 
