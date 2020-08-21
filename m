@@ -2,97 +2,142 @@ Return-Path: <SRS0=QJlE=B7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 086C8C433DF
-	for <linux-media@archiver.kernel.org>; Fri, 21 Aug 2020 17:15:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C95C4C433DF
+	for <linux-media@archiver.kernel.org>; Fri, 21 Aug 2020 17:19:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DE36620748
-	for <linux-media@archiver.kernel.org>; Fri, 21 Aug 2020 17:15:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1598030145;
-	bh=kUUMVdgT45uJdGw+zhIXwUip0kwyWnX0AKsICuuCKk4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=ZGu4GcllEyljMWnX0Ao5lEnN18C9i/NdjitRrsuLQtnwOOz/nodyGT/R9K2ErWpg2
-	 0r7v8tZMBHpnrKr5Zi8SCEjmtml0pHyY9TdBp0dDrPfkQyDTCTuoWey+/OgYc3LYSI
-	 Xrq8mZlTJes2b5G8RaXkJhsIXQf5TyAT6Gj2jOUM=
+	by mail.kernel.org (Postfix) with ESMTP id AC9C720748
+	for <linux-media@archiver.kernel.org>; Fri, 21 Aug 2020 17:19:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728858AbgHURPJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 21 Aug 2020 13:15:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50114 "EHLO mail.kernel.org"
+        id S1728535AbgHURTH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 21 Aug 2020 13:19:07 -0400
+Received: from mga02.intel.com ([134.134.136.20]:38444 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728107AbgHUQQk (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 21 Aug 2020 12:16:40 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 63BDF22B4D;
-        Fri, 21 Aug 2020 16:16:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598026600;
-        bh=kUUMVdgT45uJdGw+zhIXwUip0kwyWnX0AKsICuuCKk4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UapiBpLZFQHbJ3Y4zcGRc1xFQfeG+s/RUQUo2gcr+e+hWS5LzEg4bOcDPRIkfEnvm
-         lspOlB3blV/lrZr2QHUZ5Lv7rmL4r17I+9MSiZJj2Q0PEqV+fyIUkUgu389BDZXGgr
-         FZ2iBlHsUKwydfzricSzKtAgkUNJTihv/8QIZN50=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 43/61] cec-api: prevent leaking memory through hole in structure
-Date:   Fri, 21 Aug 2020 12:15:27 -0400
-Message-Id: <20200821161545.347622-43-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200821161545.347622-1-sashal@kernel.org>
-References: <20200821161545.347622-1-sashal@kernel.org>
+        id S1728172AbgHURTF (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 21 Aug 2020 13:19:05 -0400
+IronPort-SDR: j1NN5OpdfhFdC0IMPxMK4lV1SxekGilJZOQRz3N1odZ9xSHKiT0piYp06M6YBbZG0HY7zqQaQM
+ 9x6eSBtU3VDg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9720"; a="143370991"
+X-IronPort-AV: E=Sophos;i="5.76,338,1592895600"; 
+   d="scan'208";a="143370991"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2020 10:19:03 -0700
+IronPort-SDR: EhX/O0WDR2aLJPN7Mql9QPZY7hNCE6nW6OL12PkmJasXANnKWW7Z4NddRgXPGGDkq2y+91nT2O
+ fNKvWIVwElRA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,338,1592895600"; 
+   d="scan'208";a="327818640"
+Received: from lkp-server01.sh.intel.com (HELO 91ed66e1ca04) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 21 Aug 2020 10:19:00 -0700
+Received: from kbuild by 91ed66e1ca04 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1k9Agu-0001GO-6T; Fri, 21 Aug 2020 17:19:00 +0000
+Date:   Sat, 22 Aug 2020 01:18:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?iso-8859-1?Q?K=E9vin_L'h=F4pital?= <kevin.lhopital@bootlin.com>,
+        linux-media@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, mchehab@kernel.org, robh+dt@kernel.org,
+        mark.rutland@arm.com, mripard@kernel.org, wens@csie.org,
+        yong.deng@magewell.com, p.zabel@pengutronix.de,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/7] media: i2c: Add support for the OV8865 image sensor
+Message-ID: <202008220119.2HOZCJ4O%lkp@intel.com>
+References: <20200821145935.20346-4-kevin.lhopital@bootlin.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200821145935.20346-4-kevin.lhopital@bootlin.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Hi "Kévin,
 
-[ Upstream commit 6c42227c3467549ddc65efe99c869021d2f4a570 ]
+Thank you for the patch! Yet something to improve:
 
-Fix this smatch warning:
+[auto build test ERROR on linuxtv-media/master]
+[also build test ERROR on sunxi/sunxi/for-next robh/for-next v5.9-rc1 next-20200821]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-drivers/media/cec/core/cec-api.c:156 cec_adap_g_log_addrs() warn: check that 'log_addrs' doesn't leak information (struct has a hole after
-'features')
+url:    https://github.com/0day-ci/linux/commits/K-vin-L-h-pital/Support-of-MIPI-CSI-2-for-A83T-and-OV8865-camera/20200821-230356
+base:   git://linuxtv.org/media_tree.git master
+config: xtensa-allyesconfig
+compiler: xtensa-linux-gcc (GCC) 9.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross ARCH=xtensa  allyesconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross ARCH=xtensa 
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/media/i2c/Kconfig:741:error: recursive dependency detected!
+   drivers/media/i2c/Kconfig:741: symbol VIDEO_IMX214 depends on V4L2_FWNODE
+   drivers/media/v4l2-core/Kconfig:71: symbol V4L2_FWNODE is selected by VIDEO_OV8865
+   drivers/media/i2c/Kconfig:1036: symbol VIDEO_OV8865 depends on VIDEO_V4L2_SUBDEV_API
+   drivers/media/v4l2-core/Kconfig:19: symbol VIDEO_V4L2_SUBDEV_API depends on MEDIA_CONTROLLER
+   drivers/media/Kconfig:168: symbol MEDIA_CONTROLLER is selected by VIDEO_IMX214
+   For a resolution refer to Documentation/kbuild/kconfig-language.rst
+   subsection "Kconfig recursive dependency limitations"
+
+# https://github.com/0day-ci/linux/commit/aef022e7b2b7fca2cecab96bcbd6bca991163ab4
+git remote add linux-review https://github.com/0day-ci/linux
+git fetch --no-tags linux-review K-vin-L-h-pital/Support-of-MIPI-CSI-2-for-A83T-and-OV8865-camera/20200821-230356
+git checkout aef022e7b2b7fca2cecab96bcbd6bca991163ab4
+vim +741 drivers/media/i2c/Kconfig
+
+32a363d0b0b142f Mauro Carvalho Chehab 2020-03-25  718  
+5c57ae64e8bccc6 Mauro Carvalho Chehab 2020-04-15  719  menu "Camera sensor devices"
+5c57ae64e8bccc6 Mauro Carvalho Chehab 2020-04-15  720  	visible if MEDIA_CAMERA_SUPPORT
+f48fd1514212b5c Mauro Carvalho Chehab 2020-03-25  721  
+f48fd1514212b5c Mauro Carvalho Chehab 2020-03-25  722  config VIDEO_APTINA_PLL
+f48fd1514212b5c Mauro Carvalho Chehab 2020-03-25  723  	tristate
+f48fd1514212b5c Mauro Carvalho Chehab 2020-03-25  724  
+f48fd1514212b5c Mauro Carvalho Chehab 2020-03-25  725  config VIDEO_SMIAPP_PLL
+f48fd1514212b5c Mauro Carvalho Chehab 2020-03-25  726  	tristate
+f48fd1514212b5c Mauro Carvalho Chehab 2020-03-25  727  
+e62138403a841e4 Shawn Tu              2019-11-01  728  config VIDEO_HI556
+e62138403a841e4 Shawn Tu              2019-11-01  729  	tristate "Hynix Hi-556 sensor support"
+32a363d0b0b142f Mauro Carvalho Chehab 2020-03-25  730  	depends on I2C && VIDEO_V4L2
+32a363d0b0b142f Mauro Carvalho Chehab 2020-03-25  731  	select MEDIA_CONTROLLER
+32a363d0b0b142f Mauro Carvalho Chehab 2020-03-25  732  	select VIDEO_V4L2_SUBDEV_API
+e62138403a841e4 Shawn Tu              2019-11-01  733  	select V4L2_FWNODE
+e62138403a841e4 Shawn Tu              2019-11-01  734  	help
+e62138403a841e4 Shawn Tu              2019-11-01  735  	  This is a Video4Linux2 sensor driver for the Hynix
+e62138403a841e4 Shawn Tu              2019-11-01  736  	  Hi-556 camera.
+e62138403a841e4 Shawn Tu              2019-11-01  737  
+e62138403a841e4 Shawn Tu              2019-11-01  738  	  To compile this driver as a module, choose M here: the
+e62138403a841e4 Shawn Tu              2019-11-01  739  	  module will be called hi556.
+e62138403a841e4 Shawn Tu              2019-11-01  740  
+4361905962417ef Ricardo Ribalda       2018-10-05 @741  config VIDEO_IMX214
+4361905962417ef Ricardo Ribalda       2018-10-05  742  	tristate "Sony IMX214 sensor support"
+32a363d0b0b142f Mauro Carvalho Chehab 2020-03-25  743  	depends on GPIOLIB && I2C && VIDEO_V4L2
+4361905962417ef Ricardo Ribalda       2018-10-05  744  	depends on V4L2_FWNODE
+32a363d0b0b142f Mauro Carvalho Chehab 2020-03-25  745  	select MEDIA_CONTROLLER
+32a363d0b0b142f Mauro Carvalho Chehab 2020-03-25  746  	select VIDEO_V4L2_SUBDEV_API
+6de18fa3bd1dd51 Ian Kumlien           2020-02-26  747  	select REGMAP_I2C
+4361905962417ef Ricardo Ribalda       2018-10-05  748  	help
+4361905962417ef Ricardo Ribalda       2018-10-05  749  	  This is a Video4Linux2 sensor driver for the Sony
+4361905962417ef Ricardo Ribalda       2018-10-05  750  	  IMX214 camera.
+4361905962417ef Ricardo Ribalda       2018-10-05  751  
+4361905962417ef Ricardo Ribalda       2018-10-05  752  	  To compile this driver as a module, choose M here: the
+4361905962417ef Ricardo Ribalda       2018-10-05  753  	  module will be called imx214.
+4361905962417ef Ricardo Ribalda       2018-10-05  754  
+
 ---
- drivers/media/cec/cec-api.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/media/cec/cec-api.c b/drivers/media/cec/cec-api.c
-index 17d1cb2e5f976..f922a2196b2b7 100644
---- a/drivers/media/cec/cec-api.c
-+++ b/drivers/media/cec/cec-api.c
-@@ -147,7 +147,13 @@ static long cec_adap_g_log_addrs(struct cec_adapter *adap,
- 	struct cec_log_addrs log_addrs;
- 
- 	mutex_lock(&adap->lock);
--	log_addrs = adap->log_addrs;
-+	/*
-+	 * We use memcpy here instead of assignment since there is a
-+	 * hole at the end of struct cec_log_addrs that an assignment
-+	 * might ignore. So when we do copy_to_user() we could leak
-+	 * one byte of memory.
-+	 */
-+	memcpy(&log_addrs, &adap->log_addrs, sizeof(log_addrs));
- 	if (!adap->is_configured)
- 		memset(log_addrs.log_addr, CEC_LOG_ADDR_INVALID,
- 		       sizeof(log_addrs.log_addr));
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
