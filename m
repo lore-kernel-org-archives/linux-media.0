@@ -2,145 +2,105 @@ Return-Path: <SRS0=QJlE=B7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E696C433E1
-	for <linux-media@archiver.kernel.org>; Fri, 21 Aug 2020 16:42:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8B96C433DF
+	for <linux-media@archiver.kernel.org>; Fri, 21 Aug 2020 16:44:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 321BF2072D
-	for <linux-media@archiver.kernel.org>; Fri, 21 Aug 2020 16:42:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BAAB22072D
+	for <linux-media@archiver.kernel.org>; Fri, 21 Aug 2020 16:44:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1598028279;
+	bh=cUGyqRoLKLvxQhBGrRQhHCN2eGOlJljyoYCfi1tGecU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=clMzcg2CZxlPAm7lIKLfat9U1jus47dNtUc7Le7UbhqEQhR8V1tqGJBx2whKRY8lh
+	 8CahWhr5ntcg66NSgw2e47PV3iJXYJfGSCE6Dgw0COCHRTZZDEWBGSLYOIPo5914AL
+	 HnLfhjOK1vhKz1Ewv7rB6KQwbWBP2wIzIbpjxz+Y=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728451AbgHUQm3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 21 Aug 2020 12:42:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36752 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728220AbgHUQmY (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 21 Aug 2020 12:42:24 -0400
-Received: from hillosipuli.retiisi.org.uk (hillosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::81:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2F7C061573
-        for <linux-media@vger.kernel.org>; Fri, 21 Aug 2020 09:42:23 -0700 (PDT)
-Received: from valkosipuli.localdomain (valkosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::80:2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1728397AbgHUQoi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 21 Aug 2020 12:44:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48870 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728382AbgHUQUm (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 21 Aug 2020 12:20:42 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id D962B634C87
-        for <linux-media@vger.kernel.org>; Fri, 21 Aug 2020 19:41:03 +0300 (EEST)
-Received: from sailus by valkosipuli.localdomain with local (Exim 4.92)
-        (envelope-from <sakari.ailus@retiisi.org.uk>)
-        id 1k9A6B-00030D-N9
-        for linux-media@vger.kernel.org; Fri, 21 Aug 2020 19:41:03 +0300
-Date:   Fri, 21 Aug 2020 19:41:03 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     linux-media@vger.kernel.org
-Subject: [GIT PULL v2 FOR 5.10] V4L2 fixes, cleanups and documentation
- improvements
-Message-ID: <20200821164103.GN7145@valkosipuli.retiisi.org.uk>
+        by mail.kernel.org (Postfix) with ESMTPSA id 449A1208DB;
+        Fri, 21 Aug 2020 16:19:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598026784;
+        bh=cUGyqRoLKLvxQhBGrRQhHCN2eGOlJljyoYCfi1tGecU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=kI+uK8+KV8nr2/z1EGQtlhO+XYgfl+rrTZmneNup7CvL/yVV4u7C2TyfzG9xEemH5
+         rAVPLOTiVT8Ye3N0H56/ECaMXs/eoCjkRs6uz/VLUszIg6cp7xa5r+9sexrtzpDI2D
+         kbI8HBuJ7GVoMzGoQerD4yerH+xqBOzJVDGfheR8=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Jia-Ju Bai <baijiaju@tsinghua.edu.cn>, Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.9 04/26] media: pci: ttpci: av7110: fix possible buffer overflow caused by bad DMA value in debiirq()
+Date:   Fri, 21 Aug 2020 12:19:15 -0400
+Message-Id: <20200821161938.349246-4-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200821161938.349246-1-sashal@kernel.org>
+References: <20200821161938.349246-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+From: Jia-Ju Bai <baijiaju@tsinghua.edu.cn>
 
-Here's a pile of patches I dug from the depths of Patchwork. It's mostly
-fixes but also a few cleanups as well as guide on writing camera sensor
-drivers.
+[ Upstream commit 6499a0db9b0f1e903d52f8244eacc1d4be00eea2 ]
 
-Since v1, I've done more tests and added a few more patches plus fixed a
-commit ID in a Fixes: tag.
+The value av7110->debi_virt is stored in DMA memory, and it is assigned
+to data, and thus data[0] can be modified at any time by malicious
+hardware. In this case, "if (data[0] < 2)" can be passed, but then
+data[0] can be changed into a large number, which may cause buffer
+overflow when the code "av7110->ci_slot[data[0]]" is used.
 
-Please pull.
+To fix this possible bug, data[0] is assigned to a local variable, which
+replaces the use of data[0].
 
+Signed-off-by: Jia-Ju Bai <baijiaju@tsinghua.edu.cn>
+Signed-off-by: Sean Young <sean@mess.org>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/media/pci/ttpci/av7110.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-The following changes since commit 9a538b83612c8b5848bf840c2ddcd86dda1c8c76:
-
-  media: venus: core: Add support for opp tables/perf voting (2020-08-18 15:55:56 +0200)
-
-are available in the Git repository at:
-
-  git://linuxtv.org/sailus/media_tree.git tags/for-5.10-1.1-signed
-
-for you to fetch changes up to 10dc3647f36f54fdd39fa7c5143bd30a5969652d:
-
-  media: ov5675: correct the maximum exposure value (2020-08-21 11:00:44 +0300)
-
-----------------------------------------------------------------
-V4L2 camera patches for 5.9
-
-----------------------------------------------------------------
-Alexander A. Klimov (1):
-      media: omap: Replace HTTP links with HTTPS ones
-
-Bingbu Cao (3):
-      media: i2c: ov2740: get OTP data ready before nvmem registration
-      MAINTAINERS: Fix email typo and correct name of Tianshu
-      media: ov5675: correct the maximum exposure value
-
-Colin Ian King (1):
-      media: i2c: fix error check on max9286_read call
-
-Hans Verkuil (1):
-      imx274: fix frame interval handling
-
-Jacopo Mondi (4):
-      dt-bindings: media: ov5647: Convert to json-schema
-      dt-bindings: media: ov5647: Document pwdn-gpios
-      dt-bindings: media: ov5647: Document clock-noncontinuous
-      media: MAINTAINERS: ov5647: Replace maintainer
-
-Jordan Hand (1):
-      media: ipu3.rst: Format media-ctl and yavta commands as code blocks
-
-Kieran Bingham (1):
-      MAINTAINERS: Fix sort order for RDACM20
-
-Paul Kocialkowski (1):
-      media: ov5640: Correct Bit Div register in clock tree diagram
-
-Raag Jadav (1):
-      media: ov7740: use SCCB regmap
-
-Rahul Gottipati (1):
-      media: intel-ipu3: Fix code style issue
-
-Sakari Ailus (1):
-      Documentation: media: Document how to write camera sensor drivers
-
-Tom Rix (1):
-      media: m5mols: Check function pointer in m5mols_sensor_power
-
- Documentation/admin-guide/media/ipu3.rst           | 104 ++++++++--------
- .../devicetree/bindings/media/i2c/ov5647.txt       |  35 ------
- .../devicetree/bindings/media/i2c/ov5647.yaml      |  88 ++++++++++++++
- Documentation/driver-api/media/camera-sensor.rst   | 134 +++++++++++++++++++++
- Documentation/driver-api/media/csi2.rst            |   2 +
- Documentation/driver-api/media/index.rst           |   1 +
- MAINTAINERS                                        |  12 +-
- drivers/media/i2c/Kconfig                          |   2 +-
- drivers/media/i2c/imx274.c                         |   8 +-
- drivers/media/i2c/m5mols/m5mols_core.c             |   3 +-
- drivers/media/i2c/max9286.c                        |   3 +-
- drivers/media/i2c/ov2740.c                         |  24 ++--
- drivers/media/i2c/ov5640.c                         |   2 +-
- drivers/media/i2c/ov5675.c                         |  15 ++-
- drivers/media/i2c/ov7740.c                         |  10 +-
- drivers/media/platform/omap3isp/isp.c              |   2 +-
- drivers/staging/media/ipu3/include/intel-ipu3.h    |  14 +--
- drivers/staging/media/omap4iss/iss.c               |   2 +-
- 18 files changed, 330 insertions(+), 131 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/media/i2c/ov5647.txt
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ov5647.yaml
- create mode 100644 Documentation/driver-api/media/camera-sensor.rst
-
+diff --git a/drivers/media/pci/ttpci/av7110.c b/drivers/media/pci/ttpci/av7110.c
+index 382caf200ba16..c313f51688f44 100644
+--- a/drivers/media/pci/ttpci/av7110.c
++++ b/drivers/media/pci/ttpci/av7110.c
+@@ -426,14 +426,15 @@ static void debiirq(unsigned long cookie)
+ 	case DATA_CI_GET:
+ 	{
+ 		u8 *data = av7110->debi_virt;
++		u8 data_0 = data[0];
+ 
+-		if ((data[0] < 2) && data[2] == 0xff) {
++		if (data_0 < 2 && data[2] == 0xff) {
+ 			int flags = 0;
+ 			if (data[5] > 0)
+ 				flags |= CA_CI_MODULE_PRESENT;
+ 			if (data[5] > 5)
+ 				flags |= CA_CI_MODULE_READY;
+-			av7110->ci_slot[data[0]].flags = flags;
++			av7110->ci_slot[data_0].flags = flags;
+ 		} else
+ 			ci_get_data(&av7110->ci_rbuffer,
+ 				    av7110->debi_virt,
 -- 
-Kind regards,
+2.25.1
 
-Sakari Ailus
