@@ -6,27 +6,34 @@ X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5039FC433DF
-	for <linux-media@archiver.kernel.org>; Fri, 21 Aug 2020 15:56:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CAADC433E1
+	for <linux-media@archiver.kernel.org>; Fri, 21 Aug 2020 16:09:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 30CA222B43
-	for <linux-media@archiver.kernel.org>; Fri, 21 Aug 2020 15:56:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4235A207BB
+	for <linux-media@archiver.kernel.org>; Fri, 21 Aug 2020 16:09:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727845AbgHUP46 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 21 Aug 2020 11:56:58 -0400
-Received: from asavdk4.altibox.net ([109.247.116.15]:39316 "EHLO
-        asavdk4.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726542AbgHUP44 (ORCPT
+        id S1726731AbgHUQJg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 21 Aug 2020 12:09:36 -0400
+Received: from smtprelay0137.hostedemail.com ([216.40.44.137]:38498 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725828AbgHUQJf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 21 Aug 2020 11:56:56 -0400
-Received: from ravnborg.org (unknown [188.228.123.71])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by asavdk4.altibox.net (Postfix) with ESMTPS id AC78180516;
-        Fri, 21 Aug 2020 17:56:51 +0200 (CEST)
-Date:   Fri, 21 Aug 2020 17:56:50 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+        Fri, 21 Aug 2020 12:09:35 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay01.hostedemail.com (Postfix) with ESMTP id 80432100E7B42;
+        Fri, 21 Aug 2020 16:09:33 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-HE-Tag: frogs77_130d49d2703a
+X-Filterd-Recvd-Size: 2436
+Received: from XPS-9350.home (unknown [47.151.133.149])
+        (Authenticated sender: joe@perches.com)
+        by omf08.hostedemail.com (Postfix) with ESMTPA;
+        Fri, 21 Aug 2020 16:09:27 +0000 (UTC)
+Message-ID: <d9ea16e803e219894416894a5cbed0fac00d891e.camel@perches.com>
+Subject: Re: [PATCH 00/49] DRM driver for Hikey 970
+From:   Joe Perches <joe@perches.com>
+To:     Sam Ravnborg <sam@ravnborg.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Neil Armstrong <narmstrong@baylibre.com>,
         Xinliang Liu <xinliang.liu@linaro.org>,
@@ -55,45 +62,23 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org, Liuyao An <anliuyao@huawei.com>,
         Rongrong Zou <zourongrong@gmail.com>, bpf@vger.kernel.org,
         "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 00/49] DRM driver for Hikey 970
-Message-ID: <20200821155650.GB300361@ravnborg.org>
+Date:   Fri, 21 Aug 2020 09:09:25 -0700
+In-Reply-To: <20200819204800.GA110118@ravnborg.org>
 References: <cover.1597833138.git.mchehab+huawei@kernel.org>
- <20200819152120.GA106437@ravnborg.org>
- <20200819174027.70b39ee9@coco.lan>
- <20200819173558.GA3733@ravnborg.org>
- <20200821164158.22777f95@coco.lan>
+         <20200819152120.GA106437@ravnborg.org> <20200819174027.70b39ee9@coco.lan>
+         <20200819204800.GA110118@ravnborg.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.36.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200821164158.22777f95@coco.lan>
-X-CMAE-Score: 0
-X-CMAE-Analysis: v=2.3 cv=aP3eV41m c=1 sm=1 tr=0
-        a=S6zTFyMACwkrwXSdXUNehg==:117 a=S6zTFyMACwkrwXSdXUNehg==:17
-        a=kj9zAlcOel0A:10 a=7gkXJVJtAAAA:8 a=7oA8CBdsI_oY7ygzQxoA:9
-        a=CjuIK1q_8ugA:10 a=E9Po1WZjFZOl8hwRPBS3:22
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro.
+On Wed, 2020-08-19 at 22:48 +0200, Sam Ravnborg wrote:
+> And sometimes checkpatch is just wrong.
 
-On Fri, Aug 21, 2020 at 04:41:58PM +0200, Mauro Carvalho Chehab wrote:
-> Another quick question:
-> 
-> Em Wed, 19 Aug 2020 19:35:58 +0200
-> Sam Ravnborg <sam@ravnborg.org> escreveu:
-> 
-> > > +#define DSS_REDUCE(x)	((x) > 0 ? ((x) - 1) : (x))  
-> > Use generic macros for this?
-> 
-> Do you know a generic macro similar to this? Or do you mean adding
-> it to include/kernel.h?
+I'm interested in examples for when checkpatch is "just wrong".
 
-It looked like something there should be a macro for.
-But I do not know one.
 
-And no, do not try to go the kernel.h route on this.
-At least not until you see more than one user.
-
-	Sam
