@@ -7,45 +7,45 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A490CC433E1
-	for <linux-media@archiver.kernel.org>; Fri, 21 Aug 2020 16:48:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D158C433DF
+	for <linux-media@archiver.kernel.org>; Fri, 21 Aug 2020 16:51:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8278820732
-	for <linux-media@archiver.kernel.org>; Fri, 21 Aug 2020 16:48:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5442320702
+	for <linux-media@archiver.kernel.org>; Fri, 21 Aug 2020 16:51:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1598028503;
-	bh=Gtz/RmK+vN597YxQslboCRgSw2E0RPm7+U08Qg2SdzE=;
+	s=default; t=1598028717;
+	bh=VaX1+Ny6L+YXxWnugwcXEPKB6ewm/BTnTiDqgAWIiVQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=2X3UPf9HUciqxZr/ONuVE6TI9YBPUj7MxaijJLJkG6jBlss66BsVhSGED9AO5qZzc
-	 SAZvMC2PzQwV0WK6Bkr3vVbOjG1oEJDon95EjXBEPKHwWVPHTNLPvptn2uo8VdZhev
-	 2BDDyFqBDVxaLo9ETf1hFbnEq2LacW6e/dx4Rp24=
+	b=JjyXeapX+bErBrDpSdUNKBAclV2vIXTKIJvhqEcIaOz9U17tkFhQ01A9uB6fo+atj
+	 TQS71IsgjT8bgsAz4UEuuZ+udSefasUK02mPLdjab8xksY731Dk0qGmjOEbtHWyQHt
+	 uxMdINNdYI3S/LV3/V7J2PhyowU1TFmFsdayk2Cg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728592AbgHUQrw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 21 Aug 2020 12:47:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51618 "EHLO mail.kernel.org"
+        id S1728687AbgHUQvz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 21 Aug 2020 12:51:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49728 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727792AbgHUQUU (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 21 Aug 2020 12:20:20 -0400
+        id S1728348AbgHUQUC (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 21 Aug 2020 12:20:02 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3D2FE22CF7;
-        Fri, 21 Aug 2020 16:19:26 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DF53D22B49;
+        Fri, 21 Aug 2020 16:19:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598026766;
-        bh=Gtz/RmK+vN597YxQslboCRgSw2E0RPm7+U08Qg2SdzE=;
+        s=default; t=1598026745;
+        bh=VaX1+Ny6L+YXxWnugwcXEPKB6ewm/BTnTiDqgAWIiVQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LucAGsD7Re55woyM0BeVXmvE8kDGSrlEMl51T/gnWryMAjba21uDf5g13OlNAAuvL
-         G9kTHpn7Lmo2wtFWChzSIsiuVKpd3baFpocDUsZXaDltjmWEtyGTv15ibMu0bevxTo
-         2Sg25vIcAAlb79p09nSBQJrQfafY7VOa+0aq1NWg=
+        b=dmtFTa3w6WBdGA9bLYwogKDAiJDa6rm13XFfKQyNdgYBPKlm4L0ttT5/EfAAIIGz9
+         SYfyL/wGO18MIk6QtN4AKqymuirVqfQj84tgLjN5CBNhTXD3QrCBH/zz2U3zHCKoO4
+         Xbx164WJ5DoQqnCpPeW6FrEQyz+lfSnP0kuggYrk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Jia-Ju Bai <baijiaju@tsinghua.edu.cn>, Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 22/30] cec-api: prevent leaking memory through hole in structure
-Date:   Fri, 21 Aug 2020 12:18:49 -0400
-Message-Id: <20200821161857.348955-22-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 06/30] media: pci: ttpci: av7110: fix possible buffer overflow caused by bad DMA value in debiirq()
+Date:   Fri, 21 Aug 2020 12:18:33 -0400
+Message-Id: <20200821161857.348955-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200821161857.348955-1-sashal@kernel.org>
 References: <20200821161857.348955-1-sashal@kernel.org>
@@ -58,41 +58,49 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+From: Jia-Ju Bai <baijiaju@tsinghua.edu.cn>
 
-[ Upstream commit 6c42227c3467549ddc65efe99c869021d2f4a570 ]
+[ Upstream commit 6499a0db9b0f1e903d52f8244eacc1d4be00eea2 ]
 
-Fix this smatch warning:
+The value av7110->debi_virt is stored in DMA memory, and it is assigned
+to data, and thus data[0] can be modified at any time by malicious
+hardware. In this case, "if (data[0] < 2)" can be passed, but then
+data[0] can be changed into a large number, which may cause buffer
+overflow when the code "av7110->ci_slot[data[0]]" is used.
 
-drivers/media/cec/core/cec-api.c:156 cec_adap_g_log_addrs() warn: check that 'log_addrs' doesn't leak information (struct has a hole after
-'features')
+To fix this possible bug, data[0] is assigned to a local variable, which
+replaces the use of data[0].
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Jia-Ju Bai <baijiaju@tsinghua.edu.cn>
+Signed-off-by: Sean Young <sean@mess.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/cec/cec-api.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/media/pci/ttpci/av7110.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/cec/cec-api.c b/drivers/media/cec/cec-api.c
-index 21a5f45e0259e..66ef06f4670c8 100644
---- a/drivers/media/cec/cec-api.c
-+++ b/drivers/media/cec/cec-api.c
-@@ -159,7 +159,13 @@ static long cec_adap_g_log_addrs(struct cec_adapter *adap,
- 	struct cec_log_addrs log_addrs;
+diff --git a/drivers/media/pci/ttpci/av7110.c b/drivers/media/pci/ttpci/av7110.c
+index f46947d8adf8f..fcc053d95ae49 100644
+--- a/drivers/media/pci/ttpci/av7110.c
++++ b/drivers/media/pci/ttpci/av7110.c
+@@ -423,14 +423,15 @@ static void debiirq(unsigned long cookie)
+ 	case DATA_CI_GET:
+ 	{
+ 		u8 *data = av7110->debi_virt;
++		u8 data_0 = data[0];
  
- 	mutex_lock(&adap->lock);
--	log_addrs = adap->log_addrs;
-+	/*
-+	 * We use memcpy here instead of assignment since there is a
-+	 * hole at the end of struct cec_log_addrs that an assignment
-+	 * might ignore. So when we do copy_to_user() we could leak
-+	 * one byte of memory.
-+	 */
-+	memcpy(&log_addrs, &adap->log_addrs, sizeof(log_addrs));
- 	if (!adap->is_configured)
- 		memset(log_addrs.log_addr, CEC_LOG_ADDR_INVALID,
- 		       sizeof(log_addrs.log_addr));
+-		if ((data[0] < 2) && data[2] == 0xff) {
++		if (data_0 < 2 && data[2] == 0xff) {
+ 			int flags = 0;
+ 			if (data[5] > 0)
+ 				flags |= CA_CI_MODULE_PRESENT;
+ 			if (data[5] > 5)
+ 				flags |= CA_CI_MODULE_READY;
+-			av7110->ci_slot[data[0]].flags = flags;
++			av7110->ci_slot[data_0].flags = flags;
+ 		} else
+ 			ci_get_data(&av7110->ci_rbuffer,
+ 				    av7110->debi_virt,
 -- 
 2.25.1
 
