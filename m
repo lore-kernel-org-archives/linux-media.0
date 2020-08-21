@@ -4,26 +4,26 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 967E3C433E3
-	for <linux-media@archiver.kernel.org>; Fri, 21 Aug 2020 15:00:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F5C2C433DF
+	for <linux-media@archiver.kernel.org>; Fri, 21 Aug 2020 15:01:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 768CF20FC3
-	for <linux-media@archiver.kernel.org>; Fri, 21 Aug 2020 15:00:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 780D7207C3
+	for <linux-media@archiver.kernel.org>; Fri, 21 Aug 2020 15:01:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727979AbgHUPAh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 21 Aug 2020 11:00:37 -0400
-Received: from relay11.mail.gandi.net ([217.70.178.231]:38959 "EHLO
+        id S1726828AbgHUPAn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 21 Aug 2020 11:00:43 -0400
+Received: from relay11.mail.gandi.net ([217.70.178.231]:56173 "EHLO
         relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725828AbgHUPAa (ORCPT
+        with ESMTP id S1727955AbgHUPAf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 21 Aug 2020 11:00:30 -0400
+        Fri, 21 Aug 2020 11:00:35 -0400
 Received: from lhopital-XPS-13-9360.home (lfbn-tou-1-1372-bdcst.w90-89.abo.wanadoo.fr [90.89.180.255])
         (Authenticated sender: kevin.lhopital@bootlin.com)
-        by relay11.mail.gandi.net (Postfix) with ESMTPA id 58E4F100013;
-        Fri, 21 Aug 2020 15:00:26 +0000 (UTC)
+        by relay11.mail.gandi.net (Postfix) with ESMTPA id 7D666100006;
+        Fri, 21 Aug 2020 15:00:31 +0000 (UTC)
 From:   =?UTF-8?q?K=C3=A9vin=20L=27h=C3=B4pital?= 
         <kevin.lhopital@bootlin.com>
 To:     linux-media@vger.kernel.org
@@ -34,9 +34,9 @@ Cc:     mchehab@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
         paul.kocialkowski@bootlin.com, thomas.petazzoni@bootlin.com,
         =?UTF-8?q?K=C3=A9vin=20L=27h=C3=B4pital?= 
         <kevin.lhopital@bootlin.com>
-Subject: [PATCH 2/7] dt-bindings: media: i2c: Add documentation for ov8865
-Date:   Fri, 21 Aug 2020 16:59:30 +0200
-Message-Id: <20200821145935.20346-3-kevin.lhopital@bootlin.com>
+Subject: [PATCH 4/7] media: sunxi: sun6i-csi: Move the sun6i_csi_dev structure to the common header
+Date:   Fri, 21 Aug 2020 16:59:32 +0200
+Message-Id: <20200821145935.20346-5-kevin.lhopital@bootlin.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200821145935.20346-1-kevin.lhopital@bootlin.com>
 References: <20200821145935.20346-1-kevin.lhopital@bootlin.com>
@@ -48,71 +48,61 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a documentation for the sensor ov8865 from Omnivision.
+Access to the sun6i_csi_dev structure is needed to add the
+MIPI CSI2 support.
 
 Signed-off-by: Kévin L'hôpital <kevin.lhopital@bootlin.com>
 ---
- .../devicetree/bindings/media/i2c/ov8865.txt  | 51 +++++++++++++++++++
- 1 file changed, 51 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ov8865.txt
+ drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c | 12 ------------
+ drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h | 12 ++++++++++++
+ 2 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/ov8865.txt b/Documentation/devicetree/bindings/media/i2c/ov8865.txt
-new file mode 100644
-index 000000000000..ac5a662288de
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/ov8865.txt
-@@ -0,0 +1,51 @@
-+* Omnivision OV8865 MIPI CSI-2
-+
-+Required Properties:
-+- compatible: should be "ovti,ov8865"
-+- clocks: reference to the xclk input clock.
-+- clock-names: should be "xclk".
-+- DOVDD-supply: Digital I/O voltage supply, 2.8 volts
-+- AVDD-supply: Analog voltage supply, 2.8 volts
-+- AFVDD-supply: Analog voltage supply, 2.8 volts
-+- DVDD-supply: Digital core voltage supply, 1.2 volts
-+- reset-gpios: reference to the GPIO connected to the reset pin.
-+	       This is an active low signal to the OV8865.
-+- powerdown-gpios: reference to the GPIO connected to the powerdown pin.
-+		   This is an active low signal to the OV8865.
-+- rotation: as defined in
-+	    Documentation/devicetree/bindings/media/video-interfaces.txt,
-+	    valid values are 0 (sensor mounted upright) and 180 (sensor
-+	    mounted upside down).
-+- remote-endpoint: a phandle to the bus receiver's endpoint node.
-+- clock-lanes: should be set to <0> (clock lane on hardware lane 0).
-+- data-lanes: should be set to <4> (four CSI-2 lanes supported).
-+
-+The device node must contain one 'port' child node for its digital output video
-+port, in accordance with the video interface bindings defined in
-+Documentation/devicetree/bindings/media/video-interfaces.txt.
-+
-+Example:
-+&i2c2 {
-+	ov8865: camera@36 {
-+                 compatible = "ovti,ov8865";
-+                 reg = <0x36>;
-+                 clocks = <&ccu CLK_CSI_MCLK>;
-+                 clock-names ="xclk";
-+                 AVDD-supply = <&reg_ov8865_avdd>;
-+                 DOVDD-supply = <&reg_ov8865_dovdd>;
-+                 VDD2-supply = <&reg_ov8865_vdd2>;
-+                 AFVDD-supply = <&reg_ov8865_afvdd>;
-+                 powerdown-gpios = <&pio 4 17 GPIO_ACTIVE_LOW>; /* PE17 */
-+                 reset-gpios = <&pio 4 16 GPIO_ACTIVE_LOW>; /* PE16 */
-+                 rotation = <180>;
-+
-+                 port {
-+                         ov8865_to_mipi_csi2: endpoint {
-+                                 remote-endpoint = <&mipi_csi2_from_ov8865>;
-+                                 data-lanes = <1 2 3 4>;
-+                                 clock-lanes = <0>;
-+                                 bus-type = <4>; /* V4L2_FWNODE_BUS_TYPE_CSI2_DPHY */
-+                         };
-+		};
-+	};
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+index 055eb0b8e396..680fa31f380a 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+@@ -29,18 +29,6 @@
+ 
+ #define MODULE_NAME	"sun6i-csi"
+ 
+-struct sun6i_csi_dev {
+-	struct sun6i_csi		csi;
+-	struct device			*dev;
+-
+-	struct regmap			*regmap;
+-	struct clk			*clk_mod;
+-	struct clk			*clk_ram;
+-	struct reset_control		*rstc_bus;
+-
+-	int				planar_offset[3];
+-};
+-
+ static inline struct sun6i_csi_dev *sun6i_csi_to_dev(struct sun6i_csi *csi)
+ {
+ 	return container_of(csi, struct sun6i_csi_dev, csi);
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+index 8b83d15de0d0..c4a87bdab8c3 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+@@ -48,6 +48,18 @@ struct sun6i_csi {
+ 	struct sun6i_video		video;
+ };
+ 
++struct sun6i_csi_dev {
++	struct sun6i_csi	csi;
++	struct device		*dev;
++	struct regmap		*regmap;
++	struct clk		*clk_mod;
++	struct clk		*clk_ram;
++	struct clk		*clk_mipi;
++	struct clk		*clk_misc;
++	struct reset_control	*rstc_bus;
++	int			planar_offset[3];
 +};
++
+ /**
+  * sun6i_csi_is_format_supported() - check if the format supported by csi
+  * @csi:	pointer to the csi
 -- 
 2.17.1
 
