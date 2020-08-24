@@ -2,66 +2,113 @@ Return-Path: <SRS0=Edv6=CC=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FC19C433E1
-	for <linux-media@archiver.kernel.org>; Mon, 24 Aug 2020 09:24:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 881B4C433E3
+	for <linux-media@archiver.kernel.org>; Mon, 24 Aug 2020 09:28:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 84D2E2074D
-	for <linux-media@archiver.kernel.org>; Mon, 24 Aug 2020 09:24:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5BC22207DF
+	for <linux-media@archiver.kernel.org>; Mon, 24 Aug 2020 09:28:54 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="EDrrfMRw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726910AbgHXJYe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 Aug 2020 05:24:34 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:42008 "EHLO
-        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726838AbgHXJYc (ORCPT
+        id S1729942AbgHXIvc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 Aug 2020 04:51:32 -0400
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:56931 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728177AbgHXIva (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 Aug 2020 05:24:32 -0400
-Received: from valkosipuli.localdomain (valkosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::80:2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id 3FF02634C87;
-        Mon, 24 Aug 2020 12:23:04 +0300 (EEST)
-Received: from sailus by valkosipuli.localdomain with local (Exim 4.92)
-        (envelope-from <sakari.ailus@retiisi.org.uk>)
-        id 1kA8gy-0003Pz-1A; Mon, 24 Aug 2020 12:23:04 +0300
-Date:   Mon, 24 Aug 2020 12:23:04 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Benoit Parrot <bparrot@ti.com>
-Subject: Re: [PATCH] media: ti-vpe: cal: Fix compilation on 32-bit ARM
-Message-ID: <20200824092303.GP7145@valkosipuli.retiisi.org.uk>
-References: <20200823050257.564-1-laurent.pinchart@ideasonboard.com>
+        Mon, 24 Aug 2020 04:51:30 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id A8CNkNXrmuuXOA8COk1adn; Mon, 24 Aug 2020 10:51:28 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1598259088; bh=ceRb7TivxlafITlVuyAamsIq3ParWm9YhbH2GeRwJB4=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=EDrrfMRwy3IsrIS/z6wfrW7juZ+kQztDBfJRE/Qbbt3IrAFmuOKxydbk0vm1FRG+g
+         sX/D8HJCHKthrhve6F38Jc2486WzN+QcpBK9v8zwpLkyPBksA/MVUmhYuWWVymXjQn
+         Rhdwnm6TTsqMfMN6y7rpMVGp/SXeN8qqFjRfpCKGiS8BQiuXArVhPjIVcCHeHOD9De
+         y1yfY4QurDZm//PPNlXDFPo++9KanB+AiBtwpw6oAOnh4Wr+y3TNXr9xAXTgk1UR5F
+         z4xIYuF2RfIqZWFGKdpitORifXbcHQhsh67MF0bcKjIHs5TqrCSubK6xQu0/ZtLX2y
+         yS44hfHyQFXyA==
+Subject: Re: [PATCH] configure.ac: Add --without-libudev option to avoid
+ automagic dep
+To:     James Le Cuirot <chewi@gentoo.org>, linux-media@vger.kernel.org
+References: <20200823164744.6191-1-chewi@gentoo.org>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <79c5bdb0-4082-7a3b-d614-4f87bf61f01c@xs4all.nl>
+Date:   Mon, 24 Aug 2020 10:51:27 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200823050257.564-1-laurent.pinchart@ideasonboard.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200823164744.6191-1-chewi@gentoo.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfOTOIBj9j3ai3/FvUvts9OJPIYLoeA0RriZlqRhonKukqgZRk4bCIjLdXc7C0NPUMSB2cIn/8AWSawyJUFWb8w6vZbFjgRR3XEo6cTxX2i1L897Bzn6l
+ coZgiIFv6XlkX95tM3UuZPXxDj46Dkr/Mp6c32qabuKkz4EYER3D1TyJ4U+tw2US8CkBmUX9rSl4R71AF6yAO5qhQF1BSS/vPA2uKMO+uZu5uOm9TIisrufZ
+ xeDquFD5q5fM3kNBWTRn8bRf4F7QFqskEpOt0tZNINDxOOHLkZfLJrp/raJJIP6AYIWjltvvpJegOmlQUiy/gw==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sun, Aug 23, 2020 at 08:02:57AM +0300, Laurent Pinchart wrote:
-> When compiled on 32-bit ARM, the CAL driver fails with the FIELD_PREP()
-> macro complaining that the mask is not constant. While all callers of
-> the inline cal_write_field() function pass a constant mask, the mask
-> parameter itself is a variable, which likely doesn't please the
-> compiler.
+Hi James,
+
+Can you elaborate a bit more in the commit log text? It's not clear to
+me what you mean with 'avoid automagic dep' or why you want to avoid it.
+
+Regards,
+
+	Hans
+
+On 23/08/2020 18:47, James Le Cuirot wrote:
+> Signed-off-by: James Le Cuirot <chewi@gentoo.org>
+> ---
+>  configure.ac | 27 +++++++++++++++++----------
+>  1 file changed, 17 insertions(+), 10 deletions(-)
 > 
-> Fix it by replacing FIELD_PREP() with a manual implementation.
+> diff --git a/configure.ac b/configure.ac
+> index d9f43ab5..e6134d08 100644
+> --- a/configure.ac
+> +++ b/configure.ac
+> @@ -291,16 +291,23 @@ else
+>     AC_MSG_WARN(ALSA library not available)
+>  fi
+>  
+> -PKG_CHECK_MODULES(libudev, libudev, have_libudev=yes, have_libudev=no)
+> -if test "x$have_libudev" = "xyes"; then
+> -	AC_DEFINE([HAVE_LIBUDEV], [], [Use libudev])
+> -	LIBUDEV_CFLAGS="$libudev_CFLAGS"
+> -	LIBUDEV_LIBS="$libudev_LIBS"
+> -	AC_SUBST(LIBUDEV_CFLAGS)
+> -	AC_SUBST(LIBUDEV_LIBS)
+> -else
+> -   AC_MSG_WARN(udev library not available)
+> -fi
+> +AC_ARG_WITH([libudev],
+> +            AS_HELP_STRING([--without-libudev], [Do not use udev library]),
+> +            [],
+> +            [with_libudev=yes])
+> +
+> +have_libudev=no
+> +
+> +AS_IF([test "x$with_libudev" != xno -o "x$enable_libdvbv5" != xno],
+> +      [PKG_CHECK_MODULES(libudev, libudev, have_libudev=yes, [])
+> +       AS_IF([test "x$have_libudev" = xyes],
+> +             [AC_DEFINE([HAVE_LIBUDEV], [], [Use libudev])
+> +              LIBUDEV_CFLAGS="$libudev_CFLAGS"
+> +              LIBUDEV_LIBS="$libudev_LIBS"
+> +              AC_SUBST(LIBUDEV_CFLAGS)
+> +              AC_SUBST(LIBUDEV_LIBS)],
+> +             AC_MSG_WARN(udev library not available)
+> +            )])
+>  
+>  AC_SUBST([JPEG_LIBS])
+>  
 > 
-> Fixes: 50797fb30b95 ("media: ti-vpe: cal: Turn reg_(read|write)_field() into inline functions")
-> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-Thanks!
-
-Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-
--- 
-Sakari Ailus
