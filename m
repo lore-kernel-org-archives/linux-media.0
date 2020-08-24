@@ -2,59 +2,119 @@ Return-Path: <SRS0=Edv6=CC=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8DF7C433DF
-	for <linux-media@archiver.kernel.org>; Mon, 24 Aug 2020 16:05:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11751C433E3
+	for <linux-media@archiver.kernel.org>; Mon, 24 Aug 2020 16:06:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D1C382074D
-	for <linux-media@archiver.kernel.org>; Mon, 24 Aug 2020 16:05:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E33562074D
+	for <linux-media@archiver.kernel.org>; Mon, 24 Aug 2020 16:06:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1598285176;
+	bh=03hAu4nRPFwVwIO4v5NWL3jE+EDhR0ft7Y0oPd1gP0w=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=nVptKI0da9GSx5wQEdXKOJp7+FhO7oqVOKBDO3EWMAIIUBfJgci6x3RoJvTatEuVR
+	 r2ArIgHhjI0RAXJaedg2F6c/Uq2J1NvmjEYcyMvIqHYgYPGIzFz6L/SuPy0Q+iY9dO
+	 RJqBFx7y+6a3rwEyMlJX16kMjdviuVW7ucv63flU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726413AbgHXQFW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 Aug 2020 12:05:22 -0400
-Received: from gofer.mess.org ([88.97.38.141]:51663 "EHLO gofer.mess.org"
+        id S1727019AbgHXQGP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 Aug 2020 12:06:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47756 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727036AbgHXQEn (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 Aug 2020 12:04:43 -0400
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id A4155C6416; Mon, 24 Aug 2020 17:04:39 +0100 (BST)
-From:   Sean Young <sean@mess.org>
-To:     linux-media@vger.kernel.org
-Subject: [PATCH] media: rc: rename lirc char dev region to "lirc"
-Date:   Mon, 24 Aug 2020 17:04:38 +0100
-Message-Id: <20200824160439.29588-1-sean@mess.org>
-X-Mailer: git-send-email 2.20.1
+        id S1725780AbgHXQGM (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 24 Aug 2020 12:06:12 -0400
+Received: from coco.lan (unknown [95.90.213.182])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D10B92072D;
+        Mon, 24 Aug 2020 16:06:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598285171;
+        bh=03hAu4nRPFwVwIO4v5NWL3jE+EDhR0ft7Y0oPd1gP0w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=y7swRGyvuvKiCu9/nrs1SXr8C+kHHYOQrQUSAJjGAjyfAkO2vlAob2lP+2GvOiVv3
+         Pt1iO8jmNElYCkalrWgU0wwBm1cz8FdwsHljARxYM9slVfU3ws0JegC3Brl+1hW/zf
+         NjcQkkkNKRa79YYaPTJPVie4PrwlTYTaf84FyRb4=
+Date:   Mon, 24 Aug 2020 18:06:01 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Xinliang Liu <xinliang.liu@linaro.org>,
+        Wanchun Zheng <zhengwanchun@hisilicon.com>,
+        linuxarm@huawei.com, dri-devel <dri-devel@lists.freedesktop.org>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        devel@driverdev.osuosl.org, Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Xiubin Zhang <zhangxiubin1@huawei.com>,
+        Wei Xu <xuwei5@hisilicon.com>, David Airlie <airlied@linux.ie>,
+        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Bogdan Togorean <bogdan.togorean@analog.com>,
+        Laurentiu Palcu <laurentiu.palcu@nxp.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        Liwei Cai <cailiwei@hisilicon.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Chen Feng <puck.chen@hisilicon.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        linaro-mm-sig@lists.linaro.org, Rob Herring <robh+dt@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, mauro.chehab@huawei.com,
+        Rob Clark <robdclark@chromium.org>,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Liuyao An <anliuyao@huawei.com>,
+        Rongrong Zou <zourongrong@gmail.com>, bpf@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 00/49] DRM driver for Hikey 970
+Message-ID: <20200824180601.192adc3b@coco.lan>
+In-Reply-To: <20200821155650.GB300361@ravnborg.org>
+References: <cover.1597833138.git.mchehab+huawei@kernel.org>
+        <20200819152120.GA106437@ravnborg.org>
+        <20200819174027.70b39ee9@coco.lan>
+        <20200819173558.GA3733@ravnborg.org>
+        <20200821164158.22777f95@coco.lan>
+        <20200821155650.GB300361@ravnborg.org>
+X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-BaseRemoteCtl is not descriptive.
+Em Fri, 21 Aug 2020 17:56:50 +0200
+Sam Ravnborg <sam@ravnborg.org> escreveu:
 
-Signed-off-by: Sean Young <sean@mess.org>
----
- drivers/media/rc/lirc_dev.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+> Hi Mauro.
+> 
+> On Fri, Aug 21, 2020 at 04:41:58PM +0200, Mauro Carvalho Chehab wrote:
+> > Another quick question:
+> > 
+> > Em Wed, 19 Aug 2020 19:35:58 +0200
+> > Sam Ravnborg <sam@ravnborg.org> escreveu:
+> >   
+> > > > +#define DSS_REDUCE(x)	((x) > 0 ? ((x) - 1) : (x))    
+> > > Use generic macros for this?  
+> > 
+> > Do you know a generic macro similar to this? Or do you mean adding
+> > it to include/kernel.h?  
+> 
+> It looked like something there should be a macro for.
+> But I do not know one.
+> 
+> And no, do not try to go the kernel.h route on this.
+> At least not until you see more than one user.
 
-diff --git a/drivers/media/rc/lirc_dev.c b/drivers/media/rc/lirc_dev.c
-index 583e4f32a0da..bea52a2fae2b 100644
---- a/drivers/media/rc/lirc_dev.c
-+++ b/drivers/media/rc/lirc_dev.c
-@@ -811,8 +811,7 @@ int __init lirc_dev_init(void)
- 		return PTR_ERR(lirc_class);
- 	}
- 
--	retval = alloc_chrdev_region(&lirc_base_dev, 0, RC_DEV_MAX,
--				     "BaseRemoteCtl");
-+	retval = alloc_chrdev_region(&lirc_base_dev, 0, RC_DEV_MAX, "lirc");
- 	if (retval) {
- 		class_destroy(lirc_class);
- 		pr_err("alloc_chrdev_region failed\n");
--- 
-2.26.2
+Yeah, adding this to kernel.h just for a single usage is overkill. I would
+be expecting that a non-underflow decrement logic is something that 
+would be used on other places at the Kernel, but identifying this
+pattern would require some time. Maybe Kernel janitors could write some
+coccinelle script to replace similar patterns like that into some
+macro in the future.
 
+Thanks,
+Mauro
