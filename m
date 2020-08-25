@@ -2,95 +2,130 @@ Return-Path: <SRS0=Bemu=CD=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66638C433DF
-	for <linux-media@archiver.kernel.org>; Tue, 25 Aug 2020 17:36:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74D55C433DF
+	for <linux-media@archiver.kernel.org>; Tue, 25 Aug 2020 17:40:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3AC752076C
-	for <linux-media@archiver.kernel.org>; Tue, 25 Aug 2020 17:36:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5ABCD207F7
+	for <linux-media@archiver.kernel.org>; Tue, 25 Aug 2020 17:40:44 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OWtTyCh4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726803AbgHYRgQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 25 Aug 2020 13:36:16 -0400
-Received: from mailoutvs17.siol.net ([185.57.226.208]:60562 "EHLO
-        mail.siol.net" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726551AbgHYRfp (ORCPT
+        id S1726483AbgHYRke (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 25 Aug 2020 13:40:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35086 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725936AbgHYRkc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 25 Aug 2020 13:35:45 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.siol.net (Postfix) with ESMTP id CCD5C5247D2;
-        Tue, 25 Aug 2020 19:35:40 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at psrvmta09.zcs-production.pri
-Received: from mail.siol.net ([127.0.0.1])
-        by localhost (psrvmta09.zcs-production.pri [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id Cuc8QcMBidfA; Tue, 25 Aug 2020 19:35:40 +0200 (CEST)
-Received: from mail.siol.net (localhost [127.0.0.1])
-        by mail.siol.net (Postfix) with ESMTPS id 85AE15247E0;
-        Tue, 25 Aug 2020 19:35:40 +0200 (CEST)
-Received: from localhost.localdomain (89-212-178-211.dynamic.t-2.net [89.212.178.211])
-        (Authenticated sender: 031275009)
-        by mail.siol.net (Postfix) with ESMTPSA id 3E7C75247D2;
-        Tue, 25 Aug 2020 19:35:38 +0200 (CEST)
-From:   Jernej Skrabec <jernej.skrabec@siol.net>
-To:     mripard@kernel.org, wens@csie.org, paul.kocialkowski@bootlin.com
-Cc:     mchehab@kernel.org, robh+dt@kernel.org, gregkh@linuxfoundation.org,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-sunxi@googlegroups.com
-Subject: [PATCH 4/5] media: cedrus: Add support for R40
-Date:   Tue, 25 Aug 2020 19:35:22 +0200
-Message-Id: <20200825173523.1289379-5-jernej.skrabec@siol.net>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200825173523.1289379-1-jernej.skrabec@siol.net>
-References: <20200825173523.1289379-1-jernej.skrabec@siol.net>
+        Tue, 25 Aug 2020 13:40:32 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C03BC061574;
+        Tue, 25 Aug 2020 10:40:32 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id nv17so1622242pjb.3;
+        Tue, 25 Aug 2020 10:40:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=2CIAlEB0sn0czmBCstmmbk0rRRc0a7Q7Eg5uRFK+DTM=;
+        b=OWtTyCh4mBkSanD+KT2LmsSmys9GdgNPDuMOUrEMBvirSVEpgWaccxzuVDCSUPzr+g
+         UL3d/b/WhkUnWbhm0C+dKAbICczXHeEay6JEghnYPq1AWGXV0OqUHZVzSR0vH40qB4T7
+         CvKheJOKe1bLwlHMjKz6V1TnFYQX/QwQ3zFo3OtKNBualjgvS3McIxk5bZckCXdHUxPn
+         y5cllopsvswApow32o5Hqk8i69l4DMq5zNUIBV31X/TRx3SDq4RkHJpDQFbpdjwtNLEK
+         YafzqTXU3/pyTiKmRDgRCRX9RrujtgeJf8Hbr9VBxTZRL/Jzkqt3LfmQHxV5h/PRKVwB
+         vyvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2CIAlEB0sn0czmBCstmmbk0rRRc0a7Q7Eg5uRFK+DTM=;
+        b=A+n5alUnkz/m6ra9z01JjGdiTqBX2TkMKr+7HXDFTg3kAk/S9CB/sx3PWn5pwDE//w
+         E0udbLC4dIkRkpqP+mP3LpnwsHVbaDtCBYoERoxyfNhqCpkx5qTVIr8VbwfNplNjyUnc
+         TLEe326HQmGKldC5HAUaE2tnNqaUG6YS2NSXuyDWlGmD1+unY73jHrGvtnrsqTLElEEt
+         NOmdun1c9d+56PUgqH52I1tbYpCStzB9W/8RJkln+YQeEBQvxxATtKRjS7mFlITLMVP6
+         QWZGWEjuBd5i9DXMwhCZj7EpzpFWSWEjvPMUIziUy0oz+fkQ6fhh0Y1Unf9eHj8Hz2Kw
+         nTnA==
+X-Gm-Message-State: AOAM530Z0c0qybj+uBNWhb82MQyzUWm8EaxcTLm1K+XFlM2U8K6JRHiE
+        lg1AH3tWBwuRc1JMlJAcl2g=
+X-Google-Smtp-Source: ABdhPJygG/iRoMRtYkc62+6+vovnxiIUBYXGvz6sXIt/PP/MjnVCr6wdHgCpE82t+Egu2LRmdgvskQ==
+X-Received: by 2002:a17:90a:eb17:: with SMTP id j23mr2403499pjz.151.1598377230639;
+        Tue, 25 Aug 2020 10:40:30 -0700 (PDT)
+Received: from [10.69.79.32] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id b6sm3378574pjz.33.2020.08.25.10.40.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Aug 2020 10:40:29 -0700 (PDT)
+Subject: Re: [PATCH v11 00/11] PCI: brcmstb: enable PCIe for STB chips
+To:     Jim Quinlan <james.quinlan@broadcom.com>,
+        linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        bcm-kernel-feedback-list@broadcom.com
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "open list:STAGING SUBSYSTEM" <devel@driverdev.osuosl.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
+        <devicetree@vger.kernel.org>,
+        "open list:DRM DRIVERS FOR ALLWINNER A10" 
+        <dri-devel@lists.freedesktop.org>, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Julien Grall <julien.grall@arm.com>,
+        "open list:ACPI FOR ARM64 (ACPI/arm64)" <linux-acpi@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:ALLWINNER A10 CSI DRIVER" <linux-media@vger.kernel.org>,
+        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
+        <linux-remoteproc@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "open list:SUPERH" <linux-sh@vger.kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Stefano Stabellini <sstabellini@kernel.org>
+References: <20200824193036.6033-1-james.quinlan@broadcom.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <b19bc982-a0c4-c6ff-d8f5-650f2b3a83c8@gmail.com>
+Date:   Tue, 25 Aug 2020 10:40:27 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.1.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200824193036.6033-1-james.quinlan@broadcom.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Video engine in R40 is very similar to that in A33 but it runs on lower
-speed, at least according to OS images released by board designer.
+Hi,
 
-Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
----
- drivers/staging/media/sunxi/cedrus/cedrus.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+On 8/24/2020 12:30 PM, Jim Quinlan wrote:
+> 
+> Patchset Summary:
+>    Enhance a PCIe host controller driver.  Because of its unusual design
+>    we are foced to change dev->dma_pfn_offset into a more general role
+>    allowing multiple offsets.  See the 'v1' notes below for more info.
 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/stagin=
-g/media/sunxi/cedrus/cedrus.c
-index bc27f9430eeb..83a654a618be 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
-@@ -496,6 +496,11 @@ static const struct cedrus_variant sun8i_h3_cedrus_v=
-ariant =3D {
- 	.mod_rate	=3D 402000000,
- };
-=20
-+static const struct cedrus_variant sun8i_r40_cedrus_variant =3D {
-+	.capabilities	=3D CEDRUS_CAPABILITY_UNTILED,
-+	.mod_rate	=3D 297000000,
-+};
-+
- static const struct cedrus_variant sun50i_a64_cedrus_variant =3D {
- 	.capabilities	=3D CEDRUS_CAPABILITY_UNTILED |
- 			  CEDRUS_CAPABILITY_H265_DEC,
-@@ -536,6 +541,10 @@ static const struct of_device_id cedrus_dt_match[] =3D=
- {
- 		.compatible =3D "allwinner,sun8i-h3-video-engine",
- 		.data =3D &sun8i_h3_cedrus_variant,
- 	},
-+	{
-+		.compatible =3D "allwinner,sun8i-r40-video-engine",
-+		.data =3D &sun8i_r40_cedrus_variant,
-+	},
- 	{
- 		.compatible =3D "allwinner,sun50i-a64-video-engine",
- 		.data =3D &sun50i_a64_cedrus_variant,
---=20
-2.28.0
+We are version 11 and counting, and it is not clear to me whether there 
+is any chance of getting these patches reviewed and hopefully merged for 
+the 5.10 merge window.
 
+There are a lot of different files being touched, so what would be the 
+ideal way of routing those changes towards inclusion?
+
+Thanks!
+-- 
+Florian
