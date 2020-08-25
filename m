@@ -2,164 +2,131 @@ Return-Path: <SRS0=Bemu=CD=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.9 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 788AEC433E1
-	for <linux-media@archiver.kernel.org>; Tue, 25 Aug 2020 11:09:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A945C433E1
+	for <linux-media@archiver.kernel.org>; Tue, 25 Aug 2020 11:32:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 563612075B
-	for <linux-media@archiver.kernel.org>; Tue, 25 Aug 2020 11:09:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6713D2068E
+	for <linux-media@archiver.kernel.org>; Tue, 25 Aug 2020 11:32:11 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="syja+fod"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729957AbgHYLJU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 25 Aug 2020 07:09:20 -0400
-Received: from mx.socionext.com ([202.248.49.38]:29926 "EHLO mx.socionext.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729458AbgHYLJT (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 25 Aug 2020 07:09:19 -0400
-Received: from unknown (HELO kinkan-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 25 Aug 2020 20:09:16 +0900
-Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-        by kinkan-ex.css.socionext.com (Postfix) with ESMTP id 13BB01800AA;
-        Tue, 25 Aug 2020 20:09:17 +0900 (JST)
-Received: from 172.31.9.53 (172.31.9.53) by m-FILTER with ESMTP; Tue, 25 Aug 2020 20:09:17 +0900
-Received: from yuzu.css.socionext.com (yuzu [172.31.8.45])
-        by iyokan.css.socionext.com (Postfix) with ESMTP id ECCDF403AD;
-        Tue, 25 Aug 2020 20:09:16 +0900 (JST)
-Received: from [10.212.5.217] (unknown [10.212.5.217])
-        by yuzu.css.socionext.com (Postfix) with ESMTP id 683C5120131;
-        Tue, 25 Aug 2020 20:09:16 +0900 (JST)
-Subject: Re: [PATCH] dma-buf: heaps: Introduce dma_heap_add_cma() for
- non-default CMA heap
-To:     John Stultz <john.stultz@linaro.org>
-Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
-        "Andrew F . Davis" <afd@ti.com>, Liam Mark <lmark@codeaurora.org>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Laura Abbott <labbott@kernel.org>
-References: <1594948208-4739-1-git-send-email-hayashi.kunihiko@socionext.com>
- <CALAqxLXuJQOCXcpyWwyBFZGFK_dEgG0edEEf2=vOpAw6Ng8mBQ@mail.gmail.com>
- <eacfc713-e98a-78fa-b316-3943600813d0@socionext.com>
- <CALAqxLVzUnc5CH_pA7h3ygXFPRz05KtNZx+_M3eAXXrm7hhGBQ@mail.gmail.com>
- <377e6e65-0b44-ecd0-cfc5-6fbc82be35d5@socionext.com>
- <CALAqxLXbKZ=y4BTG7Kx9E46Uysx=eV=GitEDQKwp-Obg5aHUrw@mail.gmail.com>
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Message-ID: <67acbdf4-f0f0-836d-d5c9-68d40348e1b5@socionext.com>
-Date:   Tue, 25 Aug 2020 20:09:16 +0900
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1730048AbgHYLcJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 25 Aug 2020 07:32:09 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:42984 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729759AbgHYLbr (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 25 Aug 2020 07:31:47 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 07PBTRQS013682;
+        Tue, 25 Aug 2020 11:31:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=AOigmkElw5/51p8jVzrJLxBhSFn0r3ksGjzITxEY3Pw=;
+ b=syja+fodV9zkNl/zOyduImjJb4gwwrYn+X++NJU9+aTV8WRhpT6x2Z2z0DIh0p9pnDkd
+ A33aQC5g06mfYf4zKzuZgtAQLW5aQFHMIuWY5Cx0Fa+dwR0QDsS0tYpietla9njoTujs
+ hiuLbCJ2EjFj3W/wHYtnFbpM+a5D90g3FHRZLwy3IVvmZzwuWYh1UU6ELx0lvUNSsrda
+ plR7a+edK2e6RH4/Kkuse3+k4W7q2hpam3BWUd3++h4cbbFRNP9DnJ2mURINNk7zR9Ea
+ LezFPAYkpJl30ozEOvieS1EtKfxJ5lEEMVfcgRbm9x0eZD/tUF81Q61jaGbX2nhC44Dy Pw== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 333w6trehy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 25 Aug 2020 11:31:45 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 07PBPHv0006213;
+        Tue, 25 Aug 2020 11:31:45 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 333r9jefac-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 25 Aug 2020 11:31:45 +0000
+Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 07PBVinm021888;
+        Tue, 25 Aug 2020 11:31:45 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 25 Aug 2020 04:31:44 -0700
+Date:   Tue, 25 Aug 2020 14:31:40 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     mchehab+huawei@kernel.org
+Cc:     linux-media@vger.kernel.org
+Subject: [bug report] media: atomisp: re-enable warnings again
+Message-ID: <20200825113140.GA287498@mwanda>
 MIME-Version: 1.0
-In-Reply-To: <CALAqxLXbKZ=y4BTG7Kx9E46Uysx=eV=GitEDQKwp-Obg5aHUrw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9723 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0
+ suspectscore=3 malwarescore=0 spamscore=0 mlxlogscore=999 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008250087
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9723 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 impostorscore=0
+ mlxlogscore=999 suspectscore=3 phishscore=0 malwarescore=0 spamscore=0
+ priorityscore=1501 clxscore=1015 mlxscore=0 lowpriorityscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2008250087
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi John,
+Hello Mauro Carvalho Chehab,
 
-On 2020/08/22 3:32, John Stultz wrote:
-> On Fri, Aug 21, 2020 at 2:14 AM Kunihiko Hayashi
-> <hayashi.kunihiko@socionext.com> wrote:
->>
->> On 2020/08/01 4:38, John Stultz wrote:
->>> On Fri, Jul 31, 2020 at 2:32 AM Kunihiko Hayashi
->>> <hayashi.kunihiko@socionext.com> wrote:
->>>> On 2020/07/29 4:17, John Stultz wrote:
->>>>> Do you have a upstream driver that you plan to make use this new call?
->>>>
->>>> Unfortunately I don't have an upstream driver using this call.
->>>>
->>>> This call is called from dma-buf heaps "importer" or "customer",
->>>> and I only made an example (do nothing) importer driver
->>>> to test the call.
->>>>
->>>>> We want to have in-tree users of code added.
->>>>
->>>> I think this is a generic way to use non-default CMA heaps, however,
->>>> we need in-tree "importer" drivers to want to use non-default CMA heaps.
->>>> I don't find it from now.
->>>>
->>>
->>> Yea, I and again, I do agree this is functionality that will be
->>> needed. But we'll need to wait for a user (camera driver, etc which
->>> would utilize the reserved cma region) before we can merge it
->>> upstream. :(  Do let me know if you have an out of tree driver that
->>> would make use of it, and we can see what can be done to help upstream
->>> things.
->>
->> Sorry for late.
->> Before I prepare or find a user driver as "importer",
->> I think something is different in this patch.
->>
->> This patch makes it possible to treat non-default CMA connected to
->> "importer" device with memory-region as dma-buf heaps.
->>
->> However, the allocated memory from this dma-buf heaps can be used
->> for "any" devices, and the "importer" can treat memories from other
->> dma-buf heaps.
->>
->> So, the "importer" and the non-default CMA aren't directly related,
->> and I think an "exporter" for the non-default CMA should be enabled.
->>
->> In paticular, the kernel initializer (as an "exporter") calls
->> dma_heap_add_cma() for all CMAs defined in Devicetree, and
->> the device files associated with each CMA appear under "/dev/dma_heap/".
->> For example:
->>
->>      /dev/dma_heap/linux,cma@10000000
->>      /dev/dma_heap/linux,cma@11000000
->>      /dev/dma_heap/linux,cma@12000000
->>      ...
->>
->> All of these device files can be fairly allocated to any "importer" device.
->>
->> Actually I think that the kernel should executes dma_heap_add_cma()
->> for ALL defined reserved-memory nodes.
->>
->> If this idea hasn't been discussed yet and this is reasonable,
->> I'll prepare RFC patches.
-> 
-> So yes! An earlier version of the CMA heap I submitted did add all CMA
-> regions as accessible heaps as you propose here.
+The patch 5b552b198c25: "media: atomisp: re-enable warnings again"
+from May 30, 2020, leads to the following static checker warning:
 
-Sorry I've missed your submitted patch and previous discussions.
+	drivers/staging/media/atomisp/pci/atomisp_compat_css20.c:714 is_pipe_valid_to_current_run_mode()
+	warn: ignoring unreachable code.
 
-> However, the concern was that in some cases, those regions are device
-> specific reserved memory that the driver is probably expecting to have
-> exclusive access. To allow (sufficiently privileged, or misconfigured)
-> userland to be able to allocate out of that seemed like it might cause
-> trouble, and instead we should have CMA regions explicitly exported.
+drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
+   694          switch (asd->run_mode->val) {
+   695          case ATOMISP_RUN_MODE_STILL_CAPTURE:
+   696                  if (pipe_id == IA_CSS_PIPE_ID_CAPTURE)
+   697                          return true;
+   698  
+   699                  return false;
+   700          case ATOMISP_RUN_MODE_PREVIEW:
+   701                  if (!asd->continuous_mode->val) {
+   702                          if (pipe_id == IA_CSS_PIPE_ID_PREVIEW)
+   703                                  return true;
+   704  
+   705                          return false;
+   706                  }
+   707                  fallthrough;
 
-Ah, I see.
-Surely if "device-specific" memory is specified as CMA in the devicetree,
-it's difficult to avoid any trouble to access it.
+I bet all these fallthrough annotations should just be "return false;"
 
-> There was some proposal to add a dt property to the reserved memory
-> section (similar to linux,cma-default) and use that to do the
-> exporting, but other discussions seemed to prefer having drivers
-> export it explicitly in a fashion very similar to what your earlier
-> patch does. The only trouble is we just need an upstream driver to add
-> such a call in the series before we can merge it.
+   708          case ATOMISP_RUN_MODE_CONTINUOUS_CAPTURE:
+   709                  if (pipe_id == IA_CSS_PIPE_ID_CAPTURE ||
+   710                      pipe_id == IA_CSS_PIPE_ID_PREVIEW)
+   711                          return true;
+   712  
+   713                  return false;
+   714                  fallthrough;
 
-Okay, I understand.
-I agree that it seems safe for upstream driver to handle memory that is
-only used explicitly.
+Either way, this one is clearly unreachable.
 
-However, I've not found any drivers to use heaps.
-I'll hold this patch until such a driver or other ideas are upstreamed.
+   715          case ATOMISP_RUN_MODE_VIDEO:
+   716                  if (!asd->continuous_mode->val) {
+   717                          if (pipe_id == IA_CSS_PIPE_ID_VIDEO ||
+   718                              pipe_id == IA_CSS_PIPE_ID_YUVPP)
+   719                                  return true;
+   720                          else
+   721                                  return false;
+   722                  }
+   723                  fallthrough;
+   724          case ATOMISP_RUN_MODE_SDV:
+   725                  if (pipe_id == IA_CSS_PIPE_ID_CAPTURE ||
+   726                      pipe_id == IA_CSS_PIPE_ID_VIDEO)
+   727                          return true;
+   728  
+   729                  return false;
+   730          }
 
-Thank you,
-
----
-Best Regards
-Kunihiko Hayashi
+regards,
+dan carpenter
