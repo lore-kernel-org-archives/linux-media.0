@@ -2,75 +2,72 @@ Return-Path: <SRS0=Bemu=CD=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1486FC433DF
-	for <linux-media@archiver.kernel.org>; Tue, 25 Aug 2020 14:56:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14D0FC433DF
+	for <linux-media@archiver.kernel.org>; Tue, 25 Aug 2020 14:57:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E52B22075F
-	for <linux-media@archiver.kernel.org>; Tue, 25 Aug 2020 14:56:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E401F20782
+	for <linux-media@archiver.kernel.org>; Tue, 25 Aug 2020 14:57:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e1T4VjjF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dvJyYk4A"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726939AbgHYO4r (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 25 Aug 2020 10:56:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37828 "EHLO
+        id S1726717AbgHYO4d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 25 Aug 2020 10:56:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726749AbgHYO4n (ORCPT
+        with ESMTP id S1726788AbgHYO4U (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 25 Aug 2020 10:56:43 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCED2C061574;
-        Tue, 25 Aug 2020 07:56:42 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id w186so4894857pgb.8;
-        Tue, 25 Aug 2020 07:56:42 -0700 (PDT)
+        Tue, 25 Aug 2020 10:56:20 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C7BC061574;
+        Tue, 25 Aug 2020 07:56:20 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id k18so7544112pfp.7;
+        Tue, 25 Aug 2020 07:56:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=36M2Iusv4U+OCFEiYExRiUaDkUkxrwxbrWzc7Vsh9kM=;
-        b=e1T4VjjFxB1j7dvKVZizm2lxLTJuGB3BNBIRcL6pht42BVLznmpxoXKp/zWSPF77+2
-         aN4ruB4jZJWZ0yt9TxDoQTxb7tz3axNSFftZjkoezqmVBxF9w7FgfaAuPnP0rlFC1ziY
-         4AdogtsU9tENoHmt9lDJPvcUayZA0dwKrYJfTX+119c+yt6HnTYIcnr8DEeyAYzsU9pJ
-         g6+uu7R2wkdS+JlY+JS26PcfD7Hx9z5DVtvbmXAiOJbHZLiAhKq9TK7Eltl2oZoU5Id1
-         XOnfTcC81Hd+nhU9JcNeIAbAPKqxjxzMN++13KpTpsh1sPoRevLlnUc4PX2YM+JIivQP
-         GqkQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DXJMFSxcV9xYWsnVqv7Ps99ZWJR3OqDZVUVZ9L/SWjE=;
+        b=dvJyYk4ABNmrcOuHspQsH8XUQhBTK+lgCnrK2uA5hY7FH3GzUfU8XRPnt6o8h3fTXx
+         q1Nwo7lXPvbQtPK91Hatf5mxEYmoA9MD40QBuBaFGvZEd5E/BifsOZaODyCRAJPR9Hby
+         K6vqurjvNfQiQwJtOy9tzhfNj6r8AAc9jVU+rWAgWpJCGfvDuK/kH00bujhlBb1yNkwb
+         UMTaCHbAiekHf0xc/C5VkQciwLmeJknBGyiheaRY/iEDflIcHgmjJzpYB2fvhQ1deWsS
+         Jd4ODwO7Sn5/sNuU4puUESlmd0S5R+liRk6mGR9pE3Mtat3cv2oE3h0z5Dhy3imFQXbD
+         ltNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=36M2Iusv4U+OCFEiYExRiUaDkUkxrwxbrWzc7Vsh9kM=;
-        b=rpWwJbgifZOKpHiDuaXXhERP2Xp20rE34HoMkFnJLlu7X6khZH+L8jFpyjLq8yEBph
-         Wz5ci5l37m6aItdz9YAkgmzmNc6GhK7NchtPtKfCuBv8ZKvy/kp+O28N+BHFWQaMd0JB
-         tyfE229q452XjDhujoM0+ONVq7znDNmdzFX104QZWgPZKi5RLkmlxbPwWK3A3/nivGIw
-         9seGqZn3KMucCpmBuywWR7IrSrZR5UG9veCTfOq6W6gB+EJzzUJfksC/x84/ZHGVuIc4
-         m8XEfsoRAWSNURnf5rA5mClOQB4NmRRSfReH5/R/GiqTz8HwpLi7HqYIacyddN6Z8xvy
-         7lYA==
-X-Gm-Message-State: AOAM530wZdISS/NynmDFlOGSAdi5874IQQYLwV11QA4eKsBP+SgB4KSs
-        rIojs4djohONrp5hWEm0sVfRtiPGAmE=
-X-Google-Smtp-Source: ABdhPJy7PRY8JaIMbSpHA/oHTH25qAn0hu9Guzga5FhIhatjbz8tTC1sJS6zu2XdB9QW44bftyAlUw==
-X-Received: by 2002:a65:4183:: with SMTP id a3mr6852570pgq.448.1598367402178;
-        Tue, 25 Aug 2020 07:56:42 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DXJMFSxcV9xYWsnVqv7Ps99ZWJR3OqDZVUVZ9L/SWjE=;
+        b=cMD0ulobyvN2AYkGJJw2V2bXxvPRidQ+Uw9lSpXt/O0xE4v/q/6sN01VutGNuMZvqS
+         TgHqOaPrwXV+EfXON6N8JpPAaFilC1KMnCC4KUbXBtiTAiUspdaJ98MVnc6g7m/eZ8k4
+         pYJ9OH1iz15zXXqFD5d67FPASceB7lu2lEEOj/QTZtjBsxBeGlBHaFsWEBXgUNzrbZED
+         IygCd6W8uEKrRQFin4hZU5ZQtovt8G6ASCGTVKdw/8da5zy/1obZ4ODoO1QW/+1mpnm+
+         sFJ7kHbzz/xS99y5yPbAah5YuJjcLHM1UKiRykABLRYCv6314moj6AydUD3+6CYnV5v0
+         ZzEw==
+X-Gm-Message-State: AOAM532+Je4o0PiprUea+BkbBaxSOcDiwGk6BN7Q2TYpUCF55hKnLz5G
+        AvL37GqZkbguwkFvWQsiP0E=
+X-Google-Smtp-Source: ABdhPJw/15iAcP1sYV3sJGlu8PB+9DVdCkBWGhe3FX1Gk4gJE5Gj7X74eI1uCHmH5dcCVGyxuwNEAA==
+X-Received: by 2002:aa7:9556:: with SMTP id w22mr8148808pfq.245.1598367379444;
+        Tue, 25 Aug 2020 07:56:19 -0700 (PDT)
 Received: from localhost.localdomain ([240d:1a:8f0:6c00:89cb:88d1:b6b2:3345])
-        by smtp.gmail.com with ESMTPSA id a1sm4469959pgc.54.2020.08.25.07.56.39
+        by smtp.gmail.com with ESMTPSA id a1sm4469959pgc.54.2020.08.25.07.56.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Aug 2020 07:56:41 -0700 (PDT)
+        Tue, 25 Aug 2020 07:56:17 -0700 (PDT)
 From:   Alexandre Courbot <gnurou@gmail.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Nicolas Dufresne <nicolas.dufresne@collabora.com>
 Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Alexandre Courbot <gnurou@gmail.com>
-Subject: [PATCH 2/2] media: v4l2-mem2mem: simplify poll logic a bit
-Date:   Tue, 25 Aug 2020 23:55:56 +0900
-Message-Id: <20200825145556.637323-3-gnurou@gmail.com>
+Subject: [PATCH 0/2] media: v4l2-mem2mem: fix poll() bug
+Date:   Tue, 25 Aug 2020 23:55:54 +0900
+Message-Id: <20200825145556.637323-1-gnurou@gmail.com>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200825145556.637323-1-gnurou@gmail.com>
-References: <20200825145556.637323-1-gnurou@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -78,76 +75,27 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Factorize redundant checks into a single code block, remove the early
-return, and declare variables in their innermost block. Hopefully this
-makes this code a little bit easier to follow.
+This addresses a very corner case that probably nobody ever encounters,
+but I have hit it when playing with vicoded so here is a tentative fix.
 
-Signed-off-by: Alexandre Courbot <gnurou@gmail.com>
----
- drivers/media/v4l2-core/v4l2-mem2mem.c | 35 +++++++++++---------------
- 1 file changed, 15 insertions(+), 20 deletions(-)
+Patch 1/2 addresses the issue that when the last buffer of a m2m device
+has been dequeued, any attempt to poll with EPOLLOUT will result in only
+EPOLLIN being returned, even if OUTPUT buffers are still pending. The
+issue stems from the fact that the last buffer check if done first, and
+returns immediately if true.
 
-diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
-index 0d0192119af20..aeac9707123d0 100644
---- a/drivers/media/v4l2-core/v4l2-mem2mem.c
-+++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
-@@ -841,7 +841,6 @@ static __poll_t v4l2_m2m_poll_for_data(struct file *file,
- 				       struct poll_table_struct *wait)
- {
- 	struct vb2_queue *src_q, *dst_q;
--	struct vb2_buffer *src_vb = NULL, *dst_vb = NULL;
- 	__poll_t rc = 0;
- 	unsigned long flags;
- 
-@@ -863,33 +862,29 @@ static __poll_t v4l2_m2m_poll_for_data(struct file *file,
- 		return EPOLLERR;
- 
- 	spin_lock_irqsave(&src_q->done_lock, flags);
--	if (!list_empty(&src_q->done_list))
--		src_vb = list_first_entry(&src_q->done_list, struct vb2_buffer,
--						done_entry);
--	if (src_vb && (src_vb->state == VB2_BUF_STATE_DONE
--			|| src_vb->state == VB2_BUF_STATE_ERROR))
--		rc |= EPOLLOUT | EPOLLWRNORM;
-+	if (!list_empty(&src_q->done_list)) {
-+		struct vb2_buffer *src_vb = list_first_entry(
-+			&src_q->done_list, struct vb2_buffer, done_entry);
-+		if (src_vb->state == VB2_BUF_STATE_DONE ||
-+		    src_vb->state == VB2_BUF_STATE_ERROR)
-+			rc |= EPOLLOUT | EPOLLWRNORM;
-+	}
- 	spin_unlock_irqrestore(&src_q->done_lock, flags);
- 
- 	spin_lock_irqsave(&dst_q->done_lock, flags);
--	if (list_empty(&dst_q->done_list)) {
-+	if (!list_empty(&dst_q->done_list)) {
-+		struct vb2_buffer *dst_vb = list_first_entry(
-+			&dst_q->done_list, struct vb2_buffer, done_entry);
-+		if (dst_vb->state == VB2_BUF_STATE_DONE ||
-+		    dst_vb->state == VB2_BUF_STATE_ERROR)
-+			rc |= EPOLLIN | EPOLLRDNORM;
-+	} else if (dst_q->last_buffer_dequeued) {
- 		/*
- 		 * If the last buffer was dequeued from the capture queue,
- 		 * return immediately. DQBUF will return -EPIPE.
- 		 */
--		if (dst_q->last_buffer_dequeued) {
--			spin_unlock_irqrestore(&dst_q->done_lock, flags);
--			rc |= EPOLLIN | EPOLLRDNORM;
--			return rc;
--		}
--	}
--
--	if (!list_empty(&dst_q->done_list))
--		dst_vb = list_first_entry(&dst_q->done_list, struct vb2_buffer,
--						done_entry);
--	if (dst_vb && (dst_vb->state == VB2_BUF_STATE_DONE
--			|| dst_vb->state == VB2_BUF_STATE_ERROR))
- 		rc |= EPOLLIN | EPOLLRDNORM;
-+	}
- 	spin_unlock_irqrestore(&dst_q->done_lock, flags);
- 
- 	return rc;
+Patch 2/2 builds on the first one to (hopefully) clean up the code a bit
+and make the function flow easier to follow. Functionally speaking it is
+supposed to be a no-op and it can safely be dropped if the former code
+is preferred - the actual fix is in 1/2.
+
+Alexandre Courbot (2):
+  media: v4l2-mem2mem: consider OUTPUT queue first when polling
+  media: v4l2-mem2mem: simplify poll logic a bit
+
+ drivers/media/v4l2-core/v4l2-mem2mem.c | 42 +++++++++++---------------
+ 1 file changed, 18 insertions(+), 24 deletions(-)
+
 -- 
 2.28.0
 
