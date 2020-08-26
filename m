@@ -2,100 +2,426 @@ Return-Path: <SRS0=cygN=CE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13FFBC433DF
-	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 06:52:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03A88C433E4
+	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 07:18:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D4929207DF
-	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 06:52:52 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="soGar4Ol"
+	by mail.kernel.org (Postfix) with ESMTP id B3B022071E
+	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 07:18:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1598426332;
+	bh=o8vpPhoXeGvbUPsSYe6fqDmzqCLBl92caG8qMQQizSc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=m3vlousMsCOqwu0tSH3ReStDKp77OAiMk6IhKmJZX5Fbh6pCUPuDf9bZctheYZzpF
+	 SP70lA2Ed3yId6cGkznebcPFaFbWmT9EiHGpc2C4ctOr1UA1eK9Fjer3RjxiHbFvz7
+	 uI+Rg+HWRVzYh/W6Q1zPY7Pv8PUJpBZhaJW3agJM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726709AbgHZGwt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 26 Aug 2020 02:52:49 -0400
-Received: from esa5.microchip.iphmx.com ([216.71.150.166]:60140 "EHLO
-        esa5.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726152AbgHZGws (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 26 Aug 2020 02:52:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1598424769; x=1629960769;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=HBnyjxMa7uVI/eu1uBnT609d4ARMKM0v5wDO/MK1iLM=;
-  b=soGar4OlokHCTsFtuzDD9ymzl3TCl3YFC3N0NjiLqjrq0SHuCmbi8H+K
-   SfeuJbnr0FLaRMlMwMBkQmOen2QtAzEDOQ6U8Tg7rxNSc8QRIGcZdbC28
-   WP5wul4yFFDrsja7hj32sUl0PLlZl0Sawkkl/c9dcvqdGCHNTeducBP7w
-   0ML5FcWdfMBlygNVFuZU0YtkDAYrgD92epV+EPKufwRPLNT+WSu+6hPdN
-   nr6ipUSJnJ8QwFTV/9sXRcu0CUJVPThkm73QvY05to8rMMAHhH81XHIka
-   GxaoH0cz60qPcIHuamC00qSs1NqxyJkkjnGKzR51YyaDU82EvnQULDK9c
-   Q==;
-IronPort-SDR: ltFITmBxW421ggd23VoOb62FaLmXM2x8/RabVddrGsBdJh32y4SXsDc6IRb4cr0kGI0NwMplHy
- ChKs4JpINBDKcbMhvoPvKke9MLA9Vn3PgpW+5rx/4pb2kzfvFGPFLto2ROgM53E9vZZpanToXi
- TycWEhxxvFDpozssBO00NTWNxlaJGWrWVyWycj3jDgIyYDk1eMO8DLtzKTJ3bsYiCAAIMYhmel
- 2y/v9ENHW+gxKlRMm/Mc63xMZJk2mCYjen/yY5EEJQhuulotq6ThHl6PsPHo9iJS4sFgb5m12D
- BkU=
-X-IronPort-AV: E=Sophos;i="5.76,354,1592895600"; 
-   d="scan'208";a="88565264"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Aug 2020 23:52:46 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 25 Aug 2020 23:51:56 -0700
-Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.1979.3 via Frontend Transport; Tue, 25 Aug 2020 23:52:28 -0700
-From:   Eugen Hristev <eugen.hristev@microchip.com>
-To:     <robh+dt@kernel.org>, <sakari.ailus@iki.fi>,
-        <linux-media@vger.kernel.org>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Eugen Hristev <eugen.hristev@microchip.com>
-Subject: [PATCH v3 3/3] MAINTAINERS: add microchip csi2dc
-Date:   Wed, 26 Aug 2020 09:51:42 +0300
-Message-ID: <20200826065142.205000-3-eugen.hristev@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200826065142.205000-1-eugen.hristev@microchip.com>
-References: <20200826065142.205000-1-eugen.hristev@microchip.com>
+        id S1726793AbgHZHSu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 26 Aug 2020 03:18:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33056 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726698AbgHZHSt (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 26 Aug 2020 03:18:49 -0400
+Received: from mail.kernel.org (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C79E420767;
+        Wed, 26 Aug 2020 07:18:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598426328;
+        bh=o8vpPhoXeGvbUPsSYe6fqDmzqCLBl92caG8qMQQizSc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=pQnhp/Xal90t5h9eI0uh813UWlcbbJrMDFTvuvs5UeWDY3k6FMXZby7/s3Y5ICnff
+         2N468qoQqpnDynStf9EuF4lQLMvAKOBx6Gde7ftcIvjTF+RFPSscCJqYCp3hDQxP3U
+         l89xGTDtCGUvefdImCTRnBRHz3TAjyaYHqHu6Ugo=
+Received: from mchehab by mail.kernel.org with local (Exim 4.94)
+        (envelope-from <mchehab@kernel.org>)
+        id 1kAphl-001Rah-WE; Wed, 26 Aug 2020 09:18:46 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     linux-media@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>
+Subject: [PATCH 3/4] media: docs: use SPDX GPL-2.0 OR GFDL-1.1 instead of text on *.rst files
+Date:   Wed, 26 Aug 2020 09:18:38 +0200
+Message-Id: <304c6bc23194c6264f9b94f58f387e879382c00c.1598426302.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <929df929283e38b388f601c2ba521257e38cc566.1598426302.git.mchehab+huawei@kernel.org>
+References: <929df929283e38b388f601c2ba521257e38cc566.1598426302.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add Microchip CSI2DC driver in the list.
+There are some files that are dual licensed GPL and GFDL.
 
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+As SPDX v3.10 gained support for GFDL-1.1 with no invariant sections:
+
+	https://spdx.org/licenses/GFDL-1.1-no-invariants-or-later.html
+
+Let's remove the dual license text, replacing them by:
+
+	SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
+
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
+ .../mediactl/media-ioc-request-alloc.rst      | 26 +------------------
+ .../mediactl/media-request-ioc-queue.rst      | 26 +------------------
+ .../mediactl/media-request-ioc-reinit.rst     | 26 +------------------
+ .../media/mediactl/request-api.rst            | 26 +------------------
+ .../media/mediactl/request-func-close.rst     | 26 +------------------
+ .../media/mediactl/request-func-ioctl.rst     | 26 +------------------
+ .../media/mediactl/request-func-poll.rst      | 26 +------------------
+ .../userspace-api/media/v4l/dev-encoder.rst   | 26 +------------------
+ .../media/v4l/pixfmt-meta-intel-ipu3.rst      | 25 +-----------------
+ .../media/v4l/pixfmt-meta-vivid.rst           | 26 +------------------
+ 10 files changed, 10 insertions(+), 249 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index deaafb617361..a07d3f5597a6 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11375,6 +11375,13 @@ L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
- S:	Supported
- F:	sound/soc/atmel
+diff --git a/Documentation/userspace-api/media/mediactl/media-ioc-request-alloc.rst b/Documentation/userspace-api/media/mediactl/media-ioc-request-alloc.rst
+index 82f86466c7f2..ea05ff0c5382 100644
+--- a/Documentation/userspace-api/media/mediactl/media-ioc-request-alloc.rst
++++ b/Documentation/userspace-api/media/mediactl/media-ioc-request-alloc.rst
+@@ -1,28 +1,4 @@
+-.. This file is dual-licensed: you can use it either under the terms
+-.. of the GPL 2.0 or the GFDL 1.1+ license, at your option. Note that this
+-.. dual licensing only applies to this file, and not this project as a
+-.. whole.
+-..
+-.. a) This file is free software; you can redistribute it and/or
+-..    modify it under the terms of the GNU General Public License as
+-..    published by the Free Software Foundation version 2 of
+-..    the License.
+-..
+-..    This file is distributed in the hope that it will be useful,
+-..    but WITHOUT ANY WARRANTY; without even the implied warranty of
+-..    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-..    GNU General Public License for more details.
+-..
+-.. Or, alternatively,
+-..
+-.. b) Permission is granted to copy, distribute and/or modify this
+-..    document under the terms of the GNU Free Documentation License,
+-..    Version 1.1 or any later version published by the Free Software
+-..    Foundation, with no Invariant Sections, no Front-Cover Texts
+-..    and no Back-Cover Texts. A copy of the license is included at
+-..    Documentation/userspace-api/media/fdl-appendix.rst.
+-..
+-.. TODO: replace it to GPL-2.0 OR GFDL-1.1-or-later WITH no-invariant-sections
++.. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
  
-+MICROCHIP CSI2DC DRIVER
-+M:	Eugen Hristev <eugen.hristev@microchip.com>
-+L:	linux-media@vger.kernel.org
-+S:	Supported
-+F:	Documentation/devicetree/bindings/media/microchip,csi2dc.yaml
-+F:	drivers/media/platform/atmel/microchip-csi2dc.c
-+
- MICROCHIP ECC DRIVER
- M:	Tudor Ambarus <tudor.ambarus@microchip.com>
- L:	linux-crypto@vger.kernel.org
+ .. _media_ioc_request_alloc:
+ 
+diff --git a/Documentation/userspace-api/media/mediactl/media-request-ioc-queue.rst b/Documentation/userspace-api/media/mediactl/media-request-ioc-queue.rst
+index ad55b6b32616..ca1b33196242 100644
+--- a/Documentation/userspace-api/media/mediactl/media-request-ioc-queue.rst
++++ b/Documentation/userspace-api/media/mediactl/media-request-ioc-queue.rst
+@@ -1,28 +1,4 @@
+-.. This file is dual-licensed: you can use it either under the terms
+-.. of the GPL 2.0 or the GFDL 1.1+ license, at your option. Note that this
+-.. dual licensing only applies to this file, and not this project as a
+-.. whole.
+-..
+-.. a) This file is free software; you can redistribute it and/or
+-..    modify it under the terms of the GNU General Public License as
+-..    published by the Free Software Foundation version 2 of
+-..    the License.
+-..
+-..    This file is distributed in the hope that it will be useful,
+-..    but WITHOUT ANY WARRANTY; without even the implied warranty of
+-..    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-..    GNU General Public License for more details.
+-..
+-.. Or, alternatively,
+-..
+-.. b) Permission is granted to copy, distribute and/or modify this
+-..    document under the terms of the GNU Free Documentation License,
+-..    Version 1.1 or any later version published by the Free Software
+-..    Foundation, with no Invariant Sections, no Front-Cover Texts
+-..    and no Back-Cover Texts. A copy of the license is included at
+-..    Documentation/userspace-api/media/fdl-appendix.rst.
+-..
+-.. TODO: replace it to GPL-2.0 OR GFDL-1.1-or-later WITH no-invariant-sections
++.. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
+ 
+ .. _media_request_ioc_queue:
+ 
+diff --git a/Documentation/userspace-api/media/mediactl/media-request-ioc-reinit.rst b/Documentation/userspace-api/media/mediactl/media-request-ioc-reinit.rst
+index 4c43fa05c8f6..cfd503bdef70 100644
+--- a/Documentation/userspace-api/media/mediactl/media-request-ioc-reinit.rst
++++ b/Documentation/userspace-api/media/mediactl/media-request-ioc-reinit.rst
+@@ -1,28 +1,4 @@
+-.. This file is dual-licensed: you can use it either under the terms
+-.. of the GPL 2.0 or the GFDL 1.1+ license, at your option. Note that this
+-.. dual licensing only applies to this file, and not this project as a
+-.. whole.
+-..
+-.. a) This file is free software; you can redistribute it and/or
+-..    modify it under the terms of the GNU General Public License as
+-..    published by the Free Software Foundation version 2 of
+-..    the License.
+-..
+-..    This file is distributed in the hope that it will be useful,
+-..    but WITHOUT ANY WARRANTY; without even the implied warranty of
+-..    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-..    GNU General Public License for more details.
+-..
+-.. Or, alternatively,
+-..
+-.. b) Permission is granted to copy, distribute and/or modify this
+-..    document under the terms of the GNU Free Documentation License,
+-..    Version 1.1 or any later version published by the Free Software
+-..    Foundation, with no Invariant Sections, no Front-Cover Texts
+-..    and no Back-Cover Texts. A copy of the license is included at
+-..    Documentation/userspace-api/media/fdl-appendix.rst.
+-..
+-.. TODO: replace it to GPL-2.0 OR GFDL-1.1-or-later WITH no-invariant-sections
++.. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
+ 
+ .. _media_request_ioc_reinit:
+ 
+diff --git a/Documentation/userspace-api/media/mediactl/request-api.rst b/Documentation/userspace-api/media/mediactl/request-api.rst
+index 37d9442a541e..c0fa4dbb2b28 100644
+--- a/Documentation/userspace-api/media/mediactl/request-api.rst
++++ b/Documentation/userspace-api/media/mediactl/request-api.rst
+@@ -1,28 +1,4 @@
+-.. This file is dual-licensed: you can use it either under the terms
+-.. of the GPL 2.0 or the GFDL 1.1+ license, at your option. Note that this
+-.. dual licensing only applies to this file, and not this project as a
+-.. whole.
+-..
+-.. a) This file is free software; you can redistribute it and/or
+-..    modify it under the terms of the GNU General Public License as
+-..    published by the Free Software Foundation version 2 of
+-..    the License.
+-..
+-..    This file is distributed in the hope that it will be useful,
+-..    but WITHOUT ANY WARRANTY; without even the implied warranty of
+-..    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-..    GNU General Public License for more details.
+-..
+-.. Or, alternatively,
+-..
+-.. b) Permission is granted to copy, distribute and/or modify this
+-..    document under the terms of the GNU Free Documentation License,
+-..    Version 1.1 or any later version published by the Free Software
+-..    Foundation, with no Invariant Sections, no Front-Cover Texts
+-..    and no Back-Cover Texts. A copy of the license is included at
+-..    Documentation/userspace-api/media/fdl-appendix.rst.
+-..
+-.. TODO: replace it to GPL-2.0 OR GFDL-1.1-or-later WITH no-invariant-sections
++.. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
+ 
+ .. _media-request-api:
+ 
+diff --git a/Documentation/userspace-api/media/mediactl/request-func-close.rst b/Documentation/userspace-api/media/mediactl/request-func-close.rst
+index 9618b5139764..04e00bb9defd 100644
+--- a/Documentation/userspace-api/media/mediactl/request-func-close.rst
++++ b/Documentation/userspace-api/media/mediactl/request-func-close.rst
+@@ -1,28 +1,4 @@
+-.. This file is dual-licensed: you can use it either under the terms
+-.. of the GPL 2.0 or the GFDL 1.1+ license, at your option. Note that this
+-.. dual licensing only applies to this file, and not this project as a
+-.. whole.
+-..
+-.. a) This file is free software; you can redistribute it and/or
+-..    modify it under the terms of the GNU General Public License as
+-..    published by the Free Software Foundation version 2 of
+-..    the License.
+-..
+-..    This file is distributed in the hope that it will be useful,
+-..    but WITHOUT ANY WARRANTY; without even the implied warranty of
+-..    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-..    GNU General Public License for more details.
+-..
+-.. Or, alternatively,
+-..
+-.. b) Permission is granted to copy, distribute and/or modify this
+-..    document under the terms of the GNU Free Documentation License,
+-..    Version 1.1 or any later version published by the Free Software
+-..    Foundation, with no Invariant Sections, no Front-Cover Texts
+-..    and no Back-Cover Texts. A copy of the license is included at
+-..    Documentation/userspace-api/media/fdl-appendix.rst.
+-..
+-.. TODO: replace it to GPL-2.0 OR GFDL-1.1-or-later WITH no-invariant-sections
++.. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
+ 
+ .. _request-func-close:
+ 
+diff --git a/Documentation/userspace-api/media/mediactl/request-func-ioctl.rst b/Documentation/userspace-api/media/mediactl/request-func-ioctl.rst
+index 4bf985205bcc..1e1c5edb860c 100644
+--- a/Documentation/userspace-api/media/mediactl/request-func-ioctl.rst
++++ b/Documentation/userspace-api/media/mediactl/request-func-ioctl.rst
+@@ -1,28 +1,4 @@
+-.. This file is dual-licensed: you can use it either under the terms
+-.. of the GPL 2.0 or the GFDL 1.1+ license, at your option. Note that this
+-.. dual licensing only applies to this file, and not this project as a
+-.. whole.
+-..
+-.. a) This file is free software; you can redistribute it and/or
+-..    modify it under the terms of the GNU General Public License as
+-..    published by the Free Software Foundation version 2 of
+-..    the License.
+-..
+-..    This file is distributed in the hope that it will be useful,
+-..    but WITHOUT ANY WARRANTY; without even the implied warranty of
+-..    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-..    GNU General Public License for more details.
+-..
+-.. Or, alternatively,
+-..
+-.. b) Permission is granted to copy, distribute and/or modify this
+-..    document under the terms of the GNU Free Documentation License,
+-..    Version 1.1 or any later version published by the Free Software
+-..    Foundation, with no Invariant Sections, no Front-Cover Texts
+-..    and no Back-Cover Texts. A copy of the license is included at
+-..    Documentation/userspace-api/media/fdl-appendix.rst.
+-..
+-.. TODO: replace it to GPL-2.0 OR GFDL-1.1-or-later WITH no-invariant-sections
++.. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
+ 
+ .. _request-func-ioctl:
+ 
+diff --git a/Documentation/userspace-api/media/mediactl/request-func-poll.rst b/Documentation/userspace-api/media/mediactl/request-func-poll.rst
+index 85a3427e5913..92947213d3d5 100644
+--- a/Documentation/userspace-api/media/mediactl/request-func-poll.rst
++++ b/Documentation/userspace-api/media/mediactl/request-func-poll.rst
+@@ -1,28 +1,4 @@
+-.. This file is dual-licensed: you can use it either under the terms
+-.. of the GPL 2.0 or the GFDL 1.1+ license, at your option. Note that this
+-.. dual licensing only applies to this file, and not this project as a
+-.. whole.
+-..
+-.. a) This file is free software; you can redistribute it and/or
+-..    modify it under the terms of the GNU General Public License as
+-..    published by the Free Software Foundation version 2 of
+-..    the License.
+-..
+-..    This file is distributed in the hope that it will be useful,
+-..    but WITHOUT ANY WARRANTY; without even the implied warranty of
+-..    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-..    GNU General Public License for more details.
+-..
+-.. Or, alternatively,
+-..
+-.. b) Permission is granted to copy, distribute and/or modify this
+-..    document under the terms of the GNU Free Documentation License,
+-..    Version 1.1 or any later version published by the Free Software
+-..    Foundation, with no Invariant Sections, no Front-Cover Texts
+-..    and no Back-Cover Texts. A copy of the license is included at
+-..    Documentation/userspace-api/media/fdl-appendix.rst.
+-..
+-.. TODO: replace it to GPL-2.0 OR GFDL-1.1-or-later WITH no-invariant-sections
++.. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
+ 
+ .. _request-func-poll:
+ 
+diff --git a/Documentation/userspace-api/media/v4l/dev-encoder.rst b/Documentation/userspace-api/media/v4l/dev-encoder.rst
+index fb44f20924de..aa338b9624b0 100644
+--- a/Documentation/userspace-api/media/v4l/dev-encoder.rst
++++ b/Documentation/userspace-api/media/v4l/dev-encoder.rst
+@@ -1,28 +1,4 @@
+-.. This file is dual-licensed: you can use it either under the terms
+-.. of the GPL 2.0 or the GFDL 1.1+ license, at your option. Note that this
+-.. dual licensing only applies to this file, and not this project as a
+-.. whole.
+-..
+-.. a) This file is free software; you can redistribute it and/or
+-..    modify it under the terms of the GNU General Public License as
+-..    published by the Free Software Foundation version 2 of
+-..    the License.
+-..
+-..    This file is distributed in the hope that it will be useful,
+-..    but WITHOUT ANY WARRANTY; without even the implied warranty of
+-..    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-..    GNU General Public License for more details.
+-..
+-.. Or, alternatively,
+-..
+-.. b) Permission is granted to copy, distribute and/or modify this
+-..    document under the terms of the GNU Free Documentation License,
+-..    Version 1.1 or any later version published by the Free Software
+-..    Foundation, with no Invariant Sections, no Front-Cover Texts
+-..    and no Back-Cover Texts. A copy of the license is included at
+-..    Documentation/userspace-api/media/fdl-appendix.rst.
+-..
+-.. TODO: replace it to GPL-2.0 OR GFDL-1.1-or-later WITH no-invariant-sections
++.. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
+ 
+ .. _encoder:
+ 
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-meta-intel-ipu3.rst b/Documentation/userspace-api/media/v4l/pixfmt-meta-intel-ipu3.rst
+index 97a9a2925671..5f33d35532ef 100644
+--- a/Documentation/userspace-api/media/v4l/pixfmt-meta-intel-ipu3.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-meta-intel-ipu3.rst
+@@ -1,27 +1,4 @@
+-.. This file is dual-licensed: you can use it either under the terms
+-.. of the GPL 2.0 or the GFDL 1.1+ license, at your option. Note that this
+-.. dual licensing only applies to this file, and not this project as a
+-.. whole.
+-..
+-.. a) This file is free software; you can redistribute it and/or
+-..    modify it under the terms of the GNU General Public License version
+-..    2.0 as published by the Free Software Foundation.
+-..
+-..    This file is distributed in the hope that it will be useful,
+-..    but WITHOUT ANY WARRANTY; without even the implied warranty of
+-..    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-..    GNU General Public License version 2.0 for more details.
+-..
+-.. Or, alternatively,
+-..
+-.. b) Permission is granted to copy, distribute and/or modify this
+-..    document under the terms of the GNU Free Documentation License,
+-..    Version 1.1 or any later version published by the Free Software
+-..    Foundation, with no Invariant Sections, no Front-Cover Texts
+-..    and no Back-Cover Texts. A copy of the license is included at
+-..    Documentation/userspace-api/media/fdl-appendix.rst.
+-..
+-.. TODO: replace it to GPL-2.0 OR GFDL-1.1-or-later WITH no-invariant-sections
++.. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
+ 
+ .. _v4l2-meta-fmt-params:
+ .. _v4l2-meta-fmt-stat-3a:
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-meta-vivid.rst b/Documentation/userspace-api/media/v4l/pixfmt-meta-vivid.rst
+index 34a2382ef91c..7173e2c3e245 100644
+--- a/Documentation/userspace-api/media/v4l/pixfmt-meta-vivid.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-meta-vivid.rst
+@@ -1,28 +1,4 @@
+-.. This file is dual-licensed: you can use it either under the terms
+-.. of the GPL 2.0 or the GFDL 1.1+ license, at your option. Note that this
+-.. dual licensing only applies to this file, and not this project as a
+-.. whole.
+-..
+-.. a) This file is free software; you can redistribute it and/or
+-..    modify it under the terms of the GNU General Public License as
+-..    published by the Free Software Foundation version 2 of
+-..    the License.
+-..
+-..    This file is distributed in the hope that it will be useful,
+-..    but WITHOUT ANY WARRANTY; without even the implied warranty of
+-..    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-..    GNU General Public License for more details.
+-..
+-.. Or, alternatively,
+-..
+-.. b) Permission is granted to copy, distribute and/or modify this
+-..    document under the terms of the GNU Free Documentation License,
+-..    Version 1.1 or any later version published by the Free Software
+-..    Foundation, with no Invariant Sections, no Front-Cover Texts
+-..    and no Back-Cover Texts. A copy of the license is included at
+-..    Documentation/userspace-api/media/fdl-appendix.rst.
+-..
+-.. TODO: replace it to GPL-2.0 OR GFDL-1.1-or-later WITH no-invariant-sections
++.. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
+ 
+ .. _v4l2-meta-fmt-vivid:
+ 
 -- 
-2.25.1
+2.26.2
 
