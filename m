@@ -2,88 +2,107 @@ Return-Path: <SRS0=cygN=CE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91EFAC433DF
-	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 11:04:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52E48C433DF
+	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 11:11:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5CE472087C
-	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 11:04:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 309EA2087C
+	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 11:11:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="twlNdYtB"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kHrFHnGJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728871AbgHZLEG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 26 Aug 2020 07:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54216 "EHLO
+        id S1728790AbgHZLLJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 26 Aug 2020 07:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728660AbgHZLAi (ORCPT
+        with ESMTP id S1728721AbgHZLLB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 26 Aug 2020 07:00:38 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6961C061574;
-        Wed, 26 Aug 2020 04:00:37 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id w25so1802186ljo.12;
-        Wed, 26 Aug 2020 04:00:37 -0700 (PDT)
+        Wed, 26 Aug 2020 07:11:01 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B26C061574;
+        Wed, 26 Aug 2020 04:11:00 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id i10so881692pgk.1;
+        Wed, 26 Aug 2020 04:11:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IrP6ayckjNJ1DXpVyleRBUcFlQaxWlVGGvYCRU/uzd4=;
-        b=twlNdYtBtcwaVvGPQQqBMGYo+BCqGNAMnQ06scY1fvZsCpKwWZRwSByvNXbYYnRfPu
-         9bHzuP2ndjv2STYV5bjZ0ZArEPuWmY++WTwVe6+fioivo83/P+iA4jK9tENhV4b40Qar
-         YuRhz3Qgr6mWXHMLKdDoV4yUjhv6aAXsVl20wj6VxzH/5KGABewzMz2J+8caqlFiWqMh
-         XhFfcXdRWAvNaBCe+jUzB5jEAABOgKFbixVC6GIwJhflNmvOXylZ9k75sijC6TnL5CMa
-         kfGa/rHeWDHedGF59eqknU2Aupage26bsMENg5mNG9ohiFwl9Q/o8O2WOmNHorNqQ0Un
-         AR0w==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=OYwGuEb91/Fq7kHgAcheZzGBW4eXw4/zcLyHp4V/iG0=;
+        b=kHrFHnGJJqHIOGuHlNt47+PIV7xjyxVsQGCXDBKvWlCVnlDrIzQm6EMJ2ilqj4vxtR
+         Ea5p9UqDeeEy8aUGQmy7Jg2iXrzk3+f7GARCG/yd94rppYK1u0lp3FDcF1INMV7dBzZu
+         88Sx8IdxaethQB6tSl/yYI2xja24LrVc04r10ejLRKRrdS8mKCWTZPyTmaw3HrNQHi6L
+         /9L2n9XdDytKjSYeVNeUJSPwJHMkrwKqnUmP8LFzlh2gerEGyU19Z15fqwcs8wbTOAvQ
+         mkSg6jHwv/x12y61M23ocu1o6DnSUIhByZVC5fAASWXHamKddzyqNC+GJmw55ugorjCO
+         PYPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IrP6ayckjNJ1DXpVyleRBUcFlQaxWlVGGvYCRU/uzd4=;
-        b=caiMLUZm0QvXudMQxYri6GAp2g7KfVoIY5onI3wx/FzcA/MMVe3NIXAujX1lw8o+KP
-         Glw2qICivtJYlQxXtcJKSpQEw7qiUdqFhhhmuItUGitrz8DhWPgwMacg2+OdaS4yKa1t
-         bPFqGS8irAx/GziluopyQM8VG0ZfKbLYXAjJ/p0QU/8G6ISMdJklaX1d4F3e6SW4vM+A
-         Bnm0wbpLXhVkSfpfOCp7Wqta7VxHT0iPXoG9e6TfWURGSwnKx2U3zAfa5KVimqMQn31p
-         ZoYutt/SiZB/c5h2LoUtldcGgi9CdDJd6INbtXRne7kntOcI3IkSGuFCcHLYaj7qAvy1
-         J2GQ==
-X-Gm-Message-State: AOAM532GN/p0KXZBojAnQu+Or3WitpPdos6TTSdTVRs9t39RrWEZrKtj
-        oCfiIBUQJzERi64N5NhobbpKj8U3iXsJ5CTQOVr/IAz4
-X-Google-Smtp-Source: ABdhPJyYPUaNdwhtweLVaLU70yKQWGzSfUwIGGvMtGw/Dd2GWNDaKIongg6kM6TSRpOEJEd3h9eF8RvYzzWvJQt2VgA=
-X-Received: by 2002:a2e:80d3:: with SMTP id r19mr7356055ljg.310.1598439635750;
- Wed, 26 Aug 2020 04:00:35 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=OYwGuEb91/Fq7kHgAcheZzGBW4eXw4/zcLyHp4V/iG0=;
+        b=VbwE8EtmMSO6AeNQgcM80oHbYAJcAYp7gv/cUsSjUz1a/FKltMAIRLMliQzAyt6HqE
+         Pi2QRzU3wuG7WaKw88DkcVK8Yp8giko4LlYND04pf+JoAj6khJOq2D+Am2aJ1bhPO4Sp
+         5RSElsYh6R+/SYRLNO3izmmKJEAkCLwBBnzkF9nDaKw69eO/tw2kuJNm0ZI8xxeOEHAZ
+         eWtcDhN01iHvBf6+aj9xDGwwJtOi3UvGgzzKHUfu23XjpIHnMlAMC01c8wITAAokyt6N
+         3/ozOi9Lk7dKEZFnyfxCkGooXh8Lq7eL/84fYBxNXAPFqbKaS82h0xod6pnrzCWTQH81
+         bkWQ==
+X-Gm-Message-State: AOAM531k1G77ZGjIEnJ3X+C9ZXdNjMa5KBE9ztzlQ5NEWAzfHPXOipXK
+        nodYoPIx5EzM+WmWkOapUdc=
+X-Google-Smtp-Source: ABdhPJwLxmpEUrt0bg/EsSlOKtqGn2tKaPB89b7YhYCQnhKwKyVGv7GIbk3RsGJH1mgpotz1PR/t8A==
+X-Received: by 2002:a63:df01:: with SMTP id u1mr9354157pgg.401.1598440259924;
+        Wed, 26 Aug 2020 04:10:59 -0700 (PDT)
+Received: from localhost.localdomain ([49.207.215.131])
+        by smtp.gmail.com with ESMTPSA id e62sm2793172pfh.144.2020.08.26.04.10.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Aug 2020 04:10:59 -0700 (PDT)
+From:   Anant Thazhemadam <anant.thazhemadam@gmail.com>
+Cc:     anant.thazhemadam@gmail.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] staging: media/atomisp : fix "dubious: !x | !y" sparse warning
+Date:   Wed, 26 Aug 2020 16:39:15 +0530
+Message-Id: <20200826110919.9523-1-anant.thazhemadam@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200826095000.GW1793@kadam>
+References: <20200826095000.GW1793@kadam>
 MIME-Version: 1.0
-References: <20200826092606.2910-1-dinghao.liu@zju.edu.cn>
-In-Reply-To: <20200826092606.2910-1-dinghao.liu@zju.edu.cn>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Wed, 26 Aug 2020 08:00:24 -0300
-Message-ID: <CAOMZO5BCZYVj-C70XhwiaWVAZ8ViiBcErRP79eu3=m=aCWvZnw@mail.gmail.com>
-Subject: Re: [PATCH] [v2] media: mx2_emmaprp: Fix memleak in emmaprp_probe
-To:     Dinghao Liu <dinghao.liu@zju.edu.cn>
-Cc:     kjlu@umn.edu, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Dinghao,
+Upon running Sparse, "warning: dubious: !x | !y" is brought to notice
+for this file.  Logical and bitwise OR are basically the same in this
+context, so it doesn't cause a runtime bug.  But let's change it to
+logical OR to make it a little bit cleaner and silence the Sparse
+warning.
 
-On Wed, Aug 26, 2020 at 6:31 AM Dinghao Liu <dinghao.liu@zju.edu.cn> wrote:
->
-> When platform_get_irq() fails, we should release
-> vfd and unregister pcdev->v4l2_dev just like the
-> subsequent error paths.
->
-> Fixes: d4e192cc44914 ("media: mx2_emmaprp: Check for platform_get_irq() error")
-> Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
+---
+ .../media/atomisp/pci/isp/kernels/vf/vf_1.0/ia_css_vf.host.c    | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks for the fix:
-
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
+diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/vf/vf_1.0/ia_css_vf.host.c b/drivers/staging/media/atomisp/pci/isp/kernels/vf/vf_1.0/ia_css_vf.host.c
+index 358cb7d2cd4c..3b850bb2d39d 100644
+--- a/drivers/staging/media/atomisp/pci/isp/kernels/vf/vf_1.0/ia_css_vf.host.c
++++ b/drivers/staging/media/atomisp/pci/isp/kernels/vf/vf_1.0/ia_css_vf.host.c
+@@ -58,7 +58,7 @@ sh_css_vf_downscale_log2(
+ 	unsigned int ds_log2 = 0;
+ 	unsigned int out_width;
+ 
+-	if ((!out_info) | (!vf_info))
++	if ((!out_info) || (!vf_info))
+ 		return -EINVAL;
+ 
+ 	out_width = out_info->res.width;
+-- 
+2.25.1
