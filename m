@@ -2,65 +2,66 @@ Return-Path: <SRS0=cygN=CE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 309EDC433E1
-	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 11:35:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F57AC433DF
+	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 11:47:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F1A882083B
-	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 11:35:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EA0A82087C
+	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 11:47:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E7VxO8g4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nLSKDQaB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729033AbgHZLeO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 26 Aug 2020 07:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58202 "EHLO
+        id S1728909AbgHZLWB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 26 Aug 2020 07:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728946AbgHZL0d (ORCPT
+        with ESMTP id S1728902AbgHZLVZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 26 Aug 2020 07:26:33 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55EECC061574;
-        Wed, 26 Aug 2020 04:25:52 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id w14so1923164ljj.4;
-        Wed, 26 Aug 2020 04:25:51 -0700 (PDT)
+        Wed, 26 Aug 2020 07:21:25 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4A1C061799;
+        Wed, 26 Aug 2020 04:19:46 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id y26so782934lfe.2;
+        Wed, 26 Aug 2020 04:19:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=BwPP+Wy6wA+3eWc/onU66ibaN4gluQuh0nP0l3YOUgY=;
-        b=E7VxO8g4aPMfq4QDhK8BsuM/jTaOOwMzE+iUebvg+1KPXgHLZ/uheF+srixOBQG7Pw
-         mLT7kFfr9VzTvSHgpAYSYS7u9G88jbHWq6gmLad6k+pHRahNDthV0vEzV6IaS4pfcq4n
-         kjQoVV+4Fu1N8eW2tX21cbqFOBCfg+4cZQ2eKCH9863QtfIlYDwhQg7fl8+mo1nXwFga
-         t04AS7oMBGiNPQUFds5R425WHFGNzo8sktu/aAwLxsDkLJGJU46IhGZ/82XC53oRzL9b
-         yzxBJPtoIWzKEXDoSWgBA7pLE6yDyFjunnZWtjoGLwIiFoIuzG4x/rfy/upwZ/PNOerC
-         7ozQ==
+        bh=Uu4WskBztKVUoVSil4cy4MR9LWqcw8xk2hr+l0UQ5ho=;
+        b=nLSKDQaBmzQREFSjfYHKCqFSUKm9X0iKZKktP8MRR7TUCwjXuSJJQWe4LWG8yLQR5B
+         6ya721Xer1i/YscNwBz3wTajvo9dCz7ieCkXcXzy4pLGrwOxfu2LJ4wCam9Tacykvw5i
+         RHga6ZekM3QBEWrT0WnzqT3K73yNX+D/45UWy5PUzN3iQeEMNBieoWxxtND4qaSYXy2H
+         O1SMNuSUhs2bbLEusZUxwdWD9wrryrVS9yA34iQ/p/dnOVnRDpuTq2N/erfwBHywv+Wx
+         GO8s99zdB/EYGMwGsdhphInw4RWcHUmk2wNPyfSxs/Pon7KfXSW4mfBiqDnQBE839FX/
+         Z/Lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=BwPP+Wy6wA+3eWc/onU66ibaN4gluQuh0nP0l3YOUgY=;
-        b=c9Z0dF+HrTEFzkgArBpE9UB9aWLRD/k/Gn1sXpglnliApxb15xWkbzxWabv/pTjW2H
-         KHZEnD4rrvuKOxNcSi+KIxTpNlXnya1s86oBzzXsi0Hj4oPWjKO1c9R5RZC8FWwkB8Tu
-         KUMb7ziWW28tRR0jnlWUztgqqh8B2DqSAi1Z/Nx4fKeR3BRERizNdhhcWRnpT+80eQs6
-         QMACT3wzl1ud8Bb/lOpRLO6dEGPRqKkg0uMNACxRIEasXt1xpNpHu31SOPbErzVBMSfH
-         EIkPsDQAEMp9cHOFXrL9gxOo0nlmOct0711reyK5s1t7GRqs5Dd/3yTNUMi9vgtrXpFe
-         R0Rw==
-X-Gm-Message-State: AOAM5302LD5l3hG4Cbpt33YkytOaaEvVNdeg/gAJ3WeCzF9f5LgCVblW
-        EL1yQuPqTn9rf2HhBDD7PPdh0/6heIx2fdpm8hLyjZso
-X-Google-Smtp-Source: ABdhPJyf3RocfiFYJoOXhENx1YiwGXmbCnofX5NfPHEkKZ/YZSvrN2VK++bIgmUgSR+KxwDjqy0ss+1Z2wzh5TICNTA=
-X-Received: by 2002:a2e:9904:: with SMTP id v4mr6738335lji.321.1598441149742;
- Wed, 26 Aug 2020 04:25:49 -0700 (PDT)
+        bh=Uu4WskBztKVUoVSil4cy4MR9LWqcw8xk2hr+l0UQ5ho=;
+        b=uTuCaSNhOkJwnKb2eS65M5aK7RC+RS1dUb4Cdf0f3t6zh+mdOaaudwy47F1yQA851T
+         qQBBu7GQ+sBn2Bq0Kntbt6CQv6yxq+v7nv4gOnQs4a4uaVzABK9HpO3ufc8nJBiwNzN+
+         G5dSTQA6dYzSdnvKo5kcLoi797MLFByEXzQ8BUObZXhVnLsUS1sD2TT6bUb13FfFFvAZ
+         H9hpvx1CYnBVJDh0fnqfW+sOYstPQ7c7g03/VfMHKzW9Q6JPXV2r+qDsdMaMHlcRfR1d
+         wd4ZWajFZBvRbONMP4GkX2UMozZDNXN9EJVeKAN3MVd4kMxKF10uF1Q1Pq9t27Ngoirn
+         cRwg==
+X-Gm-Message-State: AOAM531e4eOgD/T1SxnaDFp7xAksEAnaBWBvMOm/ZdTzAR5y1otQFgmE
+        /goc6Lg3UCeTuyp40r7cKXzS3ZBheU/eR6Ko+RU=
+X-Google-Smtp-Source: ABdhPJxuVHbetnc2ILjUr/BDvb4NcfasRruvdoGDD4w183KvosLLP3yazMpa2v2J3UgwEYKy/joOCyF1a6VogES9xps=
+X-Received: by 2002:ac2:5a0c:: with SMTP id q12mr2905449lfn.173.1598440784506;
+ Wed, 26 Aug 2020 04:19:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200825145556.637323-1-gnurou@gmail.com> <CAAEAJfBbxExQP7cAQnsAE1_Zh-onBKPt8is3S9qBEpx6MAywRg@mail.gmail.com>
-In-Reply-To: <CAAEAJfBbxExQP7cAQnsAE1_Zh-onBKPt8is3S9qBEpx6MAywRg@mail.gmail.com>
+References: <20200825145556.637323-1-gnurou@gmail.com> <20200825145556.637323-3-gnurou@gmail.com>
+ <CAAEAJfD1kUJODa+-STV6Q+=9qWH8v2=KZzAA4ppgfbQxstO+Mg@mail.gmail.com>
+In-Reply-To: <CAAEAJfD1kUJODa+-STV6Q+=9qWH8v2=KZzAA4ppgfbQxstO+Mg@mail.gmail.com>
 From:   Alexandre Courbot <gnurou@gmail.com>
-Date:   Wed, 26 Aug 2020 20:25:38 +0900
-Message-ID: <CAAVeFu+0UqVwoUmOXm38E-vikaQZ4Graaz_9ERWozNAeTFkrPQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] media: v4l2-mem2mem: fix poll() bug
+Date:   Wed, 26 Aug 2020 20:19:33 +0900
+Message-ID: <CAAVeFuJgBqN7KYhNi=mMNxy6wHTZOn5E1=pHP3q=n8X++b5pmg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] media: v4l2-mem2mem: simplify poll logic a bit
 To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
@@ -73,54 +74,105 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Aug 26, 2020 at 7:10 AM Ezequiel Garcia
+Hi Ezequiel, thanks for the review!
+
+On Wed, Aug 26, 2020 at 1:15 PM Ezequiel Garcia
 <ezequiel@vanguardiasur.com.ar> wrote:
 >
-> Hello Alex,
+> Hi Alexandre,
 >
-> Thanks for the patch.
->
-> On Tue, Aug 25, 2020, 11:56 AM Alexandre Courbot <gnurou@gmail.com> wrote:
+> On Tue, 25 Aug 2020 at 11:56, Alexandre Courbot <gnurou@gmail.com> wrote:
 > >
-> > This addresses a very corner case that probably nobody ever encounters,
-> > but I have hit it when playing with vicoded so here is a tentative fix.
+> > Factorize redundant checks into a single code block, remove the early
+> > return, and declare variables in their innermost block. Hopefully this
+> > makes this code a little bit easier to follow.
 > >
 >
-> I'll try to make a more complete review soon, but meanwhile
-> I was thinking if it was possible to include a little kselftest program
-> for this issue, something CIs can pick-up and test corner cases like this,
-> making sure we don't regress on the issue.
+> This _definitely_ makes the poll handling more readable.
 >
-> (Or alternatively, v4l2-compliance?)
+> Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
+>
+> See below a nitpick.
+>
+> > Signed-off-by: Alexandre Courbot <gnurou@gmail.com>
+> > ---
+> >  drivers/media/v4l2-core/v4l2-mem2mem.c | 35 +++++++++++---------------
+> >  1 file changed, 15 insertions(+), 20 deletions(-)
+> >
+> > diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
+> > index 0d0192119af20..aeac9707123d0 100644
+> > --- a/drivers/media/v4l2-core/v4l2-mem2mem.c
+> > +++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+> > @@ -841,7 +841,6 @@ static __poll_t v4l2_m2m_poll_for_data(struct file *file,
+> >                                        struct poll_table_struct *wait)
+> >  {
+> >         struct vb2_queue *src_q, *dst_q;
+> > -       struct vb2_buffer *src_vb = NULL, *dst_vb = NULL;
+> >         __poll_t rc = 0;
+> >         unsigned long flags;
+> >
+> > @@ -863,33 +862,29 @@ static __poll_t v4l2_m2m_poll_for_data(struct file *file,
+> >                 return EPOLLERR;
+> >
+> >         spin_lock_irqsave(&src_q->done_lock, flags);
+> > -       if (!list_empty(&src_q->done_list))
+> > -               src_vb = list_first_entry(&src_q->done_list, struct vb2_buffer,
+> > -                                               done_entry);
+> > -       if (src_vb && (src_vb->state == VB2_BUF_STATE_DONE
+> > -                       || src_vb->state == VB2_BUF_STATE_ERROR))
+> > -               rc |= EPOLLOUT | EPOLLWRNORM;
+> > +       if (!list_empty(&src_q->done_list)) {
+> > +               struct vb2_buffer *src_vb = list_first_entry(
+> > +                       &src_q->done_list, struct vb2_buffer, done_entry);
+> > +               if (src_vb->state == VB2_BUF_STATE_DONE ||
+> > +                   src_vb->state == VB2_BUF_STATE_ERROR)
+> > +                       rc |= EPOLLOUT | EPOLLWRNORM;
+> > +       }
+> >         spin_unlock_irqrestore(&src_q->done_lock, flags);
+> >
+> >         spin_lock_irqsave(&dst_q->done_lock, flags);
+> > -       if (list_empty(&dst_q->done_list)) {
+> > +       if (!list_empty(&dst_q->done_list)) {
+> > +               struct vb2_buffer *dst_vb = list_first_entry(
+> > +                       &dst_q->done_list, struct vb2_buffer, done_entry);
+> > +               if (dst_vb->state == VB2_BUF_STATE_DONE ||
+> > +                   dst_vb->state == VB2_BUF_STATE_ERROR)
+> > +                       rc |= EPOLLIN | EPOLLRDNORM;
+> > +       } else if (dst_q->last_buffer_dequeued) {
+> >                 /*
+> >                  * If the last buffer was dequeued from the capture queue,
+> >                  * return immediately. DQBUF will return -EPIPE.
+> >                  */
+>
+> The part about "returning immediately" doesn't make
+> much sense now. Could we rephrase this, keeping the -EPIPE
+> comment?
 
-I am not very familiar with kselftest, but IIUC the conditions that
-lead to this issue are easier to reproduce using v4l2-compliance,
-where we can have a user-space driving the queues. It would also have
-the benefit to exercise all drivers. I'll think about adding such a
-test, thanks for the suggestion!
+I understood this sentence as referring to the system call and not
+just this function, but maybe we can rephrase this as "... make
+user-space wake up immediately"?
 
 >
-> Thanks!
+> Thanks,
 > Ezequiel
 >
-> > Patch 1/2 addresses the issue that when the last buffer of a m2m device
-> > has been dequeued, any attempt to poll with EPOLLOUT will result in only
-> > EPOLLIN being returned, even if OUTPUT buffers are still pending. The
-> > issue stems from the fact that the last buffer check if done first, and
-> > returns immediately if true.
+> > -               if (dst_q->last_buffer_dequeued) {
+> > -                       spin_unlock_irqrestore(&dst_q->done_lock, flags);
+> > -                       rc |= EPOLLIN | EPOLLRDNORM;
+> > -                       return rc;
+> > -               }
+> > -       }
+> > -
+> > -       if (!list_empty(&dst_q->done_list))
+> > -               dst_vb = list_first_entry(&dst_q->done_list, struct vb2_buffer,
+> > -                                               done_entry);
+> > -       if (dst_vb && (dst_vb->state == VB2_BUF_STATE_DONE
+> > -                       || dst_vb->state == VB2_BUF_STATE_ERROR))
+> >                 rc |= EPOLLIN | EPOLLRDNORM;
+> > +       }
+> >         spin_unlock_irqrestore(&dst_q->done_lock, flags);
 > >
-> > Patch 2/2 builds on the first one to (hopefully) clean up the code a bit
-> > and make the function flow easier to follow. Functionally speaking it is
-> > supposed to be a no-op and it can safely be dropped if the former code
-> > is preferred - the actual fix is in 1/2.
-> >
-> > Alexandre Courbot (2):
-> >   media: v4l2-mem2mem: consider OUTPUT queue first when polling
-> >   media: v4l2-mem2mem: simplify poll logic a bit
-> >
-> >  drivers/media/v4l2-core/v4l2-mem2mem.c | 42 +++++++++++---------------
-> >  1 file changed, 18 insertions(+), 24 deletions(-)
-> >
+> >         return rc;
 > > --
 > > 2.28.0
 > >
