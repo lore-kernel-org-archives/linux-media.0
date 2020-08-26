@@ -1,264 +1,120 @@
-Return-Path: <SRS0=xaSx=B3=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=cygN=CE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93BD8C433E4
-	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 18:42:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4335EC433DF
+	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 18:06:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7049D204EC
-	for <linux-media@archiver.kernel.org>; Mon, 17 Aug 2020 18:42:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1F5F420737
+	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 18:06:48 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="HCgGTSL+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731699AbgHQSmd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Aug 2020 14:42:33 -0400
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:45407 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388098AbgHQP5L (ORCPT
+        id S1726790AbgHZSGk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 26 Aug 2020 14:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36466 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726187AbgHZSGg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Aug 2020 11:57:11 -0400
-X-Originating-IP: 93.34.118.233
-Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id E14B040004;
-        Mon, 17 Aug 2020 15:56:59 +0000 (UTC)
-From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
-To:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-media@vger.kernel.org, Leon Luo <leonl@leopardimaging.com>
-Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>, mchehab@kernel.org,
-        sakari.ailus@linux.intel.com, hverkuil-cisco@xs4all.nl,
-        laurent.pinchart@ideasonboard.com,
-        linux-renesas-soc@vger.kernel.org
-Subject: 
-Date:   Mon, 17 Aug 2020 18:00:37 +0200
-Message-Id: <20200817160037.255972-1-jacopo+renesas@jmondi.org>
-X-Mailer: git-send-email 2.27.0
+        Wed, 26 Aug 2020 14:06:36 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68EDC061574;
+        Wed, 26 Aug 2020 11:06:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=Yzdof1CrmZPvQSdWOfnC4TP7kZhRZYrI2aPOvWW4r0c=; b=HCgGTSL+FAaNQNPUZggHMSb/qU
+        IOTBhz+Gg+i0Vgo1UqD00Xd1bY4o0NmLCN8nqXTxmBC9NFAKFsSUyOKarB2Wposx0hpyb+zOmjPQg
+        N1Pj5XE7fwFSollzF5tTgqRkMuu3E7DOs1Hv/6P26G6/qt/ghuswHev9pEistMeEjTY1CssjjxRBc
+        xwh89LItYYWmXe4EzAChp0L/kw46jqk6qV3ytzIhypWPSvzAq+po7+V6OPpo2DNMcRrjU6ANbB9n5
+        m82JxLjOc3XD6u9xeBAE80WxpjiuIGjy+VPGHlMe46+dWX+djVwLoICRL5d606rF0oLtfkH1hq+ld
+        YZ6UJ8rA==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kAzoa-0000W1-VS; Wed, 26 Aug 2020 18:06:29 +0000
+Subject: Re: [PATCH v6 6/6] Documentation: ACPI: Document
+ allow-low-power-probe _DSD property
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org, Bingbu Cao <bingbu.cao@intel.com>,
+        linux-media@vger.kernel.org,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
+        Hyungwoo Yang <hyungwoo.yang@intel.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>,
+        "Qiu, Tian Shu" <tian.shu.qiu@intel.com>
+References: <20200826115432.6103-1-sakari.ailus@linux.intel.com>
+ <20200826115432.6103-7-sakari.ailus@linux.intel.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <ac5a7cb9-7fd1-fb73-b872-d5a58846d99f@infradead.org>
+Date:   Wed, 26 Aug 2020 11:06:22 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
+In-Reply-To: <20200826115432.6103-7-sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Subject: [PATCH] dt-bindings: media: imx274: Convert to json-schema
+On 8/26/20 4:54 AM, Sakari Ailus wrote:
+> Document the probe-low-power _DSD property and how it is used with I²C
+> drivers.
+> 
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> ---
+>  .../acpi/dsd/allow-low-power-probe.rst        | 28 +++++++++++++++++++
+>  Documentation/firmware-guide/acpi/index.rst   |  1 +
+>  2 files changed, 29 insertions(+)
+>  create mode 100644 Documentation/firmware-guide/acpi/dsd/allow-low-power-probe.rst
+> 
+> diff --git a/Documentation/firmware-guide/acpi/dsd/allow-low-power-probe.rst b/Documentation/firmware-guide/acpi/dsd/allow-low-power-probe.rst
+> new file mode 100644
+> index 0000000000000..6fcc89162b898
+> --- /dev/null
+> +++ b/Documentation/firmware-guide/acpi/dsd/allow-low-power-probe.rst
+> @@ -0,0 +1,28 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +======================================
+> +Probing I²C devices in low power state
+> +======================================
+> +
+> +Introduction
+> +============
+> +
+> +In some cases it may be preferred to leave certain devices powered off for the
+> +entire system bootup if powering on these devices has adverse side effects,
+> +beyond just powering on the said device. Linux recognizes the _DSD property
+> +"allow-low-power-probe" that can be used for this purpose.
+> +
+> +How it works
+> +============
+> +
+> +The property "allow-low-power-probe" boolean property may be used to tell Linux
 
-Convert the imx274 bindings document to json-schema and update
-the MAINTAINERS file accordingly.
+Drop the first "property".
 
-Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
----
- .../bindings/media/i2c/sony,imx214.txt        |  53 --------
- .../bindings/media/i2c/sony,imx214.yaml       | 124 ++++++++++++++++++
- MAINTAINERS                                   |   2 +-
- 3 files changed, 125 insertions(+), 54 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/media/i2c/sony,imx214.txt
- create mode 100644 Documentation/devicetree/bindings/media/i2c/sony,imx214.yaml
+> +that the I²C framework should instruct the kernel ACPI framework to leave the
+> +device in the low power state. If the driver indicates its support for this by
+> +setting the I2C_DRV_FL_ALLOW_LOW_POWER_PROBE flag in struct i2c_driver.flags
+> +field and the "allow-low-power-probe" property is present, the device will not
+> +be powered on for probe.
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx214.txt b/Documentation/devicetree/bindings/media/i2c/sony,imx214.txt
-deleted file mode 100644
-index f11f28a5fda4..000000000000
---- a/Documentation/devicetree/bindings/media/i2c/sony,imx214.txt
-+++ /dev/null
-@@ -1,53 +0,0 @@
--* Sony 1/3.06-Inch 13.13Mp CMOS Digital Image Sensor
--
--The Sony imx214 is a 1/3.06-inch CMOS active pixel digital image sensor with
--an active array size of 4224H x 3200V. It is programmable through an I2C
--interface.
--Image data is sent through MIPI CSI-2, through 2 or 4 lanes at a maximum
--throughput of 1.2Gbps/lane.
--
--
--Required Properties:
--- compatible: Shall be "sony,imx214".
--- reg: I2C bus address of the device. Depending on how the sensor is wired,
--       it shall be <0x10> or <0x1a>;
--- enable-gpios: GPIO descriptor for the enable pin.
--- vdddo-supply: Chip digital IO regulator (1.8V).
--- vdda-supply: Chip analog regulator (2.7V).
--- vddd-supply: Chip digital core regulator (1.12V).
--- clocks: Reference to the xclk clock.
--- clock-frequency: Frequency of the xclk clock.
--
--Optional Properties:
--- flash-leds: See ../video-interfaces.txt
--- lens-focus: See ../video-interfaces.txt
--
--The imx214 device node shall contain one 'port' child node with
--an 'endpoint' subnode. For further reading on port node refer to
--Documentation/devicetree/bindings/media/video-interfaces.txt.
--
--Required Properties on endpoint:
--- data-lanes: check ../video-interfaces.txt
--- link-frequencies: check ../video-interfaces.txt
--- remote-endpoint: check ../video-interfaces.txt
--
--Example:
--
--	camera-sensor@1a {
--		compatible = "sony,imx214";
--		reg = <0x1a>;
--		vdddo-supply = <&pm8994_lvs1>;
--		vddd-supply = <&camera_vddd_1v12>;
--		vdda-supply = <&pm8994_l17>;
--		lens-focus = <&ad5820>;
--		enable-gpios = <&msmgpio 25 GPIO_ACTIVE_HIGH>;
--		clocks = <&mmcc CAMSS_MCLK0_CLK>;
--		clock-frequency = <24000000>;
--		port {
--			imx214_ep: endpoint {
--				data-lanes = <1 2 3 4>;
--				link-frequencies = /bits/ 64 <480000000>;
--				remote-endpoint = <&csiphy0_ep>;
--			};
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx214.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx214.yaml
-new file mode 100644
-index 000000000000..ddd4627214b1
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/sony,imx214.yaml
-@@ -0,0 +1,124 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/sony,imx214.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Sony 1/3.06-Inch 13.13Mp CMOS Digital Image Sensor
-+
-+maintainers:
-+  - Ricardo Ribalda <ribalda@kernel.org>
-+
-+description: -|
-+  The Sony imx214 is a 1/3.06-inch CMOS active pixel digital image sensor with
-+  an active array size of 4224H x 3200V. It is programmable through an I2C
-+  interface.  Image data is sent through MIPI CSI-2, through 2 or 4 lanes at a
-+  maximum throughput of 1.2Gbps/lane.
-+
-+properties:
-+  compatible:
-+    const: sony,imx214
-+
-+  reg:
-+    description: -|
-+      I2C device address. Depends on how the sensor is wired, it shall be
-+    enum:
-+      - 0x10
-+      - 0x1a
-+
-+  clocks:
-+    description: Reference to the xclk clock.
-+    maxItems: 1
-+
-+  clock-frequency:
-+    description: Frequency of the xclk clock in Hz.
-+
-+  enable-gpios:
-+    description: GPIO descriptor for the enable pin.
-+    maxItems: 1
-+
-+  vdddo-supply:
-+    description: Chip digital IO regulator (1.8V).
-+    maxItems: 1
-+
-+  vdda-supply:
-+    description: Chip analog regulator (2.7V).
-+    maxItems: 1
-+
-+  vddd-supply:
-+    description: Chip digital core regulator (1.12V).
-+    maxItems: 1
-+
-+  flash-leds:
-+    description: See ../video-interfaces.txt
-+
-+  lens-focus:
-+    description: See ../video-interfaces.txt
-+
-+  port:
-+    type: object
-+    description: |
-+      The device node must contain one 'port' child node for its digital output
-+      video port, in accordance with the video interface bindings defined in
-+      Documentation/devicetree/bindings/media/video-interfaces.txt.
-+
-+    properties:
-+      endpoint:
-+        type: object
-+        properties:
-+          remote-endpoint:
-+            description: See ../video-interfaces.txt
-+
-+          data-lanes:
-+            description: See ../video-interfaces.txt
-+
-+          link-frequencies:
-+            description: See ../video-interfaces.txt
-+
-+        required:
-+          - data-lanes
-+          - link-frequencies
-+
-+    additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-frequency
-+  - enable-gpios
-+  - vdddo-supply
-+  - vdda-supply
-+  - vddd-supply
-+  - port
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    i2c0 {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        camera-sensor@1a {
-+            compatible = "sony,imx214";
-+            reg = <0x1a>;
-+            vdddo-supply = <&pm8994_lvs1>;
-+            vddd-supply = <&camera_vddd_1v12>;
-+            vdda-supply = <&pm8994_l17>;
-+            lens-focus = <&ad5820>;
-+            enable-gpios = <&msmgpio 25 GPIO_ACTIVE_HIGH>;
-+            clocks = <&camera_clk>;
-+            clock-frequency = <24000000>;
-+
-+            port {
-+                imx214_ep: endpoint {
-+                    data-lanes = <1 2 3 4>;
-+                    link-frequencies = /bits/ 64 <480000000>;
-+                    remote-endpoint = <&csiphy0_ep>;
-+                };
-+            };
-+        };
-+    };
-+
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 6c8e98238a7b..d1a6173d3b64 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15918,7 +15918,7 @@ M:	Ricardo Ribalda <ribalda@kernel.org>
- L:	linux-media@vger.kernel.org
- S:	Maintained
- T:	git git://linuxtv.org/media_tree.git
--F:	Documentation/devicetree/bindings/media/i2c/sony,imx214.txt
-+F:	Documentation/devicetree/bindings/media/i2c/sony,imx214.yaml
- F:	drivers/media/i2c/imx214.c
-
- SONY IMX219 SENSOR DRIVER
---
-2.27.0
+thanks.
+-- 
+~Randy
 
