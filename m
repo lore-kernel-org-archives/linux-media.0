@@ -2,283 +2,170 @@ Return-Path: <SRS0=cygN=CE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 896A7C433DF
-	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 07:19:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 551F5C433E3
+	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 08:42:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5B4B820825
-	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 07:19:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1598426351;
-	bh=0x9ncJQIGlCkEuJhLzZ1EuCxyoWzRXNvdeYep6RQ+5Y=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=dwDx6OteAAcTdTF5RQy+GAC/qJouTYgi4XKBl311OXECSU5WA931qgqvwIMc18xBv
-	 KOn2si34y5QXHM5DO4+lKQV6VA1AkwlEu+WSfLt/wVosT6fGvVPu/1U0Ffmchl0Me8
-	 bwozVtE+fjkfopsd7G9jSEHVRhFflsSq/cN0/ug0=
+	by mail.kernel.org (Postfix) with ESMTP id 1CA2A208A9
+	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 08:42:42 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X0VVbmuU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726740AbgHZHSu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 26 Aug 2020 03:18:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33050 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726233AbgHZHSt (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 26 Aug 2020 03:18:49 -0400
-Received: from mail.kernel.org (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B9AAA2071E;
-        Wed, 26 Aug 2020 07:18:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598426328;
-        bh=0x9ncJQIGlCkEuJhLzZ1EuCxyoWzRXNvdeYep6RQ+5Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p6g7zIemwUgyTu6hyjK0M5mkDRULyfTJb3rysCmGquEowsshS1qwOsgKFtB/mvI/p
-         vS9YgMe3RO+iAheZAuHPMMq8d4TgnqcqraQFSCdX5NdVGiNP5A70SmoOHFvbkBuAGq
-         lqT4FU1+HbqsF9+KfPt/Q+vO+61XoG8KS/9QYAjw=
-Received: from mchehab by mail.kernel.org with local (Exim 4.94)
-        (envelope-from <mchehab@kernel.org>)
-        id 1kAphl-001Raf-V6; Wed, 26 Aug 2020 09:18:45 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     linux-media@vger.kernel.org,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>
-Subject: [PATCH 2/4] media: docs: use the new SPDX header for GFDL-1.1 on *.svg files
-Date:   Wed, 26 Aug 2020 09:18:37 +0200
-Message-Id: <f37dc4587f1adbf57c44c9e204c748d97c802fb8.1598426302.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <929df929283e38b388f601c2ba521257e38cc566.1598426302.git.mchehab+huawei@kernel.org>
-References: <929df929283e38b388f601c2ba521257e38cc566.1598426302.git.mchehab+huawei@kernel.org>
+        id S1727768AbgHZIml (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 26 Aug 2020 04:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32958 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726817AbgHZImk (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 26 Aug 2020 04:42:40 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D25C061574;
+        Wed, 26 Aug 2020 01:42:39 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id e187so527678ybc.5;
+        Wed, 26 Aug 2020 01:42:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5ViRH3laE2QbcXmDZtwWF8vjYiOD2tb9bGM2bDxMEN8=;
+        b=X0VVbmuUJHi6o5GDPu5Rii7Jn/Fo8SgPsvLw/ez1EoYyPNAEMbIhIqEtb8L3eUXbEB
+         v3OyK5N9Z4r9C6Coen1ap1iN1J8pP81oVIAiZ1zCS/VIRPVXdZigVv3sl0r8s1XpxRJF
+         lgtV1tDHzgDwUw62d/V2vMUwvHw4qEVL7cDZmxsH5bgiwnocbPCE6kw2fQaodfOlPuiD
+         ATF3K/hFS27Pnh1Hcq80exFSgA0s44mjOnAGufxdwYvodR+ptOg6qe7BO+rH0CLpHlh0
+         0ivEWiu+cMDdRCV59zzJsam8m831izTlLsPTAPgXlafjuMx/w2l5ZQWfhtv2Ib2jJHHs
+         cUcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5ViRH3laE2QbcXmDZtwWF8vjYiOD2tb9bGM2bDxMEN8=;
+        b=uToHZRSiulkRnREmbc0zKOOx4zq6mwbsf56LIzvrTPM8yMhe58KGe5r9l1CpZNdasi
+         1ZtlZpAz3bGATLtLzEzaGhQj8IaRmGkKMhnhgjLg0G3w6LfseC7sVSjQFL2rakfVgxch
+         7FffL0/3UtnXPgVm4aSGMHXaXga1sCpYP+6cskrhBe4CoKZMOBZDIpeu86HsrLiRJmPc
+         xJZvg+Ct7jywygTNgpvJBzlJtfFoP8x2LKja8ki8kTpX2T0ULezj2j0x3TnbmBP/iaoy
+         /zeTo2XKpw25I5uFOArrs+OMsdvo9ZVzWy7GYqdWbo7tIXbZNSuVLWCzjI3KMjh6ew+H
+         W69g==
+X-Gm-Message-State: AOAM530sqRsRKh9gR+MlvF0eUxT9UwB5SIOTsvpCHYuJmEFrKEGX9HHd
+        ACmrOnvM9RtWcZnmBXGvJB+2BdN+OGgN/HNpcC9eRVez4ww=
+X-Google-Smtp-Source: ABdhPJydZXzgmPSm5JZRguhED1DhJVJC8Twsauvyt4K0uczjLU0+k0YjqfEeXomhfbtwgHveaq2Z2SnvbsMz60CworU=
+X-Received: by 2002:a25:8149:: with SMTP id j9mr20646722ybm.214.1598431358936;
+ Wed, 26 Aug 2020 01:42:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200818122012.37956-1-jacopo+renesas@jmondi.org>
+ <20200818122012.37956-4-jacopo+renesas@jmondi.org> <20200819135423.GL6049@pendragon.ideasonboard.com>
+ <CA+V-a8sxDJXrGM-MYEwNS=D-eyA6oTRvDU3YT7Uu5Ph5kFh15w@mail.gmail.com> <20200822013558.GN5967@pendragon.ideasonboard.com>
+In-Reply-To: <20200822013558.GN5967@pendragon.ideasonboard.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Wed, 26 Aug 2020 09:42:12 +0100
+Message-ID: <CA+V-a8uUp1XLEo_w=5vaVgXfCeepCg6SdXz_27RX6=gYR4bM8w@mail.gmail.com>
+Subject: Re: [PATCH 3/3] dt-bindings: media: ov772x: Document endpoint props
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-SPDX v3.10 gained support for GFDL-1.1 with no invariant sections:
+Hi Laurent,
 
-	https://spdx.org/licenses/GFDL-1.1-no-invariants-or-later.html
+On Sat, Aug 22, 2020 at 2:36 AM Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> Hi Prabhakar,
+>
+> On Fri, Aug 21, 2020 at 12:37:35PM +0100, Lad, Prabhakar wrote:
+> > On Wed, Aug 19, 2020 at 2:54 PM Laurent Pinchart wrote:
+> > > On Tue, Aug 18, 2020 at 02:20:12PM +0200, Jacopo Mondi wrote:
+> > > > Document endpoint properties for the parallel bus type and
+> > > > add them to the example.
+> > > >
+> > > > Specify a few constraints:
+> > > > - If the bus type is BT.656 no hsync or vsycn polarities can be
+> > > >   specified.
+> > > > - If the bus width is 10 bits, not data-shift can be applied.
+> > > >
+> > > > Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+> > > > ---
+> > > >  .../devicetree/bindings/media/i2c/ov772x.yaml | 43 +++++++++++++++++++
+> > > >  1 file changed, 43 insertions(+)
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/media/i2c/ov772x.yaml b/Documentation/devicetree/bindings/media/i2c/ov772x.yaml
+> > > > index 75dad40f70cc..3fad5dffd19a 100644
+> > > > --- a/Documentation/devicetree/bindings/media/i2c/ov772x.yaml
+> > > > +++ b/Documentation/devicetree/bindings/media/i2c/ov772x.yaml
+> > > > @@ -50,9 +50,47 @@ properties:
+> > > >            bus-type:
+> > > >              enum: [5, 6]
+> > > >
+> > > > +          bus-width:
+> > > > +            enum: [8, 10]
+> > > > +            default: 10
+> > > > +
+> > > > +          data-shift:
+> > > > +            enum: [0, 2]
+> > > > +            default: 0
+> > > > +
+> > > > +          hsync-active:
+> > > > +            enum: [0, 1]
+> > > > +            default: 1
+> > > > +
+> > > > +          vsync-active:
+> > > > +            enum: [0, 1]
+> > > > +            default: 1
+> > > > +
+> > > > +          pclk-sample:
+> > > > +            enum: [0, 1]
+> > > > +            default: 1
+> > > > +
+> > > >            remote-endpoint:
+> > > >              description: A phandle to the bus receiver's endpoint node.
+> > > >
+> > > > +        allOf:
+> > > > +          - if:
+> > > > +              properties:
+> > > > +                bus-type:
+> > > > +                  const: 6
+> > > > +            then:
+> > > > +                properties:
+> > > > +                  hsync-active: false
+> > > > +                  vsync-active: false
+> > > > +
+> > > > +          - if:
+> > > > +              properties:
+> > > > +                bus-width:
+> > > > +                  const: 10
+> > > > +            then:
+> > > > +                properties:
+> > > > +                  data-shift:
+> > > > +                    const: 0
+> > >
+> > > I'd add a blank line here.
+> > >
+> > > >          required:
+> > > >            - bus-type
+> > >
+> > > Should some of the properties be required ? Possibly conditioned on
+> > > bus-type ?
+> >
+> > Agreed, would be interesting to know how this can be handled (split
+> > out bus-type and add required properties for each) ?
+>
+> We can add required: statements to the above if/then/else.
+>
+Aha thanks for pointing out. (I hadn't come across such cases)
 
-So, remove the license text, replacing them by this new SPDX license.
-
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- .../userspace-api/media/typical_media_device.svg      | 11 +----------
- Documentation/userspace-api/media/v4l/crop.svg        | 11 +----------
- Documentation/userspace-api/media/v4l/fieldseq_bt.svg | 11 +----------
- Documentation/userspace-api/media/v4l/fieldseq_tb.svg | 11 +----------
- .../media/v4l/subdev-image-processing-crop.svg        | 11 +----------
- .../media/v4l/subdev-image-processing-full.svg        | 11 +----------
- .../subdev-image-processing-scaling-multi-source.svg  | 11 +----------
- Documentation/userspace-api/media/v4l/vbi_525.svg     | 11 +----------
- Documentation/userspace-api/media/v4l/vbi_625.svg     | 11 +----------
- Documentation/userspace-api/media/v4l/vbi_hsync.svg   | 11 +----------
- 10 files changed, 10 insertions(+), 100 deletions(-)
-
-diff --git a/Documentation/userspace-api/media/typical_media_device.svg b/Documentation/userspace-api/media/typical_media_device.svg
-index 3420341ff7b6..fca7af8e438b 100644
---- a/Documentation/userspace-api/media/typical_media_device.svg
-+++ b/Documentation/userspace-api/media/typical_media_device.svg
-@@ -1,14 +1,5 @@
- <?xml version="1.0" encoding="UTF-8"?>
--<!--
--    Permission is granted to copy, distribute and/or modify this
--    document under the terms of the GNU Free Documentation License,
--    Version 1.1 or any later version published by the Free Software
--    Foundation, with no Invariant Sections, no Front-Cover Texts
--    and no Back-Cover Texts. A copy of the license is included at
--    Documentation/userspace-api/media/fdl-appendix.rst.
--
--    TODO: replace it to GFDL-1.1-or-later WITH no-invariant-sections
---->
-+<!-- SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later -->
- <svg id="svg2" width="235mm" height="179mm" clip-path="url(#a)" fill-rule="evenodd" stroke-linejoin="round" stroke-width="28.222" preserveAspectRatio="xMidYMid" version="1.2" viewBox="0 0 22648.239 17899.829" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><metadata id="metadata1533"><rdf:RDF><cc:Work rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/><dc:title/></cc:Work></rdf:RDF></metadata><defs id="defs4"><clipPath id="a"><rect id="rect7" width="28000" height="21000"/></clipPath></defs><path id="path11" d="m10146 2636c-518.06 0-1035.1 515-1035.1 1031v4124c0 516 517.06 1032 1035.1 1032h8572.2c518.06 0 1036.1-516 1036.1-1032v-4124c0-516-518.06-1031-1036.1-1031h-8572.2z"
- fill="#fcf" style=""/><path id="path15" d="m1505.5 13443c-293 0-585 292-585 585v2340c0 293 292 586 585 586h3275c293 0 586-293 586-586v-2340c0-293-293-585-586-585h-3275z" fill="#ffc" style=""/><path id="path19" d="m517.15 22.013c-461 0-922 461-922 922v11169c0 461 461 923 922 923h3692c461 0 922-462 922-923v-11169c0-461-461-922-922-922h-3692z" fill="#e6e6e6" style=""/><path id="path23" d="m2371.5 6438h-2260v-1086h4520v1086h-2260z" fill="#ff8080" style=""/><path id="path25" d="m2371.5 6438h-2260v-1086h4520v1086h-2260z" fill="none" stroke="#3465af" style=""/><text id="text27" class="TextShape" x="-2089.4541" y="-2163.9871" font-family="Serif, serif" font-size="493.88px"><tspan id="tspan29" class="TextParagraph" font-family="Serif, serif" font-size="493.88px"><tspan id="tspan31" class="TextPosition" x="489.5459" y="6111.0132" font-family="Serif, serif" font-size="493.88px"><tspan id="tspan33"
- fill="#000000" font-family="Serif, serif" font-size="493.88px">Audio decoder</tspan></tspan></tspan></text>
-diff --git a/Documentation/userspace-api/media/v4l/crop.svg b/Documentation/userspace-api/media/v4l/crop.svg
-index 4cd47f98e7c8..5483227757e7 100644
---- a/Documentation/userspace-api/media/v4l/crop.svg
-+++ b/Documentation/userspace-api/media/v4l/crop.svg
-@@ -1,14 +1,5 @@
- <?xml version="1.0" encoding="UTF-8" standalone="no"?>
--<!--
--    Permission is granted to copy, distribute and/or modify this
--    document under the terms of the GNU Free Documentation License,
--    Version 1.1 or any later version published by the Free Software
--    Foundation, with no Invariant Sections, no Front-Cover Texts
--    and no Back-Cover Texts. A copy of the license is included at
--    Documentation/userspace-api/media/fdl-appendix.rst.
--
--    TODO: replace it to GFDL-1.1-or-later WITH no-invariant-sections
---->
-+<!-- SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later -->
- <svg
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:cc="http://creativecommons.org/ns#"
-diff --git a/Documentation/userspace-api/media/v4l/fieldseq_bt.svg b/Documentation/userspace-api/media/v4l/fieldseq_bt.svg
-index b663f6fcb70b..91ac2813b454 100644
---- a/Documentation/userspace-api/media/v4l/fieldseq_bt.svg
-+++ b/Documentation/userspace-api/media/v4l/fieldseq_bt.svg
-@@ -1,14 +1,5 @@
- <?xml version="1.0" encoding="UTF-8" standalone="no"?>
--<!--
--    Permission is granted to copy, distribute and/or modify this
--    document under the terms of the GNU Free Documentation License,
--    Version 1.1 or any later version published by the Free Software
--    Foundation, with no Invariant Sections, no Front-Cover Texts
--    and no Back-Cover Texts. A copy of the license is included at
--    Documentation/userspace-api/media/fdl-appendix.rst.
--
--    TODO: replace it to GFDL-1.1-or-later WITH no-invariant-sections
---->
-+<!-- SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later -->
- <svg
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:cc="http://creativecommons.org/ns#"
-diff --git a/Documentation/userspace-api/media/v4l/fieldseq_tb.svg b/Documentation/userspace-api/media/v4l/fieldseq_tb.svg
-index f8b440a1cb60..7b4f8fb33757 100644
---- a/Documentation/userspace-api/media/v4l/fieldseq_tb.svg
-+++ b/Documentation/userspace-api/media/v4l/fieldseq_tb.svg
-@@ -1,14 +1,5 @@
- <?xml version="1.0" encoding="UTF-8" standalone="no"?>
--<!--
--    Permission is granted to copy, distribute and/or modify this
--    document under the terms of the GNU Free Documentation License,
--    Version 1.1 or any later version published by the Free Software
--    Foundation, with no Invariant Sections, no Front-Cover Texts
--    and no Back-Cover Texts. A copy of the license is included at
--    Documentation/userspace-api/media/fdl-appendix.rst.
--
--    TODO: replace it to GFDL-1.1-or-later WITH no-invariant-sections
---->
-+<!-- SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later -->
- <svg
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:cc="http://creativecommons.org/ns#"
-diff --git a/Documentation/userspace-api/media/v4l/subdev-image-processing-crop.svg b/Documentation/userspace-api/media/v4l/subdev-image-processing-crop.svg
-index 109bbcebd3b4..d92311281e01 100644
---- a/Documentation/userspace-api/media/v4l/subdev-image-processing-crop.svg
-+++ b/Documentation/userspace-api/media/v4l/subdev-image-processing-crop.svg
-@@ -1,14 +1,5 @@
- <?xml version="1.0" encoding="UTF-8" standalone="no"?>
--<!--
--    Permission is granted to copy, distribute and/or modify this
--    document under the terms of the GNU Free Documentation License,
--    Version 1.1 or any later version published by the Free Software
--    Foundation, with no Invariant Sections, no Front-Cover Texts
--    and no Back-Cover Texts. A copy of the license is included at
--    Documentation/userspace-api/media/fdl-appendix.rst.
--
--    TODO: replace it to GFDL-1.1-or-later WITH no-invariant-sections
---->
-+<!-- SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later -->
- <svg
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:cc="http://creativecommons.org/ns#"
-diff --git a/Documentation/userspace-api/media/v4l/subdev-image-processing-full.svg b/Documentation/userspace-api/media/v4l/subdev-image-processing-full.svg
-index cfdb7532d5b6..864a594ff8d0 100644
---- a/Documentation/userspace-api/media/v4l/subdev-image-processing-full.svg
-+++ b/Documentation/userspace-api/media/v4l/subdev-image-processing-full.svg
-@@ -1,14 +1,5 @@
- <?xml version="1.0" encoding="UTF-8" standalone="no"?>
--<!--
--    Permission is granted to copy, distribute and/or modify this
--    document under the terms of the GNU Free Documentation License,
--    Version 1.1 or any later version published by the Free Software
--    Foundation, with no Invariant Sections, no Front-Cover Texts
--    and no Back-Cover Texts. A copy of the license is included at
--    Documentation/userspace-api/media/fdl-appendix.rst.
--
--    TODO: replace it to GFDL-1.1-or-later WITH no-invariant-sections
---->
-+<!-- SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later -->
- <svg
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:cc="http://creativecommons.org/ns#"
-diff --git a/Documentation/userspace-api/media/v4l/subdev-image-processing-scaling-multi-source.svg b/Documentation/userspace-api/media/v4l/subdev-image-processing-scaling-multi-source.svg
-index f7f1379d30a6..b75755d31f15 100644
---- a/Documentation/userspace-api/media/v4l/subdev-image-processing-scaling-multi-source.svg
-+++ b/Documentation/userspace-api/media/v4l/subdev-image-processing-scaling-multi-source.svg
-@@ -1,14 +1,5 @@
- <?xml version="1.0" encoding="UTF-8" standalone="no"?>
--<!--
--    Permission is granted to copy, distribute and/or modify this
--    document under the terms of the GNU Free Documentation License,
--    Version 1.1 or any later version published by the Free Software
--    Foundation, with no Invariant Sections, no Front-Cover Texts
--    and no Back-Cover Texts. A copy of the license is included at
--    Documentation/userspace-api/media/fdl-appendix.rst.
--
--    TODO: replace it to GFDL-1.1-or-later WITH no-invariant-sections
---->
-+<!-- SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later -->
- <svg
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:cc="http://creativecommons.org/ns#"
-diff --git a/Documentation/userspace-api/media/v4l/vbi_525.svg b/Documentation/userspace-api/media/v4l/vbi_525.svg
-index b7d09057617e..b01086d466a6 100644
---- a/Documentation/userspace-api/media/v4l/vbi_525.svg
-+++ b/Documentation/userspace-api/media/v4l/vbi_525.svg
-@@ -1,14 +1,5 @@
- <?xml version="1.0" encoding="UTF-8" standalone="no"?>
--<!--
--    Permission is granted to copy, distribute and/or modify this
--    document under the terms of the GNU Free Documentation License,
--    Version 1.1 or any later version published by the Free Software
--    Foundation, with no Invariant Sections, no Front-Cover Texts
--    and no Back-Cover Texts. A copy of the license is included at
--    Documentation/userspace-api/media/fdl-appendix.rst.
--
--    TODO: replace it to GFDL-1.1-or-later WITH no-invariant-sections
---->
-+<!-- SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later -->
- <svg
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:cc="http://creativecommons.org/ns#"
-diff --git a/Documentation/userspace-api/media/v4l/vbi_625.svg b/Documentation/userspace-api/media/v4l/vbi_625.svg
-index e1f5e8552c37..41c1ce920d14 100644
---- a/Documentation/userspace-api/media/v4l/vbi_625.svg
-+++ b/Documentation/userspace-api/media/v4l/vbi_625.svg
-@@ -1,14 +1,5 @@
- <?xml version="1.0" encoding="UTF-8" standalone="no"?>
--<!--
--    Permission is granted to copy, distribute and/or modify this
--    document under the terms of the GNU Free Documentation License,
--    Version 1.1 or any later version published by the Free Software
--    Foundation, with no Invariant Sections, no Front-Cover Texts
--    and no Back-Cover Texts. A copy of the license is included at
--    Documentation/userspace-api/media/fdl-appendix.rst.
--
--    TODO: replace it to GFDL-1.1-or-later WITH no-invariant-sections
---->
-+<!-- SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later -->
- <svg
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:cc="http://creativecommons.org/ns#"
-diff --git a/Documentation/userspace-api/media/v4l/vbi_hsync.svg b/Documentation/userspace-api/media/v4l/vbi_hsync.svg
-index 77606a7b00a4..7fcf12a7ece0 100644
---- a/Documentation/userspace-api/media/v4l/vbi_hsync.svg
-+++ b/Documentation/userspace-api/media/v4l/vbi_hsync.svg
-@@ -1,14 +1,5 @@
- <?xml version="1.0" encoding="UTF-8" standalone="no"?>
--<!--
--    Permission is granted to copy, distribute and/or modify this
--    document under the terms of the GNU Free Documentation License,
--    Version 1.1 or any later version published by the Free Software
--    Foundation, with no Invariant Sections, no Front-Cover Texts
--    and no Back-Cover Texts. A copy of the license is included at
--    Documentation/userspace-api/media/fdl-appendix.rst.
--
--    TODO: replace it to GFDL-1.1-or-later WITH no-invariant-sections
---->
-+<!-- SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later -->
- <svg
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:cc="http://creativecommons.org/ns#"
--- 
-2.26.2
-
+Cheers,
+Prabhakar
