@@ -2,163 +2,225 @@ Return-Path: <SRS0=cygN=CE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82CBDC433DF
-	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 11:47:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EE33C433E1
+	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 11:51:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4BB2220707
-	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 11:47:41 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="uSXSbgG9"
+	by mail.kernel.org (Postfix) with ESMTP id 3CB952080C
+	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 11:51:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728435AbgHZLrj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 26 Aug 2020 07:47:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57516 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728786AbgHZLVm (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 26 Aug 2020 07:21:42 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD09C0613ED;
-        Wed, 26 Aug 2020 04:21:32 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id y2so1914600ljc.1;
-        Wed, 26 Aug 2020 04:21:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RdgIpCwczQqon253S1bYfUgfts2Opcf7CDIOFNDECKI=;
-        b=uSXSbgG9oq/51fUqC4T5ktqeKJ5wnt8dFwjDNRThRCsoExvUOXXr0jY9PQ1J8+IGfB
-         n+A6kPAbUcurZWTCTyWLkWTE0/76FJGUitRx5FbIkzUnUpxcZ3QxKrNJTyTsJXevZhs3
-         ZL+VMBNXysQuj9k8t1jAUf17nvjTyeRsSLF59M2WJgbM27G7B8gYOBi1ZAHWGYq10YEA
-         rKg36vIm0HlNj6+pGrYhmFk8H7wdxxkkw8Fn7KgmrFHK7fNFe+ALBj4wXXRi9WhY21tO
-         2Hh9mO0OI5xtK6TzAd08kP1pREF+LpthqVHBtM5TwEX++v+X+RlmLPw43SLtl3g/FUlF
-         Pv+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RdgIpCwczQqon253S1bYfUgfts2Opcf7CDIOFNDECKI=;
-        b=c1P5VAVXfGhjeqLO8Y5LYTX9NCAVJnEEndKRpQVf3CBgiQOWOnGSLPfXOSaFUzv+xu
-         3aXMYQ8puhiUTgO9I0Tki04vtR5VbhDXYkpZFcqXbfrAjQ1rXgsoudZAQyid0WcZODuU
-         T5XTW11bJ2H086Qbl358H/zHEpRwKho6rXANyuglGlHsq0/SpcbzukvUWUo+AVG68gMK
-         uXNzYeCccS+pr05QVnDlRYB/eo0CFy08tKKv3Wq4kJ8djm9Px+rlm7M4EYgG5GzLwqSo
-         WwgJBKaiLTSkAHs+KQgA5FigMdzYsPDZBGx1IjghLW6s480thVnNdy9rEsbiG5G5NnDG
-         KhuQ==
-X-Gm-Message-State: AOAM531HGMSFwXbP4VKxodmwXqvJxL/CVcY+C8Ql8iHVo6CLwiLuIvH9
-        3enkrSPyHvxYKwtB6XXYCxwXa4nGTe77RtUmxcQ=
-X-Google-Smtp-Source: ABdhPJzsxvDHT3CSBq0HreUv8gP0r9P3r4jtbpKtloh+xuIvGCFPI7eUMno8maFFWPdbhol80sOamOnfSwiJTybPdtk=
-X-Received: by 2002:a2e:9e8a:: with SMTP id f10mr6657140ljk.330.1598440890979;
- Wed, 26 Aug 2020 04:21:30 -0700 (PDT)
+        id S1729197AbgHZLvO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 26 Aug 2020 07:51:14 -0400
+Received: from mga06.intel.com ([134.134.136.31]:17928 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729181AbgHZLvF (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 26 Aug 2020 07:51:05 -0400
+IronPort-SDR: CedqNMWSajI1h6eUL0+jOS2jdozmk69QzHpskD+iRrMudJn1CBKAUtZHO5d4VmCeOE+k5MRk+u
+ ApRHU1N4XohQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9724"; a="217822885"
+X-IronPort-AV: E=Sophos;i="5.76,355,1592895600"; 
+   d="scan'208";a="217822885"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2020 04:50:58 -0700
+IronPort-SDR: 45btBJ3Fh4xEeSU/JjsxGTjrvYWzd+ac0ValhMUhBCn3aJFlHtVtBZ+gaGx7Je4pMJuR1e+VhX
+ 04DpG52DM7tQ==
+X-IronPort-AV: E=Sophos;i="5.76,355,1592895600"; 
+   d="scan'208";a="331754184"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2020 04:50:53 -0700
+Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id 6B3E9209B8;
+        Wed, 26 Aug 2020 14:50:51 +0300 (EEST)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.92)
+        (envelope-from <sakari.ailus@linux.intel.com>)
+        id 1kAu0e-0001bP-Q6; Wed, 26 Aug 2020 14:54:32 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org, Bingbu Cao <bingbu.cao@intel.com>,
+        linux-media@vger.kernel.org,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
+        Hyungwoo Yang <hyungwoo.yang@intel.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>,
+        "Qiu, Tian Shu" <tian.shu.qiu@intel.com>
+Subject: [PATCH v6 3/6] ov5670: Support probe whilst the device is in a low power state
+Date:   Wed, 26 Aug 2020 14:54:29 +0300
+Message-Id: <20200826115432.6103-4-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200826115432.6103-1-sakari.ailus@linux.intel.com>
+References: <20200826115432.6103-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-References: <20200825145556.637323-1-gnurou@gmail.com> <20200825145556.637323-2-gnurou@gmail.com>
- <CAAEAJfBeJnSjqfyhosM_6jP4C+wQ7UVmt=oG_O0w--sAf0=0PQ@mail.gmail.com>
-In-Reply-To: <CAAEAJfBeJnSjqfyhosM_6jP4C+wQ7UVmt=oG_O0w--sAf0=0PQ@mail.gmail.com>
-From:   Alexandre Courbot <gnurou@gmail.com>
-Date:   Wed, 26 Aug 2020 20:21:19 +0900
-Message-ID: <CAAVeFuLnfeBG89hVsM8JuFaCP+s7RTZe_OvFM6WPVH0dnkAZNA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] media: v4l2-mem2mem: consider OUTPUT queue first when polling
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Aug 26, 2020 at 1:08 PM Ezequiel Garcia
-<ezequiel@vanguardiasur.com.ar> wrote:
->
-> Hi Alexandre,
->
-> On Tue, 25 Aug 2020 at 11:56, Alexandre Courbot <gnurou@gmail.com> wrote:
-> >
-> > If poll() is called on a m2m device with the EPOLLOUT event after the
-> > last buffer of the CAPTURE queue is dequeued, any buffer available on
-> > OUTPUT queue will never be signaled because v4l2_m2m_poll_for_data()
-> > starts by checking whether dst_q->last_buffer_dequeued is set and
-> > returns EPOLLIN in this case, without looking at the state of the OUTPUT
-> > queue.
-> >
-> > Fix this by checking the state of the OUTPUT queue before considering
-> > that early-return case.
-> >
-> > This also has the side-effect of bringing the two blocks of code dealing
-> > with the CAPTURE queue next to one another, and saves us one spin
-> > lock/unlock cycle, for what it's worth.
-> >
-> > Signed-off-by: Alexandre Courbot <gnurou@gmail.com>
->
-> Change looks good to me.
->
-> Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
->
-> Do you think it qualifies for -stable? The issue has been
-> here since the dawn of time.
+Tell ACPI device PM code that the driver supports the device being in a
+low power state when the driver's probe function is entered.
 
-Indeed, and this should be quite a rare corner case. I will leave that
-call to the maintainers.
+Also do identification on the first access of the device, whether in probe
+or when starting streaming.
 
->
-> Thanks,
-> Ezequiel
->
-> > ---
-> >  drivers/media/v4l2-core/v4l2-mem2mem.c | 23 +++++++++++------------
-> >  1 file changed, 11 insertions(+), 12 deletions(-)
-> >
-> > diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
-> > index 95a8f2dc5341d..0d0192119af20 100644
-> > --- a/drivers/media/v4l2-core/v4l2-mem2mem.c
-> > +++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
-> > @@ -862,6 +862,15 @@ static __poll_t v4l2_m2m_poll_for_data(struct file *file,
-> >              list_empty(&dst_q->queued_list)))
-> >                 return EPOLLERR;
-> >
-> > +       spin_lock_irqsave(&src_q->done_lock, flags);
-> > +       if (!list_empty(&src_q->done_list))
-> > +               src_vb = list_first_entry(&src_q->done_list, struct vb2_buffer,
-> > +                                               done_entry);
-> > +       if (src_vb && (src_vb->state == VB2_BUF_STATE_DONE
-> > +                       || src_vb->state == VB2_BUF_STATE_ERROR))
-> > +               rc |= EPOLLOUT | EPOLLWRNORM;
-> > +       spin_unlock_irqrestore(&src_q->done_lock, flags);
-> > +
-> >         spin_lock_irqsave(&dst_q->done_lock, flags);
-> >         if (list_empty(&dst_q->done_list)) {
-> >                 /*
-> > @@ -870,21 +879,11 @@ static __poll_t v4l2_m2m_poll_for_data(struct file *file,
-> >                  */
-> >                 if (dst_q->last_buffer_dequeued) {
-> >                         spin_unlock_irqrestore(&dst_q->done_lock, flags);
-> > -                       return EPOLLIN | EPOLLRDNORM;
-> > +                       rc |= EPOLLIN | EPOLLRDNORM;
-> > +                       return rc;
-> >                 }
-> >         }
-> > -       spin_unlock_irqrestore(&dst_q->done_lock, flags);
-> >
-> > -       spin_lock_irqsave(&src_q->done_lock, flags);
-> > -       if (!list_empty(&src_q->done_list))
-> > -               src_vb = list_first_entry(&src_q->done_list, struct vb2_buffer,
-> > -                                               done_entry);
-> > -       if (src_vb && (src_vb->state == VB2_BUF_STATE_DONE
-> > -                       || src_vb->state == VB2_BUF_STATE_ERROR))
-> > -               rc |= EPOLLOUT | EPOLLWRNORM;
-> > -       spin_unlock_irqrestore(&src_q->done_lock, flags);
-> > -
-> > -       spin_lock_irqsave(&dst_q->done_lock, flags);
-> >         if (!list_empty(&dst_q->done_list))
-> >                 dst_vb = list_first_entry(&dst_q->done_list, struct vb2_buffer,
-> >                                                 done_entry);
-> > --
-> > 2.28.0
-> >
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ drivers/media/i2c/ov5670.c | 76 +++++++++++++++++++++++---------------
+ 1 file changed, 46 insertions(+), 30 deletions(-)
+
+diff --git a/drivers/media/i2c/ov5670.c b/drivers/media/i2c/ov5670.c
+index f26252e35e08d..74b0325c22565 100644
+--- a/drivers/media/i2c/ov5670.c
++++ b/drivers/media/i2c/ov5670.c
+@@ -1832,6 +1832,8 @@ struct ov5670 {
+ 
+ 	/* Streaming on/off */
+ 	bool streaming;
++	/* True if the device has been identified */
++	bool identified;
+ };
+ 
+ #define to_ov5670(_sd)	container_of(_sd, struct ov5670, sd)
+@@ -2270,6 +2272,32 @@ static int ov5670_get_skip_frames(struct v4l2_subdev *sd, u32 *frames)
+ 	return 0;
+ }
+ 
++/* Verify chip ID */
++static int ov5670_identify_module(struct ov5670 *ov5670)
++{
++	struct i2c_client *client = v4l2_get_subdevdata(&ov5670->sd);
++	int ret;
++	u32 val;
++
++	if (ov5670->identified)
++		return 0;
++
++	ret = ov5670_read_reg(ov5670, OV5670_REG_CHIP_ID,
++			      OV5670_REG_VALUE_24BIT, &val);
++	if (ret)
++		return ret;
++
++	if (val != OV5670_CHIP_ID) {
++		dev_err(&client->dev, "chip id mismatch: %x!=%x\n",
++			OV5670_CHIP_ID, val);
++		return -ENXIO;
++	}
++
++	ov5670->identified = true;
++
++	return 0;
++}
++
+ /* Prepare streaming by writing default values and customized values */
+ static int ov5670_start_streaming(struct ov5670 *ov5670)
+ {
+@@ -2278,6 +2306,10 @@ static int ov5670_start_streaming(struct ov5670 *ov5670)
+ 	int link_freq_index;
+ 	int ret;
+ 
++	ret = ov5670_identify_module(ov5670);
++	if (ret)
++		return ret;
++
+ 	/* Get out of from software reset */
+ 	ret = ov5670_write_reg(ov5670, OV5670_REG_SOFTWARE_RST,
+ 			       OV5670_REG_VALUE_08BIT, OV5670_SOFTWARE_RST);
+@@ -2401,27 +2433,6 @@ static int __maybe_unused ov5670_resume(struct device *dev)
+ 	return 0;
+ }
+ 
+-/* Verify chip ID */
+-static int ov5670_identify_module(struct ov5670 *ov5670)
+-{
+-	struct i2c_client *client = v4l2_get_subdevdata(&ov5670->sd);
+-	int ret;
+-	u32 val;
+-
+-	ret = ov5670_read_reg(ov5670, OV5670_REG_CHIP_ID,
+-			      OV5670_REG_VALUE_24BIT, &val);
+-	if (ret)
+-		return ret;
+-
+-	if (val != OV5670_CHIP_ID) {
+-		dev_err(&client->dev, "chip id mismatch: %x!=%x\n",
+-			OV5670_CHIP_ID, val);
+-		return -ENXIO;
+-	}
+-
+-	return 0;
+-}
+-
+ static const struct v4l2_subdev_video_ops ov5670_video_ops = {
+ 	.s_stream = ov5670_set_stream,
+ };
+@@ -2456,6 +2467,7 @@ static int ov5670_probe(struct i2c_client *client)
+ 	struct ov5670 *ov5670;
+ 	const char *err_msg;
+ 	u32 input_clk = 0;
++	bool low_power;
+ 	int ret;
+ 
+ 	device_property_read_u32(&client->dev, "clock-frequency", &input_clk);
+@@ -2472,11 +2484,14 @@ static int ov5670_probe(struct i2c_client *client)
+ 	/* Initialize subdev */
+ 	v4l2_i2c_subdev_init(&ov5670->sd, client, &ov5670_subdev_ops);
+ 
+-	/* Check module identity */
+-	ret = ov5670_identify_module(ov5670);
+-	if (ret) {
+-		err_msg = "ov5670_identify_module() error";
+-		goto error_print;
++	low_power = acpi_dev_state_low_power(&client->dev);
++	if (!low_power) {
++		/* Check module identity */
++		ret = ov5670_identify_module(ov5670);
++		if (ret) {
++			err_msg = "ov5670_identify_module() error";
++			goto error_print;
++		}
+ 	}
+ 
+ 	mutex_init(&ov5670->mutex);
+@@ -2513,10 +2528,10 @@ static int ov5670_probe(struct i2c_client *client)
+ 	ov5670->streaming = false;
+ 
+ 	/*
+-	 * Device is already turned on by i2c-core with ACPI domain PM.
+-	 * Enable runtime PM and turn off the device.
++	 * Don't set the device's state to active if it's in a low power state.
+ 	 */
+-	pm_runtime_set_active(&client->dev);
++	if (!low_power)
++		pm_runtime_set_active(&client->dev);
+ 	pm_runtime_enable(&client->dev);
+ 	pm_runtime_idle(&client->dev);
+ 
+@@ -2558,7 +2573,7 @@ static const struct dev_pm_ops ov5670_pm_ops = {
+ 
+ #ifdef CONFIG_ACPI
+ static const struct acpi_device_id ov5670_acpi_ids[] = {
+-	{"INT3479"},
++	{ "INT3479" },
+ 	{ /* sentinel */ }
+ };
+ 
+@@ -2573,6 +2588,7 @@ static struct i2c_driver ov5670_i2c_driver = {
+ 	},
+ 	.probe_new = ov5670_probe,
+ 	.remove = ov5670_remove,
++	.flags = I2C_DRV_FL_ALLOW_LOW_POWER_PROBE,
+ };
+ 
+ module_i2c_driver(ov5670_i2c_driver);
+-- 
+2.20.1
+
