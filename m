@@ -2,107 +2,125 @@ Return-Path: <SRS0=cygN=CE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52E48C433DF
-	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 11:11:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 309EDC433E1
+	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 11:35:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 309EA2087C
-	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 11:11:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F1A882083B
+	for <linux-media@archiver.kernel.org>; Wed, 26 Aug 2020 11:35:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kHrFHnGJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E7VxO8g4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728790AbgHZLLJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 26 Aug 2020 07:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55862 "EHLO
+        id S1729033AbgHZLeO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 26 Aug 2020 07:34:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728721AbgHZLLB (ORCPT
+        with ESMTP id S1728946AbgHZL0d (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 26 Aug 2020 07:11:01 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B26C061574;
-        Wed, 26 Aug 2020 04:11:00 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id i10so881692pgk.1;
-        Wed, 26 Aug 2020 04:11:00 -0700 (PDT)
+        Wed, 26 Aug 2020 07:26:33 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55EECC061574;
+        Wed, 26 Aug 2020 04:25:52 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id w14so1923164ljj.4;
+        Wed, 26 Aug 2020 04:25:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=OYwGuEb91/Fq7kHgAcheZzGBW4eXw4/zcLyHp4V/iG0=;
-        b=kHrFHnGJJqHIOGuHlNt47+PIV7xjyxVsQGCXDBKvWlCVnlDrIzQm6EMJ2ilqj4vxtR
-         Ea5p9UqDeeEy8aUGQmy7Jg2iXrzk3+f7GARCG/yd94rppYK1u0lp3FDcF1INMV7dBzZu
-         88Sx8IdxaethQB6tSl/yYI2xja24LrVc04r10ejLRKRrdS8mKCWTZPyTmaw3HrNQHi6L
-         /9L2n9XdDytKjSYeVNeUJSPwJHMkrwKqnUmP8LFzlh2gerEGyU19Z15fqwcs8wbTOAvQ
-         mkSg6jHwv/x12y61M23ocu1o6DnSUIhByZVC5fAASWXHamKddzyqNC+GJmw55ugorjCO
-         PYPQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BwPP+Wy6wA+3eWc/onU66ibaN4gluQuh0nP0l3YOUgY=;
+        b=E7VxO8g4aPMfq4QDhK8BsuM/jTaOOwMzE+iUebvg+1KPXgHLZ/uheF+srixOBQG7Pw
+         mLT7kFfr9VzTvSHgpAYSYS7u9G88jbHWq6gmLad6k+pHRahNDthV0vEzV6IaS4pfcq4n
+         kjQoVV+4Fu1N8eW2tX21cbqFOBCfg+4cZQ2eKCH9863QtfIlYDwhQg7fl8+mo1nXwFga
+         t04AS7oMBGiNPQUFds5R425WHFGNzo8sktu/aAwLxsDkLJGJU46IhGZ/82XC53oRzL9b
+         yzxBJPtoIWzKEXDoSWgBA7pLE6yDyFjunnZWtjoGLwIiFoIuzG4x/rfy/upwZ/PNOerC
+         7ozQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=OYwGuEb91/Fq7kHgAcheZzGBW4eXw4/zcLyHp4V/iG0=;
-        b=VbwE8EtmMSO6AeNQgcM80oHbYAJcAYp7gv/cUsSjUz1a/FKltMAIRLMliQzAyt6HqE
-         Pi2QRzU3wuG7WaKw88DkcVK8Yp8giko4LlYND04pf+JoAj6khJOq2D+Am2aJ1bhPO4Sp
-         5RSElsYh6R+/SYRLNO3izmmKJEAkCLwBBnzkF9nDaKw69eO/tw2kuJNm0ZI8xxeOEHAZ
-         eWtcDhN01iHvBf6+aj9xDGwwJtOi3UvGgzzKHUfu23XjpIHnMlAMC01c8wITAAokyt6N
-         3/ozOi9Lk7dKEZFnyfxCkGooXh8Lq7eL/84fYBxNXAPFqbKaS82h0xod6pnrzCWTQH81
-         bkWQ==
-X-Gm-Message-State: AOAM531k1G77ZGjIEnJ3X+C9ZXdNjMa5KBE9ztzlQ5NEWAzfHPXOipXK
-        nodYoPIx5EzM+WmWkOapUdc=
-X-Google-Smtp-Source: ABdhPJwLxmpEUrt0bg/EsSlOKtqGn2tKaPB89b7YhYCQnhKwKyVGv7GIbk3RsGJH1mgpotz1PR/t8A==
-X-Received: by 2002:a63:df01:: with SMTP id u1mr9354157pgg.401.1598440259924;
-        Wed, 26 Aug 2020 04:10:59 -0700 (PDT)
-Received: from localhost.localdomain ([49.207.215.131])
-        by smtp.gmail.com with ESMTPSA id e62sm2793172pfh.144.2020.08.26.04.10.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Aug 2020 04:10:59 -0700 (PDT)
-From:   Anant Thazhemadam <anant.thazhemadam@gmail.com>
-Cc:     anant.thazhemadam@gmail.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] staging: media/atomisp : fix "dubious: !x | !y" sparse warning
-Date:   Wed, 26 Aug 2020 16:39:15 +0530
-Message-Id: <20200826110919.9523-1-anant.thazhemadam@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200826095000.GW1793@kadam>
-References: <20200826095000.GW1793@kadam>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BwPP+Wy6wA+3eWc/onU66ibaN4gluQuh0nP0l3YOUgY=;
+        b=c9Z0dF+HrTEFzkgArBpE9UB9aWLRD/k/Gn1sXpglnliApxb15xWkbzxWabv/pTjW2H
+         KHZEnD4rrvuKOxNcSi+KIxTpNlXnya1s86oBzzXsi0Hj4oPWjKO1c9R5RZC8FWwkB8Tu
+         KUMb7ziWW28tRR0jnlWUztgqqh8B2DqSAi1Z/Nx4fKeR3BRERizNdhhcWRnpT+80eQs6
+         QMACT3wzl1ud8Bb/lOpRLO6dEGPRqKkg0uMNACxRIEasXt1xpNpHu31SOPbErzVBMSfH
+         EIkPsDQAEMp9cHOFXrL9gxOo0nlmOct0711reyK5s1t7GRqs5Dd/3yTNUMi9vgtrXpFe
+         R0Rw==
+X-Gm-Message-State: AOAM5302LD5l3hG4Cbpt33YkytOaaEvVNdeg/gAJ3WeCzF9f5LgCVblW
+        EL1yQuPqTn9rf2HhBDD7PPdh0/6heIx2fdpm8hLyjZso
+X-Google-Smtp-Source: ABdhPJyf3RocfiFYJoOXhENx1YiwGXmbCnofX5NfPHEkKZ/YZSvrN2VK++bIgmUgSR+KxwDjqy0ss+1Z2wzh5TICNTA=
+X-Received: by 2002:a2e:9904:: with SMTP id v4mr6738335lji.321.1598441149742;
+ Wed, 26 Aug 2020 04:25:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+References: <20200825145556.637323-1-gnurou@gmail.com> <CAAEAJfBbxExQP7cAQnsAE1_Zh-onBKPt8is3S9qBEpx6MAywRg@mail.gmail.com>
+In-Reply-To: <CAAEAJfBbxExQP7cAQnsAE1_Zh-onBKPt8is3S9qBEpx6MAywRg@mail.gmail.com>
+From:   Alexandre Courbot <gnurou@gmail.com>
+Date:   Wed, 26 Aug 2020 20:25:38 +0900
+Message-ID: <CAAVeFu+0UqVwoUmOXm38E-vikaQZ4Graaz_9ERWozNAeTFkrPQ@mail.gmail.com>
+Subject: Re: [PATCH 0/2] media: v4l2-mem2mem: fix poll() bug
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Upon running Sparse, "warning: dubious: !x | !y" is brought to notice
-for this file.  Logical and bitwise OR are basically the same in this
-context, so it doesn't cause a runtime bug.  But let's change it to
-logical OR to make it a little bit cleaner and silence the Sparse
-warning.
+On Wed, Aug 26, 2020 at 7:10 AM Ezequiel Garcia
+<ezequiel@vanguardiasur.com.ar> wrote:
+>
+> Hello Alex,
+>
+> Thanks for the patch.
+>
+> On Tue, Aug 25, 2020, 11:56 AM Alexandre Courbot <gnurou@gmail.com> wrote:
+> >
+> > This addresses a very corner case that probably nobody ever encounters,
+> > but I have hit it when playing with vicoded so here is a tentative fix.
+> >
+>
+> I'll try to make a more complete review soon, but meanwhile
+> I was thinking if it was possible to include a little kselftest program
+> for this issue, something CIs can pick-up and test corner cases like this,
+> making sure we don't regress on the issue.
+>
+> (Or alternatively, v4l2-compliance?)
 
-Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
----
- .../media/atomisp/pci/isp/kernels/vf/vf_1.0/ia_css_vf.host.c    | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I am not very familiar with kselftest, but IIUC the conditions that
+lead to this issue are easier to reproduce using v4l2-compliance,
+where we can have a user-space driving the queues. It would also have
+the benefit to exercise all drivers. I'll think about adding such a
+test, thanks for the suggestion!
 
-diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/vf/vf_1.0/ia_css_vf.host.c b/drivers/staging/media/atomisp/pci/isp/kernels/vf/vf_1.0/ia_css_vf.host.c
-index 358cb7d2cd4c..3b850bb2d39d 100644
---- a/drivers/staging/media/atomisp/pci/isp/kernels/vf/vf_1.0/ia_css_vf.host.c
-+++ b/drivers/staging/media/atomisp/pci/isp/kernels/vf/vf_1.0/ia_css_vf.host.c
-@@ -58,7 +58,7 @@ sh_css_vf_downscale_log2(
- 	unsigned int ds_log2 = 0;
- 	unsigned int out_width;
- 
--	if ((!out_info) | (!vf_info))
-+	if ((!out_info) || (!vf_info))
- 		return -EINVAL;
- 
- 	out_width = out_info->res.width;
--- 
-2.25.1
+>
+> Thanks!
+> Ezequiel
+>
+> > Patch 1/2 addresses the issue that when the last buffer of a m2m device
+> > has been dequeued, any attempt to poll with EPOLLOUT will result in only
+> > EPOLLIN being returned, even if OUTPUT buffers are still pending. The
+> > issue stems from the fact that the last buffer check if done first, and
+> > returns immediately if true.
+> >
+> > Patch 2/2 builds on the first one to (hopefully) clean up the code a bit
+> > and make the function flow easier to follow. Functionally speaking it is
+> > supposed to be a no-op and it can safely be dropped if the former code
+> > is preferred - the actual fix is in 1/2.
+> >
+> > Alexandre Courbot (2):
+> >   media: v4l2-mem2mem: consider OUTPUT queue first when polling
+> >   media: v4l2-mem2mem: simplify poll logic a bit
+> >
+> >  drivers/media/v4l2-core/v4l2-mem2mem.c | 42 +++++++++++---------------
+> >  1 file changed, 18 insertions(+), 24 deletions(-)
+> >
+> > --
+> > 2.28.0
+> >
