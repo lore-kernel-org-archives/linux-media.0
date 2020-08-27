@@ -2,156 +2,190 @@ Return-Path: <SRS0=AfPA=CF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C1B4C433E4
-	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 19:46:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E97DFC433E7
+	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 22:56:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 655B9207DF
-	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 19:46:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BF26C20848
+	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 22:56:19 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="feSgNFGD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727884AbgH0Tqc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Aug 2020 15:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51238 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726887AbgH0Tq3 (ORCPT
+        id S1728036AbgH0W4Q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Aug 2020 18:56:16 -0400
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:2881 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726972AbgH0W4P (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Aug 2020 15:46:29 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB58C06121B
-        for <linux-media@vger.kernel.org>; Thu, 27 Aug 2020 12:46:29 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dafna)
-        with ESMTPSA id EF93D29A984
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-To:     linux-media@vger.kernel.org
-Cc:     laurent.pinchart@ideasonboard.com, dafna.hirschfeld@collabora.com,
-        helen.koike@collabora.com, ezequiel@collabora.com,
-        hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
-        sakari.ailus@linux.intel.com, linux-rockchip@lists.infradead.org,
-        mchehab@kernel.org, tfiga@chromium.org
-Subject: [PATCH v7 5/6] media: staging: rkisp1: allow quantization setting by userspace on the isp source pad
-Date:   Thu, 27 Aug 2020 21:46:11 +0200
-Message-Id: <20200827194612.13502-6-dafna.hirschfeld@collabora.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200827194612.13502-1-dafna.hirschfeld@collabora.com>
-References: <20200827194612.13502-1-dafna.hirschfeld@collabora.com>
+        Thu, 27 Aug 2020 18:56:15 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f4839e40000>; Thu, 27 Aug 2020 15:55:32 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Thu, 27 Aug 2020 15:56:15 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Thu, 27 Aug 2020 15:56:15 -0700
+Received: from [10.2.174.186] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 27 Aug
+ 2020 22:56:14 +0000
+Subject: Re: [PATCH v3 3/3] media: i2c: imx274: Add IMX274 power on and off
+ sequence
+To:     Sakari Ailus <sakari.ailus@iki.fi>
+CC:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <frankc@nvidia.com>, <hverkuil@xs4all.nl>, <luca@lucaceresoli.net>,
+        <leonl@leopardimaging.com>, <robh+dt@kernel.org>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1595264494-2400-1-git-send-email-skomatineni@nvidia.com>
+ <1595264494-2400-3-git-send-email-skomatineni@nvidia.com>
+ <20200731162611.GB6401@valkosipuli.retiisi.org.uk>
+ <b8819080-6585-c953-e7ad-9b0a10f1d821@nvidia.com>
+ <20200813220147.GJ840@valkosipuli.retiisi.org.uk>
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+Message-ID: <824ced0f-7493-9d2f-10af-5242c7997631@nvidia.com>
+Date:   Thu, 27 Aug 2020 15:55:52 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <20200813220147.GJ840@valkosipuli.retiisi.org.uk>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1598568932; bh=7y2B9liBdt6/JW2O3wpgrVPduvEhHwTR5pP93AhCNSM=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
+         Content-Language;
+        b=feSgNFGDLTmc/qw7jU9BAhKdNnlYMDtsC+GFxZlBIOGnq/mDRBjCDk65KBhX+CSfl
+         dK7TaAtdTTExbYlECn9bP3cGrHuKXvE3YztWWpfXThWcSdM7SdMT2i+V6gwEkhOW/2
+         HCXBUwdQYo/Vo6Cw8toEAcRh2t+wI/AbAgton2j4vSVdmy5dMilj0rqLpNpU+04Njq
+         Z1BlRJmBfF4eCWBYhlnDKFh6eMP6NkcMB7/EPvq13QkqzgHdxzK6ZuLheXZM+qk3kX
+         eKAL7W8fH+x4B+a430DKmB+Hr9DeEov5CvNOqZaHUuruk9jcQH1IVQEsIx2zqFccRt
+         ty6B9RFfJvrpg==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The isp entity has hardware support to force full range quantization
-for YUV formats. Use the subdev CSC API to allow userspace to set the
-quantization for YUV formats on the isp entity.
 
-- The flag V4L2_SUBDEV_MBUS_CODE_CSC_QUANTIZATION is set for
-YUV formats during enumeration of the isp formats on the source pad.
-- The full quantization is set on YUV formats if userspace asks it
-on the isp entity using the flag V4L2_MBUS_FRAMEFMT_SET_CSC.
-
-On the capture and the resizer, the quantization is read-only
-and always set to the default quantization.
-
-Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Acked-by: Helen Koike <helen.koike@collabora.com>
-Reviewed-by: Tomasz Figa <tfiga@chromium.org>
----
- drivers/staging/media/rkisp1/TODO             |  2 +-
- drivers/staging/media/rkisp1/rkisp1-capture.c | 10 ----------
- drivers/staging/media/rkisp1/rkisp1-isp.c     | 20 +++++++++++++++----
- 3 files changed, 17 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/staging/media/rkisp1/TODO b/drivers/staging/media/rkisp1/TODO
-index bdb1b8f73556..bdd1da43cb5e 100644
---- a/drivers/staging/media/rkisp1/TODO
-+++ b/drivers/staging/media/rkisp1/TODO
-@@ -1,7 +1,7 @@
- * Fix pad format size for statistics and parameters entities.
- * Fix checkpatch errors.
- * Review and comment every lock
--* Handle quantization
-+* Add uapi docs. Remember to add documentation of how quantization is handled.
- * Document rkisp1-common.h
- * streaming paths (mainpath and selfpath) check if the other path is streaming
- in several places of the code, review this, specially that it doesn't seem it
-diff --git a/drivers/staging/media/rkisp1/rkisp1-capture.c b/drivers/staging/media/rkisp1/rkisp1-capture.c
-index c05280950ea0..f355b2977009 100644
---- a/drivers/staging/media/rkisp1/rkisp1-capture.c
-+++ b/drivers/staging/media/rkisp1/rkisp1-capture.c
-@@ -1069,8 +1069,6 @@ static void rkisp1_try_fmt(const struct rkisp1_capture *cap,
- 			   const struct v4l2_format_info **fmt_info)
- {
- 	const struct rkisp1_capture_config *config = cap->config;
--	struct rkisp1_capture *other_cap =
--			&cap->rkisp1->capture_devs[cap->id ^ 1];
- 	const struct rkisp1_capture_fmt_cfg *fmt;
- 	const struct v4l2_format_info *info;
- 	const unsigned int max_widths[] = { RKISP1_RSZ_MP_SRC_MAX_WIDTH,
-@@ -1095,14 +1093,6 @@ static void rkisp1_try_fmt(const struct rkisp1_capture *cap,
- 
- 	info = rkisp1_fill_pixfmt(pixm, cap->id);
- 
--	/* can not change quantization when stream-on */
--	if (other_cap->is_streaming)
--		pixm->quantization = other_cap->pix.fmt.quantization;
--	/* output full range by default, take effect in params */
--	else if (!pixm->quantization ||
--		 pixm->quantization > V4L2_QUANTIZATION_LIM_RANGE)
--		pixm->quantization = V4L2_QUANTIZATION_FULL_RANGE;
--
- 	if (fmt_cfg)
- 		*fmt_cfg = fmt;
- 	if (fmt_info)
-diff --git a/drivers/staging/media/rkisp1/rkisp1-isp.c b/drivers/staging/media/rkisp1/rkisp1-isp.c
-index 6ec1e9816e9f..1063f4505aaf 100644
---- a/drivers/staging/media/rkisp1/rkisp1-isp.c
-+++ b/drivers/staging/media/rkisp1/rkisp1-isp.c
-@@ -589,6 +589,10 @@ static int rkisp1_isp_enum_mbus_code(struct v4l2_subdev *sd,
- 
- 		if (code->index == pos - 1) {
- 			code->code = fmt->mbus_code;
-+			if (fmt->pixel_enc == V4L2_PIXEL_ENC_YUV &&
-+			    dir == RKISP1_ISP_SD_SRC)
-+				code->flags =
-+					V4L2_SUBDEV_MBUS_CODE_CSC_QUANTIZATION;
- 			return 0;
- 		}
- 	}
-@@ -620,7 +624,6 @@ static int rkisp1_isp_init_config(struct v4l2_subdev *sd,
- 					     RKISP1_ISP_PAD_SOURCE_VIDEO);
- 	*src_fmt = *sink_fmt;
- 	src_fmt->code = RKISP1_DEF_SRC_PAD_FMT;
--	src_fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
- 
- 	src_crop = v4l2_subdev_get_try_crop(sd, cfg,
- 					    RKISP1_ISP_PAD_SOURCE_VIDEO);
-@@ -663,9 +666,18 @@ static void rkisp1_isp_set_src_fmt(struct rkisp1_isp *isp,
- 		isp->src_fmt = mbus_info;
- 	src_fmt->width  = src_crop->width;
- 	src_fmt->height = src_crop->height;
--	src_fmt->quantization = format->quantization;
--	/* full range by default */
--	if (!src_fmt->quantization)
-+
-+	/*
-+	 * The CSC API is used to allow userspace to force full
-+	 * quantization on YUV formats.
-+	 */
-+	if (format->flags & V4L2_MBUS_FRAMEFMT_SET_CSC &&
-+	    format->quantization == V4L2_QUANTIZATION_FULL_RANGE &&
-+	    mbus_info->pixel_enc == V4L2_PIXEL_ENC_YUV)
-+		src_fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
-+	else if (mbus_info->pixel_enc == V4L2_PIXEL_ENC_YUV)
-+		src_fmt->quantization = V4L2_QUANTIZATION_LIM_RANGE;
-+	else
- 		src_fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
- 
- 	*format = *src_fmt;
--- 
-2.17.1
+On 8/13/20 3:01 PM, Sakari Ailus wrote:
+> Hi Sowjanya,
+>
+> On Fri, Jul 31, 2020 at 09:34:15AM -0700, Sowjanya Komatineni wrote:
+>> On 7/31/20 9:26 AM, Sakari Ailus wrote:
+>>> Hi Sowjanya,
+>>>
+>>> Thanks for the patch.
+>>>
+>>> On Mon, Jul 20, 2020 at 10:01:34AM -0700, Sowjanya Komatineni wrote:
+>>>> IMX274 has VANA analog 2.8V supply, VDIG digital core 1.8V supply,
+>>>> and VDDL digital io 1.2V supply which are optional based on camera
+>>>> module design.
+>>>>
+>>>> IMX274 also need external 24Mhz clock and is optional based on
+>>>> camera module design.
+>>> The sensor appears to be able to use other frequencies, too. Could you
+>>> check in the driver the frequency is correct? This should be found in DT
+>>> bindings, too.
+>> External input clock is not in DT. So added it as part of this series.
+>>
+>> We are mostly using 24Mhz I/P with IMX274 on designs we have and also on
+>> leopard module which has onboard XTAL for 24Mhz
+> Yes. This information still should be found in DT as the xtal isn't part of
+> the sensor.
+>
+>>>> This patch adds support for IMX274 power on and off to enable and
+>>>> disable these supplies and external clock.
+>>>>
+>>>> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+>>>> ---
+>>>>    drivers/media/i2c/imx274.c | 132 +++++++++++++++++++++++++++++++++++++++++++--
+>>>>    1 file changed, 129 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/drivers/media/i2c/imx274.c b/drivers/media/i2c/imx274.c
+>>>> index 55869ff..7157b1d 100644
+>>>> --- a/drivers/media/i2c/imx274.c
+>>>> +++ b/drivers/media/i2c/imx274.c
+>>>> @@ -19,6 +19,7 @@
+>>>>    #include <linux/module.h>
+>>>>    #include <linux/of_gpio.h>
+>>>>    #include <linux/regmap.h>
+>>>> +#include <linux/regulator/consumer.h>
+>>>>    #include <linux/slab.h>
+>>>>    #include <linux/v4l2-mediabus.h>
+>>>>    #include <linux/videodev2.h>
+>>>> @@ -131,6 +132,15 @@
+>>>>    #define IMX274_TABLE_WAIT_MS			0
+>>>>    #define IMX274_TABLE_END			1
+>>>> +/* regulator supplies */
+>>>> +static const char * const imx274_supply_names[] = {
+>>>> +	"VDDL",  /* IF (1.2V) supply */
+>>>> +	"VDIG",  /* Digital Core (1.8V) supply */
+>>>> +	"VANA",  /* Analog (2.8V) supply */
+>>>> +};
+>>>> +
+>>>> +#define IMX274_NUM_SUPPLIES ARRAY_SIZE(imx274_supply_names)
+>>> Please use ARRAY_SIZE() directly.
+>>>
+>>>> +
+>>>>    /*
+>>>>     * imx274 I2C operation related structure
+>>>>     */
+>>>> @@ -501,6 +511,8 @@ struct imx274_ctrls {
+>>>>     * @frame_rate: V4L2 frame rate structure
+>>>>     * @regmap: Pointer to regmap structure
+>>>>     * @reset_gpio: Pointer to reset gpio
+>>>> + * @supplies: imx274 analog and digital supplies
+>>>> + * @inck: input clock to imx274
+>>>>     * @lock: Mutex structure
+>>>>     * @mode: Parameters for the selected readout mode
+>>>>     */
+>>>> @@ -514,6 +526,8 @@ struct stimx274 {
+>>>>    	struct v4l2_fract frame_interval;
+>>>>    	struct regmap *regmap;
+>>>>    	struct gpio_desc *reset_gpio;
+>>>> +	struct regulator *supplies[IMX274_NUM_SUPPLIES];
+>>>> +	struct clk *inck;
+>>>>    	struct mutex lock; /* mutex lock for operations */
+>>>>    	const struct imx274_mode *mode;
+>>>>    };
+>>>> @@ -767,6 +781,99 @@ static void imx274_reset(struct stimx274 *priv, int rst)
+>>>>    	usleep_range(IMX274_RESET_DELAY1, IMX274_RESET_DELAY2);
+>>>>    }
+>>>> +/*
+>>>> + * imx274_power_on - Function called to power on the sensor
+>>>> + * @imx274: Pointer to device structure
+>>>> + */
+>>>> +static int imx274_power_on(struct device *dev)
+>>>> +{
+>>>> +	struct i2c_client *client = to_i2c_client(dev);
+>>>> +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+>>>> +	struct stimx274 *imx274 = to_imx274(sd);
+>>>> +	int i, ret;
+>>>> +
+>>>> +	ret = clk_prepare_enable(imx274->inck);
+>>>> +	if (ret) {
+>>>> +		dev_err(&imx274->client->dev,
+>>>> +			"Failed to enable input clock: %d\n", ret);
+>>>> +		return ret;
+>>>> +	}
+>>>> +
+>>> Could you use regulator_bulk_enable() instead? Same for disable.
+>> Using regulator_bulk_enable() makes these regulators mandatory.
+> How? regulator_bulk_enable() simply does call regulator_enable() on all the
+> regulators.
+>
+regulator_bulk APIs uses regulator_bulk_data and so had to retrieve 
+regulators from DT with devm_regulator_bulk_get() which don't use 
+optional regulator get.
 
