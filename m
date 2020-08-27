@@ -2,30 +2,30 @@ Return-Path: <SRS0=AfPA=CF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27930C433E3
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C1B4C433E4
 	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 19:46:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0DA6622BEB
+	by mail.kernel.org (Postfix) with ESMTP id 655B9207DF
 	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 19:46:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727050AbgH0Tqb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Aug 2020 15:46:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51236 "EHLO
+        id S1727884AbgH0Tqc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Aug 2020 15:46:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726400AbgH0Tq3 (ORCPT
+        with ESMTP id S1726887AbgH0Tq3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 27 Aug 2020 15:46:29 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EAF1C061264
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB58C06121B
         for <linux-media@vger.kernel.org>; Thu, 27 Aug 2020 12:46:29 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: dafna)
-        with ESMTPSA id AA84B2987DA
+        with ESMTPSA id EF93D29A984
 From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com, dafna.hirschfeld@collabora.com,
@@ -33,198 +33,125 @@ Cc:     laurent.pinchart@ideasonboard.com, dafna.hirschfeld@collabora.com,
         hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
         sakari.ailus@linux.intel.com, linux-rockchip@lists.infradead.org,
         mchehab@kernel.org, tfiga@chromium.org
-Subject: [PATCH v7 0/6] v4l2: add support for colorspace conversion API (CSC) for video capture and subdevices
-Date:   Thu, 27 Aug 2020 21:46:06 +0200
-Message-Id: <20200827194612.13502-1-dafna.hirschfeld@collabora.com>
+Subject: [PATCH v7 5/6] media: staging: rkisp1: allow quantization setting by userspace on the isp source pad
+Date:   Thu, 27 Aug 2020 21:46:11 +0200
+Message-Id: <20200827194612.13502-6-dafna.hirschfeld@collabora.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200827194612.13502-1-dafna.hirschfeld@collabora.com>
+References: <20200827194612.13502-1-dafna.hirschfeld@collabora.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-For video capture it is the driver that reports the colorspace, transfer function,
-Y'CbCr/HSV encoding and quantization range used by the video, and there is no way
-to request something different, even though many HDTV receivers have some sort of
-colorspace conversion capabilities.
+The isp entity has hardware support to force full range quantization
+for YUV formats. Use the subdev CSC API to allow userspace to set the
+quantization for YUV formats on the isp entity.
 
-For output video this feature already exists since the application
-specifies this information for the video format it will send out, and
-the transmitter will enable any available CSC if a format conversion has
-to be performed in order to match the capabilities of the sink.
+- The flag V4L2_SUBDEV_MBUS_CODE_CSC_QUANTIZATION is set for
+YUV formats during enumeration of the isp formats on the source pad.
+- The full quantization is set on YUV formats if userspace asks it
+on the isp entity using the flag V4L2_MBUS_FRAMEFMT_SET_CSC.
 
-For video capture we propose adding new v4l2_pix_format flag:
-V4L2_PIX_FMT_FLAG_SET_CSC. The flag is set by the application,
-the driver will interpret the fields 'colorspace', 'xfer_func',
-'ycbcr_enc/hsv_enc' and 'quantization' as the requested colorspace information
-and will attempt to do the conversion it supports.
+On the capture and the resizer, the quantization is read-only
+and always set to the default quantization.
 
-Drivers set the flags
-V4L2_FMT_FLAG_CSC_COLORSPACE,
-V4L2_FMT_FLAG_CSC_XFER_FUNC,
-V4L2_FMT_FLAG_CSC_YCBCR_ENC/V4L2_FMT_FLAG_CSC_HSV_ENC,
-V4L2_FMT_FLAG_CSC_QUANTIZATION,
-
-in the flags field of the struct v4l2_fmtdesc during enumeration to
-indicate that they support colorspace conversion for the respective field.
-
-The same API is added for the subdevices. With the flag
-V4L2_MBUS_FRAMEFMT_SET_CSC set by the application in VIDIOC_SUBDEV_S_FMT
-ioctl and the flags
-V4L2_SUBDEV_MBUS_CODE_CSC_COLORSPACE,
-V4L2_SUBDEV_MBUS_CODE_CSC_XFER_FUNC,
-V4L2_SUBDEV_MBUS_CODE_CSC_YCBCR_ENC/V4L2_SUBDEV_MBUS_CODE_CSC_HSV_ENC
-V4L2_SUBDEV_MBUS_CODE_CSC_QUANTIZATION,
-
-set by the driver in the VIDIOC_SUBDEV_ENUM_MBUS_CODE ioctl.
-
-For subdevices, new 'flags' fields were added to the structs
-v4l2_subdev_mbus_code_enum, v4l2_mbus_framefmt which are borrowed from the
-'reserved' field. In the struct 'v4l2_mbus_framefmt' and reserved2 field
-is added before the flags due to padding.
-
-Drivers do not have to actually look at the flags. If the flags are not
-set, then the colorspace, xfer_func, ycbcr_enc/hsv_enc and quantization
-fields are set to the default values by the core, i.e. just pass on the
-received format without conversion.
-
-The patchset includes a patch in vivid that implements the API for video
-capture devices and a patch in rkisp1 driver that implement the API for
-subdevices.
-
-In rkisp1, the API is used to allow userspace to set the quantization for
-YUV formats on the source pad of the isp entity. The quantization is read-only
-on the other entities and pads and does not have to be propagated.
-
-I also removed the TODO item 'Handle quantization'
-and added the TODO item 'Add uapi docs. Remember to add documentation of how quantization is handled.'
-
-A patchset for v4l-utils to support the API: https://patchwork.kernel.org/cover/11642587/
-
-To test the patchset, follow the instructions from here: https://patchwork.kernel.org/cover/11642587/
-with the exception that the branch changed, so the clone command should be:
-
-git clone --single-branch --branch rkisp1-quant-v7-aug-27-2  https://gitlab.collabora.com/dafna/v4l-utils.git
-
-
-Patches Summary:
-----------------
-patch 1 - moves the description of the v4l2_pix_format flags in the Documentation to the right
-place where it should be. This is just a fix.
-
-patch 2 - Adds the API for video devices - Adds the new macros and fields and their documentation.
-This is only for video devices.
-
-patch 3 - uses the API in the capture device of vivid. Using the API, userspace is allowed to:
-1. Set the colorspace
-2. set the xfer_func
-3. Set the ycbcr_enc function for YUV formats.
-4. Set the hsv_enc function for HSV formats
-5. Set the quantization for YUV and RGB formats.
-
-patch 4 - Adds the API for subdevices - Adds the new macros and fields and their documentation.
-It also replaces the ycbcr_enc field of 'struct v4l2_mbus_framefmt' with a union that includes
-also hsv_enc and adds support for CSC on hsv_enc for subdevices.
-
-patch 5 - use the API to allow userspace to set the quantization on the isp source pad.
-
-patch 6 - sets the flags to 0 in the mbus enumeration of the resizer.
-
-Changes from v6:
-----------------
-- in patch 3, simplified the help functions  v4l2_is_*_valid in v4l2-common.h
-- in patch 4, set the flag back to be of size 16 to avoid having reserved2 field in v4l2_mbus_framefmt
-
-Changes from v5:
-----------------
-- reordering the colorspace fields in the documentation and their flags in the header files
-to the order 'colorspace', 'transfer function' 'Y'CbCr/ HSV encoding' , 'quantization'
-
-- in patch 3, move the helpers 'vivid_is_*_valid' as static inline 'v4l2_is_*_valid' in v4l2-common.h , reorder the
-handling of the colorspace fields, and drop a redundant assignment 'dev->tpg.quantization = mp->quantization'
-
-- squashing patches 4,5 into one
-
-- in patch 4, changing the documentation in file subdev-formats.rst to not mention 'capture stream'
-since this term is only relevant to video devices, so I changed the existing documentations:
-
-"must be set by the driver for capture streams and by the application for output streams"
-
-with "must be set by the driver for subdevices"
-and documenting that the CSC is only for source pads.
-
-
-- In patches 2,4,  in the doc of V4L2_MBUS_FRAMEFMT_SET_CSC/V4L2_PIX_FMT_FLAG_SET_CSC, replacing '0' with ``*_DEFAULT``
-
-- in patch 5 (patch 6 in v2) : replace return of V4L2_QUANTIZATION_DEFAULT was the right value.
-
-Changes from v4:
-----------------
-- This time I didn't to this patchset the patches from 'media: staging: rkisp1: bugs fixes and vars renames'
-but note that this patchset is rebased on that patchset.
-
-- I added the fields 'colorspace' 'xfer_func' to the list of fields that the CSC API supports due to
-comment from Hans Verkuil. Also the vivid implementation is extended to support those fields.
-
-- I split the patch that adds the API into two patches. One for video devices and one patch for subdevices.
-This is because the two APIs are actually independent and it is easier to maintain and review two small patches
-than one big patch.
-Also, it can be decided that only one of those patches be accepted.
-
-- I changed the flags fields in 'struct v4l2_mbus_framefmt'  to __u32 and added a reserved2 field before it due to
-padding.
-
-- I changed the patch for rkisp1 so that the quantization can be set by userspace only on the source pad of
-the isp entity and is read-only and set always to default for all other entities and pads.
-The driver also does not validate matching of the quantization between entities.
-
-- Added a patch to the rkisp1-resizer that sets the flags to 0 when enumerating the mbus codes.
-This is because the resizer reports the same formats as the source pad of the isp entity but does
-not support the quantization conversion.
-
-- various small fixes due to feedback.
-
-Changes from v3:
-----------------
-- patches 1,2,3,7,8 are new (rkisp1 bug fixes, move v4l2-pixfmt flags docs, vivid patch, support for HSV media bus)
-
-- patch 4 (The API):
-1) reformulate the Documentation according to comments from Verkuil and Tomasz Figa
-2) remove the code in drivers/media/v4l2-core/v4l2-subdev.c and drivers/media/v4l2-core/v4l2-ioctl.c
-so that except of the new macros and fields no new code is added to the core
-
-- patches 5,6 - refactor the rkisp1 implementation so that the userspace should set the quantization separately
-to each entity. In patch 6 the validation callbacks make sure the quantizations matches.
-
-Dafna Hirschfeld (6):
-  media: Documentation: v4l: move table of v4l2_pix_format(_mplane)
-    flags to pixfmt-v4l2.rst
-  v4l2: add support for colorspace conversion API (CSC) for video
-    capture
-  media: vivid: Add support to the CSC API
-  v4l2: extend the CSC API to subdevice.
-  media: staging: rkisp1: allow quantization setting by userspace on the
-    isp source pad
-  media: staging: rkisp1: rsz: set flags to 0 in enum_mbus_code cb
-
- .../media/v4l/pixfmt-reserved.rst             | 17 ----
- .../media/v4l/pixfmt-v4l2-mplane.rst          | 16 +---
- .../userspace-api/media/v4l/pixfmt-v4l2.rst   | 81 +++++++++++++++-
- .../media/v4l/subdev-formats.rst              | 95 +++++++++++++++++--
- .../media/v4l/vidioc-enum-fmt.rst             | 35 +++++++
- .../v4l/vidioc-subdev-enum-mbus-code.rst      | 51 +++++++++-
- .../media/videodev2.h.rst.exceptions          |  7 +-
- .../media/test-drivers/vivid/vivid-vid-cap.c  | 38 ++++++--
- .../test-drivers/vivid/vivid-vid-common.c     | 25 +++++
+Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Acked-by: Helen Koike <helen.koike@collabora.com>
+Reviewed-by: Tomasz Figa <tfiga@chromium.org>
+---
  drivers/staging/media/rkisp1/TODO             |  2 +-
- drivers/staging/media/rkisp1/rkisp1-capture.c | 10 --
- drivers/staging/media/rkisp1/rkisp1-isp.c     | 20 +++-
- drivers/staging/media/rkisp1/rkisp1-resizer.c |  1 +
- include/media/v4l2-common.h                   | 29 ++++++
- include/uapi/linux/v4l2-mediabus.h            | 15 ++-
- include/uapi/linux/v4l2-subdev.h              | 10 +-
- include/uapi/linux/videodev2.h                |  6 ++
- 17 files changed, 388 insertions(+), 70 deletions(-)
+ drivers/staging/media/rkisp1/rkisp1-capture.c | 10 ----------
+ drivers/staging/media/rkisp1/rkisp1-isp.c     | 20 +++++++++++++++----
+ 3 files changed, 17 insertions(+), 15 deletions(-)
 
+diff --git a/drivers/staging/media/rkisp1/TODO b/drivers/staging/media/rkisp1/TODO
+index bdb1b8f73556..bdd1da43cb5e 100644
+--- a/drivers/staging/media/rkisp1/TODO
++++ b/drivers/staging/media/rkisp1/TODO
+@@ -1,7 +1,7 @@
+ * Fix pad format size for statistics and parameters entities.
+ * Fix checkpatch errors.
+ * Review and comment every lock
+-* Handle quantization
++* Add uapi docs. Remember to add documentation of how quantization is handled.
+ * Document rkisp1-common.h
+ * streaming paths (mainpath and selfpath) check if the other path is streaming
+ in several places of the code, review this, specially that it doesn't seem it
+diff --git a/drivers/staging/media/rkisp1/rkisp1-capture.c b/drivers/staging/media/rkisp1/rkisp1-capture.c
+index c05280950ea0..f355b2977009 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-capture.c
++++ b/drivers/staging/media/rkisp1/rkisp1-capture.c
+@@ -1069,8 +1069,6 @@ static void rkisp1_try_fmt(const struct rkisp1_capture *cap,
+ 			   const struct v4l2_format_info **fmt_info)
+ {
+ 	const struct rkisp1_capture_config *config = cap->config;
+-	struct rkisp1_capture *other_cap =
+-			&cap->rkisp1->capture_devs[cap->id ^ 1];
+ 	const struct rkisp1_capture_fmt_cfg *fmt;
+ 	const struct v4l2_format_info *info;
+ 	const unsigned int max_widths[] = { RKISP1_RSZ_MP_SRC_MAX_WIDTH,
+@@ -1095,14 +1093,6 @@ static void rkisp1_try_fmt(const struct rkisp1_capture *cap,
+ 
+ 	info = rkisp1_fill_pixfmt(pixm, cap->id);
+ 
+-	/* can not change quantization when stream-on */
+-	if (other_cap->is_streaming)
+-		pixm->quantization = other_cap->pix.fmt.quantization;
+-	/* output full range by default, take effect in params */
+-	else if (!pixm->quantization ||
+-		 pixm->quantization > V4L2_QUANTIZATION_LIM_RANGE)
+-		pixm->quantization = V4L2_QUANTIZATION_FULL_RANGE;
+-
+ 	if (fmt_cfg)
+ 		*fmt_cfg = fmt;
+ 	if (fmt_info)
+diff --git a/drivers/staging/media/rkisp1/rkisp1-isp.c b/drivers/staging/media/rkisp1/rkisp1-isp.c
+index 6ec1e9816e9f..1063f4505aaf 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-isp.c
++++ b/drivers/staging/media/rkisp1/rkisp1-isp.c
+@@ -589,6 +589,10 @@ static int rkisp1_isp_enum_mbus_code(struct v4l2_subdev *sd,
+ 
+ 		if (code->index == pos - 1) {
+ 			code->code = fmt->mbus_code;
++			if (fmt->pixel_enc == V4L2_PIXEL_ENC_YUV &&
++			    dir == RKISP1_ISP_SD_SRC)
++				code->flags =
++					V4L2_SUBDEV_MBUS_CODE_CSC_QUANTIZATION;
+ 			return 0;
+ 		}
+ 	}
+@@ -620,7 +624,6 @@ static int rkisp1_isp_init_config(struct v4l2_subdev *sd,
+ 					     RKISP1_ISP_PAD_SOURCE_VIDEO);
+ 	*src_fmt = *sink_fmt;
+ 	src_fmt->code = RKISP1_DEF_SRC_PAD_FMT;
+-	src_fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
+ 
+ 	src_crop = v4l2_subdev_get_try_crop(sd, cfg,
+ 					    RKISP1_ISP_PAD_SOURCE_VIDEO);
+@@ -663,9 +666,18 @@ static void rkisp1_isp_set_src_fmt(struct rkisp1_isp *isp,
+ 		isp->src_fmt = mbus_info;
+ 	src_fmt->width  = src_crop->width;
+ 	src_fmt->height = src_crop->height;
+-	src_fmt->quantization = format->quantization;
+-	/* full range by default */
+-	if (!src_fmt->quantization)
++
++	/*
++	 * The CSC API is used to allow userspace to force full
++	 * quantization on YUV formats.
++	 */
++	if (format->flags & V4L2_MBUS_FRAMEFMT_SET_CSC &&
++	    format->quantization == V4L2_QUANTIZATION_FULL_RANGE &&
++	    mbus_info->pixel_enc == V4L2_PIXEL_ENC_YUV)
++		src_fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
++	else if (mbus_info->pixel_enc == V4L2_PIXEL_ENC_YUV)
++		src_fmt->quantization = V4L2_QUANTIZATION_LIM_RANGE;
++	else
+ 		src_fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
+ 
+ 	*format = *src_fmt;
 -- 
 2.17.1
 
