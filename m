@@ -2,120 +2,145 @@ Return-Path: <SRS0=AfPA=CF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B71ABC433DF
-	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 15:41:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A79D0C433E3
+	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 15:45:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 82D3D20707
-	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 15:41:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 85E462087D
+	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 15:45:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=cerno.tech header.i=@cerno.tech header.b="E/SbbEeS";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="l6+I15Gu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AMPa8N1A"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727066AbgH0PlZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Aug 2020 11:41:25 -0400
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:53113 "EHLO
-        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726266AbgH0PlZ (ORCPT
+        id S1727040AbgH0PpL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Aug 2020 11:45:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41746 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726924AbgH0PpH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Aug 2020 11:41:25 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id E7620580189;
-        Thu, 27 Aug 2020 11:41:23 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 27 Aug 2020 11:41:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=5kjKXc18Mu8gbbHx1ieZ1Dlzopi
-        c4BvIVhQuWyLHDzc=; b=E/SbbEeS7mdWMbtVEiwC7QsoNlhw0jZSbz/5Mql10Lx
-        Q7ukAac1iGuPFOKtcAmqXRQFH6XvNp5YR/3Mh04lTQUQkR+w0KP3qJW09EnF9n8B
-        xlJWjyMwC57Ut5mR01wdlQ5dDyEW5xn4z3af0uZ0jLj8IL3NAGusRwDE+pkZ62aU
-        gCbRj0hezNzGNuqz+eOww2oKuaBn6yRRkKu51pm+zyNf6w8UTUR2RNFiN/QLlaJ2
-        QfH5uULGWNB8kSDZkK1pASj7OwhdoMMNvLh/aG3zQZvHG6DypfsG3BFBF9p8SJCj
-        C/iQgYLL+mivb5BtztlRKxkLuD2IfDDFnsnDQc3P4kw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=5kjKXc
-        18Mu8gbbHx1ieZ1Dlzopic4BvIVhQuWyLHDzc=; b=l6+I15GuAxpFB8YtSRbE1s
-        Y8xGYtkcBStDbRyKFUg2ESe+koMvKa+o2zuLuGOg/GU/7w/EnmAMMTvjkCHSs2Ig
-        LjU4+XwSfim3NAmyLeBysI20DgThUcwR9Tm2O/wBUDN+YD6dsiSIZPp6NvLfjOf8
-        h+SyTSKyHrA7SUxIVlqUTujAazp6czMm/q5ljSc3CWfoOPS9J4DeUg8iQJnJ1J0a
-        he0heNeFiupUVM3dsGTy1o3IGAxgBjjCm29w5Sc3iTQ6VCcgTsgWZYLMXAVRPCWd
-        Xe9LyyBcP59VQAf1D3tExhhE6CAf2AZ1wRYCtuj9W6PkQCdeYKh9InkOTBTKSHDw
-        ==
-X-ME-Sender: <xms:IdRHX2hu0jZ6A9mtK_k4EfA-FHZTPF9uEIFZMtDeKHQAyFuAEx7UOA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedruddvgedgkeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddunecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepuddvudfhkeekhefgffetffelgffftdehffduffegveetffehueeivddvjedv
-    gfevnecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:IdRHX3COoKZWmhu6z4ZWlBXFW0xuOyeln6lVhkLkBvjk3A5tFIN-yA>
-    <xmx:IdRHX-Gd9ZhZw2KSvA16SUrx1HF-7eVNO3Tkl2hCm0bhxUv2qlnjKw>
-    <xmx:IdRHX_TKu7odB_HGKP-LBqIAYKZPOPqNAPAqKpoqhsMxrBCjS6irLA>
-    <xmx:I9RHX7eQ6XS2mAMtW8CI-LdK9OMLEaXw_uJBApKYgM4x8dLy86hp4w>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 6E044306005F;
-        Thu, 27 Aug 2020 11:41:21 -0400 (EDT)
-Date:   Thu, 27 Aug 2020 17:41:19 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     =?utf-8?B?S8OpdmluIEwnaMO0cGl0YWw=?= <kevin.lhopital@bootlin.com>
-Cc:     linux-media@vger.kernel.org, mchehab@kernel.org,
-        robh+dt@kernel.org, mark.rutland@arm.com, wens@csie.org,
-        yong.deng@magewell.com, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thu, 27 Aug 2020 11:45:07 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F55EC061264;
+        Thu, 27 Aug 2020 08:45:06 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id f24so5320237edw.10;
+        Thu, 27 Aug 2020 08:45:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=74Ao/c7oeFoBT1F8v8BlKUziYBzWC4YEYws/h439jKs=;
+        b=AMPa8N1AoD9YB7fIeGgmF/cNowE7jTvmdnSlHkNXqWgTuHGj1LDyz6RY9dorKnL/fN
+         Z30pyVOeUrs4fDWQn3hrs1dZvRxrbplQZbImRrNJNHdCgPH/5mhyGT43pJeH7xkrp6Sb
+         MZBcScUrs/MJyLn42oxJRGaNJrvbJexbN1cPg2Cxkb3XtnP+LC3+ovtJFuj8hqptSUOv
+         CcXCkksNHNjATY9ob/FlyIIO46cj2X4u3uwybNf4+PMBFfX+68NaraOwOxzF+DfICVCM
+         VN25BNvOEthy10Y2DCDS0ilfaqRXmZ3ernBzLlAAUqcBNegk+XnORCZVVMope4D1TZQ+
+         iXvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=74Ao/c7oeFoBT1F8v8BlKUziYBzWC4YEYws/h439jKs=;
+        b=f6srJWownTppSnU2+3MptZvEHdePKHnvbEXq54deOOW5/FFNInOh2MhO+dlDMKLC4V
+         TpRtYq8GsF1rgDEC4DkwD7n0aDcdbXVc15lBXl1GBDykVcaE/e1y01mVsOpP9mvv6P+u
+         W1oxEvOT6F0u88HAeUZCmnJb1c2/FFxOWWgmin3ck/4zz85xvas1gRWE0mRzVcyjYzKS
+         iGhjfFdHSUGyXEtosG+HoQXrpK8nwjTtQmDlFkSSAtpQ7lG6Oxn+ioaEe/A85N1P6WP/
+         xrheaxSSYgWM2iylX+hC7Lr0f6OTUZ/sQmVwgqd/za+anrKEVy2zmMdtLJhg4YoOaRnP
+         kA2A==
+X-Gm-Message-State: AOAM531gg3WXCpmSqM85jFSKewr0BVAeTYfxwSmLzJdvcUldxs+gBKq8
+        xqZVe2tQfvthzkTgT68kYJQ=
+X-Google-Smtp-Source: ABdhPJxRtAe6Y1ma+0338eCNyd9I0m6G1oP+UGM2tA/8xgx0U3OYLFtKYBAAwxNFg0VrZz+x/RmEmw==
+X-Received: by 2002:a05:6402:3088:: with SMTP id de8mr20472098edb.88.1598543104973;
+        Thu, 27 Aug 2020 08:45:04 -0700 (PDT)
+Received: from localhost ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id u4sm1804409edt.11.2020.08.27.08.45.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Aug 2020 08:45:03 -0700 (PDT)
+Date:   Thu, 27 Aug 2020 17:45:02 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     hch@lst.de, joro@8bytes.org, linux@armlinux.org.uk,
+        will@kernel.org, inki.dae@samsung.com, sw0312.kim@samsung.com,
+        kyungmin.park@samsung.com, m.szyprowski@samsung.com,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        jonathanh@nvidia.com, vdumpa@nvidia.com, digetx@gmail.com,
+        matthias.bgg@gmail.com, yong.wu@mediatek.com,
+        geert+renesas@glider.be, magnus.damm@gmail.com, t-kristo@ti.com,
+        s-anna@ti.com, laurent.pinchart@ideasonboard.com,
         linux-arm-kernel@lists.infradead.org,
-        paul.kocialkowski@bootlin.com, thomas.petazzoni@bootlin.com
-Subject: Re: [PATCH 5/7] media: sunxi: sun6i-csi: Add support of MIPI CSI-2
- for A83T
-Message-ID: <20200827154119.ljxvjb2fe7xeg2xo@gilmour.lan>
-References: <20200821145935.20346-1-kevin.lhopital@bootlin.com>
- <20200821145935.20346-6-kevin.lhopital@bootlin.com>
- <20200825143704.qkg2re5bxm2cufnd@gilmour.lan>
- <20200826111728.21d52c34@lhopital-XPS-13-9360>
+        iommu@lists.linux-foundation.org,
+        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 13/18] iommu/tegra: Add IOMMU_DOMAIN_DMA support
+Message-ID: <20200827154502.GA1660457@ulmo>
+References: <cover.1597931875.git.robin.murphy@arm.com>
+ <cd11bc7851dbe46db6d14821a942678047331913.1597931876.git.robin.murphy@arm.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="frux7y34gyxq2g4n"
+        protocol="application/pgp-signature"; boundary="YiEDa0DAkWCtVeE4"
 Content-Disposition: inline
-In-Reply-To: <20200826111728.21d52c34@lhopital-XPS-13-9360>
+In-Reply-To: <cd11bc7851dbe46db6d14821a942678047331913.1597931876.git.robin.murphy@arm.com>
+User-Agent: Mutt/1.14.6 (2020-07-11)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 
---frux7y34gyxq2g4n
-Content-Type: text/plain; charset=iso-8859-1
+--YiEDa0DAkWCtVeE4
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Aug 26, 2020 at 11:17:28AM +0200, K=E9vin L'h=F4pital wrote:
-> > > +	mdelay(10); =20
-> >=20
-> > Why do you need an mdelay here?
+On Thu, Aug 20, 2020 at 04:08:32PM +0100, Robin Murphy wrote:
+> Now that arch/arm is wired up for default domains and iommu-dma,
+> implement the corresponding driver-side support for DMA domains.
 >=20
-> yes a msleep could be more correct here.
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> ---
+>  drivers/iommu/tegra-smmu.c | 37 +++++++++++++++++++++----------------
+>  1 file changed, 21 insertions(+), 16 deletions(-)
 
-My question was more about whether/why you need one in the first place,
-not necessarily how you would implement that delay.
+We can't do that yet because it will currently still break for use-cases
+such as display where we don't properly set up identity mappings during
+boot. The result is that the dma-iommu code will enable translations
+before the driver gets a chance to set up any mappings and if the
+display controller was left on by the bootloader, scanning out a splash
+screen, this causes faults between the point where dma-iommu is being
+set up for the display controller and where the display controller
+starts mapping its own buffers (rather than the ones mapped by the
+bootloader).
 
-Maxime
+That said, I do have a series that I've been carrying around for longer
+than I've wanted that does exactly this for Tegra SMMU and I'd prefer if
+you could drop this particular change from your series so that I can
+keep working on resolving the identity mapping issues first.
 
---frux7y34gyxq2g4n
+Thierry
+
+--YiEDa0DAkWCtVeE4
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX0fUHwAKCRDj7w1vZxhR
-xe20AP9MrwIj1p6+Wb9mEL56E2ynthsYRloqePkJXIFLXvvYKwD/bsjv+odRNGt0
-Wkpfn5tU6gwLEWbuHgviKzUwChkfHA4=
-=ZP4Z
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl9H1PwACgkQ3SOs138+
+s6GMrhAAqb0k0/ZQ/J5VIibNnM1oZSG1CTD/3tuwm94u1T1J++b71xlQpN0U7Fru
+gJNX22olSrdpzdecS9LQ3Twqu4qgPzLazvenfBLxxrDuwS466j3hbbW8cG1Tlb/m
+6lEbacziO0f91GP7ao5dAG0HIPZvIYfU1PIA/eOPnBcOlFVvWVfCnN6gOjPOSocz
+20X/S1W6d5Jo7x2T0PtA0TFpD9BZVzjZA2q9XVzPSxkqLfEVMU00Yp/TnHySfWJ3
++sfRxeaUl5Ysjrtkd5YeFoIGlVctyKIKtGCIR60HU4bPlB4cdaVaaJBVkJAM7kQh
+p+UGnGgl09/DyAe57qVaEWsbcXwHaxeveFmdjMHn9y0veGidzQPg0KtDUL2k7D3V
+NXHKnets8HdkODT8PjTSbS3ELLEHf1GxsYAcR9aHvV1FLMl3c/8ZmMA1RZ5CIAbD
+rmFaxQENmVHUev0lQnwlYP7Wwt2YyXc62L9UfyhrIkQjHmm/D+uIlPmjkr/YDreI
+xndQ7H0OgVFKuc9nfSpnBOgIEeLDNr2AA59wzUxHikB+5MfDyxOk5TqnsjdcqSqr
+b8257AC5ZWe79OOD0/hwDAlmSlx/hB3lO2kmm3BhLX+5tOTQv7vTSgr9BTppkZrD
+dQHiT2TjMsiQyBhXhceazD0hhSAC3MSh1+TpgLDrBy2Sh96zUQ8=
+=Dzgn
 -----END PGP SIGNATURE-----
 
---frux7y34gyxq2g4n--
+--YiEDa0DAkWCtVeE4--
