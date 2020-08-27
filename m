@@ -7,65 +7,65 @@ X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E676C433DF
-	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 09:25:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8C6AC433E1
+	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 09:25:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E2A8A2177B
-	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 09:25:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 86E472075B
+	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 09:25:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hnbPjqc5"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dolX/Oj/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727996AbgH0JY6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Aug 2020 05:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38500 "EHLO
+        id S1728228AbgH0JZv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Aug 2020 05:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728447AbgH0JYz (ORCPT
+        with ESMTP id S1728620AbgH0JZY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Aug 2020 05:24:55 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9CBC061264
-        for <linux-media@vger.kernel.org>; Thu, 27 Aug 2020 02:24:54 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id f7so4673675wrw.1
-        for <linux-media@vger.kernel.org>; Thu, 27 Aug 2020 02:24:53 -0700 (PDT)
+        Thu, 27 Aug 2020 05:25:24 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D98C061234
+        for <linux-media@vger.kernel.org>; Thu, 27 Aug 2020 02:25:24 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id o4so4668489wrn.0
+        for <linux-media@vger.kernel.org>; Thu, 27 Aug 2020 02:25:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=y6eC9FLONwMHdn6Vk0cNJPGbuy8ijaSCojAKxgZZyGI=;
-        b=hnbPjqc5lM+2ivWPWllQVpQjADKutPYchKe3HF5YZEtqdQv5wcsgAsTa4QRucC7KXm
-         Fu0kESFc2qZknb+X0Rv98VLtHjG6hEw9sVXLN0Uhu/Jwf8srK+lEFy1gl0o/PNKM7TSi
-         S/pYjYrB1fZerg/uae81FFQKOdK1/DEKvXyvoNlslFdEHJT7u8RmjKyhzWbP83BqUGpU
-         nixwNth8eI+fGKSYvBKP6+9x55Sgd9bLhcNrJ7Axst+6u2Xl5MPzx1l0Y0Wrvnr8vTSc
-         WHUmuWpHE2OG+j5ZwAH3oOJsFFmzZQJ3VGzYpgUZpDACYU0vdfwOw0JHhQNVY95KCzrq
-         Uxtg==
+        bh=IFNMyaH4C8tyb/mJTWrzTTwDqXVQt+oIKxEwk0xfFcs=;
+        b=dolX/Oj/ruvZXAdY9Awn2EFLCyhybVa7noGABscD4AETJE40yPNweFzjsbch+7oNWD
+         E9nAAOpcJUgp9Zeqgha+dssMpvo6RwBkMdKQr1/shKrQb0Y4cHWz0ezv+I0u83obAvvs
+         bxIIDWcO3SxyVq+9yL4RT0eclQmQCeE61H2Le1JzT6LZEjHn8FIOK2vXK5RGTu9VzPcR
+         WlhWpzHcuySlhhcZMMW1BJw56yMBEgmOpH8MrD85+vdLpTWukcT7HwdGUEZDK9qEuGzE
+         EEvUN3FdcV2SjAR3UvcnQyjrQkSL1X9pwPfyfVrHiU1yoYtiTJg8HyGXsdwT/G9xnbHr
+         KRwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=y6eC9FLONwMHdn6Vk0cNJPGbuy8ijaSCojAKxgZZyGI=;
-        b=VIx/GlW/qsv8zFIfTa+09lx0iK4aqz0IzgxsLx6ZAtyrFRZMD5BE4AXhDWGCS4TuGd
-         TftBgnIAwmBDdGNYoqLJLXvItaobd3syQ59fR41BpIdQNv7GzZOP0APvPsHEMDVAYoR/
-         d+3xxY+0RG2TKbiVX/eVS04srCUF4LlLMBn10A4KZfdz9zEl6M5SN/tThphCKBQXMmY1
-         YtXpQNEIq6/yt0Yauu41GrvcAuhGLly6ukwGcGFrSF+vGSmQzOmR9UsXtNsS2hCiTo9O
-         QSpBW9T5qq2Mxybp1LEmwfW9gZjO9XPGt3vO1Mo2xS6FyZ0F9uBDedwFY+9D+JZPv3nr
-         emFA==
-X-Gm-Message-State: AOAM5311o2E8o+rxIwb8GZsSRiwxV8ALIL9/Jl6BXE1cUvGgEwDRJfdO
-        T3rLKxPOxFUiD+Zwj/ci9KL7INa/mTtyu4Md
-X-Google-Smtp-Source: ABdhPJzhjGcMcaab0JBm7YKdkEeQjDzX8SevME+a/8lFxMocA/bRceA4s3D9XxUWxvQN3fyah0kthw==
-X-Received: by 2002:a5d:6944:: with SMTP id r4mr20635784wrw.132.1598520292764;
-        Thu, 27 Aug 2020 02:24:52 -0700 (PDT)
+        bh=IFNMyaH4C8tyb/mJTWrzTTwDqXVQt+oIKxEwk0xfFcs=;
+        b=kEvFSHMOeVLQyO592ejR+I46Eq1/iDgnNibhJnAxlIm3Fobgf6ron9DzX3L4GyyG89
+         tvV9llOP77ULw4xyJ+pYi42WbhDsQHcz3+wdnNg0v6XGXc9TuVJB9kCAcqwJJkgc2RqB
+         FhUnOQzamXrvbM4duFXC+RauAi//CoRyJjuwXwgJ2LvSa2zSTWPgs0CyzEoRjz+1AJ2r
+         ctyWVVwKJwqpJLT8tIrErFh8LMaaUmtFuWZ6srrcOMEat9wHoWs87SMJ6pGQYfviJZdn
+         ifT3ek0gk363CfJNkfssPQAvVUWY8RfTYgjZ48YCy/UALzYgeJ7CnH9/isgaca9kAnXz
+         vW1w==
+X-Gm-Message-State: AOAM532vtzscw5jpufdvadKWsjjR1bFZ5GIDEBew6JWnqcsP/PJUmZGm
+        jy+iKby3udZA01mp27j2QUkMTQ==
+X-Google-Smtp-Source: ABdhPJwT8tpl+fd43qiB4cxkLEEDXd73CQlEGtZK4m11dQ+acs5TwfsJbOHxWMvs/63SDdvUq4pcBA==
+X-Received: by 2002:a5d:6505:: with SMTP id x5mr18875316wru.336.1598520322734;
+        Thu, 27 Aug 2020 02:25:22 -0700 (PDT)
 Received: from localhost.localdomain ([195.24.90.54])
-        by smtp.gmail.com with ESMTPSA id z203sm4357330wmc.31.2020.08.27.02.24.50
+        by smtp.gmail.com with ESMTPSA id z203sm4357330wmc.31.2020.08.27.02.25.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Aug 2020 02:24:52 -0700 (PDT)
+        Thu, 27 Aug 2020 02:25:22 -0700 (PDT)
 From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
 To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
 Cc:     Dikshita Agarwal <dikshita@codeaurora.org>,
         Vikash Garodia <vgarodia@codeaurora.org>,
         Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH 01/13] venus: Delete not used core caps
-Date:   Thu, 27 Aug 2020 12:24:05 +0300
-Message-Id: <20200827092417.16040-2-stanimir.varbanov@linaro.org>
+Subject: [PATCH 13/13] venus: helpers: Wire up hfi platform buffer requirements
+Date:   Thu, 27 Aug 2020 12:24:17 +0300
+Message-Id: <20200827092417.16040-14-stanimir.varbanov@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200827092417.16040-1-stanimir.varbanov@linaro.org>
 References: <20200827092417.16040-1-stanimir.varbanov@linaro.org>
@@ -74,53 +74,104 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The core caps are filled but not used, delete them. In case we
-need them we can re-introduce.
+Now when everything is in place wire up buffer requirements
+from hfi platform buffers to the buffer requirements helper.
 
 Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 ---
- drivers/media/platform/qcom/venus/core.h      | 6 ------
- drivers/media/platform/qcom/venus/hfi_venus.c | 3 ---
- 2 files changed, 9 deletions(-)
+ drivers/media/platform/qcom/venus/helpers.c   | 50 +++++++++++++++++++
+ .../media/platform/qcom/venus/hfi_parser.h    |  5 ++
+ 2 files changed, 55 insertions(+)
 
-diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
-index a9a52e29312d..18cf5b329a2b 100644
---- a/drivers/media/platform/qcom/venus/core.h
-+++ b/drivers/media/platform/qcom/venus/core.h
-@@ -143,7 +143,6 @@ struct venus_caps {
-  * @enc_codecs:	encoders supported by this core
-  * @dec_codecs:	decoders supported by this core
-  * @max_sessions_supported:	holds the maximum number of sessions
-- * @core_caps:	core capabilities
-  * @priv:	a private filed for HFI operations
-  * @ops:		the core HFI operations
-  * @work:	a delayed work for handling system fatal error
-@@ -189,11 +188,6 @@ struct venus_core {
- 	unsigned long enc_codecs;
- 	unsigned long dec_codecs;
- 	unsigned int max_sessions_supported;
--#define ENC_ROTATION_CAPABILITY		0x1
--#define ENC_SCALING_CAPABILITY		0x2
--#define ENC_DEINTERLACE_CAPABILITY	0x4
--#define DEC_MULTI_STREAM_CAPABILITY	0x8
--	unsigned int core_caps;
- 	void *priv;
- 	const struct hfi_ops *ops;
- 	struct delayed_work work;
-diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
-index 4be4a75ddcb6..cb0e657b7649 100644
---- a/drivers/media/platform/qcom/venus/hfi_venus.c
-+++ b/drivers/media/platform/qcom/venus/hfi_venus.c
-@@ -1591,9 +1591,6 @@ int venus_hfi_create(struct venus_core *core)
- 	hdev->suspended = true;
- 	core->priv = hdev;
- 	core->ops = &venus_hfi_ops;
--	core->core_caps = ENC_ROTATION_CAPABILITY | ENC_SCALING_CAPABILITY |
--			  ENC_DEINTERLACE_CAPABILITY |
--			  DEC_MULTI_STREAM_CAPABILITY;
+diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
+index cd06a6998f52..a3e59b3791eb 100644
+--- a/drivers/media/platform/qcom/venus/helpers.c
++++ b/drivers/media/platform/qcom/venus/helpers.c
+@@ -15,6 +15,7 @@
+ #include "hfi_helper.h"
+ #include "pm_helpers.h"
+ #include "hfi_platform.h"
++#include "hfi_parser.h"
  
- 	ret = venus_interface_queues_init(hdev);
+ struct intbuf {
+ 	struct list_head list;
+@@ -552,6 +553,51 @@ static u32 to_hfi_raw_fmt(u32 v4l2_fmt)
+ 	return 0;
+ }
+ 
++static int platform_get_bufreq(struct venus_inst *inst, u32 buftype,
++			       struct hfi_buffer_requirements *req)
++{
++	enum hfi_version version = inst->core->res->hfi_version;
++	const struct hfi_platform *hfi_plat;
++	struct hfi_plat_buffers_params params;
++	bool is_dec = inst->session_type == VIDC_SESSION_TYPE_DEC;
++	struct venc_controls *enc_ctr = &inst->controls.enc;
++
++	hfi_plat = hfi_platform_get(version);
++
++	if (!hfi_plat || !hfi_plat->bufreq)
++		return -EINVAL;
++
++	params.version = version;
++	params.num_vpp_pipes = hfi_platform_num_vpp_pipes(version);
++
++	if (is_dec) {
++		params.width = inst->width;
++		params.height = inst->height;
++		params.codec = inst->fmt_out->pixfmt;
++		params.hfi_color_fmt = to_hfi_raw_fmt(inst->fmt_cap->pixfmt);
++		params.dec.max_mbs_per_frame = mbs_per_frame_max(inst);
++		params.dec.buffer_size_limit = 0;
++		params.dec.is_secondary_output =
++			inst->opb_buftype == HFI_BUFFER_OUTPUT2;
++		params.dec.is_interlaced =
++			inst->pic_struct != HFI_INTERLACE_FRAME_PROGRESSIVE ?
++				true : false;
++	} else {
++		params.width = inst->out_width;
++		params.height = inst->out_height;
++		params.codec = inst->fmt_cap->pixfmt;
++		params.hfi_color_fmt = to_hfi_raw_fmt(inst->fmt_out->pixfmt);
++		params.enc.work_mode = VIDC_WORK_MODE_2;
++		params.enc.rc_type = HFI_RATE_CONTROL_OFF;
++		if (enc_ctr->bitrate_mode == V4L2_MPEG_VIDEO_BITRATE_MODE_CQ)
++			params.enc.rc_type = HFI_RATE_CONTROL_CQ;
++		params.enc.num_b_frames = enc_ctr->num_b_frames;
++		params.enc.is_tenbit = inst->bit_depth == VIDC_BITDEPTH_10;
++	}
++
++	return hfi_plat->bufreq(&params, inst->session_type, buftype, req);
++}
++
+ int venus_helper_get_bufreq(struct venus_inst *inst, u32 type,
+ 			    struct hfi_buffer_requirements *req)
+ {
+@@ -563,6 +609,10 @@ int venus_helper_get_bufreq(struct venus_inst *inst, u32 type,
+ 	if (req)
+ 		memset(req, 0, sizeof(*req));
+ 
++	ret = platform_get_bufreq(inst, type, req);
++	if (!ret)
++		return 0;
++
+ 	ret = hfi_session_get_property(inst, ptype, &hprop);
  	if (ret)
+ 		return ret;
+diff --git a/drivers/media/platform/qcom/venus/hfi_parser.h b/drivers/media/platform/qcom/venus/hfi_parser.h
+index 7f59d82110f9..5751d0140700 100644
+--- a/drivers/media/platform/qcom/venus/hfi_parser.h
++++ b/drivers/media/platform/qcom/venus/hfi_parser.h
+@@ -112,4 +112,9 @@ static inline u32 core_num_max(struct venus_inst *inst)
+ 	return cap_max(inst, HFI_CAPABILITY_MAX_VIDEOCORES);
+ }
+ 
++static inline u32 mbs_per_frame_max(struct venus_inst *inst)
++{
++	return cap_max(inst, HFI_CAPABILITY_MBS_PER_FRAME);
++}
++
+ #endif
 -- 
 2.17.1
 
