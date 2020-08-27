@@ -6,88 +6,104 @@ X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
 	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2F90C433E1
-	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 14:52:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FF26C433DF
+	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 15:13:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CE22D2054F
-	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 14:52:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7DB6D22B40
+	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 15:13:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=emersion.fr header.i=@emersion.fr header.b="SxZqeJxI"
+	dkim=pass (2048-bit key) header.d=cerno.tech header.i=@cerno.tech header.b="ZcSb+Tsy";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="lwpSDbB1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728121AbgH0Ow1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Aug 2020 10:52:27 -0400
-Received: from mail-40134.protonmail.ch ([185.70.40.134]:21105 "EHLO
-        mail-40134.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726882AbgH0OwV (ORCPT
+        id S1728481AbgH0PNP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Aug 2020 11:13:15 -0400
+Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:44971 "EHLO
+        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728432AbgH0PNJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Aug 2020 10:52:21 -0400
-Date:   Thu, 27 Aug 2020 14:52:12 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=emersion.fr;
-        s=protonmail2; t=1598539937;
-        bh=yE3GsZ9y/3e4AfJhkux+xTs/8FeXnCPJxbneuzKe2ss=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=SxZqeJxI8EU0Yvda+Tk1Iy7j1b4cDNLCzY6tNk5UrElCIry8+0vNTfFqej5zyXR1S
-         tm4O+7uOCQeYweD2KzDhqQculZDXGkgqREJDSzI9buvDy7jDFoWVfvaRR3knMJA0H5
-         SnXa/DxgLg3Ie6NQybMJCzTKBMEAhUS5rkqaUdqBPtanvuzff1w/FpG7WPbAT5lkBj
-         M0zhYsYIjqTLKcvGzxmNPwwf0IUNzt5d1Aag4Znl2yb2T8A2QoJOU4z0i6eqDetMT9
-         lNXf1nfGM4rj6d7NhktMGt6WPrOdksmjSn1wXF8tU/HByBBTskirvZMhJCDpZxaGYQ
-         KBVdFAykbJPUg==
-To:     Ezequiel Garcia <ezequiel@collabora.com>
-From:   Simon Ser <contact@emersion.fr>
-Cc:     James Jones <jajones@nvidia.com>,
-        Brian Starkey <brian.starkey@arm.com>,
-        Robert Beckett <bob.beckett@collabora.com>,
-        "nd@arm.com" <nd@arm.com>, Tomasz Figa <tfiga@chromium.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>,
-        Liam Mark <lmark@codeaurora.org>,
-        "Andrew F . Davis" <afd@ti.com>,
-        "kernel@collabora.com" <kernel@collabora.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        Laura Abbott <labbott@kernel.org>,
-        Daniel Stone <daniels@collabora.com>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
-Reply-To: Simon Ser <contact@emersion.fr>
-Subject: Re: [RFC] Experimental DMA-BUF Device Heaps
-Message-ID: <RYac-UwqFncGmZCWk713lK86adAOfMQbeT6CF15dhr1H3o-P-_tXJcwNYxM5LYqddtYe7Y7VEmbSrDe5ixtIqtHmxMkH1FfulkO4VppXGKA=@emersion.fr>
-In-Reply-To: <746a0bb75bd8388a30b53a5ddc56fb24aea308a8.camel@collabora.com>
-References: <20200816172246.69146-1-ezequiel@collabora.com> <20200817151813.wet5faqg4fzlfbsh@DESKTOP-E1NTVVP.localdomain> <c2450755-91fd-da72-bf1e-c015ad9d6b25@nvidia.com> <746a0bb75bd8388a30b53a5ddc56fb24aea308a8.camel@collabora.com>
+        Thu, 27 Aug 2020 11:13:09 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 203EF10EE;
+        Thu, 27 Aug 2020 11:13:06 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Thu, 27 Aug 2020 11:13:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=C/+mFJaBBx5jcHqjlyBhhPH/qkk
+        DdWRrn/96ZVyikyo=; b=ZcSb+TsyY8AG17EFmMntByiRrLy2Lh1IfkRkMEQymPZ
+        cBcUY1EuPHNlGjHYWKjhW4pGw66Eg5mYIQnjCl3trZ7AnfpucJlzTEu+nV1BbKVa
+        /4P1yYCuvveNxTtT63biuulyh0oCLxC/YxxjjmWoUk9dNGwAfuBBLdw6UvhZLWGw
+        2zScotb/2225H9yv5N0SKsppUOs67egIThQIJd623FKPns4YQP/02DDyYVnqttER
+        InUlKmC5oSu5YBf7WxYOPvxlImiyLk26wZhrLo6S33B5BtfnTzKe7P05NSY024zv
+        5ZRhnTS+CVk/zpwrO9iEVul/U1zUBDJnbe8fkgo5uFA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=C/+mFJ
+        aBBx5jcHqjlyBhhPH/qkkDdWRrn/96ZVyikyo=; b=lwpSDbB1z9TXIfrhnhHFXk
+        ZDgT7aOVf6k/VJCn2VeF7cDJWHqdiB6pinj8ywPIdwDAkr43aGpKLiWmPP1n5zM6
+        cInkraCNo8y8R0rwxt33bug8JkzfU/dbNnUahI/Z9ZD7rL8f4iXuOioiIvkF0ns3
+        OhIiTv+Wrb/y9vUF7KKtUskK8x2jglThLLtp7msp8cbsr9IuOYLPmybqc/8qV8nJ
+        Uf2zR5/lq9roGEyymHhvnc5gL1Zuhy0OjGMNjOMK7wMqtNRoPbrRWDbm4vOPMoe1
+        W13qwOPnJKNqlCop0wYuSMbXBOhkHqUxg1YMcuS41bBADysD3f5SsHypEOR+gIFA
+        ==
+X-ME-Sender: <xms:fs1HX7oexFet15xeOQMnDHXEvA1DZBkS1q0z_j0iWSj_NbGcwWSaKA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedruddvgedgkedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
+    gedunecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:fs1HX1pNinnZpn-Z99_x8lSk7hyrNk8L28GRWJAp71h3WSdtFHQfGw>
+    <xmx:fs1HX4MjulN24sDECRxkoXxOEDYVbwMGXNBTMiDsjpJuFY2FFklXkw>
+    <xmx:fs1HX-480H3lNDsRUh75-AHkzPaFCacIVGlmDUQeh3k5pyKHAmUKyQ>
+    <xmx:gc1HX8R6BKTkBwn2zx2eBdBdqPd4VQTYYJUpRXKGIrwqJWOPM11BxQ>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 6B5273280065;
+        Thu, 27 Aug 2020 11:13:02 -0400 (EDT)
+Date:   Thu, 27 Aug 2020 17:13:00 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Jernej Skrabec <jernej.skrabec@siol.net>
+Cc:     wens@csie.org, mchehab@kernel.org, robh+dt@kernel.org,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@googlegroups.com
+Subject: Re: [PATCH 0/3] ARM: dts: sun8i: r40: Enable IR on BananaPi M2U
+Message-ID: <20200827151300.zu3drnnortto5647@gilmour.lan>
+References: <20200825171358.1286902-1-jernej.skrabec@siol.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ot7wtlx72g4ekyyy"
+Content-Disposition: inline
+In-Reply-To: <20200825171358.1286902-1-jernej.skrabec@siol.net>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thursday, August 20, 2020 10:15 AM, Ezequiel Garcia <ezequiel@collabora.=
-com> wrote:
 
-> > I'm rather interested on where this goes, as I was toying with using
-> > some sort of heap ID as a basis for a "device-local" constraint in the
-> > memory constraints proposals Simon and I will be discussing at XDC this
-> > year. It would be rather elegant if there was one type of heap ID used
-> > universally throughout the kernel that could provide a unique handle fo=
-r
-> > the shared system memory heap(s), as well as accelerator-local heaps on
-> > fancy NICs, GPUs, NN accelerators, capture devices, etc. so apps could
-> > negotiate a location among themselves. This patch seems to be a step
-> > towards that in a way, but I agree it would be counterproductive if a
-> > bunch of devices that were using the same underlying system memory ende=
-d
-> > up each getting their own heap ID just because they used some SW
-> > framework that worked that way.
-> > Would appreciate it if you could send along a pointer to your BoF if it
-> > happens!
->
-> Here is it:
->
-> https://linuxplumbersconf.org/event/7/contributions/818/
->
-> It would be great to see you there and discuss this,
-> given I was hoping we could talk about how to meet a
-> userspace allocator library expectations as well.
+--ot7wtlx72g4ekyyy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Unfortunately there's no livestream for BoFs. Would be very interested
-in having a summary of the discussions once the BoF is over!
+On Tue, Aug 25, 2020 at 07:13:55PM +0200, Jernej Skrabec wrote:
+> This series first adds nodes to R40 DTSI and then enable IR receiver
+> for BananaPi M2 Ultra board.
+
+Applied all three, thanks!
+Maxime
+
+--ot7wtlx72g4ekyyy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX0fNfAAKCRDj7w1vZxhR
+xUAjAQDDiSUFApIM2/5AnuNCdLMGzEYkz0pHqwujbG61g6UOuAD+IUZ3P1fJUSKs
+y55trL0dgZJ8dtwoyb94ofzk8tmhNwY=
+=m1f1
+-----END PGP SIGNATURE-----
+
+--ot7wtlx72g4ekyyy--
