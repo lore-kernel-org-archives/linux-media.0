@@ -2,108 +2,261 @@ Return-Path: <SRS0=AfPA=CF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34EF1C433E3
-	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 12:54:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9F7FC433DF
+	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 12:56:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0EBD922BF5
-	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 12:54:57 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FGT1CbGR"
+	by mail.kernel.org (Postfix) with ESMTP id AB1AD2177B
+	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 12:56:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1598532979;
+	bh=T573s1h+OfVtbSoERHdm73xj5TCvPh4oK6PieFQpZAE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=OzJ0G1FWOaksSyRS/FCcRe3GyYxOAxdq7DdO/Lalmlos5dtoWM53ipvkQ7qrmnsk1
+	 8JaJH8MTN3teVxl53tNSzUSlMZJqu9Apt868YMu13ys7wWkPBFTxDBm1JcXC6mhMXC
+	 E1wAeAnxM34n6a+hdJlhb3p4x4B5txHGfAMY41xM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728995AbgH0Myv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Aug 2020 08:54:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43104 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728973AbgH0Mym (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Aug 2020 08:54:42 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D09A0C061264;
-        Thu, 27 Aug 2020 05:54:41 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id a65so5064001wme.5;
-        Thu, 27 Aug 2020 05:54:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=a5lpHFvSWQoGrjybaXmlV69Axq+442tGTTEhKXzXB/M=;
-        b=FGT1CbGRN8nWIZimQQJFHaFlgGbXUWXcohmF6aYnzTMEIdoXLV8ASHcjH/rftf8dPu
-         05h7ynqky+tK0sVnESIUNMOkwDJXKaIKOOjfk8ZzK2aS6ItFzfPK1RiS8Sgq9gCPkksa
-         s87z1TYPj+YUb/w6uaLEL+ETfgmlzhXCU10ucGJlzNXsBINUdbYoCrfyflOTHYw+cbz4
-         RAdiDof8rxMnyZ5hwply2FrDERb1PY3A2wl1RdJOsOW1zwqi8pXPitwO0zzOFjipVey5
-         oUPQnIgnx+nqlo3zwpUr7dRtVO/mC+2RV5+VHT1jDZZ+PWuU7gSvtmMNjL2CWO/kpKhp
-         IGew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=a5lpHFvSWQoGrjybaXmlV69Axq+442tGTTEhKXzXB/M=;
-        b=MJE0yRwoQzsnxhBdyQfT/5MJsLRMJJNbLzi6l5vW6qxHl5bqRp/XIPtRcshfhf1MXi
-         ylS/yD4UhWjMvhOPZHiOUs34DMwd3ylguODBJMUWyPTfH/BopgBdvZoWr6ulu4PuP+qe
-         PSJg+eQXemuAwlNiNq9hCnsrI3g41k+OsE+klK1Dq0pCO7n6T2gONMN+jQtgwl/Awrag
-         s0leS9JW4OhpgpJev6w9NZUvE1UHPaNEfgwgrXhRRJKJo219VmJNPxwKHorUR+4ardYd
-         5TGqVnuDjEDAObVVoAoW+NexE/QJex7LwaKZbSR5fiz0RZIIYEuHf8Wt4YHYadvfqj/3
-         rNTg==
-X-Gm-Message-State: AOAM530XMfU3U+EJgb0wemg2LzY3pj35cT57QRmYtFb/CbltHCsXBKw3
-        rzSZ80YqV2s8TTs0/YOtSp/HI5Ab9ROw9zwo
-X-Google-Smtp-Source: ABdhPJwqZV7pk1FvOSkguIjKJvFkFK+Tun3miq523wTMnXd9BGquVzYW29lvsrXbzl2PtJrmqLojuA==
-X-Received: by 2002:a1c:7d55:: with SMTP id y82mr3074513wmc.100.1598532878977;
-        Thu, 27 Aug 2020 05:54:38 -0700 (PDT)
-Received: from ziggy.stardust ([213.195.119.187])
-        by smtp.gmail.com with ESMTPSA id m11sm5436719wrn.11.2020.08.27.05.54.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Aug 2020 05:54:38 -0700 (PDT)
-Subject: Re: Aw: [PATCH 00/18] Convert arch/arm to use iommu-dma
-To:     Frank Wunderlich <frank-w@public-files.de>,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     hch@lst.de, joro@8bytes.org, linux@armlinux.org.uk,
-        geert+renesas@glider.be, dri-devel@lists.freedesktop.org,
-        bjorn.andersson@linaro.org, thierry.reding@gmail.com,
-        laurent.pinchart@ideasonboard.com, digetx@gmail.com, s-anna@ti.com,
-        will@kernel.org, m.szyprowski@samsung.com,
-        linux-samsung-soc@vger.kernel.org, magnus.damm@gmail.com,
-        kyungmin.park@samsung.com, jonathanh@nvidia.com, agross@kernel.org,
-        yong.wu@mediatek.com, linux-media@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, inki.dae@samsung.com,
-        vdumpa@nvidia.com, linux-mediatek@lists.infradead.org,
-        linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        sw0312.kim@samsung.com, linux-kernel@vger.kernel.org,
-        t-kristo@ti.com, iommu@lists.linux-foundation.org
-References: <cover.1597931875.git.robin.murphy@arm.com>
- <trinity-d6be65d8-9086-42bc-b993-238b731cdf60-1598531519064@3c-app-gmx-bap26>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Message-ID: <d54f5d47-63aa-d07e-3875-6acce69073f3@gmail.com>
-Date:   Thu, 27 Aug 2020 14:54:36 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1729171AbgH0Msh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Aug 2020 08:48:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33422 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729089AbgH0MsR (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 27 Aug 2020 08:48:17 -0400
+Received: from coco.lan (ip5f5ad5a8.dynamic.kabel-deutschland.de [95.90.213.168])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 34B6122CAE;
+        Thu, 27 Aug 2020 12:48:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598532496;
+        bh=T573s1h+OfVtbSoERHdm73xj5TCvPh4oK6PieFQpZAE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hJqY4JeltsfxL3WzzYk92n9b1vbGGYgmmi22jV1OgCNuS5IK6lgdQLOdCE9lhe0wi
+         6fZfF1IXWaxjOyFQ2m3jeuhbwWn8F7DOmMcTOm3uCsYT0c4wnvr0D6DtH8ECFbf4mD
+         Ww7fFDTU2TItsxbjUIkR3XdNduLgpIhmvdYdjwUs=
+Date:   Thu, 27 Aug 2020 14:48:12 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Sakari Ailus <sakari.ailus@iki.fi>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH v10 3/4] media: docs: add glossary.rst with common terms
+ used at V4L2 spec
+Message-ID: <20200827144812.14755f97@coco.lan>
+In-Reply-To: <20200827110811.GC851@valkosipuli.retiisi.org.uk>
+References: <cover.1598512802.git.mchehab+huawei@kernel.org>
+        <a7a4d5ecce953710119e7aa0c5d55f97052a75e8.1598512802.git.mchehab+huawei@kernel.org>
+        <20200827110811.GC851@valkosipuli.retiisi.org.uk>
+X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <trinity-d6be65d8-9086-42bc-b993-238b731cdf60-1598531519064@3c-app-gmx-bap26>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Em Thu, 27 Aug 2020 14:08:11 +0300
+Sakari Ailus <sakari.ailus@iki.fi> escreveu:
 
+> Hi Mauro,
+>=20
+> On Thu, Aug 27, 2020 at 09:21:47AM +0200, Mauro Carvalho Chehab wrote:
+> > Add a glossary of terms used within the media userspace API
+> > documentation, as several concepts are complex enough to cause
+> > misunderstandings.
+> >=20
+> > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> > ---
+> >  .../userspace-api/media/glossary.rst          | 216 ++++++++++++++++++
+> >  Documentation/userspace-api/media/index.rst   |   3 +
+> >  2 files changed, 219 insertions(+)
+> >  create mode 100644 Documentation/userspace-api/media/glossary.rst
+> >=20
+> > diff --git a/Documentation/userspace-api/media/glossary.rst b/Documenta=
+tion/userspace-api/media/glossary.rst
+> > new file mode 100644
+> > index 000000000000..45f0933e03c0
+> > --- /dev/null
+> > +++ b/Documentation/userspace-api/media/glossary.rst
+> > @@ -0,0 +1,216 @@
+> > +.. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-or-later
+> > +
+> > +.. For GPL-2.0, see LICENSES/preferred/GPL-2.0
+> > +..
+> > +.. For GFDL-1.1-or-later, see:
+> > +..
+> > +.. Permission is granted to copy, distribute and/or modify this docume=
+nt
+> > +.. under the terms of the GNU Free Documentation License, Version 1.1 =
+or
+> > +.. any later version published by the Free Software Foundation, with no
+> > +.. Invariant Sections, no Front-Cover Texts and no Back-Cover Texts.
+> > +.. A copy of the license is included at
+> > +.. Documentation/userspace-api/media/fdl-appendix.rst.
+> > +
+> > +=3D=3D=3D=3D=3D=3D=3D=3D
+> > +Glossary
+> > +=3D=3D=3D=3D=3D=3D=3D=3D
+> > +
+> > +.. note::
+> > +
+> > +   The goal of this section is to standardize the terms used within th=
+e media
+> > +   userspace API documentation. This is Work In Progress.
+> > +
+> > +.. Please keep the glossary entries in alphabetical order
+> > +
+> > +.. glossary::
+> > +
+> > +    Bridge Driver
+> > +	A :term:`device driver` that implements the main logic to talk with
+> > +	media hardware.
+> > +
+> > +    CEC API
+> > +	**Consumer Electronics Control API**
+> > +
+> > +	An API designed to receive and transmit data via an HDMI
+> > +	CEC interface.
+> > +
+> > +	See :ref:`cec`.
+> > +
+> > +    Device Driver
+> > +	Part of the Linux Kernel that implements support for a hardware
+> > +	component.
+> > +
+> > +    Device Node
+> > +	A character device node in the file system used to control and
+> > +	transfer data in and out of a Kernel driver.
+> > +
+> > +    Digital TV API
+> > +	**Previously known as DVB API**
+> > +
+> > +	An API designed to control a subset of the :term:`Media Hardware`
+> > +	that implements	digital TV (e. g. DVB, ATSC, ISDB, etc).
+> > +
+> > +	See :ref:`dvbapi`.
+> > +
+> > +    DSP
+> > +        **Digital Signal Processor**
+> > +
+> > +	A specialized :term:`Microprocessor`, with its architecture
+> > +	optimized for the operational needs of digital signal processing.
+> > +
+> > +    FPGA
+> > +	**Field-programmable Gate Array**
+> > +
+> > +	An :term:`IC` circuit designed to be configured by a customer or
+> > +	a designer after manufacturing.
+> > +
+> > +	See https://en.wikipedia.org/wiki/Field-programmable_gate_array.
+> > +
+> > +    Hardware Component
+> > +	A subset of the :term:`media hardware`. For example an :term:`I=C2=B2=
+C` or
+> > +	:term:`SPI` device, or an :term:`IP block` inside an
+> > +	:term:`SoC` or :term:`FPGA`.
+> > +
+> > +    Hardware Peripheral
+> > +	A group of :term:`hardware components <hardware component>` that
+> > +	together make a larger user-facing functional peripheral. For
+> > +	instance, the :term:`SoC` :term:`ISP` :term:`IP block <ip block>`
+> > +	and the external camera sensors together make a camera hardware
+> > +	peripheral.
+> > +
+> > +	Also known as :term:`peripheral`.
+> > +
+> > +    I=C2=B2C
+> > +	**Inter-Integrated Circuit**
+> > +
+> > +	A  multi-master, multi-slave, packet switched, single-ended,
+> > +	serial computer bus used to control some hardware components
+> > +	like sub-device hardware components.
+> > +
+> > +	See http://www.nxp.com/docs/en/user-guide/UM10204.pdf.
+> > +
+> > +    IC
+> > +	**Integrated circuit**
+> > +
+> > +	A set of electronic circuits on one small flat piece of
+> > +	semiconductor material, normally silicon.
+> > +
+> > +	Also known as chip.
+> > +
+> > +    IP Block
+> > +	**Intellectual property core**
+> > +
+> > +	In electronic design a semiconductor intellectual property core,
+> > +	is a reusable unit of logic, cell, or integrated circuit layout
+> > +	design that is the intellectual property of one party.
+> > +	IP Blocks may be licensed to another party or can be owned
+> > +	and used by a single party alone.
+> > +
+> > +	See https://en.wikipedia.org/wiki/Semiconductor_intellectual_property=
+_core).
+> > +
+> > +    ISP
+> > +	**Image Signal Processor**
+> > +
+> > +	A specialized processor that implements a set of algorithms for
+> > +	processing image data. ISPs may implement algorithms for lens
+> > +	shading correction, demosaicing, scaling and pixel format conversion
+> > +	as well as produce statistics for the use of the control
+> > +	algorithms (e.g. automatic exposure, white balance and focus).
+> > +
+> > +    Media API
+> > +	A set of userspace APIs used to control the media hardware. It is
+> > +	composed by:
+> > +
+> > +	  - :term:`CEC API`;
+> > +	  - :term:`Digital TV API`;
+> > +	  - :term:`MC API`;
+> > +	  - :term:`RC API`; and
+> > +	  - :term:`V4L2 API`.
+> > +
+> > +	See :doc:`index`.
+> > +
+> > +    MC API
+> > +	**Media Controller API**
+> > +
+> > +	An API designed to expose and control the relationships between
+> > +	multimedia devices and sub-devices.
+> > +
+> > +	See :ref:`media_controller`.
+> > +
+> > +    MC-centric
+> > +	:term:`V4L2 hardware` that requires a :term:`MC API`.
+> > +
+> > +	Such hardware have ``V4L2_CAP_IO_MC`` device_caps field set
+> > +	(see :ref:`VIDIOC_QUERYCAP`).
+> > +
+> > +	See :ref:`v4l2_hardware_control` for more details. =20
+> =09
+> I think this should be documented as referring to drivers, for it's a
+> property of a driver, not hardware.
+>=20
+> There is hardware that better fits for MC-enabled drivers but still has
+> V4L2-centric driver written for it. The matter is further complicated by
+> e.g. raw camera systems that may consist of several different kinds of
+> devices, including external ISPs.
+>=20
+> Say, a simple raw sensor + a CSI-2 receiver would fit for V4L2-centric
+> model well, but add a more complex sensor or that external ISP and that no
+> longer is the case. The CSI-2 receiver is still the same in both cases
+> though.
+>=20
+> Similar comment on video-node-centric.
 
-On 27/08/2020 14:31, Frank Wunderlich wrote:
-> Tested full series on bananapi r2 (mt7623/mt2701, 5.9-rc1 + hdmi-patches), works so far fbcon+x without issues
-> 
-> Tested-by: Frank Wunderlich <frank-w@public-files.de>
-> 
+Makes sense. Do you have some suggestion for the text??
 
-Thanks for testing.
+>=20
+> The rest looks fine to me.
 
-Robin this is especially relevant for:
-[PATCH 09/18] iommu/mediatek-v1: Add IOMMU_DOMAIN_DMA support
+Ok.
 
-Regards,
-Matthias
+Thanks,
+Mauro
