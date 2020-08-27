@@ -2,30 +2,30 @@ Return-Path: <SRS0=AfPA=CF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B28B3C433DF
-	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 19:46:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27930C433E3
+	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 19:46:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 918B022B4D
-	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 19:46:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0DA6622BEB
+	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 19:46:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727883AbgH0Tqa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Aug 2020 15:46:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51240 "EHLO
+        id S1727050AbgH0Tqb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Aug 2020 15:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726894AbgH0Tq3 (ORCPT
+        with ESMTP id S1726400AbgH0Tq3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 27 Aug 2020 15:46:29 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CA2C061232
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EAF1C061264
         for <linux-media@vger.kernel.org>; Thu, 27 Aug 2020 12:46:29 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: dafna)
-        with ESMTPSA id 6855829A974
+        with ESMTPSA id AA84B2987DA
 From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com, dafna.hirschfeld@collabora.com,
@@ -33,309 +33,198 @@ Cc:     laurent.pinchart@ideasonboard.com, dafna.hirschfeld@collabora.com,
         hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
         sakari.ailus@linux.intel.com, linux-rockchip@lists.infradead.org,
         mchehab@kernel.org, tfiga@chromium.org
-Subject: [PATCH v7 4/6] v4l2: extend the CSC API to subdevice.
-Date:   Thu, 27 Aug 2020 21:46:10 +0200
-Message-Id: <20200827194612.13502-5-dafna.hirschfeld@collabora.com>
+Subject: [PATCH v7 0/6] v4l2: add support for colorspace conversion API (CSC) for video capture and subdevices
+Date:   Thu, 27 Aug 2020 21:46:06 +0200
+Message-Id: <20200827194612.13502-1-dafna.hirschfeld@collabora.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200827194612.13502-1-dafna.hirschfeld@collabora.com>
-References: <20200827194612.13502-1-dafna.hirschfeld@collabora.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch extends the CSC API in video devices to be supported
-also on sub-devices. The flag V4L2_MBUS_FRAMEFMT_SET_CSC set by
-the application when calling VIDIOC_SUBDEV_S_FMT ioctl.
-The flags:
+For video capture it is the driver that reports the colorspace, transfer function,
+Y'CbCr/HSV encoding and quantization range used by the video, and there is no way
+to request something different, even though many HDTV receivers have some sort of
+colorspace conversion capabilities.
 
+For output video this feature already exists since the application
+specifies this information for the video format it will send out, and
+the transmitter will enable any available CSC if a format conversion has
+to be performed in order to match the capabilities of the sink.
+
+For video capture we propose adding new v4l2_pix_format flag:
+V4L2_PIX_FMT_FLAG_SET_CSC. The flag is set by the application,
+the driver will interpret the fields 'colorspace', 'xfer_func',
+'ycbcr_enc/hsv_enc' and 'quantization' as the requested colorspace information
+and will attempt to do the conversion it supports.
+
+Drivers set the flags
+V4L2_FMT_FLAG_CSC_COLORSPACE,
+V4L2_FMT_FLAG_CSC_XFER_FUNC,
+V4L2_FMT_FLAG_CSC_YCBCR_ENC/V4L2_FMT_FLAG_CSC_HSV_ENC,
+V4L2_FMT_FLAG_CSC_QUANTIZATION,
+
+in the flags field of the struct v4l2_fmtdesc during enumeration to
+indicate that they support colorspace conversion for the respective field.
+
+The same API is added for the subdevices. With the flag
+V4L2_MBUS_FRAMEFMT_SET_CSC set by the application in VIDIOC_SUBDEV_S_FMT
+ioctl and the flags
 V4L2_SUBDEV_MBUS_CODE_CSC_COLORSPACE,
 V4L2_SUBDEV_MBUS_CODE_CSC_XFER_FUNC,
 V4L2_SUBDEV_MBUS_CODE_CSC_YCBCR_ENC/V4L2_SUBDEV_MBUS_CODE_CSC_HSV_ENC
-V4L2_SUBDEV_MBUS_CODE_CSC_QUANTIZATION
+V4L2_SUBDEV_MBUS_CODE_CSC_QUANTIZATION,
 
-are set by the driver in the VIDIOC_SUBDEV_ENUM_MBUS_CODE ioctl.
+set by the driver in the VIDIOC_SUBDEV_ENUM_MBUS_CODE ioctl.
 
-New 'flags' fields were added to the structs
-v4l2_subdev_mbus_code_enum, v4l2_mbus_framefmt which are borrowed
-from the 'reserved' field
+For subdevices, new 'flags' fields were added to the structs
+v4l2_subdev_mbus_code_enum, v4l2_mbus_framefmt which are borrowed from the
+'reserved' field. In the struct 'v4l2_mbus_framefmt' and reserved2 field
+is added before the flags due to padding.
 
-The patch also replaces the 'ycbcr_enc' field in
-'struct v4l2_mbus_framefmt' with a union that includes 'hsv_enc'
+Drivers do not have to actually look at the flags. If the flags are not
+set, then the colorspace, xfer_func, ycbcr_enc/hsv_enc and quantization
+fields are set to the default values by the core, i.e. just pass on the
+received format without conversion.
 
-Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
----
+The patchset includes a patch in vivid that implements the API for video
+capture devices and a patch in rkisp1 driver that implement the API for
+subdevices.
+
+In rkisp1, the API is used to allow userspace to set the quantization for
+YUV formats on the source pad of the isp entity. The quantization is read-only
+on the other entities and pads and does not have to be propagated.
+
+I also removed the TODO item 'Handle quantization'
+and added the TODO item 'Add uapi docs. Remember to add documentation of how quantization is handled.'
+
+A patchset for v4l-utils to support the API: https://patchwork.kernel.org/cover/11642587/
+
+To test the patchset, follow the instructions from here: https://patchwork.kernel.org/cover/11642587/
+with the exception that the branch changed, so the clone command should be:
+
+git clone --single-branch --branch rkisp1-quant-v7-aug-27-2  https://gitlab.collabora.com/dafna/v4l-utils.git
+
+
+Patches Summary:
+----------------
+patch 1 - moves the description of the v4l2_pix_format flags in the Documentation to the right
+place where it should be. This is just a fix.
+
+patch 2 - Adds the API for video devices - Adds the new macros and fields and their documentation.
+This is only for video devices.
+
+patch 3 - uses the API in the capture device of vivid. Using the API, userspace is allowed to:
+1. Set the colorspace
+2. set the xfer_func
+3. Set the ycbcr_enc function for YUV formats.
+4. Set the hsv_enc function for HSV formats
+5. Set the quantization for YUV and RGB formats.
+
+patch 4 - Adds the API for subdevices - Adds the new macros and fields and their documentation.
+It also replaces the ycbcr_enc field of 'struct v4l2_mbus_framefmt' with a union that includes
+also hsv_enc and adds support for CSC on hsv_enc for subdevices.
+
+patch 5 - use the API to allow userspace to set the quantization on the isp source pad.
+
+patch 6 - sets the flags to 0 in the mbus enumeration of the resizer.
+
+Changes from v6:
+----------------
+- in patch 3, simplified the help functions  v4l2_is_*_valid in v4l2-common.h
+- in patch 4, set the flag back to be of size 16 to avoid having reserved2 field in v4l2_mbus_framefmt
+
+Changes from v5:
+----------------
+- reordering the colorspace fields in the documentation and their flags in the header files
+to the order 'colorspace', 'transfer function' 'Y'CbCr/ HSV encoding' , 'quantization'
+
+- in patch 3, move the helpers 'vivid_is_*_valid' as static inline 'v4l2_is_*_valid' in v4l2-common.h , reorder the
+handling of the colorspace fields, and drop a redundant assignment 'dev->tpg.quantization = mp->quantization'
+
+- squashing patches 4,5 into one
+
+- in patch 4, changing the documentation in file subdev-formats.rst to not mention 'capture stream'
+since this term is only relevant to video devices, so I changed the existing documentations:
+
+"must be set by the driver for capture streams and by the application for output streams"
+
+with "must be set by the driver for subdevices"
+and documenting that the CSC is only for source pads.
+
+
+- In patches 2,4,  in the doc of V4L2_MBUS_FRAMEFMT_SET_CSC/V4L2_PIX_FMT_FLAG_SET_CSC, replacing '0' with ``*_DEFAULT``
+
+- in patch 5 (patch 6 in v2) : replace return of V4L2_QUANTIZATION_DEFAULT was the right value.
+
+Changes from v4:
+----------------
+- This time I didn't to this patchset the patches from 'media: staging: rkisp1: bugs fixes and vars renames'
+but note that this patchset is rebased on that patchset.
+
+- I added the fields 'colorspace' 'xfer_func' to the list of fields that the CSC API supports due to
+comment from Hans Verkuil. Also the vivid implementation is extended to support those fields.
+
+- I split the patch that adds the API into two patches. One for video devices and one patch for subdevices.
+This is because the two APIs are actually independent and it is easier to maintain and review two small patches
+than one big patch.
+Also, it can be decided that only one of those patches be accepted.
+
+- I changed the flags fields in 'struct v4l2_mbus_framefmt'  to __u32 and added a reserved2 field before it due to
+padding.
+
+- I changed the patch for rkisp1 so that the quantization can be set by userspace only on the source pad of
+the isp entity and is read-only and set always to default for all other entities and pads.
+The driver also does not validate matching of the quantization between entities.
+
+- Added a patch to the rkisp1-resizer that sets the flags to 0 when enumerating the mbus codes.
+This is because the resizer reports the same formats as the source pad of the isp entity but does
+not support the quantization conversion.
+
+- various small fixes due to feedback.
+
+Changes from v3:
+----------------
+- patches 1,2,3,7,8 are new (rkisp1 bug fixes, move v4l2-pixfmt flags docs, vivid patch, support for HSV media bus)
+
+- patch 4 (The API):
+1) reformulate the Documentation according to comments from Verkuil and Tomasz Figa
+2) remove the code in drivers/media/v4l2-core/v4l2-subdev.c and drivers/media/v4l2-core/v4l2-ioctl.c
+so that except of the new macros and fields no new code is added to the core
+
+- patches 5,6 - refactor the rkisp1 implementation so that the userspace should set the quantization separately
+to each entity. In patch 6 the validation callbacks make sure the quantizations matches.
+
+Dafna Hirschfeld (6):
+  media: Documentation: v4l: move table of v4l2_pix_format(_mplane)
+    flags to pixfmt-v4l2.rst
+  v4l2: add support for colorspace conversion API (CSC) for video
+    capture
+  media: vivid: Add support to the CSC API
+  v4l2: extend the CSC API to subdevice.
+  media: staging: rkisp1: allow quantization setting by userspace on the
+    isp source pad
+  media: staging: rkisp1: rsz: set flags to 0 in enum_mbus_code cb
+
+ .../media/v4l/pixfmt-reserved.rst             | 17 ----
+ .../media/v4l/pixfmt-v4l2-mplane.rst          | 16 +---
+ .../userspace-api/media/v4l/pixfmt-v4l2.rst   | 81 +++++++++++++++-
  .../media/v4l/subdev-formats.rst              | 95 +++++++++++++++++--
+ .../media/v4l/vidioc-enum-fmt.rst             | 35 +++++++
  .../v4l/vidioc-subdev-enum-mbus-code.rst      | 51 +++++++++-
+ .../media/videodev2.h.rst.exceptions          |  7 +-
+ .../media/test-drivers/vivid/vivid-vid-cap.c  | 38 ++++++--
+ .../test-drivers/vivid/vivid-vid-common.c     | 25 +++++
+ drivers/staging/media/rkisp1/TODO             |  2 +-
+ drivers/staging/media/rkisp1/rkisp1-capture.c | 10 --
+ drivers/staging/media/rkisp1/rkisp1-isp.c     | 20 +++-
+ drivers/staging/media/rkisp1/rkisp1-resizer.c |  1 +
+ include/media/v4l2-common.h                   | 29 ++++++
  include/uapi/linux/v4l2-mediabus.h            | 15 ++-
  include/uapi/linux/v4l2-subdev.h              | 10 +-
- 4 files changed, 157 insertions(+), 14 deletions(-)
+ include/uapi/linux/videodev2.h                |  6 ++
+ 17 files changed, 388 insertions(+), 70 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/subdev-formats.rst b/Documentation/userspace-api/media/v4l/subdev-formats.rst
-index 9a4d61b0d76f..73ee5ee12f00 100644
---- a/Documentation/userspace-api/media/v4l/subdev-formats.rst
-+++ b/Documentation/userspace-api/media/v4l/subdev-formats.rst
-@@ -41,32 +41,107 @@ Media Bus Formats
- 	:ref:`field-order` for details.
-     * - __u32
-       - ``colorspace``
--      - Image colorspace, from enum
--	:c:type:`v4l2_colorspace`. See
--	:ref:`colorspaces` for details.
-+      - Image colorspace, from enum :c:type:`v4l2_colorspace`.
-+        Must be set by the driver for subdevices. If the application sets the
-+	flag ``V4L2_MBUS_FRAMEFMT_SET_CSC`` then the application can set this
-+	field on the source pad to request a specific colorspace for the media
-+	bus data. If the driver cannot handle the requested conversion, it will
-+	return another supported colorspace. The driver indicates that colorspace
-+	conversion is supported by setting the flag
-+	V4L2_SUBDEV_MBUS_CODE_CSC_COLORSPACE in the corresponding struct
-+	:c:type:`v4l2_subdev_mbus_code_enum` during enumeration.
-+	See :ref:`v4l2-subdev-mbus-code-flags`.
-+    * - union {
-+      - (anonymous)
-     * - __u16
-       - ``ycbcr_enc``
-       - Y'CbCr encoding, from enum :c:type:`v4l2_ycbcr_encoding`.
-         This information supplements the ``colorspace`` and must be set by
--	the driver for capture streams and by the application for output
--	streams, see :ref:`colorspaces`.
-+	the driver for subdevices, see :ref:`colorspaces`. If the application
-+	sets the flag ``V4L2_MBUS_FRAMEFMT_SET_CSC`` then the application can set
-+	this field on a source pad to request a specific Y'CbCr encoding
-+	for the media bus data. If the driver cannot handle the requested
-+	conversion, it will return another supported encoding.
-+	This field is ignored for HSV media bus formats. The driver indicates
-+	that ycbcr_enc conversion is supported by setting the flag
-+	V4L2_SUBDEV_MBUS_CODE_CSC_YCBCR_ENC in the corresponding struct
-+	:c:type:`v4l2_subdev_mbus_code_enum` during enumeration.
-+	See :ref:`v4l2-subdev-mbus-code-flags`.
-+    * - __u16
-+      - ``hsv_enc``
-+      - HSV encoding, from enum :c:type:`v4l2_hsv_encoding`.
-+        This information supplements the ``colorspace`` and must be set by
-+	the driver for subdevices, see :ref:`colorspaces`. If the application
-+	sets the flag ``V4L2_MBUS_FRAMEFMT_SET_CSC`` then the application can set
-+	this field on a source pad to request a specific HSV encoding
-+	for the media bus data. If the driver cannot handle the requested
-+	conversion, it will return another supported encoding.
-+	This field is ignored for Y'CbCr media bus formats. The driver indicates
-+	that hsv_enc conversion is supported by setting the flag
-+	V4L2_SUBDEV_MBUS_CODE_CSC_HSV_ENC in the corresponding struct
-+	:c:type:`v4l2_subdev_mbus_code_enum` during enumeration.
-+	See :ref:`v4l2-subdev-mbus-code-flags`
-+    * - }
-+      -
-     * - __u16
-       - ``quantization``
-       - Quantization range, from enum :c:type:`v4l2_quantization`.
-         This information supplements the ``colorspace`` and must be set by
--	the driver for capture streams and by the application for output
--	streams, see :ref:`colorspaces`.
-+	the driver for subdevices, see :ref:`colorspaces`. If the application
-+	sets the flag ``V4L2_MBUS_FRAMEFMT_SET_CSC`` then the application can set
-+	this field on a source pad to request a specific quantization
-+	for the media bus data. If the driver cannot handle the requested
-+	conversion, it will return another supported quantization.
-+	The driver indicates that quantization conversion is supported by
-+	setting the flag V4L2_SUBDEV_MBUS_CODE_CSC_QUANTIZATION in the
-+	corresponding struct :c:type:`v4l2_subdev_mbus_code_enum`
-+	during enumeration. See :ref:`v4l2-subdev-mbus-code-flags`.
-+
-     * - __u16
-       - ``xfer_func``
-       - Transfer function, from enum :c:type:`v4l2_xfer_func`.
-         This information supplements the ``colorspace`` and must be set by
--	the driver for capture streams and by the application for output
--	streams, see :ref:`colorspaces`.
-+	the driver for subdevices, see :ref:`colorspaces`. If the application
-+	sets the flag ``V4L2_MBUS_FRAMEFMT_SET_CSC`` then the application can set
-+	this field on a source pad to request a specific transfer
-+	function for the media bus data. If the driver cannot handle the requested
-+	conversion, it will return another supported transfer function.
-+	The driver indicates that the transfer function conversion is supported by
-+	setting the flag V4L2_SUBDEV_MBUS_CODE_CSC_XFER_FUNC in the
-+	corresponding struct :c:type:`v4l2_subdev_mbus_code_enum`
-+	during enumeration. See :ref:`v4l2-subdev-mbus-code-flags`.
-     * - __u16
--      - ``reserved``\ [11]
-+      - ``flags``
-+      - flags See:  :ref:v4l2-mbus-framefmt-flags
-+    * - __u16
-+      - ``reserved``\ [10]
-       - Reserved for future extensions. Applications and drivers must set
- 	the array to zero.
- 
-+.. _v4l2-mbus-framefmt-flags:
-+
-+.. flat-table:: v4l2_mbus_framefmt Flags
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       3 1 4
-+
-+    * .. _`mbus-framefmt-set-csc`:
-+
-+      - ``V4L2_MBUS_FRAMEFMT_SET_CSC``
-+      - 0x0001
-+      - Set by the application. It is only used for source pads and is
-+	ignored for sink pads. If set, then request the subdevice to do
-+	colorspace conversion from the received colorspace to the requested
-+	colorspace values. If the colorimetry field (``colorspace``, ``xfer_func``,
-+	``ycbcr_enc``, ``hsv_enc`` or ``quantization``) is set to ``*_DEFAULT``,
-+	then that colorimetry setting will remain unchanged from what was received.
-+	So in order to change the quantization, only the ``quantization`` field shall
-+	be set to non default value (``V4L2_QUANTIZATION_FULL_RANGE`` or
-+	``V4L2_QUANTIZATION_LIM_RANGE``) and all other colorimetry fields shall
-+	be set to ``*_DEFAULT``.
-+
-+	To check which conversions are supported by the hardware for the current
-+	media bus frame format, see :ref:`v4l2-subdev-mbus-code-flags`.
- 
- 
- .. _v4l2-mbus-pixelcode:
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
-index 35b8607203a4..d9bb12ac2145 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
-@@ -79,11 +79,60 @@ information about the try formats.
-       - Media bus format codes to be enumerated, from enum
- 	:ref:`v4l2_subdev_format_whence <v4l2-subdev-format-whence>`.
-     * - __u32
--      - ``reserved``\ [8]
-+      - ``flags``
-+      - See :ref:`v4l2-subdev-mbus-code-flags`
-+    * - __u32
-+      - ``reserved``\ [7]
-       - Reserved for future extensions. Applications and drivers must set
- 	the array to zero.
- 
- 
-+
-+.. tabularcolumns:: |p{4.4cm}|p{4.4cm}|p{7.7cm}|
-+
-+.. _v4l2-subdev-mbus-code-flags:
-+
-+.. flat-table:: Subdev Media Bus Code Enumerate Flags
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 1 2
-+
-+    * - V4L2_SUBDEV_MBUS_CODE_CSC_COLORSPACE
-+      - 0x00000001
-+      - The driver allows the application to try to change the default colorspace
-+	encoding. The application can ask to configure the colorspace of the
-+	subdevice when calling the :ref:`VIDIOC_SUBDEV_S_FMT <VIDIOC_SUBDEV_G_FMT>`
-+	ioctl with :ref:`V4L2_MBUS_FRAMEFMT_SET_CSC <mbus-framefmt-set-csc>` set.
-+	See :ref:`v4l2-mbus-format` on how to do this.
-+    * - V4L2_SUBDEV_MBUS_CODE_CSC_XFER_FUNC
-+      - 0x00000002
-+      - The driver allows the application to try to change the default transform function.
-+	The application can ask to configure the transform function of
-+	the subdevice when calling the :ref:`VIDIOC_SUBDEV_S_FMT <VIDIOC_SUBDEV_G_FMT>`
-+	ioctl with :ref:`V4L2_MBUS_FRAMEFMT_SET_CSC <mbus-framefmt-set-csc>` set.
-+	See :ref:`v4l2-mbus-format` on how to do this.
-+    * - V4L2_SUBDEV_MBUS_CODE_CSC_YCBCR_ENC
-+      - 0x00000004
-+      - The driver allows the application to try to change the default Y'CbCr
-+	encoding. The application can ask to configure the Y'CbCr encoding of the
-+	subdevice when calling the :ref:`VIDIOC_SUBDEV_S_FMT <VIDIOC_SUBDEV_G_FMT>`
-+	ioctl with :ref:`V4L2_MBUS_FRAMEFMT_SET_CSC <mbus-framefmt-set-csc>` set.
-+	See :ref:`v4l2-mbus-format` on how to do this.
-+    * - V4L2_SUBDEV_MBUS_CODE_CSC_HSV_ENC
-+      - 0x00000004
-+      - The driver allows the application to try to change the default HSV
-+	encoding. The application can ask to configure the HSV encoding of the
-+	subdevice when calling the :ref:`VIDIOC_SUBDEV_S_FMT <VIDIOC_SUBDEV_G_FMT>`
-+	ioctl with :ref:`V4L2_MBUS_FRAMEFMT_SET_CSC <mbus-framefmt-set-csc>` set.
-+	See :ref:`v4l2-mbus-format` on how to do this.
-+    * - V4L2_SUBDEV_MBUS_CODE_CSC_QUANTIZATION
-+      - 0x00000008
-+      - The driver allows the application to try to change the default
-+	quantization. The application can ask to configure the quantization of
-+	the subdevice when calling the :ref:`VIDIOC_SUBDEV_S_FMT <VIDIOC_SUBDEV_G_FMT>`
-+	ioctl with :ref:`V4L2_MBUS_FRAMEFMT_SET_CSC <mbus-framefmt-set-csc>` set.
-+	See :ref:`v4l2-mbus-format` on how to do this.
-+
- Return Value
- ============
- 
-diff --git a/include/uapi/linux/v4l2-mediabus.h b/include/uapi/linux/v4l2-mediabus.h
-index 123a231001a8..903e67b16711 100644
---- a/include/uapi/linux/v4l2-mediabus.h
-+++ b/include/uapi/linux/v4l2-mediabus.h
-@@ -16,6 +16,8 @@
- #include <linux/types.h>
- #include <linux/videodev2.h>
- 
-+#define V4L2_MBUS_FRAMEFMT_SET_CSC	0x0001
-+
- /**
-  * struct v4l2_mbus_framefmt - frame format on the media bus
-  * @width:	image width
-@@ -24,8 +26,11 @@
-  * @field:	used interlacing type (from enum v4l2_field)
-  * @colorspace:	colorspace of the data (from enum v4l2_colorspace)
-  * @ycbcr_enc:	YCbCr encoding of the data (from enum v4l2_ycbcr_encoding)
-+ * @hsv_enc:	HSV encoding of the data (from enum v4l2_hsv_encoding)
-  * @quantization: quantization of the data (from enum v4l2_quantization)
-  * @xfer_func:  transfer function of the data (from enum v4l2_xfer_func)
-+ * @flags:	flags (V4L2_MBUS_FRAMEFMT_*)
-+ * @reserved:  reserved bytes that can be later used
-  */
- struct v4l2_mbus_framefmt {
- 	__u32			width;
-@@ -33,10 +38,16 @@ struct v4l2_mbus_framefmt {
- 	__u32			code;
- 	__u32			field;
- 	__u32			colorspace;
--	__u16			ycbcr_enc;
-+	union {
-+		/* enum v4l2_ycbcr_encoding */
-+		__u16			ycbcr_enc;
-+		/* enum v4l2_hsv_encoding */
-+		__u16			hsv_enc;
-+	};
- 	__u16			quantization;
- 	__u16			xfer_func;
--	__u16			reserved[11];
-+	__u16			flags;
-+	__u16			reserved[10];
- };
- 
- #ifndef __KERNEL__
-diff --git a/include/uapi/linux/v4l2-subdev.h b/include/uapi/linux/v4l2-subdev.h
-index 5d2a1dab7911..00850b98078a 100644
---- a/include/uapi/linux/v4l2-subdev.h
-+++ b/include/uapi/linux/v4l2-subdev.h
-@@ -65,19 +65,27 @@ struct v4l2_subdev_crop {
- 	__u32 reserved[8];
- };
- 
-+#define V4L2_SUBDEV_MBUS_CODE_CSC_COLORSPACE	0x00000001
-+#define V4L2_SUBDEV_MBUS_CODE_CSC_XFER_FUNC	0x00000002
-+#define V4L2_SUBDEV_MBUS_CODE_CSC_YCBCR_ENC	0x00000004
-+#define V4L2_SUBDEV_MBUS_CODE_CSC_HSV_ENC	V4L2_SUBDEV_MBUS_CODE_CSC_YCBCR_ENC
-+#define V4L2_SUBDEV_MBUS_CODE_CSC_QUANTIZATION	0x00000008
-+
- /**
-  * struct v4l2_subdev_mbus_code_enum - Media bus format enumeration
-  * @pad: pad number, as reported by the media API
-  * @index: format index during enumeration
-  * @code: format code (MEDIA_BUS_FMT_ definitions)
-  * @which: format type (from enum v4l2_subdev_format_whence)
-+ * @flags: flags set by the driver, (V4L2_SUBDEV_MBUS_CODE_*)
-  */
- struct v4l2_subdev_mbus_code_enum {
- 	__u32 pad;
- 	__u32 index;
- 	__u32 code;
- 	__u32 which;
--	__u32 reserved[8];
-+	__u32 flags;
-+	__u32 reserved[7];
- };
- 
- /**
 -- 
 2.17.1
 
