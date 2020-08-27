@@ -7,65 +7,65 @@ X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03D09C433E1
-	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 09:26:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D287AC433DF
+	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 09:26:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D150A22B47
-	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 09:26:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B4C4122B47
+	for <linux-media@archiver.kernel.org>; Thu, 27 Aug 2020 09:26:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ls/E8s1X"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cv41kRwc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728478AbgH0J0A (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Aug 2020 05:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38614 "EHLO
+        id S1728490AbgH0J0R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Aug 2020 05:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728596AbgH0JZW (ORCPT
+        with ESMTP id S1728568AbgH0JZT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Aug 2020 05:25:22 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38864C061233
-        for <linux-media@vger.kernel.org>; Thu, 27 Aug 2020 02:25:22 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id y3so4658783wrl.4
-        for <linux-media@vger.kernel.org>; Thu, 27 Aug 2020 02:25:22 -0700 (PDT)
+        Thu, 27 Aug 2020 05:25:19 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE9A5C061235
+        for <linux-media@vger.kernel.org>; Thu, 27 Aug 2020 02:25:15 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id x9so4470753wmi.2
+        for <linux-media@vger.kernel.org>; Thu, 27 Aug 2020 02:25:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=26b9ZpoO3fx+ixXB0E3OlKajS9U73sb4174Ch8Q2TcY=;
-        b=ls/E8s1X+JgvkrgngkXoGDYBLCEU/jJEA+wq9vnLD4z1ROImxG9aN0ogvb6jeclWv8
-         20L6l07nAoVQutKXQK5AdxqVwGquBLDGDEcD2UQb72SYA0L5tKMe5ISN16rp7hESErlw
-         7mohDDpTkLrRBP5qI0XmR8L1zWCkLZVwCTwiKK+ISw5kaXSKFDLPEZMIkt9XjWWMPbJE
-         KaTIyiVz33QVxmBIyydw2vT4PojOv+uUJDyJKgvOlZw6MkaS7Fzc/f6DyJewjDwqsmnO
-         cHmRKQkLHhzRrmf3ucpffgIf/ON5zzPMKhIom0nb3Qfg8LRAym4Xa/Ju2YprrH8R5K/9
-         BmdA==
+        bh=OGj1U+RHEgRBo72Z19HJA/GgC9Z8W3lKprGNOAt6O6Y=;
+        b=cv41kRwcoHdV3sWpRs7mbvUjJRVliv/pz4A/l0BMxj2coUR0fsCcb99/qXgJ1rLRfc
+         spDcdNghukbbUcGVCIS+FWZbMgLtoe3bfOjJMkgH/1X94cXUiqqBXYG6wx/sVf8SGs0G
+         AxLPdokqciOf2YJguunK9y4a6EovAvpAIMJZVjL29IvjCICbsNngK10o37zVqvuXpDMh
+         TCHocPyVEJn21Po4p9Yo3JJrtE8Mqe04O4P4vBZaSIUTpdsCOopVvwmGLlxNjkC9PiTP
+         iGZWmJs1ecDRV4FV4+Pyr21lKPRZYOGvwAAsoAgxnuJ/VItPqBj1o1B6OIqqyntRoULi
+         dhaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=26b9ZpoO3fx+ixXB0E3OlKajS9U73sb4174Ch8Q2TcY=;
-        b=Jr3Nx7fCdNaRH9zdaTBLcTYNgqlE6MmL4Up0ZlJdcmV5Jh177BGfYVT+Jr/kzO60wA
-         xbNwDQ7TWa6t3/FOzC9gv/WGGD/AbJ9T1SNrRM0nms6aXUihXgMJ1MpJz13imLqZ5D1V
-         on4s48bDcgMKdmgxJh0OrY7EU+26LC6fgbIcLmMiZ0aAYDOFypIef/urOndeclA5N7NI
-         kebw93wX4BB8CqRBaqLjFbxleKzh+71WnJvCivKUe+H9PkfW/BSgOZ7QLXRSW5gkh43X
-         4+f5r9bpqILOuvyU8mDy8Ki7btpMsY7XN+Dpl6/GYsnMpbuljbbGC8rVJFIpLFUL6olK
-         b8Zg==
-X-Gm-Message-State: AOAM531WU44vT7h3P/GzqncI94lvASHoCsj9sRNOx8B2lqA8xUM41lUH
-        0f9dKEUZQiAoEdYzkmQ8Z7cXJQ==
-X-Google-Smtp-Source: ABdhPJzFMHdT/c1AqvH07HxTW89Bha4zy+AnytM5h4Gqvr+Bahiz1GXddehf41O2/nVDE6cXfI1S8g==
-X-Received: by 2002:adf:fb87:: with SMTP id a7mr20766902wrr.390.1598520320904;
-        Thu, 27 Aug 2020 02:25:20 -0700 (PDT)
+        bh=OGj1U+RHEgRBo72Z19HJA/GgC9Z8W3lKprGNOAt6O6Y=;
+        b=PxADPNK0u6QQy7ELUK4NV/hL5NlH7vjkiegEK7gTdiVK9hybqvgLcVn4BAdTrZdmbO
+         gdOu2qZPq/eXPB076vR0yqDAYpTpbsvSVtjWmIno4kfqTlrpKAR/TQviyv1qQ0NLvmgb
+         UiNONd1a0HExz4xQ4lWYFXw3XL75fsj0/kpEqKYiUdHp5/yUHH32Hd9MjMgUqfa14TgK
+         r6bxj0JbxS95GVXCJ5ryiHK0snKuVqmHWTk11fQCG4GG3Er2bfTiUOzb8gH/9AdbegPe
+         YafoFwAXtukx4E1Y98ZAbl+L8+ARhHTRBV+viyhICZK7hPH24TwN94KpI+jPuvPWvlx2
+         KxXw==
+X-Gm-Message-State: AOAM530biH1bSFRwlS7UqboNkmudDNda6g2qsMS0pwwwVtmz11HVWbWb
+        wGJdg4wBVNlD/1cfv/rQTAhvIg==
+X-Google-Smtp-Source: ABdhPJw2zK/hE/ZHif/IfxVKntH0dfkmFqbVbtqhH2TIXKyoVR3Cs0kqEMJ/xYzP3kFX7ZE0+heEtQ==
+X-Received: by 2002:a05:600c:21d6:: with SMTP id x22mr10386181wmj.112.1598520314503;
+        Thu, 27 Aug 2020 02:25:14 -0700 (PDT)
 Received: from localhost.localdomain ([195.24.90.54])
-        by smtp.gmail.com with ESMTPSA id z203sm4357330wmc.31.2020.08.27.02.25.19
+        by smtp.gmail.com with ESMTPSA id z203sm4357330wmc.31.2020.08.27.02.25.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Aug 2020 02:25:20 -0700 (PDT)
+        Thu, 27 Aug 2020 02:25:14 -0700 (PDT)
 From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
 To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
 Cc:     Dikshita Agarwal <dikshita@codeaurora.org>,
         Vikash Garodia <vgarodia@codeaurora.org>,
         Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH 12/13] venus: vdec,core: Handle picture structure event
-Date:   Thu, 27 Aug 2020 12:24:16 +0300
-Message-Id: <20200827092417.16040-13-stanimir.varbanov@linaro.org>
+Subject: [PATCH 09/13] venus: hfi_plat: Add hfi platform buffers ops
+Date:   Thu, 27 Aug 2020 12:24:13 +0300
+Message-Id: <20200827092417.16040-10-stanimir.varbanov@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200827092417.16040-1-stanimir.varbanov@linaro.org>
 References: <20200827092417.16040-1-stanimir.varbanov@linaro.org>
@@ -74,49 +74,79 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Handle progressive/interlaced bitstream event by similar way as
-bit depth.
+From Venus v6 and beyond the buffer size and count have to be
+calculated in the v4l2 driver instead of getting them from
+firmware.
 
 Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 ---
- drivers/media/platform/qcom/venus/core.h | 1 +
- drivers/media/platform/qcom/venus/vdec.c | 4 ++++
- 2 files changed, 5 insertions(+)
+ .../media/platform/qcom/venus/hfi_plat_bufs.h | 35 +++++++++++++++++++
+ .../media/platform/qcom/venus/hfi_platform.h  |  3 ++
+ 2 files changed, 38 insertions(+)
+ create mode 100644 drivers/media/platform/qcom/venus/hfi_plat_bufs.h
 
-diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
-index 7545f004f564..59996e96e1f2 100644
---- a/drivers/media/platform/qcom/venus/core.h
-+++ b/drivers/media/platform/qcom/venus/core.h
-@@ -371,6 +371,7 @@ struct venus_inst {
- 	union hfi_get_property hprop;
- 	unsigned int core_acquired: 1;
- 	unsigned int bit_depth;
-+	unsigned int pic_struct;
- 	struct vb2_buffer *last_buf;
+diff --git a/drivers/media/platform/qcom/venus/hfi_plat_bufs.h b/drivers/media/platform/qcom/venus/hfi_plat_bufs.h
+new file mode 100644
+index 000000000000..6dfecaf5b0bd
+--- /dev/null
++++ b/drivers/media/platform/qcom/venus/hfi_plat_bufs.h
+@@ -0,0 +1,35 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (c) 2020, The Linux Foundation. All rights reserved.
++ */
++
++#ifndef __HFI_PLATFORM_BUFFERS_H__
++#define __HFI_PLATFORM_BUFFERS_H__
++
++#include <linux/types.h>
++#include "hfi_helper.h"
++
++struct hfi_plat_buffers_params {
++	u32 width;
++	u32 height;
++	u32 codec;
++	u32 hfi_color_fmt;
++	enum hfi_version version;
++	u32 num_vpp_pipes;
++	union {
++		struct {
++			u32 max_mbs_per_frame;
++			u32 buffer_size_limit;
++			bool is_secondary_output;
++			bool is_interlaced;
++		} dec;
++		struct {
++			u32 work_mode;
++			u32 rc_type;
++			u32 num_b_frames;
++			bool is_tenbit;
++		} enc;
++	};
++};
++
++#endif
+diff --git a/drivers/media/platform/qcom/venus/hfi_platform.h b/drivers/media/platform/qcom/venus/hfi_platform.h
+index f5f019282eab..692152f2075d 100644
+--- a/drivers/media/platform/qcom/venus/hfi_platform.h
++++ b/drivers/media/platform/qcom/venus/hfi_platform.h
+@@ -10,6 +10,7 @@
+ #include <linux/videodev2.h>
+ 
+ #include "hfi.h"
++#include "hfi_plat_bufs.h"
+ #include "hfi_helper.h"
+ 
+ #define MAX_PLANES		4
+@@ -49,6 +50,8 @@ struct hfi_platform {
+ 	void (*codecs)(u32 *enc_codecs, u32 *dec_codecs, u32 *count);
+ 	const struct hfi_plat_caps *(*capabilities)(unsigned int *entries);
+ 	u8 (*num_vpp_pipes)(void);
++	int (*bufreq)(struct hfi_plat_buffers_params *params, u32 session_type,
++		      u32 buftype, struct hfi_buffer_requirements *bufreq);
  };
  
-diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-index be3bcba2643b..af223da492e6 100644
---- a/drivers/media/platform/qcom/venus/vdec.c
-+++ b/drivers/media/platform/qcom/venus/vdec.c
-@@ -1310,6 +1310,9 @@ static void vdec_event_change(struct venus_inst *inst,
- 	if (inst->bit_depth != ev_data->bit_depth)
- 		inst->bit_depth = ev_data->bit_depth;
- 
-+	if (inst->pic_struct != ev_data->pic_struct)
-+		inst->pic_struct = ev_data->pic_struct;
-+
- 	dev_dbg(dev, VDBGM "event %s sufficient resources (%ux%u)\n",
- 		sufficient ? "" : "not", ev_data->width, ev_data->height);
- 
-@@ -1486,6 +1489,7 @@ static int vdec_open(struct file *file)
- 	inst->clk_data.core_id = VIDC_CORE_ID_DEFAULT;
- 	inst->core_acquired = false;
- 	inst->bit_depth = VIDC_BITDEPTH_8;
-+	inst->pic_struct = HFI_INTERLACE_FRAME_PROGRESSIVE;
- 	init_waitqueue_head(&inst->reconf_wait);
- 	venus_helper_init_instance(inst);
- 
+ extern const struct hfi_platform hfi_plat_v4;
 -- 
 2.17.1
 
