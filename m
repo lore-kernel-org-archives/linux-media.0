@@ -2,143 +2,186 @@ Return-Path: <SRS0=DymM=CG=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DA07C433E6
-	for <linux-media@archiver.kernel.org>; Fri, 28 Aug 2020 15:18:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3C09C433E7
+	for <linux-media@archiver.kernel.org>; Fri, 28 Aug 2020 15:37:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7334D20757
-	for <linux-media@archiver.kernel.org>; Fri, 28 Aug 2020 15:18:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BD28120825
+	for <linux-media@archiver.kernel.org>; Fri, 28 Aug 2020 15:37:02 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=vanguardiasur-com-ar.20150623.gappssmtp.com header.i=@vanguardiasur-com-ar.20150623.gappssmtp.com header.b="yVyoKyqZ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cY9YdZC8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726400AbgH1PSt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 28 Aug 2020 11:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35332 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728300AbgH1PSe (ORCPT
+        id S1726851AbgH1Pgz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 28 Aug 2020 11:36:55 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:29986 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726052AbgH1Pgu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 28 Aug 2020 11:18:34 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02625C06121B
-        for <linux-media@vger.kernel.org>; Fri, 28 Aug 2020 08:18:34 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id d26so2024689ejr.1
-        for <linux-media@vger.kernel.org>; Fri, 28 Aug 2020 08:18:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rLp2qagswVisSwUhPji3X4e9+R7X4KPZn75PJ32/4eQ=;
-        b=yVyoKyqZXuU1lVddeyUQszPeCQWTOeASrF2dR5tgqlPZEMRiN1EKdCpNioEgwC8q+P
-         r1M+d+u9uLB5f+JfYgP7r9bm31N7S6aPmsXAN6LULKHleMTNGDYH0NXJH3yWF8+tDBFp
-         KRQtgV4CLEWbbMgZCmLJMKad1pOrKCKuttBA0pHba/Z7I83odZbMay96ESYh+/Be1lkZ
-         /9lrs+4ePmk6pbiK5X9rWgsEyI2vcaQOt4GgRckN+FWWGtLqiC6rmVuEWgDpsyZVe4rj
-         oGO6da4aGJsxImuUwY3Fw975MC0kkUgjhGZITIsdNfgdt0c0/PmvQhtC38bj1WfO4sCT
-         G34g==
+        Fri, 28 Aug 2020 11:36:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1598629008;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=90baatzSPBpORTYvIrGD2xeuQLVBCo5SpxPsADar6cc=;
+        b=cY9YdZC8q+Lx/HkcgXcR3Dopnz76bIN1N221AK3n3XBJSbPJMb7w+iBadQEBkBmfNr89EP
+        bm7H8EFsiyZTP46Un4zNoGhBaRGdYddJNp/eLh5ct1ScHOcyn3k4l1IKczRW0af2KgZfur
+        Vq/R1TdMn8rz45evMlLiQOEVKXZBYmI=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-231-8qmuJxkwOUOw1Fr5ZTT5aA-1; Fri, 28 Aug 2020 11:36:47 -0400
+X-MC-Unique: 8qmuJxkwOUOw1Fr5ZTT5aA-1
+Received: by mail-qk1-f198.google.com with SMTP id t10so1242723qke.11
+        for <linux-media@vger.kernel.org>; Fri, 28 Aug 2020 08:36:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rLp2qagswVisSwUhPji3X4e9+R7X4KPZn75PJ32/4eQ=;
-        b=UTRBcAO8+h3FMh+g3taimZvawI6oyj0V3+ovNcFQ9jIfpY8cASTe3/uO89zVbSLTFj
-         YKUC0x4AUsTmgErRhcjHKBZn/6HavUUq/KKY/xcmKFEhrIKlYYeULqMHyxQpSQgJ5a+M
-         ZXrMdb8onZzWXA7coyabhMV7Gnv7AQKW+XJ8uef2mCL2BBi4M3BicBUROUJn2MI2ZWx2
-         ZzIB80VGp1e0DxsWCLPif15KdLMcoo31vqF6gyGK469wmh9PIKsUxxpwFtXCAI24wKwG
-         OvwqS7TvReI3ykh5i9LvbfabWxRSqQEh9Na74xbR49/49PhXpznAQiDdixGlZTpuTidP
-         RyOw==
-X-Gm-Message-State: AOAM5303jQ21tnwpUhGqKYggl/pwoHmbQeUGZtuaD8ZZXcg7xZL639ec
-        Eu2JDiFsEbznE0d6wqdLCvbHbfxrDAHXvCPPVRKi4Q==
-X-Google-Smtp-Source: ABdhPJwzuOCiKW8xZAt5+FxAc2kjneiSQ3kGfhVJkYTgi/85BXb83BGsmDvfrjvd/brJkPJbOHVpyr+kmgwFgQPxDck=
-X-Received: by 2002:a17:906:c10c:: with SMTP id do12mr2324911ejc.92.1598627911293;
- Fri, 28 Aug 2020 08:18:31 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=90baatzSPBpORTYvIrGD2xeuQLVBCo5SpxPsADar6cc=;
+        b=J4S12lWfpKFICa/TrllFd8fI4AHq80Wj31X0wLA5ADuhQG24dwY3Eno4AbwfhHwCdB
+         8Q7nAsT+G5ptmHxCEsaSYVupLfxT+47Quz7myTjAgfbRnJ5xcdhQkABJKABhhJMZ6OYU
+         xqq7cwIqYV4Tnp2t+oUxbSqtfupaClvO9Oqrnix+cvYpdf9mcpNIUklMPtpCoXSDsqMf
+         jLWj3CbNeK+ziDdmG2NonTUEudQ3qQiA4yGPEtYacHA58mgXNRlVkeyT4SSXdHbx3Pvu
+         rHtVUozhBiTZBi+zkKX3UwmrrJGy8xYgA5cEKtthBE25Owq7PpZhWcKuvTvhSXd3bfze
+         U9kw==
+X-Gm-Message-State: AOAM531SLR+8ogey6RZ1crYMxVWv4j/L1+Yn97/FYZizdqjTsmuJh9+N
+        To3zWEEJBDBl4l2kbbf61QK8BHj4opsXfmS1Qq6Ub8qwHiShH3os58Nv+hBqMcsoQVTAGTAWOBg
+        Cht7IhpUMz+9tkqjU4h3QHaA=
+X-Received: by 2002:a37:2747:: with SMTP id n68mr1704424qkn.176.1598629006498;
+        Fri, 28 Aug 2020 08:36:46 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxoB5eKwE3Dt2wDr4pX5sS6NGxMfZLnhKR9BLUmh6g1fCcYwnzpg+4LvBZtX7Iehhbd+ES20Q==
+X-Received: by 2002:a37:2747:: with SMTP id n68mr1704402qkn.176.1598629006231;
+        Fri, 28 Aug 2020 08:36:46 -0700 (PDT)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id j74sm1111465qke.7.2020.08.28.08.36.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Aug 2020 08:36:45 -0700 (PDT)
+Subject: Re: [PATCH] media: ov7670: check status of ov7670_read
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        linux-media@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Huckleberry <nhuck15@gmail.com>
+References: <20200828145518.26324-1-trix@redhat.com>
+ <CAKwvOd=S=aw6KoRvzhUMi4fR799kaPwAKoigjuR9fS-JSYSGPA@mail.gmail.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <db41a471-b5cd-6ffe-c24f-ba14d9125920@redhat.com>
+Date:   Fri, 28 Aug 2020 08:36:43 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-References: <20200827124946.328700-1-gnurou@gmail.com> <20200827124946.328700-3-gnurou@gmail.com>
-In-Reply-To: <20200827124946.328700-3-gnurou@gmail.com>
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date:   Fri, 28 Aug 2020 12:18:20 -0300
-Message-ID: <CAAEAJfCPqse-E9dekbS2A+thodJq7cP+29kxck-w5Rn4r83Qog@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] media: v4l2-mem2mem: simplify poll logic
-To:     Alexandre Courbot <gnurou@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAKwvOd=S=aw6KoRvzhUMi4fR799kaPwAKoigjuR9fS-JSYSGPA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, 27 Aug 2020 at 09:50, Alexandre Courbot <gnurou@gmail.com> wrote:
->
-> Factorize redundant checks into a single code block, remove unneeded
-> checks (a buffer in done_list is necessarily in the DONE or ERROR
-> state), and we end up with a much simpler version of this function.
->
-> Signed-off-by: Alexandre Courbot <gnurou@gmail.com>
 
-This is really good, thanks!
+On 8/28/20 8:13 AM, Nick Desaulniers wrote:
+> On Fri, Aug 28, 2020 at 7:55 AM <trix@redhat.com> wrote:
+>> From: Tom Rix <trix@redhat.com>
+>>
+>> clang static analysis flags this representative problem
+>>
+>> drivers/media/i2c/ov7670.c:1463:9: warning: Assigned
+>>   value is garbage or undefined
+>>         *value = gain;
+>>                ^ ~~~~
+>>
+>> gain is set by a successful call to ov7670_read()
+> Indeed, it looks like gain is only valid if the return value from
+> ov7670_read() is >= 0.  Would it be simpler to just initialize gain to
+> 0 in ov7670_g_gain?
 
-Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
+It looks like ov7670_read() subroutines both convert > 0 returns to 0.
 
-> ---
->  drivers/media/v4l2-core/v4l2-mem2mem.c | 26 +++++---------------------
->  1 file changed, 5 insertions(+), 21 deletions(-)
+Setting gain, and similar cases, to 0 means it is ok the setting side effect.  maybe it would be ok if this was a void return or there was some known poison value.  I did not look into that.  There are other routines that are more than a simple get() and i wanted to use the same fix for all of them.
+
+yeah on clang static analysis making it into kbuild!  I have been doing these fixes for a couple of months.  with a just-built clang, i run 'scan-build make randomconfig', 'scan-build make', then run scan-view on the html.  the randomconfig accounts for the very scattered fixes i have posted.  generally i would say kernel is doing pretty well, maybe 20 to 1 false to real problems.
+
+Tom
+
 >
-> diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
-> index fe90c3c0e4128..af8138c5d7ced 100644
-> --- a/drivers/media/v4l2-core/v4l2-mem2mem.c
-> +++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
-> @@ -841,7 +841,6 @@ static __poll_t v4l2_m2m_poll_for_data(struct file *file,
->                                        struct poll_table_struct *wait)
->  {
->         struct vb2_queue *src_q, *dst_q;
-> -       struct vb2_buffer *src_vb = NULL, *dst_vb = NULL;
->         __poll_t rc = 0;
->         unsigned long flags;
+> Side question; I'm super happy to see someone sending patches for
+> things identified by clang's static analyzer.  I'm curious, Tom, how
+> did you run it?  Did you use the recently landed in kbuild-next
+> support for the make target `make clang-analyzer`?
 >
-> @@ -862,32 +861,17 @@ static __poll_t v4l2_m2m_poll_for_data(struct file *file,
->              list_empty(&dst_q->queued_list)))
->                 return EPOLLERR;
+>> So check that ov7670_read() is successful.
+>>
+>> The remaining static analysis problems are false positives.
+>> There appears to be a limitation with checking the
+>> aggregated returns.
+>>
+>> Signed-off-by: Tom Rix <trix@redhat.com>
+>> ---
+>>  drivers/media/i2c/ov7670.c | 17 +++++++++++++----
+>>  1 file changed, 13 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/media/i2c/ov7670.c b/drivers/media/i2c/ov7670.c
+>> index b42b289faaef..001d4b09db72 100644
+>> --- a/drivers/media/i2c/ov7670.c
+>> +++ b/drivers/media/i2c/ov7670.c
+>> @@ -929,6 +929,8 @@ static int ov7670_set_hw(struct v4l2_subdev *sd, int hstart, int hstop,
+>>         ret =  ov7670_write(sd, REG_HSTART, (hstart >> 3) & 0xff);
+>>         ret += ov7670_write(sd, REG_HSTOP, (hstop >> 3) & 0xff);
+>>         ret += ov7670_read(sd, REG_HREF, &v);
+>> +       if (ret)
+>> +               return ret;
+>>         v = (v & 0xc0) | ((hstop & 0x7) << 3) | (hstart & 0x7);
+>>         msleep(10);
+>>         ret += ov7670_write(sd, REG_HREF, v);
+>> @@ -938,6 +940,8 @@ static int ov7670_set_hw(struct v4l2_subdev *sd, int hstart, int hstop,
+>>         ret += ov7670_write(sd, REG_VSTART, (vstart >> 2) & 0xff);
+>>         ret += ov7670_write(sd, REG_VSTOP, (vstop >> 2) & 0xff);
+>>         ret += ov7670_read(sd, REG_VREF, &v);
+>> +       if (ret)
+>> +               return ret;
+>>         v = (v & 0xf0) | ((vstop & 0x3) << 2) | (vstart & 0x3);
+>>         msleep(10);
+>>         ret += ov7670_write(sd, REG_VREF, v);
+>> @@ -1460,6 +1464,8 @@ static int ov7670_g_gain(struct v4l2_subdev *sd, __s32 *value)
+>>         unsigned char gain;
+>>
+>>         ret = ov7670_read(sd, REG_GAIN, &gain);
+>> +       if (ret)
+>> +               return ret;
+>>         *value = gain;
+>>         return ret;
+>>  }
+>> @@ -1470,11 +1476,14 @@ static int ov7670_s_gain(struct v4l2_subdev *sd, int value)
+>>         unsigned char com8;
+>>
+>>         ret = ov7670_write(sd, REG_GAIN, value & 0xff);
+>> +       if (ret)
+>> +               return ret;
+>>         /* Have to turn off AGC as well */
+>> -       if (ret == 0) {
+>> -               ret = ov7670_read(sd, REG_COM8, &com8);
+>> -               ret = ov7670_write(sd, REG_COM8, com8 & ~COM8_AGC);
+>> -       }
+>> +       ret = ov7670_read(sd, REG_COM8, &com8);
+>> +       if (ret)
+>> +               return ret;
+>> +       ret = ov7670_write(sd, REG_COM8, com8 & ~COM8_AGC);
+>> +
+>>         return ret;
+>>  }
+>>
+>> --
+>> 2.18.1
+>>
 >
-> -       spin_lock_irqsave(&dst_q->done_lock, flags);
-> -       if (list_empty(&dst_q->done_list)) {
-> -               /*
-> -                * If the last buffer was dequeued from the capture queue,
-> -                * return immediately. DQBUF will return -EPIPE.
-> -                */
-> -               if (dst_q->last_buffer_dequeued)
-> -                       rc |= EPOLLIN | EPOLLRDNORM;
-> -       }
-> -       spin_unlock_irqrestore(&dst_q->done_lock, flags);
-> -
->         spin_lock_irqsave(&src_q->done_lock, flags);
->         if (!list_empty(&src_q->done_list))
-> -               src_vb = list_first_entry(&src_q->done_list, struct vb2_buffer,
-> -                                               done_entry);
-> -       if (src_vb && (src_vb->state == VB2_BUF_STATE_DONE
-> -                       || src_vb->state == VB2_BUF_STATE_ERROR))
->                 rc |= EPOLLOUT | EPOLLWRNORM;
->         spin_unlock_irqrestore(&src_q->done_lock, flags);
->
->         spin_lock_irqsave(&dst_q->done_lock, flags);
-> -       if (!list_empty(&dst_q->done_list))
-> -               dst_vb = list_first_entry(&dst_q->done_list, struct vb2_buffer,
-> -                                               done_entry);
-> -       if (dst_vb && (dst_vb->state == VB2_BUF_STATE_DONE
-> -                       || dst_vb->state == VB2_BUF_STATE_ERROR))
-> +       /*
-> +        * If the last buffer was dequeued from the capture queue, signal
-> +        * userspace. DQBUF(CAPTURE) will return -EPIPE.
-> +        */
-> +       if (!list_empty(&dst_q->done_list) || dst_q->last_buffer_dequeued)
->                 rc |= EPOLLIN | EPOLLRDNORM;
->         spin_unlock_irqrestore(&dst_q->done_lock, flags);
->
-> --
-> 2.28.0
->
+
