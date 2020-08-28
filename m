@@ -2,45 +2,45 @@ Return-Path: <SRS0=DymM=CG=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6AE8C433E2
-	for <linux-media@archiver.kernel.org>; Fri, 28 Aug 2020 09:17:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0728C433E2
+	for <linux-media@archiver.kernel.org>; Fri, 28 Aug 2020 09:17:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9721420EDD
-	for <linux-media@archiver.kernel.org>; Fri, 28 Aug 2020 09:17:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7B1D420C56
+	for <linux-media@archiver.kernel.org>; Fri, 28 Aug 2020 09:17:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1598606248;
-	bh=BINRLNO/WzZxpSvpKg/DSQZ1C+g7y3QuKMPwUQv2Ut8=;
+	s=default; t=1598606253;
+	bh=qf3s74BFMfzPaXEhkWfFmaoIcsmrt/xu5Ve7JjjrqSI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=DtiC/9cLVyWgR+Hp2bvyS9cLawA1xK2NDScV9TIQ+fN/nFnvCayk3X4R2HFghtnCN
-	 a3x+hc/lmQncxi2NLFF56I5gGR3aq/BT8FLKXbzokXNZEQCFpNfBUYoNtiuHYp69ym
-	 yzZxLzYXOsC/0zigrZVOZBMO1Y1zYY/cj+od0Q+I=
+	b=1UXaTzQW1ywc7A6XDafYJ5+E6XuMqt95lFJgY9RixG7YwFZjJ5T3abJApTY69nFV4
+	 FZABzy/gDC9veVRIvXF/hiG5afFs+mOkUtZKzv0nk5E4Hj0l/f63IV1cscau7fBYd/
+	 n9iggmyXa0GflO+4+cV+/o91tUTQiXDwbxTxAkws=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728932AbgH1JRL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 28 Aug 2020 05:17:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48530 "EHLO mail.kernel.org"
+        id S1728912AbgH1JRK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 28 Aug 2020 05:17:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48546 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728362AbgH1JQy (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1728548AbgH1JQy (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Fri, 28 Aug 2020 05:16:54 -0400
 Received: from mail.kernel.org (unknown [95.90.213.181])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 23AB1208CA;
+        by mail.kernel.org (Postfix) with ESMTPSA id 3D68520C56;
         Fri, 28 Aug 2020 09:16:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1598606213;
-        bh=BINRLNO/WzZxpSvpKg/DSQZ1C+g7y3QuKMPwUQv2Ut8=;
+        bh=qf3s74BFMfzPaXEhkWfFmaoIcsmrt/xu5Ve7JjjrqSI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MDq9wP9RaZhC1OKHCjwVC9xegBqpCsydBihStMI8lok8cOKf7HZeSZ8HVYpT4/1yp
-         ZrMsqbhxen+8KDCGh7K3YCoZSJUMQBTGvwlyze/LpBW8Pu4aqJSVXtn3RPYDBv9OpW
-         J5pizsyGTfTN6ZK21TyMBJ9ChSQo9iBq0Zn2sveY=
+        b=o/uh8mxaO6aCUHIiw2fwZiZV736BMezCvVZ65ayjQd+uNMxyLAfU1Wnnke7NimkcA
+         JQwQYJ0gDv34xBMFZlJvL3TtZzLXKFS3l0DYmV2BPolWYsMIfobj6knnDaF602uTJS
+         eMwJpIuapVR7lg5zsX0f3IVpajA3zGxemaSiEKvM=
 Received: from mchehab by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1kBaV9-0047AB-7a; Fri, 28 Aug 2020 11:16:51 +0200
+        id 1kBaV9-0047AH-Ap; Fri, 28 Aug 2020 11:16:51 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
@@ -48,9 +48,9 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Hans Verkuil <hans.verkuil@cisco.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-media@vger.kernel.org
-Subject: [PATCH v11 1/4] media: open.rst: better document device node naming
-Date:   Fri, 28 Aug 2020 11:16:47 +0200
-Message-Id: <7a33a2ad9d8ad46446971d3ef2a5bb780eb50c9d.1598606093.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v11 4/4] media: open.rst: document mc-centric and video-node-centric
+Date:   Fri, 28 Aug 2020 11:16:50 +0200
+Message-Id: <99929cf3d951ff9dbe0e70e9380dfb2c13408869.1598606093.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1598606093.git.mchehab+huawei@kernel.org>
 References: <cover.1598606093.git.mchehab+huawei@kernel.org>
@@ -62,81 +62,110 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Right now, only kAPI documentation describes the device naming.
-However, such description is needed at the uAPI too. Add it,
-and describe how to get an unique identifier for a given device.
+When we added support for omap3, back in 2010, we added a new
+type of V4L2 devices that aren't fully controlled via the V4L2
+device node.
 
-Acked-by: Hans Verkuil <hans.verkuil@cisco.com>
-Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Yet, we have never clearly documented in the V4L2 specification
+the differences between the two types.
+
+Let's document them based on the the current implementation.
+
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../userspace-api/media/v4l/open.rst          | 43 +++++++++++++++++--
- 1 file changed, 40 insertions(+), 3 deletions(-)
+ .../userspace-api/media/v4l/open.rst          | 59 +++++++++++++++++--
+ 1 file changed, 53 insertions(+), 6 deletions(-)
 
 diff --git a/Documentation/userspace-api/media/v4l/open.rst b/Documentation/userspace-api/media/v4l/open.rst
-index 38046ef20141..7f1ff8a77059 100644
+index 4928f636c576..d20f98969294 100644
 --- a/Documentation/userspace-api/media/v4l/open.rst
 +++ b/Documentation/userspace-api/media/v4l/open.rst
-@@ -14,12 +14,14 @@ Opening and Closing Devices
+@@ -13,6 +13,53 @@
+ Opening and Closing Devices
  ***************************
  
- 
--Device Naming
--=============
-+.. _v4l2_device_naming:
++.. _v4l2_hardware_control:
 +
-+V4L2 Device Node Naming
-+=======================
- 
- V4L2 drivers are implemented as kernel modules, loaded manually by the
- system administrator or automatically when a device is first discovered.
--The driver modules plug into the "videodev" kernel module. It provides
-+The driver modules plug into the ``videodev`` kernel module. It provides
- helper functions and a common application interface specified in this
- document.
- 
-@@ -30,6 +32,41 @@ option CONFIG_VIDEO_FIXED_MINOR_RANGES. In that case minor numbers
- are allocated in ranges depending on the device node type (video, radio,
- etc.).
- 
-+The device nodes supported by the Video4Linux subsystem are:
++Controlling a hardware peripheral via V4L2
++==========================================
 +
-+======================== ====================================================
-+Default device node name Usage
-+======================== ====================================================
-+``/dev/videoX``		 Video and metadata for capture/output devices
-+``/dev/vbiX``		 Vertical blank data (i.e. closed captions, teletext)
-+``/dev/radioX``		 Radio tuners and modulators
-+``/dev/swradioX``	 Software Defined Radio tuners and modulators
-+``/dev/v4l-touchX``	 Touch sensors
-+``/dev/v4l-subdevX``	 Video sub-devices (used by sensors and other
-+			 components of the hardware peripheral)\ [#]_
-+======================== ====================================================
++Hardware that is supported using the V4L2 uAPI often consists of multiple
++devices or peripherals, each of which have their own driver.
 +
-+Where ``X`` is a non-negative integer.
++The bridge driver exposes one or more V4L2 device nodes
++(see :ref:`v4l2_device_naming`).
++
++There are other drivers providing support for other components of
++the hardware, which may also expose device nodes, called V4L2 sub-devices.
++
++When such V4L2 sub-devices are exposed, they allow controlling those
++other hardware components - usually connected via a serial bus (like
++I²C, SMBus or SPI). Depending on the bridge driver, those sub-devices
++can be controlled indirectly via the bridge driver or explicitly via
++the :ref:`Media Controller <media_controller>` and via the
++:ref:`V4L2 sub-devices <subdev>`.
++
++The devices that require the use of the
++:ref:`Media Controller <media_controller>` are called **MC-centric**
++devices. The devices that are fully controlled via V4L2 device nodes
++are called **video-node-centric**.
++
++Userspace can check if a V4L2 hardware peripheral is MC-centric by
++calling :ref:`VIDIOC_QUERYCAP` and checking the
++:ref:`device_caps field <device-capabilities>`.
++
++If the device returns ``V4L2_CAP_IO_MC`` flag at ``device_caps``,
++then it is MC-centric, otherwise, it is video-node-centric.
++
++It is required for MC-centric drivers to identify the V4L2
++sub-devices and to configure the pipelines via the
++:ref:`media controller API <media_controller>` before using the peripheral.
++Also, the sub-devices' configuration shall be controlled via the
++:ref:`sub-device API <subdev>`.
 +
 +.. note::
 +
-+   1. The actual device node name is system-dependent, as udev rules may apply.
-+   2. There is no guarantee that ``X`` will remain the same for the same
-+      device, as the number depends on the device driver's probe order.
-+      If you need an unique name, udev default rules produce
-+      ``/dev/v4l/by-id/`` and ``/dev/v4l/by-path/`` directories containing
-+      links that can be used uniquely to identify a V4L2 device node::
++   A video-node-centric may still provide media-controller and
++   sub-device interfaces as well.
 +
-+	$ tree /dev/v4l
-+	/dev/v4l
-+	├── by-id
-+	│   └── usb-OmniVision._USB_Camera-B4.04.27.1-video-index0 -> ../../video0
-+	└── by-path
-+	    └── pci-0000:00:14.0-usb-0:2:1.0-video-index0 -> ../../video0
-+
-+.. [#] **V4L2 sub-device nodes** (e. g. ``/dev/v4l-subdevX``) use a different
-+       set of system calls, as covered at :ref:`subdev`.
-+
- Many drivers support "video_nr", "radio_nr" or "vbi_nr" module
- options to select specific video/radio/vbi node numbers. This allows the
- user to request that the device node is named e.g. /dev/video5 instead
++  However, in that case the media-controller and the sub-device
++  interfaces are read-only and just provide information about the
++  device. The actual configuration is done via the video nodes.
+ 
+ .. _v4l2_device_naming:
+ 
+@@ -109,7 +156,7 @@ Related Devices
+ Devices can support several functions. For example video capturing, VBI
+ capturing and radio support.
+ 
+-The V4L2 API creates different nodes for each of these functions.
++The V4L2 API creates different V4L2 device nodes for each of these functions.
+ 
+ The V4L2 API was designed with the idea that one device node could
+ support all functions. However, in practice this never worked: this
+@@ -119,17 +166,17 @@ switching a device node between different functions only works when
+ using the streaming I/O API, not with the
+ :ref:`read() <func-read>`/\ :ref:`write() <func-write>` API.
+ 
+-Today each device node supports just one function.
++Today each V4L2 device node supports just one function.
+ 
+ Besides video input or output the hardware may also support audio
+ sampling or playback. If so, these functions are implemented as ALSA PCM
+ devices with optional ALSA audio mixer devices.
+ 
+ One problem with all these devices is that the V4L2 API makes no
+-provisions to find these related devices. Some really complex devices
+-use the Media Controller (see :ref:`media_controller`) which can be
+-used for this purpose. But most drivers do not use it, and while some
+-code exists that uses sysfs to discover related devices (see
++provisions to find these related V4L2 device nodes. Some really complex
++hardware use the Media Controller (see :ref:`media_controller`) which can
++be used for this purpose. But several drivers do not use it, and while some
++code exists that uses sysfs to discover related V4L2 device nodes (see
+ libmedia_dev in the
+ `v4l-utils <http://git.linuxtv.org/cgit.cgi/v4l-utils.git/>`__ git
+ repository), there is no library yet that can provide a single API
 -- 
 2.26.2
 
