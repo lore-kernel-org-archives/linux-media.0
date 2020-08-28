@@ -2,121 +2,100 @@ Return-Path: <SRS0=DymM=CG=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=unavailable
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8137BC433E2
-	for <linux-media@archiver.kernel.org>; Fri, 28 Aug 2020 09:11:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7C67C433E6
+	for <linux-media@archiver.kernel.org>; Fri, 28 Aug 2020 09:17:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4DF202071B
-	for <linux-media@archiver.kernel.org>; Fri, 28 Aug 2020 09:11:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 840C32086A
+	for <linux-media@archiver.kernel.org>; Fri, 28 Aug 2020 09:17:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1598605871;
-	bh=oKT/2svB4V5RCSSf/IhBWh7gWH9c49rsuRrm68MCF/c=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=ERPasMrM4rUFYkoysqu0o+CIBu0iWQ9hHL88LtAtDqNu7ps63emdiwP5aq06j8ueU
-	 JxsAYx+XmwLEdBdcowOE34sw4grMcPlT9w6meE83oPZXmlPaGuGaxattufR9AZGDPa
-	 dBI8F+8XcJ/AgmiEOTDL/t+hsQYd2wH/ssiATsEY=
+	s=default; t=1598606227;
+	bh=IBVeh1zZx2EXVnY8k4/KBmTXmlSvBkhFzMjL+yHXBoo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=onsvh3qfJqvoy+s4/c8sJtx+pCDI/9lGqSQUgyXrbhaeHR+wrdGyk7NBcI8qbMQ5D
+	 uQXvJnPOs1Qiumx5ddwuMnx8O6MFCBz3wGzHQXH/GfmbiqXA//eKLuT1Nrlu91YGNG
+	 VxGfCM2Nk6j+ugSEtoSlW86f/sx5jqJCY6IYgcUU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728787AbgH1JLG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 28 Aug 2020 05:11:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46184 "EHLO mail.kernel.org"
+        id S1728825AbgH1JQ6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 28 Aug 2020 05:16:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48540 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728548AbgH1JLE (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 28 Aug 2020 05:11:04 -0400
-Received: from coco.lan (unknown [95.90.213.181])
+        id S1728444AbgH1JQy (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 28 Aug 2020 05:16:54 -0400
+Received: from mail.kernel.org (unknown [95.90.213.181])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EB8412071B;
-        Fri, 28 Aug 2020 09:11:02 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2EB31208FE;
+        Fri, 28 Aug 2020 09:16:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598605864;
-        bh=oKT/2svB4V5RCSSf/IhBWh7gWH9c49rsuRrm68MCF/c=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=v2TKMF0FrQi1Mr6zXOxsLr8xXRGvLxZVKoed4jhkGhRVBTUBqDUgq5D7vv2XkuUVQ
-         ZFslYFeaPfbxAlS7yuQ6LgXlIJPBC2yCdtsdOvaRcwcF1oYqSrwzGD6Zvi1D9cYcG8
-         Mlxb66mdfU0NzakVvnLbFVoKyY2W0K6BBGa4OjUc=
-Date:   Fri, 28 Aug 2020 11:11:00 +0200
+        s=default; t=1598606213;
+        bh=IBVeh1zZx2EXVnY8k4/KBmTXmlSvBkhFzMjL+yHXBoo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=SaEHHr49V5B5ntZjzcgf9tyQrDbYvKNTQwlowVmIQAijvkRK/AJ3AH+FqENYdFt+l
+         YtjBHDfuvvRxO297CzfX/h1Fctd+vTMrMXTVGoASQmyTX9yskbEv75/yjaGp9Q7A9k
+         CJ3hB3exaiWWeG5mnFyn2iSjq+Id1QPxNGKQXZiI=
+Received: from mchehab by mail.kernel.org with local (Exim 4.94)
+        (envelope-from <mchehab@kernel.org>)
+        id 1kBaV9-0047AD-8f; Fri, 28 Aug 2020 11:16:51 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Sakari Ailus <sakari.ailus@iki.fi>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-media@vger.kernel.org
-Subject: Re: [PATCH v10 3/4] media: docs: add glossary.rst with common terms
- used at V4L2 spec
-Message-ID: <20200828111100.669767fa@coco.lan>
-In-Reply-To: <20200827110811.GC851@valkosipuli.retiisi.org.uk>
-References: <cover.1598512802.git.mchehab+huawei@kernel.org>
-        <a7a4d5ecce953710119e7aa0c5d55f97052a75e8.1598512802.git.mchehab+huawei@kernel.org>
-        <20200827110811.GC851@valkosipuli.retiisi.org.uk>
-X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+Subject: [PATCH v11 2/4] media: open.rst: remove the minor number range
+Date:   Fri, 28 Aug 2020 11:16:48 +0200
+Message-Id: <e9835a51c2305b10d64231f9df2ec7fa6276030b.1598606093.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <cover.1598606093.git.mchehab+huawei@kernel.org>
+References: <cover.1598606093.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Thu, 27 Aug 2020 14:08:11 +0300
-Sakari Ailus <sakari.ailus@iki.fi> escreveu:
+minor numbers use to range between 0 to 255, but that
+was changed a long time ago. While it still applies when
+CONFIG_VIDEO_FIXED_MINOR_RANGES, when the minor number is
+dynamically allocated, this may not be true. In any case,
+this is not relevant, as udev will take care of it.
 
-> > +    MC-centric
-> > +	:term:`V4L2 hardware` that requires a :term:`MC API`.
-> > +
-> > +	Such hardware have ``V4L2_CAP_IO_MC`` device_caps field set
-> > +	(see :ref:`VIDIOC_QUERYCAP`).
-> > +
-> > +	See :ref:`v4l2_hardware_control` for more details.  
-> 	
-> I think this should be documented as referring to drivers, for it's a
-> property of a driver, not hardware.
-> 
-> There is hardware that better fits for MC-enabled drivers but still has
-> V4L2-centric driver written for it. The matter is further complicated by
-> e.g. raw camera systems that may consist of several different kinds of
-> devices, including external ISPs.
-> 
-> Say, a simple raw sensor + a CSI-2 receiver would fit for V4L2-centric
-> model well, but add a more complex sensor or that external ISP and that no
-> longer is the case. The CSI-2 receiver is still the same in both cases
-> though.
-> 
-> Similar comment on video-node-centric.
+So, remove this useless misinformation.
 
-I guess I got what you meant. I'm folding it with the following diff:
+Acked-by: Hans Verkuil <hans.verkuil@cisco.com>
+Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ Documentation/userspace-api/media/v4l/open.rst | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/glossary.rst b/Documentation/userspace-api/media/glossary.rst
-index 45f0933e03c0..023bb561c406 100644
---- a/Documentation/userspace-api/media/glossary.rst
-+++ b/Documentation/userspace-api/media/glossary.rst
-@@ -138,9 +138,9 @@ Glossary
- 	See :ref:`media_controller`.
+diff --git a/Documentation/userspace-api/media/v4l/open.rst b/Documentation/userspace-api/media/v4l/open.rst
+index 7f1ff8a77059..4928f636c576 100644
+--- a/Documentation/userspace-api/media/v4l/open.rst
++++ b/Documentation/userspace-api/media/v4l/open.rst
+@@ -26,11 +26,10 @@ helper functions and a common application interface specified in this
+ document.
  
-     MC-centric
--	:term:`V4L2 hardware` that requires a :term:`MC API`.
-+	:term:`V4L2 hardware` device driver that requires :term:`MC API`.
+ Each driver thus loaded registers one or more device nodes with major
+-number 81 and a minor number between 0 and 255. Minor numbers are
+-allocated dynamically unless the kernel is compiled with the kernel
+-option CONFIG_VIDEO_FIXED_MINOR_RANGES. In that case minor numbers
+-are allocated in ranges depending on the device node type (video, radio,
+-etc.).
++number 81. Minor numbers are allocated dynamically unless the kernel
++is compiled with the kernel option CONFIG_VIDEO_FIXED_MINOR_RANGES.
++In that case minor numbers are allocated in ranges depending on the
++device node type.
  
--	Such hardware have ``V4L2_CAP_IO_MC`` device_caps field set
-+	Such drivers have ``V4L2_CAP_IO_MC`` device_caps field set
- 	(see :ref:`VIDIOC_QUERYCAP`).
+ The device nodes supported by the Video4Linux subsystem are:
  
- 	See :ref:`v4l2_hardware_control` for more details.
-@@ -203,9 +203,9 @@ Glossary
- 	:term:`bridge driver`. See :ref:`subdev`.
- 
-     Video-node-centric
--	V4L2 hardware that doesn't require a media controller to be used.
-+	V4L2 device driver that doesn't require a media controller to be used.
- 
--	Such hardware have the ``V4L2_CAP_IO_MC`` device_caps field unset
-+	Such drivers have the ``V4L2_CAP_IO_MC`` device_caps field unset
- 	(see :ref:`VIDIOC_QUERYCAP`).
- 
-     V4L2 Sub-device API
+-- 
+2.26.2
 
-
-Thanks,
-Mauro
