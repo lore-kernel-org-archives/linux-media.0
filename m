@@ -2,105 +2,179 @@ Return-Path: <SRS0=AAu9=CI=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB771C433E6
-	for <linux-media@archiver.kernel.org>; Sun, 30 Aug 2020 16:30:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEFC2C433E6
+	for <linux-media@archiver.kernel.org>; Sun, 30 Aug 2020 17:08:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8A5402071B
-	for <linux-media@archiver.kernel.org>; Sun, 30 Aug 2020 16:30:58 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZmIEJrIq"
+	by mail.kernel.org (Postfix) with ESMTP id B6B192071B
+	for <linux-media@archiver.kernel.org>; Sun, 30 Aug 2020 17:08:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726468AbgH3Qa5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 30 Aug 2020 12:30:57 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:28640 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726046AbgH3Qax (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sun, 30 Aug 2020 12:30:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1598805052;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc; bh=mYvzFBs63TbpVmhIX3wGRs+LwFoNle22iFtiQP17T/I=;
-        b=ZmIEJrIqWyC7TJN3xmi6QVnEESG2SAOZSNWwkDtYnmhFMHcZEpqwiQ13I/YgwOQrB/E2X8
-        0d1Pfy0vWEzX6kMplfHXNidlv6MQ5XaMsaKPgcaomqfxFVu28HmN8FGOGhbtRZjfUleTqM
-        lBAZ5nBOR2rUcKQokz/jvkCcyFdrQ8I=
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
- [209.85.166.198]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-203-FExsLZlNOKu8DjtdGkCl9Q-1; Sun, 30 Aug 2020 12:30:48 -0400
-X-MC-Unique: FExsLZlNOKu8DjtdGkCl9Q-1
-Received: by mail-il1-f198.google.com with SMTP id 2so3401479ill.10
-        for <linux-media@vger.kernel.org>; Sun, 30 Aug 2020 09:30:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=mYvzFBs63TbpVmhIX3wGRs+LwFoNle22iFtiQP17T/I=;
-        b=UvZg6ZsHdiRmSPd5Xdw9V8g21wdb4KwTVaDfSR1uYIW3reRC4SDRvYUTCdny1qImVt
-         CeoTOGDOaceQ8vur+Z1tbBvGpWI9TS4XPQ7c2wC5cs02HKQwTgp1rEGWbUDdqdeo+zvm
-         YsvBXYw/SUECiPsAo4YLay1uYKYpitbwW5MqqUqk7Qd84HG+M7mcBiNDCAlKyxyKSkoK
-         zT7pmmNur1BqwmpiShP7Sizb3omoEVgbHegLqHutfpTeIPJPTmNvSBk4hG4jRg48f5rj
-         6R/DfTQoNHsmtbvF9NzMZCwiOEir+23MEhVT4D2Xz6SBbf4yCsA3cKbInsAohLPPP7t2
-         wD2g==
-X-Gm-Message-State: AOAM530JvquddN0ktlW8UV7SQEvk/9f8NUH2O9CJizonRU5bhGJIaRW6
-        JEiEFeG3R8IIrDD5/tes1UAcXjQtlVa48SscS6VAJR3sIJ9vrsfZUJaJXQQGiczRROmQNoVpKvU
-        a/egOZlxBp8UBb2WqwBpQ3SQ=
-X-Received: by 2002:a5e:8c0c:: with SMTP id n12mr5694767ioj.147.1598805048117;
-        Sun, 30 Aug 2020 09:30:48 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwObfN6L0TDNnE8gtLMDpGDLrvSEVrNnpNznkakgT9w+mf7UKzkbWb/k5DT7vV3OKKAEbjvCQ==
-X-Received: by 2002:a5e:8c0c:: with SMTP id n12mr5694763ioj.147.1598805047936;
-        Sun, 30 Aug 2020 09:30:47 -0700 (PDT)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id k18sm3104399ils.42.2020.08.30.09.30.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Aug 2020 09:30:47 -0700 (PDT)
-From:   trix@redhat.com
-To:     matrandg@cisco.com, mchehab@kernel.org, natechancellor@gmail.com,
-        ndesaulniers@google.com, p.zabel@pengutronix.de,
-        hans.verkuil@cisco.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] media: tc358743: initialize variable
-Date:   Sun, 30 Aug 2020 09:30:43 -0700
-Message-Id: <20200830163043.10317-1-trix@redhat.com>
-X-Mailer: git-send-email 2.18.1
+        id S1726468AbgH3RIk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 30 Aug 2020 13:08:40 -0400
+Received: from mga05.intel.com ([192.55.52.43]:27630 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725934AbgH3RIj (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 30 Aug 2020 13:08:39 -0400
+IronPort-SDR: AgpgbodJBqU01ZFfVs0WzImPTIUgzT0HMrBu5zlQKz0c7rpBzB3kdVj8VZDT41Vd3TI+I9jaDS
+ 21+syOXigmdA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9729"; a="241686332"
+X-IronPort-AV: E=Sophos;i="5.76,372,1592895600"; 
+   d="scan'208";a="241686332"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2020 10:08:37 -0700
+IronPort-SDR: p7shRyjkQ/z8TzKxsYgnbm0HaPaqLAi98MldirMZAf9wyhaC0rRdhjBKW2mXik4SQ9XA7GL337
+ IeCw9pSs8b3w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,372,1592895600"; 
+   d="scan'208";a="501083554"
+Received: from lkp-server02.sh.intel.com (HELO 301dc1beeb51) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 30 Aug 2020 10:08:37 -0700
+Received: from kbuild by 301dc1beeb51 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kCQom-0000yA-J4; Sun, 30 Aug 2020 17:08:36 +0000
+Date:   Mon, 31 Aug 2020 01:07:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org
+Subject: [ragnatech:media-tree] BUILD SUCCESS WITH WARNING
+ 07d999f0d9463ea0d1f76e0f8921ea363d805767
+Message-ID: <5f4bdce4.Afbq2YkkgvjNkmPR%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+tree/branch: git://git.ragnatech.se/linux  media-tree
+branch HEAD: 07d999f0d9463ea0d1f76e0f8921ea363d805767  media: open.rst: document mc-centric and video-node-centric
 
-clang static analysis flags this error
+Warning in current branch:
 
-tc358743.c:1468:9: warning: Branch condition evaluates
-  to a garbage value
-        return handled ? IRQ_HANDLED : IRQ_NONE;
-               ^~~~~~~
-handled should be initialized to false.
+drivers/staging/media/tegra-video/vi.c:555:35: warning: unused variable 'vi_ctrl_ops' [-Wunused-const-variable]
+drivers/staging/media/tegra-video/vi.c:559:26: warning: unused variable 'vi_pattern_strings' [-Wunused-const-variable]
 
-Fixes: d747b806abf4 ("[media] tc358743: add direct interrupt handling")
-Signed-off-by: Tom Rix <trix@redhat.com>
+Warning ids grouped by kconfigs:
+
+clang_recent_errors
+`-- arm64-randconfig-r022-20200830
+    |-- drivers-staging-media-tegra-video-vi.c:warning:unused-variable-vi_ctrl_ops
+    `-- drivers-staging-media-tegra-video-vi.c:warning:unused-variable-vi_pattern_strings
+
+elapsed time: 1936m
+
+configs tested: 101
+configs skipped: 9
+
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                         s3c6400_defconfig
+arm                        vexpress_defconfig
+mips                   sb1250_swarm_defconfig
+mips                         bigsur_defconfig
+sh                        dreamcast_defconfig
+h8300                            alldefconfig
+arm                            mps2_defconfig
+arm                          pxa910_defconfig
+m68k                       m5249evb_defconfig
+arm                           omap1_defconfig
+arm                          ep93xx_defconfig
+arm64                            alldefconfig
+powerpc                          g5_defconfig
+arm                          tango4_defconfig
+arm                      jornada720_defconfig
+sh                           se7780_defconfig
+powerpc                       holly_defconfig
+mips                            gpr_defconfig
+mips                 decstation_r4k_defconfig
+powerpc                      ppc64e_defconfig
+powerpc                  mpc866_ads_defconfig
+m68k                          atari_defconfig
+mips                             allmodconfig
+xtensa                          iss_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a002-20200829
+x86_64               randconfig-a003-20200829
+x86_64               randconfig-a006-20200829
+x86_64               randconfig-a005-20200829
+x86_64               randconfig-a001-20200829
+x86_64               randconfig-a004-20200829
+x86_64               randconfig-a002-20200830
+x86_64               randconfig-a005-20200830
+x86_64               randconfig-a001-20200830
+i386                 randconfig-a002-20200829
+i386                 randconfig-a005-20200829
+i386                 randconfig-a003-20200829
+i386                 randconfig-a004-20200829
+i386                 randconfig-a001-20200829
+i386                 randconfig-a006-20200829
+i386                 randconfig-a001-20200830
+i386                 randconfig-a002-20200830
+i386                 randconfig-a004-20200830
+i386                 randconfig-a006-20200830
+i386                 randconfig-a005-20200830
+i386                 randconfig-a003-20200830
+i386                 randconfig-a015-20200830
+i386                 randconfig-a016-20200830
+i386                 randconfig-a014-20200830
+i386                 randconfig-a013-20200829
+i386                 randconfig-a012-20200829
+i386                 randconfig-a011-20200829
+i386                 randconfig-a016-20200829
+i386                 randconfig-a014-20200829
+i386                 randconfig-a015-20200829
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
 ---
- drivers/media/i2c/tc358743.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/media/i2c/tc358743.c b/drivers/media/i2c/tc358743.c
-index a03dcab5ce61..c724bd1591de 100644
---- a/drivers/media/i2c/tc358743.c
-+++ b/drivers/media/i2c/tc358743.c
-@@ -1461,7 +1461,7 @@ static int tc358743_isr(struct v4l2_subdev *sd, u32 status, bool *handled)
- static irqreturn_t tc358743_irq_handler(int irq, void *dev_id)
- {
- 	struct tc358743_state *state = dev_id;
--	bool handled;
-+	bool handled = false;
- 
- 	tc358743_isr(&state->sd, 0, &handled);
- 
--- 
-2.18.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
