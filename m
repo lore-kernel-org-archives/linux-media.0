@@ -2,103 +2,101 @@ Return-Path: <SRS0=P+oI=CJ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D3CCC433E6
-	for <linux-media@archiver.kernel.org>; Mon, 31 Aug 2020 19:53:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4355CC433E2
+	for <linux-media@archiver.kernel.org>; Mon, 31 Aug 2020 20:18:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EA4612087D
-	for <linux-media@archiver.kernel.org>; Mon, 31 Aug 2020 19:53:18 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="oBX7S/eh"
+	by mail.kernel.org (Postfix) with ESMTP id 1C6612087D
+	for <linux-media@archiver.kernel.org>; Mon, 31 Aug 2020 20:18:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729808AbgHaTwu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 31 Aug 2020 15:52:50 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:2968 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728671AbgHaTwt (ORCPT
+        id S1729939AbgHaUSQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 31 Aug 2020 16:18:16 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:34418 "EHLO
+        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728129AbgHaUSQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 31 Aug 2020 15:52:49 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5f4d54930000>; Mon, 31 Aug 2020 12:50:43 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 31 Aug 2020 12:52:49 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 31 Aug 2020 12:52:49 -0700
-Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 31 Aug
- 2020 19:52:49 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Mon, 31 Aug 2020 19:52:49 +0000
-Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.173.243]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5f4d55100006>; Mon, 31 Aug 2020 12:52:48 -0700
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <sakari.ailus@iki.fi>,
-        <hverkuil@xs4all.nl>, <luca@lucaceresoli.net>,
-        <leonl@leopardimaging.com>, <robh+dt@kernel.org>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>
-CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 0/4] IMX274 fixes and power on and off implementation
-Date:   Mon, 31 Aug 2020 12:52:34 -0700
-Message-ID: <1598903558-9691-1-git-send-email-skomatineni@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-X-NVConfidentiality: public
+        Mon, 31 Aug 2020 16:18:16 -0400
+Received: from valkosipuli.localdomain (valkosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::80:2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id E8FD8634C87;
+        Mon, 31 Aug 2020 23:17:57 +0300 (EEST)
+Received: from sailus by valkosipuli.localdomain with local (Exim 4.92)
+        (envelope-from <sakari.ailus@retiisi.org.uk>)
+        id 1kCqFZ-0000z4-RL; Mon, 31 Aug 2020 23:17:57 +0300
+Date:   Mon, 31 Aug 2020 23:17:57 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com, hverkuil@xs4all.nl,
+        luca@lucaceresoli.net, leonl@leopardimaging.com,
+        robh+dt@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 3/4] dt-bindings: media: imx274: Move clock and
+ supplies to required properties
+Message-ID: <20200831201757.GC844@valkosipuli.retiisi.org.uk>
+References: <1598903558-9691-1-git-send-email-skomatineni@nvidia.com>
+ <1598903558-9691-4-git-send-email-skomatineni@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1598903443; bh=ObH5yIt3OmMX+IKEdrYTYd8H5mBLzF2Tl1tY4rioIwM=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         X-NVConfidentiality:MIME-Version:Content-Type;
-        b=oBX7S/ehfaOAhOMEVrpdth0Esw244gGLPDM9YzfajZiBSU3svu/ucE6yiaFt02QM+
-         KPmsVeBpxy0dHIOFNXW8//o2pgr7RzKiF22N7Oy40jM/kXVvlJm/JpALt2fXTPbMI8
-         DXek/OC2abKzdLfiOw8RO5FmgE/icYLIWsxp9LDYL+LejUvrjI79UPg6y8vvS528HP
-         5uFKfYc4AIfyp2QinWBrSyT7UCiiKes8dI/lFH0r51BOJEqx2DQjyMukeqnhnUsmbC
-         VSMf5raeLn0CAQkY6TCCDgr+JZ5Q+DUXo4hyQ3IwyFOwj3qgdjKBaJPBIPoOeuX2PI
-         1wH3guxdJ2hMw==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1598903558-9691-4-git-send-email-skomatineni@nvidia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch series includes
-- Fix for proper Y_OUT_SIZE register configuration.
-- Power on/off sequence implementation through runtime PM.
-- dt-binding doc update to move input clock and supplies as required
-  properties.
+Hi Sowjanya,
 
-Delta between patch versions:
-[v4]:	Includes below v4 feedback
-	- Implemented power on/off through Runtime PM.
-	- Use regulator bulk APIs.
-	- Use lower case for supply names.
+On Mon, Aug 31, 2020 at 12:52:37PM -0700, Sowjanya Komatineni wrote:
+> Clock and supplies are external to IMX274 sensor and are dependent
+> on camera module design.
+> 
+> So, this patch moves them to required properties.
+> 
+> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+> ---
+>  Documentation/devicetree/bindings/media/i2c/imx274.txt | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/media/i2c/imx274.txt b/Documentation/devicetree/bindings/media/i2c/imx274.txt
+> index d0a5c899..b43bed6 100644
+> --- a/Documentation/devicetree/bindings/media/i2c/imx274.txt
+> +++ b/Documentation/devicetree/bindings/media/i2c/imx274.txt
+> @@ -10,15 +10,15 @@ at 1440 Mbps.
+>  Required Properties:
+>  - compatible: value should be "sony,imx274" for imx274 sensor
+>  - reg: I2C bus address of the device
+> -
+> -Optional Properties:
+> -- reset-gpios: Sensor reset GPIO
+>  - clocks: Reference to the input clock.
+>  - clock-names: Should be "inck".
+>  - vana-supply: Sensor 2.8v analog supply.
+>  - vdig-supply: Sensor 1.8v digital core supply.
+>  - vddl-supply: Sensor digital IO 1.2v supply.
 
-[v3]:	Includes below v2 feedback
-	- Removed explicit clk_set_rate from driver as default external
-	  input clock rate can be configured through DT.
+If these have been optional in the past I don't think we can start
+requiring them now.
 
-[v2]:	Includes below changes based on v1 feedback
-	- External input clock name changed from xclk to inck.
-	- implementation change for get regulators to store all in array.
-	- To keep in reset low prior to regulators power on.
+The framework will just give the driver a dummy regulator if one isn't
+found.
 
-Sowjanya Komatineni (4):
-  media: i2c: imx274: Fix Y_OUT_SIZE register setting
-  dt-bindings: media: imx274: Use lower case for supply names
-  dt-bindings: media: imx274: Move clock and supplies to required
-    properties
-  media: i2c: imx274: Add IMX274 power on and off sequence
-
- .../devicetree/bindings/media/i2c/imx274.txt       |  10 +-
- drivers/media/i2c/imx274.c                         | 153 ++++++++++++++++++++-
- 2 files changed, 154 insertions(+), 9 deletions(-)
+>  
+> +Optional Properties:
+> +- reset-gpios: Sensor reset GPIO
+> +
+>  The imx274 device node should contain one 'port' child node with
+>  an 'endpoint' subnode. For further reading on port node refer to
+>  Documentation/devicetree/bindings/media/video-interfaces.txt.
 
 -- 
-2.7.4
+Kind regards,
 
+Sakari Ailus
