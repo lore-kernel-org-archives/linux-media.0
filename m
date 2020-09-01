@@ -2,81 +2,89 @@ Return-Path: <SRS0=Qez8=CK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F20AEC433E6
-	for <linux-media@archiver.kernel.org>; Tue,  1 Sep 2020 11:25:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E060C433E2
+	for <linux-media@archiver.kernel.org>; Tue,  1 Sep 2020 11:28:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C0E46206C0
-	for <linux-media@archiver.kernel.org>; Tue,  1 Sep 2020 11:25:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5A32A2083B
+	for <linux-media@archiver.kernel.org>; Tue,  1 Sep 2020 11:28:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726122AbgIALZC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Sep 2020 07:25:02 -0400
-Received: from verein.lst.de ([213.95.11.211]:53056 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726107AbgIALYH (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 1 Sep 2020 07:24:07 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 508E268B05; Tue,  1 Sep 2020 13:06:18 +0200 (CEST)
-Date:   Tue, 1 Sep 2020 13:06:17 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Tomasz Figa <tfiga@chromium.org>
-Cc:     Christoph Hellwig <hch@lst.de>, alsa-devel@alsa-project.org,
-        linux-ia64@vger.kernel.org,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        nouveau@lists.freedesktop.org, linux-nvme@lists.infradead.org,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        linux-mm@kvack.org,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        linux-scsi@vger.kernel.org,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Pawel Osciak <pawel@osciak.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
-        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-parisc@vger.kernel.org, netdev@vger.kernel.org,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
-        Roedel <joro@8bytes.org>," <iommu@lists.linux-foundation.org>
-Subject: Re: [PATCH 05/28] media/v4l2: remove
- V4L2-FLAG-MEMORY-NON-CONSISTENT
-Message-ID: <20200901110617.GA13232@lst.de>
-References: <20200819065555.1802761-1-hch@lst.de> <20200819065555.1802761-6-hch@lst.de> <CAAFQd5COLxjydDYrfx47ht8tj-aNPiaVnC+WyQA7nvpW4gs=ww@mail.gmail.com> <20200819135454.GA17098@lst.de> <CAAFQd5BuXP7t3d-Rwft85j=KTyXq7y4s24mQxLr=VoY9krEGZw@mail.gmail.com> <20200820044347.GA4533@lst.de> <20200820052004.GA5305@lst.de> <CAAFQd5CFiA2WBaaPQ9ezvMjYZfNw37c42UEy9Pk7kJyCi1mLzQ@mail.gmail.com> <20200820165407.GD12693@lst.de> <CAAFQd5D=NzgjosB51-O_cH27a8V6CPgCfaPSfHHz7nKJPbazgg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAFQd5D=NzgjosB51-O_cH27a8V6CPgCfaPSfHHz7nKJPbazgg@mail.gmail.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+        id S1727044AbgIAL1T (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Sep 2020 07:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44756 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727004AbgIAL0x (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Sep 2020 07:26:53 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4001C06125E
+        for <linux-media@vger.kernel.org>; Tue,  1 Sep 2020 04:16:25 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dafna)
+        with ESMTPSA id 6FA682987D5
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+To:     linux-media@vger.kernel.org
+Cc:     laurent.pinchart@ideasonboard.com, dafna.hirschfeld@collabora.com,
+        helen.koike@collabora.com, ezequiel@collabora.com,
+        hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
+        sakari.ailus@linux.intel.com, linux-rockchip@lists.infradead.org,
+        mchehab@kernel.org, tfiga@chromium.org
+Subject: [PATCH v4 10/10] media: staging: rkisp1: fix configuration for GREY pixelformat
+Date:   Tue,  1 Sep 2020 13:16:12 +0200
+Message-Id: <20200901111612.10552-11-dafna.hirschfeld@collabora.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200901111612.10552-1-dafna.hirschfeld@collabora.com>
+References: <20200901111612.10552-1-dafna.hirschfeld@collabora.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Aug 20, 2020 at 07:33:48PM +0200, Tomasz Figa wrote:
-> > It wasn't meant to be too insulting, but I found this out when trying
-> > to figure out how to just disable it.  But it also ends up using
-> > the actual dma attr flags for it's own consistency checks, so just
-> > not setting the flag did not turn out to work that easily.
-> >
-> 
-> Yes, sadly the videobuf2 ended up becoming quite counterintuitive
-> after growing for the long years and that is reflected in the design
-> of this feature as well. I think we need to do something about it.
+This patch changes the device configuration to support capture
+of V4L2_PIX_FMT_GREY video. The 'write_format' field of the format
+description should be planar.
+Also the array 'pixm->plane_fmt' that describes the planes should
+be memset to 0 before filling it since the the cb, cr planes should
+be 0.
 
-So I'm about to respin the series and wonder how we should proceed.
-I've failed to come up with a clean patch to keep the flag and make
-it a no-op.  Can you or your team give it a spin?
+Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+---
+ drivers/staging/media/rkisp1/rkisp1-capture.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Also I wonder if the flag should be renamed from NON_CONSISTENT
-to NON_COHERENT - the consistent thing is a weird wart from the times
-the old PCI DMA API that is mostly gone now.
+diff --git a/drivers/staging/media/rkisp1/rkisp1-capture.c b/drivers/staging/media/rkisp1/rkisp1-capture.c
+index 79ee6795a58f..6d02cb1c9c5b 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-capture.c
++++ b/drivers/staging/media/rkisp1/rkisp1-capture.c
+@@ -120,7 +120,7 @@ static const struct rkisp1_capture_fmt_cfg rkisp1_mp_fmts[] = {
+ 	{
+ 		.fourcc = V4L2_PIX_FMT_GREY,
+ 		.uv_swap = 0,
+-		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUVINT,
++		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_PLA_OR_RAW8,
+ 		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
+ 	},
+ 	/* yuv420 */
+@@ -248,7 +248,7 @@ static const struct rkisp1_capture_fmt_cfg rkisp1_sp_fmts[] = {
+ 	{
+ 		.fourcc = V4L2_PIX_FMT_GREY,
+ 		.uv_swap = 0,
+-		.write_format = RKISP1_MI_CTRL_SP_WRITE_INT,
++		.write_format = RKISP1_MI_CTRL_SP_WRITE_PLA,
+ 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV400,
+ 		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
+ 	},
+@@ -1059,6 +1059,7 @@ rkisp1_fill_pixfmt(struct v4l2_pix_format_mplane *pixm,
+ 	unsigned int i;
+ 	u32 stride;
+ 
++	memset(pixm->plane_fmt, 0, sizeof(pixm->plane_fmt));
+ 	info = v4l2_format_info(pixm->pixelformat);
+ 	pixm->num_planes = info->mem_planes;
+ 	stride = info->bpp[0] * pixm->width;
+-- 
+2.17.1
+
