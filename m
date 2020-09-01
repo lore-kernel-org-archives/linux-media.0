@@ -2,136 +2,281 @@ Return-Path: <SRS0=Qez8=CK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40115C433E2
-	for <linux-media@archiver.kernel.org>; Tue,  1 Sep 2020 15:10:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 670F4C433E6
+	for <linux-media@archiver.kernel.org>; Tue,  1 Sep 2020 16:16:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 137752100A
-	for <linux-media@archiver.kernel.org>; Tue,  1 Sep 2020 15:10:14 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="lCL5SLaM"
+	by mail.kernel.org (Postfix) with ESMTP id 49A4D2065F
+	for <linux-media@archiver.kernel.org>; Tue,  1 Sep 2020 16:16:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726771AbgIAPKB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Sep 2020 11:10:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726543AbgIAPJt (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Sep 2020 11:09:49 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FEDBC061244
-        for <linux-media@vger.kernel.org>; Tue,  1 Sep 2020 08:09:49 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id nw23so2182867ejb.4
-        for <linux-media@vger.kernel.org>; Tue, 01 Sep 2020 08:09:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BIr3FRHLWeYI5mpm2jHeXhPihRGMNnmHYOmMOMeHpR4=;
-        b=lCL5SLaMFPqoPftiV2X8nocTTBdKqARvrqI17ufYPS0DtjiIyaSIs4CniiHZ/VEW8n
-         WoqCHbvQzPHbcjvAM7+zD7U98QNr5oxI5U75nYwYeOtUdaj7M9sptx5fdS3otDiC5uUz
-         5071XY7IwhHNlm+8JmyRZFrwvyyMI1Xxx/Jf4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BIr3FRHLWeYI5mpm2jHeXhPihRGMNnmHYOmMOMeHpR4=;
-        b=h0KZVcs11c5tjS0VUvvpWr8Q4lTBpaqJ8NTBl7VHoX6WO4EbK5R0bdxkbDBS6m1C4l
-         lG5SNPTqypbkngKZD8f8RHMFfGtc+rA6FTffFmB3N/xLrjAlmH4eLAB1RK6GLjvJFzyQ
-         I82vjHNxYBSSzMvIl8Sn5ijRXjj8uVZbRovzl4pShOq1LCt7BuvDm7vYCLJDTSxSNIt7
-         a5MjGOJ7Ttyhmo+mHMNieglTNDZhgng7tPwf1kqzTs5K9Xla6f1GSlGV9LGT4L6Oyx4H
-         l5o9IbtsTHVheiCy5UW9RE+UnQw5cFrTtW/rZ44KiOyMRLrmL1LTY1h0EWJvnWqSCrLw
-         VW9Q==
-X-Gm-Message-State: AOAM532IL+5561PiW24x7bm2oeuRgp9y1IG0I/Ngl8VgMgOLvAhldhxt
-        YJ6pSDUeOHPgpwMPtbpJxOjGDaU6zCjj1g==
-X-Google-Smtp-Source: ABdhPJxxkPZMqKhbl7PXPV48RnGKHMqyo29W87m9QzQ90jcp0cDp9o+eiKQOghB5MA80o7ks+wtb1A==
-X-Received: by 2002:a17:906:fb84:: with SMTP id lr4mr1965129ejb.282.1598972987453;
-        Tue, 01 Sep 2020 08:09:47 -0700 (PDT)
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com. [209.85.218.51])
-        by smtp.gmail.com with ESMTPSA id k14sm1349362edo.89.2020.09.01.08.09.47
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Sep 2020 08:09:47 -0700 (PDT)
-Received: by mail-ej1-f51.google.com with SMTP id d11so2129093ejt.13
-        for <linux-media@vger.kernel.org>; Tue, 01 Sep 2020 08:09:47 -0700 (PDT)
-X-Received: by 2002:a5d:5150:: with SMTP id u16mr2332024wrt.197.1598972568491;
- Tue, 01 Sep 2020 08:02:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200819065555.1802761-1-hch@lst.de> <20200819065555.1802761-6-hch@lst.de>
- <CAAFQd5COLxjydDYrfx47ht8tj-aNPiaVnC+WyQA7nvpW4gs=ww@mail.gmail.com>
- <20200819135454.GA17098@lst.de> <CAAFQd5BuXP7t3d-Rwft85j=KTyXq7y4s24mQxLr=VoY9krEGZw@mail.gmail.com>
- <20200820044347.GA4533@lst.de> <20200820052004.GA5305@lst.de>
- <CAAFQd5CFiA2WBaaPQ9ezvMjYZfNw37c42UEy9Pk7kJyCi1mLzQ@mail.gmail.com>
- <20200820165407.GD12693@lst.de> <CAAFQd5D=NzgjosB51-O_cH27a8V6CPgCfaPSfHHz7nKJPbazgg@mail.gmail.com>
- <20200901110617.GA13232@lst.de>
-In-Reply-To: <20200901110617.GA13232@lst.de>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Tue, 1 Sep 2020 17:02:20 +0200
-X-Gmail-Original-Message-ID: <CAAFQd5CmPVSxmZJVn7HnNUn8srZbAbnfzpNMYw3KcDzn7xD2cg@mail.gmail.com>
-Message-ID: <CAAFQd5CmPVSxmZJVn7HnNUn8srZbAbnfzpNMYw3KcDzn7xD2cg@mail.gmail.com>
-Subject: Re: [PATCH 05/28] media/v4l2: remove V4L2-FLAG-MEMORY-NON-CONSISTENT
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     alsa-devel@alsa-project.org, linux-ia64@vger.kernel.org,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        nouveau@lists.freedesktop.org, linux-nvme@lists.infradead.org,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        linux-mm@kvack.org,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        linux-scsi@vger.kernel.org,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Pawel Osciak <pawel@osciak.com>,
+        id S1731972AbgIAQQg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Sep 2020 12:16:36 -0400
+Received: from mga14.intel.com ([192.55.52.115]:5423 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729002AbgIAQQ3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 1 Sep 2020 12:16:29 -0400
+IronPort-SDR: u7WUPpbXEzrK6NDwRZUL1mOHbLsvTHLEVk8iPErDQrfPggjbG/F83L9v7A23ISv07TNFfwKMrl
+ c2WcZBTIkKiQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9731"; a="156458764"
+X-IronPort-AV: E=Sophos;i="5.76,379,1592895600"; 
+   d="scan'208";a="156458764"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2020 09:16:28 -0700
+IronPort-SDR: os/5uSk7qU9bcGqgGXd4PdXIh6WoxaIsSvv9gEkE3JPhUNZHceJ/kFaVaXVYHhU4P1Ra/sXUxS
+ RnykPD2yvawg==
+X-IronPort-AV: E=Sophos;i="5.76,379,1592895600"; 
+   d="scan'208";a="283440642"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2020 09:16:24 -0700
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id E27B3215E4; Tue,  1 Sep 2020 19:16:22 +0300 (EEST)
+Date:   Tue, 1 Sep 2020 19:16:22 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Dongchun Zhu <dongchun.zhu@mediatek.com>
+Cc:     Tomasz Figa <tfiga@chromium.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Cao Bing Bu <bingbu.cao@intel.com>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg 
         Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-parisc@vger.kernel.org, netdev@vger.kernel.org,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
-        Roedel <joro@8bytes.org>," <iommu@lists.linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+        Sj Huang <sj.huang@mediatek.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        matrix.zhu@aliyun.com,
+        linux-devicetree <devicetree@vger.kernel.org>,
+        Louis Kuo <louis.kuo@mediatek.com>,
+        Shengnan Wang =?utf-8?B?KOeOi+Wco+eUtyk=?= 
+        <shengnan.wang@mediatek.com>
+Subject: Re: [PATCH v13 1/2] media: dt-bindings: media: i2c: Document OV02A10
+ bindings
+Message-ID: <20200901161622.GA32646@paasikivi.fi.intel.com>
+References: <20200710101850.4604-1-dongchun.zhu@mediatek.com>
+ <20200710101850.4604-2-dongchun.zhu@mediatek.com>
+ <CAAFQd5BB3c9nvruY0jcVbRZtbUyiFj0v8=D6KA7EPtN4rz=+wA@mail.gmail.com>
+ <20200831160644.GL31019@paasikivi.fi.intel.com>
+ <1598970937.4733.21.camel@mhfsdcap03>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1598970937.4733.21.camel@mhfsdcap03>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Sep 1, 2020 at 1:06 PM Christoph Hellwig <hch@lst.de> wrote:
->
-> On Thu, Aug 20, 2020 at 07:33:48PM +0200, Tomasz Figa wrote:
-> > > It wasn't meant to be too insulting, but I found this out when trying
-> > > to figure out how to just disable it.  But it also ends up using
-> > > the actual dma attr flags for it's own consistency checks, so just
-> > > not setting the flag did not turn out to work that easily.
-> > >
-> >
-> > Yes, sadly the videobuf2 ended up becoming quite counterintuitive
-> > after growing for the long years and that is reflected in the design
-> > of this feature as well. I think we need to do something about it.
->
-> So I'm about to respin the series and wonder how we should proceed.
-> I've failed to come up with a clean patch to keep the flag and make
-> it a no-op.  Can you or your team give it a spin?
->
+On Tue, Sep 01, 2020 at 10:35:37PM +0800, Dongchun Zhu wrote:
+> Hi Tomasz, Sakari,
+> 
+> Thanks for digging into the imperfections.
+> 
+> On Mon, 2020-08-31 at 19:06 +0300, Sakari Ailus wrote:
+> > Hi Tomasz,
+> > 
+> > Thanks for dressing this into words.
+> > 
+> > On Mon, Aug 31, 2020 at 01:44:27PM +0200, Tomasz Figa wrote:
+> > > Hi Dongchun,
+> > > 
+> > > On Fri, Jul 10, 2020 at 12:19 PM Dongchun Zhu <dongchun.zhu@mediatek.com> wrote:
+> > > >
+> > > > Add YAML device tree binding for OV02A10 CMOS image sensor,
+> > > > and the relevant MAINTAINERS entries.
+> > > >
+> > > > Reviewed-by: Tomasz Figa <tfiga@chromium.org>
+> > > > Reviewed-by: Rob Herring <robh@kernel.org>
+> > > > Signed-off-by: Dongchun Zhu <dongchun.zhu@mediatek.com>
+> > > > ---
+> > > >  .../bindings/media/i2c/ovti,ov02a10.yaml           | 172 +++++++++++++++++++++
+> > > >  MAINTAINERS                                        |   7 +
+> > > >  2 files changed, 179 insertions(+)
+> > > >  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov02a10.yaml
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov02a10.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov02a10.yaml
+> > > > new file mode 100644
+> > > > index 0000000..3a916cc
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov02a10.yaml
+> > > > @@ -0,0 +1,172 @@
+> > > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > > +# Copyright (c) 2020 MediaTek Inc.
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id: http://devicetree.org/schemas/media/i2c/ovti,ov02a10.yaml#
+> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > +
+> > > > +title: Omnivision OV02A10 CMOS Sensor Device Tree Bindings
+> > > > +
+> > > > +maintainers:
+> > > > +  - Dongchun Zhu <dongchun.zhu@mediatek.com>
+> > > > +
+> > > > +description: |-
+> > > > +  The Omnivision OV02A10 is a low-cost, high performance, 1/5-inch, 2 megapixel
+> > > > +  image sensor, which is the latest production derived from Omnivision's CMOS
+> > > > +  image sensor technology. Ihis chip supports high frame rate speeds up to 30fps
+> > > > +  @ 1600x1200 (UXGA) resolution transferred over a 1-lane MIPI interface. The
+> > > > +  sensor output is available via CSI-2 serial data output.
+> > > > +
+> > > > +properties:
+> > > > +  compatible:
+> > > > +    const: ovti,ov02a10
+> > > > +
+> > > > +  reg:
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  clocks:
+> > > > +    items:
+> > > > +      - description: top mux camtg clock
+> > > > +      - description: divider clock
+> > > > +
+> > > > +  clock-names:
+> > > > +    items:
+> > > > +      - const: eclk
+> > > > +      - const: freq_mux
+> > > 
+> > > Why do we have two clocks here? Looking at the example suggests that
+> > > they may be the clocks of the SoC that the integration was done with.
+> > > However, the binding must only define the aspects of the particular
+> > > device, i.e. this sensor.
+> > > 
+> > > I suppose we should only have "eclk" here and it should be described
+> > > as "external clock for the sensor".
+> > > 
+> 
+> I cannot agree with you more, it would be fixed in next release.
+> 
+> > > > +
+> > > > +  clock-frequency:
+> > > > +    description:
+> > > > +      Frequency of the eclk clock in Hertz.
+> > > 
+> > > nit: maybe Hz?
+> > > 
+> 
+> Both shall be okay, let's use Hz instead, which seems to be more simple.
+> 
+> > > > +
+> > > > +  dovdd-supply:
+> > > > +    description:
+> > > > +      Definition of the regulator used as Digital I/O voltage supply.
+> > > > +
+> > > > +  avdd-supply:
+> > > > +    description:
+> > > > +      Definition of the regulator used as Analog voltage supply.
+> > > > +
+> > > > +  dvdd-supply:
+> > > > +    description:
+> > > > +      Definition of the regulator used as Digital core voltage supply.
+> > > > +
+> > > > +  powerdown-gpios:
+> > > > +    description:
+> > > > +      Must be the device tree identifier of the GPIO connected to the
+> > > > +      PD_PAD pin. This pin is used to place the OV02A10 into standby mode
+> > > > +      or shutdown mode. As the line needs to be high for the powerdown mode
+> > > > +      to be active, it should be marked GPIO_ACTIVE_HIGH.
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  reset-gpios:
+> > > > +    description:
+> > > > +      Must be the device tree identifier of the GPIO connected to the
+> > > > +      RST_PD pin. If specified, it will be asserted during driver probe.
+> > > > +      As the line needs to be low for the reset to be active, it should be
+> > > > +      marked GPIO_ACTIVE_LOW.
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  rotation:
+> > > > +    description:
+> > > > +      Definition of the sensor's placement.
+> > > > +    allOf:
+> > > > +      - $ref: "/schemas/types.yaml#/definitions/uint32"
+> > > > +      - enum:
+> > > > +          - 0    # Sensor Mounted Upright
+> > > > +          - 180  # Sensor Mounted Upside Down
+> > > > +        default: 0
+> > > > +
+> > > > +  ovti,mipi-tx-speed:
+> > > > +    description:
+> > > > +      Indication of MIPI transmission speed select, which is to control D-PHY
+> > > > +      timing setting by adjusting MIPI clock voltage to improve the clock
+> > > > +      driver capability.
+> > > 
+> > > The description says that the value adjusts "MIPI clock voltage".
+> > > Should the property be renamed to "ovti,mipi-clock-voltage"?
+> > > 
+> 
+> Sure, mipi-clock-voltage seems more clear, perfect naming :-)
+> 
+> > > > +    allOf:
+> > > > +      - $ref: "/schemas/types.yaml#/definitions/uint32"
+> > > > +      - enum:
+> > > > +          - 0    #  20MHz -  30MHz
+> > > > +          - 1    #  30MHz -  50MHz
+> > > > +          - 2    #  50MHz -  75MHz
+> > > > +          - 3    #  75MHz - 100MHz
+> > > > +          - 4    # 100MHz - 130MHz
+> > > > +        default: 3
+> > > > +
+> > > 
+> > > I've discussed this on IRC with Sakari. It sounds like this works as
+> > > is for us because the driver currently only supports 1 mode, always
+> > > running the link at 390 MHz. This won't scale if one intends to add
+> > > more modes, because DT can't be expected to be updated when the driver
+> > > changes. The two are expected to be separate and backwards compatible.
+> > > 
+> > > I think we could model this in DT as an array of <link speed, clock
+> > > voltage> pairs. Similarly to the OPP bindings [1]. An example to have
+> > > all link speeds up to 390 MHz use the value 4:
+> > > 
+> > > ovti,mipi-clock-voltages = <
+> > >               /* KHz         clock voltage unit */
+> > >                  390000    4
+> > > >;
+> > > 
+> > > if one wants to select different voltage for different link, they
+> > > could do so as well. With the example below, the driver should
+> > > configure "3" for link frequencies <= 150 MHz and "4" for > 150 MHz <=
+> > > 390 MHz. Link frequencies > 390 MHz should be disallowed.
+> > > 
+> > > ovti,mipi-clock-voltages = <
+> > >               /* KHz         clock voltage unit */
+> > >                  150000    3
+> > >                  390000    4
+> > > >;
+> > > 
+> > > What do you think?
+> > 
+> 
+> So now we define the MIPI clock voltage (unit) as one function of link
+> frequency?
+> 
+> For current sensor mode (1600x1200, 390MHz link frequency), we then
+> shall always use the value 4 to configure the MIPI transmission speed
+> selection (P1:0xA1). Am I correct in thinking that?
+> 
+> > One more note on my proposal: use the index of the link frequency to access
+> > the ovti,mipi-clock-voltages array. That should be more simple for the
+> > driver, as the driver is expected to use only link frequencies listed in DT
+> > bindings anyway.
+> > 
+> 
+> Good idea! That's exactly what I mean.
+> Just submitted one draft change to handle the new property in DT.
+> @Sakari @Tomasz please help to review it.
+> https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/2387980/1/drivers/media/i2c/ov02a10.c#883
 
-Okay, I'll take a look.
+Please send it to the list.
 
-> Also I wonder if the flag should be renamed from NON_CONSISTENT
-> to NON_COHERENT - the consistent thing is a weird wart from the times
-> the old PCI DMA API that is mostly gone now.
-
-It originated from the DMA_ATTR_NON_CONSISTENT flag, but agreed that
-NON_COHERENT would be more consistent (pun not intended) with the rest
-of the DMA API given the removal of that flag. Let me see if we can
-still change it.
-
-Best regards,
-Tomasz
+-- 
+Sakari Ailus
