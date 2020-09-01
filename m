@@ -2,192 +2,303 @@ Return-Path: <SRS0=Qez8=CK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70BE3C433E2
-	for <linux-media@archiver.kernel.org>; Tue,  1 Sep 2020 14:34:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB666C433E6
+	for <linux-media@archiver.kernel.org>; Tue,  1 Sep 2020 14:35:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3B10C20767
-	for <linux-media@archiver.kernel.org>; Tue,  1 Sep 2020 14:34:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1598970874;
-	bh=JNmfQDuYufiFeN1QfagfVFn418QL7S4j46INV2H5Efs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=NN4PyuGNZyBTh8IbJ/zKeuEEHlNd1Y5AmEzg4tcA8RoC7L3lfk8fL+FmqqelxbbiS
-	 bmP9jjigwYzI42Ol74vpfeUMpPZqVRfVcHqZzdHVHtSttR/zP9Lx0LDAGmUD/WIADd
-	 WLsxK1PmF8VlQMB6Bw6r3hgHM2485KY96ADzq6ks=
+	by mail.kernel.org (Postfix) with ESMTP id A225820767
+	for <linux-media@archiver.kernel.org>; Tue,  1 Sep 2020 14:35:24 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=mg.codeaurora.org header.i=@mg.codeaurora.org header.b="Sg6G5/SS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728296AbgIAOec (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Sep 2020 10:34:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46586 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728378AbgIAOeR (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 1 Sep 2020 10:34:17 -0400
-Received: from coco.lan (ip5f5ad5cf.dynamic.kabel-deutschland.de [95.90.213.207])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1728388AbgIAOfQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Sep 2020 10:35:16 -0400
+Received: from mail29.static.mailgun.info ([104.130.122.29]:36408 "EHLO
+        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728358AbgIAOVN (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 1 Sep 2020 10:21:13 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1598970071; h=References: In-Reply-To: Message-Id: Date:
+ Subject: Cc: To: From: Sender;
+ bh=kSj6kC40JWnDnxc6lXMwrPkfer4vaGjWOxuIc4G/8nI=; b=Sg6G5/SSuYmay4LoKDkSpT6AYD721qpyvVlMBEZuyJzhdd48YAoQ4ALQunxDw1Y9WyxekP5X
+ 4UUSPag/SBCTFnv9808OGPsZSDCVkBHSAQisLt5BhBuc1sf9EYwP3eysNjnOqy2Qlqkz9U4l
+ +b/JP8sGorBJPB+bbKfRU0YDQj4=
+X-Mailgun-Sending-Ip: 104.130.122.29
+X-Mailgun-Sid: WyI3ZjU0NiIsICJsaW51eC1tZWRpYUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
+ 5f4e58c6380a624e4d047851 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 01 Sep 2020 14:20:54
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 9B2BBC433CA; Tue,  1 Sep 2020 14:20:53 +0000 (UTC)
+Received: from blr-ubuntu-173.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3113D206FA;
-        Tue,  1 Sep 2020 14:33:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598970808;
-        bh=JNmfQDuYufiFeN1QfagfVFn418QL7S4j46INV2H5Efs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=vfDBP/MfHgwy/KvmIgWHbnStlg3WtNEPyIalsVQa3/blKMqpLPUNReHMoXd9PyDyA
-         QjRCjqqathyipXWmRZHPck3ceOLpGK1ipI8evUwJyTMqIDSXg+HSJueaxgtzZH8o+l
-         +WfQXfux35wICoz7ucTCAbbNWreHA9HRhIsOXIpI=
-Date:   Tue, 1 Sep 2020 16:33:25 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Stefan Witzel <s.witzel@gmx.de>
-Cc:     linux-media@vger.kernel.org
-Subject: Re: Enforcing color profile
-Message-ID: <20200901163325.5feb2874@coco.lan>
-In-Reply-To: <ede0342b-3975-15e3-a8d8-98886456b489@gmx.de>
-References: <7486393e-56b5-e460-b542-02c72525139b@gmx.de>
-        <0fa5da29-a058-2678-e616-65c921c6389a@xs4all.nl>
-        <72B7F2AA-4FCC-4842-A80B-5C4D856C0A89@gmx.de>
-        <ede0342b-3975-15e3-a8d8-98886456b489@gmx.de>
-X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        (Authenticated sender: rnayak)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 305CDC43391;
+        Tue,  1 Sep 2020 14:20:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 305CDC43391
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+To:     stanimir.varbanov@linaro.org, robh+dt@kernel.org,
+        agross@kernel.org, bjorn.andersson@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mka@chromium.org, Rajendra Nayak <rnayak@codeaurora.org>
+Subject: [PATCH v6 3/5] media: venus: core: Add support for opp tables/perf voting
+Date:   Tue,  1 Sep 2020 19:50:24 +0530
+Message-Id: <1598970026-7199-4-git-send-email-rnayak@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1598970026-7199-1-git-send-email-rnayak@codeaurora.org>
+References: <1598970026-7199-1-git-send-email-rnayak@codeaurora.org>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Tue, 1 Sep 2020 15:37:23 +0200
-Stefan Witzel <s.witzel@gmx.de> escreveu:
+Add support to add OPP tables and perf voting on the OPP powerdomain.
+This is needed so venus votes on the corresponding performance state
+for the OPP powerdomain along with setting the core clock rate.
 
-> Hello,
-> 
-> Just in case someone should stumble across this thread: An appropriate
-> solution is available here:
-> 
->   https://github.com/xkahn/camlink
-> 
-> As pointed out by Hans before the described problem is technically an
-> application bug, so one might say it should be fixed on application
-> level, which is what the solution above does.
+Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Acked-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
+ drivers/media/platform/qcom/venus/core.c       |  2 +
+ drivers/media/platform/qcom/venus/core.h       |  5 ++
+ drivers/media/platform/qcom/venus/pm_helpers.c | 92 ++++++++++++++++++++++++--
+ 3 files changed, 92 insertions(+), 7 deletions(-)
 
-Hmm... let me try to understand something. I don't have this device.
-I'm just curious about what's happening here ;-)
+diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+index bfcaba3..a3e98a5 100644
+--- a/drivers/media/platform/qcom/venus/core.c
++++ b/drivers/media/platform/qcom/venus/core.c
+@@ -525,6 +525,7 @@ static const struct venus_resources sdm845_res_v2 = {
+ 	.vcodec_clks_num = 2,
+ 	.vcodec_pmdomains = { "venus", "vcodec0", "vcodec1" },
+ 	.vcodec_pmdomains_num = 3,
++	.opp_pmdomain = (const char *[]) { "cx", NULL },
+ 	.vcodec_num = 2,
+ 	.max_load = 3110400,	/* 4096x2160@90 */
+ 	.hfi_version = HFI_VERSION_4XX,
+@@ -570,6 +571,7 @@ static const struct venus_resources sc7180_res = {
+ 	.vcodec_clks_num = 2,
+ 	.vcodec_pmdomains = { "venus", "vcodec0" },
+ 	.vcodec_pmdomains_num = 2,
++	.opp_pmdomain = (const char *[]) { "cx", NULL },
+ 	.vcodec_num = 1,
+ 	.hfi_version = HFI_VERSION_4XX,
+ 	.vmem_id = VIDC_RESOURCE_NONE,
+diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
+index 7118612..b0cc544 100644
+--- a/drivers/media/platform/qcom/venus/core.h
++++ b/drivers/media/platform/qcom/venus/core.h
+@@ -62,6 +62,7 @@ struct venus_resources {
+ 	unsigned int vcodec_clks_num;
+ 	const char * const vcodec_pmdomains[VIDC_PMDOMAINS_NUM_MAX];
+ 	unsigned int vcodec_pmdomains_num;
++	const char **opp_pmdomain;
+ 	unsigned int vcodec_num;
+ 	enum hfi_version hfi_version;
+ 	u32 max_load;
+@@ -145,8 +146,12 @@ struct venus_core {
+ 	struct clk *vcodec1_clks[VIDC_VCODEC_CLKS_NUM_MAX];
+ 	struct icc_path *video_path;
+ 	struct icc_path *cpucfg_path;
++	struct opp_table *opp_table;
++	bool has_opp_table;
+ 	struct device_link *pd_dl_venus;
+ 	struct device *pmdomains[VIDC_PMDOMAINS_NUM_MAX];
++	struct device_link *opp_dl_venus;
++	struct device *opp_pmdomain;
+ 	struct video_device *vdev_dec;
+ 	struct video_device *vdev_enc;
+ 	struct v4l2_device v4l2_dev;
+diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
+index 531e7a4..3127af8 100644
+--- a/drivers/media/platform/qcom/venus/pm_helpers.c
++++ b/drivers/media/platform/qcom/venus/pm_helpers.c
+@@ -9,6 +9,7 @@
+ #include <linux/iopoll.h>
+ #include <linux/kernel.h>
+ #include <linux/pm_domain.h>
++#include <linux/pm_opp.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/types.h>
+ #include <media/v4l2-mem2mem.h>
+@@ -66,10 +67,9 @@ static void core_clks_disable(struct venus_core *core)
+ 
+ static int core_clks_set_rate(struct venus_core *core, unsigned long freq)
+ {
+-	struct clk *clk = core->clks[0];
+ 	int ret;
+ 
+-	ret = clk_set_rate(clk, freq);
++	ret = dev_pm_opp_set_rate(core->dev, freq);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -744,13 +744,16 @@ static int venc_power_v4(struct device *dev, int on)
+ 
+ static int vcodec_domains_get(struct device *dev)
+ {
++	int ret;
++	struct opp_table *opp_table;
++	struct device **opp_virt_dev;
+ 	struct venus_core *core = dev_get_drvdata(dev);
+ 	const struct venus_resources *res = core->res;
+ 	struct device *pd;
+ 	unsigned int i;
+ 
+ 	if (!res->vcodec_pmdomains_num)
+-		return -ENODEV;
++		goto skip_pmdomains;
+ 
+ 	for (i = 0; i < res->vcodec_pmdomains_num; i++) {
+ 		pd = dev_pm_domain_attach_by_name(dev,
+@@ -767,7 +770,41 @@ static int vcodec_domains_get(struct device *dev)
+ 	if (!core->pd_dl_venus)
+ 		return -ENODEV;
+ 
++skip_pmdomains:
++	if (!core->has_opp_table)
++		return 0;
++
++	/* Attach the power domain for setting performance state */
++	opp_table = dev_pm_opp_attach_genpd(dev, res->opp_pmdomain, &opp_virt_dev);
++	if (IS_ERR(opp_table)) {
++		ret = PTR_ERR(opp_table);
++		goto opp_attach_err;
++	}
++
++	core->opp_pmdomain = *opp_virt_dev;
++	core->opp_dl_venus = device_link_add(dev, core->opp_pmdomain,
++					     DL_FLAG_RPM_ACTIVE |
++					     DL_FLAG_PM_RUNTIME |
++					     DL_FLAG_STATELESS);
++	if (!core->opp_dl_venus) {
++		ret = -ENODEV;
++		goto opp_dl_add_err;
++	}
++
+ 	return 0;
++
++opp_dl_add_err:
++	dev_pm_domain_detach(core->opp_pmdomain, true);
++opp_attach_err:
++	if (core->pd_dl_venus) {
++		device_link_del(core->pd_dl_venus);
++		for (i = 0; i < res->vcodec_pmdomains_num; i++) {
++			if (IS_ERR_OR_NULL(core->pmdomains[i]))
++				continue;
++			dev_pm_domain_detach(core->pmdomains[i], true);
++		}
++	}
++	return ret;
+ }
+ 
+ static void vcodec_domains_put(struct device *dev)
+@@ -777,7 +814,7 @@ static void vcodec_domains_put(struct device *dev)
+ 	unsigned int i;
+ 
+ 	if (!res->vcodec_pmdomains_num)
+-		return;
++		goto skip_pmdomains;
+ 
+ 	if (core->pd_dl_venus)
+ 		device_link_del(core->pd_dl_venus);
+@@ -787,6 +824,15 @@ static void vcodec_domains_put(struct device *dev)
+ 			continue;
+ 		dev_pm_domain_detach(core->pmdomains[i], true);
+ 	}
++
++skip_pmdomains:
++	if (!core->has_opp_table)
++		return;
++
++	if (core->opp_dl_venus)
++		device_link_del(core->opp_dl_venus);
++
++	dev_pm_domain_detach(core->opp_pmdomain, true);
+ }
+ 
+ static int core_get_v4(struct device *dev)
+@@ -815,19 +861,46 @@ static int core_get_v4(struct device *dev)
+ 	if (legacy_binding)
+ 		return 0;
+ 
++	core->opp_table = dev_pm_opp_set_clkname(dev, "core");
++	if (IS_ERR(core->opp_table))
++		return PTR_ERR(core->opp_table);
++
++	if (core->res->opp_pmdomain) {
++		ret = dev_pm_opp_of_add_table(dev);
++		if (!ret) {
++			core->has_opp_table = true;
++		} else if (ret != -ENODEV) {
++			dev_err(dev, "invalid OPP table in device tree\n");
++			dev_pm_opp_put_clkname(core->opp_table);
++			return ret;
++		}
++	}
++
+ 	ret = vcodec_domains_get(dev);
+-	if (ret)
++	if (ret) {
++		if (core->has_opp_table)
++			dev_pm_opp_of_remove_table(dev);
++		dev_pm_opp_put_clkname(core->opp_table);
+ 		return ret;
++	}
+ 
+ 	return 0;
+ }
+ 
+ static void core_put_v4(struct device *dev)
+ {
++	struct venus_core *core = dev_get_drvdata(dev);
++
+ 	if (legacy_binding)
+ 		return;
+ 
+ 	vcodec_domains_put(dev);
++
++	if (core->has_opp_table)
++		dev_pm_opp_of_remove_table(dev);
++	if (core->opp_table)
++		dev_pm_opp_put_clkname(core->opp_table);
++
+ }
+ 
+ static int core_power_v4(struct device *dev, int on)
+@@ -835,10 +908,15 @@ static int core_power_v4(struct device *dev, int on)
+ 	struct venus_core *core = dev_get_drvdata(dev);
+ 	int ret = 0;
+ 
+-	if (on == POWER_ON)
++	if (on == POWER_ON) {
+ 		ret = core_clks_enable(core);
+-	else
++	} else {
++		/* Drop the performance state vote */
++		if (core->opp_pmdomain)
++			dev_pm_opp_set_rate(dev, 0);
++
+ 		core_clks_disable(core);
++	}
+ 
+ 	return ret;
+ }
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
 
-After looking at the patches and at:
-	https://assortedhackery.com/patching-cam-link-to-play-nicer-on-linux/
-
-it sounded to me that the UVC driver reports support for 3 different
-fourccs:
-
-	Pixel Format: 'YUYV' # V4L2_PIX_FMT_YUYV
-	Pixel Format: 'NV12' # V4L2_PIX_FMT_NV12
-	Pixel Format: 'YU12' # V4L2_PIX_FMT_YUV420
-
-all of them at 1080 p resolution. 
-
-It is very common that devices would support multiple video
-formats. So, the above looks fine on my eyes, provided that the
-device has support for those 3 YUV format variants.
-
--
-
-If I understood well, YUYV works fine (with is a variant of 4:2:2). 
-
-The problem is with 4:2:0 formats (NV12 and YU12):
-
-	https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/pixfmt-nv12.html
-	https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/pixfmt-yuv420.html
-
-that don't work properly with Discord. Is that right?
-Btw, are both NV12 and YU12 broken there?
-
-Did you try using those formats with a different application,
-like qv4l2 or qvidcap?
-
-> 
-> Best,
-> Stefan
-> 
-> On 17.08.20 16:50, Stefan Witzel wrote:
-> > Hi Hans,
-
-Please don't top-post!
-
-> >
-> > I suppose it is ultimately an application bug. I was just hoping that the v4l driver cold somehow artificially restrict the device's feature list so as to make the buggy application (which seems to be pretty much any existing web conference app) work. That would be like the hardware workaround but on driver level.
-> >
-> > I do not yet have the device myself, so I'm relying on information from the website I quoted. I very much appreciate that you took the time to reply! I might come back with more concrete questions once I have the device.
-> >
-> > Thanks a lot! Best,
-> > Stefan
-> >
-> > Am 17. August 2020 15:34:00 MESZ schrieb Hans Verkuil <hverkuil@xs4all.nl>:  
-> >> On 17/08/2020 14:09, Stefan Witzel wrote:  
-> >>> Hello,
-> >>>
-> >>> I am not a V4L developer so if this is not the right place to bring  
-> >> up  
-> >>> the issue please tell me who to contact instead.
-> >>> The page [1] documents a problem with a particular device "Elgato Cam
-> >>> Link 4K" which provides various format options among which most  
-> >> software  
-> >>> does not consciously pick the one which it implicitly expects leading  
-> >> to  
-> >>> problems. There is a software workaround, transcoding and looping
-> >>> through a virtual device and a hardware fix flashing the problematic
-> >>> profiles away.
-> >>> However it appears to me that the most satisfactory solution is  
-> >> hinted  
-> >>> at in the sentence
-> >>>  
-> >>>> I couldn't find any option in V4L to force selection of 'YUYV  
-> >> 4:2:2', so instead  
-> >>>
-> >>> So my question is: what changes would be necessary to allow v4l2-ctl  
-> >> to  
-> >>> enforce a particular format and who would be the right person to ask  
-> >> to  
-> >>> make such changes?  
-> >>
-> >> It's there already:
-> >>
-> >> v4l2-ctl -v pixelformat=YUYV
-> >>
-> >> That will do the trick.
-> >>
-> >> If you plug in the device and run 'v4l2-ctl -V', which pixelformat does
-> >> it
-> >> report? I would expect it to be YUYV since that's first in the list.
-> >>
-> >> If apps like Discord pick YU12 instead, then that's weird. That's
-> >> something that
-> >> the application does, and v4l2-ctl won't help with that. I.e., it
-> >> appears to be
-> >> an application bug.
-> >>
-> >> One other alternative is that the device has broken 4:2:0 support, i.e.
-> >> it reports
-> >> these formats, but they don't actually work. You can use qv4l2 or
-> >> qvidcap to test
-> >> if these 4:2:0 formats are working.
-> >>
-> >> Regards,
-> >>
-> >> 	Hans
-> >>
-> >>  
-> >>>
-> >>> Best regards,
-> >>> Stefan
-> >>>
-> >>>
-> >>> [1]  
-> >> https://assortedhackery.com/patching-cam-link-to-play-nicer-on-linux/  
-> >>>  
-
-
-
-Thanks,
-Mauro
