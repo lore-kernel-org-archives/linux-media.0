@@ -1,1333 +1,390 @@
-Return-Path: <SRS0=P+oI=CJ=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=Qez8=CK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C60F5C433E6
-	for <linux-media@archiver.kernel.org>; Mon, 31 Aug 2020 22:06:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D41F0C433E2
+	for <linux-media@archiver.kernel.org>; Tue,  1 Sep 2020 01:18:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 689792083E
-	for <linux-media@archiver.kernel.org>; Mon, 31 Aug 2020 22:06:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A38102073A
+	for <linux-media@archiver.kernel.org>; Tue,  1 Sep 2020 01:18:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l2wE9skW"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="XqLU8HNT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730411AbgHaWGZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 31 Aug 2020 18:06:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33054 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730392AbgHaWGU (ORCPT
+        id S1726173AbgIABSE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 31 Aug 2020 21:18:04 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:51288 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725941AbgIABRl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 31 Aug 2020 18:06:20 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E207CC061575;
-        Mon, 31 Aug 2020 15:06:17 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id cy2so2658030qvb.0;
-        Mon, 31 Aug 2020 15:06:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ar47oE9l+B4PpQ/b+8/BG1tbQtXjslKPOJJiWjt1tFc=;
-        b=l2wE9skWNHSdZ85d4PC/G5d49zpAsJk3a50M3RaPuXVcU06b1vfgMRygW4TjTpcapq
-         oLq6J9yMKwH6mauc21P6APt3vIvOSjCvGV/9KOdBFOPnUhJjzyYdriy0heSWULZ6r5RG
-         rtXNhDd4xRnltOQ+rMCrTim60XQ4hc8T9gBU2tlIuzkh2jrqCgeGMxQwNeyz85JJvs/e
-         Uv/5o0xlFBEnpOB1/DruvP7Z7E4UwevdjTTF2E5ZdxguKoMmeEhCkMfdO7poMyDNu5gm
-         qbn8O5d1yDfDerp1BxwXKNs7QJVSARy3Gfd4njCcShsPTL7u3iUlKE2I39jLwRnhZiod
-         opnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ar47oE9l+B4PpQ/b+8/BG1tbQtXjslKPOJJiWjt1tFc=;
-        b=V1dKJ/gsss4BOiqJgOEiQL/CS6CWkxgW8aV5Jn6SSqgc7aaDAQcC+rVw34ybZYtDd8
-         6IKMcBHBeD2mOKnDUzJbhJtd1G2r6GlAVnk8OHxjrW6tQXOcWLzYONmSVcaLIOTRylWQ
-         it6FURBWco6uU9zMCoywSejQC+FnZ9TYwMOzE+VLuJEt4XHB6Vglu4oP7aEySLPy+iGO
-         MeM9W6FeTedKtqz1vfCGfTFyTSqzu+1qWRUH3Wmsj3ST9zsEpgitAyPWUCXU6MxrJaEW
-         XYLFbwdnr+6+Xtfqj+KRD6JvhrvnBY3XAn8mE8j5IACQyV4ukj7ScUvI87FPaz2sjwV8
-         RqcQ==
-X-Gm-Message-State: AOAM532+QbS04aRWFDUVcHb0gfL2Vi7ruOjRCb502+PZJdfK4NLDW7Zl
-        Uu9zv5p9nnSs6WKOWCWlavMqOy5l0iUKScQA
-X-Google-Smtp-Source: ABdhPJx+gGy9ZMkGTI1MEpP8Zhq/WhO7POKfWZySCB860yoOTQVCKaMZM/BlZhFCjX7BVH1f4tQELQ==
-X-Received: by 2002:ad4:510c:: with SMTP id g12mr3223943qvp.106.1598911575354;
-        Mon, 31 Aug 2020 15:06:15 -0700 (PDT)
-Received: from localhost.localdomain ([190.189.67.136])
-        by smtp.gmail.com with ESMTPSA id d10sm3051232qkk.1.2020.08.31.15.06.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 31 Aug 2020 15:06:14 -0700 (PDT)
-From:   Santiago Hormazabal <santiagohssl@gmail.com>
-To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mon, 31 Aug 2020 21:17:41 -0400
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D829697D;
+        Tue,  1 Sep 2020 03:17:35 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1598923056;
+        bh=7Jn8CK2pu0tZD0Nf9wViqoMWvo9/DQxVNRGwSZQXth0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XqLU8HNTkJzF6kVpa+1TMiob2ZGdG47ZQhYym1aejXBz+hpb8rNQ8T6vyS7rRCjjW
+         k9gX3J9KnIytPkh0GDLEDckSt+4/UR9hfZVTqBxcr7lneNYvYSAxs68riLAnALNO+j
+         qahEY+3/hcsPLSCiKfDuNk3i9doabCfEhda7Xsq4=
+Date:   Tue, 1 Sep 2020 04:17:14 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Adam Goode <agoode@google.com>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Santiago Hormazabal <santiagohssl@gmail.com>
-Subject: [PATCH 2/3] media: Add support for the AM/FM radio chip KT0913 from KT Micro.
-Date:   Mon, 31 Aug 2020 19:06:00 -0300
-Message-Id: <20200831220601.20794-3-santiagohssl@gmail.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200831220601.20794-1-santiagohssl@gmail.com>
-References: <20200831220601.20794-1-santiagohssl@gmail.com>
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] media: uvcvideo: Convey full ycbcr colorspace
+ information to v4l2
+Message-ID: <20200901011714.GF16155@pendragon.ideasonboard.com>
+References: <20200823012134.3813457-1-agoode@google.com>
+ <20200823012134.3813457-2-agoode@google.com>
+ <20200823145417.GC6002@pendragon.ideasonboard.com>
+ <20200823150822.GD6002@pendragon.ideasonboard.com>
+ <5a2882e5-c029-dde7-c6ff-bd6f57aa7850@xs4all.nl>
+ <CAOf41NnrfW6h++nR42R1OxR0B3DVrKg9RVLTQVJ=nEkn3GW4aw@mail.gmail.com>
+ <6538b14c-e386-2fab-d178-7bb3e98b3525@xs4all.nl>
+ <CAOf41NmOdb1Y3ZSO7YLxyStbSfUCo8p204TdvkwH91cXdmNq5A@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOf41NmOdb1Y3ZSO7YLxyStbSfUCo8p204TdvkwH91cXdmNq5A@mail.gmail.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This chip requires almost no support components and can used over I2C.
-The driver uses the I2C bus and exposes the controls as a V4L2 radio.
-Tested with a module that contains this chip (from SZZSJDZ.com,
-part number ZJ-801B, even tho the company seems defunct now), and an H2+
-AllWinner SoC running a kernel built off 07d999f of the media_tree.
+Hi Adam,
 
-Signed-off-by: Santiago Hormazabal <santiagohssl@gmail.com>
----
- drivers/media/radio/Kconfig        |   10 +
- drivers/media/radio/Makefile       |    1 +
- drivers/media/radio/radio-kt0913.c | 1196 ++++++++++++++++++++++++++++
- 3 files changed, 1207 insertions(+)
- create mode 100644 drivers/media/radio/radio-kt0913.c
+On Mon, Aug 24, 2020 at 01:31:54PM -0400, Adam Goode wrote:
+> On Mon, Aug 24, 2020 at 10:38 AM Hans Verkuil wrote:
+> > On 24/08/2020 15:56, Adam Goode wrote:
+> > > On Mon, Aug 24, 2020 at 4:48 AM Hans Verkuil wrote:
+> > >> On 23/08/2020 17:08, Laurent Pinchart wrote:
+> > >>> On Sun, Aug 23, 2020 at 05:54:24PM +0300, Laurent Pinchart wrote:
+> > >>>> On Sat, Aug 22, 2020 at 09:21:34PM -0400, Adam Goode wrote:
+> > >>>>> The Color Matching Descriptor has been present in USB cameras since
+> > >>>>> the original version of UVC, but it has never been fully used
+> > >>>>> in Linux.
+> > >>>>>
+> > >>>>> This change informs V4L2 of all of the critical colorspace parameters:
+> > >>>>> colorspace (called "color primaries" in UVC), transfer function
+> > >>>>> (called "transfer characteristics" in UVC), ycbcr encoding (called
+> > >>>>> "matrix coefficients" in UVC), and quantization, which is always
+> > >>>>> LIMITED for UVC, see section 2.26 in USB_Video_FAQ_1.5.pdf.
+> > >>>>
+> > >>>> Isn't this valid for MJPEG only though ? There's not much else we can do
+> > >>>> though, as UVC cameras don't report quantization information. Shouldn't
+> > >>>> we however reflect this in the commit message, and in the comment below,
+> > >>>> to state that UVC requires limited quantization range for MJPEG, and
+> > >>>> while it doesn't explicitly specify the quantization range for other
+> > >>>> formats, we can only assume it should be limited as well ?
+> > >
+> > > Yes, I am happy to improve the comment to be clearer.
+> > >
+> > >>>> The code otherwise looks good to me.
+> > >>>>
+> > >>>> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > >>>>
+> > >>>> Please let me know if you'd like to address the above issue.
+> > >>>>
+> > >>>>> The quantization is the most important improvement for this patch,
+> > >>>>> because V4L2 will otherwise interpret MJPEG as FULL range. Web browsers
+> > >>>>> such as Chrome and Firefox already ignore V4L2's quantization for USB
+> > >>>>> devices and use the correct LIMITED value, but other programs such
+> > >>>>> as qv4l2 will incorrectly interpret the output of MJPEG from USB
+> > >>>>> cameras without this change.
+> > >>>>>
+> > >>>>> Signed-off-by: Adam Goode <agoode@google.com>
+> > >>>>> ---
+> > >>>>>  drivers/media/usb/uvc/uvc_driver.c | 52 +++++++++++++++++++++++++++---
+> > >>>>>  drivers/media/usb/uvc/uvc_v4l2.c   |  6 ++++
+> > >>>>>  drivers/media/usb/uvc/uvcvideo.h   |  5 ++-
+> > >>>>>  3 files changed, 58 insertions(+), 5 deletions(-)
+> > >>>>>
+> > >>>>> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> > >>>>> index 431d86e1c94b..c0c81b089b7d 100644
+> > >>>>> --- a/drivers/media/usb/uvc/uvc_driver.c
+> > >>>>> +++ b/drivers/media/usb/uvc/uvc_driver.c
+> > >>>>> @@ -248,10 +248,10 @@ static struct uvc_format_desc *uvc_format_by_guid(const u8 guid[16])
+> > >>>>>     return NULL;
+> > >>>>>  }
+> > >>>>>
+> > >>>>> -static u32 uvc_colorspace(const u8 primaries)
+> > >>>>> +static enum v4l2_colorspace uvc_colorspace(const u8 primaries)
+> > >>>>>  {
+> > >>>>> -   static const u8 colorprimaries[] = {
+> > >>>>> -           0,
+> > >>>>> +   static const enum v4l2_colorspace colorprimaries[] = {
+> > >>>>> +           V4L2_COLORSPACE_DEFAULT,  /* Unspecified */
+> > >>>>>             V4L2_COLORSPACE_SRGB,
+> > >>>>>             V4L2_COLORSPACE_470_SYSTEM_M,
+> > >>>>>             V4L2_COLORSPACE_470_SYSTEM_BG,
+> > >>>>> @@ -262,7 +262,43 @@ static u32 uvc_colorspace(const u8 primaries)
+> > >>>>>     if (primaries < ARRAY_SIZE(colorprimaries))
+> > >>>>>             return colorprimaries[primaries];
+> > >>>>>
+> > >>>>> -   return 0;
+> > >>>>> +   return V4L2_COLORSPACE_DEFAULT;  /* Reserved */
+> > >>>>> +}
+> > >>>>> +
+> > >>>>> +static enum v4l2_xfer_func uvc_xfer_func(const u8 transfer_characteristics)
+> > >>>>> +{
+> > >>>>> +   static const enum v4l2_xfer_func xfer_funcs[] = {
+> > >>>>> +           V4L2_XFER_FUNC_DEFAULT,  /* Unspecified */
+> > >>>>> +           V4L2_XFER_FUNC_709,
+> > >>>>> +           V4L2_XFER_FUNC_709,      /* BT.470-2 M */
+> > >>>>> +           V4L2_XFER_FUNC_709,      /* BT.470-2 B, G */
+> > >>>>> +           V4L2_XFER_FUNC_709,      /* SMPTE 170M */
+> > >>>>> +           V4L2_XFER_FUNC_SMPTE240M,
+> > >>>>> +           V4L2_XFER_FUNC_NONE,     /* Linear (V = Lc) */
+> > >>>>> +           V4L2_XFER_FUNC_SRGB,
+> > >>>>> +   };
+> > >>>>> +
+> > >>>>> +   if (transfer_characteristics < ARRAY_SIZE(xfer_funcs))
+> > >>>>> +           return xfer_funcs[transfer_characteristics];
+> > >>>>> +
+> > >>>>> +   return V4L2_XFER_FUNC_DEFAULT;  /* Reserved */
+> > >>>>> +}
+> > >>>>> +
+> > >>>>> +static enum v4l2_ycbcr_encoding uvc_ycbcr_enc(const u8 matrix_coefficients)
+> > >>>>> +{
+> > >>>>> +   static const enum v4l2_ycbcr_encoding ycbcr_encs[] = {
+> > >>>>> +           V4L2_YCBCR_ENC_DEFAULT,  /* Unspecified */
+> > >>>>> +           V4L2_YCBCR_ENC_709,
+> > >>>>> +           V4L2_YCBCR_ENC_601,      /* FCC */
+> > >>>
+> > >>> I may have spoken a bit too fast. Doesn't FCC differ from BT.601 ?
+> > >>> According to https://en.wikipedia.org/wiki/Talk%3AYCbCr, the former uses
+> > >>>
+> > >>>  E'Y = 0.59 E'G + 0.11 E'B + 0.30 E'R
+> > >>>  E'PB = – 0.331 E'G + 0.500 E'B – 0.169 E'R
+> > >>>  E'PR = – 0.421 E'G – 0.079 E'B + 0.500 E'R
+> > >>>
+> > >>> while the latter uses
+> > >>>
+> > >>>  E'Y = 0.587 E'G + 0.114 E'B + 0.299 E'R
+> > >>>  E'PB = – 0.331 E'G + 0.500 E'B – 0.169 E'R
+> > >>>  E'PR = – 0.419 E'G – 0.081 E'B + 0.500 E'R
+> > >>>
+> > >>> We seems to be missing FCC in the V4L2 color space definitions.
+> > >>
+> > >> The differences between the two are minuscule. Add to that that NTSC 1953
+> > >> hasn't been in use for many decades. So I have no plans to add another YCC
+> > >> encoding for this. I'll double check this in a few weeks time when I have
+> > >> access to a better book on colorimetry.
+> > >>
+> > >
+> > > I can add a comment directly to clarify, but I am following the
+> > > mappings described in videodev2.h (with the assumption that "FCC" is
+> > > close enough to 601):
+> > >
+> > > /*
+> > > * Mapping of V4L2_XFER_FUNC_DEFAULT to actual transfer functions
+> > > * for the various colorspaces:
+> > > *
+> > > * V4L2_COLORSPACE_SMPTE170M, V4L2_COLORSPACE_470_SYSTEM_M,
+> > > * V4L2_COLORSPACE_470_SYSTEM_BG, V4L2_COLORSPACE_REC709 and
+> > > * V4L2_COLORSPACE_BT2020: V4L2_XFER_FUNC_709
+> > > *
+> > > * V4L2_COLORSPACE_SRGB, V4L2_COLORSPACE_JPEG: V4L2_XFER_FUNC_SRGB
+> > > *
+> > > * V4L2_COLORSPACE_OPRGB: V4L2_XFER_FUNC_OPRGB
+> > > *
+> > > * V4L2_COLORSPACE_SMPTE240M: V4L2_XFER_FUNC_SMPTE240M
+> > > *
+> > > * V4L2_COLORSPACE_RAW: V4L2_XFER_FUNC_NONE
+> > > *
+> > > * V4L2_COLORSPACE_DCI_P3: V4L2_XFER_FUNC_DCI_P3
+> > > */
+> > >
+> > > /*
+> > > * Mapping of V4L2_YCBCR_ENC_DEFAULT to actual encodings for the
+> > > * various colorspaces:
+> > > *
+> > > * V4L2_COLORSPACE_SMPTE170M, V4L2_COLORSPACE_470_SYSTEM_M,
+> > > * V4L2_COLORSPACE_470_SYSTEM_BG, V4L2_COLORSPACE_SRGB,
+> > > * V4L2_COLORSPACE_OPRGB and V4L2_COLORSPACE_JPEG: V4L2_YCBCR_ENC_601
+> > > *
+> > > * V4L2_COLORSPACE_REC709 and V4L2_COLORSPACE_DCI_P3: V4L2_YCBCR_ENC_709
+> > > *
+> > > * V4L2_COLORSPACE_BT2020: V4L2_YCBCR_ENC_BT2020
+> > > *
+> > > * V4L2_COLORSPACE_SMPTE240M: V4L2_YCBCR_ENC_SMPTE240M
+> > > */
+> > >
+> > > We could potentially do with some more xfer functions, though.
+> > >
+> > >>>
+> > >>>>> +           V4L2_YCBCR_ENC_601,      /* BT.470-2 B, G */
+> > >>>>> +           V4L2_YCBCR_ENC_601,      /* SMPTE 170M */
+> > >>>>> +           V4L2_YCBCR_ENC_SMPTE240M,
+> > >>>>> +   };
+> > >>>>> +
+> > >>>>> +   if (matrix_coefficients < ARRAY_SIZE(ycbcr_encs))
+> > >>>>> +           return ycbcr_encs[matrix_coefficients];
+> > >>>>> +
+> > >>>>> +   return V4L2_YCBCR_ENC_DEFAULT;  /* Reserved */
+> > >>>>>  }
+> > >>>>>
+> > >>>>>  /* Simplify a fraction using a simple continued fraction decomposition. The
+> > >>>>> @@ -704,6 +740,14 @@ static int uvc_parse_format(struct uvc_device *dev,
+> > >>>>>             }
+> > >>>>>
+> > >>>>>             format->colorspace = uvc_colorspace(buffer[3]);
+> > >>>>> +           format->xfer_func = uvc_xfer_func(buffer[4]);
+> > >>>>> +           format->ycbcr_enc = uvc_ycbcr_enc(buffer[5]);
+> > >>>>> +           /* All USB YCbCr encodings use LIMITED range as of UVC 1.5.
+> > >>>>> +            * This is true even for MJPEG, which V4L2 otherwise assumes to
+> > >>>>> +            * be FULL.
+> > >>>>> +            * See section 2.26 in USB_Video_FAQ_1.5.pdf.
+> > >>
+> > >> Not true. I checked the FAQ: the FAQ describes what happens when a video renderer
+> > >> incorrectly interprets the decoded JPEG color components as limited range instead
+> > >> of full range (which they are to be JPEG compliant). JPEG always encodes YCbCr as
+> > >> full range.
+> > >>
+> > >
+> > > Here is what the FAQ says:
+> > >
+> > > "If the images are encoded with the luma and chroma units in the 0-255
+> > > range that is used
+> > > for typical JPEG still images, then the saturation and contrast will
+> > > look artificially boosted
+> > > when the video is rendered under the assumption that the levels were
+> > > in the YCbCr color
+> > > space. BT601 specifies eight-bit coding where Y is in the range of 16
+> > > (black) to 235 (white)
+> > > inclusive."
+> > >
+> > > I read this as saying "if you encode MJPEG the same as typical JPEG
+> > > still images, it is wrong because Y must be in the range 16-235". Am I
+> > > reading this incorrectly?
+> >
+> > I think so. It's the 'when the video is rendered under the assumption that
+> > the levels were in the YCbCr color space.' that is the reason why the colors
+> > are boosted. Normally a JPEG is either decoded to full range RGB or limited
+> > range YCbCr. If it is decoded to full range YCbCr, then the renderer should
+> > take that into account, otherwise the colors will be wrong ('boosted').
+> >
+> > The text is a bit ambiguous, but JPEG always uses full range YCbCr, that's
+> > just part of the JPEG standard.
+> 
+> Hmm. The text is definitely confusing. Here are some facts I know:
+> 
+> About JPEG and JFIF:
+> - JPEG itself doesn't mandate the YCbCr encoding (this is specified in
+> JFIF). [https://www.w3.org/Graphics/JPEG/jfif3.pdf]
+> - JFIF specifies YCbCr encoding and range as 601 but with an explicit
+> change: "Y, Cb, and Cr are converted from R, G, and B as defined in
+> CCIR Recommendation 601 but are normalized so as to occupy the full
+> 256 levels of a 8-bit binary encoding".
+> - A JPEG file isn't JFIF unless it has an APP0 with 'JFIF'.
+> 
+> About MJPEG:
+> - MJPEG doesn't specify explicit YCbCr encoding information (there
+> isn't really a specification?).
+> - The USB devices I have that output MJPEG do not output JFIF (no APP0
+> with 'JFIF').
+> 
+> About color in UVC:
+> - MJPEG in UVC is required to be 8-bit YCbCr encoded
+> [USB_Video_Payload_MJPEG_1.5.pdf, section 3.3] with the color encoding
+> information specified via the Color Matching descriptor
+> [USB_Video_Payload_MJPEG_1.5.pdf, section 3].
+> - The UVC Color Matching descriptor cites BT.601 and other standards
+> without mentioning any changes to them [UVC Class Specification
+> 1.5.pdf, 3.9.2.6].
+> - BT.601 and BT.709 require limited-range YCbCr encoding.
+> 
+> Real-world observations:
+> - The USB webcams I have (Logitech) output limited-range UVC MJPEG.
 
-diff --git a/drivers/media/radio/Kconfig b/drivers/media/radio/Kconfig
-index d29e29645e04..ac9053a95f3a 100644
---- a/drivers/media/radio/Kconfig
-+++ b/drivers/media/radio/Kconfig
-@@ -226,6 +226,16 @@ config RADIO_WL1273
- # TI's ST based wl128x FM radio
- source "drivers/media/radio/wl128x/Kconfig"
- 
-+config RADIO_KT0913
-+	tristate "KT0913 I2C FM/AM radio support"
-+	depends on I2C && VIDEO_V4L2
-+	help
-+	  Say Y here if you want to use the KT0913 FM/AM chip.
-+	  This is a low cost chip that uses the I2C bus.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called radio-kt0913.
-+
- #
- # ISA drivers configuration
- #
-diff --git a/drivers/media/radio/Makefile b/drivers/media/radio/Makefile
-index 53c7ae135460..a314121f7771 100644
---- a/drivers/media/radio/Makefile
-+++ b/drivers/media/radio/Makefile
-@@ -34,5 +34,6 @@ obj-$(CONFIG_RADIO_WL1273) += radio-wl1273.o
- obj-$(CONFIG_RADIO_WL128X) += wl128x/
- obj-$(CONFIG_RADIO_TEA575X) += tea575x.o
- obj-$(CONFIG_USB_RAREMONO) += radio-raremono.o
-+obj-$(CONFIG_RADIO_KT0913) += radio-kt0913.o
- 
- shark2-objs := radio-shark2.o radio-tea5777.o
-diff --git a/drivers/media/radio/radio-kt0913.c b/drivers/media/radio/radio-kt0913.c
-new file mode 100644
-index 000000000000..067d7ceac079
---- /dev/null
-+++ b/drivers/media/radio/radio-kt0913.c
-@@ -0,0 +1,1196 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * drivers/media/radio/radio-kt0913.c
-+ *
-+ * Driver for the KT0913 radio chip from KTMicro.
-+ * This driver provides a v4l2 interface to the tuner, using the I2C
-+ * protocol to communicate with the chip.
-+ * It exposes two bands, one for AM and another for FM. If the "campus
-+ * band" feature needs to be enabled, set the corresponding module parameter
-+ * to 1.
-+ * Reference Clock and Audio DAC anti-pop configurations should be
-+ * set via a device tree node. Defaults will be used otherwise.
-+ *
-+ * Audio output should be routed to a speaker or an audio capture
-+ * device.
-+ *
-+ * Based on radio-tea5764 by Fabio Belavenuto <belavenuto@gmail.com>
-+ *
-+ *  Copyright (c) 2020 Santiago Hormazabal <santiagohssl@gmail.com>
-+ *
-+ * TODO:
-+ *  use rd and wr support for the regmap instead of volatile regs.
-+ *  add support for the hardware-assisted frequency seek.
-+ *  export FM SNR and AM/FM AFC deviation values as RO controls.
-+ *  support the kt0915 chip.
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/i2c.h>
-+#include <linux/err.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/of.h>
-+#include <linux/math64.h>
-+#include <linux/regmap.h>
-+#include <media/v4l2-ctrls.h>
-+#include <media/v4l2-device.h>
-+#include <media/v4l2-ioctl.h>
-+#include <media/v4l2-event.h>
-+
-+ /* ************************************************************************* */
-+
-+ /* registers of the kt0913 */
-+#define KT0913_REG_CHIP_ID      0x01
-+#define KT0913_REG_SEEK         0x02
-+#define KT0913_REG_TUNE         0x03
-+#define KT0913_REG_VOLUME       0x04
-+#define KT0913_REG_DSPCFGA      0x05
-+#define KT0913_REG_LOCFGA       0x0a
-+#define KT0913_REG_LOCFGC       0x0c
-+#define KT0913_REG_RXCFG        0x0f
-+#define KT0913_REG_STATUSA      0x12
-+#define KT0913_REG_STATUSB      0x13
-+#define KT0913_REG_STATUSC      0x14
-+#define KT0913_REG_AMSYSCFG     0x16
-+#define KT0913_REG_AMCHAN       0x17
-+#define KT0913_REG_AMCALI       0x18
-+#define KT0913_REG_GPIOCFG      0x1d
-+#define KT0913_REG_AMDSP        0x22
-+#define KT0913_REG_AMSTATUSA    0x24
-+#define KT0913_REG_AMSTATUSB    0x25
-+#define KT0913_REG_SOFTMUTE     0x2e
-+#define KT0913_REG_AMCFG        0x33
-+#define KT0913_REG_AMCFG2       0x34
-+#define KT0913_REG_AFC          0x3c
-+
-+/* register symbols masks, values and shift count */
-+#define KT0913_TUNE_FMTUNE_MASK 0x8000 /* FM Tune enable */
-+#define KT0913_TUNE_FMTUNE_ON 0x8000 /* FM Tune enabled */
-+#define KT0913_TUNE_FMTUNE_OFF 0x0000 /* FM Tune disabled */
-+#define KT0913_TUNE_FMCHAN_MASK 0x0fff /* frequency in kHz / 50kHz */
-+
-+#define KT0913_VOLUME_DMUTE_MASK 0x2000
-+#define KT0913_VOLUME_DMUTE_ON 0x0000
-+#define KT0913_VOLUME_DMUTE_OFF 0x2000
-+#define KT0913_VOLUME_DE_MASK 0x0800 /* de-emphasis time constant */
-+#define KT0913_VOLUME_DE_75US 0x0000 /* 75us */
-+#define KT0913_VOLUME_DE_50US 0x0800 /* 50us */
-+#define KT0913_VOLUME_POP_MASK 0x30 /* audio dac anti-pop config */
-+#define KT0913_VOLUME_POP_SHIFT 4
-+
-+#define KT0913_DSPCFGA_MONO_MASK 0x8000 /* mono select (0=stereo, 1=mono) */
-+#define KT0913_DSPCFGA_MONO_ON 0x8000 /* mono */
-+#define KT0913_DSPCFGA_MONO_OFF 0x0000 /* stereo */
-+
-+#define KT0913_LOCFG_CAMPUSBAND_EN_MASK 0x0008 /* campus band fm enable */
-+#define KT0913_LOCFG_CAMPUSBAND_EN_ON 0x0008 /* FM range 64-110MHz */
-+#define KT0913_LOCFG_CAMPUSBAND_EN_OFF 0x0000 /* FM range 32-110MHz */
-+
-+#define KT0913_RXCFGA_STDBY_MASK 0x1000 /* standby mode enable */
-+#define KT0913_RXCFGA_STDBY_ON 0x1000 /* standby mode enabled */
-+#define KT0913_RXCFGA_STDBY_OFF 0x0000 /* standby mode disabled */
-+#define KT0913_RXCFGA_VOLUME_MASK 0x001f /* volume control */
-+
-+#define KT0913_STATUSA_XTAL_OK 0x8000 /* crystal ready indicator */
-+#define KT0913_STATUSA_STC 0x4000 /* seek/tune complete */
-+
-+#define KT0913_STATUSA_PLL_LOCK_MASK 0x800 /* system pll ready indicator */
-+#define KT0913_STATUSA_PLL_LOCK_LOCKED 0x800 /* system pll ready */
-+#define KT0913_STATUSA_PLL_LOCK_UNLOCKED 0x000 /* not ready */
-+#define KT0913_STATUSA_LO_LOCK 0x400 /* LO synthesizer ready indicator */
-+#define KT0913_STATUSA_ST_MASK 0x300 /* stereo indicator (0x300=stereo, otherwise mono) */
-+#define KT0913_STATUSA_ST_STEREO 0x300 /* stereo */
-+#define KT0913_STATUSA_FMRSSI_MASK 0xf8 /* FM RSSI (-100dBm + FMRSSI*3dBm) */
-+#define KT0913_STATUSA_FMRSSI_SHIFT 3
-+
-+#define KT0913_STATUSC_PWSTATUS 0x8000 /* power status indicator */
-+#define KT0913_STATUSC_CHIPRDY 0x2000 /* chip ready indicator */
-+#define KT0913_STATUSC_FMSNR 0x1fc0 /* FM SNR (unknown units) */
-+
-+#define KT0913_AMCHAN_AMTUNE_MASK 0x8000 /* AM tune enable */
-+#define KT0913_AMCHAN_AMTUNE_ON 0x8000 /* AM tune enabled */
-+#define KT0913_AMCHAN_AMTUNE_OFF 0x0000 /* AM tune disabled */
-+#define KT0913_AMCHAN_AMCHAN_MASK 0x7ff /* am channel in kHz */
-+
-+#define KT0913_AMSYSCFG_AM_FM_MASK 0x8000 /* am/fm mode control */
-+#define KT0913_AMSYSCFG_AM_FM_AM 0x8000 /* am mode */
-+#define KT0913_AMSYSCFG_AM_FM_FM 0x0000 /* fm mode (default) */
-+#define KT0913_AMSYSCFG_REFCLK_MASK 0x0f00 /* reference clock selection */
-+#define KT0913_AMSYSCFG_REFCLK_SHIFT 8
-+#define KT0913_AMSYSCFG_AU_GAIN_MASK 0x00c0 /* audio gain selection */
-+#define KT0913_AMSYSCFG_AU_GAIN_6DB 0x0040 /* 6dB audio gain */
-+#define KT0913_AMSYSCFG_AU_GAIN_3DB 0x0000 /* 3dB audio gain (default) */
-+#define KT0913_AMSYSCFG_AU_GAIN_0DB 0x00c0 /* 0dB audio gain */
-+#define KT0913_AMSYSCFG_AU_GAIN_MIN_3DB 0x0080 /* -3dB audio gain */
-+
-+#define KT0913_AMSTATUSA_AMRSSI_MASK 0x1f00 /* am channel rssi */
-+#define KT0913_AMSTATUSA_AMRSSI_SHIFT 8
-+
-+/* constants */
-+#define KT0913_CHIP_ID  0x544B /* ASCII of 'KT' */
-+
-+#define V4L2_KHZ_FREQ_MUL 16U /* v4l2 uses 16x the kHz value as their freq */
-+#define KT0913_FMCHAN_MUL 50U /* kt0913 uses freqs with a 50kHz multiplier */
-+#define KT0913_FM_RANGE_LOW_NO_CAMPUS 64000U /* 64MHz lower bound for FM */
-+#define KT0913_FM_RANGE_LOW_CAMPUS 32000U /* 32MHz lower bound for campus FM */
-+#define KT0913_FM_RANGE_HIGH 110000U /* 110MHz upper bound for FM */
-+#define KT0913_AM_RANGE_LOW  500U /* 500kHz lower bound for AM */
-+#define KT0913_AM_RANGE_HIGH 1710U /* 1710kHz upper bound for AM */
-+
-+#define KT0913_FM_AM_DRIVER_NAME "kt0913"
-+
-+/* ************************************************************************* */
-+
-+/* v4l2 device number to use. -1 will assign the next free one */
-+static int kt0913_v4l2_radio_nr = -1;
-+/* use the extended range of FM down to 32MHz. disabled by default */
-+static int kt0913_use_campus_band;
-+
-+/* ************************************************************************* */
-+
-+/* kt0913 status struct */
-+struct kt0913_device {
-+	struct v4l2_device v4l2_dev;		/* main v4l2 struct */
-+	struct i2c_client *client;		/* I2C client */
-+	struct video_device vdev;		/* vide_device struct */
-+	struct v4l2_ctrl_handler ctrl_handler;	/* ctrl_handler struct */
-+
-+	/* V4L2 Controls */
-+	struct v4l2_ctrl *ctrl_pll_lock;	/* PLL lock */
-+	struct v4l2_ctrl *ctrl_volume;		/* Overall volume */
-+	struct v4l2_ctrl *ctrl_au_gain;		/* Audio Gain */
-+	struct v4l2_ctrl *ctrl_mute;		/* Master mute */
-+	struct v4l2_ctrl *ctrl_deemp;		/* Deemphasis */
-+
-+	/* current operation band (fm, fm_campus, am) */
-+	unsigned int band;
-+
-+	/* audio dac anti-pop setting:
-+	 *  0 -> 100uF (default)
-+	 *  1 -> 60uF
-+	 *  2 -> 20uF
-+	 *  3 -> 10uF
-+	 */
-+	unsigned int audio_anti_pop;
-+
-+	/* reference clock selection:
-+	 *  0 -> 32.768kHz (default)
-+	 *  1 -> 6.5MHz
-+	 *  2 -> 7.6MHz
-+	 *  3 -> 12MHz
-+	 *  4 -> 13MHz
-+	 *  5 -> 15.2MHz
-+	 *  6 -> 19.2MHz
-+	 *  7 -> 24MHz
-+	 *  8 -> 26MHz
-+	 *  9 -> 38kHz
-+	 */
-+	unsigned int refclock_val;
-+
-+	/* Regmap */
-+	struct regmap *regmap;
-+
-+	/* For core assisted locking */
-+	struct mutex mutex;
-+};
-+
-+/* ************************************************************************* */
-+
-+/* Regmap settings */
-+static const struct regmap_range kt0913_regmap_all_registers_range[] = {
-+	regmap_reg_range(0x01, 0x05),
-+	regmap_reg_range(0x0a, 0x0a),
-+	regmap_reg_range(0x0c, 0x0c),
-+	regmap_reg_range(0x0f, 0x0f),
-+	regmap_reg_range(0x12, 0x14),
-+	regmap_reg_range(0x16, 0x18),
-+	regmap_reg_range(0x1d, 0x1d),
-+	regmap_reg_range(0x22, 0x22),
-+	regmap_reg_range(0x24, 0x25),
-+	regmap_reg_range(0x2e, 0x2f),
-+	regmap_reg_range(0x30, 0x34),
-+	regmap_reg_range(0x3a, 0x3a),
-+	regmap_reg_range(0x3c, 0x3c),
-+};
-+
-+static const struct regmap_access_table kt0913_all_registers_access_table = {
-+	.yes_ranges = kt0913_regmap_all_registers_range,
-+	.n_yes_ranges = ARRAY_SIZE(kt0913_regmap_all_registers_range),
-+};
-+
-+static const struct reg_sequence kt0913_init_regs_to_defaults[] = {
-+	/* Standby disabled, volume 0dB */
-+	{ KT0913_REG_RXCFG, 0x881f },
-+	/* FM Channel spacing = 50kHz, Right & Left unmuted */
-+	{ KT0913_REG_SEEK, 0x000b },
-+	/* Stereo, High Stereo/Mono blend level, blend disabled */
-+	{ KT0913_REG_DSPCFGA, 0x1000 },
-+	/* FM AFC Enabled */
-+	{ KT0913_REG_LOCFGA, 0x0100 },
-+	/* Campus band disabled by default */
-+	{ KT0913_REG_LOCFGC, 0x0024 },
-+	/*
-+	 * FM mode, internal defined bands, clock from XT, 32.768kHz
-+	 * 3dB audio gain, AM AFC Enabled
-+	 */
-+	{ KT0913_REG_AMSYSCFG, 0x0002 },
-+	/* Default AM freq = 504kHz */
-+	{ KT0913_REG_AMCHAN, 0x01f8},
-+	/* VOL and CH GPIOs set to HiZ */
-+	{ KT0913_REG_GPIOCFG, 0x0000 },
-+	/* AM Channel bandwidth = 6kHz, non-differential output */
-+	{ KT0913_REG_AMDSP, 0xafc4 },
-+	/*
-+	 * softmute is disabled on AM and FM, but set the defaults:
-+	 * strong softmute attn., slow softmute attack/recover,
-+	 * lowest AM softumte start level, almost the minimum
-+	 * softmute target volume, RSSI mode for softmute, lowest
-+	 * FM softmute start level
-+	 */
-+	{ KT0913_REG_SOFTMUTE, 0x0010 },
-+	/* 1kHz for AM channel space, working mode A for the keys */
-+	{ KT0913_REG_AMCFG, 0x1401 },
-+	/* TIME1 = shortest, TIME2 = fastest */
-+	{ KT0913_REG_AMCFG, 0x4050 },
-+	/* set 86MHz as the default frequency, and tune it */
-+	{ KT0913_REG_TUNE, 0x86b8 },
-+	/*
-+	 * FM&AM Softmute disabled, Mute disabled, 75us deemp.,
-+	 * no bass boost, 100uF anti pop cap
-+	 */
-+	{ KT0913_REG_VOLUME, 0xe080 },
-+};
-+
-+static const struct regmap_config kt0913_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 16,
-+	.max_register = KT0913_REG_AFC,
-+	.volatile_table = &kt0913_all_registers_access_table,
-+	.cache_type = REGCACHE_RBTREE,
-+	.val_format_endian = REGMAP_ENDIAN_BIG,
-+};
-+
-+/* ************************************************************************* */
-+
-+/* bands where the kt0913 operates */
-+enum { BAND_FM, BAND_FM_CAMPUS, BAND_AM };
-+
-+static const struct v4l2_frequency_band kt0913_bands[] = {
-+	{
-+		/* BAND_FM */
-+		.type = V4L2_TUNER_RADIO,
-+		.index = 0, /* index provided to v4l2 */
-+		.capability = V4L2_TUNER_CAP_LOW | V4L2_TUNER_CAP_STEREO |
-+				V4L2_TUNER_CAP_FREQ_BANDS,
-+		.rangelow = KT0913_FM_RANGE_LOW_NO_CAMPUS * V4L2_KHZ_FREQ_MUL,
-+		.rangehigh = KT0913_FM_RANGE_HIGH * V4L2_KHZ_FREQ_MUL,
-+		.modulation = V4L2_BAND_MODULATION_FM,
-+	},
-+	{
-+		/* BAND_FM_CAMPUS */
-+		.type = V4L2_TUNER_RADIO,
-+		.index = 0, /* index provided to v4l2 */
-+		.capability = V4L2_TUNER_CAP_LOW | V4L2_TUNER_CAP_STEREO |
-+				V4L2_TUNER_CAP_FREQ_BANDS,
-+		.rangelow = KT0913_FM_RANGE_LOW_CAMPUS * V4L2_KHZ_FREQ_MUL,
-+		.rangehigh = KT0913_FM_RANGE_HIGH * V4L2_KHZ_FREQ_MUL,
-+		.modulation = V4L2_BAND_MODULATION_FM,
-+	},
-+	{
-+		/* BAND_AM */
-+		.type = V4L2_TUNER_RADIO,
-+		.index = 1, /* index provided to v4l2 */
-+		.capability = V4L2_TUNER_CAP_LOW | V4L2_TUNER_CAP_FREQ_BANDS,
-+		.rangelow = KT0913_AM_RANGE_LOW * V4L2_KHZ_FREQ_MUL,
-+		.rangehigh = KT0913_AM_RANGE_HIGH * V4L2_KHZ_FREQ_MUL,
-+		.modulation = V4L2_BAND_MODULATION_AM,
-+	},
-+};
-+
-+/* ************************************************************************* */
-+
-+static inline struct kt0913_device *
-+v4l2_device_to_device(struct v4l2_device *v4l2_dev)
-+{
-+	return container_of(v4l2_dev,
-+		struct kt0913_device, v4l2_dev);
-+}
-+
-+static inline struct kt0913_device *
-+v4l2_ctrl_to_device(struct v4l2_ctrl *ctrl_handler)
-+{
-+	return container_of(ctrl_handler->handler,
-+		struct kt0913_device, ctrl_handler);
-+}
-+
-+/* ************************************************************************* */
-+
-+static inline u32 khz_to_v4l2_freq(unsigned int freq)
-+{
-+	return freq * V4L2_KHZ_FREQ_MUL;
-+}
-+
-+static inline unsigned int v4l2_freq_to_khz(u32 v4l2_freq)
-+{
-+	return v4l2_freq / V4L2_KHZ_FREQ_MUL;
-+}
-+
-+/* ************************************************************************* */
-+
-+static int __kt0913_get_fm_frequency(struct kt0913_device *radio,
-+				     unsigned int *frequency)
-+{
-+	unsigned int tune_reg;
-+	int ret = regmap_read(radio->regmap, KT0913_REG_TUNE, &tune_reg);
-+
-+	if (ret)
-+		return ret;
-+
-+	*frequency = (tune_reg & KT0913_TUNE_FMCHAN_MASK) * KT0913_FMCHAN_MUL;
-+
-+	return 0;
-+}
-+
-+static int __kt0913_set_fm_frequency(struct kt0913_device *radio,
-+				     unsigned int frequency)
-+{
-+	return regmap_write(radio->regmap, KT0913_REG_TUNE,
-+		KT0913_TUNE_FMTUNE_ON | (frequency / KT0913_FMCHAN_MUL));
-+}
-+
-+/* ************************************************************************* */
-+
-+static int __kt0913_set_mute(struct kt0913_device *radio, int on)
-+{
-+	return regmap_update_bits(radio->regmap,
-+		KT0913_REG_VOLUME, KT0913_VOLUME_DMUTE_MASK,
-+		on ? KT0913_VOLUME_DMUTE_ON : KT0913_VOLUME_DMUTE_OFF);
-+}
-+
-+/* ************************************************************************* */
-+
-+static int __kt0913_set_deemphasis(struct kt0913_device *radio, s32 deemp)
-+{
-+	switch (deemp) {
-+	case V4L2_DEEMPHASIS_75_uS:
-+		return regmap_update_bits(radio->regmap,
-+			KT0913_REG_VOLUME, KT0913_VOLUME_DE_MASK,
-+			KT0913_VOLUME_DE_50US);
-+
-+		/* 50us is used for the disabled option (which is not supported
-+		 * on the chip) and the 50uS value
-+		 */
-+	default:
-+		return regmap_update_bits(radio->regmap,
-+			KT0913_REG_VOLUME, KT0913_VOLUME_DE_MASK,
-+			KT0913_VOLUME_DE_75US);
-+	}
-+}
-+
-+/* ************************************************************************* */
-+
-+static int __kt0913_set_volume(struct kt0913_device *radio, s32 volume)
-+{
-+	/* map [-60, 0] to [1, 31] which is what the kt0913 expects */
-+	volume = (volume / 2) + 31;
-+	return regmap_update_bits(radio->regmap,
-+		KT0913_REG_RXCFG, KT0913_RXCFGA_VOLUME_MASK,
-+		volume);
-+}
-+
-+/* ************************************************************************* */
-+
-+static int __kt0913_set_standby(struct kt0913_device *radio, int standby)
-+{
-+	return regmap_update_bits(radio->regmap,
-+		KT0913_REG_RXCFG, KT0913_RXCFGA_STDBY_MASK,
-+		standby ? KT0913_RXCFGA_STDBY_ON : KT0913_RXCFGA_STDBY_OFF);
-+}
-+
-+/* ************************************************************************* */
-+
-+static int __kt0913_get_pll_status(struct kt0913_device *radio, int *locked)
-+{
-+	unsigned int statusa_reg;
-+	int ret = regmap_read(radio->regmap, KT0913_REG_STATUSA, &statusa_reg);
-+
-+	if (ret)
-+		return ret;
-+
-+	*locked = (statusa_reg & KT0913_STATUSA_PLL_LOCK_MASK) ==
-+		KT0913_STATUSA_PLL_LOCK_LOCKED ? 1 : 0;
-+
-+	return 0;
-+}
-+
-+/* ************************************************************************* */
-+
-+static int __kt0913_get_rx_stereo_or_mono(struct kt0913_device *radio,
-+					  int *stereo)
-+{
-+	unsigned int statusa_reg;
-+	int ret = regmap_read(radio->regmap, KT0913_REG_STATUSA, &statusa_reg);
-+
-+	if (ret)
-+		return ret;
-+
-+	*stereo = (statusa_reg & KT0913_STATUSA_ST_MASK) ==
-+		KT0913_STATUSA_ST_STEREO ? 1 : 0;
-+
-+	return 0;
-+}
-+
-+/* ************************************************************************* */
-+
-+static int __kt0913_get_fm_rssi(struct kt0913_device *radio, s32 *rssi)
-+{
-+	unsigned int statusa_reg;
-+	int ret = regmap_read(radio->regmap, KT0913_REG_STATUSA, &statusa_reg);
-+
-+	if (ret)
-+		return ret;
-+
-+	/* RSSI(dBm) = -100 + FMRSSI<4:0> * 3dBm
-+	 * even tho we can get the value in dBm, we want a %
-+	 */
-+	*rssi = (statusa_reg & KT0913_STATUSA_FMRSSI_MASK) >>
-+		KT0913_STATUSA_FMRSSI_SHIFT;
-+	/* map range 0-31 to 0-65535 */
-+	*rssi *= 65535;
-+	*rssi /= KT0913_STATUSA_FMRSSI_MASK >> KT0913_STATUSA_FMRSSI_SHIFT;
-+
-+	return 0;
-+}
-+
-+/* ************************************************************************* */
-+
-+static int __kt0913_get_cfg_stereo_enabled(struct kt0913_device *radio,
-+					   int *stereo)
-+{
-+	unsigned int dspcfga_reg;
-+	int ret = regmap_read(radio->regmap, KT0913_REG_DSPCFGA, &dspcfga_reg);
-+
-+	if (ret)
-+		return ret;
-+
-+	*stereo = (dspcfga_reg & KT0913_DSPCFGA_MONO_MASK) ==
-+		KT0913_DSPCFGA_MONO_OFF ? 1 : 0;
-+
-+	return ret;
-+}
-+
-+static int __kt0913_set_cfg_stereo_enabled(struct kt0913_device *radio,
-+					   int stereo)
-+{
-+	return regmap_update_bits(radio->regmap,
-+		KT0913_REG_DSPCFGA, KT0913_DSPCFGA_MONO_MASK,
-+		stereo ? KT0913_DSPCFGA_MONO_OFF : KT0913_DSPCFGA_MONO_ON);
-+}
-+
-+/* ************************************************************************* */
-+
-+static int __kt0913_set_au_gain(struct kt0913_device *radio, s32 gain)
-+{
-+	switch (gain) {
-+	case 6:
-+		return regmap_update_bits(radio->regmap,
-+			KT0913_REG_AMSYSCFG, KT0913_AMSYSCFG_AU_GAIN_MASK,
-+			KT0913_AMSYSCFG_AU_GAIN_6DB);
-+	case 3:
-+		return regmap_update_bits(radio->regmap,
-+			KT0913_REG_AMSYSCFG, KT0913_AMSYSCFG_AU_GAIN_MASK,
-+			KT0913_AMSYSCFG_AU_GAIN_3DB);
-+	case 0:
-+		return regmap_update_bits(radio->regmap,
-+			KT0913_REG_AMSYSCFG, KT0913_AMSYSCFG_AU_GAIN_MASK,
-+			KT0913_AMSYSCFG_AU_GAIN_0DB);
-+	case -3:
-+		return regmap_update_bits(radio->regmap,
-+			KT0913_REG_AMSYSCFG, KT0913_AMSYSCFG_AU_GAIN_MASK,
-+			KT0913_AMSYSCFG_AU_GAIN_MIN_3DB);
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+/* ************************************************************************* */
-+
-+static int __kt0913_set_am_fm_band(struct kt0913_device *radio,
-+				   unsigned int band)
-+{
-+	return regmap_update_bits(radio->regmap,
-+		KT0913_REG_AMSYSCFG, KT0913_AMSYSCFG_AM_FM_MASK,
-+		band == BAND_AM ?
-+		KT0913_AMSYSCFG_AM_FM_AM : KT0913_AMSYSCFG_AM_FM_FM);
-+}
-+
-+/* ************************************************************************* */
-+
-+static int __kt0913_get_am_frequency(struct kt0913_device *radio,
-+				     unsigned int *frequency)
-+{
-+	unsigned int amchan_reg;
-+	int ret = regmap_read(radio->regmap, KT0913_REG_AMCHAN, &amchan_reg);
-+
-+	if (ret)
-+		return ret;
-+
-+	*frequency = (amchan_reg & KT0913_AMCHAN_AMCHAN_MASK);
-+
-+	return 0;
-+}
-+
-+static int __kt0913_set_am_frequency(struct kt0913_device *radio,
-+				     unsigned int frequency)
-+{
-+	return regmap_write(radio->regmap, KT0913_REG_AMCHAN,
-+		KT0913_AMCHAN_AMTUNE_ON | frequency);
-+}
-+
-+/* ************************************************************************* */
-+
-+static int __kt0913_get_am_rssi(struct kt0913_device *radio, s32 *rssi)
-+{
-+	unsigned int amstatusa_reg;
-+	int ret = regmap_read(radio->regmap,
-+		KT0913_REG_AMSTATUSA, &amstatusa_reg);
-+
-+	if (ret)
-+		return ret;
-+
-+	/* AMRSSI(dBm) = -90 + AMRSSI<4:0> * 3dBm
-+	 * even tho we can get the value in dBm, we want a %
-+	 */
-+	*rssi = (amstatusa_reg & KT0913_AMSTATUSA_AMRSSI_MASK) >>
-+		 KT0913_AMSTATUSA_AMRSSI_SHIFT;
-+	/* map range 0-31 to 0-65535 */
-+	*rssi *= 65535;
-+	*rssi /= KT0913_AMSTATUSA_AMRSSI_MASK >> KT0913_AMSTATUSA_AMRSSI_SHIFT;
-+
-+	return 0;
-+}
-+
-+/* ************************************************************************* */
-+
-+static int __kt0913_init(struct kt0913_device *radio)
-+{
-+	int ret = 0;
-+
-+	/* write the defaults */
-+	ret = regmap_multi_reg_write(radio->regmap,
-+				     kt0913_init_regs_to_defaults,
-+				     ARRAY_SIZE(kt0913_init_regs_to_defaults));
-+	if (ret) {
-+		v4l2_err(radio->client,
-+			 "regmap_multi_reg_write() failed! %d", ret);
-+		return ret;
-+	}
-+
-+	/* set the audio dac anti-pop config */
-+	ret = regmap_update_bits(radio->regmap,
-+				 KT0913_REG_VOLUME, KT0913_VOLUME_POP_MASK,
-+				 radio->audio_anti_pop <<
-+				 KT0913_VOLUME_POP_SHIFT);
-+	if (ret) {
-+		v4l2_err(radio->client,
-+			 "regmap_update_bits() err on anti-pop cfg! %d", ret);
-+		return ret;
-+	}
-+
-+	/* set the reference clock config */
-+	ret = regmap_update_bits(radio->regmap,
-+				 KT0913_REG_AMSYSCFG,
-+				 KT0913_AMSYSCFG_REFCLK_MASK,
-+				 radio->refclock_val <<
-+				 KT0913_AMSYSCFG_REFCLK_SHIFT);
-+	if (ret) {
-+		v4l2_err(radio->client,
-+			 "regmap_update_bits() err on refclk cfg! %d", ret);
-+		return ret;
-+	}
-+
-+	if (kt0913_use_campus_band) {
-+		v4l2_info(radio->client,
-+			  "campus band is enabled!");
-+		/* set the campus band bit */
-+		ret = regmap_update_bits(radio->regmap,
-+					 KT0913_REG_LOCFGC,
-+					 KT0913_LOCFG_CAMPUSBAND_EN_MASK,
-+					 KT0913_LOCFG_CAMPUSBAND_EN_ON);
-+		if (ret) {
-+			v4l2_err(radio->client,
-+				 "regmap_update_bits() err on campus band! %d",
-+				 ret);
-+			return ret;
-+		}
-+	}
-+
-+	return __kt0913_set_mute(radio, true);
-+}
-+
-+/* ************************************************************************* */
-+
-+static int kt0913_ioctl_vidioc_g_frequency(struct file *file, void *priv,
-+					   struct v4l2_frequency *f)
-+{
-+	struct kt0913_device *radio = video_drvdata(file);
-+	int ret;
-+
-+	if (f->tuner != 0)
-+		return -EINVAL;
-+
-+	f->type = V4L2_TUNER_RADIO;
-+
-+	if (radio->band == BAND_AM)
-+		ret = __kt0913_get_am_frequency(radio, &f->frequency);
-+	else
-+		ret = __kt0913_get_fm_frequency(radio, &f->frequency);
-+
-+	if (ret)
-+		return ret;
-+
-+	/* convert kHz freq into v4l2 freq */
-+	f->frequency = khz_to_v4l2_freq(f->frequency);
-+
-+	return 0;
-+}
-+
-+static int kt0913_ioctl_vidioc_s_frequency(struct file *file, void *priv,
-+					   const struct v4l2_frequency *f)
-+{
-+	struct kt0913_device *radio = video_drvdata(file);
-+	unsigned int freq = f->frequency;
-+	unsigned int new_band;
-+	unsigned int half_gap_freq;
-+	int ret;
-+
-+	if (f->tuner != 0 || f->type != V4L2_TUNER_RADIO)
-+		return -EINVAL;
-+
-+	if (freq == 0)
-+		return -EINVAL;
-+
-+	/* calculate the middle frequency on the gap of the bands */
-+	half_gap_freq = kt0913_bands[BAND_AM].rangehigh;
-+
-+	if (kt0913_use_campus_band)
-+		/* using the AM band and the campus FM band if enabled */
-+		half_gap_freq += kt0913_bands[BAND_FM_CAMPUS].rangelow;
-+	else
-+		/* or using the AM band and the standard FM band */
-+		half_gap_freq += kt0913_bands[BAND_FM].rangelow;
-+
-+	half_gap_freq /= 2;
-+
-+	if (freq <= half_gap_freq)
-+		new_band = BAND_AM;
-+	else if (freq <= kt0913_bands[BAND_FM].rangelow &&
-+		 kt0913_use_campus_band)
-+		new_band = BAND_FM_CAMPUS;
-+	else
-+		new_band = BAND_FM;
-+
-+	/* is the requested band different than the one currently set? */
-+	if (radio->band != new_band) {
-+		/* update the band on the device */
-+		ret = __kt0913_set_am_fm_band(radio, new_band);
-+		if (ret)
-+			return ret;
-+		radio->band = new_band;
-+	}
-+
-+	/* clamp the frequency to the band boundaries */
-+	freq = clamp(freq, kt0913_bands[new_band].rangelow,
-+		     kt0913_bands[new_band].rangehigh);
-+
-+	/* convert v4l2 freq to kHz */
-+	freq = v4l2_freq_to_khz(freq);
-+
-+	if (radio->band == BAND_AM)
-+		return __kt0913_set_am_frequency(radio, freq);
-+	else
-+		return __kt0913_set_fm_frequency(radio, freq);
-+}
-+
-+static int kt0913_ioctl_vidioc_enum_freq_bands(struct file *file, void *priv,
-+					       struct v4l2_frequency_band *band)
-+{
-+	if (band->tuner != 0)
-+		return -EINVAL;
-+
-+	switch (band->index) {
-+	case 0:
-+		if (kt0913_use_campus_band)
-+			*band = kt0913_bands[BAND_FM_CAMPUS];
-+		else
-+			*band = kt0913_bands[BAND_FM];
-+		return 0;
-+	case 1:
-+		*band = kt0913_bands[BAND_AM];
-+		return 0;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+/* ************************************************************************* */
-+
-+/* V4L2 vidioc */
-+static int kt0913_ioctl_vidioc_querycap(struct file *file, void *priv,
-+					struct v4l2_capability *capability)
-+{
-+	struct kt0913_device *radio = video_drvdata(file);
-+	struct video_device *dev;
-+
-+	if (!radio)
-+		return -ENODEV;
-+
-+	dev = &radio->vdev;
-+
-+	if (!dev)
-+		return -ENODEV;
-+
-+	strscpy(capability->driver, KT0913_FM_AM_DRIVER_NAME,
-+		sizeof(capability->driver));
-+	strscpy(capability->card, dev->name, sizeof(capability->card));
-+	snprintf(capability->bus_info, sizeof(capability->bus_info),
-+		 "I2C:%s", dev_name(&dev->dev));
-+	return 0;
-+}
-+
-+static int kt0913_ioctl_vidioc_g_tuner(struct file *file, void *priv,
-+				       struct v4l2_tuner *v)
-+{
-+	struct kt0913_device *radio = video_drvdata(file);
-+	int ret;
-+	int stereo_enabled;
-+	int is_stereo;
-+
-+	if (v->index != 0)
-+		return -EINVAL;
-+
-+	strscpy(v->name, "FM/AM", sizeof(v->name));
-+	v->type = V4L2_TUNER_RADIO;
-+
-+	v->capability = V4L2_TUNER_CAP_LOW | V4L2_TUNER_CAP_STEREO |
-+		V4L2_TUNER_CAP_FREQ_BANDS;
-+
-+	v->rangelow = kt0913_bands[BAND_AM].rangelow;
-+	v->rangehigh = kt0913_bands[BAND_FM].rangehigh;
-+
-+	if (radio->band == BAND_AM) {
-+		v->rxsubchans = V4L2_TUNER_SUB_MONO;
-+		v->audmode = V4L2_TUNER_MODE_MONO;
-+
-+		ret = __kt0913_get_am_rssi(radio, &v->signal);
-+		if (ret)
-+			return ret;
-+	} else {
-+		ret = __kt0913_get_cfg_stereo_enabled(radio, &stereo_enabled);
-+		if (ret)
-+			return ret;
-+
-+		v->rxsubchans = stereo_enabled ?
-+			V4L2_TUNER_SUB_STEREO : V4L2_TUNER_SUB_MONO;
-+
-+		ret = __kt0913_get_rx_stereo_or_mono(radio, &is_stereo);
-+		if (ret)
-+			return ret;
-+
-+		v->audmode = is_stereo ?
-+			V4L2_TUNER_MODE_STEREO : V4L2_TUNER_MODE_MONO;
-+
-+		ret = __kt0913_get_fm_rssi(radio, &v->signal);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	/* AFC is enabled and active by default */
-+	v->afc = 1;
-+
-+	return 0;
-+}
-+
-+static int kt0913_ioctl_vidioc_s_tuner(struct file *file, void *priv,
-+				       const struct v4l2_tuner *v)
-+{
-+	struct kt0913_device *radio = video_drvdata(file);
-+
-+	if (v->index != 0)
-+		return -EINVAL;
-+
-+	/* only mono and stereo are supported */
-+	if (v->audmode != V4L2_TUNER_MODE_MONO &&
-+	    v->audmode != V4L2_TUNER_MODE_STEREO)
-+		return 0;
-+
-+	/* AM is mono only, so don't try to set it to stereo */
-+	if (radio->band == BAND_AM && v->audmode != V4L2_TUNER_MODE_MONO)
-+		return 0;
-+
-+	/* set to stereo if specified, otherwise set to mono */
-+	return __kt0913_set_cfg_stereo_enabled(radio,
-+		v->audmode == V4L2_TUNER_MODE_STEREO);
-+}
-+
-+static int kt0913_s_ctrl(struct v4l2_ctrl *ctrl)
-+{
-+	struct kt0913_device *radio = v4l2_ctrl_to_device(ctrl);
-+
-+	switch (ctrl->id) {
-+	case V4L2_CID_AUDIO_MUTE:
-+		return __kt0913_set_mute(radio, ctrl->val);
-+	case V4L2_CID_AUDIO_VOLUME:
-+		return __kt0913_set_volume(radio, ctrl->val);
-+	case V4L2_CID_GAIN:
-+		return __kt0913_set_au_gain(radio, ctrl->val);
-+	case V4L2_CID_TUNE_DEEMPHASIS:
-+		return __kt0913_set_deemphasis(radio, ctrl->val);
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int kt0913_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
-+{
-+	struct kt0913_device *radio = v4l2_ctrl_to_device(ctrl);
-+
-+	switch (ctrl->id) {
-+	case V4L2_CID_RF_TUNER_PLL_LOCK:
-+		return __kt0913_get_pll_status(radio, &ctrl->val);
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static const struct v4l2_ctrl_ops kt0913_ctrl_ops = {
-+	.s_ctrl = kt0913_s_ctrl,
-+	.g_volatile_ctrl = kt0913_g_volatile_ctrl,
-+};
-+
-+/* ************************************************************************* */
-+
-+/* File system interface (use the ancillary fops for v4l2) */
-+static const struct v4l2_file_operations kt0913_radio_fops = {
-+	.owner = THIS_MODULE,
-+	.open = v4l2_fh_open,
-+	.release = v4l2_fh_release,
-+	.poll = v4l2_ctrl_poll,
-+	.unlocked_ioctl = video_ioctl2,
-+};
-+
-+/* ioctl ops */
-+static const struct v4l2_ioctl_ops kt0913_ioctl_ops = {
-+	.vidioc_querycap = kt0913_ioctl_vidioc_querycap,
-+	.vidioc_g_tuner = kt0913_ioctl_vidioc_g_tuner,
-+	.vidioc_s_tuner = kt0913_ioctl_vidioc_s_tuner,
-+	.vidioc_g_frequency = kt0913_ioctl_vidioc_g_frequency,
-+	.vidioc_s_frequency = kt0913_ioctl_vidioc_s_frequency,
-+	.vidioc_enum_freq_bands = kt0913_ioctl_vidioc_enum_freq_bands,
-+	/* use ancillary functions for these: */
-+	.vidioc_log_status = v4l2_ctrl_log_status,
-+	.vidioc_subscribe_event = v4l2_ctrl_subscribe_event,
-+	.vidioc_unsubscribe_event = v4l2_event_unsubscribe,
-+};
-+
-+/* V4L2 RADIO device structure */
-+static struct video_device kt0913_radio_template = {
-+	.name = KT0913_FM_AM_DRIVER_NAME,
-+	.fops = &kt0913_radio_fops,
-+	.ioctl_ops = &kt0913_ioctl_ops,
-+	.release = video_device_release_empty,
-+	.vfl_dir = VFL_DIR_RX,
-+	.device_caps = V4L2_CAP_TUNER | V4L2_CAP_RADIO,
-+};
-+
-+/* ************************************************************************* */
-+
-+#if IS_ENABLED(CONFIG_OF)
-+static const struct of_device_id kt0913_of_match[] = {
-+	{ .compatible = "ktm,kt0913" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, kt0913_of_match);
-+#endif /* IS_ENABLED(CONFIG_OF) */
-+
-+static void __kt0913_parse_dt(struct kt0913_device *radio)
-+{
-+	const void *ptr_anti_pop = of_get_property(radio->client->dev.of_node,
-+		"ktm,anti-pop", NULL);
-+	const void *ptr_refclk = of_get_property(radio->client->dev.of_node,
-+		"ktm,refclk", NULL);
-+
-+	if (ptr_anti_pop) {
-+		radio->audio_anti_pop =
-+			clamp(be32_to_cpup(ptr_anti_pop), 0U, 3U);
-+	} else {
-+		radio->audio_anti_pop = 0;
-+		v4l2_warn(radio->client,
-+			  "No ktm,anti-pop on dt node, using default");
-+	}
-+
-+	if (ptr_refclk) {
-+		radio->refclock_val =
-+			clamp(be32_to_cpup(ptr_refclk), 0U, 9U);
-+	} else {
-+		radio->refclock_val = 0;
-+		v4l2_warn(radio->client,
-+			  "No ktm,refclk on dt node, using default");
-+	}
-+}
-+
-+/* ************************************************************************* */
-+
-+static int kt0913_probe(struct i2c_client *client,
-+			const struct i2c_device_id *id)
-+{
-+	struct kt0913_device *radio;
-+	struct v4l2_device *v4l2_dev;
-+	struct v4l2_ctrl_handler *hdl;
-+	struct regmap *regmap;
-+	int ret;
-+
-+	pr_debug("%s\n", __func__);
-+
-+	/* this driver uses word R/W i2c operations, check if it's supported */
-+	ret = i2c_check_functionality(client->adapter,
-+				      I2C_FUNC_SMBUS_READ_WORD_DATA |
-+				      I2C_FUNC_SMBUS_WRITE_WORD_DATA);
-+	if (!ret) {
-+		v4l2_err(client,
-+			 "I2C adapter doesn't support word operations");
-+		return -EIO;
-+	}
-+
-+	/* check if the device exist on the bus before initializing it */
-+	ret = i2c_smbus_read_word_data(client, KT0913_REG_CHIP_ID);
-+	if (ret < 0) {
-+		v4l2_err(client,
-+			 "Error reading CHIP ID of the kt0913 (%d)", ret);
-+		return ret;
-+	}
-+
-+	/* check if the CHIP ID register value matches the expected value */
-+	if (ret != KT0913_CHIP_ID) {
-+		v4l2_err(radio->client,
-+			 "Invalid CHIP ID: 0x%x, expected 0x%x",
-+			 ret, KT0913_CHIP_ID);
-+		return -ENODEV;
-+	}
-+
-+	v4l2_info(client,
-+		  "kt0913 found @ 0x%x (%s)\n",
-+		  client->addr, client->adapter->name);
-+
-+	/* alloc context for the kt0913 radio struct */
-+	radio = devm_kzalloc(&client->dev, sizeof(*radio), GFP_KERNEL);
-+	if (!radio)
-+		return -ENOMEM;
-+
-+	v4l2_dev = &radio->v4l2_dev;
-+	ret = v4l2_device_register(&client->dev, v4l2_dev);
-+	if (ret < 0) {
-+		v4l2_err(client,
-+			 "could not register v4l2_dev\n");
-+		goto errfr;
-+	}
-+
-+	mutex_init(&radio->mutex);
-+
-+	/* register the control handler from the context struct */
-+	hdl = &radio->ctrl_handler;
-+	v4l2_ctrl_handler_init(hdl, 5);
-+
-+	/* add the control: Mute */
-+	radio->ctrl_mute = v4l2_ctrl_new_std(hdl, &kt0913_ctrl_ops,
-+					     V4L2_CID_AUDIO_MUTE,
-+					     0, 1, 1, 0);
-+	if (hdl->error) {
-+		ret = hdl->error;
-+		v4l2_err(v4l2_dev, "Could not register control: mute\n");
-+		goto errunreg;
-+	}
-+
-+	/* add the control: Volume */
-+	radio->ctrl_volume = v4l2_ctrl_new_std(hdl, &kt0913_ctrl_ops,
-+					       V4L2_CID_AUDIO_VOLUME,
-+					       -60, 0, 2, 0);
-+	if (hdl->error) {
-+		ret = hdl->error;
-+		v4l2_err(v4l2_dev, "Could not register control: Volume\n");
-+		goto errunreg;
-+	}
-+
-+	/* add the control: audio gain */
-+	radio->ctrl_au_gain = v4l2_ctrl_new_std(hdl, &kt0913_ctrl_ops,
-+						V4L2_CID_GAIN,
-+						-3, 6, 3, 3);
-+	if (hdl->error) {
-+		ret = hdl->error;
-+		v4l2_err(v4l2_dev, "Could not register control: audio gain\n");
-+		goto errunreg;
-+	}
-+	radio->ctrl_au_gain->flags |= V4L2_CTRL_FLAG_SLIDER;
-+
-+	/* add the control: PLL Lock */
-+	radio->ctrl_pll_lock = v4l2_ctrl_new_std(hdl, &kt0913_ctrl_ops,
-+						 V4L2_CID_RF_TUNER_PLL_LOCK,
-+						 0, 1, 1, 0);
-+	if (hdl->error) {
-+		ret = hdl->error;
-+		v4l2_err(v4l2_dev, "Could not register control: pll lock\n");
-+		goto errunreg;
-+	}
-+	radio->ctrl_pll_lock->flags |= (V4L2_CTRL_FLAG_VOLATILE |
-+		V4L2_CTRL_FLAG_READ_ONLY);
-+
-+	/* add the control: deemphasis */
-+	radio->ctrl_deemp = v4l2_ctrl_new_std_menu(hdl, &kt0913_ctrl_ops,
-+						   V4L2_CID_TUNE_DEEMPHASIS,
-+						   V4L2_DEEMPHASIS_75_uS,
-+						   0,
-+						   V4L2_DEEMPHASIS_75_uS);
-+	if (hdl->error) {
-+		ret = hdl->error;
-+		v4l2_err(v4l2_dev, "Could not register control: deemphasis\n");
-+		goto errunreg;
-+	}
-+	/* the control handler is ready to be used */
-+	v4l2_dev->ctrl_handler = hdl;
-+
-+	radio->vdev = kt0913_radio_template;
-+	radio->vdev.lock = &radio->mutex;
-+	radio->vdev.v4l2_dev = v4l2_dev;
-+	video_set_drvdata(&radio->vdev, radio);
-+
-+	radio->client = client;
-+	i2c_set_clientdata(client, radio);
-+
-+	/* init the regmap of the kt0913 */
-+	regmap = devm_regmap_init_i2c(client, &kt0913_regmap_config);
-+	if (IS_ERR(regmap)) {
-+		ret = PTR_ERR(regmap);
-+		v4l2_err(client,
-+			 "devm_regmap_init_i2c() failed! %d", ret);
-+		goto errunreg;
-+	}
-+	radio->regmap = regmap;
-+
-+	__kt0913_parse_dt(radio);
-+
-+	/* init the kt0913 into a known state */
-+	ret = __kt0913_init(radio);
-+	if (ret) {
-+		v4l2_err(client,
-+			 "__kt0913_init() failed! %d", ret);
-+		goto errunreg;
-+	}
-+
-+	pm_runtime_get_noresume(&client->dev);
-+	pm_runtime_set_active(&client->dev);
-+	pm_runtime_enable(&client->dev);
-+	pm_runtime_dont_use_autosuspend(&client->dev);
-+
-+	ret = video_register_device(&radio->vdev,
-+				    VFL_TYPE_RADIO, kt0913_v4l2_radio_nr);
-+	if (ret < 0) {
-+		v4l2_err(client,
-+			 "Could not register video device!");
-+		goto error_pm_disable;
-+	}
-+
-+	v4l2_info(client, "registered.");
-+	return 0;
-+error_pm_disable:
-+	pm_runtime_disable(&client->dev);
-+	pm_runtime_set_suspended(&client->dev);
-+errunreg:
-+	v4l2_ctrl_handler_free(hdl);
-+	v4l2_device_unregister(v4l2_dev);
-+errfr:
-+	__kt0913_set_standby(radio, true);
-+	kfree(radio);
-+	return ret;
-+}
-+
-+static int kt0913_remove(struct i2c_client *client)
-+{
-+	struct kt0913_device *radio = i2c_get_clientdata(client);
-+
-+	pr_debug("%s\n", __func__);
-+	if (!radio)
-+		return -EINVAL;
-+
-+	__kt0913_set_standby(radio, true);
-+
-+	pm_runtime_get_sync(&client->dev);
-+	pm_runtime_disable(&client->dev);
-+	pm_runtime_set_suspended(&client->dev);
-+	pm_runtime_put_noidle(&client->dev);
-+
-+	video_unregister_device(&radio->vdev);
-+	v4l2_ctrl_handler_free(&radio->ctrl_handler);
-+	v4l2_device_unregister(&radio->v4l2_dev);
-+
-+	v4l2_info(client, "removed.");
-+	return 0;
-+}
-+
-+/* ************************************************************************* */
-+
-+#ifdef CONFIG_PM
-+static int kt0913_i2c_pm_runtime_suspend(struct device *dev)
-+{
-+	struct kt0913_device *radio = i2c_get_clientdata(to_i2c_client(dev));
-+
-+	pr_debug("%s\n", __func__);
-+	if (!radio)
-+		return 0;
-+
-+	return __kt0913_set_standby(radio, true);
-+}
-+
-+static int kt0913_i2c_pm_runtime_resume(struct device *dev)
-+{
-+	struct kt0913_device *radio = i2c_get_clientdata(to_i2c_client(dev));
-+
-+	pr_debug("%s\n", __func__);
-+	if (!radio)
-+		return 0;
-+
-+	return __kt0913_set_standby(radio, false);
-+}
-+#endif /* CONFIG_PM */
-+
-+static const struct dev_pm_ops kt0913_i2c_pm_ops = {
-+	SET_RUNTIME_PM_OPS(kt0913_i2c_pm_runtime_suspend,
-+			   kt0913_i2c_pm_runtime_resume, NULL)
-+};
-+
-+static const struct i2c_device_id kt0913_idtable[] = {
-+	{ "kt0913", 0 },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(i2c, kt0913_idtable);
-+
-+static struct i2c_driver kt0913_driver = {
-+	.driver = {
-+		.name = "kt0913",
-+		.of_match_table = of_match_ptr(kt0913_of_match),
-+		.pm = &kt0913_i2c_pm_ops,
-+	},
-+	.probe = kt0913_probe,
-+	.remove = kt0913_remove,
-+	.id_table = kt0913_idtable,
-+};
-+module_i2c_driver(kt0913_driver);
-+
-+MODULE_AUTHOR("Santiago Hormazabal <santiagohssl@gmail.com>");
-+MODULE_DESCRIPTION("KTMicro KT0913 AM/FM receiver");
-+MODULE_LICENSE("GPL");
-+MODULE_VERSION("0.0.3");
-+
-+module_param(kt0913_use_campus_band, int, 0);
-+MODULE_PARM_DESC(kt0913_use_campus_band, "Use the Campus Band feature (FM range 32MHz-110MHz)");
-+module_param(kt0913_v4l2_radio_nr, int, 0);
-+MODULE_PARM_DESC(kt0913_v4l2_radio_nr, "v4l2 device number to use (i.e. /dev/radioX)");
+How have you determined that ? I'd like to run tests locally, and before
+writing an application that decompresses JPEG without any colorspace
+conversion, I'd like to know if one already exists.
+
+> - The ATEM Mini outputs full-range UVC MJPEG, but this is considered
+> to be incorrect behavior
+> (https://forum.blackmagicdesign.com/viewtopic.php?f=4&t=108315,
+> https://www.youtube.com/watch?v=BEXQ5s2HpwE).
+> - Chrome, Firefox, and Safari interpret UVC MJPEG as limited-range.
+> 
+> 
+> I would agree that if the MJPEG coming out of UVC has JFIF headers, we
+> would have a problem, because we would have conflicting YCbCr encoding
+> metadata.
+> 
+> But since:
+> 1. UVC is pretty clear about how to encode color,
+> 2. JPEG-without-JFIF doesn't define YCbCr encoding,
+> 3. MJPEG devices output non-JFIF JPEG,
+> 4. UVC only specifies limited-range encoding for YCbCr,
+> 
+> I would conclude that UVC MJPEG should be expected to be limited-range.
+>
+> > >>>>> +            */
+> > >>>>> +           format->quantization = V4L2_QUANTIZATION_LIM_RANGE;
+> > >>
+> > >> What about sRGB? That uses full range.
+> > >>
+> > >
+> > > It is a little confusing in the code, but I only set the quantization
+> > > explicitly when we get a Color Matching descriptor from the device. My
+> > > reading of the spec says that this descriptor isn't present for RGB
+> > > formats, only YCrCb. When the spec mentions sRGB in Color Matching, it
+> > > is referring only to primaries or gamma.
+> > >
+> > >>>>>
+> > >>>>>             buflen -= buffer[0];
+> > >>>>>             buffer += buffer[0];
+> > >>>>> diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+> > >>>>> index 7f14096cb44d..79daf46b3dcd 100644
+> > >>>>> --- a/drivers/media/usb/uvc/uvc_v4l2.c
+> > >>>>> +++ b/drivers/media/usb/uvc/uvc_v4l2.c
+> > >>>>> @@ -279,6 +279,9 @@ static int uvc_v4l2_try_format(struct uvc_streaming *stream,
+> > >>>>>     fmt->fmt.pix.sizeimage = probe->dwMaxVideoFrameSize;
+> > >>>>>     fmt->fmt.pix.pixelformat = format->fcc;
+> > >>>>>     fmt->fmt.pix.colorspace = format->colorspace;
+> > >>>>> +   fmt->fmt.pix.xfer_func = format->xfer_func;
+> > >>>>> +   fmt->fmt.pix.ycbcr_enc = format->ycbcr_enc;
+> > >>>>> +   fmt->fmt.pix.quantization = format->quantization;
+> > >>>>>
+> > >>>>>     if (uvc_format != NULL)
+> > >>>>>             *uvc_format = format;
+> > >>>>> @@ -315,6 +318,9 @@ static int uvc_v4l2_get_format(struct uvc_streaming *stream,
+> > >>>>>     fmt->fmt.pix.bytesperline = uvc_v4l2_get_bytesperline(format, frame);
+> > >>>>>     fmt->fmt.pix.sizeimage = stream->ctrl.dwMaxVideoFrameSize;
+> > >>>>>     fmt->fmt.pix.colorspace = format->colorspace;
+> > >>>>> +   fmt->fmt.pix.xfer_func = format->xfer_func;
+> > >>>>> +   fmt->fmt.pix.ycbcr_enc = format->ycbcr_enc;
+> > >>>>> +   fmt->fmt.pix.quantization = format->quantization;
+> > >>>>>
+> > >>>>>  done:
+> > >>>>>     mutex_unlock(&stream->mutex);
+> > >>>>> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+> > >>>>> index 6ab972c643e3..6508192173dd 100644
+> > >>>>> --- a/drivers/media/usb/uvc/uvcvideo.h
+> > >>>>> +++ b/drivers/media/usb/uvc/uvcvideo.h
+> > >>>>> @@ -370,7 +370,10 @@ struct uvc_format {
+> > >>>>>     u8 type;
+> > >>>>>     u8 index;
+> > >>>>>     u8 bpp;
+> > >>>>> -   u8 colorspace;
+> > >>>>> +   enum v4l2_colorspace colorspace;
+> > >>>>> +   enum v4l2_xfer_func xfer_func;
+> > >>>>> +   enum v4l2_ycbcr_encoding ycbcr_enc;
+> > >>>>> +   enum v4l2_quantization quantization;
+> > >>>>>     u32 fcc;
+> > >>>>>     u32 flags;
+> > >>>>>
+
 -- 
-2.24.1
+Regards,
 
+Laurent Pinchart
