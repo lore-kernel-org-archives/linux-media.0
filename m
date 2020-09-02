@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD09CC433E7
-	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 16:18:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBD62C433E7
+	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 16:18:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B751A20639
-	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 16:18:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A1558208B3
+	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 16:18:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1599063517;
-	bh=fpks8/wgVNH3xUBKsGhywKHuyIv8sN2aTZ5fHxmheuM=;
+	s=default; t=1599063523;
+	bh=mAfBaiRJRkp25BV0rN9ichUjyzowk2QtFfeZRpXBqio=;
 	h=From:Cc:Subject:Date:In-Reply-To:References:To:List-ID:From;
-	b=ZMeiz2e5Ibernv9hc4acG4oxCCq5mDrG1l1j9+mKKIC67R3T428fbZO1qUaQi9mQw
-	 JoUJ8wS8UnbCvFUU2/lEW8KXTivneph4wtEzdPMQxnSC82vFF3p+9iyEfYD6beMJ9q
-	 GkUdYpvtP744BcAnBFX+QTmEqlWVI0pOYumAxnZ8=
+	b=ZkvNCcJQtVUF2o4x8YgBdHrWVOF8bYeuPXNM41KruIlIvnDYL4abd5NJSlJdJ/Qi4
+	 fC1qWBqlEFvedKVIVVJvKRh29ZUwaBlsSI+hrMJ0jvfgz0bFUL4q8D5+7h/aKKPMnH
+	 P0nhLXysqfKREiZCtbhmrPzByd7iG+ssozLBpjH8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728887AbgIBQSH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Sep 2020 12:18:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53842 "EHLO mail.kernel.org"
+        id S1728904AbgIBQSn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Sep 2020 12:18:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53496 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727970AbgIBQKs (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 2 Sep 2020 12:10:48 -0400
+        id S1726293AbgIBQKr (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 2 Sep 2020 12:10:47 -0400
 Received: from mail.kernel.org (ip5f5ad5c3.dynamic.kabel-deutschland.de [95.90.213.195])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D6D1D208C7;
+        by mail.kernel.org (Postfix) with ESMTPSA id D5AAF207EA;
         Wed,  2 Sep 2020 16:10:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1599063046;
-        bh=fpks8/wgVNH3xUBKsGhywKHuyIv8sN2aTZ5fHxmheuM=;
+        bh=mAfBaiRJRkp25BV0rN9ichUjyzowk2QtFfeZRpXBqio=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sZm4UigSYItvrgyo3ZQ5jhbMEUIVHtHTwQbKUsSwIaqGhjKsoCQm/vGhYLO5IR5QD
-         ltTBCRxT45+x76RlQaeFQBdhxtD4yiLkgOD2wE0MOCvWy+iL8af1uCDIDVdPQ7HkHk
-         uQmGMODE9wotHtT5VjPpI2st9L/X2gSn3BlwdhHc=
+        b=YrSjrgBqjLvEimNjiscWYcFi/Z9/Adwx0IFgc2usu33c7Pup8nyXZmXKAtw5NML4T
+         Li0vbFaztxpJNQ1Dlti/ZM2IuMf8bs3pQv2HJVEt8APXbCegWINupstRUEiZMdEKnv
+         DO0pCwH8Xi9IJn++lnqNg0RiPUoZ+Gs8qBl9N0tI=
 Received: from mchehab by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1kDVLP-000tA1-S2; Wed, 02 Sep 2020 18:10:43 +0200
+        id 1kDVLP-000tA7-U8; Wed, 02 Sep 2020 18:10:43 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 09/38] media: vivid: move the detection part out of vivid_create_instance
-Date:   Wed,  2 Sep 2020 18:10:12 +0200
-Message-Id: <5c740fb631ed95df4b15ea5de43bd9b1a7a53493.1599062230.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 11/38] media: vivid: move set_capabilities logic to a separate function
+Date:   Wed,  2 Sep 2020 18:10:14 +0200
+Message-Id: <38814ad757c215a94c964c85b67b99fb327ad7f4.1599062230.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1599062230.git.mchehab+huawei@kernel.org>
 References: <cover.1599062230.git.mchehab+huawei@kernel.org>
@@ -59,241 +59,196 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The vivid_create_instance() function is too harry. Smatch can't
-process it, because it takes too long.
+Move such logic from vivid_create_instance(), as otherwise
+smatch takes forever.
 
-The detection part is an important piece of it. As such, there
-are even comments before and after such block.
-
-So, it makes sense to just move it to a separate function.
+The vivid_create_instance() is still a too big for my taste.
+So, further cleanups are still needed.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/test-drivers/vivid/vivid-core.c | 151 ++++++++++--------
- 1 file changed, 83 insertions(+), 68 deletions(-)
+ drivers/media/test-drivers/vivid/vivid-core.c | 161 +++++++++---------
+ 1 file changed, 83 insertions(+), 78 deletions(-)
 
 diff --git a/drivers/media/test-drivers/vivid/vivid-core.c b/drivers/media/test-drivers/vivid/vivid-core.c
-index 931218fa955e..d4785da440d9 100644
+index f8cb4133e1ce..e3ffc2566623 100644
 --- a/drivers/media/test-drivers/vivid/vivid-core.c
 +++ b/drivers/media/test-drivers/vivid/vivid-core.c
-@@ -832,56 +832,16 @@ static int vivid_create_queue(struct vivid_dev *dev,
- 	return vb2_queue_init(q);
+@@ -1001,6 +1001,88 @@ static int vivid_detect_feature_set(struct vivid_dev *dev, int inst,
+ 	return 0;
  }
  
--static int vivid_create_instance(struct platform_device *pdev, int inst)
-+static int vivid_detect_feature_set(struct vivid_dev *dev, int inst,
-+				    unsigned node_type,
-+				    bool *has_tuner,
-+				    bool *has_modulator,
-+				    int *ccs_cap,
-+				    int *ccs_out,
-+				    unsigned in_type_counter[4],
-+				    unsigned out_type_counter[4])
- {
--	static const struct v4l2_dv_timings def_dv_timings =
--					V4L2_DV_BT_CEA_1280X720P60;
--	unsigned in_type_counter[4] = { 0, 0, 0, 0 };
--	unsigned out_type_counter[4] = { 0, 0, 0, 0 };
--	int ccs_cap = ccs_cap_mode[inst];
--	int ccs_out = ccs_out_mode[inst];
--	bool has_tuner;
--	bool has_modulator;
--	struct vivid_dev *dev;
--	struct video_device *vfd;
--	unsigned node_type = node_types[inst];
--	v4l2_std_id tvnorms_cap = 0, tvnorms_out = 0;
--	int ret;
- 	int i;
--#ifdef CONFIG_VIDEO_VIVID_CEC
--	unsigned int cec_tx_bus_cnt = 0;
--#endif
--
--	/* allocate main vivid state structure */
--	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
--	if (!dev)
--		return -ENOMEM;
--
--	dev->inst = inst;
--
--#ifdef CONFIG_MEDIA_CONTROLLER
--	dev->v4l2_dev.mdev = &dev->mdev;
--
--	/* Initialize media device */
--	strscpy(dev->mdev.model, VIVID_MODULE_NAME, sizeof(dev->mdev.model));
--	snprintf(dev->mdev.bus_info, sizeof(dev->mdev.bus_info),
--		 "platform:%s-%03d", VIVID_MODULE_NAME, inst);
--	dev->mdev.dev = &pdev->dev;
--	media_device_init(&dev->mdev);
--	dev->mdev.ops = &vivid_media_ops;
--#endif
--
--	/* register v4l2_device */
--	snprintf(dev->v4l2_dev.name, sizeof(dev->v4l2_dev.name),
--			"%s-%03d", VIVID_MODULE_NAME, inst);
--	ret = v4l2_device_register(&pdev->dev, &dev->v4l2_dev);
--	if (ret) {
--		kfree(dev);
--		return ret;
--	}
--	dev->v4l2_dev.release = vivid_dev_release;
--
--	/* start detecting feature set */
- 
- 	/* do we use single- or multi-planar? */
- 	dev->multiplanar = multiplanar[inst] > 1;
-@@ -947,14 +907,12 @@ static int vivid_create_instance(struct platform_device *pdev, int inst)
- 	    !dev->has_vid_cap && !dev->has_meta_cap) {
- 		v4l2_warn(&dev->v4l2_dev,
- 			  "Webcam or HDMI input without video or metadata nodes\n");
--		kfree(dev);
- 		return -EINVAL;
- 	}
- 	if ((in_type_counter[TV] || in_type_counter[SVID]) &&
- 	    !dev->has_vid_cap && !dev->has_vbi_cap && !dev->has_meta_cap) {
- 		v4l2_warn(&dev->v4l2_dev,
- 			  "TV or S-Video input without video, VBI or metadata nodes\n");
--		kfree(dev);
- 		return -EINVAL;
- 	}
- 
-@@ -976,13 +934,11 @@ static int vivid_create_instance(struct platform_device *pdev, int inst)
- 	    !dev->has_vid_out && !dev->has_vbi_out && !dev->has_meta_out) {
- 		v4l2_warn(&dev->v4l2_dev,
- 			  "S-Video output without video, VBI or metadata nodes\n");
--		kfree(dev);
- 		return -EINVAL;
- 	}
- 	if (out_type_counter[HDMI] && !dev->has_vid_out && !dev->has_meta_out) {
- 		v4l2_warn(&dev->v4l2_dev,
- 			  "HDMI output without video or metadata nodes\n");
--		kfree(dev);
- 		return -EINVAL;
- 	}
- 
-@@ -999,25 +955,25 @@ static int vivid_create_instance(struct platform_device *pdev, int inst)
- 	dev->has_tv_tuner = in_type_counter[TV];
- 
- 	/* do we have a tuner? */
--	has_tuner = ((dev->has_vid_cap || dev->has_vbi_cap) && in_type_counter[TV]) ||
--		    dev->has_radio_rx || dev->has_sdr_cap;
-+	*has_tuner = ((dev->has_vid_cap || dev->has_vbi_cap) && in_type_counter[TV]) ||
-+		      dev->has_radio_rx || dev->has_sdr_cap;
- 
- 	/* do we have a modulator? */
--	has_modulator = dev->has_radio_tx;
-+	*has_modulator = dev->has_radio_tx;
- 
- 	if (dev->has_vid_cap)
- 		/* do we have a framebuffer for overlay testing? */
- 		dev->has_fb = node_type & 0x10000;
- 
- 	/* can we do crop/compose/scaling while capturing? */
--	if (no_error_inj && ccs_cap == -1)
--		ccs_cap = 7;
-+	if (no_error_inj && *ccs_cap == -1)
-+		*ccs_cap = 7;
- 
- 	/* if ccs_cap == -1, then the user can select it using controls */
--	if (ccs_cap != -1) {
--		dev->has_crop_cap = ccs_cap & 1;
--		dev->has_compose_cap = ccs_cap & 2;
--		dev->has_scaler_cap = ccs_cap & 4;
-+	if (*ccs_cap != -1) {
-+		dev->has_crop_cap = *ccs_cap & 1;
-+		dev->has_compose_cap = *ccs_cap & 2;
-+		dev->has_scaler_cap = *ccs_cap & 4;
- 		v4l2_info(&dev->v4l2_dev, "Capture Crop: %c Compose: %c Scaler: %c\n",
- 			dev->has_crop_cap ? 'Y' : 'N',
- 			dev->has_compose_cap ? 'Y' : 'N',
-@@ -1025,14 +981,14 @@ static int vivid_create_instance(struct platform_device *pdev, int inst)
- 	}
- 
- 	/* can we do crop/compose/scaling with video output? */
--	if (no_error_inj && ccs_out == -1)
--		ccs_out = 7;
-+	if (no_error_inj && *ccs_out == -1)
-+		*ccs_out = 7;
- 
- 	/* if ccs_out == -1, then the user can select it using controls */
--	if (ccs_out != -1) {
--		dev->has_crop_out = ccs_out & 1;
--		dev->has_compose_out = ccs_out & 2;
--		dev->has_scaler_out = ccs_out & 4;
-+	if (*ccs_out != -1) {
-+		dev->has_crop_out = *ccs_out & 1;
-+		dev->has_compose_out = *ccs_out & 2;
-+		dev->has_scaler_out = *ccs_out & 4;
- 		v4l2_info(&dev->v4l2_dev, "Output Crop: %c Compose: %c Scaler: %c\n",
- 			dev->has_crop_out ? 'Y' : 'N',
- 			dev->has_compose_out ? 'Y' : 'N',
-@@ -1042,7 +998,66 @@ static int vivid_create_instance(struct platform_device *pdev, int inst)
- 	/* do we create a touch capture device */
- 	dev->has_touch_cap = node_type & 0x80000;
- 
--	/* end detecting feature set */
-+	return 0;
++static void vivid_set_capabilities(struct vivid_dev *dev)
++{
++	if (dev->has_vid_cap) {
++		/* set up the capabilities of the video capture device */
++		dev->vid_cap_caps = dev->multiplanar ?
++			V4L2_CAP_VIDEO_CAPTURE_MPLANE :
++			V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_VIDEO_OVERLAY;
++		dev->vid_cap_caps |= V4L2_CAP_STREAMING | V4L2_CAP_READWRITE;
++		if (dev->has_audio_inputs)
++			dev->vid_cap_caps |= V4L2_CAP_AUDIO;
++		if (dev->has_tv_tuner)
++			dev->vid_cap_caps |= V4L2_CAP_TUNER;
++	}
++	if (dev->has_vid_out) {
++		/* set up the capabilities of the video output device */
++		dev->vid_out_caps = dev->multiplanar ?
++			V4L2_CAP_VIDEO_OUTPUT_MPLANE :
++			V4L2_CAP_VIDEO_OUTPUT;
++		if (dev->has_fb)
++			dev->vid_out_caps |= V4L2_CAP_VIDEO_OUTPUT_OVERLAY;
++		dev->vid_out_caps |= V4L2_CAP_STREAMING | V4L2_CAP_READWRITE;
++		if (dev->has_audio_outputs)
++			dev->vid_out_caps |= V4L2_CAP_AUDIO;
++	}
++	if (dev->has_vbi_cap) {
++		/* set up the capabilities of the vbi capture device */
++		dev->vbi_cap_caps = (dev->has_raw_vbi_cap ? V4L2_CAP_VBI_CAPTURE : 0) |
++				    (dev->has_sliced_vbi_cap ? V4L2_CAP_SLICED_VBI_CAPTURE : 0);
++		dev->vbi_cap_caps |= V4L2_CAP_STREAMING | V4L2_CAP_READWRITE;
++		if (dev->has_audio_inputs)
++			dev->vbi_cap_caps |= V4L2_CAP_AUDIO;
++		if (dev->has_tv_tuner)
++			dev->vbi_cap_caps |= V4L2_CAP_TUNER;
++	}
++	if (dev->has_vbi_out) {
++		/* set up the capabilities of the vbi output device */
++		dev->vbi_out_caps = (dev->has_raw_vbi_out ? V4L2_CAP_VBI_OUTPUT : 0) |
++				    (dev->has_sliced_vbi_out ? V4L2_CAP_SLICED_VBI_OUTPUT : 0);
++		dev->vbi_out_caps |= V4L2_CAP_STREAMING | V4L2_CAP_READWRITE;
++		if (dev->has_audio_outputs)
++			dev->vbi_out_caps |= V4L2_CAP_AUDIO;
++	}
++	if (dev->has_sdr_cap) {
++		/* set up the capabilities of the sdr capture device */
++		dev->sdr_cap_caps = V4L2_CAP_SDR_CAPTURE | V4L2_CAP_TUNER;
++		dev->sdr_cap_caps |= V4L2_CAP_STREAMING | V4L2_CAP_READWRITE;
++	}
++	/* set up the capabilities of the radio receiver device */
++	if (dev->has_radio_rx)
++		dev->radio_rx_caps = V4L2_CAP_RADIO | V4L2_CAP_RDS_CAPTURE |
++				     V4L2_CAP_HW_FREQ_SEEK | V4L2_CAP_TUNER |
++				     V4L2_CAP_READWRITE;
++	/* set up the capabilities of the radio transmitter device */
++	if (dev->has_radio_tx)
++		dev->radio_tx_caps = V4L2_CAP_RDS_OUTPUT | V4L2_CAP_MODULATOR |
++				     V4L2_CAP_READWRITE;
++
++	/* set up the capabilities of meta capture device */
++	if (dev->has_meta_cap) {
++		dev->meta_cap_caps = V4L2_CAP_META_CAPTURE |
++				     V4L2_CAP_STREAMING | V4L2_CAP_READWRITE;
++		if (dev->has_audio_inputs)
++			dev->meta_cap_caps |= V4L2_CAP_AUDIO;
++		if (dev->has_tv_tuner)
++			dev->meta_cap_caps |= V4L2_CAP_TUNER;
++	}
++	/* set up the capabilities of meta output device */
++	if (dev->has_meta_out) {
++		dev->meta_out_caps = V4L2_CAP_META_OUTPUT |
++				     V4L2_CAP_STREAMING | V4L2_CAP_READWRITE;
++		if (dev->has_audio_outputs)
++			dev->meta_out_caps |= V4L2_CAP_AUDIO;
++	}
++	/* set up the capabilities of the touch capture device */
++	if (dev->has_touch_cap) {
++		dev->touch_cap_caps = V4L2_CAP_TOUCH | V4L2_CAP_STREAMING |
++				      V4L2_CAP_READWRITE;
++		dev->touch_cap_caps |= dev->multiplanar ?
++			V4L2_CAP_VIDEO_CAPTURE_MPLANE : V4L2_CAP_VIDEO_CAPTURE;
++	}
 +}
 +
-+static int vivid_create_instance(struct platform_device *pdev, int inst)
-+{
-+	static const struct v4l2_dv_timings def_dv_timings =
-+					V4L2_DV_BT_CEA_1280X720P60;
-+	unsigned in_type_counter[4] = { 0, 0, 0, 0 };
-+	unsigned out_type_counter[4] = { 0, 0, 0, 0 };
-+	int ccs_cap = ccs_cap_mode[inst];
-+	int ccs_out = ccs_out_mode[inst];
-+	bool has_tuner;
-+	bool has_modulator;
-+	struct vivid_dev *dev;
-+	struct video_device *vfd;
-+	unsigned node_type = node_types[inst];
-+	v4l2_std_id tvnorms_cap = 0, tvnorms_out = 0;
-+	int ret;
-+	int i;
-+#ifdef CONFIG_VIDEO_VIVID_CEC
-+	unsigned int cec_tx_bus_cnt = 0;
-+#endif
-+
-+	/* allocate main vivid state structure */
-+	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
-+	if (!dev)
-+		return -ENOMEM;
-+
-+	dev->inst = inst;
-+
-+#ifdef CONFIG_MEDIA_CONTROLLER
-+	dev->v4l2_dev.mdev = &dev->mdev;
-+
-+	/* Initialize media device */
-+	strscpy(dev->mdev.model, VIVID_MODULE_NAME, sizeof(dev->mdev.model));
-+	snprintf(dev->mdev.bus_info, sizeof(dev->mdev.bus_info),
-+		 "platform:%s-%03d", VIVID_MODULE_NAME, inst);
-+	dev->mdev.dev = &pdev->dev;
-+	media_device_init(&dev->mdev);
-+	dev->mdev.ops = &vivid_media_ops;
-+#endif
-+
-+	/* register v4l2_device */
-+	snprintf(dev->v4l2_dev.name, sizeof(dev->v4l2_dev.name),
-+			"%s-%03d", VIVID_MODULE_NAME, inst);
-+	ret = v4l2_device_register(&pdev->dev, &dev->v4l2_dev);
-+	if (ret) {
-+		kfree(dev);
-+		return ret;
-+	}
-+	dev->v4l2_dev.release = vivid_dev_release;
-+
-+	ret = vivid_detect_feature_set(dev, inst, node_type,
-+				       &has_tuner, &has_modulator,
-+				       &ccs_cap, &ccs_out,
-+				       in_type_counter, out_type_counter);
-+	if (ret) {
-+		kfree(dev);
-+		return ret;
-+	}
+ static void vivid_disable_unused_ioctls(struct vivid_dev *dev,
+ 					bool has_tuner,
+ 					bool has_modulator,
+@@ -1153,84 +1235,7 @@ static int vivid_create_instance(struct platform_device *pdev, int inst)
+ 		return ret;
+ 	}
  
- 	if (dev->has_vid_cap) {
- 		/* set up the capabilities of the video capture device */
+-	if (dev->has_vid_cap) {
+-		/* set up the capabilities of the video capture device */
+-		dev->vid_cap_caps = dev->multiplanar ?
+-			V4L2_CAP_VIDEO_CAPTURE_MPLANE :
+-			V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_VIDEO_OVERLAY;
+-		dev->vid_cap_caps |= V4L2_CAP_STREAMING | V4L2_CAP_READWRITE;
+-		if (dev->has_audio_inputs)
+-			dev->vid_cap_caps |= V4L2_CAP_AUDIO;
+-		if (dev->has_tv_tuner)
+-			dev->vid_cap_caps |= V4L2_CAP_TUNER;
+-	}
+-	if (dev->has_vid_out) {
+-		/* set up the capabilities of the video output device */
+-		dev->vid_out_caps = dev->multiplanar ?
+-			V4L2_CAP_VIDEO_OUTPUT_MPLANE :
+-			V4L2_CAP_VIDEO_OUTPUT;
+-		if (dev->has_fb)
+-			dev->vid_out_caps |= V4L2_CAP_VIDEO_OUTPUT_OVERLAY;
+-		dev->vid_out_caps |= V4L2_CAP_STREAMING | V4L2_CAP_READWRITE;
+-		if (dev->has_audio_outputs)
+-			dev->vid_out_caps |= V4L2_CAP_AUDIO;
+-	}
+-	if (dev->has_vbi_cap) {
+-		/* set up the capabilities of the vbi capture device */
+-		dev->vbi_cap_caps = (dev->has_raw_vbi_cap ? V4L2_CAP_VBI_CAPTURE : 0) |
+-				    (dev->has_sliced_vbi_cap ? V4L2_CAP_SLICED_VBI_CAPTURE : 0);
+-		dev->vbi_cap_caps |= V4L2_CAP_STREAMING | V4L2_CAP_READWRITE;
+-		if (dev->has_audio_inputs)
+-			dev->vbi_cap_caps |= V4L2_CAP_AUDIO;
+-		if (dev->has_tv_tuner)
+-			dev->vbi_cap_caps |= V4L2_CAP_TUNER;
+-	}
+-	if (dev->has_vbi_out) {
+-		/* set up the capabilities of the vbi output device */
+-		dev->vbi_out_caps = (dev->has_raw_vbi_out ? V4L2_CAP_VBI_OUTPUT : 0) |
+-				    (dev->has_sliced_vbi_out ? V4L2_CAP_SLICED_VBI_OUTPUT : 0);
+-		dev->vbi_out_caps |= V4L2_CAP_STREAMING | V4L2_CAP_READWRITE;
+-		if (dev->has_audio_outputs)
+-			dev->vbi_out_caps |= V4L2_CAP_AUDIO;
+-	}
+-	if (dev->has_sdr_cap) {
+-		/* set up the capabilities of the sdr capture device */
+-		dev->sdr_cap_caps = V4L2_CAP_SDR_CAPTURE | V4L2_CAP_TUNER;
+-		dev->sdr_cap_caps |= V4L2_CAP_STREAMING | V4L2_CAP_READWRITE;
+-	}
+-	/* set up the capabilities of the radio receiver device */
+-	if (dev->has_radio_rx)
+-		dev->radio_rx_caps = V4L2_CAP_RADIO | V4L2_CAP_RDS_CAPTURE |
+-				     V4L2_CAP_HW_FREQ_SEEK | V4L2_CAP_TUNER |
+-				     V4L2_CAP_READWRITE;
+-	/* set up the capabilities of the radio transmitter device */
+-	if (dev->has_radio_tx)
+-		dev->radio_tx_caps = V4L2_CAP_RDS_OUTPUT | V4L2_CAP_MODULATOR |
+-				     V4L2_CAP_READWRITE;
+-
+-	/* set up the capabilities of meta capture device */
+-	if (dev->has_meta_cap) {
+-		dev->meta_cap_caps = V4L2_CAP_META_CAPTURE |
+-				     V4L2_CAP_STREAMING | V4L2_CAP_READWRITE;
+-		if (dev->has_audio_inputs)
+-			dev->meta_cap_caps |= V4L2_CAP_AUDIO;
+-		if (dev->has_tv_tuner)
+-			dev->meta_cap_caps |= V4L2_CAP_TUNER;
+-	}
+-	/* set up the capabilities of meta output device */
+-	if (dev->has_meta_out) {
+-		dev->meta_out_caps = V4L2_CAP_META_OUTPUT |
+-				     V4L2_CAP_STREAMING | V4L2_CAP_READWRITE;
+-		if (dev->has_audio_outputs)
+-			dev->meta_out_caps |= V4L2_CAP_AUDIO;
+-	}
+-	/* set up the capabilities of the touch capture device */
+-	if (dev->has_touch_cap) {
+-		dev->touch_cap_caps = V4L2_CAP_TOUCH | V4L2_CAP_STREAMING |
+-				      V4L2_CAP_READWRITE;
+-		dev->touch_cap_caps |= dev->multiplanar ?
+-			V4L2_CAP_VIDEO_CAPTURE_MPLANE : V4L2_CAP_VIDEO_CAPTURE;
+-	}
++	vivid_set_capabilities(dev);
+ 
+ 	ret = -ENOMEM;
+ 	/* initialize the test pattern generator */
 -- 
 2.26.2
 
