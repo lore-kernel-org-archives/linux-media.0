@@ -4,138 +4,170 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=no autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E6C2C433E7
-	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 22:49:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39FE3C433E7
+	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 23:00:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6C6DB20767
-	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 22:49:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E7F6207EA
+	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 23:00:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="nuwm7bil"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="jGdZtAdc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726678AbgIBWtC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Sep 2020 18:49:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32842 "EHLO
+        id S1727107AbgIBXAH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Sep 2020 19:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726618AbgIBWsT (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Sep 2020 18:48:19 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE40C061246
-        for <linux-media@vger.kernel.org>; Wed,  2 Sep 2020 15:48:19 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id c18so1011676wrm.9
-        for <linux-media@vger.kernel.org>; Wed, 02 Sep 2020 15:48:19 -0700 (PDT)
+        with ESMTP id S1727101AbgIBW7o (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Sep 2020 18:59:44 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E67C061244
+        for <linux-media@vger.kernel.org>; Wed,  2 Sep 2020 15:59:44 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id n22so672096edt.4
+        for <linux-media@vger.kernel.org>; Wed, 02 Sep 2020 15:59:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=l80LLYGa/yYmt3H9jqHnhQDWkk8QQ1YTQWwpquPQW8Q=;
-        b=nuwm7bilclieGOSY2ZWyaQnC5HjoU7juXZSnF039IugZj8wLuLXsFFqF7YHrQzDJJX
-         pKqwXoM9mQrAdmZgV6mPwaelAFb1YUvkZkr565NZZXAQ8Eoha8o1gf/8odXr5OWhHwWm
-         aGYN3wplbcEGgf8jXv8nBNjFyjZyrYkMAXNvA=
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=K6cGerCxO46Qm24iFA5aZEL6UdjUDW3jjNLe5Ls8bmw=;
+        b=jGdZtAdc7CvPt+P2PuAbn91E6yyatAb+8jgjU+0k3SbWdjhBWYOEa+KKGF/DNvtW66
+         en6JA8kGE7oWpnaCF9TivIQ7+3Wq0KMsx0qHCQo9Z0s+0Hp789sEBg4fQNaaLg2TRPun
+         LHR6LIHcTsZo10OmpUpN2XpJpF5YaKSPfVhv0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=l80LLYGa/yYmt3H9jqHnhQDWkk8QQ1YTQWwpquPQW8Q=;
-        b=px8OBTWk61agAI9NZ96ufQUfGcWl9+mJTsaOLrPCxlVRD/0qvY7VmMsPr+9aOXIOYW
-         xqePzNVD92Um+LwBgk7XSbWPxj+iuNTuGS0PTjXtUjRRky1cUTMQgjdgFDs7uRwq01k0
-         bfTf0sg1PVrEv4ElnHaojZ/6AJmEWDP2I3+y1LxauI7jgrk96FpeRwNSNZ1wdr6fUwHt
-         a4CNbjCSenUXP0FnZF41M6x/xP/LQieN9rZYcgXqc79k32B2vfTh05piH/FBRZ9LujKy
-         B1IHmtYAWcbhUs9lfZnqNW5UueuqjjtumF1ceUd4Alhvn0843svsXRRXfmbmTS1a+ado
-         WO8w==
-X-Gm-Message-State: AOAM533+vk4WWOKYwZgP5ClFeYxPDvcujfuP/mJMp2yJ6jaZBzfzLIMm
-        YpHI3vVGA30xIcrO5rTe/uRmcOUXb+2hdA==
-X-Google-Smtp-Source: ABdhPJyvFaOl5Bp71SygSFaYE7q0D2J9roMhkJJIvfrjHfZdhbmgcAK/3ymTae/CPSE3tuE1xJQZ/Q==
-X-Received: by 2002:adf:e6c8:: with SMTP id y8mr392900wrm.229.1599086897633;
-        Wed, 02 Sep 2020 15:48:17 -0700 (PDT)
-Received: from tfiga.c.googlers.com.com (88.140.78.34.bc.googleusercontent.com. [34.78.140.88])
-        by smtp.gmail.com with ESMTPSA id m125sm1557568wme.35.2020.09.02.15.48.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Sep 2020 15:48:17 -0700 (PDT)
-From:   Tomasz Figa <tfiga@chromium.org>
-To:     linux-media@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hao He <hao.he@bitland.com.cn>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, drinkcat@chromium.org,
-        Xingyu Wu <wuxy@bitland.com.cn>, dongchun.zhu@mediatek.com,
-        sj.huang@mediatek.com, darfur_liu@gcoreinc.com, hao.he7@gmail.com,
-        Tomasz Figa <tfiga@chromium.org>
-Subject: [PATCH v4 0/4] Galaxycore GC5035 sensor driver
-Date:   Wed,  2 Sep 2020 22:48:09 +0000
-Message-Id: <20200902224813.14283-1-tfiga@chromium.org>
-X-Mailer: git-send-email 2.28.0.402.g5ffc5be6b7-goog
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=K6cGerCxO46Qm24iFA5aZEL6UdjUDW3jjNLe5Ls8bmw=;
+        b=L0I6isI+PPPjmacWJl7CKCUFN2QTndWGWUUkX7x6mQPPtFyca0avh04baptnsxF363
+         rwEOryIp/QgxFy+UeY8yvSWo+JBWnysnLoskwUmojst9S9uEFjrOYov5hYKRrwG6WZF9
+         BOlinr95s+hTswegwDdMmBTXiF1S+DLw7JpB+fI5m7xnAGcEiNjAaMb9Sjx7CMux69BF
+         Lz8CvFgTE8+lbEyMiTpEFRZ0E6oW9gFKDyi6zoSCTp5q0BB82cAO+3dVaU4KeQzTy632
+         AyJg0isMFdnNFaGnELJj3t//yoOCFpYTrySnLq75MW5gmDGdshAqBpYYls/HVSbX9G2r
+         5Ezw==
+X-Gm-Message-State: AOAM532oS0qavIxcjyzvAxjwl0wsXXIlz5sEgKkF5Pu19yGb4caGGXvG
+        uNtTDWMPoafR9OFLjqhciKxBP97QIN0Bkw==
+X-Google-Smtp-Source: ABdhPJw/WrdRElDxZljCwPtTBIa/FQTpJ6Bci8obowrOP7CsREfimBw8NYrIDQhfoSzC8gJlq/2k1A==
+X-Received: by 2002:a05:6402:b72:: with SMTP id cb18mr119010edb.299.1599087582442;
+        Wed, 02 Sep 2020 15:59:42 -0700 (PDT)
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
+        by smtp.gmail.com with ESMTPSA id y14sm1017095eje.10.2020.09.02.15.59.41
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Sep 2020 15:59:41 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id z4so1066595wrr.4
+        for <linux-media@vger.kernel.org>; Wed, 02 Sep 2020 15:59:41 -0700 (PDT)
+X-Received: by 2002:a5d:4e0b:: with SMTP id p11mr416596wrt.32.1599087580861;
+ Wed, 02 Sep 2020 15:59:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <1597380295-6297-1-git-send-email-wuxy@bitland.com.cn>
+ <1597380295-6297-5-git-send-email-wuxy@bitland.com.cn> <20200831174057.GO31019@paasikivi.fi.intel.com>
+In-Reply-To: <20200831174057.GO31019@paasikivi.fi.intel.com>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Thu, 3 Sep 2020 00:59:20 +0200
+X-Gmail-Original-Message-ID: <CAAFQd5ARYNVMjScuk5-w_z5Pt6jD=CPkCYG+rM2Znvt9j1Od6g@mail.gmail.com>
+Message-ID: <CAAFQd5ARYNVMjScuk5-w_z5Pt6jD=CPkCYG+rM2Znvt9j1Od6g@mail.gmail.com>
+Subject: Re: [PATCH V3 3/3] media: i2c: gc5035: Add GC5035 image sensor driver
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Xingyu Wu <wuxy@bitland.com.cn>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        "shawnx.tu" <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        "dave.stevenson" <dave.stevenson@raspberrypi.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Cao Bing Bu <bingbu.cao@intel.com>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-devicetree <devicetree@vger.kernel.org>,
+        Dongchun Zhu <dongchun.zhu@mediatek.com>,
+        Sj Huang <sj.huang@mediatek.com>,
+        darfur_liu <darfur_liu@gcoreinc.com>,
+        "hao.he7" <hao.he7@gmail.com>,
+        =?UTF-8?B?5L2V5rWpQjAzMjA1?= <hao.he@bitland.com.cn>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi everyone,
+Hi Sakari,
 
-This series adds YAML DT binding and V4L2 sub-device driver for
-Galaxycore GC5035 5-megapixel 10-bit Bayer CMOS 1/4" sensor, which has a
-two-lane MIPI CSI-2 data interface and uses the I2C bus for control
+On Mon, Aug 31, 2020 at 7:41 PM Sakari Ailus
+<sakari.ailus@linux.intel.com> wrote:
+>
+> Hi Xingyu,
+>
+> Thanks for the update. I've got a few more comments below.
+>
+> Do you happen to have some insight on what the OTP data contains and what
+> does the driver do with it?
+>
+> At least in principle the OTP data may be programmed for the customer so
+> the same sensor could contain something else what the driver expects to
+> find there.
+>
 
-The initial version supports the following features:
- - Manual exposure, analog and digital gain control
- - Vertical blanking interval control
- - Test pattern generator (color bars)
- - Media controller support
- - Runtime PM support
- - Support operating modes:
-    o 2592x1944 at 30fps,
-    o 1296x972 at 30fps,
-    o 1280x720 at 60fps.
+Thanks for the review. For anything without my reply, assume fixed. :)
 
-A separate patch in the series adds support for loading manufacture-time
-configuration from the sensor OTP, which currently includes:
- - register patch table,
- - DPC table.
+As far as I can see, the data is being read from an area that is
+supposed to be reserved for Galaxycore, so I'd assume it doesn't
+depend on the customer.
 
-This is based on Hao He's and Xingyu Wu's v3 series that partially reached
-the maling lists:
- - patch 1/3 - equivalent of patch 1/4 of this seres:
- https://patchwork.ozlabs.org/project/devicetree-bindings/patch/1597380295-6297-3-git-send-email-wuxy@bitland.com.cn/
- - patch 3/3 - equivalent of patches 3/4 + 4/4 of this series:
- https://patchwork.ozlabs.org/project/devicetree-bindings/patch/1597380295-6297-5-git-send-email-wuxy@bitland.com.cn/
-Patch 2/3 that adds DT bindings was missing so I recreated it from
-scratch on my own.
+[snip]
+> > diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+> > index da11036..aeaf594 100644
+> > --- a/drivers/media/i2c/Kconfig
+> > +++ b/drivers/media/i2c/Kconfig
+> > @@ -712,6 +712,18 @@ config VIDEO_APTINA_PLL
+> >  config VIDEO_SMIAPP_PLL
+> >       tristate
+> >
+> > +config VIDEO_GC5035
+> > +     tristate "Galaxycore GC5035 sensor support"
+> > +     depends on I2C && VIDEO_V4L2
+> > +     select MEDIA_CONTROLLER
+> > +     select VIDEO_V4L2_SUBDEV_API
+>
+> Add:
+>
+>         V4L2_FWNODE
+>         OF
 
-Changes from v3:
- - Require and handle clock-frequency and link-frequencies device
-   properties.
- - Separate the driver patch into one for base functionality and another
-   for OTP handling.
- - Do not perform OTP initialization on driver probe, since it's a
-   costly operation. Instead do it at first streaming time.
- - Fix power sequencing to match the hardware specification.
- - Set system PM ops.
- - Various stylistic changes and general clean-up.
- - Add myself as a maintainer.
+This driver doesn't depend on OF. It uses the firmware-independent
+property access API. (v4 I sent actually uses device_property_*()).
 
-Hao He (3):
-  dt-bindings: Add a vendor prefix for Galaxycore Inc.
-  media: i2c: Add a driver for the Galaxycore GC5035 sensor
-  media: i2c: gc5035: Add OTP configuration handling
+[snip]
+> > +static int __gc5035_power_on(struct gc5035 *gc5035)
+> > +{
+> > +     struct device *dev = &gc5035->client->dev;
+> > +     int i, ret;
+> > +
+> > +     ret = clk_prepare_enable(gc5035->xvclk);
+> > +     if (ret < 0) {
+> > +             dev_err(dev, "Failed to enable xvclk\n");
+> > +             return ret;
+> > +     }
+> > +
+> > +     gpiod_set_value_cansleep(gc5035->reset_gpio, 1);
+> > +
+> > +     for (i = 0; i < GC5035_NUM_SUPPLIES; i++) {
+> > +             ret = regulator_enable(gc5035->supplies[i].consumer);
+> > +             if (ret) {
+> > +                     dev_err(dev, "Failed to enable %s: %d\n",
+> > +                             gc5035->supplies[i].supply, ret);
+> > +                     goto disable_reg_clk;
+>
+> Please use regulator_bulk_enable() here, and regulator_bulk_disable()
+> below.
+>
 
-Tomasz Figa (1):
-  media: dt-bindings: media: i2c: Add bindings for GC5035
+This actually needs to have one of the regulators (iovdd) enabled
+before the other ones, but regulator_bulk_enable() is async. In v4 I
+used regulator_enable() for iovdd and regulator_bulk_enable() for the
+other two for optimal sequencing.
 
- .../devicetree/bindings/media/i2c/gc5035.yaml |  142 ++
- .../devicetree/bindings/vendor-prefixes.yaml  |    2 +
- MAINTAINERS                                   |    7 +
- drivers/media/i2c/Kconfig                     |   13 +
- drivers/media/i2c/Makefile                    |    1 +
- drivers/media/i2c/gc5035.c                    | 1972 +++++++++++++++++
- 6 files changed, 2137 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/gc5035.yaml
- create mode 100644 drivers/media/i2c/gc5035.c
-
--- 
-2.28.0.402.g5ffc5be6b7-goog
-
+Best regards,
+Tomasz
