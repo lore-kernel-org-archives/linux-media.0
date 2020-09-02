@@ -2,138 +2,172 @@ Return-Path: <SRS0=Cf27=CL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B856C2BBDB
-	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 05:35:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A86BAC433E7
+	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 06:25:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 66071207EA
-	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 05:35:41 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pDzQpqIN"
+	by mail.kernel.org (Postfix) with ESMTP id 85CD02084C
+	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 06:25:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1599027928;
+	bh=OJSpVQ5c8EF99vvALEkF5NCOboYU11I4INM1qljBWAk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=U7RqH1ALSadBgUVee1/cS2C6RBFVC4u/OCX6WrlT/GsxVIU777B8zoiaQDMBRhhED
+	 NtFgjq7yMzOfLyghKOzOkTacX4S7tEUUuUkc+50esCQjN3WP78VkmWoqzUzGZNp1ge
+	 MUbUld/dZB9tP+C91hnOlw9IbpQFgNjgexrc5Kcs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726323AbgIBFfk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Sep 2020 01:35:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43374 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725774AbgIBFfj (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Sep 2020 01:35:39 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6A5C061244;
-        Tue,  1 Sep 2020 22:35:39 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id s10so1298955plp.1;
-        Tue, 01 Sep 2020 22:35:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eQPR30zGfRfeAaiqiFgod4rMnLiD9w7BcMVmHoMNe6I=;
-        b=pDzQpqINV8Bc/bc9VIOK+95xcXunbQUoqiHZ+g1Vc3u4naR3uz/81aNSPNi1S+iJim
-         UBo+xMuLI+Axtc0qbjDY4xwBG7Egssp2GVM3vJQyO70DNYOGvfvHyzuMpItR+9DoCNSh
-         ZybDEywUInFXMB168+RHJTmC9Z+U2cd06klj41JAsLqICHz/WqLzhVcAwsVsI6K48YSb
-         M+rbaDf1Z6T6kbuSNTp+av9JNHNpJhOKjjh8by8n/vOawHBNvmgAL6fNGVTUjOZdQ/QO
-         IdPHLOjiR1DnXBqU9nUG89pDZVl18svEvfipP9r92UEVblcenJdTAgk5rphfQD4PSVnc
-         1DJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eQPR30zGfRfeAaiqiFgod4rMnLiD9w7BcMVmHoMNe6I=;
-        b=kZhtOxK4FzMQf3gVQCeLo9OHelBe/n44LBiT85KA1NY7d5zM8NNEwKuXt7/ZGNsY75
-         i0NflS54iYAbpnU8clmyPeRQUMpC8Lr4kjZrvP5TYH7b6Rn4ZxEUZrnSM2VOSw9cS1TW
-         LNp6g3IkrZkSd7xPeXzvOq5aCrjqkrmPeH/8xPza9HveF3zpRe6R32vpjaSVcQ6JWetv
-         I6r1aYTu1qfsZ9MpLPmOrDwSx/dRb5s6xgGXpHFMqPb0LgglN6rNvrqMtXtK13KaSjs/
-         HdHO9YXvxLlxA7FxAYXNBrkT4kOwRN0xQDwyOFPXJEACMQN70pNCyFB6FgjWr4CpoC4d
-         y30A==
-X-Gm-Message-State: AOAM530g/igO96W/8pt0VNmum1BXApGrTqPoIqheifx8IDl4z5toZQgE
-        G2Cw3aZxYA9d8fESXqYt27I=
-X-Google-Smtp-Source: ABdhPJyNlWT8JPI8rqixhq9HIg8+D7+aDTjHXMIKLbUrx9Nv2GXMWOXm0vv/86Ne5hHQSHaeBIzS1Q==
-X-Received: by 2002:a17:90b:1916:: with SMTP id mp22mr737220pjb.132.1599024938457;
-        Tue, 01 Sep 2020 22:35:38 -0700 (PDT)
-Received: from localhost ([2401:fa00:8f:203:a6ae:11ff:fe11:4b46])
-        by smtp.gmail.com with ESMTPSA id in12sm3154140pjb.29.2020.09.01.22.35.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Sep 2020 22:35:37 -0700 (PDT)
-Date:   Wed, 2 Sep 2020 14:35:35 +0900
-From:   Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
-To:     Dongchun Zhu <dongchun.zhu@mediatek.com>
-Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        mchehab@kernel.org, andriy.shevchenko@linux.intel.com,
-        robh+dt@kernel.org, mark.rutland@arm.com,
-        sakari.ailus@linux.intel.com, drinkcat@chromium.org,
-        tfiga@chromium.org, matthias.bgg@gmail.com, bingbu.cao@intel.com,
-        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, sj.huang@mediatek.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        louis.kuo@mediatek.com, shengnan.wang@mediatek.com
-Subject: Re: [PATCH V10 2/2] media: i2c: dw9768: Add DW9768 VCM driver
-Message-ID: <20200902053535.GC2264887@google.com>
-References: <20200703080404.29770-1-dongchun.zhu@mediatek.com>
- <20200703080404.29770-3-dongchun.zhu@mediatek.com>
+        id S1726559AbgIBGZX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Sep 2020 02:25:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44066 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726140AbgIBGZX (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 2 Sep 2020 02:25:23 -0400
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D4384207EA;
+        Wed,  2 Sep 2020 06:25:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599027922;
+        bh=OJSpVQ5c8EF99vvALEkF5NCOboYU11I4INM1qljBWAk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=cx7V3lN0x/HJn8KyFIInMt5KfkyaJCTldKREtwcqUlfsZvC6DVn1jss0trGfjrR4L
+         v35JrKSKPDZ5kRg51D2bplQkOUUEu50JpIzclruONxWogIYddV+3uNatU9Xky1Kvf0
+         nwPVPCx3YD7AnovHok7owct+V5+ZBhc33Ez3GXzo=
+Received: by mail-ej1-f45.google.com with SMTP id nw23so5001068ejb.4;
+        Tue, 01 Sep 2020 23:25:21 -0700 (PDT)
+X-Gm-Message-State: AOAM533bPaodKwUxVfRXkymCeJ1ZzI4U4ulEN7tCtoGPL7IV+F5/hkqy
+        FkbU/6qons1MbzK/NFxA4WzsPFtbUCvvHFoFC98=
+X-Google-Smtp-Source: ABdhPJyiySgzLF6YcdaOO3ZsW9BLeguC234fHAFv7x9K7DmVJH5VctW7LNW5MlD4LKdDfgXG0WPH27dKjVqXE8SyjSo=
+X-Received: by 2002:a17:906:9356:: with SMTP id p22mr4697123ejw.119.1599027920394;
+ Tue, 01 Sep 2020 23:25:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200703080404.29770-3-dongchun.zhu@mediatek.com>
+References: <20200828160053.6064-1-krzk@kernel.org> <20200828160053.6064-3-krzk@kernel.org>
+ <20200831090859.GF31019@paasikivi.fi.intel.com>
+In-Reply-To: <20200831090859.GF31019@paasikivi.fi.intel.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Wed, 2 Sep 2020 08:25:09 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPe6+vBfnTUXq4DdSmk3e-xaaCEZabD3u=LOaKH773Kc1w@mail.gmail.com>
+Message-ID: <CAJKOXPe6+vBfnTUXq4DdSmk3e-xaaCEZabD3u=LOaKH773Kc1w@mail.gmail.com>
+Subject: Re: [PATCH 3/3] media: imx258: Get clock from device properties and
+ enable it
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Yeh, Andy" <andy.yeh@intel.com>,
+        "Chiang, Alan" <alanx.chiang@intel.com>,
+        "Chen, Jason" <jasonx.z.chen@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On (20/07/03 16:04), Dongchun Zhu wrote:
-[..]
-> +static int dw9768_probe(struct i2c_client *client)
-> +{
-> +	struct device *dev = &client->dev;
-> +	struct dw9768 *dw9768;
-> +	unsigned int i;
-> +	int ret;
-> +
-> +	dw9768 = devm_kzalloc(dev, sizeof(*dw9768), GFP_KERNEL);
-> +	if (!dw9768)
-> +		return -ENOMEM;
-> +
-> +	/* Initialize subdev */
-> +	v4l2_i2c_subdev_init(&dw9768->sd, client, &dw9768_ops);
-> +
-[..]
-> +	dw9768->sd.entity.function = MEDIA_ENT_F_LENS;
-> +
-> +	pm_runtime_enable(dev);
-> +	if (!pm_runtime_enabled(dev)) {
-> +		ret = dw9768_runtime_resume(dev);
-> +		if (ret < 0) {
-> +			dev_err(dev, "failed to power on: %d\n", ret);
-> +			goto err_clean_entity;
-> +		}
-> +	}
-> +
-> +	ret = v4l2_async_register_subdev(&dw9768->sd);
-> +	if (ret < 0) {
-> +		dev_err(dev, "failed to register V4L2 subdev: %d", ret);
-> +		goto err_power_off;
-> +	}
+On Mon, 31 Aug 2020 at 11:09, Sakari Ailus <sakari.ailus@linux.intel.com> wrote:
+>
+> Hi Krzysztof,
+>
+> Thanks for the patchset.
+>
+> On Fri, Aug 28, 2020 at 06:00:53PM +0200, Krzysztof Kozlowski wrote:
+> > The IMX258 sensor driver checked in device properties for a
+> > clock-frequency property which actually does not mean that the clock is
+> > really running such frequency or is it even enabled.
+> >
+> > Get the provided clock and check it frequency.  If none is provided,
+> > fall back to old property.
+> >
+> > Enable the clock when accessing the IMX258 registers and when streaming
+> > starts.
+> >
+> > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> > ---
+> >  drivers/media/i2c/imx258.c | 107 ++++++++++++++++++++++++++++++-------
+> >  1 file changed, 87 insertions(+), 20 deletions(-)
+> >
+> > diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
+> > index c20bac9b00ec..4d763dcabb1d 100644
+> > --- a/drivers/media/i2c/imx258.c
+> > +++ b/drivers/media/i2c/imx258.c
+> > @@ -2,6 +2,7 @@
+> >  // Copyright (C) 2018 Intel Corporation
+> >
+> >  #include <linux/acpi.h>
+> > +#include <linux/clk.h>
+> >  #include <linux/delay.h>
+> >  #include <linux/i2c.h>
+> >  #include <linux/module.h>
+> > @@ -68,6 +69,9 @@
+> >  #define REG_CONFIG_MIRROR_FLIP               0x03
+> >  #define REG_CONFIG_FLIP_TEST_PATTERN 0x02
+> >
+> > +/* Input clock frequency in Hz */
+> > +#define IMX258_INPUT_CLOCK_FREQ              19200000
+> > +
+> >  struct imx258_reg {
+> >       u16 address;
+> >       u8 val;
+> > @@ -610,6 +614,8 @@ struct imx258 {
+> >
+> >       /* Streaming on/off */
+> >       bool streaming;
+> > +
+> > +     struct clk *clk;
+> >  };
+> >
+> >  static inline struct imx258 *to_imx258(struct v4l2_subdev *_sd)
+> > @@ -747,6 +753,12 @@ static int imx258_set_ctrl(struct v4l2_ctrl *ctrl)
+> >       if (pm_runtime_get_if_in_use(&client->dev) == 0)
+> >               return 0;
+> >
+> > +     ret = clk_prepare_enable(imx258->clk);
+> > +     if (ret) {
+> > +             dev_err(&client->dev, "failed to enable clock\n");
+> > +             goto out;
+> > +     }
+> > +
+> >       switch (ctrl->id) {
+> >       case V4L2_CID_ANALOGUE_GAIN:
+> >               ret = imx258_write_reg(imx258, IMX258_REG_ANALOG_GAIN,
+> > @@ -779,6 +791,8 @@ static int imx258_set_ctrl(struct v4l2_ctrl *ctrl)
+> >               break;
+> >       }
+> >
+> > +out:
+> > +     clk_disable_unprepare(imx258->clk);
+> >       pm_runtime_put(&client->dev);
+> >
+> >       return ret;
+> > @@ -972,10 +986,40 @@ static int imx258_stop_streaming(struct imx258 *imx258)
+> >       return 0;
+> >  }
+> >
+> > +static int imx258_power_on(struct imx258 *imx258)
+> > +{
+> > +     struct i2c_client *client = v4l2_get_subdevdata(&imx258->sd);
+> > +     int ret;
+> > +
+> > +     ret = pm_runtime_get_sync(&client->dev);
+> > +     if (ret < 0)
+> > +             goto err;
+>
+> Please continue to use runtime PM directly, and move the clock control to
+> runtime PM callbacks (apart from probe and remove).
 
-I would expect to see a slightly different order here: first set
-everything up, then expose the device to PM subsystem.
+Runtime PM comes with its own overhead and using it for just toggling
+clock is slightly waste of cycle but if this is preferred I can do it.
 
-[..]
-> +static int dw9768_remove(struct i2c_client *client)
-> +{
-> +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
-> +	struct dw9768 *dw9768 = sd_to_dw9768(sd);
-> +
-> +	v4l2_async_unregister_subdev(&dw9768->sd);
-> +	v4l2_ctrl_handler_free(&dw9768->ctrls);
-> +	media_entity_cleanup(&dw9768->sd.entity);
-> +	pm_runtime_disable(&client->dev);
-> +	if (!pm_runtime_status_suspended(&client->dev))
-> +		dw9768_runtime_suspend(&client->dev);
-> +	pm_runtime_set_suspended(&client->dev);
-
-Ditto. Shall we first disable PM (so that we won't get any unexpected
-PM callbacks) and then destroy the device?
-
-	-ss
+Best regards,
+Krzysztof
