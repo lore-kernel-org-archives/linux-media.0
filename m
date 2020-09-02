@@ -2,120 +2,78 @@ Return-Path: <SRS0=Cf27=CL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A261EC433E7
-	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 21:38:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF74EC433E2
+	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 21:53:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 711B3207EA
-	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 21:38:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 94C342098B
+	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 21:53:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726674AbgIBVid (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Sep 2020 17:38:33 -0400
-Received: from elvis.franken.de ([193.175.24.41]:49452 "EHLO elvis.franken.de"
+        id S1726762AbgIBVxh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Sep 2020 17:53:37 -0400
+Received: from mga14.intel.com ([192.55.52.115]:28379 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726355AbgIBVic (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 2 Sep 2020 17:38:32 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1kDaSO-0001KH-00; Wed, 02 Sep 2020 23:38:16 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 29A9AC0E7B; Wed,  2 Sep 2020 23:38:09 +0200 (CEST)
-Date:   Wed, 2 Sep 2020 23:38:09 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     alsa-devel@alsa-project.org, linux-ia64@vger.kernel.org,
-        linux-doc@vger.kernel.org, nouveau@lists.freedesktop.org,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        linux-mm@kvack.org, Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-samsung-soc@vger.kernel.org,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        linux-scsi@vger.kernel.org,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        linux-media@vger.kernel.org,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Pawel Osciak <pawel@osciak.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org,
-        netdev@vger.kernel.org, Seung-Woo Kim <sw0312.kim@samsung.com>,
-        linux-mips@vger.kernel.org, iommu@lists.linux-foundation.org
-Subject: Re: [PATCH 22/28] sgiseeq: convert from dma_cache_sync to
- dma_sync_single_for_device
-Message-ID: <20200902213809.GA7998@alpha.franken.de>
-References: <20200819065555.1802761-1-hch@lst.de>
- <20200819065555.1802761-23-hch@lst.de>
- <20200901152209.GA14288@alpha.franken.de>
- <20200901171241.GA20685@alpha.franken.de>
- <20200901171627.GA8255@lst.de>
- <20200901173810.GA25282@alpha.franken.de>
+        id S1726298AbgIBVxg (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 2 Sep 2020 17:53:36 -0400
+IronPort-SDR: UEHGVqqIJF83VjGmb0/9lDVoqbdIzjYT1TQpW8ckrnnApx8h7Ape1g1tX3aHAJzsBfwiMgfD6F
+ fPcza0AsR82g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9732"; a="156754222"
+X-IronPort-AV: E=Sophos;i="5.76,384,1592895600"; 
+   d="scan'208";a="156754222"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2020 14:53:35 -0700
+IronPort-SDR: BrfkZlFUKv0sf9RjV1BkCgqjbxl5VZNFtrvfekZO8CvLqrXxPckPYHyTjmWtfZJJoyzU0YIXVK
+ XtiKGwc1PC4g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,384,1592895600"; 
+   d="scan'208";a="325951664"
+Received: from lkp-server02.sh.intel.com (HELO eb469fda2af7) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 02 Sep 2020 14:53:34 -0700
+Received: from kbuild by eb469fda2af7 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kDahB-0000Gc-Jp; Wed, 02 Sep 2020 21:53:33 +0000
+Date:   Thu, 3 Sep 2020 05:53:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-media@vger.kernel.org,
+        0day robot <lkp@intel.com>
+Subject: [RFC PATCH] Revert "wlcore: wl1271_check_aes_cmac_cypher() can be
+ static
+Message-ID: <20200902215322.GA42069@779141fe2fa5>
+References: <202009030534.oYAQhUQX%lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200901173810.GA25282@alpha.franken.de>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <202009030534.oYAQhUQX%lkp@intel.com>
+X-Patchwork-Hint: ignore
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Sep 01, 2020 at 07:38:10PM +0200, Thomas Bogendoerfer wrote:
-> On Tue, Sep 01, 2020 at 07:16:27PM +0200, Christoph Hellwig wrote:
-> > Well, if IP22 doesn't speculate (which I'm pretty sure is the case),
-> > dma_sync_single_for_cpu should indeeed be a no-op.  But then there
-> > also shouldn't be anything in the cache, as the previous
-> > dma_sync_single_for_device should have invalidated it.  So it seems like
-> > we are missing one (or more) ownership transfers to the device.  I'll
-> > try to look at the the ownership management in a little more detail
-> > tomorrow.
-> 
-> this is the problem:
-> 
->        /* Always check for received packets. */
->         sgiseeq_rx(dev, sp, hregs, sregs);
-> 
-> so the driver will look at the rx descriptor on every interrupt, so
-> we cache the rx descriptor on the first interrupt and if there was
-> $no rx packet, we will only see it, if cache line gets flushed for
-> some other reason. kick_tx() does a busy loop checking tx descriptors,
-> with just sync_desc_cpu...
 
-the patch below fixes the problem.
+Signed-off-by: kernel test robot <lkp@intel.com>
+---
+ main.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas.
-
-
-diff --git a/drivers/net/ethernet/seeq/sgiseeq.c b/drivers/net/ethernet/seeq/sgiseeq.c
-index 8507ff242014..876e3700a0e4 100644
---- a/drivers/net/ethernet/seeq/sgiseeq.c
-+++ b/drivers/net/ethernet/seeq/sgiseeq.c
-@@ -112,14 +112,18 @@ struct sgiseeq_private {
- 
- static inline void dma_sync_desc_cpu(struct net_device *dev, void *addr)
- {
--       dma_cache_sync(dev->dev.parent, addr, sizeof(struct sgiseeq_rx_desc),
--                      DMA_FROM_DEVICE);
-+       struct sgiseeq_private *sp = netdev_priv(dev);
-+
-+       dma_sync_single_for_device(dev->dev.parent, VIRT_TO_DMA(sp, addr),
-+                       sizeof(struct sgiseeq_rx_desc), DMA_FROM_DEVICE);
+diff --git a/drivers/net/wireless/ti/wlcore/main.c b/drivers/net/wireless/ti/wlcore/main.c
+index 090692f4f9e1d..7197ffef07fb1 100644
+--- a/drivers/net/wireless/ti/wlcore/main.c
++++ b/drivers/net/wireless/ti/wlcore/main.c
+@@ -1092,7 +1092,7 @@ static int wl12xx_chip_wakeup(struct wl1271 *wl, bool plt)
+ 	return ret;
  }
  
- static inline void dma_sync_desc_dev(struct net_device *dev, void *addr)
+-bool wl1271_check_aes_cmac_cypher(struct wl1271 *wl)
++static bool wl1271_check_aes_cmac_cypher(struct wl1271 *wl)
  {
--       dma_cache_sync(dev->dev.parent, addr, sizeof(struct sgiseeq_rx_desc),
--                      DMA_TO_DEVICE);
-+       struct sgiseeq_private *sp = netdev_priv(dev);
-+
-+       dma_sync_single_for_device(dev->dev.parent, VIRT_TO_DMA(sp, addr),
-+                       sizeof(struct sgiseeq_rx_desc), DMA_TO_DEVICE);
- }
- 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+ 	int ver[5] = { };
+ 	int ret;
