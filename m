@@ -7,47 +7,48 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA415C2BBD0
-	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 16:11:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0ABFC433E2
+	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 16:11:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B30C7207EA
-	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 16:11:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A1EE120773
+	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 16:11:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1599063066;
-	bh=yHxkHJXmHHTyvyIwik9o+Zn+nYcXFp6fggzlMJQEB0w=;
+	s=default; t=1599063073;
+	bh=jLwPewIQn+pgFUopzBjLSNLeLllS2zvZWT+HqHEkCss=;
 	h=From:Cc:Subject:Date:In-Reply-To:References:To:List-ID:From;
-	b=HSfK7Cq+xkxzDg5eV41r95oZp3QRk3MKbNE7ct5UBMKGPd0uZpnhsUCWe3QpH9DwK
-	 h1dCLFJEFLkQNErW/klbHDAnCo1qaajj7oe268DZJgJbg4xrMFCvhTfi3Gd71LBqVN
-	 CtelYOLV+ZKM/oTzIe8gysvQklEr2BjrE8E1/NiI=
+	b=ZaVpfLwg3553np2yHODxxrLFHV20xg1bP6ott9LfXvVStoW6gflD3sGqZdta46jw7
+	 +FY0PysBeWrPPuI1s812CERHI2tVMfMNj+A1jVzFo2A1fQs2/yHgKeYkQcqyyh8/PD
+	 nVMIr+4gmQmoOcLvtWIeYRb5fq/Fqcxd+G8c5IM4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728313AbgIBQLB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Sep 2020 12:11:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53920 "EHLO mail.kernel.org"
+        id S1728371AbgIBQLD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Sep 2020 12:11:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53930 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728164AbgIBQKw (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1728261AbgIBQKw (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 2 Sep 2020 12:10:52 -0400
 Received: from mail.kernel.org (ip5f5ad5c3.dynamic.kabel-deutschland.de [95.90.213.195])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DA1312137B;
+        by mail.kernel.org (Postfix) with ESMTPSA id E524B21532;
         Wed,  2 Sep 2020 16:10:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1599063046;
-        bh=yHxkHJXmHHTyvyIwik9o+Zn+nYcXFp6fggzlMJQEB0w=;
+        bh=jLwPewIQn+pgFUopzBjLSNLeLllS2zvZWT+HqHEkCss=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2alxKTRfIVmUUpPCedtGlFXhuDyxf1uwEBLlY7gwRwZx4sF0APleIQv6D5VLfX/zK
-         pTG8GW4JxZPNBkUDj2PmZse9xJklp/hvnjECggpAcCjAnSEsP1tgNZx+NXZ1LAh/FB
-         OBO39kdozwMgLnQEynMss6S/y14oBGm2PHeD7qTc=
+        b=mfGsMbIFHQAtssLyUM73TwAZkAt+2AAhZnlAsVA0zni6U3JNgnIdJRkMEb6bziIrR
+         oF6+7psEzCsO8jJDQG4mZM5t8RKmSqk380rORMbIeuv+TkiN0XD6Ew56MyX5C/EjSI
+         aLle/FcBysGu2c9nmQCpppgffNzQqbkndQ+F0lDc=
 Received: from mchehab by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1kDVLP-000t9n-N0; Wed, 02 Sep 2020 18:10:43 +0200
+        id 1kDVLQ-000tAW-57; Wed, 02 Sep 2020 18:10:44 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Antti Palosaari <crope@iki.fi>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 03/38] media: qt1010: fix usage of unititialized value
-Date:   Wed,  2 Sep 2020 18:10:06 +0200
-Message-Id: <b14f07b9c89456001f4d9c1ce7a66d5ebea40fdf.1599062230.git.mchehab+huawei@kernel.org>
+        Takashi Iwai <tiwai@suse.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 19/38] media: cx88-alsa: number of pages should be unsigned long
+Date:   Wed,  2 Sep 2020 18:10:22 +0200
+Message-Id: <0f391afa1692b65fa61f795e192fcef43e1779ba.1599062230.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1599062230.git.mchehab+huawei@kernel.org>
 References: <cover.1599062230.git.mchehab+huawei@kernel.org>
@@ -59,95 +60,61 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-As pointed by smatch:
+As reported by smatch:
 
-	drivers/media/tuners/qt1010.c:239 qt1010_init_meas1() error: uninitialized symbol 'val2'.
-	drivers/media/tuners/qt1010.c:273 qt1010_init_meas2() error: uninitialized symbol 'val'.
+	drivers/media/pci/cx88/cx88-alsa.c:286 cx88_alsa_dma_init() warn: should 'nr_pages << 12' be a 64 bit type?
 
-The logic is ok, but it is hard for static analyzers
-to parse it, as it depends on a value read in the middle
-of a loop.
-
-Also, it takes a while for humans to verify.
-
-Re-write the first function to use a more direct way.
-
-At the second one, I opted to just initialize the read var,
-in order to shut up the report.
-
-While here, address a few coding style issues at the
-function code.
+the number of patches should be unsigned long.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/tuners/qt1010.c | 25 ++++++++++++++-----------
- 1 file changed, 14 insertions(+), 11 deletions(-)
+ drivers/media/pci/cx88/cx88-alsa.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/tuners/qt1010.c b/drivers/media/tuners/qt1010.c
-index e48faf942830..3853a3d43d4f 100644
---- a/drivers/media/tuners/qt1010.c
-+++ b/drivers/media/tuners/qt1010.c
-@@ -222,23 +222,24 @@ static int qt1010_init_meas1(struct qt1010_priv *priv,
- 		{ QT1010_WR, reg, reg_init_val },
- 		{ QT1010_WR, 0x1e, 0x00 },
- 		{ QT1010_WR, 0x1e, oper },
--		{ QT1010_RD, reg, 0xff }
- 	};
+diff --git a/drivers/media/pci/cx88/cx88-alsa.c b/drivers/media/pci/cx88/cx88-alsa.c
+index 7d7aceecc985..aec60ebb010f 100644
+--- a/drivers/media/pci/cx88/cx88-alsa.c
++++ b/drivers/media/pci/cx88/cx88-alsa.c
+@@ -42,12 +42,12 @@
+  */
  
- 	for (i = 0; i < ARRAY_SIZE(i2c_data); i++) {
--		if (i2c_data[i].oper == QT1010_WR) {
--			err = qt1010_writereg(priv, i2c_data[i].reg,
--					      i2c_data[i].val);
--		} else {
--			err = qt1010_readreg(priv, i2c_data[i].reg, &val2);
--		}
--		if (err) return err;
-+		err = qt1010_writereg(priv, i2c_data[i].reg,
-+				      i2c_data[i].val);
-+		if (err)
-+			return err;
- 	}
+ struct cx88_audio_buffer {
+-	unsigned int               bpl;
+-	struct cx88_riscmem        risc;
++	unsigned int		bpl;
++	struct cx88_riscmem	risc;
+ 	void			*vaddr;
+ 	struct scatterlist	*sglist;
+ 	int                     sglen;
+-	int                     nr_pages;
++	unsigned long		nr_pages;
+ };
  
-+	err = qt1010_readreg(priv, reg, &val2);
-+	if (err)
-+		return err;
- 	do {
- 		val1 = val2;
- 		err = qt1010_readreg(priv, reg, &val2);
--		if (err) return err;
-+		if (err)
-+			return err;
-+
- 		dev_dbg(&priv->i2c->dev, "%s: compare reg:%02x %02x %02x\n",
- 				__func__, reg, val1, val2);
- 	} while (val1 != val2);
-@@ -250,7 +251,7 @@ static int qt1010_init_meas1(struct qt1010_priv *priv,
- static int qt1010_init_meas2(struct qt1010_priv *priv,
- 			    u8 reg_init_val, u8 *retval)
+ struct cx88_audio_dev {
+@@ -271,7 +271,8 @@ static irqreturn_t cx8801_irq(int irq, void *dev_id)
+ 	return IRQ_RETVAL(handled);
+ }
+ 
+-static int cx88_alsa_dma_init(struct cx88_audio_dev *chip, int nr_pages)
++static int cx88_alsa_dma_init(struct cx88_audio_dev *chip,
++			      unsigned long nr_pages)
  {
--	u8 i, val;
-+	u8 i, val = 0xff;
- 	int err;
- 	qt1010_i2c_oper_t i2c_data[] = {
- 		{ QT1010_WR, 0x07, reg_init_val },
-@@ -261,6 +262,7 @@ static int qt1010_init_meas2(struct qt1010_priv *priv,
- 		{ QT1010_WR, 0x1e, 0x00 },
- 		{ QT1010_WR, 0x22, 0xff }
- 	};
-+
- 	for (i = 0; i < ARRAY_SIZE(i2c_data); i++) {
- 		if (i2c_data[i].oper == QT1010_WR) {
- 			err = qt1010_writereg(priv, i2c_data[i].reg,
-@@ -268,7 +270,8 @@ static int qt1010_init_meas2(struct qt1010_priv *priv,
- 		} else {
- 			err = qt1010_readreg(priv, i2c_data[i].reg, &val);
- 		}
--		if (err) return err;
-+		if (err)
-+			return err;
+ 	struct cx88_audio_buffer *buf = chip->buf;
+ 	struct page *pg;
+@@ -279,11 +280,11 @@ static int cx88_alsa_dma_init(struct cx88_audio_dev *chip, int nr_pages)
+ 
+ 	buf->vaddr = vmalloc_32(nr_pages << PAGE_SHIFT);
+ 	if (!buf->vaddr) {
+-		dprintk(1, "vmalloc_32(%d pages) failed\n", nr_pages);
++		dprintk(1, "vmalloc_32(%lu pages) failed\n", nr_pages);
+ 		return -ENOMEM;
  	}
- 	*retval = val;
- 	return 0;
+ 
+-	dprintk(1, "vmalloc is at addr %p, size=%d\n",
++	dprintk(1, "vmalloc is at addr %p, size=%lu\n",
+ 		buf->vaddr, nr_pages << PAGE_SHIFT);
+ 
+ 	memset(buf->vaddr, 0, nr_pages << PAGE_SHIFT);
 -- 
 2.26.2
 
