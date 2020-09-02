@@ -4,56 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22314C433E2
-	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 16:18:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61C6AC43461
+	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 16:19:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 016E4208B3
-	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 16:18:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4171020639
+	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 16:19:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1599063527;
-	bh=o6Sh4lf9iPZGm59TmPs0E72ml8wcW0c1F943Y0tZ+fU=;
+	s=default; t=1599063549;
+	bh=20rwtaupDb1aKHEooDzQl/rU/dgCpdJe5nG7WDKkIQo=;
 	h=From:Cc:Subject:Date:In-Reply-To:References:To:List-ID:From;
-	b=qZVahz0sU72nrx7+r1ncj4/4WIjF0brr0X28/sWocDwKzt17Q/yASorYj0bEfL4XD
-	 CerjqqYuUDDTDxeA0ITvclNWJ4IFM3ZOml9y+9gOj3P3dq/pjeAZ22QxoauGITPgvF
-	 LlBYgCaY1uF/6YRmCMbMZhDmojkszw+xVkA3RQiE=
+	b=bxe6ucK4+eNowxrP2A9Svl6exMG3mxuqY7530dkPhX42UpXiiNYBzjf5rE3Oua5lE
+	 fvoozFWBgppo19P3L1B77nCjcFhpShaiIGeOd5ZvPcwWcm/owrWG/hDfUZGUO8Q/pb
+	 MK6AVgkkLuCeBwApcfiQ7vMUqaS9nxfg7mO3xGfY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728404AbgIBQSn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Sep 2020 12:18:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53504 "EHLO mail.kernel.org"
+        id S1728708AbgIBQSm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Sep 2020 12:18:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53510 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726771AbgIBQKq (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 2 Sep 2020 12:10:46 -0400
+        id S1727944AbgIBQKr (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 2 Sep 2020 12:10:47 -0400
 Received: from mail.kernel.org (ip5f5ad5c3.dynamic.kabel-deutschland.de [95.90.213.195])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D6DCE208CA;
+        by mail.kernel.org (Postfix) with ESMTPSA id D8B2C20BED;
         Wed,  2 Sep 2020 16:10:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1599063046;
-        bh=o6Sh4lf9iPZGm59TmPs0E72ml8wcW0c1F943Y0tZ+fU=;
+        bh=20rwtaupDb1aKHEooDzQl/rU/dgCpdJe5nG7WDKkIQo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q8vRkqBaakRSn5pZdvB0Iz/Uk04wuGVZ5NGOLRHAVU1NKm+g04R+Ic2PSCEAIHje0
-         XTyYzYr7Tn968sW59wVoqt0U1E+4veme24+9Cfjaad0K0aSje46uYK48TBUTjpsj4r
-         b/HxNImuKoH0l07N/riDO2pNYtn/WAPRFoXwtl5U=
+        b=C7Ydg7tr6cIAabckT8QZ+dQywwCWAHNr54q6yEDZ0ogV5DvrWeCuEL/fTKSPZNE7l
+         dvQddlUG516QXmMdSznl9IbkJAB9a+D3AlMk8bpcJ+Lkg0qYDNg6YNbbZd3UpOJgxz
+         FdqXwEsrpFrojPjmeXXodDfrFizyaFHu8ZeuD084=
 Received: from mchehab by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1kDVLP-000t9l-M7; Wed, 02 Sep 2020 18:10:43 +0200
+        id 1kDVLP-000tAD-Vy; Wed, 02 Sep 2020 18:10:44 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Vandana BN <bnvandana@gmail.com>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 02/38] media: v4l2-ioctl: avoid memory leaks on some time32 compat functions
-Date:   Wed,  2 Sep 2020 18:10:05 +0200
-Message-Id: <27254f9780e7ec8502761826c2888dbd51a536a8.1599062230.git.mchehab+huawei@kernel.org>
+        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 13/38] media: vivid: move the create queues to a separate function
+Date:   Wed,  2 Sep 2020 18:10:16 +0200
+Message-Id: <42219ecf5014d677d6fb65ae70086b7ae3b36931.1599062230.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1599062230.git.mchehab+huawei@kernel.org>
 References: <cover.1599062230.git.mchehab+huawei@kernel.org>
@@ -65,94 +59,215 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There are some reports about possible memory leaks:
-
-	drivers/media/v4l2-core//v4l2-ioctl.c:3203 video_put_user() warn: check that 'ev32' doesn't leak information (struct has a hole after 'type')
-	drivers/media/v4l2-core//v4l2-ioctl.c:3230 video_put_user() warn: check that 'vb32' doesn't leak information (struct has a hole after 'memory')
-
-While smatch seems to be reporting a false positive (line 3203),
-there's indeed a possible leak with reserved2 at vb32.
-
-We might have fixed just that one, but smatch checks won't
-be able to check leaks at ev32. So, re-work the code in a way
-that will ensure that the var contents will be zeroed before
-filling it.
-
-With that, we don't need anymore to touch reserved fields.
+Instead of placing everything inside vivid_create_instance(),
+we can move the part which creates per-type video queues
+into a separate function.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/v4l2-core/v4l2-ioctl.c | 48 ++++++++++++++--------------
- 1 file changed, 24 insertions(+), 24 deletions(-)
+ drivers/media/test-drivers/vivid/vivid-core.c | 175 +++++++++---------
+ 1 file changed, 92 insertions(+), 83 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index a556880f225a..6f3fe9c4b64a 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -3189,17 +3189,16 @@ static int video_put_user(void __user *arg, void *parg, unsigned int cmd)
- #ifdef CONFIG_COMPAT_32BIT_TIME
- 	case VIDIOC_DQEVENT_TIME32: {
- 		struct v4l2_event *ev = parg;
--		struct v4l2_event_time32 ev32 = {
--			.type		= ev->type,
--			.pending	= ev->pending,
--			.sequence	= ev->sequence,
--			.timestamp.tv_sec  = ev->timestamp.tv_sec,
--			.timestamp.tv_nsec = ev->timestamp.tv_nsec,
--			.id		= ev->id,
--		};
-+		struct v4l2_event_time32 ev32;
+diff --git a/drivers/media/test-drivers/vivid/vivid-core.c b/drivers/media/test-drivers/vivid/vivid-core.c
+index 3340b61e68c0..69cc8456a323 100644
+--- a/drivers/media/test-drivers/vivid/vivid-core.c
++++ b/drivers/media/test-drivers/vivid/vivid-core.c
+@@ -1218,6 +1218,93 @@ static int vivid_init_dv_timings(struct vivid_dev *dev)
+ 	return 0;
+ }
  
-+		memset(&ev32, 0, sizeof(ev32));
-+		ev32.type		= ev->type,
-+		ev32.pending		= ev->pending,
-+		ev32.sequence		= ev->sequence,
-+		ev32.timestamp.tv_sec	= ev->timestamp.tv_sec,
-+		ev32.timestamp.tv_nsec	= ev->timestamp.tv_nsec,
-+		ev32.id			= ev->id,
- 		memcpy(&ev32.u, &ev->u, sizeof(ev->u));
--		memcpy(&ev32.reserved, &ev->reserved, sizeof(ev->reserved));
- 
- 		if (copy_to_user(arg, &ev32, sizeof(ev32)))
- 			return -EFAULT;
-@@ -3210,21 +3209,22 @@ static int video_put_user(void __user *arg, void *parg, unsigned int cmd)
- 	case VIDIOC_DQBUF_TIME32:
- 	case VIDIOC_PREPARE_BUF_TIME32: {
- 		struct v4l2_buffer *vb = parg;
--		struct v4l2_buffer_time32 vb32 = {
--			.index		= vb->index,
--			.type		= vb->type,
--			.bytesused	= vb->bytesused,
--			.flags		= vb->flags,
--			.field		= vb->field,
--			.timestamp.tv_sec	= vb->timestamp.tv_sec,
--			.timestamp.tv_usec	= vb->timestamp.tv_usec,
--			.timecode	= vb->timecode,
--			.sequence	= vb->sequence,
--			.memory		= vb->memory,
--			.m.userptr	= vb->m.userptr,
--			.length		= vb->length,
--			.request_fd	= vb->request_fd,
--		};
-+		struct v4l2_buffer_time32 vb32;
++static int vivid_create_queues(struct vivid_dev *dev)
++{
++	int ret;
 +
-+		memset(&vb32, 0, sizeof(vb32));
-+		vb32.index		= vb->index,
-+		vb32.type		= vb->type,
-+		vb32.bytesused		= vb->bytesused,
-+		vb32.flags		= vb->flags,
-+		vb32.field		= vb->field,
-+		vb32.timestamp.tv_sec	= vb->timestamp.tv_sec,
-+		vb32.timestamp.tv_usec	= vb->timestamp.tv_usec,
-+		vb32.timecode		= vb->timecode,
-+		vb32.sequence		= vb->sequence,
-+		vb32.memory		= vb->memory,
-+		vb32.length		= vb->length,
-+		vb32.request_fd		= vb->request_fd,
-+		memcpy(&vb32.m, &vb->m, sizeof(vb->m));
++	/* start creating the vb2 queues */
++	if (dev->has_vid_cap) {
++		/* initialize vid_cap queue */
++		ret = vivid_create_queue(dev, &dev->vb_vid_cap_q,
++					 V4L2_BUF_TYPE_VIDEO_CAPTURE, 2,
++					 &vivid_vid_cap_qops);
++		if (ret)
++			return ret;
++	}
++
++	if (dev->has_vid_out) {
++		/* initialize vid_out queue */
++		ret = vivid_create_queue(dev, &dev->vb_vid_out_q,
++					 V4L2_BUF_TYPE_VIDEO_OUTPUT, 2,
++					 &vivid_vid_out_qops);
++		if (ret)
++			return ret;
++	}
++
++	if (dev->has_vbi_cap) {
++		/* initialize vbi_cap queue */
++		ret = vivid_create_queue(dev, &dev->vb_vbi_cap_q,
++					 V4L2_BUF_TYPE_VBI_CAPTURE, 2,
++					 &vivid_vbi_cap_qops);
++		if (ret)
++			return ret;
++	}
++
++	if (dev->has_vbi_out) {
++		/* initialize vbi_out queue */
++		ret = vivid_create_queue(dev, &dev->vb_vbi_out_q,
++					 V4L2_BUF_TYPE_VBI_OUTPUT, 2,
++					 &vivid_vbi_out_qops);
++		if (ret)
++			return ret;
++	}
++
++	if (dev->has_sdr_cap) {
++		/* initialize sdr_cap queue */
++		ret = vivid_create_queue(dev, &dev->vb_sdr_cap_q,
++					 V4L2_BUF_TYPE_SDR_CAPTURE, 8,
++					 &vivid_sdr_cap_qops);
++		if (ret)
++			return ret;
++	}
++
++	if (dev->has_meta_cap) {
++		/* initialize meta_cap queue */
++		ret = vivid_create_queue(dev, &dev->vb_meta_cap_q,
++					 V4L2_BUF_TYPE_META_CAPTURE, 2,
++					 &vivid_meta_cap_qops);
++		if (ret)
++			return ret;
++	}
++
++	if (dev->has_meta_out) {
++		/* initialize meta_out queue */
++		ret = vivid_create_queue(dev, &dev->vb_meta_out_q,
++					 V4L2_BUF_TYPE_META_OUTPUT, 1,
++					 &vivid_meta_out_qops);
++		if (ret)
++			return ret;
++	}
++
++	if (dev->has_touch_cap) {
++		/* initialize touch_cap queue */
++		ret = vivid_create_queue(dev, &dev->vb_touch_cap_q,
++					 V4L2_BUF_TYPE_VIDEO_CAPTURE, 1,
++					 &vivid_touch_cap_qops);
++		if (ret)
++			return ret;
++	}
++
++	if (dev->has_fb) {
++		/* Create framebuffer for testing capture/output overlay */
++		ret = vivid_fb_init(dev);
++		if (ret)
++			return ret;
++		v4l2_info(&dev->v4l2_dev, "Framebuffer device registered as fb%d\n",
++			  dev->fb_info.node);
++	}
++	return 0;
++}
  
- 		if (copy_to_user(arg, &vb32, sizeof(vb32)))
- 			return -EFAULT;
+ static int vivid_create_instance(struct platform_device *pdev, int inst)
+ {
+@@ -1399,8 +1486,8 @@ static int vivid_create_instance(struct platform_device *pdev, int inst)
+ 	 * Same as create_singlethread_workqueue, but now I can use the
+ 	 * string formatting of alloc_ordered_workqueue.
+ 	 */
+-	dev->cec_workqueue =
+-		alloc_ordered_workqueue("vivid-%03d-cec", WQ_MEM_RECLAIM, inst);
++	dev->cec_workqueue = alloc_ordered_workqueue("vivid-%03d-cec",
++						     WQ_MEM_RECLAIM, inst);
+ 	if (!dev->cec_workqueue) {
+ 		ret = -ENOMEM;
+ 		goto unreg_dev;
+@@ -1409,87 +1496,9 @@ static int vivid_create_instance(struct platform_device *pdev, int inst)
+ 	if (allocators[inst] == 1)
+ 		dma_coerce_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
+ 
+-	/* start creating the vb2 queues */
+-	if (dev->has_vid_cap) {
+-		/* initialize vid_cap queue */
+-		ret = vivid_create_queue(dev, &dev->vb_vid_cap_q,
+-					 V4L2_BUF_TYPE_VIDEO_CAPTURE, 2,
+-					 &vivid_vid_cap_qops);
+-		if (ret)
+-			goto unreg_dev;
+-	}
+-
+-	if (dev->has_vid_out) {
+-		/* initialize vid_out queue */
+-		ret = vivid_create_queue(dev, &dev->vb_vid_out_q,
+-					 V4L2_BUF_TYPE_VIDEO_OUTPUT, 2,
+-					 &vivid_vid_out_qops);
+-		if (ret)
+-			goto unreg_dev;
+-	}
+-
+-	if (dev->has_vbi_cap) {
+-		/* initialize vbi_cap queue */
+-		ret = vivid_create_queue(dev, &dev->vb_vbi_cap_q,
+-					 V4L2_BUF_TYPE_VBI_CAPTURE, 2,
+-					 &vivid_vbi_cap_qops);
+-		if (ret)
+-			goto unreg_dev;
+-	}
+-
+-	if (dev->has_vbi_out) {
+-		/* initialize vbi_out queue */
+-		ret = vivid_create_queue(dev, &dev->vb_vbi_out_q,
+-					 V4L2_BUF_TYPE_VBI_OUTPUT, 2,
+-					 &vivid_vbi_out_qops);
+-		if (ret)
+-			goto unreg_dev;
+-	}
+-
+-	if (dev->has_sdr_cap) {
+-		/* initialize sdr_cap queue */
+-		ret = vivid_create_queue(dev, &dev->vb_sdr_cap_q,
+-					 V4L2_BUF_TYPE_SDR_CAPTURE, 8,
+-					 &vivid_sdr_cap_qops);
+-		if (ret)
+-			goto unreg_dev;
+-	}
+-
+-	if (dev->has_meta_cap) {
+-		/* initialize meta_cap queue */
+-		ret = vivid_create_queue(dev, &dev->vb_meta_cap_q,
+-					 V4L2_BUF_TYPE_META_CAPTURE, 2,
+-					 &vivid_meta_cap_qops);
+-		if (ret)
+-			goto unreg_dev;
+-	}
+-
+-	if (dev->has_meta_out) {
+-		/* initialize meta_out queue */
+-		ret = vivid_create_queue(dev, &dev->vb_meta_out_q,
+-					 V4L2_BUF_TYPE_META_OUTPUT, 1,
+-					 &vivid_meta_out_qops);
+-		if (ret)
+-			goto unreg_dev;
+-	}
+-
+-	if (dev->has_touch_cap) {
+-		/* initialize touch_cap queue */
+-		ret = vivid_create_queue(dev, &dev->vb_touch_cap_q,
+-					 V4L2_BUF_TYPE_VIDEO_CAPTURE, 1,
+-					 &vivid_touch_cap_qops);
+-		if (ret)
+-			goto unreg_dev;
+-	}
+-
+-	if (dev->has_fb) {
+-		/* Create framebuffer for testing capture/output overlay */
+-		ret = vivid_fb_init(dev);
+-		if (ret)
+-			goto unreg_dev;
+-		v4l2_info(&dev->v4l2_dev, "Framebuffer device registered as fb%d\n",
+-			  dev->fb_info.node);
+-	}
++	ret = vivid_create_queues(dev);
++	if (ret)
++		goto unreg_dev;
+ 
+ #ifdef CONFIG_VIDEO_VIVID_CEC
+ 	if (dev->has_vid_cap && in_type_counter[HDMI]) {
 -- 
 2.26.2
 
