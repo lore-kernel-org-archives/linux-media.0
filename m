@@ -2,73 +2,104 @@ Return-Path: <SRS0=Cf27=CL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A7F6C433E2
-	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 06:29:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0022AC433E6
+	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 06:46:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1113D2078B
-	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 06:29:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DC29120665
+	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 06:46:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726510AbgIBG3n (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Sep 2020 02:29:43 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:57240 "EHLO
-        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726140AbgIBG3n (ORCPT
+        id S1726446AbgIBGqX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Sep 2020 02:46:23 -0400
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:54390 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726247AbgIBGqW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 2 Sep 2020 02:29:43 -0400
-Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id BD8F9634C8C
-        for <linux-media@vger.kernel.org>; Wed,  2 Sep 2020 09:29:19 +0300 (EEST)
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Subject: [PATCH 1/1] media: i2c: Remove Alan Chiang's e-mail address
-Date:   Wed,  2 Sep 2020 09:24:49 +0300
-Message-Id: <20200902062449.23597-1-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.27.0
+        Wed, 2 Sep 2020 02:46:22 -0400
+Received: from [88.147.20.154] (port=44860 helo=[192.168.77.66])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1kDMXC-0009pS-DD; Wed, 02 Sep 2020 08:46:18 +0200
+Subject: Re: [PATCH v5 2/3] dt-bindings: media: imx274: Add optional input
+ clock and supplies
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        sakari.ailus@iki.fi, hverkuil@xs4all.nl, jacopo+renesas@jmondi.org,
+        leonl@leopardimaging.com, robh+dt@kernel.org, lgirdwood@gmail.com,
+        broonie@kernel.org
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1599012278-10203-1-git-send-email-skomatineni@nvidia.com>
+ <1599012278-10203-3-git-send-email-skomatineni@nvidia.com>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Message-ID: <7ce6003c-a27d-5831-66a1-832db0114188@lucaceresoli.net>
+Date:   Wed, 2 Sep 2020 08:46:14 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1599012278-10203-3-git-send-email-skomatineni@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Alan Chiang's e-mail address no longer works. Remove it.
+Hi Sowjanya,
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- drivers/media/i2c/dw9807-vcm.c | 2 +-
- drivers/media/i2c/imx258.c     | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 02/09/20 04:04, Sowjanya Komatineni wrote:
+> This patch adds IMX274 optional external clock input and voltage
+> supplies to device tree bindings.
+> 
+> Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+> ---
+>  .../devicetree/bindings/media/i2c/sony,imx274.yaml  | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx274.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx274.yaml
+> index 7ae47a6..57e7176 100644
+> --- a/Documentation/devicetree/bindings/media/i2c/sony,imx274.yaml
+> +++ b/Documentation/devicetree/bindings/media/i2c/sony,imx274.yaml
+> @@ -25,6 +25,27 @@ properties:
+>    reset-gpios:
+>      maxItems: 1
+>  
+> +  clocks:
+> +    maxItems: 1
+> +    description: Reference to the sensor input clock
+> +
+> +  clock-names:
+> +    maxItems: 1
+> +    items:
+> +      - const: inck
 
-diff --git a/drivers/media/i2c/dw9807-vcm.c b/drivers/media/i2c/dw9807-vcm.c
-index b38a4e6d270d..438a44b76da8 100644
---- a/drivers/media/i2c/dw9807-vcm.c
-+++ b/drivers/media/i2c/dw9807-vcm.c
-@@ -324,6 +324,6 @@ static struct i2c_driver dw9807_i2c_driver = {
- 
- module_i2c_driver(dw9807_i2c_driver);
- 
--MODULE_AUTHOR("Chiang, Alan <alanx.chiang@intel.com>");
-+MODULE_AUTHOR("Chiang, Alan");
- MODULE_DESCRIPTION("DW9807 VCM driver");
- MODULE_LICENSE("GPL v2");
-diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
-index f86ae18bc104..ccb55fd1d506 100644
---- a/drivers/media/i2c/imx258.c
-+++ b/drivers/media/i2c/imx258.c
-@@ -1304,7 +1304,7 @@ static struct i2c_driver imx258_i2c_driver = {
- module_i2c_driver(imx258_i2c_driver);
- 
- MODULE_AUTHOR("Yeh, Andy <andy.yeh@intel.com>");
--MODULE_AUTHOR("Chiang, Alan <alanx.chiang@intel.com>");
-+MODULE_AUTHOR("Chiang, Alan");
- MODULE_AUTHOR("Chen, Jason <jasonx.z.chen@intel.com>");
- MODULE_DESCRIPTION("Sony IMX258 sensor driver");
- MODULE_LICENSE("GPL v2");
+I think this can be simpler:
+
+  clock-names:
+    maxItems: 1
+    items:
+      - const: inck
+
+As in:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml?h=v5.9-rc3#n90
+
 -- 
-2.27.0
-
+Luca
