@@ -2,117 +2,101 @@ Return-Path: <SRS0=Cf27=CL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95EA0C433E6
-	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 06:52:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD656C433E2
+	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 07:18:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 79EE2207EA
-	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 06:52:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B833B2072A
+	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 07:18:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1599031117;
+	bh=RspbMEATeicSe3TX1cuxyqsI46vzPdGI2/TNMQ3nQ7k=;
+	h=From:To:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=qfOAEvrREPvzoJ8KarKbUlQLBI79b/Gdto4S2moX7GO5hr1lEjptFe2gFN15icQIE
+	 ZS3VLHUAVY8BbwkwqV2X4WMrrihjZ7UdKY464jgXQqxoTRHjOFt6gZCmn3p2C3sjZ2
+	 ApdgLYh8PzwVAohFTcXyOhtqdQ1PpidjtIReK/KU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726567AbgIBGw0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Sep 2020 02:52:26 -0400
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:59917 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726144AbgIBGwZ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 2 Sep 2020 02:52:25 -0400
-Received: from [88.147.20.154] (port=44912 helo=[192.168.77.66])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1kDMd5-000Com-EF; Wed, 02 Sep 2020 08:52:23 +0200
-Subject: Re: [PATCH v5 2/3] dt-bindings: media: imx274: Add optional input
- clock and supplies
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        sakari.ailus@iki.fi, hverkuil@xs4all.nl, jacopo+renesas@jmondi.org,
-        leonl@leopardimaging.com, robh+dt@kernel.org, lgirdwood@gmail.com,
-        broonie@kernel.org
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1599012278-10203-1-git-send-email-skomatineni@nvidia.com>
- <1599012278-10203-3-git-send-email-skomatineni@nvidia.com>
- <7ce6003c-a27d-5831-66a1-832db0114188@lucaceresoli.net>
-Message-ID: <09270110-39ca-7232-0848-c5c338de8552@lucaceresoli.net>
-Date:   Wed, 2 Sep 2020 08:52:19 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <7ce6003c-a27d-5831-66a1-832db0114188@lucaceresoli.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+        id S1726669AbgIBHSd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Sep 2020 03:18:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55310 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726167AbgIBHSb (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 2 Sep 2020 03:18:31 -0400
+Received: from PC-kkoz.proceq.com (unknown [213.160.61.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 273572087D;
+        Wed,  2 Sep 2020 07:18:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599031111;
+        bh=RspbMEATeicSe3TX1cuxyqsI46vzPdGI2/TNMQ3nQ7k=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=CTeNuWwFcgwb6MIHDjwhvFz6FsfMX2qAzWYNnjvY2qMvgMlgO04ulGpJ9ERESTiGP
+         7Oyc3KtFApbXYFJ9bxbLl8BAgf1dqjyHWAU8cykVDqlpw9diOqek+XT/CwXuXLYbsC
+         ZOB4HEGgQsR2Ws3cajD/Mz6wNnEjvkx/GP3RXDIo=
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 2/3] media: imx258: Add support for binding via device tree
+Date:   Wed,  2 Sep 2020 09:18:09 +0200
+Message-Id: <1599031090-21608-2-git-send-email-krzk@kernel.org>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1599031090-21608-1-git-send-email-krzk@kernel.org>
+References: <1599031090-21608-1-git-send-email-krzk@kernel.org>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi again...
+The IMX258 can be used also on embedded designs using device tree so
+allow the sensor to bind to a device tree node.
 
-On 02/09/20 08:46, Luca Ceresoli wrote:
-> Hi Sowjanya,
-> 
-> On 02/09/20 04:04, Sowjanya Komatineni wrote:
->> This patch adds IMX274 optional external clock input and voltage
->> supplies to device tree bindings.
->>
->> Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
->> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
->> ---
->>  .../devicetree/bindings/media/i2c/sony,imx274.yaml  | 21 +++++++++++++++++++++
->>  1 file changed, 21 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx274.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx274.yaml
->> index 7ae47a6..57e7176 100644
->> --- a/Documentation/devicetree/bindings/media/i2c/sony,imx274.yaml
->> +++ b/Documentation/devicetree/bindings/media/i2c/sony,imx274.yaml
->> @@ -25,6 +25,27 @@ properties:
->>    reset-gpios:
->>      maxItems: 1
->>  
->> +  clocks:
->> +    maxItems: 1
->> +    description: Reference to the sensor input clock
->> +
->> +  clock-names:
->> +    maxItems: 1
->> +    items:
->> +      - const: inck
-> 
-> I think this can be simpler:
-> 
->   clock-names:
->     maxItems: 1
->     items:
->       - const: inck
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-Which is equal to the original... copy-paste-and-forgot.
+---
 
-Here's the simplified form, for real:
+Changes since v1:
+1. None
+---
+ drivers/media/i2c/imx258.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-  clocks:
-    maxItems: 1
-  clock-names:
-    const: inck
-
-As in:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml?h=v5.9-rc3#n90
-
-
+diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
+index f86ae18bc104..c20bac9b00ec 100644
+--- a/drivers/media/i2c/imx258.c
++++ b/drivers/media/i2c/imx258.c
+@@ -1291,11 +1291,18 @@ static const struct acpi_device_id imx258_acpi_ids[] = {
+ MODULE_DEVICE_TABLE(acpi, imx258_acpi_ids);
+ #endif
+ 
++static const struct of_device_id imx258_dt_ids[] = {
++	{ .compatible = "sony,imx258" },
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(of, imx258_dt_ids);
++
+ static struct i2c_driver imx258_i2c_driver = {
+ 	.driver = {
+ 		.name = "imx258",
+ 		.pm = &imx258_pm_ops,
+ 		.acpi_match_table = ACPI_PTR(imx258_acpi_ids),
++		.of_match_table	= imx258_dt_ids,
+ 	},
+ 	.probe_new = imx258_probe,
+ 	.remove = imx258_remove,
 -- 
-Luca
+2.7.4
+
