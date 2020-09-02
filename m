@@ -2,157 +2,119 @@ Return-Path: <SRS0=Cf27=CL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B3ADC433E2
-	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 15:57:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0A72C43461
+	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 16:10:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D9B11207EA
-	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 15:57:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B2B902072A
+	for <linux-media@archiver.kernel.org>; Wed,  2 Sep 2020 16:10:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1599062245;
-	bh=di7oB6z89bc0JJQJfIcyG++9jmlU3N16jB15jFiLFGA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=o+9D00pc+tUJd6srlRk2b2w5wo/nsD3rHmRbL0PrMdQlrkthnvAmMCrTzgKNzv0Tw
-	 rEPsAwRCQWwXnLvthNlV2+oixP8VWr4fohuCv4qvzEi2hizd3Sn3c4W5t13S1EjS4q
-	 xnOXnb3hfKu3Xr6m5R0ZfA+qsUIN8dHfcj+cSd80=
+	s=default; t=1599063051;
+	bh=1OCEDwU9HDg1YRkwjzMBn5RpJKhK/uC509VN2U3vg0c=;
+	h=From:Cc:Subject:Date:In-Reply-To:References:To:List-ID:From;
+	b=RrTmm9ULT9CGCG233e+iEmg/HuXd8cWTNY7OPFrGFdeqRoY5lCYm0Kjos8NUmLh4m
+	 uADA0x2rhPksS40bBRqpmoad3NgmDUhyUSuO79UEjeNKgPmuqbBNFa81sGD1+lYA5j
+	 naAAaCpIskHxCxf0PRbLruR44fozxzk43Tf0XuNU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727790AbgIBP5P convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Sep 2020 11:57:15 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:41209 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726380AbgIBP5N (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Sep 2020 11:57:13 -0400
-Received: by mail-oi1-f195.google.com with SMTP id 2so4817882ois.8;
-        Wed, 02 Sep 2020 08:57:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=9DEmVUjPTyBKjnvLO+wWE+XjYNvSuVDxJTujI+Ajagc=;
-        b=tah/q2vZSU9oxJGcPFUN5fLabRgqZl8zP6NJUTySpXfPW61JTp4ilmA/aAM56B5vxh
-         Zhgl2mqe0Nh8Zo624Y6D0/AIm40SJMW7XWwFItqlJ3EELZj56utzFsG3X53Jt8TGdjh1
-         fuW3QYQVTPhYTw+WcKn/tOobIeFzXT/xU1J/L1U1ecISDz6eJm4aNkkYrHGqWUMKCq+M
-         yohjfgZdh/TadwE2MGUuyJ0E9rO13yzd6H+yF0ltZL2xo1/L/itpSGW0R4dV48/eh/yL
-         hc3gvcyE6QAWx5IFnqvK8KOTWqTo1bxgQkyo1Oyc4OYx5961g9z/5heeHPuJ+pqWoMdo
-         ISsw==
-X-Gm-Message-State: AOAM532ISOINb0De+lNwJwIA7zCoPND6PQvYQnvybKEtVNDQWcCYKubZ
-        UbD1FSOTz+a+LfOyTokVtasF+v4rDeLv2K0RzXE=
-X-Google-Smtp-Source: ABdhPJxISKaKeJir20XopYsr2P5EemHb8bMmTSWmdl+aDQipaSVLQOc5ztTEce5sBNaV5tILpcudk3dJ78Xf43NpMbg=
-X-Received: by 2002:aca:fd95:: with SMTP id b143mr2357844oii.68.1599062232602;
- Wed, 02 Sep 2020 08:57:12 -0700 (PDT)
+        id S1728035AbgIBQKs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Sep 2020 12:10:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53486 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726323AbgIBQKq (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 2 Sep 2020 12:10:46 -0400
+Received: from mail.kernel.org (ip5f5ad5c3.dynamic.kabel-deutschland.de [95.90.213.195])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D5B0320829;
+        Wed,  2 Sep 2020 16:10:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599063046;
+        bh=1OCEDwU9HDg1YRkwjzMBn5RpJKhK/uC509VN2U3vg0c=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ifhvhUuYT6pd0LE2qsDDFfRrMs8OdIaCz9X7BIOgxoGIjS6nbjFk3zb/jSh37oh2k
+         nF6OongzJKq2WaCYU3KSWPiKn5o9cVjdXfv0Jh96z4VXkZpBNguFTgU0YhvGGBUa+O
+         Ypt7/TzZzQ1xyDr+AhnWN65zCsVHK6mfMlG7CzEI=
+Received: from mchehab by mail.kernel.org with local (Exim 4.94)
+        (envelope-from <mchehab@kernel.org>)
+        id 1kDVLP-000t9r-Oh; Wed, 02 Sep 2020 18:10:43 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Allen Pais <allen.lkml@gmail.com>,
+        Romain Perier <romain.perier@gmail.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 05/38] media: wl128x: get rid of a potential spectre issue
+Date:   Wed,  2 Sep 2020 18:10:08 +0200
+Message-Id: <17a07bd5f4a690a388ba03daf8d01b30bd9cd8d9.1599062230.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <cover.1599062230.git.mchehab+huawei@kernel.org>
+References: <cover.1599062230.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-References: <20200901210333.8462-1-sakari.ailus@linux.intel.com> <20200901210333.8462-7-sakari.ailus@linux.intel.com>
-In-Reply-To: <20200901210333.8462-7-sakari.ailus@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 2 Sep 2020 17:57:01 +0200
-Message-ID: <CAJZ5v0jFceTFRTD55cz3ZHRZpuNRK_z9=_DxWexc8ArsGU3cog@mail.gmail.com>
-Subject: Re: [PATCH v7 6/6] Documentation: ACPI: Document allow-low-power-probe
- _DSD property
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Mani, Rajmohan" <rajmohan.mani@intel.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
-        Hyungwoo Yang <hyungwoo.yang@intel.com>,
-        linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Sep 1, 2020 at 11:03 PM Sakari Ailus
-<sakari.ailus@linux.intel.com> wrote:
->
-> Document the probe-low-power _DSD property and how it is used with I²C
-> drivers.
+As reported by smatch:
+	drivers/media/radio/wl128x/fmdrv_common.c:736 fm_irq_handle_rdsdata_getcmd_resp() warn: potential spectre issue 'rds_fmt.data.groupdatabuff.buff>
 
-I would reorder the series to make this go right after the [1/6] or
-maybe even fold it into that patch.
+Address it by using array_index_nospec().
 
-The point is that the changes in [1/6] clearly depend on the property
-defined here.
+While here, reorder the linux/ includes.
 
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
->  .../acpi/dsd/allow-low-power-probe.rst        | 28 +++++++++++++++++++
->  Documentation/firmware-guide/acpi/index.rst   |  1 +
->  2 files changed, 29 insertions(+)
->  create mode 100644 Documentation/firmware-guide/acpi/dsd/allow-low-power-probe.rst
->
-> diff --git a/Documentation/firmware-guide/acpi/dsd/allow-low-power-probe.rst b/Documentation/firmware-guide/acpi/dsd/allow-low-power-probe.rst
-> new file mode 100644
-> index 0000000000000..6fcc89162b898
-> --- /dev/null
-> +++ b/Documentation/firmware-guide/acpi/dsd/allow-low-power-probe.rst
-> @@ -0,0 +1,28 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +======================================
-> +Probing I²C devices in low power state
-> +======================================
-> +
-> +Introduction
-> +============
-> +
-> +In some cases it may be preferred to leave certain devices powered off for the
-> +entire system bootup if powering on these devices has adverse side effects,
-> +beyond just powering on the said device. Linux recognizes the _DSD property
-> +"allow-low-power-probe" that can be used for this purpose.
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ drivers/media/radio/wl128x/fmdrv_common.c | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
-It would be good to refer to the document defining the generic _DSD
-properties mechanism and the GUID used for that from here.
+diff --git a/drivers/media/radio/wl128x/fmdrv_common.c b/drivers/media/radio/wl128x/fmdrv_common.c
+index 5c395da74e17..9abc8e0283c1 100644
+--- a/drivers/media/radio/wl128x/fmdrv_common.c
++++ b/drivers/media/radio/wl128x/fmdrv_common.c
+@@ -19,9 +19,11 @@
+  *  Author: Manjunatha Halli <manjunatha_halli@ti.com>
+  */
+ 
+-#include <linux/module.h>
+-#include <linux/firmware.h>
+ #include <linux/delay.h>
++#include <linux/firmware.h>
++#include <linux/module.h>
++#include <linux/nospec.h>
++
+ #include "fmdrv.h"
+ #include "fmdrv_v4l2.h"
+ #include "fmdrv_common.h"
+@@ -700,7 +702,7 @@ static void fm_irq_handle_rdsdata_getcmd_resp(struct fmdev *fmdev)
+ 	struct fm_rds *rds = &fmdev->rx.rds;
+ 	unsigned long group_idx, flags;
+ 	u8 *rds_data, meta_data, tmpbuf[FM_RDS_BLK_SIZE];
+-	u8 type, blk_idx;
++	u8 type, blk_idx, idx;
+ 	u16 cur_picode;
+ 	u32 rds_len;
+ 
+@@ -733,9 +735,11 @@ static void fm_irq_handle_rdsdata_getcmd_resp(struct fmdev *fmdev)
+ 		}
+ 
+ 		/* Skip checkword (control) byte and copy only data byte */
+-		memcpy(&rds_fmt.data.groupdatabuff.
+-				buff[blk_idx * (FM_RDS_BLK_SIZE - 1)],
+-				rds_data, (FM_RDS_BLK_SIZE - 1));
++		idx = array_index_nospec(blk_idx * (FM_RDS_BLK_SIZE - 1),
++				         FM_RX_RDS_INFO_FIELD_MAX - (FM_RDS_BLK_SIZE - 1));
++
++		memcpy(&rds_fmt.data.groupdatabuff.buff[idx], rds_data,
++		       FM_RDS_BLK_SIZE - 1);
+ 
+ 		rds->last_blk_idx = blk_idx;
+ 
+-- 
+2.26.2
 
-The meaning of  "_DSD property" may not be entirely clear to the
-reader as it stands.
-
-And maybe call the property "i2c-allow-low-power-probe" or similar, to
-indicate that it is specific to i2c.
-
-> +
-> +How it works
-> +============
-> +
-> +The property "allow-low-power-probe" boolean property may be used to tell Linux
-
-"boolean device property" ?
-
-> +that the I²C framework should instruct the kernel ACPI framework to leave the
-> +device in the low power state. If the driver indicates its support for this by
-> +setting the I2C_DRV_FL_ALLOW_LOW_POWER_PROBE flag in struct i2c_driver.flags
-> +field and the "allow-low-power-probe" property is present, the device will not
-> +be powered on for probe.
-> +
-> +The downside is that as the device is not powered on, even if there's a problem
-> +with the device, the driver likely probes just fine but the first user will
-> +find out the device doesn't work, instead of a failure at probe time. This
-> +feature should thus be used sparingly.
-
-It would be good to give an ASL example with this property provided.
-
-> diff --git a/Documentation/firmware-guide/acpi/index.rst b/Documentation/firmware-guide/acpi/index.rst
-> index ad3b5afdae77e..0070fcde9e669 100644
-> --- a/Documentation/firmware-guide/acpi/index.rst
-> +++ b/Documentation/firmware-guide/acpi/index.rst
-> @@ -11,6 +11,7 @@ ACPI Support
->     dsd/graph
->     dsd/data-node-references
->     dsd/leds
-> +   dsd/allow-low-power-probe
->     enumeration
->     osi
->     method-customizing
-> --
