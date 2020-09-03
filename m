@@ -2,133 +2,174 @@ Return-Path: <SRS0=bW/p=CM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCBA0C433E9
-	for <linux-media@archiver.kernel.org>; Thu,  3 Sep 2020 14:29:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FB4FC433E2
+	for <linux-media@archiver.kernel.org>; Thu,  3 Sep 2020 14:41:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 99B82206EB
-	for <linux-media@archiver.kernel.org>; Thu,  3 Sep 2020 14:29:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1599143349;
-	bh=RpJ/Acz/rkFmpeYcR0KIQTeH7ShlVwP3XrcWxrYHMBg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=WIFam1DHo0+M1w7AUkX7VLmb+O9yJR1SWritU5qj1qEC/9t2iCt56XawkVJT6fRAz
-	 IcrLCFfIYW3l3C3Ds795GT1ybiakXX57A5blPp5FIG4HaHMdxIm+7oayRkqAvLysdh
-	 zZpDkw/BzeWyMCkfrre3W2CEZfLD1dOoYNX6PVds=
+	by mail.kernel.org (Postfix) with ESMTP id 5C822206EB
+	for <linux-media@archiver.kernel.org>; Thu,  3 Sep 2020 14:41:50 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cBApgdMz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729306AbgICO2y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Sep 2020 10:28:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36126 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729353AbgICO2J (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 3 Sep 2020 10:28:09 -0400
-Received: from coco.lan (ip5f5ad5c3.dynamic.kabel-deutschland.de [95.90.213.195])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 521892072A;
-        Thu,  3 Sep 2020 14:27:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599143276;
-        bh=RpJ/Acz/rkFmpeYcR0KIQTeH7ShlVwP3XrcWxrYHMBg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YiD9KinC/bM6LRtBh7UMcfZV76qOTfP9S/SPTFurA4lfiNopWQVaOWwypGZhMtf6h
-         xvM8EOYhHRnh0poIRllkIuhQFm/V6IByyWXAhdm0zpJqhR5bAsxa4xW9yAZX2NbxvX
-         9aTQsVDku6BfHP3ww1QpHdVBkuo+5OXM9H5V/6RM=
-Date:   Thu, 3 Sep 2020 16:27:51 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/5] media: atomisp: get rid of
- -Wsuggest-attribute=format warnings
-Message-ID: <20200903162751.1dd13300@coco.lan>
-In-Reply-To: <20200903140724.GE1891694@smile.fi.intel.com>
-References: <cover.1599141140.git.mchehab+huawei@kernel.org>
-        <6c77d765707b1e6b2901fd23d85b4d032f1a1799.1599141140.git.mchehab+huawei@kernel.org>
-        <20200903140724.GE1891694@smile.fi.intel.com>
-X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S1729437AbgICOlp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Sep 2020 10:41:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:57963 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729404AbgICOlf (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 3 Sep 2020 10:41:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1599144092;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dlXSpmpAiY7YS5kYtaeWA3wo80DV7Gum6Jwj3vtpgjg=;
+        b=cBApgdMzStCbFy4yZlSuQ487GEoDmC6On8ildZrUvdJp42vSnvTeOY0ewFtTRJgZmhQ0R9
+        M6g3nyLK/m+FANLEGQjtfzWZMNdFNmDdW8cRs3BJ2lpVznxOftk9913Rqiy8ttIuWyMqnp
+        nBfE+5qiZWkiMrYvVAoU0NL5azYCyl4=
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
+ [209.85.166.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-314-CqVY6QY9MySDu5SCnQVyCg-1; Thu, 03 Sep 2020 10:41:31 -0400
+X-MC-Unique: CqVY6QY9MySDu5SCnQVyCg-1
+Received: by mail-il1-f198.google.com with SMTP id m80so2442982ilb.12
+        for <linux-media@vger.kernel.org>; Thu, 03 Sep 2020 07:41:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=dlXSpmpAiY7YS5kYtaeWA3wo80DV7Gum6Jwj3vtpgjg=;
+        b=UPkDYcPf0JZrKnpthCU31HmzeUlTCL36aRF0LcAQAnx5x02Mbc8sdRFsk0cmI8wh2o
+         2bZK+BAS5spBUQ/kBlgiuQ1jlvxXSRzLaXXd20pNOEgyW9IjUi2+XobKKsJpWrbTsR9+
+         TfLI33q8fJxWsW9c7Wz7vrO9qe6egwyOt8Jiimc/vua3aTfNmHSZ0CKGA04yAn/Hxu50
+         azyBqmHa4Mvva4l57KjKYRXrfM+uPHB1W2PCPy5GNG0GZltkLRNG7sBfXefjvnFEBP36
+         +huut4MP7zOqKtZ37URHDTPEORzAYD8YNbKY7Jlevm1Ru0zlzE5KAF005DnodPPT91nM
+         GfXw==
+X-Gm-Message-State: AOAM5327ffnZxBWmmlIYiMoYRDCdfXbTrfIkyl5/S7XdvGL4OMkKFYgT
+        HKkZFGJrQgI/4rXe9VE5JdV4DGeSpszHmvwRapGFiypTV4DO3FgB/EBCsvWunylU4WiK1M4SZ3P
+        sz/hF70JNXE53PUZcoNrDZfo=
+X-Received: by 2002:a92:c78e:: with SMTP id c14mr3385271ilk.3.1599144090426;
+        Thu, 03 Sep 2020 07:41:30 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxCAl5Mf+O6dLNF91Wu0iMCa8KPqD4EBuQd+O1BKyeEB3KAYW3jsrXGYwXNu2cuFkUA/BFcLw==
+X-Received: by 2002:a92:c78e:: with SMTP id c14mr3385251ilk.3.1599144090118;
+        Thu, 03 Sep 2020 07:41:30 -0700 (PDT)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id s16sm1403323iow.47.2020.09.03.07.41.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Sep 2020 07:41:29 -0700 (PDT)
+Subject: Re: [PATCH] media: dvb-frontends/cxd2099: report errors
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     jasmin@anw.at, o.endriss@gmx.de, rjkm@metzlerbros.de,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200722134126.31191-1-trix@redhat.com>
+ <20200903161328.62378992@coco.lan>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <b274b6b1-e2ac-2b68-9fb8-502255ca6982@redhat.com>
+Date:   Thu, 3 Sep 2020 07:41:27 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200903161328.62378992@coco.lan>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Thu, 3 Sep 2020 17:07:24 +0300
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> escreveu:
 
-> On Thu, Sep 03, 2020 at 03:57:32PM +0200, Mauro Carvalho Chehab wrote:
-> > There are some warnings reported by gcc:
-> > 	drivers/staging/media/atomisp//pci/atomisp_compat_css20.c:164:2: warni=
-ng: function =E2=80=98atomisp_css2_dbg_print=E2=80=99 might be a candidate =
-for =E2=80=98gnu_printf=E2=80=99 format attribute [-Wsuggest-attribute=3Dfo=
-rmat]
-> > 	drivers/staging/media/atomisp//pci/atomisp_compat_css20.c:170:2: warni=
-ng: function =E2=80=98atomisp_css2_dbg_ftrace_print=E2=80=99 might be a can=
-didate for =E2=80=98gnu_printf=E2=80=99 format attribute [-Wsuggest-attribu=
-te=3Dformat]
-> > 	drivers/staging/media/atomisp//pci/atomisp_compat_css20.c:170:2: warni=
-ng: function =E2=80=98atomisp_css2_dbg_ftrace_print=E2=80=99 might be a can=
-didate for =E2=80=98gnu_printf=E2=80=99 format attribute [-Wsuggest-attribu=
-te=3Dformat]
-> > 	drivers/staging/media/atomisp//pci/atomisp_compat_css20.c:176:2: warni=
-ng: function =E2=80=98atomisp_css2_err_print=E2=80=99 might be a candidate =
-for =E2=80=98gnu_printf=E2=80=99 format attribute [-Wsuggest-attribute=3Dfo=
-rmat]
-> >=20
-> > That are due to the usage of printf-like messages without
-> > enabling the error checking logic.
-> >=20
-> > Add the proper attributes in order to shut up such warnings. =20
->=20
-> > +static int  __attribute__((format (printf, 1, 0)))
-> > +atomisp_css2_dbg_ftrace_print(const char *fmt, va_list args)
-> >  {
-> >  	ftrace_vprintk(fmt, args);
-> >  	return 0;
-> >  }
-> >   =20
->=20
-> Why not to drop it completely as well?
+On 9/3/20 7:13 AM, Mauro Carvalho Chehab wrote:
+> Em Wed, 22 Jul 2020 06:41:26 -0700
+> trix@redhat.com escreveu:
+>
+>> From: Tom Rix <trix@redhat.com>
+>>
+>> Clang static analysis reports this error
+>>
+>> drivers/media/dvb-frontends/cxd2099.c:420:2: warning: Undefined
+>>   or garbage value returned to caller
+>>         return val;
+>>         ^~~~~~~~~~
+>>
+>> In read_cam_control, the call to read_io can fail.
+>> When it fails val is not set.
+>>
+>> The failure status should be returned to the caller,
+>> not the unset val.
+>>
+>> Similar problem with read_attribute_mem
+>>
+>> Fixes: 0f0b270f905b ("[media] ngene: CXD2099AR Common Interface driver")
+>>
+>> Signed-off-by: Tom Rix <trix@redhat.com>
+>> ---
+>>  drivers/media/dvb-frontends/cxd2099.c | 14 ++++++++++----
+>>  1 file changed, 10 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/media/dvb-frontends/cxd2099.c b/drivers/media/dvb-frontends/cxd2099.c
+>> index f88b5355493e..9dfaf18fc4b4 100644
+>> --- a/drivers/media/dvb-frontends/cxd2099.c
+>> +++ b/drivers/media/dvb-frontends/cxd2099.c
+>> @@ -387,12 +387,15 @@ static int read_attribute_mem(struct dvb_ca_en50221 *ca,
+>>  {
+>>  	struct cxd *ci = ca->data;
+>>  	u8 val;
+>> +	int ret;
+>>  
+>>  	mutex_lock(&ci->lock);
+>>  	set_mode(ci, 1);
+>> -	read_pccard(ci, address, &val, 1);
+>> +	ret = read_pccard(ci, address, &val, 1);
+>> +	if (!ret)
+>> +		ret = val;
+>>  	mutex_unlock(&ci->lock);
+>> -	return val;
+>> +	return ret;
+>>  }
+>>  
+>>  static int write_attribute_mem(struct dvb_ca_en50221 *ca, int slot,
+>> @@ -412,12 +415,15 @@ static int read_cam_control(struct dvb_ca_en50221 *ca,
+>>  {
+>>  	struct cxd *ci = ca->data;
+>>  	unsigned int val;
+>> +	int ret;
+>>  
+>>  	mutex_lock(&ci->lock);
+>>  	set_mode(ci, 0);
+>> -	read_io(ci, address, &val);
+>> +	ret = read_io(ci, address, &val);
+>> +	if (!ret)
+>> +		ret = val;
+>>  	mutex_unlock(&ci->lock);
+>> -	return val;
+>> +	return ret;
+>>  }
+>>  
+>>  static int write_cam_control(struct dvb_ca_en50221 *ca, int slot,
+> Hmm... Had you test this one on a real hardware? It is not
+> uncommon to have some DVB devices that would fail reading
+> when the firmware is on cold state.
+>
+> Without testing a patch like that at a real hardware, there's
+> no way to know if this is intentional or if the original
+> developer forgot to add a check for the error.
 
-Because of this:
+No, I do not have hw.  I understand your concerns, it is ok if you want to drop this patch, else i'll beef up the warnings.
 
-	make -s CC=3D"gcc -fno-diagnostics-show-caret" CF=3D-D__CHECK_ENDIAN__ CON=
-FIG_DEBUG_SECTION_MISMATCH=3Dy  W=3D1 M=3Ddrivers/staging/media/atomisp/ 2>=
-&1|grep -v ": In function =E2=80=98"
-	drivers/staging/media/atomisp//pci/atomisp_compat_css20.c:858:52: error: =
-=E2=80=98ftrace_vprintk=E2=80=99 undeclared (first use in this function); d=
-id you mean =E2=80=98tracepoint=E2=80=99?
-	drivers/staging/media/atomisp//pci/atomisp_compat_css20.c:858:52: note: ea=
-ch undeclared identifier is reported only once for each function it appears=
- in
+Tom
 
-Basically, kernel.h defines it as a macro:
+>
+> So, at most, it could print some warning message for
+> non-zero return codes.
+>
+>
+> Thanks,
+> Mauro
+>
 
-	#define ftrace_vprintk(fmt, vargs)					\
-	do {									\
-		if (__builtin_constant_p(fmt)) {				\
-			static const char *trace_printk_fmt __used		\
-			  __attribute__((section("__trace_printk_fmt"))) =3D	\
-				__builtin_constant_p(fmt) ? fmt : NULL;		\
-										\
-			__ftrace_vbprintk(_THIS_IP_, trace_printk_fmt, vargs);	\
-		} else								\
-			__ftrace_vprintk(_THIS_IP_, fmt, vargs);		\
-	} while (0)
-
-Now, a different thing would be to get rid of using trace as a debug
-mechanism. Right now, I don't have any strong opinion, but I guess
-that, while this driver is still at staging, it sounds good to be
-able of using traces instead of dmesg for debugging purposes, but
-to be honest, I didn't test yet to use ftrace for such purpose.
-
-Thanks,
-Mauro
