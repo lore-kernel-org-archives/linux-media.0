@@ -2,71 +2,95 @@ Return-Path: <SRS0=bW/p=CM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88A42C433E9
-	for <linux-media@archiver.kernel.org>; Thu,  3 Sep 2020 13:35:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01530C433E9
+	for <linux-media@archiver.kernel.org>; Thu,  3 Sep 2020 14:11:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 65B332072A
-	for <linux-media@archiver.kernel.org>; Thu,  3 Sep 2020 13:35:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B7D3420658
+	for <linux-media@archiver.kernel.org>; Thu,  3 Sep 2020 14:11:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729069AbgICNcJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Sep 2020 09:32:09 -0400
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:55911 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728935AbgICNIu (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Sep 2020 09:08:50 -0400
-X-Originating-IP: 2.224.242.101
-Received: from uno.lan (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 60B0840019;
-        Thu,  3 Sep 2020 13:06:53 +0000 (UTC)
-From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
-To:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-media@vger.kernel.org,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>, mchehab@kernel.org,
-        sakari.ailus@linux.intel.com, hverkuil-cisco@xs4all.nl,
-        laurent.pinchart@ideasonboard.com,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v4 0/3] dt-bindings: media: ov772x: Convert to json-schema
-Date:   Thu,  3 Sep 2020 15:10:26 +0200
-Message-Id: <20200903131029.18334-1-jacopo+renesas@jmondi.org>
-X-Mailer: git-send-email 2.28.0
+        id S1729056AbgICOLf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Sep 2020 10:11:35 -0400
+Received: from mga06.intel.com ([134.134.136.31]:34932 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729142AbgICOKH (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 3 Sep 2020 10:10:07 -0400
+IronPort-SDR: c7qgbts54Y3P1Y2SvMcDeRwFb6ohKhODd/xjnUjbw+0b31oewotWf3NS8hnxECQPMUneM7P8g5
+ r7byl4bChipQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9733"; a="219129982"
+X-IronPort-AV: E=Sophos;i="5.76,387,1592895600"; 
+   d="scan'208";a="219129982"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2020 07:09:39 -0700
+IronPort-SDR: rkZ0Olar/QMGUYe0mhdZgEL72iAnn+i/sGoky55dDU7fVd4VgjWgmNUES9gyd25QUNbpwm4FXb
+ Cij5BElBsaRA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,387,1592895600"; 
+   d="scan'208";a="331797666"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga008.jf.intel.com with ESMTP; 03 Sep 2020 07:09:37 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1kDptc-00E2xB-51; Thu, 03 Sep 2020 17:07:24 +0300
+Date:   Thu, 3 Sep 2020 17:07:24 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/5] media: atomisp: get rid of
+ -Wsuggest-attribute=format warnings
+Message-ID: <20200903140724.GE1891694@smile.fi.intel.com>
+References: <cover.1599141140.git.mchehab+huawei@kernel.org>
+ <6c77d765707b1e6b2901fd23d85b4d032f1a1799.1599141140.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <6c77d765707b1e6b2901fd23d85b4d032f1a1799.1599141140.git.mchehab+huawei@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Convert the ov722x bindings to json-schema and add endpoint properties and
-bus-type.
+On Thu, Sep 03, 2020 at 03:57:32PM +0200, Mauro Carvalho Chehab wrote:
+> There are some warnings reported by gcc:
+> 	drivers/staging/media/atomisp//pci/atomisp_compat_css20.c:164:2: warning: function ‘atomisp_css2_dbg_print’ might be a candidate for ‘gnu_printf’ format attribute [-Wsuggest-attribute=format]
+> 	drivers/staging/media/atomisp//pci/atomisp_compat_css20.c:170:2: warning: function ‘atomisp_css2_dbg_ftrace_print’ might be a candidate for ‘gnu_printf’ format attribute [-Wsuggest-attribute=format]
+> 	drivers/staging/media/atomisp//pci/atomisp_compat_css20.c:170:2: warning: function ‘atomisp_css2_dbg_ftrace_print’ might be a candidate for ‘gnu_printf’ format attribute [-Wsuggest-attribute=format]
+> 	drivers/staging/media/atomisp//pci/atomisp_compat_css20.c:176:2: warning: function ‘atomisp_css2_err_print’ might be a candidate for ‘gnu_printf’ format attribute [-Wsuggest-attribute=format]
+> 
+> That are due to the usage of printf-like messages without
+> enabling the error checking logic.
+> 
+> Add the proper attributes in order to shut up such warnings.
 
-Compared to v3 in 1/3 I have not documented 'endpoint'
-Then 2/3 introduces the 'bus-type' endpoint properties, so I had to document
-'endpoint' and list 'remote-endpoint' as required (which makes me think I
-could have kept it in 1/3, but for sake of consistency...)
-3/3 adds endpoint properties, whose presence is conditional to the specified
-bus-type.
+> +static int  __attribute__((format (printf, 1, 0)))
+> +atomisp_css2_dbg_ftrace_print(const char *fmt, va_list args)
+>  {
+>  	ftrace_vprintk(fmt, args);
+>  	return 0;
+>  }
+>  
 
-Thanks
-  j
+Why not to drop it completely as well?
 
-Jacopo Mondi (3):
-  dt-bindings: media: ov772x: Convert to json-schema
-  dt-bindings: media: ov772x: Make bus-type mandatory
-  dt-bindings: media: ov772x: Document endpoint props
+> -static int atomisp_css2_err_print(const char *fmt, va_list args)
+> -{
+> -	vprintk(fmt, args);
+> -	return 0;
+> -}
 
- .../devicetree/bindings/media/i2c/ov772x.txt  |  40 -----
- .../bindings/media/i2c/ovti,ov772x.yaml       | 138 ++++++++++++++++++
- MAINTAINERS                                   |   2 +-
- 3 files changed, 139 insertions(+), 41 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/media/i2c/ov772x.txt
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov772x.yaml
 
---
-2.28.0
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
