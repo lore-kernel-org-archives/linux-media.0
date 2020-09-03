@@ -2,117 +2,84 @@ Return-Path: <SRS0=bW/p=CM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16AB6C433E2
-	for <linux-media@archiver.kernel.org>; Thu,  3 Sep 2020 15:12:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7510AC43461
+	for <linux-media@archiver.kernel.org>; Thu,  3 Sep 2020 15:13:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E09FD20716
-	for <linux-media@archiver.kernel.org>; Thu,  3 Sep 2020 15:12:04 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="i0y2uYMm"
+	by mail.kernel.org (Postfix) with ESMTP id 5439D2072A
+	for <linux-media@archiver.kernel.org>; Thu,  3 Sep 2020 15:13:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729197AbgICPLy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Sep 2020 11:11:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45180 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728849AbgICM1b (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Sep 2020 08:27:31 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17ADAC061251
-        for <linux-media@vger.kernel.org>; Thu,  3 Sep 2020 05:22:13 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id s205so3425694lja.7
-        for <linux-media@vger.kernel.org>; Thu, 03 Sep 2020 05:22:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=AmASOpjxirKUPe5KF2kTy+958y5fGEm2GLzYZrAWmY0=;
-        b=i0y2uYMmTvexrD5BT2Rg+2fR0wxA2Yuw2kq4ZFSIPgBWPk+zTIRox7tLo/V7J1IDcg
-         /zGL+yZo0kczuHH1lpR6RfLpnpsjbK1Xp0ad2DHuWiTiwIFLLDyXSUCe+EHEXlAi3p/e
-         pUr+iDCt5+xuvOEFlzj81oBsxg91JWPrhoQrh/NEf6k/eN5Qg/a80myuftRM/DW9XmNC
-         ipV330QqlNcjkmijfbJW8+o9rHOfLN3FmFatTgkTg9EzG5KQ3wG5MwH0rOaFzRGEbvkH
-         hEhTtGPWREF3ecaEB8e8krjUDxI3vOI+oVG2I+4TqSvovZEv6c27pjXJC4dege2SgzxD
-         u2CQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=AmASOpjxirKUPe5KF2kTy+958y5fGEm2GLzYZrAWmY0=;
-        b=udT06ikKWcUWra9z5MD4dj1p2tfPdz1XJjUMYGiWSbXHxVYXei3hEeGQ36dN4RYybq
-         oBzbAPKISD8GnkZVhdya2tHFu84c5DuEBc32QcNFGfmAWlrHHucxZ+LxAqXFXn3hA5i0
-         zAVFvJeYfUJ7IE09tUVMQtkD/7O1fIjNEu+3rY5sThectM9JBcxvWQlvoLWlPby+p/sf
-         SYEVp6RblhHX+ohYGxHzHTb/EGLe8wwPD5vT6RLGrDPaL4BSpkPY35BwdaXy2xl+H02x
-         wBx3kKtIqOTAJJobbleoH4Rm46jeSCSN5sUTexDzS8IYbfxNm4/mtpKZaPPqAcsaE5c2
-         UvLQ==
-X-Gm-Message-State: AOAM531a2Dalqc9OwsGyaxzpMhnGk/8p4QaZI9i68eLApUbE3a+u15SP
-        B8LbrYkn1Zb9GNj/6jJlTxnSU0qoydxvndSKMFJaQg==
-X-Google-Smtp-Source: ABdhPJwQ0KpxtLPZAseSnphNEoFuICKHObdYRxY2PW9uBsaYw3EIqCfxJnx9Lxv1GfE40giqNWLH6sOOChl2QA2RQ2I=
-X-Received: by 2002:a2e:b892:: with SMTP id r18mr1073176ljp.249.1599135731427;
- Thu, 03 Sep 2020 05:22:11 -0700 (PDT)
+        id S1728735AbgICPNP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Sep 2020 11:13:15 -0400
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:51407 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728670AbgICLsq (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Sep 2020 07:48:46 -0400
+X-Originating-IP: 2.224.242.101
+Received: from uno.lan (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 7C70B1BF209;
+        Thu,  3 Sep 2020 11:48:03 +0000 (UTC)
+From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
+To:     robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-media@vger.kernel.org
+Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>, mchehab@kernel.org,
+        sakari.ailus@linux.intel.com, hverkuil-cisco@xs4all.nl,
+        laurent.pinchart@ideasonboard.com,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v4 0/3] dt-bindings: media: i2c: Convert 3 sensor bindings
+Date:   Thu,  3 Sep 2020 13:51:40 +0200
+Message-Id: <20200903115143.13717-1-jacopo+renesas@jmondi.org>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-References: <cover.1598331148.git.joe@perches.com> <990bf6f33ccaf73ad56eb4bea8bd2c0db5e90a31.1598331148.git.joe@perches.com>
- <d5ea3bc7-bff2-c702-51ed-cb85767824a7@amd.com>
-In-Reply-To: <d5ea3bc7-bff2-c702-51ed-cb85767824a7@amd.com>
-From:   Sumit Semwal <sumit.semwal@linaro.org>
-Date:   Thu, 3 Sep 2020 17:51:59 +0530
-Message-ID: <CAO_48GGeXrDe9F1S64pf4qeF-2vMMiwOTZXOXDctAdPO5Pn04w@mail.gmail.com>
-Subject: Re: [PATCH 08/29] dma-buf: Avoid comma separated statements
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Joe Perches <joe@perches.com>, Jiri Kosina <trivial@kernel.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>,
-        DRI mailing list <dri-devel@lists.freedesktop.org>,
-        Linaro MM SIG <linaro-mm-sig@lists.linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello Joe,
+I know I've sent the previous version first as part of a longer list of patches,
+later individually, and now grouped together again. Sorry for the fuss, hope
+it's not too confusing.
 
-On Wed, 26 Aug 2020 at 20:38, Christian K=C3=B6nig <christian.koenig@amd.co=
-m> wrote:
->
-> Am 25.08.20 um 06:56 schrieb Joe Perches:
-> > Use semicolons and braces.
-> >
-> > Signed-off-by: Joe Perches <joe@perches.com>
->
-> Acked-by: Christian K=C3=B6nig <christian.koenig@amd.com>
-FWIW,
-Acked-by: Sumit Semwal <sumit.semwal@linaro.org>
+These three sensor bindings conversions go together as they all happen in a
+single patch, so I deemed it was easier to just group them.
 
->
-> > ---
-> >   drivers/dma-buf/st-dma-fence.c | 7 +++++--
-> >   1 file changed, 5 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/dma-buf/st-dma-fence.c b/drivers/dma-buf/st-dma-fe=
-nce.c
-> > index e593064341c8..c8a12d7ad71a 100644
-> > --- a/drivers/dma-buf/st-dma-fence.c
-> > +++ b/drivers/dma-buf/st-dma-fence.c
-> > @@ -471,8 +471,11 @@ static int thread_signal_callback(void *arg)
-> >                       dma_fence_signal(f1);
-> >
-> >               smp_store_mb(cb.seen, false);
-> > -             if (!f2 || dma_fence_add_callback(f2, &cb.cb, simple_call=
-back))
-> > -                     miss++, cb.seen =3D true;
-> > +             if (!f2 ||
-> > +                 dma_fence_add_callback(f2, &cb.cb, simple_callback)) =
-{
-> > +                     miss++;
-> > +                     cb.seen =3D true;
-> > +             }
-> >
-> >               if (!t->before)
-> >                       dma_fence_signal(f1);
->
+In v4 after finalizing the discussion with Laurent and Rob on how to handle
+of-graph endpoint, I have dropped them from mt9v111 and imx274. For imx214 as I
+have endpoint properties to document I have also documented 'endpoint' (not
+mandatory) and 'remote-endpoint' (mandatory). Hope I got the outcome of the
+discussion right. For imx214 I also took in Laurent's suggestion on how to
+document the 'data-lanes' supported values.
+
+Individual maintainers cc-ed per-patch.
+
+Thanks
+   j
+
+Jacopo Mondi (3):
+  dt-bindings: media: mt9v111: Convert to json-schema
+  dt-bindings: media: imx274: Convert to json-schema
+  dt-bindings: media: imx214: Convert to json-schema
+
+ .../bindings/media/i2c/aptina,mt9v111.txt     |  46 ------
+ .../bindings/media/i2c/aptina,mt9v111.yaml    |  75 ++++++++++
+ .../devicetree/bindings/media/i2c/imx274.txt  |  38 -----
+ .../bindings/media/i2c/sony,imx214.txt        |  53 -------
+ .../bindings/media/i2c/sony,imx214.yaml       | 137 ++++++++++++++++++
+ .../bindings/media/i2c/sony,imx274.yaml       |  59 ++++++++
+ MAINTAINERS                                   |   6 +-
+ 7 files changed, 274 insertions(+), 140 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/media/i2c/aptina,mt9v111.txt
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/aptina,mt9v111.yaml
+ delete mode 100644 Documentation/devicetree/bindings/media/i2c/imx274.txt
+ delete mode 100644 Documentation/devicetree/bindings/media/i2c/sony,imx214.txt
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/sony,imx214.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/sony,imx274.yaml
+
+--
+2.28.0
+
