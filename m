@@ -2,184 +2,130 @@ Return-Path: <SRS0=bW/p=CM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5A1BC2D0A5
-	for <linux-media@archiver.kernel.org>; Thu,  3 Sep 2020 15:13:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A54A1C433E9
+	for <linux-media@archiver.kernel.org>; Thu,  3 Sep 2020 15:48:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CCB4B20716
-	for <linux-media@archiver.kernel.org>; Thu,  3 Sep 2020 15:13:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8156720775
+	for <linux-media@archiver.kernel.org>; Thu,  3 Sep 2020 15:48:52 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fv+ELy+K"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729162AbgICPNO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Sep 2020 11:13:14 -0400
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:56703 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728677AbgICLsq (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Sep 2020 07:48:46 -0400
-X-Originating-IP: 2.224.242.101
-Received: from uno.lan (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id B0BA81BF216;
-        Thu,  3 Sep 2020 11:48:08 +0000 (UTC)
-From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
-To:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-media@vger.kernel.org, Leon Luo <leonl@leopardimaging.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>
-Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>, mchehab@kernel.org,
-        sakari.ailus@linux.intel.com, hverkuil-cisco@xs4all.nl,
-        laurent.pinchart@ideasonboard.com,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v4 2/3] dt-bindings: media: imx274: Convert to json-schema
-Date:   Thu,  3 Sep 2020 13:51:42 +0200
-Message-Id: <20200903115143.13717-3-jacopo+renesas@jmondi.org>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200903115143.13717-1-jacopo+renesas@jmondi.org>
-References: <20200903115143.13717-1-jacopo+renesas@jmondi.org>
+        id S1728494AbgICPsr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Sep 2020 11:48:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48378 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726025AbgICPsp (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Sep 2020 11:48:45 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20549C061244;
+        Thu,  3 Sep 2020 08:48:45 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id w5so3761098wrp.8;
+        Thu, 03 Sep 2020 08:48:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OPj9d30CAARqGx+bikPSsEnUWXOcRX7Mxe5aMa8ahCE=;
+        b=Fv+ELy+K8p1TzkuFzHURU8ULrabjLy/GA+gzrVslyT9VOYD/zzcxlCRarBUx24WKrr
+         j5Zr67a5zMLy7bfYFOfwlVMhz0E9e2ZT1vbriU7KZwnmIfrI+Vvgk/eBjxqJ5U60a7n8
+         8qXKrhUyNu+W5a3GLvwkqwPEcZoFmGBsfTsLAVqsgZS0j4L2k9ovbYqObZHMpPMoDAYG
+         bxUfk47jrPQJXDXj//x4zgv++hYgtm05jEFuPueuVK4kNvaM8ywNZyeWHHhRnP7ji5oW
+         Gy4tjKcYBr1v93ZJTIKinzVU8XXLMKlP2jGlJ2JLd3wPZMjg1lyL3vvEmGRB9/0ZM7C2
+         5w3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OPj9d30CAARqGx+bikPSsEnUWXOcRX7Mxe5aMa8ahCE=;
+        b=pyMrYsylGaximgyfSuMKHOn0tuQubyOhOTd8Cj+UV1UkMTgqZuNZugeko+v7q7nr7e
+         W0Sehy9DP8gqkZwp1ui9EAI1/OlAMBb++lUqaOGG80sDY62fdo4LNzsLDFZiDY5g58AW
+         OZaR4hA+6xqZQ9qBiYSUam055fQQxPx2Vqhf0gpcoMwO+5aEiHdsj7qJJ1Em7mFOQwDz
+         ujRWKJEw4QiObvFsYh5YhDb9C97ZMtmwc8KN4lQJyvKLG7InRwMYI+cV37nF3OXMeDEM
+         72ZIZ9RMtu0PilRiyx4rCBAkN8i6T3YkOEwnnmaUEpvXBtq+rzM/QFJ/D8wEdY+yePAt
+         o9vQ==
+X-Gm-Message-State: AOAM532IGRibxczIFO6RSQ7JnptE4SP+eSm6DHaaasL2Rzh672/y57CR
+        J6ACyea/j168Qxdvgng6Tc0=
+X-Google-Smtp-Source: ABdhPJzoUWMY/x3nAOJw9Pgg2IVnTKHb2nEiyUuAELHzrPUZ4WLFr/xkMOPobcmcW7xqeTvOZwlHsA==
+X-Received: by 2002:adf:f78c:: with SMTP id q12mr3157273wrp.6.1599148123691;
+        Thu, 03 Sep 2020 08:48:43 -0700 (PDT)
+Received: from medion (cpc83661-brig20-2-0-cust443.3-3.cable.virginm.net. [82.28.105.188])
+        by smtp.gmail.com with ESMTPSA id x24sm5546173wrd.53.2020.09.03.08.48.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Sep 2020 08:48:42 -0700 (PDT)
+From:   Alex Dewar <alex.dewar90@gmail.com>
+X-Google-Original-From: Alex Dewar <alex.dewar@gmx.co.uk>
+Date:   Thu, 3 Sep 2020 16:48:41 +0100
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Alex Dewar <alex.dewar90@gmail.com>, devel@driverdev.osuosl.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Cox <alan@linux.intel.com>
+Subject: Re: [PATCH] staging: media: atomisp: Fix error path in lm3554_probe()
+Message-ID: <20200903154841.w5rppm325jobimud@medion>
+References: <20200902184207.479525-1-alex.dewar90@gmail.com>
+ <20200903121134.GB8299@kadam>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200903121134.GB8299@kadam>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Convert the imx274 bindings document to json-schema and update
-the MAINTAINERS file accordingly.
+Good point about the timer!
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
----
- .../devicetree/bindings/media/i2c/imx274.txt  | 38 ------------
- .../bindings/media/i2c/sony,imx274.yaml       | 59 +++++++++++++++++++
- MAINTAINERS                                   |  2 +-
- 3 files changed, 60 insertions(+), 39 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/media/i2c/imx274.txt
- create mode 100644 Documentation/devicetree/bindings/media/i2c/sony,imx274.yaml
+> >  
+> > -	err = lm3554_gpio_init(client);
+> > -	if (err) {
+> > +	ret = lm3554_gpio_init(client);
+> > +	if (ret) {
+> >  		dev_err(&client->dev, "gpio request/direction_output fail");
+> > -		goto fail2;
+> > +		goto err_cleanup_entity;
+> >  	}
+> >  	return atomisp_register_i2c_module(&flash->sd, NULL, LED_FLASH);
+> 
+> If atomisp_register_i2c_module() fails then we need to call
+> lm3554_gpio_uninit(client) and do other cleanup.
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/imx274.txt b/Documentation/devicetree/bindings/media/i2c/imx274.txt
-deleted file mode 100644
-index 0727079d2410..000000000000
---- a/Documentation/devicetree/bindings/media/i2c/imx274.txt
-+++ /dev/null
-@@ -1,38 +0,0 @@
--* Sony 1/2.5-Inch 8.51Mp CMOS Digital Image Sensor
--
--The Sony imx274 is a 1/2.5-inch CMOS active pixel digital image sensor with
--an active array size of 3864H x 2202V. It is programmable through I2C
--interface. The I2C address is fixed to 0x1a as per sensor data sheet.
--Image data is sent through MIPI CSI-2, which is configured as 4 lanes
--at 1440 Mbps.
--
--
--Required Properties:
--- compatible: value should be "sony,imx274" for imx274 sensor
--- reg: I2C bus address of the device
--
--Optional Properties:
--- reset-gpios: Sensor reset GPIO
--- clocks: Reference to the input clock.
--- clock-names: Should be "inck".
--- VANA-supply: Sensor 2.8v analog supply.
--- VDIG-supply: Sensor 1.8v digital core supply.
--- VDDL-supply: Sensor digital IO 1.2v supply.
--
--The imx274 device node should contain one 'port' child node with
--an 'endpoint' subnode. For further reading on port node refer to
--Documentation/devicetree/bindings/media/video-interfaces.txt.
--
--Example:
--	sensor@1a {
--		compatible = "sony,imx274";
--		reg = <0x1a>;
--		#address-cells = <1>;
--		#size-cells = <0>;
--		reset-gpios = <&gpio_sensor 0 0>;
--		port {
--			sensor_out: endpoint {
--				remote-endpoint = <&csiss_in>;
--			};
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx274.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx274.yaml
-new file mode 100644
-index 000000000000..f757ce380cb2
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/sony,imx274.yaml
-@@ -0,0 +1,59 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/sony,imx274.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Sony 1/2.5-Inch 8.51MP CMOS Digital Image Sensor
-+
-+maintainers:
-+  - Leon Luo <leonl@leopardimaging.com>
-+
-+description: |
-+  The Sony IMX274 is a 1/2.5-inch CMOS active pixel digital image sensor with an
-+  active array size of 3864H x 2202V. It is programmable through I2C interface.
-+  Image data is sent through MIPI CSI-2, which is configured as 4 lanes at 1440
-+  Mbps.
-+
-+properties:
-+  compatible:
-+    const: sony,imx274
-+
-+  reg:
-+    const: 0x1a
-+
-+  reset-gpios:
-+    maxItems: 1
-+
-+  port:
-+    type: object
-+    description: |
-+      Output video port. See ../video-interfaces.txt.
-+
-+required:
-+  - compatible
-+  - reg
-+  - port
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c0 {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        imx274: camera-sensor@1a {
-+            compatible = "sony,imx274";
-+            reg = <0x1a>;
-+            reset-gpios = <&gpio_sensor 0 0>;
-+
-+            port {
-+                sensor_out: endpoint {
-+                    remote-endpoint = <&csiss_in>;
-+                };
-+            };
-+        };
-+    };
-+
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3f8f093268b7..093a54ae1527 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16127,7 +16127,7 @@ M:	Leon Luo <leonl@leopardimaging.com>
- L:	linux-media@vger.kernel.org
- S:	Maintained
- T:	git git://linuxtv.org/media_tree.git
--F:	Documentation/devicetree/bindings/media/i2c/imx274.txt
-+F:	Documentation/devicetree/bindings/media/i2c/sony,imx274.yaml
- F:	drivers/media/i2c/imx274.c
+I'm probably showing my ignorance here, but I can't see what cleanup we
+need. Inside lm3554_gpio_init we have:
 
- SONY IMX290 SENSOR DRIVER
---
-2.28.0
+	ret = gpiod_direction_output(pdata->gpio_reset, 0);
+	if (ret < 0)
+		return ret;
+	dev_info(&client->dev, "flash led reset successfully\n");
 
+	if (!pdata->gpio_strobe)
+		return -EINVAL;
+
+	ret = gpiod_direction_output(pdata->gpio_strobe, 0);
+	if (ret < 0)
+		return ret;
+
+I'm not sure how you "undo" a call to gpiod_direction_output, but I'm
+thinking you won't need to do anything because it should be ok to leave
+a gpio to output 0... right?
+
+Alex
+
+> 
+> > -fail2:
+> > +
+> > +err_cleanup_entity:
+> >  	media_entity_cleanup(&flash->sd.entity);
+> > +err_free_ctrl_handler:
+> >  	v4l2_ctrl_handler_free(&flash->ctrl_handler);
+> 
+> regards,
+> dan carpenter
+> 
