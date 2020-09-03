@@ -2,110 +2,117 @@ Return-Path: <SRS0=bW/p=CM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBF28C433E9
-	for <linux-media@archiver.kernel.org>; Thu,  3 Sep 2020 15:09:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16AB6C433E2
+	for <linux-media@archiver.kernel.org>; Thu,  3 Sep 2020 15:12:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 93EB420716
-	for <linux-media@archiver.kernel.org>; Thu,  3 Sep 2020 15:09:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1599145782;
-	bh=68DNqEok2XhXHOmQ4/OhRUUJNNkVRuXHV71v+f39NZM=;
-	h=From:Cc:Subject:Date:In-Reply-To:References:To:List-ID:From;
-	b=x0D1x3Bv1QgdMBFlbvLjQ7beuBXLBadAzxmoPOuMmzbPVCh4o3dvDbaojNJ5gNSQ5
-	 XYIWqCt1/q+rF1MtAC3JUFolRTrVCeZa5Bz9SbEl0bO7LPY5wm3pXN1X7fSCE9Y5Cr
-	 U2WVJa++URyDw7akmXEaTnk5rxM6RFywhr0uTcwo=
+	by mail.kernel.org (Postfix) with ESMTP id E09FD20716
+	for <linux-media@archiver.kernel.org>; Thu,  3 Sep 2020 15:12:04 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="i0y2uYMm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728844AbgICPJg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Sep 2020 11:09:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47860 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728938AbgICN6P (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 3 Sep 2020 09:58:15 -0400
-Received: from mail.kernel.org (ip5f5ad5c3.dynamic.kabel-deutschland.de [95.90.213.195])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 15723208CA;
-        Thu,  3 Sep 2020 13:57:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599141456;
-        bh=68DNqEok2XhXHOmQ4/OhRUUJNNkVRuXHV71v+f39NZM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rEZLA3kledQKylisBtEd5Hn2NlCom0PPkl9HQlukK8uR7gs15pLUmnJaULD7xNNwn
-         OEfc68462reeaHv2UsNQJmoNwbq+f+1TA2IpzcGOKvLq+zQHjwoyLqYL8PVZ4O2p8V
-         5ZHIrQRcac1DUnzSkVcVszp5btpwcGpTcz+J6ZmY=
-Received: from mchehab by mail.kernel.org with local (Exim 4.94)
-        (envelope-from <mchehab@kernel.org>)
-        id 1kDpk6-004T6r-6d; Thu, 03 Sep 2020 15:57:34 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 4/5] media: atomisp: move a static constant out of a header file
-Date:   Thu,  3 Sep 2020 15:57:31 +0200
-Message-Id: <a3280622dd3c85360c789e156f7b9d03bc8b2de3.1599141140.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <cover.1599141140.git.mchehab+huawei@kernel.org>
-References: <cover.1599141140.git.mchehab+huawei@kernel.org>
+        id S1729197AbgICPLy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Sep 2020 11:11:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728849AbgICM1b (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Sep 2020 08:27:31 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17ADAC061251
+        for <linux-media@vger.kernel.org>; Thu,  3 Sep 2020 05:22:13 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id s205so3425694lja.7
+        for <linux-media@vger.kernel.org>; Thu, 03 Sep 2020 05:22:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=AmASOpjxirKUPe5KF2kTy+958y5fGEm2GLzYZrAWmY0=;
+        b=i0y2uYMmTvexrD5BT2Rg+2fR0wxA2Yuw2kq4ZFSIPgBWPk+zTIRox7tLo/V7J1IDcg
+         /zGL+yZo0kczuHH1lpR6RfLpnpsjbK1Xp0ad2DHuWiTiwIFLLDyXSUCe+EHEXlAi3p/e
+         pUr+iDCt5+xuvOEFlzj81oBsxg91JWPrhoQrh/NEf6k/eN5Qg/a80myuftRM/DW9XmNC
+         ipV330QqlNcjkmijfbJW8+o9rHOfLN3FmFatTgkTg9EzG5KQ3wG5MwH0rOaFzRGEbvkH
+         hEhTtGPWREF3ecaEB8e8krjUDxI3vOI+oVG2I+4TqSvovZEv6c27pjXJC4dege2SgzxD
+         u2CQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=AmASOpjxirKUPe5KF2kTy+958y5fGEm2GLzYZrAWmY0=;
+        b=udT06ikKWcUWra9z5MD4dj1p2tfPdz1XJjUMYGiWSbXHxVYXei3hEeGQ36dN4RYybq
+         oBzbAPKISD8GnkZVhdya2tHFu84c5DuEBc32QcNFGfmAWlrHHucxZ+LxAqXFXn3hA5i0
+         zAVFvJeYfUJ7IE09tUVMQtkD/7O1fIjNEu+3rY5sThectM9JBcxvWQlvoLWlPby+p/sf
+         SYEVp6RblhHX+ohYGxHzHTb/EGLe8wwPD5vT6RLGrDPaL4BSpkPY35BwdaXy2xl+H02x
+         wBx3kKtIqOTAJJobbleoH4Rm46jeSCSN5sUTexDzS8IYbfxNm4/mtpKZaPPqAcsaE5c2
+         UvLQ==
+X-Gm-Message-State: AOAM531a2Dalqc9OwsGyaxzpMhnGk/8p4QaZI9i68eLApUbE3a+u15SP
+        B8LbrYkn1Zb9GNj/6jJlTxnSU0qoydxvndSKMFJaQg==
+X-Google-Smtp-Source: ABdhPJwQ0KpxtLPZAseSnphNEoFuICKHObdYRxY2PW9uBsaYw3EIqCfxJnx9Lxv1GfE40giqNWLH6sOOChl2QA2RQ2I=
+X-Received: by 2002:a2e:b892:: with SMTP id r18mr1073176ljp.249.1599135731427;
+ Thu, 03 Sep 2020 05:22:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+References: <cover.1598331148.git.joe@perches.com> <990bf6f33ccaf73ad56eb4bea8bd2c0db5e90a31.1598331148.git.joe@perches.com>
+ <d5ea3bc7-bff2-c702-51ed-cb85767824a7@amd.com>
+In-Reply-To: <d5ea3bc7-bff2-c702-51ed-cb85767824a7@amd.com>
+From:   Sumit Semwal <sumit.semwal@linaro.org>
+Date:   Thu, 3 Sep 2020 17:51:59 +0530
+Message-ID: <CAO_48GGeXrDe9F1S64pf4qeF-2vMMiwOTZXOXDctAdPO5Pn04w@mail.gmail.com>
+Subject: Re: [PATCH 08/29] dma-buf: Avoid comma separated statements
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     Joe Perches <joe@perches.com>, Jiri Kosina <trivial@kernel.org>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        DRI mailing list <dri-devel@lists.freedesktop.org>,
+        Linaro MM SIG <linaro-mm-sig@lists.linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Gcc reports that input_formatter_alignment is not used:
+Hello Joe,
 
-	In file included from ./drivers/staging/media/atomisp//pci/hive_isp_css_include/input_formatter.h:34,
-	                 from drivers/staging/media/atomisp//pci/runtime/debug/src/ia_css_debug.c:55:
-	./drivers/staging/media/atomisp//pci/hive_isp_css_common/host/input_formatter_local.h:118:27: warning: ‘input_formatter_alignment’ defined but not used [-Wunused-const-variable=]
+On Wed, 26 Aug 2020 at 20:38, Christian K=C3=B6nig <christian.koenig@amd.co=
+m> wrote:
+>
+> Am 25.08.20 um 06:56 schrieb Joe Perches:
+> > Use semicolons and braces.
+> >
+> > Signed-off-by: Joe Perches <joe@perches.com>
+>
+> Acked-by: Christian K=C3=B6nig <christian.koenig@amd.com>
+FWIW,
+Acked-by: Sumit Semwal <sumit.semwal@linaro.org>
 
-However, it is, but only inside input_formatter.c.
-
-So, move it out of the header file.
-
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- .../atomisp/pci/hive_isp_css_common/host/input_formatter.c    | 4 ++++
- .../pci/hive_isp_css_common/host/input_formatter_local.h      | 4 ----
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_formatter.c b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_formatter.c
-index 1b196cd265b9..5cd6136f21a2 100644
---- a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_formatter.c
-+++ b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_formatter.c
-@@ -27,6 +27,10 @@
- #include "input_formatter_private.h"
- #endif /* __INLINE_INPUT_FORMATTER__ */
- 
-+static const unsigned int input_formatter_alignment[N_INPUT_FORMATTER_ID] = {
-+	ISP_VEC_ALIGN, ISP_VEC_ALIGN, HIVE_ISP_CTRL_DATA_BYTES
-+};
-+
- const hrt_address HIVE_IF_SRST_ADDRESS[N_INPUT_FORMATTER_ID] = {
- 	INPUT_FORMATTER0_SRST_OFFSET,
- 	INPUT_FORMATTER1_SRST_OFFSET,
-diff --git a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_formatter_local.h b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_formatter_local.h
-index 94fff77584f7..dfb593c109af 100644
---- a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_formatter_local.h
-+++ b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_formatter_local.h
-@@ -115,8 +115,4 @@ struct input_formatter_bin_state_s {
- 	u32	en_status_update;
- };
- 
--static const unsigned int input_formatter_alignment[N_INPUT_FORMATTER_ID] = {
--	ISP_VEC_ALIGN, ISP_VEC_ALIGN, HIVE_ISP_CTRL_DATA_BYTES
--};
--
- #endif /* __INPUT_FORMATTER_LOCAL_H_INCLUDED__ */
--- 
-2.26.2
-
+>
+> > ---
+> >   drivers/dma-buf/st-dma-fence.c | 7 +++++--
+> >   1 file changed, 5 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/dma-buf/st-dma-fence.c b/drivers/dma-buf/st-dma-fe=
+nce.c
+> > index e593064341c8..c8a12d7ad71a 100644
+> > --- a/drivers/dma-buf/st-dma-fence.c
+> > +++ b/drivers/dma-buf/st-dma-fence.c
+> > @@ -471,8 +471,11 @@ static int thread_signal_callback(void *arg)
+> >                       dma_fence_signal(f1);
+> >
+> >               smp_store_mb(cb.seen, false);
+> > -             if (!f2 || dma_fence_add_callback(f2, &cb.cb, simple_call=
+back))
+> > -                     miss++, cb.seen =3D true;
+> > +             if (!f2 ||
+> > +                 dma_fence_add_callback(f2, &cb.cb, simple_callback)) =
+{
+> > +                     miss++;
+> > +                     cb.seen =3D true;
+> > +             }
+> >
+> >               if (!t->before)
+> >                       dma_fence_signal(f1);
+>
