@@ -2,131 +2,181 @@ Return-Path: <SRS0=bW/p=CM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 212E2C433E2
-	for <linux-media@archiver.kernel.org>; Thu,  3 Sep 2020 07:49:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15F58C433E2
+	for <linux-media@archiver.kernel.org>; Thu,  3 Sep 2020 08:16:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E4D8E20775
-	for <linux-media@archiver.kernel.org>; Thu,  3 Sep 2020 07:49:53 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="StoEJz9i"
+	by mail.kernel.org (Postfix) with ESMTP id E637820FC3
+	for <linux-media@archiver.kernel.org>; Thu,  3 Sep 2020 08:16:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727931AbgICHtt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Sep 2020 03:49:49 -0400
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:9777 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726814AbgICHts (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Sep 2020 03:49:48 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5f509fec0000>; Thu, 03 Sep 2020 00:49:00 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 03 Sep 2020 00:49:47 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 03 Sep 2020 00:49:47 -0700
-Received: from [10.2.53.12] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 3 Sep
- 2020 07:49:47 +0000
-Subject: Re: [PATCH 16/38] media: videobuf-dma-sg: number of pages should be
- unsigned long
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Michel Lespinasse <walken@google.com>,
-        Mike Rapoport <rppt@kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <cover.1599062230.git.mchehab+huawei@kernel.org>
- <a57a3584ccc16f33b2e6e8a850b7cb7cf029dfb6.1599062230.git.mchehab+huawei@kernel.org>
-From:   John Hubbard <jhubbard@nvidia.com>
-Message-ID: <29cbe38a-4094-5d60-9f85-050bb44febcc@nvidia.com>
-Date:   Thu, 3 Sep 2020 00:49:47 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1728461AbgICIPz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Sep 2020 04:15:55 -0400
+Received: from mga11.intel.com ([192.55.52.93]:55058 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728787AbgICIPo (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 3 Sep 2020 04:15:44 -0400
+IronPort-SDR: GpqKeUXx+aNbmjFEIOgb+NiALJ9sSxXkLG6S60atlHx+cOXZPwy6ZwQ8ADnanTo2+OVeQhRo9k
+ yQT/IIpaJPhg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9732"; a="155042681"
+X-IronPort-AV: E=Sophos;i="5.76,385,1592895600"; 
+   d="scan'208";a="155042681"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2020 01:15:43 -0700
+IronPort-SDR: PzgkixOpBw/2MXRipbTtMdExKciOY0phgh2vceFz0ReqOW5caqWzC+8sLL+QlmNnvuyF1vzeP/
+ 7zpoXoC9MnnQ==
+X-IronPort-AV: E=Sophos;i="5.76,385,1592895600"; 
+   d="scan'208";a="405416207"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2020 01:15:40 -0700
+Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id 6FB2F203ED;
+        Thu,  3 Sep 2020 11:15:38 +0300 (EEST)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.92)
+        (envelope-from <sakari.ailus@linux.intel.com>)
+        id 1kDkPO-0001c9-Hc; Thu, 03 Sep 2020 11:15:50 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
+        Hyungwoo Yang <hyungwoo.yang@intel.com>,
+        linux-media@vger.kernel.org
+Subject: [PATCH v8 1/6] i2c: Allow an ACPI driver to manage the device's power state during probe
+Date:   Thu,  3 Sep 2020 11:15:45 +0300
+Message-Id: <20200903081550.6012-2-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200903081550.6012-1-sakari.ailus@linux.intel.com>
+References: <20200903081550.6012-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <a57a3584ccc16f33b2e6e8a850b7cb7cf029dfb6.1599062230.git.mchehab+huawei@kernel.org>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1599119340; bh=h2YtYK7X/8q5C0J8GcJkvpLDMTqz+dYhXOto+gkI9M0=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=StoEJz9iReMvZwUWoJPzLDURYq36XjxdX0hehx0H3TQYOUtozau3fLiE24n5XClNA
-         ewK9DL8Nr3NSo5qkdaRNBJq+nGrCeHq8N7jPvSUezeqX+WXTq9cohG+FcBzRYgNgQR
-         T5wzmgZGEIuk48fyBbNS9tPt4flECSVn1+xaV2OcpZ+jXivNfdJidtnfuxylTC+soy
-         L84gmlGpqVVlALWKfC1tn3jY0u7P7cwxj2FNP3N1WCEtQnGEs/Kw4GGb0iq41OY/th
-         eDtzPslAdNwT8+I+bKdycacU0PEfbcmIHw/maCPnOLKSDLcWKKsyJ+DnoZyE2ZyR/T
-         70hp5hBYErUvw==
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 9/2/20 9:10 AM, Mauro Carvalho Chehab wrote:
-> As reported by smatch:
-> 
-> 	drivers/media/v4l2-core/videobuf-dma-sg.c:245 videobuf_dma_init_kernel() warn: should 'nr_pages << 12' be a 64 bit type?
-> 
-> The printk should not be using %d for the number of pages.
-> 
-> After looking better, the real problem here is that the
-> number of pages should be long int.
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> ---
->   drivers/media/v4l2-core/videobuf-dma-sg.c | 22 ++++++++++++----------
->   include/media/videobuf-dma-sg.h           |  2 +-
->   2 files changed, 13 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/media/v4l2-core/videobuf-dma-sg.c b/drivers/media/v4l2-core/videobuf-dma-sg.c
-> index 46ff19df9f53..8dd0562de287 100644
-> --- a/drivers/media/v4l2-core/videobuf-dma-sg.c
-> +++ b/drivers/media/v4l2-core/videobuf-dma-sg.c
-> @@ -180,7 +180,7 @@ static int videobuf_dma_init_user_locked(struct videobuf_dmabuf *dma,
->   	if (rw == READ)
->   		flags |= FOLL_WRITE;
->   
-> -	dprintk(1, "init user [0x%lx+0x%lx => %d pages]\n",
-> +	dprintk(1, "init user [0x%lx+0x%lx => %lu pages]\n",
->   		data, size, dma->nr_pages);
->   
->   	err = pin_user_pages(data & PAGE_MASK, dma->nr_pages,
+Enable drivers to tell ACPI that there's no need to power on a device for
+probe. Drivers should still perform this by themselves if there's a need
+to. In some cases powering on the device during probe is undesirable, and
+this change enables a driver to choose what fits best for it.
 
+Add a field called "flags" into struct i2c_driver for driver flags, and a
+flag I2C_DRV_FL_ALLOW_LOW_POWER_PROBE to tell a driver supports probe in
+low power state.
 
-One pre-existing detail to remember is that the gup/pup routines,
-specifically pin_user_pages() in this case, use an "int" for the
-incoming nr_pages. (I wonder if that should be changed? It's now
-becoming a pitfall.) So it's now possible to overflow.
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ drivers/i2c/i2c-core-base.c | 19 ++++++++++++++++---
+ include/linux/i2c.h         | 14 ++++++++++++++
+ 2 files changed, 30 insertions(+), 3 deletions(-)
 
-In other situations like this (see xsdfec_table_write() in
-drivers/misc/xilinx_sdfec.c), we've added checks such as:
-
-	u32 n;
-	...
-
-	if (WARN_ON_ONCE(n > INT_MAX))
-		return -EINVAL;
-
-	nr_pages = n;
-
-	res = pin_user_pages_fast((unsigned long)src_ptr, nr_pages, 0, pages);
-
-...in other words, check the value while it's stored in a 64-bit type,
-before sending it down into a 32-bit API.
-
-...other than that, everything else looks fine.
-
-thanks,
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index 5ec082e2039d9..cfb1e777c6196 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -436,6 +436,16 @@ static int i2c_smbus_host_notify_to_irq(const struct i2c_client *client)
+ 	return irq > 0 ? irq : -ENXIO;
+ }
+ 
++static bool allow_low_power_probe(struct device *dev)
++{
++	struct i2c_driver *driver = to_i2c_driver(dev->driver);
++
++	return driver->flags & I2C_DRV_FL_ALLOW_LOW_POWER_PROBE &&
++		!acpi_dev_get_property(ACPI_COMPANION(dev),
++				       "i2c-allow-low-power-probe",
++				       ACPI_TYPE_ANY, NULL);
++}
++
+ static int i2c_device_probe(struct device *dev)
+ {
+ 	struct i2c_client	*client = i2c_verify_client(dev);
+@@ -514,7 +524,8 @@ static int i2c_device_probe(struct device *dev)
+ 	if (status < 0)
+ 		goto err_clear_wakeup_irq;
+ 
+-	status = dev_pm_domain_attach(&client->dev, true);
++	status = dev_pm_domain_attach(&client->dev,
++				      !allow_low_power_probe(&client->dev));
+ 	if (status)
+ 		goto err_clear_wakeup_irq;
+ 
+@@ -536,7 +547,8 @@ static int i2c_device_probe(struct device *dev)
+ 	return 0;
+ 
+ err_detach_pm_domain:
+-	dev_pm_domain_detach(&client->dev, true);
++	dev_pm_domain_detach(&client->dev,
++			     !allow_low_power_probe(&client->dev));
+ err_clear_wakeup_irq:
+ 	dev_pm_clear_wake_irq(&client->dev);
+ 	device_init_wakeup(&client->dev, false);
+@@ -562,7 +574,8 @@ static int i2c_device_remove(struct device *dev)
+ 		status = driver->remove(client);
+ 	}
+ 
+-	dev_pm_domain_detach(&client->dev, true);
++	dev_pm_domain_detach(&client->dev,
++			     !allow_low_power_probe(&client->dev));
+ 
+ 	dev_pm_clear_wake_irq(&client->dev);
+ 	device_init_wakeup(&client->dev, false);
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index fc55ea41d3237..f8c3257a8bb25 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -11,6 +11,7 @@
+ #define _LINUX_I2C_H
+ 
+ #include <linux/acpi.h>		/* for acpi_handle */
++#include <linux/bits.h>
+ #include <linux/mod_devicetable.h>
+ #include <linux/device.h>	/* for struct device */
+ #include <linux/sched.h>	/* for completion */
+@@ -217,6 +218,16 @@ enum i2c_alert_protocol {
+ 	I2C_PROTOCOL_SMBUS_HOST_NOTIFY,
+ };
+ 
++/**
++ * enum i2c_driver_flags - Flags for an I2C device driver
++ *
++ * @I2C_DRV_FL_ALLOW_LOW_POWER_PROBE: Let the ACPI driver manage the device's
++ *				      power state during probe and remove
++ */
++enum i2c_driver_flags {
++	I2C_DRV_FL_ALLOW_LOW_POWER_PROBE = BIT(0),
++};
++
+ /**
+  * struct i2c_driver - represent an I2C device driver
+  * @class: What kind of i2c device we instantiate (for detect)
+@@ -231,6 +242,7 @@ enum i2c_alert_protocol {
+  * @detect: Callback for device detection
+  * @address_list: The I2C addresses to probe (for detect)
+  * @clients: List of detected clients we created (for i2c-core use only)
++ * @flags: A bitmask of flags defined in &enum i2c_driver_flags
+  *
+  * The driver.owner field should be set to the module owner of this driver.
+  * The driver.name field should be set to the name of this driver.
+@@ -289,6 +301,8 @@ struct i2c_driver {
+ 	int (*detect)(struct i2c_client *client, struct i2c_board_info *info);
+ 	const unsigned short *address_list;
+ 	struct list_head clients;
++
++	u32 flags;
+ };
+ #define to_i2c_driver(d) container_of(d, struct i2c_driver, driver)
+ 
 -- 
-John Hubbard
-NVIDIA
+2.20.1
+
