@@ -2,177 +2,220 @@ Return-Path: <SRS0=ZCSR=CN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 080AAC43461
-	for <linux-media@archiver.kernel.org>; Fri,  4 Sep 2020 12:31:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7326CC43461
+	for <linux-media@archiver.kernel.org>; Fri,  4 Sep 2020 13:34:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BCF312074A
-	for <linux-media@archiver.kernel.org>; Fri,  4 Sep 2020 12:31:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4172D2078E
+	for <linux-media@archiver.kernel.org>; Fri,  4 Sep 2020 13:34:18 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="t/3vUViV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730010AbgIDMbO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Sep 2020 08:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41940 "EHLO
+        id S1730470AbgIDNeF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Sep 2020 09:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728588AbgIDMbC (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Sep 2020 08:31:02 -0400
-Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9ACAC061244
-        for <linux-media@vger.kernel.org>; Fri,  4 Sep 2020 05:31:01 -0700 (PDT)
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 7B286C6429; Fri,  4 Sep 2020 13:30:50 +0100 (BST)
-Date:   Fri, 4 Sep 2020 13:30:50 +0100
-From:   Sean Young <sean@mess.org>
-To:     Joakim Zhang <qiangqing.zhang@nxp.com>
-Cc:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        Andy Duan <fugang.duan@nxp.com>, linux-gpio@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: Re: SONY IR issue
-Message-ID: <20200904123050.GA11675@gofer.mess.org>
-References: <DB8PR04MB679580C7C8E6888B56C8BDACE62C0@DB8PR04MB6795.eurprd04.prod.outlook.com>
- <20200903185513.GA31286@gofer.mess.org>
- <DB8PR04MB67950837E2355EA81FBAADD1E62D0@DB8PR04MB6795.eurprd04.prod.outlook.com>
+        with ESMTP id S1730447AbgIDNaV (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Sep 2020 09:30:21 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E091C061245;
+        Fri,  4 Sep 2020 06:29:33 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2D53C540;
+        Fri,  4 Sep 2020 15:29:24 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1599226164;
+        bh=gaKQogjFkemHMpyyZ83iJjezV+gtGiFSIdmO7pGnQ3I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=t/3vUViVhSO2SDIgevxig29k+/zBCmBsi0EwtNN/drZPC+MQc5uwwNrDJ+W+MKSW/
+         Bq6aNmoE905kePmpwCDjj7xi1raIBP8gRZZBZeo2SzWUeEvrCRuY9O62H8a+XLF19F
+         di6kYDU18fAuIDrx5jbE+ClIDsuyQrWCN1KvV6OM=
+Date:   Fri, 4 Sep 2020 16:29:00 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Sakari Ailus <sakari.ailus@iki.fi>
+Cc:     Jacopo Mondi <jacopo@jmondi.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Subject: Re: [PATCH v3 1/2] media: i2c: ov772x: Add support for BT656 mode
+Message-ID: <20200904132900.GA7518@pendragon.ideasonboard.com>
+References: <20200824190406.27478-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20200824190406.27478-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20200904012000.GA9369@pendragon.ideasonboard.com>
+ <20200904075553.qjdyskcpext7fxcy@uno.localdomain>
+ <20200904082104.GE4392@valkosipuli.retiisi.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DB8PR04MB67950837E2355EA81FBAADD1E62D0@DB8PR04MB6795.eurprd04.prod.outlook.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200904082104.GE4392@valkosipuli.retiisi.org.uk>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Joakim,
+Hello,
 
-On Fri, Sep 04, 2020 at 10:43:23AM +0000, Joakim Zhang wrote:
-> > On Thu, Sep 03, 2020 at 11:55:30AM +0000, Joakim Zhang wrote:
-> > > Thanks a lot for pointing me to use “ir-ctl -r”, really easy to
-> > > capture the raw data. 😊
+On Fri, Sep 04, 2020 at 11:21:04AM +0300, Sakari Ailus wrote:
+> On Fri, Sep 04, 2020 at 09:55:53AM +0200, Jacopo Mondi wrote:
+> > On Fri, Sep 04, 2020 at 04:20:00AM +0300, Laurent Pinchart wrote:
+> > > On Mon, Aug 24, 2020 at 08:04:05PM +0100, Lad Prabhakar wrote:
+> > > > Add support to read the bus-type and enable BT656 mode if needed.
+> > > >
+> > > > Also fail probe if unsupported bus_type is detected.
+> > > >
+> > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> > > > ---
+> > > >  drivers/media/i2c/ov772x.c | 32 ++++++++++++++++++++++++++++++++
+> > > >  1 file changed, 32 insertions(+)
+> > > >
+> > > > diff --git a/drivers/media/i2c/ov772x.c b/drivers/media/i2c/ov772x.c
+> > > > index 2cc6a678069a..67764d647526 100644
+> > > > --- a/drivers/media/i2c/ov772x.c
+> > > > +++ b/drivers/media/i2c/ov772x.c
+> > > > @@ -31,6 +31,7 @@
+> > > >  #include <media/v4l2-ctrls.h>
+> > > >  #include <media/v4l2-device.h>
+> > > >  #include <media/v4l2-event.h>
+> > > > +#include <media/v4l2-fwnode.h>
+> > > >  #include <media/v4l2-image-sizes.h>
+> > > >  #include <media/v4l2-subdev.h>
+> > > >
+> > > > @@ -434,6 +435,7 @@ struct ov772x_priv {
+> > > >  #ifdef CONFIG_MEDIA_CONTROLLER
+> > > >  	struct media_pad pad;
+> > > >  #endif
+> > > > +	struct v4l2_fwnode_endpoint ep;
+> > > >  };
+> > > >
+> > > >  /*
+> > > > @@ -581,6 +583,13 @@ static int ov772x_s_stream(struct v4l2_subdev *sd, int enable)
+> > > >  	if (priv->streaming == enable)
+> > > >  		goto done;
+> > > >
+> > > > +	if (priv->ep.bus_type == V4L2_MBUS_BT656) {
+> > > > +		ret = regmap_update_bits(priv->regmap, COM7, ITU656_ON_OFF,
+> > > > +					 enable ? ITU656_ON_OFF : ~ITU656_ON_OFF);
+> > > > +		if (ret)
+> > > > +			goto done;
+> > > > +	}
+> > > > +
+> > > >  	ret = regmap_update_bits(priv->regmap, COM2, SOFT_SLEEP_MODE,
+> > > >  				 enable ? 0 : SOFT_SLEEP_MODE);
+> > > >  	if (ret)
+> > > > @@ -1354,6 +1363,7 @@ static const struct v4l2_subdev_ops ov772x_subdev_ops = {
+> > > >
+> > > >  static int ov772x_probe(struct i2c_client *client)
+> > > >  {
+> > > > +	struct fwnode_handle *endpoint;
+> > > >  	struct ov772x_priv	*priv;
+> > > >  	int			ret;
+> > > >  	static const struct regmap_config ov772x_regmap_config = {
+> > > > @@ -1415,6 +1425,28 @@ static int ov772x_probe(struct i2c_client *client)
+> > > >  		goto error_clk_put;
+> > > >  	}
+> > > >
+> > > > +	endpoint = fwnode_graph_get_next_endpoint(dev_fwnode(&client->dev),
+> > > > +						  NULL);
+> > > > +	if (!endpoint) {
+> > > > +		dev_err(&client->dev, "endpoint node not found\n");
+> > > > +		ret = -EINVAL;
+> > > > +		goto error_clk_put;
+> > > > +	}
+> > > > +
+> > > > +	ret = v4l2_fwnode_endpoint_parse(endpoint, &priv->ep);
 > > >
-> > > The scancode from my RC is 0x130002, the scancode decoded by SONY
-> > decoder is 0x110002. So I capture the waveform generated by IR and raw data
-> > sampled by GPIO. All attached, please have a check.
+> > > v4l2_fwnode_endpoint_parse() is deprecated for new drivers,
+> > > v4l2_fwnode_endpoint_alloc_parse() is recommended instead. Please note
+> > > that v4l2_fwnode_endpoint_free() then needs to be called in the error
+> > > path and in remove().
 > > 
-> > So you captured it with a logic analyzer?
-> Yes, with a logic analyzer yesterday. Today, change to use a analog analyzer, the signal is perfect, seems not the issue of signal generated by IR device. IR device I used is IRM-V538/TR1.
+> > Doesn't alloc_parse() differ from just _parse() as it reserve space
+> > for the 'link-frequencies' array ? As this device does not support
+> > CSI-2 and the 'link-frequencies' property is not allows in bindings,
+> > isn't using endpoint_parse() better as it saves a call to _free() ?
+> 
+> Yeah. I think the documentation needs to be updated.
+> 
+> The thinking was there would be other variable size properties that drivers
+> would need but that didn't happen. So feel free to continue use
+> v4l2_fwnode_endpoint_parse() where it does the job.
 
-Ok, makes sense.
- 
-> > > As you can see, the RC transmit repeatedly 6 times. After checking them
-> > carefully, all of them satisfied SONY 12bit protocols. SONY decoder decode the
-> > 5th signal and report the scancode 0x110002.
-> > > According to raw data, it really should be 0x110002. So I check the waveform
-> > and raw data further, the raw data sampled by GPIO seems not correct.
+I thought the goal was to remove v4l2_fwnode_endpoint_parse() in the
+future. If Sakari is happy to keep it and see it used for parallel
+buses, I have no objection.
+
+> > Or are we deprecating that function unconditionally ? The
+> > documentation suggests "please use v4l2_fwnode_endpoint_alloc_parse()
+> > in new drivers" but here it doesn't seem required..
+> > 
+> > > On the other hand, not setting .bus_type and letting the parse()
+> > > function determine the but type automatically is also deprecated, and I
+> > > don't think forcing drivers to call v4l2_fwnode_endpoint_alloc_parse()
+> > > once for each bus type until one succeeds is a good API. As change will
+> > > be needed in that API, you can ignore v4l2_fwnode_endpoint_alloc_parse()
+> > > for the time being if you want.
+> > 
+> > But indeed relying on auto-guessing of the bus type is deprecated since
+> > some time now (and the API could be improved, yes). Sorry I missed
+> > that yesterday.
+> 
+> There's one case where the bus type does not need to be set: when bindings
+> require it *and* at the same time you have no default configuration that
+> requires something to be set in the bus specific struct. Bindings where
+> bus-type is required were added later so I think the documentation should
+> be changed there, too.
+> 
+> I can send the patches.
+
+This patch shows a common use case, with a source supporting both
+parallel and BT.656. Having to call v4l2_fwnode_endpoint_parse() twice,
+once for each bus type, isn't a very good API in my opinion. I'd like
+v4l2_fwnode_endpoint_parse() to be able to determine the bus type (using
+the bus-type property) *and* support defaults with a single call.
+
+Speaking of defaults, I wonder if it's a good idea to let that up to
+drivers, or if we should standardize on one set of defaults that would
+be shared by all DT bindings.
+
+> > As we support parallel and bt.656 only I must be honest I don't mind
+> > it here as otherwise the code would be more complex for no real gain,
+> > but I defer this to Sakari which has been fighting the battle against
+> > auto-guessing since a long time now  :)
+> 
+> I think you should require bus-type property in bindings in that case.
+> 
+> But as it's an existing driver, bus-type will be optional. You'll need to
+> default to what was supported earlier. This is actually an interesting case
+> as bindings do not document it.
+> 
+> > > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 > > >
-> > > e.g. for the 5th signal
-> > > [cid:image001.jpg@01D6822C.2AD54480]
-> > > pulse 2408
-> > > space 549
-> > > pulse 579
-> > > space 581
-> > > pulse 1188
-> > > space 579
-> > > pulse 579
-> > > space 579
-> > > pulse 579
-> > > space 581
-> > > pulse 577
-> > > space 579
-> > > pulse 579
-> > > space 549
-> > > pulse 610
-> > > space 548
-> > > pulse 1222
-> > > space 547
-> > > pulse 690 // this should be ~1200
-> > > space 567
-> > > pulse 587
-> > > space 569
-> > > pulse 588
-> > > space 570
-> > > pulse 1192
-> > > timeout 17877
-> > >
-> > > For other signals, they all have an exception value in raw data, as below, so
-> > decoder failed at these values. Strange enough, why only one value is incorrect.
-> > > 1st: space 54
-> > > 2nd: pulse 76
-> > > 3rd: space 61
-> > > 4th: space 51
-> > > 6th: space 53
-> > > But looking into the waveform, they are all normal, could you tell me how to
-> > look into it? Is there any specific configuration for GPIO PAD? I might have to
-> > grab some analog signals.
-> > > One more add is that, it can improve decode correctness if I add milliseconds
-> > delay in ir_sony_decode() function.
-> > 
-> > Right, so changing the dev_dbg() to dev_info() did work, although that is not
-> > the correct fix.
-> > 
-> > It would be interesting to know if the problem is in the gpio device, or if there is
-> > a problem with further processing in the IR layers.
-> > 
-> > What is the device you are using?
-> >
-> > I think it would be interesting to add a debug printk in gpio_ir_recv_irq with the
-> > ktime and the val. We can see then if correct data is being generated here, or if
-> > things go wrong in the IR layers.
-> I did below code change to print raw data generated in gpio interrupt handler. After checking the data, it is consistent to the raw data dump by the ir-ctl.
-> 
-> --- a/drivers/media/rc/rc-ir-raw.c
-> +++ b/drivers/media/rc/rc-ir-raw.c
-> @@ -76,7 +76,7 @@ int ir_raw_event_store(struct rc_dev *dev, struct ir_raw_event *ev)
->         if (!dev->raw)
->                 return -EINVAL;
-> 
-> -       dev_dbg(&dev->dev, "sample: (%05dus %s)\n",
-> +       trace_printk("sample: (%05dus %s)\n",
->                 TO_US(ev->duration), TO_STR(ev->pulse));
-> 
->         if (!kfifo_put(&dev->raw->kfifo, *ev)) {
-> 
-> 
-> > I wouldn't be surprised if the gpio device generates two interrupts for the
-> > broken pulse (one after 690us and another at 1200us), and if decoding happens
-> > before the second then the wrong pulse length is used.
-> I also check the number of interrupt generated by gpio. After I press the key, RC transmits 7 frames, it should contain 182 falling/rising edges.
-> It indeed reports 182 interrupts and go through ir_raw_event_store function 182 times. Since the number of interrupt is accurate, just a few falling/rising interrupt
-> comes much quickly than others, but the analog signal is perfect. It is really out of my understanding. It should not an issue in IR layer.
+> > > > +	fwnode_handle_put(endpoint);
+> > > > +	if (ret) {
+> > > > +		dev_err(&client->dev, "Could not parse endpoint\n");
+> > > > +		goto error_clk_put;
+> > > > +	}
+> > > > +
+> > > > +	if (priv->ep.bus_type != V4L2_MBUS_PARALLEL &&
+> > > > +	    priv->ep.bus_type != V4L2_MBUS_BT656) {
+> > > > +		dev_err(&client->dev, "Unsupported bus type %d\n",
+> > > > +			priv->ep.bus_type);
+> > > > +		goto error_clk_put;
+> > > > +	}
+> > > > +
+> > > >  	ret = ov772x_video_probe(priv);
+> > > >  	if (ret < 0)
+> > > >  		goto error_gpio_put;
 
-I think the next step would be to put dev_dbg/printk in gpio-ir-recv.c,
-and see if the results are the same there. I suspect they will be.
+-- 
+Regards,
 
-> > > I also have a question, if RC transmit repeatedly 6 times, and SONY decodes
-> > decode all raw data successfully, it will report to input subsystem 6 times, does
-> > input subsystem will still report to userspace 6 times?
-> > 
-> > If the sony decodes the same values 6 times, then scancode will reported 6
-> > imes, but there will be only one key down event, and a key up event about
-> > 100ms after the the last decode (plus a few other milliseconds for various
-> > timeouts).
-> Thanks for your details. Does this mean input subsystem will still report scancode 6 times, but only report keycode once if it is matched?
-
-Exactly. The keycode is only reported once, so that if the user press e.g.
-"1" they will get just get one "1". 
-
-> Sean, based on your experience, where else do you suggest me to look into this further? Have you came across such case, a few interrupt responded so quickly so that front pulse/space is much shorten?
-
-To be honest I've never seen this before.
-
-I'm not sure what the cause could be. On the raspberry pi it is known that
-lots usb traffic causes delays in the gpio interrupt handlers due to
-some hardware issue, but this causes some interrupts to arrive late. This
-causes some of the pulse/space timings to be longer, and then later ones
-are shorter again as it catches up.
-
-Similarly if the kernel is running with interrupts off for too long, some
-of the timings will be longer and others shorter.
-
-Is there anything you can tell us about the gpio hardware?
-
-Thanks,
-
-Sean
+Laurent Pinchart
