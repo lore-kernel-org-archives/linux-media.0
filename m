@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A677C43461
-	for <linux-media@archiver.kernel.org>; Fri,  4 Sep 2020 20:18:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA82AC43461
+	for <linux-media@archiver.kernel.org>; Fri,  4 Sep 2020 20:18:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D298D2098B
-	for <linux-media@archiver.kernel.org>; Fri,  4 Sep 2020 20:18:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 97F4A2084D
+	for <linux-media@archiver.kernel.org>; Fri,  4 Sep 2020 20:18:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728012AbgIDUSO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Sep 2020 16:18:14 -0400
+        id S1728034AbgIDUSR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Sep 2020 16:18:17 -0400
 Received: from gw.c-home.cz ([89.24.150.100]:41821 "EHLO dmz.c-home.cz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726441AbgIDUSM (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 4 Sep 2020 16:18:12 -0400
+        id S1726441AbgIDUSP (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 4 Sep 2020 16:18:15 -0400
 X-Greylist: delayed 967 seconds by postgrey-1.27 at vger.kernel.org; Fri, 04 Sep 2020 16:18:04 EDT
 Received: from ubuntu1804.c-home.cz (unifi.c-home.cz [192.168.1.239])
-        by dmz.c-home.cz (8.14.4+Sun/8.14.4) with ESMTP id 084K1EdD002405;
-        Fri, 4 Sep 2020 22:01:29 +0200 (CEST)
+        by dmz.c-home.cz (8.14.4+Sun/8.14.4) with ESMTP id 084K1EdB002405;
+        Fri, 4 Sep 2020 22:01:27 +0200 (CEST)
 From:   Martin Cerveny <m.cerveny@computer.org>
 To:     devicetree@vger.kernel.org
 Cc:     Martin Cerveny <m.cerveny@computer.org>,
@@ -34,9 +34,9 @@ Cc:     Martin Cerveny <m.cerveny@computer.org>,
         Maxime Ripard <mripard@kernel.org>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Rob Herring <robh+dt@kernel.org>
-Subject: [PATCH 5/6] media: allwinner,sun4i-a10-video-engine: Add V3s compatible
-Date:   Fri,  4 Sep 2020 22:01:11 +0200
-Message-Id: <20200904200112.5563-6-m.cerveny@computer.org>
+Subject: [PATCH 3/6] ARM: dts: sun8i: v3s: Add node for system control
+Date:   Fri,  4 Sep 2020 22:01:09 +0200
+Message-Id: <20200904200112.5563-4-m.cerveny@computer.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200904200112.5563-1-m.cerveny@computer.org>
 References: <20200904200112.5563-1-m.cerveny@computer.org>
@@ -45,25 +45,47 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Allwinner V3s SoC contains video engine. Add compatible for it.
+Allwinner V3s has system control and SRAM C1 region similar to H3.
 
 Signed-off-by: Martin Cerveny <m.cerveny@computer.org>
 ---
- .../bindings/media/allwinner,sun4i-a10-video-engine.yaml         | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/boot/dts/sun8i-v3s.dtsi | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-engine.yaml b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-engine.yaml
-index 4cc1a670c..08515c18c 100644
---- a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-engine.yaml
-+++ b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-engine.yaml
-@@ -18,6 +18,7 @@ properties:
-       - allwinner,sun7i-a20-video-engine
-       - allwinner,sun8i-a33-video-engine
-       - allwinner,sun8i-h3-video-engine
-+      - allwinner,sun8i-v3s-video-engine
-       - allwinner,sun50i-a64-video-engine
-       - allwinner,sun50i-h5-video-engine
-       - allwinner,sun50i-h6-video-engine
+diff --git a/arch/arm/boot/dts/sun8i-v3s.dtsi b/arch/arm/boot/dts/sun8i-v3s.dtsi
+index e5312869c..3f18866fb 100644
+--- a/arch/arm/boot/dts/sun8i-v3s.dtsi
++++ b/arch/arm/boot/dts/sun8i-v3s.dtsi
+@@ -138,6 +138,29 @@
+ 			};
+ 		};
+ 
++		syscon: system-control@1c00000 {
++			compatible = "allwinner,sun8i-v3s-system-control",
++				     "allwinner,sun8i-h3-system-control";
++			reg = <0x01c00000 0x1000>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges;
++
++			sram_c: sram@1d00000 {
++				compatible = "mmio-sram";
++				reg = <0x01d00000 0x80000>;
++				#address-cells = <1>;
++				#size-cells = <1>;
++				ranges = <0 0x01d00000 0x80000>;
++
++				ve_sram: sram-section@0 {
++					compatible = "allwinner,sun8i-v3s-sram-c1",
++						     "allwinner,sun4i-a10-sram-c1";
++					reg = <0x000000 0x80000>;
++				};
++			};
++		};
++
+ 		tcon0: lcd-controller@1c0c000 {
+ 			compatible = "allwinner,sun8i-v3s-tcon";
+ 			reg = <0x01c0c000 0x1000>;
 -- 
 2.17.1
 
