@@ -2,123 +2,66 @@ Return-Path: <SRS0=ZCSR=CN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7475DC43461
-	for <linux-media@archiver.kernel.org>; Fri,  4 Sep 2020 20:26:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62F0CC433E2
+	for <linux-media@archiver.kernel.org>; Fri,  4 Sep 2020 21:34:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2D2582084D
-	for <linux-media@archiver.kernel.org>; Fri,  4 Sep 2020 20:26:50 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dWScMilw"
+	by mail.kernel.org (Postfix) with ESMTP id 347B62087C
+	for <linux-media@archiver.kernel.org>; Fri,  4 Sep 2020 21:34:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728021AbgIDU0t (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Sep 2020 16:26:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726135AbgIDU0r (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Sep 2020 16:26:47 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A87DC061244
-        for <linux-media@vger.kernel.org>; Fri,  4 Sep 2020 13:26:47 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id i22so10220158eja.5
-        for <linux-media@vger.kernel.org>; Fri, 04 Sep 2020 13:26:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=71QF8U6Pk/SiD85qlDqgpqkUOmuelTg8cgLRGmKd4dg=;
-        b=dWScMilwgzS+jeGX34RxcHODSmT017udhLnTrcdCacIY5qKlib/Ga1PVvLXMJBSV+x
-         h5h9I8waE88HTpZuR8PqVIdBzBgwbh6YS0rrdycZMe3cOD5Y0K9oCXwunA66el91/5Mb
-         Q9/iYkvEhMeTGtBF8BSMOtRbKHD4Pl8roa1XvmslHehpbFctdKTIYqPqugoSDn/ufxP8
-         IhwSeo45OrFgDsZGP7jHhz42AICfLI7mj3mwIdyD3G61H3MaLV/4W0dbnZJiCAacqk2D
-         IEkIJ0W0VmXpwYzgbA4VoVBf74j4xGZqnTA7XWHqLbCfpWPxfCq3kit7o7RZgzLGwO/r
-         8IvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=71QF8U6Pk/SiD85qlDqgpqkUOmuelTg8cgLRGmKd4dg=;
-        b=L8WeJl1nRWRF+aJOgM6gUfFb51zJLtIobVucVc/JMxvT+6z7TQuc6fIPLlxtpn5fWD
-         tYx4g+wrq/y0APvv4wknfgQ3CuKgw91kiqs0wBxsTqyIAiMDiuSKyHF9klKYO0ggPFhG
-         jkS4KpSzkwFHel9M719r5lA+qWWCaGE2nfazVBIQUZmUUpp1GG3K+LSwRzL7K8BhtrMx
-         jbPNMKAsAdFnDRyftE+QftKAI6aS2MwANaAi4cTQ1xFvX0KIyiMgE12axyH/taQoEGTA
-         e6C5Vz4CgGxiWB663wLjbqeIo5DthQBbF1DCjsCxKHLUmLIOoXLhBcDVJyBcc9ByWvC5
-         4l8w==
-X-Gm-Message-State: AOAM530MUDVdt/sOqUTfzij3P5Bu85KXy3vb0dRj3LH2VDeEgWkSEDPa
-        YLFbYfEB/b+Urc3ZNCHraUiNWw==
-X-Google-Smtp-Source: ABdhPJx30bReT6CTdB48NgVjNdPtv2dzDs6J0R/E4WIddm4nOy7VcNTajmbkx8JjJoGBxw+SAEnSog==
-X-Received: by 2002:a17:906:3755:: with SMTP id e21mr9269680ejc.39.1599251205777;
-        Fri, 04 Sep 2020 13:26:45 -0700 (PDT)
-Received: from [192.168.1.6] ([195.24.90.54])
-        by smtp.googlemail.com with ESMTPSA id dm22sm7068399edb.49.2020.09.04.13.26.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Sep 2020 13:26:44 -0700 (PDT)
-Subject: Re: [PATCH] media: venus: core: Drop local dma_parms
-To:     Robin Murphy <robin.murphy@arm.com>, stanimir.varbanov@linaro.org,
-        mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <e5384b296a0af099dc502572752df149127b7947.1599167568.git.robin.murphy@arm.com>
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Message-ID: <c474d49b-7800-28c6-d73b-20a6d2258e9e@linaro.org>
-Date:   Fri, 4 Sep 2020 23:26:42 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1728120AbgIDVeM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Sep 2020 17:34:12 -0400
+Received: from smtprelay0198.hostedemail.com ([216.40.44.198]:39058 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727020AbgIDVeI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 4 Sep 2020 17:34:08 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay03.hostedemail.com (Postfix) with ESMTP id 75B528384365;
+        Fri,  4 Sep 2020 21:34:04 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-HE-Tag: brain20_590dcfc270b5
+X-Filterd-Recvd-Size: 1527
+Received: from XPS-9350.home (unknown [47.151.133.149])
+        (Authenticated sender: joe@perches.com)
+        by omf16.hostedemail.com (Postfix) with ESMTPA;
+        Fri,  4 Sep 2020 21:34:02 +0000 (UTC)
+Message-ID: <f5e9bd00f94d4058e7fa214b4219d3e1978e8b55.camel@perches.com>
+Subject: Re: [PATCH 08/29] dma-buf: Avoid comma separated statements
+From:   Joe Perches <joe@perches.com>
+To:     kieran.bingham+renesas@ideasonboard.com,
+        Jiri Kosina <trivial@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+In-Reply-To: <e6035e4b-9d4e-3c23-c140-4e9d6822496b@ideasonboard.com>
+References: <cover.1598331148.git.joe@perches.com>
+         <990bf6f33ccaf73ad56eb4bea8bd2c0db5e90a31.1598331148.git.joe@perches.com>
+         <e6035e4b-9d4e-3c23-c140-4e9d6822496b@ideasonboard.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Date:   Fri, 04 Sep 2020 14:33:52 -0700
 MIME-Version: 1.0
-In-Reply-To: <e5384b296a0af099dc502572752df149127b7947.1599167568.git.robin.murphy@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+User-Agent: Evolution 3.36.4-0ubuntu1 
 Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Robin,
+On Fri, 2020-09-04 at 12:42 +0100, Kieran Bingham wrote:
+> I'm pleased to see this is treewide ;-)
+> Definitely prefer this.
 
-Thanks for the patch!
+These are only the comma uses in if/do/while blocks that
+would also need braces as separate statements.
 
-On 9/4/20 12:14 AM, Robin Murphy wrote:
-> Since commit 9495b7e92f71 ("driver core: platform: Initialize dma_parms
-> for platform devices"), struct platform_device already provides a
-> dma_parms structure, so we can save allocating another one.
-> 
-> Also the DMA segment size is simply a size, not a bitmask.
-> 
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-> ---
->  drivers/media/platform/qcom/venus/core.c | 8 +-------
->  1 file changed, 1 insertion(+), 7 deletions(-)
-> 
-> diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-> index 203c6538044f..2fa9275d75ff 100644
-> --- a/drivers/media/platform/qcom/venus/core.c
-> +++ b/drivers/media/platform/qcom/venus/core.c
-> @@ -226,13 +226,7 @@ static int venus_probe(struct platform_device *pdev)
->  	if (ret)
->  		return ret;
->  
-> -	if (!dev->dma_parms) {
-> -		dev->dma_parms = devm_kzalloc(dev, sizeof(*dev->dma_parms),
-> -					      GFP_KERNEL);
-> -		if (!dev->dma_parms)
-> -			return -ENOMEM;
-> -	}
-> -	dma_set_max_seg_size(dev, DMA_BIT_MASK(32));
-> +	dma_set_max_seg_size(dev, UINT_MAX);
+There a multiple dozens more just with single statements
+terminated by commas and not semicolons.
 
-To be correct we should check for EIO error?
+See:  https://lore.kernel.org/patchwork/patch/1291033/
 
->  
->  	INIT_LIST_HEAD(&core->instances);
->  	mutex_init(&core->lock);
-> 
 
--- 
-regards,
-Stan
