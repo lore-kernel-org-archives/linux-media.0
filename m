@@ -2,228 +2,255 @@ Return-Path: <SRS0=ZCSR=CN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AFF4C433E2
-	for <linux-media@archiver.kernel.org>; Fri,  4 Sep 2020 13:49:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB728C43461
+	for <linux-media@archiver.kernel.org>; Fri,  4 Sep 2020 13:50:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DE3E52074D
-	for <linux-media@archiver.kernel.org>; Fri,  4 Sep 2020 13:49:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6FC0720658
+	for <linux-media@archiver.kernel.org>; Fri,  4 Sep 2020 13:50:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="o++PUbGo"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="ht7FM1vA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730683AbgIDNsg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Sep 2020 09:48:36 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:44228 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730668AbgIDNr4 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Sep 2020 09:47:56 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200904133512euoutp020c06d158dc43ff3eb5acc0e16014029d~xmAo_niyf2949729497euoutp02Q
-        for <linux-media@vger.kernel.org>; Fri,  4 Sep 2020 13:35:12 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200904133512euoutp020c06d158dc43ff3eb5acc0e16014029d~xmAo_niyf2949729497euoutp02Q
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1599226512;
-        bh=j4NMsIUYeDhNT1iU/BYbUagBybluyVnGEfDAwzBqQE4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o++PUbGo65XuYr4Q/r3BVGYNCcIOxMj8GySOSY+HO8EOzP9v1w/pAc5WcdmU9HdL2
-         aiY8x2pGDHL8A/9gVxR2NbMKnyCtx6U2SaKAc2hMBlqdQoNj9xWwJcNuSBPhgOWjOd
-         LKPsfCGbW8JLiqWg+YF+tB65pRNXalLN/cji0nsc=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20200904133511eucas1p2d486263c794f51fdb8ea88600fe1e5fd~xmAoilL9n0781807818eucas1p2F;
-        Fri,  4 Sep 2020 13:35:11 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 1D.11.06456.F82425F5; Fri,  4
-        Sep 2020 14:35:11 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200904133511eucas1p2359dd080181340eb4f24b325e75a4c68~xmAoO9OKM0143201432eucas1p2w;
-        Fri,  4 Sep 2020 13:35:11 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200904133511eusmtrp1fbe17ff149b4a75ba401f69bbb75685f~xmAoN7VnX0766507665eusmtrp1T;
-        Fri,  4 Sep 2020 13:35:11 +0000 (GMT)
-X-AuditID: cbfec7f2-7efff70000001938-67-5f52428f70ed
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id FE.BE.06314.F82425F5; Fri,  4
-        Sep 2020 14:35:11 +0100 (BST)
-Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20200904133511eusmtip1461f7ad71c971aeb5f97e8bdefea381d~xmAnrZiyY2113121131eusmtip1w;
-        Fri,  4 Sep 2020 13:35:11 +0000 (GMT)
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-To:     dri-devel@lists.freedesktop.org, iommu@lists.linux-foundation.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
+        id S1730597AbgIDNuV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Sep 2020 09:50:21 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:52164 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730687AbgIDNtd (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Sep 2020 09:49:33 -0400
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 17F64540;
+        Fri,  4 Sep 2020 15:48:56 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1599227336;
+        bh=JchvXbon4mHBQSTlVX6Y5V7cre9VlOak2CkfONDlO1U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ht7FM1vAaYxdABUm6AxtFWO19YDiuPzh6EDiWK5xIBay19/gB+RkWOjcRGsGSdgc3
+         7o6Bc7PxgZFyFDtCbzRSSqvDGRuAUGkb7OyCZo45S+qk+8B6AAU7l6SBg5Ayu9VGbx
+         7ZkFqNXTTDeayVSCm8wZfE8xTcA23MQd34JkhPuY=
+Date:   Fri, 4 Sep 2020 16:48:32 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Sakari Ailus <sakari.ailus@iki.fi>
+Cc:     Jacopo Mondi <jacopo@jmondi.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Subject: [PATCH v10 29/30] media: pci: fix common ALSA DMA-mapping related
- codes
-Date:   Fri,  4 Sep 2020 15:17:10 +0200
-Message-Id: <20200904131711.12950-30-m.szyprowski@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200904131711.12950-1-m.szyprowski@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA0WSe0gUURTGvfPYHVcnplXwpqmwoFGUuvRgSjETsYmEwighMF1zUMsXu65l
-        Qi4+y1eZVGKhUpqt63N9pmRq6mZLYmqmlemmWRlm+MIeWjuO1n+/853v3O/cyyVQcQNuTYRF
-        xrDySFm4RCDCGrp/9O665ukb4KJvpems3h6Ersmrwuk/DTkoPbg4K6DVmi6ELnriSi8MGhBa
-        OzGE0wPNdwV0ZnU9Tld0jgrpB9rfCN3+fRL3IJnygnLAPF4qwhht2VUB07g0jjNjGTqEqS1O
-        YN6uTqBM7nApYFpGVAImu64MMPNau+Nmp0VuwWx4WCwrd3YPFIV+TCvBo79KLg5NJyMqYLBN
-        B6YEpPbAT7e0GMdi6iGAGh3J8wKAPfp96UBk5HkAq/MMYGNgfKwP5RulAFa+HxbwhXFitlAl
-        5FwCSgrTZ9IFHFtSKQA+yzLnTCg1gcCiqqG1hgXlC8f6tGuMUQ4waTkD55ik3OEHdT3Cx9lD
-        TXUbyrGpUa/Pm8S5gyDVIYRVv5Ix3uQFNfeH1tkCTuvqhDxvhfrcTIwfSALQ0Fsh5ItMAAcS
-        89Zv5Arf9f40rkEY99sOq5qdefkQbDNwWxBG3gSHZzZzMmrEGw23UV4m4ZVUMe92hPm6yn+x
-        7X39KM8MnEtMAfwL5QCorx1GrwP7/P9hRQCUAStWqYgIYRXSSPaCk0IWoVBGhjidjYrQAuNv
-        0q/q5prAYn9QB6AIIDEnTQ76BohxWawiLqIDQAKVWJKeL/RnxGSwLO4SK48KkCvDWUUHsCEw
-        iRW5+94XfzEVIothz7NsNCvf6CKEqbUKeMeXPH20N/ROss9imnqWbBW6Kw+nnRJKo7xefpuC
-        fs6tbiMnVMjJpuX9r/2njtYjIrOszphtVE3j85WdxVM33wTK7AZ8tHEFn3sqR+Mxl65zJTZ+
-        6mMO/oza+7LHK+WBINsjji1xQr8FaFIHUgtV2SM+WxLKkkykYegK0R3rKMEUoTLpDlSukP0F
-        K0nh7UkDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJIsWRmVeSWpSXmKPExsVy+t/xu7r9TkHxBm3z1Sx6z51kstg4Yz2r
-        xf9tE5ktrnx9z2axcvVRJosF+60tvlx5yGSx6fE1VovLu+awWfRs2MpqsfbIXXaLZZv+MFkc
-        /PCE1YHXY828NYwee78tYPHYtKqTzWP7twesHve7jzN5bF5S73H732Nmj8k3ljN67L7ZwObR
-        t2UVo8fnTXIB3FF6NkX5pSWpChn5xSW2StGGFkZ6hpYWekYmlnqGxuaxVkamSvp2NimpOZll
-        qUX6dgl6GU/bl7IWvFaquPaqhamB8aFsFyMnh4SAicSD+xeYuxi5OIQEljJKfLoxkREiISNx
-        cloDK4QtLPHnWhcbRNEnRolJ33vAEmwChhJdbyESIgKdjBLTuj+ygzjMAq+ZJFp3rWEDqRIW
-        CJDoP72CBcRmEVCVaP7RDdbNK2An8WjlViaIFfISqzccYAaxOYHiW2c8AasRErCV+DBnMcsE
-        Rr4FjAyrGEVSS4tz03OLDfWKE3OLS/PS9ZLzczcxAqNl27Gfm3cwXtoYfIhRgINRiYeXwT4o
-        Xog1say4MvcQowQHs5IIr9PZ03FCvCmJlVWpRfnxRaU5qcWHGE2BjprILCWanA+M5LySeENT
-        Q3MLS0NzY3NjMwslcd4OgYMxQgLpiSWp2ampBalFMH1MHJxSDYxNJ32f+OflBO5yNA77EG2U
-        N63XytFiBtcn7sqs3e9idBgY3M9Lv7/j0FKUXu987phmvmcm0/1ZCdzzfnAnnpl4+JN6erKI
-        8Y33vjVZOb9zXR/6uUw/WVC2+aqjlYKMv+SyNdl2R3NEfn5O6T+3g1s9vfuh2YvpC7f+DNk4
-        r/gyz/5XYky/GpRYijMSDbWYi4oTAeT7s9WsAgAA
-X-CMS-MailID: 20200904133511eucas1p2359dd080181340eb4f24b325e75a4c68
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200904133511eucas1p2359dd080181340eb4f24b325e75a4c68
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20200904133511eucas1p2359dd080181340eb4f24b325e75a4c68
-References: <20200904131711.12950-1-m.szyprowski@samsung.com>
-        <CGME20200904133511eucas1p2359dd080181340eb4f24b325e75a4c68@eucas1p2.samsung.com>
+        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Subject: Re: [PATCH v3 1/2] media: i2c: ov772x: Add support for BT656 mode
+Message-ID: <20200904134832.GC7518@pendragon.ideasonboard.com>
+References: <20200824190406.27478-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20200824190406.27478-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20200904012000.GA9369@pendragon.ideasonboard.com>
+ <20200904075553.qjdyskcpext7fxcy@uno.localdomain>
+ <20200904082104.GE4392@valkosipuli.retiisi.org.uk>
+ <20200904092049.6lokfmln4vulswrn@uno.localdomain>
+ <20200904093626.GF4392@valkosipuli.retiisi.org.uk>
+ <20200904103550.3cdxick4lje34kxv@uno.localdomain>
+ <20200904110013.GG4392@valkosipuli.retiisi.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200904110013.GG4392@valkosipuli.retiisi.org.uk>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The Documentation/DMA-API-HOWTO.txt states that dma_map_sg returns the
-numer of the created entries in the DMA address space. However the
-subsequent calls to dma_sync_sg_for_{device,cpu} and dma_unmap_sg must be
-called with the original number of entries passed to dma_map_sg. The
-sg_table->nents in turn holds the result of the dma_map_sg call as stated
-in include/linux/scatterlist.h. Adapt the code to obey those rules.
+On Fri, Sep 04, 2020 at 02:00:13PM +0300, Sakari Ailus wrote:
+> On Fri, Sep 04, 2020 at 12:35:50PM +0200, Jacopo Mondi wrote:
+> > On Fri, Sep 04, 2020 at 12:36:26PM +0300, Sakari Ailus wrote:
+> > > On Fri, Sep 04, 2020 at 11:20:49AM +0200, Jacopo Mondi wrote:
+> > > > On Fri, Sep 04, 2020 at 11:21:04AM +0300, Sakari Ailus wrote:
+> > > > > On Fri, Sep 04, 2020 at 09:55:53AM +0200, Jacopo Mondi wrote:
+> > > > > > On Fri, Sep 04, 2020 at 04:20:00AM +0300, Laurent Pinchart wrote:
+> > > > > > > Hi Prabhakar,
+> > > > > > >
+> > > > > > > Thank you for the patch.
+> > > > > > >
+> > > > > > > On Mon, Aug 24, 2020 at 08:04:05PM +0100, Lad Prabhakar wrote:
+> > > > > > > > Add support to read the bus-type and enable BT656 mode if needed.
+> > > > > > > >
+> > > > > > > > Also fail probe if unsupported bus_type is detected.
+> > > > > > > >
+> > > > > > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > > > > > Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> > > > > > > > ---
+> > > > > > > >  drivers/media/i2c/ov772x.c | 32 ++++++++++++++++++++++++++++++++
+> > > > > > > >  1 file changed, 32 insertions(+)
+> > > > > > > >
+> > > > > > > > diff --git a/drivers/media/i2c/ov772x.c b/drivers/media/i2c/ov772x.c
+> > > > > > > > index 2cc6a678069a..67764d647526 100644
+> > > > > > > > --- a/drivers/media/i2c/ov772x.c
+> > > > > > > > +++ b/drivers/media/i2c/ov772x.c
+> > > > > > > > @@ -31,6 +31,7 @@
+> > > > > > > >  #include <media/v4l2-ctrls.h>
+> > > > > > > >  #include <media/v4l2-device.h>
+> > > > > > > >  #include <media/v4l2-event.h>
+> > > > > > > > +#include <media/v4l2-fwnode.h>
+> > > > > > > >  #include <media/v4l2-image-sizes.h>
+> > > > > > > >  #include <media/v4l2-subdev.h>
+> > > > > > > >
+> > > > > > > > @@ -434,6 +435,7 @@ struct ov772x_priv {
+> > > > > > > >  #ifdef CONFIG_MEDIA_CONTROLLER
+> > > > > > > >  	struct media_pad pad;
+> > > > > > > >  #endif
+> > > > > > > > +	struct v4l2_fwnode_endpoint ep;
+> > > > > > > >  };
+> > > > > > > >
+> > > > > > > >  /*
+> > > > > > > > @@ -581,6 +583,13 @@ static int ov772x_s_stream(struct v4l2_subdev *sd, int enable)
+> > > > > > > >  	if (priv->streaming == enable)
+> > > > > > > >  		goto done;
+> > > > > > > >
+> > > > > > > > +	if (priv->ep.bus_type == V4L2_MBUS_BT656) {
+> > > > > > > > +		ret = regmaup_update_bits(priv->regmap, COM7, ITU656_ON_OFF,
+> > > > > > > > +					 enable ? ITU656_ON_OFF : ~ITU656_ON_OFF);
+> > > > > > > > +		if (ret)
+> > > > > > > > +			goto done;
+> > > > > > > > +	}
+> > > > > > > > +
+> > > > > > > >  	ret = regmap_update_bits(priv->regmap, COM2, SOFT_SLEEP_MODE,
+> > > > > > > >  				 enable ? 0 : SOFT_SLEEP_MODE);
+> > > > > > > >  	if (ret)
+> > > > > > > > @@ -1354,6 +1363,7 @@ static const struct v4l2_subdev_ops ov772x_subdev_ops = {
+> > > > > > > >
+> > > > > > > >  static int ov772x_probe(struct i2c_client *client)
+> > > > > > > >  {
+> > > > > > > > +	struct fwnode_handle *endpoint;
+> > > > > > > >  	struct ov772x_priv	*priv;
+> > > > > > > >  	int			ret;
+> > > > > > > >  	static const struct regmap_config ov772x_regmap_config = {
+> > > > > > > > @@ -1415,6 +1425,28 @@ static int ov772x_probe(struct i2c_client *client)
+> > > > > > > >  		goto error_clk_put;
+> > > > > > > >  	}
+> > > > > > > >
+> > > > > > > > +	endpoint = fwnode_graph_get_next_endpoint(dev_fwnode(&client->dev),
+> > > > > > > > +						  NULL);
+> > > > > > > > +	if (!endpoint) {
+> > > > > > > > +		dev_err(&client->dev, "endpoint node not found\n");
+> > > > > > > > +		ret = -EINVAL;
+> > > > > > > > +		goto error_clk_put;
+> > > > > > > > +	}
+> > > > > > > > +
+> > > > > > > > +	ret = v4l2_fwnode_endpoint_parse(endpoint, &priv->ep);
+> > > > > > >
+> > > > > > > v4l2_fwnode_endpoint_parse() is deprecated for new drivers,
+> > > > > > > v4l2_fwnode_endpoint_alloc_parse() is recommended instead. Please note
+> > > > > > > that v4l2_fwnode_endpoint_free() then needs to be called in the error
+> > > > > > > path and in remove().
+> > > > > >
+> > > > > > Doesn't alloc_parse() differ from just _parse() as it reserve space
+> > > > > > for the 'link-frequencies' array ? As this device does not support
+> > > > > > CSI-2 and the 'link-frequencies' property is not allows in bindings,
+> > > > > > isn't using endpoint_parse() better as it saves a call to _free() ?
+> > > > >
+> > > > > Yeah. I think the documentation needs to be updated.
+> > > > >
+> > > > > The thinking was there would be other variable size properties that drivers
+> > > > > would need but that didn't happen. So feel free to continue use
+> > > > > v4l2_fwnode_endpoint_parse() where it does the job.
+> > > > >
+> > > > > >
+> > > > > > Or are we deprecating that function unconditionally ? The
+> > > > > > documentation suggests "please use v4l2_fwnode_endpoint_alloc_parse()
+> > > > > > in new drivers" but here it doesn't seem required..
+> > > > > >
+> > > > > > >
+> > > > > > > On the other hand, not setting .bus_type and letting the parse()
+> > > > > > > function determine the but type automatically is also deprecated, and I
+> > > > > > > don't think forcing drivers to call v4l2_fwnode_endpoint_alloc_parse()
+> > > > > > > once for each bus type until one succeeds is a good API. As change will
+> > > > > > > be needed in that API, you can ignore v4l2_fwnode_endpoint_alloc_parse()
+> > > > > > > for the time being if you want.
+> > > > > >
+> > > > > > But indeed relying on auto-guessing of the bus type is deprecated since
+> > > > > > some time now (and the API could be improved, yes). Sorry I missed
+> > > > > > that yesterday.
+> > > > >
+> > > > > There's one case where the bus type does not need to be set: when bindings
+> > > > > require it *and* at the same time you have no default configuration that
+> > > > > requires something to be set in the bus specific struct. Bindings where
+> > > > > bus-type is required were added later so I think the documentation should
+> > > > > be changed there, too.
+> > > > >
+> > > > > I can send the patches.
+> > > > >
+> > > > > >
+> > > > > > As we support parallel and bt.656 only I must be honest I don't mind
+> > > > > > it here as otherwise the code would be more complex for no real gain,
+> > > > > > but I defer this to Sakari which has been fighting the battle against
+> > > > > > auto-guessing since a long time now  :)
+> > > > >
+> > > > > I think you should require bus-type property in bindings in that case.
+> > > > >
+> > > > > But as it's an existing driver, bus-type will be optional. You'll need to
+> > > > > default to what was supported earlier. This is actually an interesting case
+> > > > > as bindings do not document it.
+> > > >
+> > > > For reference:
+> > > > https://patchwork.linuxtv.org/project/linux-media/patch/20200903131029.18334-3-jacopo+renesas@jmondi.org/
+> > > >
+> > > > But yes, we might have DTBs in the wild without bus-type specified :(
+> > >
+> > > Shouldn't that be then that the bus-type is optional and defaults to
+> > > parallel?
+> > 
+> > I think going forward we want to make it mandatory, don't we ? The
+> > older dts will fail at dt validation time against the new yaml bindings, but
+> > my understanding is that this is not a problem.
+> 
+> For new devices, yes. I still wouldn't make DT binding changes that render
+> the old DT source invalid, at least unless it's absolutely mandatory. And
+> that is not the case here.
+> 
+> I guess it may be a bit grey area. At least leave a comment in the driver
+> on how the old bindings were so the code isn't accidentally "fixed".
+> 
+> > Binary compatibility, with the introduction of BT.656 support becomes
+> > more complex instead :/
+> > 
+> > Before this series parallel was the only supported bus type and no
+> > endpoint properties were required. The driver picked the default
+> > settings for signal polarities and that was it.
+> > 
+> > With the introduction of BT.656 no signal polarity properties means
+> > BT.656 when autoguess is in use. So going forward the bus-type shall
+> > be explicitly set, but we might receive old DTBs with no bus-type and
+> > no endpoint properties which assumes 'parallel' is in use.
+> > 
+> > One possible way forward could be:
+> > - verify if bus-type is present in the fwnode
+> > - if it is, we have a new DTB and we can rely on autoguess
 
-While touching this code, update it to use the modern DMA_FROM_DEVICE
-definitions.
+It's not guessing if the bus type is specified :-)
 
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
----
- drivers/media/pci/cx23885/cx23885-alsa.c | 4 ++--
- drivers/media/pci/cx25821/cx25821-alsa.c | 4 ++--
- drivers/media/pci/cx88/cx88-alsa.c       | 6 +++---
- drivers/media/pci/saa7134/saa7134-alsa.c | 4 ++--
- 4 files changed, 9 insertions(+), 9 deletions(-)
+> > - if it's not assume we have an old DTB that assumed 'parallel'. Parse
+> >   the fwnode and if any relevant V4L2_MBUS_ flag is set use it,
+> >   otherwise use the defaults.
+> > 
+> > If we make bus-type optional in new bindings, the old DTB with no
+> > parallel endpoint properties would be identified as BT.656 breaking
+> > capture operation, am I wrong ?
+> 
+> There's no technical reason why it has to be so.
+> 
+> You simply try endpoint parsing with parallel bus first, with the old
+> defaults, and if that succeeds, then you don't attempt to parse it as
+> Bt.656 anymore.
 
-diff --git a/drivers/media/pci/cx23885/cx23885-alsa.c b/drivers/media/pci/cx23885/cx23885-alsa.c
-index df44ed7393a0..c797bff6eebb 100644
---- a/drivers/media/pci/cx23885/cx23885-alsa.c
-+++ b/drivers/media/pci/cx23885/cx23885-alsa.c
-@@ -113,7 +113,7 @@ static int cx23885_alsa_dma_map(struct cx23885_audio_dev *dev)
- 	struct cx23885_audio_buffer *buf = dev->buf;
- 
- 	buf->sglen = dma_map_sg(&dev->pci->dev, buf->sglist,
--			buf->nr_pages, PCI_DMA_FROMDEVICE);
-+			buf->nr_pages, DMA_FROM_DEVICE);
- 
- 	if (0 == buf->sglen) {
- 		pr_warn("%s: cx23885_alsa_map_sg failed\n", __func__);
-@@ -129,7 +129,7 @@ static int cx23885_alsa_dma_unmap(struct cx23885_audio_dev *dev)
- 	if (!buf->sglen)
- 		return 0;
- 
--	dma_unmap_sg(&dev->pci->dev, buf->sglist, buf->sglen, PCI_DMA_FROMDEVICE);
-+	dma_unmap_sg(&dev->pci->dev, buf->sglist, buf->nr_pages, DMA_FROM_DEVICE);
- 	buf->sglen = 0;
- 	return 0;
- }
-diff --git a/drivers/media/pci/cx25821/cx25821-alsa.c b/drivers/media/pci/cx25821/cx25821-alsa.c
-index 301616426d8a..8da31c953b02 100644
---- a/drivers/media/pci/cx25821/cx25821-alsa.c
-+++ b/drivers/media/pci/cx25821/cx25821-alsa.c
-@@ -177,7 +177,7 @@ static int cx25821_alsa_dma_map(struct cx25821_audio_dev *dev)
- 	struct cx25821_audio_buffer *buf = dev->buf;
- 
- 	buf->sglen = dma_map_sg(&dev->pci->dev, buf->sglist,
--			buf->nr_pages, PCI_DMA_FROMDEVICE);
-+			buf->nr_pages, DMA_FROM_DEVICE);
- 
- 	if (0 == buf->sglen) {
- 		pr_warn("%s: cx25821_alsa_map_sg failed\n", __func__);
-@@ -193,7 +193,7 @@ static int cx25821_alsa_dma_unmap(struct cx25821_audio_dev *dev)
- 	if (!buf->sglen)
- 		return 0;
- 
--	dma_unmap_sg(&dev->pci->dev, buf->sglist, buf->sglen, PCI_DMA_FROMDEVICE);
-+	dma_unmap_sg(&dev->pci->dev, buf->sglist, buf->nr_pages, DMA_FROM_DEVICE);
- 	buf->sglen = 0;
- 	return 0;
- }
-diff --git a/drivers/media/pci/cx88/cx88-alsa.c b/drivers/media/pci/cx88/cx88-alsa.c
-index 7d7aceecc985..d38633bc1330 100644
---- a/drivers/media/pci/cx88/cx88-alsa.c
-+++ b/drivers/media/pci/cx88/cx88-alsa.c
-@@ -316,7 +316,7 @@ static int cx88_alsa_dma_map(struct cx88_audio_dev *dev)
- 	struct cx88_audio_buffer *buf = dev->buf;
- 
- 	buf->sglen = dma_map_sg(&dev->pci->dev, buf->sglist,
--			buf->nr_pages, PCI_DMA_FROMDEVICE);
-+			buf->nr_pages, DMA_FROM_DEVICE);
- 
- 	if (buf->sglen == 0) {
- 		pr_warn("%s: cx88_alsa_map_sg failed\n", __func__);
-@@ -332,8 +332,8 @@ static int cx88_alsa_dma_unmap(struct cx88_audio_dev *dev)
- 	if (!buf->sglen)
- 		return 0;
- 
--	dma_unmap_sg(&dev->pci->dev, buf->sglist, buf->sglen,
--		     PCI_DMA_FROMDEVICE);
-+	dma_unmap_sg(&dev->pci->dev, buf->sglist, buf->nr_pages,
-+		     DMA_FROM_DEVICE);
- 	buf->sglen = 0;
- 	return 0;
- }
-diff --git a/drivers/media/pci/saa7134/saa7134-alsa.c b/drivers/media/pci/saa7134/saa7134-alsa.c
-index 544ca57eee75..707ca77221dc 100644
---- a/drivers/media/pci/saa7134/saa7134-alsa.c
-+++ b/drivers/media/pci/saa7134/saa7134-alsa.c
-@@ -297,7 +297,7 @@ static int saa7134_alsa_dma_map(struct saa7134_dev *dev)
- 	struct saa7134_dmasound *dma = &dev->dmasound;
- 
- 	dma->sglen = dma_map_sg(&dev->pci->dev, dma->sglist,
--			dma->nr_pages, PCI_DMA_FROMDEVICE);
-+			dma->nr_pages, DMA_FROM_DEVICE);
- 
- 	if (0 == dma->sglen) {
- 		pr_warn("%s: saa7134_alsa_map_sg failed\n", __func__);
-@@ -313,7 +313,7 @@ static int saa7134_alsa_dma_unmap(struct saa7134_dev *dev)
- 	if (!dma->sglen)
- 		return 0;
- 
--	dma_unmap_sg(&dev->pci->dev, dma->sglist, dma->sglen, PCI_DMA_FROMDEVICE);
-+	dma_unmap_sg(&dev->pci->dev, dma->sglist, dma->nr_pages, DMA_FROM_DEVICE);
- 	dma->sglen = 0;
- 	return 0;
- }
+If bus-type is optional with new bindings,
+v4l2_fwnode_endpoint_parse(V4L2_MBUS_PARALLEL) will always succeed if
+the bus-type DT property isn't set.
+
+> > This might require a bit more work from Prabhakar I'm sorry. The old
+> > bindings were clearly falling short once BT.656 becomes supported.
+
 -- 
-2.17.1
+Regards,
 
+Laurent Pinchart
