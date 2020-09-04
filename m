@@ -2,145 +2,115 @@ Return-Path: <SRS0=ZCSR=CN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 259F2C43461
-	for <linux-media@archiver.kernel.org>; Fri,  4 Sep 2020 07:59:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0F8CC43461
+	for <linux-media@archiver.kernel.org>; Fri,  4 Sep 2020 08:01:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EACD5206B8
-	for <linux-media@archiver.kernel.org>; Fri,  4 Sep 2020 07:59:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 73A60206B8
+	for <linux-media@archiver.kernel.org>; Fri,  4 Sep 2020 08:01:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729751AbgIDH7r (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Sep 2020 03:59:47 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:34508 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729698AbgIDH7r (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Sep 2020 03:59:47 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: eballetbo)
-        with ESMTPSA id 2D56729AFE0
-Subject: Re: [PATCH] media: mtk-mdp: Fix Null pointer dereference when calling
- list_add
-To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-media@vger.kernel.org
-Cc:     matthias.bgg@gmail.com, mchehab@kernel.org, hverkuil@xs4all.nl,
-        kernel@collabora.com, dafna3@gmail.com
-References: <20200828135541.8282-1-dafna.hirschfeld@collabora.com>
-From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Message-ID: <d61eb22b-f3b7-50bb-f44f-629928d5e8c8@collabora.com>
-Date:   Fri, 4 Sep 2020 09:59:40 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1728099AbgIDIBy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Sep 2020 04:01:54 -0400
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:46655 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726151AbgIDIBy (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Sep 2020 04:01:54 -0400
+X-Originating-IP: 93.34.118.233
+Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id CE74160016;
+        Fri,  4 Sep 2020 08:01:48 +0000 (UTC)
+Date:   Fri, 4 Sep 2020 10:05:35 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-media@vger.kernel.org,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>, mchehab@kernel.org,
+        sakari.ailus@linux.intel.com, hverkuil-cisco@xs4all.nl,
+        laurent.pinchart@ideasonboard.com,
+        linux-renesas-soc@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v4 2/3] dt-bindings: media: ov772x: Make bus-type
+ mandatory
+Message-ID: <20200904080535.ppmaarnusrnjr4xt@uno.localdomain>
+References: <20200903131029.18334-1-jacopo+renesas@jmondi.org>
+ <20200903131029.18334-3-jacopo+renesas@jmondi.org>
 MIME-Version: 1.0
-In-Reply-To: <20200828135541.8282-1-dafna.hirschfeld@collabora.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20200903131029.18334-3-jacopo+renesas@jmondi.org>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Dafna,
+Hi Laurent,
 
-Thank you to work on this fix.
-
-On 28/8/20 15:55, Dafna Hirschfeld wrote:
-> In list_add, the first variable is the new node and the second
-> is the list head. The function is called with a wrong order causing
-> NULL dereference:
-> 
-> [   15.527030] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000008
-> [   15.542317] Mem abort info:
-> [   15.545152]   ESR = 0x96000044
-> [   15.548248]   EC = 0x25: DABT (current EL), IL = 32 bits
-> [   15.553624]   SET = 0, FnV = 0
-> [   15.556715]   EA = 0, S1PTW = 0
-> [   15.559892] Data abort info:
-> [   15.562799]   ISV = 0, ISS = 0x00000044
-> [   15.566678]   CM = 0, WnR = 1
-> [   15.569683] user pgtable: 4k pages, 48-bit VAs, pgdp=00000001373f0000
-> [   15.576196] [0000000000000008] pgd=0000000000000000, p4d=0000000000000000
-> [   15.583101] Internal error: Oops: 96000044 [#1] PREEMPT SMP
-> [   15.588747] Modules linked in: mtk_mdp(+) cfg80211 v4l2_mem2mem videobuf2_vmalloc videobuf2_dma_contig videobuf2_memops videobuf2_v4l2 videobuf2_common vide
-> odev mt8173_rt5650 smsc95xx usbnet ecdh_generic ecc snd_soc_rt5645 mc mt8173_afe_pcm rfkill cros_ec_sensors snd_soc_mtk_common elan_i2c crct10dif_ce cros_ec_se
-> nsors_core snd_soc_rl6231 elants_i2c industrialio_triggered_buffer kfifo_buf mtk_vpu cros_ec_chardev cros_usbpd_charger cros_usbpd_logger sbs_battery display_c
-> onnector pwm_bl ip_tables x_tables ipv6
-> [   15.634295] CPU: 0 PID: 188 Comm: systemd-udevd Not tainted 5.9.0-rc2+ #69
-> [   15.641242] Hardware name: Google Elm (DT)
-> [   15.645381] pstate: 20000005 (nzCv daif -PAN -UAO BTYPE=--)
-> [   15.651022] pc : mtk_mdp_probe+0x134/0x3a8 [mtk_mdp]
-> [   15.656041] lr : mtk_mdp_probe+0x128/0x3a8 [mtk_mdp]
-> [   15.661055] sp : ffff80001255b910
-> [   15.669548] x29: ffff80001255b910 x28: 0000000000000000
-> [   15.679973] x27: ffff800009089bf8 x26: ffff0000fafde800
-> [   15.690347] x25: ffff0000ff7d2768 x24: ffff800009089010
-> [   15.700670] x23: ffff0000f01a7cd8 x22: ffff0000fafde810
-> [   15.710940] x21: ffff0000f01a7c80 x20: ffff0000f0c3c180
-> [   15.721148] x19: ffff0000ff7f1618 x18: 0000000000000010
-> [   15.731289] x17: 0000000000000000 x16: 0000000000000000
-> [   15.741375] x15: 0000000000aaaaaa x14: 0000000000000020
-> [   15.751399] x13: 00000000ffffffff x12: 0000000000000020
-> [   15.761363] x11: 0000000000000028 x10: 0101010101010101
-> [   15.771279] x9 : 0000000000000004 x8 : 7f7f7f7f7f7f7f7f
-> [   15.781148] x7 : 646bff6171606b2b x6 : 0000000000806d65
-> [   15.790981] x5 : ffff0000ff7f8360 x4 : 0000000000000000
-> [   15.800767] x3 : 0000000000000004 x2 : 0000000000000001
-> [   15.810501] x1 : 0000000000000005 x0 : 0000000000000000
-> [   15.820171] Call trace:
-> [   15.826944]  mtk_mdp_probe+0x134/0x3a8 [mtk_mdp]
-> [   15.835908]  platform_drv_probe+0x54/0xa8
-> [   15.844247]  really_probe+0xe4/0x3b0
-> [   15.852104]  driver_probe_device+0x58/0xb8
-> [   15.860457]  device_driver_attach+0x74/0x80
-> [   15.868854]  __driver_attach+0x58/0xe0
-> [   15.876770]  bus_for_each_dev+0x70/0xc0
-> [   15.884726]  driver_attach+0x24/0x30
-> [   15.892374]  bus_add_driver+0x14c/0x1f0
-> [   15.900295]  driver_register+0x64/0x120
-> [   15.908168]  __platform_driver_register+0x48/0x58
-> [   15.916864]  mtk_mdp_driver_init+0x20/0x1000 [mtk_mdp]
-> [   15.925943]  do_one_initcall+0x54/0x1b4
-> [   15.933662]  do_init_module+0x54/0x200
-> [   15.941246]  load_module+0x1cf8/0x22d0
-> [   15.948798]  __do_sys_finit_module+0xd8/0xf0
-> [   15.956829]  __arm64_sys_finit_module+0x20/0x30
-> [   15.965082]  el0_svc_common.constprop.0+0x6c/0x168
-> [   15.973527]  do_el0_svc+0x24/0x90
-> [   15.980403]  el0_sync_handler+0x90/0x198
-> [   15.987867]  el0_sync+0x158/0x180
-> [   15.994653] Code: 9400014b 2a0003fc 35000920 f9400280 (f9000417)
-> [   16.004299] ---[ end trace 76fee0203f9898e5 ]---
-> 
-> Fixes: 86698b9505bbc ("media: mtk-mdp: convert mtk_mdp_dev.comp array to list")
-> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+On Thu, Sep 03, 2020 at 03:10:28PM +0200, Jacopo Mondi wrote:
+> In order to establish required properties based on the selected
+> bus type, make the 'bus-type' property mandatory. As this change
+> documents an endpoint property, also document the 'remote-endpoint'
+> one now that the 'endpoint' schema has been expanded.
+>
+> Binary compatibility with existing DTB is kept as the driver does not
+> enforce the property to be present, and shall fall-back to default
+> parallel bus configuration, which was the only supported bus type, if
+> the property is not specified.
+>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 > ---
->  drivers/media/platform/mtk-mdp/mtk_mdp_core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_core.c b/drivers/media/platform/mtk-mdp/mtk_mdp_core.c
-> index f96c8b3bf861..976aa1f4829b 100644
-> --- a/drivers/media/platform/mtk-mdp/mtk_mdp_core.c
-> +++ b/drivers/media/platform/mtk-mdp/mtk_mdp_core.c
-> @@ -94,7 +94,7 @@ static void mtk_mdp_reset_handler(void *priv)
->  void mtk_mdp_register_component(struct mtk_mdp_dev *mdp,
->  				struct mtk_mdp_comp *comp)
->  {
-> -	list_add(&mdp->comp_list, &comp->node);
-> +	list_add(&comp->node, &mdp->comp_list);
->  }
->  
->  void mtk_mdp_unregister_component(struct mtk_mdp_dev *mdp,
-> 
+>  .../bindings/media/i2c/ovti,ov772x.yaml       | 20 +++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov772x.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov772x.yaml
+> index e7e2d31fcc23..406e9cd463a2 100644
+> --- a/Documentation/devicetree/bindings/media/i2c/ovti,ov772x.yaml
+> +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov772x.yaml
+> @@ -41,6 +41,25 @@ properties:
+>      description: |
+>        Video output port. See ../video-interfaces.txt.
+>
+> +    properties:
+> +      endpoint:
+> +        type: object
+> +
+> +        properties:
+> +          remote-endpoint:
+> +            description: See ../video-interfaces.txt
 
-FWIW this also fixes my problems with suspend/resume on my Acer Chromebook R13, so:
+So I guess the same as you suggested for imx214 applies here (drop
+remote-endpoint)
 
-Tested-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
-
-
-
-
+> +
+> +          bus-type:
+> +            enum: [5, 6]
+> +
+> +        required:
+> +          - remote-endpoint
+> +          - bus-type
+> +
+> +        additionalProperties: false
+> +
+> +    additionalProperties: false
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -65,6 +84,7 @@ examples:
+>
+>              port {
+>                  ov772x_0: endpoint {
+> +                    bus-type = <5>;
+>                      remote-endpoint = <&vcap1_in0>;
+>                  };
+>              };
+> --
+> 2.28.0
+>
