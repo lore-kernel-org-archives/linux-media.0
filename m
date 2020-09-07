@@ -2,75 +2,109 @@ Return-Path: <SRS0=gSK1=CQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6A1CC433E2
-	for <linux-media@archiver.kernel.org>; Mon,  7 Sep 2020 16:05:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB3D2C43461
+	for <linux-media@archiver.kernel.org>; Mon,  7 Sep 2020 16:15:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8D33D208C7
-	for <linux-media@archiver.kernel.org>; Mon,  7 Sep 2020 16:05:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AF330206E6
+	for <linux-media@archiver.kernel.org>; Mon,  7 Sep 2020 16:15:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729973AbgIGQFT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Sep 2020 12:05:19 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:40388 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729915AbgIGOrM (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 7 Sep 2020 10:47:12 -0400
-X-IronPort-AV: E=Sophos;i="5.76,402,1592838000"; 
-   d="scan'208";a="56367466"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 07 Sep 2020 23:46:07 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 8B1B442FBA1B;
-        Mon,  7 Sep 2020 23:46:04 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Subject: [PATCH 1/2] dt-bindings: media: renesas,vin: Add device tree support for r8a7742
-Date:   Mon,  7 Sep 2020 15:45:08 +0100
-Message-Id: <20200907144509.8861-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200907144509.8861-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20200907144509.8861-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        id S1730495AbgIGQPq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Sep 2020 12:15:46 -0400
+Received: from www.linuxtv.org ([130.149.80.248]:43778 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729949AbgIGQPi (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 7 Sep 2020 12:15:38 -0400
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1kFJhz-000Pe9-U7; Mon, 07 Sep 2020 16:09:31 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1kFJqT-0007jp-5C; Mon, 07 Sep 2020 16:18:18 +0000
+Date:   Mon, 7 Sep 2020 16:18:16 +0000 (UTC)
+From:   Jenkins Builder Robot <jenkins@linuxtv.org>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        libcamera-devel@lists.libcamera.org
+Message-ID: <1076588385.8.1599495496997@builder.linuxtv.org>
+Subject: Build failed in Jenkins: libcamera #285
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
+X-Jenkins-Job: libcamera
+X-Jenkins-Result: FAILURE
+Auto-submitted: auto-generated
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add compatible string for r8a7742. No driver change is needed as
-"renesas,rcar-gen2-vin" will activate the right code.
+See <https://builder.linuxtv.org/job/libcamera/285/display/redirect?page=changes>
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
----
- Documentation/devicetree/bindings/media/renesas,vin.yaml | 1 +
- 1 file changed, 1 insertion(+)
+Changes:
 
-diff --git a/Documentation/devicetree/bindings/media/renesas,vin.yaml b/Documentation/devicetree/bindings/media/renesas,vin.yaml
-index 53c0a7238bac..7f0dd2a08613 100644
---- a/Documentation/devicetree/bindings/media/renesas,vin.yaml
-+++ b/Documentation/devicetree/bindings/media/renesas,vin.yaml
-@@ -24,6 +24,7 @@ properties:
-     oneOf:
-       - items:
-           - enum:
-+              - renesas,vin-r8a7742  # RZ/G1H
-               - renesas,vin-r8a7743  # RZ/G1M
-               - renesas,vin-r8a7744  # RZ/G1N
-               - renesas,vin-r8a7745  # RZ/G1E
--- 
-2.17.1
+[kieran.bingham] meson: Provide build configuration summary
 
+
+------------------------------------------
+Started by an SCM change
+Running as SYSTEM
+Building remotely on slave1 in workspace <https://builder.linuxtv.org/job/libcamera/ws/>
+No credentials specified
+Cloning the remote Git repository
+Cloning repository git://linuxtv.org/libcamera.git
+ > git init <https://builder.linuxtv.org/job/libcamera/ws/> # timeout=10
+Fetching upstream changes from git://linuxtv.org/libcamera.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.20.1'
+ > git fetch --tags --force --progress -- git://linuxtv.org/libcamera.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url git://linuxtv.org/libcamera.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url git://linuxtv.org/libcamera.git # timeout=10
+Fetching upstream changes from git://linuxtv.org/libcamera.git
+ > git fetch --tags --force --progress -- git://linuxtv.org/libcamera.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
+ > git rev-parse refs/remotes/origin/origin/master^{commit} # timeout=10
+Checking out Revision 094b3001fd7dc755f3a2804f7de73c09ea27dc8b (refs/remotes/origin/master)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 094b3001fd7dc755f3a2804f7de73c09ea27dc8b # timeout=10
+Commit message: "meson: Provide build configuration summary"
+ > git rev-list --no-walk 8117ab0a320029f97540aed2a9eebf3c759b8879 # timeout=10
+[libcamera] $ /bin/sh -xe /tmp/jenkins3670769587014002804.sh
++ rm -rf build
++ meson setup build
+The Meson build system
+Version: 0.49.2
+Source dir: <https://builder.linuxtv.org/job/libcamera/ws/>
+Build dir: <https://builder.linuxtv.org/job/libcamera/ws/build>
+Build type: native build
+Project name: libcamera
+Project version: 0.0.0
+Native C compiler: ccache cc (gcc 8.3.0 "cc (Debian 8.3.0-6) 8.3.0")
+Native C++ compiler: ccache c++ (gcc 8.3.0 "c++ (Debian 8.3.0-6) 8.3.0")
+Build machine cpu family: x86_64
+Build machine cpu: x86_64
+Header <execinfo.h> has symbol "backtrace" : YES
+Header <stdlib.h> has symbol "secure_getenv" : YES
+Compiler for C supports arguments -Wno-c99-designator -Wc99-designator: NO
+Configuring version.h using configuration
+Program openssl found: YES (/usr/bin/openssl)
+Library atomic found: YES
+Library dl found: YES
+Library gnutls found: YES
+Found pkg-config: /usr/bin/pkg-config (0.29)
+Dependency libudev found: YES 241
+Dependency threads found: YES 
+Dependency Boost found: NO 
+
+src/ipa/raspberrypi/meson.build:5:0: ERROR:  Dependency "boost" not found
+
+A full log can be found at <https://builder.linuxtv.org/job/libcamera/ws/build/meson-logs/meson-log.txt>
+Build step 'Execute shell' marked build as failure
