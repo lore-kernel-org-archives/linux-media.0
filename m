@@ -2,124 +2,148 @@ Return-Path: <SRS0=gSK1=CQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.5 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65CB7C43461
-	for <linux-media@archiver.kernel.org>; Mon,  7 Sep 2020 17:20:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51534C433E2
+	for <linux-media@archiver.kernel.org>; Mon,  7 Sep 2020 17:45:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3E63220658
-	for <linux-media@archiver.kernel.org>; Mon,  7 Sep 2020 17:20:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C05D206E7
+	for <linux-media@archiver.kernel.org>; Mon,  7 Sep 2020 17:45:45 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="A0Stn/cy"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730737AbgIGRU3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Sep 2020 13:20:29 -0400
-Received: from mga09.intel.com ([134.134.136.24]:32295 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729712AbgIGNxS (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 7 Sep 2020 09:53:18 -0400
-IronPort-SDR: KyMNN8CrHL07unmX9jVAJwInqykI24fTxUrAXwbPzZbMZz5TRt6iePxlhE9uSdWvEEMBHZJM2a
- 2sdN3kOcLi0g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9736"; a="158983617"
-X-IronPort-AV: E=Sophos;i="5.76,401,1592895600"; 
-   d="scan'208";a="158983617"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2020 06:51:10 -0700
-IronPort-SDR: QA6tpQQPK2xO+vA9bWsf8yc3XQicbfmqmYZRNKcI7GVnV/iLwnJM0rEc48iraNGRgHIudDeUA0
- ypJW6zZghdrQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,401,1592895600"; 
-   d="scan'208";a="333169136"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga008.jf.intel.com with ESMTP; 07 Sep 2020 06:51:06 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andy.shevchenko@gmail.com>)
-        id 1kFHXz-00ExtQ-Ge; Mon, 07 Sep 2020 16:51:03 +0300
-Date:   Mon, 7 Sep 2020 16:51:03 +0300
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     Tomasz Figa <tfiga@chromium.org>
-Cc:     Dongchun Zhu <dongchun.zhu@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        srv_heupstream <srv_heupstream@mediatek.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Sj Huang <sj.huang@mediatek.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Louis Kuo <louis.kuo@mediatek.com>,
-        Shengnan Wang =?utf-8?B?KOeOi+Wco+eUtyk=?= 
-        <shengnan.wang@mediatek.com>, matrix.zhu@aliyun.com
-Subject: Re: [PATCH v14 2/2] media: i2c: Add OV02A10 image sensor driver
-Message-ID: <20200907135103.GI1891694@smile.fi.intel.com>
-References: <20200902120122.24456-1-dongchun.zhu@mediatek.com>
- <20200902120122.24456-3-dongchun.zhu@mediatek.com>
- <20200902134421.GN1891694@smile.fi.intel.com>
- <1599225767.4733.64.camel@mhfsdcap03>
- <CAHp75Ve8WNuCuRmFcXaZHLjHMGfsvM=69ii5g4H+NYud6N95eQ@mail.gmail.com>
- <CAAFQd5BH4NZrhg=abqc=P9Uzf+t4Davn4SP9i3QktS4Q05WtzA@mail.gmail.com>
+        id S1730306AbgIGRpo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Sep 2020 13:45:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45202 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731285AbgIGRoK (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Sep 2020 13:44:10 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5893AC061786
+        for <linux-media@vger.kernel.org>; Mon,  7 Sep 2020 10:44:05 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id w2so15053047wmi.1
+        for <linux-media@vger.kernel.org>; Mon, 07 Sep 2020 10:44:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TtLg9Y4dgEBmAcytToxU0LrQsMgfNF7OgoEHJZ2Q+vw=;
+        b=A0Stn/cyvojbDX7w3lzbvMIO7gTwe43sZAGbFpuAEdS5sHSClH8/IZ2AifZ+YY+VOX
+         UVwM/aA+6tWtgJSEoCDO1PW617SUSIQB8k6b0bPqqeB7dxfGKJQUxNBeFtcQo9e3Ascw
+         6zhcNnrpuccjT086HR4puL61ghnrcI3EOoQm8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TtLg9Y4dgEBmAcytToxU0LrQsMgfNF7OgoEHJZ2Q+vw=;
+        b=HpmftpKoouhik7NxzOVcJxsRK7lqU814iBKQBvkEqAmjDmDLMNKagpiIHqOeBLzyLM
+         9jLHQTOGizQ6J0gjpAAYdwAmrRRU6dWM89Q5/tlryD98Wp/bFQZSrAoABGAqqspeGCFQ
+         B8VFpQIEDjPpjUbUAPpcePGgLta8h4vghy/5uX6yh7GYPdtoy4mpexJtKpdTrvt+h2Ob
+         hIGaEWJLORxjGslYxwYg3Qc7TZfdvSIu1Llqj8wQADyqxvfxmd/ac85xu1zkUWrxc93w
+         X+kwPOGMmgMBx2Dcnkhem90aToE+hZr3Yoo0F7dztAYQs8kSSFf3SrwNbJrPYuQJcby2
+         Q55A==
+X-Gm-Message-State: AOAM532vsYcE5+b6qcERadhFoMIThKWPfStgPBFr+Tq+0oCHQqEEHwdS
+        J1Sj4xYnJfN1Hk/VADzHviy3tR+OeQJCUcnlX/IEQQ==
+X-Google-Smtp-Source: ABdhPJyNQsBm1Y3/ieHSfjO664M9CBhnY/ZnuJjayy1tYR+ob0ku/Wpd26F5nf8H2/xl9/84D4TcAGvzrj4IPjrxwfU=
+X-Received: by 2002:a1c:bad5:: with SMTP id k204mr408820wmf.111.1599500642170;
+ Mon, 07 Sep 2020 10:44:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAFQd5BH4NZrhg=abqc=P9Uzf+t4Davn4SP9i3QktS4Q05WtzA@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20200824193036.6033-1-james.quinlan@broadcom.com>
+ <b19bc982-a0c4-c6ff-d8f5-650f2b3a83c8@gmail.com> <20200827063517.GA4637@lst.de>
+ <CA+-6iNy3U9pO0Bykzgvb9n9fcsBi6FiatLdpA1s0HgQNWZ49mg@mail.gmail.com> <20200907091649.GA6428@e121166-lin.cambridge.arm.com>
+In-Reply-To: <20200907091649.GA6428@e121166-lin.cambridge.arm.com>
+From:   Jim Quinlan <james.quinlan@broadcom.com>
+Date:   Mon, 7 Sep 2020 13:43:23 -0400
+Message-ID: <CA+-6iNzoz3pM2pJksXogeuou6wB9W-59rN-amCLERFLuY5zLMg@mail.gmail.com>
+Subject: Re: [PATCH v11 00/11] PCI: brcmstb: enable PCIe for STB chips
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
+        <linux-pci@vger.kernel.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "open list:STAGING SUBSYSTEM" <devel@driverdev.osuosl.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
+        <devicetree@vger.kernel.org>,
+        "open list:DRM DRIVERS FOR ALLWINNER A10" 
+        <dri-devel@lists.freedesktop.org>, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Julien Grall <julien.grall@arm.com>,
+        "open list:ACPI FOR ARM64 (ACPI/arm64)" <linux-acpi@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:ALLWINNER A10 CSI DRIVER" <linux-media@vger.kernel.org>,
+        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
+        <linux-remoteproc@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "open list:SUPERH" <linux-sh@vger.kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Stefano Stabellini <sstabellini@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Sep 07, 2020 at 03:15:17PM +0200, Tomasz Figa wrote:
-> On Fri, Sep 4, 2020 at 4:06 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Fri, Sep 4, 2020 at 4:48 PM Dongchun Zhu <dongchun.zhu@mediatek.com> wrote:
-> > > On Wed, 2020-09-02 at 16:44 +0300, Andy Shevchenko wrote:
-> > > > On Wed, Sep 02, 2020 at 08:01:22PM +0800, Dongchun Zhu wrote:
-
-...
-
-> > > > > +   struct i2c_client *client = to_i2c_client(dev);
-> > > > > +   struct v4l2_subdev *sd = i2c_get_clientdata(client);
+On Mon, Sep 7, 2020 at 5:16 AM Lorenzo Pieralisi
+<lorenzo.pieralisi@arm.com> wrote:
+>
+> On Thu, Aug 27, 2020 at 09:29:59AM -0400, Jim Quinlan wrote:
+> > On Thu, Aug 27, 2020 at 2:35 AM Christoph Hellwig <hch@lst.de> wrote:
+> > >
+> > > On Tue, Aug 25, 2020 at 10:40:27AM -0700, Florian Fainelli wrote:
+> > > > Hi,
 > > > >
-> > > >       struct v4l2_subdev *sd = dev_get_drvdata(dev);
+> > > > On 8/24/2020 12:30 PM, Jim Quinlan wrote:
+> > > >>
+> > > >> Patchset Summary:
+> > > >>    Enhance a PCIe host controller driver.  Because of its unusual design
+> > > >>    we are foced to change dev->dma_pfn_offset into a more general role
+> > > >>    allowing multiple offsets.  See the 'v1' notes below for more info.
 > > > >
-> > > > Same for the rest similar cases.
+> > > > We are version 11 and counting, and it is not clear to me whether there is
+> > > > any chance of getting these patches reviewed and hopefully merged for the
+> > > > 5.10 merge window.
+> > > >
+> > > > There are a lot of different files being touched, so what would be the
+> > > > ideal way of routing those changes towards inclusion?
 > > >
-> > > We've discussed the issue in DW9768 V2.
-> > >
-> > > For V4L2 sub-device drivers, dev_get_drvdata() shouldn't be used
-> > > directly.
-> > >
-> > > More details please check the Google Issue:
-> > > https://partnerissuetracker.corp.google.com/issues/147957975
-> >
-> > This is not a public link. Can you remind me what was the issue?
-> >
-> 
-> v4l2-subdev framework uses dev drvdata for its own purposes. However,
-> that problem was about the driver setting its own drvdata and having
-> it overridden by the framework. There is nothing wrong in using
-> dev_get_drvdata(), assuming the correct type is known and here it's
-> guaranteed to be v4l2_subdev for the v4l2-subdev framework.
-> 
-> In fact i2c_get_clientdata() [1] is just a wrapper that calls
-> dev_get_drvdata(&client->dev).
+> > > FYI, I offered to take the dma-mapping bits through the dma-mapping tree.
+> > > I have a bit of a backlog, but plan to review and if Jim is ok with that
+> > > apply the current version.
+> > Sounds good to me.
+>
+> Hi Jim,
+>
+> is the dependency now solved ? Should we review/take this series as
+> is for v5.10 through the PCI tree ?
+Hello Lorenzo,
 
-And funny future would be that if we don't do this now we will have plenty of
-janitors to DoS attack us with the fix in the future.
+We are still working out a regression with the DMA offset commit on
+the RaspberryPi.  Nicolas has found the root cause and we are now
+devising a solution.
 
-> [1] https://elixir.bootlin.com/linux/v5.9-rc3/source/include/linux/i2c.h#L351
+Thanks,
+Jim Quinlan
+Broadcom STB
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+>
+> Thanks,
+> Lorenzo
