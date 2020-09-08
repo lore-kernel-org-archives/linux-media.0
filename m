@@ -2,110 +2,99 @@ Return-Path: <SRS0=7dE9=CR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA266C43461
-	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 19:34:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6832DC43461
+	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 19:36:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 74F982145D
-	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 19:34:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EF62521741
+	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 19:36:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="J+xmTgpW"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="K92m6z+/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731922AbgIHTdb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Sep 2020 15:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54344 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731000AbgIHP6F (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Sep 2020 11:58:05 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF194C06138D
-        for <linux-media@vger.kernel.org>; Tue,  8 Sep 2020 05:33:24 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id ay8so15795970edb.8
-        for <linux-media@vger.kernel.org>; Tue, 08 Sep 2020 05:33:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=CbHAntwE/i/0aOcErfQq5jTQMnZZWtdKrAQxbD+Urlc=;
-        b=J+xmTgpWIz9Bfj8KndmtxBj1SCYkernBnfaLUVEZ1RBJMr2xge19uixrG4oQBxWmxE
-         wlcVcXZsavOQxg4sIEhXmDFiYybKnat/o+TLE5MGXzt663viuveYHsIaoT7VX/+k0Sxb
-         dmsYrI4+WU3ck1uTe4hy+JbTz2wcuufFscmSCxrcRxFst9HEzxpsuMxMuF1wXZpg1jt6
-         FkIqMsDT/Cm2vCccRKFUz7St6nLxmBuWa+u0DPge8QTUdOqNslY518gM4zEem1PYnC7/
-         odBsMsJQMswlXhDy1m+xg3viqA4ZteEcF4gs6E5YhPBg/KlxCGcfN6LbGUP7ncOv15md
-         NX/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=CbHAntwE/i/0aOcErfQq5jTQMnZZWtdKrAQxbD+Urlc=;
-        b=lGkj4MfJ6C6vN7cdVuHC3SBjcd4CiWEu8Vdo+mARh5aKO1/Mm+5kcRzFHW/2Wim7FN
-         UzurDA1J1xf/LQsRrrA+hD1AvSMWTWun9XFgCrH6I4b7+XrXl2G45T1OFs8/38b575/w
-         Dy7tb8LMa3iMvlgvk2DSjHcBIWtrIasWOqhj04O3rvJ3mCOqVCeiCj243DSQgSVntGJU
-         Lq2JtIM2H8ipkFpgF8yFsu9p67vHfTMs23To9/i70mBWUpZHSUoxfyZVYIU1rqOmLiPj
-         83xC53uytyL494X1WkJPt7vkiHSUjoGAvohxlvYHlZ1wWvWaCncG1tUSBLwgwsff7qxM
-         u13A==
-X-Gm-Message-State: AOAM532HKxEkTI2P6aFKLxR0joNDIx4b55zen2146Lok95FlvJDxpdTL
-        JPUDsbbmDyiXAfAHDej6+aDq3Q==
-X-Google-Smtp-Source: ABdhPJyire6a1xGmOn/Oizs1+bSA9Zj7VgW0Nwa4xh6mFyM9pB0RqkBU2ggzqp6YMpsH7c/DBqKZXg==
-X-Received: by 2002:a50:c182:: with SMTP id m2mr26187244edf.70.1599568403518;
-        Tue, 08 Sep 2020 05:33:23 -0700 (PDT)
-Received: from localhost.localdomain ([195.24.90.54])
-        by smtp.gmail.com with ESMTPSA id y9sm17499744edo.37.2020.09.08.05.33.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Sep 2020 05:33:22 -0700 (PDT)
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        nicolas.dufresne@collabora.com,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH v3 0/6] Add VP9 codec levels
-Date:   Tue,  8 Sep 2020 15:32:15 +0300
-Message-Id: <20200908123221.2793-1-stanimir.varbanov@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        id S1732338AbgIHTgE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Sep 2020 15:36:04 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:53670 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732252AbgIHTgB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Sep 2020 15:36:01 -0400
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 06A113B
+        for <linux-media@vger.kernel.org>; Tue,  8 Sep 2020 21:35:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1599593759;
+        bh=jTku1Jf4Cqz+3jDTQDT3J1bwsxXWM0mpKU0IMEGOWRc=;
+        h=Date:From:To:Subject:From;
+        b=K92m6z+/AkB81rzx2jRWJyt0EN1TXFivg1DqBLe2t20TCg0Hve7g+szhQj8pzrYyQ
+         uHRxUu4OMDA8IpnhXf1uBnWisT/nDYMpH5BWzFCrnf1jnscvHfNRRi6OC1eUmbCCKR
+         iBynUMM79Xq1rZVuHUMdxp38WDx3YOKEqrltXyAU=
+Date:   Tue, 8 Sep 2020 22:35:33 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Subject: [GIT PULL FOR v5.10] Miscellaneous UVC changes
+Message-ID: <20200908193533.GA9607@pendragon.ideasonboard.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+Hi Mauro,
 
-This new v3 now contains the implementation for VP9 profile and levels
-in the Venus driver as has been requested by Nicolas at [1].
+The following changes since commit d034731bb4b4f2bf5f378231a6d99e59c2cb59f6:
 
-Comments are welcome!
+  media: vivid: fix compile warning/error (2020-09-08 11:54:00 +0200)
 
-regards,
-Stan
+are available in the Git repository at:
 
-[1] https://patchwork.kernel.org/patch/11717307/
+  git://linuxtv.org/pinchartl/media.git tags/uvc-next-20200908
 
-Stanimir Varbanov (6):
-  v4l2-ctrl: Add VP9 codec levels
-  venus: hfi_helper: Add VP9 profile and levels
-  venus: helpers: Add a helper to map v4l2 ids to HFI ids
-  venus: vdec: Set/Get VP9 profile/level
-  venus: vdec: Use helper to get profile and level
-  venus: venc: Use helper to set profile and level
+for you to fetch changes up to 1c2200153c500600b478e9f47361c9435aaac477:
 
- .../media/v4l/ext-ctrls-codec.rst             |  43 ++++
- drivers/media/platform/qcom/venus/core.h      |  13 +-
- drivers/media/platform/qcom/venus/helpers.c   | 239 ++++++++++++++++++
- drivers/media/platform/qcom/venus/helpers.h   |   2 +
- .../media/platform/qcom/venus/hfi_helper.h    |  18 ++
- .../media/platform/qcom/venus/vdec_ctrls.c    |  31 ++-
- drivers/media/platform/qcom/venus/venc.c      | 159 +-----------
- .../media/platform/qcom/venus/venc_ctrls.c    |  14 +-
- drivers/media/v4l2-core/v4l2-ctrls.c          |  21 ++
- include/uapi/linux/v4l2-controls.h            |  17 ++
- 10 files changed, 370 insertions(+), 187 deletions(-)
+  media: uvcvideo: Convey full colorspace information to V4L2 (2020-09-08 19:53:31 +0300)
+
+----------------------------------------------------------------
+Miscellaneous UVC changes for v5.10
+
+----------------------------------------------------------------
+Adam Goode (2):
+      media: uvcvideo: Ensure all probed info is returned to v4l2
+      media: uvcvideo: Convey full colorspace information to V4L2
+
+Alexander A. Klimov (1):
+      media: uvcvideo: Replace HTTP links with HTTPS ones
+
+Daniel W. S. Almeida (1):
+      media: uvcvideo: Fix dereference of out-of-bound list iterator
+
+Dmitry Buzdyk (1):
+      media: uvcvideo: Add mapping for HEVC payloads
+
+Hans de Goede (2):
+      media: uvcvideo: Fix uvc_ctrl_fixup_xu_info() not having any effect
+      media: uvcvideo: Cleanup uvc_ctrl_add_info() error handling
+
+Jun Chen (1):
+      media: uvcvideo: Fix annotation for uvc_video_clock_update()
+
+Laurent Pinchart (2):
+      media: uvcvideo: Set media controller entity functions
+      media: uvcvideo: Silence shift-out-of-bounds warning
+
+ drivers/media/usb/uvc/uvc_ctrl.c   | 46 ++++++++++++------------
+ drivers/media/usb/uvc/uvc_driver.c | 71 +++++++++++++++++++++++++++++++++++---
+ drivers/media/usb/uvc/uvc_entity.c | 35 +++++++++++++++++++
+ drivers/media/usb/uvc/uvc_v4l2.c   | 34 ++++++++++++++++++
+ drivers/media/usb/uvc/uvc_video.c  |  2 +-
+ drivers/media/usb/uvc/uvcvideo.h   |  8 ++++-
+ 6 files changed, 167 insertions(+), 29 deletions(-)
 
 -- 
-2.17.1
+Regards,
 
+Laurent Pinchart
