@@ -2,174 +2,131 @@ Return-Path: <SRS0=7dE9=CR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E1D3C433E2
-	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 20:00:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9136C43461
+	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 20:04:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 590522137B
-	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 20:00:02 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ragnatech-se.20150623.gappssmtp.com header.i=@ragnatech-se.20150623.gappssmtp.com header.b="n5qGCXo1"
+	by mail.kernel.org (Postfix) with ESMTP id 8DF82207DE
+	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 20:04:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730809AbgIHT7W (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Sep 2020 15:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50670 "EHLO
+        id S1732332AbgIHUEF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Sep 2020 16:04:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730485AbgIHPfh (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Sep 2020 11:35:37 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF419C061368
-        for <linux-media@vger.kernel.org>; Tue,  8 Sep 2020 08:35:06 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id n25so9706499ljj.4
-        for <linux-media@vger.kernel.org>; Tue, 08 Sep 2020 08:35:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=tGrF/vntbxcaJrg5poH7gCu+VWyo9L1BGQaIoIoS0bQ=;
-        b=n5qGCXo1v/X8PSEimLNceYfoLFK43B7g0eyI3jYR3uW14XAA4IE07X48ZKE7YJ70UB
-         JEcRKUHQT4cygg8gCURGdeBaerT9Borb6Apcl4jO+AitKEYcyKR+v/V0SsZeW1b9KTKZ
-         T4u/4yQeetA+aH1V5kXiKSA9NeqInShUo9Jj/fF24oDmWL98A/DUSelSqCmPdxjADtXt
-         5egM5+0P5ils3V8bietOEkG7u8rodrCT2oQDTRr94vaFewKmE9Oka8lHZDq/Jryg7P64
-         fBY0QMSrFBHO0ym10Uy5IR1zGhIxxftr1aETdSpB11o9cbC3wy6bK/RXkPmDvIKhlbcJ
-         cRqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=tGrF/vntbxcaJrg5poH7gCu+VWyo9L1BGQaIoIoS0bQ=;
-        b=doyz+/MQVYJyvAvQR2us8tg/LKKEgFMlm7qhrq3BrwOXctIoCoZgN86Vht0ryPkWAe
-         C9j3/js23fHPTgg4B5hpvwZJp9hN+WyO/LsBoIInu4VaFPqMtNx+HQZ1/DObZ9uRiS/2
-         EJREj1tzpTk927faY9POWn3VHRt98vymYS6R6gKg82639A8K9OCEobuHUn6kPZOpp9gG
-         3C4SFqeKzyunL1s/4RGkcS99mKLHeGKlud979tXNLVBTzqzYGctA6UBS79+9zWfezuhY
-         IWatx3XFDcsVyLoZAhvHyzP+0bjQzVdeJ/4pNbLBshZ15KqrfiduvituEJS/bkxnv7qu
-         t3aw==
-X-Gm-Message-State: AOAM533/o/b3kaDilydbtSadwDVsFY+mF/OhDBO6fM0tTXsJjoHsRO2y
-        LLw58zwopFI+bA8gvhAi3rtEkA==
-X-Google-Smtp-Source: ABdhPJy1r23FBDpD0AieNv6pKwgAOMIvS4RqWasIIr61zMeo/9UcX+kJabzQIpPXrPEHYKTDEOtgpA==
-X-Received: by 2002:a2e:9110:: with SMTP id m16mr13370093ljg.173.1599579304860;
-        Tue, 08 Sep 2020 08:35:04 -0700 (PDT)
-Received: from localhost (h-209-203.A463.priv.bahnhof.se. [155.4.209.203])
-        by smtp.gmail.com with ESMTPSA id y4sm10537582ljk.61.2020.09.08.08.35.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Sep 2020 08:35:04 -0700 (PDT)
-Date:   Tue, 8 Sep 2020 17:35:03 +0200
-From:   Niklas <niklas.soderlund@ragnatech.se>
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Subject: Re: [PATCH] media: rcar-vin: Update crop and compose settings for
- every s_fmt call
-Message-ID: <20200908153503.GA3399240@oden.dyn.berto.se>
-References: <1596187745-31596-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20200801090456.GB1379367@oden.dyn.berto.se>
- <CA+V-a8sOHct_JetCsug8Z2BQpMLH2p39hj2XNw_1N5gkBQp1Gg@mail.gmail.com>
- <20200803192108.GB2297236@oden.dyn.berto.se>
- <6d659e56-1e1f-c9c7-2e66-4ddc4e7fad15@xs4all.nl>
- <CA+V-a8uzznUvzGgZ5A4B8ASEDbmMCrQPSAcEjO7v45zmAkdGDQ@mail.gmail.com>
- <20200904022522.GD9369@pendragon.ideasonboard.com>
- <CA+V-a8tTKu5FeEs+Hi2AwXy-i5OFufeyhTKGC6D4C5fK81895g@mail.gmail.com>
+        with ESMTP id S1730400AbgIHPXv (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Sep 2020 11:23:51 -0400
+Received: from hillosipuli.retiisi.org.uk (hillosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::81:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDE6C061A20
+        for <linux-media@vger.kernel.org>; Tue,  8 Sep 2020 07:10:47 -0700 (PDT)
+Received: from valkosipuli.localdomain (valkosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::80:2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id 1FA7A634C87
+        for <linux-media@vger.kernel.org>; Tue,  8 Sep 2020 17:08:23 +0300 (EEST)
+Received: from sailus by valkosipuli.localdomain with local (Exim 4.92)
+        (envelope-from <sakari.ailus@retiisi.org.uk>)
+        id 1kFeIJ-0000WB-9N
+        for linux-media@vger.kernel.org; Tue, 08 Sep 2020 17:08:23 +0300
+Date:   Tue, 8 Sep 2020 17:08:23 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     linux-media@vger.kernel.org
+Subject: [GIT PULL FOR 5.10] V4L2 camera patches
+Message-ID: <20200908140823.GC834@valkosipuli.retiisi.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+V-a8tTKu5FeEs+Hi2AwXy-i5OFufeyhTKGC6D4C5fK81895g@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Lad,
+Hi Mauro,
 
-On 2020-09-06 20:12:35 +0100, Lad, Prabhakar wrote:
-> Hi Laurent,
-> 
-> On Fri, Sep 4, 2020 at 3:25 AM Laurent Pinchart
-> <laurent.pinchart@ideasonboard.com> wrote:
-> >
-> > Hi Prabhakar,
-> >
-> > On Thu, Sep 03, 2020 at 03:53:18PM +0100, Lad, Prabhakar wrote:
-> > > On Wed, Aug 19, 2020 at 3:08 PM Hans Verkuil wrote:
-> > > > On 03/08/2020 21:21, Niklas wrote:
-> > > > > On 2020-08-03 19:11:32 +0100, Lad, Prabhakar wrote:
-> > > > >> On Sat, Aug 1, 2020 at 10:04 AM Niklas wrote:
-> > > > >>> On 2020-07-31 10:29:05 +0100, Lad Prabhakar wrote:
-> > > > >>>> The crop and compose settings for VIN in non mc mode werent updated
-> > > > >>>> in s_fmt call this resulted in captured images being clipped.
-> > > > >>>>
-> > > > >>>> With the below sequence on the third capture where size is set to
-> > > > >>>> 640x480 resulted in clipped image of size 320x240.
-> > > > >>>>
-> > > > >>>> high(640x480) -> low (320x240) -> high (640x480)
-> > > > >>>>
-> > > > >>>> This patch makes sure the VIN crop and compose settings are updated.
-> > > > >>>
-> > > > >>> This is clearly an inconsistency in the VIN driver that should be fixed.
-> > > > >>> But I think the none-mc mode implements the correct behavior. That is
-> > > > >>> that S_FMT should not modify the crop/compose rectangles other then make
-> > > > >>> sure they don't go out of bounds. This is an area we tried to clarify in
-> > > > >>> the past but I'm still not sure what the correct answer to.
-> > > > >>>
-> > > > >> What should be the exact behaviour of the bridge driver  for s_fmt
-> > > > >> call. Should the crop/compose settings be updated for every s_fmt
-> > > > >> callback or should they be only updated on s_selection callback.
-> > > > >> Currently the non-mc rcar-vin doesnt update the crop/compose setting
-> > > > >> in s_fmt callback due to which I see the above issue as mentioned.
-> > > > >
-> > > > > This is not entirely correct. It does update the crop and compose
-> > > > > rectangles on s_fmt, it makes sure they are not out-of-bounds for the
-> > > > > new format if it's accepted by s_fmt. See v4l2_rect_map_inside() calls
-> > > > > in the snippet bellow.
-> > > >
-> > > > For non-mc mode s_fmt must update any crop/compose rectangles to ensure that
-> > > > they are not out-of-bounds. But for mc mode the validation is done when you
-> > > > start streaming, so I think s_fmt won't make any changes in that mode.
-> > >
-> > > Thank you Hans.
-> > >
-> > > > Double-check that with Laurent, though...
-> > >
-> > > Niklas/Laurent - How do we proceed on this ?
-> >
-> > MC devices rely on userspace to propagate formats between entities, and
-> > on kernelspace to propagate formats within entities. This is documented
-> > in https://linuxtv.org/downloads/v4l-dvb-apis/userspace-api/v4l/dev-subdev.html.
-> > The configuration of an entity (formats and selection rectangles) must
-> > be valid at all times. Subdev drivers should thus either adjust or reset
-> > the crop and selection rectangles. The specification isn't clear on
-> > which behaviour should be implemented, the only related text is
-> >
-> > "Sub-devices that scale frames using variable scaling factors should
-> > reset the scale factors to default values when sink pads formats are
-> > modified. If the 1:1 scaling ratio is supported, this means that source
-> > pads formats should be reset to the sink pads formats."
-> >
-> > I would recommend resetting as the default behaviour. In any case,
-> > adjustements are needed to ensure that the configuration remains valid.
-> >
-> In that case can I have your Ack to the patch please.
+Here's a bunch of V4L2 camera and fwnode patches for 5.10.
 
-If this is the approach we wish to take here you should remove the code 
-above and bellow the added block as it becomes redundant whit this 
-change.
+Please pull.
 
-> 
-> Cheers,
-> Prabhakar
+The following changes since commit d13ee586e026e8166231e03e5345718ebf625c02:
+
+  Merge tag 'v5.9-rc4' into patchwork (2020-09-07 16:13:06 +0200)
+
+are available in the Git repository at:
+
+  git://linuxtv.org/sailus/media_tree.git tags/for-5.10-2-signed
+
+for you to fetch changes up to 7f79a4f1e832ac02fa7594806db2ad14adf134e5:
+
+  media: ov8856: Add support for 3264x2448 mode (2020-09-08 16:30:50 +0300)
+
+----------------------------------------------------------------
+V4L2 patche sfor 5.10
+
+----------------------------------------------------------------
+Andy Shevchenko (10):
+      media: ipu3-cio2: Simplify cleanup code
+      media: ipu3-cio2: Introduce CIO2_LOP_ENTRIES constant
+      media: ipu2-cio2: Replace custom definition with PAGE_SIZE
+      media: ipu3-cio2: Use macros from pfn.h
+      media: ipu3-cio2: Replace infinite loop by one with clear exit condition
+      media: ipu3-cio2: Use readl_poll_timeout() helper
+      media: ipu3-cio2: Get rid of pci_set_master() duplication
+      media: ipu3-cio2: Drop bogus check and error message
+      media: ipu3-cio2: Drop useless assignments
+      media: ipu3-cio2: Update Copyright year and fix indentation issues
+
+Christophe JAILLET (1):
+      media: staging/intel-ipu3: css: Correctly reset some memory
+
+Dinghao Liu (1):
+      media: omap3isp: Fix memleak in isp_probe
+
+Lad Prabhakar (6):
+      media: i2c: ov5640: Remain in power down for DVP mode unless streaming
+      media: i2c: ov5640: Separate out mipi configuration from s_power
+      media: i2c: ov5640: Enable data pins on poweron for DVP mode
+      media: i2c: ov5640: Configure HVP lines in s_power callback
+      media: i2c: ov5640: Add support for BT656 mode
+      media: i2c: ov5640: Fail probe on unsupported bus_type
+
+Laurent Pinchart (5):
+      media: v4l2-async: Document asd allocation requirements
+      media: rcar_drif: Fix fwnode reference leak when parsing DT
+      media: rcar_drif: Allocate v4l2_async_subdev dynamically
+      media: rcar-csi2: Allocate v4l2_async_subdev dynamically
+      media: i2c: max9286: Allocate v4l2_async_subdev dynamically
+
+Robert Foss (2):
+      media: ov8856: Add support for 1632x1224 mode
+      media: ov8856: Add support for 3264x2448 mode
+
+Sakari Ailus (5):
+      media: i2c: Remove Alan Chiang's e-mail address
+      v4l2-fwnode: Use debug level for printing link frequencies
+      v4l2-fwnode: Make number of data lanes a character
+      v4l2-fwnode: Make bus configuration a struct
+      v4l2-fwnode: Document new usage patterns of v4l2_fwnode_endpoint_parse
+
+ drivers/media/i2c/dw9807-vcm.c               |   2 +-
+ drivers/media/i2c/imx258.c                   |   2 +-
+ drivers/media/i2c/max9286.c                  |  40 +--
+ drivers/media/i2c/ov5640.c                   | 336 ++++++++++++---------
+ drivers/media/i2c/ov8856.c                   | 430 +++++++++++++++++++++++++++
+ drivers/media/pci/intel/ipu3/ipu3-cio2.c     | 150 ++++------
+ drivers/media/pci/intel/ipu3/ipu3-cio2.h     |   4 +-
+ drivers/media/platform/omap3isp/isp.c        |   6 +-
+ drivers/media/platform/rcar-vin/rcar-csi2.c  |  24 +-
+ drivers/media/platform/rcar_drif.c           |  30 +-
+ drivers/media/v4l2-core/v4l2-fwnode.c        |   4 +-
+ drivers/staging/media/ipu3/ipu3-css-params.c |   2 +-
+ include/media/v4l2-async.h                   |   5 +-
+ include/media/v4l2-fwnode.h                  |  24 +-
+ 14 files changed, 745 insertions(+), 314 deletions(-)
 
 -- 
-Regards,
-Niklas Söderlund
+Sakari Ailus
