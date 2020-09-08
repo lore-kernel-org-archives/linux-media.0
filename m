@@ -2,79 +2,90 @@ Return-Path: <SRS0=7dE9=CR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F7E9C433E2
-	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 10:27:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 181CFC433E2
+	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 10:34:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0DAE521532
-	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 10:27:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1599560844;
-	bh=98uqJvpNFRRmztCSHPipazrlYRl/HX3TWgGmXTvF4iU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=ZyfszDQkSm0CH5ZcxBqo/3gl/L0TJGuBVd3rTxcXXfY8hrlEk8+PZQhpnir8NJTCV
-	 Cu3fHLjrLKGZH+AR1HFr2IKZe23IXZPBh0REYWuMRpAB1CU5oxEmhrEpT5Fm1xZnbj
-	 Xhek50KrnZ7eUnvgg4k+MqUq6ARZOTeg/fenjMFI=
+	by mail.kernel.org (Postfix) with ESMTP id 3C4E820C09
+	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 10:34:10 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="NCMWQFZu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729746AbgIHK1X (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Sep 2020 06:27:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37162 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729228AbgIHK1W (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 8 Sep 2020 06:27:22 -0400
-Received: from coco.lan (ip5f5ad5ce.dynamic.kabel-deutschland.de [95.90.213.206])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8BC9D2177B;
-        Tue,  8 Sep 2020 10:27:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599560841;
-        bh=98uqJvpNFRRmztCSHPipazrlYRl/HX3TWgGmXTvF4iU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=U66DiOtCOmRyrxx1i/2Sq9Q3zt+MIZQEckcbSH3hXI68XJipOrOJd8BnhSlrxYz0W
-         NMyVQUztG2J9rNZeC/b7EVRUxy8RaDB5xy+My8XQhYHoYcFCeoeT9DoW1h6L3267vw
-         VOPjzaQQ8AAGsu9QXF6HkRk+5+ZYEKkWti7pCZgA=
-Date:   Tue, 8 Sep 2020 12:27:16 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        devel@driverdev.osuosl.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org,
-        Anant Thazhemadam <anant.thazhemadam@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/5] address W=1 warnings at staging/media/atomisp
-Message-ID: <20200908122716.09562b43@coco.lan>
-In-Reply-To: <cover.1599141140.git.mchehab+huawei@kernel.org>
-References: <cover.1599141140.git.mchehab+huawei@kernel.org>
-X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S1729969AbgIHKdp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Sep 2020 06:33:45 -0400
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:49345 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729542AbgIHK0d (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 8 Sep 2020 06:26:33 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id FapHkWzhXMeQuFapJkfd9A; Tue, 08 Sep 2020 12:26:13 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1599560773; bh=QcAbiD6FktTEgHd2VYDDvPco9MKZ6GT5lUvQ/sohjXg=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
+        b=NCMWQFZuh4msPoThuq9OtuUq6s7oOYAuCRSRRBC4fRkuyW01sN0hER0Ka/5yb8bt2
+         8TepN8RuBdfPxbBqgQzhBtWon64rPW5ltAl/94iuzvFnXhoH9WG15ptqbdgM9W63lk
+         i4p09YRZkXOdZNoVqnls2mW4swrQCYiW7qYfAVXPmMR8P8I4toUugvW5yvUMQSeOeH
+         HNBq9a67/VhrKxINJS2w6ejZjUUJo8BWmWV11b78r1ul4bM2ZLooOoUSXomm1o1y7g
+         RiKPNWl9XKbZPMrHQCw3x1zQ+lhXSA0FeXDRktQD4c5yAThpxuA7tsE1Y5KZaICtN9
+         7viRNpwTt/6sg==
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 2/2] cec-adap.c: add 'unregistered' checks
+Date:   Tue,  8 Sep 2020 12:26:11 +0200
+Message-Id: <20200908102611.471265-3-hverkuil-cisco@xs4all.nl>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200908102611.471265-1-hverkuil-cisco@xs4all.nl>
+References: <20200908102611.471265-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4wfBZhREe2cqDzaHjQpaHwro+ZlViMI7xIUvjQlndRhvALEs9RKg3BNiFtX7Cv1lquwlWFHZMhypTRuN82b7XYdFMxb4Zl22Z9wpsCfzJnjzEkCmJQ6pwN
+ 7cBnzHvUrgXOhR62FaJF5kKhX60oK/tMVtXmWPWcXRQrKELEPgwZyox7d9zapMkG/Ln/cv/jdw8BP3hd05GdG0Ms+1OZTttUcyYi6JNiKHGzL4/meXjlu+fI
+ EteX321Tqmj9EtEyCmmEFBsNYpTFfdRegsaxzVC70fZ/meKg/6UkZHKC/3tWr3lH
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Greg,
+Make the code a bit more robust by checking if the adapter has
+been unregistered at the start of cec_transmit_msg_fh() and
+cec_received_msg_ts(). If it is unregistered, then just return.
 
-Em Tue,  8 Sep 2020 12:12:21 +0200
-Mauro Carvalho Chehab <mchehab+huawei@kernel.org> escreveu:
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ drivers/media/cec/core/cec-adap.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> The linux-media policy is to have zero warnings with W=1. However, when
-> I started using a Jenkins instance at https://builder.linuxtv.org to automate
-> such tests, I didn't notice that a bug at the scripts were just ignoring
-> warnings.
+diff --git a/drivers/media/cec/core/cec-adap.c b/drivers/media/cec/core/cec-adap.c
+index 3153c401cb65..d5d5d28d0b36 100644
+--- a/drivers/media/cec/core/cec-adap.c
++++ b/drivers/media/cec/core/cec-adap.c
+@@ -751,6 +751,9 @@ int cec_transmit_msg_fh(struct cec_adapter *adap, struct cec_msg *msg,
+ 	struct cec_data *data;
+ 	bool is_raw = msg_is_raw(msg);
+ 
++	if (adap->devnode.unregistered)
++		return -ENODEV;
++
+ 	msg->rx_ts = 0;
+ 	msg->tx_ts = 0;
+ 	msg->rx_status = 0;
+@@ -1049,6 +1052,9 @@ void cec_received_msg_ts(struct cec_adapter *adap,
+ 	if (WARN_ON(!msg->len || msg->len > CEC_MAX_MSG_SIZE))
+ 		return;
+ 
++	if (adap->devnode.unregistered)
++		return;
++
+ 	/*
+ 	 * Some CEC adapters will receive the messages that they transmitted.
+ 	 * This test filters out those messages by checking if we are the
+-- 
+2.27.0
 
-Please ignore this patch series. It was sent by mistake instead
-of a completely unrelated one.
-
-This was already merged via the media tree.
-
-Thanks,
-Mauro
