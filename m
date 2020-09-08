@@ -2,94 +2,90 @@ Return-Path: <SRS0=7dE9=CR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E0C2C43461
-	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 08:46:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9982DC433E2
+	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 08:54:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 47AD0215A4
-	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 08:46:21 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="TudaNhNJ"
+	by mail.kernel.org (Postfix) with ESMTP id 69E8C2166E
+	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 08:54:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729988AbgIHIqT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Sep 2020 04:46:19 -0400
-Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:50193 "EHLO
-        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729775AbgIHIqS (ORCPT
+        id S1729378AbgIHIyt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Sep 2020 04:54:49 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:60116 "EHLO
+        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729351AbgIHIys (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 8 Sep 2020 04:46:18 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id FZGZkWOeiMeQuFZGakfFvl; Tue, 08 Sep 2020 10:46:17 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1599554777; bh=5BjAMOh18xMR8dQHvVUmpyip0di5JV2lMHop3B89Bx8=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=TudaNhNJecwawGyZCFChCM8XXDrmi7CYkuZmjM0PJNWLFxFrW3TMsMvUQSH9HPaSi
-         EGTWiQ40apkflopYxn9TWIXipANgVEmoEcEoiuoUj09fSl+HbfLARC05VVFUutB/j3
-         GqZGVCsdsn1YoCkWd6LNpJWn0jsTB9n2pXBC7lNfTEjsAT8qC4kgtFyIARdStpvfCk
-         FsdtGoD+7gJveFiu18Gk9aoXaTRRogE+RrFKSkHomkXmhO/LGt5agg9aI3K0F0eyvD
-         d5llwVdY01LIxHZAjP7Q5dV05J6543jfGsBG0wwnqAMOUT7UIVNt+40ANRIkbiB1x6
-         rL3LbonWzto9A==
-Subject: Re: Asus PN50 CEC
-To:     Timo Ketola <timo@riihineva.no-ip.org>, linux-media@vger.kernel.org
-References: <e56fb2cd-5e40-b83e-f702-0dced9df86fb@riihineva.no-ip.org>
- <8634e5af-175d-1fff-1693-1445f336b9f9@xs4all.nl>
- <d2d11658-7e06-986f-36dd-1321abc2baee@riihineva.no-ip.org>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <0a8ee8ec-b77d-9f28-f386-ac910bc16dcd@xs4all.nl>
-Date:   Tue, 8 Sep 2020 10:46:15 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Tue, 8 Sep 2020 04:54:48 -0400
+Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id C0CAB634C8F;
+        Tue,  8 Sep 2020 11:54:38 +0300 (EEST)
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     laurent.pinchart@ideasonboard.com, kieran.bingham@ideasonboard.com,
+        niklas.soderlund@ragnatech.se, jacopo@jmondi.org
+Subject: [PATCH 3/3] v4l2-fwnode: Document changes usage patterns of v4l2_fwnode_endpoint_parse
+Date:   Tue,  8 Sep 2020 11:51:21 +0300
+Message-Id: <20200908085121.864-4-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200908085121.864-1-sakari.ailus@linux.intel.com>
+References: <20200908085121.864-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <d2d11658-7e06-986f-36dd-1321abc2baee@riihineva.no-ip.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfMT7FygA348k212I+O4Tyj2UXb/Q93UPvb6XjsMUxtRDB5PbRzDutkB0FkfK8On6drREkEAmxvepbUygF+5UWMkq0ZFfcWyL0r2FLeGDVBlx4Ol1/r5g
- OooN3mcP8xzVl2kHFvJWmTfE/+G4ee/UuiBqzKaB1+L20FGHypgjLh+GKDH7i6MVtfKa+pTD+4+gaHOkOkSDwECMot/vxez5zxhDZVQ65j7OBT/SqF/lKFHa
- egJSAtmljMWlDFQCosRWOu2jvJ9ifUF5IW65wU4nMOD3qeWBGnnPMELruppFMR0NSgaM/i5gQBSrEMbqCcF+xg==
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 08/09/2020 10:13, Timo Ketola wrote:
-> On 8.9.2020 10.57, Hans Verkuil wrote:
->> I suspect that this is a BIOS-only implementation that just does the bare minimum
->> for wake up and standby (if enabled).
-> 
-> What does it mean? Is it just that BIOS does not report about it to the OS? If it was implemented with GPIOs, shouldn't it still be possible to write a driver for it - in theory - if we somehow were
-> able to find out the GPIOs?
+Document that it is possible to provide defaults for multiple bus types to
+v4l2_fwnode_endpoint_parse and v4l2_fwnode_endpoint_alloc_parse. Also
+underline the fact that detecting the bus type without bus-type property
+is only for the old drivers.
 
-Usually CEC is handled by a microcontroller or a specialized CEC chip.
-It's rare to see a pure GPIO implementation.
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ include/media/v4l2-fwnode.h | 18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
 
-So it is typically not possible to get access to it if it is all handled in
-the BIOS. At least, I've never seen it.
-
-I also suspect that what they call 'CEC' is a really cut-down implementation,
-just enough to receive/transmit wake-up and standby messages.
-
-Sadly, without any documentation there isn't anything that can be done about this.
-
-If you want to support CEC under linux, then go with a Pulse-Eight USB CEC adapter:
-this is fully supported by linux.
-
-Regards,
-
-	Hans
-
-> 
-> Unfortunately, I don't know too much about modern PCs at this level.
-> 
-> Thanks for looking at this!
-> 
-> -- 
-> 
-> Timo
+diff --git a/include/media/v4l2-fwnode.h b/include/media/v4l2-fwnode.h
+index d04f39b60096..ccaa5693df14 100644
+--- a/include/media/v4l2-fwnode.h
++++ b/include/media/v4l2-fwnode.h
+@@ -226,11 +226,10 @@ struct v4l2_fwnode_connector {
+  * call this function once the correct type is found --- with a default
+  * configuration valid for that type.
+  *
+- * As a compatibility means guessing the bus type is also supported by setting
+- * @vep.bus_type to V4L2_MBUS_UNKNOWN. The caller may not provide a default
+- * configuration in this case as the defaults are specific to a given bus type.
+- * This functionality is deprecated and should not be used in new drivers and it
+- * is only supported for CSI-2 D-PHY, parallel and Bt.656 buses.
++ * It is also allowed to set @vep.bus_type to V4L2_MBUS_UNKNOWN. USING THIS
++ * FEATURE REQUIRES "bus-type" PROPERTY IN DT BINDINGS. For old drivers,
++ * guessing @vep.bus_type between CSI-2 D-PHY, parallel and Bt.656 busses is
++ * supported. NEVER RELY ON GUESSING @vep.bus_type IN NEW DRIVERS!
+  *
+  * The function does not change the V4L2 fwnode endpoint state if it fails.
+  *
+@@ -269,11 +268,10 @@ void v4l2_fwnode_endpoint_free(struct v4l2_fwnode_endpoint *vep);
+  * call this function once the correct type is found --- with a default
+  * configuration valid for that type.
+  *
+- * As a compatibility means guessing the bus type is also supported by setting
+- * @vep.bus_type to V4L2_MBUS_UNKNOWN. The caller may not provide a default
+- * configuration in this case as the defaults are specific to a given bus type.
+- * This functionality is deprecated and should not be used in new drivers and it
+- * is only supported for CSI-2 D-PHY, parallel and Bt.656 buses.
++ * It is also allowed to set @vep.bus_type to V4L2_MBUS_UNKNOWN. USING THIS
++ * FEATURE REQUIRES "bus-type" PROPERTY IN DT BINDINGS. For old drivers,
++ * guessing @vep.bus_type between CSI-2 D-PHY, parallel and Bt.656 busses is
++ * supported. NEVER RELY ON GUESSING @vep.bus_type IN NEW DRIVERS!
+  *
+  * The function does not change the V4L2 fwnode endpoint state if it fails.
+  *
+-- 
+2.27.0
 
