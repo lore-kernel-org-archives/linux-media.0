@@ -2,243 +2,234 @@ Return-Path: <SRS0=7dE9=CR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53BEDC43461
-	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 19:29:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2F55C433E2
+	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 19:31:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1881D2177B
-	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 19:29:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A2AE52145D
+	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 19:31:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tBb9RkBT"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="I2A6OrWW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732233AbgIHT3g (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Sep 2020 15:29:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54220 "EHLO
+        id S1732129AbgIHTaj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Sep 2020 15:30:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730703AbgIHP7x (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Sep 2020 11:59:53 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F0FC0617A3
-        for <linux-media@vger.kernel.org>; Tue,  8 Sep 2020 08:53:56 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id p6so11562655ybk.10
-        for <linux-media@vger.kernel.org>; Tue, 08 Sep 2020 08:53:56 -0700 (PDT)
+        with ESMTP id S1731004AbgIHTaW (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Sep 2020 15:30:22 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0083C061573
+        for <linux-media@vger.kernel.org>; Tue,  8 Sep 2020 12:30:21 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id 34so237135pgo.13
+        for <linux-media@vger.kernel.org>; Tue, 08 Sep 2020 12:30:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WMKNLrzDF7/sPPEU8y1v2n71gknBmnCmkI9dRZPe674=;
-        b=tBb9RkBT7PkAZehXVkxlLKQ2DjH/kenKlBga9GRbuu7F0OeOyC+9Zl11tM2QpNlVDB
-         xI4fS0ucuz3JCcJSUuTBaAJdW4RCLW505trAdJp59wF2jThAwWora+hTDxyPcoTpFZA3
-         mp5Q0KhKBXV9HPDb7cZWgGxhDeIBIuwjqUBlHcoHraklkr09Psgr5q+9dutdu1sHtyHy
-         rxGY79ETynm25Hc3tDaWsx+STSN8YCyXo9ho28BRnrS986TZduTIuYYvV14dD55EhWSu
-         En3xhVaHbWkPOSCLBs6TxGq2Mn1RQvCFnsuA1vKfwzzmNPnmAvQ7AT5Q8GVIrHMLu2eL
-         fhWQ==
+        d=chromium.org; s=google;
+        h=mime-version:content-transfer-encoding:in-reply-to:references
+         :subject:from:cc:to:date:message-id:user-agent;
+        bh=SsOjzOVIq97WOAc6WZeXaOq483i3DuOEILRijMKc8+c=;
+        b=I2A6OrWWp9ZhN3tycDzSBFzxFhAVc4uVVlf6QeuGM+05TNovmH2B+uVYHRSjh8Tfa4
+         3rbgHqE43zixo0WWMEH/uPn6zQ+k8rp6mukpfWZWv8M5OQw4plGz5nLDUFU8TKhOG76x
+         kbIHeGgSSQCfV0ICNIztWj0FF4yY6nAq3J+2c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WMKNLrzDF7/sPPEU8y1v2n71gknBmnCmkI9dRZPe674=;
-        b=LvyNR2QFFQoovtllpTwijr9dZ6xToA4biLq5XBG2sS4f99zz/MEUJaLfVmnBRit8wT
-         00MghM3WxKt7t61b4mxbFDwmYW8x3NKY9BusabuUfOP92VynQ3eGlXofJ5m7d33RG9T+
-         6ZcFp/RZAnSHBL67vajG5cedCpH/IYJpDo3zCgqbF/BxDtT/mx2/eELlXixYOs07qjde
-         XbtNhyon/ER6TcJaZL2ObYr8X1EWlSixYCYn2Ym4pY8FOGUcqXmmfXS6ChhctAryfzRS
-         4w1zq/bLPzW7NqDnpvWUX7FjGTjtjyxRtFlLoN7dcoKYbj3ySx4ahvcWFkk57MIRAFnz
-         pOKg==
-X-Gm-Message-State: AOAM531cC80D0V0jzmQjPk12TnHs7uTz8H/T7PgCyG8jUutsrUlZtabA
-        vI2dmvtLsJRZf3y7pPjZfWA/0u6fGZb/eodxtEEW4A==
-X-Google-Smtp-Source: ABdhPJzdMvfsa/IlOorKdDsqGAkDpoCCXep7yMjMOixUz2SkSrRlufjMRSvxarr/is9WvT0a5ZfKEk54011eZf6t4Po=
-X-Received: by 2002:a25:5f4c:: with SMTP id h12mr364293ybm.97.1599580434228;
- Tue, 08 Sep 2020 08:53:54 -0700 (PDT)
+        h=x-gm-message-state:mime-version:content-transfer-encoding
+         :in-reply-to:references:subject:from:cc:to:date:message-id
+         :user-agent;
+        bh=SsOjzOVIq97WOAc6WZeXaOq483i3DuOEILRijMKc8+c=;
+        b=RG+a0HhPa5BS62epsH85ZrXLFmXDgSjIFEUTtzCGpyVHhktVEwErz5ltckrRiukL5G
+         Iddo2/1babqug3U4jC0hfavP+keN/zdHVTP7YnC4mOuYByc2IAZ5jiC7a8KzDzbWcLOe
+         q9ieEMiKLq7bbeHRxF4aGAkiEGJe4J2mrFIbxKbKxUyCMY864W/9fmiidTQOSlGGf5W0
+         nbY891u3mQNE1QbhjVVDcfsJIDtp6JbCGRsXXYIypJyx/1CrPMy3y+ya3FO94904E5jp
+         eO2d5JwHXqlv7L9a+NOZWZ3tq+xgCYMP8YNKeKEf/thdZQAMeq9oY2yLWWeb1dDpDFSa
+         VFtQ==
+X-Gm-Message-State: AOAM532GqqUv2WQtrQAIUqz8a4L3TEoLz1wUrvRnbdVOmkVyR4tc4jP/
+        YNY3kId2q/R4ocim+xBIMBLspg==
+X-Google-Smtp-Source: ABdhPJxHIdKSrBuYxJO9MpvlN9pOkwSjhGrSBHPFd2611Mm9W5IYS0c3yvOL6x5Xbpknc67grJnfiw==
+X-Received: by 2002:a62:6003:: with SMTP id u3mr279604pfb.55.1599593421304;
+        Tue, 08 Sep 2020 12:30:21 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:3e52:82ff:fe6c:83ab])
+        by smtp.gmail.com with ESMTPSA id r3sm208389pfh.88.2020.09.08.12.30.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Sep 2020 12:30:20 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20200828032752.3229698-1-agoode@google.com> <20200902200617.1720599-1-agoode@google.com>
- <20200904030336.GG9369@pendragon.ideasonboard.com>
-In-Reply-To: <20200904030336.GG9369@pendragon.ideasonboard.com>
-From:   Adam Goode <agoode@google.com>
-Date:   Tue, 8 Sep 2020 11:53:15 -0400
-Message-ID: <CAOf41NnpkXATUNay+EPucFg7Nx8=rfLta+TZsRrknZiq3Gegxg@mail.gmail.com>
-Subject: Re: [PATCH v3] media: uvcvideo: Convey full colorspace information to V4L2
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200907130731.2607-1-rojay@codeaurora.org>
+References: <20200907130731.2607-1-rojay@codeaurora.org>
+Subject: Re: [PATCH V3] i2c: i2c-qcom-geni: Add shutdown callback for i2c
+From:   Stephen Boyd <swboyd@chromium.org>
+Cc:     dianders@chromium.org, saiprakash.ranjan@codeaurora.org,
+        gregkh@linuxfoundation.org, mka@chromium.org,
+        akashast@codeaurora.org, msavaliy@qti.qualcomm.com,
+        skakit@codeaurora.org, rnayak@codeaurora.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        Roja Rani Yarubandi <rojay@codeaurora.org>
+To:     Roja Rani Yarubandi <rojay@codeaurora.org>, wsa@kernel.org
+Date:   Tue, 08 Sep 2020 12:30:18 -0700
+Message-ID: <159959341894.454335.3250696075143737399@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Sep 3, 2020 at 11:04 PM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Adam,
->
-> Thank you for the patch.
->
-> On Wed, Sep 02, 2020 at 04:06:17PM -0400, Adam Goode wrote:
-> > The Color Matching Descriptor has been present in USB cameras since
-> > the original version of UVC, but it has never been fully exposed
-> > in Linux.
-> >
-> > This change informs V4L2 of all of the UVC colorspace parameters:
-> > color primaries, transfer characteristics, and YCbCr encoding.
-> > videodev2.h doesn't have values for all the possible UVC color settings,
-> > so it is mapped as closely as possible.
-> >
-> > Signed-off-by: Adam Goode <agoode@google.com>
-> > ---
-> >
-> > Changes in v3:
-> >  - Remove quantization changes completely.
-> >
-> >  drivers/media/usb/uvc/uvc_driver.c | 64 ++++++++++++++++++++++++++++--
-> >  drivers/media/usb/uvc/uvc_v4l2.c   |  4 ++
-> >  drivers/media/usb/uvc/uvcvideo.h   |  4 +-
-> >  3 files changed, 67 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> > index 431d86e1c94b..8682c7ad6949 100644
-> > --- a/drivers/media/usb/uvc/uvc_driver.c
-> > +++ b/drivers/media/usb/uvc/uvc_driver.c
-> > @@ -248,10 +248,10 @@ static struct uvc_format_desc *uvc_format_by_guid(const u8 guid[16])
-> >       return NULL;
-> >  }
-> >
-> > -static u32 uvc_colorspace(const u8 primaries)
-> > +static enum v4l2_colorspace uvc_colorspace(const u8 primaries)
-> >  {
-> > -     static const u8 colorprimaries[] = {
-> > -             0,
-> > +     static const enum v4l2_colorspace colorprimaries[] = {
-> > +             V4L2_COLORSPACE_DEFAULT,  /* Unspecified */
-> >               V4L2_COLORSPACE_SRGB,
-> >               V4L2_COLORSPACE_470_SYSTEM_M,
-> >               V4L2_COLORSPACE_470_SYSTEM_BG,
-> > @@ -262,7 +262,61 @@ static u32 uvc_colorspace(const u8 primaries)
-> >       if (primaries < ARRAY_SIZE(colorprimaries))
-> >               return colorprimaries[primaries];
-> >
-> > -     return 0;
-> > +     return V4L2_COLORSPACE_DEFAULT;  /* Reserved */
-> > +}
-> > +
-> > +static enum v4l2_xfer_func uvc_xfer_func(const u8 transfer_characteristics)
-> > +{
-> > +     /* V4L2 currently does not currently have definitions for all
->
-> A single "currently" should be enough :-) I'll fix this when applying.
+Why is dri-devel on here? And linaro-mm-sig?
 
-Thank you! I was fixating too much on the present :)
+Quoting Roja Rani Yarubandi (2020-09-07 06:07:31)
+> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-=
+qcom-geni.c
+> index dead5db3315a..b3609760909f 100644
+> --- a/drivers/i2c/busses/i2c-qcom-geni.c
+> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+>  struct geni_i2c_err_log {
+> @@ -384,7 +387,8 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *g=
+i2c, struct i2c_msg *msg,
+>         if (dma_buf) {
+>                 if (gi2c->err)
+>                         geni_i2c_rx_fsm_rst(gi2c);
+> -               geni_se_rx_dma_unprep(se, rx_dma, len);
+> +               geni_se_rx_dma_unprep(se, gi2c->rx_dma, len);
+> +               gi2c->rx_dma =3D (dma_addr_t)NULL;
+>                 i2c_put_dma_safe_msg_buf(dma_buf, msg, !gi2c->err);
+>         }
+> =20
+> @@ -394,12 +398,12 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev =
+*gi2c, struct i2c_msg *msg,
+>  static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg=
+ *msg,
+>                                 u32 m_param)
+>  {
+> -       dma_addr_t tx_dma;
+>         unsigned long time_left;
+>         void *dma_buf =3D NULL;
+>         struct geni_se *se =3D &gi2c->se;
+>         size_t len =3D msg->len;
+> =20
+> +       gi2c->xfer_len =3D len;
+>         if (!of_machine_is_compatible("lenovo,yoga-c630"))
+>                 dma_buf =3D i2c_get_dma_safe_msg_buf(msg, 32);
+> =20
+> @@ -410,7 +414,7 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *g=
+i2c, struct i2c_msg *msg,
+> =20
+>         writel_relaxed(len, se->base + SE_I2C_TX_TRANS_LEN);
+> =20
+> -       if (dma_buf && geni_se_tx_dma_prep(se, dma_buf, len, &tx_dma)) {
+> +       if (dma_buf && geni_se_tx_dma_prep(se, dma_buf, len, &gi2c->tx_dm=
+a)) {
+>                 geni_se_select_mode(se, GENI_SE_FIFO);
+>                 i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
+>                 dma_buf =3D NULL;
+> @@ -429,7 +433,8 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *g=
+i2c, struct i2c_msg *msg,
+>         if (dma_buf) {
+>                 if (gi2c->err)
+>                         geni_i2c_tx_fsm_rst(gi2c);
+> -               geni_se_tx_dma_unprep(se, tx_dma, len);
+> +               geni_se_tx_dma_unprep(se, gi2c->tx_dma, len);
+> +               gi2c->tx_dma =3D (dma_addr_t)NULL;
+>                 i2c_put_dma_safe_msg_buf(dma_buf, msg, !gi2c->err);
+>         }
+> =20
+> @@ -479,6 +484,51 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
+>         return ret;
+>  }
+> =20
+> +static void geni_i2c_stop_xfer(struct geni_i2c_dev *gi2c)
+> +{
+> +       int ret;
+> +       u32 dma;
+> +       u32 val;
+> +       u32 geni_status;
+> +       struct geni_se *se =3D &gi2c->se;
+> +
+> +       ret =3D pm_runtime_get_sync(gi2c->se.dev);
+> +       if (ret < 0) {
+> +               dev_err(gi2c->se.dev, "Failed to resume device: %d\n", re=
+t);
 
+Is this print really necessary? Doesn't PM core already print this sort
+of information?
 
->
-> > +      * possible values of UVC transfer characteristics. If
-> > +      * v4l2_xfer_func is extended with new values, the mapping
-> > +      * below should be updated.
-> > +      *
-> > +      * Substitutions are taken from the mapping given for
-> > +      * V4L2_XFER_FUNC_DEFAULT documented in videodev2.h.
-> > +      */
-> > +     static const enum v4l2_xfer_func xfer_funcs[] = {
-> > +             V4L2_XFER_FUNC_DEFAULT,    /* Unspecified */
-> > +             V4L2_XFER_FUNC_709,
-> > +             V4L2_XFER_FUNC_709,        /* Substitution for BT.470-2 M */
-> > +             V4L2_XFER_FUNC_709,        /* Substitution for BT.470-2 B, G */
-> > +             V4L2_XFER_FUNC_709,        /* Substitution for SMPTE 170M */
-> > +             V4L2_XFER_FUNC_SMPTE240M,
-> > +             V4L2_XFER_FUNC_NONE,
-> > +             V4L2_XFER_FUNC_SRGB,
-> > +     };
-> > +
-> > +     if (transfer_characteristics < ARRAY_SIZE(xfer_funcs))
-> > +             return xfer_funcs[transfer_characteristics];
-> > +
-> > +     return V4L2_XFER_FUNC_DEFAULT;  /* Reserved */
-> > +}
-> > +
-> > +static enum v4l2_ycbcr_encoding uvc_ycbcr_enc(const u8 matrix_coefficients)
-> > +{
-> > +     /* V4L2 currently does not currently have definitions for all
->
-> Same here.
->
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->
-> > +      * possible values of UVC matrix coefficients. If
-> > +      * v4l2_ycbcr_encoding is extended with new values, the
-> > +      * mapping below should be updated.
-> > +      *
-> > +      * Substitutions are taken from the mapping given for
-> > +      * V4L2_YCBCR_ENC_DEFAULT documented in videodev2.h.
-> > +      *
-> > +      * FCC is assumed to be close enough to 601.
-> > +      */
-> > +     static const enum v4l2_ycbcr_encoding ycbcr_encs[] = {
-> > +             V4L2_YCBCR_ENC_DEFAULT,  /* Unspecified */
-> > +             V4L2_YCBCR_ENC_709,
-> > +             V4L2_YCBCR_ENC_601,      /* Substitution for FCC */
-> > +             V4L2_YCBCR_ENC_601,      /* Substitution for BT.470-2 B, G */
-> > +             V4L2_YCBCR_ENC_601,
-> > +             V4L2_YCBCR_ENC_SMPTE240M,
-> > +     };
-> > +
-> > +     if (matrix_coefficients < ARRAY_SIZE(ycbcr_encs))
-> > +             return ycbcr_encs[matrix_coefficients];
-> > +
-> > +     return V4L2_YCBCR_ENC_DEFAULT;  /* Reserved */
-> >  }
-> >
-> >  /* Simplify a fraction using a simple continued fraction decomposition. The
-> > @@ -704,6 +758,8 @@ static int uvc_parse_format(struct uvc_device *dev,
-> >               }
-> >
-> >               format->colorspace = uvc_colorspace(buffer[3]);
-> > +             format->xfer_func = uvc_xfer_func(buffer[4]);
-> > +             format->ycbcr_enc = uvc_ycbcr_enc(buffer[5]);
-> >
-> >               buflen -= buffer[0];
-> >               buffer += buffer[0];
-> > diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-> > index 0335e69b70ab..dee65e89d6c2 100644
-> > --- a/drivers/media/usb/uvc/uvc_v4l2.c
-> > +++ b/drivers/media/usb/uvc/uvc_v4l2.c
-> > @@ -253,6 +253,8 @@ static int uvc_v4l2_try_format(struct uvc_streaming *stream,
-> >       fmt->fmt.pix.bytesperline = uvc_v4l2_get_bytesperline(format, frame);
-> >       fmt->fmt.pix.sizeimage = probe->dwMaxVideoFrameSize;
-> >       fmt->fmt.pix.colorspace = format->colorspace;
-> > +     fmt->fmt.pix.xfer_func = format->xfer_func;
-> > +     fmt->fmt.pix.ycbcr_enc = format->ycbcr_enc;
-> >
-> >       if (uvc_format != NULL)
-> >               *uvc_format = format;
-> > @@ -289,6 +291,8 @@ static int uvc_v4l2_get_format(struct uvc_streaming *stream,
-> >       fmt->fmt.pix.bytesperline = uvc_v4l2_get_bytesperline(format, frame);
-> >       fmt->fmt.pix.sizeimage = stream->ctrl.dwMaxVideoFrameSize;
-> >       fmt->fmt.pix.colorspace = format->colorspace;
-> > +     fmt->fmt.pix.xfer_func = format->xfer_func;
-> > +     fmt->fmt.pix.ycbcr_enc = format->ycbcr_enc;
-> >
-> >  done:
-> >       mutex_unlock(&stream->mutex);
-> > diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> > index 6ab972c643e3..eb5f3ffc0222 100644
-> > --- a/drivers/media/usb/uvc/uvcvideo.h
-> > +++ b/drivers/media/usb/uvc/uvcvideo.h
-> > @@ -370,7 +370,9 @@ struct uvc_format {
-> >       u8 type;
-> >       u8 index;
-> >       u8 bpp;
-> > -     u8 colorspace;
-> > +     enum v4l2_colorspace colorspace;
-> > +     enum v4l2_xfer_func xfer_func;
-> > +     enum v4l2_ycbcr_encoding ycbcr_enc;
-> >       u32 fcc;
-> >       u32 flags;
-> >
->
-> --
-> Regards,
->
-> Laurent Pinchart
+> +               return;
+> +       }
+> +
+> +       geni_status =3D readl_relaxed(gi2c->se.base + SE_GENI_STATUS);
+> +       if (geni_status & M_GENI_CMD_ACTIVE) {
+
+Please try to de-indent all this.
+
+	if (!(geni_status & M_GENI_CMD_ACTIVE))
+		goto out;
+
+> +               geni_i2c_abort_xfer(gi2c);
+> +               dma =3D readl_relaxed(se->base + SE_GENI_DMA_MODE_EN);
+> +               if (dma) {
+
+	if (!dma)
+		goto out;
+
+> +                       val =3D readl_relaxed(gi2c->se.base + SE_DMA_DEBU=
+G_REG0);
+> +                       if (val & DMA_TX_ACTIVE) {
+> +                               gi2c->cur_wr =3D 0;
+> +                               if (gi2c->err)
+> +                                       geni_i2c_tx_fsm_rst(gi2c);
+> +                               if (gi2c->tx_dma) {
+> +                                       geni_se_tx_dma_unprep(se,
+> +                                                gi2c->tx_dma, gi2c->xfer=
+_len);
+> +                                       gi2c->tx_dma =3D (dma_addr_t)NULL;
+
+Almost nobody does this. In fact, grep shows me one hit in the kernel.
+If nobody else is doing it something is probably wrong. When would dma
+mode be active and tx_dma not be set to something that should be
+stopped? If it really is necessary I suppose we should assign this to
+DMA_MAPPING_ERROR instead of casting NULL. Then the check above for
+tx_dma being valid can be dropped because geni_se_tx_dma_unprep()
+already checks for a valid mapping before doing anything. But really, we
+should probably be tracking the dma buffer mapped to the CPU as well as
+the dma address that was used for the mapping. Not storing both is a
+problem, see below.
+
+> +                               }
+> +                       } else if (val & DMA_RX_ACTIVE) {
+> +                               gi2c->cur_rd =3D 0;
+> +                               if (gi2c->err)
+> +                                       geni_i2c_rx_fsm_rst(gi2c);
+> +                               if (gi2c->rx_dma) {
+> +                                       geni_se_rx_dma_unprep(se,
+> +                                               gi2c->rx_dma, gi2c->xfer_=
+len);
+
+Looking closely it seems that the geni dma wrappers shouldn't even be
+checking for an iova being non-zero. Instead they should make sure that
+it just isn't invalid with !dma_mapping_error().
+
+> +                                       gi2c->rx_dma =3D (dma_addr_t)NULL;
+
+If we're stopping some dma transaction doesn't that mean the=20
+
+                 i2c_put_dma_safe_msg_buf(dma_buf, msg, !gi2c->err);
+
+code needs to run also? I fail to see where we free the buffer that has
+been mapped for DMA.
+
+> +                               }
+> +                       }
+> +               }
+> +       }
+> +
+
+out:
+
+> +       pm_runtime_put_sync_suspend(gi2c->se.dev);
+> +}
+> +
