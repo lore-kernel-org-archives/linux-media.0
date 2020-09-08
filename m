@@ -2,87 +2,101 @@ Return-Path: <SRS0=7dE9=CR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E4D1C43461
-	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 17:51:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0C1BC43461
+	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 17:55:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C27F42078B
-	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 17:51:31 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="nic2hwxW"
+	by mail.kernel.org (Postfix) with ESMTP id 967C1206E7
+	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 17:55:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732168AbgIHRvS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Sep 2020 13:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56848 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731632AbgIHQNo (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Sep 2020 12:13:44 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC38C061372
-        for <linux-media@vger.kernel.org>; Tue,  8 Sep 2020 05:44:43 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C27A239;
-        Tue,  8 Sep 2020 14:40:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1599568851;
-        bh=WIA0Rdncklw7PEnnn4MSQttOJJ3UsJJY226KgryHRhg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nic2hwxWm4qp0rPOT28GorrbKclXiyGwNi+G2pkOzmMkhc5MBzfNqaio8a2MAMiPh
-         59BdQzdXhWGvTg5Vb4HjvTgwmAoOLOi3004+UNQNmbiFv/FiVdZ40kSavSMPC5J4uq
-         +YBsOnczuZf7IKyCz66X+Xi0cQzWqW9uSlTu3hdM=
-Date:   Tue, 8 Sep 2020 15:40:26 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-media@vger.kernel.org, kieran.bingham@ideasonboard.com,
-        niklas.soderlund@ragnatech.se, jacopo@jmondi.org
-Subject: Re: [PATCH 1/3] v4l2-fwnode: Make number of data lanes a character
-Message-ID: <20200908124026.GH6047@pendragon.ideasonboard.com>
-References: <20200908085121.864-1-sakari.ailus@linux.intel.com>
- <20200908085121.864-2-sakari.ailus@linux.intel.com>
+        id S1732077AbgIHRxy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Sep 2020 13:53:54 -0400
+Received: from mga03.intel.com ([134.134.136.65]:2303 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731576AbgIHQMs (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 8 Sep 2020 12:12:48 -0400
+IronPort-SDR: nWu89b0LER2ABoifsUQjA0sgfPIOdKflvnsvlGqMs7hgHVVZRa+1c0meo49VBY9IXf+6ZLe1OV
+ 0KPjWb82uZVA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9737"; a="158155211"
+X-IronPort-AV: E=Sophos;i="5.76,405,1592895600"; 
+   d="scan'208";a="158155211"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2020 06:56:12 -0700
+IronPort-SDR: wFyJre8V0XJXORP2iyf11CCrKYU1fCIKfq1w4mElivku5RfC9HxbySalF6u3SuJwM0fJRyLisz
+ U2fpYmwEjQ1w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,405,1592895600"; 
+   d="scan'208";a="333480191"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga008.jf.intel.com with ESMTP; 08 Sep 2020 06:56:10 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1kFe6R-00FDeC-Em; Tue, 08 Sep 2020 16:56:07 +0300
+Date:   Tue, 8 Sep 2020 16:56:07 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dan Scally <djrscally@gmail.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org, heikki.krogerus@linux.intel.com,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        kitakar@gmail.com, jorhand@linux.microsoft.com
+Subject: Re: cio2 ipu3 module to automatically connect sensors via swnodes
+Message-ID: <20200908135607.GD1891694@smile.fi.intel.com>
+References: <CAFLoDVFmeKcgXBe7kORqx0Q=H_wCWze=6G8qZRRXZT3Uqgkx8w@mail.gmail.com>
+ <20200908080326.GB27352@paasikivi.fi.intel.com>
+ <5614b37e-c263-c9e7-fe5b-a523401c58e2@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200908085121.864-2-sakari.ailus@linux.intel.com>
+In-Reply-To: <5614b37e-c263-c9e7-fe5b-a523401c58e2@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sakari,
-
-Thank you for the patch.
-
-On Tue, Sep 08, 2020 at 11:51:19AM +0300, Sakari Ailus wrote:
-> The maximum is currently four (4). No short is needed.
+On Tue, Sep 08, 2020 at 10:40:09AM +0100, Dan Scally wrote:
+> On 08/09/2020 09:03, Sakari Ailus wrote:
+> > On ACPI systems regulators and clocks as well as GPIOs to some extent are
+> > controlled by AML code in the DSDT and SSDT. There are different ways this
+> > can be implemented though. It may be that the PMIC in this case is
+> > controlled entirely from the AML code without the need for a driver.
+> > 
+> > This might be the case here. It should be possible to figure this out from
+> > the DSDT and SSDT tables.
 > 
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
->  include/media/v4l2-fwnode.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Ah - that's interesting, thanks. I'll delve into the SSDT and DSDT tables
+> and see if I can spot that happening. Presumably it is the case though, as
+> like I say it seems to be working fine without any intervention by our
+> sensor drivers.
 > 
-> diff --git a/include/media/v4l2-fwnode.h b/include/media/v4l2-fwnode.h
-> index c47b70636e42..81e7eb123294 100644
-> --- a/include/media/v4l2-fwnode.h
-> +++ b/include/media/v4l2-fwnode.h
-> @@ -40,7 +40,7 @@ struct v4l2_fwnode_bus_mipi_csi2 {
->  	unsigned int flags;
->  	unsigned char data_lanes[V4L2_FWNODE_CSI2_MAX_DATA_LANES];
->  	unsigned char clock_lane;
-> -	unsigned short num_data_lanes;
-> +	unsigned char num_data_lanes;
->  	bool lane_polarities[1 + V4L2_FWNODE_CSI2_MAX_DATA_LANES];
+> > If you do not change how the regulators in the PMIC are controlled I'd
+> > think it's very, very unlikely you'd be able to fry the sensors.
+> Very reassuring!
+> > The GPIOs there I'd expect to be reset GPIOs, one for each sensor.
+> > Interesting that they are not handled by ACPI in this case. FWIW, the
+> > tps68470 driver is present also in the upstream kernel.
 
-That's a 4 bytes gain, it's useful.
+There are 3 GPIOs (per PMIC, AFAIR) that are controlled via AML. But I dunno
+what is going on in those methods and what the purpose is.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
->  };
+> Yeah we found the tps68470 gpio driver (actually andriy pointed it out I
+> think) - it seems that the pins _provided_ by that driver don't actually
+> have any affect when toggled though, only the ones allocated to the PMIC in
+> its _CRM seem to turn the sensors on/off when toggled (at least, switching
+> those off is the only thing that stops the sensor from appearing in
+> i2cdetect). The pins from the PMIC's _CRM seem to just be system GPIO pins,
+> controllable with `gpioset gpiochip0` for example. For the most part we've
+> been controlling them in the sensor drivers by evaluating the sensor's _DEP
+> entry in ACPI to get to the PMIC's acpi_device. That does seem a little
+> hackish though, and it's definitely pretty ugly.
 
 -- 
-Regards,
+With Best Regards,
+Andy Shevchenko
 
-Laurent Pinchart
+
