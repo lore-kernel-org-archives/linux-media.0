@@ -2,106 +2,86 @@ Return-Path: <SRS0=7dE9=CR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AB65C433E2
-	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 16:40:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C3C2C43461
+	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 16:45:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4CF19206A5
-	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 16:40:40 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=codex.online header.i=@codex.online header.b="dHQ+rhSh"
+	by mail.kernel.org (Postfix) with ESMTP id 381D3206E7
+	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 16:45:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731509AbgIHQkj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Sep 2020 12:40:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60628 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732066AbgIHQhZ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Sep 2020 12:37:25 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A12C0612FF
-        for <linux-media@vger.kernel.org>; Tue,  8 Sep 2020 05:58:48 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id a9so17083395wmm.2
-        for <linux-media@vger.kernel.org>; Tue, 08 Sep 2020 05:58:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=codex.online; s=google;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uub9k0StEJlQyOQ33s7kr8CRajYny0y7opDrp/nmXXw=;
-        b=dHQ+rhSh1NeaE635v725ZsPUsdyNF4z3S55yVFakxl6FGl72jH3fTWxkbExIGem3tm
-         PeSuXo5+8YdWBusyWuXdtzA1Ia8sWbTjEWZdnvdNJXFETFguSC0PnoJAfcdp4gMuOBMj
-         usAR11oP5ZEBPkVOULCE9kp8Ie7oEUrpQENOA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uub9k0StEJlQyOQ33s7kr8CRajYny0y7opDrp/nmXXw=;
-        b=XU+x4nKlqQI3l8OZVS0V4IeNqSUoFtczd0oohWkfdDKQAaJQwzagidPLcngwpNph10
-         o5tBeei3BVHSZa7VnK2krU1Gwy0NyA9dVW0CMdiJi5Y6phxaVf/vldALKGMQdN7BuMm2
-         HS6DH3MVaJ7dj/nBxfFCKxOy5KqtUdg1uBOhVJ0raC5rJvpN7mvV2RRa5+KfZbvn2Bkj
-         wgm/WVJkqZvXaZZoGtIpkZUIfecJuA6HAr9yMOgNzAoot2Rke4cNKtAUaJEv7azGHrRO
-         08hX+zJ6KBRmlWPCm5ZtZ86yscAZXVFcpTKoY9fY1J83II9UFC3mt8zlBT8scqHf2eq4
-         risA==
-X-Gm-Message-State: AOAM531UyP2LT1hGwnTbgwrbqewBgUUOiNApvQ8mrCU7u+yDgnEQ4lBv
-        w+g83BPdtK7TK+vxbKM/Whm/oAdHNaF9+Q==
-X-Google-Smtp-Source: ABdhPJx2xz0HZ07x+R8aUcNgeGxp4/+NpWx1T/H/9ykjIAycrYIka6lTt9KIlTR52a+QFpBButAEtA==
-X-Received: by 2002:a05:600c:2:: with SMTP id g2mr4486243wmc.85.1599569926888;
-        Tue, 08 Sep 2020 05:58:46 -0700 (PDT)
-Received: from localhost ([66.159.216.147])
-        by smtp.gmail.com with ESMTPSA id x10sm33435256wmi.37.2020.09.08.05.58.46
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Sep 2020 05:58:46 -0700 (PDT)
-From:   Harry Mallon <harry.mallon@codex.online>
-To:     linux-media@vger.kernel.org
-Subject: [PATCH] edid-decode: Report supported SL-HDR versions
-Date:   Tue,  8 Sep 2020 13:58:44 +0100
-Message-Id: <20200908125844.73317-1-harry.mallon@codex.online>
-X-Mailer: git-send-email 2.28.0
+        id S1732018AbgIHQog (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Sep 2020 12:44:36 -0400
+Received: from verein.lst.de ([213.95.11.211]:53340 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731773AbgIHQoU (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 8 Sep 2020 12:44:20 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 026F868B02; Tue,  8 Sep 2020 14:20:45 +0200 (CEST)
+Date:   Tue, 8 Sep 2020 14:20:45 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Jim Quinlan <james.quinlan@broadcom.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
+        <linux-pci@vger.kernel.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "open list:STAGING SUBSYSTEM" <devel@driverdev.osuosl.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
+        <devicetree@vger.kernel.org>,
+        "open list:DRM DRIVERS FOR ALLWINNER A10" 
+        <dri-devel@lists.freedesktop.org>, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Julien Grall <julien.grall@arm.com>,
+        "open list:ACPI FOR ARM64 (ACPI/arm64)" <linux-acpi@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:ALLWINNER A10 CSI DRIVER" <linux-media@vger.kernel.org>,
+        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
+        <linux-remoteproc@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "open list:SUPERH" <linux-sh@vger.kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Stefano Stabellini <sstabellini@kernel.org>
+Subject: Re: [PATCH v11 00/11] PCI: brcmstb: enable PCIe for STB chips
+Message-ID: <20200908122045.GA31727@lst.de>
+References: <20200824193036.6033-1-james.quinlan@broadcom.com> <b19bc982-a0c4-c6ff-d8f5-650f2b3a83c8@gmail.com> <20200827063517.GA4637@lst.de> <CA+-6iNy3U9pO0Bykzgvb9n9fcsBi6FiatLdpA1s0HgQNWZ49mg@mail.gmail.com> <20200907091649.GA6428@e121166-lin.cambridge.arm.com> <CA+-6iNzoz3pM2pJksXogeuou6wB9W-59rN-amCLERFLuY5zLMg@mail.gmail.com> <00e49acb-c659-de10-3e87-76bfd82e4a76@gmail.com> <20200908104226.GB22909@e121166-lin.cambridge.arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200908104226.GB22909@e121166-lin.cambridge.arm.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Specified in ETSI TS 103 433-1 v1.3.1
+On Tue, Sep 08, 2020 at 11:42:26AM +0100, Lorenzo Pieralisi wrote:
+> > Maybe we can parallelize the PCIe driver review while the DMA changes
+> > are being worked on in Christoph's branch. Lorenzo, are you fine with
+> > the PCIe changes proper?
+> 
+> I will have a look - the main contentious point was about the DMA
+> changes - if Christoph is happy with them I am OK with them
+> too - I hope there is not anything controversial in the host
+> bridge driver itself but I will look into it.
 
-Signed-off-by: Harry Mallon <harry.mallon@codex.online>
----
- parse-cta-block.cpp | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/parse-cta-block.cpp b/parse-cta-block.cpp
-index 97924d1..ad1e18b 100644
---- a/parse-cta-block.cpp
-+++ b/parse-cta-block.cpp
-@@ -1512,11 +1512,21 @@ static void cta_hdr_dyn_metadata_block(const unsigned char *x, unsigned length)
- 		printf("    HDR Dynamic Metadata Type %u\n", type);
- 		switch (type) {
- 		case 1:
--		case 2:
- 		case 4:
- 			if (type_len > 2)
- 				printf("      Version: %u\n", x[3] & 0xf);
- 			break;
-+		case 2:
-+			if (type_len > 2) {
-+				unsigned version = x[3] & 0xf;
-+				printf("      Version: %u\n", version);
-+				if (version >= 1) {
-+					if (x[3] & 0x10) printf("      Supports SL-HDR1 (ETSI TS 103 433-1)\n");
-+					if (x[3] & 0x20) printf("      Supports SL-HDR2 (ETSI TS 103 433-2)\n");
-+					if (x[3] & 0x40) printf("      Supports SL-HDR3 (ETSI TS 103 433-3)\n");
-+				}
-+			}
-+			break;
- 		default:
- 			break;
- 		}
--- 
-2.28.0
-
+I'm pretty happy with the overall shape.  Now we just need to squeeze
+out the regressions..
