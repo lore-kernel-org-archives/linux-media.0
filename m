@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E870C43461
-	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 10:15:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C627C433E2
+	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 10:15:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0B052207DE
-	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 10:15:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 34D41215A4
+	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 10:15:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1599560113;
-	bh=VuGxZvo9yHiaoeDqVaq0mRPlaYO1KqH47p+IwFf+LRE=;
+	s=default; t=1599560137;
+	bh=vW65TbwI8SwZiwFXgxSf5xZsxuSUgeC5F1theLDAloE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=yy0/I6VaaPXORzT6+V4qLtB/UilHnlBKM8SybLk8ucpnBIFKxhTdvNsDp4mHveQKV
-	 kMoQGJJW41wKIgNXySLNiNSkcvLudz3oYVAetSMmm3945bDbvgXtpPDh1JB1dJTuJK
-	 /mm/P7Gm4Po/a1KvGvLQohKL8XAFnVYt+MA7vBDk=
+	b=QkqerxLBlHNg7m0lFwiO8CESZwijNp6mN7JTeyY7o8QGUMHOIxMQ96pTiQmbxGnys
+	 4a2fDNIb709mF4QVQJpgV4DOCPikGfMBz2hbcS5q6m0bx0sA1+QdOANUz5xHBiJIDr
+	 FFA7VSC+n8SS7fx49phaaWt3X57x41G/CxQUZIO4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729062AbgIHKOt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Sep 2020 06:14:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59862 "EHLO mail.kernel.org"
+        id S1729259AbgIHKPe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Sep 2020 06:15:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59740 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729104AbgIHKMf (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 8 Sep 2020 06:12:35 -0400
+        id S1728676AbgIHKMc (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 8 Sep 2020 06:12:32 -0400
 Received: from mail.kernel.org (ip5f5ad5ce.dynamic.kabel-deutschland.de [95.90.213.206])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7FEAD21D79;
-        Tue,  8 Sep 2020 10:12:32 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AE6052177B;
+        Tue,  8 Sep 2020 10:12:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599559952;
-        bh=VuGxZvo9yHiaoeDqVaq0mRPlaYO1KqH47p+IwFf+LRE=;
+        s=default; t=1599559951;
+        bh=vW65TbwI8SwZiwFXgxSf5xZsxuSUgeC5F1theLDAloE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qzFJPKrMSr98zhIOKH91ICQ4+dUN9MrDjIB/ZpEjGHbUcxSKgLKJWASEVBm/49Lf/
-         orclnub6zmuCD25OU1d74vpEhrZu+b+o/EFvWYj6mpnRE26K8k7lbpsvfx6n01vTvS
-         zEoa6Wn7M/+rFAJ1GRB8eJvzsVUKZqdRU8K6wQwc=
+        b=XOTKlvG5RcCQyQUg8lIy9/a/rI0DPNURl0LHFw87QllN/YnsnO1dSvU2sO5+vmnIZ
+         yibeTs10ffagpvTOkXTtm1U9VSw1fqKzjSDLLfq9i8xvyBnfy6OIksjg2FNmjuSAfv
+         wdaHeNeoG8dk0Vo5jCikWEnmkGJywKXPyHnl9mIE=
 Received: from mchehab by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1kFac1-00B3qj-5f; Tue, 08 Sep 2020 12:12:29 +0200
+        id 1kFac1-00B3qb-1w; Tue, 08 Sep 2020 12:12:29 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
@@ -49,104 +49,55 @@ Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 5/5] media: atomisp: get rid of -Wsuggest-attribute=format warnings
-Date:   Tue,  8 Sep 2020 12:12:26 +0200
-Message-ID: <6c77d765707b1e6b2901fd23d85b4d032f1a1799.1599141140.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 1/5] media: atomisp: get rid of some cleanup leftovers
+Date:   Tue,  8 Sep 2020 12:12:22 +0200
+Message-ID: <1e7968e715e23b90ab4994b32301a6cf4faffca8.1599141140.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1599141140.git.mchehab+huawei@kernel.org>
 References: <cover.1599141140.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
-Message-ID: <20200908101226.AQUSmToASMRn-RJzjpD9CgpevQWWSUahyzfL38nV-a0@z>
+Message-ID: <20200908101222.HEnAjtLBFmS33hxt-QnEPz6f6VtcpiPZg8G9v4HuUEY@z>
 
-There are some warnings reported by gcc:
-	drivers/staging/media/atomisp//pci/atomisp_compat_css20.c:164:2: warning: function ‘atomisp_css2_dbg_print’ might be a candidate for ‘gnu_printf’ format attribute [-Wsuggest-attribute=format]
-	drivers/staging/media/atomisp//pci/atomisp_compat_css20.c:170:2: warning: function ‘atomisp_css2_dbg_ftrace_print’ might be a candidate for ‘gnu_printf’ format attribute [-Wsuggest-attribute=format]
-	drivers/staging/media/atomisp//pci/atomisp_compat_css20.c:170:2: warning: function ‘atomisp_css2_dbg_ftrace_print’ might be a candidate for ‘gnu_printf’ format attribute [-Wsuggest-attribute=format]
-	drivers/staging/media/atomisp//pci/atomisp_compat_css20.c:176:2: warning: function ‘atomisp_css2_err_print’ might be a candidate for ‘gnu_printf’ format attribute [-Wsuggest-attribute=format]
+The code that used to check for ISP2400/2401 version were
+using the revision number in order to decide wheather
+version should be used. With the new version, the code
+doesn't need to check anymore for ISP version.
 
-That are due to the usage of printf-like messages without
-enabling the error checking logic.
-
-Add the proper attributes in order to shut up such warnings.
-
+Fixes: ca133c395f2f ("media: atomisp: improve device detection code")
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../media/atomisp/pci/atomisp_compat_css20.c  | 20 ++++---------------
- .../staging/media/atomisp/pci/ia_css_env.h    |  4 ++--
- 2 files changed, 6 insertions(+), 18 deletions(-)
+ drivers/staging/media/atomisp/pci/atomisp_v4l2.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
-index e54242dc0888..5a730e17cc6e 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
-@@ -159,24 +159,13 @@ static void atomisp_css2_hw_load(hrt_address addr, void *to, uint32_t n)
- 	spin_unlock_irqrestore(&mmio_lock, flags);
- }
- 
--static int atomisp_css2_dbg_print(const char *fmt, va_list args)
--{
--	vprintk(fmt, args);
--	return 0;
--}
--
--static int atomisp_css2_dbg_ftrace_print(const char *fmt, va_list args)
-+static int  __attribute__((format (printf, 1, 0)))
-+atomisp_css2_dbg_ftrace_print(const char *fmt, va_list args)
- {
- 	ftrace_vprintk(fmt, args);
- 	return 0;
- }
- 
--static int atomisp_css2_err_print(const char *fmt, va_list args)
--{
--	vprintk(fmt, args);
--	return 0;
--}
--
- void atomisp_load_uint32(hrt_address addr, uint32_t *data)
- {
- 	*data = atomisp_css2_hw_load_32(addr);
-@@ -869,8 +858,7 @@ static inline int __set_css_print_env(struct atomisp_device *isp, int opt)
- 		isp->css_env.isp_css_env.print_env.debug_print =
- 		    atomisp_css2_dbg_ftrace_print;
- 	else if (opt == 2)
--		isp->css_env.isp_css_env.print_env.debug_print =
--		    atomisp_css2_dbg_print;
-+		isp->css_env.isp_css_env.print_env.debug_print = vprintk;
- 	else
- 		ret = -EINVAL;
- 
-@@ -903,7 +891,7 @@ int atomisp_css_load_firmware(struct atomisp_device *isp)
- 
- 	__set_css_print_env(isp, dbg_func);
- 
--	isp->css_env.isp_css_env.print_env.error_print = atomisp_css2_err_print;
-+	isp->css_env.isp_css_env.print_env.error_print = vprintk;
- 
- 	/* load isp fw into ISP memory */
- 	err = ia_css_load_firmware(isp->dev, &isp->css_env.isp_css_env,
-diff --git a/drivers/staging/media/atomisp/pci/ia_css_env.h b/drivers/staging/media/atomisp/pci/ia_css_env.h
-index 8debf334c15c..9808ff9e0492 100644
---- a/drivers/staging/media/atomisp/pci/ia_css_env.h
-+++ b/drivers/staging/media/atomisp/pci/ia_css_env.h
-@@ -75,9 +75,9 @@ struct ia_css_hw_access_env {
- /* Environment with function pointers to print error and debug messages.
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
+index 8c1d5a3b8f45..304857bffc6a 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
+@@ -1429,7 +1429,6 @@ atomisp_load_firmware(struct atomisp_device *isp)
   */
- struct ia_css_print_env {
--	int (*debug_print)(const char *fmt, va_list args);
-+	int (*debug_print)(const char *fmt, va_list args) __attribute__((format (printf, 1, 0)));
- 	/** Print a debug message. */
--	int (*error_print)(const char *fmt, va_list args);
-+	int (*error_print)(const char *fmt, va_list args) __attribute__((format (printf, 1, 0)));
- 	/** Print an error message.*/
- };
+ static bool is_valid_device(struct pci_dev *pdev, const struct pci_device_id *id)
+ {
+-	unsigned int a0_max_id = 0;
+ 	const char *name;
+ 	const char *product;
  
+@@ -1437,11 +1436,9 @@ static bool is_valid_device(struct pci_dev *pdev, const struct pci_device_id *id
+ 
+ 	switch (id->device & ATOMISP_PCI_DEVICE_SOC_MASK) {
+ 	case ATOMISP_PCI_DEVICE_SOC_MRFLD:
+-		a0_max_id = ATOMISP_PCI_REV_MRFLD_A0_MAX;
+ 		name = "Merrifield";
+ 		break;
+ 	case ATOMISP_PCI_DEVICE_SOC_BYT:
+-		a0_max_id = ATOMISP_PCI_REV_BYT_A0_MAX;
+ 		name = "Baytrail";
+ 		break;
+ 	case ATOMISP_PCI_DEVICE_SOC_ANN:
 -- 
 2.26.2
 
