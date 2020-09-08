@@ -2,111 +2,79 @@ Return-Path: <SRS0=7dE9=CR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A105C43461
-	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 10:15:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F7E9C433E2
+	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 10:27:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 67528216C4
-	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 10:15:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0DAE521532
+	for <linux-media@archiver.kernel.org>; Tue,  8 Sep 2020 10:27:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1599560143;
-	bh=68DNqEok2XhXHOmQ4/OhRUUJNNkVRuXHV71v+f39NZM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=zIKuXKGKJwqMK+HND7yNs55VR8ou+ocsaxqr+zD4eSa4dfEs/DUqoSPyByLGsPBYD
-	 4eHTq8LUmHTWMHdyIbQfVIlSK+EpbwXC/31Jt+PpYmWyW8ZhVrF+pwqI3iNeyf0QxX
-	 eLCldJKS+25E21UrjNihC1ZwrOmAeXpl/3e+H99E=
+	s=default; t=1599560844;
+	bh=98uqJvpNFRRmztCSHPipazrlYRl/HX3TWgGmXTvF4iU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=ZyfszDQkSm0CH5ZcxBqo/3gl/L0TJGuBVd3rTxcXXfY8hrlEk8+PZQhpnir8NJTCV
+	 Cu3fHLjrLKGZH+AR1HFr2IKZe23IXZPBh0REYWuMRpAB1CU5oxEmhrEpT5Fm1xZnbj
+	 Xhek50KrnZ7eUnvgg4k+MqUq6ARZOTeg/fenjMFI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729479AbgIHKPg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Sep 2020 06:15:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59746 "EHLO mail.kernel.org"
+        id S1729746AbgIHK1X (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Sep 2020 06:27:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37162 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728828AbgIHKMc (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 8 Sep 2020 06:12:32 -0400
-Received: from mail.kernel.org (ip5f5ad5ce.dynamic.kabel-deutschland.de [95.90.213.206])
+        id S1729228AbgIHK1W (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 8 Sep 2020 06:27:22 -0400
+Received: from coco.lan (ip5f5ad5ce.dynamic.kabel-deutschland.de [95.90.213.206])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AD899216C4;
-        Tue,  8 Sep 2020 10:12:31 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8BC9D2177B;
+        Tue,  8 Sep 2020 10:27:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599559951;
-        bh=68DNqEok2XhXHOmQ4/OhRUUJNNkVRuXHV71v+f39NZM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gvLSkwfAcQ8V+/WodB5dkaMyFIcNgQ0c4wdSL3yhrGFVXRe5cofRHaIdQUSO9Pyvo
-         22LHFHkAi+tqdaOSBaLBqRm0HEf3OmJUsWx/Mwlq5tZ5/pVkZLdzjW1ge2Y2lp7kzR
-         fdQPz8NWeAdP4f1t4VTa+wDsS1nprFL483diKtFE=
-Received: from mchehab by mail.kernel.org with local (Exim 4.94)
-        (envelope-from <mchehab@kernel.org>)
-        id 1kFac1-00B3qh-4u; Tue, 08 Sep 2020 12:12:29 +0200
+        s=default; t=1599560841;
+        bh=98uqJvpNFRRmztCSHPipazrlYRl/HX3TWgGmXTvF4iU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=U66DiOtCOmRyrxx1i/2Sq9Q3zt+MIZQEckcbSH3hXI68XJipOrOJd8BnhSlrxYz0W
+         NMyVQUztG2J9rNZeC/b7EVRUxy8RaDB5xy+My8XQhYHoYcFCeoeT9DoW1h6L3267vw
+         VOPjzaQQ8AAGsu9QXF6HkRk+5+ZYEKkWti7pCZgA=
+Date:   Tue, 8 Sep 2020 12:27:16 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        devel@driverdev.osuosl.org,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-media@vger.kernel.org,
+        Anant Thazhemadam <anant.thazhemadam@gmail.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 4/5] media: atomisp: move a static constant out of a header file
-Date:   Tue,  8 Sep 2020 12:12:25 +0200
-Message-ID: <a3280622dd3c85360c789e156f7b9d03bc8b2de3.1599141140.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.26.2
+Subject: Re: [PATCH 0/5] address W=1 warnings at staging/media/atomisp
+Message-ID: <20200908122716.09562b43@coco.lan>
 In-Reply-To: <cover.1599141140.git.mchehab+huawei@kernel.org>
 References: <cover.1599141140.git.mchehab+huawei@kernel.org>
+X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
-Message-ID: <20200908101225.bymKoLq3VJ4b3VYgO8Zi2RA6rNryQZjQRLRL9ycGSyU@z>
 
-Gcc reports that input_formatter_alignment is not used:
+Hi Greg,
 
-	In file included from ./drivers/staging/media/atomisp//pci/hive_isp_css_include/input_formatter.h:34,
-	                 from drivers/staging/media/atomisp//pci/runtime/debug/src/ia_css_debug.c:55:
-	./drivers/staging/media/atomisp//pci/hive_isp_css_common/host/input_formatter_local.h:118:27: warning: ‘input_formatter_alignment’ defined but not used [-Wunused-const-variable=]
+Em Tue,  8 Sep 2020 12:12:21 +0200
+Mauro Carvalho Chehab <mchehab+huawei@kernel.org> escreveu:
 
-However, it is, but only inside input_formatter.c.
+> The linux-media policy is to have zero warnings with W=1. However, when
+> I started using a Jenkins instance at https://builder.linuxtv.org to automate
+> such tests, I didn't notice that a bug at the scripts were just ignoring
+> warnings.
 
-So, move it out of the header file.
+Please ignore this patch series. It was sent by mistake instead
+of a completely unrelated one.
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- .../atomisp/pci/hive_isp_css_common/host/input_formatter.c    | 4 ++++
- .../pci/hive_isp_css_common/host/input_formatter_local.h      | 4 ----
- 2 files changed, 4 insertions(+), 4 deletions(-)
+This was already merged via the media tree.
 
-diff --git a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_formatter.c b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_formatter.c
-index 1b196cd265b9..5cd6136f21a2 100644
---- a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_formatter.c
-+++ b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_formatter.c
-@@ -27,6 +27,10 @@
- #include "input_formatter_private.h"
- #endif /* __INLINE_INPUT_FORMATTER__ */
- 
-+static const unsigned int input_formatter_alignment[N_INPUT_FORMATTER_ID] = {
-+	ISP_VEC_ALIGN, ISP_VEC_ALIGN, HIVE_ISP_CTRL_DATA_BYTES
-+};
-+
- const hrt_address HIVE_IF_SRST_ADDRESS[N_INPUT_FORMATTER_ID] = {
- 	INPUT_FORMATTER0_SRST_OFFSET,
- 	INPUT_FORMATTER1_SRST_OFFSET,
-diff --git a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_formatter_local.h b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_formatter_local.h
-index 94fff77584f7..dfb593c109af 100644
---- a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_formatter_local.h
-+++ b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_formatter_local.h
-@@ -115,8 +115,4 @@ struct input_formatter_bin_state_s {
- 	u32	en_status_update;
- };
- 
--static const unsigned int input_formatter_alignment[N_INPUT_FORMATTER_ID] = {
--	ISP_VEC_ALIGN, ISP_VEC_ALIGN, HIVE_ISP_CTRL_DATA_BYTES
--};
--
- #endif /* __INPUT_FORMATTER_LOCAL_H_INCLUDED__ */
--- 
-2.26.2
-
+Thanks,
+Mauro
