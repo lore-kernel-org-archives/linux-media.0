@@ -5,139 +5,116 @@ X-Spam-Level:
 X-Spam-Status: No, score=-14.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E37D6C10DAA
-	for <linux-media@archiver.kernel.org>; Wed,  9 Sep 2020 17:11:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E598EC433E2
+	for <linux-media@archiver.kernel.org>; Wed,  9 Sep 2020 17:14:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 94B94208FE
-	for <linux-media@archiver.kernel.org>; Wed,  9 Sep 2020 17:11:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A0A5C21919
+	for <linux-media@archiver.kernel.org>; Wed,  9 Sep 2020 17:14:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="GhZMVx7p"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="Nc8rWaiK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730846AbgIIRKu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Sep 2020 13:10:50 -0400
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:51023 "EHLO
-        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727976AbgIIPfE (ORCPT
+        id S1728611AbgIIRNz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Sep 2020 13:13:55 -0400
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:56799 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730021AbgIIPcF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 9 Sep 2020 11:35:04 -0400
+        Wed, 9 Sep 2020 11:32:05 -0400
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id G14wkjX7EXgwIG14xkZkWe; Wed, 09 Sep 2020 16:28:08 +0200
+        id G0fHkjNw8XgwIG0fIkZfqA; Wed, 09 Sep 2020 16:01:36 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1599661688; bh=+xRI7RCVjWPFLjTuzSdpKFeCB3MzDQJw+96p0B8ybuQ=;
+        t=1599660096; bh=i+JQnXb+Wd/uX2BD58/h8euU8jNSO1h3eT+5kMLBFiA=;
         h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
          Subject;
-        b=GhZMVx7pRGfoeYUSkx+6M0RckAcR1G9X/4Z1Z7eKsxh9pkUJuKeQkeHnsrDfozlB7
-         fV1d5JNDKC61U1UFhVchtDeVN3NaJxdVdmFBRbzDoyaTDB8l/K0yYz0oj0ZT1MCIO6
-         TOfNLINWQVC4n7rQq5AThsjvsPmygt8tmZ6ll8qlBvgzZCimKb1VEIbmhreGVeoZTc
-         fLZ85a/y1BBSAcV5fczOpK5HQ0Wpv0QjvKH4qfdMYKaH41yINXEpkBQbb4X740v1KB
-         1CBv6JL9Qk9JzlYLkmNnMgMdcqeBHT8YuVDaq/HZBogfWRz55VpFtTsfwvyi9gn47y
-         hxuBCrPmakEBw==
-Subject: Re: [PATCH] media: em28xx: fix function pointer check
-To:     trix@redhat.com, mchehab@kernel.org, natechancellor@gmail.com,
-        ndesaulniers@google.com, brad@nextdimension.cc, mkrufky@linuxtv.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-References: <20200903145038.20076-1-trix@redhat.com>
+        b=Nc8rWaiKuDJCk98btheXEBVPsnTr/rEzXBShA4EdhMWQkvHPskg2RH5KkDQOBvv0w
+         /zZlegmS4EqDmDCZOr4tHdnaq2S27LfDwJFzJ8iqFhbNzUUfQ4sUv2DIZpOFKwyQui
+         eDUzm5PCMq99tvfOc4DEd98/Hy2jTzU7Yt/WO096nkBqa8pATGEjBOPPWUl4uih6BR
+         7fBTDkPvNCPhW4sgxcVdyyz5h4L4i4uiZo2z/pKSWQIBME06nZssMuYknxuUnClGmc
+         JFvTyNF2bUJJxPxanqKefR6rRjx7UPw7ZYVPQpkcJOEFTHAR0Ob+gWONOWek+N6e7u
+         KEOY63uJc/BJw==
+Subject: Re: [PATCHv2] fix GCC enum warning
+To:     Rosen Penev <rosenp@gmail.com>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>
+References: <20200803213929.34616-1-rosenp@gmail.com>
+ <992328dc-8ad5-063c-69fc-b01364bf3011@xs4all.nl>
+ <CAKxU2N8CjSw+awumPNL_9WfdvXMbSBtmRDtfq9AsL7P2sppJWQ@mail.gmail.com>
 From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <65584276-f49c-15c9-5f20-a4e5f5fe5085@xs4all.nl>
-Date:   Wed, 9 Sep 2020 16:28:06 +0200
+Message-ID: <c88d0408-63a8-7216-b2c5-2966135a5fcf@xs4all.nl>
+Date:   Wed, 9 Sep 2020 16:01:35 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200903145038.20076-1-trix@redhat.com>
+In-Reply-To: <CAKxU2N8CjSw+awumPNL_9WfdvXMbSBtmRDtfq9AsL7P2sppJWQ@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfK0x4z69G0pcN0tTyBl9g89oLI40CCA1Pcs6+GL8aCFjhEJWXG1+Fp/IEtwiTOlOPLh63xcX/ctPdCy/4klHm+VaxJzPhy+afVtZY62B2TEirP2HL1qf
- YV/AfjMvr86y2vsJj//XYI3hm8N57Og9gM30h6lUlp9j+94aX/BSkc5DzA9hJF/3Qzqy9zCQ2ovoCZoX2oN/ynVm+bMoVvJ9mXoVw+dS/ECWlUZyTyT6ZQNG
- qmBqg4DFcYXVSz1HLXcvyXQ66fz50w5zNVJHdbMzE7xTrxHlFUNBdDwvLckTvbRQD6RRu+iMx2jKZXBYlM0LMusm6z0Wdly4uY25757jT6wJ2Uvj2JkKoVtL
- 7EDr/cykZK+ssUldtBs17BGk7XZd/V8fH3hbcuEj6MNvlB5nu1LS5L1STLA37L14Yy8bl24HxIWRRTG39hvNz52p1+OOU5c88TW/YguYpjq2c954K2MQYryY
- c2dSOckvGMqKK5W1okBJ3RE/UfoNy3pDnj3oJW/UcNb5ekMesMT7V+U1gJF+dEagNWHtMPX+ioSIEW7ERdqOYadyQ5DTAHQpFRXKVA==
+X-CMAE-Envelope: MS4wfGeQ2E+AuA9AX6mkx2IvWujEOss40Fuza9xkISQeXqPNm5ReoIMsEZZSFNMIbu248fxpOf0s62uBm8buN7bUjiyPrG7xhdoGCD6HKL+Kg9sFAH2yVG9T
+ 3B42rY0l8U9BPonZgue86Z+4yIx6y86vYwT7Ic2WLDDtDwN0eXQBHo7f6KDDWbTuZLNEy3hPcjyTUcNyKo887oNk+H/XiFpT3KGHvyYXzbYAu7wEamSKOi06
+ FuL7/8TA15+Nu+aqC2Ii5gjtzMMKSSQllssT1HQOMQmtBeZR/d/KFO758VkpfjAbe3mUY0VBCiyJqa/V97pA2w==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 03/09/2020 16:50, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
-> 
-> clang static analyzer reports this problem
-> 
-> em28xx-core.c:1162:4: warning: Called function pointer
->   is null (null dereference)
->         ops->suspend(dev->dev_next);
->         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> This is the problem block
-> 
-> 	if (ops->suspend)
-> 		ops->suspend(dev);
-> 	if (dev->dev_next)
-> 		ops->suspend(dev->dev_next);
-> 
-> The check for ops->suspend only covers one statement.
-> So fix the check consistent with other similar in
-> the file.
-> 
-> Change a similar check in em28xx_resume_extension()
-> to use consistent logic as its siblings.
-> 
-> Fixes: be7fd3c3a8c5 ("media: em28xx: Hauppauge DualHD second tuner functionality")
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/media/usb/em28xx/em28xx-core.c | 17 +++++++++--------
->  1 file changed, 9 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/media/usb/em28xx/em28xx-core.c b/drivers/media/usb/em28xx/em28xx-core.c
-> index e6088b5d1b80..d60f4c2a661d 100644
-> --- a/drivers/media/usb/em28xx/em28xx-core.c
-> +++ b/drivers/media/usb/em28xx/em28xx-core.c
-> @@ -1156,10 +1156,11 @@ int em28xx_suspend_extension(struct em28xx *dev)
->  	dev_info(&dev->intf->dev, "Suspending extensions\n");
->  	mutex_lock(&em28xx_devlist_mutex);
->  	list_for_each_entry(ops, &em28xx_extension_devlist, next) {
-> -		if (ops->suspend)
-> +		if (ops->suspend) {
->  			ops->suspend(dev);
-> -		if (dev->dev_next)
-> -			ops->suspend(dev->dev_next);
-> +			if (dev->dev_next)
-> +				ops->suspend(dev->dev_next);
-> +		}
->  	}
->  	mutex_unlock(&em28xx_devlist_mutex);
->  	return 0;
-> @@ -1172,11 +1173,11 @@ int em28xx_resume_extension(struct em28xx *dev)
->  	dev_info(&dev->intf->dev, "Resuming extensions\n");
->  	mutex_lock(&em28xx_devlist_mutex);
->  	list_for_each_entry(ops, &em28xx_extension_devlist, next) {
-> -		if (!ops->resume)
-> -			continue;
+On 21/08/2020 00:12, Rosen Penev wrote:
+> On Thu, Aug 20, 2020 at 5:26 AM Hans Verkuil <hverkuil@xs4all.nl> wrote:
+>>
+>> On 03/08/2020 23:39, Rosen Penev wrote:
+>>> Found with -Wenum-compare
+>>>
+>>> ../utils/common/v4l-helpers.h:880:36: warning: enumerated and
+>>> non-enumerated type in conditional expression [-Wextra]
+>>>   880 |  return hsv_enc < V4L2_HSV_ENC_180 ? V4L2_HSV_ENC_180 : hsv_enc;
+>>>
+>>> Signed-off-by: Rosen Penev <rosenp@gmail.com>
+>>> ---
+>>>  v2: Added warning message.
+>>>  utils/common/v4l-helpers.h | 2 +-
+>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/utils/common/v4l-helpers.h b/utils/common/v4l-helpers.h
+>>> index e093e717..edd21c16 100644
+>>> --- a/utils/common/v4l-helpers.h
+>>> +++ b/utils/common/v4l-helpers.h
+>>> @@ -877,7 +877,7 @@ v4l_format_g_hsv_enc(const struct v4l2_format *fmt)
+>>>  {
+>>>       unsigned hsv_enc = v4l_format_g_ycbcr_enc(fmt);
+>>
+>> Does the warning go away if you replace 'unsigned' with enum v4l2_hsv_encoding?
+> ../utils/common/v4l-helpers.h:878:25: error: cannot initialize a
+> variable of type 'enum v4l2_hsv_encoding' with an rvalue of type
+> 'unsigned int'
+>         enum v4l2_hsv_encoding hsv_enc = v4l_format_g_ycbcr_enc(fmt);
 
-Actually, this code is fine: if !ops->resume, then just continue.
+Urgh.
 
-So there is no need to change this resume code.
+How about this:
 
-And in fact, I think it would be best if the same approach was used in
-em28xx_suspend_extension.
+	if (hsv_enc < V4L2_HSV_ENC_180)
+		return V4L2_HSV_ENC_180;
+	return hsv_enc;
 
 Regards,
 
 	Hans
 
-> -		ops->resume(dev);
-> -		if (dev->dev_next)
-> -			ops->resume(dev->dev_next);
-> +		if (ops->resume) {
-> +			ops->resume(dev);
-> +			if (dev->dev_next)
-> +				ops->resume(dev->dev_next);
-> +		}
->  	}
->  	mutex_unlock(&em28xx_devlist_mutex);
->  	return 0;
 > 
+>>
+>> I would like that a lot better than casting V4L2_HSV_ENC_180.
+>>
+>> Regards,
+>>
+>>         Hans
+>>
+>>>
+>>> -     return hsv_enc < V4L2_HSV_ENC_180 ? V4L2_HSV_ENC_180 : hsv_enc;
+>>> +     return hsv_enc < V4L2_HSV_ENC_180 ? unsigned(V4L2_HSV_ENC_180) : hsv_enc;
+>>>  }
+>>>
+>>>  static inline void v4l_format_s_quantization(struct v4l2_format *fmt,
+>>>
+>>
 
