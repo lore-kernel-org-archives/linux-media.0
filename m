@@ -2,102 +2,114 @@ Return-Path: <SRS0=g+iK=CT=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 920A0C433E2
-	for <linux-media@archiver.kernel.org>; Thu, 10 Sep 2020 12:25:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CE23C433E2
+	for <linux-media@archiver.kernel.org>; Thu, 10 Sep 2020 12:45:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5CE242075A
-	for <linux-media@archiver.kernel.org>; Thu, 10 Sep 2020 12:25:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DB40C20829
+	for <linux-media@archiver.kernel.org>; Thu, 10 Sep 2020 12:45:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725971AbgIJMZc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 10 Sep 2020 08:25:32 -0400
-Received: from www.linuxtv.org ([130.149.80.248]:42426 "EHLO www.linuxtv.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730656AbgIJMWw (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 10 Sep 2020 08:22:52 -0400
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1kGLVL-004D3K-Pw; Thu, 10 Sep 2020 12:16:43 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1kGLdu-00060r-K0; Thu, 10 Sep 2020 12:25:34 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL FOR v5.10] Various fixes and enhancements (CSC uAPI) (#66870)
-Date:   Thu, 10 Sep 2020 12:25:34 +0000
-Message-Id: <20200910122534.23072-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <707bbc69-b071-4fb0-71ff-a54eb87a60f9@xs4all.nl>
-References: 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1730813AbgIJMpm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 10 Sep 2020 08:45:42 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:45909 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730474AbgIJMo7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 10 Sep 2020 08:44:59 -0400
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 10 Sep 2020 05:44:35 -0700
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 10 Sep 2020 05:44:34 -0700
+Received: from c-mansur-linux.qualcomm.com ([10.204.90.208])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 10 Sep 2020 18:14:23 +0530
+Received: by c-mansur-linux.qualcomm.com (Postfix, from userid 461723)
+        id 5305E21D23; Thu, 10 Sep 2020 18:14:22 +0530 (IST)
+From:   Mansur Alisha Shaik <mansur@codeaurora.org>
+To:     linux-media@vger.kernel.org, stanimir.varbanov@linaro.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        vgarodia@codeaurora.org,
+        Mansur Alisha Shaik <mansur@codeaurora.org>
+Subject: [PATCH v2 1/3] venus: core: handle race condititon for core ops
+Date:   Thu, 10 Sep 2020 18:14:14 +0530
+Message-Id: <1599741856-16239-2-git-send-email-mansur@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1599741856-16239-1-git-send-email-mansur@codeaurora.org>
+References: <1599741856-16239-1-git-send-email-mansur@codeaurora.org>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+For core ops we are having only write protect but there
+is no read protect, because of this in multthreading
+and concurrency, one CPU core is reading without wait
+which is causing the NULL pointer dereferece crash.
 
-Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/707bbc69-b071-4fb0-71ff-a54eb87a60f9@xs4all.nl/
-Build log: https://builder.linuxtv.org/job/patchwork/67709/
-Build time: 00:03:31
-Link: https://lore.kernel.org/linux-media/707bbc69-b071-4fb0-71ff-a54eb87a60f9@xs4all.nl
+one such scenario is as show below, where in one CPU
+core, core->ops becoming NULL and in another CPU core
+calling core->ops->session_init().
 
-gpg: Signature made Thu 10 Sep 2020 11:01:59 AM UTC
-gpg:                using RSA key AAA7FFBA4D2D77EF4CAEA1421326E0CD23ABDCE5
-gpg: Good signature from "Hans Verkuil <hverkuil-cisco@xs4all.nl>" [unknown]
-gpg:                 aka "Hans Verkuil <hverkuil@xs4all.nl>" [full]
+CPU: core-7:
+Call trace:
+ hfi_session_init+0x180/0x1dc [venus_core]
+ vdec_queue_setup+0x9c/0x364 [venus_dec]
+ vb2_core_reqbufs+0x1e4/0x368 [videobuf2_common]
+ vb2_reqbufs+0x4c/0x64 [videobuf2_v4l2]
+ v4l2_m2m_reqbufs+0x50/0x84 [v4l2_mem2mem]
+ v4l2_m2m_ioctl_reqbufs+0x2c/0x38 [v4l2_mem2mem]
+ v4l_reqbufs+0x4c/0x5c
+__video_do_ioctl+0x2b0/0x39c
 
-Summary: got 4/19 patches with issues, being 4 at build time, plus one error when buinding PDF document
+CPU: core-0:
+Call trace:
+ venus_shutdown+0x98/0xfc [venus_core]
+ venus_sys_error_handler+0x64/0x148 [venus_core]
+ process_one_work+0x210/0x3d0
+ worker_thread+0x248/0x3f4
+ kthread+0x11c/0x12c
 
-Error/warnings:
+Signed-off-by: Mansur Alisha Shaik <mansur@codeaurora.org>
+Acked-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+---
+Changes in V2:
+- Addressed review comments by stan by validating on top
+- of https://lore.kernel.org/patchwork/project/lkml/list/?series=455962
 
-patches/0001-media-usb-uvc-no-need-to-check-return-value-of-debug.patch:
+ drivers/media/platform/qcom/venus/hfi.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-    allyesconfig: return code #0:
-	../drivers/staging/media/atomisp/pci/atomisp_compat_css20.c: ../drivers/staging/media/atomisp/pci/atomisp_compat_css20.c:703 is_pipe_valid_to_current_run_mode() warn: ignoring unreachable code.
-	../drivers/staging/media/atomisp/pci/sh_css.c:1685:16: warning: assignment left-hand side might be a candidate for a format attribute [-Wsuggest-attribute=format]
-
-    allyesconfig: return code #0:
-	../drivers/media/test-drivers/vivid/vivid-core.c: ../drivers/media/test-drivers/vivid/vivid-core.c:1909 vivid_create_instance() parse error: turning off implications after 60 seconds
-	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2841 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
-
-patches/0005-v4l2-add-support-for-colorspace-conversion-API-CSC-f.patch:
-
-    allyesconfig: return code #0:
-	../drivers/staging/media/atomisp/pci/atomisp_compat_css20.c: ../drivers/staging/media/atomisp/pci/atomisp_compat_css20.c:703 is_pipe_valid_to_current_run_mode() warn: ignoring unreachable code.
-	../drivers/staging/media/atomisp/pci/sh_css.c:1685:16: warning: assignment left-hand side might be a candidate for a format attribute [-Wsuggest-attribute=format]
-
-    allyesconfig: return code #0:
-	../drivers/media/test-drivers/vivid/vivid-core.c: ../drivers/media/test-drivers/vivid/vivid-core.c:1909 vivid_create_instance() parse error: turning off implications after 60 seconds
-	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2856 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
-
-patches/0006-media-vivid-Add-support-to-the-CSC-API.patch:
-
-    allyesconfig: return code #0:
-	../drivers/staging/media/atomisp/pci/sh_css.c:1685:16: warning: assignment left-hand side might be a candidate for a format attribute [-Wsuggest-attribute=format]
-	../drivers/staging/media/atomisp/pci/atomisp_compat_css20.c: ../drivers/staging/media/atomisp/pci/atomisp_compat_css20.c:703 is_pipe_valid_to_current_run_mode() warn: ignoring unreachable code.
-
-    allyesconfig: return code #0:
-	../drivers/media/test-drivers/vivid/vivid-core.c: ../drivers/media/test-drivers/vivid/vivid-core.c:1909 vivid_create_instance() parse error: turning off implications after 60 seconds
-	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2841 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
-
-patches/0007-v4l2-extend-the-CSC-API-to-subdevice.patch:
-
-    allyesconfig: return code #0:
-	../drivers/staging/media/atomisp/pci/atomisp_compat_css20.c: ../drivers/staging/media/atomisp/pci/atomisp_compat_css20.c:703 is_pipe_valid_to_current_run_mode() warn: ignoring unreachable code.
-	../drivers/staging/media/atomisp/pci/sh_css.c:1685:16: warning: assignment left-hand side might be a candidate for a format attribute [-Wsuggest-attribute=format]
-
-    allyesconfig: return code #0:
-	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2841 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
-
-
-Error #512 when building PDF docs
+diff --git a/drivers/media/platform/qcom/venus/hfi.c b/drivers/media/platform/qcom/venus/hfi.c
+index a59022a..3137071 100644
+--- a/drivers/media/platform/qcom/venus/hfi.c
++++ b/drivers/media/platform/qcom/venus/hfi.c
+@@ -195,7 +195,7 @@ EXPORT_SYMBOL_GPL(hfi_session_create);
+ int hfi_session_init(struct venus_inst *inst, u32 pixfmt)
+ {
+ 	struct venus_core *core = inst->core;
+-	const struct hfi_ops *ops = core->ops;
++	const struct hfi_ops *ops;
+ 	int ret;
+ 
+ 	if (inst->state != INST_UNINIT)
+@@ -204,10 +204,13 @@ int hfi_session_init(struct venus_inst *inst, u32 pixfmt)
+ 	inst->hfi_codec = to_codec_type(pixfmt);
+ 	reinit_completion(&inst->done);
+ 
++	mutex_lock(&core->lock);
++	ops = core->ops;
+ 	ret = ops->session_init(inst, inst->session_type, inst->hfi_codec);
+ 	if (ret)
+ 		return ret;
+ 
++	mutex_unlock(&core->lock);
+ 	ret = wait_session_msg(inst);
+ 	if (ret)
+ 		return ret;
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
+of Code Aurora Forum, hosted by The Linux Foundation
 
