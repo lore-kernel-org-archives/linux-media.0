@@ -5,39 +5,64 @@ X-Spam-Level:
 X-Spam-Status: No, score=-14.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AFBFC433E2
-	for <linux-media@archiver.kernel.org>; Thu, 10 Sep 2020 21:06:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CEE7C43461
+	for <linux-media@archiver.kernel.org>; Thu, 10 Sep 2020 21:25:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6261821D91
-	for <linux-media@archiver.kernel.org>; Thu, 10 Sep 2020 21:06:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 30DB721D92
+	for <linux-media@archiver.kernel.org>; Thu, 10 Sep 2020 21:25:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727983AbgIJVGR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 10 Sep 2020 17:06:17 -0400
-Received: from foss.arm.com ([217.140.110.172]:37582 "EHLO foss.arm.com"
+        id S1728157AbgIJVYg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 10 Sep 2020 17:24:36 -0400
+Received: from foss.arm.com ([217.140.110.172]:37282 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731060AbgIJOgK (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 10 Sep 2020 10:36:10 -0400
+        id S1731004AbgIJOXM (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 10 Sep 2020 10:23:12 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E1CB8113E;
-        Thu, 10 Sep 2020 07:36:09 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E3BEB11B3;
+        Thu, 10 Sep 2020 07:21:17 -0700 (PDT)
 Received: from [10.57.40.122] (unknown [10.57.40.122])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 314173F66E;
-        Thu, 10 Sep 2020 07:36:09 -0700 (PDT)
-Subject: Re: [PATCH] media: venus: core: Drop local dma_parms
-To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <e5384b296a0af099dc502572752df149127b7947.1599167568.git.robin.murphy@arm.com>
- <c474d49b-7800-28c6-d73b-20a6d2258e9e@linaro.org>
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1B4783F66E;
+        Thu, 10 Sep 2020 07:21:08 -0700 (PDT)
+Subject: Re: [trivial PATCH] treewide: Convert switch/case fallthrough; to
+ break;
+To:     Joe Perches <joe@perches.com>, LKML <linux-kernel@vger.kernel.org>,
+        Jiri Kosina <trivial@kernel.org>
+Cc:     linux-wireless@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        oss-drivers@netronome.com, nouveau@lists.freedesktop.org,
+        alsa-devel <alsa-devel@alsa-project.org>,
+        dri-devel@lists.freedesktop.org, linux-ide@vger.kernel.org,
+        dm-devel@redhat.com, linux-mtd@lists.infradead.org,
+        linux-i2c@vger.kernel.org, sparclinux@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu, linux-rtc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+        dccp@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net,
+        linux-afs@lists.infradead.org, coreteam@netfilter.org,
+        intel-wired-lan@lists.osuosl.org, linux-serial@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org,
+        Kees Cook <kees.cook@canonical.com>,
+        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, linux-sctp@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-nvme@lists.infradead.org,
+        storagedev@microchip.com, ceph-devel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-parisc@vger.kernel.org, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-mips@vger.kernel.org, iommu@lists.linux-foundation.org,
+        netfilter-devel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Will Deacon <will@kernel.org>
+References: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
 From:   Robin Murphy <robin.murphy@arm.com>
-Message-ID: <8781a8eb-e472-0201-b773-e8b82325675c@arm.com>
-Date:   Thu, 10 Sep 2020 15:36:08 +0100
+Message-ID: <9372456a-8dcf-2735-57a4-e126aa5df3a6@arm.com>
+Date:   Thu, 10 Sep 2020 15:21:05 +0100
 User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <c474d49b-7800-28c6-d73b-20a6d2258e9e@linaro.org>
+In-Reply-To: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
@@ -46,53 +71,50 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 2020-09-04 21:26, Stanimir Varbanov wrote:
-> Hi Robin,
+On 2020-09-09 21:06, Joe Perches wrote:
+> fallthrough to a separate case/default label break; isn't very readable.
 > 
-> Thanks for the patch!
+> Convert pseudo-keyword fallthrough; statements to a simple break; when
+> the next label is case or default and the only statement in the next
+> label block is break;
 > 
-> On 9/4/20 12:14 AM, Robin Murphy wrote:
->> Since commit 9495b7e92f71 ("driver core: platform: Initialize dma_parms
->> for platform devices"), struct platform_device already provides a
->> dma_parms structure, so we can save allocating another one.
->>
->> Also the DMA segment size is simply a size, not a bitmask.
->>
->> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
->> ---
->>   drivers/media/platform/qcom/venus/core.c | 8 +-------
->>   1 file changed, 1 insertion(+), 7 deletions(-)
->>
->> diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
->> index 203c6538044f..2fa9275d75ff 100644
->> --- a/drivers/media/platform/qcom/venus/core.c
->> +++ b/drivers/media/platform/qcom/venus/core.c
->> @@ -226,13 +226,7 @@ static int venus_probe(struct platform_device *pdev)
->>   	if (ret)
->>   		return ret;
->>   
->> -	if (!dev->dma_parms) {
->> -		dev->dma_parms = devm_kzalloc(dev, sizeof(*dev->dma_parms),
->> -					      GFP_KERNEL);
->> -		if (!dev->dma_parms)
->> -			return -ENOMEM;
->> -	}
->> -	dma_set_max_seg_size(dev, DMA_BIT_MASK(32));
->> +	dma_set_max_seg_size(dev, UINT_MAX);
+> Found using:
 > 
-> To be correct we should check for EIO error?
+> $ grep-2.5.4 -rP --include=*.[ch] -n "fallthrough;(\s*(case\s+\w+|default)\s*:\s*){1,7}break;" *
+> 
+> Miscellanea:
+> 
+> o Move or coalesce a couple label blocks above a default: block.
+> 
+> Signed-off-by: Joe Perches <joe@perches.com>
+> ---
+> 
+> Compiled allyesconfig x86-64 only.
+> A few files for other arches were not compiled.
+> 
 
-Well, half the point of 9495b7e92f71 was to make sure that 
-dma_set_max_seg_size() cannot fail for platform drivers. Thus if we're 
-taking advantage of that change to make the assumption that we never 
-need to allocate dma_parms here, then an error check would be redundant 
-by definition ;)
+[...]
+> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> index c192544e874b..743db1abec40 100644
+> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> @@ -3777,7 +3777,7 @@ static int arm_smmu_device_hw_probe(struct arm_smmu_device *smmu)
+>   	switch (FIELD_GET(IDR0_TTF, reg)) {
+>   	case IDR0_TTF_AARCH32_64:
+>   		smmu->ias = 40;
+> -		fallthrough;
+> +		break;
+>   	case IDR0_TTF_AARCH64:
+>   		break;
+>   	default:
+
+I have to say I don't really agree with the readability argument for 
+this one - a fallthrough is semantically correct here, since the first 
+case is a superset of the second. It just happens that anything we would 
+do for the common subset is implicitly assumed (there are other 
+potential cases we simply haven't added support for at the moment), thus 
+the second case is currently empty.
+
+This change actively obfuscates that distinction.
 
 Robin.
-
-> 
->>   
->>   	INIT_LIST_HEAD(&core->instances);
->>   	mutex_init(&core->lock);
->>
-> 
