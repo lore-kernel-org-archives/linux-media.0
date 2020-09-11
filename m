@@ -2,145 +2,302 @@ Return-Path: <SRS0=cWAp=CU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B14BBC43461
-	for <linux-media@archiver.kernel.org>; Fri, 11 Sep 2020 08:59:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F771C433E2
+	for <linux-media@archiver.kernel.org>; Fri, 11 Sep 2020 09:16:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 49C7D206CA
-	for <linux-media@archiver.kernel.org>; Fri, 11 Sep 2020 08:59:28 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=renesasgroup.onmicrosoft.com header.i=@renesasgroup.onmicrosoft.com header.b="b7+DvHV6"
+	by mail.kernel.org (Postfix) with ESMTP id C941C2087C
+	for <linux-media@archiver.kernel.org>; Fri, 11 Sep 2020 09:16:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725794AbgIKI70 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Sep 2020 04:59:26 -0400
-Received: from mail-eopbgr1410120.outbound.protection.outlook.com ([40.107.141.120]:8928
-        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725783AbgIKI7S (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 11 Sep 2020 04:59:18 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JR9SjLUuKqN7D2TtQ79L27e+635nEiPTgRW8YNS4uTbJB3DijDXUNxjvBzyVEXZ1i91mjkpGEUbAem9X2bvNZhzaGFtkbH/kH1Ce3BeO/8x5fkQJ3o7ZufdXx3S46UScjl6KbOtstIEquN/Mxk4xidDJc9tT+0GCjfGf5TdBJ6Tn/2vJr2L2j0VYT+Ky3CPpMsrGzqiFlRJ3Obm06OZYHKhLq3bJxLyOw6Q2Q79mrz075IwEWOQZDvlIRW+hhn6FwE9HiOu/xdjj94XqDDELr/Pu+uzFxhO572DyrObj3RhNcm3G/1AzbiaLLoiMb+QCa0lvTH8PmjUfyKxdpzJmhw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0TmDflnWz40M7ga8eJq74wW1IWiW2z2NHf6I7rjeY28=;
- b=e5wNwwoQUxpDippiyJ0yBn6oH1cV9FEhybhHNjG0DLFfqlm/RWa11uHlGII8Jg+U797rdnGkDt91jrdZOZosyr6pkEFZiTQLx/AeY9/HRv/CT6tPeKgUm39A0r9bfr8NxDnKm9EpCtFtDT0sp+bMcRp0L65zPG+8luohoJpRZUbvT5zPPBovs8R+onQqEYGLTUvmmtDEmNzrQlJ8wh2pFG9y6C/x1UTUF3WvU26XvuMTWLr3r4iljoMjMAzGCZi+8nL0smMcz4rIotEyPzC9oHuygjK0E5I72GSLANqoniKH4PuMm+yY7kJ78++G2BQrLNO4X3Yqu2G+LoLcCeWHDw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0TmDflnWz40M7ga8eJq74wW1IWiW2z2NHf6I7rjeY28=;
- b=b7+DvHV685vf3U7eO6SYdgngsVtjPDHoFPfIQFpzu4k6F7c7yN0lRyPP3MnqgtiKS2MvYEGj8aIcKz/psMPThCELI12QxP3Klt9XUknpk1gpkd4jlUl3gjUhJqgr4tZs+oUahPXKQxJgvja8OYnOa8Eh402wj4D/QGLDNaUzKbc=
-Received: from OSBPR01MB5048.jpnprd01.prod.outlook.com (2603:1096:604:38::10)
- by OSBPR01MB5046.jpnprd01.prod.outlook.com (2603:1096:604:7b::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16; Fri, 11 Sep
- 2020 08:59:13 +0000
-Received: from OSBPR01MB5048.jpnprd01.prod.outlook.com
- ([fe80::cdbe:6988:b51c:51a3]) by OSBPR01MB5048.jpnprd01.prod.outlook.com
- ([fe80::cdbe:6988:b51c:51a3%6]) with mapi id 15.20.3370.017; Fri, 11 Sep 2020
- 08:59:13 +0000
-From:   Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Jacopo Mondi <jacopo@jmondi.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-CC:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>,
-        "laurent.pinchart@ideasonboard.com" 
-        <laurent.pinchart@ideasonboard.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>, Rob Herring <robh@kernel.org>
-Subject: RE: [PATCH v5 2/3] dt-bindings: media: ov772x: Make bus-type
- mandatory
-Thread-Topic: [PATCH v5 2/3] dt-bindings: media: ov772x: Make bus-type
- mandatory
-Thread-Index: AQHWh43k71JChNqS1EGqGfC4KPnIw6li7EyAgAA4EID////lkA==
-Date:   Fri, 11 Sep 2020 08:59:13 +0000
-Message-ID: <OSBPR01MB5048CACE31FB094F753F4F55AA240@OSBPR01MB5048.jpnprd01.prod.outlook.com>
-References: <20200910162055.614089-1-jacopo+renesas@jmondi.org>
- <20200910162055.614089-3-jacopo+renesas@jmondi.org>
- <20200911053757.GF6566@paasikivi.fi.intel.com>
- <20200911085837.kyxx3p465ovowcel@uno.localdomain>
-In-Reply-To: <20200911085837.kyxx3p465ovowcel@uno.localdomain>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: jmondi.org; dkim=none (message not signed)
- header.d=none;jmondi.org; dmarc=none action=none header.from=bp.renesas.com;
-x-originating-ip: [193.141.220.21]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 50379594-c299-47b9-714f-08d85630f48f
-x-ms-traffictypediagnostic: OSBPR01MB5046:
-x-microsoft-antispam-prvs: <OSBPR01MB5046CBC891A0375D5BF2AE04AA240@OSBPR01MB5046.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: JOPP9pXGkQBEJ/Z4h3pwj6YWxQjIcm1ZGAW8KIc1dgHBbWO69eUtR+kh4Mk24r/VSXQo7Uy/43LvbJX8e5ZCxZ1T6RxhqhIxB4F3SLfk9N7CV8Y6Ye5WFrqfuygTFpEQYbKHcTwckcT6jBT/BtGvZyDh2Ut1YhAJlv04fMkwgdVAIpnJvqLeZhzvV2Ez8UTaWz9q5ta3GjJZVKR8d9xqy7/byVlZAsk8fyvC//x7qQAZ5LDVJevREzFvAl1WEdHyfYTjdIJrNfqjIdJgaM5hWUo+dCeSSE8BpWMnBIcjocoPjfXyjelBBQTorAGOjW0Yh/dvbxg6taIaQ+ntp34Scg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSBPR01MB5048.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(136003)(376002)(39860400002)(396003)(346002)(110136005)(5660300002)(2906002)(6506007)(86362001)(8936002)(478600001)(53546011)(66556008)(83380400001)(316002)(7416002)(7696005)(54906003)(33656002)(71200400001)(66476007)(64756008)(55016002)(26005)(8676002)(186003)(76116006)(4326008)(66946007)(52536014)(66446008)(9686003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: GJzo2/0Tj+6URqOm+ekfVlMXpf+GqRF9v+uKY+4f+Hc8NHnf+m/1O5m9TjXXx15cStrkqlwpnPq7/brD8I6dF/ZFkN37SWC6GpONrcq+h8qhUk41rBwKpNfpTWg8qA8anzSYOd37bouuexfuJfvWuABtSH9KgdxfQLSNUDVK1gmys2ypHgUeTbLnNqK1FFS1ALW9NFZMFF9nhFLmRnNQNGPgM75RnjMGh4LlZLxbhIe9cSiHVhmQu6YRBvlNJR66MG9NHj31YtrWJBm1ZXBWuRxdbb5m7AsaHUTGTLb37+3dsB+8GtpgPLX75XXjKczKtPrDFNS5bG5no4zqGcyaZk8oNZfJ0gDxl8LdGPm+h7pBLCIk4XJVGXmd04DRq1cL1OOl+/p9Qe2RXLPf1Jd11kbuLHBRq3mtTq11LvVZ/cZ2ELf6oyuRIQEAVGLbgwmDKWooO+e2jJTLLf+lR+n1bYplH4m1062FVqDAeQS9GAD9A+RGiXHN5mAvg0iyza1J8ag3ngOnWYpSiYdWhWSEyY1dhScPqRVsVNV8VJRmzj52q2iuNgcmbALXbYQBlW+4ybNKTqposctGlFZBoPdPdnP/PptFWIPSOzC1orp1tk9sQ+K8LRhDiS75kZpJ8szXtA29riqjFCQmScYpmx+HKg==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1725774AbgIKJQe convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Sep 2020 05:16:34 -0400
+Received: from www.linuxtv.org ([130.149.80.248]:43674 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725835AbgIKJQa (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 11 Sep 2020 05:16:30 -0400
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1kGf4W-005JUa-Oq; Fri, 11 Sep 2020 09:10:21 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1kGfD6-0003xu-GF; Fri, 11 Sep 2020 09:19:12 +0000
+Date:   Fri, 11 Sep 2020 09:19:12 +0000 (UTC)
+From:   Jenkins Builder Robot <jenkins@linuxtv.org>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org
+Message-ID: <2041009865.0.1599815952475@builder.linuxtv.org>
+Subject: Build failed in Jenkins: media-build #3213
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OSBPR01MB5048.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 50379594-c299-47b9-714f-08d85630f48f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Sep 2020 08:59:13.0827
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 92xdwTIm8V0udqAb6s8dyIY5uBp08kC/FvGXDa91Br4L/osryDAejR/JTQ4G7YUybcQujLwcQL9x71h6vknkyM3h9Wei/86kL5TIqzQvEbB9CEWIvUiLuhquoEtmGU0r
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSBPR01MB5046
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
+X-Jenkins-Job: media-build
+X-Jenkins-Result: FAILURE
+Auto-submitted: auto-generated
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-SGkgSmFjb3BvLA0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IEphY29w
-byBNb25kaSA8amFjb3BvQGptb25kaS5vcmc+DQo+IFNlbnQ6IDExIFNlcHRlbWJlciAyMDIwIDA5
-OjU5DQo+IFRvOiBTYWthcmkgQWlsdXMgPHNha2FyaS5haWx1c0BsaW51eC5pbnRlbC5jb20+DQo+
-IENjOiBKYWNvcG8gTW9uZGkgPGphY29wbytyZW5lc2FzQGptb25kaS5vcmc+OyByb2JoK2R0QGtl
-cm5lbC5vcmc7IGRldmljZXRyZWVAdmdlci5rZXJuZWwub3JnOyBsaW51eC1tZWRpYUB2Z2VyLmtl
-cm5lbC5vcmc7IExhZCwNCj4gUHJhYmhha2FyIDxwcmFiaGFrYXIuY3NlbmdnQGdtYWlsLmNvbT47
-IG1jaGVoYWJAa2VybmVsLm9yZzsgaHZlcmt1aWwtY2lzY29AeHM0YWxsLm5sOyBsYXVyZW50LnBp
-bmNoYXJ0QGlkZWFzb25ib2FyZC5jb207IGxpbnV4LQ0KPiByZW5lc2FzLXNvY0B2Z2VyLmtlcm5l
-bC5vcmc7IFJvYiBIZXJyaW5nIDxyb2JoQGtlcm5lbC5vcmc+OyBQcmFiaGFrYXIgTWFoYWRldiBM
-YWQgPHByYWJoYWthci5tYWhhZGV2LWxhZC5yakBicC5yZW5lc2FzLmNvbT4NCj4gU3ViamVjdDog
-UmU6IFtQQVRDSCB2NSAyLzNdIGR0LWJpbmRpbmdzOiBtZWRpYTogb3Y3NzJ4OiBNYWtlIGJ1cy10
-eXBlIG1hbmRhdG9yeQ0KPg0KPiBIaSBTYWthcmksDQo+DQo+IE9uIEZyaSwgU2VwIDExLCAyMDIw
-IGF0IDA4OjM3OjU3QU0gKzAzMDAsIFNha2FyaSBBaWx1cyB3cm90ZToNCj4gPiBIaSBKYWNvcG8s
-DQo+ID4NCj4gPiBPbiBUaHUsIFNlcCAxMCwgMjAyMCBhdCAwNjoyMDo1NFBNICswMjAwLCBKYWNv
-cG8gTW9uZGkgd3JvdGU6DQo+ID4gPiBJbiBvcmRlciB0byBlc3RhYmxpc2ggcmVxdWlyZWQgcHJv
-cGVydGllcyBiYXNlZCBvbiB0aGUgc2VsZWN0ZWQNCj4gPiA+IGJ1cyB0eXBlLCBtYWtlIHRoZSAn
-YnVzLXR5cGUnIHByb3BlcnR5IG1hbmRhdG9yeS4gQXMgdGhpcyBjaGFuZ2UNCj4gPiA+IGRvY3Vt
-ZW50cyBhbiBlbmRwb2ludCBwcm9wZXJ0eSwgYWxzbyBkb2N1bWVudCB0aGUgJ3JlbW90ZS1lbmRw
-b2ludCcNCj4gPiA+IG9uZSBub3cgdGhhdCB0aGUgJ2VuZHBvaW50JyBzY2hlbWEgaGFzIGJlZW4g
-ZXhwYW5kZWQuDQo+ID4gPg0KPiA+ID4gQmluYXJ5IGNvbXBhdGliaWxpdHkgd2l0aCBleGlzdGlu
-ZyBEVEIgaXMga2VwdCBhcyB0aGUgZHJpdmVyIGRvZXMgbm90DQo+ID4gPiBlbmZvcmNlIHRoZSBw
-cm9wZXJ0eSB0byBiZSBwcmVzZW50LCBhbmQgc2hhbGwgZmFsbC1iYWNrIHRvIGRlZmF1bHQNCj4g
-PiA+IHBhcmFsbGVsIGJ1cyBjb25maWd1cmF0aW9uLCB3aGljaCB3YXMgdGhlIG9ubHkgc3VwcG9y
-dGVkIGJ1cyB0eXBlLCBpZg0KPiA+ID4gdGhlIHByb3BlcnR5IGlzIG5vdCBzcGVjaWZpZWQuDQo+
-ID4NCj4gPiBDb3VsZCB5b3UgYWRkIGEgY29tbWVudCBvbiB0aGlzIHRvIHRoZSBkcml2ZXIsIHNv
-IHRoaXMgZmVhdHVyZSBpc24ndA0KPiA+IGFjY2lkZW50YWxseSByZW1vdmVkPw0KPg0KPiBTdXJl
-LCBjYW4gSSBzZW5kIGEgcGF0Y2ggaW4gcmVwbHkgdG8gdGhpcyBzZXJpZXMgdG8gYXZvaWQgYSB2
-NiA/DQpJZiB5b3UgZG9u4oCZdCBtaW5kIElsbCBoYW5kbGUgdGhpcyBhcyBwYXJ0IG9mIGJ0NjU2
-IGFkZGl0aW9ucyA/DQoNCkNoZWVycywNClByYWJoYWthcg0KDQoNClJlbmVzYXMgRWxlY3Ryb25p
-Y3MgRXVyb3BlIEdtYkgsIEdlc2NoYWVmdHNmdWVocmVyL1ByZXNpZGVudDogQ2Fyc3RlbiBKYXVj
-aCwgU2l0eiBkZXIgR2VzZWxsc2NoYWZ0L1JlZ2lzdGVyZWQgb2ZmaWNlOiBEdWVzc2VsZG9yZiwg
-QXJjYWRpYXN0cmFzc2UgMTAsIDQwNDcyIER1ZXNzZWxkb3JmLCBHZXJtYW55LCBIYW5kZWxzcmVn
-aXN0ZXIvQ29tbWVyY2lhbCBSZWdpc3RlcjogRHVlc3NlbGRvcmYsIEhSQiAzNzA4IFVTdC1JRE5y
-Li9UYXggaWRlbnRpZmljYXRpb24gbm8uOiBERSAxMTkzNTM0MDYgV0VFRS1SZWcuLU5yLi9XRUVF
-IHJlZy4gbm8uOiBERSAxNDk3ODY0Nw0K
+See <https://builder.linuxtv.org/job/media-build/3213/display/redirect>
+
+Changes:
+
+
+------------------------------------------
+[...truncated 4.00 KB...]
+Resolving linuxtv.org (linuxtv.org)... 130.149.80.248
+Connecting to linuxtv.org (linuxtv.org)|130.149.80.248|:80... connected.
+HTTP request sent, awaiting response... 301 Moved Permanently
+Location: https://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2 [following]
+--2020-09-11 09:17:07--  https://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2
+Connecting to linuxtv.org (linuxtv.org)|130.149.80.248|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 7090959 (6.8M) [application/x-bzip2]
+Saving to: ‘linux-media.tar.bz2’
+
+     0K .......... .......... .......... .......... ..........  0%  160K 43s
+    50K .......... .......... .......... .......... ..........  1%  322K 32s
+   100K .......... .......... .......... .......... ..........  2% 19.6M 21s
+   150K .......... .......... .......... .......... ..........  2%  328K 21s
+   200K .......... .......... .......... .......... ..........  3% 21.5M 17s
+   250K .......... .......... .......... .......... ..........  4% 21.5M 14s
+   300K .......... .......... .......... .......... ..........  5% 19.8M 12s
+   350K .......... .......... .......... .......... ..........  5% 21.9M 10s
+   400K .......... .......... .......... .......... ..........  6%  336K 11s
+   450K .......... .......... .......... .......... ..........  7% 22.8M 10s
+   500K .......... .......... .......... .......... ..........  7% 21.3M 9s
+   550K .......... .......... .......... .......... ..........  8% 21.3M 8s
+   600K .......... .......... .......... .......... ..........  9% 22.1M 8s
+   650K .......... .......... .......... .......... .......... 10% 20.0M 7s
+   700K .......... .......... .......... .......... .......... 10% 25.9M 7s
+   750K .......... .......... .......... .......... .......... 11% 22.5M 6s
+   800K .......... .......... .......... .......... .......... 12%  362K 7s
+   850K .......... .......... .......... .......... .......... 12% 18.8M 6s
+   900K .......... .......... .......... .......... .......... 13% 19.5M 6s
+   950K .......... .......... .......... .......... .......... 14% 20.0M 6s
+  1000K .......... .......... .......... .......... .......... 15% 20.2M 5s
+  1050K .......... .......... .......... .......... .......... 15% 20.8M 5s
+  1100K .......... .......... .......... .......... .......... 16% 21.6M 5s
+  1150K .......... .......... .......... .......... .......... 17% 20.7M 5s
+  1200K .......... .......... .......... .......... .......... 18% 17.5M 4s
+  1250K .......... .......... .......... .......... .......... 18% 22.2M 4s
+  1300K .......... .......... .......... .......... .......... 19% 20.6M 4s
+  1350K .......... .......... .......... .......... .......... 20% 20.7M 4s
+  1400K .......... .......... .......... .......... .......... 20% 18.6M 4s
+  1450K .......... .......... .......... .......... .......... 21% 19.9M 3s
+  1500K .......... .......... .......... .......... .......... 22% 23.6M 3s
+  1550K .......... .......... .......... .......... .......... 23% 16.3M 3s
+  1600K .......... .......... .......... .......... .......... 23% 5.62M 3s
+  1650K .......... .......... .......... .......... .......... 24%  452K 3s
+  1700K .......... .......... .......... .......... .......... 25% 86.2M 3s
+  1750K .......... .......... .......... .......... .......... 25% 28.8M 3s
+  1800K .......... .......... .......... .......... .......... 26% 41.3M 3s
+  1850K .......... .......... .......... .......... .......... 27% 22.2M 3s
+  1900K .......... .......... .......... .......... .......... 28% 51.2M 3s
+  1950K .......... .......... .......... .......... .......... 28%  110M 3s
+  2000K .......... .......... .......... .......... .......... 29% 18.2M 3s
+  2050K .......... .......... .......... .......... .......... 30%  104M 3s
+  2100K .......... .......... .......... .......... .......... 31%  101M 2s
+  2150K .......... .......... .......... .......... .......... 31% 27.9M 2s
+  2200K .......... .......... .......... .......... .......... 32% 15.0M 2s
+  2250K .......... .......... .......... .......... .......... 33% 30.5M 2s
+  2300K .......... .......... .......... .......... .......... 33%  106M 2s
+  2350K .......... .......... .......... .......... .......... 34%  112M 2s
+  2400K .......... .......... .......... .......... .......... 35% 12.2M 2s
+  2450K .......... .......... .......... .......... .......... 36% 44.4M 2s
+  2500K .......... .......... .......... .......... .......... 36% 18.0M 2s
+  2550K .......... .......... .......... .......... .......... 37% 24.1M 2s
+  2600K .......... .......... .......... .......... .......... 38% 17.9M 2s
+  2650K .......... .......... .......... .......... .......... 38% 16.9M 2s
+  2700K .......... .......... .......... .......... .......... 39% 19.5M 2s
+  2750K .......... .......... .......... .......... .......... 40% 17.9M 2s
+  2800K .......... .......... .......... .......... .......... 41% 15.2M 2s
+  2850K .......... .......... .......... .......... .......... 41% 18.0M 2s
+  2900K .......... .......... .......... .......... .......... 42% 17.4M 2s
+  2950K .......... .......... .......... .......... .......... 43% 17.4M 1s
+  3000K .......... .......... .......... .......... .......... 44% 15.4M 1s
+  3050K .......... .......... .......... .......... .......... 44% 16.3M 1s
+  3100K .......... .......... .......... .......... .......... 45% 19.9M 1s
+  3150K .......... .......... .......... .......... .......... 46% 4.57M 1s
+  3200K .......... .......... .......... .......... .......... 46% 15.8M 1s
+  3250K .......... .......... .......... .......... .......... 47% 13.8M 1s
+  3300K .......... .......... .......... .......... .......... 48% 21.9M 1s
+  3350K .......... .......... .......... .......... .......... 49%  656K 1s
+  3400K .......... .......... .......... .......... .......... 49% 33.2M 1s
+  3450K .......... .......... .......... .......... .......... 50% 15.1M 1s
+  3500K .......... .......... .......... .......... .......... 51% 79.7M 1s
+  3550K .......... .......... .......... .......... .......... 51%  107M 1s
+  3600K .......... .......... .......... .......... .......... 52% 43.8M 1s
+  3650K .......... .......... .......... .......... .......... 53%  156M 1s
+  3700K .......... .......... .......... .......... .......... 54% 9.80M 1s
+  3750K .......... .......... .......... .......... .......... 54% 24.9M 1s
+  3800K .......... .......... .......... .......... .......... 55% 52.1M 1s
+  3850K .......... .......... .......... .......... .......... 56% 90.0M 1s
+  3900K .......... .......... .......... .......... .......... 57% 96.5M 1s
+  3950K .......... .......... .......... .......... .......... 57% 97.2M 1s
+  4000K .......... .......... .......... .......... .......... 58% 87.3M 1s
+  4050K .......... .......... .......... .......... .......... 59%  123M 1s
+  4100K .......... .......... .......... .......... .......... 59%  144M 1s
+  4150K .......... .......... .......... .......... .......... 60%  145M 1s
+  4200K .......... .......... .......... .......... .......... 61% 72.2M 1s
+  4250K .......... .......... .......... .......... .......... 62%  110M 1s
+  4300K .......... .......... .......... .......... .......... 62% 57.2M 1s
+  4350K .......... .......... .......... .......... .......... 63% 58.2M 1s
+  4400K .......... .......... .......... .......... .......... 64% 35.2M 1s
+  4450K .......... .......... .......... .......... .......... 64% 41.5M 1s
+  4500K .......... .......... .......... .......... .......... 65% 70.0M 1s
+  4550K .......... .......... .......... .......... .......... 66% 53.1M 1s
+  4600K .......... .......... .......... .......... .......... 67% 42.8M 1s
+  4650K .......... .......... .......... .......... .......... 67% 51.5M 1s
+  4700K .......... .......... .......... .......... .......... 68% 62.7M 1s
+  4750K .......... .......... .......... .......... .......... 69% 47.1M 1s
+  4800K .......... .......... .......... .......... .......... 70% 39.5M 1s
+  4850K .......... .......... .......... .......... .......... 70% 62.2M 1s
+  4900K .......... .......... .......... .......... .......... 71% 54.7M 1s
+  4950K .......... .......... .......... .......... .......... 72% 49.5M 0s
+  5000K .......... .......... .......... .......... .......... 72% 53.7M 0s
+  5050K .......... .......... .......... .......... .......... 73% 61.4M 0s
+  5100K .......... .......... .......... .......... .......... 74% 44.2M 0s
+  5150K .......... .......... .......... .......... .......... 75% 49.1M 0s
+  5200K .......... .......... .......... .......... .......... 75% 37.1M 0s
+  5250K .......... .......... .......... .......... .......... 76% 50.8M 0s
+  5300K .......... .......... .......... .......... .......... 77% 41.5M 0s
+  5350K .......... .......... .......... .......... .......... 77% 46.2M 0s
+  5400K .......... .......... .......... .......... .......... 78% 15.8M 0s
+  5450K .......... .......... .......... .......... .......... 79% 23.5M 0s
+  5500K .......... .......... .......... .......... .......... 80% 17.4M 0s
+  5550K .......... .......... .......... .......... .......... 80% 19.1M 0s
+  5600K .......... .......... .......... .......... .......... 81% 14.6M 0s
+  5650K .......... .......... .......... .......... .......... 82% 18.9M 0s
+  5700K .......... .......... .......... .......... .......... 83% 19.4M 0s
+  5750K .......... .......... .......... .......... .......... 83% 20.8M 0s
+  5800K .......... .......... .......... .......... .......... 84% 20.3M 0s
+  5850K .......... .......... .......... .......... .......... 85% 20.0M 0s
+  5900K .......... .......... .......... .......... .......... 85% 19.8M 0s
+  5950K .......... .......... .......... .......... .......... 86% 18.9M 0s
+  6000K .......... .......... .......... .......... .......... 87% 15.7M 0s
+  6050K .......... .......... .......... .......... .......... 88% 19.7M 0s
+  6100K .......... .......... .......... .......... .......... 88% 19.3M 0s
+  6150K .......... .......... .......... .......... .......... 89% 21.1M 0s
+  6200K .......... .......... .......... .......... .......... 90% 20.8M 0s
+  6250K .......... .......... .......... .......... .......... 90% 21.4M 0s
+  6300K .......... .......... .......... .......... .......... 91% 20.9M 0s
+  6350K .......... .......... .......... .......... .......... 92% 20.7M 0s
+  6400K .......... .......... .......... .......... .......... 93% 14.7M 0s
+  6450K .......... .......... .......... .......... .......... 93%  814K 0s
+  6500K .......... .......... .......... .......... .......... 94% 21.7M 0s
+  6550K .......... .......... .......... .......... .......... 95% 30.2M 0s
+  6600K .......... .......... .......... .......... .......... 96% 45.4M 0s
+  6650K .......... .......... .......... .......... .......... 96% 55.2M 0s
+  6700K .......... .......... .......... .......... .......... 97% 68.4M 0s
+  6750K .......... .......... .......... .......... .......... 98% 27.2M 0s
+  6800K .......... .......... .......... .......... .......... 98% 11.0M 0s
+  6850K .......... .......... .......... .......... .......... 99% 60.8M 0s
+  6900K .......... .......... ....                            100%  205M=1.4s
+
+2020-09-11 09:17:09 (4.78 MB/s) - ‘linux-media.tar.bz2’ saved [7090959/7090959]
+
+make: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+make: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+tar xfj linux-media.tar.bz2
+rm -f .patches_applied .linked_dir .git_log.md5
+make: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+**********************************************************
+* Downloading firmwares from linuxtv.org.                *
+**********************************************************
+firmware/dvb-usb-vp702x-01.fw
+firmware/dvb-usb-vp7045-01.fw
+firmware/dvb-fe-bcm3510-01.fw
+firmware/as102_data2_st.hex
+firmware/dvb-usb-terratec-h7-drxk.fw
+firmware/isdbt_nova_12mhz.inp
+firmware/Boot.S
+firmware/dvb_nova_12mhz_b0.inp
+firmware/dvb-fe-xc4000-1.4.1.fw
+firmware/sms1xxx-hcw-55xxx-isdbt-02.fw
+firmware/sms1xxx-nova-a-dvbt-01.fw
+firmware/dvb-usb-avertv-a800-02.fw
+firmware/cmmb_venice_12mhz.inp
+firmware/dvb-fe-xc5000c-4.1.30.7.fw
+firmware/v4l-cx23418-cpu.fw
+firmware/v4l-cx23885-enc-broken.fw
+firmware/dvb-fe-drxj-mc-vsb-1.0.8.fw
+firmware/dvb_nova_12mhz.inp
+firmware/dvb-usb-dib0700-1.20.fw
+firmware/tdmb_nova_12mhz.inp
+firmware/as102_data1_st.hex
+firmware/dvb-fe-or51132-vsb.fw
+firmware/dvb-usb-it9135-02.fw
+firmware/v4l-cx23418-apu.fw
+firmware/dvb-ttpci-01.fw-261f
+firmware/v4l-cx23418-dig.fw
+firmware/dvb-ttpci-01.fw-261c
+firmware/dvb-usb-bluebird-01.fw
+firmware/dvb-fe-or51211.fw
+firmware/dvb-fe-or51132-qam.fw
+firmware/sms1xxx-stellar-dvbt-01.fw
+firmware/dvb-usb-dibusb-5.0.0.11.fw
+firmware/dvb-fe-drxj-mc-vsb-qam-1.0.8.fw
+firmware/dvb-usb-terratec-h5-drxk.fw
+firmware/dvb-usb-wt220u-02.fw
+firmware/v4l-cx23885-enc.fw
+firmware/dvb-ttpci-01.fw-2622
+firmware/dvb-usb-wt220u-01.fw
+firmware/v4l-cx25840.fw
+firmware/dvb-fe-drxj-mc-1.0.8.fw
+firmware/v4l-cx231xx-avcore-01.fw
+firmware/dvb-usb-dtt200u-01.fw
+firmware/dvb-usb-dibusb-6.0.0.8.fw
+firmware/sms1xxx-nova-b-dvbt-01.fw
+firmware/dvb-fe-xc5000-1.6.114.fw
+firmware/cmmb_vega_12mhz.inp
+firmware/dvb-usb-it9135-01.fw
+firmware/isdbt_nova_12mhz_b0.inp
+firmware/dvb-ttpci-01.fw-261a
+firmware/dvb-ttpci-01.fw-261b
+firmware/dvb-ttpci-01.fw-261d
+firmware/README
+firmware/isdbt_rio.inp
+firmware/dvb-usb-umt-010-02.fw
+firmware/sms1xxx-hcw-55xxx-dvbt-02.fw
+firmware/dvb-usb-terratec-h7-az6007.fw
+firmware/v4l-cx23885-avcore-01.fw
+******************
+* Start building *
+******************
+make -C <https://builder.linuxtv.org/job/media-build/ws/v4l> allyesconfig
+make[1]: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
+make[2]: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+Applying patches for kernel 4.19.0-5-amd64
+patch -s -f -N -p1 -i ../backports/api_version.patch
+patch -s -f -N -p1 -i ../backports/pr_fmt.patch
+patch -s -f -N -p1 -i ../backports/debug.patch
+patch -s -f -N -p1 -i ../backports/drx39xxj.patch
+patch -s -f -N -p1 -i ../backports/v5.9_tasklet.patch
+patch -s -f -N -p1 -i ../backports/v5.7_mmap_read_lock.patch
+patch -s -f -N -p1 -i ../backports/v5.7_vm_map_ram.patch
+patch -s -f -N -p1 -i ../backports/v5.7_pin_user_pages.patch
+patch -s -f -N -p1 -i ../backports/v5.6_pin_user_pages.patch
+patch -s -f -N -p1 -i ../backports/v5.6_const_fb_ops.patch
+patch -s -f -N -p1 -i ../backports/v5.6_pm_runtime_get_if_active.patch
+patch -s -f -N -p1 -i ../backports/v5.5_alsa_pcm_api_updates.patch
+patch -s -f -N -p1 -i ../backports/v5.5_memtype_h.patch
+patch -s -f -N -p1 -i ../backports/v5.4_revert_spi_transfer.patch
+patch -s -f -N -p1 -i ../backports/v5.1_vm_map_pages.patch
+patch -s -f -N -p1 -i ../backports/v5.1_devm_i2c_new_dummy_device.patch
+patch -s -f -N -p1 -i ../backports/v5.0_ipu3-cio2.patch
+2 out of 2 hunks FAILED
+make[2]: *** [Makefile:132: apply_patches] Error 1
+make[2]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+make[1]: *** [Makefile:378: allyesconfig] Error 2
+make[1]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
+make: *** [Makefile:26: allyesconfig] Error 2
+can't select all drivers at ./build line 531
+Build step 'Execute shell' marked build as failure
