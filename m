@@ -2,97 +2,259 @@ Return-Path: <SRS0=cWAp=CU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E1EDC43461
-	for <linux-media@archiver.kernel.org>; Fri, 11 Sep 2020 18:48:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B253BC433E2
+	for <linux-media@archiver.kernel.org>; Fri, 11 Sep 2020 21:45:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D8B1922207
-	for <linux-media@archiver.kernel.org>; Fri, 11 Sep 2020 18:48:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8272C221E5
+	for <linux-media@archiver.kernel.org>; Fri, 11 Sep 2020 21:45:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725819AbgIKSsb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Sep 2020 14:48:31 -0400
-Received: from www.linuxtv.org ([130.149.80.248]:53450 "EHLO www.linuxtv.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725770AbgIKSs0 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 11 Sep 2020 14:48:26 -0400
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1kGnzz-005qGy-RH; Fri, 11 Sep 2020 18:42:15 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1kGo8b-0006pR-6D; Fri, 11 Sep 2020 18:51:09 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL for v5.10] Venus updates - part2 (#66892)
-Date:   Fri, 11 Sep 2020 18:51:09 +0000
-Message-Id: <20200911185109.26208-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200911175629.25918-1-stanimir.varbanov@linaro.org>
-References: 
+        id S1725939AbgIKVpH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Sep 2020 17:45:07 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:51540 "EHLO
+        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725864AbgIKVpG (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 11 Sep 2020 17:45:06 -0400
+Received: from valkosipuli.localdomain (valkosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::80:2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id 18CB8634C8C;
+        Sat, 12 Sep 2020 00:44:41 +0300 (EEST)
+Received: from sailus by valkosipuli.localdomain with local (Exim 4.92)
+        (envelope-from <sakari.ailus@retiisi.org.uk>)
+        id 1kGqqX-00014C-91; Sat, 12 Sep 2020 00:44:41 +0300
+Date:   Sat, 12 Sep 2020 00:44:41 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Eugen Hristev <eugen.hristev@microchip.com>
+Cc:     leonl@leopardimaging.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: imx274: add support for sensor mode6, 1280x540
+Message-ID: <20200911214441.GG834@valkosipuli.retiisi.org.uk>
+References: <20200909105328.92598-1-eugen.hristev@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200909105328.92598-1-eugen.hristev@microchip.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+Hi Eugen,
 
-Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/20200911175629.25918-1-stanimir.varbanov@linaro.org/
-Build log: https://builder.linuxtv.org/job/patchwork/67884/
-Build time: 00:38:44
-Link: https://lore.kernel.org/linux-media/20200911175629.25918-1-stanimir.varbanov@linaro.org
+Thanks for the patch.
 
-gpg: Signature made Fri 11 Sep 2020 05:46:54 PM UTC
-gpg:                using RSA key E1558C2497CE3CCC2B5AA30F25B55FC81B7035F2
-gpg: Good signature from "Stanimir Varbanov <stanimir.varbanov@linaro.org>" [unknown]
-gpg: WARNING: This key is not certified with a trusted signature!
-gpg:          There is no indication that the signature belongs to the owner.
-Primary key fingerprint: 34CF E039 8A16 AD93 18FD  D5E8 A6D0 26D8 E358 14D4
-     Subkey fingerprint: E155 8C24 97CE 3CCC 2B5A  A30F 25B5 5FC8 1B70 35F2
+On Wed, Sep 09, 2020 at 01:53:28PM +0300, Eugen Hristev wrote:
+> Add support for the mode 6 for the sensor, this mode uses
+> 3/8 subsampling and 3 horizontal binning.
+> Aspect ratio is changed.
+> Split the bin_ratio variable into two parts, one for
+> width and one for height, as the ratio is no longer preserved
+> when doing subsampling in this mode.
+> 
+> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+> ---
+>  drivers/media/i2c/imx274.c | 89 +++++++++++++++++++++++++++++++-------
+>  1 file changed, 73 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/imx274.c b/drivers/media/i2c/imx274.c
+> index e6aa9f32b6a8..5adb11f036e2 100644
+> --- a/drivers/media/i2c/imx274.c
+> +++ b/drivers/media/i2c/imx274.c
+> @@ -147,8 +147,9 @@ static const struct regmap_config imx274_regmap_config = {
+>  
+>  enum imx274_binning {
+>  	IMX274_BINNING_OFF,
+> -	IMX274_BINNING_2_1,
+> -	IMX274_BINNING_3_1,
+> +	IMX274_BINNING_2_2,
+> +	IMX274_BINNING_3_3,
+> +	IMX274_BINNING_4_3,
 
-Summary: got 3/9 patches with issues, being 2 at build time, plus one error when buinding PDF document
+This enum is unused (apart from the useless use of the first value). Please
+remove it (may be a new patch).
 
-Error/warnings:
+>  };
+>  
+>  /*
+> @@ -158,7 +159,8 @@ enum imx274_binning {
+>   * implemented modes.
+>   *
+>   * @init_regs: registers to initialize the mode
+> - * @bin_ratio: downscale factor (e.g. 3 for 3:1 binning)
+> + * @wbin_ratio: width downscale factor (e.g. 3 for 1280; 3 = 3840/1280)
+> + * @hbin_ratio: height downscale factor (e.g. 3 for 720; 3 = 2160/720)
+>   * @min_frame_len: Minimum frame length for each mode (see "Frame Rate
+>   *                 Adjustment (CSI-2)" in the datasheet)
+>   * @min_SHR: Minimum SHR register value (see "Shutter Setting (CSI-2)" in the
+> @@ -169,7 +171,8 @@ enum imx274_binning {
+>   */
+>  struct imx274_mode {
+>  	const struct reg_8 *init_regs;
+> -	unsigned int bin_ratio;
+> +	unsigned int wbin_ratio;
+> +	unsigned int hbin_ratio;
 
-patches/0001-media-venus-core-Drop-local-dma_parms.patch:
+These could be char or short.
 
-    allyesconfig: return code #0:
-	../drivers/staging/media/atomisp/pci/atomisp_compat_css20.c: ../drivers/staging/media/atomisp/pci/atomisp_compat_css20.c:703 is_pipe_valid_to_current_run_mode() warn: ignoring unreachable code.
-	../drivers/staging/media/atomisp/pci/sh_css.c:1685:16: warning: assignment left-hand side might be a candidate for a format attribute [-Wsuggest-attribute=format]
+>  	int min_frame_len;
+>  	int min_SHR;
+>  	int max_fps;
+> @@ -332,6 +335,46 @@ static const struct reg_8 imx274_mode5_1280x720_raw10[] = {
+>  	{IMX274_TABLE_END, 0x00}
+>  };
+>  
+> +/*
+> + * Vertical 2/8 subsampling horizontal 3 binning
+> + * imx274 mode6(refer to datasheet) register configuration with
+> + * 1280x540 resolution, raw10 data and mipi four lane output
+> + */
+> +static const struct reg_8 imx274_mode6_1280x540_raw10[] = {
+> +	{0x3004, 0x04}, /* mode setting */
+> +	{0x3005, 0x31},
+> +	{0x3006, 0x00},
+> +	{0x3007, 0x02}, /* mode setting */
+> +
+> +	{0x3018, 0xA2}, /* output XVS, HVS */
+> +
+> +	{0x306B, 0x05},
+> +	{0x30E2, 0x04}, /* mode setting */
+> +
+> +	{0x30EE, 0x01},
+> +	{0x3342, 0x0A},
+> +	{0x3343, 0x00},
+> +	{0x3344, 0x16},
+> +	{0x3345, 0x00},
+> +	{0x33A6, 0x01},
+> +	{0x3528, 0x0E},
+> +	{0x3554, 0x1F},
+> +	{0x3555, 0x01},
+> +	{0x3556, 0x01},
+> +	{0x3557, 0x01},
+> +	{0x3558, 0x01},
+> +	{0x3559, 0x00},
+> +	{0x355A, 0x00},
+> +	{0x35BA, 0x0E},
+> +	{0x366A, 0x1B},
+> +	{0x366B, 0x1A},
+> +	{0x366C, 0x19},
+> +	{0x366D, 0x17},
+> +	{0x3A41, 0x04},
+> +
+> +	{IMX274_TABLE_END, 0x00}
+> +};
+> +
+>  /*
+>   * imx274 first step register configuration for
+>   * starting stream
+> @@ -445,7 +488,8 @@ static const struct reg_8 imx274_tp_regs[] = {
+>  static const struct imx274_mode imx274_modes[] = {
+>  	{
+>  		/* mode 1, 4K */
+> -		.bin_ratio = 1,
+> +		.wbin_ratio = 1, /* 3840 */
+> +		.hbin_ratio = 1, /* 2160 */
+>  		.init_regs = imx274_mode1_3840x2160_raw10,
+>  		.min_frame_len = 4550,
+>  		.min_SHR = 12,
+> @@ -454,7 +498,8 @@ static const struct imx274_mode imx274_modes[] = {
+>  	},
+>  	{
+>  		/* mode 3, 1080p */
+> -		.bin_ratio = 2,
+> +		.wbin_ratio = 2, /* 1620 */
+> +		.hbin_ratio = 2, /* 1080 */
+>  		.init_regs = imx274_mode3_1920x1080_raw10,
+>  		.min_frame_len = 2310,
+>  		.min_SHR = 8,
+> @@ -463,13 +508,24 @@ static const struct imx274_mode imx274_modes[] = {
+>  	},
+>  	{
+>  		/* mode 5, 720p */
+> -		.bin_ratio = 3,
+> +		.wbin_ratio = 3, /* 1280 */
+> +		.hbin_ratio = 3, /* 720 */
+>  		.init_regs = imx274_mode5_1280x720_raw10,
+>  		.min_frame_len = 2310,
+>  		.min_SHR = 8,
+>  		.max_fps = 120,
+>  		.nocpiop = 112,
+>  	},
+> +	{
+> +		/* mode 6, 540p */
+> +		.wbin_ratio = 3, /* 1280 */
+> +		.hbin_ratio = 4, /* 540 */
+> +		.init_regs = imx274_mode6_1280x540_raw10,
+> +		.min_frame_len = 2310,
+> +		.min_SHR = 4,
+> +		.max_fps = 120,
+> +		.nocpiop = 112,
+> +	},
+>  };
+>  
+>  /*
+> @@ -892,12 +948,13 @@ static int __imx274_change_compose(struct stimx274 *imx274,
+>  	}
+>  
+>  	for (i = 0; i < ARRAY_SIZE(imx274_modes); i++) {
+> -		unsigned int ratio = imx274_modes[i].bin_ratio;
+> +		unsigned int wratio = imx274_modes[i].wbin_ratio;
+> +		unsigned int hratio = imx274_modes[i].hbin_ratio;
+>  
+>  		int goodness = imx274_binning_goodness(
+>  			imx274,
+> -			cur_crop->width / ratio, *width,
+> -			cur_crop->height / ratio, *height,
+> +			cur_crop->width / wratio, *width,
+> +			cur_crop->height / hratio, *height,
+>  			flags);
+>  
+>  		if (goodness >= best_goodness) {
+> @@ -906,14 +963,14 @@ static int __imx274_change_compose(struct stimx274 *imx274,
+>  		}
+>  	}
+>  
+> -	*width = cur_crop->width / best_mode->bin_ratio;
+> -	*height = cur_crop->height / best_mode->bin_ratio;
+> +	*width = cur_crop->width / best_mode->wbin_ratio;
+> +	*height = cur_crop->height / best_mode->hbin_ratio;
+>  
+>  	if (which == V4L2_SUBDEV_FORMAT_ACTIVE)
+>  		imx274->mode = best_mode;
+>  
+> -	dev_dbg(dev, "%s: selected %u:1 binning\n",
+> -		__func__, best_mode->bin_ratio);
+> +	dev_dbg(dev, "%s: selected %u:%u binning\n",
 
-    allyesconfig: return code #0:
-	../drivers/media/test-drivers/vivid/vivid-core.c: ../drivers/media/test-drivers/vivid/vivid-core.c:1909 vivid_create_instance() parse error: turning off implications after 60 seconds
-	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2841 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
+I think the earlier message suggested it was ratio. How about "x"
+instead of a colon?
 
-patches/0002-v4l2-ctrl-Add-VP9-codec-levels.patch:
+Apart from these looks good to me.
 
-    allyesconfig: return code #0:
-	../drivers/staging/media/atomisp/pci/atomisp_compat_css20.c: ../drivers/staging/media/atomisp/pci/atomisp_compat_css20.c:703 is_pipe_valid_to_current_run_mode() warn: ignoring unreachable code.
-	../drivers/staging/media/atomisp/pci/sh_css.c:1685:16: warning: assignment left-hand side might be a candidate for a format attribute [-Wsuggest-attribute=format]
+> +		__func__, best_mode->wbin_ratio, best_mode->hbin_ratio);
+>  
+>  	tgt_fmt->width = *width;
+>  	tgt_fmt->height = *height;
+> @@ -1840,8 +1897,8 @@ static int imx274_probe(struct i2c_client *client)
+>  	imx274->mode = &imx274_modes[IMX274_DEFAULT_BINNING];
+>  	imx274->crop.width = IMX274_MAX_WIDTH;
+>  	imx274->crop.height = IMX274_MAX_HEIGHT;
+> -	imx274->format.width = imx274->crop.width / imx274->mode->bin_ratio;
+> -	imx274->format.height = imx274->crop.height / imx274->mode->bin_ratio;
+> +	imx274->format.width = imx274->crop.width / imx274->mode->wbin_ratio;
+> +	imx274->format.height = imx274->crop.height / imx274->mode->hbin_ratio;
+>  	imx274->format.field = V4L2_FIELD_NONE;
+>  	imx274->format.code = MEDIA_BUS_FMT_SRGGB10_1X10;
+>  	imx274->format.colorspace = V4L2_COLORSPACE_SRGB;
 
-    allyesconfig: return code #0:
-	../drivers/media/test-drivers/vivid/vivid-core.c: ../drivers/media/test-drivers/vivid/vivid-core.c:1909 vivid_create_instance() parse error: turning off implications after 60 seconds
-	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2841 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
+-- 
+Kind regards,
 
-   checkpatch.pl:
-	$ cat patches/0002-v4l2-ctrl-Add-VP9-codec-levels.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:139: CHECK: Please use a blank line after function/struct/union/enum declarations
-	-:139: CHECK: spaces preferred around that '+' (ctx:VxV)
-
-patches/0008-firmware-qcom_scm-Add-memory-protect-virtual-address.patch:
-
-   checkpatch.pl:
-	$ cat patches/0008-firmware-qcom_scm-Add-memory-protect-virtual-address.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:72: CHECK: extern prototypes should be avoided in .h files
-
-
-Error #512 when building PDF docs
-
+Sakari Ailus
