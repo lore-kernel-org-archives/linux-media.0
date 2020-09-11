@@ -2,136 +2,125 @@ Return-Path: <SRS0=cWAp=CU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41F7FC433E2
-	for <linux-media@archiver.kernel.org>; Fri, 11 Sep 2020 17:37:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3684BC433E2
+	for <linux-media@archiver.kernel.org>; Fri, 11 Sep 2020 17:58:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0BEF9221E7
-	for <linux-media@archiver.kernel.org>; Fri, 11 Sep 2020 17:37:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F0E0422204
+	for <linux-media@archiver.kernel.org>; Fri, 11 Sep 2020 17:58:22 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fWPhBwRH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726557AbgIKRhO convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Sep 2020 13:37:14 -0400
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:40010 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725995AbgIKMte (ORCPT
+        id S1725846AbgIKR6V (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Sep 2020 13:58:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57750 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725710AbgIKR6R (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 11 Sep 2020 08:49:34 -0400
-Received: from [78.134.51.148] (port=34610 helo=[192.168.77.62])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1kGiUZ-000Ei9-J2; Fri, 11 Sep 2020 14:49:27 +0200
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Subject: Re: [PATCH v8 0/6] Support running driver's probe for a device
- powered off
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-i2c@vger.kernel.org
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
-        Hyungwoo Yang <hyungwoo.yang@intel.com>,
-        linux-media@vger.kernel.org
-References: <20200903081550.6012-1-sakari.ailus@linux.intel.com>
-Message-ID: <f4b82baa-66b7-464e-fd39-66d2243a05ef@lucaceresoli.net>
-Date:   Fri, 11 Sep 2020 14:49:26 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20200903081550.6012-1-sakari.ailus@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8BIT
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+        Fri, 11 Sep 2020 13:58:17 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC58C061573
+        for <linux-media@vger.kernel.org>; Fri, 11 Sep 2020 10:58:16 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id lo4so14885612ejb.8
+        for <linux-media@vger.kernel.org>; Fri, 11 Sep 2020 10:58:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:subject:date:message-id;
+        bh=nRURPQVTePKPsHgmeSXD6VQbJn+/wx6dLirmnPb+How=;
+        b=fWPhBwRH7CxVkYP5U3XirjAc3eAR2cjK8GksrRWH8jDGKoOGlGkJ5E9xNaV5cglM7x
+         QCZ/DQbWbb4K8hSfg7bTdf/cXzuTDmz0TMZO5z6VMvcYvOO0CBalASHrcC391I3F+0Gn
+         23Nmj/eM2FH+gzq/YgJTVgVu8CWMYN2DxrMVfPca2/Lp1qUk6uTqHDoCgzDvEc0TXmML
+         XcY1mALfEQtA0MQ10dT6oZqhwlMRVHDbsKWXE/YGXAd9hkMd6fljX+a+9cvZRyZhTrZF
+         rSnx90ObzZbRyr55eWAn3V5SoPDvgcUao9+ARxjRRmKcnWUtofws3HF+6R41nLBeGFhI
+         ECtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:subject:date:message-id;
+        bh=nRURPQVTePKPsHgmeSXD6VQbJn+/wx6dLirmnPb+How=;
+        b=qvVbMOAz9dVlL1Q+QPeFqqs7SiR8titkX9JuBIuT8ozOwD5ZSkgkVXk2j1+VyUdDQb
+         CDCxdN/QsvNmHlUXIERapw0KelTzPuUr6M/9SQFWtKqvdc9lewPxxKuClZbXxNy32R0F
+         10tA16Y5J91GNOexGyNmhmGAjIZvfu58kcfhc6+usAr+MQ0hIt4Ad60Q6PwF7p01lFHg
+         p1VHTjcIJnTL229dqG7qS5YVxR4yUsdkzRjDnyzjACB7jLq7JCVocTon2judPJNzrf+t
+         nSTDkP7GIDD+JjaMZmFEwV1oIYf0b0aUfouT8/lVqgNut1YvufMHpAFuQpqro/CyUmk5
+         KQeA==
+X-Gm-Message-State: AOAM531CGalUn5opRAU0t6FzSaqcYyY93nliWgxv4yE8D1wDApSEMJgJ
+        Xw/NhGIs/M8lbPfz3a39DhXYkShyCOK9Vg4L
+X-Google-Smtp-Source: ABdhPJw4VgpOq1ECixaFyXztXyKPNaX+/ssYoY8GRvVpzkYOYbdlRV3BfbxKMV4eMEAS0uYt1tm8lA==
+X-Received: by 2002:a17:906:cb92:: with SMTP id mf18mr3287804ejb.485.1599847095028;
+        Fri, 11 Sep 2020 10:58:15 -0700 (PDT)
+Received: from localhost.localdomain ([195.24.90.54])
+        by smtp.gmail.com with ESMTPSA id k9sm2217535edr.3.2020.09.11.10.58.12
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Sep 2020 10:58:14 -0700 (PDT)
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+To:     linux-media@vger.kernel.org
+Subject: [GIT PULL for v5.10] Venus updates - part2
+Date:   Fri, 11 Sep 2020 20:56:29 +0300
+Message-Id: <20200911175629.25918-1-stanimir.varbanov@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sakari,
+Hi Mauro,
 
-On 03/09/20 10:15, Sakari Ailus wrote:
-> 
-> Hi all,
-> 
-> These patches enable calling (and finishing) a driver's probe function
-> without powering on the respective device on busses where the practice is
-> to power on the device for probe. While it generally is a driver's job to
-> check the that the device is there, there are cases where it might be
-> undesirable. (In this case it stems from a combination of hardware design
-> and user expectations; see below.) The downside with this change is that
-> if there is something wrong with the device, it will only be found at the
-> time the device is used. In this case (the camera sensors + EEPROM in a
-> sensor) I don't see any tangible harm from that though.
-> 
-> An indication both from the driver and the firmware is required to allow
-> the device's power state to remain off during probe (see the first patch).
-> 
-> 
-> The use case is such that there is a privacy LED next to an integrated
-> user-facing laptop camera, and this LED is there to signal the user that
-> the camera is recording a video or capturing images. That LED also happens
-> to be wired to one of the power supplies of the camera, so whenever you
-> power on the camera, the LED will be lit, whether images are captured from
-> the camera --- or not. There's no way to implement this differently
-> without additional software control (allowing of which is itself a
-> hardware design decision) on most CSI-2-connected camera sensors as they
-> simply have no pin to signal the camera streaming state.
-> 
-> This is also what happens during driver probe: the camera will be powered
-> on by the I²C subsystem calling dev_pm_domain_attach() and the device is
-> already powered on when the driver's own probe function is called. To the
-> user this visible during the boot process as a blink of the privacy LED,
-> suggesting that the camera is recording without the user having used an
-> application to do that. From the end user's point of view the behaviour is
-> not expected and for someone unfamiliar with internal workings of a
-> computer surely seems quite suspicious --- even if images are not being
-> actually captured.
-> 
-> I've tested these on linux-next master. They also apply to Wolfram's
-> i2c/for-next branch, there's a patch that affects the I²C core changes
-> here (see below). The patches apart from that apply to Bartosz's
-> at24/for-next as well as Mauro's linux-media master branch.
+ * Fix for firmware load failure with the firmware version in linux-firmware for sdm845/850.
+ * Add VP9 levels menu control and the implementation in the driver.
+ * Cleanup dma_parms.
 
-Apologies for having joined this discussion this late.
+Please pull.
 
-This patchset seems a good base to cover a different use case, where I
-also cannot access the physical device at probe time.
+regards,
+Stan
 
-I'm going to try these patches, but in my case there are a few
-differences that need a better understanding.
+The following changes since commit 93c16fabdb74a9c1a427402fc1fe588a45130c5b:
 
-First, I'm using device tree, not ACPI. In addition to adding OF support
-similar to the work you've done for ACPI, I think instead of
-acpi_dev_state_low_power() we should have a function that works for both
-ACPI and DT.
+  media: ov8856: Add support for 3264x2448 mode (2020-09-10 14:29:35 +0200)
 
-Second, even though all the chips I'm interested in are connected via
-I2C, some of them (IIO sensors) can alternatively be connected via SPI
-and it would make perfectly sense to use SPI instead of I2C. The "i2c-"
-prefix added in v8 on the ACPI property looks like a limitation in that
-respect. The same reasoning applies to the implementation in the I2C
-core, but implementation could be generalized later.
+are available in the Git repository at:
 
-I'd love to know your opinion on the above points.
+  git://linuxtv.org/svarbanov/media_tree.git tags/venus-for-v5.10-part2
 
--- 
-Luca
+for you to fetch changes up to 0aa6d05de364d6e06534ee179ae0d33c1656098b:
 
+  venus: firmware: Set virtual address ranges (2020-09-10 19:12:37 +0300)
+
+----------------------------------------------------------------
+Venus updates for v5.10 part2
+
+----------------------------------------------------------------
+Robin Murphy (1):
+      media: venus: core: Drop local dma_parms
+
+Stanimir Varbanov (8):
+      v4l2-ctrl: Add VP9 codec levels
+      venus: hfi_helper: Add VP9 profile and levels
+      venus: helpers: Add a helper to map v4l2 ids to HFI ids
+      venus: vdec: Set/Get VP9 profile/level
+      venus: vdec: Use helper to get profile and level
+      venus: venc: Use helper to set profile and level
+      firmware: qcom_scm: Add memory protect virtual address ranges
+      venus: firmware: Set virtual address ranges
+
+ .../userspace-api/media/v4l/ext-ctrls-codec.rst    |  43 ++++
+ drivers/firmware/qcom_scm.c                        |  24 +++
+ drivers/firmware/qcom_scm.h                        |   1 +
+ drivers/media/platform/qcom/venus/core.c           |  14 +-
+ drivers/media/platform/qcom/venus/core.h           |  17 +-
+ drivers/media/platform/qcom/venus/firmware.c       |  19 +-
+ drivers/media/platform/qcom/venus/helpers.c        | 239 +++++++++++++++++++++
+ drivers/media/platform/qcom/venus/helpers.h        |   2 +
+ drivers/media/platform/qcom/venus/hfi_helper.h     |  18 ++
+ drivers/media/platform/qcom/venus/vdec_ctrls.c     |  31 ++-
+ drivers/media/platform/qcom/venus/venc.c           | 159 +-------------
+ drivers/media/platform/qcom/venus/venc_ctrls.c     |  14 +-
+ drivers/media/v4l2-core/v4l2-ctrls.c               |  21 ++
+ include/linux/qcom_scm.h                           |   7 +
+ include/uapi/linux/v4l2-controls.h                 |  17 ++
+ 15 files changed, 429 insertions(+), 197 deletions(-)
