@@ -2,73 +2,192 @@ Return-Path: <SRS0=cWAp=CU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 740F9C43461
-	for <linux-media@archiver.kernel.org>; Fri, 11 Sep 2020 08:54:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44EDEC2D0E0
+	for <linux-media@archiver.kernel.org>; Fri, 11 Sep 2020 08:55:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 401E4204FD
-	for <linux-media@archiver.kernel.org>; Fri, 11 Sep 2020 08:54:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0715E214F1
+	for <linux-media@archiver.kernel.org>; Fri, 11 Sep 2020 08:55:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725777AbgIKIyy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Sep 2020 04:54:54 -0400
-Received: from relay11.mail.gandi.net ([217.70.178.231]:48641 "EHLO
-        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725550AbgIKIyw (ORCPT
+        id S1725812AbgIKIz5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Sep 2020 04:55:57 -0400
+Received: from relay12.mail.gandi.net ([217.70.178.232]:32937 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725771AbgIKIz5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 11 Sep 2020 04:54:52 -0400
+        Fri, 11 Sep 2020 04:55:57 -0400
 Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 5C214100012;
-        Fri, 11 Sep 2020 08:54:46 +0000 (UTC)
-Date:   Fri, 11 Sep 2020 10:58:37 +0200
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id CFC4E20000B;
+        Fri, 11 Sep 2020 08:55:49 +0000 (UTC)
+Date:   Fri, 11 Sep 2020 10:59:39 +0200
 From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-media@vger.kernel.org,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>, mchehab@kernel.org,
-        hverkuil-cisco@xs4all.nl, laurent.pinchart@ideasonboard.com,
-        linux-renesas-soc@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v5 2/3] dt-bindings: media: ov772x: Make bus-type
- mandatory
-Message-ID: <20200911085837.kyxx3p465ovowcel@uno.localdomain>
-References: <20200910162055.614089-1-jacopo+renesas@jmondi.org>
- <20200910162055.614089-3-jacopo+renesas@jmondi.org>
- <20200911053757.GF6566@paasikivi.fi.intel.com>
+To:     Luca Ceresoli <luca@lucaceresoli.net>
+Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Leon Luo <leonl@leopardimaging.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-media@vger.kernel.org, mchehab@kernel.org,
+        sakari.ailus@linux.intel.com, hverkuil-cisco@xs4all.nl,
+        laurent.pinchart@ideasonboard.com,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v5] dt-bindings: media: imx274: Convert to json-schema
+Message-ID: <20200911085939.3fahuftw3o2hj4vw@uno.localdomain>
+References: <20200910162009.613976-1-jacopo+renesas@jmondi.org>
+ <f6b43803-1880-c5fe-dba1-fa94d1dbb182@lucaceresoli.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200911053757.GF6566@paasikivi.fi.intel.com>
+In-Reply-To: <f6b43803-1880-c5fe-dba1-fa94d1dbb182@lucaceresoli.net>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sakari,
+Hi Luca,
 
-On Fri, Sep 11, 2020 at 08:37:57AM +0300, Sakari Ailus wrote:
+On Fri, Sep 11, 2020 at 09:53:23AM +0200, Luca Ceresoli wrote:
 > Hi Jacopo,
 >
-> On Thu, Sep 10, 2020 at 06:20:54PM +0200, Jacopo Mondi wrote:
-> > In order to establish required properties based on the selected
-> > bus type, make the 'bus-type' property mandatory. As this change
-> > documents an endpoint property, also document the 'remote-endpoint'
-> > one now that the 'endpoint' schema has been expanded.
+> On 10/09/20 18:20, Jacopo Mondi wrote:
+> > Convert the imx274 bindings document to json-schema and update
+> > the MAINTAINERS file accordingly.
 > >
-> > Binary compatibility with existing DTB is kept as the driver does not
-> > enforce the property to be present, and shall fall-back to default
-> > parallel bus configuration, which was the only supported bus type, if
-> > the property is not specified.
+> > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+> > ---
+> >
+> > v4->v5:
+> > - Add optional properties that were upstreamed in v5.9-rc2 in the textual
+> >   bindings
+> > - Move them to be lowercase: this patch should be fast-tracked through the
+> >   fixes branch to make sure it gets in before v5.9 is released, otherwise the
+> >   textual bindings will have supplies names in uppercase
+> >
+> > ---
+> >  .../devicetree/bindings/media/i2c/imx274.txt  | 38 ---------
+> >  .../bindings/media/i2c/sony,imx274.yaml       | 77 +++++++++++++++++++
+> >  MAINTAINERS                                   |  2 +-
+> >  3 files changed, 78 insertions(+), 39 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/media/i2c/imx274.txt
+> >  create mode 100644 Documentation/devicetree/bindings/media/i2c/sony,imx274.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/media/i2c/imx274.txt b/Documentation/devicetree/bindings/media/i2c/imx274.txt
+> > deleted file mode 100644
+> > index 0727079d2410..000000000000
+> > --- a/Documentation/devicetree/bindings/media/i2c/imx274.txt
+> > +++ /dev/null
+> > @@ -1,38 +0,0 @@
+> > -* Sony 1/2.5-Inch 8.51Mp CMOS Digital Image Sensor
+> > -
+> > -The Sony imx274 is a 1/2.5-inch CMOS active pixel digital image sensor with
+> > -an active array size of 3864H x 2202V. It is programmable through I2C
+> > -interface. The I2C address is fixed to 0x1a as per sensor data sheet.
+> > -Image data is sent through MIPI CSI-2, which is configured as 4 lanes
+> > -at 1440 Mbps.
+> > -
+> > -
+> > -Required Properties:
+> > -- compatible: value should be "sony,imx274" for imx274 sensor
+> > -- reg: I2C bus address of the device
+> > -
+> > -Optional Properties:
+> > -- reset-gpios: Sensor reset GPIO
+> > -- clocks: Reference to the input clock.
+> > -- clock-names: Should be "inck".
+> > -- VANA-supply: Sensor 2.8v analog supply.
+> > -- VDIG-supply: Sensor 1.8v digital core supply.
+> > -- VDDL-supply: Sensor digital IO 1.2v supply.
+> > -
+> > -The imx274 device node should contain one 'port' child node with
+> > -an 'endpoint' subnode. For further reading on port node refer to
+> > -Documentation/devicetree/bindings/media/video-interfaces.txt.
+> > -
+> > -Example:
+> > -	sensor@1a {
+> > -		compatible = "sony,imx274";
+> > -		reg = <0x1a>;
+> > -		#address-cells = <1>;
+> > -		#size-cells = <0>;
+> > -		reset-gpios = <&gpio_sensor 0 0>;
+> > -		port {
+> > -			sensor_out: endpoint {
+> > -				remote-endpoint = <&csiss_in>;
+> > -			};
+> > -		};
+> > -	};
+> > diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx274.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx274.yaml
+> > new file mode 100644
+> > index 000000000000..fe81def68466
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/media/i2c/sony,imx274.yaml
+> > @@ -0,0 +1,77 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/media/i2c/sony,imx274.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Sony 1/2.5-Inch 8.51MP CMOS Digital Image Sensor
+> > +
+> > +maintainers:
+> > +  - Leon Luo <leonl@leopardimaging.com>
+> > +
+> > +description: |
+> > +  The Sony IMX274 is a 1/2.5-inch CMOS active pixel digital image sensor with an
+> > +  active array size of 3864H x 2202V. It is programmable through I2C interface.
+> > +  Image data is sent through MIPI CSI-2, which is configured as 4 lanes at 1440
+> > +  Mbps.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: sony,imx274
+> > +
+> > +  reg:
+> > +    const: 0x1a
+> > +
+> > +  reset-gpios:
+> > +    maxItems: 1
+> > +
+> > +  port:
+> > +    type: object
+> > +    description: |
+> > +      Output video port. See ../video-interfaces.txt.
+> > +
+> > +  clocks:
+> > +    maxItems: 1
+> > +
+> > +  clock-names:
+> > +    const: inck
+> > +
+> > +  vana-supply:
+> > +    description: Sensor 2.8v analog supply.
+> > +    maxItems: 1
+> > +
+> > +  vdig-supply:
+> > +    description: Sensor 2.8v analog supply.
 >
-> Could you add a comment on this to the driver, so this feature isn't
-> accidentally removed?
+> Copy-paste leftover. Should be "Sensor 1.8v digital core supply."
+>
 
-Sure, can I send a patch in reply to this series to avoid a v6 ?
+oooo :(
+I've been so sloppy on this series I'm almost ashamed.
+
+I'll send a v6 with your tag in
+
+> > +    maxItems: 1
+> > +
+> > +  vddl-supply:
+> > +    description: Sensor 2.8v analog supply.
+>
+> Same here, should be "Sensor digital IO 1.2v supply."
+>
+> With the above fixed you can add to v6:
+>  Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
 >
 > --
-> Regards,
->
-> Sakari Ailus
+> Luca
