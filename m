@@ -4,23 +4,23 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F11DC433E2
-	for <linux-media@archiver.kernel.org>; Sat, 12 Sep 2020 14:33:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39B33C433E2
+	for <linux-media@archiver.kernel.org>; Sat, 12 Sep 2020 14:33:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DDB8E20855
-	for <linux-media@archiver.kernel.org>; Sat, 12 Sep 2020 14:33:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 01078208B3
+	for <linux-media@archiver.kernel.org>; Sat, 12 Sep 2020 14:33:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725937AbgILOdB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 12 Sep 2020 10:33:01 -0400
-Received: from gw.c-home.cz ([89.24.150.100]:33045 "EHLO dmz.c-home.cz"
+        id S1725933AbgILOcx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 12 Sep 2020 10:32:53 -0400
+Received: from gw.c-home.cz ([89.24.150.100]:33043 "EHLO dmz.c-home.cz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725881AbgILObe (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1725880AbgILObe (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Sat, 12 Sep 2020 10:31:34 -0400
 Received: from ubuntu1804.c-home.cz (unifi.c-home.cz [192.168.1.239])
-        by dmz.c-home.cz (8.14.4+Sun/8.14.4) with ESMTP id 08CEUtN1007223;
+        by dmz.c-home.cz (8.14.4+Sun/8.14.4) with ESMTP id 08CEUtN3007223;
         Sat, 12 Sep 2020 16:31:01 +0200 (CEST)
 From:   Martin Cerveny <m.cerveny@computer.org>
 To:     Maxime Ripard <mripard@kernel.org>
@@ -33,9 +33,9 @@ Cc:     Martin Cerveny <m.cerveny@computer.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Rob Herring <robh+dt@kernel.org>
-Subject: [PATCH v2 2/6] dt-bindings: sram: allwinner,sun4i-a10-system-control: Add V3s compatibles
-Date:   Sat, 12 Sep 2020 16:30:48 +0200
-Message-Id: <20200912143052.30952-3-m.cerveny@computer.org>
+Subject: [PATCH v2 4/6] media: cedrus: Add support for V3s
+Date:   Sat, 12 Sep 2020 16:30:50 +0200
+Message-Id: <20200912143052.30952-5-m.cerveny@computer.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200912143052.30952-1-m.cerveny@computer.org>
 References: <20200912143052.30952-1-m.cerveny@computer.org>
@@ -44,38 +44,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Allwinner V3s has system control similar to that in H3.
-Add compatibles for system control with SRAM C1 region.
+V3s video engine runs at lower speed and support video decoder
+for H.264 and JPEG/MJPEG only.
 
 Signed-off-by: Martin Cerveny <m.cerveny@computer.org>
 ---
- .../bindings/sram/allwinner,sun4i-a10-system-control.yaml   | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/staging/media/sunxi/cedrus/cedrus.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml b/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml
-index f5825935fd22..9577d6c1494a 100644
---- a/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml
-+++ b/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml
-@@ -33,6 +33,9 @@ properties:
-           - const: allwinner,sun4i-a10-system-control
-       - const: allwinner,sun8i-a23-system-control
-       - const: allwinner,sun8i-h3-system-control
-+      - items:
-+          - const: allwinner,sun8i-v3s-system-control
-+          - const: allwinner,sun8i-h3-system-control
-       - const: allwinner,sun50i-a64-sram-controller
-         deprecated: true
-       - const: allwinner,sun50i-a64-system-control
-@@ -86,6 +89,9 @@ patternProperties:
-               - items:
-                   - const: allwinner,sun8i-h3-sram-c1
-                   - const: allwinner,sun4i-a10-sram-c1
-+              - items:
-+                  - const: allwinner,sun8i-v3s-sram-c1
-+                  - const: allwinner,sun4i-a10-sram-c1
-               - items:
-                   - const: allwinner,sun50i-a64-sram-c1
-                   - const: allwinner,sun4i-a10-sram-c1
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/staging/media/sunxi/cedrus/cedrus.c
+index ae7e154eca9f..79ec5e07b416 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
+@@ -511,6 +511,12 @@ static const struct cedrus_variant sun8i_h3_cedrus_variant = {
+ 	.mod_rate	= 402000000,
+ };
+ 
++static const struct cedrus_variant sun8i_v3s_cedrus_variant = {
++	.capabilities	= CEDRUS_CAPABILITY_UNTILED |
++			  CEDRUS_CAPABILITY_H264_DEC,
++	.mod_rate	= 297000000,
++};
++
+ static const struct cedrus_variant sun50i_a64_cedrus_variant = {
+ 	.capabilities	= CEDRUS_CAPABILITY_UNTILED |
+ 			  CEDRUS_CAPABILITY_MPEG2_DEC |
+@@ -557,6 +563,10 @@ static const struct of_device_id cedrus_dt_match[] = {
+ 		.compatible = "allwinner,sun8i-h3-video-engine",
+ 		.data = &sun8i_h3_cedrus_variant,
+ 	},
++	{
++		.compatible = "allwinner,sun8i-v3s-video-engine",
++		.data = &sun8i_v3s_cedrus_variant,
++	},
+ 	{
+ 		.compatible = "allwinner,sun50i-a64-video-engine",
+ 		.data = &sun50i_a64_cedrus_variant,
 -- 
 2.17.1
 
