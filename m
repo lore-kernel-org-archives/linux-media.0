@@ -4,29 +4,29 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EDF2C43461
-	for <linux-media@archiver.kernel.org>; Sun, 13 Sep 2020 18:43:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A01CEC2D0A7
+	for <linux-media@archiver.kernel.org>; Sun, 13 Sep 2020 18:43:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1328D2168B
-	for <linux-media@archiver.kernel.org>; Sun, 13 Sep 2020 18:43:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 72BB6221E3
+	for <linux-media@archiver.kernel.org>; Sun, 13 Sep 2020 18:43:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725976AbgIMSnA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 13 Sep 2020 14:43:00 -0400
-Received: from relmlor1.renesas.com ([210.160.252.171]:17654 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725969AbgIMSm5 (ORCPT
+        id S1725986AbgIMSnE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 13 Sep 2020 14:43:04 -0400
+Received: from relmlor2.renesas.com ([210.160.252.172]:58490 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725980AbgIMSnB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 13 Sep 2020 14:42:57 -0400
+        Sun, 13 Sep 2020 14:43:01 -0400
 X-IronPort-AV: E=Sophos;i="5.76,423,1592838000"; 
-   d="scan'208";a="57142465"
+   d="scan'208";a="56925270"
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 14 Sep 2020 03:42:55 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 14 Sep 2020 03:43:00 +0900
 Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id DE6E940078B7;
-        Mon, 14 Sep 2020 03:42:53 +0900 (JST)
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id B739540078B7;
+        Mon, 14 Sep 2020 03:42:58 +0900 (JST)
 From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     Jacopo Mondi <jacopo@jmondi.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -37,9 +37,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Prabhakar <prabhakar.csengg@gmail.com>
-Subject: [PATCH v4 1/3] media: i2c: ov772x: Parse endpoint properties
-Date:   Sun, 13 Sep 2020 19:42:45 +0100
-Message-Id: <20200913184247.618-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v4 3/3] media: i2c: ov772x: Add test pattern control
+Date:   Sun, 13 Sep 2020 19:42:47 +0100
+Message-Id: <20200913184247.618-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200913184247.618-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20200913184247.618-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -48,73 +48,78 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Parse endpoint properties using v4l2_fwnode_endpoint_alloc_parse()
-to determine bus-type and store it locally in priv data.
-
-Also for backward compatibility with the existing DT where bus-type
-isnt specified fallback to V4L2_MBUS_PARALLEL.
+Add support for test pattern control supported by the sensor.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- drivers/media/i2c/ov772x.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ drivers/media/i2c/ov772x.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/i2c/ov772x.c b/drivers/media/i2c/ov772x.c
-index 2cc6a678069a..551082aa7026 100644
+index edd7c4c22225..2eeb11eae5f8 100644
 --- a/drivers/media/i2c/ov772x.c
 +++ b/drivers/media/i2c/ov772x.c
-@@ -31,6 +31,7 @@
- #include <media/v4l2-ctrls.h>
- #include <media/v4l2-device.h>
- #include <media/v4l2-event.h>
-+#include <media/v4l2-fwnode.h>
- #include <media/v4l2-image-sizes.h>
- #include <media/v4l2-subdev.h>
+@@ -227,7 +227,7 @@
  
-@@ -434,6 +435,7 @@ struct ov772x_priv {
- #ifdef CONFIG_MEDIA_CONTROLLER
- 	struct media_pad pad;
- #endif
-+	enum v4l2_mbus_type		  bus_type;
+ /* COM3 */
+ #define SWAP_MASK       (SWAP_RGB | SWAP_YUV | SWAP_ML)
+-#define IMG_MASK        (VFLIP_IMG | HFLIP_IMG)
++#define IMG_MASK        (VFLIP_IMG | HFLIP_IMG | SCOLOR_TEST)
+ 
+ #define VFLIP_IMG       0x80	/* Vertical flip image ON/OFF selection */
+ #define HFLIP_IMG       0x40	/* Horizontal mirror image ON/OFF selection */
+@@ -425,6 +425,7 @@ struct ov772x_priv {
+ 	const struct ov772x_win_size     *win;
+ 	struct v4l2_ctrl		 *vflip_ctrl;
+ 	struct v4l2_ctrl		 *hflip_ctrl;
++	unsigned int			  test_pattern;
+ 	/* band_filter = COM8[5] ? 256 - BDBASE : 0 */
+ 	struct v4l2_ctrl		 *band_filter_ctrl;
+ 	unsigned int			  fps;
+@@ -540,6 +541,11 @@ static const struct ov772x_win_size ov772x_win_sizes[] = {
+ 	},
  };
  
++static const char * const ov772x_test_pattern_menu[] = {
++	"Disabled",
++	"Vertical Color Bar Type 1",
++};
++
  /*
-@@ -1354,6 +1356,8 @@ static const struct v4l2_subdev_ops ov772x_subdev_ops = {
+  * frame rate settings lists
+  */
+@@ -809,6 +815,9 @@ static int ov772x_s_ctrl(struct v4l2_ctrl *ctrl)
+ 		}
  
- static int ov772x_probe(struct i2c_client *client)
- {
-+	struct v4l2_fwnode_endpoint bus_cfg = { .bus_type = 0 };
-+	struct fwnode_handle	*ep;
- 	struct ov772x_priv	*priv;
- 	int			ret;
- 	static const struct regmap_config ov772x_regmap_config = {
-@@ -1415,6 +1419,26 @@ static int ov772x_probe(struct i2c_client *client)
- 		goto error_clk_put;
+ 		return ret;
++	case V4L2_CID_TEST_PATTERN:
++		priv->test_pattern = ctrl->val;
++		return 0;
  	}
  
-+	ep = fwnode_graph_get_next_endpoint(dev_fwnode(&client->dev),
-+					    NULL);
-+	if (!ep) {
-+		dev_err(&client->dev, "endpoint node not found\n");
-+		ret = -EINVAL;
-+		goto error_clk_put;
-+	}
-+
-+	bus_cfg.bus_type = V4L2_MBUS_PARALLEL;
-+	ret = v4l2_fwnode_endpoint_alloc_parse(ep, &bus_cfg);
-+	priv->bus_type = bus_cfg.bus_type;
-+	v4l2_fwnode_endpoint_free(&bus_cfg);
-+	if (ret) {
-+		/* For backward compatibility with the existing DT where
-+		 * bus-type isnt specified fallback to V4L2_MBUS_PARALLEL
-+		 */
-+		priv->bus_type = V4L2_MBUS_PARALLEL;
-+		dev_notice(&client->dev, "Falling back to V4L2_MBUS_PARALLEL mode\n");
-+	}
-+
- 	ret = ov772x_video_probe(priv);
+ 	return -EINVAL;
+@@ -1107,6 +1116,8 @@ static int ov772x_set_params(struct ov772x_priv *priv,
+ 		val ^= VFLIP_IMG;
+ 	if (priv->hflip_ctrl->val)
+ 		val ^= HFLIP_IMG;
++	if (priv->test_pattern)
++		val |= SCOLOR_TEST;
+ 
+ 	ret = regmap_update_bits(priv->regmap, COM3, SWAP_MASK | IMG_MASK, val);
  	if (ret < 0)
- 		goto error_gpio_put;
+@@ -1405,6 +1416,10 @@ static int ov772x_probe(struct i2c_client *client)
+ 	priv->band_filter_ctrl = v4l2_ctrl_new_std(&priv->hdl, &ov772x_ctrl_ops,
+ 						   V4L2_CID_BAND_STOP_FILTER,
+ 						   0, 256, 1, 0);
++	v4l2_ctrl_new_std_menu_items(&priv->hdl, &ov772x_ctrl_ops,
++				     V4L2_CID_TEST_PATTERN,
++				     ARRAY_SIZE(ov772x_test_pattern_menu) - 1,
++				     0, 0, ov772x_test_pattern_menu);
+ 	priv->subdev.ctrl_handler = &priv->hdl;
+ 	if (priv->hdl.error) {
+ 		ret = priv->hdl.error;
 -- 
 2.17.1
 
