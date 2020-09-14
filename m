@@ -2,144 +2,135 @@ Return-Path: <SRS0=4kUN=CX=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12F39C433E2
-	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 06:54:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9668C43461
+	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 07:48:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D091A21548
-	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 06:54:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7FFE8217BA
+	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 07:48:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726051AbgINGyU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Sep 2020 02:54:20 -0400
-Received: from mga01.intel.com ([192.55.52.88]:33536 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726039AbgINGyU (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Sep 2020 02:54:20 -0400
-IronPort-SDR: 9z7zLBqthAIuv2/W1wASKCv2JFUZPMQcJObAD3FqMuugDfJLE7QjmXrTGDyhaq4rb4hP7rs8Fl
- iRnRmNyioq5g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9743"; a="177092748"
-X-IronPort-AV: E=Sophos;i="5.76,425,1592895600"; 
-   d="scan'208";a="177092748"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2020 23:54:19 -0700
-IronPort-SDR: pdEiVDhMyKt7oIChbRSjZKBN4EcgjafmPS4ykn+81MtIwHwnqFCNhEEN4umDbCbm4DxCu/3qLv
- 5KhEZ4b/34+g==
-X-IronPort-AV: E=Sophos;i="5.76,425,1592895600"; 
-   d="scan'208";a="286329780"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2020 23:54:17 -0700
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 9E6CE20815; Mon, 14 Sep 2020 09:54:15 +0300 (EEST)
-Date:   Mon, 14 Sep 2020 09:54:15 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Jacopo Mondi <jacopo@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Subject: Re: [PATCH v4 1/3] media: i2c: ov772x: Parse endpoint properties
-Message-ID: <20200914065415.GK26842@paasikivi.fi.intel.com>
-References: <20200913184247.618-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20200913184247.618-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        id S1726128AbgINHs1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Sep 2020 03:48:27 -0400
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:53667 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726154AbgINHsX (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 14 Sep 2020 03:48:23 -0400
+Received: from [78.134.51.148] (port=41466 helo=[192.168.77.62])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1kHjDi-0007bu-2M; Mon, 14 Sep 2020 09:48:14 +0200
+Subject: Re: [PATCH] media: imx274: add support for sensor mode6, 1280x540
+To:     Sakari Ailus <sakari.ailus@iki.fi>,
+        Eugen Hristev <eugen.hristev@microchip.com>
+Cc:     leonl@leopardimaging.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200909105328.92598-1-eugen.hristev@microchip.com>
+ <20200911214441.GG834@valkosipuli.retiisi.org.uk>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Message-ID: <de057619-f314-58d8-2000-aad0cd052bba@lucaceresoli.net>
+Date:   Mon, 14 Sep 2020 09:48:13 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200913184247.618-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200911214441.GG834@valkosipuli.retiisi.org.uk>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Prabhakar,
+Hi,
 
-Thanks for the patchset.
-
-On Sun, Sep 13, 2020 at 07:42:45PM +0100, Lad Prabhakar wrote:
-> Parse endpoint properties using v4l2_fwnode_endpoint_alloc_parse()
-> to determine bus-type and store it locally in priv data.
+On 11/09/20 23:44, Sakari Ailus wrote:
+> Hi Eugen,
 > 
-> Also for backward compatibility with the existing DT where bus-type
-> isnt specified fallback to V4L2_MBUS_PARALLEL.
+> Thanks for the patch.
 > 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
->  drivers/media/i2c/ov772x.c | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
+> On Wed, Sep 09, 2020 at 01:53:28PM +0300, Eugen Hristev wrote:
+>> Add support for the mode 6 for the sensor, this mode uses
+>> 3/8 subsampling and 3 horizontal binning.
+>> Aspect ratio is changed.
+>> Split the bin_ratio variable into two parts, one for
+>> width and one for height, as the ratio is no longer preserved
+>> when doing subsampling in this mode.
+>>
+>> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+>> ---
+>>  drivers/media/i2c/imx274.c | 89 +++++++++++++++++++++++++++++++-------
+>>  1 file changed, 73 insertions(+), 16 deletions(-)
+>>
+>> diff --git a/drivers/media/i2c/imx274.c b/drivers/media/i2c/imx274.c
+>> index e6aa9f32b6a8..5adb11f036e2 100644
+>> --- a/drivers/media/i2c/imx274.c
+>> +++ b/drivers/media/i2c/imx274.c
+>> @@ -147,8 +147,9 @@ static const struct regmap_config imx274_regmap_config = {
+>>  
+>>  enum imx274_binning {
+>>  	IMX274_BINNING_OFF,
+>> -	IMX274_BINNING_2_1,
+>> -	IMX274_BINNING_3_1,
+>> +	IMX274_BINNING_2_2,
+>> +	IMX274_BINNING_3_3,
+>> +	IMX274_BINNING_4_3,
 > 
-> diff --git a/drivers/media/i2c/ov772x.c b/drivers/media/i2c/ov772x.c
-> index 2cc6a678069a..551082aa7026 100644
-> --- a/drivers/media/i2c/ov772x.c
-> +++ b/drivers/media/i2c/ov772x.c
-> @@ -31,6 +31,7 @@
->  #include <media/v4l2-ctrls.h>
->  #include <media/v4l2-device.h>
->  #include <media/v4l2-event.h>
-> +#include <media/v4l2-fwnode.h>
->  #include <media/v4l2-image-sizes.h>
->  #include <media/v4l2-subdev.h>
->  
-> @@ -434,6 +435,7 @@ struct ov772x_priv {
->  #ifdef CONFIG_MEDIA_CONTROLLER
->  	struct media_pad pad;
->  #endif
-> +	enum v4l2_mbus_type		  bus_type;
->  };
->  
->  /*
-> @@ -1354,6 +1356,8 @@ static const struct v4l2_subdev_ops ov772x_subdev_ops = {
->  
->  static int ov772x_probe(struct i2c_client *client)
->  {
-> +	struct v4l2_fwnode_endpoint bus_cfg = { .bus_type = 0 };
-> +	struct fwnode_handle	*ep;
->  	struct ov772x_priv	*priv;
->  	int			ret;
->  	static const struct regmap_config ov772x_regmap_config = {
-> @@ -1415,6 +1419,26 @@ static int ov772x_probe(struct i2c_client *client)
->  		goto error_clk_put;
->  	}
->  
-> +	ep = fwnode_graph_get_next_endpoint(dev_fwnode(&client->dev),
-> +					    NULL);
-> +	if (!ep) {
-> +		dev_err(&client->dev, "endpoint node not found\n");
-> +		ret = -EINVAL;
-> +		goto error_clk_put;
-> +	}
-> +
-> +	bus_cfg.bus_type = V4L2_MBUS_PARALLEL;
-> +	ret = v4l2_fwnode_endpoint_alloc_parse(ep, &bus_cfg);
-> +	priv->bus_type = bus_cfg.bus_type;
-> +	v4l2_fwnode_endpoint_free(&bus_cfg);
-> +	if (ret) {
-> +		/* For backward compatibility with the existing DT where
-> +		 * bus-type isnt specified fallback to V4L2_MBUS_PARALLEL
+> This enum is unused (apart from the useless use of the first value). Please
+> remove it (may be a new patch).
 
-"isn't", "fall back", and a period, please.
+I agree.
 
-> +		 */
-> +		priv->bus_type = V4L2_MBUS_PARALLEL;
-> +		dev_notice(&client->dev, "Falling back to V4L2_MBUS_PARALLEL mode\n");
+[...]
 
-I'd just use dev_dbg().
+>> @@ -454,7 +498,8 @@ static const struct imx274_mode imx274_modes[] = {
+>>  	},
+>>  	{
+>>  		/* mode 3, 1080p */
+>> -		.bin_ratio = 2,
+>> +		.wbin_ratio = 2, /* 1620 */
 
-> +	}
-> +
->  	ret = ov772x_video_probe(priv);
->  	if (ret < 0)
->  		goto error_gpio_put;
+s/1620/1920/
+
+[...]
+
+>> @@ -906,14 +963,14 @@ static int __imx274_change_compose(struct stimx274 *imx274,
+>>  		}
+>>  	}
+>>  
+>> -	*width = cur_crop->width / best_mode->bin_ratio;
+>> -	*height = cur_crop->height / best_mode->bin_ratio;
+>> +	*width = cur_crop->width / best_mode->wbin_ratio;
+>> +	*height = cur_crop->height / best_mode->hbin_ratio;
+>>  
+>>  	if (which == V4L2_SUBDEV_FORMAT_ACTIVE)
+>>  		imx274->mode = best_mode;
+>>  
+>> -	dev_dbg(dev, "%s: selected %u:1 binning\n",
+>> -		__func__, best_mode->bin_ratio);
+>> +	dev_dbg(dev, "%s: selected %u:%u binning\n",
+> 
+> I think the earlier message suggested it was ratio. How about "x"
+> instead of a colon?
+> 
+> Apart from these looks good to me.
+
+LGTM too.
 
 -- 
-Regards,
-
-Sakari Ailus
+Luca
