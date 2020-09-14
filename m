@@ -2,112 +2,131 @@ Return-Path: <SRS0=4kUN=CX=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48512C433E2
-	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 11:27:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18409C433E2
+	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 12:02:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1A16C208DB
-	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 11:27:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D5CC521655
+	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 12:02:08 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ENOOvlVt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726081AbgINL05 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Sep 2020 07:26:57 -0400
-Received: from mx2.suse.de ([195.135.220.15]:43092 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726057AbgINLZ1 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Sep 2020 07:25:27 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 0E010B0EA;
-        Mon, 14 Sep 2020 11:25:41 +0000 (UTC)
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     sumit.semwal@linaro.org, christian.koenig@amd.com, daniel@ffwll.ch,
-        airlied@linux.ie, sam@ravnborg.org, mark.cave-ayland@ilande.co.uk,
-        kraxel@redhat.com, davem@davemloft.net,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        l.stach@pengutronix.de, linux+etnaviv@armlinux.org.uk,
-        christian.gmeiner@gmail.com, jani.nikula@linux.intel.com,
-        joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, pawel@osciak.com,
-        m.szyprowski@samsung.com, kyungmin.park@samsung.com,
-        tfiga@chromium.org, mchehab@kernel.org, chris@chris-wilson.co.uk,
-        matthew.auld@intel.com, thomas.hellstrom@intel.com
-Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, etnaviv@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        sparclinux@vger.kernel.org, Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH 0/3] dma-buf: Flag vmap'ed memory as system or I/O memory
-Date:   Mon, 14 Sep 2020 13:25:18 +0200
-Message-Id: <20200914112521.1327-1-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.28.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726112AbgINMBi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Sep 2020 08:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40078 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726050AbgINLmy (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 14 Sep 2020 07:42:54 -0400
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41583C06174A
+        for <linux-media@vger.kernel.org>; Mon, 14 Sep 2020 04:42:54 -0700 (PDT)
+Received: by mail-qt1-x843.google.com with SMTP id p65so13146782qtd.2
+        for <linux-media@vger.kernel.org>; Mon, 14 Sep 2020 04:42:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=KO7Vo/UFbom0XQ02gFw7M+7BSAjhKhvbrD6dSqHvAMQ=;
+        b=ENOOvlVthgdjhid6ke8a7N1zoPdV5ZwIslnKJaivi9E6ml1PXqyYgh6zW1eCxvXGVl
+         1D5B5Huz9ElO4d9YF9XgoniqfHwX7YgsXEhsfZH2jY5U/QthT1VCFfqHIMP81F3TBvmo
+         7IkCPUTAFClkvYgHPcre2zNWks05+JLlpIpQPX5B2rIuNRiz7HFdH+wGlVHQFYNrWDvi
+         dYCqRecySlj7NFpdDQjnFVkCzrkuEBkKpFY2RLHyiM9Eohfd/RxqMjo5Q95gXTF1qGnB
+         jjeZcLhkjhWN5BeM0Ef0BQCyxX4a2dauSQcpuV6b5g5DtqRhKlgd+PBEOXmpHTR2y8IB
+         MoYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=KO7Vo/UFbom0XQ02gFw7M+7BSAjhKhvbrD6dSqHvAMQ=;
+        b=JH5nm3/q5uN+o4FyNBvNYbkrcihRM8ZGdC3DDP52nA/lIhZBg3EOSf3rikMaESSWaO
+         iGxFsdO+87oFOcrjEDIUoxRKX+HTwYqaFPdu2YDUEFXhRNOqNSmQ6JHSI2VsJRf+ks27
+         1u8oR+k7TegBalwULoOYnl+g/4BJ9Znw/F9moTmylIVCtOgrhoAgI1TvJLNOWYCRBz1x
+         JNGJSd8eHUZC9guOIwPa7z6pGSN6Ow9J5DtoWka1rAWn53BvMTcCCallC363JVPMpNbM
+         WOu/T7j7eoLSqznLyONgJ6x7EfuNfnlmea4gUfnsOdhx+YZ6YyCJlId7/9WRjxC6kRz+
+         50ow==
+X-Gm-Message-State: AOAM531rYzdpJA48RS+ccRCbumoDA82w4FnUTeQEU/LZX6HgXpLtBqpU
+        RF+b9SZsSlc1d5M7e+/DE+o=
+X-Google-Smtp-Source: ABdhPJw1zzjIHhSsoqdw/CFpoOmYWYLYxs8La1mK5yemSz/hleq214flFXUq1ilnYmpFPNruErpgyQ==
+X-Received: by 2002:ac8:7b2c:: with SMTP id l12mr12473039qtu.98.1600083773356;
+        Mon, 14 Sep 2020 04:42:53 -0700 (PDT)
+Received: from localhost.localdomain ([2804:14c:482:640:9cc0:878:419e:8021])
+        by smtp.gmail.com with ESMTPSA id r42sm14176764qtk.29.2020.09.14.04.42.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Sep 2020 04:42:52 -0700 (PDT)
+From:   Fabio Estevam <festevam@gmail.com>
+To:     hverkuil-cisco@xs4all.nl
+Cc:     lkundrak@v3.sk, mchehab@kernel.org, linux-media@vger.kernel.org,
+        Fabio Estevam <festevam@gmail.com>
+Subject: [PATCH] media: marvell-ccic: Pass __maybe_unused to the PM hooks
+Date:   Mon, 14 Sep 2020 08:42:43 -0300
+Message-Id: <20200914114244.6036-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Dma-buf provides vmap() and vunmap() for retrieving and releasing mappings
-of dma-buf memory in kernel address space. The functions operate with plain
-addresses and the assumption is that the memory can be accessed with load
-and store operations. This is not the case on some architectures (e.g.,
-sparc64) where I/O memory can only be accessed with dedicated instructions.
+Building for the riscv allmodconfig target leads to the following
+build warnings:
 
-This patchset introduces struct dma_buf_map, which contains the address of
-a buffer and a flag that tells whether system- or I/O-memory instructions
-are required.
+drivers/media/platform/marvell-ccic/mmp-driver.c:347:12: warning: 'mmpcam_resume' defined but not used [-Wunused-function]
+drivers/media/platform/marvell-ccic/mmp-driver.c:338:12: warning: 'mmpcam_suspend' defined but not used [-Wunused-function]
 
-Some background: updating the DRM framebuffer console on sparc64 makes the
-kernel panic. This is because the framebuffer memory cannot be accessed with
-system-memory instructions. We currently employ a workaround in DRM to
-address this specific problem. [1]
+This happens because the generated .config does not select CONFIG_PM and 
+CONFIG_PM_SLEEP options.
 
-To resolve the problem, we'd like to address it at the most common point,
-which is the dma-buf framework. The dma-buf mapping ideally knows if I/O
-instructions are required and exports this information to it's users. The
-new structure struct dma_buf_map stores the buffer address and a flag that
-signals I/O memory. Affected users of the buffer (e.g., drivers, frameworks)
-can then access the memory accordingly.
+Mark the PM hooks as __maybe_unused to avoid such warnings.
 
-This patchset only introduces struct dma_buf_map, and updates struct dma_buf
-and it's interfaces. Further patches can update dma-buf users. For example,
-there's a prototype patchset for DRM that fixes the framebuffer problem. [2]
+Reported-by: Olof's autobuilder <build@lixom.net>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ drivers/media/platform/marvell-ccic/mmp-driver.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Further work: TTM, one of DRM's memory managers, already exports an
-is_iomem flag of its own. It could later be switched over to exporting struct
-dma_buf_map, thus simplifying some code. Several DRM drivers expect their
-fbdev console to operate on I/O memory. These could possibly be switched over
-to the generic fbdev emulation, as soon as the generic code uses struct
-dma_buf_map.
-
-[1] https://lore.kernel.org/dri-devel/20200725191012.GA434957@ravnborg.org/
-[2] https://lore.kernel.org/dri-devel/20200806085239.4606-1-tzimmermann@suse.de/
-
-Thomas Zimmermann (3):
-  dma-buf: Add struct dma-buf-map for storing struct dma_buf.vaddr_ptr
-  dma-buf: Use struct dma_buf_map in dma_buf_vmap() interfaces
-  dma-buf: Use struct dma_buf_map in dma_buf_vunmap() interfaces
-
- Documentation/driver-api/dma-buf.rst          |   3 +
- drivers/dma-buf/dma-buf.c                     |  40 +++---
- drivers/gpu/drm/drm_gem_cma_helper.c          |  16 ++-
- drivers/gpu/drm/drm_gem_shmem_helper.c        |  17 ++-
- drivers/gpu/drm/drm_prime.c                   |  14 +-
- drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c   |  13 +-
- drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c    |  13 +-
- .../drm/i915/gem/selftests/i915_gem_dmabuf.c  |  18 ++-
- drivers/gpu/drm/tegra/gem.c                   |  23 ++--
- .../common/videobuf2/videobuf2-dma-contig.c   |  17 ++-
- .../media/common/videobuf2/videobuf2-dma-sg.c |  19 ++-
- .../common/videobuf2/videobuf2-vmalloc.c      |  21 ++-
- include/drm/drm_prime.h                       |   5 +-
- include/linux/dma-buf-map.h                   | 126 ++++++++++++++++++
- include/linux/dma-buf.h                       |  11 +-
- 15 files changed, 274 insertions(+), 82 deletions(-)
- create mode 100644 include/linux/dma-buf-map.h
-
---
-2.28.0
+diff --git a/drivers/media/platform/marvell-ccic/mmp-driver.c b/drivers/media/platform/marvell-ccic/mmp-driver.c
+index c4b28a00a3a2..097d7775e1ee 100644
+--- a/drivers/media/platform/marvell-ccic/mmp-driver.c
++++ b/drivers/media/platform/marvell-ccic/mmp-driver.c
+@@ -307,7 +307,7 @@ static int mmpcam_platform_remove(struct platform_device *pdev)
+  * Suspend/resume support.
+  */
+ 
+-static int mmpcam_runtime_resume(struct device *dev)
++static __maybe_unused int mmpcam_runtime_resume(struct device *dev)
+ {
+ 	struct mmp_camera *cam = dev_get_drvdata(dev);
+ 	struct mcam_camera *mcam = &cam->mcam;
+@@ -321,7 +321,7 @@ static int mmpcam_runtime_resume(struct device *dev)
+ 	return 0;
+ }
+ 
+-static int mmpcam_runtime_suspend(struct device *dev)
++static __maybe_unused int mmpcam_runtime_suspend(struct device *dev)
+ {
+ 	struct mmp_camera *cam = dev_get_drvdata(dev);
+ 	struct mcam_camera *mcam = &cam->mcam;
+@@ -335,7 +335,7 @@ static int mmpcam_runtime_suspend(struct device *dev)
+ 	return 0;
+ }
+ 
+-static int mmpcam_suspend(struct device *dev)
++static __maybe_unused int mmpcam_suspend(struct device *dev)
+ {
+ 	struct mmp_camera *cam = dev_get_drvdata(dev);
+ 
+@@ -344,7 +344,7 @@ static int mmpcam_suspend(struct device *dev)
+ 	return 0;
+ }
+ 
+-static int mmpcam_resume(struct device *dev)
++static __maybe_unused int mmpcam_resume(struct device *dev)
+ {
+ 	struct mmp_camera *cam = dev_get_drvdata(dev);
+ 
+-- 
+2.17.1
 
