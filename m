@@ -7,48 +7,48 @@ X-Spam-Status: No, score=-14.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9FA5C433E2
-	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 09:04:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FFCFC43461
+	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 09:04:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 58171207C3
+	by mail.kernel.org (Postfix) with ESMTP id CD16621D1A
 	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 09:04:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1600074248;
-	bh=yM9N4NLqi4WGMy1CjkjYEiUQeXobHjZl0q9V8IJvvnw=;
+	bh=SQ8BrVWT+pT9oqMRs+BcLSzHdUIIt5GLTT/iCSfSVEI=;
 	h=From:Cc:Subject:Date:In-Reply-To:References:To:List-ID:From;
-	b=j1wgn1DQ5ljXZUWwIEAx+lzLKranhVda/9jmCwHPODTPjbiKOo9N7TSQLb1TGAMCz
-	 IkqAqL7ganrfdBLo8FgEPWWPIvDm5C5YSdlHjf369ArDAaNUnSs20ymSqLXfjRJ/xO
-	 PMKbRO9UaPa8qzCnT3DAocbF2ie4ecW1vqu98UaQ=
+	b=0i0bnH50ugD0gQlQ9X3KpRBqbqGKK1p671vGyumII02pSDUyWywsAdE0U+N0Ebnrx
+	 +axo0Hh0DS4Fk4WLLs9oCP9dyfEZzOQD+X16DoofNAjKvbBHCeBSRV3A2w+U1bZN6W
+	 RTuk4M3lroG54sbeOiO2MOFp6TDoRs6x7W/oyFaU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726266AbgINJEB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Sep 2020 05:04:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37860 "EHLO mail.kernel.org"
+        id S1726274AbgINJEF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Sep 2020 05:04:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37868 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726224AbgINJDh (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1726227AbgINJDh (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Mon, 14 Sep 2020 05:03:37 -0400
 Received: from mail.kernel.org (ip5f5ad5d8.dynamic.kabel-deutschland.de [95.90.213.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1CDE122224;
+        by mail.kernel.org (Postfix) with ESMTPSA id 471ED2222C;
         Mon, 14 Sep 2020 09:03:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1600074212;
-        bh=yM9N4NLqi4WGMy1CjkjYEiUQeXobHjZl0q9V8IJvvnw=;
+        bh=SQ8BrVWT+pT9oqMRs+BcLSzHdUIIt5GLTT/iCSfSVEI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W0ixixNjC6rmc3WHHWCUL/qUObi09L5Hk+Et5MpqrtogUcaAPRZkcC64OiWEfSQkF
-         k9mkhFvvQ92LZynMuTCW0v2dbSOnukKel3yCySAS7gOILG1Rim5DBe60NhMlizn90S
-         EezoHaOC+NZ9oXmMfpZbHTzB6QiwEBrkPMCPe0oU=
+        b=kruvN5mMh2pPPK59bTdQAFqAAhidhiL98Bv1+0ZIHsx4qgRyqtfYp6uNTIsVlRdhE
+         f+ZMXHzlUVvPpcsnpnRzSizOGjqBODpmfXcyuLdb/PuAlgj2tEfKg+kyHXtFcT3TC6
+         2fFOstFCMCoEtr3yATaXl3nSbQeb8lUZU7Pb5DCI=
 Received: from mchehab by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1kHkOW-002dzn-7X; Mon, 14 Sep 2020 11:03:28 +0200
+        id 1kHkOW-002dzX-1X; Mon, 14 Sep 2020 11:03:28 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH RFC 10/11] media: vidtv: get rid of the work queue
-Date:   Mon, 14 Sep 2020 11:03:25 +0200
-Message-Id: <faaa816a1dea0b2ce983128a40a9867809e04381.1600073975.git.mchehab+huawei@kernel.org>
+Subject: [PATCH RFC 04/11] media: vidtv: fix frequency tuning logic
+Date:   Mon, 14 Sep 2020 11:03:19 +0200
+Message-Id: <ba42bd610f16cf34dadd7ba2b9444e8e8f106339.1600073975.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1600073975.git.mchehab+huawei@kernel.org>
 References: <cover.1600073975.git.mchehab+huawei@kernel.org>
@@ -60,169 +60,105 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The dvb_frontend will already call status periodically, when
-a channel is tuned. So, no need to have a work queue for
-such purpose.
+Right now, there are some issues at the tuning logic:
+
+1) the config struct is not copied at the tuner driver.
+   so, it won't use any frequency table at all;
+2) the code that checks for frequency shifts is called
+   at set_params. So, lock_status will never be zeroed;
+3) the signal strength will also report a strong
+   signal, even if not tuned;
+4) the logic is not excluding non-set frequencies.
+
+Fix those issues.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../media/test-drivers/vidtv/vidtv_demod.c    | 77 ++-----------------
- .../media/test-drivers/vidtv/vidtv_demod.h    |  3 -
- 2 files changed, 6 insertions(+), 74 deletions(-)
+ .../media/test-drivers/vidtv/vidtv_tuner.c    | 22 ++++++++++++++-----
+ 1 file changed, 17 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_demod.c b/drivers/media/test-drivers/vidtv/vidtv_demod.c
-index bfe63d7160f2..c54c88cac84f 100644
---- a/drivers/media/test-drivers/vidtv/vidtv_demod.c
-+++ b/drivers/media/test-drivers/vidtv/vidtv_demod.c
-@@ -190,26 +190,21 @@ static void vidtv_demod_update_stats(struct dvb_frontend *fe)
- 
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_tuner.c b/drivers/media/test-drivers/vidtv/vidtv_tuner.c
+index 39e848ae5836..0f397fe12989 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_tuner.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_tuner.c
+@@ -120,7 +120,7 @@ vidtv_tuner_get_dev(struct dvb_frontend *fe)
+ 	return i2c_get_clientdata(fe->tuner_priv);
  }
  
--static void vidtv_demod_poll_snr_handler(struct work_struct *work)
-+static int vidtv_demod_read_status(struct dvb_frontend *fe,
-+				   enum fe_status *status)
+-static s32 vidtv_tuner_check_frequency_shift(struct dvb_frontend *fe)
++static int vidtv_tuner_check_frequency_shift(struct dvb_frontend *fe)
  {
--	/*
--	 * periodically check the signal quality and eventually
--	 * lose the TS lock if it dips too low
--	 */
--	struct vidtv_demod_state *state;
-+	struct vidtv_demod_state *state = fe->demodulator_priv;
- 	const struct vidtv_demod_cnr_to_qual_s *cnr2qual = NULL;
--	struct vidtv_demod_config *config;
-+	struct vidtv_demod_config *config = &state->config;
- 	u16 snr = 0;
+ 	struct vidtv_tuner_dev *tuner_dev = vidtv_tuner_get_dev(fe);
+ 	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
+@@ -156,6 +156,8 @@ static s32 vidtv_tuner_check_frequency_shift(struct dvb_frontend *fe)
+ 	}
  
--	state = container_of(work, struct vidtv_demod_state, poll_snr.work);
--	config = &state->config;
--
- 	/* Simulate random lost of signal due to a bad-tuned channel */
- 	cnr2qual = vidtv_match_cnr_s(&state->frontend);
+ 	for (i = 0; i < array_sz; i++) {
++		if (!valid_freqs[i])
++			break;
+ 		shift = abs(c->frequency - valid_freqs[i]);
  
- 	if (cnr2qual && state->tuner_cnr < cnr2qual->cnr_good &&
- 	    state->frontend.ops.tuner_ops.get_rf_strength) {
--		state->frontend.ops.tuner_ops.get_rf_strength(&state->frontend, &snr);
-+		state->frontend.ops.tuner_ops.get_rf_strength(&state->frontend,
-+							      &snr);
+ 		if (!shift)
+@@ -177,6 +179,7 @@ static int
+ vidtv_tuner_get_signal_strength(struct dvb_frontend *fe, u16 *strength)
+ {
+ 	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
++	struct vidtv_tuner_dev *tuner_dev = vidtv_tuner_get_dev(fe);
+ 	const struct vidtv_tuner_cnr_to_qual_s *cnr2qual = NULL;
+ 	struct device *dev = fe->dvb->device;
+ 	u32 array_size = 0;
+@@ -184,6 +187,10 @@ vidtv_tuner_get_signal_strength(struct dvb_frontend *fe, u16 *strength)
+ 	u32 i;
  
- 		if (snr < cnr2qual->cnr_ok) {
- 			/* eventually lose the TS lock */
-@@ -229,15 +224,6 @@ static void vidtv_demod_poll_snr_handler(struct work_struct *work)
+ 	shift = vidtv_tuner_check_frequency_shift(fe);
++	if (shift < 0) {
++		tuner_dev->hw_state.lock_status = 0;
++		return 0;
++	}
  
- 	vidtv_demod_update_stats(&state->frontend);
+ 	switch (c->delivery_system) {
+ 	case SYS_DVBT:
+@@ -224,10 +231,6 @@ vidtv_tuner_get_signal_strength(struct dvb_frontend *fe, u16 *strength)
+ 			*strength = cnr2qual[i].cnr_good;
+ 			return 0;
+ 		}
+-		if (shift < 0) {	/* Channel not tuned */
+-			*strength = 0;
+-			return 0;
+-		}
+ 		/*
+ 		 * Channel tuned at wrong frequency. Simulate that the
+ 		 * Carrier S/N ratio is not too good.
+@@ -288,6 +291,7 @@ static int vidtv_tuner_set_params(struct dvb_frontend *fe)
+ 	struct vidtv_tuner_dev *tuner_dev = vidtv_tuner_get_dev(fe);
+ 	struct vidtv_tuner_config config  = tuner_dev->config;
+ 	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
++	s32 shift;
  
--	schedule_delayed_work(&state->poll_snr,
--			      msecs_to_jiffies(POLL_THRD_TIME));
--}
--
--static int vidtv_demod_read_status(struct dvb_frontend *fe,
--				   enum fe_status *status)
--{
--	struct vidtv_demod_state *state = fe->demodulator_priv;
--
- 	*status = state->status;
+ 	u32 min_freq = fe->ops.tuner_ops.info.frequency_min_hz;
+ 	u32 max_freq = fe->ops.tuner_ops.info.frequency_max_hz;
+@@ -305,6 +309,13 @@ static int vidtv_tuner_set_params(struct dvb_frontend *fe)
+ 	tuner_dev->hw_state.lock_status = TUNER_STATUS_LOCKED;
+ 
+ 	msleep_interruptible(config.mock_tune_delay_msec);
++
++	shift = vidtv_tuner_check_frequency_shift(fe);
++	if (shift < 0) {
++		tuner_dev->hw_state.lock_status = 0;
++		return shift;
++	}
++
+ 	return 0;
+ }
+ 
+@@ -395,6 +406,7 @@ static int vidtv_tuner_i2c_probe(struct i2c_client *client,
+ 	       &vidtv_tuner_ops,
+ 	       sizeof(struct dvb_tuner_ops));
+ 
++	memcpy(&tuner_dev->config, config, sizeof(tuner_dev->config));
+ 	fe->tuner_priv = client;
  
  	return 0;
-@@ -296,55 +282,12 @@ static int vidtv_demod_set_frontend(struct dvb_frontend *fe)
- 
- 	vidtv_demod_update_stats(fe);
- 
--	if (state->tuner_cnr > 0) {
--		schedule_delayed_work(&state->poll_snr,
--					msecs_to_jiffies(POLL_THRD_TIME));
--
--		state->poll_snr_thread_running = true;
--	}
--
- 	if (fe->ops.i2c_gate_ctrl)
- 		fe->ops.i2c_gate_ctrl(fe, 0);
- 
- 	return 0;
- }
- 
--static int vidtv_demod_sleep(struct dvb_frontend *fe)
--{
--	struct vidtv_demod_state *state = fe->demodulator_priv;
--
--	if (state->poll_snr_thread_running) {
--		cancel_delayed_work_sync(&state->poll_snr);
--		state->poll_snr_thread_running = false;
--		state->poll_snr_thread_restart = true;
--	}
--	return 0;
--}
--
--static int vidtv_demod_init(struct dvb_frontend *fe)
--{
--	struct vidtv_demod_state *state = fe->demodulator_priv;
--	u32    tuner_status             = 0;
--
--	/*
--	 * At resume, start the snr poll thread only if it was suspended with
--	 * the thread running. Extra care should be taken here, as some tuner
--	 * status change might happen at resume time (for example, due to an
--	 * ioctl syscall to set_frontend, or due to a release syscall).
--	 */
--	fe->ops.tuner_ops.get_status(fe, &tuner_status);
--
--	if (tuner_status == TUNER_STATUS_LOCKED &&
--	    state->poll_snr_thread_restart) {
--		schedule_delayed_work(&state->poll_snr,
--				      msecs_to_jiffies(POLL_THRD_TIME));
--
--		state->poll_snr_thread_restart = false;
--	}
--
--	return 0;
--}
--
- /*
-  * NOTE:
-  * This is implemented here just to be used as an example for real
-@@ -375,9 +318,6 @@ static void vidtv_demod_release(struct dvb_frontend *fe)
- {
- 	struct vidtv_demod_state *state = fe->demodulator_priv;
- 
--	if (state->poll_snr_thread_running)
--		cancel_delayed_work_sync(&state->poll_snr);
--
- 	kfree(state);
- }
- 
-@@ -423,9 +363,6 @@ static const struct dvb_frontend_ops vidtv_demod_ops = {
- 
- 	.release = vidtv_demod_release,
- 
--	.init  = vidtv_demod_init,
--	.sleep = vidtv_demod_sleep,
--
- 	.set_frontend = vidtv_demod_set_frontend,
- 	.get_frontend = vidtv_demod_get_frontend,
- 
-@@ -461,8 +398,6 @@ static int vidtv_demod_i2c_probe(struct i2c_client *client,
- 
- 	memcpy(&state->config, config, sizeof(state->config));
- 
--	INIT_DELAYED_WORK(&state->poll_snr, &vidtv_demod_poll_snr_handler);
--
- 	state->frontend.demodulator_priv = state;
- 	i2c_set_clientdata(client, state);
- 
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_demod.h b/drivers/media/test-drivers/vidtv/vidtv_demod.h
-index 7f52a537935b..87651b0193e6 100644
---- a/drivers/media/test-drivers/vidtv/vidtv_demod.h
-+++ b/drivers/media/test-drivers/vidtv/vidtv_demod.h
-@@ -63,10 +63,7 @@ struct vidtv_demod_config {
- struct vidtv_demod_state {
- 	struct dvb_frontend frontend;
- 	struct vidtv_demod_config config;
--	struct delayed_work poll_snr;
- 	enum fe_status status;
- 	u16 tuner_cnr;
--	bool poll_snr_thread_running;
--	bool poll_snr_thread_restart;
- };
- #endif // VIDTV_DEMOD_H
 -- 
 2.26.2
 
