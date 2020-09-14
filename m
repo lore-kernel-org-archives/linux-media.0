@@ -2,129 +2,86 @@ Return-Path: <SRS0=4kUN=CX=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MIME_BASE64_TEXT,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86097C433E2
-	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 09:05:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6151C2BC11
+	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 09:42:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 328D0221F0
-	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 09:05:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600074308;
-	bh=yn4rC/mpMg6Y49QUXHu+kh/MepPer+40IA5SSwhxib0=;
-	h=From:Cc:Subject:Date:In-Reply-To:References:To:List-ID:From;
-	b=ulraoeoSZMnte0Fpb5OWPpIwzFQ+ncTMrDo2GIwbeeSFiPYTxKWlZwGE/rNreJy77
-	 EstFWTZA08F2TcEatlouAPAiccAWm+irxaxgYNXS1kZ1o2g8HaRIKH1eeiWPikN1fY
-	 aptSc+od/fjsFjmxxzb/fCUlJ3AF19akmtL+V5jI=
+	by mail.kernel.org (Postfix) with ESMTP id 791F220759
+	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 09:42:29 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="gJHGt4La"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726319AbgINJEo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Sep 2020 05:04:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37864 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726225AbgINJDg (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Sep 2020 05:03:36 -0400
-Received: from mail.kernel.org (ip5f5ad5d8.dynamic.kabel-deutschland.de [95.90.213.216])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F25BD2220D;
-        Mon, 14 Sep 2020 09:03:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600074212;
-        bh=yn4rC/mpMg6Y49QUXHu+kh/MepPer+40IA5SSwhxib0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZNqZifMaRzqfCicyneaDvwsbeBbBI3tCjtcgneXEXAviuGZc+LhyXVKRBxBGRnNSX
-         Qha9FiwsXRpoY5ZvfQc2GaD+b7thrmv0j564lGta81IR80oR0iksgdSem+TcG2uXSe
-         6ItUF8QZxCYs938xleISIFpDFVVTbyh/stCtf/go=
-Received: from mchehab by mail.kernel.org with local (Exim 4.94)
-        (envelope-from <mchehab@kernel.org>)
-        id 1kHkOW-002dzi-5J; Mon, 14 Sep 2020 11:03:28 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH RFC 08/11] media: vidtv: properly initialize the internal state struct
-Date:   Mon, 14 Sep 2020 11:03:23 +0200
-Message-Id: <22b323ff01a900c01bf9e407c4130f82f62fe312.1600073975.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <cover.1600073975.git.mchehab+huawei@kernel.org>
-References: <cover.1600073975.git.mchehab+huawei@kernel.org>
+        id S1726366AbgINJm1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Sep 2020 05:42:27 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:26329 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726355AbgINJmZ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 14 Sep 2020 05:42:25 -0400
+X-UUID: d08c180bc3314fe2974c175af6ce0ff1-20200914
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=bQUXUzbFriOSQ+r1Po0//r4PBP6F9rJZE9cWHJ8VvZM=;
+        b=gJHGt4LaCju5NNB6YbRj+x8Zgc9Pl/jRH6LAfCy+XTy4H1UWTgRoQYyBvE4MdL6ud87oCtn1Bu1Pag8SipaL9yyJH6dbkUmpWO6Twy90DmNdljIy7U1Ia+LQzfsDuk0MG75fetNq+O/cULYehF+3xBbw5eHPUYGXilHxLF+4Awg=;
+X-UUID: d08c180bc3314fe2974c175af6ce0ff1-20200914
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <maoguang.meng@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 855825856; Mon, 14 Sep 2020 17:42:19 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs05n1.mediatek.inc (172.21.101.15) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 14 Sep 2020 17:42:16 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 14 Sep 2020 17:42:16 +0800
+From:   <maoguang.meng@mediatek.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <tfiga@chromium.org>,
+        <yong.wu@mediatek.com>, <sj.huang@mediatek.com>
+CC:     <linux-media@vger.kernel.org>, Hans Verkuil <hverkuil@xs4all.nl>,
+        <xia.jiang@mediatek.com>, <maoguang.meng@mediatek.com>
+Subject: [PATCH] arm64: dts: add jpeg enc node for mt8183
+Date:   Mon, 14 Sep 2020 17:40:12 +0800
+Message-ID: <20200914094012.5817-1-maoguang.meng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Right now, the config data passed from the bridge driver is
-just ignored.
-
-Also, let's initialize the delayed work at probing time.
-
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- drivers/media/test-drivers/vidtv/vidtv_demod.c | 10 +++++-----
- drivers/media/test-drivers/vidtv/vidtv_demod.h |  1 -
- 2 files changed, 5 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_demod.c b/drivers/media/test-drivers/vidtv/vidtv_demod.c
-index 3eb48b4a9a6b..6199a4e06ff9 100644
---- a/drivers/media/test-drivers/vidtv/vidtv_demod.c
-+++ b/drivers/media/test-drivers/vidtv/vidtv_demod.c
-@@ -268,10 +268,6 @@ static int vidtv_demod_init(struct dvb_frontend *fe)
- 	struct vidtv_demod_state *state = fe->demodulator_priv;
- 	u32    tuner_status             = 0;
- 
--	if (state->cold_start)
--		INIT_DELAYED_WORK(&state->poll_snr,
--				  &vidtv_demod_poll_snr_handler);
--
- 	/*
- 	 * At resume, start the snr poll thread only if it was suspended with
- 	 * the thread running. Extra care should be taken here, as some tuner
-@@ -288,7 +284,6 @@ static int vidtv_demod_init(struct dvb_frontend *fe)
- 		state->poll_snr_thread_restart = false;
- 	}
- 
--	state->cold_start = false;
- 	return 0;
- }
- 
-@@ -396,6 +391,7 @@ MODULE_DEVICE_TABLE(i2c, vidtv_demod_i2c_id_table);
- static int vidtv_demod_i2c_probe(struct i2c_client *client,
- 				 const struct i2c_device_id *id)
- {
-+	struct vidtv_tuner_config *config = client->dev.platform_data;
- 	struct vidtv_demod_state *state;
- 
- 	/* allocate memory for the internal state */
-@@ -408,6 +404,10 @@ static int vidtv_demod_i2c_probe(struct i2c_client *client,
- 	       &vidtv_demod_ops,
- 	       sizeof(struct dvb_frontend_ops));
- 
-+	memcpy(&state->config, config, sizeof(state->config));
-+
-+	INIT_DELAYED_WORK(&state->poll_snr, &vidtv_demod_poll_snr_handler);
-+
- 	state->frontend.demodulator_priv = state;
- 	i2c_set_clientdata(client, state);
- 
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_demod.h b/drivers/media/test-drivers/vidtv/vidtv_demod.h
-index dfb36c515e4d..7f52a537935b 100644
---- a/drivers/media/test-drivers/vidtv/vidtv_demod.h
-+++ b/drivers/media/test-drivers/vidtv/vidtv_demod.h
-@@ -66,7 +66,6 @@ struct vidtv_demod_state {
- 	struct delayed_work poll_snr;
- 	enum fe_status status;
- 	u16 tuner_cnr;
--	bool cold_start;
- 	bool poll_snr_thread_running;
- 	bool poll_snr_thread_restart;
- };
--- 
-2.26.2
+RnJvbTogTWFvZ3VhbmcgTWVuZyA8bWFvZ3VhbmcubWVuZ0BtZWRpYXRlay5jb20+DQoNCmFkZCBq
+cGVnIGVuYyBkZXZpY2UgdHJlZSBub2RlDQoNClNpZ25lZC1vZmYtYnk6IE1hb2d1YW5nIE1lbmcg
+PG1hb2d1YW5nLm1lbmdAbWVkaWF0ZWsuY29tPg0KLS0tDQpSZWJhc2Ugb24gdjUuOS1yYzEuDQog
+ICBbMV0gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvcGF0Y2h3b3JrL3BhdGNoLzExNjQ3NDYvDQog
+ICBbMl0gaHR0cHM6Ly9wYXRjaHdvcmsua2VybmVsLm9yZy9wYXRjaC8xMTcwMzI5OS8NCiAgIFsz
+XSBodHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL3BhdGNoLzExMjgzNzczLw0KLS0tDQoNCiBh
+cmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE4My5kdHNpIHwgMTEgKysrKysrKysrKysN
+CiAxIGZpbGUgY2hhbmdlZCwgMTEgaW5zZXJ0aW9ucygrKQ0KDQpkaWZmIC0tZ2l0IGEvYXJjaC9h
+cm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMuZHRzaSBiL2FyY2gvYXJtNjQvYm9vdC9kdHMv
+bWVkaWF0ZWsvbXQ4MTgzLmR0c2kNCmluZGV4IDhkOGY0MjdkYjAzMC4uMWU3MjYyNWYxNjE1IDEw
+MDY0NA0KLS0tIGEvYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMuZHRzaQ0KKysr
+IGIvYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMuZHRzaQ0KQEAgLTk2MSw2ICs5
+NjEsMTcgQEANCiAJCQlwb3dlci1kb21haW5zID0gPCZzY3BzeXMgTVQ4MTgzX1BPV0VSX0RPTUFJ
+Tl9WRU5DPjsNCiAJCX07DQogDQorCQl2ZW5jX2pwZ0AxNzAzMDAwMCB7DQorCQkJY29tcGF0aWJs
+ZSA9ICJtZWRpYXRlayxtdDgxODMtanBnZW5jIiwgIm1lZGlhdGVrLG10ay1qcGdlbmMiOw0KKwkJ
+CXJlZyA9IDwwIDB4MTcwMzAwMDAgMCAweDEwMDA+Ow0KKwkJCWludGVycnVwdHMgPSA8R0lDX1NQ
+SSAyNDkgSVJRX1RZUEVfTEVWRUxfTE9XPjsNCisJCQlpb21tdXMgPSA8JmlvbW11IE00VV9QT1JU
+X0pQR0VOQ19SRE1BPiwNCisJCQkJIDwmaW9tbXUgTTRVX1BPUlRfSlBHRU5DX0JTRE1BPjsNCisJ
+CQlwb3dlci1kb21haW5zID0gPCZzY3BzeXMgTVQ4MTgzX1BPV0VSX0RPTUFJTl9WRU5DPjsNCisJ
+CQljbG9ja3MgPSA8JnZlbmNzeXMgQ0xLX1ZFTkNfSlBHRU5DPjsNCisJCQljbG9jay1uYW1lcyA9
+ICJqcGdlbmMiOw0KKwkJfTsNCisNCiAJCWlwdV9jb25uOiBzeXNjb25AMTkwMDAwMDAgew0KIAkJ
+CWNvbXBhdGlibGUgPSAibWVkaWF0ZWssbXQ4MTgzLWlwdV9jb25uIiwgInN5c2NvbiI7DQogCQkJ
+cmVnID0gPDAgMHgxOTAwMDAwMCAwIDB4MTAwMD47DQotLSANCjIuMTguMA0K
 
