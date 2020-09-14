@@ -2,78 +2,80 @@ Return-Path: <SRS0=4kUN=CX=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9235C2BC11
-	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 15:56:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60A4BC2BC11
+	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 16:41:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5DB332074B
-	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 15:56:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0D0D9206A5
+	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 16:41:41 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="JD1+mg3m"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726328AbgINP4i (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Sep 2020 11:56:38 -0400
-Received: from relay6-d.mail.gandi.net ([217.70.183.198]:56993 "EHLO
-        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726098AbgINPyP (ORCPT
+        id S1725990AbgINPOt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Sep 2020 11:14:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44910 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726098AbgINPO3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Sep 2020 11:54:15 -0400
-X-Originating-IP: 93.34.118.233
-Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 066EDC0007;
-        Mon, 14 Sep 2020 15:54:06 +0000 (UTC)
-From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
-To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        linux-renesas-soc@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH] media: i2c: max9286: Fix async subdev size
-Date:   Mon, 14 Sep 2020 17:57:49 +0200
-Message-Id: <20200914155749.183030-1-jacopo+renesas@jmondi.org>
-X-Mailer: git-send-email 2.28.0
+        Mon, 14 Sep 2020 11:14:29 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975C4C061788;
+        Mon, 14 Sep 2020 08:14:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=qoTdF1K8QZfe59Hsr5727q9mC8g2Jr5rOYMLLk2l1RQ=; b=JD1+mg3m8jvSPy3g4VSjTLAnne
+        36W7CEcoAjxEVt2IAtPzrSLLevxJXWdpbHQIw28Hd8heE9NT0eLFI3udQPI9fiPX78IfhNKa6ks+t
+        B6qOI+lbhHblw0gjtrh7b4QFmisAWGkdYGLVZMa2FALPb3LmhFrZ/EhI1n0frpG3jT/9G2onhyqti
+        +JAkxxX8vEDs8hVliKzd7NKSOO7+clLbM8f4UpsVvfAezc/NiKnlHpgaH4hmhufya8Q6/AXWqwdjv
+        2yxTbv35hihTfi1UKALD5FKKVyct2R0rgRXAei//GMv4/Wl+PzWkc0P9X7kAFL7918W/mYBUUblZB
+        Ej1HafoQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kHqB4-0003Xz-OV; Mon, 14 Sep 2020 15:13:58 +0000
+Date:   Mon, 14 Sep 2020 16:13:58 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Joonyoung Shim <jy0922.shim@samsung.com>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        iommu@lists.linux-foundation.org,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        linux1394-devel@lists.sourceforge.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        nouveau@lists.freedesktop.org, netdev@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-mm@kvack.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH 11/17] sgiseeq: convert to dma_alloc_noncoherent
+Message-ID: <20200914151358.GQ6583@casper.infradead.org>
+References: <20200914144433.1622958-1-hch@lst.de>
+ <20200914144433.1622958-12-hch@lst.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200914144433.1622958-12-hch@lst.de>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Since commit:
-86d37bf31af6 ("media: i2c: max9286: Allocate v4l2_async_subdev dynamically")
-the async subdevice registered to the max9286 notifier is dynamically
-allocated by the v4l2 framework by using
-the v4l2_async_notifier_add_fwnode_subdev function. In order to allocate
-enough space for max9286_asd structure that encloses the async subdevice
-paired with a pointer to the corresponding source, pass to the framework
-the size of the whole structure in place of the one of the enclosed async
-subdev.
+On Mon, Sep 14, 2020 at 04:44:27PM +0200, Christoph Hellwig wrote:
+>  drivers/net/ethernet/i825xx/lasi_82596.c |  25 ++---
+>  drivers/net/ethernet/i825xx/lib82596.c   | 114 ++++++++++++++---------
+>  drivers/net/ethernet/i825xx/sni_82596.c  |   4 -
+>  drivers/net/ethernet/seeq/sgiseeq.c      |  28 ++++--
+>  drivers/scsi/53c700.c                    |   9 +-
+>  5 files changed, 103 insertions(+), 77 deletions(-)
 
-Fixes: 86d37bf31af6 ("media: i2c: max9286: Allocate v4l2_async_subdev dynamically")
-Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
----
- drivers/media/i2c/max9286.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
-index c82c1493e099..746c411b79a0 100644
---- a/drivers/media/i2c/max9286.c
-+++ b/drivers/media/i2c/max9286.c
-@@ -579,8 +579,7 @@ static int max9286_v4l2_notifier_register(struct max9286_priv *priv)
- 		struct v4l2_async_subdev *asd;
-
- 		asd = v4l2_async_notifier_add_fwnode_subdev(&priv->notifier,
--							    source->fwnode,
--							    sizeof(*asd));
-+			source->fwnode, sizeof(struct max9286_asd));
- 		if (IS_ERR(asd)) {
- 			dev_err(dev, "Failed to add subdev for source %u: %ld",
- 				i, PTR_ERR(asd));
---
-2.28.0
-
+I think your patch slicing-and-dicing went wrong here ;-(
