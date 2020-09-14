@@ -2,107 +2,164 @@ Return-Path: <SRS0=4kUN=CX=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EC08C43461
-	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 13:26:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A16F7C43461
+	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 13:34:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3C435206DB
-	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 13:26:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600089989;
-	bh=dXrEI8jV4unTdYHFAX+Gpr/qoPq01Has+DYPOYKtm2w=;
-	h=From:Cc:Subject:Date:To:List-ID:From;
-	b=cKlFpFpv180AXh8B70hi2mNRlD2HJcvaQeO7x+ABB2mGWPfwb7F8vKTHcJwtk7vVO
-	 DEqHNAQcOq/5Uw9IoQJvSApBSulWd5I8SUdD7blAERfJtM5ECA2AkDF3pR8Yxaq1VQ
-	 NVJ1Kg80dn2ptpG0E3bd6xOi4+5RKX+4bxTra1HI=
+	by mail.kernel.org (Postfix) with ESMTP id 5934C206DC
+	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 13:34:20 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LNYaV5ht"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726718AbgINN0S (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Sep 2020 09:26:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47416 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726452AbgINNXT (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Sep 2020 09:23:19 -0400
-Received: from mail.kernel.org (unknown [95.90.213.216])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5E30E206DB;
-        Mon, 14 Sep 2020 13:23:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600089794;
-        bh=dXrEI8jV4unTdYHFAX+Gpr/qoPq01Has+DYPOYKtm2w=;
-        h=From:To:Cc:Subject:Date:From;
-        b=1PxDyUkrzS6ZADUEulO7FrbACopN2SNXZFxv7PItrTzycvktYk59+s6rxe4ETwJ7P
-         2gQkNbljnk6tkVEFQECgw1W/hyfI8t5qp62AnNmGCf095def+zw4mzTDCLSXLqnH2q
-         8vxTbHk/z3P+tl6/Trfuc/2NinF1gWmYPENj2auc=
-Received: from mchehab by mail.kernel.org with local (Exim 4.94)
-        (envelope-from <mchehab@kernel.org>)
-        id 1kHoRs-003DeD-0P; Mon, 14 Sep 2020 15:23:12 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH] media: vidtv: adjust signal strength range
-Date:   Mon, 14 Sep 2020 15:23:10 +0200
-Message-Id: <c824a8b556280747c2a278864920baf8f78089ab.1600089788.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.26.2
+        id S1726105AbgINNeI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Sep 2020 09:34:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56804 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726722AbgINN3z (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 14 Sep 2020 09:29:55 -0400
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13B5C06178B;
+        Mon, 14 Sep 2020 06:29:32 -0700 (PDT)
+Received: by mail-ed1-x543.google.com with SMTP id g4so17638622edk.0;
+        Mon, 14 Sep 2020 06:29:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=2sgKFqAzyYTWFS7DpgNkPf7xuqkExWpe0vtA6hya4p8=;
+        b=LNYaV5htN1AoGcRr3qutKAdIAJ9K2NpHJmZnCLnFDlG8+zhSr8pFBVrIVZbK7upLCy
+         XuYIA5pbVz06HyYiXjA0CX8OrBfsP8QYVTX6yJ60VAjafiTzs3Dr1q7h1S6WN1SGAvlY
+         UXlmfxZ5/aBJS18uzwRmNUI3/lYVMDzcdWcPZzIRtlGG2B6QiV90AnQEfAOpca3J5cuM
+         fi/i79PCqkzlb/1pkXfPwtPFhCm+AEfUwe9iWPeCcG3ahwbSU9PfGzYe8A8PulfEuuIe
+         /yCSNERBUwZ4Herw4m2hVxb+aHQ2rdJcpWKX6iPZoqfXgRCIkWGGqsSIIr4ud7pRIc3R
+         2DEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=2sgKFqAzyYTWFS7DpgNkPf7xuqkExWpe0vtA6hya4p8=;
+        b=AdEobLBxLwsypFTpwwmuXPs3IJYWarxtMVuuDDMehBV0ap8bz/C9eaDqvAMwr5xWhf
+         LatGiZRNvPyJSIceFYo+OdA+zJIqBd6LrkiivACMfRS7fhQGM/jvecHfbrDrudhdF++0
+         u86No2bvYWZg6eEEgRhG9idyxKPidBPqVrgUweEJiu9l9eD6iC9jNxbmD8E8H6ML1xLg
+         IIaXFx30rtFojSumicyAon89mousZPc5zAdywMRmHki4HdKP+AFUs2OueePk8oK6FAFt
+         Ty8vWS4DiVH65NgH/m9RMYoylR4HzCMAtQITx3Hh/6djMEX8Ac0YxL3y1yzPkEQKq7OK
+         6I4g==
+X-Gm-Message-State: AOAM5304ixko22aLBDbL+mKEGgZ08GcSCONvwRgRKzUte8lh9M99aesM
+        U1+HiJ1ThN/R9n/pPxSSPUE=
+X-Google-Smtp-Source: ABdhPJwqz+YzShnzPAVkh+LgWPDH996EZ9R5Asg2qCZETs+L6ijZw4dfeniXkQwebJgtgDxC1+lltA==
+X-Received: by 2002:aa7:cad3:: with SMTP id l19mr16523629edt.352.1600090171724;
+        Mon, 14 Sep 2020 06:29:31 -0700 (PDT)
+Received: from abel.fritz.box ([2a02:908:1252:fb60:6179:d701:8021:da3d])
+        by smtp.gmail.com with ESMTPSA id d6sm9575625edm.31.2020.09.14.06.29.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Sep 2020 06:29:30 -0700 (PDT)
+From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
+        <ckoenig.leichtzumerken@gmail.com>
+X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
+To:     akpm@linux-foundation.org
+Cc:     sumit.semwal@linaro.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH 2/2] mm: introduce vma_set_file function
+Date:   Mon, 14 Sep 2020 15:29:20 +0200
+Message-Id: <20200914132920.59183-3-christian.koenig@amd.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200914132920.59183-1-christian.koenig@amd.com>
+References: <20200914132920.59183-1-christian.koenig@amd.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On real devices, signal strength is always a negative
-number when represented in dBm. A more interesting
-range is to use dBmV (which is what Kaffeine does,
-for example). The conversion from the two units are
-simple:
+Add the new vma_set_file() function to allow changing
+vma->vm_file with the necessary refcount dance.
 
-	dBmV = dBm - 108
-
-Usually, signal strength ranges up to 100dBmV. Adjust the
-maximum value to be around 74 dBmV, when there's no
-frequency shift, which represents a good signal.
-
-With that, Kaffeine displays it a lot better.
-
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Christian König <christian.koenig@amd.com>
 ---
- drivers/media/test-drivers/vidtv/vidtv_demod.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ drivers/dma-buf/dma-buf.c | 16 +++++-----------
+ include/linux/mm.h        |  2 ++
+ mm/mmap.c                 | 16 ++++++++++++++++
+ 3 files changed, 23 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_demod.c b/drivers/media/test-drivers/vidtv/vidtv_demod.c
-index c54c88cac84f..c825842758f0 100644
---- a/drivers/media/test-drivers/vidtv/vidtv_demod.c
-+++ b/drivers/media/test-drivers/vidtv/vidtv_demod.c
-@@ -181,12 +181,18 @@ static void vidtv_demod_update_stats(struct dvb_frontend *fe)
- 	c->block_count.stat[0].scale = scale;
+diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+index 1699a8e309ef..672f3525ba74 100644
+--- a/drivers/dma-buf/dma-buf.c
++++ b/drivers/dma-buf/dma-buf.c
+@@ -1163,20 +1163,14 @@ int dma_buf_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma,
+ 		return -EINVAL;
  
- 	/*
--	 * Add a 0.5% of randomness at the signal streangth and CNR,
-+	 * Add a 0.5% of randomness at the signal strength and CNR,
- 	 * and make them different, as we want to have something closer
- 	 * to a real case scenario.
-+	 *
-+	 * Also, usually, signal strength is a negative number in dBm.
- 	 */
--	c->strength.stat[0].svalue = state->tuner_cnr + prandom_u32_max(state->tuner_cnr / 50);
--	c->cnr.stat[0].svalue = state->tuner_cnr - prandom_u32_max(state->tuner_cnr / 50);
-+	c->strength.stat[0].svalue = state->tuner_cnr;
-+	c->strength.stat[0].svalue -= prandom_u32_max(state->tuner_cnr / 50);
-+	c->strength.stat[0].svalue -= 68000; /* Adjust to a better range */
+ 	/* readjust the vma */
+-	get_file(dmabuf->file);
+-	oldfile = vma->vm_file;
+-	vma->vm_file = dmabuf->file;
++	oldfile = vma_set_file(vma, dmabuf->file);
+ 	vma->vm_pgoff = pgoff;
+ 
+ 	ret = dmabuf->ops->mmap(dmabuf, vma);
+-	if (ret) {
+-		/* restore old parameters on failure */
+-		vma->vm_file = oldfile;
+-		fput(dmabuf->file);
+-	} else {
+-		if (oldfile)
+-			fput(oldfile);
+-	}
++	/* restore old parameters on failure */
++	if (ret)
++		vma_set_file(vma, oldfile);
 +
-+	c->cnr.stat[0].svalue = state->tuner_cnr;
-+	c->cnr.stat[0].svalue -= prandom_u32_max(state->tuner_cnr / 50);
+ 	return ret;
  
  }
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 1983e08f5906..398a6fdaad1e 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -2688,6 +2688,8 @@ static inline void vma_set_page_prot(struct vm_area_struct *vma)
+ }
+ #endif
  
++struct file *vma_set_file(struct vm_area_struct *vma, struct file *file);
++
+ #ifdef CONFIG_NUMA_BALANCING
+ unsigned long change_prot_numa(struct vm_area_struct *vma,
+ 			unsigned long start, unsigned long end);
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 40248d84ad5f..d3c3c510f643 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -136,6 +136,22 @@ void vma_set_page_prot(struct vm_area_struct *vma)
+ 	WRITE_ONCE(vma->vm_page_prot, vm_page_prot);
+ }
+ 
++/*
++ * Change backing file, only valid to use during initial VMA setup.
++ */
++struct file *vma_set_file(struct vm_area_struct *vma, struct file *file)
++{
++	if (file)
++	        get_file(file);
++
++	swap(vma->vm_file, file);
++
++	if (file)
++		fput(file);
++
++	return file;
++}
++
+ /*
+  * Requires inode->i_mapping->i_mmap_rwsem
+  */
 -- 
-2.26.2
+2.17.1
 
