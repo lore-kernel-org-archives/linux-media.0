@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-14.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E0F9C43461
-	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 09:04:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CBC6C433E2
+	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 09:04:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 205A6221E8
-	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 09:04:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0153422206
+	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 09:04:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600074279;
-	bh=0PU/DNFt4f6Rzyiw/4kbN0uHCEIwJDLqO3MyGp9lp6U=;
+	s=default; t=1600074282;
+	bh=rUom+ejH2KZs2/WGPKIpoScZ0HYybm2vQ1/DgHzt874=;
 	h=From:Cc:Subject:Date:In-Reply-To:References:To:List-ID:From;
-	b=Yam9v+4RpO1eHcx1zlgsQMg6BM5z4EYD4QSQD1voe5tf4CWAQty1PqlGPfZs+IPlP
-	 Ig2iHgp3mavtgxNsgGPQgfa0Wb2uBAFmX/Tdrz8QBItGl5CYbXDioXEMHg7QHqoFg/
-	 wPxKRpmsD8A5PqluOyBPRUjHy22jmq11pFqWyz9I=
+	b=sIOuLhTIkSRRL+1v5/T4gId2A8NY+PVa0BaaOa+qkzTn52OUw3Tpj6QOwsotqcPjl
+	 UEdemLu2E1BGn5qvvUl94lupGAxleVj8fgVoSZZ/PChu72sRp3G6WjLMbdDHhtmv5w
+	 t0z/MZ/ndkOzVBMqN6MlfB2xhy688H3r1Gg3nomI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726310AbgINJEa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1726210AbgINJEa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 14 Sep 2020 05:04:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37862 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:37872 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726222AbgINJDg (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1726232AbgINJDg (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Mon, 14 Sep 2020 05:03:36 -0400
 Received: from mail.kernel.org (ip5f5ad5d8.dynamic.kabel-deutschland.de [95.90.213.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E80422220A;
-        Mon, 14 Sep 2020 09:03:31 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1A01E22242;
+        Mon, 14 Sep 2020 09:03:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600074212;
-        bh=0PU/DNFt4f6Rzyiw/4kbN0uHCEIwJDLqO3MyGp9lp6U=;
+        s=default; t=1600074215;
+        bh=rUom+ejH2KZs2/WGPKIpoScZ0HYybm2vQ1/DgHzt874=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Dsaw98HxiG8Qz5Lh2DNSZQeuBZ7/9KGo0zRzern2oUESiiSCYqNDi3uNa++Qtin/v
-         MMk+SJVc5jrneSI1426ptYQ6Zze7wurzbV5Io+BmLTWeQMubSai2s1UUpLChzEp0n4
-         1n2GJ6BCz/jeaCpLnUSUtzDlu3lkNf9OAy/U1WgE=
+        b=Pgfeyt0zuR7H16d4cOPD/32sXIYPFFyKmxJgvYFlrPQvkrG9IABFDDd06GNtdpZlc
+         lD15ZrkzhS70ci96pFmE4x7a/GevkXGXzWau2UiUHWkI9/JGYiO2kqGZLTt2ykcgeL
+         Z8fStYZRGt5PBUm9uuBxfsHH7KedfAO2sINapFP8=
 Received: from mchehab by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1kHkOW-002dza-2X; Mon, 14 Sep 2020 11:03:28 +0200
+        id 1kHkOW-002dzg-4R; Mon, 14 Sep 2020 11:03:28 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH RFC 05/11] media: vidtv: add an initial channel frequency
-Date:   Mon, 14 Sep 2020 11:03:20 +0200
-Message-Id: <9893bb388395da2559bfd212e2d354fe83d3eccb.1600073975.git.mchehab+huawei@kernel.org>
+Subject: [PATCH RFC 07/11] media: vidtv: remove a wrong endiannes check from s302m generator
+Date:   Mon, 14 Sep 2020 11:03:22 +0200
+Message-Id: <23a923f8ff24fe06565c4720572bef16b82ef03d.1600073975.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1600073975.git.mchehab+huawei@kernel.org>
 References: <cover.1600073975.git.mchehab+huawei@kernel.org>
@@ -60,50 +60,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use 474 MHz frequency for DVB-T/DVB-C, as this is the first
-channel that it is valid on most places for DVB-T.
+The code there is already doing the right thing, as it uses
+value & 0xff, value & 0xff00, which already ensures the
+expected endiannes.
 
-In the case of DVB-S, let's add Astra 19.2E initial
-frequency at the scan files as the default, e. g. 12.5515 GHz.
+So, it doesn't make any sense to touch the order depending on
+the CPU endiannes.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/test-drivers/vidtv/vidtv_bridge.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ drivers/media/test-drivers/vidtv/vidtv_s302m.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_bridge.c b/drivers/media/test-drivers/vidtv/vidtv_bridge.c
-index 270c183b1d67..cb32f82f88f9 100644
---- a/drivers/media/test-drivers/vidtv/vidtv_bridge.c
-+++ b/drivers/media/test-drivers/vidtv/vidtv_bridge.c
-@@ -47,17 +47,25 @@ static unsigned int mock_tune_delay_msec;
- module_param(mock_tune_delay_msec, uint, 0);
- MODULE_PARM_DESC(mock_tune_delay_msec, "Simulate a tune delay");
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_s302m.c b/drivers/media/test-drivers/vidtv/vidtv_s302m.c
+index 5ae2ede951eb..1bab2e231a55 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_s302m.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_s302m.c
+@@ -352,14 +352,6 @@ static u32 vidtv_s302m_write_frame(struct vidtv_encoder *e,
+ 	f.data[3] = (sample & 0x0FF0) >>  4;
+ 	f.data[4] = (sample & 0xF000) >> 12;
  
--static unsigned int vidtv_valid_dvb_t_freqs[NUM_VALID_TUNER_FREQS];
-+static unsigned int vidtv_valid_dvb_t_freqs[NUM_VALID_TUNER_FREQS] = {
-+	474000000
-+};
-+
- module_param_array(vidtv_valid_dvb_t_freqs, uint, NULL, 0);
- MODULE_PARM_DESC(vidtv_valid_dvb_t_freqs,
- 		 "Valid DVB-T frequencies to simulate");
- 
--static unsigned int vidtv_valid_dvb_c_freqs[NUM_VALID_TUNER_FREQS];
-+static unsigned int vidtv_valid_dvb_c_freqs[NUM_VALID_TUNER_FREQS] = {
-+	474000000
-+};
-+
- module_param_array(vidtv_valid_dvb_c_freqs, uint, NULL, 0);
- MODULE_PARM_DESC(vidtv_valid_dvb_c_freqs,
- 		 "Valid DVB-C frequencies to simulate");
- 
--static unsigned int vidtv_valid_dvb_s_freqs[NUM_VALID_TUNER_FREQS];
-+static unsigned int vidtv_valid_dvb_s_freqs[NUM_VALID_TUNER_FREQS] = {
-+	12551500
-+};
- module_param_array(vidtv_valid_dvb_s_freqs, uint, NULL, 0);
- MODULE_PARM_DESC(vidtv_valid_dvb_s_freqs,
- 		 "Valid DVB-C frequencies to simulate");
+-	#ifdef __LITTLE_ENDIAN
+-	f.data[0] = reverse[f.data[0]];
+-	f.data[1] = reverse[f.data[1]];
+-	f.data[2] = reverse[f.data[2]];
+-	f.data[3] = reverse[f.data[3]];
+-	f.data[4] = reverse[f.data[4]];
+-	#endif
+-
+ 	nbytes += vidtv_memcpy(e->encoder_buf,
+ 			       e->encoder_buf_offset,
+ 			       VIDTV_S302M_BUF_SZ,
 -- 
 2.26.2
 
