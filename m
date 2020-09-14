@@ -2,108 +2,96 @@ Return-Path: <SRS0=4kUN=CX=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A0E8C43461
-	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 14:52:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2D43C43461
+	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 14:54:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C9D9F20936
-	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 14:52:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9F940206BE
+	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 14:54:28 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ifsAl2Rr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726570AbgINOwU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Sep 2020 10:52:20 -0400
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:30015 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726795AbgINOvt (ORCPT
+        id S1726869AbgINOyN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Sep 2020 10:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41648 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726744AbgINOxw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Sep 2020 10:51:49 -0400
-X-Originating-IP: 93.34.118.233
-Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 8B1A2240007;
-        Mon, 14 Sep 2020 14:51:46 +0000 (UTC)
-Date:   Mon, 14 Sep 2020 16:55:37 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
-        kieran.bingham@ideasonboard.com, niklas.soderlund@ragnatech.se
-Subject: Re: [PATCH 3/3] v4l2-fwnode: Document changes usage patterns of
- v4l2_fwnode_endpoint_parse
-Message-ID: <20200914145537.f3vqq7l72rlt32kr@uno.localdomain>
-References: <20200908085121.864-1-sakari.ailus@linux.intel.com>
- <20200908085121.864-4-sakari.ailus@linux.intel.com>
+        Mon, 14 Sep 2020 10:53:52 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A71C06174A;
+        Mon, 14 Sep 2020 07:53:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description;
+        bh=wWR7H3WZih9ZGlGO6OHg+MKLXPw0ngda85sKeqyd2Cw=; b=ifsAl2RrU7KnR1yT2uKbMkDdPl
+        XkvmPaEnJfciEndlUDneY+5JqCj8WbUratm+mlOoljGDnRpAblVkHJt5HxwZP88i+1ZeUkb3Q4kPB
+        Q0hYtsUAwLyA82WBlvmT34I76tDhu2XUUL+Wln8SIqaM03pjRT6I+XF4gy3lM7lEonWUAF1QtO3nM
+        lnZ4Uw3pVPI+sKkkInM9hz/97JfUtGChXNAZFyOdPolUcrlDaG+zPS8jdMSC2Jpjzh5wD/nEzvhrb
+        HoIjUlPKR9uBUiALYFS7+3bG6ZWkYeISVrlgBbD0hWEq5oDJFe5+qpgK8BhcxaG9TxulgvC3/PSP2
+        H5/a4Rbw==;
+Received: from 089144214092.atnat0023.highway.a1.net ([89.144.214.92] helo=localhost)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kHpr7-0001jw-Ar; Mon, 14 Sep 2020 14:53:21 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Joonyoung Shim <jy0922.shim@samsung.com>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        iommu@lists.linux-foundation.org
+Cc:     Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        linux1394-devel@lists.sourceforge.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        nouveau@lists.freedesktop.org, netdev@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-mm@kvack.org,
+        alsa-devel@alsa-project.org
+Subject: [PATCH 03/17] drm/exynos: stop setting DMA_ATTR_NON_CONSISTENT
+Date:   Mon, 14 Sep 2020 16:44:19 +0200
+Message-Id: <20200914144433.1622958-4-hch@lst.de>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200914144433.1622958-1-hch@lst.de>
+References: <20200914144433.1622958-1-hch@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200908085121.864-4-sakari.ailus@linux.intel.com>
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sakari,
+DMA_ATTR_NON_CONSISTENT is a no-op except on PARISC and some mips
+configs, so don't set it in this ARM specific driver.
 
-On Tue, Sep 08, 2020 at 11:51:21AM +0300, Sakari Ailus wrote:
-> Document that it is possible to provide defaults for multiple bus types to
-> v4l2_fwnode_endpoint_parse and v4l2_fwnode_endpoint_alloc_parse. Also
-> underline the fact that detecting the bus type without bus-type property
-> is only for the old drivers.
->
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
->  include/media/v4l2-fwnode.h | 18 ++++++++----------
->  1 file changed, 8 insertions(+), 10 deletions(-)
->
-> diff --git a/include/media/v4l2-fwnode.h b/include/media/v4l2-fwnode.h
-> index d04f39b60096..ccaa5693df14 100644
-> --- a/include/media/v4l2-fwnode.h
-> +++ b/include/media/v4l2-fwnode.h
-> @@ -226,11 +226,10 @@ struct v4l2_fwnode_connector {
->   * call this function once the correct type is found --- with a default
->   * configuration valid for that type.
->   *
-> - * As a compatibility means guessing the bus type is also supported by setting
-> - * @vep.bus_type to V4L2_MBUS_UNKNOWN. The caller may not provide a default
-> - * configuration in this case as the defaults are specific to a given bus type.
-> - * This functionality is deprecated and should not be used in new drivers and it
-> - * is only supported for CSI-2 D-PHY, parallel and Bt.656 buses.
-> + * It is also allowed to set @vep.bus_type to V4L2_MBUS_UNKNOWN. USING THIS
-> + * FEATURE REQUIRES "bus-type" PROPERTY IN DT BINDINGS. For old drivers,
-> + * guessing @vep.bus_type between CSI-2 D-PHY, parallel and Bt.656 busses is
-> + * supported. NEVER RELY ON GUESSING @vep.bus_type IN NEW DRIVERS!
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+---
+ drivers/gpu/drm/exynos/exynos_drm_gem.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-As per the discussion in:
-[PATCH v4 1/3] media: i2c: ov772x: Parse endpoint properties
-this leaves a bit of gray area on how to address cases where older dts
-do not report any "bus-type" property, as in the case of PARALLEL vs
-BT.656 Prabhakar has, it gets impossible to detect mis-configurations.
+diff --git a/drivers/gpu/drm/exynos/exynos_drm_gem.c b/drivers/gpu/drm/exynos/exynos_drm_gem.c
+index efa476858db54b..07073222b8f691 100644
+--- a/drivers/gpu/drm/exynos/exynos_drm_gem.c
++++ b/drivers/gpu/drm/exynos/exynos_drm_gem.c
+@@ -42,8 +42,6 @@ static int exynos_drm_alloc_buf(struct exynos_drm_gem *exynos_gem, bool kvmap)
+ 	if (exynos_gem->flags & EXYNOS_BO_WC ||
+ 			!(exynos_gem->flags & EXYNOS_BO_CACHABLE))
+ 		attr |= DMA_ATTR_WRITE_COMBINE;
+-	else
+-		attr |= DMA_ATTR_NON_CONSISTENT;
+ 
+ 	/* FBDev emulation requires kernel mapping */
+ 	if (!kvmap)
+-- 
+2.28.0
 
-I have suggested him two different behaviours, depending if 'bus-type'
-is present in the fwnode or not, but I'm not sure that's the best way
-forward. What do you think ?
-
->   *
->   * The function does not change the V4L2 fwnode endpoint state if it fails.
->   *
-> @@ -269,11 +268,10 @@ void v4l2_fwnode_endpoint_free(struct v4l2_fwnode_endpoint *vep);
->   * call this function once the correct type is found --- with a default
->   * configuration valid for that type.
->   *
-> - * As a compatibility means guessing the bus type is also supported by setting
-> - * @vep.bus_type to V4L2_MBUS_UNKNOWN. The caller may not provide a default
-> - * configuration in this case as the defaults are specific to a given bus type.
-> - * This functionality is deprecated and should not be used in new drivers and it
-> - * is only supported for CSI-2 D-PHY, parallel and Bt.656 buses.
-> + * It is also allowed to set @vep.bus_type to V4L2_MBUS_UNKNOWN. USING THIS
-> + * FEATURE REQUIRES "bus-type" PROPERTY IN DT BINDINGS. For old drivers,
-> + * guessing @vep.bus_type between CSI-2 D-PHY, parallel and Bt.656 busses is
-> + * supported. NEVER RELY ON GUESSING @vep.bus_type IN NEW DRIVERS!
->   *
->   * The function does not change the V4L2 fwnode endpoint state if it fails.
->   *
-> --
-> 2.27.0
->
