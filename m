@@ -2,239 +2,186 @@ Return-Path: <SRS0=4kUN=CX=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97D22C43461
-	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 13:58:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00B65C433E2
+	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 14:07:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 47116208E4
-	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 13:58:34 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="WmSn4/YE"
+	by mail.kernel.org (Postfix) with ESMTP id CBCDD21655
+	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 14:07:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726812AbgINN6Z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Sep 2020 09:58:25 -0400
-Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:53393 "EHLO
-        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726797AbgINN5r (ORCPT
+        id S1726785AbgINOGs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Sep 2020 10:06:48 -0400
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:35569 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726833AbgINOGE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Sep 2020 09:57:47 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id Hoy5k0nxZPTBMHoy8kc40W; Mon, 14 Sep 2020 15:56:32 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1600091792; bh=mbclfXUxafdxgC26WPOez+ej6gFteViPVOesw+YXTBE=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=WmSn4/YEFgtY2eXUfpzSGSMIxOUQG12+Ecpj9pfIVYoOXSdJb4WD9jxIX4YerSiYt
-         MCGuoU3OUvOewFZ7CI7GR+eJEhz5wq3ghQkK1WNzTwuvAx2/h+n1CRFIaj3PFyffHZ
-         eUX9uWLrTGBFzy5Q8vibFaeC6lBhXMrMKHPfDxUVlEPww9r9Tk9mqdbuT6rmuMYVfX
-         CDky98T0ORdMIpeaSfxJWJo5GRwbKRfPok24D49vDcnA53wRamofIGOYPwZqfbkeHI
-         UAWobT0F0kvWlGdKdju859PPAOB41GUFqToTrWNmYWD1kEBcIHY0NKdCvy3o6pP/dd
-         BghJdaHEGXWMw==
-Subject: Re: [PATCH v2] media: v4l2-ctrl: add control for long term reference.
-To:     dikshita@codeaurora.org
-Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, mchehab@kernel.org,
-        nicolas@ndufresne.ca, majja@codeaurora.org,
-        stanimir.varbanov@linaro.org, vgarodia@codeaurora.org
-References: <1597382967-32729-1-git-send-email-dikshita@codeaurora.org>
- <506c9e88-e54b-2534-0df9-f7855456dcd8@xs4all.nl>
- <b6c14a61a5a63b68a07a539f39b88477@codeaurora.org>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <b8508c3f-4f92-56a3-998b-0436cfb855e2@xs4all.nl>
-Date:   Mon, 14 Sep 2020 15:56:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Mon, 14 Sep 2020 10:06:04 -0400
+X-Originating-IP: 93.34.118.233
+Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id BF0812000D;
+        Mon, 14 Sep 2020 14:05:46 +0000 (UTC)
+Date:   Mon, 14 Sep 2020 16:09:37 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Subject: Re: [PATCH v4 1/3] media: i2c: ov772x: Parse endpoint properties
+Message-ID: <20200914140937.kja7x5k2xo2uwgqg@uno.localdomain>
+References: <20200913184247.618-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20200913184247.618-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-In-Reply-To: <b6c14a61a5a63b68a07a539f39b88477@codeaurora.org>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfLIm0duwF7QqZ4ulMFSf0JL5s2YDpOiIo+NsWj8ht3p4TlCQ+ripTkx3mVbQ4ALXe25Rs5JqZyX0FOXV0xJWqyGp0bsR3moBOJczIM302HbNCLoK2BGQ
- kSuZGIc1XuxfWU/YSn3UXXCwNdKxaZ0XxGXcBWZVPnEJ60mbBhzXDaazt6xEwknPDL3gH5eCWGA1rhoxfcWq2Pg6a5wJhGzK4+KUo6givVc5zTjYnMRb6nCK
- T8Kf5q6kasXqhLib8PDJmxpoBSxAWnWQ+SPMWLS/+Pi2BWmI2125VqEE06enJdwXGalX5ME8MSA5MVcfPWvia7Fr3/rrFDsEkHytbWHCfpOuDYo7ET/ZaW7g
- Cjedu4GDRKKFOMnN91XM+fYo6gdfjKWCTUrRSfDmmXildkm3v1Po1m4RCmGb3MM9Fc9qzwS/cRlCDKhk43nRC78p4ZvI9jLUc3tni8Ih+2Wq2D6T1bXIreVE
- FT1vpdzL9AaV5IaGskEvexd0N421/xNrwvvszklMT6BcBhrSFRYoJ7uZa0QA7oJIJmKL5E53fFIpPj1TZOJVJ/dZAKBmDszx2yn5XA==
+Content-Disposition: inline
+In-Reply-To: <20200913184247.618-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 27/08/2020 08:59, dikshita@codeaurora.org wrote:
-> Hi Hans,
-> 
-> Thanks for your comments.
-> 
-> On 2020-08-25 15:34, Hans Verkuil wrote:
->> On 14/08/2020 07:29, Dikshita Agarwal wrote:
->>> LTR (Long Term Reference) frames are the frames that are encoded
->>> sometime in the past and stored in the DPB buffer list to be used
->>> as reference to encode future frames.
->>> This change adds controls to enable this feature.
->>>
->>> Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
->>> ---
->>>  .../userspace-api/media/v4l/ext-ctrls-codec.rst    | 23 ++++++++++++++++++++++
->>>  drivers/media/v4l2-core/v4l2-ctrls.c               |  6 ++++++
->>>  include/uapi/linux/v4l2-controls.h                 |  4 ++++
->>>  3 files changed, 33 insertions(+)
->>>
->>> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->>> index d0d506a..6d1b005 100644
->>> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->>> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->>> @@ -4272,3 +4272,26 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->>>        - Selecting this value specifies that HEVC slices are expected
->>>          to be prefixed by Annex B start codes. According to :ref:`hevc`
->>>          valid start codes can be 3-bytes 0x000001 or 4-bytes 0x00000001.
->>> +
->>> +``V4L2_CID_MPEG_VIDEO_LTRCOUNT (enum)``
->>
->> I prefer _LTR_COUNT (same for the other control defines).
->>
->> I assume 'enum' is a mistake? This should be 'integer', right?
-> Right, I will correct it at all the places.
->>
->>> +    Specifies the number of Long Term Reference frames encoder needs to
->>> +    generate or keep.
->>> +    This control is used to query or configure the number of Long Term
->>> +    Reference frames.
->>
->> Add something like: "Applicable to the H264 and HEVC encoder."
-> Sure.
->>
->>> +
->>> +``V4L2_CID_MPEG_VIDEO_MARKLTRFRAME (enum)``
->>> +    This control is used to mark current frame as Long Term Reference
->>> +    frame.
->>
->> enum -> integer
->> _MARK_LTR_FRAME
->>
->> How about renaming this to: "_FRAME_LTR_INDEX"?
-> You are suggesting to rename it to V4L2_CID_MPEG_VIDEO_MARK_LTR_FRAME or V4L2_CID_MPEG_VIDEO_MARK_FRAME_LTR_INDEX ?
+Hi Prabhakar,
 
-V4L2_CID_MPEG_VIDEO_FRAME_LTR_INDEX
+On Sun, Sep 13, 2020 at 07:42:45PM +0100, Lad Prabhakar wrote:
+> Parse endpoint properties using v4l2_fwnode_endpoint_alloc_parse()
+> to determine bus-type and store it locally in priv data.
+>
+> Also for backward compatibility with the existing DT where bus-type
+> isnt specified fallback to V4L2_MBUS_PARALLEL.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>  drivers/media/i2c/ov772x.c | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+>
+> diff --git a/drivers/media/i2c/ov772x.c b/drivers/media/i2c/ov772x.c
+> index 2cc6a678069a..551082aa7026 100644
+> --- a/drivers/media/i2c/ov772x.c
+> +++ b/drivers/media/i2c/ov772x.c
+> @@ -31,6 +31,7 @@
+>  #include <media/v4l2-ctrls.h>
+>  #include <media/v4l2-device.h>
+>  #include <media/v4l2-event.h>
+> +#include <media/v4l2-fwnode.h>
+>  #include <media/v4l2-image-sizes.h>
+>  #include <media/v4l2-subdev.h>
+>
+> @@ -434,6 +435,7 @@ struct ov772x_priv {
+>  #ifdef CONFIG_MEDIA_CONTROLLER
+>  	struct media_pad pad;
+>  #endif
+> +	enum v4l2_mbus_type		  bus_type;
+>  };
+>
+>  /*
+> @@ -1354,6 +1356,8 @@ static const struct v4l2_subdev_ops ov772x_subdev_ops = {
+>
+>  static int ov772x_probe(struct i2c_client *client)
+>  {
+> +	struct v4l2_fwnode_endpoint bus_cfg = { .bus_type = 0 };
+> +	struct fwnode_handle	*ep;
+>  	struct ov772x_priv	*priv;
+>  	int			ret;
+>  	static const struct regmap_config ov772x_regmap_config = {
+> @@ -1415,6 +1419,26 @@ static int ov772x_probe(struct i2c_client *client)
+>  		goto error_clk_put;
+>  	}
+>
+> +	ep = fwnode_graph_get_next_endpoint(dev_fwnode(&client->dev),
+> +					    NULL);
+> +	if (!ep) {
+> +		dev_err(&client->dev, "endpoint node not found\n");
+> +		ret = -EINVAL;
+> +		goto error_clk_put;
+> +	}
+> +
+> +	bus_cfg.bus_type = V4L2_MBUS_PARALLEL;
 
->>
->> I would also suggest having the range as 0..LTR_COUNT where 0 means that
->> this is not a LTR frame. An alternative is to have two controls: one boolean
->> that determines if the frame is a LTR frame or not, and one control containing
->> the LTR index.
->>
->> Is the LTR index 0 or 1 based according to the standard? I think that if it is
->> 1 based you can use 0 to mean 'not an LTR frame'. If it is 0 based in
->> the standard,
->> then having two controls might be better.
->>
->> A third alternative might be to use -1 as the value to indicate that it is not
->> an LTR frame, but it feels hackish. I'm not sure yet.
->>
-> Could you please help me to understand how this info will be helpful?
-> This control won't be set by client for every frame. So a frame for which this control is not set
-> is not a LTR frame and a frame for which this control is set is a LTR frame and will be marked with
-> LTR index ranging from 0 to LTR_COUNT-1 (range is according to standard)
+Could you set the bus type when you declare bus_cfg ? There's no point
+in setting it to UNKNOW and re-writing it here
 
-This isn't how requests work. If a control is not set in a request, then it is assumed
-that the control value is unchanged. So in this case, the previously set value for this
-control will be used.
+> +	ret = v4l2_fwnode_endpoint_alloc_parse(ep, &bus_cfg);
 
-Regards,
+Should you here fwnode_handle_put(ep) ?
 
-	Hans
+Also, this driver does not support the 'link_frequency' property, as the
+device does not support CSI-2. As commented on the previous version,
+the 'alloc' version of v4l2_fwnode_endpoint_parse() reserves space for
+that property, and requires a manual free like you have here below. So
+using the 'alloc' version is not techincally wrong, but I don't think
+it's required here.
 
->>> +    this provides a Long Term Reference index that ranges from 0
->>> +    to LTR count-1 and then the particular frame will be marked with that
->>> +    Long Term Reference index.
->>
->> Add something like: "Applicable to the H264 and HEVC encoder."
-> sure, will add.
->>
->> This only makes sense when used with requests, right? Otherwise you cannot
->> reliably associate this control with a frame. That should be mentioned here.
-> Sure, will add.
->>
->>> +
->>> +``V4L2_CID_MPEG_VIDEO_USELTRFRAME (enum)``
->>
->> enum -> bitmask
->> _USE_LTR_FRAMES
-> Will correct this in next patch.
->>
->>> +    Specifies the Long Term Reference frame(s) to be used for encoding
->>> +    the current frame.
->>> +    This provides a bitmask which consists of bits [0, 15]. A total of N
->>> +    LSB bits of this field are valid, where N is the maximum number of
->>> +    Long Term Reference frames supported.
->>> +    All the other bits are invalid and should be rejected.
->>> +    The LSB corresponds to the Long Term Reference index 0. Bit N-1 from
->>> +    the LSB corresponds to the Long Term Reference index max LTR count-1.
->>
->> Add something like: "Applicable to the H264 and HEVC encoder."
->>
->> This too only makes sense when using requests, correct? That should be mentioned
->> here.
-> Sure, will do.
->>
->> I assume that this must be set to 0 for LTR frames? Or at least this
->> control will
->> be ignored for LTR frames.
-> Yes, frames marked as LTR frames will not be encoded by using any other LTR frame as a reference.
-> So this control won't be set for LTR frames.
-> This will be set only for the frames which needs to be encoded by using an LTR frame as a reference.
->>
->>> diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
->>> index 3f3fbcd..3138c72 100644
->>> --- a/drivers/media/v4l2-core/v4l2-ctrls.c
->>> +++ b/drivers/media/v4l2-core/v4l2-ctrls.c
->>> @@ -991,6 +991,9 @@ const char *v4l2_ctrl_get_name(u32 id)
->>>      case V4L2_CID_MPEG_VIDEO_HEVC_SLICE_PARAMS:        return "HEVC Slice Parameters";
->>>      case V4L2_CID_MPEG_VIDEO_HEVC_DECODE_MODE:        return "HEVC Decode Mode";
->>>      case V4L2_CID_MPEG_VIDEO_HEVC_START_CODE:        return "HEVC Start Code";
->>> +    case V4L2_CID_MPEG_VIDEO_LTRCOUNT:        return "LTR Count";
->>> +    case V4L2_CID_MPEG_VIDEO_MARKLTRFRAME:        return "Mark LTR";
->>> +    case V4L2_CID_MPEG_VIDEO_USELTRFRAME:        return "Use LTR";
->>
->> "Use LTR Frames"
->>
->>>
->>>      /* CAMERA controls */
->>>      /* Keep the order of the 'case's the same as in v4l2-controls.h! */
->>> @@ -1224,6 +1227,9 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
->>>          break;
->>>      case V4L2_CID_MPEG_VIDEO_MV_H_SEARCH_RANGE:
->>>      case V4L2_CID_MPEG_VIDEO_MV_V_SEARCH_RANGE:
->>> +    case V4L2_CID_MPEG_VIDEO_LTRCOUNT:
->>> +    case V4L2_CID_MPEG_VIDEO_MARKLTRFRAME:
->>> +    case V4L2_CID_MPEG_VIDEO_USELTRFRAME:
->>>          *type = V4L2_CTRL_TYPE_INTEGER;
->>>          break;
->>>      case V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME:
->>> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
->>> index 6227141..f2daa86 100644
->>> --- a/include/uapi/linux/v4l2-controls.h
->>> +++ b/include/uapi/linux/v4l2-controls.h
->>> @@ -742,6 +742,10 @@ enum v4l2_cid_mpeg_video_hevc_size_of_length_field {
->>>  #define V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L6_BR    (V4L2_CID_MPEG_BASE + 642)
->>>  #define V4L2_CID_MPEG_VIDEO_REF_NUMBER_FOR_PFRAMES    (V4L2_CID_MPEG_BASE + 643)
->>>  #define V4L2_CID_MPEG_VIDEO_PREPEND_SPSPPS_TO_IDR    (V4L2_CID_MPEG_BASE + 644)
->>> +#define V4L2_CID_MPEG_VIDEO_LTRCOUNT    (V4L2_CID_MPEG_BASE + 645)
->>> +#define V4L2_CID_MPEG_VIDEO_MARKLTRFRAME    (V4L2_CID_MPEG_BASE + 646)
->>> +#define V4L2_CID_MPEG_VIDEO_USELTRFRAME        (V4L2_CID_MPEG_BASE + 647)
->>> +
->>>
->>>  /*  MPEG-class control IDs specific to the CX2341x driver as defined by V4L2 */
->>>  #define V4L2_CID_MPEG_CX2341X_BASE                (V4L2_CTRL_CLASS_MPEG | 0x1000)
->>>
->>
->> Regards,
->>
->>     Hans
-> 
-> Thanks,
-> Dikshita
+> +	priv->bus_type = bus_cfg.bus_type;
+> +	v4l2_fwnode_endpoint_free(&bus_cfg);
+> +	if (ret) {
 
+By reading the code in v4l2-fwnode it seems to me that, if you set
+bus_cfg.bus_type:
+1) The "bus_type" property is set in the fwnode and doesn't match the
+requested one -> return -ENXIO
+2) The "bus_type" property is not set in the fwnode: no error code is
+returned and vep->bus_type is not changed.
+
+> +		/* For backward compatibility with the existing DT where
+> +		 * bus-type isnt specified fallback to V4L2_MBUS_PARALLEL
+> +		 */
+
+This mean there's no need to fallback here, as at this point we only
+support PARALLEL. If fwnode,bus_type is not set you won't faile, if
+it's set and doesn't match you should fail as the DT is not correct
+(at this point).
+
+1) In this patch: try to parse as MBUS_PARALLEL, fail if -ENXIO,
+assume parallel otherwise and continue.
+
+2) When you introduce BT.656 in the next patch things become nasty.
+Newer DTS will have bus_type mandatory once my series gets in. Old
+ones do not and assume "parallel".
+2.a) If you try to parse with "cfg.bus_type = MBUS_BT656" and there's
+no 'bus_type' in the fwnode, the 'parallel' flags are simply cleared
+at the end of v4l2_fwnode_endpoint_parse_parallel_bus(), but the
+bus_type does not get changed. You won't detect the mismatch and
+happily assume the bus type is BT.656. In other word, if you set
+cfg.bus_type that's always authoritative unless the fwnode property
+contradicts it (and if that's the case, it should be documented in
+v4l2-fnode, unless it is and I missed it).
+2.b) If the fwnode.bus_type is set, you try to parse one bus type
+first, if -ENOXIO try the second. If it fails again, then return an
+error.
+
+In the next patch, to avoid the case described in 2.a I would:
+- Parse the 'bus_type' property in the driver (mentioning it's for
+  retrocompatibility).
+-- If not present: Assume parallel and parse the fwnode. Enclose that
+with a comment about "retrocompatibility" and proceed.
+-- If present: Do what suggested in the 2.b case. Try one, then the
+other, then eventually fail.
+
+I hope this makes any sense, this part is such a gray area... and as a
+note to "self" in the forthcoming "of_graph.yaml", let's make bus_type
+mandatory for all endpoints!
+
+Also, I might be mistaken in following the code and if you have tested
+all cases and they work as intended please call me out on this :)
+
+Thanks
+  j
+
+> +		priv->bus_type = V4L2_MBUS_PARALLEL;
+> +		dev_notice(&client->dev, "Falling back to V4L2_MBUS_PARALLEL mode\n");
+> +	}
+> +
+>  	ret = ov772x_video_probe(priv);
+>  	if (ret < 0)
+>  		goto error_gpio_put;
+> --
+> 2.17.1
+>
