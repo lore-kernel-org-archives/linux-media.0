@@ -2,221 +2,215 @@ Return-Path: <SRS0=4kUN=CX=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CBF3C43461
-	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 16:47:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 916D0C43461
+	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 16:50:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 44CE121974
-	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 16:47:37 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="KmfGrfDX"
+	by mail.kernel.org (Postfix) with ESMTP id 64B2C20829
+	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 16:50:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726115AbgINPJY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Sep 2020 11:09:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44052 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725992AbgINPJH (ORCPT
+        id S1726299AbgINQtv convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Sep 2020 12:49:51 -0400
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:35754 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726094AbgINQtt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Sep 2020 11:09:07 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79CF6C06178A;
-        Mon, 14 Sep 2020 08:09:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=Hd44flV0rNOoconJIhItgKEmFIKY+u0t7YJsM9KNpfo=; b=KmfGrfDX7byZuKSDmAvqbHPmbG
-        rVaI8AfoPY6UsW2JcwgF4VuMlzi7fLK0J2xpI95SGy0q+W5zBRBcMVQ48ucc/QC/JtBbmBw2rpIi9
-        k2hdX5nDNJVJiGWdMoQGMk7KRRTGvh0MIF+0oRVh8VPbm/iHIJ4t0AAsaDW8cmC9dxwwIAuvWz6+v
-        Gta5PNKJzPOsjrE8pPJot2z39D/4owQoF9Nt8nXSM22jnkkdQMTdKKTO6VZE0csNfpqzMQatn8xP6
-        SS2WBIoSfFEy1gOvLpecVGJG4LcKAOo3nI1A6Rs3aY3bxSBocIMVe8GEYW4DiACK5ruWQPrRzPTSo
-        HLZyS2gw==;
-Received: from 089144214092.atnat0023.highway.a1.net ([89.144.214.92] helo=localhost)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kHq5w-0003B7-Sc; Mon, 14 Sep 2020 15:08:41 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        iommu@lists.linux-foundation.org
-Cc:     Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        linux1394-devel@lists.sourceforge.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        nouveau@lists.freedesktop.org, netdev@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-mm@kvack.org,
-        alsa-devel@alsa-project.org
-Subject: [PATCH 10/17] hal2: convert to dma_alloc_noncoherent
-Date:   Mon, 14 Sep 2020 16:44:26 +0200
-Message-Id: <20200914144433.1622958-11-hch@lst.de>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200914144433.1622958-1-hch@lst.de>
-References: <20200914144433.1622958-1-hch@lst.de>
+        Mon, 14 Sep 2020 12:49:49 -0400
+Received: from [78.134.51.148] (port=46080 helo=[192.168.77.62])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1kHrfX-0002jl-8u; Mon, 14 Sep 2020 18:49:31 +0200
+Subject: Re: [PATCH v8 0/6] Support running driver's probe for a device
+ powered off
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
+        Hyungwoo Yang <hyungwoo.yang@intel.com>,
+        linux-media@vger.kernel.org
+References: <20200903081550.6012-1-sakari.ailus@linux.intel.com>
+ <f4b82baa-66b7-464e-fd39-66d2243a05ef@lucaceresoli.net>
+ <20200911130104.GF26842@paasikivi.fi.intel.com>
+ <6dea1206-cfaa-bfc5-d57e-4dcddadc03c7@lucaceresoli.net>
+ <20200914094727.GM26842@paasikivi.fi.intel.com>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Message-ID: <de017bfd-8908-f5ba-afa7-469a0059a5a7@lucaceresoli.net>
+Date:   Mon, 14 Sep 2020 18:49:29 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20200914094727.GM26842@paasikivi.fi.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8BIT
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use the new non-coherent DMA API including proper ownership transfers.
-This also means we can allocate the buffer memory with the proper
-direction instead of bidirectional.
+Hi Sakari,
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- sound/mips/hal2.c | 58 ++++++++++++++++++++++-------------------------
- 1 file changed, 27 insertions(+), 31 deletions(-)
+On 14/09/20 11:47, Sakari Ailus wrote:
+> Hi Luca,
+> 
+> On Mon, Sep 14, 2020 at 09:58:24AM +0200, Luca Ceresoli wrote:
+>> Hi Sakari,
+>>
+>> On 11/09/20 15:01, Sakari Ailus wrote:
+>>> Hi Luca,
+>>>
+>>> On Fri, Sep 11, 2020 at 02:49:26PM +0200, Luca Ceresoli wrote:
+>>>> Hi Sakari,
+>>>>
+>>>> On 03/09/20 10:15, Sakari Ailus wrote:
+>>>>>
+>>>>> Hi all,
+>>>>>
+>>>>> These patches enable calling (and finishing) a driver's probe function
+>>>>> without powering on the respective device on busses where the practice is
+>>>>> to power on the device for probe. While it generally is a driver's job to
+>>>>> check the that the device is there, there are cases where it might be
+>>>>> undesirable. (In this case it stems from a combination of hardware design
+>>>>> and user expectations; see below.) The downside with this change is that
+>>>>> if there is something wrong with the device, it will only be found at the
+>>>>> time the device is used. In this case (the camera sensors + EEPROM in a
+>>>>> sensor) I don't see any tangible harm from that though.
+>>>>>
+>>>>> An indication both from the driver and the firmware is required to allow
+>>>>> the device's power state to remain off during probe (see the first patch).
+>>>>>
+>>>>>
+>>>>> The use case is such that there is a privacy LED next to an integrated
+>>>>> user-facing laptop camera, and this LED is there to signal the user that
+>>>>> the camera is recording a video or capturing images. That LED also happens
+>>>>> to be wired to one of the power supplies of the camera, so whenever you
+>>>>> power on the camera, the LED will be lit, whether images are captured from
+>>>>> the camera --- or not. There's no way to implement this differently
+>>>>> without additional software control (allowing of which is itself a
+>>>>> hardware design decision) on most CSI-2-connected camera sensors as they
+>>>>> simply have no pin to signal the camera streaming state.
+>>>>>
+>>>>> This is also what happens during driver probe: the camera will be powered
+>>>>> on by the I²C subsystem calling dev_pm_domain_attach() and the device is
+>>>>> already powered on when the driver's own probe function is called. To the
+>>>>> user this visible during the boot process as a blink of the privacy LED,
+>>>>> suggesting that the camera is recording without the user having used an
+>>>>> application to do that. From the end user's point of view the behaviour is
+>>>>> not expected and for someone unfamiliar with internal workings of a
+>>>>> computer surely seems quite suspicious --- even if images are not being
+>>>>> actually captured.
+>>>>>
+>>>>> I've tested these on linux-next master. They also apply to Wolfram's
+>>>>> i2c/for-next branch, there's a patch that affects the I²C core changes
+>>>>> here (see below). The patches apart from that apply to Bartosz's
+>>>>> at24/for-next as well as Mauro's linux-media master branch.
+>>>>
+>>>> Apologies for having joined this discussion this late.
+>>>
+>>> No worries. But thanks for the comments.
+>>>
+>>>>
+>>>> This patchset seems a good base to cover a different use case, where I
+>>>> also cannot access the physical device at probe time.
+>>>>
+>>>> I'm going to try these patches, but in my case there are a few
+>>>> differences that need a better understanding.
+>>>>
+>>>> First, I'm using device tree, not ACPI. In addition to adding OF support
+>>>> similar to the work you've done for ACPI, I think instead of
+>>>> acpi_dev_state_low_power() we should have a function that works for both
+>>>> ACPI and DT.
+>>>
+>>> acpi_dev_state_low_power() is really ACPI specific: it does tell the ACPI
+>>> power state of the device during probe or remove. It is not needed on DT
+>>> since the power state of the device is controlled directly by the driver.
+>>> On I²C ACPI devices, it's the framework that powers them on for probe.
+>>
+>> I see, thanks for clarifying. I'm not used to ACPI so I didn't get that.
+>>
+>>> You could have a helper function on DT to tell a driver what to do in
+>>> probe, but the functionality in that case is unrelated.
+>>
+>> So in case of DT we might think of a function that just tells whether
+>> the device is marked to allow low-power probe, but it's just an info
+>> from DT:
+>>
+>> int mydriver_probe(struct i2c_client *client)
+>> {
+>> 	...
+>> 	low_power = of_dev_state_low_power(&client->dev);
+>> 	if (!low_power) {
+>> 		mydriver_initialize(); /* power+clocks, write regs */
+>>  	}
+>> 	...
+>> }
+>>
+>> ...and, if (low_power), call mydriver_initialize() at first usage.
+>>
+>> I'm wondering whether this might make sense in mainline.
+> 
+> Quite possibly, if there are drivers that would need it.
+> 
+> The function should probably be called differently though as what it does
+> is quite different after all.
+> 
+> Unless... we did the following:
+> 
+> - Redefine the I²C driver flag added by this patchset into what tells the
+>   I²C framework whether the driver does its own power management
+>   independently of the I²C framework. It could be called e.g.
+>   I2C_DRV_FL_FULL_PM, to indicate the driver is responsible for all power
+>   management of the device, and the I²C framework would not power on the
+>   device for probe or remove.
+> 
+> - Add a firmware function to tell whether the device identification should
+>   take place during probe or not. For this is what we're really doing here
+>   from driver's point of view: lazy device probing.
 
-diff --git a/sound/mips/hal2.c b/sound/mips/hal2.c
-index ec84bc4c3a6e77..9ac9b58d7c8cdd 100644
---- a/sound/mips/hal2.c
-+++ b/sound/mips/hal2.c
-@@ -441,7 +441,8 @@ static inline void hal2_stop_adc(struct snd_hal2 *hal2)
- 	hal2->adc.pbus.pbus->pbdma_ctrl = HPC3_PDMACTRL_LD;
- }
- 
--static int hal2_alloc_dmabuf(struct snd_hal2 *hal2, struct hal2_codec *codec)
-+static int hal2_alloc_dmabuf(struct snd_hal2 *hal2, struct hal2_codec *codec,
-+		enum dma_data_direction buffer_dir)
- {
- 	struct device *dev = hal2->card->dev;
- 	struct hal2_desc *desc;
-@@ -449,15 +450,15 @@ static int hal2_alloc_dmabuf(struct snd_hal2 *hal2, struct hal2_codec *codec)
- 	int count = H2_BUF_SIZE / H2_BLOCK_SIZE;
- 	int i;
- 
--	codec->buffer = dma_alloc_attrs(dev, H2_BUF_SIZE, &buffer_dma,
--					GFP_KERNEL, DMA_ATTR_NON_CONSISTENT);
-+	codec->buffer = dma_alloc_noncoherent(dev, H2_BUF_SIZE, &buffer_dma,
-+					buffer_dir, GFP_KERNEL);
- 	if (!codec->buffer)
- 		return -ENOMEM;
--	desc = dma_alloc_attrs(dev, count * sizeof(struct hal2_desc),
--			       &desc_dma, GFP_KERNEL, DMA_ATTR_NON_CONSISTENT);
-+	desc = dma_alloc_noncoherent(dev, count * sizeof(struct hal2_desc),
-+			&desc_dma, DMA_BIDIRECTIONAL, GFP_KERNEL);
- 	if (!desc) {
--		dma_free_attrs(dev, H2_BUF_SIZE, codec->buffer, buffer_dma,
--			       DMA_ATTR_NON_CONSISTENT);
-+		dma_free_noncoherent(dev, H2_BUF_SIZE, codec->buffer, buffer_dma,
-+				buffer_dir);
- 		return -ENOMEM;
- 	}
- 	codec->buffer_dma = buffer_dma;
-@@ -470,20 +471,22 @@ static int hal2_alloc_dmabuf(struct snd_hal2 *hal2, struct hal2_codec *codec)
- 		      desc_dma : desc_dma + (i + 1) * sizeof(struct hal2_desc);
- 		desc++;
- 	}
--	dma_cache_sync(dev, codec->desc, count * sizeof(struct hal2_desc),
--		       DMA_TO_DEVICE);
-+	dma_sync_single_for_device(dev, codec->desc_dma,
-+				   count * sizeof(struct hal2_desc),
-+				   DMA_BIDIRECTIONAL);
- 	codec->desc_count = count;
- 	return 0;
- }
- 
--static void hal2_free_dmabuf(struct snd_hal2 *hal2, struct hal2_codec *codec)
-+static void hal2_free_dmabuf(struct snd_hal2 *hal2, struct hal2_codec *codec,
-+		enum dma_data_direction buffer_dir)
- {
- 	struct device *dev = hal2->card->dev;
- 
--	dma_free_attrs(dev, codec->desc_count * sizeof(struct hal2_desc),
--		       codec->desc, codec->desc_dma, DMA_ATTR_NON_CONSISTENT);
--	dma_free_attrs(dev, H2_BUF_SIZE, codec->buffer, codec->buffer_dma,
--		       DMA_ATTR_NON_CONSISTENT);
-+	dma_free_noncoherent(dev, codec->desc_count * sizeof(struct hal2_desc),
-+		       codec->desc, codec->desc_dma, DMA_BIDIRECTIONAL);
-+	dma_free_noncoherent(dev, H2_BUF_SIZE, codec->buffer, codec->buffer_dma,
-+			buffer_dir);
- }
- 
- static const struct snd_pcm_hardware hal2_pcm_hw = {
-@@ -509,21 +512,16 @@ static int hal2_playback_open(struct snd_pcm_substream *substream)
- {
- 	struct snd_pcm_runtime *runtime = substream->runtime;
- 	struct snd_hal2 *hal2 = snd_pcm_substream_chip(substream);
--	int err;
- 
- 	runtime->hw = hal2_pcm_hw;
--
--	err = hal2_alloc_dmabuf(hal2, &hal2->dac);
--	if (err)
--		return err;
--	return 0;
-+	return hal2_alloc_dmabuf(hal2, &hal2->dac, DMA_TO_DEVICE);
- }
- 
- static int hal2_playback_close(struct snd_pcm_substream *substream)
- {
- 	struct snd_hal2 *hal2 = snd_pcm_substream_chip(substream);
- 
--	hal2_free_dmabuf(hal2, &hal2->dac);
-+	hal2_free_dmabuf(hal2, &hal2->dac, DMA_TO_DEVICE);
- 	return 0;
- }
- 
-@@ -579,7 +577,9 @@ static void hal2_playback_transfer(struct snd_pcm_substream *substream,
- 	unsigned char *buf = hal2->dac.buffer + rec->hw_data;
- 
- 	memcpy(buf, substream->runtime->dma_area + rec->sw_data, bytes);
--	dma_cache_sync(hal2->card->dev, buf, bytes, DMA_TO_DEVICE);
-+	dma_sync_single_for_device(hal2->card->dev,
-+			hal2->dac.buffer_dma + rec->hw_data, bytes,
-+			DMA_TO_DEVICE);
- 
- }
- 
-@@ -597,22 +597,16 @@ static int hal2_capture_open(struct snd_pcm_substream *substream)
- {
- 	struct snd_pcm_runtime *runtime = substream->runtime;
- 	struct snd_hal2 *hal2 = snd_pcm_substream_chip(substream);
--	struct hal2_codec *adc = &hal2->adc;
--	int err;
- 
- 	runtime->hw = hal2_pcm_hw;
--
--	err = hal2_alloc_dmabuf(hal2, adc);
--	if (err)
--		return err;
--	return 0;
-+	return hal2_alloc_dmabuf(hal2, &hal2->adc, DMA_FROM_DEVICE);
- }
- 
- static int hal2_capture_close(struct snd_pcm_substream *substream)
- {
- 	struct snd_hal2 *hal2 = snd_pcm_substream_chip(substream);
- 
--	hal2_free_dmabuf(hal2, &hal2->adc);
-+	hal2_free_dmabuf(hal2, &hal2->adc, DMA_FROM_DEVICE);
- 	return 0;
- }
- 
-@@ -667,7 +661,9 @@ static void hal2_capture_transfer(struct snd_pcm_substream *substream,
- 	struct snd_hal2 *hal2 = snd_pcm_substream_chip(substream);
- 	unsigned char *buf = hal2->adc.buffer + rec->hw_data;
- 
--	dma_cache_sync(hal2->card->dev, buf, bytes, DMA_FROM_DEVICE);
-+	dma_sync_single_for_cpu(hal2->card->dev,
-+			hal2->adc.buffer_dma + rec->hw_data, bytes,
-+			DMA_FROM_DEVICE);
- 	memcpy(substream->runtime->dma_area + rec->sw_data, buf, bytes);
- }
- 
+Indeed my needs have nothing to do with power management. What I need is
+lazy device probing as the I2C bus may need time before it can be used.
+From the driver code point of view it looks similar (there's an if()
+around initializations in probe() and init is done later if needed), but
+the usage is different.
+
+Another approach would be to add a new I2C driver operation [say
+init_hw()], then move code for lazy init out of probe() into init_hw().
+probe() would still allocate resources. init_hw() would be called by the
+framework (or the controller driver?) when it knows eveything is ready.
+Just wild thoughts while I'm trying to focus the problem...
+
+> There are no dependencies between the two but they can be used together to
+> implement the same functionality as this patchset currently does. This way
+> also the differences between driver implementations for ACPI and DT can be
+> reduced as the logic is the same.
+> 
+> Further on, with this approach, if other busses happen to need this
+> functionality in the future, it would be straightforward to add support ---
+> it only takes to query whether it's indicated by the DT or ACPI property.
+> 
+> Thoughts, opinions?
+> 
+
 -- 
-2.28.0
+Luca
 
