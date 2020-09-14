@@ -2,163 +2,344 @@ Return-Path: <SRS0=4kUN=CX=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+X-Spam-Status: No, score=-14.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0060FC433E2
-	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 08:33:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88E47C43461
+	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 09:03:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B807F2220A
-	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 08:33:48 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="s0tLnr4f"
+	by mail.kernel.org (Postfix) with ESMTP id 4444C207C3
+	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 09:03:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1600074220;
+	bh=tLXQIY2CoWuylaBPgsY3ScsMvwtWmDwYLS1/jrbi+s0=;
+	h=From:Cc:Subject:Date:In-Reply-To:References:To:List-ID:From;
+	b=sD/izRCsh1QPaEFEOo6lXplRfKrh4QriaJLBpRRXVR0cZdNUKmuca/rqi0/RMWgvp
+	 1oWsKJlSS4dJ4J+A24oGDZQrr+3iq5moDkz1nBA1AbdawgX/q6yJOSjFqhEIuRlZ/k
+	 pxArXu3gXT44leUe+/x6LYx8tGIpFvyaoRAm+NS0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726256AbgINIdn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Sep 2020 04:33:43 -0400
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:33149 "EHLO
-        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726196AbgINIdk (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Sep 2020 04:33:40 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id HjvakANHZXgwIHjvbkiHlg; Mon, 14 Sep 2020 10:33:36 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1600072416; bh=6cBkkDse8EnkRRQ/hU3Yx+Zl6dVYvWZOTnnSJT950bY=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=s0tLnr4fNdm34rCsFKkod1eZ0480CjguoMSroHrjyp8pK34KS1X3DdtgPhH1blAmS
-         kykcz88t+rIwjuwdg40KnZDmmjKaxh4HnjMnsulxBB6vBnrLmFZExSqBtxzt/SQHZw
-         csoBRI3Y7ufjUsxuLHuZC6dlIvF1RPVmHiWS26a6GurLqIe/M3zruWvR0n3867VGsN
-         AF14zo6ow8h5IoKl8FNxMGV8Ygl33XtCsCjMvZgfU9DfcWtM378MUmmPPk9JnCQjfu
-         Z+TtROGUzkZ+yHFM5km96w7FVf5BvBiex5LEsH+FYuUGqWJWYhNnhxnPe8IkyoZSwR
-         kJFDKuf6PDuHQ==
-Subject: Re: [v10 0/4] media: vidtv: Implement a virtual DVB driver
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
-Cc:     "r.verdejo@samsung.com" <r.verdejo@samsung.com>,
-        "nicolas@ndufresne.ca" <nicolas@ndufresne.ca>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
-        "linux-kernel-mentees@lists.linuxfoundation.org" 
-        <linux-kernel-mentees@lists.linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20200912111506.2d2bd512@coco.lan>
- <15028D87-A496-4CAD-91A6-E4467489C4D0@getmailspring.com>
- <20200912195702.58f71f8f@coco.lan>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <2cbf772e-59e7-36ca-8d39-320fc62d47d8@xs4all.nl>
-Date:   Mon, 14 Sep 2020 10:33:34 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726236AbgINJDi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Sep 2020 05:03:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37646 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726143AbgINJDc (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 14 Sep 2020 05:03:32 -0400
+Received: from mail.kernel.org (ip5f5ad5d8.dynamic.kabel-deutschland.de [95.90.213.216])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 57516207C3;
+        Mon, 14 Sep 2020 09:03:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600074211;
+        bh=tLXQIY2CoWuylaBPgsY3ScsMvwtWmDwYLS1/jrbi+s0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=pmegek0J3pqaS1iXMTDrLDuog8OdqVbuibw/XykyM0jduY1lQ3FN42wEMJrSbO00h
+         8ulDy/rR8yhpB5brFuMsxgDLEI6WZn1Id5FPtcvHCs94T2FELJqmk1BBbiXJs5bKEv
+         MfU1Jloo8d5UnNn5unAJDOpRRFnyYyIkPNPE/zYM=
+Received: from mchehab by mail.kernel.org with local (Exim 4.94)
+        (envelope-from <mchehab@kernel.org>)
+        id 1kHkOW-002dzk-6E; Mon, 14 Sep 2020 11:03:28 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH RFC 09/11] media: vidtv: add basic support for DVBv5 stats
+Date:   Mon, 14 Sep 2020 11:03:24 +0200
+Message-Id: <8df003fd261a36929b606e07480c99f88a2a15ef.1600073975.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <cover.1600073975.git.mchehab+huawei@kernel.org>
+References: <cover.1600073975.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20200912195702.58f71f8f@coco.lan>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfPKHkAZdeQCjfnPgss7wjvVcjUHwSU5iEEbYywCPuNhxACJ4n7sXNoZAlo6glpN0NU1gS4c+/tMu3PBThBoM1rz9A04oIarcIfwPyDJZn1H0guZ/yOiR
- myT/m7FcmVxRJimNEsbEZPL/4iW9LxCE/a2Q8fzulMCEGzd3qAqgtr94ob+kNGkNX8Nq6S7nsq1iZBGeQnAp5loT5a0S07qDfjbIwMCEolWA9In8pmhzeJsZ
- OWZRVSWly/UDqtCuPFNpatLFzyOPgefB0bPcRLo7zZMaZxMwFWFp9uJd+2pEYSUErzM3jnlEGf41yTXAStrFh/D32YLchBP4f+dlAxxE+O8S+3PxaT37CbgB
- hApSq/jFlZjJ2VQ2piaCg+DCy124SQfL94dHhiYkDJd8l5qtYPqQlacqsdpGEZhTc3JgeuRz9BcptX2RuwR4h66cvGo5efxiKMfcUe1txOVvkBj0EMVns+fm
- SdwsaXX3sC24ZiGd5izF2kNznC4iP/aM+qX/Y20JWD/NRWp2ZSNThkazxbkOwQvVkbgSNnmF89p4LwCwZldjtUUYQtl9nR2OnigzYg==
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 12/09/2020 19:57, Mauro Carvalho Chehab wrote:
-> Em Sat, 12 Sep 2020 11:49:01 -0300
-> "Daniel W. S. Almeida" <dwlsalmeida@gmail.com> escreveu:
-> 
->> Hi Hans and Mauro & all
->>
->>
->>> Why the dvb_ prefix? All virtual drivers just start with 'vi'.
->>>
->>> And wouldn't it make more sense to call dvb_vidtv_bridge.ko just vidtv.ko?
->>> Just like the other virtual media drivers?  
->>
->> I guess Mauro was the one to come up with the dvb_* prefix for the
->> kernel modules for the reasons he explicited up in this thread. 
->>
->> As far as dvb_vidtv_bridge.ko and vidtv_bridge.c, I just wanted to be
->> verbose so that people would look at this and see that it is the code
->> for a bridge driver, since this is also supposed to be a template. 
->>
->> Also because I had some trouble myself figuring out what was what when
->> first browsing through other dvb drivers. That said, I am 100% onboard
->> with renaming this to vidtv.ko or whatever seems more appropiate :)
-> 
-> Let us think a little bit about that. 
-> 
->>
->>
->>> Yet, I agree with you that at least an alias is needed.
->>> earlier today, I wrote a patch with such purpose:  
->>
->> If you all would like to just leave this at that ^ I am also ok with it.
->>
->>> For regression testing of vidtv during the daily build it would be  
->> great if
->>> the contrib/test/test-media script can be enhanced to include vidtv.  
->>
->> Sure, I can do that if you'd like. Can you provide some tips on how to
->> get started? :)
-> 
-> Hans can explain it better, but the hole idea is to have a set of
-> userspace apps that will ensure that drivers will properly implement
-> the DVB API.
-> 
-> I suspect that, before that (or together with such tooling), we need
-> to properly implement the frontend ioctl, validating the per delivery
-> system parameters, as, right now, it just accepts anything from
-> userspace. 
+The current stats code is broken on so many ways. It ends
+reporting 0 for signal strengh, and the work queue doesn't
+run. If it would run, the code would crash.
 
-Daniel, if you look at the test-media script, then you'll see that it has
-separate sections for each virtual driver. It's probably best to look at
-the vim2m driver tests since that's the easiest.
+Fix such issues and add the minimum stuff for DVBv5 stats.
 
-It loads the module, then it starts v4l2-compliance to test the API. This
-utility basically tries all V4L2 APIs and checks that the driver conforms to
-the spec.
+Right now, only strength and cnr and UCB are implemented.
+pre/post BER stats will always return zero.
 
-Note that you see options like '-m platform:vim2m' that selects which /dev/media
-device to use based on the name and v4l2-compliance (or v4l2-ctl with the -z option)
-then walks the topology of the media device and tests all interfaces it finds.
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ .../media/test-drivers/vidtv/vidtv_demod.c    | 185 ++++++++++++------
+ .../media/test-drivers/vidtv/vidtv_tuner.c    |   2 +-
+ 2 files changed, 122 insertions(+), 65 deletions(-)
 
-Hence my question about media controller support in vidtv: this should be
-supported there as well since it allows you to write these test sequences without
-having to know which /dev/fooX device should be used.
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_demod.c b/drivers/media/test-drivers/vidtv/vidtv_demod.c
+index 6199a4e06ff9..bfe63d7160f2 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_demod.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_demod.c
+@@ -122,6 +122,74 @@ static const struct vidtv_demod_cnr_to_qual_s
+ 	return NULL; /* not found */
+ }
+ 
++static void vidtv_clean_stats(struct dvb_frontend *fe)
++{
++	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
++
++	/* Fill the length of each status counter */
++
++	/* Signal is always available */
++	c->strength.len = 1;
++	c->strength.stat[0].scale = FE_SCALE_DECIBEL;
++	c->strength.stat[0].svalue = 0;
++
++	/* Usually available only after Viterbi lock */
++	c->cnr.stat[0].scale = FE_SCALE_NOT_AVAILABLE;
++	c->cnr.stat[0].svalue = 0;
++	c->cnr.len = 1;
++
++	/* Those depends on full lock */
++	c->pre_bit_error.stat[0].scale = FE_SCALE_NOT_AVAILABLE;
++	c->pre_bit_error.stat[0].uvalue = 0;
++	c->pre_bit_error.len = 1;
++	c->pre_bit_count.stat[0].scale = FE_SCALE_NOT_AVAILABLE;
++	c->pre_bit_count.stat[0].uvalue = 0;
++	c->pre_bit_count.len = 1;
++	c->post_bit_error.stat[0].scale = FE_SCALE_NOT_AVAILABLE;
++	c->post_bit_error.stat[0].uvalue = 0;
++	c->post_bit_error.len = 1;
++	c->post_bit_count.stat[0].scale = FE_SCALE_NOT_AVAILABLE;
++	c->post_bit_count.stat[0].uvalue = 0;
++	c->post_bit_count.len = 1;
++	c->block_error.stat[0].scale = FE_SCALE_NOT_AVAILABLE;
++	c->block_error.stat[0].uvalue = 0;
++	c->block_error.len = 1;
++	c->block_count.stat[0].scale = FE_SCALE_NOT_AVAILABLE;
++	c->block_count.stat[0].uvalue = 0;
++	c->block_count.len = 1;
++}
++
++static void vidtv_demod_update_stats(struct dvb_frontend *fe)
++{
++	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
++	struct vidtv_demod_state *state = fe->demodulator_priv;
++	u32 scale;
++
++	if (state->status & FE_HAS_LOCK) {
++		scale = FE_SCALE_COUNTER;
++		c->cnr.stat[0].scale = FE_SCALE_DECIBEL;
++	} else {
++		scale = FE_SCALE_NOT_AVAILABLE;
++		c->cnr.stat[0].scale = scale;
++	}
++
++	c->pre_bit_error.stat[0].scale = scale;
++	c->pre_bit_count.stat[0].scale = scale;
++	c->post_bit_error.stat[0].scale = scale;
++	c->post_bit_count.stat[0].scale = scale;
++	c->block_error.stat[0].scale = scale;
++	c->block_count.stat[0].scale = scale;
++
++	/*
++	 * Add a 0.5% of randomness at the signal streangth and CNR,
++	 * and make them different, as we want to have something closer
++	 * to a real case scenario.
++	 */
++	c->strength.stat[0].svalue = state->tuner_cnr + prandom_u32_max(state->tuner_cnr / 50);
++	c->cnr.stat[0].svalue = state->tuner_cnr - prandom_u32_max(state->tuner_cnr / 50);
++
++}
++
+ static void vidtv_demod_poll_snr_handler(struct work_struct *work)
+ {
+ 	/*
+@@ -133,33 +201,34 @@ static void vidtv_demod_poll_snr_handler(struct work_struct *work)
+ 	struct vidtv_demod_config *config;
+ 	u16 snr = 0;
+ 
+-	state  = container_of(work, struct vidtv_demod_state, poll_snr.work);
++	state = container_of(work, struct vidtv_demod_state, poll_snr.work);
+ 	config = &state->config;
+ 
+-	if (!state->frontend.ops.tuner_ops.get_rf_strength)
+-		return;
+-
+-	state->frontend.ops.tuner_ops.get_rf_strength(&state->frontend, &snr);
+-
++	/* Simulate random lost of signal due to a bad-tuned channel */
+ 	cnr2qual = vidtv_match_cnr_s(&state->frontend);
+-	if (!cnr2qual)
+-		return;
+ 
+-	if (snr < cnr2qual->cnr_ok) {
+-		/* eventually lose the TS lock */
+-		if (prandom_u32_max(100) < config->drop_tslock_prob_on_low_snr)
+-			state->status = 0;
+-	} else {
+-		/* recover if the signal improves */
+-		if (prandom_u32_max(100) <
+-		    config->recover_tslock_prob_on_good_snr)
+-			state->status = FE_HAS_SIGNAL  |
+-					FE_HAS_CARRIER |
+-					FE_HAS_VITERBI |
+-					FE_HAS_SYNC    |
+-					FE_HAS_LOCK;
++	if (cnr2qual && state->tuner_cnr < cnr2qual->cnr_good &&
++	    state->frontend.ops.tuner_ops.get_rf_strength) {
++		state->frontend.ops.tuner_ops.get_rf_strength(&state->frontend, &snr);
++
++		if (snr < cnr2qual->cnr_ok) {
++			/* eventually lose the TS lock */
++			if (prandom_u32_max(100) < config->drop_tslock_prob_on_low_snr)
++				state->status = 0;
++		} else {
++			/* recover if the signal improves */
++			if (prandom_u32_max(100) <
++			    config->recover_tslock_prob_on_good_snr)
++				state->status = FE_HAS_SIGNAL  |
++						FE_HAS_CARRIER |
++						FE_HAS_VITERBI |
++						FE_HAS_SYNC    |
++						FE_HAS_LOCK;
++		}
+ 	}
+ 
++	vidtv_demod_update_stats(&state->frontend);
++
+ 	schedule_delayed_work(&state->poll_snr,
+ 			      msecs_to_jiffies(POLL_THRD_TIME));
+ }
+@@ -174,28 +243,13 @@ static int vidtv_demod_read_status(struct dvb_frontend *fe,
+ 	return 0;
+ }
+ 
+-static int vidtv_demod_read_ber(struct dvb_frontend *fe, u32 *ber)
+-{
+-	*ber = 0;
+-	return 0;
+-}
+-
+ static int vidtv_demod_read_signal_strength(struct dvb_frontend *fe,
+ 					    u16 *strength)
+ {
+-	*strength = 0;
+-	return 0;
+-}
++	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
+ 
+-static int vidtv_demod_read_snr(struct dvb_frontend *fe, u16 *snr)
+-{
+-	*snr = 0;
+-	return 0;
+-}
++	*strength = c->strength.stat[0].uvalue;
+ 
+-static int vidtv_demod_read_ucblocks(struct dvb_frontend *fe, u32 *ucblocks)
+-{
+-	*ucblocks = 0;
+ 	return 0;
+ }
+ 
+@@ -216,38 +270,42 @@ static int vidtv_demod_get_frontend(struct dvb_frontend *fe,
+ 
+ static int vidtv_demod_set_frontend(struct dvb_frontend *fe)
+ {
+-	struct vidtv_demod_state *state            = fe->demodulator_priv;
+ 	const struct vidtv_demod_cnr_to_qual_s *cnr2qual = NULL;
+-	u32 tuner_status                        = 0;
++	struct vidtv_demod_state *state = fe->demodulator_priv;
++	u32 tuner_status = 0;
++	int ret;
+ 
+-	if (fe->ops.tuner_ops.set_params) {
+-		fe->ops.tuner_ops.set_params(fe);
++	if (!fe->ops.tuner_ops.set_params)
++		return 0;
+ 
+-		/* store the CNR returned by the tuner */
+-		fe->ops.tuner_ops.get_rf_strength(fe, &state->tuner_cnr);
++	fe->ops.tuner_ops.set_params(fe);
+ 
+-		fe->ops.tuner_ops.get_status(fe, &tuner_status);
+-		state->status = (state->tuner_cnr > 0) ?  FE_HAS_SIGNAL  |
+-							  FE_HAS_CARRIER |
+-							  FE_HAS_VITERBI |
+-							  FE_HAS_SYNC    |
+-							  FE_HAS_LOCK	 :
+-							  0;
+-		cnr2qual = vidtv_match_cnr_s(fe);
++	/* store the CNR returned by the tuner */
++	ret = fe->ops.tuner_ops.get_rf_strength(fe, &state->tuner_cnr);
++	if (ret < 0)
++		return ret;
+ 
+-		/* signal isn't good: might lose the lock eventually */
+-		if (tuner_status == TUNER_STATUS_LOCKED &&
+-		    state->tuner_cnr < cnr2qual->cnr_good) {
+-			schedule_delayed_work(&state->poll_snr,
+-					      msecs_to_jiffies(POLL_THRD_TIME));
++	fe->ops.tuner_ops.get_status(fe, &tuner_status);
++	state->status = (state->tuner_cnr > 0) ?  FE_HAS_SIGNAL  |
++						    FE_HAS_CARRIER |
++						    FE_HAS_VITERBI |
++						    FE_HAS_SYNC    |
++						    FE_HAS_LOCK	 :
++						    0;
++	cnr2qual = vidtv_match_cnr_s(fe);
+ 
+-			state->poll_snr_thread_running = true;
+-		}
++	vidtv_demod_update_stats(fe);
+ 
+-		if (fe->ops.i2c_gate_ctrl)
+-			fe->ops.i2c_gate_ctrl(fe, 0);
++	if (state->tuner_cnr > 0) {
++		schedule_delayed_work(&state->poll_snr,
++					msecs_to_jiffies(POLL_THRD_TIME));
++
++		state->poll_snr_thread_running = true;
+ 	}
+ 
++	if (fe->ops.i2c_gate_ctrl)
++		fe->ops.i2c_gate_ctrl(fe, 0);
++
+ 	return 0;
+ }
+ 
+@@ -372,10 +430,7 @@ static const struct dvb_frontend_ops vidtv_demod_ops = {
+ 	.get_frontend = vidtv_demod_get_frontend,
+ 
+ 	.read_status          = vidtv_demod_read_status,
+-	.read_ber             = vidtv_demod_read_ber,
+ 	.read_signal_strength = vidtv_demod_read_signal_strength,
+-	.read_snr             = vidtv_demod_read_snr,
+-	.read_ucblocks        = vidtv_demod_read_ucblocks,
+ 
+ 	/* For DVB-S/S2 */
+ 	.set_voltage = vidtv_demod_set_voltage,
+@@ -411,6 +466,8 @@ static int vidtv_demod_i2c_probe(struct i2c_client *client,
+ 	state->frontend.demodulator_priv = state;
+ 	i2c_set_clientdata(client, state);
+ 
++	vidtv_clean_stats(&state->frontend);
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_tuner.c b/drivers/media/test-drivers/vidtv/vidtv_tuner.c
+index 0f397fe12989..2956e2339996 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_tuner.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_tuner.c
+@@ -245,7 +245,7 @@ vidtv_tuner_get_signal_strength(struct dvb_frontend *fe, u16 *strength)
+ 	 * do a linear interpolation between 34dB and 10dB if we can't
+ 	 * match against the table
+ 	 */
+-	*strength = 34 - 24 * shift / 100;
++	*strength = 34000 - 24000 * shift / 100;
+ 	return 0;
+ }
+ 
+-- 
+2.26.2
 
-After the compliance test is run the script tests unbind/bind (always a nasty test)
-and checks for memory leaks (if enabled in the kernel).
-
-Much of this test sequence can be copied for vidtv, but you need something else for
-the compliance test. It would for now be enough to have some quick check with the
-existing dvb utils from v4l-utils to see that the basics work.
-
-IMHO I think a dtv-compliance utility along the lines of v4l2-compliance and
-cec-compliance should be created.
-
-I'm actually wondering whether the dtv compliance tests shouldn't be part of
-v4l2-compliance (which would have to be renamed to media-compliance in that case)
-since there are hybrid drivers supporting both in the same media topology.
-
-This would make compliance tests possible where analog/digital TV mode handling
-is tested (i.e. if analog TV is in use, then trying to use digital TV would return
-EBUSY and vice versa).
-
-It would require some work in v4l2-compliance.cpp to make this possible, but I
-can do that myself.
-
-Compliance tests have proven to be a great method of testing for regressions and
-testing drivers in general.
-
-Note that it takes a lot of time to create good compliance tests, but you just start
-with some simple tests and expand it over time.
-
-Regards,
-
-	Hans
