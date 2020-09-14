@@ -2,100 +2,92 @@ Return-Path: <SRS0=4kUN=CX=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89DF1C433E2
-	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 15:00:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26780C433E2
+	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 15:00:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 355DF20829
-	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 15:00:21 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="IUgu2bMN"
+	by mail.kernel.org (Postfix) with ESMTP id E50F020735
+	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 15:00:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726832AbgINOvs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Sep 2020 10:51:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41306 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726419AbgINOvj (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Sep 2020 10:51:39 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2683AC061788;
-        Mon, 14 Sep 2020 07:51:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=yG7qWXKBUIxg7RQ3+cci8dpYxavPbFHR4ZLuySoica4=; b=IUgu2bMNuG9D3yRoXTao7ZJ8F0
-        bi9cOkVyJbzYiWWHUCJVQtCjtfS1WOJDrcjH+8xfTxuF32oJH+t+iwKJxIfH9cQIx0ubhC0x6cBUH
-        E7HyCBzJntz5qzVYF0OebK0LtgVouGMwPJoDrGil30HSYK3dlYRfK91E8XQSpnK7lIE1xiaTNBHi1
-        HtcwbVTlCRvy8GbmbHX7caUYl1HISztizQBCIDJTEas1Bg5MzPM/lh98U53IW6e9mpEmHWEg+HM3B
-        9zlDbT3UZzNeuyLd8r7YzrHdvg+/kFkPKOdOQ7URC8YirZWGUdedUJvmMj/yaNfps3p7zLv3CJ3EF
-        2aJ0nDkg==;
-Received: from 089144214092.atnat0023.highway.a1.net ([89.144.214.92] helo=localhost)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kHpp0-0001ag-7f; Mon, 14 Sep 2020 14:51:10 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        iommu@lists.linux-foundation.org
-Cc:     Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        linux1394-devel@lists.sourceforge.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        nouveau@lists.freedesktop.org, netdev@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-mm@kvack.org,
-        alsa-devel@alsa-project.org
-Subject: [PATCH 02/17] mm: turn alloc_pages into an inline function
-Date:   Mon, 14 Sep 2020 16:44:18 +0200
-Message-Id: <20200914144433.1622958-3-hch@lst.de>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200914144433.1622958-1-hch@lst.de>
-References: <20200914144433.1622958-1-hch@lst.de>
+        id S1726381AbgINPAU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Sep 2020 11:00:20 -0400
+Received: from mga06.intel.com ([134.134.136.31]:9712 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726855AbgINO6P (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 14 Sep 2020 10:58:15 -0400
+IronPort-SDR: k8GNAjhIxiNr27TfZurNDu986NgNMsg49mzAqG0aX4zizOohE4UU0N1D7h2FFrJDTnrJLpzO3i
+ NerFIZicx67w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9744"; a="220641922"
+X-IronPort-AV: E=Sophos;i="5.76,426,1592895600"; 
+   d="scan'208";a="220641922"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2020 07:58:08 -0700
+IronPort-SDR: LHba+NKWsGD8QuhezQHir6z1HtzV1yqdzMdf29BZCg63zrtRKKiuB7O0v+aA1jT8tXe5qZsmc3
+ SiV/+xtZcZJg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,426,1592895600"; 
+   d="scan'208";a="335308104"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga008.jf.intel.com with ESMTP; 14 Sep 2020 07:58:03 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1kHpvc-00GcnE-AE; Mon, 14 Sep 2020 17:58:00 +0300
+Date:   Mon, 14 Sep 2020 17:58:00 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dan Scally <djrscally@gmail.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        jorhand@linux.microsoft.com, Tsuchiya Yuto <kitakar@gmail.com>
+Subject: Re: cio2 ipu3 module to automatically connect sensors via swnodes
+Message-ID: <20200914145800.GF3956970@smile.fi.intel.com>
+References: <CAFLoDVFmeKcgXBe7kORqx0Q=H_wCWze=6G8qZRRXZT3Uqgkx8w@mail.gmail.com>
+ <20200909134053.GA3699980@kuha.fi.intel.com>
+ <70b214fd-d199-ccb2-2a84-dc1f6f7c759f@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <70b214fd-d199-ccb2-2a84-dc1f6f7c759f@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-To prevent a compiler error when a method call alloc_pages is
-added (which I plan to for the dma_map_ops).
+On Sat, Sep 12, 2020 at 08:45:10AM +0100, Dan Scally wrote:
+> Hello Heikki
+> 
+> On 09/09/2020 14:40, Heikki Krogerus wrote:
+> > I'm almost certain that my graph patch is broken. My tests did not
+> > cover nearly as much that is needed to properly test the patch. I
+> > think at least the refcount handling is totally broken in
+> > software_node_graph_get_next_endpoint(), so that function at least
+> > needs to be rewritten.
+> > 
+> > Unfortunately I do not have time to work on that patch right now.
+> > 
+> > thanks,
+> 
+> I managed to get to the bottom of the remaining issue (which was the cause
+> of the problem I originally posted here about - that's now all resolved). 
+> In addition to the refcount handling problems,
+> software_node_graph_get_next_endpoint() was occasionally passing an invalid
+> combination of parameters to software_node_get_next_child(); sometimes it
+> would pass an existing endpoint as old in combination with a port which was
+> not the endpoint's parent. Applying this on top of your patch seems to stop
+> both of those errors:
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- include/linux/gfp.h | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Can you send a formal patch where you will be a co-developer to Heikki?
+Though I don't remember if Heikki signed off it.
 
-diff --git a/include/linux/gfp.h b/include/linux/gfp.h
-index 67a0774e080b98..dd2577c5407112 100644
---- a/include/linux/gfp.h
-+++ b/include/linux/gfp.h
-@@ -550,8 +550,10 @@ extern struct page *alloc_pages_vma(gfp_t gfp_mask, int order,
- #define alloc_hugepage_vma(gfp_mask, vma, addr, order) \
- 	alloc_pages_vma(gfp_mask, order, vma, addr, numa_node_id(), true)
- #else
--#define alloc_pages(gfp_mask, order) \
--		alloc_pages_node(numa_node_id(), gfp_mask, order)
-+static inline struct page *alloc_pages(gfp_t gfp_mask, unsigned int order)
-+{
-+	return alloc_pages_node(numa_node_id(), gfp_mask, order);
-+}
- #define alloc_pages_vma(gfp_mask, order, vma, addr, node, false)\
- 	alloc_pages(gfp_mask, order)
- #define alloc_hugepage_vma(gfp_mask, vma, addr, order) \
 -- 
-2.28.0
+With Best Regards,
+Andy Shevchenko
+
 
