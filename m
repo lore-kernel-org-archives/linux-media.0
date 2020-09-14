@@ -2,107 +2,239 @@ Return-Path: <SRS0=4kUN=CX=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DBE2C433E2
-	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 13:37:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97D22C43461
+	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 13:58:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0E852207BB
-	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 13:37:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 47116208E4
+	for <linux-media@archiver.kernel.org>; Mon, 14 Sep 2020 13:58:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pUG+6EgL"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="WmSn4/YE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726667AbgINNhC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Sep 2020 09:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56794 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726709AbgINN3z (ORCPT
+        id S1726812AbgINN6Z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Sep 2020 09:58:25 -0400
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:53393 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726797AbgINN5r (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Sep 2020 09:29:55 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1CDC061788;
-        Mon, 14 Sep 2020 06:29:31 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id n13so17550919edo.10;
-        Mon, 14 Sep 2020 06:29:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ShM3ina3e3/hH7dOyVac4CL9sFVc4RQd6mh3jLnIlg0=;
-        b=pUG+6EgLO2UPiBn6Yk4D2WmMQ/2yB7GdzCr1j99p7omOVBGUkd7OME2Fcch33BqK1h
-         kRoISKMKO5KS64Eoe/fHBFeNwV6nFMzIKjBkMfXBmA4CS+3/ttEr8EbhVHNz9ZsbSKC+
-         tYgEBRJJqVRXOcxWBasjfP0giKeqzan4zln/A47HPqfQB6JFTqJfBGpbRUO/fyQwbUal
-         UdqQUeN+a9jSnmr+R3MdQ6PbF9DaVnJ+dE5LVNIofNGl83vr4fPPxwNAhIod4K+nZZ4S
-         S/jizlrTm17N+FilPGRnJONY9iEJiG9iXj+/8ipwpTSCARh5J35nyMCPQkiynXVYWbZ+
-         uZLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ShM3ina3e3/hH7dOyVac4CL9sFVc4RQd6mh3jLnIlg0=;
-        b=JSF5mFcnaZTqJbV7OhaEqqG9RR+Dk+UhFGVuKfrg/va3h/ME5Pnw51Vz92Lt1RitWk
-         zp06XFrqGGF0RaxZmmjv8UEWbqRWORsuY90ed4tWaOUE7eY4ubbuLZnquueUGqLyqz/h
-         27XJh0xD7jh5QieZ/pijW76LUqit5Y7vHQCzN+MqYp8TPOFkBRekr762MZLNxXIkgzRN
-         AJkqXIMz1KjCeBzTMDT/L1xgeHENF0o3BJWKN2IeMsc9Vhm9RJii+6WJ32zgSubN9BhG
-         IKRcVc0xKZcZN0hgKvCXnZlSfItv4fvEDQrj81Zln5ig51DOJyCaLp550Dkp8JV2TYe5
-         Ob0w==
-X-Gm-Message-State: AOAM530TwBYI+t8Zj0RFWRjAP2X1M2rat0Qo9kUzqgW7f85BDz8A4gJk
-        bLoXq/vCvKULXjVYxuyLtws=
-X-Google-Smtp-Source: ABdhPJxDNWaaOe6mtDbVu9uBxPuALA0/yZsLGV/qaVVWO83ofnwCuhSwypEKZj15QfAv8gcowcwWvA==
-X-Received: by 2002:a05:6402:17b9:: with SMTP id j25mr17411290edy.203.1600090170135;
-        Mon, 14 Sep 2020 06:29:30 -0700 (PDT)
-Received: from abel.fritz.box ([2a02:908:1252:fb60:6179:d701:8021:da3d])
-        by smtp.gmail.com with ESMTPSA id d6sm9575625edm.31.2020.09.14.06.29.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Sep 2020 06:29:29 -0700 (PDT)
-From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
-        <ckoenig.leichtzumerken@gmail.com>
-X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-To:     akpm@linux-foundation.org
-Cc:     sumit.semwal@linaro.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH 1/2] drm/shmem-helpers: revert "Redirect mmap for imported dma-buf"
-Date:   Mon, 14 Sep 2020 15:29:19 +0200
-Message-Id: <20200914132920.59183-2-christian.koenig@amd.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200914132920.59183-1-christian.koenig@amd.com>
-References: <20200914132920.59183-1-christian.koenig@amd.com>
+        Mon, 14 Sep 2020 09:57:47 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id Hoy5k0nxZPTBMHoy8kc40W; Mon, 14 Sep 2020 15:56:32 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1600091792; bh=mbclfXUxafdxgC26WPOez+ej6gFteViPVOesw+YXTBE=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=WmSn4/YEFgtY2eXUfpzSGSMIxOUQG12+Ecpj9pfIVYoOXSdJb4WD9jxIX4YerSiYt
+         MCGuoU3OUvOewFZ7CI7GR+eJEhz5wq3ghQkK1WNzTwuvAx2/h+n1CRFIaj3PFyffHZ
+         eUX9uWLrTGBFzy5Q8vibFaeC6lBhXMrMKHPfDxUVlEPww9r9Tk9mqdbuT6rmuMYVfX
+         CDky98T0ORdMIpeaSfxJWJo5GRwbKRfPok24D49vDcnA53wRamofIGOYPwZqfbkeHI
+         UAWobT0F0kvWlGdKdju859PPAOB41GUFqToTrWNmYWD1kEBcIHY0NKdCvy3o6pP/dd
+         BghJdaHEGXWMw==
+Subject: Re: [PATCH v2] media: v4l2-ctrl: add control for long term reference.
+To:     dikshita@codeaurora.org
+Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, mchehab@kernel.org,
+        nicolas@ndufresne.ca, majja@codeaurora.org,
+        stanimir.varbanov@linaro.org, vgarodia@codeaurora.org
+References: <1597382967-32729-1-git-send-email-dikshita@codeaurora.org>
+ <506c9e88-e54b-2534-0df9-f7855456dcd8@xs4all.nl>
+ <b6c14a61a5a63b68a07a539f39b88477@codeaurora.org>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <b8508c3f-4f92-56a3-998b-0436cfb855e2@xs4all.nl>
+Date:   Mon, 14 Sep 2020 15:56:29 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <b6c14a61a5a63b68a07a539f39b88477@codeaurora.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4wfLIm0duwF7QqZ4ulMFSf0JL5s2YDpOiIo+NsWj8ht3p4TlCQ+ripTkx3mVbQ4ALXe25Rs5JqZyX0FOXV0xJWqyGp0bsR3moBOJczIM302HbNCLoK2BGQ
+ kSuZGIc1XuxfWU/YSn3UXXCwNdKxaZ0XxGXcBWZVPnEJ60mbBhzXDaazt6xEwknPDL3gH5eCWGA1rhoxfcWq2Pg6a5wJhGzK4+KUo6givVc5zTjYnMRb6nCK
+ T8Kf5q6kasXqhLib8PDJmxpoBSxAWnWQ+SPMWLS/+Pi2BWmI2125VqEE06enJdwXGalX5ME8MSA5MVcfPWvia7Fr3/rrFDsEkHytbWHCfpOuDYo7ET/ZaW7g
+ Cjedu4GDRKKFOMnN91XM+fYo6gdfjKWCTUrRSfDmmXildkm3v1Po1m4RCmGb3MM9Fc9qzwS/cRlCDKhk43nRC78p4ZvI9jLUc3tni8Ih+2Wq2D6T1bXIreVE
+ FT1vpdzL9AaV5IaGskEvexd0N421/xNrwvvszklMT6BcBhrSFRYoJ7uZa0QA7oJIJmKL5E53fFIpPj1TZOJVJ/dZAKBmDszx2yn5XA==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This reverts commit 26d3ac3cb04d171a861952e89324e347598a347f.
+On 27/08/2020 08:59, dikshita@codeaurora.org wrote:
+> Hi Hans,
+> 
+> Thanks for your comments.
+> 
+> On 2020-08-25 15:34, Hans Verkuil wrote:
+>> On 14/08/2020 07:29, Dikshita Agarwal wrote:
+>>> LTR (Long Term Reference) frames are the frames that are encoded
+>>> sometime in the past and stored in the DPB buffer list to be used
+>>> as reference to encode future frames.
+>>> This change adds controls to enable this feature.
+>>>
+>>> Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
+>>> ---
+>>>  .../userspace-api/media/v4l/ext-ctrls-codec.rst    | 23 ++++++++++++++++++++++
+>>>  drivers/media/v4l2-core/v4l2-ctrls.c               |  6 ++++++
+>>>  include/uapi/linux/v4l2-controls.h                 |  4 ++++
+>>>  3 files changed, 33 insertions(+)
+>>>
+>>> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>>> index d0d506a..6d1b005 100644
+>>> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>>> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>>> @@ -4272,3 +4272,26 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>>>        - Selecting this value specifies that HEVC slices are expected
+>>>          to be prefixed by Annex B start codes. According to :ref:`hevc`
+>>>          valid start codes can be 3-bytes 0x000001 or 4-bytes 0x00000001.
+>>> +
+>>> +``V4L2_CID_MPEG_VIDEO_LTRCOUNT (enum)``
+>>
+>> I prefer _LTR_COUNT (same for the other control defines).
+>>
+>> I assume 'enum' is a mistake? This should be 'integer', right?
+> Right, I will correct it at all the places.
+>>
+>>> +    Specifies the number of Long Term Reference frames encoder needs to
+>>> +    generate or keep.
+>>> +    This control is used to query or configure the number of Long Term
+>>> +    Reference frames.
+>>
+>> Add something like: "Applicable to the H264 and HEVC encoder."
+> Sure.
+>>
+>>> +
+>>> +``V4L2_CID_MPEG_VIDEO_MARKLTRFRAME (enum)``
+>>> +    This control is used to mark current frame as Long Term Reference
+>>> +    frame.
+>>
+>> enum -> integer
+>> _MARK_LTR_FRAME
+>>
+>> How about renaming this to: "_FRAME_LTR_INDEX"?
+> You are suggesting to rename it to V4L2_CID_MPEG_VIDEO_MARK_LTR_FRAME or V4L2_CID_MPEG_VIDEO_MARK_FRAME_LTR_INDEX ?
 
-We need to figure out if dma_buf_mmap() is valid or not first.
+V4L2_CID_MPEG_VIDEO_FRAME_LTR_INDEX
 
-Signed-off-by: Christian König <christian.koenig@amd.com>
----
- drivers/gpu/drm/drm_gem_shmem_helper.c | 3 ---
- 1 file changed, 3 deletions(-)
+>>
+>> I would also suggest having the range as 0..LTR_COUNT where 0 means that
+>> this is not a LTR frame. An alternative is to have two controls: one boolean
+>> that determines if the frame is a LTR frame or not, and one control containing
+>> the LTR index.
+>>
+>> Is the LTR index 0 or 1 based according to the standard? I think that if it is
+>> 1 based you can use 0 to mean 'not an LTR frame'. If it is 0 based in
+>> the standard,
+>> then having two controls might be better.
+>>
+>> A third alternative might be to use -1 as the value to indicate that it is not
+>> an LTR frame, but it feels hackish. I'm not sure yet.
+>>
+> Could you please help me to understand how this info will be helpful?
+> This control won't be set by client for every frame. So a frame for which this control is not set
+> is not a LTR frame and a frame for which this control is set is a LTR frame and will be marked with
+> LTR index ranging from 0 to LTR_COUNT-1 (range is according to standard)
 
-diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
-index 0a952f27c184..cd727343f72b 100644
---- a/drivers/gpu/drm/drm_gem_shmem_helper.c
-+++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
-@@ -594,9 +594,6 @@ int drm_gem_shmem_mmap(struct drm_gem_object *obj, struct vm_area_struct *vma)
- 	/* Remove the fake offset */
- 	vma->vm_pgoff -= drm_vma_node_start(&obj->vma_node);
- 
--	if (obj->import_attach)
--		return dma_buf_mmap(obj->dma_buf, vma, 0);
--
- 	shmem = to_drm_gem_shmem_obj(obj);
- 
- 	ret = drm_gem_shmem_get_pages(shmem);
--- 
-2.17.1
+This isn't how requests work. If a control is not set in a request, then it is assumed
+that the control value is unchanged. So in this case, the previously set value for this
+control will be used.
+
+Regards,
+
+	Hans
+
+>>> +    this provides a Long Term Reference index that ranges from 0
+>>> +    to LTR count-1 and then the particular frame will be marked with that
+>>> +    Long Term Reference index.
+>>
+>> Add something like: "Applicable to the H264 and HEVC encoder."
+> sure, will add.
+>>
+>> This only makes sense when used with requests, right? Otherwise you cannot
+>> reliably associate this control with a frame. That should be mentioned here.
+> Sure, will add.
+>>
+>>> +
+>>> +``V4L2_CID_MPEG_VIDEO_USELTRFRAME (enum)``
+>>
+>> enum -> bitmask
+>> _USE_LTR_FRAMES
+> Will correct this in next patch.
+>>
+>>> +    Specifies the Long Term Reference frame(s) to be used for encoding
+>>> +    the current frame.
+>>> +    This provides a bitmask which consists of bits [0, 15]. A total of N
+>>> +    LSB bits of this field are valid, where N is the maximum number of
+>>> +    Long Term Reference frames supported.
+>>> +    All the other bits are invalid and should be rejected.
+>>> +    The LSB corresponds to the Long Term Reference index 0. Bit N-1 from
+>>> +    the LSB corresponds to the Long Term Reference index max LTR count-1.
+>>
+>> Add something like: "Applicable to the H264 and HEVC encoder."
+>>
+>> This too only makes sense when using requests, correct? That should be mentioned
+>> here.
+> Sure, will do.
+>>
+>> I assume that this must be set to 0 for LTR frames? Or at least this
+>> control will
+>> be ignored for LTR frames.
+> Yes, frames marked as LTR frames will not be encoded by using any other LTR frame as a reference.
+> So this control won't be set for LTR frames.
+> This will be set only for the frames which needs to be encoded by using an LTR frame as a reference.
+>>
+>>> diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
+>>> index 3f3fbcd..3138c72 100644
+>>> --- a/drivers/media/v4l2-core/v4l2-ctrls.c
+>>> +++ b/drivers/media/v4l2-core/v4l2-ctrls.c
+>>> @@ -991,6 +991,9 @@ const char *v4l2_ctrl_get_name(u32 id)
+>>>      case V4L2_CID_MPEG_VIDEO_HEVC_SLICE_PARAMS:        return "HEVC Slice Parameters";
+>>>      case V4L2_CID_MPEG_VIDEO_HEVC_DECODE_MODE:        return "HEVC Decode Mode";
+>>>      case V4L2_CID_MPEG_VIDEO_HEVC_START_CODE:        return "HEVC Start Code";
+>>> +    case V4L2_CID_MPEG_VIDEO_LTRCOUNT:        return "LTR Count";
+>>> +    case V4L2_CID_MPEG_VIDEO_MARKLTRFRAME:        return "Mark LTR";
+>>> +    case V4L2_CID_MPEG_VIDEO_USELTRFRAME:        return "Use LTR";
+>>
+>> "Use LTR Frames"
+>>
+>>>
+>>>      /* CAMERA controls */
+>>>      /* Keep the order of the 'case's the same as in v4l2-controls.h! */
+>>> @@ -1224,6 +1227,9 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
+>>>          break;
+>>>      case V4L2_CID_MPEG_VIDEO_MV_H_SEARCH_RANGE:
+>>>      case V4L2_CID_MPEG_VIDEO_MV_V_SEARCH_RANGE:
+>>> +    case V4L2_CID_MPEG_VIDEO_LTRCOUNT:
+>>> +    case V4L2_CID_MPEG_VIDEO_MARKLTRFRAME:
+>>> +    case V4L2_CID_MPEG_VIDEO_USELTRFRAME:
+>>>          *type = V4L2_CTRL_TYPE_INTEGER;
+>>>          break;
+>>>      case V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME:
+>>> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+>>> index 6227141..f2daa86 100644
+>>> --- a/include/uapi/linux/v4l2-controls.h
+>>> +++ b/include/uapi/linux/v4l2-controls.h
+>>> @@ -742,6 +742,10 @@ enum v4l2_cid_mpeg_video_hevc_size_of_length_field {
+>>>  #define V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L6_BR    (V4L2_CID_MPEG_BASE + 642)
+>>>  #define V4L2_CID_MPEG_VIDEO_REF_NUMBER_FOR_PFRAMES    (V4L2_CID_MPEG_BASE + 643)
+>>>  #define V4L2_CID_MPEG_VIDEO_PREPEND_SPSPPS_TO_IDR    (V4L2_CID_MPEG_BASE + 644)
+>>> +#define V4L2_CID_MPEG_VIDEO_LTRCOUNT    (V4L2_CID_MPEG_BASE + 645)
+>>> +#define V4L2_CID_MPEG_VIDEO_MARKLTRFRAME    (V4L2_CID_MPEG_BASE + 646)
+>>> +#define V4L2_CID_MPEG_VIDEO_USELTRFRAME        (V4L2_CID_MPEG_BASE + 647)
+>>> +
+>>>
+>>>  /*  MPEG-class control IDs specific to the CX2341x driver as defined by V4L2 */
+>>>  #define V4L2_CID_MPEG_CX2341X_BASE                (V4L2_CTRL_CLASS_MPEG | 0x1000)
+>>>
+>>
+>> Regards,
+>>
+>>     Hans
+> 
+> Thanks,
+> Dikshita
 
