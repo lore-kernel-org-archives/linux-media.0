@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EF3FC43461
-	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 22:19:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B56B0C433E2
+	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 22:19:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E704220809
-	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 22:19:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8129A208E4
+	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 22:19:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="DkmB3YTM"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="olAOSynY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727443AbgIOWT1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 15 Sep 2020 18:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52954 "EHLO
+        id S1727752AbgIOWTa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 15 Sep 2020 18:19:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727690AbgIOQ3r (ORCPT
+        with ESMTP id S1727499AbgIOQ3r (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 15 Sep 2020 12:29:47 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543DBC061A10;
-        Tue, 15 Sep 2020 09:11:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C3AC06178B;
+        Tue, 15 Sep 2020 09:28:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=I03vZyMCQXixsKgB+vAi29QqwSDPgVkGV9+ViaS1CMg=; b=DkmB3YTM4x4P/03PR0YpgL495M
-        EfAecJ6/RbGViN36w0QSd/Tr391/7C3qp+8l6E51mioxfYFEf84qweB7rrRnnk+XS4NrRJAxVL9or
-        eM1zmit6nOvg6b55NFhpo114VioVSvnslqOCa1VQJwriMKfnb1O5WFoJuez65V/sByOexHLk1aG12
-        kIJoLn37eUqAXIXtLeRRXw1BLM962vL4dorybD0panUqncIhUNKnleKBHKVtAPesBxrCrYXQozSDG
-        Ht+YUL90n+pvTplQ82CtOCFOCta92rwWzKpTg+cQVDksvP2loDwB8A2oyP92wwnyQJsL9Bj01w7CB
-        wY2hcvmw==;
+        bh=1/bEcy21h9dr4Lop81Jp+A+3tsDr/+YN8bI8sHR6ers=; b=olAOSynYlsHEGJhf6TUlmrckuE
+        /r0LGBccgU4hRqqI8td0cmd/yN43a1NVzzTHUUoIBhJriadMr+CZIn81GdOqHwGRRCnoGg0Lpn2As
+        D87gTkZYobl3hk2YFKI39vdQ/6KaZsMZZHwt9r8yylGEHBzR9RNXvP3ZAPY1xXRi6Vcg2UuFPe53e
+        0Nr6Ng4Fo3q7nEb85kHX3sqaqpJfeXNhK6gIhRiDcpSKQqPiwby8Brgzeb7Q8bHIHFeQFHcfeCFaO
+        30AdYUq1MYULU/w9BF2KXnq/TBqPJ/HePxZDgzUFxWt8R3Pzl7zV2oGhwr/DJ8H/v8eE7+ssTVi/j
+        0mVYXghw==;
 Received: from 089144214092.atnat0023.highway.a1.net ([89.144.214.92] helo=localhost)
         by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kIDXq-0004bk-Fp; Tue, 15 Sep 2020 16:11:02 +0000
+        id 1kIDon-0005qq-4D; Tue, 15 Sep 2020 16:28:33 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -57,9 +57,9 @@ Cc:     Stefan Richter <stefanr@s5r6.in-berlin.de>,
         nouveau@lists.freedesktop.org, netdev@vger.kernel.org,
         linux-scsi@vger.kernel.org, linux-mm@kvack.org,
         alsa-devel@alsa-project.org
-Subject: [PATCH 08/18] dma-mapping: add a new dma_alloc_noncoherent API
-Date:   Tue, 15 Sep 2020 17:51:12 +0200
-Message-Id: <20200915155122.1768241-9-hch@lst.de>
+Subject: [PATCH 16/18] dma-mapping: add new {alloc,free}_noncoherent dma_map_ops methods
+Date:   Tue, 15 Sep 2020 17:51:20 +0200
+Message-Id: <20200915155122.1768241-17-hch@lst.de>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200915155122.1768241-1-hch@lst.de>
 References: <20200915155122.1768241-1-hch@lst.de>
@@ -71,155 +71,82 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a new API to allocate and free memory that is guaranteed to be
-addressable by a device, but which potentially is not cache coherent
-for DMA.
-
-To transfer ownership to and from the device, the existing streaming
-DMA API calls dma_sync_single_for_device and dma_sync_single_for_cpu
-must be used.
-
-For now the new calls are implemented on top of dma_alloc_attrs just
-like the old-noncoherent API, but once all drivers are switched to
-the new API it will be replaced with a better working implementation
-that is available on all architectures.
+This will allow IOMMU drivers to allocate non-contigous memory and
+return a vmapped virtual address.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- Documentation/core-api/dma-api.rst | 75 ++++++++++++++----------------
- include/linux/dma-mapping.h        | 12 +++++
- 2 files changed, 48 insertions(+), 39 deletions(-)
+ include/linux/dma-mapping.h |  5 +++++
+ kernel/dma/mapping.c        | 33 +++++++++++++++++++++++++++------
+ 2 files changed, 32 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/core-api/dma-api.rst b/Documentation/core-api/dma-api.rst
-index 90239348b30f6f..ea0413276ddb70 100644
---- a/Documentation/core-api/dma-api.rst
-+++ b/Documentation/core-api/dma-api.rst
-@@ -516,48 +516,56 @@ routines, e.g.:::
- 	}
- 
- 
--Part II - Advanced dma usage
------------------------------
-+Part II - Non-coherent DMA allocations
-+--------------------------------------
- 
--Warning: These pieces of the DMA API should not be used in the
--majority of cases, since they cater for unlikely corner cases that
--don't belong in usual drivers.
-+These APIs allow to allocate pages in the kernel direct mapping that are
-+guaranteed to be DMA addressable.  This means that unlike dma_alloc_coherent,
-+virt_to_page can be called on the resulting address, and the resulting
-+struct page can be used for everything a struct page is suitable for.
- 
--If you don't understand how cache line coherency works between a
--processor and an I/O device, you should not be using this part of the
--API at all.
-+If you don't understand how cache line coherency works between a processor and
-+an I/O device, you should not be using this part of the API.
- 
- ::
- 
- 	void *
--	dma_alloc_attrs(struct device *dev, size_t size, dma_addr_t *dma_handle,
--			gfp_t flag, unsigned long attrs)
-+	dma_alloc_noncoherent(struct device *dev, size_t size,
-+			dma_addr_t *dma_handle, enum dma_data_direction dir,
-+			gfp_t gfp)
- 
--Identical to dma_alloc_coherent() except that when the
--DMA_ATTR_NON_CONSISTENT flags is passed in the attrs argument, the
--platform will choose to return either consistent or non-consistent memory
--as it sees fit.  By using this API, you are guaranteeing to the platform
--that you have all the correct and necessary sync points for this memory
--in the driver should it choose to return non-consistent memory.
-+This routine allocates a region of <size> bytes of consistent memory.  It
-+returns a pointer to the allocated region (in the processor's virtual address
-+space) or NULL if the allocation failed.  The returned memory may or may not
-+be in the kernels direct mapping.  Drivers must not call virt_to_page on
-+the returned memory region.
- 
--Note: where the platform can return consistent memory, it will
--guarantee that the sync points become nops.
-+It also returns a <dma_handle> which may be cast to an unsigned integer the
-+same width as the bus and given to the device as the DMA address base of
-+the region.
- 
--Warning:  Handling non-consistent memory is a real pain.  You should
--only use this API if you positively know your driver will be
--required to work on one of the rare (usually non-PCI) architectures
--that simply cannot make consistent memory.
-+The dir parameter specified if data is read and/or written by the device,
-+see dma_map_single() for details.
-+
-+The gfp parameter allows the caller to specify the ``GFP_`` flags (see
-+kmalloc()) for the allocation, but rejects flags used to specify a memory
-+zone such as GFP_DMA or GFP_HIGHMEM.
-+
-+Before giving the memory to the device, dma_sync_single_for_device() needs
-+to be called, and before reading memory written by the device,
-+dma_sync_single_for_cpu(), just like for streaming DMA mappings that are
-+reused.
- 
- ::
- 
- 	void
--	dma_free_attrs(struct device *dev, size_t size, void *cpu_addr,
--		       dma_addr_t dma_handle, unsigned long attrs)
-+	dma_free_noncoherent(struct device *dev, size_t size, void *cpu_addr,
-+			dma_addr_t dma_handle, enum dma_data_direction dir)
- 
--Free memory allocated by the dma_alloc_attrs().  All common
--parameters must be identical to those otherwise passed to dma_free_coherent,
--and the attrs argument must be identical to the attrs passed to
--dma_alloc_attrs().
-+Free a region of memory previously allocated using dma_alloc_noncoherent().
-+dev, size and dma_handle and dir must all be the same as those passed into
-+dma_alloc_noncoherent().  cpu_addr must be the virtual address returned by
-+the dma_alloc_noncoherent().
- 
- ::
- 
-@@ -575,17 +583,6 @@ memory or doing partial flushes.
- 	into the width returned by this call.  It will also always be a power
- 	of two for easy alignment.
- 
--::
--
--	void
--	dma_cache_sync(struct device *dev, void *vaddr, size_t size,
--		       enum dma_data_direction direction)
--
--Do a partial sync of memory that was allocated by dma_alloc_attrs() with
--the DMA_ATTR_NON_CONSISTENT flag starting at virtual address vaddr and
--continuing on for size.  Again, you *must* observe the cache line
--boundaries when doing this.
--
- 
- Part III - Debug drivers use of the DMA-API
- -------------------------------------------
 diff --git a/include/linux/dma-mapping.h b/include/linux/dma-mapping.h
-index df0bff2ea750e0..4e1de194b45cbf 100644
+index bf592cf0db4acb..b4b5d75260d6dc 100644
 --- a/include/linux/dma-mapping.h
 +++ b/include/linux/dma-mapping.h
-@@ -389,6 +389,18 @@ static inline unsigned long dma_get_merge_boundary(struct device *dev)
- }
- #endif /* CONFIG_HAS_DMA */
- 
-+static inline void *dma_alloc_noncoherent(struct device *dev, size_t size,
-+		dma_addr_t *dma_handle, enum dma_data_direction dir, gfp_t gfp)
-+{
-+	return dma_alloc_attrs(dev, size, dma_handle, gfp,
-+			DMA_ATTR_NON_CONSISTENT);
-+}
-+static inline void dma_free_noncoherent(struct device *dev, size_t size,
-+		void *vaddr, dma_addr_t dma_handle, enum dma_data_direction dir)
-+{
-+	dma_free_attrs(dev, size, vaddr, dma_handle, DMA_ATTR_NON_CONSISTENT);
-+}
-+
- static inline dma_addr_t dma_map_single_attrs(struct device *dev, void *ptr,
- 		size_t size, enum dma_data_direction dir, unsigned long attrs)
+@@ -80,6 +80,11 @@ struct dma_map_ops {
+ 			gfp_t gfp);
+ 	void (*free_pages)(struct device *dev, size_t size, struct page *vaddr,
+ 			dma_addr_t dma_handle, enum dma_data_direction dir);
++	void* (*alloc_noncoherent)(struct device *dev, size_t size,
++			dma_addr_t *dma_handle, enum dma_data_direction dir,
++			gfp_t gfp);
++	void (*free_noncoherent)(struct device *dev, size_t size, void *vaddr,
++			dma_addr_t dma_handle, enum dma_data_direction dir);
+ 	int (*mmap)(struct device *, struct vm_area_struct *,
+ 			  void *, dma_addr_t, size_t,
+ 			  unsigned long attrs);
+diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
+index 6f86c925b8251d..8614d7d2ee59a9 100644
+--- a/kernel/dma/mapping.c
++++ b/kernel/dma/mapping.c
+@@ -502,19 +502,40 @@ EXPORT_SYMBOL_GPL(dma_free_pages);
+ void *dma_alloc_noncoherent(struct device *dev, size_t size,
+ 		dma_addr_t *dma_handle, enum dma_data_direction dir, gfp_t gfp)
  {
+-	struct page *page;
++	const struct dma_map_ops *ops = get_dma_ops(dev);
++	void *vaddr;
+ 
+-	page = dma_alloc_pages(dev, size, dma_handle, dir, gfp);
+-	if (!page)
+-		return NULL;
+-	return page_address(page);
++	if (!ops || !ops->alloc_noncoherent) {
++		struct page *page;
++
++		page = dma_alloc_pages(dev, size, dma_handle, dir, gfp);
++		if (!page)
++			return NULL;
++		return page_address(page);
++	}
++
++	size = PAGE_ALIGN(size);
++	vaddr = ops->alloc_noncoherent(dev, size, dma_handle, dir, gfp);
++	if (vaddr)
++		debug_dma_map_page(dev, virt_to_page(vaddr), 0, size, dir,
++				   *dma_handle);
++	return vaddr;
+ }
+ EXPORT_SYMBOL_GPL(dma_alloc_noncoherent);
+ 
+ void dma_free_noncoherent(struct device *dev, size_t size, void *vaddr,
+ 		dma_addr_t dma_handle, enum dma_data_direction dir)
+ {
+-	dma_free_pages(dev, size, virt_to_page(vaddr), dma_handle, dir);
++	const struct dma_map_ops *ops = get_dma_ops(dev);
++
++	if (!ops || !ops->free_noncoherent) {
++		dma_free_pages(dev, size, virt_to_page(vaddr), dma_handle, dir);
++		return;
++	}
++
++	size = PAGE_ALIGN(size);
++	debug_dma_unmap_page(dev, dma_handle, size, dir);
++	ops->free_noncoherent(dev, size, vaddr, dma_handle, dir);
+ }
+ EXPORT_SYMBOL_GPL(dma_free_noncoherent);
+ 
 -- 
 2.28.0
 
