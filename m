@@ -2,44 +2,41 @@ Return-Path: <SRS0=a2Vr=CY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51032C433E2
-	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 18:29:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93B38C433E2
+	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 18:29:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 12FA821D1B
-	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 18:29:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5F918206B7
+	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 18:29:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728013AbgIOS3K (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 15 Sep 2020 14:29:10 -0400
-Received: from bin-mail-out-05.binero.net ([195.74.38.228]:49878 "EHLO
-        bin-mail-out-05.binero.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728021AbgIOSVg (ORCPT
+        id S1727786AbgIOS3W (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 15 Sep 2020 14:29:22 -0400
+Received: from relmlor1.renesas.com ([210.160.252.171]:22065 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727992AbgIOSUd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 15 Sep 2020 14:21:36 -0400
-X-Halon-ID: 381a6e66-f780-11ea-a39b-005056917f90
-Authorized-sender: niklas.soderlund@fsdn.se
-Received: from bismarck.berto.se (p54ac52a8.dip0.t-ipconnect.de [84.172.82.168])
-        by bin-vsp-out-02.atm.binero.net (Halon) with ESMTPA
-        id 381a6e66-f780-11ea-a39b-005056917f90;
-        Tue, 15 Sep 2020 20:21:06 +0200 (CEST)
-From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tue, 15 Sep 2020 14:20:33 -0400
+X-IronPort-AV: E=Sophos;i="5.76,430,1592838000"; 
+   d="scan'208";a="57347034"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 16 Sep 2020 03:20:31 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 13B07400755E;
+        Wed, 16 Sep 2020 03:20:29 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v4 1/3] dt-bindings: adv7604: Fix documentation for hpd-gpios
-Date:   Tue, 15 Sep 2020 20:19:42 +0200
-Message-Id: <20200915181944.1037620-2-niklas.soderlund+renesas@ragnatech.se>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200915181944.1037620-1-niklas.soderlund+renesas@ragnatech.se>
-References: <20200915181944.1037620-1-niklas.soderlund+renesas@ragnatech.se>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Subject: [PATCH v2 0/2] media: rcar-vin: Kconfig: Update Kconfig
+Date:   Tue, 15 Sep 2020 19:20:25 +0100
+Message-Id: <20200915182027.2787-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -48,41 +45,27 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-As of [1] the hpd-gpios property is optional, document it as such.
+Hi All,
 
-1. commit 269bd1324fbfaa52 ("[media] media: adv7604: improve usage of gpiod API")
+This is trivial patch series updating the rcar-vin Kconfig to
+include Renesas RZ/Gx SoC's
 
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/media/i2c/adv7604.txt | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+Cheers,
+Prabhakar
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/adv7604.txt b/Documentation/devicetree/bindings/media/i2c/adv7604.txt
-index b3e688b77a38cb6d..8c7cdc7cd7aaebc8 100644
---- a/Documentation/devicetree/bindings/media/i2c/adv7604.txt
-+++ b/Documentation/devicetree/bindings/media/i2c/adv7604.txt
-@@ -19,10 +19,6 @@ Required Properties:
-     slave device on the I2C bus. The main address is mandatory, others are
-     optional and revert to defaults if not specified.
- 
--  - hpd-gpios: References to the GPIOs that control the HDMI hot-plug
--    detection pins, one per HDMI input. The active flag indicates the GPIO
--    level that enables hot-plug detection.
--
- The device node must contain one 'port' child node per device input and output
- port, in accordance with the video interface bindings defined in
- Documentation/devicetree/bindings/media/video-interfaces.txt. The port nodes
-@@ -37,6 +33,9 @@ The digital output port node must contain at least one endpoint.
- 
- Optional Properties:
- 
-+  - hpd-gpios: References to the GPIOs that control the HDMI hot-plug
-+    detection pins, one per HDMI input. The active flag indicates the GPIO
-+    level that enables hot-plug detection.
-   - reset-gpios: Reference to the GPIO connected to the device's reset pin.
-   - default-input: Select which input is selected after reset.
-   - reg-names : Names of maps with programmable addresses.
+v1->v2
+* Updated commit description
+* included RB from Niklas
+
+Lad Prabhakar (2):
+  media: rcar-vin: Kconfig: Update help description for VIDEO_RCAR_CSI2
+    config
+  media: rcar-vin: Kconfig: Update help description for VIDEO_RCAR_VIN
+    config
+
+ drivers/media/platform/rcar-vin/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
 -- 
-2.28.0
+2.17.1
 
