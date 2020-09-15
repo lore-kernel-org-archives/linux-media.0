@@ -2,111 +2,93 @@ Return-Path: <SRS0=a2Vr=CY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE8DFC433E2
-	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 15:57:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0F99C433E2
+	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 16:19:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 53C6D20756
-	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 15:57:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5A28320708
+	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 16:19:04 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="WixtAFmw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727498AbgIOP4x (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 15 Sep 2020 11:56:53 -0400
-Received: from relmlor1.renesas.com ([210.160.252.171]:44828 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727533AbgIOP4S (ORCPT
+        id S1727584AbgIOQRS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 15 Sep 2020 12:17:18 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:37152 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727610AbgIOQQO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 15 Sep 2020 11:56:18 -0400
-X-IronPort-AV: E=Sophos;i="5.76,430,1592838000"; 
-   d="scan'208";a="57341061"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 16 Sep 2020 00:56:08 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 5BEEF400F7C1;
-        Wed, 16 Sep 2020 00:56:05 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Tue, 15 Sep 2020 12:16:14 -0400
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3BCE3276;
+        Tue, 15 Sep 2020 18:12:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1600186327;
+        bh=yWcHzfZaIL+JJoYu6WgRXH1lmt2hAIodJaLy5+l5lQ0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WixtAFmwupVy7MRyDTZqdZRI02yRepxuWJ4yPMNnxeJtBh+AktZupVFYDc6j/uPZv
+         l1VpY8FBzuH0HnIh/pcPbkaK060agSmlL6VBG9R3sca6dF87vJkU+nP2QN7Zg3Jrhk
+         Z6YpX097SeLzHq2RkY1wMphh7PvJZUGsMYtNd14U=
+Date:   Tue, 15 Sep 2020 19:11:38 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Ramesh Shanmugasundaram <rashanmu@gmail.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Subject: [PATCH] media: v4l2-fwnode: Return -EINVAL for invalid bus-type
-Date:   Tue, 15 Sep 2020 16:55:44 +0100
-Message-Id: <20200915155544.826-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH 1/3] MAINTAINERS: Add Fabrizio Castro to Renesas DRIF
+Message-ID: <20200915161138.GB26029@pendragon.ideasonboard.com>
+References: <20200915131216.21137-1-fabrizio.castro.jz@renesas.com>
+ <20200915131216.21137-2-fabrizio.castro.jz@renesas.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200915131216.21137-2-fabrizio.castro.jz@renesas.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-With the current implementation if invalid bus-type is passed via DT
-v4l2_fwnode_endpoint_parse() defaulted the mus-type to V4L2_MBUS_PARALLEL
-instead of returning error.
+Hi Fabrizio,
 
-This Patch adds V4L2_MBUS_INVALID entry to v4l2_mbus_type enum and when
-invalid bus-type is detected in v4l2_fwnode_endpoint_parse() it returns
--EINVAL to the caller.
+Thank you for the patch.
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
- drivers/media/v4l2-core/v4l2-fwnode.c | 6 +++++-
- include/media/v4l2-mediabus.h         | 2 ++
- 2 files changed, 7 insertions(+), 1 deletion(-)
+On Tue, Sep 15, 2020 at 02:12:14PM +0100, Fabrizio Castro wrote:
+> Renesas are expanding their DRIF support and offering,
+> I'll be the internal maintainer for DRIF.
+> 
+> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 
-diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
-index a4c3c77c1894..a6f3549eadd3 100644
---- a/drivers/media/v4l2-core/v4l2-fwnode.c
-+++ b/drivers/media/v4l2-core/v4l2-fwnode.c
-@@ -93,7 +93,7 @@ v4l2_fwnode_bus_type_to_mbus(enum v4l2_fwnode_bus_type type)
- 	const struct v4l2_fwnode_bus_conv *conv =
- 		get_v4l2_fwnode_bus_conv_by_fwnode_bus(type);
- 
--	return conv ? conv->mbus_type : V4L2_MBUS_UNKNOWN;
-+	return conv ? conv->mbus_type : V4L2_MBUS_INVALID;
- }
- 
- static const char *
-@@ -436,6 +436,10 @@ static int __v4l2_fwnode_endpoint_parse(struct fwnode_handle *fwnode,
- 		 v4l2_fwnode_mbus_type_to_string(vep->bus_type),
- 		 vep->bus_type);
- 	mbus_type = v4l2_fwnode_bus_type_to_mbus(bus_type);
-+	if (mbus_type == V4L2_MBUS_INVALID) {
-+		pr_debug("unsupported bus type %u\n", bus_type);
-+		return -EINVAL;
-+	}
- 
- 	if (vep->bus_type != V4L2_MBUS_UNKNOWN) {
- 		if (mbus_type != V4L2_MBUS_UNKNOWN &&
-diff --git a/include/media/v4l2-mediabus.h b/include/media/v4l2-mediabus.h
-index 45f88f0248c4..b4f630783cb7 100644
---- a/include/media/v4l2-mediabus.h
-+++ b/include/media/v4l2-mediabus.h
-@@ -78,6 +78,7 @@
-  * @V4L2_MBUS_CCP2:	CCP2 (Compact Camera Port 2)
-  * @V4L2_MBUS_CSI2_DPHY: MIPI CSI-2 serial interface, with D-PHY
-  * @V4L2_MBUS_CSI2_CPHY: MIPI CSI-2 serial interface, with C-PHY
-+ * @V4L2_MBUS_INVALID:	invalid bus type (keep it last for sanity)
-  */
- enum v4l2_mbus_type {
- 	V4L2_MBUS_UNKNOWN,
-@@ -87,6 +88,7 @@ enum v4l2_mbus_type {
- 	V4L2_MBUS_CCP2,
- 	V4L2_MBUS_CSI2_DPHY,
- 	V4L2_MBUS_CSI2_CPHY,
-+	V4L2_MBUS_INVALID,
- };
- 
- /**
+Thank you for volunteering :-)
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> ---
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 26af84f97353..9f49e5ac90d8 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -10898,6 +10898,7 @@ F:	include/media/drv-intf/renesas-ceu.h
+>  
+>  MEDIA DRIVERS FOR RENESAS - DRIF
+>  M:	Ramesh Shanmugasundaram <rashanmu@gmail.com>
+> +M:	Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+>  L:	linux-media@vger.kernel.org
+>  L:	linux-renesas-soc@vger.kernel.org
+>  S:	Supported
+
 -- 
-2.17.1
+Regards,
 
+Laurent Pinchart
