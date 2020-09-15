@@ -2,581 +2,303 @@ Return-Path: <SRS0=a2Vr=CY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31056C433E2
-	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 14:15:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB027C2D0E0
+	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 15:08:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D5D1521D7F
-	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 14:15:20 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bHShiwh1"
+	by mail.kernel.org (Postfix) with ESMTP id 874E720715
+	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 15:08:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1600182512;
+	bh=W/u5CunWTOege2SM3N7jcf/kRuv658onEHsDoV7/J7M=;
+	h=From:Cc:Subject:Date:To:List-ID:From;
+	b=TH029cDeSqT6WnCTX60WkGgn6vvNWlz7It3NKHlTf6XlSdbWF7cCj3CAZn+/G/CVq
+	 ukn6wlGTNQq7DltvVYwD9yLJ101w3rQQ6yib6a296fdk6OL7ynqc7JMcs1/ZFBYGa/
+	 oeCloHujrQEdPs1vtIfXJaYbkTYvvHYoIUTbHmi8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726762AbgIOOPD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 15 Sep 2020 10:15:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60044 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726425AbgIOONR (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 15 Sep 2020 10:13:17 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7A8C06174A;
-        Tue, 15 Sep 2020 07:13:17 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id e11so2776578ybk.1;
-        Tue, 15 Sep 2020 07:13:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zIEyd4MafhCf2empjuUO0FqMNyEXsOM4I17N9XjcuR0=;
-        b=bHShiwh1v2Dry+ITVNbqUDpKbP1yRk56FPxNCpPhgt65mkB37PkeSMDtguYEzDtNGb
-         +CjzyTOuWYms8BxebjmChwanphwfKdjW7x0xVUKyWig/IEnFNODjHajdmCaleX52bYmA
-         urNkS23IybCU21AykbUw+Ky86avtwk4XrgDbgD50pWD6s/XdzfVoJGaDZlcZVf7XyP4z
-         8OuwubMEqitb4oEyvnaxl2ogp5+Md1M2KwYmJNJxTS/4i+i3iuMyk7LfAvncnUjHe5X2
-         iHOEdXF6vszN7/MbaXt/WDFcoto4KF9q13JtNhgTCkekwcM/FVTP1cA+iIiY2KLM+DS1
-         K5NQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zIEyd4MafhCf2empjuUO0FqMNyEXsOM4I17N9XjcuR0=;
-        b=RG+fMy6u8XThYJFqGGAHN+mIAXM/oBa6DEuD4/DqHiMklYLT+VjhbUjNd1HnoSnyx5
-         hPMab6mFfg3ISD3brotnov/boHIGEot2Oi9wtdOqomLhvGnc5C1l8x6kzoezqrTfp09y
-         AHNwWIZoKfvYdxFlHjLiwq9V1eSMxhzYU0Gffg1Wf9N2Fep5/7OLXY32tlWDtPsH1qvh
-         EjNKaScp28P9EdOoQskEdSpKQSCnvRz2RyPw9MwrqGswPu1PHmNTCreTg95wGnzwZJVD
-         IOphCKhaTnzksk8u24dzvPNOnR5Dfw8f1Ehl9UFxjOq3dpu6d3DuB0nYT0XKCj+rZdlj
-         2uqQ==
-X-Gm-Message-State: AOAM533aNV01AAqJNK7A37v65+g/h0ij+/oXUAUyvB6E52DqoAnGbPGM
-        75bOC/fK1+PQcSPFc10A3NlWMWJuA0oOD4ZUEIA=
-X-Google-Smtp-Source: ABdhPJzWRLU1Y94YgrSrWtSI8eSf6xRAE7nZwJkqfjZvmvZ4+ZPTfPNdWJhq8IzE3sdI+oJM2i8gvGyriv+vZVjaqw0=
-X-Received: by 2002:a25:4244:: with SMTP id p65mr26994038yba.25.1600179196696;
- Tue, 15 Sep 2020 07:13:16 -0700 (PDT)
+        id S1727331AbgIOPIS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 15 Sep 2020 11:08:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33784 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726985AbgIOPF4 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 15 Sep 2020 11:05:56 -0400
+Received: from mail.kernel.org (ip5f5ad5a5.dynamic.kabel-deutschland.de [95.90.213.165])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E7B2E2067C;
+        Tue, 15 Sep 2020 15:05:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600182355;
+        bh=W/u5CunWTOege2SM3N7jcf/kRuv658onEHsDoV7/J7M=;
+        h=From:To:Cc:Subject:Date:From;
+        b=u2Hn17X3pXkLRZi6r/HSP9LrLzxx15VUcjoy0BXLybp8G8d3yu/n4K67HKZhyXamr
+         yG6HiIQYmI9aK7VIqhKuBmmYvHHL0CPHjE5KChXRkl9N2CzUVVB+dfwjUf6hBITv4g
+         B1ctIMUXET63apI3qcjeXISD19tufcOf4eblSusk=
+Received: from mchehab by mail.kernel.org with local (Exim 4.94)
+        (envelope-from <mchehab@kernel.org>)
+        id 1kICWm-004lwM-Hk; Tue, 15 Sep 2020 17:05:52 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH] media: vidtv: Add a music instead of playing a single tone
+Date:   Tue, 15 Sep 2020 17:05:51 +0200
+Message-Id: <597f2f6831dce6af83e9efbb473efd9e789d9f33.1600182349.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-References: <20200915131216.21137-1-fabrizio.castro.jz@renesas.com> <20200915131216.21137-3-fabrizio.castro.jz@renesas.com>
-In-Reply-To: <20200915131216.21137-3-fabrizio.castro.jz@renesas.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Tue, 15 Sep 2020 15:12:50 +0100
-Message-ID: <CA+V-a8v32x18vVnwt-0dXtKzJMEQPVk-8fjYpBCGDWNAyK4CPw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] media: dt-bindings: media: renesas,drif: Convert to json-schema
-To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Ramesh Shanmugasundaram <rashanmu@gmail.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Fabrizio,
+Keep playing a single tone is not too nice, and prevents
+checking some weird things.
 
-Thank you for the patch.
+So, instead, implement a simple tone generator, changing
+the code to play a public domain song (5th Symphony of
+Beethoven), using sinusoidal waves.
 
-On Tue, Sep 15, 2020 at 2:14 PM Fabrizio Castro
-<fabrizio.castro.jz@renesas.com> wrote:
->
-> Convert the Renesas DRIF bindings to DT schema and update
-> MAINTAINERS accordingly.
->
-> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-> ---
->  .../bindings/media/renesas,drif.txt           | 177 ------------
->  .../bindings/media/renesas,drif.yaml          | 270 ++++++++++++++++++
->  MAINTAINERS                                   |   2 +-
->  3 files changed, 271 insertions(+), 178 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/media/renesas,drif.txt
->  create mode 100644 Documentation/devicetree/bindings/media/renesas,drif.yaml
->
-Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ .../media/test-drivers/vidtv/vidtv_encoder.h  |  70 ++++++++++++
+ .../media/test-drivers/vidtv/vidtv_s302m.c    | 104 ++++++++++++++++--
+ 2 files changed, 165 insertions(+), 9 deletions(-)
 
-Cheers,
-Prabhakar
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_encoder.h b/drivers/media/test-drivers/vidtv/vidtv_encoder.h
+index 6da63abdddea..a7c99cafab4f 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_encoder.h
++++ b/drivers/media/test-drivers/vidtv/vidtv_encoder.h
+@@ -28,6 +28,73 @@ struct vidtv_access_unit {
+ 	struct vidtv_access_unit *next;
+ };
+ 
++/* Some musical notes, used by a tone generator */
++enum musical_notes {
++	NOTE_SILENT = 0,
++
++	NOTE_C_2 = 65,
++	NOTE_CS_2 = 69,
++	NOTE_D_2 = 73,
++	NOTE_DS_2 = 78,
++	NOTE_E_2 = 82,
++	NOTE_F_2 = 87,
++	NOTE_FS_2 = 93,
++	NOTE_G_2 = 98,
++	NOTE_GS_2 = 104,
++	NOTE_A_2 = 110,
++	NOTE_AS_2 = 117,
++	NOTE_B_2 = 123,
++	NOTE_C_3 = 131,
++	NOTE_CS_3 = 139,
++	NOTE_D_3 = 147,
++	NOTE_DS_3 = 156,
++	NOTE_E_3 = 165,
++	NOTE_F_3 = 175,
++	NOTE_FS_3 = 185,
++	NOTE_G_3 = 196,
++	NOTE_GS_3 = 208,
++	NOTE_A_3 = 220,
++	NOTE_AS_3 = 233,
++	NOTE_B_3 = 247,
++	NOTE_C_4 = 262,
++	NOTE_CS_4 = 277,
++	NOTE_D_4 = 294,
++	NOTE_DS_4 = 311,
++	NOTE_E_4 = 330,
++	NOTE_F_4 = 349,
++	NOTE_FS_4 = 370,
++	NOTE_G_4 = 392,
++	NOTE_GS_4 = 415,
++	NOTE_A_4 = 440,
++	NOTE_AS_4 = 466,
++	NOTE_B_4 = 494,
++	NOTE_C_5 = 523,
++	NOTE_CS_5 = 554,
++	NOTE_D_5 = 587,
++	NOTE_DS_5 = 622,
++	NOTE_E_5 = 659,
++	NOTE_F_5 = 698,
++	NOTE_FS_5 = 740,
++	NOTE_G_5 = 784,
++	NOTE_GS_5 = 831,
++	NOTE_A_5 = 880,
++	NOTE_AS_5 = 932,
++	NOTE_B_5 = 988,
++	NOTE_C_6 = 1047,
++	NOTE_CS_6 = 1109,
++	NOTE_D_6 = 1175,
++	NOTE_DS_6 = 1245,
++	NOTE_E_6 = 1319,
++	NOTE_F_6 = 1397,
++	NOTE_FS_6 = 1480,
++	NOTE_G_6 = 1568,
++	NOTE_GS_6 = 1661,
++	NOTE_A_6 = 1760,
++	NOTE_AS_6 = 1865,
++	NOTE_B_6 = 1976,
++	NOTE_C_7 = 2093
++};
++
+ /**
+  * struct vidtv_encoder - A generic encoder type.
+  * @id: So we can cast to a concrete implementation when needed.
+@@ -64,6 +131,9 @@ struct vidtv_encoder {
+ 	u32 encoder_buf_offset;
+ 
+ 	u64 sample_count;
++	int last_duration;
++	int note_offset;
++	enum musical_notes last_tone;
+ 
+ 	struct vidtv_access_unit *access_units;
+ 
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_s302m.c b/drivers/media/test-drivers/vidtv/vidtv_s302m.c
+index 2a40ef15f715..122a450fb27c 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_s302m.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_s302m.c
+@@ -40,6 +40,9 @@
+ #define S302M_BLOCK_SZ 192
+ #define S302M_SIN_LUT_NUM_ELEM 1024
+ 
++/* Used by the tone generator: number of samples for PI */
++#define PI		180
++
+ static const u8 reverse[256] = {
+ 	/* from ffmpeg */
+ 	0x00, 0x80, 0x40, 0xC0, 0x20, 0xA0, 0x60, 0xE0, 0x10, 0x90, 0x50, 0xD0,
+@@ -66,10 +69,74 @@ static const u8 reverse[256] = {
+ 	0x3F, 0xBF, 0x7F, 0xFF,
+ };
+ 
+-/* Used by the tone generator */
+-#define SAMPLE_RATE	48000
+-#define PI		180
+-#define NOTE_A4		440
++struct tone_duration {
++	enum musical_notes note;
++	int duration;
++};
++
++#define COMPASS 120		/* beats per minute (Allegro) */
++const static struct tone_duration beethoven_5th_symphony[] = {
++	{ NOTE_E_6, 128},  { NOTE_DS_6, 128}, { NOTE_E_6, 128},
++	{ NOTE_DS_6, 128}, { NOTE_E_6, 128},  { NOTE_B_5, 128},
++	{ NOTE_D_6, 128},  { NOTE_C_6, 128},  { NOTE_A_3, 128},
++	{ NOTE_E_4, 128},  { NOTE_A_4, 128},  { NOTE_C_5, 128},
++	{ NOTE_E_5, 128},  { NOTE_A_5, 128},  { NOTE_E_3, 128},
++	{ NOTE_E_4, 128},  { NOTE_GS_4, 128}, { NOTE_E_5, 128},
++	{ NOTE_GS_5, 128}, { NOTE_B_5, 128},  { NOTE_A_3, 128},
++	{ NOTE_E_4, 128},  { NOTE_A_4, 128},  { NOTE_E_5, 128},
++	{ NOTE_E_6, 128},  { NOTE_DS_6, 128}, { NOTE_E_6, 128},
++	{ NOTE_DS_6, 128}, { NOTE_E_6, 128},  { NOTE_B_5, 128},
++	{ NOTE_D_6, 128},  { NOTE_C_6, 128},  { NOTE_A_3, 128},
++	{ NOTE_E_4, 128},  { NOTE_A_4, 128},  { NOTE_C_5, 128},
++	{ NOTE_E_5, 128},  { NOTE_A_5, 128},  { NOTE_E_3, 128},
++	{ NOTE_E_4, 128},  { NOTE_GS_4, 128}, { NOTE_E_5, 128},
++	{ NOTE_C_6, 128},  { NOTE_B_5, 128},  { NOTE_A_3, 128},
++	{ NOTE_E_4, 128},  { NOTE_A_4, 128},  { NOTE_SILENT, 128},
++
++	{ NOTE_E_6, 128},  { NOTE_DS_6, 128}, { NOTE_E_6, 128},
++	{ NOTE_DS_6, 128}, { NOTE_E_6, 128},  { NOTE_B_5, 128},
++	{ NOTE_D_6, 128},  { NOTE_C_6, 128},  { NOTE_A_3, 128},
++	{ NOTE_E_4, 128},  { NOTE_A_4, 128},  { NOTE_C_5, 128},
++	{ NOTE_E_5, 128},  { NOTE_A_5, 128},  { NOTE_E_3, 128},
++	{ NOTE_E_4, 128},  { NOTE_GS_4, 128}, { NOTE_E_5, 128},
++	{ NOTE_GS_5, 128}, { NOTE_B_5, 128},  { NOTE_A_3, 128},
++	{ NOTE_E_4, 128},  { NOTE_A_4, 128},  { NOTE_E_5, 128},
++	{ NOTE_E_6, 128},  { NOTE_DS_6, 128}, { NOTE_E_6, 128},
++	{ NOTE_DS_6, 128}, { NOTE_E_6, 128},  { NOTE_B_5, 128},
++	{ NOTE_D_6, 128},  { NOTE_C_6, 128},  { NOTE_A_3, 128},
++	{ NOTE_E_4, 128},  { NOTE_A_4, 128},  { NOTE_C_5, 128},
++	{ NOTE_E_5, 128},  { NOTE_A_5, 128},  { NOTE_E_3, 128},
++	{ NOTE_E_4, 128},  { NOTE_GS_4, 128}, { NOTE_E_5, 128},
++	{ NOTE_C_6, 128},  { NOTE_B_5, 128},  { NOTE_A_3, 128},
++	{ NOTE_E_4, 128},  { NOTE_A_4, 128},  { NOTE_B_4, 128},
++	{ NOTE_C_5, 128},  { NOTE_D_5, 128},  { NOTE_C_4, 128},
++	{ NOTE_G_4, 128},  { NOTE_C_5, 128},  { NOTE_G_4, 128},
++	{ NOTE_F_5, 128},  { NOTE_E_5, 128},  { NOTE_G_3, 128},
++	{ NOTE_G_4, 128},  { NOTE_B_3, 128},  { NOTE_F_4, 128},
++	{ NOTE_E_5, 128},  { NOTE_D_5, 128},  { NOTE_A_3, 128},
++	{ NOTE_E_4, 128},  { NOTE_A_4, 128},  { NOTE_E_4, 128},
++	{ NOTE_D_5, 128},  { NOTE_C_5, 128},  { NOTE_E_3, 128},
++	{ NOTE_E_4, 128},  { NOTE_E_5, 255},  { NOTE_E_6, 128},
++	{ NOTE_E_5, 128},  { NOTE_E_6, 128},  { NOTE_E_5, 255},
++	{ NOTE_DS_5, 128}, { NOTE_E_5, 128},  { NOTE_DS_6, 128},
++	{ NOTE_E_6, 128},  { NOTE_DS_5, 128}, { NOTE_E_5, 128},
++	{ NOTE_DS_6, 128}, { NOTE_E_6, 128},  { NOTE_DS_6, 128},
++	{ NOTE_E_6, 128},  { NOTE_DS_6, 128}, { NOTE_E_6, 128},
++	{ NOTE_B_5, 128},  { NOTE_D_6, 128},  { NOTE_C_6, 128},
++	{ NOTE_A_3, 128},  { NOTE_E_4, 128},  { NOTE_A_4, 128},
++	{ NOTE_C_5, 128},  { NOTE_E_5, 128},  { NOTE_A_5, 128},
++	{ NOTE_E_3, 128},  { NOTE_E_4, 128},  { NOTE_GS_4, 128},
++	{ NOTE_E_5, 128},  { NOTE_GS_5, 128}, { NOTE_B_5, 128},
++	{ NOTE_A_3, 128},  { NOTE_E_4, 128},  { NOTE_A_4, 128},
++	{ NOTE_E_5, 128},  { NOTE_E_6, 128},  { NOTE_DS_6, 128},
++	{ NOTE_E_6, 128},  { NOTE_DS_6, 128}, { NOTE_E_6, 128},
++	{ NOTE_B_5, 128},  { NOTE_D_6, 128},  { NOTE_C_6, 128},
++	{ NOTE_A_3, 128},  { NOTE_E_4, 128},  { NOTE_A_4, 128},
++	{ NOTE_C_5, 128},  { NOTE_E_5, 128},  { NOTE_A_5, 128},
++	{ NOTE_E_3, 128},  { NOTE_E_4, 128},  { NOTE_GS_4, 128},
++	{ NOTE_E_5, 128},  { NOTE_C_6, 128},  { NOTE_B_5, 128},
++	{ NOTE_C_5, 255},  { NOTE_C_5, 255},  { NOTE_SILENT, 512},
++};
+ 
+ static struct vidtv_access_unit *vidtv_s302m_access_unit_init(struct vidtv_access_unit *head)
+ {
+@@ -187,15 +254,33 @@ static u16 vidtv_s302m_get_sample(struct vidtv_encoder *e)
+ 
+ 	if (!e->src_buf) {
+ 		/*
+-		 * Simple tone generator. For now, just generates a 440 Hz
+-		 * sinusoidal wave.
++		 * Simple tone generator: play the tones at the
++		 * beethoven_5th_symphony array.
+ 		 */
+-		pos = (2 * PI * e->src_buf_offset * NOTE_A4 / SAMPLE_RATE);
++		if (e->last_duration <= 0) {
++			if (e->src_buf_offset >= ARRAY_SIZE(beethoven_5th_symphony))
++				e->src_buf_offset = 0;
+ 
+-		if (pos == 360)
++			e->last_tone = beethoven_5th_symphony[e->src_buf_offset].note;
++			e->last_duration = beethoven_5th_symphony[e->src_buf_offset].duration * S302M_SAMPLING_RATE_HZ / COMPASS / 5;
++			e->src_buf_offset++;
++			e->note_offset = 0;
++		} else {
++			e->last_duration--;
++		}
++
++		/* Handle silent */
++		if (!e->last_tone) {
+ 			e->src_buf_offset = 0;
++			return 0x8000;
++		}
++
++		pos = (2 * PI * e->note_offset * e->last_tone / S302M_SAMPLING_RATE_HZ);
++
++		if (pos == 360)
++			e->note_offset = 0;
+ 		else
+-			e->src_buf_offset++;
++			e->note_offset++;
+ 
+ 		return (fixp_sin32(pos % (2 * PI)) >> 16) + 0x8000;
+ 	}
+@@ -388,6 +473,7 @@ struct vidtv_encoder
+ 	e->encoder_buf_offset = 0;
+ 
+ 	e->sample_count = 0;
++	e->last_duration = 0;
+ 
+ 	e->src_buf = (args.src_buf) ? args.src_buf : NULL;
+ 	e->src_buf_sz = (args.src_buf) ? args.src_buf_sz : 0;
+-- 
+2.26.2
 
-> diff --git a/Documentation/devicetree/bindings/media/renesas,drif.txt b/Documentation/devicetree/bindings/media/renesas,drif.txt
-> deleted file mode 100644
-> index 0d8974aa8b38..000000000000
-> --- a/Documentation/devicetree/bindings/media/renesas,drif.txt
-> +++ /dev/null
-> @@ -1,177 +0,0 @@
-> -Renesas R-Car Gen3 Digital Radio Interface controller (DRIF)
-> -------------------------------------------------------------
-> -
-> -R-Car Gen3 DRIF is a SPI like receive only slave device. A general
-> -representation of DRIF interfacing with a master device is shown below.
-> -
-> -+---------------------+                +---------------------+
-> -|                     |-----SCK------->|CLK                  |
-> -|       Master        |-----SS-------->|SYNC  DRIFn (slave)  |
-> -|                     |-----SD0------->|D0                   |
-> -|                     |-----SD1------->|D1                   |
-> -+---------------------+                +---------------------+
-> -
-> -As per datasheet, each DRIF channel (drifn) is made up of two internal
-> -channels (drifn0 & drifn1). These two internal channels share the common
-> -CLK & SYNC. Each internal channel has its own dedicated resources like
-> -irq, dma channels, address space & clock. This internal split is not
-> -visible to the external master device.
-> -
-> -The device tree model represents each internal channel as a separate node.
-> -The internal channels sharing the CLK & SYNC are tied together by their
-> -phandles using a property called "renesas,bonding". For the rest of
-> -the documentation, unless explicitly stated, the word channel implies an
-> -internal channel.
-> -
-> -When both internal channels are enabled they need to be managed together
-> -as one (i.e.) they cannot operate alone as independent devices. Out of the
-> -two, one of them needs to act as a primary device that accepts common
-> -properties of both the internal channels. This channel is identified by a
-> -property called "renesas,primary-bond".
-> -
-> -To summarize,
-> -   - When both the internal channels that are bonded together are enabled,
-> -     the zeroth channel is selected as primary-bond. This channels accepts
-> -     properties common to all the members of the bond.
-> -   - When only one of the bonded channels need to be enabled, the property
-> -     "renesas,bonding" or "renesas,primary-bond" will have no effect. That
-> -     enabled channel can act alone as any other independent device.
-> -
-> -Required properties of an internal channel:
-> --------------------------------------------
-> -- compatible:  "renesas,r8a7795-drif" if DRIF controller is a part of R8A7795 SoC.
-> -               "renesas,r8a7796-drif" if DRIF controller is a part of R8A7796 SoC.
-> -               "renesas,rcar-gen3-drif" for a generic R-Car Gen3 compatible device.
-> -
-> -               When compatible with the generic version, nodes must list the
-> -               SoC-specific version corresponding to the platform first
-> -               followed by the generic version.
-> -
-> -- reg: offset and length of that channel.
-> -- interrupts: associated with that channel.
-> -- clocks: phandle and clock specifier of that channel.
-> -- clock-names: clock input name string: "fck".
-> -- dmas: phandles to the DMA channels.
-> -- dma-names: names of the DMA channel: "rx".
-> -- renesas,bonding: phandle to the other channel.
-> -
-> -Optional properties of an internal channel:
-> --------------------------------------------
-> -- power-domains: phandle to the respective power domain.
-> -
-> -Required properties of an internal channel when:
-> -       - It is the only enabled channel of the bond (or)
-> -       - If it acts as primary among enabled bonds
-> ---------------------------------------------------------
-> -- pinctrl-0: pin control group to be used for this channel.
-> -- pinctrl-names: must be "default".
-> -- renesas,primary-bond: empty property indicating the channel acts as primary
-> -                       among the bonded channels.
-> -- port: child port node corresponding to the data input, in accordance with
-> -       the video interface bindings defined in
-> -       Documentation/devicetree/bindings/media/video-interfaces.txt. The port
-> -       node must contain at least one endpoint.
-> -
-> -Optional endpoint property:
-> ----------------------------
-> -- sync-active: Indicates sync signal polarity, 0/1 for low/high respectively.
-> -              This property maps to SYNCAC bit in the hardware manual. The
-> -              default is 1 (active high).
-> -
-> -Example:
-> ---------
-> -
-> -(1) Both internal channels enabled:
-> ------------------------------------
-> -
-> -When interfacing with a third party tuner device with two data pins as shown
-> -below.
-> -
-> -+---------------------+                +---------------------+
-> -|                     |-----SCK------->|CLK                  |
-> -|       Master        |-----SS-------->|SYNC  DRIFn (slave)  |
-> -|                     |-----SD0------->|D0                   |
-> -|                     |-----SD1------->|D1                   |
-> -+---------------------+                +---------------------+
-> -
-> -       drif00: rif@e6f40000 {
-> -               compatible = "renesas,r8a7795-drif",
-> -                            "renesas,rcar-gen3-drif";
-> -               reg = <0 0xe6f40000 0 0x64>;
-> -               interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
-> -               clocks = <&cpg CPG_MOD 515>;
-> -               clock-names = "fck";
-> -               dmas = <&dmac1 0x20>, <&dmac2 0x20>;
-> -               dma-names = "rx", "rx";
-> -               power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-> -               renesas,bonding = <&drif01>;
-> -               renesas,primary-bond;
-> -               pinctrl-0 = <&drif0_pins>;
-> -               pinctrl-names = "default";
-> -               port {
-> -                       drif0_ep: endpoint {
-> -                            remote-endpoint = <&tuner_ep>;
-> -                       };
-> -               };
-> -       };
-> -
-> -       drif01: rif@e6f50000 {
-> -               compatible = "renesas,r8a7795-drif",
-> -                            "renesas,rcar-gen3-drif";
-> -               reg = <0 0xe6f50000 0 0x64>;
-> -               interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
-> -               clocks = <&cpg CPG_MOD 514>;
-> -               clock-names = "fck";
-> -               dmas = <&dmac1 0x22>, <&dmac2 0x22>;
-> -               dma-names = "rx", "rx";
-> -               power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-> -               renesas,bonding = <&drif00>;
-> -       };
-> -
-> -
-> -(2) Internal channel 1 alone is enabled:
-> -----------------------------------------
-> -
-> -When interfacing with a third party tuner device with one data pin as shown
-> -below.
-> -
-> -+---------------------+                +---------------------+
-> -|                     |-----SCK------->|CLK                  |
-> -|       Master        |-----SS-------->|SYNC  DRIFn (slave)  |
-> -|                     |                |D0 (unused)          |
-> -|                     |-----SD-------->|D1                   |
-> -+---------------------+                +---------------------+
-> -
-> -       drif00: rif@e6f40000 {
-> -               compatible = "renesas,r8a7795-drif",
-> -                            "renesas,rcar-gen3-drif";
-> -               reg = <0 0xe6f40000 0 0x64>;
-> -               interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
-> -               clocks = <&cpg CPG_MOD 515>;
-> -               clock-names = "fck";
-> -               dmas = <&dmac1 0x20>, <&dmac2 0x20>;
-> -               dma-names = "rx", "rx";
-> -               power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-> -               renesas,bonding = <&drif01>;
-> -       };
-> -
-> -       drif01: rif@e6f50000 {
-> -               compatible = "renesas,r8a7795-drif",
-> -                            "renesas,rcar-gen3-drif";
-> -               reg = <0 0xe6f50000 0 0x64>;
-> -               interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
-> -               clocks = <&cpg CPG_MOD 514>;
-> -               clock-names = "fck";
-> -               dmas = <&dmac1 0x22>, <&dmac2 0x22>;
-> -               dma-names = "rx", "rx";
-> -               power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-> -               renesas,bonding = <&drif00>;
-> -               pinctrl-0 = <&drif0_pins>;
-> -               pinctrl-names = "default";
-> -               port {
-> -                       drif0_ep: endpoint {
-> -                            remote-endpoint = <&tuner_ep>;
-> -                            sync-active = <0>;
-> -                       };
-> -               };
-> -       };
-> diff --git a/Documentation/devicetree/bindings/media/renesas,drif.yaml b/Documentation/devicetree/bindings/media/renesas,drif.yaml
-> new file mode 100644
-> index 000000000000..f57fccc159d6
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/renesas,drif.yaml
-> @@ -0,0 +1,270 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/renesas,drif.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Renesas R-Car Gen3 Digital Radio Interface controller (DRIF)
-> +
-> +maintainers:
-> +  - Ramesh Shanmugasundaram <rashanmu@gmail.com>
-> +  - Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-> +
-> +description: |
-> +  R-Car Gen3 DRIF is a SPI like receive only slave device. A general
-> +  representation of DRIF interfacing with a master device is shown below.
-> +
-> +  +---------------------+                +---------------------+
-> +  |                     |-----SCK------->|CLK                  |
-> +  |       Master        |-----SS-------->|SYNC  DRIFn (slave)  |
-> +  |                     |-----SD0------->|D0                   |
-> +  |                     |-----SD1------->|D1                   |
-> +  +---------------------+                +---------------------+
-> +
-> +  As per datasheet, each DRIF channel (drifn) is made up of two internal
-> +  channels (drifn0 & drifn1). These two internal channels share the common
-> +  CLK & SYNC. Each internal channel has its own dedicated resources like
-> +  irq, dma channels, address space & clock. This internal split is not
-> +  visible to the external master device.
-> +
-> +  The device tree model represents each internal channel as a separate node.
-> +  The internal channels sharing the CLK & SYNC are tied together by their
-> +  phandles using a property called "renesas,bonding". For the rest of
-> +  the documentation, unless explicitly stated, the word channel implies an
-> +  internal channel.
-> +
-> +  When both internal channels are enabled they need to be managed together
-> +  as one (i.e.) they cannot operate alone as independent devices. Out of the
-> +  two, one of them needs to act as a primary device that accepts common
-> +  properties of both the internal channels. This channel is identified by a
-> +  property called "renesas,primary-bond".
-> +
-> +  To summarize,
-> +     * When both the internal channels that are bonded together are enabled,
-> +       the zeroth channel is selected as primary-bond. This channels accepts
-> +       properties common to all the members of the bond.
-> +     * When only one of the bonded channels need to be enabled, the property
-> +       "renesas,bonding" or "renesas,primary-bond" will have no effect. That
-> +       enabled channel can act alone as any other independent device.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +        - renesas,r8a7795-drif        # R-Car H3
-> +        - renesas,r8a7796-drif        # R-Car M3-W
-> +      - const: renesas,rcar-gen3-drif # Generic R-Car Gen3 compatible device
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    maxItems: 1
-> +    items:
-> +      - const: fck
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  dmas:
-> +    minItems: 1
-> +    maxItems: 2
-> +
-> +  dma-names:
-> +    minItems: 1
-> +    maxItems: 2
-> +    items:
-> +      - const: rx
-> +      - const: rx
-> +
-> +  renesas,bonding:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description:
-> +      The phandle to the other internal channel of DRIF
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  pinctrl-0:
-> +    maxItems: 1
-> +
-> +  pinctrl-names:
-> +    maxItems: 1
-> +    items:
-> +      - const: default
-> +
-> +  renesas,primary-bond:
-> +    type: boolean
-> +    description:
-> +      Indicates that the channel acts as primary among the bonded channels.
-> +
-> +  port:
-> +    type: object
-> +    description:
-> +      Child port node corresponding to the data input, in accordance with the
-> +      video interface bindings defined in
-> +      Documentation/devicetree/bindings/media/video-interfaces.txt.
-> +      The port node must contain at least one endpoint.
-> +
-> +    properties:
-> +      endpoint:
-> +        type: object
-> +
-> +        properties:
-> +          remote-endpoint:
-> +            description:
-> +              A phandle to the remote tuner endpoint subnode in remote node
-> +              port.
-> +
-> +          sync-active:
-> +            enum: [0, 1]
-> +            description:
-> +              Indicates sync signal polarity, 0/1 for low/high respectively.
-> +              This property maps to SYNCAC bit in the hardware manual. The
-> +              default is 1 (active high).
-> +
-> +        additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - resets
-> +  - dmas
-> +  - dma-names
-> +  - renesas,bonding
-> +
-> +if:
-> +  required:
-> +    - renesas,primary-bond
-> +then:
-> +  required:
-> +    - pinctrl-0
-> +    - pinctrl-names
-> +    - port
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  # Example with both internal channels enabled.
-> +  #
-> +  # When interfacing with a third party tuner device with two data pins as shown
-> +  # below.
-> +  #
-> +  # +---------------------+                +---------------------+
-> +  # |                     |-----SCK------->|CLK                  |
-> +  # |       Master        |-----SS-------->|SYNC  DRIFn (slave)  |
-> +  # |                     |-----SD0------->|D0                   |
-> +  # |                     |-----SD1------->|D1                   |
-> +  # +---------------------+                +---------------------+
-> +  - |
-> +    #include <dt-bindings/clock/r8a7795-cpg-mssr.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/power/r8a7795-sysc.h>
-> +
-> +    soc {
-> +            #address-cells = <2>;
-> +            #size-cells = <2>;
-> +
-> +            drif00: rif@e6f40000 {
-> +                    compatible = "renesas,r8a7795-drif",
-> +                                 "renesas,rcar-gen3-drif";
-> +                    reg = <0 0xe6f40000 0 0x64>;
-> +                    interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
-> +                    clocks = <&cpg CPG_MOD 515>;
-> +                    clock-names = "fck";
-> +                    dmas = <&dmac1 0x20>, <&dmac2 0x20>;
-> +                    dma-names = "rx", "rx";
-> +                    power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-> +                    renesas,bonding = <&drif01>;
-> +                    resets = <&cpg 515>;
-> +                    renesas,primary-bond;
-> +                    pinctrl-0 = <&drif0_pins>;
-> +                    pinctrl-names = "default";
-> +                    port {
-> +                            drif0_ep: endpoint {
-> +                                 remote-endpoint = <&tuner_ep>;
-> +                            };
-> +                    };
-> +            };
-> +
-> +            drif01: rif@e6f50000 {
-> +                    compatible = "renesas,r8a7795-drif",
-> +                                 "renesas,rcar-gen3-drif";
-> +                    reg = <0 0xe6f50000 0 0x64>;
-> +                    interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
-> +                    clocks = <&cpg CPG_MOD 514>;
-> +                    clock-names = "fck";
-> +                    dmas = <&dmac1 0x22>, <&dmac2 0x22>;
-> +                    dma-names = "rx", "rx";
-> +                    power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-> +                    renesas,bonding = <&drif00>;
-> +                    resets = <&cpg 514>;
-> +            };
-> +    };
-> +
-> +  # Example with internal channel 1 alone enabled.
-> +  #
-> +  # When interfacing with a third party tuner device with one data pin as shown
-> +  # below.
-> +  #
-> +  # +---------------------+                +---------------------+
-> +  # |                     |-----SCK------->|CLK                  |
-> +  # |       Master        |-----SS-------->|SYNC  DRIFn (slave)  |
-> +  # |                     |                |D0 (unused)          |
-> +  # |                     |-----SD-------->|D1                   |
-> +  # +---------------------+                +---------------------+
-> +  - |
-> +    #include <dt-bindings/clock/r8a7795-cpg-mssr.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/power/r8a7795-sysc.h>
-> +
-> +    soc {
-> +            #address-cells = <2>;
-> +            #size-cells = <2>;
-> +
-> +            drif10: rif@e6f60000 {
-> +                    compatible = "renesas,r8a7795-drif",
-> +                                 "renesas,rcar-gen3-drif";
-> +                    reg = <0 0xe6f60000 0 0x64>;
-> +                    interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
-> +                    clocks = <&cpg CPG_MOD 513>;
-> +                    clock-names = "fck";
-> +                    dmas = <&dmac1 0x24>, <&dmac2 0x24>;
-> +                    dma-names = "rx", "rx";
-> +                    power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-> +                    resets = <&cpg 513>;
-> +                    renesas,bonding = <&drif11>;
-> +            };
-> +
-> +            drif11: rif@e6f70000 {
-> +                    compatible = "renesas,r8a7795-drif",
-> +                                 "renesas,rcar-gen3-drif";
-> +                    reg = <0 0xe6f70000 0 0x64>;
-> +                    interrupts = <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>;
-> +                    clocks = <&cpg CPG_MOD 512>;
-> +                    clock-names = "fck";
-> +                    dmas = <&dmac1 0x26>, <&dmac2 0x26>;
-> +                    dma-names = "rx", "rx";
-> +                    power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-> +                    resets = <&cpg 512>;
-> +                    renesas,bonding = <&drif10>;
-> +                    pinctrl-0 = <&drif1_pins>;
-> +                    pinctrl-names = "default";
-> +                    port {
-> +                            drif1_ep: endpoint {
-> +                                 remote-endpoint = <&tuner_ep1>;
-> +                                 sync-active = <0>;
-> +                            };
-> +                    };
-> +            };
-> +    };
-> +...
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 9f49e5ac90d8..3e2a1cad3749 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -10903,7 +10903,7 @@ L:      linux-media@vger.kernel.org
->  L:     linux-renesas-soc@vger.kernel.org
->  S:     Supported
->  T:     git git://linuxtv.org/media_tree.git
-> -F:     Documentation/devicetree/bindings/media/renesas,drif.txt
-> +F:     Documentation/devicetree/bindings/media/renesas,drif.yaml
->  F:     drivers/media/platform/rcar_drif.c
->
->  MEDIA DRIVERS FOR RENESAS - FCP
-> --
-> 2.25.1
->
