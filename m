@@ -3,72 +3,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BAF5FC433E2
-	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 13:23:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D413C433E2
+	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 13:37:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 80280206F4
-	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 13:23:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EC4A920738
+	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 13:37:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726507AbgIONWp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 15 Sep 2020 09:22:45 -0400
-Received: from relmlor1.renesas.com ([210.160.252.171]:17833 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726446AbgIONNL (ORCPT
+        id S1726452AbgIONf6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 15 Sep 2020 09:35:58 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:46603 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726666AbgIONff (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 15 Sep 2020 09:13:11 -0400
-X-IronPort-AV: E=Sophos;i="5.76,429,1592838000"; 
-   d="scan'208";a="57333413"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 15 Sep 2020 22:12:38 +0900
-Received: from devel.example.org?044ree.adwin.renesas.com (unknown [10.226.36.120])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 8B25842BA8C2;
-        Tue, 15 Sep 2020 22:12:35 +0900 (JST)
-From:   Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tue, 15 Sep 2020 09:35:35 -0400
+Received: by mail-oi1-f193.google.com with SMTP id u126so3796148oif.13;
+        Tue, 15 Sep 2020 06:31:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XFJbV8gqtdgXON44AjHs01o37Q1aP3y+2+6LNfuSBbg=;
+        b=oHp+IqmN/EZLJ263x2fajwviA5F7GCqeD8WZtwNxgQBFGEKCIRIt+44jLp66c0x5ON
+         9tPhLL5GNBnFCF4mOWxAk54JP7l6R6sM9Rq2ykmr9/RRVzykmdD1jWvPyY4jlBLqDUty
+         FpRIjsZCn7iingOkS45ejHVfZAS+kqXpdiyfoIttXJYaHS+fUwHh4snzeOSvE8pNRciu
+         X1UptaQ+WXeqYY9DbDqLG/0oGCTIPcoLP8n9NlpBddkAlrkqPwf9QK8wzEsGRSNiNTry
+         B993vW4nQiqFGRbzzQu93FuiGmDajLRL7CaaplpxQxfW2JEIg2DnZ8cz1/vfgpVjb2PD
+         kKuA==
+X-Gm-Message-State: AOAM531uNSOZeMnQeFs8ueGwMjVGazIxkG3Fu1zfiNs5Qd4shV+H3grI
+        jhNHxyt0zRudVSSAC6zFjeuA1RSGLjzNM9yyWHePnycL
+X-Google-Smtp-Source: ABdhPJzZ3UVmsOsTh4cqJBlDJ7vzhFrrmrBKHqhfHpds3yc77F0pv64OlNm3mClJtOeFqGGDm7n+2njVKcAuwriGQnA=
+X-Received: by 2002:aca:52d6:: with SMTP id g205mr3393965oib.54.1600176702442;
+ Tue, 15 Sep 2020 06:31:42 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200915131216.21137-1-fabrizio.castro.jz@renesas.com> <20200915131216.21137-4-fabrizio.castro.jz@renesas.com>
+In-Reply-To: <20200915131216.21137-4-fabrizio.castro.jz@renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 15 Sep 2020 15:31:30 +0200
+Message-ID: <CAMuHMdXdsHDKZS1ZdACK0-wGsc6cfQFGETykJ_sQX=bat3WZ7w@mail.gmail.com>
+Subject: Re: [PATCH 3/3] media: dt-bindings: media: renesas,drif: Add r8a77990 support
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
         Ramesh Shanmugasundaram <rashanmu@gmail.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
         Chris Paterson <Chris.Paterson2@renesas.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCH 0/3] Document r8a77990 DRIF support
-Date:   Tue, 15 Sep 2020 14:12:13 +0100
-Message-Id: <20200915131216.21137-1-fabrizio.castro.jz@renesas.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Dear All,
+On Tue, Sep 15, 2020 at 3:12 PM Fabrizio Castro
+<fabrizio.castro.jz@renesas.com> wrote:
+> The r8a77990 (a.k.a. R-Car E3) device tree schema is
+> compatible with R-Car H3 and M3-W schema.
+>
+> Document r8a77990 support within renesas,drif.yaml.
+>
+> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 
-this series documents DRIF support for the r8a77990
-(a.k.a. R-Car E3).
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Thanks,
-Fab
+Gr{oetje,eeting}s,
 
-Fabrizio Castro (3):
-  MAINTAINERS: Add Fabrizio Castro to Renesas DRIF
-  media: dt-bindings: media: renesas,drif: Convert to json-schema
-  media: dt-bindings: media: renesas,drif: Add r8a77990 support
-
- .../bindings/media/renesas,drif.txt           | 177 ------------
- .../bindings/media/renesas,drif.yaml          | 271 ++++++++++++++++++
- MAINTAINERS                                   |   3 +-
- 3 files changed, 273 insertions(+), 178 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/media/renesas,drif.txt
- create mode 100644 Documentation/devicetree/bindings/media/renesas,drif.yaml
+                        Geert
 
 -- 
-2.25.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
