@@ -2,119 +2,80 @@ Return-Path: <SRS0=oGXw=CZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5D80C43461
-	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 00:06:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A18AC43461
+	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 00:25:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 701DB20809
-	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 00:06:52 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lZ6hi3H/"
+	by mail.kernel.org (Postfix) with ESMTP id 0D1222064E
+	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 00:25:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727262AbgIPAGe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 15 Sep 2020 20:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34080 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726972AbgIOO2m (ORCPT
+        id S1726846AbgIPAZA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 15 Sep 2020 20:25:00 -0400
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:35324 "EHLO
+        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726836AbgIOOPy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 15 Sep 2020 10:28:42 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2439C06174A;
-        Tue, 15 Sep 2020 07:14:12 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id h20so2743707ybj.8;
-        Tue, 15 Sep 2020 07:14:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yFEswjPEkU42WKhQk4a5lgZHSsu2C+ZFtLptD4MF2bQ=;
-        b=lZ6hi3H/Ni/Rj2qNSQSbJUp1gwv0oUrg8wH/4QfzoVGTjQRN1cgLUGpHpfRrRjqL9d
-         8+/BbZZ0cQg66eCcvKa3AEZ5gNMcmPYu4PSIJumVyzJAd1wNQbIZksQqur54Hah6Q179
-         UJd93wJSoIx7jGhcnAnCunfcTcvDTyn27ppCy7EV71Dt25opvC/zdqqrRKZIT6KvDv6B
-         V8eZxkCs92fpCtt47zfe15Y90OLjGOn1A7yMkkc6Xo37fkOA4a1sqzTargzXQEmpn4C2
-         CfGM00NAbquvHs7retxPQaFlwaaCoLRr8sJfar2QjAMXBnV+NjlOV++8Lyp7WO50wEIf
-         mY3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yFEswjPEkU42WKhQk4a5lgZHSsu2C+ZFtLptD4MF2bQ=;
-        b=lzmN8AZvKvAC/58t694GiB5wjbG0vRdbtEAeE3xUUhi549c1qNA0W6GYsEgTI6Vrhr
-         5cmaopyl6xRHH8U3v+QoGHLQYxZcCUe/T4hySnvExAeOiVQ6hckrT3Gw6IVrLEPgLWsR
-         uRCX4D3PLYT+oTLAHGiFJDPhR1yDFn30NQPVMFIECp9DmNZfEZ284gaFCaW/4OGIrRj9
-         ARovRtgUDJTGK4dsXNpcqMEDdJdMKMr3UFCYOLn2+yM684eXXT+PN8GZy4RmbV3AbGU3
-         yXuYYItUvtPgAjyY4sW3BuBNd7nRmB5zgVvdUSk8sb+UDll0vR/PyFc9dSzUbxWLDAGN
-         3PTg==
-X-Gm-Message-State: AOAM530IDvV4tEacVlPo6hIG7UT7TLnJK8YNARMPneJmuJCkNtjUq3Wi
-        xxtHT0z3mKoLpPX+ZKfBOGbBuyvBFTBbnx5KNgQ=
-X-Google-Smtp-Source: ABdhPJxcaOWZcfw234jowg3P/dhI9NAewu6ytUIkBJ/r5/zNIRqqESPPYfmmdQPZhTf2Bf33axoPb0dCxznPJoefwPc=
-X-Received: by 2002:a25:344c:: with SMTP id b73mr26337425yba.127.1600179252155;
- Tue, 15 Sep 2020 07:14:12 -0700 (PDT)
+        Tue, 15 Sep 2020 10:15:54 -0400
+Received: from relay9-d.mail.gandi.net (unknown [217.70.183.199])
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id 0A6013A39CE;
+        Tue, 15 Sep 2020 13:21:00 +0000 (UTC)
+X-Originating-IP: 93.34.118.233
+Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 5B356FF80F;
+        Tue, 15 Sep 2020 13:18:34 +0000 (UTC)
+Date:   Tue, 15 Sep 2020 15:22:25 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Luca Ceresoli <luca@lucaceresoli.net>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: Re: [PATCH 1/3] media: docs: v4l2-subdev: fix typo
+Message-ID: <20200915132225.vagwwswb7d6dvx63@uno.localdomain>
+References: <20200904215141.20862-1-luca@lucaceresoli.net>
 MIME-Version: 1.0
-References: <20200915131216.21137-1-fabrizio.castro.jz@renesas.com> <20200915131216.21137-4-fabrizio.castro.jz@renesas.com>
-In-Reply-To: <20200915131216.21137-4-fabrizio.castro.jz@renesas.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Tue, 15 Sep 2020 15:13:46 +0100
-Message-ID: <CA+V-a8u3q=KeNtSZXtwcGEv3Am9m2bSZbcjOxP8ub2SohMeQMA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] media: dt-bindings: media: renesas,drif: Add r8a77990 support
-To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Ramesh Shanmugasundaram <rashanmu@gmail.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200904215141.20862-1-luca@lucaceresoli.net>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Fabrizio,
+Hi Luca,
 
-Thank you for the patch.
+On Fri, Sep 04, 2020 at 11:51:39PM +0200, Luca Ceresoli wrote:
+> Fix "will to" -> "will do".
+>
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-On Tue, Sep 15, 2020 at 2:19 PM Fabrizio Castro
-<fabrizio.castro.jz@renesas.com> wrote:
->
-> The r8a77990 (a.k.a. R-Car E3) device tree schema is
-> compatible with R-Car H3 and M3-W schema.
->
-> Document r8a77990 support within renesas,drif.yaml.
->
-> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+
+Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+
+Thanks
+   j
+
+
 > ---
->  Documentation/devicetree/bindings/media/renesas,drif.yaml | 1 +
->  1 file changed, 1 insertion(+)
+>  Documentation/driver-api/media/v4l2-subdev.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-
-Cheers,
-Prabhakar
-
-> diff --git a/Documentation/devicetree/bindings/media/renesas,drif.yaml b/Documentation/devicetree/bindings/media/renesas,drif.yaml
-> index f57fccc159d6..051d515be38d 100644
-> --- a/Documentation/devicetree/bindings/media/renesas,drif.yaml
-> +++ b/Documentation/devicetree/bindings/media/renesas,drif.yaml
-> @@ -53,6 +53,7 @@ properties:
->        - enum:
->          - renesas,r8a7795-drif        # R-Car H3
->          - renesas,r8a7796-drif        # R-Car M3-W
-> +        - renesas,r8a77990-drif       # R-Car E3
->        - const: renesas,rcar-gen3-drif # Generic R-Car Gen3 compatible device
+> diff --git a/Documentation/driver-api/media/v4l2-subdev.rst b/Documentation/driver-api/media/v4l2-subdev.rst
+> index bc7e1fc40a9d..9a7dddd97f5a 100644
+> --- a/Documentation/driver-api/media/v4l2-subdev.rst
+> +++ b/Documentation/driver-api/media/v4l2-subdev.rst
+> @@ -191,7 +191,7 @@ but it is better and easier to use this macro:
 >
->    reg:
+>  	err = v4l2_subdev_call(sd, core, g_std, &norm);
+>
+> -The macro will to the right ``NULL`` pointer checks and returns ``-ENODEV``
+> +The macro will do the right ``NULL`` pointer checks and returns ``-ENODEV``
+>  if :c:type:`sd <v4l2_subdev>` is ``NULL``, ``-ENOIOCTLCMD`` if either
+>  :c:type:`sd <v4l2_subdev>`->core or :c:type:`sd <v4l2_subdev>`->core->g_std is ``NULL``, or the actual result of the
+>  :c:type:`sd <v4l2_subdev>`->ops->core->g_std ops.
 > --
-> 2.25.1
+> 2.28.0
 >
