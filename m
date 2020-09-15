@@ -2,52 +2,53 @@ Return-Path: <SRS0=a2Vr=CY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF78AC43461
-	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 07:22:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C017C43461
+	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 08:10:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B2FCA214F1
-	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 07:22:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2E3D121D7B
+	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 08:10:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600154563;
-	bh=oiZhyrnur8sEMYwMjG4p+RXrZKXVdVhsWLko9YL6U1U=;
+	s=default; t=1600157427;
+	bh=ltBu5LTP2ouZsfNOjIsOf5oJI8CRy/Vd/boJklZqc1E=;
 	h=From:Cc:Subject:Date:To:List-ID:From;
-	b=QCw+JeMn6UmMIUy3Gohw+wU0Bb8BPPVtOfYEFMFdadXki1fpJCnvJ2GD6KQAO7Qp3
-	 KItrLEq/+j9osAyhx3pP5/UM4Al6UZtaVg6xFSGeqnJAVgHjKksyTNrRGBFEhH2xM4
-	 GQZPF3JDo2eUiAVZnLliBw31EFBDSzrvEnoYzJBM=
+	b=b5eysilD+ib/y6ovaNLyrTBUiszAHfSnr+C6joY4RBUNEyzt7Go2dfX20SR5j1MHJ
+	 EM0ga7l4mfUCoZBhXvVb2XsCzzZUBWPddJALtA2B+/UWk6P4cNW/GsmxC60SIp6vVl
+	 MNyDHf6tqWk+P41x7SpYBSTJLippE4yiRgfAn2SI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726119AbgIOHWR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 15 Sep 2020 03:22:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43460 "EHLO mail.kernel.org"
+        id S1726198AbgIOIKC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 15 Sep 2020 04:10:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60592 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726085AbgIOHWN (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 15 Sep 2020 03:22:13 -0400
+        id S1726178AbgIOIJS (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 15 Sep 2020 04:09:18 -0400
 Received: from mail.kernel.org (ip5f5ad5a5.dynamic.kabel-deutschland.de [95.90.213.165])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3567C20897;
-        Tue, 15 Sep 2020 07:22:13 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1E2B520771;
+        Tue, 15 Sep 2020 08:09:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600154533;
-        bh=oiZhyrnur8sEMYwMjG4p+RXrZKXVdVhsWLko9YL6U1U=;
+        s=default; t=1600157357;
+        bh=ltBu5LTP2ouZsfNOjIsOf5oJI8CRy/Vd/boJklZqc1E=;
         h=From:To:Cc:Subject:Date:From;
-        b=PnX7XCuftGF7QHNG+q3TVX3SrgKNWyI1nQflrG6kAc7+cTdgydqoPj5iN0Fz2VQjO
-         /Y/EYUNjNFGr8VS/+2ooGvfWSDiC06UdUlDLEt3z6pxOWwfHyD2tvjvdBNc4FaGxkV
-         vHtzFdEH+Vji0aIjwnpyTOpNbPWCS5DnczMrR0bw=
+        b=KpNUSgv+DVaiKKqkX3/QUchuEz1+LAycy2/HIMcqXnvKiZmDZJrS5AXD4s8ei93VU
+         6GKYokDhRhPylzvZxna8VoqWJYjqRck5lHYbTcApQ1WEP/b7OkOysLP8HLvQcSSz+X
+         +/+jcC9Y0RBF+y9YM/KD0au9f8Ysvqy431gVU+xU=
 Received: from mchehab by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1kI5I2-004XJd-LJ; Tue, 15 Sep 2020 09:22:10 +0200
+        id 1kI61a-004ZXx-F5; Tue, 15 Sep 2020 10:09:14 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 0/3] vidtv: fix DVB-S/S2 simulation
-Date:   Tue, 15 Sep 2020 09:22:06 +0200
-Message-Id: <cover.1600154449.git.mchehab+huawei@kernel.org>
+Subject: [PATCH] media: vidtv: add a poor guy's simulation to preBER stats
+Date:   Tue, 15 Sep 2020 10:09:13 +0200
+Message-Id: <3123a37e472a0d2067326e3ab5172562aab8389a.1600157351.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -57,20 +58,77 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add dummy functions to simulate a DisEqC , and fix the tuning logic,
-in order to take a LNBf into account.
+A typical digital TV stream has errors that are corrected
+by Viterbi. While the error rate after Viterbi is usually
+zero, with good signals, there are some chances of getting
+random errors before that, which are auto-corrected by
+the error code algorithm.
 
-Mauro Carvalho Chehab (3):
-  media: vidtv: add DiSEqC dummy ops
-  media: vidtv: fix DVB-S/S2 tuning logic
-  media: vidtv.rst: update it to better describe the frequencies
+Add a poor guy's implementation that would show some
+noise at the pre-BER part of the demod.
 
- .../driver-api/media/drivers/vidtv.rst        | 14 ++++++--
- .../media/test-drivers/vidtv/vidtv_bridge.c   | 35 +++++++++++++++----
- .../media/test-drivers/vidtv/vidtv_demod.c    | 33 +++++++++++++++--
- 3 files changed, 70 insertions(+), 12 deletions(-)
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ drivers/media/test-drivers/vidtv/vidtv_mux.c | 23 ++++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_mux.c b/drivers/media/test-drivers/vidtv/vidtv_mux.c
+index 5d1a275d504b..26a742c95c76 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_mux.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_mux.c
+@@ -21,6 +21,7 @@
+ #include <linux/delay.h>
+ #include <linux/vmalloc.h>
+ #include <linux/math64.h>
++
+ #include "vidtv_mux.h"
+ #include "vidtv_ts.h"
+ #include "vidtv_pes.h"
+@@ -376,6 +377,7 @@ static void vidtv_mux_clear(struct vidtv_mux *m)
+ 	m->mux_buf_offset = 0;
+ }
+ 
++#define ERR_RATE 10000000
+ static void vidtv_mux_tick(struct work_struct *work)
+ {
+ 	struct vidtv_mux *m = container_of(work,
+@@ -384,6 +386,7 @@ static void vidtv_mux_tick(struct work_struct *work)
+ 	struct dtv_frontend_properties *c = &m->fe->dtv_property_cache;
+ 	u32 nbytes;
+ 	u32 npkts;
++	u32 tot_bits = 0;
+ 
+ 	while (m->streaming) {
+ 		nbytes = 0;
+@@ -419,10 +422,26 @@ static void vidtv_mux_tick(struct work_struct *work)
+ 		 * but post BER count can be lower than pre BER, if the error
+ 		 * correction logic discards packages.
+ 		 */
+-		c->pre_bit_count.stat[0].uvalue = nbytes;
+-		c->post_bit_count.stat[0].uvalue = nbytes;
++		c->pre_bit_count.stat[0].uvalue = nbytes * 8;
++		c->post_bit_count.stat[0].uvalue = nbytes * 8;
+ 		c->block_count.stat[0].uvalue += npkts;
+ 
++		/*
++		 * Even without any visible errors for the user, the pre-BER
++		 * stats usually have an error range up to 1E-6. So,
++		 * add some random error increment count to it.
++		 *
++		 * Please notice that this is a poor guy's implementation,
++		 * as it will produce one corrected bit error every time
++		 * ceil(total bytes / ERR_RATE) is incremented, without
++		 * any sort of (pseudo-)randomness.
++		 */
++		tot_bits += nbytes * 8;
++		if (tot_bits > ERR_RATE) {
++			c->pre_bit_error.stat[0].uvalue++;
++			tot_bits -= ERR_RATE;
++		}
++
+ 		usleep_range(VIDTV_SLEEP_USECS, VIDTV_MAX_SLEEP_USECS);
+ 	}
+ }
 -- 
 2.26.2
-
 
