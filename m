@@ -2,44 +2,40 @@ Return-Path: <SRS0=a2Vr=CY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4561DC43461
-	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 18:21:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E21CEC433E2
+	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 18:21:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 01FDE205F4
-	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 18:21:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A6BEA2064B
+	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 18:21:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728016AbgIOSUz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 15 Sep 2020 14:20:55 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:51334 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728009AbgIOSUh (ORCPT
+        id S1728019AbgIOSVg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 15 Sep 2020 14:21:36 -0400
+Received: from bin-mail-out-06.binero.net ([195.74.38.229]:49860 "EHLO
+        bin-mail-out-06.binero.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727801AbgIOSV2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 15 Sep 2020 14:20:37 -0400
-X-IronPort-AV: E=Sophos;i="5.76,430,1592838000"; 
-   d="scan'208";a="57129599"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 16 Sep 2020 03:20:35 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id C4BC84006DF6;
-        Wed, 16 Sep 2020 03:20:33 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tue, 15 Sep 2020 14:21:28 -0400
+X-Halon-ID: 344f444e-f780-11ea-a39b-005056917f90
+Authorized-sender: niklas.soderlund@fsdn.se
+Received: from bismarck.berto.se (p54ac52a8.dip0.t-ipconnect.de [84.172.82.168])
+        by bin-vsp-out-02.atm.binero.net (Halon) with ESMTPA
+        id 344f444e-f780-11ea-a39b-005056917f90;
+        Tue, 15 Sep 2020 20:21:05 +0200 (CEST)
+From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         linux-media@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Subject: [PATCH v2 2/2] media: rcar-vin: Kconfig: Update help description for VIDEO_RCAR_VIN config
-Date:   Tue, 15 Sep 2020 19:20:27 +0100
-Message-Id: <20200915182027.2787-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200915182027.2787-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20200915182027.2787-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH v4 0/3] dt-bindings: adv7604: Convert bindings to json-schema
+Date:   Tue, 15 Sep 2020 20:19:41 +0200
+Message-Id: <20200915181944.1037620-1-niklas.soderlund+renesas@ragnatech.se>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -48,29 +44,28 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The rcar-vin driver also supports RZ/G{1,2} SoC's, update the description
-to reflect this.
+Hi Hans,
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Chris Paterson <Chris.Paterson2@renesas.com>
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
----
- drivers/media/platform/rcar-vin/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This series converts the ADV7604 bindings to YAML and lists the new file
+under MAINTAINERS. I have used the schema to validate the usage of the
+bindings and no issues are found.
 
-diff --git a/drivers/media/platform/rcar-vin/Kconfig b/drivers/media/platform/rcar-vin/Kconfig
-index 2669c13a0423..030312d862e7 100644
---- a/drivers/media/platform/rcar-vin/Kconfig
-+++ b/drivers/media/platform/rcar-vin/Kconfig
-@@ -24,7 +24,7 @@ config VIDEO_RCAR_VIN
- 	select V4L2_FWNODE
- 	help
- 	  Support for Renesas R-Car Video Input (VIN) driver.
--	  Supports R-Car Gen2 and Gen3 SoCs.
-+	  Supports R-Car Gen{2,3} and RZ/G{1,2} SoCs.
- 
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called rcar-vin.
+Previous versions of this series referred to issues found when running 
+the validation and patches that fixed them. All those patches have now 
+been picked up.
+
+Niklas Söderlund (3):
+  dt-bindings: adv7604: Fix documentation for hpd-gpios
+  dt-bindings: adv7604: Convert bindings to json-schema
+  MAINTAINERS: Add ADV7604 bindings documentation
+
+ .../devicetree/bindings/media/i2c/adv7604.txt |  88 ---------
+ .../bindings/media/i2c/adv7604.yaml           | 178 ++++++++++++++++++
+ MAINTAINERS                                   |   1 +
+ 3 files changed, 179 insertions(+), 88 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/media/i2c/adv7604.txt
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/adv7604.yaml
+
 -- 
-2.17.1
+2.28.0
 
