@@ -7,48 +7,48 @@ X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91CD0C2D0E0
-	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 07:22:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FA37C43461
+	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 07:22:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 56ED120EDD
-	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 07:22:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D30F220897
+	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 07:22:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600154550;
-	bh=6qPomrYty0ynUFfaleIaujbyDH6LqlXrj62ixs2/gQQ=;
+	s=default; t=1600154554;
+	bh=oCvrzKbAPo2pXN2csnzS1LlIhxmlfQMu70M/hn3lOlU=;
 	h=From:Cc:Subject:Date:In-Reply-To:References:To:List-ID:From;
-	b=IRJUGlM87o+smjkGspdQOiRx9zcSj3kWzmHbjNIP/geg+BG3DZGQFbw7MYKMFVfhO
-	 kSs1Wus9cZ69R4BDJNZFpncFJX8FzAFtIX9VxNMYN6yMD3b1urcqO8bBCUUdxsiatn
-	 xm07tAp3mur+ekacBRk9ByTbvU89yT2WVnzj6G1M=
+	b=LsKMBBfvb5EWDskaKDO7CJNk5Opb2cRE4bu6JR4MUnx8925EHMdOnMFkSU+lIenYH
+	 3oYDdldp6xxdXVAk8Bj55Rrp/GNQZ9XEXhzQRitXHWsyk/mh6KDVVCO4YHvIEz5IgU
+	 1JpUdDmSI93mh29ZvBZipbXp1pdD2ZL8UDv/aVWQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726134AbgIOHWV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 15 Sep 2020 03:22:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43466 "EHLO mail.kernel.org"
+        id S1726085AbgIOHWa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 15 Sep 2020 03:22:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43464 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726092AbgIOHWO (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1726031AbgIOHWO (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 15 Sep 2020 03:22:14 -0400
 Received: from mail.kernel.org (ip5f5ad5a5.dynamic.kabel-deutschland.de [95.90.213.165])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 356292080C;
+        by mail.kernel.org (Postfix) with ESMTPSA id 36FCB20EDD;
         Tue, 15 Sep 2020 07:22:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1600154533;
-        bh=6qPomrYty0ynUFfaleIaujbyDH6LqlXrj62ixs2/gQQ=;
+        bh=oCvrzKbAPo2pXN2csnzS1LlIhxmlfQMu70M/hn3lOlU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YDTdFPDvJWwoPud9FSBwsSUJLYGHPO0HrjkWW6lfRw7vBu3NOkrrufvP+5uOh2Bvu
-         WojjSHQac6Wi7BaNPVjgPIuyLf7ItKkRyOR4UFhEXXVV+dt9CXK3iq01MyrQ0QE53g
-         IbcqMbMspy/3rx4jVek5im4e9vcRpwGx8IPZOtDA=
+        b=rx/7CG+wFpfz07GPulc7XxJjd5Y6SpvEf1cOulP6ag8Od7h9Z3aZbVl7MESbZ7nLB
+         LQ3/Q+xk0gLRxZxDRzT+i8XDZC4gM2R9b5WeaAsHBvX4v++4nCk+ajMTblMiGh6JJ6
+         X5OOR2RKGAmhphiEbjw8DkwmjaNSg2rGDjoqCw+4=
 Received: from mchehab by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1kI5I2-004XJf-Mo; Tue, 15 Sep 2020 09:22:10 +0200
+        id 1kI5I2-004XJj-Q1; Tue, 15 Sep 2020 09:22:10 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 1/3] media: vidtv: add DiSEqC dummy ops
-Date:   Tue, 15 Sep 2020 09:22:07 +0200
-Message-Id: <84f1cd09c78e62219cfe5f23bf833586f20ed02f.1600154449.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 3/3] media: vidtv.rst: update it to better describe the frequencies
+Date:   Tue, 15 Sep 2020 09:22:09 +0200
+Message-Id: <be96344fb96ab821576ee9b6de05b6432b02163f.1600154449.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1600154449.git.mchehab+huawei@kernel.org>
 References: <cover.1600154449.git.mchehab+huawei@kernel.org>
@@ -60,65 +60,53 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Those are needed for real applications to work with Satellite
-systems.
+The virtual driver has now a minimal set of frequencies for a
+single transponder to be found by each DVB standard.
+
+Document it, and update related information about the
+simulated LNBf.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../media/test-drivers/vidtv/vidtv_demod.c    | 33 +++++++++++++++++--
- 1 file changed, 31 insertions(+), 2 deletions(-)
+ Documentation/driver-api/media/drivers/vidtv.rst | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_demod.c b/drivers/media/test-drivers/vidtv/vidtv_demod.c
-index c825842758f0..8afdfb369ed1 100644
---- a/drivers/media/test-drivers/vidtv/vidtv_demod.c
-+++ b/drivers/media/test-drivers/vidtv/vidtv_demod.c
-@@ -320,6 +320,32 @@ static int vidtv_demod_set_voltage(struct dvb_frontend *fe,
- 	return 0;
- }
+diff --git a/Documentation/driver-api/media/drivers/vidtv.rst b/Documentation/driver-api/media/drivers/vidtv.rst
+index c9f62fcfdd9b..65115448c52d 100644
+--- a/Documentation/driver-api/media/drivers/vidtv.rst
++++ b/Documentation/driver-api/media/drivers/vidtv.rst
+@@ -62,6 +62,14 @@ When compiled as a module, run::
+ That's it! The bridge driver will initialize the tuner and demod drivers as
+ part of its own initialization.
  
-+/*
-+ * NOTE:
-+ * This is implemented here just to be used as an example for real
-+ * demod drivers.
-+ *
-+ * Should only be implemented if the demod has support for DVB-S or DVB-S2
-+ */
-+static int vidtv_send_diseqc_msg(struct dvb_frontend *fe,
-+				 struct dvb_diseqc_master_cmd *cmd)
-+{
-+	return 0;
-+}
++By default, it will accept the following frequencies:
 +
-+/*
-+ * NOTE:
-+ * This is implemented here just to be used as an example for real
-+ * demod drivers.
-+ *
-+ * Should only be implemented if the demod has support for DVB-S or DVB-S2
-+ */
-+static int vidtv_diseqc_send_burst(struct dvb_frontend *fe,
-+				   enum fe_sec_mini_cmd burst)
-+{
-+	return 0;
-+}
++	- 474 MHz for DVB-T/T2/C;
++	- 11,362 GHz for DVB-S/S2.
 +
- static void vidtv_demod_release(struct dvb_frontend *fe)
- {
- 	struct vidtv_demod_state *state = fe->demodulator_priv;
-@@ -376,8 +402,11 @@ static const struct dvb_frontend_ops vidtv_demod_ops = {
- 	.read_signal_strength = vidtv_demod_read_signal_strength,
++For satellite systems, the driver simulates an universal extended
++LNBf, with frequencies at Ku-Band, ranging from 10.7 GHz to 12.75 GHz.
++
+ You can optionally define some command-line arguments to vidtv.
  
- 	/* For DVB-S/S2 */
--	.set_voltage = vidtv_demod_set_voltage,
--	.set_tone    = vidtv_demod_set_tone,
-+	.set_voltage		= vidtv_demod_set_voltage,
-+	.set_tone		= vidtv_demod_set_tone,
-+	.diseqc_send_master_cmd	= vidtv_send_diseqc_msg,
-+	.diseqc_send_burst	= vidtv_diseqc_send_burst,
-+
- };
+ Command-line arguments to vidtv
+@@ -86,13 +94,13 @@ mock_tune_delay_msec
+ 	Simulate a tune delay.  Default 0.
  
- static const struct i2c_device_id vidtv_demod_i2c_id_table[] = {
+ vidtv_valid_dvb_t_freqs
+-	Valid DVB-T frequencies to simulate.
++	Valid DVB-T frequencies to simulate, in Hz.
+ 
+ vidtv_valid_dvb_c_freqs
+-	Valid DVB-C frequencies to simulate.
++	Valid DVB-C frequencies to simulate, in Hz.
+ 
+ vidtv_valid_dvb_s_freqs
+-	Valid DVB-C frequencies to simulate.
++	Valid DVB-S/S2 frequencies to simulate at Ku-Band, in kHz.
+ 
+ max_frequency_shift_hz,
+ 	Maximum shift in HZ allowed when tuning in a channel.
 -- 
 2.26.2
 
