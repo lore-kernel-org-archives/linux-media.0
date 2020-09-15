@@ -4,41 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CD3BC43461
-	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 00:33:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A722C43461
+	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 00:34:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2FDF220739
-	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 00:33:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1ADB620739
+	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 00:34:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726735AbgIPAdj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 15 Sep 2020 20:33:39 -0400
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:57437 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726661AbgIONm3 (ORCPT
+        id S1726696AbgIONiY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 15 Sep 2020 09:38:24 -0400
+Received: from relay10.mail.gandi.net ([217.70.178.230]:50905 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726658AbgIONbd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 15 Sep 2020 09:42:29 -0400
-X-Originating-IP: 93.34.118.233
+        Tue, 15 Sep 2020 09:31:33 -0400
 Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 7DAB660004;
-        Tue, 15 Sep 2020 13:41:29 +0000 (UTC)
-Date:   Tue, 15 Sep 2020 15:45:19 +0200
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 3D90324000B;
+        Tue, 15 Sep 2020 13:31:00 +0000 (UTC)
+Date:   Tue, 15 Sep 2020 15:34:51 +0200
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     Luca Ceresoli <luca@lucaceresoli.net>
 Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: Re: [PATCH 2/3] media: docs: v4l2-subdev: move "Subdev registration"
- to a subsection
-Message-ID: <20200915134519.5u3vedcyek5ivvjq@uno.localdomain>
+Subject: Re: [PATCH 3/3] media: docs: v4l2-subdev: move generic paragraph to
+ the introduction
+Message-ID: <20200915133451.jydprottrtskqe7y@uno.localdomain>
 References: <20200904215141.20862-1-luca@lucaceresoli.net>
- <20200904215141.20862-2-luca@lucaceresoli.net>
+ <20200904215141.20862-3-luca@lucaceresoli.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200904215141.20862-2-luca@lucaceresoli.net>
+In-Reply-To: <20200904215141.20862-3-luca@lucaceresoli.net>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -46,69 +45,77 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Hi Luca,
 
-On Fri, Sep 04, 2020 at 11:51:40PM +0200, Luca Ceresoli wrote:
-> The subdev registration topic is pretty lengthy, and takes more than
-> half of the "V4L2 sub-devices" section. Help readers in finding their
-> way through the document by dedicating a subsection to
-> "Subdev registration".
+On Fri, Sep 04, 2020 at 11:51:41PM +0200, Luca Ceresoli wrote:
+> This paragraph provides generic information to explain what v4l2_subdev is
+> useful for. Placing it in the middle of paragraphs describing the details
+> of subdev registration does not make much sense. Move it near the beginning
+> of the section when the v4l2_subdev idea has just been introduced and
+> before going into its details.
 >
-> Each of the two registration methods takes many paragraphs, but since
-> adding a subsubsection would be overkill, just emphasize them in bold.
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> ---
+>  Documentation/driver-api/media/v4l2-subdev.rst | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/Documentation/driver-api/media/v4l2-subdev.rst b/Documentation/driver-api/media/v4l2-subdev.rst
+> index fb66163deb38..1c1e3f9da142 100644
+> --- a/Documentation/driver-api/media/v4l2-subdev.rst
+> +++ b/Documentation/driver-api/media/v4l2-subdev.rst
+> @@ -12,6 +12,12 @@ Usually these are I2C devices, but not necessarily. In order to provide the
+>  driver with a consistent interface to these sub-devices the
+>  :c:type:`v4l2_subdev` struct (v4l2-subdev.h) was created.
+>
+> +The advantage of using :c:type:`v4l2_subdev` is that it is a generic struct and
+> +does not contain any knowledge about the underlying hardware. So a driver might
+> +contain several subdevs that use an I2C bus, but also a subdev that is
+> +controlled through GPIO pins. This distinction is only relevant when setting
+> +up the device, but once the subdev is registered it is completely transparent.
+> +
+>  Each sub-device driver must have a :c:type:`v4l2_subdev` struct. This struct
+>  can be stand-alone for simple sub-devices or it might be embedded in a larger
+>  struct if more state information needs to be stored. Usually there is a
+> @@ -235,12 +241,6 @@ it can call ``v4l2_subdev_notify(sd, notification, arg)``. This macro checks
+>  whether there is a ``notify()`` callback defined and returns ``-ENODEV`` if not.
+>  Otherwise the result of the ``notify()`` call is returned.
+>
+> -The advantage of using :c:type:`v4l2_subdev` is that it is a generic struct and
+> -does not contain any knowledge about the underlying hardware. So a driver might
+> -contain several subdevs that use an I2C bus, but also a subdev that is
+> -controlled through GPIO pins. This distinction is only relevant when setting
+> -up the device, but once the subdev is registered it is completely transparent.
+> -
 
-I see bold being used mostly for C symbols names, I don't know if
-that's a kind of convention or not.
+Have you considered moving the whole part that describes how to call
+operations, which comes after the synchronous registration case to a
+dedicated sub-section ? The above paragraph makes sense in the context
+of describing why v4l2_subdev is advantageous as it abstract the
+underlying details under a unified call interface.
 
-I would not mind a subsection to be honest...
-I think the patch is good and I'll provide a tag, maybe others can
-provide opinions too!
+This could become
 
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+V4L2 sub-devices
+----------------
+
+Intro
+~~~~~
+
+Registration
+~~~~~~~~~~~~
+
+**synchronous**
+**asynchronous**
+
+Operations call (or a better name :)
+~~~~~~~~~~~~~~~
+
+What do you think ?
 
 Thanks
   j
 
->
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> ---
->  Documentation/driver-api/media/v4l2-subdev.rst | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
->
-> diff --git a/Documentation/driver-api/media/v4l2-subdev.rst b/Documentation/driver-api/media/v4l2-subdev.rst
-> index 9a7dddd97f5a..fb66163deb38 100644
-> --- a/Documentation/driver-api/media/v4l2-subdev.rst
-> +++ b/Documentation/driver-api/media/v4l2-subdev.rst
-> @@ -138,6 +138,9 @@ ensures that width, height and the media bus pixel code are equal on both source
->  and sink of the link. Subdev drivers are also free to use this function to
->  perform the checks mentioned above in addition to their own checks.
->
-> +Subdev registration
-> +~~~~~~~~~~~~~~~~~~~
-> +
->  There are currently two ways to register subdevices with the V4L2 core. The
->  first (traditional) possibility is to have subdevices registered by bridge
->  drivers. This can be done when the bridge driver has the complete information
-> @@ -157,7 +160,7 @@ below.
->  Using one or the other registration method only affects the probing process, the
->  run-time bridge-subdevice interaction is in both cases the same.
->
-> -In the synchronous case a device (bridge) driver needs to register the
-> +In the **synchronous** case a device (bridge) driver needs to register the
->  :c:type:`v4l2_subdev` with the v4l2_device:
->
->  	:c:func:`v4l2_device_register_subdev <v4l2_device_register_subdev>`
-> @@ -238,9 +241,9 @@ contain several subdevs that use an I2C bus, but also a subdev that is
->  controlled through GPIO pins. This distinction is only relevant when setting
->  up the device, but once the subdev is registered it is completely transparent.
->
-> -In the asynchronous case subdevice probing can be invoked independently of the
-> -bridge driver availability. The subdevice driver then has to verify whether all
-> -the requirements for a successful probing are satisfied. This can include a
-> +In the **asynchronous** case subdevice probing can be invoked independently of
-> +the bridge driver availability. The subdevice driver then has to verify whether
-> +all the requirements for a successful probing are satisfied. This can include a
->  check for a master clock availability. If any of the conditions aren't satisfied
->  the driver might decide to return ``-EPROBE_DEFER`` to request further reprobing
->  attempts. Once all conditions are met the subdevice shall be registered using
+>  In the **asynchronous** case subdevice probing can be invoked independently of
+>  the bridge driver availability. The subdevice driver then has to verify whether
+>  all the requirements for a successful probing are satisfied. This can include a
 > --
 > 2.28.0
 >
