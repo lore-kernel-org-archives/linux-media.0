@@ -2,120 +2,71 @@ Return-Path: <SRS0=a2Vr=CY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED71DC433E2
-	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 22:44:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 290FFC2D0E3
+	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 23:02:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B737820795
-	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 22:44:13 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="oc+kgjLw"
+	by mail.kernel.org (Postfix) with ESMTP id 00581208E4
+	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 23:02:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727514AbgIOPzF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 15 Sep 2020 11:55:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47492 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727504AbgIOPyI (ORCPT
+        id S1727340AbgIOXCX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 15 Sep 2020 19:02:23 -0400
+Received: from bin-mail-out-06.binero.net ([195.74.38.229]:8379 "EHLO
+        bin-mail-out-06.binero.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727570AbgIOXCR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 15 Sep 2020 11:54:08 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30423C061355;
-        Tue, 15 Sep 2020 08:54:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=2UlbGdiZDTOnbAr3xs1aHbeR9XTzI0Lit7D+l7hf2I4=; b=oc+kgjLwN6z7KfpzJBCa7G7OBj
-        xMg3Fwxams8c4EpKokR8UZQx2ybyjDj6drc+aW/2LIv1O+PR2BmjXm+WhI4RUptwlI8TGWRoAeWLn
-        tDzzTX6C7Wcaz+wjCgZzqB/SScThzcLyj8JgUrilV2pjnlwL2WrjnmkdPgkjiBopQKBs17NlwGyrT
-        ONpkConNykQRC+jrpDpmqw3ajb1dphcelbcTILjH85oTRbiw7nNGsu7203+03im4y0uv272kq3shG
-        s0VEBKB5Z/ya3O5D9oa/TJdMgnhrtizoC8G9P+/zAzkC5+arP3EQvUavmCF3BtD/B11AifbDQWTH6
-        Z2mcOZcw==;
-Received: from 089144214092.atnat0023.highway.a1.net ([89.144.214.92] helo=localhost)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kIDGv-0003AQ-TI; Tue, 15 Sep 2020 15:53:34 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        iommu@lists.linux-foundation.org
-Cc:     Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        linux1394-devel@lists.sourceforge.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        nouveau@lists.freedesktop.org, netdev@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-mm@kvack.org,
-        alsa-devel@alsa-project.org
-Subject: a saner API for allocating DMA addressable pages v3
-Date:   Tue, 15 Sep 2020 17:51:04 +0200
-Message-Id: <20200915155122.1768241-1-hch@lst.de>
+        Tue, 15 Sep 2020 19:02:17 -0400
+X-Halon-ID: 795617bd-f7a7-11ea-92dc-005056917a89
+Authorized-sender: niklas.soderlund@fsdn.se
+Received: from bismarck.berto.se (p54ac52a8.dip0.t-ipconnect.de [84.172.82.168])
+        by bin-vsp-out-01.atm.binero.net (Halon) with ESMTPA
+        id 795617bd-f7a7-11ea-92dc-005056917a89;
+        Wed, 16 Sep 2020 01:02:05 +0200 (CEST)
+From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+To:     linux-media@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH 1/2] rcar-csi2: Extend RAW8 support to all RGB layouts
+Date:   Wed, 16 Sep 2020 01:01:39 +0200
+Message-Id: <20200915230140.1201187-2-niklas.soderlund+renesas@ragnatech.se>
 X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200915230140.1201187-1-niklas.soderlund+renesas@ragnatech.se>
+References: <20200915230140.1201187-1-niklas.soderlund+renesas@ragnatech.se>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi all,
+Extend the list of supported formats to include all RGB layouts of RAW8.
 
-this series replaced the DMA_ATTR_NON_CONSISTENT flag to dma_alloc_attrs
-with a separate new dma_alloc_pages API, which is available on all
-platforms.  In addition to cleaning up the convoluted code path, this
-ensures that other drivers that have asked for better support for
-non-coherent DMA to pages with incurring bounce buffering over can finally
-be properly supported.
+Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+---
+ drivers/media/platform/rcar-vin/rcar-csi2.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-As a follow up I plan to move the implementation of the
-DMA_ATTR_NO_KERNEL_MAPPING flag over to this framework as well, given
-that is also is a fundamentally non coherent allocation.  The replacement
-for that flag would then return a struct page, as it is allowed to
-actually return pages without a kernel mapping as the name suggested
-(although most of the time they will actually have a kernel mapping..)
+diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
+index 511cd4984777ad99..c21501ce8980000f 100644
+--- a/drivers/media/platform/rcar-vin/rcar-csi2.c
++++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
+@@ -320,6 +320,9 @@ static const struct rcar_csi2_format rcar_csi2_formats[] = {
+ 	{ .code = MEDIA_BUS_FMT_YUYV8_1X16,	.datatype = 0x1e, .bpp = 16 },
+ 	{ .code = MEDIA_BUS_FMT_UYVY8_2X8,	.datatype = 0x1e, .bpp = 16 },
+ 	{ .code = MEDIA_BUS_FMT_YUYV10_2X10,	.datatype = 0x1e, .bpp = 20 },
++	{ .code = MEDIA_BUS_FMT_SBGGR8_1X8,     .datatype = 0x2a, .bpp = 8 },
++	{ .code = MEDIA_BUS_FMT_SGBRG8_1X8,     .datatype = 0x2a, .bpp = 8 },
++	{ .code = MEDIA_BUS_FMT_SGRBG8_1X8,     .datatype = 0x2a, .bpp = 8 },
+ 	{ .code = MEDIA_BUS_FMT_SRGGB8_1X8,     .datatype = 0x2a, .bpp = 8 },
+ };
+ 
+-- 
+2.28.0
 
-In addition to the conversions of the existing non-coherent DMA users,
-I've also added a patch to convert the firewire ohci driver to use
-the new dma_alloc_pages API.
-
-The first patch is queued up for 5.9 in the media tree, but included here
-for completeness.
-
-
-A git tree is available here:
-
-    git://git.infradead.org/users/hch/misc.git dma_alloc_pages
-
-Gitweb:
-
-    http://git.infradead.org/users/hch/misc.git/shortlog/refs/heads/dma_alloc_pages
-
-
-Changes since v2:
- - fix up the patch reshuffle which wasn't quite correct
- - fix up a few commit messages
-
-Changes since v1:
- - rebased on the latests dma-mapping tree, which merged many of the
-   cleanups
- - fix an argument passing typo in 53c700, caught by sparse
- - rename a few macro arguments in 53c700
- - pass the right device to the DMA API in the lib82596 drivers
- - fix memory ownershiptransfers in sgiseeq
- - better document what a page in the direct kernel mapping means
- - split into dma_alloc_pages that returns a struct page and is in the
-   direct mapping vs dma_alloc_noncoherent that can be vmapped
- - conver the firewire ohci driver to dma_alloc_pages
-
-Diffstat:
