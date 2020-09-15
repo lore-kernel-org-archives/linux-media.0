@@ -2,124 +2,177 @@ Return-Path: <SRS0=a2Vr=CY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B62EC433E2
-	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 17:57:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17A57C43461
+	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 18:06:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E39A520936
-	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 17:57:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A393C20936
+	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 18:06:18 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hav9Nr1Q"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727986AbgIORqq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 15 Sep 2020 13:46:46 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:28656 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727958AbgIORoX (ORCPT
+        id S1727737AbgIOSF4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 15 Sep 2020 14:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39822 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727733AbgIOSFY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 15 Sep 2020 13:44:23 -0400
-X-IronPort-AV: E=Sophos;i="5.76,430,1592838000"; 
-   d="scan'208";a="57128212"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 16 Sep 2020 02:44:19 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id A1C23400753C;
-        Wed, 16 Sep 2020 02:44:17 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Jacopo Mondi <jacopo@jmondi.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Subject: [PATCH v5 3/3] media: i2c: ov772x: Add test pattern control
-Date:   Tue, 15 Sep 2020 18:42:35 +0100
-Message-Id: <20200915174235.1229-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200915174235.1229-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20200915174235.1229-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Tue, 15 Sep 2020 14:05:24 -0400
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC879C06178A;
+        Tue, 15 Sep 2020 11:05:23 -0700 (PDT)
+Received: by mail-qk1-x742.google.com with SMTP id q63so5230962qkf.3;
+        Tue, 15 Sep 2020 11:05:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZLmSNoQM7+jjlnQIow8a+BqWm7XXJW35Z9CfcXxfl/4=;
+        b=hav9Nr1QbVJ3BlehRb/RqjACjFYrsIPLG1+I2UOClKfAp5+7ngG3IJmvKwICB5lzdq
+         WGV93nHyISl5cDRkAVdXhbwRwGpn0BDD6iIE1RISAzntc0zLsJhLKhSGksmHGxQxM0Nq
+         a7JAAzV0h50v//u8XuyeHoX0jmJ1pcffrlRm4cyLKojSIGPU8TrMQvCVT+9MIrzCWzdC
+         LaqUwVU6TF9DYqE1qTtH1/PMOSPjsMueBhLyxdfL5muRWfGnTfCN9j4Vf+Pd0vcdCBm9
+         vikEFqlZLseCYyLftc/+1VK3YrI36DtDcSwHB5DelgZyFAU2ssYsKOIMeff/y6H+0BUV
+         q2pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZLmSNoQM7+jjlnQIow8a+BqWm7XXJW35Z9CfcXxfl/4=;
+        b=ct04N1e4vHl9nnvjy1h0wCgV1Ep1dMExenl3ycqxtlE31je7TMN1Cz4rF8UiuD4cet
+         LxXkeMeXb3sY3vREQGmLIbzCmKDonQ+HjHRRC4MrI9I5qfGj325VqyGKWu5cPPOFAYVA
+         d2Uqz/+ay1Zw5dKU00p5YquwNB+cZjUPj/v96rvEQe0NUW2j8LctuemKj30BDtp9CbQ0
+         5H89Bq6x69/9nDIKYTsi64h5iYKbc2rY8mjRCRzS9mRMjhqa6VVzC3wrAuuml1rv5huU
+         vhwFwsx3Mb20Yf4oYceRCEfOIfKqjJrLKm4dCv1yAIApkmskdzZ83JYjfhVpSmRadhxl
+         xSKw==
+X-Gm-Message-State: AOAM5309NwS0QPo7OhGWgg/Tao2ycDz8piF0m6a+dfzxPFL092lrm3+e
+        C7h55pBaM62/ADXQdcAgYFY=
+X-Google-Smtp-Source: ABdhPJwwaZSFKtq7HxhR0p4tMkY/hLtYbTyG5VeqvlQKvebKtBQ2ObXdgMNFu+CfVTX9eKpx83hzUw==
+X-Received: by 2002:a05:620a:2225:: with SMTP id n5mr18523930qkh.171.1600193122843;
+        Tue, 15 Sep 2020 11:05:22 -0700 (PDT)
+Received: from localhost.localdomain ([2804:14d:72b1:8920:a2ce:f815:f14d:bfac])
+        by smtp.gmail.com with ESMTPSA id u66sm18969306qka.136.2020.09.15.11.05.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Sep 2020 11:05:22 -0700 (PDT)
+From:   "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
+X-Google-Original-From: Daniel W. S. Almeida
+To:     mchehab@kernel.org
+Cc:     "Daniel W . S . Almeida" <dwlsalmeida@gmail.com>,
+        geert@linux-m68k.org, r.verdejo@samsung.com,
+        linux-media@vger.kernel.org, nicolas@ndufresne.ca,
+        skhan@linuxfoundation.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-kernel@vger.kernel.org, rdunlap@infradead.org
+Subject: [PATCH] media: vidtv: fix build on 32bit architectures
+Date:   Tue, 15 Sep 2020 15:05:09 -0300
+Message-Id: <20200915180509.2661572-1-dwlsalmeida@gmail.com>
+X-Mailer: git-send-email 2.28.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support for test pattern control supported by the sensor.
+From: Daniel W. S. Almeida <dwlsalmeida@gmail.com>
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+Fix the following error for builds on 32bit architectures:
+
+ERROR: modpost: "__udivdi3"
+[drivers/media/test-drivers/vidtv/dvb-vidtv-bridge.ko] undefined!
+
+Which is due to 64bit divisions that did not go through the helpers
+in linux/math64.h
+
+As vidtv_mux_check_mux_rate was not operational in its current form,
+drop the entire function  while it is not fixed properly.
+
+For now, call vidtv_mux_pad_with_nulls with a constant number of packets
+to avoid warnings due to unused functions when building this driver.
+
+Fixes: f90cf6079bf67988 ("media: vidtv: add a bridge driver")
+Signed-off-by: Daniel W. S. Almeida <dwlsalmeida@gmail.com>
 ---
- drivers/media/i2c/ov772x.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+ drivers/media/test-drivers/vidtv/vidtv_mux.c  | 34 +------------------
+ .../media/test-drivers/vidtv/vidtv_s302m.c    |  4 +--
+ 2 files changed, 3 insertions(+), 35 deletions(-)
 
-diff --git a/drivers/media/i2c/ov772x.c b/drivers/media/i2c/ov772x.c
-index 869f2d94faec..3f68801692f4 100644
---- a/drivers/media/i2c/ov772x.c
-+++ b/drivers/media/i2c/ov772x.c
-@@ -227,7 +227,7 @@
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_mux.c b/drivers/media/test-drivers/vidtv/vidtv_mux.c
+index 5d1a275d504b..6e402a880fdc 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_mux.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_mux.c
+@@ -336,38 +336,6 @@ static u32 vidtv_mux_pad_with_nulls(struct vidtv_mux *m, u32 npkts)
+ 	return nbytes;
+ }
  
- /* COM3 */
- #define SWAP_MASK       (SWAP_RGB | SWAP_YUV | SWAP_ML)
--#define IMG_MASK        (VFLIP_IMG | HFLIP_IMG)
-+#define IMG_MASK        (VFLIP_IMG | HFLIP_IMG | SCOLOR_TEST)
+-static u32 vidtv_mux_check_mux_rate(struct vidtv_mux *m)
+-{
+-	/*
+-	 * attempt to maintain a constant mux rate, padding with null packets
+-	 * if needed
+-	 */
+-
+-	u32 nbytes = 0;  /* the number of bytes written by this function */
+-
+-	u64 nbytes_expected; /* the number of bytes we should have written */
+-	u64 nbytes_streamed; /* the number of bytes we actually wrote */
+-	u32 num_null_pkts; /* number of null packets to bridge the gap */
+-
+-	u64 elapsed_time_msecs = jiffies_to_usecs(m->timing.current_jiffies -
+-						  m->timing.past_jiffies);
+-
+-	elapsed_time_msecs = min(elapsed_time_msecs, (u64)VIDTV_MAX_SLEEP_USECS / 1000);
+-	nbytes_expected = div64_u64(m->mux_rate_kbytes_sec * 1000, MSEC_PER_SEC);
+-	nbytes_expected *= elapsed_time_msecs;
+-
+-	nbytes_streamed = m->mux_buf_offset;
+-
+-	if (nbytes_streamed < nbytes_expected) {
+-		/* can't write half a packet: roundup to a 188 multiple */
+-		nbytes_expected  = roundup(nbytes_expected - nbytes_streamed, TS_PACKET_LEN);
+-		num_null_pkts    = nbytes_expected / TS_PACKET_LEN;
+-		nbytes          += vidtv_mux_pad_with_nulls(m, num_null_pkts);
+-	}
+-
+-	return nbytes;
+-}
+-
+ static void vidtv_mux_clear(struct vidtv_mux *m)
+ {
+ 	/* clear the packets currently in the mux */
+@@ -397,7 +365,7 @@ static void vidtv_mux_tick(struct work_struct *work)
+ 			nbytes += vidtv_mux_push_si(m);
  
- #define VFLIP_IMG       0x80	/* Vertical flip image ON/OFF selection */
- #define HFLIP_IMG       0x40	/* Horizontal mirror image ON/OFF selection */
-@@ -425,6 +425,7 @@ struct ov772x_priv {
- 	const struct ov772x_win_size     *win;
- 	struct v4l2_ctrl		 *vflip_ctrl;
- 	struct v4l2_ctrl		 *hflip_ctrl;
-+	unsigned int			  test_pattern;
- 	/* band_filter = COM8[5] ? 256 - BDBASE : 0 */
- 	struct v4l2_ctrl		 *band_filter_ctrl;
- 	unsigned int			  fps;
-@@ -540,6 +541,11 @@ static const struct ov772x_win_size ov772x_win_sizes[] = {
- 	},
- };
+ 		nbytes += vidtv_mux_poll_encoders(m);
+-		nbytes += vidtv_mux_check_mux_rate(m);
++		nbytes += vidtv_mux_pad_with_nulls(m, 256);
  
-+static const char * const ov772x_test_pattern_menu[] = {
-+	"Disabled",
-+	"Vertical Color Bar Type 1",
-+};
-+
- /*
-  * frame rate settings lists
-  */
-@@ -809,6 +815,9 @@ static int ov772x_s_ctrl(struct v4l2_ctrl *ctrl)
- 		}
+ 		npkts = nbytes / TS_PACKET_LEN;
  
- 		return ret;
-+	case V4L2_CID_TEST_PATTERN:
-+		priv->test_pattern = ctrl->val;
-+		return 0;
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_s302m.c b/drivers/media/test-drivers/vidtv/vidtv_s302m.c
+index f8049cdf564a..e3290facf57b 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_s302m.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_s302m.c
+@@ -285,12 +285,12 @@ static void vidtv_s302m_compute_pts(struct vidtv_encoder *e)
+ {
+ 	u64 count = e->sample_count;
+ 	struct vidtv_access_unit *au = e->access_units;
++	u32 duration = CLOCK_UNIT_90KHZ / e->sampling_rate_hz;
+ 
+ 	while (au) {
+ 		count += au->num_samples;
+ 
+-		au->pts = count *
+-			  CLOCK_UNIT_90KHZ / e->sampling_rate_hz;
++		au->pts = count * duration;
+ 
+ 		au = au->next;
  	}
- 
- 	return -EINVAL;
-@@ -1107,6 +1116,8 @@ static int ov772x_set_params(struct ov772x_priv *priv,
- 		val ^= VFLIP_IMG;
- 	if (priv->hflip_ctrl->val)
- 		val ^= HFLIP_IMG;
-+	if (priv->test_pattern)
-+		val |= SCOLOR_TEST;
- 
- 	ret = regmap_update_bits(priv->regmap, COM3, SWAP_MASK | IMG_MASK, val);
- 	if (ret < 0)
-@@ -1405,6 +1416,10 @@ static int ov772x_probe(struct i2c_client *client)
- 	priv->band_filter_ctrl = v4l2_ctrl_new_std(&priv->hdl, &ov772x_ctrl_ops,
- 						   V4L2_CID_BAND_STOP_FILTER,
- 						   0, 256, 1, 0);
-+	v4l2_ctrl_new_std_menu_items(&priv->hdl, &ov772x_ctrl_ops,
-+				     V4L2_CID_TEST_PATTERN,
-+				     ARRAY_SIZE(ov772x_test_pattern_menu) - 1,
-+				     0, 0, ov772x_test_pattern_menu);
- 	priv->subdev.ctrl_handler = &priv->hdl;
- 	if (priv->hdl.error) {
- 		ret = priv->hdl.error;
 -- 
-2.17.1
+2.28.0
 
