@@ -1,276 +1,120 @@
-Return-Path: <SRS0=a2Vr=CY=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=oGXw=CZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51841C433E2
-	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 23:29:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5D80C43461
+	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 00:06:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1AC0F2193E
-	for <linux-media@archiver.kernel.org>; Tue, 15 Sep 2020 23:29:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 701DB20809
+	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 00:06:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nCImKK7q"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lZ6hi3H/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727283AbgIOX3D (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 15 Sep 2020 19:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33962 "EHLO
+        id S1727262AbgIPAGe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 15 Sep 2020 20:06:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727309AbgIOX27 (ORCPT
+        with ESMTP id S1726972AbgIOO2m (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 15 Sep 2020 19:28:59 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45346C06178B;
-        Tue, 15 Sep 2020 16:28:55 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id j2so4974495wrx.7;
-        Tue, 15 Sep 2020 16:28:55 -0700 (PDT)
+        Tue, 15 Sep 2020 10:28:42 -0400
+Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2439C06174A;
+        Tue, 15 Sep 2020 07:14:12 -0700 (PDT)
+Received: by mail-yb1-xb42.google.com with SMTP id h20so2743707ybj.8;
+        Tue, 15 Sep 2020 07:14:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=wlMH8QuyjYR1doRko83qgCbVSL0B0yuQuD817gAzTi4=;
-        b=nCImKK7qVweclYFnPpSdKdNg5bCcq9ghNZnf9NG5qcxImcCnw8Deph43+A8rA1bSzu
-         /oVYxBJEXGj8VU/iT5OC2kDswPCcUnC+ZOHAbpan4Zm9MGRPIBz7TkHwqR9AZpOc+9tp
-         fodiasMqoFE9SUFolIdqz1rviK6j+tchlvq9RD/1txE/jA6OOyTvrPBShzeZ0aQGLjVv
-         sqqqllcLZ/m8EdGuHPYB0UWxd0fT0UjJOX3vE6+5dvZQa4XvboFzmlOiht3Rg7Ft2WAY
-         c8wGmbqpAtYFyBeitRqqN7n9JXZstndM28RuzV1GtyyNH67ognjIXxCQPjWAZ2bYD/tM
-         NOKA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yFEswjPEkU42WKhQk4a5lgZHSsu2C+ZFtLptD4MF2bQ=;
+        b=lZ6hi3H/Ni/Rj2qNSQSbJUp1gwv0oUrg8wH/4QfzoVGTjQRN1cgLUGpHpfRrRjqL9d
+         8+/BbZZ0cQg66eCcvKa3AEZ5gNMcmPYu4PSIJumVyzJAd1wNQbIZksQqur54Hah6Q179
+         UJd93wJSoIx7jGhcnAnCunfcTcvDTyn27ppCy7EV71Dt25opvC/zdqqrRKZIT6KvDv6B
+         V8eZxkCs92fpCtt47zfe15Y90OLjGOn1A7yMkkc6Xo37fkOA4a1sqzTargzXQEmpn4C2
+         CfGM00NAbquvHs7retxPQaFlwaaCoLRr8sJfar2QjAMXBnV+NjlOV++8Lyp7WO50wEIf
+         mY3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=wlMH8QuyjYR1doRko83qgCbVSL0B0yuQuD817gAzTi4=;
-        b=c1/nhIAtkrNC6bgOkEN/eA7eXCWA8C4bXPbJX2n4Idcnx35qcuPxkUcky4HHofCxTw
-         EDIeZ30njzhjkoVT31qrbJ5uAJOJQ81bv9Cyxa1iJTJzF+rFbusAXG/DAr9jn2YIl+ZP
-         Fq7QzqTQbDhdZV2Dis5cyM6OHFEWEf1yvUNYthrIPZBrSZRzQAZIKWblOPpDLYyGBNi+
-         Vl8QnL42I+OpQjDHBeW0KnasXTbtdeU4EkngC8AD3W5NYuHQwuxsYxuKCQyp1EXhFTId
-         Fmk/8bd2M4/gacJBuQ9fnxSbjr5REpZdYTtobfFqS6oTMPRlL5sS06PmULCYxucA1REI
-         2+Bw==
-X-Gm-Message-State: AOAM530AYaXKKs633C10ya0VtSaXXObEKRjmhbxer3ASujQ6ZsXGuVGK
-        k9pkJBtYdNPMPutKS878ctf9dvY3ErAtH69C
-X-Google-Smtp-Source: ABdhPJyrBNyK85g/jRR3+OJXgVBTv0WqbqJQ11xvPlpQPkLEStVItcgpHlkjExYoJxOLyz/cwUmRHA==
-X-Received: by 2002:adf:e4c9:: with SMTP id v9mr23006769wrm.375.1600212533961;
-        Tue, 15 Sep 2020 16:28:53 -0700 (PDT)
-Received: from djrscally-MIIX-510-12ISK.home ([2.29.208.34])
-        by smtp.gmail.com with ESMTPSA id f1sm28624374wrx.75.2020.09.15.16.28.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Sep 2020 16:28:53 -0700 (PDT)
-From:   Daniel Scally <djrscally@gmail.com>
-To:     gregkh@linuxfoundation.org, rafael@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linux-media@vger.kernel.org, heikki.krogerus@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, kieran.bingham@ideasonboard.com,
-        jorhand@linux.microsoft.com, kitakar@gmail.com
-Subject: [PATCH v2] software_node: Add support for fwnode_graph*() family of functions
-Date:   Wed, 16 Sep 2020 00:28:27 +0100
-Message-Id: <20200915232827.3416-1-djrscally@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yFEswjPEkU42WKhQk4a5lgZHSsu2C+ZFtLptD4MF2bQ=;
+        b=lzmN8AZvKvAC/58t694GiB5wjbG0vRdbtEAeE3xUUhi549c1qNA0W6GYsEgTI6Vrhr
+         5cmaopyl6xRHH8U3v+QoGHLQYxZcCUe/T4hySnvExAeOiVQ6hckrT3Gw6IVrLEPgLWsR
+         uRCX4D3PLYT+oTLAHGiFJDPhR1yDFn30NQPVMFIECp9DmNZfEZ284gaFCaW/4OGIrRj9
+         ARovRtgUDJTGK4dsXNpcqMEDdJdMKMr3UFCYOLn2+yM684eXXT+PN8GZy4RmbV3AbGU3
+         yXuYYItUvtPgAjyY4sW3BuBNd7nRmB5zgVvdUSk8sb+UDll0vR/PyFc9dSzUbxWLDAGN
+         3PTg==
+X-Gm-Message-State: AOAM530IDvV4tEacVlPo6hIG7UT7TLnJK8YNARMPneJmuJCkNtjUq3Wi
+        xxtHT0z3mKoLpPX+ZKfBOGbBuyvBFTBbnx5KNgQ=
+X-Google-Smtp-Source: ABdhPJxcaOWZcfw234jowg3P/dhI9NAewu6ytUIkBJ/r5/zNIRqqESPPYfmmdQPZhTf2Bf33axoPb0dCxznPJoefwPc=
+X-Received: by 2002:a25:344c:: with SMTP id b73mr26337425yba.127.1600179252155;
+ Tue, 15 Sep 2020 07:14:12 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200915131216.21137-1-fabrizio.castro.jz@renesas.com> <20200915131216.21137-4-fabrizio.castro.jz@renesas.com>
+In-Reply-To: <20200915131216.21137-4-fabrizio.castro.jz@renesas.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Tue, 15 Sep 2020 15:13:46 +0100
+Message-ID: <CA+V-a8u3q=KeNtSZXtwcGEv3Am9m2bSZbcjOxP8ub2SohMeQMA@mail.gmail.com>
+Subject: Re: [PATCH 3/3] media: dt-bindings: media: renesas,drif: Add r8a77990 support
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Ramesh Shanmugasundaram <rashanmu@gmail.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Hi Fabrizio,
 
-This implements the remaining .graph_* callbacks in the
-fwnode operations vector for the software nodes. That makes
-the fwnode_graph*() functions available in the drivers also
-when software nodes are used.
+Thank you for the patch.
 
-The implementation tries to mimic the "OF graph" as much as
-possible, but there is no support for the "reg" device
-property. The ports will need to have the index in their
-name which starts with "port" (for example "port0", "port1",
-...) and endpoints will use the index of the software node
-that is given to them during creation. The port nodes can
-also be grouped under a specially named "ports" subnode,
-just like in DT, if necessary.
+On Tue, Sep 15, 2020 at 2:19 PM Fabrizio Castro
+<fabrizio.castro.jz@renesas.com> wrote:
+>
+> The r8a77990 (a.k.a. R-Car E3) device tree schema is
+> compatible with R-Car H3 and M3-W schema.
+>
+> Document r8a77990 support within renesas,drif.yaml.
+>
+> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> ---
+>  Documentation/devicetree/bindings/media/renesas,drif.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+>
+Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-The remote-endpoints are reference properties under the
-endpoint nodes that are named "remote-endpoint". 
+Cheers,
+Prabhakar
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Co-developed-by: Daniel Scally <djrscally@gmail.com>
-Signed-off-by: Daniel Scally <djrscally@gmail.com>
----
-changes in v2:
-	- added software_node_device_is_available
-	- altered software_node_get_next_child to get references
-	- altered software_node_get_next_endpoint to release references
-	to ports and avoid passing invalid combinations of swnodes to
-	software_node_get_next_child
-	- altered swnode_graph_find_next_port to release port rather than
-	old
-	
- drivers/base/swnode.c | 129 +++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 127 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/base/swnode.c b/drivers/base/swnode.c
-index 010828fc785b..d69034b807e3 100644
---- a/drivers/base/swnode.c
-+++ b/drivers/base/swnode.c
-@@ -363,6 +363,11 @@ static void software_node_put(struct fwnode_handle *fwnode)
- 	kobject_put(&swnode->kobj);
- }
- 
-+static bool software_node_device_is_available(const struct fwnode_handle *fwnode)
-+{
-+	return is_software_node(fwnode);
-+}
-+
- static bool software_node_property_present(const struct fwnode_handle *fwnode,
- 					   const char *propname)
- {
-@@ -450,7 +455,7 @@ software_node_get_next_child(const struct fwnode_handle *fwnode,
- 		c = list_next_entry(c, entry);
- 	else
- 		c = list_first_entry(&p->children, struct swnode, entry);
--	return &c->fwnode;
-+	return software_node_get(&c->fwnode);
- }
- 
- static struct fwnode_handle *
-@@ -536,9 +541,125 @@ software_node_get_reference_args(const struct fwnode_handle *fwnode,
- 	return 0;
- }
- 
-+static struct fwnode_handle *
-+swnode_graph_find_next_port(const struct fwnode_handle *parent,
-+			    struct fwnode_handle *port)
-+{
-+	struct fwnode_handle *old = port;
-+
-+	while ((port = software_node_get_next_child(parent, old))) {
-+		if (!strncmp(to_swnode(port)->node->name, "port", 4))
-+			return port;
-+		fwnode_handle_put(port);
-+		old = port;
-+	}
-+
-+	return NULL;
-+}
-+
-+static struct fwnode_handle *
-+software_node_graph_get_next_endpoint(const struct fwnode_handle *fwnode,
-+				      struct fwnode_handle *endpoint)
-+{
-+	struct swnode *swnode = to_swnode(fwnode);
-+	struct fwnode_handle *old = endpoint;
-+	struct fwnode_handle *parent_of_old;
-+	struct fwnode_handle *parent;
-+	struct fwnode_handle *port;
-+
-+	if (!swnode)
-+		return NULL;
-+
-+	if (endpoint) {
-+		port = software_node_get_parent(endpoint);
-+		parent = software_node_get_parent(port);
-+	} else {
-+		parent = software_node_get_named_child_node(fwnode, "ports");
-+		if (!parent)
-+			parent = software_node_get(&swnode->fwnode);
-+
-+		port = swnode_graph_find_next_port(parent, NULL);
-+	}
-+
-+	for (; port; port = swnode_graph_find_next_port(parent, port)) {
-+
-+		if (old) {
-+			parent_of_old = software_node_get_parent(old);
-+
-+			if (parent_of_old != port)
-+				old = NULL;
-+
-+			fwnode_handle_put(parent_of_old);
-+		}
-+
-+		endpoint = software_node_get_next_child(port, old);
-+		fwnode_handle_put(old);
-+		if (endpoint)
-+			break;
-+
-+		fwnode_handle_put(port);
-+	}
-+
-+	fwnode_handle_put(port);
-+	software_node_put(parent);
-+
-+	return endpoint;
-+}
-+
-+static struct fwnode_handle *
-+software_node_graph_get_remote_endpoint(const struct fwnode_handle *fwnode)
-+{
-+	struct swnode *swnode = to_swnode(fwnode);
-+	const struct software_node_ref_args *ref;
-+	const struct property_entry *prop;
-+
-+	if (!swnode)
-+		return NULL;
-+
-+	prop = property_entry_get(swnode->node->properties, "remote-endpoint");
-+	if (!prop || prop->type != DEV_PROP_REF || prop->is_inline)
-+		return NULL;
-+
-+	ref = prop->pointer;
-+
-+	return software_node_get(software_node_fwnode(ref[0].node));
-+}
-+
-+static struct fwnode_handle *
-+software_node_graph_get_port_parent(struct fwnode_handle *fwnode)
-+{
-+	struct swnode *swnode = to_swnode(fwnode);
-+	struct fwnode_handle *parent;
-+
-+	if (!strcmp(swnode->parent->node->name, "ports"))
-+		parent = &swnode->parent->parent->fwnode;
-+	else
-+		parent = &swnode->parent->fwnode;
-+
-+	return software_node_get(parent);
-+}
-+
-+static int
-+software_node_graph_parse_endpoint(const struct fwnode_handle *fwnode,
-+				   struct fwnode_endpoint *endpoint)
-+{
-+	struct swnode *swnode = to_swnode(fwnode);
-+	int ret;
-+
-+	ret = kstrtou32(swnode->parent->node->name + 4, 10, &endpoint->port);
-+	if (ret)
-+		return ret;
-+
-+	endpoint->id = swnode->id;
-+	endpoint->local_fwnode = fwnode;
-+
-+	return 0;
-+}
-+
- static const struct fwnode_operations software_node_ops = {
- 	.get = software_node_get,
- 	.put = software_node_put,
-+	.device_is_available = software_node_device_is_available,
- 	.property_present = software_node_property_present,
- 	.property_read_int_array = software_node_read_int_array,
- 	.property_read_string_array = software_node_read_string_array,
-@@ -547,7 +668,11 @@ static const struct fwnode_operations software_node_ops = {
- 	.get_parent = software_node_get_parent,
- 	.get_next_child_node = software_node_get_next_child,
- 	.get_named_child_node = software_node_get_named_child_node,
--	.get_reference_args = software_node_get_reference_args
-+	.get_reference_args = software_node_get_reference_args,
-+	.graph_get_next_endpoint = software_node_graph_get_next_endpoint,
-+	.graph_get_remote_endpoint = software_node_graph_get_remote_endpoint,
-+	.graph_get_port_parent = software_node_graph_get_port_parent,
-+	.graph_parse_endpoint = software_node_graph_parse_endpoint,
- };
- 
- /* -------------------------------------------------------------------------- */
--- 
-2.17.1
-
+> diff --git a/Documentation/devicetree/bindings/media/renesas,drif.yaml b/Documentation/devicetree/bindings/media/renesas,drif.yaml
+> index f57fccc159d6..051d515be38d 100644
+> --- a/Documentation/devicetree/bindings/media/renesas,drif.yaml
+> +++ b/Documentation/devicetree/bindings/media/renesas,drif.yaml
+> @@ -53,6 +53,7 @@ properties:
+>        - enum:
+>          - renesas,r8a7795-drif        # R-Car H3
+>          - renesas,r8a7796-drif        # R-Car M3-W
+> +        - renesas,r8a77990-drif       # R-Car E3
+>        - const: renesas,rcar-gen3-drif # Generic R-Car Gen3 compatible device
+>
+>    reg:
+> --
+> 2.25.1
+>
