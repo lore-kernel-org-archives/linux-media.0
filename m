@@ -2,92 +2,111 @@ Return-Path: <SRS0=oGXw=CZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A1F0C43461
-	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 20:59:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F880C433E2
+	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 21:05:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F0F95221E7
-	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 20:59:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 38945206BE
+	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 21:05:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727392AbgIPU7i (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Sep 2020 16:59:38 -0400
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:50110 "EHLO
-        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726331AbgIPQai (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Sep 2020 12:30:38 -0400
-Received: from relay10.mail.gandi.net (unknown [217.70.178.230])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id EAC293B067F;
-        Wed, 16 Sep 2020 15:45:21 +0000 (UTC)
-Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 960FA240010;
-        Wed, 16 Sep 2020 15:39:57 +0000 (UTC)
-From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
-To:     kieran.bingham+renesas@ideasonboard.com,
-        laurent.pinchart+renesas@ideasonboard.com,
-        niklas.soderlund+renesas@ragnatech.se, mchehab@kernel.org
-Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sakari Ailus <sakari.ailus@iki.fi>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Hyun Kwon <hyunk@xilinx.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 1/2] RFC: media: i2c: max9286: Compensate reverse channel
-Date:   Wed, 16 Sep 2020 17:43:37 +0200
-Message-Id: <20200916154338.159747-2-jacopo+renesas@jmondi.org>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200916154338.159747-1-jacopo+renesas@jmondi.org>
-References: <20200916154338.159747-1-jacopo+renesas@jmondi.org>
+        id S1726460AbgIPVFl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Sep 2020 17:05:41 -0400
+Received: from mga12.intel.com ([192.55.52.136]:47961 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726452AbgIPQOy (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 16 Sep 2020 12:14:54 -0400
+IronPort-SDR: YM8xyj2v5IK2PGuPv2Bz6Q1liFC9nQiB3/psqLnl0UXvq1Iwki6oapQYNJ4keIvu/+QmIOtQmA
+ izdEITI/XCow==
+X-IronPort-AV: E=McAfee;i="6000,8403,9746"; a="139010505"
+X-IronPort-AV: E=Sophos;i="5.76,433,1592895600"; 
+   d="scan'208";a="139010505"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2020 09:10:21 -0700
+IronPort-SDR: 3Y50nJV6jyTxRwFVh14qPPfHsdKEpLlg7UV3QSz72B9ow8R8dan/HuwotGEgAeNS1nF1kKi+ys
+ ZWE1O912MAcg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,433,1592895600"; 
+   d="scan'208";a="336075017"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga008.jf.intel.com with ESMTP; 16 Sep 2020 09:10:19 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1kIa0d-00H7Ue-Go; Wed, 16 Sep 2020 19:10:15 +0300
+Date:   Wed, 16 Sep 2020 19:10:15 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     Dan Scally <djrscally@gmail.com>,
+        Sakari Ailus <sakari.ailus@iki.fi>, gregkh@linuxfoundation.org,
+        rafael@kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, heikki.krogerus@linux.intel.com,
+        jorhand@linux.microsoft.com, kitakar@gmail.com
+Subject: Re: [PATCH v2] software_node: Add support for fwnode_graph*() family
+ of functions
+Message-ID: <20200916161015.GX3956970@smile.fi.intel.com>
+References: <20200915232827.3416-1-djrscally@gmail.com>
+ <20200916091707.GL834@valkosipuli.retiisi.org.uk>
+ <7b81d743-736d-62d1-7072-d08759a0d5d7@gmail.com>
+ <4a355889-6e65-70e0-1646-bb832579fd91@ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4a355889-6e65-70e0-1646-bb832579fd91@ideasonboard.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Adjust the MAX9286 reverse channel amplitude to support devices which
-are not pre-programmed, like the RDACM21 camera module.
+On Wed, Sep 16, 2020 at 04:06:25PM +0100, Kieran Bingham wrote:
+> On 16/09/2020 14:22, Dan Scally wrote:
+> > On 16/09/2020 10:17, Sakari Ailus wrote:
+> >> On Wed, Sep 16, 2020 at 12:28:27AM +0100, Daniel Scally wrote:
 
-The de-serializer starts with a 100mV channel amplitude, and increases
-it to 170mV after all remote ends have probed and enabled their
-'high-threshold' noise immunity feature.
+Thank you, Kieran, for detailed explanation, one small correction below though.
 
-Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
----
- drivers/media/i2c/max9286.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+...
 
-diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
-index 6852448284ea..992eb15a59be 100644
---- a/drivers/media/i2c/max9286.c
-+++ b/drivers/media/i2c/max9286.c
-@@ -535,6 +535,11 @@ static int max9286_notify_bound(struct v4l2_async_notifier *notifier,
- 	 * - Disable auto-ack as communication on the control channel are now
- 	 *   stable.
- 	 */
-+	max9286_write(priv, 0x3f, MAX9286_EN_REV_CFG | MAX9286_REV_FLEN(35));
-+	max9286_write(priv, 0x3b, MAX9286_REV_TRF(1) | MAX9286_REV_AMP(70) |
-+		      MAX9286_REV_AMP_X);
-+	usleep_range(2000, 2500);
-+
- 	max9286_check_config_link(priv, priv->source_mask);
+> >> This looks like a bugfix that probably should or could be backported. Could
+> >> you make it a separate patch, with a Fixes: tag?
+> > Yes, sure. That does change how some of the other code would need to
+> > work though if this patch were applied but not the separated one. Sorry;
+> > not sure what's the best way to proceed in that case. Should I just note
+> > that this patch depends on the prior application of the separated one?
+> 
+> I think the assumption is that this individual change to
+> software_node_property_present() should be in a patch on it's own
+> preceeding 'this' one.
+> 
+> Running git-blame on drivers/base/swnode.c identifies this line as
+> previously being added by: 59abd83672f70, so you would add the tag:
 
- 	/*
-@@ -953,8 +958,7 @@ static int max9286_setup(struct max9286_priv *priv)
- 	 *   high threshold enabled by the serializer driver.
- 	 */
- 	max9286_write(priv, 0x3f, MAX9286_EN_REV_CFG | MAX9286_REV_FLEN(35));
--	max9286_write(priv, 0x3b, MAX9286_REV_TRF(1) | MAX9286_REV_AMP(70) |
--		      MAX9286_REV_AMP_X);
-+	max9286_write(priv, 0x3b, MAX9286_REV_TRF(1) | MAX9286_REV_AMP(100));
- 	usleep_range(2000, 2500);
+> Fixes: 59abd83672f7 ("drivers: base: Introducing software nodes to the
+> firmware node framework")
 
- 	/*
---
-2.28.0
+Just to point out that this must be on one line.
+
+> to the 'fixing' patch, and that can be backported accordingly.
+> 
+> When patches are sent in a series, the dependency becomes implicit.
+> You can do this by specifying a range when you do `git format-patch`
+> 
+> If you want to save off the last '2' patches, you can use a range
+> shorthand of '-2':
+> 
+> for example:
+> 
+>   git format-patch -2 -v3 --cover-letter -o patches/swnode
+> 
+> As it's a 'series' we add a cover letter to group them, and that gives a
+> location to add some free-form text as you wish too.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
