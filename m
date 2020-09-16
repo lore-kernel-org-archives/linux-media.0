@@ -2,73 +2,76 @@ Return-Path: <SRS0=oGXw=CZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 604A2C43461
-	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 20:22:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98828C35257
+	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 20:24:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1394E20936
-	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 20:22:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 554DC21D7D
+	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 20:24:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727633AbgIPUWI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Sep 2020 16:22:08 -0400
-Received: from relmlor1.renesas.com ([210.160.252.171]:38446 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727133AbgIPR3d (ORCPT
+        id S1727233AbgIPUYl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Sep 2020 16:24:41 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:30310 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726709AbgIPR1q (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Sep 2020 13:29:33 -0400
-X-IronPort-AV: E=Sophos;i="5.76,432,1592838000"; 
-   d="scan'208";a="57427880"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 16 Sep 2020 19:59:55 +0900
-Received: from devel.example.org?044ree.adwin.renesas.com (unknown [10.226.36.120])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 746884277746;
-        Wed, 16 Sep 2020 19:59:52 +0900 (JST)
-From:   Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Ramesh Shanmugasundaram <rashanmu@gmail.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCH v2 0/3] Document r8a77990 DRIF support
-Date:   Wed, 16 Sep 2020 11:59:46 +0100
-Message-Id: <20200916105949.24858-1-fabrizio.castro.jz@renesas.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Wed, 16 Sep 2020 13:27:46 -0400
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 16 Sep 2020 10:26:21 -0700
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 16 Sep 2020 10:26:19 -0700
+Received: from c-mansur-linux.qualcomm.com ([10.204.90.208])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 16 Sep 2020 22:56:14 +0530
+Received: by c-mansur-linux.qualcomm.com (Postfix, from userid 461723)
+        id 9140521D3D; Wed, 16 Sep 2020 22:56:12 +0530 (IST)
+From:   Mansur Alisha Shaik <mansur@codeaurora.org>
+To:     linux-media@vger.kernel.org, stanimir.varbanov@linaro.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        vgarodia@codeaurora.org,
+        Mansur Alisha Shaik <mansur@codeaurora.org>
+Subject: [PATCH v2 4/4] venus: put dummy vote on video-mem path after last session release
+Date:   Wed, 16 Sep 2020 22:55:57 +0530
+Message-Id: <1600277157-24327-5-git-send-email-mansur@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1600277157-24327-1-git-send-email-mansur@codeaurora.org>
+References: <1600277157-24327-1-git-send-email-mansur@codeaurora.org>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Dear All,
+As per current implementation, we are unvoting "videom-mem" path
+for last video session during vdec_session_release().
+While video playback when we try to suspend device, we see video clock
+warnings since votes are already removed during vdec_session_release().
 
-this series documents DRIF support for the r8a77990
-(a.k.a. R-Car E3).
+corrected this by putting dummy vote on "video-mem" after last video
+session release and unvoting it during suspend.
 
-Thanks,
-Fab
+Signed-off-by: Mansur Alisha Shaik <mansur@codeaurora.org>
+---
+ drivers/media/platform/qcom/venus/pm_helpers.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Fabrizio Castro (3):
-  MAINTAINERS: Add Fabrizio Castro to Renesas DRIF
-  media: dt-bindings: media: renesas,drif: Convert to json-schema
-  media: dt-bindings: media: renesas,drif: Add r8a77990 support
-
- .../bindings/media/renesas,drif.txt           | 177 ------------
- .../bindings/media/renesas,drif.yaml          | 271 ++++++++++++++++++
- MAINTAINERS                                   |   3 +-
- 3 files changed, 273 insertions(+), 178 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/media/renesas,drif.txt
- create mode 100644 Documentation/devicetree/bindings/media/renesas,drif.yaml
-
+diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
+index 57877ea..c0a3524 100644
+--- a/drivers/media/platform/qcom/venus/pm_helpers.c
++++ b/drivers/media/platform/qcom/venus/pm_helpers.c
+@@ -212,6 +212,9 @@ static int load_scale_bw(struct venus_core *core)
+ 	}
+ 	mutex_unlock(&core->lock);
+ 
++	if (!total_avg && !total_peak)
++		total_avg = kbps_to_icc(1000);
++
+ 	dev_dbg(core->dev, VDBGL "total: avg_bw: %u, peak_bw: %u\n",
+ 		total_avg, total_peak);
+ 
 -- 
-2.25.1
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
+of Code Aurora Forum, hosted by The Linux Foundation
 
