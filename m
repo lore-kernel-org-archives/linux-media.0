@@ -2,107 +2,92 @@ Return-Path: <SRS0=oGXw=CZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77060C433E2
-	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 20:48:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B399C433E2
+	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 20:48:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 18A5320770
-	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 20:48:11 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="VOJ9CnEl"
+	by mail.kernel.org (Postfix) with ESMTP id 23F32206BE
+	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 20:48:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726640AbgIPUsI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1728484AbgIPUsI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 16 Sep 2020 16:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726629AbgIPRBO (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
+Received: from mga14.intel.com ([192.55.52.115]:33041 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726669AbgIPRBO (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 16 Sep 2020 13:01:14 -0400
-Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325C7C00458F
-        for <linux-media@vger.kernel.org>; Wed, 16 Sep 2020 07:07:13 -0700 (PDT)
-Received: by mail-qk1-x742.google.com with SMTP id t138so8290311qka.0
-        for <linux-media@vger.kernel.org>; Wed, 16 Sep 2020 07:07:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=La99VFybE95ljQbGxohkbmDHsRKJC2A6ovW4ZDnoPGg=;
-        b=VOJ9CnElE1tIzpvRDzSJxLQXWm/++E5FKZhGlhD2qVUn6aMIi84JEKIgO4BLKBmrP8
-         08+579lu3VaATYWW4i8PGHX9Si56Ffjc2npOiCodIUUWmw/m9Buy2lOkdee413PzBJtT
-         x9mYMzsldhpi7ImCKJBtzzGQ3/8cMBlG1qLA+/dMmxPgByr1NS/GqvGpDW5O/vceKxtJ
-         +XQSEKzGfX7GYU0a3pfCCcvviY717MYm16mP2bE42kUhSaKvxtNvUTUwkG+cuUo+ADJz
-         ftd1VkfL3CHhvcCXW38fSX0htUIapxKqapCQC8eiBeQHlHvZFfCUe4nIqG0OLueSoAQq
-         4aWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=La99VFybE95ljQbGxohkbmDHsRKJC2A6ovW4ZDnoPGg=;
-        b=I4wd4Ni7NXFsSse+ijA+IU2ig+BrMoC4xEmp/2MTlHzd4jjW8XzMM4VCczLRaTHoT8
-         lmE1vQ9lajl6j3SblBG3dwK6ApuSOtJnkohpp/n6swALJAyeX2DF1/nylTFIJaK0RwXW
-         fhygBVKZRJIByKQ/3UmJE2k/1gr1WsoV51iLMWIlSYKIaONj00uaKS6dQho8VpQCG2kg
-         x1wtTf9Cjgy8De9fgnig+PCmlTgymeJuVtZxLtDLlkEKd36By7WvWzcV509mHzHfv80l
-         T3L6NBrmOmQAeDEVXHda4BPkTonw0T3p1fCz4Aijx9BrupI2+0WWDT37e4zRTX51njoZ
-         Qyiw==
-X-Gm-Message-State: AOAM5304ore747levdYBa76VXMrxBUV/dTuT78OSRfCH7IitRWF8yJmn
-        p73OQw/43HKh+D27xQguLk+W4A==
-X-Google-Smtp-Source: ABdhPJyGvoVtODTTRAjWRbOAqjMljnU8wALvrzaWChMgxILat6SxGUHhK0nHHjrTElsiKnfbm48/tg==
-X-Received: by 2002:a37:84f:: with SMTP id 76mr22783375qki.251.1600265232291;
-        Wed, 16 Sep 2020 07:07:12 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-156-34-48-30.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.48.30])
-        by smtp.gmail.com with ESMTPSA id k48sm20623786qtk.44.2020.09.16.07.07.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Sep 2020 07:07:11 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1kIY5W-0002hp-NA; Wed, 16 Sep 2020 11:07:10 -0300
-Date:   Wed, 16 Sep 2020 11:07:10 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     christian.koenig@amd.com, akpm@linux-foundation.org,
-        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: Changing vma->vm_file in dma_buf_mmap()
-Message-ID: <20200916140710.GA8409@ziepe.ca>
-References: <20200914132920.59183-1-christian.koenig@amd.com>
- <40cd26ae-b855-4627-5a13-4dcea5d622f6@gmail.com>
- <20200914140632.GD1221970@ziepe.ca>
- <9302e4e0-0ff0-8b00-ada1-85feefb49e88@gmail.com>
- <20200916095359.GD438822@phenom.ffwll.local>
+IronPort-SDR: jKvmMRsbXpN7sZlnSB6ivgwpj7SiQxo79MSBd+Pk3uxHs71THSfZfIfHGPsgNkfrYN1oX6IvIF
+ RCWsokkpCqxg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9745"; a="158754290"
+X-IronPort-AV: E=Sophos;i="5.76,433,1592895600"; 
+   d="scan'208";a="158754290"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2020 07:32:47 -0700
+IronPort-SDR: NqTeR4wIj1OCxUIlK2a2Me8rV1JTj9i1KRs4rY8sa8onkkOG/Lo1Fpop9ZWNw465PdC1OlCfYo
+ Bo+day95h8xg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,433,1592895600"; 
+   d="scan'208";a="336043207"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga008.jf.intel.com with ESMTP; 16 Sep 2020 07:32:44 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1kIYUD-00H6OZ-0J; Wed, 16 Sep 2020 17:32:41 +0300
+Date:   Wed, 16 Sep 2020 17:32:41 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dan Scally <djrscally@gmail.com>
+Cc:     Sakari Ailus <sakari.ailus@iki.fi>, gregkh@linuxfoundation.org,
+        rafael@kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, heikki.krogerus@linux.intel.com,
+        kieran.bingham@ideasonboard.com, jorhand@linux.microsoft.com,
+        kitakar@gmail.com
+Subject: Re: [PATCH v2] software_node: Add support for fwnode_graph*() family
+ of functions
+Message-ID: <20200916143241.GL3956970@smile.fi.intel.com>
+References: <20200915232827.3416-1-djrscally@gmail.com>
+ <20200916091707.GL834@valkosipuli.retiisi.org.uk>
+ <7b81d743-736d-62d1-7072-d08759a0d5d7@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200916095359.GD438822@phenom.ffwll.local>
+In-Reply-To: <7b81d743-736d-62d1-7072-d08759a0d5d7@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Sep 16, 2020 at 11:53:59AM +0200, Daniel Vetter wrote:
+On Wed, Sep 16, 2020 at 02:22:10PM +0100, Dan Scally wrote:
+> On 16/09/2020 10:17, Sakari Ailus wrote:
+> > On Wed, Sep 16, 2020 at 12:28:27AM +0100, Daniel Scally wrote:
 
-> But within the driver, we generally need thousands of these, and that
-> tends to bring fd exhaustion problems with it. That's why all the private
-> buffer objects which aren't shared with other process or other drivers are
-> handles only valid for a specific fd instance of the drm chardev (each
-> open gets their own namespace), and only for ioctls done on that chardev.
-> And for mmap we assign fake (but unique across all open fd on it) offsets
-> within the overall chardev. Hence all the pgoff mangling and re-mangling.
+...
 
-Are they still unique struct files? Just without a fdno?
- 
-> Hence why we'd like to be able to forward aliasing mappings and adjust the
-> file and pgoff, while hopefully everything keeps working. I thought this
-> would work, but Christian noticed it doesn't really.
+> >> @@ -450,7 +455,7 @@ software_node_get_next_child(const struct fwnode_handle *fwnode,
+> >>  		c = list_next_entry(c, entry);
+> >>  	else
+> >>  		c = list_first_entry(&p->children, struct swnode, entry);
+> >> -	return &c->fwnode;
+> >> +	return software_node_get(&c->fwnode);
+> > This looks like a bugfix that probably should or could be backported. Could
+> > you make it a separate patch, with a Fixes: tag?
+> Yes, sure. That does change how some of the other code would need to
+> work though if this patch were applied but not the separated one. Sorry;
+> not sure what's the best way to proceed in that case. Should I just note
+> that this patch depends on the prior application of the separated one?
 
-It seems reasonable to me that the dma buf should be the owner of the
-VMA, otherwise like you say, there is a big mess attaching the custom
-vma ops and what not to the proper dma buf.
+It's easy to achieve. You may create a series of two, where the second one
+dependant on the first one and first one has a Fixes tag and subject to
+backport. I guess that's what Sakari meant.
 
-I don't see anything obviously against this in mmap_region() - why did
-Chritian notice it doesn't really work?
+> >>  }
 
-Jason
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
