@@ -2,115 +2,80 @@ Return-Path: <SRS0=oGXw=CZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D1CFC2BB84
-	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 17:55:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9898C433E2
+	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 18:20:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1C63E2074B
-	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 17:55:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7583A21655
+	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 18:20:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727376AbgIPRzN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Sep 2020 13:55:13 -0400
-Received: from mx2.suse.de ([195.135.220.15]:48854 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727648AbgIPRyY (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Sep 2020 13:54:24 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id B766FAD68;
-        Wed, 16 Sep 2020 13:47:47 +0000 (UTC)
-Message-ID: <1600264046.2424.23.camel@suse.de>
-Subject: Re: [PATCH] [Patch v2] usbtv: Fix refcounting mixup
-From:   Oliver Neukum <oneukum@suse.de>
-To:     Hans Verkuil <hverkuil@xs4all.nl>, ben.hutchings@codethink.co.uk,
-        gregkh@linuxfoundation.org, mchehab@s-opensource.com,
-        linux-media@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Date:   Wed, 16 Sep 2020 15:47:26 +0200
-In-Reply-To: <4550f8e2-38a9-b1f4-0277-25e79fed2e14@xs4all.nl>
-References: <20180515130744.19342-1-oneukum@suse.com>
-         <85dd974b-c251-47a5-600d-77b009e2dfcd@xs4all.nl>
-         <1526399190.31771.2.camel@suse.com>
-         <1ee4b00d-9a55-92cf-e708-1e0c60ca4bfd@xs4all.nl>
-         <1526462623.25281.5.camel@suse.com>
-         <4550f8e2-38a9-b1f4-0277-25e79fed2e14@xs4all.nl>
-Content-Type: multipart/mixed; boundary="=-2IVdwKfkYLtDpcEbGw6p"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
+        id S1727897AbgIPSUN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Sep 2020 14:20:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40760 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727907AbgIPSUG (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 16 Sep 2020 14:20:06 -0400
+Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7481EC061756;
+        Wed, 16 Sep 2020 11:20:00 -0700 (PDT)
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id CDB6DC63F3; Wed, 16 Sep 2020 19:19:54 +0100 (BST)
+Date:   Wed, 16 Sep 2020 19:19:54 +0100
+From:   Sean Young <sean@mess.org>
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>
+Cc:     "mchehab@kernel.org" <mchehab@kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>, Andy Duan <fugang.duan@nxp.com>
+Subject: Re: [PATCH] media: rc: gpio-ir-recv: add QoS support for cpuidle
+ system
+Message-ID: <20200916181954.GA27005@gofer.mess.org>
+References: <20200915150202.24165-1-qiangqing.zhang@nxp.com>
+ <20200915093342.GA24139@gofer.mess.org>
+ <DB8PR04MB67951DE19DD876721093AED4E6200@DB8PR04MB6795.eurprd04.prod.outlook.com>
+ <20200915201947.GA4019@gofer.mess.org>
+ <DB8PR04MB679586E9818080C0ED804848E6210@DB8PR04MB6795.eurprd04.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DB8PR04MB679586E9818080C0ED804848E6210@DB8PR04MB6795.eurprd04.prod.outlook.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi Joakim,
 
---=-2IVdwKfkYLtDpcEbGw6p
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-
-Am Mittwoch, den 16.05.2018, 12:27 +0200 schrieb Hans Verkuil:
-> On 05/16/18 11:23, Oliver Neukum wrote:
-> > Am Dienstag, den 15.05.2018, 18:01 +0200 schrieb Hans Verkuil:
-> > > On 05/15/2018 05:46 PM, Oliver Neukum wrote:
-> > > > Am Dienstag, den 15.05.2018, 16:28 +0200 schrieb Hans Verkuil:
-> > > > > On 05/15/18 15:07, Oliver Neukum wrote:
-
-> > Eh, but we cannot create a V4L device before the first device
-> > is connected and we must certainly create multiple V4L devices if
-> > multiple physical devices are connected.
+On Wed, Sep 16, 2020 at 10:22:11AM +0000, Joakim Zhang wrote:
 > 
-> v4l2_device_register is a terrible name. It does not create devices
-> or register with anything, it just initializes a root data structure. I have
-> proposed renaming this to v4l2_root_init() in the past, but people didn't
-> want a big rename action.
+> Hi Sean,
 > 
-> BTW, with 'global data structure' I meant a data structure in struct usbtv.
-> All I meant to say is that v4l2_device_register should be called in probe(),
-> not in usbtv_video_init().
+> Thanks for your hint, I will send a V2 soon according to your suggestions.
+> 
+> We also have a concern, since you are a IR expert, may you can give us answers. With this patch, the first frame once press could not been decoded.
+> AFAIK, IR protocols have not specify how may frames transmitting once press, is there ang criterion to decide this?
+> 
+> Is it possible that single frame transmitting once pressing? Per my understanding, it will transmit more than one frame.
 
-Hi,
+So remotes send IR signals while a button is being pressed down. For the
+remotes I've seen, when pressing a button a short amount of time will repeat
+the IR message at least three times. This is a few times when I've tried
+this, but by no means exhaustive of all remotes or protocols.
 
-Sorry for thread necromancy I am cleaning up electronically.
-This patch has fallen through the cracks. As far as I can see the issue
-is still open. I screwed this up. So do you want me to do a major
-redesign? If not, what is to be done?
+I think the question you are trying to answer is, if we miss the first
+message, will we at least have another chance if the message is repeated?
 
-	Regards
-		Oliver
+So I think the message will be repeated, but the repeat message is not
+enough for the nec protocol. The nec repeat is a shorter message which
+does not carry any information apart from "last key still pressed":
 
+https://www.sbprojects.net/knowledge/ir/nec.php
 
+Thanks,
 
---=-2IVdwKfkYLtDpcEbGw6p
-Content-Disposition: attachment; filename="0001-Patch-v2-usbtv-Fix-refcounting-mixup.patch"
-Content-Type: text/x-patch; name="0001-Patch-v2-usbtv-Fix-refcounting-mixup.patch";
-	charset="UTF-8"
-Content-Transfer-Encoding: base64
-
-RnJvbSBjNjA0MDYxODY1MWQ2NzBiODk1MTk4MDk2ZTNmYTQ0MmI2Y2Y4YTI2IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
-OiBUdWUsIDE1IE1heSAyMDE4IDEyOjE2OjI2ICswMjAwClN1YmplY3Q6IFtQQVRDSF0gW1BhdGNo
-IHYyXSB1c2J0djogRml4IHJlZmNvdW50aW5nIG1peHVwCgpUaGUgcHJlbWF0dXJlIGZyZWUgaW4g
-dGhlIGVycm9yIHBhdGggaXMgYmxvY2tlZCBieSBWNEwKcmVmY291bnRpbmcsIG5vdCBVU0IgcmVm
-Y291bnRpbmcuIFRoYW5rcyB0bwpCZW4gSHV0Y2hpbmdzIGZvciByZXZpZXcuCgpbdjJdIGNvcnJl
-Y3RlZCBhdHRyaWJ1dGlvbnMKClNpZ25lZC1vZmYtYnk6IE9saXZlciBOZXVrdW0gPG9uZXVrdW1A
-c3VzZS5jb20+CkZpeGVzOiA1MGU3MDQ0NTM1NTMgKCJtZWRpYTogdXNidHY6IHByZXZlbnQgZG91
-YmxlIGZyZWUgaW4gZXJyb3IgY2FzZSIpCkNDOiBzdGFibGVAdmdlci5rZXJuZWwub3JnClJlcG9y
-dGVkLWJ5OiBCZW4gSHV0Y2hpbmdzIDxiZW4uaHV0Y2hpbmdzQGNvZGV0aGluay5jby51az4KLS0t
-CiBkcml2ZXJzL21lZGlhL3VzYi91c2J0di91c2J0di1jb3JlLmMgfCAzICsrLQogMSBmaWxlIGNo
-YW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL2RyaXZl
-cnMvbWVkaWEvdXNiL3VzYnR2L3VzYnR2LWNvcmUuYyBiL2RyaXZlcnMvbWVkaWEvdXNiL3VzYnR2
-L3VzYnR2LWNvcmUuYwppbmRleCBlZTljNjU2ZDEyMWYuLjIzMDhjMGI0ZjVlNyAxMDA2NDQKLS0t
-IGEvZHJpdmVycy9tZWRpYS91c2IvdXNidHYvdXNidHYtY29yZS5jCisrKyBiL2RyaXZlcnMvbWVk
-aWEvdXNiL3VzYnR2L3VzYnR2LWNvcmUuYwpAQCAtMTEzLDcgKzExMyw4IEBAIHN0YXRpYyBpbnQg
-dXNidHZfcHJvYmUoc3RydWN0IHVzYl9pbnRlcmZhY2UgKmludGYsCiAKIHVzYnR2X2F1ZGlvX2Zh
-aWw6CiAJLyogd2UgbXVzdCBub3QgZnJlZSBhdCB0aGlzIHBvaW50ICovCi0JdXNiX2dldF9kZXYo
-dXNidHYtPnVkZXYpOworCXY0bDJfZGV2aWNlX2dldCgmdXNidHYtPnY0bDJfZGV2KTsKKwkvKiB0
-aGlzIHdpbGwgdW5kbyB0aGUgdjRsMl9kZXZpY2VfZ2V0KCkgKi8KIAl1c2J0dl92aWRlb19mcmVl
-KHVzYnR2KTsKIAogdXNidHZfdmlkZW9fZmFpbDoKLS0gCjIuMTYuNAoK
-
-
---=-2IVdwKfkYLtDpcEbGw6p--
-
+Sean
