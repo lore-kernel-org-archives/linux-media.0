@@ -2,175 +2,123 @@ Return-Path: <SRS0=oGXw=CZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 902C7C43461
-	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 08:26:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0484C43461
+	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 08:50:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 66CA321D1B
-	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 08:26:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8C26C20872
+	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 08:50:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726579AbgIPI0u (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Sep 2020 04:26:50 -0400
-Received: from relay9-d.mail.gandi.net ([217.70.183.199]:34425 "EHLO
-        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726161AbgIPI0r (ORCPT
+        id S1726683AbgIPIuB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Sep 2020 04:50:01 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:46257 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726675AbgIPIt4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Sep 2020 04:26:47 -0400
-X-Originating-IP: 93.34.118.233
-Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 38CC5FF806;
-        Wed, 16 Sep 2020 08:26:40 +0000 (UTC)
-Date:   Wed, 16 Sep 2020 10:30:32 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Subject: Re: [PATCH v5 1/3] media: i2c: ov772x: Parse endpoint properties
-Message-ID: <20200916083032.yif4veaf3n44hkpf@uno.localdomain>
-References: <20200915174235.1229-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20200915174235.1229-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20200916074737.phc6atpsahxowfjt@uno.localdomain>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200916074737.phc6atpsahxowfjt@uno.localdomain>
+        Wed, 16 Sep 2020 04:49:56 -0400
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 16 Sep 2020 01:49:56 -0700
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 16 Sep 2020 01:49:53 -0700
+Received: from c-mansur-linux.qualcomm.com ([10.204.90.208])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 16 Sep 2020 14:19:42 +0530
+Received: by c-mansur-linux.qualcomm.com (Postfix, from userid 461723)
+        id 4651421D3B; Wed, 16 Sep 2020 14:19:41 +0530 (IST)
+From:   Mansur Alisha Shaik <mansur@codeaurora.org>
+To:     linux-media@vger.kernel.org, stanimir.varbanov@linaro.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        vgarodia@codeaurora.org,
+        Mansur Alisha Shaik <mansur@codeaurora.org>
+Subject: [PATCH v4 2/3] venus: handle use after free for iommu_map/iommu_unmap
+Date:   Wed, 16 Sep 2020 14:19:33 +0530
+Message-Id: <1600246174-31802-3-git-send-email-mansur@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1600246174-31802-1-git-send-email-mansur@codeaurora.org>
+References: <1600246174-31802-1-git-send-email-mansur@codeaurora.org>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Prabhakar,
-  sorry, two more tiny nits
+In concurrency usecase and reboot scenario we are seeing muliple
+crashes related to iommu_map/iommu_unamp of core->fw.iommu_domain.
 
-On Wed, Sep 16, 2020 at 09:47:37AM +0200, Jacopo Mondi wrote:
-> Hi Prabhakar,
->
-> On Tue, Sep 15, 2020 at 06:42:33PM +0100, Lad Prabhakar wrote:
-> > Parse endpoint properties using v4l2_fwnode_endpoint_alloc_parse()
-> > to determine bus-type and store it locally in priv data.
-> >
-> > v4l2_fwnode_endpoint_alloc_parse() with bus_type set to
-> > V4L2_MBUS_PARALLEL falls back to V4L2_MBUS_PARALLEL thus handling
-> > backward compatibility with existing DT where bus-type isn't specified.
->
->
-> I don't think this is necessary here. This patch does not need to
-> handle any retrocompatibility, as only PARALLEL is supported.
->
-> The 'right' way to put it to me would be
-> "Parse endpoint properties using v4l2_fwnode_endpoint_alloc_parse()
-> to determine the bus type and store it in the driver structure.
->
-> Set bus_type to V4L2_MBUS_PARALLEL as it's the only supported one"
->
-> See comment in the next patch for retrocompatibility
->
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> >  drivers/media/i2c/ov772x.c | 25 +++++++++++++++++++++++++
-> >  1 file changed, 25 insertions(+)
-> >
-> > diff --git a/drivers/media/i2c/ov772x.c b/drivers/media/i2c/ov772x.c
-> > index 2cc6a678069a..4ab4b3c883d0 100644
-> > --- a/drivers/media/i2c/ov772x.c
-> > +++ b/drivers/media/i2c/ov772x.c
-> > @@ -31,6 +31,7 @@
-> >  #include <media/v4l2-ctrls.h>
-> >  #include <media/v4l2-device.h>
-> >  #include <media/v4l2-event.h>
-> > +#include <media/v4l2-fwnode.h>
-> >  #include <media/v4l2-image-sizes.h>
-> >  #include <media/v4l2-subdev.h>
-> >
-> > @@ -434,6 +435,7 @@ struct ov772x_priv {
-> >  #ifdef CONFIG_MEDIA_CONTROLLER
-> >  	struct media_pad pad;
-> >  #endif
-> > +	enum v4l2_mbus_type		  bus_type;
-> >  };
-> >
-> >  /*
-> > @@ -1354,6 +1356,8 @@ static const struct v4l2_subdev_ops ov772x_subdev_ops = {
-> >
-> >  static int ov772x_probe(struct i2c_client *client)
-> >  {
-> > +	struct v4l2_fwnode_endpoint bus_cfg;
-> > +	struct fwnode_handle	*ep;
-> >  	struct ov772x_priv	*priv;
-> >  	int			ret;
-> >  	static const struct regmap_config ov772x_regmap_config = {
-> > @@ -1415,6 +1419,27 @@ static int ov772x_probe(struct i2c_client *client)
-> >  		goto error_clk_put;
-> >  	}
-> >
-> > +	ep = fwnode_graph_get_next_endpoint(dev_fwnode(&client->dev),
-> > +					    NULL);
-> > +	if (!ep) {
-> > +		dev_err(&client->dev, "endpoint node not found\n");
+In one case we are seeing "Unable to handle kernel NULL pointer
+dereference at virtual address 0000000000000008" crash, this is
+because of core->fw.iommu_domain in venus_firmware_deinit() and
+trying to map in venus_boot() during venus_sys_error_handler()
 
-Nit: other error messages in the driver start with a capital letter,
+Call trace:
+ __iommu_map+0x4c/0x348
+ iommu_map+0x5c/0x70
+ venus_boot+0x184/0x230 [venus_core]
+ venus_sys_error_handler+0xa0/0x14c [venus_core]
+ process_one_work+0x210/0x3d0
+ worker_thread+0x248/0x3f4
+ kthread+0x11c/0x12c
+ ret_from_fork+0x10/0x18
 
-> > +		ret = -EINVAL;
-> > +		goto error_clk_put;
-> > +	}
-> > +
-> > +	/* For backward compatibility with the existing DT where
-> > +	 * bus-type isn't specified v4l2_fwnode_endpoint_alloc_parse()
-> > +	 * with bus_type set to V4L2_MBUS_PARALLEL falls back to
-> > +	 * V4L2_MBUS_PARALLEL
-> > +	 */
->
-> You can drop this comment block
->
+In second case we are seeing "Unable to handle kernel paging request
+at virtual address 006b6b6b6b6b6b9b" crash, this is because of
+unmappin iommu domain which is already unmapped.
 
-Or better move it to the next patch. Two nits in the meantime:
+Call trace:
+ venus_remove+0xf8/0x108 [venus_core]
+ venus_core_shutdown+0x1c/0x34 [venus_core]
+ platform_drv_shutdown+0x28/0x34
+ device_shutdown+0x154/0x1fc
+ kernel_restart_prepare+0x40/0x4c
+ kernel_restart+0x1c/0x64
+ __arm64_sys_reboot+0x190/0x238
+ el0_svc_common+0xa4/0x154
+ el0_svc_compat_handler+0x2c/0x38
+ el0_svc_compat+0x8/0x10
 
-Use
-        /*
-         * This
+Signed-off-by: Mansur Alisha Shaik <mansur@codeaurora.org>
+---
+ drivers/media/platform/qcom/venus/firmware.c | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
 
-in place of
+diff --git a/drivers/media/platform/qcom/venus/firmware.c b/drivers/media/platform/qcom/venus/firmware.c
+index 1db64a8..d03e2dd 100644
+--- a/drivers/media/platform/qcom/venus/firmware.c
++++ b/drivers/media/platform/qcom/venus/firmware.c
+@@ -171,9 +171,14 @@ static int venus_shutdown_no_tz(struct venus_core *core)
+ 
+ 	iommu = core->fw.iommu_domain;
+ 
+-	unmapped = iommu_unmap(iommu, VENUS_FW_START_ADDR, mapped);
+-	if (unmapped != mapped)
+-		dev_err(dev, "failed to unmap firmware\n");
++	if (core->fw.mapped_mem_size && iommu) {
++		unmapped = iommu_unmap(iommu, VENUS_FW_START_ADDR, mapped);
++
++		if (unmapped != mapped)
++			dev_err(dev, "failed to unmap firmware\n");
++		else
++			core->fw.mapped_mem_size = 0;
++	}
+ 
+ 	return 0;
+ }
+@@ -305,7 +310,11 @@ void venus_firmware_deinit(struct venus_core *core)
+ 	iommu = core->fw.iommu_domain;
+ 
+ 	iommu_detach_device(iommu, core->fw.dev);
+-	iommu_domain_free(iommu);
++
++	if (core->fw.iommu_domain) {
++		iommu_domain_free(iommu);
++		core->fw.iommu_domain = NULL;
++	}
+ 
+ 	platform_device_unregister(to_platform_device(core->fw.dev));
+ }
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
+of Code Aurora Forum, hosted by The Linux Foundation
 
-        /* This
-
-And I would write it as something like
-
-        /*
-         * For backward compatibility with older DTS where the
-         * bus-type property was not mandatory, assume
-         * V4L2_MBUS_PARALLEL as it was the only supported bus at the
-         * time. v4l2_fwnode_endpoint_alloc_parse() will not fail if
-         * 'bus-type' is not specified.
-         */
-
-Thanks
-   j
-
-> > +	bus_cfg.bus_type = V4L2_MBUS_PARALLEL;
-> > +	ret = v4l2_fwnode_endpoint_alloc_parse(ep, &bus_cfg);
-> > +	priv->bus_type = bus_cfg.bus_type;
->
-> Set this after if (ret)
->
-> > +	v4l2_fwnode_endpoint_free(&bus_cfg);
-> > +	fwnode_handle_put(ep);
-> > +	if (ret)
-> > +		goto error_clk_put;
-> > +
-> >  	ret = ov772x_video_probe(priv);
-> >  	if (ret < 0)
-> >  		goto error_gpio_put;
-> > --
-> > 2.17.1
-> >
