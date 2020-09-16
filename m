@@ -2,109 +2,94 @@ Return-Path: <SRS0=oGXw=CZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 376A4C2D0E3
-	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 00:56:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D680CC43461
+	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 02:29:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 01C9620715
-	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 00:56:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8F0E12087D
+	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 02:29:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726106AbgIOLaW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 15 Sep 2020 07:30:22 -0400
-Received: from relay10.mail.gandi.net ([217.70.178.230]:33903 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726202AbgIOLWt (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 15 Sep 2020 07:22:49 -0400
-Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 84C3524000E;
-        Tue, 15 Sep 2020 11:20:52 +0000 (UTC)
-Date:   Tue, 15 Sep 2020 13:24:43 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Niklas =?utf-8?Q?S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Cc:     linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH 1/2] rcar-csi2: Switch to using fwnode instead of OF
-Message-ID: <20200915112443.kdvrvhxb75vnel3c@uno.localdomain>
-References: <20200914215011.339387-1-niklas.soderlund+renesas@ragnatech.se>
- <20200914215011.339387-2-niklas.soderlund+renesas@ragnatech.se>
+        id S1726510AbgIPC27 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 15 Sep 2020 22:28:59 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:58318 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726399AbgIPC2A (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 15 Sep 2020 22:28:00 -0400
+Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 92663282DCA4FDA37810;
+        Wed, 16 Sep 2020 10:27:57 +0800 (CST)
+Received: from huawei.com (10.175.113.32) by DGGEMS408-HUB.china.huawei.com
+ (10.3.19.208) with Microsoft SMTP Server id 14.3.487.0; Wed, 16 Sep 2020
+ 10:27:48 +0800
+From:   Liu Shixin <liushixin2@huawei.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Liu Shixin <liushixin2@huawei.com>
+Subject: [PATCH -next] media: saa7164: convert to use DEFINE_SEQ_ATTRIBUTE macro
+Date:   Wed, 16 Sep 2020 10:50:24 +0800
+Message-ID: <20200916025024.3992731-1-liushixin2@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200914215011.339387-2-niklas.soderlund+renesas@ragnatech.se>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.32]
+X-CFilter-Loop: Reflected
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Niklas,
+Use DEFINE_SEQ_ATTRIBUTE macro to simplify the code.
 
-On Mon, Sep 14, 2020 at 11:50:10PM +0200, Niklas Söderlund wrote:
-> Use the fwnode_graph_get_endpoint_by_id() interface instead of
-> of_graph_get_endpoint_by_regs() to fetch the fwnode. This saves
-> translating between a device_node and fwnode_handle.
->
-> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+---
+ drivers/media/pci/saa7164/saa7164-core.c | 17 +++--------------
+ 1 file changed, 3 insertions(+), 14 deletions(-)
 
-Looks good
-Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+diff --git a/drivers/media/pci/saa7164/saa7164-core.c b/drivers/media/pci/saa7164/saa7164-core.c
+index 6c08b77bfd47..f3a4e575a782 100644
+--- a/drivers/media/pci/saa7164/saa7164-core.c
++++ b/drivers/media/pci/saa7164/saa7164-core.c
+@@ -1139,32 +1139,21 @@ static int saa7164_seq_show(struct seq_file *m, void *v)
+ 	return 0;
+ }
+ 
+-static const struct seq_operations saa7164_seq_ops = {
++static const struct seq_operations saa7164_sops = {
+ 	.start = saa7164_seq_start,
+ 	.next = saa7164_seq_next,
+ 	.stop = saa7164_seq_stop,
+ 	.show = saa7164_seq_show,
+ };
+ 
+-static int saa7164_open(struct inode *inode, struct file *file)
+-{
+-	return seq_open(file, &saa7164_seq_ops);
+-}
+-
+-static const struct file_operations saa7164_operations = {
+-	.owner          = THIS_MODULE,
+-	.open           = saa7164_open,
+-	.read           = seq_read,
+-	.llseek         = seq_lseek,
+-	.release        = seq_release,
+-};
++DEFINE_SEQ_ATTRIBUTE(saa7164);
+ 
+ static struct dentry *saa7614_dentry;
+ 
+ static void __init saa7164_debugfs_create(void)
+ {
+ 	saa7614_dentry = debugfs_create_file("saa7164", 0444, NULL, NULL,
+-					     &saa7164_operations);
++					     &saa7164_fops);
+ }
+ 
+ static void __exit saa7164_debugfs_remove(void)
+-- 
+2.25.1
 
-Thanks
-  j
-
-> ---
->  drivers/media/platform/rcar-vin/rcar-csi2.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
-> index 511cd4984777ad99..23e89ef2429d310a 100644
-> --- a/drivers/media/platform/rcar-vin/rcar-csi2.c
-> +++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
-> @@ -873,31 +873,31 @@ static int rcsi2_parse_dt(struct rcar_csi2 *priv)
->  {
->  	struct v4l2_async_subdev *asd;
->  	struct fwnode_handle *fwnode;
-> -	struct device_node *ep;
-> +	struct fwnode_handle *ep;
->  	struct v4l2_fwnode_endpoint v4l2_ep = { .bus_type = 0 };
->  	int ret;
->
-> -	ep = of_graph_get_endpoint_by_regs(priv->dev->of_node, 0, 0);
-> +	ep = fwnode_graph_get_endpoint_by_id(dev_fwnode(priv->dev), 0, 0, 0);
->  	if (!ep) {
->  		dev_err(priv->dev, "Not connected to subdevice\n");
->  		return -EINVAL;
->  	}
->
-> -	ret = v4l2_fwnode_endpoint_parse(of_fwnode_handle(ep), &v4l2_ep);
-> +	ret = v4l2_fwnode_endpoint_parse(ep, &v4l2_ep);
->  	if (ret) {
->  		dev_err(priv->dev, "Could not parse v4l2 endpoint\n");
-> -		of_node_put(ep);
-> +		fwnode_handle_put(ep);
->  		return -EINVAL;
->  	}
->
->  	ret = rcsi2_parse_v4l2(priv, &v4l2_ep);
->  	if (ret) {
-> -		of_node_put(ep);
-> +		fwnode_handle_put(ep);
->  		return ret;
->  	}
->
-> -	fwnode = fwnode_graph_get_remote_endpoint(of_fwnode_handle(ep));
-> -	of_node_put(ep);
-> +	fwnode = fwnode_graph_get_remote_endpoint(ep);
-> +	fwnode_handle_put(ep);
->
->  	dev_dbg(priv->dev, "Found '%pOF'\n", to_of_node(fwnode));
->
-> --
-> 2.28.0
->
