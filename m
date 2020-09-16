@@ -2,92 +2,75 @@ Return-Path: <SRS0=oGXw=CZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B399C433E2
-	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 20:48:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E8D5C2BB84
+	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 20:53:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 23F32206BE
-	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 20:48:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E888921D24
+	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 20:53:54 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=suse.com header.i=@suse.com header.b="ZVM03/lQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728484AbgIPUsI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Sep 2020 16:48:08 -0400
-Received: from mga14.intel.com ([192.55.52.115]:33041 "EHLO mga14.intel.com"
+        id S1726964AbgIPUxo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Sep 2020 16:53:44 -0400
+Received: from mx2.suse.de ([195.135.220.15]:44520 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726669AbgIPRBO (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Sep 2020 13:01:14 -0400
-IronPort-SDR: jKvmMRsbXpN7sZlnSB6ivgwpj7SiQxo79MSBd+Pk3uxHs71THSfZfIfHGPsgNkfrYN1oX6IvIF
- RCWsokkpCqxg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9745"; a="158754290"
-X-IronPort-AV: E=Sophos;i="5.76,433,1592895600"; 
-   d="scan'208";a="158754290"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2020 07:32:47 -0700
-IronPort-SDR: NqTeR4wIj1OCxUIlK2a2Me8rV1JTj9i1KRs4rY8sa8onkkOG/Lo1Fpop9ZWNw465PdC1OlCfYo
- Bo+day95h8xg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,433,1592895600"; 
-   d="scan'208";a="336043207"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga008.jf.intel.com with ESMTP; 16 Sep 2020 07:32:44 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kIYUD-00H6OZ-0J; Wed, 16 Sep 2020 17:32:41 +0300
-Date:   Wed, 16 Sep 2020 17:32:41 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Dan Scally <djrscally@gmail.com>
-Cc:     Sakari Ailus <sakari.ailus@iki.fi>, gregkh@linuxfoundation.org,
-        rafael@kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, heikki.krogerus@linux.intel.com,
-        kieran.bingham@ideasonboard.com, jorhand@linux.microsoft.com,
-        kitakar@gmail.com
-Subject: Re: [PATCH v2] software_node: Add support for fwnode_graph*() family
- of functions
-Message-ID: <20200916143241.GL3956970@smile.fi.intel.com>
-References: <20200915232827.3416-1-djrscally@gmail.com>
- <20200916091707.GL834@valkosipuli.retiisi.org.uk>
- <7b81d743-736d-62d1-7072-d08759a0d5d7@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7b81d743-736d-62d1-7072-d08759a0d5d7@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        id S1726601AbgIPQyH (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 16 Sep 2020 12:54:07 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=cantorsusede;
+        t=1600264263;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=URjknDmbSImuyku/1xafsgyr5xseibwZWMHvYI3vi64=;
+        b=ZVM03/lQvZ9FvT4heQQDEUqALXOaH014/tASz1f6pVIPFqp7gj+2UPfhm0Yk0JA4qC/a1l
+        AicmEIKVjGnThDcUPYpcYNzZHE144rUlf6+V9RY6U+ioktv07c9lDUhygmuJ1AQB5Q9cjD
+        8glG0wBPJtBnTb86PkNMuMTNuU8Hw6v/8XDZhLUP2FDHawGEBxuknGAEseAbz6DzC6lSKW
+        Khey8ZZJ0z0zPXxT2k+GTv3qUlji/KLJbZ9rvq2azjxggUDRlh90cRabRKrVpHfVBJnBCU
+        6O0tOFy0RxIWmyxUzvzndQQ8tYZOYYnPg31Ous8MxOUp718V2u+enzk7DSuAGQ==
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 74511AC83;
+        Wed, 16 Sep 2020 13:51:18 +0000 (UTC)
+From:   Oliver Neukum <oneukum@suse.com>
+To:     sean@mess.org, mchehab@kernel.org, linux-media@vger.kernel.org
+Cc:     Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH] ati_remote: sanity check for both endpoints
+Date:   Wed, 16 Sep 2020 15:50:51 +0200
+Message-Id: <20200916135051.15398-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Sep 16, 2020 at 02:22:10PM +0100, Dan Scally wrote:
-> On 16/09/2020 10:17, Sakari Ailus wrote:
-> > On Wed, Sep 16, 2020 at 12:28:27AM +0100, Daniel Scally wrote:
+If you do sanity checks, you should do them for both endpoints.
+Hence introduce checking for endpoint type for the output
+endpoint, too.
 
-...
+Reported-by: syzbot+998261c2ae5932458f6c@syzkaller.appspotmail.com
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/media/rc/ati_remote.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-> >> @@ -450,7 +455,7 @@ software_node_get_next_child(const struct fwnode_handle *fwnode,
-> >>  		c = list_next_entry(c, entry);
-> >>  	else
-> >>  		c = list_first_entry(&p->children, struct swnode, entry);
-> >> -	return &c->fwnode;
-> >> +	return software_node_get(&c->fwnode);
-> > This looks like a bugfix that probably should or could be backported. Could
-> > you make it a separate patch, with a Fixes: tag?
-> Yes, sure. That does change how some of the other code would need to
-> work though if this patch were applied but not the separated one. Sorry;
-> not sure what's the best way to proceed in that case. Should I just note
-> that this patch depends on the prior application of the separated one?
-
-It's easy to achieve. You may create a series of two, where the second one
-dependant on the first one and first one has a Fixes tag and subject to
-backport. I guess that's what Sakari meant.
-
-> >>  }
-
+diff --git a/drivers/media/rc/ati_remote.c b/drivers/media/rc/ati_remote.c
+index 9cdef17b4793..c12dda73cdd5 100644
+--- a/drivers/media/rc/ati_remote.c
++++ b/drivers/media/rc/ati_remote.c
+@@ -835,6 +835,10 @@ static int ati_remote_probe(struct usb_interface *interface,
+ 		err("%s: endpoint_in message size==0? \n", __func__);
+ 		return -ENODEV;
+ 	}
++	if (!usb_endpoint_is_int_out(endpoint_out)) {
++		err("%s: Unexpected endpoint_out\n", __func__);
++		return -ENODEV;
++	}
+ 
+ 	ati_remote = kzalloc(sizeof (struct ati_remote), GFP_KERNEL);
+ 	rc_dev = rc_allocate_device(RC_DRIVER_SCANCODE);
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.16.4
 
