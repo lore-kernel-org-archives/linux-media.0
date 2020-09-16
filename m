@@ -2,118 +2,113 @@ Return-Path: <SRS0=oGXw=CZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF76CC43461
-	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 19:03:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4699CC433E2
+	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 19:05:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4D756206DB
-	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 19:03:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DBFA7206B2
+	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 19:05:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K+ltZlIe"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q6gW5WFu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728351AbgIPTDm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Sep 2020 15:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35712 "EHLO
+        id S1727419AbgIPTFZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Sep 2020 15:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727472AbgIPRsR (ORCPT
+        with ESMTP id S1727437AbgIPTFQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Sep 2020 13:48:17 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B41EC0086B9;
-        Wed, 16 Sep 2020 06:43:48 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id o16so8116595qkj.10;
-        Wed, 16 Sep 2020 06:43:48 -0700 (PDT)
+        Wed, 16 Sep 2020 15:05:16 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB4FC061756;
+        Wed, 16 Sep 2020 12:05:16 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id d4so3771352wmd.5;
+        Wed, 16 Sep 2020 12:05:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:message-id:in-reply-to:references:subject
-         :mime-version:content-transfer-encoding:content-disposition;
-        bh=i+kt8NbkJcxlxgcLxVS6CeOWPHcc3xF+IDhB44RR268=;
-        b=K+ltZlIe+PijHm11DJWUqDWOGK2CdfuB9iqjxvoegeouGbkxeLuGjgXq8AfRPqyc83
-         5BHzN7xmpjLoZdpzmrN8ETQ1hUjyyZZKVHQpiXj/S5ufWgFvtFmGrrQY2Xbds/0CWUxa
-         gs3PLHuK9TjcK6GhGS7+T4bc5U802IRNgTkWD9hkDuzsvjatOhilPYNN78lpKbZ1diRt
-         e+azuXZ6VvKEU+qC3SInjzTlG17ZqHbogJEvggkUFdJodfY8cDjE9zaWR8RYUcp1v64/
-         fUikdKP51cMfrylKb6jB/4YcOSCuSuVolzOLl0jovm/fs32vnYF7G+dEGjYT4agmpI0C
-         sG6g==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yp6mYJPOiI1MfwSlXN8ceAxsgA+JQ4K10iRIk0yhBL8=;
+        b=q6gW5WFuw4VPH7GzIeIjMUhZC7YcISqFdNjdRRM+8LX/iVGfeI4CZTRwRK7+Wxbu26
+         U9jxq1opWnd5KMHtIwPW5g4kvu8iyAaaIcFHIObUObtliQyCCcAK7Kj8/stSpzWtcaWN
+         L7LLPxuEu/IPIE5dA4wZU+BiDDM8dBDMwgQCmHWQsIo1buZ2yHjmRSJkjriQsQwTCCwM
+         hOK7Gu8DBq00TeEJgGGkFUzw4dfSKxA5ghYyYCPyyyZ1l6/1fIV6eTBhXBZHCV1DESOe
+         rek9WYj6CbnnVysq4iCJdx+dEqHyvirCH5mXJuH40uIlnIY6ylXsClsmyJwE1LhVsmdF
+         hLhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
-         :references:subject:mime-version:content-transfer-encoding
-         :content-disposition;
-        bh=i+kt8NbkJcxlxgcLxVS6CeOWPHcc3xF+IDhB44RR268=;
-        b=Fv1dM/0BnCmDfadhi/q2uokbKxGKOiRu3183MDeuBrh2vOnz8wSBVhxCfhQJT+nVIk
-         CgmK1mE1JPSXTR91THX4TKY9DsM2Ed/GKavfC3bWd4+wXXlAFt3jhARNnfEbGyrlnYcQ
-         DzdSzmOEK2OJJ8gVjZ71bSGKAyYw5RRIyQNCwSKStqH2qojOYccfBldkRrErpjdLJh9x
-         SQ/tWl0M0Ab7qr2yUiCBPjRvonx4utRPZBMsADdjpW6A24Avm8IirI7z9G4OBMPCJXra
-         1dXXtzb9JKv3YWj+1yf9NRGHtTjKFYGvMcegJjK4TrnBlwhO4Nezx/ljSRBs6MDGR8Mp
-         n7VQ==
-X-Gm-Message-State: AOAM533P51JQwKs1UrWsFEIrMK9+ML7qxf0hw1vpvXdS7O5l5CSGmNPW
-        3jJ6exeI4wxaYt5eNkoXkBhzGrKk2Tr0FQ==
-X-Google-Smtp-Source: ABdhPJwQ2ByIHypHf9G8Fq55SO7s2+ErkosiVaEblPF4LX6tR/hvnvJnDSyT3oXWCruYXXL3omPuVw==
-X-Received: by 2002:a37:9f4e:: with SMTP id i75mr21405479qke.180.1600263827681;
-        Wed, 16 Sep 2020 06:43:47 -0700 (PDT)
-Received: from dwls-dell ([2804:14d:72b1:8920:a2ce:f815:f14d:bfac])
-        by smtp.gmail.com with ESMTPSA id w6sm18891846qti.63.2020.09.16.06.43.43
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 16 Sep 2020 06:43:46 -0700 (PDT)
-Date:   Wed, 16 Sep 2020 10:43:42 -0300
-From:   "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "=?utf-8?Q?r.verdejo=40samsung.com?=" <r.verdejo@samsung.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        "=?utf-8?Q?nicolas=40ndufresne.ca?=" <nicolas@ndufresne.ca>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "=?utf-8?Q?linux-kernel-mentees=40lists.linuxfoundation.org?=" 
-        <linux-kernel-mentees@lists.linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <BAE73C66-D2B7-44A5-8CD9-72D0430BEED7@getmailspring.com>
-In-Reply-To: <CAMuHMdXjA7q-v-mYY9DChC0XQbv9vfW6c3Vfn07-H-FgBr+izA@mail.gmail.com>
-References: <CAMuHMdXjA7q-v-mYY9DChC0XQbv9vfW6c3Vfn07-H-FgBr+izA@mail.gmail.com>
-Subject: Re: [PATCH] media: vidtv: fix build on 32bit architectures
-X-Mailer: Mailspring
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yp6mYJPOiI1MfwSlXN8ceAxsgA+JQ4K10iRIk0yhBL8=;
+        b=Kg6agyZj7PO/ggaUi1Jh7OHoXCmMPHgXajO9rMXZ/Kf++kMyNY8BLMCevV/ZvkGMd4
+         9qLSAIO9JUi3aFhEeNCXWGcxAdiVfPzNuc39N9hMd+SZgOyBEbxX6cp2u33jCZ0xuyRM
+         9DiOcs2J35IJyCP22omp/lbXuGjlp2rc3nlRFbVnnIAAxI5nhVHOfK3lf532DQnIInhF
+         KXhBhc4GbOa7gfzNDSl0WiGbp0PyXe8yBqsnKhho+9NTsvD1qzSahBvN6dwzBdBC1I4+
+         S/LJKCvrycr4WEus1mPdqeaxIvU2dKcYP1Oy99z4pKdOm+ZG9RPiPtEaV5uykC9K2R8e
+         z22w==
+X-Gm-Message-State: AOAM532181e3rhXTflYGIKC6EuwPR2cQerfkJIYzuewbC26XgvnIGkJ5
+        adnWZkaM3ljanCaTfKM4EFHLq7qB++1gLujy
+X-Google-Smtp-Source: ABdhPJwHduI7ywbHfA5idkAVBWpWWcJ4mKflNSQRa0cEjgt0JmZ05mTRiKySb5CYgHncBCIuu7K02w==
+X-Received: by 2002:a1c:dd87:: with SMTP id u129mr6203375wmg.172.1600283114736;
+        Wed, 16 Sep 2020 12:05:14 -0700 (PDT)
+Received: from localhost.localdomain (cpc83661-brig20-2-0-cust443.3-3.cable.virginm.net. [82.28.105.188])
+        by smtp.gmail.com with ESMTPSA id s2sm35284679wrw.96.2020.09.16.12.05.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Sep 2020 12:05:14 -0700 (PDT)
+From:   Alex Dewar <alex.dewar90@gmail.com>
+Cc:     Alex Dewar <alex.dewar90@gmail.com>,
+        "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: vidtv: fix time conversion error
+Date:   Wed, 16 Sep 2020 20:05:06 +0100
+Message-Id: <20200916190507.30476-1-alex.dewar90@gmail.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro, Geert,
+In vidtv_mux_check_mux_rate(), the function jiffies_to_usecs() is called
+but its output is treated as if it were a value in milliseconds (indeed,
+it is assigned to a variable called elapsed_time_msecs). Accordingly,
+the calculation will be off by a factor of 1000. Fix this.
 
-> That doesn't seem to be the right thing to do here.
->
-> Assuming that sampling rate is 48 kHz, you'll
-> have duration = 1.875, which would be rounded to 1.
->
-> In other words, the above is identical to:
->
-> au->pts = count
->
-> Now, I don't know from where that CLOCK_UNIT_90KHZ came from.
->
+Addresses-Coverity: 1496996 ("Integer handling issues")
+Fixes: f90cf6079bf6 ("media: vidtv: add a bridge driver")
+Signed-off-by: Alex Dewar <alex.dewar90@gmail.com>
+---
+ drivers/media/test-drivers/vidtv/vidtv_mux.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Mauro, here's my current understanding:
-
-The values for PTS have to be defined in terms of a 90khz clock. 
-
-So for 30fps video, the values for PTS per frame would be:
-
-frame_num/30 * 90000
-
-so 0, 3000, 6000, 9000...etc
-
-The same math is being used here for audio, but instead we have the
-total audio sample count and a 48000 samples/sec
-
-
-I did miss this rounding error though, I'm sorry.
-
-
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_mux.c b/drivers/media/test-drivers/vidtv/vidtv_mux.c
+index 5d1a275d504b..77b00a854a9c 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_mux.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_mux.c
+@@ -349,12 +349,12 @@ static u32 vidtv_mux_check_mux_rate(struct vidtv_mux *m)
+ 	u64 nbytes_streamed; /* the number of bytes we actually wrote */
+ 	u32 num_null_pkts; /* number of null packets to bridge the gap */
+ 
+-	u64 elapsed_time_msecs = jiffies_to_usecs(m->timing.current_jiffies -
++	u64 elapsed_time_usecs = jiffies_to_usecs(m->timing.current_jiffies -
+ 						  m->timing.past_jiffies);
+ 
+-	elapsed_time_msecs = min(elapsed_time_msecs, (u64)VIDTV_MAX_SLEEP_USECS / 1000);
+-	nbytes_expected = div64_u64(m->mux_rate_kbytes_sec * 1000, MSEC_PER_SEC);
+-	nbytes_expected *= elapsed_time_msecs;
++	elapsed_time_usecs = min_t(u64, elapsed_time_usecs, VIDTV_MAX_SLEEP_USECS);
++	nbytes_expected = m->mux_rate_kbytes_sec; /* kb/sec is the same as bytes/msec */
++	nbytes_expected *= div64_u64(elapsed_time_usecs, 1000ULL);
+ 
+ 	nbytes_streamed = m->mux_buf_offset;
+ 
+-- 
+2.28.0
 
