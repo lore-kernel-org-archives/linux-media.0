@@ -7,228 +7,134 @@ X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 638B4C43461
-	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 20:55:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3025C433E2
+	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 20:57:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0867E221EB
-	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 20:55:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 81DF021D7D
+	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 20:57:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=amdcloud.onmicrosoft.com header.i=@amdcloud.onmicrosoft.com header.b="mHZlf4b/"
+	dkim=pass (1024-bit key) header.d=amdcloud.onmicrosoft.com header.i=@amdcloud.onmicrosoft.com header.b="qNo5jvdL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726874AbgIPUzk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Sep 2020 16:55:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55058 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726578AbgIPQxB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Sep 2020 12:53:01 -0400
-Received: from NAM02-BL2-obe.outbound.protection.outlook.com (mail-bl2nam02on061e.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe46::61e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B02C0A889D;
-        Wed, 16 Sep 2020 06:00:09 -0700 (PDT)
+        id S1728502AbgIPU5B (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Sep 2020 16:57:01 -0400
+Received: from mail-eopbgr770045.outbound.protection.outlook.com ([40.107.77.45]:24910
+        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726520AbgIPQwi (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 16 Sep 2020 12:52:38 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ErrOuxa3MujUvNNOBau1Hx54hJbxueklDRulQ8TsAFJr0aKt+ZNXgns46OwJJF86+khjlEauA7+hZSCY8WpS/Ob6bqgqpYFzvGIW6c6r0k7tmj17PN033lXju6Y3hsyc8deBkdPBYsoqf35NpgbTxgmznWZS5EHXq9HrSYvnCSffhzKoDaqVunuivLQJjjNuA9kMIIDxLNMZaQZcYyc3F3UKNi4/uYkruRC30s8yn3KmP1AH1HE17LO/ilPSgr3GIn5zzWAs7lA0+N0A+dKkaFC1wgq9pIiHHDzRC7akKHNBnu9KR2VDLpSYuupgB7VwmQxEQLWlNt03Juoh5bb51A==
+ b=kPckStrmAvqrF9qczfWbKFzrUEJu3fxdVkIn4CGR0h8MJiIZ5/MdH9OmLc7+CNmXTWqFEolhY4+7p4kRHCbqHr32NR6vlnKQsrLnRoc9FvEHwDm9OkDQm6uhLKOqZhO/5T9/ZniUdljJZdGMxUtpeapUu6zOXFuSaHJ3Y6CcW0ObotPdBMdepu5I8TuuXS6RZTk333HYRnljSaqEy1xBZuqigetXJxpRiiKWpw0Hp1soNUj33/AOQUzSVlByy23C7kUSunb408UwklDE84mdoffrXlTdVDUIfnVyhyLV1ekYI3AKToMYODruvaCP71v3nbdoK+o9l8AyXjqGciGuag==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IaEdr8l66IXRq8bDD6lyfWmluYbsj84CmtABMDA/ypg=;
- b=ByZVPp2AIWoc3wWSR+zNaeAme9p68lTAe4jG2YT+4XMnSfu2j/YOSRhTcxDJO/VuV+XtcNMkfRlaIkk5TgIcay/J3Iz0L9ExpBeREDa78SXz5Gst9aautKVJ1Z8TPr4zFhAfJc+aD0zeSt6kmmtMIJRmzigpQBuF8BWY50oKYNE1H8a0talEl/887uVFm0IiSjdHNKXpE+PWAZMlXTgmnEpPC57W1w8R2FlJaLTFKkKwNgSir7A70Khagh2McEviyXllfR3ucJ3miPkAToVw2DqQJUItoshnXlAMVBj4epHAeChvdtB0oJPpkCRXhSHp6QBahm68Z/WMkS0Nzq3rwA==
+ bh=Rez1AarHQgPeuHFvhBkKF/WjIJALwOz78hL2C0zvC4c=;
+ b=RQCVNMhsFp+llnR2YtuzczBRIfcC2tC8mcIUN1wIVjuvGm+3IxZWxDdmI3SNS8bo3yzVoMgP3/phXrMD+FJrpJAtt2xumUm9oem8g4yU1XDilNx8oDGXUUz/Ocy04PMJBCB1HzAX9Hdqg1eVb/lYmGxCDM78X4ZvFPEUzKKdLqosmDadVk6ST24qwnXAiCfJBUiBWWeawRWllYFXfx5g+GkvD3WBK+lJHRKaSesK4mqVYWzxmmQOWtNReJ+Yi8hgwqnJLi8/HxzKI/qVDvxQ7KLcxfD3fZtu8CAEIo+zBcR5e9WbwK+3fyuC5vBt2+pxA/pP5jL1+rX8Hw1+l4qbAA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IaEdr8l66IXRq8bDD6lyfWmluYbsj84CmtABMDA/ypg=;
- b=mHZlf4b/GkF/MCf4AwcTjbw38pM9T3sW01COjLfT3EUPAin+PQpioWCtKQwKyiYlxvLuANowWRJHkU/E+6qqy0bFEuFh16i9NXjA5o20kpnoNk+SGjbudKEoGV+cmX5fYqBZQJOVwMzfah04b6vfbPjNrfjav8SzAWPv79H3Fsw=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
+ bh=Rez1AarHQgPeuHFvhBkKF/WjIJALwOz78hL2C0zvC4c=;
+ b=qNo5jvdL6RW/0CmXMexMFohsZXbspIwWzgbpCXRsi02iPAUNbKTsAEtJz4ejSLaBkKuT1OiXEzztfGJwtbCn+t5OK3dSEX9pi8epq1AYBpl56KJa5wH80awkOaVUJS/46WVzeZh4v168fvu/528Za8fyY+JE7C7cDG2ge7h5pS4=
+Authentication-Results: kvack.org; dkim=none (message not signed)
+ header.d=none;kvack.org; dmarc=none action=none header.from=amd.com;
 Received: from MN2PR12MB3775.namprd12.prod.outlook.com (2603:10b6:208:159::19)
- by BL0PR12MB2580.namprd12.prod.outlook.com (2603:10b6:207:3e::19) with
+ by MN2PR12MB4438.namprd12.prod.outlook.com (2603:10b6:208:267::23) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16; Wed, 16 Sep
- 2020 13:00:06 +0000
+ 2020 14:14:24 +0000
 Received: from MN2PR12MB3775.namprd12.prod.outlook.com
  ([fe80::f8f7:7403:1c92:3a60]) by MN2PR12MB3775.namprd12.prod.outlook.com
  ([fe80::f8f7:7403:1c92:3a60%6]) with mapi id 15.20.3391.014; Wed, 16 Sep 2020
- 13:00:06 +0000
-Subject: Re: [PATCH 0/3] dma-buf: Flag vmap'ed memory as system or I/O memory
-To:     Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     sumit.semwal@linaro.org, airlied@linux.ie, sam@ravnborg.org,
-        mark.cave-ayland@ilande.co.uk, kraxel@redhat.com,
-        davem@davemloft.net, maarten.lankhorst@linux.intel.com,
-        mripard@kernel.org, l.stach@pengutronix.de,
-        linux+etnaviv@armlinux.org.uk, christian.gmeiner@gmail.com,
-        jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, pawel@osciak.com, m.szyprowski@samsung.com,
-        kyungmin.park@samsung.com, tfiga@chromium.org, mchehab@kernel.org,
-        chris@chris-wilson.co.uk, matthew.auld@intel.com,
-        thomas.hellstrom@intel.com, linux-media@vger.kernel.org,
+ 14:14:24 +0000
+Subject: Re: Changing vma->vm_file in dma_buf_mmap()
+To:     Jason Gunthorpe <jgg@ziepe.ca>, akpm@linux-foundation.org,
+        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
         dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        etnaviv@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-tegra@vger.kernel.org, sparclinux@vger.kernel.org
-References: <20200914112521.1327-1-tzimmermann@suse.de>
- <20200916093756.GC438822@phenom.ffwll.local>
- <0378c326-28c6-371e-45d2-8b81ccbda84f@suse.de>
- <20200916122405.GQ438822@phenom.ffwll.local>
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <20200914132920.59183-1-christian.koenig@amd.com>
+ <40cd26ae-b855-4627-5a13-4dcea5d622f6@gmail.com>
+ <20200914140632.GD1221970@ziepe.ca>
+ <9302e4e0-0ff0-8b00-ada1-85feefb49e88@gmail.com>
+ <20200916095359.GD438822@phenom.ffwll.local> <20200916140710.GA8409@ziepe.ca>
 From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Message-ID: <53743f37-4142-c076-296f-bfcba0840121@amd.com>
-Date:   Wed, 16 Sep 2020 14:59:57 +0200
+Message-ID: <8db2474f-ecb7-0e17-5f5b-145708fe44d5@amd.com>
+Date:   Wed, 16 Sep 2020 16:14:19 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
-In-Reply-To: <20200916122405.GQ438822@phenom.ffwll.local>
+In-Reply-To: <20200916140710.GA8409@ziepe.ca>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-X-ClientProxiedBy: AM3PR05CA0104.eurprd05.prod.outlook.com
- (2603:10a6:207:1::30) To MN2PR12MB3775.namprd12.prod.outlook.com
+X-ClientProxiedBy: AM0PR02CA0099.eurprd02.prod.outlook.com
+ (2603:10a6:208:154::40) To MN2PR12MB3775.namprd12.prod.outlook.com
  (2603:10b6:208:159::19)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2a02:908:1252:fb60:be8a:bd56:1f94:86e7] (2a02:908:1252:fb60:be8a:bd56:1f94:86e7) by AM3PR05CA0104.eurprd05.prod.outlook.com (2603:10a6:207:1::30) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3391.11 via Frontend Transport; Wed, 16 Sep 2020 13:00:01 +0000
+Received: from [IPv6:2a02:908:1252:fb60:be8a:bd56:1f94:86e7] (2a02:908:1252:fb60:be8a:bd56:1f94:86e7) by AM0PR02CA0099.eurprd02.prod.outlook.com (2603:10a6:208:154::40) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3391.13 via Frontend Transport; Wed, 16 Sep 2020 14:14:22 +0000
 X-Originating-IP: [2a02:908:1252:fb60:be8a:bd56:1f94:86e7]
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: d9006b38-420f-435f-3165-08d85a406eea
-X-MS-TrafficTypeDiagnostic: BL0PR12MB2580:
-X-Microsoft-Antispam-PRVS: <BL0PR12MB25802D9F1777F77863361ED483210@BL0PR12MB2580.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Office365-Filtering-Correlation-Id: 74d6b4a9-dd56-4ec4-e1e7-08d85a4acfff
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4438:
+X-Microsoft-Antispam-PRVS: <MN2PR12MB4438DA0A247D2BFDA26BBD8783210@MN2PR12MB4438.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: W9YuKSjzvl0+CWdsjPlJ6MZBlU1GWg9UCpOnG/Cf+UnegqZl6gNWuTGLwrNXlGer/ccMKalKDHIOVwvo6guv7HXTq/S3znGWcVI8CCQIwG9xkiZ11aMFSbBY3ytfDt97gVuY/ZHhqxpZVktSv5sWl9N3CKSb7Wws8qUT1jtZg0r2igPm0SzPBExuJ+JTCesGJuHiQiz24nhFSrAzqeBcy9m/BrfUOWlwRLogNz1wtAp6qEmJL165/3noKRuQGrJM8MM0QH4j21GEU5+FIz0ZanYUXijVGK3M8VvqM96v3i0jpyvlEVKWxDPsnzd1gckdHYL1K1k5tuYg923gDPxIdLEupkr5Xvlx7irIYTrjwd5WcW+oIgZ4NVYOA7whsjca20ykILcaIh/yztrRvV4bzgEFMym9mI3ZFskcDj7oEITkBSgdFPGXtb8Inf8fL/sr7CdRdNFdGotWJNAZxZZcag==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3775.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(366004)(346002)(136003)(396003)(376002)(6486002)(66946007)(31686004)(66574015)(66556008)(45080400002)(8936002)(66476007)(86362001)(2616005)(6666004)(83380400001)(4326008)(31696002)(36756003)(5660300002)(316002)(7406005)(16526019)(478600001)(966005)(2906002)(110136005)(8676002)(52116002)(7416002)(186003)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: eiBS9mQMZ8tM7l0nRg0iUe4VG6mQQqQq3ebQ4yRlpaf2Qrf93jFVQWpq+NfSBf3LinaAGJrd7vnSgcDdRK3keETxkUYr0hf0iy+bLgtN0gnhEkHikq/4hCrxqPeyYsmw4jmBpa0zDZA9huTWHSbAr0GBUd/d1v/h9i9VnKoC33fxcOPoh5VbhmnpjzFwzFFkWCDlX/6xI5gr/r6ZDBb+P2kO9nCQd2hgXL0tMTmxGN0lAsCrssJJ63bijPK4UCu1HFdca9lNW4+I6CabYaT3z665H0ETXIHc9Sw/+73I0Ej0MPZgLiO5A9x5T44qNEOzwLPh8MBAeG0QoMVRt1nirZkWc51b/IX1H0px27aMiiXgn332JCoLzRfArr3/M3ICQR1bQO2rbQvKonobfsqTBPjt/Gla6RO3zW02UZs3pKzIM9mp5tCG/XmNvnlF9l5QX7h+EYgBzeXQPK9nFs7cmn5YBxjgir4gybAKe60L6BN+jVZH9CF7qqeVhw2WUP7xKTgzgZGdFxjcAALUGy29wNxmpOHbORpFd9xmt9DijzxAgw/rswjzSCx5BzT5wgzbnFsT87Z9jL/0+QGQwvA3zcCILNu3l7cAI7r6L1Wgh0D5/ElER+1XN+dqBKM3DgX3RKxBvDeXqam4HwrRkKOBy5PUmfHkesTe5t9g2Zqp0nvMz7dwSOktCeuE0lXFd4bC47RRIaRJEW6WToG+We0mCQ==
+X-Microsoft-Antispam-Message-Info: ubN5pZ7Gk9tchSXD73JfxeDr5XZBdWSGuN+CDmFy3a5Lp/lnOsw6/DYKuzAHx88F5xXY8OZp3qVBbLQs/koyrdpmOKbqhZBVaGoXyRjJoQ4vJzwSVt5kBtEoDDKNC3973CfUMXDfBazsGqMWF5cX9x+XrVaX4k/ig+tO0ufPMcZgHYy7l5Szpun80fB646HJ6Eh7+4uklXiOko2OyGb7S+W+lKd2vqmrtqVCHWPFwQS8NGRhvdfl0homPVrfa7tJNDXhFnkJnOdDZ5vsTgE+Xx4yMNCij6O/Dl9zPmeDaQPyUDzS0QzmauxuAle2H+/IamtKfK9bI0LkJqjVr7pumf0S4GSLfwgAy8WaNT0wfAjtv5gG1fB3Ii6mvAjnTA3S
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3775.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(376002)(346002)(396003)(366004)(136003)(478600001)(36756003)(8936002)(8676002)(6486002)(6666004)(31686004)(31696002)(2616005)(5660300002)(86362001)(66476007)(316002)(2906002)(66556008)(66946007)(16526019)(83380400001)(186003)(52116002)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: IrNcftLaojgvOQV/gpCVeEmJsz26wCk1QiPA99h6t+vMuuGH3SudJ62veDV3JUnJmokHRCMLfuQX8U4aQiGg7zzqLa2cf2WRxUiIZXjpYOp7FcQVlgegzIrT+tbYeY8WLfYZtbxLg6rXDJ6xtLUWusSTJfKI7sgf75toYtTufMzAOY3R4iFqU5F9F60zfxtcNT3SrzLfbQLlyL45YmJVe+3D6Zxtyx3LPsZ8RrR3OjLZIzENnT6/oEEL5iHkCLgFHvvT+uwM8HPuMf1Y2JgdUm7VL+JG23zur2k/+0OggRawg88jM/P0jv6V022DwwfuujRRePw3a0cEXQDix7z3gJdMFJB32AYxU9gVCQa53v7LVWC/8sxoEhqP9gIyuVjZk8An5qyR0zzVESUMr8qufkaPt7BS1Ss61VvXFLHfXqqZ65spedHXAQysZhq6qR5RPEWXARFAc+IasBRIquKkUJT2oTF694+3Chys/ai6qr5pX9FZb2BkesJJwaEDZVad7ZMAoLnH0mMO5kfhpHV6OWZw2HoguOl+T/ymMLMAmwjryJJgKBYdcnMMUD6xGPyuibQdYfWKZYWR1H6ChUDc48ms+Z+1c2174wZf6DWOdmfXUIq/EkIqkZrGy+tO7wISaN5TZR6VTY2060BDc2vVfpxH24K6qU9LoeOhV0gIrSEd1UMtMdbvHETm8C7htZJe+r4gg424knabrjEbdYZWvg==
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d9006b38-420f-435f-3165-08d85a406eea
+X-MS-Exchange-CrossTenant-Network-Message-Id: 74d6b4a9-dd56-4ec4-e1e7-08d85a4acfff
 X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3775.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2020 13:00:06.5109
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2020 14:14:23.9056
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gMFmyU2SHkeiVAdprVWOgNnXNdvcqtwhGAVtPFYMugRtl1jG/0G0DnyKk7f62lnz
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB2580
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2t5AgoaBMnnoRyOLqXfqqk6kHxdRciQrBcNfPC0xsGD4GG12Lxa1yzMSNcMXHTIS
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4438
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Am 16.09.20 um 14:24 schrieb Daniel Vetter:
-> On Wed, Sep 16, 2020 at 12:48:20PM +0200, Thomas Zimmermann wrote:
->> Hi
->>
->> Am 16.09.20 um 11:37 schrieb Daniel Vetter:
->>> On Mon, Sep 14, 2020 at 01:25:18PM +0200, Thomas Zimmermann wrote:
->>>> Dma-buf provides vmap() and vunmap() for retrieving and releasing mappings
->>>> of dma-buf memory in kernel address space. The functions operate with plain
->>>> addresses and the assumption is that the memory can be accessed with load
->>>> and store operations. This is not the case on some architectures (e.g.,
->>>> sparc64) where I/O memory can only be accessed with dedicated instructions.
->>>>
->>>> This patchset introduces struct dma_buf_map, which contains the address of
->>>> a buffer and a flag that tells whether system- or I/O-memory instructions
->>>> are required.
->>>>
->>>> Some background: updating the DRM framebuffer console on sparc64 makes the
->>>> kernel panic. This is because the framebuffer memory cannot be accessed with
->>>> system-memory instructions. We currently employ a workaround in DRM to
->>>> address this specific problem. [1]
->>>>
->>>> To resolve the problem, we'd like to address it at the most common point,
->>>> which is the dma-buf framework. The dma-buf mapping ideally knows if I/O
->>>> instructions are required and exports this information to it's users. The
->>>> new structure struct dma_buf_map stores the buffer address and a flag that
->>>> signals I/O memory. Affected users of the buffer (e.g., drivers, frameworks)
->>>> can then access the memory accordingly.
->>>>
->>>> This patchset only introduces struct dma_buf_map, and updates struct dma_buf
->>>> and it's interfaces. Further patches can update dma-buf users. For example,
->>>> there's a prototype patchset for DRM that fixes the framebuffer problem. [2]
->>>>
->>>> Further work: TTM, one of DRM's memory managers, already exports an
->>>> is_iomem flag of its own. It could later be switched over to exporting struct
->>>> dma_buf_map, thus simplifying some code. Several DRM drivers expect their
->>>> fbdev console to operate on I/O memory. These could possibly be switched over
->>>> to the generic fbdev emulation, as soon as the generic code uses struct
->>>> dma_buf_map.
->>>>
->>>> [1] https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fdri-devel%2F20200725191012.GA434957%40ravnborg.org%2F&amp;data=02%7C01%7Cchristian.koenig%40amd.com%7C04e3cc3e03ae40f1fa0f08d85a3b6a68%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637358558524732385&amp;sdata=wTmFuB95GhKUU%2F2Q91V0%2BtzAu4%2BEe3VBUcriBy3jx2g%3D&amp;reserved=0
->>>> [2] https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fdri-devel%2F20200806085239.4606-1-tzimmermann%40suse.de%2F&amp;data=02%7C01%7Cchristian.koenig%40amd.com%7C04e3cc3e03ae40f1fa0f08d85a3b6a68%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637358558524732385&amp;sdata=L4rBHmegO63b%2FiTQdTyH158KNxAZwSuJCQOaFszo5L0%3D&amp;reserved=0
->>> lgtm, imo ready to convert the follow-up patches over to this. But I think
->>> would be good to get at least some ack from the ttm side for the overall
->>> plan.
->> Yup, it would be nice if TTM could had out these types automatically.
->> Then all TTM-based drivers would automatically support it.
->>
->>> Also, I think we should put all the various helpers (writel/readl, memset,
->>> memcpy, whatever else) into the dma-buf-map.h helper, so that most code
->>> using this can just treat it as an abstract pointer type and never look
->>> underneath it.
->> We have some framebuffer helpers that rely on pointer arithmetic, so
->> we'd need that too. No big deal wrt code, but I was worried about the
->> overhead. If a loop goes over framebuffer memory, there's an if/else
->> branch for each access to the memory buffer.
-> If we make all the helpers static inline, then the compiler should be able
-> to see that dma_buf_map.is_iomem is always the same, and produced really
-> optimized code for it by pulling that check out from all the loops.
+Am 16.09.20 um 16:07 schrieb Jason Gunthorpe:
+> On Wed, Sep 16, 2020 at 11:53:59AM +0200, Daniel Vetter wrote:
 >
-> So should only result in somewhat verbose code of having to call
-> dma_buf_map pointer arthimetic helpers, but not in bad generated code.
-> Still worth double-checking I think, since e.g. on x86 the generated code
-> should be the same for both cases (but maybe the compiler doesn't see
-> through the inline asm to realize that, so we might end up with 2 copies).
+>> But within the driver, we generally need thousands of these, and that
+>> tends to bring fd exhaustion problems with it. That's why all the private
+>> buffer objects which aren't shared with other process or other drivers are
+>> handles only valid for a specific fd instance of the drm chardev (each
+>> open gets their own namespace), and only for ioctls done on that chardev.
+>> And for mmap we assign fake (but unique across all open fd on it) offsets
+>> within the overall chardev. Hence all the pgoff mangling and re-mangling.
+> Are they still unique struct files? Just without a fdno?
 
-Can we have that even independent of DMA-buf? We have essentially the 
-same problem in TTM and the code around that is a complete mess if you 
-ask me.
+Yes, exactly.
+
+>> Hence why we'd like to be able to forward aliasing mappings and adjust the
+>> file and pgoff, while hopefully everything keeps working. I thought this
+>> would work, but Christian noticed it doesn't really.
+> It seems reasonable to me that the dma buf should be the owner of the
+> VMA, otherwise like you say, there is a big mess attaching the custom
+> vma ops and what not to the proper dma buf.
+>
+> I don't see anything obviously against this in mmap_region() - why did
+> Chritian notice it doesn't really work?
+
+To clarify I think this might work.
+
+I just had the same "Is that legal?", "What about security?", etc.. 
+questions you raised as well.
+
+It seems like a source of trouble so I thought better ask somebody more 
+familiar with that.
 
 Christian.
 
-> -Daniel
 >
->
->> Best regards
->> Thomas
->>
->>> -Daniel
->>>
->>>> Thomas Zimmermann (3):
->>>>    dma-buf: Add struct dma-buf-map for storing struct dma_buf.vaddr_ptr
->>>>    dma-buf: Use struct dma_buf_map in dma_buf_vmap() interfaces
->>>>    dma-buf: Use struct dma_buf_map in dma_buf_vunmap() interfaces
->>>>
->>>>   Documentation/driver-api/dma-buf.rst          |   3 +
->>>>   drivers/dma-buf/dma-buf.c                     |  40 +++---
->>>>   drivers/gpu/drm/drm_gem_cma_helper.c          |  16 ++-
->>>>   drivers/gpu/drm/drm_gem_shmem_helper.c        |  17 ++-
->>>>   drivers/gpu/drm/drm_prime.c                   |  14 +-
->>>>   drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c   |  13 +-
->>>>   drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c    |  13 +-
->>>>   .../drm/i915/gem/selftests/i915_gem_dmabuf.c  |  18 ++-
->>>>   drivers/gpu/drm/tegra/gem.c                   |  23 ++--
->>>>   .../common/videobuf2/videobuf2-dma-contig.c   |  17 ++-
->>>>   .../media/common/videobuf2/videobuf2-dma-sg.c |  19 ++-
->>>>   .../common/videobuf2/videobuf2-vmalloc.c      |  21 ++-
->>>>   include/drm/drm_prime.h                       |   5 +-
->>>>   include/linux/dma-buf-map.h                   | 126 ++++++++++++++++++
->>>>   include/linux/dma-buf.h                       |  11 +-
->>>>   15 files changed, 274 insertions(+), 82 deletions(-)
->>>>   create mode 100644 include/linux/dma-buf-map.h
->>>>
->>>> --
->>>> 2.28.0
->>>>
->> -- 
->> Thomas Zimmermann
->> Graphics Driver Developer
->> SUSE Software Solutions Germany GmbH
->> Maxfeldstr. 5, 90409 Nürnberg, Germany
->> (HRB 36809, AG Nürnberg)
->> Geschäftsführer: Felix Imendörffer
->>
->
->
->
+> Jason
 
