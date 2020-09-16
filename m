@@ -2,546 +2,108 @@ Return-Path: <SRS0=oGXw=CZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AAC93C43461
-	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 15:57:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 334AAC433E2
+	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 16:11:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 49B312245F
-	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 15:57:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ACE192222C
+	for <linux-media@archiver.kernel.org>; Wed, 16 Sep 2020 16:11:00 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="lut+i5aC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726453AbgIPP5h (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Sep 2020 11:57:37 -0400
-Received: from relmlor1.renesas.com ([210.160.252.171]:3896 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726370AbgIPP4u (ORCPT
+        id S1726479AbgIPQIF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Sep 2020 12:08:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726460AbgIPQEk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Sep 2020 11:56:50 -0400
-X-IronPort-AV: E=Sophos;i="5.76,432,1592838000"; 
-   d="scan'208";a="57427889"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 16 Sep 2020 20:00:01 +0900
-Received: from devel.example.org?044ree.adwin.renesas.com (unknown [10.226.36.120])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 712764277746;
-        Wed, 16 Sep 2020 19:59:58 +0900 (JST)
-From:   Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Wed, 16 Sep 2020 12:04:40 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12A3C02C2B3;
+        Wed, 16 Sep 2020 08:49:24 -0700 (PDT)
+Received: from [192.168.0.20] (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 257E326B;
+        Wed, 16 Sep 2020 17:44:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1600271046;
+        bh=lySLVcxndFknMXMSgr2EWx9F9cUXcq47wEXfwbGQSAE=;
+        h=Reply-To:Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=lut+i5aCD6jc5yaQ3ck1RNYa7TomqMY5PjmXtCNkxtBLse1CVJIQoAKLFJ0eVLMXj
+         MsSx0YblCWJWyPqQEjHGUNhgDqiWIZgEntThVADIVmeNaTHMnzbzA6bd/Ws699AALq
+         BDhnYjHsHJCRO9Kx99CMVn0ZX5ZudtNN9n90w0tw=
+Reply-To: kieran.bingham+renesas@ideasonboard.com
+Subject: Re: [PATCH 1/5] media: v4l2-async: Document asd allocation
+ requirements
+To:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-media@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
         Ramesh Shanmugasundaram <rashanmu@gmail.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCH v2 2/3] media: dt-bindings: media: renesas,drif: Convert to json-schema
-Date:   Wed, 16 Sep 2020 11:59:48 +0100
-Message-Id: <20200916105949.24858-3-fabrizio.castro.jz@renesas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200916105949.24858-1-fabrizio.castro.jz@renesas.com>
-References: <20200916105949.24858-1-fabrizio.castro.jz@renesas.com>
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Steve Longerbeam <slongerbeam@gmail.com>
+References: <20200811205939.19550-1-laurent.pinchart+renesas@ideasonboard.com>
+ <20200811205939.19550-2-laurent.pinchart+renesas@ideasonboard.com>
+From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Organization: Ideas on Board
+Message-ID: <0dca7898-01ff-79a2-bb7e-7e946706deb1@ideasonboard.com>
+Date:   Wed, 16 Sep 2020 16:44:02 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200811205939.19550-2-laurent.pinchart+renesas@ideasonboard.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Convert the Renesas DRIF bindings to DT schema and update
-MAINTAINERS accordingly.
+Hi Laurent,
 
-Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
-v1->v2:
-* s/controller/Controller/ in the title of renesas,drif.yaml
-  as suggested by Laurent.
+On 11/08/2020 21:59, Laurent Pinchart wrote:
+> The v4l2_async_notifier_add_subdev() function requires the asd pointer
+> it receives to be allocated dynamically, but doesn't explicitly say so.
+> Only one driver out of 13 get its right (atmel-sama5d2-isc.c, but with
+> memory leaks in the error paths), clearly showing we have an issue.
+> 
+> Update the v4l2_async_notifier_add_subdev() documentation to clearly
+> state the allocation requirement. Whether this will be enough to avoid
+> new offending code isn't certain, but it's a good first step
+> nonetheless.
+> 
+> Fixes: 9ca465312132 ("media: v4l: fwnode: Support generic parsing of graph endpoints in a device")
+> Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 
- .../bindings/media/renesas,drif.txt           | 177 ------------
- .../bindings/media/renesas,drif.yaml          | 270 ++++++++++++++++++
- MAINTAINERS                                   |   2 +-
- 3 files changed, 271 insertions(+), 178 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/media/renesas,drif.txt
- create mode 100644 Documentation/devicetree/bindings/media/renesas,drif.yaml
+Seems reasonable to me:
 
-diff --git a/Documentation/devicetree/bindings/media/renesas,drif.txt b/Documentation/devicetree/bindings/media/renesas,drif.txt
-deleted file mode 100644
-index 0d8974aa8b38..000000000000
---- a/Documentation/devicetree/bindings/media/renesas,drif.txt
-+++ /dev/null
-@@ -1,177 +0,0 @@
--Renesas R-Car Gen3 Digital Radio Interface controller (DRIF)
--------------------------------------------------------------
--
--R-Car Gen3 DRIF is a SPI like receive only slave device. A general
--representation of DRIF interfacing with a master device is shown below.
--
--+---------------------+                +---------------------+
--|                     |-----SCK------->|CLK                  |
--|       Master        |-----SS-------->|SYNC  DRIFn (slave)  |
--|                     |-----SD0------->|D0                   |
--|                     |-----SD1------->|D1                   |
--+---------------------+                +---------------------+
--
--As per datasheet, each DRIF channel (drifn) is made up of two internal
--channels (drifn0 & drifn1). These two internal channels share the common
--CLK & SYNC. Each internal channel has its own dedicated resources like
--irq, dma channels, address space & clock. This internal split is not
--visible to the external master device.
--
--The device tree model represents each internal channel as a separate node.
--The internal channels sharing the CLK & SYNC are tied together by their
--phandles using a property called "renesas,bonding". For the rest of
--the documentation, unless explicitly stated, the word channel implies an
--internal channel.
--
--When both internal channels are enabled they need to be managed together
--as one (i.e.) they cannot operate alone as independent devices. Out of the
--two, one of them needs to act as a primary device that accepts common
--properties of both the internal channels. This channel is identified by a
--property called "renesas,primary-bond".
--
--To summarize,
--   - When both the internal channels that are bonded together are enabled,
--     the zeroth channel is selected as primary-bond. This channels accepts
--     properties common to all the members of the bond.
--   - When only one of the bonded channels need to be enabled, the property
--     "renesas,bonding" or "renesas,primary-bond" will have no effect. That
--     enabled channel can act alone as any other independent device.
--
--Required properties of an internal channel:
---------------------------------------------
--- compatible:	"renesas,r8a7795-drif" if DRIF controller is a part of R8A7795 SoC.
--		"renesas,r8a7796-drif" if DRIF controller is a part of R8A7796 SoC.
--		"renesas,rcar-gen3-drif" for a generic R-Car Gen3 compatible device.
--
--		When compatible with the generic version, nodes must list the
--		SoC-specific version corresponding to the platform first
--		followed by the generic version.
--
--- reg: offset and length of that channel.
--- interrupts: associated with that channel.
--- clocks: phandle and clock specifier of that channel.
--- clock-names: clock input name string: "fck".
--- dmas: phandles to the DMA channels.
--- dma-names: names of the DMA channel: "rx".
--- renesas,bonding: phandle to the other channel.
--
--Optional properties of an internal channel:
---------------------------------------------
--- power-domains: phandle to the respective power domain.
--
--Required properties of an internal channel when:
--	- It is the only enabled channel of the bond (or)
--	- If it acts as primary among enabled bonds
----------------------------------------------------------
--- pinctrl-0: pin control group to be used for this channel.
--- pinctrl-names: must be "default".
--- renesas,primary-bond: empty property indicating the channel acts as primary
--			among the bonded channels.
--- port: child port node corresponding to the data input, in accordance with
--	the video interface bindings defined in
--	Documentation/devicetree/bindings/media/video-interfaces.txt. The port
--	node must contain at least one endpoint.
--
--Optional endpoint property:
-----------------------------
--- sync-active: Indicates sync signal polarity, 0/1 for low/high respectively.
--	       This property maps to SYNCAC bit in the hardware manual. The
--	       default is 1 (active high).
--
--Example:
----------
--
--(1) Both internal channels enabled:
-------------------------------------
--
--When interfacing with a third party tuner device with two data pins as shown
--below.
--
--+---------------------+                +---------------------+
--|                     |-----SCK------->|CLK                  |
--|       Master        |-----SS-------->|SYNC  DRIFn (slave)  |
--|                     |-----SD0------->|D0                   |
--|                     |-----SD1------->|D1                   |
--+---------------------+                +---------------------+
--
--	drif00: rif@e6f40000 {
--		compatible = "renesas,r8a7795-drif",
--			     "renesas,rcar-gen3-drif";
--		reg = <0 0xe6f40000 0 0x64>;
--		interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
--		clocks = <&cpg CPG_MOD 515>;
--		clock-names = "fck";
--		dmas = <&dmac1 0x20>, <&dmac2 0x20>;
--		dma-names = "rx", "rx";
--		power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
--		renesas,bonding = <&drif01>;
--		renesas,primary-bond;
--		pinctrl-0 = <&drif0_pins>;
--		pinctrl-names = "default";
--		port {
--			drif0_ep: endpoint {
--			     remote-endpoint = <&tuner_ep>;
--			};
--		};
--	};
--
--	drif01: rif@e6f50000 {
--		compatible = "renesas,r8a7795-drif",
--			     "renesas,rcar-gen3-drif";
--		reg = <0 0xe6f50000 0 0x64>;
--		interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
--		clocks = <&cpg CPG_MOD 514>;
--		clock-names = "fck";
--		dmas = <&dmac1 0x22>, <&dmac2 0x22>;
--		dma-names = "rx", "rx";
--		power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
--		renesas,bonding = <&drif00>;
--	};
--
--
--(2) Internal channel 1 alone is enabled:
------------------------------------------
--
--When interfacing with a third party tuner device with one data pin as shown
--below.
--
--+---------------------+                +---------------------+
--|                     |-----SCK------->|CLK                  |
--|       Master        |-----SS-------->|SYNC  DRIFn (slave)  |
--|                     |                |D0 (unused)          |
--|                     |-----SD-------->|D1                   |
--+---------------------+                +---------------------+
--
--	drif00: rif@e6f40000 {
--		compatible = "renesas,r8a7795-drif",
--			     "renesas,rcar-gen3-drif";
--		reg = <0 0xe6f40000 0 0x64>;
--		interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
--		clocks = <&cpg CPG_MOD 515>;
--		clock-names = "fck";
--		dmas = <&dmac1 0x20>, <&dmac2 0x20>;
--		dma-names = "rx", "rx";
--		power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
--		renesas,bonding = <&drif01>;
--	};
--
--	drif01: rif@e6f50000 {
--		compatible = "renesas,r8a7795-drif",
--			     "renesas,rcar-gen3-drif";
--		reg = <0 0xe6f50000 0 0x64>;
--		interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
--		clocks = <&cpg CPG_MOD 514>;
--		clock-names = "fck";
--		dmas = <&dmac1 0x22>, <&dmac2 0x22>;
--		dma-names = "rx", "rx";
--		power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
--		renesas,bonding = <&drif00>;
--		pinctrl-0 = <&drif0_pins>;
--		pinctrl-names = "default";
--		port {
--			drif0_ep: endpoint {
--			     remote-endpoint = <&tuner_ep>;
--			     sync-active = <0>;
--			};
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/media/renesas,drif.yaml b/Documentation/devicetree/bindings/media/renesas,drif.yaml
-new file mode 100644
-index 000000000000..4763a6009e8b
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/renesas,drif.yaml
-@@ -0,0 +1,270 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/renesas,drif.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Renesas R-Car Gen3 Digital Radio Interface Controller (DRIF)
-+
-+maintainers:
-+  - Ramesh Shanmugasundaram <rashanmu@gmail.com>
-+  - Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-+
-+description: |
-+  R-Car Gen3 DRIF is a SPI like receive only slave device. A general
-+  representation of DRIF interfacing with a master device is shown below.
-+
-+  +---------------------+                +---------------------+
-+  |                     |-----SCK------->|CLK                  |
-+  |       Master        |-----SS-------->|SYNC  DRIFn (slave)  |
-+  |                     |-----SD0------->|D0                   |
-+  |                     |-----SD1------->|D1                   |
-+  +---------------------+                +---------------------+
-+
-+  As per datasheet, each DRIF channel (drifn) is made up of two internal
-+  channels (drifn0 & drifn1). These two internal channels share the common
-+  CLK & SYNC. Each internal channel has its own dedicated resources like
-+  irq, dma channels, address space & clock. This internal split is not
-+  visible to the external master device.
-+
-+  The device tree model represents each internal channel as a separate node.
-+  The internal channels sharing the CLK & SYNC are tied together by their
-+  phandles using a property called "renesas,bonding". For the rest of
-+  the documentation, unless explicitly stated, the word channel implies an
-+  internal channel.
-+
-+  When both internal channels are enabled they need to be managed together
-+  as one (i.e.) they cannot operate alone as independent devices. Out of the
-+  two, one of them needs to act as a primary device that accepts common
-+  properties of both the internal channels. This channel is identified by a
-+  property called "renesas,primary-bond".
-+
-+  To summarize,
-+     * When both the internal channels that are bonded together are enabled,
-+       the zeroth channel is selected as primary-bond. This channels accepts
-+       properties common to all the members of the bond.
-+     * When only one of the bonded channels need to be enabled, the property
-+       "renesas,bonding" or "renesas,primary-bond" will have no effect. That
-+       enabled channel can act alone as any other independent device.
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+        - renesas,r8a7795-drif        # R-Car H3
-+        - renesas,r8a7796-drif        # R-Car M3-W
-+      - const: renesas,rcar-gen3-drif # Generic R-Car Gen3 compatible device
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    maxItems: 1
-+    items:
-+      - const: fck
-+
-+  resets:
-+    maxItems: 1
-+
-+  dmas:
-+    minItems: 1
-+    maxItems: 2
-+
-+  dma-names:
-+    minItems: 1
-+    maxItems: 2
-+    items:
-+      - const: rx
-+      - const: rx
-+
-+  renesas,bonding:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      The phandle to the other internal channel of DRIF
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  pinctrl-0:
-+    maxItems: 1
-+
-+  pinctrl-names:
-+    maxItems: 1
-+    items:
-+      - const: default
-+
-+  renesas,primary-bond:
-+    type: boolean
-+    description:
-+      Indicates that the channel acts as primary among the bonded channels.
-+
-+  port:
-+    type: object
-+    description:
-+      Child port node corresponding to the data input, in accordance with the
-+      video interface bindings defined in
-+      Documentation/devicetree/bindings/media/video-interfaces.txt.
-+      The port node must contain at least one endpoint.
-+
-+    properties:
-+      endpoint:
-+        type: object
-+
-+        properties:
-+          remote-endpoint:
-+            description:
-+              A phandle to the remote tuner endpoint subnode in remote node
-+              port.
-+
-+          sync-active:
-+            enum: [0, 1]
-+            description:
-+              Indicates sync signal polarity, 0/1 for low/high respectively.
-+              This property maps to SYNCAC bit in the hardware manual. The
-+              default is 1 (active high).
-+
-+        additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - resets
-+  - dmas
-+  - dma-names
-+  - renesas,bonding
-+
-+if:
-+  required:
-+    - renesas,primary-bond
-+then:
-+  required:
-+    - pinctrl-0
-+    - pinctrl-names
-+    - port
-+
-+additionalProperties: false
-+
-+examples:
-+  # Example with both internal channels enabled.
-+  #
-+  # When interfacing with a third party tuner device with two data pins as shown
-+  # below.
-+  #
-+  # +---------------------+                +---------------------+
-+  # |                     |-----SCK------->|CLK                  |
-+  # |       Master        |-----SS-------->|SYNC  DRIFn (slave)  |
-+  # |                     |-----SD0------->|D0                   |
-+  # |                     |-----SD1------->|D1                   |
-+  # +---------------------+                +---------------------+
-+  - |
-+    #include <dt-bindings/clock/r8a7795-cpg-mssr.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/power/r8a7795-sysc.h>
-+
-+    soc {
-+            #address-cells = <2>;
-+            #size-cells = <2>;
-+
-+            drif00: rif@e6f40000 {
-+                    compatible = "renesas,r8a7795-drif",
-+                                 "renesas,rcar-gen3-drif";
-+                    reg = <0 0xe6f40000 0 0x64>;
-+                    interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
-+                    clocks = <&cpg CPG_MOD 515>;
-+                    clock-names = "fck";
-+                    dmas = <&dmac1 0x20>, <&dmac2 0x20>;
-+                    dma-names = "rx", "rx";
-+                    power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-+                    renesas,bonding = <&drif01>;
-+                    resets = <&cpg 515>;
-+                    renesas,primary-bond;
-+                    pinctrl-0 = <&drif0_pins>;
-+                    pinctrl-names = "default";
-+                    port {
-+                            drif0_ep: endpoint {
-+                                 remote-endpoint = <&tuner_ep>;
-+                            };
-+                    };
-+            };
-+
-+            drif01: rif@e6f50000 {
-+                    compatible = "renesas,r8a7795-drif",
-+                                 "renesas,rcar-gen3-drif";
-+                    reg = <0 0xe6f50000 0 0x64>;
-+                    interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
-+                    clocks = <&cpg CPG_MOD 514>;
-+                    clock-names = "fck";
-+                    dmas = <&dmac1 0x22>, <&dmac2 0x22>;
-+                    dma-names = "rx", "rx";
-+                    power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-+                    renesas,bonding = <&drif00>;
-+                    resets = <&cpg 514>;
-+            };
-+    };
-+
-+  # Example with internal channel 1 alone enabled.
-+  #
-+  # When interfacing with a third party tuner device with one data pin as shown
-+  # below.
-+  #
-+  # +---------------------+                +---------------------+
-+  # |                     |-----SCK------->|CLK                  |
-+  # |       Master        |-----SS-------->|SYNC  DRIFn (slave)  |
-+  # |                     |                |D0 (unused)          |
-+  # |                     |-----SD-------->|D1                   |
-+  # +---------------------+                +---------------------+
-+  - |
-+    #include <dt-bindings/clock/r8a7795-cpg-mssr.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/power/r8a7795-sysc.h>
-+
-+    soc {
-+            #address-cells = <2>;
-+            #size-cells = <2>;
-+
-+            drif10: rif@e6f60000 {
-+                    compatible = "renesas,r8a7795-drif",
-+                                 "renesas,rcar-gen3-drif";
-+                    reg = <0 0xe6f60000 0 0x64>;
-+                    interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
-+                    clocks = <&cpg CPG_MOD 513>;
-+                    clock-names = "fck";
-+                    dmas = <&dmac1 0x24>, <&dmac2 0x24>;
-+                    dma-names = "rx", "rx";
-+                    power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-+                    resets = <&cpg 513>;
-+                    renesas,bonding = <&drif11>;
-+            };
-+
-+            drif11: rif@e6f70000 {
-+                    compatible = "renesas,r8a7795-drif",
-+                                 "renesas,rcar-gen3-drif";
-+                    reg = <0 0xe6f70000 0 0x64>;
-+                    interrupts = <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>;
-+                    clocks = <&cpg CPG_MOD 512>;
-+                    clock-names = "fck";
-+                    dmas = <&dmac1 0x26>, <&dmac2 0x26>;
-+                    dma-names = "rx", "rx";
-+                    power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-+                    resets = <&cpg 512>;
-+                    renesas,bonding = <&drif10>;
-+                    pinctrl-0 = <&drif1_pins>;
-+                    pinctrl-names = "default";
-+                    port {
-+                            drif1_ep: endpoint {
-+                                 remote-endpoint = <&tuner_ep1>;
-+                                 sync-active = <0>;
-+                            };
-+                    };
-+            };
-+    };
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d9ebaf0c179b..6b4989ad505e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10914,7 +10914,7 @@ L:	linux-media@vger.kernel.org
- L:	linux-renesas-soc@vger.kernel.org
- S:	Supported
- T:	git git://linuxtv.org/media_tree.git
--F:	Documentation/devicetree/bindings/media/renesas,drif.txt
-+F:	Documentation/devicetree/bindings/media/renesas,drif.yaml
- F:	drivers/media/platform/rcar_drif.c
- 
- MEDIA DRIVERS FOR RENESAS - FCP
--- 
-2.25.1
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+
+> ---
+>  include/media/v4l2-async.h | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/media/v4l2-async.h b/include/media/v4l2-async.h
+> index 8319284c93cb..d6e31234826f 100644
+> --- a/include/media/v4l2-async.h
+> +++ b/include/media/v4l2-async.h
+> @@ -154,8 +154,9 @@ void v4l2_async_notifier_init(struct v4l2_async_notifier *notifier);
+>   * @notifier: pointer to &struct v4l2_async_notifier
+>   * @asd: pointer to &struct v4l2_async_subdev
+>   *
+> - * Call this function before registering a notifier to link the
+> - * provided asd to the notifiers master @asd_list.
+> + * Call this function before registering a notifier to link the provided @asd to
+> + * the notifiers master @asd_list. The @asd must be allocated with k*alloc() as
+> + * it will be freed by the framework when the notifier is destroyed.
+>   */
+>  int v4l2_async_notifier_add_subdev(struct v4l2_async_notifier *notifier,
+>  				   struct v4l2_async_subdev *asd);
+> 
 
