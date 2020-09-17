@@ -2,102 +2,105 @@ Return-Path: <SRS0=7MnB=C2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A62BC433E2
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 07:20:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 070D6C433E2
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 07:20:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D9F032083B
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 07:20:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600327241;
-	bh=cGR7Ut51zyLqgr7LZIC637tRgQYLhYGs8GRiX0vbHCQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=ApaXFtrDJft5DzSSFowk5DxxySg0Hm1R9mryXSnZ20F6tZj0OF4D/ih4jS+7bJX3T
-	 u9zNpo6mqiA7URxIRbRqJx0/rs6YUOGte4BiHypdnKdb1YaRTiKPAL6w0FIcFL4vYo
-	 sy8vsxd0Ja6vMvzN+RhU78pbayM4l9T9DRB4vGcg=
+	by mail.kernel.org (Postfix) with ESMTP id C1C6B204FD
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 07:20:50 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="emqitvXa"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726311AbgIQHUh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Sep 2020 03:20:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60868 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726279AbgIQHUc (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Sep 2020 03:20:32 -0400
-Received: from coco.lan (ip5f5ad5d2.dynamic.kabel-deutschland.de [95.90.213.210])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C8CE82072E;
-        Thu, 17 Sep 2020 07:20:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600327229;
-        bh=cGR7Ut51zyLqgr7LZIC637tRgQYLhYGs8GRiX0vbHCQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=CeTWPfybY1e5B/MvRn7EcJfdpPsk8tyVGogFoFBp8W8QlpNZ6cvijSC16/GXMsucw
-         ofb0ahkJ+8gipBlCN691ijerT8TjVXnhjz5Vd4dE6fJju1RFp0PpkVTjjS8pHweLPa
-         dj2viqwW25AeTqpDaUmcFSeAeFfll5C0pvgOs0Es=
-Date:   Thu, 17 Sep 2020 09:20:25 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Subject: Re: [GIT FIXES FOR v5.9] Remove V4L2_FLAG_MEMORY_NON_CONSISTENT
- flag
-Message-ID: <20200917092025.285f18a5@coco.lan>
-In-Reply-To: <9347220a-a039-93ff-5dd7-f35613631a29@xs4all.nl>
-References: <9347220a-a039-93ff-5dd7-f35613631a29@xs4all.nl>
-X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S1726290AbgIQHUf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Sep 2020 03:20:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48612 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726187AbgIQHUY (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 17 Sep 2020 03:20:24 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998FFC061756
+        for <linux-media@vger.kernel.org>; Thu, 17 Sep 2020 00:20:22 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id u13so850904pgh.1
+        for <linux-media@vger.kernel.org>; Thu, 17 Sep 2020 00:20:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:content-transfer-encoding:in-reply-to:references
+         :subject:from:cc:to:date:message-id:user-agent;
+        bh=8mZBJ8cLMtckf5ie94vJM9dG4dXSSI5Lejo+Q/gBHh4=;
+        b=emqitvXamm1Zt4kpxTich+8DdlEB5lfs6ctgPWa0EPCVR9Iyj+wLVcTCZ44Z74IjUY
+         94Mj+hbZqt2kyeIzD3SJ1u5sB1MIHi4psCJJgsF8tfoS7tmUTZ5OzCuBFiTkY4d9O9Xl
+         sE6j+kvR4hBDGNAXRH3Jf1laOeVtuJl9IgMUI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:content-transfer-encoding
+         :in-reply-to:references:subject:from:cc:to:date:message-id
+         :user-agent;
+        bh=8mZBJ8cLMtckf5ie94vJM9dG4dXSSI5Lejo+Q/gBHh4=;
+        b=b7N+fFcQmwmpIwusnQwTqA40FSWUR3Of8WGzEBMzAWzKcLlIeQIZ4y8NaFoLteDCHz
+         M3TCLUr+TLfQbrwoT2N7rAHyNXNJp+3k4xqCeXcXfdSc674Arlqb3ZLJ+XtlFkxAOP7w
+         DQnCEYGy09Qztn1rYzIrYDkFAqzkjsHjiifnyZcQ0TRcuJ0zOCRw0230FDzGS3M+IIIl
+         VqE75w2hmf1Cf3UyLGoGKuCpxLIB/5Fjp8A4+NlPdpxUNN5mYRIo3DSS5ijJc2SQFSFK
+         dzT9kjcyJcGYLZCc3gfEK4/qNydGHBcT+PuBjchKrJ1mUqGfx24zTDwUFDiUrEABKcVp
+         Mp/w==
+X-Gm-Message-State: AOAM530oypUt9rJ3wBw1T9fFTo7D1Av+QRe6THCy76N2k1t/HKxpmJFU
+        gaJADV3uJ+JctSXK5ax5IvmyG6XkYQemWA==
+X-Google-Smtp-Source: ABdhPJwXci7bPJVYBFGnOsZ81TDzX4aNaBlsDL4MOUhAzC4BVReOIP1FUogHNHnB3AqHInM5cq0p0Q==
+X-Received: by 2002:a63:d648:: with SMTP id d8mr21375045pgj.4.1600327222184;
+        Thu, 17 Sep 2020 00:20:22 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:3e52:82ff:fe6c:83ab])
+        by smtp.gmail.com with ESMTPSA id 143sm19564027pfc.66.2020.09.17.00.20.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Sep 2020 00:20:21 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <1600305963-7659-3-git-send-email-mansur@codeaurora.org>
+References: <1600305963-7659-1-git-send-email-mansur@codeaurora.org> <1600305963-7659-3-git-send-email-mansur@codeaurora.org>
+Subject: Re: [RESEND v2 2/4] venus: core: vote for video-mem path
+From:   Stephen Boyd <swboyd@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        vgarodia@codeaurora.org,
+        Mansur Alisha Shaik <mansur@codeaurora.org>
+To:     Mansur Alisha Shaik <mansur@codeaurora.org>,
+        linux-media@vger.kernel.org, stanimir.varbanov@linaro.org
+Date:   Thu, 17 Sep 2020 00:20:20 -0700
+Message-ID: <160032722036.4188128.15261798942473063496@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Fri, 11 Sep 2020 12:52:57 +0200
-Hans Verkuil <hverkuil@xs4all.nl> escreveu:
+Quoting Mansur Alisha Shaik (2020-09-16 18:26:01)
+> diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/pla=
+tform/qcom/venus/core.c
+> index 52a3886..064b6c8 100644
+> --- a/drivers/media/platform/qcom/venus/core.c
+> +++ b/drivers/media/platform/qcom/venus/core.c
+> @@ -363,8 +363,16 @@ static __maybe_unused int venus_runtime_suspend(stru=
+ct device *dev)
+> =20
+>         ret =3D icc_set_bw(core->cpucfg_path, 0, 0);
+>         if (ret)
+> -               return ret;
+> +               goto err_poweron_core;
+> +
+> +       ret =3D icc_set_bw(core->video_path, 0, 0);
+> +       if (ret)
+> +               goto err_poweron_core;
+> +
+> +       return ret;
+> =20
+> +err_poweron_core:
+> +       pm_ops->core_power(dev, POWER_ON);
 
-> From the commit log of the patch:
-> 
-> --------------------------------------------------------------------
-> The patch partially reverts some of the UAPI bits of the buffer
-> cache management hints. Namely, the queue consistency (memory
-> coherency) user-space hint because, as it turned out, the kernel
-> implementation of this feature was misusing DMA_ATTR_NON_CONSISTENT.
-> 
-> The patch revers both kernel and user space parts: removes the
-> DMA consistency attr functions, rolls back changes to v4l2_requestbuffers,
-> v4l2_create_buffers structures and corresponding UAPI functions
-> (plus compat32 layer) and cleans up the documentation.
-> --------------------------------------------------------------------
-> 
-> The intention is that this feature will return once proper low-level support
-> for this has been sorted. A patch to revert the v4l-utils changes is ready
-> to be merged once this patch made it's way to our master branch:
-> 
-> https://patchwork.linuxtv.org/project/linux-media/patch/20200911030952.74468-1-sergey.senozhatsky@gmail.com/
-> 
-> I've tested this with the test-media script.
-> 
-> Regards,
-> 
-> 	Hans
-> 
-> The following changes since commit 93c16fabdb74a9c1a427402fc1fe588a45130c5b:
-> 
->   media: ov8856: Add support for 3264x2448 mode (2020-09-10 14:29:35 +0200)
-> 
-> are available in the Git repository at:
-> 
->   git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.9-mem
-> 
-> for you to fetch changes up to d36642b40255022dda1cfcaebe82e40a592d4ee8:
-> 
->   media/v4l2: remove V4L2_FLAG_MEMORY_NON_CONSISTENT flag (2020-09-11 12:26:54 +0200)
+Don't we need to put back the bandwidth from before suspend was entered
+if the video_path fails?
 
-This caused a warning when building the html books. Not sure why the robot
-didn't warn. I'll be posting a fix at the ML.
-
-Thanks,
-Mauro
+>         return ret;
+>  }
+>
