@@ -5,102 +5,102 @@ X-Spam-Level:
 X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7260FC43461
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 11:43:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EEAACC433E2
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 11:51:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 36A58206BE
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 11:43:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A67DF206E6
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 11:51:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="IzrMRhjl"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="PO4byAB7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726505AbgIQLnK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Sep 2020 07:43:10 -0400
-Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:53727 "EHLO
-        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726714AbgIQLnH (ORCPT
+        id S1726851AbgIQLux (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Sep 2020 07:50:53 -0400
+Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:60721 "EHLO
+        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726758AbgIQL1b (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Sep 2020 07:43:07 -0400
+        Thu, 17 Sep 2020 07:27:31 -0400
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id IsJ8kMCx8PTBMIsJ9klouK; Thu, 17 Sep 2020 13:42:36 +0200
+        id Is3qkM7BCPTBMIs3tkllRF; Thu, 17 Sep 2020 13:26:53 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1600342956; bh=7dj1q32JDBgy/nh+pm/ikTPB2+8KPJ8Yve3Qciq8Qpw=;
+        t=1600342013; bh=f4uU11TplcltXscEBKpGneN6cvdGllExJEW1PbYfP6g=;
         h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
          Subject;
-        b=IzrMRhjlHnOYFzhPh1+7thsXuzsW1ts7Cwabv4GDGIARb/X3qhdk1EDtrHi/a+N2L
-         lTixRyzEiOo/b+nuzTnzTKCkj/J93AFnsFgeOeSMrdu+x95Vbi1CzbscDGSfAxnoD0
-         Ycx2QLRPP5mtfGLyJTpKnzWh7rwh3N+y4Rj4J7gwEJ8i6McJw8mc7rkNtS+84MnNyG
-         Svn/16KwUfxRZzVCq0F0vSIahuPwLefz7QJpx/3ghxW3Ggu4KCB8lqeMkdfkXx6xo7
-         Uad/+QFp44mWyf8siMLDJ2JuLeaUdLmuGpCIQtaC4x/wjGJPzCDagpXH+ffcX3RgfK
-         bwmaaZEYT6rOg==
-Subject: Re: [PATCH] media: mtk-jpeg: Fix a reference count leak.
-To:     wu000273@umn.edu, kjlu@umn.edu
-Cc:     Rick Chang <rick.chang@mediatek.com>,
-        Bin Liu <bin.liu@mediatek.com>,
+        b=PO4byAB7mXg96eKklNbeMqFiF+BXBc5YfTTlVc34KfLZHUhHIdhk+2OAnHtkEuX4s
+         udqIK2fjqR9DNscCBDRsOo71erq+iM2tL7gvVtTW8NCrv5kGCuf9cTR+pMaWsydw+P
+         KJa91bdZ/3EfVpo4bIiLV1btI0FDu4z0T6+tkxH2nGgc9rESJqZykSO1ir1U/dXmwd
+         uL1r82b8N+8DnwdYSjtZPvTkaYmW2RRYaPRbgWiucXoZdJhXTmPG9nEkw9Mznd2phR
+         oKLdROxKAKTWaP+OIQk8xd1pnX+qFRyiWFrtFBlzW66cdIEzioobVjz4/nju3D0WHM
+         K2IQNdTZotokw==
+Subject: Re: [PATCH] media: platform: s3c-camif: Fix runtime PM imbalance in
+ s3c_camif_open
+To:     Dinghao Liu <dinghao.liu@zju.edu.cn>, kjlu@umn.edu
+Cc:     Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Ricky Liang <jcliang@chromium.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20200613230843.14109-1-wu000273@umn.edu>
+        linux-media@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200522082915.4731-1-dinghao.liu@zju.edu.cn>
 From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <19432e4d-dcc4-5056-17ef-a6d2dd7b6fb4@xs4all.nl>
-Date:   Thu, 17 Sep 2020 13:42:34 +0200
+Message-ID: <611ffe6a-c4ef-d23c-4d3f-a7771ce56bab@xs4all.nl>
+Date:   Thu, 17 Sep 2020 13:26:46 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200613230843.14109-1-wu000273@umn.edu>
+In-Reply-To: <20200522082915.4731-1-dinghao.liu@zju.edu.cn>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfJuL7t1rHdW84tT2i/rcyP37zN46fhUoL058G4mjDiCpc1dzY5lcoTLXx9HusSgsaifwP6PIjBuISaAZ+ojG1FafXGdRtu7I7e4kXACzagTcWXDdJ3TK
- 4Tq91XJm52nrrxrUnpYAVmRUuCZy1S7iP4movC8W6Ipv4c4kEcRuwTa0PXuCtogHXkTXjgG+xGbG6aL7fD0BbEFqLtaMn5VnQPipmVRVMCWfrXKAHwEkZQbf
- coOfLDhU5gFmonJgeunqbZV7ufinrjxoal13MNFk1fCcUnA10wk6dBf8tawQCzdipJH8W1yRyvrn8qIxP7ilxVbCtOhDPPhG/DMuvwxEpF5b8Vo8AwUcuZ/e
- sjivz4IRI3G8+uGqxTJYCkoGeJRrr+ZhN+jR7XYGkGGzGr/93Vk2AVmboy/5ewvNFLmTZjjXVSzvoNMRN6N7E5a9B2eIEk3WbfPp41pcag+gAEoUI+6Zo8zW
- NNvvya1RJJj06++rU9b6E4IJbEY8VRjujiT38/P6fRCUlx60reRstYEJm+Xw2JLZbT+yAkiq5G6Jf1HtvhKsTAZQPF1FRLgnaLtneqzda+ib1cYloCIx/IPP
- PFlUpFT+XQIZBOGF7BKxhvELyd1iQU+XlIOfhNaIvTfh9cv73O2l0fpIccMaXKkKoVsVvLLU4EeYfA4IP7mE88MntmYLZIaW6ignJfhmOy1uzPPOz+txIT8n
- ltk8AlI7JtQ=
+X-CMAE-Envelope: MS4wfL73kWQRYSxDnh7SSlpi0XbenrsCQooROgHQTF9H+9opAp/kiXPa03L40yxbRGKjEKAyts40RsDxNxFPgFMbFeOAucSwIlQNk8rABAWrBuF33e87p95c
+ Jj1mPqoof52toqHmpCr81RE5NVbyjq3V5o6Ug4AJ5f+t0rLTcpDsuwpYDv6vbGComj7YuSI5zLtUGH6yDPzYlEL4uI+J1Xi5ViqDM0DuErKgc5O0PCV6lnRA
+ GIXRoJOLpHq5BDgzGISwDNZ2ooNBT4vFVB0hITD/XuvrUPOlAUi0nLPAfoXZY1vsc2VveR//TIgCmhyd6C2urtuzi2p6bosqV7KtXBy/y/wG8MZP2lHCz94l
+ r+0sXa/LTPGq4prFv6W/A6tCPeQ/LeiAShbNKJn/eMrIyq4JNRryFqfyAtaP+oemw9Lhl2HZi0KHG5+dISZWnQUdHvENSTbX+YYLnVjOcM4l4DXAXJ/oGUVj
+ KW+oYee3kH7nbcS27DEWCSDXsZ9QH5us9TmrIg==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 14/06/2020 01:08, wu000273@umn.edu wrote:
-> From: Qiushi Wu <wu000273@umn.edu>
-> 
+On 22/05/2020 10:29, Dinghao Liu wrote:
 > pm_runtime_get_sync() increments the runtime PM usage counter even
-> when it returns an error code. Thus call pm_runtime_put_noidle()
-> if pm_runtime_get_sync() fails.
+> when it returns an error code. Thus a pairing decrement is needed on
+> the error handling path to keep the counter balanced.
 > 
-> Fixes: b2f0d2724ba4 ("[media] vcodec: mediatek: Add Mediatek JPEG Decoder Driver")
-> Signed-off-by: Qiushi Wu <wu000273@umn.edu>
+> Also, call pm_runtime_put() and v4l2_fh_release() when sensor_set_power()
+> returns an error code.
+> 
+> Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
 > ---
->  drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  drivers/media/platform/s3c-camif/camif-capture.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 > 
-> diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
-> index f82a81a3bdee..097f0b050f67 100644
-> --- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
-> +++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
-> @@ -710,8 +710,10 @@ static int mtk_jpeg_start_streaming(struct vb2_queue *q, unsigned int count)
->  	int ret = 0;
+> diff --git a/drivers/media/platform/s3c-camif/camif-capture.c b/drivers/media/platform/s3c-camif/camif-capture.c
+> index 9ca49af29542..d42d9cfaf674 100644
+> --- a/drivers/media/platform/s3c-camif/camif-capture.c
+> +++ b/drivers/media/platform/s3c-camif/camif-capture.c
+> @@ -552,11 +552,9 @@ static int s3c_camif_open(struct file *file)
+>  		goto err_pm;
 >  
->  	ret = pm_runtime_get_sync(ctx->jpeg->dev);
-> -	if (ret < 0)
-> +	if (ret < 0) {
-> +		pm_runtime_put_noidle(ctx->jpeg->dev);
->  		goto err;
-> +	}
->  
->  	return 0;
->  err:
-> 
+>  	ret = sensor_set_power(camif, 1);
+> -	if (!ret)
+> -		goto unlock;
 
-This patch no longer applies, can you rebase this?
+This is wrong, now this will call v4l2_fh_release() as well on success.
+
+This needs to be reworked.
 
 Regards,
 
 	Hans
+
+>  
+> -	pm_runtime_put(camif->dev);
+>  err_pm:
+> +	pm_runtime_put(camif->dev);
+>  	v4l2_fh_release(file);
+>  unlock:
+>  	mutex_unlock(&camif->lock);
+> 
+
