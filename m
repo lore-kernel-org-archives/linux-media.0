@@ -2,189 +2,223 @@ Return-Path: <SRS0=7MnB=C2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA672C433E2
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 18:43:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD37DC43461
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 18:43:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 74101208E4
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 18:43:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600368224;
-	bh=P6t4EObPuKTAtjmptm4+AFH+z1+4hhhtxhJjS4UyDF0=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=USQmU+jwdDO8cVdi6iUXL8p/lPXsPdGZGRismngphiXmfcwGf4R9PGgkWJ1NKnVtA
-	 S8OUCqQ/0eBU6N8oou78vvSuyr1ByxScuUaf/pr/W3a6NdO6+1/Nk7/titu19V5inT
-	 FiYf4AzfXxFn2qxKysD+jqrtU+IBM/e+S0STlq2w=
+	by mail.kernel.org (Postfix) with ESMTP id 9563621D7B
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 18:43:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726532AbgIQSni (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Sep 2020 14:43:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57978 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728606AbgIQQx3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Sep 2020 12:53:29 -0400
-Received: from kozik-lap.mshome.net (unknown [194.230.155.191])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 39C1520708;
-        Thu, 17 Sep 2020 16:53:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600361605;
-        bh=P6t4EObPuKTAtjmptm4+AFH+z1+4hhhtxhJjS4UyDF0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=QWWMJnynLqLOQxMCeIhdb30C/fJHQKsRzanwLdTpwbhaMyXT+tXpbqbOYpkb+Ly2M
-         aBumK6+zCHsWhNp6ZfqN5QXKUzl+nO1TwJgKiLkTRKlRiFxwyqIPdifsq9tCyheivp
-         WIbwLhtE7vcm3MGDi0wpAwkD5yRasj8RADVLwNo8=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Hoan Tran <hoan@os.amperecomputing.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Sungbo Eo <mans0n@gorani.run>, Stefan Agner <stefan@agner.ch>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Yash Shah <yash.shah@sifive.com>,
+        id S1726539AbgIQSnx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Sep 2020 14:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42234 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726403AbgIQSnm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 17 Sep 2020 14:43:42 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82AF8C06174A;
+        Thu, 17 Sep 2020 11:43:30 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nicolas)
+        with ESMTPSA id D21B229C5B9
+Message-ID: <72b35424372f4e3b73d82c84637672b7b39353e8.camel@collabora.com>
+Subject: Re: [PATCH] media: cedrus: Propagate OUTPUT resolution to CAPTURE
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Reply-To: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     kernel@collabora.com, Maxime Ripard <mripard@kernel.org>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        - <patches@opensource.cirrus.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Amelie Delaunay <amelie.delaunay@st.com>,
-        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Andy Teng <andy.teng@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Sricharan R <sricharan@codeaurora.org>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-unisoc@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-media@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mediatek@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH v2 00/13] gpio: add common dtschema
-Date:   Thu, 17 Sep 2020 18:52:48 +0200
-Message-Id: <20200917165301.23100-1-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Chen-Yu Tsai <wens@csie.org>, linux-media@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 17 Sep 2020 14:43:19 -0400
+In-Reply-To: <b868e559-25e0-7381-67f4-d3a6f7c0e2ed@xs4all.nl>
+References: <20200514153903.341287-1-nicolas.dufresne@collabora.com>
+         <b868e559-25e0-7381-67f4-d3a6f7c0e2ed@xs4all.nl>
+Organization: Collabora
+Content-Type: multipart/signed; micalg="pgp-sha1"; protocol="application/pgp-signature";
+        boundary="=-T5ZSHFf8CWwJEBgVkOmc"
+User-Agent: Evolution 3.36.5 (3.36.5-1.fc32) 
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
 
-Changes since v1
-================
-1. Use common schema in bindings outside of gpio/ (new patches).
-2. Minor fixes - see individual patches for changelogs.
+--=-T5ZSHFf8CWwJEBgVkOmc
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Le jeudi 17 septembre 2020 =C3=A0 12:39 +0200, Hans Verkuil a =C3=A9crit :
+> On 14/05/2020 17:39, Nicolas Dufresne wrote:
+> > As per spec, the CAPTURE resolution should be automatically set based o=
+n
+> > the OTUPUT resolution. This patch properly propagate width/height to th=
+e
+> > capture when the OUTPUT format is set and override the user provided
+> > width/height with configured OUTPUT resolution when the CAPTURE fmt is
+> > updated.
+> >=20
+> > This also prevents userspace from selecting a CAPTURE resolution that i=
+s
+> > too small, avoiding unwanted page faults.
+> >=20
+> > Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> > ---
+> >  drivers/staging/media/sunxi/cedrus/cedrus_video.c | 7 ++++++-
+> >  1 file changed, 6 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_video.c b/driver=
+s/staging/media/sunxi/cedrus/cedrus_video.c
+> > index 16d82309e7b6..a6d6b15adc2e 100644
+> > --- a/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+> > +++ b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+> > @@ -247,6 +247,8 @@ static int cedrus_try_fmt_vid_cap(struct file *file=
+, void *priv,
+> >  		return -EINVAL;
+> > =20
+> >  	pix_fmt->pixelformat =3D fmt->pixelformat;
+> > +	pix_fmt->width =3D ctx->src_fmt.width;
+> > +	pix_fmt->height =3D ctx->src_fmt.height;
+> >  	cedrus_prepare_format(pix_fmt);
+> > =20
+> >  	return 0;
+> > @@ -319,11 +321,14 @@ static int cedrus_s_fmt_vid_out(struct file *file=
+, void *priv,
+> >  		break;
+> >  	}
+> > =20
+> > -	/* Propagate colorspace information to capture. */
+> > +	/* Propagate format information to capture. */
+> >  	ctx->dst_fmt.colorspace =3D f->fmt.pix.colorspace;
+> >  	ctx->dst_fmt.xfer_func =3D f->fmt.pix.xfer_func;
+> >  	ctx->dst_fmt.ycbcr_enc =3D f->fmt.pix.ycbcr_enc;
+> >  	ctx->dst_fmt.quantization =3D f->fmt.pix.quantization;
+> > +	ctx->dst_fmt.width =3D ctx->src_fmt.width;
+> > +	ctx->dst_fmt.height =3D ctx->src_fmt.height;
+>=20
+> You can only do this if the capture queue isn't busy.
+>=20
+> See also hantro_reset_raw_fmt() where it does that check.
+>=20
+> So this needs a v2.
+
+I missed this reply, wasn't expecting a negative third review. I'll
+copy and paste from there. So basically:
+
+ - EBUSY if peer vq is busy
+ - EBUSY if pixel format is changed while vq is busy
+ - EBUSY if streaming
+
+Obviously, I don't have userspace to exercise any of these cases, but
+it seems to make sense. I remembered about this patch today as someone
+reported the kernel crash we get without this patch:
+
+---
+
+I tried testing cedrus with gstreamer 0.18 and it managed to crash the
+kernel on
+A64. I used:
+
+  gst-launch-1.0 filesrc location=3Dtest.mkv ! matroskademux ! queue !
+h264parse ! v4l2slh264dec ! filesink location=3Daaa.dat
+
+Unable to handle kernel paging request at virtual address
+8080808080808088
+Mem abort info:
+  ESR =3D 0x96000044
+  EC =3D 0x25: DABT (current EL), IL =3D 32 bits
+  SET =3D 0, FnV =3D 0
+  EA =3D 0, S1PTW =3D 0
+Data abort info:
+  ISV =3D 0, ISS =3D 0x00000044
+  CM =3D 0, WnR =3D 1
+[8080808080808088] address between user and kernel address ranges
+Internal error: Oops: 96000044 [#1] SMP
+Modules linked in: modem_power hci_uart btrtl bluetooth ecdh_generic
+ecc sunxi_cedrus(C) sun8i_ce crypto_engine snd_soc_bt_sco
+snd_soc_simple_card snd_soc_simple_card_utils snd_soc_simple_amplifier
+sun50i_codec_analog sun8i_codec sun8i_adda_pr_regmap snd_soc_ec25
+sun4i_i2s snd_soc_core snd_pcm_dmaengine snd_pcm snd_timer snd
+soundcore stk3310 inv_mpu6050_i2c inv_mpu6050 st_magn_i2c
+st_sensors_i2c st_magn st_sensors industrialio_triggered_buffer
+kfifo_buf regmap_i2c option usb_wwan usbserial anx7688 ohci_platform
+ohci_hcd ehci_platform ehci_hcd g_cdc usb_f_acm u_serial usb_f_ecm
+u_ether libcomposite sunxi phy_generic musb_hdrc udc_core usbcore
+sun8i_rotate v4l2_mem2mem gc2145 ov5640 sun6i_csi videobuf2_dma_contig
+v4l2_fwnode videobuf2_memops videobuf2_v4l2 videobuf2_common videodev
+mc 8723cs(C) cfg80211 rfkill lima gpu_sched goodix
+CPU: 0 PID: 0 Comm: swapper/0 Tainted: G         C        5.9.0-rc5-
+00386-g4fe2ef82bd0b #62
+Hardware name: Pine64 PinePhone (1.2) (DT)
+pstate: 80000085 (Nzcv daIf -PAN -UAO BTYPE=3D--)
+pc : v4l2_m2m_buf_remove+0x44/0x90 [v4l2_mem2mem]
+lr : v4l2_m2m_buf_remove+0x18/0x90 [v4l2_mem2mem]
+sp : ffffffc010c8be20
+x29: ffffffc010c8be20 x28: ffffffc010bb2fc0=20
+x27: 0000000000000060 x26: ffffffc010935e58=20
+x25: ffffffc010c06a5a x24: 0000000000000080=20
+x23: 0000000000000005 x22: ffffffc010c8bf4c=20
+x21: ffffff806ba0d088 x20: ffffff80687d1800=20
+x19: ffffff8066c40298 x18: 0000000000000000=20
+x17: 0000000000000000 x16: 0000000000000000=20
+x15: 000001b66678fd80 x14: 0000000000000204=20
+x13: 0000000000000001 x12: 0000000000000040=20
+x11: ffffff806f0c0248 x10: ffffff806f0c024a=20
+x9 : ffffffc010bbdac8 x8 : ffffff806f000270=20
+x7 : 0000000000000000 x6 : dead000000000100=20
+x5 : dead000000000122 x4 : 0000000000000000=20
+x3 : 8080808080808080 x2 : 8080808080808080=20
+x1 : ffffff80641327a8 x0 : 0000000000000080=20
+Call trace:
+ v4l2_m2m_buf_remove+0x44/0x90 [v4l2_mem2mem]
+ v4l2_m2m_buf_done_and_job_finish+0x34/0x140 [v4l2_mem2mem]
+ cedrus_irq+0x8c/0xc0 [sunxi_cedrus]
+ __handle_irq_event_percpu+0x54/0x150
+ handle_irq_event+0x4c/0xec
+ handle_fasteoi_irq+0xbc/0x1c0
+ __handle_domain_irq+0x78/0xdc
+ gic_handle_irq+0x50/0xa0
+ el1_irq+0xb8/0x140
+ arch_cpu_idle+0x10/0x14
+ cpu_startup_entry+0x24/0x60
+ rest_init+0xb0/0xbc
+ arch_call_rest_init+0xc/0x14
+ start_kernel+0x690/0x6b0
+Code: f2fbd5a6 f2fbd5a5 52800004 a9400823 (f9000462)=20
+---[ end trace 88233b9a76cdb261 ]---
+Kernel panic - not syncing: Fatal exception in interrupt
 
 
-Notes
-=====
-This is independent work of pca953x bindings:
-https://lore.kernel.org/lkml/20200916155715.21009-1-krzk@kernel.org/T/#u
+>=20
+> Regards,
+>=20
+> 	Hans
+>=20
+> > +	cedrus_prepare_format(&ctx->dst_fmt);
+> > =20
+> >  	return 0;
+> >  }
+> >=20
 
-The DTS patches can be also applied independently.
-The bindings patches depend on first one, adding common schema.
+--=-T5ZSHFf8CWwJEBgVkOmc
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
-Best regards,
-Krzysztof
+-----BEGIN PGP SIGNATURE-----
 
-Krzysztof Kozlowski (13):
-  dt-bindings: gpio: add common schema for GPIO controllers
-  dt-bindings: gpio: include common schema in GPIO controllers
-  dt-bindings: gpio: pl061: add missing properties and include common
-    schema
-  dt-bindings: gpio: fsl-imx-gpio: add i.MX ARMv6 and ARMv7 compatibles
-  dt-bindings: gpio: fsl-imx-gpio: add gpio-line-names
-  dt-bindings: gpio: gpio-vf610: fix iMX 7ULP compatible matching
-  dt-bindings: media: include common schema in GPIO controllers
-  dt-bindings: mfd: include common schema in GPIO controllers
-  dt-bindings: pinctrl: include common schema in GPIO controllers
-  ASoC: dt-bindings: zl38060: include common schema in GPIO controllers
-  arm64: dts: imx8mq-librem5: correct GPIO hog property
-  arm64: dts: imx8mq-librem5: align GPIO hog names with dtschema
-  ARM: dts: imx: align GPIO hog names with dtschema
+iF0EABECAB0WIQSScpfJiL+hb5vvd45xUwItrAaoHAUCX2OuRwAKCRBxUwItrAao
+HORwAKDS1aEYXGxWBg34aSw2nH9rISBBzACffPFBNUnc77SBAay4jgSCE7244uY=
+=eI5v
+-----END PGP SIGNATURE-----
 
- .../bindings/gpio/brcm,xgs-iproc-gpio.yaml    |   3 +
- .../bindings/gpio/fsl-imx-gpio.yaml           |  17 ++-
- .../devicetree/bindings/gpio/gpio-common.yaml | 125 ++++++++++++++++++
- .../devicetree/bindings/gpio/gpio-mxs.yaml    |   4 +
- .../bindings/gpio/gpio-pca9570.yaml           |   3 +
- .../devicetree/bindings/gpio/gpio-rda.yaml    |   3 +
- .../devicetree/bindings/gpio/gpio-vf610.yaml  |  11 +-
- .../devicetree/bindings/gpio/mrvl-gpio.yaml   |   1 +
- .../devicetree/bindings/gpio/pl061-gpio.yaml  |   6 +
- .../bindings/gpio/qcom,wcd934x-gpio.yaml      |   3 +
- .../bindings/gpio/renesas,em-gio.yaml         |   3 +
- .../bindings/gpio/renesas,rcar-gpio.yaml      |   3 +
- .../devicetree/bindings/gpio/sifive,gpio.yaml |   3 +
- .../bindings/gpio/snps,dw-apb-gpio.yaml       |   3 +
- .../gpio/socionext,uniphier-gpio.yaml         |   3 +
- .../bindings/gpio/xylon,logicvc-gpio.yaml     |   3 +
- .../bindings/media/i2c/maxim,max9286.yaml     |   3 +
- .../bindings/mfd/cirrus,madera.yaml           |   1 +
- .../devicetree/bindings/mfd/max77650.yaml     |   3 +
- .../bindings/mfd/rohm,bd71828-pmic.yaml       |   3 +
- .../devicetree/bindings/mfd/st,stmfx.yaml     |   2 +
- .../devicetree/bindings/mfd/wlf,arizona.yaml  |   1 +
- .../pinctrl/actions,s500-pinctrl.yaml         |   3 +
- .../pinctrl/allwinner,sun4i-a10-pinctrl.yaml  |   1 +
- .../bindings/pinctrl/cirrus,lochnagar.yaml    |   3 +
- .../bindings/pinctrl/ingenic,pinctrl.yaml     |   3 +
- .../pinctrl/mediatek,mt6779-pinctrl.yaml      |   3 +
- .../bindings/pinctrl/pinctrl-mt8192.yaml      |   3 +
- .../pinctrl/qcom,ipq6018-pinctrl.yaml         |   3 +
- .../pinctrl/qcom,msm8226-pinctrl.yaml         |   3 +
- .../bindings/pinctrl/qcom,sm8250-pinctrl.yaml |   3 +
- .../pinctrl/renesas,rza2-pinctrl.yaml         |   3 +
- .../bindings/pinctrl/st,stm32-pinctrl.yaml    |   3 +
- .../devicetree/bindings/sound/zl38060.yaml    |   3 +
- arch/arm/boot/dts/imx51-zii-rdu1.dts          |   2 +-
- arch/arm/boot/dts/imx6qdl-zii-rdu2.dtsi       |   8 +-
- arch/arm/boot/dts/imx6ul-ccimx6ulsbcpro.dts   |   2 +-
- .../boot/dts/freescale/imx8mq-librem5.dtsi    |   4 +-
- 38 files changed, 245 insertions(+), 12 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/gpio/gpio-common.yaml
-
--- 
-2.17.1
+--=-T5ZSHFf8CWwJEBgVkOmc--
 
