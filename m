@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41CEBC2D0E3
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 18:41:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BDCEEC433E2
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 18:42:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DCA5D221EE
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 18:41:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7D7ED208E4
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 18:42:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600368092;
-	bh=aZDGZYJid2V8Fx1m0lmm3+JurcbZ8SKx/Yu1RMA/dNU=;
+	s=default; t=1600368134;
+	bh=pV5NUEmeW9mZ1TS+/Jc3oFxArHOIVWs9UQjncMMV5dA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=ekeU9D9gIm7Nu9R957QGpvpHIDAvshiycy8lhXaafTDbQ5iFmCRll334E20661cdo
-	 VvosJHW63GyTdmlYW5nJ2o4iSavcvNl+305zTFybB2R4ltAN1DCjC1K6FHfuR07ulx
-	 Hy6/OSEvH9rNeRlqT2pbZzMmwSBWB+DzOIopV1AI=
+	b=0Ddqy71T7trksPkIgbBJBM9FDKcO1ViZafxfY5gCNcrYagWAHcPcATfT1IGNeBmOu
+	 7uPjb5+AZE7PydYHc13Ynkw0680R5MqdJSKB8PXukRzaUt7AfI6P7MKazFLE6pG448
+	 SnjNW0fzChQkc49lnvi9kr7NW/nfrQsCtydhfYWE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728780AbgIQQ4O (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Sep 2020 12:56:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34894 "EHLO mail.kernel.org"
+        id S1726508AbgIQSmK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Sep 2020 14:42:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33764 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728647AbgIQQ4A (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Sep 2020 12:56:00 -0400
+        id S1728747AbgIQQza (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 17 Sep 2020 12:55:30 -0400
 Received: from kozik-lap.mshome.net (unknown [194.230.155.191])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 43716206A4;
-        Thu, 17 Sep 2020 16:55:45 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 647A521D24;
+        Thu, 17 Sep 2020 16:55:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600361759;
-        bh=aZDGZYJid2V8Fx1m0lmm3+JurcbZ8SKx/Yu1RMA/dNU=;
+        s=default; t=1600361729;
+        bh=pV5NUEmeW9mZ1TS+/Jc3oFxArHOIVWs9UQjncMMV5dA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CQqVCUrfLSMMi4PrDWY4qKZjHVNOyrDoFCP+p9QOTMBKlS8x//BbLXwkbpzdWa9Zp
-         ch+gydcuGEuCGdWBPVtpfyx9z+TMM2nwLPCpQ/WzrosyUBT4SpCAT3NJgYtEdVE1R3
-         m8XgMvq67Xe47mK2cmpG2EKoKLHRb57Oy3xWTRsk=
+        b=ZezngZwDO3KQgBWc5kH7o+363k3VkzXLGbSLbSc0tebpQso6t6pYwNkEyZCDiQPmV
+         SDInDhjroyojBh7Mphf9Czz2rjH6R5ZkFLMbtuCEXnnrfdP8uQrsgKQcvItrVphoK1
+         F0JF12gmB5ueiJxBeEsZOAKj0ouhtPyo/iU8CgBA=
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
@@ -101,9 +101,9 @@ To:     Linus Walleij <linus.walleij@linaro.org>,
         linux-mediatek@lists.infradead.org,
         linux-renesas-soc@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH v2 08/13] dt-bindings: mfd: include common schema in GPIO controllers
-Date:   Thu, 17 Sep 2020 18:52:56 +0200
-Message-Id: <20200917165301.23100-9-krzk@kernel.org>
+Subject: [PATCH v2 06/13] dt-bindings: gpio: gpio-vf610: fix iMX 7ULP compatible matching
+Date:   Thu, 17 Sep 2020 18:52:54 +0200
+Message-Id: <20200917165301.23100-7-krzk@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200917165301.23100-1-krzk@kernel.org>
 References: <20200917165301.23100-1-krzk@kernel.org>
@@ -111,8 +111,14 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Include the common GPIO schema in GPIO controllers to be sure all common
-properties are properly validated.
+The i.MX 7ULP DTSes use two compatibles so update the binding to fix
+dtbs_check warnings like:
+
+  arch/arm/boot/dts/imx7ulp-com.dt.yaml: gpio@40ae0000:
+    compatible: ['fsl,imx7ulp-gpio', 'fsl,vf610-gpio'] is too long
+
+  arch/arm/boot/dts/imx7ulp-com.dt.yaml: gpio@40ae0000:
+    compatible: Additional items are not allowed ('fsl,vf610-gpio' was unexpected)
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 
@@ -121,78 +127,28 @@ Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 Changes since v1:
 1. New patch
 ---
- Documentation/devicetree/bindings/mfd/cirrus,madera.yaml     | 1 +
- Documentation/devicetree/bindings/mfd/max77650.yaml          | 3 +++
- Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml | 3 +++
- Documentation/devicetree/bindings/mfd/st,stmfx.yaml          | 2 ++
- Documentation/devicetree/bindings/mfd/wlf,arizona.yaml       | 1 +
- 5 files changed, 10 insertions(+)
+ Documentation/devicetree/bindings/gpio/gpio-vf610.yaml | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/mfd/cirrus,madera.yaml b/Documentation/devicetree/bindings/mfd/cirrus,madera.yaml
-index 499c62c04daa..76c78f96dbd2 100644
---- a/Documentation/devicetree/bindings/mfd/cirrus,madera.yaml
-+++ b/Documentation/devicetree/bindings/mfd/cirrus,madera.yaml
-@@ -20,6 +20,7 @@ description: |
-     bindings/sound/cirrus,madera.yaml
+diff --git a/Documentation/devicetree/bindings/gpio/gpio-vf610.yaml b/Documentation/devicetree/bindings/gpio/gpio-vf610.yaml
+index 82f3e4b407d1..7a5745255969 100644
+--- a/Documentation/devicetree/bindings/gpio/gpio-vf610.yaml
++++ b/Documentation/devicetree/bindings/gpio/gpio-vf610.yaml
+@@ -22,9 +22,11 @@ allOf:
  
- allOf:
-+  - $ref: /schemas/gpio/gpio-common.yaml#
-   - $ref: /schemas/pinctrl/cirrus,madera.yaml#
-   - $ref: /schemas/regulator/wlf,arizona.yaml#
-   - $ref: /schemas/sound/cirrus,madera.yaml#
-diff --git a/Documentation/devicetree/bindings/mfd/max77650.yaml b/Documentation/devicetree/bindings/mfd/max77650.yaml
-index b0a0f0d3d9d4..382ce6363e5e 100644
---- a/Documentation/devicetree/bindings/mfd/max77650.yaml
-+++ b/Documentation/devicetree/bindings/mfd/max77650.yaml
-@@ -20,6 +20,9 @@ description: |
-   LEDs and onkey) refer to the binding documents under the respective
-   sub-system directories.
- 
-+allOf:
-+  - $ref: /schemas/gpio/gpio-common.yaml#
-+
  properties:
    compatible:
-     const: maxim,max77650
-diff --git a/Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml b/Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml
-index 3a6a1a26e2b3..3a59ec26075d 100644
---- a/Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml
-+++ b/Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml
-@@ -15,6 +15,9 @@ description: |
-   single-cell linear charger. Also included is a Coulomb counter, a real-time
-   clock (RTC), and a 32.768 kHz clock gate.
+-    enum:
+-      - fsl,vf610-gpio
+-      - fsl,imx7ulp-gpio
++    oneOf:
++      - const: fsl,vf610-gpio
++      - items:
++          - const: fsl,imx7ulp-gpio
++          - const: fsl,vf610-gpio
  
-+allOf:
-+  - $ref: /schemas/gpio/gpio-common.yaml#
-+
- properties:
-   compatible:
-     const: rohm,bd71828
-diff --git a/Documentation/devicetree/bindings/mfd/st,stmfx.yaml b/Documentation/devicetree/bindings/mfd/st,stmfx.yaml
-index 888ab4b5df45..dc7168255c18 100644
---- a/Documentation/devicetree/bindings/mfd/st,stmfx.yaml
-+++ b/Documentation/devicetree/bindings/mfd/st,stmfx.yaml
-@@ -31,6 +31,8 @@ properties:
- 
-   pinctrl:
-     type: object
-+    allOf:
-+      - $ref: /schemas/gpio/gpio-common.yaml#
- 
-     properties:
-       compatible:
-diff --git a/Documentation/devicetree/bindings/mfd/wlf,arizona.yaml b/Documentation/devicetree/bindings/mfd/wlf,arizona.yaml
-index 9e762d474218..a8610e304a00 100644
---- a/Documentation/devicetree/bindings/mfd/wlf,arizona.yaml
-+++ b/Documentation/devicetree/bindings/mfd/wlf,arizona.yaml
-@@ -16,6 +16,7 @@ description: |
- allOf:
-   - $ref: /schemas/sound/wlf,arizona.yaml#
-   - $ref: /schemas/regulator/wlf,arizona.yaml#
-+  - $ref: /schemas/gpio/gpio-common.yaml#
-   - $ref: /schemas/extcon/wlf,arizona.yaml#
-   - if:
-       properties:
+   reg:
+     description: The first reg tuple represents the PORT module, the second tuple
 -- 
 2.17.1
 
