@@ -2,100 +2,94 @@ Return-Path: <SRS0=7MnB=C2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AD36C433E2
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 12:37:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3E42C433E2
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 12:39:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 18B842087D
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 12:37:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A0B5221582
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 12:39:09 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="sZq8B/Xu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726992AbgIQMgu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Sep 2020 08:36:50 -0400
-Received: from mga12.intel.com ([192.55.52.136]:17406 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726589AbgIQMgH (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Sep 2020 08:36:07 -0400
-X-Greylist: delayed 501 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 08:35:56 EDT
-IronPort-SDR: fd79BEHzpQKWVRy46I/7xhpDdyTgT5OGwJGtXBSiHszomggQzvHZLQybBGDqZKdWAOpB8zwKzw
- w8dTuZWx4O4A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9746"; a="139188102"
-X-IronPort-AV: E=Sophos;i="5.76,436,1592895600"; 
-   d="scan'208";a="139188102"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2020 05:25:37 -0700
-IronPort-SDR: jMwGTc1ljHPuFBxuAjHrcoVSsWcREA7H6qljjXAyITclEhlpWZmxmCgo2Qt68QLHzh5nWtxjLw
- hwXWkcDrbg+A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,436,1592895600"; 
-   d="scan'208";a="336395898"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga008.jf.intel.com with ESMTP; 17 Sep 2020 05:25:33 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kIsyf-00HK03-ST; Thu, 17 Sep 2020 15:25:29 +0300
-Date:   Thu, 17 Sep 2020 15:25:29 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        devel@driverdev.osuosl.org, robh@kernel.org,
-        jorhand@linux.microsoft.com, linux-media@vger.kernel.org,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        kieran.bingham@ideasonboard.com, kitakar@gmail.com,
-        bingbu.cao@intel.com, mchehab@kernel.org, davem@davemloft.net,
-        tian.shu.qiu@intel.com, yong.zhi@intel.com
-Subject: Re: [RFC PATCH] Add bridge driver to connect sensors to CIO2 device
- via software nodes on ACPI platforms
-Message-ID: <20200917122529.GJ3956970@smile.fi.intel.com>
-References: <20200916213618.8003-1-djrscally@gmail.com>
- <20200917103343.GW26842@paasikivi.fi.intel.com>
- <20200917104941.GP4282@kadam>
+        id S1727017AbgIQMjG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Sep 2020 08:39:06 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:47880 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726964AbgIQMie (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 17 Sep 2020 08:38:34 -0400
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C181F2DB;
+        Thu, 17 Sep 2020 14:38:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1600346306;
+        bh=s9KoUx1z44jLuwvlrdTyTpwp14U8lri6GxDBZu338BM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sZq8B/Xudj93Nt9/BGIHl6RtqbYqRrhrA+muJ3CsgZQcJBK2FFw5A/Q5QWM+Vcr0U
+         k/DCkNeLOA43CiHeN/M6umskEigyfpx4dvH0hneZKKkj1ZUXnjZley8RzRAKhe4H9f
+         YM62ecKT5FY1qnNcc06Qq6uZNUboTPagxM/gv5MU=
+Date:   Thu, 17 Sep 2020 15:37:57 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-media@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 7/7] media: usb: uvc: no need to check return value of
+ debugfs_create functions
+Message-ID: <20200917123757.GC3969@pendragon.ideasonboard.com>
+References: <20200818133608.462514-1-gregkh@linuxfoundation.org>
+ <20200818133608.462514-7-gregkh@linuxfoundation.org>
+ <20200818234719.GD2360@pendragon.ideasonboard.com>
+ <20200917122550.GA5053@pendragon.ideasonboard.com>
+ <20200917123426.GA3595353@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200917104941.GP4282@kadam>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200917123426.GA3595353@kroah.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Sep 17, 2020 at 01:49:41PM +0300, Dan Carpenter wrote:
-> On Thu, Sep 17, 2020 at 01:33:43PM +0300, Sakari Ailus wrote:
+Hi Greg,
 
-> > > +	int i, ret;
+On Thu, Sep 17, 2020 at 02:34:26PM +0200, Greg Kroah-Hartman wrote:
+> On Thu, Sep 17, 2020 at 03:25:50PM +0300, Laurent Pinchart wrote:
+> > On Wed, Aug 19, 2020 at 02:47:19AM +0300, Laurent Pinchart wrote:
+> > > On Tue, Aug 18, 2020 at 03:36:08PM +0200, Greg Kroah-Hartman wrote:
+> > > > When calling debugfs functions, there is no need to ever check the
+> > > > return value.  The function can work or not, but the code logic should
+> > > > never do something different based on this.
+> > > 
+> > > Is there no value in warning the user that something went wrong ? Silent
+> > > failures are harder to debug.
 > > 
-> > unsigned int i
-> > 
+> > Could yous share your opinion about this ?
 > 
-> Why?
+> For debugfs, this isn't an issue, what can a user do with something like
+> "debugfs isn't working?  What does that mean???"
 > 
-> For list iterators then "int i;" is best...  For sizes then unsigned is
-> sometimes best.  Or if it's part of the hardware spec or network spec
-> unsigned is best.  Otherwise unsigned variables cause a ton of bugs.
-> They're not as intuitive as signed variables.  Imagine if there is an
-> error in this loop and you want to unwind.  With a signed variable you
-> can do:
+> And if we _really_ want warnings like this, it should go into the
+> debugfs core, not require this to be done for every debugfs user, right?
 > 
-> 	while (--i >= 0)
-> 		cleanup(&bridge.sensors[i]);
+> debugfs is just there for kernel developers to help debug things, it's
+> not a dependancy on any userspace functionality, so if it works or not
+> should not be an issue for any user.
+> 
+> Unless that user is a kernel developer of course :)
 
-Ha-ha. It's actually a counter argument to your stuff because above is the same as
+Exactly my point :-)
 
-	while (i--)
-		cleanup(&bridge.sensors[i]);
-
-with pretty much unsigned int i.
-
-> There are very few times where raising the type maximum from 2 billion
-> to 4 billion fixes anything.
+I'm fine moving the error message to the debugfs core itself instead of
+duplicating it in drivers. Maybe it's already there though, I haven't
+checked. Not printing any message isn't a great idea in my opinion, it
+makes debugging more difficult. I can't count the number of times where
+I've had to add printk's and recompile the kernel to debug issues that
+really should have generated at least a dev_dbg().
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Regards,
 
-
+Laurent Pinchart
