@@ -2,119 +2,124 @@ Return-Path: <SRS0=7MnB=C2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AEB89C433E2
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 17:23:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF2F2C2BBD1
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 17:46:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6DD2E221E3
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 17:23:32 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="Oe+9XFyi"
+	by mail.kernel.org (Postfix) with ESMTP id A159720872
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 17:46:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726312AbgIQRXY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Sep 2020 13:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57926 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726318AbgIQRXP (ORCPT
+        id S1726651AbgIQRqe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Sep 2020 13:46:34 -0400
+Received: from relmlor1.renesas.com ([210.160.252.171]:5872 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726590AbgIQRnS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Sep 2020 13:23:15 -0400
-Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E098EC061788
-        for <linux-media@vger.kernel.org>; Thu, 17 Sep 2020 10:23:14 -0700 (PDT)
-Received: by mail-oi1-x242.google.com with SMTP id 185so3324644oie.11
-        for <linux-media@vger.kernel.org>; Thu, 17 Sep 2020 10:23:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=F86p0ud99YSiTMCN0ZfJJse9lFQfi+WRyzF06l3LfwA=;
-        b=Oe+9XFyi4XwSdp0c08MIQlmhrPw1Z8ltKB2S7V3IMBblrL34HKoK0b4blCy3ZHSJxj
-         7IaJJ0RwaRrjJztcw/95TWgK1iToMprnqvda3Cw5Rs+2ciTDAeh8nMCt44s2ulVhn6KN
-         6sAVjFYZRVuJFjONKZdpeD53O77tF58gs1uyI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=F86p0ud99YSiTMCN0ZfJJse9lFQfi+WRyzF06l3LfwA=;
-        b=PHDhM/5Qmp/MvHbBW7Cb5DxmD59jl1+iug5CX0YANuPWvZWUBnyqIjjH51XxVf3a1w
-         3SmuKCRHC5aLMnqU8raC9C9JQe/5qRjvZ10sEVkHIR4pN7H+4bGZZgvuTSWT1VZ344FT
-         refz+B/eEjyareTWZ7FDcusxc8ZqZAhzjGOWkdS9fVmHlAg+itiKJbexln9sV5XVOvs+
-         CPbIXzC0WAmHfFY7qOtoCdqKfHbGrYtVE6paDQo3ItrtxYqsvrMwI9UInp/n+pXEHRoR
-         hVnus8nkZ9pli8RzUAkUaIGeJys2zvZDP8mW/o+gqFc51XJrkoDIXo2n8KijoBDnCGwg
-         PbIw==
-X-Gm-Message-State: AOAM533aSTo0PsCPHSew2SmQYTDrayFJZT6cxlw57kqMHgHTQVGK2D8y
-        PDzyFKYrj9TSjA6GraQAKFsS2clrYYuVk9mPZZ6cDw==
-X-Google-Smtp-Source: ABdhPJwF3dNmQNnc08BdxH8My7DtOBpKWMR10LzO7dt3VFCMGmJE1UwcTFFGHLsdQ5ho5h5wrPc5sUf6w5ZuU6y8//k=
-X-Received: by 2002:aca:6083:: with SMTP id u125mr7050119oib.14.1600363394219;
- Thu, 17 Sep 2020 10:23:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAKMK7uE=UqZD3PVC8XZAXrgGH-VsUF_-YQD3MLV8KK1kpxO4yQ@mail.gmail.com>
- <20200917113110.GE8409@ziepe.ca> <6fd74b84-959c-8b3b-c27b-e9fbf66396c7@gmail.com>
- <20200917121858.GF8409@ziepe.ca> <d82f08ee-2dec-18e8-fb06-d26f18ed777a@gmail.com>
- <20200917143551.GG8409@ziepe.ca> <5b330920-c789-fac7-e9b1-49f3bc1097a8@gmail.com>
- <20200917152456.GH8409@ziepe.ca> <CAKMK7uHQLAHXC_aBZZco0e3tbAqnNuW8QdJk=-V-yM2khw5e=Q@mail.gmail.com>
- <b9e65f47-b5c8-db09-117a-a8e22a5b6c71@amd.com> <20200917163907.GI8409@ziepe.ca>
-In-Reply-To: <20200917163907.GI8409@ziepe.ca>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Thu, 17 Sep 2020 19:23:03 +0200
-Message-ID: <CAKMK7uHrQ13-0oxTGZERQeoJ7jQES9jeDf0FhY3qW-NHdZvZ4w@mail.gmail.com>
-Subject: Re: [Linaro-mm-sig] Changing vma->vm_file in dma_buf_mmap()
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>, Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 17 Sep 2020 13:43:18 -0400
+X-IronPort-AV: E=Sophos;i="5.77,271,1596466800"; 
+   d="scan'208";a="57552448"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 18 Sep 2020 02:42:38 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 580A040BC9F5;
+        Fri, 18 Sep 2020 02:42:36 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Jacopo Mondi <jacopo@jmondi.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Subject: [PATCH v6 3/3] media: i2c: ov772x: Add test pattern control
+Date:   Thu, 17 Sep 2020 18:42:24 +0100
+Message-Id: <20200917174224.11430-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200917174224.11430-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20200917174224.11430-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Sep 17, 2020 at 6:39 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
->
-> On Thu, Sep 17, 2020 at 06:06:14PM +0200, Christian K=C3=B6nig wrote:
-> > > > If it is already taking a page fault I'm not sure the extra functio=
-n
-> > > > call indirection is going to be a big deal. Having a uniform VMA
-> > > > sounds saner than every driver custom rolling something.
-> > > >
-> > > > When I unwound a similar mess in RDMA all the custom VMA stuff in t=
-he
-> > > > drivers turned out to be generally buggy, at least.
-> > > >
-> > > > Is vma->vm_file->private_data universally a dma_buf pointer at leas=
-t?
-> > > Nope. I think if you want this without some large scale rewrite of a
-> > > lot of code we'd need a vmops->get_dmabuf or similar. Not pretty, but
-> > > would get the job done.
-> >
-> > Yeah, agree that sounds like the simplest approach.
->
-> I don't think that will fly, it is clearly only papering over a mess
-> inside DRM/dma buf :\
+Add support for test pattern control supported by the sensor.
 
-dma-buf started out as something to paper over the disjoint mess of
-allocators, since it was pretty clear to anyone involved we're not
-going to unify them anytime soon, if ever. So the mess pretty much is
-bound to stay.
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+---
+ drivers/media/i2c/ov772x.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
-I think most reasonable thing would be to throw a common vmops in
-there somehow, but even that means some large scale surgery across
-every driver/subsystem involved in dma-buf. It wouldn't unify
-anything, all it would give you is a constant vma->vm_ops to do some
-kind of upcasting. And that would still only give you a slightly less
-opaque pointer with a callback to upcast to a dma-buf in some
-driver/subsystem specific way.
--Daniel
---=20
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+diff --git a/drivers/media/i2c/ov772x.c b/drivers/media/i2c/ov772x.c
+index fe48b5881ad9..c3d36e003cad 100644
+--- a/drivers/media/i2c/ov772x.c
++++ b/drivers/media/i2c/ov772x.c
+@@ -227,7 +227,7 @@
+ 
+ /* COM3 */
+ #define SWAP_MASK       (SWAP_RGB | SWAP_YUV | SWAP_ML)
+-#define IMG_MASK        (VFLIP_IMG | HFLIP_IMG)
++#define IMG_MASK        (VFLIP_IMG | HFLIP_IMG | SCOLOR_TEST)
+ 
+ #define VFLIP_IMG       0x80	/* Vertical flip image ON/OFF selection */
+ #define HFLIP_IMG       0x40	/* Horizontal mirror image ON/OFF selection */
+@@ -425,6 +425,7 @@ struct ov772x_priv {
+ 	const struct ov772x_win_size     *win;
+ 	struct v4l2_ctrl		 *vflip_ctrl;
+ 	struct v4l2_ctrl		 *hflip_ctrl;
++	unsigned int			  test_pattern;
+ 	/* band_filter = COM8[5] ? 256 - BDBASE : 0 */
+ 	struct v4l2_ctrl		 *band_filter_ctrl;
+ 	unsigned int			  fps;
+@@ -540,6 +541,11 @@ static const struct ov772x_win_size ov772x_win_sizes[] = {
+ 	},
+ };
+ 
++static const char * const ov772x_test_pattern_menu[] = {
++	"Disabled",
++	"Vertical Color Bar Type 1",
++};
++
+ /*
+  * frame rate settings lists
+  */
+@@ -809,6 +815,9 @@ static int ov772x_s_ctrl(struct v4l2_ctrl *ctrl)
+ 		}
+ 
+ 		return ret;
++	case V4L2_CID_TEST_PATTERN:
++		priv->test_pattern = ctrl->val;
++		return 0;
+ 	}
+ 
+ 	return -EINVAL;
+@@ -1107,6 +1116,8 @@ static int ov772x_set_params(struct ov772x_priv *priv,
+ 		val ^= VFLIP_IMG;
+ 	if (priv->hflip_ctrl->val)
+ 		val ^= HFLIP_IMG;
++	if (priv->test_pattern)
++		val |= SCOLOR_TEST;
+ 
+ 	ret = regmap_update_bits(priv->regmap, COM3, SWAP_MASK | IMG_MASK, val);
+ 	if (ret < 0)
+@@ -1443,6 +1454,10 @@ static int ov772x_probe(struct i2c_client *client)
+ 	priv->band_filter_ctrl = v4l2_ctrl_new_std(&priv->hdl, &ov772x_ctrl_ops,
+ 						   V4L2_CID_BAND_STOP_FILTER,
+ 						   0, 256, 1, 0);
++	v4l2_ctrl_new_std_menu_items(&priv->hdl, &ov772x_ctrl_ops,
++				     V4L2_CID_TEST_PATTERN,
++				     ARRAY_SIZE(ov772x_test_pattern_menu) - 1,
++				     0, 0, ov772x_test_pattern_menu);
+ 	priv->subdev.ctrl_handler = &priv->hdl;
+ 	if (priv->hdl.error) {
+ 		ret = priv->hdl.error;
+-- 
+2.17.1
+
