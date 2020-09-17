@@ -2,68 +2,65 @@ Return-Path: <SRS0=7MnB=C2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D754EC2BBD1
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 12:26:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34046C43461
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 12:27:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A278221974
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 12:26:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E5E2321655
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 12:27:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YSwvclpg"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="IVQpQa30"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726785AbgIQMY5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Sep 2020 08:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39404 "EHLO
+        id S1726785AbgIQM1g (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Sep 2020 08:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726611AbgIQMYx (ORCPT
+        with ESMTP id S1726766AbgIQM1f (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Sep 2020 08:24:53 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1EDFC061788;
-        Thu, 17 Sep 2020 05:24:34 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id j2so2264531eds.9;
-        Thu, 17 Sep 2020 05:24:34 -0700 (PDT)
+        Thu, 17 Sep 2020 08:27:35 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A39C06178B
+        for <linux-media@vger.kernel.org>; Thu, 17 Sep 2020 05:26:40 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id z1so1866957wrt.3
+        for <linux-media@vger.kernel.org>; Thu, 17 Sep 2020 05:26:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=reply-to:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=GBPWnK+O45hDPiwD6Yl2FVueQas8+06W2RHndFOU4x0=;
-        b=YSwvclpgwQrjaZJLio4+fZCnlFslcy8Smk4D3Nl1taPur3YUbCtbgZhfm/6+rxDLDb
-         wnpQZk8wKk/ZMKnF8vQJK7jlxVoRuJE6PwMpAZIlrRUdYNDuAbOMf896/BwdweSdvEDR
-         egGfWHIWpyYNDLR+YDZFocW3Spw/+1H3TuHMdAE5hQV4Sa7vq171+oowCUwvVE1XPned
-         BNGCHnafxMkf0uGcmrVb/SW+uYrSjukjUsITqm1O0eLlKXIQ//sx5vYoWXnSP9AjX43r
-         JzICsn9YQNoT2j5O7gynMB4YyLqxhQ4BfDYgM40y/TSWY5dKWblFY0toaz+U49m5h2eD
-         SrPQ==
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=776kE571jxALYsOg06ejCyM2zHb/SfLHRc5/m8v10ss=;
+        b=IVQpQa30jthrbYlgwDGmu0dc3mjMkTqbdMKMaSnRvLnHMKlNvHBoPDQ8r760u+SVPm
+         59vgHhoVxmVxKNvGKFX9QbbbOEpWzNWMXSHfbRt/bDygT1XUo/rI/mTP8lwcUxWU928G
+         cOYIpmnvb7A0tsT+gMKdSIF7Iz7lnU7Ky2wTs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:reply-to:subject:to:cc:references:from
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-transfer-encoding:content-language;
-        bh=GBPWnK+O45hDPiwD6Yl2FVueQas8+06W2RHndFOU4x0=;
-        b=NlN69kOP9FDRpkuv6GNSuvUE6DRgjq01q50HJGYBRlV7pWR3hoeypwQelEAo4y+c2d
-         VPSxGvJnZIExFtavV88KyWUL6nkwYT//3lhBkGZaeiEVmzN+wHrRrna2DrC/+HmhvCTv
-         BD6gLeCQdQgV0m1DLeVY4QBm2VPVqawVZilLdsO5F8Ph3iPmwTvXbNijlODZSJf87EoY
-         qcA9m10qEXxLp2YD4ge0oBlYxF6bvbtzoNSa2sF1iEGnQ6y/7V8VFTTDEq6w0zimRxU1
-         UqURXC10lrqwErD5xUGn3xBEgPrOCJH6dsGKWrTbvAWgIiIQfMiSLLeroLc5tItQQn4I
-         K5BA==
-X-Gm-Message-State: AOAM5334VeEOwXUhP1mj3IG1clhp9PsF8ld4WXLUSBXWTBoGkByx2Bok
-        eQu4wq9hbQcWjfkAexWLbzgzQAczzdg=
-X-Google-Smtp-Source: ABdhPJxjg1yiXefIk0NeL3VjLQ2zbCP7yoFRn/H/W2k2rNszWXwepBIqx8bZOzhUQkVeMcmckHNfJw==
-X-Received: by 2002:a05:6402:1110:: with SMTP id u16mr32547477edv.253.1600345471990;
-        Thu, 17 Sep 2020 05:24:31 -0700 (PDT)
-Received: from ?IPv6:2a02:908:1252:fb60:be8a:bd56:1f94:86e7? ([2a02:908:1252:fb60:be8a:bd56:1f94:86e7])
-        by smtp.gmail.com with ESMTPSA id b5sm16198291edq.69.2020.09.17.05.24.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Sep 2020 05:24:31 -0700 (PDT)
-Reply-To: christian.koenig@amd.com
-Subject: Re: [Linaro-mm-sig] Changing vma->vm_file in dma_buf_mmap()
-To:     Jason Gunthorpe <jgg@ziepe.ca>, christian.koenig@amd.com
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=776kE571jxALYsOg06ejCyM2zHb/SfLHRc5/m8v10ss=;
+        b=rh0bi/fqnEQnFrqpotmMaXT2zEQrH7WLyytSBMs0DTKn4jAladZBYHmXwqbzx+Hd0Q
+         bvOL753qp9mVFVVdYYz3MFFm3KVN89ECxIgZBKaxvy3HcuXn6entByro2+XvvOHY0v/Q
+         pKTjKsUdqKeUlG/5ySoEX/F9fvdzQb5CORRaL3EvWM8/qETcNr3x4QoqLZRGqq4LrIni
+         lK1so+3kDVD3FDOZhoBWyrszAfi7h4qy6x1YLVtx1+Je23sdG2nC2P3mrcGF2jdwX61/
+         FMMyNrtECSb5a6PwcATAAWJLVf2ZCTFJCN52sxFYxequQqIB8zfFXFpKMh4PU+k1S85K
+         zxww==
+X-Gm-Message-State: AOAM5337E2Zb30KySZafsdL/4TJM7tzkhJEfxxNE+7Q1w/PDynhKSXZl
+        idaGkDyPv226WcO86JToURPfjw==
+X-Google-Smtp-Source: ABdhPJxsVUfr3DZLp2Gh7FRSChhAJlPPexeSjbdhob6/sk140ihZIXopzA3J7Zp+4xfpjlTSOU6Fyg==
+X-Received: by 2002:a5d:4a49:: with SMTP id v9mr34943739wrs.153.1600345599608;
+        Thu, 17 Sep 2020 05:26:39 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id u186sm10458866wmu.34.2020.09.17.05.26.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Sep 2020 05:26:38 -0700 (PDT)
+Date:   Thu, 17 Sep 2020 14:26:36 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     christian.koenig@amd.com
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         dri-devel <dri-devel@lists.freedesktop.org>,
         "moderated list:DMA BUFFER SHARING FRAMEWORK" 
         <linaro-mm-sig@lists.linaro.org>, Linux MM <linux-mm@kvack.org>,
@@ -71,9 +68,16 @@ Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         "open list:DMA BUFFER SHARING FRAMEWORK" 
         <linux-media@vger.kernel.org>
-References: <20200916095359.GD438822@phenom.ffwll.local>
- <20200916140710.GA8409@ziepe.ca>
- <8db2474f-ecb7-0e17-5f5b-145708fe44d5@amd.com>
+Subject: Re: [Linaro-mm-sig] Changing vma->vm_file in dma_buf_mmap()
+Message-ID: <20200917122636.GW438822@phenom.ffwll.local>
+Mail-Followup-To: christian.koenig@amd.com, Jason Gunthorpe <jgg@ziepe.ca>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" <linaro-mm-sig@lists.linaro.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" <linux-media@vger.kernel.org>
+References: <8db2474f-ecb7-0e17-5f5b-145708fe44d5@amd.com>
  <CAKMK7uFdwrT3HACPh3ADAKvhXJ-Hf3dExZmgJVAQ1KKjSai_0w@mail.gmail.com>
  <aa953b09-53b1-104b-dc4b-156ad8a75e62@gmail.com>
  <CAKMK7uHJNRzCJfWVSmMrLmGXE0qo+OCXiMd+zPTOkeG2pnVrmQ@mail.gmail.com>
@@ -82,57 +86,67 @@ References: <20200916095359.GD438822@phenom.ffwll.local>
  <20200917113110.GE8409@ziepe.ca>
  <6fd74b84-959c-8b3b-c27b-e9fbf66396c7@gmail.com>
  <20200917121858.GF8409@ziepe.ca>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-Message-ID: <d82f08ee-2dec-18e8-fb06-d26f18ed777a@gmail.com>
-Date:   Thu, 17 Sep 2020 14:24:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ <d82f08ee-2dec-18e8-fb06-d26f18ed777a@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200917121858.GF8409@ziepe.ca>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+In-Reply-To: <d82f08ee-2dec-18e8-fb06-d26f18ed777a@gmail.com>
+X-Operating-System: Linux phenom 5.7.0-1-amd64 
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Am 17.09.20 um 14:18 schrieb Jason Gunthorpe:
-> On Thu, Sep 17, 2020 at 02:03:48PM +0200, Christian KÃ¶nig wrote:
->> Am 17.09.20 um 13:31 schrieb Jason Gunthorpe:
->>> On Thu, Sep 17, 2020 at 10:09:12AM +0200, Daniel Vetter wrote:
->>>
->>>> Yeah, but it doesn't work when forwarding from the drm chardev to the
->>>> dma-buf on the importer side, since you'd need a ton of different
->>>> address spaces. And you still rely on the core code picking up your
->>>> pgoff mangling, which feels about as risky to me as the vma file
->>>> pointer wrangling - if it's not consistently applied the reverse map
->>>> is toast and unmap_mapping_range doesn't work correctly for our needs.
->>> I would think the pgoff has to be translated at the same time the
->>> vm->vm_file is changed?
->>>
->>> The owner of the dma_buf should have one virtual address space and FD,
->>> all its dma bufs should be linked to it, and all pgoffs translated to
->>> that space.
->> Yeah, that is exactly like amdgpu is doing it.
->>
->> Going to document that somehow when I'm done with TTM cleanups.
-> BTW, while people are looking at this, is there a way to go from a VMA
-> to a dma_buf that owns it?
+On Thu, Sep 17, 2020 at 02:24:29PM +0200, Christian König wrote:
+> Am 17.09.20 um 14:18 schrieb Jason Gunthorpe:
+> > On Thu, Sep 17, 2020 at 02:03:48PM +0200, Christian König wrote:
+> > > Am 17.09.20 um 13:31 schrieb Jason Gunthorpe:
+> > > > On Thu, Sep 17, 2020 at 10:09:12AM +0200, Daniel Vetter wrote:
+> > > > 
+> > > > > Yeah, but it doesn't work when forwarding from the drm chardev to the
+> > > > > dma-buf on the importer side, since you'd need a ton of different
+> > > > > address spaces. And you still rely on the core code picking up your
+> > > > > pgoff mangling, which feels about as risky to me as the vma file
+> > > > > pointer wrangling - if it's not consistently applied the reverse map
+> > > > > is toast and unmap_mapping_range doesn't work correctly for our needs.
+> > > > I would think the pgoff has to be translated at the same time the
+> > > > vm->vm_file is changed?
+> > > > 
+> > > > The owner of the dma_buf should have one virtual address space and FD,
+> > > > all its dma bufs should be linked to it, and all pgoffs translated to
+> > > > that space.
+> > > Yeah, that is exactly like amdgpu is doing it.
+> > > 
+> > > Going to document that somehow when I'm done with TTM cleanups.
+> > BTW, while people are looking at this, is there a way to go from a VMA
+> > to a dma_buf that owns it?
+> 
+> Only a driver specific one.
+> 
+> For TTM drivers vma->vm_private_data points to the buffer object. Not sure
+> about the drivers using GEM only.
 
-Only a driver specific one.
+For gem drivers (which includes the ones using vram helpers, which uses
+ttm internally) that points at the drm_gem_object pointer. I guess that
+might be something we can unify a bit on the ttm mmap paths of the
+remaining driver, now that there's a drm_gem_object embedded anyway.
+-Daniel
 
-For TTM drivers vma->vm_private_data points to the buffer object. Not 
-sure about the drivers using GEM only.
+> 
+> Why are you asking?
+> 
+> Regards,
+> Christian.
+> 
+> > 
+> > Jason
+> > _______________________________________________
+> > Linaro-mm-sig mailing list
+> > Linaro-mm-sig@lists.linaro.org
+> > https://lists.linaro.org/mailman/listinfo/linaro-mm-sig
+> 
 
-Why are you asking?
-
-Regards,
-Christian.
-
->
-> Jason
-> _______________________________________________
-> Linaro-mm-sig mailing list
-> Linaro-mm-sig@lists.linaro.org
-> https://lists.linaro.org/mailman/listinfo/linaro-mm-sig
-
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
