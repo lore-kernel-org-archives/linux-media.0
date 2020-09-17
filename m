@@ -2,429 +2,197 @@ Return-Path: <SRS0=7MnB=C2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EBDBC433E2
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 07:54:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9666C433E2
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 08:10:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D6462221E3
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 07:54:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600329285;
-	bh=x4xrCIr4mjHLKAY6XUCSk155T0IExAtLh0m5BEjecbU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=TJ25kzBVa/751yhaFJ+lUh2UgeGr0r/l4s5x74wo6C8xtcMBCO/u02xwooNhrauXL
-	 Uewja6oRjWsOw3Jy2ESzrTlUShCpRGOPvXXLrzMmji+u4xyTOsFQR7AsMD5cqOGUzR
-	 Xd45FRc2QrVf6TZgMglzv6AjSGV8/+HBt4YgFe+o=
+	by mail.kernel.org (Postfix) with ESMTP id 9EE8C221E7
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 08:10:18 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="LiGHVTAZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726285AbgIQHyZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Sep 2020 03:54:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43316 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726142AbgIQHx1 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Sep 2020 03:53:27 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3AC1221D43;
-        Thu, 17 Sep 2020 07:53:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600329204;
-        bh=x4xrCIr4mjHLKAY6XUCSk155T0IExAtLh0m5BEjecbU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ik8HU1qN5AugxnqX36Q1rHfPWaHIjrKW2rH8s/sNTaYSIN/JthqAdtWBhUIZQIhpW
-         sz4wdiVSfeggzocbrVlSdisSXp4MddJiRJXO06iNz7HxYzMCjpCn7Wko4LIdsP3IAz
-         ziw2frDa6PyOcmHWRTnLGBi97vE8C2b01KSt8aEo=
-Date:   Thu, 17 Sep 2020 09:53:56 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Daniel Scally <djrscally@gmail.com>
-Cc:     yong.zhi@intel.com, sakari.ailus@linux.intel.com,
-        bingbu.cao@intel.com, tian.shu.qiu@intel.com, mchehab@kernel.org,
-        davem@davemloft.net, robh@kernel.org, devel@driverdev.osuosl.org,
-        jorhand@linux.microsoft.com, kieran.bingham@ideasonboard.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        kitakar@gmail.com
-Subject: Re: [RFC PATCH] Add bridge driver to connect sensors to CIO2 device
- via software nodes on ACPI platforms
-Message-ID: <20200917075356.GA3333802@kroah.com>
-References: <20200916213618.8003-1-djrscally@gmail.com>
+        id S1726502AbgIQIKG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Sep 2020 04:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56320 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726448AbgIQIJr (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 17 Sep 2020 04:09:47 -0400
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B909AC061756
+        for <linux-media@vger.kernel.org>; Thu, 17 Sep 2020 01:09:23 -0700 (PDT)
+Received: by mail-oi1-x241.google.com with SMTP id x14so1478076oic.9
+        for <linux-media@vger.kernel.org>; Thu, 17 Sep 2020 01:09:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=hj748MDWz3uGjap8dFpsmQR43oB5FdmeE3PU5X76VV0=;
+        b=LiGHVTAZBlNXFMLULoLuA7sDuYos0oM5OblFb/GVLUevRmNfmxziUxmN5o1oE1+kmU
+         Rj3uVZ8GFXSdl/JIHrwHGB9TM+RPKb1uNIqL0MqOn18aam/SH8w9FTYGAPGf5TzhNpRe
+         Pe+BiT0Mhqg6d1HSV5qM409pE0CFaTHo+UOd0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=hj748MDWz3uGjap8dFpsmQR43oB5FdmeE3PU5X76VV0=;
+        b=on0/AiDL0eXAjELA87/mgtn9lM52KDYlb91Q/FI1tPKcDW1SJSfsU3xBE2+4i0pIbp
+         o44mb8SItmnE4uVKWxsveeSQZTjrWt+4TfTtZJA3R0G5fx7B/6yyYr/G9vOC+gjOk1+1
+         1MyKNqWWvMA35+k6lvSJQmfXaT5XWxz+rGJdP4KHVPfxsMV7Y86GhyCXYTnNBXAdEE5X
+         pRZv7PqyTH57SpUiHsI/iPGk854IVCwr4DBujo1GAT/kFDEB7kO2CT+ciBBCRcz9DFWZ
+         qLBL0c2Bt7j/UQthgSdPAUh2dptQeSjT4ZKVo9RwU8AoToVB/0C4LtXPcXkQCVVCCgpP
+         R0QQ==
+X-Gm-Message-State: AOAM530tgDYiojIB1/d4x+OnPhFO40crh5rXVfh/UBv/NVMADzEon9+L
+        +UzVtUgbLJHq8Ic7QPslcP/swJtUd14QioW733HyyA==
+X-Google-Smtp-Source: ABdhPJxnhcvTWespPIz0mwDd5lfmfASbxSQp+iv4wdI3VWmLcUZDr+o6jic2DrtQ3xdcC58bSj1uv5b78VL+7UnvPaQ=
+X-Received: by 2002:aca:de41:: with SMTP id v62mr5615790oig.128.1600330163116;
+ Thu, 17 Sep 2020 01:09:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200916213618.8003-1-djrscally@gmail.com>
+References: <20200914132920.59183-1-christian.koenig@amd.com>
+ <40cd26ae-b855-4627-5a13-4dcea5d622f6@gmail.com> <20200914140632.GD1221970@ziepe.ca>
+ <9302e4e0-0ff0-8b00-ada1-85feefb49e88@gmail.com> <20200916095359.GD438822@phenom.ffwll.local>
+ <20200916140710.GA8409@ziepe.ca> <8db2474f-ecb7-0e17-5f5b-145708fe44d5@amd.com>
+ <CAKMK7uFdwrT3HACPh3ADAKvhXJ-Hf3dExZmgJVAQ1KKjSai_0w@mail.gmail.com>
+ <aa953b09-53b1-104b-dc4b-156ad8a75e62@gmail.com> <CAKMK7uHJNRzCJfWVSmMrLmGXE0qo+OCXiMd+zPTOkeG2pnVrmQ@mail.gmail.com>
+ <8d8693db-a3f0-4f5f-3e32-57d23ca620f8@amd.com>
+In-Reply-To: <8d8693db-a3f0-4f5f-3e32-57d23ca620f8@amd.com>
+From:   Daniel Vetter <daniel@ffwll.ch>
+Date:   Thu, 17 Sep 2020 10:09:12 +0200
+Message-ID: <CAKMK7uE=UqZD3PVC8XZAXrgGH-VsUF_-YQD3MLV8KK1kpxO4yQ@mail.gmail.com>
+Subject: Re: [Linaro-mm-sig] Changing vma->vm_file in dma_buf_mmap()
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Sep 16, 2020 at 10:36:18PM +0100, Daniel Scally wrote:
->  MAINTAINERS                              |   6 +
->  drivers/media/pci/intel/ipu3/ipu3-cio2.c |  67 +++-
+On Thu, Sep 17, 2020 at 9:11 AM Christian K=C3=B6nig
+<christian.koenig@amd.com> wrote:
+>
+> Am 17.09.20 um 08:23 schrieb Daniel Vetter:
+> > On Wed, Sep 16, 2020 at 5:31 PM Christian K=C3=B6nig
+> > <ckoenig.leichtzumerken@gmail.com> wrote:
+> >> Am 16.09.20 um 17:24 schrieb Daniel Vetter:
+> >>> On Wed, Sep 16, 2020 at 4:14 PM Christian K=C3=B6nig
+> >>> <christian.koenig@amd.com> wrote:
+> >>>> Am 16.09.20 um 16:07 schrieb Jason Gunthorpe:
+> >>>>> On Wed, Sep 16, 2020 at 11:53:59AM +0200, Daniel Vetter wrote:
+> >>>>>
+> >>>>>> But within the driver, we generally need thousands of these, and t=
+hat
+> >>>>>> tends to bring fd exhaustion problems with it. That's why all the =
+private
+> >>>>>> buffer objects which aren't shared with other process or other dri=
+vers are
+> >>>>>> handles only valid for a specific fd instance of the drm chardev (=
+each
+> >>>>>> open gets their own namespace), and only for ioctls done on that c=
+hardev.
+> >>>>>> And for mmap we assign fake (but unique across all open fd on it) =
+offsets
+> >>>>>> within the overall chardev. Hence all the pgoff mangling and re-ma=
+ngling.
+> >>>>> Are they still unique struct files? Just without a fdno?
+> >>>> Yes, exactly.
+> >>> Not entirely, since dma-buf happened after drm chardev, so for that
+> >>> historical reason the underlying struct file is shared, since it's th=
+e
+> >>> drm chardev. But since that's per-device we don't have a problem in
+> >>> practice with different vm_ops, since those are also per-device. But
+> >>> yeah we could fish out some entirely hidden per-object struct file if
+> >>> that's required for some mm internal reasons.
+> >> Hui? Ok that is just the handling in i915, isn't it?
+> >>
+> >> As far as I know we create an unique struct file for each DMA-buf.
+> > Yes dma-buf, but that gets forwarded to the original drm chardev which
+> > originally exported the buffer. It's only there where the forwarding
+> > chain stops. The other thing is that iirc we have a singleton
+> > anon_inode behind all the dma-buf, so they'd share all the same
+> > address_space and so would all alias for unmap_mapping_range (I think
+> > at least).
+>
+> Amdgpu works by using the address_space of the drm chardev into the
+> struct file of DMA-buf instead.
+>
+> I think that this is cleaner, but only by a little bit :)
 
-staging drivers should be self-contained, and not modify stuff outside
-of drivers/staging/
+Yeah, but it doesn't work when forwarding from the drm chardev to the
+dma-buf on the importer side, since you'd need a ton of different
+address spaces. And you still rely on the core code picking up your
+pgoff mangling, which feels about as risky to me as the vma file
+pointer wrangling - if it's not consistently applied the reverse map
+is toast and unmap_mapping_range doesn't work correctly for our needs.
 
->  drivers/staging/media/ipu3/Kconfig       |  15 +
->  drivers/staging/media/ipu3/Makefile      |   1 +
->  drivers/staging/media/ipu3/cio2-bridge.c | 448 +++++++++++++++++++++++
+> Anyway I'm a bit concerned that we have so many different approaches for
+> the same problem.
 
-Why does this have to be in drivers/staging/ at all?  Why not spend the
-time to fix it up properly and get it merged correctly?  It's a very
-small driver, and should be smaller, so it should not be a lot of work
-to do.  And it would be faster to do that than to take it through
-staging...
+Yeah, I think if we can standardize this then that would be really good.
+-Daniel
 
->  5 files changed, 534 insertions(+), 3 deletions(-)
->  create mode 100644 drivers/staging/media/ipu3/cio2-bridge.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index b5cfab015bd6..55b0b9888bc0 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -9152,6 +9152,12 @@ S:	Maintained
->  W:	http://www.adaptec.com/
->  F:	drivers/scsi/ips*
->  
-> +IPU3 CIO2 Bridge Driver
-> +M:	Daniel Scally <djrscally@gmail.com>
-> +L:	linux-media@vger.kernel.org
-> +S:	Maintained
-> +F:	drivers/staging/media/ipu3/cio2-bridge.c
-> +
->  IPVS
->  M:	Wensong Zhang <wensong@linux-vs.org>
->  M:	Simon Horman <horms@verge.net.au>
-> diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-> index 92f5eadf2c99..fd941d2c7581 100644
-> --- a/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-> +++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-> @@ -1719,6 +1719,59 @@ static void cio2_queues_exit(struct cio2_device *cio2)
->  		cio2_queue_exit(cio2, &cio2->queue[i]);
->  }
->  
-> +static int cio2_probe_can_progress(struct pci_dev *pci_dev)
-> +{
-> +	void *sensor;
-
-This is a huge flag that something is wrong, why void?
-
-> +
-> +	/*
-> +	 * On ACPI platforms, we need to probe _after_ sensors wishing to connect
-> +	 * to cio2 have added a device link. If there are no consumers yet, then
-> +	 * we need to defer. The .sync_state() callback will then be called after
-> +	 * all linked sensors have probed
-> +	 */
-> +
-> +	if (IS_ENABLED(CONFIG_ACPI)) {
-> +		sensor = (struct device *)list_first_entry_or_null(
-
-And you cast it???  Not right at all.
-
-> +								&pci_dev->dev.links.consumers,
-> +								struct dev_links_info,
-> +								consumers);
-
-How do you "know" this is the first link?  This feels really really
-wrong and very fragile.
-
-> +
-> +		if (!sensor)
-> +			return -EPROBE_DEFER;
-
-So any random value will work?  I doubt it :)
-
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +void cio2_sync_state(struct device *dev)
-> +{
-> +	struct cio2_device *cio2;
-> +	int ret = 0;
-> +
-> +	if (IS_ENABLED(CONFIG_ACPI)) {
-> +		cio2 = dev_get_drvdata(dev);
-> +
-> +		if (!cio2) {
-> +			dev_err(dev, "Failed to retrieve driver data\n");
-
-How can this fail?
-
-> +			return;
-
-No error value?
-
-> +		}
-> +
-> +		/* insert the bridge driver to connect sensors via software nodes */
-> +		ret = request_module("cio2-bridge");
-> +
-> +		if (ret)
-> +			dev_err(dev, "Failed to insert cio2-bridge\n");
-
-Yet you keep on in the function???
-
-> +
-> +		ret = cio2_parse_firmware(cio2);
-> +
-> +		if (ret) {
-> +			v4l2_async_notifier_unregister(&cio2->notifier);
-> +			v4l2_async_notifier_cleanup(&cio2->notifier);
-> +			cio2_queues_exit(cio2);
-
-But you clean up after this error?
-
-> +		}
-> +	}
-
-And again, do not tell anyone?
-
-Feels really wrong...
-
-> +}
-> +
->  /**************** PCI interface ****************/
->  
->  static int cio2_pci_config_setup(struct pci_dev *dev)
-> @@ -1746,6 +1799,11 @@ static int cio2_pci_probe(struct pci_dev *pci_dev,
->  	void __iomem *const *iomap;
->  	int r;
->  
-> +	r = cio2_probe_can_progress(pci_dev);
-> +
-> +	if (r)
-> +		return -EPROBE_DEFER;
-> +
->  	cio2 = devm_kzalloc(&pci_dev->dev, sizeof(*cio2), GFP_KERNEL);
->  	if (!cio2)
->  		return -ENOMEM;
-> @@ -1821,9 +1879,11 @@ static int cio2_pci_probe(struct pci_dev *pci_dev,
->  	v4l2_async_notifier_init(&cio2->notifier);
->  
->  	/* Register notifier for subdevices we care */
-> -	r = cio2_parse_firmware(cio2);
-> -	if (r)
-> -		goto fail_clean_notifier;
-> +	if (!IS_ENABLED(CONFIG_ACPI)) {
-> +		r = cio2_parse_firmware(cio2);
-> +		if (r)
-> +			goto fail_clean_notifier;
-> +	}
->  
->  	r = devm_request_irq(&pci_dev->dev, pci_dev->irq, cio2_irq,
->  			     IRQF_SHARED, CIO2_NAME, cio2);
-> @@ -2052,6 +2112,7 @@ static struct pci_driver cio2_pci_driver = {
->  	.remove = cio2_pci_remove,
->  	.driver = {
->  		.pm = &cio2_pm_ops,
-> +		.sync_state = cio2_sync_state
->  	},
->  };
->  
-> diff --git a/drivers/staging/media/ipu3/Kconfig b/drivers/staging/media/ipu3/Kconfig
-> index 3e9640523e50..08842fd8c0da 100644
-> --- a/drivers/staging/media/ipu3/Kconfig
-> +++ b/drivers/staging/media/ipu3/Kconfig
-> @@ -14,3 +14,18 @@ config VIDEO_IPU3_IMGU
->  
->  	  Say Y or M here if you have a Skylake/Kaby Lake SoC with a MIPI
->  	  camera. The module will be called ipu3-imgu.
-> +
-> +config VIDEO_CIO2_BRIDGE
-> +	tristate "IPU3 CIO2 Sensor Bridge Driver"
-> +	depends on PCI && VIDEO_V4L2
-> +	depends on ACPI
-> +	depends on X86
-
-Why x86?
-
-Why not CONFIG_TEST?
+>
+> Christian.
+>
+> > -Daniel
+> >
+> >> Regards,
+> >> Christian.
+> >>
+> >>
+> >>> -Daniel
+> >>>
+> >>>>>> Hence why we'd like to be able to forward aliasing mappings and ad=
+just the
+> >>>>>> file and pgoff, while hopefully everything keeps working. I though=
+t this
+> >>>>>> would work, but Christian noticed it doesn't really.
+> >>>>> It seems reasonable to me that the dma buf should be the owner of t=
+he
+> >>>>> VMA, otherwise like you say, there is a big mess attaching the cust=
+om
+> >>>>> vma ops and what not to the proper dma buf.
+> >>>>>
+> >>>>> I don't see anything obviously against this in mmap_region() - why =
+did
+> >>>>> Chritian notice it doesn't really work?
+> >>>> To clarify I think this might work.
+> >>>>
+> >>>> I just had the same "Is that legal?", "What about security?", etc..
+> >>>> questions you raised as well.
+> >>>>
+> >>>> It seems like a source of trouble so I thought better ask somebody m=
+ore
+> >>>> familiar with that.
+> >>>>
+> >>>> Christian.
+> >>>>
+> >>>>> Jason
+> >>>> _______________________________________________
+> >>>> dri-devel mailing list
+> >>>> dri-devel@lists.freedesktop.org
+> >>>> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2F=
+lists.freedesktop.org%2Fmailman%2Flistinfo%2Fdri-devel&amp;data=3D02%7C01%7=
+Cchristian.koenig%40amd.com%7Cf725d2eb6a5a49bd533f08d85ad23308%7C3dd8961fe4=
+884e608e11a82d994e183d%7C0%7C0%7C637359206142262941&amp;sdata=3DqcLsl9R1gP%=
+2FGY39ctsQkIzI99Bn%2F840YS17F4xudrAE%3D&amp;reserved=3D0
+> >>>
+> >
+>
 
 
-
-> +	help
-> +	  This module provides a bridge connecting sensors (I.E. cameras) to
-> +	  the CIO2 device infrastructure via software nodes built from information
-> +	  parsed from the SSDB buffer.
-> +
-> +	  Say Y or M here if your platform's cameras use IPU3 with connections
-> +	  that should be defined in ACPI. The module will be called cio2-bridge.
-> +
-> +	  If in doubt, say N here.
-> \ No newline at end of file
-> diff --git a/drivers/staging/media/ipu3/Makefile b/drivers/staging/media/ipu3/Makefile
-> index 9def80ef28f3..12dff56dbb9e 100644
-> --- a/drivers/staging/media/ipu3/Makefile
-> +++ b/drivers/staging/media/ipu3/Makefile
-> @@ -10,3 +10,4 @@ ipu3-imgu-objs += \
->  		ipu3-css.o ipu3-v4l2.o ipu3.o
->  
->  obj-$(CONFIG_VIDEO_IPU3_IMGU) += ipu3-imgu.o
-> +obj-$(CONFIG_VIDEO_CIO2_BRIDGE) += cio2-bridge.o
-> \ No newline at end of file
-> diff --git a/drivers/staging/media/ipu3/cio2-bridge.c b/drivers/staging/media/ipu3/cio2-bridge.c
-> new file mode 100644
-> index 000000000000..5115aeeb35a1
-> --- /dev/null
-> +++ b/drivers/staging/media/ipu3/cio2-bridge.c
-> @@ -0,0 +1,448 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <linux/acpi.h>
-> +#include <acpi/acpi_bus.h>
-> +#include <linux/device.h>
-> +#include <linux/i2c.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/pci.h>
-> +#include <media/v4l2-subdev.h>
-> +
-> +#include <linux/fwnode.h>
-> +#include <linux/kref.h>
-
-Why kref.h?
-
-
-
-> +
-> +static void cio2_bridge_exit(void);
-> +static int cio2_bridge_init(void);
-> +
-> +#define MAX_CONNECTED_DEVICES			4
-> +#define SWNODE_SENSOR_HID			0
-> +#define SWNODE_SENSOR_PORT			1
-> +#define SWNODE_SENSOR_ENDPOINT			2
-> +#define SWNODE_CIO2_PORT			3
-> +#define SWNODE_CIO2_ENDPOINT			4
-> +#define SWNODE_NULL_TERMINATOR			5
-> +
-> +#define CIO2_HID				"INT343E"
-> +#define CIO2_PCI_ID				0x9d32
-> +
-> +#define ENDPOINT_SENSOR				0
-> +#define ENDPOINT_CIO2				1
-> +
-> +#define NODE_HID(_HID)				\
-> +((const struct software_node) {			\
-> +	_HID,					\
-> +})
-> +
-> +#define NODE_PORT(_PORT, _HID_NODE)		\
-> +((const struct software_node) {			\
-> +	_PORT,					\
-> +	_HID_NODE,				\
-> +})
-> +
-> +#define NODE_ENDPOINT(_EP, _PORT, _PROPS)	\
-> +((const struct software_node) {			\
-> +	_EP,					\
-> +	_PORT,					\
-> +	_PROPS,					\
-> +})
-> +
-> +#define PROPERTY_ENTRY_NULL			\
-> +((const struct property_entry) { })
-> +#define SOFTWARE_NODE_NULL			\
-> +((const struct software_node) { })
-> +
-> +/*
-> + * Extend this array with ACPI Hardware ID's of devices known to be
-> + * working
-> + */
-> +
-> +static char *supported_devices[] = {
-> +	"INT33BE",
-> +	"OVTI2680",
-> +	"OVTI5648",
-> +};
-> +
-> +/*
-> + * software_node needs const char * names. Can't snprintf a const char *,
-> + * so instead we need an array of them and use the port num from SSDB as
-> + * an index.
-> + */
-> +
-> +const char *port_names[] = {
-> +	"port0", "port1", "port2", "port3", "port4",
-> +	"port5", "port6", "port7", "port8", "port9"
-> +};
-> +
-> +struct software_node cio2_hid_node = { CIO2_HID, };
-> +
-> +struct sensor {
-> +	struct device *dev;
-> +	struct software_node swnodes[5];
-> +	struct property_entry sensor_props[6];
-> +	struct property_entry cio2_props[3];
-> +	struct fwnode_handle *fwnode;
-> +};
-> +
-> +struct cio2_bridge {
-> +	int n_sensors;
-> +	struct sensor sensors[MAX_CONNECTED_DEVICES];
-> +	struct pci_dev *cio2;
-> +	struct fwnode_handle *cio2_fwnode;
-> +};
-> +
-> +struct cio2_bridge bridge = { 0, };
-> +
-> +static const struct property_entry remote_endpoints[] = {
-> +	PROPERTY_ENTRY_REF("remote-endpoint", /* Sensor 0, Sensor Property */
-> +			   &bridge.sensors[0].swnodes[SWNODE_CIO2_ENDPOINT]),
-> +	PROPERTY_ENTRY_REF("remote-endpoint", /* Sensor 0, CIO2 Property */
-> +			   &bridge.sensors[0].swnodes[SWNODE_SENSOR_ENDPOINT]),
-> +	PROPERTY_ENTRY_REF("remote-endpoint",
-> +			   &bridge.sensors[1].swnodes[SWNODE_CIO2_ENDPOINT]),
-> +	PROPERTY_ENTRY_REF("remote-endpoint",
-> +			   &bridge.sensors[1].swnodes[SWNODE_SENSOR_ENDPOINT]),
-> +	PROPERTY_ENTRY_REF("remote-endpoint",
-> +			   &bridge.sensors[2].swnodes[SWNODE_CIO2_ENDPOINT]),
-> +	PROPERTY_ENTRY_REF("remote-endpoint",
-> +			   &bridge.sensors[2].swnodes[SWNODE_SENSOR_ENDPOINT]),
-> +	PROPERTY_ENTRY_REF("remote-endpoint",
-> +			   &bridge.sensors[3].swnodes[SWNODE_CIO2_ENDPOINT]),
-> +	PROPERTY_ENTRY_REF("remote-endpoint",
-> +			   &bridge.sensors[3].swnodes[SWNODE_SENSOR_ENDPOINT]),
-> +	{ }
-> +};
-> +
-> +/* Data representation as it is in ACPI SSDB buffer */
-> +struct sensor_bios_data_packed {
-> +	u8 version;
-> +	u8 sku;
-> +	u8 guid_csi2[16];
-> +	u8 devfunction;
-> +	u8 bus;
-> +	u32 dphylinkenfuses;
-> +	u32 clockdiv;
-> +	u8 link;
-> +	u8 lanes;
-> +	u32 csiparams[10];
-> +	u32 maxlanespeed;
-> +	u8 sensorcalibfileidx;
-> +	u8 sensorcalibfileidxInMBZ[3];
-> +	u8 romtype;
-> +	u8 vcmtype;
-> +	u8 platforminfo;
-> +	u8 platformsubinfo;
-> +	u8 flash;
-> +	u8 privacyled;
-> +	u8 degree;
-> +	u8 mipilinkdefined;
-> +	u32 mclkspeed;
-> +	u8 controllogicid;
-> +	u8 reserved1[3];
-> +	u8 mclkport;
-> +	u8 reserved2[13];
-> +} __attribute__((__packed__));
-
-Endian issues???
-
-This doesn't look "packed" to me, did you check it?
-
-I've stopped here, sorry, ran out of time...
-
-greg k-h
+--=20
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
