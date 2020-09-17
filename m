@@ -2,362 +2,299 @@ Return-Path: <SRS0=7MnB=C2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 819A1C433E2
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 13:00:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBB35C433E2
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 13:04:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 491D1206CA
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 13:00:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6CCB32083B
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 13:04:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726790AbgIQM77 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Sep 2020 08:59:59 -0400
-Received: from mga02.intel.com ([134.134.136.20]:63039 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727106AbgIQM7k (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Sep 2020 08:59:40 -0400
-X-Greylist: delayed 451 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 08:59:40 EDT
-IronPort-SDR: Xnltfdj9Qwf9fYUQjKFc1BZQXoo5n9UToglZaSfuhxQA5TRh+aVM9IIxnCElv1xVtEDbeQqxRn
- huMB1E3OQyyQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9746"; a="147373969"
-X-IronPort-AV: E=Sophos;i="5.76,437,1592895600"; 
-   d="scan'208";a="147373969"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2020 05:51:54 -0700
-IronPort-SDR: I2/kqZ5J7tf0+T/O8IZeaY7ADSe8lHCPleOd8b15KotCW8WF8rqqH+gA0lTE8VlqZ2w6yg55bK
- xNomfzMr+1dA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,437,1592895600"; 
-   d="scan'208";a="336403560"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga008.jf.intel.com with ESMTP; 17 Sep 2020 05:51:50 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kItHm-00HKBf-I2; Thu, 17 Sep 2020 15:45:14 +0300
-Date:   Thu, 17 Sep 2020 15:45:14 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Dan Scally <djrscally@gmail.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>, yong.zhi@intel.com,
-        bingbu.cao@intel.com, tian.shu.qiu@intel.com, mchehab@kernel.org,
-        gregkh@linuxfoundation.org, davem@davemloft.net, robh@kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        devel@driverdev.osuosl.org, jorhand@linux.microsoft.com,
-        kitakar@gmail.com, kieran.bingham@ideasonboard.com
-Subject: Re: [RFC PATCH] Add bridge driver to connect sensors to CIO2 device
- via software nodes on ACPI platforms
-Message-ID: <20200917124514.GK3956970@smile.fi.intel.com>
-References: <20200916213618.8003-1-djrscally@gmail.com>
- <20200917103343.GW26842@paasikivi.fi.intel.com>
- <8133a57d-ab4c-dccd-4325-9b10e7805648@gmail.com>
+        id S1726948AbgIQNEu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Sep 2020 09:04:50 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:29274 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726785AbgIQMhH (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 17 Sep 2020 08:37:07 -0400
+X-Greylist: delayed 485 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 08:36:02 EDT
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 17 Sep 2020 05:27:51 -0700
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 17 Sep 2020 05:27:49 -0700
+Received: from c-rojay-linux.qualcomm.com ([10.206.21.80])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 17 Sep 2020 17:57:10 +0530
+Received: by c-rojay-linux.qualcomm.com (Postfix, from userid 88981)
+        id 072351AEA; Thu, 17 Sep 2020 17:57:08 +0530 (IST)
+From:   Roja Rani Yarubandi <rojay@codeaurora.org>
+To:     wsa@kernel.org
+Cc:     swboyd@chromium.org, dianders@chromium.org,
+        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
+        mka@chromium.org, akashast@codeaurora.org,
+        msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
+        vkaur@codeaurora.org, pyarlaga@codeaurora.org,
+        rnayak@codeaurora.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
+        Roja Rani Yarubandi <rojay@codeaurora.org>
+Subject: [PATCH V4] i2c: i2c-qcom-geni: Add shutdown callback for i2c
+Date:   Thu, 17 Sep 2020 17:55:58 +0530
+Message-Id: <20200917122558.23110-1-rojay@codeaurora.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8133a57d-ab4c-dccd-4325-9b10e7805648@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Sep 17, 2020 at 11:52:28AM +0100, Dan Scally wrote:
-> On 17/09/2020 11:33, Sakari Ailus wrote:
-
-I will do better review for next version, assuming you will Cc reviewers and
-TWIMC people. Below is like small part of comments I may give to the code.
-
-...
-
-> > The ones I know require PMIC control done in software (not even
-> > sensors are accessible without that).
-> So far we've just been getting the sensor drivers themselves to toggle
-> the gpio pins that turn the PMIC on (those pins are listed against the
-> PMIC's _CRS, and we've been finding those by evaluating the sensor's
-> _DEP) - once that's done the cameras show up on i2c and,with the bridge
-> driver installed, you can use libcamera to take photos.
-
-Do I understand correctly that you are able to get pictures from the camera
-hardware?
-
-...
-
-> > a module and not enlarge everyone's kernel, and the initialisation would at
-> > the same time take place before the rest of what the CIO2 driver does in
-> > probe.
-> I thought of that as well, but wasn't sure which was preferable. I can
-> compress it into the CIO2 driver though sure.
-
-Sakari, I tend to agree with Dan and have the board file separated from the
-driver and even framework.
-
-...
-
-> > Cc Andy, too.
-
-Thanks!
-
-...
-
-> >> I wanted to raise this as an RFC as although I don't think it's ready for
-> >> integration it has some things that I'd like feedback on, in particular the
-> >> method I chose to make the module be auto-inserted. A more ideal method would
-> >> have been to have the driver be an ACPI driver for the INT343E device, but each
-> > What do you think this device does represent? Devices whose status is
-> > always zero may exist in the table even if they would not be actually
-> > present.
-> >
-> > CIO2 is a PCI device and it has no ACPI (or PNP) ID, or at least should not
-> > have one.
-> This is the ACPI entry I mean:
-> 
-> Device (CIO2)
-> {
->     Method (_STA, 0, NotSerialized)  // _STA: Status
->     {
->         If ((CIOE == One))
->         {
->             Return (0x0F)
->         }
->         Else
->         {
->             Return (Zero)
->         }
->     }
-> 
->     Name (_HID, "INT343E")  // _HID: Hardware ID
->     Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
->     {
->         Name (CBUF, ResourceTemplate ()
->         {
->             Interrupt (ResourceConsumer, Level, ActiveLow, Shared, ,, _Y15)
->             {
->                 0x00000010,
->             }
->             Memory32Fixed (ReadWrite,
->                 0xFE400000,         // Address Base
->                 0x00010000,         // Address Length
->                 )
->         })
->         CreateDWordField (CBUF, \_SB.PCI0.CIO2._CRS._Y15._INT, CIOV)  // _INT: Interrupts
->         CIOV = CIOI /* \CIOI */
->         Return (CBUF) /* \_SB_.PCI0.CIO2._CRS.CBUF */
->     }
-> }
-
-Ah, I think you misinterpreted the meaning of above. The above is a switch how
-camera device appears either as PCI or an ACPI. So, it effectively means you
-should *not* have any relation for this HID until you find a platform where the
-device is for real enumerated via ACPI.
-
-...
-
-> >> +static int cio2_probe_can_progress(struct pci_dev *pci_dev)
-> >> +{
-> >> +	void *sensor;
-
-Why void?
-
-> >> +	/*
-> >> +	 * On ACPI platforms, we need to probe _after_ sensors wishing to connect
-> >> +	 * to cio2 have added a device link. If there are no consumers yet, then
-> >> +	 * we need to defer. The .sync_state() callback will then be called after
-> >> +	 * all linked sensors have probed
-> >> +	 */
-> >> +
-> >> +	if (IS_ENABLED(CONFIG_ACPI)) {
-
-> >> +		sensor = (struct device *)list_first_entry_or_null(
-
-Besides the fact that castings from or to void * are implicit in C, the proper
-use of list API should have pretty well defined type of lvalue.
-
-> >> +								&pci_dev->dev.links.consumers,
-> >> +								struct dev_links_info,
-> >> +								consumers);
-> > Please wrap so it's under 80.
-> >
-> Will do
-> >> +
-> >> +		if (!sensor)
-> >> +			return -EPROBE_DEFER;
-> >> +	}
-> >> +
-> >> +	return 0;
-> >> +}
-
-...
-
-> >> +	if (!IS_ENABLED(CONFIG_ACPI)) {
-> >> +		r = cio2_parse_firmware(cio2);
-> >> +		if (r)
-> >> +			goto fail_clean_notifier;
-> >> +	}
-
-How comes?
-
-...
-
-> >> \ No newline at end of file
-
-???
-
-Be sure you are using good editor.
-
-...
-
-> >> +#include <acpi/acpi_bus.h>
-
-Redundant. ACPI headers are designed the way that you are using a single header
-in Linux kernel for all. It might be different in drivers/acpi stuff, but not
-in general.
-
-> >> +#include <linux/device.h>
-> >> +#include <linux/i2c.h>
-> >> +#include <linux/kernel.h>
-> >> +#include <linux/module.h>
-> >> +#include <linux/pci.h>
-> >> +#include <media/v4l2-subdev.h>
-> >> +
-> >> +#include <linux/fwnode.h>
-> >> +#include <linux/kref.h>
-
-Please, keep them sorted. And since it's for media, the media inclusion may be
-placed last in a separate group.
-
-...
-
-> >> +#define PROPERTY_ENTRY_NULL			\
-> >> +((const struct property_entry) { })
-> > Alignment. Same appears to apply to other macros (please indent).
-> Yep
-> >
-> >> +#define SOFTWARE_NODE_NULL			\
-> >> +((const struct software_node) { })
-
-Why?!
-
-...
-
-> >> +struct software_node cio2_hid_node = { CIO2_HID, };
-
-static ?
-
-Same for other global variables.
-
-...
-
-> >> +struct cio2_bridge bridge = { 0, };
-
-When define as static the assignment will not be needed.
-
-...
-
-> >> +static int read_acpi_block(struct device *dev, char *id, void *data, u32 size)
-> >> +{
-> >> +	union acpi_object *obj;
-> >> +	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
-
-> >> +	struct acpi_handle *dev_handle = ACPI_HANDLE(dev);
-
-Usually we use simple handle if there is no ambiguous reading.
-
-> >> +	int status;
-
-Should be acpi_status
-
-> >> +	u32 buffer_length;
-> >> +
-> >> +	status = acpi_evaluate_object(dev_handle, id, NULL, &buffer);
-
-> >> +	if (!ACPI_SUCCESS(status))
-
-ACPI_FAILURE()
-
-> >> +		return -ENODEV;
-> >> +
-> >> +	obj = (union acpi_object *)buffer.pointer;
-
-Why explicit casting?
-
-> >> +	if (!obj || obj->type != ACPI_TYPE_BUFFER) {
-> >> +		dev_err(dev, "Could't read acpi buffer\n");
-
-> >> +		status = -ENODEV;
-
-Should have different int type variable for that.
-
-> >> +		goto err;
-
-If there is no obj, you may return directly without freeing.
-
-> >> +	}
-> >> +
-> >> +	if (obj->buffer.length > size) {
-> >> +		dev_err(dev, "Given buffer is too small\n");
-> >> +		status = -ENODEV;
-> >> +		goto err;
-> >> +	}
-> >> +
-> >> +	memcpy(data, obj->buffer.pointer, min(size, obj->buffer.length));
-
-Does type of size and length the same? Otherwise you need min_t().
-
-> >> +	buffer_length = obj->buffer.length;
-> >> +	kfree(buffer.pointer);
-> >> +
-> >> +	return buffer_length;
-
-> >> +err:
-
-Consider naming labels by what they are about to do. Like
-	err_free:
-here.
-
-> >> +	kfree(buffer.pointer);
-> >> +	return status;
-> >> +}
-
-> >> +static int get_acpi_ssdb_sensor_data(struct device *dev,
-> >> +				     struct sensor_bios_data *sensor)
-> >> +{
-> >> +	struct sensor_bios_data_packed sensor_data;
-
-> >> +	int ret = read_acpi_block(dev, "SSDB", &sensor_data,
-> >> +				  sizeof(sensor_data));
-
-Please, split declaration and assignment especially in the cases where it
-requires long lines.
-
-> >> +	if (ret < 0) {
-> >> +		dev_err(dev, "Failed to fetch SSDB data\n");
-> >> +		return ret;
-> >> +	}
-> >> +
-> >> +	sensor->link = sensor_data.link;
-> >> +	sensor->lanes = sensor_data.lanes;
-> >> +	sensor->mclkspeed = sensor_data.mclkspeed;
-> >> +
-> >> +	return 0;
-> >> +}
-
-...
-
-> >> +		if (!dev->driver_data) {
-> >> +			pr_info("ACPI match for %s, but it has no driver\n",
-> >> +				supported_devices[i]);
-> >> +			continue;
-> >> +		} else {
-> >> +			pr_info("Found supported device %s\n",
-> >> +				supported_devices[i]);
-> >> +		}
-
-Positive conditions are easier to read, but on the other hand 'else' is
-redundant in such conditionals (where if branch bails out from the flow).
-
+If the hardware is still accessing memory after SMMU translation
+is disabled (as part of smmu shutdown callback), then the
+IOVAs (I/O virtual address) which it was using will go on the bus
+as the physical addresses which will result in unknown crashes
+like NoC/interconnect errors.
+
+So, implement shutdown callback to i2c driver to stop on-going transfer
+and unmap DMA mappings during system "reboot" or "shutdown".
+
+Store DMA mapping data in geni_i2c_dev struct to enhance DMA mapping
+data scope. For example during shutdown callback to unmap DMA mapping,
+this stored DMA mapping data can be used to call geni_se_tx_dma_unprep,
+geni_se_rx_dma_unprep and  i2c_put_dma_safe_msg_buf functions.
+
+Add two helper functions geni_i2c_rx_msg_cleanup and
+geni_i2c_tx_msg_cleanup to unwrap the things after rx/tx FIFO/DMA
+transfers, so that the same can be used in geni_i2c_stop_xfer()
+function during shutdown callback.
+
+Remove "iova" check from geni_se_tx_dma_unprep and geni_se_rx_dma_unprep
+fucntions as invalidating with dma_mapping_error() is enough.
+
+Fixes: 37692de5d523 ("i2c: i2c-qcom-geni: Add bus driver for the Qualcomm GENI I2C controller")
+Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
+---
+Changes in V2:
+ - As per Stephen's comments added seperate function for stop transfer,
+   fixed minor nitpicks.
+ - As per Stephen's comments, changed commit text.
+
+Changes in V3:
+ - As per Stephen's comments, squashed patch 1 into patch 2, added Fixes tag.
+ - As per Akash's comments, included FIFO case in stop_xfer, fixed minor nitpicks.
+
+Changes in V4:
+ - As per Stephen's comments cleaned up geni_i2c_stop_xfer function,
+   added dma_buf in geni_i2c_dev struct to call i2c_put_dma_safe_msg_buf()
+   from other functions, removed "iova" check in geni_se_rx_dma_unprep()
+   and geni_se_tx_dma_unprep() functions.
+ - Added two helper functions geni_i2c_rx_msg_cleanup() and
+   geni_i2c_tx_msg_cleanup() to unwrap the things after rx/tx FIFO/DMA
+   transfers, so that the same can be used in geni_i2c_stop_xfer() function
+   during shutdown callback. Updated commit text accordingly.
+ - In stop_xfer check whether it is tx/rx transfer using I2C_M_RD which is valid
+   for both FIFO and DMA cases, so dropped DMA_RX_ACTIVE and DMA_TX_ACTIVE bit
+   check of SE_DMA_DEBUG_REG0 register.
+
+ drivers/i2c/busses/i2c-qcom-geni.c | 93 ++++++++++++++++++++++++------
+ drivers/soc/qcom/qcom-geni-se.c    |  4 +-
+ 2 files changed, 78 insertions(+), 19 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+index dead5db3315a..b0d8043c8cb2 100644
+--- a/drivers/i2c/busses/i2c-qcom-geni.c
++++ b/drivers/i2c/busses/i2c-qcom-geni.c
+@@ -86,6 +86,10 @@ struct geni_i2c_dev {
+ 	u32 clk_freq_out;
+ 	const struct geni_i2c_clk_fld *clk_fld;
+ 	int suspended;
++	void *dma_buf;
++	size_t xfer_len;
++	dma_addr_t tx_dma;
++	dma_addr_t rx_dma;
+ };
+ 
+ struct geni_i2c_err_log {
+@@ -307,7 +311,6 @@ static void geni_i2c_abort_xfer(struct geni_i2c_dev *gi2c)
+ 
+ 	spin_lock_irqsave(&gi2c->lock, flags);
+ 	geni_i2c_err(gi2c, GENI_TIMEOUT);
+-	gi2c->cur = NULL;
+ 	geni_se_abort_m_cmd(&gi2c->se);
+ 	spin_unlock_irqrestore(&gi2c->lock, flags);
+ 	do {
+@@ -349,10 +352,62 @@ static void geni_i2c_tx_fsm_rst(struct geni_i2c_dev *gi2c)
+ 		dev_err(gi2c->se.dev, "Timeout resetting TX_FSM\n");
+ }
+ 
++static void geni_i2c_rx_msg_cleanup(struct geni_i2c_dev *gi2c)
++{
++	struct geni_se *se = &gi2c->se;
++
++	gi2c->cur_rd = 0;
++	if (gi2c->dma_buf) {
++		if (gi2c->err)
++			geni_i2c_rx_fsm_rst(gi2c);
++		geni_se_rx_dma_unprep(se, gi2c->rx_dma, gi2c->xfer_len);
++		i2c_put_dma_safe_msg_buf(gi2c->dma_buf, gi2c->cur, !gi2c->err);
++	}
++}
++
++static void geni_i2c_tx_msg_cleanup(struct geni_i2c_dev *gi2c)
++{
++	struct geni_se *se = &gi2c->se;
++
++	gi2c->cur_wr = 0;
++	if (gi2c->dma_buf) {
++		if (gi2c->err)
++			geni_i2c_tx_fsm_rst(gi2c);
++		geni_se_tx_dma_unprep(se, gi2c->tx_dma, gi2c->xfer_len);
++		i2c_put_dma_safe_msg_buf(gi2c->dma_buf, gi2c->cur, !gi2c->err);
++	}
++}
++
++static void geni_i2c_stop_xfer(struct geni_i2c_dev *gi2c)
++{
++	int ret;
++	u32 geni_status;
++
++	/* Resume device, as runtime suspend can happen anytime during transfer */
++	ret = pm_runtime_get_sync(gi2c->se.dev);
++	if (ret < 0) {
++		dev_err(gi2c->se.dev, "Failed to resume device: %d\n", ret);
++		return;
++	}
++
++	geni_status = readl_relaxed(gi2c->se.base + SE_GENI_STATUS);
++	if (!(geni_status & M_GENI_CMD_ACTIVE))
++		goto out;
++
++	geni_i2c_abort_xfer(gi2c);
++	if (gi2c->cur->flags & I2C_M_RD)
++		geni_i2c_rx_msg_cleanup(gi2c);
++	else
++		geni_i2c_tx_msg_cleanup(gi2c);
++	gi2c->cur = NULL;
++out:
++	pm_runtime_put_sync_suspend(gi2c->se.dev);
++}
++
+ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ 				u32 m_param)
+ {
+-	dma_addr_t rx_dma;
++	dma_addr_t rx_dma = 0;
+ 	unsigned long time_left;
+ 	void *dma_buf = NULL;
+ 	struct geni_se *se = &gi2c->se;
+@@ -372,6 +427,10 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ 		geni_se_select_mode(se, GENI_SE_FIFO);
+ 		i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
+ 		dma_buf = NULL;
++	} else {
++		gi2c->xfer_len = len;
++		gi2c->rx_dma = rx_dma;
++		gi2c->dma_buf = dma_buf;
+ 	}
+ 
+ 	geni_se_setup_m_cmd(se, I2C_READ, m_param);
+@@ -380,13 +439,7 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ 	if (!time_left)
+ 		geni_i2c_abort_xfer(gi2c);
+ 
+-	gi2c->cur_rd = 0;
+-	if (dma_buf) {
+-		if (gi2c->err)
+-			geni_i2c_rx_fsm_rst(gi2c);
+-		geni_se_rx_dma_unprep(se, rx_dma, len);
+-		i2c_put_dma_safe_msg_buf(dma_buf, msg, !gi2c->err);
+-	}
++	geni_i2c_rx_msg_cleanup(gi2c);
+ 
+ 	return gi2c->err;
+ }
+@@ -394,7 +447,7 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ 				u32 m_param)
+ {
+-	dma_addr_t tx_dma;
++	dma_addr_t tx_dma = 0;
+ 	unsigned long time_left;
+ 	void *dma_buf = NULL;
+ 	struct geni_se *se = &gi2c->se;
+@@ -414,6 +467,10 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ 		geni_se_select_mode(se, GENI_SE_FIFO);
+ 		i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
+ 		dma_buf = NULL;
++	} else {
++		gi2c->xfer_len = len;
++		gi2c->tx_dma = tx_dma;
++		gi2c->dma_buf = dma_buf;
+ 	}
+ 
+ 	geni_se_setup_m_cmd(se, I2C_WRITE, m_param);
+@@ -425,13 +482,7 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ 	if (!time_left)
+ 		geni_i2c_abort_xfer(gi2c);
+ 
+-	gi2c->cur_wr = 0;
+-	if (dma_buf) {
+-		if (gi2c->err)
+-			geni_i2c_tx_fsm_rst(gi2c);
+-		geni_se_tx_dma_unprep(se, tx_dma, len);
+-		i2c_put_dma_safe_msg_buf(dma_buf, msg, !gi2c->err);
+-	}
++	geni_i2c_tx_msg_cleanup(gi2c);
+ 
+ 	return gi2c->err;
+ }
+@@ -630,6 +681,13 @@ static int geni_i2c_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++static void geni_i2c_shutdown(struct platform_device *pdev)
++{
++	struct geni_i2c_dev *gi2c = platform_get_drvdata(pdev);
++
++	geni_i2c_stop_xfer(gi2c);
++}
++
+ static int __maybe_unused geni_i2c_runtime_suspend(struct device *dev)
+ {
+ 	int ret;
+@@ -694,6 +752,7 @@ MODULE_DEVICE_TABLE(of, geni_i2c_dt_match);
+ static struct platform_driver geni_i2c_driver = {
+ 	.probe  = geni_i2c_probe,
+ 	.remove = geni_i2c_remove,
++	.shutdown = geni_i2c_shutdown,
+ 	.driver = {
+ 		.name = "geni_i2c",
+ 		.pm = &geni_i2c_pm_ops,
+diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
+index d0e4f520cff8..0216b38c1e9a 100644
+--- a/drivers/soc/qcom/qcom-geni-se.c
++++ b/drivers/soc/qcom/qcom-geni-se.c
+@@ -705,7 +705,7 @@ void geni_se_tx_dma_unprep(struct geni_se *se, dma_addr_t iova, size_t len)
+ {
+ 	struct geni_wrapper *wrapper = se->wrapper;
+ 
+-	if (iova && !dma_mapping_error(wrapper->dev, iova))
++	if (!dma_mapping_error(wrapper->dev, iova))
+ 		dma_unmap_single(wrapper->dev, iova, len, DMA_TO_DEVICE);
+ }
+ EXPORT_SYMBOL(geni_se_tx_dma_unprep);
+@@ -722,7 +722,7 @@ void geni_se_rx_dma_unprep(struct geni_se *se, dma_addr_t iova, size_t len)
+ {
+ 	struct geni_wrapper *wrapper = se->wrapper;
+ 
+-	if (iova && !dma_mapping_error(wrapper->dev, iova))
++	if (!dma_mapping_error(wrapper->dev, iova))
+ 		dma_unmap_single(wrapper->dev, iova, len, DMA_FROM_DEVICE);
+ }
+ EXPORT_SYMBOL(geni_se_rx_dma_unprep);
 -- 
-With Best Regards,
-Andy Shevchenko
-
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
+of Code Aurora Forum, hosted by The Linux Foundation
 
