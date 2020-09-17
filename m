@@ -2,159 +2,186 @@ Return-Path: <SRS0=7MnB=C2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F5E0C43461
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 02:33:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0AE9C43461
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 03:48:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 606B220715
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 02:33:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 48E6A20732
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 03:48:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V9UjUCYO"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="BxMl4JqP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726186AbgIQCdy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Sep 2020 22:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60652 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726170AbgIQCdH (ORCPT
+        id S1726198AbgIQDs3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Sep 2020 23:48:29 -0400
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:53445 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726142AbgIQDs0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Sep 2020 22:33:07 -0400
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6541FC061756;
-        Wed, 16 Sep 2020 19:25:57 -0700 (PDT)
-Received: by mail-oi1-x244.google.com with SMTP id i17so674444oig.10;
-        Wed, 16 Sep 2020 19:25:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=R5XYK+FD12SBr+zByKiW7lJ2AXayCleve7wGCw+emfg=;
-        b=V9UjUCYOOdeSu2uHFLTg7/KcyyISDs1n0pfeaYK3t4TaGUl8l5NpOAGQCUzEFZ1Ire
-         57sYAG3FYfR4OZzOGFq335xtt6YTXKZz0FTqrUrnLL3QDEyWiuwqmNKwAPYgSrQOWMun
-         xnV6RqwF7NlC8RNPGk0ub9VhlU6J86rmNN/4YCtbGqmK+n1PFa20qE8wPhxSNVHuSkTr
-         Ir31bTJGeNEzfFK2rGRFqp2QCjFAl/B6KM9c+bztlk1Y3ZqD3YMw/6Wzk0/E7b9xk6KM
-         iDWBiMIWHDD6+BuT0nGYs7NaBhQT2EjvkvaRhyMmep72hgezTK1lT+qQm1rLWHtcmJQp
-         QXCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=R5XYK+FD12SBr+zByKiW7lJ2AXayCleve7wGCw+emfg=;
-        b=aCyXrqAvvruF/NkUpi9O8leJoGnoe6WdNIst8sCfHUejV0I5NLj2xHHej45dBlZjTE
-         Vhy9QeZoAg9UJry6pyKA/FI6t4xc9qqYlk4I8x2qQW3eMwmrqfVt27Xs0sOegk9m5CWz
-         jttfiurC/p4pwt04VnG5FcdtNx46BxmI4NjZncFq5OfEhY3PB0xiJB92cFaRhCpa8BRG
-         28LEW9K99zcX6fzbjo0r5MH8KIAhCELcfOvrxRlB7AQtkDuep8MDig/+pZN9h5odHMih
-         9HvRFVMNBjZZ1O4vu5I5OpOoBmldvaUIXtiZLU1GrKXUo3UNwIsnRRiBbXEG7MzocCe5
-         EJmQ==
-X-Gm-Message-State: AOAM532amXfPDHMM0JuyikeujNioVnJ9mL0sUFNdqJZxBLoMweHditEj
-        /nWq7YyJbYBYyQb9vbxvp+WtNGNibbA=
-X-Google-Smtp-Source: ABdhPJzPPJOoGkQ+eWqM+gcoZekSgumJCUcku3YiZ/oKUVcrJKQGqOqnkjl9KwukPmqXoKDf6g5X0g==
-X-Received: by 2002:a54:440f:: with SMTP id k15mr1096762oiw.131.1600309556810;
-        Wed, 16 Sep 2020 19:25:56 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b16sm9424322otq.31.2020.09.16.19.25.55
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 16 Sep 2020 19:25:55 -0700 (PDT)
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        linux-uvc-devel@lists.sourceforge.net, linux-usb@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH RESEND v3 0/5] media: uvcvideo: Fix race conditions
-Date:   Wed, 16 Sep 2020 19:25:42 -0700
-Message-Id: <20200917022547.198090-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.17.1
+        Wed, 16 Sep 2020 23:48:26 -0400
+X-Greylist: delayed 426 seconds by postgrey-1.27 at vger.kernel.org; Wed, 16 Sep 2020 23:48:25 EDT
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id IknMkOztTTSPzIknNktcPr; Thu, 17 Sep 2020 05:41:17 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1600314077; bh=Or45x9t/V2mV9M8/3Gj6pv6qlFAXh8VZ7D0oXeuEW+A=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=BxMl4JqPxshTbHF6d8XpKnOHZlq/aXACk0nMKiqc0FrIqkDU2wT/zuI54I/ac631z
+         aitod88PTlyLiEYXlhYWmIN8/Gv31hkEM4M+JGJKxWz/v/2tBQrqXFDYOFv1qY6N96
+         Tl8DTOLXD60NjMuJwB1HSfQsg9fRssllk0fM+Bv1XPOeArAhK0pPSwvNVJd5bDu4IZ
+         JWb4S+lNzU6AiKL/5ONBgEM6FbkxW63Gss8QifwmktBoC7Rq+V3Coc69uhSa1wx8tZ
+         /g8F6iLNPsII/OrW+3QsmIsj9YGYeu63OGyMdPYmDFPj7WRLEHyoxxo2jSDS5IeCPo
+         H4rodGuQRVE9A==
+Message-ID: <fb833bb67f007988646e82aca593d65d@smtp-cloud7.xs4all.net>
+Date:   Thu, 17 Sep 2020 05:41:16 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: WARNINGS
+X-CMAE-Envelope: MS4wfLOtzPplUlCiy6zAUVOfAJtpJ0ovkAnFd5VGcIT8CZ+KGrPHVyg9LIzyrvCZMUdyo3I8Mxq2zHVyb81zqbnGYk5hkEaz/Q76YZ9vHsFjdxcXBToaR9AP
+ b9oXtnFvGchtlG0lFvurpphkIQKENO8yvn2qDmG1getviF3+sVYDFDeSdXVs9VoEKcjngL22pPfZSh4W73eQBQrCbj04f4cWGd0pdU9tnjfmrkoT9DaxDjy+
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Something seems to have gone wrong with v3 of this patch series.
-I am sure I sent it out, but I don't find it anywhere.
-Resending. Sorry for any duplicates.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-The uvcvideo code has no lock protection against USB disconnects
-while video operations are ongoing. This has resulted in random
-error reports, typically pointing to a crash in usb_ifnum_to_if(),
-called from usb_hcd_alloc_bandwidth(). A typical traceback is as
-follows.
+Results of the daily build of media_tree:
 
-usb 1-4: USB disconnect, device number 3
-BUG: unable to handle kernel NULL pointer dereference at 0000000000000000
-PGD 0 P4D 0
-Oops: 0000 [#1] PREEMPT SMP PTI
-CPU: 0 PID: 5633 Comm: V4L2CaptureThre Not tainted 4.19.113-08536-g5d29ca36db06 #1
-Hardware name: GOOGLE Edgar, BIOS Google_Edgar.7287.167.156 03/25/2019
-RIP: 0010:usb_ifnum_to_if+0x29/0x40
-Code: <...>
-RSP: 0018:ffffa46f42a47a80 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffff904a396c9000
-RDX: ffff904a39641320 RSI: 0000000000000001 RDI: 0000000000000000
-RBP: ffffa46f42a47a80 R08: 0000000000000002 R09: 0000000000000000
-R10: 0000000000009975 R11: 0000000000000009 R12: 0000000000000000
-R13: ffff904a396b3800 R14: ffff904a39e88000 R15: 0000000000000000
-FS: 00007f396448e700(0000) GS:ffff904a3ba00000(0000) knlGS:0000000000000000
-CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 000000016cb46000 CR4: 00000000001006f0
-Call Trace:
- usb_hcd_alloc_bandwidth+0x1ee/0x30f
- usb_set_interface+0x1a3/0x2b7
- uvc_video_start_transfer+0x29b/0x4b8 [uvcvideo]
- uvc_video_start_streaming+0x91/0xdd [uvcvideo]
- uvc_start_streaming+0x28/0x5d [uvcvideo]
- vb2_start_streaming+0x61/0x143 [videobuf2_common]
- vb2_core_streamon+0xf7/0x10f [videobuf2_common]
- uvc_queue_streamon+0x2e/0x41 [uvcvideo]
- uvc_ioctl_streamon+0x42/0x5c [uvcvideo]
- __video_do_ioctl+0x33d/0x42a
- video_usercopy+0x34e/0x5ff
- ? video_ioctl2+0x16/0x16
- v4l2_ioctl+0x46/0x53
- do_vfs_ioctl+0x50a/0x76f
- ksys_ioctl+0x58/0x83
- __x64_sys_ioctl+0x1a/0x1e
- do_syscall_64+0x54/0xde
+date:			Thu Sep 17 05:00:15 CEST 2020
+media-tree git hash:	741043b02c2e00c8fea1a0f6f8ce43c6326cd9e8
+media_build git hash:	21087b03fd494d4e53bebf781b1f187f16cf74e8
+v4l-utils git hash:	4833a12e78525e4d1a8c1f5da5f9534b857557be
+edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
+gcc version:		i686-linux-gcc (GCC) 9.3.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		v0.6.2-1-gfebba84c
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		v0.5.0-6793-g0248ebb06
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 65546dfa86f803ba44e908adc14ff4d8174a0fd2
+host hardware:		x86_64
+host os:		5.7.0-1-amd64
 
-While there are not many references to this problem on mailing lists, it is
-reported on a regular basis on various Chromebooks (roughly 300 reports
-per month). The problem is relatively easy to reproduce by adding msleep()
-calls into the code.
+linux-git-sh: OK
+linux-git-arm-davinci: OK
+linux-git-arm-at91: OK
+linux-git-arm-stm32: OK
+linux-git-arm-pxa: OK
+linux-git-mips: OK
+linux-git-arm64: OK
+linux-git-powerpc64: OK
+linux-git-arm-multi: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: WARNINGS: VIDEO_TEGRA VIDEO_TEGRA_TPG
+Check for strcpy/strncpy/strlcpy: WARNINGS: found 3 strcpy(), 3 strncpy(), 3 strlcpy()
+linux-3.10.108-i686: WARNINGS
+linux-3.10.108-x86_64: WARNINGS
+linux-3.11.10-i686: WARNINGS
+linux-3.11.10-x86_64: WARNINGS
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.81-i686: OK
+linux-3.16.81-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.212-i686: OK
+linux-4.4.212-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.212-i686: OK
+linux-4.9.212-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.169-i686: OK
+linux-4.14.169-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.101-i686: OK
+linux-4.19.101-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.15-i686: OK
+linux-5.0.15-x86_64: OK
+linux-5.1.1-i686: OK
+linux-5.1.1-x86_64: OK
+linux-5.2.1-i686: OK
+linux-5.2.1-x86_64: OK
+linux-5.3.1-i686: OK
+linux-5.3.1-x86_64: OK
+linux-5.4.17-i686: OK
+linux-5.4.17-x86_64: OK
+linux-5.5.1-i686: OK
+linux-5.5.1-x86_64: OK
+linux-5.6.1-i686: OK
+linux-5.6.1-x86_64: OK
+linux-5.7.2-i686: OK
+linux-5.7.2-x86_64: OK
+linux-5.8.1-i686: OK
+linux-5.8.1-x86_64: OK
+linux-5.9-rc1-i686: OK
+linux-5.9-rc1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: WARNINGS: Final Summary: 2943, Succeeded: 2943, Failed: 0, Warnings: 2
+virtme-32: WARNINGS: Final Summary: 2779, Succeeded: 2779, Failed: 0, Warnings: 4
+sparse: OK
+smatch: WARNINGS
 
-I tried to reproduce the problem with non-uvcvideo webcams, but was
-unsuccessful. I was unable to get Philips (pwc) webcams to work. gspca
-based webcams don't experience the problem, or at least I was unable to
-reproduce it (The gspa driver does not trigger sending USB messages in the
-open function, and otherwise uses the locking mechanism provided by the
-v4l2/vb2 core).
+Detailed results are available here:
 
-I don't presume to claim that I found every issue, but this patch series
-should fix at least the major problems.
+http://www.xs4all.nl/~hverkuil/logs/Thursday.log
 
-The patch series was tested exensively on a Chromebook running chromeos-4.19
-and on a Linux system running a v5.8.y based kernel.
+Detailed regression test results are available here:
 
-v3:
-- In patch 5/5, add missing calls to usb_autopm_put_interface() and kfree()
-  to failure code path
+http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media-dmesg.log
 
-v2:
-- Added details about problem frequency and testing with non-uvc webcams
-  to summary
-- In patch 4/5, return EPOLLERR instead of -ENODEV on poll errors
-- Fix description in patch 5/5
+Full logs are available here:
 
-----------------------------------------------------------------
-Guenter Roeck (5):
-      media: uvcvideo: Cancel async worker earlier
-      media: uvcvideo: Lock video streams and queues while unregistering
-      media: uvcvideo: Release stream queue when unregistering video device
-      media: uvcvideo: Protect uvc queue file operations against disconnect
-      media: uvcvideo: Abort uvc_v4l2_open if video device is unregistered
+http://www.xs4all.nl/~hverkuil/logs/Thursday.tar.bz2
 
- drivers/media/usb/uvc/uvc_ctrl.c   | 11 ++++++----
- drivers/media/usb/uvc/uvc_driver.c | 12 ++++++++++
- drivers/media/usb/uvc/uvc_queue.c  | 32 +++++++++++++++++++++++++--
- drivers/media/usb/uvc/uvc_v4l2.c   | 45 ++++++++++++++++++++++++++++++++++++--
- drivers/media/usb/uvc/uvcvideo.h   |  1 +
- 5 files changed, 93 insertions(+), 8 deletions(-)
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
