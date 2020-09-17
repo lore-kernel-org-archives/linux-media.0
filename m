@@ -4,103 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 070D6C433E2
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 07:20:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3D07C43461
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 07:20:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C1C6B204FD
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 07:20:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B1A062083B
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 07:20:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="emqitvXa"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="mUK1l+0V"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726290AbgIQHUf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Sep 2020 03:20:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48612 "EHLO
+        id S1726332AbgIQHUu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Sep 2020 03:20:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726187AbgIQHUY (ORCPT
+        with ESMTP id S1726196AbgIQHUm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Sep 2020 03:20:24 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998FFC061756
-        for <linux-media@vger.kernel.org>; Thu, 17 Sep 2020 00:20:22 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id u13so850904pgh.1
-        for <linux-media@vger.kernel.org>; Thu, 17 Sep 2020 00:20:22 -0700 (PDT)
+        Thu, 17 Sep 2020 03:20:42 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243A0C061756
+        for <linux-media@vger.kernel.org>; Thu, 17 Sep 2020 00:20:41 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id q4so791646pjh.5
+        for <linux-media@vger.kernel.org>; Thu, 17 Sep 2020 00:20:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:content-transfer-encoding:in-reply-to:references
          :subject:from:cc:to:date:message-id:user-agent;
-        bh=8mZBJ8cLMtckf5ie94vJM9dG4dXSSI5Lejo+Q/gBHh4=;
-        b=emqitvXamm1Zt4kpxTich+8DdlEB5lfs6ctgPWa0EPCVR9Iyj+wLVcTCZ44Z74IjUY
-         94Mj+hbZqt2kyeIzD3SJ1u5sB1MIHi4psCJJgsF8tfoS7tmUTZ5OzCuBFiTkY4d9O9Xl
-         sE6j+kvR4hBDGNAXRH3Jf1laOeVtuJl9IgMUI=
+        bh=qTwre4ZeIJuKy55xpBHaxVBN8pj7CPhlTLeYSSpiSIU=;
+        b=mUK1l+0V3m0aQzgpa7FBva6vX516YzP+V0Ikp9EOOpWanHA6Oqd/eds6F+JWOODp5F
+         lRVkvzD5o394JcSu9xKkcS+1wIY/QVYxmY8V/+1GAwI8vuVSxeRJquEr4tUCdJ7dgwBS
+         JPwCv9bw4jQvsjgSpvgiFXug1bnoUS8X3LQqw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:content-transfer-encoding
          :in-reply-to:references:subject:from:cc:to:date:message-id
          :user-agent;
-        bh=8mZBJ8cLMtckf5ie94vJM9dG4dXSSI5Lejo+Q/gBHh4=;
-        b=b7N+fFcQmwmpIwusnQwTqA40FSWUR3Of8WGzEBMzAWzKcLlIeQIZ4y8NaFoLteDCHz
-         M3TCLUr+TLfQbrwoT2N7rAHyNXNJp+3k4xqCeXcXfdSc674Arlqb3ZLJ+XtlFkxAOP7w
-         DQnCEYGy09Qztn1rYzIrYDkFAqzkjsHjiifnyZcQ0TRcuJ0zOCRw0230FDzGS3M+IIIl
-         VqE75w2hmf1Cf3UyLGoGKuCpxLIB/5Fjp8A4+NlPdpxUNN5mYRIo3DSS5ijJc2SQFSFK
-         dzT9kjcyJcGYLZCc3gfEK4/qNydGHBcT+PuBjchKrJ1mUqGfx24zTDwUFDiUrEABKcVp
-         Mp/w==
-X-Gm-Message-State: AOAM530oypUt9rJ3wBw1T9fFTo7D1Av+QRe6THCy76N2k1t/HKxpmJFU
-        gaJADV3uJ+JctSXK5ax5IvmyG6XkYQemWA==
-X-Google-Smtp-Source: ABdhPJwXci7bPJVYBFGnOsZ81TDzX4aNaBlsDL4MOUhAzC4BVReOIP1FUogHNHnB3AqHInM5cq0p0Q==
-X-Received: by 2002:a63:d648:: with SMTP id d8mr21375045pgj.4.1600327222184;
-        Thu, 17 Sep 2020 00:20:22 -0700 (PDT)
+        bh=qTwre4ZeIJuKy55xpBHaxVBN8pj7CPhlTLeYSSpiSIU=;
+        b=VADWdfYhzCjHHC2mNaV9l8VJC7CROk8rtCP5A8hAVXYjbx9cJWaOaKjH8M6IU6lxzZ
+         tqDLTqpVHY/xgLy9klQvkYtL3gHsUsEGnMFtOcbep6vMh0ZtLTL1TT6+ez2SOZnF4e9p
+         3/Ve8zakVPtsAb2iSUpYZ9mQZKQwCjp3ZyLmP1Ct2XUlI3P1gHRZ0uSLRQR+Sq4j8FGj
+         q8jXNRp66HlR/CCgFD2vMw555I8HKwvpiHNK2a3mu+I0Y45L7vFaCBEBao1aJHoaZmjE
+         d/rYo7OI1LbqPcimFu6a9DbkHKpFOLdweeRwXdX1j7plsbiXl/C676a5dBs51L1l0SMM
+         xV4g==
+X-Gm-Message-State: AOAM532wLI1kyrNvxucSj89OT/pKcvK0CXuhmKR9Lcr+UL5HMsdNLWXx
+        RsnkEvxvYvcWmcFHWF0kIQrGD5/zKozmyg==
+X-Google-Smtp-Source: ABdhPJwg+azqcg7sWP3zo0LXxIcosCEY+c69pW80exTxTNCPi7oboCX55uPw+dUh9lC85AB99OkYuA==
+X-Received: by 2002:a17:90b:1916:: with SMTP id mp22mr6792303pjb.132.1600327240752;
+        Thu, 17 Sep 2020 00:20:40 -0700 (PDT)
 Received: from chromium.org ([2620:15c:202:1:3e52:82ff:fe6c:83ab])
-        by smtp.gmail.com with ESMTPSA id 143sm19564027pfc.66.2020.09.17.00.20.21
+        by smtp.gmail.com with ESMTPSA id g23sm19530034pfh.133.2020.09.17.00.20.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2020 00:20:21 -0700 (PDT)
+        Thu, 17 Sep 2020 00:20:40 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1600305963-7659-3-git-send-email-mansur@codeaurora.org>
-References: <1600305963-7659-1-git-send-email-mansur@codeaurora.org> <1600305963-7659-3-git-send-email-mansur@codeaurora.org>
-Subject: Re: [RESEND v2 2/4] venus: core: vote for video-mem path
+In-Reply-To: <1600305963-7659-2-git-send-email-mansur@codeaurora.org>
+References: <1600305963-7659-1-git-send-email-mansur@codeaurora.org> <1600305963-7659-2-git-send-email-mansur@codeaurora.org>
+Subject: Re: [RESEND v2 1/4] venus: core: change clk enable and disable order in resume and suspend
 From:   Stephen Boyd <swboyd@chromium.org>
 Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         vgarodia@codeaurora.org,
         Mansur Alisha Shaik <mansur@codeaurora.org>
 To:     Mansur Alisha Shaik <mansur@codeaurora.org>,
         linux-media@vger.kernel.org, stanimir.varbanov@linaro.org
-Date:   Thu, 17 Sep 2020 00:20:20 -0700
-Message-ID: <160032722036.4188128.15261798942473063496@swboyd.mtv.corp.google.com>
+Date:   Thu, 17 Sep 2020 00:20:39 -0700
+Message-ID: <160032723903.4188128.6871272126838595856@swboyd.mtv.corp.google.com>
 User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Quoting Mansur Alisha Shaik (2020-09-16 18:26:01)
-> diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/pla=
-tform/qcom/venus/core.c
-> index 52a3886..064b6c8 100644
-> --- a/drivers/media/platform/qcom/venus/core.c
-> +++ b/drivers/media/platform/qcom/venus/core.c
-> @@ -363,8 +363,16 @@ static __maybe_unused int venus_runtime_suspend(stru=
-ct device *dev)
-> =20
->         ret =3D icc_set_bw(core->cpucfg_path, 0, 0);
->         if (ret)
-> -               return ret;
-> +               goto err_poweron_core;
-> +
-> +       ret =3D icc_set_bw(core->video_path, 0, 0);
-> +       if (ret)
-> +               goto err_poweron_core;
-> +
-> +       return ret;
-> =20
-> +err_poweron_core:
-> +       pm_ops->core_power(dev, POWER_ON);
+Quoting Mansur Alisha Shaik (2020-09-16 18:26:00)
+> Currently video driver is voting after clk enable and un voting
+> before clk disable. Basically we should vote before clk enable
+> and un vote after clk disable.
+>=20
+> Corrected this by changing the order of clk enable and clk disable.
+>=20
+> Fixes: 7482a983d ("media: venus: redesign clocks and pm domains control")
+> Signed-off-by: Mansur Alisha Shaik <mansur@codeaurora.org>
+> ---
 
-Don't we need to put back the bandwidth from before suspend was entered
-if the video_path fails?
-
->         return ret;
->  }
->
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
