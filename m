@@ -2,143 +2,129 @@ Return-Path: <SRS0=7MnB=C2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+X-Spam-Status: No, score=-12.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 443B9C43461
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 01:53:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C19A5C35256
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 02:33:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 00B6D2072E
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 01:53:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 898AD208E4
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 02:33:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=mg.codeaurora.org header.i=@mg.codeaurora.org header.b="UV7NwRrZ"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YHFubGF3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726198AbgIQBxi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Sep 2020 21:53:38 -0400
-Received: from mail29.static.mailgun.info ([104.130.122.29]:57869 "EHLO
-        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726129AbgIQBxg (ORCPT
+        id S1726222AbgIQCdJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Sep 2020 22:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60650 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726064AbgIQCdF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Sep 2020 21:53:36 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1600307615; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=5gKnvHK1s7h+t4dIt5Jw6+hoAVJacQi86HN6L5bs5zA=;
- b=UV7NwRrZ3VyqtYF82nnyj0atNcBH5W/5YwHX/R56iiBh1X0jjp13PNderfLtoXD2Yg430hIP
- CjMlMCNb8cIkd0JQBL+ZxMNd4faRwC/6jbhSXTYqjTEyvK+amTfyTblOLWTfj954vGXcHWvn
- bk3Rgap3RUI9y0dkKmAM1dGytbI=
-X-Mailgun-Sending-Ip: 104.130.122.29
-X-Mailgun-Sid: WyI3ZjU0NiIsICJsaW51eC1tZWRpYUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
- 5f62c18d91755cb92b41fd8b (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 17 Sep 2020 01:53:17
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 1D317C433F0; Thu, 17 Sep 2020 01:53:17 +0000 (UTC)
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: mansur)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id A6D5EC433C8;
-        Thu, 17 Sep 2020 01:53:16 +0000 (UTC)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 17 Sep 2020 07:23:16 +0530
-From:   mansur@codeaurora.org
-To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, vgarodia@codeaurora.org
-Subject: Re: [PATCH v2 2/3] venus: core: cancel pending work items in
- workqueue
-In-Reply-To: <a96d7cce-2781-e3d6-6238-8fec411511a1@linaro.org>
-References: <1599741856-16239-1-git-send-email-mansur@codeaurora.org>
- <1599741856-16239-3-git-send-email-mansur@codeaurora.org>
- <a96d7cce-2781-e3d6-6238-8fec411511a1@linaro.org>
-Message-ID: <51eeedbe7e84ce67e8d5b3f9fd3a7a2e@codeaurora.org>
-X-Sender: mansur@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+        Wed, 16 Sep 2020 22:33:05 -0400
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0231DC061797;
+        Wed, 16 Sep 2020 19:26:05 -0700 (PDT)
+Received: by mail-ot1-x343.google.com with SMTP id a2so481505otr.11;
+        Wed, 16 Sep 2020 19:26:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=ljdmjxdKqEuBlgltC6/Q3uw8AjHFikdpknr0TkuRy0A=;
+        b=YHFubGF31fKSw5FJtZqFQQbWWzTmPO4L7HyCUWSEw7HpOARjJfH1pdbHGg3fskJMN9
+         SJXpz7AZBuSkbz56d2pPj+fjmNjm+mi4F5a1ZWqoSvUNsycvxASJid+KEiMQOflzRC6z
+         SHiWlZOp8+NaHPmjDuOAt0yd65ncxNbtmGJFdS2YW23ifhrrTlEBBKgAclwFgVuaXxZx
+         ssGCl/6/74rm05R53imZOke/NCf0sIOCxQ84Ma0cKHE8U30EXYYO3vwcAvx+/Vem+5Qx
+         vsV52yGOF7s8BxZ3HINY8zdRUBHVW9+rIHrYXq1Re2fQ5r87vxMr5NbGi/2OnuIs7xbW
+         q9ZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :in-reply-to:references;
+        bh=ljdmjxdKqEuBlgltC6/Q3uw8AjHFikdpknr0TkuRy0A=;
+        b=cwMRPOzP1kWsjM3OXwWgQmJC5gfEbq5oDiz2ZeC+QUBhMki9Blo2ikaB3Pu8FFWaJf
+         ujvytjYJs3xOdczc95v3IfwjEJ7lQfKas4FpKcAM54gesFW9yqisAuojnC2nZJysMkth
+         YHyl/c9rVDEoLS3fj6Li1nV2X1YIZjdYFtEjQXNZHsiVGuw4Dw7f0jJjPLmRaHfLakfx
+         +TSVOl2uwTdRg5Uy+R1RVMPT/iTPaTFkmnK7Sx6wbWeGx2Xb5jzYExclm1SjQ5EiOmfE
+         6xD3mkWKV9iq6plDg1plGBX74KHncwuYaK1zuqi+8g2ySlWGfnYsF7nvR6pxMqu53ch9
+         KldQ==
+X-Gm-Message-State: AOAM533sT561o4sBLpSDyiZTtUJcBXdRtVm5KAiJ/5MKu95vwF5s4v2O
+        vVjm/oy39jJHByeEAcdrgJ8=
+X-Google-Smtp-Source: ABdhPJzDl9ZZfD8ZSxUVlnOikRRv4WS+mkf73k0l4N5ta56eofyQlT8SAN949r9jTu6TBH6XzUYH2w==
+X-Received: by 2002:a05:6830:20d8:: with SMTP id z24mr18418697otq.3.1600309564443;
+        Wed, 16 Sep 2020 19:26:04 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c25sm12286685oot.42.2020.09.16.19.26.03
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 16 Sep 2020 19:26:04 -0700 (PDT)
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        linux-uvc-devel@lists.sourceforge.net, linux-usb@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH RESEND v3 5/5] media: uvcvideo: Abort uvc_v4l2_open if video device is unregistered
+Date:   Wed, 16 Sep 2020 19:25:47 -0700
+Message-Id: <20200917022547.198090-6-linux@roeck-us.net>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200917022547.198090-1-linux@roeck-us.net>
+References: <20200917022547.198090-1-linux@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 2020-09-11 15:52, Stanimir Varbanov wrote:
-> Hi,
-> 
-> On 9/10/20 3:44 PM, Mansur Alisha Shaik wrote:
->> In concurrency usecase and reboot scenario we are
->> observing race condition and seeing NULL pointer
->> dereference crash. In shutdown path and system
->> recovery path we are destroying the same mutex
->> hence seeing crash.
->> 
->> This case is handled by mutex protection and
->> cancel delayed work items in work queue.
->> 
->> Below is the call trace for the crash
->> Call trace:
->>  venus_remove+0xdc/0xec [venus_core]
->>  venus_core_shutdown+0x1c/0x34 [venus_core]
->>  platform_drv_shutdown+0x28/0x34
->>  device_shutdown+0x154/0x1fc
->>  kernel_restart_prepare+0x40/0x4c
->>  kernel_restart+0x1c/0x64
->> 
->> Call trace:
->>  mutex_lock+0x34/0x60
->>  venus_hfi_destroy+0x28/0x98 [venus_core]
->>  hfi_destroy+0x1c/0x28 [venus_core]
-> 
-> I queued up [1] and after it this cannot happen anymore because
-> hfi_destroy() is not called by venus_sys_error_handler().
-> 
-> So I guess this patch is not needed anymore.
-> 
-> [1] https://www.spinics.net/lists/linux-arm-msm/msg70092.html
-> 
-Yes, this patch is not needed any more. rebased and posted new version
-https://lore.kernel.org/patchwork/project/lkml/list/?series=463091
+uvc_v4l2_open() acquires the uvc device mutex. After doing so,
+it does not check if the video device is still registered. This may
+result in race conditions and can result in an attempt to submit an urb
+to a disconnected USB interface (from uvc_status_start).
 
->>  venus_sys_error_handler+0x60/0x14c [venus_core]
->>  process_one_work+0x210/0x3d0
->>  worker_thread+0x248/0x3f4
->>  kthread+0x11c/0x12c
->>  ret_from_fork+0x10/0x18
->> 
->> Signed-off-by: Mansur Alisha Shaik <mansur@codeaurora.org>
->> ---
->>  drivers/media/platform/qcom/venus/core.c | 4 ++++
->>  1 file changed, 4 insertions(+)
->> 
->> diff --git a/drivers/media/platform/qcom/venus/core.c 
->> b/drivers/media/platform/qcom/venus/core.c
->> index c5af428..69aa199 100644
->> --- a/drivers/media/platform/qcom/venus/core.c
->> +++ b/drivers/media/platform/qcom/venus/core.c
->> @@ -323,6 +323,8 @@ static int venus_remove(struct platform_device 
->> *pdev)
->>  	struct device *dev = core->dev;
->>  	int ret;
->> 
->> +	cancel_delayed_work_sync(&core->work);
->> +
->>  	ret = pm_runtime_get_sync(dev);
->>  	WARN_ON(ret < 0);
->> 
->> @@ -340,7 +342,9 @@ static int venus_remove(struct platform_device 
->> *pdev)
->>  	if (pm_ops->core_put)
->>  		pm_ops->core_put(dev);
->> 
->> +	mutex_lock(&core->lock);
->>  	hfi_destroy(core);
->> +	mutex_unlock(&core->lock);
->> 
->>  	icc_put(core->video_path);
->>  	icc_put(core->cpucfg_path);
->> 
+The problem was observed after adding a call to msleep() just before
+acquiring the mutex and disconnecting the camera during the sleep.
+
+Check if the video device is still registered after acquiring the mutex
+to avoid the problem. In the release function, only call uvc_status_stop()
+if the video device is still registered. If the video device has been
+unregistered, the urb associated with uvc status has already been killed
+in uvc_status_unregister(). Trying to kill it again won't do any good
+and might have unexpected side effects.
+
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/media/usb/uvc/uvc_v4l2.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+index 7e5e583dae5e..8073eae5d879 100644
+--- a/drivers/media/usb/uvc/uvc_v4l2.c
++++ b/drivers/media/usb/uvc/uvc_v4l2.c
+@@ -548,6 +548,12 @@ static int uvc_v4l2_open(struct file *file)
+ 	}
+ 
+ 	mutex_lock(&stream->dev->lock);
++	if (!video_is_registered(&stream->vdev)) {
++		mutex_unlock(&stream->dev->lock);
++		usb_autopm_put_interface(stream->dev->intf);
++		kfree(handle);
++		return -ENODEV;
++	}
+ 	if (stream->dev->users == 0) {
+ 		ret = uvc_status_start(stream->dev, GFP_KERNEL);
+ 		if (ret < 0) {
+@@ -590,7 +596,7 @@ static int uvc_v4l2_release(struct file *file)
+ 	file->private_data = NULL;
+ 
+ 	mutex_lock(&stream->dev->lock);
+-	if (--stream->dev->users == 0)
++	if (--stream->dev->users == 0 && video_is_registered(&stream->vdev))
+ 		uvc_status_stop(stream->dev);
+ 	mutex_unlock(&stream->dev->lock);
+ 
+-- 
+2.17.1
+
