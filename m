@@ -2,117 +2,151 @@ Return-Path: <SRS0=7MnB=C2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E4D5C433E2
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 15:10:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63F3BC43461
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 15:26:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C65062072E
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 15:10:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EEEB322205
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 15:26:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GRhGAYpU"
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="KItZq7TL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727918AbgIQPJX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Sep 2020 11:09:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36890 "EHLO
+        id S1728198AbgIQPZu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Sep 2020 11:25:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727899AbgIQPH7 (ORCPT
+        with ESMTP id S1728185AbgIQPZG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Sep 2020 11:07:59 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C05DC061223;
-        Thu, 17 Sep 2020 07:08:28 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id u9so1190715plk.4;
-        Thu, 17 Sep 2020 07:08:28 -0700 (PDT)
+        Thu, 17 Sep 2020 11:25:06 -0400
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6FF7C061756
+        for <linux-media@vger.kernel.org>; Thu, 17 Sep 2020 08:24:58 -0700 (PDT)
+Received: by mail-qt1-x843.google.com with SMTP id r8so2121481qtp.13
+        for <linux-media@vger.kernel.org>; Thu, 17 Sep 2020 08:24:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zeRj3f6nyWLRdKoz6U7zTVJ0r+VVM/E42TLCww5Jge8=;
-        b=GRhGAYpUbLQLD7rsHRD8Gt6k1AOgGiS8JgVFi1Z9AyzpAxgzpscPl7516mOzlQRaig
-         HwoyNmxJ2Y1GITM61jjkMvzoVaIJGmsdrPO9L/S2hsHmFmyjOAtQF3TGzXrLBmqzDYQm
-         ea2JHqKxKAwiVsprqTXNxrS8Oq5eWc2LQGiErzRamqG+OB9mGqJUnOdOIH1MO0jwMQCv
-         xt9nr1FAo0ozDMPKqgA/h+2kSjIhpNPzh/Tl8aATX7Ua3wKL+91wNAt1Lz5lUuIre2yW
-         HTo25DJKhYQ94jTe6CELMtUdoHG6mP+QczAbBaN8cOTcsdAt4tanwXUduvfzuETGyLsE
-         qO5g==
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=/MIjfA84FROcmh2Yr+++vHpa0nobfYfMg9k42KNVp2M=;
+        b=KItZq7TLRwXkeSUDV7TVakSYOYYpYVj1lFuOvU0VuV2nyeTZkDl+5SDk5YU6xRfdQb
+         mmJrGXwRgXiqpqZBf8DLOJr/gMeGErqhZkM8rZSmNzY3KpK/NJt55cQb3C29WXfmsp40
+         KJdpWLxQBDyknwAoYt/ULy2EsSn//x6zNDDJW/sQmVP1idUubfNstwrhi9t017rZ3QZJ
+         3sDqFSKs5FzHiMnyyMyLtAnPX0Naf0m0oIbzEeYFHkliee0CZ1/6R0VN7TcyiVwxLFrO
+         JOOOGOMacxM9ezg1v7YEt3scmLEmwNPGkyrd88i/jnPrnz/LvnJkdxDuuHZJUSvAh0TC
+         tmSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zeRj3f6nyWLRdKoz6U7zTVJ0r+VVM/E42TLCww5Jge8=;
-        b=J1CkNHcSIVO02OfeP0QyGB4DnEyzKjF9bg3Gd5t5nvQYfBWTwiXEwgKhu5cluzDsHp
-         2H7e2aNlPAbPixRq9bZ4KqXcQE+niaegW2oKPNCim8Y0XNjVjqOwLOgtj11cXf1ByqFu
-         yrJSSeMqhxibiUN8yUrzTwRyuFekaQKueAJ63ehggLu23HxZyDKfbPoyBfhJRzJ5HJf4
-         nrQjWIY1f+9afTW8WbK+GdLBqPl0TmHQhujY0JDCQ/M10A6oMKDvJm7DoYDuqFrpaFYt
-         kRIJJrTj6rKTWfkHKGVcXMRQ6aRzBldGDhboDNvXi+QE+x674glruYGL7JhEwQlZMnyB
-         qxnQ==
-X-Gm-Message-State: AOAM533697Y8qtHUSIR5xUTQuDUCJvGXkQhw0aHAUitjEIVT1G2KznDP
-        XlEwsLrOBjtAM8PUCr/fWfwRDJQZevmvW00GNhE=
-X-Google-Smtp-Source: ABdhPJyh5SCZniVNl+/4l5cUoMNIO4kYJ+q3Jqvhcbm1nkQPGtZAzykiqRLIOqvGCrV8bWOIU+GOb4AQ/Szk8cTgcqo=
-X-Received: by 2002:a17:902:b7c7:b029:d1:cc21:9c38 with SMTP id
- v7-20020a170902b7c7b02900d1cc219c38mr17716244plz.21.1600351707970; Thu, 17
- Sep 2020 07:08:27 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=/MIjfA84FROcmh2Yr+++vHpa0nobfYfMg9k42KNVp2M=;
+        b=LwbrqoBsbk5XuTKnCt9BoZFInEM8Pt57mDjtTQW9L1ohiOmFGGIq3il4uIW3klOr4c
+         JaQOaCngyvloRLwN6te65diaTBR8tBsir78TyXwoZNh9yUXbwI6p/Zse/xz7KD3RCn1G
+         CY8sZZf8t2omb7AUSeHZL6X7CMaHvMO29b8sDcOh2tet7oPaiY9Rk5rCA85mtaQRpaCr
+         cadVOO6V6e5bkHugtJPOKxUNCithAJtTGug8wAravyz4lYreJSKYD4VmyOkRsUfOBGJK
+         6Ol6ls9gDkYjc8TJptxv12WNhH1zIU2swNlscwIsM+KlOO6IIOFo9N261JQ3eYR9v46Z
+         nSeQ==
+X-Gm-Message-State: AOAM530gus9shZyXI6mjpuZCIMmTO65J/K1lqzK/Li9xLE8W5Ijs9A2t
+        hlwFUOSMIT53HdIMA7gOiSZOrA==
+X-Google-Smtp-Source: ABdhPJyml2ehbabsQ2p5uBo50b15HPhlS1qE50x7EQpnsGFfmEF+Ym7+K38vhRLvzw2lQSd1AWRM1Q==
+X-Received: by 2002:ac8:5d04:: with SMTP id f4mr16143583qtx.290.1600356297898;
+        Thu, 17 Sep 2020 08:24:57 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-156-34-48-30.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.48.30])
+        by smtp.gmail.com with ESMTPSA id z74sm86638qkb.11.2020.09.17.08.24.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Sep 2020 08:24:57 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1kIvmK-000VsL-KF; Thu, 17 Sep 2020 12:24:56 -0300
+Date:   Thu, 17 Sep 2020 12:24:56 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     christian.koenig@amd.com
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>, Linux MM <linux-mm@kvack.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>
+Subject: Re: [Linaro-mm-sig] Changing vma->vm_file in dma_buf_mmap()
+Message-ID: <20200917152456.GH8409@ziepe.ca>
+References: <aa953b09-53b1-104b-dc4b-156ad8a75e62@gmail.com>
+ <CAKMK7uHJNRzCJfWVSmMrLmGXE0qo+OCXiMd+zPTOkeG2pnVrmQ@mail.gmail.com>
+ <8d8693db-a3f0-4f5f-3e32-57d23ca620f8@amd.com>
+ <CAKMK7uE=UqZD3PVC8XZAXrgGH-VsUF_-YQD3MLV8KK1kpxO4yQ@mail.gmail.com>
+ <20200917113110.GE8409@ziepe.ca>
+ <6fd74b84-959c-8b3b-c27b-e9fbf66396c7@gmail.com>
+ <20200917121858.GF8409@ziepe.ca>
+ <d82f08ee-2dec-18e8-fb06-d26f18ed777a@gmail.com>
+ <20200917143551.GG8409@ziepe.ca>
+ <5b330920-c789-fac7-e9b1-49f3bc1097a8@gmail.com>
 MIME-Version: 1.0
-References: <20200916213618.8003-1-djrscally@gmail.com> <20200917075356.GA3333802@kroah.com>
- <d97fb93f-5258-b654-3063-863e81ae7298@gmail.com> <53787a36-4473-9336-6719-270930db2735@ideasonboard.com>
-In-Reply-To: <53787a36-4473-9336-6719-270930db2735@ideasonboard.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 17 Sep 2020 17:08:09 +0300
-Message-ID: <CAHp75VcjSZC7BG9ckFTogTK0xXog9tev8i3w=P0iN4JRQY05XQ@mail.gmail.com>
-Subject: Re: [RFC PATCH] Add bridge driver to connect sensors to CIO2 device
- via software nodes on ACPI platforms
-To:     kieran.bingham@ideasonboard.com
-Cc:     Dan Scally <djrscally@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Yong Zhi <yong.zhi@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Tian Shu Qiu <tian.shu.qiu@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Rob Herring <robh@kernel.org>,
-        "open list:STAGING SUBSYSTEM" <devel@driverdev.osuosl.org>,
-        jorhand@linux.microsoft.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Tsuchiya Yuto <kitakar@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5b330920-c789-fac7-e9b1-49f3bc1097a8@gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Sep 17, 2020 at 4:31 PM Kieran Bingham
-<kieran.bingham@ideasonboard.com> wrote:
-> On 17/09/2020 10:47, Dan Scally wrote:
-> > On 17/09/2020 08:53, Greg KH wrote:
-> >> On Wed, Sep 16, 2020 at 10:36:18PM +0100, Daniel Scally wrote:
-
-> >>>  drivers/staging/media/ipu3/Kconfig       |  15 +
-> >>>  drivers/staging/media/ipu3/Makefile      |   1 +
-> >>>  drivers/staging/media/ipu3/cio2-bridge.c | 448 +++++++++++++++++++++++
-> >> Why does this have to be in drivers/staging/ at all?  Why not spend the
-> >> time to fix it up properly and get it merged correctly?  It's a very
-> >> small driver, and should be smaller, so it should not be a lot of work
-> >> to do.  And it would be faster to do that than to take it through
-> >> staging...
-> > I was just under the impression that that was the process to be honest,
-> > if that's not right I'll just move it directly to drivers/media/ipu3
+On Thu, Sep 17, 2020 at 04:54:44PM +0200, Christian König wrote:
+> Am 17.09.20 um 16:35 schrieb Jason Gunthorpe:
+> > On Thu, Sep 17, 2020 at 02:24:29PM +0200, Christian König wrote:
+> > > Am 17.09.20 um 14:18 schrieb Jason Gunthorpe:
+> > > > On Thu, Sep 17, 2020 at 02:03:48PM +0200, Christian König wrote:
+> > > > > Am 17.09.20 um 13:31 schrieb Jason Gunthorpe:
+> > > > > > On Thu, Sep 17, 2020 at 10:09:12AM +0200, Daniel Vetter wrote:
+> > > > > > 
+> > > > > > > Yeah, but it doesn't work when forwarding from the drm chardev to the
+> > > > > > > dma-buf on the importer side, since you'd need a ton of different
+> > > > > > > address spaces. And you still rely on the core code picking up your
+> > > > > > > pgoff mangling, which feels about as risky to me as the vma file
+> > > > > > > pointer wrangling - if it's not consistently applied the reverse map
+> > > > > > > is toast and unmap_mapping_range doesn't work correctly for our needs.
+> > > > > > I would think the pgoff has to be translated at the same time the
+> > > > > > vm->vm_file is changed?
+> > > > > > 
+> > > > > > The owner of the dma_buf should have one virtual address space and FD,
+> > > > > > all its dma bufs should be linked to it, and all pgoffs translated to
+> > > > > > that space.
+> > > > > Yeah, that is exactly like amdgpu is doing it.
+> > > > > 
+> > > > > Going to document that somehow when I'm done with TTM cleanups.
+> > > > BTW, while people are looking at this, is there a way to go from a VMA
+> > > > to a dma_buf that owns it?
+> > > Only a driver specific one.
+> > Sounds OK
+> > 
+> > > For TTM drivers vma->vm_private_data points to the buffer object. Not sure
+> > > about the drivers using GEM only.
+> > Why are drivers in control of the vma? I would think dma_buf should be
+> > the vma owner. IIRC module lifetime correctness essentially hings on
+> > the module owner of the struct file
+> 
+> Because the page fault handling is completely driver specific.
 >
-> The IPU3 driver is still in staging (unless I've missed something), so I
-> think this cio2-bridge should stay with it.
+> We could install some DMA-buf vmops, but that would just be another layer of
+> redirection.
 
-You missed something.
-https://elixir.bootlin.com/linux/v5.9-rc5/source/drivers/media/pci/intel
+If it is already taking a page fault I'm not sure the extra function
+call indirection is going to be a big deal. Having a uniform VMA
+sounds saner than every driver custom rolling something.
 
-IPU3 from Freescale (IIRC) is a different story.
+When I unwound a similar mess in RDMA all the custom VMA stuff in the
+drivers turned out to be generally buggy, at least.
 
-> Hopefully with more users of the IPU3 brought in by this cio2-bridge,
-> that will help gather momentum to get the IPU3 developments required
-> completed and moved into drivers/media.
+Is vma->vm_file->private_data universally a dma_buf pointer at least?
 
--- 
-With Best Regards,
-Andy Shevchenko
+> > So, user VA -> find_vma -> dma_buf object -> dma_buf operations on the
+> > memory it represents
+> 
+> Ah, yes we are already doing this in amdgpu as well. But only for DMA-bufs
+> or more generally buffers which are mmaped by this driver instance.
+
+So there is no general dma_buf service? That is a real bummer
+
+Jason
