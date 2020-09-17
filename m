@@ -2,126 +2,92 @@ Return-Path: <SRS0=7MnB=C2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 180B3C433E2
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 12:27:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B477AC433E2
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 12:34:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 729472087D
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 12:27:48 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="jUOw1GsR"
+	by mail.kernel.org (Postfix) with ESMTP id 54B75208E4
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 12:34:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1600346094;
+	bh=tdZKh1qLT5/CZgLEYm1IvQYFAkgpFAnpj9CITh0Zkqw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=uZI+h1RS4D7v9DXkA+77Yd9Zg4uutPOr0kWys4I3I/ETszoFXHW7lbdOEzWI/j+yg
+	 GeGmVKHJHKNV/zMBJ/EAElrR+p/UDWTuhfEaSQkgZQ+MhwZ9oCxDAHIogyAWcZBEiQ
+	 7LgpZbg3OsfWpM9vpQRdKJkxFWE9iMegEj4TdfM0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726825AbgIQM1i (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Sep 2020 08:27:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39692 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726755AbgIQM1f (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Sep 2020 08:27:35 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36792C061788;
-        Thu, 17 Sep 2020 05:26:26 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0A53A2DB;
-        Thu, 17 Sep 2020 14:26:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1600345580;
-        bh=VW/FHynYWkvJI2rwZqPU2m2AOLCsdOx8X7PJldOHHDg=;
+        id S1726956AbgIQMes (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Sep 2020 08:34:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51920 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726951AbgIQMeX (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 17 Sep 2020 08:34:23 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1626A2087D;
+        Thu, 17 Sep 2020 12:33:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600346034;
+        bh=tdZKh1qLT5/CZgLEYm1IvQYFAkgpFAnpj9CITh0Zkqw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jUOw1GsRgvr0PgFeswIP1NUhmsue2/ZJEh7tqki/99R86mOcPHbwpx/iHHa6P6TAM
-         cXKqdRJ+eWIolQcRAf0g6/NHcPH18KqMHXQ5Q3wimeb/hWcqzHbVjrZmFB1zdTi22b
-         BEW5af60jlN7ArxvouEQ3fcsf9BuuZC9aNnYMue0=
-Date:   Thu, 17 Sep 2020 15:25:50 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        b=H1VYO8wh+cqUCtIwF8Gg/BZkUMELrZ3utpX5LMxkJmTBAW3S1GIZicW2tVT1t3zpC
+         bM18Uo9l2XCsLNapvssmLb91kGpS4dXeuvJ1AZD5JQBGCrUscMfBtsiIsZVhkZHKj4
+         jaA66+mq3vHtmPSI35KnEWR5fJ9T2LvSvJkiwUYw=
+Date:   Thu, 17 Sep 2020 14:34:26 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     linux-media@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 7/7] media: usb: uvc: no need to check return value of
  debugfs_create functions
-Message-ID: <20200917122550.GA5053@pendragon.ideasonboard.com>
+Message-ID: <20200917123426.GA3595353@kroah.com>
 References: <20200818133608.462514-1-gregkh@linuxfoundation.org>
  <20200818133608.462514-7-gregkh@linuxfoundation.org>
  <20200818234719.GD2360@pendragon.ideasonboard.com>
+ <20200917122550.GA5053@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200818234719.GD2360@pendragon.ideasonboard.com>
+In-Reply-To: <20200917122550.GA5053@pendragon.ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Greg,
-
-On Wed, Aug 19, 2020 at 02:47:19AM +0300, Laurent Pinchart wrote:
+On Thu, Sep 17, 2020 at 03:25:50PM +0300, Laurent Pinchart wrote:
 > Hi Greg,
 > 
-> Thank you for the patch.
-> 
-> On Tue, Aug 18, 2020 at 03:36:08PM +0200, Greg Kroah-Hartman wrote:
-> > When calling debugfs functions, there is no need to ever check the
-> > return value.  The function can work or not, but the code logic should
-> > never do something different based on this.
-> 
-> Is there no value in warning the user that something went wrong ? Silent
-> failures are harder to debug.
-
-Could yous share your opinion about this ?
-
-> > Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> > Cc: linux-media@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > ---
-> >  drivers/media/usb/uvc/uvc_debugfs.c | 20 ++++----------------
-> >  1 file changed, 4 insertions(+), 16 deletions(-)
+> On Wed, Aug 19, 2020 at 02:47:19AM +0300, Laurent Pinchart wrote:
+> > Hi Greg,
 > > 
-> > diff --git a/drivers/media/usb/uvc/uvc_debugfs.c b/drivers/media/usb/uvc/uvc_debugfs.c
-> > index 2b8af4b54117..1a1258d4ffca 100644
-> > --- a/drivers/media/usb/uvc/uvc_debugfs.c
-> > +++ b/drivers/media/usb/uvc/uvc_debugfs.c
-> > @@ -73,7 +73,6 @@ static struct dentry *uvc_debugfs_root_dir;
-> >  void uvc_debugfs_init_stream(struct uvc_streaming *stream)
-> >  {
-> >  	struct usb_device *udev = stream->dev->udev;
-> > -	struct dentry *dent;
-> >  	char dir_name[33];
-> >  
-> >  	if (uvc_debugfs_root_dir == NULL)
-> > @@ -82,22 +81,11 @@ void uvc_debugfs_init_stream(struct uvc_streaming *stream)
-> >  	snprintf(dir_name, sizeof(dir_name), "%u-%u-%u", udev->bus->busnum,
-> >  		 udev->devnum, stream->intfnum);
-> >  
-> > -	dent = debugfs_create_dir(dir_name, uvc_debugfs_root_dir);
-> > -	if (IS_ERR_OR_NULL(dent)) {
-> > -		uvc_printk(KERN_INFO, "Unable to create debugfs %s "
-> > -			   "directory.\n", dir_name);
-> > -		return;
-> > -	}
-> > -
-> > -	stream->debugfs_dir = dent;
-> > +	stream->debugfs_dir = debugfs_create_dir(dir_name,
-> > +						 uvc_debugfs_root_dir);
-> >  
-> > -	dent = debugfs_create_file("stats", 0444, stream->debugfs_dir,
-> > -				   stream, &uvc_debugfs_stats_fops);
-> > -	if (IS_ERR_OR_NULL(dent)) {
-> > -		uvc_printk(KERN_INFO, "Unable to create debugfs stats file.\n");
-> > -		uvc_debugfs_cleanup_stream(stream);
-> > -		return;
-> > -	}
-> > +	debugfs_create_file("stats", 0444, stream->debugfs_dir, stream,
-> > +			    &uvc_debugfs_stats_fops);
-> >  }
-> >  
-> >  void uvc_debugfs_cleanup_stream(struct uvc_streaming *stream)
+> > Thank you for the patch.
+> > 
+> > On Tue, Aug 18, 2020 at 03:36:08PM +0200, Greg Kroah-Hartman wrote:
+> > > When calling debugfs functions, there is no need to ever check the
+> > > return value.  The function can work or not, but the code logic should
+> > > never do something different based on this.
+> > 
+> > Is there no value in warning the user that something went wrong ? Silent
+> > failures are harder to debug.
+> 
+> Could yous share your opinion about this ?
 
--- 
-Regards,
+For debugfs, this isn't an issue, what can a user do with something like
+"debugfs isn't working?  What does that mean???"
 
-Laurent Pinchart
+And if we _really_ want warnings like this, it should go into the
+debugfs core, not require this to be done for every debugfs user, right?
+
+debugfs is just there for kernel developers to help debug things, it's
+not a dependancy on any userspace functionality, so if it works or not
+should not be an issue for any user.
+
+Unless that user is a kernel developer of course :)
+
+thanks,
+
+greg k-h
