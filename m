@@ -2,105 +2,122 @@ Return-Path: <SRS0=7MnB=C2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EEAACC433E2
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 11:51:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 174A0C43461
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 11:51:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A67DF206E6
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 11:51:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D4C31206E6
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 11:51:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="PO4byAB7"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="CuJU/d6f"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726851AbgIQLux (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Sep 2020 07:50:53 -0400
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:60721 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726758AbgIQL1b (ORCPT
+        id S1726897AbgIQLvq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Sep 2020 07:51:46 -0400
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:44789 "EHLO
+        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726874AbgIQLvg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Sep 2020 07:27:31 -0400
+        Thu, 17 Sep 2020 07:51:36 -0400
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id Is3qkM7BCPTBMIs3tkllRF; Thu, 17 Sep 2020 13:26:53 +0200
+        id IsRokMGlKPTBMIsRpkls1Y; Thu, 17 Sep 2020 13:51:33 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1600342013; bh=f4uU11TplcltXscEBKpGneN6cvdGllExJEW1PbYfP6g=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+        t=1600343493; bh=/O4gS7MSKU8PFxophiWRKJaaVyaXCETFhD6SSQxwQD0=;
+        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
          Subject;
-        b=PO4byAB7mXg96eKklNbeMqFiF+BXBc5YfTTlVc34KfLZHUhHIdhk+2OAnHtkEuX4s
-         udqIK2fjqR9DNscCBDRsOo71erq+iM2tL7gvVtTW8NCrv5kGCuf9cTR+pMaWsydw+P
-         KJa91bdZ/3EfVpo4bIiLV1btI0FDu4z0T6+tkxH2nGgc9rESJqZykSO1ir1U/dXmwd
-         uL1r82b8N+8DnwdYSjtZPvTkaYmW2RRYaPRbgWiucXoZdJhXTmPG9nEkw9Mznd2phR
-         oKLdROxKAKTWaP+OIQk8xd1pnX+qFRyiWFrtFBlzW66cdIEzioobVjz4/nju3D0WHM
-         K2IQNdTZotokw==
-Subject: Re: [PATCH] media: platform: s3c-camif: Fix runtime PM imbalance in
- s3c_camif_open
-To:     Dinghao Liu <dinghao.liu@zju.edu.cn>, kjlu@umn.edu
-Cc:     Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200522082915.4731-1-dinghao.liu@zju.edu.cn>
+        b=CuJU/d6fbPMtsuKyKAjqfT0MyZB4FSe8DdVoFpUKvJm+KYd3SzecDkcyk+LQucYJ5
+         Xu4N5u86tenuLaR8PRBcOdlS7Z6yUE7J3iQoB3MEqGvWUn4SZcY6qxSZJswqf0oM5p
+         wOy/mWyJQ7GDjybcjtuuXTiI+DY6I5MIDhvafzlOnuRMWR0Wubk/kgThhnroH5Mu4e
+         q+Jkuu5KMnyVuyfTUrJ0h0VepdEGG9xQ/iLJc8BaICEoQyO0HvFBTbk+y66WHSNFeA
+         XDey+lsfuGI/DmgWSFlw4hnZQUHt/Y77RP7Qvp7Mbt4uRkOdI4GBzcLsQO6SYRz6HR
+         IVV++zFOunyxA==
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <611ffe6a-c4ef-d23c-4d3f-a7771ce56bab@xs4all.nl>
-Date:   Thu, 17 Sep 2020 13:26:46 +0200
+Subject: [GIT PULL FOR v5.10] PM ref count fixes
+Message-ID: <c25be17a-da29-5a82-468a-c6e80c9229ca@xs4all.nl>
+Date:   Thu, 17 Sep 2020 13:51:32 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200522082915.4731-1-dinghao.liu@zju.edu.cn>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfL73kWQRYSxDnh7SSlpi0XbenrsCQooROgHQTF9H+9opAp/kiXPa03L40yxbRGKjEKAyts40RsDxNxFPgFMbFeOAucSwIlQNk8rABAWrBuF33e87p95c
- Jj1mPqoof52toqHmpCr81RE5NVbyjq3V5o6Ug4AJ5f+t0rLTcpDsuwpYDv6vbGComj7YuSI5zLtUGH6yDPzYlEL4uI+J1Xi5ViqDM0DuErKgc5O0PCV6lnRA
- GIXRoJOLpHq5BDgzGISwDNZ2ooNBT4vFVB0hITD/XuvrUPOlAUi0nLPAfoXZY1vsc2VveR//TIgCmhyd6C2urtuzi2p6bosqV7KtXBy/y/wG8MZP2lHCz94l
- r+0sXa/LTPGq4prFv6W/A6tCPeQ/LeiAShbNKJn/eMrIyq4JNRryFqfyAtaP+oemw9Lhl2HZi0KHG5+dISZWnQUdHvENSTbX+YYLnVjOcM4l4DXAXJ/oGUVj
- KW+oYee3kH7nbcS27DEWCSDXsZ9QH5us9TmrIg==
+X-CMAE-Envelope: MS4wfNUtdEuodRb1+pQSE6MeOONWIhrHLtR+CHmWAl6rd3pTgqEtf97/zK6hGFTP8CvqX+zaxRD9p6A/izD7Ldg3wbnXTNDaV3j1a4r8XFZhlLwojRTwOC+W
+ SlH+KK1ALr1VPoQODttqgMHrNNqDMISqhrfpqUrLKvwasufaMzVLbErCmcL2hHwGnHYUc/ojAbn1UonrBzYGa3n66toO7osQTtjVM9y1B7j5uamo/7QrsvPi
+ R/T4139DWwk1W4bHK5x1iSJHCFnTQwaj3NJ+PsbZzzE=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 22/05/2020 10:29, Dinghao Liu wrote:
-> pm_runtime_get_sync() increments the runtime PM usage counter even
-> when it returns an error code. Thus a pairing decrement is needed on
-> the error handling path to keep the counter balanced.
-> 
-> Also, call pm_runtime_put() and v4l2_fh_release() when sensor_set_power()
-> returns an error code.
-> 
-> Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
-> ---
->  drivers/media/platform/s3c-camif/camif-capture.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/media/platform/s3c-camif/camif-capture.c b/drivers/media/platform/s3c-camif/camif-capture.c
-> index 9ca49af29542..d42d9cfaf674 100644
-> --- a/drivers/media/platform/s3c-camif/camif-capture.c
-> +++ b/drivers/media/platform/s3c-camif/camif-capture.c
-> @@ -552,11 +552,9 @@ static int s3c_camif_open(struct file *file)
->  		goto err_pm;
->  
->  	ret = sensor_set_power(camif, 1);
-> -	if (!ret)
-> -		goto unlock;
-
-This is wrong, now this will call v4l2_fh_release() as well on success.
-
-This needs to be reworked.
+I've decided to just take all these fixes. It's kind of ugly the way
+pm_runtime_get_sync works (leaving a refcount on error), but there does
+not appear to be any interest to fix this, and these are still bugs that
+need fixing.
 
 Regards,
 
 	Hans
 
->  
-> -	pm_runtime_put(camif->dev);
->  err_pm:
-> +	pm_runtime_put(camif->dev);
->  	v4l2_fh_release(file);
->  unlock:
->  	mutex_unlock(&camif->lock);
-> 
+The following changes since commit 741043b02c2e00c8fea1a0f6f8ce43c6326cd9e8:
 
+  media: vidtv: don't initialize cnr2qual var (2020-09-14 16:10:08 +0200)
+
+are available in the Git repository at:
+
+  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.10d
+
+for you to fetch changes up to f2ddc25a73625596097e0984d8e825885ea62294:
+
+  media: st-delta: Fix reference count leak in delta_run_work (2020-09-17 13:27:45 +0200)
+
+----------------------------------------------------------------
+Tag branch
+
+----------------------------------------------------------------
+Aditya Pakki (1):
+      media: st-delta: Fix reference count leak in delta_run_work
+
+Dinghao Liu (5):
+      media: bdisp: Fix runtime PM imbalance on error
+      media: platform: sti: hva: Fix runtime PM imbalance on error
+      media: platform: s3c-camif: Fix runtime PM imbalance on error
+      media: coda: Fix runtime PM imbalance in coda_probe
+      media: vsp1: Fix runtime PM imbalance on error
+
+Qiushi Wu (12):
+      media: rcar-vin: Fix a reference count leak.
+      media: rcar-vin: Fix a reference count leak.
+      media: rockchip/rga: Fix a reference count leak.
+      media: platform: fcp: Fix a reference count leak.
+      media: camss: Fix a reference count leak.
+      media: s5p-mfc: Fix a reference count leak
+      media: stm32-dcmi: Fix a reference count leak
+      media: ti-vpe: Fix a missing check and reference count leak
+      media: exynos4-is: Fix a reference count leak
+      media: exynos4-is: Fix a reference count leak due to pm_runtime_get_sync
+      media: exynos4-is: Fix several reference count leaks due to pm_runtime_get_sync
+      media: sti: Fix reference count leaks
+
+ drivers/media/platform/coda/coda-common.c        |  2 ++
+ drivers/media/platform/exynos4-is/fimc-isp.c     |  4 +++-
+ drivers/media/platform/exynos4-is/fimc-lite.c    |  2 +-
+ drivers/media/platform/exynos4-is/media-dev.c    |  4 +++-
+ drivers/media/platform/exynos4-is/mipi-csis.c    |  4 +++-
+ drivers/media/platform/qcom/camss/camss-csiphy.c |  4 +++-
+ drivers/media/platform/rcar-fcp.c                |  4 +++-
+ drivers/media/platform/rcar-vin/rcar-dma.c       |  4 +++-
+ drivers/media/platform/rcar-vin/rcar-v4l2.c      |  4 +++-
+ drivers/media/platform/rockchip/rga/rga-buf.c    |  1 +
+ drivers/media/platform/s3c-camif/camif-core.c    |  5 ++---
+ drivers/media/platform/s5p-mfc/s5p_mfc_pm.c      |  4 +++-
+ drivers/media/platform/sti/bdisp/bdisp-v4l2.c    |  3 +--
+ drivers/media/platform/sti/delta/delta-v4l2.c    |  4 +++-
+ drivers/media/platform/sti/hva/hva-hw.c          |  4 +++-
+ drivers/media/platform/stm32/stm32-dcmi.c        |  4 +---
+ drivers/media/platform/ti-vpe/vpe.c              |  2 ++
+ drivers/media/platform/vsp1/vsp1_drv.c           | 11 ++++++++---
+ 18 files changed, 48 insertions(+), 22 deletions(-)
