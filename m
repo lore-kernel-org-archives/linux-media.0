@@ -2,183 +2,362 @@ Return-Path: <SRS0=7MnB=C2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6D8CC433E2
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 12:53:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 819A1C433E2
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 13:00:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 77A6721D43
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 12:53:40 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ccM+MAvg"
+	by mail.kernel.org (Postfix) with ESMTP id 491D1206CA
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 13:00:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726945AbgIQMxc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Sep 2020 08:53:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43784 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727107AbgIQMw7 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Sep 2020 08:52:59 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC586C061756
-        for <linux-media@vger.kernel.org>; Thu, 17 Sep 2020 05:52:54 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id i22so3126849eja.5
-        for <linux-media@vger.kernel.org>; Thu, 17 Sep 2020 05:52:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=BdxYdx9XHrwCdr4dzP1oTYv5YWLs/o7KoSb8tPS/nSw=;
-        b=ccM+MAvgoCEG4vttx6xCSHufmhS0PZEIedC4PRllc90ud3FF8xpocJ7v7zm20tcZYk
-         Y48aDJAb/rrKj3Xk9P9KO5CaLGn7plZ1ehW8ylgxUpcRcso5dQy13FdSnUuMHNijRgVu
-         AVICzFSg+9EIXT1tbDVLJQ1WvvZSzYcw1XHl0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=BdxYdx9XHrwCdr4dzP1oTYv5YWLs/o7KoSb8tPS/nSw=;
-        b=hA48vL9RMzFeHywFNfYnLnE7WLB64lczfS2KxL1CBcxNuQryZ+2kKFk75b+m1W7HWk
-         l2OBZ+tMvTs+kzoAxsiUFQ3RsEu+jmIrlFq3nE4RqKdv6yZgbMz0fs8JMlwbZrYcFS9i
-         O08F3Z4zUQZR9pJIoS4m67f7fViqB+XbamybH9pBlTow+Wm2GFJXMawWApRnEDGIQXiu
-         vK/RzvaBOk4iP/IZO8tJplHxEwRThq+5FWqyprXSfW6s4UvVOmzjX0hRRz8/eP2DlFXP
-         f1Wc2M44Q5c7yu3wwlzyCTw9SqfBNnVRorR0XRL4TxrC8IoFvVShVAZ+ukSWHLesXbI3
-         EIwA==
-X-Gm-Message-State: AOAM531N3G0TPMVzt6SqYaasKFUa9so55TqDRokYGuYxTT7w3a/VLc23
-        3Kl0/Ld7UlNy9fDRRs/9pzsdXlvMg6KyYA==
-X-Google-Smtp-Source: ABdhPJzLIYJ+Q9vOYDxX6luEiTOcmPiOKY7CB16F1qhEp4GLc/JolYO0i9YX6Ow8jk+ri7W7fpJHRA==
-X-Received: by 2002:a17:906:bc52:: with SMTP id s18mr28968999ejv.398.1600347172889;
-        Thu, 17 Sep 2020 05:52:52 -0700 (PDT)
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
-        by smtp.gmail.com with ESMTPSA id a5sm17169789edb.9.2020.09.17.05.52.51
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Sep 2020 05:52:51 -0700 (PDT)
-Received: by mail-wm1-f53.google.com with SMTP id z9so1942283wmk.1
-        for <linux-media@vger.kernel.org>; Thu, 17 Sep 2020 05:52:51 -0700 (PDT)
-X-Received: by 2002:a05:600c:20f:: with SMTP id 15mr9361892wmi.99.1600347171113;
- Thu, 17 Sep 2020 05:52:51 -0700 (PDT)
+        id S1726790AbgIQM77 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Sep 2020 08:59:59 -0400
+Received: from mga02.intel.com ([134.134.136.20]:63039 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727106AbgIQM7k (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 17 Sep 2020 08:59:40 -0400
+X-Greylist: delayed 451 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 08:59:40 EDT
+IronPort-SDR: Xnltfdj9Qwf9fYUQjKFc1BZQXoo5n9UToglZaSfuhxQA5TRh+aVM9IIxnCElv1xVtEDbeQqxRn
+ huMB1E3OQyyQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9746"; a="147373969"
+X-IronPort-AV: E=Sophos;i="5.76,437,1592895600"; 
+   d="scan'208";a="147373969"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2020 05:51:54 -0700
+IronPort-SDR: I2/kqZ5J7tf0+T/O8IZeaY7ADSe8lHCPleOd8b15KotCW8WF8rqqH+gA0lTE8VlqZ2w6yg55bK
+ xNomfzMr+1dA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,437,1592895600"; 
+   d="scan'208";a="336403560"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga008.jf.intel.com with ESMTP; 17 Sep 2020 05:51:50 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1kItHm-00HKBf-I2; Thu, 17 Sep 2020 15:45:14 +0300
+Date:   Thu, 17 Sep 2020 15:45:14 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dan Scally <djrscally@gmail.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>, yong.zhi@intel.com,
+        bingbu.cao@intel.com, tian.shu.qiu@intel.com, mchehab@kernel.org,
+        gregkh@linuxfoundation.org, davem@davemloft.net, robh@kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        devel@driverdev.osuosl.org, jorhand@linux.microsoft.com,
+        kitakar@gmail.com, kieran.bingham@ideasonboard.com
+Subject: Re: [RFC PATCH] Add bridge driver to connect sensors to CIO2 device
+ via software nodes on ACPI platforms
+Message-ID: <20200917124514.GK3956970@smile.fi.intel.com>
+References: <20200916213618.8003-1-djrscally@gmail.com>
+ <20200917103343.GW26842@paasikivi.fi.intel.com>
+ <8133a57d-ab4c-dccd-4325-9b10e7805648@gmail.com>
 MIME-Version: 1.0
-References: <20200502194052.485-1-andriy.gelman@gmail.com> <21733d1ad3c2f79a5646b4f1c541dfabda0978be.camel@ndufresne.ca>
-In-Reply-To: <21733d1ad3c2f79a5646b4f1c541dfabda0978be.camel@ndufresne.ca>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Thu, 17 Sep 2020 14:52:33 +0200
-X-Gmail-Original-Message-ID: <CAAFQd5B+5Zb7pzyQga+-KjfzUCYpuC1oPRjMXsTKHJzJAcmgdw@mail.gmail.com>
-Message-ID: <CAAFQd5B+5Zb7pzyQga+-KjfzUCYpuC1oPRjMXsTKHJzJAcmgdw@mail.gmail.com>
-Subject: Re: [PATCH] media: s5p-mfc: set V4L2_BUF_FLAG_LAST flag on final buffer
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>
-Cc:     Andriy Gelman <andriy.gelman@gmail.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Kamil Debski <kamil@wypas.org>,
-        Jeongtae Park <jtp.park@samsung.com>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
-        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8133a57d-ab4c-dccd-4325-9b10e7805648@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Jun 2, 2020 at 5:09 PM Nicolas Dufresne <nicolas@ndufresne.ca> wrot=
-e:
->
-> Hi Andriy,
->
-> thanks for you patch.
->
-> Le samedi 02 mai 2020 =C3=A0 15:40 -0400, Andriy Gelman a =C3=A9crit :
-> > From: Andriy Gelman <andriy.gelman@gmail.com>
+On Thu, Sep 17, 2020 at 11:52:28AM +0100, Dan Scally wrote:
+> On 17/09/2020 11:33, Sakari Ailus wrote:
+
+I will do better review for next version, assuming you will Cc reviewers and
+TWIMC people. Below is like small part of comments I may give to the code.
+
+...
+
+> > The ones I know require PMIC control done in software (not even
+> > sensors are accessible without that).
+> So far we've just been getting the sensor drivers themselves to toggle
+> the gpio pins that turn the PMIC on (those pins are listed against the
+> PMIC's _CRS, and we've been finding those by evaluating the sensor's
+> _DEP) - once that's done the cameras show up on i2c and,with the bridge
+> driver installed, you can use libcamera to take photos.
+
+Do I understand correctly that you are able to get pictures from the camera
+hardware?
+
+...
+
+> > a module and not enlarge everyone's kernel, and the initialisation would at
+> > the same time take place before the rest of what the CIO2 driver does in
+> > probe.
+> I thought of that as well, but wasn't sure which was preferable. I can
+> compress it into the CIO2 driver though sure.
+
+Sakari, I tend to agree with Dan and have the board file separated from the
+driver and even framework.
+
+...
+
+> > Cc Andy, too.
+
+Thanks!
+
+...
+
+> >> I wanted to raise this as an RFC as although I don't think it's ready for
+> >> integration it has some things that I'd like feedback on, in particular the
+> >> method I chose to make the module be auto-inserted. A more ideal method would
+> >> have been to have the driver be an ACPI driver for the INT343E device, but each
+> > What do you think this device does represent? Devices whose status is
+> > always zero may exist in the table even if they would not be actually
+> > present.
 > >
-> > As per V4L2 api, the final buffer should set V4L2_BUF_FLAG_LAST flag.
+> > CIO2 is a PCI device and it has no ACPI (or PNP) ID, or at least should not
+> > have one.
+> This is the ACPI entry I mean:
+> 
+> Device (CIO2)
+> {
+>     Method (_STA, 0, NotSerialized)  // _STA: Status
+>     {
+>         If ((CIOE == One))
+>         {
+>             Return (0x0F)
+>         }
+>         Else
+>         {
+>             Return (Zero)
+>         }
+>     }
+> 
+>     Name (_HID, "INT343E")  // _HID: Hardware ID
+>     Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
+>     {
+>         Name (CBUF, ResourceTemplate ()
+>         {
+>             Interrupt (ResourceConsumer, Level, ActiveLow, Shared, ,, _Y15)
+>             {
+>                 0x00000010,
+>             }
+>             Memory32Fixed (ReadWrite,
+>                 0xFE400000,         // Address Base
+>                 0x00010000,         // Address Length
+>                 )
+>         })
+>         CreateDWordField (CBUF, \_SB.PCI0.CIO2._CRS._Y15._INT, CIOV)  // _INT: Interrupts
+>         CIOV = CIOI /* \CIOI */
+>         Return (CBUF) /* \_SB_.PCI0.CIO2._CRS.CBUF */
+>     }
+> }
+
+Ah, I think you misinterpreted the meaning of above. The above is a switch how
+camera device appears either as PCI or an ACPI. So, it effectively means you
+should *not* have any relation for this HID until you find a platform where the
+device is for real enumerated via ACPI.
+
+...
+
+> >> +static int cio2_probe_can_progress(struct pci_dev *pci_dev)
+> >> +{
+> >> +	void *sensor;
+
+Why void?
+
+> >> +	/*
+> >> +	 * On ACPI platforms, we need to probe _after_ sensors wishing to connect
+> >> +	 * to cio2 have added a device link. If there are no consumers yet, then
+> >> +	 * we need to defer. The .sync_state() callback will then be called after
+> >> +	 * all linked sensors have probed
+> >> +	 */
+> >> +
+> >> +	if (IS_ENABLED(CONFIG_ACPI)) {
+
+> >> +		sensor = (struct device *)list_first_entry_or_null(
+
+Besides the fact that castings from or to void * are implicit in C, the proper
+use of list API should have pretty well defined type of lvalue.
+
+> >> +								&pci_dev->dev.links.consumers,
+> >> +								struct dev_links_info,
+> >> +								consumers);
+> > Please wrap so it's under 80.
 > >
-> > Signed-off-by: Andriy Gelman <andriy.gelman@gmail.com>
-> > ---
-> >  drivers/media/platform/s5p-mfc/s5p_mfc.c | 1 +
-> >  1 file changed, 1 insertion(+)
+> Will do
+> >> +
+> >> +		if (!sensor)
+> >> +			return -EPROBE_DEFER;
+> >> +	}
+> >> +
+> >> +	return 0;
+> >> +}
+
+...
+
+> >> +	if (!IS_ENABLED(CONFIG_ACPI)) {
+> >> +		r = cio2_parse_firmware(cio2);
+> >> +		if (r)
+> >> +			goto fail_clean_notifier;
+> >> +	}
+
+How comes?
+
+...
+
+> >> \ No newline at end of file
+
+???
+
+Be sure you are using good editor.
+
+...
+
+> >> +#include <acpi/acpi_bus.h>
+
+Redundant. ACPI headers are designed the way that you are using a single header
+in Linux kernel for all. It might be different in drivers/acpi stuff, but not
+in general.
+
+> >> +#include <linux/device.h>
+> >> +#include <linux/i2c.h>
+> >> +#include <linux/kernel.h>
+> >> +#include <linux/module.h>
+> >> +#include <linux/pci.h>
+> >> +#include <media/v4l2-subdev.h>
+> >> +
+> >> +#include <linux/fwnode.h>
+> >> +#include <linux/kref.h>
+
+Please, keep them sorted. And since it's for media, the media inclusion may be
+placed last in a separate group.
+
+...
+
+> >> +#define PROPERTY_ENTRY_NULL			\
+> >> +((const struct property_entry) { })
+> > Alignment. Same appears to apply to other macros (please indent).
+> Yep
 > >
-> > diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc.c b/drivers/media/p=
-latform/s5p-mfc/s5p_mfc.c
-> > index 5c2a23b953a4..b3d9b3a523fe 100644
-> > --- a/drivers/media/platform/s5p-mfc/s5p_mfc.c
-> > +++ b/drivers/media/platform/s5p-mfc/s5p_mfc.c
-> > @@ -614,6 +614,7 @@ static void s5p_mfc_handle_stream_complete(struct s=
-5p_mfc_ctx *ctx)
-> >               list_del(&mb_entry->list);
-> >               ctx->dst_queue_cnt--;
-> >               vb2_set_plane_payload(&mb_entry->b->vb2_buf, 0, 0);
-> > +             mb_entry->b->flags |=3D V4L2_BUF_FLAG_LAST;
-> >               vb2_buffer_done(&mb_entry->b->vb2_buf, VB2_BUF_STATE_DONE=
-);
->
-> The empty buffer is only there for backward compatibility. As the spec
-> says, userspace should completely ignore this buffer. I bet it will
-> still have the effect to set last_buffer_dequeued =3D true in vb2,
-> unblocking poll() operations and allowing for the queue to unblock and
-> return EPIPE on further DQBUF.
->
-> Perhaps you should make sure the if both the src and dst queues are
-> empty/done by the time cmd_stop is called it will still work. Other
-> drivers seems to handle this, but this one does not seems to have a
-> special case for that, which may hang userspace in a different way.
->
-> What you should do to verify this patch is correct, and that your
-> userpace does not rely on legacy path is that it should always be able
-> to detect the end of the drain with a EPIPE on DQBUF. LAST_BUF is just
-> an early signalling, but may not occur if there was nothing left to
-> produce (except for MFC which maybe be crafting a buffer in all cases,
-> but that's going a roundtrip through the HW, which is not clear will
-> work if the dst queue was empty).
+> >> +#define SOFTWARE_NODE_NULL			\
+> >> +((const struct software_node) { })
 
-The spec guarantees that a buffer with the LAST_BUF flag is returned
-to the userspace. In fact, handling entirely by the DQBUF return code
-may be buggy, because the LAST_BUF flag may also be set for other
-reasons, like a resolution change happening after a drain request was
-already initiated. The proper way to handle a drain is to look for the
-LAST_BUF flag and then try to dequeue an event to check what the
-LAST_BUF flag is associated with. It might be worth adding a relevant
-note to the drain sequence documentation in the spec.
+Why?!
 
-As for the patch itself, I think it's valid, but it's a bit concerning
-that the code is inside a conditional block executed only when there
-is a buffer in the CAPTURE queue [1]. As I mentioned above, the driver
-needs to signal the LAST_BUF flag, so if there is no buffer to signal
-it on, it should be signaled when a buffer is queued. Of course it's
-well possible that the condition can never happen, e.g. the function
-is called only as a result of a hardware request that can be scheduled
-only when there is at least 1 CAPTURE buffer in the queue. Looking at
-[2], it might be the case indeed, but someone should validate that.
+...
 
-[1] https://elixir.bootlin.com/linux/v5.9-rc5/source/drivers/media/platform=
-/s5p-mfc/s5p_mfc.c#L611
-[2] https://elixir.bootlin.com/linux/v5.9-rc5/source/drivers/media/platform=
-/s5p-mfc/s5p_mfc_dec.c#L222
+> >> +struct software_node cio2_hid_node = { CIO2_HID, };
 
-Best regards,
-Tomasz
+static ?
 
->
-> As shared on IRC, you have sent these patch to FFMPEG:
->
-> https://patchwork.ffmpeg.org/project/ffmpeg/patch/20200429212942.28797-2-=
-andriy.gelman@gmail.com/
->
-> This should have been clarified as supporting legacy drivers / older
-> kernel with Samsung driver. Seems like a fair patch. And you added:
->
-> https://patchwork.ffmpeg.org/project/ffmpeg/patch/20200429212942.28797-1-=
-andriy.gelman@gmail.com/
->
-> This one should maybe add the clarification that this is an
-> optimization to skip an extra poll/dqbuf dance, but that end of
-> draining will ultimately be catched by EPIPE on dqbuf for the described
-> cases. Remains valid enhancement to ffmpeg imho.
->
-> >       }
-> >
->
+Same for other global variables.
+
+...
+
+> >> +struct cio2_bridge bridge = { 0, };
+
+When define as static the assignment will not be needed.
+
+...
+
+> >> +static int read_acpi_block(struct device *dev, char *id, void *data, u32 size)
+> >> +{
+> >> +	union acpi_object *obj;
+> >> +	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
+
+> >> +	struct acpi_handle *dev_handle = ACPI_HANDLE(dev);
+
+Usually we use simple handle if there is no ambiguous reading.
+
+> >> +	int status;
+
+Should be acpi_status
+
+> >> +	u32 buffer_length;
+> >> +
+> >> +	status = acpi_evaluate_object(dev_handle, id, NULL, &buffer);
+
+> >> +	if (!ACPI_SUCCESS(status))
+
+ACPI_FAILURE()
+
+> >> +		return -ENODEV;
+> >> +
+> >> +	obj = (union acpi_object *)buffer.pointer;
+
+Why explicit casting?
+
+> >> +	if (!obj || obj->type != ACPI_TYPE_BUFFER) {
+> >> +		dev_err(dev, "Could't read acpi buffer\n");
+
+> >> +		status = -ENODEV;
+
+Should have different int type variable for that.
+
+> >> +		goto err;
+
+If there is no obj, you may return directly without freeing.
+
+> >> +	}
+> >> +
+> >> +	if (obj->buffer.length > size) {
+> >> +		dev_err(dev, "Given buffer is too small\n");
+> >> +		status = -ENODEV;
+> >> +		goto err;
+> >> +	}
+> >> +
+> >> +	memcpy(data, obj->buffer.pointer, min(size, obj->buffer.length));
+
+Does type of size and length the same? Otherwise you need min_t().
+
+> >> +	buffer_length = obj->buffer.length;
+> >> +	kfree(buffer.pointer);
+> >> +
+> >> +	return buffer_length;
+
+> >> +err:
+
+Consider naming labels by what they are about to do. Like
+	err_free:
+here.
+
+> >> +	kfree(buffer.pointer);
+> >> +	return status;
+> >> +}
+
+> >> +static int get_acpi_ssdb_sensor_data(struct device *dev,
+> >> +				     struct sensor_bios_data *sensor)
+> >> +{
+> >> +	struct sensor_bios_data_packed sensor_data;
+
+> >> +	int ret = read_acpi_block(dev, "SSDB", &sensor_data,
+> >> +				  sizeof(sensor_data));
+
+Please, split declaration and assignment especially in the cases where it
+requires long lines.
+
+> >> +	if (ret < 0) {
+> >> +		dev_err(dev, "Failed to fetch SSDB data\n");
+> >> +		return ret;
+> >> +	}
+> >> +
+> >> +	sensor->link = sensor_data.link;
+> >> +	sensor->lanes = sensor_data.lanes;
+> >> +	sensor->mclkspeed = sensor_data.mclkspeed;
+> >> +
+> >> +	return 0;
+> >> +}
+
+...
+
+> >> +		if (!dev->driver_data) {
+> >> +			pr_info("ACPI match for %s, but it has no driver\n",
+> >> +				supported_devices[i]);
+> >> +			continue;
+> >> +		} else {
+> >> +			pr_info("Found supported device %s\n",
+> >> +				supported_devices[i]);
+> >> +		}
+
+Positive conditions are easier to read, but on the other hand 'else' is
+redundant in such conditionals (where if branch bails out from the flow).
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
