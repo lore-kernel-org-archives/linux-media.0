@@ -2,771 +2,237 @@ Return-Path: <SRS0=7MnB=C2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B899C433E2
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 10:41:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24643C433E2
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 10:43:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BE45C208DB
-	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 10:41:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BE6E12074B
+	for <linux-media@archiver.kernel.org>; Thu, 17 Sep 2020 10:43:43 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="H/IHXFoY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726446AbgIQKl2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Sep 2020 06:41:28 -0400
-Received: from mga06.intel.com ([134.134.136.31]:42833 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726217AbgIQKlY (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Sep 2020 06:41:24 -0400
-X-Greylist: delayed 443 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 06:41:20 EDT
-IronPort-SDR: dP43opK3dfoAL2Bt3J9uwTfw01BONguYvYYPSaTW5X87bjWQ1S9aFzsWcJAsEBaeiApRNVy+nH
- x2XLVS2GUCgQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9746"; a="221216264"
-X-IronPort-AV: E=Sophos;i="5.76,436,1592895600"; 
-   d="scan'208";a="221216264"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2020 03:33:50 -0700
-IronPort-SDR: iSi8QkdBiq0Q6E2UWKNtgprK3pOvH8jVSDQvwLerUK5yI9UMPTgKxQfIwvx5YfKuqlbHDTY3my
- REd0Do/If8vA==
-X-IronPort-AV: E=Sophos;i="5.76,436,1592895600"; 
-   d="scan'208";a="332097046"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2020 03:33:46 -0700
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id E052E20621; Thu, 17 Sep 2020 13:33:43 +0300 (EEST)
-Date:   Thu, 17 Sep 2020 13:33:43 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Daniel Scally <djrscally@gmail.com>
-Cc:     yong.zhi@intel.com, bingbu.cao@intel.com, tian.shu.qiu@intel.com,
-        mchehab@kernel.org, gregkh@linuxfoundation.org,
-        davem@davemloft.net, robh@kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        jorhand@linux.microsoft.com, kitakar@gmail.com,
-        kieran.bingham@ideasonboard.com, andriy.shevchenko@linux.intel.com
-Subject: Re: [RFC PATCH] Add bridge driver to connect sensors to CIO2 device
- via software nodes on ACPI platforms
-Message-ID: <20200917103343.GW26842@paasikivi.fi.intel.com>
-References: <20200916213618.8003-1-djrscally@gmail.com>
+        id S1726689AbgIQKnf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Sep 2020 06:43:35 -0400
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:35671 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726671AbgIQKn2 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 17 Sep 2020 06:43:28 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id IrNSkLsPUPTBMIrNUkld4X; Thu, 17 Sep 2020 12:43:00 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1600339380; bh=tBofln9fi0bOS9AixJEkYWKxTP17FuLQMJpQPVwQixs=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=H/IHXFoYlYC0dq0+fTuDqblhEtwJYDZlP+0PJf9IeNEgImMpTCZOTVT1zlKOtEnQK
+         +hdoZojS0QM1y85S3ymItUteJ4Qr/IMH9SKXXCOG2gco5yEAYu5xB27l9mj6mJ5foW
+         d2jg4Bj0QAg+UP5pa4Wx20to+esldc6zJvs0OiEvyorRHleZKNUDVquTov8RiGaCSg
+         mqp48bOA712Oxwj1y8/F4R/8BMtKrxoIB/U8KmoAxqdB8gtWm67TkBp31RkXEMjyQO
+         Sqh884mybshOQLll56Etx5tzX6GtCBpH02IWmG6AZq6EFUoLHGGwjg0GJPyWbjxhTp
+         0yDLXMSxKAIUw==
+Subject: Re: [PATCH v3] media: rcar-vin: Enable YDS bit depending on bus_width
+ and data_shift
+To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+References: <20200913181608.32077-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <a153e31a-4115-db74-9b21-3e0cbcd8993d@xs4all.nl>
+ <be419827-86b4-8aa2-2c82-2c7e328889c3@xs4all.nl>
+ <20200917101942.GA2382958@oden.dyn.berto.se>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <256995d1-99d3-e7a8-6cf7-a9bf4acffddf@xs4all.nl>
+Date:   Thu, 17 Sep 2020 12:42:58 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200916213618.8003-1-djrscally@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200917101942.GA2382958@oden.dyn.berto.se>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4wfH9wHTkV5EhGU/n6WeiFZSpPckNFXgpdCMHutDLW9w5f6DbQ1viTAtV7jae+umGScT7eW9dsact9qYBDu6bf2PdJLSgCOuKbKGqq0KRnEOQO5LUVKDzj
+ vkNX+5f/8cDgMsLAecDSVnojBz/i7elruK29zScfBAoANEoZO5K5+4gVeYtL3pPRU3WfFMXuEopT7noMzQBYzYjiv0bP2Fp2oEcJMSfmhAa2el7fN/vouuAi
+ WJ1/yHa2Ru58tL7cXLaRu8dSjiM1htrpS24lZlzPt7ELAi0Qljl89xFtTMUiJsbz7nLZwqaQv/MBaHZ7OYDCtPZFDsQsJJUzXghuEEo5Z/ymLCpnDOM64wHo
+ nSW0Cvt1nk441DFHqeX1gcfoXqcse7tzjWtuxDz5oGE64bUSgBz1axgRmcYrD4g/tnZL2NOJSjfcQmaG+8U98qqAeDto8kl6qcNkq17ernOiESXdMwHV60qA
+ /GWbXDu48pijiE/T5F+N26+OiXoYj58CKkcAvTdEf914gsl4unBe0iztlHTcBqcntzSWYkBgp2DikP4Cq0Sg229NsyjAiQFbAs6daTEFOVt9sNQqBrvwGyHc
+ S5WIR8boTZJH6iOoyPyDHROqVyTXOh350qcLpYHf+Pk5Lg==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Daniel,
-
-Thank you for the patch.
-
-Is this all that it takes to add support for some machines shipped with
-Windows? The ones I know require PMIC control done in software (not even
-sensors are accessible without that).
-
-One possibility would be to put this to platform code. That would
-effectively also require it's compiled to the kernel (yuck).
-
-How about just squashing this to the CIO2 driver instead (but still as a
-separate file)? It's not exactly pretty, no, but it could allow this being
-a module and not enlarge everyone's kernel, and the initialisation would at
-the same time take place before the rest of what the CIO2 driver does in
-probe.
-
-I think you should still check whether CIO2 has graph endpoints before
-proceeding with parsing SSDB buffer or looking up random-looking devices.
-
-Cc Andy, too.
-
-On Wed, Sep 16, 2020 at 10:36:18PM +0100, Daniel Scally wrote:
-> Currently on ACPI platforms, sensors that are intended to be connected to
-> a CIO2 device for use with the ipu3-cio2 driver lack the necessary
-> connection information in firmware. This patch adds a module to parse the
-> connection properties from the SSDB buffer in DSDT and build the connection
-> using software nodes.
+On 17/09/2020 12:19, Niklas Söderlund wrote:
+> Hi Hans,
 > 
-> The ipu3-cio2 driver itself is modified to insert the cio2-bridge module
-> after all sensors that have created a device link between themselves and
-> the CIO2 have probed. Sensors wishing to use this bridge will need to add
-> a device link between themselves and the CIO2 device as part of their own
-> .probe() call.
+> On 2020-09-17 11:58:16 +0200, Hans Verkuil wrote:
+>> On 17/09/2020 10:57, Hans Verkuil wrote:
+>>> Hi Prabhakar,
+>>>
+>>> Can you rebase this patch? It no longer applies.
+>>
+>> Never mind, my mistake. When I was preparing this patch I also had this patch
+>> applied: https://patchwork.linuxtv.org/project/linux-media/patch/1595602732-25582-3-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com/
+>>
+>> And that caused the conflict with this YDS patch.
+>>
+>> However, I backed out the two renesas-vin-ycbcr-8b-g patches since there were a
+>> bunch comments for https://patchwork.linuxtv.org/project/linux-media/patch/1595602732-25582-2-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com/
+>>
+>> So after dropping those two patches this YDS patch now applies fine and will
+>> be included in the PR.
 > 
-> Suggested-by: Jordan Hand <jorhand@linux.microsoft.com>
-> 
-> Signed-off-by: Daniel Scally <djrscally@gmail.com>
-> ---
-> This module's born out of efforts by the linux-surface github community
-> to get functioning webcams on Microsoft Surface and similar platforms. it
-> is dependent on this patch (which implements the software node graph family
-> of functions):
-> 
-> https://lore.kernel.org/linux-media/20200915232827.3416-1-djrscally@gmail.com/
-> 
-> I wanted to raise this as an RFC as although I don't think it's ready for
-> integration it has some things that I'd like feedback on, in particular the
-> method I chose to make the module be auto-inserted. A more ideal method would
-> have been to have the driver be an ACPI driver for the INT343E device, but each
+> Thanks for dropping the renesas-vin-ycbcr-8b-g patches from the PR, they 
+> really should not have been picked up as this patch address the issue in 
+> a nicer way. To ease your workload would you like me to collect VIN 
+> patches and send PR to you for that driver?
 
-What do you think this device does represent? Devices whose status is
-always zero may exist in the table even if they would not be actually
-present.
+I don't think that's necessary. It's not all that much.
 
-CIO2 is a PCI device and it has no ACPI (or PNP) ID, or at least should not
-have one.
+But please don't hesitate to ping/mail me if it takes too long for me to pick up
+rcar patches, in case I missed some.
 
-> of the the devices we've tested this on that dev has status 0 and so the module
-> won't bind to it. The device links method seems a little clunky, but does work,
-> and I think I have done the conditional processing correctly so that ipu3-cio2
-> continues to work on non-ACPI platforms.
+Regards,
 
-I don't think anyone uses ipu3-cio2 driver on non-ACPI platforms. It really
-does require ACPI.
+	Hans
 
 > 
->  MAINTAINERS                              |   6 +
->  drivers/media/pci/intel/ipu3/ipu3-cio2.c |  67 +++-
->  drivers/staging/media/ipu3/Kconfig       |  15 +
->  drivers/staging/media/ipu3/Makefile      |   1 +
->  drivers/staging/media/ipu3/cio2-bridge.c | 448 +++++++++++++++++++++++
->  5 files changed, 534 insertions(+), 3 deletions(-)
->  create mode 100644 drivers/staging/media/ipu3/cio2-bridge.c
+>>
+>> Sorry for the confusion,
+>>
+>> 	Hans
+>>
+>>>
+>>> Regards,
+>>>
+>>> 	Hans
+>>>
+>>> On 13/09/2020 20:16, Lad Prabhakar wrote:
+>>>> Enable YDS bit if bus_width and data_shift is set to 8 in parallel mode
+>>>> for MEDIA_BUS_FMT_UYVY8_2X8 format.
+>>>>
+>>>> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>>>> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+>>>> ---
+>>>> Changes for v3:
+>>>> * Dropped BIT macro
+>>>> * Introduced struct v4l2_fwnode_bus_parallel
+>>>>
+>>>> Changes for v2:
+>>>> * Dropped DT binding documentation patch
+>>>> * Select the data pins depending on bus-width and data-shift
+>>>>
+>>>> v1 -
+>>>> https://patchwork.kernel.org/project/linux-renesas-soc/list/?series=323799
+>>>> ---
+>>>>  drivers/media/platform/rcar-vin/rcar-core.c |  9 ++++-----
+>>>>  drivers/media/platform/rcar-vin/rcar-dma.c  | 17 ++++++++++++++---
+>>>>  drivers/media/platform/rcar-vin/rcar-vin.h  |  5 +++--
+>>>>  3 files changed, 21 insertions(+), 10 deletions(-)
+>>>>
+>>>> diff --git a/drivers/media/platform/rcar-vin/rcar-core.c b/drivers/media/platform/rcar-vin/rcar-core.c
+>>>> index 7440c8965d27..1149ab76cf5c 100644
+>>>> --- a/drivers/media/platform/rcar-vin/rcar-core.c
+>>>> +++ b/drivers/media/platform/rcar-vin/rcar-core.c
+>>>> @@ -626,12 +626,11 @@ static int rvin_parallel_parse_v4l2(struct device *dev,
+>>>>  
+>>>>  	switch (vin->parallel->mbus_type) {
+>>>>  	case V4L2_MBUS_PARALLEL:
+>>>> -		vin_dbg(vin, "Found PARALLEL media bus\n");
+>>>> -		vin->parallel->mbus_flags = vep->bus.parallel.flags;
+>>>> -		break;
+>>>>  	case V4L2_MBUS_BT656:
+>>>> -		vin_dbg(vin, "Found BT656 media bus\n");
+>>>> -		vin->parallel->mbus_flags = 0;
+>>>> +		vin_dbg(vin, "Found %s media bus\n",
+>>>> +			vin->parallel->mbus_type == V4L2_MBUS_PARALLEL ?
+>>>> +			"PARALLEL" : "BT656");
+>>>> +		vin->parallel->bus = vep->bus.parallel;
+>>>>  		break;
+>>>>  	default:
+>>>>  		vin_err(vin, "Unknown media bus type\n");
+>>>> diff --git a/drivers/media/platform/rcar-vin/rcar-dma.c b/drivers/media/platform/rcar-vin/rcar-dma.c
+>>>> index a5dbb90c5210..d067439b0b0d 100644
+>>>> --- a/drivers/media/platform/rcar-vin/rcar-dma.c
+>>>> +++ b/drivers/media/platform/rcar-vin/rcar-dma.c
+>>>> @@ -125,6 +125,7 @@
+>>>>  #define VNDMR2_VPS		(1 << 30)
+>>>>  #define VNDMR2_HPS		(1 << 29)
+>>>>  #define VNDMR2_CES		(1 << 28)
+>>>> +#define VNDMR2_YDS		(1 << 22)
+>>>>  #define VNDMR2_FTEV		(1 << 17)
+>>>>  #define VNDMR2_VLV(n)		((n & 0xf) << 12)
+>>>>  
+>>>> @@ -698,16 +699,26 @@ static int rvin_setup(struct rvin_dev *vin)
+>>>>  
+>>>>  	if (!vin->is_csi) {
+>>>>  		/* Hsync Signal Polarity Select */
+>>>> -		if (!(vin->parallel->mbus_flags & V4L2_MBUS_HSYNC_ACTIVE_LOW))
+>>>> +		if (!(vin->parallel->bus.flags & V4L2_MBUS_HSYNC_ACTIVE_LOW))
+>>>>  			dmr2 |= VNDMR2_HPS;
+>>>>  
+>>>>  		/* Vsync Signal Polarity Select */
+>>>> -		if (!(vin->parallel->mbus_flags & V4L2_MBUS_VSYNC_ACTIVE_LOW))
+>>>> +		if (!(vin->parallel->bus.flags & V4L2_MBUS_VSYNC_ACTIVE_LOW))
+>>>>  			dmr2 |= VNDMR2_VPS;
+>>>>  
+>>>>  		/* Data Enable Polarity Select */
+>>>> -		if (vin->parallel->mbus_flags & V4L2_MBUS_DATA_ENABLE_LOW)
+>>>> +		if (vin->parallel->bus.flags & V4L2_MBUS_DATA_ENABLE_LOW)
+>>>>  			dmr2 |= VNDMR2_CES;
+>>>> +
+>>>> +		switch (vin->mbus_code) {
+>>>> +		case MEDIA_BUS_FMT_UYVY8_2X8:
+>>>> +			if (vin->parallel->bus.bus_width == 8 &&
+>>>> +			    vin->parallel->bus.data_shift == 8)
+>>>> +				dmr2 |= VNDMR2_YDS;
+>>>> +			break;
+>>>> +		default:
+>>>> +			break;
+>>>> +		}
+>>>>  	}
+>>>>  
+>>>>  	/*
+>>>> diff --git a/drivers/media/platform/rcar-vin/rcar-vin.h b/drivers/media/platform/rcar-vin/rcar-vin.h
+>>>> index c19d077ce1cb..8396e0e45478 100644
+>>>> --- a/drivers/media/platform/rcar-vin/rcar-vin.h
+>>>> +++ b/drivers/media/platform/rcar-vin/rcar-vin.h
+>>>> @@ -19,6 +19,7 @@
+>>>>  #include <media/v4l2-ctrls.h>
+>>>>  #include <media/v4l2-dev.h>
+>>>>  #include <media/v4l2-device.h>
+>>>> +#include <media/v4l2-fwnode.h>
+>>>>  #include <media/videobuf2-v4l2.h>
+>>>>  
+>>>>  /* Number of HW buffers */
+>>>> @@ -92,7 +93,7 @@ struct rvin_video_format {
+>>>>   * @asd:	sub-device descriptor for async framework
+>>>>   * @subdev:	subdevice matched using async framework
+>>>>   * @mbus_type:	media bus type
+>>>> - * @mbus_flags:	media bus configuration flags
+>>>> + * @bus:	media bus parallel configuration
+>>>>   * @source_pad:	source pad of remote subdevice
+>>>>   * @sink_pad:	sink pad of remote subdevice
+>>>>   *
+>>>> @@ -102,7 +103,7 @@ struct rvin_parallel_entity {
+>>>>  	struct v4l2_subdev *subdev;
+>>>>  
+>>>>  	enum v4l2_mbus_type mbus_type;
+>>>> -	unsigned int mbus_flags;
+>>>> +	struct v4l2_fwnode_bus_parallel bus;
+>>>>  
+>>>>  	unsigned int source_pad;
+>>>>  	unsigned int sink_pad;
+>>>>
+>>>
+>>
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index b5cfab015bd6..55b0b9888bc0 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -9152,6 +9152,12 @@ S:	Maintained
->  W:	http://www.adaptec.com/
->  F:	drivers/scsi/ips*
->  
-> +IPU3 CIO2 Bridge Driver
-> +M:	Daniel Scally <djrscally@gmail.com>
-> +L:	linux-media@vger.kernel.org
-> +S:	Maintained
-> +F:	drivers/staging/media/ipu3/cio2-bridge.c
-> +
->  IPVS
->  M:	Wensong Zhang <wensong@linux-vs.org>
->  M:	Simon Horman <horms@verge.net.au>
-> diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-> index 92f5eadf2c99..fd941d2c7581 100644
-> --- a/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-> +++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-> @@ -1719,6 +1719,59 @@ static void cio2_queues_exit(struct cio2_device *cio2)
->  		cio2_queue_exit(cio2, &cio2->queue[i]);
->  }
->  
-> +static int cio2_probe_can_progress(struct pci_dev *pci_dev)
-> +{
-> +	void *sensor;
-> +
-> +	/*
-> +	 * On ACPI platforms, we need to probe _after_ sensors wishing to connect
-> +	 * to cio2 have added a device link. If there are no consumers yet, then
-> +	 * we need to defer. The .sync_state() callback will then be called after
-> +	 * all linked sensors have probed
-> +	 */
-> +
-> +	if (IS_ENABLED(CONFIG_ACPI)) {
-> +		sensor = (struct device *)list_first_entry_or_null(
-> +								&pci_dev->dev.links.consumers,
-> +								struct dev_links_info,
-> +								consumers);
 
-Please wrap so it's under 80.
-
-> +
-> +		if (!sensor)
-> +			return -EPROBE_DEFER;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +void cio2_sync_state(struct device *dev)
-> +{
-> +	struct cio2_device *cio2;
-> +	int ret = 0;
-> +
-> +	if (IS_ENABLED(CONFIG_ACPI)) {
-> +		cio2 = dev_get_drvdata(dev);
-> +
-> +		if (!cio2) {
-> +			dev_err(dev, "Failed to retrieve driver data\n");
-> +			return;
-> +		}
-> +
-> +		/* insert the bridge driver to connect sensors via software nodes */
-> +		ret = request_module("cio2-bridge");
-> +
-> +		if (ret)
-> +			dev_err(dev, "Failed to insert cio2-bridge\n");
-> +
-> +		ret = cio2_parse_firmware(cio2);
-> +
-> +		if (ret) {
-> +			v4l2_async_notifier_unregister(&cio2->notifier);
-> +			v4l2_async_notifier_cleanup(&cio2->notifier);
-> +			cio2_queues_exit(cio2);
-> +		}
-> +	}
-> +}
-> +
->  /**************** PCI interface ****************/
->  
->  static int cio2_pci_config_setup(struct pci_dev *dev)
-> @@ -1746,6 +1799,11 @@ static int cio2_pci_probe(struct pci_dev *pci_dev,
->  	void __iomem *const *iomap;
->  	int r;
->  
-> +	r = cio2_probe_can_progress(pci_dev);
-> +
-> +	if (r)
-> +		return -EPROBE_DEFER;
-> +
->  	cio2 = devm_kzalloc(&pci_dev->dev, sizeof(*cio2), GFP_KERNEL);
->  	if (!cio2)
->  		return -ENOMEM;
-> @@ -1821,9 +1879,11 @@ static int cio2_pci_probe(struct pci_dev *pci_dev,
->  	v4l2_async_notifier_init(&cio2->notifier);
->  
->  	/* Register notifier for subdevices we care */
-> -	r = cio2_parse_firmware(cio2);
-> -	if (r)
-> -		goto fail_clean_notifier;
-> +	if (!IS_ENABLED(CONFIG_ACPI)) {
-> +		r = cio2_parse_firmware(cio2);
-> +		if (r)
-> +			goto fail_clean_notifier;
-> +	}
->  
->  	r = devm_request_irq(&pci_dev->dev, pci_dev->irq, cio2_irq,
->  			     IRQF_SHARED, CIO2_NAME, cio2);
-> @@ -2052,6 +2112,7 @@ static struct pci_driver cio2_pci_driver = {
->  	.remove = cio2_pci_remove,
->  	.driver = {
->  		.pm = &cio2_pm_ops,
-> +		.sync_state = cio2_sync_state
->  	},
->  };
->  
-> diff --git a/drivers/staging/media/ipu3/Kconfig b/drivers/staging/media/ipu3/Kconfig
-> index 3e9640523e50..08842fd8c0da 100644
-> --- a/drivers/staging/media/ipu3/Kconfig
-> +++ b/drivers/staging/media/ipu3/Kconfig
-> @@ -14,3 +14,18 @@ config VIDEO_IPU3_IMGU
->  
->  	  Say Y or M here if you have a Skylake/Kaby Lake SoC with a MIPI
->  	  camera. The module will be called ipu3-imgu.
-> +
-> +config VIDEO_CIO2_BRIDGE
-> +	tristate "IPU3 CIO2 Sensor Bridge Driver"
-> +	depends on PCI && VIDEO_V4L2
-> +	depends on ACPI
-> +	depends on X86
-> +	help
-> +	  This module provides a bridge connecting sensors (I.E. cameras) to
-> +	  the CIO2 device infrastructure via software nodes built from information
-> +	  parsed from the SSDB buffer.
-> +
-> +	  Say Y or M here if your platform's cameras use IPU3 with connections
-> +	  that should be defined in ACPI. The module will be called cio2-bridge.
-> +
-> +	  If in doubt, say N here.
-> \ No newline at end of file
-> diff --git a/drivers/staging/media/ipu3/Makefile b/drivers/staging/media/ipu3/Makefile
-> index 9def80ef28f3..12dff56dbb9e 100644
-> --- a/drivers/staging/media/ipu3/Makefile
-> +++ b/drivers/staging/media/ipu3/Makefile
-> @@ -10,3 +10,4 @@ ipu3-imgu-objs += \
->  		ipu3-css.o ipu3-v4l2.o ipu3.o
->  
->  obj-$(CONFIG_VIDEO_IPU3_IMGU) += ipu3-imgu.o
-> +obj-$(CONFIG_VIDEO_CIO2_BRIDGE) += cio2-bridge.o
-> \ No newline at end of file
-> diff --git a/drivers/staging/media/ipu3/cio2-bridge.c b/drivers/staging/media/ipu3/cio2-bridge.c
-> new file mode 100644
-> index 000000000000..5115aeeb35a1
-> --- /dev/null
-> +++ b/drivers/staging/media/ipu3/cio2-bridge.c
-> @@ -0,0 +1,448 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <linux/acpi.h>
-> +#include <acpi/acpi_bus.h>
-> +#include <linux/device.h>
-> +#include <linux/i2c.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/pci.h>
-> +#include <media/v4l2-subdev.h>
-> +
-> +#include <linux/fwnode.h>
-> +#include <linux/kref.h>
-> +
-> +static void cio2_bridge_exit(void);
-> +static int cio2_bridge_init(void);
-> +
-> +#define MAX_CONNECTED_DEVICES			4
-> +#define SWNODE_SENSOR_HID			0
-> +#define SWNODE_SENSOR_PORT			1
-> +#define SWNODE_SENSOR_ENDPOINT			2
-> +#define SWNODE_CIO2_PORT			3
-> +#define SWNODE_CIO2_ENDPOINT			4
-> +#define SWNODE_NULL_TERMINATOR			5
-> +
-> +#define CIO2_HID				"INT343E"
-> +#define CIO2_PCI_ID				0x9d32
-> +
-> +#define ENDPOINT_SENSOR				0
-> +#define ENDPOINT_CIO2				1
-> +
-> +#define NODE_HID(_HID)				\
-> +((const struct software_node) {			\
-> +	_HID,					\
-> +})
-> +
-> +#define NODE_PORT(_PORT, _HID_NODE)		\
-> +((const struct software_node) {			\
-> +	_PORT,					\
-> +	_HID_NODE,				\
-> +})
-> +
-> +#define NODE_ENDPOINT(_EP, _PORT, _PROPS)	\
-> +((const struct software_node) {			\
-> +	_EP,					\
-> +	_PORT,					\
-> +	_PROPS,					\
-> +})
-> +
-> +#define PROPERTY_ENTRY_NULL			\
-> +((const struct property_entry) { })
-
-Alignment. Same appears to apply to other macros (please indent).
-
-> +#define SOFTWARE_NODE_NULL			\
-> +((const struct software_node) { })
-> +
-> +/*
-> + * Extend this array with ACPI Hardware ID's of devices known to be
-> + * working
-> + */
-> +
-> +static char *supported_devices[] = {
-> +	"INT33BE",
-> +	"OVTI2680",
-> +	"OVTI5648",
-> +};
-> +
-> +/*
-> + * software_node needs const char * names. Can't snprintf a const char *,
-> + * so instead we need an array of them and use the port num from SSDB as
-> + * an index.
-> + */
-> +
-> +const char *port_names[] = {
-> +	"port0", "port1", "port2", "port3", "port4",
-> +	"port5", "port6", "port7", "port8", "port9"
-
-I think CIO2 is limited to 4.
-
-> +};
-> +
-> +struct software_node cio2_hid_node = { CIO2_HID, };
-> +
-> +struct sensor {
-> +	struct device *dev;
-> +	struct software_node swnodes[5];
-> +	struct property_entry sensor_props[6];
-> +	struct property_entry cio2_props[3];
-> +	struct fwnode_handle *fwnode;
-> +};
-> +
-> +struct cio2_bridge {
-> +	int n_sensors;
-> +	struct sensor sensors[MAX_CONNECTED_DEVICES];
-> +	struct pci_dev *cio2;
-> +	struct fwnode_handle *cio2_fwnode;
-> +};
-> +
-> +struct cio2_bridge bridge = { 0, };
-> +
-> +static const struct property_entry remote_endpoints[] = {
-> +	PROPERTY_ENTRY_REF("remote-endpoint", /* Sensor 0, Sensor Property */
-> +			   &bridge.sensors[0].swnodes[SWNODE_CIO2_ENDPOINT]),
-> +	PROPERTY_ENTRY_REF("remote-endpoint", /* Sensor 0, CIO2 Property */
-> +			   &bridge.sensors[0].swnodes[SWNODE_SENSOR_ENDPOINT]),
-> +	PROPERTY_ENTRY_REF("remote-endpoint",
-> +			   &bridge.sensors[1].swnodes[SWNODE_CIO2_ENDPOINT]),
-> +	PROPERTY_ENTRY_REF("remote-endpoint",
-> +			   &bridge.sensors[1].swnodes[SWNODE_SENSOR_ENDPOINT]),
-> +	PROPERTY_ENTRY_REF("remote-endpoint",
-> +			   &bridge.sensors[2].swnodes[SWNODE_CIO2_ENDPOINT]),
-> +	PROPERTY_ENTRY_REF("remote-endpoint",
-> +			   &bridge.sensors[2].swnodes[SWNODE_SENSOR_ENDPOINT]),
-> +	PROPERTY_ENTRY_REF("remote-endpoint",
-> +			   &bridge.sensors[3].swnodes[SWNODE_CIO2_ENDPOINT]),
-> +	PROPERTY_ENTRY_REF("remote-endpoint",
-> +			   &bridge.sensors[3].swnodes[SWNODE_SENSOR_ENDPOINT]),
-> +	{ }
-> +};
-> +
-> +/* Data representation as it is in ACPI SSDB buffer */
-> +struct sensor_bios_data_packed {
-> +	u8 version;
-> +	u8 sku;
-> +	u8 guid_csi2[16];
-> +	u8 devfunction;
-> +	u8 bus;
-> +	u32 dphylinkenfuses;
-> +	u32 clockdiv;
-> +	u8 link;
-> +	u8 lanes;
-> +	u32 csiparams[10];
-> +	u32 maxlanespeed;
-> +	u8 sensorcalibfileidx;
-> +	u8 sensorcalibfileidxInMBZ[3];
-> +	u8 romtype;
-> +	u8 vcmtype;
-> +	u8 platforminfo;
-> +	u8 platformsubinfo;
-> +	u8 flash;
-> +	u8 privacyled;
-> +	u8 degree;
-> +	u8 mipilinkdefined;
-> +	u32 mclkspeed;
-> +	u8 controllogicid;
-> +	u8 reserved1[3];
-> +	u8 mclkport;
-> +	u8 reserved2[13];
-> +} __attribute__((__packed__));
-> +
-> +/* Fields needed by bridge driver */
-> +struct sensor_bios_data {
-> +	struct device *dev;
-> +	u8 link;
-> +	u8 lanes;
-> +	u32 mclkspeed;
-> +};
-> +
-> +static int read_acpi_block(struct device *dev, char *id, void *data, u32 size)
-> +{
-> +	union acpi_object *obj;
-> +	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
-> +	struct acpi_handle *dev_handle = ACPI_HANDLE(dev);
-> +	int status;
-> +	u32 buffer_length;
-> +
-> +	status = acpi_evaluate_object(dev_handle, id, NULL, &buffer);
-> +	if (!ACPI_SUCCESS(status))
-> +		return -ENODEV;
-> +
-> +	obj = (union acpi_object *)buffer.pointer;
-> +	if (!obj || obj->type != ACPI_TYPE_BUFFER) {
-> +		dev_err(dev, "Could't read acpi buffer\n");
-> +		status = -ENODEV;
-> +		goto err;
-> +	}
-> +
-> +	if (obj->buffer.length > size) {
-> +		dev_err(dev, "Given buffer is too small\n");
-> +		status = -ENODEV;
-> +		goto err;
-> +	}
-> +
-> +	memcpy(data, obj->buffer.pointer, min(size, obj->buffer.length));
-> +	buffer_length = obj->buffer.length;
-> +	kfree(buffer.pointer);
-> +
-> +	return buffer_length;
-> +err:
-> +	kfree(buffer.pointer);
-> +	return status;
-> +}
-> +
-> +static int get_acpi_ssdb_sensor_data(struct device *dev,
-> +				     struct sensor_bios_data *sensor)
-> +{
-> +	struct sensor_bios_data_packed sensor_data;
-> +	int ret = read_acpi_block(dev, "SSDB", &sensor_data,
-> +				  sizeof(sensor_data));
-> +
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to fetch SSDB data\n");
-> +		return ret;
-> +	}
-> +
-> +	sensor->link = sensor_data.link;
-> +	sensor->lanes = sensor_data.lanes;
-> +	sensor->mclkspeed = sensor_data.mclkspeed;
-> +
-> +	return 0;
-> +}
-> +
-> +static int create_endpoint_properties(struct device *dev,
-> +				      struct sensor_bios_data *ssdb,
-> +				      struct property_entry *sensor_props,
-> +				      struct property_entry *cio2_props)
-> +{
-> +		u32 *data_lanes;
-
-Indentation.
-
-> +		int i;
-> +
-> +		data_lanes = devm_kmalloc(dev, sizeof(u32) * (int)ssdb->lanes,
-> +					  GFP_KERNEL);
-> +
-> +		if (!data_lanes) {
-> +			dev_err(dev,
-> +				"Couldn't allocate memory for data lanes array\n");
-> +			return -ENOMEM;
-> +		}
-> +
-> +		for (i = 0; i < (int)ssdb->lanes; i++)
-> +			data_lanes[i] = (u32)i + 1;
-> +
-> +		sensor_props[0] = PROPERTY_ENTRY_U32("clock-frequency",
-> +						     ssdb->mclkspeed);
-> +		sensor_props[1] = PROPERTY_ENTRY_U32("bus-type", 5);
-> +		sensor_props[2] = PROPERTY_ENTRY_U32("clock-lanes", 0);
-
-This isn't needed on sensors in practice.
-
-> +		sensor_props[3] = PROPERTY_ENTRY_U32_ARRAY_LEN("data-lanes",
-> +							       data_lanes,
-> +							       (int)ssdb->lanes);
-> +		sensor_props[4] = remote_endpoints[(bridge.n_sensors * 2) + ENDPOINT_SENSOR];
-> +		sensor_props[5] = PROPERTY_ENTRY_NULL;
-> +
-> +		cio2_props[0] = PROPERTY_ENTRY_U32_ARRAY_LEN("data-lanes",
-> +							     data_lanes,
-> +							     (int)ssdb->lanes);
-> +		cio2_props[1] = remote_endpoints[(bridge.n_sensors * 2) + ENDPOINT_CIO2];
-> +		cio2_props[2] = PROPERTY_ENTRY_NULL;
-
-I suppose the CSI-2 link frequency is generally encoded in drivers in this
-case. A lot of drivers already check for those, could you add the
-frequencies here as well (as they are known)?
-
-> +
-> +		return 0;
-> +}
-> +
-> +static int connect_supported_devices(void)
-> +{
-> +	struct acpi_device *adev;
-> +	struct device *dev;
-> +	struct sensor_bios_data ssdb;
-> +	struct sensor *sensor;
-> +	struct property_entry *sensor_props;
-> +	struct property_entry *cio2_props;
-> +	struct fwnode_handle *fwnode;
-> +	struct software_node *nodes;
-> +	struct v4l2_subdev *sd;
-> +	int i, ret;
-
-unsigned int i
-
-> +
-> +	for (i = 0; i < ARRAY_SIZE(supported_devices); i++) {
-> +		adev = acpi_dev_get_first_match_dev(supported_devices[i],
-> +						    NULL, -1);
-> +
-> +		if (!adev)
-> +			continue;
-> +
-> +		dev = bus_find_device_by_acpi_dev(&i2c_bus_type, adev);
-> +
-> +		if (!dev) {
-> +			pr_info("ACPI match for %s, but it has no i2c device\n",
-> +				supported_devices[i]);
-> +			continue;
-> +		}
-> +
-> +		if (!dev->driver_data) {
-> +			pr_info("ACPI match for %s, but it has no driver\n",
-> +				supported_devices[i]);
-> +			continue;
-> +		} else {
-> +			pr_info("Found supported device %s\n",
-> +				supported_devices[i]);
-> +		}
-> +
-> +		sensor = &bridge.sensors[bridge.n_sensors];
-> +		/*
-> +		 * Store sensor's existing fwnode so that it can be restored if
-> +		 * this module is removed.
-> +		 */
-> +		sensor->fwnode = fwnode_handle_get(dev->fwnode);
-> +
-> +		get_acpi_ssdb_sensor_data(dev, &ssdb);
-> +
-> +		nodes = sensor->swnodes;
-> +		sensor_props = sensor->sensor_props;
-> +		cio2_props = sensor->cio2_props;
-> +		fwnode = sensor->fwnode;
-> +
-> +		ret = create_endpoint_properties(dev, &ssdb, sensor_props,
-> +						 cio2_props);
-> +
-> +		if (ret)
-> +			return ret;
-> +
-> +		/* build the software nodes */
-> +
-> +		nodes[SWNODE_SENSOR_HID] = NODE_HID(supported_devices[i]);
-> +		nodes[SWNODE_SENSOR_PORT] = NODE_PORT("port0",
-> +						      &nodes[SWNODE_SENSOR_HID]);
-> +		nodes[SWNODE_SENSOR_ENDPOINT] = NODE_ENDPOINT("endpoint0",
-> +							      &nodes[SWNODE_SENSOR_PORT],
-> +							      sensor_props);
-> +		nodes[SWNODE_CIO2_PORT] = NODE_PORT(port_names[(int)ssdb.link],
-> +						    &cio2_hid_node);
-> +		nodes[SWNODE_CIO2_ENDPOINT] = NODE_ENDPOINT("endpoint0",
-> +							    &nodes[SWNODE_CIO2_PORT],
-> +							    cio2_props);
-> +		nodes[SWNODE_NULL_TERMINATOR]   = SOFTWARE_NODE_NULL;
-> +
-> +		ret = software_node_register_nodes(nodes);
-> +		if (ret) {
-> +			dev_err(dev,
-> +				"Failed to register software nodes for %s\n",
-> +				supported_devices[i]);
-> +			return ret;
-> +		}
-> +
-> +		fwnode = software_node_fwnode(&nodes[SWNODE_SENSOR_HID]);
-> +		if (!fwnode) {
-> +			dev_err(dev,
-> +				"Failed to get software node for %s\n",
-> +				supported_devices[i]);
-> +			return ret;
-> +		}
-> +
-> +		fwnode->secondary = ERR_PTR(-ENODEV);
-> +		dev->fwnode = fwnode;
-> +
-> +		/*
-> +		 * The device should by this point has driver_data set to an
-> +		 * instance of struct v4l2_subdev; set the fwnode for that too.
-> +		 */
-> +
-> +		sd = dev_get_drvdata(dev);
-> +		sd->fwnode = fwnode;
-
-I'm a bit lost here. Isn't it enough to have the sensor device's fwnode,
-and to use that for V4L2 async fwnode matching (as usual)?
-
-> +
-> +		sensor->dev = dev;
-> +		bridge.n_sensors++;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int cio2_bridge_init(void)
-> +{
-> +	struct fwnode_handle *fwnode;
-> +	int ret;
-> +
-> +	ret = software_node_register(&cio2_hid_node);
-> +
-> +	if (ret < 0) {
-> +		pr_err("Failed to register the CIO2 HID node\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	ret = connect_supported_devices();
-> +
-> +	if ((ret < 0) || (bridge.n_sensors <= 0)) {
-> +		pr_err("cio2_bridge: Failed to connect any devices\n");
-> +		goto out;
-> +	} else {
-> +		pr_info("Found %d supported devices\n", bridge.n_sensors);
-> +	}
-> +
-> +	bridge.cio2 = pci_get_device(PCI_VENDOR_ID_INTEL, CIO2_PCI_ID, NULL);
-> +	if (!bridge.cio2) {
-> +		ret = -ENODEV;
-> +		goto out;
-> +	}
-> +
-> +	fwnode = software_node_fwnode(&cio2_hid_node);
-> +	if (!fwnode) {
-> +		pr_err("Error getting fwnode from cio2 software_node\n");
-> +		ret = -ENODEV;
-> +		goto out;
-> +	}
-> +
-> +	/*
-> +	 * We store the pci_dev's existing fwnode, beccause in the event we
-> +	 * want to reload (I.E. rmmod and insmod) this module we need to give
-> +	 * the device its original fwnode back to prevent problems down the
-> +	 * line
-> +	 */
-> +
-> +	bridge.cio2_fwnode = fwnode_handle_get(bridge.cio2->dev.fwnode);
-> +
-> +	fwnode->secondary = ERR_PTR(-ENODEV);
-> +	bridge.cio2->dev.fwnode = fwnode;
-> +
-> +	return 0;
-> +out:
-> +	cio2_bridge_exit();
-> +	return ret;
-> +}
-> +
-> +static int cio2_bridge_unregister_sensors(void)
-> +{
-> +	int i, j;
-> +	struct sensor *sensor;
-> +
-> +	for (i = 0; i < bridge.n_sensors; i++) {
-> +		sensor = &bridge.sensors[i];
-> +
-> +		/* give the sensor its original fwnode back */
-> +		sensor->dev->fwnode = sensor->fwnode;
-> +		fwnode_handle_put(sensor->fwnode);
-> +		put_device(sensor->dev);
-> +
-> +		for (j = 4; j >= 0; j--)
-> +			software_node_unregister(&sensor->swnodes[j]);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void cio2_bridge_exit(void)
-> +{
-> +	int ret;
-> +
-> +	/* Give the pci_dev its original fwnode back */
-> +	if (bridge.cio2) {
-> +		bridge.cio2->dev.fwnode = bridge.cio2_fwnode;
-> +		fwnode_handle_put(bridge.cio2_fwnode);
-> +		pci_dev_put(bridge.cio2);
-> +	}
-> +
-> +	ret = cio2_bridge_unregister_sensors();
-> +
-> +	if (ret)
-> +		pr_err("An error occurred unregistering the sensors\n");
-> +
-> +	software_node_unregister(&cio2_hid_node);
-> +}
-> +
-> +module_init(cio2_bridge_init);
-> +module_exit(cio2_bridge_exit);
-> +
-> +MODULE_DESCRIPTION("A bridge driver to connect sensors to CIO2 infrastructure.");
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_ALIAS("acpi*:INT343E:*");
-
--- 
-Kind regards,
-
-Sakari Ailus
