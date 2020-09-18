@@ -7,48 +7,49 @@ X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13E76C43463
-	for <linux-media@archiver.kernel.org>; Fri, 18 Sep 2020 02:38:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E02BAC43463
+	for <linux-media@archiver.kernel.org>; Fri, 18 Sep 2020 02:45:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D2ED323730
-	for <linux-media@archiver.kernel.org>; Fri, 18 Sep 2020 02:38:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 950E223444
+	for <linux-media@archiver.kernel.org>; Fri, 18 Sep 2020 02:45:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600396701;
-	bh=xLEf58mjGmbH0CWWabSTZzpE4t32riFaLBMWYf6Q/rg=;
+	s=default; t=1600397122;
+	bh=pGhwVmzAKmrsyihS5XbA3TPrkvfmkoyMXMpaORXB8ZI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=D0mrxgILxPrR2HHdU3A+BScgqpOikYC9my0X8ZqY9GFVM/HLaMqjJh5E2pdwP+xnX
-	 6O2aBj3mwiSOBeWme7kobJnS+quprw7fq5YGLJ0fOAfnKFDUP3agKF/x6mYGgGrL3P
-	 UxpE0M8VoXBacdPeJx/auzb6/PNK+8WWtwfLf+QI=
+	b=SHOFW/r1PhjPn1z2UlbUCW21ldk4S9QqM4UsKt/0LabrnWPRJ1a/hZr/l4ZMvBhlf
+	 ZtBC5e1IL45um+fYE9EcCKUi6MkyDJncJSlENGDFo8wG5+OgD2JRnmqkEq1cmGLOa4
+	 9F1rbSMXQfxUhUGCSf1sfQQV41XyTIu7xEhqSjJQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728767AbgIRCiP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Sep 2020 22:38:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38818 "EHLO mail.kernel.org"
+        id S1729168AbgIRCpP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Sep 2020 22:45:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34740 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728776AbgIRCM1 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Sep 2020 22:12:27 -0400
+        id S1728416AbgIRCKS (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 17 Sep 2020 22:10:18 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B19C323447;
-        Fri, 18 Sep 2020 02:12:26 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 56045239E5;
+        Fri, 18 Sep 2020 02:10:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600395147;
-        bh=xLEf58mjGmbH0CWWabSTZzpE4t32riFaLBMWYf6Q/rg=;
+        s=default; t=1600395010;
+        bh=pGhwVmzAKmrsyihS5XbA3TPrkvfmkoyMXMpaORXB8ZI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DOdF+riE7qKUapmyITFFm8EZSLGekRWDUKL1l9UAa1wzjJO/wqZOf4v4Q42JzTi3a
-         DC/DwClQzZVLbSVSaAlqeTLu/4U/k4sVohSx9lIP3lfQ+dmG7wpGNw6bgVyxffyWfZ
-         GD6WhSE8kM6QTUPbOWhPNBStbC5GK6Zpxv7ZY2SE=
+        b=bs9nmPk2y3U1nwhq3PcCX6hd/jefGcDsspWyfp1HA0BM9E7NjnwjbKASUISsPleXW
+         CnEGItLH7C78TNnlIXc/onW0PVEAURXKbM0qztEHD7/nomPNxVy8Brmj8KZpmWu9o6
+         bWPEg7Hi96dLwKO5OITbFleMNyrWkgJ+a6bHoP/I=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+Cc:     Colin Ian King <colin.king@canonical.com>,
+        Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 006/127] media: smiapp: Fix error handling at NVM reading
-Date:   Thu, 17 Sep 2020 22:10:19 -0400
-Message-Id: <20200918021220.2066485-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 105/206] media: tda10071: fix unsigned sign extension overflow
+Date:   Thu, 17 Sep 2020 22:06:21 -0400
+Message-Id: <20200918020802.2065198-105-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200918021220.2066485-1-sashal@kernel.org>
-References: <20200918021220.2066485-1-sashal@kernel.org>
+In-Reply-To: <20200918020802.2065198-1-sashal@kernel.org>
+References: <20200918020802.2065198-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -57,37 +58,50 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
+From: Colin Ian King <colin.king@canonical.com>
 
-[ Upstream commit a5b1d5413534607b05fb34470ff62bf395f5c8d0 ]
+[ Upstream commit a7463e2dc698075132de9905b89f495df888bb79 ]
 
-If NVM reading failed, the device was left powered on. Fix that.
+The shifting of buf[3] by 24 bits to the left will be promoted to
+a 32 bit signed int and then sign-extended to an unsigned long. In
+the unlikely event that the the top bit of buf[3] is set then all
+then all the upper bits end up as also being set because of
+the sign-extension and this affect the ev->post_bit_error sum.
+Fix this by using the temporary u32 variable bit_error to avoid
+the sign-extension promotion. This also removes the need to do the
+computation twice.
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Addresses-Coverity: ("Unintended sign extension")
+
+Fixes: 267897a4708f ("[media] tda10071: implement DVBv5 statistics")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+Signed-off-by: Sean Young <sean@mess.org>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/smiapp/smiapp-core.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/media/dvb-frontends/tda10071.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/i2c/smiapp/smiapp-core.c b/drivers/media/i2c/smiapp/smiapp-core.c
-index e4d7f2febf00c..05b3974bd9202 100644
---- a/drivers/media/i2c/smiapp/smiapp-core.c
-+++ b/drivers/media/i2c/smiapp/smiapp-core.c
-@@ -2338,11 +2338,12 @@ smiapp_sysfs_nvm_read(struct device *dev, struct device_attribute *attr,
- 		if (rval < 0) {
- 			if (rval != -EBUSY && rval != -EAGAIN)
- 				pm_runtime_set_active(&client->dev);
--			pm_runtime_put(&client->dev);
-+			pm_runtime_put_noidle(&client->dev);
- 			return -ENODEV;
- 		}
+diff --git a/drivers/media/dvb-frontends/tda10071.c b/drivers/media/dvb-frontends/tda10071.c
+index 097c42d3f8c26..df0c7243eafe4 100644
+--- a/drivers/media/dvb-frontends/tda10071.c
++++ b/drivers/media/dvb-frontends/tda10071.c
+@@ -483,10 +483,11 @@ static int tda10071_read_status(struct dvb_frontend *fe, enum fe_status *status)
+ 			goto error;
  
- 		if (smiapp_read_nvm(sensor, sensor->nvm)) {
-+			pm_runtime_put(&client->dev);
- 			dev_err(&client->dev, "nvm read failed\n");
- 			return -ENODEV;
- 		}
+ 		if (dev->delivery_system == SYS_DVBS) {
+-			dev->dvbv3_ber = buf[0] << 24 | buf[1] << 16 |
+-					 buf[2] << 8 | buf[3] << 0;
+-			dev->post_bit_error += buf[0] << 24 | buf[1] << 16 |
+-					       buf[2] << 8 | buf[3] << 0;
++			u32 bit_error = buf[0] << 24 | buf[1] << 16 |
++					buf[2] << 8 | buf[3] << 0;
++
++			dev->dvbv3_ber = bit_error;
++			dev->post_bit_error += bit_error;
+ 			c->post_bit_error.stat[0].scale = FE_SCALE_COUNTER;
+ 			c->post_bit_error.stat[0].uvalue = dev->post_bit_error;
+ 			dev->block_error += buf[4] << 8 | buf[5] << 0;
 -- 
 2.25.1
 
