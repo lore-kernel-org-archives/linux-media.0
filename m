@@ -5,47 +5,48 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 576E3C43463
-	for <linux-media@archiver.kernel.org>; Fri, 18 Sep 2020 02:58:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72854C43464
+	for <linux-media@archiver.kernel.org>; Fri, 18 Sep 2020 03:04:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 155862083B
-	for <linux-media@archiver.kernel.org>; Fri, 18 Sep 2020 02:58:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 38CD4206B7
+	for <linux-media@archiver.kernel.org>; Fri, 18 Sep 2020 03:04:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600397895;
-	bh=jGhZISFgVL+/FUIGMcXqvuU+A9Nr5jP1pkKvf9EPlPM=;
+	s=default; t=1600398285;
+	bh=ieeBqnK2oYZAV53k1RC08bcmmz7yge6AxnLN1S72xxU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=xCN+HmWaGBgCVyWOwuJX+qnDo50aK1NbqK8bcm2iWNPS/TgOl/rV+4vCl8Dc2KP1A
-	 vnHg240E4wzzsNLtAcv2MWW/zfkYMNQC253ANkVzM+8qs+wnb2prSy8Anwt/dgOWDj
-	 aaNSNVU8vhSSil9GZ4Dfo0/E8lj5dYyQc62sLr3c=
+	b=CIedkMdC4d4b22V1SSmTz3flo2wcMVcmqXQnKsFydnyOEvwZ5al4bjtcSnmoiObwx
+	 acuORDLrEgvPG7kjSaQRHZSPxcxy1iivjL5oltBurZ1gO72QItGW9irZqXO0c27DJ6
+	 29mPSDJZeI9L76AY+Nu9G3rDZwIY1FcQH6m9y6sM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728195AbgIRC6B (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Sep 2020 22:58:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55616 "EHLO mail.kernel.org"
+        id S1730592AbgIRDEo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Sep 2020 23:04:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52296 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727744AbgIRCGV (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Sep 2020 22:06:21 -0400
+        id S1726625AbgIRCEk (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 17 Sep 2020 22:04:40 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4B1F8238D6;
-        Fri, 18 Sep 2020 02:06:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B717E23718;
+        Fri, 18 Sep 2020 02:04:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600394781;
-        bh=jGhZISFgVL+/FUIGMcXqvuU+A9Nr5jP1pkKvf9EPlPM=;
+        s=default; t=1600394679;
+        bh=ieeBqnK2oYZAV53k1RC08bcmmz7yge6AxnLN1S72xxU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q8wBvW5rzrK2nll1jwR17lkQ+J1P//CnOpQwo182EFNLcAQKMTYzhH4Pne/RjVnmB
-         LSy8aNBHBFad9VnUnxMIBzDAM2v18Eie1g+8m377YvBSO+2zo+SuxGgtq8DfFrUfYf
-         hON4Hm+41mKezodA5b1gzr1eWx0mti0IpdrB3bks=
+        b=kTpTrDHoA8hqDa1f06zub2tjwwdGwLjPzPtkEEw1WySGxLpcA5GcwxiekHnfl9DOP
+         oq//3YcfEsQDWhS4clhbQ7D+PNrV3HU6AF9hYNZVKtUiltyAoVcnxyyr7Yd0JoUZpF
+         k3kjR+hGsMg8xskExSjV2ifaFxrAspmmCdW246Tc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+Cc:     Colin Ian King <colin.king@canonical.com>,
+        Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 254/330] media: venus: vdec: Init registered list unconditionally
-Date:   Thu, 17 Sep 2020 21:59:54 -0400
-Message-Id: <20200918020110.2063155-254-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 169/330] media: tda10071: fix unsigned sign extension overflow
+Date:   Thu, 17 Sep 2020 21:58:29 -0400
+Message-Id: <20200918020110.2063155-169-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200918020110.2063155-1-sashal@kernel.org>
 References: <20200918020110.2063155-1-sashal@kernel.org>
@@ -57,44 +58,50 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+From: Colin Ian King <colin.king@canonical.com>
 
-[ Upstream commit bc3d870e414b42d72cd386aa20a4fc3612e4feb7 ]
+[ Upstream commit a7463e2dc698075132de9905b89f495df888bb79 ]
 
-Presently the list initialization is done only in
-dynamic-resolution-change state, which leads to list corruptions
-and use-after-free. Init list_head unconditionally in
-vdec_stop_capture called by vb2 stop_streaming without takeing
-into account current codec state.
+The shifting of buf[3] by 24 bits to the left will be promoted to
+a 32 bit signed int and then sign-extended to an unsigned long. In
+the unlikely event that the the top bit of buf[3] is set then all
+then all the upper bits end up as also being set because of
+the sign-extension and this affect the ev->post_bit_error sum.
+Fix this by using the temporary u32 variable bit_error to avoid
+the sign-extension promotion. This also removes the need to do the
+computation twice.
 
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Addresses-Coverity: ("Unintended sign extension")
+
+Fixes: 267897a4708f ("[media] tda10071: implement DVBv5 statistics")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+Signed-off-by: Sean Young <sean@mess.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/qcom/venus/vdec.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/media/dvb-frontends/tda10071.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-index 59ae7a1e63bc2..05b80a66e80ed 100644
---- a/drivers/media/platform/qcom/venus/vdec.c
-+++ b/drivers/media/platform/qcom/venus/vdec.c
-@@ -987,13 +987,14 @@ static int vdec_stop_capture(struct venus_inst *inst)
- 		ret = hfi_session_flush(inst, HFI_FLUSH_OUTPUT);
- 		vdec_cancel_dst_buffers(inst);
- 		inst->codec_state = VENUS_DEC_STATE_CAPTURE_SETUP;
--		INIT_LIST_HEAD(&inst->registeredbufs);
- 		venus_helper_free_dpb_bufs(inst);
- 		break;
- 	default:
--		return 0;
-+		break;
- 	}
+diff --git a/drivers/media/dvb-frontends/tda10071.c b/drivers/media/dvb-frontends/tda10071.c
+index 1953b00b3e487..685c0ac71819e 100644
+--- a/drivers/media/dvb-frontends/tda10071.c
++++ b/drivers/media/dvb-frontends/tda10071.c
+@@ -470,10 +470,11 @@ static int tda10071_read_status(struct dvb_frontend *fe, enum fe_status *status)
+ 			goto error;
  
-+	INIT_LIST_HEAD(&inst->registeredbufs);
+ 		if (dev->delivery_system == SYS_DVBS) {
+-			dev->dvbv3_ber = buf[0] << 24 | buf[1] << 16 |
+-					 buf[2] << 8 | buf[3] << 0;
+-			dev->post_bit_error += buf[0] << 24 | buf[1] << 16 |
+-					       buf[2] << 8 | buf[3] << 0;
++			u32 bit_error = buf[0] << 24 | buf[1] << 16 |
++					buf[2] << 8 | buf[3] << 0;
 +
- 	return ret;
- }
- 
++			dev->dvbv3_ber = bit_error;
++			dev->post_bit_error += bit_error;
+ 			c->post_bit_error.stat[0].scale = FE_SCALE_COUNTER;
+ 			c->post_bit_error.stat[0].uvalue = dev->post_bit_error;
+ 			dev->block_error += buf[4] << 8 | buf[5] << 0;
 -- 
 2.25.1
 
