@@ -5,112 +5,153 @@ X-Spam-Level:
 X-Spam-Status: No, score=-8.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 54862C43464
-	for <linux-media@archiver.kernel.org>; Fri, 18 Sep 2020 08:06:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64B54C43464
+	for <linux-media@archiver.kernel.org>; Fri, 18 Sep 2020 08:16:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 11D102176B
-	for <linux-media@archiver.kernel.org>; Fri, 18 Sep 2020 08:06:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1BA902176B
+	for <linux-media@archiver.kernel.org>; Fri, 18 Sep 2020 08:16:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="OjUABHgS"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="YUz17olh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726625AbgIRIGH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 18 Sep 2020 04:06:07 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:38598 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726280AbgIRIGH (ORCPT
+        id S1726290AbgIRIQi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 18 Sep 2020 04:16:38 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:39958 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726102AbgIRIQi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 18 Sep 2020 04:06:07 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08I83mvt192647;
-        Fri, 18 Sep 2020 08:05:48 GMT
+        Fri, 18 Sep 2020 04:16:38 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08I8F2p2070722;
+        Fri, 18 Sep 2020 08:16:25 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
  : subject : message-id : references : mime-version : content-type :
  in-reply-to; s=corp-2020-01-29;
- bh=FwzhrR6pIZT+ddO5HaCmr7glfRurUVeHrfqvesMmzJA=;
- b=OjUABHgStFfv1CkX6AQwRtXJUXjBH0AkIeV0zBZrDu+Ryz3eHaqiUi/wTGLWwAkme4mi
- Jntda+uCcBDcdtGph54CcMENWADtFDlzI3Gwhc0Tk3xa7jUT8b/NjeodkN0R8FroMrfE
- V4EfxU8H8Iy0WzyNA1kXqrKPdAJdloMYv7syCm4A9hoNw5w0muNaqUd+VKI4hVFgRqbA
- Ed47cP7Ix/k8LBfO/yKP74fMVey4y3SUtAiPNs8MvxUZArrfMmStHdLzWhRQ0iBLJiyT
- 7Rp4JFt4gdusisIY4wJYD5zP/SneygwYvq2ic56xV0W4BZ1Hr3xQUQVDwTo6BCWUKTIt 9A== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 33gnrrdnx4-1
+ bh=XZIYm24yndlWZXI5R5Yn+Q8BksLATNq+z3yjFm3AtHA=;
+ b=YUz17olhIiyfVpmLPeUEvUXXTHm+DPpH6IRUD1lcgVzol0cilLunRafThRgfumbumdr+
+ UiXy6Pi95Gwx1Yi7zv2j0JpOcOEf8NGzOYpgMIw6vBlNVTWMVDJAGi1lvGlHfbJUNz3n
+ UAlmcADOI/wYQisZZ6qCEB5GLixnD+KFuxSzCsOdXtPOOe2XM3WNBN/QxL5vCeSn8fmx
+ Bby4JNT3jKL4c2RbapJdgyvyPpilx7G17FlXjK3f+a+dSvXO+CfMkaCETdUTJ+O26t0+
+ e0o5D8nGnkuApKk6njKVp4FhSD0rQuxG2Z0PnjfutDkIRkimakPLLNcrvdZrTIlfmpGc pQ== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 33gp9mnn63-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 18 Sep 2020 08:05:48 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08I80tFr079657;
-        Fri, 18 Sep 2020 08:03:48 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3030.oracle.com with ESMTP id 33megaxe6x-1
+        Fri, 18 Sep 2020 08:16:24 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08I8G1hN106137;
+        Fri, 18 Sep 2020 08:16:24 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3020.oracle.com with ESMTP id 33hm36dvus-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 18 Sep 2020 08:03:48 +0000
-Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08I83iix026517;
-        Fri, 18 Sep 2020 08:03:44 GMT
+        Fri, 18 Sep 2020 08:16:24 +0000
+Received: from abhmp0020.oracle.com (abhmp0020.oracle.com [141.146.116.26])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08I8GKxn007685;
+        Fri, 18 Sep 2020 08:16:20 GMT
 Received: from kadam (/41.57.98.10)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 18 Sep 2020 08:03:44 +0000
-Date:   Fri, 18 Sep 2020 11:03:35 +0300
+        with ESMTP ; Fri, 18 Sep 2020 08:16:20 +0000
+Date:   Fri, 18 Sep 2020 11:16:09 +0300
 From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Daniel Scally <djrscally@gmail.com>
-Cc:     yong.zhi@intel.com, sakari.ailus@linux.intel.com,
-        bingbu.cao@intel.com, tian.shu.qiu@intel.com, mchehab@kernel.org,
-        gregkh@linuxfoundation.org, davem@davemloft.net, robh@kernel.org,
-        devel@driverdev.osuosl.org, jorhand@linux.microsoft.com,
-        kieran.bingham@ideasonboard.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, kitakar@gmail.com
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     devel@driverdev.osuosl.org, robh@kernel.org, mchehab@kernel.org,
+        jorhand@linux.microsoft.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, kieran.bingham@ideasonboard.com,
+        Daniel Scally <djrscally@gmail.com>, kitakar@gmail.com,
+        yong.zhi@intel.com, bingbu.cao@intel.com,
+        andriy.shevchenko@linux.intel.com, davem@davemloft.net,
+        tian.shu.qiu@intel.com, linux-media@vger.kernel.org
 Subject: Re: [RFC PATCH] Add bridge driver to connect sensors to CIO2 device
  via software nodes on ACPI platforms
-Message-ID: <20200918080335.GT4282@kadam>
+Message-ID: <20200918081609.GR18329@kadam>
 References: <20200916213618.8003-1-djrscally@gmail.com>
+ <20200917103343.GW26842@paasikivi.fi.intel.com>
+ <20200917104941.GP4282@kadam>
+ <20200918064043.GE26842@paasikivi.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200916213618.8003-1-djrscally@gmail.com>
+In-Reply-To: <20200918064043.GE26842@paasikivi.fi.intel.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9747 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 spamscore=0
- mlxlogscore=999 adultscore=0 bulkscore=0 phishscore=0 malwarescore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 mlxlogscore=999
+ malwarescore=0 mlxscore=0 phishscore=0 adultscore=0 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009180067
+ definitions=main-2009180069
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9747 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0
- lowpriorityscore=0 malwarescore=0 mlxscore=0 bulkscore=0 suspectscore=0
- clxscore=1015 mlxlogscore=999 adultscore=0 priorityscore=1501
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009180067
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999
+ adultscore=0 malwarescore=0 clxscore=1015 lowpriorityscore=0 phishscore=0
+ spamscore=0 priorityscore=1501 suspectscore=0 impostorscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009180069
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-I ran Smatch over the code and it spotted an off by one.
+On Fri, Sep 18, 2020 at 09:40:43AM +0300, Sakari Ailus wrote:
+> Hi Dan,
+> 
+> On Thu, Sep 17, 2020 at 01:49:41PM +0300, Dan Carpenter wrote:
+> > On Thu, Sep 17, 2020 at 01:33:43PM +0300, Sakari Ailus wrote:
+> > > > +static int connect_supported_devices(void)
+> > > > +{
+> > > > +	struct acpi_device *adev;
+> > > > +	struct device *dev;
+> > > > +	struct sensor_bios_data ssdb;
+> > > > +	struct sensor *sensor;
+> > > > +	struct property_entry *sensor_props;
+> > > > +	struct property_entry *cio2_props;
+> > > > +	struct fwnode_handle *fwnode;
+> > > > +	struct software_node *nodes;
+> > > > +	struct v4l2_subdev *sd;
+> > > > +	int i, ret;
+> > > 
+> > > unsigned int i
+> > > 
+> > 
+> > Why?
+> > 
+> > For list iterators then "int i;" is best...  For sizes then unsigned is
+> > sometimes best.  Or if it's part of the hardware spec or network spec
+> > unsigned is best.  Otherwise unsigned variables cause a ton of bugs.
+> > They're not as intuitive as signed variables.  Imagine if there is an
+> > error in this loop and you want to unwind.  With a signed variable you
+> > can do:
+> > 
+> > 	while (--i >= 0)
+> > 		cleanup(&bridge.sensors[i]);
+> > 
+> > There are very few times where raising the type maximum from 2 billion
+> > to 4 billion fixes anything.
+> 
+> There's simply no need for the negative integers here. Sizes (as it's a
+> size here) are unsigned, too, so you'd be comparing signed and unsigned
+> numbers later in the function.
 
-On Wed, Sep 16, 2020 at 10:36:18PM +0100, Daniel Scally wrote:
-> +#define MAX_CONNECTED_DEVICES			4
-> +#define SWNODE_SENSOR_HID			0
-> +#define SWNODE_SENSOR_PORT			1
-> +#define SWNODE_SENSOR_ENDPOINT			2
-> +#define SWNODE_CIO2_PORT			3
-> +#define SWNODE_CIO2_ENDPOINT			4
-> +#define SWNODE_NULL_TERMINATOR			5
-   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+I'm not trying to be rude, I'm honestly puzzled by this...
 
-> +struct sensor {
-> +	struct device *dev;
-> +	struct software_node swnodes[5];
-                             ^^^^^^^^^^
-This needs to be 6 instead of 5 to prevent memory corruption.
+The "i" variable is not a size, it's an iterator...  Comparing signed
+and unsigned isn't necessarily a problem, but the only comparison in
+this case is here:
 
-> +	struct property_entry sensor_props[6];
-> +	struct property_entry cio2_props[3];
-> +	struct fwnode_handle *fwnode;
-> +};
+   253          struct property_entry *cio2_props;
+   254          struct fwnode_handle *fwnode;
+   255          struct software_node *nodes;
+   256          struct v4l2_subdev *sd;
+   257          int i, ret;
+   258  
+   259          for (i = 0; i < ARRAY_SIZE(supported_devices); i++) {
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+That's obviously fine.  The compiler knows at compile time the value of
+ARRAY_SIZE().  I feel like there must be a static checker which
+complains about this?  ARRAY_SIZE() is size_t.
 
-
-> +		nodes[SWNODE_NULL_TERMINATOR]   = SOFTWARE_NODE_NULL;
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Here.
+   260                  adev = acpi_dev_get_first_match_dev(supported_devices[i],
+   261                                                      NULL, -1);
+   262  
+   263                  if (!adev)
+   264                          continue;
+   265  
 
 regards,
 dan carpenter
