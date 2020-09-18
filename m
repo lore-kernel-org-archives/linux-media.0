@@ -7,48 +7,47 @@ X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45D28C43464
-	for <linux-media@archiver.kernel.org>; Fri, 18 Sep 2020 02:46:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BEE3CC43463
+	for <linux-media@archiver.kernel.org>; Fri, 18 Sep 2020 02:49:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EC4EA23888
-	for <linux-media@archiver.kernel.org>; Fri, 18 Sep 2020 02:46:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7184123444
+	for <linux-media@archiver.kernel.org>; Fri, 18 Sep 2020 02:49:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600397214;
-	bh=OOeHGkTyHf/xxJPobnQ823AgM3ilCrmnscfvk67GYOY=;
+	s=default; t=1600397384;
+	bh=yUK0HLYKdN07FEPz7f+8FoTS9YClMk7ZefkhznqXA5w=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Sh4/qsE9xFOm4sNJvX5hUfhaXs4meELE2VgsrbQLEeBpl5hiMgl6fRBoNYi7IYVh3
-	 fM3cWXZqs+Khkxad8kxS61w+A0KFc4QXFxt07rB4cTFy3fx8ldJFjbf1FezK8pLsn0
-	 wGTqYRBlAiv/5slp5kWAvdYRrSxBlgUAtGWeA4xE=
+	b=lY4DS8O31hPF9D4jtPg/U43yvgB9q+l7c4daHzs5WelVcCKlyww09inwxOQVxrzHY
+	 gIHBuJhyqo1j8EQuDoB8vXGy0wkdlaZ+sBuiRw7YIy11bCmINpJFEOxCXthlpNARi7
+	 YR65BYzwDr/v3bw1fHnhNghRD6K1xTwgGNfBJOrE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728361AbgIRCJs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Sep 2020 22:09:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33720 "EHLO mail.kernel.org"
+        id S1727095AbgIRCJA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Sep 2020 22:09:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60628 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728352AbgIRCJr (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Sep 2020 22:09:47 -0400
+        id S1728198AbgIRCI6 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 17 Sep 2020 22:08:58 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 50FE2239D1;
-        Fri, 18 Sep 2020 02:09:45 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1B52F235F9;
+        Fri, 18 Sep 2020 02:08:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600394986;
-        bh=OOeHGkTyHf/xxJPobnQ823AgM3ilCrmnscfvk67GYOY=;
+        s=default; t=1600394938;
+        bh=yUK0HLYKdN07FEPz7f+8FoTS9YClMk7ZefkhznqXA5w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fCkuZh58Rtx1lisZOqsGEEh5hT+pq8NvBuyAzJKBECBoMO4V+KXAtttHbTdTpfKCx
-         VG86eYPeBlRSnff5xEnUAJ9XmVtxs1a36h2zLeuuVQD92mmpYqY1Ovp0OawEqDIMIa
-         kTA0jw9NCqyLG740vk3+QCYOHqeZA+cnOH1xJ1NY=
+        b=S0iEBykGmilsKOWzCn+SPfKppMjcREqwCVOxzYagZxB5UmBn1y76tk/FSnjvQZ9Q1
+         cv2DJt1n22EzI2BP140xD6FnwBcX0NFzFv0ShwXtFXs59g7PXObHD7ISrm6cyi6cNB
+         K358sfj7XQl1W7xH9tYy9PvCgwUITVeslH8rprk4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
+Cc:     Nikhil Devshatwar <nikhil.nd@ti.com>,
+        Benoit Parrot <bparrot@ti.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        devel@driverdev.osuosl.org
-Subject: [PATCH AUTOSEL 4.19 085/206] media: staging/imx: Missing assignment in imx_media_capture_device_register()
-Date:   Thu, 17 Sep 2020 22:06:01 -0400
-Message-Id: <20200918020802.2065198-85-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 047/206] media: ti-vpe: cal: Restrict DMA to avoid memory corruption
+Date:   Thu, 17 Sep 2020 22:05:23 -0400
+Message-Id: <20200918020802.2065198-47-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200918020802.2065198-1-sashal@kernel.org>
 References: <20200918020802.2065198-1-sashal@kernel.org>
@@ -60,36 +59,56 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Nikhil Devshatwar <nikhil.nd@ti.com>
 
-[ Upstream commit ef0ed05dcef8a74178a8b480cce23a377b1de2b8 ]
+[ Upstream commit 6e72eab2e7b7a157d554b8f9faed7676047be7c1 ]
 
-There was supposed to be a "ret = " assignment here, otherwise the
-error handling on the next line won't work.
+When setting DMA for video capture from CSI channel, if the DMA size
+is not given, it ends up writing as much data as sent by the camera.
 
-Fixes: 64b5a49df486 ("[media] media: imx: Add Capture Device Interface")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Steve Longerbeam <slongerbeam@gmail.com>
+This may lead to overwriting the buffers causing memory corruption.
+Observed green lines on the default framebuffer.
+
+Restrict the DMA to maximum height as specified in the S_FMT ioctl.
+
+Signed-off-by: Nikhil Devshatwar <nikhil.nd@ti.com>
+Signed-off-by: Benoit Parrot <bparrot@ti.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/imx/imx-media-capture.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/ti-vpe/cal.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/media/imx/imx-media-capture.c b/drivers/staging/media/imx/imx-media-capture.c
-index 256039ce561e6..81a3370551dbc 100644
---- a/drivers/staging/media/imx/imx-media-capture.c
-+++ b/drivers/staging/media/imx/imx-media-capture.c
-@@ -678,7 +678,7 @@ int imx_media_capture_device_register(struct imx_media_video_dev *vdev)
- 	/* setup default format */
- 	fmt_src.pad = priv->src_sd_pad;
- 	fmt_src.which = V4L2_SUBDEV_FORMAT_ACTIVE;
--	v4l2_subdev_call(sd, pad, get_fmt, NULL, &fmt_src);
-+	ret = v4l2_subdev_call(sd, pad, get_fmt, NULL, &fmt_src);
- 	if (ret) {
- 		v4l2_err(sd, "failed to get src_sd format\n");
- 		goto unreg;
+diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
+index be3155275a6ba..d945323fc437d 100644
+--- a/drivers/media/platform/ti-vpe/cal.c
++++ b/drivers/media/platform/ti-vpe/cal.c
+@@ -684,12 +684,13 @@ static void pix_proc_config(struct cal_ctx *ctx)
+ }
+ 
+ static void cal_wr_dma_config(struct cal_ctx *ctx,
+-			      unsigned int width)
++			      unsigned int width, unsigned int height)
+ {
+ 	u32 val;
+ 
+ 	val = reg_read(ctx->dev, CAL_WR_DMA_CTRL(ctx->csi2_port));
+ 	set_field(&val, ctx->csi2_port, CAL_WR_DMA_CTRL_CPORT_MASK);
++	set_field(&val, height, CAL_WR_DMA_CTRL_YSIZE_MASK);
+ 	set_field(&val, CAL_WR_DMA_CTRL_DTAG_PIX_DAT,
+ 		  CAL_WR_DMA_CTRL_DTAG_MASK);
+ 	set_field(&val, CAL_WR_DMA_CTRL_MODE_CONST,
+@@ -1315,7 +1316,8 @@ static int cal_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 	csi2_lane_config(ctx);
+ 	csi2_ctx_config(ctx);
+ 	pix_proc_config(ctx);
+-	cal_wr_dma_config(ctx, ctx->v_fmt.fmt.pix.bytesperline);
++	cal_wr_dma_config(ctx, ctx->v_fmt.fmt.pix.bytesperline,
++			  ctx->v_fmt.fmt.pix.height);
+ 	cal_wr_dma_addr(ctx, addr);
+ 	csi2_ppi_enable(ctx);
+ 
 -- 
 2.25.1
 
