@@ -2,118 +2,96 @@ Return-Path: <SRS0=ldJM=C3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B904C43463
-	for <linux-media@archiver.kernel.org>; Fri, 18 Sep 2020 08:18:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5423C43464
+	for <linux-media@archiver.kernel.org>; Fri, 18 Sep 2020 08:24:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EDAE721582
-	for <linux-media@archiver.kernel.org>; Fri, 18 Sep 2020 08:18:05 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jtE79XAV"
+	by mail.kernel.org (Postfix) with ESMTP id 614CE21D42
+	for <linux-media@archiver.kernel.org>; Fri, 18 Sep 2020 08:24:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726394AbgIRISC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 18 Sep 2020 04:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54850 "EHLO
+        id S1726381AbgIRIX6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 18 Sep 2020 04:23:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726388AbgIRISC (ORCPT
+        with ESMTP id S1725874AbgIRIXz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 18 Sep 2020 04:18:02 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67E2C061797;
-        Fri, 18 Sep 2020 01:09:40 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id k18so4585907wmj.5;
-        Fri, 18 Sep 2020 01:09:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=gIrm1k0wpBO+eG/xwOUwVK1CI6UvN3iLydbukNax9ZE=;
-        b=jtE79XAVK5733uuedxsF172ExqK61Iq/tIYkEbK22R/GQJ15ULvPNA88TJx4Vg5kxu
-         dUOVOh1VWe5yU5c6fdiBHZmu8RcVYTmnMg8IHx4SCoTxkhERu4iiuBilqG/KDHirNoQ8
-         aXSI0aqdZmoM28b9brmY/VnOPfT5hpMtG7ensFCr/wHab8o0RxrYFpa38BqagGuO0OD+
-         z88WHZ+Xe+uvPLQqr26relcJxObDz4Kvi+54kCUNrZbLCZEhsWJOQV3bP/Ics+Tt5+5H
-         r1jy7C6RrgAVW0/4GpibBZ2vwT9nP5Lwtt+8dUpF2rTKEYLOLVWBxvGhDT2a2b0yI4+b
-         gwHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=gIrm1k0wpBO+eG/xwOUwVK1CI6UvN3iLydbukNax9ZE=;
-        b=en2CJg8snyCrhoQmjN5xWowpJv8fNv7I/K41o3vydH8HnlqlfKFgneZOdsf1SFehdf
-         7ZrnfxM1Ye0cuepKQUAcglNdQsWnZyS5gsxVybaUN7peyr/GtWp8MqOdhQBfd61Eg1x6
-         j/82CghuWG6Wqh93/YPKxSi3r/hnHISbscncnLYzYoeEYywXzzX3tTI/fwP8I9iAcmu2
-         vx10wsLdkP3kNJRC440D9PMWwLPbrv5lBAgVyQCk4C9ihVXOIjFEPaj3Riss6aTsiEWo
-         siA/BIKV/AYe+IB82rIKRtxamyQncz41AdZjZW1BrqknTlsvzW28yMIjZZplR+BWmOPX
-         auzA==
-X-Gm-Message-State: AOAM530xb295paa83BbncaXmCt3OPsFQig/+xYj2p8L5nwEt9Iv09DsN
-        gA9UeDi+lrj/0JTdBWQ1Eaw9xpXZGnpVKQK2
-X-Google-Smtp-Source: ABdhPJxJ0IwUFY6Xv/t+mR5ajPysGzi/rS/mCDNnoE1QdqD15G5LwitAj581stJGotZV+zRvcolD5g==
-X-Received: by 2002:a1c:bbd7:: with SMTP id l206mr15100540wmf.185.1600416579489;
-        Fri, 18 Sep 2020 01:09:39 -0700 (PDT)
-Received: from [192.168.1.211] ([2.29.208.34])
-        by smtp.gmail.com with ESMTPSA id 63sm4053820wrh.71.2020.09.18.01.09.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Sep 2020 01:09:38 -0700 (PDT)
-Subject: Re: [RFC PATCH] Add bridge driver to connect sensors to CIO2 device
- via software nodes on ACPI platforms
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     yong.zhi@intel.com, sakari.ailus@linux.intel.com,
-        bingbu.cao@intel.com, tian.shu.qiu@intel.com, mchehab@kernel.org,
-        gregkh@linuxfoundation.org, davem@davemloft.net, robh@kernel.org,
-        devel@driverdev.osuosl.org, jorhand@linux.microsoft.com,
-        kieran.bingham@ideasonboard.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, kitakar@gmail.com
-References: <20200916213618.8003-1-djrscally@gmail.com>
- <20200918080335.GT4282@kadam>
-From:   Dan Scally <djrscally@gmail.com>
-Message-ID: <e9d19d97-7733-04aa-2c61-e7e367a97baa@gmail.com>
-Date:   Fri, 18 Sep 2020 09:09:37 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Fri, 18 Sep 2020 04:23:55 -0400
+Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C529C06174A;
+        Fri, 18 Sep 2020 01:23:55 -0700 (PDT)
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 9A728C6366; Fri, 18 Sep 2020 09:23:52 +0100 (BST)
+Date:   Fri, 18 Sep 2020 09:23:52 +0100
+From:   Sean Young <sean@mess.org>
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>
+Cc:     "mchehab@kernel.org" <mchehab@kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH] media: rc: gpio-ir-recv: add QoS support for cpuidle
+ system
+Message-ID: <20200918082352.GA32346@gofer.mess.org>
+References: <20200915150202.24165-1-qiangqing.zhang@nxp.com>
+ <20200915093342.GA24139@gofer.mess.org>
+ <DB8PR04MB6795CB9F519D2BD277654B29E63E0@DB8PR04MB6795.eurprd04.prod.outlook.com>
+ <20200917204336.GA21441@gofer.mess.org>
+ <DB8PR04MB6795D5228426C7D93AF08081E63F0@DB8PR04MB6795.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-In-Reply-To: <20200918080335.GT4282@kadam>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <DB8PR04MB6795D5228426C7D93AF08081E63F0@DB8PR04MB6795.eurprd04.prod.outlook.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Ah, shoot - good spot, thanks
+Hi Joakim,
 
-On 18/09/2020 09:03, Dan Carpenter wrote:
-> I ran Smatch over the code and it spotted an off by one.
->
-> On Wed, Sep 16, 2020 at 10:36:18PM +0100, Daniel Scally wrote:
->> +#define MAX_CONNECTED_DEVICES			4
->> +#define SWNODE_SENSOR_HID			0
->> +#define SWNODE_SENSOR_PORT			1
->> +#define SWNODE_SENSOR_ENDPOINT			2
->> +#define SWNODE_CIO2_PORT			3
->> +#define SWNODE_CIO2_ENDPOINT			4
->> +#define SWNODE_NULL_TERMINATOR			5
->    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->
->> +struct sensor {
->> +	struct device *dev;
->> +	struct software_node swnodes[5];
->                              ^^^^^^^^^^
-> This needs to be 6 instead of 5 to prevent memory corruption.
->
->> +	struct property_entry sensor_props[6];
->> +	struct property_entry cio2_props[3];
->> +	struct fwnode_handle *fwnode;
->> +};
->
->> +		nodes[SWNODE_NULL_TERMINATOR]   = SOFTWARE_NODE_NULL;
->                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> Here.
->
-> regards,
-> dan carpenter
->
+On Fri, Sep 18, 2020 at 01:42:15AM +0000, Joakim Zhang wrote:
+> > -----Original Message-----
+> > From: Sean Young <sean@mess.org>
+> > Sent: 2020年9月18日 4:44
+> > To: Joakim Zhang <qiangqing.zhang@nxp.com>
+> > Cc: mchehab@kernel.org; linux-media@vger.kernel.org;
+> > linux-kernel@vger.kernel.org; dl-linux-imx <linux-imx@nxp.com>
+> > Subject: Re: [PATCH] media: rc: gpio-ir-recv: add QoS support for cpuidle
+> > system
+
+-snip-
+
+> > > Autosuspend delay should be fixed value, should be set to gpio device timeout
+> > value, which is 125ms.
+> > 
+> > So the idea was that cpuidle is only enabled while IR frames are being received,
+> > that's why I suggested it.
+> 
+> May be a typo, "cpuidle is only DISABLED while IR frames are being receive,", this is not I want to implement, experiments have also shown poor results.
+
+Sorry, yes I got this wrong. You are right.
+
+> > If you set the autosuspend delay to 125ms, then the cpuidle will not be enabled
+> > between IR frames. Maybe this is what you want, but it does mean cpuidle is
+> > totally suspended while anyone is pressing buttons on a remote.
+> 
+> Yes, this is what I want, cpuidle is totally disabled while pressing buttons, disable cpuidle at the first frame then keep disabled until there is no activity for a while.
+> So that we only can not decode the first frame, such as, if transmitting 4 frames once, we can correctly decode 3 times.
+> 
+> I also try your suggestion, set autosuspend delay time to protocol's timeout value, but the result is terrible. If transmitting 4 frames once, we can't correctly decode 3 times,
+> even can't decode it sometime. The sequence is, cpu in idle state when the first frame coming, then disable cpu idle until protocols' timeout, cpu in idle state again, the first frame can't be decoded.
+> The second frame coming, it will repeat the behavior of the first frame, may cause the second frame can't be decode......
+> 
+> Can you take account of I have done in the first version, autosuspend delay time is set to 125ms?
+
+Yes, in retrospect you are right. Trying to shorten the cpuidle suspended
+period will not work. I am sorry about this.
+
+How about setting the autosuspend period in devicetree, and 0 will turn
+this feature off completely?
+
+Thanks,
+
+Sean
