@@ -2,54 +2,59 @@ Return-Path: <SRS0=ldJM=C3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2097C43464
-	for <linux-media@archiver.kernel.org>; Fri, 18 Sep 2020 06:23:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CADEC43464
+	for <linux-media@archiver.kernel.org>; Fri, 18 Sep 2020 06:40:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9B512208B8
-	for <linux-media@archiver.kernel.org>; Fri, 18 Sep 2020 06:23:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1FC8A206A2
+	for <linux-media@archiver.kernel.org>; Fri, 18 Sep 2020 06:40:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726285AbgIRGX3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 18 Sep 2020 02:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37074 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726022AbgIRGX3 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 18 Sep 2020 02:23:29 -0400
-Received: from hillosipuli.retiisi.org.uk (hillosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::81:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2ABC06174A;
-        Thu, 17 Sep 2020 23:23:29 -0700 (PDT)
-Received: from valkosipuli.localdomain (valkosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::80:2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id DE24B634C87;
-        Fri, 18 Sep 2020 09:22:37 +0300 (EEST)
-Received: from sailus by valkosipuli.localdomain with local (Exim 4.92)
-        (envelope-from <sakari.ailus@retiisi.org.uk>)
-        id 1kJ9n4-00024T-2j; Fri, 18 Sep 2020 09:22:38 +0300
-Date:   Fri, 18 Sep 2020 09:22:38 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Dan Scally <djrscally@gmail.com>
-Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        heikki.krogerus@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        kieran.bingham@ideasonboard.com, jorhand@linux.microsoft.com,
-        kitakar@gmail.com
-Subject: Re: [PATCH v2] software_node: Add support for fwnode_graph*() family
- of functions
-Message-ID: <20200918062237.GP834@valkosipuli.retiisi.org.uk>
-References: <20200915232827.3416-1-djrscally@gmail.com>
- <20200916091707.GL834@valkosipuli.retiisi.org.uk>
- <7b81d743-736d-62d1-7072-d08759a0d5d7@gmail.com>
+        id S1726290AbgIRGkv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 18 Sep 2020 02:40:51 -0400
+Received: from mga02.intel.com ([134.134.136.20]:30753 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726119AbgIRGku (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 18 Sep 2020 02:40:50 -0400
+IronPort-SDR: TGq/yEMe3kL4dwKTfg9urBP3+sG2Hu79wwhciY9OjO7KtoH0HzLtFs+tfAAFRwCG8Taif3fmqu
+ 6W/liCuD6C8g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9747"; a="147555658"
+X-IronPort-AV: E=Sophos;i="5.77,274,1596524400"; 
+   d="scan'208";a="147555658"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2020 23:40:49 -0700
+IronPort-SDR: /eF7IF2j1x7n1JHSe18rHooFEKh3iBpe6c6o7ZFey4vATigNWf85BIqU9ZIQAdLQ+RY6897kLT
+ EThJEbfk+/aA==
+X-IronPort-AV: E=Sophos;i="5.77,274,1596524400"; 
+   d="scan'208";a="307770713"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2020 23:40:45 -0700
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id 25BDB20815; Fri, 18 Sep 2020 09:40:43 +0300 (EEST)
+Date:   Fri, 18 Sep 2020 09:40:43 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Daniel Scally <djrscally@gmail.com>, devel@driverdev.osuosl.org,
+        robh@kernel.org, andriy.shevchenko@linux.intel.com,
+        jorhand@linux.microsoft.com, linux-media@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        kieran.bingham@ideasonboard.com, kitakar@gmail.com,
+        bingbu.cao@intel.com, mchehab@kernel.org, davem@davemloft.net,
+        tian.shu.qiu@intel.com, yong.zhi@intel.com
+Subject: Re: [RFC PATCH] Add bridge driver to connect sensors to CIO2 device
+ via software nodes on ACPI platforms
+Message-ID: <20200918064043.GE26842@paasikivi.fi.intel.com>
+References: <20200916213618.8003-1-djrscally@gmail.com>
+ <20200917103343.GW26842@paasikivi.fi.intel.com>
+ <20200917104941.GP4282@kadam>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7b81d743-736d-62d1-7072-d08759a0d5d7@gmail.com>
+In-Reply-To: <20200917104941.GP4282@kadam>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -57,73 +62,42 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Hi Dan,
 
-On Wed, Sep 16, 2020 at 02:22:10PM +0100, Dan Scally wrote:
-> Hi Sakari - thanks for the comments
+On Thu, Sep 17, 2020 at 01:49:41PM +0300, Dan Carpenter wrote:
+> On Thu, Sep 17, 2020 at 01:33:43PM +0300, Sakari Ailus wrote:
+> > > +static int connect_supported_devices(void)
+> > > +{
+> > > +	struct acpi_device *adev;
+> > > +	struct device *dev;
+> > > +	struct sensor_bios_data ssdb;
+> > > +	struct sensor *sensor;
+> > > +	struct property_entry *sensor_props;
+> > > +	struct property_entry *cio2_props;
+> > > +	struct fwnode_handle *fwnode;
+> > > +	struct software_node *nodes;
+> > > +	struct v4l2_subdev *sd;
+> > > +	int i, ret;
+> > 
+> > unsigned int i
+> > 
 > 
-> On 16/09/2020 10:17, Sakari Ailus wrote:
-> > Moi Daniel and Heikki,
-> >
-> > On Wed, Sep 16, 2020 at 12:28:27AM +0100, Daniel Scally wrote:
-> >> From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> >>
-> >> This implements the remaining .graph_* callbacks in the
-> >> fwnode operations vector for the software nodes. That makes
-> >> the fwnode_graph*() functions available in the drivers also
-> >> when software nodes are used.
-> >>
-> >> The implementation tries to mimic the "OF graph" as much as
-> >> possible, but there is no support for the "reg" device
-> >> property. The ports will need to have the index in their
-> >> name which starts with "port" (for example "port0", "port1",
-> >> ...) and endpoints will use the index of the software node
-> >> that is given to them during creation. The port nodes can
-> >> also be grouped under a specially named "ports" subnode,
-> >> just like in DT, if necessary.
-> >>
-> >> The remote-endpoints are reference properties under the
-> >> endpoint nodes that are named "remote-endpoint". 
-> >>
-> >> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> >> Co-developed-by: Daniel Scally <djrscally@gmail.com>
-> >> Signed-off-by: Daniel Scally <djrscally@gmail.com>
-> >> ---
-> >> changes in v2:
-> >> 	- added software_node_device_is_available
-> >> 	- altered software_node_get_next_child to get references
-> >> 	- altered software_node_get_next_endpoint to release references
-> >> 	to ports and avoid passing invalid combinations of swnodes to
-> >> 	software_node_get_next_child
-> >> 	- altered swnode_graph_find_next_port to release port rather than
-> >> 	old
-> >> 	
-> >>  drivers/base/swnode.c | 129 +++++++++++++++++++++++++++++++++++++++++-
-> >>  1 file changed, 127 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/drivers/base/swnode.c b/drivers/base/swnode.c
-> >> index 010828fc785b..d69034b807e3 100644
-> >> --- a/drivers/base/swnode.c
-> >> +++ b/drivers/base/swnode.c
-> >> @@ -363,6 +363,11 @@ static void software_node_put(struct fwnode_handle *fwnode)
-> >>  	kobject_put(&swnode->kobj);
-> >>  }
-> >>  
-> >> +static bool software_node_device_is_available(const struct fwnode_handle *fwnode)
-> >> +{
-> >> +	return is_software_node(fwnode);
-> > This basically tells whether the device is there. Are there software node
-> > based devices, i.e. do you need this?
-> >
-> > If you do really need this, then I guess this could just return true for
-> > now as if you somehow get here, the node is a software node anyway.
+> Why?
 > 
-> I do think its better to include it; I'm targeting using this with
-> ipu3-cio2; the cio2_parse_firmware() call there doesn't pass
-> FWNODE_GRAPH_DEVICE_DISABLED to fwnode_graph_get_endpoint_by_id() so
+> For list iterators then "int i;" is best...  For sizes then unsigned is
+> sometimes best.  Or if it's part of the hardware spec or network spec
+> unsigned is best.  Otherwise unsigned variables cause a ton of bugs.
+> They're not as intuitive as signed variables.  Imagine if there is an
+> error in this loop and you want to unwind.  With a signed variable you
+> can do:
+> 
+> 	while (--i >= 0)
+> 		cleanup(&bridge.sensors[i]);
+> 
+> There are very few times where raising the type maximum from 2 billion
+> to 4 billion fixes anything.
 
-I wonder if this has something to do with replacing the device's fwnode
-in the cio2-bridge patch.
-
-It's the device that needs to be enabled, and it's not a software node.
+There's simply no need for the negative integers here. Sizes (as it's a
+size here) are unsigned, too, so you'd be comparing signed and unsigned
+numbers later in the function.
 
 -- 
 Regards,
