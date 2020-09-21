@@ -2,147 +2,212 @@ Return-Path: <SRS0=F5P7=C6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B35EC43466
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:13:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AEAEAC43463
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:20:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0A69C2193E
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:13:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 717E4218AC
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:20:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="RAPzGpwE"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="Ge816K6x"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726413AbgIUKNx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Sep 2020 06:13:53 -0400
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:64054 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726326AbgIUKNx (ORCPT
+        id S1726752AbgIUKUe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Sep 2020 06:20:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726738AbgIUKUe (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Sep 2020 06:13:53 -0400
-X-Greylist: delayed 1093 seconds by postgrey-1.27 at vger.kernel.org; Mon, 21 Sep 2020 06:13:53 EDT
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 08L9pWWt008800;
-        Mon, 21 Sep 2020 04:55:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=WW55bEkB7c/YZlSmO/EfsOHzstbkfstuef6OZNz+13c=;
- b=RAPzGpwEZK3EtSkcJz7IYXubWw2d6vb6Z6COv6mOaxlza+Ftd/N2PHUA2t3OLLhg9MRd
- dxTDwjvSV/TID0foNaLZz3+H9VO8ks5/8xrChPwooO9+ksEz/70TxbI5uYBWyRrU36sq
- Ze9KCk7CYEZkWRqrzvTMiTRivlzUuGb1JvFVsYtmpwUKuG7SzkKExtro+H7XbmuipSmU
- k8r1CiI8Zlx7e8Tsj9mAdmuSctFUgls3OecRoKIuIwYX5KuT41ylOE4qZuquJ4PIdGs4
- yHgXUdbVhSQT27Y9wzfFVRDnPRPEFVTRMBnMxBB4w0623C05G4+qIMNcp5ckp8uAITlz zA== 
-Received: from ediex01.ad.cirrus.com ([87.246.76.36])
-        by mx0a-001ae601.pphosted.com with ESMTP id 33nfd221ju-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 21 Sep 2020 04:55:21 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Mon, 21 Sep
- 2020 10:55:19 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.1913.5 via Frontend
- Transport; Mon, 21 Sep 2020 10:55:19 +0100
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id E4D5A2C3;
-        Mon, 21 Sep 2020 09:55:18 +0000 (UTC)
-Date:   Mon, 21 Sep 2020 09:55:18 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-CC:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Hoan Tran <hoan@os.amperecomputing.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Sungbo Eo <mans0n@gorani.run>, Stefan Agner <stefan@agner.ch>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Yash Shah <yash.shah@sifive.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        - <patches@opensource.cirrus.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Amelie Delaunay <amelie.delaunay@st.com>,
-        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Andy Teng <andy.teng@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Sricharan R <sricharan@codeaurora.org>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, <linux-gpio@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-unisoc@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <linux-media@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH v2 09/13] dt-bindings: pinctrl: include common schema in
- GPIO controllers
-Message-ID: <20200921095518.GQ10899@ediswmail.ad.cirrus.com>
-References: <20200917165301.23100-1-krzk@kernel.org>
- <20200917165301.23100-10-krzk@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20200917165301.23100-10-krzk@kernel.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0
- priorityscore=1501 impostorscore=0 phishscore=0 suspectscore=0
- mlxlogscore=807 adultscore=0 clxscore=1015 malwarescore=0 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009210071
+        Mon, 21 Sep 2020 06:20:34 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFA1C061755
+        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:20:32 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id w5so12116307wrp.8
+        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:20:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id;
+        bh=P114LNEQNNS9Xncao7G55/+Y79iVyKDqvr9Jcf50RWg=;
+        b=Ge816K6xH8yGoe0zeqBNbGeD8dUcZqlLPClrIpQEx/9buJqnSewe3lxgGeilETM7T1
+         LLGeTdIXCcaEtNz9XuDZxgvB3OMVGocgQMMJaAiHvIur9lRuRHexce5FQzsYBhfboKwd
+         zmOHKRdmXIqaIUw0DfFtTmLkezmlmFsv5ta4pK9rqFzjcFwm98A2B5wJLPt+Sfg+KDsY
+         AOmthdyfN4R0lGZEvG//XlXFhzoleYoFEn1EAdk9W3zyoY5JzhUVMZAPwDKpImpOnaA8
+         xyeyjIOMWwEd9bhettsZ9az/xfBRdPNDMysyGV2sz+0V4A8imGy07FoQXthnXOJmkcJD
+         RA+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=P114LNEQNNS9Xncao7G55/+Y79iVyKDqvr9Jcf50RWg=;
+        b=UiSIWM9wIhRKbUiQyy4S2EP/UGcgAo9MQJdT/P+a36NlpW+JiBtbk5h3Auyud/hLwk
+         +cJYbq9nl9W/f5gKujOKUiYiAJ1FiSLFsAgTtEWgXcyMXs5EmX35M1aKmX4gbHhkWieo
+         +Ix+NG3d3PhkZSFCNo1R9JhnZ34gLywU00wSMdE5So4NUhFWZcqiN63cW+0EJslsLuEU
+         IBbi7ILlBQs4zN1QM6wDAI2odWDwO+NVQ6btsXj6bbLMbSrZynmfMNeQt4hTFzKQIobl
+         0JOL5Z/SeXT0wFma0LL5scnRJo395WnvjC67Nk25+lI0DjofpQF5G0kS1sDwJKdW/vkf
+         xkbw==
+X-Gm-Message-State: AOAM531OUifEcu6G/WHpKy6Fv9XCfZY+QUTwVg9VhbbvLuwTRwwnjT8U
+        r6CfqQkfCHDvnxMSwnSk0BeH1VqsP79Djg==
+X-Google-Smtp-Source: ABdhPJx3U+75iHspfhNxbPS5+Qo2TcAZCebOPLwZNmi52sDHPeD7v6uBea1FXv9SOWNpYLwsJ7mUDw==
+X-Received: by 2002:a5d:568d:: with SMTP id f13mr50607391wrv.303.1600683631278;
+        Mon, 21 Sep 2020 03:20:31 -0700 (PDT)
+Received: from localhost.localdomain ([51.15.160.169])
+        by smtp.googlemail.com with ESMTPSA id l17sm18804629wme.11.2020.09.21.03.20.30
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 21 Sep 2020 03:20:30 -0700 (PDT)
+From:   Corentin Labbe <clabbe@baylibre.com>
+To:     gregkh@linuxfoundation.org, laurent.pinchart@skynet.be,
+        mchehab@kernel.org
+Cc:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>
+Subject: [PATCH RFT/RFC 00/49] staging: media: bring back zoran driver
+Date:   Mon, 21 Sep 2020 10:19:35 +0000
+Message-Id: <1600683624-5863-1-git-send-email-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Sep 17, 2020 at 06:52:57PM +0200, Krzysztof Kozlowski wrote:
-> Include the common GPIO schema in GPIO controllers to be sure all common
-> properties are properly validated.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> 
-> ---
+Hello
 
-For the Cirrus bits:
+The zoran driver was removed in 5.3
+The main reason of the removing was lack of motivation to convert it to
+VB2
+Since I need it, I worked on bringing it back.
 
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+So the plan to achieve it was:
+- clean up the coding style.
+- convert old usage/API
+- clean unused code
+- convert to VB2
 
-Thanks,
-Charles
+I have tried to split a bit the VB2 patch (by adding/removing code in
+another patch), but the result is unfortunately still a big patch.
+
+The result of this serie is a working zoran driver.
+Furthermore it is now compliant to v4l-compliance.
+
+In the process some old (useless) feature (fbuf, overlay) was removed
+for simplifying maintenance.
+
+The zoran hardware support MJPEG decompression, but this feature is
+temporarily disabled by this serie.
+But basically, this feature was unusable, since the only tool which
+permitted to use it was a mplayer option.
+But this mplayer option no longer compile (probably since a long time)
+and is such a hack (a copy of some private ffmpeg structure) that it is unfixable.
+Happily, when I started to work on zoran, a patch was posted on ffmpeg
+ML which permit it to output non-raw video stream (and so MJPEG for zoran case).
+But the zoran hw does not like some part of JPEG header it receives, so
+a filter need to be written.
+Anyway, this disabling is not a regression, since this feature was not
+usable since a long time.
+
+Since the driver was in staging, I targeted staging, but probably the
+driver is in a sufficient good shape to target media and bypass staging.
+
+This driver is tested on a DC10+ (on x86). Tests on different hardware
+are welcome.
+
+I would like to thanks all people that helped me to achieve this (mostly #v4l)
+
+Regards
+
+Corentin Labbe (49):
+  staging: media: Revert "media: zoran: remove deprecated driver"
+  MAINTAINERS: change maintainer of the zoran driver
+  staging: media: zoran: datasheet is no longer available from zoran.com
+  staging: media: zoran: Documentation: fix typo
+  staging: media: zoran: fix checkpatch issue
+  staging: media: zoran: unsplit lines
+  staging: media: zoran: do not forward declare zr36057_init_vfe
+  staging: media: zoran: convert all error dprintk to pci_err/pr_err
+  staging: media: zoran: convert dprintk warn
+  staging: media: zoran: convert dprintk info to pci_info
+  staging: media: zoran: convert dprintk debug
+  staging: media: zoran: zoran_device.c: convert pr_x to pci_x
+  staging: media: zoran: remove proc_fs
+  staging: media: zoran: use VFL_TYPE_VIDEO
+  staging: media: zoran: use v4l2_buffer_set_timestamp
+  staging: media: zoran: do not print random guest 0
+  staging: media: zoran: move buffer_size out of zoran_fh
+  staging: media: zoran: move v4l_settings out of zoran_fh
+  staging: media: zoran: move jpg_settings out of zoran_fh
+  staging: media: zoran: move overlay_settings out of zoran_fh
+  staging: media: zoran: Use video_drvdata to get struct zoran
+  staging: media: zoran: Change zoran_v4l_set_format parameter from
+    zoran_fh to zoran
+  staging: media: zoran: remove overlay
+  staging: media: zoran: Use DMA coherent for stat_com
+  staging: media: zoran: use ZR_NORM
+  staging: media: zoran: zoran does not support STD_ALL
+  staging: media: zoran: convert irq to pci irq
+  staging: media: zoran: convert zoran alloc to devm
+  staging: media: zoran: convert mdelay to udelay
+  staging: media: zoran: use devm for videocodec_master alloc
+  staging: media: zoran: use pci_request_regions
+  staging: media: zoran: use devm_ioremap
+  staging: media: zoran: add stat_com buffer
+  staging: media: zoran: constify struct tvnorm
+  staging: media: zoran: constify codec_name
+  staging: media: zoran: Add more check for compliance
+  staging: media: zoran: add fallthrough keyword
+  staging: media: zoran: Add vb_queue
+  staging: media: zoran: disable output
+  staging: media: zoran: device support only 32bit DMA address
+  staging: media: zoran: enable makefile
+  staging: media: zoran: remove framebuffer support
+  staging: media: zoran: add vidioc_g_parm
+  staging: media: zoran: remove test_interrupts
+  staging: media: zoran: fix use of buffer_size and sizeimage
+  staging: media: zoran: fix some compliance test
+  staging: media: zoran: remove deprecated .vidioc_g_jpegcomp
+  staging: media: zoran: convert to vb2
+  staging: media: zoran: update TODO
+
+ Documentation/media/v4l-drivers/zoran.rst  |  575 +++++++++
+ MAINTAINERS                                |   10 +
+ drivers/staging/media/Kconfig              |    2 +
+ drivers/staging/media/Makefile             |    1 +
+ drivers/staging/media/zoran/Kconfig        |   76 ++
+ drivers/staging/media/zoran/Makefile       |    7 +
+ drivers/staging/media/zoran/TODO           |   19 +
+ drivers/staging/media/zoran/videocodec.c   |  330 +++++
+ drivers/staging/media/zoran/videocodec.h   |  308 +++++
+ drivers/staging/media/zoran/zoran.h        |  320 +++++
+ drivers/staging/media/zoran/zoran_card.c   | 1320 ++++++++++++++++++++
+ drivers/staging/media/zoran/zoran_card.h   |   30 +
+ drivers/staging/media/zoran/zoran_device.c | 1002 +++++++++++++++
+ drivers/staging/media/zoran/zoran_device.h |   64 +
+ drivers/staging/media/zoran/zoran_driver.c | 1022 +++++++++++++++
+ drivers/staging/media/zoran/zr36016.c      |  433 +++++++
+ drivers/staging/media/zoran/zr36016.h      |   92 ++
+ drivers/staging/media/zoran/zr36050.c      |  842 +++++++++++++
+ drivers/staging/media/zoran/zr36050.h      |  163 +++
+ drivers/staging/media/zoran/zr36057.h      |  154 +++
+ drivers/staging/media/zoran/zr36060.c      |  872 +++++++++++++
+ drivers/staging/media/zoran/zr36060.h      |  201 +++
+ 22 files changed, 7843 insertions(+)
+ create mode 100644 Documentation/media/v4l-drivers/zoran.rst
+ create mode 100644 drivers/staging/media/zoran/Kconfig
+ create mode 100644 drivers/staging/media/zoran/Makefile
+ create mode 100644 drivers/staging/media/zoran/TODO
+ create mode 100644 drivers/staging/media/zoran/videocodec.c
+ create mode 100644 drivers/staging/media/zoran/videocodec.h
+ create mode 100644 drivers/staging/media/zoran/zoran.h
+ create mode 100644 drivers/staging/media/zoran/zoran_card.c
+ create mode 100644 drivers/staging/media/zoran/zoran_card.h
+ create mode 100644 drivers/staging/media/zoran/zoran_device.c
+ create mode 100644 drivers/staging/media/zoran/zoran_device.h
+ create mode 100644 drivers/staging/media/zoran/zoran_driver.c
+ create mode 100644 drivers/staging/media/zoran/zr36016.c
+ create mode 100644 drivers/staging/media/zoran/zr36016.h
+ create mode 100644 drivers/staging/media/zoran/zr36050.c
+ create mode 100644 drivers/staging/media/zoran/zr36050.h
+ create mode 100644 drivers/staging/media/zoran/zr36057.h
+ create mode 100644 drivers/staging/media/zoran/zr36060.c
+ create mode 100644 drivers/staging/media/zoran/zr36060.h
+
+-- 
+2.26.2
+
