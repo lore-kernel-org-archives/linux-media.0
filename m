@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-14.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6A9DC43464
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 11:44:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF8C7C43463
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 11:44:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7CE372151B
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 11:44:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 96D8F20EDD
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 11:44:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600688642;
-	bh=h4vw0dOiXQMRt/AgAEMeZykxfRjEd/JNCK+k10oChk8=;
+	s=default; t=1600688648;
+	bh=VaE4tWXufOp7oxEs2ZEserdffhxIbjWsWcM033VCLe0=;
 	h=From:Cc:Subject:Date:In-Reply-To:References:To:List-ID:From;
-	b=sZOg2uGodlD+vFnekoEMlWveN8xWXkmcW8KMGnBs8a2B3WaKWmdnJocqPSbNykc91
-	 LJ2XV+9dLoV9RDUAOSn4dkRzaVwzaV1sMndmNjXaCKyaTu/mPHJ9me52rZwe1XWzgD
-	 eqd84LBgUBGx55y9ruqY0Ni9xkFp8TpPHCvJFSmU=
+	b=jTb/GFxEn2i59C3IjPSd9O0rlBbA4idft2MgajxfOUDk3iooE+h5x1OV63jKV2FoT
+	 2nkPpS+WQtmXsNjt1KH9nI2OmIC+nevDskuiSYkXY6UqL4BsucpjDEMCHmsYehhZZw
+	 APdaVkH/uKUdHeFMFhbqYc8IHF0EGJL5Uxj4m+XA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726929AbgIULoB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1726920AbgIULoB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 21 Sep 2020 07:44:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60130 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:60132 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726584AbgIULnv (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Sep 2020 07:43:51 -0400
+        id S1726795AbgIULnw (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 21 Sep 2020 07:43:52 -0400
 Received: from mail.kernel.org (ip5f5ad5b1.dynamic.kabel-deutschland.de [95.90.213.177])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 52D752151B;
-        Mon, 21 Sep 2020 11:43:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 38EDA20EDD;
+        Mon, 21 Sep 2020 11:43:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600688630;
-        bh=h4vw0dOiXQMRt/AgAEMeZykxfRjEd/JNCK+k10oChk8=;
+        s=default; t=1600688631;
+        bh=VaE4tWXufOp7oxEs2ZEserdffhxIbjWsWcM033VCLe0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q5HZsyoPMbZrvC5iY8+VF1LATDlMwulISpbaKTw2gz88/j1UO2HkNHIUuYSx2JaAW
-         5GXeHu+uNOeetx/v+2/8SH7Z0WiBLHTl6TwIIwILFHKNQNgUEu2QGQPJVGxshJS4+b
-         hrZiPWtVQzFH9vSMCs2ClrWhTEyAyQ7P7doKh2DA=
+        b=Gq2r1qm7fNdV/La/t+adrJ1EgJ8BG43remzDFbnz2Zuy7k0wp7FaRsnpQB2D+TDe3
+         30hQca1/KAy355zkJtxuMARC4DfW3um1LvYS5QFHxBk4arL0hRhXr2s4ho7ARhBXEu
+         5gopHtXk7NiiTBwfdThnIH2BcowaJRkV4rfbyn9s=
 Received: from mchehab by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1kKKEW-0004VE-4N; Mon, 21 Sep 2020 13:43:48 +0200
+        id 1kKKEW-0004VA-2N; Mon, 21 Sep 2020 13:43:48 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 5/9] media: vidtv: cleanup SDT string identifiers
-Date:   Mon, 21 Sep 2020 13:43:42 +0200
-Message-Id: <1eaa1a66b0aa56d76c4a5b248cca7baf8a9053d3.1600688419.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 3/9] media: vidtv: fix initialization of the network_id field at SDT
+Date:   Mon, 21 Sep 2020 13:43:40 +0200
+Message-Id: <81d9bf38ccf2a5ad014772261b2169aedce22280.1600688419.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1600688419.git.mchehab+huawei@kernel.org>
 References: <cover.1600688419.git.mchehab+huawei@kernel.org>
@@ -60,80 +60,39 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In order to better test userspace applications, add an encoding
-for the strings. The original channel string is also too big.
-As we're just playing the first compasses of the 5th Beethoven
-Symphony, change the service name to just "Beethoven". Also,
-add a provider's name. For such purpose, let's point it to
-the Linux media community website.
+This field should point to the network ID, and has different
+ranges for cable, terrestrial or satellite. It also has
+an special range for temporary private usage.
 
-With such changes, the SDT table now looks more like one got
-from a real digital TV channel:
-
-SDT
-| table_id         0x42
-| section_length      44
-| one                 2
-| zero                1
-| syntax              1
-| transport_stream_id 1860
-| current_next        1
-| version             0
-| one2                3
-| section_number      0
-| last_section_number 0
-| network_id          65281
-| reserved            255
-|\
-|- service 0x0880
-|   EIT schedule          0
-|   EIT present following 0
-|   free CA mode          0
-|   running status        4
-|   descriptor length     27
-|        0x48: service_descriptor
-|           service type  1
-|           provider      'LinuxTV.org'
-|           name          'Beethoven'
-|_  1 services
+For now, let's use the temporary private one. Once the
+Network Information Table (NIT) gets added, this should be
+reviewed.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/test-drivers/vidtv/vidtv_channel.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/media/test-drivers/vidtv/vidtv_psi.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_channel.c b/drivers/media/test-drivers/vidtv/vidtv_channel.c
-index 0a62b97e6a27..f2b97cf08e87 100644
---- a/drivers/media/test-drivers/vidtv/vidtv_channel.c
-+++ b/drivers/media/test-drivers/vidtv/vidtv_channel.c
-@@ -43,6 +43,8 @@ static void vidtv_channel_encoder_destroy(struct vidtv_encoder *e)
- 	}
- }
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_psi.c b/drivers/media/test-drivers/vidtv/vidtv_psi.c
+index 8cdf645b4fdd..5fe3fbb765b8 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_psi.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_psi.c
+@@ -1107,7 +1107,14 @@ struct vidtv_psi_table_sdt *vidtv_psi_sdt_table_init(u16 transport_stream_id)
+ 	sdt->header.section_id   = 0;
+ 	sdt->header.last_section = 0;
  
-+#define ENCODING_ISO8859_15 "\x0b"
-+
- struct vidtv_channel
- *vidtv_channel_s302m_init(struct vidtv_channel *head, u16 transport_stream_id)
- {
-@@ -55,7 +57,8 @@ struct vidtv_channel
- 	const u16 s302m_es_pid              = 0x111; /* packet id for the ES */
- 	const __be32 s302m_fid              = cpu_to_be32(VIDTV_S302M_FORMAT_IDENTIFIER);
+-	sdt->network_id = cpu_to_be16(transport_stream_id);
++	/*
++	 * FIXME: The network_id range from 0xFF01 to 0xFFFF is used to
++	 * indicate temporary private use. For now, let's use the first
++	 * value.
++	 * This can be changed to something more useful, when support for
++	 * NIT gets added
++	 */
++	sdt->network_id = cpu_to_be16(0xff01);
+ 	sdt->reserved = RESERVED;
  
--	char *name = "S302m: Sine Wave PCM Audio";
-+	char *name = ENCODING_ISO8859_15 "Beethoven";
-+	char *provider = ENCODING_ISO8859_15 "LinuxTV.org";
- 
- 	struct vidtv_channel *s302m = kzalloc(sizeof(*s302m), GFP_KERNEL);
- 	struct vidtv_s302m_encoder_init_args encoder_args = {};
-@@ -68,7 +71,7 @@ struct vidtv_channel
- 				     vidtv_psi_service_desc_init(NULL,
- 								 DIGITAL_TELEVISION_SERVICE,
- 								 name,
--								 NULL);
-+								 provider);
- 
- 	s302m->transport_stream_id = transport_stream_id;
- 
+ 	vidtv_psi_sdt_table_update_sec_len(sdt);
 -- 
 2.26.2
 
