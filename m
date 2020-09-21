@@ -2,110 +2,89 @@ Return-Path: <SRS0=F5P7=C6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D65ADC4363C
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 21:40:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8CCDC4727C
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 21:54:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 98C0523A61
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 21:40:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ABB8B23A65
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 21:54:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="r3R+jRS2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZUjpmkz9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727059AbgIUVjr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Sep 2020 17:39:47 -0400
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:10722 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726452AbgIUVjr (ORCPT
+        id S1726452AbgIUVyU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Sep 2020 17:54:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53696 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727321AbgIUVyQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Sep 2020 17:39:47 -0400
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5f691d750000>; Mon, 21 Sep 2020 14:39:01 -0700
-Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 21 Sep
- 2020 21:39:46 +0000
-Received: from skomatineni-linux.nvidia.com (172.20.13.39) by
- HQMAIL107.nvidia.com (172.20.187.13) with Microsoft SMTP Server id
- 15.0.1473.3 via Frontend Transport; Mon, 21 Sep 2020 21:39:46 +0000
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <sakari.ailus@iki.fi>,
-        <hverkuil@xs4all.nl>, <jacopo+renesas@jmondi.org>,
-        <luca@lucaceresoli.net>, <leonl@leopardimaging.com>,
-        <robh+dt@kernel.org>, <lgirdwood@gmail.com>, <broonie@kernel.org>
-CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v6 0/3] IMX274 fixes and power on and off implementation
-Date:   Mon, 21 Sep 2020 14:39:36 -0700
-Message-ID: <1600724379-7324-1-git-send-email-skomatineni@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-X-NVConfidentiality: public
+        Mon, 21 Sep 2020 17:54:16 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A00C0613CF;
+        Mon, 21 Sep 2020 14:54:16 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id w2so1080261wmi.1;
+        Mon, 21 Sep 2020 14:54:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1e2+LFvtNs54bJO28h42rbrhZqmujvH9xIDpVdek6Gs=;
+        b=ZUjpmkz90uzc0mOzSbfJeBueL4Oi94IPGMGmo3qTaczNgiBFIp1aiE/CAdCr6WkblL
+         85sZg6DO2zAX3GUZ8cNi3nk0w6Z0jsjLjlD7//mhEQ26qawSWNRV0IauivYaGyZKhCmA
+         oY7b99kUs65dPs7tDUBlYMiVMeRxBVsKRWtvtqL6ZJbRmoojU2i8tNZpPqK/CDXZUZMW
+         KcJw2qIlaALk+w3NgUcPIuEanySvsJtMCJyPx2nk1le3dAB0WU3QGX5MhujjDbyRrAOe
+         +dTWOJgo+hjazpkOXd9dsAbpLNF9O8qnxf7ZGVK4W//ZEMqJYZBq8bm9B8fHRiMT/Jmp
+         p/jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1e2+LFvtNs54bJO28h42rbrhZqmujvH9xIDpVdek6Gs=;
+        b=JW8kXIyhtCWuYB7htiKtC1zGI/qAXR3bGnardvB7ZztND0Gv7LhXyFvzeaTJWzOr6w
+         FSHsSTjWXgevY47fQ0FfA91rpu5rdkzn/yNP5sDihy0mgDi1uRFe9UhLxVQ6nvCKhxTI
+         7ZqLDH20WEeqm8Ya52hbBL/BRLEIQvjVux8m9pP/SSbuA0KEiox4U694qIWT3em0Y++Q
+         iXEBc4aNqK9bJZe6pS8a+xceMZzJZ1Y3XpuTOsieOHqplXgEvB4UTrqI4iIJY01mmSq4
+         tlw7qy3M8uIyngMc/vtgZE2yHDRWhnZNsSWCd2dArkSsQsV2VnGni0MDy9EefKdaHrrL
+         icEw==
+X-Gm-Message-State: AOAM533ylPsVoWfNBM1amQSErfKTZmrcHz0x+e+7jpVTJnVjDsjacu9/
+        kD/+nrPaMoVhXf/LkbI+kaI=
+X-Google-Smtp-Source: ABdhPJyHePLFDLI5jbzVhYB8QGOYCkmS1RiKrmm/aDzZcSzswgFQO/kznU0v9WAUrLrnOj5kQMv/ng==
+X-Received: by 2002:a1c:2042:: with SMTP id g63mr1262709wmg.174.1600725255030;
+        Mon, 21 Sep 2020 14:54:15 -0700 (PDT)
+Received: from localhost.localdomain (cpc83661-brig20-2-0-cust443.3-3.cable.virginm.net. [82.28.105.188])
+        by smtp.gmail.com with ESMTPSA id t124sm1282200wmg.31.2020.09.21.14.54.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Sep 2020 14:54:14 -0700 (PDT)
+From:   Alex Dewar <alex.dewar90@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alex Dewar <alex.dewar90@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alan Cox <alan@linux.intel.com>, linux-media@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND 0/5] atomisp: Fixes and cleanups
+Date:   Mon, 21 Sep 2020 22:53:49 +0100
+Message-Id: <20200921215359.45003-1-alex.dewar90@gmail.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1600724341; bh=3ZrsgUrCYqNpkJgRT8cKF5nNh5zlSJzd4kSDO9zrOBg=;
-        h=From:To:CC:Subject:Date:Message-ID:X-Mailer:X-NVConfidentiality:
-         MIME-Version:Content-Type;
-        b=r3R+jRS2OoLgQWNqm328WHTybAtl3G4hMgNKJeaJdeZaOM5nd4FiPmm4HmDvwVRg2
-         WIOwBiE1gAjgmd0fnNrP61b7eaIqA5MPDqvOkJACH1pPwQTD3oBjSoY4VTj+SnIKPq
-         UmfISTWCdg87mZP6pUP811V9Tfvbt5stW9I9cg8srvyBjq2k7t+4GIzLL9/Udz2DZg
-         fOWWNkdNebtAJZwhm3Hbi6+lSncrccKgLAVVGtQKoB1hSgOjTvLvyBN20zq5CbjgHF
-         O8G4TLA094q6lnxKy78j0dei0ffigrwf3TNplIf10aXP38uNC2+vY0ErC8/Qh8r3fK
-         VJtP/ah93O4jA==
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch series includes
-- Fix for proper Y_OUT_SIZE register configuration.
-- Remove sensor i2c register writes to stop stream during remove.
-- Power on/off sequence implementation through runtime PM.
+Hi Mauro,
 
-Delta between patch versions:
-[v6]:	Includes below v5 feedback
-	- Added separate small patch to remove i2c writes to stop sensor
-	  during remove.
-	- Removed dt-binding patch from this series as they are posted by
-	  Jacob.
-	  https://www.spinics.net/lists/linux-renesas-soc/msg52831.html
-	- Uses udelay for 2uS delay after regulators are on before
-	  releasing reset.
-	- Moved v4l2_ctrl_handler setup to do during start streaming to
-	  configure user controls when sensor power is on during streaming.
-	- Other minor changes based on v5 feedback.
+Over the last month I've sent a few scattered patches to fix various
+warnings from static analysers, but they seem to have fallen through the
+cracks? I'm reposting them here as a series to make them easier to
+review. If you do have any feedback that'd be great :)
 
-[v5]:	Includes below v4 feedback
-	- dt-bindings patch to add optional clock and supplies and
-	  rebased on below json-schema patch.
-	  https://patchwork.kernel.org/patch/11732875/
-	- Other minor v4 feedbacks.
+Best,
+Alex
 
-[v4]:	Includes below v3 feedback
-	- Implemented power on/off through Runtime PM.
-	- Use regulator bulk APIs.
-	- Use lower case for supply names.
-
-[v3]:	Includes below v2 feedback
-	- Removed explicit clk_set_rate from driver as default external
-	  input clock rate can be configured through DT.
-
-[v2]:	Includes below changes based on v1 feedback
-	- External input clock name changed from xclk to inck.
-	- implementation change for get regulators to store all in array.
-	- To keep in reset low prior to regulators power on.
-
-
-Sowjanya Komatineni (3):
-  media: i2c: imx274: Fix Y_OUT_SIZE register setting
-  media: i2c: imx274: Remove stop stream i2c writes during remove
-  media: i2c: imx274: Add IMX274 power on and off sequence
-
- drivers/media/i2c/imx274.c | 187 ++++++++++++++++++++++++++++++++-------------
- 1 file changed, 134 insertions(+), 53 deletions(-)
-
--- 
-2.7.4
 
