@@ -7,32 +7,34 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC9D8C43464
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 08:03:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E89E1C43465
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 08:03:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A60BA21531
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 08:03:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AD02921531
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 08:03:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726912AbgIUIDV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Sep 2020 04:03:21 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:13786 "EHLO huawei.com"
+        id S1726710AbgIUIDU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Sep 2020 04:03:20 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:48064 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726334AbgIUIC0 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Sep 2020 04:02:26 -0400
-Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id B541EF959A893D63AD73;
-        Mon, 21 Sep 2020 16:02:24 +0800 (CST)
-Received: from huawei.com (10.175.113.32) by DGGEMS409-HUB.china.huawei.com
- (10.3.19.209) with Microsoft SMTP Server id 14.3.487.0; Mon, 21 Sep 2020
- 16:02:14 +0800
+        id S1726893AbgIUIC3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 21 Sep 2020 04:02:29 -0400
+Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id C81C425D22564A5CA31A;
+        Mon, 21 Sep 2020 16:02:26 +0800 (CST)
+Received: from huawei.com (10.175.113.32) by DGGEMS411-HUB.china.huawei.com
+ (10.3.19.211) with Microsoft SMTP Server id 14.3.487.0; Mon, 21 Sep 2020
+ 16:02:16 +0800
 From:   Liu Shixin <liushixin2@huawei.com>
-To:     Antti Palosaari <crope@iki.fi>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Liu Shixin <liushixin2@huawei.com>
-Subject: [PATCH -next] media: anysee: simplify the return expression of anysee_ci_* function
-Date:   Mon, 21 Sep 2020 16:24:38 +0800
-Message-ID: <20200921082438.2591513-1-liushixin2@huawei.com>
+To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>
+CC:     <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Liu Shixin <liushixin2@huawei.com>
+Subject: [PATCH -next] media: venus: simplify the return expression of venus_sys_set_* function
+Date:   Mon, 21 Sep 2020 16:24:40 +0800
+Message-ID: <20200921082440.2591617-1-liushixin2@huawei.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
@@ -47,60 +49,90 @@ Simplify the return expression.
 
 Signed-off-by: Liu Shixin <liushixin2@huawei.com>
 ---
- drivers/media/usb/dvb-usb-v2/anysee.c | 21 +++------------------
- 1 file changed, 3 insertions(+), 18 deletions(-)
+ drivers/media/platform/qcom/venus/hfi_venus.c | 28 +++----------------
+ 1 file changed, 4 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/media/usb/dvb-usb-v2/anysee.c b/drivers/media/usb/dvb-usb-v2/anysee.c
-index 89a1b204b90c..aa45b5d263f6 100644
---- a/drivers/media/usb/dvb-usb-v2/anysee.c
-+++ b/drivers/media/usb/dvb-usb-v2/anysee.c
-@@ -1171,14 +1171,9 @@ static int anysee_ci_write_attribute_mem(struct dvb_ca_en50221 *ci, int slot,
- 	int addr, u8 val)
+diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
+index 4be4a75ddcb6..05ddb68023b8 100644
+--- a/drivers/media/platform/qcom/venus/hfi_venus.c
++++ b/drivers/media/platform/qcom/venus/hfi_venus.c
+@@ -772,34 +772,24 @@ static int venus_sys_set_debug(struct venus_hfi_device *hdev, u32 debug)
  {
- 	struct dvb_usb_device *d = ci->data;
+ 	struct hfi_sys_set_property_pkt *pkt;
+ 	u8 packet[IFACEQ_VAR_SMALL_PKT_SIZE];
 -	int ret;
- 	u8 buf[] = {CMD_CI, 0x03, 0x40 | addr >> 8, addr & 0xff, 0x00, 1, val};
  
--	ret = anysee_ctrl_msg(d, buf, sizeof(buf), NULL, 0);
+ 	pkt = (struct hfi_sys_set_property_pkt *)packet;
+ 
+ 	pkt_sys_debug_config(pkt, HFI_DEBUG_MODE_QUEUE, debug);
+ 
+-	ret = venus_iface_cmdq_write(hdev, pkt);
 -	if (ret)
 -		return ret;
 -
 -	return 0;
-+	return anysee_ctrl_msg(d, buf, sizeof(buf), NULL, 0);
++	return venus_iface_cmdq_write(hdev, pkt);
  }
  
- static int anysee_ci_read_cam_control(struct dvb_ca_en50221 *ci, int slot,
-@@ -1200,14 +1195,9 @@ static int anysee_ci_write_cam_control(struct dvb_ca_en50221 *ci, int slot,
- 	u8 addr, u8 val)
+ static int venus_sys_set_coverage(struct venus_hfi_device *hdev, u32 mode)
  {
- 	struct dvb_usb_device *d = ci->data;
+ 	struct hfi_sys_set_property_pkt *pkt;
+ 	u8 packet[IFACEQ_VAR_SMALL_PKT_SIZE];
 -	int ret;
- 	u8 buf[] = {CMD_CI, 0x05, 0x40, addr, 0x00, 1, val};
  
--	ret = anysee_ctrl_msg(d, buf, sizeof(buf), NULL, 0);
+ 	pkt = (struct hfi_sys_set_property_pkt *)packet;
+ 
+ 	pkt_sys_coverage_config(pkt, mode);
+ 
+-	ret = venus_iface_cmdq_write(hdev, pkt);
 -	if (ret)
 -		return ret;
 -
 -	return 0;
-+	return anysee_ctrl_msg(d, buf, sizeof(buf), NULL, 0);
++	return venus_iface_cmdq_write(hdev, pkt);
  }
  
- static int anysee_ci_slot_reset(struct dvb_ca_en50221 *ci, int slot)
-@@ -1252,13 +1242,8 @@ static int anysee_ci_slot_shutdown(struct dvb_ca_en50221 *ci, int slot)
- static int anysee_ci_slot_ts_enable(struct dvb_ca_en50221 *ci, int slot)
+ static int venus_sys_set_idle_message(struct venus_hfi_device *hdev,
+@@ -807,7 +797,6 @@ static int venus_sys_set_idle_message(struct venus_hfi_device *hdev,
  {
- 	struct dvb_usb_device *d = ci->data;
+ 	struct hfi_sys_set_property_pkt *pkt;
+ 	u8 packet[IFACEQ_VAR_SMALL_PKT_SIZE];
 -	int ret;
  
--	ret = anysee_wr_reg_mask(d, REG_IOD, (0 << 1), 0x02);
+ 	if (!enable)
+ 		return 0;
+@@ -816,11 +805,7 @@ static int venus_sys_set_idle_message(struct venus_hfi_device *hdev,
+ 
+ 	pkt_sys_idle_indicator(pkt, enable);
+ 
+-	ret = venus_iface_cmdq_write(hdev, pkt);
 -	if (ret)
 -		return ret;
 -
 -	return 0;
-+	return anysee_wr_reg_mask(d, REG_IOD, (0 << 1), 0x02);
++	return venus_iface_cmdq_write(hdev, pkt);
  }
  
- static int anysee_ci_poll_slot_status(struct dvb_ca_en50221 *ci, int slot,
+ static int venus_sys_set_power_control(struct venus_hfi_device *hdev,
+@@ -828,17 +813,12 @@ static int venus_sys_set_power_control(struct venus_hfi_device *hdev,
+ {
+ 	struct hfi_sys_set_property_pkt *pkt;
+ 	u8 packet[IFACEQ_VAR_SMALL_PKT_SIZE];
+-	int ret;
+ 
+ 	pkt = (struct hfi_sys_set_property_pkt *)packet;
+ 
+ 	pkt_sys_power_control(pkt, enable);
+ 
+-	ret = venus_iface_cmdq_write(hdev, pkt);
+-	if (ret)
+-		return ret;
+-
+-	return 0;
++	return venus_iface_cmdq_write(hdev, pkt);
+ }
+ 
+ static int venus_get_queue_size(struct venus_hfi_device *hdev,
 -- 
 2.25.1
 
