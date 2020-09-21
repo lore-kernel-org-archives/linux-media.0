@@ -7,64 +7,64 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44AB2C43463
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:22:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F988C43465
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:22:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0A92C205F4
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:22:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6907820EDD
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:22:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="HaZ/lnL8"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="cNOdhewY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726988AbgIUKVM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Sep 2020 06:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59188 "EHLO
+        id S1726606AbgIUKWA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Sep 2020 06:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726970AbgIUKVJ (ORCPT
+        with ESMTP id S1726989AbgIUKVM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Sep 2020 06:21:09 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0E4C0613D5
-        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:21:08 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id z9so12017393wmk.1
-        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:21:08 -0700 (PDT)
+        Mon, 21 Sep 2020 06:21:12 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60BE6C0613D3
+        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:21:11 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id t10so12134484wrv.1
+        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:21:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=V00Hnz28PjN932GfSBJm8Se5vmkXoiml45tpc3tFwpc=;
-        b=HaZ/lnL8xJwtzBDX7pkXbgDeboSMizBazK0gCzI0dHsYPLpLlyswsfVyhdQp3u2Jmz
-         9l1oYpu73SdXGgeI4g5u5+/oH8VBWUwqUjhlwCmw43vV7kCJ16lsrIXzuFOOZt46QCY9
-         TVfzlCIcadcAg1/roRpMneGR78Okpyu4AwGgfBgUGxru63ojmPPGxpmO+JT8GfnOWCx3
-         jRx0CV/A+wlAK+xxdGWEitQgZLe4Mjontmac8ve/2H3v2ZXKqYmqUNpiA2lAMLOqLHfK
-         XWablPnh2HrJbQB/rPMfrEKiuajAd0h1jZtfQcLhD47NNA8MQm945AS/Ttxlu7gbGzCT
-         wupA==
+        bh=X+rFpG4vvom05OvyshLNJdJ8kwgKGSpX9C8YhBuxe5o=;
+        b=cNOdhewYGKl2YXjKJURDIdKsQu8ZURzvDXtycD++ZmmwaT+J5kQ3pbSlKC1ljvk1rb
+         7c9mM7lwiacjgzmwvAgZqpm1kttbtMjT/I+1RArtwZZzP+BmSylpv0oayqX6TuxbD1AL
+         YtAxB3UvYq7EPNfCtQPdFX+CqsLux1DiX9RG77Qg6/2jtASmro4jYFwhX5ZSnlwr8eJ3
+         5rwMXXBdln8bHX4yjru65FoT9fcu0bCqi5LVbEND7/ih/YnZo4HF33N3w8aem5HtqdAd
+         XH7qB8d4UKF8a5zjD2c4Zpu3TiAUisMPK5kiY48tVI0NvfXrE+ArvVK9tY0QmZ4spCa/
+         M4Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=V00Hnz28PjN932GfSBJm8Se5vmkXoiml45tpc3tFwpc=;
-        b=EifMCOcDUGNLVpjU8S+pPKRswufulDzJXourXEZ5yqIVozGah3LsWFULfO73BM3hrU
-         RLU/nMoSevDggcpItHJ7mqkliritDZOEofp+b9KaCA02HBe1IqrilKmhm5h0al/me6bl
-         zuv1lBSWsozYfmETtEH8IEmIDRo2Do1qGiCLPcAMvn0DO2AywdrgpxSWKpe/NYgfEkFJ
-         fVr/uqP10np5MOp1PsLFE37i2m3vht5jbcb+oZprE2OygE4CTNSCm0/WlEPLAkVtCkNk
-         /BE6GUGRSjV4MTNlVJxBUnTmGkkYnSeKcIMJZaQQp3ZZ0couI8eWXwIKHadO2JXwVOQv
-         CRGA==
-X-Gm-Message-State: AOAM530BObD5cjZm+YsC1rtBbKzWyzQyY88RXRx8KbfRLL6/6QhGoLhu
-        HY+Yh8BpMbGqaXhTSp1VLkLxVg==
-X-Google-Smtp-Source: ABdhPJwgbOyt3t2adMreBLWgBuOoAAdmy21xZ4x6cRhVH9rCZOfEVvotb2s8zR7J8LnaMYhvehXlog==
-X-Received: by 2002:a7b:c317:: with SMTP id k23mr28412728wmj.44.1600683667440;
-        Mon, 21 Sep 2020 03:21:07 -0700 (PDT)
+        bh=X+rFpG4vvom05OvyshLNJdJ8kwgKGSpX9C8YhBuxe5o=;
+        b=NsSsnNv2YFbcRvrb+aVGQb980luvU5fN4PjZf7Iw3y50Xr/7CPwzO7Bo+jjjWerUlL
+         iK7fbC9GzNGl4emdKEH+248c0b/y8OdXGmdMqE+TFMEpjnILgIdzm9/vVR61QsgUabg0
+         PV9747VL5EgAAdyoBRMSSel/PZIJXylY8vm8G2MNi1SGwbJ4Gh6agshst5DNDiSKoeMN
+         xPaX5VSLTQyev7Na+4Rr9zKS53IFYWm5ZIM3v/vww0tKzhVWu259pSR4avpLIXXfvy1y
+         bNeHEDM0LoLYxJu5sLe7u4YtdulYVaL0DQBaGP8oMzEhWrjEbnceiGrjjAc1ZgnxlQH3
+         CLnw==
+X-Gm-Message-State: AOAM5300UwwkMDyIbL9nIlfInUcKO4bgBeOB1W4qUyly9xSDNkBAXQfX
+        n1s+8cFFuQXbabv1fzcrJHa79g==
+X-Google-Smtp-Source: ABdhPJx5/I5MOZQ6v+bndDYnz6frgD0KgYbwoj30CpffrluyW6RiigjRwAq0J2375zGKyZudwb/chw==
+X-Received: by 2002:a5d:60cc:: with SMTP id x12mr51120033wrt.84.1600683670104;
+        Mon, 21 Sep 2020 03:21:10 -0700 (PDT)
 Received: from localhost.localdomain ([51.15.160.169])
-        by smtp.googlemail.com with ESMTPSA id l17sm18804629wme.11.2020.09.21.03.21.06
+        by smtp.googlemail.com with ESMTPSA id l17sm18804629wme.11.2020.09.21.03.21.09
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 21 Sep 2020 03:21:06 -0700 (PDT)
+        Mon, 21 Sep 2020 03:21:09 -0700 (PDT)
 From:   Corentin Labbe <clabbe@baylibre.com>
 To:     gregkh@linuxfoundation.org, laurent.pinchart@skynet.be,
         mchehab@kernel.org
 Cc:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH RFT/RFC 37/49] staging: media: zoran: add fallthrough keyword
-Date:   Mon, 21 Sep 2020 10:20:12 +0000
-Message-Id: <1600683624-5863-38-git-send-email-clabbe@baylibre.com>
+Subject: [PATCH RFT/RFC 40/49] staging: media: zoran: device support only 32bit DMA address
+Date:   Mon, 21 Sep 2020 10:20:15 +0000
+Message-Id: <1600683624-5863-41-git-send-email-clabbe@baylibre.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1600683624-5863-1-git-send-email-clabbe@baylibre.com>
 References: <1600683624-5863-1-git-send-email-clabbe@baylibre.com>
@@ -72,59 +72,30 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch adds fallthrough keyword where appropriate.
+The zoran device only supports 32bit DMA address.
 
 Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 ---
- drivers/staging/media/zoran/zoran_device.c | 6 ++++++
+ drivers/staging/media/zoran/zoran_card.c | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/drivers/staging/media/zoran/zoran_device.c b/drivers/staging/media/zoran/zoran_device.c
-index 9558bafdde7d..7634d94f9359 100644
---- a/drivers/staging/media/zoran/zoran_device.c
-+++ b/drivers/staging/media/zoran/zoran_device.c
-@@ -268,7 +268,9 @@ static void zr36057_adjust_vfe(struct zoran *zr, enum zoran_codec_mode mode)
- 		btwrite(reg, ZR36057_VFEHCR);
- 		break;
- 	case BUZ_MODE_MOTION_COMPRESS:
-+		fallthrough;
- 	case BUZ_MODE_IDLE:
-+		fallthrough;
- 	default:
- 		if ((zr->norm & V4L2_STD_NTSC) ||
- 		    (zr->card.type == LML33R10 &&
-@@ -521,6 +523,7 @@ static void zr36057_set_jpg(struct zoran *zr, enum zoran_codec_mode mode)
- 	/* MJPEG compression mode */
- 	switch (mode) {
- 	case BUZ_MODE_MOTION_COMPRESS:
-+		fallthrough;
- 	default:
- 		reg = ZR36057_JMC_MJPGCmpMode;
- 		break;
-@@ -582,6 +585,7 @@ static void zr36057_set_jpg(struct zoran *zr, enum zoran_codec_mode mode)
- 	/* NOTE: decimal values here */
- 	switch (mode) {
- 	case BUZ_MODE_STILL_COMPRESS:
-+		fallthrough;
- 	case BUZ_MODE_MOTION_COMPRESS:
- 		if (zr->card.type != BUZ)
- 			reg = 140;
-@@ -590,6 +594,7 @@ static void zr36057_set_jpg(struct zoran *zr, enum zoran_codec_mode mode)
- 		break;
+diff --git a/drivers/staging/media/zoran/zoran_card.c b/drivers/staging/media/zoran/zoran_card.c
+index 864196e7acae..ab16a70a7451 100644
+--- a/drivers/staging/media/zoran/zoran_card.c
++++ b/drivers/staging/media/zoran/zoran_card.c
+@@ -1101,6 +1101,12 @@ static int zoran_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	int card_num;
+ 	const char *codec_name, *vfe_name;
+ 	unsigned int nr;
++	int err;
++
++	err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
++	if (err)
++		return -ENODEV;
++	vb2_dma_contig_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
  
- 	case BUZ_MODE_STILL_DECOMPRESS:
-+		fallthrough;
- 	case BUZ_MODE_MOTION_DECOMPRESS:
- 		reg = 20;
- 		break;
-@@ -827,6 +832,7 @@ void zr36057_enable_jpg(struct zoran *zr, enum zoran_codec_mode mode)
- 		break;
- 
- 	case BUZ_MODE_IDLE:
-+		fallthrough;
- 	default:
- 		/* shut down processing */
- 		btand(~(zr->card.jpeg_int | ZR36057_ICR_JPEGRepIRQ), ZR36057_ICR);
+ 	nr = zoran_num++;
+ 	if (nr >= BUZ_MAX) {
 -- 
 2.26.2
 
