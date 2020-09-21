@@ -2,64 +2,148 @@ Return-Path: <SRS0=F5P7=C6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5ED2C43465
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 12:35:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26981C43464
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 12:48:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 768C020739
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 12:35:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D286120EDD
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 12:48:35 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=qti.qualcomm.com header.i=@qti.qualcomm.com header.b="EWqaUCaQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726899AbgIUMfk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Sep 2020 08:35:40 -0400
-Received: from mail.ispras.ru ([83.149.199.84]:43718 "EHLO mail.ispras.ru"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726496AbgIUMfj (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Sep 2020 08:35:39 -0400
-X-Greylist: delayed 330 seconds by postgrey-1.27 at vger.kernel.org; Mon, 21 Sep 2020 08:35:38 EDT
-Received: from hellwig.intra.ispras.ru (unknown [10.10.2.182])
-        by mail.ispras.ru (Postfix) with ESMTPS id 75A3240D403E;
-        Mon, 21 Sep 2020 12:30:07 +0000 (UTC)
-From:   Evgeny Novikov <novikov@ispras.ru>
-To:     Antti Palosaari <crope@iki.fi>
-Cc:     Evgeny Novikov <novikov@ispras.ru>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ldv-project@linuxtesting.org
-Subject: [PATCH] media: dvb-frontends: rtl2832_sdr: set error code in probe
-Date:   Mon, 21 Sep 2020 15:30:06 +0300
-Message-Id: <20200921123006.8016-1-novikov@ispras.ru>
-X-Mailer: git-send-email 2.16.4
+        id S1726496AbgIUMsc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Sep 2020 08:48:32 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:23750 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726353AbgIUMsb (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 21 Sep 2020 08:48:31 -0400
+X-Greylist: delayed 365 seconds by postgrey-1.27 at vger.kernel.org; Mon, 21 Sep 2020 08:48:31 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=qti.qualcomm.com; i=@qti.qualcomm.com; q=dns/txt;
+  s=qcdkim; t=1600692511; x=1632228511;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=7wpnt4EiG5JeGIBbPA/ZoMiqoGcCHgT3avwu2rq+i+A=;
+  b=EWqaUCaQvWGHkaPOOATsKoTmk/PqROdTVgjwp4Tcj3sMdexljBbzn42B
+   gzwIAF6QWmr863GRc1ucoUD6NVXHgeZs63vXrVISSe00B/7TD8oiiqZrG
+   9DfakvaTx86+Cte2KvnSthftroNLdq7ZGbX0/E7OXAGrZXJuvtCWNM4LF
+   U=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 21 Sep 2020 05:42:25 -0700
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 21 Sep 2020 05:42:23 -0700
+Received: from dikshita-linux.qualcomm.com ([10.204.65.237])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 21 Sep 2020 18:12:12 +0530
+Received: by dikshita-linux.qualcomm.com (Postfix, from userid 347544)
+        id A90D64DEF; Mon, 21 Sep 2020 18:12:11 +0530 (IST)
+From:   Dikshita Agarwal <dikshita@qti.qualcomm.com>
+To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        ezequiel@collabora.com, stanimir.varbanov@linaro.org,
+        vgarodia@codeaurora.org, majja@codeaurora.org,
+        Dikshita Agarwal <dikshita@codeaurora.org>
+Subject: [PATCH 2/2] media: v4l2-ctrl: Add layer wise bitrate controls for h264
+Date:   Mon, 21 Sep 2020 18:11:53 +0530
+Message-Id: <1600692113-32279-3-git-send-email-dikshita@qti.qualcomm.com>
+X-Mailer: git-send-email 1.9.1
+In-Reply-To: <1600692113-32279-1-git-send-email-dikshita@qti.qualcomm.com>
+References: <1600692113-32279-1-git-send-email-dikshita@qti.qualcomm.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If rtl2832_sdr_probe() encounters an unsupported tuner it cleans up
-everything and returns 0. This can result in various bad things later.
-The patch sets the error code on the corresponding path.
+From: Dikshita Agarwal <dikshita@codeaurora.org>
 
-Found by Linux Driver Verification project (linuxtesting.org).
+Adds bitrate control for all coding layers for h264
+same as hevc.
 
-Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
+Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
 ---
- drivers/media/dvb-frontends/rtl2832_sdr.c | 1 +
- 1 file changed, 1 insertion(+)
+ .../userspace-api/media/v4l/ext-ctrls-codec.rst      | 20 ++++++++++++++++++++
+ drivers/media/v4l2-core/v4l2-ctrls.c                 |  7 +++++++
+ include/uapi/linux/v4l2-controls.h                   |  8 ++++++++
+ 3 files changed, 35 insertions(+)
 
-diff --git a/drivers/media/dvb-frontends/rtl2832_sdr.c b/drivers/media/dvb-frontends/rtl2832_sdr.c
-index 720756728f2d..ef6feb299d46 100644
---- a/drivers/media/dvb-frontends/rtl2832_sdr.c
-+++ b/drivers/media/dvb-frontends/rtl2832_sdr.c
-@@ -1411,6 +1411,7 @@ static int rtl2832_sdr_probe(struct platform_device *pdev)
- 	default:
- 		v4l2_ctrl_handler_init(&dev->hdl, 0);
- 		dev_err(&pdev->dev, "Unsupported tuner\n");
-+		ret = -ENODEV;
- 		goto err_v4l2_ctrl_handler_free;
- 	}
- 	if (dev->hdl.error) {
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+index 26f8220..690b066 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+@@ -1513,6 +1513,26 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
+     * - Bit 16:32
+       - Layer number
+ 
++``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L0_BR (integer)``
++    Indicates bit rate for hierarchical coding layer 0 for H264 encoder.
++
++``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L1_BR (integer)``
++    Indicates bit rate for hierarchical coding layer 1 for H264 encoder.
++
++``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L2_BR (integer)``
++    Indicates bit rate for hierarchical coding layer 2 for H264 encoder.
++
++``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L3_BR (integer)``
++    Indicates bit rate for hierarchical coding layer 3 for H264 encoder.
++
++``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L4_BR (integer)``
++    Indicates bit rate for hierarchical coding layer 4 for H264 encoder.
++
++``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L5_BR (integer)``
++    Indicates bit rate for hierarchical coding layer 5 for H264 encoder.
++
++``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L6_BR (integer)``
++    Indicates bit rate for hierarchical coding layer 6 for H264 encoder.
+ 
+ .. _v4l2-mpeg-h264:
+ 
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
+index abef73e..9296294 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls.c
+@@ -922,6 +922,13 @@ const char *v4l2_ctrl_get_name(u32 id)
+ 	case V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MAX_QP:		return "H264 P-Frame Maximum QP Value";
+ 	case V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MIN_QP:		return "H264 B-Frame Minimum QP Value";
+ 	case V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MAX_QP:		return "H264 B-Frame Maximum QP Value";
++	case V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L0_BR:	return "H264 Hierarchical Lay 0 BitRate";
++	case V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L1_BR:	return "H264 Hierarchical Lay 1 BitRate";
++	case V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L2_BR:	return "H264 Hierarchical Lay 2 BitRate";
++	case V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L3_BR:	return "H264 Hierarchical Lay 3 BitRate";
++	case V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L4_BR:	return "H264 Hierarchical Lay 4 BitRate";
++	case V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L5_BR:	return "H264 Hierarchical Lay 5 BitRate";
++	case V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L6_BR:	return "H264 Hierarchical Lay 6 BitRate";
+ 	case V4L2_CID_MPEG_VIDEO_H264_SPS:			return "H264 Sequence Parameter Set";
+ 	case V4L2_CID_MPEG_VIDEO_H264_PPS:			return "H264 Picture Parameter Set";
+ 	case V4L2_CID_MPEG_VIDEO_H264_SCALING_MATRIX:		return "H264 Scaling Matrix";
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index 7ba05fe..b869b54 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -580,12 +580,20 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type {
+ #define V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MAX_QP	(V4L2_CID_MPEG_BASE+388)
+ #define V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MIN_QP	(V4L2_CID_MPEG_BASE+389)
+ #define V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MAX_QP	(V4L2_CID_MPEG_BASE+390)
++#define V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L0_BR	(V4L2_CID_MPEG_BASE + 391)
++#define V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L1_BR	(V4L2_CID_MPEG_BASE + 392)
++#define V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L2_BR	(V4L2_CID_MPEG_BASE + 393)
++#define V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L3_BR	(V4L2_CID_MPEG_BASE + 394)
++#define V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L4_BR	(V4L2_CID_MPEG_BASE + 395)
++#define V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L5_BR	(V4L2_CID_MPEG_BASE + 396)
++#define V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L6_BR	(V4L2_CID_MPEG_BASE + 397)
+ #define V4L2_CID_MPEG_VIDEO_MPEG4_I_FRAME_QP	(V4L2_CID_MPEG_BASE+400)
+ #define V4L2_CID_MPEG_VIDEO_MPEG4_P_FRAME_QP	(V4L2_CID_MPEG_BASE+401)
+ #define V4L2_CID_MPEG_VIDEO_MPEG4_B_FRAME_QP	(V4L2_CID_MPEG_BASE+402)
+ #define V4L2_CID_MPEG_VIDEO_MPEG4_MIN_QP	(V4L2_CID_MPEG_BASE+403)
+ #define V4L2_CID_MPEG_VIDEO_MPEG4_MAX_QP	(V4L2_CID_MPEG_BASE+404)
+ #define V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL		(V4L2_CID_MPEG_BASE+405)
++
+ enum v4l2_mpeg_video_mpeg4_level {
+ 	V4L2_MPEG_VIDEO_MPEG4_LEVEL_0	= 0,
+ 	V4L2_MPEG_VIDEO_MPEG4_LEVEL_0B	= 1,
 -- 
-2.26.2
+1.9.1
 
