@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-14.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 152B9C43466
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 16:26:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2B35C43465
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 16:26:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CC1F8238EE
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 16:26:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 81D99238EE
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 16:26:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600705603;
-	bh=gC+DNSToyQJ3fKm3T67rR1nazhYlUpk4FDv6x9LB+zU=;
+	s=default; t=1600705613;
+	bh=se6/uKPPpKEW01tuRCD4MWEIWWgItjLyAEr9HbG31rY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=uwYGKe5ZBzfCCmNjeZLKlrYebfLiGPXgiutd853XobZLEnc79tFDLGWR+iIY4R01i
-	 hieKfb3+LyPPAtgUAT66xOK8NfgRCzGnOeezN80kQQKLOO6PaJpj+Cn7w1aX8JZ0et
-	 nklHbAvy2GsMB6TXgHuqeSmSko1b9xeaUHxk5UXY=
+	b=RDYNM08uUrFp3boQwJ+x6AlwA4sJqj+p40VvuHPJuvl4XUNu7U+7rjsx4FOt5Ibp3
+	 tc4YTKsOZnS1bFrFqoWTXX6zwHgMdTzK3Ug4C4yQyti5Y4CF9EXiQHEgKVtmHPO8Dy
+	 pZyKY/zPVKAWhQI80pVB23wVKB1WqLViHwIQElZQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728442AbgIUQ0m (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Sep 2020 12:26:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53234 "EHLO mail.kernel.org"
+        id S1728449AbgIUQ0u (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Sep 2020 12:26:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53370 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726795AbgIUQ0l (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Sep 2020 12:26:41 -0400
+        id S1726795AbgIUQ0t (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 21 Sep 2020 12:26:49 -0400
 Received: from localhost.localdomain (unknown [194.230.155.191])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A2ABA238D6;
-        Mon, 21 Sep 2020 16:26:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D873F238D7;
+        Mon, 21 Sep 2020 16:26:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600705601;
-        bh=gC+DNSToyQJ3fKm3T67rR1nazhYlUpk4FDv6x9LB+zU=;
+        s=default; t=1600705609;
+        bh=se6/uKPPpKEW01tuRCD4MWEIWWgItjLyAEr9HbG31rY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RkNeHKUyPU6Me0yH8Oukc9vEK2k+aoehoZnss5N3C0NVQNlR3XfJnVQGHo1q8VMVu
-         mw02kmaiBrD7pAPiihB55J8KsVNooG7DHtz8BuHqZHX2ZkP4IaUQZdB3MyksyeWDcA
-         y4Zbq2RVVomQghvjooZVH/dW+GGcFj+oJqUcYF+4=
+        b=yztFnIYuW2Y+/vTcqRlehF+7CHwU3o45YmIChLNuWAllDw8QXGcoUWMWOLyc5tna4
+         FGmHBihGI7ipXHriYYFs9oQKtTEhgGqfMbaD5AUoXnCDVfL4SGBfgCPy8g1DzDiiHu
+         8m4IBk7c5MzukySsPoY4R8I239XmR/yz2osJnn24=
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Pavel Machek <pavel@ucw.cz>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -59,9 +59,9 @@ To:     Pavel Machek <pavel@ucw.cz>,
         Marco Felsch <m.felsch@pengutronix.de>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH 20/25] media: i2c: ov5675: simplify getting state container
-Date:   Mon, 21 Sep 2020 18:23:37 +0200
-Message-Id: <20200921162342.7348-20-krzk@kernel.org>
+Subject: [PATCH 21/25] media: i2c: ov5695: simplify getting state container
+Date:   Mon, 21 Sep 2020 18:23:38 +0200
+Message-Id: <20200921162342.7348-21-krzk@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200921162342.7348-1-krzk@kernel.org>
 References: <20200921162342.7348-1-krzk@kernel.org>
@@ -80,33 +80,33 @@ dereferences.
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- drivers/media/i2c/ov5675.c | 6 ++----
+ drivers/media/i2c/ov5695.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/i2c/ov5675.c b/drivers/media/i2c/ov5675.c
-index 9540ce8918f0..5e35808037ad 100644
---- a/drivers/media/i2c/ov5675.c
-+++ b/drivers/media/i2c/ov5675.c
-@@ -889,8 +889,7 @@ static int ov5675_set_stream(struct v4l2_subdev *sd, int enable)
+diff --git a/drivers/media/i2c/ov5695.c b/drivers/media/i2c/ov5695.c
+index cc678d9d2e0d..bbccb6f9582f 100644
+--- a/drivers/media/i2c/ov5695.c
++++ b/drivers/media/i2c/ov5695.c
+@@ -1033,8 +1033,7 @@ static void __ov5695_power_off(struct ov5695 *ov5695)
  
- static int __maybe_unused ov5675_suspend(struct device *dev)
+ static int __maybe_unused ov5695_runtime_resume(struct device *dev)
  {
 -	struct i2c_client *client = to_i2c_client(dev);
 -	struct v4l2_subdev *sd = i2c_get_clientdata(client);
 +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
- 	struct ov5675 *ov5675 = to_ov5675(sd);
+ 	struct ov5695 *ov5695 = to_ov5695(sd);
  
- 	mutex_lock(&ov5675->mutex);
-@@ -904,8 +903,7 @@ static int __maybe_unused ov5675_suspend(struct device *dev)
+ 	return __ov5695_power_on(ov5695);
+@@ -1042,8 +1041,7 @@ static int __maybe_unused ov5695_runtime_resume(struct device *dev)
  
- static int __maybe_unused ov5675_resume(struct device *dev)
+ static int __maybe_unused ov5695_runtime_suspend(struct device *dev)
  {
 -	struct i2c_client *client = to_i2c_client(dev);
 -	struct v4l2_subdev *sd = i2c_get_clientdata(client);
 +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
- 	struct ov5675 *ov5675 = to_ov5675(sd);
- 	int ret;
+ 	struct ov5695 *ov5695 = to_ov5695(sd);
  
+ 	__ov5695_power_off(ov5695);
 -- 
 2.17.1
 
