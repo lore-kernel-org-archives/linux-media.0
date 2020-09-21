@@ -2,109 +2,147 @@ Return-Path: <SRS0=F5P7=C6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+X-Spam-Status: No, score=-8.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2135BC43464
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:05:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B35EC43466
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:13:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 94B46206C3
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:05:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0A69C2193E
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:13:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=dauphine.fr header.i=@dauphine.fr header.b="bGetfJGq"
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="RAPzGpwE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726353AbgIUKFc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Sep 2020 06:05:32 -0400
-Received: from mail-eopbgr90081.outbound.protection.outlook.com ([40.107.9.81]:30240
-        "EHLO FRA01-MR2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726341AbgIUKFc (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Sep 2020 06:05:32 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C7U1MIqzA6II4UTb2/lvpyD67P2KunszuXZMsIKzvPdnl7dwDmYTpNXpGcSoDWeLzq71/hlXdxnQw6c+szFvLqvCzSrQGeLPgP0c/HkbhK8jhlTn3PCFBvFh4jtP+BMoXtRe6UkFmHr9v4zF/A/MNrAx6EFlep4KC6puxjuFqus3inX1Mz1nHks/M/ajD0QaquU6kc/oPaF8UmL3LFBSw+ipJeWPLnHTlpXtDO4uBn7nJ2ZR5ULmzCKrxNV1InVmYEw0RZOUF4I+6v/O+XY7Tmf6LdPPM2oEBgA+lAbFByJPKacRoTi9uda4ZKsiabVPx8kh4UwjdEXlPvuiIpk4pw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kz+N3+dmU5Weq/s6O8/4AoB56CshQuNrTgspCsMtRuQ=;
- b=CqANr8betc9unqzuZ0aQfEnhcfH5uyRK+fnAOfj2SXUlUWaBW/RWuCjaQsTqzoLd9IgMY44lOaRPypgnHsXiVZlDGfgKkWQYE7oGfFdAjFHc5NBaCgl8FMbd7Npk2Z6cbcYmczR1nPW+GGPJ9pnaLs+xa0hXkNWfp7OkoxF2v4p+DF/uDFCwqHCki9TcuftSp7tKEnZhdi/3mu/seNgsZb7oYEXAVOnWyLIzvpVz4QWmdZMIofS6prJd4YUfWlwy9AfMSdsMFISYlaF/YUN87v58+1qTJM0eOa6RTT8MnoNd6JKRmk9V4WNsgGnyunTJg8NCNo0CH2sg1o914CdWOQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=lamsade.dauphine.fr; dmarc=pass action=none
- header.from=dauphine.fr; dkim=pass header.d=dauphine.fr; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dauphine.fr;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kz+N3+dmU5Weq/s6O8/4AoB56CshQuNrTgspCsMtRuQ=;
- b=bGetfJGqTYb27yIatojra5w9TC+opigrd/JAMAt5vxrF4u+KWivNnYv5iN5zHBNqdS8DCJzpnse/1GofIR+uVUT+yY/DE/2Tcs7Dwv6fFxONnLUHWR39li0fzzV/3sqIVoulUNlN3V1uJubLkiCfFtoBoP5N80V1ECKd9BgM3ug=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none
- header.from=dauphine.fr;
-Received: from MR2P264MB0244.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500:9::16) by
- MR2P264MB0706.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500:10::23) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3391.19; Mon, 21 Sep 2020 10:05:28 +0000
-Received: from MR2P264MB0244.FRAP264.PROD.OUTLOOK.COM
- ([fe80::91c4:b3f7:59a8:f55d]) by MR2P264MB0244.FRAP264.PROD.OUTLOOK.COM
- ([fe80::91c4:b3f7:59a8:f55d%7]) with mapi id 15.20.3391.011; Mon, 21 Sep 2020
- 10:05:28 +0000
-Message-ID: <de7894e8574231082ea64d1be317ed5a2faeba99.camel@dauphine.fr>
-Subject: Consider updating www.ideasonboard.org
-From:   Olivier Cailloux <olivier.cailloux@dauphine.fr>
-To:     linux-media@vger.kernel.org
-Date:   Mon, 21 Sep 2020 12:05:24 +0200
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5-1.1 
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: LO2P265CA0207.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:9e::27) To MR2P264MB0244.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:500:9::16)
+        id S1726413AbgIUKNx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Sep 2020 06:13:53 -0400
+Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:64054 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726326AbgIUKNx (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 21 Sep 2020 06:13:53 -0400
+X-Greylist: delayed 1093 seconds by postgrey-1.27 at vger.kernel.org; Mon, 21 Sep 2020 06:13:53 EDT
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 08L9pWWt008800;
+        Mon, 21 Sep 2020 04:55:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=WW55bEkB7c/YZlSmO/EfsOHzstbkfstuef6OZNz+13c=;
+ b=RAPzGpwEZK3EtSkcJz7IYXubWw2d6vb6Z6COv6mOaxlza+Ftd/N2PHUA2t3OLLhg9MRd
+ dxTDwjvSV/TID0foNaLZz3+H9VO8ks5/8xrChPwooO9+ksEz/70TxbI5uYBWyRrU36sq
+ Ze9KCk7CYEZkWRqrzvTMiTRivlzUuGb1JvFVsYtmpwUKuG7SzkKExtro+H7XbmuipSmU
+ k8r1CiI8Zlx7e8Tsj9mAdmuSctFUgls3OecRoKIuIwYX5KuT41ylOE4qZuquJ4PIdGs4
+ yHgXUdbVhSQT27Y9wzfFVRDnPRPEFVTRMBnMxBB4w0623C05G4+qIMNcp5ckp8uAITlz zA== 
+Received: from ediex01.ad.cirrus.com ([87.246.76.36])
+        by mx0a-001ae601.pphosted.com with ESMTP id 33nfd221ju-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 21 Sep 2020 04:55:21 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Mon, 21 Sep
+ 2020 10:55:19 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.1913.5 via Frontend
+ Transport; Mon, 21 Sep 2020 10:55:19 +0100
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id E4D5A2C3;
+        Mon, 21 Sep 2020 09:55:18 +0000 (UTC)
+Date:   Mon, 21 Sep 2020 09:55:18 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+CC:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>, Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Hoan Tran <hoan@os.amperecomputing.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Sungbo Eo <mans0n@gorani.run>, Stefan Agner <stefan@agner.ch>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Yash Shah <yash.shah@sifive.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        - <patches@opensource.cirrus.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Amelie Delaunay <amelie.delaunay@st.com>,
+        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Andy Teng <andy.teng@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Sricharan R <sricharan@codeaurora.org>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, <linux-gpio@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-unisoc@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <linux-media@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH v2 09/13] dt-bindings: pinctrl: include common schema in
+ GPIO controllers
+Message-ID: <20200921095518.GQ10899@ediswmail.ad.cirrus.com>
+References: <20200917165301.23100-1-krzk@kernel.org>
+ <20200917165301.23100-10-krzk@kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from saucisson (2a01:e35:2e49:2720:18e2:21d:6da8:c492) by LO2P265CA0207.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:9e::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3391.13 via Frontend Transport; Mon, 21 Sep 2020 10:05:27 +0000
-X-Originating-IP: [2a01:e35:2e49:2720:18e2:21d:6da8:c492]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 545c5349-d730-4776-6510-08d85e15ddbf
-X-MS-TrafficTypeDiagnostic: MR2P264MB0706:
-X-Microsoft-Antispam-PRVS: <MR2P264MB07062EC10C387E3C8CF06E4BD23A0@MR2P264MB0706.FRAP264.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5pVWps9X42Fw/lyxCwA1e4FnQmSG2OkKAZZkFAIlyjL8YJB28+N45N390i4SC2vMsuuQZkITfC3TMK6aayfE5tpPi0u2w0KlOhhGhuOA7+d9eEVbj4Rs6vZQf9HPudvekFWRqG/GbkNPbU14REjSk9BN4q4hD5nQHuTidSkDgnhF5NW6Lkxr9CFOVqhOc9x/4lFQZjyPe3wtuBtcWxnu/3gTIAfOzGXt9t2le8Q2qRcAGmwJbadyDPn+ykYQVIBIjQSh1MGUr9Eezs0Oa6DlAzb25XgIZ+5Q5gJ0kCmTVEGrQhuacavpEGLBKgELFqhztAXmnZrPJNNDIbhYNPt6CfGgL9qRY6oNFZ7cjiml5kiFVDiN0at5DPB1il9jCLfLOWzDa336fW4LJBq8kD/d06thskWwKRf+ivxHJ8YL5Xbxy3Dcpx6eTqnK6YXrCfeDTkM96NSoLqikBveFfyUXCQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MR2P264MB0244.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(346002)(396003)(366004)(136003)(376002)(39860400002)(66556008)(2906002)(83170400001)(6916009)(66946007)(36756003)(66476007)(186003)(16526019)(6666004)(2616005)(6496006)(52116002)(4744005)(8676002)(478600001)(316002)(786003)(44832011)(966005)(83380400001)(6486002)(5660300002)(8936002)(15974865002)(163123001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: 4cA4t2bnGfpGzUK2yCxWQVdBR506/mcC4nzUENjzx9r4WSgjgdVQ5EBHsbopNhJ1P1rRe9ncg1xX9hAi16Vk+TFyXbOzHGRypTqm4wlfTgViJnpiHEXdKi1i41JdisiqY18DUuGTUHKckPxpsTsoKksk1Aadie9K81HTvrYr0tgdPqaBrXKCcBNTiURF8dGc9kpfwp2/7PIAyNBQDRvUEmJLSlLQMxmqxpVgK6ukF2WofmNpryJDemTSglbMXz4HSkMiwF9r/7QT34TkoHjADhKWzlUmV+CEqHhc1eNuB9th2Ur0/PBoL0IbRe+qZCEUx1NhOXSnWn/7EcS07skrTkX47HYbom2ovhcKpAzVzMMJ4LNHqXqXGzWh2XWhsC85xiaFyFkidzX5Sukijk6WYyp/WPnUrszy1Q3fE8g2L+LQ88rtpJWrHymi1DHbWpWcVH4XU1q+oHrpMTpD6+HqKSe+ImA5vU4ERez6lPxzaZ5QrxyYBvL6yet8VrCyqJwbFj8NVTZnVxKjTxmD/eiyd7SR3leqFnfntVSjlljcARHcOPUbj7nWM4GxQfs/KG4tfocVoi8s1QmuacTLoBVESgHrNxt9XzGndj1f2uVRBC+fwfXwl3gK0/m+WFTR32gqI0gl22BLzZgSYB1eqRFOJKLQvF2kZ395Ddgqu9DpLCT3BSmgNpLj0RRHV+J91RLbh3kSjP8fM7wcVBfSv3JhMw==
-X-OriginatorOrg: dauphine.fr
-X-MS-Exchange-CrossTenant-Network-Message-Id: 545c5349-d730-4776-6510-08d85e15ddbf
-X-MS-Exchange-CrossTenant-AuthSource: MR2P264MB0244.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Sep 2020 10:05:28.2106
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 81e7c4de-26c9-4531-b076-b70e2d75966e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MnwHiyRBIZYt4nXOlSTVk3z3jJIEGwYab0bKoVy75B5cbIZXyuA+nm5DBMv6mZ7SYTu3uZViPtr8VWUB6JAnWSvMRwmcm6R6l9t7eMkUNlx2sOFw9E2msUDOSEvahcPQ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR2P264MB0706
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20200917165301.23100-10-krzk@kernel.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0
+ priorityscore=1501 impostorscore=0 phishscore=0 suspectscore=0
+ mlxlogscore=807 adultscore=0 clxscore=1015 malwarescore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009210071
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-A lot of search engine queries send users to www.ideasonboard.org (for 
-example, https://www.startpage.com/do/dsearch?query=linux+uvc).
+On Thu, Sep 17, 2020 at 06:52:57PM +0200, Krzysztof Kozlowski wrote:
+> Include the common GPIO schema in GPIO controllers to be sure all common
+> properties are properly validated.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> 
+> ---
 
-AFAIU, information there is mostly oudated. In particular, it indicates
-that “Support requests are handled through the Linux UVC development
-mailing list [linux-uvc-devel@lists.sourceforge.net]”, whereas it seems
-to me that related development now happens at the linux-media mailing
-list. It is not easy to realize this and visitors might be misled by
-this oudated information. (I have taken quite some time to realize this
-myself and I am still unsure of my conclusions.)
+For the Cirrus bits:
 
-Could anyone confirm that linux-media is indeed the recommended list
-for problems related to the uvcvideo driver? If so, does anyone have a
-possibility of updating the website at ideasonboard.org, if only to
-warn the visitors that its information is outdated?
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-Thanks for your consideration.
--- 
-Olivier
-
+Thanks,
+Charles
