@@ -5,66 +5,66 @@ X-Spam-Level:
 X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9ED9FC43464
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:22:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85F97C43465
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:22:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 53C82205F4
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:22:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3864E205F4
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:22:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="hsFrcDBi"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="JzNiLwHc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727101AbgIUKWE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Sep 2020 06:22:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59200 "EHLO
+        id S1726631AbgIUKWN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Sep 2020 06:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726934AbgIUKVL (ORCPT
+        with ESMTP id S1726945AbgIUKVI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Sep 2020 06:21:11 -0400
+        Mon, 21 Sep 2020 06:21:08 -0400
 Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80DF1C0613D1
-        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:21:10 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id d4so11562783wmd.5
-        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:21:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1CC6C0613D2
+        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:21:07 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id w2so11566128wmi.1
+        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:21:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=uDkkWNM0rHPx30WBJ9RYyqITIKCjYLog+rU9zqKzxvE=;
-        b=hsFrcDBiXN61Z9d04dj5g+ouWOEmK2VyMDvFapjJe1DUDa08wnRo5XTxjQPuQ999wW
-         49LL96NcTSaVmoRUZsnyVxCZ85I+f1W0jwvPuNJ/CTPC1tYoPvRVa3U5d5ysmebuj5Kz
-         m0Uj8YhGjdHI/c/ihKVYEno9U9fLfDkyxO5sXVSJM6qISfaaCjGb8egyruLYPwYxF2NK
-         fblQWKEWwMuEp+AAbL0hxAXCdA8hER/GnDU0rQ3+e8aObv8aGq5DTv+Hzt4HfI0SLgsr
-         r2W8OEp9y3qdHVY1TRHJ1UPWNU+hF3/OvfbbWKtM+8QpS6iVepUalojmrcC8CO/RIzW2
-         Eebg==
+        bh=jZ72PUAOAY/v7UQdoKSs5wvFASOODli3K4iY5mQPSSc=;
+        b=JzNiLwHcQymY9+D/8+E4uv3VRe59dhgHJ1I8p9xqMKjrsJVLWChfAftBdMYaX/YAz1
+         fkM9a1DXMC7+keldbhrkRFeGSLWb/FiMr2vpJvweYAJJuH5EZbY4nFU1KtcmCP/S7CDW
+         hVzfBX9rGmO43vL6nDTmBwTZTQHkQ3DhdgWQQ6KadYIZT/ohDGARClZ2tTmWJdeei9Gf
+         tfXsZ1XmRQC6gMZPu2dDt6vUBPc6DwLSSr2G9PHReMknSJmiXBPScSsmdaJWUhUcREjv
+         yNEHAFFLVSuYW6OJDbwxxEfcqIlmtwRZEiFE1+jX19/NpTzXCsrFi+7X8k4QCKa6ZC8K
+         aiDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=uDkkWNM0rHPx30WBJ9RYyqITIKCjYLog+rU9zqKzxvE=;
-        b=MSdpJ78NR9k/kC/2hrbRzYdOtwiyzYb7G/FAlFo9SPy2Puf/Fb/L9iAM8/EVS8zZn3
-         hXltSGk7bfSLB3bfwRsxqQxxyLmaBpk3Yj9S+ZFIFXRaPG428DQAIcIuRAQ+PH5kkC6a
-         xmpD1FJOMF6mDhA+5ZAVLOUZlZ5s+vF5XDxuaof8SHBD9nB/IZUbR3OSTXiJlI22yiHM
-         XW7cdV9RrQMa/Ki9JE5HeihUTTKfimIlJ98YAQaXG8RcTjmDRScOzeC2dJtvBvGayrd6
-         sj6vWy/GtGZDjLeT5VdLs3T+86NPJvLKvNpM5o1+5+10MICXYrhEhEGyWKM81WhYSubF
-         ZSew==
-X-Gm-Message-State: AOAM5322599YLonDYCkG8+MddRplZ9kW53ThK32FpkA6w5yrIszSZjei
-        vxEvR1bthDis3ZXqMk+4SDU8Bw==
-X-Google-Smtp-Source: ABdhPJzWXxqw72kvusYKTW95fuGlXzwUmj6ka2u4TTLGkffH+FdJpwHQKoa69Ob7+uHu9Y8yhALwsg==
-X-Received: by 2002:a1c:4381:: with SMTP id q123mr28357827wma.108.1600683669228;
-        Mon, 21 Sep 2020 03:21:09 -0700 (PDT)
+        bh=jZ72PUAOAY/v7UQdoKSs5wvFASOODli3K4iY5mQPSSc=;
+        b=Q3PkjzdgzYpj9AFMnioGZpARf+7L5UQmm29NFqzZR1m2RZLC6PlBNAWtu8EtHP4n9n
+         iDWp0ur9g/Ep3JV4Ki+Lj1FV7ucBJvXGVcCcYxrPcHzinN5ptPs0rfcobFE6g9mm1CU8
+         DH9pOW5GcKFTba71g+pGQsDMhGI6+Ki16oOdEZoSkVaJtK9e9N5xHOOl7zvbf6recOHp
+         3FjwZ1gJUa5/S0oUYQ4QGuF252EMBCRtrOlDX8kN5w6JeBZoEncByeKdABZhSzKEHzCQ
+         0c+Rf6JoNtJ+aWiLscsxFne5PfiftzLbTXuJWZXbeaNTcac2oXgCAIBIQbG9qQSqoYS9
+         rCmQ==
+X-Gm-Message-State: AOAM532H8vkNvNpONr48tszOBETOQur/5IhRu1YfJ9iHTFywxlK8hOE1
+        +8b7GUtCfa1H792WcytzvqsvmQ==
+X-Google-Smtp-Source: ABdhPJz/WEM6jR4u7NBZYYpTXL198YeibOBpadp1+XxIqsxq7O0M1Pi8POlysByw9qPiVubnv0OaMw==
+X-Received: by 2002:a1c:7d55:: with SMTP id y82mr29496041wmc.100.1600683666523;
+        Mon, 21 Sep 2020 03:21:06 -0700 (PDT)
 Received: from localhost.localdomain ([51.15.160.169])
-        by smtp.googlemail.com with ESMTPSA id l17sm18804629wme.11.2020.09.21.03.21.08
+        by smtp.googlemail.com with ESMTPSA id l17sm18804629wme.11.2020.09.21.03.21.05
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 21 Sep 2020 03:21:08 -0700 (PDT)
+        Mon, 21 Sep 2020 03:21:05 -0700 (PDT)
 From:   Corentin Labbe <clabbe@baylibre.com>
 To:     gregkh@linuxfoundation.org, laurent.pinchart@skynet.be,
         mchehab@kernel.org
 Cc:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH RFT/RFC 39/49] staging: media: zoran: disable output
-Date:   Mon, 21 Sep 2020 10:20:14 +0000
-Message-Id: <1600683624-5863-40-git-send-email-clabbe@baylibre.com>
+Subject: [PATCH RFT/RFC 36/49] staging: media: zoran: Add more check for compliance
+Date:   Mon, 21 Sep 2020 10:20:11 +0000
+Message-Id: <1600683624-5863-37-git-send-email-clabbe@baylibre.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1600683624-5863-1-git-send-email-clabbe@baylibre.com>
 References: <1600683624-5863-1-git-send-email-clabbe@baylibre.com>
@@ -72,84 +72,63 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Zoran is picky about jpeg data it accepts. At least it seems to not support COM and APPn.
-So until a way to filter data will be done, disable output.
+The zoran driver miss some sanity checks, and this made v4l compliance
+happy.
 
 Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 ---
- drivers/staging/media/zoran/zoran_card.c   |  2 ++
- drivers/staging/media/zoran/zoran_driver.c | 20 ++++++++++++--------
- 2 files changed, 14 insertions(+), 8 deletions(-)
+ drivers/staging/media/zoran/zoran_driver.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/drivers/staging/media/zoran/zoran_card.c b/drivers/staging/media/zoran/zoran_card.c
-index 93318ae1803a..864196e7acae 100644
---- a/drivers/staging/media/zoran/zoran_card.c
-+++ b/drivers/staging/media/zoran/zoran_card.c
-@@ -954,6 +954,8 @@ static int zr36057_init(struct zoran *zr)
- 	*zr->video_dev = zoran_template;
- 	zr->video_dev->v4l2_dev = &zr->v4l2_dev;
- 	zr->video_dev->lock = &zr->lock;
-+	zr->video_dev->device_caps = V4L2_CAP_STREAMING | V4L2_CAP_VIDEO_CAPTURE;
-+
- 	strscpy(zr->video_dev->name, ZR_DEVNAME(zr), sizeof(zr->video_dev->name));
- 	/*
- 	 * It's not a mem2mem device, but you can both capture and output from one and the same
 diff --git a/drivers/staging/media/zoran/zoran_driver.c b/drivers/staging/media/zoran/zoran_driver.c
-index 2c1e70cf2f0c..1efec2edd72f 100644
+index 6e95fbf5c7ea..a326c0a16e0c 100644
 --- a/drivers/staging/media/zoran/zoran_driver.c
 +++ b/drivers/staging/media/zoran/zoran_driver.c
-@@ -1082,8 +1082,7 @@ static int zoran_querycap(struct file *file, void *__fh, struct v4l2_capability
- 	strscpy(cap->card, ZR_DEVNAME(zr), sizeof(cap->card));
- 	strscpy(cap->driver, "zoran", sizeof(cap->driver));
- 	snprintf(cap->bus_info, sizeof(cap->bus_info), "PCI:%s", pci_name(zr->pci_dev));
--	cap->device_caps = V4L2_CAP_STREAMING | V4L2_CAP_VIDEO_CAPTURE |
--			   V4L2_CAP_VIDEO_OUTPUT;
-+	cap->device_caps = zr->video_dev->device_caps;
- 	cap->capabilities = cap->device_caps | V4L2_CAP_DEVICE_CAPS;
- 	return 0;
- }
-@@ -2204,6 +2203,11 @@ static int zoran_mmap(struct file *file, struct vm_area_struct *vma)
- 	return res;
- }
+@@ -1092,6 +1092,11 @@ static int zoran_enum_fmt(struct zoran *zr, struct v4l2_fmtdesc *fmt, int flag)
+ {
+ 	unsigned int num, i;
  
-+/*
-+ * Output is disabled temporarily
-+ * Zoran is picky about jpeg data it accepts. At least it seems to unsupport COM and APPn.
-+ * So until a way to filter data will be done, disable output.
-+ */
- static const struct v4l2_ioctl_ops zoran_ioctl_ops = {
- 	.vidioc_querycap		    = zoran_querycap,
- 	.vidioc_s_selection		    = zoran_s_selection,
-@@ -2211,9 +2215,9 @@ static const struct v4l2_ioctl_ops zoran_ioctl_ops = {
- 	.vidioc_enum_input		    = zoran_enum_input,
- 	.vidioc_g_input			    = zoran_g_input,
- 	.vidioc_s_input			    = zoran_s_input,
--	.vidioc_enum_output		    = zoran_enum_output,
-+/*	.vidioc_enum_output		    = zoran_enum_output,
- 	.vidioc_g_output		    = zoran_g_output,
--	.vidioc_s_output		    = zoran_s_output,
-+	.vidioc_s_output		    = zoran_s_output,*/
- 	.vidioc_g_fbuf			    = zoran_g_fbuf,
- 	.vidioc_s_fbuf			    = zoran_s_fbuf,
- 	.vidioc_g_std			    = zoran_g_std,
-@@ -2227,13 +2231,13 @@ static const struct v4l2_ioctl_ops zoran_ioctl_ops = {
- 	.vidioc_streamon		    = zoran_streamon,
- 	.vidioc_streamoff		    = zoran_streamoff,
- 	.vidioc_enum_fmt_vid_cap	    = zoran_enum_fmt_vid_cap,
--	.vidioc_enum_fmt_vid_out	    = zoran_enum_fmt_vid_out,
-+/*	.vidioc_enum_fmt_vid_out	    = zoran_enum_fmt_vid_out,*/
- 	.vidioc_g_fmt_vid_cap		    = zoran_g_fmt_vid_cap,
--	.vidioc_g_fmt_vid_out               = zoran_g_fmt_vid_out,
-+/*	.vidioc_g_fmt_vid_out               = zoran_g_fmt_vid_out,*/
- 	.vidioc_s_fmt_vid_cap		    = zoran_s_fmt_vid_cap,
--	.vidioc_s_fmt_vid_out               = zoran_s_fmt_vid_out,
-+/*	.vidioc_s_fmt_vid_out               = zoran_s_fmt_vid_out,*/
- 	.vidioc_try_fmt_vid_cap		    = zoran_try_fmt_vid_cap,
--	.vidioc_try_fmt_vid_out		    = zoran_try_fmt_vid_out,
-+/*	.vidioc_try_fmt_vid_out		    = zoran_try_fmt_vid_out,*/
- 	.vidioc_subscribe_event             = v4l2_ctrl_subscribe_event,
- 	.vidioc_unsubscribe_event           = v4l2_event_unsubscribe,
- };
++	if (fmt->index >= ARRAY_SIZE(zoran_formats))
++		return -EINVAL;
++	if (fmt->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
++		return -EINVAL;
++
+ 	for (num = i = 0; i < NUM_FORMATS; i++) {
+ 		if (zoran_formats[i].flags & flag && num++ == fmt->index) {
+ 			strscpy(fmt->description, zoran_formats[i].name, sizeof(fmt->description));
+@@ -1244,6 +1249,12 @@ static int zoran_try_fmt_vid_cap(struct file *file, void *__fh,
+ 	if (i == NUM_FORMATS)
+ 		return -EINVAL;
+ 
++	fmt->fmt.pix.colorspace = zoran_formats[i].colorspace;
++	if (BUZ_MAX_HEIGHT < (fmt->fmt.pix.height * 2))
++		fmt->fmt.pix.field = V4L2_FIELD_INTERLACED;
++	else
++		fmt->fmt.pix.field = V4L2_FIELD_TOP;
++
+ 	bpp = DIV_ROUND_UP(zoran_formats[i].depth, 8);
+ 	v4l_bound_align_image(&fmt->fmt.pix.width, BUZ_MIN_WIDTH, BUZ_MAX_WIDTH, bpp == 2 ? 1 : 2,
+ 		&fmt->fmt.pix.height, BUZ_MIN_HEIGHT, BUZ_MAX_HEIGHT, 0, 0);
+@@ -1271,6 +1282,9 @@ static int zoran_s_fmt_vid_out(struct file *file, void *__fh, struct v4l2_format
+ 		return res;
+ 	}
+ 
++	if (!fmt->fmt.pix.height || !fmt->fmt.pix.width)
++		return -EINVAL;
++
+ 	settings = zr->jpg_settings;
+ 
+ 	/* we actually need to set 'real' parameters now */
+@@ -1856,6 +1870,9 @@ static int zoran_s_selection(struct file *file, void *__fh, struct v4l2_selectio
+ 	    sel->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
+ 		return -EINVAL;
+ 
++	if (!sel->r.width || !sel->r.height)
++		return -EINVAL;
++
+ 	if (sel->target != V4L2_SEL_TGT_CROP)
+ 		return -EINVAL;
+ 
 -- 
 2.26.2
 
