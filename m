@@ -6,27 +6,27 @@ X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91559C43463
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 13:02:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AF2DC43464
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 13:04:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 58902218AC
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 13:02:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EB03921D80
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 13:04:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726644AbgIUNCG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Sep 2020 09:02:06 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:61209 "EHLO
+        id S1727020AbgIUNEZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Sep 2020 09:04:25 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:56138 "EHLO
         alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726395AbgIUNCG (ORCPT
+        with ESMTP id S1726341AbgIUNEZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Sep 2020 09:02:06 -0400
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 21 Sep 2020 06:02:05 -0700
+        Mon, 21 Sep 2020 09:04:25 -0400
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 21 Sep 2020 06:04:24 -0700
 Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 21 Sep 2020 06:02:03 -0700
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 21 Sep 2020 06:04:22 -0700
 Received: from dikshita-linux.qualcomm.com ([10.204.65.237])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 21 Sep 2020 18:31:42 +0530
+  by ironmsg01-blr.qualcomm.com with ESMTP; 21 Sep 2020 18:34:20 +0530
 Received: by dikshita-linux.qualcomm.com (Postfix, from userid 347544)
-        id 31A134DEF; Mon, 21 Sep 2020 18:31:41 +0530 (IST)
+        id 1D0184DEF; Mon, 21 Sep 2020 18:34:19 +0530 (IST)
 From:   Dikshita Agarwal <dikshita@codeaurora.org>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
@@ -35,8 +35,8 @@ Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
         vgarodia@codeaurora.org, majja@codeaurora.org,
         Dikshita Agarwal <dikshita@codeaurora.org>
 Subject: [PATCH v2 0/2] Add new controls for QP and layer bitrate
-Date:   Mon, 21 Sep 2020 18:31:16 +0530
-Message-Id: <1600693278-2669-1-git-send-email-dikshita@codeaurora.org>
+Date:   Mon, 21 Sep 2020 18:33:58 +0530
+Message-Id: <1600693440-3015-1-git-send-email-dikshita@codeaurora.org>
 X-Mailer: git-send-email 1.9.1
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -45,7 +45,7 @@ X-Mailing-List: linux-media@vger.kernel.org
 This series adds frame specific min/max qp controls for hevc and layer
 wise bitrate control for h264.
 
-change since v1:
+Chnage since v1:
  corrected email.
 
 Dikshita Agarwal (2):
