@@ -2,109 +2,83 @@ Return-Path: <SRS0=F5P7=C6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7127C43463
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 07:30:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE754C43463
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 08:03:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7974320709
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 07:30:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 81C5F20BED
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 08:03:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726514AbgIUHax (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Sep 2020 03:30:53 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:32977 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726211AbgIUHaw (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Sep 2020 03:30:52 -0400
-Received: by mail-oi1-f195.google.com with SMTP id m7so15933045oie.0;
-        Mon, 21 Sep 2020 00:30:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bvT46MVLA1wc77+QBaxqpfVEdVrcHoplawt2ilNveyU=;
-        b=A2oe3ANEBZxhfC77GDz2mQA+UsPCo3vJh70NhyUlSkvk1ByTJ/pHVoKHI6l9LFqeSE
-         226GU2D0N/qw35k5o1NqLLe7nPo0sq5c+ytPwcYjhEyeVP9BWihv119ayxiSwhyvAYwV
-         vPuAt2NcDMNRKGdtCmSaFCcRThQTvFv+wCTBQXYF6tzoEHkqvfUt2uaK+1615I307EAw
-         bxHRMwTCJnSZZDmIKQiCTIVJvJnhOR1V3/LY8eADQI5uIf0Pg9gra6gDCuaj27xjgyKY
-         BvbYqvs10TA7qM28MboExUslHZ6L30JV1xRJy9M4zBEDc2jgOv08uRk5qIayN9TH+mNN
-         ca0w==
-X-Gm-Message-State: AOAM531jLjrhEk5N8kaJ9hzZG5qVEVtLmy83vu6FFqD0397B2wstTAz4
-        yozaNZ0efL+frQiXhidk1hdj/0vkSA46Rp0E2QM=
-X-Google-Smtp-Source: ABdhPJz9xmN9krNVkmFntK1fJCP4SVdiOQdSlUn0glZjdNUu0BDHNFHEgQW2lXttV0KKLloQqhm28dH1yGE42S/hfkE=
-X-Received: by 2002:aca:4441:: with SMTP id r62mr15852660oia.153.1600673451338;
- Mon, 21 Sep 2020 00:30:51 -0700 (PDT)
+        id S1726713AbgIUIDV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Sep 2020 04:03:21 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:13741 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726551AbgIUICZ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 21 Sep 2020 04:02:25 -0400
+Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 558CE626DBA23AF9D5D4;
+        Mon, 21 Sep 2020 16:02:23 +0800 (CST)
+Received: from huawei.com (10.175.113.32) by DGGEMS414-HUB.china.huawei.com
+ (10.3.19.214) with Microsoft SMTP Server id 14.3.487.0; Mon, 21 Sep 2020
+ 16:02:15 +0800
+From:   Liu Shixin <liushixin2@huawei.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Liu Shixin <liushixin2@huawei.com>
+Subject: [PATCH -next] media: media/pci: simplify the return expression of verify_window_lock
+Date:   Mon, 21 Sep 2020 16:24:39 +0800
+Message-ID: <20200921082439.2591565-1-liushixin2@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594919915-5225-8-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CA+V-a8vJ2n3KEL8P+XmVob2zjoWaX+s4a6c1TV_WoPFkwdkZmA@mail.gmail.com> <20200920140824.GA2915460@kroah.com>
-In-Reply-To: <20200920140824.GA2915460@kroah.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 21 Sep 2020 09:30:39 +0200
-Message-ID: <CAMuHMdUyXMfZcVKkqaZHJ8tJf-3Kotqg+S2NHMZT0VFO0ZJJww@mail.gmail.com>
-Subject: Re: [PATCH 07/20] dt-bindings: usb: renesas,usb3-peri: Document
- r8a774e1 support
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Mark Brown <broonie@kernel.org>,
-        Niklas <niklas.soderlund@ragnatech.se>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-ide@vger.kernel.org,
-        dmaengine <dmaengine@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        alsa-devel <alsa-devel@alsa-project.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.32]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Greg,
+Simplify the return expression.
 
-On Sun, Sep 20, 2020 at 4:08 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
-> On Sat, Sep 19, 2020 at 11:50:07AM +0100, Lad, Prabhakar wrote:
-> > On Thu, Jul 16, 2020 at 6:19 PM Lad Prabhakar
-> > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > >
-> > > Document RZ/G2H (R8A774E1) SoC bindings.
-> > >
-> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
-> > > ---
-> > >  Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > Could you please pick this patch.
->
-> Don't DT patches have to be acked by a DT maintainer first?
+Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+---
+ drivers/media/pci/bt8xx/bttv-driver.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
-https://lore.kernel.org/r/20200721033508.GA3504365@bogus
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
+diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
+index 8c61d292dec1..4f7eaec20dc3 100644
+--- a/drivers/media/pci/bt8xx/bttv-driver.c
++++ b/drivers/media/pci/bt8xx/bttv-driver.c
+@@ -2058,7 +2058,6 @@ verify_window_lock(struct bttv_fh *fh, struct v4l2_window *win,
+ {
+ 	enum v4l2_field field;
+ 	unsigned int width_mask;
+-	int rc;
+ 
+ 	if (win->w.width < 48)
+ 		win->w.width = 48;
+@@ -2111,13 +2110,10 @@ verify_window_lock(struct bttv_fh *fh, struct v4l2_window *win,
+ 	win->w.width -= win->w.left & ~width_mask;
+ 	win->w.left = (win->w.left - width_mask - 1) & width_mask;
+ 
+-	rc = limit_scaled_size_lock(fh, &win->w.width, &win->w.height,
+-			       field, width_mask,
+-			       /* width_bias: round down */ 0,
+-			       adjust_size, adjust_crop);
+-	if (0 != rc)
+-		return rc;
+-	return 0;
++	return limit_scaled_size_lock(fh, &win->w.width, &win->w.height,
++				      field, width_mask,
++				      /* width_bias: round down */ 0,
++				      adjust_size, adjust_crop);
+ }
+ 
+ static int setup_window_lock(struct bttv_fh *fh, struct bttv *btv,
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.25.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
