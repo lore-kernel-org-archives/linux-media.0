@@ -2,212 +2,97 @@ Return-Path: <SRS0=F5P7=C6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AEAEAC43463
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:20:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87A3FC43465
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:20:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 717E4218AC
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:20:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 54CFD218AC
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:20:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="Ge816K6x"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="I5VTjG3a"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726752AbgIUKUe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Sep 2020 06:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
+        id S1726768AbgIUKUi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Sep 2020 06:20:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726738AbgIUKUe (ORCPT
+        with ESMTP id S1726756AbgIUKUg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Sep 2020 06:20:34 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFA1C061755
-        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:20:32 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id w5so12116307wrp.8
-        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:20:32 -0700 (PDT)
+        Mon, 21 Sep 2020 06:20:36 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F05C0613D2
+        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:20:36 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id k15so12115007wrn.10
+        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:20:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id;
-        bh=P114LNEQNNS9Xncao7G55/+Y79iVyKDqvr9Jcf50RWg=;
-        b=Ge816K6xH8yGoe0zeqBNbGeD8dUcZqlLPClrIpQEx/9buJqnSewe3lxgGeilETM7T1
-         LLGeTdIXCcaEtNz9XuDZxgvB3OMVGocgQMMJaAiHvIur9lRuRHexce5FQzsYBhfboKwd
-         zmOHKRdmXIqaIUw0DfFtTmLkezmlmFsv5ta4pK9rqFzjcFwm98A2B5wJLPt+Sfg+KDsY
-         AOmthdyfN4R0lGZEvG//XlXFhzoleYoFEn1EAdk9W3zyoY5JzhUVMZAPwDKpImpOnaA8
-         xyeyjIOMWwEd9bhettsZ9az/xfBRdPNDMysyGV2sz+0V4A8imGy07FoQXthnXOJmkcJD
-         RA+A==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=Z5xy1HmEK3Cb2cGuOZNBEue37qSrHj+Vnq/OwfaPORg=;
+        b=I5VTjG3a3ViBXraLZbIZjAF4w3IjxazcKPBR8RM9zZISWgHD9OAAW/k6SSohJYhPNG
+         A5YpvNK36e4G+9BFnfqnxMw1ClkJlY0mfrV41zlhv06gFtYecYAE+trrq+eIDf77q/X6
+         yJ9A8CxIZkIE7MofTCSiuH14CNxFd1GOFLd0QPPHX1l5Pz9e9RJSOfW1EZPYdHwFYh3n
+         /85ZsSW7M2mpjF8Yzi14whkUIf8DbmA6nOCwjNK9GhrXL+3c8xwcyiWIXyZxS1B26ilp
+         /1uB7h0HAi7DX/gQsZce7RHc+1uONcDNT/4FfiDSZ1HxaKtJR1mEhMWmguiXrcYTJARi
+         o/UA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=P114LNEQNNS9Xncao7G55/+Y79iVyKDqvr9Jcf50RWg=;
-        b=UiSIWM9wIhRKbUiQyy4S2EP/UGcgAo9MQJdT/P+a36NlpW+JiBtbk5h3Auyud/hLwk
-         +cJYbq9nl9W/f5gKujOKUiYiAJ1FiSLFsAgTtEWgXcyMXs5EmX35M1aKmX4gbHhkWieo
-         +Ix+NG3d3PhkZSFCNo1R9JhnZ34gLywU00wSMdE5So4NUhFWZcqiN63cW+0EJslsLuEU
-         IBbi7ILlBQs4zN1QM6wDAI2odWDwO+NVQ6btsXj6bbLMbSrZynmfMNeQt4hTFzKQIobl
-         0JOL5Z/SeXT0wFma0LL5scnRJo395WnvjC67Nk25+lI0DjofpQF5G0kS1sDwJKdW/vkf
-         xkbw==
-X-Gm-Message-State: AOAM531OUifEcu6G/WHpKy6Fv9XCfZY+QUTwVg9VhbbvLuwTRwwnjT8U
-        r6CfqQkfCHDvnxMSwnSk0BeH1VqsP79Djg==
-X-Google-Smtp-Source: ABdhPJx3U+75iHspfhNxbPS5+Qo2TcAZCebOPLwZNmi52sDHPeD7v6uBea1FXv9SOWNpYLwsJ7mUDw==
-X-Received: by 2002:a5d:568d:: with SMTP id f13mr50607391wrv.303.1600683631278;
-        Mon, 21 Sep 2020 03:20:31 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=Z5xy1HmEK3Cb2cGuOZNBEue37qSrHj+Vnq/OwfaPORg=;
+        b=o3q5uvunfPK2F90J/Ym5dw7hBrnJ2RXOclE85IuwO9oU34x5e9wr7whY8i7/t6wIvX
+         dNYA1DmG29q7GHQZtHxdj6ahvkhlElEp3rGlOAXzeMwhcj/2rOcq5Q2hpxc+LvaF50VH
+         9wCiF+hmyE+A//acTr7AsOPJY3HM+KA7+63fLyK8dbaMpVKyUfVZghokgPyGIvJBW3zO
+         km6meRTHoe+l3cwPV51uxXGcXpCQA4+ZTpeJJbUxoElCR4a6ZS3DzjhmUUjl3oTssfax
+         cMoNzB9ZV5P+DWYCYj+ffUMTXL+mmyZWapkUHGwMNif+i6xB8Esy+Y5beQDf3hcMCI6L
+         +VBg==
+X-Gm-Message-State: AOAM533mm1rTPT7NFxGHnyswiCpL2l5Tq4mXERA4mirgZ8mFPsz7tKuT
+        XdPcDgmORvpWEr+39XhEBHX7JQ==
+X-Google-Smtp-Source: ABdhPJxN1Spb10RxJRxY4y67Y7+C7S5d68x0Ru3WpjlUuQNHdi07Ix7g79gisaT5NE8Ke2Dq5/yb2Q==
+X-Received: by 2002:adf:f78f:: with SMTP id q15mr43195277wrp.206.1600683635053;
+        Mon, 21 Sep 2020 03:20:35 -0700 (PDT)
 Received: from localhost.localdomain ([51.15.160.169])
-        by smtp.googlemail.com with ESMTPSA id l17sm18804629wme.11.2020.09.21.03.20.30
+        by smtp.googlemail.com with ESMTPSA id l17sm18804629wme.11.2020.09.21.03.20.34
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 21 Sep 2020 03:20:30 -0700 (PDT)
+        Mon, 21 Sep 2020 03:20:34 -0700 (PDT)
 From:   Corentin Labbe <clabbe@baylibre.com>
 To:     gregkh@linuxfoundation.org, laurent.pinchart@skynet.be,
         mchehab@kernel.org
 Cc:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH RFT/RFC 00/49] staging: media: bring back zoran driver
-Date:   Mon, 21 Sep 2020 10:19:35 +0000
-Message-Id: <1600683624-5863-1-git-send-email-clabbe@baylibre.com>
+Subject: [PATCH RFT/RFC 03/49] staging: media: zoran: datasheet is no longer available from zoran.com
+Date:   Mon, 21 Sep 2020 10:19:38 +0000
+Message-Id: <1600683624-5863-4-git-send-email-clabbe@baylibre.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1600683624-5863-1-git-send-email-clabbe@baylibre.com>
+References: <1600683624-5863-1-git-send-email-clabbe@baylibre.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello
+Simply remove this broken reference
 
-The zoran driver was removed in 5.3
-The main reason of the removing was lack of motivation to convert it to
-VB2
-Since I need it, I worked on bringing it back.
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+---
+ drivers/staging/media/zoran/zoran_device.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-So the plan to achieve it was:
-- clean up the coding style.
-- convert old usage/API
-- clean unused code
-- convert to VB2
-
-I have tried to split a bit the VB2 patch (by adding/removing code in
-another patch), but the result is unfortunately still a big patch.
-
-The result of this serie is a working zoran driver.
-Furthermore it is now compliant to v4l-compliance.
-
-In the process some old (useless) feature (fbuf, overlay) was removed
-for simplifying maintenance.
-
-The zoran hardware support MJPEG decompression, but this feature is
-temporarily disabled by this serie.
-But basically, this feature was unusable, since the only tool which
-permitted to use it was a mplayer option.
-But this mplayer option no longer compile (probably since a long time)
-and is such a hack (a copy of some private ffmpeg structure) that it is unfixable.
-Happily, when I started to work on zoran, a patch was posted on ffmpeg
-ML which permit it to output non-raw video stream (and so MJPEG for zoran case).
-But the zoran hw does not like some part of JPEG header it receives, so
-a filter need to be written.
-Anyway, this disabling is not a regression, since this feature was not
-usable since a long time.
-
-Since the driver was in staging, I targeted staging, but probably the
-driver is in a sufficient good shape to target media and bypass staging.
-
-This driver is tested on a DC10+ (on x86). Tests on different hardware
-are welcome.
-
-I would like to thanks all people that helped me to achieve this (mostly #v4l)
-
-Regards
-
-Corentin Labbe (49):
-  staging: media: Revert "media: zoran: remove deprecated driver"
-  MAINTAINERS: change maintainer of the zoran driver
-  staging: media: zoran: datasheet is no longer available from zoran.com
-  staging: media: zoran: Documentation: fix typo
-  staging: media: zoran: fix checkpatch issue
-  staging: media: zoran: unsplit lines
-  staging: media: zoran: do not forward declare zr36057_init_vfe
-  staging: media: zoran: convert all error dprintk to pci_err/pr_err
-  staging: media: zoran: convert dprintk warn
-  staging: media: zoran: convert dprintk info to pci_info
-  staging: media: zoran: convert dprintk debug
-  staging: media: zoran: zoran_device.c: convert pr_x to pci_x
-  staging: media: zoran: remove proc_fs
-  staging: media: zoran: use VFL_TYPE_VIDEO
-  staging: media: zoran: use v4l2_buffer_set_timestamp
-  staging: media: zoran: do not print random guest 0
-  staging: media: zoran: move buffer_size out of zoran_fh
-  staging: media: zoran: move v4l_settings out of zoran_fh
-  staging: media: zoran: move jpg_settings out of zoran_fh
-  staging: media: zoran: move overlay_settings out of zoran_fh
-  staging: media: zoran: Use video_drvdata to get struct zoran
-  staging: media: zoran: Change zoran_v4l_set_format parameter from
-    zoran_fh to zoran
-  staging: media: zoran: remove overlay
-  staging: media: zoran: Use DMA coherent for stat_com
-  staging: media: zoran: use ZR_NORM
-  staging: media: zoran: zoran does not support STD_ALL
-  staging: media: zoran: convert irq to pci irq
-  staging: media: zoran: convert zoran alloc to devm
-  staging: media: zoran: convert mdelay to udelay
-  staging: media: zoran: use devm for videocodec_master alloc
-  staging: media: zoran: use pci_request_regions
-  staging: media: zoran: use devm_ioremap
-  staging: media: zoran: add stat_com buffer
-  staging: media: zoran: constify struct tvnorm
-  staging: media: zoran: constify codec_name
-  staging: media: zoran: Add more check for compliance
-  staging: media: zoran: add fallthrough keyword
-  staging: media: zoran: Add vb_queue
-  staging: media: zoran: disable output
-  staging: media: zoran: device support only 32bit DMA address
-  staging: media: zoran: enable makefile
-  staging: media: zoran: remove framebuffer support
-  staging: media: zoran: add vidioc_g_parm
-  staging: media: zoran: remove test_interrupts
-  staging: media: zoran: fix use of buffer_size and sizeimage
-  staging: media: zoran: fix some compliance test
-  staging: media: zoran: remove deprecated .vidioc_g_jpegcomp
-  staging: media: zoran: convert to vb2
-  staging: media: zoran: update TODO
-
- Documentation/media/v4l-drivers/zoran.rst  |  575 +++++++++
- MAINTAINERS                                |   10 +
- drivers/staging/media/Kconfig              |    2 +
- drivers/staging/media/Makefile             |    1 +
- drivers/staging/media/zoran/Kconfig        |   76 ++
- drivers/staging/media/zoran/Makefile       |    7 +
- drivers/staging/media/zoran/TODO           |   19 +
- drivers/staging/media/zoran/videocodec.c   |  330 +++++
- drivers/staging/media/zoran/videocodec.h   |  308 +++++
- drivers/staging/media/zoran/zoran.h        |  320 +++++
- drivers/staging/media/zoran/zoran_card.c   | 1320 ++++++++++++++++++++
- drivers/staging/media/zoran/zoran_card.h   |   30 +
- drivers/staging/media/zoran/zoran_device.c | 1002 +++++++++++++++
- drivers/staging/media/zoran/zoran_device.h |   64 +
- drivers/staging/media/zoran/zoran_driver.c | 1022 +++++++++++++++
- drivers/staging/media/zoran/zr36016.c      |  433 +++++++
- drivers/staging/media/zoran/zr36016.h      |   92 ++
- drivers/staging/media/zoran/zr36050.c      |  842 +++++++++++++
- drivers/staging/media/zoran/zr36050.h      |  163 +++
- drivers/staging/media/zoran/zr36057.h      |  154 +++
- drivers/staging/media/zoran/zr36060.c      |  872 +++++++++++++
- drivers/staging/media/zoran/zr36060.h      |  201 +++
- 22 files changed, 7843 insertions(+)
- create mode 100644 Documentation/media/v4l-drivers/zoran.rst
- create mode 100644 drivers/staging/media/zoran/Kconfig
- create mode 100644 drivers/staging/media/zoran/Makefile
- create mode 100644 drivers/staging/media/zoran/TODO
- create mode 100644 drivers/staging/media/zoran/videocodec.c
- create mode 100644 drivers/staging/media/zoran/videocodec.h
- create mode 100644 drivers/staging/media/zoran/zoran.h
- create mode 100644 drivers/staging/media/zoran/zoran_card.c
- create mode 100644 drivers/staging/media/zoran/zoran_card.h
- create mode 100644 drivers/staging/media/zoran/zoran_device.c
- create mode 100644 drivers/staging/media/zoran/zoran_device.h
- create mode 100644 drivers/staging/media/zoran/zoran_driver.c
- create mode 100644 drivers/staging/media/zoran/zr36016.c
- create mode 100644 drivers/staging/media/zoran/zr36016.h
- create mode 100644 drivers/staging/media/zoran/zr36050.c
- create mode 100644 drivers/staging/media/zoran/zr36050.h
- create mode 100644 drivers/staging/media/zoran/zr36057.h
- create mode 100644 drivers/staging/media/zoran/zr36060.c
- create mode 100644 drivers/staging/media/zoran/zr36060.h
-
+diff --git a/drivers/staging/media/zoran/zoran_device.c b/drivers/staging/media/zoran/zoran_device.c
+index 04162be80420..79da964c678b 100644
+--- a/drivers/staging/media/zoran/zoran_device.c
++++ b/drivers/staging/media/zoran/zoran_device.c
+@@ -265,9 +265,6 @@ jpeg_codec_reset (struct zoran *zr)
+  *   Set the registers for the size we have specified. Don't bother
+  *   trying to understand this without the ZR36057 manual in front of
+  *   you [AC].
+- *
+- *   PS: The manual is free for download in .pdf format from
+- *   www.zoran.com - nicely done those folks.
+  */
+ 
+ static void
 -- 
 2.26.2
 
