@@ -7,64 +7,64 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B004DC43466
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:23:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40BC2C43463
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:24:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6E10B207BC
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:23:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D7B42207BC
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:24:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="cl2IeTkO"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="slyncmIC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727248AbgIUKX4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Sep 2020 06:23:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59048 "EHLO
+        id S1726832AbgIUKXy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Sep 2020 06:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726822AbgIUKUs (ORCPT
+        with ESMTP id S1726820AbgIUKUs (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 21 Sep 2020 06:20:48 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2BFBC0613DC
-        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:20:46 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id z9so12016149wmk.1
-        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:20:46 -0700 (PDT)
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DCFC0613D6
+        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:20:43 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id l9so12023355wme.3
+        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:20:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=TIEqgyl+ADDMjFEaTAbzqzyE88oPhcPFCjvc5oofbcQ=;
-        b=cl2IeTkOiCupJvlZaG/O8k0rtYcZl1U0/BOSTLDOYCY7xIRu30jRG9GqIbsxeXcljB
-         MKvqFfRYL6NrVmW9hv3HOSZvGY84FPwOu6d+mTr6pva8jHGPWK+F8zqAITcCcic8RNcr
-         mndJnmAPVL+mVgEr46+S8Zo19ywObUMECTUY1vbcP2mul78we6L1FRdj09xov5ERQidQ
-         Ir+TMX7Kopxuc4oX1zgI5Hq8MoithDoxUOAdNEh+NugcQwZMkTe/CFKQpvrhKoElkogR
-         0ROt5mHgjvUXISFuhmIvwP6BfgFXMfQXVENOScU/Vsi5QncmPVovuMufm/LXh6pPi3Sx
-         5+vQ==
+        bh=XQtRtjHSNQiSv0g3mZwkcnE0Fkjc1fIWl4XCgS/r66c=;
+        b=slyncmICmXdEhhWYEdsc+ean+2FXOU4MeBJKJmPo2//+IaYRB3AfzhfeHPRPoYmjcU
+         /rK6AcQZekKH1tayoc7buUtGimhtDhst9KvohiUoWsxOYew2qxZKBurKJ6n8guxtd/Gm
+         jsCVWoymfh3+RcpdH9ybo64Lr5V3alaPCfxDi3BVTmwrfWi7toQhMnjWq8+0K0mYpOT7
+         QP8kd9PMMb/Zff/N3U8eLFvWZnubKaM4LRKIdxFqb8WjXuX3eQxCGBPOPJFXS4scOKQ6
+         TBfMIbhGnuIeNHt578xdco7ka9XxF/X+NEfLiGkbz1J6+Oa88foumPYueZhAR/jNPAxi
+         cv1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=TIEqgyl+ADDMjFEaTAbzqzyE88oPhcPFCjvc5oofbcQ=;
-        b=h2KEQzsXFudSzMD78BXJ806OchwKqdt3hZEgErRvttU7/ojLlL9MHWJWKUhn8TmSF/
-         P76niAYwrgn+2tRr62+W042OQU2Hdpwt6LOm4h670lGSCoL242VHwj7VTbkK5/HsBZ+C
-         RlNWEJ67L8yBcfXME+VnUQ7SYXx+Blca/ibhqmnPpb+TPKZEcpf7mvzfE4ltUaMgNjGs
-         tP7Qvrr3e1nKqMvr2iSerMx8qZWdSn7mRBN0apM+2Dz4+tJKwr9GQ8F/WhFSLhvtF7Fy
-         UWCM/jSjHX8WbQeGsy+/4FAafYkNGZvD7YG6pLBE3kwc/Iu2yMjzDuw7tA66VYFrG4ns
-         T4DQ==
-X-Gm-Message-State: AOAM533cw0CilO5+PBI7KiEmuu3IBPugAA/jVc0OXy+YYwtCZtR18Iv+
-        Vg3YQNg5Fzk8n9Wpcd4GXis6aA==
-X-Google-Smtp-Source: ABdhPJxDHJykzwRYiaONPu1NNXHO6hrwhRomAUY0bJDEQg8n6PANH8+pU3cClKrbweUwkGHXiWIpBg==
-X-Received: by 2002:a1c:800f:: with SMTP id b15mr28032317wmd.114.1600683645367;
-        Mon, 21 Sep 2020 03:20:45 -0700 (PDT)
+        bh=XQtRtjHSNQiSv0g3mZwkcnE0Fkjc1fIWl4XCgS/r66c=;
+        b=fhvK0Qvc4EdyqqSajl8/ukcMxyEZxbrGasWLNPBhRIWqje7DiHsQstvU4kS19DYMVO
+         H7BZLwT79u9uB0tH2Uk+s89fneqU1J351FKigiWbshWWNidyO91lgiIs00s++yEj0FxJ
+         QmCMoh7rE+KOwbv8ZOv/HWqMtdAbw584GvNx/K7yS2vpgoUf5/yoy/foDjrH9VYIgJhd
+         udV5vs/m4rVT5f6wjqrv/azsNPRFtE9paLgbkcTLpq1OBplIsDYT7KLWnfB2KXmyHJu+
+         07Zm7E5mx/E5y7jcEUJdxNPPL8qB7f8mCSmM/AOS36XFBCNocMhiBAugSW6EOXxiuTvt
+         oyjA==
+X-Gm-Message-State: AOAM533pR1/Bf+sA1ZFkjG0mqLcKn7klSJ2AOV48XUUW+PyLG6dphphT
+        HMqEbN5jr9RTyb26oyRMcBid5w==
+X-Google-Smtp-Source: ABdhPJzLqCAqD/VEfG70gkysoerYVRtzTxtVm9b+0uuTk5ona1L4qr25Ge+YWXB4ngJw2k5ewFF6kQ==
+X-Received: by 2002:a1c:6187:: with SMTP id v129mr29087223wmb.35.1600683642386;
+        Mon, 21 Sep 2020 03:20:42 -0700 (PDT)
 Received: from localhost.localdomain ([51.15.160.169])
-        by smtp.googlemail.com with ESMTPSA id l17sm18804629wme.11.2020.09.21.03.20.44
+        by smtp.googlemail.com with ESMTPSA id l17sm18804629wme.11.2020.09.21.03.20.41
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 21 Sep 2020 03:20:44 -0700 (PDT)
+        Mon, 21 Sep 2020 03:20:41 -0700 (PDT)
 From:   Corentin Labbe <clabbe@baylibre.com>
 To:     gregkh@linuxfoundation.org, laurent.pinchart@skynet.be,
         mchehab@kernel.org
 Cc:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH RFT/RFC 13/49] staging: media: zoran: remove proc_fs
-Date:   Mon, 21 Sep 2020 10:19:48 +0000
-Message-Id: <1600683624-5863-14-git-send-email-clabbe@baylibre.com>
+Subject: [PATCH RFT/RFC 10/49] staging: media: zoran: convert dprintk info to pci_info
+Date:   Mon, 21 Sep 2020 10:19:45 +0000
+Message-Id: <1600683624-5863-11-git-send-email-clabbe@baylibre.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1600683624-5863-1-git-send-email-clabbe@baylibre.com>
 References: <1600683624-5863-1-git-send-email-clabbe@baylibre.com>
@@ -72,376 +72,304 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The zoran driver give some debug information in procfs, but this is not
-the right place.
-So let's remove them, we will use debugfs later.
+This patch convert dprintk(info) to pci_info (or pci_dbg if the message
+is not important).
 
 Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 ---
- drivers/staging/media/zoran/Makefile       |   2 +-
- drivers/staging/media/zoran/zoran.h        |   5 -
- drivers/staging/media/zoran/zoran_card.c   |   6 -
- drivers/staging/media/zoran/zoran_device.c |   1 -
- drivers/staging/media/zoran/zoran_driver.c |   1 -
- drivers/staging/media/zoran/zoran_procfs.c | 213 ---------------------
- drivers/staging/media/zoran/zoran_procfs.h |  32 ----
- 7 files changed, 1 insertion(+), 259 deletions(-)
- delete mode 100644 drivers/staging/media/zoran/zoran_procfs.c
- delete mode 100644 drivers/staging/media/zoran/zoran_procfs.h
+ drivers/staging/media/zoran/zoran_card.c   | 46 +++++++---------------
+ drivers/staging/media/zoran/zoran_device.c | 27 ++++---------
+ drivers/staging/media/zoran/zoran_driver.c | 34 ++++++----------
+ 3 files changed, 36 insertions(+), 71 deletions(-)
 
-diff --git a/drivers/staging/media/zoran/Makefile b/drivers/staging/media/zoran/Makefile
-index 21ac29a71458..7023158e3892 100644
---- a/drivers/staging/media/zoran/Makefile
-+++ b/drivers/staging/media/zoran/Makefile
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
--zr36067-objs	:=	zoran_procfs.o zoran_device.o \
-+zr36067-objs	:=	zoran_device.o \
- 			zoran_driver.o zoran_card.o
- 
- obj-$(CONFIG_VIDEO_ZORAN) += zr36067.o videocodec.o
-diff --git a/drivers/staging/media/zoran/zoran.h b/drivers/staging/media/zoran/zoran.h
-index eac8e49a080f..1b3eceaead5a 100644
---- a/drivers/staging/media/zoran/zoran.h
-+++ b/drivers/staging/media/zoran/zoran.h
-@@ -346,11 +346,6 @@ struct zoran {
- 	struct zoran_buffer_col jpg_buffers;	/* MJPEG buffers' info */
- 
- 	/* Additional stuff for testing */
--#ifdef CONFIG_PROC_FS
--	struct proc_dir_entry *zoran_proc;
--#else
--	void *zoran_proc;
--#endif
- 	int testing;
- 	int jpeg_error;
- 	int intr_counter_GIRQ1;
 diff --git a/drivers/staging/media/zoran/zoran_card.c b/drivers/staging/media/zoran/zoran_card.c
-index 5a3fa5fe32b1..02af426cf94e 100644
+index 26f58e687333..fd633265761c 100644
 --- a/drivers/staging/media/zoran/zoran_card.c
 +++ b/drivers/staging/media/zoran/zoran_card.c
-@@ -18,7 +18,6 @@
- #include <linux/vmalloc.h>
- #include <linux/slab.h>
+@@ -887,9 +887,9 @@ static void test_interrupts(struct zoran *zr)
+ 	btwrite(0, ZR36057_ICR);
+ 	btwrite(0x78000000, ZR36057_ISR);
+ 	zr->testing = 0;
+-	dprintk(5, KERN_INFO "%s: Testing interrupts...\n", ZR_DEVNAME(zr));
++	pci_info(zr->pci_dev, "Testing interrupts...\n");
+ 	if (timeout)
+-		dprintk(1, ": time spent: %d\n", 1 * HZ - timeout);
++		pci_info(zr->pci_dev, ": time spent: %d\n", 1 * HZ - timeout);
+ 	if (zr36067_debug > 1)
+ 		print_interrupts(zr);
+ 	btwrite(icr, ZR36057_ICR);
+@@ -899,10 +899,7 @@ static int zr36057_init(struct zoran *zr)
+ {
+ 	int j, err;
  
--#include <linux/proc_fs.h>
- #include <linux/i2c.h>
- #include <linux/i2c-algo-bit.h>
- #include <linux/videodev2.h>
-@@ -38,7 +37,6 @@
- #include "zoran.h"
- #include "zoran_card.h"
- #include "zoran_device.h"
--#include "zoran_procfs.h"
+-	dprintk(1,
+-		KERN_INFO
+-		"%s: %s - initializing card[%d], zr=%p\n",
+-		ZR_DEVNAME(zr), __func__, zr->id, zr);
++	pci_info(zr->pci_dev, "initializing card[%d]\n", zr->id);
  
- extern const struct zoran_format zoran_formats[];
+ 	/* default setup of all parameters which will persist between opens */
+ 	zr->user = 0;
+@@ -1134,18 +1131,12 @@ static int zoran_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 		goto zr_unreg;
+ 	zr->revision = zr->pci_dev->revision;
  
-@@ -973,7 +971,6 @@ static int zr36057_init(struct zoran *zr)
- 		encoder_call(zr, video, s_routing, 2, 0, 0);
+-	dprintk(1,
+-		KERN_INFO
+-		"%s: Zoran ZR360%c7 (rev %d), irq: %d, memory: 0x%08llx\n",
+-		ZR_DEVNAME(zr), zr->revision < 2 ? '5' : '6', zr->revision,
+-		zr->pci_dev->irq, (uint64_t)pci_resource_start(zr->pci_dev, 0));
+-	if (zr->revision >= 2) {
+-		dprintk(1,
+-			KERN_INFO
+-			"%s: Subsystem vendor=0x%04x id=0x%04x\n",
+-			ZR_DEVNAME(zr), zr->pci_dev->subsystem_vendor,
+-			zr->pci_dev->subsystem_device);
+-	}
++	pci_info(zr->pci_dev, "Zoran ZR360%c7 (rev %d), irq: %d, memory: 0x%08llx\n",
++		 zr->revision < 2 ? '5' : '6', zr->revision,
++		 zr->pci_dev->irq, (uint64_t)pci_resource_start(zr->pci_dev, 0));
++	if (zr->revision >= 2)
++		pci_info(zr->pci_dev, "Subsystem vendor=0x%04x id=0x%04x\n",
++			 zr->pci_dev->subsystem_vendor, zr->pci_dev->subsystem_device);
+ 
+ 	/* Use auto-detected card type? */
+ 	if (card[nr] == -1) {
+@@ -1208,14 +1199,13 @@ static int zoran_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 			     &latency);
+ 	need_latency = zr->revision > 1 ? 32 : 48;
+ 	if (latency != need_latency) {
+-		dprintk(2, KERN_INFO "%s: Changing PCI latency from %d to %d\n",
+-			ZR_DEVNAME(zr), latency, need_latency);
++		pci_info(zr->pci_dev, "Changing PCI latency from %d to %d\n", latency, need_latency);
+ 		pci_write_config_byte(zr->pci_dev, PCI_LATENCY_TIMER, need_latency);
  	}
  
--	zr->zoran_proc = NULL;
- 	zr->initialized = 1;
- 	return 0;
+ 	zr36057_restart(zr);
+ 	/* i2c */
+-	dprintk(2, KERN_INFO "%s: Initializing i2c bus...\n", ZR_DEVNAME(zr));
++	pci_info(zr->pci_dev, "Initializing i2c bus...\n");
  
-@@ -1014,7 +1011,6 @@ static void zoran_remove(struct pci_dev *pdev)
- 	free_irq(zr->pci_dev->irq, zr);
- 	/* unmap and free memory */
- 	kfree(zr->stat_com);
--	zoran_proc_cleanup(zr);
- 	iounmap(zr->zr36057_mem);
- 	pci_disable_device(zr->pci_dev);
- 	video_unregister_device(zr->video_dev);
-@@ -1271,8 +1267,6 @@ static int zoran_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	if (zoran_register_i2c(zr) < 0) {
+ 		pci_err(pdev, "%s - can't initialize i2c bus\n", __func__);
+@@ -1229,7 +1219,7 @@ static int zoran_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 		zr->encoder = v4l2_i2c_new_subdev(&zr->v4l2_dev, &zr->i2c_adapter,
+ 						  zr->card.i2c_encoder, 0, zr->card.addrs_encoder);
+ 
+-	dprintk(2, KERN_INFO "%s: Initializing videocodec bus...\n", ZR_DEVNAME(zr));
++	pci_info(zr->pci_dev, "Initializing videocodec bus...\n");
+ 
+ 	if (zr->card.video_codec) {
+ 		codec_name = codecid_to_modulename(zr->card.video_codec);
+@@ -1285,9 +1275,7 @@ static int zoran_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	/* take care of Natoma chipset and a revision 1 zr36057 */
+ 	if ((pci_pci_problems & PCIPCI_NATOMA) && zr->revision <= 1) {
+ 		zr->jpg_buffers.need_contiguous = 1;
+-		dprintk(1, KERN_INFO
+-			"%s: ZR36057/Natoma bug, max. buffer size is 128K\n",
+-			ZR_DEVNAME(zr));
++		pci_info(zr->pci_dev, "ZR36057/Natoma bug, max. buffer size is 128K\n");
+ 	}
+ 
  	if (zr36057_init(zr) < 0)
- 		goto zr_detach_vfe;
+@@ -1356,12 +1344,8 @@ static int __init zoran_init(void)
+ 	if (jpg_bufsize > (512 * 1024))
+ 		jpg_bufsize = 512 * 1024;
+ 	/* Use parameter for vidmem or try to find a video card */
+-	if (vidmem) {
+-		dprintk(1,
+-			KERN_INFO
+-			"%s: Using supplied video memory base address @ 0x%lx\n",
+-			ZORAN_NAME, vidmem);
+-	}
++	if (vidmem)
++		pr_info("%s: Using supplied video memory base address @ 0x%lx\n", ZORAN_NAME, vidmem);
  
--	zoran_proc_init(zr);
--
- 	return 0;
- 
- zr_detach_vfe:
+ 	/* some mainboards might not do PCI-PCI data transfer well */
+ 	if (pci_pci_problems & (PCIPCI_FAIL | PCIAGP_FAIL | PCIPCI_ALIMAGIK))
 diff --git a/drivers/staging/media/zoran/zoran_device.c b/drivers/staging/media/zoran/zoran_device.c
-index 03ad3562a807..0fb65fa4a3dd 100644
+index a04fbae30745..1f625e1e8477 100644
 --- a/drivers/staging/media/zoran/zoran_device.c
 +++ b/drivers/staging/media/zoran/zoran_device.c
-@@ -17,7 +17,6 @@
- #include <linux/sched/signal.h>
+@@ -118,8 +118,7 @@ int post_office_wait(struct zoran *zr)
+ 	}
+ 	if ((por & ZR36057_POR_POTime) && !zr->card.gws_not_connected) {
+ 		/* In LML33/BUZ \GWS line is not connected, so it has always timeout set */
+-		dprintk(1, KERN_INFO "%s: pop timeout %08x\n", ZR_DEVNAME(zr),
+-			por);
++		pci_info(zr->pci_dev, "pop timeout %08x\n", por);
+ 		return -1;
+ 	}
  
- #include <linux/interrupt.h>
--#include <linux/proc_fs.h>
- #include <linux/i2c.h>
- #include <linux/i2c-algo-bit.h>
- #include <linux/videodev2.h>
+@@ -218,16 +217,10 @@ void jpeg_codec_sleep(struct zoran *zr, int sleep)
+ {
+ 	GPIO(zr, zr->card.gpio[ZR_GPIO_JPEG_SLEEP], !sleep);
+ 	if (!sleep) {
+-		dprintk(3,
+-			KERN_INFO
+-			"%s: %s() - wake GPIO=0x%08x\n",
+-			ZR_DEVNAME(zr), __func__, btread(ZR36057_GPPGCR1));
++		pci_dbg(zr->pci_dev, "%s() - wake GPIO=0x%08x\n", __func__, btread(ZR36057_GPPGCR1));
+ 		udelay(500);
+ 	} else {
+-		dprintk(3,
+-			KERN_INFO
+-			"%s: %s() - sleep GPIO=0x%08x\n",
+-			ZR_DEVNAME(zr), __func__, btread(ZR36057_GPPGCR1));
++		pci_dbg(zr->pci_dev, "%s() - sleep GPIO=0x%08x\n", __func__, btread(ZR36057_GPPGCR1));
+ 		udelay(2);
+ 	}
+ }
+@@ -309,8 +302,7 @@ static void zr36057_set_vfe(struct zoran *zr, int video_width, int video_height,
+ 	Wa = tvn->Wa;
+ 	Ha = tvn->Ha;
+ 
+-	dprintk(2, KERN_INFO "%s: set_vfe() - width = %d, height = %d\n",
+-		ZR_DEVNAME(zr), video_width, video_height);
++	pci_info(zr->pci_dev, "set_vfe() - width = %d, height = %d\n", video_width, video_height);
+ 
+ 	if (video_width < BUZ_MIN_WIDTH ||
+ 	    video_height < BUZ_MIN_HEIGHT ||
+@@ -940,8 +932,7 @@ void zr36057_enable_jpg(struct zoran *zr, enum zoran_codec_mode mode)
+ 		zr36057_set_jpg(zr, mode);	// \P_Reset, ... Video param, FIFO
+ 
+ 		clear_interrupt_counters(zr);
+-		dprintk(2, KERN_INFO "%s: enable_jpg(MOTION_COMPRESS)\n",
+-			ZR_DEVNAME(zr));
++		pci_info(zr->pci_dev, "enable_jpg(MOTION_COMPRESS)\n");
+ 		break;
+ 	}
+ 
+@@ -968,8 +959,7 @@ void zr36057_enable_jpg(struct zoran *zr, enum zoran_codec_mode mode)
+ 		zr36057_set_jpg(zr, mode);	// \P_Reset, ... Video param, FIFO
+ 
+ 		clear_interrupt_counters(zr);
+-		dprintk(2, KERN_INFO "%s: enable_jpg(MOTION_DECOMPRESS)\n",
+-			ZR_DEVNAME(zr));
++		pci_info(zr->pci_dev, "enable_jpg(MOTION_DECOMPRESS)\n");
+ 		break;
+ 
+ 	case BUZ_MODE_IDLE:
+@@ -994,7 +984,7 @@ void zr36057_enable_jpg(struct zoran *zr, enum zoran_codec_mode mode)
+ 		decoder_call(zr, video, s_stream, 1);
+ 		encoder_call(zr, video, s_routing, 0, 0, 0);
+ 
+-		dprintk(2, KERN_INFO "%s: enable_jpg(IDLE)\n", ZR_DEVNAME(zr));
++		pci_info(zr->pci_dev, "enable_jpg(IDLE)\n");
+ 		break;
+ 	}
+ }
+@@ -1112,8 +1102,7 @@ static void zoran_restart(struct zoran *zr)
+ 		jpeg_start(zr);
+ 
+ 		if (zr->num_errors <= 8)
+-			dprintk(2, KERN_INFO "%s: Restart\n",
+-				ZR_DEVNAME(zr));
++			pci_info(zr->pci_dev, "Restart\n");
+ 
+ 		zr->JPEG_missed = 0;
+ 		zr->JPEG_error = 2;
 diff --git a/drivers/staging/media/zoran/zoran_driver.c b/drivers/staging/media/zoran/zoran_driver.c
-index 2f6ef995927a..31ed36906204 100644
+index 3b061c3e4a82..02c1f69d073e 100644
 --- a/drivers/staging/media/zoran/zoran_driver.c
 +++ b/drivers/staging/media/zoran/zoran_driver.c
-@@ -53,7 +53,6 @@
- #include <asm/byteorder.h>
- #include <linux/io.h>
- #include <linux/uaccess.h>
--#include <linux/proc_fs.h>
- 
- #include <linux/mutex.h>
- #include "zoran.h"
-diff --git a/drivers/staging/media/zoran/zoran_procfs.c b/drivers/staging/media/zoran/zoran_procfs.c
-deleted file mode 100644
-index 98f9e0103d83..000000000000
---- a/drivers/staging/media/zoran/zoran_procfs.c
-+++ /dev/null
-@@ -1,213 +0,0 @@
--/*
-- * Zoran zr36057/zr36067 PCI controller driver, for the
-- * Pinnacle/Miro DC10/DC10+/DC30/DC30+, Iomega Buz, Linux
-- * Media Labs LML33/LML33R10.
-- *
-- * This part handles the procFS entries (/proc/ZORAN[%d])
-- *
-- * Copyright (C) 2000 Serguei Miridonov <mirsev@cicese.mx>
-- *
-- * Currently maintained by:
-- *   Ronald Bultje    <rbultje@ronald.bitfreak.net>
-- *   Laurent Pinchart <laurent.pinchart@skynet.be>
-- *   Mailinglist      <mjpeg-users@lists.sf.net>
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- */
--
--#include <linux/types.h>
--#include <linux/kernel.h>
--#include <linux/module.h>
--#include <linux/printk.h>
--#include <linux/vmalloc.h>
--
--#include <linux/proc_fs.h>
--#include <linux/pci.h>
--#include <linux/i2c.h>
--#include <linux/i2c-algo-bit.h>
--#include <linux/videodev2.h>
--#include <linux/spinlock.h>
--#include <linux/sem.h>
--#include <linux/seq_file.h>
--
--#include <linux/ctype.h>
--#include <linux/poll.h>
--#include <asm/io.h>
--
--#include "videocodec.h"
--#include "zoran.h"
--#include "zoran_procfs.h"
--#include "zoran_card.h"
--
--#ifdef CONFIG_PROC_FS
--struct procfs_params_zr36067 {
--	char *name;
--	short reg;
--	u32 mask;
--	short bit;
--};
--
--static const struct procfs_params_zr36067 zr67[] = {
--	{"HSPol", 0x000, 1, 30},
--	{"HStart", 0x000, 0x3ff, 10},
--	{"HEnd", 0x000, 0x3ff, 0},
--
--	{"VSPol", 0x004, 1, 30},
--	{"VStart", 0x004, 0x3ff, 10},
--	{"VEnd", 0x004, 0x3ff, 0},
--
--	{"ExtFl", 0x008, 1, 26},
--	{"TopField", 0x008, 1, 25},
--	{"VCLKPol", 0x008, 1, 24},
--	{"DupFld", 0x008, 1, 20},
--	{"LittleEndian", 0x008, 1, 0},
--
--	{"HsyncStart", 0x10c, 0xffff, 16},
--	{"LineTot", 0x10c, 0xffff, 0},
--
--	{"NAX", 0x110, 0xffff, 16},
--	{"PAX", 0x110, 0xffff, 0},
--
--	{"NAY", 0x114, 0xffff, 16},
--	{"PAY", 0x114, 0xffff, 0},
--
--	/* {"",,,}, */
--
--	{NULL, 0, 0, 0},
--};
--
--static void setparam(struct zoran *zr, char *name, char *sval)
--{
--	int i = 0, reg0, reg, val;
--
--	while (zr67[i].name) {
--		if (!strncmp(name, zr67[i].name, strlen(zr67[i].name))) {
--			reg = reg0 = btread(zr67[i].reg);
--			reg &= ~(zr67[i].mask << zr67[i].bit);
--			if (!isdigit(sval[0]))
--				break;
--			val = simple_strtoul(sval, NULL, 0);
--			if ((val & ~zr67[i].mask))
--				break;
--			reg |= (val & zr67[i].mask) << zr67[i].bit;
--			dprintk(4,
--				KERN_INFO
--				"%s: setparam: setting ZR36067 register 0x%03x: 0x%08x=>0x%08x %s=%d\n",
--				ZR_DEVNAME(zr), zr67[i].reg, reg0, reg,
--				zr67[i].name, val);
--			btwrite(reg, zr67[i].reg);
--			break;
--		}
--		i++;
--	}
--}
--
--static int zoran_show(struct seq_file *p, void *v)
--{
--	struct zoran *zr = p->private;
--	int i;
--
--	seq_printf(p, "ZR36067 registers:\n");
--	for (i = 0; i < 0x130; i += 16)
--		seq_printf(p, "%03X %08X  %08X  %08X  %08X\n", i,
--			   btread(i), btread(i + 4), btread(i + 8), btread(i + 12));
--	return 0;
--}
--
--static int zoran_open(struct inode *inode, struct file *file)
--{
--	struct zoran *data = PDE_DATA(inode);
--
--	return single_open(file, zoran_show, data);
--}
--
--static ssize_t zoran_write(struct file *file, const char __user *buffer,
--			   size_t count, loff_t *ppos)
--{
--	struct zoran *zr = PDE_DATA(file_inode(file));
--	char *string, *sp;
--	char *line, *ldelim, *varname, *svar, *tdelim;
--
--	if (count > 32768)	/* Stupidity filter */
--		return -EINVAL;
--
--	string = sp = vmalloc(count + 1);
--	if (!string) {
--		return -ENOMEM;
--	}
--	if (copy_from_user(string, buffer, count)) {
--		vfree(string);
--		return -EFAULT;
--	}
--	string[count] = 0;
--	dprintk(4, KERN_INFO "%s: write_proc: name=%pD count=%zu zr=%p\n",
--		ZR_DEVNAME(zr), file, count, zr);
--	ldelim = " \t\n";
--	tdelim = "=";
--	line = strpbrk(sp, ldelim);
--	while (line) {
--		*line = 0;
--		svar = strpbrk(sp, tdelim);
--		if (svar) {
--			*svar = 0;
--			varname = sp;
--			svar++;
--			setparam(zr, varname, svar);
--		}
--		sp = line + 1;
--		line = strpbrk(sp, ldelim);
--	}
--	vfree(string);
--
--	return count;
--}
--
--static const struct file_operations zoran_operations = {
--	.owner		= THIS_MODULE,
--	.open		= zoran_open,
--	.read		= seq_read,
--	.write		= zoran_write,
--	.llseek		= seq_lseek,
--	.release	= single_release,
--};
--#endif
--
--int zoran_proc_init(struct zoran *zr)
--{
--#ifdef CONFIG_PROC_FS
--	char name[8];
--
--	snprintf(name, 7, "zoran%d", zr->id);
--	zr->zoran_proc = proc_create_data(name, 0, NULL, &zoran_operations, zr);
--	if (zr->zoran_proc) {
--		dprintk(2,
+@@ -225,11 +225,8 @@ static int v4l_fbuffer_alloc(struct zoran_fh *fh)
+ 		for (off = 0; off < fh->buffers.buffer_size;
+ 		     off += PAGE_SIZE)
+ 			SetPageReserved(virt_to_page(mem + off));
+-		dprintk(4,
 -			KERN_INFO
--			"%s: procfs entry /proc/%s allocated. data=%p\n",
--			ZR_DEVNAME(zr), name, zr);
--	} else {
--		pr_err("%s: Unable to initialise /proc/%s\n", ZR_DEVNAME(zr), name);
--		return 1;
--	}
--#endif
--	return 0;
--}
--
--void zoran_proc_cleanup(struct zoran *zr)
--{
--#ifdef CONFIG_PROC_FS
--	char name[8];
--
--	snprintf(name, 7, "zoran%d", zr->id);
--	if (zr->zoran_proc)
--		remove_proc_entry(name, NULL);
--	zr->zoran_proc = NULL;
--#endif
--}
-diff --git a/drivers/staging/media/zoran/zoran_procfs.h b/drivers/staging/media/zoran/zoran_procfs.h
-deleted file mode 100644
-index 0ac7cb0011f2..000000000000
---- a/drivers/staging/media/zoran/zoran_procfs.h
-+++ /dev/null
-@@ -1,32 +0,0 @@
--/*
-- * Zoran zr36057/zr36067 PCI controller driver, for the
-- * Pinnacle/Miro DC10/DC10+/DC30/DC30+, Iomega Buz, Linux
-- * Media Labs LML33/LML33R10.
-- *
-- * This part handles card-specific data and detection
-- *
-- * Copyright (C) 2000 Serguei Miridonov <mirsev@cicese.mx>
-- *
-- * Currently maintained by:
-- *   Ronald Bultje    <rbultje@ronald.bitfreak.net>
-- *   Laurent Pinchart <laurent.pinchart@skynet.be>
-- *   Mailinglist      <mjpeg-users@lists.sf.net>
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- */
--
--#ifndef __ZORAN_PROCFS_H__
--#define __ZORAN_PROCFS_H__
--
--extern int zoran_proc_init(struct zoran *zr);
--extern void zoran_proc_cleanup(struct zoran *zr);
--
--#endif				/* __ZORAN_PROCFS_H__ */
+-			"%s: %s - V4L frame %d mem %p (bus: 0x%llx)\n",
+-			ZR_DEVNAME(zr), __func__, i, mem,
+-			(unsigned long long)virt_to_bus(mem));
++		pci_info(zr->pci_dev, "%s - V4L frame %d mem %p (bus: 0x%llx)\n", __func__, i, mem,
++			 (unsigned long long)virt_to_bus(mem));
+ 	}
+ 
+ 	fh->buffers.allocated = 1;
+@@ -244,7 +241,7 @@ static void v4l_fbuffer_free(struct zoran_fh *fh)
+ 	int i, off;
+ 	unsigned char *mem;
+ 
+-	dprintk(4, KERN_INFO "%s: %s\n", ZR_DEVNAME(zr), __func__);
++	pci_dbg(zr->pci_dev, "%s\n", __func__);
+ 
+ 	for (i = 0; i < fh->buffers.num_buffers; i++) {
+ 		if (!fh->buffers.buffer[i].v4l.fbuffer)
+@@ -820,8 +817,8 @@ static int zoran_open(struct file *file)
+ 	struct zoran_fh *fh;
+ 	int res, first_open = 0;
+ 
+-	dprintk(2, KERN_INFO "%s: %s(%s, pid=[%d]), users(-)=%d\n",
+-		ZR_DEVNAME(zr), __func__, current->comm, task_pid_nr(current), zr->user + 1);
++	pci_info(zr->pci_dev, "%s(%s, pid=[%d]), users(-)=%d\n", __func__, current->comm,
++		 task_pid_nr(current), zr->user + 1);
+ 
+ 	mutex_lock(&zr->lock);
+ 
+@@ -876,8 +873,7 @@ static int zoran_open(struct file *file)
+ fail_unlock:
+ 	mutex_unlock(&zr->lock);
+ 
+-	dprintk(2, KERN_INFO "%s: open failed (%d), users(-)=%d\n",
+-		ZR_DEVNAME(zr), res, zr->user);
++	pci_info(zr->pci_dev, "open failed (%d), users(-)=%d\n", res, zr->user);
+ 
+ 	return res;
+ }
+@@ -887,8 +883,8 @@ static int zoran_close(struct file *file)
+ 	struct zoran_fh *fh = file->private_data;
+ 	struct zoran *zr = fh->zr;
+ 
+-	dprintk(2, KERN_INFO "%s: %s(%s, pid=[%d]), users(+)=%d\n",
+-		ZR_DEVNAME(zr), __func__, current->comm, task_pid_nr(current), zr->user - 1);
++	pci_info(zr->pci_dev, "%s(%s, pid=[%d]), users(+)=%d\n", __func__, current->comm,
++		 task_pid_nr(current), zr->user - 1);
+ 
+ 	/* kernel locks (fs/device.c), so don't do that ourselves
+ 	 * (prevents deadlocks) */
+@@ -933,7 +929,7 @@ static int zoran_close(struct file *file)
+ 	kfree(fh->overlay_mask);
+ 	kfree(fh);
+ 
+-	dprintk(4, KERN_INFO "%s: %s done\n", ZR_DEVNAME(zr), __func__);
++	pci_dbg(zr->pci_dev, "%s done\n", __func__);
+ 
+ 	return 0;
+ }
+@@ -2381,8 +2377,7 @@ static void zoran_vm_close(struct vm_area_struct *vma)
+ 	struct zoran *zr = fh->zr;
+ 	int i;
+ 
+-	dprintk(3, KERN_INFO "%s: %s - munmap(%s)\n", ZR_DEVNAME(zr),
+-		__func__, mode_name(fh->map_mode));
++	pci_info(zr->pci_dev, "%s - munmap(%s)\n", ZR_DEVNAME(zr), mode_name(fh->map_mode));
+ 
+ 	for (i = 0; i < fh->buffers.num_buffers; i++) {
+ 		if (fh->buffers.buffer[i].map == map)
+@@ -2396,8 +2391,7 @@ static void zoran_vm_close(struct vm_area_struct *vma)
+ 			return;
+ 	}
+ 
+-	dprintk(3, KERN_INFO "%s: %s - free %s buffers\n", ZR_DEVNAME(zr),
+-		__func__, mode_name(fh->map_mode));
++	pci_info(zr->pci_dev, "%s - free %s buffers\n", __func__, mode_name(fh->map_mode));
+ 
+ 	if (fh->map_mode == ZORAN_MAP_MODE_RAW) {
+ 		if (fh->buffers.active != ZORAN_FREE) {
+@@ -2437,10 +2431,8 @@ static int zoran_mmap(struct file *file, struct vm_area_struct *vma)
+ 	struct zoran_mapping *map;
+ 	int res = 0;
+ 
+-	dprintk(3,
+-		KERN_INFO "%s: %s(%s) of 0x%08lx-0x%08lx (size=%lu)\n",
+-		ZR_DEVNAME(zr), __func__,
+-		mode_name(fh->map_mode), vma->vm_start, vma->vm_end, size);
++	pci_info(zr->pci_dev, "%s(%s) of 0x%08lx-0x%08lx (size=%lu)\n", __func__,
++		 mode_name(fh->map_mode), vma->vm_start, vma->vm_end, size);
+ 
+ 	if (!(vma->vm_flags & VM_SHARED) || !(vma->vm_flags & VM_READ) ||
+ 	    !(vma->vm_flags & VM_WRITE)) {
 -- 
 2.26.2
 
