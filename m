@@ -7,64 +7,64 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73832C43465
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:21:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2953CC43463
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:21:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 38B30205F4
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:21:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EACE4205F4
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:21:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="tuGiHope"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="cqXso1We"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727021AbgIUKVR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Sep 2020 06:21:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59234 "EHLO
+        id S1727054AbgIUKV0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Sep 2020 06:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727019AbgIUKVQ (ORCPT
+        with ESMTP id S1727036AbgIUKVU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Sep 2020 06:21:16 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25CBDC061755
-        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:21:16 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id l15so11153419wmh.1
-        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:21:16 -0700 (PDT)
+        Mon, 21 Sep 2020 06:21:20 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF90C0613D1
+        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:21:19 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id b79so12014025wmb.4
+        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:21:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=GuupeKfcO/+rf9Qb6r8f2KQJXgchvtoxnNFe6M9/a1Y=;
-        b=tuGiHopegBqrIUp8HpoCeuXo5y5bglOeDyrrrfZ4Tzuh9U6lqCJj5fXQgy9gzZfIPm
-         Jw4YULN3OQk6sfQjCoMYyu5tVlL2tYnotZQgDONkBlgCqkIb4AhNP3X0AOl7eUv0Z2jl
-         o2z1CC2zmeBOl2meNu+J+6u5Us1CMuzlG9sdM50i75y3fZUHRNnbclBHy+Jg0CeDlEcD
-         5iBiCB8zjIBZ1ORIsNPQ+CrFmBBcfzagv/J1U1g85HIeFeuV9iXHtqKiqoSoTqAj1Rjb
-         idMoqYHxE1jLGDP9DOthGbMEi8+gvkkB/cx/HsgkwS181mW4GGcxEE1mBbCR2jW3U0+h
-         EBbw==
+        bh=S9MzB7+azPxcpMxlGiEMSs7z6RlW8asusze1qBJiaHc=;
+        b=cqXso1WeXMsOQTSMJsnRpwW6vw8vb52dEKHkPuvZGM4VKop5MTyriQZCa2VAmgKXOr
+         6c1e4BDDBKbJYdmtHs7EAJGjgrXlmHeffln/7gNXCUsNiyp/6bnDDzABtDtvgm83WBbu
+         wpeVMsoLT2gdb7UfQkoUQ+K0wPFRtw0xbm6wokBSi3Zrb1vr1VOl0O94XHk98PWCgDnx
+         HdNgaO/cwSEPz6RWMBmR8iMS3WJt8dd5N2QRjE1KkALT17HYzXNJug5lQ14x3Kcx3RF2
+         dWxYAgtv5XGlFBpF/dOyX+MNmI88hbCjsdHMzpXpyHEVYOfX7Swy8MPkhGJHhh31ycDS
+         Rxog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=GuupeKfcO/+rf9Qb6r8f2KQJXgchvtoxnNFe6M9/a1Y=;
-        b=NMveSMhnTKjue/wGat6p05R4wKxeUWz6y10Z7E4Zkh7bjtaODkyvotSVYlqyGPql9U
-         KoA2qTfRSKsfugOVfXMxJUAXUoT2smopY66ddkdbfWvClGzJtTwFp3DuPRBpVgN11/As
-         0lseu9QSEFDl1Rx4QTTNhgYVGQ+JXbrPe7Um9ww2V3IIK9uQfBApnkVG7N5R3R9isSUS
-         RKjT8K0SuH8A4xr+ykxLX1b9CcH4/u+hZA+RdgcEy/ob0Blj2/t5DJS9HfmkvpT5aSZH
-         JGCEY0eJBUZmhYw7JJLVRl7otsS76R3yOdwsoIDcrz16hh2+iYOkwzci2dw1V95F2Cg1
-         ugDw==
-X-Gm-Message-State: AOAM531ZNcAA65hj/GJiXIXTgeMn47/TapNUNsvyp5v+/PEeiwwLsiu5
-        KhZfXgSzGd02u+t6in4RcUYU8w==
-X-Google-Smtp-Source: ABdhPJxwp9O9hoZ+3in9xQ4Y1T0r6FX0PptcT7wQM++3JiwL83ORl7DTznIAAiqeYXT/IUV9yd/l7A==
-X-Received: by 2002:a1c:bdc4:: with SMTP id n187mr29267185wmf.109.1600683674831;
-        Mon, 21 Sep 2020 03:21:14 -0700 (PDT)
+        bh=S9MzB7+azPxcpMxlGiEMSs7z6RlW8asusze1qBJiaHc=;
+        b=fXXCSUadq54FgowD7XOKFjsiPv3S4iBjfF52S74GOWtIlxqZ9be2X5cplKwwt2tAYX
+         Lfi8k9DHLPwMEXx3WwqlzL5PKfUPkoaUBbyEsvlzMmkerlFDfPCvKo0w+EvChcUvGdj5
+         Ewk3HGeJjX28uzX+nf1HkWIJKI+8ZiV24rErAKP75q+rA0Ksxi5xju9M7s09SZyEr3zt
+         b/WFYR3JB+VBMxoWfbztdtiLul15/jNUIZjQXeLdGeea0n3Lz83bJ87PDofAwKZdZIMH
+         SDXSfHP/ZKwKbwk7DYhkK740VJ1YpQ5wqpk+fY3EVadVr1Z74cb62bcTlpobX7NGREHr
+         xLAg==
+X-Gm-Message-State: AOAM530CKHO7t4F5AJ0c34For7Fz5MFkUODpScyprDxoflYOdO/QYcn0
+        3uwBcNZhB30+hLQUj6S1RtZtNUj16u8xFg==
+X-Google-Smtp-Source: ABdhPJwLLiqE0xL9dMMevVsNtAO5akGgDxGF9LqBxoG4mXvA7KUeZ9nz/B8s78vAAAQzdhd3oK38Ig==
+X-Received: by 2002:a7b:c317:: with SMTP id k23mr28413581wmj.44.1600683678660;
+        Mon, 21 Sep 2020 03:21:18 -0700 (PDT)
 Received: from localhost.localdomain ([51.15.160.169])
-        by smtp.googlemail.com with ESMTPSA id l17sm18804629wme.11.2020.09.21.03.21.13
+        by smtp.googlemail.com with ESMTPSA id l17sm18804629wme.11.2020.09.21.03.21.17
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 21 Sep 2020 03:21:14 -0700 (PDT)
+        Mon, 21 Sep 2020 03:21:18 -0700 (PDT)
 From:   Corentin Labbe <clabbe@baylibre.com>
 To:     gregkh@linuxfoundation.org, laurent.pinchart@skynet.be,
         mchehab@kernel.org
 Cc:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH RFT/RFC 45/49] staging: media: zoran: fix use of buffer_size and sizeimage
-Date:   Mon, 21 Sep 2020 10:20:20 +0000
-Message-Id: <1600683624-5863-46-git-send-email-clabbe@baylibre.com>
+Subject: [PATCH RFT/RFC 49/49] staging: media: zoran: update TODO
+Date:   Mon, 21 Sep 2020 10:20:24 +0000
+Message-Id: <1600683624-5863-50-git-send-email-clabbe@baylibre.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1600683624-5863-1-git-send-email-clabbe@baylibre.com>
 References: <1600683624-5863-1-git-send-email-clabbe@baylibre.com>
@@ -72,76 +72,41 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-buffer_size was not set when it should be.
-Furthermore, use it instead of recalculate it.
+Update the TODO of the zoran driver
 
 Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 ---
- drivers/staging/media/zoran/zoran_card.c   | 2 ++
- drivers/staging/media/zoran/zoran_driver.c | 9 ++++++---
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ drivers/staging/media/zoran/TODO | 23 +++++++++++++++++++----
+ 1 file changed, 19 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/staging/media/zoran/zoran_card.c b/drivers/staging/media/zoran/zoran_card.c
-index 3bfeb1e00563..e4688891d307 100644
---- a/drivers/staging/media/zoran/zoran_card.c
-+++ b/drivers/staging/media/zoran/zoran_card.c
-@@ -852,6 +852,8 @@ void zoran_open_init_params(struct zoran *zr)
- 	if (i)
- 		pci_err(zr->pci_dev, "%s internal error\n", __func__);
- 
-+	zr->buffer_size = zr->v4l_settings.bytesperline * zr->v4l_settings.height;
+diff --git a/drivers/staging/media/zoran/TODO b/drivers/staging/media/zoran/TODO
+index 54464095d0d7..6992540d3e53 100644
+--- a/drivers/staging/media/zoran/TODO
++++ b/drivers/staging/media/zoran/TODO
+@@ -1,4 +1,19 @@
+-The zoran driver is marked deprecated. It will be removed
+-around May 2019 unless someone is willing to update this
+-driver to the latest V4L2 frameworks (especially the vb2
+-framework).
 +
- 	clear_interrupt_counters(zr);
- }
- 
-diff --git a/drivers/staging/media/zoran/zoran_driver.c b/drivers/staging/media/zoran/zoran_driver.c
-index 46bf8b32d57a..47f397ff190f 100644
---- a/drivers/staging/media/zoran/zoran_driver.c
-+++ b/drivers/staging/media/zoran/zoran_driver.c
-@@ -407,6 +407,8 @@ static int zoran_v4l_set_format(struct zoran *zr, int width, int height,
- 
- 	bpp = (format->depth + 7) / 8;
- 
-+	zr->buffer_size = height * width * bpp;
++How to test the zoran driver:
++- RAW capture
++	mplayer tv:///dev/video0 -tv driver=v4l2
 +
- 	/* Check against available buffer size */
- 	if (height * width * bpp > zr->buffer_size) {
- 		pci_err(zr->pci_dev, "%s - video buffer size (%d kB) is too small\n",
-@@ -1090,7 +1092,7 @@ static int zoran_g_fmt_vid_out(struct file *file, void *__fh, struct v4l2_format
- 	fmt->fmt.pix.width = zr->jpg_settings.img_width / zr->jpg_settings.HorDcm;
- 	fmt->fmt.pix.height = zr->jpg_settings.img_height * 2 /
- 		(zr->jpg_settings.VerDcm * zr->jpg_settings.TmpDcm);
--	fmt->fmt.pix.sizeimage = zoran_v4l2_calc_bufsize(&zr->jpg_settings);
-+	fmt->fmt.pix.sizeimage = zr->buffer_size;
- 	fmt->fmt.pix.pixelformat = V4L2_PIX_FMT_MJPEG;
- 	if (zr->jpg_settings.TmpDcm == 1)
- 		fmt->fmt.pix.field = (zr->jpg_settings.odd_even ?
-@@ -1114,7 +1116,7 @@ static int zoran_g_fmt_vid_cap(struct file *file, void *__fh, struct v4l2_format
- 
- 	fmt->fmt.pix.width = zr->v4l_settings.width;
- 	fmt->fmt.pix.height = zr->v4l_settings.height;
--	fmt->fmt.pix.sizeimage = zr->v4l_settings.bytesperline * zr->v4l_settings.height;
-+	fmt->fmt.pix.sizeimage = zr->buffer_size;
- 	fmt->fmt.pix.pixelformat = zr->v4l_settings.format->fourcc;
- 	fmt->fmt.pix.colorspace = zr->v4l_settings.format->colorspace;
- 	fmt->fmt.pix.bytesperline = zr->v4l_settings.bytesperline;
-@@ -1183,6 +1185,7 @@ static int zoran_try_fmt_vid_out(struct file *file, void *__fh,
- 				V4L2_FIELD_TOP : V4L2_FIELD_BOTTOM);
- 
- 	fmt->fmt.pix.sizeimage = zoran_v4l2_calc_bufsize(&settings);
-+	zr->buffer_size = fmt->fmt.pix.sizeimage;
- 	fmt->fmt.pix.bytesperline = 0;
- 	fmt->fmt.pix.colorspace = V4L2_COLORSPACE_SMPTE170M;
- 	return res;
-@@ -1337,7 +1340,7 @@ static int zoran_s_fmt_vid_cap(struct file *file, void *__fh, struct v4l2_format
- 
- 	/* tell the user the results/missing stuff */
- 	fmt->fmt.pix.bytesperline = zr->v4l_settings.bytesperline;
--	fmt->fmt.pix.sizeimage = zr->v4l_settings.height * zr->v4l_settings.bytesperline;
-+	fmt->fmt.pix.sizeimage = zr->buffer_size;
- 	fmt->fmt.pix.colorspace = zr->v4l_settings.format->colorspace;
- 	if (BUZ_MAX_HEIGHT < (zr->v4l_settings.height * 2))
- 		fmt->fmt.pix.field = V4L2_FIELD_INTERLACED;
++- MJPEG capture (compression)
++	mplayer tv:///dev/video0 -tv driver=v4l2:outfmt=mjpeg
++	TODO: need two test for both Dcim path
++
++- MJPEG play (decompression)
++	ffmpeg -i test.avi -vcodec mjpeg -an -f v4l2 /dev/video0
++	Note: only recent ffmpeg has the ability of sending non-raw video via v4l2
++
++	The original way of sending video was via mplayer vo_zr/vo_zr2, but it does not compile
++	anymore and is a dead end (usage of some old private ffmpeg structures).
++
++TODO
++- fix the v4l compliance "TRY_FMT cannot handle an invalid pixelformat"
++- Filter JPEG data to made output work
 -- 
 2.26.2
 
