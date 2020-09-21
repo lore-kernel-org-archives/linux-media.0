@@ -7,35 +7,34 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24A2FC35257
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 20:39:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2BF4C4363C
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 20:39:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ED9E821BE5
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 20:38:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BE51721D43
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 20:39:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727348AbgIUUi4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Sep 2020 16:38:56 -0400
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:41642 "EHLO
+        id S1727531AbgIUUjE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Sep 2020 16:39:04 -0400
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:39198 "EHLO
         hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727294AbgIUUi4 (ORCPT
+        by vger.kernel.org with ESMTP id S1727483AbgIUUjD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Sep 2020 16:38:56 -0400
+        Mon, 21 Sep 2020 16:39:03 -0400
 Received: from [78.134.51.148] (port=50434 helo=melee.fritz.box)
         by hostingweb31.netsons.net with esmtpa (Exim 4.93)
         (envelope-from <luca@lucaceresoli.net>)
-        id 1kKSJq-0009Ai-Fi; Mon, 21 Sep 2020 22:21:50 +0200
+        id 1kKSJn-0009Ai-UR; Mon, 21 Sep 2020 22:21:48 +0200
 From:   Luca Ceresoli <luca@lucaceresoli.net>
 To:     linux-media@vger.kernel.org
 Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
         linux-kernel@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Subject: [PATCH v2 3/4] media: docs: v4l2-subdev: move "Subdev registration" to a subsection
-Date:   Mon, 21 Sep 2020 22:21:33 +0200
-Message-Id: <20200921202134.9792-3-luca@lucaceresoli.net>
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>
+Subject: [PATCH v2 1/4] media: docs: v4l2-subdev: fix typo
+Date:   Mon, 21 Sep 2020 22:21:31 +0200
+Message-Id: <20200921202134.9792-1-luca@lucaceresoli.net>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200921202134.9792-1-luca@lucaceresoli.net>
-References: <20200921202134.9792-1-luca@lucaceresoli.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -52,60 +51,31 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The subdev registration topic is pretty lengthy, and takes more than
-half of the "V4L2 sub-devices" section. Help readers in finding their
-way through the document by dedicating a subsection to
-"Subdev registration".
+Fix "will to" -> "will do".
 
-Each of the two registration methods takes many paragraphs, but since
-adding a subsubsection would be overkill, just emphasize them in bold.
-
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 
 ---
 
 Changes in v2: none
 ---
- Documentation/driver-api/media/v4l2-subdev.rst | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ Documentation/driver-api/media/v4l2-subdev.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/Documentation/driver-api/media/v4l2-subdev.rst b/Documentation/driver-api/media/v4l2-subdev.rst
-index 9ea16a8c3bde..3adcd881cae5 100644
+index bc7e1fc40a9d..9a7dddd97f5a 100644
 --- a/Documentation/driver-api/media/v4l2-subdev.rst
 +++ b/Documentation/driver-api/media/v4l2-subdev.rst
-@@ -138,6 +138,9 @@ ensures that width, height and the media bus pixel code are equal on both source
- and sink of the link. Subdev drivers are also free to use this function to
- perform the checks mentioned above in addition to their own checks.
+@@ -191,7 +191,7 @@ but it is better and easier to use this macro:
  
-+Subdev registration
-+~~~~~~~~~~~~~~~~~~~
-+
- There are currently two ways to register subdevices with the V4L2 core. The
- first (traditional) possibility is to have subdevices registered by bridge
- drivers. This can be done when the bridge driver has the complete information
-@@ -157,7 +160,7 @@ below.
- Using one or the other registration method only affects the probing process, the
- run-time bridge-subdevice interaction is in both cases the same.
+ 	err = v4l2_subdev_call(sd, core, g_std, &norm);
  
--In the synchronous case a device (bridge) driver needs to register the
-+In the **synchronous** case a device (bridge) driver needs to register the
- :c:type:`v4l2_subdev` with the v4l2_device:
- 
- 	:c:func:`v4l2_device_register_subdev <v4l2_device_register_subdev>`
-@@ -238,9 +241,9 @@ contain several subdevs that use an I2C bus, but also a subdev that is
- controlled through GPIO pins. This distinction is only relevant when setting
- up the device, but once the subdev is registered it is completely transparent.
- 
--In the asynchronous case subdevice probing can be invoked independently of the
--bridge driver availability. The subdevice driver then has to verify whether all
--the requirements for a successful probing are satisfied. This can include a
-+In the **asynchronous** case subdevice probing can be invoked independently of
-+the bridge driver availability. The subdevice driver then has to verify whether
-+all the requirements for a successful probing are satisfied. This can include a
- check for a master clock availability. If any of the conditions aren't satisfied
- the driver might decide to return ``-EPROBE_DEFER`` to request further reprobing
- attempts. Once all conditions are met the subdevice shall be registered using
+-The macro will to the right ``NULL`` pointer checks and returns ``-ENODEV``
++The macro will do the right ``NULL`` pointer checks and returns ``-ENODEV``
+ if :c:type:`sd <v4l2_subdev>` is ``NULL``, ``-ENOIOCTLCMD`` if either
+ :c:type:`sd <v4l2_subdev>`->core or :c:type:`sd <v4l2_subdev>`->core->g_std is ``NULL``, or the actual result of the
+ :c:type:`sd <v4l2_subdev>`->ops->core->g_std ops.
 -- 
 2.28.0
 
