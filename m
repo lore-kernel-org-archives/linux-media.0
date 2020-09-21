@@ -5,66 +5,66 @@ X-Spam-Level:
 X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82A24C43465
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:21:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44AB2C43463
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:22:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 42F6120EDD
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:21:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0A92C205F4
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:22:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="YY36+18N"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="HaZ/lnL8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727075AbgIUKVu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Sep 2020 06:21:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59218 "EHLO
+        id S1726988AbgIUKVM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Sep 2020 06:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727000AbgIUKVN (ORCPT
+        with ESMTP id S1726970AbgIUKVJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Sep 2020 06:21:13 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3920AC0613CF
-        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:21:13 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id t10so12134578wrv.1
-        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:21:13 -0700 (PDT)
+        Mon, 21 Sep 2020 06:21:09 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0E4C0613D5
+        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:21:08 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id z9so12017393wmk.1
+        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:21:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=mJHxmatwliiILb7dsJ+xU9dZGkpFAiokQ09uJSwZTko=;
-        b=YY36+18NrSi43hiI1GypE3L3g7YkZYC4dvqcoG7y95SOj1DcWqwIToU6gOxxryf9q8
-         aXDMUATQCVAArDmi3knlOtzdjOhVud7zU1UPPGGZlBStGw/sDaSo2uRZUQ1izWMJ+w7S
-         lsJnR06Z4Y8Y+aa8LX/PXD0W4IvLdrLpfAaeW3R19RfP536Wke1u2HSxxqjNC0hF5NVt
-         t2QKRUmmeD3UAhu1FJ+i77IN9m+MF9l+VGp7G0ThCesVk4TBYgJ+DLCznQ+LJdeYQ0HC
-         WVS8QATv415OnmoScSh8oUTMTzFcJI2mDyUkzVqgJ8GxzVAv2R3W8PQNKcsaHLNWk6Y1
-         YMqQ==
+        bh=V00Hnz28PjN932GfSBJm8Se5vmkXoiml45tpc3tFwpc=;
+        b=HaZ/lnL8xJwtzBDX7pkXbgDeboSMizBazK0gCzI0dHsYPLpLlyswsfVyhdQp3u2Jmz
+         9l1oYpu73SdXGgeI4g5u5+/oH8VBWUwqUjhlwCmw43vV7kCJ16lsrIXzuFOOZt46QCY9
+         TVfzlCIcadcAg1/roRpMneGR78Okpyu4AwGgfBgUGxru63ojmPPGxpmO+JT8GfnOWCx3
+         jRx0CV/A+wlAK+xxdGWEitQgZLe4Mjontmac8ve/2H3v2ZXKqYmqUNpiA2lAMLOqLHfK
+         XWablPnh2HrJbQB/rPMfrEKiuajAd0h1jZtfQcLhD47NNA8MQm945AS/Ttxlu7gbGzCT
+         wupA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=mJHxmatwliiILb7dsJ+xU9dZGkpFAiokQ09uJSwZTko=;
-        b=KHL9nb8yVpkA9BAe4Jp6BOoSw1MjNlzIK9wPtK0FrDkxGMJYaSxpVwWHhCjR+FOBEg
-         2ciyARrK4vAtRekOKG3kCqdnIqKjk+keedCs8ugq5UAbN58JClwMtU+fvSKzBND80w7d
-         vNpbvYme48Rz/RFVB3KkEZFKOnRzhoAMBFGV01ltJ/V/4mg3gxQb4ZXI+xUB4bNkJVyC
-         QGakkFePDEqhujxeH//kXaRbA7QxytGlY0DsF1lB7yF1287mIKU7mKxRVsfCbgfu/IOI
-         4FtjDPvx4Cas9L66a+SHNyZgbcygq0b5A/B3A9ZMXojKZIa3QhUoSf1XpWyCdRlAvmhW
-         LLAQ==
-X-Gm-Message-State: AOAM5312YBJcaDSguPzogyn5kEDpQL8phdZyxycq/e7FVzuVzZfZsMR7
-        mFjfQrGpuWzJQl1zbi4thUrb4w==
-X-Google-Smtp-Source: ABdhPJwtsP6qs8zegG7/DtdHTKeW1KXJsBuEqLj+EEMBeNJc/0krxjR0o43Of5KJoFWEVdN8Jioegw==
-X-Received: by 2002:adf:ef45:: with SMTP id c5mr49998455wrp.37.1600683671890;
-        Mon, 21 Sep 2020 03:21:11 -0700 (PDT)
+        bh=V00Hnz28PjN932GfSBJm8Se5vmkXoiml45tpc3tFwpc=;
+        b=EifMCOcDUGNLVpjU8S+pPKRswufulDzJXourXEZ5yqIVozGah3LsWFULfO73BM3hrU
+         RLU/nMoSevDggcpItHJ7mqkliritDZOEofp+b9KaCA02HBe1IqrilKmhm5h0al/me6bl
+         zuv1lBSWsozYfmETtEH8IEmIDRo2Do1qGiCLPcAMvn0DO2AywdrgpxSWKpe/NYgfEkFJ
+         fVr/uqP10np5MOp1PsLFE37i2m3vht5jbcb+oZprE2OygE4CTNSCm0/WlEPLAkVtCkNk
+         /BE6GUGRSjV4MTNlVJxBUnTmGkkYnSeKcIMJZaQQp3ZZ0couI8eWXwIKHadO2JXwVOQv
+         CRGA==
+X-Gm-Message-State: AOAM530BObD5cjZm+YsC1rtBbKzWyzQyY88RXRx8KbfRLL6/6QhGoLhu
+        HY+Yh8BpMbGqaXhTSp1VLkLxVg==
+X-Google-Smtp-Source: ABdhPJwgbOyt3t2adMreBLWgBuOoAAdmy21xZ4x6cRhVH9rCZOfEVvotb2s8zR7J8LnaMYhvehXlog==
+X-Received: by 2002:a7b:c317:: with SMTP id k23mr28412728wmj.44.1600683667440;
+        Mon, 21 Sep 2020 03:21:07 -0700 (PDT)
 Received: from localhost.localdomain ([51.15.160.169])
-        by smtp.googlemail.com with ESMTPSA id l17sm18804629wme.11.2020.09.21.03.21.11
+        by smtp.googlemail.com with ESMTPSA id l17sm18804629wme.11.2020.09.21.03.21.06
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 21 Sep 2020 03:21:11 -0700 (PDT)
+        Mon, 21 Sep 2020 03:21:06 -0700 (PDT)
 From:   Corentin Labbe <clabbe@baylibre.com>
 To:     gregkh@linuxfoundation.org, laurent.pinchart@skynet.be,
         mchehab@kernel.org
 Cc:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH RFT/RFC 42/49] staging: media: zoran: remove framebuffer support
-Date:   Mon, 21 Sep 2020 10:20:17 +0000
-Message-Id: <1600683624-5863-43-git-send-email-clabbe@baylibre.com>
+Subject: [PATCH RFT/RFC 37/49] staging: media: zoran: add fallthrough keyword
+Date:   Mon, 21 Sep 2020 10:20:12 +0000
+Message-Id: <1600683624-5863-38-git-send-email-clabbe@baylibre.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1600683624-5863-1-git-send-email-clabbe@baylibre.com>
 References: <1600683624-5863-1-git-send-email-clabbe@baylibre.com>
@@ -72,157 +72,59 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The framebuffer support is obsolete, so let's reduce code size.
+This patch adds fallthrough keyword where appropriate.
 
 Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 ---
- drivers/staging/media/zoran/zoran.h        |  4 -
- drivers/staging/media/zoran/zoran_card.c   |  6 --
- drivers/staging/media/zoran/zoran_driver.c | 85 ----------------------
- 3 files changed, 95 deletions(-)
+ drivers/staging/media/zoran/zoran_device.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/staging/media/zoran/zoran.h b/drivers/staging/media/zoran/zoran.h
-index 294e52d78e1b..0246635e0eac 100644
---- a/drivers/staging/media/zoran/zoran.h
-+++ b/drivers/staging/media/zoran/zoran.h
-@@ -299,10 +299,6 @@ struct zoran {
+diff --git a/drivers/staging/media/zoran/zoran_device.c b/drivers/staging/media/zoran/zoran_device.c
+index 9558bafdde7d..7634d94f9359 100644
+--- a/drivers/staging/media/zoran/zoran_device.c
++++ b/drivers/staging/media/zoran/zoran_device.c
+@@ -268,7 +268,9 @@ static void zr36057_adjust_vfe(struct zoran *zr, enum zoran_codec_mode mode)
+ 		btwrite(reg, ZR36057_VFEHCR);
+ 		break;
+ 	case BUZ_MODE_MOTION_COMPRESS:
++		fallthrough;
+ 	case BUZ_MODE_IDLE:
++		fallthrough;
+ 	default:
+ 		if ((zr->norm & V4L2_STD_NTSC) ||
+ 		    (zr->card.type == LML33R10 &&
+@@ -521,6 +523,7 @@ static void zr36057_set_jpg(struct zoran *zr, enum zoran_codec_mode mode)
+ 	/* MJPEG compression mode */
+ 	switch (mode) {
+ 	case BUZ_MODE_MOTION_COMPRESS:
++		fallthrough;
+ 	default:
+ 		reg = ZR36057_JMC_MJPGCmpMode;
+ 		break;
+@@ -582,6 +585,7 @@ static void zr36057_set_jpg(struct zoran *zr, enum zoran_codec_mode mode)
+ 	/* NOTE: decimal values here */
+ 	switch (mode) {
+ 	case BUZ_MODE_STILL_COMPRESS:
++		fallthrough;
+ 	case BUZ_MODE_MOTION_COMPRESS:
+ 		if (zr->card.type != BUZ)
+ 			reg = 140;
+@@ -590,6 +594,7 @@ static void zr36057_set_jpg(struct zoran *zr, enum zoran_codec_mode mode)
+ 		break;
  
- 	/* Current buffer params */
- 	unsigned int buffer_size;
--	void *vbuf_base;
--	int vbuf_height, vbuf_width;
--	int vbuf_depth;
--	int vbuf_bytesperline;
+ 	case BUZ_MODE_STILL_DECOMPRESS:
++		fallthrough;
+ 	case BUZ_MODE_MOTION_DECOMPRESS:
+ 		reg = 20;
+ 		break;
+@@ -827,6 +832,7 @@ void zr36057_enable_jpg(struct zoran *zr, enum zoran_codec_mode mode)
+ 		break;
  
- 	wait_queue_head_t v4l_capq;
- 
-diff --git a/drivers/staging/media/zoran/zoran_card.c b/drivers/staging/media/zoran/zoran_card.c
-index ab16a70a7451..530dd326ad94 100644
---- a/drivers/staging/media/zoran/zoran_card.c
-+++ b/drivers/staging/media/zoran/zoran_card.c
-@@ -895,12 +895,6 @@ static int zr36057_init(struct zoran *zr)
- 	zr->jpg_buffers.allocated = 0;
- 	zr->v4l_buffers.allocated = 0;
- 
--	zr->vbuf_base = (void *)vidmem;
--	zr->vbuf_width = 0;
--	zr->vbuf_height = 0;
--	zr->vbuf_depth = 0;
--	zr->vbuf_bytesperline = 0;
--
- 	/* Avoid nonsense settings from user for default input/norm */
- 	if (default_norm < 0 || default_norm > 2)
- 		default_norm = 0;
-diff --git a/drivers/staging/media/zoran/zoran_driver.c b/drivers/staging/media/zoran/zoran_driver.c
-index 1efec2edd72f..0b4bfc184b57 100644
---- a/drivers/staging/media/zoran/zoran_driver.c
-+++ b/drivers/staging/media/zoran/zoran_driver.c
-@@ -881,48 +881,6 @@ static int zoran_close(struct file *file)
- 	return 0;
- }
- 
--static int setup_fbuffer(struct zoran_fh *fh, void *base, const struct zoran_format *fmt,
--			 int width, int height, int bytesperline)
--{
--	struct zoran *zr = fh->zr;
--
--	/* (Ronald) v4l/v4l2 guidelines */
--	if (!capable(CAP_SYS_ADMIN) && !capable(CAP_SYS_RAWIO))
--		return -EPERM;
--
--	/*
--	 * Don't allow frame buffer overlay if PCI or AGP is buggy, or on
--	   ALi Magik (that needs very low latency while the card needs a
--	   higher value always)
--	 */
--
--	if (pci_pci_problems & (PCIPCI_FAIL | PCIAGP_FAIL | PCIPCI_ALIMAGIK))
--		return -ENXIO;
--
--	/* we need a bytesperline value, even if not given */
--	if (!bytesperline)
--		bytesperline = width * ((fmt->depth + 7) & ~7) / 8;
--
--	if (height <= 0 || width <= 0 || bytesperline <= 0) {
--		pci_err(zr->pci_dev, "%s - invalid height/width/bpl value (%d|%d|%d)\n",
--			__func__, width, height, bytesperline);
--		return -EINVAL;
--	}
--	if (bytesperline & 3) {
--		pci_err(zr->pci_dev, "%s - bytesperline (%d) must be 4-byte aligned\n",
--			__func__, bytesperline);
--		return -EINVAL;
--	}
--
--	zr->vbuf_base = (void *)((unsigned long)base & ~3);
--	zr->vbuf_height = height;
--	zr->vbuf_width = width;
--	zr->vbuf_depth = fmt->depth;
--	zr->vbuf_bytesperline = bytesperline;
--
--	return 0;
--}
--
- /* get the status of a buffer in the clients buffer queue */
- static int zoran_v4l2_buffer_status(struct zoran_fh *fh,
- 				    struct v4l2_buffer *buf, int num)
-@@ -1388,47 +1346,6 @@ static int zoran_s_fmt_vid_cap(struct file *file, void *__fh, struct v4l2_format
- 	return res;
- }
- 
--static int zoran_g_fbuf(struct file *file, void *__fh,
--			struct v4l2_framebuffer *fb)
--{
--	struct zoran *zr = video_drvdata(file);
--
--	memset(fb, 0, sizeof(*fb));
--	fb->base = zr->vbuf_base;
--	fb->fmt.width = zr->vbuf_width;
--	fb->fmt.height = zr->vbuf_height;
--	fb->fmt.bytesperline = zr->vbuf_bytesperline;
--	fb->fmt.colorspace = V4L2_COLORSPACE_SRGB;
--	fb->fmt.field = V4L2_FIELD_INTERLACED;
--	fb->capability = V4L2_FBUF_CAP_LIST_CLIPPING;
--
--	return 0;
--}
--
--static int zoran_s_fbuf(struct file *file, void *__fh,
--			const struct v4l2_framebuffer *fb)
--{
--	struct zoran *zr = video_drvdata(file);
--	struct zoran_fh *fh = __fh;
--	int i, res = 0;
--	__le32 printformat = __cpu_to_le32(fb->fmt.pixelformat);
--
--	for (i = 0; i < NUM_FORMATS; i++)
--		if (zoran_formats[i].fourcc == fb->fmt.pixelformat)
--			break;
--	if (i == NUM_FORMATS) {
--		pci_err(zr->pci_dev, "VIDIOC_S_FBUF - format=0x%x (%4.4s) not allowed\n",
--			fb->fmt.pixelformat,
--			(char *)&printformat);
--		return -EINVAL;
--	}
--
--	res = setup_fbuffer(fh, fb->base, &zoran_formats[i], fb->fmt.width,
--			    fb->fmt.height, fb->fmt.bytesperline);
--
--	return res;
--}
--
- static int zoran_streamoff(struct file *file, void *__fh, enum v4l2_buf_type type);
- 
- static int zoran_reqbufs(struct file *file, void *__fh, struct v4l2_requestbuffers *req)
-@@ -2218,8 +2135,6 @@ static const struct v4l2_ioctl_ops zoran_ioctl_ops = {
- /*	.vidioc_enum_output		    = zoran_enum_output,
- 	.vidioc_g_output		    = zoran_g_output,
- 	.vidioc_s_output		    = zoran_s_output,*/
--	.vidioc_g_fbuf			    = zoran_g_fbuf,
--	.vidioc_s_fbuf			    = zoran_s_fbuf,
- 	.vidioc_g_std			    = zoran_g_std,
- 	.vidioc_s_std			    = zoran_s_std,
- 	.vidioc_g_jpegcomp		    = zoran_g_jpegcomp,
+ 	case BUZ_MODE_IDLE:
++		fallthrough;
+ 	default:
+ 		/* shut down processing */
+ 		btand(~(zr->card.jpeg_int | ZR36057_ICR_JPEGRepIRQ), ZR36057_ICR);
 -- 
 2.26.2
 
