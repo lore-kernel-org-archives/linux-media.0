@@ -2,69 +2,69 @@ Return-Path: <SRS0=F5P7=C6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 112D0C43463
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6446EC43464
 	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:23:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C0CE9207BC
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:23:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 25C3D207BC
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:23:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="Du24+tm/"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="0gkErDhe"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727189AbgIUKXL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Sep 2020 06:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59104 "EHLO
+        id S1726722AbgIUKXK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Sep 2020 06:23:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726487AbgIUKU6 (ORCPT
+        with ESMTP id S1726874AbgIUKU7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Sep 2020 06:20:58 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CCDC0613D6
-        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:20:54 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id t10so12133483wrv.1
-        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:20:53 -0700 (PDT)
+        Mon, 21 Sep 2020 06:20:59 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8ED8C0613DD
+        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:20:56 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id y15so12016108wmi.0
+        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:20:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=65FXJqBuVDUzxD7doK++gxysr5EY6cSmpC745+zOXJs=;
-        b=Du24+tm/QhmhZ5IVy7r2qPHUeCurWcwjdhxfvUmy4+7fplJwd3mtGQfOB8MZgTqFl1
-         vbavMjLPVGU5vW1vR8Ms6EEpiDMFdTbMx6KzdLWgyGxAGWyJ9l3IJo+b51zvZfdlaWRo
-         IgYhmvKycQsZFysfm9I7u+CkXkCTVxIy6D/955vSwybNxK5FpllxCk+uP/W68dKwvAhH
-         t/Cv7GX9cr5h5PmH2L6acNNPIQNFtM9K0joVNuxFlS65+lOOCrjn7Ia5FfRHY7nCHeTt
-         BT/0zrRLOTDyGVt4Wh2NawrP8Tl3/QtEXp9E9Y1Xrgx0Zm5VP3P4SCeTC7G59H/yNTtC
-         3F4A==
+        bh=AP/XqtDTUKt4yJ0ASxePcyGSZvxUdYkBiARpAfmeNO4=;
+        b=0gkErDheeGjztlrRvZ/Es3bFNzrJNLgywBc/bMxB79jS5SuFqExN763HDwrpjfawAW
+         /tK97cTawr7pTm7w6amKyxAyBW7VaPFzdor19W6x7hIN7b/K0betYlvkXPGjBqfw0cj8
+         XASuvPHYNaxO/uitvF6UIEpyDMnCKngyZo383TckofuE53Nfmag/XAyg1uDVBJGGBGjt
+         0yWCgamzV0yYSZ79iZLGgu39s0Bzfc/pP1B1mKNWVKQOGME2TDxL0VghAdxOrgM7cvAW
+         2nw7djGo6Z7WfonsQBvYu4V5jnXw3UpadepGhNLHx2xR8hTzGjgUzKaNXGUH4/9XtCOo
+         yIQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=65FXJqBuVDUzxD7doK++gxysr5EY6cSmpC745+zOXJs=;
-        b=BxqMoQDamNys4YIZza6PohM3lYy9T8596cH8YDV9nHiIeM9nfP2VxvlcXWWsvhYNmS
-         MNP8s2BIxHHQenT3NIT0SApwtA7N1IDSS9z/dHxeFhGKbGQqUdxRVT2b00OJ83qfvnT0
-         ltNDzaY5sUHMg9eD69MSgbnzOCXXPIzU08BTPEnIsZOqyfTOlkAnj8a3+tdUVXDyFdcd
-         pIjCNyhLHaOSEbYjQpT0w0I+NDuhyrUskLM3OALGCL2rrH6IlgR9I96zL1b5i+RP2EUM
-         dsrq+u/GSBn2ZyE5uYYepAO07zO4kP3MsafNIeHn2OGIyNE9xox+F6oNW2JNTZ4CezZt
-         FTGw==
-X-Gm-Message-State: AOAM530QXyoEVR8/Co0sMwmvrdBiUBjoa67WklfdXWVDjYSQInrULy7v
-        KpuQMLMhyTwjPH3auVpdyJHA1A==
-X-Google-Smtp-Source: ABdhPJwk1tGudOVy78cc5atd6bTRWuBVMmN4LKzZfKPwxptMUejJSagxk3DjbhP5ecTDndV98Boo8A==
-X-Received: by 2002:a05:6000:85:: with SMTP id m5mr22915576wrx.160.1600683652749;
-        Mon, 21 Sep 2020 03:20:52 -0700 (PDT)
+        bh=AP/XqtDTUKt4yJ0ASxePcyGSZvxUdYkBiARpAfmeNO4=;
+        b=gOOLQON0Vcm5M0c7ztbCI1IrteV79ecG1MzPWRWkG7klAzLOWshakkPm2rjks+zOCP
+         aY0tRG5rdHvmc1l7kNwk3TQ4nveEuHIN7BNd4DnoDQG5A/H43BQw16k0i7RxqLZugUcF
+         trB3NYhnB1+W7dIee64l0a7ImLvqih9UYF3n1hJbNaW6cAruZNVckSAKmxeIknNgxXkr
+         VCW0lT5YR1CjTdPF4DQADJE9VNO3lbU/23ZoZpulvRTwQs4sPgPUlvv8/MU90y2jQfp/
+         dSR52Ra1oSo4/4PS1V1azd2WPFljtnDyigPlGtoT75jzfbm1EP4bmWn7QOJDR4YX6gWP
+         x8Hw==
+X-Gm-Message-State: AOAM533sO8W5D6PPsKTO4JWUXFxZqivCimcU6GA8B6JGYAlSsSZ0ji2e
+        4ZR4r5X9dxOn+tqPcuUNM92y7A==
+X-Google-Smtp-Source: ABdhPJxlYgiJf9kz7Mv2tj9VbWR0BjfFaLonl0Gw6TmnDDV//GmMsjbTozmNdlfGxUXxY32DmOQYdA==
+X-Received: by 2002:a7b:c103:: with SMTP id w3mr28044636wmi.24.1600683655521;
+        Mon, 21 Sep 2020 03:20:55 -0700 (PDT)
 Received: from localhost.localdomain ([51.15.160.169])
-        by smtp.googlemail.com with ESMTPSA id l17sm18804629wme.11.2020.09.21.03.20.51
+        by smtp.googlemail.com with ESMTPSA id l17sm18804629wme.11.2020.09.21.03.20.54
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 21 Sep 2020 03:20:51 -0700 (PDT)
+        Mon, 21 Sep 2020 03:20:54 -0700 (PDT)
 From:   Corentin Labbe <clabbe@baylibre.com>
 To:     gregkh@linuxfoundation.org, laurent.pinchart@skynet.be,
         mchehab@kernel.org
 Cc:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH RFT/RFC 21/49] staging: media: zoran: Use video_drvdata to get struct zoran
-Date:   Mon, 21 Sep 2020 10:19:56 +0000
-Message-Id: <1600683624-5863-22-git-send-email-clabbe@baylibre.com>
+Subject: [PATCH RFT/RFC 24/49] staging: media: zoran: Use DMA coherent for stat_com
+Date:   Mon, 21 Sep 2020 10:19:59 +0000
+Message-Id: <1600683624-5863-25-git-send-email-clabbe@baylibre.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1600683624-5863-1-git-send-email-clabbe@baylibre.com>
 References: <1600683624-5863-1-git-send-email-clabbe@baylibre.com>
@@ -72,158 +72,98 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Using video_drvdata() is proper and shorter than using directly
-fh pointers.
+Instead of using a fragile virt_to_bus, let's use proper DMA coherent
+for the stat_com entry.
 
 Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 ---
- drivers/staging/media/zoran/zoran_driver.c | 40 ++++++++--------------
- 1 file changed, 14 insertions(+), 26 deletions(-)
+ drivers/staging/media/zoran/zoran.h        |  2 ++
+ drivers/staging/media/zoran/zoran_card.c   | 20 +++++++++++++-------
+ drivers/staging/media/zoran/zoran_device.c |  3 +--
+ 3 files changed, 16 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/staging/media/zoran/zoran_driver.c b/drivers/staging/media/zoran/zoran_driver.c
-index 77cd2c07c394..9d39e98c9af1 100644
---- a/drivers/staging/media/zoran/zoran_driver.c
-+++ b/drivers/staging/media/zoran/zoran_driver.c
-@@ -1320,8 +1320,7 @@ static int zoran_set_input(struct zoran *zr, int input)
+diff --git a/drivers/staging/media/zoran/zoran.h b/drivers/staging/media/zoran/zoran.h
+index aa2a8f688a01..8f3faa4eb60f 100644
+--- a/drivers/staging/media/zoran/zoran.h
++++ b/drivers/staging/media/zoran/zoran.h
+@@ -351,6 +351,8 @@ struct zoran {
+ 	unsigned long frame_num;
  
- static int zoran_querycap(struct file *file, void *__fh, struct v4l2_capability *cap)
- {
--	struct zoran_fh *fh = __fh;
--	struct zoran *zr = fh->zr;
-+	struct zoran *zr = video_drvdata(file);
+ 	wait_queue_head_t test_q;
++
++	dma_addr_t p_sc;
+ };
  
- 	strscpy(cap->card, ZR_DEVNAME(zr), sizeof(cap->card));
- 	strscpy(cap->driver, "zoran", sizeof(cap->driver));
-@@ -1352,8 +1351,7 @@ static int zoran_enum_fmt(struct zoran *zr, struct v4l2_fmtdesc *fmt, int flag)
- static int zoran_enum_fmt_vid_cap(struct file *file, void *__fh,
- 				  struct v4l2_fmtdesc *f)
- {
--	struct zoran_fh *fh = __fh;
--	struct zoran *zr = fh->zr;
-+	struct zoran *zr = video_drvdata(file);
+ static inline struct zoran *to_zoran(struct v4l2_device *v4l2_dev)
+diff --git a/drivers/staging/media/zoran/zoran_card.c b/drivers/staging/media/zoran/zoran_card.c
+index 3a7895be3341..a8d23bf126c3 100644
+--- a/drivers/staging/media/zoran/zoran_card.c
++++ b/drivers/staging/media/zoran/zoran_card.c
+@@ -931,11 +931,15 @@ static int zr36057_init(struct zoran *zr)
+ 	zoran_open_init_params(zr);
  
- 	return zoran_enum_fmt(zr, f, ZORAN_FORMAT_CAPTURE);
- }
-@@ -1361,8 +1359,7 @@ static int zoran_enum_fmt_vid_cap(struct file *file, void *__fh,
- static int zoran_enum_fmt_vid_out(struct file *file, void *__fh,
- 				  struct v4l2_fmtdesc *f)
- {
--	struct zoran_fh *fh = __fh;
--	struct zoran *zr = fh->zr;
-+	struct zoran *zr = video_drvdata(file);
+ 	/* allocate memory *before* doing anything to the hardware in case allocation fails */
+-	zr->stat_com = kzalloc(BUZ_NUM_STAT_COM * 4, GFP_KERNEL);
+ 	zr->video_dev = video_device_alloc();
+-	if (!zr->stat_com || !zr->video_dev) {
++	if (!zr->video_dev) {
+ 		err = -ENOMEM;
+-		goto exit_free;
++		goto exit;
++	}
++	zr->stat_com = dma_alloc_coherent(&zr->pci_dev->dev, BUZ_NUM_STAT_COM * sizeof(u32), &zr->p_sc, GFP_KERNEL);
++	if (!zr->stat_com) {
++		err = -ENOMEM;
++		goto exit_video;
+ 	}
+ 	for (j = 0; j < BUZ_NUM_STAT_COM; j++)
+ 		zr->stat_com[j] = cpu_to_le32(1); /* mark as unavailable to zr36057 */
+@@ -953,7 +957,7 @@ static int zr36057_init(struct zoran *zr)
+ 	zr->video_dev->vfl_dir = VFL_DIR_M2M;
+ 	err = video_register_device(zr->video_dev, VFL_TYPE_VIDEO, video_nr[zr->id]);
+ 	if (err < 0)
+-		goto exit_free;
++		goto exit_statcom;
+ 	video_set_drvdata(zr->video_dev, zr);
  
- 	return zoran_enum_fmt(zr, f, ZORAN_FORMAT_PLAYBACK);
- }
-@@ -1370,8 +1367,7 @@ static int zoran_enum_fmt_vid_out(struct file *file, void *__fh,
- static int zoran_enum_fmt_vid_overlay(struct file *file, void *__fh,
- 				      struct v4l2_fmtdesc *f)
- {
--	struct zoran_fh *fh = __fh;
--	struct zoran *zr = fh->zr;
-+	struct zoran *zr = video_drvdata(file);
- 
- 	return zoran_enum_fmt(zr, f, ZORAN_FORMAT_OVERLAY);
- }
-@@ -1421,8 +1417,7 @@ static int zoran_g_fmt_vid_cap(struct file *file, void *__fh, struct v4l2_format
- static int zoran_g_fmt_vid_overlay(struct file *file, void *__fh,
- 				   struct v4l2_format *fmt)
- {
--	struct zoran_fh *fh = __fh;
--	struct zoran *zr = fh->zr;
-+	struct zoran *zr = video_drvdata(file);
- 
- 	fmt->fmt.win.w.left = zr->overlay_settings.x;
- 	fmt->fmt.win.w.top = zr->overlay_settings.y;
-@@ -1439,8 +1434,7 @@ static int zoran_g_fmt_vid_overlay(struct file *file, void *__fh,
- static int zoran_try_fmt_vid_overlay(struct file *file, void *__fh,
- 				     struct v4l2_format *fmt)
- {
--	struct zoran_fh *fh = __fh;
--	struct zoran *zr = fh->zr;
-+	struct zoran *zr = video_drvdata(file);
- 
- 	if (fmt->fmt.win.w.width > BUZ_MAX_WIDTH)
- 		fmt->fmt.win.w.width = BUZ_MAX_WIDTH;
-@@ -1641,8 +1635,8 @@ static int zoran_s_fmt_vid_out(struct file *file, void *__fh, struct v4l2_format
- 
- static int zoran_s_fmt_vid_cap(struct file *file, void *__fh, struct v4l2_format *fmt)
- {
-+	struct zoran *zr = video_drvdata(file);
- 	struct zoran_fh *fh = __fh;
--	struct zoran *zr = fh->zr;
- 	int i;
- 	int res = 0;
- 
-@@ -1689,8 +1683,7 @@ static int zoran_s_fmt_vid_cap(struct file *file, void *__fh, struct v4l2_format
- static int zoran_g_fbuf(struct file *file, void *__fh,
- 			struct v4l2_framebuffer *fb)
- {
--	struct zoran_fh *fh = __fh;
--	struct zoran *zr = fh->zr;
-+	struct zoran *zr = video_drvdata(file);
- 
- 	memset(fb, 0, sizeof(*fb));
- 	fb->base = zr->vbuf_base;
-@@ -1709,8 +1702,8 @@ static int zoran_g_fbuf(struct file *file, void *__fh,
- static int zoran_s_fbuf(struct file *file, void *__fh,
- 			const struct v4l2_framebuffer *fb)
- {
-+	struct zoran *zr = video_drvdata(file);
- 	struct zoran_fh *fh = __fh;
--	struct zoran *zr = fh->zr;
- 	int i, res = 0;
- 	__le32 printformat = __cpu_to_le32(fb->fmt.pixelformat);
- 
-@@ -2042,8 +2035,7 @@ static int zoran_streamoff(struct file *file, void *__fh, enum v4l2_buf_type typ
- 
- static int zoran_g_std(struct file *file, void *__fh, v4l2_std_id *std)
- {
--	struct zoran_fh *fh = __fh;
--	struct zoran *zr = fh->zr;
-+	struct zoran *zr = video_drvdata(file);
- 
- 	*std = zr->norm;
+ 	zoran_init_hardware(zr);
+@@ -968,9 +972,11 @@ static int zr36057_init(struct zoran *zr)
+ 	zr->initialized = 1;
  	return 0;
-@@ -2051,8 +2043,7 @@ static int zoran_g_std(struct file *file, void *__fh, v4l2_std_id *std)
  
- static int zoran_s_std(struct file *file, void *__fh, v4l2_std_id std)
- {
--	struct zoran_fh *fh = __fh;
--	struct zoran *zr = fh->zr;
-+	struct zoran *zr = video_drvdata(file);
- 	int res = 0;
+-exit_free:
+-	kfree(zr->stat_com);
++exit_statcom:
++	dma_free_coherent(&zr->pci_dev->dev, BUZ_NUM_STAT_COM * sizeof(u32), zr->stat_com, zr->p_sc);
++exit_video:
+ 	kfree(zr->video_dev);
++exit:
+ 	return err;
+ }
  
- 	res = zoran_set_norm(zr, std);
-@@ -2065,8 +2056,7 @@ static int zoran_s_std(struct file *file, void *__fh, v4l2_std_id std)
+@@ -1004,7 +1010,7 @@ static void zoran_remove(struct pci_dev *pdev)
+ 	btwrite(0, ZR36057_SPGPPCR);
+ 	free_irq(zr->pci_dev->irq, zr);
+ 	/* unmap and free memory */
+-	kfree(zr->stat_com);
++	dma_free_coherent(&zr->pci_dev->dev, BUZ_NUM_STAT_COM * sizeof(u32), zr->stat_com, zr->p_sc);
+ 	iounmap(zr->zr36057_mem);
+ 	pci_disable_device(zr->pci_dev);
+ 	video_unregister_device(zr->video_dev);
+diff --git a/drivers/staging/media/zoran/zoran_device.c b/drivers/staging/media/zoran/zoran_device.c
+index e3104b534471..3a353130afb9 100644
+--- a/drivers/staging/media/zoran/zoran_device.c
++++ b/drivers/staging/media/zoran/zoran_device.c
+@@ -576,8 +576,7 @@ static void zr36057_set_jpg(struct zoran *zr, enum zoran_codec_mode mode)
+ 	//btor(ZR36057_VFESPFR_VCLKPol, ZR36057_VFESPFR);
  
- static int zoran_enum_input(struct file *file, void *__fh, struct v4l2_input *inp)
- {
--	struct zoran_fh *fh = __fh;
--	struct zoran *zr = fh->zr;
-+	struct zoran *zr = video_drvdata(file);
+ 	/* code base address */
+-	reg = virt_to_bus(zr->stat_com);
+-	btwrite(reg, ZR36057_JCBA);
++	btwrite(zr->p_sc, ZR36057_JCBA);
  
- 	if (inp->index >= zr->card.inputs)
- 		return -EINVAL;
-@@ -2082,8 +2072,7 @@ static int zoran_enum_input(struct file *file, void *__fh, struct v4l2_input *in
- 
- static int zoran_g_input(struct file *file, void *__fh, unsigned int *input)
- {
--	struct zoran_fh *fh = __fh;
--	struct zoran *zr = fh->zr;
-+	struct zoran *zr = video_drvdata(file);
- 
- 	*input = zr->input;
- 
-@@ -2092,8 +2081,7 @@ static int zoran_g_input(struct file *file, void *__fh, unsigned int *input)
- 
- static int zoran_s_input(struct file *file, void *__fh, unsigned int input)
- {
--	struct zoran_fh *fh = __fh;
--	struct zoran *zr = fh->zr;
-+	struct zoran *zr = video_drvdata(file);
- 	int res;
- 
- 	res = zoran_set_input(zr, input);
+ 	/* FIFO threshold (FIFO is 160. double words) */
+ 	/* NOTE: decimal values here */
 -- 
 2.26.2
 
