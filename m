@@ -7,64 +7,64 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCC54C43463
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:20:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CD8EC43464
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:20:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9F652205F4
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:20:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EBFCD207BC
+	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 10:20:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="MaGfrgp7"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="I9A+ozHb"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726778AbgIUKUj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Sep 2020 06:20:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58992 "EHLO
+        id S1726841AbgIUKUu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Sep 2020 06:20:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726764AbgIUKUi (ORCPT
+        with ESMTP id S1726828AbgIUKUs (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Sep 2020 06:20:38 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ABEBC0613D4
-        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:20:37 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id t10so12132566wrv.1
-        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:20:37 -0700 (PDT)
+        Mon, 21 Sep 2020 06:20:48 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3E1C0613CF
+        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:20:48 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id s13so11552011wmh.4
+        for <linux-media@vger.kernel.org>; Mon, 21 Sep 2020 03:20:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=0BzTczQmHpS8t1I+BEXhbnRvatw/mGTEVui5t5Npsm8=;
-        b=MaGfrgp7PHlwm0A3ZkZ8h7GGR0RRi37Yiy+yOd5x5uXY0+HcDxdjSml1+xef0vvkdj
-         tS3sXina++U+mHFVDNOpo4FxR+MKEuxMpMHJCiPfbi1M9UFYsGR2tGbxTmGawX8YfVhT
-         nKo7z8pNaOdCKG8B5Pn2VUl1tuxJoxxgNGxHZwnWbKtFj7m98v8TJRBs8RYcvOAKLS4p
-         ZnFF3w70EHp62lTH+unebW+knQa6DFB/0HfzeJgPprU7N5ZJ4dLwia0vADFLPrzISADS
-         v+H8iUci900i8d5403aBVru8s47NLPmFzKenxG9h0uSNpOTIPTAGXRKSOvcH4eFpMICM
-         bhmw==
+        bh=7hg4hkt0xKc+u3OMG6BJG4ab1Qlz/YPXWuTo+eYO1gA=;
+        b=I9A+ozHbjj5JIKiaEWlISCq0H27Pvji2tPH9MWl/bJlBO/XHBY+M9xbil5zUFwme8r
+         RopHc97gNGKXhpYPb2FtNbXH6YJVWex7q8flecpw+CgjEZoGmYW2dFWs3e28zn2RcW8W
+         u0BqgrDL6rfkc5QCTixqui4vUZ9hvKw6oCy5eL5XvLxrzk7xqLe0X3DgrPbLTJ3OyJJu
+         Da7lRhMZXm50cMBW5GS5yE2f5MzK/dNRVh8YnNwIuk8Zh2oa2OGELlicuASRb1HUGg1H
+         xEiveZMZmDXPoJsly6mRcaMfuDoNyFsBP+Bft/kd1lhQArcgu6n7mKb+Ar0zuFmIopv+
+         vMiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=0BzTczQmHpS8t1I+BEXhbnRvatw/mGTEVui5t5Npsm8=;
-        b=oTWS6RLL7s1GQsZsm8ptvoEHkifjgafUuPUemvrxAUa7kte/KYHeq+Kok3GKhAvjRl
-         vx0kxxhqANmIsizJEFR7S9eW7vdUutxs4k4DNBApBNNfv9vLWC9gllLcTrKWMyxQi7Yk
-         9AubopYT6Dq8paDOeWFSa7LL3eaRQsmir0Y1LftdhdjaDHJmxplkNbnA18BB3+njWhJj
-         JQPqFSLqDXmnqCIISHxFAxogrkShHBKXRzX2+GgB7d0bfFOKLn7pIu3J4+h0XobrjFEp
-         qv/Soq1/WG1AZ19/KrUv4ztJX9guMyRrkIQm4sTf/LIxRaNmzUT8wnTn/qOGWAai9B9n
-         rvvg==
-X-Gm-Message-State: AOAM531zSauNFvCYPW+TZB/G5QrvJ+x5uKD/GTQ8vBg0r0xfhnpW/7JK
-        th2eGXlpgTgxRN84qDv1A5m+Sg==
-X-Google-Smtp-Source: ABdhPJxO38VZN2Eb0UXu4Mfek/wdnnRWiA/oi1U24WVDHA8DvtyjmmeYlDpoZllXQtDhZEg5Bs/1qQ==
-X-Received: by 2002:adf:f508:: with SMTP id q8mr49455553wro.233.1600683635970;
-        Mon, 21 Sep 2020 03:20:35 -0700 (PDT)
+        bh=7hg4hkt0xKc+u3OMG6BJG4ab1Qlz/YPXWuTo+eYO1gA=;
+        b=ATRbwVWlTQlryZx/6yIKI4InvjQFxnNuRDywUs/Y8tQDtNZVZRNiD9iRXP+Z2Ma1gT
+         9ZLDxLFotRZnt2QTjZN/sXsIg1W/NGV/2rGSOohOCjonCDoj5M9UU7hGbZ0ugG9IH3Jy
+         cLSVjqRc1c7mwGsf5JbRR1VRh5KRb7m/IRKpmDadsgJPBma6+kuD2WrOew9BfXS7oNgU
+         ec+lEP1NAJGD7UPyHxY9IWXLlRb2nGHt0a9PHpM4LpATgGj5L7oWGitDq+dInDzTPAqZ
+         Sun8IZ40+tfdaj1oFR/O/URqG+5c6ZV0pS4GU8znj4O1PRf08OpC3KeIHHPTeQZOL44N
+         6Fyg==
+X-Gm-Message-State: AOAM531MbJ0G3VA4Q/cSCypfHXgZltqKwlIq2ztt11ofEKUwiE4IfVn0
+        T5o9VFK6AEBncr0fgaJMOygxuQ==
+X-Google-Smtp-Source: ABdhPJwJJAhkkByBZiA+u9aw9ZaL1S/4JSy8xlyXdLg6vqMKmmptWk2OW3Tnk20GbyYqMkxkQjAz+w==
+X-Received: by 2002:a7b:c4d9:: with SMTP id g25mr29201004wmk.15.1600683647080;
+        Mon, 21 Sep 2020 03:20:47 -0700 (PDT)
 Received: from localhost.localdomain ([51.15.160.169])
-        by smtp.googlemail.com with ESMTPSA id l17sm18804629wme.11.2020.09.21.03.20.35
+        by smtp.googlemail.com with ESMTPSA id l17sm18804629wme.11.2020.09.21.03.20.46
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 21 Sep 2020 03:20:35 -0700 (PDT)
+        Mon, 21 Sep 2020 03:20:46 -0700 (PDT)
 From:   Corentin Labbe <clabbe@baylibre.com>
 To:     gregkh@linuxfoundation.org, laurent.pinchart@skynet.be,
         mchehab@kernel.org
 Cc:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH RFT/RFC 04/49] staging: media: zoran: Documentation: fix typo
-Date:   Mon, 21 Sep 2020 10:19:39 +0000
-Message-Id: <1600683624-5863-5-git-send-email-clabbe@baylibre.com>
+Subject: [PATCH RFT/RFC 15/49] staging: media: zoran: use v4l2_buffer_set_timestamp
+Date:   Mon, 21 Sep 2020 10:19:50 +0000
+Message-Id: <1600683624-5863-16-git-send-email-clabbe@baylibre.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1600683624-5863-1-git-send-email-clabbe@baylibre.com>
 References: <1600683624-5863-1-git-send-email-clabbe@baylibre.com>
@@ -72,35 +72,36 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix some typo in doc.
+The ns_to_timeval function is removed, so replace it with
+v4l2_buffer_set_timestamp().
 
 Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 ---
- Documentation/media/v4l-drivers/zoran.rst | 4 ++--
+ drivers/staging/media/zoran/zoran_driver.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/media/v4l-drivers/zoran.rst b/Documentation/media/v4l-drivers/zoran.rst
-index a0586514cd8a..2b82b9a47a71 100644
---- a/Documentation/media/v4l-drivers/zoran.rst
-+++ b/Documentation/media/v4l-drivers/zoran.rst
-@@ -119,7 +119,7 @@ Pinnacle/Miro DC10+
- * Analog Devices adv7176 TV encoder
- 
- Drivers to use: videodev, i2c-core, i2c-algo-bit,
--videocodec, sa7110, adv7175, zr36060, zr36067
-+videocodec, saa7110, adv7175, zr36060, zr36067
- 
- Inputs/outputs: Composite, S-video and Internal
- 
-@@ -280,7 +280,7 @@ Samsung ks0127 TV decoder
- What the TV encoder can do an what not
- --------------------------------------
- 
--The TV encoder are doing the "same" as the decoder, but in the oder direction.
-+The TV encoder are doing the "same" as the decoder, but in the other direction.
- You feed them digital data and the generate a Composite or SVHS signal.
- For information about the colorsystems and TV norm take a look in the
- TV decoder section.
+diff --git a/drivers/staging/media/zoran/zoran_driver.c b/drivers/staging/media/zoran/zoran_driver.c
+index 31ed36906204..a996161cb276 100644
+--- a/drivers/staging/media/zoran/zoran_driver.c
++++ b/drivers/staging/media/zoran/zoran_driver.c
+@@ -1197,7 +1197,7 @@ static int zoran_v4l2_buffer_status(struct zoran_fh *fh,
+ 		    fh->buffers.buffer[num].state == BUZ_STATE_USER) {
+ 			buf->sequence = fh->buffers.buffer[num].bs.seq;
+ 			buf->flags |= V4L2_BUF_FLAG_DONE;
+-			buf->timestamp = ns_to_timeval(fh->buffers.buffer[num].bs.ts);
++			v4l2_buffer_set_timestamp(buf, fh->buffers.buffer[num].bs.ts);
+ 		} else {
+ 			buf->flags |= V4L2_BUF_FLAG_QUEUED;
+ 		}
+@@ -1228,7 +1228,7 @@ static int zoran_v4l2_buffer_status(struct zoran_fh *fh,
+ 		if (fh->buffers.buffer[num].state == BUZ_STATE_DONE ||
+ 		    fh->buffers.buffer[num].state == BUZ_STATE_USER) {
+ 			buf->sequence = fh->buffers.buffer[num].bs.seq;
+-			buf->timestamp = ns_to_timeval(fh->buffers.buffer[num].bs.ts);
++			v4l2_buffer_set_timestamp(buf, fh->buffers.buffer[num].bs.ts);
+ 			buf->bytesused = fh->buffers.buffer[num].bs.length;
+ 			buf->flags |= V4L2_BUF_FLAG_DONE;
+ 		} else {
 -- 
 2.26.2
 
