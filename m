@@ -2,210 +2,321 @@ Return-Path: <SRS0=5+7B=C7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35CC2C2D0E2
-	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 10:07:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0C40C4727E
+	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 10:54:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C12E3238D6
-	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 10:07:34 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="Ko54eEZc"
+	by mail.kernel.org (Postfix) with ESMTP id 97EFB239E5
+	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 10:54:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726554AbgIVKHa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 22 Sep 2020 06:07:30 -0400
-Received: from mail-db8eur05on2086.outbound.protection.outlook.com ([40.107.20.86]:58336
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726341AbgIVKHa (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 22 Sep 2020 06:07:30 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cRy/7u7GH6y+4mjdQGdVjMaY8ACcbZ49vtzXEWtfTF9srLk2D0q+j1ETBt9+tZ5NLNMLf6rrqGhMnJmvfPh+XTA9HqLuFGqoQxhutd/IaXEk2bieyD6BrObkp5FuTM+OPu+yq1Djs35UYq/SvbhsbXapYJhwx6CeJoRNl1riPF0MlE+OVGpcJ3SlODH2PFPVhMCYo3INU622NfsqDfFOkaXtNLE94GFcW1Phv7uzwNRF6zL65uRYdraONAeBO6Fu9jqZOGN1AywQHtVc5q8K+DUaqCpO5bVqsnHz5OBdvxltBVJzwa+W4jBYGLQL0F/ujvRZa3eiMWJj80nTcfaEIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cQ5WAPdJpvU38cuitYyr8KTnfymhJ7uWSSR+q6lGdNg=;
- b=cxR1WAWybwy31urjmcciO5uPjTeJCBKySbcKN6tHFprNTNRO8U0eg1qHNEamv5DWD+EZ+61RWds4PFKHkdT8LXYJQNxKK8DWrzlznlU+R5VegEiFSzbBLYgoh0AjE4aZZKinlrfv07AZejsV1dCIpIX9j84xi9ms3kShv6bH8kAWyIyyQ+jt6cqwPn4EdaiffkodKdVIGJ5UvdP8WuzBf7IYzn2hFg2RliEHfbWLRzkd3SBu+YprzyVq0OVTSkDjqLeQJX4OhPR9ZW5WcVapkJYOvmDItVBuTxBE/NIsovyJXQZGWjSf7cyUjD/387P7pfFXj8Hsh5VT00jYRQXvng==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cQ5WAPdJpvU38cuitYyr8KTnfymhJ7uWSSR+q6lGdNg=;
- b=Ko54eEZcz93/vJFHzlpYdS5XLm8+wrdaBS+H3xOmPWk9Wcl84j/X5LfKIzx1gDwfuHw57BZi2qw87PzEqKzvD37vD3d38NxB6Yd1XRjxikrBvj4PSgoH6K6AFUMQlO/C/AvSw5C/ebTJQkPpKQ41OsXDWzjyYajtt6hDQC2dCvk=
-Received: from DB8PR04MB6795.eurprd04.prod.outlook.com (2603:10a6:10:fa::15)
- by DB3PR0402MB3851.eurprd04.prod.outlook.com (2603:10a6:8:12::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3391.11; Tue, 22 Sep
- 2020 10:07:24 +0000
-Received: from DB8PR04MB6795.eurprd04.prod.outlook.com
- ([fe80::d12e:689a:169:fd68]) by DB8PR04MB6795.eurprd04.prod.outlook.com
- ([fe80::d12e:689a:169:fd68%8]) with mapi id 15.20.3391.011; Tue, 22 Sep 2020
- 10:07:23 +0000
-From:   Joakim Zhang <qiangqing.zhang@nxp.com>
-To:     Sean Young <sean@mess.org>
-CC:     "mchehab@kernel.org" <mchehab@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH V2 2/2] media: rc: gpio-ir-recv: add QoS support for
- cpuidle system
-Thread-Topic: [PATCH V2 2/2] media: rc: gpio-ir-recv: add QoS support for
- cpuidle system
-Thread-Index: AQHWjaTsxPl248PwT0GLsPkAhb6O2Kl0be+AgAAFGzA=
-Date:   Tue, 22 Sep 2020 10:07:23 +0000
-Message-ID: <DB8PR04MB6795B910871CE5B388AD73A9E63B0@DB8PR04MB6795.eurprd04.prod.outlook.com>
-References: <20200918181717.24056-1-qiangqing.zhang@nxp.com>
- <20200918181717.24056-3-qiangqing.zhang@nxp.com>
- <20200922094157.GA14307@gofer.mess.org>
-In-Reply-To: <20200922094157.GA14307@gofer.mess.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: mess.org; dkim=none (message not signed)
- header.d=none;mess.org; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.71]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 9aca065d-fc29-409b-36c1-08d85edf4d3e
-x-ms-traffictypediagnostic: DB3PR0402MB3851:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB3PR0402MB385155CEFD6509D62D0AE1B8E63B0@DB3PR0402MB3851.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5236;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: plNlAS4sJv8zu+65XgCMYEEWnUDC7LI5r11P61T6sJ7O6zvQiCT+i/CQ6reW/WYG0ztBVERDuUFuirSFjTSc4/wUM9DkJQ65+ypQvgnO4yu25I/goqo32vVyuha3fso4VyG0+AiLD7+1MgPu5T1YRimcDpoLKCy4UlJgMeTKX/QQyYWmbqymVO74rIMVLBj1uWKvq/xOesJdQ0u3NFigWO0brEeN3sGV3eqIwTKEIsaIIgNbN84LNkba9uJqvaQJhYoVc6V+hbhgfHzyydDsVPd49olLOVHmyW0u+4yHlrxB5DZ1sx89ZBTrzIFUia02ZdX7zzmbzb6yJcKUJCY5aIyUTGXU+JYIEWyNeWhQm4U2A2sECxDZXjgFHt2omtsC
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB6795.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(376002)(396003)(39860400002)(346002)(366004)(83380400001)(53546011)(7696005)(186003)(33656002)(8676002)(26005)(8936002)(9686003)(86362001)(55016002)(6506007)(2906002)(52536014)(478600001)(5660300002)(54906003)(4326008)(66946007)(76116006)(316002)(66556008)(64756008)(66476007)(6916009)(71200400001)(66446008)(3714002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: KKk7ur1ktNb2guYehOZxh0WZxPBvpOZZ+L6ZRGk90pr224VK1vlE2RUbV7xqD1XwVlR3jY4w2X1pPoVujsxMscyUybg1w/PEELbxapdOIMCyA1cRBaHRmykDwi/i3ra31fw+derQZFC1d2ObUPaOecafmUzQ8s7fl2N79rrRXMZSkaksFXW23Kb7R924oRsoTOYmyPQMWisg5hxTh4uZ9E7FzZG20N6xd8R1aDRuIizL8L2Jd0CXsrr3Kc8hTro1O2M52/0sCkgBtqkKj3eUo34ao0QD+XRs1KNVP+maUqROz8QXDZeill0cEvIrwGpPqckiTo/kWxgdP9hG0mqWJm8G7RJasWnky5yt7Kr6STBnb8hlp1uX8zcWEwyxEymjf5/kDvO50ys1r6LhyOuxJHl0pd6XsXUQsZchk9R+MxuW6cCkWo+8Ss0XUcdHMQmJIq2qpYXDBfBiXZrDWvJrruX1L2lhxDQ0eMQUdFZM52Om1RbT3BXq9tLNN5Hk7OPZ64QzVqV1AShJoeQdWs7uClaulyfHjkxt3+dGL/Zm5kUukT1D/yqLDJFJSvh1jE/qtex9fymS322DV2dwr9QYirYyZP7WtgAGQBC4cD1dHSDR59zhdbJisXsSqw+NtqNSlkefM3u+iCAbwi0n+TyBaw==
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        id S1726558AbgIVKyT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 22 Sep 2020 06:54:19 -0400
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:36708 "EHLO
+        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726513AbgIVKyT (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 22 Sep 2020 06:54:19 -0400
+Received: from relay4-d.mail.gandi.net (unknown [217.70.183.196])
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id D7CA83A1297;
+        Tue, 22 Sep 2020 10:54:14 +0000 (UTC)
+X-Originating-IP: 93.34.118.233
+Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id B86C1E0004;
+        Tue, 22 Sep 2020 10:53:49 +0000 (UTC)
+Date:   Tue, 22 Sep 2020 12:57:42 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Sowjanya Komatineni <skomatineni@nvidia.com>, jonathanh@nvidia.com,
+        sakari.ailus@iki.fi, hverkuil@xs4all.nl, jacopo+renesas@jmondi.org,
+        luca@lucaceresoli.net, leonl@leopardimaging.com,
+        robh+dt@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 3/3] media: i2c: imx274: Add IMX274 power on and off
+ sequence
+Message-ID: <20200922105742.jsaf7mypwvx3u6bh@uno.localdomain>
+References: <1600724379-7324-1-git-send-email-skomatineni@nvidia.com>
+ <1600724379-7324-4-git-send-email-skomatineni@nvidia.com>
+ <20200922075501.GB3994831@ulmo>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB6795.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9aca065d-fc29-409b-36c1-08d85edf4d3e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Sep 2020 10:07:23.7584
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: A/OfiJDUvQaD+CxSat1Zzfhv/z81lTDi6X/60LN1JvDC3RTT62IyGcgqG2IPTVu+FjAVq657VbNFdg0Z8dsyRA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3851
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="3vvwpxcd5qgs27cq"
+Content-Disposition: inline
+In-Reply-To: <20200922075501.GB3994831@ulmo>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-DQpIaSBTZWFuLA0KDQpUaGFua3MgZm9yIHlvdSBraW5kbHkgcmV2aWV3Lg0KDQo+IC0tLS0tT3Jp
-Z2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFNlYW4gWW91bmcgPHNlYW5AbWVzcy5vcmc+DQo+
-IFNlbnQ6IDIwMjDE6jnUwjIyyNUgMTc6NDINCj4gVG86IEpvYWtpbSBaaGFuZyA8cWlhbmdxaW5n
-LnpoYW5nQG54cC5jb20+DQo+IENjOiBtY2hlaGFiQGtlcm5lbC5vcmc7IHJvYmgrZHRAa2VybmVs
-Lm9yZzsgbGludXgtbWVkaWFAdmdlci5rZXJuZWwub3JnOw0KPiBkZXZpY2V0cmVlQHZnZXIua2Vy
-bmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgZGwtbGludXgtaW14DQo+IDxs
-aW51eC1pbXhAbnhwLmNvbT4NCj4gU3ViamVjdDogUmU6IFtQQVRDSCBWMiAyLzJdIG1lZGlhOiBy
-YzogZ3Bpby1pci1yZWN2OiBhZGQgUW9TIHN1cHBvcnQgZm9yIGNwdWlkbGUNCj4gc3lzdGVtDQo+
-IA0KPiBIaSBKb2FraW0sDQo+IA0KPiBUaGFua3MgZm9yIHlvdXIgdXBkYXRlZCBwYXRjaC4NCj4g
-DQo+IE9uIFNhdCwgU2VwIDE5LCAyMDIwIGF0IDAyOjE3OjE3QU0gKzA4MDAsIEpvYWtpbSBaaGFu
-ZyB3cm90ZToNCj4gPiBHUElPIElSIHJlY2VpdmUgaXMgbXVjaCByZWx5IG9uIGludGVycnVwdCBy
-ZXNwb25zZSwgdW5ldmVuIGludGVycnVwdA0KPiA+IGxhdGVuY3kgd2lsbCBsZWFkIHRvIGluY29y
-cmVjdCB0aW1pbmcsIHNvIHRoZSBkZWNvZGVyIGZhaWxzIHRvIGRlY29kZQ0KPiA+IGl0LiBUaGUg
-aXNzdWUgaXMgcGFydGljdWxhcmx5IGFjdXRlIG9uIHNvbWUgc3lzdGVtcyB3aGljaCBzdXBwb3J0
-DQo+ID4gY3B1aWRsZSwgbm90IGFsbCwgZHluYW1pY2FsbHkgZGlzYWJsZSBhbmQgZW5hYmxlIGNw
-dWlkbGUgY2FuIHNvbHZlDQo+ID4gdGhpcyBwcm9ibGVtIHRvIGEgZ3JlYXQgZXh0ZW50Lg0KPiA+
-DQo+ID4gSG93ZXZlciwgdGhlcmUgaXMgYSBkb3duc2lkZSB0byB0aGlzIGFwcHJvYWNoLCB0aGUg
-bWVhc3VyZW1lbnQgb2YNCj4gPiBoZWFkZXIgb24gdGhlIGZpcnN0IGZyYW1lIG1heSBpbmNvcnJl
-Y3QuIFRlc3Qgb24gaS5NWDhNIHNlcmlhbHMsIHdoZW4NCj4gPiBlbmFibGUgY3B1aWRsZSwgaW50
-ZXJydXB0IGxhdGVuY3kgY291bGQgYmUgYWJvdXQgNTAwdXMuDQo+ID4NCj4gPiBXaXRoIHRoaXMg
-cGF0Y2g6DQo+ID4gMS4gaGFzIG5vIHNpZGUgZWZmZWN0IG9uIG5vbi1jcHVpZGxlIHN5c3RlbS4N
-Cj4gPiAyLiBsYXRlbmN5IGlzIHN0aWxsIG11Y2ggbG9uZ2VyIGZvciB0aGUgZmlyc3QgZ3BpbyBp
-bnRlcnJ1cHQgb24NCj4gPiBjcHVpZGxlIHN5c3RlbSwgc28gdGhlIGZpcnN0IGZyYW1lIG1heSBu
-b3QgYmUgZGVjb2RlZC4gR2VuZXJhbGx5LCBSQw0KPiA+IHdvdWxkIHRyYW5zbWl0IG11bHRpcGxl
-IGZyYW1lcyBhdCBvbmNlIHByZXNzLCB3ZSBjYW4gc2FjcmlmaWNlIHRoZSBmaXJzdA0KPiBmcmFt
-ZS4NCj4gPiAzLiBhZGQgImxpbnV4LGF1dG9zdXNwZW5kLXBlcmlvZCIgcHJvcGVydHkgaW4gZGV2
-aWNlIHRyZWUgaWYgeW91IGFsc28NCj4gPiBzdWZmZXIgdGhpcyBjcHVpZGxlIGlzc3VlLg0KPiA+
-DQo+ID4gU2lnbmVkLW9mZi1ieTogSm9ha2ltIFpoYW5nIDxxaWFuZ3FpbmcuemhhbmdAbnhwLmNv
-bT4NCj4gPiAtLS0NCj4gPiBDaGFuZ2VMb2dzOg0KPiA+IFYxLT5WMjoNCj4gPiAJKiBzZXQgYXV0
-b3N1c3BlbmQgZGVsYXkgdGltZSB2aWEgZGV2aWNlIHRyZWUuDQo+ID4gLS0tDQo+ID4gIGRyaXZl
-cnMvbWVkaWEvcmMvZ3Bpby1pci1yZWN2LmMgfCA1MA0KPiA+ICsrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKw0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgNTAgaW5zZXJ0aW9ucygrKQ0KPiA+
-DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWVkaWEvcmMvZ3Bpby1pci1yZWN2LmMNCj4gPiBi
-L2RyaXZlcnMvbWVkaWEvcmMvZ3Bpby1pci1yZWN2LmMgaW5kZXggYTIwNDEzMDA4YzNjLi42M2Nm
-ODI5MGViMTkNCj4gPiAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL21lZGlhL3JjL2dwaW8taXIt
-cmVjdi5jDQo+ID4gKysrIGIvZHJpdmVycy9tZWRpYS9yYy9ncGlvLWlyLXJlY3YuYw0KPiA+IEBA
-IC0xMSw2ICsxMSw4IEBADQo+ID4gICNpbmNsdWRlIDxsaW51eC9vZi5oPg0KPiA+ICAjaW5jbHVk
-ZSA8bGludXgvb2ZfZ3Bpby5oPg0KPiA+ICAjaW5jbHVkZSA8bGludXgvcGxhdGZvcm1fZGV2aWNl
-Lmg+DQo+ID4gKyNpbmNsdWRlIDxsaW51eC9wbV9ydW50aW1lLmg+DQo+ID4gKyNpbmNsdWRlIDxs
-aW51eC9wbV9xb3MuaD4NCj4gPiAgI2luY2x1ZGUgPGxpbnV4L2lycS5oPg0KPiA+ICAjaW5jbHVk
-ZSA8bWVkaWEvcmMtY29yZS5oPg0KPiA+DQo+ID4gQEAgLTIwLDE3ICsyMiwzNSBAQCBzdHJ1Y3Qg
-Z3Bpb19yY19kZXYgew0KPiA+ICAJc3RydWN0IHJjX2RldiAqcmNkZXY7DQo+ID4gIAlzdHJ1Y3Qg
-Z3Bpb19kZXNjICpncGlvZDsNCj4gPiAgCWludCBpcnE7DQo+ID4gKwlzdHJ1Y3QgZGV2aWNlICpk
-ZXY7DQo+ID4gKwlzdHJ1Y3QgcG1fcW9zX3JlcXVlc3QgcW9zOw0KPiA+ICB9Ow0KPiA+DQo+ID4g
-IHN0YXRpYyBpcnFyZXR1cm5fdCBncGlvX2lyX3JlY3ZfaXJxKGludCBpcnEsIHZvaWQgKmRldl9p
-ZCkgIHsNCj4gPiAgCWludCB2YWw7DQo+ID4gIAlzdHJ1Y3QgZ3Bpb19yY19kZXYgKmdwaW9fZGV2
-ID0gZGV2X2lkOw0KPiA+ICsJc3RydWN0IGRldmljZSAqZGV2ID0gZ3Bpb19kZXYtPmRldjsNCj4g
-PiArDQo+ID4gKwkvKg0KPiA+ICsJICogRm9yIHNvbWUgY3B1aWRsZSBzeXN0ZW1zLCBub3QgYWxs
-Og0KPiA+ICsJICogUmVzcG9uZCB0byBpbnRlcnJ1cHQgdGFraW5nIG1vcmUgbGF0ZW5jeSB3aGVu
-IGNwdSBpbiBpZGxlLg0KPiA+ICsJICogSW52b2tlIGFzeW5jaHJvbm91cyBwbSBydW50aW1lIGdl
-dCBmcm9tIGludGVycnVwdCBjb250ZXh0LA0KPiA+ICsJICogdGhpcyBtYXkgaW50cm9kdWNlIGEg
-bWlsbGlzZWNvbmQgZGVsYXkgdG8gY2FsbCByZXN1bWUgY2FsbGJhY2ssDQo+ID4gKwkgKiB3aGVy
-ZSB0byBkaXNhYmxlIGNwdWlsZGUuDQo+ID4gKwkgKg0KPiA+ICsJICogVHdvIGlzc3VlcyBsZWFk
-IHRvIGZhaWwgdG8gZGVjb2RlIGZpcnN0IGZyYW1lLCBvbmUgaXMgbGF0ZW5jeSB0bw0KPiA+ICsJ
-ICogcmVzcG9uZCB0byBpbnRlcnJ1cHQsIGFub3RoZXIgaXMgZGVsYXkgaW50cm9kdWNlZCBieSBh
-c3luYyBhcGkuDQo+ID4gKwkgKi8NCj4gPiArCXBtX3J1bnRpbWVfZ2V0KGRldik7DQo+ID4NCj4g
-PiAgCXZhbCA9IGdwaW9kX2dldF92YWx1ZShncGlvX2Rldi0+Z3Bpb2QpOw0KPiA+ICAJaWYgKHZh
-bCA+PSAwKQ0KPiA+ICAJCWlyX3Jhd19ldmVudF9zdG9yZV9lZGdlKGdwaW9fZGV2LT5yY2Rldiwg
-dmFsID09IDEpOw0KPiA+DQo+ID4gKwlwbV9ydW50aW1lX21hcmtfbGFzdF9idXN5KGRldik7DQo+
-ID4gKwlwbV9ydW50aW1lX3B1dF9hdXRvc3VzcGVuZChkZXYpOw0KPiA+ICsNCj4gDQo+IEkndmUg
-ZHVzdGVkIG9mZiBteSBycGkgYW5kIHRyaWVkIHRvIHNlZSBpZiBpdCBmYWlscyB3aXRoIGNwdWlk
-bGUgZW5hYmxlZC4NCj4gQXMgZmFyIGFzIEkgY2FuIHNlZSwgaXQgYWx3YXlzIHdvcmtzIGZpbmUu
-IFNvLCBteSBvbmx5IGNvbmNlcm4gaXMgdGhhdCB0aGVyZSBpcyBhDQo+IGJ1bmNoIG9mIHBtIGJ1
-c3kgd29yayBkb25lIGhlcmUgZm9yIGRldmljZXMgdGhhdCBkbyBub3QgbmVlZCBpdCwgaW5jbHVk
-aW5nDQo+IHNwaW5sb2Nrcywga3RpbWUuIGV0Yy4NCj4gDQo+IFlvdSBjb3VsZCByZW5hbWUgdGhl
-IGRldiBmaWVsZCBvZiBncGlvX3JjX2RldiB0byBwbWRldiBhbmQgb25seSBkbyB0aGlzIHdvcmsg
-aWYNCj4gcG1fZGV2ICE9IE5VTEwuIE9yIHNvbWUgb3RoZXIgbWVjaGFuaXNtIG9mIGRvaW5nIHRo
-aXMgd29yayBjb25kaXRpb25hbGx5Lg0KPiANCj4gSGF2aW5nIHNhaWQgdGhhdCBJJ20gbm90IGVu
-dGlyZWx5IHN1cmUgdGhpcyB3aWxsIG1ha2UgbXVjaCBvZiBhIGRpZmZlcmVuY2UuDQoNClBlciBt
-eSB1bmRlcnN0YW5kaW5nLCB0aGlzIHNob3VsZCBub3QgbWFrZSBtdWNoIGRpZmZlcmVuY2UuIEJ1
-dCwgR1BJTyBJUiByZWN2IGlzIHNlbnNpdGl2ZSB0byB0aW1lLCBzbyB3ZSBuZWVkIHRyeSBvdXIg
-YmVzdCBub3QgaW50cm9kdWNlIGV4dHJhIHdvcmsuDQoNClNvLCBJIHdpbGwgaW1wcm92ZSBpdCB0
-aGVuIHNlbmQgYSBWMy4NCg0KQmVzdCBSZWdhcmRzLA0KSm9ha2ltIFpoYW5nDQo+ID4gIAlyZXR1
-cm4gSVJRX0hBTkRMRUQ7DQo+ID4gIH0NCj4gPg0KPiA+IEBAIC00MCw2ICs2MCw3IEBAIHN0YXRp
-YyBpbnQgZ3Bpb19pcl9yZWN2X3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UNCj4gKnBkZXYp
-DQo+ID4gIAlzdHJ1Y3QgZGV2aWNlX25vZGUgKm5wID0gZGV2LT5vZl9ub2RlOw0KPiA+ICAJc3Ry
-dWN0IGdwaW9fcmNfZGV2ICpncGlvX2RldjsNCj4gPiAgCXN0cnVjdCByY19kZXYgKnJjZGV2Ow0K
-PiA+ICsJdTMyIHBlcmlvZCA9IDA7DQo+ID4gIAlpbnQgcmM7DQo+ID4NCj4gPiAgCWlmICghbnAp
-DQo+ID4gQEAgLTgzLDYgKzEwNCw3IEBAIHN0YXRpYyBpbnQgZ3Bpb19pcl9yZWN2X3Byb2JlKHN0
-cnVjdCBwbGF0Zm9ybV9kZXZpY2UNCj4gKnBkZXYpDQo+ID4gIAkJcmNkZXYtPm1hcF9uYW1lID0g
-UkNfTUFQX0VNUFRZOw0KPiA+DQo+ID4gIAlncGlvX2Rldi0+cmNkZXYgPSByY2RldjsNCj4gPiAr
-CWdwaW9fZGV2LT5kZXYgPSBkZXY7DQo+ID4NCj4gPiAgCXJjID0gZGV2bV9yY19yZWdpc3Rlcl9k
-ZXZpY2UoZGV2LCByY2Rldik7DQo+ID4gIAlpZiAocmMgPCAwKSB7DQo+ID4gQEAgLTkwLDYgKzEx
-MiwxNCBAQCBzdGF0aWMgaW50IGdwaW9faXJfcmVjdl9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2
-aWNlDQo+ICpwZGV2KQ0KPiA+ICAJCXJldHVybiByYzsNCj4gPiAgCX0NCj4gPg0KPiA+ICsJb2Zf
-cHJvcGVydHlfcmVhZF91MzIobnAsICJsaW51eCxhdXRvc3VzcGVuZC1wZXJpb2QiLCAmcGVyaW9k
-KTsNCj4gPiArCWlmIChwZXJpb2QpIHsNCj4gPiArCQlwbV9ydW50aW1lX3NldF9hdXRvc3VzcGVu
-ZF9kZWxheShkZXYsIHBlcmlvZCk7DQo+ID4gKwkJcG1fcnVudGltZV91c2VfYXV0b3N1c3BlbmQo
-ZGV2KTsNCj4gPiArCQlwbV9ydW50aW1lX3NldF9zdXNwZW5kZWQoZGV2KTsNCj4gPiArCQlwbV9y
-dW50aW1lX2VuYWJsZShkZXYpOw0KPiA+ICsJfQ0KPiA+ICsNCj4gPiAgCXBsYXRmb3JtX3NldF9k
-cnZkYXRhKHBkZXYsIGdwaW9fZGV2KTsNCj4gPg0KPiA+ICAJcmV0dXJuIGRldm1fcmVxdWVzdF9p
-cnEoZGV2LCBncGlvX2Rldi0+aXJxLCBncGlvX2lyX3JlY3ZfaXJxLCBAQA0KPiA+IC0xMjIsOSAr
-MTUyLDI5IEBAIHN0YXRpYyBpbnQgZ3Bpb19pcl9yZWN2X3Jlc3VtZShzdHJ1Y3QgZGV2aWNlICpk
-ZXYpDQo+ID4gIAlyZXR1cm4gMDsNCj4gPiAgfQ0KPiA+DQo+ID4gK3N0YXRpYyBpbnQgZ3Bpb19p
-cl9yZWN2X3J1bnRpbWVfc3VzcGVuZChzdHJ1Y3QgZGV2aWNlICpkZXYpIHsNCj4gPiArCXN0cnVj
-dCBncGlvX3JjX2RldiAqZ3Bpb19kZXYgPSBkZXZfZ2V0X2RydmRhdGEoZGV2KTsNCj4gPiArDQo+
-ID4gKwljcHVfbGF0ZW5jeV9xb3NfcmVtb3ZlX3JlcXVlc3QoJmdwaW9fZGV2LT5xb3MpOw0KPiA+
-ICsNCj4gPiArCXJldHVybiAwOw0KPiA+ICt9DQo+ID4gKw0KPiA+ICtzdGF0aWMgaW50IGdwaW9f
-aXJfcmVjdl9ydW50aW1lX3Jlc3VtZShzdHJ1Y3QgZGV2aWNlICpkZXYpIHsNCj4gPiArCXN0cnVj
-dCBncGlvX3JjX2RldiAqZ3Bpb19kZXYgPSBkZXZfZ2V0X2RydmRhdGEoZGV2KTsNCj4gPiArDQo+
-ID4gKwljcHVfbGF0ZW5jeV9xb3NfYWRkX3JlcXVlc3QoJmdwaW9fZGV2LT5xb3MsIDApOw0KPiA+
-ICsNCj4gPiArCXJldHVybiAwOw0KPiA+ICt9DQo+ID4gKw0KPiA+ICBzdGF0aWMgY29uc3Qgc3Ry
-dWN0IGRldl9wbV9vcHMgZ3Bpb19pcl9yZWN2X3BtX29wcyA9IHsNCj4gPiAgCS5zdXNwZW5kICAg
-ICAgICA9IGdwaW9faXJfcmVjdl9zdXNwZW5kLA0KPiA+ICAJLnJlc3VtZSAgICAgICAgID0gZ3Bp
-b19pcl9yZWN2X3Jlc3VtZSwNCj4gPiArCS5ydW50aW1lX3N1c3BlbmQgPSBncGlvX2lyX3JlY3Zf
-cnVudGltZV9zdXNwZW5kLA0KPiA+ICsJLnJ1bnRpbWVfcmVzdW1lICA9IGdwaW9faXJfcmVjdl9y
-dW50aW1lX3Jlc3VtZSwNCj4gPiAgfTsNCj4gPiAgI2VuZGlmDQo+ID4NCj4gPiAtLQ0KPiA+IDIu
-MTcuMQ0K
+
+--3vvwpxcd5qgs27cq
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+
+Hi Thierry
+
+On Tue, Sep 22, 2020 at 09:55:01AM +0200, Thierry Reding wrote:
+> On Mon, Sep 21, 2020 at 02:39:39PM -0700, Sowjanya Komatineni wrote:
+> > IMX274 has analog 2.8V supply, digital core 1.8V supply, and vddl digital
+> > io 1.2V supply which are optional based on camera module design.
+> >
+> > IMX274 also need external 24Mhz clock and is optional based on
+> > camera module design.
+> >
+> > This patch adds support for IMX274 power on and off to enable and
+> > disable these supplies and external clock.
+> >
+> > Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+> > Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+> > ---
+> >  drivers/media/i2c/imx274.c | 184 +++++++++++++++++++++++++++++++++------------
+> >  1 file changed, 134 insertions(+), 50 deletions(-)
+> >
+> > diff --git a/drivers/media/i2c/imx274.c b/drivers/media/i2c/imx274.c
+> > index 5e515f0..b3057a5 100644
+> > --- a/drivers/media/i2c/imx274.c
+> > +++ b/drivers/media/i2c/imx274.c
+> > @@ -18,7 +18,9 @@
+> >  #include <linux/kernel.h>
+> >  #include <linux/module.h>
+> >  #include <linux/of_gpio.h>
+> > +#include <linux/pm_runtime.h>
+> >  #include <linux/regmap.h>
+> > +#include <linux/regulator/consumer.h>
+> >  #include <linux/slab.h>
+> >  #include <linux/v4l2-mediabus.h>
+> >  #include <linux/videodev2.h>
+> > @@ -131,6 +133,15 @@
+> >  #define IMX274_TABLE_WAIT_MS			0
+> >  #define IMX274_TABLE_END			1
+> >
+> > +/* regulator supplies */
+> > +static const char * const imx274_supply_names[] = {
+> > +	"vddl",  /* IF (1.2V) supply */
+> > +	"vdig",  /* Digital Core (1.8V) supply */
+> > +	"vana",  /* Analog (2.8V) supply */
+>
+> According to the device tree bindings these should be uppercase. Did I
+> miss a patch that updates the bindings?
+
+Yes! Sorry, there's been some chrun around these bindings
+https://patchwork.linuxtv.org/project/linux-media/patch/20200917144416.GN834@valkosipuli.retiisi.org.uk/
+
+It should get in for 5.9 as a late fix
+
+>
+> I think the preference is for supply names to be lowercase and given
+> that there are no users of this binding yet we could update it without
+> breaking any existing device trees.
+>
+> > +};
+> > +
+> > +#define IMX274_NUM_SUPPLIES ARRAY_SIZE(imx274_supply_names)
+> > +
+> >  /*
+> >   * imx274 I2C operation related structure
+> >   */
+> > @@ -501,6 +512,8 @@ struct imx274_ctrls {
+> >   * @frame_rate: V4L2 frame rate structure
+> >   * @regmap: Pointer to regmap structure
+> >   * @reset_gpio: Pointer to reset gpio
+> > + * @supplies: List of analog and digital supply regulators
+> > + * @inck: Pointer to sensor input clock
+> >   * @lock: Mutex structure
+> >   * @mode: Parameters for the selected readout mode
+> >   */
+> > @@ -514,6 +527,8 @@ struct stimx274 {
+> >  	struct v4l2_fract frame_interval;
+> >  	struct regmap *regmap;
+> >  	struct gpio_desc *reset_gpio;
+> > +	struct regulator_bulk_data supplies[IMX274_NUM_SUPPLIES];
+> > +	struct clk *inck;
+> >  	struct mutex lock; /* mutex lock for operations */
+> >  	const struct imx274_mode *mode;
+> >  };
+> > @@ -726,6 +741,12 @@ static int imx274_start_stream(struct stimx274 *priv)
+> >  {
+> >  	int err = 0;
+> >
+> > +	err = __v4l2_ctrl_handler_setup(&priv->ctrls.handler);
+> > +	if (err) {
+> > +		dev_err(&priv->client->dev, "Error %d setup controls\n", err);
+> > +		return err;
+> > +	}
+> > +
+> >  	/*
+> >  	 * Refer to "Standby Cancel Sequence when using CSI-2" in
+> >  	 * imx274 datasheet, it should wait 10ms or more here.
+> > @@ -767,6 +788,66 @@ static void imx274_reset(struct stimx274 *priv, int rst)
+> >  	usleep_range(IMX274_RESET_DELAY1, IMX274_RESET_DELAY2);
+> >  }
+> >
+> > +static int imx274_power_on(struct device *dev)
+> > +{
+> > +	struct i2c_client *client = to_i2c_client(dev);
+> > +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+> > +	struct stimx274 *imx274 = to_imx274(sd);
+> > +	int ret;
+> > +
+> > +	/* keep sensor in reset before power on */
+> > +	imx274_reset(imx274, 0);
+> > +
+> > +	ret = clk_prepare_enable(imx274->inck);
+> > +	if (ret) {
+> > +		dev_err(&imx274->client->dev,
+> > +			"Failed to enable input clock: %d\n", ret);
+> > +		return ret;
+> > +	}
+> > +
+> > +	ret = regulator_bulk_enable(IMX274_NUM_SUPPLIES, imx274->supplies);
+> > +	if (ret) {
+> > +		dev_err(&imx274->client->dev,
+> > +			"Failed to enable regulators: %d\n", ret);
+> > +		goto fail_reg;
+> > +	}
+> > +
+> > +	udelay(2);
+>
+> This looks like some sort of extra delay to make sure all the supply
+> voltages have settled. Should this perhaps be encoded as part of the
+> regulator ramp-up times? Or is this really an IC-specific delay that
+> is needed for some internal timing?
+>
+> > +	imx274_reset(imx274, 1);
+> > +
+> > +	return 0;
+> > +
+> > +fail_reg:
+> > +	clk_disable_unprepare(imx274->inck);
+> > +	return ret;
+> > +}
+> > +
+> > +static int imx274_power_off(struct device *dev)
+> > +{
+> > +	struct i2c_client *client = to_i2c_client(dev);
+> > +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+> > +	struct stimx274 *imx274 = to_imx274(sd);
+> > +
+> > +	imx274_reset(imx274, 0);
+> > +
+> > +	regulator_bulk_disable(IMX274_NUM_SUPPLIES, imx274->supplies);
+> > +
+> > +	clk_disable_unprepare(imx274->inck);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int imx274_regulators_get(struct device *dev, struct stimx274 *imx274)
+> > +{
+> > +	unsigned int i;
+> > +
+> > +	for (i = 0; i < IMX274_NUM_SUPPLIES; i++)
+> > +		imx274->supplies[i].supply = imx274_supply_names[i];
+> > +
+> > +	return devm_regulator_bulk_get(dev, IMX274_NUM_SUPPLIES,
+> > +					imx274->supplies);
+> > +}
+> > +
+> >  /**
+> >   * imx274_s_ctrl - This is used to set the imx274 V4L2 controls
+> >   * @ctrl: V4L2 control to be set
+> > @@ -781,6 +862,9 @@ static int imx274_s_ctrl(struct v4l2_ctrl *ctrl)
+> >  	struct stimx274 *imx274 = to_imx274(sd);
+> >  	int ret = -EINVAL;
+> >
+> > +	if (!pm_runtime_get_if_in_use(&imx274->client->dev))
+> > +		return 0;
+>
+> I'm not sure I understand this, and sorry if this has been discussed
+> earlier. Aren't there any other mechanisms in place to ensure that a
+> control can only be configured when in use? If so, then is this even
+> necessary?
+>
+> If not, silently ignoring at this point seems like it could cause subtle
+> failures by ignoring some control settings and applying others if the
+> timing is right.
+>
+> > +
+> >  	dev_dbg(&imx274->client->dev,
+> >  		"%s : s_ctrl: %s, value: %d\n", __func__,
+> >  		ctrl->name, ctrl->val);
+> > @@ -811,6 +895,8 @@ static int imx274_s_ctrl(struct v4l2_ctrl *ctrl)
+> >  		break;
+> >  	}
+> >
+> > +	pm_runtime_put(&imx274->client->dev);
+> > +
+> >  	return ret;
+> >  }
+> >
+> > @@ -1269,10 +1355,8 @@ static int imx274_s_frame_interval(struct v4l2_subdev *sd,
+> >   *
+> >   * Return: 0 on success, errors otherwise
+> >   */
+> > -static int imx274_load_default(struct stimx274 *priv)
+> > +static void imx274_load_default(struct stimx274 *priv)
+> >  {
+> > -	int ret;
+> > -
+> >  	/* load default control values */
+> >  	priv->frame_interval.numerator = 1;
+> >  	priv->frame_interval.denominator = IMX274_DEF_FRAME_RATE;
+> > @@ -1280,29 +1364,6 @@ static int imx274_load_default(struct stimx274 *priv)
+> >  	priv->ctrls.gain->val = IMX274_DEF_GAIN;
+> >  	priv->ctrls.vflip->val = 0;
+> >  	priv->ctrls.test_pattern->val = TEST_PATTERN_DISABLED;
+> > -
+> > -	/* update frame rate */
+> > -	ret = imx274_set_frame_interval(priv,
+> > -					priv->frame_interval);
+> > -	if (ret)
+> > -		return ret;
+> > -
+> > -	/* update exposure time */
+> > -	ret = v4l2_ctrl_s_ctrl(priv->ctrls.exposure, priv->ctrls.exposure->val);
+> > -	if (ret)
+> > -		return ret;
+> > -
+> > -	/* update gain */
+> > -	ret = v4l2_ctrl_s_ctrl(priv->ctrls.gain, priv->ctrls.gain->val);
+> > -	if (ret)
+> > -		return ret;
+> > -
+> > -	/* update vflip */
+> > -	ret = v4l2_ctrl_s_ctrl(priv->ctrls.vflip, priv->ctrls.vflip->val);
+> > -	if (ret)
+> > -		return ret;
+>
+> This is not moved to somewhere else, so I assume the equivalent will
+> happen somewhere higher up in the stack? Might be worth mentioning in
+> the commit message why this can be dropped.
+>
+> Thierry
+
+
+
+--3vvwpxcd5qgs27cq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEtcQ9SICaIIqPWDjAcjQGjxahVjwFAl9p2KYACgkQcjQGjxah
+VjxuKA/7BtUBwbUr1r7qMCqjhos0yPrOlR6WuVcozG0soKjjVFHXJjkuLSiM52JF
+KfrZD6l3cU1QvQK0SslzRy5Q0grpasnrERNSve5jBg2lU9zwh50BIFDrxPbW+teE
+yxeyweNjvScwrCLa0/dPQPpakq+LrdC1MrnEkZobIG7InxPsBv6TRtluZeLcnW4T
+49VYzUEcr1NGBpLmmNtdofAtm1SL0s0HqpZCZhCXBNct1DG+zW2EkFzTAQ7dIpky
+suIfAw2t5oArfjCAJFbafIQcRmnn1FgyyNancbi4CXuGv4DcGczrvjDqZTMINL4M
+7/zKU3/TyT2dxMXZrA0e0dJVS7Bjc8vRJE49UNJ3HnNwoYPk20wKTNbG4JxbTP6y
+hXdiTClqXaQQj51d520LTP+RLtpK34NPCS6lRcVuzHMNll65R3QoNHiFced9ugoz
+OxPUHEtJCB6ilR4WYpWU0anyzR5MIPZFTaHFxpFbrsiK5LvQp6uEpzYBQkTVk/Go
+qBu3nr2nSzEz4jUYuL0UNRY4sDrvazv/JFEKCmXIs+T3q6S+fGhvqGSdR5oKOepT
+QcJ4N+s3QtINAJtZxxu54txMLsKlnBI6gutUCibwM6NqZlubzp94gAreAqljqmZk
+n9WnlfKZCmpSz3RKyjj1C55QCNDW1ThHyCV65Ah4oiCZq/AIOGM=
+=K5vx
+-----END PGP SIGNATURE-----
+
+--3vvwpxcd5qgs27cq--
