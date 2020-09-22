@@ -2,109 +2,107 @@ Return-Path: <SRS0=5+7B=C7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2944EC2D0E2
-	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 08:16:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C503BC4727F
+	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 08:38:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C08E023A32
-	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 08:16:21 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dmDw9QZt"
+	by mail.kernel.org (Postfix) with ESMTP id 7755C23A5F
+	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 08:38:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1600763934;
+	bh=Mm0cw1XMHiTcGFvYZ5YAxmxvfxAfdbEoZVA80me39JE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=D2YtUKjWMSMFUffNlc+kQ4zaAEOlFmnVubPdlcuz6gdOC3Uh31o6DdOc6ccUb9yMI
+	 268et29/n83jW4KY75IuYyxdwnmb6/xm7iI+Cq+OFJhqtzKCO8t0XByoXf0RkYpzT7
+	 /hmAOmRQwElXd6A7d8gQwpM3y4fCXg3JVvs8AjJU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726578AbgIVIQS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 22 Sep 2020 04:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36286 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726483AbgIVIQS (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 22 Sep 2020 04:16:18 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6367C061755;
-        Tue, 22 Sep 2020 01:16:17 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id s12so15993065wrw.11;
-        Tue, 22 Sep 2020 01:16:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=aKRxZL4FGN5j/4WkJ9pynD3NUqlurooCForAs/j+ntg=;
-        b=dmDw9QZtzmevLAins9hFvEC4NiX8Xs22crn3GDX855fYgxS+DwvN15/80NgKOmLAdv
-         o30HhP+xH6uizb79qkXdUrkVRmuvgBH93Hknh3dBGT2IG2AVrDH/Oqb1OzY2g8WhhL/o
-         X4r04M4SUNb9SoMJznOcJtkp1CRsQlQG+SFFdRCAd9sQbW9KbFkRKR9jgr6v3pUA+8R3
-         lsZmOP230jBbi+gHRI1xP5RtBEn0mlEHwoNxNqwZTWL0RRtsMFZYphVQ+qX47K4kf4to
-         BsBhOYdjiaV6bxdXcGuX56cv0322/21x2fhtpc2EOuVRsm6HoO7VtwUrEL1W/EMDs5Zj
-         6/Cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=aKRxZL4FGN5j/4WkJ9pynD3NUqlurooCForAs/j+ntg=;
-        b=WHfoRUnH/WTavmgAIRh0rPFzMzaqUlEoxUcFBbjlnPu94D2hkfkDwX9mYEhNrCFRJB
-         f5CuP4zwcE/I6vsF7AcTHlImZ9eE7n3KBlHRWneaV+q8FdCv8rqTMZTGV4A/al4bJZ9k
-         jWIt4t96jYjHZ5iDNa5Em8OQ08vAhaqSgAI7it3KDpnZfsEBW1DCqMqPjaYOlJ4Md3pH
-         bIqOQPdBHbIoCuqQEvyYMXu9sCr9hiPrJ7kZ+aNoINhA6cyxw9aNw7oPy0MooQkauPXX
-         QofqC5R9HhxWU0GUt6DF+4FhL60yNdVdifK3Vox1gkc39P2yh8hbwYk7e3sWfNsmQkjV
-         EWEA==
-X-Gm-Message-State: AOAM5324TAkenZULTC4xPHh9+hFrhHM1Vji1czfiQHD3DBoQHZKJ/J+r
-        31yq0Aj7npl4C6jRrRy+11es9ZRQFUvtPmqC
-X-Google-Smtp-Source: ABdhPJxRolYELjQplUMesH1+RAkghTXRZcshi7uZA4CNsT8JzclYHqmvQmiEn/M9dR8aCWrWQmvlgw==
-X-Received: by 2002:a5d:680b:: with SMTP id w11mr4182872wru.73.1600762576158;
-        Tue, 22 Sep 2020 01:16:16 -0700 (PDT)
-Received: from [192.168.0.64] (cpc83661-brig20-2-0-cust443.3-3.cable.virginm.net. [82.28.105.188])
-        by smtp.gmail.com with ESMTPSA id j14sm25702629wrr.66.2020.09.22.01.16.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Sep 2020 01:16:15 -0700 (PDT)
-Subject: Re: [PATCH RESEND 0/5] atomisp: Fixes and cleanups
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alan Cox <alan@linux.intel.com>, linux-media@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org
-References: <20200921215359.45003-1-alex.dewar90@gmail.com>
- <20200922101143.28779711@coco.lan>
-From:   Alex Dewar <alex.dewar90@gmail.com>
-Message-ID: <21f18dc2-a1bc-0a37-0336-fc35170a40e9@gmail.com>
-Date:   Tue, 22 Sep 2020 09:16:13 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1726461AbgIVIiu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 22 Sep 2020 04:38:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39278 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726343AbgIVIiu (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 22 Sep 2020 04:38:50 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2F3DA23A1E;
+        Tue, 22 Sep 2020 08:38:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600763929;
+        bh=Mm0cw1XMHiTcGFvYZ5YAxmxvfxAfdbEoZVA80me39JE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lJGS3A93Lgq85UkTDgJdes21K55ht2plPLTIViCrhCUCIC3GbnIc5h/FFIvwdAN7y
+         GZhrRI/BtSs3f5OiCBv4YSrBUeSmOmarfFBLok5wtLaSTM8T+VppMPRyZogheOejZ9
+         PC9RJDxQ+/0Q63ijmDGf4+v/jSPWVgbPUXU+FO1g=
+Date:   Tue, 22 Sep 2020 10:39:09 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Mark Brown <broonie@kernel.org>,
+        Niklas <niklas.soderlund@ragnatech.se>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-ide@vger.kernel.org,
+        dmaengine <dmaengine@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        alsa-devel <alsa-devel@alsa-project.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 07/20] dt-bindings: usb: renesas,usb3-peri: Document
+ r8a774e1 support
+Message-ID: <20200922083909.GA2092905@kroah.com>
+References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1594919915-5225-8-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CA+V-a8vJ2n3KEL8P+XmVob2zjoWaX+s4a6c1TV_WoPFkwdkZmA@mail.gmail.com>
+ <20200920140824.GA2915460@kroah.com>
+ <CAMuHMdUyXMfZcVKkqaZHJ8tJf-3Kotqg+S2NHMZT0VFO0ZJJww@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200922101143.28779711@coco.lan>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdUyXMfZcVKkqaZHJ8tJf-3Kotqg+S2NHMZT0VFO0ZJJww@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 22/09/2020 09:11, Mauro Carvalho Chehab wrote:
-> Em Mon, 21 Sep 2020 22:53:49 +0100
-> Alex Dewar <alex.dewar90@gmail.com> escreveu:
->
->> Hi Mauro,
->>
->> Over the last month I've sent a few scattered patches to fix various
->> warnings from static analysers, but they seem to have fallen through the
->> cracks? I'm reposting them here as a series to make them easier to
->> review. If you do have any feedback that'd be great :)
-> Usually, there's no need to re-send the patches, as we pick them
-> from a patchwork queue.
->
-> However, only one of the patches actually applied against the
-> linux-media tree.
->
-> So, please rebased the remaining patches on the top of it.
->
-> Thanks,
-> Mauro
-That's weird. They applied cleanly against yesterday's linux-next for 
-me... I'll rebase on linux-media and resend.
+On Mon, Sep 21, 2020 at 09:30:39AM +0200, Geert Uytterhoeven wrote:
+> Hi Greg,
+> 
+> On Sun, Sep 20, 2020 at 4:08 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> > On Sat, Sep 19, 2020 at 11:50:07AM +0100, Lad, Prabhakar wrote:
+> > > On Thu, Jul 16, 2020 at 6:19 PM Lad Prabhakar
+> > > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> > > >
+> > > > Document RZ/G2H (R8A774E1) SoC bindings.
+> > > >
+> > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
+> > > > ---
+> > > >  Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml | 1 +
+> > > >  1 file changed, 1 insertion(+)
+> > > >
+> > > Could you please pick this patch.
+> >
+> > Don't DT patches have to be acked by a DT maintainer first?
+> 
+> https://lore.kernel.org/r/20200721033508.GA3504365@bogus
 
-Best,
-Alex
+Ah, missed that, sorry.  This, and patch 11/20, now queued up.
+
+greg k-h
