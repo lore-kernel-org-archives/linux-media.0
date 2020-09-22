@@ -2,32 +2,31 @@ Return-Path: <SRS0=5+7B=C7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7424C4727D
-	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 17:03:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49C84C4363D
+	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 17:03:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8783C23A9D
-	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 17:03:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1F8AB23A9D
+	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 17:03:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726715AbgIVRDh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 22 Sep 2020 13:03:37 -0400
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:33680 "EHLO
+        id S1726650AbgIVRDb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 22 Sep 2020 13:03:31 -0400
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:33656 "EHLO
         mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726563AbgIVRDd (ORCPT
+        with ESMTP id S1726563AbgIVRDb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 22 Sep 2020 13:03:33 -0400
+        Tue, 22 Sep 2020 13:03:31 -0400
 Received: from relay6-d.mail.gandi.net (unknown [217.70.183.198])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id 4FE413AEE87;
-        Tue, 22 Sep 2020 16:56:09 +0000 (UTC)
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id 46E5C3A862C;
+        Tue, 22 Sep 2020 16:56:02 +0000 (UTC)
 X-Originating-IP: 90.89.95.46
 Received: from pc-2.home (lfbn-tou-1-1532-46.w90-89.abo.wanadoo.fr [90.89.95.46])
         (Authenticated sender: maxime.chevallier@bootlin.com)
-        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 2B492C000C;
-        Tue, 22 Sep 2020 16:55:46 +0000 (UTC)
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id C8AEDC000E;
+        Tue, 22 Sep 2020 16:55:37 +0000 (UTC)
 From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -45,51 +44,59 @@ Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Subject: [PATCH v3 3/3] arm64: dts: rockchip: Add the camera interface description of the PX30
-Date:   Tue, 22 Sep 2020 18:55:35 +0200
-Message-Id: <20200922165535.1356622-4-maxime.chevallier@bootlin.com>
+Subject: [PATCH v3 0/3] media: rockchip: Introduce driver for Rockchip's camera interface
+Date:   Tue, 22 Sep 2020 18:55:32 +0200
+Message-Id: <20200922165535.1356622-1-maxime.chevallier@bootlin.com>
 X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20200922165535.1356622-1-maxime.chevallier@bootlin.com>
-References: <20200922165535.1356622-1-maxime.chevallier@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-GND-Spam-Score: 400
+X-GND-Status: SPAM
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The PX30 has a camera interface, supporting CSI2 and BT656
-modes. Add a DT description for this interface.
+Hi everyone,
 
-Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
----
-V3: Renamed the driver
+This is the third iteration of the series introducing a driver for the
+PX30 camera interface.
 
- arch/arm64/boot/dts/rockchip/px30.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+This was previously known as the "cif" driver in other iterations, but
+was renamed to "vip" following Ezequiel's advices to match the datasheet
+name.
 
-diff --git a/arch/arm64/boot/dts/rockchip/px30.dtsi b/arch/arm64/boot/dts/rockchip/px30.dtsi
-index 2695ea8cda14..8c81eb35da86 100644
---- a/arch/arm64/boot/dts/rockchip/px30.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/px30.dtsi
-@@ -1106,6 +1106,18 @@ vopl_mmu: iommu@ff470f00 {
- 		status = "disabled";
- 	};
- 
-+	vip: vip@ff490000 {
-+		compatible = "rockchip,px30-vip";
-+		reg = <0x0 0xff490000 0x0 0x200>;
-+		interrupts = <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&cru ACLK_CIF>, <&cru HCLK_CIF>, <&cru PCLK_CIF>, <&cru SCLK_CIF_OUT>;
-+		clock-names = "aclk", "hclk", "pclkin";
-+		power-domains = <&power PX30_PD_VI>;
-+		resets = <&cru SRST_CIF_A>, <&cru SRST_CIF_H>, <&cru SRST_CIF_PCLKIN>;
-+		reset-names = "axi", "ahb", "pclkin";
-+		status = "disabled";
-+	};
-+
- 	qos_gmac: qos@ff518000 {
- 		compatible = "syscon";
- 		reg = <0x0 0xff518000 0x0 0x20>;
+This is based on a BSP driver, and I'm not fully familiar with the media
+and V4L2 frameworks, so I guess some review is still needed.
+
+This new series adds some stability fixes, and introduces the
+double-buffering frame handling, giving better performances.
+
+Thanks to everyone who reviewed the first two iterations,
+
+Maxime
+
+Maxime Chevallier (3):
+  media: dt-bindings: media: Document Rockchip VIP bindings
+  media: rockchip: Introduce driver for Rockhip's camera interface
+  arm64: dts: rockchip: Add the camera interface description of the PX30
+
+ .../bindings/media/rockchip-vip.yaml          |  100 ++
+ arch/arm64/boot/dts/rockchip/px30.dtsi        |   12 +
+ drivers/media/platform/Kconfig                |   13 +
+ drivers/media/platform/Makefile               |    1 +
+ drivers/media/platform/rockchip/vip/Makefile  |    3 +
+ drivers/media/platform/rockchip/vip/capture.c | 1246 +++++++++++++++++
+ drivers/media/platform/rockchip/vip/dev.c     |  408 ++++++
+ drivers/media/platform/rockchip/vip/dev.h     |  206 +++
+ drivers/media/platform/rockchip/vip/regs.h    |  260 ++++
+ 9 files changed, 2249 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/rockchip-vip.yaml
+ create mode 100644 drivers/media/platform/rockchip/vip/Makefile
+ create mode 100644 drivers/media/platform/rockchip/vip/capture.c
+ create mode 100644 drivers/media/platform/rockchip/vip/dev.c
+ create mode 100644 drivers/media/platform/rockchip/vip/dev.h
+ create mode 100644 drivers/media/platform/rockchip/vip/regs.h
+
 -- 
 2.25.4
 
