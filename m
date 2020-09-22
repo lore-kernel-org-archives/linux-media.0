@@ -7,28 +7,28 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CDF7C4727F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD4A1C4741F
 	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 11:34:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 060FD2399A
-	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 11:34:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 99F1723A9C
+	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 11:34:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726631AbgIVLeU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1726632AbgIVLeU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 22 Sep 2020 07:34:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38990 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726623AbgIVLeT (ORCPT
+        with ESMTP id S1726603AbgIVLeP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 22 Sep 2020 07:34:19 -0400
+        Tue, 22 Sep 2020 07:34:15 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334EDC061755
-        for <linux-media@vger.kernel.org>; Tue, 22 Sep 2020 04:34:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37A5C061755
+        for <linux-media@vger.kernel.org>; Tue, 22 Sep 2020 04:34:14 -0700 (PDT)
 Received: from guri.fritz.box (p200300c7cf13ec005877be1094b7a29d.dip0.t-ipconnect.de [IPv6:2003:c7:cf13:ec00:5877:be10:94b7:a29d])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: dafna)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 952E629B4EB;
-        Tue, 22 Sep 2020 12:34:14 +0100 (BST)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 496AA29B4A8;
+        Tue, 22 Sep 2020 12:34:13 +0100 (BST)
 From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com, dafna.hirschfeld@collabora.com,
@@ -36,9 +36,9 @@ Cc:     laurent.pinchart@ideasonboard.com, dafna.hirschfeld@collabora.com,
         hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
         sakari.ailus@linux.intel.com, linux-rockchip@lists.infradead.org,
         mchehab@kernel.org, tfiga@chromium.org
-Subject: [PATCH v3 12/12] media: staging: rkisp1: cap: protect access to buf with the spin lock
-Date:   Tue, 22 Sep 2020 13:34:02 +0200
-Message-Id: <20200922113402.12442-13-dafna.hirschfeld@collabora.com>
+Subject: [PATCH v3 09/12] media: staging: rkisp1: stats: protect write to 'is_streaming' in start_streaming cb
+Date:   Tue, 22 Sep 2020 13:33:59 +0200
+Message-Id: <20200922113402.12442-10-dafna.hirschfeld@collabora.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200922113402.12442-1-dafna.hirschfeld@collabora.com>
 References: <20200922113402.12442-1-dafna.hirschfeld@collabora.com>
@@ -46,49 +46,31 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The function 'rkisp1_stream_start' calls 'rkisp1_set_next_buf'
-which access the buffers, so the call should be protected by
-taking the cap->buf.lock.
-After this patch, all locks are reviewed and commented so remove
-the TODO item "review and comment every lock"
+The field stats->is_streaming is written in 'start_streaming' callback
+without the stats->lock protection.
+The isr might run together with the callback so 'spin_lock_irq'
+should be used.
 
 Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Acked-by: Helen Koike <helen.koike@collabora.com>
 ---
- drivers/staging/media/rkisp1/TODO             | 1 -
- drivers/staging/media/rkisp1/rkisp1-capture.c | 2 ++
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ drivers/staging/media/rkisp1/rkisp1-stats.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/staging/media/rkisp1/TODO b/drivers/staging/media/rkisp1/TODO
-index f0c90d1c86a8..9662e9b51c7f 100644
---- a/drivers/staging/media/rkisp1/TODO
-+++ b/drivers/staging/media/rkisp1/TODO
-@@ -1,6 +1,5 @@
- * Fix pad format size for statistics and parameters entities.
- * Fix checkpatch errors.
--* Review and comment every lock
- * Handle quantization
- * streaming paths (mainpath and selfpath) check if the other path is streaming
- in several places of the code, review this, specially that it doesn't seem it
-diff --git a/drivers/staging/media/rkisp1/rkisp1-capture.c b/drivers/staging/media/rkisp1/rkisp1-capture.c
-index 012c0825a386..b9e56dab77af 100644
---- a/drivers/staging/media/rkisp1/rkisp1-capture.c
-+++ b/drivers/staging/media/rkisp1/rkisp1-capture.c
-@@ -913,6 +913,7 @@ static void rkisp1_stream_start(struct rkisp1_capture *cap)
- 	cap->ops->config(cap);
+diff --git a/drivers/staging/media/rkisp1/rkisp1-stats.c b/drivers/staging/media/rkisp1/rkisp1-stats.c
+index 6aa18d970f2b..51c64f75fe29 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-stats.c
++++ b/drivers/staging/media/rkisp1/rkisp1-stats.c
+@@ -157,7 +157,9 @@ rkisp1_stats_vb2_start_streaming(struct vb2_queue *queue, unsigned int count)
+ {
+ 	struct rkisp1_stats *stats = queue->drv_priv;
  
- 	/* Setup a buffer for the next frame */
-+	spin_lock_irq(&cap->buf.lock);
- 	rkisp1_set_next_buf(cap);
- 	cap->ops->enable(cap);
- 	/* It's safe to config ACTIVE and SHADOW regs for the
-@@ -930,6 +931,7 @@ static void rkisp1_stream_start(struct rkisp1_capture *cap)
- 			     RKISP1_CIF_MI_INIT_SOFT_UPD, RKISP1_CIF_MI_INIT);
- 		rkisp1_set_next_buf(cap);
- 	}
-+	spin_unlock_irq(&cap->buf.lock);
- 	cap->is_streaming = true;
++	spin_lock_irq(&stats->lock);
+ 	stats->is_streaming = true;
++	spin_unlock_irq(&stats->lock);
+ 
+ 	return 0;
  }
- 
 -- 
 2.17.1
 
