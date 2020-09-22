@@ -2,32 +2,33 @@ Return-Path: <SRS0=5+7B=C7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D020FC4727F
-	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 11:34:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89906C4727E
+	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 11:34:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9172B23A1E
-	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 11:34:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5175E23A84
+	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 11:34:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726597AbgIVLeO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1726591AbgIVLeO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 22 Sep 2020 07:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38954 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726562AbgIVLeN (ORCPT
+        with ESMTP id S1726559AbgIVLeO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 22 Sep 2020 07:34:13 -0400
+        Tue, 22 Sep 2020 07:34:14 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C29C0613CF
-        for <linux-media@vger.kernel.org>; Tue, 22 Sep 2020 04:34:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78BCAC061755
+        for <linux-media@vger.kernel.org>; Tue, 22 Sep 2020 04:34:13 -0700 (PDT)
 Received: from guri.fritz.box (p200300c7cf13ec005877be1094b7a29d.dip0.t-ipconnect.de [IPv6:2003:c7:cf13:ec00:5877:be10:94b7:a29d])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: dafna)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 6AB6429B485;
-        Tue, 22 Sep 2020 12:34:09 +0100 (BST)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 297D729B4AE;
+        Tue, 22 Sep 2020 12:34:11 +0100 (BST)
 From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com, dafna.hirschfeld@collabora.com,
@@ -35,117 +36,173 @@ Cc:     laurent.pinchart@ideasonboard.com, dafna.hirschfeld@collabora.com,
         hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
         sakari.ailus@linux.intel.com, linux-rockchip@lists.infradead.org,
         mchehab@kernel.org, tfiga@chromium.org
-Subject: [PATCH v3 00/12] media: staging: rkisp1: various bug fixes
-Date:   Tue, 22 Sep 2020 13:33:50 +0200
-Message-Id: <20200922113402.12442-1-dafna.hirschfeld@collabora.com>
+Subject: [PATCH v3 04/12] media: staging: rkisp1: params: avoid using buffer if params is not streaming
+Date:   Tue, 22 Sep 2020 13:33:54 +0200
+Message-Id: <20200922113402.12442-5-dafna.hirschfeld@collabora.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200922113402.12442-1-dafna.hirschfeld@collabora.com>
+References: <20200922113402.12442-1-dafna.hirschfeld@collabora.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix various bugs mainly in params and stats. The patchset fixes
-buffers synchronization issues discussed
-https://patchwork.kernel.org/patch/11066513/#23544763
+Currently, the first buffer queued in the params node is returned
+immediately to userspace and a copy of it is saved in the field
+'cur_params'. The copy is later used for the first configuration
+when the stream is initiated by one of selfpath/mainpath capture nodes.
 
-As discussed with Tomasz, we decide that in order to keep the code
-simple, we assume that the v-start signal (RKISP1_CIF_ISP_V_START)
-and the frame-out signal RKISP1_CIF_ISP_FRAME don't arrive together.
-So when v-start arrives, the frame sequence is incremented and
-when frame-out arrives, the stats and params isr are called.
-Also the vb.sequence of the params buffer should be the frame to
-which the params are applied.
-
-The params node needs to apply the first params buffer when
-the streaming from main/selfpath starts before the first frame arrives
-so that the first params buffer will configure the first frame.
-
-The way it is implemented is that the first buffer queued
-to the params node is not added to the list but instead a local copy
-is saved and the buffer returns to userspace immediately.
-Then the local copy is applied when main/selfpath stream starts.
-This implementation is buggy for the following reasons:
-
+There are 3 problems with this implementation:
 - The first params buffer is applied and returned to userspace even if
-userspace never calls streamon on the params node.
+userspace never calls to streamon on the params node.
 - If the first params buffer is queued after the stream started on the
 params node then it will return to userspace but will never be used.
 - The frame_sequence of the first buffer is set to -1 if the main/selfpath
 did not start streaming.
 
-To fix this, params buffers are added to the buffers list on qbuf and
-then when a stream start from selfpath/mainpath then the first buffer is removed
-from the list, applied and returned to userspace. This is done only
-if the params node is also streaming.
+A correct implementation is to apply the first params buffer when stream
+is started from mainpath/selfpath and only if params is also streaming.
 
-Testing:
-I added a code to libcamera that sets the red, blue, and green gain
-interchangeably. The frames are then saved to files.
-To run the code:
+The patch adds a new function 'rkisp1_params_apply_params_cfg' which takes
+a buffer from the buffers queue, apply it and returns it to userspace.
+The function is called from the irq handler and when main/selfpath stream
+starts - in the function 'rkisp1_params_config_parameter'
 
-git clone --single-branch --branch test-various-bug-fixes-v3 https://gitlab.collabora.com/dafna/libcamera.git
-cd libcamera
-ninja  -C build install
-meson test rkisp1-ramzor -C build
+Also remove the fields 'cur_params', 'is_first_params' which are no
+more needed.
 
-Then adding debug prints in the params node in the kernel
-that prints the gain values and the current frame
-http://ix.io/2ue3
+Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Acked-by: Helen Koike <helen.koike@collabora.com>
+---
+changes since v2:
+declare function 'rkisp1_params_apply_params_cfg' as static
+to fix a warning reported by 'kernel test robot <lkp@intel.com>'
+---
+ drivers/staging/media/rkisp1/rkisp1-common.h |  4 --
+ drivers/staging/media/rkisp1/rkisp1-params.c | 50 ++++++++------------
+ 2 files changed, 20 insertions(+), 34 deletions(-)
 
-Then playing frames with
-
-ffplay -f rawvideo -pixel_format nv12 -video_size 640x480 build/frame-bla-<FRAME-NUM>.bin
-
-and looking that the frame color matches the debug prints.
-
-changes from v2:
-* patches 11,12 in v3 are new, they fix the TODO issue "review and comment every lock"
-* patches 1,2,4 from v2 are already applied so remove from v3
-* patch 13 from v2: "media: staging: rkisp1: call media_pipeline_start/stop from stats and params" - dropped from this version
-* patch "media: staging: rkisp1: params: use the new effect value in cproc config"
-was reorder to be just before patch "media: staging: rkisp1: params: avoid using buffer if params is not streaming"
-* patch 4: declare function 'rkisp1_params_apply_params_cfg' as static to fix a warning reported by 'kernel test robot <lkp@intel.com>'
-* patch 5: rephrase commit message and inline doc as suggested by Helen.
-* patch 6: add a closing "}" to "if" condition and remove useless inline comment
-* patch 7: remove unneeded closing "}" to "if"
-
-
-changes from v1:
-- patch 1 from v1 is removed
-- patch 3 from v1 (now patch 5) which refactor the stop_streaming params cb
-is changed according to discussion with Tomasz
-- 12 new patches added
-
-Dafna Hirschfeld (12):
-  media: staging: rkisp1: params: upon stream stop, iterate a local list
-    to return the buffers
-  media: staging: rkisp1: params: in the isr, return if buffer list is
-    empty
-  media: staging: rkisp1: params: use the new effect value in cproc
-    config
-  media: staging: rkisp1: params: avoid using buffer if params is not
-    streaming
-  media: staging: rkisp1: params: set vb.sequence to be the isp's
-    frame_sequence + 1
-  media: staging: rkisp1: remove atomic operations for frame sequence
-  media: staging: rkisp1: isp: add a warning and debugfs var for irq
-    delay
-  media: staging: rkisp1: isp: don't enable signal
-    RKISP1_CIF_ISP_FRAME_IN
-  media: staging: rkisp1: stats: protect write to 'is_streaming' in
-    start_streaming cb
-  media: staging: rkisp1: params: no need to lock default config
-  media: staging: rkisp1: use the right variants of spin_lock
-  media: staging: rkisp1: cap: protect access to buf with the spin lock
-
- drivers/staging/media/rkisp1/TODO             |   1 -
- drivers/staging/media/rkisp1/rkisp1-capture.c |  19 ++-
- drivers/staging/media/rkisp1/rkisp1-common.h  |   7 +-
- drivers/staging/media/rkisp1/rkisp1-dev.c     |   2 +
- drivers/staging/media/rkisp1/rkisp1-isp.c     |  22 ++--
- drivers/staging/media/rkisp1/rkisp1-params.c  | 118 ++++++++----------
- drivers/staging/media/rkisp1/rkisp1-stats.c   |   5 +-
- 7 files changed, 76 insertions(+), 98 deletions(-)
-
+diff --git a/drivers/staging/media/rkisp1/rkisp1-common.h b/drivers/staging/media/rkisp1/rkisp1-common.h
+index 992d8ec4c448..232bee92d0eb 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-common.h
++++ b/drivers/staging/media/rkisp1/rkisp1-common.h
+@@ -262,10 +262,8 @@ struct rkisp1_stats {
+  * @rkisp1:		pointer to the rkisp1 device
+  * @config_lock:	locks the buffer list 'params' and 'is_streaming'
+  * @params:		queue of rkisp1_buffer
+- * @cur_params:		the first params values from userspace
+  * @vdev_fmt:		v4l2_format of the metadata format
+  * @is_streaming:	device is streaming
+- * @is_first_params:	the first params should take effect immediately
+  * @quantization:	the quantization configured on the isp's src pad
+  * @raw_type:		the bayer pattern on the isp video sink pad
+  */
+@@ -275,10 +273,8 @@ struct rkisp1_params {
+ 
+ 	spinlock_t config_lock; /* locks the buffers list 'params' and 'is_streaming' */
+ 	struct list_head params;
+-	struct rkisp1_params_cfg cur_params;
+ 	struct v4l2_format vdev_fmt;
+ 	bool is_streaming;
+-	bool is_first_params;
+ 
+ 	enum v4l2_quantization quantization;
+ 	enum rkisp1_fmt_raw_pat_type raw_type;
+diff --git a/drivers/staging/media/rkisp1/rkisp1-params.c b/drivers/staging/media/rkisp1/rkisp1-params.c
+index ab2deb57b1eb..e8049a50575f 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-params.c
++++ b/drivers/staging/media/rkisp1/rkisp1-params.c
+@@ -1185,23 +1185,14 @@ static void rkisp1_isp_isr_meas_config(struct rkisp1_params *params,
+ 	}
+ }
+ 
+-void rkisp1_params_isr(struct rkisp1_device *rkisp1)
++static void rkisp1_params_apply_params_cfg(struct rkisp1_params *params,
++					   unsigned int frame_sequence)
+ {
+-	unsigned int frame_sequence = atomic_read(&rkisp1->isp.frame_sequence);
+-	struct rkisp1_params *params = &rkisp1->params;
+ 	struct rkisp1_params_cfg *new_params;
+ 	struct rkisp1_buffer *cur_buf = NULL;
+ 
+-	spin_lock(&params->config_lock);
+-	if (!params->is_streaming) {
+-		spin_unlock(&params->config_lock);
+-		return;
+-	}
+-
+-	if (list_empty(&params->params)) {
+-		spin_unlock(&params->config_lock);
++	if (list_empty(&params->params))
+ 		return;
+-	}
+ 
+ 	cur_buf = list_first_entry(&params->params,
+ 				   struct rkisp1_buffer, queue);
+@@ -1218,6 +1209,20 @@ void rkisp1_params_isr(struct rkisp1_device *rkisp1)
+ 
+ 	cur_buf->vb.sequence = frame_sequence;
+ 	vb2_buffer_done(&cur_buf->vb.vb2_buf, VB2_BUF_STATE_DONE);
++}
++
++void rkisp1_params_isr(struct rkisp1_device *rkisp1)
++{
++	unsigned int frame_sequence = atomic_read(&rkisp1->isp.frame_sequence);
++	struct rkisp1_params *params = &rkisp1->params;
++
++	spin_lock(&params->config_lock);
++	if (!params->is_streaming) {
++		spin_unlock(&params->config_lock);
++		return;
++	}
++	rkisp1_params_apply_params_cfg(params, frame_sequence);
++
+ 	spin_unlock(&params->config_lock);
+ }
+ 
+@@ -1290,9 +1295,9 @@ static void rkisp1_params_config_parameter(struct rkisp1_params *params)
+ 	else
+ 		rkisp1_csm_config(params, false);
+ 
+-	/* override the default things */
+-	rkisp1_isp_isr_other_config(params, &params->cur_params);
+-	rkisp1_isp_isr_meas_config(params, &params->cur_params);
++	/* apply the first buffer if there is one already */
++	if (params->is_streaming)
++		rkisp1_params_apply_params_cfg(params, 0);
+ 
+ 	spin_unlock(&params->config_lock);
+ }
+@@ -1420,8 +1425,6 @@ static int rkisp1_params_vb2_queue_setup(struct vb2_queue *vq,
+ 	sizes[0] = sizeof(struct rkisp1_params_cfg);
+ 
+ 	INIT_LIST_HEAD(&params->params);
+-	params->is_first_params = true;
+-
+ 	return 0;
+ }
+ 
+@@ -1432,20 +1435,7 @@ static void rkisp1_params_vb2_buf_queue(struct vb2_buffer *vb)
+ 		container_of(vbuf, struct rkisp1_buffer, vb);
+ 	struct vb2_queue *vq = vb->vb2_queue;
+ 	struct rkisp1_params *params = vq->drv_priv;
+-	struct rkisp1_params_cfg *new_params;
+ 	unsigned long flags;
+-	unsigned int frame_sequence =
+-		atomic_read(&params->rkisp1->isp.frame_sequence);
+-
+-	if (params->is_first_params) {
+-		new_params = (struct rkisp1_params_cfg *)
+-			(vb2_plane_vaddr(vb, 0));
+-		vbuf->sequence = frame_sequence;
+-		vb2_buffer_done(&params_buf->vb.vb2_buf, VB2_BUF_STATE_DONE);
+-		params->is_first_params = false;
+-		params->cur_params = *new_params;
+-		return;
+-	}
+ 
+ 	params_buf->vaddr = vb2_plane_vaddr(vb, 0);
+ 	spin_lock_irqsave(&params->config_lock, flags);
 -- 
 2.17.1
 
