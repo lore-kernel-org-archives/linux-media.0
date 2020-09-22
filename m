@@ -2,62 +2,62 @@ Return-Path: <SRS0=5+7B=C7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F744C4727C
-	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 16:16:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 147B0C4727C
+	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 16:21:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 289202086A
-	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 16:16:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ADD3B2086A
+	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 16:21:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600791413;
-	bh=lAytJBmFBRo9WSocq3XA9CKnC7p8zDGjznYPwslbcb0=;
+	s=default; t=1600791690;
+	bh=xeB+A/5uqIhnzFdtlG0t45Mg7zG61/erLoZrBOloeoU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=bi3xxrHWmV8yTkZ44SKp/5s8Md7uYTD0NCcuH8cu+ACXXiXRiE7b9d7qGGZ06k1Z5
-	 tLLBWasxNUrRrn+W7IRZY/uiKb6Jslhiz9HZKskh6ViOySsX/VdW8Vapne6GpioJVJ
-	 bSqQ/fwLvPeD0DRj6nH6cqn0WKqrFmX+Nmd0ulUE=
+	b=nnDhVPxvC/OFhMIeu1fCNpuGaXZfT60wsM5WYcIPPTKGcgozVmXd4hfWAVtqm0K8S
+	 QUusTj7eBFfCfOwhfvxISBY4+ZVj3LbNzxruebWCqK1rPeDO4CsH9JNzFo0Jo9DcKy
+	 O6h3u4q0e2Sc6zYjpcfyupuIOKzLymrwSc39+nhs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726634AbgIVQQw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 22 Sep 2020 12:16:52 -0400
-Received: from mail-il1-f195.google.com ([209.85.166.195]:45786 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726508AbgIVQQw (ORCPT
+        id S1726623AbgIVQV3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 22 Sep 2020 12:21:29 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:42088 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726577AbgIVQV3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 22 Sep 2020 12:16:52 -0400
-Received: by mail-il1-f195.google.com with SMTP id h2so17845857ilo.12;
-        Tue, 22 Sep 2020 09:16:51 -0700 (PDT)
+        Tue, 22 Sep 2020 12:21:29 -0400
+Received: by mail-io1-f68.google.com with SMTP id u6so20213465iow.9;
+        Tue, 22 Sep 2020 09:21:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=NbXtXi6vT1fphxteQRXGKtTiUcawLCXlMAwmp5r1Uw0=;
-        b=sw6zdfG0Bxg4ubpdiBfAx82PP6vhvl/TZUQyJVe4yZBMWzW4vB3dehOoqlFsWA6BQ6
-         BdLbPmhgBkTQvPsZJY/vBTHi3aB1oAUrqeBGMdefC8lH3bjscFtyn64Y5CltkEMeTQEN
-         EbZEtLvkxHamnrDsOycDyyaPG3nnGUDBg0OLVyG/QQNa2WxDCtuSiUhskz2GHh5l9xQN
-         JkkphOXlY0jiKqkB4Tf5TKUnAH1n2hNJiE0fGQT6RWIwdokwvXz8mnT+8hCBkv2Vpni7
-         JvisBhZJlKY1FqOI02md0YRs8Z8FU/coNWVifVSnQ6LO8EKx+IURoPwUelXpxH4AH/di
-         w9Fw==
-X-Gm-Message-State: AOAM53335c/fUqMjO0hN5qrzn/rm2psRUoIAmwL1nOJSj/bQjvnJdtu+
-        Al5I/vhdLp72PedvxJTCOA==
-X-Google-Smtp-Source: ABdhPJzsKlHNnCI1y7/TzkbDHmB3go3160eOHRvU+qGdtjAZNwo89wtJ3Abqx6uTZbWF2sEWTVGZiw==
-X-Received: by 2002:a92:9ad6:: with SMTP id c83mr4531982ill.155.1600791411103;
-        Tue, 22 Sep 2020 09:16:51 -0700 (PDT)
+        bh=WT3BlMz5H25vS9de9DwHFxmjwp6Zk6osCyQzUmqe8OI=;
+        b=cuLsL8qq4zF4Xc4H+ZKXjBPmRXlpim7eFQ0b6zO0Gu4ENi6FRJC8N9bSgygu21FN9a
+         yqQaq6uZ0eySYx+5GB/fScQ68CsZMjuFiUyuNsX/FOTawLDm4iJWZPVbV96ouVnjMw7g
+         plOW8oMy/FF8TNJV4B08Q5C3sqRmLTtKsbuh5morVAfjTMq9AFl1AHlhg+fpLkVQj3Dt
+         tvgoR4CKhYy77i9nM2yw12sOnznVwsl4HoqFzAUTf2Ajkv+/4tseHUwS67J3qAMktEyc
+         DyitM9uAbrAQqzpJIA1DSLCZRyQk5/RwOcxFlwZMbo99O1lEiNfcc8wBBdmXMpFxuujS
+         oZ+Q==
+X-Gm-Message-State: AOAM532gUdW2ZpoQaTrIkzn2YbdGQXEIhb5loBlHbsP6F0i/J6zvos4u
+        +jzVNy7xDAVsyKDYdPK7U22lg9x5AaeM
+X-Google-Smtp-Source: ABdhPJz7KTEOSv42ZkpPp51GkLs9/Gz5b92l1Z3lYi3S6hyiYv53JM4jJs/+1t6UAUFSNTJ4O8HyIA==
+X-Received: by 2002:a6b:d908:: with SMTP id r8mr4081861ioc.21.1600791687897;
+        Tue, 22 Sep 2020 09:21:27 -0700 (PDT)
 Received: from xps15 ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id k11sm7676478iof.40.2020.09.22.09.16.50
+        by smtp.gmail.com with ESMTPSA id l4sm4461668ilk.14.2020.09.22.09.21.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Sep 2020 09:16:50 -0700 (PDT)
-Received: (nullmailer pid 2788187 invoked by uid 1000);
-        Tue, 22 Sep 2020 16:16:49 -0000
-Date:   Tue, 22 Sep 2020 10:16:49 -0600
+        Tue, 22 Sep 2020 09:21:27 -0700 (PDT)
+Received: (nullmailer pid 2795412 invoked by uid 1000);
+        Tue, 22 Sep 2020 16:21:26 -0000
+Date:   Tue, 22 Sep 2020 10:21:26 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     linux-media@vger.kernel.org, kernel@pengutronix.de,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        kernel@pengutronix.de
 Subject: Re: [PATCH] media: dt-bindings: convert CODA VPU bindings to yaml
-Message-ID: <20200922161649.GA2787699@bogus>
+Message-ID: <20200922162126.GA2791437@bogus>
 References: <20200922120007.12766-1-p.zabel@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -67,8 +67,13 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, 22 Sep 2020 14:00:07 +0200, Philipp Zabel wrote:
+On Tue, Sep 22, 2020 at 02:00:07PM +0200, Philipp Zabel wrote:
 > Convert to YAML, add missing "fsl,imx6dl-vpu", "cnm,coda960"
+
+Seems like a lot more cnm compatible additions than what's mentioned 
+here. I'm okay with some changes in the conversion which were 
+inconsistencies or errors, but just enumerate them here.
+
 > compatible, and specify the power-domain property for i.MX6.
 > 
 > Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
@@ -80,22 +85,171 @@ On Tue, 22 Sep 2020 14:00:07 +0200, Philipp Zabel wrote:
 >  delete mode 100644 Documentation/devicetree/bindings/media/coda.txt
 >  create mode 100644 Documentation/devicetree/bindings/media/coda.yaml
 > 
-
-
-My bot found errors running 'make dt_binding_check' on your patch:
-
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/coda.example.dt.yaml: video-codec@63ff4000: clock-names:0: 'per' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/coda.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/coda.example.dt.yaml: video-codec@63ff4000: clock-names:1: 'ahb' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/coda.yaml
-
-
-See https://patchwork.ozlabs.org/patch/1369025
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure dt-schema is up to date:
-
-pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
-
-Please check and re-submit.
-
+> diff --git a/Documentation/devicetree/bindings/media/coda.txt b/Documentation/devicetree/bindings/media/coda.txt
+> deleted file mode 100644
+> index 90eb74cc1993..000000000000
+> --- a/Documentation/devicetree/bindings/media/coda.txt
+> +++ /dev/null
+> @@ -1,31 +0,0 @@
+> -Chips&Media Coda multi-standard codec IP
+> -========================================
+> -
+> -Coda codec IPs are present in i.MX SoCs in various versions,
+> -called VPU (Video Processing Unit).
+> -
+> -Required properties:
+> -- compatible : should be "fsl,<chip>-src" for i.MX SoCs:
+> -  (a) "fsl,imx27-vpu" for CodaDx6 present in i.MX27
+> -  (b) "fsl,imx51-vpu" for CodaHx4 present in i.MX51
+> -  (c) "fsl,imx53-vpu" for CODA7541 present in i.MX53
+> -  (d) "fsl,imx6q-vpu" for CODA960 present in i.MX6q
+> -- reg: should be register base and length as documented in the
+> -  SoC reference manual
+> -- interrupts : Should contain the VPU interrupt. For CODA960,
+> -  a second interrupt is needed for the MJPEG unit.
+> -- clocks : Should contain the ahb and per clocks, in the order
+> -  determined by the clock-names property.
+> -- clock-names : Should be "ahb", "per"
+> -- iram : phandle pointing to the SRAM device node
+> -
+> -Example:
+> -
+> -vpu: vpu@63ff4000 {
+> -	compatible = "fsl,imx53-vpu";
+> -	reg = <0x63ff4000 0x1000>;
+> -	interrupts = <9>;
+> -	clocks = <&clks 63>, <&clks 63>;
+> -	clock-names = "ahb", "per";
+> -	iram = <&ocram>;
+> -};
+> diff --git a/Documentation/devicetree/bindings/media/coda.yaml b/Documentation/devicetree/bindings/media/coda.yaml
+> new file mode 100644
+> index 000000000000..c32415b46761
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/coda.yaml
+> @@ -0,0 +1,109 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/coda.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Chips&Media Coda multi-standard codec IP
+> +
+> +maintainers:
+> +  - Philipp Zabel <p.zabel@pengutronix.de>
+> +
+> +description: |-
+> +  Coda codec IPs are present in i.MX SoCs in various versions,
+> +  called VPU (Video Processing Unit).
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - const: fsl,imx27-vpu
+> +          - const: cnm,codadx6
+> +      - items:
+> +          - const: fsl,imx51-vpu
+> +          - const: cnm,codahx4
+> +      - items:
+> +          - const: fsl,imx53-vpu
+> +          - const: cnm,coda7541
+> +      - items:
+> +          - enum:
+> +              - fsl,imx6dl-vpu
+> +              - fsl,imx6q-vpu
+> +          - const: cnm,coda960
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: PER clock
+> +      - description: AHB interface clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: per
+> +      - const: ahb
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  iram:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: phandle pointing to the SRAM device node
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: cnm,coda960
+> +    then:
+> +      properties:
+> +        interrupts:
+> +          items:
+> +            - description: BIT processor interrupt
+> +            - description: JPEG unit interrupt
+> +
+> +        interrupt-names:
+> +          items:
+> +            - const: bit
+> +            - const: jpeg
+> +    else:
+> +      properties:
+> +        interrupts:
+> +          items:
+> +            - description: BIT processor interrupt
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - fsl,imx6dl-vpu
+> +              - fsl,imx6q-vpu
+> +    then:
+> +      properties:
+> +        power-domains:
+> +          $ref: /schemas/types.yaml#/definitions/phandle
+> +          description: phandle pointing to the PU power domain
+> +          maxItems: 1
+> +
+> +examples:
+> +  - |
+> +    vpu: video-codec@63ff4000 {
+> +        compatible = "fsl,imx53-vpu", "cnm,coda7541";
+> +        reg = <0x63ff4000 0x1000>;
+> +        interrupts = <9>;
+> +        clocks = <&clks 63>, <&clks 63>;
+> +        clock-names = "ahb", "per";
+> +        iram = <&ocram>;
+> +    };
+> +
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index d3126fc2cca2..01be39a3265e 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -4332,7 +4332,7 @@ CODA V4L2 MEM2MEM DRIVER
+>  M:	Philipp Zabel <p.zabel@pengutronix.de>
+>  L:	linux-media@vger.kernel.org
+>  S:	Maintained
+> -F:	Documentation/devicetree/bindings/media/coda.txt
+> +F:	Documentation/devicetree/bindings/media/coda.yaml
+>  F:	drivers/media/platform/coda/
+>  
+>  CODE OF CONDUCT
+> -- 
+> 2.20.1
+> 
