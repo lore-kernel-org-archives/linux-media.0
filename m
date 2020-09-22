@@ -1,240 +1,186 @@
-Return-Path: <SRS0=F5P7=C6=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=5+7B=C7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB6CBC4727C
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 22:21:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 079ABC4363D
+	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 03:42:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8F16223A62
-	for <linux-media@archiver.kernel.org>; Mon, 21 Sep 2020 22:21:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2F67C23A34
+	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 03:42:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H5n2OyQI"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="JvAasUu1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728367AbgIUWVI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Sep 2020 18:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726457AbgIUWVI (ORCPT
+        id S1727681AbgIVDmd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Sep 2020 23:42:33 -0400
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:43799 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726098AbgIVDmd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Sep 2020 18:21:08 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A015AC061755;
-        Mon, 21 Sep 2020 15:21:07 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id x69so15815202lff.3;
-        Mon, 21 Sep 2020 15:21:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5baCXWiV2rwhDRVIV5EJic7Mgcb5zuuk0grKytM42nU=;
-        b=H5n2OyQIWiZ86R9nTBQ/CyeiSF3f8Da6Gk9onHHG8BcUhzO4l/293nBEz09UhUcgjD
-         APysoQ88mps2DTGrR3SUJg1SwF/9PrX5cnG17bMUX1hDdpBGGjujUHvSjWLgGTJlSwdA
-         TkjvyB3fGVEIqlE2F8sE6YIB6rxMsOLgwJCSoiijwoUYozukfps5D2bq31H6KgZBz1Hp
-         JQFJHO76AvJNiN94ZiJ0vZwPrBrGYJxDlbS8RMsm1DpT2fvEw0b0RoViT4p2Zw4MGGg1
-         y3MamRLVZMHqfgV26Ym++7nhgEQ3Mw8actCzviH2h4y7D0d/mVa2iNxTXY6l6OmPS9pg
-         3GCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5baCXWiV2rwhDRVIV5EJic7Mgcb5zuuk0grKytM42nU=;
-        b=SBGiTVhBaOtmkbjoz1E5ulA7TaydJhLm/mF66fCAgcmGku1aw3CRozE29pDEHs8ev4
-         3hks6FCsfuGDgkkZmt94soG85qLaiJuT4xQZL34NbURLE/18EaU4cmv+EZ7VIG7Pxf7Q
-         iI2mwxZr4uZfy1yuC4I4A/BjSKw/IUjdQG+qk/ypDiUXJHrwZm+qJRsM7EPI+PAX3FWA
-         CnN7Vc8D2l5Q723QLpoCxMdiIw1jLUgYAAS6jrKdVFCLdyNXzca5E0FtIa/Q5rl1tjJu
-         8rf0XS21PmK17wK3e8BpAHz6wMfWC4ehAnj5o/+PA8Se9+WPB/i4n366dwpFF11PEEJH
-         JO7g==
-X-Gm-Message-State: AOAM530bbsJc2mpTTfP6rso2dCVlEAqzflnJc29MJEj4Bu2gSlJyYxOV
-        +R9LsuCKUWE7mz/PlQ1849c=
-X-Google-Smtp-Source: ABdhPJwEmzK6QntNgT2mTbx6XXS7ONNKRyw8nQRl7vqpKhynXV1QGBJA0WxrVxjWM6TbGO+xJxQFVA==
-X-Received: by 2002:ac2:4203:: with SMTP id y3mr623726lfh.52.1600726865969;
-        Mon, 21 Sep 2020 15:21:05 -0700 (PDT)
-Received: from localhost.localdomain (h-82-196-111-59.NA.cust.bahnhof.se. [82.196.111.59])
-        by smtp.gmail.com with ESMTPSA id y10sm2870617lfj.271.2020.09.21.15.21.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Sep 2020 15:21:05 -0700 (PDT)
-From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>
-Subject: [PATCH] media: dvb-frontends: tda18271c2dd: Constify static structs
-Date:   Tue, 22 Sep 2020 00:13:43 +0200
-Message-Id: <20200921221343.72212-1-rikard.falkeborn@gmail.com>
-X-Mailer: git-send-email 2.28.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Mon, 21 Sep 2020 23:42:33 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id KZCGkEERWho4zKZCHklWDL; Tue, 22 Sep 2020 05:42:29 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1600746149; bh=wp7l3pSR/DsIIIXEoH487w/12vv8RmdiAc1tJT8OLYs=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=JvAasUu1rGu/EyXLW8RgXabVkNlEQts5jCwsq0Pd1L1MfdhGIZWQl5q4fGhbEyLyI
+         feK0FUgxq2MIJJ4A4ZipsBuLjlfzB65GyZwWJprQJIuL6B+hMnia+12ch9uUSrUSl2
+         8JJBd5qsnziziw1oqgyZjZkLIDiKZXe4pmpjJKjS6Qo9rwhGlkMz08WPpeKdSVh7xk
+         sp+DtfO8cceno8krOKDwN726qI0Oum45jRI3GZQV5yJ/WSE+WdkwpNLbQtge9iY9ic
+         rFug2Yw+vHv16RyKFk6QCABbt4xcZ7xqZJSZwnmwsmgs2BLHVHVHGmOKjHlF7OkNLC
+         A5A0DTIH1Er3Q==
+Message-ID: <97b4f00158807c739c5da568004066a7@smtp-cloud7.xs4all.net>
+Date:   Tue, 22 Sep 2020 05:42:28 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: WARNINGS
+X-CMAE-Envelope: MS4wfIoWpQ2rqI/gl9kx3WsA9u94GWlMiZqAeODTdMgZ6gbpLitOwe3hMLzYk2+EHUlO6yHwz6rIUMmllbf9h+Xg5wQSkJ1mYXar6BFEYBqCKqFbbbEgD//m
+ hI1KMTcK/b9tXB1xiUcl3xs335DFPHqc4frX+e8B8unda9f+Wnr4OUnPANAf/rd3xC1rhdvBg2DqAeOjqLqRv6kQtwmxzVcEub2XaduqG7vu8J5haSdb+/z7
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Constify a number of static structs that were not modified. In order to
-be able to do that, const input arguments to a couple of functions that
-not modify their argument. This allows the compiler to put them in
-read-only memory, resulting in about 6k memory being read-only, and the
-resulting module is 400 bytes smaller.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Before:
-   text    data     bss     dec     hex filename
-  15492    6873       0   22365    575d drivers/media/dvb-frontends/tda18271c2dd.ko
+Results of the daily build of media_tree:
 
-After:
-   text    data     bss     dec     hex filename
-  21021     897       0   21918    559e drivers/media/dvb-frontends/tda18271c2dd.ko
+date:			Tue Sep 22 05:00:19 CEST 2020
+media-tree git hash:	9e76f2cff7a17af92c819ca0489ec5399f8367f7
+media_build git hash:	efbdeecfc21ff8abcabc84c77fe8dfbefa2d657a
+v4l-utils git hash:	ea16a7ef13a902793a5c2626b0cefc4d956147f3
+edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
+gcc version:		i686-linux-gcc (GCC) 9.3.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		v0.6.2-1-gfebba84c
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		v0.5.0-6793-g0248ebb06
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 36eaed7193020584cb96f64ed10d3481a5b84bfa
+host hardware:		x86_64
+host os:		5.7.0-1-amd64
 
-Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
----
- drivers/media/dvb-frontends/tda18271c2dd.c    |  8 +++----
- .../media/dvb-frontends/tda18271c2dd_maps.h   | 22 +++++++++----------
- 2 files changed, 15 insertions(+), 15 deletions(-)
+linux-git-sh: OK
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-stm32: OK
+linux-git-arm-pxa: OK
+linux-git-mips: OK
+linux-git-arm64: OK
+linux-git-powerpc64: OK
+linux-git-arm-multi: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: WARNINGS: VIDEO_TEGRA VIDEO_TEGRA_TPG
+Check for strcpy/strncpy/strlcpy: WARNINGS: found 0 strcpy(), 0 strncpy(), 1 strlcpy()
+linux-3.10.108-i686: WARNINGS
+linux-3.10.108-x86_64: WARNINGS
+linux-3.11.10-i686: WARNINGS
+linux-3.11.10-x86_64: WARNINGS
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.81-i686: OK
+linux-3.16.81-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.212-i686: OK
+linux-4.4.212-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.212-i686: OK
+linux-4.9.212-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.169-i686: OK
+linux-4.14.169-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.101-i686: OK
+linux-4.19.101-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.15-i686: OK
+linux-5.0.15-x86_64: OK
+linux-5.1.1-i686: OK
+linux-5.1.1-x86_64: OK
+linux-5.2.1-i686: OK
+linux-5.2.1-x86_64: OK
+linux-5.3.1-i686: OK
+linux-5.3.1-x86_64: OK
+linux-5.4.17-i686: OK
+linux-5.4.17-x86_64: OK
+linux-5.5.1-i686: OK
+linux-5.5.1-x86_64: OK
+linux-5.6.1-i686: OK
+linux-5.6.1-x86_64: OK
+linux-5.7.2-i686: OK
+linux-5.7.2-x86_64: OK
+linux-5.8.1-i686: OK
+linux-5.8.1-x86_64: OK
+linux-5.9-rc1-i686: OK
+linux-5.9-rc1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: WARNINGS: Final Summary: 2943, Succeeded: 2943, Failed: 0, Warnings: 3
+virtme-32: WARNINGS: Final Summary: 2779, Succeeded: 2779, Failed: 0, Warnings: 2
+sparse: OK
+smatch: OK
 
-diff --git a/drivers/media/dvb-frontends/tda18271c2dd.c b/drivers/media/dvb-frontends/tda18271c2dd.c
-index 43312bba1aec..661cbad76a2c 100644
---- a/drivers/media/dvb-frontends/tda18271c2dd.c
-+++ b/drivers/media/dvb-frontends/tda18271c2dd.c
-@@ -198,7 +198,7 @@ static void reset(struct tda_state *state)
- 	state->m_bFMInput = (ulFMInput == 2);
- }
- 
--static bool SearchMap1(struct SMap Map[],
-+static bool SearchMap1(const struct SMap Map[],
- 		       u32 Frequency, u8 *pParam)
- {
- 	int i = 0;
-@@ -211,7 +211,7 @@ static bool SearchMap1(struct SMap Map[],
- 	return true;
- }
- 
--static bool SearchMap2(struct SMapI Map[],
-+static bool SearchMap2(const struct SMapI Map[],
- 		       u32 Frequency, s32 *pParam)
- {
- 	int i = 0;
-@@ -225,7 +225,7 @@ static bool SearchMap2(struct SMapI Map[],
- 	return true;
- }
- 
--static bool SearchMap3(struct SMap2 Map[], u32 Frequency,
-+static bool SearchMap3(const struct SMap2 Map[], u32 Frequency,
- 		       u8 *pParam1, u8 *pParam2)
- {
- 	int i = 0;
-@@ -240,7 +240,7 @@ static bool SearchMap3(struct SMap2 Map[], u32 Frequency,
- 	return true;
- }
- 
--static bool SearchMap4(struct SRFBandMap Map[],
-+static bool SearchMap4(const struct SRFBandMap Map[],
- 		       u32 Frequency, u8 *pRFBand)
- {
- 	int i = 0;
-diff --git a/drivers/media/dvb-frontends/tda18271c2dd_maps.h b/drivers/media/dvb-frontends/tda18271c2dd_maps.h
-index 5f75516bc0cb..82218e02d77d 100644
---- a/drivers/media/dvb-frontends/tda18271c2dd_maps.h
-+++ b/drivers/media/dvb-frontends/tda18271c2dd_maps.h
-@@ -6,7 +6,7 @@ enum HF_S {
- 	HF_DVBC_8MHZ, HF_DVBC
- };
- 
--static struct SStandardParam m_StandardTable[] = {
-+static const struct SStandardParam m_StandardTable[] = {
- 	{       0,        0, 0x00, 0x00 },    /* HF_None */
- 	{ 6000000,  7000000, 0x1D, 0x2C },    /* HF_B, */
- 	{ 6900000,  8000000, 0x1E, 0x2C },    /* HF_DK, */
-@@ -28,7 +28,7 @@ static struct SStandardParam m_StandardTable[] = {
- 	{       0,        0, 0x00, 0x00 },    /* HF_DVBC (Unused) */
- };
- 
--static struct SMap  m_BP_Filter_Map[] = {
-+static const struct SMap  m_BP_Filter_Map[] = {
- 	{   62000000,  0x00 },
- 	{   84000000,  0x01 },
- 	{  100000000,  0x02 },
-@@ -39,7 +39,7 @@ static struct SMap  m_BP_Filter_Map[] = {
- 	{          0,  0x00 },    /* Table End */
- };
- 
--static struct SMapI m_RF_Cal_Map[] = {
-+static const struct SMapI m_RF_Cal_Map[] = {
- 	{   41000000,  0x0F },
- 	{   43000000,  0x1C },
- 	{   45000000,  0x2F },
-@@ -481,7 +481,7 @@ static struct SMapI m_RF_Cal_Map[] = {
- };
- 
- 
--static struct SMap2  m_KM_Map[] = {
-+static const struct SMap2  m_KM_Map[] = {
- 	{   47900000,  3, 2 },
- 	{   61100000,  3, 1 },
- 	{  350000000,  3, 0 },
-@@ -490,7 +490,7 @@ static struct SMap2  m_KM_Map[] = {
- 	{          0,  0x00 },    /* Table End */
- };
- 
--static struct SMap2 m_Main_PLL_Map[] = {
-+static const struct SMap2 m_Main_PLL_Map[] = {
- 	{  33125000, 0x57, 0xF0 },
- 	{  35500000, 0x56, 0xE0 },
- 	{  38188000, 0x55, 0xD0 },
-@@ -534,7 +534,7 @@ static struct SMap2 m_Main_PLL_Map[] = {
- 	{         0, 0x00, 0x00 },    /* Table End */
- };
- 
--static struct SMap2 m_Cal_PLL_Map[] = {
-+static const struct SMap2 m_Cal_PLL_Map[] = {
- 	{  33813000, 0xDD, 0xD0 },
- 	{  36625000, 0xDC, 0xC0 },
- 	{  39938000, 0xDB, 0xB0 },
-@@ -572,7 +572,7 @@ static struct SMap2 m_Cal_PLL_Map[] = {
- 	{         0, 0x00, 0x00 },    /* Table End */
- };
- 
--static struct SMap  m_GainTaper_Map[] = {
-+static const struct SMap  m_GainTaper_Map[] = {
- 	{  45400000, 0x1F },
- 	{  45800000, 0x1E },
- 	{  46200000, 0x1D },
-@@ -661,7 +661,7 @@ static struct SMap  m_GainTaper_Map[] = {
- 	{         0, 0x00 },    /* Table End */
- };
- 
--static struct SMap m_RF_Cal_DC_Over_DT_Map[] = {
-+static const struct SMap m_RF_Cal_DC_Over_DT_Map[] = {
- 	{  47900000, 0x00 },
- 	{  55000000, 0x00 },
- 	{  61100000, 0x0A },
-@@ -767,14 +767,14 @@ static struct SMap m_RF_Cal_DC_Over_DT_Map[] = {
- };
- 
- 
--static struct SMap  m_IR_Meas_Map[] = {
-+static const struct SMap  m_IR_Meas_Map[] = {
- 	{ 200000000, 0x05 },
- 	{ 400000000, 0x06 },
- 	{ 865000000, 0x07 },
- 	{         0, 0x00 },    /* Table End */
- };
- 
--static struct SMap2 m_CID_Target_Map[] = {
-+static const struct SMap2 m_CID_Target_Map[] = {
- 	{  46000000, 0x04, 18 },
- 	{  52200000, 0x0A, 15 },
- 	{  70100000, 0x01, 40 },
-@@ -790,7 +790,7 @@ static struct SMap2 m_CID_Target_Map[] = {
- 	{         0, 0x00,  0 },    /* Table End */
- };
- 
--static struct SRFBandMap  m_RF_Band_Map[7] = {
-+static const struct SRFBandMap  m_RF_Band_Map[7] = {
- 	{   47900000,   46000000,           0,          0},
- 	{   61100000,   52200000,           0,          0},
- 	{  152600000,   70100000,   136800000,          0},
--- 
-2.28.0
+Detailed results are available here:
 
+http://www.xs4all.nl/~hverkuil/logs/Tuesday.log
+
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Tuesday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
