@@ -2,182 +2,78 @@ Return-Path: <SRS0=5+7B=C7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61DBCC2D0E2
-	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 09:12:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 874F0C2D0E2
+	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 09:27:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 21A0E208A9
-	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 09:12:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 35ED72075E
+	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 09:27:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600765930;
-	bh=p7cAdNofsq6jZcGRc61+8kKuN3HoExxl9Kj84k4DlSc=;
-	h=From:Cc:Subject:Date:To:List-ID:From;
-	b=MXpzxHkS9cKXJ3NOKRaJs68bjFaJrQuxRZBPxStdu/CS01LzJZdGBdfDTxumYTesW
-	 4mOM8pvnY03smC49LFIMl8vSx8XsEGEm06Rz9aQJgdM3wnN7GWK6KJoHoTRS0BLTsU
-	 RX5DwQ5UDWL5Zgev2cDLO5W4vPfSHwJ74zfw8K2s=
+	s=default; t=1600766860;
+	bh=VxFgH7Ev5rUGi3aRCl8C8jCW5freXl117SHPqM83i78=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=TdVkjdEY7LlpnH9lpQMhRNXjQyse6v4TmM3eyUE2SfBhOc2mmT2/r2I+bRIbhibXh
+	 yfygDkjGaBnr6Dl/vLUnm1xAewQ5gyXkELdErKOKcTpTptn4TiJ9SkSEDtqTHsw7Z9
+	 thkoo2wIwRdN2oDqvGmtbcLQ0hjoJo3w6aA8LChY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726486AbgIVJMC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 22 Sep 2020 05:12:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60554 "EHLO mail.kernel.org"
+        id S1726578AbgIVJ1g (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 22 Sep 2020 05:27:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40164 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726422AbgIVJMC (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 22 Sep 2020 05:12:02 -0400
-Received: from mail.kernel.org (ip5f5ad5bc.dynamic.kabel-deutschland.de [95.90.213.188])
+        id S1726424AbgIVJ1g (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 22 Sep 2020 05:27:36 -0400
+Received: from coco.lan (ip5f5ad5bc.dynamic.kabel-deutschland.de [95.90.213.188])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4410920715;
-        Tue, 22 Sep 2020 09:12:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0F67420BED;
+        Tue, 22 Sep 2020 09:27:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600765921;
-        bh=p7cAdNofsq6jZcGRc61+8kKuN3HoExxl9Kj84k4DlSc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=jMiiRDU2bH83mEZr59h8M/+E83qo5gLFsj+dyUDW7F+TXqW3zkdZ+Tuq5qq5HiDyq
-         6LoP2oWOQ+cr4FrgXyLDb8N+OYlVRhd6ingB3nS+2Kb3/i0/NuAfOQy27PU4fa7A+M
-         HOKuvBMzm1n0E/UWwOPjQQ9n3tPOc6BGFVSEOaEQ=
-Received: from mchehab by mail.kernel.org with local (Exim 4.94)
-        (envelope-from <mchehab@kernel.org>)
-        id 1kKeL9-000uV2-0M; Tue, 22 Sep 2020 11:11:59 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 1/2] media: vidtv: avoid data copy when initializing the multiplexer
-Date:   Tue, 22 Sep 2020 11:11:57 +0200
-Message-Id: <e4e165fab8a0f0f4a61ca3f4d35dffc97a238d1e.1600765915.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.26.2
+        s=default; t=1600766856;
+        bh=VxFgH7Ev5rUGi3aRCl8C8jCW5freXl117SHPqM83i78=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SPr3dMqyGCY+VVlQoTe8XCBnE3dVciItQvAf7hxzeqpJNrME8+dvwKDcCSZ4okhfn
+         JaP4nHSjzeKw3/VSZEFDpEC705UOPe91iyraLq6iHeBKxQnFcFOeZfrwjjaEHV+uE9
+         /zNlNviWHM5AveopipKbPWa7DI5q09qdktRw4Blo=
+Date:   Tue, 22 Sep 2020 11:27:29 +0200
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Alex Dewar <alex.dewar90@gmail.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Alan Cox <alan@linux.intel.com>, linux-media@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH REBASE 0/3] atomisp: Rebased fixes
+Message-ID: <20200922112729.313d454d@coco.lan>
+In-Reply-To: <20200922090914.20702-1-alex.dewar90@gmail.com>
+References: <21f18dc2-a1bc-0a37-0336-fc35170a40e9@gmail.com>
+        <20200922090914.20702-1-alex.dewar90@gmail.com>
+X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Initialize the fields of the arguments directly when
-declaring it, and pass the args as a pointer, instead of
-copying them.
+Em Tue, 22 Sep 2020 10:09:07 +0100
+Alex Dewar <alex.dewar90@gmail.com> escreveu:
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- .../media/test-drivers/vidtv/vidtv_bridge.c   | 24 ++++++++++---------
- drivers/media/test-drivers/vidtv/vidtv_mux.c  | 24 +++++++++----------
- drivers/media/test-drivers/vidtv/vidtv_mux.h  |  2 +-
- 3 files changed, 26 insertions(+), 24 deletions(-)
+> Hi Mauro,
+> 
+> I've rebased the patches now, but there is a slight hiccup. For patches 2
+> and 3 of this series there will now be a conflict with commit 9289cdf39992
+> ("staging: media: atomisp: Convert to GPIO descriptors") in Greg's tree.
+> 
+> I'm not sure what the best way to handle this is? The merge conflicts
+> will be trivial (due to a conversion between the gpio_* and gpiod_*
+> APIs), but I could alternatively send these last two patches in via
+> Greg's tree if that's easier for people. Let me know what works.
 
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_bridge.c b/drivers/media/test-drivers/vidtv/vidtv_bridge.c
-index b76c1c1ff7c0..46655e34a332 100644
---- a/drivers/media/test-drivers/vidtv/vidtv_bridge.c
-+++ b/drivers/media/test-drivers/vidtv/vidtv_bridge.c
-@@ -159,7 +159,14 @@ vidtv_bridge_on_new_pkts_avail(void *priv, u8 *buf, u32 npkts)
- 
- static int vidtv_start_streaming(struct vidtv_dvb *dvb)
- {
--	struct vidtv_mux_init_args mux_args = {0};
-+	struct vidtv_mux_init_args mux_args = {
-+		.mux_rate_kbytes_sec         = mux_rate_kbytes_sec,
-+		.on_new_packets_available_cb = vidtv_bridge_on_new_pkts_avail,
-+		.pcr_period_usecs            = pcr_period_msec * USEC_PER_MSEC,
-+		.si_period_usecs             = si_period_msec * USEC_PER_MSEC,
-+		.pcr_pid                     = pcr_pid,
-+		.transport_stream_id         = VIDTV_DEFAULT_TS_ID,
-+	};
- 	struct device *dev = &dvb->pdev->dev;
- 	u32 mux_buf_sz;
- 
-@@ -168,19 +175,14 @@ static int vidtv_start_streaming(struct vidtv_dvb *dvb)
- 		return 0;
- 	}
- 
--	mux_buf_sz = (mux_buf_sz_pkts) ? mux_buf_sz_pkts : vidtv_bridge_mux_buf_sz_for_mux_rate();
-+	mux_buf_sz = (mux_buf_sz_pkts) ? mux_buf_sz_pkts :
-+					 vidtv_bridge_mux_buf_sz_for_mux_rate();
- 
--	mux_args.mux_rate_kbytes_sec         = mux_rate_kbytes_sec;
--	mux_args.on_new_packets_available_cb = vidtv_bridge_on_new_pkts_avail;
--	mux_args.mux_buf_sz                  = mux_buf_sz;
--	mux_args.pcr_period_usecs            = pcr_period_msec * 1000;
--	mux_args.si_period_usecs             = si_period_msec * 1000;
--	mux_args.pcr_pid                     = pcr_pid;
--	mux_args.transport_stream_id         = VIDTV_DEFAULT_TS_ID;
--	mux_args.priv                        = dvb;
-+	mux_args.mux_buf_sz  = mux_buf_sz;
-+	mux_args.priv = dvb;
- 
- 	dvb->streaming = true;
--	dvb->mux = vidtv_mux_init(dvb->fe[0], dev, mux_args);
-+	dvb->mux = vidtv_mux_init(dvb->fe[0], dev, &mux_args);
- 	if (!dvb->mux)
- 		return -ENOMEM;
- 	vidtv_mux_start_thread(dvb->mux);
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_mux.c b/drivers/media/test-drivers/vidtv/vidtv_mux.c
-index 9086edd45252..6127e9ff71a1 100644
---- a/drivers/media/test-drivers/vidtv/vidtv_mux.c
-+++ b/drivers/media/test-drivers/vidtv/vidtv_mux.c
-@@ -434,7 +434,7 @@ void vidtv_mux_stop_thread(struct vidtv_mux *m)
- 
- struct vidtv_mux *vidtv_mux_init(struct dvb_frontend *fe,
- 				 struct device *dev,
--				 struct vidtv_mux_init_args args)
-+				 struct vidtv_mux_init_args *args)
- {
- 	struct vidtv_mux *m;
- 
-@@ -444,26 +444,26 @@ struct vidtv_mux *vidtv_mux_init(struct dvb_frontend *fe,
- 
- 	m->dev = dev;
- 	m->fe = fe;
--	m->timing.pcr_period_usecs = args.pcr_period_usecs;
--	m->timing.si_period_usecs  = args.si_period_usecs;
-+	m->timing.pcr_period_usecs = args->pcr_period_usecs;
-+	m->timing.si_period_usecs  = args->si_period_usecs;
- 
--	m->mux_rate_kbytes_sec = args.mux_rate_kbytes_sec;
-+	m->mux_rate_kbytes_sec = args->mux_rate_kbytes_sec;
- 
--	m->on_new_packets_available_cb = args.on_new_packets_available_cb;
-+	m->on_new_packets_available_cb = args->on_new_packets_available_cb;
- 
--	m->mux_buf = vzalloc(args.mux_buf_sz);
-+	m->mux_buf = vzalloc(args->mux_buf_sz);
- 	if (!m->mux_buf)
- 		goto free_mux;
- 
--	m->mux_buf_sz = args.mux_buf_sz;
-+	m->mux_buf_sz = args->mux_buf_sz;
- 
--	m->pcr_pid = args.pcr_pid;
--	m->transport_stream_id = args.transport_stream_id;
--	m->priv = args.priv;
-+	m->pcr_pid = args->pcr_pid;
-+	m->transport_stream_id = args->transport_stream_id;
-+	m->priv = args->priv;
- 	m->timing.current_jiffies = get_jiffies_64();
- 
--	if (args.channels)
--		m->channels = args.channels;
-+	if (args->channels)
-+		m->channels = args->channels;
- 	else
- 		if (vidtv_channels_init(m) < 0)
- 			goto free_mux_buf;
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_mux.h b/drivers/media/test-drivers/vidtv/vidtv_mux.h
-index 08138c80398a..52d79e3bbc31 100644
---- a/drivers/media/test-drivers/vidtv/vidtv_mux.h
-+++ b/drivers/media/test-drivers/vidtv/vidtv_mux.h
-@@ -159,7 +159,7 @@ struct vidtv_mux_init_args {
- 
- struct vidtv_mux *vidtv_mux_init(struct dvb_frontend *fe,
- 				 struct device *dev,
--				 struct vidtv_mux_init_args args);
-+				 struct vidtv_mux_init_args *args);
- void vidtv_mux_destroy(struct vidtv_mux *m);
- 
- void vidtv_mux_start_thread(struct vidtv_mux *m);
--- 
-2.26.2
+Maybe the best would be to re-send those after the merge window, when
+both patches will arrive upstream.
 
+Thanks,
+Mauro
