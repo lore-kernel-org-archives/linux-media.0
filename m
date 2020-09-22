@@ -2,71 +2,129 @@ Return-Path: <SRS0=5+7B=C7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07A5FC4727D
-	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 11:50:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4571C2D0E2
+	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 11:57:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CF3A422574
-	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 11:50:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 830C52388B
+	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 11:57:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1600775837;
+	bh=JzX0UWVhsqqZWZ21G01cSXkn5qwSlkYla79J8KYPlOA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=FUJhXBxXY54TjcyY9K8FUERuKh/vHx5kL34A4fJPkNR8nTTlsNeRgZLmT6MJnTT3m
+	 DwwkdilXw0ccTglGVZ0PybR1c9Z4998E3Q1fepDvptLlw6GqdDEx3T6+hWD9h0bU/+
+	 xFF4vD4ZBslbvToXpUYwPt+WLDeXJj9Nde7rn2FU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726762AbgIVLuU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 22 Sep 2020 07:50:20 -0400
-Received: from elvis.franken.de ([193.175.24.41]:51272 "EHLO elvis.franken.de"
+        id S1726554AbgIVL5N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 22 Sep 2020 07:57:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54644 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727004AbgIVLuT (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 22 Sep 2020 07:50:19 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1kKfxr-000822-06; Tue, 22 Sep 2020 12:56:03 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 4F214C0FFF; Tue, 22 Sep 2020 10:51:34 +0200 (CEST)
-Date:   Tue, 22 Sep 2020 10:51:34 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        iommu@lists.linux-foundation.org,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        linux1394-devel@lists.sourceforge.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        nouveau@lists.freedesktop.org, netdev@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-mm@kvack.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH 13/18] 53c700: convert to dma_alloc_noncoherent
-Message-ID: <20200922085134.GG8477@alpha.franken.de>
-References: <20200915155122.1768241-1-hch@lst.de>
- <20200915155122.1768241-14-hch@lst.de>
+        id S1726509AbgIVL5N (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 22 Sep 2020 07:57:13 -0400
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B967A2388B;
+        Tue, 22 Sep 2020 11:57:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600775833;
+        bh=JzX0UWVhsqqZWZ21G01cSXkn5qwSlkYla79J8KYPlOA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=LMsl+4ueGZzXFyO5Chwc5vTZZa34WwHVgdvZtzadg2Iy+hIi3Z04TRi6PZVMboYo1
+         NmP9NJsESc/94cQ5lJcUGf7CAKDirJroFWVJdJaNv7s79NKQTz2alpW2WpS/8vCmuz
+         /SjrboilA9XMi1Nf07/CU5djf8IZ42RUd9+kAnA0=
+Received: by mail-ed1-f52.google.com with SMTP id n13so15822734edo.10;
+        Tue, 22 Sep 2020 04:57:12 -0700 (PDT)
+X-Gm-Message-State: AOAM530aIAvKBj2JoNQ9iKHk6y70gHGO/8cpVOz7HIuVDjCa0uSPPQ8V
+        wKficOFXJlXZ/+Ac5ZujeQOY32f7VqgxSdqjXzg=
+X-Google-Smtp-Source: ABdhPJx6F8zoxz3fiIJuJ3HfhDz1x3+14UraYWfnus99n33U49cVmZ47m+VJqi+2Yp3i7enBtwxhxbNwiyUU5fNa52Y=
+X-Received: by 2002:a50:e78f:: with SMTP id b15mr3569103edn.104.1600775831336;
+ Tue, 22 Sep 2020 04:57:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200915155122.1768241-14-hch@lst.de>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+References: <20200921162342.7348-1-krzk@kernel.org> <20200921162342.7348-7-krzk@kernel.org>
+ <20200922093726.GN26842@paasikivi.fi.intel.com>
+In-Reply-To: <20200922093726.GN26842@paasikivi.fi.intel.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Tue, 22 Sep 2020 13:56:59 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPeAyiPHdxBNocNCCsX8c_jM8hpPqRB4crjcOOBOt5MtLQ@mail.gmail.com>
+Message-ID: <CAJKOXPeAyiPHdxBNocNCCsX8c_jM8hpPqRB4crjcOOBOt5MtLQ@mail.gmail.com>
+Subject: Re: [PATCH 07/25] media: i2c: imx355: silence unused acpi_device_id warning
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Pavel Machek <pavel@ucw.cz>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Dongchun Zhu <dongchun.zhu@mediatek.com>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Ricardo Ribalda <ribalda@kernel.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Shunqian Zheng <zhengsq@rock-chips.com>,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
+        Hyungwoo Yang <hyungwoo.yang@intel.com>,
+        Wenyou Yang <wenyou.yang@microchip.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        linux-media@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Sep 15, 2020 at 05:51:17PM +0200, Christoph Hellwig wrote:
-> Use the new non-coherent DMA API including proper ownership transfers.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  drivers/scsi/53c700.c | 20 ++++++++++++++------
->  1 file changed, 14 insertions(+), 6 deletions(-)
+On Tue, 22 Sep 2020 at 11:37, Sakari Ailus <sakari.ailus@linux.intel.com> w=
+rote:
+>
+> Hi Krzysztof,
+>
+> Thanks for the patchset!
+>
+> I believe the I=E6=B6=8E client has been dug up first as we've been deali=
+ng with
+> I=E6=B6=8E devices all the time, and it's been a pattern. I don't see tha=
+t as a
+> reason to reject the patches either though, it definitely cleans up the
+> drivers.
+>
+> On Mon, Sep 21, 2020 at 06:23:24PM +0200, Krzysztof Kozlowski wrote:
+> > If driver is built without ACPI, the struct acpi_device_id won't be
+> > used:
+> >
+> >   drivers/media/i2c/imx355.c:1836:36: warning:
+> >     'imx355_acpi_ids' defined but not used [-Wunused-const-variable=3D]
+> >
+> > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> > ---
+> >  drivers/media/i2c/imx355.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/media/i2c/imx355.c b/drivers/media/i2c/imx355.c
+> > index 51245e71b411..8db287251f49 100644
+> > --- a/drivers/media/i2c/imx355.c
+> > +++ b/drivers/media/i2c/imx355.c
+> > @@ -1833,7 +1833,7 @@ static const struct dev_pm_ops imx355_pm_ops =3D =
+{
+> >       SET_SYSTEM_SLEEP_PM_OPS(imx355_suspend, imx355_resume)
+> >  };
+> >
+> > -static const struct acpi_device_id imx355_acpi_ids[] =3D {
+> > +static const struct acpi_device_id imx355_acpi_ids[]__maybe_unused =3D=
+ {
+>
+> A space before __ perhaps?
+>
+> Albeit this seems to be all, I can address that while applying if that's
+> ok.
 
-Tested-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Yes, there should be a space here. Let me know if I should send v2.
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Best regards,
+Krzysztof
