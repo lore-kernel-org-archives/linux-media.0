@@ -1,86 +1,83 @@
-Return-Path: <SRS0=5+7B=C7=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=mA+5=DA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9A7AC2D0E2
-	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 23:00:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 771C3C4363D
+	for <linux-media@archiver.kernel.org>; Wed, 23 Sep 2020 02:44:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A552D221EB
-	for <linux-media@archiver.kernel.org>; Tue, 22 Sep 2020 23:00:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600815649;
-	bh=/6i347VVe4a98PeoA0g91m1WixI2xuDpmkxmMA3n8Zs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=cZSTzbXJntO/X22DVKChky7xeIzPlQjpLMs+eACFACsN/yTX3G3IPfl150ZlvUeLW
-	 D3uR+Kj543eEhaFA2CAffhoKUnyX4WJf3WAqNPotmrzD1JJYYdnso9UJ3E/6LIPDuK
-	 ZSRI654WRP791Uqcm2G6QH956P6wJNthDJig9pkw=
+	by mail.kernel.org (Postfix) with ESMTP id D4B4020838
+	for <linux-media@archiver.kernel.org>; Wed, 23 Sep 2020 02:44:14 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="lmuTxudS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726780AbgIVXAp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 22 Sep 2020 19:00:45 -0400
-Received: from mail-il1-f195.google.com ([209.85.166.195]:34385 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726448AbgIVXAp (ORCPT
+        id S1727300AbgIWCoO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 22 Sep 2020 22:44:14 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:53018 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726829AbgIWCoN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 22 Sep 2020 19:00:45 -0400
-Received: by mail-il1-f195.google.com with SMTP id q5so12437424ilj.1;
-        Tue, 22 Sep 2020 16:00:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GsXOYZZf5xdaUt63u65zd5bMSVGREYrkQy367fZurpc=;
-        b=hbhYvjelyQhZszEXkYD+hYHkzlTTlbwTckhISSDPJDH0R3PaUUEbO45/cgmqz3uNUr
-         8H8g/i7BhD7m3EZnBA6AihNwhTMUPM7gyV489SwtRPn5FDhArxBxtucQ+bZo09o42zTZ
-         LyRPYA3Ns4LLich7zjDBkqNoeyH6WeiRRx415R4Uu+e3UeT8KXJgPd3yQq35Dv0FJhmV
-         WbwuMxCJZL9jE0Rq38EtOn8LVW3h2GkF/Zybc3UUitM2Rf9k/hSYJKP0HClqvEw3pVD6
-         MDMPkCOJT6h8VxRvhkZR+7L5PW3ZPyZq65MDc2kxOKdCKCZZkuqchrIBBbdWChadQIX5
-         AUbw==
-X-Gm-Message-State: AOAM533CCuH6fHQ4Mwm+yeVx99jevwVpjkkosNwFEyE+DV0PrbzQUw9D
-        b1VRk4iOdJDKxS+V80xueQ==
-X-Google-Smtp-Source: ABdhPJxfqDX5bxzFUrY+k6Qc1PsPZWVhldUH35d8eXvTqDKiWig6b9je3/K0vTqPctttmyXkbg6eqg==
-X-Received: by 2002:a92:cb01:: with SMTP id s1mr6368568ilo.225.1600815644833;
-        Tue, 22 Sep 2020 16:00:44 -0700 (PDT)
-Received: from xps15 ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id u15sm8062352ior.6.2020.09.22.16.00.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Sep 2020 16:00:44 -0700 (PDT)
-Received: (nullmailer pid 3425231 invoked by uid 1000);
-        Tue, 22 Sep 2020 23:00:43 -0000
-Date:   Tue, 22 Sep 2020 17:00:43 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Martin Cerveny <m.cerveny@computer.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>
-Subject: Re: [PATCH v2 5/6] dt-bindings: media: cedrus: Add V3s compatible
-Message-ID: <20200922230043.GA3425202@bogus>
-References: <20200912143052.30952-1-m.cerveny@computer.org>
- <20200912143052.30952-6-m.cerveny@computer.org>
+        Tue, 22 Sep 2020 22:44:13 -0400
+Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6105A9CE;
+        Wed, 23 Sep 2020 04:44:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1600829051;
+        bh=Pk8DOe4Sjm9CHaYdH3XnoiMR5gzTbv6xMKNPC4hXEhA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=lmuTxudS1Csu/yJ1vhOSbGqOJpqZrAhiRtKR/5DwVqqVBQhQn+o0Q88fzmmwOso34
+         Z/fzT806Am6SGxSyjcPMDqiC5AlAmH6cK5Da0yxbHHw9yBnEWv55uvGD+vA/fOmaoi
+         J6hS1tF5vmYRCQPmu23WG0qieqPs31r0SNxznroo=
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Dylan Yip <dylany@xilinx.com>, Vishal Sagar <vsagar@xilinx.com>
+Subject: [PATCH/RFC 01/16] media: videodev2.h: Remove unneeded comment about 4CC value
+Date:   Wed, 23 Sep 2020 05:43:18 +0300
+Message-Id: <20200923024333.920-2-laurent.pinchart@ideasonboard.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200923024333.920-1-laurent.pinchart@ideasonboard.com>
+References: <20200923024333.920-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200912143052.30952-6-m.cerveny@computer.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sat, 12 Sep 2020 16:30:51 +0200, Martin Cerveny wrote:
-> Allwinner V3s SoC contains video engine. Add compatible for it.
-> 
-> Signed-off-by: Martin Cerveny <m.cerveny@computer.org>
-> ---
->  .../bindings/media/allwinner,sun4i-a10-video-engine.yaml         | 1 +
->  1 file changed, 1 insertion(+)
-> 
+The V4L2_PIX_FMT_BGRA444 format has a comment that explains why its 4CC
+value is GA12. This explains the development history and isn't of much
+interest to readers, it should have been part of a commit message
+instead. Drop the comment, anyone interested in history can turn to git.
 
-Acked-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ include/uapi/linux/videodev2.h | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index c7b70ff53bc1..e89b6c5ca799 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -529,12 +529,6 @@ struct v4l2_pix_format {
+ #define V4L2_PIX_FMT_RGBX444 v4l2_fourcc('R', 'X', '1', '2') /* 16  rrrrgggg bbbbxxxx */
+ #define V4L2_PIX_FMT_ABGR444 v4l2_fourcc('A', 'B', '1', '2') /* 16  aaaabbbb ggggrrrr */
+ #define V4L2_PIX_FMT_XBGR444 v4l2_fourcc('X', 'B', '1', '2') /* 16  xxxxbbbb ggggrrrr */
+-
+-/*
+- * Originally this had 'BA12' as fourcc, but this clashed with the older
+- * V4L2_PIX_FMT_SGRBG12 which inexplicably used that same fourcc.
+- * So use 'GA12' instead for V4L2_PIX_FMT_BGRA444.
+- */
+ #define V4L2_PIX_FMT_BGRA444 v4l2_fourcc('G', 'A', '1', '2') /* 16  bbbbgggg rrrraaaa */
+ #define V4L2_PIX_FMT_BGRX444 v4l2_fourcc('B', 'X', '1', '2') /* 16  bbbbgggg rrrrxxxx */
+ #define V4L2_PIX_FMT_RGB555  v4l2_fourcc('R', 'G', 'B', 'O') /* 16  RGB-5-5-5     */
+-- 
+Regards,
+
+Laurent Pinchart
+
