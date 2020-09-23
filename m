@@ -2,234 +2,114 @@ Return-Path: <SRS0=mA+5=DA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C85CAC4727F
-	for <linux-media@archiver.kernel.org>; Wed, 23 Sep 2020 15:22:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15155C47425
+	for <linux-media@archiver.kernel.org>; Wed, 23 Sep 2020 15:22:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9151D221E7
-	for <linux-media@archiver.kernel.org>; Wed, 23 Sep 2020 15:22:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600874526;
-	bh=tH7mX2uiDbk528V//LDqIJ+cbqxHanIdBiyIEHFK1RI=;
-	h=From:To:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=AkrxxXEjLu1O/xHZrPDbr4/xCbfxi7H1AYfOg2omXvUJtNX/AA5/vijBf2e+aDTsZ
-	 WA3bljdAJbZxvW+nwz2vxqxsdE0aeU/VsITn/SsW84vDRUDsawrka4UtbiOaWFrl0f
-	 qzWBFj57OzEBvjaMiE7uY7c9O61iNkC/XEW0gPUg=
+	by mail.kernel.org (Postfix) with ESMTP id CC2D1221E7
+	for <linux-media@archiver.kernel.org>; Wed, 23 Sep 2020 15:22:50 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=reintjes.nrw header.i=@reintjes.nrw header.b="mKq3yxzI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726823AbgIWPWD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Sep 2020 11:22:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41472 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726156AbgIWPWC (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Sep 2020 11:22:02 -0400
-Received: from localhost.localdomain (unknown [194.230.155.191])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4AE3021D7D;
-        Wed, 23 Sep 2020 15:21:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600874522;
-        bh=tH7mX2uiDbk528V//LDqIJ+cbqxHanIdBiyIEHFK1RI=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=puPPJBBj9n7wgb77YhUNAoCQeBAPQvpu54QNBSNwZcR5EznlCkROqhTYqS+OQGXGK
-         1LFrXTI7Ljbp9xVEvnsNfR+1T+VeutZUM303oqGE2ZLapjX32jF8oY3Zw9iM37Ewza
-         DPCo1Q8+2Cr7CGidaKauX3/qOAo6II5bJH4pQ0R8=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 4/4] media: i2c: imx258: get clock from device properties and enable it via runtime PM
-Date:   Wed, 23 Sep 2020 17:21:29 +0200
-Message-Id: <20200923152129.21736-4-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200923152129.21736-1-krzk@kernel.org>
-References: <20200923152129.21736-1-krzk@kernel.org>
+        id S1726802AbgIWPWm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Sep 2020 11:22:42 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.54]:34512 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726687AbgIWPWm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 23 Sep 2020 11:22:42 -0400
+X-Greylist: delayed 713 seconds by postgrey-1.27 at vger.kernel.org; Wed, 23 Sep 2020 11:22:39 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1600874558;
+        s=strato-dkim-0002; d=reintjes.nrw;
+        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=R7hI6d/NmZuNcg1vUXN4expafaD5dS9k1NOlJgVsfQ0=;
+        b=mKq3yxzIBoK6eXKDjSaCRr3BwBIqpDKeJr75f5YQmPBPRRn9qdkRISKeudlw+eJUaN
+        i9j0YoD7Nd07ieGLh8UqSmYZ1Ccml4PGsZ2Mglopdz9Hz5rLCJkN670J1l7AKyk9w16x
+        a5x5cVcgZWQk6FXpa0G8mlW7WSJEKPFpozzrnE9Mqlay09jPyJDrOXyUKIYtt6nlhpnO
+        Iws66XTKRoaWIH3voDt0xHa2loKeKKkr2KuI9gRfjll43rW7LApn0Q1chdN5eLyO3daW
+        Z1KVrRhdU65Y8/6yfAJtnadI1+vhAkdCKhH0qGquacG5znElBXtRT3qPa76R5ygpIUbq
+        FhJQ==
+X-RZG-AUTH: ":IGUXYVP6Ne1lB7nQNv+YSUx4qaxF0YAcTeeZr8criwvl+4OoAsy1YB7b8FzONHo5ckdw3KGGkZZ/Zu8="
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.0.198]
+        by smtp.strato.de (RZmta 46.10.7 DYNA|AUTH)
+        with ESMTPSA id Y04b60w8NFAYy22
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Wed, 23 Sep 2020 17:10:34 +0200 (CEST)
+Subject: Re: [PATCH 00/14] drop double zeroing
+To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        Julia Lawall <Julia.Lawall@inria.fr>
+Cc:     linux-serial@vger.kernel.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-block@vger.kernel.org,
+        Yossi Leybovich <sleybo@amazon.com>,
+        linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-rdma@vger.kernel.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        rds-devel@oss.oracle.com
+References: <1600601186-7420-1-git-send-email-Julia.Lawall@inria.fr>
+ <160070750168.56292.17961674601916397869.b4-ty@kernel.org>
+From:   Rolf Reintjes <lists2.rolf@reintjes.nrw>
+Message-ID: <c3b33526-936d-ffa4-c301-4d0485822be1@reintjes.nrw>
+Date:   Wed, 23 Sep 2020 17:10:33 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
+MIME-Version: 1.0
+In-Reply-To: <160070750168.56292.17961674601916397869.b4-ty@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The IMX258 sensor driver checked in device properties for a
-clock-frequency property which actually does not mean that the clock is
-really running such frequency or is it even enabled.
+Hello Mark,
 
-Get the provided clock and check it frequency.  If none is provided,
-fall back to old property.
+On 21.09.20 18:58, Mark Brown wrote:
+> On Sun, 20 Sep 2020 13:26:12 +0200, Julia Lawall wrote:
+>> sg_init_table zeroes its first argument, so the allocation of that argument
+>> doesn't have to.
+> 
+> Applied to
+> 
+>     https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+> 
+> Thanks!
 
-Enable the clock when accessing the IMX258 registers and when streaming
-starts with runtime PM.
+I do not understand which of the 14 patches you applied. Your mail 
+responds to the 00/14 mail.
 
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+Rolf
 
----
-
-Changes since v3:
-1. None
-
-Changes since v2:
-1. Do not try to set drvdata, wrap lines.
-2. Use dev_dbg.
-
-Changes since v1:
-1. Use runtime PM for clock toggling
----
- drivers/media/i2c/imx258.c | 71 +++++++++++++++++++++++++++++++++-----
- 1 file changed, 62 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
-index ae183b0dbba9..7bedbfe5c4d6 100644
---- a/drivers/media/i2c/imx258.c
-+++ b/drivers/media/i2c/imx258.c
-@@ -2,6 +2,7 @@
- // Copyright (C) 2018 Intel Corporation
- 
- #include <linux/acpi.h>
-+#include <linux/clk.h>
- #include <linux/delay.h>
- #include <linux/i2c.h>
- #include <linux/module.h>
-@@ -68,6 +69,9 @@
- #define REG_CONFIG_MIRROR_FLIP		0x03
- #define REG_CONFIG_FLIP_TEST_PATTERN	0x02
- 
-+/* Input clock frequency in Hz */
-+#define IMX258_INPUT_CLOCK_FREQ		19200000
-+
- struct imx258_reg {
- 	u16 address;
- 	u8 val;
-@@ -610,6 +614,8 @@ struct imx258 {
- 
- 	/* Streaming on/off */
- 	bool streaming;
-+
-+	struct clk *clk;
- };
- 
- static inline struct imx258 *to_imx258(struct v4l2_subdev *_sd)
-@@ -972,6 +978,29 @@ static int imx258_stop_streaming(struct imx258 *imx258)
- 	return 0;
- }
- 
-+static int imx258_power_on(struct device *dev)
-+{
-+	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-+	struct imx258 *imx258 = to_imx258(sd);
-+	int ret;
-+
-+	ret = clk_prepare_enable(imx258->clk);
-+	if (ret)
-+		dev_err(dev, "failed to enable clock\n");
-+
-+	return ret;
-+}
-+
-+static int imx258_power_off(struct device *dev)
-+{
-+	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-+	struct imx258 *imx258 = to_imx258(sd);
-+
-+	clk_disable_unprepare(imx258->clk);
-+
-+	return 0;
-+}
-+
- static int imx258_set_stream(struct v4l2_subdev *sd, int enable)
- {
- 	struct imx258 *imx258 = to_imx258(sd);
-@@ -1199,9 +1228,28 @@ static int imx258_probe(struct i2c_client *client)
- 	int ret;
- 	u32 val = 0;
- 
--	device_property_read_u32(&client->dev, "clock-frequency", &val);
--	if (val != 19200000)
--		return -EINVAL;
-+	imx258 = devm_kzalloc(&client->dev, sizeof(*imx258), GFP_KERNEL);
-+	if (!imx258)
-+		return -ENOMEM;
-+
-+	imx258->clk = devm_clk_get_optional(&client->dev, NULL);
-+	if (!imx258->clk) {
-+		dev_dbg(&client->dev,
-+			"no clock provided, using clock-frequency property\n");
-+
-+		device_property_read_u32(&client->dev, "clock-frequency", &val);
-+		if (val != IMX258_INPUT_CLOCK_FREQ)
-+			return -EINVAL;
-+	} else if (IS_ERR(imx258->clk)) {
-+		return dev_err_probe(&client->dev, PTR_ERR(imx258->clk),
-+				     "error getting clock\n");
-+	} else {
-+		if (clk_get_rate(imx258->clk) != IMX258_INPUT_CLOCK_FREQ) {
-+			dev_err(&client->dev,
-+				"input clock frequency not supported\n");
-+			return -EINVAL;
-+		}
-+	}
- 
- 	/*
- 	 * Check that the device is mounted upside down. The driver only
-@@ -1211,24 +1259,25 @@ static int imx258_probe(struct i2c_client *client)
- 	if (ret || val != 180)
- 		return -EINVAL;
- 
--	imx258 = devm_kzalloc(&client->dev, sizeof(*imx258), GFP_KERNEL);
--	if (!imx258)
--		return -ENOMEM;
--
- 	/* Initialize subdev */
- 	v4l2_i2c_subdev_init(&imx258->sd, client, &imx258_subdev_ops);
- 
-+	/* Will be powered off via pm_runtime_idle */
-+	ret = imx258_power_on(&client->dev);
-+	if (ret)
-+		return ret;
-+
- 	/* Check module identity */
- 	ret = imx258_identify_module(imx258);
- 	if (ret)
--		return ret;
-+		goto error_identify;
- 
- 	/* Set default mode to max resolution */
- 	imx258->cur_mode = &supported_modes[0];
- 
- 	ret = imx258_init_controls(imx258);
- 	if (ret)
--		return ret;
-+		goto error_identify;
- 
- 	/* Initialize subdev */
- 	imx258->sd.internal_ops = &imx258_internal_ops;
-@@ -1258,6 +1307,9 @@ static int imx258_probe(struct i2c_client *client)
- error_handler_free:
- 	imx258_free_controls(imx258);
- 
-+error_identify:
-+	imx258_power_off(&client->dev);
-+
- 	return ret;
- }
- 
-@@ -1278,6 +1330,7 @@ static int imx258_remove(struct i2c_client *client)
- 
- static const struct dev_pm_ops imx258_pm_ops = {
- 	SET_SYSTEM_SLEEP_PM_OPS(imx258_suspend, imx258_resume)
-+	SET_RUNTIME_PM_OPS(imx258_power_off, imx258_power_on, NULL)
- };
- 
- #ifdef CONFIG_ACPI
--- 
-2.17.1
+> 
+> [1/1] spi/topcliff-pch: drop double zeroing
+>        commit: ca03dba30f2b8ff45a2972c6691e4c96d8c52b3b
+> 
+> All being well this means that it will be integrated into the linux-next
+> tree (usually sometime in the next 24 hours) and sent to Linus during
+> the next merge window (or sooner if it is a bug fix), however if
+> problems are discovered then the patch may be dropped or reverted.
+> 
+> You may get further e-mails resulting from automated or manual testing
+> and review of the tree, please engage with people reporting problems and
+> send followup patches addressing any issues that are reported if needed.
+> 
+> If any updates are required or you are submitting further changes they
+> should be sent as incremental updates against current git, existing
+> patches will not be replaced.
+> 
+> Please add any relevant lists and maintainers to the CCs when replying
+> to this mail.
+> 
+> Thanks,
+> Mark
+> 
 
