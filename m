@@ -2,105 +2,99 @@ Return-Path: <SRS0=PL4U=DB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 524B7C4363D
-	for <linux-media@archiver.kernel.org>; Thu, 24 Sep 2020 17:31:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A18CDC4727E
+	for <linux-media@archiver.kernel.org>; Thu, 24 Sep 2020 17:42:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 078C0238A1
-	for <linux-media@archiver.kernel.org>; Thu, 24 Sep 2020 17:31:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3E647206CD
+	for <linux-media@archiver.kernel.org>; Thu, 24 Sep 2020 17:42:28 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=ndufresne-ca.20150623.gappssmtp.com header.i=@ndufresne-ca.20150623.gappssmtp.com header.b="nOuIzwWd"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728553AbgIXRbf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Sep 2020 13:31:35 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:33711 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726915AbgIXRbf (ORCPT
+        id S1728626AbgIXRm0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 24 Sep 2020 13:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59520 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728621AbgIXRm0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Sep 2020 13:31:35 -0400
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 24 Sep 2020 10:31:34 -0700
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 24 Sep 2020 10:31:31 -0700
-Received: from dikshita-linux.qualcomm.com ([10.204.65.237])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 24 Sep 2020 23:01:18 +0530
-Received: by dikshita-linux.qualcomm.com (Postfix, from userid 347544)
-        id B049A4E7F; Thu, 24 Sep 2020 23:01:17 +0530 (IST)
-From:   Dikshita Agarwal <dikshita@codeaurora.org>
-To:     linux-media@vger.kernel.org, stanimir.varbanov@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        vgarodia@codeaurora.org, Dikshita Agarwal <dikshita@codeaurora.org>
-Subject: [PATCH 1/2] venus: venc: update output format based on capture format.
-Date:   Thu, 24 Sep 2020 23:01:13 +0530
-Message-Id: <1600968674-11559-2-git-send-email-dikshita@codeaurora.org>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1600968674-11559-1-git-send-email-dikshita@codeaurora.org>
-References: <1600968674-11559-1-git-send-email-dikshita@codeaurora.org>
+        Thu, 24 Sep 2020 13:42:26 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0F7C0613D3
+        for <linux-media@vger.kernel.org>; Thu, 24 Sep 2020 10:42:25 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id n133so242269qkn.11
+        for <linux-media@vger.kernel.org>; Thu, 24 Sep 2020 10:42:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=ufQSouJEr6iOhClGNkcFys0+GmEFSbJ326GsTOQ2uLs=;
+        b=nOuIzwWdqsKX//nOnPPcem2yIWA2yfus/bkl7atiAWOGJyts9EJzkywbm3/178bHdP
+         GIu7YfCjro+GjducZXySGvlhKxo41hPz9qqgcCspT6ybspy4HJUpojHUeGNViEOVcXNy
+         fO4CPjviAUOJPD8GxRMJF/DjJv6o/GlXwBkFaw7FJkBLnqMk5te1Fje9KkBzlkM5704K
+         u2h3MKqbKzCIz7wJJPZiCHE15+a7tl6pKs8EgAMJiWPXX2n+81eU4hO3BQ5Ha40yYxla
+         zTxeG4CNde9VZn0X6xyGpVZFPsqxt645OZjRsdX1PUkGvsz7HtBTIrUXZkdOKL1mPt+k
+         BKhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=ufQSouJEr6iOhClGNkcFys0+GmEFSbJ326GsTOQ2uLs=;
+        b=jN/wcSslwujLvHWlV2fKIa/VXTlPFzpJtVn+KsbDfFraaTTPrRU+uCm6xXg1omE97L
+         eOGxVQz5bR2c8Uc2EMPh+Crv+X6kR4dzbsMbwyJLCYdEDhtHclcLHKSUzzJDZQIqipLS
+         nWXo1D8slq7ocEE1Dddwu4HKALd96vyOSar72PHD2QkbRXXQ4PMnRXum19KskWEowSNl
+         2rtDstGKzEd0c7Zj1dwoKCShHiMeGWqNpziItnnzFopg3W+zshNynVjt3cSORWWXb+1e
+         SvIwnvn5UmeIoSLlwoTTLfMmCVhpEv1DoepUYKyPbkIuraELfJaHtHfOWYmR9oS1rqgf
+         jQOg==
+X-Gm-Message-State: AOAM530Hl90YFCbbicn+PCHCohdk85q6IaXWhj59xIjodl6VlHmrNY/J
+        KC009KWnWM3wbkCKc3oWHJ1ZcgOtyTV/jlFE
+X-Google-Smtp-Source: ABdhPJy3+e6AffcDB4O9E1FMQxXBkkIU1OHmqDYWUevKy9OJXSv9xTsK0X7FvrcZqGkh92CxjFaiRg==
+X-Received: by 2002:a37:5fc6:: with SMTP id t189mr231569qkb.78.1600969344786;
+        Thu, 24 Sep 2020 10:42:24 -0700 (PDT)
+Received: from skullcanyon (marriott-chateau-champlain-montreal.sites.intello.com. [66.171.169.34])
+        by smtp.gmail.com with ESMTPSA id a24sm85243qko.82.2020.09.24.10.42.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Sep 2020 10:42:24 -0700 (PDT)
+Message-ID: <871d369fc987ac7cc24bdab9bc9df9fadf939c01.camel@ndufresne.ca>
+Subject: Re: [PATCH v2 0/2] Add new controls for QP and layer bitrate
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Dikshita Agarwal <dikshita@codeaurora.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        ezequiel@collabora.com, stanimir.varbanov@linaro.org,
+        vgarodia@codeaurora.org, majja@codeaurora.org
+Date:   Thu, 24 Sep 2020 13:42:22 -0400
+In-Reply-To: <1600693440-3015-1-git-send-email-dikshita@codeaurora.org>
+References: <1600693440-3015-1-git-send-email-dikshita@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-1.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-update output format parameters when s_fmt is called on
-capture port as recommended in encoder spec.
+Le lundi 21 septembre 2020 à 18:33 +0530, Dikshita Agarwal a écrit :
+> This series adds frame specific min/max qp controls for hevc and layer
+> wise bitrate control for h264.
 
-Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
----
- drivers/media/platform/qcom/venus/venc.c | 28 +++++++++++++++-------------
- 1 file changed, 15 insertions(+), 13 deletions(-)
+Any chance you could append your driver changes with this set ? I don't
+think new APIs ever make it without a driver using it.
 
-diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
-index c591d00..7d2aaa8 100644
---- a/drivers/media/platform/qcom/venus/venc.c
-+++ b/drivers/media/platform/qcom/venus/venc.c
-@@ -382,31 +382,33 @@ static int venc_s_fmt(struct file *file, void *fh, struct v4l2_format *f)
- 
- 	memset(&format, 0, sizeof(format));
- 
--	format.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
--	format.fmt.pix_mp.pixelformat = pixfmt_out;
-+	format.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
-+	format.fmt.pix_mp.pixelformat = pixfmt_cap;
- 	format.fmt.pix_mp.width = orig_pixmp.width;
- 	format.fmt.pix_mp.height = orig_pixmp.height;
- 	venc_try_fmt_common(inst, &format);
- 
--	if (f->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) {
--		inst->out_width = format.fmt.pix_mp.width;
--		inst->out_height = format.fmt.pix_mp.height;
--		inst->colorspace = pixmp->colorspace;
--		inst->ycbcr_enc = pixmp->ycbcr_enc;
--		inst->quantization = pixmp->quantization;
--		inst->xfer_func = pixmp->xfer_func;
-+	if (f->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE) {
-+		inst->width = format.fmt.pix_mp.width;
-+		inst->height = format.fmt.pix_mp.height;
- 	}
- 
- 	memset(&format, 0, sizeof(format));
- 
--	format.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
--	format.fmt.pix_mp.pixelformat = pixfmt_cap;
-+	format.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
-+	format.fmt.pix_mp.pixelformat = pixfmt_out;
- 	format.fmt.pix_mp.width = orig_pixmp.width;
- 	format.fmt.pix_mp.height = orig_pixmp.height;
- 	venc_try_fmt_common(inst, &format);
- 
--	inst->width = format.fmt.pix_mp.width;
--	inst->height = format.fmt.pix_mp.height;
-+	inst->out_width = format.fmt.pix_mp.width;
-+	inst->out_height = format.fmt.pix_mp.height;
-+	if (f->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) {
-+		inst->colorspace = pixmp->colorspace;
-+		inst->ycbcr_enc = pixmp->ycbcr_enc;
-+		inst->quantization = pixmp->quantization;
-+		inst->xfer_func = pixmp->xfer_func;
-+	}
- 
- 	if (f->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE)
- 		inst->fmt_out = fmt;
--- 
-1.9.1
+> 
+> Chnage since v1:
+>  corrected email.
+> 
+> Dikshita Agarwal (2):
+>   media: v4l2-ctrl: Add frame-specific min/max qp controls for hevc
+>   media: v4l2-ctrl: Add layer wise bitrate controls for h264
+> 
+>  .../userspace-api/media/v4l/ext-ctrls-codec.rst    | 74 +++++++++++++++++++++-
+>  drivers/media/v4l2-core/v4l2-ctrls.c               | 15 +++++
+>  include/uapi/linux/v4l2-controls.h                 | 17 +++++
+>  3 files changed, 104 insertions(+), 2 deletions(-)
+> 
 
