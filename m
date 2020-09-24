@@ -2,124 +2,86 @@ Return-Path: <SRS0=PL4U=DB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B7C1C4727E
-	for <linux-media@archiver.kernel.org>; Thu, 24 Sep 2020 11:22:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 123A9C4363D
+	for <linux-media@archiver.kernel.org>; Thu, 24 Sep 2020 12:00:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E71D62396E
-	for <linux-media@archiver.kernel.org>; Thu, 24 Sep 2020 11:22:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600946541;
-	bh=tSrMjh6Tp12F91iwQGjfztE81iQr93TgUJgtnz2nFkw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=sIGTpA9S7yxl58UaiwobY51v7yl9Qfzy52mfobVMm+cuh4pNZMkTMayRh/c5uNNpg
-	 4TYaNeMLdQMJlVGl+TK6vu+mKC7Ls4tkRVUnDou0+ZIlYLDIXtTGhkV00QyMy6x8CQ
-	 YiOTySjNUl18qPZD+X/5M3a1iiWDQsKeID+9OcTc=
+	by mail.kernel.org (Postfix) with ESMTP id AC93823772
+	for <linux-media@archiver.kernel.org>; Thu, 24 Sep 2020 12:00:19 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="A5d1oFXm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727333AbgIXLWN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Sep 2020 07:22:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49456 "EHLO mail.kernel.org"
+        id S1727480AbgIXMAT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 24 Sep 2020 08:00:19 -0400
+Received: from mx2.suse.de ([195.135.220.15]:53220 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726483AbgIXLWM (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Sep 2020 07:22:12 -0400
-Received: from mail.kernel.org (ip5f5ad5c4.dynamic.kabel-deutschland.de [95.90.213.196])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EB78E2396E;
-        Thu, 24 Sep 2020 11:22:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600946532;
-        bh=tSrMjh6Tp12F91iwQGjfztE81iQr93TgUJgtnz2nFkw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bSeH9EaLIUTTpJLk0icANW25BYYnoH9u2e/WtucDsWSrE5G7wiedatFCst+b/UxV6
-         s8AnEtvh0fbHz09JedBhw4QnSquf+sWgOPoH0dODQhEz1yzjGEUSjsZ25rsY0swISB
-         Fkgm6jUCLCDmmiXnQU1bej48tZ6PGjFHhzVtDsTE=
-Received: from mchehab by mail.kernel.org with local (Exim 4.94)
-        (envelope-from <mchehab@kernel.org>)
-        id 1kLPKD-000AES-Fp; Thu, 24 Sep 2020 13:22:09 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Subject: [PATCH 0/2] Start supporting builds with Sphinx 3.1+
-Date:   Thu, 24 Sep 2020 13:22:03 +0200
-Message-Id: <cover.1600945712.git.mchehab+huawei@kernel.org>
+        id S1727437AbgIXMAT (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 24 Sep 2020 08:00:19 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1600948818;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7YAo6nKT6+itwlQyBkZk599IkJ9DvBCbffApv9QwI80=;
+        b=A5d1oFXmn7eUTKcg2Pz7XPXCr5u6/5JnDhEOGKEuvnO4iJ3PLgCzGRWBWo4OpWZdvoOMSz
+        vC9POWgIG9yYMFjbiPrap4TJCaRJLLko2/JF4vGgO001H/jTQ5/Q0QEYCPoDVzpAWmj/S4
+        KiwTvA+sCXFvicDO0s66IYbes20bm1A=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 16AF8AEC8;
+        Thu, 24 Sep 2020 12:00:18 +0000 (UTC)
+From:   Oliver Neukum <oneukum@suse.com>
+To:     mchehab@kernel.org, sean@mess.org, linux-media@vger.kernel.org,
+        yangyingliang@huawei.com
+Cc:     Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH] flexcop-usb: sanity checking of endpoint type
+Date:   Thu, 24 Sep 2020 13:37:40 +0200
+Message-Id: <20200924113740.23319-1-oneukum@suse.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200924090230.6f3b0ca1@coco.lan>
-References: <20200924090230.6f3b0ca1@coco.lan>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jon,
+Make sure the endpoint is ISOC in and do not hard code USB_DIR_IN.
 
-This is a small patch series with just two patches.
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/media/usb/b2c2/flexcop-usb.c | 2 ++
+ drivers/media/usb/b2c2/flexcop-usb.h | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-The first one adds support at cdomain.py for two notations found on
-Sphinx 3.1:
-
-	:c:expr:
-	.. c:namespace::
-
-With that, it should now be possible to use those two C domain
-tags at the media documentation, which will make it produce a
-decent result with both Sphinx 1.x/2.x and Sphinx 3.1+.
-
-The second patch manually changes the CEC documentation in
-order for it to use those macros, instead of relying at the original
-cdomain extensions.
-
-I tested building the docs with both Sphinx 2.4.4 and 3.2.1.
-They are identical, except by a minor difference:  the output of
-:c:expr: uses a bold monospaced font with 3.1+, while it uses a
-non-bold monospaced font with older versions.
-
-Yet, the output looks decent on both versions.
-
-I'm planning to use the same approach on all the other documents
-under userspace-api/media. So, I guess it would be easier if
-I could merge both the cdomain.py and the media patches via
-the media tree, if this is ok for you.
-
--
-
-With regards to patch 1, I tried first to use a hook at 'doctree-resolved',
-just like the automarkup.py, but that is too late for  changing the
-namespace. So, I ended hooking the extra logic at 'source-read'.
-
-I suspect that this could be implemented on some other ways, but
-this can be optimized later on, if needed.
-
-Mauro Carvalho Chehab (2):
-  docs: cdomain.py: add support for two new Sphinx 3.1+ tags
-  media: docs: make CEC documents compatible with Sphinx 3.1+
-
- Documentation/sphinx/cdomain.py               | 56 ++++++++++++++++++-
- .../media/cec/cec-func-close.rst              |  7 ++-
- .../media/cec/cec-func-ioctl.rst              |  7 ++-
- .../userspace-api/media/cec/cec-func-open.rst |  7 ++-
- .../userspace-api/media/cec/cec-func-poll.rst | 11 ++--
- .../media/cec/cec-ioc-adap-g-caps.rst         |  9 ++-
- .../media/cec/cec-ioc-adap-g-conn-info.rst    | 11 ++--
- .../media/cec/cec-ioc-adap-g-log-addrs.rst    | 14 +++--
- .../media/cec/cec-ioc-adap-g-phys-addr.rst    | 14 +++--
- .../media/cec/cec-ioc-dqevent.rst             |  9 ++-
- .../media/cec/cec-ioc-g-mode.rst              | 14 +++--
- .../media/cec/cec-ioc-receive.rst             | 14 +++--
- 12 files changed, 128 insertions(+), 45 deletions(-)
-
+diff --git a/drivers/media/usb/b2c2/flexcop-usb.c b/drivers/media/usb/b2c2/flexcop-usb.c
+index e3234d169065..e4da32771379 100644
+--- a/drivers/media/usb/b2c2/flexcop-usb.c
++++ b/drivers/media/usb/b2c2/flexcop-usb.c
+@@ -513,6 +513,8 @@ static int flexcop_usb_init(struct flexcop_usb *fc_usb)
+ 
+ 	if (fc_usb->uintf->cur_altsetting->desc.bNumEndpoints < 1)
+ 		return -ENODEV;
++	if (!usb_endpoint_is_isoc_in(&fc_usb->uintf->cur_altsetting->endpoint[1].desc))
++		return -ENODEV;
+ 
+ 	switch (fc_usb->udev->speed) {
+ 	case USB_SPEED_LOW:
+diff --git a/drivers/media/usb/b2c2/flexcop-usb.h b/drivers/media/usb/b2c2/flexcop-usb.h
+index e86faa0e06ca..2f230bf72252 100644
+--- a/drivers/media/usb/b2c2/flexcop-usb.h
++++ b/drivers/media/usb/b2c2/flexcop-usb.h
+@@ -15,7 +15,7 @@
+ 
+ #define B2C2_USB_CTRL_PIPE_IN usb_rcvctrlpipe(fc_usb->udev, 0)
+ #define B2C2_USB_CTRL_PIPE_OUT usb_sndctrlpipe(fc_usb->udev, 0)
+-#define B2C2_USB_DATA_PIPE usb_rcvisocpipe(fc_usb->udev, 0x81)
++#define B2C2_USB_DATA_PIPE usb_rcvisocpipe(fc_usb->udev, 1)
+ 
+ struct flexcop_usb {
+ 	struct usb_device *udev;
 -- 
 2.26.2
-
 
