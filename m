@@ -2,74 +2,59 @@ Return-Path: <SRS0=PL4U=DB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79691C4727D
-	for <linux-media@archiver.kernel.org>; Thu, 24 Sep 2020 16:22:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24156C47420
+	for <linux-media@archiver.kernel.org>; Thu, 24 Sep 2020 16:22:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 424D423A1E
-	for <linux-media@archiver.kernel.org>; Thu, 24 Sep 2020 16:22:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DE6582311B
+	for <linux-media@archiver.kernel.org>; Thu, 24 Sep 2020 16:22:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600964523;
-	bh=Dvw5LR3MifupI5h1qiwngS30RsLM801eZYLlmWV7fiA=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=h+GNVjtD0om8bD0JtPKA+q4J8o2Z0pyaNWUBGwmaQ63xgX4mdnqXIKG6210ftYrph
-	 IBuP725J1daSm8E0/HY2lrciTdfvfzFsWF/C0MDS5NWsYKgjXNxBD/S3apTb/04OiG
-	 WLoyavMApC2LQ4fLjrPckG993M1G/zn6vdGfitWc=
+	s=default; t=1600964527;
+	bh=TO2kD9WZPOaTNN2uwuxUfGHx+g8Qh2BW30M/TWXVowk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=lco4UIAjbHiZPTQSb0p6ApZKBExgAlsbdtQLTxutM0KeNNvvz78Nj2djC00TGR55U
+	 cs2kJP8RP+T9NvW6MKxAxK6vDathhEb4CLojRfLG7jZeSyMGHRX3F96Flj2Bh31Eqf
+	 B5nHPUpyt/UGrRU+fjOs52ufooxf6I7NqQWVPr48=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727127AbgIXQVz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Sep 2020 12:21:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45042 "EHLO mail.kernel.org"
+        id S1727437AbgIXQWH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 24 Sep 2020 12:22:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45054 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726820AbgIXQVx (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Sep 2020 12:21:53 -0400
+        id S1726924AbgIXQVz (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 24 Sep 2020 12:21:55 -0400
 Received: from mail.kernel.org (ip5f5ad5c4.dynamic.kabel-deutschland.de [95.90.213.196])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 543FA2388A;
+        by mail.kernel.org (Postfix) with ESMTPSA id 697072396D;
         Thu, 24 Sep 2020 16:21:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1600964512;
-        bh=Dvw5LR3MifupI5h1qiwngS30RsLM801eZYLlmWV7fiA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=xOlFKdnpn2iE8ufAr8OWdW6HcvAx9ln0T3DTC6dJzpicGrcb+MdP84ZVDDWY/Kyr5
-         HFMBF64jiSEIUONj0sNGNtzhzdoEHe/9azGpzmPomD7SRwMOeSAtZnOUbEN2nXFmDZ
-         iMwKVJ3vPzfzlKUpxa8n3X7KI3KQAsunc/y3nwn0=
+        bh=TO2kD9WZPOaTNN2uwuxUfGHx+g8Qh2BW30M/TWXVowk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=1OfRU3aNmKor2sAkKKt10qk5sru0LS229Ya6Sq5t/RxHlgXXJ3fgbIXesM/VLCR1j
+         oxEiUkUTN6w8iesU0AWr5KNlWgzPyXMxoT9cz6R49ykYCguMC/fDbn8hMhqJx8bpmV
+         8RzlrnJtZQU3wBC5os+aw69Qmlo4XPl49+2hdzAQ=
 Received: from mchehab by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1kLU0E-000KGa-3s; Thu, 24 Sep 2020 18:21:50 +0200
+        id 1kLU0E-000KGm-Hr; Thu, 24 Sep 2020 18:21:50 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
         Jonathan Corbet <corbet@lwn.net>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
         Alexandre Courbot <acourbot@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Helen Koike <helen.koike@collabora.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Jian-Jia Su <jjsu@chromium.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Ricardo Ribalda <ribalda@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>, linux-media@vger.kernel.org
-Subject: [PATCH v2 0/5] docs: cdomain.py: add support for two new Sphinx  3.1+ tags
-Date:   Thu, 24 Sep 2020 18:21:44 +0200
-Message-Id: <cover.1600963096.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH v2 5/5] media: docs: make MC documents more compatible with Sphinx 3.1+
+Date:   Thu, 24 Sep 2020 18:21:49 +0200
+Message-Id: <840088388711c4c4f96e8f0d542455e07c73c018.1600963096.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
+In-Reply-To: <cover.1600963096.git.mchehab+huawei@kernel.org>
+References: <cover.1600963096.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -77,345 +62,798 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jon,
+Sphinx 3.x broke support for the cdomain.py extension, as the
+c domain code was rewritten. Due to that, the c tags need to
+be re-written, in order to use the new c domain notation.
 
-That's she second version of the patch series fixing stuff
-at media docs with Sphinx 3.1
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ .../media/mediactl/media-func-close.rst            | 10 +++-------
+ .../media/mediactl/media-func-ioctl.rst            | 10 +++-------
+ .../media/mediactl/media-func-open.rst             | 10 +++-------
+ .../media/mediactl/media-ioc-device-info.rst       | 13 ++++---------
+ .../media/mediactl/media-ioc-enum-entities.rst     | 11 ++++-------
+ .../media/mediactl/media-ioc-enum-links.rst        | 13 ++++---------
+ .../media/mediactl/media-ioc-g-topology.rst        | 14 ++++----------
+ .../media/mediactl/media-ioc-request-alloc.rst     | 11 +++++------
+ .../media/mediactl/media-ioc-setup-link.rst        | 10 ++++------
+ .../media/mediactl/media-request-ioc-queue.rst     |  7 +++----
+ .../media/mediactl/media-request-ioc-reinit.rst    |  8 ++++----
+ .../userspace-api/media/mediactl/request-api.rst   |  5 +++--
+ .../media/mediactl/request-func-close.rst          |  8 ++------
+ .../media/mediactl/request-func-ioctl.rst          |  8 ++------
+ .../media/mediactl/request-func-poll.rst           | 12 ++++--------
+ 15 files changed, 52 insertions(+), 98 deletions(-)
 
-Patch 1 is identical to the first version. As described before,
-it  adds support at cdomain.py for two notations found on
-Sphinx 3.1:
-
-	:c:expr:
-	.. c:namespace::
-
-The remaining patches remove the cdomain.py dependency from
-the userspace-api/media, making them to produce a decent
-result with both Sphinx 1.x/2.x and 3.1+.
-
-While at the first version, I did the CEC conversion manually, for
-this new version, I wrote a perl script that does the conversion
-automatically:
-
-<script>
-#!/bin/perl
-use strict;
-
-my $namespace = shift or die "need a namespace";
-my $file = shift or die "need a file name";
-
-my $header = 1;
-my $check_next;
-my $changes;
-
-my $out;
-
-open IN, $file;
-while (<IN>) {
-	if ($header) {
-		if (!m/^\.\.\s+_\S+:/) {
-			if (m/^\.\./) {
-				$out .= $_;
-				next;
-			}
-		}
-		$out .= "\.\. c:namespace:: $namespace\n\n";
-		$out .=  $_;
-		$header = 0;
-		next;
-	}
-
-	# Replace :c:func
-	if (s/:c:func:`(\S+) \<\S+\>`/:c:func:`$1`/g) {
-		$out .=  $_;
-		$changes = 1;
-		next;
-	}
-	if (s/:ref:`(poll|open|close|select|mmap|munmap|read|write)\s*\(\)\s+\<\S+\>`/:c:func:`$1()`/g) {
-		$out .=  $_;
-		$changes = 1;
-		next;
-	}
-
-	next if ($check_next && m/^\s+:name:\s+\S+$/);
-
-	if (m/\.\. c:function::\s*int\s+(ioctl)\s*\(\s*([^\)]+),\s*([^\,]+),\s*([^\,]+) \)/
-	    || m/\.\. c:function::\s*int\s+(ioctl)\s*\(\s*([^\,]+),\s*([^\,]+),\s*([^\,]+)\)/) {
-		$check_next = 1;
-		my $arg0 = $1;
-		my $arg1 = $2;
-		my $arg2 = $3;
-		my $arg3 = $4;
-
-		$out .=  ".. c:macro:: $arg2\n\n" if ($arg2 =~ m/^[A-Z_]+$/);
-		$out .=  "``int`` :c:expr:`$arg0($arg1, $arg2, $arg3)`\n";
-		$changes = 1;
-		next;
-	}
-
-	if (m/\.\. c:function:: int\s+(ioctl)\s*\(\s*([^\)]+),\s*([^\,]+) \)/
-	    || m/\.\. c:function:: int\s+(ioctl)\s*\(\s*([^\,]+),\s*([^\,]+)\)/) {
-		$check_next = 1;
-		my $arg0 = $1;
-		my $arg1 = $2;
-		my $arg2 = $3;
-
-		$out .=  ".. c:macro:: $arg2\n\n" if ($arg2 =~ m/^[A-Z_]+$/);
-		$out .=  "``int`` :c:expr:`$arg0($arg1, $arg2)`\n";
-		$changes = 1;
-		next;
-	}
-
-	if (m/\.\. c:function:: /) {
-		$out .=  $_;
-		$changes = 1;
-		$check_next = 1;
-		next;
-	}
-
-	$out .=  $_;
-}
-close IN;
-
-$out =~ s/\n\n\n/\n\n/g;
-
-if ($changes) {
-	open OUT, ">$file";
-	print OUT $out;
-	close OUT;
-}
-</script>
-
-And manually adjusted some issues:
-  - there were a \*argp on some CEC functions;
-  - there were some audio C prototypes with bugs. Sphinx 3.2
-    reported the issue and I manually fixed them.
-
-It should be noticed that the DVB namespace has actually several
-sub-namespaces (audio, video, dmx, ca, net and fe), as it contains
-different APIs for each type of device. 
-
-I'll try to address tomorrow the remaing warnings with Sphinx 3.2.
-
-Mauro Carvalho Chehab (5):
-  docs: cdomain.py: add support for two new Sphinx 3.1+ tags
-  media: docs: make CEC documents compatible with Sphinx 3.1+
-  media: docs: make V4L documents more compatible with Sphinx 3.1+
-  media: docs: make DVB documents more compatible with Sphinx 3.1+
-  media: docs: make MC documents more compatible with Sphinx 3.1+
-
- Documentation/sphinx/cdomain.py               | 56 +++++++++++++-
- .../media/cec/cec-func-close.rst              | 10 +--
- .../media/cec/cec-func-ioctl.rst              | 11 +--
- .../userspace-api/media/cec/cec-func-open.rst | 10 +--
- .../userspace-api/media/cec/cec-func-poll.rst | 14 ++--
- .../media/cec/cec-ioc-adap-g-caps.rst         | 10 +--
- .../media/cec/cec-ioc-adap-g-conn-info.rst    | 11 +--
- .../media/cec/cec-ioc-adap-g-log-addrs.rst    | 20 ++---
- .../media/cec/cec-ioc-adap-g-phys-addr.rst    | 15 ++--
- .../media/cec/cec-ioc-dqevent.rst             | 15 ++--
- .../media/cec/cec-ioc-g-mode.rst              | 16 ++--
- .../media/cec/cec-ioc-receive.rst             | 18 ++---
- .../dvb/audio-bilingual-channel-select.rst    |  7 +-
- .../media/dvb/audio-channel-select.rst        |  8 +-
- .../media/dvb/audio-clear-buffer.rst          |  8 +-
- .../media/dvb/audio-continue.rst              |  7 +-
- .../userspace-api/media/dvb/audio-fclose.rst  |  7 +-
- .../userspace-api/media/dvb/audio-fopen.rst   |  7 +-
- .../userspace-api/media/dvb/audio-fwrite.rst  |  7 +-
- .../media/dvb/audio-get-capabilities.rst      |  8 +-
- .../media/dvb/audio-get-status.rst            |  8 +-
- .../userspace-api/media/dvb/audio-pause.rst   |  9 +--
- .../userspace-api/media/dvb/audio-play.rst    |  7 +-
- .../media/dvb/audio-select-source.rst         |  8 +-
- .../media/dvb/audio-set-av-sync.rst           |  8 +-
- .../media/dvb/audio-set-bypass-mode.rst       |  9 +--
- .../userspace-api/media/dvb/audio-set-id.rst  |  9 +--
- .../media/dvb/audio-set-mixer.rst             |  9 +--
- .../media/dvb/audio-set-mute.rst              |  8 +-
- .../media/dvb/audio-set-streamtype.rst        | 10 +--
- .../userspace-api/media/dvb/audio-stop.rst    |  9 +--
- .../userspace-api/media/dvb/ca-fclose.rst     |  7 +-
- .../userspace-api/media/dvb/ca-fopen.rst      |  7 +-
- .../userspace-api/media/dvb/ca-get-cap.rst    |  8 +-
- .../media/dvb/ca-get-descr-info.rst           |  9 ++-
- .../userspace-api/media/dvb/ca-get-msg.rst    | 10 +--
- .../media/dvb/ca-get-slot-info.rst            |  9 +--
- .../userspace-api/media/dvb/ca-reset.rst      |  9 +--
- .../userspace-api/media/dvb/ca-send-msg.rst   |  9 +--
- .../userspace-api/media/dvb/ca-set-descr.rst  |  8 +-
- .../userspace-api/media/dvb/dmx-add-pid.rst   | 10 +--
- .../userspace-api/media/dvb/dmx-expbuf.rst    | 11 +--
- .../userspace-api/media/dvb/dmx-fclose.rst    |  9 +--
- .../userspace-api/media/dvb/dmx-fopen.rst     |  5 +-
- .../userspace-api/media/dvb/dmx-fread.rst     |  7 +-
- .../userspace-api/media/dvb/dmx-fwrite.rst    |  6 +-
- .../media/dvb/dmx-get-pes-pids.rst            | 12 ++-
- .../userspace-api/media/dvb/dmx-get-stc.rst   | 12 ++-
- .../userspace-api/media/dvb/dmx-mmap.rst      | 15 ++--
- .../userspace-api/media/dvb/dmx-munmap.rst    | 14 ++--
- .../userspace-api/media/dvb/dmx-qbuf.rst      | 17 ++---
- .../userspace-api/media/dvb/dmx-querybuf.rst  |  9 +--
- .../media/dvb/dmx-remove-pid.rst              | 10 +--
- .../userspace-api/media/dvb/dmx-reqbufs.rst   |  9 +--
- .../media/dvb/dmx-set-buffer-size.rst         | 10 +--
- .../media/dvb/dmx-set-filter.rst              | 12 ++-
- .../media/dvb/dmx-set-pes-filter.rst          | 13 +---
- .../userspace-api/media/dvb/dmx-start.rst     | 11 +--
- .../userspace-api/media/dvb/dmx-stop.rst      |  9 +--
- .../media/dvb/fe-diseqc-recv-slave-reply.rst  |  9 +--
- .../media/dvb/fe-diseqc-reset-overload.rst    |  9 +--
- .../media/dvb/fe-diseqc-send-burst.rst        | 10 +--
- .../media/dvb/fe-diseqc-send-master-cmd.rst   |  9 +--
- .../dvb/fe-dishnetwork-send-legacy-cmd.rst    | 10 +--
- .../media/dvb/fe-enable-high-lnb-voltage.rst  | 10 +--
- .../userspace-api/media/dvb/fe-get-event.rst  | 12 +--
- .../media/dvb/fe-get-frontend.rst             | 12 +--
- .../userspace-api/media/dvb/fe-get-info.rst   | 11 +--
- .../media/dvb/fe-get-property.rst             | 15 ++--
- .../userspace-api/media/dvb/fe-read-ber.rst   |  9 +--
- .../media/dvb/fe-read-signal-strength.rst     |  9 +--
- .../userspace-api/media/dvb/fe-read-snr.rst   |  9 +--
- .../media/dvb/fe-read-status.rst              | 11 +--
- .../media/dvb/fe-read-uncorrected-blocks.rst  |  9 +--
- .../media/dvb/fe-set-frontend-tune-mode.rst   | 10 +--
- .../media/dvb/fe-set-frontend.rst             | 11 +--
- .../userspace-api/media/dvb/fe-set-tone.rst   | 10 +--
- .../media/dvb/fe-set-voltage.rst              | 10 +--
- .../media/dvb/frontend_f_close.rst            |  8 +-
- .../media/dvb/frontend_f_open.rst             | 10 +--
- .../userspace-api/media/dvb/net-add-if.rst    |  9 +--
- .../userspace-api/media/dvb/net-get-if.rst    | 10 +--
- .../userspace-api/media/dvb/net-remove-if.rst | 10 +--
- .../media/dvb/video-clear-buffer.rst          |  8 +-
- .../userspace-api/media/dvb/video-command.rst | 10 +--
- .../media/dvb/video-continue.rst              |  8 +-
- .../media/dvb/video-fast-forward.rst          | 10 +--
- .../userspace-api/media/dvb/video-fclose.rst  |  6 +-
- .../userspace-api/media/dvb/video-fopen.rst   |  6 +-
- .../userspace-api/media/dvb/video-freeze.rst  |  8 +-
- .../userspace-api/media/dvb/video-fwrite.rst  |  6 +-
- .../media/dvb/video-get-capabilities.rst      |  8 +-
- .../media/dvb/video-get-event.rst             |  8 +-
- .../media/dvb/video-get-frame-count.rst       |  8 +-
- .../userspace-api/media/dvb/video-get-pts.rst |  8 +-
- .../media/dvb/video-get-size.rst              |  8 +-
- .../media/dvb/video-get-status.rst            |  7 +-
- .../userspace-api/media/dvb/video-play.rst    |  8 +-
- .../media/dvb/video-select-source.rst         |  7 +-
- .../media/dvb/video-set-blank.rst             |  8 +-
- .../media/dvb/video-set-display-format.rst    |  8 +-
- .../media/dvb/video-set-format.rst            |  9 +--
- .../media/dvb/video-set-streamtype.rst        |  8 +-
- .../media/dvb/video-slowmotion.rst            | 10 +--
- .../media/dvb/video-stillpicture.rst          |  8 +-
- .../userspace-api/media/dvb/video-stop.rst    |  8 +-
- .../media/dvb/video-try-command.rst           |  8 +-
- .../media/mediactl/media-func-close.rst       | 10 +--
- .../media/mediactl/media-func-ioctl.rst       | 10 +--
- .../media/mediactl/media-func-open.rst        | 10 +--
- .../media/mediactl/media-ioc-device-info.rst  | 13 +---
- .../mediactl/media-ioc-enum-entities.rst      | 11 +--
- .../media/mediactl/media-ioc-enum-links.rst   | 13 +---
- .../media/mediactl/media-ioc-g-topology.rst   | 14 +---
- .../mediactl/media-ioc-request-alloc.rst      | 11 ++-
- .../media/mediactl/media-ioc-setup-link.rst   | 10 +--
- .../mediactl/media-request-ioc-queue.rst      |  7 +-
- .../mediactl/media-request-ioc-reinit.rst     |  8 +-
- .../media/mediactl/request-api.rst            |  5 +-
- .../media/mediactl/request-func-close.rst     |  8 +-
- .../media/mediactl/request-func-ioctl.rst     |  8 +-
- .../media/mediactl/request-func-poll.rst      | 12 +--
- .../userspace-api/media/v4l/buffer.rst        | 14 +---
- .../userspace-api/media/v4l/dev-capture.rst   |  7 +-
- .../userspace-api/media/v4l/dev-output.rst    |  7 +-
- .../userspace-api/media/v4l/dev-raw-vbi.rst   | 19 ++---
- .../userspace-api/media/v4l/dev-rds.rst       | 12 +--
- .../media/v4l/dev-sliced-vbi.rst              | 31 ++------
- .../userspace-api/media/v4l/diff-v4l.rst      | 39 ++--------
- .../userspace-api/media/v4l/dmabuf.rst        |  8 +-
- .../userspace-api/media/v4l/format.rst        |  7 +-
- .../userspace-api/media/v4l/func-close.rst    |  8 +-
- .../userspace-api/media/v4l/func-ioctl.rst    | 10 +--
- .../userspace-api/media/v4l/func-mmap.rst     | 18 ++---
- .../userspace-api/media/v4l/func-munmap.rst   | 14 ++--
- .../userspace-api/media/v4l/func-open.rst     | 14 ++--
- .../userspace-api/media/v4l/func-poll.rst     | 40 +++++-----
- .../userspace-api/media/v4l/func-read.rst     | 39 +++++-----
- .../userspace-api/media/v4l/func-select.rst   | 42 +++++-----
- .../userspace-api/media/v4l/func-write.rst    | 13 ++--
- .../userspace-api/media/v4l/hist-v4l2.rst     | 76 +------------------
- Documentation/userspace-api/media/v4l/io.rst  |  6 +-
- .../media/v4l/libv4l-introduction.rst         | 30 ++++----
- .../userspace-api/media/v4l/mmap.rst          | 26 +++----
- .../userspace-api/media/v4l/open.rst          | 15 ++--
- Documentation/userspace-api/media/v4l/rw.rst  | 18 ++---
- .../userspace-api/media/v4l/streaming-par.rst |  5 +-
- .../userspace-api/media/v4l/userp.rst         | 11 +--
- .../media/v4l/vidioc-create-bufs.rst          | 11 +--
- .../media/v4l/vidioc-cropcap.rst              | 11 +--
- .../media/v4l/vidioc-dbg-g-chip-info.rst      | 13 +---
- .../media/v4l/vidioc-dbg-g-register.rst       | 18 ++---
- .../media/v4l/vidioc-decoder-cmd.rst          | 19 ++---
- .../media/v4l/vidioc-dqevent.rst              | 19 +----
- .../media/v4l/vidioc-dv-timings-cap.rst       | 17 ++---
- .../media/v4l/vidioc-encoder-cmd.rst          | 25 +++---
- .../media/v4l/vidioc-enum-dv-timings.rst      | 16 ++--
- .../media/v4l/vidioc-enum-fmt.rst             | 12 +--
- .../media/v4l/vidioc-enum-frameintervals.rst  | 15 +---
- .../media/v4l/vidioc-enum-framesizes.rst      | 16 +---
- .../media/v4l/vidioc-enum-freq-bands.rst      | 12 +--
- .../media/v4l/vidioc-enumaudio.rst            | 10 +--
- .../media/v4l/vidioc-enumaudioout.rst         | 10 +--
- .../media/v4l/vidioc-enuminput.rst            | 14 +---
- .../media/v4l/vidioc-enumoutput.rst           | 13 +---
- .../media/v4l/vidioc-enumstd.rst              | 23 ++----
- .../userspace-api/media/v4l/vidioc-expbuf.rst | 14 +---
- .../media/v4l/vidioc-g-audio.rst              | 18 ++---
- .../media/v4l/vidioc-g-audioout.rst           | 16 ++--
- .../userspace-api/media/v4l/vidioc-g-crop.rst | 16 ++--
- .../userspace-api/media/v4l/vidioc-g-ctrl.rst | 16 ++--
- .../media/v4l/vidioc-g-dv-timings.rst         | 26 +++----
- .../userspace-api/media/v4l/vidioc-g-edid.rst | 25 +++---
- .../media/v4l/vidioc-g-enc-index.rst          | 13 +---
- .../media/v4l/vidioc-g-ext-ctrls.rst          | 21 ++---
- .../userspace-api/media/v4l/vidioc-g-fbuf.rst | 18 ++---
- .../userspace-api/media/v4l/vidioc-g-fmt.rst  | 22 +++---
- .../media/v4l/vidioc-g-frequency.rst          | 16 ++--
- .../media/v4l/vidioc-g-input.rst              | 15 ++--
- .../media/v4l/vidioc-g-jpegcomp.rst           | 17 ++---
- .../media/v4l/vidioc-g-modulator.rst          | 17 ++---
- .../media/v4l/vidioc-g-output.rst             | 15 ++--
- .../userspace-api/media/v4l/vidioc-g-parm.rst | 30 +++-----
- .../media/v4l/vidioc-g-priority.rst           | 16 ++--
- .../media/v4l/vidioc-g-selection.rst          | 15 ++--
- .../media/v4l/vidioc-g-sliced-vbi-cap.rst     | 12 +--
- .../userspace-api/media/v4l/vidioc-g-std.rst  | 24 +++---
- .../media/v4l/vidioc-g-tuner.rst              | 19 ++---
- .../media/v4l/vidioc-log-status.rst           | 10 +--
- .../media/v4l/vidioc-overlay.rst              | 10 +--
- .../media/v4l/vidioc-prepare-buf.rst          | 10 +--
- .../userspace-api/media/v4l/vidioc-qbuf.rst   | 17 ++---
- .../media/v4l/vidioc-query-dv-timings.rst     | 15 ++--
- .../media/v4l/vidioc-querybuf.rst             | 10 +--
- .../media/v4l/vidioc-querycap.rst             | 16 ++--
- .../media/v4l/vidioc-queryctrl.rst            | 22 ++----
- .../media/v4l/vidioc-querystd.rst             | 15 ++--
- .../media/v4l/vidioc-reqbufs.rst              | 10 +--
- .../media/v4l/vidioc-s-hw-freq-seek.rst       | 11 +--
- .../media/v4l/vidioc-streamon.rst             | 14 ++--
- .../v4l/vidioc-subdev-enum-frame-interval.rst | 10 +--
- .../v4l/vidioc-subdev-enum-frame-size.rst     | 11 +--
- .../v4l/vidioc-subdev-enum-mbus-code.rst      | 11 +--
- .../media/v4l/vidioc-subdev-g-crop.rst        | 16 ++--
- .../media/v4l/vidioc-subdev-g-fmt.rst         | 17 ++---
- .../v4l/vidioc-subdev-g-frame-interval.rst    | 16 ++--
- .../media/v4l/vidioc-subdev-g-selection.rst   | 17 ++---
- .../media/v4l/vidioc-subdev-querycap.rst      |  9 +--
- .../media/v4l/vidioc-subscribe-event.rst      | 17 ++---
- 209 files changed, 1058 insertions(+), 1649 deletions(-)
-
+diff --git a/Documentation/userspace-api/media/mediactl/media-func-close.rst b/Documentation/userspace-api/media/mediactl/media-func-close.rst
+index ec571b34ce69..8ac2443e76c1 100644
+--- a/Documentation/userspace-api/media/mediactl/media-func-close.rst
++++ b/Documentation/userspace-api/media/mediactl/media-func-close.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++.. c:namespace:: MC
+ 
+ .. _media-func-close:
+ 
+@@ -11,7 +12,6 @@ Name
+ 
+ media-close - Close a media device
+ 
+-
+ Synopsis
+ ========
+ 
+@@ -19,16 +19,13 @@ Synopsis
+ 
+     #include <unistd.h>
+ 
+-
+ .. c:function:: int close( int fd )
+-    :name: mc-close
+ 
+ Arguments
+ =========
+ 
+ ``fd``
+-    File descriptor returned by :c:func:`open() <mc-open>`.
+-
++    File descriptor returned by :c:func:`open()`.
+ 
+ Description
+ ===========
+@@ -36,11 +33,10 @@ Description
+ Closes the media device. Resources associated with the file descriptor
+ are freed. The device configuration remain unchanged.
+ 
+-
+ Return Value
+ ============
+ 
+-:ref:`close() <media-func-close>` returns 0 on success. On error, -1 is returned, and
++:c:func:`close()` returns 0 on success. On error, -1 is returned, and
+ ``errno`` is set appropriately. Possible error codes are:
+ 
+ EBADF
+diff --git a/Documentation/userspace-api/media/mediactl/media-func-ioctl.rst b/Documentation/userspace-api/media/mediactl/media-func-ioctl.rst
+index 35ed549bec0e..e69b315faaad 100644
+--- a/Documentation/userspace-api/media/mediactl/media-func-ioctl.rst
++++ b/Documentation/userspace-api/media/mediactl/media-func-ioctl.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++.. c:namespace:: MC
+ 
+ .. _media-func-ioctl:
+ 
+@@ -11,7 +12,6 @@ Name
+ 
+ media-ioctl - Control a media device
+ 
+-
+ Synopsis
+ ========
+ 
+@@ -19,15 +19,13 @@ Synopsis
+ 
+     #include <sys/ioctl.h>
+ 
+-
+-.. c:function:: int ioctl( int fd, int request, void *argp )
+-    :name: mc-ioctl
++``int`` :c:expr:`ioctl(int fd, int request, void *argp)`
+ 
+ Arguments
+ =========
+ 
+ ``fd``
+-    File descriptor returned by :c:func:`open() <mc-open>`.
++    File descriptor returned by :c:func:`open()`.
+ 
+ ``request``
+     Media ioctl request code as defined in the media.h header file, for
+@@ -36,7 +34,6 @@ Arguments
+ ``argp``
+     Pointer to a request-specific structure.
+ 
+-
+ Description
+ ===========
+ 
+@@ -52,7 +49,6 @@ their parameters are located in the media.h header file. All media ioctl
+ requests, their respective function and parameters are specified in
+ :ref:`media-user-func`.
+ 
+-
+ Return Value
+ ============
+ 
+diff --git a/Documentation/userspace-api/media/mediactl/media-func-open.rst b/Documentation/userspace-api/media/mediactl/media-func-open.rst
+index 2c2595157ea3..24487cb0a308 100644
+--- a/Documentation/userspace-api/media/mediactl/media-func-open.rst
++++ b/Documentation/userspace-api/media/mediactl/media-func-open.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++.. c:namespace:: MC
+ 
+ .. _media-func-open:
+ 
+@@ -11,7 +12,6 @@ Name
+ 
+ media-open - Open a media device
+ 
+-
+ Synopsis
+ ========
+ 
+@@ -19,9 +19,7 @@ Synopsis
+ 
+     #include <fcntl.h>
+ 
+-
+ .. c:function:: int open( const char *device_name, int flags )
+-    :name: mc-open
+ 
+ Arguments
+ =========
+@@ -33,11 +31,10 @@ Arguments
+     Open flags. Access mode must be either ``O_RDONLY`` or ``O_RDWR``.
+     Other flags have no effect.
+ 
+-
+ Description
+ ===========
+ 
+-To open a media device applications call :ref:`open() <media-func-open>` with the
++To open a media device applications call :c:func:`open()` with the
+ desired device name. The function has no side effects; the device
+ configuration remain unchanged.
+ 
+@@ -45,11 +42,10 @@ When the device is opened in read-only mode, attempts to modify its
+ configuration will result in an error, and ``errno`` will be set to
+ EBADF.
+ 
+-
+ Return Value
+ ============
+ 
+-:ref:`open() <func-open>` returns the new file descriptor on success. On error,
++:c:func:`open()` returns the new file descriptor on success. On error,
+ -1 is returned, and ``errno`` is set appropriately. Possible error codes
+ are:
+ 
+diff --git a/Documentation/userspace-api/media/mediactl/media-ioc-device-info.rst b/Documentation/userspace-api/media/mediactl/media-ioc-device-info.rst
+index cde1ddfc0bfb..6608caccd10f 100644
+--- a/Documentation/userspace-api/media/mediactl/media-ioc-device-info.rst
++++ b/Documentation/userspace-api/media/mediactl/media-ioc-device-info.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++.. c:namespace:: MC
+ 
+ .. _media_ioc_device_info:
+ 
+@@ -11,24 +12,22 @@ Name
+ 
+ MEDIA_IOC_DEVICE_INFO - Query device information
+ 
+-
+ Synopsis
+ ========
+ 
+-.. c:function:: int ioctl( int fd, MEDIA_IOC_DEVICE_INFO, struct media_device_info *argp )
+-    :name: MEDIA_IOC_DEVICE_INFO
++.. c:macro:: MEDIA_IOC_DEVICE_INFO
+ 
++``int`` :c:expr:`ioctl(int fd, MEDIA_IOC_DEVICE_INFO, struct media_device_info *argp)`
+ 
+ Arguments
+ =========
+ 
+ ``fd``
+-    File descriptor returned by :ref:`open() <media-func-open>`.
++    File descriptor returned by :c:func:`open()`.
+ 
+ ``argp``
+     Pointer to struct :c:type:`media_device_info`.
+ 
+-
+ Description
+ ===========
+ 
+@@ -38,7 +37,6 @@ a struct :c:type:`media_device_info`. The driver
+ fills the structure and returns the information to the application. The
+ ioctl never fails.
+ 
+-
+ .. c:type:: media_device_info
+ 
+ .. tabularcolumns:: |p{4.4cm}|p{4.4cm}|p{8.7cm}|
+@@ -48,7 +46,6 @@ ioctl never fails.
+     :stub-columns: 0
+     :widths:       1 1 2
+ 
+-
+     *  -  char
+        -  ``driver``\ [16]
+        -  Name of the driver implementing the media API as a NUL-terminated
+@@ -94,7 +91,6 @@ ioctl never fails.
+        -  Reserved for future extensions. Drivers and applications must set
+ 	  this array to zero.
+ 
+-
+ The ``serial`` and ``bus_info`` fields can be used to distinguish
+ between multiple instances of otherwise identical hardware. The serial
+ number takes precedence when provided and can be assumed to be unique.
+@@ -102,7 +98,6 @@ If the serial number is an empty string, the ``bus_info`` field can be
+ used instead. The ``bus_info`` field is guaranteed to be unique, but can
+ vary across reboots or device unplug/replug.
+ 
+-
+ Return Value
+ ============
+ 
+diff --git a/Documentation/userspace-api/media/mediactl/media-ioc-enum-entities.rst b/Documentation/userspace-api/media/mediactl/media-ioc-enum-entities.rst
+index 93e35f198f47..2795b513688f 100644
+--- a/Documentation/userspace-api/media/mediactl/media-ioc-enum-entities.rst
++++ b/Documentation/userspace-api/media/mediactl/media-ioc-enum-entities.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++.. c:namespace:: MC
+ 
+ .. _media_ioc_enum_entities:
+ 
+@@ -11,24 +12,22 @@ Name
+ 
+ MEDIA_IOC_ENUM_ENTITIES - Enumerate entities and their properties
+ 
+-
+ Synopsis
+ ========
+ 
+-.. c:function:: int ioctl( int fd, MEDIA_IOC_ENUM_ENTITIES, struct media_entity_desc *argp )
+-    :name: MEDIA_IOC_ENUM_ENTITIES
++.. c:macro:: MEDIA_IOC_ENUM_ENTITIES
+ 
++``int`` :c:expr:`ioctl(int fd, MEDIA_IOC_ENUM_ENTITIES, struct media_entity_desc *argp)`
+ 
+ Arguments
+ =========
+ 
+ ``fd``
+-    File descriptor returned by :ref:`open() <media-func-open>`.
++    File descriptor returned by :c:func:`open()`.
+ 
+ ``argp``
+     Pointer to struct :c:type:`media_entity_desc`.
+ 
+-
+ Description
+ ===========
+ 
+@@ -49,7 +48,6 @@ Entity IDs can be non-contiguous. Applications must *not* try to
+ enumerate entities by calling MEDIA_IOC_ENUM_ENTITIES with increasing
+ id's until they get an error.
+ 
+-
+ .. c:type:: media_entity_desc
+ 
+ .. tabularcolumns:: |p{1.5cm}|p{1.7cm}|p{1.6cm}|p{1.5cm}|p{11.2cm}|
+@@ -136,7 +134,6 @@ id's until they get an error.
+     *  - }
+        -
+ 
+-
+ Return Value
+ ============
+ 
+diff --git a/Documentation/userspace-api/media/mediactl/media-ioc-enum-links.rst b/Documentation/userspace-api/media/mediactl/media-ioc-enum-links.rst
+index f3e94c7b5dc3..9fe198a5bc92 100644
+--- a/Documentation/userspace-api/media/mediactl/media-ioc-enum-links.rst
++++ b/Documentation/userspace-api/media/mediactl/media-ioc-enum-links.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++.. c:namespace:: MC
+ 
+ .. _media_ioc_enum_links:
+ 
+@@ -11,24 +12,22 @@ Name
+ 
+ MEDIA_IOC_ENUM_LINKS - Enumerate all pads and links for a given entity
+ 
+-
+ Synopsis
+ ========
+ 
+-.. c:function:: int ioctl( int fd, MEDIA_IOC_ENUM_LINKS, struct media_links_enum *argp )
+-    :name: MEDIA_IOC_ENUM_LINKS
++.. c:macro:: MEDIA_IOC_ENUM_LINKS
+ 
++``int`` :c:expr:`ioctl(int fd, MEDIA_IOC_ENUM_LINKS, struct media_links_enum *argp)`
+ 
+ Arguments
+ =========
+ 
+ ``fd``
+-    File descriptor returned by :ref:`open() <media-func-open>`.
++    File descriptor returned by :c:func:`open()`.
+ 
+ ``argp``
+     Pointer to struct :c:type:`media_links_enum`.
+ 
+-
+ Description
+ ===========
+ 
+@@ -53,7 +52,6 @@ outbound links can be retrieved with :ref:`MEDIA_IOC_ENUM_ENTITIES`.
+ Only forward links that originate at one of the entity's source pads are
+ returned during the enumeration process.
+ 
+-
+ .. c:type:: media_links_enum
+ 
+ .. tabularcolumns:: |p{4.4cm}|p{4.4cm}|p{8.7cm}|
+@@ -82,7 +80,6 @@ returned during the enumeration process.
+        -  Reserved for future extensions. Drivers and applications must set
+           the array to zero.
+ 
+-
+ .. c:type:: media_pad_desc
+ 
+ .. tabularcolumns:: |p{4.4cm}|p{4.4cm}|p{8.7cm}|
+@@ -110,7 +107,6 @@ returned during the enumeration process.
+           the array to zero.
+ 
+ 
+-
+ .. c:type:: media_link_desc
+ 
+ .. tabularcolumns:: |p{4.4cm}|p{4.4cm}|p{8.7cm}|
+@@ -137,7 +133,6 @@ returned during the enumeration process.
+        -  Reserved for future extensions. Drivers and applications must set
+           the array to zero.
+ 
+-
+ Return Value
+ ============
+ 
+diff --git a/Documentation/userspace-api/media/mediactl/media-ioc-g-topology.rst b/Documentation/userspace-api/media/mediactl/media-ioc-g-topology.rst
+index 9b7d2296b7fd..a1020f78d0cf 100644
+--- a/Documentation/userspace-api/media/mediactl/media-ioc-g-topology.rst
++++ b/Documentation/userspace-api/media/mediactl/media-ioc-g-topology.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++.. c:namespace:: MC
+ 
+ .. _media_ioc_g_topology:
+ 
+@@ -11,24 +12,22 @@ Name
+ 
+ MEDIA_IOC_G_TOPOLOGY - Enumerate the graph topology and graph element properties
+ 
+-
+ Synopsis
+ ========
+ 
+-.. c:function:: int ioctl( int fd, MEDIA_IOC_G_TOPOLOGY, struct media_v2_topology *argp )
+-    :name: MEDIA_IOC_G_TOPOLOGY
++.. c:macro:: MEDIA_IOC_G_TOPOLOGY
+ 
++``int`` :c:expr:`ioctl(int fd, MEDIA_IOC_G_TOPOLOGY, struct media_v2_topology *argp)`
+ 
+ Arguments
+ =========
+ 
+ ``fd``
+-    File descriptor returned by :ref:`open() <media-func-open>`.
++    File descriptor returned by :c:func:`open()`.
+ 
+ ``argp``
+     Pointer to struct :c:type:`media_v2_topology`.
+ 
+-
+ Description
+ ===========
+ 
+@@ -120,7 +119,6 @@ desired arrays with the media graph elements.
+ 	  converted to a 64-bits integer. It can be zero. if zero, the ioctl
+ 	  won't store the links. It will just update ``num_links``
+ 
+-
+ .. tabularcolumns:: |p{1.6cm}|p{3.2cm}|p{12.7cm}|
+ 
+ .. c:type:: media_v2_entity
+@@ -158,7 +156,6 @@ desired arrays with the media graph elements.
+        -  Reserved for future extensions. Drivers and applications must set
+ 	  this array to zero.
+ 
+-
+ .. tabularcolumns:: |p{1.6cm}|p{3.2cm}|p{12.7cm}|
+ 
+ .. c:type:: media_v2_interface
+@@ -192,7 +189,6 @@ desired arrays with the media graph elements.
+        -  Used only for device node interfaces. See
+ 	  :c:type:`media_v2_intf_devnode` for details.
+ 
+-
+ .. tabularcolumns:: |p{1.6cm}|p{3.2cm}|p{12.7cm}|
+ 
+ .. c:type:: media_v2_intf_devnode
+@@ -245,7 +241,6 @@ desired arrays with the media graph elements.
+        -  Reserved for future extensions. Drivers and applications must set
+ 	  this array to zero.
+ 
+-
+ .. tabularcolumns:: |p{1.6cm}|p{3.2cm}|p{12.7cm}|
+ 
+ .. c:type:: media_v2_link
+@@ -282,7 +277,6 @@ desired arrays with the media graph elements.
+        -  Reserved for future extensions. Drivers and applications must set
+ 	  this array to zero.
+ 
+-
+ Return Value
+ ============
+ 
+diff --git a/Documentation/userspace-api/media/mediactl/media-ioc-request-alloc.rst b/Documentation/userspace-api/media/mediactl/media-ioc-request-alloc.rst
+index ea05ff0c5382..fce661bed716 100644
+--- a/Documentation/userspace-api/media/mediactl/media-ioc-request-alloc.rst
++++ b/Documentation/userspace-api/media/mediactl/media-ioc-request-alloc.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
++.. c:namespace:: MC
+ 
+ .. _media_ioc_request_alloc:
+ 
+@@ -11,24 +12,22 @@ Name
+ 
+ MEDIA_IOC_REQUEST_ALLOC - Allocate a request
+ 
+-
+ Synopsis
+ ========
+ 
+-.. c:function:: int ioctl( int fd, MEDIA_IOC_REQUEST_ALLOC, int *argp )
+-    :name: MEDIA_IOC_REQUEST_ALLOC
++.. c:macro:: MEDIA_IOC_REQUEST_ALLOC
+ 
++``int`` :c:expr:`ioctl(int fd, MEDIA_IOC_REQUEST_ALLOC, int *argp)`
+ 
+ Arguments
+ =========
+ 
+ ``fd``
+-    File descriptor returned by :ref:`open() <media-func-open>`.
++    File descriptor returned by :c:func:`open()`.
+ 
+ ``argp``
+     Pointer to an integer.
+ 
+-
+ Description
+ ===========
+ 
+@@ -51,7 +50,7 @@ Finally, the file descriptor can be :ref:`polled <request-func-poll>` to wait
+ for the request to complete.
+ 
+ The request will remain allocated until all the file descriptors associated
+-with it are closed by :ref:`close() <request-func-close>` and the driver no
++with it are closed by :c:func:`close()` and the driver no
+ longer uses the request internally. See also
+ :ref:`here <media-request-life-time>` for more information.
+ 
+diff --git a/Documentation/userspace-api/media/mediactl/media-ioc-setup-link.rst b/Documentation/userspace-api/media/mediactl/media-ioc-setup-link.rst
+index e2aa51015783..cefca682c8d6 100644
+--- a/Documentation/userspace-api/media/mediactl/media-ioc-setup-link.rst
++++ b/Documentation/userspace-api/media/mediactl/media-ioc-setup-link.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++.. c:namespace:: MC
+ 
+ .. _media_ioc_setup_link:
+ 
+@@ -11,24 +12,22 @@ Name
+ 
+ MEDIA_IOC_SETUP_LINK - Modify the properties of a link
+ 
+-
+ Synopsis
+ ========
+ 
+-.. c:function:: int ioctl( int fd, MEDIA_IOC_SETUP_LINK, struct media_link_desc *argp )
+-    :name: MEDIA_IOC_SETUP_LINK
++.. c:macro:: MEDIA_IOC_SETUP_LINK
+ 
++``int`` :c:expr:`ioctl(int fd, MEDIA_IOC_SETUP_LINK, struct media_link_desc *argp)`
+ 
+ Arguments
+ =========
+ 
+ ``fd``
+-    File descriptor returned by :ref:`open() <media-func-open>`.
++    File descriptor returned by :c:func:`open()`.
+ 
+ ``argp``
+     Pointer to struct :c:type:`media_link_desc`.
+ 
+-
+ Description
+ ===========
+ 
+@@ -53,7 +52,6 @@ non-dynamic link will return an ``EBUSY`` error code.
+ If the specified link can't be found the driver returns with an ``EINVAL``
+ error code.
+ 
+-
+ Return Value
+ ============
+ 
+diff --git a/Documentation/userspace-api/media/mediactl/media-request-ioc-queue.rst b/Documentation/userspace-api/media/mediactl/media-request-ioc-queue.rst
+index ca1b33196242..784822592e47 100644
+--- a/Documentation/userspace-api/media/mediactl/media-request-ioc-queue.rst
++++ b/Documentation/userspace-api/media/mediactl/media-request-ioc-queue.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
++.. c:namespace:: MC
+ 
+ .. _media_request_ioc_queue:
+ 
+@@ -11,13 +12,12 @@ Name
+ 
+ MEDIA_REQUEST_IOC_QUEUE - Queue a request
+ 
+-
+ Synopsis
+ ========
+ 
+-.. c:function:: int ioctl( int request_fd, MEDIA_REQUEST_IOC_QUEUE )
+-    :name: MEDIA_REQUEST_IOC_QUEUE
++.. c:macro:: MEDIA_REQUEST_IOC_QUEUE
+ 
++``int`` :c:expr:`ioctl(int request_fd, MEDIA_REQUEST_IOC_QUEUE)`
+ 
+ Arguments
+ =========
+@@ -25,7 +25,6 @@ Arguments
+ ``request_fd``
+     File descriptor returned by :ref:`MEDIA_IOC_REQUEST_ALLOC`.
+ 
+-
+ Description
+ ===========
+ 
+diff --git a/Documentation/userspace-api/media/mediactl/media-request-ioc-reinit.rst b/Documentation/userspace-api/media/mediactl/media-request-ioc-reinit.rst
+index cfd503bdef70..6a3264759985 100644
+--- a/Documentation/userspace-api/media/mediactl/media-request-ioc-reinit.rst
++++ b/Documentation/userspace-api/media/mediactl/media-request-ioc-reinit.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
++.. c:namespace:: MC
+ 
+ .. _media_request_ioc_reinit:
+ 
+@@ -11,13 +12,12 @@ Name
+ 
+ MEDIA_REQUEST_IOC_REINIT - Re-initialize a request
+ 
+-
+ Synopsis
+ ========
+ 
+-.. c:function:: int ioctl( int request_fd, MEDIA_REQUEST_IOC_REINIT )
+-    :name: MEDIA_REQUEST_IOC_REINIT
++.. c:macro:: MEDIA_REQUEST_IOC_REINIT
+ 
++``int`` :c:expr:`ioctl(int request_fd, MEDIA_REQUEST_IOC_REINIT)`
+ 
+ Arguments
+ =========
+@@ -33,7 +33,7 @@ this request ioctl can be used to re-initialize a previously allocated
+ request.
+ 
+ Re-initializing a request will clear any existing data from the request.
+-This avoids having to :ref:`close() <request-func-close>` a completed
++This avoids having to :c:func:`close()` a completed
+ request and allocate a new request. Instead the completed request can just
+ be re-initialized and it is ready to be used again.
+ 
+diff --git a/Documentation/userspace-api/media/mediactl/request-api.rst b/Documentation/userspace-api/media/mediactl/request-api.rst
+index c0fa4dbb2b28..6c4cbd9f08a5 100644
+--- a/Documentation/userspace-api/media/mediactl/request-api.rst
++++ b/Documentation/userspace-api/media/mediactl/request-api.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
++.. c:namespace:: MC
+ 
+ .. _media-request-api:
+ 
+@@ -93,7 +94,7 @@ regardless of whether a request is in use or not.
+    Setting the same control through a request and also directly can lead to
+    undefined behavior!
+ 
+-User-space can :ref:`poll() <request-func-poll>` a request file descriptor in
++User-space can :c:func:`poll()` a request file descriptor in
+ order to wait until the request completes. A request is considered complete
+ once all its associated buffers are available for dequeuing and all the
+ associated controls have been updated with the values at the time of completion.
+@@ -115,7 +116,7 @@ Recycling and Destruction
+ -------------------------
+ 
+ Finally, a completed request can either be discarded or be reused. Calling
+-:ref:`close() <request-func-close>` on a request file descriptor will make
++:c:func:`close()` on a request file descriptor will make
+ that file descriptor unusable and the request will be freed once it is no
+ longer in use by the kernel. That is, if the request is queued and then the
+ file descriptor is closed, then it won't be freed until the driver completed
+diff --git a/Documentation/userspace-api/media/mediactl/request-func-close.rst b/Documentation/userspace-api/media/mediactl/request-func-close.rst
+index 04e00bb9defd..a225c2762f28 100644
+--- a/Documentation/userspace-api/media/mediactl/request-func-close.rst
++++ b/Documentation/userspace-api/media/mediactl/request-func-close.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
++.. c:namespace:: MC
+ 
+ .. _request-func-close:
+ 
+@@ -11,7 +12,6 @@ Name
+ 
+ request-close - Close a request file descriptor
+ 
+-
+ Synopsis
+ ========
+ 
+@@ -19,9 +19,7 @@ Synopsis
+ 
+     #include <unistd.h>
+ 
+-
+ .. c:function:: int close( int fd )
+-    :name: req-close
+ 
+ Arguments
+ =========
+@@ -29,7 +27,6 @@ Arguments
+ ``fd``
+     File descriptor returned by :ref:`MEDIA_IOC_REQUEST_ALLOC`.
+ 
+-
+ Description
+ ===========
+ 
+@@ -38,11 +35,10 @@ are freed once all file descriptors associated with the request are closed
+ and the driver has completed the request.
+ See :ref:`here <media-request-life-time>` for more information.
+ 
+-
+ Return Value
+ ============
+ 
+-:ref:`close() <request-func-close>` returns 0 on success. On error, -1 is
++:c:func:`close()` returns 0 on success. On error, -1 is
+ returned, and ``errno`` is set appropriately. Possible error codes are:
+ 
+ EBADF
+diff --git a/Documentation/userspace-api/media/mediactl/request-func-ioctl.rst b/Documentation/userspace-api/media/mediactl/request-func-ioctl.rst
+index 1e1c5edb860c..b80757b3bc42 100644
+--- a/Documentation/userspace-api/media/mediactl/request-func-ioctl.rst
++++ b/Documentation/userspace-api/media/mediactl/request-func-ioctl.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
++.. c:namespace:: MC
+ 
+ .. _request-func-ioctl:
+ 
+@@ -11,7 +12,6 @@ Name
+ 
+ request-ioctl - Control a request file descriptor
+ 
+-
+ Synopsis
+ ========
+ 
+@@ -19,9 +19,7 @@ Synopsis
+ 
+     #include <sys/ioctl.h>
+ 
+-
+-.. c:function:: int ioctl( int fd, int cmd, void *argp )
+-    :name: req-ioctl
++``int`` :c:expr:`ioctl(int fd, int cmd, void *argp)`
+ 
+ Arguments
+ =========
+@@ -36,7 +34,6 @@ Arguments
+ ``argp``
+     Pointer to a request-specific structure.
+ 
+-
+ Description
+ ===========
+ 
+@@ -52,7 +49,6 @@ their parameters are located in the media.h header file. All request ioctl
+ commands, their respective function and parameters are specified in
+ :ref:`media-user-func`.
+ 
+-
+ Return Value
+ ============
+ 
+diff --git a/Documentation/userspace-api/media/mediactl/request-func-poll.rst b/Documentation/userspace-api/media/mediactl/request-func-poll.rst
+index 92947213d3d5..ce0043dbe7da 100644
+--- a/Documentation/userspace-api/media/mediactl/request-func-poll.rst
++++ b/Documentation/userspace-api/media/mediactl/request-func-poll.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
++.. c:namespace:: MC
+ 
+ .. _request-func-poll:
+ 
+@@ -11,7 +12,6 @@ Name
+ 
+ request-poll - Wait for some event on a file descriptor
+ 
+-
+ Synopsis
+ ========
+ 
+@@ -19,9 +19,7 @@ Synopsis
+ 
+     #include <sys/poll.h>
+ 
+-
+ .. c:function:: int poll( struct pollfd *ufds, unsigned int nfds, int timeout )
+-   :name: request-poll
+ 
+ Arguments
+ =========
+@@ -35,14 +33,13 @@ Arguments
+ ``timeout``
+    Timeout to wait for events
+ 
+-
+ Description
+ ===========
+ 
+-With the :c:func:`poll() <request-func-poll>` function applications can wait
++With the :c:func:`poll()` function applications can wait
+ for a request to complete.
+ 
+-On success :c:func:`poll() <request-func-poll>` returns the number of file
++On success :c:func:`poll()` returns the number of file
+ descriptors that have been selected (that is, file descriptors for which the
+ ``revents`` field of the respective struct :c:type:`pollfd`
+ is non-zero). Request file descriptor set the ``POLLPRI`` flag in ``revents``
+@@ -53,11 +50,10 @@ set appropriately.
+ Attempting to poll for a request that is not yet queued will
+ set the ``POLLERR`` flag in ``revents``.
+ 
+-
+ Return Value
+ ============
+ 
+-On success, :c:func:`poll() <request-func-poll>` returns the number of
++On success, :c:func:`poll()` returns the number of
+ structures which have non-zero ``revents`` fields, or zero if the call
+ timed out. On error -1 is returned, and the ``errno`` variable is set
+ appropriately:
 -- 
 2.26.2
-
 
