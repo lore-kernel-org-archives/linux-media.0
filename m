@@ -2,147 +2,91 @@ Return-Path: <SRS0=XatT=DC=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 255CBC4741F
-	for <linux-media@archiver.kernel.org>; Fri, 25 Sep 2020 14:13:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20BAAC4363D
+	for <linux-media@archiver.kernel.org>; Fri, 25 Sep 2020 15:00:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DA04520BED
-	for <linux-media@archiver.kernel.org>; Fri, 25 Sep 2020 14:13:09 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="VjaUG617"
+	by mail.kernel.org (Postfix) with ESMTP id C6B5521D42
+	for <linux-media@archiver.kernel.org>; Fri, 25 Sep 2020 15:00:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728997AbgIYOMd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 25 Sep 2020 10:12:33 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:50583 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728960AbgIYOMd (ORCPT
+        id S1729003AbgIYPAA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 25 Sep 2020 11:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58470 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728038AbgIYPAA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 25 Sep 2020 10:12:33 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200925141232euoutp011aa9ca7927073af6db964376c58266b4~4DEOg5pCz1102011020euoutp01l
-        for <linux-media@vger.kernel.org>; Fri, 25 Sep 2020 14:12:32 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200925141232euoutp011aa9ca7927073af6db964376c58266b4~4DEOg5pCz1102011020euoutp01l
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1601043152;
-        bh=09pv1gfbrMxHYJO8AD2snW5aXubFJIYR4lyEPqOH5uU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VjaUG617xjpS25xHY+2VFzQl2odlMBm65cz5PGEeXU08wEE9pZ/qW13B0SPqT0kru
-         G+jd1sq7hMKaX1w99LfqXun38Lh1Fnp3A82MAj4qwqJUiGuI63nRzS9JpZHSC3mlW+
-         hNVAyJHqupO6778Su8pTHRaPVGYyTym+/3Zjkq1c=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20200925141231eucas1p20d3233eb3232f4d36c19cfa361272ddf~4DEOAP91c3256732567eucas1p2i;
-        Fri, 25 Sep 2020 14:12:31 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id CB.E4.06456.FCAFD6F5; Fri, 25
-        Sep 2020 15:12:31 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200925141231eucas1p223c342cc989df23e4fc28d97fe3010c5~4DENtkpoZ3253732537eucas1p2z;
-        Fri, 25 Sep 2020 14:12:31 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200925141231eusmtrp2883de88f9ea00225cba96e6eb43335bb~4DENs9Nam2598725987eusmtrp2i;
-        Fri, 25 Sep 2020 14:12:31 +0000 (GMT)
-X-AuditID: cbfec7f2-7efff70000001938-5b-5f6dfacfef32
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id FE.39.06314.FCAFD6F5; Fri, 25
-        Sep 2020 15:12:31 +0100 (BST)
-Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20200925141230eusmtip1b4b74b11e2277e18fef6a5019d2e2f2b~4DENMB_3U1229912299eusmtip1y;
-        Fri, 25 Sep 2020 14:12:30 +0000 (GMT)
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-To:     Linux IOMMU <iommu@lists.linux-foundation.org>,
-        linux-media@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>, Christoph Hellwig <hch@lst.de>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Tomasz Figa <tfiga@chromium.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/8] dma-mapping: add DMA_ATTR_LOW_ADDRESS attribute
-Date:   Fri, 25 Sep 2020 16:12:11 +0200
-Message-Id: <20200925141218.13550-2-m.szyprowski@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200925141218.13550-1-m.szyprowski@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA0WSbUhTURjHObu7d3fD2W0KniwTBgUaqbOgC5ZYWtz6EFKSINS85UWtTWXz
-        JQVrJL4NNU2wobZsOa053RLzZVq5ZToyNd9AwUBjFgZaqYGt1Dav2pfD7zzn9/yfw+HgiEiH
-        +uLJKemMIoWWiTEBt73/9/DREadcGqKv9SNfaEwo+bzpHYesexNGFteYeeTIiGsZt9RiZIn5
-        JUpqRl5zyOa+TzzS+sOBkoXzCwi5kr+BRXhQDquWQxm1RkDVqEa5VKuhGKMqpxoB1T2twqiy
-        NgOgVloPRuNxgpMJjCw5k1EEh8cLkkz6ejRtiX970rbIU4FSXA34OCSOw8H3E5gaCHAR8QzA
-        PKuVy25WAeyoesJxWyJiBUBbYehOh7OhgsdKjQC+qp/g7HaYR/sRt4UREqheVLtycdybSIcN
-        dk+3gxAODuxZZ1O9iCj4p8nCdTOXOATtk28xNwuJU7D8wybKTvOHTeberUw+EQ7nRnuBOwgS
-        Bh4sKp3nsVIUtGvyuSx7wW8Dbdv1A3Cz6zGHbcgDcG64mcduSgAcv6cBrBUGZ4adW1dFiABo
-        sgS7ERKnoa4YY9ETTi3udcuICx+0P0TYshAWFYjYjMOweqBld6r14xjCMgWd6+Pb71MBYMHc
-        GFYO/Kv/z6oDwAB8mAylPJFRSlKYrCAlLVdmpCQG3UiVtwLXzxncGFjuBL/GrtsAgQOxh9D+
-        WS4VoXSmMltuAxBHxN7CM0OD10TCBDo7h1GkShUZMkZpA/txrthHeEy3cFVEJNLpzC2GSWMU
-        O6ccnO+rAkVPRbP7JtaIjcrL2khkMPdCeKihz0+fUSMJqTQ6pg3GwLI7X+9Xe6/pogXxjm5H
-        oFoR15JgydXHRlIr9BfZ7KW1mObZPTnxd6d7vms9TvycsbbNS8/ZV88uddou/s3MvlIVYfGi
-        Olrab5pM0V0VsoD1LMOj82hIbMxy5pEhnZirTKIlgYhCSf8DmeqdJDUDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmphkeLIzCtJLcpLzFFi42I5/e/4Xd3zv3LjDbpO8VpsnLGe1WLl6qNM
-        Fgv2W1t0zt7AbnH+PJC4vGsOm0XPhq2sFjPO72OyWHvkLrvFwQ9PWC3an75ktvjc+o/Ngcfj
-        ycF5TB5r5q1h9JjdcJHFY9OqTjaPyTeWM3rsvtnA5tG3ZRWjx+dNcgEcUXo2RfmlJakKGfnF
-        JbZK0YYWRnqGlhZ6RiaWeobG5rFWRqZK+nY2Kak5mWWpRfp2CXoZ65cuYS14x1lx9dBb9gbG
-        Xo4uRk4OCQETiV/LJrJ3MXJxCAksZZT4eOQcM0RCRuLktAZWCFtY4s+1LjaIok+MEls2HWUD
-        SbAJGEp0ve0Cs0UEyiQ6rmxlBiliFnjDJHH31Q92kISwgIvE79W7WEBsFgFViRNXD4M18ArY
-        Skw48x9qg7zE6g0HwDZzCthJPLx4gLGLkQNom63E/odOExj5FjAyrGIUSS0tzk3PLTbUK07M
-        LS7NS9dLzs/dxAiMgW3Hfm7ewXhpY/AhRgEORiUe3hOPcuOFWBPLiitzDzFKcDArifA6nT0d
-        J8SbklhZlVqUH19UmpNafIjRFOimicxSosn5wPjMK4k3NDU0t7A0NDc2NzazUBLn7RA4GCMk
-        kJ5YkpqdmlqQWgTTx8TBKdXA6PJgjXyaSIa8D9MpcVaDHQzdzz2OflwRwXT5okTF3V/fKqW0
-        6grcMhmeie+crLN49dfZ7DOF/ZaKSbv0PA7Y2ONSY+1fdODhHPsQ+9JME/+5XwQ9Yw5cMNqj
-        eHfaDe64e5tX9CamWEXPdV+pqRoWlDTrftmRxgfmEknsnDfnTFycrxtkZh2mxFKckWioxVxU
-        nAgAEI6bVpcCAAA=
-X-CMS-MailID: 20200925141231eucas1p223c342cc989df23e4fc28d97fe3010c5
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200925141231eucas1p223c342cc989df23e4fc28d97fe3010c5
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20200925141231eucas1p223c342cc989df23e4fc28d97fe3010c5
-References: <20200925141218.13550-1-m.szyprowski@samsung.com>
-        <CGME20200925141231eucas1p223c342cc989df23e4fc28d97fe3010c5@eucas1p2.samsung.com>
+        Fri, 25 Sep 2020 11:00:00 -0400
+Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA11C0613CE
+        for <linux-media@vger.kernel.org>; Fri, 25 Sep 2020 07:59:55 -0700 (PDT)
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 5571911A001; Fri, 25 Sep 2020 15:59:52 +0100 (BST)
+Date:   Fri, 25 Sep 2020 15:59:52 +0100
+From:   Sean Young <sean@mess.org>
+To:     linux-media@vger.kernel.org
+Subject: [GIT PULL FOR v5.10] Various small fixes
+Message-ID: <20200925145951.GA7907@gofer.mess.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Some devices require to allocate a special buffer (usually for the
-firmware) just at the beginning of the address space to ensure that all
-further allocations can be expressed as a positive offset from that
-special buffer. When IOMMU is used for managing the DMA address space,
-such requirement can be easily fulfilled, simply by enforcing the
-'first-fit' IOVA allocation algorithm.
+Hi Mauro,
 
-This patch adds a DMA attribute for such case.
+The last changes for v5.10. These should be uncontroversial.
 
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
----
- include/linux/dma-mapping.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+Sean
 
-diff --git a/include/linux/dma-mapping.h b/include/linux/dma-mapping.h
-index bb138ac6f5e6..c8c568ba375b 100644
---- a/include/linux/dma-mapping.h
-+++ b/include/linux/dma-mapping.h
-@@ -66,6 +66,12 @@
-  * at least read-only at lesser-privileged levels).
-  */
- #define DMA_ATTR_PRIVILEGED		(1UL << 9)
-+/*
-+ * DMA_ATTR_LOW_ADDRESS: used to indicate that the buffer should be allocated
-+ * at the lowest possible DMA address, usually just at the beginning of the
-+ * DMA/IOVA address space ('first-fit' allocation algorithm).
-+ */
-+#define DMA_ATTR_LOW_ADDRESS		(1UL << 10)
- 
- /*
-  * A dma_addr_t can hold any valid DMA or bus address for the platform.
--- 
-2.17.1
+The following changes since commit 01cc2ec6ea044731e939e5e47f7e115b86f49465:
 
+  media: atomisp: cleanup __printf() atributes on printk messages (2020-09-23 10:19:19 +0200)
+
+are available in the Git repository at:
+
+  git://linuxtv.org/syoung/media_tree.git tags/v5.10c
+
+for you to fetch changes up to 9062169a01befed40403e44fea1f35d92c759b5e:
+
+  bindings: media: gpio-ir-receiver: add linux,autosuspend-period property (2020-09-25 15:37:24 +0100)
+
+----------------------------------------------------------------
+v5.10c
+
+----------------------------------------------------------------
+Evgeny Novikov (1):
+      media: dvb-frontends: rtl2832_sdr: set error code in probe
+
+Joakim Zhang (2):
+      media: rc: gpio-ir-recv: add QoS support for cpuidle system
+      bindings: media: gpio-ir-receiver: add linux,autosuspend-period property
+
+Oliver Neukum (2):
+      media: ati_remote: sanity check for both endpoints
+      media: flexcop-usb: sanity checking of endpoint type
+
+Qinglang Miao (1):
+      media: flexcop-usb: remove needless check before usb_free_coherent()
+
+Rikard Falkeborn (1):
+      media: dvb-frontends: tda18271c2dd: Constify static structs
+
+Vaibhav Gupta (1):
+      media: netup_unidvb: drop initialization of PM pointers
+
+ .../devicetree/bindings/media/gpio-ir-receiver.txt |  3 ++
+ drivers/media/dvb-frontends/rtl2832_sdr.c          |  1 +
+ drivers/media/dvb-frontends/tda18271c2dd.c         | 41 ++++++++---------
+ drivers/media/dvb-frontends/tda18271c2dd_maps.h    | 22 ++++-----
+ drivers/media/pci/netup_unidvb/netup_unidvb_core.c |  2 -
+ drivers/media/rc/ati_remote.c                      |  4 ++
+ drivers/media/rc/gpio-ir-recv.c                    | 53 ++++++++++++++++++++++
+ drivers/media/usb/b2c2/flexcop-usb.c               |  9 ++--
+ drivers/media/usb/b2c2/flexcop-usb.h               |  2 +-
+ 9 files changed, 97 insertions(+), 40 deletions(-)
