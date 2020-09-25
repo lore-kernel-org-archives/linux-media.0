@@ -7,134 +7,148 @@ X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 514F0C4363D
-	for <linux-media@archiver.kernel.org>; Fri, 25 Sep 2020 08:05:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81F79C4727F
+	for <linux-media@archiver.kernel.org>; Fri, 25 Sep 2020 08:06:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EC8A22388E
-	for <linux-media@archiver.kernel.org>; Fri, 25 Sep 2020 08:05:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 15AF9208B6
+	for <linux-media@archiver.kernel.org>; Fri, 25 Sep 2020 08:06:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=temperror (0-bit key) header.d=phytec.de header.i=@phytec.de header.b="aabP0zdt"
+	dkim=temperror (0-bit key) header.d=phytec.de header.i=@phytec.de header.b="iBv1bbb9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727461AbgIYIF5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 25 Sep 2020 04:05:57 -0400
-Received: from mickerik.phytec.de ([195.145.39.210]:61920 "EHLO
+        id S1727464AbgIYIGD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 25 Sep 2020 04:06:03 -0400
+Received: from mickerik.phytec.de ([195.145.39.210]:61918 "EHLO
         mickerik.phytec.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727201AbgIYIF4 (ORCPT
+        with ESMTP id S1727450AbgIYIF6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 25 Sep 2020 04:05:56 -0400
+        Fri, 25 Sep 2020 04:05:58 -0400
 DKIM-Signature: v=1; a=rsa-sha256; d=phytec.de; s=a1; c=relaxed/simple;
-        q=dns/txt; i=@phytec.de; t=1601020245; x=1603612245;
+        q=dns/txt; i=@phytec.de; t=1601020249; x=1603612249;
         h=From:Sender:Reply-To:Subject:Date:Message-Id:To:Cc:MIME-Version:Content-Type:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
         List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=x5Pk/l2MiC1puFAoUsj9YgTJFrLM/W2OzlbBAh4xBcc=;
-        b=aabP0zdtZPlT+FWbirhNwfjksCzPoc91adY+3d35kYVEAdu4FBuBT9JIQ0OI8VqC
-        7wuDU/mGfgKyuWXOWLXrZ/Q43Qw9mvx2UkNL3a7ZUxKlRCupcvQEHxnQZZjk/dOJ
-        KNj1vJAag77POiLvyYETgO/UPGs04f14QGicyxT7DnY=;
-X-AuditID: c39127d2-269ff70000001c25-f4-5f6da1551b95
+        bh=W2ZrFbcxd4kDGmQO+BiozH8E+vz+f2nc13eOaGw19XE=;
+        b=iBv1bbb92r0yTpZ1wcrPTdMU0eDJuIRsNLu1ysrjHn9DIrFDPeSZokfc7RDW19Eu
+        nDpGWm12wQTokuRjBp8UN6hyWcwzhHREOPQ0Hv4m9XgdTtgALJd3hAeuUelAQXXz
+        RUv3Xh2aiodZZkIBv6xbTQfQXqd6p/uiQU/28e4tF3o=;
+X-AuditID: c39127d2-253ff70000001c25-f6-5f6da159bed7
 Received: from idefix.phytec.de (Unknown_Domain [172.16.0.10])
-        by mickerik.phytec.de (PHYTEC Mail Gateway) with SMTP id 6D.A5.07205.551AD6F5; Fri, 25 Sep 2020 09:50:45 +0200 (CEST)
+        by mickerik.phytec.de (PHYTEC Mail Gateway) with SMTP id 3E.A5.07205.951AD6F5; Fri, 25 Sep 2020 09:50:49 +0200 (CEST)
 Received: from lws-riedmueller.phytec.de ([172.16.23.108])
           by idefix.phytec.de (IBM Domino Release 9.0.1FP7)
-          with ESMTP id 2020092509504515-495332 ;
-          Fri, 25 Sep 2020 09:50:45 +0200 
+          with ESMTP id 2020092509504915-495334 ;
+          Fri, 25 Sep 2020 09:50:49 +0200 
 From:   Stefan Riedmueller <s.riedmueller@phytec.de>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Enrico Scholz <enrico.scholz@sigma-chemnitz.de>,
+        Dirk Bender <d.bender@phytec.de>,
         Stefan Riedmueller <s.riedmueller@phytec.de>
-Subject: [PATCH 3/5] media: mt9p031: Implement [gs]_register debug calls
-Date:   Fri, 25 Sep 2020 09:50:27 +0200
-Message-Id: <20200925075029.32181-3-s.riedmueller@phytec.de>
+Subject: [PATCH 5/5] media: mt9p031: Fix corrupted frame after restarting stream
+Date:   Fri, 25 Sep 2020 09:50:29 +0200
+Message-Id: <20200925075029.32181-5-s.riedmueller@phytec.de>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200925075029.32181-1-s.riedmueller@phytec.de>
 References: <20200925075029.32181-1-s.riedmueller@phytec.de>
 MIME-Version: 1.0
 X-MIMETrack: Itemize by SMTP Server on Idefix/Phytec(Release 9.0.1FP7|August  17, 2016) at
- 25.09.2020 09:50:45,
+ 25.09.2020 09:50:49,
         Serialize by Router on Idefix/Phytec(Release 9.0.1FP7|August  17, 2016) at
- 25.09.2020 09:50:45
+ 25.09.2020 09:50:49
 X-TNEFEvaluated: 1
 Content-Transfer-Encoding: quoted-printable
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrJLMWRmVeSWpSXmKPExsWyRoCBSzd0YW68wY4+EYu9xy6wWHROXMJu
-        cXnXHDaLng1bWS2WbfrDZPFpyzcmBzaP2R0zWT02repk85h3MtBjxcr/TB6fN8kFsEZx2aSk
-        5mSWpRbp2yVwZbzZc5WpoIO/YtO/VtYGxvs8XYycHBICJhKf701gBLGFBLYxSmw5WNDFyAVk
-        X2OUePZrGztIgk3ASGLBtEYmEFtEwEKid9F0sAZmga+MEuvOZoPYwgIeEo2NK8DqWQRUJZYt
-        6WQFsXkFbCROvf3GCLFMXmLmpe9gNZwCthJH355nglhsI/Fix19GiHpBiZMzn7CAHCEhcIVR
-        ov/UDDaIZiGJ04vPMkMs1pZYtvA18wRGgVlIemYhSS1gZFrFKJSbmZydWpSZrVeQUVmSmqyX
-        krqJERi8hyeqX9rB2DfH4xAjEwfjIUYJDmYlEd7jG3LihXhTEiurUovy44tKc1KLDzFKc7Ao
-        ifNu4C0JExJITyxJzU5NLUgtgskycXBKNTAuvRvCLuG22kauZ6Z8d4Fu35+2Q2Zx7lXrPh0L
-        ThDY2aGs8s989fMbv3fasogqZH1QWmwmeuiY+IxYwZzcL7M6Dcuc3fiX54m4PFawO1ItZ79v
-        m9gXl7YzLY2fPMRVZn/6+EJwve3Kj86Mm2+xHQ3asJCT4Y9PuMaLxuj/ey9zLT17YovCvhIl
-        luKMREMt5qLiRADUtBXmTAIAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrPLMWRmVeSWpSXmKPExsWyRoCBSzdyYW68we1vchadE5ewW1zeNYfN
+        omfDVlaLZZv+MFl82vKNyYHVY3bHTFaPTas62TzmnQz0+LxJLoAlissmJTUnsyy1SN8ugSvj
+        zptbTAUnRSquH3rN0sDYJtjFyMkhIWAisX/pB0YQW0hgG6PE1W25EPY1Rom7D8tBbDYBI4kF
+        0xqZQGwRAQuJ3kXTgeq5OJgFnjFKtLe1soEkhAUCJP5Pm8gOYrMIqEqs+3yCBcTmFbCRODDl
+        MBvEMnmJmZe+g9VwCthKHH17nglimY3Eix1/GSHqBSVOznzCArJAQuAKo8TpT7NYIJqFJE4v
+        PssMYjMLaEssW/iaeQKjwCwkPbOQpBYwMq1iFMrNTM5OLcrM1ivIqCxJTdZLSd3ECAzUwxPV
+        L+1g7JvjcYiRiYPxEKMEB7OSCO/xDTnxQrwpiZVVqUX58UWlOanFhxilOViUxHk38JaECQmk
+        J5akZqemFqQWwWSZODilGhgNvl7u+cFwsGfvDN7Z/0z2X1u9n2tH9SqPjyzzcm3OOWb2nkus
+        bSl4mlM0b5Vz9mRBP4/nuxfL/Jv8cIbwvrSgU47TZjp1OLr82mAWGniU+cb9f88UGmy6Y2TM
+        Zj9uNud101635cbUFd7vubLtDM6Xbyn6djVPW6ugV/bTmsOL+M/L+eh3lfxWYinOSDTUYi4q
+        TgQA/2/8F0ICAAA=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
+From: Dirk Bender <d.bender@phytec.de>
 
-Implement g=5Fregister and s=5Fregister v4l2=5Fsubdev=5Fcore=5Fops to access
-camera register directly from userspace for debug purposes.
+To prevent corrupted frames after starting and stopping the sensor it's
+datasheet specifies a specific pause sequence to follow:
 
-Signed-off-by: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
+Stopping:
+	Set Pause=5FRestart Bit -> Set Restart Bit -> Set Chip=5FEnable Off
+
+Restarting:
+	Set Chip=5FEnable On -> Clear Pause=5FRestart Bit
+
+The Restart Bit is cleared automatically and must not be cleared
+manually as this would cause undefined behavior.
+
+Signed-off-by: Dirk Bender <d.bender@phytec.de>
 Signed-off-by: Stefan Riedmueller <s.riedmueller@phytec.de>
 ---
- drivers/media/i2c/mt9p031.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ drivers/media/i2c/mt9p031.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
 diff --git a/drivers/media/i2c/mt9p031.c b/drivers/media/i2c/mt9p031.c
-index ce192be4531f..f5d6a7890c47 100644
+index 8f8ee37a2dd2..2f2daf95dcd3 100644
 --- a/drivers/media/i2c/mt9p031.c
 +++ b/drivers/media/i2c/mt9p031.c
-@@ -703,6 +703,30 @@ static int mt9p031=5Frestore=5Fblc(struct mt9p031 *mt9=
-p031)
- 	return 0;
- }
+@@ -80,6 +80,8 @@
+ #define		MT9P031=5FPIXEL=5FCLOCK=5FSHIFT(n)		((n) << 8)
+ #define		MT9P031=5FPIXEL=5FCLOCK=5FDIVIDE(n)		((n) << 0)
+ #define MT9P031=5FFRAME=5FRESTART				0x0b
++#define		MT9P031=5FFRAME=5FRESTART=5FSET		(1 << 0)
++#define		MT9P031=5FFRAME=5FPAUSE=5FRESTART=5FSET		(1 << 1)
+ #define MT9P031=5FSHUTTER=5FDELAY				0x0c
+ #define MT9P031=5FRST					0x0d
+ #define		MT9P031=5FRST=5FENABLE			1
+@@ -483,9 +485,25 @@ static int mt9p031=5Fset=5Fparams(struct mt9p031 *mt9p=
+031)
+ static int mt9p031=5Fs=5Fstream(struct v4l2=5Fsubdev *subdev, int enable)
+ {
+ 	struct mt9p031 *mt9p031 =3D to=5Fmt9p031(subdev);
++	struct i2c=5Fclient *client =3D v4l2=5Fget=5Fsubdevdata(subdev);
++	int val;
+ 	int ret;
 =20
-+#ifdef CONFIG=5FVIDEO=5FADV=5FDEBUG
-+static int mt9p031=5Fg=5Fregister(struct v4l2=5Fsubdev *sd,
-+			      struct v4l2=5Fdbg=5Fregister *reg)
-+{
-+	struct i2c=5Fclient *client =3D v4l2=5Fget=5Fsubdevdata(sd);
-+	int ret;
+ 	if (!enable) {
++		val =3D mt9p031=5Fread(client, MT9P031=5FFRAME=5FRESTART);
 +
-+	ret =3D mt9p031=5Fread(client, reg->reg);
++		/* enable pause restart */
++		val |=3D MT9P031=5FFRAME=5FPAUSE=5FRESTART=5FSET;
++		ret =3D mt9p031=5Fwrite(client, MT9P031=5FFRAME=5FRESTART, val);
++		if (ret < 0)
++			return ret;
++
++		/* enable restart + keep pause restart set */
++		val |=3D MT9P031=5FFRAME=5FRESTART=5FSET;
++		ret =3D mt9p031=5Fwrite(client, MT9P031=5FFRAME=5FRESTART, val);
++		if (ret < 0)
++			return ret;
++
+ 		/* Stop sensor readout */
+ 		ret =3D mt9p031=5Fset=5Foutput=5Fcontrol(mt9p031,
+ 						 MT9P031=5FOUTPUT=5FCONTROL=5FCEN, 0);
+@@ -505,6 +523,13 @@ static int mt9p031=5Fs=5Fstream(struct v4l2=5Fsubdev *=
+subdev, int enable)
+ 	if (ret < 0)
+ 		return ret;
+=20
++	val =3D mt9p031=5Fread(client, MT9P031=5FFRAME=5FRESTART);
++	/* disable reset + pause restart */
++	val &=3D ~MT9P031=5FFRAME=5FPAUSE=5FRESTART=5FSET;
++	ret =3D mt9p031=5Fwrite(client, MT9P031=5FFRAME=5FRESTART, val);
 +	if (ret < 0)
 +		return ret;
 +
-+	reg->val =3D ret;
-+	return 0;
-+}
-+
-+static int mt9p031=5Fs=5Fregister(struct v4l2=5Fsubdev *sd,
-+			      struct v4l2=5Fdbg=5Fregister const *reg)
-+{
-+	struct i2c=5Fclient *client =3D v4l2=5Fget=5Fsubdevdata(sd);
-+
-+	return mt9p031=5Fwrite(client, reg->reg, reg->val);
-+}
-+#endif
-+
- static int mt9p031=5Fs=5Fctrl(struct v4l2=5Fctrl *ctrl)
- {
- 	struct mt9p031 *mt9p031 =3D
-@@ -1000,6 +1024,10 @@ static int mt9p031=5Fclose(struct v4l2=5Fsubdev *sub=
-dev, struct v4l2=5Fsubdev=5Ffh *fh)
+ 	return mt9p031=5Fpll=5Fenable(mt9p031);
+ }
 =20
- static const struct v4l2=5Fsubdev=5Fcore=5Fops mt9p031=5Fsubdev=5Fcore=5Fo=
-ps =3D {
- 	.s=5Fpower        =3D mt9p031=5Fset=5Fpower,
-+#ifdef CONFIG=5FVIDEO=5FADV=5FDEBUG
-+	.s=5Fregister	=3D mt9p031=5Fs=5Fregister,
-+	.g=5Fregister	=3D mt9p031=5Fg=5Fregister,
-+#endif
- };
-=20
- static const struct v4l2=5Fsubdev=5Fvideo=5Fops mt9p031=5Fsubdev=5Fvideo=
-=5Fops =3D {
 --=20
 2.25.1
 
