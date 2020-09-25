@@ -2,472 +2,826 @@ Return-Path: <SRS0=XatT=DC=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C58A0C47429
-	for <linux-media@archiver.kernel.org>; Fri, 25 Sep 2020 11:56:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27D5AC4363D
+	for <linux-media@archiver.kernel.org>; Fri, 25 Sep 2020 12:59:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 861BD22211
-	for <linux-media@archiver.kernel.org>; Fri, 25 Sep 2020 11:56:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C0A9C2075E
+	for <linux-media@archiver.kernel.org>; Fri, 25 Sep 2020 12:59:52 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="mGL+DYj4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728382AbgIYL4M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 25 Sep 2020 07:56:12 -0400
-Received: from mx2.suse.de ([195.135.220.15]:45604 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728118AbgIYL4I (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 25 Sep 2020 07:56:08 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 286F6AF3F;
-        Fri, 25 Sep 2020 11:56:06 +0000 (UTC)
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     sumit.semwal@linaro.org, christian.koenig@amd.com, afd@ti.com,
-        corbet@lwn.net, benjamin.gaignard@linaro.org, lmark@codeaurora.org,
-        labbott@redhat.com, Brian.Starkey@arm.com, john.stultz@linaro.org,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        airlied@linux.ie, daniel@ffwll.ch, l.stach@pengutronix.de,
-        linux+etnaviv@armlinux.org.uk, christian.gmeiner@gmail.com,
-        jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, pawel@osciak.com, m.szyprowski@samsung.com,
-        kyungmin.park@samsung.com, tfiga@chromium.org, mchehab@kernel.org,
-        matthew.auld@intel.com, robin.murphy@arm.com,
-        thomas.hellstrom@intel.com, sam@ravnborg.org, kraxel@redhat.com,
-        arnd@arndb.de, gregkh@linuxfoundation.org
-Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-doc@vger.kernel.org,
-        etnaviv@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-tegra@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Subject: [PATCH v3 3/4] dma-buf: Use struct dma_buf_map in dma_buf_vunmap() interfaces
-Date:   Fri, 25 Sep 2020 13:56:00 +0200
-Message-Id: <20200925115601.23955-4-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200925115601.23955-1-tzimmermann@suse.de>
-References: <20200925115601.23955-1-tzimmermann@suse.de>
+        id S1729101AbgIYM7r (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 25 Sep 2020 08:59:47 -0400
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:34209 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728406AbgIYM7q (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 25 Sep 2020 08:59:46 -0400
+X-Greylist: delayed 430 seconds by postgrey-1.27 at vger.kernel.org; Fri, 25 Sep 2020 08:59:43 EDT
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id LnD7kAovP4gEjLnDAkdc5x; Fri, 25 Sep 2020 14:52:31 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1601038351; bh=Uj/TTzuZIxV4NDwFZkrsCBLXfbcY69vGKdX28wBBqwM=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=mGL+DYj4zI9K7biSVl5pNbtdU/kMkxxqghpFam7+dOQRn41M0PxIXpCYHCSpjUHRW
+         MGM1vYlAUGitO10Ihfvz4nQMYtBGLI+dojvF1jDoKlLKcrMR8U37BcEokHslrjUoUO
+         hslwN/NuabDNnWceaoX/GIebo57St4SLlffTfehnrXfkrHQQIqMxjjWBYFFL1ames4
+         pNfzfeBd+Ah0GFoOdasfC9/S07/U0EwbEOk2jbPSwbdkh4CROWzR22hGXr+OSXuv5M
+         iA7luMaTp3fe9oXutay1lagAcVE9Y6kOgSH9xE4NZ9UzHau50xjQicQWKQT5T70TGn
+         sxDpXZqi7c4Rw==
+Subject: Re: [PATCH 3/3] media: i2c: Introduce a driver for the Techwell
+ TW9900 decoder
+To:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+References: <20200918142422.1086555-1-maxime.chevallier@bootlin.com>
+ <20200918142422.1086555-4-maxime.chevallier@bootlin.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <57c93f63-2450-aa43-7616-e3a763c95e36@xs4all.nl>
+Date:   Fri, 25 Sep 2020 14:52:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200918142422.1086555-4-maxime.chevallier@bootlin.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfI8kmJ2VO7jSrUW0cimne3JV5FtcZW/7Uqy3edXmqAMEgYBwspnUi9m8OQgXxwC0ArQbLY1QNVPDO8kSc/XW6PgLRuuq2ugSrEqAgum2W1lUk2px9FiT
+ W3KSwnhU93jVTVNsussRlQYYsW5IPwWS7pAou5T4JxvpHCksKnQWlGMdUmixdq6utsNQVa+TbPscNceSlmX9Zymff5PY0qIAxYVPH447k3UsR6Jco2IV1ZuX
+ iUJ5tz2BG5qDhK/Ab4O9YvV56uncDmxZvZh6Ef6sMXdBE0iwtOyeD7YQLcoGu1JZ9JmfQbmFjpvZObpDfS9zS9Ot3CXfKc0WdgqSn13LwEu8LHl3WwpBXopd
+ wRuUtEj3Kusvdvcw5hR0OxDyrMcnFhnhy6hF6JIy2qIiNjb9JLrdmcEMMDrjsdSYmyBlQlfthSK+Spcbx92VGG9awbhVsVHZ2Nzt3k6tyh6nys1cBuShA2/J
+ kPGn08d0u3R+HDZQJpy3CXRec6z7EiQMKD6XJMzOCSitCyQb9JjiBSQeSrS09mVHG5toBBukOtelUXXRIu2KEUOBqVhxxaXhUq49Qs5j4OyNg8sUGaz482wh
+ 33gMcTCoMuShTHFcMWvztJ4CaJJqW5LTpTkt21gCHizWX+Kj+7N3EoYFyOeW2DzD8G0=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch updates dma_buf_vunmap() and dma-buf's vunmap callback to
-use struct dma_buf_map. The interfaces used to receive a buffer address.
-This address is now given in an instance of the structure.
+Hi Maxime,
 
-Users of the functions are updated accordingly. This is only an interface
-change. It is currently expected that dma-buf memory can be accessed with
-system memory load/store operations.
+Some comments below, this driver needs to be changed:
 
-v2:
-	* include dma-buf-heaps and i915 selftests (kernel test robot)
-	* initialize cma_obj before using it in drm_gem_cma_free_object()
-	  (kernel test robot)
+On 18/09/2020 16:24, Maxime Chevallier wrote:
+> The Techwell video decoder supports PAL, NTSC and SECAM input formats,
+> and outputs a BT.656 signal.
+> 
+> This commit adds support for this device, based on an implementation
+> made by Rockchip. This implemention adds basic support for NTSC and PAL,
+> and some basic brightness and contrast controls.
+> 
+> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+> ---
+>  drivers/media/i2c/Kconfig  |   9 +
+>  drivers/media/i2c/Makefile |   1 +
+>  drivers/media/i2c/tw9900.c | 671 +++++++++++++++++++++++++++++++++++++
+>  3 files changed, 681 insertions(+)
+>  create mode 100644 drivers/media/i2c/tw9900.c
+> 
+> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+> index c7ba76fee599..9b9f97fa4335 100644
+> --- a/drivers/media/i2c/Kconfig
+> +++ b/drivers/media/i2c/Kconfig
+> @@ -426,6 +426,15 @@ config VIDEO_TW2804
+>  	  To compile this driver as a module, choose M here: the
+>  	  module will be called tw2804.
+>  
+> +config VIDEO_TW9900
+> +	tristate "Techwell TW9900 video decoder"
+> +	depends on VIDEO_V4L2 && I2C
+> +	help
+> +	  Support for the Techwell tw9900 multi-standard video decoder
+> +
+> +	  To compile this driver as a module, choose M here: the
+> +	  module will be called tw9900.
+> +
+>  config VIDEO_TW9903
+>  	tristate "Techwell TW9903 video decoder"
+>  	depends on VIDEO_V4L2 && I2C
+> diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
+> index f0a77473979d..cbc1d9aedd38 100644
+> --- a/drivers/media/i2c/Makefile
+> +++ b/drivers/media/i2c/Makefile
+> @@ -49,6 +49,7 @@ obj-$(CONFIG_VIDEO_TVP5150) += tvp5150.o
+>  obj-$(CONFIG_VIDEO_TVP514X) += tvp514x.o
+>  obj-$(CONFIG_VIDEO_TVP7002) += tvp7002.o
+>  obj-$(CONFIG_VIDEO_TW2804) += tw2804.o
+> +obj-$(CONFIG_VIDEO_TW9900) += tw9900.o
+>  obj-$(CONFIG_VIDEO_TW9903) += tw9903.o
+>  obj-$(CONFIG_VIDEO_TW9906) += tw9906.o
+>  obj-$(CONFIG_VIDEO_TW9910) += tw9910.o
+> diff --git a/drivers/media/i2c/tw9900.c b/drivers/media/i2c/tw9900.c
+> new file mode 100644
+> index 000000000000..950a7bbda80d
+> --- /dev/null
+> +++ b/drivers/media/i2c/tw9900.c
+> @@ -0,0 +1,671 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Driver for the Techwell TW9900 multi-standard video decoder.
+> + *
+> + * Copyright (C) 2018 Fuzhou Rockchip Electronics Co., Ltd.
+> + * Copyright (C) 2020 Maxime Chevallier <maxime.chevallier@bootlin.com>
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/device.h>
+> +#include <linux/gpio/consumer.h>
+> +#include <linux/i2c.h>
+> +#include <linux/module.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/regulator/consumer.h>
+> +#include <linux/sysfs.h>
+> +#include <linux/timer.h>
+> +#include <linux/delay.h>
+> +#include <media/media-entity.h>
+> +#include <media/v4l2-async.h>
+> +#include <media/v4l2-ctrls.h>
+> +#include <media/v4l2-event.h>
+> +#include <media/v4l2-subdev.h>
+> +
+> +#define TW9900_REG_CHIP_ID	0x00
+> +#define TW9900_REG_CHIP_STATUS  0x01
+> +#define		TW9900_REG_CHIP_STATUS_VLOCK	0x08
+> +#define		TW9900_REG_CHIP_STATUS_VDLOSS	0x80
+> +#define TW9900_REG_OUT_FMT_CTL  0x03
+> +#define TW9900_REG_CKHY_HSDLY   0x04
+> +#define TW9900_REG_OUT_CTRL_I	0x05
+> +#define TW9900_REG_ANALOG_CTL   0x06
+> +#define TW9900_REG_CROP_HI	0x07
+> +#define TW9900_REG_VDELAY_LO    0x08
+> +#define TW9900_REG_VACTIVE_LO   0x09
+> +#define TW9900_REG_HACTIVE_LO	0x0B
+> +#define TW9900_REG_CNTRL1	0x0C
+> +#define TW9900_REG_BRIGHT_CTL   0x10
+> +#define TW9900_REG_CONTRAST_CTL 0x11
+> +#define TW9900_REG_VBI_CNTL	0x19
+> +#define TW9900_REG_ANAL_CTL_II  0x1A
+> +#define TW9900_REG_OUT_CTRL_II	0x1B
+> +#define TW9900_REG_STD_SEL      0x1C
+> +#define TW9900_REG_MISSCNT      0x26
+> +#define TW9900_REG_MISC_CTL_II  0x2F
+> +#define TW9900_REG_VVBI         0x55
+> +
+> +#define TW9900_CHIP_ID		0x00
+> +
+> +#define REG_SC_CTRL_MODE		TW9900_REG_OUT_FMT_CTL
+> +#define     SC_CTRL_MODE_STANDBY	0xA7
+> +#define     SC_CTRL_MODE_STREAMING	0xA0
+> +
+> +#define REG_NULL			0xFF
+> +
+> +#define VSYNC_POLL_INTERVAL_MS  20
+> +#define VSYNC_WAIT_MAX_POLLS    50
+> +
+> +static const char * const tw9900_supply_names[] = {
+> +	"vdd",
+> +};
+> +
+> +#define TW9900_NUM_SUPPLIES ARRAY_SIZE(tw9900_supply_names)
+> +
+> +struct regval {
+> +	u8 addr;
+> +	u8 val;
+> +};
+> +
+> +struct tw9900_mode {
+> +	u32 width;
+> +	u32 height;
+> +	u32 skip_top;
+> +	u32 std;
+> +	u32 field;
+> +	const struct regval *reg_list;
+> +};
+> +
+> +struct tw9900 {
+> +	struct i2c_client	*client;
+> +	struct gpio_desc	*reset_gpio;
+> +	struct regulator_bulk_data supplies[TW9900_NUM_SUPPLIES];
+> +
+> +	bool			streaming;
+> +
+> +	struct v4l2_subdev	subdev;
+> +	struct v4l2_ctrl_handler hdl;
+> +	struct media_pad	pad;
+> +
+> +	struct timer_list timer;
+> +	struct work_struct work_i2c_poll;
+> +
+> +	const struct tw9900_mode *cur_mode;
+> +};
+> +
+> +#define to_tw9900(sd) container_of(sd, struct tw9900, subdev)
+> +
+> +static const struct regval tw9900_init_regs[] = {
+> +	{TW9900_REG_MISC_CTL_II,	0xE6},
+> +	{TW9900_REG_MISSCNT,		0x24},
+> +	{TW9900_REG_OUT_FMT_CTL,	0xA7},
+> +	{TW9900_REG_ANAL_CTL_II,	0x0A},
+> +	{TW9900_REG_VDELAY_LO,		0x19},
+> +	{TW9900_REG_STD_SEL,		0x00},
+> +	{TW9900_REG_VACTIVE_LO,		0xF0},
+> +	{TW9900_REG_STD_SEL,		0x07},
+> +	{TW9900_REG_CKHY_HSDLY,		0x40},
+> +	{TW9900_REG_ANALOG_CTL,		0x80},
+> +	{TW9900_REG_CNTRL1,		0xdc},
+> +	{TW9900_REG_OUT_CTRL_I,		0x98},
+> +	{REG_NULL, 0x0},
+> +};
+> +
+> +static const struct regval tw9900_yuv_regs[] = {
+> +	{REG_NULL, 0x0},
+> +};
+> +
+> +static const struct regval tw9900_pal_regs[] = {
+> +	{TW9900_REG_STD_SEL, 0x01},
+> +	{REG_NULL, 0x0},
+> +};
+> +
+> +static const struct regval tw9900_ntsc_regs[] = {
+> +	{TW9900_REG_OUT_FMT_CTL, 0xA4},
+> +	{TW9900_REG_VDELAY_LO, 0x12},
+> +	{TW9900_REG_VACTIVE_LO, 0xf0},
+> +	{TW9900_REG_CROP_HI, 0x02},
+> +	{TW9900_REG_HACTIVE_LO, 0xD0},
+> +	{TW9900_REG_VBI_CNTL, 0x01},
+> +	{TW9900_REG_STD_SEL, 0x00},
+> +	{REG_NULL, 0x0},
+> +};
+> +
+> +static const struct tw9900_mode supported_modes[] = {
+> +	{
+> +		.width = 720,
+> +		.height = 576,
+> +		.skip_top = 0,
+> +		.std = V4L2_STD_PAL,
+> +		.field = V4L2_FIELD_NONE,
+> +		.reg_list = tw9900_pal_regs,
+> +	},
+> +	{
+> +		.width = 720,
+> +		.height = 480,
+> +		.skip_top = 0,
+> +		.std = V4L2_STD_NTSC,
+> +		.field = V4L2_FIELD_NONE,
+> +		.reg_list = tw9900_ntsc_regs,
+> +	},
+> +};
+> +
+> +static int tw9900_write_reg(struct i2c_client *client, u8 reg, u8 val)
+> +{
+> +	int ret;
+> +
+> +	ret = i2c_smbus_write_byte_data(client, reg, val);
+> +
+> +	if (ret < 0)
+> +		dev_err(&client->dev, "write reg error: %d\n", ret);
+> +
+> +	return ret;
+> +}
+> +
+> +static int tw9900_write_array(struct i2c_client *client,
+> +			      const struct regval *regs)
+> +{
+> +	int i, ret = 0;
+> +
+> +	for (i = 0; ret == 0 && regs[i].addr != REG_NULL; i++)
+> +		ret = tw9900_write_reg(client, regs[i].addr, regs[i].val);
+> +
+> +	return ret;
+> +}
+> +
+> +static inline u8 tw9900_read_reg(struct i2c_client *client, u8 reg)
+> +{
+> +	return i2c_smbus_read_byte_data(client, reg);
+> +}
+> +
+> +static void tw9900_fill_fmt(const struct tw9900_mode *mode,
+> +			    struct v4l2_mbus_framefmt *fmt)
+> +{
+> +	fmt->code = MEDIA_BUS_FMT_UYVY8_2X8;
+> +	fmt->width = mode->width;
+> +	fmt->height = mode->height;
+> +	fmt->field = mode->field;
+> +	fmt->colorspace = V4L2_COLORSPACE_SMPTE170M;
+> +}
+> +
+> +static int tw9900_find_closest_mode_index(u32 width, u32 height)
+> +{
+> +	int i, best_score = 0, score, best = 0;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(supported_modes); i++) {
+> +		score = abs(supported_modes[i].width - width) +
+> +			abs(supported_modes[i].height - height);
+> +
+> +		if (best_score > score) {
+> +			best_score = score;
+> +			best = i;
+> +		}
+> +	}
+> +
+> +	return best;
+> +}
+> +
+> +static int tw9900_find_mode_index(u32 width, u32 height)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(supported_modes); i++)
+> +		if (supported_modes[i].width == width &&
+> +		    supported_modes[i].height == height)
+> +			return i;
+> +
+> +	/* No match, find the closestmatch */
+> +	return tw9900_find_closest_mode_index(width, height);
+> +}
+> +
+> +static int tw9900_set_fmt(struct v4l2_subdev *sd,
+> +			  struct v4l2_subdev_pad_config *cfg,
+> +			  struct v4l2_subdev_format *fmt)
+> +{
+> +	struct tw9900 *tw9900 = to_tw9900(sd);
+> +	struct v4l2_mbus_framefmt *mbus_fmt = &fmt->format;
+> +	int mode_index = tw9900_find_mode_index(mbus_fmt->width,
+> +						mbus_fmt->height);
+> +
+> +	if (mode_index < 0)
+> +		return -EINVAL;
+> +
+> +	tw9900->cur_mode = &supported_modes[mode_index];
+> +
+> +	tw9900_fill_fmt(tw9900->cur_mode, mbus_fmt);
+> +
+> +	/* Update the dimensions in case we don't have a perfect match */
+> +	mbus_fmt->width = tw9900->cur_mode->width;
+> +	mbus_fmt->height = tw9900->cur_mode->height;
+> +
+> +	return 0;
+> +}
+> +
+> +static int tw9900_get_fmt(struct v4l2_subdev *sd,
+> +			  struct v4l2_subdev_pad_config *cfg,
+> +			  struct v4l2_subdev_format *fmt)
+> +{
+> +	struct tw9900 *tw9900 = to_tw9900(sd);
+> +	struct v4l2_mbus_framefmt *mbus_fmt = &fmt->format;
+> +
+> +	tw9900_fill_fmt(tw9900->cur_mode, mbus_fmt);
+> +
+> +	return 0;
+> +}
+> +
+> +static int tw9900_enum_mbus_code(struct v4l2_subdev *sd,
+> +				 struct v4l2_subdev_pad_config *cfg,
+> +				 struct v4l2_subdev_mbus_code_enum *code)
+> +{
+> +	if (code->index >= ARRAY_SIZE(supported_modes))
+> +		return -EINVAL;
+> +
+> +	code->code = MEDIA_BUS_FMT_UYVY8_2X8;
+> +
+> +	return 0;
+> +}
+> +
+> +static int tw9900_enum_frame_sizes(struct v4l2_subdev *sd,
+> +				   struct v4l2_subdev_pad_config *cfg,
+> +				   struct v4l2_subdev_frame_size_enum *fse)
+> +{
+> +	u32 index = fse->index;
+> +
+> +	if (index >= ARRAY_SIZE(supported_modes))
+> +		return -EINVAL;
+> +
+> +	fse->code = MEDIA_BUS_FMT_UYVY8_2X8;
+> +
+> +	fse->min_width  = supported_modes[index].width;
+> +	fse->max_width  = supported_modes[index].width;
+> +	fse->max_height = supported_modes[index].height;
+> +	fse->min_height = supported_modes[index].height;
+> +
+> +	return 0;
+> +}
+> +
+> +static int tw9900_g_skip_top_lines(struct v4l2_subdev *sd, u32 *lines)
+> +{
+> +	struct tw9900 *tw9900 = to_tw9900(sd);
+> +
+> +	*lines = tw9900->cur_mode->skip_top;
+> +
+> +	return 0;
+> +}
+> +
+> +static int __tw9900_power_on(struct tw9900 *tw9900)
+> +{
+> +	int ret;
+> +	struct device *dev = &tw9900->client->dev;
+> +
+> +	if (tw9900->reset_gpio)
+> +		gpiod_set_value_cansleep(tw9900->reset_gpio, 1);
+> +
+> +	ret = regulator_bulk_enable(TW9900_NUM_SUPPLIES, tw9900->supplies);
+> +	if (ret < 0)
+> +		goto error;
+> +
+> +	usleep_range(50000, 52000);
+> +
+> +	if (tw9900->reset_gpio)
+> +		gpiod_set_value_cansleep(tw9900->reset_gpio, 0);
+> +
+> +	usleep_range(1000, 2000);
+> +
+> +	ret = tw9900_write_array(tw9900->client, tw9900_init_regs);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to init tw9900\n");
+> +		goto error;
+> +	}
+> +
+> +	return 0;
+> +
+> +error:
+> +
+> +	return ret;
+> +}
+> +
+> +static void __tw9900_power_off(struct tw9900 *tw9900)
+> +{
+> +	if (tw9900->reset_gpio)
+> +		gpiod_set_value_cansleep(tw9900->reset_gpio, 1);
+> +
+> +	regulator_bulk_disable(TW9900_NUM_SUPPLIES, tw9900->supplies);
+> +}
+> +
+> +static int tw9900_s_ctrl(struct v4l2_ctrl *ctrl)
+> +{
+> +	struct tw9900 *tw9900 = container_of(ctrl->handler, struct tw9900, hdl);
+> +
+> +	if (pm_runtime_suspended(&tw9900->client->dev))
+> +		return 0;
+> +
+> +	switch (ctrl->id) {
+> +	case V4L2_CID_BRIGHTNESS:
+> +		tw9900_write_reg(tw9900->client, 0x10, (u8)ctrl->val);
+> +		break;
+> +	case V4L2_CID_CONTRAST:
+> +		tw9900_write_reg(tw9900->client, 0x11, (u8)ctrl->val);
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static int tw9900_s_stream(struct v4l2_subdev *sd, int on)
+> +{
+> +	struct tw9900 *tw9900 = to_tw9900(sd);
+> +	struct i2c_client *client = tw9900->client;
+> +	int i, ret = 0;
+> +
+> +	on = !!on;
+> +	if (on == tw9900->streaming)
+> +		goto unlock_and_return;
+> +
+> +	if (on) {
+> +		ret = pm_runtime_get_sync(&tw9900->client->dev);
+> +		if (ret < 0) {
+> +			pm_runtime_put_noidle(&client->dev);
+> +			goto unlock_and_return;
+> +		}
+> +
+> +		ret = v4l2_ctrl_handler_setup(sd->ctrl_handler);
+> +		if (ret) {
+> +			pm_runtime_put(&client->dev);
+> +			goto unlock_and_return;
+> +		}
+> +
+> +		ret = tw9900_write_array(tw9900->client,
+> +					 tw9900->cur_mode->reg_list);
+> +		if (ret) {
+> +			pm_runtime_put(&client->dev);
+> +			goto unlock_and_return;
+> +		}
+> +
+> +		/* Wait for VSync lock */
+> +		for (i = 0; i < VSYNC_WAIT_MAX_POLLS; i++) {
+> +			u8 status = tw9900_read_reg(tw9900->client,
+> +						    TW9900_REG_CHIP_STATUS);
+> +			if (!(status & TW9900_REG_CHIP_STATUS_VDLOSS) &&
+> +			    (status & TW9900_REG_CHIP_STATUS_VLOCK))
+> +				break;
+> +
+> +			msleep(VSYNC_POLL_INTERVAL_MS);
+> +		}
+> +
+> +		ret = tw9900_write_reg(client, REG_SC_CTRL_MODE,
+> +				       SC_CTRL_MODE_STREAMING);
+> +		if (ret) {
+> +			pm_runtime_put(&client->dev);
+> +			goto unlock_and_return;
+> +		}
+> +
+> +	} else {
+> +		tw9900_write_reg(client, REG_SC_CTRL_MODE,
+> +				 SC_CTRL_MODE_STANDBY);
+> +		pm_runtime_put(&client->dev);
+> +	}
+> +
+> +	tw9900->streaming = on;
+> +
+> +unlock_and_return:
+> +
+> +	return ret;
+> +}
+> +
+> +#ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
+> +static int tw9900_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+> +{
+> +	struct tw9900 *tw9900 = to_tw9900(sd);
+> +	struct v4l2_mbus_framefmt *try_fmt;
+> +
+> +	try_fmt = v4l2_subdev_get_try_format(sd, fh->pad, 0);
+> +
+> +	/* Initialize try_fmt */
+> +	tw9900_fill_fmt(tw9900->cur_mode, try_fmt);
+> +
+> +	return 0;
+> +}
+> +#endif
+> +
+> +static int tw9900_runtime_resume(struct device *dev)
+> +{
+> +	struct i2c_client *client = to_i2c_client(dev);
+> +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+> +	struct tw9900 *tw9900 = to_tw9900(sd);
+> +
+> +	return __tw9900_power_on(tw9900);
+> +}
+> +
+> +static int tw9900_runtime_suspend(struct device *dev)
+> +{
+> +	struct i2c_client *client = to_i2c_client(dev);
+> +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+> +	struct tw9900 *tw9900 = to_tw9900(sd);
+> +
+> +	__tw9900_power_off(tw9900);
+> +
+> +	return 0;
+> +}
+> +
+> +static int tw9900_subscribe_event(struct v4l2_subdev *sd,
+> +				  struct v4l2_fh *fh,
+> +				  struct v4l2_event_subscription *sub)
+> +{
+> +	switch (sub->type) {
+> +	case V4L2_EVENT_SOURCE_CHANGE:
+> +		return v4l2_src_change_event_subdev_subscribe(sd, fh, sub);
+> +	case V4L2_EVENT_CTRL:
+> +		return v4l2_ctrl_subdev_subscribe_event(sd, fh, sub);
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +static const struct dev_pm_ops tw9900_pm_ops = {
+> +	SET_RUNTIME_PM_OPS(tw9900_runtime_suspend,
+> +			   tw9900_runtime_resume, NULL)
+> +};
+> +
+> +static const struct v4l2_subdev_core_ops tw9900_core_ops = {
+> +	.subscribe_event = tw9900_subscribe_event,
+> +	.unsubscribe_event = v4l2_event_subdev_unsubscribe,
+> +};
+> +
+> +static const struct v4l2_subdev_video_ops tw9900_video_ops = {
+> +	.s_stream = tw9900_s_stream,
+> +};
+> +
+> +static const struct v4l2_subdev_pad_ops tw9900_pad_ops = {
+> +	.enum_mbus_code = tw9900_enum_mbus_code,
+> +	.enum_frame_size = tw9900_enum_frame_sizes,
+> +	.get_fmt = tw9900_get_fmt,
+> +	.set_fmt = tw9900_set_fmt,
+> +};
+> +
+> +static struct v4l2_subdev_sensor_ops tw9900_sensor_ops = {
+> +	.g_skip_top_lines	= tw9900_g_skip_top_lines,
+> +};
+> +
+> +static const struct v4l2_subdev_ops tw9900_subdev_ops = {
+> +	.core	= &tw9900_core_ops,
+> +	.video	= &tw9900_video_ops,
+> +	.pad	= &tw9900_pad_ops,
+> +	.sensor = &tw9900_sensor_ops,
+> +};
 
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Acked-by: Sumit Semwal <sumit.semwal@linaro.org>
-Acked-by: Christian König <christian.koenig@amd.com>
-Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
----
- drivers/dma-buf/dma-buf.c                     |  8 ++---
- drivers/dma-buf/heaps/heap-helpers.c          |  2 +-
- drivers/gpu/drm/drm_gem_cma_helper.c          |  9 +++---
- drivers/gpu/drm/drm_gem_shmem_helper.c        |  3 +-
- drivers/gpu/drm/drm_prime.c                   |  6 ++--
- drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c   |  5 +--
- drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c    |  2 +-
- .../drm/i915/gem/selftests/i915_gem_dmabuf.c  |  6 ++--
- .../gpu/drm/i915/gem/selftests/mock_dmabuf.c  |  4 +--
- drivers/gpu/drm/tegra/gem.c                   |  5 +--
- .../common/videobuf2/videobuf2-dma-contig.c   |  3 +-
- .../media/common/videobuf2/videobuf2-dma-sg.c |  3 +-
- .../common/videobuf2/videobuf2-vmalloc.c      |  6 ++--
- include/drm/drm_prime.h                       |  2 +-
- include/linux/dma-buf-map.h                   | 32 +++++++++++++++++--
- include/linux/dma-buf.h                       |  4 +--
- 16 files changed, 66 insertions(+), 34 deletions(-)
+This is wrong. This is not a sensor, so you don't set the format, instead
+you set the TV standard (s_std).
 
-diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index 61bd24d21b38..a6ba4d598f0e 100644
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -1236,21 +1236,21 @@ EXPORT_SYMBOL_GPL(dma_buf_vmap);
- /**
-  * dma_buf_vunmap - Unmap a vmap obtained by dma_buf_vmap.
-  * @dmabuf:	[in]	buffer to vunmap
-- * @vaddr:	[in]	vmap to vunmap
-+ * @map:	[in]	vmap pointer to vunmap
-  */
--void dma_buf_vunmap(struct dma_buf *dmabuf, void *vaddr)
-+void dma_buf_vunmap(struct dma_buf *dmabuf, struct dma_buf_map *map)
- {
- 	if (WARN_ON(!dmabuf))
- 		return;
- 
- 	BUG_ON(dma_buf_map_is_null(&dmabuf->vmap_ptr));
- 	BUG_ON(dmabuf->vmapping_counter == 0);
--	BUG_ON(!dma_buf_map_is_vaddr(&dmabuf->vmap_ptr, vaddr));
-+	BUG_ON(!dma_buf_map_is_equal(&dmabuf->vmap_ptr, map));
- 
- 	mutex_lock(&dmabuf->lock);
- 	if (--dmabuf->vmapping_counter == 0) {
- 		if (dmabuf->ops->vunmap)
--			dmabuf->ops->vunmap(dmabuf, vaddr);
-+			dmabuf->ops->vunmap(dmabuf, map);
- 		dma_buf_map_clear(&dmabuf->vmap_ptr);
- 	}
- 	mutex_unlock(&dmabuf->lock);
-diff --git a/drivers/dma-buf/heaps/heap-helpers.c b/drivers/dma-buf/heaps/heap-helpers.c
-index aeb9e100f339..fcf4ce3e2cbb 100644
---- a/drivers/dma-buf/heaps/heap-helpers.c
-+++ b/drivers/dma-buf/heaps/heap-helpers.c
-@@ -251,7 +251,7 @@ static int dma_heap_dma_buf_vmap(struct dma_buf *dmabuf, struct dma_buf_map *map
- 	return 0;
- }
- 
--static void dma_heap_dma_buf_vunmap(struct dma_buf *dmabuf, void *vaddr)
-+static void dma_heap_dma_buf_vunmap(struct dma_buf *dmabuf, struct dma_buf_map *map)
- {
- 	struct heap_helper_buffer *buffer = dmabuf->priv;
- 
-diff --git a/drivers/gpu/drm/drm_gem_cma_helper.c b/drivers/gpu/drm/drm_gem_cma_helper.c
-index 19670b05ead5..2165633c9b9e 100644
---- a/drivers/gpu/drm/drm_gem_cma_helper.c
-+++ b/drivers/gpu/drm/drm_gem_cma_helper.c
-@@ -175,13 +175,12 @@ drm_gem_cma_create_with_handle(struct drm_file *file_priv,
-  */
- void drm_gem_cma_free_object(struct drm_gem_object *gem_obj)
- {
--	struct drm_gem_cma_object *cma_obj;
--
--	cma_obj = to_drm_gem_cma_obj(gem_obj);
-+	struct drm_gem_cma_object *cma_obj = to_drm_gem_cma_obj(gem_obj);
-+	struct dma_buf_map map = DMA_BUF_MAP_INIT_VADDR(cma_obj->vaddr);
- 
- 	if (gem_obj->import_attach) {
- 		if (cma_obj->vaddr)
--			dma_buf_vunmap(gem_obj->import_attach->dmabuf, cma_obj->vaddr);
-+			dma_buf_vunmap(gem_obj->import_attach->dmabuf, &map);
- 		drm_prime_gem_destroy(gem_obj, cma_obj->sgt);
- 	} else if (cma_obj->vaddr) {
- 		dma_free_wc(gem_obj->dev->dev, cma_obj->base.size,
-@@ -628,7 +627,7 @@ drm_gem_cma_prime_import_sg_table_vmap(struct drm_device *dev,
- 
- 	obj = drm_gem_cma_prime_import_sg_table(dev, attach, sgt);
- 	if (IS_ERR(obj)) {
--		dma_buf_vunmap(attach->dmabuf, map.vaddr);
-+		dma_buf_vunmap(attach->dmabuf, &map);
- 		return obj;
- 	}
- 
-diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
-index 6328cfbb828e..fb11df7aced5 100644
---- a/drivers/gpu/drm/drm_gem_shmem_helper.c
-+++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
-@@ -337,6 +337,7 @@ EXPORT_SYMBOL(drm_gem_shmem_vmap);
- static void drm_gem_shmem_vunmap_locked(struct drm_gem_shmem_object *shmem)
- {
- 	struct drm_gem_object *obj = &shmem->base;
-+	struct dma_buf_map map = DMA_BUF_MAP_INIT_VADDR(shmem->vaddr);
- 
- 	if (WARN_ON_ONCE(!shmem->vmap_use_count))
- 		return;
-@@ -345,7 +346,7 @@ static void drm_gem_shmem_vunmap_locked(struct drm_gem_shmem_object *shmem)
- 		return;
- 
- 	if (obj->import_attach)
--		dma_buf_vunmap(obj->import_attach->dmabuf, shmem->vaddr);
-+		dma_buf_vunmap(obj->import_attach->dmabuf, &map);
- 	else
- 		vunmap(shmem->vaddr);
- 
-diff --git a/drivers/gpu/drm/drm_prime.c b/drivers/gpu/drm/drm_prime.c
-index 42d081c43bc8..89e2a2496734 100644
---- a/drivers/gpu/drm/drm_prime.c
-+++ b/drivers/gpu/drm/drm_prime.c
-@@ -688,16 +688,16 @@ EXPORT_SYMBOL(drm_gem_dmabuf_vmap);
- /**
-  * drm_gem_dmabuf_vunmap - dma_buf vunmap implementation for GEM
-  * @dma_buf: buffer to be unmapped
-- * @vaddr: the virtual address of the buffer
-+ * @map: the virtual address of the buffer
-  *
-  * Releases a kernel virtual mapping. This can be used as the
-  * &dma_buf_ops.vunmap callback. Calls into &drm_gem_object_funcs.vunmap for device specific handling.
-  */
--void drm_gem_dmabuf_vunmap(struct dma_buf *dma_buf, void *vaddr)
-+void drm_gem_dmabuf_vunmap(struct dma_buf *dma_buf, struct dma_buf_map *map)
- {
- 	struct drm_gem_object *obj = dma_buf->priv;
- 
--	drm_gem_vunmap(obj, vaddr);
-+	drm_gem_vunmap(obj, map->vaddr);
- }
- EXPORT_SYMBOL(drm_gem_dmabuf_vunmap);
- 
-diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c b/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
-index 80a9fc143bbb..135fbff6fecf 100644
---- a/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
-@@ -70,9 +70,10 @@ void etnaviv_gem_prime_unpin(struct drm_gem_object *obj)
- 
- static void etnaviv_gem_prime_release(struct etnaviv_gem_object *etnaviv_obj)
- {
-+	struct dma_buf_map map = DMA_BUF_MAP_INIT_VADDR(etnaviv_obj->vaddr);
-+
- 	if (etnaviv_obj->vaddr)
--		dma_buf_vunmap(etnaviv_obj->base.import_attach->dmabuf,
--			       etnaviv_obj->vaddr);
-+		dma_buf_vunmap(etnaviv_obj->base.import_attach->dmabuf, &map);
- 
- 	/* Don't drop the pages for imported dmabuf, as they are not
- 	 * ours, just free the array we allocated:
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c b/drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c
-index 6ee8f2cfd8c1..0dd477e56573 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c
-@@ -91,7 +91,7 @@ static int i915_gem_dmabuf_vmap(struct dma_buf *dma_buf, struct dma_buf_map *map
- 	return 0;
- }
- 
--static void i915_gem_dmabuf_vunmap(struct dma_buf *dma_buf, void *vaddr)
-+static void i915_gem_dmabuf_vunmap(struct dma_buf *dma_buf, struct dma_buf_map *map)
- {
- 	struct drm_i915_gem_object *obj = dma_buf_to_obj(dma_buf);
- 
-diff --git a/drivers/gpu/drm/i915/gem/selftests/i915_gem_dmabuf.c b/drivers/gpu/drm/i915/gem/selftests/i915_gem_dmabuf.c
-index f79ebc5329b7..0b4d19729e1f 100644
---- a/drivers/gpu/drm/i915/gem/selftests/i915_gem_dmabuf.c
-+++ b/drivers/gpu/drm/i915/gem/selftests/i915_gem_dmabuf.c
-@@ -152,7 +152,7 @@ static int igt_dmabuf_import(void *arg)
- 
- 	err = 0;
- out_dma_map:
--	dma_buf_vunmap(dmabuf, dma_map);
-+	dma_buf_vunmap(dmabuf, &map);
- out_obj:
- 	i915_gem_object_put(obj);
- out_dmabuf:
-@@ -182,7 +182,7 @@ static int igt_dmabuf_import_ownership(void *arg)
- 	}
- 
- 	memset(ptr, 0xc5, PAGE_SIZE);
--	dma_buf_vunmap(dmabuf, ptr);
-+	dma_buf_vunmap(dmabuf, &map);
- 
- 	obj = to_intel_bo(i915_gem_prime_import(&i915->drm, dmabuf));
- 	if (IS_ERR(obj)) {
-@@ -250,7 +250,7 @@ static int igt_dmabuf_export_vmap(void *arg)
- 	memset(ptr, 0xc5, dmabuf->size);
- 
- 	err = 0;
--	dma_buf_vunmap(dmabuf, ptr);
-+	dma_buf_vunmap(dmabuf, &map);
- out:
- 	dma_buf_put(dmabuf);
- 	return err;
-diff --git a/drivers/gpu/drm/i915/gem/selftests/mock_dmabuf.c b/drivers/gpu/drm/i915/gem/selftests/mock_dmabuf.c
-index becd9fb95d58..2855d11c7a51 100644
---- a/drivers/gpu/drm/i915/gem/selftests/mock_dmabuf.c
-+++ b/drivers/gpu/drm/i915/gem/selftests/mock_dmabuf.c
-@@ -74,11 +74,11 @@ static int mock_dmabuf_vmap(struct dma_buf *dma_buf, struct dma_buf_map *map)
- 	return 0;
- }
- 
--static void mock_dmabuf_vunmap(struct dma_buf *dma_buf, void *vaddr)
-+static void mock_dmabuf_vunmap(struct dma_buf *dma_buf, struct dma_buf_map *map)
- {
- 	struct mock_dmabuf *mock = to_mock(dma_buf);
- 
--	vm_unmap_ram(vaddr, mock->npages);
-+	vm_unmap_ram(map->vaddr, mock->npages);
- }
- 
- static int mock_dmabuf_mmap(struct dma_buf *dma_buf, struct vm_area_struct *vma)
-diff --git a/drivers/gpu/drm/tegra/gem.c b/drivers/gpu/drm/tegra/gem.c
-index cd497edad850..26af8daa9a16 100644
---- a/drivers/gpu/drm/tegra/gem.c
-+++ b/drivers/gpu/drm/tegra/gem.c
-@@ -149,11 +149,12 @@ static void *tegra_bo_mmap(struct host1x_bo *bo)
- static void tegra_bo_munmap(struct host1x_bo *bo, void *addr)
- {
- 	struct tegra_bo *obj = host1x_to_tegra_bo(bo);
-+	struct dma_buf_map map = DMA_BUF_MAP_INIT_VADDR(addr);
- 
- 	if (obj->vaddr)
- 		return;
- 	else if (obj->gem.import_attach)
--		dma_buf_vunmap(obj->gem.import_attach->dmabuf, addr);
-+		dma_buf_vunmap(obj->gem.import_attach->dmabuf, &map);
- 	else
- 		vunmap(addr);
- }
-@@ -656,7 +657,7 @@ static int tegra_gem_prime_vmap(struct dma_buf *buf, struct dma_buf_map *map)
- 	return 0;
- }
- 
--static void tegra_gem_prime_vunmap(struct dma_buf *buf, void *vaddr)
-+static void tegra_gem_prime_vunmap(struct dma_buf *buf, struct dma_buf_map *map)
- {
- }
- 
-diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-index 11428287bdf3..a1eb8279b113 100644
---- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-+++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-@@ -648,6 +648,7 @@ static void vb2_dc_unmap_dmabuf(void *mem_priv)
- {
- 	struct vb2_dc_buf *buf = mem_priv;
- 	struct sg_table *sgt = buf->dma_sgt;
-+	struct dma_buf_map map = DMA_BUF_MAP_INIT_VADDR(buf->vaddr);
- 
- 	if (WARN_ON(!buf->db_attach)) {
- 		pr_err("trying to unpin a not attached buffer\n");
-@@ -660,7 +661,7 @@ static void vb2_dc_unmap_dmabuf(void *mem_priv)
- 	}
- 
- 	if (buf->vaddr) {
--		dma_buf_vunmap(buf->db_attach->dmabuf, buf->vaddr);
-+		dma_buf_vunmap(buf->db_attach->dmabuf, &map);
- 		buf->vaddr = NULL;
- 	}
- 	dma_buf_unmap_attachment(buf->db_attach, sgt, buf->dma_dir);
-diff --git a/drivers/media/common/videobuf2/videobuf2-dma-sg.c b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-index c51170e9c1b9..d5157e903e27 100644
---- a/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-+++ b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-@@ -580,6 +580,7 @@ static void vb2_dma_sg_unmap_dmabuf(void *mem_priv)
- {
- 	struct vb2_dma_sg_buf *buf = mem_priv;
- 	struct sg_table *sgt = buf->dma_sgt;
-+	struct dma_buf_map map = DMA_BUF_MAP_INIT_VADDR(buf->vaddr);
- 
- 	if (WARN_ON(!buf->db_attach)) {
- 		pr_err("trying to unpin a not attached buffer\n");
-@@ -592,7 +593,7 @@ static void vb2_dma_sg_unmap_dmabuf(void *mem_priv)
- 	}
- 
- 	if (buf->vaddr) {
--		dma_buf_vunmap(buf->db_attach->dmabuf, buf->vaddr);
-+		dma_buf_vunmap(buf->db_attach->dmabuf, &map);
- 		buf->vaddr = NULL;
- 	}
- 	dma_buf_unmap_attachment(buf->db_attach, sgt, buf->dma_dir);
-diff --git a/drivers/media/common/videobuf2/videobuf2-vmalloc.c b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
-index 7b68e2379c65..11ba0eb1315b 100644
---- a/drivers/media/common/videobuf2/videobuf2-vmalloc.c
-+++ b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
-@@ -390,17 +390,19 @@ static int vb2_vmalloc_map_dmabuf(void *mem_priv)
- static void vb2_vmalloc_unmap_dmabuf(void *mem_priv)
- {
- 	struct vb2_vmalloc_buf *buf = mem_priv;
-+	struct dma_buf_map map = DMA_BUF_MAP_INIT_VADDR(buf->vaddr);
- 
--	dma_buf_vunmap(buf->dbuf, buf->vaddr);
-+	dma_buf_vunmap(buf->dbuf, &map);
- 	buf->vaddr = NULL;
- }
- 
- static void vb2_vmalloc_detach_dmabuf(void *mem_priv)
- {
- 	struct vb2_vmalloc_buf *buf = mem_priv;
-+	struct dma_buf_map map = DMA_BUF_MAP_INIT_VADDR(buf->vaddr);
- 
- 	if (buf->vaddr)
--		dma_buf_vunmap(buf->dbuf, buf->vaddr);
-+		dma_buf_vunmap(buf->dbuf, &map);
- 
- 	kfree(buf);
- }
-diff --git a/include/drm/drm_prime.h b/include/drm/drm_prime.h
-index 5125f84c28f6..0991a47a1567 100644
---- a/include/drm/drm_prime.h
-+++ b/include/drm/drm_prime.h
-@@ -84,7 +84,7 @@ void drm_gem_unmap_dma_buf(struct dma_buf_attachment *attach,
- 			   struct sg_table *sgt,
- 			   enum dma_data_direction dir);
- int drm_gem_dmabuf_vmap(struct dma_buf *dma_buf, struct dma_buf_map *map);
--void drm_gem_dmabuf_vunmap(struct dma_buf *dma_buf, void *vaddr);
-+void drm_gem_dmabuf_vunmap(struct dma_buf *dma_buf, struct dma_buf_map *map);
- 
- int drm_gem_prime_mmap(struct drm_gem_object *obj, struct vm_area_struct *vma);
- int drm_gem_dmabuf_mmap(struct dma_buf *dma_buf, struct vm_area_struct *vma);
-diff --git a/include/linux/dma-buf-map.h b/include/linux/dma-buf-map.h
-index 5ae732d373eb..c173a4abf4ba 100644
---- a/include/linux/dma-buf-map.h
-+++ b/include/linux/dma-buf-map.h
-@@ -23,6 +23,16 @@ struct dma_buf_map {
- 	bool is_iomem;
- };
- 
-+/**
-+ * DMA_BUF_MAP_INIT_VADDR - Initializes struct dma_buf_map to an address in system memory
-+ * @vaddr:	A system-memory address
-+ */
-+#define DMA_BUF_MAP_INIT_VADDR(vaddr_) \
-+	{ \
-+		.vaddr = (vaddr_), \
-+		.is_iomem = false, \
-+	}
-+
- /**
-  * dma_buf_map_set_vaddr - Sets a dma-buf mapping structure to an address in system memory
-  * @map:	The dma-buf mapping structure
-@@ -36,10 +46,26 @@ static inline void dma_buf_map_set_vaddr(struct dma_buf_map *map, void *vaddr)
- 	map->is_iomem = false;
- }
- 
--/* API transition helper */
--static inline bool dma_buf_map_is_vaddr(const struct dma_buf_map *map, const void *vaddr)
-+/**
-+ * dma_buf_map_is_equal - Compares two dma-buf mapping structures for equality
-+ * @lhs:	The dma-buf mapping structure
-+ * @rhs:	A dma-buf mapping structure to compare with
-+ *
-+ * Two dma-buf mapping structures are equal if they both refer to the same type of memory
-+ * and to the same address within that memory.
-+ *
-+ * Returns:
-+ * True is both structures are equal, or false otherwise.
-+ */
-+static inline bool dma_buf_map_is_equal(const struct dma_buf_map *lhs,
-+					const struct dma_buf_map *rhs)
- {
--	return !map->is_iomem && (map->vaddr == vaddr);
-+	if (lhs->is_iomem != rhs->is_iomem)
-+		return false;
-+	else if (lhs->is_iomem)
-+		return lhs->vaddr_iomem == rhs->vaddr_iomem;
-+	else
-+		return lhs->vaddr == rhs->vaddr;
- }
- 
- /**
-diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-index 7237997cfa38..cf77cc15f4ba 100644
---- a/include/linux/dma-buf.h
-+++ b/include/linux/dma-buf.h
-@@ -267,7 +267,7 @@ struct dma_buf_ops {
- 	int (*mmap)(struct dma_buf *, struct vm_area_struct *vma);
- 
- 	int (*vmap)(struct dma_buf *dmabuf, struct dma_buf_map *map);
--	void (*vunmap)(struct dma_buf *, void *vaddr);
-+	void (*vunmap)(struct dma_buf *dmabuf, struct dma_buf_map *map);
- };
- 
- /**
-@@ -504,5 +504,5 @@ int dma_buf_end_cpu_access(struct dma_buf *dma_buf,
- int dma_buf_mmap(struct dma_buf *, struct vm_area_struct *,
- 		 unsigned long);
- int dma_buf_vmap(struct dma_buf *dmabuf, struct dma_buf_map *map);
--void dma_buf_vunmap(struct dma_buf *dmabuf, void *vaddr);
-+void dma_buf_vunmap(struct dma_buf *dmabuf, struct dma_buf_map *map);
- #endif /* __DMA_BUF_H__ */
--- 
-2.28.0
+drivers/media/i2c/tw9910.c is a fairly OK template to use. The tw9910 supports
+a simple scaler as well, but I don't know if the tw9900 has the same feature.
+If not, then the format resolution is fixed based on the current selected
+TV standard.
+
+There is definitely no need for g_skip_top_lines: 1) it's a sensor-only op,
+and 2) that function always returns 0, so why keep it?
+
+> +
+> +static const struct v4l2_ctrl_ops tw9900_ctrl_ops = {
+> +	.s_ctrl = tw9900_s_ctrl,
+> +};
+> +
+> +#ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
+> +static const struct v4l2_subdev_internal_ops tw9900_internal_ops = {
+> +	.open = tw9900_open,
+> +};
+> +#endif
+> +
+> +static int tw9900_check_sensor_id(struct tw9900 *tw9900,
+
+*Not* a sensor :-)
+
+> +				  struct i2c_client *client)
+> +{
+> +	struct device *dev = &tw9900->client->dev;
+> +	u8 id;
+> +
+> +	id = tw9900_read_reg(client, TW9900_CHIP_ID);
+> +
+> +	if (id != TW9900_CHIP_ID) {
+> +		dev_err(dev, "Wrong camera sensor id(%04x)\n", id);
+> +		return -EINVAL;
+> +	}
+> +
+> +	dev_info(dev, "Detected TW9900 (%04x) sensor\n", TW9900_CHIP_ID);
+> +
+> +	return 0;
+> +}
+> +
+> +static int tw9900_configure_regulators(struct tw9900 *tw9900)
+> +{
+> +	u32 i;
+> +
+> +	for (i = 0; i < TW9900_NUM_SUPPLIES; i++)
+> +		tw9900->supplies[i].supply = tw9900_supply_names[i];
+> +
+> +	return devm_regulator_bulk_get(&tw9900->client->dev,
+> +				       TW9900_NUM_SUPPLIES,
+> +				       tw9900->supplies);
+> +}
+> +
+> +static int tw9900_probe(struct i2c_client *client,
+> +			const struct i2c_device_id *id)
+> +{
+> +	struct device *dev = &client->dev;
+> +	struct v4l2_ctrl_handler *hdl;
+> +	struct tw9900 *tw9900;
+> +	int ret;
+> +
+> +	tw9900 = devm_kzalloc(dev, sizeof(*tw9900), GFP_KERNEL);
+> +	if (!tw9900)
+> +		return -ENOMEM;
+> +
+> +	tw9900->client = client;
+> +	tw9900->cur_mode = &supported_modes[0];
+> +
+> +	tw9900->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
+> +	if (IS_ERR(tw9900->reset_gpio))
+> +		tw9900->reset_gpio = NULL;
+> +
+> +	ret = tw9900_configure_regulators(tw9900);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to get power regulators\n");
+> +		return ret;
+> +	}
+> +
+> +	v4l2_i2c_subdev_init(&tw9900->subdev, client, &tw9900_subdev_ops);
+> +	tw9900->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE | V4L2_SUBDEV_FL_HAS_EVENTS;
+> +
+> +	hdl = &tw9900->hdl;
+> +
+> +	v4l2_ctrl_handler_init(hdl, 2);
+> +
+> +	v4l2_ctrl_new_std(hdl, &tw9900_ctrl_ops, V4L2_CID_BRIGHTNESS,
+> +			  -128, 127, 1, 0);
+> +	v4l2_ctrl_new_std(hdl, &tw9900_ctrl_ops, V4L2_CID_CONTRAST,
+> +			  0, 255, 1, 0x60);
+> +
+> +	tw9900->subdev.ctrl_handler = hdl;
+> +	if (hdl->error) {
+> +		int err = hdl->error;
+> +
+> +		v4l2_ctrl_handler_free(hdl);
+> +		return err;
+> +	}
+> +
+> +	ret = __tw9900_power_on(tw9900);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = tw9900_check_sensor_id(tw9900, client);
+> +	if (ret)
+> +		goto err_power_off;
+> +
+> +#ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
+> +	tw9900->subdev.internal_ops = &tw9900_internal_ops;
+> +	tw9900->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+> +#endif
+> +#if defined(CONFIG_MEDIA_CONTROLLER)
+> +	tw9900->pad.flags = MEDIA_PAD_FL_SOURCE;
+> +	tw9900->subdev.entity.function = MEDIA_ENT_F_CAM_SENSOR;
+
+Set to MEDIA_ENT_F_ATV_DECODER.
+
+Regards,
+
+	Hans
+
+> +
+> +	ret = media_entity_pads_init(&tw9900->subdev.entity, 1, &tw9900->pad);
+> +	if (ret < 0)
+> +		goto err_power_off;
+> +#endif
+> +
+> +	ret = v4l2_async_register_subdev(&tw9900->subdev);
+> +	if (ret) {
+> +		dev_err(dev, "v4l2 async register subdev failed\n");
+> +		goto err_clean_entity;
+> +	}
+> +
+> +	pm_runtime_set_active(dev);
+> +	pm_runtime_enable(dev);
+> +	pm_runtime_idle(dev);
+> +
+> +	return 0;
+> +
+> +err_clean_entity:
+> +#if defined(CONFIG_MEDIA_CONTROLLER)
+> +	media_entity_cleanup(&tw9900->subdev.entity);
+> +#endif
+> +err_power_off:
+> +	__tw9900_power_off(tw9900);
+> +
+> +	return ret;
+> +}
+> +
+> +static int tw9900_remove(struct i2c_client *client)
+> +{
+> +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+> +	struct tw9900 *tw9900 = to_tw9900(sd);
+> +
+> +	v4l2_async_unregister_subdev(sd);
+> +#if defined(CONFIG_MEDIA_CONTROLLER)
+> +	media_entity_cleanup(&sd->entity);
+> +#endif
+> +
+> +	pm_runtime_disable(&client->dev);
+> +	if (!pm_runtime_status_suspended(&client->dev))
+> +		__tw9900_power_off(tw9900);
+> +	pm_runtime_set_suspended(&client->dev);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct i2c_device_id tw9900_id[] = {
+> +	{"tw9900", 0},
+> +	{},
+> +};
+> +
+> +#if IS_ENABLED(CONFIG_OF)
+> +static const struct of_device_id tw9900_of_match[] = {
+> +	{ .compatible = "techwell,tw9900" },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, tw9900_of_match);
+> +#endif
+> +
+> +static struct i2c_driver tw9900_i2c_driver = {
+> +	.driver = {
+> +		.name = "tw9900",
+> +		.pm = &tw9900_pm_ops,
+> +		.of_match_table = tw9900_of_match
+> +	},
+> +	.probe		= tw9900_probe,
+> +	.remove		= tw9900_remove,
+> +	.id_table	= tw9900_id,
+> +};
+> +
+> +module_i2c_driver(tw9900_i2c_driver);
+> +
+> +MODULE_DESCRIPTION("tw9900 sensor driver");
+> +MODULE_LICENSE("GPL v2");
+> 
 
