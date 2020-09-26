@@ -7,57 +7,57 @@ X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D887AC4741F
-	for <linux-media@archiver.kernel.org>; Sat, 26 Sep 2020 04:25:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29430C47420
+	for <linux-media@archiver.kernel.org>; Sat, 26 Sep 2020 04:25:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9C6D72080A
+	by mail.kernel.org (Postfix) with ESMTP id E6E092078B
 	for <linux-media@archiver.kernel.org>; Sat, 26 Sep 2020 04:25:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QR3D70X+"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="D1xoiKND"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730054AbgIZEZN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 26 Sep 2020 00:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42222 "EHLO
+        id S1730056AbgIZEZO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 26 Sep 2020 00:25:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730033AbgIZEZE (ORCPT
+        with ESMTP id S1730041AbgIZEZM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 26 Sep 2020 00:25:04 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64ADC0613D4
-        for <linux-media@vger.kernel.org>; Fri, 25 Sep 2020 21:25:03 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id e18so511273pgd.4
-        for <linux-media@vger.kernel.org>; Fri, 25 Sep 2020 21:25:03 -0700 (PDT)
+        Sat, 26 Sep 2020 00:25:12 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BFFC0613D8
+        for <linux-media@vger.kernel.org>; Fri, 25 Sep 2020 21:25:06 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id 5so4155944pgf.5
+        for <linux-media@vger.kernel.org>; Fri, 25 Sep 2020 21:25:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=2H1Yr1ZzRbTr0UE566f697qNBNIq6GZE63QK31mOArc=;
-        b=QR3D70X+iURkNzPXl26udZXdU8x9honZnaMWw4JV2DKKAIvIFtkWhDmU8HykuxoRUj
-         kQOi8jHCzczouvlfYRVDinDjm85nLQlg31by6GieWnYcJNKmVdwEjC7pR1DQH3aw0W6f
-         r0QLTxE4f+JBnu+5C2o5u7ggaWg0rg3bF64Zc79ECONonPRowJwtIm96g3MFqkLw0SpX
-         iG1F+HCHirx0wUURVjmDyERxSdZkEp9LjMNm8XM/f2fylGuUAUxdI/nnySnxYcwg4P/V
-         eysFTGffdcMyz8llW4fqtlxdEldrvDb17KOJ37R3KCOs1Vz3NyLCW4T0XWt1rJKKtsuC
-         kYxA==
+        bh=vw5JB3RRsbohaer3Y56R1IPsXZfXmp2s3xn/82rJ0CY=;
+        b=D1xoiKNDyt3hh17/hK6uqP4SAJ0L1P3/8IXEZSgrQKf9rBZXqkaliK02LneXiMkHGc
+         hxYhfBZgNzpCVtoUOBPYp/QXx5X4/02K3L9IlZyEnsTLPVYvwP/uqLK4KsdUC+CbktyT
+         8DNFlax8CYkd9Trrqr9xoxsbV9QIMOilaXcPWav2ATUes6LDMvL85b+AkLVf6tvVHYom
+         +Id89kS5caa8WGXDDtF5fDnl4RarlgFQyvitdpowCBq68FauqBrCZSuZArik8Bp9lmvK
+         Fh0WjZM6QEhINjtqmgHLGVqCcIl0sx1uE4RQxjHaCKgOy70fCPRfjDyzqBwVCDnyFq3g
+         I5WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=2H1Yr1ZzRbTr0UE566f697qNBNIq6GZE63QK31mOArc=;
-        b=ikk4HfyKrJ0jFKKcVY9Xst9suen4rOnAJ/bnBU8q/qL0+SSB6QrMs5Sk7QbikIMTs5
-         TsHWCh1kDh5r6ysexykBtvdgNtR6LhmoiTiY209Kuv43EBkHA8PiknQqfRahwmYf6gr9
-         0WiEMmgiLCg2Lin6KFBtjaWVQ3472HudPzodZUP344+MVvOAQUUqOHc6w3zxPK8mD+aO
-         Z09xFrGaaGDMsUFTFwaG2Mh84+oBzp4uc5o5NqvUpvsC9dMyKFBK8NaZP4GRrQn4bp4N
-         PGg6ZQEc4i1NENoPB8hsstEVhT8ZcYDPCVfhrO/Laeyw9JC/IHpUEzLn0IdN666iiF04
-         Insg==
-X-Gm-Message-State: AOAM531QrwlchakFKPc6SljqKfUxGKcVNCOobg85e5Kn8YUqy6LDQq6B
-        DWAxlL01/+NA7sbErtzLUgjvTQ==
-X-Google-Smtp-Source: ABdhPJxVSgNpa8Val9ZcacJd85QmQO2OmijAvP06AHqBP8I1x0fgkNGF6yDx7vorPACjyRFjjzINHA==
-X-Received: by 2002:a62:fb1a:0:b029:142:2501:39f9 with SMTP id x26-20020a62fb1a0000b0290142250139f9mr1542805pfm.72.1601094303392;
-        Fri, 25 Sep 2020 21:25:03 -0700 (PDT)
+        bh=vw5JB3RRsbohaer3Y56R1IPsXZfXmp2s3xn/82rJ0CY=;
+        b=W6/StzpCMwxR2M2sBIx54Mm7qnXmk408QKUC5IGOxUyBJUi+6sjHR4cD2lGod5wZ6q
+         3o2bHOqjNNnyNxe739aUHZwr6KrFZ285j/XAzR4CoDWBlpTH8B6Z3NtN8x99G+0VtsgA
+         NPwa4IQGrO/UdkgYO62y/VBVIH1vdbXOD1o2nQ0CycC1Cm67LxXiuthczHhhdJLY1O6C
+         SOevSElbflQ43g6n0yOMEpcZLZcGRt/5ZbJIgMDYhfoLYO7+AVcfqYhIaNg+AaN9qlvQ
+         XOGx7ZFvGxCGYk2PKvVDC3/K9RVmDEtAGGMYZfJ39WqbsKsouytt8I1SnbxYcM+wxvfp
+         2clQ==
+X-Gm-Message-State: AOAM531byRUED82CYfm9Ho/xYxIYGzdgYdGxrtX+4dK87SAmzVGWtDCR
+        pNSC6aRmDI/hAcaJxEHlGh6BZg==
+X-Google-Smtp-Source: ABdhPJyvQ50xfxJX8TpnL1MvlzaJmF3SWzncH/tqsov+stEHycC5jsIv3tQvdZov8P+AXKPfVqQiWA==
+X-Received: by 2002:a62:cd49:0:b029:150:7742:c6c8 with SMTP id o70-20020a62cd490000b02901507742c6c8mr2126731pfg.61.1601094306220;
+        Fri, 25 Sep 2020 21:25:06 -0700 (PDT)
 Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
-        by smtp.gmail.com with ESMTPSA id a5sm3585886pgk.13.2020.09.25.21.25.02
+        by smtp.gmail.com with ESMTPSA id a5sm3585886pgk.13.2020.09.25.21.25.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Sep 2020 21:25:02 -0700 (PDT)
+        Fri, 25 Sep 2020 21:25:05 -0700 (PDT)
 From:   John Stultz <john.stultz@linaro.org>
 To:     lkml <linux-kernel@vger.kernel.org>
 Cc:     John Stultz <john.stultz@linaro.org>,
@@ -74,9 +74,9 @@ Cc:     John Stultz <john.stultz@linaro.org>,
         Simon Ser <contact@emersion.fr>,
         James Jones <jajones@nvidia.com>, linux-media@vger.kernel.org,
         dri-devel@lists.freedesktop.org
-Subject: [RFC][PATCH 4/6] dma-buf: system_heap: Allocate higher order pages if available
-Date:   Sat, 26 Sep 2020 04:24:51 +0000
-Message-Id: <20200926042453.67517-5-john.stultz@linaro.org>
+Subject: [RFC][PATCH 6/6] dma-buf: heaps: Skip sync if not mapped
+Date:   Sat, 26 Sep 2020 04:24:53 +0000
+Message-Id: <20200926042453.67517-7-john.stultz@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200926042453.67517-1-john.stultz@linaro.org>
 References: <20200926042453.67517-1-john.stultz@linaro.org>
@@ -87,11 +87,45 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-While the system heap can return non-contiguous pages,
-try to allocate larger order pages if possible.
+This patch is basically a port of Ørjan Eide's similar patch for ION
+ https://lore.kernel.org/lkml/20200414134629.54567-1-orjan.eide@arm.com/
 
-This will allow slight performance gains and make implementing
-page pooling easier.
+Only sync the sg-list of dma-buf heap attachment when the attachment
+is actually mapped on the device.
+
+dma-bufs may be synced at any time. It can be reached from user space
+via DMA_BUF_IOCTL_SYNC, so there are no guarantees from callers on when
+syncs may be attempted, and dma_buf_end_cpu_access() and
+dma_buf_begin_cpu_access() may not be paired.
+
+Since the sg_list's dma_address isn't set up until the buffer is used
+on the device, and dma_map_sg() is called on it, the dma_address will be
+NULL if sync is attempted on the dma-buf before it's mapped on a device.
+
+Before v5.0 (commit 55897af63091 ("dma-direct: merge swiotlb_dma_ops
+into the dma_direct code")) this was a problem as the dma-api (at least
+the swiotlb_dma_ops on arm64) would use the potentially invalid
+dma_address. How that failed depended on how the device handled physical
+address 0. If 0 was a valid address to physical ram, that page would get
+flushed a lot, while the actual pages in the buffer would not get synced
+correctly. While if 0 is an invalid physical address it may cause a
+fault and trigger a crash.
+
+In v5.0 this was incidentally fixed by commit 55897af63091 ("dma-direct:
+merge swiotlb_dma_ops into the dma_direct code"), as this moved the
+dma-api to use the page pointer in the sg_list, and (for Ion buffers at
+least) this will always be valid if the sg_list exists at all.
+
+But, this issue is re-introduced in v5.3 with
+commit 449fa54d6815 ("dma-direct: correct the physical addr in
+dma_direct_sync_sg_for_cpu/device") moves the dma-api back to the old
+behaviour and picks the dma_address that may be invalid.
+
+dma-buf core doesn't ensure that the buffer is mapped on the device, and
+thus have a valid sg_list, before calling the exporter's
+begin_cpu_access.
+
+Logic and commit message originally by: Ørjan Eide <orjan.eide@arm.com>
 
 Cc: Sumit Semwal <sumit.semwal@linaro.org>
 Cc: Liam Mark <lmark@codeaurora.org>
@@ -109,155 +143,122 @@ Cc: linux-media@vger.kernel.org
 Cc: dri-devel@lists.freedesktop.org
 Signed-off-by: John Stultz <john.stultz@linaro.org>
 ---
- drivers/dma-buf/heaps/system_heap.c | 85 ++++++++++++++++++++++-------
- 1 file changed, 66 insertions(+), 19 deletions(-)
+ drivers/dma-buf/heaps/cma_heap.c    | 10 ++++++++++
+ drivers/dma-buf/heaps/system_heap.c | 10 ++++++++++
+ 2 files changed, 20 insertions(+)
 
+diff --git a/drivers/dma-buf/heaps/cma_heap.c b/drivers/dma-buf/heaps/cma_heap.c
+index 3adfdbed0829..b6ab0392ad9a 100644
+--- a/drivers/dma-buf/heaps/cma_heap.c
++++ b/drivers/dma-buf/heaps/cma_heap.c
+@@ -44,6 +44,7 @@ struct dma_heap_attachment {
+ 	struct device *dev;
+ 	struct sg_table table;
+ 	struct list_head list;
++	bool mapped;
+ };
+ 
+ static int cma_heap_attach(struct dma_buf *dmabuf,
+@@ -68,6 +69,7 @@ static int cma_heap_attach(struct dma_buf *dmabuf,
+ 
+ 	a->dev = attachment->dev;
+ 	INIT_LIST_HEAD(&a->list);
++	a->mapped = false;
+ 
+ 	attachment->priv = a;
+ 
+@@ -101,6 +103,7 @@ static struct sg_table *cma_heap_map_dma_buf(struct dma_buf_attachment *attachme
+ 	if (!dma_map_sg(attachment->dev, table->sgl, table->nents,
+ 			direction))
+ 		table = ERR_PTR(-ENOMEM);
++	a->mapped = true;
+ 	return table;
+ }
+ 
+@@ -108,6 +111,9 @@ static void cma_heap_unmap_dma_buf(struct dma_buf_attachment *attachment,
+ 				   struct sg_table *table,
+ 				   enum dma_data_direction direction)
+ {
++	struct dma_heap_attachment *a = attachment->priv;
++
++	a->mapped = false;
+ 	dma_unmap_sg(attachment->dev, table->sgl, table->nents, direction);
+ }
+ 
+@@ -123,6 +129,8 @@ static int cma_heap_dma_buf_begin_cpu_access(struct dma_buf *dmabuf,
+ 
+ 	mutex_lock(&buffer->lock);
+ 	list_for_each_entry(a, &buffer->attachments, list) {
++		if (!a->mapped)
++			continue;
+ 		dma_sync_sg_for_cpu(a->dev, a->table.sgl, a->table.nents,
+ 				    direction);
+ 	}
+@@ -142,6 +150,8 @@ static int cma_heap_dma_buf_end_cpu_access(struct dma_buf *dmabuf,
+ 
+ 	mutex_lock(&buffer->lock);
+ 	list_for_each_entry(a, &buffer->attachments, list) {
++		if (!a->mapped)
++			continue;
+ 		dma_sync_sg_for_device(a->dev, a->table.sgl, a->table.nents,
+ 				       direction);
+ 	}
 diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heaps/system_heap.c
-index ddfa17dc48a8..882a632e9bb7 100644
+index 9f57b4c8ae69..8a523b6fd51a 100644
 --- a/drivers/dma-buf/heaps/system_heap.c
 +++ b/drivers/dma-buf/heaps/system_heap.c
-@@ -39,6 +39,14 @@ struct dma_heap_attachment {
- 	struct list_head list;
- };
- 
-+#define HIGH_ORDER_GFP  (((GFP_HIGHUSER | __GFP_ZERO | __GFP_NOWARN \
-+				| __GFP_NORETRY) & ~__GFP_RECLAIM) \
-+				| __GFP_COMP)
-+#define LOW_ORDER_GFP (GFP_HIGHUSER | __GFP_ZERO | __GFP_COMP)
-+static gfp_t order_flags[] = {HIGH_ORDER_GFP, LOW_ORDER_GFP, LOW_ORDER_GFP};
-+static const unsigned int orders[] = {8, 4, 0};
-+#define NUM_ORDERS ARRAY_SIZE(orders)
-+
- static struct sg_table *dup_sg_table(struct sg_table *table)
- {
- 	struct sg_table *new_table;
-@@ -259,8 +267,11 @@ static void system_heap_dma_buf_release(struct dma_buf *dmabuf)
- 	int i;
- 
- 	table = &buffer->sg_table;
--	for_each_sgtable_sg(table, sg, i)
--		__free_page(sg_page(sg));
-+	for_each_sg(table->sgl, sg, table->nents, i) {
-+		struct page *page = sg_page(sg);
-+
-+		__free_pages(page, compound_order(page));
-+	}
- 	sg_free_table(table);
- 	kfree(buffer);
- }
-@@ -278,6 +289,26 @@ const struct dma_buf_ops system_heap_buf_ops = {
- 	.release = system_heap_dma_buf_release,
- };
- 
-+static struct page *alloc_largest_available(unsigned long size,
-+					    unsigned int max_order)
-+{
-+	struct page *page;
-+	int i;
-+
-+	for (i = 0; i < NUM_ORDERS; i++) {
-+		if (size <  (PAGE_SIZE << orders[i]))
-+			continue;
-+		if (max_order < orders[i])
-+			continue;
-+
-+		page = alloc_pages(order_flags[i], orders[i]);
-+		if (!page)
-+			continue;
-+		return page;
-+	}
-+	return NULL;
-+}
-+
- static int system_heap_allocate(struct dma_heap *heap,
- 				unsigned long len,
- 				unsigned long fd_flags,
-@@ -285,11 +316,13 @@ static int system_heap_allocate(struct dma_heap *heap,
- {
- 	struct system_heap_buffer *buffer;
- 	DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
-+	unsigned long size_remaining = len;
-+	unsigned int max_order = orders[0];
- 	struct dma_buf *dmabuf;
+@@ -38,6 +38,7 @@ struct dma_heap_attachment {
+ 	struct device *dev;
  	struct sg_table *table;
- 	struct scatterlist *sg;
--	pgoff_t pagecount;
--	pgoff_t pg;
-+	struct list_head pages;
-+	struct page *page, *tmp_page;
- 	int i, ret = -ENOMEM;
+ 	struct list_head list;
++	bool mapped;
+ };
  
- 	buffer = kzalloc(sizeof(*buffer), GFP_KERNEL);
-@@ -301,25 +334,35 @@ static int system_heap_allocate(struct dma_heap *heap,
- 	buffer->heap = heap;
- 	buffer->len = len;
+ #define HIGH_ORDER_GFP  (((GFP_HIGHUSER | __GFP_ZERO | __GFP_NOWARN \
+@@ -94,6 +95,7 @@ static int system_heap_attach(struct dma_buf *dmabuf,
+ 	a->table = table;
+ 	a->dev = attachment->dev;
+ 	INIT_LIST_HEAD(&a->list);
++	a->mapped = false;
  
--	table = &buffer->sg_table;
--	pagecount = len / PAGE_SIZE;
--	if (sg_alloc_table(table, pagecount, GFP_KERNEL))
--		goto free_buffer;
--
--	sg = table->sgl;
--	for (pg = 0; pg < pagecount; pg++) {
--		struct page *page;
-+	INIT_LIST_HEAD(&pages);
-+	i = 0;
-+	while (size_remaining > 0) {
- 		/*
- 		 * Avoid trying to allocate memory if the process
- 		 * has been killed by SIGKILL
- 		 */
- 		if (fatal_signal_pending(current))
--			goto free_pages;
--		page = alloc_page(GFP_KERNEL | __GFP_ZERO);
-+			goto free_buffer;
+ 	attachment->priv = a;
+ 
+@@ -128,6 +130,7 @@ static struct sg_table *system_heap_map_dma_buf(struct dma_buf_attachment *attac
+ 	if (!dma_map_sg(attachment->dev, table->sgl, table->nents, direction))
+ 		return ERR_PTR(-ENOMEM);
+ 
++	a->mapped = true;
+ 	return table;
+ }
+ 
+@@ -135,6 +138,9 @@ static void system_heap_unmap_dma_buf(struct dma_buf_attachment *attachment,
+ 				      struct sg_table *table,
+ 				      enum dma_data_direction direction)
+ {
++	struct dma_heap_attachment *a = attachment->priv;
 +
-+		page = alloc_largest_available(size_remaining, max_order);
- 		if (!page)
--			goto free_pages;
--		sg_set_page(sg, page, page_size(page), 0);
-+			goto free_buffer;
-+
-+		list_add_tail(&page->lru, &pages);
-+		size_remaining -= PAGE_SIZE << compound_order(page);
-+		max_order = compound_order(page);
-+		i++;
-+	}
-+
-+	table = &buffer->sg_table;
-+	if (sg_alloc_table(table, i, GFP_KERNEL))
-+		goto free_buffer;
-+
-+	sg = table->sgl;
-+	list_for_each_entry_safe(page, tmp_page, &pages, lru) {
-+		sg_set_page(sg, page, PAGE_SIZE << compound_order(page), 0);
- 		sg = sg_next(sg);
-+		list_del(&page->lru);
++	a->mapped = false;
+ 	dma_unmap_sg(attachment->dev, table->sgl, table->nents, direction);
+ }
+ 
+@@ -151,6 +157,8 @@ static int system_heap_dma_buf_begin_cpu_access(struct dma_buf *dmabuf,
+ 		invalidate_kernel_vmap_range(buffer->vaddr, buffer->len);
+ 
+ 	list_for_each_entry(a, &buffer->attachments, list) {
++		if (!a->mapped)
++			continue;
+ 		dma_sync_sg_for_cpu(a->dev, a->table->sgl, a->table->nents,
+ 				    direction);
  	}
+@@ -171,6 +179,8 @@ static int system_heap_dma_buf_end_cpu_access(struct dma_buf *dmabuf,
+ 		flush_kernel_vmap_range(buffer->vaddr, buffer->len);
  
- 	/* create the dmabuf */
-@@ -339,14 +382,18 @@ static int system_heap_allocate(struct dma_heap *heap,
- 		/* just return, as put will call release and that will free */
- 		return ret;
+ 	list_for_each_entry(a, &buffer->attachments, list) {
++		if (!a->mapped)
++			continue;
+ 		dma_sync_sg_for_device(a->dev, a->table->sgl, a->table->nents,
+ 				       direction);
  	}
--
- 	return ret;
- 
- free_pages:
--	for_each_sgtable_sg(table, sg, i)
--		__free_page(sg_page(sg));
-+	for_each_sgtable_sg(table, sg, i) {
-+		struct page *p = sg_page(sg);
-+
-+		__free_pages(p, compound_order(p));
-+	}
- 	sg_free_table(table);
- free_buffer:
-+	list_for_each_entry_safe(page, tmp_page, &pages, lru)
-+		__free_pages(page, compound_order(page));
- 	kfree(buffer);
- 
- 	return ret;
 -- 
 2.17.1
 
