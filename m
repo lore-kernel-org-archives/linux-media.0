@@ -2,185 +2,168 @@ Return-Path: <SRS0=ZUFx=DD=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-11.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15682C4727D
-	for <linux-media@archiver.kernel.org>; Sat, 26 Sep 2020 03:39:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62A88C2D0A8
+	for <linux-media@archiver.kernel.org>; Sat, 26 Sep 2020 04:24:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 504A821741
-	for <linux-media@archiver.kernel.org>; Sat, 26 Sep 2020 03:39:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 143BF2078B
+	for <linux-media@archiver.kernel.org>; Sat, 26 Sep 2020 04:24:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="HXEtrzIQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mVKL30wy"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728051AbgIZDjc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 25 Sep 2020 23:39:32 -0400
-Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:55629 "EHLO
-        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726149AbgIZDjc (ORCPT
+        id S1729172AbgIZEY5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 26 Sep 2020 00:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726210AbgIZEY5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 25 Sep 2020 23:39:32 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id M13ZkEA3i4gEjM13akegGS; Sat, 26 Sep 2020 05:39:30 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1601091570; bh=DVhZIa3y8Sjs5J7/Ww0mPtlA9NATs9lK5Hvw5JIlMYQ=;
-        h=Message-ID:Date:From:To:Subject:From:Subject;
-        b=HXEtrzIQfPYt1KiKJ9CvCvMGZy1+I90Hl+vuA/3tjXvK+5G4cWuWvM0FGwr8LnulY
-         vRw9p+YyhTwgTJZdW1A3YTmtT4AHljnYI6zvU1U6b2JmDsw7wQbgaZqtKKKF+bGzWN
-         bujGiSm5kb3bZul6sWgJv6HqdcwFbDr/pLA8twyWbQHWzF3kfPWWla/BiqjRGOa5pH
-         usRtqIPo8rXdun82e/5KjN1Tw1P2ysQJtefRCod7ac7WAW3ZM+kr31IoefEjVHJW4+
-         RuSW8nmyKhyOYZ6BKpUub1wDXjx5gGutW1TxgizMVaBMPo2dkdK8YEIKcrC/EEX6/r
-         LXRTqlmzhbkPw==
-Message-ID: <cafc1405e13c9cf403f280d3287343b3@smtp-cloud9.xs4all.net>
-Date:   Sat, 26 Sep 2020 05:39:29 +0200
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
-X-CMAE-Envelope: MS4wfAdR1qwM7Qk+bv3SdnnIqYXLO5AHpq1uPbJLN/GY+6N05j/aBE+WV/+ublDnlBYdgbfKQru+w+Yr+yc16iP2hPDxWuP/v7dPoDggw95IkyYLNIoiN6Dk
- 0EMeY7SI4XrGP0/K6VzFMnH4TvzZ2QZhdLaVkGgxU8tmNsuQiKM8W3l9cJlAqsrR5iaCqTAGW4us/eUnxk1PPZxlUNy6PZwvfI6JQGHCTOn46MtIBAV00cP9
+        Sat, 26 Sep 2020 00:24:57 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41AD8C0613CE
+        for <linux-media@vger.kernel.org>; Fri, 25 Sep 2020 21:24:57 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id u4so351187plr.4
+        for <linux-media@vger.kernel.org>; Fri, 25 Sep 2020 21:24:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=u7Z9AmMaAX9Vb4Ld53icr/xLpCufMXVRoWb2ypLsc80=;
+        b=mVKL30wyp8QWxrO/AXPzbqcUkAgUwQ5PQLPtaTkJUo85MCgp0lLqI759YCjmqYCkfo
+         0vofLOZ+oqHZEyalKS9grgA6QsTsHTLZUVGmcmn4NXUp+sOGw9tqWOL6ubqGxS3Nrc00
+         q7tnYBkMjfrG4/lWYFeHodZ7QGCewEqSZ6IsvQh/3ZR0RsD03VrR8qY1GpHDuym1lq5x
+         vmaDqZ8UEYL5EXf8Wktjix4s29ercJuTkpkr1blwjS1MwNlPlh5wQKPWzsMsYaIxYeKr
+         psDWBvDxbJDar9sPHmE6joj+ftiS9KY4vzTpm7AdJVQcwhLAOkWQl4oK2hkRKUtga3cW
+         uDPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=u7Z9AmMaAX9Vb4Ld53icr/xLpCufMXVRoWb2ypLsc80=;
+        b=ZfuFaAbricJiyzbnz30g7VHbOIKpxhpMjNpS60U3YxtYXmyf5PUzNyOs7bmO1u6RgV
+         xNOLtOwvE1bHvYvwvvFXRKF32YbFLX6dlQ+GdY94DnRrmGJ/3cb+XL/WUh56uROe+cig
+         XceZuN3Qj+bpevk0dDto9MvtAtXpHMDd0/T5qfnt0Uz1OoAVTA00fSX/LIk3a4G+OWAX
+         w5gZdc5WCYhWTptZh8xmjJlVrrgJRI8m+Igg8xnlirEs8nOx/4TnAWwl03YXOqym5FEs
+         7elH6oIpngDMf70rYzveCbuxebYLu8tj8PSEXEBMVsAYDt14Ary/opOG2zsTngKUAgQI
+         ZPSg==
+X-Gm-Message-State: AOAM531D4lTPyBJC1EDc2pRu83sAbzPosBoqwLI/CMqFQ+n7qClfeNC3
+        VgxlXRmvFUjtOMggvRHax8owLw==
+X-Google-Smtp-Source: ABdhPJzK4xRnW4GQ7wUmaWVVtyqAzUaT2hQgL6Vkyx4xR/37YLk5BaJvFuZ7unQ2rLB0zWZJPt03KQ==
+X-Received: by 2002:a17:902:8347:b029:d1:f365:6fb5 with SMTP id z7-20020a1709028347b02900d1f3656fb5mr2420471pln.61.1601094296568;
+        Fri, 25 Sep 2020 21:24:56 -0700 (PDT)
+Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
+        by smtp.gmail.com with ESMTPSA id a5sm3585886pgk.13.2020.09.25.21.24.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Sep 2020 21:24:55 -0700 (PDT)
+From:   John Stultz <john.stultz@linaro.org>
+To:     lkml <linux-kernel@vger.kernel.org>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@kernel.org>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sandeep Patil <sspatil@google.com>,
+        =?UTF-8?q?=C3=98rjan=20Eide?= <orjan.eide@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Simon Ser <contact@emersion.fr>,
+        James Jones <jajones@nvidia.com>, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: [RFC][PATCH 0/6] dma-buf: Performance improvements for system heap
+Date:   Sat, 26 Sep 2020 04:24:47 +0000
+Message-Id: <20200926042453.67517-1-john.stultz@linaro.org>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+Hey All,
+  So this patch series contains a series of performance
+optimizations to the dma-buf system heap.
 
-Results of the daily build of media_tree:
+Unfortunately, in working these up, I realized the heap-helpers
+infrastructure we tried to add to miniimize code duplication is
+not as generic as we intended. For some heaps it makes sense to
+deal with page lists, for other heaps it makes more sense to
+track things with sgtables.
 
-date:			Sat Sep 26 05:00:13 CEST 2020
-media-tree git hash:	01cc2ec6ea044731e939e5e47f7e115b86f49465
-media_build git hash:	efbdeecfc21ff8abcabc84c77fe8dfbefa2d657a
-v4l-utils git hash:	ea16a7ef13a902793a5c2626b0cefc4d956147f3
-edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
-gcc version:		i686-linux-gcc (GCC) 9.3.0
-sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		v0.6.2-1-gfebba84c
-smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		v0.5.0-6793-g0248ebb06
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: b54e01a7f76260649e5d124db86c575c8650c2f9
-host hardware:		x86_64
-host os:		5.7.0-1-amd64
+So this series reworks the system heap to use sgtables, and then
+consolidates the pagelist method from the heap-helpers into the
+CMA heap. After which the heap-helpers logic is removed (as it
+is unused). I'd still like to find a better way to avoid some of
+the logic duplication in implementing the entire dma_buf_ops
+handlers per heap. But unfortunately that code is tied somewhat
+to how the buffer's memory is tracked.
 
-linux-git-sh: OK
-linux-git-arm-davinci: OK
-linux-git-arm-at91: OK
-linux-git-mips: OK
-linux-git-powerpc64: OK
-linux-git-arm-stm32: OK
-linux-git-arm-pxa: OK
-linux-git-arm64: OK
-linux-git-arm-multi: OK
-linux-git-i686: OK
-linux-git-x86_64: OK
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-3.10.108-i686: WARNINGS
-linux-3.10.108-x86_64: WARNINGS
-linux-3.11.10-i686: WARNINGS
-linux-3.11.10-x86_64: WARNINGS
-linux-3.12.74-i686: OK
-linux-3.12.74-x86_64: OK
-linux-3.13.11-i686: OK
-linux-3.13.11-x86_64: OK
-linux-3.14.79-i686: OK
-linux-3.14.79-x86_64: OK
-linux-3.15.10-i686: OK
-linux-3.15.10-x86_64: OK
-linux-3.16.81-i686: OK
-linux-3.16.81-x86_64: OK
-linux-3.17.8-i686: OK
-linux-3.17.8-x86_64: OK
-linux-3.18.136-i686: OK
-linux-3.18.136-x86_64: OK
-linux-3.19.8-i686: OK
-linux-3.19.8-x86_64: OK
-linux-4.0.9-i686: OK
-linux-4.0.9-x86_64: OK
-linux-4.1.52-i686: OK
-linux-4.1.52-x86_64: OK
-linux-4.2.8-i686: OK
-linux-4.2.8-x86_64: OK
-linux-4.3.6-i686: OK
-linux-4.3.6-x86_64: OK
-linux-4.4.212-i686: OK
-linux-4.4.212-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.212-i686: OK
-linux-4.9.212-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.169-i686: OK
-linux-4.14.169-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.101-i686: OK
-linux-4.19.101-x86_64: OK
-linux-4.20.15-i686: OK
-linux-4.20.15-x86_64: OK
-linux-5.0.15-i686: OK
-linux-5.0.15-x86_64: OK
-linux-5.1.1-i686: OK
-linux-5.1.1-x86_64: OK
-linux-5.2.1-i686: OK
-linux-5.2.1-x86_64: OK
-linux-5.3.1-i686: OK
-linux-5.3.1-x86_64: OK
-linux-5.4.17-i686: OK
-linux-5.4.17-x86_64: OK
-linux-5.5.1-i686: OK
-linux-5.5.1-x86_64: OK
-linux-5.6.1-i686: OK
-linux-5.6.1-x86_64: OK
-linux-5.7.2-i686: OK
-linux-5.7.2-x86_64: OK
-linux-5.8.1-i686: OK
-linux-5.8.1-x86_64: OK
-linux-5.9-rc1-i686: OK
-linux-5.9-rc1-x86_64: OK
-apps: OK
-spec-git: OK
-virtme: WARNINGS: Final Summary: 2943, Succeeded: 2943, Failed: 0, Warnings: 1
-virtme-32: WARNINGS: Final Summary: 2779, Succeeded: 2779, Failed: 0, Warnings: 2
-sparse: OK
-smatch: OK
+After this, the series introduces two optimizations to the the
+system heap, utilizing large order pages, and adding a page-pool
+(maybe abusing the pagepool logic from the network code, but it
+seems silly to reimplement it).
 
-Detailed results are available here:
 
-http://www.xs4all.nl/~hverkuil/logs/Saturday.log
+I implemented a simple allocation microbenchmark to compare
+dmabuf heaps vs ion:
+  https://git.linaro.org/people/john.stultz/android-dev.git/commit/?h=dev/dma-buf-heap-perf&id=e33aabd34b300f8f8be8d71ec7253dd0abe702f2
 
-Detailed regression test results are available here:
+With these changes, the allocation path is *much* improved,
+performing better then ION (though to be fair, the repeated 
+allocating and freeing of the same size buffer is the ideal
+case for the pagepool logic, so don't read too much into it).
 
-http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media-32.log
-http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media-dmesg.log
+I charted some datapoints from the microbenchmark with each
+of the patches should folks be interested.
+https://docs.google.com/spreadsheets/d/1-1C8ZQpmkl_0DISkI6z4xelE08MlNAN7oEu34AnO4Ao/edit#gid=0
 
-Full logs are available here:
+Finally, a port of a patch that Ørjan Eide implemented for ION
+that avoids calling sync on attachments that don't have a
+mapping.
 
-http://www.xs4all.nl/~hverkuil/logs/Saturday.tar.bz2
+Feedback on these would be great!
 
-The Media Infrastructure API from this daily build is here:
 
-http://www.xs4all.nl/~hverkuil/spec/index.html
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: Liam Mark <lmark@codeaurora.org>
+Cc: Laura Abbott <labbott@kernel.org>
+Cc: Brian Starkey <Brian.Starkey@arm.com>
+Cc: Hridya Valsaraju <hridya@google.com>
+Cc: Suren Baghdasaryan <surenb@google.com>
+Cc: Sandeep Patil <sspatil@google.com>
+Cc: Ørjan Eide <orjan.eide@arm.com>
+Cc: Robin Murphy <robin.murphy@arm.com>
+Cc: Ezequiel Garcia <ezequiel@collabora.com>
+Cc: Simon Ser <contact@emersion.fr>
+Cc: James Jones <jajones@nvidia.com>
+Cc: linux-media@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+
+John Stultz (6):
+  dma-buf: system_heap: Rework system heap to use sgtables instead of
+    pagelists
+  dma-buf: heaps: Move heap-helper logic into the cma_heap
+    implementation
+  dma-buf: heaps: Remove heap-helpers code
+  dma-buf: system_heap: Allocate higher order pages if available
+  dma-buf: system_heap: Add pagepool support to system heap
+  dma-buf: heaps: Skip sync if not mapped
+
+ drivers/dma-buf/heaps/Kconfig        |   1 +
+ drivers/dma-buf/heaps/Makefile       |   1 -
+ drivers/dma-buf/heaps/cma_heap.c     | 332 +++++++++++++++++----
+ drivers/dma-buf/heaps/heap-helpers.c | 271 -----------------
+ drivers/dma-buf/heaps/heap-helpers.h |  53 ----
+ drivers/dma-buf/heaps/system_heap.c  | 426 ++++++++++++++++++++++++---
+ 6 files changed, 660 insertions(+), 424 deletions(-)
+ delete mode 100644 drivers/dma-buf/heaps/heap-helpers.c
+ delete mode 100644 drivers/dma-buf/heaps/heap-helpers.h
+
+-- 
+2.17.1
+
