@@ -2,74 +2,57 @@ Return-Path: <SRS0=ZUFx=DD=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=ham
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F340C2D0A8
-	for <linux-media@archiver.kernel.org>; Sat, 26 Sep 2020 05:57:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68FD6C2D0A8
+	for <linux-media@archiver.kernel.org>; Sat, 26 Sep 2020 06:30:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DC6FA2080A
-	for <linux-media@archiver.kernel.org>; Sat, 26 Sep 2020 05:57:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1601099827;
-	bh=VpCCvy+EKz11t+tlGoIB2j+LPqNVuV+DnNFwkVqi0iw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=AqaTSWuC2KuSTAjBEOB6oPWk67pAtibdZebQOFJnIURjv3FmD0uL2cZl2K6fpbYnu
-	 Hk9XONCYy6TLH309MEFS2cEmoEWje2CYLzsq3gc36WdukFpStAm/1bapqyUlA27TBM
-	 xObeGcr6WZ/10Ef4W1uTl/P1oTh+M5mjiD6LOFeo=
+	by mail.kernel.org (Postfix) with ESMTP id 2785820882
+	for <linux-media@archiver.kernel.org>; Sat, 26 Sep 2020 06:30:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726210AbgIZF5H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 26 Sep 2020 01:57:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52790 "EHLO mail.kernel.org"
+        id S1727201AbgIZGax (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 26 Sep 2020 02:30:53 -0400
+Received: from verein.lst.de ([213.95.11.211]:58446 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726119AbgIZF5H (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 26 Sep 2020 01:57:07 -0400
-Received: from coco.lan (ip5f5ad5c1.dynamic.kabel-deutschland.de [95.90.213.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EC82820809;
-        Sat, 26 Sep 2020 05:57:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601099826;
-        bh=VpCCvy+EKz11t+tlGoIB2j+LPqNVuV+DnNFwkVqi0iw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=m+DYDymX9ui8HRZXH9UlwsXgr3dhQKiCW2DF2byZESLRu0HdmykRuZorexpxqyHu0
-         giICo7rVre5d7CbpxDZQsjIENDXnPwv9wFX+/G+CylEvNECyHXKx5kG79BcPT0sVsW
-         7W3kPUPZ/36v+7wfzhV+sG1Q1C6d75w83qROpGNM=
-Date:   Sat, 26 Sep 2020 07:57:02 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     linux-media@vger.kernel.org
+        id S1726210AbgIZGax (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 26 Sep 2020 02:30:53 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 1AE7968AFE; Sat, 26 Sep 2020 08:30:51 +0200 (CEST)
+Date:   Sat, 26 Sep 2020 08:30:50 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Christoph Hellwig <hch@lst.de>, linux-media@vger.kernel.org
 Subject: Re: [git:media_tree/fixes] media: media/v4l2: remove
  V4L2_FLAG_MEMORY_NON_CONSISTENT flag
-Message-ID: <20200926075702.6e1fbe2a@coco.lan>
-In-Reply-To: <20200922134235.GA22620@lst.de>
-References: <E1kHoRT-009OMF-AW@www.linuxtv.org>
-        <20200922134235.GA22620@lst.de>
-X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+Message-ID: <20200926063050.GB3427@lst.de>
+References: <E1kHoRT-009OMF-AW@www.linuxtv.org> <20200922134235.GA22620@lst.de> <20200926075702.6e1fbe2a@coco.lan>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200926075702.6e1fbe2a@coco.lan>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Christoph,
-
-Em Tue, 22 Sep 2020 15:42:35 +0200
-Christoph Hellwig <hch@lst.de> escreveu:
-
-> On Mon, Sep 14, 2020 at 01:28:06PM +0000, Mauro Carvalho Chehab wrote:
-> > This is an automatic generated email to let you know that the following patch were queued:  
+On Sat, Sep 26, 2020 at 07:57:02AM +0200, Mauro Carvalho Chehab wrote:
+> Hi Christoph,
 > 
-> did you intend to get this into Linus tree before 5.9?  I just checked
-> and didn't see it in mainline yet.
+> Em Tue, 22 Sep 2020 15:42:35 +0200
+> Christoph Hellwig <hch@lst.de> escreveu:
+> 
+> > On Mon, Sep 14, 2020 at 01:28:06PM +0000, Mauro Carvalho Chehab wrote:
+> > > This is an automatic generated email to let you know that the following patch were queued:  
+> > 
+> > did you intend to get this into Linus tree before 5.9?  I just checked
+> > and didn't see it in mainline yet.
+> 
+> It was merged upstream on Thursday:
+> 
+> 	https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8fa5960f575995bc8f3beb6b36c5aa6c61e7cdc0
 
-It was merged upstream on Thursday:
-
-	https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8fa5960f575995bc8f3beb6b36c5aa6c61e7cdc0
-
-Regards,
-Mauro
+Yes, I saw it yesterday, and now merged the sereis that depends on it
+into my for-next tree.
