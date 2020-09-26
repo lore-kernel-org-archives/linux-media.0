@@ -2,205 +2,74 @@ Return-Path: <SRS0=ZUFx=DD=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F24D5C47420
-	for <linux-media@archiver.kernel.org>; Sat, 26 Sep 2020 04:25:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F340C2D0A8
+	for <linux-media@archiver.kernel.org>; Sat, 26 Sep 2020 05:57:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BE7142078B
-	for <linux-media@archiver.kernel.org>; Sat, 26 Sep 2020 04:25:27 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WSXp6wb5"
+	by mail.kernel.org (Postfix) with ESMTP id DC6FA2080A
+	for <linux-media@archiver.kernel.org>; Sat, 26 Sep 2020 05:57:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1601099827;
+	bh=VpCCvy+EKz11t+tlGoIB2j+LPqNVuV+DnNFwkVqi0iw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=AqaTSWuC2KuSTAjBEOB6oPWk67pAtibdZebQOFJnIURjv3FmD0uL2cZl2K6fpbYnu
+	 Hk9XONCYy6TLH309MEFS2cEmoEWje2CYLzsq3gc36WdukFpStAm/1bapqyUlA27TBM
+	 xObeGcr6WZ/10Ef4W1uTl/P1oTh+M5mjiD6LOFeo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730045AbgIZEZM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 26 Sep 2020 00:25:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42230 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730019AbgIZEZF (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sat, 26 Sep 2020 00:25:05 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F32C0613D6
-        for <linux-media@vger.kernel.org>; Fri, 25 Sep 2020 21:25:05 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id x16so3362885pgj.3
-        for <linux-media@vger.kernel.org>; Fri, 25 Sep 2020 21:25:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=/z1sF9p3q5wnfzY3ZTbxrN10Skwo2Y6Rq8ZU166mru4=;
-        b=WSXp6wb5oEQXway9MAE25SNgkcoGB3A0OZEvTUWHbhaQcCbSV5Ny+E7VBwg8KmOOcq
-         yf+GkI6TgmXX+FInkLEgtXDSfKYP0BgE4pNpZqhGEVrBISYNSgmypbgffcboNFj9ieaA
-         FIYzHMmYEOWJ8Biy3uom7ZyaqCxD04BMyJpW+4kle1dvosbg3dumOY966Amx0qBSu95P
-         A40DSecXHKYkGNqCZ7pz9lmoijccn18mYFX85cE+7mNzeUxoRhgHySufYs1zncvsY/nA
-         wWlPAlUNiGL1Rg5aiqJ4bQPEzuSXFeIMxIrcJEacxBI2b7/pyGyToijcWcIl7O9/Jl8K
-         VrpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/z1sF9p3q5wnfzY3ZTbxrN10Skwo2Y6Rq8ZU166mru4=;
-        b=d26CYv0b5AzIEoNi3Bn23GcvZd6QRLZAQDq0bkTpaie489q3nVHLerbjGBI0Y2XtBX
-         bSlXwNA2npBwpSVZoigf0nEcsdEt/Y/JDDOVcZGWRmTMY2/CrYOy+VSSFsG/zUbTAXu4
-         JrUsuXhgOX2RkNeeHBXdUkneig5FH956ej0Vs8LMn8ic0T1YdLBPT5aC0THoGYdFlFiY
-         94LMUzOrAiQuuu6vdLNIaCF1ri+LB2S+wtCFfq8F1USYp61tfdYaKjfuSXriw6o+z2Pa
-         N00sjHz7hmHvjT00rwLYOuXgG2m7vfwIzLcR/bARGM2fTfQ4S2Z+K5dOkZGoNOb6W/Iu
-         Y9+Q==
-X-Gm-Message-State: AOAM531kn4IA04tYo4W7s0hraGEA/miL9L7ByRHCWlsVQW4dLDR9msPV
-        +Qp2VmzS1FBWnruliIuHy3qF9w==
-X-Google-Smtp-Source: ABdhPJxJdPim2jtqq6MvkC+z6P836ZUm0PKEAEj8ymE6++fwkRtRu6msPB2Sd2NBFczvSf2ry5Vv2g==
-X-Received: by 2002:a63:5401:: with SMTP id i1mr1540855pgb.398.1601094304699;
-        Fri, 25 Sep 2020 21:25:04 -0700 (PDT)
-Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
-        by smtp.gmail.com with ESMTPSA id a5sm3585886pgk.13.2020.09.25.21.25.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Sep 2020 21:25:04 -0700 (PDT)
-From:   John Stultz <john.stultz@linaro.org>
-To:     lkml <linux-kernel@vger.kernel.org>
-Cc:     John Stultz <john.stultz@linaro.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@kernel.org>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sandeep Patil <sspatil@google.com>,
-        =?UTF-8?q?=C3=98rjan=20Eide?= <orjan.eide@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Simon Ser <contact@emersion.fr>,
-        James Jones <jajones@nvidia.com>, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: [RFC][PATCH 5/6] dma-buf: system_heap: Add pagepool support to system heap
-Date:   Sat, 26 Sep 2020 04:24:52 +0000
-Message-Id: <20200926042453.67517-6-john.stultz@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200926042453.67517-1-john.stultz@linaro.org>
-References: <20200926042453.67517-1-john.stultz@linaro.org>
+        id S1726210AbgIZF5H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 26 Sep 2020 01:57:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52790 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726119AbgIZF5H (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 26 Sep 2020 01:57:07 -0400
+Received: from coco.lan (ip5f5ad5c1.dynamic.kabel-deutschland.de [95.90.213.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EC82820809;
+        Sat, 26 Sep 2020 05:57:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601099826;
+        bh=VpCCvy+EKz11t+tlGoIB2j+LPqNVuV+DnNFwkVqi0iw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=m+DYDymX9ui8HRZXH9UlwsXgr3dhQKiCW2DF2byZESLRu0HdmykRuZorexpxqyHu0
+         giICo7rVre5d7CbpxDZQsjIENDXnPwv9wFX+/G+CylEvNECyHXKx5kG79BcPT0sVsW
+         7W3kPUPZ/36v+7wfzhV+sG1Q1C6d75w83qROpGNM=
+Date:   Sat, 26 Sep 2020 07:57:02 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     linux-media@vger.kernel.org
+Subject: Re: [git:media_tree/fixes] media: media/v4l2: remove
+ V4L2_FLAG_MEMORY_NON_CONSISTENT flag
+Message-ID: <20200926075702.6e1fbe2a@coco.lan>
+In-Reply-To: <20200922134235.GA22620@lst.de>
+References: <E1kHoRT-009OMF-AW@www.linuxtv.org>
+        <20200922134235.GA22620@lst.de>
+X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Reuse/abuse the pagepool code from the network code to speed
-up allocation performance.
+Hi Christoph,
 
-This is similar to the ION pagepool usage, but tries to
-utilize generic code instead of a custom implementation.
+Em Tue, 22 Sep 2020 15:42:35 +0200
+Christoph Hellwig <hch@lst.de> escreveu:
 
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: Liam Mark <lmark@codeaurora.org>
-Cc: Laura Abbott <labbott@kernel.org>
-Cc: Brian Starkey <Brian.Starkey@arm.com>
-Cc: Hridya Valsaraju <hridya@google.com>
-Cc: Suren Baghdasaryan <surenb@google.com>
-Cc: Sandeep Patil <sspatil@google.com>
-Cc: Ørjan Eide <orjan.eide@arm.com>
-Cc: Robin Murphy <robin.murphy@arm.com>
-Cc: Ezequiel Garcia <ezequiel@collabora.com>
-Cc: Simon Ser <contact@emersion.fr>
-Cc: James Jones <jajones@nvidia.com>
-Cc: linux-media@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org
-Signed-off-by: John Stultz <john.stultz@linaro.org>
----
- drivers/dma-buf/heaps/Kconfig       |  1 +
- drivers/dma-buf/heaps/system_heap.c | 32 +++++++++++++++++++++++++----
- 2 files changed, 29 insertions(+), 4 deletions(-)
+> On Mon, Sep 14, 2020 at 01:28:06PM +0000, Mauro Carvalho Chehab wrote:
+> > This is an automatic generated email to let you know that the following patch were queued:  
+> 
+> did you intend to get this into Linus tree before 5.9?  I just checked
+> and didn't see it in mainline yet.
 
-diff --git a/drivers/dma-buf/heaps/Kconfig b/drivers/dma-buf/heaps/Kconfig
-index a5eef06c4226..f13cde4321b1 100644
---- a/drivers/dma-buf/heaps/Kconfig
-+++ b/drivers/dma-buf/heaps/Kconfig
-@@ -1,6 +1,7 @@
- config DMABUF_HEAPS_SYSTEM
- 	bool "DMA-BUF System Heap"
- 	depends on DMABUF_HEAPS
-+	select PAGE_POOL
- 	help
- 	  Choose this option to enable the system dmabuf heap. The system heap
- 	  is backed by pages from the buddy allocator. If in doubt, say Y.
-diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heaps/system_heap.c
-index 882a632e9bb7..9f57b4c8ae69 100644
---- a/drivers/dma-buf/heaps/system_heap.c
-+++ b/drivers/dma-buf/heaps/system_heap.c
-@@ -20,6 +20,7 @@
- #include <linux/scatterlist.h>
- #include <linux/slab.h>
- #include <linux/vmalloc.h>
-+#include <net/page_pool.h>
- 
- struct dma_heap *sys_heap;
- 
-@@ -46,6 +47,7 @@ struct dma_heap_attachment {
- static gfp_t order_flags[] = {HIGH_ORDER_GFP, LOW_ORDER_GFP, LOW_ORDER_GFP};
- static const unsigned int orders[] = {8, 4, 0};
- #define NUM_ORDERS ARRAY_SIZE(orders)
-+struct page_pool *pools[NUM_ORDERS];
- 
- static struct sg_table *dup_sg_table(struct sg_table *table)
- {
-@@ -264,13 +266,17 @@ static void system_heap_dma_buf_release(struct dma_buf *dmabuf)
- 	struct system_heap_buffer *buffer = dmabuf->priv;
- 	struct sg_table *table;
- 	struct scatterlist *sg;
--	int i;
-+	int i, j;
- 
- 	table = &buffer->sg_table;
- 	for_each_sg(table->sgl, sg, table->nents, i) {
- 		struct page *page = sg_page(sg);
- 
--		__free_pages(page, compound_order(page));
-+		for (j = 0; j < NUM_ORDERS; j++) {
-+			if (compound_order(page) == orders[j])
-+				break;
-+		}
-+		page_pool_put_full_page(pools[j], page, false);
- 	}
- 	sg_free_table(table);
- 	kfree(buffer);
-@@ -300,8 +306,7 @@ static struct page *alloc_largest_available(unsigned long size,
- 			continue;
- 		if (max_order < orders[i])
- 			continue;
--
--		page = alloc_pages(order_flags[i], orders[i]);
-+		page = page_pool_alloc_pages(pools[i], order_flags[i]);
- 		if (!page)
- 			continue;
- 		return page;
-@@ -406,6 +411,25 @@ static const struct dma_heap_ops system_heap_ops = {
- static int system_heap_create(void)
- {
- 	struct dma_heap_export_info exp_info;
-+	int i;
-+
-+	for (i = 0; i < NUM_ORDERS; i++) {
-+		struct page_pool_params pp;
-+
-+		memset(&pp, 0, sizeof(pp));
-+		pp.order = orders[i];
-+		pp.dma_dir = DMA_BIDIRECTIONAL;
-+		pools[i] = page_pool_create(&pp);
-+
-+		if (IS_ERR(pools[i])) {
-+			int j;
-+
-+			pr_err("%s: page pool creation failed!\n", __func__);
-+			for (j = 0; j < i; j++)
-+				page_pool_destroy(pools[j]);
-+			return PTR_ERR(pools[i]);
-+		}
-+	}
- 
- 	exp_info.name = "system";
- 	exp_info.ops = &system_heap_ops;
--- 
-2.17.1
+It was merged upstream on Thursday:
 
+	https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8fa5960f575995bc8f3beb6b36c5aa6c61e7cdc0
+
+Regards,
+Mauro
