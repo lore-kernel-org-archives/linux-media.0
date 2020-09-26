@@ -2,94 +2,74 @@ Return-Path: <SRS0=ZUFx=DD=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EB9EC2D0A8
-	for <linux-media@archiver.kernel.org>; Sat, 26 Sep 2020 08:23:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C62BAC2D0A8
+	for <linux-media@archiver.kernel.org>; Sat, 26 Sep 2020 11:30:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 329F8208A9
-	for <linux-media@archiver.kernel.org>; Sat, 26 Sep 2020 08:23:01 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="p0fP8vOr"
+	by mail.kernel.org (Postfix) with ESMTP id 804BF2076B
+	for <linux-media@archiver.kernel.org>; Sat, 26 Sep 2020 11:30:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726311AbgIZIXA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 26 Sep 2020 04:23:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50390 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726037AbgIZIXA (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sat, 26 Sep 2020 04:23:00 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222F0C0613CE
-        for <linux-media@vger.kernel.org>; Sat, 26 Sep 2020 01:23:00 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id a22so4301918ljp.13
-        for <linux-media@vger.kernel.org>; Sat, 26 Sep 2020 01:22:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=4Aqt4e1Ash+FISMrFbqexVvfkrdj0VgVC3AKeET4JHs=;
-        b=p0fP8vOracuL5OeXwAy+rgY5Mdol42CUH30gqxiPx7w6q6xyDlDKrGLFcVeGShmnb3
-         IGFMbRbiqjLlAFotoqrVCzAKcdzNQXdg1Lwr+u1mpONrzTCrqYCzTyj9fjafdUcAnNum
-         lBErAkbaLL2sRGxikcUp0yD0T3YXmZtey7X8/wN/tuZKlrvFK3UMsPx35NtxbRbIuukb
-         F/A3RPvqjXzEBHq3TXZ0dTfcp9LRBCWNSRQzlZg/UHGMvRFsMGdDIwqjzAqRKiCrrVit
-         JUYJ/1A1IraFZRD3uAD+ZUZxa+4qQMVx/qX2j4K1qmUdX5YzWLUZS81Y4cxSRGIvCaNW
-         Oarw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=4Aqt4e1Ash+FISMrFbqexVvfkrdj0VgVC3AKeET4JHs=;
-        b=gDH5iqqKTZpA27MlR8ahQM67n7FsrIP1vZFHrHaT3atO8y5mUL/DkURtDAB90+G/mV
-         ruaH35fQP6+GFT7G/IpxX/yN0i8Via1KqjS5O1q2ZT/fB4HM3R9/KIZLm2xMsRQ0lY4K
-         A+hULGB7AdTsVvSUjKoYjIBI8cRt1Bkk+pMQtFyCXIm5hmGp4SkpHBG0rmqSG6ySHFCM
-         HwBOHRDNSrFTwOE54B+sKWlAsj42ULOba5vYzI52KjmnOvLRg1exrVViNzGyiSZ3Tus3
-         ZzYnPiGGCAEb04ej6iq2FUCNeSIUHpdBE7SAJuEDU8DTG1YfDNCugTCNblMaA4DHgoW8
-         O5fg==
-X-Gm-Message-State: AOAM533T3xAPOC0yntNovem6WD6H910d1Ar4tlO1UMwMGIY7e0Uci1e6
-        Dms+d1SF0JTZZlrMn93m4umA5kXDCt4+yys77Hc=
-X-Google-Smtp-Source: ABdhPJxgtHLqM3GxzuQZ20nibpSVIIcXLFPBvQJLUGD8MZxQR8MgX691rGfnV2ycSPXoE/+UFZMTSLbtCWaMKhOQC/E=
-X-Received: by 2002:a2e:8846:: with SMTP id z6mr2254889ljj.457.1601108577486;
- Sat, 26 Sep 2020 01:22:57 -0700 (PDT)
-MIME-Version: 1.0
-From:   Michael Zimmermann <sigmaepsilon92@gmail.com>
-Date:   Sat, 26 Sep 2020 10:22:46 +0200
-Message-ID: <CAN9vWDL5rK_UCi-dTUG_Si7MbVSB4hVjvhs1-TEgvdGi+ajUvQ@mail.gmail.com>
-Subject: ITE8708 on ASUS PN50 uses a 16 byte io region
-To:     Sean Young <sean@mess.org>
+        id S1726239AbgIZLak (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 26 Sep 2020 07:30:40 -0400
+Received: from gofer.mess.org ([88.97.38.141]:44197 "EHLO gofer.mess.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725208AbgIZLak (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 26 Sep 2020 07:30:40 -0400
+X-Greylist: delayed 73847 seconds by postgrey-1.27 at vger.kernel.org; Sat, 26 Sep 2020 07:30:40 EDT
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 2EB1611A001; Sat, 26 Sep 2020 12:30:39 +0100 (BST)
+Date:   Sat, 26 Sep 2020 12:30:39 +0100
+From:   Sean Young <sean@mess.org>
+To:     Michael Zimmermann <sigmaepsilon92@gmail.com>
 Cc:     linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: ITE8708 on ASUS PN50 uses a 16 byte io region
+Message-ID: <20200926113038.GA23934@gofer.mess.org>
+References: <CAN9vWDL5rK_UCi-dTUG_Si7MbVSB4hVjvhs1-TEgvdGi+ajUvQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAN9vWDL5rK_UCi-dTUG_Si7MbVSB4hVjvhs1-TEgvdGi+ajUvQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+On Sat, Sep 26, 2020 at 10:22:46AM +0200, Michael Zimmermann wrote:
+> Hi,
+> 
+> here's the resource descriptor from my DSDT:
+> Name (BUF0, ResourceTemplate ()
+> {
+>     IO (Decode16,
+>         0x0000,             // Range Minimum
+>         0x0000,             // Range Maximum
+>         0x01,               // Alignment
+>         0x10,               // Length
+>         _Y1A)
+>     IRQNoFlags (_Y1B)
+>         {}
+>     DMA (Compatibility, NotBusMaster, Transfer8, )
+>         {}
+> })
+> 
+> As you can see it uses 16 bytes for the IO region while the driver
+> drivers/media/rc/ite-cir.c expects 8.
+> I don't see any obvious reason why they do that since they only seem
+> to write two words in there, and if I edit the DSDT to change the
+> length from 0x10 to 0x8 the linux driver detects the device properly
+> it works just fine.
+> 
+> So is this a bug on ASUS' side or should we just accept longer regions
+> for the same device type?
 
-here's the resource descriptor from my DSDT:
-Name (BUF0, ResourceTemplate ()
-{
-    IO (Decode16,
-        0x0000,             // Range Minimum
-        0x0000,             // Range Maximum
-        0x01,               // Alignment
-        0x10,               // Length
-        _Y1A)
-    IRQNoFlags (_Y1B)
-        {}
-    DMA (Compatibility, NotBusMaster, Transfer8, )
-        {}
-})
+So looking at the driver, some devices do have an io region of 16 and
+others expect 8. See the io_region_size field of ite_dev_descs.
 
-As you can see it uses 16 bytes for the IO region while the driver
-drivers/media/rc/ite-cir.c expects 8.
-I don't see any obvious reason why they do that since they only seem
-to write two words in there, and if I edit the DSDT to change the
-length from 0x10 to 0x8 the linux driver detects the device properly
-it works just fine.
+So for ITE8708 the io_region_size is set to 8. Does your device really
+have an ITE8708 or is the DSDT wrong? 
 
-So is this a bug on ASUS' side or should we just accept longer regions
-for the same device type?
 
-Thanks
-Michael
+Sean
