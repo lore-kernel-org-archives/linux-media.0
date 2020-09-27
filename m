@@ -2,126 +2,110 @@ Return-Path: <SRS0=CWyv=DE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3100C4741F
-	for <linux-media@archiver.kernel.org>; Sun, 27 Sep 2020 19:16:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DC06C4346E
+	for <linux-media@archiver.kernel.org>; Sun, 27 Sep 2020 19:44:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 66AC423A03
-	for <linux-media@archiver.kernel.org>; Sun, 27 Sep 2020 19:16:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 002FA21D95
+	for <linux-media@archiver.kernel.org>; Sun, 27 Sep 2020 19:44:38 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="XL9bbz2O"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726291AbgI0TQR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 27 Sep 2020 15:16:17 -0400
-Received: from asavdk4.altibox.net ([109.247.116.15]:50146 "EHLO
-        asavdk4.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726255AbgI0TQQ (ORCPT
+        id S1726280AbgI0Toi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 27 Sep 2020 15:44:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36616 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726239AbgI0Toi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 27 Sep 2020 15:16:16 -0400
-Received: from ravnborg.org (unknown [188.228.123.71])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by asavdk4.altibox.net (Postfix) with ESMTPS id C2B8980637;
-        Sun, 27 Sep 2020 21:16:06 +0200 (CEST)
-Date:   Sun, 27 Sep 2020 21:16:05 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     christian.koenig@amd.com, airlied@linux.ie,
-        dri-devel@lists.freedesktop.org, thierry.reding@gmail.com,
-        kraxel@redhat.com, tfiga@chromium.org, m.szyprowski@samsung.com,
-        arnd@arndb.de, corbet@lwn.net, linux-doc@vger.kernel.org,
-        jonathanh@nvidia.com, matthew.auld@intel.com,
-        linux+etnaviv@armlinux.org.uk, labbott@redhat.com,
-        linux-media@vger.kernel.org, pawel@osciak.com,
-        intel-gfx@lists.freedesktop.org, etnaviv@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, thomas.hellstrom@intel.com,
-        rodrigo.vivi@intel.com, linux-tegra@vger.kernel.org,
-        mchehab@kernel.org, gregkh@linuxfoundation.org,
-        lmark@codeaurora.org, afd@ti.com, kyungmin.park@samsung.com,
-        robin.murphy@arm.com
-Subject: Re: [PATCH v3 0/4] dma-buf: Flag vmap'ed memory as system or I/O
- memory
-Message-ID: <20200927191605.GA237178@ravnborg.org>
-References: <20200925115601.23955-1-tzimmermann@suse.de>
- <20200926071334.GA42915@ravnborg.org>
- <8761e0dd-569e-0ea0-7bc5-25e4f7cb67cc@suse.de>
+        Sun, 27 Sep 2020 15:44:38 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF146C0613CE
+        for <linux-media@vger.kernel.org>; Sun, 27 Sep 2020 12:44:37 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id e23so5464928eja.3
+        for <linux-media@vger.kernel.org>; Sun, 27 Sep 2020 12:44:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=7byhznMTDMGNZWyHHBM3w4db+dAkh5PJbFVolAq7xGs=;
+        b=XL9bbz2OVNOBaK4lzhkkFWRXVTJdIeeEe3fV4JrdrDk5RMWSM5q4fm+HPV88TQDmjg
+         Qaw7IU/gSAcEcL0J5tjDdo33ic7AMvm/hm8Zdtsc6G0cfhySFoGp65ZXaopI0oJ3iQsJ
+         skGeiqApTPUpUkpd8ki9nVFrLM3W5S3/lUEVg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=7byhznMTDMGNZWyHHBM3w4db+dAkh5PJbFVolAq7xGs=;
+        b=t0TfivIo5C44bBPG7RBlbjDU2mkcCYTEAY1JhTFcadGtYSdbwDKk5+LfjQF3gZuRvR
+         U7v3T5+J31gOZ98LlTor5J5teOKGj+jpyt0gsyhATnigcFiR4QM0NzdeTYEASIXh+2fS
+         tNyM+0Dx0c83m3aD11/sUKML6LIfFWam2EpmEnrvejGkUGYQ8j7k8qdxO9gb/RxNEcyU
+         aNYB1Yn9nk+CuJFdsgNDoOGyC8LXml52deGL1/cQ3rFeA8xNXnCSGrNQK7fbbM9M3HCd
+         KCgovshCDDwbg8MSdYD8tlUylNBDb1aipY/EbWds//17VIdSzW5qkqinGhbZV9pQD28X
+         rRcA==
+X-Gm-Message-State: AOAM53105tXOhDiWFr8ecyXnkVwbnNNi9FNfgPDy8g3SF+YF5EKANtF6
+        W2Q50+988RmNh8TVxrVYygQLKAIGDH8PJg==
+X-Google-Smtp-Source: ABdhPJxy/dKN34hF5e46aWV9Ec7kVF1wMF42YMhoTJ+qLb0lNlj0i3N47svLHdFtRhF5SnEhG/lKHA==
+X-Received: by 2002:a17:906:a88a:: with SMTP id ha10mr13295928ejb.532.1601235875997;
+        Sun, 27 Sep 2020 12:44:35 -0700 (PDT)
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
+        by smtp.gmail.com with ESMTPSA id a15sm7262384ejy.118.2020.09.27.12.44.34
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 27 Sep 2020 12:44:35 -0700 (PDT)
+Received: by mail-wr1-f51.google.com with SMTP id o5so9512152wrn.13
+        for <linux-media@vger.kernel.org>; Sun, 27 Sep 2020 12:44:34 -0700 (PDT)
+X-Received: by 2002:a5d:6552:: with SMTP id z18mr14720929wrv.32.1601235874347;
+ Sun, 27 Sep 2020 12:44:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8761e0dd-569e-0ea0-7bc5-25e4f7cb67cc@suse.de>
-X-CMAE-Score: 0
-X-CMAE-Analysis: v=2.3 cv=A5ZCwZeG c=1 sm=1 tr=0
-        a=S6zTFyMACwkrwXSdXUNehg==:117 a=S6zTFyMACwkrwXSdXUNehg==:17
-        a=kj9zAlcOel0A:10 a=7gkXJVJtAAAA:8 a=GurwE-QF2vAYMD8ieTkA:9
-        a=CjuIK1q_8ugA:10 a=E9Po1WZjFZOl8hwRPBS3:22
+References: <20200903081550.6012-1-sakari.ailus@linux.intel.com>
+ <f4b82baa-66b7-464e-fd39-66d2243a05ef@lucaceresoli.net> <20200911130104.GF26842@paasikivi.fi.intel.com>
+ <6dea1206-cfaa-bfc5-d57e-4dcddadc03c7@lucaceresoli.net> <20200914094727.GM26842@paasikivi.fi.intel.com>
+ <20200926123807.GA3781977@chromium.org> <20200927193900.GA30711@kunai>
+In-Reply-To: <20200927193900.GA30711@kunai>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Sun, 27 Sep 2020 21:44:19 +0200
+X-Gmail-Original-Message-ID: <CAAFQd5Be5sUQYtXapcSOu8CVffW2LuLog9qh71-+mxze9WYUVQ@mail.gmail.com>
+Message-ID: <CAAFQd5Be5sUQYtXapcSOu8CVffW2LuLog9qh71-+mxze9WYUVQ@mail.gmail.com>
+Subject: Re: [PATCH v8 0/6] Support running driver's probe for a device
+ powered off
+To:     Wolfram Sang <wsa@the-dreams.de>, Tomasz Figa <tfiga@chromium.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Mani, Rajmohan" <rajmohan.mani@intel.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
+        Hyungwoo Yang <hyungwoo.yang@intel.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Thomas.
+On Sun, Sep 27, 2020 at 9:39 PM Wolfram Sang <wsa@the-dreams.de> wrote:
+>
+>
+> > I think we might be overly complicating things. IMHO the series as is
+> > with the "i2c_" prefix removed from the flags introduced would be
+> > reusable as is for any other subsystem that needs it. Of course, for
+> > now, the handling of the flag would remain implemented only in the I2C
+> > subsystem.
+>
+> Just to be clear: you are suggesting to remove "i2c" from the DSD
+> binding "i2c-allow-low-power-probe". And you are not talking about
+> moving I2C_DRV_FL_ALLOW_LOW_POWER_PROBE to struct device_driver? I
+> recall the latter has been NACKed by gkh so far.
+>
 
-> > 
-> > struct simap {
-> >        union {
-> >                void __iomem *vaddr_iomem;
-> >                void *vaddr;
-> >        };
-> >        bool is_iomem;
-> > };
-> > 
-> > Where simap is a shorthand for system_iomem_map
-> > And it could al be stuffed into a include/linux/simap.h file.
-> > 
-> > Not totally sold on the simap name - but wanted to come up with
-> > something.
-> 
-> Yes. Others, myself included, have suggested to use a name that does not
-> imply a connection to the dma-buf framework, but no one has come up with
->  a good name.
-> 
-> I strongly dislike simap, as it's entirely non-obvious what it does.
-> dma-buf-map is not actually wrong. The structures represents the mapping
-> of a dma-able buffer in most cases.
-> 
-> > 
-> > With this approach users do not have to pull in dma-buf to use it and
-> > users will not confuse that this is only for dma-buf usage.
-> 
-> There's no need to enable dma-buf. It's all in the header file without
-> dependencies on dma-buf. It's really just the name.
-> 
-> But there's something else to take into account. The whole issue here is
-> that the buffer is disconnected from its originating driver, so we don't
-> know which kind of memory ops we have to use. Thinking about it, I
-> realized that no one else seemed to have this problem until now.
-> Otherwise there would be a solution already. So maybe the dma-buf
-> framework *is* the native use case for this data structure.
-
-We have at least:
-linux/fb.h:
-	union {
-		char __iomem *screen_base;      /* Virtual address */
-		char *screen_buffer;
-	};
-
-Which solve more or less the same problem.
-
- 
-> Anyway, if a better name than dma-buf-map comes in, I'm willing to
-> rename the thing. Otherwise I intend to merge the patchset by the end of
-> the week.
-
-Well, the main thing is that I think this shoud be moved away from
-dma-buf. But if indeed dma-buf is the only relevant user in drm then
-I am totally fine with the current naming.
-
-One alternative named that popped up in my head: struct sys_io_map {}
-But again, if this is kept in dma-buf then I am fine with the current
-naming.
-
-In other words, if you continue to think this is mostly a dma-buf
-thing all three patches are:
-Acked-by: Sam Ravnborg <sam@ravnborg.org>
-
-	Sam
+I'd also drop "I2C_" from "I2C_DRV_FL_ALLOW_LOW_POWER_PROBE", but all
+the implementation would remain where it is in the code. IOW, I'm just
+suggesting a naming change to avoid proliferating duplicate flags of
+the same meaning across subsystems.
