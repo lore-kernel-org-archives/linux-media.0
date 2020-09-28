@@ -2,95 +2,102 @@ Return-Path: <SRS0=+xP7=DF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76710C4727E
-	for <linux-media@archiver.kernel.org>; Mon, 28 Sep 2020 14:12:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA477C47420
+	for <linux-media@archiver.kernel.org>; Mon, 28 Sep 2020 14:18:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3B34321941
-	for <linux-media@archiver.kernel.org>; Mon, 28 Sep 2020 14:12:47 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="NgDg30ve"
+	by mail.kernel.org (Postfix) with ESMTP id 9C58A21D46
+	for <linux-media@archiver.kernel.org>; Mon, 28 Sep 2020 14:18:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1601302685;
+	bh=n0SDEJiGHKBMiTQJpDhH++PpVZUE8wCtPQdFHZ2pW3Y=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=Ho7m/NMdNhu+N+jsOnOp6JNR02ydd4DW7ALBc+F6UeLw8qajWBaD7VUnC4PxjPFh1
+	 xcobmnWiWkJ0LxKWigfK3XshwxpDqg9wX6rUcYDm1tjDiMF6XvC6DqbATKcgbnLsaO
+	 CAYiC2af0LQPjERaE2oY7gTQyQrPVc78pbiQ0HYk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726558AbgI1OMo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 28 Sep 2020 10:12:44 -0400
-Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:42211 "EHLO
-        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726310AbgI1OMn (ORCPT
+        id S1726504AbgI1OSC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 28 Sep 2020 10:18:02 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:38329 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726327AbgI1OSB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 28 Sep 2020 10:12:43 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id MttMk6kYjv4gEMttPkROmB; Mon, 28 Sep 2020 16:12:41 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1601302361; bh=tCYrxQLs0ptZjaQbbKuxZVmedyj/sbq6LVmqSQgCCYs=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=NgDg30vewxZvAttfeTM6OeTLv5O4WCVEuyMZvUNOT+uz/jOcgF2pk81XJONne8wGn
-         rTQFGfepRi9kW7U3PCrCBDMyjIrKfFnrn0+RucUbX0kcUSdX60Zz3zLx1wi64v51uZ
-         qJe7VSv1xX9GXu26P8wOZll8hQVPq7xWOZebrjgQH5Eqlr8MOc/CFpecgpiaJZFQ3P
-         R9rjZeVQdsX6mSbmOsmBCDvA0/g8H8DnlxGO3Z2Hwa/dwkCgEGxvVQgGVRAF6E0t5h
-         zeKs9kEtuO+Jp9keUYMI8wvlsWBiL4FlnQb5nCWT1Uwo+fKELGig/Yejwl7fl23kZ5
-         sNQpxhpjWH7PQ==
-Subject: Re: [PATCH] media: v4l2-mem2mem: Fix spurious v4l2_m2m_buf_done
-To:     Ezequiel Garcia <ezequiel@collabora.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Tomasz Figa <tfiga@chromium.org>, kernel@collabora.com,
-        Adrian Ratiu <adrian.ratiu@collabora.com>
-References: <20200814071202.25067-9-xia.jiang@mediatek.com>
- <20200928140334.19070-1-ezequiel@collabora.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <a25c5c3e-6ece-5996-101e-a36a660f6c5a@xs4all.nl>
-Date:   Mon, 28 Sep 2020 16:12:36 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        Mon, 28 Sep 2020 10:18:01 -0400
+Received: by mail-ot1-f67.google.com with SMTP id y5so1053038otg.5;
+        Mon, 28 Sep 2020 07:18:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=n0SDEJiGHKBMiTQJpDhH++PpVZUE8wCtPQdFHZ2pW3Y=;
+        b=Ka81PzCmBX2fVD7A+82y+0iF4vTzQeEq6t3TycROq/IlHxeD8GqaExZb623uDgA+jT
+         hR9cVsF7rwuJ64i+FfEXMir+MPJKRPuAi/5CNBeAAlPkNJ7sDggQZVzIbOhPX8TNNGyo
+         rAZ416tqqAk80v5ZlrYcEqiAPWs8/OHJMNOg/3mPiXv5xkXhssoHCfTXJC6gVoaVRWGb
+         GnDkXsKwru3004DtcKQ7kWHDl87z1o68OOMXVW4TnXtaUYb77nxrg7KKUYkKrPDduY6V
+         vRjmpkWEH8t0UewNlILHHkeMshqZsBO95L+7BL9JrK+AOdW73Hlr05E0nDiXoxZk+Dc2
+         eBZw==
+X-Gm-Message-State: AOAM532dP78vhbbdYRz1U/4mxx4wugI1Y/9ugc4RmtVcUn3QhdFC/EGj
+        HJjdA1lC3NDfIntJtqlYI6yT9+TkZaRunl0kEPQ=
+X-Google-Smtp-Source: ABdhPJz6eV4I4wC0CrXWH8jkFLr1VayvxIEzXRxTuz0YVtl3qOlZAg+2X0ohUMDuRUAmdp8Am59xUkdBoyfLCAAEtBM=
+X-Received: by 2002:a05:6830:1f16:: with SMTP id u22mr1078670otg.118.1601302680861;
+ Mon, 28 Sep 2020 07:18:00 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200928140334.19070-1-ezequiel@collabora.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfFgE24lYB1apI/z5TurW1TjBc86r2cEyO8A5Oi12umsNgKNI1yFZGqEMtfaLYNAFcWhyAKo1SV2kIROJDYp8dmIv04EO/AILUu8TlPV245zb3Hgv+Uyd
- 4xiTfitveilQFEgtI1VUd7J+obFaQZwrlyDxl4+UczfEyDyKW2trhHpMIVJ914WePg1IHAUfwE4z8Qk8yL4o3snEgey/2ok7FowkdUqE8fWRedhFdZcg6Xtx
- yCDEEh+xE98dF1htLg+NGaVqi/2iQeqYZENIgeBOQQHGAQvVDvPkpggbwM4+vE8AZgbwZMYgZ3mQ6xg7YF0d5yKfCtH9bho7N7l+zs5kOttV3c/ZKyWserRz
- VXDURmvb
+References: <20200903081550.6012-1-sakari.ailus@linux.intel.com>
+ <f4b82baa-66b7-464e-fd39-66d2243a05ef@lucaceresoli.net> <20200911130104.GF26842@paasikivi.fi.intel.com>
+ <6dea1206-cfaa-bfc5-d57e-4dcddadc03c7@lucaceresoli.net> <20200914094727.GM26842@paasikivi.fi.intel.com>
+ <20200926123807.GA3781977@chromium.org> <20200927193900.GA30711@kunai> <CAAFQd5Be5sUQYtXapcSOu8CVffW2LuLog9qh71-+mxze9WYUVQ@mail.gmail.com>
+In-Reply-To: <CAAFQd5Be5sUQYtXapcSOu8CVffW2LuLog9qh71-+mxze9WYUVQ@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 28 Sep 2020 16:17:44 +0200
+Message-ID: <CAJZ5v0hKQNv+qj-7EQ2Dmtk=UamtVKHBXDCjqo-48Qj13yY+cw@mail.gmail.com>
+Subject: Re: [PATCH v8 0/6] Support running driver's probe for a device
+ powered off
+To:     Tomasz Figa <tfiga@chromium.org>
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Mani, Rajmohan" <rajmohan.mani@intel.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
+        Hyungwoo Yang <hyungwoo.yang@intel.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 28/09/2020 16:03, Ezequiel Garcia wrote:
-> A seemingly bad rebase introduced a spurious v4l2_m2m_buf_done,
-> which releases a buffer twice and therefore triggers a
-> noisy warning on each job:
-> 
-> WARNING: CPU: 0 PID: 0 at drivers/media/common/videobuf2/videobuf2-core.c:986 vb2_buffer_done+0x208/0x2a0
-> 
-> Fix it by removing the spurious v4l2_m2m_buf_done.
-> 
-> Reported-by: Adrian Ratiu <adrian.ratiu@collabora.com>
-> Fixes: 911ea8ec42dea ("media: v4l2-mem2mem: add v4l2_m2m_suspend, v4l2_m2m_resume")
-> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+On Sun, Sep 27, 2020 at 9:44 PM Tomasz Figa <tfiga@chromium.org> wrote:
+>
+> On Sun, Sep 27, 2020 at 9:39 PM Wolfram Sang <wsa@the-dreams.de> wrote:
+> >
+> >
+> > > I think we might be overly complicating things. IMHO the series as is
+> > > with the "i2c_" prefix removed from the flags introduced would be
+> > > reusable as is for any other subsystem that needs it. Of course, for
+> > > now, the handling of the flag would remain implemented only in the I2C
+> > > subsystem.
+> >
+> > Just to be clear: you are suggesting to remove "i2c" from the DSD
+> > binding "i2c-allow-low-power-probe". And you are not talking about
+> > moving I2C_DRV_FL_ALLOW_LOW_POWER_PROBE to struct device_driver? I
+> > recall the latter has been NACKed by gkh so far.
+> >
+>
+> I'd also drop "I2C_" from "I2C_DRV_FL_ALLOW_LOW_POWER_PROBE", but all
+> the implementation would remain where it is in the code. IOW, I'm just
+> suggesting a naming change to avoid proliferating duplicate flags of
+> the same meaning across subsystems.
 
-Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+But that would indicate that the property was recognized by other
+subsystems which wouldn't be the case, so it would be confusing.
 
-> ---
->  drivers/media/v4l2-core/v4l2-mem2mem.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
-> index f626ba5ee3d9..b221b4e438a1 100644
-> --- a/drivers/media/v4l2-core/v4l2-mem2mem.c
-> +++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
-> @@ -516,7 +516,6 @@ void v4l2_m2m_buf_done_and_job_finish(struct v4l2_m2m_dev *m2m_dev,
->  
->  	if (WARN_ON(!src_buf || !dst_buf))
->  		goto unlock;
-> -	v4l2_m2m_buf_done(src_buf, state);
->  	dst_buf->is_held = src_buf->flags & V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF;
->  	if (!dst_buf->is_held) {
->  		v4l2_m2m_dst_buf_remove(m2m_ctx);
-> 
-
+That's why it cannot be documented as a general property ATM too.
