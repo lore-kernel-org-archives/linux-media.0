@@ -2,75 +2,79 @@ Return-Path: <SRS0=+xP7=DF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6D2CC4727E
-	for <linux-media@archiver.kernel.org>; Mon, 28 Sep 2020 14:04:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24918C4727E
+	for <linux-media@archiver.kernel.org>; Mon, 28 Sep 2020 14:12:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8E84721D7F
-	for <linux-media@archiver.kernel.org>; Mon, 28 Sep 2020 14:04:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EBE2B21974
+	for <linux-media@archiver.kernel.org>; Mon, 28 Sep 2020 14:12:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726393AbgI1OEK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 28 Sep 2020 10:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36174 "EHLO
+        id S1726466AbgI1OMh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 28 Sep 2020 10:12:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726325AbgI1OEJ (ORCPT
+        with ESMTP id S1726310AbgI1OMh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 28 Sep 2020 10:04:09 -0400
+        Mon, 28 Sep 2020 10:12:37 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A188C061755;
-        Mon, 28 Sep 2020 07:04:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7E7C061755;
+        Mon, 28 Sep 2020 07:12:37 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: ezequiel)
-        with ESMTPSA id 5E07E2949CA
-From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+        (Authenticated sender: aratiu)
+        with ESMTPSA id E2F0C2997F7
+From:   Adrian Ratiu <adrian.ratiu@collabora.com>
+To:     Ezequiel Garcia <ezequiel@collabora.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Tomasz Figa <tfiga@chromium.org>, kernel@collabora.com,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Adrian Ratiu <adrian.ratiu@collabora.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH] media: v4l2-mem2mem: Fix spurious v4l2_m2m_buf_done
-Date:   Mon, 28 Sep 2020 11:03:34 -0300
-Message-Id: <20200928140334.19070-1-ezequiel@collabora.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200814071202.25067-9-xia.jiang@mediatek.com>
+        Hans Verkuil <hverkuil@xs4all.nl>
+Subject: Re: [PATCH] media: v4l2-mem2mem: Fix spurious v4l2_m2m_buf_done
+In-Reply-To: <20200928140334.19070-1-ezequiel@collabora.com>
 References: <20200814071202.25067-9-xia.jiang@mediatek.com>
+ <20200928140334.19070-1-ezequiel@collabora.com>
+Date:   Mon, 28 Sep 2020 17:13:52 +0300
+Message-ID: <87imby3s67.fsf@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; format=flowed
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-A seemingly bad rebase introduced a spurious v4l2_m2m_buf_done,
-which releases a buffer twice and therefore triggers a
-noisy warning on each job:
+Thank you Ezequiel,
 
-WARNING: CPU: 0 PID: 0 at drivers/media/common/videobuf2/videobuf2-core.c:986 vb2_buffer_done+0x208/0x2a0
+Tested-by: Adrian Ratiu <adrian.ratiu@collabora.com>
 
-Fix it by removing the spurious v4l2_m2m_buf_done.
-
-Reported-by: Adrian Ratiu <adrian.ratiu@collabora.com>
-Fixes: 911ea8ec42dea ("media: v4l2-mem2mem: add v4l2_m2m_suspend, v4l2_m2m_resume")
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
----
- drivers/media/v4l2-core/v4l2-mem2mem.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
-index f626ba5ee3d9..b221b4e438a1 100644
---- a/drivers/media/v4l2-core/v4l2-mem2mem.c
-+++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
-@@ -516,7 +516,6 @@ void v4l2_m2m_buf_done_and_job_finish(struct v4l2_m2m_dev *m2m_dev,
- 
- 	if (WARN_ON(!src_buf || !dst_buf))
- 		goto unlock;
--	v4l2_m2m_buf_done(src_buf, state);
- 	dst_buf->is_held = src_buf->flags & V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF;
- 	if (!dst_buf->is_held) {
- 		v4l2_m2m_dst_buf_remove(m2m_ctx);
--- 
-2.27.0
-
+On Mon, 28 Sep 2020, Ezequiel Garcia <ezequiel@collabora.com> 
+wrote:
+> A seemingly bad rebase introduced a spurious v4l2_m2m_buf_done,
+> which releases a buffer twice and therefore triggers a
+> noisy warning on each job:
+>
+> WARNING: CPU: 0 PID: 0 at drivers/media/common/videobuf2/videobuf2-core.c:986 vb2_buffer_done+0x208/0x2a0
+>
+> Fix it by removing the spurious v4l2_m2m_buf_done.
+>
+> Reported-by: Adrian Ratiu <adrian.ratiu@collabora.com>
+> Fixes: 911ea8ec42dea ("media: v4l2-mem2mem: add v4l2_m2m_suspend, v4l2_m2m_resume")
+> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> ---
+>  drivers/media/v4l2-core/v4l2-mem2mem.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
+> index f626ba5ee3d9..b221b4e438a1 100644
+> --- a/drivers/media/v4l2-core/v4l2-mem2mem.c
+> +++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+> @@ -516,7 +516,6 @@ void v4l2_m2m_buf_done_and_job_finish(struct v4l2_m2m_dev *m2m_dev,
+>  
+>  	if (WARN_ON(!src_buf || !dst_buf))
+>  		goto unlock;
+> -	v4l2_m2m_buf_done(src_buf, state);
+>  	dst_buf->is_held = src_buf->flags & V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF;
+>  	if (!dst_buf->is_held) {
+>  		v4l2_m2m_dst_buf_remove(m2m_ctx);
+> -- 
+> 2.27.0
