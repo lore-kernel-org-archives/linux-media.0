@@ -4,24 +4,24 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A402C4727D
-	for <linux-media@archiver.kernel.org>; Tue, 29 Sep 2020 13:59:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11656C4727D
+	for <linux-media@archiver.kernel.org>; Tue, 29 Sep 2020 13:59:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3B16620848
-	for <linux-media@archiver.kernel.org>; Tue, 29 Sep 2020 13:59:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AB7FF20848
+	for <linux-media@archiver.kernel.org>; Tue, 29 Sep 2020 13:59:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731299AbgI2N6i (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 29 Sep 2020 09:58:38 -0400
-Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:47110 "EHLO
+        id S1731452AbgI2N7I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 29 Sep 2020 09:59:08 -0400
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:47124 "EHLO
         mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731231AbgI2N61 (ORCPT
+        by vger.kernel.org with ESMTP id S1731133AbgI2N6M (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 29 Sep 2020 09:58:27 -0400
+        Tue, 29 Sep 2020 09:58:12 -0400
 X-IronPort-AV: E=Sophos;i="5.77,318,1596492000"; 
-   d="scan'208";a="470079966"
+   d="scan'208";a="470079961"
 Received: from palace.lip6.fr ([132.227.105.202])
   by mail2-relais-roc.national.inria.fr with ESMTP/TLS/AES256-SHA256; 29 Sep 2020 15:57:41 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
@@ -31,9 +31,9 @@ Cc:     =?UTF-8?q?Valdis=20Kl=C4=93tnieks?= <valdis.kletnieks@vt.edu>,
         Thomas Gleixner <tglx@linutronix.de>,
         kernel-janitors@vger.kernel.org, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 20/20] media: bttv: use semicolons rather than commas to separate statements
-Date:   Tue, 29 Sep 2020 15:14:43 +0200
-Message-Id: <1601385283-26144-21-git-send-email-Julia.Lawall@inria.fr>
+Subject: [PATCH 15/20] media: au0828: use semicolons rather than commas to separate statements
+Date:   Tue, 29 Sep 2020 15:14:38 +0200
+Message-Id: <1601385283-26144-16-git-send-email-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 1.9.1
 In-Reply-To: <1601385283-26144-1-git-send-email-Julia.Lawall@inria.fr>
 References: <1601385283-26144-1-git-send-email-Julia.Lawall@inria.fr>
@@ -58,24 +58,20 @@ e2
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- drivers/media/pci/bt8xx/bttv-cards.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/media/usb/au0828/au0828-video.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/pci/bt8xx/bttv-cards.c b/drivers/media/pci/bt8xx/bttv-cards.c
-index 16148802dabb..ca20b806e82d 100644
---- a/drivers/media/pci/bt8xx/bttv-cards.c
-+++ b/drivers/media/pci/bt8xx/bttv-cards.c
-@@ -3934,8 +3934,10 @@ static void osprey_eeprom(struct bttv *btv, const u8 ee[256])
- 			if (checksum != ee[21])
- 				return;
- 			cardid = BTTV_BOARD_OSPREY1x0_848;
--			for (i = 12; i < 21; i++)
--				serial *= 10, serial += ee[i] - '0';
-+			for (i = 12; i < 21; i++) {
-+				serial *= 10;
-+				serial += ee[i] - '0';
-+			}
- 		}
- 	} else {
- 		unsigned short type;
+diff --git a/drivers/media/usb/au0828/au0828-video.c b/drivers/media/usb/au0828/au0828-video.c
+index aa5bc6a2ae20..5c4bac5a4ec7 100644
+--- a/drivers/media/usb/au0828/au0828-video.c
++++ b/drivers/media/usb/au0828/au0828-video.c
+@@ -248,7 +248,7 @@ static int au0828_init_isoc(struct au0828_dev *dev, int max_packets,
+ 		memset(dev->isoc_ctl.transfer_buffer[i], 0, sb_size);
+ 
+ 		pipe = usb_rcvisocpipe(dev->usbdev,
+-				       dev->isoc_in_endpointaddr),
++				       dev->isoc_in_endpointaddr);
+ 
+ 		usb_fill_int_urb(urb, dev->usbdev, pipe,
+ 				 dev->isoc_ctl.transfer_buffer[i], sb_size,
 
