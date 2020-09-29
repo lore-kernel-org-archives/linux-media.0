@@ -7,34 +7,34 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 992E3C4727C
-	for <linux-media@archiver.kernel.org>; Tue, 29 Sep 2020 13:59:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80264C4727D
+	for <linux-media@archiver.kernel.org>; Tue, 29 Sep 2020 13:59:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4B134206B7
-	for <linux-media@archiver.kernel.org>; Tue, 29 Sep 2020 13:59:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 395D2207C4
+	for <linux-media@archiver.kernel.org>; Tue, 29 Sep 2020 13:59:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731493AbgI2N7h (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 29 Sep 2020 09:59:37 -0400
+        id S1730884AbgI2N5v (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 29 Sep 2020 09:57:51 -0400
 Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:47096 "EHLO
         mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730843AbgI2N5w (ORCPT
+        by vger.kernel.org with ESMTP id S1729807AbgI2N5u (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 29 Sep 2020 09:57:52 -0400
+        Tue, 29 Sep 2020 09:57:50 -0400
 X-IronPort-AV: E=Sophos;i="5.77,318,1596492000"; 
-   d="scan'208";a="470079952"
+   d="scan'208";a="470079949"
 Received: from palace.lip6.fr ([132.227.105.202])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/AES256-SHA256; 29 Sep 2020 15:57:41 +0200
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/AES256-SHA256; 29 Sep 2020 15:57:40 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
+To:     Antti Palosaari <crope@iki.fi>
 Cc:     =?UTF-8?q?Valdis=20Kl=C4=93tnieks?= <valdis.kletnieks@vt.edu>,
         Joe Perches <joe@perches.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         kernel-janitors@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 06/20] media: gspca: ov534-ov772x: use semicolons rather than commas to separate statements
-Date:   Tue, 29 Sep 2020 15:14:29 +0200
-Message-Id: <1601385283-26144-7-git-send-email-Julia.Lawall@inria.fr>
+Subject: [PATCH 03/20] media: rtl28xxu: use semicolons rather than commas to separate statements
+Date:   Tue, 29 Sep 2020 15:14:26 +0200
+Message-Id: <1601385283-26144-4-git-send-email-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 1.9.1
 In-Reply-To: <1601385283-26144-1-git-send-email-Julia.Lawall@inria.fr>
 References: <1601385283-26144-1-git-send-email-Julia.Lawall@inria.fr>
@@ -59,37 +59,29 @@ e2
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- drivers/media/usb/gspca/ov534.c |   12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/media/usb/dvb-usb-v2/rtl28xxu.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/usb/gspca/ov534.c b/drivers/media/usb/gspca/ov534.c
-index 9a11158f38da..8b6a57f170d0 100644
---- a/drivers/media/usb/gspca/ov534.c
-+++ b/drivers/media/usb/gspca/ov534.c
-@@ -1220,9 +1220,9 @@ static int sd_init_controls(struct gspca_dev *gspca_dev)
- 	int hflip_def;
+diff --git a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
+index 91460e4d0c30..3952cc534b4a 100644
+--- a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
++++ b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
+@@ -955,7 +955,7 @@ static int rtl2832u_frontend_attach(struct dvb_usb_adapter *adap)
+ 			struct mn88472_config mn88472_config = {};
  
- 	if (sd->sensor == SENSOR_OV767x) {
--		saturation_min = 0,
--		saturation_max = 6,
--		saturation_def = 3,
-+		saturation_min = 0;
-+		saturation_max = 6;
-+		saturation_def = 3;
- 		brightness_min = -127;
- 		brightness_max = 127;
- 		brightness_def = 0;
-@@ -1233,9 +1233,9 @@ static int sd_init_controls(struct gspca_dev *gspca_dev)
- 		exposure_def = 0x13;
- 		hflip_def = 1;
- 	} else {
--		saturation_min = 0,
--		saturation_max = 255,
--		saturation_def = 64,
-+		saturation_min = 0;
-+		saturation_max = 255;
-+		saturation_def = 64;
- 		brightness_min = 0;
- 		brightness_max = 255;
- 		brightness_def = 0;
+ 			mn88472_config.fe = &adap->fe[1];
+-			mn88472_config.i2c_wr_max = 22,
++			mn88472_config.i2c_wr_max = 22;
+ 			strscpy(info.type, "mn88472", I2C_NAME_SIZE);
+ 			mn88472_config.xtal = 20500000;
+ 			mn88472_config.ts_mode = SERIAL_TS_MODE;
+@@ -980,7 +980,7 @@ static int rtl2832u_frontend_attach(struct dvb_usb_adapter *adap)
+ 			struct mn88473_config mn88473_config = {};
+ 
+ 			mn88473_config.fe = &adap->fe[1];
+-			mn88473_config.i2c_wr_max = 22,
++			mn88473_config.i2c_wr_max = 22;
+ 			strscpy(info.type, "mn88473", I2C_NAME_SIZE);
+ 			info.addr = 0x18;
+ 			info.platform_data = &mn88473_config;
 
