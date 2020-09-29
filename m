@@ -2,189 +2,185 @@ Return-Path: <SRS0=nxNx=DG=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-8.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC152C2D0A8
-	for <linux-media@archiver.kernel.org>; Tue, 29 Sep 2020 03:27:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A3AEC4346E
+	for <linux-media@archiver.kernel.org>; Tue, 29 Sep 2020 03:48:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AD14A21734
-	for <linux-media@archiver.kernel.org>; Tue, 29 Sep 2020 03:27:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7C91521924
+	for <linux-media@archiver.kernel.org>; Tue, 29 Sep 2020 03:48:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DdTJ6jCq"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="rwD51JU2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727416AbgI2D0q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 28 Sep 2020 23:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47214 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727408AbgI2D0q (ORCPT
+        id S1727151AbgI2DsF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 28 Sep 2020 23:48:05 -0400
+Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:58863 "EHLO
+        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726944AbgI2DsF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 28 Sep 2020 23:26:46 -0400
-Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BCDC0613D0;
-        Mon, 28 Sep 2020 20:26:46 -0700 (PDT)
-Received: by mail-qv1-xf42.google.com with SMTP id cv8so1600626qvb.12;
-        Mon, 28 Sep 2020 20:26:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=RiV1cS73QXhrI6Mq3a3ZiuUNhTGoF/5ZbayW8PLZSuA=;
-        b=DdTJ6jCqRsVuEG6o3lasj6+OpO0czSAC24H+xck9sse4NmWVHze3PdIm2yKQ0/iZEa
-         7/GHDlr/6QS+1GKYqqAIkq9H13SuROOMWVW95M/OTov5XuL8ypsxpPlkzpis8e8hRNju
-         OUJi5Iz2nw+nnkXPsXOI+x5HuprSWibwD3nge0G/Fk+Enoj93JdKWAmQrIxiuHYWrLAs
-         eLlpnYDEvvgufSVCuJqnLmcNthyhwYaH8bJ5Fl33kvpqmLP8xD3A3fiFao8qqoTBr5vF
-         qmHxJc4z3y+T6GARydERQ+G8MTvPycgab4Y9PPo+HWIc0BsPFQ/JNVj0CSAgZdvkaqwc
-         9Nvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=RiV1cS73QXhrI6Mq3a3ZiuUNhTGoF/5ZbayW8PLZSuA=;
-        b=PCkXP5nkDh6v3G1BTG0WcFhkyXLhuAC4al7HqaNWsBcwKpBDaubFgh2SxUeM8TOrtv
-         MX741Thqck92I8vwKiiU98HyvN57tz6fax2HLzRprFGjQeEIkiCzx8Ti2bfSmZCzy6z+
-         QRJB+bhbBv4I6fAN23iX5xO+BqxXvNSq6AZPN7N1n3a9DIqRzGT3hJ4O61Xk+XQvhlv5
-         vaP2AE/gINDvZTdLKdNTWTPtsJYNwGdVTFEFWEescu6Hu5c9XSgIuvmpTdBDfQrMP/a/
-         FlgYj+kuF33i2JhRuu3mTfddTdK7h70mpgrN3EmJNRbkxQFglF6aIierX3QcPmxaCTYf
-         wXsA==
-X-Gm-Message-State: AOAM531tL5hMB/uaKXcQmqWRgViN1p9EDM0UJbORhpW6MPmK4L2WCSk3
-        Lh33JpNx6AqCJf9olTqUKJE=
-X-Google-Smtp-Source: ABdhPJybOoebfnDtiJcEmvLo70f4GxWruP9r8sezS+3jZBt48XFNpkmd+kugfbihJrwkHZ74l9Ub/A==
-X-Received: by 2002:a0c:aee0:: with SMTP id n32mr2698991qvd.7.1601350005118;
-        Mon, 28 Sep 2020 20:26:45 -0700 (PDT)
-Received: from localhost.localdomain ([2804:14d:72b1:8920:da15:c0bd:33c1:e2ad])
-        by smtp.gmail.com with ESMTPSA id c40sm4010313qtb.72.2020.09.28.20.26.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Sep 2020 20:26:44 -0700 (PDT)
-From:   "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
-X-Google-Original-From: Daniel W. S. Almeida
-To:     mchehab+huawei@kernel.org, r.verdejo@samsung.com,
-        nicolas@ndufresne.ca
-Cc:     "Daniel W . S . Almeida" <dwlsalmeida@gmail.com>,
-        linux-media@vger.kernel.org, skhan@linuxfoundation.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH WIP 4/6] media: vidtv: psi: extract descriptor chaining code into a helper
-Date:   Tue, 29 Sep 2020 00:26:23 -0300
-Message-Id: <20200929032625.1548909-4-dwlsalmeida@gmail.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200929032625.1548909-1-dwlsalmeida@gmail.com>
-References: <20200929032625.1548909-1-dwlsalmeida@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Mon, 28 Sep 2020 23:48:05 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id N6cRkC8AGTHgxN6cSkMrvW; Tue, 29 Sep 2020 05:48:01 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1601351281; bh=Z+O3kXb4wGpHUICkcThaOhn8bsWU6kTNsVzf4w/Qk3Q=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=rwD51JU2l8wNfOk1WfnjgRkNsbU4vjnPXg4ABogxljRhIgsoc1L4wamWJkZSfm5Zy
+         k5lVGnK/hFaWHsLPz3ItKQgmC+8zJinssI6uxuE/jGFBgTcWGQ6/7YsXnfiFyOtUH0
+         5yjL5B7ijdJH9rcxb5inGo8tG44NNxBvVg2ZQlOqL/m+TikShR4sxcS6aV2roKzXb9
+         7YrUFBXfp3SV6FNlWnp5gpNkh23lujpBLE9zIKJ0GNncp/yK17+IDKV5jBXN4bm+/P
+         tXaEMqXVy8bZTH5gEkhcfGiKQpE5asJFqIKf32NgFCNFN1FcgnIrpkAz/yARgjBogX
+         /Oz+vkfCJ2DrA==
+Message-ID: <dbd4f1b539c62b4a798f56732372e966@smtp-cloud8.xs4all.net>
+Date:   Tue, 29 Sep 2020 05:47:59 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: WARNINGS
+X-CMAE-Envelope: MS4wfIrz+dxArTk8fHnyobjQL8P+u9YrnBF2SvUGekRmvsaHmGKkNq2eMjzC0z73A1CjveJh14eH5mpca1rOXOm8liQampDtP0RlCA7to9/9ZeJdnRX66Cnq
+ LcDUW3G8deCjSO9T9GXKcyJCzSGeU4iw0qN79QaNvDq5LQylcSY36RU7/7rRlJqqY4pFx2V47EqCxLF1ASKm3mFbSEeqY7tREuoT8LjdjUI5gvFLjkyNq82a
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Daniel W. S. Almeida <dwlsalmeida@gmail.com>
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-The code to append a descriptor to the end of a chain is repeated
-throughout the psi generator code. Extract it into its own helper
-function to avoid cluttering.
+Results of the daily build of media_tree:
 
-Signed-off-by: Daniel W. S. Almeida <dwlsalmeida@gmail.com>
----
- drivers/media/test-drivers/vidtv/vidtv_psi.c | 49 ++++++--------------
- 1 file changed, 15 insertions(+), 34 deletions(-)
+date:			Tue Sep 29 05:00:14 CEST 2020
+media-tree git hash:	c0c8db7bc95397f32fe60ff8b07c746a69fb22de
+media_build git hash:	2a08e22a168a40407c561f17e386229abc582c3a
+v4l-utils git hash:	4736edbed8fb012951bf3f5f7ef4d9135fbf7622
+edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
+gcc version:		i686-linux-gcc (GCC) 9.3.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		v0.6.2-1-gfebba84c
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		v0.5.0-6793-g0248ebb06
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: b54e01a7f76260649e5d124db86c575c8650c2f9
+host hardware:		x86_64
+host os:		5.7.0-1-amd64
 
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_psi.c b/drivers/media/test-drivers/vidtv/vidtv_psi.c
-index e331fc7d8eef..2cf103057b19 100644
---- a/drivers/media/test-drivers/vidtv/vidtv_psi.c
-+++ b/drivers/media/test-drivers/vidtv/vidtv_psi.c
-@@ -313,6 +313,16 @@ static u32 table_section_crc32_write_into(struct crc32_write_args args)
- 	return nbytes;
- }
- 
-+static void vidtv_psi_desc_chain(struct vidtv_psi_desc *head, struct vidtv_psi_desc *desc)
-+{
-+	if (head) {
-+		while (head->next)
-+			head = head->next;
-+
-+		head->next = desc;
-+	}
-+}
-+
- struct vidtv_psi_desc_service *vidtv_psi_service_desc_init(struct vidtv_psi_desc *head,
- 							   enum service_type service_type,
- 							   char *service_name,
-@@ -346,12 +356,7 @@ struct vidtv_psi_desc_service *vidtv_psi_service_desc_init(struct vidtv_psi_desc
- 	if (provider_name && provider_name_len)
- 		desc->provider_name = kstrdup(provider_name, GFP_KERNEL);
- 
--	if (head) {
--		while (head->next)
--			head = head->next;
--
--		head->next = (struct vidtv_psi_desc *)desc;
--	}
-+	vidtv_psi_desc_chain(head, (struct vidtv_psi_desc *)desc);
- 	return desc;
- }
- 
-@@ -379,13 +384,7 @@ struct vidtv_psi_desc_registration
- 		       additional_ident_info,
- 		       additional_info_len);
- 
--	if (head) {
--		while (head->next)
--			head = head->next;
--
--		head->next = (struct vidtv_psi_desc *)desc;
--	}
--
-+	vidtv_psi_desc_chain(head, (struct vidtv_psi_desc *)desc);
- 	return desc;
- }
- 
-@@ -404,13 +403,7 @@ struct vidtv_psi_desc_network_name
- 	if (network_name && network_name_len)
- 		desc->network_name = kstrdup(network_name, GFP_KERNEL);
- 
--	if (head) {
--		while (head->next)
--			head = head->next;
--
--		head->next = (struct vidtv_psi_desc *)desc;
--	}
--
-+	vidtv_psi_desc_chain(head, (struct vidtv_psi_desc *)desc);
- 	return desc;
- }
- 
-@@ -448,13 +441,7 @@ struct vidtv_psi_desc_service_list
- 	desc->length = length;
- 	desc->service_list = head_e;
- 
--	if (head) {
--		while (head->next)
--			head = head->next;
--
--		head->next = (struct vidtv_psi_desc *)desc;
--	}
--
-+	vidtv_psi_desc_chain(head, (struct vidtv_psi_desc *)desc);
- 	return desc;
- }
- 
-@@ -493,13 +480,7 @@ struct vidtv_psi_desc_short_event
- 	if (text && text_len)
- 		desc->text = kstrdup(text, GFP_KERNEL);
- 
--	if (head) {
--		while (head->next)
--			head = head->next;
--
--		head->next = (struct vidtv_psi_desc *)desc;
--	}
--
-+	vidtv_psi_desc_chain(head, (struct vidtv_psi_desc *)desc);
- 	return desc;
- }
- 
--- 
-2.28.0
+linux-git-sh: OK
+linux-git-arm-davinci: OK
+linux-git-arm-at91: OK
+linux-git-arm-stm32: OK
+linux-git-arm-pxa: OK
+linux-git-mips: OK
+linux-git-arm64: OK
+linux-git-powerpc64: OK
+linux-git-arm-multi: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.81-i686: OK
+linux-3.16.81-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.212-i686: OK
+linux-4.4.212-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.212-i686: OK
+linux-4.9.212-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.169-i686: OK
+linux-4.14.169-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.101-i686: OK
+linux-4.19.101-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.15-i686: OK
+linux-5.0.15-x86_64: OK
+linux-5.1.1-i686: OK
+linux-5.1.1-x86_64: OK
+linux-5.2.1-i686: OK
+linux-5.2.1-x86_64: OK
+linux-5.3.1-i686: OK
+linux-5.3.1-x86_64: OK
+linux-5.4.17-i686: OK
+linux-5.4.17-x86_64: OK
+linux-5.5.1-i686: OK
+linux-5.5.1-x86_64: OK
+linux-5.6.1-i686: OK
+linux-5.6.1-x86_64: OK
+linux-5.7.2-i686: OK
+linux-5.7.2-x86_64: OK
+linux-5.8.1-i686: OK
+linux-5.8.1-x86_64: OK
+linux-5.9-rc1-i686: OK
+linux-5.9-rc1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: WARNINGS: Final Summary: 2943, Succeeded: 2943, Failed: 0, Warnings: 2
+virtme-32: WARNINGS: Final Summary: 2779, Succeeded: 2779, Failed: 0, Warnings: 2
+sparse: OK
+smatch: OK
 
+Detailed results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Tuesday.log
+
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Tuesday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
