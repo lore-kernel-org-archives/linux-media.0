@@ -7,35 +7,35 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF529C4741F
-	for <linux-media@archiver.kernel.org>; Tue, 29 Sep 2020 13:59:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32BE4C4727C
+	for <linux-media@archiver.kernel.org>; Tue, 29 Sep 2020 13:59:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 57ED321531
-	for <linux-media@archiver.kernel.org>; Tue, 29 Sep 2020 13:59:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DC86D2145D
+	for <linux-media@archiver.kernel.org>; Tue, 29 Sep 2020 13:59:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731114AbgI2N6H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 29 Sep 2020 09:58:07 -0400
-Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:47124 "EHLO
+        id S1731092AbgI2N6G (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 29 Sep 2020 09:58:06 -0400
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:47110 "EHLO
         mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730906AbgI2N5y (ORCPT
+        by vger.kernel.org with ESMTP id S1730902AbgI2N5y (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 29 Sep 2020 09:57:54 -0400
 X-IronPort-AV: E=Sophos;i="5.77,318,1596492000"; 
-   d="scan'208";a="470079954"
+   d="scan'208";a="470079953"
 Received: from palace.lip6.fr ([132.227.105.202])
   by mail2-relais-roc.national.inria.fr with ESMTP/TLS/AES256-SHA256; 29 Sep 2020 15:57:41 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Maxime Ripard <mripard@kernel.org>
+To:     Sylwester Nawrocki <sylvester.nawrocki@gmail.com>
 Cc:     =?UTF-8?q?Valdis=20Kl=C4=93tnieks?= <valdis.kletnieks@vt.edu>,
         Joe Perches <joe@perches.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         kernel-janitors@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 08/20] media: sun4i-csi: use semicolons rather than commas to separate statements
-Date:   Tue, 29 Sep 2020 15:14:31 +0200
-Message-Id: <1601385283-26144-9-git-send-email-Julia.Lawall@inria.fr>
+        linux-media@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 07/20] media: s3c-camif: use semicolons rather than commas to separate statements
+Date:   Tue, 29 Sep 2020 15:14:30 +0200
+Message-Id: <1601385283-26144-8-git-send-email-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 1.9.1
 In-Reply-To: <1601385283-26144-1-git-send-email-Julia.Lawall@inria.fr>
 References: <1601385283-26144-1-git-send-email-Julia.Lawall@inria.fr>
@@ -60,20 +60,27 @@ e2
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/s3c-camif/camif-core.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c b/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
-index 8f4e254b6a41..1a2f65d83a6c 100644
---- a/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
-+++ b/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
-@@ -363,7 +363,7 @@ int sun4i_csi_v4l2_register(struct sun4i_csi *csi)
- 	vdev->lock = &csi->lock;
+diff --git a/drivers/media/platform/s3c-camif/camif-core.c b/drivers/media/platform/s3c-camif/camif-core.c
+index 92f43c0cbc0c..02b5f933c411 100644
+--- a/drivers/media/platform/s3c-camif/camif-core.c
++++ b/drivers/media/platform/s3c-camif/camif-core.c
+@@ -131,11 +131,13 @@ static int camif_get_scaler_factor(u32 src, u32 tar, u32 *ratio, u32 *shift)
+ 	while (sh--) {
+ 		unsigned int tmp = 1 << sh;
+ 		if (src >= tar * tmp) {
+-			*shift = sh, *ratio = tmp;
++			*shift = sh;
++			*ratio = tmp;
+ 			return 0;
+ 		}
+ 	}
+-	*shift = 0, *ratio = 1;
++	*shift = 0;
++	*ratio = 1;
+ 	return 0;
+ }
  
- 	/* Set a default format */
--	csi->fmt.pixelformat = sun4i_csi_formats[0].fourcc,
-+	csi->fmt.pixelformat = sun4i_csi_formats[0].fourcc;
- 	csi->fmt.width = CSI_DEFAULT_WIDTH;
- 	csi->fmt.height = CSI_DEFAULT_HEIGHT;
- 	_sun4i_csi_try_fmt(csi, &csi->fmt);
 
