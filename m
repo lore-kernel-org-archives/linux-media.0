@@ -7,35 +7,34 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32BE4C4727C
-	for <linux-media@archiver.kernel.org>; Tue, 29 Sep 2020 13:59:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A411FC4727C
+	for <linux-media@archiver.kernel.org>; Tue, 29 Sep 2020 13:59:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DC86D2145D
-	for <linux-media@archiver.kernel.org>; Tue, 29 Sep 2020 13:59:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 59AA52145D
+	for <linux-media@archiver.kernel.org>; Tue, 29 Sep 2020 13:59:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731092AbgI2N6G (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1731070AbgI2N6G (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 29 Sep 2020 09:58:06 -0400
-Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:47110 "EHLO
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:47096 "EHLO
         mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730902AbgI2N5y (ORCPT
+        by vger.kernel.org with ESMTP id S1730966AbgI2N56 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 29 Sep 2020 09:57:54 -0400
+        Tue, 29 Sep 2020 09:57:58 -0400
 X-IronPort-AV: E=Sophos;i="5.77,318,1596492000"; 
-   d="scan'208";a="470079953"
+   d="scan'208";a="470079955"
 Received: from palace.lip6.fr ([132.227.105.202])
   by mail2-relais-roc.national.inria.fr with ESMTP/TLS/AES256-SHA256; 29 Sep 2020 15:57:41 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Sylwester Nawrocki <sylvester.nawrocki@gmail.com>
+To:     Mike Isely <isely@pobox.com>
 Cc:     =?UTF-8?q?Valdis=20Kl=C4=93tnieks?= <valdis.kletnieks@vt.edu>,
         Joe Perches <joe@perches.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         kernel-janitors@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 07/20] media: s3c-camif: use semicolons rather than commas to separate statements
-Date:   Tue, 29 Sep 2020 15:14:30 +0200
-Message-Id: <1601385283-26144-8-git-send-email-Julia.Lawall@inria.fr>
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 09/20] media: pvrusb2: use semicolons rather than commas to separate statements
+Date:   Tue, 29 Sep 2020 15:14:32 +0200
+Message-Id: <1601385283-26144-10-git-send-email-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 1.9.1
 In-Reply-To: <1601385283-26144-1-git-send-email-Julia.Lawall@inria.fr>
 References: <1601385283-26144-1-git-send-email-Julia.Lawall@inria.fr>
@@ -60,27 +59,20 @@ e2
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- drivers/media/platform/s3c-camif/camif-core.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/media/usb/pvrusb2/pvrusb2-devattr.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/s3c-camif/camif-core.c b/drivers/media/platform/s3c-camif/camif-core.c
-index 92f43c0cbc0c..02b5f933c411 100644
---- a/drivers/media/platform/s3c-camif/camif-core.c
-+++ b/drivers/media/platform/s3c-camif/camif-core.c
-@@ -131,11 +131,13 @@ static int camif_get_scaler_factor(u32 src, u32 tar, u32 *ratio, u32 *shift)
- 	while (sh--) {
- 		unsigned int tmp = 1 << sh;
- 		if (src >= tar * tmp) {
--			*shift = sh, *ratio = tmp;
-+			*shift = sh;
-+			*ratio = tmp;
- 			return 0;
- 		}
- 	}
--	*shift = 0, *ratio = 1;
-+	*shift = 0;
-+	*ratio = 1;
- 	return 0;
- }
+diff --git a/drivers/media/usb/pvrusb2/pvrusb2-devattr.c b/drivers/media/usb/pvrusb2/pvrusb2-devattr.c
+index 1fcf63218885..d1b984ec757d 100644
+--- a/drivers/media/usb/pvrusb2/pvrusb2-devattr.c
++++ b/drivers/media/usb/pvrusb2/pvrusb2-devattr.c
+@@ -594,7 +594,7 @@ static int pvr2_lgdt3306a_attach(struct pvr2_dvb_adapter *adap)
+ 	lgdt3306a_config.mpeg_mode = LGDT3306A_MPEG_PARALLEL;
+ 	lgdt3306a_config.tpclk_edge = LGDT3306A_TPCLK_FALLING_EDGE;
+ 	lgdt3306a_config.tpvalid_polarity = LGDT3306A_TP_VALID_LOW;
+-	lgdt3306a_config.xtalMHz = 25, /* demod clock MHz; 24/25 supported */
++	lgdt3306a_config.xtalMHz = 25; /* demod clock MHz; 24/25 supported */
  
+ 	adap->i2c_client_demod[0] = dvb_module_probe("lgdt3306a", NULL,
+ 						     &adap->channel.hdw->i2c_adap,
 
