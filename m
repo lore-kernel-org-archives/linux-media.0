@@ -8,57 +8,57 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0260DC4727E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC152C2D0A8
 	for <linux-media@archiver.kernel.org>; Tue, 29 Sep 2020 03:27:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C579321734
-	for <linux-media@archiver.kernel.org>; Tue, 29 Sep 2020 03:27:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AD14A21734
+	for <linux-media@archiver.kernel.org>; Tue, 29 Sep 2020 03:27:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N9pyV5n5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DdTJ6jCq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727495AbgI2D05 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 28 Sep 2020 23:26:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47234 "EHLO
+        id S1727416AbgI2D0q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 28 Sep 2020 23:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726064AbgI2D0x (ORCPT
+        with ESMTP id S1727408AbgI2D0q (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 28 Sep 2020 23:26:53 -0400
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF51C061755;
-        Mon, 28 Sep 2020 20:26:52 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id g72so3102508qke.8;
-        Mon, 28 Sep 2020 20:26:52 -0700 (PDT)
+        Mon, 28 Sep 2020 23:26:46 -0400
+Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BCDC0613D0;
+        Mon, 28 Sep 2020 20:26:46 -0700 (PDT)
+Received: by mail-qv1-xf42.google.com with SMTP id cv8so1600626qvb.12;
+        Mon, 28 Sep 2020 20:26:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=hfFwZ3HlzYS1eMwazP0kendf4o1kSxj79xJD83EYXmk=;
-        b=N9pyV5n5SX1MgmqPp0PhpoYzGlcx7tyFmcpwX+iIqE1TsW2jzfdvVAolI0cgC7vnpT
-         GGvymtZ+BDYBzrG3fj2WuAKE0DB+1ctYL13/XzeGtHfZOJNhcd/LNshm0UcLs8wO0hQF
-         jKkqI1Psv17uazhMldI0acTm3ZMS2CZ0CTJdpgryP2bRL2jcXyR0houZchwA0HzFHyBM
-         PMStte6zjpUlk6WnuEXDJCk6rortGXfz6l2mxtwe6gD4a8hU6QuDnjhhcfCkqnPaqPTu
-         igB5sLHMihmuCuZHGQGaEL4tBvMh2MkQ5rLM6YyCbtUVGXkAJphqRtKUlcY1Jeg/V+cn
-         jFDQ==
+        bh=RiV1cS73QXhrI6Mq3a3ZiuUNhTGoF/5ZbayW8PLZSuA=;
+        b=DdTJ6jCqRsVuEG6o3lasj6+OpO0czSAC24H+xck9sse4NmWVHze3PdIm2yKQ0/iZEa
+         7/GHDlr/6QS+1GKYqqAIkq9H13SuROOMWVW95M/OTov5XuL8ypsxpPlkzpis8e8hRNju
+         OUJi5Iz2nw+nnkXPsXOI+x5HuprSWibwD3nge0G/Fk+Enoj93JdKWAmQrIxiuHYWrLAs
+         eLlpnYDEvvgufSVCuJqnLmcNthyhwYaH8bJ5Fl33kvpqmLP8xD3A3fiFao8qqoTBr5vF
+         qmHxJc4z3y+T6GARydERQ+G8MTvPycgab4Y9PPo+HWIc0BsPFQ/JNVj0CSAgZdvkaqwc
+         9Nvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=hfFwZ3HlzYS1eMwazP0kendf4o1kSxj79xJD83EYXmk=;
-        b=tHuEDn7vxottMbLyfvGJ6NfnVFC3yckcGcAwWoajKN/Cj90CLbFyY7w1N6Q2SjILaA
-         uio9lj6nnLO78GwoEJuWXu/zWKCbp1viRmBAELR+/Bn7ikUXxUPDVDBvnFIOIF7euWtF
-         SjkuzlMZLF65WhWxf9ogvCYQh5DOfl4R8ZvEYoK/0Bpymjf8rNmUQSLr/awFwtePJ0x0
-         xkrL1YKk8kgc2XvnllTvJiQnBVxHsGhj+TaWzDJIt6DmwMDIrghq0OreksPRyYwoLWHw
-         4u6hDA7TbDPqyRkJmJBq/p0t4W9GtdVgLI6msktgQ+QNqdFQxgb1h644tAsUDWFFWr0e
-         qp4g==
-X-Gm-Message-State: AOAM5339lYnT5e0lsSPE/zVCmPRer54krRU4UU+oPbQ7sme37u+mypZR
-        onnBfH1dY2v7PL2ZTvwoO7A=
-X-Google-Smtp-Source: ABdhPJzukJqIFWl+XhHi7xs4/P1TciFlOpahd3nHsPNpqjNS4/bwT4nW3dxWF3ObmqWGAxCRHeeDvw==
-X-Received: by 2002:a37:9c86:: with SMTP id f128mr2642714qke.30.1601350011843;
-        Mon, 28 Sep 2020 20:26:51 -0700 (PDT)
+        bh=RiV1cS73QXhrI6Mq3a3ZiuUNhTGoF/5ZbayW8PLZSuA=;
+        b=PCkXP5nkDh6v3G1BTG0WcFhkyXLhuAC4al7HqaNWsBcwKpBDaubFgh2SxUeM8TOrtv
+         MX741Thqck92I8vwKiiU98HyvN57tz6fax2HLzRprFGjQeEIkiCzx8Ti2bfSmZCzy6z+
+         QRJB+bhbBv4I6fAN23iX5xO+BqxXvNSq6AZPN7N1n3a9DIqRzGT3hJ4O61Xk+XQvhlv5
+         vaP2AE/gINDvZTdLKdNTWTPtsJYNwGdVTFEFWEescu6Hu5c9XSgIuvmpTdBDfQrMP/a/
+         FlgYj+kuF33i2JhRuu3mTfddTdK7h70mpgrN3EmJNRbkxQFglF6aIierX3QcPmxaCTYf
+         wXsA==
+X-Gm-Message-State: AOAM531tL5hMB/uaKXcQmqWRgViN1p9EDM0UJbORhpW6MPmK4L2WCSk3
+        Lh33JpNx6AqCJf9olTqUKJE=
+X-Google-Smtp-Source: ABdhPJybOoebfnDtiJcEmvLo70f4GxWruP9r8sezS+3jZBt48XFNpkmd+kugfbihJrwkHZ74l9Ub/A==
+X-Received: by 2002:a0c:aee0:: with SMTP id n32mr2698991qvd.7.1601350005118;
+        Mon, 28 Sep 2020 20:26:45 -0700 (PDT)
 Received: from localhost.localdomain ([2804:14d:72b1:8920:da15:c0bd:33c1:e2ad])
-        by smtp.gmail.com with ESMTPSA id c40sm4010313qtb.72.2020.09.28.20.26.48
+        by smtp.gmail.com with ESMTPSA id c40sm4010313qtb.72.2020.09.28.20.26.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Sep 2020 20:26:51 -0700 (PDT)
+        Mon, 28 Sep 2020 20:26:44 -0700 (PDT)
 From:   "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
 X-Google-Original-From: Daniel W. S. Almeida
 To:     mchehab+huawei@kernel.org, r.verdejo@samsung.com,
@@ -67,9 +67,9 @@ Cc:     "Daniel W . S . Almeida" <dwlsalmeida@gmail.com>,
         linux-media@vger.kernel.org, skhan@linuxfoundation.org,
         linux-kernel-mentees@lists.linuxfoundation.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH WIP 6/6] media: vidtv: psi: fix missing assignments in while loops
-Date:   Tue, 29 Sep 2020 00:26:25 -0300
-Message-Id: <20200929032625.1548909-6-dwlsalmeida@gmail.com>
+Subject: [PATCH WIP 4/6] media: vidtv: psi: extract descriptor chaining code into a helper
+Date:   Tue, 29 Sep 2020 00:26:23 -0300
+Message-Id: <20200929032625.1548909-4-dwlsalmeida@gmail.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200929032625.1548909-1-dwlsalmeida@gmail.com>
 References: <20200929032625.1548909-1-dwlsalmeida@gmail.com>
@@ -81,89 +81,110 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Daniel W. S. Almeida <dwlsalmeida@gmail.com>
 
-Some variables were only assigned once but were used in while
-loops as if they had been updated at every iteration. Fix this.
+The code to append a descriptor to the end of a chain is repeated
+throughout the psi generator code. Extract it into its own helper
+function to avoid cluttering.
 
 Signed-off-by: Daniel W. S. Almeida <dwlsalmeida@gmail.com>
 ---
- drivers/media/test-drivers/vidtv/vidtv_psi.c | 22 +++++++++-----------
- 1 file changed, 10 insertions(+), 12 deletions(-)
+ drivers/media/test-drivers/vidtv/vidtv_psi.c | 49 ++++++--------------
+ 1 file changed, 15 insertions(+), 34 deletions(-)
 
 diff --git a/drivers/media/test-drivers/vidtv/vidtv_psi.c b/drivers/media/test-drivers/vidtv/vidtv_psi.c
-index 2cf103057b19..ddbffea4c353 100644
+index e331fc7d8eef..2cf103057b19 100644
 --- a/drivers/media/test-drivers/vidtv/vidtv_psi.c
 +++ b/drivers/media/test-drivers/vidtv/vidtv_psi.c
-@@ -1191,9 +1191,7 @@ u32 vidtv_psi_pmt_write_into(struct vidtv_psi_pmt_write_args args)
+@@ -313,6 +313,16 @@ static u32 table_section_crc32_write_into(struct crc32_write_args args)
+ 	return nbytes;
+ }
  
- 	struct vidtv_psi_desc *table_descriptor   = args.pmt->descriptor;
- 	struct vidtv_psi_table_pmt_stream *stream = args.pmt->stream;
--	struct vidtv_psi_desc *stream_descriptor  = (stream) ?
--						    args.pmt->stream->descriptor :
--						    NULL;
-+	struct vidtv_psi_desc *stream_descriptor;
- 
- 	struct header_write_args h_args = {};
- 	struct psi_write_args psi_args  = {};
-@@ -1253,6 +1251,8 @@ u32 vidtv_psi_pmt_write_into(struct vidtv_psi_pmt_write_args args)
- 
- 		nbytes += vidtv_psi_ts_psi_write_into(psi_args);
- 
-+		stream_descriptor = stream->descriptor;
++static void vidtv_psi_desc_chain(struct vidtv_psi_desc *head, struct vidtv_psi_desc *desc)
++{
++	if (head) {
++		while (head->next)
++			head = head->next;
 +
- 		while (stream_descriptor) {
- 			/* write the stream descriptors, if any */
- 			d_args.dest_buf           = args.buf;
-@@ -1343,9 +1343,7 @@ u32 vidtv_psi_sdt_write_into(struct vidtv_psi_sdt_write_args args)
- 	u32 crc = INITIAL_CRC;
- 
- 	struct vidtv_psi_table_sdt_service *service = args.sdt->service;
--	struct vidtv_psi_desc *service_desc = (args.sdt->service) ?
--					      args.sdt->service->descriptor :
--					      NULL;
-+	struct vidtv_psi_desc *service_desc;
- 
- 	struct header_write_args h_args = {};
- 	struct psi_write_args psi_args  = {};
-@@ -1392,6 +1390,8 @@ u32 vidtv_psi_sdt_write_into(struct vidtv_psi_sdt_write_args args)
- 
- 		nbytes += vidtv_psi_ts_psi_write_into(psi_args);
- 
-+		service_desc = service->descriptor;
++		head->next = desc;
++	}
++}
 +
- 		while (service_desc) {
- 			/* copy the service descriptors, if any */
- 			d_args.dest_buf           = args.buf;
-@@ -1639,9 +1639,7 @@ u32 vidtv_psi_nit_write_into(struct vidtv_psi_nit_write_args args)
+ struct vidtv_psi_desc_service *vidtv_psi_service_desc_init(struct vidtv_psi_desc *head,
+ 							   enum service_type service_type,
+ 							   char *service_name,
+@@ -346,12 +356,7 @@ struct vidtv_psi_desc_service *vidtv_psi_service_desc_init(struct vidtv_psi_desc
+ 	if (provider_name && provider_name_len)
+ 		desc->provider_name = kstrdup(provider_name, GFP_KERNEL);
  
- 	struct vidtv_psi_desc *table_descriptor     = args.nit->descriptor;
- 	struct vidtv_psi_table_transport *transport = args.nit->transport;
--	struct vidtv_psi_desc *transport_descriptor = (transport) ?
--						       args.nit->transport->descriptor :
--						       NULL;
-+	struct vidtv_psi_desc *transport_descriptor;
+-	if (head) {
+-		while (head->next)
+-			head = head->next;
+-
+-		head->next = (struct vidtv_psi_desc *)desc;
+-	}
++	vidtv_psi_desc_chain(head, (struct vidtv_psi_desc *)desc);
+ 	return desc;
+ }
  
- 	struct header_write_args h_args = {};
- 	struct psi_write_args psi_args  = {};
-@@ -1709,6 +1707,8 @@ u32 vidtv_psi_nit_write_into(struct vidtv_psi_nit_write_args args)
+@@ -379,13 +384,7 @@ struct vidtv_psi_desc_registration
+ 		       additional_ident_info,
+ 		       additional_info_len);
  
- 		nbytes += vidtv_psi_ts_psi_write_into(psi_args);
+-	if (head) {
+-		while (head->next)
+-			head = head->next;
+-
+-		head->next = (struct vidtv_psi_desc *)desc;
+-	}
+-
++	vidtv_psi_desc_chain(head, (struct vidtv_psi_desc *)desc);
+ 	return desc;
+ }
  
-+		transport_descriptor = transport->descriptor;
-+
- 		while (transport_descriptor) {
- 			/* write the transport descriptors, if any */
- 			d_args.dest_buf           = args.buf;
-@@ -1846,9 +1846,7 @@ u32 vidtv_psi_eit_write_into(struct vidtv_psi_eit_write_args args)
- 	u32 crc = INITIAL_CRC;
+@@ -404,13 +403,7 @@ struct vidtv_psi_desc_network_name
+ 	if (network_name && network_name_len)
+ 		desc->network_name = kstrdup(network_name, GFP_KERNEL);
  
- 	struct vidtv_psi_table_eit_event *event = args.eit->event;
--	struct vidtv_psi_desc *event_descriptor = (args.eit->event) ?
--						   args.eit->event->descriptor :
--						   NULL;
-+	struct vidtv_psi_desc *event_descriptor;
+-	if (head) {
+-		while (head->next)
+-			head = head->next;
+-
+-		head->next = (struct vidtv_psi_desc *)desc;
+-	}
+-
++	vidtv_psi_desc_chain(head, (struct vidtv_psi_desc *)desc);
+ 	return desc;
+ }
  
- 	struct header_write_args h_args = {};
- 	struct psi_write_args psi_args  = {};
+@@ -448,13 +441,7 @@ struct vidtv_psi_desc_service_list
+ 	desc->length = length;
+ 	desc->service_list = head_e;
+ 
+-	if (head) {
+-		while (head->next)
+-			head = head->next;
+-
+-		head->next = (struct vidtv_psi_desc *)desc;
+-	}
+-
++	vidtv_psi_desc_chain(head, (struct vidtv_psi_desc *)desc);
+ 	return desc;
+ }
+ 
+@@ -493,13 +480,7 @@ struct vidtv_psi_desc_short_event
+ 	if (text && text_len)
+ 		desc->text = kstrdup(text, GFP_KERNEL);
+ 
+-	if (head) {
+-		while (head->next)
+-			head = head->next;
+-
+-		head->next = (struct vidtv_psi_desc *)desc;
+-	}
+-
++	vidtv_psi_desc_chain(head, (struct vidtv_psi_desc *)desc);
+ 	return desc;
+ }
+ 
 -- 
 2.28.0
 
