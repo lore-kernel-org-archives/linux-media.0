@@ -4,30 +4,30 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83341C47420
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:29:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DC20C4727E
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:29:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2EF3C2087D
+	by mail.kernel.org (Postfix) with ESMTP id C47CD20759
 	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:29:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731077AbgI3P3V (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Sep 2020 11:29:21 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:44650 "EHLO
+        id S1731068AbgI3P3U (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Sep 2020 11:29:20 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:44670 "EHLO
         hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731073AbgI3P3T (ORCPT
+        with ESMTP id S1731070AbgI3P3S (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Sep 2020 11:29:19 -0400
+        Wed, 30 Sep 2020 11:29:18 -0400
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 92451634C8E
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 37457634CC1
         for <linux-media@vger.kernel.org>; Wed, 30 Sep 2020 18:28:54 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH 099/100] ccs: Add shading correction and luminance correction level controls
-Date:   Wed, 30 Sep 2020 18:28:57 +0300
-Message-Id: <20200930152858.8471-100-sakari.ailus@linux.intel.com>
+Subject: [PATCH 094/100] ccs: Add support for analogue gain coefficient controls
+Date:   Wed, 30 Sep 2020 18:28:52 +0300
+Message-Id: <20200930152858.8471-95-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200930152858.8471-1-sakari.ailus@linux.intel.com>
 References: <20200930152858.8471-1-sakari.ailus@linux.intel.com>
@@ -37,105 +37,83 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add controls for supporting lens shading correction.
+Add four controls for reading CCS analogue gain coefficients. The
+values are constants that are device specific.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 74 ++++++++++++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
+ drivers/media/i2c/ccs/ccs-core.c | 38 ++++++++++++++++++++++++++++++--
+ 1 file changed, 36 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index c68c11e8e9f3..d2ffb48c9a30 100644
+index 0b0165f5a28b..21afdf70038d 100644
 --- a/drivers/media/i2c/ccs/ccs-core.c
 +++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -755,6 +755,25 @@ static int ccs_set_ctrl(struct v4l2_ctrl *ctrl)
- 	case V4L2_CID_TEST_PATTERN_GREENB:
- 		rval = ccs_write(sensor, TEST_DATA_GREENB, ctrl->val);
+@@ -28,6 +28,7 @@
+ #include <linux/v4l2-mediabus.h>
+ #include <media/v4l2-fwnode.h>
+ #include <media/v4l2-device.h>
++#include <uapi/linux/ccs.h>
  
-+		break;
-+	case V4L2_CID_CCS_SHADING_CORRECTION:
-+		if (!(CCS_LIM(sensor, SHADING_CORRECTION_CAPABILITY) &
-+		      (CCS_SHADING_CORRECTION_CAPABILITY_COLOR_SHADING |
-+		       CCS_SHADING_CORRECTION_CAPABILITY_LUMINANCE_CORRECTION)))
-+			break;
-+
-+		rval = ccs_write(sensor, SHADING_CORRECTION_EN,
-+				 ctrl->val ? CCS_SHADING_CORRECTION_EN_ENABLE :
-+				 0);
-+
-+		break;
-+	case V4L2_CID_CCS_LUMINANCE_SHADING_CORRECTION:
-+		if (!(CCS_LIM(sensor, SHADING_CORRECTION_CAPABILITY) &
-+		      CCS_SHADING_CORRECTION_CAPABILITY_LUMINANCE_CORRECTION))
-+			break;
-+
-+		rval = ccs_write(sensor, LUMINANCE_CORRECTION_LEVEL, ctrl->val);
-+
- 		break;
- 	case V4L2_CID_PIXEL_RATE:
- 		/* For v4l2_ctrl_s_ctrl_int64() used internally. */
-@@ -876,6 +895,61 @@ static int ccs_init_controls(struct ccs_sensor *sensor)
- 	}
- 	}
+ #include "ccs.h"
  
-+	if (CCS_LIM(sensor, SHADING_CORRECTION_CAPABILITY) &
-+	    CCS_SHADING_CORRECTION_CAPABILITY_COLOR_SHADING) {
-+		const struct v4l2_ctrl_config ctrl_cfg = {
-+			.name = "Shading Correction",
-+			.type = V4L2_CTRL_TYPE_BOOLEAN,
-+			.id = V4L2_CID_CCS_SHADING_CORRECTION,
-+			.ops = &ccs_ctrl_ops,
-+			.max = 1,
-+			.step = 1,
+@@ -770,14 +771,46 @@ static int ccs_init_controls(struct ccs_sensor *sensor)
+ 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
+ 	int rval;
+ 
+-	rval = v4l2_ctrl_handler_init(&sensor->pixel_array->ctrl_handler, 13);
++	rval = v4l2_ctrl_handler_init(&sensor->pixel_array->ctrl_handler, 17);
+ 	if (rval)
+ 		return rval;
+ 
+ 	sensor->pixel_array->ctrl_handler.lock = &sensor->mutex;
+ 
+ 	switch (CCS_LIM(sensor, ANALOG_GAIN_CAPABILITY)) {
+-	case CCS_ANALOG_GAIN_CAPABILITY_GLOBAL:
++	case CCS_ANALOG_GAIN_CAPABILITY_GLOBAL: {
++		struct {
++			const char *name;
++			u32 id;
++			s32 value;
++		} const gain_ctrls[] = {
++			{ "Analogue Gain m0", V4L2_CID_CCS_ANALOGUE_GAIN_M0,
++			  CCS_LIM(sensor, ANALOG_GAIN_M0), },
++			{ "Analogue Gain c0", V4L2_CID_CCS_ANALOGUE_GAIN_C0,
++			  CCS_LIM(sensor, ANALOG_GAIN_C0), },
++			{ "Analogue Gain m1", V4L2_CID_CCS_ANALOGUE_GAIN_M1,
++			  CCS_LIM(sensor, ANALOG_GAIN_M1), },
++			{ "Analogue Gain c1", V4L2_CID_CCS_ANALOGUE_GAIN_C1,
++			  CCS_LIM(sensor, ANALOG_GAIN_C1), },
 +		};
-+
-+		v4l2_ctrl_new_custom(&sensor->pixel_array->ctrl_handler,
-+				     &ctrl_cfg, NULL);
-+	}
-+
-+	if (CCS_LIM(sensor, SHADING_CORRECTION_CAPABILITY) &
-+	    CCS_SHADING_CORRECTION_CAPABILITY_LUMINANCE_CORRECTION) {
-+		const struct v4l2_ctrl_config ctrl_cfg = {
-+			.name = "Luminance Shading Correction",
-+			.type = V4L2_CTRL_TYPE_BOOLEAN,
-+			.id = V4L2_CID_CCS_LUMINANCE_SHADING_CORRECTION,
++		struct v4l2_ctrl_config ctrl_cfg = {
++			.type = V4L2_CTRL_TYPE_INTEGER,
 +			.ops = &ccs_ctrl_ops,
-+			.max = 255,
-+			.step = 1,
-+			.def = 128,
-+		};
-+
-+		v4l2_ctrl_new_custom(&sensor->pixel_array->ctrl_handler,
-+				     &ctrl_cfg, NULL);
-+	}
-+
-+	if (CCS_LIM(sensor, SHADING_CORRECTION_CAPABILITY) &
-+	    (CCS_SHADING_CORRECTION_CAPABILITY_COLOR_SHADING |
-+	     CCS_SHADING_CORRECTION_CAPABILITY_LUMINANCE_CORRECTION)) {
-+		u32 val =
-+			((CCS_LIM(sensor, SHADING_CORRECTION_CAPABILITY) &
-+			  CCS_SHADING_CORRECTION_CAPABILITY_COLOR_SHADING) ?
-+			 V4L2_CCS_SHADING_CORRECTION_COLOUR : 0) |
-+			((CCS_LIM(sensor, SHADING_CORRECTION_CAPABILITY) &
-+			   CCS_SHADING_CORRECTION_CAPABILITY_LUMINANCE_CORRECTION) ?
-+			 V4L2_CCS_SHADING_CORRECTION_LUMINANCE : 0);
-+		const struct v4l2_ctrl_config ctrl_cfg = {
-+			.name = "Shading Correction Capability",
-+			.type = V4L2_CTRL_TYPE_BITMASK,
-+			.id = V4L2_CID_CCS_SHADING_CORRECTION_CAPABILITY,
-+			.ops = &ccs_ctrl_ops,
-+			.max = val,
-+			.def = val,
 +			.flags = V4L2_CTRL_FLAG_READ_ONLY,
++			.step = 1,
 +		};
++		unsigned int i;
 +
-+		v4l2_ctrl_new_custom(&sensor->pixel_array->ctrl_handler,
-+				     &ctrl_cfg, NULL);
++		for (i = 0; i < ARRAY_SIZE(gain_ctrls); i++) {
++			ctrl_cfg.name = gain_ctrls[i].name;
++			ctrl_cfg.id = gain_ctrls[i].id;
++			ctrl_cfg.min = ctrl_cfg.max = ctrl_cfg.def =
++				gain_ctrls[i].value;
++
++			v4l2_ctrl_new_custom(&sensor->pixel_array->ctrl_handler,
++					     &ctrl_cfg, NULL);
++		}
++
+ 		v4l2_ctrl_new_std(&sensor->pixel_array->ctrl_handler,
+ 				  &ccs_ctrl_ops, V4L2_CID_ANALOGUE_GAIN,
+ 				  CCS_LIM(sensor, ANALOG_GAIN_CODE_MIN),
+@@ -786,6 +819,7 @@ static int ccs_init_controls(struct ccs_sensor *sensor)
+ 				      1U),
+ 				  CCS_LIM(sensor, ANALOG_GAIN_CODE_MIN));
+ 	}
 +	}
-+
+ 
  	if (CCS_LIM(sensor, DIGITAL_GAIN_CAPABILITY) ==
  	    CCS_DIGITAL_GAIN_CAPABILITY_GLOBAL ||
- 	    CCS_LIM(sensor, DIGITAL_GAIN_CAPABILITY) ==
 -- 
 2.27.0
 
