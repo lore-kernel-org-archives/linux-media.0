@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F10BCC4727C
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:29:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C804CC4727E
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:29:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AED3D20789
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:29:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8828B20759
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:29:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731025AbgI3P3d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Sep 2020 11:29:33 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:44664 "EHLO
+        id S1731047AbgI3P3O (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Sep 2020 11:29:14 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:44680 "EHLO
         hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731046AbgI3P3P (ORCPT
+        with ESMTP id S1731034AbgI3P3N (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Sep 2020 11:29:15 -0400
+        Wed, 30 Sep 2020 11:29:13 -0400
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 1BBAE634CF3
-        for <linux-media@vger.kernel.org>; Wed, 30 Sep 2020 18:28:53 +0300 (EEST)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id A80EA634CA9
+        for <linux-media@vger.kernel.org>; Wed, 30 Sep 2020 18:28:52 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH 080/100] ccs-pll: Separate VT divisor limit calculation from the rest
-Date:   Wed, 30 Sep 2020 18:28:38 +0300
-Message-Id: <20200930152858.8471-81-sakari.ailus@linux.intel.com>
+Subject: [PATCH 075/100] ccs-pll: Better separate OP and VT sub-tree calculation
+Date:   Wed, 30 Sep 2020 18:28:33 +0300
+Message-Id: <20200930152858.8471-76-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200930152858.8471-1-sakari.ailus@linux.intel.com>
 References: <20200930152858.8471-1-sakari.ailus@linux.intel.com>
@@ -37,96 +37,117 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Separate VT divisor limit calculation from the rest of the VT PLL branch
-calculation. This way it can be used for dual PLL support as well.
+Better separate OP PLL branch calculation from VT branch calculation.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs-pll.c | 64 +++++++++++++++++++++----------------
- 1 file changed, 37 insertions(+), 27 deletions(-)
+ drivers/media/i2c/ccs-pll.c | 54 +++++++++++++++++++++----------------
+ 1 file changed, 31 insertions(+), 23 deletions(-)
 
 diff --git a/drivers/media/i2c/ccs-pll.c b/drivers/media/i2c/ccs-pll.c
-index 52dea3894229..d7805e61a7c0 100644
+index b474c7e81385..41e2ba72bce1 100644
 --- a/drivers/media/i2c/ccs-pll.c
 +++ b/drivers/media/i2c/ccs-pll.c
-@@ -228,6 +228,41 @@ static int check_ext_bounds(struct device *dev, struct ccs_pll *pll)
- 	return 0;
+@@ -162,11 +162,11 @@ static int check_all_bounds(struct device *dev,
+ #define PHY_CONST_DIV		16
+ 
+ static void
+-__ccs_pll_calculate_vt(struct device *dev, const struct ccs_pll_limits *lim,
+-		       const struct ccs_pll_branch_limits_bk *op_lim_bk,
+-		       struct ccs_pll *pll, struct ccs_pll_branch_fr *pll_fr,
+-		       struct ccs_pll_branch_bk *op_pll_bk, bool cphy,
+-		       uint32_t phy_const)
++ccs_pll_calculate_vt(struct device *dev, const struct ccs_pll_limits *lim,
++		     const struct ccs_pll_branch_limits_bk *op_lim_bk,
++		     struct ccs_pll *pll, struct ccs_pll_branch_fr *pll_fr,
++		     struct ccs_pll_branch_bk *op_pll_bk, bool cphy,
++		     uint32_t phy_const)
+ {
+ 	uint32_t sys_div;
+ 	uint32_t best_pix_div = INT_MAX >> 1;
+@@ -174,6 +174,9 @@ __ccs_pll_calculate_vt(struct device *dev, const struct ccs_pll_limits *lim,
+ 	uint32_t min_vt_div, max_vt_div, vt_div;
+ 	uint32_t min_sys_div, max_sys_div;
+ 
++	if (pll->flags & CCS_PLL_FLAG_NO_OP_CLOCKS)
++		goto out_calc_pixel_rate;
++
+ 	/*
+ 	 * Find out whether a sensor supports derating. If it does not, VT and
+ 	 * OP domains are required to run at the same pixel rate.
+@@ -313,6 +316,10 @@ __ccs_pll_calculate_vt(struct device *dev, const struct ccs_pll_limits *lim,
+ 		pll_fr->pll_op_clk_freq_hz / pll->vt_bk.sys_clk_div;
+ 	pll->vt_bk.pix_clk_freq_hz =
+ 		pll->vt_bk.sys_clk_freq_hz / pll->vt_bk.pix_clk_div;
++
++out_calc_pixel_rate:
++	pll->pixel_rate_pixel_array =
++		pll->vt_bk.pix_clk_freq_hz * pll->vt_lanes;
  }
  
-+static void
-+ccs_pll_find_vt_sys_div(struct device *dev, const struct ccs_pll_limits *lim,
-+			struct ccs_pll *pll, struct ccs_pll_branch_fr *pll_fr,
-+			uint16_t min_vt_div, uint16_t max_vt_div,
-+			uint16_t *min_sys_div, uint16_t *max_sys_div)
-+{
-+	/*
-+	 * Find limits for sys_clk_div. Not all values are possible with all
-+	 * values of pix_clk_div.
-+	 */
-+	*min_sys_div = lim->vt_bk.min_sys_clk_div;
-+	dev_dbg(dev, "min_sys_div: %u\n", *min_sys_div);
-+	*min_sys_div = max_t(uint16_t, *min_sys_div,
-+			     DIV_ROUND_UP(min_vt_div,
-+					  lim->vt_bk.max_pix_clk_div));
-+	dev_dbg(dev, "min_sys_div: max_vt_pix_clk_div: %u\n", *min_sys_div);
-+	*min_sys_div = max_t(uint16_t, *min_sys_div,
-+			     pll_fr->pll_op_clk_freq_hz
-+			     / lim->vt_bk.max_sys_clk_freq_hz);
-+	dev_dbg(dev, "min_sys_div: max_pll_op_clk_freq_hz: %u\n", *min_sys_div);
-+	*min_sys_div = clk_div_even_up(*min_sys_div);
-+	dev_dbg(dev, "min_sys_div: one or even: %u\n", *min_sys_div);
-+
-+	*max_sys_div = lim->vt_bk.max_sys_clk_div;
-+	dev_dbg(dev, "max_sys_div: %u\n", *max_sys_div);
-+	*max_sys_div = min_t(uint16_t, *max_sys_div,
-+			     DIV_ROUND_UP(max_vt_div,
-+					  lim->vt_bk.min_pix_clk_div));
-+	dev_dbg(dev, "max_sys_div: min_vt_pix_clk_div: %u\n", *max_sys_div);
-+	*max_sys_div = min_t(uint16_t, *max_sys_div,
-+			     DIV_ROUND_UP(pll_fr->pll_op_clk_freq_hz,
-+					  lim->vt_bk.min_pix_clk_freq_hz));
-+	dev_dbg(dev, "max_sys_div: min_vt_pix_clk_freq_hz: %u\n", *max_sys_div);
-+}
-+
- #define CPHY_CONST		7
- #define DPHY_CONST		16
- #define PHY_CONST_DIV		16
-@@ -314,33 +349,8 @@ ccs_pll_calculate_vt(struct device *dev, const struct ccs_pll_limits *lim,
- 	dev_dbg(dev, "max_vt_div: min_vt_pix_clk_freq_hz: %u\n",
- 		max_vt_div);
- 
--	/*
--	 * Find limitsits for sys_clk_div. Not all values are possible
--	 * with all values of pix_clk_div.
--	 */
--	min_sys_div = lim->vt_bk.min_sys_clk_div;
--	dev_dbg(dev, "min_sys_div: %u\n", min_sys_div);
--	min_sys_div = max_t(uint16_t, min_sys_div,
--			    DIV_ROUND_UP(min_vt_div,
--					 lim->vt_bk.max_pix_clk_div));
--	dev_dbg(dev, "min_sys_div: max_vt_pix_clk_div: %u\n", min_sys_div);
--	min_sys_div = max_t(uint16_t, min_sys_div,
--			    pll_fr->pll_op_clk_freq_hz
--			    / lim->vt_bk.max_sys_clk_freq_hz);
--	dev_dbg(dev, "min_sys_div: max_pll_op_clk_freq_hz: %u\n", min_sys_div);
--	min_sys_div = clk_div_even_up(min_sys_div);
--	dev_dbg(dev, "min_sys_div: one or even: %u\n", min_sys_div);
--
--	max_sys_div = lim->vt_bk.max_sys_clk_div;
--	dev_dbg(dev, "max_sys_div: %u\n", max_sys_div);
--	max_sys_div = min_t(uint16_t, max_sys_div,
--			    DIV_ROUND_UP(max_vt_div,
--					 lim->vt_bk.min_pix_clk_div));
--	dev_dbg(dev, "max_sys_div: min_vt_pix_clk_div: %u\n", max_sys_div);
--	max_sys_div = min_t(uint16_t, max_sys_div,
--			    DIV_ROUND_UP(pll_fr->pll_op_clk_freq_hz,
--					 lim->vt_bk.min_pix_clk_freq_hz));
--	dev_dbg(dev, "max_sys_div: min_vt_pix_clk_freq_hz: %u\n", max_sys_div);
-+	ccs_pll_find_vt_sys_div(dev, lim, pll, pll_fr, min_vt_div,
-+				max_vt_div, &min_sys_div, &max_sys_div);
- 
+ /*
+@@ -327,12 +334,12 @@ __ccs_pll_calculate_vt(struct device *dev, const struct ccs_pll_limits *lim,
+  * @return Zero on success, error code on error.
+  */
+ static int
+-__ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+-		    const struct ccs_pll_branch_limits_fr *op_lim_fr,
+-		    const struct ccs_pll_branch_limits_bk *op_lim_bk,
+-		    struct ccs_pll *pll, struct ccs_pll_branch_fr *op_pll_fr,
+-		    struct ccs_pll_branch_bk *op_pll_bk, uint32_t mul,
+-		    uint32_t div, uint32_t l, bool cphy, uint32_t phy_const)
++ccs_pll_calculate_op(struct device *dev, const struct ccs_pll_limits *lim,
++		     const struct ccs_pll_branch_limits_fr *op_lim_fr,
++		     const struct ccs_pll_branch_limits_bk *op_lim_bk,
++		     struct ccs_pll *pll, struct ccs_pll_branch_fr *op_pll_fr,
++		     struct ccs_pll_branch_bk *op_pll_bk, uint32_t mul,
++		     uint32_t div, uint32_t l, bool cphy, uint32_t phy_const)
+ {
  	/*
- 	 * Find pix_div such that a legal pix_div * sys_div results
+ 	 * Higher multipliers (and divisors) are often required than
+@@ -430,15 +437,7 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 
+ 	dev_dbg(dev, "op_pix_clk_div: %u\n", op_pll_bk->pix_clk_div);
+ 
+-	if (!(pll->flags & CCS_PLL_FLAG_NO_OP_CLOCKS))
+-		__ccs_pll_calculate_vt(dev, lim, op_lim_bk, pll, op_pll_fr,
+-				       op_pll_bk, cphy, phy_const);
+-
+-	pll->pixel_rate_pixel_array =
+-		pll->vt_bk.pix_clk_freq_hz * pll->vt_lanes;
+-
+-	return check_all_bounds(dev, lim, op_lim_fr, op_lim_bk, pll, op_pll_fr,
+-				op_pll_bk);
++	return 0;
+ }
+ 
+ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+@@ -558,13 +557,22 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 	     op_pll_fr->pre_pll_clk_div +=
+ 		     (pll->flags & CCS_PLL_FLAG_EXT_IP_PLL_DIVIDER) ? 1 :
+ 		     2 - (op_pll_fr->pre_pll_clk_div & 1)) {
+-		rval = __ccs_pll_calculate(dev, lim, op_lim_fr, op_lim_bk, pll,
+-					   op_pll_fr, op_pll_bk, mul, div, l,
+-					   cphy, phy_const);
++		rval = ccs_pll_calculate_op(dev, lim, op_lim_fr, op_lim_bk, pll,
++					    op_pll_fr, op_pll_bk, mul, div, l,
++					    cphy, phy_const);
++		if (rval)
++			continue;
++
++		ccs_pll_calculate_vt(dev, lim, op_lim_bk, pll, op_pll_fr,
++				     op_pll_bk, cphy, phy_const);
++
++		rval = check_all_bounds(dev, lim, op_lim_fr, op_lim_bk, pll,
++					op_pll_fr, op_pll_bk);
+ 		if (rval)
+ 			continue;
+ 
+ 		print_pll(dev, pll);
++
+ 		return 0;
+ 	}
+ 
 -- 
 2.27.0
 
