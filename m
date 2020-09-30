@@ -7,27 +7,30 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1444C4727F
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:30:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 084DFC4727C
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:30:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 98651221EF
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:30:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C418F22207
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:30:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731180AbgI3Pa0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Sep 2020 11:30:26 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:44650 "EHLO
-        hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730653AbgI3P3D (ORCPT
+        id S1731187AbgI3Pa3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Sep 2020 11:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42212 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730813AbgI3P3D (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 30 Sep 2020 11:29:03 -0400
+Received: from hillosipuli.retiisi.eu (hillosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::81:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A788AC0613D0
+        for <linux-media@vger.kernel.org>; Wed, 30 Sep 2020 08:29:02 -0700 (PDT)
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 2CC43634C96
-        for <linux-media@vger.kernel.org>; Wed, 30 Sep 2020 18:28:47 +0300 (EEST)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 8CE8E634C90
+        for <linux-media@vger.kernel.org>; Wed, 30 Sep 2020 18:28:46 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH 012/100] smiapp: Use CCS registers
-Date:   Wed, 30 Sep 2020 18:27:30 +0300
-Message-Id: <20200930152858.8471-13-sakari.ailus@linux.intel.com>
+Subject: [PATCH 006/100] smiapp: Use MIPI CCS version and manufacturer ID information
+Date:   Wed, 30 Sep 2020 18:27:24 +0300
+Message-Id: <20200930152858.8471-7-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200930152858.8471-1-sakari.ailus@linux.intel.com>
 References: <20200930152858.8471-1-sakari.ailus@linux.intel.com>
@@ -37,696 +40,249 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Switch to CCS standard registers where they exist. The still relevant SMIA
-registers are left as-is and the redundant ones are removed.
+Read MIPI CCS manufacturer and version information, and use the CCS IDs
+over SMIA whenever they are set.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/smiapp/smiapp-core.c | 272 +++++++++++--------------
- drivers/media/i2c/smiapp/smiapp.h      |   4 +-
- 2 files changed, 118 insertions(+), 158 deletions(-)
+ drivers/media/i2c/smiapp/smiapp-core.c | 76 +++++++++++++++++++-------
+ drivers/media/i2c/smiapp/smiapp.h      | 20 ++++---
+ 2 files changed, 68 insertions(+), 28 deletions(-)
 
 diff --git a/drivers/media/i2c/smiapp/smiapp-core.c b/drivers/media/i2c/smiapp/smiapp-core.c
-index a54ceef5c5ea..b9faf38d4bba 100644
+index 47e983e9cd87..10900ac4aa1a 100644
 --- a/drivers/media/i2c/smiapp/smiapp-core.c
 +++ b/drivers/media/i2c/smiapp/smiapp-core.c
-@@ -28,7 +28,6 @@
- #include <media/v4l2-device.h>
- 
- #include "ccs-limits.h"
--#include "ccs-regs.h"
- #include "smiapp.h"
- 
- #define SMIAPP_ALIGN_DIM(dim, flags)	\
-@@ -357,40 +356,34 @@ static int smiapp_pll_configure(struct smiapp_sensor *sensor)
- 	struct smiapp_pll *pll = &sensor->pll;
- 	int rval;
- 
--	rval = smiapp_write(
--		sensor, SMIAPP_REG_U16_VT_PIX_CLK_DIV, pll->vt.pix_clk_div);
-+	rval = ccs_write(sensor, VT_PIX_CLK_DIV, pll->vt.pix_clk_div);
- 	if (rval < 0)
- 		return rval;
- 
--	rval = smiapp_write(
--		sensor, SMIAPP_REG_U16_VT_SYS_CLK_DIV, pll->vt.sys_clk_div);
-+	rval = ccs_write(sensor, VT_SYS_CLK_DIV, pll->vt.sys_clk_div);
- 	if (rval < 0)
- 		return rval;
- 
--	rval = smiapp_write(
--		sensor, SMIAPP_REG_U16_PRE_PLL_CLK_DIV, pll->pre_pll_clk_div);
-+	rval = ccs_write(sensor, PRE_PLL_CLK_DIV, pll->pre_pll_clk_div);
- 	if (rval < 0)
- 		return rval;
- 
--	rval = smiapp_write(
--		sensor, SMIAPP_REG_U16_PLL_MULTIPLIER, pll->pll_multiplier);
-+	rval = ccs_write(sensor, PLL_MULTIPLIER, pll->pll_multiplier);
- 	if (rval < 0)
- 		return rval;
- 
- 	/* Lane op clock ratio does not apply here. */
--	rval = smiapp_write(
--		sensor, SMIAPP_REG_U32_REQUESTED_LINK_BIT_RATE_MBPS,
--		DIV_ROUND_UP(pll->op.sys_clk_freq_hz, 1000000 / 256 / 256));
-+	rval = ccs_write(sensor, REQUESTED_LINK_RATE,
-+			 DIV_ROUND_UP(pll->op.sys_clk_freq_hz,
-+				      1000000 / 256 / 256));
- 	if (rval < 0 || sensor->minfo.smiapp_profile == SMIAPP_PROFILE_0)
- 		return rval;
- 
--	rval = smiapp_write(
--		sensor, SMIAPP_REG_U16_OP_PIX_CLK_DIV, pll->op.pix_clk_div);
-+	rval = ccs_write(sensor, OP_PIX_CLK_DIV, pll->op.pix_clk_div);
- 	if (rval < 0)
- 		return rval;
- 
--	return smiapp_write(
--		sensor, SMIAPP_REG_U16_OP_SYS_CLK_DIV, pll->op.sys_clk_div);
-+	return ccs_write(sensor, OP_SYS_CLK_DIV, pll->op.sys_clk_div);
- }
- 
- static int smiapp_pll_try(struct smiapp_sensor *sensor,
-@@ -522,10 +515,10 @@ static u32 smiapp_pixel_order(struct smiapp_sensor *sensor)
- 
- 	if (sensor->hflip) {
- 		if (sensor->hflip->val)
--			flip |= SMIAPP_IMAGE_ORIENTATION_HFLIP;
-+			flip |= CCS_IMAGE_ORIENTATION_HORIZONTAL_MIRROR;
- 
- 		if (sensor->vflip->val)
--			flip |= SMIAPP_IMAGE_ORIENTATION_VFLIP;
-+			flip |= CCS_IMAGE_ORIENTATION_VERTICAL_FLIP;
- 	}
- 
- 	flip ^= sensor->hvflip_inv_mask;
-@@ -585,10 +578,10 @@ static int smiapp_set_ctrl(struct v4l2_ctrl *ctrl)
- 			return -EBUSY;
- 
- 		if (sensor->hflip->val)
--			orient |= SMIAPP_IMAGE_ORIENTATION_HFLIP;
-+			orient |= CCS_IMAGE_ORIENTATION_HORIZONTAL_MIRROR;
- 
- 		if (sensor->vflip->val)
--			orient |= SMIAPP_IMAGE_ORIENTATION_VFLIP;
-+			orient |= CCS_IMAGE_ORIENTATION_VERTICAL_FLIP;
- 
- 		orient ^= sensor->hvflip_inv_mask;
- 
-@@ -633,60 +626,50 @@ static int smiapp_set_ctrl(struct v4l2_ctrl *ctrl)
- 
- 	switch (ctrl->id) {
- 	case V4L2_CID_ANALOGUE_GAIN:
--		rval = smiapp_write(
--			sensor,
--			SMIAPP_REG_U16_ANALOGUE_GAIN_CODE_GLOBAL, ctrl->val);
-+		rval = ccs_write(sensor, ANALOG_GAIN_CODE_GLOBAL, ctrl->val);
- 
- 		break;
- 	case V4L2_CID_EXPOSURE:
--		rval = smiapp_write(
--			sensor,
--			SMIAPP_REG_U16_COARSE_INTEGRATION_TIME, ctrl->val);
-+		rval = ccs_write(sensor, COARSE_INTEGRATION_TIME, ctrl->val);
- 
- 		break;
- 	case V4L2_CID_HFLIP:
- 	case V4L2_CID_VFLIP:
--		rval = smiapp_write(sensor, SMIAPP_REG_U8_IMAGE_ORIENTATION,
--				    orient);
-+		rval = ccs_write(sensor, IMAGE_ORIENTATION, orient);
- 
- 		break;
- 	case V4L2_CID_VBLANK:
--		rval = smiapp_write(
--			sensor, SMIAPP_REG_U16_FRAME_LENGTH_LINES,
--			sensor->pixel_array->crop[SMIAPP_PA_PAD_SRC].height
--			+ ctrl->val);
-+		rval = ccs_write(sensor, FRAME_LENGTH_LINES,
-+				 sensor->pixel_array->crop[
-+					 SMIAPP_PA_PAD_SRC].height
-+				 + ctrl->val);
- 
- 		break;
- 	case V4L2_CID_HBLANK:
--		rval = smiapp_write(
--			sensor, SMIAPP_REG_U16_LINE_LENGTH_PCK,
--			sensor->pixel_array->crop[SMIAPP_PA_PAD_SRC].width
--			+ ctrl->val);
-+		rval = ccs_write(sensor, LINE_LENGTH_PCK,
-+				 sensor->pixel_array->crop[
-+					 SMIAPP_PA_PAD_SRC].width
-+				 + ctrl->val);
- 
- 		break;
- 	case V4L2_CID_TEST_PATTERN:
--		rval = smiapp_write(
--			sensor, SMIAPP_REG_U16_TEST_PATTERN_MODE, ctrl->val);
-+		rval = ccs_write(sensor, TEST_PATTERN_MODE, ctrl->val);
- 
- 		break;
- 	case V4L2_CID_TEST_PATTERN_RED:
--		rval = smiapp_write(
--			sensor, SMIAPP_REG_U16_TEST_DATA_RED, ctrl->val);
-+		rval = ccs_write(sensor, TEST_DATA_RED, ctrl->val);
- 
- 		break;
- 	case V4L2_CID_TEST_PATTERN_GREENR:
--		rval = smiapp_write(
--			sensor, SMIAPP_REG_U16_TEST_DATA_GREENR, ctrl->val);
-+		rval = ccs_write(sensor, TEST_DATA_GREENR, ctrl->val);
- 
- 		break;
- 	case V4L2_CID_TEST_PATTERN_BLUE:
--		rval = smiapp_write(
--			sensor, SMIAPP_REG_U16_TEST_DATA_BLUE, ctrl->val);
-+		rval = ccs_write(sensor, TEST_DATA_BLUE, ctrl->val);
- 
- 		break;
- 	case V4L2_CID_TEST_PATTERN_GREENB:
--		rval = smiapp_write(
--			sensor, SMIAPP_REG_U16_TEST_DATA_GREENB, ctrl->val);
-+		rval = ccs_write(sensor, TEST_DATA_GREENB, ctrl->val);
- 
- 		break;
- 	case V4L2_CID_PIXEL_RATE:
-@@ -846,8 +829,7 @@ static int smiapp_get_mbus_formats(struct smiapp_sensor *sensor)
- 
- 	dev_dbg(&client->dev, "data_format_model_type %d\n", type);
- 
--	rval = smiapp_read(sensor, SMIAPP_REG_U8_PIXEL_ORDER,
--			   &pixel_order);
-+	rval = ccs_read(sensor, PIXEL_ORDER, &pixel_order);
- 	if (rval)
- 		return rval;
- 
-@@ -1054,22 +1036,20 @@ static int smiapp_read_nvm_page(struct smiapp_sensor *sensor, u32 p, u8 *nvm,
- 
- 	*status = 0;
- 
--	rval = smiapp_write(sensor,
--			    SMIAPP_REG_U8_DATA_TRANSFER_IF_1_PAGE_SELECT, p);
-+	rval = ccs_write(sensor, DATA_TRANSFER_IF_1_PAGE_SELECT, p);
- 	if (rval)
- 		return rval;
- 
--	rval = smiapp_write(sensor, SMIAPP_REG_U8_DATA_TRANSFER_IF_1_CTRL,
--			    SMIAPP_DATA_TRANSFER_IF_1_CTRL_EN);
-+	rval = ccs_write(sensor, DATA_TRANSFER_IF_1_CTRL,
-+			 CCS_DATA_TRANSFER_IF_1_CTRL_ENABLE);
- 	if (rval)
- 		return rval;
- 
--	rval = smiapp_read(sensor, SMIAPP_REG_U8_DATA_TRANSFER_IF_1_STATUS,
--			   &s);
-+	rval = ccs_read(sensor, DATA_TRANSFER_IF_1_STATUS, &s);
- 	if (rval)
- 		return rval;
- 
--	if (s & SMIAPP_DATA_TRANSFER_IF_1_STATUS_EUSAGE) {
-+	if (s & CCS_DATA_TRANSFER_IF_1_STATUS_IMPROPER_IF_USAGE) {
- 		*status = s;
- 		return -ENODATA;
- 	}
-@@ -1077,14 +1057,10 @@ static int smiapp_read_nvm_page(struct smiapp_sensor *sensor, u32 p, u8 *nvm,
- 	if (CCS_LIM(sensor, DATA_TRANSFER_IF_CAPABILITY) &
- 	    CCS_DATA_TRANSFER_IF_CAPABILITY_POLLING) {
- 		for (i = 1000; i > 0; i--) {
--			if (s & SMIAPP_DATA_TRANSFER_IF_1_STATUS_RD_READY)
-+			if (s & CCS_DATA_TRANSFER_IF_1_STATUS_READ_IF_READY)
- 				break;
- 
--			rval = smiapp_read(
--				sensor,
--				SMIAPP_REG_U8_DATA_TRANSFER_IF_1_STATUS,
--				&s);
--
-+			rval = ccs_read(sensor, DATA_TRANSFER_IF_1_STATUS, &s);
- 			if (rval)
- 				return rval;
- 		}
-@@ -1093,12 +1069,10 @@ static int smiapp_read_nvm_page(struct smiapp_sensor *sensor, u32 p, u8 *nvm,
- 			return -ETIMEDOUT;
- 	}
- 
--	for (i = 0; i < SMIAPP_NVM_PAGE_SIZE; i++) {
-+	for (i = 0; i <= CCS_LIM_DATA_TRANSFER_IF_1_DATA_MAX_P; i++) {
- 		u32 v;
- 
--		rval = smiapp_read(sensor,
--				   SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_0 + i,
--				   &v);
-+		rval = ccs_read(sensor, DATA_TRANSFER_IF_1_DATA(i), &v);
- 		if (rval)
- 			return rval;
- 
-@@ -1115,20 +1089,21 @@ static int smiapp_read_nvm(struct smiapp_sensor *sensor, unsigned char *nvm,
- 	u32 p;
- 	int rval = 0, rval2;
- 
--	for (p = 0; p < nvm_size / SMIAPP_NVM_PAGE_SIZE && !rval; p++) {
-+	for (p = 0; p < nvm_size / (CCS_LIM_DATA_TRANSFER_IF_1_DATA_MAX_P + 1)
-+		     && !rval; p++) {
- 		rval = smiapp_read_nvm_page(sensor, p, nvm, &status);
--		nvm += SMIAPP_NVM_PAGE_SIZE;
-+		nvm += CCS_LIM_DATA_TRANSFER_IF_1_DATA_MAX_P + 1;
- 	}
- 
- 	if (rval == -ENODATA &&
--	    status & SMIAPP_DATA_TRANSFER_IF_1_STATUS_EUSAGE)
-+	    status & CCS_DATA_TRANSFER_IF_1_STATUS_IMPROPER_IF_USAGE)
- 		rval = 0;
- 
--	rval2 = smiapp_write(sensor, SMIAPP_REG_U8_DATA_TRANSFER_IF_1_CTRL, 0);
-+	rval2 = ccs_write(sensor, DATA_TRANSFER_IF_1_CTRL, 0);
- 	if (rval < 0)
- 		return rval;
- 	else
--		return rval2 ?: p * SMIAPP_NVM_PAGE_SIZE;
-+		return rval2 ?: p * (CCS_LIM_DATA_TRANSFER_IF_1_DATA_MAX_P + 1);
- }
- 
- /*
-@@ -1144,16 +1119,15 @@ static int smiapp_change_cci_addr(struct smiapp_sensor *sensor)
- 
- 	client->addr = sensor->hwcfg->i2c_addr_dfl;
- 
--	rval = smiapp_write(sensor,
--			    SMIAPP_REG_U8_CCI_ADDRESS_CONTROL,
--			    sensor->hwcfg->i2c_addr_alt << 1);
-+	rval = ccs_write(sensor, CCI_ADDRESS_CTRL,
-+			 sensor->hwcfg->i2c_addr_alt << 1);
- 	if (rval)
- 		return rval;
- 
- 	client->addr = sensor->hwcfg->i2c_addr_alt;
- 
- 	/* verify addr change went ok */
--	rval = smiapp_read(sensor, SMIAPP_REG_U8_CCI_ADDRESS_CONTROL, &val);
-+	rval = ccs_read(sensor, CCI_ADDRESS_CTRL, &val);
- 	if (rval)
- 		return rval;
- 
-@@ -1259,34 +1233,30 @@ static int smiapp_setup_flash_strobe(struct smiapp_sensor *sensor)
- 	strobe_width_high_rs = (tmp + strobe_adjustment - 1) /
- 				strobe_adjustment;
- 
--	rval = smiapp_write(sensor, SMIAPP_REG_U8_FLASH_MODE_RS,
--			    strobe_setup->mode);
-+	rval = ccs_write(sensor, FLASH_MODE_RS, strobe_setup->mode);
- 	if (rval < 0)
- 		goto out;
- 
--	rval = smiapp_write(sensor, SMIAPP_REG_U8_FLASH_STROBE_ADJUSTMENT,
--			    strobe_adjustment);
-+	rval = ccs_write(sensor, FLASH_STROBE_ADJUSTMENT, strobe_adjustment);
- 	if (rval < 0)
- 		goto out;
- 
--	rval = smiapp_write(
--		sensor, SMIAPP_REG_U16_TFLASH_STROBE_WIDTH_HIGH_RS_CTRL,
--		strobe_width_high_rs);
-+	rval = ccs_write(sensor, TFLASH_STROBE_WIDTH_HIGH_RS_CTRL,
-+			 strobe_width_high_rs);
- 	if (rval < 0)
- 		goto out;
- 
--	rval = smiapp_write(sensor, SMIAPP_REG_U16_TFLASH_STROBE_DELAY_RS_CTRL,
--			    strobe_setup->strobe_delay);
-+	rval = ccs_write(sensor, TFLASH_STROBE_DELAY_RS_CTRL,
-+			 strobe_setup->strobe_delay);
- 	if (rval < 0)
- 		goto out;
- 
--	rval = smiapp_write(sensor, SMIAPP_REG_U16_FLASH_STROBE_START_POINT,
--			    strobe_setup->stobe_start_point);
-+	rval = ccs_write(sensor, FLASH_STROBE_START_POINT,
-+			 strobe_setup->stobe_start_point);
- 	if (rval < 0)
- 		goto out;
- 
--	rval = smiapp_write(sensor, SMIAPP_REG_U8_FLASH_TRIGGER_RS,
--			    strobe_setup->trigger);
-+	rval = ccs_write(sensor, FLASH_TRIGGER_RS, strobe_setup->trigger);
- 
- out:
- 	sensor->hwcfg->strobe_setup->trigger = 0;
-@@ -1349,8 +1319,7 @@ static int smiapp_power_on(struct device *dev)
- 		}
- 	}
- 
--	rval = smiapp_write(sensor, SMIAPP_REG_U8_SOFTWARE_RESET,
--			    SMIAPP_SOFTWARE_RESET);
-+	rval = ccs_write(sensor, SOFTWARE_RESET, CCS_SOFTWARE_RESET_ON);
- 	if (rval < 0) {
- 		dev_err(dev, "software reset failed\n");
- 		goto out_cci_addr_fail;
-@@ -1364,45 +1333,42 @@ static int smiapp_power_on(struct device *dev)
- 		}
- 	}
- 
--	rval = smiapp_write(sensor, SMIAPP_REG_U16_COMPRESSION_MODE,
--			    SMIAPP_COMPRESSION_MODE_SIMPLE_PREDICTOR);
-+	rval = ccs_write(sensor, COMPRESSION_MODE,
-+			 CCS_COMPRESSION_MODE_DPCM_PCM_SIMPLE);
- 	if (rval) {
- 		dev_err(dev, "compression mode set failed\n");
- 		goto out_cci_addr_fail;
- 	}
- 
--	rval = smiapp_write(
--		sensor, SMIAPP_REG_U16_EXTCLK_FREQUENCY_MHZ,
--		sensor->hwcfg->ext_clk / (1000000 / (1 << 8)));
-+	rval = ccs_write(sensor, EXTCLK_FREQUENCY_MHZ,
-+			 sensor->hwcfg->ext_clk / (1000000 / (1 << 8)));
- 	if (rval) {
- 		dev_err(dev, "extclk frequency set failed\n");
- 		goto out_cci_addr_fail;
- 	}
- 
--	rval = smiapp_write(sensor, SMIAPP_REG_U8_CSI_LANE_MODE,
--			    sensor->hwcfg->lanes - 1);
-+	rval = ccs_write(sensor, CSI_LANE_MODE, sensor->hwcfg->lanes - 1);
- 	if (rval) {
- 		dev_err(dev, "csi lane mode set failed\n");
- 		goto out_cci_addr_fail;
- 	}
- 
--	rval = smiapp_write(sensor, SMIAPP_REG_U8_FAST_STANDBY_CTRL,
--			    SMIAPP_FAST_STANDBY_CTRL_IMMEDIATE);
-+	rval = ccs_write(sensor, FAST_STANDBY_CTRL,
-+			 CCS_FAST_STANDBY_CTRL_FRAME_TRUNCATION);
- 	if (rval) {
- 		dev_err(dev, "fast standby set failed\n");
- 		goto out_cci_addr_fail;
- 	}
- 
--	rval = smiapp_write(sensor, SMIAPP_REG_U8_CSI_SIGNALLING_MODE,
--			    sensor->hwcfg->csi_signalling_mode);
-+	rval = ccs_write(sensor, CSI_SIGNALING_MODE,
-+			 sensor->hwcfg->csi_signalling_mode);
- 	if (rval) {
- 		dev_err(dev, "csi signalling mode set failed\n");
- 		goto out_cci_addr_fail;
- 	}
- 
- 	/* DPHY control done by sensor based on requested link rate */
--	rval = smiapp_write(sensor, SMIAPP_REG_U8_DPHY_CTRL,
--			    SMIAPP_DPHY_CTRL_UI);
-+	rval = ccs_write(sensor, PHY_CTRL, CCS_PHY_CTRL_UI);
- 	if (rval < 0)
- 		goto out_cci_addr_fail;
- 
-@@ -1439,9 +1405,7 @@ static int smiapp_power_off(struct device *dev)
- 	 * will fail. So do a soft reset explicitly here.
- 	 */
- 	if (sensor->hwcfg->i2c_addr_alt)
--		smiapp_write(sensor,
--			     SMIAPP_REG_U8_SOFTWARE_RESET,
--			     SMIAPP_SOFTWARE_RESET);
-+		ccs_write(sensor, SOFTWARE_RESET, CCS_SOFTWARE_RESET_ON);
- 
- 	gpiod_set_value(sensor->xshutdown, 0);
- 	clk_disable_unprepare(sensor->ext_clk);
-@@ -1464,9 +1428,9 @@ static int smiapp_start_streaming(struct smiapp_sensor *sensor)
- 
- 	mutex_lock(&sensor->mutex);
- 
--	rval = smiapp_write(sensor, SMIAPP_REG_U16_CSI_DATA_FORMAT,
--			    (sensor->csi_format->width << 8) |
--			    sensor->csi_format->compressed);
-+	rval = ccs_write(sensor, CSI_DATA_FORMAT,
-+			 (sensor->csi_format->width << 8) |
-+			 sensor->csi_format->compressed);
- 	if (rval)
- 		goto out;
- 
-@@ -1479,14 +1443,13 @@ static int smiapp_start_streaming(struct smiapp_sensor *sensor)
- 			(sensor->binning_horizontal << 4)
- 			| sensor->binning_vertical;
- 
--		rval = smiapp_write(
--			sensor, SMIAPP_REG_U8_BINNING_TYPE, binning_type);
-+		rval = ccs_write(sensor, BINNING_TYPE, binning_type);
- 		if (rval < 0)
- 			goto out;
- 
- 		binning_mode = 1;
- 	}
--	rval = smiapp_write(sensor, SMIAPP_REG_U8_BINNING_MODE, binning_mode);
-+	rval = ccs_write(sensor, BINNING_MODE, binning_mode);
- 	if (rval < 0)
- 		goto out;
- 
-@@ -1496,26 +1459,26 @@ static int smiapp_start_streaming(struct smiapp_sensor *sensor)
- 		goto out;
- 
- 	/* Analog crop start coordinates */
--	rval = smiapp_write(sensor, SMIAPP_REG_U16_X_ADDR_START,
--			    sensor->pixel_array->crop[SMIAPP_PA_PAD_SRC].left);
-+	rval = ccs_write(sensor, X_ADDR_START,
-+			 sensor->pixel_array->crop[SMIAPP_PA_PAD_SRC].left);
- 	if (rval < 0)
- 		goto out;
- 
--	rval = smiapp_write(sensor, SMIAPP_REG_U16_Y_ADDR_START,
--			    sensor->pixel_array->crop[SMIAPP_PA_PAD_SRC].top);
-+	rval = ccs_write(sensor, Y_ADDR_START,
-+			 sensor->pixel_array->crop[SMIAPP_PA_PAD_SRC].top);
- 	if (rval < 0)
- 		goto out;
- 
- 	/* Analog crop end coordinates */
--	rval = smiapp_write(
--		sensor, SMIAPP_REG_U16_X_ADDR_END,
-+	rval = ccs_write(
-+		sensor, X_ADDR_END,
- 		sensor->pixel_array->crop[SMIAPP_PA_PAD_SRC].left
- 		+ sensor->pixel_array->crop[SMIAPP_PA_PAD_SRC].width - 1);
- 	if (rval < 0)
- 		goto out;
- 
--	rval = smiapp_write(
--		sensor, SMIAPP_REG_U16_Y_ADDR_END,
-+	rval = ccs_write(
-+		sensor, Y_ADDR_END,
- 		sensor->pixel_array->crop[SMIAPP_PA_PAD_SRC].top
- 		+ sensor->pixel_array->crop[SMIAPP_PA_PAD_SRC].height - 1);
- 	if (rval < 0)
-@@ -1529,26 +1492,26 @@ static int smiapp_start_streaming(struct smiapp_sensor *sensor)
- 	/* Digital crop */
- 	if (CCS_LIM(sensor, DIGITAL_CROP_CAPABILITY)
- 	    == CCS_DIGITAL_CROP_CAPABILITY_INPUT_CROP) {
--		rval = smiapp_write(
--			sensor, SMIAPP_REG_U16_DIGITAL_CROP_X_OFFSET,
-+		rval = ccs_write(
-+			sensor, DIGITAL_CROP_X_OFFSET,
- 			sensor->scaler->crop[SMIAPP_PAD_SINK].left);
- 		if (rval < 0)
- 			goto out;
- 
--		rval = smiapp_write(
--			sensor, SMIAPP_REG_U16_DIGITAL_CROP_Y_OFFSET,
-+		rval = ccs_write(
-+			sensor, DIGITAL_CROP_Y_OFFSET,
- 			sensor->scaler->crop[SMIAPP_PAD_SINK].top);
- 		if (rval < 0)
- 			goto out;
- 
--		rval = smiapp_write(
--			sensor, SMIAPP_REG_U16_DIGITAL_CROP_IMAGE_WIDTH,
-+		rval = ccs_write(
-+			sensor, DIGITAL_CROP_IMAGE_WIDTH,
- 			sensor->scaler->crop[SMIAPP_PAD_SINK].width);
- 		if (rval < 0)
- 			goto out;
- 
--		rval = smiapp_write(
--			sensor, SMIAPP_REG_U16_DIGITAL_CROP_IMAGE_HEIGHT,
-+		rval = ccs_write(
-+			sensor, DIGITAL_CROP_IMAGE_HEIGHT,
- 			sensor->scaler->crop[SMIAPP_PAD_SINK].height);
- 		if (rval < 0)
- 			goto out;
-@@ -1557,24 +1520,22 @@ static int smiapp_start_streaming(struct smiapp_sensor *sensor)
- 	/* Scaling */
- 	if (CCS_LIM(sensor, SCALING_CAPABILITY)
- 	    != CCS_SCALING_CAPABILITY_NONE) {
--		rval = smiapp_write(sensor, SMIAPP_REG_U16_SCALING_MODE,
--				    sensor->scaling_mode);
-+		rval = ccs_write(sensor, SCALING_MODE, sensor->scaling_mode);
- 		if (rval < 0)
- 			goto out;
- 
--		rval = smiapp_write(sensor, SMIAPP_REG_U16_SCALE_M,
--				    sensor->scale_m);
-+		rval = ccs_write(sensor, SCALE_M, sensor->scale_m);
- 		if (rval < 0)
- 			goto out;
- 	}
- 
- 	/* Output size from sensor */
--	rval = smiapp_write(sensor, SMIAPP_REG_U16_X_OUTPUT_SIZE,
--			    sensor->src->crop[SMIAPP_PAD_SRC].width);
-+	rval = ccs_write(sensor, X_OUTPUT_SIZE,
-+			 sensor->src->crop[SMIAPP_PAD_SRC].width);
- 	if (rval < 0)
- 		goto out;
--	rval = smiapp_write(sensor, SMIAPP_REG_U16_Y_OUTPUT_SIZE,
--			    sensor->src->crop[SMIAPP_PAD_SRC].height);
-+	rval = ccs_write(sensor, Y_OUTPUT_SIZE,
-+			 sensor->src->crop[SMIAPP_PAD_SRC].height);
- 	if (rval < 0)
- 		goto out;
- 
-@@ -1594,8 +1555,7 @@ static int smiapp_start_streaming(struct smiapp_sensor *sensor)
- 		goto out;
- 	}
- 
--	rval = smiapp_write(sensor, SMIAPP_REG_U8_MODE_SELECT,
--			    SMIAPP_MODE_SELECT_STREAMING);
-+	rval = ccs_write(sensor, MODE_SELECT, CCS_MODE_SELECT_STREAMING);
- 
- out:
- 	mutex_unlock(&sensor->mutex);
-@@ -1609,8 +1569,7 @@ static int smiapp_stop_streaming(struct smiapp_sensor *sensor)
- 	int rval;
- 
- 	mutex_lock(&sensor->mutex);
--	rval = smiapp_write(sensor, SMIAPP_REG_U8_MODE_SELECT,
--			    SMIAPP_MODE_SELECT_SOFTWARE_STANDBY);
-+	rval = ccs_write(sensor, MODE_SELECT, CCS_MODE_SELECT_SOFTWARE_STANDBY);
- 	if (rval)
- 		goto out;
- 
-@@ -1828,7 +1787,7 @@ static void smiapp_propagate(struct v4l2_subdev *subdev,
- 				sensor->scale_m =
- 					CCS_LIM(sensor, SCALER_N_MIN);
- 				sensor->scaling_mode =
--					SMIAPP_SCALING_MODE_NONE;
-+					CCS_SCALING_MODE_NO_SCALING;
- 			} else if (ssd == sensor->binner) {
- 				sensor->binning_horizontal = 1;
- 				sensor->binning_vertical = 1;
-@@ -2063,7 +2022,7 @@ static void smiapp_set_compose_scaler(struct v4l2_subdev *subdev,
+@@ -2356,9 +2356,14 @@ smiapp_sysfs_ident_read(struct device *dev, struct device_attribute *attr,
  	struct smiapp_sensor *sensor = to_smiapp_sensor(subdev);
- 	u32 min, max, a, b, max_m;
- 	u32 scale_m = CCS_LIM(sensor, SCALER_N_MIN);
--	int mode = SMIAPP_SCALING_MODE_HORIZONTAL;
-+	int mode = CCS_SCALING_MODE_HORIZONTAL;
- 	u32 try[4];
- 	u32 ntry = 0;
- 	unsigned int i;
-@@ -2123,7 +2082,7 @@ static void smiapp_set_compose_scaler(struct v4l2_subdev *subdev,
+ 	struct smiapp_module_info *minfo = &sensor->minfo;
  
- 		if (this > best) {
- 			scale_m = try[i];
--			mode = SMIAPP_SCALING_MODE_HORIZONTAL;
-+			mode = CCS_SCALING_MODE_HORIZONTAL;
- 			best = this;
- 		}
+-	return snprintf(buf, PAGE_SIZE, "%2.2x%4.4x%2.2x\n",
+-			minfo->manufacturer_id, minfo->model_id,
+-			minfo->revision_number_major) + 1;
++	if (minfo->mipi_manufacturer_id)
++		return snprintf(buf, PAGE_SIZE, "%4.4x%4.4x%2.2x\n",
++				minfo->mipi_manufacturer_id, minfo->model_id,
++				minfo->revision_number_major) + 1;
++	else
++		return snprintf(buf, PAGE_SIZE, "%2.2x%4.4x%2.2x\n",
++				minfo->smia_manufacturer_id, minfo->model_id,
++				minfo->revision_number_major) + 1;
+ }
  
-@@ -2494,26 +2453,24 @@ static int smiapp_identify_module(struct smiapp_sensor *sensor)
- 		rval = smiapp_read_8only(sensor, SMIAPP_REG_U8_MANUFACTURER_ID,
- 					 &minfo->smia_manufacturer_id);
+ static DEVICE_ATTR(ident, S_IRUGO, smiapp_sysfs_ident_read, NULL);
+@@ -2377,8 +2382,11 @@ static int smiapp_identify_module(struct smiapp_sensor *sensor)
+ 	minfo->name = SMIAPP_NAME;
+ 
+ 	/* Module info */
+-	rval = smiapp_read_8only(sensor, SMIAPP_REG_U8_MANUFACTURER_ID,
+-				 &minfo->manufacturer_id);
++	rval = ccs_read(sensor, MODULE_MANUFACTURER_ID,
++			&minfo->mipi_manufacturer_id);
++	if (!rval && !minfo->mipi_manufacturer_id)
++		rval = smiapp_read_8only(sensor, SMIAPP_REG_U8_MANUFACTURER_ID,
++					 &minfo->smia_manufacturer_id);
  	if (!rval)
--		rval = smiapp_read_8only(sensor, SMIAPP_REG_U16_MODEL_ID,
-+		rval = smiapp_read_8only(sensor, CCS_R_MODULE_MODEL_ID,
+ 		rval = smiapp_read_8only(sensor, SMIAPP_REG_U16_MODEL_ID,
  					 &minfo->model_id);
- 	if (!rval)
- 		rval = smiapp_read_8only(sensor,
--					 SMIAPP_REG_U8_REVISION_NUMBER_MAJOR,
-+					 CCS_R_MODULE_REVISION_NUMBER_MAJOR,
- 					 &minfo->revision_number_major);
- 	if (!rval)
- 		rval = smiapp_read_8only(sensor,
--					 SMIAPP_REG_U8_REVISION_NUMBER_MINOR,
-+					 CCS_R_MODULE_REVISION_NUMBER_MINOR,
- 					 &minfo->revision_number_minor);
- 	if (!rval)
--		rval = smiapp_read_8only(sensor,
--					 SMIAPP_REG_U8_MODULE_DATE_YEAR,
-+		rval = smiapp_read_8only(sensor, CCS_R_MODULE_DATE_YEAR,
- 					 &minfo->module_year);
- 	if (!rval)
--		rval = smiapp_read_8only(sensor,
--					 SMIAPP_REG_U8_MODULE_DATE_MONTH,
-+		rval = smiapp_read_8only(sensor, CCS_R_MODULE_DATE_MONTH,
- 					 &minfo->module_month);
- 	if (!rval)
--		rval = smiapp_read_8only(sensor, SMIAPP_REG_U8_MODULE_DATE_DAY,
-+		rval = smiapp_read_8only(sensor, CCS_R_MODULE_DATE_DAY,
- 					 &minfo->module_day);
+@@ -2404,9 +2412,12 @@ static int smiapp_identify_module(struct smiapp_sensor *sensor)
  
  	/* Sensor info */
-@@ -2522,19 +2479,19 @@ static int smiapp_identify_module(struct smiapp_sensor *sensor)
- 				&minfo->sensor_mipi_manufacturer_id);
- 	if (!rval && !minfo->sensor_mipi_manufacturer_id)
+ 	if (!rval)
++		rval = ccs_read(sensor, SENSOR_MANUFACTURER_ID,
++				&minfo->sensor_mipi_manufacturer_id);
++	if (!rval && !minfo->sensor_mipi_manufacturer_id)
  		rval = smiapp_read_8only(sensor,
--					 SMIAPP_REG_U8_SENSOR_MANUFACTURER_ID,
-+					 CCS_R_SENSOR_MANUFACTURER_ID,
- 					 &minfo->sensor_smia_manufacturer_id);
+ 					 SMIAPP_REG_U8_SENSOR_MANUFACTURER_ID,
+-					 &minfo->sensor_manufacturer_id);
++					 &minfo->sensor_smia_manufacturer_id);
  	if (!rval)
  		rval = smiapp_read_8only(sensor,
--					 SMIAPP_REG_U16_SENSOR_MODEL_ID,
-+					 CCS_R_SENSOR_MODEL_ID,
- 					 &minfo->sensor_model_id);
- 	if (!rval)
- 		rval = smiapp_read_8only(sensor,
--					 SMIAPP_REG_U8_SENSOR_REVISION_NUMBER,
-+					 CCS_R_SENSOR_REVISION_NUMBER,
- 					 &minfo->sensor_revision_number);
- 	if (!rval)
- 		rval = smiapp_read_8only(sensor,
--					 SMIAPP_REG_U8_SENSOR_FIRMWARE_VERSION,
-+					 CCS_R_SENSOR_FIRMWARE_VERSION,
- 					 &minfo->sensor_firmware_version);
+ 					 SMIAPP_REG_U16_SENSOR_MODEL_ID,
+@@ -2422,9 +2433,11 @@ static int smiapp_identify_module(struct smiapp_sensor *sensor)
  
  	/* SMIA */
-@@ -2919,7 +2876,7 @@ static struct smiapp_hwconfig *smiapp_get_hwconfig(struct device *dev)
+ 	if (!rval)
++		rval = ccs_read(sensor, MIPI_CCS_VERSION, &minfo->ccs_version);
++	if (!rval && !minfo->ccs_version)
+ 		rval = smiapp_read_8only(sensor, SMIAPP_REG_U8_SMIA_VERSION,
+ 					 &minfo->smia_version);
+-	if (!rval)
++	if (!rval && !minfo->ccs_version)
+ 		rval = smiapp_read_8only(sensor, SMIAPP_REG_U8_SMIAPP_VERSION,
+ 					 &minfo->smiapp_version);
  
- 	switch (bus_cfg.bus_type) {
- 	case V4L2_MBUS_CSI2_DPHY:
--		hwcfg->csi_signalling_mode = SMIAPP_CSI_SIGNALLING_MODE_CSI2;
-+		hwcfg->csi_signalling_mode = CCS_CSI_SIGNALING_MODE_CSI_2_DPHY;
- 		hwcfg->lanes = bus_cfg.bus.mipi_csi2.num_data_lanes;
- 		break;
- 	case V4L2_MBUS_CCP2:
-@@ -3095,8 +3052,9 @@ static int smiapp_probe(struct i2c_client *client)
+@@ -2433,38 +2446,62 @@ static int smiapp_identify_module(struct smiapp_sensor *sensor)
+ 		return -ENODEV;
+ 	}
+ 
+-	dev_dbg(&client->dev, "module 0x%2.2x-0x%4.4x\n",
+-		minfo->manufacturer_id, minfo->model_id);
++	if (minfo->mipi_manufacturer_id)
++		dev_dbg(&client->dev, "MIPI CCS module 0x%4.4x-0x%4.4x\n",
++			minfo->mipi_manufacturer_id, minfo->model_id);
++	else
++		dev_dbg(&client->dev, "SMIA module 0x%2.2x-0x%4.4x\n",
++			minfo->smia_manufacturer_id, minfo->model_id);
+ 
+ 	dev_dbg(&client->dev,
+ 		"module revision 0x%2.2x-0x%2.2x date %2.2d-%2.2d-%2.2d\n",
+ 		minfo->revision_number_major, minfo->revision_number_minor,
+ 		minfo->module_year, minfo->module_month, minfo->module_day);
+ 
+-	dev_dbg(&client->dev, "sensor 0x%2.2x-0x%4.4x\n",
+-		minfo->sensor_manufacturer_id, minfo->sensor_model_id);
++	if (minfo->sensor_mipi_manufacturer_id)
++		dev_dbg(&client->dev, "MIPI CCS sensor 0x%4.4x-0x%4.4x\n",
++			minfo->sensor_mipi_manufacturer_id,
++			minfo->sensor_model_id);
++	else
++		dev_dbg(&client->dev, "SMIA sensor 0x%2.2x-0x%4.4x\n",
++			minfo->sensor_smia_manufacturer_id,
++			minfo->sensor_model_id);
+ 
+ 	dev_dbg(&client->dev,
+ 		"sensor revision 0x%2.2x firmware version 0x%2.2x\n",
+ 		minfo->sensor_revision_number, minfo->sensor_firmware_version);
+ 
+-	dev_dbg(&client->dev, "smia version %2.2d smiapp version %2.2d\n",
+-		minfo->smia_version, minfo->smiapp_version);
++	if (minfo->ccs_version)
++		dev_dbg(&client->dev, "MIPI CCS version %u.%u",
++			(minfo->ccs_version & CCS_MIPI_CCS_VERSION_MAJOR_MASK)
++			>> CCS_MIPI_CCS_VERSION_MAJOR_SHIFT,
++			(minfo->ccs_version & CCS_MIPI_CCS_VERSION_MINOR_MASK));
++	else
++		dev_dbg(&client->dev,
++			"smia version %2.2d smiapp version %2.2d\n",
++			minfo->smia_version, minfo->smiapp_version);
+ 
+ 	/*
+ 	 * Some modules have bad data in the lvalues below. Hope the
+ 	 * rvalues have better stuff. The lvalues are module
+ 	 * parameters whereas the rvalues are sensor parameters.
  	 */
- 	if (sensor->hwcfg->module_board_orient ==
- 	    SMIAPP_MODULE_BOARD_ORIENT_180)
--		sensor->hvflip_inv_mask = SMIAPP_IMAGE_ORIENTATION_HFLIP |
--					  SMIAPP_IMAGE_ORIENTATION_VFLIP;
-+		sensor->hvflip_inv_mask =
-+			CCS_IMAGE_ORIENTATION_HORIZONTAL_MIRROR |
-+			CCS_IMAGE_ORIENTATION_VERTICAL_FLIP;
+-	if (!minfo->manufacturer_id && !minfo->model_id) {
+-		minfo->manufacturer_id = minfo->sensor_manufacturer_id;
++	if (minfo->sensor_smia_manufacturer_id &&
++	    !minfo->smia_manufacturer_id && !minfo->model_id) {
++		minfo->smia_manufacturer_id =
++			minfo->sensor_smia_manufacturer_id;
+ 		minfo->model_id = minfo->sensor_model_id;
+ 		minfo->revision_number_major = minfo->sensor_revision_number;
+ 	}
  
- 	rval = smiapp_call_quirk(sensor, limits);
- 	if (rval) {
+ 	for (i = 0; i < ARRAY_SIZE(smiapp_module_idents); i++) {
+-		if (smiapp_module_idents[i].manufacturer_id
+-		    != minfo->manufacturer_id)
++		if (smiapp_module_idents[i].mipi_manufacturer_id &&
++		    smiapp_module_idents[i].mipi_manufacturer_id
++		    != minfo->mipi_manufacturer_id)
++			continue;
++		if (smiapp_module_idents[i].smia_manufacturer_id &&
++		    smiapp_module_idents[i].smia_manufacturer_id
++		    != minfo->smia_manufacturer_id)
+ 			continue;
+ 		if (smiapp_module_idents[i].model_id != minfo->model_id)
+ 			continue;
+@@ -2488,9 +2525,8 @@ static int smiapp_identify_module(struct smiapp_sensor *sensor)
+ 		dev_warn(&client->dev,
+ 			 "no quirks for this module; let's hope it's fully compliant\n");
+ 
+-	dev_dbg(&client->dev, "the sensor is called %s, ident %2.2x%4.4x%2.2x\n",
+-		minfo->name, minfo->manufacturer_id, minfo->model_id,
+-		minfo->revision_number_major);
++	dev_dbg(&client->dev, "the sensor is called %s\n",
++		minfo->name);
+ 
+ 	return 0;
+ }
 diff --git a/drivers/media/i2c/smiapp/smiapp.h b/drivers/media/i2c/smiapp/smiapp.h
-index 1a67cf485dcc..c6e4e05a7522 100644
+index 7cef97db7f47..b1d0e3d71630 100644
 --- a/drivers/media/i2c/smiapp/smiapp.h
 +++ b/drivers/media/i2c/smiapp/smiapp.h
-@@ -15,6 +15,8 @@
- #include <media/v4l2-ctrls.h>
- #include <media/v4l2-subdev.h>
+@@ -91,8 +91,9 @@ struct smiapp_quirk;
+ #define SMIAPP_MODULE_IDENT_FLAG_REV_LE		(1 << 0)
  
-+#include "ccs-regs.h"
-+
- #include "smiapp-pll.h"
- #include "smiapp-reg-defs.h"
- #include "smiapp-regs.h"
-@@ -220,7 +222,7 @@ struct smiapp_sensor {
- 	struct gpio_desc *xshutdown;
- 	void *ccs_limits;
- 	u8 nbinning_subtypes;
--	struct smiapp_binning_subtype binning_subtypes[SMIAPP_BINNING_SUBTYPES];
-+	struct smiapp_binning_subtype binning_subtypes[CCS_LIM_BINNING_SUB_TYPE_MAX_N + 1];
- 	u32 mbus_frame_fmts;
- 	const struct smiapp_csi_data_format *csi_format;
- 	const struct smiapp_csi_data_format *internal_csi_format;
+ struct smiapp_module_ident {
+-	u8 manufacturer_id;
++	u16 mipi_manufacturer_id;
+ 	u16 model_id;
++	u8 smia_manufacturer_id;
+ 	u8 revision_number_major;
+ 
+ 	u8 flags;
+@@ -102,7 +103,8 @@ struct smiapp_module_ident {
+ };
+ 
+ struct smiapp_module_info {
+-	u32 manufacturer_id;
++	u32 smia_manufacturer_id;
++	u32 mipi_manufacturer_id;
+ 	u32 model_id;
+ 	u32 revision_number_major;
+ 	u32 revision_number_minor;
+@@ -111,13 +113,15 @@ struct smiapp_module_info {
+ 	u32 module_month;
+ 	u32 module_day;
+ 
+-	u32 sensor_manufacturer_id;
++	u32 sensor_smia_manufacturer_id;
++	u32 sensor_mipi_manufacturer_id;
+ 	u32 sensor_model_id;
+ 	u32 sensor_revision_number;
+ 	u32 sensor_firmware_version;
+ 
+ 	u32 smia_version;
+ 	u32 smiapp_version;
++	u32 ccs_version;
+ 
+ 	u32 smiapp_profile;
+ 
+@@ -126,7 +130,7 @@ struct smiapp_module_info {
+ };
+ 
+ #define SMIAPP_IDENT_FQ(manufacturer, model, rev, fl, _name, _quirk)	\
+-	{ .manufacturer_id = manufacturer,				\
++	{ .smia_manufacturer_id = manufacturer,				\
+ 	  .model_id = model,						\
+ 	  .revision_number_major = rev,					\
+ 	  .flags = fl,							\
+@@ -134,7 +138,7 @@ struct smiapp_module_info {
+ 	  .quirk = _quirk, }
+ 
+ #define SMIAPP_IDENT_LQ(manufacturer, model, rev, _name, _quirk)	\
+-	{ .manufacturer_id = manufacturer,				\
++	{ .smia_manufacturer_id = manufacturer,				\
+ 	  .model_id = model,						\
+ 	  .revision_number_major = rev,					\
+ 	  .flags = SMIAPP_MODULE_IDENT_FLAG_REV_LE,			\
+@@ -142,14 +146,14 @@ struct smiapp_module_info {
+ 	  .quirk = _quirk, }
+ 
+ #define SMIAPP_IDENT_L(manufacturer, model, rev, _name)			\
+-	{ .manufacturer_id = manufacturer,				\
++	{ .smia_manufacturer_id = manufacturer,				\
+ 	  .model_id = model,						\
+ 	  .revision_number_major = rev,					\
+ 	  .flags = SMIAPP_MODULE_IDENT_FLAG_REV_LE,			\
+ 	  .name = _name, }
+ 
+ #define SMIAPP_IDENT_Q(manufacturer, model, rev, _name, _quirk)		\
+-	{ .manufacturer_id = manufacturer,				\
++	{ .smia_manufacturer_id = manufacturer,				\
+ 	  .model_id = model,						\
+ 	  .revision_number_major = rev,					\
+ 	  .flags = 0,							\
+@@ -157,7 +161,7 @@ struct smiapp_module_info {
+ 	  .quirk = _quirk, }
+ 
+ #define SMIAPP_IDENT(manufacturer, model, rev, _name)			\
+-	{ .manufacturer_id = manufacturer,				\
++	{ .smia_manufacturer_id = manufacturer,				\
+ 	  .model_id = model,						\
+ 	  .revision_number_major = rev,					\
+ 	  .flags = 0,							\
 -- 
 2.27.0
 
