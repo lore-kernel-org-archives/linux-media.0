@@ -4,55 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 655DFC2D0A8
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 06:36:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19F32C4727C
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 06:36:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 15A6C2075F
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 06:36:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B70302076E
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 06:36:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1601447779;
-	bh=KSQdhVCwLXMmbKuCw0FaRITnyXOd7ETydwCFt7TfWg8=;
+	s=default; t=1601447781;
+	bh=etEdHKnsQP/29xUeMI6P5O8K+a5TTCmJWm0/4A80Hxs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=cFRuh5ELo69qP5DVEbLWcDZhLgrPLikq2IvE20eE7GnR7pv4m24vPSCO7Y21133KZ
-	 H6pR87qU37APZtQY6HxLKWWjVv0WKazV7GNYycszU9Y9El15dCYh8np3AhPNdtf8uO
-	 Jbdf8HFm21aNpr6dx7e8e1HgJVmD97tj4o4HhXvs=
+	b=qtyTAyEWrC90f5kyNuIKQAsrQ/l4qIWZzleayoa/mSwzQ1osacy7cjwySEqRU2sz/
+	 k+DHa7WNNHDSPdNMtVNpxsI/RJvvo5Flhii1LAmIR9WfRbRKl7TcTzpE8+kNNSTLyA
+	 5XC/bI4pzwEEpHI0c4kO92uWJbmnSkMHk1Ed8bo0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728157AbgI3GgI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Sep 2020 02:36:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59314 "EHLO mail.kernel.org"
+        id S1728246AbgI3GgU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Sep 2020 02:36:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59308 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727887AbgI3GgI (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Sep 2020 02:36:08 -0400
+        id S1727861AbgI3GgH (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 30 Sep 2020 02:36:07 -0400
 Received: from mail.kernel.org (ip5f5ad5c4.dynamic.kabel-deutschland.de [95.90.213.196])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3A8272145D;
+        by mail.kernel.org (Postfix) with ESMTPSA id 2A509207F7;
         Wed, 30 Sep 2020 06:36:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1601447766;
-        bh=KSQdhVCwLXMmbKuCw0FaRITnyXOd7ETydwCFt7TfWg8=;
+        bh=etEdHKnsQP/29xUeMI6P5O8K+a5TTCmJWm0/4A80Hxs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EncXzmypd8oBxoUobMn7J5C7OeBODcf9Kz2t6WFAoCiMqisI3109VUCZb7XzAgQ4D
-         ekAxqPyHAs/6o8+XxsW2EEwzYG9897GwK5CTvgfC5pYqiZz185S3IzBy3BClruquHz
-         bKUcRDCaOz+JskRWxrn3O7PT3a9W7kMioAO+l5ZU=
+        b=n920gN2tFYHH/vtTh5H86Gbvy5iLSOeL8CtJQMZWkYeKj6e2/m4wFHRqQ9FAlj0Lt
+         TEz3/EL73TdS/z51olTY0QYvGsQmGAIMDYKpLNh/o4+rDgk745/iJ6JWPIyZsfX0hT
+         t5Hwuu/un8hxToi+1qGKc2F3NYFsI/KJAsyBKyu0=
 Received: from mchehab by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1kNVid-001QmS-Sd; Wed, 30 Sep 2020 08:36:03 +0200
+        id 1kNVid-001QmY-W1; Wed, 30 Sep 2020 08:36:04 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Bingbu Cao <bingbu.cao@intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 3/9] media: docs: ipu3.rst: rely at automarkup extension
-Date:   Wed, 30 Sep 2020 08:35:56 +0200
-Message-Id: <b9d4cdf89bafb131dab4030c3e8789f5e1c14193.1601447236.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 6/9] media: cec-core.rst: fix warnings with Sphinx 3.0+
+Date:   Wed, 30 Sep 2020 08:35:59 +0200
+Message-Id: <fa50a5ccf615f056aff48051fe0e038b946c72d0.1601447236.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1601447236.git.mchehab+huawei@kernel.org>
 References: <cover.1601447236.git.mchehab+huawei@kernel.org>
@@ -63,120 +61,220 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There are several :c:type: definitions there, in order to
-do cross-references with the driver's documentation.
+The new C domain code on Sphinx 3 is a lot more pedantic.
+It only accepts real functions declared as c:function.
 
-Those are broken when docs are built with Sphinx 3.x, as
-it would require :c:struct: instead.
+So, declarations like this are not valid:
 
-For Sphinx < 3.x, the automarkup.py extension is able to do the
-replacement already, and a future improvement on it should make
-it also work with Sphinx 3.x.
+	.. c:function::
+	        int (*adap_enable)(struct cec_adapter *adap, bool enable);
 
-So, get rid of the usage of the :c:type: macro there.
+Also, no blank lines are allowed after ".. c:function:", and
+continuation lines should be like:
+
+	.. c:function:
+		int (void foo, \
+		     int bar);
+
+Change the logic there, in order to avoid lots of warnings
+when built with Sphinx 3.x.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/admin-guide/media/ipu3.rst | 38 ++++++++++++------------
- 1 file changed, 19 insertions(+), 19 deletions(-)
+ Documentation/driver-api/media/cec-core.rst | 62 +++++++++------------
+ 1 file changed, 26 insertions(+), 36 deletions(-)
 
-diff --git a/Documentation/admin-guide/media/ipu3.rst b/Documentation/admin-guide/media/ipu3.rst
-index a4cd489fc5dc..07d139bf8459 100644
---- a/Documentation/admin-guide/media/ipu3.rst
-+++ b/Documentation/admin-guide/media/ipu3.rst
-@@ -488,63 +488,63 @@ Name			 Description
- Optical Black Correction Optical Black Correction block subtracts a pre-defined
- 			 value from the respective pixel values to obtain better
- 			 image quality.
--			 Defined in :c:type:`ipu3_uapi_obgrid_param`.
-+			 Defined in struct ipu3_uapi_obgrid_param.
- Linearization		 This algo block uses linearization parameters to
- 			 address non-linearity sensor effects. The Lookup table
- 			 table is defined in
--			 :c:type:`ipu3_uapi_isp_lin_vmem_params`.
-+			 struct ipu3_uapi_isp_lin_vmem_params.
- SHD			 Lens shading correction is used to correct spatial
- 			 non-uniformity of the pixel response due to optical
- 			 lens shading. This is done by applying a different gain
- 			 for each pixel. The gain, black level etc are
--			 configured in :c:type:`ipu3_uapi_shd_config_static`.
-+			 configured in struct ipu3_uapi_shd_config_static.
- BNR			 Bayer noise reduction block removes image noise by
- 			 applying a bilateral filter.
--			 See :c:type:`ipu3_uapi_bnr_static_config` for details.
-+			 See struct ipu3_uapi_bnr_static_config for details.
- ANR			 Advanced Noise Reduction is a block based algorithm
- 			 that performs noise reduction in the Bayer domain. The
- 			 convolution matrix etc can be found in
--			 :c:type:`ipu3_uapi_anr_config`.
-+			 struct ipu3_uapi_anr_config.
- DM			 Demosaicing converts raw sensor data in Bayer format
- 			 into RGB (Red, Green, Blue) presentation. Then add
- 			 outputs of estimation of Y channel for following stream
- 			 processing by Firmware. The struct is defined as
--			 :c:type:`ipu3_uapi_dm_config`.
-+			 struct ipu3_uapi_dm_config.
- Color Correction	 Color Correction algo transforms sensor specific color
- 			 space to the standard "sRGB" color space. This is done
- 			 by applying 3x3 matrix defined in
--			 :c:type:`ipu3_uapi_ccm_mat_config`.
--Gamma correction	 Gamma correction :c:type:`ipu3_uapi_gamma_config` is a
-+			 struct ipu3_uapi_ccm_mat_config.
-+Gamma correction	 Gamma correction struct ipu3_uapi_gamma_config is a
- 			 basic non-linear tone mapping correction that is
- 			 applied per pixel for each pixel component.
- CSC			 Color space conversion transforms each pixel from the
- 			 RGB primary presentation to YUV (Y: brightness,
- 			 UV: Luminance) presentation. This is done by applying
- 			 a 3x3 matrix defined in
--			 :c:type:`ipu3_uapi_csc_mat_config`
-+			 struct ipu3_uapi_csc_mat_config
- CDS			 Chroma down sampling
- 			 After the CSC is performed, the Chroma Down Sampling
- 			 is applied for a UV plane down sampling by a factor
- 			 of 2 in each direction for YUV 4:2:0 using a 4x2
--			 configurable filter :c:type:`ipu3_uapi_cds_params`.
-+			 configurable filter struct ipu3_uapi_cds_params.
- CHNR			 Chroma noise reduction
- 			 This block processes only the chrominance pixels and
- 			 performs noise reduction by cleaning the high
- 			 frequency noise.
--			 See struct :c:type:`ipu3_uapi_yuvp1_chnr_config`.
-+			 See struct struct ipu3_uapi_yuvp1_chnr_config.
- TCC			 Total color correction as defined in struct
--			 :c:type:`ipu3_uapi_yuvp2_tcc_static_config`.
-+			 struct ipu3_uapi_yuvp2_tcc_static_config.
- XNR3			 eXtreme Noise Reduction V3 is the third revision of
- 			 noise reduction algorithm used to improve image
- 			 quality. This removes the low frequency noise in the
- 			 captured image. Two related structs are  being defined,
--			 :c:type:`ipu3_uapi_isp_xnr3_params` for ISP data memory
--			 and :c:type:`ipu3_uapi_isp_xnr3_vmem_params` for vector
-+			 struct ipu3_uapi_isp_xnr3_params for ISP data memory
-+			 and struct ipu3_uapi_isp_xnr3_vmem_params for vector
- 			 memory.
- TNR			 Temporal Noise Reduction block compares successive
- 			 frames in time to remove anomalies / noise in pixel
--			 values. :c:type:`ipu3_uapi_isp_tnr3_vmem_params` and
--			 :c:type:`ipu3_uapi_isp_tnr3_params` are defined for ISP
-+			 values. struct ipu3_uapi_isp_tnr3_vmem_params and
-+			 struct ipu3_uapi_isp_tnr3_params are defined for ISP
- 			 vector and data memory respectively.
- ======================== =======================================================
+diff --git a/Documentation/driver-api/media/cec-core.rst b/Documentation/driver-api/media/cec-core.rst
+index 3ce26b7c2b2b..03016eeaf8f4 100644
+--- a/Documentation/driver-api/media/cec-core.rst
++++ b/Documentation/driver-api/media/cec-core.rst
+@@ -36,8 +36,9 @@ The struct cec_adapter represents the CEC adapter hardware. It is created by
+ calling cec_allocate_adapter() and deleted by calling cec_delete_adapter():
  
-@@ -576,9 +576,9 @@ processor, while many others will use a set of fixed hardware blocks also
- called accelerator cluster (ACC) to crunch pixel data and produce statistics.
+ .. c:function::
+-   struct cec_adapter *cec_allocate_adapter(const struct cec_adap_ops *ops, void *priv,
+-   const char *name, u32 caps, u8 available_las);
++   struct cec_adapter *cec_allocate_adapter(const struct cec_adap_ops *ops, \
++					    void *priv, const char *name, \
++					    u32 caps, u8 available_las);
  
- ACC parameters of individual algorithms, as defined by
--:c:type:`ipu3_uapi_acc_param`, can be chosen to be applied by the user
--space through struct :c:type:`ipu3_uapi_flags` embedded in
--:c:type:`ipu3_uapi_params` structure. For parameters that are configured as
-+struct ipu3_uapi_acc_param, can be chosen to be applied by the user
-+space through struct struct ipu3_uapi_flags embedded in
-+struct ipu3_uapi_params structure. For parameters that are configured as
- not enabled by the user space, the corresponding structs are ignored by the
- driver, in which case the existing configuration of the algorithm will be
- preserved.
+ .. c:function::
+    void cec_delete_adapter(struct cec_adapter *adap);
+@@ -74,7 +75,8 @@ To register the /dev/cecX device node and the remote control device (if
+ CEC_CAP_RC is set) you call:
+ 
+ .. c:function::
+-	int cec_register_adapter(struct cec_adapter *adap, struct device *parent);
++	int cec_register_adapter(struct cec_adapter *adap, \
++				 struct device *parent);
+ 
+ where parent is the parent device.
+ 
+@@ -123,9 +125,8 @@ The seven low-level ops deal with various aspects of controlling the CEC adapter
+ hardware:
+ 
+ 
+-To enable/disable the hardware:
++To enable/disable the hardware::
+ 
+-.. c:function::
+ 	int (*adap_enable)(struct cec_adapter *adap, bool enable);
+ 
+ This callback enables or disables the CEC hardware. Enabling the CEC hardware
+@@ -137,9 +138,8 @@ state of the CEC adapter after calling cec_allocate_adapter() is disabled.
+ Note that adap_enable must return 0 if enable is false.
+ 
+ 
+-To enable/disable the 'monitor all' mode:
++To enable/disable the 'monitor all' mode::
+ 
+-.. c:function::
+ 	int (*adap_monitor_all_enable)(struct cec_adapter *adap, bool enable);
+ 
+ If enabled, then the adapter should be put in a mode to also monitor messages
+@@ -150,9 +150,8 @@ called if the CEC_CAP_MONITOR_ALL capability is set. This callback is optional
+ Note that adap_monitor_all_enable must return 0 if enable is false.
+ 
+ 
+-To enable/disable the 'monitor pin' mode:
++To enable/disable the 'monitor pin' mode::
+ 
+-.. c:function::
+ 	int (*adap_monitor_pin_enable)(struct cec_adapter *adap, bool enable);
+ 
+ If enabled, then the adapter should be put in a mode to also monitor CEC pin
+@@ -163,9 +162,8 @@ the CEC_CAP_MONITOR_PIN capability is set. This callback is optional
+ Note that adap_monitor_pin_enable must return 0 if enable is false.
+ 
+ 
+-To program a new logical address:
++To program a new logical address::
+ 
+-.. c:function::
+ 	int (*adap_log_addr)(struct cec_adapter *adap, u8 logical_addr);
+ 
+ If logical_addr == CEC_LOG_ADDR_INVALID then all programmed logical addresses
+@@ -177,9 +175,8 @@ can receive directed messages to that address.
+ Note that adap_log_addr must return 0 if logical_addr is CEC_LOG_ADDR_INVALID.
+ 
+ 
+-To transmit a new message:
++To transmit a new message::
+ 
+-.. c:function::
+ 	int (*adap_transmit)(struct cec_adapter *adap, u8 attempts,
+ 			     u32 signal_free_time, struct cec_msg *msg);
+ 
+@@ -196,17 +193,15 @@ The CEC_FREE_TIME_TO_USEC macro can be used to convert signal_free_time to
+ microseconds (one data bit period is 2.4 ms).
+ 
+ 
+-To log the current CEC hardware status:
++To log the current CEC hardware status::
+ 
+-.. c:function::
+ 	void (*adap_status)(struct cec_adapter *adap, struct seq_file *file);
+ 
+ This optional callback can be used to show the status of the CEC hardware.
+ The status is available through debugfs: cat /sys/kernel/debug/cec/cecX/status
+ 
+-To free any resources when the adapter is deleted:
++To free any resources when the adapter is deleted::
+ 
+-.. c:function::
+ 	void (*adap_free)(struct cec_adapter *adap);
+ 
+ This optional callback can be used to free any resources that might have been
+@@ -216,15 +211,14 @@ allocated by the driver. It's called from cec_delete_adapter.
+ Your adapter driver will also have to react to events (typically interrupt
+ driven) by calling into the framework in the following situations:
+ 
+-When a transmit finished (successfully or otherwise):
++When a transmit finished (successfully or otherwise)::
+ 
+-.. c:function::
+-	void cec_transmit_done(struct cec_adapter *adap, u8 status, u8 arb_lost_cnt,
+-		       u8 nack_cnt, u8 low_drive_cnt, u8 error_cnt);
++	void cec_transmit_done(struct cec_adapter *adap, u8 status,
++			       u8 arb_lost_cnt,  u8 nack_cnt, u8 low_drive_cnt,
++			       u8 error_cnt);
+ 
+-or:
++or::
+ 
+-.. c:function::
+ 	void cec_transmit_attempt_done(struct cec_adapter *adap, u8 status);
+ 
+ The status can be one of:
+@@ -341,17 +335,15 @@ So this must work:
+ 	$ cat einj.txt >error-inj
+ 
+ The first callback is called when this file is read and it should show the
+-the current error injection state:
++the current error injection state::
+ 
+-.. c:function::
+ 	int (*error_inj_show)(struct cec_adapter *adap, struct seq_file *sf);
+ 
+ It is recommended that it starts with a comment block with basic usage
+ information. It returns 0 for success and an error otherwise.
+ 
+-The second callback will parse commands written to the ``error-inj`` file:
++The second callback will parse commands written to the ``error-inj`` file::
+ 
+-.. c:function::
+ 	bool (*error_inj_parse_line)(struct cec_adapter *adap, char *line);
+ 
+ The ``line`` argument points to the start of the command. Any leading
+@@ -382,9 +374,8 @@ CEC protocol driven. The following high-level callbacks are available:
+ 	};
+ 
+ The received() callback allows the driver to optionally handle a newly
+-received CEC message
++received CEC message::
+ 
+-.. c:function::
+ 	int (*received)(struct cec_adapter *adap, struct cec_msg *msg);
+ 
+ If the driver wants to process a CEC message, then it can implement this
+@@ -399,15 +390,14 @@ CEC framework functions
+ CEC Adapter drivers can call the following CEC framework functions:
+ 
+ .. c:function::
+-	int cec_transmit_msg(struct cec_adapter *adap, struct cec_msg *msg,
+-			     bool block);
++   int cec_transmit_msg(struct cec_adapter *adap, struct cec_msg *msg, \
++			bool block);
+ 
+ Transmit a CEC message. If block is true, then wait until the message has been
+ transmitted, otherwise just queue it and return.
+ 
+ .. c:function::
+-	void cec_s_phys_addr(struct cec_adapter *adap, u16 phys_addr,
+-			     bool block);
++   void cec_s_phys_addr(struct cec_adapter *adap, u16 phys_addr, bool block);
+ 
+ Change the physical address. This function will set adap->phys_addr and
+ send an event if it has changed. If cec_s_log_addrs() has been called and
+@@ -422,15 +412,15 @@ to another valid physical address, then this function will first set the
+ address to CEC_PHYS_ADDR_INVALID before enabling the new physical address.
+ 
+ .. c:function::
+-	void cec_s_phys_addr_from_edid(struct cec_adapter *adap,
+-				       const struct edid *edid);
++   void cec_s_phys_addr_from_edid(struct cec_adapter *adap, \
++				  const struct edid *edid);
+ 
+ A helper function that extracts the physical address from the edid struct
+ and calls cec_s_phys_addr() with that address, or CEC_PHYS_ADDR_INVALID
+ if the EDID did not contain a physical address or edid was a NULL pointer.
+ 
+ .. c:function::
+-	int cec_s_log_addrs(struct cec_adapter *adap,
++	int cec_s_log_addrs(struct cec_adapter *adap, \
+ 			    struct cec_log_addrs *log_addrs, bool block);
+ 
+ Claim the CEC logical addresses. Should never be called if CEC_CAP_LOG_ADDRS
 -- 
 2.26.2
 
