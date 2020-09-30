@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 188FFC47420
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0943C47426
 	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:29:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C7C9520759
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:29:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 76F1A2071E
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:29:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731096AbgI3P31 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Sep 2020 11:29:27 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:44644 "EHLO
+        id S1731097AbgI3P32 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Sep 2020 11:29:28 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:44656 "EHLO
         hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731071AbgI3P3R (ORCPT
+        with ESMTP id S1731063AbgI3P3R (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 30 Sep 2020 11:29:17 -0400
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 4B710634C89
-        for <linux-media@vger.kernel.org>; Wed, 30 Sep 2020 18:28:54 +0300 (EEST)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id DDBCA634D07
+        for <linux-media@vger.kernel.org>; Wed, 30 Sep 2020 18:28:53 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH 095/100] v4l: uapi: Add controls for CCS alternative analogue gain
-Date:   Wed, 30 Sep 2020 18:28:53 +0300
-Message-Id: <20200930152858.8471-96-sakari.ailus@linux.intel.com>
+Subject: [PATCH 090/100] ccs: Remove analogue gain field
+Date:   Wed, 30 Sep 2020 18:28:48 +0300
+Message-Id: <20200930152858.8471-91-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200930152858.8471-1-sakari.ailus@linux.intel.com>
 References: <20200930152858.8471-1-sakari.ailus@linux.intel.com>
@@ -37,26 +37,51 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add two new controls for alternative analogue gain some CCS compliant
-camera sensors support.
+The analogue gain control was stored to the device specific struct but was
+never used. Remove it.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- include/uapi/linux/ccs.h | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/i2c/ccs/ccs-core.c | 13 ++++++-------
+ drivers/media/i2c/ccs/ccs.h      |  1 -
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/include/uapi/linux/ccs.h b/include/uapi/linux/ccs.h
-index bcdce95955b0..f22afa58b446 100644
---- a/include/uapi/linux/ccs.h
-+++ b/include/uapi/linux/ccs.h
-@@ -10,5 +10,7 @@
- #define V4L2_CID_CCS_ANALOGUE_GAIN_C0		(V4L2_CID_USER_CCS_BASE + 2)
- #define V4L2_CID_CCS_ANALOGUE_GAIN_M1		(V4L2_CID_USER_CCS_BASE + 3)
- #define V4L2_CID_CCS_ANALOGUE_GAIN_C1		(V4L2_CID_USER_CCS_BASE + 4)
-+#define V4L2_CID_CCS_ANALOGUE_LINEAR_GAIN	(V4L2_CID_USER_CCS_BASE + 5)
-+#define V4L2_CID_CCS_ANALOGUE_EXPONENTIAL_GAIN	(V4L2_CID_USER_CCS_BASE + 6)
+diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
+index 37016855df43..0a59bc13ac56 100644
+--- a/drivers/media/i2c/ccs/ccs-core.c
++++ b/drivers/media/i2c/ccs/ccs-core.c
+@@ -776,13 +776,12 @@ static int ccs_init_controls(struct ccs_sensor *sensor)
  
- #endif
+ 	sensor->pixel_array->ctrl_handler.lock = &sensor->mutex;
+ 
+-	sensor->analog_gain = v4l2_ctrl_new_std(
+-		&sensor->pixel_array->ctrl_handler, &ccs_ctrl_ops,
+-		V4L2_CID_ANALOGUE_GAIN,
+-		CCS_LIM(sensor, ANALOG_GAIN_CODE_MIN),
+-		CCS_LIM(sensor, ANALOG_GAIN_CODE_MAX),
+-		max(CCS_LIM(sensor, ANALOG_GAIN_CODE_STEP), 1U),
+-		CCS_LIM(sensor, ANALOG_GAIN_CODE_MIN));
++	v4l2_ctrl_new_std(&sensor->pixel_array->ctrl_handler, &ccs_ctrl_ops,
++			  V4L2_CID_ANALOGUE_GAIN,
++			  CCS_LIM(sensor, ANALOG_GAIN_CODE_MIN),
++			  CCS_LIM(sensor, ANALOG_GAIN_CODE_MAX),
++			  max(CCS_LIM(sensor, ANALOG_GAIN_CODE_STEP), 1U),
++			  CCS_LIM(sensor, ANALOG_GAIN_CODE_MIN));
+ 
+ 	if (CCS_LIM(sensor, DIGITAL_GAIN_CAPABILITY) ==
+ 	    CCS_DIGITAL_GAIN_CAPABILITY_GLOBAL ||
+diff --git a/drivers/media/i2c/ccs/ccs.h b/drivers/media/i2c/ccs/ccs.h
+index 6b07e4143ff0..b97e55b57a69 100644
+--- a/drivers/media/i2c/ccs/ccs.h
++++ b/drivers/media/i2c/ccs/ccs.h
+@@ -262,7 +262,6 @@ struct ccs_sensor {
+ 	unsigned long *valid_link_freqs;
+ 
+ 	/* Pixel array controls */
+-	struct v4l2_ctrl *analog_gain;
+ 	struct v4l2_ctrl *exposure;
+ 	struct v4l2_ctrl *hflip;
+ 	struct v4l2_ctrl *vflip;
 -- 
 2.27.0
 
