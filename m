@@ -5,39 +5,39 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DF3BC4727C
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 16:09:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 874EEC4727C
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 16:09:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0ECA3207FB
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 16:09:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 40ED7207FB
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 16:09:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="fzFAqzzF"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="s2TCGGUp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731130AbgI3QJn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Sep 2020 12:09:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48586 "EHLO
+        id S1731155AbgI3QJs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Sep 2020 12:09:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730980AbgI3QJi (ORCPT
+        with ESMTP id S1731070AbgI3QJg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Sep 2020 12:09:38 -0400
+        Wed, 30 Sep 2020 12:09:36 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D591C0613D2;
-        Wed, 30 Sep 2020 09:09:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6182AC061755;
+        Wed, 30 Sep 2020 09:09:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=n8t3zfDKftEl3wniB1iex4k9WYjEfWPCbzhvTIk320k=; b=fzFAqzzFRvhRqbzPvKHX/UJfQ3
-        /NI7O+NLFeOPs/aVaRFnad9SHfEGa0AMJH3Ww74NM485dJ6rUlZXctWmJlRLtyMoDdWNgig/bjYeI
-        GI1v6PBkrOb+y+AowzYW4JDG6DLNMz+263+qVoyx/zEHHw6ZSM8kMvZl+XMT/dYrUtRE/0n2Ildd0
-        M1cdlAvzx1TXOdTQ8/fu+WFi7lghDWFZ/XxW0a9wOe6vS909VHX6CTJRh97xEm5B7FsxsYRy0CFcK
-        jqLQrKdLfns0WNpLBm6gpHCG6fknpYwbiccBrcQtmHhN/B/jCHggvhMeQt7g7UuCrN8AzHSDWLMHt
-        opJTXyMg==;
+        bh=eMHlDyqZ7dNED/B7sCe7wssLaO5nPO2N0j7Z8xnh0T8=; b=s2TCGGUph5wbFGk6APK4eVyxPI
+        b75XFkAr8c4FUXo56lmvDS6fzxJHtxrgluvuCv9ic/aZiV7umcHegVS1VySMrPR3A7YwHCNYd6/S2
+        NEcXghBLnPS2UEH764m6Dgm6ERRJNWsuKNCmHwAf4tpO0f8uzl6SOZCnGu61Xzt/AaP65YcB46lss
+        LXHerOe19sJmWoO0p8Se7OuR2I0FNTht2nYyQioGQAnmngX5flFWTLkLZ+vlp8amYTtPHgFwVN703
+        EbrIANXyAk4xNp294lO8yPpa+5EiQycfInum0VYWfcRTKbaywSD4yzA8YQgKfCUuCeTe0v8KEOjNr
+        2InOnBNw==;
 Received: from [2001:4bb8:180:7b62:c70:4a89:bc61:4] (helo=localhost)
         by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kNefc-0003EI-Ei; Wed, 30 Sep 2020 16:09:32 +0000
+        id 1kNefZ-0003Dp-7t; Wed, 30 Sep 2020 16:09:30 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
@@ -45,9 +45,9 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         iommu@lists.linux-foundation.org
 Cc:     Robin Murphy <robin.murphy@arm.com>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 8/8] WIP: add a dma_alloc_contiguous API
-Date:   Wed, 30 Sep 2020 18:09:17 +0200
-Message-Id: <20200930160917.1234225-9-hch@lst.de>
+Subject: [PATCH 6/8] dma-direct: simplify the DMA_ATTR_NO_KERNEL_MAPPING handling
+Date:   Wed, 30 Sep 2020 18:09:15 +0200
+Message-Id: <20200930160917.1234225-7-hch@lst.de>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200930160917.1234225-1-hch@lst.de>
 References: <20200930160917.1234225-1-hch@lst.de>
@@ -58,218 +58,212 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a new API that returns a virtually non-contigous array of pages
-and dma address.  This API is only implemented for dma-iommu and will
-not be implemented for non-iommu DMA API instances that have to allocate
-contiguous memory.  It is up to the caller to check if the API is
-available.
+Use and entirely separate code path for the DMA_ATTR_NO_KERNEL_MAPPING
+path.  This avoids any confusion about the ret type, and avoids lots of
+attr checks and helpers that can be significantly simplified now.
 
-The intent is that media drivers can use this API if either:
-
- - no kernel mapping or only temporary kernel mappings are required.
-   That is as a better replacement for DMA_ATTR_NO_KERNEL_MAPPING
- - a kernel mapping is required for cached and DMA mapped pages, but
-   the driver also needs the pages to e.g. map them to userspace.
-   In that sense it is a replacement for some aspects of the recently
-   removed and never fully implemented DMA_ATTR_NON_CONSISTENT
+It also ensures that common handling is applied to architetures still
+using the arch alloc/free hooks.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- drivers/iommu/dma-iommu.c   | 73 +++++++++++++++++++++++++------------
- include/linux/dma-mapping.h |  9 +++++
- kernel/dma/mapping.c        | 35 ++++++++++++++++++
- 3 files changed, 93 insertions(+), 24 deletions(-)
+ include/linux/dma-noncoherent.h |  13 -----
+ kernel/dma/direct.c             | 100 +++++++++++++-------------------
+ 2 files changed, 39 insertions(+), 74 deletions(-)
 
-diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-index 7922f545cd5eef..158026a856622c 100644
---- a/drivers/iommu/dma-iommu.c
-+++ b/drivers/iommu/dma-iommu.c
-@@ -565,23 +565,12 @@ static struct page **__iommu_dma_alloc_pages(struct device *dev,
- 	return pages;
+diff --git a/include/linux/dma-noncoherent.h b/include/linux/dma-noncoherent.h
+index e61283e06576a8..73ac149fa181b4 100644
+--- a/include/linux/dma-noncoherent.h
++++ b/include/linux/dma-noncoherent.h
+@@ -21,19 +21,6 @@ static inline bool dev_is_dma_coherent(struct device *dev)
  }
+ #endif /* CONFIG_ARCH_HAS_DMA_COHERENCE_H */
  
--/**
-- * iommu_dma_alloc_remap - Allocate and map a buffer contiguous in IOVA space
-- * @dev: Device to allocate memory for. Must be a real device
-- *	 attached to an iommu_dma_domain
-- * @size: Size of buffer in bytes
-- * @dma_handle: Out argument for allocated DMA handle
-- * @gfp: Allocation flags
-- * @prot: pgprot_t to use for the remapped mapping
-- * @attrs: DMA attributes for this allocation
-- *
-- * If @size is less than PAGE_SIZE, then a full CPU page will be allocated,
-+/*
-+ * If size is less than PAGE_SIZE, then a full CPU page will be allocated,
-  * but an IOMMU which supports smaller pages might not map the whole thing.
-- *
-- * Return: Mapped virtual address, or NULL on failure.
-  */
--static void *iommu_dma_alloc_remap(struct device *dev, size_t size,
--		dma_addr_t *dma_handle, gfp_t gfp, pgprot_t prot,
-+static struct page **__iommu_dma_alloc_noncontiguous(struct device *dev,
-+		size_t size, dma_addr_t *dma_handle, gfp_t gfp, pgprot_t prot,
- 		unsigned long attrs)
- {
- 	struct iommu_domain *domain = iommu_get_dma_domain(dev);
-@@ -593,7 +582,6 @@ static void *iommu_dma_alloc_remap(struct device *dev, size_t size,
- 	struct page **pages;
- 	struct sg_table sgt;
- 	dma_addr_t iova;
--	void *vaddr;
- 
- 	*dma_handle = DMA_MAPPING_ERROR;
- 
-@@ -636,17 +624,10 @@ static void *iommu_dma_alloc_remap(struct device *dev, size_t size,
- 			< size)
- 		goto out_free_sg;
- 
--	vaddr = dma_common_pages_remap(pages, size, prot,
--			__builtin_return_address(0));
--	if (!vaddr)
--		goto out_unmap;
+-/*
+- * Check if an allocation needs to be marked uncached to be coherent.
+- */
+-static __always_inline bool dma_alloc_need_uncached(struct device *dev,
+-		unsigned long attrs)
+-{
+-	if (dev_is_dma_coherent(dev))
+-		return false;
+-	if (attrs & DMA_ATTR_NO_KERNEL_MAPPING)
+-		return false;
+-	return true;
+-}
 -
- 	*dma_handle = iova;
- 	sg_free_table(&sgt);
--	return vaddr;
-+	return pages;
- 
--out_unmap:
--	__iommu_dma_unmap(dev, iova, size);
- out_free_sg:
- 	sg_free_table(&sgt);
- out_free_iova:
-@@ -656,6 +637,46 @@ static void *iommu_dma_alloc_remap(struct device *dev, size_t size,
- 	return NULL;
+ void *arch_dma_alloc(struct device *dev, size_t size, dma_addr_t *dma_handle,
+ 		gfp_t gfp, unsigned long attrs);
+ void arch_dma_free(struct device *dev, size_t size, void *cpu_addr,
+diff --git a/kernel/dma/direct.c b/kernel/dma/direct.c
+index ace9159c992f65..a3c619b424edf0 100644
+--- a/kernel/dma/direct.c
++++ b/kernel/dma/direct.c
+@@ -75,39 +75,6 @@ static bool dma_coherent_ok(struct device *dev, phys_addr_t phys, size_t size)
+ 		min_not_zero(dev->coherent_dma_mask, dev->bus_dma_limit);
  }
  
-+static void *iommu_dma_alloc_remap(struct device *dev, size_t size,
-+		dma_addr_t *dma_handle, gfp_t gfp, pgprot_t prot,
-+		unsigned long attrs)
-+{
-+	struct page **pages;
-+	void *vaddr;
-+
-+	pages = __iommu_dma_alloc_noncontiguous(dev, size, dma_handle, gfp,
-+						prot, attrs);
-+	if (!pages)
-+		return NULL;
-+	vaddr = dma_common_pages_remap(pages, size, prot,
-+			__builtin_return_address(0));
-+	if (!vaddr)
-+		goto out_unmap;
-+	return vaddr;
-+
-+out_unmap:
-+	__iommu_dma_unmap(dev, *dma_handle, size);
-+	__iommu_dma_free_pages(pages, PAGE_ALIGN(size) >> PAGE_SHIFT);
-+	return NULL;
-+}
-+
-+#ifdef CONFIG_DMA_REMAP
-+static struct page **iommu_dma_alloc_noncontiguous(struct device *dev,
-+		size_t size, dma_addr_t *dma_handle, gfp_t gfp,
-+		unsigned long attrs)
-+{
-+	return __iommu_dma_alloc_noncontiguous(dev, size, dma_handle, gfp,
-+					       PAGE_KERNEL, attrs);
-+}
-+
-+static void iommu_dma_free_noncontiguous(struct device *dev, size_t size,
-+		struct page **pages, dma_addr_t dma_handle)
-+{
-+	__iommu_dma_unmap(dev, dma_handle, size);
-+	__iommu_dma_free_pages(pages, PAGE_ALIGN(size) >> PAGE_SHIFT);
-+}
-+#endif
-+
- static void iommu_dma_sync_single_for_cpu(struct device *dev,
- 		dma_addr_t dma_handle, size_t size, enum dma_data_direction dir)
+-/*
+- * Decrypting memory is allowed to block, so if this device requires
+- * unencrypted memory it must come from atomic pools.
+- */
+-static inline bool dma_should_alloc_from_pool(struct device *dev, gfp_t gfp,
+-					      unsigned long attrs)
+-{
+-	if (!IS_ENABLED(CONFIG_DMA_COHERENT_POOL))
+-		return false;
+-	if (gfpflags_allow_blocking(gfp))
+-		return false;
+-	if (force_dma_unencrypted(dev))
+-		return true;
+-	if (!IS_ENABLED(CONFIG_DMA_DIRECT_REMAP))
+-		return false;
+-	if (dma_alloc_need_uncached(dev, attrs))
+-		return true;
+-	return false;
+-}
+-
+-static inline bool dma_should_free_from_pool(struct device *dev,
+-					     unsigned long attrs)
+-{
+-	if (IS_ENABLED(CONFIG_DMA_COHERENT_POOL))
+-		return true;
+-	if ((attrs & DMA_ATTR_NO_KERNEL_MAPPING) &&
+-	    !force_dma_unencrypted(dev))
+-		return false;
+-	if (IS_ENABLED(CONFIG_DMA_DIRECT_REMAP))
+-		return true;
+-	return false;
+-}
+-
+ static struct page *__dma_direct_alloc_pages(struct device *dev, size_t size,
+ 		gfp_t gfp)
  {
-@@ -1110,6 +1131,10 @@ static const struct dma_map_ops iommu_dma_ops = {
- 	.free			= iommu_dma_free,
- 	.alloc_pages		= dma_common_alloc_pages,
- 	.free_pages		= dma_common_free_pages,
-+#ifdef CONFIG_DMA_REMAP
-+	.alloc_noncontiguous	= iommu_dma_alloc_noncontiguous,
-+	.free_noncontiguous	= iommu_dma_free_noncontiguous,
-+#endif
- 	.mmap			= iommu_dma_mmap,
- 	.get_sgtable		= iommu_dma_get_sgtable,
- 	.map_page		= iommu_dma_map_page,
-diff --git a/include/linux/dma-mapping.h b/include/linux/dma-mapping.h
-index 4b9b1d64f5ec9e..51bbc32365bb8d 100644
---- a/include/linux/dma-mapping.h
-+++ b/include/linux/dma-mapping.h
-@@ -74,6 +74,10 @@ struct dma_map_ops {
- 			gfp_t gfp);
- 	void (*free_pages)(struct device *dev, size_t size, struct page *vaddr,
- 			dma_addr_t dma_handle, enum dma_data_direction dir);
-+	struct page **(*alloc_noncontiguous)(struct device *dev, size_t size,
-+			dma_addr_t *dma_handle, gfp_t gfp, unsigned long attrs);
-+	void (*free_noncontiguous)(struct device *dev, size_t size,
-+			struct page **pages, dma_addr_t dma_handle);
- 	int (*mmap)(struct device *, struct vm_area_struct *,
- 			  void *, dma_addr_t, size_t,
- 			  unsigned long attrs);
-@@ -384,6 +388,11 @@ void *dma_alloc_noncoherent(struct device *dev, size_t size,
- 		dma_addr_t *dma_handle, enum dma_data_direction dir, gfp_t gfp);
- void dma_free_noncoherent(struct device *dev, size_t size, void *vaddr,
- 		dma_addr_t dma_handle, enum dma_data_direction dir);
-+bool dma_can_alloc_noncontiguous(struct device *dev);
-+struct page **dma_alloc_noncontiguous(struct device *dev, size_t size,
-+		dma_addr_t *dma_handle, gfp_t gfp, unsigned long attrs);
-+void dma_free_noncontiguous(struct device *dev, size_t size,
-+		struct page **pages, dma_addr_t dma_handle);
+@@ -170,35 +137,45 @@ void *dma_direct_alloc(struct device *dev, size_t size,
+ 	void *ret;
+ 	int err;
  
- static inline dma_addr_t dma_map_single_attrs(struct device *dev, void *ptr,
- 		size_t size, enum dma_data_direction dir, unsigned long attrs)
-diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
-index 06115f59f4ffbf..6d975d1a20dd72 100644
---- a/kernel/dma/mapping.c
-+++ b/kernel/dma/mapping.c
-@@ -529,6 +529,41 @@ void dma_free_noncoherent(struct device *dev, size_t size, void *vaddr,
- }
- EXPORT_SYMBOL_GPL(dma_free_noncoherent);
+-	if (!IS_ENABLED(CONFIG_ARCH_HAS_DMA_SET_UNCACHED) &&
+-	    !IS_ENABLED(CONFIG_DMA_DIRECT_REMAP) &&
+-	    dma_alloc_need_uncached(dev, attrs))
+-		return arch_dma_alloc(dev, size, dma_handle, gfp, attrs);
+-
+ 	size = PAGE_ALIGN(size);
+ 	if (attrs & DMA_ATTR_NO_WARN)
+ 		gfp |= __GFP_NOWARN;
  
-+bool dma_can_alloc_noncontiguous(struct device *dev)
-+{
-+	const struct dma_map_ops *ops = get_dma_ops(dev);
+-	if (dma_should_alloc_from_pool(dev, gfp, attrs))
+-		return dma_direct_alloc_from_pool(dev, size, dma_handle, gfp);
+-
+-	/* we always manually zero the memory once we are done */
+-	page = __dma_direct_alloc_pages(dev, size, gfp & ~__GFP_ZERO);
+-	if (!page)
+-		return NULL;
+-
+ 	if ((attrs & DMA_ATTR_NO_KERNEL_MAPPING) &&
+ 	    !force_dma_unencrypted(dev)) {
++		page = __dma_direct_alloc_pages(dev, size, gfp);
++		if (!page)
++			return NULL;
+ 		/* remove any dirty cache lines on the kernel alias */
+ 		if (!PageHighMem(page))
+ 			arch_dma_prep_coherent(page, size);
++		*dma_handle = phys_to_dma_direct(dev, page_to_phys(page));
+ 		/* return the page pointer as the opaque cookie */
+-		ret = page;
+-		goto done;
++		return page;
+ 	}
+ 
++	if (!IS_ENABLED(CONFIG_ARCH_HAS_DMA_SET_UNCACHED) &&
++	    !IS_ENABLED(CONFIG_DMA_DIRECT_REMAP) &&
++	    !dev_is_dma_coherent(dev))
++		return arch_dma_alloc(dev, size, dma_handle, gfp, attrs);
 +
-+	return ops && ops->free_noncontiguous;
-+}
-+EXPORT_SYMBOL_GPL(dma_can_alloc_noncontiguous);
++	/*
++	 * Remapping or decrypting memory may block. If either is required and
++	 * we can't block, allocate the memory from the atomic pools.
++	 */
++	if (IS_ENABLED(CONFIG_DMA_COHERENT_POOL) &&
++	    !gfpflags_allow_blocking(gfp) &&
++	    (force_dma_unencrypted(dev) ||
++	     (IS_ENABLED(CONFIG_DMA_DIRECT_REMAP) && !dev_is_dma_coherent(dev))))
++		return dma_direct_alloc_from_pool(dev, size, dma_handle, gfp);
 +
-+struct page **dma_alloc_noncontiguous(struct device *dev, size_t size,
-+		dma_addr_t *dma_handle, gfp_t gfp, unsigned long attrs)
-+{
-+	const struct dma_map_ops *ops = get_dma_ops(dev);
-+
-+	if (WARN_ON_ONCE(!dma_can_alloc_noncontiguous(dev)))
++	/* we always manually zero the memory once we are done */
++	page = __dma_direct_alloc_pages(dev, size, gfp & ~__GFP_ZERO);
++	if (!page)
 +		return NULL;
-+	if (attrs & ~DMA_ATTR_ALLOC_SINGLE_PAGES) {
-+		dev_warn(dev, "invalid flags (0x%lx) for %s\n",
-+			 attrs, __func__);
-+		return NULL;
-+	}
-+	return ops->alloc_noncontiguous(dev, size, dma_handle, gfp, attrs);
-+}
-+EXPORT_SYMBOL_GPL(dma_alloc_noncontiguous);
 +
-+void dma_free_noncontiguous(struct device *dev, size_t size,
-+		struct page **pages, dma_addr_t dma_handle)
-+{
-+	const struct dma_map_ops *ops = get_dma_ops(dev);
-+
-+	if (WARN_ON_ONCE(!dma_can_alloc_noncontiguous(dev)))
+ 	if ((IS_ENABLED(CONFIG_DMA_DIRECT_REMAP) &&
+-	     dma_alloc_need_uncached(dev, attrs)) ||
++	     !dev_is_dma_coherent(dev)) ||
+ 	    (IS_ENABLED(CONFIG_DMA_REMAP) && PageHighMem(page))) {
+ 		/* remove any dirty cache lines on the kernel alias */
+ 		arch_dma_prep_coherent(page, size);
+@@ -241,7 +218,7 @@ void *dma_direct_alloc(struct device *dev, size_t size,
+ 	memset(ret, 0, size);
+ 
+ 	if (IS_ENABLED(CONFIG_ARCH_HAS_DMA_SET_UNCACHED) &&
+-	    dma_alloc_need_uncached(dev, attrs)) {
++	    !dev_is_dma_coherent(dev)) {
+ 		arch_dma_prep_coherent(page, size);
+ 		ret = arch_dma_set_uncached(ret, size);
+ 		if (IS_ERR(ret))
+@@ -269,25 +246,25 @@ void dma_direct_free(struct device *dev, size_t size,
+ {
+ 	unsigned int page_order = get_order(size);
+ 
++	if ((attrs & DMA_ATTR_NO_KERNEL_MAPPING) &&
++	    !force_dma_unencrypted(dev)) {
++		/* cpu_addr is a struct page cookie, not a kernel address */
++		dma_free_contiguous(dev, cpu_addr, size);
 +		return;
-+	ops->free_noncontiguous(dev, size, pages, dma_handle);
-+}
-+EXPORT_SYMBOL_GPL(dma_free_noncontiguous);
++	}
 +
- int dma_supported(struct device *dev, u64 mask)
+ 	if (!IS_ENABLED(CONFIG_ARCH_HAS_DMA_SET_UNCACHED) &&
+ 	    !IS_ENABLED(CONFIG_DMA_DIRECT_REMAP) &&
+-	    dma_alloc_need_uncached(dev, attrs)) {
++	    !dev_is_dma_coherent(dev)) {
+ 		arch_dma_free(dev, size, cpu_addr, dma_addr, attrs);
+ 		return;
+ 	}
+ 
+ 	/* If cpu_addr is not from an atomic pool, dma_free_from_pool() fails */
+-	if (dma_should_free_from_pool(dev, attrs) &&
++	if (IS_ENABLED(CONFIG_DMA_COHERENT_POOL) &&
+ 	    dma_free_from_pool(dev, cpu_addr, PAGE_ALIGN(size)))
+ 		return;
+ 
+-	if ((attrs & DMA_ATTR_NO_KERNEL_MAPPING) &&
+-	    !force_dma_unencrypted(dev)) {
+-		/* cpu_addr is a struct page cookie, not a kernel address */
+-		dma_free_contiguous(dev, cpu_addr, size);
+-		return;
+-	}
+-
+ 	if (force_dma_unencrypted(dev))
+ 		set_memory_encrypted((unsigned long)cpu_addr, 1 << page_order);
+ 
+@@ -304,7 +281,8 @@ struct page *dma_direct_alloc_pages(struct device *dev, size_t size,
  {
- 	const struct dma_map_ops *ops = get_dma_ops(dev);
+ 	struct page *page;
+ 
+-	if (dma_should_alloc_from_pool(dev, gfp, 0))
++	if (IS_ENABLED(CONFIG_DMA_COHERENT_POOL) &&
++	    force_dma_unencrypted(dev) && !gfpflags_allow_blocking(gfp))
+ 		return dma_direct_alloc_from_pool(dev, size, dma_handle, gfp);
+ 
+ 	page = __dma_direct_alloc_pages(dev, size, gfp | __GFP_ZERO);
+@@ -341,7 +319,7 @@ void dma_direct_free_pages(struct device *dev, size_t size,
+ 	void *vaddr = page_address(page);
+ 
+ 	/* If cpu_addr is not from an atomic pool, dma_free_from_pool() fails */
+-	if (dma_should_free_from_pool(dev, 0) &&
++	if (IS_ENABLED(CONFIG_DMA_COHERENT_POOL) &&
+ 	    dma_free_from_pool(dev, vaddr, size))
+ 		return;
+ 
 -- 
 2.28.0
 
