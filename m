@@ -7,27 +7,30 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88CC3C4727E
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:30:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C26EC47420
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:30:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3E93321D7F
+	by mail.kernel.org (Postfix) with ESMTP id F1810221EF
 	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:30:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730833AbgI3PaY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1730858AbgI3PaY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 30 Sep 2020 11:30:24 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:44644 "EHLO
-        hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730832AbgI3P3D (ORCPT
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42218 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730872AbgI3P3D (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 30 Sep 2020 11:29:03 -0400
+Received: from hillosipuli.retiisi.eu (hillosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::81:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5CD9C061755
+        for <linux-media@vger.kernel.org>; Wed, 30 Sep 2020 08:29:03 -0700 (PDT)
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id BEB74634CA1
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 4F629634C97
         for <linux-media@vger.kernel.org>; Wed, 30 Sep 2020 18:28:47 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH 016/100] smiapp: Differentiate CCS sensors from SMIA in subdev naming
-Date:   Wed, 30 Sep 2020 18:27:34 +0300
-Message-Id: <20200930152858.8471-17-sakari.ailus@linux.intel.com>
+Subject: [PATCH 013/100] smiapp: Remove quirk function for writing a single 8-bit register
+Date:   Wed, 30 Sep 2020 18:27:31 +0300
+Message-Id: <20200930152858.8471-14-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200930152858.8471-1-sakari.ailus@linux.intel.com>
 References: <20200930152858.8471-1-sakari.ailus@linux.intel.com>
@@ -37,49 +40,71 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Call CCS compliant sensors as "ccs" instead of "smiapp" in absence of a
-device specific name. This is done based on the value of the manufacturer
-ID register that is only present in CCS.
+This function is no longer needed as the smiapp_write() function can be
+used to write 8-bit registers with plain register addresses.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/smiapp/ccs-core.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/media/i2c/smiapp/smiapp-quirk.c | 15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/media/i2c/smiapp/ccs-core.c b/drivers/media/i2c/smiapp/ccs-core.c
-index dd093a7d2ef4..c82e311d2661 100644
---- a/drivers/media/i2c/smiapp/ccs-core.c
-+++ b/drivers/media/i2c/smiapp/ccs-core.c
-@@ -2437,8 +2437,6 @@ static int ccs_identify_module(struct ccs_sensor *sensor)
- 	unsigned int i;
- 	int rval = 0;
+diff --git a/drivers/media/i2c/smiapp/smiapp-quirk.c b/drivers/media/i2c/smiapp/smiapp-quirk.c
+index 24630c7650d2..9422eb61b424 100644
+--- a/drivers/media/i2c/smiapp/smiapp-quirk.c
++++ b/drivers/media/i2c/smiapp/smiapp-quirk.c
+@@ -14,11 +14,6 @@
  
--	minfo->name = SMIAPP_NAME;
+ #include "smiapp.h"
+ 
+-static int smiapp_write_8(struct smiapp_sensor *sensor, u16 reg, u8 val)
+-{
+-	return smiapp_write(sensor, reg, val);
+-}
 -
- 	/* Module info */
- 	rval = ccs_read(sensor, MODULE_MANUFACTURER_ID,
- 			&minfo->mipi_manufacturer_id);
-@@ -2528,15 +2526,18 @@ static int ccs_identify_module(struct ccs_sensor *sensor)
- 		"sensor revision 0x%2.2x firmware version 0x%2.2x\n",
- 		minfo->sensor_revision_number, minfo->sensor_firmware_version);
+ static int smiapp_write_8s(struct smiapp_sensor *sensor,
+ 			   const struct smiapp_reg_8 *regs, int len)
+ {
+@@ -26,7 +21,7 @@ static int smiapp_write_8s(struct smiapp_sensor *sensor,
+ 	int rval;
  
--	if (minfo->ccs_version)
-+	if (minfo->ccs_version) {
- 		dev_dbg(&client->dev, "MIPI CCS version %u.%u",
- 			(minfo->ccs_version & CCS_MIPI_CCS_VERSION_MAJOR_MASK)
- 			>> CCS_MIPI_CCS_VERSION_MAJOR_SHIFT,
- 			(minfo->ccs_version & CCS_MIPI_CCS_VERSION_MINOR_MASK));
--	else
-+		minfo->name = CCS_NAME;
-+	} else {
- 		dev_dbg(&client->dev,
- 			"smia version %2.2d smiapp version %2.2d\n",
- 			minfo->smia_version, minfo->smiapp_version);
-+		minfo->name = SMIAPP_NAME;
-+	}
+ 	for (; len > 0; len--, regs++) {
+-		rval = smiapp_write_8(sensor, regs->reg, regs->val);
++		rval = smiapp_write(sensor, regs->reg, regs->val);
+ 		if (rval < 0) {
+ 			dev_err(&client->dev,
+ 				"error %d writing reg 0x%4.4x, val 0x%2.2x",
+@@ -170,7 +165,7 @@ static int jt8ev1_post_poweron(struct smiapp_sensor *sensor)
  
- 	/*
- 	 * Some modules have bad data in the lvalues below. Hope the
+ static int jt8ev1_pre_streamon(struct smiapp_sensor *sensor)
+ {
+-	return smiapp_write_8(sensor, 0x3328, 0x00);
++	return smiapp_write(sensor, 0x3328, 0x00);
+ }
+ 
+ static int jt8ev1_post_streamoff(struct smiapp_sensor *sensor)
+@@ -178,7 +173,7 @@ static int jt8ev1_post_streamoff(struct smiapp_sensor *sensor)
+ 	int rval;
+ 
+ 	/* Workaround: allows fast standby to work properly */
+-	rval = smiapp_write_8(sensor, 0x3205, 0x04);
++	rval = smiapp_write(sensor, 0x3205, 0x04);
+ 	if (rval < 0)
+ 		return rval;
+ 
+@@ -186,11 +181,11 @@ static int jt8ev1_post_streamoff(struct smiapp_sensor *sensor)
+ 	usleep_range(2000, 2050);
+ 
+ 	/* Restore it */
+-	rval = smiapp_write_8(sensor, 0x3205, 0x00);
++	rval = smiapp_write(sensor, 0x3205, 0x00);
+ 	if (rval < 0)
+ 		return rval;
+ 
+-	return smiapp_write_8(sensor, 0x3328, 0x80);
++	return smiapp_write(sensor, 0x3328, 0x80);
+ }
+ 
+ static int jt8ev1_init(struct smiapp_sensor *sensor)
 -- 
 2.27.0
 
