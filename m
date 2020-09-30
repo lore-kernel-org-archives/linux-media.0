@@ -2,426 +2,155 @@ Return-Path: <SRS0=fdi2=DH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41EB3C4727F
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 11:53:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AE34C4727E
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 12:20:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 04589207C3
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 11:53:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 10AA02071E
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 12:20:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="Mzyn+zVr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iQxZnZUa"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729762AbgI3Lxw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Sep 2020 07:53:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37264 "EHLO
+        id S1728235AbgI3MUH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Sep 2020 08:20:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729645AbgI3Lxg (ORCPT
+        with ESMTP id S1725776AbgI3MUH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Sep 2020 07:53:36 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18464C0613D0
-        for <linux-media@vger.kernel.org>; Wed, 30 Sep 2020 04:53:36 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id v12so1430530wmh.3
-        for <linux-media@vger.kernel.org>; Wed, 30 Sep 2020 04:53:36 -0700 (PDT)
+        Wed, 30 Sep 2020 08:20:07 -0400
+Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B83C061755;
+        Wed, 30 Sep 2020 05:20:07 -0700 (PDT)
+Received: by mail-yb1-xb42.google.com with SMTP id x20so1107334ybs.8;
+        Wed, 30 Sep 2020 05:20:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=xUwXV1jfLyrk3fzHWFN8UiiEyP/n/7Giq0Q27vW4/6U=;
-        b=Mzyn+zVrXBXpB/+qYQebnqFhRO/DuKUHFBPJkLc7TN2czB/64CXPai6KWUFwetDAfc
-         HiJUiHhd/MTv5mm8SRrBWkPQBHpdlRc66Zg2Kke80Xv/6lIDAemQHuIfKCEhNB2P83J7
-         DW9fw+N+dCkBJcH1o/iiDoeK/f/LoIMMagH2okdqXDpMD15kdHn/XhnvnqAyuM9rgY3G
-         jG3nvwC6He1dXL/8kEz0HZjng7+rqgZIc8CRaPxzZqfFbnDGgqMmtjOBBjqeY0fDRzu0
-         68b8rfYJsJIlIcXaJjWhn12ZL4tyFrPhbgenjHi4uqp6BK0jRBye5Quq8i16pSi7BZBp
-         ZiOw==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8OY3SIpBqhs9ShdUb/W0izWrW0fchBVg7nzJdv4eq1A=;
+        b=iQxZnZUaCriMamuxwJyeFSRHA+SDnZKrPyar0weotpP7rJaMOJrG+YS8mQv8cVUiT/
+         FXxtqoiX4Z2pToh3Xjwg0+OpOb4Z4vSKOjU2wQW5J7685ZVhdiU/RbASQv9NrG9leN5j
+         v3vvlY+qjmubNkIayoOX9IKPSKftKNk3keEAtjWe9mL0QNp2hmjU7gGkuO8EWwDucNLK
+         x8pSRvXo9aedhvroxrVgv2fzNj6Vqpplbmkw+PcijC/r5HXYKpP7A6b//uSDyYXS5o7I
+         06+1C18yQTUKAcHGOL7rGwmFaToqeOukEAPysDB5AAbV9F/RmMPpX6esyJ+P/7LcT15Z
+         kwhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xUwXV1jfLyrk3fzHWFN8UiiEyP/n/7Giq0Q27vW4/6U=;
-        b=iKluheeQ7qGI/P1LPlVrRS09VtKMPInGQXt86N9N1QXqmLFouUEoOr8PUt4ih3+bIT
-         8/5mRKvEpITz+Rms0e9FOXzhqCWCZOYdAiQSF7A4h2uBKJJ0m51xxKmbg9LZiw/86qbm
-         OvPD/nsCP2RZQATsehatOEzMX0Qd7ifc2h6u1oZ1KK7TLqf9LlpSmL7NIqqfQjjX8MpR
-         Tomy7fPkvm8+44J0gmrk0wFa0he2aDcHMLqFnbnBQKFGaertWmCpyLy69ty1YogMIfGZ
-         mzM3vdJSmjLfyRIgBStifENMVYTkXF1qBmj4knb0J2qFTLS2UHB1sEf8dugaWPKOG9Zk
-         BSzA==
-X-Gm-Message-State: AOAM530eDLAlZvtQ+Ajqr5nQiS2mHj7UfRRF319O4qzjGeFCUucU+DnY
-        VwMu9semfaaeq2ECbk3wqhLVvg==
-X-Google-Smtp-Source: ABdhPJzCm/YhtWAwHXSjeHPaI1kSy6fvH1RwwqDu1cSYHPf/1VKNjTpMJQTwi/TktXn5ofLco3x7DQ==
-X-Received: by 2002:a1c:2903:: with SMTP id p3mr2733148wmp.170.1601466814658;
-        Wed, 30 Sep 2020 04:53:34 -0700 (PDT)
-Received: from alex-xps13.baylibre.local (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id s12sm2222353wmd.20.2020.09.30.04.53.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Sep 2020 04:53:33 -0700 (PDT)
-From:   Alexandre Bailon <abailon@baylibre.com>
-To:     linux-remoteproc@vger.kernel.org
-Cc:     ohad@wizery.com, bjorn.andersson@linaro.org,
-        sumit.semwal@linaro.org, christian.koenig@amd.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        jstephan@baylibre.com, stephane.leprovost@mediatek.com,
-        gpain@baylibre.com, mturquette@baylibre.com,
-        Alexandre Bailon <abailon@baylibre.com>
-Subject: [RFC PATCH 2/4] rpmsg: apu_rpmsg: Add support for async apu request
-Date:   Wed, 30 Sep 2020 13:53:48 +0200
-Message-Id: <20200930115350.5272-3-abailon@baylibre.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200930115350.5272-1-abailon@baylibre.com>
-References: <20200930115350.5272-1-abailon@baylibre.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8OY3SIpBqhs9ShdUb/W0izWrW0fchBVg7nzJdv4eq1A=;
+        b=ap35dzbyKfqRrB1en9PcY3SdQDcqT9iXRaAIOltGG/uCMaAxTvN1d5nzTxFvpMVlKs
+         QhjNDy8QUumCa/LVGEE6ETPmBgS1wgeva+zIlkPAe50MiijKTBX0XtOVZZpr6/cD4y2i
+         96WeckoT5qtMqZyuu1fZ1hB/S7FXwkPD0P6FAkQftV8avXMgJ8GCVAWobUEoqJrrvZu3
+         N/k2N1ILEkDEWQZTP7J8ovUXHYh/dvkpWEclA9hbWGWAEzTk8hS6uRxOoeqbGx2hw3YF
+         8f9xkMEzHEJ8fna8CZA0w6LKsYlL599L4nZXP60epOZP1Br1+pMbikcRqFTAIA21DlfE
+         NIew==
+X-Gm-Message-State: AOAM533uRkQRAIpIQGgbK6kVzLY37AzxJfp86fugPi59vJAOLaCj+Fbv
+        /NqVc5OQSwwNfHBsYUnPC52KHqNfOiRfhT18Sj6IO8CfeUBqK+Dv
+X-Google-Smtp-Source: ABdhPJxdagDPrgQuFVssAP+5cHQ8RgYlZRk4xuLfdA0tNOgUrr1u4oTxJcW98Uw0ZpK3xYXpXHaGzWY9/bAZavEBy40=
+X-Received: by 2002:a25:e811:: with SMTP id k17mr2590001ybd.401.1601468406510;
+ Wed, 30 Sep 2020 05:20:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200917174224.11430-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20200917174224.11430-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <20200930114529.GM26842@paasikivi.fi.intel.com>
+In-Reply-To: <20200930114529.GM26842@paasikivi.fi.intel.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Wed, 30 Sep 2020 13:19:40 +0100
+Message-ID: <CA+V-a8t5piG4a0C2BKgsZii6EB7te=GUeRCmfcPhdm+hAuV7Ng@mail.gmail.com>
+Subject: Re: [PATCH v6 1/3] media: i2c: ov772x: Parse endpoint properties
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Julien STEPHAN <jstephan@baylibre.com>
+HI Sakari,
 
-In order to improve performances and flexibility,
-add support of async request.
+Thank you for the review.
 
-Signed-off-by: Julien STEPHAN <jstephan@baylibre.com>
-Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
----
- drivers/rpmsg/apu_rpmsg.c      | 208 ++++++++++++++++++++++-----------
- include/uapi/linux/apu_rpmsg.h |   6 +-
- 2 files changed, 144 insertions(+), 70 deletions(-)
+On Wed, Sep 30, 2020 at 12:45 PM Sakari Ailus
+<sakari.ailus@linux.intel.com> wrote:
+>
+> Hi Prabhakar,
+>
+> On Thu, Sep 17, 2020 at 06:42:22PM +0100, Lad Prabhakar wrote:
+> > Parse endpoint properties using v4l2_fwnode_endpoint_alloc_parse()
+> > to determine the bus type and store it in the driver structure.
+> >
+> > Set bus_type to V4L2_MBUS_PARALLEL as it's the only supported one
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> >  drivers/media/i2c/ov772x.c | 34 ++++++++++++++++++++++++++++++++++
+> >  1 file changed, 34 insertions(+)
+> >
+> > diff --git a/drivers/media/i2c/ov772x.c b/drivers/media/i2c/ov772x.c
+> > index 2cc6a678069a..f61a3f09ad64 100644
+> > --- a/drivers/media/i2c/ov772x.c
+> > +++ b/drivers/media/i2c/ov772x.c
+> > @@ -31,6 +31,7 @@
+> >  #include <media/v4l2-ctrls.h>
+> >  #include <media/v4l2-device.h>
+> >  #include <media/v4l2-event.h>
+> > +#include <media/v4l2-fwnode.h>
+> >  #include <media/v4l2-image-sizes.h>
+> >  #include <media/v4l2-subdev.h>
+> >
+> > @@ -434,6 +435,7 @@ struct ov772x_priv {
+> >  #ifdef CONFIG_MEDIA_CONTROLLER
+> >       struct media_pad pad;
+> >  #endif
+> > +     enum v4l2_mbus_type               bus_type;
+> >  };
+> >
+> >  /*
+> > @@ -1348,6 +1350,34 @@ static const struct v4l2_subdev_ops ov772x_subdev_ops = {
+> >       .pad    = &ov772x_subdev_pad_ops,
+> >  };
+> >
+> > +static int ov772x_parse_dt(struct i2c_client *client,
+> > +                        struct ov772x_priv *priv)
+> > +{
+> > +     struct v4l2_fwnode_endpoint bus_cfg;
+> > +     struct fwnode_handle *ep;
+> > +     int ret;
+> > +
+> > +     ep = fwnode_graph_get_next_endpoint(dev_fwnode(&client->dev),
+> > +                                         NULL);
+> > +     if (!ep) {
+> > +             dev_err(&client->dev, "Endpoint node not found\n");
+> > +             return -EINVAL;
+> > +     }
+> > +
+> > +     bus_cfg.bus_type = V4L2_MBUS_PARALLEL;
+>
+> Please zero the entire struct, i.e. do this assignment in the declaration.
+>
+Agreed, but instead at the declaration I would prefer here as below,
+since patch 2/3 has a comment related to backward compatibility with
+the bindings. Is this OK with you ?
+    bus_cfg = (struct v4l2_fwnode_endpoint)
+          { .bus_type = V4L2_MBUS_PARALLEL };
 
-diff --git a/drivers/rpmsg/apu_rpmsg.c b/drivers/rpmsg/apu_rpmsg.c
-index 5131b8b8e1f2..e14597c467d7 100644
---- a/drivers/rpmsg/apu_rpmsg.c
-+++ b/drivers/rpmsg/apu_rpmsg.c
-@@ -34,11 +34,16 @@ struct rpmsg_apu {
- 	struct iommu_domain *domain;
- 	struct iova_domain *iovad;
- 	int iova_limit_pfn;
-+	wait_queue_head_t waitqueue;
-+	u8 available_response;
-+	spinlock_t ctx_lock;
-+	struct list_head requests;
- };
- 
- struct rpmsg_request {
--	struct completion completion;
-+	u8 ready;
- 	struct list_head node;
-+	struct apu_buffer *buffer;
- 	void *req;
- };
- 
-@@ -68,25 +73,35 @@ static dev_t rpmsg_major;
- static DEFINE_IDA(rpmsg_ctrl_ida);
- static DEFINE_IDA(rpmsg_minor_ida);
- static DEFINE_IDA(req_ida);
--static LIST_HEAD(requests);
- static struct apu_iova_domain *apu_iovad;
- 
--static int apu_rpmsg_callback(struct rpmsg_device *dev, void *data, int count,
-+
-+static int apu_rpmsg_callback(struct rpmsg_device *rpdev, void *data, int count,
- 			      void *priv, u32 addr)
- {
-+	struct rpmsg_apu *apu = dev_get_drvdata(&rpdev->dev);
- 	struct rpmsg_request *rpmsg_req;
- 	struct apu_dev_request *hdr = data;
-+	unsigned long flags;
- 
--	list_for_each_entry(rpmsg_req, &requests, node) {
--		struct apu_dev_request *tmp_hdr = rpmsg_req->req;
-+	spin_lock_irqsave(&apu->ctx_lock, flags);
-+	list_for_each_entry(rpmsg_req, &apu->requests, node) {
-+		struct apu_request *tmp_hdr = rpmsg_req->req;
- 
- 		if (hdr->id == tmp_hdr->id) {
--			memcpy(rpmsg_req->req, data, count);
--			complete(&rpmsg_req->completion);
--
--			return 0;
-+			rpmsg_req->ready = 1;
-+			apu->available_response++;
-+			tmp_hdr->result = hdr->result;
-+			tmp_hdr->size_in = hdr->size_in;
-+			tmp_hdr->size_out = hdr->size_out;
-+			memcpy(tmp_hdr->data, hdr->data,
-+			       hdr->size_in+hdr->size_out);
-+
-+			wake_up_interruptible(&apu->waitqueue);
-+			break;
- 		}
- 	}
-+	spin_unlock_irqrestore(&apu->ctx_lock, flags);
- 
- 	return 0;
- }
-@@ -177,48 +192,6 @@ static void apu_device_memory_unmap(struct rpmsg_apu *apu,
- 	dma_buf_put(buffer->dma_buf);
- }
- 
--static int _apu_send_request(struct rpmsg_apu *apu,
--			     struct rpmsg_device *rpdev,
--			     struct apu_dev_request *req, int len)
--{
--
--	struct rpmsg_request *rpmsg_req;
--	int ret = 0;
--
--	req->id = ida_simple_get(&req_ida, 0, 0xffff, GFP_KERNEL);
--	if (req->id < 0)
--		return ret;
--
--	rpmsg_req = kzalloc(sizeof(*rpmsg_req), GFP_KERNEL);
--	if (!rpmsg_req)
--		return -ENOMEM;
--
--	rpmsg_req->req = req;
--	init_completion(&rpmsg_req->completion);
--	list_add(&rpmsg_req->node, &requests);
--
--	ret = rpmsg_send(rpdev->ept, req, len);
--	if (ret)
--		goto free_req;
--
--	/* be careful with race here between timeout and callback*/
--	ret = wait_for_completion_timeout(&rpmsg_req->completion,
--					  msecs_to_jiffies(1000));
--	if (!ret)
--		ret = -ETIMEDOUT;
--	else
--		ret = 0;
--
--	ida_simple_remove(&req_ida, req->id);
--
--free_req:
--
--	list_del(&rpmsg_req->node);
--	kfree(rpmsg_req);
--
--	return ret;
--}
--
- static int apu_send_request(struct rpmsg_apu *apu,
- 			    struct apu_request *req)
- {
-@@ -226,6 +199,8 @@ static int apu_send_request(struct rpmsg_apu *apu,
- 	struct rpmsg_device *rpdev = apu->rpdev;
- 	struct apu_dev_request *dev_req;
- 	struct apu_buffer *buffer;
-+	struct rpmsg_request *rpmsg_req;
-+	unsigned long flags;
- 
- 	int size = req->size_in + req->size_out +
- 		sizeof(u32) * req->count * 2 + sizeof(*dev_req);
-@@ -257,24 +232,63 @@ static int apu_send_request(struct rpmsg_apu *apu,
- 		dev_req_buffer_size[i] = buffer_size[i];
- 	}
- 
--	ret = _apu_send_request(apu, rpdev, dev_req, size);
-+	ret = ida_simple_get(&req_ida, 0, 0xffff, GFP_KERNEL);
-+	if (ret < 0)
-+		goto err_free_memory;
-+
-+	dev_req->id = ret;
-+
-+	rpmsg_req = kzalloc(sizeof(*rpmsg_req), GFP_KERNEL);
-+	if (!rpmsg_req) {
-+		ret =  -ENOMEM;
-+		goto err_ida_remove;
-+	}
- 
-+	req->id = dev_req->id;
-+	rpmsg_req->req = req;
-+	rpmsg_req->buffer = buffer;
-+	spin_lock_irqsave(&apu->ctx_lock, flags);
-+	list_add(&rpmsg_req->node, &apu->requests);
-+	spin_unlock_irqrestore(&apu->ctx_lock, flags);
-+
-+	ret = rpmsg_send(rpdev->ept, dev_req, size);
-+	if (ret < 0)
-+		goto err;
-+
-+	kfree(dev_req);
-+
-+	return req->id;
-+
-+err:
-+	list_del(&rpmsg_req->node);
-+	kfree(rpmsg_req);
-+	kfree(req);
-+err_ida_remove:
-+	ida_simple_remove(&req_ida, dev_req->id);
- err_free_memory:
- 	for (i--; i >= 0; i--)
- 		apu_device_memory_unmap(apu, &buffer[i]);
- 
--	req->result = dev_req->result;
--	req->size_in = dev_req->size_in;
--	req->size_out = dev_req->size_out;
--	memcpy(req->data, dev_req->data, dev_req->size_in + dev_req->size_out +
--	       sizeof(u32) * req->count);
--
- 	kfree(buffer);
- 	kfree(dev_req);
- 
- 	return ret;
- }
- 
-+unsigned int rpmsg_eptdev_poll(struct file *fp, struct poll_table_struct *wait)
-+{
-+	struct rpmsg_apu *apu = fp->private_data;
-+	unsigned long flags;
-+
-+	poll_wait(fp, &apu->waitqueue, wait);
-+	spin_lock_irqsave(&apu->ctx_lock, flags);
-+	if (apu->available_response) {
-+		spin_unlock_irqrestore(&apu->ctx_lock, flags);
-+		return POLLIN;
-+	}
-+	spin_unlock_irqrestore(&apu->ctx_lock, flags);
-+	return 0;
-+}
- 
- static long rpmsg_eptdev_ioctl(struct file *fp, unsigned int cmd,
- 			       unsigned long arg)
-@@ -285,6 +299,11 @@ static long rpmsg_eptdev_ioctl(struct file *fp, unsigned int cmd,
- 	void __user *argp = (void __user *)arg;
- 	int len;
- 	int ret;
-+	unsigned long flags;
-+	struct rpmsg_request *rpmsg_req;
-+	int i;
-+
-+	ret = 0;
- 
- 	switch (cmd) {
- 	case APU_SEND_REQ_IOCTL:
-@@ -306,24 +325,69 @@ static long rpmsg_eptdev_ioctl(struct file *fp, unsigned int cmd,
- 		}
- 
- 		ret = apu_send_request(apu, apu_req_full);
--		if (ret) {
--			kfree(apu_req_full);
--			return ret;
-+
-+		break;
-+	case APU_GET_NEXT_AVAILABLE_IOCTL:
-+		ret = -ENOMSG;
-+		spin_lock_irqsave(&apu->ctx_lock, flags);
-+		list_for_each_entry(rpmsg_req, &apu->requests, node) {
-+			if (rpmsg_req->ready == 1) {
-+				struct apu_request *req =
-+					rpmsg_req->req;
-+
-+				ret = 0;
-+				if (copy_to_user(argp, &req->id, sizeof(__u16)))
-+					ret = -EFAULT;
-+				break;
-+			}
- 		}
-+		spin_unlock_irqrestore(&apu->ctx_lock, flags);
-+		break;
-+	case APU_GET_RESP:
-+		/* Get the header */
-+		if (!argp)
-+			return -EINVAL;
- 
--		if (copy_to_user(argp, apu_req_full, sizeof(apu_req) +
--				 sizeof(u32) * apu_req_full->count +
--				 apu_req_full->size_in + apu_req_full->size_out))
--			ret = -EFAULT;
-+		if (copy_from_user(&apu_req, argp,
-+				   sizeof(apu_req)))
-+			return -EFAULT;
- 
--		kfree(apu_req_full);
--		return ret;
-+		spin_lock_irqsave(&apu->ctx_lock, flags);
-+		list_for_each_entry(rpmsg_req, &apu->requests, node) {
-+			struct apu_request *req = rpmsg_req->req;
-+
-+			if ((apu_req.id == req->id) &&
-+			    (rpmsg_req->ready == 1)) {
-+				int req_len = sizeof(struct apu_request) +
-+					req->size_in + req->size_out +
-+					req->count * sizeof(u32)*2;
-+				int apu_req_len = sizeof(struct apu_request) +
-+					req->size_in + req->size_out +
-+					req->count * sizeof(u32)*2;
-+
-+				len = min(req_len, apu_req_len);
-+				if (copy_to_user(argp, req, len))
-+					ret = -EFAULT;
-+				apu->available_response--;
-+				ida_simple_remove(&req_ida, req->id);
-+				for (i = 0; i < req->count ; i++)
-+					apu_device_memory_unmap(apu,
-+							&rpmsg_req->buffer[i]);
-+				list_del(&rpmsg_req->node);
-+				kfree(rpmsg_req->buffer);
-+				kfree(rpmsg_req->req);
-+				kfree(rpmsg_req);
-+				break;
-+			}
-+		}
-+		spin_unlock_irqrestore(&apu->ctx_lock, flags);
- 
-+		break;
- 	default:
--		return -EINVAL;
-+		ret = -EINVAL;
- 	}
- 
--	return 0;
-+	return ret;
- }
- 
- static int rpmsg_eptdev_open(struct inode *inode, struct file *filp)
-@@ -351,6 +415,7 @@ static const struct file_operations rpmsg_eptdev_fops = {
- 	.release = rpmsg_eptdev_release,
- 	.unlocked_ioctl = rpmsg_eptdev_ioctl,
- 	.compat_ioctl = rpmsg_eptdev_ioctl,
-+	.poll = rpmsg_eptdev_poll,
- };
- 
- static void iova_domain_release(struct kref *ref)
-@@ -512,6 +577,11 @@ static int apu_rpmsg_probe(struct rpmsg_device *rpdev)
- 	dev->id = ret;
- 	dev_set_name(&apu->dev, "apu%d", ret);
- 
-+	init_waitqueue_head(&apu->waitqueue);
-+	spin_lock_init(&apu->ctx_lock);
-+	apu->available_response = 0;
-+	INIT_LIST_HEAD(&apu->requests);
-+
- 	ret = cdev_add(&apu->cdev, dev->devt, 1);
- 	if (ret)
- 		goto free_ctrl_ida;
-diff --git a/include/uapi/linux/apu_rpmsg.h b/include/uapi/linux/apu_rpmsg.h
-index 81c9e4af9a94..f61207520254 100644
---- a/include/uapi/linux/apu_rpmsg.h
-+++ b/include/uapi/linux/apu_rpmsg.h
-@@ -21,6 +21,7 @@
-  *        by the APU.
-  */
- struct apu_request {
-+	__u16 id;
- 	__u16 cmd;
- 	__u16 result;
- 	__u16 size_in;
-@@ -31,6 +32,9 @@ struct apu_request {
- };
- 
- /* Send synchronous request to an APU */
--#define APU_SEND_REQ_IOCTL	_IOWR(0xb7, 0x2, struct apu_request)
-+
-+#define APU_SEND_REQ_IOCTL		_IOW(0xb7, 0x2, struct apu_request)
-+#define APU_GET_NEXT_AVAILABLE_IOCTL	_IOR(0xb7, 0x3, __u16)
-+#define APU_GET_RESP			_IOWR(0xb7, 0x4, struct apu_request)
- 
- #endif
--- 
-2.26.2
+> You can also use v4l2_fwnode_endpoint_parse() if you're not using the link
+> frequencies --- sensor drivers generally should but you could only add them
+> as optional at this point (out of scope of this patch).
+>
+will stick with this for now :)
 
+Cheers,
+Prabhakar
