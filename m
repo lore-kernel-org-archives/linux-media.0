@@ -7,27 +7,28 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC725C4727C
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:30:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF0ACC47427
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:30:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9B72621D7F
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:30:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6D54A21D7F
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:30:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730851AbgI3Paf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Sep 2020 11:30:35 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:44648 "EHLO
+        id S1731202AbgI3Pag (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Sep 2020 11:30:36 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:44632 "EHLO
         hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730785AbgI3P3C (ORCPT
+        with ESMTP id S1725892AbgI3P3B (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Sep 2020 11:29:02 -0400
+        Wed, 30 Sep 2020 11:29:01 -0400
+X-Greylist: delayed 2446 seconds by postgrey-1.27 at vger.kernel.org; Wed, 30 Sep 2020 11:29:00 EDT
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 17A57634C95
-        for <linux-media@vger.kernel.org>; Wed, 30 Sep 2020 18:28:47 +0300 (EEST)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 3E27A634C8D
+        for <linux-media@vger.kernel.org>; Wed, 30 Sep 2020 18:28:46 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH 011/100] smiapp: Use CCS limits in reading binning capabilities
-Date:   Wed, 30 Sep 2020 18:27:29 +0300
-Message-Id: <20200930152858.8471-12-sakari.ailus@linux.intel.com>
+Subject: [PATCH 003/100] smiapp: Calculate CCS limit offsets and limit buffer size
+Date:   Wed, 30 Sep 2020 18:27:21 +0300
+Message-Id: <20200930152858.8471-4-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200930152858.8471-1-sakari.ailus@linux.intel.com>
 References: <20200930152858.8471-1-sakari.ailus@linux.intel.com>
@@ -37,53 +38,80 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use CCS limits for obtaining binning capabilities and subtypes.
+Calculate the limit offsets and the size of the limit buffer. CCS limits
+are read into this buffer, and the offsets are helpful in accessing the
+information in it.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/smiapp/smiapp-core.c | 27 +++++++++-----------------
- 1 file changed, 9 insertions(+), 18 deletions(-)
+ drivers/media/i2c/smiapp/smiapp-core.c | 40 +++++++++++++++++++++++++-
+ 1 file changed, 39 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/i2c/smiapp/smiapp-core.c b/drivers/media/i2c/smiapp/smiapp-core.c
-index 0f703860af0e..a54ceef5c5ea 100644
+index 105ef29152e8..47e983e9cd87 100644
 --- a/drivers/media/i2c/smiapp/smiapp-core.c
 +++ b/drivers/media/i2c/smiapp/smiapp-core.c
-@@ -3105,26 +3105,17 @@ static int smiapp_probe(struct i2c_client *client)
- 	}
+@@ -27,6 +27,7 @@
+ #include <media/v4l2-fwnode.h>
+ #include <media/v4l2-device.h>
  
- 	if (CCS_LIM(sensor, BINNING_CAPABILITY)) {
--		u32 val;
--
--		rval = smiapp_read(sensor,
--				   SMIAPP_REG_U8_BINNING_SUBTYPES, &val);
--		if (rval < 0) {
--			rval = -ENODEV;
--			goto out_free_ccs_limits;
--		}
--		sensor->nbinning_subtypes = min_t(u8, val,
--						  SMIAPP_BINNING_SUBTYPES);
-+		sensor->nbinning_subtypes =
-+			min_t(u8, CCS_LIM(sensor, BINNING_SUB_TYPES),
-+			      CCS_LIM_BINNING_SUB_TYPE_MAX_N);
++#include "ccs-limits.h"
+ #include "smiapp.h"
  
- 		for (i = 0; i < sensor->nbinning_subtypes; i++) {
--			rval = smiapp_read(
--				sensor, SMIAPP_REG_U8_BINNING_TYPE_n(i), &val);
--			if (rval < 0) {
--				rval = -ENODEV;
--				goto out_free_ccs_limits;
--			}
--			sensor->binning_subtypes[i] =
--				*(struct smiapp_binning_subtype *)&val;
-+			sensor->binning_subtypes[i].horizontal =
-+				CCS_LIM_AT(sensor, BINNING_SUB_TYPE, i) >>
-+				CCS_BINNING_SUB_TYPE_COLUMN_SHIFT;
-+			sensor->binning_subtypes[i].vertical =
-+				CCS_LIM_AT(sensor, BINNING_SUB_TYPE, i) &
-+				CCS_BINNING_SUB_TYPE_ROW_MASK;
+ #define SMIAPP_ALIGN_DIM(dim, flags)	\
+@@ -34,6 +35,11 @@
+ 	 ? ALIGN((dim), 2)		\
+ 	 : (dim) & ~1)
  
- 			dev_dbg(&client->dev, "binning %xx%x\n",
- 				sensor->binning_subtypes[i].horizontal,
++struct ccs_limit_offset {
++	u16	lim;
++	u16	info;
++} ccs_limit_offsets[CCS_L_LAST + 1];
++
+ /*
+  * smiapp_module_idents - supported camera modules
+  */
+@@ -3166,7 +3172,39 @@ static struct i2c_driver smiapp_i2c_driver = {
+ 	.id_table = smiapp_id_table,
+ };
+ 
+-module_i2c_driver(smiapp_i2c_driver);
++static int smiapp_module_init(void)
++{
++	unsigned int i, l;
++
++	for (i = 0, l = 0; ccs_limits[i].size && l < CCS_L_LAST; i++) {
++		if (!(ccs_limits[i].flags & CCS_L_FL_SAME_REG)) {
++			ccs_limit_offsets[l + 1].lim =
++				ALIGN(ccs_limit_offsets[l].lim +
++				      ccs_limits[i].size,
++				      ccs_reg_width(ccs_limits[i + 1].reg));
++			ccs_limit_offsets[l].info = i;
++			l++;
++		} else {
++			ccs_limit_offsets[l].lim += ccs_limits[i].size;
++		}
++	}
++
++	if (WARN_ON(ccs_limits[i].size))
++		return -EINVAL;
++
++	if (WARN_ON(l != CCS_L_LAST))
++		return -EINVAL;
++
++	return i2c_register_driver(THIS_MODULE, &smiapp_i2c_driver);
++}
++
++static void smiapp_module_cleanup(void)
++{
++	i2c_del_driver(&smiapp_i2c_driver);
++}
++
++module_init(smiapp_module_init);
++module_exit(smiapp_module_cleanup);
+ 
+ MODULE_AUTHOR("Sakari Ailus <sakari.ailus@iki.fi>");
+ MODULE_DESCRIPTION("Generic SMIA/SMIA++ camera module driver");
 -- 
 2.27.0
 
