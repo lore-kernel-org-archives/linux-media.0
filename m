@@ -4,30 +4,30 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06AB1C4727F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83341C47420
 	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:29:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AA7C8207FB
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:29:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2EF3C2087D
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:29:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730806AbgI3P3U (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Sep 2020 11:29:20 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:44680 "EHLO
+        id S1731077AbgI3P3V (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Sep 2020 11:29:21 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:44650 "EHLO
         hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731077AbgI3P3S (ORCPT
+        with ESMTP id S1731073AbgI3P3T (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Sep 2020 11:29:18 -0400
+        Wed, 30 Sep 2020 11:29:19 -0400
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id A734E634D10
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 92451634C8E
         for <linux-media@vger.kernel.org>; Wed, 30 Sep 2020 18:28:54 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH 100/100] smiapp: Add CCS ACPI device ID
-Date:   Wed, 30 Sep 2020 18:28:58 +0300
-Message-Id: <20200930152858.8471-101-sakari.ailus@linux.intel.com>
+Subject: [PATCH 099/100] ccs: Add shading correction and luminance correction level controls
+Date:   Wed, 30 Sep 2020 18:28:57 +0300
+Message-Id: <20200930152858.8471-100-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200930152858.8471-1-sakari.ailus@linux.intel.com>
 References: <20200930152858.8471-1-sakari.ailus@linux.intel.com>
@@ -37,39 +37,105 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The CCS compliant sensors use device ID "MIPI0200". Use this id for ACPI
-device matching.
+Add controls for supporting lens shading correction.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/media/i2c/ccs/ccs-core.c | 74 ++++++++++++++++++++++++++++++++
+ 1 file changed, 74 insertions(+)
 
 diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index d2ffb48c9a30..313754515165 100644
+index c68c11e8e9f3..d2ffb48c9a30 100644
 --- a/drivers/media/i2c/ccs/ccs-core.c
 +++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -3596,6 +3596,12 @@ static const struct ccs_device smia_device = {
+@@ -755,6 +755,25 @@ static int ccs_set_ctrl(struct v4l2_ctrl *ctrl)
+ 	case V4L2_CID_TEST_PATTERN_GREENB:
+ 		rval = ccs_write(sensor, TEST_DATA_GREENB, ctrl->val);
  
- static const struct ccs_device ccs_device = {};
- 
-+static const struct acpi_device_id ccs_acpi_table[] = {
-+	{ .id = "MIPI0200", .driver_data = (unsigned long)&ccs_device },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(acpi, ccs_acpi_table);
++		break;
++	case V4L2_CID_CCS_SHADING_CORRECTION:
++		if (!(CCS_LIM(sensor, SHADING_CORRECTION_CAPABILITY) &
++		      (CCS_SHADING_CORRECTION_CAPABILITY_COLOR_SHADING |
++		       CCS_SHADING_CORRECTION_CAPABILITY_LUMINANCE_CORRECTION)))
++			break;
 +
- static const struct of_device_id ccs_of_table[] = {
- 	{ .compatible = "nokia,smia", .data = &smia_device },
- 	{ .compatible = "mipi,ccs", .data = &ccs_device },
-@@ -3610,6 +3616,7 @@ static const struct dev_pm_ops ccs_pm_ops = {
++		rval = ccs_write(sensor, SHADING_CORRECTION_EN,
++				 ctrl->val ? CCS_SHADING_CORRECTION_EN_ENABLE :
++				 0);
++
++		break;
++	case V4L2_CID_CCS_LUMINANCE_SHADING_CORRECTION:
++		if (!(CCS_LIM(sensor, SHADING_CORRECTION_CAPABILITY) &
++		      CCS_SHADING_CORRECTION_CAPABILITY_LUMINANCE_CORRECTION))
++			break;
++
++		rval = ccs_write(sensor, LUMINANCE_CORRECTION_LEVEL, ctrl->val);
++
+ 		break;
+ 	case V4L2_CID_PIXEL_RATE:
+ 		/* For v4l2_ctrl_s_ctrl_int64() used internally. */
+@@ -876,6 +895,61 @@ static int ccs_init_controls(struct ccs_sensor *sensor)
+ 	}
+ 	}
  
- static struct i2c_driver ccs_i2c_driver = {
- 	.driver	= {
-+		.acpi_match_table = ccs_acpi_table,
- 		.of_match_table = ccs_of_table,
- 		.name = CCS_NAME,
- 		.pm = &ccs_pm_ops,
++	if (CCS_LIM(sensor, SHADING_CORRECTION_CAPABILITY) &
++	    CCS_SHADING_CORRECTION_CAPABILITY_COLOR_SHADING) {
++		const struct v4l2_ctrl_config ctrl_cfg = {
++			.name = "Shading Correction",
++			.type = V4L2_CTRL_TYPE_BOOLEAN,
++			.id = V4L2_CID_CCS_SHADING_CORRECTION,
++			.ops = &ccs_ctrl_ops,
++			.max = 1,
++			.step = 1,
++		};
++
++		v4l2_ctrl_new_custom(&sensor->pixel_array->ctrl_handler,
++				     &ctrl_cfg, NULL);
++	}
++
++	if (CCS_LIM(sensor, SHADING_CORRECTION_CAPABILITY) &
++	    CCS_SHADING_CORRECTION_CAPABILITY_LUMINANCE_CORRECTION) {
++		const struct v4l2_ctrl_config ctrl_cfg = {
++			.name = "Luminance Shading Correction",
++			.type = V4L2_CTRL_TYPE_BOOLEAN,
++			.id = V4L2_CID_CCS_LUMINANCE_SHADING_CORRECTION,
++			.ops = &ccs_ctrl_ops,
++			.max = 255,
++			.step = 1,
++			.def = 128,
++		};
++
++		v4l2_ctrl_new_custom(&sensor->pixel_array->ctrl_handler,
++				     &ctrl_cfg, NULL);
++	}
++
++	if (CCS_LIM(sensor, SHADING_CORRECTION_CAPABILITY) &
++	    (CCS_SHADING_CORRECTION_CAPABILITY_COLOR_SHADING |
++	     CCS_SHADING_CORRECTION_CAPABILITY_LUMINANCE_CORRECTION)) {
++		u32 val =
++			((CCS_LIM(sensor, SHADING_CORRECTION_CAPABILITY) &
++			  CCS_SHADING_CORRECTION_CAPABILITY_COLOR_SHADING) ?
++			 V4L2_CCS_SHADING_CORRECTION_COLOUR : 0) |
++			((CCS_LIM(sensor, SHADING_CORRECTION_CAPABILITY) &
++			   CCS_SHADING_CORRECTION_CAPABILITY_LUMINANCE_CORRECTION) ?
++			 V4L2_CCS_SHADING_CORRECTION_LUMINANCE : 0);
++		const struct v4l2_ctrl_config ctrl_cfg = {
++			.name = "Shading Correction Capability",
++			.type = V4L2_CTRL_TYPE_BITMASK,
++			.id = V4L2_CID_CCS_SHADING_CORRECTION_CAPABILITY,
++			.ops = &ccs_ctrl_ops,
++			.max = val,
++			.def = val,
++			.flags = V4L2_CTRL_FLAG_READ_ONLY,
++		};
++
++		v4l2_ctrl_new_custom(&sensor->pixel_array->ctrl_handler,
++				     &ctrl_cfg, NULL);
++	}
++
+ 	if (CCS_LIM(sensor, DIGITAL_GAIN_CAPABILITY) ==
+ 	    CCS_DIGITAL_GAIN_CAPABILITY_GLOBAL ||
+ 	    CCS_LIM(sensor, DIGITAL_GAIN_CAPABILITY) ==
 -- 
 2.27.0
 
