@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60097C4727E
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 20:19:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E646CC47429
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 20:19:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 371B92074A
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 20:19:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C282F2074A
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 20:19:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730442AbgI3UTS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Sep 2020 16:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59004 "EHLO
+        id S1730476AbgI3UTU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Sep 2020 16:19:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729912AbgI3UTR (ORCPT
+        with ESMTP id S1729912AbgI3UTS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Sep 2020 16:19:17 -0400
+        Wed, 30 Sep 2020 16:19:18 -0400
 Received: from hillosipuli.retiisi.eu (hillosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::81:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4855C0613D1;
-        Wed, 30 Sep 2020 13:19:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3666C061755;
+        Wed, 30 Sep 2020 13:19:18 -0700 (PDT)
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 62862634C8D;
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 8B8E2634C8F;
         Wed, 30 Sep 2020 23:19:01 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     devicetree@vger.kernel.org
-Subject: [RESEND PATCH 022/100] dt-bindings: nokia,smia: Make vana-supply optional
-Date:   Wed, 30 Sep 2020 23:19:10 +0300
-Message-Id: <20200930201914.31377-4-sakari.ailus@linux.intel.com>
+Subject: [RESEND PATCH 024/100] dt-bindings: nokia,smia: Use better active polarity for reset
+Date:   Wed, 30 Sep 2020 23:19:12 +0300
+Message-Id: <20200930201914.31377-6-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200930201914.31377-1-sakari.ailus@linux.intel.com>
 References: <20200930201914.31377-1-sakari.ailus@linux.intel.com>
@@ -41,36 +41,36 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-vana-supply is optional in the spec, therefore make it optional in
-bindings, too.
+Generally reset signal is active low on camera sensors. The example had it
+high. Make it low, and use GPIO_ACTIVE_LOW in gpio.h for that.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- Documentation/devicetree/bindings/media/i2c/nokia,smia.txt | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/nokia,smia.txt b/Documentation/devicetree/bindings/media/i2c/nokia,smia.txt
-index 6c45c79ef91f..5ea4f799877b 100644
---- a/Documentation/devicetree/bindings/media/i2c/nokia,smia.txt
-+++ b/Documentation/devicetree/bindings/media/i2c/nokia,smia.txt
-@@ -16,8 +16,6 @@ Mandatory properties
+diff --git a/Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml b/Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml
+index 3d6f68b0e559..d7de07e99008 100644
+--- a/Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml
++++ b/Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml
+@@ -120,6 +120,8 @@ required:
  
- - compatible: "nokia,smia"
- - reg: I2C address (0x10, or an alternative address)
--- vana-supply: Analogue voltage supply (VANA), typically 2,8 volts (sensor
--  dependent).
- - clocks: External clock to the sensor
- - clock-frequency: Frequency of the external clock to the sensor
- 
-@@ -31,6 +29,8 @@ Optional properties
- - rotation: Integer property; valid values are 0 (sensor mounted upright)
- 	    and 180 (sensor mounted upside down). See
- 	    ../video-interfaces.txt .
-+- vana-supply: Analogue voltage supply (VANA), typically 2,8 volts (sensor
-+  dependent).
- 
- 
- Endpoint node mandatory properties
+ examples:
+   - |
++    #include <dt-bindings/gpio/gpio.h>
++
+     i2c2 {
+         #address-cells = <1>;
+         #size-cells = <0>;
+@@ -129,7 +131,7 @@ examples:
+         camera-sensor@10 {
+             compatible = "nokia,smia";
+             reg = <0x10>;
+-            reset-gpios = <&gpio3 20 0>;
++            reset-gpios = <&gpio3 20 GPIO_ACTIVE_LOW>;
+             vana-supply = <&vaux3>;
+             clocks = <&omap3_isp 0>;
+             clock-frequency = <9600000>;
 -- 
 2.27.0
 
