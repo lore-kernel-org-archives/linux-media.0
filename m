@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2BF4C4727C
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:29:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80738C47420
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:29:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7BA9820759
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:29:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 414F720789
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:29:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731132AbgI3P3w (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1731006AbgI3P3w (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 30 Sep 2020 11:29:52 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:44656 "EHLO
+Received: from retiisi.org.uk ([95.216.213.190]:44648 "EHLO
         hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730999AbgI3P3L (ORCPT
+        with ESMTP id S1730994AbgI3P3K (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Sep 2020 11:29:11 -0400
+        Wed, 30 Sep 2020 11:29:10 -0400
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 396EE634CDE
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 0943D634C96
         for <linux-media@vger.kernel.org>; Wed, 30 Sep 2020 18:28:51 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH 055/100] ccs-pll: Differentiate between CSI-2 D-PHY and C-PHY
-Date:   Wed, 30 Sep 2020 18:28:13 +0300
-Message-Id: <20200930152858.8471-56-sakari.ailus@linux.intel.com>
+Subject: [PATCH 052/100] ccs-pll: Use correct VT divisor for calculating VT SYS divisor
+Date:   Wed, 30 Sep 2020 18:28:10 +0300
+Message-Id: <20200930152858.8471-53-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200930152858.8471-1-sakari.ailus@linux.intel.com>
 References: <20200930152858.8471-1-sakari.ailus@linux.intel.com>
@@ -37,56 +37,36 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Differentiate between CSI-2 D-PHY and C-PHY. This does not yet include
-support for C-PHY.
+Use the correct video timing divisor to calculate the SYS divisor. Instead
+of the current value, the minimum was used. This could have resulted in a
+too low SYS divisor.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs-pll.c      | 2 +-
- drivers/media/i2c/ccs-pll.h      | 3 ++-
- drivers/media/i2c/ccs/ccs-core.c | 2 +-
- 3 files changed, 4 insertions(+), 3 deletions(-)
+ drivers/media/i2c/ccs-pll.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/i2c/ccs-pll.c b/drivers/media/i2c/ccs-pll.c
-index 61ace70852e0..069f2ee821fe 100644
+index dd30949efb6b..a2cc961366c3 100644
 --- a/drivers/media/i2c/ccs-pll.c
 +++ b/drivers/media/i2c/ccs-pll.c
-@@ -430,7 +430,7 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
- 		pll->binning_vertical);
+@@ -365,14 +365,14 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
  
- 	switch (pll->bus_type) {
--	case CCS_PLL_BUS_TYPE_CSI2:
-+	case CCS_PLL_BUS_TYPE_CSI2_DPHY:
- 		/* CSI transfers 2 bits per clock per lane; thus times 2 */
- 		op_pll_fr->pll_op_clk_freq_hz = pll->link_freq * 2
- 			* (pll->csi2.lanes / lane_op_clock_ratio);
-diff --git a/drivers/media/i2c/ccs-pll.h b/drivers/media/i2c/ccs-pll.h
-index 578c9272688a..d06a80c4fc52 100644
---- a/drivers/media/i2c/ccs-pll.h
-+++ b/drivers/media/i2c/ccs-pll.h
-@@ -13,7 +13,8 @@
- #define CCS_PLL_H
+ 			/* Check if this one is better. */
+ 			if (pix_div * sys_div
+-			    <= roundup(min_vt_div, best_pix_div))
++			    <= roundup(vt_div, best_pix_div))
+ 				best_pix_div = pix_div;
+ 		}
+ 		if (best_pix_div < INT_MAX >> 1)
+ 			break;
+ 	}
  
- /* CSI-2 or CCP-2 */
--#define CCS_PLL_BUS_TYPE_CSI2					0x00
-+#define CCS_PLL_BUS_TYPE_CSI2_DPHY				0x00
-+#define CCS_PLL_BUS_TYPE_CSI2_CPHY				0x01
+-	pll->vt_bk.sys_clk_div = DIV_ROUND_UP(min_vt_div, best_pix_div);
++	pll->vt_bk.sys_clk_div = DIV_ROUND_UP(vt_div, best_pix_div);
+ 	pll->vt_bk.pix_clk_div = best_pix_div;
  
- /* op pix clock is for all lanes in total normally */
- #define CCS_PLL_FLAG_OP_PIX_CLOCK_PER_LANE			(1 << 0)
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 0dc1c0e05c34..adf9c3e06567 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -3179,7 +3179,7 @@ static int ccs_probe(struct i2c_client *client)
- 	sensor->scale_m = CCS_LIM(sensor, SCALER_N_MIN);
- 
- 	/* prepare PLL configuration input values */
--	sensor->pll.bus_type = CCS_PLL_BUS_TYPE_CSI2;
-+	sensor->pll.bus_type = CCS_PLL_BUS_TYPE_CSI2_DPHY;
- 	sensor->pll.csi2.lanes = sensor->hwcfg.lanes;
- 	sensor->pll.ext_clk_freq_hz = sensor->hwcfg.ext_clk;
- 	sensor->pll.scale_n = CCS_LIM(sensor, SCALER_N_MIN);
+ 	pll->vt_bk.sys_clk_freq_hz =
 -- 
 2.27.0
 
