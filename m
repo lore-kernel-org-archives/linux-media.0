@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37D69C4727C
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:30:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94EECC4727F
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:30:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EDD7420B1F
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:30:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 421F320B1F
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:30:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730980AbgI3P37 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Sep 2020 11:29:59 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:44648 "EHLO
+        id S1731145AbgI3PaC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Sep 2020 11:30:02 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:44680 "EHLO
         hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730975AbgI3P3J (ORCPT
+        with ESMTP id S1730984AbgI3P3J (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 30 Sep 2020 11:29:09 -0400
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 02FBC634C95
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 69F8A634C91
         for <linux-media@vger.kernel.org>; Wed, 30 Sep 2020 18:28:50 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH 041/100] ccs: Read ireal numbers correctly
-Date:   Wed, 30 Sep 2020 18:27:59 +0300
-Message-Id: <20200930152858.8471-42-sakari.ailus@linux.intel.com>
+Subject: [PATCH 045/100] ccs: Use static data read-only registers
+Date:   Wed, 30 Sep 2020 18:28:03 +0300
+Message-Id: <20200930152858.8471-46-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200930152858.8471-1-sakari.ailus@linux.intel.com>
 References: <20200930152858.8471-1-sakari.ailus@linux.intel.com>
@@ -37,122 +37,107 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Some limit values are available in q16.q16 format, referred to as 32-bit
-unsigned ireal in CCS. Read these correctly.
+Access read-only registers from CCS static data.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c       | 10 ++--------
- drivers/media/i2c/ccs/ccs-reg-access.c | 23 +++++++++++++++++++++--
- drivers/media/i2c/ccs/ccs.h            |  9 +++++++++
- 3 files changed, 32 insertions(+), 10 deletions(-)
+ drivers/media/i2c/ccs/ccs-reg-access.c | 64 ++++++++++++++++++++++++--
+ 1 file changed, 60 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 34878678bc5f..40e0fc84205c 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -120,8 +120,8 @@ void ccs_replace_limit(struct ccs_sensor *sensor,
- 	ccs_assign_limit(ptr, ccs_reg_width(linfo->reg), val);
- }
- 
--static u32 ccs_get_limit(struct ccs_sensor *sensor,
--			 unsigned int limit, unsigned int offset)
-+u32 ccs_get_limit(struct ccs_sensor *sensor, unsigned int limit,
-+		  unsigned int offset)
- {
- 	void *ptr;
- 	u32 val;
-@@ -149,12 +149,6 @@ static u32 ccs_get_limit(struct ccs_sensor *sensor,
- 	return ccs_reg_conv(sensor, ccs_limits[limit].reg, val);
- }
- 
--#define CCS_LIM(sensor, limit) \
--	ccs_get_limit(sensor, CCS_L_##limit, 0)
--
--#define CCS_LIM_AT(sensor, limit, offset)	\
--	ccs_get_limit(sensor, CCS_L_##limit, CCS_L_##limit##_OFFSET(offset))
--
- static int ccs_read_all_limits(struct ccs_sensor *sensor)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
 diff --git a/drivers/media/i2c/ccs/ccs-reg-access.c b/drivers/media/i2c/ccs/ccs-reg-access.c
-index fe6112cba6be..91ccbca11577 100644
+index 9fda16b221a7..02af2b0abdaf 100644
 --- a/drivers/media/i2c/ccs/ccs-reg-access.c
 +++ b/drivers/media/i2c/ccs/ccs-reg-access.c
-@@ -15,6 +15,7 @@
- #include <linux/i2c.h>
- 
- #include "ccs.h"
-+#include "ccs-limits.h"
- 
- static uint32_t float_to_u32_mul_1000000(struct i2c_client *client,
- 					 uint32_t phloat)
-@@ -143,12 +144,30 @@ unsigned int ccs_reg_width(u32 reg)
- 	return sizeof(uint8_t);
+@@ -198,11 +198,67 @@ static int __ccs_read_addr(struct ccs_sensor *sensor, u32 reg, u32 *val,
+ 	return 0;
  }
  
-+static u32 ireal32_to_u32_mul_1000000(struct i2c_client *client, u32 val)
++static int __ccs_read_data(struct ccs_reg *regs, size_t num_regs,
++			   u32 reg, u32 *val)
 +{
-+	if (val >> 10 > U32_MAX / 15625) {
-+		dev_warn(&client->dev, "value %u overflows!\n", val);
-+		return U32_MAX;
++	unsigned int width = ccs_reg_width(reg);
++	size_t i;
++
++	for (i = 0; i < num_regs; i++, regs++) {
++		uint8_t *data;
++
++		if (regs->addr + regs->len < CCS_REG_ADDR(reg) + width)
++			continue;
++
++		if (regs->addr > CCS_REG_ADDR(reg))
++			break;
++
++		data = &regs->value[CCS_REG_ADDR(reg) - regs->addr];
++
++		switch (width) {
++		case sizeof(uint8_t):
++			*val = *data;
++			break;
++		case sizeof(uint16_t):
++			*val = get_unaligned_be16(data);
++			break;
++		case sizeof(uint32_t):
++			*val = get_unaligned_be32(data);
++			break;
++		default:
++			WARN_ON(1);
++			return -EINVAL;
++		}
++
++		return 0;
 +	}
 +
-+	return ((val >> 10) * 15625) +
-+		(val & GENMASK(9, 0)) * 15625 / 1024;
++	return -ENOENT;
 +}
 +
- u32 ccs_reg_conv(struct ccs_sensor *sensor, u32 reg, u32 val)
++static int ccs_read_data(struct ccs_sensor *sensor, u32 reg, u32 *val)
++{
++	if (!__ccs_read_data(sensor->sdata.sensor_read_only_regs,
++			     sensor->sdata.num_sensor_read_only_regs,
++			     reg, val))
++		return 0;
++
++	return __ccs_read_data(sensor->mdata.module_read_only_regs,
++			       sensor->mdata.num_module_read_only_regs,
++			       reg, val);
++}
++
+ static int ccs_read_addr_raw(struct ccs_sensor *sensor, u32 reg, u32 *val,
+-			     bool force8, bool quirk, bool conv)
++			     bool force8, bool quirk, bool conv, bool data)
  {
- 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
+ 	int rval;
  
--	if (reg & CCS_FL_FLOAT_IREAL)
--		val = float_to_u32_mul_1000000(client, val);
-+	if (reg & CCS_FL_FLOAT_IREAL) {
-+		if (CCS_LIM(sensor, CLOCK_CAPA_TYPE_CAPABILITY) &
-+		    CCS_CLOCK_CAPA_TYPE_CAPABILITY_IREAL)
-+			val = ireal32_to_u32_mul_1000000(client, val);
-+		else
-+			val = float_to_u32_mul_1000000(client, val);
-+	} else if (reg & CCS_FL_IREAL) {
-+		val = ireal32_to_u32_mul_1000000(client, val);
++	if (data) {
++		rval = ccs_read_data(sensor, reg, val);
++		if (!rval)
++			return 0;
 +	}
++
+ 	if (quirk) {
+ 		*val = 0;
+ 		rval = ccs_call_quirk(sensor, reg_access, false, &reg, val);
+@@ -223,17 +279,17 @@ static int ccs_read_addr_raw(struct ccs_sensor *sensor, u32 reg, u32 *val,
  
- 	return val;
+ int ccs_read_addr(struct ccs_sensor *sensor, u32 reg, u32 *val)
+ {
+-	return ccs_read_addr_raw(sensor, reg, val, false, true, true);
++	return ccs_read_addr_raw(sensor, reg, val, false, true, true, true);
  }
-diff --git a/drivers/media/i2c/ccs/ccs.h b/drivers/media/i2c/ccs/ccs.h
-index cbcd93b519da..f60d1801c469 100644
---- a/drivers/media/i2c/ccs/ccs.h
-+++ b/drivers/media/i2c/ccs/ccs.h
-@@ -17,6 +17,7 @@
- #include <media/v4l2-subdev.h>
  
- #include "ccs-data.h"
-+#include "ccs-limits.h"
- #include "ccs-quirk.h"
- #include "ccs-regs.h"
- #include "ccs-reg-access.h"
-@@ -50,6 +51,12 @@
- #define CCS_DFL_I2C_ADDR	(0x20 >> 1) /* Default I2C Address */
- #define CCS_ALT_I2C_ADDR	(0x6e >> 1) /* Alternate I2C Address */
+ int ccs_read_addr_8only(struct ccs_sensor *sensor, u32 reg, u32 *val)
+ {
+-	return ccs_read_addr_raw(sensor, reg, val, true, true, true);
++	return ccs_read_addr_raw(sensor, reg, val, true, true, true, true);
+ }
  
-+#define CCS_LIM(sensor, limit) \
-+	ccs_get_limit(sensor, CCS_L_##limit, 0)
-+
-+#define CCS_LIM_AT(sensor, limit, offset)	\
-+	ccs_get_limit(sensor, CCS_L_##limit, CCS_L_##limit##_OFFSET(offset))
-+
- /*
-  * Sometimes due to board layout considerations the camera module can be
-  * mounted rotated. The typical rotation used is 180 degrees which can be
-@@ -277,5 +284,7 @@ struct ccs_sensor {
+ int ccs_read_addr_noconv(struct ccs_sensor *sensor, u32 reg, u32 *val)
+ {
+-	return ccs_read_addr_raw(sensor, reg, val, false, true, false);
++	return ccs_read_addr_raw(sensor, reg, val, false, true, false, true);
+ }
  
- void ccs_replace_limit(struct ccs_sensor *sensor,
- 		       unsigned int limit, unsigned int offset, u32 val);
-+u32 ccs_get_limit(struct ccs_sensor *sensor, unsigned int limit,
-+		  unsigned int offset);
- 
- #endif /* __CCS_H__ */
+ static int ccs_write_retry(struct i2c_client *client, struct i2c_msg *msg)
 -- 
 2.27.0
 
