@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77B51C47420
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:30:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71428C4727E
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:30:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 481902137B
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:30:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 400FA2158C
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:30:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731148AbgI3PaD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Sep 2020 11:30:03 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:44670 "EHLO
+        id S1730959AbgI3PaF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Sep 2020 11:30:05 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:44650 "EHLO
         hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730969AbgI3P3I (ORCPT
+        with ESMTP id S1730967AbgI3P3I (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 30 Sep 2020 11:29:08 -0400
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id CC564634CD5
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 92A8A634CD1
         for <linux-media@vger.kernel.org>; Wed, 30 Sep 2020 18:28:49 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH 039/100] ccs: Make real to integer number conversion optional
-Date:   Wed, 30 Sep 2020 18:27:57 +0300
-Message-Id: <20200930152858.8471-40-sakari.ailus@linux.intel.com>
+Subject: [PATCH 036/100] ccs: The functions to get compose or crop rectangle never return NULL
+Date:   Wed, 30 Sep 2020 18:27:54 +0300
+Message-Id: <20200930152858.8471-37-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200930152858.8471-1-sakari.ailus@linux.intel.com>
 References: <20200930152858.8471-1-sakari.ailus@linux.intel.com>
@@ -37,115 +37,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The limit values will be raw soon, and the conversion takes place later
-on. Prepare for that.
+The NULL check is not needed as the functions do not return NULL. Remove
+the check (and BUG).
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-reg-access.c | 35 +++++++++++++++++++-------
- drivers/media/i2c/ccs/ccs-reg-access.h |  2 ++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ drivers/media/i2c/ccs/ccs-core.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/i2c/ccs/ccs-reg-access.c b/drivers/media/i2c/ccs/ccs-reg-access.c
-index abec746f3c93..fe6112cba6be 100644
---- a/drivers/media/i2c/ccs/ccs-reg-access.c
-+++ b/drivers/media/i2c/ccs/ccs-reg-access.c
-@@ -143,14 +143,23 @@ unsigned int ccs_reg_width(u32 reg)
- 	return sizeof(uint8_t);
- }
- 
-+u32 ccs_reg_conv(struct ccs_sensor *sensor, u32 reg, u32 val)
-+{
-+	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
-+
-+	if (reg & CCS_FL_FLOAT_IREAL)
-+		val = float_to_u32_mul_1000000(client, val);
-+
-+	return val;
-+}
-+
- /*
-  * Read a 8/16/32-bit i2c register.  The value is returned in 'val'.
-  * Returns zero if successful, or non-zero otherwise.
-  */
- static int __ccs_read_addr(struct ccs_sensor *sensor, u32 reg, u32 *val,
--			   bool only8)
-+			   bool only8, bool conv)
- {
--	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
- 	unsigned int len = ccs_reg_width(reg);
- 	int rval;
- 
-@@ -162,14 +171,16 @@ static int __ccs_read_addr(struct ccs_sensor *sensor, u32 reg, u32 *val,
- 	if (rval < 0)
- 		return rval;
- 
--	if (reg & CCS_FL_FLOAT_IREAL)
--		*val = float_to_u32_mul_1000000(client, *val);
-+	if (!conv)
-+		return 0;
-+
-+	*val = ccs_reg_conv(sensor, reg, *val);
- 
- 	return 0;
- }
- 
- static int ccs_read_addr_raw(struct ccs_sensor *sensor, u32 reg, u32 *val,
--			     bool force8, bool quirk)
-+			     bool force8, bool quirk, bool conv)
- {
- 	int rval;
- 
-@@ -182,22 +193,28 @@ static int ccs_read_addr_raw(struct ccs_sensor *sensor, u32 reg, u32 *val,
- 			return rval;
- 
- 		if (force8)
--			return __ccs_read_addr(sensor, reg, val, true);
-+			return __ccs_read_addr(sensor, reg, val, true, conv);
+diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
+index 4c08e2d1d94c..9a3d7131cd10 100644
+--- a/drivers/media/i2c/ccs/ccs-core.c
++++ b/drivers/media/i2c/ccs/ccs-core.c
+@@ -1760,16 +1760,12 @@ static void ccs_get_crop_compose(struct v4l2_subdev *subdev,
+ 			*comps = &ssd->compose;
+ 	} else {
+ 		if (crops) {
+-			for (i = 0; i < subdev->entity.num_pads; i++) {
++			for (i = 0; i < subdev->entity.num_pads; i++)
+ 				crops[i] = v4l2_subdev_get_try_crop(subdev, cfg, i);
+-				BUG_ON(!crops[i]);
+-			}
+ 		}
+-		if (comps) {
++		if (comps)
+ 			*comps = v4l2_subdev_get_try_compose(subdev, cfg,
+ 							     CCS_PAD_SINK);
+-			BUG_ON(!*comps);
+-		}
  	}
- 
- 	return __ccs_read_addr(sensor, reg, val,
- 			       ccs_needs_quirk(sensor,
--					       CCS_QUIRK_FLAG_8BIT_READ_ONLY));
-+					       CCS_QUIRK_FLAG_8BIT_READ_ONLY),
-+			       conv);
  }
  
- int ccs_read_addr(struct ccs_sensor *sensor, u32 reg, u32 *val)
- {
--	return ccs_read_addr_raw(sensor, reg, val, false, true);
-+	return ccs_read_addr_raw(sensor, reg, val, false, true, true);
- }
- 
- int ccs_read_addr_8only(struct ccs_sensor *sensor, u32 reg, u32 *val)
- {
--	return ccs_read_addr_raw(sensor, reg, val, true, true);
-+	return ccs_read_addr_raw(sensor, reg, val, true, true, true);
-+}
-+
-+int ccs_read_addr_noconv(struct ccs_sensor *sensor, u32 reg, u32 *val)
-+{
-+	return ccs_read_addr_raw(sensor, reg, val, false, true, false);
- }
- 
- int ccs_write_addr_no_quirk(struct ccs_sensor *sensor, u32 reg, u32 val)
-diff --git a/drivers/media/i2c/ccs/ccs-reg-access.h b/drivers/media/i2c/ccs/ccs-reg-access.h
-index 9fdf5659ed09..5f6ff9c57698 100644
---- a/drivers/media/i2c/ccs/ccs-reg-access.h
-+++ b/drivers/media/i2c/ccs/ccs-reg-access.h
-@@ -24,10 +24,12 @@ struct ccs_sensor;
- int ccs_read_addr_no_quirk(struct ccs_sensor *sensor, u32 reg, u32 *val);
- int ccs_read_addr(struct ccs_sensor *sensor, u32 reg, u32 *val);
- int ccs_read_addr_8only(struct ccs_sensor *sensor, u32 reg, u32 *val);
-+int ccs_read_addr_noconv(struct ccs_sensor *sensor, u32 reg, u32 *val);
- int ccs_write_addr_no_quirk(struct ccs_sensor *sensor, u32 reg, u32 val);
- int ccs_write_addr(struct ccs_sensor *sensor, u32 reg, u32 val);
- 
- unsigned int ccs_reg_width(u32 reg);
-+u32 ccs_reg_conv(struct ccs_sensor *sensor, u32 reg, u32 val);
- 
- #define ccs_read(sensor, reg_name, val) \
- 	ccs_read_addr(sensor, CCS_R_##reg_name, val)
 -- 
 2.27.0
 
