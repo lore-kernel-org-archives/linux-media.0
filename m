@@ -2,159 +2,104 @@ Return-Path: <SRS0=fdi2=DH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4ED0DC4727E
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:30:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98980C47420
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:53:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 08B2622574
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:30:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 30F70206D4
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:53:01 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=sslab.ics.keio.ac.jp header.i=@sslab.ics.keio.ac.jp header.b="M7Rpj6Hk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731203AbgI3Paj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Sep 2020 11:30:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
+        id S1728729AbgI3Pw6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Sep 2020 11:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730198AbgI3P3A (ORCPT
+        with ESMTP id S1725892AbgI3Pw6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Sep 2020 11:29:00 -0400
-Received: from hillosipuli.retiisi.eu (hillosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::81:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6436C0613D1
-        for <linux-media@vger.kernel.org>; Wed, 30 Sep 2020 08:29:00 -0700 (PDT)
-Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 2CA35634C8C
-        for <linux-media@vger.kernel.org>; Wed, 30 Sep 2020 18:28:46 +0300 (EEST)
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Subject: [PATCH 002/100] smiapp: Use CCS register flags
-Date:   Wed, 30 Sep 2020 18:27:20 +0300
-Message-Id: <20200930152858.8471-3-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200930152858.8471-1-sakari.ailus@linux.intel.com>
-References: <20200930152858.8471-1-sakari.ailus@linux.intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Wed, 30 Sep 2020 11:52:58 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB197C0613D0
+        for <linux-media@vger.kernel.org>; Wed, 30 Sep 2020 08:52:58 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id bb1so1281707plb.2
+        for <linux-media@vger.kernel.org>; Wed, 30 Sep 2020 08:52:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sslab.ics.keio.ac.jp; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=/xkIWni8SgM73BFi4hmvbWE+41W2IJ3UZaLFsKLGrO0=;
+        b=M7Rpj6HkNrkx/NYoCjDpdd8guTiZAXIj1AzQyO7qCGRK1o1otWJB44tKHxsiBiTlxk
+         Xt1q0quZP6YK9skgCohk66ZUEO50v+aOJV828C7ZjkbTD9Y1gxqmsUjpH7mNINOsXtA1
+         53v+cY61EOY6HKy9dydKEOy/FaWxa5SNmrWAs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=/xkIWni8SgM73BFi4hmvbWE+41W2IJ3UZaLFsKLGrO0=;
+        b=p07PvI5ht/z6y9VfHhiwsXaJjpHUIlJXyWmfSzX4WzeZTi83crMoDYyi0yRtg2T5Mm
+         m5900khTZ/nsD6NJQ/X7FYiTlBr9D8jSREo5M3h8u247IcjhHAfLVPi+n/6mySy5QkSW
+         n2Uz1bo2H4g2kcEWx6SRb5w68yxm4BxiTkgxFO1HkTE9zBxPncwX45/oRV/DVdR+qg2b
+         Nn20Co0LC2qUuz7M7r1EPS847UVFik62+szmEYwrEladoW4BTLYlf+WfbdJBffoNm4qR
+         PJOICWKJbC/1eukn0HaDMUoigFWWwoCnsrGn6MFW/V1i69A/lqmRsiCrVkVWBC2n6D4e
+         dIzA==
+X-Gm-Message-State: AOAM5337xr+KkF4OZ/hzknZ22UmugTCeycw00f28HleIzFih+jjQyns9
+        0CahPpM9q/FDnii2tNGqeocERQ==
+X-Google-Smtp-Source: ABdhPJxan0UpaLux6JIjM9Vs6ukVwn7rRVFayoREveaALuHTa6YagFd00MEr3S9yFKisVPQ0l1dC5w==
+X-Received: by 2002:a17:902:9047:b029:d2:8d1f:1629 with SMTP id w7-20020a1709029047b02900d28d1f1629mr3229942plz.44.1601481178259;
+        Wed, 30 Sep 2020 08:52:58 -0700 (PDT)
+Received: from brooklyn.i.sslab.ics.keio.ac.jp (sslab-relay.ics.keio.ac.jp. [131.113.126.173])
+        by smtp.googlemail.com with ESMTPSA id z28sm3142765pfq.81.2020.09.30.08.52.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Sep 2020 08:52:57 -0700 (PDT)
+From:   Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>
+Cc:     keitasuzuki.park@sslab.ics.keio.ac.jp,
+        takafumi@sslab.ics.keio.ac.jp,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RESEND PATCH] media: siano: fix memory leak of debugfs members in smsdvb_hotplug
+Date:   Wed, 30 Sep 2020 15:52:38 +0000
+Message-Id: <20200930155244.12114-1-keitasuzuki.park@sslab.ics.keio.ac.jp>
+X-Mailer: git-send-email 2.17.1
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use the CCS register flags instead of the old smia flags. The
-new flags include the register width information that was separate from
-the register flags previously.
+When dvb_create_media_graph fails, the debugfs kept inside client should
+be released. However, the current implementation does not release them.
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Fix this by adding a new goto label to call smsdvb_debugfs_release.
+
+Fixes: 0d3ab8410dcb ("[media] dvb core: must check dvb_create_media_graph()")
+Signed-off-by: Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>
 ---
- drivers/media/i2c/smiapp/smiapp-reg-defs.h |  8 ++++----
- drivers/media/i2c/smiapp/smiapp-regs.c     | 20 +++++++++++++-------
- drivers/media/i2c/smiapp/smiapp-regs.h     | 13 ++++---------
- 3 files changed, 21 insertions(+), 20 deletions(-)
+ drivers/media/common/siano/smsdvb-main.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/smiapp/smiapp-reg-defs.h b/drivers/media/i2c/smiapp/smiapp-reg-defs.h
-index 865488befc09..ec574007908b 100644
---- a/drivers/media/i2c/smiapp/smiapp-reg-defs.h
-+++ b/drivers/media/i2c/smiapp/smiapp-reg-defs.h
-@@ -7,11 +7,11 @@
-  * Copyright (C) 2011--2012 Nokia Corporation
-  * Contact: Sakari Ailus <sakari.ailus@iki.fi>
-  */
--#define SMIAPP_REG_MK_U8(r) ((SMIAPP_REG_8BIT << 16) | (r))
--#define SMIAPP_REG_MK_U16(r) ((SMIAPP_REG_16BIT << 16) | (r))
--#define SMIAPP_REG_MK_U32(r) ((SMIAPP_REG_32BIT << 16) | (r))
-+#define SMIAPP_REG_MK_U8(r)	(r)
-+#define SMIAPP_REG_MK_U16(r)	(CCS_FL_16BIT | (r))
-+#define SMIAPP_REG_MK_U32(r)	(CCS_FL_32BIT | (r))
+diff --git a/drivers/media/common/siano/smsdvb-main.c b/drivers/media/common/siano/smsdvb-main.c
+index 88f90dfd368b..ae17407e477a 100644
+--- a/drivers/media/common/siano/smsdvb-main.c
++++ b/drivers/media/common/siano/smsdvb-main.c
+@@ -1169,12 +1169,15 @@ static int smsdvb_hotplug(struct smscore_device_t *coredev,
+ 	rc = dvb_create_media_graph(&client->adapter, true);
+ 	if (rc < 0) {
+ 		pr_err("dvb_create_media_graph failed %d\n", rc);
+-		goto client_error;
++		goto media_graph_error;
+ 	}
  
--#define SMIAPP_REG_MK_F32(r) (SMIAPP_REG_FLAG_FLOAT | (SMIAPP_REG_32BIT << 16) | (r))
-+#define SMIAPP_REG_MK_F32(r)	(CCS_FL_FLOAT_IREAL | CCS_FL_32BIT | (r))
- 
- #define SMIAPP_REG_U16_MODEL_ID					SMIAPP_REG_MK_U16(0x0000)
- #define SMIAPP_REG_U8_REVISION_NUMBER_MAJOR			SMIAPP_REG_MK_U8(0x0002)
-diff --git a/drivers/media/i2c/smiapp/smiapp-regs.c b/drivers/media/i2c/smiapp/smiapp-regs.c
-index 1b58b7c6c839..904054d303ba 100644
---- a/drivers/media/i2c/smiapp/smiapp-regs.c
-+++ b/drivers/media/i2c/smiapp/smiapp-regs.c
-@@ -133,6 +133,16 @@ static int ____smiapp_read_8only(struct smiapp_sensor *sensor, u16 reg,
+ 	pr_info("DVB interface registered.\n");
  	return 0;
- }
  
-+unsigned int ccs_reg_width(u32 reg)
-+{
-+	if (reg & CCS_FL_16BIT)
-+		return sizeof(uint16_t);
-+	if (reg & CCS_FL_32BIT)
-+		return sizeof(uint32_t);
++media_graph_error:
++	smsdvb_debugfs_release(client);
 +
-+	return sizeof(uint8_t);
-+}
-+
- /*
-  * Read a 8/16/32-bit i2c register.  The value is returned in 'val'.
-  * Returns zero if successful, or non-zero otherwise.
-@@ -141,13 +151,9 @@ static int __smiapp_read(struct smiapp_sensor *sensor, u32 reg, u32 *val,
- 			 bool only8)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
--	u8 len = SMIAPP_REG_WIDTH(reg);
-+	unsigned int len = ccs_reg_width(reg);
- 	int rval;
+ client_error:
+ 	dvb_unregister_frontend(&client->frontend);
  
--	if (len != SMIAPP_REG_8BIT && len != SMIAPP_REG_16BIT
--	    && len != SMIAPP_REG_32BIT)
--		return -EINVAL;
--
- 	if (!only8)
- 		rval = ____smiapp_read(sensor, SMIAPP_REG_ADDR(reg), len, val);
- 	else
-@@ -156,7 +162,7 @@ static int __smiapp_read(struct smiapp_sensor *sensor, u32 reg, u32 *val,
- 	if (rval < 0)
- 		return rval;
- 
--	if (reg & SMIAPP_REG_FLAG_FLOAT)
-+	if (reg & CCS_FL_FLOAT_IREAL)
- 		*val = float_to_u32_mul_1000000(client, *val);
- 
- 	return 0;
-@@ -204,7 +210,7 @@ int smiapp_write_no_quirk(struct smiapp_sensor *sensor, u32 reg, u32 val)
- 	struct i2c_msg msg;
- 	unsigned char data[6];
- 	unsigned int retries;
--	u8 len = SMIAPP_REG_WIDTH(reg);
-+	unsigned int len = ccs_reg_width(reg);
- 	int r;
- 
- 	if (len > sizeof(data) - 2)
-diff --git a/drivers/media/i2c/smiapp/smiapp-regs.h b/drivers/media/i2c/smiapp/smiapp-regs.h
-index 8fda6ed5668c..7223f5f89109 100644
---- a/drivers/media/i2c/smiapp/smiapp-regs.h
-+++ b/drivers/media/i2c/smiapp/smiapp-regs.h
-@@ -14,16 +14,9 @@
- #include <linux/i2c.h>
- #include <linux/types.h>
- 
--#define SMIAPP_REG_ADDR(reg)		((u16)reg)
--#define SMIAPP_REG_WIDTH(reg)		((u8)(reg >> 16))
--#define SMIAPP_REG_FLAGS(reg)		((u8)(reg >> 24))
--
--/* Use upper 8 bits of the type field for flags */
--#define SMIAPP_REG_FLAG_FLOAT		(1 << 24)
-+#include "ccs-regs.h"
- 
--#define SMIAPP_REG_8BIT			1
--#define SMIAPP_REG_16BIT		2
--#define SMIAPP_REG_32BIT		4
-+#define SMIAPP_REG_ADDR(reg)		((u16)reg)
- 
- struct smiapp_sensor;
- 
-@@ -33,4 +26,6 @@ int smiapp_read_8only(struct smiapp_sensor *sensor, u32 reg, u32 *val);
- int smiapp_write_no_quirk(struct smiapp_sensor *sensor, u32 reg, u32 val);
- int smiapp_write(struct smiapp_sensor *sensor, u32 reg, u32 val);
- 
-+unsigned int ccs_reg_width(u32 reg);
-+
- #endif
 -- 
-2.27.0
+2.17.1
 
