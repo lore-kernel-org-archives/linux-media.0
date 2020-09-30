@@ -2,104 +2,105 @@ Return-Path: <SRS0=fdi2=DH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98980C47420
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:53:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27751C47420
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 16:09:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 30F70206D4
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 15:53:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AD20420789
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 16:09:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=sslab.ics.keio.ac.jp header.i=@sslab.ics.keio.ac.jp header.b="M7Rpj6Hk"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="P3xuRpLp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728729AbgI3Pw6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Sep 2020 11:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45988 "EHLO
+        id S1731101AbgI3QJi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Sep 2020 12:09:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725892AbgI3Pw6 (ORCPT
+        with ESMTP id S1731074AbgI3QJh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Sep 2020 11:52:58 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB197C0613D0
-        for <linux-media@vger.kernel.org>; Wed, 30 Sep 2020 08:52:58 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id bb1so1281707plb.2
-        for <linux-media@vger.kernel.org>; Wed, 30 Sep 2020 08:52:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sslab.ics.keio.ac.jp; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=/xkIWni8SgM73BFi4hmvbWE+41W2IJ3UZaLFsKLGrO0=;
-        b=M7Rpj6HkNrkx/NYoCjDpdd8guTiZAXIj1AzQyO7qCGRK1o1otWJB44tKHxsiBiTlxk
-         Xt1q0quZP6YK9skgCohk66ZUEO50v+aOJV828C7ZjkbTD9Y1gxqmsUjpH7mNINOsXtA1
-         53v+cY61EOY6HKy9dydKEOy/FaWxa5SNmrWAs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=/xkIWni8SgM73BFi4hmvbWE+41W2IJ3UZaLFsKLGrO0=;
-        b=p07PvI5ht/z6y9VfHhiwsXaJjpHUIlJXyWmfSzX4WzeZTi83crMoDYyi0yRtg2T5Mm
-         m5900khTZ/nsD6NJQ/X7FYiTlBr9D8jSREo5M3h8u247IcjhHAfLVPi+n/6mySy5QkSW
-         n2Uz1bo2H4g2kcEWx6SRb5w68yxm4BxiTkgxFO1HkTE9zBxPncwX45/oRV/DVdR+qg2b
-         Nn20Co0LC2qUuz7M7r1EPS847UVFik62+szmEYwrEladoW4BTLYlf+WfbdJBffoNm4qR
-         PJOICWKJbC/1eukn0HaDMUoigFWWwoCnsrGn6MFW/V1i69A/lqmRsiCrVkVWBC2n6D4e
-         dIzA==
-X-Gm-Message-State: AOAM5337xr+KkF4OZ/hzknZ22UmugTCeycw00f28HleIzFih+jjQyns9
-        0CahPpM9q/FDnii2tNGqeocERQ==
-X-Google-Smtp-Source: ABdhPJxan0UpaLux6JIjM9Vs6ukVwn7rRVFayoREveaALuHTa6YagFd00MEr3S9yFKisVPQ0l1dC5w==
-X-Received: by 2002:a17:902:9047:b029:d2:8d1f:1629 with SMTP id w7-20020a1709029047b02900d28d1f1629mr3229942plz.44.1601481178259;
-        Wed, 30 Sep 2020 08:52:58 -0700 (PDT)
-Received: from brooklyn.i.sslab.ics.keio.ac.jp (sslab-relay.ics.keio.ac.jp. [131.113.126.173])
-        by smtp.googlemail.com with ESMTPSA id z28sm3142765pfq.81.2020.09.30.08.52.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Sep 2020 08:52:57 -0700 (PDT)
-From:   Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>
-Cc:     keitasuzuki.park@sslab.ics.keio.ac.jp,
-        takafumi@sslab.ics.keio.ac.jp,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH] media: siano: fix memory leak of debugfs members in smsdvb_hotplug
-Date:   Wed, 30 Sep 2020 15:52:38 +0000
-Message-Id: <20200930155244.12114-1-keitasuzuki.park@sslab.ics.keio.ac.jp>
-X-Mailer: git-send-email 2.17.1
-To:     unlisted-recipients:; (no To-header on input)
+        Wed, 30 Sep 2020 12:09:37 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241E9C0613D0;
+        Wed, 30 Sep 2020 09:09:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description;
+        bh=jLVH2ETUcna4vnSJJM6qywpgQCBtyE661AcFkWsPNQc=; b=P3xuRpLpWkE6u3BGD3WvuVniKG
+        aCLFBV/3BO8MRlfymLp6EYoYWaJKOi3sDy8xSAcdLIQon++6H2oEFkBJl22oNVEG5rJXr5NabZFML
+        LSxzhjXq9CzGRjzdKjCMmbnQsoq7H4C1AQYThJOjWCPwVE/W7YOgEiYUk7jb8QDaxiKmM4pkI2JDN
+        gVlveu0fpxAFqCweZzvqmpgA0yGT3KP+lz0wbFbyVAFtoLHlFRxa6v7SF8bV4FVGvXeEawkjaI1r0
+        uCQy4mWJlE9d4k6Lv/wNJMHdNhtEyW9NBA1XvdjHzweDMC+sFSChe+gxXfai2OeNX9yi2YKN07Ea5
+        qVyfOXGQ==;
+Received: from [2001:4bb8:180:7b62:c70:4a89:bc61:4] (helo=localhost)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kNefb-0003E1-2j; Wed, 30 Sep 2020 16:09:31 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        iommu@lists.linux-foundation.org
+Cc:     Robin Murphy <robin.murphy@arm.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 7/8] dma-iommu: remove __iommu_dma_mmap
+Date:   Wed, 30 Sep 2020 18:09:16 +0200
+Message-Id: <20200930160917.1234225-8-hch@lst.de>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200930160917.1234225-1-hch@lst.de>
+References: <20200930160917.1234225-1-hch@lst.de>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When dvb_create_media_graph fails, the debugfs kept inside client should
-be released. However, the current implementation does not release them.
+The function has a single caller, so open code it there and take
+advantage of the precalculated page count variable.
 
-Fix this by adding a new goto label to call smsdvb_debugfs_release.
-
-Fixes: 0d3ab8410dcb ("[media] dvb core: must check dvb_create_media_graph()")
-Signed-off-by: Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- drivers/media/common/siano/smsdvb-main.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/iommu/dma-iommu.c | 17 +----------------
+ 1 file changed, 1 insertion(+), 16 deletions(-)
 
-diff --git a/drivers/media/common/siano/smsdvb-main.c b/drivers/media/common/siano/smsdvb-main.c
-index 88f90dfd368b..ae17407e477a 100644
---- a/drivers/media/common/siano/smsdvb-main.c
-+++ b/drivers/media/common/siano/smsdvb-main.c
-@@ -1169,12 +1169,15 @@ static int smsdvb_hotplug(struct smscore_device_t *coredev,
- 	rc = dvb_create_media_graph(&client->adapter, true);
- 	if (rc < 0) {
- 		pr_err("dvb_create_media_graph failed %d\n", rc);
--		goto client_error;
-+		goto media_graph_error;
- 	}
+diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+index b363b20a9f41ce..7922f545cd5eef 100644
+--- a/drivers/iommu/dma-iommu.c
++++ b/drivers/iommu/dma-iommu.c
+@@ -656,21 +656,6 @@ static void *iommu_dma_alloc_remap(struct device *dev, size_t size,
+ 	return NULL;
+ }
  
- 	pr_info("DVB interface registered.\n");
- 	return 0;
+-/**
+- * __iommu_dma_mmap - Map a buffer into provided user VMA
+- * @pages: Array representing buffer from __iommu_dma_alloc()
+- * @size: Size of buffer in bytes
+- * @vma: VMA describing requested userspace mapping
+- *
+- * Maps the pages of the buffer in @pages into @vma. The caller is responsible
+- * for verifying the correct size and protection of @vma beforehand.
+- */
+-static int __iommu_dma_mmap(struct page **pages, size_t size,
+-		struct vm_area_struct *vma)
+-{
+-	return vm_map_pages(vma, pages, PAGE_ALIGN(size) >> PAGE_SHIFT);
+-}
+-
+ static void iommu_dma_sync_single_for_cpu(struct device *dev,
+ 		dma_addr_t dma_handle, size_t size, enum dma_data_direction dir)
+ {
+@@ -1075,7 +1060,7 @@ static int iommu_dma_mmap(struct device *dev, struct vm_area_struct *vma,
+ 		struct page **pages = dma_common_find_pages(cpu_addr);
  
-+media_graph_error:
-+	smsdvb_debugfs_release(client);
-+
- client_error:
- 	dvb_unregister_frontend(&client->frontend);
- 
+ 		if (pages)
+-			return __iommu_dma_mmap(pages, size, vma);
++			return vm_map_pages(vma, pages, nr_pages);
+ 		pfn = vmalloc_to_pfn(cpu_addr);
+ 	} else {
+ 		pfn = page_to_pfn(virt_to_page(cpu_addr));
 -- 
-2.17.1
+2.28.0
 
