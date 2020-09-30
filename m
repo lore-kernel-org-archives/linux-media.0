@@ -2,76 +2,86 @@ Return-Path: <SRS0=fdi2=DH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40FD0C4727C
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 16:10:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53AEBC4727E
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 16:51:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E7B2C20888
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 16:10:07 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Lz8YfiSs"
+	by mail.kernel.org (Postfix) with ESMTP id F2A602076B
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 16:51:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728819AbgI3QJa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Sep 2020 12:09:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48550 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725372AbgI3QJa (ORCPT
+        id S1726476AbgI3Qu7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Sep 2020 12:50:59 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:51136 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725355AbgI3Qu7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Sep 2020 12:09:30 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4CC7C061755;
-        Wed, 30 Sep 2020 09:09:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=Bg6UAf5GmAebEK7LE0iET3qIkeB8RGO2JOGQCLfw5AE=; b=Lz8YfiSsW36fA+/kt+aQbTMK4P
-        K6o/6VxFcPIVfzsF7/V5PFlSQAKkt6d4r+ZOirMOoIRjFKB9lqo8WhU0Hng+I8LDD973uUBpOMAGx
-        aQMwUwC3BRYimqDyMZM2dY6a4XbNBQdmmocZs4mVYjF2+pbn6XFHehXz/ZnTPH3K8iP34Z0nfywAt
-        da+F4VpYkHW+B5fhZq6JvsQfEtHhrJ2CvaupP0jjgjLWxXMKo9+TGT6tRu2GfP8v6RZew9VPaEwJ1
-        j5smZJMasHuQ4SPX2i8LZyAYwhy8CDbLI54uncAOeXzaWjMPyILN2qmiwmq12V7bm5fj2KLNxLCs4
-        iB8QVggg==;
-Received: from [2001:4bb8:180:7b62:c70:4a89:bc61:4] (helo=localhost)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kNefP-0003CH-NZ; Wed, 30 Sep 2020 16:09:21 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        iommu@lists.linux-foundation.org
-Cc:     Robin Murphy <robin.murphy@arm.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: dma_alloc_pages / dma_alloc_noncoherent fixups
-Date:   Wed, 30 Sep 2020 18:09:09 +0200
-Message-Id: <20200930160917.1234225-1-hch@lst.de>
-X-Mailer: git-send-email 2.28.0
+        Wed, 30 Sep 2020 12:50:59 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: tonyk)
+        with ESMTPSA id 4FDA729CD77
+Subject: Re: [PATCH v4 22/52] docs: get rid of :c:type explicit declarations
+ for structs
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>,
+        "Theodore Y. Ts'o" <tytso@mit.edu>,
+        Alexandru Ardelean <alexandru.ardelean@analog.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Moritz Fischer <mdf@kernel.org>,
+        Puranjay Mohan <puranjay12@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Satya Tangirala <satyat@google.com>,
+        Takashi Iwai <tiwai@suse.com>, Tom Rix <trix@redhat.com>,
+        alsa-devel@alsa-project.org, linux-fpga@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mm@kvack.org
+References: <cover.1601467849.git.mchehab+huawei@kernel.org>
+ <f74a2b4e1c8c475b5a053f5edd9da5a818be4b1f.1601467849.git.mchehab+huawei@kernel.org>
+From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>
+Message-ID: <fd8bf973-3c22-a492-39e5-2164ce6724db@collabora.com>
+Date:   Wed, 30 Sep 2020 13:50:46 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
+In-Reply-To: <f74a2b4e1c8c475b5a053f5edd9da5a818be4b1f.1601467849.git.mchehab+huawei@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi all,
+On 9/30/20 10:24 AM, Mauro Carvalho Chehab wrote:
+> The :c:type:`foo` only works properly with structs before
+> Sphinx 3.x.
+> 
+> On Sphinx 3.x, structs should now be declared using the
+> .. c:struct, and referenced via :c:struct tag.
+> 
+> As we now have the automarkup.py macro, that automatically
+> convert:
+> 	struct foo
+> 
+> into cross-references, let's get rid of that, solving
+> several warnings when building docs with Sphinx 3.x.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> ---
+>  Documentation/block/blk-mq.rst                |  8 +++----
 
-this series has a bunch of fixups for the noncoherent DMA allocator
-rework that recently landed in linux-next.
+Regarding blk-mq.rst:
 
-I think the most important part is that the idea of vmap()ing
-non-contiguous allocations in dma_alloc_noncoherent doesn't work very
-well after all.  It means we can't just rely on virt_to_page to get
-the page and just use remap_pfn_range or stuff it into other APIs,
-but on the other hand it also isn't really generic enought for what
-the media APIs seems to want.
-
-So the first patch reverts that change, and the last patch suggests
-a different lower level API which should allow the media code to do
-all it wants.
-
-I'd suggest all but the last patch for the current merge window, and
-we should have a discussion on how well the last one suits the media
-subsystem, and probably merge it together with any media changes to
-use the required API.
+Reviewed-by: André Almeida <andrealmeid@collabora.com>
