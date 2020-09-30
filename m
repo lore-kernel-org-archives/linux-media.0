@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9127C4742A
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA229C4742B
 	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 20:19:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A1F3E20739
+	by mail.kernel.org (Postfix) with ESMTP id BCA4D2074B
 	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 20:19:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730441AbgI3UTS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Sep 2020 16:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59012 "EHLO
+        id S1730470AbgI3UTT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Sep 2020 16:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730117AbgI3UTR (ORCPT
+        with ESMTP id S1730453AbgI3UTT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Sep 2020 16:19:17 -0400
+        Wed, 30 Sep 2020 16:19:19 -0400
 Received: from hillosipuli.retiisi.eu (hillosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::81:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9A8C0613D2;
-        Wed, 30 Sep 2020 13:19:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B556DC0613D0;
+        Wed, 30 Sep 2020 13:19:18 -0700 (PDT)
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 74874634C8E;
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 9D1DB634C90;
         Wed, 30 Sep 2020 23:19:01 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     devicetree@vger.kernel.org
-Subject: [RESEND PATCH 023/100] dt-bindings: nokia,smia: Convert to YAML
-Date:   Wed, 30 Sep 2020 23:19:11 +0300
-Message-Id: <20200930201914.31377-5-sakari.ailus@linux.intel.com>
+Subject: [RESEND PATCH 025/100] dt-bindings: nokia,smia: Amend SMIA bindings with MIPI CCS support
+Date:   Wed, 30 Sep 2020 23:19:13 +0300
+Message-Id: <20200930201914.31377-7-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200930201914.31377-1-sakari.ailus@linux.intel.com>
 References: <20200930201914.31377-1-sakari.ailus@linux.intel.com>
@@ -41,245 +41,78 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Convert nokia,smia DT bindings to YAML.
-
-Also add explicit license to bindings.
+Amend the existing SMIA bindings by adding MIPI CCS support. Besides the
+compatible string, two new regulator supplies are added. Rename the old
+bindings accordingly as CCS is the current standard.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- .../bindings/media/i2c/nokia,smia.txt         |  68 --------
- .../bindings/media/i2c/nokia,smia.yaml        | 147 ++++++++++++++++++
- 2 files changed, 147 insertions(+), 68 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/media/i2c/nokia,smia.txt
- create mode 100644 Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml
+ .../i2c/{nokia,smia.yaml => mipi,ccs.yaml}     | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
+ rename Documentation/devicetree/bindings/media/i2c/{nokia,smia.yaml => mipi,ccs.yaml} (89%)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/nokia,smia.txt b/Documentation/devicetree/bindings/media/i2c/nokia,smia.txt
-deleted file mode 100644
-index 5ea4f799877b..000000000000
---- a/Documentation/devicetree/bindings/media/i2c/nokia,smia.txt
-+++ /dev/null
-@@ -1,68 +0,0 @@
--SMIA/SMIA++ sensor
--
--SMIA (Standard Mobile Imaging Architecture) is an image sensor standard
--defined jointly by Nokia and ST. SMIA++, defined by Nokia, is an extension
--of that. These definitions are valid for both types of sensors.
--
--More detailed documentation can be found in
--Documentation/devicetree/bindings/media/video-interfaces.txt .
--
--The device node should contain a "port" node which may contain one or more
--endpoint nodes, in accordance with video interface bindings defined in
--Documentation/devicetree/bindings/media/video-interfaces.txt .
--
--Mandatory properties
----------------------
--
--- compatible: "nokia,smia"
--- reg: I2C address (0x10, or an alternative address)
--- clocks: External clock to the sensor
--- clock-frequency: Frequency of the external clock to the sensor
--
--
--Optional properties
---------------------
--
--- reset-gpios: XSHUTDOWN GPIO
--- flash-leds: See ../video-interfaces.txt
--- lens-focus: See ../video-interfaces.txt
--- rotation: Integer property; valid values are 0 (sensor mounted upright)
--	    and 180 (sensor mounted upside down). See
--	    ../video-interfaces.txt .
--- vana-supply: Analogue voltage supply (VANA), typically 2,8 volts (sensor
--  dependent).
--
--
--Endpoint node mandatory properties
------------------------------------
--
--- data-lanes: <1..n>
--- link-frequencies: List of allowed data link frequencies. An array of
--  64-bit elements.
--
--
--Example
---------
--
--&i2c2 {
--	clock-frequency = <400000>;
--
--	camera-sensor@10 {
--		compatible = "nokia,smia";
--		reg = <0x10>;
--		reset-gpios = <&gpio3 20 0>;
--		vana-supply = <&vaux3>;
--		clocks = <&omap3_isp 0>;
--		clock-frequency = <9600000>;
--		nokia,nvm-size = <512>; /* 8 * 64 */
--		port {
--			smiapp_ep: endpoint {
--				data-lanes = <1 2>;
--				remote-endpoint = <&csi2a_ep>;
--				link-frequencies =
--					/bits/ 64 <199200000 210000000
--						   499200000>;
--			};
--		};
--	};
--};
-diff --git a/Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml b/Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml
-new file mode 100644
-index 000000000000..3d6f68b0e559
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml
-@@ -0,0 +1,147 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+# Copyright (C) 2014--2020 Intel Corporation
+diff --git a/Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml b/Documentation/devicetree/bindings/media/i2c/mipi,ccs.yaml
+similarity index 89%
+rename from Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml
+rename to Documentation/devicetree/bindings/media/i2c/mipi,ccs.yaml
+index d7de07e99008..6ac01ec8610c 100644
+--- a/Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml
++++ b/Documentation/devicetree/bindings/media/i2c/mipi,ccs.yaml
+@@ -1,26 +1,32 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ # Copyright (C) 2014--2020 Intel Corporation
+ 
+-$id: http://devicetree.org/schemas/media/i2c/nokia,smia.yaml#
++$id: http://devicetree.org/schemas/media/i2c/mipi,ccs.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: SMIA/SMIA++ sensor
++title: MIPI CCS, SMIA++ and SMIA compliant camera sensors
+ 
+ maintainers:
+   - Sakari Ailus <sakari.ailus@linux.intel.com>
+ 
+ description:
+ 
++  CCS (Camera Command Set) is a raw Bayer camera sensor standard defined by the
++  MIPI Alliance; see
++  <URL:https://www.mipi.org/specifications/camera-command-set>.
 +
-+$id: http://devicetree.org/schemas/media/i2c/nokia,smia.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: SMIA/SMIA++ sensor
-+
-+maintainers:
-+  - Sakari Ailus <sakari.ailus@linux.intel.com>
-+
-+description:
-+
-+  SMIA (Standard Mobile Imaging Architecture) is an image sensor standard
-+  defined jointly by Nokia and ST. SMIA++, defined by Nokia, is an extension of
-+  that. These definitions are valid for both types of sensors.
-+
-+  More detailed documentation can be found in
-+  Documentation/devicetree/bindings/media/video-interfaces.txt .
-+
-+properties:
-+  compatible:
-+    const: nokia,smia
-+
-+  reg:
-+    maxItems: 1
-+
-+  vana-supply:
-+    description: Analogue voltage supply (VANA), typically 2,8 volts (sensor
-+      dependent).
-+    maxItems: 1
-+
-+  clocks:
-+    description: External clock to the sensor.
-+    maxItems: 1
-+
-+  clock-frequency:
-+    description: Frequency of the external clock to the sensor.
-+
-+  reset-gpios:
-+    description: Reset GPIO. Also commonly called XSHUTDOWN in hardware
-+      documentation.
-+    maxItems: 1
-+
-+  flash-leds:
-+    description: Flash LED phandles. See ../video-interfaces.txt for details.
-+
-+  lens-focus:
-+    description: Lens focus controller phandles. See ../video-interfaces.txt
-+      for details.
-+
-+  rotation:
-+    description: Rotation; either 0 or 180 degrees.
-+
-+  port:
-+    type: object
-+    properties:
-+      endpoint:
-+        type: object
-+        properties:
-+          link-frequencies:
-+            $ref: /schemas/types.yaml#/definitions/uint64-array
-+            description: List of allowed data link frequencies. An array of
-+              64-bit elements.
-+          data-lanes:
-+            oneOf:
-+              - items:
-+                - const: 1
-+              - items:
-+                - const: 1
-+                - const: 2
-+              - items:
-+                - const: 1
-+                - const: 2
-+                - const: 3
-+              - items:
-+                - const: 1
-+                - const: 2
-+                - const: 3
-+                - const: 4
-+              - items:
-+                - const: 1
-+                - const: 2
-+                - const: 3
-+                - const: 4
-+                - const: 5
-+              - items:
-+                - const: 1
-+                - const: 2
-+                - const: 3
-+                - const: 4
-+                - const: 5
-+                - const: 6
-+              - items:
-+                - const: 1
-+                - const: 2
-+                - const: 3
-+                - const: 4
-+                - const: 5
-+                - const: 6
-+                - const: 7
-+              - items:
-+                - const: 1
-+                - const: 2
-+                - const: 3
-+                - const: 4
-+                - const: 5
-+                - const: 6
-+                - const: 7
-+                - const: 8
-+        required:
-+          - link-frequencies
-+          - data-lanes
-+
-+required:
-+  - compatible
-+  - reg
-+  - clock-frequency
-+  - clocks
-+
-+examples:
-+  - |
-+    i2c2 {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        clock-frequency = <400000>;
-+
-+        camera-sensor@10 {
-+            compatible = "nokia,smia";
-+            reg = <0x10>;
-+            reset-gpios = <&gpio3 20 0>;
-+            vana-supply = <&vaux3>;
-+            clocks = <&omap3_isp 0>;
-+            clock-frequency = <9600000>;
-+            nokia,nvm-size = <512>; /* 8 * 64 */
-+            port {
-+                smiapp_ep: endpoint {
-+                    data-lanes = <1 2>;
-+                    remote-endpoint = <&csi2a_ep>;
-+                    link-frequencies = /bits/ 64 <199200000 210000000
-+                                                  499200000>;
-+                };
-+            };
-+        };
-+    };
-+...
+   SMIA (Standard Mobile Imaging Architecture) is an image sensor standard
+   defined jointly by Nokia and ST. SMIA++, defined by Nokia, is an extension of
+-  that. These definitions are valid for both types of sensors.
++  that.
+ 
+   More detailed documentation can be found in
+   Documentation/devicetree/bindings/media/video-interfaces.txt .
+ 
+ properties:
+   compatible:
+-    const: nokia,smia
++    oneOf:
++      - const: mipi,ccs
++      - const: nokia,smia
+ 
+   reg:
+     maxItems: 1
+@@ -129,7 +135,7 @@ examples:
+         clock-frequency = <400000>;
+ 
+         camera-sensor@10 {
+-            compatible = "nokia,smia";
++            compatible = "mipi,ccs";
+             reg = <0x10>;
+             reset-gpios = <&gpio3 20 GPIO_ACTIVE_LOW>;
+             vana-supply = <&vaux3>;
+@@ -137,7 +143,7 @@ examples:
+             clock-frequency = <9600000>;
+             nokia,nvm-size = <512>; /* 8 * 64 */
+             port {
+-                smiapp_ep: endpoint {
++                ccs_ep: endpoint {
+                     data-lanes = <1 2>;
+                     remote-endpoint = <&csi2a_ep>;
+                     link-frequencies = /bits/ 64 <199200000 210000000
 -- 
 2.27.0
 
