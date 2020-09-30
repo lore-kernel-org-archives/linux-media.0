@@ -2,75 +2,81 @@ Return-Path: <SRS0=fdi2=DH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 573C7C4727C
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 03:00:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC6ECC2D0A8
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 03:36:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0C04420773
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 03:00:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0B59B20791
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 03:36:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="OA+S7Bz9"
+	dkim=pass (1024-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="xvEc0xCd"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729786AbgI3DAE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 29 Sep 2020 23:00:04 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:4218 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729446AbgI3DAD (ORCPT
+        id S1726064AbgI3Dgr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 29 Sep 2020 23:36:47 -0400
+Received: from mail-41104.protonmail.ch ([185.70.41.104]:12890 "EHLO
+        mail-41104.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725320AbgI3Dgr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 29 Sep 2020 23:00:03 -0400
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5f73f44e0002>; Tue, 29 Sep 2020 19:58:22 -0700
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 30 Sep
- 2020 03:00:02 +0000
-Received: from skomatineni-linux.nvidia.com (10.124.1.5) by mail.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
- Transport; Wed, 30 Sep 2020 03:00:02 +0000
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <hverkuil@xs4all.nl>
-CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>
-Subject: [PATCH v1 0/2] Allow building Tegra video driver with COMPILE_TEST
-Date:   Tue, 29 Sep 2020 20:02:36 -0700
-Message-ID: <1601434958-29305-1-git-send-email-skomatineni@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-X-NVConfidentiality: public
+        Tue, 29 Sep 2020 23:36:47 -0400
+Received: from mail-03.mail-europe.com (mail-03.mail-europe.com [91.134.188.129])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        by mail-41104.protonmail.ch (Postfix) with ESMTPS id 449472002ED1
+        for <linux-media@vger.kernel.org>; Wed, 30 Sep 2020 03:36:45 +0000 (UTC)
+Authentication-Results: mail-41104.protonmail.ch;
+        dkim=pass (1024-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="xvEc0xCd"
+Date:   Wed, 30 Sep 2020 03:36:35 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail; t=1601437001;
+        bh=pj69XHhWKsTp9SDJRyBelLvh+xgLtNcsNyXAZRyx7ug=;
+        h=Date:To:From:Reply-To:Subject:From;
+        b=xvEc0xCdxN7nXo/RYpClrtaJdDNrE/YPXxqUKcxCreQ4CXIJCIBBKXPvx2mExUNe8
+         xb4hyk83amfylT4zh5NsfWAA37MdklsOhyEfQuHaczlyG/4+EYTIzqiUDZZO/OD7uk
+         yCbCdcuT9xtSjq5vRhOXpQZbb7vsnb+KguckOudQ=
+To:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
+From:   DLK <daniel.lee.kruse@protonmail.com>
+Reply-To: DLK <daniel.lee.kruse@protonmail.com>
+Subject: [RFC] media: cx23885: reset DMA on AMD Family 15h (Models 30h-3fh) I/O Memory Management Unit due to RiSC engine stall
+Message-ID: <fBomE4kLpPNPTyJ7Zfg070Y5yx8DO2XdgZ978_HAdl7OhkJwJO5XNAIJybrQmrZ5Ixt4bS3ssarr409JKF_z2ip6faA_dhGp6_fuYn1KOV0=@protonmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1601434702; bh=1nqr4ua6fcvL3/8a5eNm1SxuTO2CagaFTIPMzrgRzIU=;
-        h=From:To:CC:Subject:Date:Message-ID:X-Mailer:X-NVConfidentiality:
-         MIME-Version:Content-Type;
-        b=OA+S7Bz99oAUP1W4RSA4rm04dSnO1ZYsNukV/Sdf7T0N5Cfq8fFT81x4AP0I6khUv
-         kdATBkrRQf0TDr0CtvlytiUZQfKj+17MKifgG9lOkkYNKOrqqv/wekMa6Xb//Ai0Zu
-         tQlvVpqmcE4++srxiSK2dWBvfRKpTP1jbSL/aDRSsThDaVAeGJTsxb8EasmB+cw9H2
-         dcdtVyh3dOeST4eZkT/yrYf+tdBHzMCJeJfCmFDDNFok1DjspausWcHC2mF0lMNmzr
-         1wvQxv0KNKtjXVJeO7xXuGToU3uQ6dwYziwAwL3hhp4F2GZbfEXkH1L4RJ2qjAQan3
-         8VUmdpXgAMrzw==
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series enables COMPILE_TEST for Tegra video driver.
+MythTV and w-scan won't scan channels on the AMD Kaveri APU with the Hauppa=
+uge
+QuadHD TV tuner card.
 
-Tegra video driver has dependency on host1x driver. So this series also
-includes a patch to allow building host1x driver with COMPILE_TEST for
-all platforms.
+For the solution I added the Input/Output Memory Management Unit's PCI Iden=
+tity
+of 0x1423 to the broken_dev_id[] array.
 
-Sowjanya Komatineni (2):
-  gpu: host1x: Allow COMPILE_TEST to build host1x driver on all
-    platforms
-  media: tegra-video: Allow building driver with COMPILE_TEST
+This patch is with the Linux 5.4.0-48-generic version of the kernel.
 
- drivers/gpu/host1x/Kconfig                | 2 +-
- drivers/staging/media/tegra-video/Kconfig | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Daniel Lee Kruse <daniel.lee.kruse@protonmail.com>
 
--- 
-2.7.4
+---
+diff --git a/drivers/media/pci/cx23885/cx23885-core.c b/drivers/media/pci/c=
+x23885/cx23885-core.c
+index 4b0c53f61fb7..4e8132d4b2df 100644
+--- a/drivers/media/pci/cx23885/cx23885-core.c
++++ b/drivers/media/pci/cx23885/cx23885-core.c
+@@ -2074,6 +2074,10 @@ static struct {
+         * 0x1451 is PCI ID for the IOMMU found on Ryzen
+         */
+        { PCI_VENDOR_ID_AMD, 0x1451 },
++       /* According to sudo lspci -nn,
++        * 0x1423 is the PCI ID for the IOMMU found on Kaveri
++        */
++       { PCI_VENDOR_ID_AMD, 0x1423 },
+ };
 
+ static bool cx23885_does_need_dma_reset(void)
