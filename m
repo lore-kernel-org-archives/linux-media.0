@@ -7,51 +7,49 @@ X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4FC2C4727F
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 06:36:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37132C4741F
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 06:36:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6A3212076A
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 06:36:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F3E532075F
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 06:36:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1601447786;
-	bh=6FbpSr2Z77TWm5cLFUNzD9WaCkeZQAoribfaCC5rs7k=;
+	s=default; t=1601447788;
+	bh=Rhqi3Xr5j3S4w5//6C1yLKFp1bK36UdJCSRITo3QGXk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=oBYSaQjkhbjkJtk7J0vT+pKCgkB1On2soU5/raCCcUQqWBKCScqBBbc9265LrQPuS
-	 Aybp3lCihUDB+c2/TheJwZNiVekJQEsr2u5UXusEDMzNILEoQI4OZ1Z15Il7KXt3nf
-	 Z6B9T3uM31o4ukLCWZ9Ts/SKQnL/u3cibbKKSevA=
+	b=LUFJEqjAtgOMwMqEnIDJSbq8WnOd8ln4TB1QSxYjWZMjpY7cBwVnBPuZtJBkXy7PC
+	 FcJZ0jdB7AVvYNnX2qEdkNHgR3aorCsNF7Rfm4SVW4+xkOFDu1hS0suD7bO/wlrI42
+	 J+XxWyp/RVfWA9Raxz7QJgTJXdDeXC+rthuHUa/s=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728061AbgI3GgH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1728025AbgI3GgH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 30 Sep 2020 02:36:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59276 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:59270 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725535AbgI3GgH (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Sep 2020 02:36:07 -0400
+        id S1726924AbgI3GgG (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 30 Sep 2020 02:36:06 -0400
 Received: from mail.kernel.org (ip5f5ad5c4.dynamic.kabel-deutschland.de [95.90.213.196])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2588E2076E;
+        by mail.kernel.org (Postfix) with ESMTPSA id 2117D2076A;
         Wed, 30 Sep 2020 06:36:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1601447766;
-        bh=6FbpSr2Z77TWm5cLFUNzD9WaCkeZQAoribfaCC5rs7k=;
+        bh=Rhqi3Xr5j3S4w5//6C1yLKFp1bK36UdJCSRITo3QGXk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Bp9trC2EldsrjLmG8826svFiTOuqV1aI2s4j0YBISifgOfwP37FIItroj3Yx4TUkJ
-         bxb4oMg32dG9jC7ARMa7tifr7xdw5VToYmoQg0ogBBSRQ+KTOQn1GRezfR4KP44eOT
-         /eQyq1V4MeeeKD9bwUfj+3SFJCnDjL0tSyTOBqLg=
+        b=Ua+VLY+h5KZEK6KljyIinwNB6UvLfAGBmnHz+LyEOEBNJUpYQInM50S7wEE75ZUJN
+         icWp6ZpqNM+10TxVIFyimYjsnPj5ird7TGAFkhQqo0FR8s4LAigMnTetfMGDNmP4Sz
+         1P+6q+5FCX4vAbf3tZNZm7H36MGR0MxqZcKgxHvE=
 Received: from mchehab by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1kNVie-001Qme-1c; Wed, 30 Sep 2020 08:36:04 +0200
+        id 1kNVid-001QmO-Qo; Wed, 30 Sep 2020 08:36:03 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 8/9] media: hist-v4l2.rst: remove struct duplication
-Date:   Wed, 30 Sep 2020 08:36:01 +0200
-Message-Id: <6ca487190fafa23f4ab53935a9c6d0fcde9f95d2.1601447236.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 1/9] media: camera-sensor.rst: fix a doc build warning
+Date:   Wed, 30 Sep 2020 08:35:54 +0200
+Message-Id: <6fcadfc727239a6c870a851bf6b54fcfb4805cb9.1601447236.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1601447236.git.mchehab+huawei@kernel.org>
 References: <cover.1601447236.git.mchehab+huawei@kernel.org>
@@ -62,71 +60,28 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There are several places there where struct was used twice,
-on multiple lines, like:
+	Documentation/driver-api/media/camera-sensor.rst:123: WARNING: Inline literal start-string without end-string.
 
-	struct
-	struct ``v4l2_zoomcap``
-
-That's probably done during the DocBook to ReSt conversion.
-
-Probably the cases where "struct struct" were at the same line
-was addressed back then, but the multi-line cases are still
-there.
-
-Get rid of them.
+There's a missing blank space over there.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/userspace-api/media/v4l/hist-v4l2.rst | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+ Documentation/driver-api/media/camera-sensor.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/hist-v4l2.rst b/Documentation/userspace-api/media/v4l/hist-v4l2.rst
-index 8be82bdb1729..fe60cb9e2e07 100644
---- a/Documentation/userspace-api/media/v4l/hist-v4l2.rst
-+++ b/Documentation/userspace-api/media/v4l/hist-v4l2.rst
-@@ -582,11 +582,10 @@ This unnamed version was finally merged into Linux 2.5.46.
-     above. A ``field`` field of type :c:type:`v4l2_field` was added to
-     distinguish between field and frame (interlaced) overlay.
+diff --git a/Documentation/driver-api/media/camera-sensor.rst b/Documentation/driver-api/media/camera-sensor.rst
+index bd81c2cc37f8..4d1ae12b9b4d 100644
+--- a/Documentation/driver-api/media/camera-sensor.rst
++++ b/Documentation/driver-api/media/camera-sensor.rst
+@@ -123,7 +123,7 @@ Control framework
+ ``v4l2_ctrl_handler_setup()`` function may not be used in the device's runtime
+ PM ``runtime_resume`` callback, as it has no way to figure out the power state
+ of the device. This is because the power state of the device is only changed
+-after the power state transition has taken place. The ``s_ctrl``callback can be
++after the power state transition has taken place. The ``s_ctrl`` callback can be
+ used to obtain device's power state after the power state transition:
  
--17. The digital zoom interface, including struct
--    struct ``v4l2_zoomcap``, struct
-+17. The digital zoom interface, including struct ``v4l2_zoomcap``,
-     struct ``v4l2_zoom``, ``V4L2_ZOOM_NONCAP`` and
-     ``V4L2_ZOOM_WHILESTREAMING`` was replaced by a new cropping and
--    scaling interface. The previously unused struct
-+    scaling interface. The previously unused
-     struct :c:type:`v4l2_cropcap` and struct :c:type:`v4l2_crop`
-     where redefined for this purpose. See :ref:`crop` for details.
- 
-@@ -811,7 +810,7 @@ V4L2 spec erratum 2006-02-04
- 
- 1. The ``clips`` field in struct :c:type:`v4l2_window`
-    must point to an array of struct :c:type:`v4l2_clip`, not
--   a linked list, because drivers ignore the struct
-+   a linked list, because drivers ignore the
-    struct :c:type:`v4l2_clip`. ``next`` pointer.
- 
- 
-@@ -926,7 +925,7 @@ V4L2 in Linux 2.6.22
- 
-    A new ``global_alpha`` field was added to
-    :c:type:`v4l2_window`, extending the structure. This
--   may *break compatibility* with applications using a struct
-+   may *break compatibility* with applications using a
-    struct :c:type:`v4l2_window` directly. However the
-    :ref:`VIDIOC_G/S/TRY_FMT <VIDIOC_G_FMT>` ioctls, which take a
-    pointer to a :c:type:`v4l2_format` parent structure
-@@ -1013,8 +1012,7 @@ V4L2 in Linux 2.6.29
- 
- 1. The ``VIDIOC_G_CHIP_IDENT`` ioctl was renamed to
-    ``VIDIOC_G_CHIP_IDENT_OLD`` and ``VIDIOC_DBG_G_CHIP_IDENT`` was
--   introduced in its place. The old struct
--   struct ``v4l2_chip_ident`` was renamed to
-+   introduced in its place. The old struct ``v4l2_chip_ident`` was renamed to
-    struct ``v4l2_chip_ident_old``.
- 
- 2. The pixel formats ``V4L2_PIX_FMT_VYUY``, ``V4L2_PIX_FMT_NV16`` and
+ .. c:function::
 -- 
 2.26.2
 
