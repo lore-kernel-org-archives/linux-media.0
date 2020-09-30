@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 465C5C4727C
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 16:10:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4ECBC4741F
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 16:10:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E78D2207FB
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 16:09:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B19020936
+	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 16:10:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="vTUKxlHv"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="bgqyEOvc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731029AbgI3QJe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Sep 2020 12:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48564 "EHLO
+        id S1730363AbgI3QJa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Sep 2020 12:09:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730984AbgI3QJc (ORCPT
+        with ESMTP id S1727438AbgI3QJa (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Sep 2020 12:09:32 -0400
+        Wed, 30 Sep 2020 12:09:30 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6233AC0613D0;
-        Wed, 30 Sep 2020 09:09:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0D8C0613D1;
+        Wed, 30 Sep 2020 09:09:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=TmfaCnUd+7mEz2YuYjVCYbtQ0kXcXuqBuz2CDTaW1SU=; b=vTUKxlHvoBZU8oPuhfyrBvMush
-        R8HWo77aaA/LJrPmDuWZoiiDEH5yrCNR3FWG2OnLJ7+urDV58UGL9mWxIRaiQu0dullqNzBTf5wAU
-        pKdhVu2W/dOFVAwdroM1B55Rhhws/gIKMi8HWTMWuFeAQvOc9bLTw23c9Uy9fAhoGpi7fgBmWeQ4k
-        quQOt/+R406V/VviQHvuyRe3bFdwJQlDenY5GHU7VuR+9Hhv/brb8OJVzK8YlqfnvDS0Pog73xU2r
-        GVbYqmzOXj8rj/iA0Sit4Ms7NjLAmayqY7L5ime3YuIlMssIibDUhdvSI8nL5TlzWtCmOTpFUWy/O
-        6Rr9StWw==;
+        bh=xYVAS8gqHWqs3QJ5Ea1gOgq+YCGQh2QxwGDstR65vcw=; b=bgqyEOvcazknkjXu+XD34eM9kU
+        2/Qxq/Ch1RrqStmO/H7aFX7eocn3B89NDrAYzUEelsKifeeuNjSmMbIjr9nZKUMXphR59qJj0b2EV
+        +vjB15gtEiWZOBEZ69jetp6DC/qBJi8ZDTT8+GHAGZiJfOsx6zYi1YjsmygpEdZIaonLbnjFmkfw6
+        GnBouNenkOqKlq/0ckJqygNI3j5c9iaL2eHbTDr/HRhxdV+/KBSFCzUgyDOPYrZPCN27eazHVcpbo
+        KcvepWMlyEidZqfNgm+mBlP7eRHXJ5cOki4RRZb8PfPaU683fAqLTH6FStWpnRCt0oCqpMS2TT4vH
+        SK+TbjCw==;
 Received: from [2001:4bb8:180:7b62:c70:4a89:bc61:4] (helo=localhost)
         by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kNefW-0003DH-6X; Wed, 30 Sep 2020 16:09:26 +0000
+        id 1kNefS-0003Ct-A7; Wed, 30 Sep 2020 16:09:22 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
@@ -45,9 +45,9 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         iommu@lists.linux-foundation.org
 Cc:     Robin Murphy <robin.murphy@arm.com>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 4/8] dma-direct: use __GFP_ZERO in dma_direct_alloc_pages
-Date:   Wed, 30 Sep 2020 18:09:13 +0200
-Message-Id: <20200930160917.1234225-5-hch@lst.de>
+Subject: [PATCH 1/8] dma-mapping: remove the {alloc,free}_noncoherent methods
+Date:   Wed, 30 Sep 2020 18:09:10 +0200
+Message-Id: <20200930160917.1234225-2-hch@lst.de>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200930160917.1234225-1-hch@lst.de>
 References: <20200930160917.1234225-1-hch@lst.de>
@@ -58,54 +58,134 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Prepare for supporting the DMA_ATTR_NO_KERNEL_MAPPING flag in
-dma_alloc_pages.
+It turns out allowing non-contigous allocations here was a rather bad
+idea, as we'll now need to define ways to get the pages for mmaping
+or dma_buf sharing.  Revert this change and stick to the original
+concept.  A different API for the use case of non-contigous allocations
+will be added back later.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- kernel/dma/direct.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/iommu/dma-iommu.c   | 30 ------------------------------
+ include/linux/dma-mapping.h |  5 -----
+ kernel/dma/mapping.c        | 33 ++++++---------------------------
+ 3 files changed, 6 insertions(+), 62 deletions(-)
 
-diff --git a/kernel/dma/direct.c b/kernel/dma/direct.c
-index b5f20781d3a96f..b5d56810130b22 100644
---- a/kernel/dma/direct.c
-+++ b/kernel/dma/direct.c
-@@ -296,9 +296,10 @@ struct page *dma_direct_alloc_pages(struct device *dev, size_t size,
+diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+index c12c1dc43d312e..b363b20a9f41ce 100644
+--- a/drivers/iommu/dma-iommu.c
++++ b/drivers/iommu/dma-iommu.c
+@@ -1055,34 +1055,6 @@ static void *iommu_dma_alloc(struct device *dev, size_t size,
+ 	return cpu_addr;
+ }
+ 
+-#ifdef CONFIG_DMA_REMAP
+-static void *iommu_dma_alloc_noncoherent(struct device *dev, size_t size,
+-		dma_addr_t *handle, enum dma_data_direction dir, gfp_t gfp)
+-{
+-	if (!gfpflags_allow_blocking(gfp)) {
+-		struct page *page;
+-
+-		page = dma_common_alloc_pages(dev, size, handle, dir, gfp);
+-		if (!page)
+-			return NULL;
+-		return page_address(page);
+-	}
+-
+-	return iommu_dma_alloc_remap(dev, size, handle, gfp | __GFP_ZERO,
+-				     PAGE_KERNEL, 0);
+-}
+-
+-static void iommu_dma_free_noncoherent(struct device *dev, size_t size,
+-		void *cpu_addr, dma_addr_t handle, enum dma_data_direction dir)
+-{
+-	__iommu_dma_unmap(dev, handle, size);
+-	__iommu_dma_free(dev, size, cpu_addr);
+-}
+-#else
+-#define iommu_dma_alloc_noncoherent		NULL
+-#define iommu_dma_free_noncoherent		NULL
+-#endif /* CONFIG_DMA_REMAP */
+-
+ static int iommu_dma_mmap(struct device *dev, struct vm_area_struct *vma,
+ 		void *cpu_addr, dma_addr_t dma_addr, size_t size,
+ 		unsigned long attrs)
+@@ -1153,8 +1125,6 @@ static const struct dma_map_ops iommu_dma_ops = {
+ 	.free			= iommu_dma_free,
+ 	.alloc_pages		= dma_common_alloc_pages,
+ 	.free_pages		= dma_common_free_pages,
+-	.alloc_noncoherent	= iommu_dma_alloc_noncoherent,
+-	.free_noncoherent	= iommu_dma_free_noncoherent,
+ 	.mmap			= iommu_dma_mmap,
+ 	.get_sgtable		= iommu_dma_get_sgtable,
+ 	.map_page		= iommu_dma_map_page,
+diff --git a/include/linux/dma-mapping.h b/include/linux/dma-mapping.h
+index 7c77cd6f3604a7..4b9b1d64f5ec9e 100644
+--- a/include/linux/dma-mapping.h
++++ b/include/linux/dma-mapping.h
+@@ -74,11 +74,6 @@ struct dma_map_ops {
+ 			gfp_t gfp);
+ 	void (*free_pages)(struct device *dev, size_t size, struct page *vaddr,
+ 			dma_addr_t dma_handle, enum dma_data_direction dir);
+-	void* (*alloc_noncoherent)(struct device *dev, size_t size,
+-			dma_addr_t *dma_handle, enum dma_data_direction dir,
+-			gfp_t gfp);
+-	void (*free_noncoherent)(struct device *dev, size_t size, void *vaddr,
+-			dma_addr_t dma_handle, enum dma_data_direction dir);
+ 	int (*mmap)(struct device *, struct vm_area_struct *,
+ 			  void *, dma_addr_t, size_t,
+ 			  unsigned long attrs);
+diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
+index 9669550656a0b4..06115f59f4ffbf 100644
+--- a/kernel/dma/mapping.c
++++ b/kernel/dma/mapping.c
+@@ -513,40 +513,19 @@ EXPORT_SYMBOL_GPL(dma_free_pages);
+ void *dma_alloc_noncoherent(struct device *dev, size_t size,
  		dma_addr_t *dma_handle, enum dma_data_direction dir, gfp_t gfp)
  {
- 	struct page *page;
--	void *ret;
+-	const struct dma_map_ops *ops = get_dma_ops(dev);
+-	void *vaddr;
+-
+-	if (!ops || !ops->alloc_noncoherent) {
+-		struct page *page;
+-
+-		page = dma_alloc_pages(dev, size, dma_handle, dir, gfp);
+-		if (!page)
+-			return NULL;
+-		return page_address(page);
+-	}
++	struct page *page;
  
- 	if (dma_should_alloc_from_pool(dev, gfp, 0)) {
-+		void *ret;
-+
- 		page = dma_alloc_from_pool(dev, size, &ret, gfp,
- 				dma_coherent_ok);
- 		if (!page)
-@@ -306,7 +307,7 @@ struct page *dma_direct_alloc_pages(struct device *dev, size_t size,
- 		goto done;
- 	}
+-	size = PAGE_ALIGN(size);
+-	vaddr = ops->alloc_noncoherent(dev, size, dma_handle, dir, gfp);
+-	if (vaddr)
+-		debug_dma_map_page(dev, virt_to_page(vaddr), 0, size, dir,
+-				   *dma_handle);
+-	return vaddr;
++	page = dma_alloc_pages(dev, size, dma_handle, dir, gfp);
++	if (!page)
++		return NULL;
++	return page_address(page);
+ }
+ EXPORT_SYMBOL_GPL(dma_alloc_noncoherent);
  
--	page = __dma_direct_alloc_pages(dev, size, gfp);
-+	page = __dma_direct_alloc_pages(dev, size, gfp | __GFP_ZERO);
- 	if (!page)
- 		return NULL;
- 	if (PageHighMem(page)) {
-@@ -320,13 +321,11 @@ struct page *dma_direct_alloc_pages(struct device *dev, size_t size,
- 		goto out_free_pages;
- 	}
+ void dma_free_noncoherent(struct device *dev, size_t size, void *vaddr,
+ 		dma_addr_t dma_handle, enum dma_data_direction dir)
+ {
+-	const struct dma_map_ops *ops = get_dma_ops(dev);
+-
+-	if (!ops || !ops->free_noncoherent) {
+-		dma_free_pages(dev, size, virt_to_page(vaddr), dma_handle, dir);
+-		return;
+-	}
+-
+-	size = PAGE_ALIGN(size);
+-	debug_dma_unmap_page(dev, dma_handle, size, dir);
+-	ops->free_noncoherent(dev, size, vaddr, dma_handle, dir);
++	dma_free_pages(dev, size, virt_to_page(vaddr), dma_handle, dir);
+ }
+ EXPORT_SYMBOL_GPL(dma_free_noncoherent);
  
--	ret = page_address(page);
- 	if (force_dma_unencrypted(dev)) {
--		if (set_memory_decrypted((unsigned long)ret,
-+		if (set_memory_decrypted((unsigned long)page_address(page),
- 				1 << get_order(size)))
- 			goto out_free_pages;
- 	}
--	memset(ret, 0, size);
- done:
- 	*dma_handle = phys_to_dma_direct(dev, page_to_phys(page));
- 	return page;
 -- 
 2.28.0
 
