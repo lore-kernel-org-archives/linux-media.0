@@ -1,37 +1,83 @@
-Return-Path: <SRS0=fdi2=DH=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=N3gP=DI=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28536C4727E
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 20:19:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A7BAC4741F
+	for <linux-media@archiver.kernel.org>; Thu,  1 Oct 2020 01:21:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F0B072074A
-	for <linux-media@archiver.kernel.org>; Wed, 30 Sep 2020 20:19:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4A37521924
+	for <linux-media@archiver.kernel.org>; Thu,  1 Oct 2020 01:21:59 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="b7EY98on"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730404AbgI3UTR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Sep 2020 16:19:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59010 "EHLO
+        id S1730560AbgJABV4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Sep 2020 21:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730009AbgI3UTR (ORCPT
+        with ESMTP id S1730499AbgJABV4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Sep 2020 16:19:17 -0400
-Received: from hillosipuli.retiisi.eu (hillosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::81:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE46C061755;
-        Wed, 30 Sep 2020 13:19:16 -0700 (PDT)
-Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 22859634C87;
-        Wed, 30 Sep 2020 23:19:00 +0300 (EEST)
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     devicetree@vger.kernel.org
-Subject: [RESEND PATCH 000/100] Linux CCS driver
-Date:   Wed, 30 Sep 2020 23:19:07 +0300
-Message-Id: <20200930201914.31377-1-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.27.0
+        Wed, 30 Sep 2020 21:21:56 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99CAC061755
+        for <linux-media@vger.kernel.org>; Wed, 30 Sep 2020 18:21:55 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id 7so2558596pgm.11
+        for <linux-media@vger.kernel.org>; Wed, 30 Sep 2020 18:21:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fvY55OKvdBQuZcw5ImE/AN2tBcW6EILZrL1RIyXg90E=;
+        b=b7EY98onG6qWo1zxpcIa1WXVRCHcZZvWrwT6452qabZ8yWmguH1x4Px6q+6NsmdHyj
+         owqPUCFI4SjLTAX2FsL59orOOEgACCwFoe1I3VVFqgSzfMw4i04YEn6BTwqFwL6SUaJP
+         MBgVjf+YW0zCPsGcxND0z7bldFNESSs+iNRyWFiPCCsEGFNZBdeDfIlvXTKDnfdkhzFI
+         UcZi4HTOWf4l4/O7IN7Jf3xd7Rijuxy089ScscjJfiqTojcdjC+WjwCfJoJTqzjx4cp0
+         sIMtEv2c29Nu7sVd/MKo7e0B0IoP5t7BIMra0+twOu1UBhZNDTdDIjJr2UJy+Rz0cAZK
+         rmxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fvY55OKvdBQuZcw5ImE/AN2tBcW6EILZrL1RIyXg90E=;
+        b=fQgOx9j5Ij7u2p3l0Z9Mw0dikcSkNv6W+ibtn+Gn82lAcDFuhip6h4e9kC8rAXz/vU
+         /g+9bZ28ABCddHKGY8iGml/Ub4eGHLPpocA95KmNqEw8qByjfCt2uy8cPFTcTpX7/xGx
+         l2R6rW6ch12qgweejjEWON8rFAssyIwEIRT937kESjCQzzqy2lt6/m1i7Kbk0L7wk9gE
+         4zav0KqgBdTLIjeYAx3rdCRviN7RoAAqQt4uBlUT63Ko5DEQOs9oCQ58Oggr08yF3gRi
+         P7Z4cpZbHZut4usOQzjEKzfJZZja4yYYtav+aRrCLfhdOBhNuk06iYLV/HScoTqAGOZd
+         30Cg==
+X-Gm-Message-State: AOAM530PPPdBxWz3FU8/eQWj9XLmUV55x7+WRJ0gbBAYSpNEFZpGY1zw
+        6UwN0R7GhUuiiOyITu8TXDW8qA==
+X-Google-Smtp-Source: ABdhPJxM/aCR52AHNBDdjEC2YIKRegJP/yr49/KVMHTHHeY78lQHqaRradU2OZgQ2PcioJvZKdDoFQ==
+X-Received: by 2002:a62:3605:0:b029:151:ee7f:d910 with SMTP id d5-20020a6236050000b0290151ee7fd910mr355682pfa.49.1601515315070;
+        Wed, 30 Sep 2020 18:21:55 -0700 (PDT)
+Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
+        by smtp.gmail.com with ESMTPSA id s187sm4229372pfc.134.2020.09.30.18.21.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Sep 2020 18:21:54 -0700 (PDT)
+From:   John Stultz <john.stultz@linaro.org>
+To:     lkml <linux-kernel@vger.kernel.org>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@kernel.org>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sandeep Patil <sspatil@google.com>,
+        =?UTF-8?q?=C3=98rjan=20Eide?= <orjan.eide@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Simon Ser <contact@emersion.fr>,
+        James Jones <jajones@nvidia.com>, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH v2 0/6] dma-buf: Performance improvements for system heap
+Date:   Thu,  1 Oct 2020 01:21:45 +0000
+Message-Id: <20201001012151.21149-1-john.stultz@linaro.org>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -39,193 +85,98 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi folks,
+Hey All,
+  So this patch series contains a series of performance
+optimizations to the dma-buf system heap.
 
-I'm just resending the DT binding patches while cc'ing the devicetree
-list. The entire set is here:
+Unfortunately, in working these up, I realized the heap-helpers
+infrastructure we tried to add to miniimize code duplication is
+not as generic as we intended. For some heaps it makes sense to
+deal with page lists, for other heaps it makes more sense to
+track things with sgtables.
 
-<URL:https://lore.kernel.org/linux-media/20200930152858.8471-1-sakari.ailus@linux.intel.com/T/#t>
+So this series reworks the system heap to use sgtables, and then
+consolidates the pagelist method from the heap-helpers into the
+CMA heap. After which the heap-helpers logic is removed (as it
+is unused). I'd still like to find a better way to avoid some of
+the logic duplication in implementing the entire dma_buf_ops
+handlers per heap. But unfortunately that code is tied somewhat
+to how the buffer's memory is tracked.
 
-The entire set converts the existing SMIA driver into a MIPI CCS driver
-while maintaining compatibility with existing SMIA compliant devices. MIPI
-CCS is the current standard, hence the rename.
+After this, the series introduces two optimizations to the the
+system heap, utilizing large order pages, and adding a page-pool
+(maybe abusing the pagepool logic from the network code, but it
+seems silly to reimplement it).
 
-Sakari Ailus (100):
-  smiapp: Add CCS register definitions and limits
-  smiapp: Use CCS register flags
-  smiapp: Calculate CCS limit offsets and limit buffer size
-  smiapp: Remove macros for defining registers, merge definitions
-  smiapp: Add macros for accessing CCS registers
-  smiapp: Use MIPI CCS version and manufacturer ID information
-  smiapp: Read CCS limit values
-  smiapp: Switch to CCS limits
-  smiapp: Obtain frame descriptor from CCS limits
-  smiapp: Use CCS limits in reading data format descriptors
-  smiapp: Use CCS limits in reading binning capabilities
-  smiapp: Use CCS registers
-  smiapp: Remove quirk function for writing a single 8-bit register
-  smiapp: Rename register access functions
-  smiapp: Internal rename to CCS
-  smiapp: Differentiate CCS sensors from SMIA in subdev naming
-  smiapp: Rename as "ccs"
-  ccs: Remove profile concept
-  ccs: Give all subdevs a function
-  dt-bindings: Add vendor prefix for MIPI Alliance
-  dt-bindings: nokia,smia: Fix link-frequencies documentation
-  dt-bindings: nokia,smia: Make vana-supply optional
-  dt-bindings: nokia,smia: Convert to YAML
-  dt-bindings: nokia,smia: Use better active polarity for reset
-  dt-bindings: Amend SMIA bindings with MIPI CCS support
-  dt-bindings: Add bus-type for C-PHY support
-  ccs: Request for "reset" GPIO
-  ccs: Add "mipi,ccs" compatible string
-  ccs: Remove the I²C ID table
-  ccs: Remove remaining support for platform data
-  ccs: Make hwcfg part of the device specific struct
-  ccs: Add CCS static data parser library
-  ccs: Combine revision number major and minor into one
-  ccs: Read CCS static data from firmware binaries
-  ccs: Stop reading arrays after the first zero
-  ccs: The functions to get compose or crop rectangle never return NULL
-  ccs: Replace somewhat harsh internal checks based on BUG with WARN_ON
-  ccs: Refactor register reading a little
-  ccs: Make real to integer number conversion optional
-  ccs: Move limit value real to integer conversion from read to access
-    time
-  ccs: Read ireal numbers correctly
-  smiapp-pll: Rename as ccs-pll
-  ccs: Change my e-mail address
-  ccs: Add support for manufacturer regs from sensor and module files
-  ccs: Use static data read-only registers
-  ccs: Clean up runtime PM usage
-  ccs: Wrap long lines, unwrap short ones
-  ccs: Add device compatible identifiers for telling SMIA and CCS apart
-  ccs: Use longer pre-I²C sleep for CCS compliant devices
-  ccs-pll: Don't use div_u64 to divide a 32-bit number
-  ccs-pll: Split limits and PLL configuration into front and back parts
-  ccs-pll: Use correct VT divisor for calculating VT SYS divisor
-  ccs-pll: End search if there are no better values available
-  ccs-pll: Remove parallel bus support
-  ccs-pll: Differentiate between CSI-2 D-PHY and C-PHY
-  ccs-pll: Move the flags field down, away from 8-bit fields
-  ccs-pll: Document the structs in the header as well as the function
-  ccs-pll: Use the BIT macro
-  ccs-pll: Begin calculation from OP system clock frequency
-  ccs-pll: Fix condition for pre-PLL divider lower bound
-  ccs-pll: Avoid overflow in pre-PLL divisor lower bound search
-  ccs-pll: Fix comment on check against maximum PLL multiplier
-  ccs-pll: Fix check for PLL multiplier upper bound
-  ccs-pll: Use explicit 32-bit unsigned type
-  ccs-pll: Add support for lane speed model
-  ccs: Add support for lane speed model
-  ccs-pll: Add support for decoupled OP domain calculation
-  ccs-pll: Add support for extended input PLL clock divider
-  ccs-pll: Support two cycles per pixel on OP domain
-  ccs-pll: Add support flexible OP PLL pixel clock divider
-  ccs-pll: Add sanity checks
-  ccs-pll: Add C-PHY support
-  ccs-pll: Split off VT subtree calculation
-  ccs-pll: Check for derating and overrating, support non-derating
-    sensors
-  ccs-pll: Better separate OP and VT sub-tree calculation
-  ccs-pll: Print relevant information on PLL tree
-  ccs-pll: Rework bounds checks
-  ccs-pll: Make VT divisors 16-bit
-  ccs-pll: Fix VT post-PLL divisor calculation
-  ccs-pll: Separate VT divisor limit calculation from the rest
-  ccs-pll: Add trivial dual PLL support
-  ccs: Dual PLL support
-  ccs-pll: Add support for DDR OP system and pixel clocks
-  ccs: Add support for DDR OP SYS and OP PIX clocks
-  ccs: Print written register values
-  ccs-pll: Print pixel rates
-  ccs: Add support for obtaining C-PHY configuration from firmware
-  ccs: Add digital gain support
-  ccs: Add support for old-style SMIA digital gain
-  ccs: Remove analogue gain field
-  ccs: Only add analogue gain control if the device supports it
-  v4l: Add user control base for CCS controls
-  v4l: uapi: Add controls for analogue gain constants
-  ccs: Add support for analogue gain coefficient controls
-  v4l: uapi: Add controls for CCS alternative analogue gain
-  ccs: Add support for alternate analogue global gain
-  ccs: Add debug prints for MSR registers
-  v4l: uapi: Add CCS controls for correction configuration and
-    capabilities
-  ccs: Add shading correction and luminance correction level controls
-  smiapp: Add CCS ACPI device ID
+I implemented a simple allocation microbenchmark to compare
+dmabuf heaps vs ion:
+  https://git.linaro.org/people/john.stultz/android-dev.git/commit/?h=dev/dma-buf-heap-perf&id=24c723fb41c7a9cb5cf9b2412722866cba3a1417
 
- .../bindings/media/i2c/mipi,ccs.yaml          |  164 +
- .../bindings/media/i2c/nokia,smia.txt         |   66 -
- .../devicetree/bindings/vendor-prefixes.yaml  |    2 +
- MAINTAINERS                                   |   20 +-
- drivers/media/i2c/Kconfig                     |    4 +-
- drivers/media/i2c/Makefile                    |    4 +-
- drivers/media/i2c/ccs-pll.c                   |  885 ++++
- drivers/media/i2c/ccs-pll.h                   |  211 +
- drivers/media/i2c/ccs/Kconfig                 |   11 +
- drivers/media/i2c/ccs/Makefile                |    6 +
- drivers/media/i2c/ccs/ccs-core.c              | 3665 +++++++++++++++++
- drivers/media/i2c/ccs/ccs-data-defs.h         |  215 +
- drivers/media/i2c/ccs/ccs-data.c              |  949 +++++
- drivers/media/i2c/ccs/ccs-data.h              |  116 +
- drivers/media/i2c/ccs/ccs-limits.c            |  239 ++
- drivers/media/i2c/ccs/ccs-limits.h            |  258 ++
- drivers/media/i2c/ccs/ccs-os.h                |   15 +
- .../smiapp-quirk.c => ccs/ccs-quirk.c}        |  105 +-
- .../smiapp-quirk.h => ccs/ccs-quirk.h}        |   54 +-
- drivers/media/i2c/ccs/ccs-reg-access.c        |  417 ++
- drivers/media/i2c/ccs/ccs-reg-access.h        |   42 +
- drivers/media/i2c/ccs/ccs-regs.h              |  953 +++++
- .../media/i2c/{smiapp/smiapp.h => ccs/ccs.h}  |  183 +-
- drivers/media/i2c/ccs/smiapp-reg-defs.h       |  582 +++
- drivers/media/i2c/smiapp-pll.c                |  482 ---
- drivers/media/i2c/smiapp-pll.h                |   99 -
- drivers/media/i2c/smiapp/Kconfig              |   10 -
- drivers/media/i2c/smiapp/Makefile             |    6 -
- drivers/media/i2c/smiapp/smiapp-core.c        | 3173 --------------
- drivers/media/i2c/smiapp/smiapp-limits.c      |  118 -
- drivers/media/i2c/smiapp/smiapp-limits.h      |  114 -
- drivers/media/i2c/smiapp/smiapp-reg-defs.h    |  489 ---
- drivers/media/i2c/smiapp/smiapp-reg.h         |  116 -
- drivers/media/i2c/smiapp/smiapp-regs.c        |  261 --
- drivers/media/i2c/smiapp/smiapp-regs.h        |   36 -
- include/uapi/linux/ccs.h                      |   21 +
- include/uapi/linux/v4l2-controls.h            |    6 +
- 37 files changed, 8939 insertions(+), 5158 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/mipi,ccs.yaml
- delete mode 100644 Documentation/devicetree/bindings/media/i2c/nokia,smia.txt
- create mode 100644 drivers/media/i2c/ccs-pll.c
- create mode 100644 drivers/media/i2c/ccs-pll.h
- create mode 100644 drivers/media/i2c/ccs/Kconfig
- create mode 100644 drivers/media/i2c/ccs/Makefile
- create mode 100644 drivers/media/i2c/ccs/ccs-core.c
- create mode 100644 drivers/media/i2c/ccs/ccs-data-defs.h
- create mode 100644 drivers/media/i2c/ccs/ccs-data.c
- create mode 100644 drivers/media/i2c/ccs/ccs-data.h
- create mode 100644 drivers/media/i2c/ccs/ccs-limits.c
- create mode 100644 drivers/media/i2c/ccs/ccs-limits.h
- create mode 100644 drivers/media/i2c/ccs/ccs-os.h
- rename drivers/media/i2c/{smiapp/smiapp-quirk.c => ccs/ccs-quirk.c} (63%)
- rename drivers/media/i2c/{smiapp/smiapp-quirk.h => ccs/ccs-quirk.h} (53%)
- create mode 100644 drivers/media/i2c/ccs/ccs-reg-access.c
- create mode 100644 drivers/media/i2c/ccs/ccs-reg-access.h
- create mode 100644 drivers/media/i2c/ccs/ccs-regs.h
- rename drivers/media/i2c/{smiapp/smiapp.h => ccs/ccs.h} (53%)
- create mode 100644 drivers/media/i2c/ccs/smiapp-reg-defs.h
- delete mode 100644 drivers/media/i2c/smiapp-pll.c
- delete mode 100644 drivers/media/i2c/smiapp-pll.h
- delete mode 100644 drivers/media/i2c/smiapp/Kconfig
- delete mode 100644 drivers/media/i2c/smiapp/Makefile
- delete mode 100644 drivers/media/i2c/smiapp/smiapp-core.c
- delete mode 100644 drivers/media/i2c/smiapp/smiapp-limits.c
- delete mode 100644 drivers/media/i2c/smiapp/smiapp-limits.h
- delete mode 100644 drivers/media/i2c/smiapp/smiapp-reg-defs.h
- delete mode 100644 drivers/media/i2c/smiapp/smiapp-reg.h
- delete mode 100644 drivers/media/i2c/smiapp/smiapp-regs.c
- delete mode 100644 drivers/media/i2c/smiapp/smiapp-regs.h
- create mode 100644 include/uapi/linux/ccs.h
+With these changes, the allocation path is *much* improved,
+performing better then ION (though to be fair, the repeated
+allocating and freeing of the same size buffer is the ideal
+case for the pagepool logic, so don't read too much into it).
+
+I charted some datapoints from the microbenchmark with each
+of the patches should folks be interested.
+https://docs.google.com/spreadsheets/d/1-1C8ZQpmkl_0DISkI6z4xelE08MlNAN7oEu34AnO4Ao/edit#gid=0
+
+Finally, a port of a patch that Ørjan Eide implemented for ION
+that avoids calling sync on attachments that don't have a
+mapping.
+
+Feedback on these would be great!
+
+thanks
+-john
+
+New in v2:
+* Fix unused return value and locking issue Reported-by:
+    kernel test robot <lkp@intel.com>
+    Julia Lawall <julia.lawall@inria.fr>
+* Make system_heap_buf_ops static Reported-by:
+     kernel test robot <lkp@intel.com>
+* Make cma_heap_buf_ops static suggested by
+    kernel test robot <lkp@intel.com>
+* Fix uninitialized return in cma Reported-by:
+    kernel test robot <lkp@intel.com>
+* Minor cleanups
+
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: Liam Mark <lmark@codeaurora.org>
+Cc: Laura Abbott <labbott@kernel.org>
+Cc: Brian Starkey <Brian.Starkey@arm.com>
+Cc: Hridya Valsaraju <hridya@google.com>
+Cc: Suren Baghdasaryan <surenb@google.com>
+Cc: Sandeep Patil <sspatil@google.com>
+Cc: Ørjan Eide <orjan.eide@arm.com>
+Cc: Robin Murphy <robin.murphy@arm.com>
+Cc: Ezequiel Garcia <ezequiel@collabora.com>
+Cc: Simon Ser <contact@emersion.fr>
+Cc: James Jones <jajones@nvidia.com>
+Cc: linux-media@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+
+John Stultz (6):
+  dma-buf: system_heap: Rework system heap to use sgtables instead of
+    pagelists
+  dma-buf: heaps: Move heap-helper logic into the cma_heap
+    implementation
+  dma-buf: heaps: Remove heap-helpers code
+  dma-buf: system_heap: Allocate higher order pages if available
+  dma-buf: system_heap: Add pagepool support to system heap
+  dma-buf: heaps: Skip sync if not mapped
+
+ drivers/dma-buf/heaps/Kconfig        |   1 +
+ drivers/dma-buf/heaps/Makefile       |   1 -
+ drivers/dma-buf/heaps/cma_heap.c     | 328 ++++++++++++++++----
+ drivers/dma-buf/heaps/heap-helpers.c | 271 -----------------
+ drivers/dma-buf/heaps/heap-helpers.h |  53 ----
+ drivers/dma-buf/heaps/system_heap.c  | 427 ++++++++++++++++++++++++---
+ 6 files changed, 659 insertions(+), 422 deletions(-)
+ delete mode 100644 drivers/dma-buf/heaps/heap-helpers.c
+ delete mode 100644 drivers/dma-buf/heaps/heap-helpers.h
 
 -- 
-2.27.0
+2.17.1
 
