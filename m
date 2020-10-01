@@ -2,211 +2,133 @@ Return-Path: <SRS0=N3gP=DI=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3326C47420
-	for <linux-media@archiver.kernel.org>; Thu,  1 Oct 2020 08:45:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 105ABC47420
+	for <linux-media@archiver.kernel.org>; Thu,  1 Oct 2020 08:49:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 913E320B1F
-	for <linux-media@archiver.kernel.org>; Thu,  1 Oct 2020 08:45:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7052320B1F
+	for <linux-media@archiver.kernel.org>; Thu,  1 Oct 2020 08:49:02 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="U/JeWGe3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731618AbgJAIpH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 1 Oct 2020 04:45:07 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:45387 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731527AbgJAIpH (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Oct 2020 04:45:07 -0400
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 01 Oct 2020 01:45:06 -0700
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 01 Oct 2020 01:45:04 -0700
-X-QCInternal: smtphost
-Received: from c-rojay-linux.qualcomm.com ([10.206.21.80])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 01 Oct 2020 14:14:33 +0530
-Received: by c-rojay-linux.qualcomm.com (Postfix, from userid 88981)
-        id 8F5A122A4; Thu,  1 Oct 2020 14:14:32 +0530 (IST)
-From:   Roja Rani Yarubandi <rojay@codeaurora.org>
-To:     wsa@kernel.org
-Cc:     swboyd@chromium.org, dianders@chromium.org,
-        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
-        mka@chromium.org, akashast@codeaurora.org,
-        msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
-        vkaur@codeaurora.org, pyarlaga@codeaurora.org,
-        rnayak@codeaurora.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
-        Roja Rani Yarubandi <rojay@codeaurora.org>
-Subject: [PATCH V5 2/3] i2c: i2c-qcom-geni: Store DMA mapping data in geni_i2c_dev struct
-Date:   Thu,  1 Oct 2020 14:14:24 +0530
-Message-Id: <20201001084425.23117-3-rojay@codeaurora.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20201001084425.23117-1-rojay@codeaurora.org>
-References: <20201001084425.23117-1-rojay@codeaurora.org>
+        id S1726647AbgJAItB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 1 Oct 2020 04:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33650 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725921AbgJAItB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Oct 2020 04:49:01 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA92C0613E2
+        for <linux-media@vger.kernel.org>; Thu,  1 Oct 2020 01:49:00 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id w5so4678303wrp.8
+        for <linux-media@vger.kernel.org>; Thu, 01 Oct 2020 01:49:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=z3W/+UmHFDJR18MuX6sQgP8oE7n6vaF6n11YCm+XJiI=;
+        b=U/JeWGe3SdUqAg1gTu7Y3Xv3WAzhqdCQ4Mu1Hi8lxqEJtuJ/8vwe90fj/S6vDe/me/
+         ssWLVdhX73q1L0zPWAOlDGAgTDEapccIDXp/kK9DqX0y0ZCS58gT2lXDhzTlJE/lyp78
+         4xETKJogwAFFERKf6kBBCLoC8phbOF9BsoIZQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=z3W/+UmHFDJR18MuX6sQgP8oE7n6vaF6n11YCm+XJiI=;
+        b=s8LFuwjeHnWmR1EPKh1KHRrBWXKifH9Ets7ifhwh5it9YGIOWGVsPKdJ8H8N4nfGld
+         goICnflhMPRvuuUnKCCrWizfWrKIyE/P8txe6x51jnK//uOdg+ozxVndUprFw50mu8P7
+         JT4KXOcgHao/z0YPgqqFRzdwxex9VjNQHibHlZpEgemmzylw4fMdfqJVDdejyvsZJ9bQ
+         i2cvH/jDg1fFSzHKrulmTlThxLQ4vNh0x+XvKA1LBjKR7zya+Uyey87x5wzqyNzbQfsl
+         kJcApPy0RbQs706CWEnWFosro+SVk1R193zMx+2Lmsm/bgxBNngU85FZRX1Gk6hHBnwq
+         R5KA==
+X-Gm-Message-State: AOAM530jv6wy6SfD3gFzzRrcvPjJYw84SjRJpeZlRlP1dkAv6BVR+aWh
+        oBaecsqSpQzxQFJxRsBYTNhcoQ==
+X-Google-Smtp-Source: ABdhPJxOxyoDX0b5gNKiFbSaDU5KDIBVsfBcvH3wwR1QPfbuHsRGFXu73fInXCqwuMEGoH0WdO1vqA==
+X-Received: by 2002:a5d:4a48:: with SMTP id v8mr7600342wrs.304.1601542139344;
+        Thu, 01 Oct 2020 01:48:59 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id y1sm7475729wma.36.2020.10.01.01.48.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Oct 2020 01:48:58 -0700 (PDT)
+Date:   Thu, 1 Oct 2020 10:48:56 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Alexandre Bailon <abailon@baylibre.com>
+Cc:     linux-remoteproc@vger.kernel.org, ohad@wizery.com,
+        gpain@baylibre.com, stephane.leprovost@mediatek.com,
+        jstephan@baylibre.com, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        mturquette@baylibre.com, bjorn.andersson@linaro.org,
+        christian.koenig@amd.com, linux-media@vger.kernel.org
+Subject: Re: [RFC PATCH 0/4] Add a RPMsg driver to support AI Processing Unit
+ (APU)
+Message-ID: <20201001084856.GC438822@phenom.ffwll.local>
+Mail-Followup-To: Alexandre Bailon <abailon@baylibre.com>,
+        linux-remoteproc@vger.kernel.org, ohad@wizery.com,
+        gpain@baylibre.com, stephane.leprovost@mediatek.com,
+        jstephan@baylibre.com, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        mturquette@baylibre.com, bjorn.andersson@linaro.org,
+        christian.koenig@amd.com, linux-media@vger.kernel.org
+References: <20200930115350.5272-1-abailon@baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200930115350.5272-1-abailon@baylibre.com>
+X-Operating-System: Linux phenom 5.7.0-1-amd64 
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Store DMA mapping data in geni_i2c_dev struct to enhance DMA mapping
-data scope. For example during shutdown callback to unmap DMA mapping,
-this stored DMA mapping data can be used to call geni_se_tx_dma_unprep
-and geni_se_rx_dma_unprep functions.
+On Wed, Sep 30, 2020 at 01:53:46PM +0200, Alexandre Bailon wrote:
+> This adds a RPMsg driver that implements communication between the CPU and an
+> APU.
+> This uses VirtIO buffer to exchange messages but for sharing data, this uses
+> a dmabuf, mapped to be shared between CPU (userspace) and APU.
+> The driver is relatively generic, and should work with any SoC implementing
+> hardware accelerator for AI if they use support remoteproc and VirtIO.
+> 
+> For the people interested by the firmware or userspace library,
+> the sources are available here:
+> https://github.com/BayLibre/open-amp/tree/v2020.01-mtk/apps/examples/apu
 
-Add two helper functions geni_i2c_rx_msg_cleanup and
-geni_i2c_tx_msg_cleanup to unwrap the things after rx/tx FIFO/DMA
-transfers, so that the same can be used in geni_i2c_stop_xfer()
-function during shutdown callback.
+Since this has open userspace (from a very cursory look), and smells very
+much like an acceleration driver, and seems to use dma-buf for memory
+management: Why is this not just a drm driver?
+-Daniel
 
-Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
----
-Changes in V5:
- - As per Stephen's comments separated this patch from shutdown
-   callback patch, gi2c->cur = NULL is not removed from 
-   geni_i2c_abort_xfer(), and made a copy of gi2c->cur and passed
-   to cleanup functions.
+> 
+> Alexandre Bailon (3):
+>   Add a RPMSG driver for the APU in the mt8183
+>   rpmsg: apu_rpmsg: update the way to store IOMMU mapping
+>   rpmsg: apu_rpmsg: Add an IOCTL to request IOMMU mapping
+> 
+> Julien STEPHAN (1):
+>   rpmsg: apu_rpmsg: Add support for async apu request
+> 
+>  drivers/rpmsg/Kconfig          |   9 +
+>  drivers/rpmsg/Makefile         |   1 +
+>  drivers/rpmsg/apu_rpmsg.c      | 752 +++++++++++++++++++++++++++++++++
+>  drivers/rpmsg/apu_rpmsg.h      |  52 +++
+>  include/uapi/linux/apu_rpmsg.h |  47 +++
+>  5 files changed, 861 insertions(+)
+>  create mode 100644 drivers/rpmsg/apu_rpmsg.c
+>  create mode 100644 drivers/rpmsg/apu_rpmsg.h
+>  create mode 100644 include/uapi/linux/apu_rpmsg.h
+> 
+> -- 
+> 2.26.2
+> 
+> _______________________________________________
+> dri-devel mailing list
+> dri-devel@lists.freedesktop.org
+> https://lists.freedesktop.org/mailman/listinfo/dri-devel
 
- drivers/i2c/busses/i2c-qcom-geni.c | 63 ++++++++++++++++++++++--------
- 1 file changed, 47 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-index dead5db3315a..aee2a1dd2c62 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -86,6 +86,9 @@ struct geni_i2c_dev {
- 	u32 clk_freq_out;
- 	const struct geni_i2c_clk_fld *clk_fld;
- 	int suspended;
-+	void *dma_buf;
-+	size_t xfer_len;
-+	dma_addr_t dma_addr;
- };
- 
- struct geni_i2c_err_log {
-@@ -349,14 +352,43 @@ static void geni_i2c_tx_fsm_rst(struct geni_i2c_dev *gi2c)
- 		dev_err(gi2c->se.dev, "Timeout resetting TX_FSM\n");
- }
- 
-+static void geni_i2c_rx_msg_cleanup(struct geni_i2c_dev *gi2c,
-+				     struct i2c_msg *cur)
-+{
-+	struct geni_se *se = &gi2c->se;
-+
-+	gi2c->cur_rd = 0;
-+	if (gi2c->dma_buf) {
-+		if (gi2c->err)
-+			geni_i2c_rx_fsm_rst(gi2c);
-+		geni_se_rx_dma_unprep(se, gi2c->dma_addr, gi2c->xfer_len);
-+		i2c_put_dma_safe_msg_buf(gi2c->dma_buf, cur, !gi2c->err);
-+	}
-+}
-+
-+static void geni_i2c_tx_msg_cleanup(struct geni_i2c_dev *gi2c,
-+				     struct i2c_msg *cur)
-+{
-+	struct geni_se *se = &gi2c->se;
-+
-+	gi2c->cur_wr = 0;
-+	if (gi2c->dma_buf) {
-+		if (gi2c->err)
-+			geni_i2c_tx_fsm_rst(gi2c);
-+		geni_se_tx_dma_unprep(se, gi2c->dma_addr, gi2c->xfer_len);
-+		i2c_put_dma_safe_msg_buf(gi2c->dma_buf, cur, !gi2c->err);
-+	}
-+}
-+
- static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 				u32 m_param)
- {
--	dma_addr_t rx_dma;
-+	dma_addr_t rx_dma = 0;
- 	unsigned long time_left;
- 	void *dma_buf = NULL;
- 	struct geni_se *se = &gi2c->se;
- 	size_t len = msg->len;
-+	struct i2c_msg *cur;
- 
- 	if (!of_machine_is_compatible("lenovo,yoga-c630"))
- 		dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
-@@ -372,21 +404,20 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 		geni_se_select_mode(se, GENI_SE_FIFO);
- 		i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
- 		dma_buf = NULL;
-+	} else {
-+		gi2c->xfer_len = len;
-+		gi2c->dma_addr = rx_dma;
-+		gi2c->dma_buf = dma_buf;
- 	}
- 
- 	geni_se_setup_m_cmd(se, I2C_READ, m_param);
- 
-+	cur = gi2c->cur;
- 	time_left = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
- 	if (!time_left)
- 		geni_i2c_abort_xfer(gi2c);
- 
--	gi2c->cur_rd = 0;
--	if (dma_buf) {
--		if (gi2c->err)
--			geni_i2c_rx_fsm_rst(gi2c);
--		geni_se_rx_dma_unprep(se, rx_dma, len);
--		i2c_put_dma_safe_msg_buf(dma_buf, msg, !gi2c->err);
--	}
-+	geni_i2c_rx_msg_cleanup(gi2c, cur);
- 
- 	return gi2c->err;
- }
-@@ -394,11 +425,12 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 				u32 m_param)
- {
--	dma_addr_t tx_dma;
-+	dma_addr_t tx_dma = 0;
- 	unsigned long time_left;
- 	void *dma_buf = NULL;
- 	struct geni_se *se = &gi2c->se;
- 	size_t len = msg->len;
-+	struct i2c_msg *cur;
- 
- 	if (!of_machine_is_compatible("lenovo,yoga-c630"))
- 		dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
-@@ -414,6 +446,10 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 		geni_se_select_mode(se, GENI_SE_FIFO);
- 		i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
- 		dma_buf = NULL;
-+	} else {
-+		gi2c->xfer_len = len;
-+		gi2c->dma_addr = tx_dma;
-+		gi2c->dma_buf = dma_buf;
- 	}
- 
- 	geni_se_setup_m_cmd(se, I2C_WRITE, m_param);
-@@ -421,17 +457,12 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 	if (!dma_buf) /* Get FIFO IRQ */
- 		writel_relaxed(1, se->base + SE_GENI_TX_WATERMARK_REG);
- 
-+	cur = gi2c->cur;
- 	time_left = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
- 	if (!time_left)
- 		geni_i2c_abort_xfer(gi2c);
- 
--	gi2c->cur_wr = 0;
--	if (dma_buf) {
--		if (gi2c->err)
--			geni_i2c_tx_fsm_rst(gi2c);
--		geni_se_tx_dma_unprep(se, tx_dma, len);
--		i2c_put_dma_safe_msg_buf(dma_buf, msg, !gi2c->err);
--	}
-+	geni_i2c_tx_msg_cleanup(gi2c, cur);
- 
- 	return gi2c->err;
- }
 -- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-of Code Aurora Forum, hosted by The Linux Foundation
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
