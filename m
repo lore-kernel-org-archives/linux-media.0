@@ -3,159 +3,175 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C07E3C47095
-	for <linux-media@archiver.kernel.org>; Fri,  2 Oct 2020 18:46:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C58FC47095
+	for <linux-media@archiver.kernel.org>; Fri,  2 Oct 2020 19:22:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8E42F208B6
-	for <linux-media@archiver.kernel.org>; Fri,  2 Oct 2020 18:46:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DC552206DB
+	for <linux-media@archiver.kernel.org>; Fri,  2 Oct 2020 19:22:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="LhoHpieZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pyCYGPD3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387935AbgJBSqD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 2 Oct 2020 14:46:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38028 "EHLO
+        id S2388538AbgJBTWo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 2 Oct 2020 15:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725991AbgJBSqD (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 2 Oct 2020 14:46:03 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374B4C0613E2
-        for <linux-media@vger.kernel.org>; Fri,  2 Oct 2020 11:46:01 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id c18so2838703wrm.9
-        for <linux-media@vger.kernel.org>; Fri, 02 Oct 2020 11:46:01 -0700 (PDT)
+        with ESMTP id S2388451AbgJBTWS (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 2 Oct 2020 15:22:18 -0400
+Received: from mail-oo1-xc42.google.com (mail-oo1-xc42.google.com [IPv6:2607:f8b0:4864:20::c42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97FA9C0613D0;
+        Fri,  2 Oct 2020 12:22:15 -0700 (PDT)
+Received: by mail-oo1-xc42.google.com with SMTP id g26so621628ooa.9;
+        Fri, 02 Oct 2020 12:22:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=cqLPfUuqb60ZIVoOQ31hnraU/Ifr39O5/ULDkN9IWmw=;
-        b=LhoHpieZ6b1yu3Bgv5UVyYwE5gEJCucfXpQtCsua7dxm7nPU5GPxUoM22UNQQ6v2CK
-         k0Y2QqxCtl6jlPSAgvR23+rIu6KvQsYlEl3KTS7hhk4KmBbGsS7srplNima8l2683HV3
-         M+RegCjSI+WIRGmRnHJIv+DYHNTbkSdc4/ZqA=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qtkiGjkyzPqhHXvj+x4KevVCs1UVs2TLajO5QFK46lc=;
+        b=pyCYGPD3z231H+FQCXNEMLBtwRoKmxKBpFEKm871TgQU8g0X8z2LzGq3oGkeS5tId6
+         2OjBG9lDxg08oGQpJZn5YUoFRjrDuVdqQVFb4w+hBOrxNG6DqBJwawSIiKC9egvCjB02
+         Xw0waBU/U8aGynIrCK89k3Jdpw7z3gEFzB4jasOXhXEyNbxDcZrLX7dRpFGKQoKw1Tws
+         aLL3JDgghZLFX8ZY8jZDZOeRMejsM+55Cdtpn64aGJMuNlg/C9MwjlV2q4dNBpKlf7yk
+         7CMS1H3Bkbl6Ac+k8YwG1V0D40n/6TqKugG/Uh9B1bMTgFcoERjMQ390o1uoJ6zqs1ZP
+         ObOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=cqLPfUuqb60ZIVoOQ31hnraU/Ifr39O5/ULDkN9IWmw=;
-        b=C7srC36X2AagjFwsdKNt3/jPoTLHiIl6GKRX216saBidSaQORN+2mJRH6WR5QbVWiq
-         1q7PadQLPL+X2wSZXavexVXknTUiuzJFONuodzBUQXmi/k1jrKIyNaqBwgIwYI7eVFt7
-         UFlf3Qp5oUO+WI/1gis7DJ+tK0PbEUxWGwiINFgpCqxwzzyJ3Ujv/XV5BHQ/eadmbZYO
-         jXf2YdkWCBrxymxrPaUqhrYlWgF6bCypCayUPtHG9p6BDhWwCmBH40fQQZ7BMMO6CRLo
-         4ev2pFSLWDZH+bsD1g+IoirzhgpLU/XVuM7tq8CP8EWKWFCM7OAnGi5xOFPHtoYBywp6
-         irNg==
-X-Gm-Message-State: AOAM530OKmnpGlple9vmH2Cbb79b/2UxUhT065gV6KCN32ymvygicsuc
-        1liWWZRsi0xOOxceLxmOBv4/9w==
-X-Google-Smtp-Source: ABdhPJzgHPhBsD8FZtMDQrfMIjGL4qmZj/8xNAuAHXm+0qz5n2h6pVB3S7OCKNZbK4qjctoXq1cGGA==
-X-Received: by 2002:a5d:40cd:: with SMTP id b13mr4528517wrq.297.1601664359823;
-        Fri, 02 Oct 2020 11:45:59 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id n2sm2937452wma.29.2020.10.02.11.45.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Oct 2020 11:45:57 -0700 (PDT)
-Date:   Fri, 2 Oct 2020 20:45:54 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        airlied@linux.ie, daniel@ffwll.ch, sam@ravnborg.org,
-        alexander.deucher@amd.com, christian.koenig@amd.com,
-        kraxel@redhat.com, l.stach@pengutronix.de,
-        linux+etnaviv@armlinux.org.uk, christian.gmeiner@gmail.com,
-        inki.dae@samsung.com, jy0922.shim@samsung.com,
-        sw0312.kim@samsung.com, kyungmin.park@samsung.com,
-        kgene@kernel.org, krzk@kernel.org, yuq825@gmail.com,
-        bskeggs@redhat.com, robh@kernel.org, tomeu.vizoso@collabora.com,
-        steven.price@arm.com, alyssa.rosenzweig@collabora.com,
-        hjc@rock-chips.com, heiko@sntech.de, hdegoede@redhat.com,
-        sean@poorly.run, eric@anholt.net, oleksandr_andrushchenko@epam.com,
-        ray.huang@amd.com, sumit.semwal@linaro.org,
-        emil.velikov@collabora.com, luben.tuikov@amd.com, apaneers@amd.com,
-        linus.walleij@linaro.org, melissa.srw@gmail.com,
-        chris@chris-wilson.co.uk, miaoqinglang@huawei.com,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org,
-        etnaviv@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, lima@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, spice-devel@lists.freedesktop.org,
-        linux-rockchip@lists.infradead.org, xen-devel@lists.xenproject.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v3 7/7] drm/todo: Update entries around struct dma_buf_map
-Message-ID: <20201002184554.GN438822@phenom.ffwll.local>
-References: <20200929151437.19717-1-tzimmermann@suse.de>
- <20200929151437.19717-8-tzimmermann@suse.de>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qtkiGjkyzPqhHXvj+x4KevVCs1UVs2TLajO5QFK46lc=;
+        b=IlKRih1aUtcUykxiNm2BBs0g4FhIG2XCowYqCpAmBRYlL2Pj8xSc7Y/+l2d6rE4taX
+         uwwFwDIWidpN3G585JF5lBD3PSkE+T8+sDt/yt0PHzFjzYwp0JYKDyIKvGHcRCXkCOKi
+         ULNPFo2hjchogUW43sNZCQPLs18VPKWCImgJh3CeQKzacg8sOgiLy3YskjgU5wh+0IRY
+         Fu2ox1mOr0lnL/X0QImD8A502xoC7n6VIKHbNPfpQ+eG9IsMUzCXFluo+f2BEYDQqSB2
+         u9oiO9OvRP5oHNhg6AOQYD1PyIlOh0g3VvBEJvo0JoQo1xPnWx3WW/vdcclxpsXXArVY
+         drPw==
+X-Gm-Message-State: AOAM533ldunzwLVuaadzIGaDmllZAZh5+LEvyW9ZCs8AoiJfkgjWeueg
+        0sty1Oo11Tl1A75EWCavJkCVh9T75Oy3RFbNRRY=
+X-Google-Smtp-Source: ABdhPJx7YX8zviFjrOEhTKLkYmCq2KlFovtI8luMYDcSxruAN3b9De/JFEEiXwNOCHvtvZ+X9imhz+Hlu9vqUFcQCHI=
+X-Received: by 2002:a4a:d509:: with SMTP id m9mr3027482oos.77.1601666534935;
+ Fri, 02 Oct 2020 12:22:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200929151437.19717-8-tzimmermann@suse.de>
-X-Operating-System: Linux phenom 5.7.0-1-amd64 
+References: <20201002175303.390363-1-daniel.vetter@ffwll.ch> <CAAFQd5AsFOau=m_3UPh2tKqwiUJaY4NH9HHrHJ17gbCLDgTNCQ@mail.gmail.com>
+In-Reply-To: <CAAFQd5AsFOau=m_3UPh2tKqwiUJaY4NH9HHrHJ17gbCLDgTNCQ@mail.gmail.com>
+From:   Oded Gabbay <oded.gabbay@gmail.com>
+Date:   Fri, 2 Oct 2020 22:21:47 +0300
+Message-ID: <CAFCwf12zK9oLoShj9C71Bysg4Sd0VCaOHqPRJznZa_+SpB4j-Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] mm/frame-vec: Drop gup_flags from get_vaddr_frames()
+To:     Tomasz Figa <tfiga@chromium.org>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Inki Dae <inki.dae@samsung.com>,
+        Joonyoung Shim <jy0922.shim@samsung.com>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Pawel Osciak <pawel@osciak.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Omer Shpigelman <oshpigelman@habana.ai>,
+        Tomer Tayar <ttayar@habana.ai>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Pawel Piskorski <ppiskorski@habana.ai>,
+        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
+        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Sep 29, 2020 at 05:14:37PM +0200, Thomas Zimmermann wrote:
-> Instances of struct dma_buf_map should be useful throughout DRM's
-> memory management code. Furthermore, several drivers can now use
-> generic fbdev emulation.
-> 
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+On Fri, Oct 2, 2020 at 9:23 PM Tomasz Figa <tfiga@chromium.org> wrote:
+>
+> On Fri, Oct 2, 2020 at 7:53 PM Daniel Vetter <daniel.vetter@ffwll.ch> wrote:
+> >
+> > FOLL_WRITE | FOLL_FORCE is really the only reasonable thing to do for
+> > simple dma device that can't guarantee write protection. Which is also
+> > what all the callers are using.
+> >
+> > So just simplify this.
+> >
+> > Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+> > Cc: Inki Dae <inki.dae@samsung.com>
+> > Cc: Joonyoung Shim <jy0922.shim@samsung.com>
+> > Cc: Seung-Woo Kim <sw0312.kim@samsung.com>
+> > Cc: Kyungmin Park <kyungmin.park@samsung.com>
+> > Cc: Kukjin Kim <kgene@kernel.org>
+> > Cc: Krzysztof Kozlowski <krzk@kernel.org>
+> > Cc: Pawel Osciak <pawel@osciak.com>
+> > Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+> > Cc: Tomasz Figa <tfiga@chromium.org>
+> > Cc: Andrew Morton <akpm@linux-foundation.org>
+> > Cc: Oded Gabbay <oded.gabbay@gmail.com>
+> > Cc: Omer Shpigelman <oshpigelman@habana.ai>
+> > Cc: Tomer Tayar <ttayar@habana.ai>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: Pawel Piskorski <ppiskorski@habana.ai>
+> > Cc: linux-arm-kernel@lists.infradead.org
+> > Cc: linux-samsung-soc@vger.kernel.org
+> > Cc: linux-media@vger.kernel.org
+> > Cc: linux-mm@kvack.org
+> > ---
+> >  drivers/gpu/drm/exynos/exynos_drm_g2d.c           | 3 +--
+> >  drivers/media/common/videobuf2/videobuf2-memops.c | 3 +--
+> >  drivers/misc/habanalabs/common/memory.c           | 3 +--
+> >  include/linux/mm.h                                | 2 +-
+> >  mm/frame_vector.c                                 | 4 ++--
+> >  5 files changed, 6 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/exynos/exynos_drm_g2d.c b/drivers/gpu/drm/exynos/exynos_drm_g2d.c
+> > index 967a5cdc120e..ac452842bab3 100644
+> > --- a/drivers/gpu/drm/exynos/exynos_drm_g2d.c
+> > +++ b/drivers/gpu/drm/exynos/exynos_drm_g2d.c
+> > @@ -480,8 +480,7 @@ static dma_addr_t *g2d_userptr_get_dma_addr(struct g2d_data *g2d,
+> >                 goto err_free;
+> >         }
+> >
+> > -       ret = get_vaddr_frames(start, npages, FOLL_FORCE | FOLL_WRITE,
+> > -               g2d_userptr->vec);
+> > +       ret = get_vaddr_frames(start, npages, g2d_userptr->vec);
+> >         if (ret != npages) {
+> >                 DRM_DEV_ERROR(g2d->dev,
+> >                               "failed to get user pages from userptr.\n");
+> > diff --git a/drivers/media/common/videobuf2/videobuf2-memops.c b/drivers/media/common/videobuf2/videobuf2-memops.c
+> > index 6e9e05153f4e..9dd6c27162f4 100644
+> > --- a/drivers/media/common/videobuf2/videobuf2-memops.c
+> > +++ b/drivers/media/common/videobuf2/videobuf2-memops.c
+> > @@ -40,7 +40,6 @@ struct frame_vector *vb2_create_framevec(unsigned long start,
+> >         unsigned long first, last;
+> >         unsigned long nr;
+> >         struct frame_vector *vec;
+> > -       unsigned int flags = FOLL_FORCE | FOLL_WRITE;
+> >
+> >         first = start >> PAGE_SHIFT;
+> >         last = (start + length - 1) >> PAGE_SHIFT;
+> > @@ -48,7 +47,7 @@ struct frame_vector *vb2_create_framevec(unsigned long start,
+> >         vec = frame_vector_create(nr);
+> >         if (!vec)
+> >                 return ERR_PTR(-ENOMEM);
+> > -       ret = get_vaddr_frames(start & PAGE_MASK, nr, flags, vec);
+> > +       ret = get_vaddr_frames(start & PAGE_MASK, nr, vec);
+> >         if (ret < 0)
+> >                 goto out_destroy;
+> >         /* We accept only complete set of PFNs */
+>
+> For drivers/media/common/videobuf2/:
+>
+> Acked-by: Tomasz Figa <tfiga@chromium.org>
+>
+> Best regards,
+> Tomasz
 
-Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+For drivers/misc/habanalabs:
+Acked-by: Oded Gabbay <oded.gabbay@gmail.com>
 
-> ---
->  Documentation/gpu/todo.rst | 24 ++++++++++++++++++++++--
->  1 file changed, 22 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/gpu/todo.rst b/Documentation/gpu/todo.rst
-> index 3751ac976c3e..023626c1837b 100644
-> --- a/Documentation/gpu/todo.rst
-> +++ b/Documentation/gpu/todo.rst
-> @@ -197,8 +197,10 @@ Convert drivers to use drm_fbdev_generic_setup()
->  ------------------------------------------------
->  
->  Most drivers can use drm_fbdev_generic_setup(). Driver have to implement
-> -atomic modesetting and GEM vmap support. Current generic fbdev emulation
-> -expects the framebuffer in system memory (or system-like memory).
-> +atomic modesetting and GEM vmap support. Historically, generic fbdev emulation
-> +expected the framebuffer in system memory or system-like memory. By employing
-> +struct dma_buf_map, drivers with frambuffers in I/O memory can be supported
-> +as well.
->  
->  Contact: Maintainer of the driver you plan to convert
->  
-> @@ -446,6 +448,24 @@ Contact: Ville Syrjälä, Daniel Vetter
->  
->  Level: Intermediate
->  
-> +Use struct dma_buf_map throughout codebase
-> +------------------------------------------
-> +
-> +Pointers to shared device memory are stored in struct dma_buf_map. Each
-> +instance knows whether it refers to system or I/O memory. Most of the DRM-wide
-> +interface have been converted to use struct dma_buf_map, but implementations
-> +often still use raw pointers.
-> +
-> +The task is to use struct dma_buf_map where it makes sense.
-> +
-> +* Memory managers should use struct dma_buf_map for dma-buf-imported buffers.
-> +* TTM might benefit from using struct dma_buf_map internally.
-> +* Framebuffer copying and blitting helpers should operate on struct dma_buf_map.
-> +
-> +Contact: Thomas Zimmermann <tzimmermann@suse.de>, Christian König, Daniel Vetter
-> +
-> +Level: Intermediate
-> +
->  
->  Core refactorings
->  =================
-> -- 
-> 2.28.0
-> 
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Thanks,
+Oded
