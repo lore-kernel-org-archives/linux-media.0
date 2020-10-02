@@ -2,127 +2,140 @@ Return-Path: <SRS0=i6Q9=DJ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D312C46466
-	for <linux-media@archiver.kernel.org>; Fri,  2 Oct 2020 22:23:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 729BBC41604
+	for <linux-media@archiver.kernel.org>; Fri,  2 Oct 2020 22:39:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 235DF20738
-	for <linux-media@archiver.kernel.org>; Fri,  2 Oct 2020 22:23:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3E95420796
+	for <linux-media@archiver.kernel.org>; Fri,  2 Oct 2020 22:39:25 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="CkmG7p3e"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725788AbgJBWXi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 2 Oct 2020 18:23:38 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:27896 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725283AbgJBWXh (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 2 Oct 2020 18:23:37 -0400
-X-IronPort-AV: E=Sophos;i="5.77,329,1596466800"; 
-   d="scan'208";a="58574391"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 03 Oct 2020 07:23:35 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 49E2140062C6;
-        Sat,  3 Oct 2020 07:23:33 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Jacopo Mondi <jacopo@jmondi.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v8 1/3] media: i2c: ov772x: Parse endpoint properties
-Date:   Fri,  2 Oct 2020 23:23:21 +0100
-Message-Id: <20201002222323.21736-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201002222323.21736-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20201002222323.21736-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        id S1725550AbgJBWjV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 2 Oct 2020 18:39:21 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:10697 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725446AbgJBWjV (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 2 Oct 2020 18:39:21 -0400
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5f77ac0c0001>; Fri, 02 Oct 2020 15:39:08 -0700
+Received: from [10.2.58.214] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 2 Oct
+ 2020 22:39:19 +0000
+Subject: Re: [PATCH 2/2] mm/frame-vec: use FOLL_LONGTERM
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        DRI Development <dri-devel@lists.freedesktop.org>
+CC:     LKML <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Jan Kara <jack@suse.cz>,
+        Dan Williams <dan.j.williams@intel.com>, <linux-mm@kvack.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>, <linux-media@vger.kernel.org>
+References: <20201002175303.390363-1-daniel.vetter@ffwll.ch>
+ <20201002175303.390363-2-daniel.vetter@ffwll.ch>
+From:   John Hubbard <jhubbard@nvidia.com>
+Message-ID: <cb56763e-4fda-a783-03ae-7f749ec55981@nvidia.com>
+Date:   Fri, 2 Oct 2020 15:39:18 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
+MIME-Version: 1.0
+In-Reply-To: <20201002175303.390363-2-daniel.vetter@ffwll.ch>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1601678348; bh=qTcrCkJDzdT8SfyK7qNOOJqSlCcdoBOSPBld3HipaxE=;
+        h=Subject:To:CC:References:From:Message-ID:Date:User-Agent:
+         MIME-Version:In-Reply-To:Content-Type:Content-Language:
+         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
+        b=CkmG7p3e1gAyMtXXHaHX1wOW1NQeTx5EUso+tbSgFhrSp+8QrJgqKgpGph1U/WlJ9
+         qjs7wfNjzCdFazLpm35kI8ryUb4HAhQGO1YhRDZHuawuF1n/XklWptr0Oh+AMQAUjy
+         jneLP0a9LWrTfebX3/q5vKRWI7xVqEgLJba7x3/ynwdacCPjlPBn92WcwSu6Cw0YiT
+         eKgU9+6RSW0XQZenBoBjewsXMxc+aP2u4J0XqZOj1Y5gz6t/S5sXbW56buv0moU6ab
+         JNDEx6uK4fFAQ92xLXRbzenGuHOo4jN8MNmfnLJi/k09pKguinMXh3euJYAOLgkYOa
+         zfT3EJXtIkeRQ==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Parse endpoint properties using v4l2_fwnode_endpoint_alloc_parse()
-to determine the bus type and store it in the driver structure.
+On 10/2/20 10:53 AM, Daniel Vetter wrote:
+> For $reasons I've stumbled over this code and I'm not sure the change
+> to the new gup functions in 55a650c35fea ("mm/gup: frame_vector:
+> convert get_user_pages() --> pin_user_pages()") was entirely correct.
+>=20
+> This here is used for long term buffers (not just quick I/O) like
+> RDMA, and John notes this in his patch. But I thought the rule for
+> these is that they need to add FOLL_LONGTERM, which John's patch
+> didn't do.
 
-Set bus_type to V4L2_MBUS_PARALLEL as it's the only supported one
+Yep. The earlier gup --> pup conversion patches were intended to not
+have any noticeable behavior changes, and FOLL_LONGTERM, with it's
+special cases and such, added some risk that I wasn't ready to take
+on yet. Also, FOLL_LONGTERM rules are only *recently* getting firmed
+up. So there was some doubt at least in my mind, about which sites
+should have it.
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
----
- drivers/media/i2c/ov772x.c | 34 ++++++++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+But now that we're here, I think it's really good that you've brought
+this up. It's definitely time to add FOLL_LONGTERM wherever it's missing.
 
-diff --git a/drivers/media/i2c/ov772x.c b/drivers/media/i2c/ov772x.c
-index 2cc6a678069a..afe2446dfb68 100644
---- a/drivers/media/i2c/ov772x.c
-+++ b/drivers/media/i2c/ov772x.c
-@@ -31,6 +31,7 @@
- #include <media/v4l2-ctrls.h>
- #include <media/v4l2-device.h>
- #include <media/v4l2-event.h>
-+#include <media/v4l2-fwnode.h>
- #include <media/v4l2-image-sizes.h>
- #include <media/v4l2-subdev.h>
- 
-@@ -434,6 +435,7 @@ struct ov772x_priv {
- #ifdef CONFIG_MEDIA_CONTROLLER
- 	struct media_pad pad;
- #endif
-+	enum v4l2_mbus_type		  bus_type;
- };
- 
- /*
-@@ -1348,6 +1350,34 @@ static const struct v4l2_subdev_ops ov772x_subdev_ops = {
- 	.pad	= &ov772x_subdev_pad_ops,
- };
- 
-+static int ov772x_parse_dt(struct i2c_client *client,
-+			   struct ov772x_priv *priv)
-+{
-+	struct v4l2_fwnode_endpoint bus_cfg = {
-+		.bus_type = V4L2_MBUS_PARALLEL
-+	};
-+	struct fwnode_handle *ep;
-+	int ret;
-+
-+	ep = fwnode_graph_get_next_endpoint(dev_fwnode(&client->dev), NULL);
-+	if (!ep) {
-+		dev_err(&client->dev, "Endpoint node not found\n");
-+		return -EINVAL;
-+	}
-+
-+	ret = v4l2_fwnode_endpoint_alloc_parse(ep, &bus_cfg);
-+	if (ret)
-+		goto error_fwnode_put;
-+
-+	priv->bus_type = bus_cfg.bus_type;
-+	v4l2_fwnode_endpoint_free(&bus_cfg);
-+
-+error_fwnode_put:
-+	fwnode_handle_put(ep);
-+
-+	return ret;
-+}
-+
- /*
-  * i2c_driver function
-  */
-@@ -1415,6 +1445,10 @@ static int ov772x_probe(struct i2c_client *client)
- 		goto error_clk_put;
- 	}
- 
-+	ret = ov772x_parse_dt(client, priv);
-+	if (ret)
-+		goto error_clk_put;
-+
- 	ret = ov772x_video_probe(priv);
- 	if (ret < 0)
- 		goto error_gpio_put;
--- 
-2.17.1
+thanks,
+--=20
+John Hubbard
+NVIDIA
+
+>=20
+> There is already a dax specific check (added in b7f0554a56f2 ("mm:
+> fail get_vaddr_frames() for filesystem-dax mappings")), so this seems
+> like the prudent thing to do.
+>=20
+> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: John Hubbard <jhubbard@nvidia.com>
+> Cc: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
+> Cc: Jan Kara <jack@suse.cz>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: linux-mm@kvack.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-samsung-soc@vger.kernel.org
+> Cc: linux-media@vger.kernel.org
+> ---
+> Hi all,
+>=20
+> I stumbled over this and figured typing this patch can't hurt. Really
+> just to maybe learn a few things about how gup/pup is supposed to be
+> used (we have a bit of that in drivers/gpu), this here isn't really
+> ralated to anything I'm doing.
+>=20
+> I'm also wondering whether the explicit dax check should be removed,
+> since FOLL_LONGTERM should take care of that already.
+> -Daniel
+> ---
+>   mm/frame_vector.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/mm/frame_vector.c b/mm/frame_vector.c
+> index 5d34c9047e9c..3507e09cb3ff 100644
+> --- a/mm/frame_vector.c
+> +++ b/mm/frame_vector.c
+> @@ -35,7 +35,7 @@ int get_vaddr_frames(unsigned long start, unsigned int =
+nr_frames,
+>   {
+>   	struct mm_struct *mm =3D current->mm;
+>   	struct vm_area_struct *vma;
+> -	unsigned int gup_flags =3D FOLL_WRITE | FOLL_FORCE;
+> +	unsigned int gup_flags =3D FOLL_WRITE | FOLL_FORCE | FOLL_LONGTERM;
+>   	int ret =3D 0;
+>   	int err;
+>   	int locked;
+>=20
 
