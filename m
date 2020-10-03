@@ -7,56 +7,56 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1846BC4741F
-	for <linux-media@archiver.kernel.org>; Sat,  3 Oct 2020 04:03:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59B27C4727D
+	for <linux-media@archiver.kernel.org>; Sat,  3 Oct 2020 04:03:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CF43E207FB
-	for <linux-media@archiver.kernel.org>; Sat,  3 Oct 2020 04:03:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 157E5207FF
+	for <linux-media@archiver.kernel.org>; Sat,  3 Oct 2020 04:03:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="a0cf+nPL"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iCtAp16i"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725819AbgJCEDL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 3 Oct 2020 00:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39048 "EHLO
+        id S1725839AbgJCEDV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 3 Oct 2020 00:03:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725807AbgJCEDI (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 3 Oct 2020 00:03:08 -0400
+        with ESMTP id S1725825AbgJCEDU (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 3 Oct 2020 00:03:20 -0400
 Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86347C0613D0
-        for <linux-media@vger.kernel.org>; Fri,  2 Oct 2020 21:03:08 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id gm14so2311358pjb.2
-        for <linux-media@vger.kernel.org>; Fri, 02 Oct 2020 21:03:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD58C0613E8
+        for <linux-media@vger.kernel.org>; Fri,  2 Oct 2020 21:03:18 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id i3so2131646pjz.4
+        for <linux-media@vger.kernel.org>; Fri, 02 Oct 2020 21:03:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=qDmdA3E3k0WcvEKJL539r8KYOExUff4XTLceLBQuupY=;
-        b=a0cf+nPLMpMjpQI82SemGlUIWrWmLb94fhl7q68tkPZtczXIePaAoqkriup1tEyOaX
-         k1SAv+BOBuCC6K6t7KKxKgS45ZA42laRzhJ/qD5LX9w9Ez31ERIUvyFyk2qCt9RBrNWz
-         XhLFReMWTBDViftARAVq1zBh0Ao1/qQGJLSZUGABcSWoWzf87UfGtzDAH1Rty4XuXvxy
-         WoBmF95j9EHyZCWTpfq6+Dvf+sdh1bk4GsiDumRhkFnJIRcF8Z4fczhRbOI7jnC9FvVM
-         28yFnq+zs2WTnSaC+9wtp08RPCdBtlBKVUAtOfai3pn3yBlQkFN2UbudGt32Ja+dYQZT
-         CBUA==
+        bh=tpTaD+pd4ck4bVP3jdYyxJbjW42E08ISZPU7AHa+XuI=;
+        b=iCtAp16i2PFqCuAtAc95pctbZClTzNcfeELmUCYBbz+JDgZFdJjc0ge+UW+FHMbNfh
+         UrI0haS/vXZV+aUY9NLhpLM8R1G9G10iO44wZ5pKo1Ojd2xDJqr+TaMTIu2j1nU3hN3+
+         L6cXOWui/1+aw3xCcYDN4c9ohitsWYOwJkOUXSWRf0mjoGhfuqIAg/i94L09LkwUxsP5
+         I7gYH7jrY6i3VFNxRuwHqfW97kkF3mF3eGO550s63rK3LzEGo1fu/DIAVXsLAHd997bd
+         WH30VF3FZrXEq4+mV31Yt9rgnaJ3ivCqg1/j3J6vmLZO2pIqYUP7v1SnRqJ975C38mN4
+         cvwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=qDmdA3E3k0WcvEKJL539r8KYOExUff4XTLceLBQuupY=;
-        b=PcPccUEP+KNQ2KcPjOhOfkZADWLpS8nqvXoNB9Lu4ewEwW0qGMXi8KHNK3oOCYu0gz
-         6l12oUlU1kUGErddfWh0gvcqMilOM9H0y29BiTt9I2LnKWX9D3o69zTnIVkFME7wExw4
-         5+Vx2r212UvGGN7zVBi8hQNVSFhyfvuA/R2OW5LBe++E7du1Ps9VzPy1L8ApbQ1y++zR
-         wzvecSKlRXcQ4/FkRXDZnmOWb3M9mfM/hXLIFOuJKYui1tblp5E5qtesnJMZ/1jFrtAm
-         mvbDIC8sjUeFXptIfDgy1tnngcKr/J3rE2V8xabeyYd23uc/S5p0Thp7ot01Ro//4TaE
-         a8NA==
-X-Gm-Message-State: AOAM533A+Yp/wh/kj6imTu12vQPtqSNZwI2FsLsLgdyRotfDafE0jPs7
-        mhkmD6ilA1HWxakaNUPH09ODRw==
-X-Google-Smtp-Source: ABdhPJwni5E7y6nissv8Ogs+irApUo4wFV4n6mqH2ximcudDbsXjewVZdnIDC7B9NIUSCJz8OUEDxw==
-X-Received: by 2002:a17:90a:ab8f:: with SMTP id n15mr5821518pjq.139.1601697788005;
-        Fri, 02 Oct 2020 21:03:08 -0700 (PDT)
+        bh=tpTaD+pd4ck4bVP3jdYyxJbjW42E08ISZPU7AHa+XuI=;
+        b=Ifu3nhl0uSBVuQNygH5uierrwZWjTwxGo1BhLhvtmBuQePbUhvIjEhUXVUK0MmHiUc
+         rME7Nl3UgyzPhaPaKiAUksJQxlsJpoN4mNiSNIKdxV6DAIRK8FGuiI9/j0hlXKCA+B0z
+         CJqNIF2f4bsMQzdhM0wqAXv9+CFN7Sn1DX7NlXnaOeQ4dSCf9wJLO38NYz7E8ULbW9Fn
+         4mudCW8FElkAfjVaDy18QLJu0UoSwwBW3cONplSolJ8We/YGOmAWQbzLifoiwAzZLLUj
+         UF/1AMFtvGtRCpYUbkIQwNNywFtNsHeMVRKKpkJ0vHKqwNGP70u/C+fuaFmSuH/eb+GB
+         EsRA==
+X-Gm-Message-State: AOAM531gmSNJ9fdm6mNwo016mDdRTocklvnQFLF/Fvx50paQar6/pasw
+        zsT0P9mVA/OwpoCX0/5wXvgrig==
+X-Google-Smtp-Source: ABdhPJxtWqhtvVCWUchRdru+/v7VgHdom2HPrTSSjkwt5rvTB7sDHJfAy64XBhzTdVSAJlo5uf1IMA==
+X-Received: by 2002:a17:90a:da06:: with SMTP id e6mr5906398pjv.8.1601697797650;
+        Fri, 02 Oct 2020 21:03:17 -0700 (PDT)
 Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
-        by smtp.gmail.com with ESMTPSA id 190sm3909290pfy.22.2020.10.02.21.03.05
+        by smtp.gmail.com with ESMTPSA id 190sm3909290pfy.22.2020.10.02.21.03.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Oct 2020 21:03:07 -0700 (PDT)
+        Fri, 02 Oct 2020 21:03:16 -0700 (PDT)
 From:   John Stultz <john.stultz@linaro.org>
 To:     lkml <linux-kernel@vger.kernel.org>
 Cc:     John Stultz <john.stultz@linaro.org>,
@@ -75,9 +75,9 @@ Cc:     John Stultz <john.stultz@linaro.org>,
         Simon Ser <contact@emersion.fr>,
         James Jones <jajones@nvidia.com>, linux-media@vger.kernel.org,
         dri-devel@lists.freedesktop.org
-Subject: [PATCH v3 2/7] dma-buf: heaps: Move heap-helper logic into the cma_heap implementation
-Date:   Sat,  3 Oct 2020 04:02:52 +0000
-Message-Id: <20201003040257.62768-3-john.stultz@linaro.org>
+Subject: [PATCH v3 7/7] dma-buf: system_heap: Add a system-uncached heap re-using the system heap
+Date:   Sat,  3 Oct 2020 04:02:57 +0000
+Message-Id: <20201003040257.62768-8-john.stultz@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20201003040257.62768-1-john.stultz@linaro.org>
 References: <20201003040257.62768-1-john.stultz@linaro.org>
@@ -88,12 +88,44 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Since the heap-helpers logic ended up not being as generic as
-hoped, move the heap-helpers dma_buf_ops implementations into
-the cma_heap directly.
+This adds a heap that allocates non-contiguous buffers that are
+marked as writecombined, so they are not cached by the CPU.
 
-This will allow us to remove the heap_helpers code in a following
-patch.
+This is useful, as most graphics buffers are usually not touched
+by the CPU or only written into once by the CPU. So when mapping
+the buffer over and over between devices, we can skip the CPU
+syncing, which saves a lot of cache management overhead, greatly
+improving performance.
+
+For folk using ION, there was a ION_FLAG_CACHED flag, which
+signaled if the returned buffer should be CPU cacheable or not.
+With DMA-BUF heaps, we do not yet have such a flag, and by default
+the current heaps (system and cma) produce CPU cachable buffers.
+So for folks transitioning from ION to DMA-BUF Heaps, this fills
+in some of that missing functionality.
+
+There has been a suggestion to make this functionality a flag
+(DMAHEAP_FLAG_UNCACHED?) on the system heap, similar to how
+ION used the ION_FLAG_CACHED. But I want to make sure an
+_UNCACHED flag would truely be a generic attribute across all
+heaps. So far that has been unclear, so having it as a separate
+heap seemes better for now. (But I'm open to discussion on this
+point!)
+
+This is a rework of earlier efforts to add a uncached system heap,
+done utilizing the exisitng system heap, adding just a bit of
+logic to handle the uncached case.
+
+Feedback would be very welcome!
+
+Many thanks to Liam Mark for his help to get this working.
+
+Pending opensource users of this code include:
+* AOSP HiKey960 gralloc:
+  - https://android-review.googlesource.com/c/device/linaro/hikey/+/1399519
+  - Visibly improves performance over the system heap
+* AOSP Codec2 (possibly, needs more review):
+  - https://android-review.googlesource.com/c/platform/frameworks/av/+/1360640/17/media/codec2/vndk/C2DmaBufAllocator.cpp#325
 
 Cc: Sumit Semwal <sumit.semwal@linaro.org>
 Cc: Liam Mark <lmark@codeaurora.org>
@@ -113,419 +145,229 @@ Cc: linux-media@vger.kernel.org
 Cc: dri-devel@lists.freedesktop.org
 Signed-off-by: John Stultz <john.stultz@linaro.org>
 ---
-v2:
-* Fix unused return value and locking issue Reported-by:
-    kernel test robot <lkp@intel.com>
-    Julia Lawall <julia.lawall@inria.fr>
-* Make cma_heap_buf_ops static suggested by
-    kernel test robot <lkp@intel.com>
-* Fix uninitialized return in cma Reported-by:
-    kernel test robot <lkp@intel.com>
-* Minor cleanups
-v3:
-* Use the new sgtable mapping functions, as Suggested-by:
-     Daniel Mentz <danielmentz@google.com>
----
- drivers/dma-buf/heaps/cma_heap.c | 317 ++++++++++++++++++++++++++-----
- 1 file changed, 267 insertions(+), 50 deletions(-)
+ drivers/dma-buf/heaps/system_heap.c | 87 ++++++++++++++++++++++++++---
+ 1 file changed, 79 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/dma-buf/heaps/cma_heap.c b/drivers/dma-buf/heaps/cma_heap.c
-index 626cf7fd033a..366963b94c72 100644
---- a/drivers/dma-buf/heaps/cma_heap.c
-+++ b/drivers/dma-buf/heaps/cma_heap.c
-@@ -2,76 +2,291 @@
- /*
-  * DMABUF CMA heap exporter
-  *
-- * Copyright (C) 2012, 2019 Linaro Ltd.
-+ * Copyright (C) 2012, 2019, 2020 Linaro Ltd.
-  * Author: <benjamin.gaignard@linaro.org> for ST-Ericsson.
-+ *
-+ * Also utilizing parts of Andrew Davis' SRAM heap:
-+ * Copyright (C) 2019 Texas Instruments Incorporated - http://www.ti.com/
-+ *	Andrew F. Davis <afd@ti.com>
-  */
--
- #include <linux/cma.h>
--#include <linux/device.h>
- #include <linux/dma-buf.h>
--#include <linux/dma-heap.h>
- #include <linux/dma-contiguous.h>
-+#include <linux/dma-heap.h>
-+#include <linux/dma-mapping.h>
- #include <linux/err.h>
--#include <linux/errno.h>
- #include <linux/highmem.h>
-+#include <linux/io.h>
-+#include <linux/mm.h>
- #include <linux/module.h>
--#include <linux/slab.h>
- #include <linux/scatterlist.h>
--#include <linux/sched/signal.h>
-+#include <linux/slab.h>
+diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heaps/system_heap.c
+index 2b8d4b6abacb..952f1fd9dacf 100644
+--- a/drivers/dma-buf/heaps/system_heap.c
++++ b/drivers/dma-buf/heaps/system_heap.c
+@@ -22,6 +22,7 @@
+ #include <linux/vmalloc.h>
  
--#include "heap-helpers.h"
+ struct dma_heap *sys_heap;
++struct dma_heap *sys_uncached_heap;
  
- struct cma_heap {
+ struct system_heap_buffer {
  	struct dma_heap *heap;
- 	struct cma *cma;
+@@ -31,6 +32,8 @@ struct system_heap_buffer {
+ 	struct sg_table sg_table;
+ 	int vmap_cnt;
+ 	void *vaddr;
++
++	bool uncached;
  };
  
--static void cma_heap_free(struct heap_helper_buffer *buffer)
-+struct cma_heap_buffer {
-+	struct cma_heap *heap;
-+	struct list_head attachments;
-+	struct mutex lock;
-+	unsigned long len;
-+	struct page *cma_pages;
-+	struct page **pages;
-+	pgoff_t pagecount;
-+	int vmap_cnt;
-+	void *vaddr;
-+};
+ struct dma_heap_attachment {
+@@ -38,6 +41,8 @@ struct dma_heap_attachment {
+ 	struct sg_table *table;
+ 	struct list_head list;
+ 	bool mapped;
 +
-+struct dma_heap_attachment {
-+	struct device *dev;
-+	struct sg_table table;
-+	struct list_head list;
-+};
-+
-+static int cma_heap_attach(struct dma_buf *dmabuf,
-+			   struct dma_buf_attachment *attachment)
- {
--	struct cma_heap *cma_heap = dma_heap_get_drvdata(buffer->heap);
--	unsigned long nr_pages = buffer->pagecount;
--	struct page *cma_pages = buffer->priv_virt;
-+	struct cma_heap_buffer *buffer = dmabuf->priv;
-+	struct dma_heap_attachment *a;
-+	int ret;
++	bool uncached;
+ };
  
--	/* free page list */
--	kfree(buffer->pages);
--	/* release memory */
--	cma_release(cma_heap->cma, cma_pages, nr_pages);
-+	a = kzalloc(sizeof(*a), GFP_KERNEL);
-+	if (!a)
-+		return -ENOMEM;
+ #define HIGH_ORDER_GFP  (((GFP_HIGHUSER | __GFP_ZERO | __GFP_NOWARN \
+@@ -94,7 +99,7 @@ static int system_heap_attach(struct dma_buf *dmabuf,
+ 	a->dev = attachment->dev;
+ 	INIT_LIST_HEAD(&a->list);
+ 	a->mapped = false;
+-
++	a->uncached = buffer->uncached;
+ 	attachment->priv = a;
+ 
+ 	mutex_lock(&buffer->lock);
+@@ -124,9 +129,13 @@ static struct sg_table *system_heap_map_dma_buf(struct dma_buf_attachment *attac
+ {
+ 	struct dma_heap_attachment *a = attachment->priv;
+ 	struct sg_table *table = a->table;
++	int attr = 0;
+ 	int ret;
+ 
+-	ret = dma_map_sgtable(attachment->dev, table, direction, 0);
++	if (a->uncached)
++		attr = DMA_ATTR_SKIP_CPU_SYNC;
 +
-+	ret = sg_alloc_table_from_pages(&a->table, buffer->pages,
-+					buffer->pagecount, 0,
-+					buffer->pagecount << PAGE_SHIFT,
-+					GFP_KERNEL);
-+	if (ret) {
-+		kfree(a);
-+		return ret;
-+	}
-+
-+	a->dev = attachment->dev;
-+	INIT_LIST_HEAD(&a->list);
-+
-+	attachment->priv = a;
-+
-+	mutex_lock(&buffer->lock);
-+	list_add(&a->list, &buffer->attachments);
-+	mutex_unlock(&buffer->lock);
-+
-+	return 0;
-+}
-+
-+static void cma_heap_detatch(struct dma_buf *dmabuf,
-+			     struct dma_buf_attachment *attachment)
-+{
-+	struct cma_heap_buffer *buffer = dmabuf->priv;
-+	struct dma_heap_attachment *a = attachment->priv;
-+
-+	mutex_lock(&buffer->lock);
-+	list_del(&a->list);
-+	mutex_unlock(&buffer->lock);
-+
-+	sg_free_table(&a->table);
-+	kfree(a);
-+}
-+
-+static struct sg_table *cma_heap_map_dma_buf(struct dma_buf_attachment *attachment,
-+					     enum dma_data_direction direction)
-+{
-+	struct dma_heap_attachment *a = attachment->priv;
-+	struct sg_table *table = &a->table;
-+	int ret;
-+
-+	ret = dma_map_sgtable(attachment->dev, table, direction, 0);
-+	if (ret)
-+		return ERR_PTR(-ENOMEM);
-+	return table;
-+}
-+
-+static void cma_heap_unmap_dma_buf(struct dma_buf_attachment *attachment,
-+				   struct sg_table *table,
-+				   enum dma_data_direction direction)
-+{
-+	dma_unmap_sgtable(attachment->dev, table, direction, 0);
-+}
-+
-+static int cma_heap_dma_buf_begin_cpu_access(struct dma_buf *dmabuf,
-+					     enum dma_data_direction direction)
-+{
-+	struct cma_heap_buffer *buffer = dmabuf->priv;
-+	struct dma_heap_attachment *a;
-+
-+	if (buffer->vmap_cnt)
-+		invalidate_kernel_vmap_range(buffer->vaddr, buffer->len);
-+
-+	mutex_lock(&buffer->lock);
-+	list_for_each_entry(a, &buffer->attachments, list) {
-+		dma_sync_sgtable_for_cpu(a->dev, &a->table, direction);
-+	}
-+	mutex_unlock(&buffer->lock);
-+
-+	return 0;
-+}
-+
-+static int cma_heap_dma_buf_end_cpu_access(struct dma_buf *dmabuf,
-+					   enum dma_data_direction direction)
-+{
-+	struct cma_heap_buffer *buffer = dmabuf->priv;
-+	struct dma_heap_attachment *a;
-+
-+	if (buffer->vmap_cnt)
-+		flush_kernel_vmap_range(buffer->vaddr, buffer->len);
-+
-+	mutex_lock(&buffer->lock);
-+	list_for_each_entry(a, &buffer->attachments, list) {
-+		dma_sync_sgtable_for_device(a->dev, &a->table, direction);
-+	}
-+	mutex_unlock(&buffer->lock);
-+
-+	return 0;
-+}
-+
-+static vm_fault_t cma_heap_vm_fault(struct vm_fault *vmf)
-+{
-+	struct vm_area_struct *vma = vmf->vma;
-+	struct cma_heap_buffer *buffer = vma->vm_private_data;
-+
-+	if (vmf->pgoff > buffer->pagecount)
-+		return VM_FAULT_SIGBUS;
-+
-+	vmf->page = buffer->pages[vmf->pgoff];
-+	get_page(vmf->page);
-+
-+	return 0;
-+}
-+
-+static const struct vm_operations_struct dma_heap_vm_ops = {
-+	.fault = cma_heap_vm_fault,
-+};
-+
-+static int cma_heap_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma)
-+{
-+	struct cma_heap_buffer *buffer = dmabuf->priv;
-+
-+	if ((vma->vm_flags & (VM_SHARED | VM_MAYSHARE)) == 0)
-+		return -EINVAL;
-+
-+	vma->vm_ops = &dma_heap_vm_ops;
-+	vma->vm_private_data = buffer;
-+
-+	return 0;
-+}
-+
-+static void *cma_heap_do_vmap(struct cma_heap_buffer *buffer)
-+{
-+	void *vaddr;
-+
-+	vaddr = vmap(buffer->pages, buffer->pagecount, VM_MAP, PAGE_KERNEL);
-+	if (!vaddr)
-+		return ERR_PTR(-ENOMEM);
-+
-+	return vaddr;
-+}
-+
-+static void *cma_heap_vmap(struct dma_buf *dmabuf)
-+{
-+	struct cma_heap_buffer *buffer = dmabuf->priv;
-+	void *vaddr;
-+
-+	mutex_lock(&buffer->lock);
-+	if (buffer->vmap_cnt) {
-+		buffer->vmap_cnt++;
-+		vaddr = buffer->vaddr;
-+		goto out;
-+	}
-+
-+	vaddr = cma_heap_do_vmap(buffer);
-+	if (IS_ERR(vaddr))
-+		goto out;
-+
-+	buffer->vaddr = vaddr;
-+	buffer->vmap_cnt++;
-+out:
-+	mutex_unlock(&buffer->lock);
-+
-+	return vaddr;
-+}
-+
-+static void cma_heap_vunmap(struct dma_buf *dmabuf, void *vaddr)
-+{
-+	struct cma_heap_buffer *buffer = dmabuf->priv;
-+
-+	mutex_lock(&buffer->lock);
-+	if (!--buffer->vmap_cnt) {
-+		vunmap(buffer->vaddr);
-+		buffer->vaddr = NULL;
-+	}
-+	mutex_unlock(&buffer->lock);
-+}
-+
-+static void cma_heap_dma_buf_release(struct dma_buf *dmabuf)
-+{
-+	struct cma_heap_buffer *buffer = dmabuf->priv;
-+	struct cma_heap *cma_heap = buffer->heap;
-+
-+	if (buffer->vmap_cnt > 0) {
-+		WARN(1, "%s: buffer still mapped in the kernel\n", __func__);
-+		vunmap(buffer->vaddr);
-+	}
-+
-+	cma_release(cma_heap->cma, buffer->cma_pages, buffer->pagecount);
- 	kfree(buffer);
++	ret = dma_map_sgtable(attachment->dev, table, direction, attr);
+ 	if (ret)
+ 		return ERR_PTR(ret);
+ 
+@@ -139,9 +148,12 @@ static void system_heap_unmap_dma_buf(struct dma_buf_attachment *attachment,
+ 				      enum dma_data_direction direction)
+ {
+ 	struct dma_heap_attachment *a = attachment->priv;
++	int attr = 0;
+ 
++	if (a->uncached)
++		attr = DMA_ATTR_SKIP_CPU_SYNC;
+ 	a->mapped = false;
+-	dma_unmap_sgtable(attachment->dev, table, direction, 0);
++	dma_unmap_sgtable(attachment->dev, table, direction, attr);
  }
  
--/* dmabuf heap CMA operations functions */
-+static const struct dma_buf_ops cma_heap_buf_ops = {
-+	.attach = cma_heap_attach,
-+	.detach = cma_heap_detatch,
-+	.map_dma_buf = cma_heap_map_dma_buf,
-+	.unmap_dma_buf = cma_heap_unmap_dma_buf,
-+	.begin_cpu_access = cma_heap_dma_buf_begin_cpu_access,
-+	.end_cpu_access = cma_heap_dma_buf_end_cpu_access,
-+	.mmap = cma_heap_mmap,
-+	.vmap = cma_heap_vmap,
-+	.vunmap = cma_heap_vunmap,
-+	.release = cma_heap_dma_buf_release,
-+};
+ static int system_heap_dma_buf_begin_cpu_access(struct dma_buf *dmabuf,
+@@ -150,6 +162,9 @@ static int system_heap_dma_buf_begin_cpu_access(struct dma_buf *dmabuf,
+ 	struct system_heap_buffer *buffer = dmabuf->priv;
+ 	struct dma_heap_attachment *a;
+ 
++	if (buffer->uncached)
++		return 0;
 +
- static int cma_heap_allocate(struct dma_heap *heap,
--			     unsigned long len,
--			     unsigned long fd_flags,
--			     unsigned long heap_flags)
-+				  unsigned long len,
-+				  unsigned long fd_flags,
-+				  unsigned long heap_flags)
+ 	mutex_lock(&buffer->lock);
+ 
+ 	if (buffer->vmap_cnt)
+@@ -171,6 +186,9 @@ static int system_heap_dma_buf_end_cpu_access(struct dma_buf *dmabuf,
+ 	struct system_heap_buffer *buffer = dmabuf->priv;
+ 	struct dma_heap_attachment *a;
+ 
++	if (buffer->uncached)
++		return 0;
++
+ 	mutex_lock(&buffer->lock);
+ 
+ 	if (buffer->vmap_cnt)
+@@ -194,6 +212,9 @@ static int system_heap_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma)
+ 	struct sg_page_iter piter;
+ 	int ret;
+ 
++	if (buffer->uncached)
++		vma->vm_page_prot = pgprot_writecombine(vma->vm_page_prot);
++
+ 	for_each_sgtable_page(table, &piter, vma->vm_pgoff) {
+ 		struct page *page = sg_page_iter_page(&piter);
+ 
+@@ -215,8 +236,12 @@ static void *system_heap_do_vmap(struct system_heap_buffer *buffer)
+ 	struct page **pages = vmalloc(sizeof(struct page *) * npages);
+ 	struct page **tmp = pages;
+ 	struct sg_page_iter piter;
++	pgprot_t pgprot = PAGE_KERNEL;
+ 	void *vaddr;
+ 
++	if (buffer->uncached)
++		pgprot = pgprot_writecombine(PAGE_KERNEL);
++
+ 	if (!pages)
+ 		return ERR_PTR(-ENOMEM);
+ 
+@@ -225,7 +250,7 @@ static void *system_heap_do_vmap(struct system_heap_buffer *buffer)
+ 		*tmp++ = sg_page_iter_page(&piter);
+ 	}
+ 
+-	vaddr = vmap(pages, npages, VM_MAP, PAGE_KERNEL);
++	vaddr = vmap(pages, npages, VM_MAP, pgprot);
+ 	vfree(pages);
+ 
+ 	if (!vaddr)
+@@ -278,6 +303,10 @@ static void system_heap_dma_buf_release(struct dma_buf *dmabuf)
+ 	int i;
+ 
+ 	table = &buffer->sg_table;
++	/* Unmap the uncached buffers from the heap device (pairs with the map on allocate) */
++	if (buffer->uncached)
++		dma_unmap_sgtable(dma_heap_get_dev(buffer->heap), table, DMA_BIDIRECTIONAL, 0);
++
+ 	for_each_sg(table->sgl, sg, table->nents, i) {
+ 		struct page *page = sg_page(sg);
+ 
+@@ -320,10 +349,11 @@ static struct page *alloc_largest_available(unsigned long size,
+ 	return NULL;
+ }
+ 
+-static int system_heap_allocate(struct dma_heap *heap,
+-				unsigned long len,
+-				unsigned long fd_flags,
+-				unsigned long heap_flags)
++static int system_heap_do_allocate(struct dma_heap *heap,
++				   unsigned long len,
++				   unsigned long fd_flags,
++				   unsigned long heap_flags,
++				   bool uncached)
  {
- 	struct cma_heap *cma_heap = dma_heap_get_drvdata(heap);
--	struct heap_helper_buffer *helper_buffer;
--	struct page *cma_pages;
-+	struct cma_heap_buffer *buffer;
-+	DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
- 	size_t size = PAGE_ALIGN(len);
--	unsigned long nr_pages = size >> PAGE_SHIFT;
-+	pgoff_t pagecount = size >> PAGE_SHIFT;
- 	unsigned long align = get_order(size);
-+	struct page *cma_pages;
- 	struct dma_buf *dmabuf;
- 	int ret = -ENOMEM;
- 	pgoff_t pg;
+ 	struct system_heap_buffer *buffer;
+ 	DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
+@@ -344,6 +374,7 @@ static int system_heap_allocate(struct dma_heap *heap,
+ 	mutex_init(&buffer->lock);
+ 	buffer->heap = heap;
+ 	buffer->len = len;
++	buffer->uncached = uncached;
  
--	if (align > CONFIG_CMA_ALIGNMENT)
--		align = CONFIG_CMA_ALIGNMENT;
--
--	helper_buffer = kzalloc(sizeof(*helper_buffer), GFP_KERNEL);
--	if (!helper_buffer)
-+	buffer = kzalloc(sizeof(*buffer), GFP_KERNEL);
-+	if (!buffer)
- 		return -ENOMEM;
- 
--	init_heap_helper_buffer(helper_buffer, cma_heap_free);
--	helper_buffer->heap = heap;
--	helper_buffer->size = len;
-+	INIT_LIST_HEAD(&buffer->attachments);
-+	mutex_init(&buffer->lock);
-+	buffer->len = size;
+ 	INIT_LIST_HEAD(&pages);
+ 	i = 0;
+@@ -393,6 +424,16 @@ static int system_heap_allocate(struct dma_heap *heap,
+ 		/* just return, as put will call release and that will free */
+ 		return ret;
+ 	}
 +
-+	if (align > CONFIG_CMA_ALIGNMENT)
-+		align = CONFIG_CMA_ALIGNMENT;
- 
--	cma_pages = cma_alloc(cma_heap->cma, nr_pages, align, false);
-+	cma_pages = cma_alloc(cma_heap->cma, pagecount, align, false);
- 	if (!cma_pages)
--		goto free_buf;
-+		goto free_buffer;
- 
-+	/* Clear the cma pages */
- 	if (PageHighMem(cma_pages)) {
--		unsigned long nr_clear_pages = nr_pages;
-+		unsigned long nr_clear_pages = pagecount;
- 		struct page *page = cma_pages;
- 
- 		while (nr_clear_pages > 0) {
-@@ -85,7 +300,6 @@ static int cma_heap_allocate(struct dma_heap *heap,
- 			 */
- 			if (fatal_signal_pending(current))
- 				goto free_cma;
--
- 			page++;
- 			nr_clear_pages--;
- 		}
-@@ -93,28 +307,30 @@ static int cma_heap_allocate(struct dma_heap *heap,
- 		memset(page_address(cma_pages), 0, size);
- 	}
- 
--	helper_buffer->pagecount = nr_pages;
--	helper_buffer->pages = kmalloc_array(helper_buffer->pagecount,
--					     sizeof(*helper_buffer->pages),
--					     GFP_KERNEL);
--	if (!helper_buffer->pages) {
-+	buffer->pages = kmalloc_array(pagecount, sizeof(*buffer->pages), GFP_KERNEL);
-+	if (!buffer->pages) {
- 		ret = -ENOMEM;
- 		goto free_cma;
- 	}
- 
--	for (pg = 0; pg < helper_buffer->pagecount; pg++)
--		helper_buffer->pages[pg] = &cma_pages[pg];
-+	for (pg = 0; pg < pagecount; pg++)
-+		buffer->pages[pg] = &cma_pages[pg];
++	/*
++	 * For uncached buffers, we need to initially flush cpu cache, since
++	 * the __GFP_ZERO on the allocation means the zeroing was done by the
++	 * cpu and thus it is likely cached. Map (and implicitly flush) it out
++	 * now so we don't get corruption later on.
++	 */
++	if (buffer->uncached)
++		dma_map_sgtable(dma_heap_get_dev(heap), table, DMA_BIDIRECTIONAL, 0);
 +
-+	buffer->cma_pages = cma_pages;
-+	buffer->heap = cma_heap;
-+	buffer->pagecount = pagecount;
- 
- 	/* create the dmabuf */
--	dmabuf = heap_helper_export_dmabuf(helper_buffer, fd_flags);
-+	exp_info.ops = &cma_heap_buf_ops;
-+	exp_info.size = buffer->len;
-+	exp_info.flags = fd_flags;
-+	exp_info.priv = buffer;
-+	dmabuf = dma_buf_export(&exp_info);
- 	if (IS_ERR(dmabuf)) {
- 		ret = PTR_ERR(dmabuf);
- 		goto free_pages;
- 	}
- 
--	helper_buffer->dmabuf = dmabuf;
--	helper_buffer->priv_virt = cma_pages;
--
- 	ret = dma_buf_fd(dmabuf, fd_flags);
- 	if (ret < 0) {
- 		dma_buf_put(dmabuf);
-@@ -125,11 +341,12 @@ static int cma_heap_allocate(struct dma_heap *heap,
  	return ret;
  
  free_pages:
--	kfree(helper_buffer->pages);
-+	kfree(buffer->pages);
- free_cma:
--	cma_release(cma_heap->cma, cma_pages, nr_pages);
--free_buf:
--	kfree(helper_buffer);
-+	cma_release(cma_heap->cma, cma_pages, pagecount);
-+free_buffer:
-+	kfree(buffer);
-+
+@@ -410,10 +451,30 @@ static int system_heap_allocate(struct dma_heap *heap,
  	return ret;
  }
  
++static int system_heap_allocate(struct dma_heap *heap,
++				unsigned long len,
++				unsigned long fd_flags,
++				unsigned long heap_flags)
++{
++	return system_heap_do_allocate(heap, len, fd_flags, heap_flags, false);
++}
++
+ static const struct dma_heap_ops system_heap_ops = {
+ 	.allocate = system_heap_allocate,
+ };
+ 
++static int system_uncached_heap_allocate(struct dma_heap *heap,
++					 unsigned long len,
++					 unsigned long fd_flags,
++					 unsigned long heap_flags)
++{
++	return system_heap_do_allocate(heap, len, fd_flags, heap_flags, true);
++}
++
++static const struct dma_heap_ops system_uncached_heap_ops = {
++	.allocate = system_uncached_heap_allocate,
++};
++
+ static int system_heap_create(void)
+ {
+ 	struct dma_heap_export_info exp_info;
+@@ -426,6 +487,16 @@ static int system_heap_create(void)
+ 	if (IS_ERR(sys_heap))
+ 		return PTR_ERR(sys_heap);
+ 
++	exp_info.name = "system-uncached";
++	exp_info.ops = &system_uncached_heap_ops;
++	exp_info.priv = NULL;
++
++	sys_uncached_heap = dma_heap_add(&exp_info);
++	if (IS_ERR(sys_uncached_heap))
++		return PTR_ERR(sys_heap);
++
++	dma_coerce_mask_and_coherent(dma_heap_get_dev(sys_uncached_heap), DMA_BIT_MASK(64));
++
+ 	return 0;
+ }
+ module_init(system_heap_create);
 -- 
 2.17.1
 
