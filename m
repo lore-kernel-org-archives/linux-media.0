@@ -2,126 +2,167 @@ Return-Path: <SRS0=aNwB=DK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40A76C46466
-	for <linux-media@archiver.kernel.org>; Sat,  3 Oct 2020 16:50:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A049DC41604
+	for <linux-media@archiver.kernel.org>; Sat,  3 Oct 2020 22:44:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B4AFD206DD
-	for <linux-media@archiver.kernel.org>; Sat,  3 Oct 2020 16:50:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 449EB206B6
+	for <linux-media@archiver.kernel.org>; Sat,  3 Oct 2020 22:44:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="OYrHGAdi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q8Rv2Qmo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725805AbgJCQu0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 3 Oct 2020 12:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43388 "EHLO
+        id S1725982AbgJCWoj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 3 Oct 2020 18:44:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725793AbgJCQu0 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 3 Oct 2020 12:50:26 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC815C0613D0;
-        Sat,  3 Oct 2020 09:50:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=+0e6+K3hwZF8MBukpU2gY6R90DOei1aWOAOJjZS9mg0=; b=OYrHGAdiqbM8IOWluCfZ4PgyVH
-        YI4sF50+rzmkrJJEelwHHaRIVdMWXiaRY0Xwt0LZ7vXw3Sfo9o2yBq6FjNafNAzO3jJW4BqQyna8C
-        GYhgQyXo/GfvbazLNnPLdF8gQ72/6qx2EpwSyya+w7xGpy0gdtHWWCbvR8HF2pg32/brYgnMCuXgr
-        pz7j8VvKTHBWHWdeIxYG0jrIXxE1/h+SOFKS6WrXSmYApwV0UeOR3pDwhqJuKh1vbSdUbL2dBrkCe
-        CcajlttSLw703Buppbvihc49ObvfgvKM5u9yvw559s8BeRn++ur8HyZsquctYoTibD67+dH6HOO+w
-        B5UiNPhg==;
-Received: from [2601:1c0:6280:3f0::2c9a]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kOkjk-0006xp-8v; Sat, 03 Oct 2020 16:50:20 +0000
-Subject: Re: [PATCH] media: mtk-vcodec: fix builds when remoteproc is disabled
-To:     Alexandre Courbot <acourbot@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tomasz Figa <tfiga@chromium.org>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-References: <20201003130947.555637-1-acourbot@chromium.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <43e118c9-0bc6-d85d-2f86-e74f833e1e8a@infradead.org>
-Date:   Sat, 3 Oct 2020 09:50:14 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        with ESMTP id S1725931AbgJCWoj (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 3 Oct 2020 18:44:39 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A09E1C0613D0
+        for <linux-media@vger.kernel.org>; Sat,  3 Oct 2020 15:44:39 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id ds1so103581pjb.5
+        for <linux-media@vger.kernel.org>; Sat, 03 Oct 2020 15:44:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=vQAokBEj20y8i6bpc3pIuIOLRwMaUyJNGYhF/oqnuvU=;
+        b=Q8Rv2QmoPC8gDn+nklL1DEEJGmzfW7tvdtNtLJZbV4sBTczxspxTONqBgztM0OcA6E
+         H76q3+aC7Vn80XT4tOCm1zSRxqPN9GJHolXOhv7m0ibe3rqmp7a2fwdcQIe4Ml6i5GQc
+         AjoVGwdj8s7RgGIZJM7BEyDlzFJoD2gU8rugA3PRCeI7XTXrF2cXLB+oamiFBMpnRM/j
+         MQe3SrtaOm/Bss1Wvm9ho3zxD25GBmBmXDOHyGei8n4uu0Em5YMraWif1JN2L7BoFc50
+         yprgBG6MCywzUj0y1b0cD9K3DlewV738q/RT0HnUgQI6C6O8ejGchhpl0cBUybtOU1uR
+         5/3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=vQAokBEj20y8i6bpc3pIuIOLRwMaUyJNGYhF/oqnuvU=;
+        b=fFOCkRkQmbXOmSjCEAXLje9LnuGhfNS481y9xCZ8L1H8CVDYz5R7i3Ir8MMH/Zw6iC
+         Jx45uuLfzfq+imq8tG/4cv6j8vdsuojLIW/+VP+s6mkLrXh0kFQZJXVijwFfTUmkC+cs
+         TZfUw2pUytJxBNLDt0oD71t98I8WGmL4LGdsdb5BkhCAJiJ5UEW3uIKjMFjeMgJEi2Tk
+         NWrChokQDBEuKwgs4G/E3OszQWAzRziAnMB3coWHMYJuwU6YWOhgM9vTtz4WQIP/UVMm
+         rZyggI7JN8nrnMpk9MXFjX0EZoR6XachEqxLUIGnJmSf3zhJPeWO3y8ow4TT6ydM6Z2q
+         /aJQ==
+X-Gm-Message-State: AOAM531qYpgw16C4ejKbgP8FsOQg9IA6g0VFeAKXfTsXUZhML+5ze8pT
+        zDlrBDjAXBLKgveQ4eiOqjhdJ599RhNzjg==
+X-Google-Smtp-Source: ABdhPJyLxhCETbSHVxoYOe3G1/4gsyR6we8ufjPdtWKGsQl9E+cHP3ZkKOSTSb8VwLQE6Lzg8QX32g==
+X-Received: by 2002:a17:90b:4003:: with SMTP id ie3mr8779942pjb.1.1601765078845;
+        Sat, 03 Oct 2020 15:44:38 -0700 (PDT)
+Received: from mangix-trapnet.lan ([2001:470:1f05:79e::a89])
+        by smtp.gmail.com with ESMTPSA id l10sm5777777pgp.25.2020.10.03.15.44.37
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Oct 2020 15:44:38 -0700 (PDT)
+From:   Rosen Penev <rosenp@gmail.com>
+To:     linux-media@vger.kernel.org
+Subject: [PATCH 2/2] clang-tidy: add a bunch of const
+Date:   Sat,  3 Oct 2020 15:44:35 -0700
+Message-Id: <20201003224435.37725-2-rosenp@gmail.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20201003224435.37725-1-rosenp@gmail.com>
+References: <20201003224435.37725-1-rosenp@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20201003130947.555637-1-acourbot@chromium.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 10/3/20 6:09 AM, Alexandre Courbot wrote:
-> The addition of MT8183 support added a dependency on the SCP remoteproc
-> module. However the initial patch used the "select" Kconfig directive,
-> which may result in the SCP module to not be compiled if remoteproc was
-> disabled. In such a case, mtk-vcodec would try to link against
-> non-existent SCP symbols. "select" was clearly misused here as explained
-> in kconfig-language.txt.
-> 
-> Replace this by a "depends" directive on at least one of the VPU and
-> SCP modules, to allow the driver to be compiled as long as one of these
-> is enabled, and adapt the code to support this new scenario.
-> 
-> Also adapt the Kconfig text to explain the extra requirements for MT8173
-> and MT8183.
-> 
-> Reported-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
+Found with cppcoreguidelines-interfaces-global-init
 
-I was seeing this also, so I checked this patch. WFM.
+Signed-off-by: Rosen Penev <rosenp@gmail.com>
+---
+ lib/libv4lconvert/processing/autogain.c              | 2 +-
+ lib/libv4lconvert/processing/gamma.c                 | 2 +-
+ lib/libv4lconvert/processing/libv4lprocessing-priv.h | 6 +++---
+ lib/libv4lconvert/processing/libv4lprocessing.c      | 2 +-
+ lib/libv4lconvert/processing/whitebalance.c          | 2 +-
+ utils/cec-compliance/cec-test.cpp                    | 2 +-
+ 6 files changed, 8 insertions(+), 8 deletions(-)
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-
-See below.
-
-> ---
->  drivers/media/platform/Kconfig                | 11 +--
->  .../media/platform/mtk-vcodec/mtk_vcodec_fw.c | 72 ++++++++++++-------
->  2 files changed, 55 insertions(+), 28 deletions(-)
-> 
-> diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-> index a3cb104956d5..e559d9c529b6 100644
-> --- a/drivers/media/platform/Kconfig
-> +++ b/drivers/media/platform/Kconfig
-> @@ -253,14 +253,17 @@ config VIDEO_MEDIATEK_VCODEC
->  	depends on MTK_IOMMU || COMPILE_TEST
->  	depends on VIDEO_DEV && VIDEO_V4L2
->  	depends on ARCH_MEDIATEK || COMPILE_TEST
-> +	depends on VIDEO_MEDIATEK_VPU || MTK_SCP
->  	select VIDEOBUF2_DMA_CONTIG
->  	select V4L2_MEM2MEM_DEV
-> -	select VIDEO_MEDIATEK_VPU
-> -	select MTK_SCP
->  	help
->  	    Mediatek video codec driver provides HW capability to
-> -	    encode and decode in a range of video formats
-> -	    This driver rely on VPU driver to communicate with VPU.
-> +	    encode and decode in a range of video formats on MT8173
-> +	    and MT8183.
-> +
-> +	    Note that support for support for MT8173 requires
-
-Drop one of "support for" above. (or "for support" ;)
-
-> +	    VIDEO_MEDIATEK_VPU to also be selected. Support for
-> +	    MT8183 depends on MTK_SCP.
->  
->  	    To compile this driver as modules, choose M here: the
->  	    modules will be called mtk-vcodec-dec and mtk-vcodec-enc.
-
-
-thanks.
+diff --git a/lib/libv4lconvert/processing/autogain.c b/lib/libv4lconvert/processing/autogain.c
+index 7b4f91f7c..aef06b057 100644
+--- a/lib/libv4lconvert/processing/autogain.c
++++ b/lib/libv4lconvert/processing/autogain.c
+@@ -213,6 +213,6 @@ static int autogain_calculate_lookup_tables(
+ 	return 0;
+ }
+ 
+-struct v4lprocessing_filter autogain_filter = {
++const struct v4lprocessing_filter autogain_filter = {
+ 	autogain_active, autogain_calculate_lookup_tables
+ };
+diff --git a/lib/libv4lconvert/processing/gamma.c b/lib/libv4lconvert/processing/gamma.c
+index 73129637e..d65068f03 100644
+--- a/lib/libv4lconvert/processing/gamma.c
++++ b/lib/libv4lconvert/processing/gamma.c
+@@ -57,6 +57,6 @@ static int gamma_calculate_lookup_tables(
+ 	return 1;
+ }
+ 
+-struct v4lprocessing_filter gamma_filter = {
++const struct v4lprocessing_filter gamma_filter = {
+ 	gamma_active, gamma_calculate_lookup_tables
+ };
+diff --git a/lib/libv4lconvert/processing/libv4lprocessing-priv.h b/lib/libv4lconvert/processing/libv4lprocessing-priv.h
+index e4a29dd92..9f0b74934 100644
+--- a/lib/libv4lconvert/processing/libv4lprocessing-priv.h
++++ b/lib/libv4lconvert/processing/libv4lprocessing-priv.h
+@@ -61,8 +61,8 @@ struct v4lprocessing_filter {
+ 			unsigned char *buf, const struct v4l2_format *fmt);
+ };
+ 
+-extern struct v4lprocessing_filter whitebalance_filter;
+-extern struct v4lprocessing_filter autogain_filter;
+-extern struct v4lprocessing_filter gamma_filter;
++extern const struct v4lprocessing_filter whitebalance_filter;
++extern const struct v4lprocessing_filter autogain_filter;
++extern const struct v4lprocessing_filter gamma_filter;
+ 
+ #endif
+diff --git a/lib/libv4lconvert/processing/libv4lprocessing.c b/lib/libv4lconvert/processing/libv4lprocessing.c
+index b061f5041..cbe5a8393 100644
+--- a/lib/libv4lconvert/processing/libv4lprocessing.c
++++ b/lib/libv4lconvert/processing/libv4lprocessing.c
+@@ -27,7 +27,7 @@
+ #include "libv4lprocessing-priv.h"
+ #include "../libv4lconvert-priv.h" /* for PIX_FMT defines */
+ 
+-static struct v4lprocessing_filter *filters[] = {
++static const struct v4lprocessing_filter *filters[] = {
+ 	&whitebalance_filter,
+ 	&autogain_filter,
+ 	&gamma_filter,
+diff --git a/lib/libv4lconvert/processing/whitebalance.c b/lib/libv4lconvert/processing/whitebalance.c
+index c74069ae2..367dcb7ff 100644
+--- a/lib/libv4lconvert/processing/whitebalance.c
++++ b/lib/libv4lconvert/processing/whitebalance.c
+@@ -205,6 +205,6 @@ static int whitebalance_calculate_lookup_tables(
+ 	return 0; /* Should never happen */
+ }
+ 
+-struct v4lprocessing_filter whitebalance_filter = {
++const struct v4lprocessing_filter whitebalance_filter = {
+ 	whitebalance_active, whitebalance_calculate_lookup_tables
+ };
+diff --git a/utils/cec-compliance/cec-test.cpp b/utils/cec-compliance/cec-test.cpp
+index 8633171a0..8a9ea2afe 100644
+--- a/utils/cec-compliance/cec-test.cpp
++++ b/utils/cec-compliance/cec-test.cpp
+@@ -1414,7 +1414,7 @@ static struct remote_subtest post_test_subtests[] = {
+ };
+ 
+ 
+-static struct remote_test tests[] = {
++static const struct remote_test tests[] = {
+ 	test_case("Core",
+ 		  TAG_CORE,
+ 		  core_subtests),
 -- 
-~Randy
+2.26.2
+
