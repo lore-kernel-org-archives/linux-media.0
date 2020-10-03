@@ -2,121 +2,78 @@ Return-Path: <SRS0=aNwB=DK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80434C4727D
-	for <linux-media@archiver.kernel.org>; Sat,  3 Oct 2020 08:42:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57EC3C4727D
+	for <linux-media@archiver.kernel.org>; Sat,  3 Oct 2020 08:46:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4CAA5208A9
-	for <linux-media@archiver.kernel.org>; Sat,  3 Oct 2020 08:42:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1601714533;
-	bh=q8u1UlvPfmsV6VIf1D4oal2zRtzy+wplm1IJN2QmTek=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=vIZ3z2cc+8Jmswb/kShVEWQ7uwK1O3leHnfnDAZMZ3RqDs0MZSjCQCdkUGpzhG8Sj
-	 OQDfzx8MbfreGX4UybVGxvo6Hwo3mBdxhRaCAQo5CLPKI4DLzAxZUathVMzebXx6jr
-	 ePVB6gUQ1GOWFPaYKZSXJGG8t5zYnnsvz+98b6GY=
+	by mail.kernel.org (Postfix) with ESMTP id 27ABE206DB
+	for <linux-media@archiver.kernel.org>; Sat,  3 Oct 2020 08:46:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725826AbgJCImM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 3 Oct 2020 04:42:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37442 "EHLO mail.kernel.org"
+        id S1725769AbgJCIq6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 3 Oct 2020 04:46:58 -0400
+Received: from gofer.mess.org ([88.97.38.141]:41167 "EHLO gofer.mess.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725763AbgJCImB (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 3 Oct 2020 04:42:01 -0400
-Received: from mail.kernel.org (ip5f5ad5cf.dynamic.kabel-deutschland.de [95.90.213.207])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8577220738;
-        Sat,  3 Oct 2020 08:42:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601714520;
-        bh=q8u1UlvPfmsV6VIf1D4oal2zRtzy+wplm1IJN2QmTek=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E7N/nYLrhXEkOBVgW/m9aa93OcajQyNDd8e7b+ZSB2sbzh3bXhOxTp8q1f/IbRD6W
-         wHpC9gwYsREJah1s9qj9a0bPM4yD48G+KM8VNrAWvHA74gMFL2I71ArMkzqqHcG87z
-         h59jDkU5AtMwcL9NKMYwDjNtgbFPI8P437LcCsSw=
-Received: from mchehab by mail.kernel.org with local (Exim 4.94)
-        (envelope-from <mchehab@kernel.org>)
-        id 1kOd77-0002Iv-Vs; Sat, 03 Oct 2020 10:41:57 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/4] media: siano: rename a duplicated card string
-Date:   Sat,  3 Oct 2020 10:41:55 +0200
-Message-Id: <210191dd5314f26b062fed3a47d108a0e4f53d18.1601714147.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <6b90346919d42ffc7c3ad283bfca2825b238147a.1601714147.git.mchehab+huawei@kernel.org>
-References: <6b90346919d42ffc7c3ad283bfca2825b238147a.1601714147.git.mchehab+huawei@kernel.org>
+        id S1725763AbgJCIq6 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 3 Oct 2020 04:46:58 -0400
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 62F49C63EB; Sat,  3 Oct 2020 09:46:56 +0100 (BST)
+Date:   Sat, 3 Oct 2020 09:46:56 +0100
+From:   Sean Young <sean@mess.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Joakim Zhang <qiangqing.zhang@nxp.com>, mchehab@kernel.org,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-imx@nxp.com
+Subject: Re: [PATCH V3 1/2] bindings: media: gpio-ir-receiver: add
+ linux,autosuspend-period property
+Message-ID: <20201003084656.GA29917@gofer.mess.org>
+References: <20200922190807.6830-1-qiangqing.zhang@nxp.com>
+ <20200922190807.6830-2-qiangqing.zhang@nxp.com>
+ <20200929155201.GA665464@bogus>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200929155201.GA665464@bogus>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There are two different variants for Hauppauge WinTV MiniCard:
+On Tue, Sep 29, 2020 at 10:52:01AM -0500, Rob Herring wrote:
+> On Wed, Sep 23, 2020 at 03:08:06AM +0800, Joakim Zhang wrote:
+> > Add linux,autosuspend-period property for gpio ir receiver. Some cpuidle
+> > systems wake from idle may take a bit long time, for such case, need
+> > disable cpuidle temporarily.
+> > 
+> > Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
+> > ---
+> > ChangeLogs:
+> > V1->V2:
+> > 	* New add.
+> > V2->V3:
+> > 	* linux,autosuspend-period = 125; -> linux,autosuspend-period = <125>;
+> > ---
+> >  Documentation/devicetree/bindings/media/gpio-ir-receiver.txt | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/media/gpio-ir-receiver.txt b/Documentation/devicetree/bindings/media/gpio-ir-receiver.txt
+> > index 58261fb7b408..e1447c9b0e26 100644
+> > --- a/Documentation/devicetree/bindings/media/gpio-ir-receiver.txt
+> > +++ b/Documentation/devicetree/bindings/media/gpio-ir-receiver.txt
+> > @@ -7,6 +7,8 @@ Required properties:
+> >  Optional properties:
+> >  	- linux,rc-map-name: see rc.txt file in the same
+> >  	  directory.
+> > +        - linux,autosuspend-period: autosuspend delay time,
+> > +          the unit is milisecond.
+> 
+> What makes this linux specific?
 
-	[SMS1XXX_BOARD_HAUPPAUGE_TIGER_MINICARD] = {
-		.name	= "Hauppauge WinTV MiniCard",
-		.type	= SMS_NOVA_B0,
-		.fw[DEVICE_MODE_DVBT_BDA] = SMS_FW_DVBT_HCW_55XXX,
-		.default_mode = DEVICE_MODE_DVBT_BDA,
-		.lna_ctrl  = 29,
-		.board_cfg.foreign_lna0_ctrl = 29,
-		.rf_switch = 17,
-		.board_cfg.rf_switch_uhf = 17,
-	},
-	[SMS1XXX_BOARD_HAUPPAUGE_TIGER_MINICARD_R2] = {
-		.name	= "Hauppauge WinTV MiniCard Rev 2",
-		.type	= SMS_NOVA_B0,
-		.fw[DEVICE_MODE_DVBT_BDA] = SMS_FW_DVBT_HCW_55XXX,
-		.default_mode = DEVICE_MODE_DVBT_BDA,
-		.lna_ctrl  = -1,
-	},
+Good point. "linux,autosuspend-period" does not say what is being
+suspended either. How about "cpuidle-suspend-period" instead?
 
-As it can be seen, the RF part of the definitions are different.
 
-So, better to use different names in order to distinguish
-between them.
-
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- Documentation/admin-guide/media/siano-cardlist.rst | 2 +-
- drivers/media/common/siano/sms-cards.c             | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/admin-guide/media/siano-cardlist.rst b/Documentation/admin-guide/media/siano-cardlist.rst
-index d387c04d753c..bb731a953878 100644
---- a/Documentation/admin-guide/media/siano-cardlist.rst
-+++ b/Documentation/admin-guide/media/siano-cardlist.rst
-@@ -20,7 +20,7 @@ Siano cards list
-      - 2040:1801
-    * - Hauppauge WinTV MiniCard
-      - 2040:2000, 2040:200a, 2040:2010, 2040:2011, 2040:2019
--   * - Hauppauge WinTV MiniCard
-+   * - Hauppauge WinTV MiniCard Rev 2
-      - 2040:2009
-    * - Hauppauge WinTV MiniStick
-      - 2040:5500, 2040:5510, 2040:5520, 2040:5530, 2040:5580, 2040:5590, 2040:b900, 2040:b910, 2040:b980, 2040:b990, 2040:c000, 2040:c010, 2040:c080, 2040:c090, 2040:c0a0, 2040:f5a0
-diff --git a/drivers/media/common/siano/sms-cards.c b/drivers/media/common/siano/sms-cards.c
-index e67ee3d55488..d4a116ab6c88 100644
---- a/drivers/media/common/siano/sms-cards.c
-+++ b/drivers/media/common/siano/sms-cards.c
-@@ -79,7 +79,7 @@ static struct sms_board sms_boards[] = {
- 		.board_cfg.rf_switch_uhf = 17,
- 	},
- 	[SMS1XXX_BOARD_HAUPPAUGE_TIGER_MINICARD_R2] = {
--		.name	= "Hauppauge WinTV MiniCard",
-+		.name	= "Hauppauge WinTV MiniCard Rev 2",
- 		.type	= SMS_NOVA_B0,
- 		.fw[DEVICE_MODE_DVBT_BDA] = SMS_FW_DVBT_HCW_55XXX,
- 		.default_mode = DEVICE_MODE_DVBT_BDA,
--- 
-2.26.2
-
+Sean
