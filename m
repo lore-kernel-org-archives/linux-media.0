@@ -2,36 +2,36 @@ Return-Path: <SRS0=4VRt=DM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C991C4363A
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC3C3C4727D
 	for <linux-media@archiver.kernel.org>; Mon,  5 Oct 2020 08:01:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3E1D52068D
+	by mail.kernel.org (Postfix) with ESMTP id 9E36220756
 	for <linux-media@archiver.kernel.org>; Mon,  5 Oct 2020 08:01:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725914AbgJEIBS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1725915AbgJEIBS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 5 Oct 2020 04:01:18 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:36416 "EHLO
-        hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725880AbgJEIBR (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 5 Oct 2020 04:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35666 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725895AbgJEIBS (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 5 Oct 2020 04:01:18 -0400
+Received: from hillosipuli.retiisi.eu (hillosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::81:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B27C0613CE
+        for <linux-media@vger.kernel.org>; Mon,  5 Oct 2020 01:01:17 -0700 (PDT)
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 74D70634C8D;
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 3A7B6634C87;
         Mon,  5 Oct 2020 11:00:42 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com, jacopo@jmondi.org,
         niklas.soderlund@ragnatech.se
-Subject: [PATCH v2 3/5] v4l2-fwnode: Don't zero parts of struct v4l2_fwnode_endpoint anymore
-Date:   Mon,  5 Oct 2020 11:01:13 +0300
-Message-Id: <20201005080115.8875-4-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 0/5] V4L2 fwnode fixes, improvements and cleanups
+Date:   Mon,  5 Oct 2020 11:01:10 +0300
+Message-Id: <20201005080115.8875-1-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201005080115.8875-1-sakari.ailus@linux.intel.com>
-References: <20201005080115.8875-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -39,42 +39,47 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Don't zero parts of the vep argument to v4l2_fwnode_endpoint_parse()
-anymore as this can no longer be done while still supporting defaults on
-multiple bus types.
+Hi all,
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
- drivers/media/v4l2-core/v4l2-fwnode.c | 12 ------------
- 1 file changed, 12 deletions(-)
+This small set improves V4L2 fwnode framework in small but in an important
+ways. In particular:
 
-diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
-index dfc53d11053f..44dd04b05e29 100644
---- a/drivers/media/v4l2-core/v4l2-fwnode.c
-+++ b/drivers/media/v4l2-core/v4l2-fwnode.c
-@@ -416,20 +416,8 @@ static int __v4l2_fwnode_endpoint_parse(struct fwnode_handle *fwnode,
- 	enum v4l2_mbus_type mbus_type;
- 	int rval;
- 
--	if (vep->bus_type == V4L2_MBUS_UNKNOWN) {
--		/* Zero fields from bus union to until the end */
--		memset(&vep->bus, 0,
--		       sizeof(*vep) - offsetof(typeof(*vep), bus));
--	}
--
- 	pr_debug("===== begin parsing endpoint %pfw\n", fwnode);
- 
--	/*
--	 * Zero the fwnode graph endpoint memory in case we don't end up parsing
--	 * the endpoint.
--	 */
--	memset(&vep->base, 0, sizeof(vep->base));
--
- 	fwnode_property_read_u32(fwnode, "bus-type", &bus_type);
- 	pr_debug("fwnode video bus type %s (%u), mbus type %s (%u)\n",
- 		 v4l2_fwnode_bus_type_to_string(bus_type), bus_type,
+- Default parameters are no longer zeroed for V4L2_MBUS_UNKNOWN --- this
+  makes defaults for multiple bus types actually working, so it's a bugfix
+
+- Don't tell to use v4l2_fwnode_endpoint_alloc_parse in all drivers;
+  v4l2_fwnode_endpoint_parse is just as good if the device doesn't need
+  link-frequencies.
+
+- Rewrite v4l2_fwnode_endpoint(_alloc)_parse documentation
+
+Laurent: I believe this addresses your request to parse multiple bus types
+with a single call to v4l2_fwnode_endpoint_(alloc_)parse --- please see
+the 4th patch. You don't really need to tell the default, but the caller
+will need to check the result is one of the known types. But as the caller
+very probably needs to do some work based on the bus type right afterwards
+this is hardly an actual burden for drivers.
+
+since v1:
+
+- Add note (Laurent's text) on either zeroing or using explicit values in
+  vep argument.
+
+- Say v4l2_fwnode_endpoint_parse does not parse "link-frequencies" (rather
+  than omenous properties with low fixed limit in length).
+
+Sakari Ailus (5):
+  adv748x: Zero entire struct v4l2_fwnode_endpoint
+  v4l2-fwnode: v4l2_fwnode_endpoint_parse caller must init vep argument
+  v4l2-fwnode: Don't zero parts of struct v4l2_fwnode_endpoint anymore
+  v4l2-fwnode: Rework v4l2_fwnode_endpoint_parse documentation
+  v4l2-fwnode: Say it's fine to use v4l2_fwnode_endpoint_parse
+
+ drivers/media/i2c/adv748x/adv748x-core.c |  3 +-
+ drivers/media/v4l2-core/v4l2-fwnode.c    | 12 ----
+ include/media/v4l2-fwnode.h              | 74 ++++++++++++++++--------
+ 3 files changed, 50 insertions(+), 39 deletions(-)
+
 -- 
 2.27.0
 
