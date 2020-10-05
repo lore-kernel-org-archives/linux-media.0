@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4E4EC4727F
-	for <linux-media@archiver.kernel.org>; Mon,  5 Oct 2020 08:01:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DAEFC47095
+	for <linux-media@archiver.kernel.org>; Mon,  5 Oct 2020 08:01:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 990B820796
-	for <linux-media@archiver.kernel.org>; Mon,  5 Oct 2020 08:01:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3463820756
+	for <linux-media@archiver.kernel.org>; Mon,  5 Oct 2020 08:01:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725923AbgJEIBT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1725917AbgJEIBT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 5 Oct 2020 04:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35668 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725898AbgJEIBS (ORCPT
+        with ESMTP id S1725909AbgJEIBS (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Mon, 5 Oct 2020 04:01:18 -0400
 Received: from hillosipuli.retiisi.eu (hillosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::81:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D69C0613A6
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C49C0613A7
         for <linux-media@vger.kernel.org>; Mon,  5 Oct 2020 01:01:17 -0700 (PDT)
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 85A63634C8E;
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 6088E634C8C;
         Mon,  5 Oct 2020 11:00:42 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com, jacopo@jmondi.org,
         niklas.soderlund@ragnatech.se
-Subject: [PATCH v2 4/5] v4l2-fwnode: Rework v4l2_fwnode_endpoint_parse documentation
-Date:   Mon,  5 Oct 2020 11:01:14 +0300
-Message-Id: <20201005080115.8875-5-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 2/5] v4l2-fwnode: v4l2_fwnode_endpoint_parse caller must init vep argument
+Date:   Mon,  5 Oct 2020 11:01:12 +0300
+Message-Id: <20201005080115.8875-3-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201005080115.8875-1-sakari.ailus@linux.intel.com>
 References: <20201005080115.8875-1-sakari.ailus@linux.intel.com>
@@ -42,96 +42,45 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Rework the documentation of v4l2_fwnode_endpoint_parse for better
-readability, usefulness and correctness.
+Document that the caller of v4l2_fwnode_endpoint_parse() must init the
+fields of struct v4l2_fwnode_endpoint (vep argument) fields.
 
+It used to be that the fields were zeroed by v4l2_fwnode_endpoint_parse
+when bus type was set to V4L2_MBUS_UNKNOWN but with recent changes (Fixes:
+line below) that no longer makes sense.
+
+Fixes: bb4bba9232fc ("media: v4l2-fwnode: Make bus configuration a struct")
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- include/media/v4l2-fwnode.h | 62 ++++++++++++++++++++++++-------------
- 1 file changed, 40 insertions(+), 22 deletions(-)
+ include/media/v4l2-fwnode.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/include/media/v4l2-fwnode.h b/include/media/v4l2-fwnode.h
-index ed0840f3d5df..20b30d770944 100644
+index c09074276543..ed0840f3d5df 100644
 --- a/include/media/v4l2-fwnode.h
 +++ b/include/media/v4l2-fwnode.h
-@@ -219,17 +219,26 @@ struct v4l2_fwnode_connector {
-  * @vep: pointer to the V4L2 fwnode data structure
+@@ -231,6 +231,9 @@ struct v4l2_fwnode_connector {
+  * guessing @vep.bus_type between CSI-2 D-PHY, parallel and BT.656 busses is
+  * supported. NEVER RELY ON GUESSING @vep.bus_type IN NEW DRIVERS!
   *
-  * This function parses the V4L2 fwnode endpoint specific parameters from the
-- * firmware. The caller is responsible for assigning @vep.bus_type to a valid
-- * media bus type. The caller may also set the default configuration for the
-- * endpoint --- a configuration that shall be in line with the DT binding
-- * documentation. Should a device support multiple bus types, the caller may
-- * call this function once the correct type is found --- with a default
-- * configuration valid for that type.
-- *
-- * It is also allowed to set @vep.bus_type to V4L2_MBUS_UNKNOWN. USING THIS
-- * FEATURE REQUIRES "bus-type" PROPERTY IN DT BINDINGS. For old drivers,
-- * guessing @vep.bus_type between CSI-2 D-PHY, parallel and BT.656 busses is
-- * supported. NEVER RELY ON GUESSING @vep.bus_type IN NEW DRIVERS!
-+ * firmware. There are two ways to use this function, either by letting it
-+ * obtain the type of the bus (by setting the @vep.bus_type field to
-+ * V4L2_MBUS_UNKNOWN) or specifying the bus type explicitly to one of the &enum
-+ * v4l2_mbus_type types.
++ * The caller is required to initialise all fields of @vep, either with
++ * explicitly values, or by zeroing them.
 + *
-+ * When @vep.bus_type is V4L2_MBUS_UNKNOWN, the function will use the "bus-type"
-+ * property to determine the type when it is available. The caller is
-+ * responsible for validating the contents of @vep.bus_type field after the call
-+ * returns.
-+ *
-+ * As a deprecated functionality to support older DT bindings without "bus-type"
-+ * property for devices that support multiple types, if the "bus-type" property
-+ * does not exist, the function will attempt to guess the type based on the
-+ * endpoint properties available. NEVER RELY ON GUESSING THE BUS TYPE IN NEW
-+ * DRIVERS OR BINDINGS.
-+ *
-+ * It is also possible to set @vep.bus_type corresponding to an actual bus. In
-+ * this case the function will only attempt to parse properties related to this
-+ * bus, and it will return an error if the value of the "bus-type" property
-+ * corresponds to a different bus.
+  * The function does not change the V4L2 fwnode endpoint state if it fails.
   *
-  * The caller is required to initialise all fields of @vep, either with
-  * explicitly values, or by zeroing them.
-@@ -264,17 +273,26 @@ void v4l2_fwnode_endpoint_free(struct v4l2_fwnode_endpoint *vep);
-  * @vep: pointer to the V4L2 fwnode data structure
+  * NOTE: This function does not parse properties the size of which is variable
+@@ -273,6 +276,9 @@ void v4l2_fwnode_endpoint_free(struct v4l2_fwnode_endpoint *vep);
+  * guessing @vep.bus_type between CSI-2 D-PHY, parallel and BT.656 busses is
+  * supported. NEVER RELY ON GUESSING @vep.bus_type IN NEW DRIVERS!
   *
-  * This function parses the V4L2 fwnode endpoint specific parameters from the
-- * firmware. The caller is responsible for assigning @vep.bus_type to a valid
-- * media bus type. The caller may also set the default configuration for the
-- * endpoint --- a configuration that shall be in line with the DT binding
-- * documentation. Should a device support multiple bus types, the caller may
-- * call this function once the correct type is found --- with a default
-- * configuration valid for that type.
-- *
-- * It is also allowed to set @vep.bus_type to V4L2_MBUS_UNKNOWN. USING THIS
-- * FEATURE REQUIRES "bus-type" PROPERTY IN DT BINDINGS. For old drivers,
-- * guessing @vep.bus_type between CSI-2 D-PHY, parallel and BT.656 busses is
-- * supported. NEVER RELY ON GUESSING @vep.bus_type IN NEW DRIVERS!
-+ * firmware. There are two ways to use this function, either by letting it
-+ * obtain the type of the bus (by setting the @vep.bus_type field to
-+ * V4L2_MBUS_UNKNOWN) or specifying the bus type explicitly to one of the &enum
-+ * v4l2_mbus_type types.
++ * The caller is required to initialise all fields of @vep, either with
++ * explicitly values, or by zeroing them.
 + *
-+ * When @vep.bus_type is V4L2_MBUS_UNKNOWN, the function will use the "bus-type"
-+ * property to determine the type when it is available. The caller is
-+ * responsible for validating the contents of @vep.bus_type field after the call
-+ * returns.
-+ *
-+ * As a deprecated functionality to support older DT bindings without "bus-type"
-+ * property for devices that support multiple types, if the "bus-type" property
-+ * does not exist, the function will attempt to guess the type based on the
-+ * endpoint properties available. NEVER RELY ON GUESSING THE BUS TYPE IN NEW
-+ * DRIVERS OR BINDINGS.
-+ *
-+ * It is also possible to set @vep.bus_type corresponding to an actual bus. In
-+ * this case the function will only attempt to parse properties related to this
-+ * bus, and it will return an error if the value of the "bus-type" property
-+ * corresponds to a different bus.
+  * The function does not change the V4L2 fwnode endpoint state if it fails.
   *
-  * The caller is required to initialise all fields of @vep, either with
-  * explicitly values, or by zeroing them.
+  * v4l2_fwnode_endpoint_alloc_parse() has two important differences to
 -- 
 2.27.0
 
