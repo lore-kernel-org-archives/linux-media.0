@@ -2,103 +2,75 @@ Return-Path: <SRS0=4VRt=DM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6691C4363A
-	for <linux-media@archiver.kernel.org>; Mon,  5 Oct 2020 07:46:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51B21C47095
+	for <linux-media@archiver.kernel.org>; Mon,  5 Oct 2020 08:01:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ADEBC2075A
-	for <linux-media@archiver.kernel.org>; Mon,  5 Oct 2020 07:46:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 109902068D
+	for <linux-media@archiver.kernel.org>; Mon,  5 Oct 2020 08:01:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725919AbgJEHqZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 5 Oct 2020 03:46:25 -0400
-Received: from mga14.intel.com ([192.55.52.115]:39270 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725895AbgJEHqZ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 5 Oct 2020 03:46:25 -0400
-IronPort-SDR: x51AE5q9HisF32dfjfs6iT7fIUKg1UgCzcfN9WbzuorcoMmRriH5dj2lx70ZwjoSHbKs3iT7Tm
- j495DpjQZTfg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9764"; a="162587750"
-X-IronPort-AV: E=Sophos;i="5.77,338,1596524400"; 
-   d="scan'208";a="162587750"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2020 00:46:20 -0700
-IronPort-SDR: B4oKUSmtWnzh4iDkFdLUso5nl4SMcnpHsEMivSqHbVWFYekZa7vtBl7cdhZwTSdGPv7RuqmX4o
- WTL9/QbbJfgQ==
-X-IronPort-AV: E=Sophos;i="5.77,338,1596524400"; 
-   d="scan'208";a="417036571"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2020 00:46:18 -0700
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id E079E205CA; Mon,  5 Oct 2020 10:46:15 +0300 (EEST)
-Date:   Mon, 5 Oct 2020 10:46:15 +0300
+        id S1725893AbgJEIBR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 5 Oct 2020 04:01:17 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:36396 "EHLO
+        hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725870AbgJEIBR (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 5 Oct 2020 04:01:17 -0400
+Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 4E893634C89;
+        Mon,  5 Oct 2020 11:00:42 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org
-Subject: Re: [PATCH 5/5] v4l2-fwnode: Say it's fine to use
- v4l2_fwnode_endpoint_parse
-Message-ID: <20201005074615.GC26842@paasikivi.fi.intel.com>
-References: <20200930144811.16612-1-sakari.ailus@linux.intel.com>
- <20200930144811.16612-6-sakari.ailus@linux.intel.com>
- <20201004084148.GF3938@pendragon.ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     laurent.pinchart@ideasonboard.com, jacopo@jmondi.org,
+        niklas.soderlund@ragnatech.se
+Subject: [PATCH v2 1/5] adv748x: Zero entire struct v4l2_fwnode_endpoint
+Date:   Mon,  5 Oct 2020 11:01:11 +0300
+Message-Id: <20201005080115.8875-2-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20201005080115.8875-1-sakari.ailus@linux.intel.com>
+References: <20201005080115.8875-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201004084148.GF3938@pendragon.ideasonboard.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sun, Oct 04, 2020 at 11:41:48AM +0300, Laurent Pinchart wrote:
-> Hi Sakari,
-> 
-> Thank you for the patch.
-> 
-> On Wed, Sep 30, 2020 at 05:48:11PM +0300, Sakari Ailus wrote:
-> > Earlier it was expected that there would be more variable size endpoint
-> > properties and that most if not all drivers would need them. For that
-> > reason it was expected also that v4l2_fwnode_endpoint_parse would no
-> > longer be needed.
-> > 
-> > What actually happened that not all drivers require "link-frequencies",
-> > the only variable size media endpoint property without a small upper
-> > limit. Therefore drivers that do not need that information are fine using
-> > v4l2_fwnode_endpoint_parse. So don't tell drivers to use
-> > v4l2_fwnode_endpoint_alloc_parse in all cases.
-> > 
-> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > ---
-> >  include/media/v4l2-fwnode.h | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/include/media/v4l2-fwnode.h b/include/media/v4l2-fwnode.h
-> > index 0c28dc11e829..cbd872e59f8e 100644
-> > --- a/include/media/v4l2-fwnode.h
-> > +++ b/include/media/v4l2-fwnode.h
-> > @@ -245,8 +245,8 @@ struct v4l2_fwnode_connector {
-> >   * The function does not change the V4L2 fwnode endpoint state if it fails.
-> >   *
-> >   * NOTE: This function does not parse properties the size of which is variable
-> > - * without a low fixed limit. Please use v4l2_fwnode_endpoint_alloc_parse() in
-> > - * new drivers instead.
-> > + * without a low fixed limit. Please use v4l2_fwnode_endpoint_alloc_parse() if
-> > + * you need properties of variable size.
-> 
-> Shouldn't we explicitly mention link-frequencies ? "properties the size
-> of which is variable without a low fixed limit" is not very clear for a
-> casual reader.
+The v4l2_fwnode_parse_endpoint() function can make use of defaults in
+multiple bus types. To use this feature, all callers must zero the rest of
+the fields of this struct, too. All other drivers appear to do that
+already apart from this one.
 
-I'll use this in v2:
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ drivers/media/i2c/adv748x/adv748x-core.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-+ * NOTE: This function does not parse "link-frequencies" property as its size is
-+ * not known in advance. Please use v4l2_fwnode_endpoint_alloc_parse() if you
-+ * need properties of variable size.
-
+diff --git a/drivers/media/i2c/adv748x/adv748x-core.c b/drivers/media/i2c/adv748x/adv748x-core.c
+index 1fe7f97c6d52..ae8b7ebf3830 100644
+--- a/drivers/media/i2c/adv748x/adv748x-core.c
++++ b/drivers/media/i2c/adv748x/adv748x-core.c
+@@ -589,14 +589,13 @@ static int adv748x_parse_csi2_lanes(struct adv748x_state *state,
+ 				    unsigned int port,
+ 				    struct device_node *ep)
+ {
+-	struct v4l2_fwnode_endpoint vep;
++	struct v4l2_fwnode_endpoint vep = { .bus_type = V4L2_MBUS_CSI2_DPHY };
+ 	unsigned int num_lanes;
+ 	int ret;
+ 
+ 	if (port != ADV748X_PORT_TXA && port != ADV748X_PORT_TXB)
+ 		return 0;
+ 
+-	vep.bus_type = V4L2_MBUS_CSI2_DPHY;
+ 	ret = v4l2_fwnode_endpoint_parse(of_fwnode_handle(ep), &vep);
+ 	if (ret)
+ 		return ret;
 -- 
-Sakari Ailus
+2.27.0
+
