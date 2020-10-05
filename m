@@ -7,28 +7,28 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51B21C47095
-	for <linux-media@archiver.kernel.org>; Mon,  5 Oct 2020 08:01:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C991C4363A
+	for <linux-media@archiver.kernel.org>; Mon,  5 Oct 2020 08:01:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 109902068D
-	for <linux-media@archiver.kernel.org>; Mon,  5 Oct 2020 08:01:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3E1D52068D
+	for <linux-media@archiver.kernel.org>; Mon,  5 Oct 2020 08:01:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725893AbgJEIBR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 5 Oct 2020 04:01:17 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:36396 "EHLO
+        id S1725914AbgJEIBS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 5 Oct 2020 04:01:18 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:36416 "EHLO
         hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725870AbgJEIBR (ORCPT
+        with ESMTP id S1725880AbgJEIBR (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Mon, 5 Oct 2020 04:01:17 -0400
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 4E893634C89;
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 74D70634C8D;
         Mon,  5 Oct 2020 11:00:42 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com, jacopo@jmondi.org,
         niklas.soderlund@ragnatech.se
-Subject: [PATCH v2 1/5] adv748x: Zero entire struct v4l2_fwnode_endpoint
-Date:   Mon,  5 Oct 2020 11:01:11 +0300
-Message-Id: <20201005080115.8875-2-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 3/5] v4l2-fwnode: Don't zero parts of struct v4l2_fwnode_endpoint anymore
+Date:   Mon,  5 Oct 2020 11:01:13 +0300
+Message-Id: <20201005080115.8875-4-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201005080115.8875-1-sakari.ailus@linux.intel.com>
 References: <20201005080115.8875-1-sakari.ailus@linux.intel.com>
@@ -39,38 +39,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The v4l2_fwnode_parse_endpoint() function can make use of defaults in
-multiple bus types. To use this feature, all callers must zero the rest of
-the fields of this struct, too. All other drivers appear to do that
-already apart from this one.
+Don't zero parts of the vep argument to v4l2_fwnode_endpoint_parse()
+anymore as this can no longer be done while still supporting defaults on
+multiple bus types.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/i2c/adv748x/adv748x-core.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/media/v4l2-core/v4l2-fwnode.c | 12 ------------
+ 1 file changed, 12 deletions(-)
 
-diff --git a/drivers/media/i2c/adv748x/adv748x-core.c b/drivers/media/i2c/adv748x/adv748x-core.c
-index 1fe7f97c6d52..ae8b7ebf3830 100644
---- a/drivers/media/i2c/adv748x/adv748x-core.c
-+++ b/drivers/media/i2c/adv748x/adv748x-core.c
-@@ -589,14 +589,13 @@ static int adv748x_parse_csi2_lanes(struct adv748x_state *state,
- 				    unsigned int port,
- 				    struct device_node *ep)
- {
--	struct v4l2_fwnode_endpoint vep;
-+	struct v4l2_fwnode_endpoint vep = { .bus_type = V4L2_MBUS_CSI2_DPHY };
- 	unsigned int num_lanes;
- 	int ret;
+diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
+index dfc53d11053f..44dd04b05e29 100644
+--- a/drivers/media/v4l2-core/v4l2-fwnode.c
++++ b/drivers/media/v4l2-core/v4l2-fwnode.c
+@@ -416,20 +416,8 @@ static int __v4l2_fwnode_endpoint_parse(struct fwnode_handle *fwnode,
+ 	enum v4l2_mbus_type mbus_type;
+ 	int rval;
  
- 	if (port != ADV748X_PORT_TXA && port != ADV748X_PORT_TXB)
- 		return 0;
+-	if (vep->bus_type == V4L2_MBUS_UNKNOWN) {
+-		/* Zero fields from bus union to until the end */
+-		memset(&vep->bus, 0,
+-		       sizeof(*vep) - offsetof(typeof(*vep), bus));
+-	}
+-
+ 	pr_debug("===== begin parsing endpoint %pfw\n", fwnode);
  
--	vep.bus_type = V4L2_MBUS_CSI2_DPHY;
- 	ret = v4l2_fwnode_endpoint_parse(of_fwnode_handle(ep), &vep);
- 	if (ret)
- 		return ret;
+-	/*
+-	 * Zero the fwnode graph endpoint memory in case we don't end up parsing
+-	 * the endpoint.
+-	 */
+-	memset(&vep->base, 0, sizeof(vep->base));
+-
+ 	fwnode_property_read_u32(fwnode, "bus-type", &bus_type);
+ 	pr_debug("fwnode video bus type %s (%u), mbus type %s (%u)\n",
+ 		 v4l2_fwnode_bus_type_to_string(bus_type), bus_type,
 -- 
 2.27.0
 
