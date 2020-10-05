@@ -2,166 +2,93 @@ Return-Path: <SRS0=4VRt=DM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 660A3C4727E
-	for <linux-media@archiver.kernel.org>; Mon,  5 Oct 2020 08:26:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F038C47095
+	for <linux-media@archiver.kernel.org>; Mon,  5 Oct 2020 08:49:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 286112075A
-	for <linux-media@archiver.kernel.org>; Mon,  5 Oct 2020 08:26:46 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="AXAmvxEc"
+	by mail.kernel.org (Postfix) with ESMTP id 14A572064C
+	for <linux-media@archiver.kernel.org>; Mon,  5 Oct 2020 08:49:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726182AbgJEI0j (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 5 Oct 2020 04:26:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39658 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726074AbgJEI0i (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 5 Oct 2020 04:26:38 -0400
-Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406A2C0613AA
-        for <linux-media@vger.kernel.org>; Mon,  5 Oct 2020 01:26:38 -0700 (PDT)
-Received: by mail-vs1-xe43.google.com with SMTP id 7so3767081vsp.6
-        for <linux-media@vger.kernel.org>; Mon, 05 Oct 2020 01:26:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=41Y6sjMmjcMlV2JauZyN/TxOh6umZ/keewCU2mb8LIc=;
-        b=AXAmvxEcZgWulidtPjWzcdr2Qm2OYOtZA0wDa8FmovT91MPeLRIwIVCT8lx9v5UNlG
-         SctQfxm1GmrUHlaNPX+RFUQtBHXdidJ0/CU1C9clQS0l30cTxEkteaWVnvPQuLuFSdee
-         4MV2Fpon9L5TsVQGS1K3gSKttvhofJOiwA9P0bVAeb/tNn5WAcwRk5Be/IAOdU2QkdYn
-         VFrey16k5OCZxA1L7Q1xqspPxsd/+WYGgx9scKUGZYuyhxSBuKF1PhH1KfSOoQx2J5OY
-         401UuKSNx0/BKxG4Vky36hMzFvsFJwDUWIuAQewHgLK5qqZWGGWEkqztdK9+VC+FKpcj
-         S9OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=41Y6sjMmjcMlV2JauZyN/TxOh6umZ/keewCU2mb8LIc=;
-        b=UqMNFv3scuXYy09bN6ovsCep50f98XUB2ppuHJ2z3YjFiU2jYk2lyqWPA8XexdnOBC
-         Lhi710Ndv9Ns4WrPofIPMxSpPxQrlt0sHqIUPvjBSFfXT57o7k4hVAc0OxAb7SihDQ/L
-         h0GWMV/c6Hh5N1ehHwOy4XnrK8VwwY3CavI8JqJWamOo1OIB/qi0jXmpF3evTGcXTSOh
-         H8xwz4XYNQQ4AhTErS1x8Xp4Uv9kCePpD8byfPNqEz/0r8FL1foGvv+d1viK7m4AAXBw
-         q2cKcQ8+RJVgdTIE02ZWNWG06773rnBlueH+Rn9G+T6ZgZkp/BsTuRpHbc1B95evxsPP
-         oF3g==
-X-Gm-Message-State: AOAM532iPqCn2H2r7+OQ3JcS4qDPk+P6drl2XGl2sq1ZmD+REVhZTJvh
-        7ro8BvAvlkQVxOtjawk8WtjYczUfZWQzNdGJ3YPhlg==
-X-Google-Smtp-Source: ABdhPJxlPMGygHVTcnGIf5MQvmk2y9YM/OMFZ7y/LPtKUwwQZxTgA80YvlEMQPDfoWIYZailBQzIdWarus99WB2IvNI=
-X-Received: by 2002:a67:ec9a:: with SMTP id h26mr6751269vsp.34.1601886397228;
- Mon, 05 Oct 2020 01:26:37 -0700 (PDT)
+        id S1726004AbgJEItF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 5 Oct 2020 04:49:05 -0400
+Received: from mga04.intel.com ([192.55.52.120]:64418 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725880AbgJEItF (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 5 Oct 2020 04:49:05 -0400
+IronPort-SDR: uGqchOwkkklW18mwUVMcEfMwBogu42Fes3tt+3VBsoX9WmLasEjfx/GztLD7TqgKp2igAozXaI
+ nqD9+C9sSpKQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9764"; a="160739423"
+X-IronPort-AV: E=Sophos;i="5.77,338,1596524400"; 
+   d="scan'208";a="160739423"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2020 01:48:58 -0700
+IronPort-SDR: UPd8fX2UVZGZuWU587nv6Y5qXeQGSdpctqkoRfk2qW9uO47f/ntw6qFjqksYNiLg5cgddKIsE+
+ j4TNDqJjK8VA==
+X-IronPort-AV: E=Sophos;i="5.77,338,1596524400"; 
+   d="scan'208";a="515922828"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2020 01:48:54 -0700
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id 741AF205CA; Mon,  5 Oct 2020 11:48:52 +0300 (EEST)
+Date:   Mon, 5 Oct 2020 11:48:52 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Alexandre Courbot <acourbot@chromium.org>
+Cc:     Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH v2] media: mtk-vcodec: fix builds when remoteproc is
+ disabled
+Message-ID: <20201005084852.GD26842@paasikivi.fi.intel.com>
+References: <20201004122234.802044-1-acourbot@chromium.org>
 MIME-Version: 1.0
-References: <20201002234143.3570746-1-robh@kernel.org>
-In-Reply-To: <20201002234143.3570746-1-robh@kernel.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 5 Oct 2020 10:26:01 +0200
-Message-ID: <CAPDyKFq=ZUiYhm0-K5ZVYS1FH2O5e-+Gt6Dftf=LmL9ABa7CaA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Another round of adding missing 'additionalProperties'
-To:     Rob Herring <robh@kernel.org>
-Cc:     DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-spi@vger.kernel.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-leds@vger.kernel.org,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mips@vger.kernel.org,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-remoteproc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org,
-        Linux USB List <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201004122234.802044-1-acourbot@chromium.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sat, 3 Oct 2020 at 01:41, Rob Herring <robh@kernel.org> wrote:
->
-> Another round of wack-a-mole. The json-schema default is additional
-> unknown properties are allowed, but for DT all properties should be
-> defined.
->
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Shawn Guo <shawnguo@kernel.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Baolin Wang <baolin.wang7@gmail.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Jonathan Cameron <jic23@kernel.org>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Liam Girdwood <lgirdwood@gmail.com>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: linux-clk@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-spi@vger.kernel.org
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-hwmon@vger.kernel.org
-> Cc: linux-iio@vger.kernel.org
-> Cc: openipmi-developer@lists.sourceforge.net
-> Cc: linux-leds@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: linux-rockchip@lists.infradead.org
-> Cc: linux-stm32@st-md-mailman.stormreply.com
-> Cc: linux-mips@vger.kernel.org
-> Cc: linux-mmc@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-pci@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-remoteproc@vger.kernel.org
-> Cc: linux-serial@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-usb@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->
-> I'll take this thru the DT tree.
->
+Hi Alexandre,
 
-[...]
+On Sun, Oct 04, 2020 at 09:22:34PM +0900, Alexandre Courbot wrote:
+> The addition of MT8183 support added a dependency on the SCP remoteproc
+> module. However the initial patch used the "select" Kconfig directive,
+> which may result in the SCP module to not be compiled if remoteproc was
+> disabled. In such a case, mtk-vcodec would try to link against
+> non-existent SCP symbols. "select" was clearly misused here as explained
+> in kconfig-language.txt.
+> 
+> Replace this by a "depends" directive on at least one of the VPU and
+> SCP modules, to allow the driver to be compiled as long as one of these
+> is enabled, and adapt the code to support this new scenario.
+> 
+> Also adapt the Kconfig text to explain the extra requirements for MT8173
+> and MT8183.
+> 
+> Reported-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
+> Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
 
->  .../bindings/mmc/mmc-pwrseq-emmc.yaml         |  2 ++
->  .../bindings/mmc/mmc-pwrseq-sd8787.yaml       |  2 ++
->  .../bindings/mmc/mmc-pwrseq-simple.yaml       |  2 ++
+Thanks for the patch!
 
-Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
+Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-Kind regards
-Uffe
+I wonder if this driver suffers from similar object lifetime management
+issues than V4L2 and MC do, albeit not related to either. Say, what happens
+if you unbind the other device while mtk-vcodec is in use?
+
+-- 
+Regards,
+
+Sakari Ailus
