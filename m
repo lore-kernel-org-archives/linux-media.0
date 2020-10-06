@@ -2,82 +2,179 @@ Return-Path: <SRS0=ILh3=DN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73D0CC4727E
-	for <linux-media@archiver.kernel.org>; Tue,  6 Oct 2020 07:30:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 500B3C4742B
+	for <linux-media@archiver.kernel.org>; Tue,  6 Oct 2020 07:38:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 86B4720853
-	for <linux-media@archiver.kernel.org>; Tue,  6 Oct 2020 07:30:14 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="YUOC+nOR"
+	by mail.kernel.org (Postfix) with ESMTP id 17B802078E
+	for <linux-media@archiver.kernel.org>; Tue,  6 Oct 2020 07:38:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727043AbgJFHaN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 6 Oct 2020 03:30:13 -0400
-Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:57787 "EHLO
-        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726875AbgJFHaM (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 6 Oct 2020 03:30:12 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id PhQEkHAOjv4gEPhQIkvAjO; Tue, 06 Oct 2020 09:30:10 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1601969410; bh=kwLD43K+JoahSCNFJTRi6J9gL0JFO9wJRUwCzB7VxRU=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=YUOC+nORI+YDDazbAilWVqFey7Sd6qmENch1mzCA81mkpomsJyU/nHoj7e1qL1Wws
-         kxgfhnrOFWg1vb2zzzKV2oD3VikRQyAJzG725aYqWzlWhs9dyUh1zMTmYmS2Qqfwzg
-         TRpElIUCX5mtB4fuC+M28GxBPs+jqmvOFWg/mHJGo7EhAl3W/Th5c/2NJMi0SBer+P
-         leGOFcRhMeXLYnBblLKIH3pYM4llgm1ASysen6q03FFU70Ous31UYjV/5rFicpjNYo
-         0TRy0CRKMI9SYdijz4h5rGEYNrC7tJIm8KmcyJgnrC17APhA45B0tCIRW0TIcscnky
-         8pmqmH3GMazJg==
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 2/3] dvb-frontends/drxk_hard.c: fix uninitialized variable warning
-Date:   Tue,  6 Oct 2020 09:30:05 +0200
-Message-Id: <20201006073006.2315225-3-hverkuil-cisco@xs4all.nl>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201006073006.2315225-1-hverkuil-cisco@xs4all.nl>
-References: <20201006073006.2315225-1-hverkuil-cisco@xs4all.nl>
+        id S1727254AbgJFHh7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 6 Oct 2020 03:37:59 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:36572 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725912AbgJFHh6 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Oct 2020 03:37:58 -0400
+Received: by mail-ot1-f65.google.com with SMTP id 60so11408196otw.3;
+        Tue, 06 Oct 2020 00:37:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8+YGZEZXCDlVSYcoSNcJ9v6pHT8JdkLtCN5s+E2ToaQ=;
+        b=L3b/PWChkoqoS3sM68KkIks1b0cT9jMiy6dEJ9WER5VSr4OUBijAy2r0ZZDu964yjz
+         VfYs+kttlFUUP4B0e2mPea0gSV3iwIyp/iscNyRT6mHVtn8iPaLkWHSACJPMMBwj+eSl
+         utbFbKULMEnBeRrgiJxKhsqHpC0l88y4yzNFHScB/x1qHcvrT7e4I0yjt3x/Sann2q4h
+         y6EQVsfVkoKicpJiyuAJVQuixqzSrEfdShe63f3CfTQY76y4JWp4uaRykmsJ7mzqt11b
+         pwyHr5l4guJHbdpXDUG3lkH7L8LwjJrWNf7+Z0I8N80RMqyHFPxvrMulIJw3KWT1NFHX
+         8Wcw==
+X-Gm-Message-State: AOAM530TkVNGXR8CUhM7L2hbvAP7zPSf1zQWRsPH5X4MYux3okdjemRq
+        M09bV9zRdfkzREB3AYB0zIRmbB0IPlE+jS+LjT4=
+X-Google-Smtp-Source: ABdhPJz2bCZlgB6we6A9AWlaXsOI2O+CwxUcnmKhPrIVPza5tGmo+mK6C98Ugzjy2W9HQnh3L0gpSmpM+xs5ujOFQMY=
+X-Received: by 2002:a05:6830:210a:: with SMTP id i10mr2082078otc.145.1601969875043;
+ Tue, 06 Oct 2020 00:37:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfJ4GUOsLW1ZWlftxlFx5SVBWtEGjnen6WLhR+/T5rA7Gsgn1FgsGRqBtt7exQED2Y5jUcCUEe1DzO+CWRD9eQoYqB0QOivRnv0lsM5cYCoc/zWNKkmMW
- ESlClNCNU3pj5npsG9iv/NdLSt0UUsxSQNUVMKxy6aI0WYq0My9ayQ2TU0P5PsNlGDx54PFnc37305Ge1DOeKDzW4eM3RSkE04IS6sGOpRXEhIzePUd61LAV
+References: <20201005183830.486085-1-robh@kernel.org> <20201005183830.486085-2-robh@kernel.org>
+In-Reply-To: <20201005183830.486085-2-robh@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 6 Oct 2020 09:37:43 +0200
+Message-ID: <CAMuHMdXjBSzbs4yAPJ-XUTBRZWKN61hO8vQ1-nGN5nAo7JnV-w@mail.gmail.com>
+Subject: Re: [PATCH 1/4] dt-bindings: Add missing 'unevaluatedProperties'
+To:     Rob Herring <robh@kernel.org>
+Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        linux-iio@vger.kernel.org, Viresh Kumar <vireshk@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Sebastian Reichel <sre@kernel.org>, linux-ide@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        linux-leds@vger.kernel.org, Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-rtc@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        linux-input@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-can@vger.kernel.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Richard Weinberger <richard@nod.at>,
+        dmaengine <dmaengine@vger.kernel.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-drxk_hard.c: In function 'hi_command.constprop':
-drxk_hard.c:1016:5: warning: 'wait_cmd' may be used uninitialized in this function [-Wmaybe-uninitialized]
- 1015 |   } while ((status < 0) && (retry_count < DRXK_MAX_RETRIES)
-      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 1016 |     && (wait_cmd != 0));
-      |     ^~~~~~~~~~~~~~~~~~
+Hi Rob,
 
-Just initialize wait_cmd to 0.
+On Mon, Oct 5, 2020 at 8:39 PM Rob Herring <robh@kernel.org> wrote:
+> This doesn't yet do anything in the tools, but make it explicit so we can
+> check either 'unevaluatedProperties' or 'additionalProperties' is present
+> in schemas.
+>
+> 'unevaluatedProperties' is appropriate when including another schema (via
+> '$ref') and all possible properties and/or child nodes are not
+> explicitly listed in the schema with the '$ref'.
+>
+> This is in preparation to add a meta-schema to check for missing
+> 'unevaluatedProperties' or 'additionalProperties'. This has been a
+> constant source of review issues.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- drivers/media/dvb-frontends/drxk_hard.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for your patch!
 
-diff --git a/drivers/media/dvb-frontends/drxk_hard.c b/drivers/media/dvb-frontends/drxk_hard.c
-index 32f9346deb3e..37882bc587f9 100644
---- a/drivers/media/dvb-frontends/drxk_hard.c
-+++ b/drivers/media/dvb-frontends/drxk_hard.c
-@@ -1004,7 +1004,7 @@ static int hi_command(struct drxk_state *state, u16 cmd, u16 *p_result)
- 	if (!powerdown_cmd) {
- 		/* Wait until command rdy */
- 		u32 retry_count = 0;
--		u16 wait_cmd;
-+		u16 wait_cmd = 0;
- 
- 		do {
- 			usleep_range(1000, 2000);
+>  Documentation/devicetree/bindings/bus/renesas,bsc.yaml       | 2 ++
+>  .../bindings/memory-controllers/renesas,rpc-if.yaml          | 2 ++
+>  Documentation/devicetree/bindings/net/renesas,ether.yaml     | 2 ++
+>  Documentation/devicetree/bindings/serial/renesas,hscif.yaml  | 2 ++
+>  Documentation/devicetree/bindings/serial/renesas,sci.yaml    | 2 ++
+>  Documentation/devicetree/bindings/serial/renesas,scif.yaml   | 2 ++
+>  Documentation/devicetree/bindings/serial/renesas,scifa.yaml  | 2 ++
+>  Documentation/devicetree/bindings/serial/renesas,scifb.yaml  | 2 ++
+>  Documentation/devicetree/bindings/spi/renesas,hspi.yaml      | 2 ++
+>  Documentation/devicetree/bindings/spi/renesas,rspi.yaml      | 2 ++
+>  Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml  | 2 ++
+
+Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+> --- a/Documentation/devicetree/bindings/net/renesas,ether.yaml
+> +++ b/Documentation/devicetree/bindings/net/renesas,ether.yaml
+> @@ -85,6 +85,8 @@ required:
+>    - clocks
+>    - pinctrl-0
+>
+> +unevaluatedProperties: false
+
+This one has received an "additionalProperties: false" in commit
+41506bff84f1563e ("dt-bindings: net: renesas, ether: Improve schema validation")
+in net-next, which you probably want to remove.
+
+> +
+>  examples:
+>    # Lager board
+>    - |
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.28.0
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
