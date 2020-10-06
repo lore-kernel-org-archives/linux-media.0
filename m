@@ -2,94 +2,95 @@ Return-Path: <SRS0=ILh3=DN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69364C41604
-	for <linux-media@archiver.kernel.org>; Tue,  6 Oct 2020 18:18:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51024C4727D
+	for <linux-media@archiver.kernel.org>; Tue,  6 Oct 2020 19:50:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B20D5206F7
-	for <linux-media@archiver.kernel.org>; Tue,  6 Oct 2020 18:18:52 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=tent.at header.i=@tent.at header.b="B7bj28rU"
+	by mail.kernel.org (Postfix) with ESMTP id EDBC720797
+	for <linux-media@archiver.kernel.org>; Tue,  6 Oct 2020 19:50:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1602013814;
+	bh=ZYhmMF8wpTSUkQAxbp5owVdP92LkRUkggDnmLBPe5U4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=knYdQnrpXGdpumWftQ/QgnVFxrrIimZM/hu1vB9X9JIoBdFT5nOivKyb9TwH7odRI
+	 UpDkXnYErdkFYlYhclHGLitNLgEFOErI5jhvoq1umyDPk80xy3v7Xdoh8a0R1z2z0I
+	 mxR1OS7LmAnhh69NHb5cet5t63PP8PQw1jQMq3CA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726830AbgJFSSw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 6 Oct 2020 14:18:52 -0400
-Received: from irn-bru.nerdsurf.de ([178.63.114.209]:47082 "EHLO
-        irn-bru.nerdsurf.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725906AbgJFSSw (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Oct 2020 14:18:52 -0400
-X-Greylist: delayed 323 seconds by postgrey-1.27 at vger.kernel.org; Tue, 06 Oct 2020 14:18:51 EDT
-Received: from texa.stuttgart.nerdsurf.de (unknown [172.23.27.116])
-        by irn-bru.nerdsurf.de (Postfix) with ESMTP id 0E437540658;
-        Tue,  6 Oct 2020 20:13:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tent.at; s=mail20151109;
-        t=1602008003;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=tE4VXulymaNnmfDTAhU1VMVrF6bGYDBlNodvsuXMOKw=;
-        b=B7bj28rU1b4fo/QBVaUA6JgUhGpKgE7QJrFABC3Aoj9KmGJZ4j7GxyzXziUQrXHqQWDGLs
-        KT++lbm5bCZ0PB72ur+zc3eNXeZ7j7oORrUKRSAUpSGb1uzbuVhCRHnEv1hsCiTwu0uq3O
-        ZlUCyw/lzye7x5QSpdFxZpvbi09GUOA=
-From:   Kai Muenz <squ@tent.at>
-To:     linux-media@vger.kernel.org
-Cc:     Kai Muenz <squ@tent.at>
-Subject: [PATCH] Added Hauppauge MAX S2's USB-IDs to dw2102.c
-Date:   Tue,  6 Oct 2020 20:13:09 +0200
-Message-Id: <20201006181309.542700-1-squ@tent.at>
-X-Mailer: git-send-email 2.28.0
+        id S1726566AbgJFTuN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 6 Oct 2020 15:50:13 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:44187 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725943AbgJFTuM (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Oct 2020 15:50:12 -0400
+Received: by mail-ot1-f66.google.com with SMTP id a2so13417059otr.11;
+        Tue, 06 Oct 2020 12:50:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=C2VdEx1qgxUjYGallz1CvIXMTJLqrZbwLPUfqsl53aQ=;
+        b=a+AyPfswJlYnGWV1ExdT1LksSLDpFgyTlY1iLuPvMtcI6EiBw9UlyO4jdx5SJ8GAT9
+         Jhhm+9Q6OpaZkWR0cqQszhwiGJJH8I/ngklK/cF8+zPpgVoB9MHZ0L2e31+Q+JcS5bXf
+         6w0/5Yl0oAStLMuJxjbODN5gm7oLe15TZBjBj0NSgpkLkmrAAgromBUdwgotlXA9kWp5
+         75s7/2SgtLaT8S3YtdtsBiGYloTyVUVYdyhh/yuStD2YCCg1m0BpHg0OLbPMCfmYvkDZ
+         71+tdIAkSe9wJtizzQiSE7C1UyNnJUpqCjCiSF+yy3t7JnELlpDAy2sjDHQSZGqFM2n9
+         B+6g==
+X-Gm-Message-State: AOAM530X+QelDIwR8Jxw1/3CbgPDWJhZ6GzBIXemZHpDm+pCnKSof0Mk
+        DSFdiIWI8DKqsEKfGPl7n/zWne34muII
+X-Google-Smtp-Source: ABdhPJw9yaRSS5uQ2iC7X/JRpm+DTYvg/NaIxLusFM/1IVfbYNZsG4u4IqxpNqGotE7EhktQ8pW3aA==
+X-Received: by 2002:a9d:4cd:: with SMTP id 71mr3745830otm.276.1602013811958;
+        Tue, 06 Oct 2020 12:50:11 -0700 (PDT)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id r62sm1701429oih.12.2020.10.06.12.50.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Oct 2020 12:50:11 -0700 (PDT)
+Received: (nullmailer pid 2720710 invoked by uid 1000);
+        Tue, 06 Oct 2020 19:50:10 -0000
+Date:   Tue, 6 Oct 2020 14:50:10 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [RESEND PATCH 020/100] dt-bindings: Add vendor prefix for MIPI
+ Alliance
+Message-ID: <20201006195010.GA2718573@bogus>
+References: <20200930201914.31377-1-sakari.ailus@linux.intel.com>
+ <20200930201914.31377-2-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200930201914.31377-2-sakari.ailus@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Signed-off-by: Kai Muenz <squ@tent.at>
----
- drivers/media/usb/dvb-usb/dw2102.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+On Wed, Sep 30, 2020 at 11:19:08PM +0300, Sakari Ailus wrote:
+> Add a vendor prefix for MIPI Alliance, Inc.
+> 
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> ---
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/usb/dvb-usb/dw2102.c b/drivers/media/usb/dvb-usb/dw2102.c
-index a27a68440..ab31b1e37 100644
---- a/drivers/media/usb/dvb-usb/dw2102.c
-+++ b/drivers/media/usb/dvb-usb/dw2102.c
-@@ -1770,6 +1770,7 @@ enum dw2102_table_entry {
- 	TEVII_S660,
- 	PROF_7500,
- 	GENIATECH_SU3000,
-+    HAUPPAUGE_MAX_S2,
- 	TERRATEC_CINERGY_S2,
- 	TEVII_S480_1,
- 	TEVII_S480_2,
-@@ -1802,6 +1803,7 @@ static struct usb_device_id dw2102_table[] = {
- 	[TEVII_S660] = {USB_DEVICE(0x9022, USB_PID_TEVII_S660)},
- 	[PROF_7500] = {USB_DEVICE(0x3034, 0x7500)},
- 	[GENIATECH_SU3000] = {USB_DEVICE(0x1f4d, 0x3000)},
-+	[HAUPPAUGE_MAX_S2] = {USB_DEVICE(0x2040, 0xd900)},
- 	[TERRATEC_CINERGY_S2] = {USB_DEVICE(USB_VID_TERRATEC, USB_PID_TERRATEC_CINERGY_S2_R1)},
- 	[TEVII_S480_1] = {USB_DEVICE(0x9022, USB_PID_TEVII_S480_1)},
- 	[TEVII_S480_2] = {USB_DEVICE(0x9022, USB_PID_TEVII_S480_2)},
-@@ -2230,12 +2232,16 @@ static struct dvb_usb_device_properties su3000_properties = {
- 		}},
- 		}
- 	},
--	.num_device_descs = 8,
-+	.num_device_descs = 9,
- 	.devices = {
- 		{ "SU3000HD DVB-S USB2.0",
- 			{ &dw2102_table[GENIATECH_SU3000], NULL },
- 			{ NULL },
- 		},
-+		{ "Hauppauge MAX S2 or WinTV NOVA HD USB2.0",
-+			{ &dw2102_table[HAUPPAUGE_MAX_S2], NULL },
-+			{ NULL },
-+		},
- 		{ "Terratec Cinergy S2 USB HD",
- 			{ &dw2102_table[TERRATEC_CINERGY_S2], NULL },
- 			{ NULL },
--- 
-2.28.0
+I guess based on the irc discussion, this is withdrawn.
 
+> 
+> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> index 63996ab03521..f16b53909e6e 100644
+> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> @@ -663,6 +663,8 @@ patternProperties:
+>      description: Miniand Tech
+>    "^minix,.*":
+>      description: MINIX Technology Ltd.
+> +  "^mipi,.*":
+> +    description: MIPI Alliance, Inc.
+>    "^miramems,.*":
+>      description: MiraMEMS Sensing Technology Co., Ltd.
+>    "^mitsubishi,.*":
+> -- 
+> 2.27.0
+> 
