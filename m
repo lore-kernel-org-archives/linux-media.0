@@ -2,119 +2,110 @@ Return-Path: <SRS0=ILh3=DN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BD6CC4741F
-	for <linux-media@archiver.kernel.org>; Tue,  6 Oct 2020 07:00:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54F2FC41604
+	for <linux-media@archiver.kernel.org>; Tue,  6 Oct 2020 07:30:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D6EC9208FE
-	for <linux-media@archiver.kernel.org>; Tue,  6 Oct 2020 07:00:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 618A62078E
+	for <linux-media@archiver.kernel.org>; Tue,  6 Oct 2020 07:30:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="duVae73q"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="lgArBDro"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727230AbgJFHAY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 6 Oct 2020 03:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51132 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725962AbgJFHAX (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Oct 2020 03:00:23 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C16C061755
-        for <linux-media@vger.kernel.org>; Tue,  6 Oct 2020 00:00:23 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id g12so6698456wrp.10
-        for <linux-media@vger.kernel.org>; Tue, 06 Oct 2020 00:00:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Oe7zU6gzISKBUmakEze1jPjt4AoCrxJWUb32hirWtf4=;
-        b=duVae73qGXrIWn0dA9Y2ba0eTvLVJldQbfNGMJhbCGq9paoehFS47xcK9OLpCkH4WF
-         NqBrFaENJwbrU/th8XmIkh1VS1vd2oH1s1pXzDf2b99Cb/bAZ5mIsHV6ptmyF1OBtQBy
-         GT9rg4w2n4Isj8jXnTNnLi+Aw/L7SFWFx72v0bNTNomBvhPxjgr+pR8su7g3MDB9LEtn
-         /vLB/qwXlI19SAUsjJySvCczuoNdnCBTeLhRqUeV/ScZadUIhYWFwLaiDoYkjoSe+gXj
-         C3HqfoAXjTKslZ5dKtYyztKJYZ9eX7NM47nSfo4FbYcgGC7bh2R2dMJAzlKCSNaNoWRF
-         iUUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Oe7zU6gzISKBUmakEze1jPjt4AoCrxJWUb32hirWtf4=;
-        b=HftkVDyiHiPqmdZkWfmzTDKEpmPYm/tvI63RgFMN4MmFYChI6t51wFa7mnJ320S9Lr
-         7czWNEHNY9FeMXW5iEOytwP9kcuY74ScCa3zdI7fFmJasQsIxrhkjDb4S6/3KzDItV8F
-         mJCqxKgLdJkkjnMELXAd9oM/xfyxVQR83t+jEy83E6BaKM3MjCV84oB9CVTddYmK0a90
-         GHJBMjtlCx9XH3v/GP0ooL9fpKxw2IW87j03PWApbTvIxjUoVGi/yenCxlB6YXCJEgy7
-         qgrOHr4IB2OZrB3MwkjqYEdXQzio7tklUTwqj9YQBR4wq1bMd0X+TLHAWIlXLsUuhPRF
-         G6bQ==
-X-Gm-Message-State: AOAM531lf2MOx4tzEqtcA48psE/V0wAml8ksToJW3N8MerV0bMxrJfBp
-        AezH4RqxwGeW2LRKCUzWFNNwtg==
-X-Google-Smtp-Source: ABdhPJzRpE6n88xNVq3Fk+xQSff8QQNC8n1c0b7ajSoy19OwpevLFHK5HQwgX5M07UqJkIIa/Io0cQ==
-X-Received: by 2002:adf:bb43:: with SMTP id x3mr3174885wrg.250.1601967621811;
-        Tue, 06 Oct 2020 00:00:21 -0700 (PDT)
-Received: from dell ([91.110.221.236])
-        by smtp.gmail.com with ESMTPSA id o186sm2537036wmb.12.2020.10.06.00.00.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Oct 2020 00:00:21 -0700 (PDT)
-Date:   Tue, 6 Oct 2020 08:00:13 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Another round of adding missing
- 'additionalProperties'
-Message-ID: <20201006070013.GA6148@dell>
-References: <20201002234143.3570746-1-robh@kernel.org>
+        id S1726917AbgJFHaN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 6 Oct 2020 03:30:13 -0400
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:52193 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726670AbgJFHaM (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 6 Oct 2020 03:30:12 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id PhQEkHAOjv4gEPhQIkvAjw; Tue, 06 Oct 2020 09:30:11 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1601969411; bh=KX4uZDWlPdWKby3W4TMfUj5a7PySRSaFtZCFknDjM7A=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
+        b=lgArBDroNkhwvKor/VBlDG2QBs7vMApXpB7xCnEFD+Nrgi9+Fz/kKcfOf2hxil4ms
+         U6CKwDHgpLc7Mdygl1szIPt3UXl+B0ejuQe8rb9uHYtH5PS7xx/yd+kvgyBNOWz8Js
+         6+AZmxPBvKaw+KkyLTV+vVHc/6UMR9DtOLJFwDxeGIJlGrAlpr59a951HMXju03bx3
+         UfDtRenlValaQBUBN7jisjhqJXg+i18Ov1vfDvM/mJk07HqWeXZj67NCkNMcUfXajU
+         gT4rtYuQyZjtjDuOG7V7mu84mljBuQu7f0CihMeoNZ/yIlbg8fSR+SwITFDVnY28i9
+         856lxWgzmTc+A==
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Sylwester Nawrocki <snawrocki@kernel.org>
+Subject: [PATCH 3/3] s5k5baf: drop 'data' field in struct s5k5baf_fw
+Date:   Tue,  6 Oct 2020 09:30:06 +0200
+Message-Id: <20201006073006.2315225-4-hverkuil-cisco@xs4all.nl>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20201006073006.2315225-1-hverkuil-cisco@xs4all.nl>
+References: <20201006073006.2315225-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201002234143.3570746-1-robh@kernel.org>
+X-CMAE-Envelope: MS4wfH8u/QYCuNHdGcDsmBJOzan0hiCoPJQaxldbmfeK3yqiV307AOxBP91EnUeEykgIVsVYZ+eAnsADuXhF8xS8huszMkJNknHNV7FJfsSKgmANjXwNoln0
+ M8024ZUAjb2ZFSn15/7RXXAHs5ZDWh7LTQyS8sEfCqAs6BVCNXc3MWpu+5zBFiv2gfVXrjMHr0pnDB+Af5SyNHcI4VJWpG7CJcsbzRVbqp/IGzADSEqeZQFx
+ MgNxvZ/9CyWH7AB2xnAyBALjrSOMQFET9uqs8RDb2znw3dE4BQMpcLg+Exftl4z5
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, 02 Oct 2020, Rob Herring wrote:
+struct s5k5baf_fw ends with this:
 
-> Another round of wack-a-mole. The json-schema default is additional
-> unknown properties are allowed, but for DT all properties should be
-> defined.
+       struct {
+               u16 id;
+               u16 offset;
+       } seq[0];
+       u16 data[];
+};
 
-Acked-by: Lee Jones <lee.jones@linaro.org>
+which is rather confusing and can cause gcc warnings:
 
+s5k5baf.c: In function 's5k5baf_load_setfile.isra':
+s5k5baf.c:390:13: warning: array subscript 65535 is outside the bounds of an interior zero-length array 'struct <anonymous>[0]' [-Wzero-length-bounds]
+  390 |   if (f->seq[i].offset + d <= end)
+      |       ~~~~~~^~~
+
+It turns out that 'data[]' is used in only one place and it can
+easily be replaced by &fw->seq[0].id and 'seq[0]' can be replaced by
+'seq[]'.
+
+This is both more readable and solved that warnings.
+
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: Kyungmin Park <kyungmin.park@samsung.com>
+Cc: Sylwester Nawrocki <snawrocki@kernel.org>
+---
+ drivers/media/i2c/s5k5baf.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/media/i2c/s5k5baf.c b/drivers/media/i2c/s5k5baf.c
+index 42584a088273..ec6f22efe19a 100644
+--- a/drivers/media/i2c/s5k5baf.c
++++ b/drivers/media/i2c/s5k5baf.c
+@@ -280,8 +280,7 @@ struct s5k5baf_fw {
+ 	struct {
+ 		u16 id;
+ 		u16 offset;
+-	} seq[0];
+-	u16 data[];
++	} seq[];
+ };
+ 
+ struct s5k5baf {
+@@ -563,7 +562,7 @@ static u16 *s5k5baf_fw_get_seq(struct s5k5baf *state, u16 seq_id)
+ 	if (fw == NULL)
+ 		return NULL;
+ 
+-	data = fw->data + 2 * fw->count;
++	data = &fw->seq[0].id + 2 * fw->count;
+ 
+ 	for (i = 0; i < fw->count; ++i) {
+ 		if (fw->seq[i].id == seq_id)
 -- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.28.0
+
