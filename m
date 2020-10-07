@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BB43C4363C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6C2EC4727E
 	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 27EAB2080A
+	by mail.kernel.org (Postfix) with ESMTP id A629F2080A
 	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728070AbgJGIqW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Oct 2020 04:46:22 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:57044 "EHLO
+        id S1728071AbgJGIqX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Oct 2020 04:46:23 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:57056 "EHLO
         hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728056AbgJGIqT (ORCPT
+        with ESMTP id S1728054AbgJGIqT (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:19 -0400
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 03F6B634D11
-        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:23 +0300 (EEST)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id E33DA634D0F
+        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:22 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH v2 100/106] ccs: Add support for analogue gain coefficient controls
-Date:   Wed,  7 Oct 2020 11:45:51 +0300
-Message-Id: <20201007084557.25843-91-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 098/106] v4l: uapi: Add user control base for CCS controls
+Date:   Wed,  7 Oct 2020 11:45:49 +0300
+Message-Id: <20201007084557.25843-89-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201007084557.25843-1-sakari.ailus@linux.intel.com>
 References: <20201007084505.25761-1-sakari.ailus@linux.intel.com>
@@ -37,83 +37,31 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add four controls for reading CCS analogue gain coefficients. The
-values are constants that are device specific.
+Add a control base for CCS controls, and reserve 128 controls. Luckily
+these numbers are cheap.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 38 ++++++++++++++++++++++++++++++--
- 1 file changed, 36 insertions(+), 2 deletions(-)
+ include/uapi/linux/v4l2-controls.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index d6d6aeceb415..2a507b63bafc 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -28,6 +28,7 @@
- #include <linux/v4l2-mediabus.h>
- #include <media/v4l2-fwnode.h>
- #include <media/v4l2-device.h>
-+#include <uapi/linux/ccs.h>
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index a184c4939438..a84df4cfd03c 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -198,6 +198,12 @@ enum v4l2_colorfx {
+  */
+ #define V4L2_CID_USER_ATMEL_ISC_BASE		(V4L2_CID_USER_BASE + 0x10c0)
  
- #include "ccs.h"
- 
-@@ -772,14 +773,46 @@ static int ccs_init_controls(struct ccs_sensor *sensor)
- 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
- 	int rval;
- 
--	rval = v4l2_ctrl_handler_init(&sensor->pixel_array->ctrl_handler, 13);
-+	rval = v4l2_ctrl_handler_init(&sensor->pixel_array->ctrl_handler, 17);
- 	if (rval)
- 		return rval;
- 
- 	sensor->pixel_array->ctrl_handler.lock = &sensor->mutex;
- 
- 	switch (CCS_LIM(sensor, ANALOG_GAIN_CAPABILITY)) {
--	case CCS_ANALOG_GAIN_CAPABILITY_GLOBAL:
-+	case CCS_ANALOG_GAIN_CAPABILITY_GLOBAL: {
-+		struct {
-+			const char *name;
-+			u32 id;
-+			s32 value;
-+		} const gain_ctrls[] = {
-+			{ "Analogue Gain m0", V4L2_CID_CCS_ANALOGUE_GAIN_M0,
-+			  CCS_LIM(sensor, ANALOG_GAIN_M0), },
-+			{ "Analogue Gain c0", V4L2_CID_CCS_ANALOGUE_GAIN_C0,
-+			  CCS_LIM(sensor, ANALOG_GAIN_C0), },
-+			{ "Analogue Gain m1", V4L2_CID_CCS_ANALOGUE_GAIN_M1,
-+			  CCS_LIM(sensor, ANALOG_GAIN_M1), },
-+			{ "Analogue Gain c1", V4L2_CID_CCS_ANALOGUE_GAIN_C1,
-+			  CCS_LIM(sensor, ANALOG_GAIN_C1), },
-+		};
-+		struct v4l2_ctrl_config ctrl_cfg = {
-+			.type = V4L2_CTRL_TYPE_INTEGER,
-+			.ops = &ccs_ctrl_ops,
-+			.flags = V4L2_CTRL_FLAG_READ_ONLY,
-+			.step = 1,
-+		};
-+		unsigned int i;
++/*
++ * The base for MIPI CCS driver controls.
++ * We reserve 128 controls for this driver.
++ */
++#define V4L2_CID_USER_CCS_BASE			(V4L2_CID_USER_BASE + 0x10e0)
 +
-+		for (i = 0; i < ARRAY_SIZE(gain_ctrls); i++) {
-+			ctrl_cfg.name = gain_ctrls[i].name;
-+			ctrl_cfg.id = gain_ctrls[i].id;
-+			ctrl_cfg.min = ctrl_cfg.max = ctrl_cfg.def =
-+				gain_ctrls[i].value;
-+
-+			v4l2_ctrl_new_custom(&sensor->pixel_array->ctrl_handler,
-+					     &ctrl_cfg, NULL);
-+		}
-+
- 		v4l2_ctrl_new_std(&sensor->pixel_array->ctrl_handler,
- 				  &ccs_ctrl_ops, V4L2_CID_ANALOGUE_GAIN,
- 				  CCS_LIM(sensor, ANALOG_GAIN_CODE_MIN),
-@@ -788,6 +821,7 @@ static int ccs_init_controls(struct ccs_sensor *sensor)
- 				      1U),
- 				  CCS_LIM(sensor, ANALOG_GAIN_CODE_MIN));
- 	}
-+	}
- 
- 	if (CCS_LIM(sensor, DIGITAL_GAIN_CAPABILITY) ==
- 	    CCS_DIGITAL_GAIN_CAPABILITY_GLOBAL ||
+ /* MPEG-class control IDs */
+ /* The MPEG controls are applicable to all codec controls
+  * and the 'MPEG' part of the define is historical */
 -- 
 2.27.0
 
