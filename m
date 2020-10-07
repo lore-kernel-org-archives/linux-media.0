@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71854C4727E
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CF82C41604
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2EB422080A
+	by mail.kernel.org (Postfix) with ESMTP id F41A02080A
 	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728085AbgJGIqi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Oct 2020 04:46:38 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:57058 "EHLO
+        id S1728087AbgJGIqj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Oct 2020 04:46:39 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:57052 "EHLO
         hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728035AbgJGIqQ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:16 -0400
+        with ESMTP id S1728030AbgJGIqP (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:15 -0400
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 02222634CFC
-        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:22 +0300 (EEST)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 8647D634CF7
+        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:21 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH v2 086/106] ccs-pll: Separate VT divisor limit calculation from the rest
-Date:   Wed,  7 Oct 2020 11:45:37 +0300
-Message-Id: <20201007084557.25843-77-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 080/106] ccs-pll: Check for derating and overrating, support non-derating sensors
+Date:   Wed,  7 Oct 2020 11:45:31 +0300
+Message-Id: <20201007084557.25843-71-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201007084557.25843-1-sakari.ailus@linux.intel.com>
 References: <20201007084505.25761-1-sakari.ailus@linux.intel.com>
@@ -37,96 +37,154 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Separate VT divisor limit calculation from the rest of the VT PLL branch
-calculation. This way it can be used for dual PLL support as well.
+Some sensors support derating (VT domain speed faster than OP) or
+overrating (VT domain speed slower than OP). While this was supported for
+the driver, the hardware support for the feature was never verified. Do
+that now, and for those devices without that support, VT and OP speeds
+have to match.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs-pll.c | 64 +++++++++++++++++++++----------------
- 1 file changed, 37 insertions(+), 27 deletions(-)
+ drivers/media/i2c/ccs-pll.c      | 84 +++++++++++++++++++++-----------
+ drivers/media/i2c/ccs-pll.h      |  2 +
+ drivers/media/i2c/ccs/ccs-core.c |  7 +++
+ 3 files changed, 64 insertions(+), 29 deletions(-)
 
 diff --git a/drivers/media/i2c/ccs-pll.c b/drivers/media/i2c/ccs-pll.c
-index 4321989b9013..8b300e786451 100644
+index 3d43e737155f..96eb71f16c81 100644
 --- a/drivers/media/i2c/ccs-pll.c
 +++ b/drivers/media/i2c/ccs-pll.c
-@@ -228,6 +228,41 @@ static int check_ext_bounds(struct device *dev, struct ccs_pll *pll)
- 	return 0;
+@@ -142,6 +142,18 @@ static int check_all_bounds(struct device *dev,
+ 			lim->vt_bk.max_pix_clk_freq_hz,
+ 			"vt_pix_clk_freq_hz");
+ 
++	if (!(pll->flags & CCS_PLL_FLAG_FIFO_DERATING) &&
++	    pll->pixel_rate_pixel_array > pll->pixel_rate_csi) {
++		dev_dbg(dev, "device does not support derating\n");
++		return -EINVAL;
++	}
++
++	if (!(pll->flags & CCS_PLL_FLAG_FIFO_OVERRATING) &&
++	    pll->pixel_rate_pixel_array < pll->pixel_rate_csi) {
++		dev_dbg(dev, "device does not support overrating\n");
++		return -EINVAL;
++	}
++
+ 	return rval;
  }
  
-+static void
-+ccs_pll_find_vt_sys_div(struct device *dev, const struct ccs_pll_limits *lim,
-+			struct ccs_pll *pll, struct ccs_pll_branch_fr *pll_fr,
-+			uint16_t min_vt_div, uint16_t max_vt_div,
-+			uint16_t *min_sys_div, uint16_t *max_sys_div)
-+{
-+	/*
-+	 * Find limits for sys_clk_div. Not all values are possible with all
-+	 * values of pix_clk_div.
-+	 */
-+	*min_sys_div = lim->vt_bk.min_sys_clk_div;
-+	dev_dbg(dev, "min_sys_div: %u\n", *min_sys_div);
-+	*min_sys_div = max_t(uint16_t, *min_sys_div,
-+			     DIV_ROUND_UP(min_vt_div,
-+					  lim->vt_bk.max_pix_clk_div));
-+	dev_dbg(dev, "min_sys_div: max_vt_pix_clk_div: %u\n", *min_sys_div);
-+	*min_sys_div = max_t(uint16_t, *min_sys_div,
-+			     pll_fr->pll_op_clk_freq_hz
-+			     / lim->vt_bk.max_sys_clk_freq_hz);
-+	dev_dbg(dev, "min_sys_div: max_pll_op_clk_freq_hz: %u\n", *min_sys_div);
-+	*min_sys_div = clk_div_even_up(*min_sys_div);
-+	dev_dbg(dev, "min_sys_div: one or even: %u\n", *min_sys_div);
-+
-+	*max_sys_div = lim->vt_bk.max_sys_clk_div;
-+	dev_dbg(dev, "max_sys_div: %u\n", *max_sys_div);
-+	*max_sys_div = min_t(uint16_t, *max_sys_div,
-+			     DIV_ROUND_UP(max_vt_div,
-+					  lim->vt_bk.min_pix_clk_div));
-+	dev_dbg(dev, "max_sys_div: min_vt_pix_clk_div: %u\n", *max_sys_div);
-+	*max_sys_div = min_t(uint16_t, *max_sys_div,
-+			     DIV_ROUND_UP(pll_fr->pll_op_clk_freq_hz,
-+					  lim->vt_bk.min_pix_clk_freq_hz));
-+	dev_dbg(dev, "max_sys_div: min_vt_pix_clk_freq_hz: %u\n", *max_sys_div);
-+}
-+
- #define CPHY_CONST		7
- #define DPHY_CONST		16
- #define PHY_CONST_DIV		16
-@@ -314,33 +349,8 @@ ccs_pll_calculate_vt(struct device *dev, const struct ccs_pll_limits *lim,
- 	dev_dbg(dev, "max_vt_div: min_vt_pix_clk_freq_hz: %u\n",
- 		max_vt_div);
- 
--	/*
--	 * Find limitsits for sys_clk_div. Not all values are possible
--	 * with all values of pix_clk_div.
--	 */
--	min_sys_div = lim->vt_bk.min_sys_clk_div;
--	dev_dbg(dev, "min_sys_div: %u\n", min_sys_div);
--	min_sys_div = max_t(uint16_t, min_sys_div,
--			    DIV_ROUND_UP(min_vt_div,
--					 lim->vt_bk.max_pix_clk_div));
--	dev_dbg(dev, "min_sys_div: max_vt_pix_clk_div: %u\n", min_sys_div);
--	min_sys_div = max_t(uint16_t, min_sys_div,
--			    pll_fr->pll_op_clk_freq_hz
--			    / lim->vt_bk.max_sys_clk_freq_hz);
--	dev_dbg(dev, "min_sys_div: max_pll_op_clk_freq_hz: %u\n", min_sys_div);
--	min_sys_div = clk_div_even_up(min_sys_div);
--	dev_dbg(dev, "min_sys_div: one or even: %u\n", min_sys_div);
--
--	max_sys_div = lim->vt_bk.max_sys_clk_div;
--	dev_dbg(dev, "max_sys_div: %u\n", max_sys_div);
--	max_sys_div = min_t(uint16_t, max_sys_div,
--			    DIV_ROUND_UP(max_vt_div,
--					 lim->vt_bk.min_pix_clk_div));
--	dev_dbg(dev, "max_sys_div: min_vt_pix_clk_div: %u\n", max_sys_div);
--	max_sys_div = min_t(uint16_t, max_sys_div,
--			    DIV_ROUND_UP(pll_fr->pll_op_clk_freq_hz,
--					 lim->vt_bk.min_pix_clk_freq_hz));
--	dev_dbg(dev, "max_sys_div: min_vt_pix_clk_freq_hz: %u\n", max_sys_div);
-+	ccs_pll_find_vt_sys_div(dev, lim, pll, pll_fr, min_vt_div,
-+				max_vt_div, &min_sys_div, &max_sys_div);
+@@ -163,37 +175,51 @@ __ccs_pll_calculate_vt(struct device *dev, const struct ccs_pll_limits *lim,
+ 	uint32_t min_sys_div, max_sys_div;
  
  	/*
- 	 * Find pix_div such that a legal pix_div * sys_div results
+-	 * Some sensors perform analogue binning and some do this
+-	 * digitally. The ones doing this digitally can be roughly be
+-	 * found out using this formula. The ones doing this digitally
+-	 * should run at higher clock rate, so smaller divisor is used
+-	 * on video timing side.
++	 * Find out whether a sensor supports derating. If it does not, VT and
++	 * OP domains are required to run at the same pixel rate.
+ 	 */
+-	if (lim->min_line_length_pck_bin > lim->min_line_length_pck
+-	    / pll->binning_horizontal)
+-		vt_op_binning_div = pll->binning_horizontal;
+-	else
+-		vt_op_binning_div = 1;
+-	dev_dbg(dev, "vt_op_binning_div: %u\n", vt_op_binning_div);
++	if (!(pll->flags & CCS_PLL_FLAG_FIFO_DERATING)) {
++		min_vt_div =
++			op_pll_bk->sys_clk_div * op_pll_bk->pix_clk_div
++			* pll->vt_lanes * phy_const
++			/ pll->op_lanes / PHY_CONST_DIV;
++	} else {
++		/*
++		 * Some sensors perform analogue binning and some do this
++		 * digitally. The ones doing this digitally can be roughly be
++		 * found out using this formula. The ones doing this digitally
++		 * should run at higher clock rate, so smaller divisor is used
++		 * on video timing side.
++		 */
++		if (lim->min_line_length_pck_bin > lim->min_line_length_pck
++		    / pll->binning_horizontal)
++			vt_op_binning_div = pll->binning_horizontal;
++		else
++			vt_op_binning_div = 1;
++		dev_dbg(dev, "vt_op_binning_div: %u\n", vt_op_binning_div);
+ 
+-	/*
+-	 * Profile 2 supports vt_pix_clk_div E [4, 10]
+-	 *
+-	 * Horizontal binning can be used as a base for difference in
+-	 * divisors. One must make sure that horizontal blanking is
+-	 * enough to accommodate the CSI-2 sync codes.
+-	 *
+-	 * Take scaling factor and number of VT lanes into account as well.
+-	 *
+-	 * Find absolute limits for the factor of vt divider.
+-	 */
+-	dev_dbg(dev, "scale_m: %u\n", pll->scale_m);
+-	min_vt_div = DIV_ROUND_UP(pll->bits_per_pixel * op_pll_bk->sys_clk_div
+-				  * pll->scale_n * pll->vt_lanes * phy_const,
+-				  (pll->flags & CCS_PLL_FLAG_LANE_SPEED_MODEL ?
+-				   pll->csi2.lanes : 1)
+-				  * vt_op_binning_div * pll->scale_m
+-				  * PHY_CONST_DIV);
++		/*
++		 * Profile 2 supports vt_pix_clk_div E [4, 10]
++		 *
++		 * Horizontal binning can be used as a base for difference in
++		 * divisors. One must make sure that horizontal blanking is
++		 * enough to accommodate the CSI-2 sync codes.
++		 *
++		 * Take scaling factor and number of VT lanes into account as well.
++		 *
++		 * Find absolute limits for the factor of vt divider.
++		 */
++		dev_dbg(dev, "scale_m: %u\n", pll->scale_m);
++		min_vt_div =
++			DIV_ROUND_UP(pll->bits_per_pixel
++				     * op_pll_bk->sys_clk_div * pll->scale_n
++				     * pll->vt_lanes * phy_const,
++				     (pll->flags &
++				      CCS_PLL_FLAG_LANE_SPEED_MODEL ?
++				      pll->csi2.lanes : 1)
++				     * vt_op_binning_div * pll->scale_m
++				     * PHY_CONST_DIV);
++	}
+ 
+ 	/* Find smallest and biggest allowed vt divisor. */
+ 	dev_dbg(dev, "min_vt_div: %u\n", min_vt_div);
+diff --git a/drivers/media/i2c/ccs-pll.h b/drivers/media/i2c/ccs-pll.h
+index 0c25c5f5d4e4..9ba738ea7006 100644
+--- a/drivers/media/i2c/ccs-pll.h
++++ b/drivers/media/i2c/ccs-pll.h
+@@ -27,6 +27,8 @@
+ #define CCS_PLL_FLAG_LINK_DECOUPLED				BIT(3)
+ #define CCS_PLL_FLAG_EXT_IP_PLL_DIVIDER				BIT(4)
+ #define CCS_PLL_FLAG_FLEXIBLE_OP_PIX_CLK_DIV			BIT(5)
++#define CCS_PLL_FLAG_FIFO_DERATING				BIT(6)
++#define CCS_PLL_FLAG_FIFO_OVERRATING				BIT(7)
+ 
+ /**
+  * struct ccs_pll_branch_fr - CCS PLL configuration (front)
+diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
+index ab6abcf4c1dd..a169656c4560 100644
+--- a/drivers/media/i2c/ccs/ccs-core.c
++++ b/drivers/media/i2c/ccs/ccs-core.c
+@@ -3216,6 +3216,13 @@ static int ccs_probe(struct i2c_client *client)
+ 	if (CCS_LIM(sensor, CLOCK_TREE_PLL_CAPABILITY) &
+ 	    CCS_CLOCK_TREE_PLL_CAPABILITY_FLEXIBLE_OP_PIX_CLK_DIV)
+ 		sensor->pll.flags |= CCS_PLL_FLAG_FLEXIBLE_OP_PIX_CLK_DIV;
++	if (CCS_LIM(sensor, FIFO_SUPPORT_CAPABILITY) &
++	    CCS_FIFO_SUPPORT_CAPABILITY_DERATING)
++		sensor->pll.flags |= CCS_PLL_FLAG_FIFO_DERATING;
++	if (CCS_LIM(sensor, FIFO_SUPPORT_CAPABILITY) &
++	    CCS_FIFO_SUPPORT_CAPABILITY_DERATING_OVERRATING)
++		sensor->pll.flags |= CCS_PLL_FLAG_FIFO_DERATING |
++				     CCS_PLL_FLAG_FIFO_OVERRATING;
+ 	sensor->pll.op_bits_per_lane = CCS_LIM(sensor, OP_BITS_PER_LANE);
+ 	sensor->pll.ext_clk_freq_hz = sensor->hwcfg.ext_clk;
+ 	sensor->pll.scale_n = CCS_LIM(sensor, SCALER_N_MIN);
 -- 
 2.27.0
 
