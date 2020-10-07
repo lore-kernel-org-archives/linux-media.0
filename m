@@ -2,171 +2,82 @@ Return-Path: <SRS0=q2TO=DO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CE31C41604
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 16:15:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0405C4727E
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 16:24:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1C67E2177B
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 16:15:12 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="KTJQQCyZ"
+	by mail.kernel.org (Postfix) with ESMTP id 4FB08216C4
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 16:24:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1602087872;
+	bh=AcxZqCa9cQ0OdTwWzhgEbA4kPcVqTrNW+DmyeUmpcxo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=0smqvKFLA916JHByn2AHQRA/ELS/3k3z9n5uyN6vtkTsGXkrUhMBzTgIwCYd2Nmt9
+	 4Mc2YqJPF7eIJCycQsfFIDWoYOXDLiMfNMvdZZMUzDS2ZSL4oRRbgyTo+raZwq7ZGH
+	 hRPrlISEw8pYJUinXt+g9h/QEzrFdD9eXa/PA7zU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729106AbgJGQPL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Oct 2020 12:15:11 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:51910 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727335AbgJGQPL (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 7 Oct 2020 12:15:11 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 097GBuj7001145;
-        Wed, 7 Oct 2020 18:15:02 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=STMicroelectronics;
- bh=FrR4z8DFk1Yt0/WCgIrxlpv+ajzjWbHMtoRqo/WihN4=;
- b=KTJQQCyZqPfWIGMgAZBfpUBFqilJwkcJNR9naG/YhFtLUTr1ToAk2izpHPXHnDkOQjEz
- oE6CwJ/tci9zPCchp7amfiWVNeYyHszzlYR4pZhEs8K5vEBSgmRRmIST+a/7vN01BZxW
- NPoncmJ6mFa1xHLKNEUk8LnlJEjtzwfuMEQIBgcxwNsJ4bGZuNtUOKQBpLmUfhDIBjcL
- 3AKjsZ+YgmXCJV/L0e11YCgSZuNAK0hKEKNigu5y+GscY7UmH162n8mYrCiTBqa1pEnU
- AP8gN8sCEDNZtRS280smKBAB1m2+DwgXO/bnkIHnfgsvcTQwxpbPB/0igMTtVsTNvvk6 QA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 3402tk5w33-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Oct 2020 18:15:02 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 872EB10002A;
-        Wed,  7 Oct 2020 18:15:01 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag1node1.st.com [10.75.127.1])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7358B2BE220;
-        Wed,  7 Oct 2020 18:15:01 +0200 (CEST)
-Received: from localhost (10.75.127.46) by SFHDAG1NODE1.st.com (10.75.127.1)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 7 Oct 2020 18:15:01
- +0200
-From:   Hugues Fruchet <hugues.fruchet@st.com>
-To:     Alexandre Torgue <alexandre.torgue@st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-CC:     <linux-media@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Alain Volmat <alain.volmat@st.com>,
-        Yannick Fertre <yannick.fertre@st.com>,
-        Philippe CORNU <philippe.cornu@st.com>,
-        Hugues Fruchet <hugues.fruchet@st.com>
-Subject: [PATCH] media: stm32-dcmi: add support of BT656 bus
-Date:   Wed, 7 Oct 2020 18:14:50 +0200
-Message-ID: <1602087290-18020-1-git-send-email-hugues.fruchet@st.com>
-X-Mailer: git-send-email 2.7.4
+        id S1727970AbgJGQYb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Oct 2020 12:24:31 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:41883 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727665AbgJGQYb (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 12:24:31 -0400
+Received: by mail-oi1-f196.google.com with SMTP id q136so1884039oic.8;
+        Wed, 07 Oct 2020 09:24:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jq+tHvWM4iiywqLkK7TAv1q3AynzqI/YYhTbvpw+D9o=;
+        b=i4xJ+L4u0kWkKd6mK44KdAucG+g/0jurDmsrrljfo7CSdg0urPsN5MOJmj3y1Uc2Mo
+         vsSwe9XrIDNsXXjvVHGd+NlkkJ0pe4n0jA1bJj4pim1uBsri9UL6K/mnhq2373Jg5dym
+         fkz51EmTF4rG0bzSjm6vb/C8EJHX2zJgpMN3y+KFAngr/a4DKOaUPcbYr0Gysx8dQ1CV
+         Mqjus2O7yP5E/H3C332ABDe+oQdSAhP6NEYMK1GiNIysALCT7A+Dop5c3a9EOY0mF/mg
+         TdVfYPKjoDFtcdpi8ACdn2oCJ4LQAFUtcmUICbnBHTxOOiKX7Jc+WWeJVGqVXRFd2iVa
+         iN3g==
+X-Gm-Message-State: AOAM533tycdTPbjueKvabe8AxODtT6Q5P8G4A28wNvc9bS4IEBOSbhHc
+        lxm+ctLiWZ4R5K1Udocung==
+X-Google-Smtp-Source: ABdhPJyicFosZDh1zhwZcCv6cf4eAx0ILfiaizgARQNA1hWO69Yr9Y1+7jbHssl3A0Gu0RmVqi5DSg==
+X-Received: by 2002:aca:aa8d:: with SMTP id t135mr2323433oie.76.1602087870268;
+        Wed, 07 Oct 2020 09:24:30 -0700 (PDT)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id 15sm1915071ooy.36.2020.10.07.09.24.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Oct 2020 09:24:29 -0700 (PDT)
+Received: (nullmailer pid 330687 invoked by uid 1000);
+        Wed, 07 Oct 2020 16:24:29 -0000
+Date:   Wed, 7 Oct 2020 11:24:29 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 026/106] dt-bindings: mipi-ccs: Add bus-type for C-PHY
+ support
+Message-ID: <20201007162429.GA330627@bogus>
+References: <20201007135225.GA125839@bogus>
+ <20201007144937.27609-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG3NODE3.st.com (10.75.127.9) To SFHDAG1NODE1.st.com
- (10.75.127.1)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-10-07_10:2020-10-06,2020-10-07 signatures=0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201007144937.27609-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support of BT656 embedded synchronization bus.
-This mode allows to save hardware synchro lines hsync & vsync
-by replacing them with synchro codes embedded in data stream.
-This bus type is only compatible with 8 bits width data bus.
-Due to reserved values 0x00 & 0xff used for synchro codes,
-valid data only vary from 0x1 to 0xfe, this is up to sensor
-to clip accordingly pixel data. As a consequence of this
-clipping, JPEG is not supported when using this bus type.
-DCMI crop feature is also not available with this bus type.
+On Wed, 07 Oct 2020 17:49:37 +0300, Sakari Ailus wrote:
+> The bus-type property is required for C-PHY support. Add it, including
+> values for CCP2 and CSI-2 D-PHY.
+> 
+> Also require the bus-type property. Effectively all new sensors are MIPI
+> D-PHY or C-PHY that cannot be told apart without the bus-type property.
+> 
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> ---
+>  .../devicetree/bindings/media/i2c/mipi-ccs.yaml          | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
 
-Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
----
- drivers/media/platform/stm32/stm32-dcmi.c | 37 +++++++++++++++++++++++++++++--
- 1 file changed, 35 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/media/platform/stm32/stm32-dcmi.c b/drivers/media/platform/stm32/stm32-dcmi.c
-index fd1c41c..d7d7cdb 100644
---- a/drivers/media/platform/stm32/stm32-dcmi.c
-+++ b/drivers/media/platform/stm32/stm32-dcmi.c
-@@ -157,6 +157,7 @@ struct stm32_dcmi {
- 	struct vb2_queue		queue;
- 
- 	struct v4l2_fwnode_bus_parallel	bus;
-+	enum v4l2_mbus_type		bus_type;
- 	struct completion		complete;
- 	struct clk			*mclk;
- 	enum state			state;
-@@ -777,6 +778,23 @@ static int dcmi_start_streaming(struct vb2_queue *vq, unsigned int count)
- 	if (dcmi->bus.flags & V4L2_MBUS_PCLK_SAMPLE_RISING)
- 		val |= CR_PCKPOL;
- 
-+	/*
-+	 * BT656 embedded synchronisation bus mode.
-+	 *
-+	 * Default SAV/EAV mode is supported here with default codes
-+	 * SAV=0xff000080 & EAV=0xff00009d.
-+	 * With DCMI this means LSC=SAV=0x80 & LEC=EAV=0x9d.
-+	 */
-+	if (dcmi->bus_type == V4L2_MBUS_BT656) {
-+		val |= CR_ESS;
-+
-+		/* Unmask all codes */
-+		reg_write(dcmi->regs, DCMI_ESUR, 0xffffffff);/* FEC:LEC:LSC:FSC */
-+
-+		/* Trig on LSC=0x80 & LEC=0x9d codes, ignore FSC and FEC */
-+		reg_write(dcmi->regs, DCMI_ESCR, 0xff9d80ff);/* FEC:LEC:LSC:FSC */
-+	}
-+
- 	reg_write(dcmi->regs, DCMI_CR, val);
- 
- 	/* Set crop */
-@@ -1067,8 +1085,9 @@ static int dcmi_set_fmt(struct stm32_dcmi *dcmi, struct v4l2_format *f)
- 	if (ret)
- 		return ret;
- 
--	/* Disable crop if JPEG is requested */
--	if (pix->pixelformat == V4L2_PIX_FMT_JPEG)
-+	/* Disable crop if JPEG is requested or BT656 bus is selected */
-+	if (pix->pixelformat == V4L2_PIX_FMT_JPEG &&
-+	    dcmi->bus_type != V4L2_MBUS_BT656)
- 		dcmi->do_crop = false;
- 
- 	/* pix to mbus format */
-@@ -1592,6 +1611,11 @@ static int dcmi_formats_init(struct stm32_dcmi *dcmi)
- 			if (dcmi_formats[i].mbus_code != mbus_code.code)
- 				continue;
- 
-+			/* Exclude JPEG if BT656 bus is selected */
-+			if (dcmi_formats[i].fourcc == V4L2_PIX_FMT_JPEG &&
-+			    dcmi->bus_type == V4L2_MBUS_BT656)
-+				continue;
-+
- 			/* Code supported, have we got this fourcc yet? */
- 			for (j = 0; j < num_fmts; j++)
- 				if (sd_fmts[j]->fourcc ==
-@@ -1873,9 +1897,18 @@ static int dcmi_probe(struct platform_device *pdev)
- 		dev_err(&pdev->dev, "CSI bus not supported\n");
- 		return -ENODEV;
- 	}
-+
-+	if (ep.bus_type == V4L2_MBUS_BT656 &&
-+	    ep.bus.parallel.bus_width != 8) {
-+		dev_err(&pdev->dev, "BT656 bus conflicts with %d bits bus width (8 bits required)\n",
-+			ep.bus.parallel.bus_width);
-+		return -ENODEV;
-+	}
-+
- 	dcmi->bus.flags = ep.bus.parallel.flags;
- 	dcmi->bus.bus_width = ep.bus.parallel.bus_width;
- 	dcmi->bus.data_shift = ep.bus.parallel.data_shift;
-+	dcmi->bus_type = ep.bus_type;
- 
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq <= 0)
--- 
-2.7.4
-
+Reviewed-by: Rob Herring <robh@kernel.org>
