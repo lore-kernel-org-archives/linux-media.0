@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8543CC4727E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE215C41604
 	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3F9D92083B
+	by mail.kernel.org (Postfix) with ESMTP id 9CC2C2080A
 	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727996AbgJGIqJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1728004AbgJGIqJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 7 Oct 2020 04:46:09 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:57070 "EHLO
+Received: from retiisi.org.uk ([95.216.213.190]:57056 "EHLO
         hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727976AbgJGIqG (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:06 -0400
+        with ESMTP id S1727982AbgJGIqH (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:07 -0400
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id A4945634C8D
-        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:18 +0300 (EEST)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 109AB634CD2
+        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:19 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH v2 041/106] ccs: Move limit value real to integer conversion from read to access time
-Date:   Wed,  7 Oct 2020 11:44:54 +0300
-Message-Id: <20201007084557.25843-34-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 045/106] ccs: Change my e-mail address
+Date:   Wed,  7 Oct 2020 11:44:58 +0300
+Message-Id: <20201007084557.25843-38-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201007084557.25843-1-sakari.ailus@linux.intel.com>
 References: <20201007084505.25761-1-sakari.ailus@linux.intel.com>
@@ -37,62 +37,150 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Instead of converting the limit values at register read time, do that at
-access time instead.
+Use my @linux.intel.com e-mail address in the CCS driver.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
+ drivers/media/i2c/ccs-pll.c            | 4 ++--
+ drivers/media/i2c/ccs-pll.h            | 2 +-
+ drivers/media/i2c/ccs/ccs-core.c       | 6 +++---
+ drivers/media/i2c/ccs/ccs-quirk.c      | 2 +-
+ drivers/media/i2c/ccs/ccs-quirk.h      | 2 +-
+ drivers/media/i2c/ccs/ccs-reg-access.c | 2 +-
+ drivers/media/i2c/ccs/ccs-reg-access.h | 2 +-
+ drivers/media/i2c/ccs/ccs.h            | 2 +-
+ 8 files changed, 11 insertions(+), 11 deletions(-)
 
+diff --git a/drivers/media/i2c/ccs-pll.c b/drivers/media/i2c/ccs-pll.c
+index 58f5fe7062ae..0d57bac1599a 100644
+--- a/drivers/media/i2c/ccs-pll.c
++++ b/drivers/media/i2c/ccs-pll.c
+@@ -6,7 +6,7 @@
+  *
+  * Copyright (C) 2020 Intel Corporation
+  * Copyright (C) 2011--2012 Nokia Corporation
+- * Contact: Sakari Ailus <sakari.ailus@iki.fi>
++ * Contact: Sakari Ailus <sakari.ailus@linux.intel.com>
+  */
+ 
+ #include <linux/device.h>
+@@ -475,6 +475,6 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *limits,
+ }
+ EXPORT_SYMBOL_GPL(ccs_pll_calculate);
+ 
+-MODULE_AUTHOR("Sakari Ailus <sakari.ailus@iki.fi>");
++MODULE_AUTHOR("Sakari Ailus <sakari.ailus@linux.intel.com>");
+ MODULE_DESCRIPTION("Generic MIPI CCS/SMIA/SMIA++ PLL calculator");
+ MODULE_LICENSE("GPL v2");
+diff --git a/drivers/media/i2c/ccs-pll.h b/drivers/media/i2c/ccs-pll.h
+index 88d641ee3fa1..07f7f9e8a1cc 100644
+--- a/drivers/media/i2c/ccs-pll.h
++++ b/drivers/media/i2c/ccs-pll.h
+@@ -6,7 +6,7 @@
+  *
+  * Copyright (C) 2020 Intel Corporation
+  * Copyright (C) 2012 Nokia Corporation
+- * Contact: Sakari Ailus <sakari.ailus@iki.fi>
++ * Contact: Sakari Ailus <sakari.ailus@linux.intel.com>
+  */
+ 
+ #ifndef CCS_PLL_H
 diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index e01a5584b8b0..5b7f142b2432 100644
+index 4e49195efb5f..5d7c5ece578d 100644
 --- a/drivers/media/i2c/ccs/ccs-core.c
 +++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -124,6 +124,7 @@ static u32 ccs_get_limit(struct ccs_sensor *sensor,
- 			 unsigned int limit, unsigned int offset)
- {
- 	void *ptr;
-+	u32 val;
- 	int ret;
+@@ -6,7 +6,7 @@
+  *
+  * Copyright (C) 2020 Intel Corporation
+  * Copyright (C) 2010--2012 Nokia Corporation
+- * Contact: Sakari Ailus <sakari.ailus@iki.fi>
++ * Contact: Sakari Ailus <sakari.ailus@linux.intel.com>
+  *
+  * Based on smiapp driver by Vimarsh Zutshi
+  * Based on jt8ev1.c by Vimarsh Zutshi
+@@ -1162,7 +1162,7 @@ static int ccs_setup_flash_strobe(struct ccs_sensor *sensor)
+ 	 * do not change, or if you do at least know what you're
+ 	 * doing. :-)
+ 	 *
+-	 * Sakari Ailus <sakari.ailus@iki.fi> 2010-10-25
++	 * Sakari Ailus <sakari.ailus@linux.intel.com> 2010-10-25
+ 	 *
+ 	 * flash_strobe_length [us] / 10^6 = (tFlash_strobe_width_ctrl
+ 	 *	/ EXTCLK freq [Hz]) * flash_strobe_adjustment
+@@ -3323,7 +3323,7 @@ static void ccs_module_cleanup(void)
+ module_init(ccs_module_init);
+ module_exit(ccs_module_cleanup);
  
- 	ret = ccs_limit_ptr(sensor, limit, offset, &ptr);
-@@ -132,16 +133,20 @@ static u32 ccs_get_limit(struct ccs_sensor *sensor,
+-MODULE_AUTHOR("Sakari Ailus <sakari.ailus@iki.fi>");
++MODULE_AUTHOR("Sakari Ailus <sakari.ailus@linux.intel.com>");
+ MODULE_DESCRIPTION("Generic MIPI CCS/SMIA/SMIA++ camera sensor driver");
+ MODULE_LICENSE("GPL v2");
+ MODULE_ALIAS("smiapp");
+diff --git a/drivers/media/i2c/ccs/ccs-quirk.c b/drivers/media/i2c/ccs/ccs-quirk.c
+index 8b4fa60044b2..4fe8c6f70579 100644
+--- a/drivers/media/i2c/ccs/ccs-quirk.c
++++ b/drivers/media/i2c/ccs/ccs-quirk.c
+@@ -6,7 +6,7 @@
+  *
+  * Copyright (C) 2020 Intel Corporation
+  * Copyright (C) 2011--2012 Nokia Corporation
+- * Contact: Sakari Ailus <sakari.ailus@iki.fi>
++ * Contact: Sakari Ailus <sakari.ailus@linux.intel.com>
+  */
  
- 	switch (ccs_reg_width(ccs_limits[ccs_limit_offsets[limit].info].reg)) {
- 	case sizeof(u8):
--		return *(u8 *)ptr;
-+		val = *(u8 *)ptr;
-+		break;
- 	case sizeof(u16):
--		return *(u16 *)ptr;
-+		val = *(u16 *)ptr;
-+		break;
- 	case sizeof(u32):
--		return *(u32 *)ptr;
-+		val = *(u32 *)ptr;
-+		break;
-+	default:
-+		WARN_ON(1);
-+		return 0;
- 	}
+ #include <linux/delay.h>
+diff --git a/drivers/media/i2c/ccs/ccs-quirk.h b/drivers/media/i2c/ccs/ccs-quirk.h
+index 3e7779e2fc4b..6b4ec4beaba0 100644
+--- a/drivers/media/i2c/ccs/ccs-quirk.h
++++ b/drivers/media/i2c/ccs/ccs-quirk.h
+@@ -6,7 +6,7 @@
+  *
+  * Copyright (C) 2020 Intel Corporation
+  * Copyright (C) 2011--2012 Nokia Corporation
+- * Contact: Sakari Ailus <sakari.ailus@iki.fi>
++ * Contact: Sakari Ailus <sakari.ailus@linux.intel.com>
+  */
  
--	WARN_ON(1);
--
--	return 0;
-+	return ccs_reg_conv(sensor, ccs_limits[limit].reg, val);
- }
+ #ifndef __CCS_QUIRK__
+diff --git a/drivers/media/i2c/ccs/ccs-reg-access.c b/drivers/media/i2c/ccs/ccs-reg-access.c
+index 91ccbca11577..aad2727570ec 100644
+--- a/drivers/media/i2c/ccs/ccs-reg-access.c
++++ b/drivers/media/i2c/ccs/ccs-reg-access.c
+@@ -6,7 +6,7 @@
+  *
+  * Copyright (C) 2020 Intel Corporation
+  * Copyright (C) 2011--2012 Nokia Corporation
+- * Contact: Sakari Ailus <sakari.ailus@iki.fi>
++ * Contact: Sakari Ailus <sakari.ailus@linux.intel.com>
+  */
  
- #define CCS_LIM(sensor, limit) \
-@@ -182,7 +187,7 @@ static int ccs_read_all_limits(struct ccs_sensor *sensor)
- 		     j++, reg += width, ptr += width) {
- 			u32 val;
+ #include <asm/unaligned.h>
+diff --git a/drivers/media/i2c/ccs/ccs-reg-access.h b/drivers/media/i2c/ccs/ccs-reg-access.h
+index 5f6ff9c57698..cfad2e520fe2 100644
+--- a/drivers/media/i2c/ccs/ccs-reg-access.h
++++ b/drivers/media/i2c/ccs/ccs-reg-access.h
+@@ -6,7 +6,7 @@
+  *
+  * Copyright (C) 2020 Intel Corporation
+  * Copyright (C) 2011--2012 Nokia Corporation
+- * Contact: Sakari Ailus <sakari.ailus@iki.fi>
++ * Contact: Sakari Ailus <sakari.ailus@linux.intel.com>
+  */
  
--			ret = ccs_read_addr(sensor, reg, &val);
-+			ret = ccs_read_addr_noconv(sensor, reg, &val);
- 			if (ret)
- 				goto out_err;
+ #ifndef SMIAPP_REGS_H
+diff --git a/drivers/media/i2c/ccs/ccs.h b/drivers/media/i2c/ccs/ccs.h
+index c8a9f4ee093e..6b07e4143ff0 100644
+--- a/drivers/media/i2c/ccs/ccs.h
++++ b/drivers/media/i2c/ccs/ccs.h
+@@ -6,7 +6,7 @@
+  *
+  * Copyright (C) 2020 Intel Corporation
+  * Copyright (C) 2010--2012 Nokia Corporation
+- * Contact: Sakari Ailus <sakari.ailus@iki.fi>
++ * Contact: Sakari Ailus <sakari.ailus@linux.intel.com>
+  */
  
+ #ifndef __CCS_H__
 -- 
 2.27.0
 
