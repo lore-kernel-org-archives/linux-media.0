@@ -2,34 +2,34 @@ Return-Path: <SRS0=q2TO=DO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D2AAC41604
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2ACC1C4741F
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 046AE2080A
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B6F232080A
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727936AbgJGIqC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Oct 2020 04:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35028 "EHLO
+        id S1727938AbgJGIqB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Oct 2020 04:46:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727940AbgJGIqB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:01 -0400
+        with ESMTP id S1727915AbgJGIqA (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:00 -0400
 Received: from hillosipuli.retiisi.eu (hillosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::81:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FCC1C0613D4
-        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 01:46:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C547C061755
+        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 01:45:59 -0700 (PDT)
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 3E0EE634C91
-        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:16 +0300 (EEST)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id CFF25634C8D
+        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:15 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH v2 008/106] smiapp: Switch to CCS limits
-Date:   Wed,  7 Oct 2020 11:44:28 +0300
-Message-Id: <20201007084557.25843-8-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 004/106] smiapp: Remove macros for defining registers, merge definitions
+Date:   Wed,  7 Oct 2020 11:44:24 +0300
+Message-Id: <20201007084557.25843-4-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201007084557.25843-1-sakari.ailus@linux.intel.com>
 References: <20201007084505.25761-1-sakari.ailus@linux.intel.com>
@@ -40,875 +40,1225 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use the CCS limit definitions instead of the SMIA ones. This allows
-accessing CCS capabilities where needed as well as dropping the old SMIA
-limits.
+Remove macros for defining new SMIA registers, instead put the register
+flags to the register definition itself. Also move the register flags to
+the same file.
+
+This is not expected to be updated but rather left there as a reference.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/smiapp/Makefile        |   3 +-
- drivers/media/i2c/smiapp/smiapp-core.c   | 255 ++++++++++-------------
- drivers/media/i2c/smiapp/smiapp-limits.c | 118 -----------
- drivers/media/i2c/smiapp/smiapp-limits.h | 114 ----------
- drivers/media/i2c/smiapp/smiapp-quirk.c  |  25 +--
- drivers/media/i2c/smiapp/smiapp-quirk.h  |   3 -
- drivers/media/i2c/smiapp/smiapp.h        |  10 -
- 7 files changed, 113 insertions(+), 415 deletions(-)
- delete mode 100644 drivers/media/i2c/smiapp/smiapp-limits.c
- delete mode 100644 drivers/media/i2c/smiapp/smiapp-limits.h
+ drivers/media/i2c/smiapp/smiapp-quirk.c    |    2 +-
+ drivers/media/i2c/smiapp/smiapp-reg-defs.h | 1046 +++++++++++---------
+ drivers/media/i2c/smiapp/smiapp-reg.h      |  116 ---
+ drivers/media/i2c/smiapp/smiapp.h          |    2 +-
+ 4 files changed, 570 insertions(+), 596 deletions(-)
+ delete mode 100644 drivers/media/i2c/smiapp/smiapp-reg.h
 
-diff --git a/drivers/media/i2c/smiapp/Makefile b/drivers/media/i2c/smiapp/Makefile
-index 4638d1e14ebc..2189de360db6 100644
---- a/drivers/media/i2c/smiapp/Makefile
-+++ b/drivers/media/i2c/smiapp/Makefile
-@@ -1,7 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-only
- smiapp-objs			+= smiapp-core.o smiapp-regs.o \
--				   smiapp-quirk.o smiapp-limits.o \
--				   ccs-limits.o
-+				   smiapp-quirk.o ccs-limits.o
- obj-$(CONFIG_VIDEO_SMIAPP)	+= smiapp.o
- 
- ccflags-y += -I $(srctree)/drivers/media/i2c
-diff --git a/drivers/media/i2c/smiapp/smiapp-core.c b/drivers/media/i2c/smiapp/smiapp-core.c
-index 42df98740445..a7cbd9029caa 100644
---- a/drivers/media/i2c/smiapp/smiapp-core.c
-+++ b/drivers/media/i2c/smiapp/smiapp-core.c
-@@ -64,45 +64,6 @@ static const struct smiapp_module_ident smiapp_module_idents[] = {
-  *
-  */
- 
--static u32 smiapp_get_limit(struct smiapp_sensor *sensor,
--				 unsigned int limit)
--{
--	if (WARN_ON(limit >= SMIAPP_LIMIT_LAST))
--		return 1;
--
--	return sensor->limits[limit];
--}
--
--#define SMIA_LIM(sensor, limit) \
--	smiapp_get_limit(sensor, SMIAPP_LIMIT_##limit)
--
--static int smiapp_read_all_smia_limits(struct smiapp_sensor *sensor)
--{
--	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
--	unsigned int i;
--	int rval;
--
--	for (i = 0; i < SMIAPP_LIMIT_LAST; i++) {
--		u32 val;
--
--		rval = smiapp_read(
--			sensor, smiapp_reg_limits[i].addr, &val);
--		if (rval)
--			return rval;
--
--		sensor->limits[i] = val;
--
--		dev_dbg(&client->dev, "0x%8.8x \"%s\" = %u, 0x%x\n",
--			smiapp_reg_limits[i].addr,
--			smiapp_reg_limits[i].what, val, val);
--	}
--
--	if (SMIA_LIM(sensor, SCALER_N_MIN) == 0)
--		smiapp_replace_limit(sensor, SMIAPP_LIMIT_SCALER_N_MIN, 16);
--
--	return 0;
--}
--
- static void ccs_assign_limit(void *ptr, unsigned int width, u32 val)
- {
- 	switch (width) {
-@@ -253,6 +214,9 @@ static int ccs_read_all_limits(struct smiapp_sensor *sensor)
- 
- 	sensor->ccs_limits = alloc;
- 
-+	if (CCS_LIM(sensor, SCALER_N_MIN) < 16)
-+		ccs_replace_limit(sensor, CCS_L_SCALER_N_MIN, 0, 16);
-+
- 	return 0;
- 
- out_err:
-@@ -444,35 +408,35 @@ static int smiapp_pll_try(struct smiapp_sensor *sensor,
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
- 	struct smiapp_pll_limits lim = {
--		.min_pre_pll_clk_div = SMIA_LIM(sensor, MIN_PRE_PLL_CLK_DIV),
--		.max_pre_pll_clk_div = SMIA_LIM(sensor, MAX_PRE_PLL_CLK_DIV),
--		.min_pll_ip_freq_hz = SMIA_LIM(sensor, MIN_PLL_IP_FREQ_HZ),
--		.max_pll_ip_freq_hz = SMIA_LIM(sensor, MAX_PLL_IP_FREQ_HZ),
--		.min_pll_multiplier = SMIA_LIM(sensor, MIN_PLL_MULTIPLIER),
--		.max_pll_multiplier = SMIA_LIM(sensor, MAX_PLL_MULTIPLIER),
--		.min_pll_op_freq_hz = SMIA_LIM(sensor, MIN_PLL_OP_FREQ_HZ),
--		.max_pll_op_freq_hz = SMIA_LIM(sensor, MAX_PLL_OP_FREQ_HZ),
--
--		.op.min_sys_clk_div = SMIA_LIM(sensor, MIN_OP_SYS_CLK_DIV),
--		.op.max_sys_clk_div = SMIA_LIM(sensor, MAX_OP_SYS_CLK_DIV),
--		.op.min_pix_clk_div = SMIA_LIM(sensor, MIN_OP_PIX_CLK_DIV),
--		.op.max_pix_clk_div = SMIA_LIM(sensor, MAX_OP_PIX_CLK_DIV),
--		.op.min_sys_clk_freq_hz = SMIA_LIM(sensor, MIN_OP_SYS_CLK_FREQ_HZ),
--		.op.max_sys_clk_freq_hz = SMIA_LIM(sensor, MAX_OP_SYS_CLK_FREQ_HZ),
--		.op.min_pix_clk_freq_hz = SMIA_LIM(sensor, MIN_OP_PIX_CLK_FREQ_HZ),
--		.op.max_pix_clk_freq_hz = SMIA_LIM(sensor, MAX_OP_PIX_CLK_FREQ_HZ),
--
--		.vt.min_sys_clk_div = SMIA_LIM(sensor, MIN_VT_SYS_CLK_DIV),
--		.vt.max_sys_clk_div = SMIA_LIM(sensor, MAX_VT_SYS_CLK_DIV),
--		.vt.min_pix_clk_div = SMIA_LIM(sensor, MIN_VT_PIX_CLK_DIV),
--		.vt.max_pix_clk_div = SMIA_LIM(sensor, MAX_VT_PIX_CLK_DIV),
--		.vt.min_sys_clk_freq_hz = SMIA_LIM(sensor, MIN_VT_SYS_CLK_FREQ_HZ),
--		.vt.max_sys_clk_freq_hz = SMIA_LIM(sensor, MAX_VT_SYS_CLK_FREQ_HZ),
--		.vt.min_pix_clk_freq_hz = SMIA_LIM(sensor, MIN_VT_PIX_CLK_FREQ_HZ),
--		.vt.max_pix_clk_freq_hz = SMIA_LIM(sensor, MAX_VT_PIX_CLK_FREQ_HZ),
--
--		.min_line_length_pck_bin = SMIA_LIM(sensor, MIN_LINE_LENGTH_PCK_BIN),
--		.min_line_length_pck = SMIA_LIM(sensor, MIN_LINE_LENGTH_PCK),
-+		.min_pre_pll_clk_div = CCS_LIM(sensor, MIN_PRE_PLL_CLK_DIV),
-+		.max_pre_pll_clk_div = CCS_LIM(sensor, MAX_PRE_PLL_CLK_DIV),
-+		.min_pll_ip_freq_hz = CCS_LIM(sensor, MIN_PLL_IP_CLK_FREQ_MHZ),
-+		.max_pll_ip_freq_hz = CCS_LIM(sensor, MAX_PLL_IP_CLK_FREQ_MHZ),
-+		.min_pll_multiplier = CCS_LIM(sensor, MIN_PLL_MULTIPLIER),
-+		.max_pll_multiplier = CCS_LIM(sensor, MAX_PLL_MULTIPLIER),
-+		.min_pll_op_freq_hz = CCS_LIM(sensor, MIN_PLL_OP_CLK_FREQ_MHZ),
-+		.max_pll_op_freq_hz = CCS_LIM(sensor, MAX_PLL_OP_CLK_FREQ_MHZ),
-+
-+		.op.min_sys_clk_div = CCS_LIM(sensor, MIN_OP_SYS_CLK_DIV),
-+		.op.max_sys_clk_div = CCS_LIM(sensor, MAX_OP_SYS_CLK_DIV),
-+		.op.min_pix_clk_div = CCS_LIM(sensor, MIN_OP_PIX_CLK_DIV),
-+		.op.max_pix_clk_div = CCS_LIM(sensor, MAX_OP_PIX_CLK_DIV),
-+		.op.min_sys_clk_freq_hz = CCS_LIM(sensor, MIN_OP_SYS_CLK_FREQ_MHZ),
-+		.op.max_sys_clk_freq_hz = CCS_LIM(sensor, MAX_OP_SYS_CLK_FREQ_MHZ),
-+		.op.min_pix_clk_freq_hz = CCS_LIM(sensor, MIN_OP_PIX_CLK_FREQ_MHZ),
-+		.op.max_pix_clk_freq_hz = CCS_LIM(sensor, MAX_OP_PIX_CLK_FREQ_MHZ),
-+
-+		.vt.min_sys_clk_div = CCS_LIM(sensor, MIN_VT_SYS_CLK_DIV),
-+		.vt.max_sys_clk_div = CCS_LIM(sensor, MAX_VT_SYS_CLK_DIV),
-+		.vt.min_pix_clk_div = CCS_LIM(sensor, MIN_VT_PIX_CLK_DIV),
-+		.vt.max_pix_clk_div = CCS_LIM(sensor, MAX_VT_PIX_CLK_DIV),
-+		.vt.min_sys_clk_freq_hz = CCS_LIM(sensor, MIN_VT_SYS_CLK_FREQ_MHZ),
-+		.vt.max_sys_clk_freq_hz = CCS_LIM(sensor, MAX_VT_SYS_CLK_FREQ_MHZ),
-+		.vt.min_pix_clk_freq_hz = CCS_LIM(sensor, MIN_VT_PIX_CLK_FREQ_MHZ),
-+		.vt.max_pix_clk_freq_hz = CCS_LIM(sensor, MAX_VT_PIX_CLK_FREQ_MHZ),
-+
-+		.min_line_length_pck_bin = CCS_LIM(sensor, MIN_LINE_LENGTH_PCK_BIN),
-+		.min_line_length_pck = CCS_LIM(sensor, MIN_LINE_LENGTH_PCK),
- 	};
- 
- 	return smiapp_pll_calculate(&client->dev, &lim, pll);
-@@ -515,7 +479,7 @@ static void __smiapp_update_exposure_limits(struct smiapp_sensor *sensor)
- 
- 	max = sensor->pixel_array->crop[SMIAPP_PA_PAD_SRC].height
- 		+ sensor->vblank->val
--		- SMIA_LIM(sensor, COARSE_INTEGRATION_TIME_MAX_MARGIN);
-+		- CCS_LIM(sensor, COARSE_INTEGRATION_TIME_MAX_MARGIN);
- 
- 	__v4l2_ctrl_modify_range(ctrl, ctrl->minimum, max, ctrl->step, max);
- }
-@@ -770,10 +734,10 @@ static int smiapp_init_controls(struct smiapp_sensor *sensor)
- 	sensor->analog_gain = v4l2_ctrl_new_std(
- 		&sensor->pixel_array->ctrl_handler, &smiapp_ctrl_ops,
- 		V4L2_CID_ANALOGUE_GAIN,
--		SMIA_LIM(sensor, ANALOGUE_GAIN_CODE_MIN),
--		SMIA_LIM(sensor, ANALOGUE_GAIN_CODE_MAX),
--		max(SMIA_LIM(sensor, ANALOGUE_GAIN_CODE_STEP), 1U),
--		SMIA_LIM(sensor, ANALOGUE_GAIN_CODE_MIN));
-+		CCS_LIM(sensor, ANALOG_GAIN_CODE_MIN),
-+		CCS_LIM(sensor, ANALOG_GAIN_CODE_MAX),
-+		max(CCS_LIM(sensor, ANALOG_GAIN_CODE_STEP), 1U),
-+		CCS_LIM(sensor, ANALOG_GAIN_CODE_MIN));
- 
- 	/* Exposure limits will be updated soon, use just something here. */
- 	sensor->exposure = v4l2_ctrl_new_std(
-@@ -1032,21 +996,21 @@ static void smiapp_update_blanking(struct smiapp_sensor *sensor)
- 	int min, max;
- 
- 	if (sensor->binning_vertical > 1 || sensor->binning_horizontal > 1) {
--		min_fll = SMIA_LIM(sensor, MIN_FRAME_LENGTH_LINES_BIN);
--		max_fll = SMIA_LIM(sensor, MAX_FRAME_LENGTH_LINES_BIN);
--		min_llp = SMIA_LIM(sensor, MIN_LINE_LENGTH_PCK_BIN);
--		max_llp = SMIA_LIM(sensor, MAX_LINE_LENGTH_PCK_BIN);
--		min_lbp = SMIA_LIM(sensor, MIN_LINE_BLANKING_PCK_BIN);
-+		min_fll = CCS_LIM(sensor, MIN_FRAME_LENGTH_LINES_BIN);
-+		max_fll = CCS_LIM(sensor, MAX_FRAME_LENGTH_LINES_BIN);
-+		min_llp = CCS_LIM(sensor, MIN_LINE_LENGTH_PCK_BIN);
-+		max_llp = CCS_LIM(sensor, MAX_LINE_LENGTH_PCK_BIN);
-+		min_lbp = CCS_LIM(sensor, MIN_LINE_BLANKING_PCK_BIN);
- 	} else {
--		min_fll = SMIA_LIM(sensor, MIN_FRAME_LENGTH_LINES);
--		max_fll = SMIA_LIM(sensor, MAX_FRAME_LENGTH_LINES);
--		min_llp = SMIA_LIM(sensor, MIN_LINE_LENGTH_PCK);
--		max_llp = SMIA_LIM(sensor, MAX_LINE_LENGTH_PCK);
--		min_lbp = SMIA_LIM(sensor, MIN_LINE_BLANKING_PCK);
-+		min_fll = CCS_LIM(sensor, MIN_FRAME_LENGTH_LINES);
-+		max_fll = CCS_LIM(sensor, MAX_FRAME_LENGTH_LINES);
-+		min_llp = CCS_LIM(sensor, MIN_LINE_LENGTH_PCK);
-+		max_llp = CCS_LIM(sensor, MAX_LINE_LENGTH_PCK);
-+		min_lbp = CCS_LIM(sensor, MIN_LINE_BLANKING_PCK);
- 	}
- 
- 	min = max_t(int,
--		    SMIA_LIM(sensor, MIN_FRAME_BLANKING_LINES),
-+		    CCS_LIM(sensor, MIN_FRAME_BLANKING_LINES),
- 		    min_fll -
- 		    sensor->pixel_array->crop[SMIAPP_PA_PAD_SRC].height);
- 	max = max_fll -	sensor->pixel_array->crop[SMIAPP_PA_PAD_SRC].height;
-@@ -1124,8 +1088,8 @@ static int smiapp_read_nvm_page(struct smiapp_sensor *sensor, u32 p, u8 *nvm,
- 		return -ENODATA;
- 	}
- 
--	if (SMIA_LIM(sensor, DATA_TRANSFER_IF_CAPABILITY) &
--	    SMIAPP_DATA_TRANSFER_IF_CAPABILITY_POLL) {
-+	if (CCS_LIM(sensor, DATA_TRANSFER_IF_CAPABILITY) &
-+	    CCS_DATA_TRANSFER_IF_CAPABILITY_POLLING) {
- 		for (i = 1000; i > 0; i--) {
- 			if (s & SMIAPP_DATA_TRANSFER_IF_1_STATUS_RD_READY)
- 				break;
-@@ -1577,8 +1541,8 @@ static int smiapp_start_streaming(struct smiapp_sensor *sensor)
- 	 */
- 
- 	/* Digital crop */
--	if (SMIA_LIM(sensor, DIGITAL_CROP_CAPABILITY)
--	    == SMIAPP_DIGITAL_CROP_CAPABILITY_INPUT_CROP) {
-+	if (CCS_LIM(sensor, DIGITAL_CROP_CAPABILITY)
-+	    == CCS_DIGITAL_CROP_CAPABILITY_INPUT_CROP) {
- 		rval = smiapp_write(
- 			sensor, SMIAPP_REG_U16_DIGITAL_CROP_X_OFFSET,
- 			sensor->scaler->crop[SMIAPP_PAD_SINK].left);
-@@ -1605,8 +1569,8 @@ static int smiapp_start_streaming(struct smiapp_sensor *sensor)
- 	}
- 
- 	/* Scaling */
--	if (SMIA_LIM(sensor, SCALING_CAPABILITY)
--	    != SMIAPP_SCALING_CAPABILITY_NONE) {
-+	if (CCS_LIM(sensor, SCALING_CAPABILITY)
-+	    != CCS_SCALING_CAPABILITY_NONE) {
- 		rval = smiapp_write(sensor, SMIAPP_REG_U16_SCALING_MODE,
- 				    sensor->scaling_mode);
- 		if (rval < 0)
-@@ -1628,9 +1592,9 @@ static int smiapp_start_streaming(struct smiapp_sensor *sensor)
- 	if (rval < 0)
- 		goto out;
- 
--	if ((SMIA_LIM(sensor, FLASH_MODE_CAPABILITY) &
--	     (SMIAPP_FLASH_MODE_CAPABILITY_SINGLE_STROBE |
--	      SMIAPP_FLASH_MODE_CAPABILITY_MULTIPLE_STROBE)) &&
-+	if (CCS_LIM(sensor, FLASH_MODE_CAPABILITY) &
-+	    (CCS_FLASH_MODE_CAPABILITY_SINGLE_STROBE |
-+	     SMIAPP_FLASH_MODE_CAPABILITY_MULTIPLE_STROBE) &&
- 	    sensor->hwcfg->strobe_setup != NULL &&
- 	    sensor->hwcfg->strobe_setup->trigger != 0) {
- 		rval = smiapp_setup_flash_strobe(sensor);
-@@ -1876,7 +1840,7 @@ static void smiapp_propagate(struct v4l2_subdev *subdev,
- 		if (which == V4L2_SUBDEV_FORMAT_ACTIVE) {
- 			if (ssd == sensor->scaler) {
- 				sensor->scale_m =
--					SMIA_LIM(sensor, SCALER_N_MIN);
-+					CCS_LIM(sensor, SCALER_N_MIN);
- 				sensor->scaling_mode =
- 					SMIAPP_SCALING_MODE_NONE;
- 			} else if (ssd == sensor->binner) {
-@@ -1988,12 +1952,12 @@ static int smiapp_set_format(struct v4l2_subdev *subdev,
- 
- 	fmt->format.width =
- 		clamp(fmt->format.width,
--		      SMIA_LIM(sensor, MIN_X_OUTPUT_SIZE),
--		      SMIA_LIM(sensor, MAX_X_OUTPUT_SIZE));
-+		      CCS_LIM(sensor, MIN_X_OUTPUT_SIZE),
-+		      CCS_LIM(sensor, MAX_X_OUTPUT_SIZE));
- 	fmt->format.height =
- 		clamp(fmt->format.height,
--		      SMIA_LIM(sensor, MIN_Y_OUTPUT_SIZE),
--		      SMIA_LIM(sensor, MAX_Y_OUTPUT_SIZE));
-+		      CCS_LIM(sensor, MIN_Y_OUTPUT_SIZE),
-+		      CCS_LIM(sensor, MAX_Y_OUTPUT_SIZE));
- 
- 	smiapp_get_crop_compose(subdev, cfg, crops, NULL, fmt->which);
- 
-@@ -2046,7 +2010,7 @@ static int scaling_goodness(struct v4l2_subdev *subdev, int w, int ask_w,
- 	val -= abs(w - ask_w);
- 	val -= abs(h - ask_h);
- 
--	if (w < SMIA_LIM(sensor, MIN_X_OUTPUT_SIZE))
-+	if (w < CCS_LIM(sensor, MIN_X_OUTPUT_SIZE))
- 		val -= SCALING_GOODNESS_EXTREME;
- 
- 	dev_dbg(&client->dev, "w %d ask_w %d h %d ask_h %d goodness %d\n",
-@@ -2112,7 +2076,7 @@ static void smiapp_set_compose_scaler(struct v4l2_subdev *subdev,
- 	struct i2c_client *client = v4l2_get_subdevdata(subdev);
- 	struct smiapp_sensor *sensor = to_smiapp_sensor(subdev);
- 	u32 min, max, a, b, max_m;
--	u32 scale_m = SMIA_LIM(sensor, SCALER_N_MIN);
-+	u32 scale_m = CCS_LIM(sensor, SCALER_N_MIN);
- 	int mode = SMIAPP_SCALING_MODE_HORIZONTAL;
- 	u32 try[4];
- 	u32 ntry = 0;
-@@ -2125,19 +2089,19 @@ static void smiapp_set_compose_scaler(struct v4l2_subdev *subdev,
- 			      crops[SMIAPP_PAD_SINK]->height);
- 
- 	a = crops[SMIAPP_PAD_SINK]->width
--		* SMIA_LIM(sensor, SCALER_N_MIN) / sel->r.width;
-+		* CCS_LIM(sensor, SCALER_N_MIN) / sel->r.width;
- 	b = crops[SMIAPP_PAD_SINK]->height
--		* SMIA_LIM(sensor, SCALER_N_MIN) / sel->r.height;
-+		* CCS_LIM(sensor, SCALER_N_MIN) / sel->r.height;
- 	max_m = crops[SMIAPP_PAD_SINK]->width
--		* SMIA_LIM(sensor, SCALER_N_MIN)
--		/ SMIA_LIM(sensor, MIN_X_OUTPUT_SIZE);
-+		* CCS_LIM(sensor, SCALER_N_MIN)
-+		/ CCS_LIM(sensor, MIN_X_OUTPUT_SIZE);
- 
--	a = clamp(a, SMIA_LIM(sensor, SCALER_M_MIN),
--		  SMIA_LIM(sensor, SCALER_M_MAX));
--	b = clamp(b, SMIA_LIM(sensor, SCALER_M_MIN),
--		  SMIA_LIM(sensor, SCALER_M_MAX));
--	max_m = clamp(max_m, SMIA_LIM(sensor, SCALER_M_MIN),
--		      SMIA_LIM(sensor, SCALER_M_MAX));
-+	a = clamp(a, CCS_LIM(sensor, SCALER_M_MIN),
-+		  CCS_LIM(sensor, SCALER_M_MAX));
-+	b = clamp(b, CCS_LIM(sensor, SCALER_M_MIN),
-+		  CCS_LIM(sensor, SCALER_M_MAX));
-+	max_m = clamp(max_m, CCS_LIM(sensor, SCALER_M_MIN),
-+		      CCS_LIM(sensor, SCALER_M_MAX));
- 
- 	dev_dbg(&client->dev, "scaling: a %d b %d max_m %d\n", a, b, max_m);
- 
-@@ -2163,8 +2127,7 @@ static void smiapp_set_compose_scaler(struct v4l2_subdev *subdev,
- 		int this = scaling_goodness(
- 			subdev,
- 			crops[SMIAPP_PAD_SINK]->width
--			/ try[i]
--			* SMIA_LIM(sensor, SCALER_N_MIN),
-+			/ try[i] * CCS_LIM(sensor, SCALER_N_MIN),
- 			sel->r.width,
- 			crops[SMIAPP_PAD_SINK]->height,
- 			sel->r.height,
-@@ -2178,18 +2141,18 @@ static void smiapp_set_compose_scaler(struct v4l2_subdev *subdev,
- 			best = this;
- 		}
- 
--		if (SMIA_LIM(sensor, SCALING_CAPABILITY)
--		    == SMIAPP_SCALING_CAPABILITY_HORIZONTAL)
-+		if (CCS_LIM(sensor, SCALING_CAPABILITY)
-+		    == CCS_SCALING_CAPABILITY_HORIZONTAL)
- 			continue;
- 
- 		this = scaling_goodness(
- 			subdev, crops[SMIAPP_PAD_SINK]->width
- 			/ try[i]
--			* SMIA_LIM(sensor, SCALER_N_MIN),
-+			* CCS_LIM(sensor, SCALER_N_MIN),
- 			sel->r.width,
- 			crops[SMIAPP_PAD_SINK]->height
- 			/ try[i]
--			* SMIA_LIM(sensor, SCALER_N_MIN),
-+			* CCS_LIM(sensor, SCALER_N_MIN),
- 			sel->r.height,
- 			sel->flags);
- 
-@@ -2203,12 +2166,12 @@ static void smiapp_set_compose_scaler(struct v4l2_subdev *subdev,
- 	sel->r.width =
- 		(crops[SMIAPP_PAD_SINK]->width
- 		 / scale_m
--		 * SMIA_LIM(sensor, SCALER_N_MIN)) & ~1;
-+		 * CCS_LIM(sensor, SCALER_N_MIN)) & ~1;
- 	if (mode == SMIAPP_SCALING_MODE_BOTH)
- 		sel->r.height =
- 			(crops[SMIAPP_PAD_SINK]->height
- 			 / scale_m
--			 * SMIA_LIM(sensor, SCALER_N_MIN))
-+			 * CCS_LIM(sensor, SCALER_N_MIN))
- 			& ~1;
- 	else
- 		sel->r.height = crops[SMIAPP_PAD_SINK]->height;
-@@ -2262,10 +2225,9 @@ static int __smiapp_sel_supported(struct v4l2_subdev *subdev,
- 		if (ssd == sensor->src
- 		    && sel->pad == SMIAPP_PAD_SRC)
- 			return 0;
--		if (ssd == sensor->scaler
--		    && sel->pad == SMIAPP_PAD_SINK
--		    && SMIA_LIM(sensor, DIGITAL_CROP_CAPABILITY)
--		    == SMIAPP_DIGITAL_CROP_CAPABILITY_INPUT_CROP)
-+		if (ssd == sensor->scaler && sel->pad == SMIAPP_PAD_SINK &&
-+		    CCS_LIM(sensor, DIGITAL_CROP_CAPABILITY)
-+		    == CCS_DIGITAL_CROP_CAPABILITY_INPUT_CROP)
- 			return 0;
- 		return -EINVAL;
- 	case V4L2_SEL_TGT_NATIVE_SIZE:
-@@ -2279,9 +2241,8 @@ static int __smiapp_sel_supported(struct v4l2_subdev *subdev,
- 			return -EINVAL;
- 		if (ssd == sensor->binner)
- 			return 0;
--		if (ssd == sensor->scaler
--		    && SMIA_LIM(sensor, SCALING_CAPABILITY)
--		    != SMIAPP_SCALING_CAPABILITY_NONE)
-+		if (ssd == sensor->scaler && CCS_LIM(sensor, SCALING_CAPABILITY)
-+		    != CCS_SCALING_CAPABILITY_NONE)
- 			return 0;
- 		fallthrough;
- 	default:
-@@ -2345,8 +2306,8 @@ static void smiapp_get_native_size(struct smiapp_subdev *ssd,
- {
- 	r->top = 0;
- 	r->left = 0;
--	r->width = SMIA_LIM(ssd->sensor, X_ADDR_MAX) + 1;
--	r->height = SMIA_LIM(ssd->sensor, Y_ADDR_MAX) + 1;
-+	r->width = CCS_LIM(ssd->sensor, X_ADDR_MAX) + 1;
-+	r->height = CCS_LIM(ssd->sensor, Y_ADDR_MAX) + 1;
- }
- 
- static int __smiapp_get_selection(struct v4l2_subdev *subdev,
-@@ -2431,10 +2392,10 @@ static int smiapp_set_selection(struct v4l2_subdev *subdev,
- 	sel->r.height =	SMIAPP_ALIGN_DIM(sel->r.height, sel->flags);
- 
- 	sel->r.width = max_t(unsigned int,
--			     SMIA_LIM(sensor, MIN_X_OUTPUT_SIZE),
-+			     CCS_LIM(sensor, MIN_X_OUTPUT_SIZE),
- 			     sel->r.width);
- 	sel->r.height = max_t(unsigned int,
--			      SMIA_LIM(sensor, MIN_Y_OUTPUT_SIZE),
-+			      CCS_LIM(sensor, MIN_Y_OUTPUT_SIZE),
- 			      sel->r.height);
- 
- 	switch (sel->target) {
-@@ -3123,12 +3084,6 @@ static int smiapp_probe(struct i2c_client *client)
- 		goto out_power_off;
- 	}
- 
--	rval = smiapp_read_all_smia_limits(sensor);
--	if (rval) {
--		rval = -ENODEV;
--		goto out_power_off;
--	}
--
- 	rval = ccs_read_all_limits(sensor);
- 	if (rval)
- 		goto out_power_off;
-@@ -3163,7 +3118,7 @@ static int smiapp_probe(struct i2c_client *client)
- 		goto out_free_ccs_limits;
- 	}
- 
--	if (SMIA_LIM(sensor, BINNING_CAPABILITY)) {
-+	if (CCS_LIM(sensor, BINNING_CAPABILITY)) {
- 		u32 val;
- 
- 		rval = smiapp_read(sensor,
-@@ -3200,8 +3155,8 @@ static int smiapp_probe(struct i2c_client *client)
- 	}
- 
- 	if (sensor->minfo.smiapp_version &&
--	    SMIA_LIM(sensor, DATA_TRANSFER_IF_CAPABILITY) &
--	    SMIAPP_DATA_TRANSFER_IF_CAPABILITY_SUPPORTED) {
-+	    CCS_LIM(sensor, DATA_TRANSFER_IF_CAPABILITY) &
-+	    CCS_DATA_TRANSFER_IF_CAPABILITY_SUPPORTED) {
- 		if (device_create_file(&client->dev, &dev_attr_nvm) != 0) {
- 			dev_err(&client->dev, "sysfs nvm entry failed\n");
- 			rval = -EBUSY;
-@@ -3210,22 +3165,22 @@ static int smiapp_probe(struct i2c_client *client)
- 	}
- 
- 	/* We consider this as profile 0 sensor if any of these are zero. */
--	if (!SMIA_LIM(sensor, MIN_OP_SYS_CLK_DIV) ||
--	    !SMIA_LIM(sensor, MAX_OP_SYS_CLK_DIV) ||
--	    !SMIA_LIM(sensor, MIN_OP_PIX_CLK_DIV) ||
--	    !SMIA_LIM(sensor, MAX_OP_PIX_CLK_DIV)) {
-+	if (!CCS_LIM(sensor, MIN_OP_SYS_CLK_DIV) ||
-+	    !CCS_LIM(sensor, MAX_OP_SYS_CLK_DIV) ||
-+	    !CCS_LIM(sensor, MIN_OP_PIX_CLK_DIV) ||
-+	    !CCS_LIM(sensor, MAX_OP_PIX_CLK_DIV)) {
- 		sensor->minfo.smiapp_profile = SMIAPP_PROFILE_0;
--	} else if (SMIA_LIM(sensor, SCALING_CAPABILITY)
--		   != SMIAPP_SCALING_CAPABILITY_NONE) {
--		if (SMIA_LIM(sensor, SCALING_CAPABILITY)
--		    == SMIAPP_SCALING_CAPABILITY_HORIZONTAL)
-+	} else if (CCS_LIM(sensor, SCALING_CAPABILITY)
-+		   != CCS_SCALING_CAPABILITY_NONE) {
-+		if (CCS_LIM(sensor, SCALING_CAPABILITY)
-+		    == CCS_SCALING_CAPABILITY_HORIZONTAL)
- 			sensor->minfo.smiapp_profile = SMIAPP_PROFILE_1;
- 		else
- 			sensor->minfo.smiapp_profile = SMIAPP_PROFILE_2;
- 		sensor->scaler = &sensor->ssds[sensor->ssds_used];
- 		sensor->ssds_used++;
--	} else if (SMIA_LIM(sensor, DIGITAL_CROP_CAPABILITY)
--		   == SMIAPP_DIGITAL_CROP_CAPABILITY_INPUT_CROP) {
-+	} else if (CCS_LIM(sensor, DIGITAL_CROP_CAPABILITY)
-+		   == CCS_DIGITAL_CROP_CAPABILITY_INPUT_CROP) {
- 		sensor->scaler = &sensor->ssds[sensor->ssds_used];
- 		sensor->ssds_used++;
- 	}
-@@ -3234,13 +3189,13 @@ static int smiapp_probe(struct i2c_client *client)
- 	sensor->pixel_array = &sensor->ssds[sensor->ssds_used];
- 	sensor->ssds_used++;
- 
--	sensor->scale_m = SMIA_LIM(sensor, SCALER_N_MIN);
-+	sensor->scale_m = CCS_LIM(sensor, SCALER_N_MIN);
- 
- 	/* prepare PLL configuration input values */
- 	sensor->pll.bus_type = SMIAPP_PLL_BUS_TYPE_CSI2;
- 	sensor->pll.csi2.lanes = sensor->hwcfg->lanes;
- 	sensor->pll.ext_clk_freq_hz = sensor->hwcfg->ext_clk;
--	sensor->pll.scale_n = SMIA_LIM(sensor, SCALER_N_MIN);
-+	sensor->pll.scale_n = CCS_LIM(sensor, SCALER_N_MIN);
- 	/* Profile 0 sensors have no separate OP clock branch. */
- 	if (sensor->minfo.smiapp_profile == SMIAPP_PROFILE_0)
- 		sensor->pll.flags |= SMIAPP_PLL_FLAG_NO_OP_CLOCKS;
-diff --git a/drivers/media/i2c/smiapp/smiapp-limits.c b/drivers/media/i2c/smiapp/smiapp-limits.c
-deleted file mode 100644
-index de5ee5296713..000000000000
---- a/drivers/media/i2c/smiapp/smiapp-limits.c
-+++ /dev/null
-@@ -1,118 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * drivers/media/i2c/smiapp/smiapp-limits.c
-- *
-- * Generic driver for SMIA/SMIA++ compliant camera modules
-- *
-- * Copyright (C) 2011--2012 Nokia Corporation
-- * Contact: Sakari Ailus <sakari.ailus@iki.fi>
-- */
--
--#include "smiapp.h"
--
--struct smiapp_reg_limits smiapp_reg_limits[] = {
--	{ SMIAPP_REG_U16_ANALOGUE_GAIN_CAPABILITY, "analogue_gain_capability" }, /* 0 */
--	{ SMIAPP_REG_U16_ANALOGUE_GAIN_CODE_MIN, "analogue_gain_code_min" },
--	{ SMIAPP_REG_U16_ANALOGUE_GAIN_CODE_MAX, "analogue_gain_code_max" },
--	{ SMIAPP_REG_U8_THS_ZERO_MIN, "ths_zero_min" },
--	{ SMIAPP_REG_U8_TCLK_TRAIL_MIN, "tclk_trail_min" },
--	{ SMIAPP_REG_U16_INTEGRATION_TIME_CAPABILITY, "integration_time_capability" }, /* 5 */
--	{ SMIAPP_REG_U16_COARSE_INTEGRATION_TIME_MIN, "coarse_integration_time_min" },
--	{ SMIAPP_REG_U16_COARSE_INTEGRATION_TIME_MAX_MARGIN, "coarse_integration_time_max_margin" },
--	{ SMIAPP_REG_U16_FINE_INTEGRATION_TIME_MIN, "fine_integration_time_min" },
--	{ SMIAPP_REG_U16_FINE_INTEGRATION_TIME_MAX_MARGIN, "fine_integration_time_max_margin" },
--	{ SMIAPP_REG_U16_DIGITAL_GAIN_CAPABILITY, "digital_gain_capability" }, /* 10 */
--	{ SMIAPP_REG_U16_DIGITAL_GAIN_MIN, "digital_gain_min" },
--	{ SMIAPP_REG_U16_DIGITAL_GAIN_MAX, "digital_gain_max" },
--	{ SMIAPP_REG_F32_MIN_EXT_CLK_FREQ_HZ, "min_ext_clk_freq_hz" },
--	{ SMIAPP_REG_F32_MAX_EXT_CLK_FREQ_HZ, "max_ext_clk_freq_hz" },
--	{ SMIAPP_REG_U16_MIN_PRE_PLL_CLK_DIV, "min_pre_pll_clk_div" }, /* 15 */
--	{ SMIAPP_REG_U16_MAX_PRE_PLL_CLK_DIV, "max_pre_pll_clk_div" },
--	{ SMIAPP_REG_F32_MIN_PLL_IP_FREQ_HZ, "min_pll_ip_freq_hz" },
--	{ SMIAPP_REG_F32_MAX_PLL_IP_FREQ_HZ, "max_pll_ip_freq_hz" },
--	{ SMIAPP_REG_U16_MIN_PLL_MULTIPLIER, "min_pll_multiplier" },
--	{ SMIAPP_REG_U16_MAX_PLL_MULTIPLIER, "max_pll_multiplier" }, /* 20 */
--	{ SMIAPP_REG_F32_MIN_PLL_OP_FREQ_HZ, "min_pll_op_freq_hz" },
--	{ SMIAPP_REG_F32_MAX_PLL_OP_FREQ_HZ, "max_pll_op_freq_hz" },
--	{ SMIAPP_REG_U16_MIN_VT_SYS_CLK_DIV, "min_vt_sys_clk_div" },
--	{ SMIAPP_REG_U16_MAX_VT_SYS_CLK_DIV, "max_vt_sys_clk_div" },
--	{ SMIAPP_REG_F32_MIN_VT_SYS_CLK_FREQ_HZ, "min_vt_sys_clk_freq_hz" }, /* 25 */
--	{ SMIAPP_REG_F32_MAX_VT_SYS_CLK_FREQ_HZ, "max_vt_sys_clk_freq_hz" },
--	{ SMIAPP_REG_F32_MIN_VT_PIX_CLK_FREQ_HZ, "min_vt_pix_clk_freq_hz" },
--	{ SMIAPP_REG_F32_MAX_VT_PIX_CLK_FREQ_HZ, "max_vt_pix_clk_freq_hz" },
--	{ SMIAPP_REG_U16_MIN_VT_PIX_CLK_DIV, "min_vt_pix_clk_div" },
--	{ SMIAPP_REG_U16_MAX_VT_PIX_CLK_DIV, "max_vt_pix_clk_div" }, /* 30 */
--	{ SMIAPP_REG_U16_MIN_FRAME_LENGTH_LINES, "min_frame_length_lines" },
--	{ SMIAPP_REG_U16_MAX_FRAME_LENGTH_LINES, "max_frame_length_lines" },
--	{ SMIAPP_REG_U16_MIN_LINE_LENGTH_PCK, "min_line_length_pck" },
--	{ SMIAPP_REG_U16_MAX_LINE_LENGTH_PCK, "max_line_length_pck" },
--	{ SMIAPP_REG_U16_MIN_LINE_BLANKING_PCK, "min_line_blanking_pck" }, /* 35 */
--	{ SMIAPP_REG_U16_MIN_FRAME_BLANKING_LINES, "min_frame_blanking_lines" },
--	{ SMIAPP_REG_U8_MIN_LINE_LENGTH_PCK_STEP_SIZE, "min_line_length_pck_step_size" },
--	{ SMIAPP_REG_U16_MIN_OP_SYS_CLK_DIV, "min_op_sys_clk_div" },
--	{ SMIAPP_REG_U16_MAX_OP_SYS_CLK_DIV, "max_op_sys_clk_div" },
--	{ SMIAPP_REG_F32_MIN_OP_SYS_CLK_FREQ_HZ, "min_op_sys_clk_freq_hz" }, /* 40 */
--	{ SMIAPP_REG_F32_MAX_OP_SYS_CLK_FREQ_HZ, "max_op_sys_clk_freq_hz" },
--	{ SMIAPP_REG_U16_MIN_OP_PIX_CLK_DIV, "min_op_pix_clk_div" },
--	{ SMIAPP_REG_U16_MAX_OP_PIX_CLK_DIV, "max_op_pix_clk_div" },
--	{ SMIAPP_REG_F32_MIN_OP_PIX_CLK_FREQ_HZ, "min_op_pix_clk_freq_hz" },
--	{ SMIAPP_REG_F32_MAX_OP_PIX_CLK_FREQ_HZ, "max_op_pix_clk_freq_hz" }, /* 45 */
--	{ SMIAPP_REG_U16_X_ADDR_MIN, "x_addr_min" },
--	{ SMIAPP_REG_U16_Y_ADDR_MIN, "y_addr_min" },
--	{ SMIAPP_REG_U16_X_ADDR_MAX, "x_addr_max" },
--	{ SMIAPP_REG_U16_Y_ADDR_MAX, "y_addr_max" },
--	{ SMIAPP_REG_U16_MIN_X_OUTPUT_SIZE, "min_x_output_size" }, /* 50 */
--	{ SMIAPP_REG_U16_MIN_Y_OUTPUT_SIZE, "min_y_output_size" },
--	{ SMIAPP_REG_U16_MAX_X_OUTPUT_SIZE, "max_x_output_size" },
--	{ SMIAPP_REG_U16_MAX_Y_OUTPUT_SIZE, "max_y_output_size" },
--	{ SMIAPP_REG_U16_MIN_EVEN_INC, "min_even_inc" },
--	{ SMIAPP_REG_U16_MAX_EVEN_INC, "max_even_inc" }, /* 55 */
--	{ SMIAPP_REG_U16_MIN_ODD_INC, "min_odd_inc" },
--	{ SMIAPP_REG_U16_MAX_ODD_INC, "max_odd_inc" },
--	{ SMIAPP_REG_U16_SCALING_CAPABILITY, "scaling_capability" },
--	{ SMIAPP_REG_U16_SCALER_M_MIN, "scaler_m_min" },
--	{ SMIAPP_REG_U16_SCALER_M_MAX, "scaler_m_max" }, /* 60 */
--	{ SMIAPP_REG_U16_SCALER_N_MIN, "scaler_n_min" },
--	{ SMIAPP_REG_U16_SCALER_N_MAX, "scaler_n_max" },
--	{ SMIAPP_REG_U16_SPATIAL_SAMPLING_CAPABILITY, "spatial_sampling_capability" },
--	{ SMIAPP_REG_U8_DIGITAL_CROP_CAPABILITY, "digital_crop_capability" },
--	{ SMIAPP_REG_U16_COMPRESSION_CAPABILITY, "compression_capability" }, /* 65 */
--	{ SMIAPP_REG_U8_FIFO_SUPPORT_CAPABILITY, "fifo_support_capability" },
--	{ SMIAPP_REG_U8_DPHY_CTRL_CAPABILITY, "dphy_ctrl_capability" },
--	{ SMIAPP_REG_U8_CSI_LANE_MODE_CAPABILITY, "csi_lane_mode_capability" },
--	{ SMIAPP_REG_U8_CSI_SIGNALLING_MODE_CAPABILITY, "csi_signalling_mode_capability" },
--	{ SMIAPP_REG_U8_FAST_STANDBY_CAPABILITY, "fast_standby_capability" }, /* 70 */
--	{ SMIAPP_REG_U8_CCI_ADDRESS_CONTROL_CAPABILITY, "cci_address_control_capability" },
--	{ SMIAPP_REG_U32_MAX_PER_LANE_BITRATE_1_LANE_MODE_MBPS, "max_per_lane_bitrate_1_lane_mode_mbps" },
--	{ SMIAPP_REG_U32_MAX_PER_LANE_BITRATE_2_LANE_MODE_MBPS, "max_per_lane_bitrate_2_lane_mode_mbps" },
--	{ SMIAPP_REG_U32_MAX_PER_LANE_BITRATE_3_LANE_MODE_MBPS, "max_per_lane_bitrate_3_lane_mode_mbps" },
--	{ SMIAPP_REG_U32_MAX_PER_LANE_BITRATE_4_LANE_MODE_MBPS, "max_per_lane_bitrate_4_lane_mode_mbps" }, /* 75 */
--	{ SMIAPP_REG_U8_TEMP_SENSOR_CAPABILITY, "temp_sensor_capability" },
--	{ SMIAPP_REG_U16_MIN_FRAME_LENGTH_LINES_BIN, "min_frame_length_lines_bin" },
--	{ SMIAPP_REG_U16_MAX_FRAME_LENGTH_LINES_BIN, "max_frame_length_lines_bin" },
--	{ SMIAPP_REG_U16_MIN_LINE_LENGTH_PCK_BIN, "min_line_length_pck_bin" },
--	{ SMIAPP_REG_U16_MAX_LINE_LENGTH_PCK_BIN, "max_line_length_pck_bin" }, /* 80 */
--	{ SMIAPP_REG_U16_MIN_LINE_BLANKING_PCK_BIN, "min_line_blanking_pck_bin" },
--	{ SMIAPP_REG_U16_FINE_INTEGRATION_TIME_MIN_BIN, "fine_integration_time_min_bin" },
--	{ SMIAPP_REG_U16_FINE_INTEGRATION_TIME_MAX_MARGIN_BIN, "fine_integration_time_max_margin_bin" },
--	{ SMIAPP_REG_U8_BINNING_CAPABILITY, "binning_capability" },
--	{ SMIAPP_REG_U8_BINNING_WEIGHTING_CAPABILITY, "binning_weighting_capability" }, /* 85 */
--	{ SMIAPP_REG_U8_DATA_TRANSFER_IF_CAPABILITY, "data_transfer_if_capability" },
--	{ SMIAPP_REG_U8_SHADING_CORRECTION_CAPABILITY, "shading_correction_capability" },
--	{ SMIAPP_REG_U8_GREEN_IMBALANCE_CAPABILITY, "green_imbalance_capability" },
--	{ SMIAPP_REG_U8_BLACK_LEVEL_CAPABILITY, "black_level_capability" },
--	{ SMIAPP_REG_U8_MODULE_SPECIFIC_CORRECTION_CAPABILITY, "module_specific_correction_capability" }, /* 90 */
--	{ SMIAPP_REG_U16_DEFECT_CORRECTION_CAPABILITY, "defect_correction_capability" },
--	{ SMIAPP_REG_U16_DEFECT_CORRECTION_CAPABILITY_2, "defect_correction_capability_2" },
--	{ SMIAPP_REG_U8_EDOF_CAPABILITY, "edof_capability" },
--	{ SMIAPP_REG_U8_COLOUR_FEEDBACK_CAPABILITY, "colour_feedback_capability" },
--	{ SMIAPP_REG_U8_ESTIMATION_MODE_CAPABILITY, "estimation_mode_capability" }, /* 95 */
--	{ SMIAPP_REG_U8_ESTIMATION_ZONE_CAPABILITY, "estimation_zone_capability" },
--	{ SMIAPP_REG_U16_CAPABILITY_TRDY_MIN, "capability_trdy_min" },
--	{ SMIAPP_REG_U8_FLASH_MODE_CAPABILITY, "flash_mode_capability" },
--	{ SMIAPP_REG_U8_ACTUATOR_CAPABILITY, "actuator_capability" },
--	{ SMIAPP_REG_U8_BRACKETING_LUT_CAPABILITY_1, "bracketing_lut_capability_1" }, /* 100 */
--	{ SMIAPP_REG_U8_BRACKETING_LUT_CAPABILITY_2, "bracketing_lut_capability_2" },
--	{ SMIAPP_REG_U16_ANALOGUE_GAIN_CODE_STEP, "analogue_gain_code_step" },
--	{ 0, NULL },
--};
-diff --git a/drivers/media/i2c/smiapp/smiapp-limits.h b/drivers/media/i2c/smiapp/smiapp-limits.h
-deleted file mode 100644
-index dbac0b4975f9..000000000000
---- a/drivers/media/i2c/smiapp/smiapp-limits.h
-+++ /dev/null
-@@ -1,114 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- * drivers/media/i2c/smiapp/smiapp-limits.h
-- *
-- * Generic driver for SMIA/SMIA++ compliant camera modules
-- *
-- * Copyright (C) 2011--2012 Nokia Corporation
-- * Contact: Sakari Ailus <sakari.ailus@iki.fi>
-- */
--
--#define SMIAPP_LIMIT_ANALOGUE_GAIN_CAPABILITY			0
--#define SMIAPP_LIMIT_ANALOGUE_GAIN_CODE_MIN			1
--#define SMIAPP_LIMIT_ANALOGUE_GAIN_CODE_MAX			2
--#define SMIAPP_LIMIT_THS_ZERO_MIN				3
--#define SMIAPP_LIMIT_TCLK_TRAIL_MIN				4
--#define SMIAPP_LIMIT_INTEGRATION_TIME_CAPABILITY		5
--#define SMIAPP_LIMIT_COARSE_INTEGRATION_TIME_MIN		6
--#define SMIAPP_LIMIT_COARSE_INTEGRATION_TIME_MAX_MARGIN		7
--#define SMIAPP_LIMIT_FINE_INTEGRATION_TIME_MIN			8
--#define SMIAPP_LIMIT_FINE_INTEGRATION_TIME_MAX_MARGIN		9
--#define SMIAPP_LIMIT_DIGITAL_GAIN_CAPABILITY			10
--#define SMIAPP_LIMIT_DIGITAL_GAIN_MIN				11
--#define SMIAPP_LIMIT_DIGITAL_GAIN_MAX				12
--#define SMIAPP_LIMIT_MIN_EXT_CLK_FREQ_HZ			13
--#define SMIAPP_LIMIT_MAX_EXT_CLK_FREQ_HZ			14
--#define SMIAPP_LIMIT_MIN_PRE_PLL_CLK_DIV			15
--#define SMIAPP_LIMIT_MAX_PRE_PLL_CLK_DIV			16
--#define SMIAPP_LIMIT_MIN_PLL_IP_FREQ_HZ				17
--#define SMIAPP_LIMIT_MAX_PLL_IP_FREQ_HZ				18
--#define SMIAPP_LIMIT_MIN_PLL_MULTIPLIER				19
--#define SMIAPP_LIMIT_MAX_PLL_MULTIPLIER				20
--#define SMIAPP_LIMIT_MIN_PLL_OP_FREQ_HZ				21
--#define SMIAPP_LIMIT_MAX_PLL_OP_FREQ_HZ				22
--#define SMIAPP_LIMIT_MIN_VT_SYS_CLK_DIV				23
--#define SMIAPP_LIMIT_MAX_VT_SYS_CLK_DIV				24
--#define SMIAPP_LIMIT_MIN_VT_SYS_CLK_FREQ_HZ			25
--#define SMIAPP_LIMIT_MAX_VT_SYS_CLK_FREQ_HZ			26
--#define SMIAPP_LIMIT_MIN_VT_PIX_CLK_FREQ_HZ			27
--#define SMIAPP_LIMIT_MAX_VT_PIX_CLK_FREQ_HZ			28
--#define SMIAPP_LIMIT_MIN_VT_PIX_CLK_DIV				29
--#define SMIAPP_LIMIT_MAX_VT_PIX_CLK_DIV				30
--#define SMIAPP_LIMIT_MIN_FRAME_LENGTH_LINES			31
--#define SMIAPP_LIMIT_MAX_FRAME_LENGTH_LINES			32
--#define SMIAPP_LIMIT_MIN_LINE_LENGTH_PCK			33
--#define SMIAPP_LIMIT_MAX_LINE_LENGTH_PCK			34
--#define SMIAPP_LIMIT_MIN_LINE_BLANKING_PCK			35
--#define SMIAPP_LIMIT_MIN_FRAME_BLANKING_LINES			36
--#define SMIAPP_LIMIT_MIN_LINE_LENGTH_PCK_STEP_SIZE		37
--#define SMIAPP_LIMIT_MIN_OP_SYS_CLK_DIV				38
--#define SMIAPP_LIMIT_MAX_OP_SYS_CLK_DIV				39
--#define SMIAPP_LIMIT_MIN_OP_SYS_CLK_FREQ_HZ			40
--#define SMIAPP_LIMIT_MAX_OP_SYS_CLK_FREQ_HZ			41
--#define SMIAPP_LIMIT_MIN_OP_PIX_CLK_DIV				42
--#define SMIAPP_LIMIT_MAX_OP_PIX_CLK_DIV				43
--#define SMIAPP_LIMIT_MIN_OP_PIX_CLK_FREQ_HZ			44
--#define SMIAPP_LIMIT_MAX_OP_PIX_CLK_FREQ_HZ			45
--#define SMIAPP_LIMIT_X_ADDR_MIN					46
--#define SMIAPP_LIMIT_Y_ADDR_MIN					47
--#define SMIAPP_LIMIT_X_ADDR_MAX					48
--#define SMIAPP_LIMIT_Y_ADDR_MAX					49
--#define SMIAPP_LIMIT_MIN_X_OUTPUT_SIZE				50
--#define SMIAPP_LIMIT_MIN_Y_OUTPUT_SIZE				51
--#define SMIAPP_LIMIT_MAX_X_OUTPUT_SIZE				52
--#define SMIAPP_LIMIT_MAX_Y_OUTPUT_SIZE				53
--#define SMIAPP_LIMIT_MIN_EVEN_INC				54
--#define SMIAPP_LIMIT_MAX_EVEN_INC				55
--#define SMIAPP_LIMIT_MIN_ODD_INC				56
--#define SMIAPP_LIMIT_MAX_ODD_INC				57
--#define SMIAPP_LIMIT_SCALING_CAPABILITY				58
--#define SMIAPP_LIMIT_SCALER_M_MIN				59
--#define SMIAPP_LIMIT_SCALER_M_MAX				60
--#define SMIAPP_LIMIT_SCALER_N_MIN				61
--#define SMIAPP_LIMIT_SCALER_N_MAX				62
--#define SMIAPP_LIMIT_SPATIAL_SAMPLING_CAPABILITY		63
--#define SMIAPP_LIMIT_DIGITAL_CROP_CAPABILITY			64
--#define SMIAPP_LIMIT_COMPRESSION_CAPABILITY			65
--#define SMIAPP_LIMIT_FIFO_SUPPORT_CAPABILITY			66
--#define SMIAPP_LIMIT_DPHY_CTRL_CAPABILITY			67
--#define SMIAPP_LIMIT_CSI_LANE_MODE_CAPABILITY			68
--#define SMIAPP_LIMIT_CSI_SIGNALLING_MODE_CAPABILITY		69
--#define SMIAPP_LIMIT_FAST_STANDBY_CAPABILITY			70
--#define SMIAPP_LIMIT_CCI_ADDRESS_CONTROL_CAPABILITY		71
--#define SMIAPP_LIMIT_MAX_PER_LANE_BITRATE_1_LANE_MODE_MBPS	72
--#define SMIAPP_LIMIT_MAX_PER_LANE_BITRATE_2_LANE_MODE_MBPS	73
--#define SMIAPP_LIMIT_MAX_PER_LANE_BITRATE_3_LANE_MODE_MBPS	74
--#define SMIAPP_LIMIT_MAX_PER_LANE_BITRATE_4_LANE_MODE_MBPS	75
--#define SMIAPP_LIMIT_TEMP_SENSOR_CAPABILITY			76
--#define SMIAPP_LIMIT_MIN_FRAME_LENGTH_LINES_BIN			77
--#define SMIAPP_LIMIT_MAX_FRAME_LENGTH_LINES_BIN			78
--#define SMIAPP_LIMIT_MIN_LINE_LENGTH_PCK_BIN			79
--#define SMIAPP_LIMIT_MAX_LINE_LENGTH_PCK_BIN			80
--#define SMIAPP_LIMIT_MIN_LINE_BLANKING_PCK_BIN			81
--#define SMIAPP_LIMIT_FINE_INTEGRATION_TIME_MIN_BIN		82
--#define SMIAPP_LIMIT_FINE_INTEGRATION_TIME_MAX_MARGIN_BIN	83
--#define SMIAPP_LIMIT_BINNING_CAPABILITY				84
--#define SMIAPP_LIMIT_BINNING_WEIGHTING_CAPABILITY		85
--#define SMIAPP_LIMIT_DATA_TRANSFER_IF_CAPABILITY		86
--#define SMIAPP_LIMIT_SHADING_CORRECTION_CAPABILITY		87
--#define SMIAPP_LIMIT_GREEN_IMBALANCE_CAPABILITY			88
--#define SMIAPP_LIMIT_BLACK_LEVEL_CAPABILITY			89
--#define SMIAPP_LIMIT_MODULE_SPECIFIC_CORRECTION_CAPABILITY	90
--#define SMIAPP_LIMIT_DEFECT_CORRECTION_CAPABILITY		91
--#define SMIAPP_LIMIT_DEFECT_CORRECTION_CAPABILITY_2		92
--#define SMIAPP_LIMIT_EDOF_CAPABILITY				93
--#define SMIAPP_LIMIT_COLOUR_FEEDBACK_CAPABILITY			94
--#define SMIAPP_LIMIT_ESTIMATION_MODE_CAPABILITY			95
--#define SMIAPP_LIMIT_ESTIMATION_ZONE_CAPABILITY			96
--#define SMIAPP_LIMIT_CAPABILITY_TRDY_MIN			97
--#define SMIAPP_LIMIT_FLASH_MODE_CAPABILITY			98
--#define SMIAPP_LIMIT_ACTUATOR_CAPABILITY			99
--#define SMIAPP_LIMIT_BRACKETING_LUT_CAPABILITY_1		100
--#define SMIAPP_LIMIT_BRACKETING_LUT_CAPABILITY_2		101
--#define SMIAPP_LIMIT_ANALOGUE_GAIN_CODE_STEP			102
--#define SMIAPP_LIMIT_LAST					103
 diff --git a/drivers/media/i2c/smiapp/smiapp-quirk.c b/drivers/media/i2c/smiapp/smiapp-quirk.c
-index 308ca0b03f5a..24630c7650d2 100644
+index ab96d6067fc3..308ca0b03f5a 100644
 --- a/drivers/media/i2c/smiapp/smiapp-quirk.c
 +++ b/drivers/media/i2c/smiapp/smiapp-quirk.c
-@@ -10,6 +10,8 @@
- 
- #include <linux/delay.h>
- 
-+#include "ccs-limits.h"
-+
- #include "smiapp.h"
+@@ -14,7 +14,7 @@
  
  static int smiapp_write_8(struct smiapp_sensor *sensor, u16 reg, u8 val)
-@@ -36,17 +38,6 @@ static int smiapp_write_8s(struct smiapp_sensor *sensor,
- 	return 0;
- }
- 
--void smiapp_replace_limit(struct smiapp_sensor *sensor,
--			  u32 limit, u32 val)
--{
--	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
--
--	dev_dbg(&client->dev, "quirk: 0x%8.8x \"%s\" = %d, 0x%x\n",
--		smiapp_reg_limits[limit].addr,
--		smiapp_reg_limits[limit].what, val, val);
--	sensor->limits[limit] = val;
--}
--
- static int jt8ew9_limits(struct smiapp_sensor *sensor)
  {
- 	if (sensor->minfo.revision_number_major < 0x03)
-@@ -54,9 +45,8 @@ static int jt8ew9_limits(struct smiapp_sensor *sensor)
- 
- 	/* Below 24 gain doesn't have effect at all, */
- 	/* but ~59 is needed for full dynamic range */
--	smiapp_replace_limit(sensor, SMIAPP_LIMIT_ANALOGUE_GAIN_CODE_MIN, 59);
--	smiapp_replace_limit(
--		sensor, SMIAPP_LIMIT_ANALOGUE_GAIN_CODE_MAX, 6000);
-+	ccs_replace_limit(sensor, CCS_L_ANALOG_GAIN_CODE_MIN, 0, 59);
-+	ccs_replace_limit(sensor, CCS_L_ANALOG_GAIN_CODE_MAX, 0, 6000);
- 
- 	return 0;
+-	return smiapp_write(sensor, SMIAPP_REG_MK_U8(reg), val);
++	return smiapp_write(sensor, reg, val);
  }
-@@ -126,9 +116,8 @@ const struct smiapp_quirk smiapp_imx125es_quirk = {
  
- static int jt8ev1_limits(struct smiapp_sensor *sensor)
- {
--	smiapp_replace_limit(sensor, SMIAPP_LIMIT_X_ADDR_MAX, 4271);
--	smiapp_replace_limit(sensor,
--			     SMIAPP_LIMIT_MIN_LINE_BLANKING_PCK_BIN, 184);
-+	ccs_replace_limit(sensor, CCS_L_X_ADDR_MAX, 0, 4271);
-+	ccs_replace_limit(sensor, CCS_L_MIN_LINE_BLANKING_PCK_BIN, 0, 184);
+ static int smiapp_write_8s(struct smiapp_sensor *sensor,
+diff --git a/drivers/media/i2c/smiapp/smiapp-reg-defs.h b/drivers/media/i2c/smiapp/smiapp-reg-defs.h
+index ec574007908b..06b69b1ab55f 100644
+--- a/drivers/media/i2c/smiapp/smiapp-reg-defs.h
++++ b/drivers/media/i2c/smiapp/smiapp-reg-defs.h
+@@ -7,483 +7,573 @@
+  * Copyright (C) 2011--2012 Nokia Corporation
+  * Contact: Sakari Ailus <sakari.ailus@iki.fi>
+  */
+-#define SMIAPP_REG_MK_U8(r)	(r)
+-#define SMIAPP_REG_MK_U16(r)	(CCS_FL_16BIT | (r))
+-#define SMIAPP_REG_MK_U32(r)	(CCS_FL_32BIT | (r))
  
- 	return 0;
- }
-@@ -221,7 +210,7 @@ const struct smiapp_quirk smiapp_jt8ev1_quirk = {
+-#define SMIAPP_REG_MK_F32(r)	(CCS_FL_FLOAT_IREAL | CCS_FL_32BIT | (r))
++#ifndef __SMIAPP_REG_DEFS_H__
++#define __SMIAPP_REG_DEFS_H__
  
- static int tcm8500md_limits(struct smiapp_sensor *sensor)
- {
--	smiapp_replace_limit(sensor, SMIAPP_LIMIT_MIN_PLL_IP_FREQ_HZ, 2700000);
-+	ccs_replace_limit(sensor, CCS_L_MIN_PLL_IP_CLK_FREQ_MHZ, 0, 2700000);
- 
- 	return 0;
- }
-diff --git a/drivers/media/i2c/smiapp/smiapp-quirk.h b/drivers/media/i2c/smiapp/smiapp-quirk.h
-index 17505be60c1d..8a479f17cd19 100644
---- a/drivers/media/i2c/smiapp/smiapp-quirk.h
-+++ b/drivers/media/i2c/smiapp/smiapp-quirk.h
-@@ -55,9 +55,6 @@ struct smiapp_reg_8 {
- 	u8 val;
- };
- 
--void smiapp_replace_limit(struct smiapp_sensor *sensor,
--			  u32 limit, u32 val);
+-#define SMIAPP_REG_U16_MODEL_ID					SMIAPP_REG_MK_U16(0x0000)
+-#define SMIAPP_REG_U8_REVISION_NUMBER_MAJOR			SMIAPP_REG_MK_U8(0x0002)
+-#define SMIAPP_REG_U8_MANUFACTURER_ID				SMIAPP_REG_MK_U8(0x0003)
+-#define SMIAPP_REG_U8_SMIA_VERSION				SMIAPP_REG_MK_U8(0x0004)
+-#define SMIAPP_REG_U8_FRAME_COUNT				SMIAPP_REG_MK_U8(0x0005)
+-#define SMIAPP_REG_U8_PIXEL_ORDER				SMIAPP_REG_MK_U8(0x0006)
+-#define SMIAPP_REG_U16_DATA_PEDESTAL				SMIAPP_REG_MK_U16(0x0008)
+-#define SMIAPP_REG_U8_PIXEL_DEPTH				SMIAPP_REG_MK_U8(0x000c)
+-#define SMIAPP_REG_U8_REVISION_NUMBER_MINOR			SMIAPP_REG_MK_U8(0x0010)
+-#define SMIAPP_REG_U8_SMIAPP_VERSION				SMIAPP_REG_MK_U8(0x0011)
+-#define SMIAPP_REG_U8_MODULE_DATE_YEAR				SMIAPP_REG_MK_U8(0x0012)
+-#define SMIAPP_REG_U8_MODULE_DATE_MONTH				SMIAPP_REG_MK_U8(0x0013)
+-#define SMIAPP_REG_U8_MODULE_DATE_DAY				SMIAPP_REG_MK_U8(0x0014)
+-#define SMIAPP_REG_U8_MODULE_DATE_PHASE				SMIAPP_REG_MK_U8(0x0015)
+-#define SMIAPP_REG_U16_SENSOR_MODEL_ID				SMIAPP_REG_MK_U16(0x0016)
+-#define SMIAPP_REG_U8_SENSOR_REVISION_NUMBER			SMIAPP_REG_MK_U8(0x0018)
+-#define SMIAPP_REG_U8_SENSOR_MANUFACTURER_ID			SMIAPP_REG_MK_U8(0x0019)
+-#define SMIAPP_REG_U8_SENSOR_FIRMWARE_VERSION			SMIAPP_REG_MK_U8(0x001a)
+-#define SMIAPP_REG_U32_SERIAL_NUMBER				SMIAPP_REG_MK_U32(0x001c)
+-#define SMIAPP_REG_U8_FRAME_FORMAT_MODEL_TYPE			SMIAPP_REG_MK_U8(0x0040)
+-#define SMIAPP_REG_U8_FRAME_FORMAT_MODEL_SUBTYPE		SMIAPP_REG_MK_U8(0x0041)
+-#define SMIAPP_REG_U16_FRAME_FORMAT_DESCRIPTOR_2(n)		SMIAPP_REG_MK_U16(0x0042 + ((n) << 1)) /* 0 <= n <= 14 */
+-#define SMIAPP_REG_U32_FRAME_FORMAT_DESCRIPTOR_4(n)		SMIAPP_REG_MK_U32(0x0060 + ((n) << 2)) /* 0 <= n <= 7 */
+-#define SMIAPP_REG_U16_ANALOGUE_GAIN_CAPABILITY			SMIAPP_REG_MK_U16(0x0080)
+-#define SMIAPP_REG_U16_ANALOGUE_GAIN_CODE_MIN			SMIAPP_REG_MK_U16(0x0084)
+-#define SMIAPP_REG_U16_ANALOGUE_GAIN_CODE_MAX			SMIAPP_REG_MK_U16(0x0086)
+-#define SMIAPP_REG_U16_ANALOGUE_GAIN_CODE_STEP			SMIAPP_REG_MK_U16(0x0088)
+-#define SMIAPP_REG_U16_ANALOGUE_GAIN_TYPE			SMIAPP_REG_MK_U16(0x008a)
+-#define SMIAPP_REG_U16_ANALOGUE_GAIN_M0				SMIAPP_REG_MK_U16(0x008c)
+-#define SMIAPP_REG_U16_ANALOGUE_GAIN_C0				SMIAPP_REG_MK_U16(0x008e)
+-#define SMIAPP_REG_U16_ANALOGUE_GAIN_M1				SMIAPP_REG_MK_U16(0x0090)
+-#define SMIAPP_REG_U16_ANALOGUE_GAIN_C1				SMIAPP_REG_MK_U16(0x0092)
+-#define SMIAPP_REG_U8_DATA_FORMAT_MODEL_TYPE			SMIAPP_REG_MK_U8(0x00c0)
+-#define SMIAPP_REG_U8_DATA_FORMAT_MODEL_SUBTYPE			SMIAPP_REG_MK_U8(0x00c1)
+-#define SMIAPP_REG_U16_DATA_FORMAT_DESCRIPTOR(n)		SMIAPP_REG_MK_U16(0x00c2 + ((n) << 1))
+-#define SMIAPP_REG_U8_MODE_SELECT				SMIAPP_REG_MK_U8(0x0100)
+-#define SMIAPP_REG_U8_IMAGE_ORIENTATION				SMIAPP_REG_MK_U8(0x0101)
+-#define SMIAPP_REG_U8_SOFTWARE_RESET				SMIAPP_REG_MK_U8(0x0103)
+-#define SMIAPP_REG_U8_GROUPED_PARAMETER_HOLD			SMIAPP_REG_MK_U8(0x0104)
+-#define SMIAPP_REG_U8_MASK_CORRUPTED_FRAMES			SMIAPP_REG_MK_U8(0x0105)
+-#define SMIAPP_REG_U8_FAST_STANDBY_CTRL				SMIAPP_REG_MK_U8(0x0106)
+-#define SMIAPP_REG_U8_CCI_ADDRESS_CONTROL			SMIAPP_REG_MK_U8(0x0107)
+-#define SMIAPP_REG_U8_2ND_CCI_IF_CONTROL			SMIAPP_REG_MK_U8(0x0108)
+-#define SMIAPP_REG_U8_2ND_CCI_ADDRESS_CONTROL			SMIAPP_REG_MK_U8(0x0109)
+-#define SMIAPP_REG_U8_CSI_CHANNEL_IDENTIFIER			SMIAPP_REG_MK_U8(0x0110)
+-#define SMIAPP_REG_U8_CSI_SIGNALLING_MODE			SMIAPP_REG_MK_U8(0x0111)
+-#define SMIAPP_REG_U16_CSI_DATA_FORMAT				SMIAPP_REG_MK_U16(0x0112)
+-#define SMIAPP_REG_U8_CSI_LANE_MODE				SMIAPP_REG_MK_U8(0x0114)
+-#define SMIAPP_REG_U8_CSI2_10_TO_8_DT				SMIAPP_REG_MK_U8(0x0115)
+-#define SMIAPP_REG_U8_CSI2_10_TO_7_DT				SMIAPP_REG_MK_U8(0x0116)
+-#define SMIAPP_REG_U8_CSI2_10_TO_6_DT				SMIAPP_REG_MK_U8(0x0117)
+-#define SMIAPP_REG_U8_CSI2_12_TO_8_DT				SMIAPP_REG_MK_U8(0x0118)
+-#define SMIAPP_REG_U8_CSI2_12_TO_7_DT				SMIAPP_REG_MK_U8(0x0119)
+-#define SMIAPP_REG_U8_CSI2_12_TO_6_DT				SMIAPP_REG_MK_U8(0x011a)
+-#define SMIAPP_REG_U8_CSI2_14_TO_10_DT				SMIAPP_REG_MK_U8(0x011b)
+-#define SMIAPP_REG_U8_CSI2_14_TO_8_DT				SMIAPP_REG_MK_U8(0x011c)
+-#define SMIAPP_REG_U8_CSI2_16_TO_10_DT				SMIAPP_REG_MK_U8(0x011d)
+-#define SMIAPP_REG_U8_CSI2_16_TO_8_DT				SMIAPP_REG_MK_U8(0x011e)
+-#define SMIAPP_REG_U8_GAIN_MODE					SMIAPP_REG_MK_U8(0x0120)
+-#define SMIAPP_REG_U16_VANA_VOLTAGE				SMIAPP_REG_MK_U16(0x0130)
+-#define SMIAPP_REG_U16_VDIG_VOLTAGE				SMIAPP_REG_MK_U16(0x0132)
+-#define SMIAPP_REG_U16_VIO_VOLTAGE				SMIAPP_REG_MK_U16(0x0134)
+-#define SMIAPP_REG_U16_EXTCLK_FREQUENCY_MHZ			SMIAPP_REG_MK_U16(0x0136)
+-#define SMIAPP_REG_U8_TEMP_SENSOR_CONTROL			SMIAPP_REG_MK_U8(0x0138)
+-#define SMIAPP_REG_U8_TEMP_SENSOR_MODE				SMIAPP_REG_MK_U8(0x0139)
+-#define SMIAPP_REG_U8_TEMP_SENSOR_OUTPUT			SMIAPP_REG_MK_U8(0x013a)
+-#define SMIAPP_REG_U16_FINE_INTEGRATION_TIME			SMIAPP_REG_MK_U16(0x0200)
+-#define SMIAPP_REG_U16_COARSE_INTEGRATION_TIME			SMIAPP_REG_MK_U16(0x0202)
+-#define SMIAPP_REG_U16_ANALOGUE_GAIN_CODE_GLOBAL		SMIAPP_REG_MK_U16(0x0204)
+-#define SMIAPP_REG_U16_ANALOGUE_GAIN_CODE_GREENR		SMIAPP_REG_MK_U16(0x0206)
+-#define SMIAPP_REG_U16_ANALOGUE_GAIN_CODE_RED			SMIAPP_REG_MK_U16(0x0208)
+-#define SMIAPP_REG_U16_ANALOGUE_GAIN_CODE_BLUE			SMIAPP_REG_MK_U16(0x020a)
+-#define SMIAPP_REG_U16_ANALOGUE_GAIN_CODE_GREENB		SMIAPP_REG_MK_U16(0x020c)
+-#define SMIAPP_REG_U16_DIGITAL_GAIN_GREENR			SMIAPP_REG_MK_U16(0x020e)
+-#define SMIAPP_REG_U16_DIGITAL_GAIN_RED				SMIAPP_REG_MK_U16(0x0210)
+-#define SMIAPP_REG_U16_DIGITAL_GAIN_BLUE			SMIAPP_REG_MK_U16(0x0212)
+-#define SMIAPP_REG_U16_DIGITAL_GAIN_GREENB			SMIAPP_REG_MK_U16(0x0214)
+-#define SMIAPP_REG_U16_VT_PIX_CLK_DIV				SMIAPP_REG_MK_U16(0x0300)
+-#define SMIAPP_REG_U16_VT_SYS_CLK_DIV				SMIAPP_REG_MK_U16(0x0302)
+-#define SMIAPP_REG_U16_PRE_PLL_CLK_DIV				SMIAPP_REG_MK_U16(0x0304)
+-#define SMIAPP_REG_U16_PLL_MULTIPLIER				SMIAPP_REG_MK_U16(0x0306)
+-#define SMIAPP_REG_U16_OP_PIX_CLK_DIV				SMIAPP_REG_MK_U16(0x0308)
+-#define SMIAPP_REG_U16_OP_SYS_CLK_DIV				SMIAPP_REG_MK_U16(0x030a)
+-#define SMIAPP_REG_U16_FRAME_LENGTH_LINES			SMIAPP_REG_MK_U16(0x0340)
+-#define SMIAPP_REG_U16_LINE_LENGTH_PCK				SMIAPP_REG_MK_U16(0x0342)
+-#define SMIAPP_REG_U16_X_ADDR_START				SMIAPP_REG_MK_U16(0x0344)
+-#define SMIAPP_REG_U16_Y_ADDR_START				SMIAPP_REG_MK_U16(0x0346)
+-#define SMIAPP_REG_U16_X_ADDR_END				SMIAPP_REG_MK_U16(0x0348)
+-#define SMIAPP_REG_U16_Y_ADDR_END				SMIAPP_REG_MK_U16(0x034a)
+-#define SMIAPP_REG_U16_X_OUTPUT_SIZE				SMIAPP_REG_MK_U16(0x034c)
+-#define SMIAPP_REG_U16_Y_OUTPUT_SIZE				SMIAPP_REG_MK_U16(0x034e)
+-#define SMIAPP_REG_U16_X_EVEN_INC				SMIAPP_REG_MK_U16(0x0380)
+-#define SMIAPP_REG_U16_X_ODD_INC				SMIAPP_REG_MK_U16(0x0382)
+-#define SMIAPP_REG_U16_Y_EVEN_INC				SMIAPP_REG_MK_U16(0x0384)
+-#define SMIAPP_REG_U16_Y_ODD_INC				SMIAPP_REG_MK_U16(0x0386)
+-#define SMIAPP_REG_U16_SCALING_MODE				SMIAPP_REG_MK_U16(0x0400)
+-#define SMIAPP_REG_U16_SPATIAL_SAMPLING				SMIAPP_REG_MK_U16(0x0402)
+-#define SMIAPP_REG_U16_SCALE_M					SMIAPP_REG_MK_U16(0x0404)
+-#define SMIAPP_REG_U16_SCALE_N					SMIAPP_REG_MK_U16(0x0406)
+-#define SMIAPP_REG_U16_DIGITAL_CROP_X_OFFSET			SMIAPP_REG_MK_U16(0x0408)
+-#define SMIAPP_REG_U16_DIGITAL_CROP_Y_OFFSET			SMIAPP_REG_MK_U16(0x040a)
+-#define SMIAPP_REG_U16_DIGITAL_CROP_IMAGE_WIDTH			SMIAPP_REG_MK_U16(0x040c)
+-#define SMIAPP_REG_U16_DIGITAL_CROP_IMAGE_HEIGHT		SMIAPP_REG_MK_U16(0x040e)
+-#define SMIAPP_REG_U16_COMPRESSION_MODE				SMIAPP_REG_MK_U16(0x0500)
+-#define SMIAPP_REG_U16_TEST_PATTERN_MODE			SMIAPP_REG_MK_U16(0x0600)
+-#define SMIAPP_REG_U16_TEST_DATA_RED				SMIAPP_REG_MK_U16(0x0602)
+-#define SMIAPP_REG_U16_TEST_DATA_GREENR				SMIAPP_REG_MK_U16(0x0604)
+-#define SMIAPP_REG_U16_TEST_DATA_BLUE				SMIAPP_REG_MK_U16(0x0606)
+-#define SMIAPP_REG_U16_TEST_DATA_GREENB				SMIAPP_REG_MK_U16(0x0608)
+-#define SMIAPP_REG_U16_HORIZONTAL_CURSOR_WIDTH			SMIAPP_REG_MK_U16(0x060a)
+-#define SMIAPP_REG_U16_HORIZONTAL_CURSOR_POSITION		SMIAPP_REG_MK_U16(0x060c)
+-#define SMIAPP_REG_U16_VERTICAL_CURSOR_WIDTH			SMIAPP_REG_MK_U16(0x060e)
+-#define SMIAPP_REG_U16_VERTICAL_CURSOR_POSITION			SMIAPP_REG_MK_U16(0x0610)
+-#define SMIAPP_REG_U16_FIFO_WATER_MARK_PIXELS			SMIAPP_REG_MK_U16(0x0700)
+-#define SMIAPP_REG_U8_TCLK_POST					SMIAPP_REG_MK_U8(0x0800)
+-#define SMIAPP_REG_U8_THS_PREPARE				SMIAPP_REG_MK_U8(0x0801)
+-#define SMIAPP_REG_U8_THS_ZERO_MIN				SMIAPP_REG_MK_U8(0x0802)
+-#define SMIAPP_REG_U8_THS_TRAIL					SMIAPP_REG_MK_U8(0x0803)
+-#define SMIAPP_REG_U8_TCLK_TRAIL_MIN				SMIAPP_REG_MK_U8(0x0804)
+-#define SMIAPP_REG_U8_TCLK_PREPARE				SMIAPP_REG_MK_U8(0x0805)
+-#define SMIAPP_REG_U8_TCLK_ZERO					SMIAPP_REG_MK_U8(0x0806)
+-#define SMIAPP_REG_U8_TLPX					SMIAPP_REG_MK_U8(0x0807)
+-#define SMIAPP_REG_U8_DPHY_CTRL					SMIAPP_REG_MK_U8(0x0808)
+-#define SMIAPP_REG_U32_REQUESTED_LINK_BIT_RATE_MBPS		SMIAPP_REG_MK_U32(0x0820)
+-#define SMIAPP_REG_U8_BINNING_MODE				SMIAPP_REG_MK_U8(0x0900)
+-#define SMIAPP_REG_U8_BINNING_TYPE				SMIAPP_REG_MK_U8(0x0901)
+-#define SMIAPP_REG_U8_BINNING_WEIGHTING				SMIAPP_REG_MK_U8(0x0902)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_CTRL			SMIAPP_REG_MK_U8(0x0a00)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_STATUS			SMIAPP_REG_MK_U8(0x0a01)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_PAGE_SELECT		SMIAPP_REG_MK_U8(0x0a02)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_0			SMIAPP_REG_MK_U8(0x0a04)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_1			SMIAPP_REG_MK_U8(0x0a05)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_2			SMIAPP_REG_MK_U8(0x0a06)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_3			SMIAPP_REG_MK_U8(0x0a07)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_4			SMIAPP_REG_MK_U8(0x0a08)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_5			SMIAPP_REG_MK_U8(0x0a09)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_12		SMIAPP_REG_MK_U8(0x0a10)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_13		SMIAPP_REG_MK_U8(0x0a11)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_14		SMIAPP_REG_MK_U8(0x0a12)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_15		SMIAPP_REG_MK_U8(0x0a13)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_16		SMIAPP_REG_MK_U8(0x0a14)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_17		SMIAPP_REG_MK_U8(0x0a15)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_18		SMIAPP_REG_MK_U8(0x0a16)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_19		SMIAPP_REG_MK_U8(0x0a17)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_20		SMIAPP_REG_MK_U8(0x0a18)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_21		SMIAPP_REG_MK_U8(0x0a19)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_22		SMIAPP_REG_MK_U8(0x0a1a)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_23		SMIAPP_REG_MK_U8(0x0a1b)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_24		SMIAPP_REG_MK_U8(0x0a1c)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_25		SMIAPP_REG_MK_U8(0x0a1d)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_26		SMIAPP_REG_MK_U8(0x0a1e)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_27		SMIAPP_REG_MK_U8(0x0a1f)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_28		SMIAPP_REG_MK_U8(0x0a20)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_29		SMIAPP_REG_MK_U8(0x0a21)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_30		SMIAPP_REG_MK_U8(0x0a22)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_31		SMIAPP_REG_MK_U8(0x0a23)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_32		SMIAPP_REG_MK_U8(0x0a24)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_33		SMIAPP_REG_MK_U8(0x0a25)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_34		SMIAPP_REG_MK_U8(0x0a26)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_35		SMIAPP_REG_MK_U8(0x0a27)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_36		SMIAPP_REG_MK_U8(0x0a28)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_37		SMIAPP_REG_MK_U8(0x0a29)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_38		SMIAPP_REG_MK_U8(0x0a2a)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_39		SMIAPP_REG_MK_U8(0x0a2b)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_40		SMIAPP_REG_MK_U8(0x0a2c)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_41		SMIAPP_REG_MK_U8(0x0a2d)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_42		SMIAPP_REG_MK_U8(0x0a2e)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_43		SMIAPP_REG_MK_U8(0x0a2f)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_44		SMIAPP_REG_MK_U8(0x0a30)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_45		SMIAPP_REG_MK_U8(0x0a31)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_46		SMIAPP_REG_MK_U8(0x0a32)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_47		SMIAPP_REG_MK_U8(0x0a33)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_48		SMIAPP_REG_MK_U8(0x0a34)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_49		SMIAPP_REG_MK_U8(0x0a35)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_50		SMIAPP_REG_MK_U8(0x0a36)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_51		SMIAPP_REG_MK_U8(0x0a37)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_52		SMIAPP_REG_MK_U8(0x0a38)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_53		SMIAPP_REG_MK_U8(0x0a39)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_54		SMIAPP_REG_MK_U8(0x0a3a)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_55		SMIAPP_REG_MK_U8(0x0a3b)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_56		SMIAPP_REG_MK_U8(0x0a3c)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_57		SMIAPP_REG_MK_U8(0x0a3d)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_58		SMIAPP_REG_MK_U8(0x0a3e)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_59		SMIAPP_REG_MK_U8(0x0a3f)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_60		SMIAPP_REG_MK_U8(0x0a40)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_61		SMIAPP_REG_MK_U8(0x0a41)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_62		SMIAPP_REG_MK_U8(0x0a42)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_63		SMIAPP_REG_MK_U8(0x0a43)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_CTRL			SMIAPP_REG_MK_U8(0x0a44)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_STATUS			SMIAPP_REG_MK_U8(0x0a45)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_PAGE_SELECT		SMIAPP_REG_MK_U8(0x0a46)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_0			SMIAPP_REG_MK_U8(0x0a48)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_1			SMIAPP_REG_MK_U8(0x0a49)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_2			SMIAPP_REG_MK_U8(0x0a4a)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_3			SMIAPP_REG_MK_U8(0x0a4b)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_4			SMIAPP_REG_MK_U8(0x0a4c)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_5			SMIAPP_REG_MK_U8(0x0a4d)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_6			SMIAPP_REG_MK_U8(0x0a4e)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_7			SMIAPP_REG_MK_U8(0x0a4f)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_8			SMIAPP_REG_MK_U8(0x0a50)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_9			SMIAPP_REG_MK_U8(0x0a51)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_10		SMIAPP_REG_MK_U8(0x0a52)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_11		SMIAPP_REG_MK_U8(0x0a53)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_12		SMIAPP_REG_MK_U8(0x0a54)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_13		SMIAPP_REG_MK_U8(0x0a55)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_14		SMIAPP_REG_MK_U8(0x0a56)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_15		SMIAPP_REG_MK_U8(0x0a57)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_16		SMIAPP_REG_MK_U8(0x0a58)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_17		SMIAPP_REG_MK_U8(0x0a59)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_18		SMIAPP_REG_MK_U8(0x0a5a)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_19		SMIAPP_REG_MK_U8(0x0a5b)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_20		SMIAPP_REG_MK_U8(0x0a5c)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_21		SMIAPP_REG_MK_U8(0x0a5d)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_22		SMIAPP_REG_MK_U8(0x0a5e)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_23		SMIAPP_REG_MK_U8(0x0a5f)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_24		SMIAPP_REG_MK_U8(0x0a60)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_25		SMIAPP_REG_MK_U8(0x0a61)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_26		SMIAPP_REG_MK_U8(0x0a62)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_27		SMIAPP_REG_MK_U8(0x0a63)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_28		SMIAPP_REG_MK_U8(0x0a64)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_29		SMIAPP_REG_MK_U8(0x0a65)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_30		SMIAPP_REG_MK_U8(0x0a66)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_31		SMIAPP_REG_MK_U8(0x0a67)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_32		SMIAPP_REG_MK_U8(0x0a68)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_33		SMIAPP_REG_MK_U8(0x0a69)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_34		SMIAPP_REG_MK_U8(0x0a6a)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_35		SMIAPP_REG_MK_U8(0x0a6b)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_36		SMIAPP_REG_MK_U8(0x0a6c)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_37		SMIAPP_REG_MK_U8(0x0a6d)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_38		SMIAPP_REG_MK_U8(0x0a6e)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_39		SMIAPP_REG_MK_U8(0x0a6f)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_40		SMIAPP_REG_MK_U8(0x0a70)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_41		SMIAPP_REG_MK_U8(0x0a71)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_42		SMIAPP_REG_MK_U8(0x0a72)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_43		SMIAPP_REG_MK_U8(0x0a73)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_44		SMIAPP_REG_MK_U8(0x0a74)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_45		SMIAPP_REG_MK_U8(0x0a75)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_46		SMIAPP_REG_MK_U8(0x0a76)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_47		SMIAPP_REG_MK_U8(0x0a77)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_48		SMIAPP_REG_MK_U8(0x0a78)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_49		SMIAPP_REG_MK_U8(0x0a79)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_50		SMIAPP_REG_MK_U8(0x0a7a)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_51		SMIAPP_REG_MK_U8(0x0a7b)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_52		SMIAPP_REG_MK_U8(0x0a7c)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_53		SMIAPP_REG_MK_U8(0x0a7d)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_54		SMIAPP_REG_MK_U8(0x0a7e)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_55		SMIAPP_REG_MK_U8(0x0a7f)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_56		SMIAPP_REG_MK_U8(0x0a80)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_57		SMIAPP_REG_MK_U8(0x0a81)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_58		SMIAPP_REG_MK_U8(0x0a82)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_59		SMIAPP_REG_MK_U8(0x0a83)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_60		SMIAPP_REG_MK_U8(0x0a84)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_61		SMIAPP_REG_MK_U8(0x0a85)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_62		SMIAPP_REG_MK_U8(0x0a86)
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_63		SMIAPP_REG_MK_U8(0x0a87)
+-#define SMIAPP_REG_U8_SHADING_CORRECTION_ENABLE			SMIAPP_REG_MK_U8(0x0b00)
+-#define SMIAPP_REG_U8_LUMINANCE_CORRECTION_LEVEL		SMIAPP_REG_MK_U8(0x0b01)
+-#define SMIAPP_REG_U8_GREEN_IMBALANCE_FILTER_ENABLE		SMIAPP_REG_MK_U8(0x0b02)
+-#define SMIAPP_REG_U8_GREEN_IMBALANCE_FILTER_WEIGHT		SMIAPP_REG_MK_U8(0x0b03)
+-#define SMIAPP_REG_U8_BLACK_LEVEL_CORRECTION_ENABLE		SMIAPP_REG_MK_U8(0x0b04)
+-#define SMIAPP_REG_U8_MAPPED_COUPLET_CORRECT_ENABLE		SMIAPP_REG_MK_U8(0x0b05)
+-#define SMIAPP_REG_U8_SINGLE_DEFECT_CORRECT_ENABLE		SMIAPP_REG_MK_U8(0x0b06)
+-#define SMIAPP_REG_U8_SINGLE_DEFECT_CORRECT_WEIGHT		SMIAPP_REG_MK_U8(0x0b07)
+-#define SMIAPP_REG_U8_DYNAMIC_COUPLET_CORRECT_ENABLE		SMIAPP_REG_MK_U8(0x0b08)
+-#define SMIAPP_REG_U8_DYNAMIC_COUPLET_CORRECT_WEIGHT		SMIAPP_REG_MK_U8(0x0b09)
+-#define SMIAPP_REG_U8_COMBINED_DEFECT_CORRECT_ENABLE		SMIAPP_REG_MK_U8(0x0b0a)
+-#define SMIAPP_REG_U8_COMBINED_DEFECT_CORRECT_WEIGHT		SMIAPP_REG_MK_U8(0x0b0b)
+-#define SMIAPP_REG_U8_MODULE_SPECIFIC_CORRECTION_ENABLE		SMIAPP_REG_MK_U8(0x0b0c)
+-#define SMIAPP_REG_U8_MODULE_SPECIFIC_CORRECTION_WEIGHT		SMIAPP_REG_MK_U8(0x0b0d)
+-#define SMIAPP_REG_U8_MAPPED_LINE_DEFECT_CORRECT_ENABLE		SMIAPP_REG_MK_U8(0x0b0e)
+-#define SMIAPP_REG_U8_MAPPED_LINE_DEFECT_CORRECT_ADJUST		SMIAPP_REG_MK_U8(0x0b0f)
+-#define SMIAPP_REG_U8_MAPPED_COUPLET_CORRECT_ADJUST		SMIAPP_REG_MK_U8(0x0b10)
+-#define SMIAPP_REG_U8_MAPPED_TRIPLET_DEFECT_CORRECT_ENABLE	SMIAPP_REG_MK_U8(0x0b11)
+-#define SMIAPP_REG_U8_MAPPED_TRIPLET_DEFECT_CORRECT_ADJUST	SMIAPP_REG_MK_U8(0x0b12)
+-#define SMIAPP_REG_U8_DYNAMIC_TRIPLET_DEFECT_CORRECT_ENABLE	SMIAPP_REG_MK_U8(0x0b13)
+-#define SMIAPP_REG_U8_DYNAMIC_TRIPLET_DEFECT_CORRECT_ADJUST	SMIAPP_REG_MK_U8(0x0b14)
+-#define SMIAPP_REG_U8_DYNAMIC_LINE_DEFECT_CORRECT_ENABLE	SMIAPP_REG_MK_U8(0x0b15)
+-#define SMIAPP_REG_U8_DYNAMIC_LINE_DEFECT_CORRECT_ADJUST	SMIAPP_REG_MK_U8(0x0b16)
+-#define SMIAPP_REG_U8_EDOF_MODE					SMIAPP_REG_MK_U8(0x0b80)
+-#define SMIAPP_REG_U8_SHARPNESS					SMIAPP_REG_MK_U8(0x0b83)
+-#define SMIAPP_REG_U8_DENOISING					SMIAPP_REG_MK_U8(0x0b84)
+-#define SMIAPP_REG_U8_MODULE_SPECIFIC				SMIAPP_REG_MK_U8(0x0b85)
+-#define SMIAPP_REG_U16_DEPTH_OF_FIELD				SMIAPP_REG_MK_U16(0x0b86)
+-#define SMIAPP_REG_U16_FOCUS_DISTANCE				SMIAPP_REG_MK_U16(0x0b88)
+-#define SMIAPP_REG_U8_ESTIMATION_MODE_CTRL			SMIAPP_REG_MK_U8(0x0b8a)
+-#define SMIAPP_REG_U16_COLOUR_TEMPERATURE			SMIAPP_REG_MK_U16(0x0b8c)
+-#define SMIAPP_REG_U16_ABSOLUTE_GAIN_GREENR			SMIAPP_REG_MK_U16(0x0b8e)
+-#define SMIAPP_REG_U16_ABSOLUTE_GAIN_RED			SMIAPP_REG_MK_U16(0x0b90)
+-#define SMIAPP_REG_U16_ABSOLUTE_GAIN_BLUE			SMIAPP_REG_MK_U16(0x0b92)
+-#define SMIAPP_REG_U16_ABSOLUTE_GAIN_GREENB			SMIAPP_REG_MK_U16(0x0b94)
+-#define SMIAPP_REG_U8_ESTIMATION_ZONE_MODE			SMIAPP_REG_MK_U8(0x0bc0)
+-#define SMIAPP_REG_U16_FIXED_ZONE_WEIGHTING			SMIAPP_REG_MK_U16(0x0bc2)
+-#define SMIAPP_REG_U16_CUSTOM_ZONE_X_START			SMIAPP_REG_MK_U16(0x0bc4)
+-#define SMIAPP_REG_U16_CUSTOM_ZONE_Y_START			SMIAPP_REG_MK_U16(0x0bc6)
+-#define SMIAPP_REG_U16_CUSTOM_ZONE_WIDTH			SMIAPP_REG_MK_U16(0x0bc8)
+-#define SMIAPP_REG_U16_CUSTOM_ZONE_HEIGHT			SMIAPP_REG_MK_U16(0x0bca)
+-#define SMIAPP_REG_U8_GLOBAL_RESET_CTRL1			SMIAPP_REG_MK_U8(0x0c00)
+-#define SMIAPP_REG_U8_GLOBAL_RESET_CTRL2			SMIAPP_REG_MK_U8(0x0c01)
+-#define SMIAPP_REG_U8_GLOBAL_RESET_MODE_CONFIG_1		SMIAPP_REG_MK_U8(0x0c02)
+-#define SMIAPP_REG_U8_GLOBAL_RESET_MODE_CONFIG_2		SMIAPP_REG_MK_U8(0x0c03)
+-#define SMIAPP_REG_U16_TRDY_CTRL				SMIAPP_REG_MK_U16(0x0c04)
+-#define SMIAPP_REG_U16_TRDOUT_CTRL				SMIAPP_REG_MK_U16(0x0c06)
+-#define SMIAPP_REG_U16_TSHUTTER_STROBE_DELAY_CTRL		SMIAPP_REG_MK_U16(0x0c08)
+-#define SMIAPP_REG_U16_TSHUTTER_STROBE_WIDTH_CTRL		SMIAPP_REG_MK_U16(0x0c0a)
+-#define SMIAPP_REG_U16_TFLASH_STROBE_DELAY_CTRL			SMIAPP_REG_MK_U16(0x0c0c)
+-#define SMIAPP_REG_U16_TFLASH_STROBE_WIDTH_HIGH_CTRL		SMIAPP_REG_MK_U16(0x0c0e)
+-#define SMIAPP_REG_U16_TGRST_INTERVAL_CTRL			SMIAPP_REG_MK_U16(0x0c10)
+-#define SMIAPP_REG_U8_FLASH_STROBE_ADJUSTMENT			SMIAPP_REG_MK_U8(0x0c12)
+-#define SMIAPP_REG_U16_FLASH_STROBE_START_POINT			SMIAPP_REG_MK_U16(0x0c14)
+-#define SMIAPP_REG_U16_TFLASH_STROBE_DELAY_RS_CTRL		SMIAPP_REG_MK_U16(0x0c16)
+-#define SMIAPP_REG_U16_TFLASH_STROBE_WIDTH_HIGH_RS_CTRL		SMIAPP_REG_MK_U16(0x0c18)
+-#define SMIAPP_REG_U8_FLASH_MODE_RS				SMIAPP_REG_MK_U8(0x0c1a)
+-#define SMIAPP_REG_U8_FLASH_TRIGGER_RS				SMIAPP_REG_MK_U8(0x0c1b)
+-#define SMIAPP_REG_U8_FLASH_STATUS				SMIAPP_REG_MK_U8(0x0c1c)
+-#define SMIAPP_REG_U8_SA_STROBE_MODE				SMIAPP_REG_MK_U8(0x0c1d)
+-#define SMIAPP_REG_U16_SA_STROBE_START_POINT			SMIAPP_REG_MK_U16(0x0c1e)
+-#define SMIAPP_REG_U16_TSA_STROBE_DELAY_CTRL			SMIAPP_REG_MK_U16(0x0c20)
+-#define SMIAPP_REG_U16_TSA_STROBE_WIDTH_CTRL			SMIAPP_REG_MK_U16(0x0c22)
+-#define SMIAPP_REG_U8_SA_STROBE_TRIGGER				SMIAPP_REG_MK_U8(0x0c24)
+-#define SMIAPP_REG_U8_SPECIAL_ACTUATOR_STATUS			SMIAPP_REG_MK_U8(0x0c25)
+-#define SMIAPP_REG_U16_TFLASH_STROBE_WIDTH2_HIGH_RS_CTRL	SMIAPP_REG_MK_U16(0x0c26)
+-#define SMIAPP_REG_U16_TFLASH_STROBE_WIDTH_LOW_RS_CTRL		SMIAPP_REG_MK_U16(0x0c28)
+-#define SMIAPP_REG_U8_TFLASH_STROBE_COUNT_RS_CTRL		SMIAPP_REG_MK_U8(0x0c2a)
+-#define SMIAPP_REG_U8_TFLASH_STROBE_COUNT_CTRL			SMIAPP_REG_MK_U8(0x0c2b)
+-#define SMIAPP_REG_U16_TFLASH_STROBE_WIDTH2_HIGH_CTRL		SMIAPP_REG_MK_U16(0x0c2c)
+-#define SMIAPP_REG_U16_TFLASH_STROBE_WIDTH_LOW_CTRL		SMIAPP_REG_MK_U16(0x0c2e)
+-#define SMIAPP_REG_U8_LOW_LEVEL_CTRL				SMIAPP_REG_MK_U8(0x0c80)
+-#define SMIAPP_REG_U16_MAIN_TRIGGER_REF_POINT			SMIAPP_REG_MK_U16(0x0c82)
+-#define SMIAPP_REG_U16_MAIN_TRIGGER_T3				SMIAPP_REG_MK_U16(0x0c84)
+-#define SMIAPP_REG_U8_MAIN_TRIGGER_COUNT			SMIAPP_REG_MK_U8(0x0c86)
+-#define SMIAPP_REG_U16_PHASE1_TRIGGER_T3			SMIAPP_REG_MK_U16(0x0c88)
+-#define SMIAPP_REG_U8_PHASE1_TRIGGER_COUNT			SMIAPP_REG_MK_U8(0x0c8a)
+-#define SMIAPP_REG_U16_PHASE2_TRIGGER_T3			SMIAPP_REG_MK_U16(0x0c8c)
+-#define SMIAPP_REG_U8_PHASE2_TRIGGER_COUNT			SMIAPP_REG_MK_U8(0x0c8e)
+-#define SMIAPP_REG_U8_MECH_SHUTTER_CTRL				SMIAPP_REG_MK_U8(0x0d00)
+-#define SMIAPP_REG_U8_OPERATION_MODE				SMIAPP_REG_MK_U8(0x0d01)
+-#define SMIAPP_REG_U8_ACT_STATE1				SMIAPP_REG_MK_U8(0x0d02)
+-#define SMIAPP_REG_U8_ACT_STATE2				SMIAPP_REG_MK_U8(0x0d03)
+-#define SMIAPP_REG_U16_FOCUS_CHANGE				SMIAPP_REG_MK_U16(0x0d80)
+-#define SMIAPP_REG_U16_FOCUS_CHANGE_CONTROL			SMIAPP_REG_MK_U16(0x0d82)
+-#define SMIAPP_REG_U16_FOCUS_CHANGE_NUMBER_PHASE1		SMIAPP_REG_MK_U16(0x0d84)
+-#define SMIAPP_REG_U16_FOCUS_CHANGE_NUMBER_PHASE2		SMIAPP_REG_MK_U16(0x0d86)
+-#define SMIAPP_REG_U8_STROBE_COUNT_PHASE1			SMIAPP_REG_MK_U8(0x0d88)
+-#define SMIAPP_REG_U8_STROBE_COUNT_PHASE2			SMIAPP_REG_MK_U8(0x0d89)
+-#define SMIAPP_REG_U8_POSITION					SMIAPP_REG_MK_U8(0x0d8a)
+-#define SMIAPP_REG_U8_BRACKETING_LUT_CONTROL			SMIAPP_REG_MK_U8(0x0e00)
+-#define SMIAPP_REG_U8_BRACKETING_LUT_MODE			SMIAPP_REG_MK_U8(0x0e01)
+-#define SMIAPP_REG_U8_BRACKETING_LUT_ENTRY_CONTROL		SMIAPP_REG_MK_U8(0x0e02)
+-#define SMIAPP_REG_U8_LUT_PARAMETERS_START			SMIAPP_REG_MK_U8(0x0e10)
+-#define SMIAPP_REG_U8_LUT_PARAMETERS_END			SMIAPP_REG_MK_U8(0x0eff)
+-#define SMIAPP_REG_U16_INTEGRATION_TIME_CAPABILITY		SMIAPP_REG_MK_U16(0x1000)
+-#define SMIAPP_REG_U16_COARSE_INTEGRATION_TIME_MIN		SMIAPP_REG_MK_U16(0x1004)
+-#define SMIAPP_REG_U16_COARSE_INTEGRATION_TIME_MAX_MARGIN	SMIAPP_REG_MK_U16(0x1006)
+-#define SMIAPP_REG_U16_FINE_INTEGRATION_TIME_MIN		SMIAPP_REG_MK_U16(0x1008)
+-#define SMIAPP_REG_U16_FINE_INTEGRATION_TIME_MAX_MARGIN		SMIAPP_REG_MK_U16(0x100a)
+-#define SMIAPP_REG_U16_DIGITAL_GAIN_CAPABILITY			SMIAPP_REG_MK_U16(0x1080)
+-#define SMIAPP_REG_U16_DIGITAL_GAIN_MIN				SMIAPP_REG_MK_U16(0x1084)
+-#define SMIAPP_REG_U16_DIGITAL_GAIN_MAX				SMIAPP_REG_MK_U16(0x1086)
+-#define SMIAPP_REG_U16_DIGITAL_GAIN_STEP_SIZE			SMIAPP_REG_MK_U16(0x1088)
+-#define SMIAPP_REG_F32_MIN_EXT_CLK_FREQ_HZ			SMIAPP_REG_MK_F32(0x1100)
+-#define SMIAPP_REG_F32_MAX_EXT_CLK_FREQ_HZ			SMIAPP_REG_MK_F32(0x1104)
+-#define SMIAPP_REG_U16_MIN_PRE_PLL_CLK_DIV			SMIAPP_REG_MK_U16(0x1108)
+-#define SMIAPP_REG_U16_MAX_PRE_PLL_CLK_DIV			SMIAPP_REG_MK_U16(0x110a)
+-#define SMIAPP_REG_F32_MIN_PLL_IP_FREQ_HZ			SMIAPP_REG_MK_F32(0x110c)
+-#define SMIAPP_REG_F32_MAX_PLL_IP_FREQ_HZ			SMIAPP_REG_MK_F32(0x1110)
+-#define SMIAPP_REG_U16_MIN_PLL_MULTIPLIER			SMIAPP_REG_MK_U16(0x1114)
+-#define SMIAPP_REG_U16_MAX_PLL_MULTIPLIER			SMIAPP_REG_MK_U16(0x1116)
+-#define SMIAPP_REG_F32_MIN_PLL_OP_FREQ_HZ			SMIAPP_REG_MK_F32(0x1118)
+-#define SMIAPP_REG_F32_MAX_PLL_OP_FREQ_HZ			SMIAPP_REG_MK_F32(0x111c)
+-#define SMIAPP_REG_U16_MIN_VT_SYS_CLK_DIV			SMIAPP_REG_MK_U16(0x1120)
+-#define SMIAPP_REG_U16_MAX_VT_SYS_CLK_DIV			SMIAPP_REG_MK_U16(0x1122)
+-#define SMIAPP_REG_F32_MIN_VT_SYS_CLK_FREQ_HZ			SMIAPP_REG_MK_F32(0x1124)
+-#define SMIAPP_REG_F32_MAX_VT_SYS_CLK_FREQ_HZ			SMIAPP_REG_MK_F32(0x1128)
+-#define SMIAPP_REG_F32_MIN_VT_PIX_CLK_FREQ_HZ			SMIAPP_REG_MK_F32(0x112c)
+-#define SMIAPP_REG_F32_MAX_VT_PIX_CLK_FREQ_HZ			SMIAPP_REG_MK_F32(0x1130)
+-#define SMIAPP_REG_U16_MIN_VT_PIX_CLK_DIV			SMIAPP_REG_MK_U16(0x1134)
+-#define SMIAPP_REG_U16_MAX_VT_PIX_CLK_DIV			SMIAPP_REG_MK_U16(0x1136)
+-#define SMIAPP_REG_U16_MIN_FRAME_LENGTH_LINES			SMIAPP_REG_MK_U16(0x1140)
+-#define SMIAPP_REG_U16_MAX_FRAME_LENGTH_LINES			SMIAPP_REG_MK_U16(0x1142)
+-#define SMIAPP_REG_U16_MIN_LINE_LENGTH_PCK			SMIAPP_REG_MK_U16(0x1144)
+-#define SMIAPP_REG_U16_MAX_LINE_LENGTH_PCK			SMIAPP_REG_MK_U16(0x1146)
+-#define SMIAPP_REG_U16_MIN_LINE_BLANKING_PCK			SMIAPP_REG_MK_U16(0x1148)
+-#define SMIAPP_REG_U16_MIN_FRAME_BLANKING_LINES			SMIAPP_REG_MK_U16(0x114a)
+-#define SMIAPP_REG_U8_MIN_LINE_LENGTH_PCK_STEP_SIZE		SMIAPP_REG_MK_U8(0x114c)
+-#define SMIAPP_REG_U16_MIN_OP_SYS_CLK_DIV			SMIAPP_REG_MK_U16(0x1160)
+-#define SMIAPP_REG_U16_MAX_OP_SYS_CLK_DIV			SMIAPP_REG_MK_U16(0x1162)
+-#define SMIAPP_REG_F32_MIN_OP_SYS_CLK_FREQ_HZ			SMIAPP_REG_MK_F32(0x1164)
+-#define SMIAPP_REG_F32_MAX_OP_SYS_CLK_FREQ_HZ			SMIAPP_REG_MK_F32(0x1168)
+-#define SMIAPP_REG_U16_MIN_OP_PIX_CLK_DIV			SMIAPP_REG_MK_U16(0x116c)
+-#define SMIAPP_REG_U16_MAX_OP_PIX_CLK_DIV			SMIAPP_REG_MK_U16(0x116e)
+-#define SMIAPP_REG_F32_MIN_OP_PIX_CLK_FREQ_HZ			SMIAPP_REG_MK_F32(0x1170)
+-#define SMIAPP_REG_F32_MAX_OP_PIX_CLK_FREQ_HZ			SMIAPP_REG_MK_F32(0x1174)
+-#define SMIAPP_REG_U16_X_ADDR_MIN				SMIAPP_REG_MK_U16(0x1180)
+-#define SMIAPP_REG_U16_Y_ADDR_MIN				SMIAPP_REG_MK_U16(0x1182)
+-#define SMIAPP_REG_U16_X_ADDR_MAX				SMIAPP_REG_MK_U16(0x1184)
+-#define SMIAPP_REG_U16_Y_ADDR_MAX				SMIAPP_REG_MK_U16(0x1186)
+-#define SMIAPP_REG_U16_MIN_X_OUTPUT_SIZE			SMIAPP_REG_MK_U16(0x1188)
+-#define SMIAPP_REG_U16_MIN_Y_OUTPUT_SIZE			SMIAPP_REG_MK_U16(0x118a)
+-#define SMIAPP_REG_U16_MAX_X_OUTPUT_SIZE			SMIAPP_REG_MK_U16(0x118c)
+-#define SMIAPP_REG_U16_MAX_Y_OUTPUT_SIZE			SMIAPP_REG_MK_U16(0x118e)
+-#define SMIAPP_REG_U16_MIN_EVEN_INC				SMIAPP_REG_MK_U16(0x11c0)
+-#define SMIAPP_REG_U16_MAX_EVEN_INC				SMIAPP_REG_MK_U16(0x11c2)
+-#define SMIAPP_REG_U16_MIN_ODD_INC				SMIAPP_REG_MK_U16(0x11c4)
+-#define SMIAPP_REG_U16_MAX_ODD_INC				SMIAPP_REG_MK_U16(0x11c6)
+-#define SMIAPP_REG_U16_SCALING_CAPABILITY			SMIAPP_REG_MK_U16(0x1200)
+-#define SMIAPP_REG_U16_SCALER_M_MIN				SMIAPP_REG_MK_U16(0x1204)
+-#define SMIAPP_REG_U16_SCALER_M_MAX				SMIAPP_REG_MK_U16(0x1206)
+-#define SMIAPP_REG_U16_SCALER_N_MIN				SMIAPP_REG_MK_U16(0x1208)
+-#define SMIAPP_REG_U16_SCALER_N_MAX				SMIAPP_REG_MK_U16(0x120a)
+-#define SMIAPP_REG_U16_SPATIAL_SAMPLING_CAPABILITY		SMIAPP_REG_MK_U16(0x120c)
+-#define SMIAPP_REG_U8_DIGITAL_CROP_CAPABILITY			SMIAPP_REG_MK_U8(0x120e)
+-#define SMIAPP_REG_U16_COMPRESSION_CAPABILITY			SMIAPP_REG_MK_U16(0x1300)
+-#define SMIAPP_REG_U16_MATRIX_ELEMENT_REDINRED			SMIAPP_REG_MK_U16(0x1400)
+-#define SMIAPP_REG_U16_MATRIX_ELEMENT_GREENINRED		SMIAPP_REG_MK_U16(0x1402)
+-#define SMIAPP_REG_U16_MATRIX_ELEMENT_BLUEINRED			SMIAPP_REG_MK_U16(0x1404)
+-#define SMIAPP_REG_U16_MATRIX_ELEMENT_REDINGREEN		SMIAPP_REG_MK_U16(0x1406)
+-#define SMIAPP_REG_U16_MATRIX_ELEMENT_GREENINGREEN		SMIAPP_REG_MK_U16(0x1408)
+-#define SMIAPP_REG_U16_MATRIX_ELEMENT_BLUEINGREEN		SMIAPP_REG_MK_U16(0x140a)
+-#define SMIAPP_REG_U16_MATRIX_ELEMENT_REDINBLUE			SMIAPP_REG_MK_U16(0x140c)
+-#define SMIAPP_REG_U16_MATRIX_ELEMENT_GREENINBLUE		SMIAPP_REG_MK_U16(0x140e)
+-#define SMIAPP_REG_U16_MATRIX_ELEMENT_BLUEINBLUE		SMIAPP_REG_MK_U16(0x1410)
+-#define SMIAPP_REG_U16_FIFO_SIZE_PIXELS				SMIAPP_REG_MK_U16(0x1500)
+-#define SMIAPP_REG_U8_FIFO_SUPPORT_CAPABILITY			SMIAPP_REG_MK_U8(0x1502)
+-#define SMIAPP_REG_U8_DPHY_CTRL_CAPABILITY			SMIAPP_REG_MK_U8(0x1600)
+-#define SMIAPP_REG_U8_CSI_LANE_MODE_CAPABILITY			SMIAPP_REG_MK_U8(0x1601)
+-#define SMIAPP_REG_U8_CSI_SIGNALLING_MODE_CAPABILITY		SMIAPP_REG_MK_U8(0x1602)
+-#define SMIAPP_REG_U8_FAST_STANDBY_CAPABILITY			SMIAPP_REG_MK_U8(0x1603)
+-#define SMIAPP_REG_U8_CCI_ADDRESS_CONTROL_CAPABILITY		SMIAPP_REG_MK_U8(0x1604)
+-#define SMIAPP_REG_U32_MAX_PER_LANE_BITRATE_1_LANE_MODE_MBPS	SMIAPP_REG_MK_U32(0x1608)
+-#define SMIAPP_REG_U32_MAX_PER_LANE_BITRATE_2_LANE_MODE_MBPS	SMIAPP_REG_MK_U32(0x160c)
+-#define SMIAPP_REG_U32_MAX_PER_LANE_BITRATE_3_LANE_MODE_MBPS	SMIAPP_REG_MK_U32(0x1610)
+-#define SMIAPP_REG_U32_MAX_PER_LANE_BITRATE_4_LANE_MODE_MBPS	SMIAPP_REG_MK_U32(0x1614)
+-#define SMIAPP_REG_U8_TEMP_SENSOR_CAPABILITY			SMIAPP_REG_MK_U8(0x1618)
+-#define SMIAPP_REG_U16_MIN_FRAME_LENGTH_LINES_BIN		SMIAPP_REG_MK_U16(0x1700)
+-#define SMIAPP_REG_U16_MAX_FRAME_LENGTH_LINES_BIN		SMIAPP_REG_MK_U16(0x1702)
+-#define SMIAPP_REG_U16_MIN_LINE_LENGTH_PCK_BIN			SMIAPP_REG_MK_U16(0x1704)
+-#define SMIAPP_REG_U16_MAX_LINE_LENGTH_PCK_BIN			SMIAPP_REG_MK_U16(0x1706)
+-#define SMIAPP_REG_U16_MIN_LINE_BLANKING_PCK_BIN		SMIAPP_REG_MK_U16(0x1708)
+-#define SMIAPP_REG_U16_FINE_INTEGRATION_TIME_MIN_BIN		SMIAPP_REG_MK_U16(0x170a)
+-#define SMIAPP_REG_U16_FINE_INTEGRATION_TIME_MAX_MARGIN_BIN	SMIAPP_REG_MK_U16(0x170c)
+-#define SMIAPP_REG_U8_BINNING_CAPABILITY			SMIAPP_REG_MK_U8(0x1710)
+-#define SMIAPP_REG_U8_BINNING_WEIGHTING_CAPABILITY		SMIAPP_REG_MK_U8(0x1711)
+-#define SMIAPP_REG_U8_BINNING_SUBTYPES				SMIAPP_REG_MK_U8(0x1712)
+-#define SMIAPP_REG_U8_BINNING_TYPE_n(n)				SMIAPP_REG_MK_U8(0x1713 + (n)) /* 1 <= n <= 237 */
+-#define SMIAPP_REG_U8_DATA_TRANSFER_IF_CAPABILITY		SMIAPP_REG_MK_U8(0x1800)
+-#define SMIAPP_REG_U8_SHADING_CORRECTION_CAPABILITY		SMIAPP_REG_MK_U8(0x1900)
+-#define SMIAPP_REG_U8_GREEN_IMBALANCE_CAPABILITY		SMIAPP_REG_MK_U8(0x1901)
+-#define SMIAPP_REG_U8_BLACK_LEVEL_CAPABILITY			SMIAPP_REG_MK_U8(0x1902)
+-#define SMIAPP_REG_U8_MODULE_SPECIFIC_CORRECTION_CAPABILITY	SMIAPP_REG_MK_U8(0x1903)
+-#define SMIAPP_REG_U16_DEFECT_CORRECTION_CAPABILITY		SMIAPP_REG_MK_U16(0x1904)
+-#define SMIAPP_REG_U16_DEFECT_CORRECTION_CAPABILITY_2		SMIAPP_REG_MK_U16(0x1906)
+-#define SMIAPP_REG_U8_EDOF_CAPABILITY				SMIAPP_REG_MK_U8(0x1980)
+-#define SMIAPP_REG_U8_ESTIMATION_FRAMES				SMIAPP_REG_MK_U8(0x1981)
+-#define SMIAPP_REG_U8_SUPPORTS_SHARPNESS_ADJ			SMIAPP_REG_MK_U8(0x1982)
+-#define SMIAPP_REG_U8_SUPPORTS_DENOISING_ADJ			SMIAPP_REG_MK_U8(0x1983)
+-#define SMIAPP_REG_U8_SUPPORTS_MODULE_SPECIFIC_ADJ		SMIAPP_REG_MK_U8(0x1984)
+-#define SMIAPP_REG_U8_SUPPORTS_DEPTH_OF_FIELD_ADJ		SMIAPP_REG_MK_U8(0x1985)
+-#define SMIAPP_REG_U8_SUPPORTS_FOCUS_DISTANCE_ADJ		SMIAPP_REG_MK_U8(0x1986)
+-#define SMIAPP_REG_U8_COLOUR_FEEDBACK_CAPABILITY		SMIAPP_REG_MK_U8(0x1987)
+-#define SMIAPP_REG_U8_EDOF_SUPPORT_AB_NXM			SMIAPP_REG_MK_U8(0x1988)
+-#define SMIAPP_REG_U8_ESTIMATION_MODE_CAPABILITY		SMIAPP_REG_MK_U8(0x19c0)
+-#define SMIAPP_REG_U8_ESTIMATION_ZONE_CAPABILITY		SMIAPP_REG_MK_U8(0x19c1)
+-#define SMIAPP_REG_U16_EST_DEPTH_OF_FIELD			SMIAPP_REG_MK_U16(0x19c2)
+-#define SMIAPP_REG_U16_EST_FOCUS_DISTANCE			SMIAPP_REG_MK_U16(0x19c4)
+-#define SMIAPP_REG_U16_CAPABILITY_TRDY_MIN			SMIAPP_REG_MK_U16(0x1a00)
+-#define SMIAPP_REG_U8_FLASH_MODE_CAPABILITY			SMIAPP_REG_MK_U8(0x1a02)
+-#define SMIAPP_REG_U16_MECH_SHUT_AND_ACT_START_ADDR		SMIAPP_REG_MK_U16(0x1b02)
+-#define SMIAPP_REG_U8_ACTUATOR_CAPABILITY			SMIAPP_REG_MK_U8(0x1b04)
+-#define SMIAPP_REG_U16_ACTUATOR_TYPE				SMIAPP_REG_MK_U16(0x1b40)
+-#define SMIAPP_REG_U8_AF_DEVICE_ADDRESS				SMIAPP_REG_MK_U8(0x1b42)
+-#define SMIAPP_REG_U16_FOCUS_CHANGE_ADDRESS			SMIAPP_REG_MK_U16(0x1b44)
+-#define SMIAPP_REG_U8_BRACKETING_LUT_CAPABILITY_1		SMIAPP_REG_MK_U8(0x1c00)
+-#define SMIAPP_REG_U8_BRACKETING_LUT_CAPABILITY_2		SMIAPP_REG_MK_U8(0x1c01)
+-#define SMIAPP_REG_U8_BRACKETING_LUT_SIZE			SMIAPP_REG_MK_U8(0x1c02)
++/* Register addresses */
++#define SMIAPP_REG_U16_MODEL_ID					(0x0000 | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_REVISION_NUMBER_MAJOR			0x0002
++#define SMIAPP_REG_U8_MANUFACTURER_ID				0x0003
++#define SMIAPP_REG_U8_SMIA_VERSION				0x0004
++#define SMIAPP_REG_U8_FRAME_COUNT				0x0005
++#define SMIAPP_REG_U8_PIXEL_ORDER				0x0006
++#define SMIAPP_REG_U16_DATA_PEDESTAL				(0x0008 | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_PIXEL_DEPTH				0x000c
++#define SMIAPP_REG_U8_REVISION_NUMBER_MINOR			0x0010
++#define SMIAPP_REG_U8_SMIAPP_VERSION				0x0011
++#define SMIAPP_REG_U8_MODULE_DATE_YEAR				0x0012
++#define SMIAPP_REG_U8_MODULE_DATE_MONTH				0x0013
++#define SMIAPP_REG_U8_MODULE_DATE_DAY				0x0014
++#define SMIAPP_REG_U8_MODULE_DATE_PHASE				0x0015
++#define SMIAPP_REG_U16_SENSOR_MODEL_ID				(0x0016 | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_SENSOR_REVISION_NUMBER			0x0018
++#define SMIAPP_REG_U8_SENSOR_MANUFACTURER_ID			0x0019
++#define SMIAPP_REG_U8_SENSOR_FIRMWARE_VERSION			0x001a
++#define SMIAPP_REG_U32_SERIAL_NUMBER				(0x001c | CCS_FL_32BIT)
++#define SMIAPP_REG_U8_FRAME_FORMAT_MODEL_TYPE			0x0040
++#define SMIAPP_REG_U8_FRAME_FORMAT_MODEL_SUBTYPE		0x0041
++#define SMIAPP_REG_U16_FRAME_FORMAT_DESCRIPTOR_2(n)		((0x0042 + ((n) << 1)) | CCS_FL_16BIT) /* 0 <= n <= 14 */
++#define SMIAPP_REG_U32_FRAME_FORMAT_DESCRIPTOR_4(n)		((0x0060 + ((n) << 2)) | CCS_FL_32BIT) /* 0 <= n <= 7 */
++#define SMIAPP_REG_U16_ANALOGUE_GAIN_CAPABILITY			(0x0080 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_ANALOGUE_GAIN_CODE_MIN			(0x0084 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_ANALOGUE_GAIN_CODE_MAX			(0x0086 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_ANALOGUE_GAIN_CODE_STEP			(0x0088 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_ANALOGUE_GAIN_TYPE			(0x008a | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_ANALOGUE_GAIN_M0				(0x008c | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_ANALOGUE_GAIN_C0				(0x008e | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_ANALOGUE_GAIN_M1				(0x0090 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_ANALOGUE_GAIN_C1				(0x0092 | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_DATA_FORMAT_MODEL_TYPE			0x00c0
++#define SMIAPP_REG_U8_DATA_FORMAT_MODEL_SUBTYPE			0x00c1
++#define SMIAPP_REG_U16_DATA_FORMAT_DESCRIPTOR(n)		((0x00c2 + ((n) << 1)) | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_MODE_SELECT				0x0100
++#define SMIAPP_REG_U8_IMAGE_ORIENTATION				0x0101
++#define SMIAPP_REG_U8_SOFTWARE_RESET				0x0103
++#define SMIAPP_REG_U8_GROUPED_PARAMETER_HOLD			0x0104
++#define SMIAPP_REG_U8_MASK_CORRUPTED_FRAMES			0x0105
++#define SMIAPP_REG_U8_FAST_STANDBY_CTRL				0x0106
++#define SMIAPP_REG_U8_CCI_ADDRESS_CONTROL			0x0107
++#define SMIAPP_REG_U8_2ND_CCI_IF_CONTROL			0x0108
++#define SMIAPP_REG_U8_2ND_CCI_ADDRESS_CONTROL			0x0109
++#define SMIAPP_REG_U8_CSI_CHANNEL_IDENTIFIER			0x0110
++#define SMIAPP_REG_U8_CSI_SIGNALLING_MODE			0x0111
++#define SMIAPP_REG_U16_CSI_DATA_FORMAT				(0x0112 | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_CSI_LANE_MODE				0x0114
++#define SMIAPP_REG_U8_CSI2_10_TO_8_DT				0x0115
++#define SMIAPP_REG_U8_CSI2_10_TO_7_DT				0x0116
++#define SMIAPP_REG_U8_CSI2_10_TO_6_DT				0x0117
++#define SMIAPP_REG_U8_CSI2_12_TO_8_DT				0x0118
++#define SMIAPP_REG_U8_CSI2_12_TO_7_DT				0x0119
++#define SMIAPP_REG_U8_CSI2_12_TO_6_DT				0x011a
++#define SMIAPP_REG_U8_CSI2_14_TO_10_DT				0x011b
++#define SMIAPP_REG_U8_CSI2_14_TO_8_DT				0x011c
++#define SMIAPP_REG_U8_CSI2_16_TO_10_DT				0x011d
++#define SMIAPP_REG_U8_CSI2_16_TO_8_DT				0x011e
++#define SMIAPP_REG_U8_GAIN_MODE					0x0120
++#define SMIAPP_REG_U16_VANA_VOLTAGE				(0x0130 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_VDIG_VOLTAGE				(0x0132 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_VIO_VOLTAGE				(0x0134 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_EXTCLK_FREQUENCY_MHZ			(0x0136 | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_TEMP_SENSOR_CONTROL			0x0138
++#define SMIAPP_REG_U8_TEMP_SENSOR_MODE				0x0139
++#define SMIAPP_REG_U8_TEMP_SENSOR_OUTPUT			0x013a
++#define SMIAPP_REG_U16_FINE_INTEGRATION_TIME			(0x0200 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_COARSE_INTEGRATION_TIME			(0x0202 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_ANALOGUE_GAIN_CODE_GLOBAL		(0x0204 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_ANALOGUE_GAIN_CODE_GREENR		(0x0206 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_ANALOGUE_GAIN_CODE_RED			(0x0208 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_ANALOGUE_GAIN_CODE_BLUE			(0x020a | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_ANALOGUE_GAIN_CODE_GREENB		(0x020c | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_DIGITAL_GAIN_GREENR			(0x020e | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_DIGITAL_GAIN_RED				(0x0210 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_DIGITAL_GAIN_BLUE			(0x0212 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_DIGITAL_GAIN_GREENB			(0x0214 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_VT_PIX_CLK_DIV				(0x0300 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_VT_SYS_CLK_DIV				(0x0302 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_PRE_PLL_CLK_DIV				(0x0304 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_PLL_MULTIPLIER				(0x0306 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_OP_PIX_CLK_DIV				(0x0308 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_OP_SYS_CLK_DIV				(0x030a | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_FRAME_LENGTH_LINES			(0x0340 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_LINE_LENGTH_PCK				(0x0342 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_X_ADDR_START				(0x0344 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_Y_ADDR_START				(0x0346 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_X_ADDR_END				(0x0348 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_Y_ADDR_END				(0x034a | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_X_OUTPUT_SIZE				(0x034c | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_Y_OUTPUT_SIZE				(0x034e | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_X_EVEN_INC				(0x0380 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_X_ODD_INC				(0x0382 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_Y_EVEN_INC				(0x0384 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_Y_ODD_INC				(0x0386 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_SCALING_MODE				(0x0400 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_SPATIAL_SAMPLING				(0x0402 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_SCALE_M					(0x0404 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_SCALE_N					(0x0406 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_DIGITAL_CROP_X_OFFSET			(0x0408 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_DIGITAL_CROP_Y_OFFSET			(0x040a | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_DIGITAL_CROP_IMAGE_WIDTH			(0x040c | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_DIGITAL_CROP_IMAGE_HEIGHT		(0x040e | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_COMPRESSION_MODE				(0x0500 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_TEST_PATTERN_MODE			(0x0600 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_TEST_DATA_RED				(0x0602 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_TEST_DATA_GREENR				(0x0604 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_TEST_DATA_BLUE				(0x0606 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_TEST_DATA_GREENB				(0x0608 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_HORIZONTAL_CURSOR_WIDTH			(0x060a | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_HORIZONTAL_CURSOR_POSITION		(0x060c | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_VERTICAL_CURSOR_WIDTH			(0x060e | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_VERTICAL_CURSOR_POSITION			(0x0610 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_FIFO_WATER_MARK_PIXELS			(0x0700 | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_TCLK_POST					0x0800
++#define SMIAPP_REG_U8_THS_PREPARE				0x0801
++#define SMIAPP_REG_U8_THS_ZERO_MIN				0x0802
++#define SMIAPP_REG_U8_THS_TRAIL					0x0803
++#define SMIAPP_REG_U8_TCLK_TRAIL_MIN				0x0804
++#define SMIAPP_REG_U8_TCLK_PREPARE				0x0805
++#define SMIAPP_REG_U8_TCLK_ZERO					0x0806
++#define SMIAPP_REG_U8_TLPX					0x0807
++#define SMIAPP_REG_U8_DPHY_CTRL					0x0808
++#define SMIAPP_REG_U32_REQUESTED_LINK_BIT_RATE_MBPS		(0x0820 | CCS_FL_32BIT)
++#define SMIAPP_REG_U8_BINNING_MODE				0x0900
++#define SMIAPP_REG_U8_BINNING_TYPE				0x0901
++#define SMIAPP_REG_U8_BINNING_WEIGHTING				0x0902
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_CTRL			0x0a00
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_STATUS			0x0a01
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_PAGE_SELECT		0x0a02
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_0			0x0a04
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_1			0x0a05
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_2			0x0a06
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_3			0x0a07
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_4			0x0a08
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_5			0x0a09
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_12		0x0a10
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_13		0x0a11
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_14		0x0a12
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_15		0x0a13
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_16		0x0a14
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_17		0x0a15
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_18		0x0a16
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_19		0x0a17
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_20		0x0a18
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_21		0x0a19
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_22		0x0a1a
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_23		0x0a1b
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_24		0x0a1c
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_25		0x0a1d
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_26		0x0a1e
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_27		0x0a1f
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_28		0x0a20
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_29		0x0a21
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_30		0x0a22
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_31		0x0a23
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_32		0x0a24
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_33		0x0a25
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_34		0x0a26
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_35		0x0a27
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_36		0x0a28
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_37		0x0a29
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_38		0x0a2a
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_39		0x0a2b
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_40		0x0a2c
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_41		0x0a2d
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_42		0x0a2e
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_43		0x0a2f
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_44		0x0a30
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_45		0x0a31
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_46		0x0a32
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_47		0x0a33
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_48		0x0a34
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_49		0x0a35
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_50		0x0a36
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_51		0x0a37
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_52		0x0a38
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_53		0x0a39
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_54		0x0a3a
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_55		0x0a3b
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_56		0x0a3c
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_57		0x0a3d
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_58		0x0a3e
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_59		0x0a3f
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_60		0x0a40
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_61		0x0a41
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_62		0x0a42
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_1_DATA_63		0x0a43
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_CTRL			0x0a44
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_STATUS			0x0a45
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_PAGE_SELECT		0x0a46
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_0			0x0a48
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_1			0x0a49
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_2			0x0a4a
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_3			0x0a4b
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_4			0x0a4c
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_5			0x0a4d
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_6			0x0a4e
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_7			0x0a4f
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_8			0x0a50
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_9			0x0a51
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_10		0x0a52
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_11		0x0a53
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_12		0x0a54
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_13		0x0a55
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_14		0x0a56
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_15		0x0a57
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_16		0x0a58
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_17		0x0a59
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_18		0x0a5a
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_19		0x0a5b
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_20		0x0a5c
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_21		0x0a5d
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_22		0x0a5e
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_23		0x0a5f
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_24		0x0a60
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_25		0x0a61
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_26		0x0a62
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_27		0x0a63
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_28		0x0a64
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_29		0x0a65
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_30		0x0a66
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_31		0x0a67
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_32		0x0a68
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_33		0x0a69
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_34		0x0a6a
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_35		0x0a6b
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_36		0x0a6c
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_37		0x0a6d
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_38		0x0a6e
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_39		0x0a6f
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_40		0x0a70
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_41		0x0a71
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_42		0x0a72
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_43		0x0a73
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_44		0x0a74
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_45		0x0a75
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_46		0x0a76
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_47		0x0a77
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_48		0x0a78
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_49		0x0a79
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_50		0x0a7a
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_51		0x0a7b
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_52		0x0a7c
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_53		0x0a7d
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_54		0x0a7e
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_55		0x0a7f
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_56		0x0a80
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_57		0x0a81
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_58		0x0a82
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_59		0x0a83
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_60		0x0a84
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_61		0x0a85
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_62		0x0a86
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_2_DATA_63		0x0a87
++#define SMIAPP_REG_U8_SHADING_CORRECTION_ENABLE			0x0b00
++#define SMIAPP_REG_U8_LUMINANCE_CORRECTION_LEVEL		0x0b01
++#define SMIAPP_REG_U8_GREEN_IMBALANCE_FILTER_ENABLE		0x0b02
++#define SMIAPP_REG_U8_GREEN_IMBALANCE_FILTER_WEIGHT		0x0b03
++#define SMIAPP_REG_U8_BLACK_LEVEL_CORRECTION_ENABLE		0x0b04
++#define SMIAPP_REG_U8_MAPPED_COUPLET_CORRECT_ENABLE		0x0b05
++#define SMIAPP_REG_U8_SINGLE_DEFECT_CORRECT_ENABLE		0x0b06
++#define SMIAPP_REG_U8_SINGLE_DEFECT_CORRECT_WEIGHT		0x0b07
++#define SMIAPP_REG_U8_DYNAMIC_COUPLET_CORRECT_ENABLE		0x0b08
++#define SMIAPP_REG_U8_DYNAMIC_COUPLET_CORRECT_WEIGHT		0x0b09
++#define SMIAPP_REG_U8_COMBINED_DEFECT_CORRECT_ENABLE		0x0b0a
++#define SMIAPP_REG_U8_COMBINED_DEFECT_CORRECT_WEIGHT		0x0b0b
++#define SMIAPP_REG_U8_MODULE_SPECIFIC_CORRECTION_ENABLE		0x0b0c
++#define SMIAPP_REG_U8_MODULE_SPECIFIC_CORRECTION_WEIGHT		0x0b0d
++#define SMIAPP_REG_U8_MAPPED_LINE_DEFECT_CORRECT_ENABLE		0x0b0e
++#define SMIAPP_REG_U8_MAPPED_LINE_DEFECT_CORRECT_ADJUST		0x0b0f
++#define SMIAPP_REG_U8_MAPPED_COUPLET_CORRECT_ADJUST		0x0b10
++#define SMIAPP_REG_U8_MAPPED_TRIPLET_DEFECT_CORRECT_ENABLE	0x0b11
++#define SMIAPP_REG_U8_MAPPED_TRIPLET_DEFECT_CORRECT_ADJUST	0x0b12
++#define SMIAPP_REG_U8_DYNAMIC_TRIPLET_DEFECT_CORRECT_ENABLE	0x0b13
++#define SMIAPP_REG_U8_DYNAMIC_TRIPLET_DEFECT_CORRECT_ADJUST	0x0b14
++#define SMIAPP_REG_U8_DYNAMIC_LINE_DEFECT_CORRECT_ENABLE	0x0b15
++#define SMIAPP_REG_U8_DYNAMIC_LINE_DEFECT_CORRECT_ADJUST	0x0b16
++#define SMIAPP_REG_U8_EDOF_MODE					0x0b80
++#define SMIAPP_REG_U8_SHARPNESS					0x0b83
++#define SMIAPP_REG_U8_DENOISING					0x0b84
++#define SMIAPP_REG_U8_MODULE_SPECIFIC				0x0b85
++#define SMIAPP_REG_U16_DEPTH_OF_FIELD				(0x0b86 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_FOCUS_DISTANCE				(0x0b88 | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_ESTIMATION_MODE_CTRL			0x0b8a
++#define SMIAPP_REG_U16_COLOUR_TEMPERATURE			(0x0b8c | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_ABSOLUTE_GAIN_GREENR			(0x0b8e | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_ABSOLUTE_GAIN_RED			(0x0b90 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_ABSOLUTE_GAIN_BLUE			(0x0b92 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_ABSOLUTE_GAIN_GREENB			(0x0b94 | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_ESTIMATION_ZONE_MODE			0x0bc0
++#define SMIAPP_REG_U16_FIXED_ZONE_WEIGHTING			(0x0bc2 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_CUSTOM_ZONE_X_START			(0x0bc4 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_CUSTOM_ZONE_Y_START			(0x0bc6 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_CUSTOM_ZONE_WIDTH			(0x0bc8 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_CUSTOM_ZONE_HEIGHT			(0x0bca | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_GLOBAL_RESET_CTRL1			0x0c00
++#define SMIAPP_REG_U8_GLOBAL_RESET_CTRL2			0x0c01
++#define SMIAPP_REG_U8_GLOBAL_RESET_MODE_CONFIG_1		0x0c02
++#define SMIAPP_REG_U8_GLOBAL_RESET_MODE_CONFIG_2		0x0c03
++#define SMIAPP_REG_U16_TRDY_CTRL				(0x0c04 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_TRDOUT_CTRL				(0x0c06 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_TSHUTTER_STROBE_DELAY_CTRL		(0x0c08 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_TSHUTTER_STROBE_WIDTH_CTRL		(0x0c0a | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_TFLASH_STROBE_DELAY_CTRL			(0x0c0c | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_TFLASH_STROBE_WIDTH_HIGH_CTRL		(0x0c0e | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_TGRST_INTERVAL_CTRL			(0x0c10 | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_FLASH_STROBE_ADJUSTMENT			0x0c12
++#define SMIAPP_REG_U16_FLASH_STROBE_START_POINT			(0x0c14 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_TFLASH_STROBE_DELAY_RS_CTRL		(0x0c16 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_TFLASH_STROBE_WIDTH_HIGH_RS_CTRL		(0x0c18 | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_FLASH_MODE_RS				0x0c1a
++#define SMIAPP_REG_U8_FLASH_TRIGGER_RS				0x0c1b
++#define SMIAPP_REG_U8_FLASH_STATUS				0x0c1c
++#define SMIAPP_REG_U8_SA_STROBE_MODE				0x0c1d
++#define SMIAPP_REG_U16_SA_STROBE_START_POINT			(0x0c1e | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_TSA_STROBE_DELAY_CTRL			(0x0c20 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_TSA_STROBE_WIDTH_CTRL			(0x0c22 | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_SA_STROBE_TRIGGER				0x0c24
++#define SMIAPP_REG_U8_SPECIAL_ACTUATOR_STATUS			0x0c25
++#define SMIAPP_REG_U16_TFLASH_STROBE_WIDTH2_HIGH_RS_CTRL	(0x0c26 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_TFLASH_STROBE_WIDTH_LOW_RS_CTRL		(0x0c28 | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_TFLASH_STROBE_COUNT_RS_CTRL		0x0c2a
++#define SMIAPP_REG_U8_TFLASH_STROBE_COUNT_CTRL			0x0c2b
++#define SMIAPP_REG_U16_TFLASH_STROBE_WIDTH2_HIGH_CTRL		(0x0c2c | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_TFLASH_STROBE_WIDTH_LOW_CTRL		(0x0c2e | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_LOW_LEVEL_CTRL				0x0c80
++#define SMIAPP_REG_U16_MAIN_TRIGGER_REF_POINT			(0x0c82 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MAIN_TRIGGER_T3				(0x0c84 | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_MAIN_TRIGGER_COUNT			0x0c86
++#define SMIAPP_REG_U16_PHASE1_TRIGGER_T3			(0x0c88 | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_PHASE1_TRIGGER_COUNT			0x0c8a
++#define SMIAPP_REG_U16_PHASE2_TRIGGER_T3			(0x0c8c | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_PHASE2_TRIGGER_COUNT			0x0c8e
++#define SMIAPP_REG_U8_MECH_SHUTTER_CTRL				0x0d00
++#define SMIAPP_REG_U8_OPERATION_MODE				0x0d01
++#define SMIAPP_REG_U8_ACT_STATE1				0x0d02
++#define SMIAPP_REG_U8_ACT_STATE2				0x0d03
++#define SMIAPP_REG_U16_FOCUS_CHANGE				(0x0d80 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_FOCUS_CHANGE_CONTROL			(0x0d82 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_FOCUS_CHANGE_NUMBER_PHASE1		(0x0d84 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_FOCUS_CHANGE_NUMBER_PHASE2		(0x0d86 | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_STROBE_COUNT_PHASE1			0x0d88
++#define SMIAPP_REG_U8_STROBE_COUNT_PHASE2			0x0d89
++#define SMIAPP_REG_U8_POSITION					0x0d8a
++#define SMIAPP_REG_U8_BRACKETING_LUT_CONTROL			0x0e00
++#define SMIAPP_REG_U8_BRACKETING_LUT_MODE			0x0e01
++#define SMIAPP_REG_U8_BRACKETING_LUT_ENTRY_CONTROL		0x0e02
++#define SMIAPP_REG_U8_LUT_PARAMETERS_START			0x0e10
++#define SMIAPP_REG_U8_LUT_PARAMETERS_END			0x0eff
++#define SMIAPP_REG_U16_INTEGRATION_TIME_CAPABILITY		(0x1000 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_COARSE_INTEGRATION_TIME_MIN		(0x1004 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_COARSE_INTEGRATION_TIME_MAX_MARGIN	(0x1006 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_FINE_INTEGRATION_TIME_MIN		(0x1008 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_FINE_INTEGRATION_TIME_MAX_MARGIN		(0x100a | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_DIGITAL_GAIN_CAPABILITY			(0x1080 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_DIGITAL_GAIN_MIN				(0x1084 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_DIGITAL_GAIN_MAX				(0x1086 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_DIGITAL_GAIN_STEP_SIZE			(0x1088 | CCS_FL_16BIT)
++#define SMIAPP_REG_F32_MIN_EXT_CLK_FREQ_HZ			(0x1100 | CCS_FL_FLOAT_IREAL | CCS_FL_32BIT)
++#define SMIAPP_REG_F32_MAX_EXT_CLK_FREQ_HZ			(0x1104 | CCS_FL_FLOAT_IREAL | CCS_FL_32BIT)
++#define SMIAPP_REG_U16_MIN_PRE_PLL_CLK_DIV			(0x1108 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MAX_PRE_PLL_CLK_DIV			(0x110a | CCS_FL_16BIT)
++#define SMIAPP_REG_F32_MIN_PLL_IP_FREQ_HZ			(0x110c | CCS_FL_FLOAT_IREAL | CCS_FL_32BIT)
++#define SMIAPP_REG_F32_MAX_PLL_IP_FREQ_HZ			(0x1110 | CCS_FL_FLOAT_IREAL | CCS_FL_32BIT)
++#define SMIAPP_REG_U16_MIN_PLL_MULTIPLIER			(0x1114 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MAX_PLL_MULTIPLIER			(0x1116 | CCS_FL_16BIT)
++#define SMIAPP_REG_F32_MIN_PLL_OP_FREQ_HZ			(0x1118 | CCS_FL_FLOAT_IREAL | CCS_FL_32BIT)
++#define SMIAPP_REG_F32_MAX_PLL_OP_FREQ_HZ			(0x111c | CCS_FL_FLOAT_IREAL | CCS_FL_32BIT)
++#define SMIAPP_REG_U16_MIN_VT_SYS_CLK_DIV			(0x1120 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MAX_VT_SYS_CLK_DIV			(0x1122 | CCS_FL_16BIT)
++#define SMIAPP_REG_F32_MIN_VT_SYS_CLK_FREQ_HZ			(0x1124 | CCS_FL_FLOAT_IREAL | CCS_FL_32BIT)
++#define SMIAPP_REG_F32_MAX_VT_SYS_CLK_FREQ_HZ			(0x1128 | CCS_FL_FLOAT_IREAL | CCS_FL_32BIT)
++#define SMIAPP_REG_F32_MIN_VT_PIX_CLK_FREQ_HZ			(0x112c | CCS_FL_FLOAT_IREAL | CCS_FL_32BIT)
++#define SMIAPP_REG_F32_MAX_VT_PIX_CLK_FREQ_HZ			(0x1130 | CCS_FL_FLOAT_IREAL | CCS_FL_32BIT)
++#define SMIAPP_REG_U16_MIN_VT_PIX_CLK_DIV			(0x1134 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MAX_VT_PIX_CLK_DIV			(0x1136 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MIN_FRAME_LENGTH_LINES			(0x1140 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MAX_FRAME_LENGTH_LINES			(0x1142 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MIN_LINE_LENGTH_PCK			(0x1144 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MAX_LINE_LENGTH_PCK			(0x1146 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MIN_LINE_BLANKING_PCK			(0x1148 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MIN_FRAME_BLANKING_LINES			(0x114a | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_MIN_LINE_LENGTH_PCK_STEP_SIZE		0x114c
++#define SMIAPP_REG_U16_MIN_OP_SYS_CLK_DIV			(0x1160 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MAX_OP_SYS_CLK_DIV			(0x1162 | CCS_FL_16BIT)
++#define SMIAPP_REG_F32_MIN_OP_SYS_CLK_FREQ_HZ			(0x1164 | CCS_FL_FLOAT_IREAL | CCS_FL_32BIT)
++#define SMIAPP_REG_F32_MAX_OP_SYS_CLK_FREQ_HZ			(0x1168 | CCS_FL_FLOAT_IREAL | CCS_FL_32BIT)
++#define SMIAPP_REG_U16_MIN_OP_PIX_CLK_DIV			(0x116c | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MAX_OP_PIX_CLK_DIV			(0x116e | CCS_FL_16BIT)
++#define SMIAPP_REG_F32_MIN_OP_PIX_CLK_FREQ_HZ			(0x1170 | CCS_FL_FLOAT_IREAL | CCS_FL_32BIT)
++#define SMIAPP_REG_F32_MAX_OP_PIX_CLK_FREQ_HZ			(0x1174 | CCS_FL_FLOAT_IREAL | CCS_FL_32BIT)
++#define SMIAPP_REG_U16_X_ADDR_MIN				(0x1180 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_Y_ADDR_MIN				(0x1182 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_X_ADDR_MAX				(0x1184 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_Y_ADDR_MAX				(0x1186 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MIN_X_OUTPUT_SIZE			(0x1188 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MIN_Y_OUTPUT_SIZE			(0x118a | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MAX_X_OUTPUT_SIZE			(0x118c | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MAX_Y_OUTPUT_SIZE			(0x118e | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MIN_EVEN_INC				(0x11c0 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MAX_EVEN_INC				(0x11c2 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MIN_ODD_INC				(0x11c4 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MAX_ODD_INC				(0x11c6 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_SCALING_CAPABILITY			(0x1200 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_SCALER_M_MIN				(0x1204 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_SCALER_M_MAX				(0x1206 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_SCALER_N_MIN				(0x1208 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_SCALER_N_MAX				(0x120a | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_SPATIAL_SAMPLING_CAPABILITY		(0x120c | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_DIGITAL_CROP_CAPABILITY			0x120e
++#define SMIAPP_REG_U16_COMPRESSION_CAPABILITY			(0x1300 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MATRIX_ELEMENT_REDINRED			(0x1400 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MATRIX_ELEMENT_GREENINRED		(0x1402 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MATRIX_ELEMENT_BLUEINRED			(0x1404 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MATRIX_ELEMENT_REDINGREEN		(0x1406 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MATRIX_ELEMENT_GREENINGREEN		(0x1408 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MATRIX_ELEMENT_BLUEINGREEN		(0x140a | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MATRIX_ELEMENT_REDINBLUE			(0x140c | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MATRIX_ELEMENT_GREENINBLUE		(0x140e | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MATRIX_ELEMENT_BLUEINBLUE		(0x1410 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_FIFO_SIZE_PIXELS				(0x1500 | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_FIFO_SUPPORT_CAPABILITY			0x1502
++#define SMIAPP_REG_U8_DPHY_CTRL_CAPABILITY			0x1600
++#define SMIAPP_REG_U8_CSI_LANE_MODE_CAPABILITY			0x1601
++#define SMIAPP_REG_U8_CSI_SIGNALLING_MODE_CAPABILITY		0x1602
++#define SMIAPP_REG_U8_FAST_STANDBY_CAPABILITY			0x1603
++#define SMIAPP_REG_U8_CCI_ADDRESS_CONTROL_CAPABILITY		0x1604
++#define SMIAPP_REG_U32_MAX_PER_LANE_BITRATE_1_LANE_MODE_MBPS	(0x1608 | CCS_FL_32BIT)
++#define SMIAPP_REG_U32_MAX_PER_LANE_BITRATE_2_LANE_MODE_MBPS	(0x160c | CCS_FL_32BIT)
++#define SMIAPP_REG_U32_MAX_PER_LANE_BITRATE_3_LANE_MODE_MBPS	(0x1610 | CCS_FL_32BIT)
++#define SMIAPP_REG_U32_MAX_PER_LANE_BITRATE_4_LANE_MODE_MBPS	(0x1614 | CCS_FL_32BIT)
++#define SMIAPP_REG_U8_TEMP_SENSOR_CAPABILITY			0x1618
++#define SMIAPP_REG_U16_MIN_FRAME_LENGTH_LINES_BIN		(0x1700 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MAX_FRAME_LENGTH_LINES_BIN		(0x1702 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MIN_LINE_LENGTH_PCK_BIN			(0x1704 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MAX_LINE_LENGTH_PCK_BIN			(0x1706 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_MIN_LINE_BLANKING_PCK_BIN		(0x1708 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_FINE_INTEGRATION_TIME_MIN_BIN		(0x170a | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_FINE_INTEGRATION_TIME_MAX_MARGIN_BIN	(0x170c | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_BINNING_CAPABILITY			0x1710
++#define SMIAPP_REG_U8_BINNING_WEIGHTING_CAPABILITY		0x1711
++#define SMIAPP_REG_U8_BINNING_SUBTYPES				0x1712
++#define SMIAPP_REG_U8_BINNING_TYPE_n(n)				(0x1713 + (n)) /* 1 <= n <= 237 */
++#define SMIAPP_REG_U8_DATA_TRANSFER_IF_CAPABILITY		0x1800
++#define SMIAPP_REG_U8_SHADING_CORRECTION_CAPABILITY		0x1900
++#define SMIAPP_REG_U8_GREEN_IMBALANCE_CAPABILITY		0x1901
++#define SMIAPP_REG_U8_BLACK_LEVEL_CAPABILITY			0x1902
++#define SMIAPP_REG_U8_MODULE_SPECIFIC_CORRECTION_CAPABILITY	0x1903
++#define SMIAPP_REG_U16_DEFECT_CORRECTION_CAPABILITY		(0x1904 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_DEFECT_CORRECTION_CAPABILITY_2		(0x1906 | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_EDOF_CAPABILITY				0x1980
++#define SMIAPP_REG_U8_ESTIMATION_FRAMES				0x1981
++#define SMIAPP_REG_U8_SUPPORTS_SHARPNESS_ADJ			0x1982
++#define SMIAPP_REG_U8_SUPPORTS_DENOISING_ADJ			0x1983
++#define SMIAPP_REG_U8_SUPPORTS_MODULE_SPECIFIC_ADJ		0x1984
++#define SMIAPP_REG_U8_SUPPORTS_DEPTH_OF_FIELD_ADJ		0x1985
++#define SMIAPP_REG_U8_SUPPORTS_FOCUS_DISTANCE_ADJ		0x1986
++#define SMIAPP_REG_U8_COLOUR_FEEDBACK_CAPABILITY		0x1987
++#define SMIAPP_REG_U8_EDOF_SUPPORT_AB_NXM			0x1988
++#define SMIAPP_REG_U8_ESTIMATION_MODE_CAPABILITY		0x19c0
++#define SMIAPP_REG_U8_ESTIMATION_ZONE_CAPABILITY		0x19c1
++#define SMIAPP_REG_U16_EST_DEPTH_OF_FIELD			(0x19c2 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_EST_FOCUS_DISTANCE			(0x19c4 | CCS_FL_16BIT)
++#define SMIAPP_REG_U16_CAPABILITY_TRDY_MIN			(0x1a00 | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_FLASH_MODE_CAPABILITY			0x1a02
++#define SMIAPP_REG_U16_MECH_SHUT_AND_ACT_START_ADDR		(0x1b02 | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_ACTUATOR_CAPABILITY			0x1b04
++#define SMIAPP_REG_U16_ACTUATOR_TYPE				(0x1b40 | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_AF_DEVICE_ADDRESS				0x1b42
++#define SMIAPP_REG_U16_FOCUS_CHANGE_ADDRESS			(0x1b44 | CCS_FL_16BIT)
++#define SMIAPP_REG_U8_BRACKETING_LUT_CAPABILITY_1		0x1c00
++#define SMIAPP_REG_U8_BRACKETING_LUT_CAPABILITY_2		0x1c01
++#define SMIAPP_REG_U8_BRACKETING_LUT_SIZE			0x1c02
++
++/* Register bit definitions */
++#define SMIAPP_IMAGE_ORIENTATION_HFLIP			BIT(0)
++#define SMIAPP_IMAGE_ORIENTATION_VFLIP			BIT(1)
++
++#define SMIAPP_DATA_TRANSFER_IF_1_CTRL_EN		BIT(0)
++#define SMIAPP_DATA_TRANSFER_IF_1_CTRL_WR_EN		BIT(1)
++#define SMIAPP_DATA_TRANSFER_IF_1_CTRL_ERR_CLEAR	BIT(2)
++#define SMIAPP_DATA_TRANSFER_IF_1_STATUS_RD_READY	BIT(0)
++#define SMIAPP_DATA_TRANSFER_IF_1_STATUS_WR_READY	BIT(1)
++#define SMIAPP_DATA_TRANSFER_IF_1_STATUS_EDATA		BIT(2)
++#define SMIAPP_DATA_TRANSFER_IF_1_STATUS_EUSAGE		BIT(3)
++
++#define SMIAPP_DATA_TRANSFER_IF_CAPABILITY_SUPPORTED	BIT(0)
++#define SMIAPP_DATA_TRANSFER_IF_CAPABILITY_POLL		BIT(2)
++
++#define SMIAPP_SOFTWARE_RESET				BIT(0)
++
++#define SMIAPP_FLASH_MODE_CAPABILITY_SINGLE_STROBE	BIT(0)
++#define SMIAPP_FLASH_MODE_CAPABILITY_MULTIPLE_STROBE	BIT(1)
++
++#define SMIAPP_CSI_SIGNALLING_MODE_CCP2_DATA_CLOCK	0
++#define SMIAPP_CSI_SIGNALLING_MODE_CCP2_DATA_STROBE	1
++#define SMIAPP_CSI_SIGNALLING_MODE_CSI2			2
++
++#define SMIAPP_DPHY_CTRL_AUTOMATIC			0
++/* DPHY control based on REQUESTED_LINK_BIT_RATE_MBPS */
++#define SMIAPP_DPHY_CTRL_UI				1
++#define SMIAPP_DPHY_CTRL_REGISTER			2
++
++#define SMIAPP_COMPRESSION_MODE_SIMPLE_PREDICTOR	1
++#define SMIAPP_COMPRESSION_MODE_ADVANCED_PREDICTOR	2
++
++#define SMIAPP_MODE_SELECT_SOFTWARE_STANDBY		0
++#define SMIAPP_MODE_SELECT_STREAMING			1
++
++#define SMIAPP_SCALING_MODE_NONE			0
++#define SMIAPP_SCALING_MODE_HORIZONTAL			1
++#define SMIAPP_SCALING_MODE_BOTH			2
++
++#define SMIAPP_SCALING_CAPABILITY_NONE			0
++#define SMIAPP_SCALING_CAPABILITY_HORIZONTAL		1
++#define SMIAPP_SCALING_CAPABILITY_BOTH			2 /* horizontal/both */
++
++/* digital crop right before scaler */
++#define SMIAPP_DIGITAL_CROP_CAPABILITY_NONE		0
++#define SMIAPP_DIGITAL_CROP_CAPABILITY_INPUT_CROP	1
++
++#define SMIAPP_BINNING_CAPABILITY_NO			0
++#define SMIAPP_BINNING_CAPABILITY_YES			1
++
++/* Maximum number of binning subtypes */
++#define SMIAPP_BINNING_SUBTYPES				253
++
++#define SMIAPP_PIXEL_ORDER_GRBG				0
++#define SMIAPP_PIXEL_ORDER_RGGB				1
++#define SMIAPP_PIXEL_ORDER_BGGR				2
++#define SMIAPP_PIXEL_ORDER_GBRG				3
++
++#define SMIAPP_DATA_FORMAT_MODEL_TYPE_NORMAL		1
++#define SMIAPP_DATA_FORMAT_MODEL_TYPE_EXTENDED		2
++#define SMIAPP_DATA_FORMAT_MODEL_TYPE_NORMAL_N		8
++#define SMIAPP_DATA_FORMAT_MODEL_TYPE_EXTENDED_N	16
++
++#define SMIAPP_FRAME_FORMAT_MODEL_TYPE_2BYTE		0x01
++#define SMIAPP_FRAME_FORMAT_MODEL_TYPE_4BYTE		0x02
++#define SMIAPP_FRAME_FORMAT_MODEL_SUBTYPE_NROWS_MASK	0x0f
++#define SMIAPP_FRAME_FORMAT_MODEL_SUBTYPE_NCOLS_MASK	0xf0
++#define SMIAPP_FRAME_FORMAT_MODEL_SUBTYPE_NCOLS_SHIFT	4
++
++#define SMIAPP_FRAME_FORMAT_DESC_2_PIXELCODE_MASK	0xf000
++#define SMIAPP_FRAME_FORMAT_DESC_2_PIXELCODE_SHIFT	12
++#define SMIAPP_FRAME_FORMAT_DESC_2_PIXELS_MASK		0x0fff
++
++#define SMIAPP_FRAME_FORMAT_DESC_4_PIXELCODE_MASK	0xf0000000
++#define SMIAPP_FRAME_FORMAT_DESC_4_PIXELCODE_SHIFT	28
++#define SMIAPP_FRAME_FORMAT_DESC_4_PIXELS_MASK		0x0000ffff
++
++#define SMIAPP_FRAME_FORMAT_DESC_PIXELCODE_EMBEDDED	1
++#define SMIAPP_FRAME_FORMAT_DESC_PIXELCODE_DUMMY	2
++#define SMIAPP_FRAME_FORMAT_DESC_PIXELCODE_BLACK	3
++#define SMIAPP_FRAME_FORMAT_DESC_PIXELCODE_DARK		4
++#define SMIAPP_FRAME_FORMAT_DESC_PIXELCODE_VISIBLE	5
++
++#define SMIAPP_FAST_STANDBY_CTRL_COMPLETE_FRAMES	0
++#define SMIAPP_FAST_STANDBY_CTRL_IMMEDIATE		1
++
++/* Scaling N factor */
++#define SMIAPP_SCALE_N					16
++
++#endif /* __SMIAPP_REG_DEFS_H__ */
+diff --git a/drivers/media/i2c/smiapp/smiapp-reg.h b/drivers/media/i2c/smiapp/smiapp-reg.h
+deleted file mode 100644
+index e6f96309786f..000000000000
+--- a/drivers/media/i2c/smiapp/smiapp-reg.h
++++ /dev/null
+@@ -1,116 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
+-/*
+- * drivers/media/i2c/smiapp/smiapp-reg.h
+- *
+- * Generic driver for SMIA/SMIA++ compliant camera modules
+- *
+- * Copyright (C) 2011--2012 Nokia Corporation
+- * Contact: Sakari Ailus <sakari.ailus@iki.fi>
+- */
 -
- #define SMIAPP_MK_QUIRK_REG_8(_reg, _val) \
- 	{				\
- 		.reg = (u16)_reg,	\
+-#ifndef __SMIAPP_REG_H_
+-#define __SMIAPP_REG_H_
+-
+-#include <linux/bits.h>
+-
+-#include "smiapp-reg-defs.h"
+-
+-/* Bits for above register */
+-#define SMIAPP_IMAGE_ORIENTATION_HFLIP			BIT(0)
+-#define SMIAPP_IMAGE_ORIENTATION_VFLIP			BIT(1)
+-
+-#define SMIAPP_DATA_TRANSFER_IF_1_CTRL_EN		BIT(0)
+-#define SMIAPP_DATA_TRANSFER_IF_1_CTRL_WR_EN		BIT(1)
+-#define SMIAPP_DATA_TRANSFER_IF_1_CTRL_ERR_CLEAR	BIT(2)
+-#define SMIAPP_DATA_TRANSFER_IF_1_STATUS_RD_READY	BIT(0)
+-#define SMIAPP_DATA_TRANSFER_IF_1_STATUS_WR_READY	BIT(1)
+-#define SMIAPP_DATA_TRANSFER_IF_1_STATUS_EDATA		BIT(2)
+-#define SMIAPP_DATA_TRANSFER_IF_1_STATUS_EUSAGE		BIT(3)
+-
+-#define SMIAPP_DATA_TRANSFER_IF_CAPABILITY_SUPPORTED	BIT(0)
+-#define SMIAPP_DATA_TRANSFER_IF_CAPABILITY_POLL		BIT(2)
+-
+-#define SMIAPP_SOFTWARE_RESET				BIT(0)
+-
+-#define SMIAPP_FLASH_MODE_CAPABILITY_SINGLE_STROBE	BIT(0)
+-#define SMIAPP_FLASH_MODE_CAPABILITY_MULTIPLE_STROBE	BIT(1)
+-
+-#define SMIAPP_CSI_SIGNALLING_MODE_CCP2_DATA_CLOCK	0
+-#define SMIAPP_CSI_SIGNALLING_MODE_CCP2_DATA_STROBE	1
+-#define SMIAPP_CSI_SIGNALLING_MODE_CSI2			2
+-
+-#define SMIAPP_DPHY_CTRL_AUTOMATIC			0
+-/* DPHY control based on REQUESTED_LINK_BIT_RATE_MBPS */
+-#define SMIAPP_DPHY_CTRL_UI				1
+-#define SMIAPP_DPHY_CTRL_REGISTER			2
+-
+-#define SMIAPP_COMPRESSION_MODE_SIMPLE_PREDICTOR	1
+-#define SMIAPP_COMPRESSION_MODE_ADVANCED_PREDICTOR	2
+-
+-#define SMIAPP_MODE_SELECT_SOFTWARE_STANDBY		0
+-#define SMIAPP_MODE_SELECT_STREAMING			1
+-
+-#define SMIAPP_SCALING_MODE_NONE			0
+-#define SMIAPP_SCALING_MODE_HORIZONTAL			1
+-#define SMIAPP_SCALING_MODE_BOTH			2
+-
+-#define SMIAPP_SCALING_CAPABILITY_NONE			0
+-#define SMIAPP_SCALING_CAPABILITY_HORIZONTAL		1
+-#define SMIAPP_SCALING_CAPABILITY_BOTH			2 /* horizontal/both */
+-
+-/* digital crop right before scaler */
+-#define SMIAPP_DIGITAL_CROP_CAPABILITY_NONE		0
+-#define SMIAPP_DIGITAL_CROP_CAPABILITY_INPUT_CROP	1
+-
+-#define SMIAPP_BINNING_CAPABILITY_NO			0
+-#define SMIAPP_BINNING_CAPABILITY_YES			1
+-
+-/* Maximum number of binning subtypes */
+-#define SMIAPP_BINNING_SUBTYPES				253
+-
+-#define SMIAPP_PIXEL_ORDER_GRBG				0
+-#define SMIAPP_PIXEL_ORDER_RGGB				1
+-#define SMIAPP_PIXEL_ORDER_BGGR				2
+-#define SMIAPP_PIXEL_ORDER_GBRG				3
+-
+-#define SMIAPP_DATA_FORMAT_MODEL_TYPE_NORMAL		1
+-#define SMIAPP_DATA_FORMAT_MODEL_TYPE_EXTENDED		2
+-#define SMIAPP_DATA_FORMAT_MODEL_TYPE_NORMAL_N		8
+-#define SMIAPP_DATA_FORMAT_MODEL_TYPE_EXTENDED_N	16
+-
+-#define SMIAPP_FRAME_FORMAT_MODEL_TYPE_2BYTE		0x01
+-#define SMIAPP_FRAME_FORMAT_MODEL_TYPE_4BYTE		0x02
+-#define SMIAPP_FRAME_FORMAT_MODEL_SUBTYPE_NROWS_MASK	0x0f
+-#define SMIAPP_FRAME_FORMAT_MODEL_SUBTYPE_NCOLS_MASK	0xf0
+-#define SMIAPP_FRAME_FORMAT_MODEL_SUBTYPE_NCOLS_SHIFT	4
+-
+-#define SMIAPP_FRAME_FORMAT_DESC_2_PIXELCODE_MASK	0xf000
+-#define SMIAPP_FRAME_FORMAT_DESC_2_PIXELCODE_SHIFT	12
+-#define SMIAPP_FRAME_FORMAT_DESC_2_PIXELS_MASK		0x0fff
+-
+-#define SMIAPP_FRAME_FORMAT_DESC_4_PIXELCODE_MASK	0xf0000000
+-#define SMIAPP_FRAME_FORMAT_DESC_4_PIXELCODE_SHIFT	28
+-#define SMIAPP_FRAME_FORMAT_DESC_4_PIXELS_MASK		0x0000ffff
+-
+-#define SMIAPP_FRAME_FORMAT_DESC_PIXELCODE_EMBEDDED	1
+-#define SMIAPP_FRAME_FORMAT_DESC_PIXELCODE_DUMMY	2
+-#define SMIAPP_FRAME_FORMAT_DESC_PIXELCODE_BLACK	3
+-#define SMIAPP_FRAME_FORMAT_DESC_PIXELCODE_DARK		4
+-#define SMIAPP_FRAME_FORMAT_DESC_PIXELCODE_VISIBLE	5
+-
+-#define SMIAPP_FAST_STANDBY_CTRL_COMPLETE_FRAMES	0
+-#define SMIAPP_FAST_STANDBY_CTRL_IMMEDIATE		1
+-
+-/* Scaling N factor */
+-#define SMIAPP_SCALE_N					16
+-
+-/* Image statistics registers */
+-/* Registers 0x2000 to 0x2fff are reserved for future
+- * use for statistics features.
+- */
+-
+-/* Manufacturer Specific Registers: 0x3000 to 0x3fff
+- * The manufacturer specifies these as a black box.
+- */
+-
+-#endif /* __SMIAPP_REG_H_ */
 diff --git a/drivers/media/i2c/smiapp/smiapp.h b/drivers/media/i2c/smiapp/smiapp.h
-index 08ca1b3d1b2f..1a67cf485dcc 100644
+index 6f469934f9e3..7cef97db7f47 100644
 --- a/drivers/media/i2c/smiapp/smiapp.h
 +++ b/drivers/media/i2c/smiapp/smiapp.h
-@@ -84,8 +84,6 @@ struct smiapp_hwconfig {
- 	struct smiapp_flash_strobe_parms *strobe_setup;
- };
+@@ -16,7 +16,7 @@
+ #include <media/v4l2-subdev.h>
  
--#include "smiapp-limits.h"
--
- struct smiapp_quirk;
+ #include "smiapp-pll.h"
+-#include "smiapp-reg.h"
++#include "smiapp-reg-defs.h"
+ #include "smiapp-regs.h"
+ #include "smiapp-quirk.h"
  
- #define SMIAPP_MODULE_IDENT_FLAG_REV_LE		(1 << 0)
-@@ -167,13 +165,6 @@ struct smiapp_module_info {
- 	  .flags = 0,							\
- 	  .name = _name, }
- 
--struct smiapp_reg_limits {
--	u32 addr;
--	char *what;
--};
--
--extern struct smiapp_reg_limits smiapp_reg_limits[];
--
- struct smiapp_csi_data_format {
- 	u32 code;
- 	u8 width;
-@@ -227,7 +218,6 @@ struct smiapp_sensor {
- 	struct regulator *vana;
- 	struct clk *ext_clk;
- 	struct gpio_desc *xshutdown;
--	u32 limits[SMIAPP_LIMIT_LAST];
- 	void *ccs_limits;
- 	u8 nbinning_subtypes;
- 	struct smiapp_binning_subtype binning_subtypes[SMIAPP_BINNING_SUBTYPES];
 -- 
 2.27.0
 
