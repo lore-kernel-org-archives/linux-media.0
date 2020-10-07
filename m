@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF1B0C4363C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62A1BC41604
 	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AB0F320797
+	by mail.kernel.org (Postfix) with ESMTP id 1BBC520797
 	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728022AbgJGIqM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Oct 2020 04:46:12 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:57058 "EHLO
+        id S1728107AbgJGIqu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Oct 2020 04:46:50 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:57044 "EHLO
         hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727997AbgJGIqK (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:10 -0400
+        with ESMTP id S1728012AbgJGIqM (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:12 -0400
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id F2FC8634CDC
-        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:19 +0300 (EEST)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id AF873634C96
+        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:20 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH v2 058/106] ccs-pll: Use correct VT divisor for calculating VT SYS divisor
-Date:   Wed,  7 Oct 2020 11:45:09 +0300
-Message-Id: <20201007084557.25843-49-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 068/106] ccs-pll: Fix comment on check against maximum PLL multiplier
+Date:   Wed,  7 Oct 2020 11:45:19 +0300
+Message-Id: <20201007084557.25843-59-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201007084557.25843-1-sakari.ailus@linux.intel.com>
 References: <20201007084505.25761-1-sakari.ailus@linux.intel.com>
@@ -37,36 +37,27 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use the correct video timing divisor to calculate the SYS divisor. Instead
-of the current value, the minimum was used. This could have resulted in a
-too low SYS divisor.
+The comment is about minimum PLL multiplier but the related check really
+deals with the maximum PLL multiplier.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs-pll.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/i2c/ccs-pll.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/media/i2c/ccs-pll.c b/drivers/media/i2c/ccs-pll.c
-index b2f0fa14ff92..ea0f84fc8a90 100644
+index 78897a7c1448..f4c41d61e332 100644
 --- a/drivers/media/i2c/ccs-pll.c
 +++ b/drivers/media/i2c/ccs-pll.c
-@@ -365,14 +365,14 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
- 
- 			/* Check if this one is better. */
- 			if (pix_div * sys_div
--			    <= roundup(min_vt_div, best_pix_div))
-+			    <= roundup(vt_div, best_pix_div))
- 				best_pix_div = pix_div;
- 		}
- 		if (best_pix_div < INT_MAX >> 1)
- 			break;
- 	}
- 
--	pll->vt_bk.sys_clk_div = DIV_ROUND_UP(min_vt_div, best_pix_div);
-+	pll->vt_bk.sys_clk_div = DIV_ROUND_UP(vt_div, best_pix_div);
- 	pll->vt_bk.pix_clk_div = best_pix_div;
- 
- 	pll->vt_bk.sys_clk_freq_hz =
+@@ -203,7 +203,7 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 			   / div);
+ 	dev_dbg(dev, "more_mul_max: max_op_sys_clk_div check: %u\n",
+ 		more_mul_max);
+-	/* Ensure we won't go above min_pll_multiplier. */
++	/* Ensure we won't go above max_pll_multiplier. */
+ 	more_mul_max = min(more_mul_max,
+ 			   DIV_ROUND_UP(op_lim_fr->max_pll_multiplier, mul));
+ 	dev_dbg(dev, "more_mul_max: min_pll_multiplier check: %u\n",
 -- 
 2.27.0
 
