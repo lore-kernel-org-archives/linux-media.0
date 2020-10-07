@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5BD7C4727E
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AB75C4363C
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5EABD2080A
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C19C2080A
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728079AbgJGIqb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Oct 2020 04:46:31 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:57038 "EHLO
+        id S1728053AbgJGIqR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Oct 2020 04:46:17 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:57076 "EHLO
         hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728015AbgJGIqR (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:17 -0400
+        with ESMTP id S1727977AbgJGIqN (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:13 -0400
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id B0C53634C8C
-        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:22 +0300 (EEST)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 2D7C5634CEF
+        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:21 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH v2 095/106] ccs: Add support for old-style SMIA digital gain
-Date:   Wed,  7 Oct 2020 11:45:46 +0300
-Message-Id: <20201007084557.25843-86-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 075/106] ccs-pll: Support two cycles per pixel on OP domain
+Date:   Wed,  7 Oct 2020 11:45:26 +0300
+Message-Id: <20201007084557.25843-66-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201007084557.25843-1-sakari.ailus@linux.intel.com>
 References: <20201007084505.25761-1-sakari.ailus@linux.intel.com>
@@ -37,77 +37,115 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-SMIA only has per-component digital gain. Add support for it.
+The l parameter defines the number of clock cycles to process a single
+pixel per OP lane. It is calculated based on a new register
+op_bits_per_lane.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c        | 33 +++++++++++++++++++++++--
- drivers/media/i2c/ccs/smiapp-reg-defs.h |  2 ++
- 2 files changed, 33 insertions(+), 2 deletions(-)
+ drivers/media/i2c/ccs-pll.c      | 19 +++++++++++++------
+ drivers/media/i2c/ccs-pll.h      |  2 ++
+ drivers/media/i2c/ccs/ccs-core.c |  1 +
+ 3 files changed, 16 insertions(+), 6 deletions(-)
 
+diff --git a/drivers/media/i2c/ccs-pll.c b/drivers/media/i2c/ccs-pll.c
+index 62939ca5b8e2..60ab0c043c7a 100644
+--- a/drivers/media/i2c/ccs-pll.c
++++ b/drivers/media/i2c/ccs-pll.c
+@@ -162,7 +162,7 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 		    const struct ccs_pll_branch_limits_bk *op_lim_bk,
+ 		    struct ccs_pll *pll, struct ccs_pll_branch_fr *op_pll_fr,
+ 		    struct ccs_pll_branch_bk *op_pll_bk, uint32_t mul,
+-		    uint32_t div)
++		    uint32_t div, uint32_t l)
+ {
+ 	uint32_t sys_div;
+ 	uint32_t best_pix_div = INT_MAX >> 1;
+@@ -252,10 +252,15 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 	op_pll_fr->pll_op_clk_freq_hz = op_pll_fr->pll_ip_clk_freq_hz
+ 		* op_pll_fr->pll_multiplier;
+ 
+-	op_pll_bk->pix_clk_div = pll->bits_per_pixel
+-		* pll->op_lanes / pll->csi2.lanes;
++	if (pll->flags & CCS_PLL_FLAG_LANE_SPEED_MODEL)
++		op_pll_bk->pix_clk_div = pll->bits_per_pixel
++			* pll->op_lanes / pll->csi2.lanes / l;
++	else
++		op_pll_bk->pix_clk_div = pll->bits_per_pixel / l;
++
+ 	op_pll_bk->pix_clk_freq_hz =
+ 		op_pll_bk->sys_clk_freq_hz / op_pll_bk->pix_clk_div;
++
+ 	dev_dbg(dev, "op_pix_clk_div: %u\n", op_pll_bk->pix_clk_div);
+ 
+ 	if (pll->flags & CCS_PLL_FLAG_NO_OP_CLOCKS) {
+@@ -291,7 +296,7 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 	dev_dbg(dev, "scale_m: %u\n", pll->scale_m);
+ 	min_vt_div = DIV_ROUND_UP(op_pll_bk->pix_clk_div
+ 				  * op_pll_bk->sys_clk_div * pll->scale_n
+-				  * pll->vt_lanes,
++				  * pll->vt_lanes * l,
+ 				  pll->op_lanes * vt_op_binning_div
+ 				  * pll->scale_m);
+ 
+@@ -406,6 +411,8 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 	uint16_t min_op_pre_pll_clk_div;
+ 	uint16_t max_op_pre_pll_clk_div;
+ 	uint32_t mul, div;
++	uint32_t l = (!pll->op_bits_per_lane ||
++		      pll->op_bits_per_lane >= pll->bits_per_pixel) ? 1 : 2;
+ 	uint32_t i;
+ 	int rval = -EINVAL;
+ 
+@@ -444,7 +451,7 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 	pll->pixel_rate_csi =
+ 		op_pll_bk->pix_clk_freq_hz
+ 		* (pll->flags & CCS_PLL_FLAG_LANE_SPEED_MODEL ?
+-		   pll->csi2.lanes : 1);
++		   pll->csi2.lanes : 1) / l;
+ 
+ 	/* Figure out limits for OP pre-pll divider based on extclk */
+ 	dev_dbg(dev, "min / max op_pre_pll_clk_div: %u / %u\n",
+@@ -482,7 +489,7 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 		     (pll->flags & CCS_PLL_FLAG_EXT_IP_PLL_DIVIDER) ? 1 :
+ 		     2 - (op_pll_fr->pre_pll_clk_div & 1)) {
+ 		rval = __ccs_pll_calculate(dev, lim, op_lim_fr, op_lim_bk, pll,
+-					   op_pll_fr, op_pll_bk, mul, div);
++					   op_pll_fr, op_pll_bk, mul, div, l);
+ 		if (rval)
+ 			continue;
+ 
+diff --git a/drivers/media/i2c/ccs-pll.h b/drivers/media/i2c/ccs-pll.h
+index 7c2b7a85de6a..dd97cd6dca0d 100644
+--- a/drivers/media/i2c/ccs-pll.h
++++ b/drivers/media/i2c/ccs-pll.h
+@@ -75,6 +75,7 @@ struct ccs_pll_branch_bk {
+  * @scale_m: Downscaling factor, M component, [16, max] (input)
+  * @scale_n: Downscaling factor, N component, typically 16 (input)
+  * @bits_per_pixel: Bits per pixel on the output data bus (input)
++ * @op_bits_per_lane: Number of bits per OP lane (input)
+  * @flags: CCS_PLL_FLAG_* (input)
+  * @link_freq: Chosen link frequency (input)
+  * @ext_clk_freq_hz: External clock frequency, i.e. the sensor's input clock
+@@ -99,6 +100,7 @@ struct ccs_pll {
+ 	uint8_t scale_m;
+ 	uint8_t scale_n;
+ 	uint8_t bits_per_pixel;
++	uint8_t op_bits_per_lane;
+ 	uint16_t flags;
+ 	uint32_t link_freq;
+ 	uint32_t ext_clk_freq_hz;
 diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 7975b3900017..b58cfb308251 100644
+index 00957568407a..8f8bda98b0b7 100644
 --- a/drivers/media/i2c/ccs/ccs-core.c
 +++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -674,7 +674,34 @@ static int ccs_set_ctrl(struct v4l2_ctrl *ctrl)
- 		break;
- 
- 	case V4L2_CID_DIGITAL_GAIN:
--		rval = ccs_write(sensor, DIGITAL_GAIN_GLOBAL, ctrl->val);
-+		if (CCS_LIM(sensor, DIGITAL_GAIN_CAPABILITY) ==
-+		    CCS_DIGITAL_GAIN_CAPABILITY_GLOBAL) {
-+			rval = ccs_write(sensor, DIGITAL_GAIN_GLOBAL,
-+					 ctrl->val);
-+			break;
-+		}
-+
-+		rval = ccs_write_addr(sensor,
-+				      SMIAPP_REG_U16_DIGITAL_GAIN_GREENR,
-+				      ctrl->val);
-+		if (rval)
-+			break;
-+
-+		rval = ccs_write_addr(sensor,
-+				      SMIAPP_REG_U16_DIGITAL_GAIN_RED,
-+				      ctrl->val);
-+		if (rval)
-+			break;
-+
-+		rval = ccs_write_addr(sensor,
-+				      SMIAPP_REG_U16_DIGITAL_GAIN_BLUE,
-+				      ctrl->val);
-+		if (rval)
-+			break;
-+
-+		rval = ccs_write_addr(sensor,
-+				      SMIAPP_REG_U16_DIGITAL_GAIN_GREENB,
-+				      ctrl->val);
- 
- 		break;
- 	case V4L2_CID_EXPOSURE:
-@@ -760,7 +787,9 @@ static int ccs_init_controls(struct ccs_sensor *sensor)
- 		CCS_LIM(sensor, ANALOG_GAIN_CODE_MIN));
- 
- 	if (CCS_LIM(sensor, DIGITAL_GAIN_CAPABILITY) ==
--	    CCS_DIGITAL_GAIN_CAPABILITY_GLOBAL)
-+	    CCS_DIGITAL_GAIN_CAPABILITY_GLOBAL ||
-+	    CCS_LIM(sensor, DIGITAL_GAIN_CAPABILITY) ==
-+	    SMIAPP_DIGITAL_GAIN_CAPABILITY_PER_CHANNEL)
- 		v4l2_ctrl_new_std(&sensor->pixel_array->ctrl_handler,
- 				  &ccs_ctrl_ops, V4L2_CID_DIGITAL_GAIN,
- 				  CCS_LIM(sensor, DIGITAL_GAIN_MIN),
-diff --git a/drivers/media/i2c/ccs/smiapp-reg-defs.h b/drivers/media/i2c/ccs/smiapp-reg-defs.h
-index e80c110ebf3a..177e3e51207a 100644
---- a/drivers/media/i2c/ccs/smiapp-reg-defs.h
-+++ b/drivers/media/i2c/ccs/smiapp-reg-defs.h
-@@ -535,6 +535,8 @@
- #define SMIAPP_DIGITAL_CROP_CAPABILITY_NONE		0
- #define SMIAPP_DIGITAL_CROP_CAPABILITY_INPUT_CROP	1
- 
-+#define SMIAPP_DIGITAL_GAIN_CAPABILITY_PER_CHANNEL	1
-+
- #define SMIAPP_BINNING_CAPABILITY_NO			0
- #define SMIAPP_BINNING_CAPABILITY_YES			1
+@@ -3214,6 +3214,7 @@ static int ccs_probe(struct i2c_client *client)
+ 	if (CCS_LIM(sensor, CLOCK_TREE_PLL_CAPABILITY) &
+ 	    CCS_CLOCK_TREE_PLL_CAPABILITY_EXT_DIVIDER)
+ 		sensor->pll.flags |= CCS_PLL_FLAG_EXT_IP_PLL_DIVIDER;
++	sensor->pll.op_bits_per_lane = CCS_LIM(sensor, OP_BITS_PER_LANE);
+ 	sensor->pll.ext_clk_freq_hz = sensor->hwcfg.ext_clk;
+ 	sensor->pll.scale_n = CCS_LIM(sensor, SCALER_N_MIN);
  
 -- 
 2.27.0
