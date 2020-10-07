@@ -2,31 +2,31 @@ Return-Path: <SRS0=q2TO=DO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE215C41604
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3473C4727F
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9CC2C2080A
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5E34E212CC
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728004AbgJGIqJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Oct 2020 04:46:09 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:57056 "EHLO
+        id S1728008AbgJGIqK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Oct 2020 04:46:10 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:57076 "EHLO
         hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727982AbgJGIqH (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:07 -0400
+        with ESMTP id S1727988AbgJGIqI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:08 -0400
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 109AB634CD2
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 7AAE8634CD9
         for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:19 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH v2 045/106] ccs: Change my e-mail address
-Date:   Wed,  7 Oct 2020 11:44:58 +0300
-Message-Id: <20201007084557.25843-38-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 050/106] ccs: Add device compatible identifiers for telling SMIA and CCS apart
+Date:   Wed,  7 Oct 2020 11:45:03 +0300
+Message-Id: <20201007084557.25843-43-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201007084557.25843-1-sakari.ailus@linux.intel.com>
 References: <20201007084505.25761-1-sakari.ailus@linux.intel.com>
@@ -37,150 +37,53 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use my @linux.intel.com e-mail address in the CCS driver.
+Add device data specific to DT compatible ID to tell SMIA and CCS devices
+apart already in power-up.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs-pll.c            | 4 ++--
- drivers/media/i2c/ccs-pll.h            | 2 +-
- drivers/media/i2c/ccs/ccs-core.c       | 6 +++---
- drivers/media/i2c/ccs/ccs-quirk.c      | 2 +-
- drivers/media/i2c/ccs/ccs-quirk.h      | 2 +-
- drivers/media/i2c/ccs/ccs-reg-access.c | 2 +-
- drivers/media/i2c/ccs/ccs-reg-access.h | 2 +-
- drivers/media/i2c/ccs/ccs.h            | 2 +-
- 8 files changed, 11 insertions(+), 11 deletions(-)
+ drivers/media/i2c/ccs/ccs-core.c | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/i2c/ccs-pll.c b/drivers/media/i2c/ccs-pll.c
-index 58f5fe7062ae..0d57bac1599a 100644
---- a/drivers/media/i2c/ccs-pll.c
-+++ b/drivers/media/i2c/ccs-pll.c
-@@ -6,7 +6,7 @@
-  *
-  * Copyright (C) 2020 Intel Corporation
-  * Copyright (C) 2011--2012 Nokia Corporation
-- * Contact: Sakari Ailus <sakari.ailus@iki.fi>
-+ * Contact: Sakari Ailus <sakari.ailus@linux.intel.com>
-  */
- 
- #include <linux/device.h>
-@@ -475,6 +475,6 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *limits,
- }
- EXPORT_SYMBOL_GPL(ccs_pll_calculate);
- 
--MODULE_AUTHOR("Sakari Ailus <sakari.ailus@iki.fi>");
-+MODULE_AUTHOR("Sakari Ailus <sakari.ailus@linux.intel.com>");
- MODULE_DESCRIPTION("Generic MIPI CCS/SMIA/SMIA++ PLL calculator");
- MODULE_LICENSE("GPL v2");
-diff --git a/drivers/media/i2c/ccs-pll.h b/drivers/media/i2c/ccs-pll.h
-index 88d641ee3fa1..07f7f9e8a1cc 100644
---- a/drivers/media/i2c/ccs-pll.h
-+++ b/drivers/media/i2c/ccs-pll.h
-@@ -6,7 +6,7 @@
-  *
-  * Copyright (C) 2020 Intel Corporation
-  * Copyright (C) 2012 Nokia Corporation
-- * Contact: Sakari Ailus <sakari.ailus@iki.fi>
-+ * Contact: Sakari Ailus <sakari.ailus@linux.intel.com>
-  */
- 
- #ifndef CCS_PLL_H
 diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 4e49195efb5f..5d7c5ece578d 100644
+index 5f1665f08b9f..940b5327a388 100644
 --- a/drivers/media/i2c/ccs/ccs-core.c
 +++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -6,7 +6,7 @@
-  *
-  * Copyright (C) 2020 Intel Corporation
-  * Copyright (C) 2010--2012 Nokia Corporation
-- * Contact: Sakari Ailus <sakari.ailus@iki.fi>
-+ * Contact: Sakari Ailus <sakari.ailus@linux.intel.com>
-  *
-  * Based on smiapp driver by Vimarsh Zutshi
-  * Based on jt8ev1.c by Vimarsh Zutshi
-@@ -1162,7 +1162,7 @@ static int ccs_setup_flash_strobe(struct ccs_sensor *sensor)
- 	 * do not change, or if you do at least know what you're
- 	 * doing. :-)
- 	 *
--	 * Sakari Ailus <sakari.ailus@iki.fi> 2010-10-25
-+	 * Sakari Ailus <sakari.ailus@linux.intel.com> 2010-10-25
- 	 *
- 	 * flash_strobe_length [us] / 10^6 = (tFlash_strobe_width_ctrl
- 	 *	/ EXTCLK freq [Hz]) * flash_strobe_adjustment
-@@ -3323,7 +3323,7 @@ static void ccs_module_cleanup(void)
- module_init(ccs_module_init);
- module_exit(ccs_module_cleanup);
+@@ -59,6 +59,12 @@ static const struct ccs_module_ident ccs_module_idents[] = {
+ 	CCS_IDENT_LQ(0x10, 0x4241, -1, "imx125es", &smiapp_imx125es_quirk),
+ };
  
--MODULE_AUTHOR("Sakari Ailus <sakari.ailus@iki.fi>");
-+MODULE_AUTHOR("Sakari Ailus <sakari.ailus@linux.intel.com>");
- MODULE_DESCRIPTION("Generic MIPI CCS/SMIA/SMIA++ camera sensor driver");
- MODULE_LICENSE("GPL v2");
- MODULE_ALIAS("smiapp");
-diff --git a/drivers/media/i2c/ccs/ccs-quirk.c b/drivers/media/i2c/ccs/ccs-quirk.c
-index 8b4fa60044b2..4fe8c6f70579 100644
---- a/drivers/media/i2c/ccs/ccs-quirk.c
-+++ b/drivers/media/i2c/ccs/ccs-quirk.c
-@@ -6,7 +6,7 @@
++#define CCS_DEVICE_FLAG_IS_SMIA		BIT(0)
++
++struct ccs_device {
++	unsigned char flags;
++};
++
+ /*
   *
-  * Copyright (C) 2020 Intel Corporation
-  * Copyright (C) 2011--2012 Nokia Corporation
-- * Contact: Sakari Ailus <sakari.ailus@iki.fi>
-+ * Contact: Sakari Ailus <sakari.ailus@linux.intel.com>
-  */
+  * Dynamic Capability Identification
+@@ -3276,11 +3282,17 @@ static int ccs_remove(struct i2c_client *client)
+ 	return 0;
+ }
  
- #include <linux/delay.h>
-diff --git a/drivers/media/i2c/ccs/ccs-quirk.h b/drivers/media/i2c/ccs/ccs-quirk.h
-index 3e7779e2fc4b..6b4ec4beaba0 100644
---- a/drivers/media/i2c/ccs/ccs-quirk.h
-+++ b/drivers/media/i2c/ccs/ccs-quirk.h
-@@ -6,7 +6,7 @@
-  *
-  * Copyright (C) 2020 Intel Corporation
-  * Copyright (C) 2011--2012 Nokia Corporation
-- * Contact: Sakari Ailus <sakari.ailus@iki.fi>
-+ * Contact: Sakari Ailus <sakari.ailus@linux.intel.com>
-  */
- 
- #ifndef __CCS_QUIRK__
-diff --git a/drivers/media/i2c/ccs/ccs-reg-access.c b/drivers/media/i2c/ccs/ccs-reg-access.c
-index 91ccbca11577..aad2727570ec 100644
---- a/drivers/media/i2c/ccs/ccs-reg-access.c
-+++ b/drivers/media/i2c/ccs/ccs-reg-access.c
-@@ -6,7 +6,7 @@
-  *
-  * Copyright (C) 2020 Intel Corporation
-  * Copyright (C) 2011--2012 Nokia Corporation
-- * Contact: Sakari Ailus <sakari.ailus@iki.fi>
-+ * Contact: Sakari Ailus <sakari.ailus@linux.intel.com>
-  */
- 
- #include <asm/unaligned.h>
-diff --git a/drivers/media/i2c/ccs/ccs-reg-access.h b/drivers/media/i2c/ccs/ccs-reg-access.h
-index 5f6ff9c57698..cfad2e520fe2 100644
---- a/drivers/media/i2c/ccs/ccs-reg-access.h
-+++ b/drivers/media/i2c/ccs/ccs-reg-access.h
-@@ -6,7 +6,7 @@
-  *
-  * Copyright (C) 2020 Intel Corporation
-  * Copyright (C) 2011--2012 Nokia Corporation
-- * Contact: Sakari Ailus <sakari.ailus@iki.fi>
-+ * Contact: Sakari Ailus <sakari.ailus@linux.intel.com>
-  */
- 
- #ifndef SMIAPP_REGS_H
-diff --git a/drivers/media/i2c/ccs/ccs.h b/drivers/media/i2c/ccs/ccs.h
-index c8a9f4ee093e..6b07e4143ff0 100644
---- a/drivers/media/i2c/ccs/ccs.h
-+++ b/drivers/media/i2c/ccs/ccs.h
-@@ -6,7 +6,7 @@
-  *
-  * Copyright (C) 2020 Intel Corporation
-  * Copyright (C) 2010--2012 Nokia Corporation
-- * Contact: Sakari Ailus <sakari.ailus@iki.fi>
-+ * Contact: Sakari Ailus <sakari.ailus@linux.intel.com>
-  */
- 
- #ifndef __CCS_H__
++static const struct ccs_device smia_device = {
++	.flags = CCS_DEVICE_FLAG_IS_SMIA,
++};
++
++static const struct ccs_device ccs_device = {};
++
+ static const struct of_device_id ccs_of_table[] = {
+-	{ .compatible = "mipi-ccs-1.1" },
+-	{ .compatible = "mipi-ccs-1.0" },
+-	{ .compatible = "mipi-ccs" },
+-	{ .compatible = "nokia,smia" },
++	{ .compatible = "mipi-ccs-1.1", .data = &ccs_device },
++	{ .compatible = "mipi-ccs-1.0", .data = &ccs_device },
++	{ .compatible = "mipi-ccs", .data = &ccs_device },
++	{ .compatible = "nokia,smia", .data = &smia_device },
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(of, ccs_of_table);
 -- 
 2.27.0
 
