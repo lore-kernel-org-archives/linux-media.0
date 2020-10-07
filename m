@@ -2,167 +2,132 @@ Return-Path: <SRS0=q2TO=DO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F0A7C4363C
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 10:47:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2171FC4363C
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 11:10:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CB3ED20870
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 10:47:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A0A12216C4
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 11:10:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="LWM9hhbF"
+	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="ThIrPxwO"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727898AbgJGKrP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Oct 2020 06:47:15 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:52608 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726942AbgJGKrO (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 06:47:14 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20201007104713euoutp026a349068e02ec8d29eb2c9ccfd121b84~7sAYueR8E2345223452euoutp020
-        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 10:47:13 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20201007104713euoutp026a349068e02ec8d29eb2c9ccfd121b84~7sAYueR8E2345223452euoutp020
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1602067633;
-        bh=E5XERvvgz2kHeHngJGLKNS1MxI488JkYoBjaEOnm4F0=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=LWM9hhbFLBQZw9NeZcCu74FRkXPQ+DXk1L64bWyE0gfQavvukQ3aK7nEY6+oeK2+r
-         F3FU/ubHqVIWc3Y1KacSRmxqrhIP8kgA2Q46SEaukpDsDjpgZA0TUTe0DK41CQfvTK
-         Gid85XkZ852hx3oQWRrs9b80m6f2nRITktStiISE=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20201007104712eucas1p15a76d78779d57144160e51c36d83d24e~7sAYLFOLh3224932249eucas1p1I;
-        Wed,  7 Oct 2020 10:47:12 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id ED.76.06456.0BC9D7F5; Wed,  7
-        Oct 2020 11:47:12 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20201007104711eucas1p1a1b0945d6b12e3260b210dfcb5756ab9~7sAXtthzZ0030400304eucas1p11;
-        Wed,  7 Oct 2020 10:47:11 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20201007104711eusmtrp1487b9ffe41a58ec6aaec5d6c86578d4d~7sAXs58Da2859428594eusmtrp1b;
-        Wed,  7 Oct 2020 10:47:11 +0000 (GMT)
-X-AuditID: cbfec7f2-7efff70000001938-2a-5f7d9cb05c38
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 66.4B.06314.FAC9D7F5; Wed,  7
-        Oct 2020 11:47:11 +0100 (BST)
-Received: from [106.210.88.143] (unknown [106.210.88.143]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20201007104710eusmtip191849209bf06805c0437d3901896f954~7sAWmUm-z2861128611eusmtip1e;
-        Wed,  7 Oct 2020 10:47:10 +0000 (GMT)
-Subject: Re: [PATCH 2/2] mm/frame-vec: use FOLL_LONGTERM
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Jan Kara <jack@suse.cz>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Pawel Osciak <pawel@osciak.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Inki Dae <inki.dae@samsung.com>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>, Oded Gabbay <oded.gabbay@gmail.com>
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-Message-ID: <d2f8e8a7-614d-18c8-9e2a-c604e5e54ce6@samsung.com>
-Date:   Wed, 7 Oct 2020 12:47:10 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0)
-        Gecko/20100101 Thunderbird/78.3.1
+        id S1727018AbgJGLKz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Oct 2020 07:10:55 -0400
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:54690 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726861AbgJGLKz (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 7 Oct 2020 07:10:55 -0400
+Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 097B2HHO022041;
+        Wed, 7 Oct 2020 13:10:43 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=tCCh6QJ69c9mdC8PCEmk9ihoBbtQNtpxtgVQ37a6uNw=;
+ b=ThIrPxwO2/vAfLbS7FqoKQvlnwH0E8Mo88K/wmYbu4tZSDAdW1KHs6R8YhILd4k6g93A
+ sVvvd7bnnB1Uf2PPXy2oZYbEytVFr2XjAsNcO2CTZzrp4x9xgj7W4q87b5jE2GOVdMge
+ FFR1Dx/GCDWxdDo46kbKeyAtbTlJ6O+QPYK30z/3lcgrupQXzGHHWe5bAumQ0Gj77rXp
+ B8r3ws102UjrtkeQ20QFYT1R1jJqus9bO7SBDluEabzAZ5Co5pavI2W8MEyiOKAUiuLb
+ +P88+mMhy5gmc0DehuY1Oe2zONoNuMvZ0IVrcr1c5dcLdYO8uekI3ERuaiNeR8mD80OP eA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 3402tjv4fk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Oct 2020 13:10:43 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9C28E10002A;
+        Wed,  7 Oct 2020 13:10:42 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag1node1.st.com [10.75.127.1])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8832E21FEAB;
+        Wed,  7 Oct 2020 13:10:42 +0200 (CEST)
+Received: from localhost (10.75.127.47) by SFHDAG1NODE1.st.com (10.75.127.1)
+ with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 7 Oct 2020 13:10:42
+ +0200
+From:   Hugues Fruchet <hugues.fruchet@st.com>
+To:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+CC:     <linux-media@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Hugues Fruchet <hugues.fruchet@st.com>,
+        Alain Volmat <alain.volmat@st.com>
+Subject: [PATCH] media: ov5640: add support of 160x120 resolution
+Date:   Wed, 7 Oct 2020 13:09:59 +0200
+Message-ID: <1602068999-32041-1-git-send-email-hugues.fruchet@st.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-In-Reply-To: <CAKMK7uFP-XQHUPYeRhPx7tjvjARQiF-os9z9jx6WANV6sgSf6g@mail.gmail.com>
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SaUwTURSF8zrTmQEtPiqGqxKXxrglinXLSzSKxujERKO/XBLBKiOgbLaA
-        4EpoIIDgAhpqqYJ1QQgIomBFWUQUTZFVCSg7GIuxIosaIUEZxoV/3z333LxzksdRSjMzg/ML
-        DBG0gRp/FeNIF774WbMkz3TKa1lk6XRiys1mSMrlWkSud7ZSJKPqLkXefOtjSFL7BZqkpuhl
-        5IrhJRojm4zc+2Bmia2tjiavoz6zJL+7UU4aikwMScgrkJO27F9yYqgpkZFa23s5uWT/yRJD
-        ci9DBqNHGY9pfGpkHc0Xf0+n+UfGVpa/8aRXxucPJLH8S8MIzbefrZTx92+e4RP1Xxi+e7iX
-        4ftK3jL8uQdZiK9Kr2D5wfxZfMHge3rHlL2Oa70Ff78wQeu+br+j7+OWbCbY5hB+se08FYls
-        bDxy4ACvhAR92Tgr8R0EjRkh8chxjIcQxNSflUnDIILE6tx/Fz3vfsilRQaCFx+LaWnoQ/BQ
-        3ywXXVMxgetpMTKRXfBWiK2IQaKJwo8YKLRYkLhgsBri7fGMyAq8DtqtDWM6x9F4HtRYtovy
-        NHwArLVRrGRxhldXemiRHfBOiEpLGWcKz4aHdhMlsSu860kbjw24g4O8iq+MFHsTFNuj//BU
-        +FT54E8dN7AmJ9DSgR5BZ3UOKw0JCBqiDEhyrYGW6mFGTEfhRZBb5C7JG+BW3Be5KAN2gia7
-        sxTCCZIKUyhJVkBsjFJyzwdj5d1/zz6tracuIJVxQjXjhDrGCXWM/99NR3QWchVCdQE+gk4d
-        KBxbqtME6EIDfZYeDArIR2M/1zpaOWBB3+oPlCPMIdVkxe6jJ72Uck2YLiKgHAFHqVwUG19b
-        PZUKb03EcUEb5KUN9Rd05WgmR6tcFSvMvfuU2EcTIhwRhGBB+3cr4xxmRKLV3W1Tou1pTudP
-        +F6zHfQwx3kbB0jpzT0FJnbmClwRFPR8zq9VpV1Xk3e5Z4282eaxwHvhJxfr6by49YdGh04l
-        VrcOdI34hlS5po9oLNrwV2a1Z//KnOW7Gz22qDuDyyZ9z/g8fLipcXP/nLlF/V0dzW63N1vK
-        rHa/iMy6Dz53nmXWq2idr0a9mNLqNL8BDaTifLUDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0hTYRjHec9tZ9HwOBXfLMpGFATNjtfXsBHSh0NUdPmQZbVO86Cic7kz
-        7ULR0jKZt7SLOpfaxSKTypndtCjTVNR0XioyJ6XFDE1ILO1iba7Abz+e5/97Hh54aFx+l/Sj
-        45MMgj6JT1RQ84i2meaBVbctx9Sr+yqCkeV2FYUKz3cBdOn9AI6ut9/CUe/kOIUKBs8QqKQw
-        HUPFRS3ASQ4MVX+8LEEOu41AHWmjEmQdekWinkcWCmXfqSWRveoPiYo6n2Coy9FPonNj0xJU
-        dHaEQhOnZqh1PlyJ0UZwj7+VE9xD84CEu1I/gnHWrwUSrqXoJ8ENZjVjXM3V41xO+heKG/ox
-        QnHjT/ooLvduJeDayxsl3IR1MVc70U9s8diljNDrUgyCf5xONKxVRLMoUMmGI2VgcLiSDQrb
-        syYwRBGgiogREuNTBX2Aap8yru5dFXXAIT2Ub8/DjcAhMQEpDZlgOPz2O+liOVMB4NNyhbu+
-        CLZeMJJu9oK/XpkoE5jnzIwB6Lj4YbbhxSB4qSwDc7E3swFmNmYAVwhn6ig4bc0j3UYhDjOs
-        pbPrKIaFpjHXKCktY1RwsK3HadA0wSyDnQ82u8o+zH6Y1X0Oc0c8YWvxMOFiKbMVppUVzjLO
-        hMLSmve4m5fA+2OWf+wL3w6XYWeA3DxHN89RzHMU8xylHBCVwFtIEbWxWpFVirxWTEmKVWp0
-        Witwfsy9F9M1D0B39fYGwNBAMV8WlXxULSf5VPGwtgFAGld4yyI72vbKZTH84SOCXqfWpyQK
-        YgMIcd6Wj/v5aHTO/0syqNkQNgyFs2FBYUGhSOEry2Se7ZYzsbxBSBCEA4L+v4fRUj8jKMOW
-        V7/ceXr0yuqhqZtRibaVGt1v+/aKutSa+uiWiNxk1vuNZ8ynnX6PgNC7bbDFH2V0LjU2Fay3
-        TUleF7ffODFu8+nY9PxzzlXNpKGY68/NTI5G+fwCu/9JS1ZIQnZTdT3/zmOjSbbwmCovUkoc
-        VHVPi1Ats15P6F2huWbfoSDEOJ5dietF/i8Y0zPsRwMAAA==
-X-CMS-MailID: 20201007104711eucas1p1a1b0945d6b12e3260b210dfcb5756ab9
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20201003094038eucas1p12aaafe0f52a7747bc2ba95ccb91d1651
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20201003094038eucas1p12aaafe0f52a7747bc2ba95ccb91d1651
-References: <20201002175303.390363-1-daniel.vetter@ffwll.ch>
-        <20201002175303.390363-2-daniel.vetter@ffwll.ch>
-        <20201002180603.GL9916@ziepe.ca>
-        <CAKMK7uGF+y-r4swLXmodhduRMy0NPa=ASBY8JOXS_g=9Rq9XQw@mail.gmail.com>
-        <20201002233118.GM9916@ziepe.ca>
-        <CGME20201003094038eucas1p12aaafe0f52a7747bc2ba95ccb91d1651@eucas1p1.samsung.com>
-        <CAKMK7uFP-XQHUPYeRhPx7tjvjARQiF-os9z9jx6WANV6sgSf6g@mail.gmail.com>
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG4NODE2.st.com (10.75.127.11) To SFHDAG1NODE1.st.com
+ (10.75.127.1)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-10-07_08:2020-10-06,2020-10-07 signatures=0
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Daniel,
+Add support of 160x120 resolution.
 
-On 03.10.2020 11:40, Daniel Vetter wrote:
->> After he three places above should use pin_user_pages_fast(), then
->> this whole broken API should be moved into videobuf2-memops.c and a
->> big fat "THIS DOESN'T WORK" stuck on it.
->>
->> videobuf2 should probably use P2P DMA buf for this instead.
-> Yup this should be done with dma_buf instead, and v4l has that.
+Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
+---
+ drivers/media/i2c/ov5640.c | 25 ++++++++++++++++++++++++-
+ 1 file changed, 24 insertions(+), 1 deletion(-)
 
-Yes, V4L2 has dma_buf support NOW. That days, using so called V4L2 
-USERPTR method was the only way to achieve zero copy buffer sharing 
-between devices, so this is just a historical baggage. I've been 
-actively involved in implementing that. I've tried to make it secure as 
-much as possible assuming the limitation of that approach. With a few 
-assumptions it works fine. Buffers are refcounted both by the 
-vm_ops->open or by incrementing the refcount of the vm->file. This 
-basically works with any sane driver, which doesn't free the mmaped 
-buffer until the file is released. This is true for V4L2 and FBdev devices.
-
-This API is considered as deprecated in V4L2 world, so I think 
-supporting this hack can be removed one day as nowadays userspace should 
-use dma buf.
-
- > ...
-
-Best regards
+diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+index 8d0254d..df348dc 100644
+--- a/drivers/media/i2c/ov5640.c
++++ b/drivers/media/i2c/ov5640.c
+@@ -98,7 +98,8 @@
+ #define OV5640_REG_AVG_READOUT		0x56a1
+ 
+ enum ov5640_mode_id {
+-	OV5640_MODE_QCIF_176_144 = 0,
++	OV5640_MODE_QQVGA_160_120 = 0,
++	OV5640_MODE_QCIF_176_144,
+ 	OV5640_MODE_QVGA_320_240,
+ 	OV5640_MODE_VGA_640_480,
+ 	OV5640_MODE_NTSC_720_480,
+@@ -416,6 +417,24 @@ static const struct reg_value ov5640_setting_QVGA_320_240[] = {
+ 	{0x3824, 0x02, 0, 0}, {0x5001, 0xa3, 0, 0},
+ };
+ 
++static const struct reg_value ov5640_setting_QQVGA_160_120[] = {
++	{0x3c07, 0x08, 0, 0},
++	{0x3c09, 0x1c, 0, 0}, {0x3c0a, 0x9c, 0, 0}, {0x3c0b, 0x40, 0, 0},
++	{0x3814, 0x31, 0, 0},
++	{0x3815, 0x31, 0, 0}, {0x3800, 0x00, 0, 0}, {0x3801, 0x00, 0, 0},
++	{0x3802, 0x00, 0, 0}, {0x3803, 0x04, 0, 0}, {0x3804, 0x0a, 0, 0},
++	{0x3805, 0x3f, 0, 0}, {0x3806, 0x07, 0, 0}, {0x3807, 0x9b, 0, 0},
++	{0x3810, 0x00, 0, 0},
++	{0x3811, 0x10, 0, 0}, {0x3812, 0x00, 0, 0}, {0x3813, 0x06, 0, 0},
++	{0x3618, 0x00, 0, 0}, {0x3612, 0x29, 0, 0}, {0x3708, 0x64, 0, 0},
++	{0x3709, 0x52, 0, 0}, {0x370c, 0x03, 0, 0}, {0x3a02, 0x03, 0, 0},
++	{0x3a03, 0xd8, 0, 0}, {0x3a08, 0x01, 0, 0}, {0x3a09, 0x27, 0, 0},
++	{0x3a0a, 0x00, 0, 0}, {0x3a0b, 0xf6, 0, 0}, {0x3a0e, 0x03, 0, 0},
++	{0x3a0d, 0x04, 0, 0}, {0x3a14, 0x03, 0, 0}, {0x3a15, 0xd8, 0, 0},
++	{0x4001, 0x02, 0, 0}, {0x4004, 0x02, 0, 0},
++	{0x4407, 0x04, 0, 0}, {0x5001, 0xa3, 0, 0},
++};
++
+ static const struct reg_value ov5640_setting_QCIF_176_144[] = {
+ 	{0x3c07, 0x08, 0, 0},
+ 	{0x3c09, 0x1c, 0, 0}, {0x3c0a, 0x9c, 0, 0}, {0x3c0b, 0x40, 0, 0},
+@@ -552,6 +571,10 @@ static const struct ov5640_mode_info ov5640_mode_init_data = {
+ 
+ static const struct ov5640_mode_info
+ ov5640_mode_data[OV5640_NUM_MODES] = {
++	{OV5640_MODE_QQVGA_160_120, SUBSAMPLING,
++	 160, 1896, 120, 984,
++	 ov5640_setting_QCIF_176_144,
++	 ARRAY_SIZE(ov5640_setting_QCIF_176_144)},
+ 	{OV5640_MODE_QCIF_176_144, SUBSAMPLING,
+ 	 176, 1896, 144, 984,
+ 	 ov5640_setting_QCIF_176_144,
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+2.7.4
 
