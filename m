@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9603CC4727E
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 216B8C4727F
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 537A220797
+	by mail.kernel.org (Postfix) with ESMTP id D2DA62080A
 	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728073AbgJGIqY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Oct 2020 04:46:24 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:57072 "EHLO
+        id S1728075AbgJGIq0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Oct 2020 04:46:26 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:57058 "EHLO
         hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728057AbgJGIqT (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:19 -0400
+        with ESMTP id S1728063AbgJGIqU (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:20 -0400
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 14852634D12
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 71C10634D16
         for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:23 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH v2 101/106] v4l: uapi: ccs: Add controls for CCS alternative analogue gain
-Date:   Wed,  7 Oct 2020 11:45:52 +0300
-Message-Id: <20201007084557.25843-92-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 106/106] ccs: Add CCS ACPI device ID
+Date:   Wed,  7 Oct 2020 11:45:57 +0300
+Message-Id: <20201007084557.25843-97-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201007084557.25843-1-sakari.ailus@linux.intel.com>
 References: <20201007084505.25761-1-sakari.ailus@linux.intel.com>
@@ -37,26 +37,39 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add two new controls for alternative analogue gain some CCS compliant
-camera sensors support.
+The CCS compliant sensors use device ID "MIPI0200". Use this id for ACPI
+device matching.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- include/uapi/linux/ccs.h | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/i2c/ccs/ccs-core.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/include/uapi/linux/ccs.h b/include/uapi/linux/ccs.h
-index bcdce95955b0..f22afa58b446 100644
---- a/include/uapi/linux/ccs.h
-+++ b/include/uapi/linux/ccs.h
-@@ -10,5 +10,7 @@
- #define V4L2_CID_CCS_ANALOGUE_GAIN_C0		(V4L2_CID_USER_CCS_BASE + 2)
- #define V4L2_CID_CCS_ANALOGUE_GAIN_M1		(V4L2_CID_USER_CCS_BASE + 3)
- #define V4L2_CID_CCS_ANALOGUE_GAIN_C1		(V4L2_CID_USER_CCS_BASE + 4)
-+#define V4L2_CID_CCS_ANALOGUE_LINEAR_GAIN	(V4L2_CID_USER_CCS_BASE + 5)
-+#define V4L2_CID_CCS_ANALOGUE_EXPONENTIAL_GAIN	(V4L2_CID_USER_CCS_BASE + 6)
+diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
+index 10ed3d01af16..297c5373a305 100644
+--- a/drivers/media/i2c/ccs/ccs-core.c
++++ b/drivers/media/i2c/ccs/ccs-core.c
+@@ -3604,6 +3604,12 @@ static const struct ccs_device smia_device = {
  
- #endif
+ static const struct ccs_device ccs_device = {};
+ 
++static const struct acpi_device_id ccs_acpi_table[] = {
++	{ .id = "MIPI0200", .driver_data = (unsigned long)&ccs_device },
++	{ },
++};
++MODULE_DEVICE_TABLE(acpi, ccs_acpi_table);
++
+ static const struct of_device_id ccs_of_table[] = {
+ 	{ .compatible = "mipi-ccs-1.1", .data = &ccs_device },
+ 	{ .compatible = "mipi-ccs-1.0", .data = &ccs_device },
+@@ -3620,6 +3626,7 @@ static const struct dev_pm_ops ccs_pm_ops = {
+ 
+ static struct i2c_driver ccs_i2c_driver = {
+ 	.driver	= {
++		.acpi_match_table = ccs_acpi_table,
+ 		.of_match_table = ccs_of_table,
+ 		.name = CCS_NAME,
+ 		.pm = &ccs_pm_ops,
 -- 
 2.27.0
 
