@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87D5DC4363C
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00412C4727F
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3F6FD20797
+	by mail.kernel.org (Postfix) with ESMTP id B601620797
 	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728103AbgJGIqt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1728104AbgJGIqt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 7 Oct 2020 04:46:49 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:57072 "EHLO
+Received: from retiisi.org.uk ([95.216.213.190]:57052 "EHLO
         hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728016AbgJGIqN (ORCPT
+        with ESMTP id S1728019AbgJGIqN (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:13 -0400
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id F1C86634CEB
-        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:20 +0300 (EEST)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 1E371634CED
+        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:21 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH v2 072/106] ccs: Add support for lane speed model
-Date:   Wed,  7 Oct 2020 11:45:23 +0300
-Message-Id: <20201007084557.25843-63-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 074/106] ccs-pll: Add support for extended input PLL clock divider
+Date:   Wed,  7 Oct 2020 11:45:25 +0300
+Message-Id: <20201007084557.25843-65-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201007084557.25843-1-sakari.ailus@linux.intel.com>
 References: <20201007084505.25761-1-sakari.ailus@linux.intel.com>
@@ -37,41 +37,55 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Convey the relevant PLL flags to the PLL calculator. Also the lane speed
-model affects how the link rate is calculated on the CSI-2 bus, as the
-rate is total of all lanes.
+CCS allows odd PLL dividers other than 1, granted that the corresponding
+capability bit is set. Support this both in the PLL calculator and the CCS
+driver.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ drivers/media/i2c/ccs-pll.c      | 4 +++-
+ drivers/media/i2c/ccs-pll.h      | 1 +
+ drivers/media/i2c/ccs/ccs-core.c | 3 +++
+ 3 files changed, 7 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/media/i2c/ccs-pll.c b/drivers/media/i2c/ccs-pll.c
+index cb19a36e54df..62939ca5b8e2 100644
+--- a/drivers/media/i2c/ccs-pll.c
++++ b/drivers/media/i2c/ccs-pll.c
+@@ -478,7 +478,9 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 
+ 	for (op_pll_fr->pre_pll_clk_div = min_op_pre_pll_clk_div;
+ 	     op_pll_fr->pre_pll_clk_div <= max_op_pre_pll_clk_div;
+-	     op_pll_fr->pre_pll_clk_div += 2 - (op_pll_fr->pre_pll_clk_div & 1)) {
++	     op_pll_fr->pre_pll_clk_div +=
++		     (pll->flags & CCS_PLL_FLAG_EXT_IP_PLL_DIVIDER) ? 1 :
++		     2 - (op_pll_fr->pre_pll_clk_div & 1)) {
+ 		rval = __ccs_pll_calculate(dev, lim, op_lim_fr, op_lim_bk, pll,
+ 					   op_pll_fr, op_pll_bk, mul, div);
+ 		if (rval)
+diff --git a/drivers/media/i2c/ccs-pll.h b/drivers/media/i2c/ccs-pll.h
+index 165de20af079..7c2b7a85de6a 100644
+--- a/drivers/media/i2c/ccs-pll.h
++++ b/drivers/media/i2c/ccs-pll.h
+@@ -25,6 +25,7 @@
+ /* CCS PLL flags */
+ #define CCS_PLL_FLAG_LANE_SPEED_MODEL				BIT(2)
+ #define CCS_PLL_FLAG_LINK_DECOUPLED				BIT(3)
++#define CCS_PLL_FLAG_EXT_IP_PLL_DIVIDER				BIT(4)
+ 
+ /**
+  * struct ccs_pll_branch_fr - CCS PLL configuration (front)
 diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 2ee972bb4885..8b022f2ea17e 100644
+index c3c4f59670e2..00957568407a 100644
 --- a/drivers/media/i2c/ccs/ccs-core.c
 +++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -387,7 +387,9 @@ static int ccs_pll_configure(struct ccs_sensor *sensor)
- 	/* Lane op clock ratio does not apply here. */
- 	rval = ccs_write(sensor, REQUESTED_LINK_RATE,
- 			 DIV_ROUND_UP(pll->op_bk.sys_clk_freq_hz,
--				      1000000 / 256 / 256));
-+				      1000000 / 256 / 256) *
-+			 (pll->flags & CCS_PLL_FLAG_LANE_SPEED_MODEL ?
-+			  sensor->pll.csi2.lanes : 1));
- 	if (rval < 0 || sensor->pll.flags & CCS_PLL_FLAG_NO_OP_CLOCKS)
- 		return rval;
- 
-@@ -3194,6 +3196,13 @@ static int ccs_probe(struct i2c_client *client)
- 	/* prepare PLL configuration input values */
- 	sensor->pll.bus_type = CCS_PLL_BUS_TYPE_CSI2_DPHY;
- 	sensor->pll.csi2.lanes = sensor->hwcfg.lanes;
-+	if (CCS_LIM(sensor, CLOCK_CALCULATION) &
-+	    CCS_CLOCK_CALCULATION_LANE_SPEED) {
-+		sensor->pll.vt_lanes =
-+			CCS_LIM(sensor, NUM_OF_VT_LANES) + 1;
-+		sensor->pll.op_lanes = sensor->pll.vt_lanes;
-+		sensor->pll.flags |= CCS_PLL_FLAG_LANE_SPEED_MODEL;
-+	}
+@@ -3211,6 +3211,9 @@ static int ccs_probe(struct i2c_client *client)
+ 			sensor->pll.op_lanes = sensor->pll.csi2.lanes;
+ 		}
+ 	}
++	if (CCS_LIM(sensor, CLOCK_TREE_PLL_CAPABILITY) &
++	    CCS_CLOCK_TREE_PLL_CAPABILITY_EXT_DIVIDER)
++		sensor->pll.flags |= CCS_PLL_FLAG_EXT_IP_PLL_DIVIDER;
  	sensor->pll.ext_clk_freq_hz = sensor->hwcfg.ext_clk;
  	sensor->pll.scale_n = CCS_LIM(sensor, SCALER_N_MIN);
  
