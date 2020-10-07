@@ -2,172 +2,189 @@ Return-Path: <SRS0=q2TO=DO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 045C0C4727F
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 19:25:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 941BCC4727E
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 19:33:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9D5392085B
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 19:25:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4231F20872
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 19:33:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="IfegH4nw"
+	dkim=pass (1024-bit key) header.d=mg.codeaurora.org header.i=@mg.codeaurora.org header.b="CVvolVrT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728241AbgJGTZF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Oct 2020 15:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49658 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728207AbgJGTZE (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 15:25:04 -0400
-Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C11B3C0613D5
-        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 12:25:02 -0700 (PDT)
-Received: by mail-oi1-x242.google.com with SMTP id m128so3666108oig.7
-        for <linux-media@vger.kernel.org>; Wed, 07 Oct 2020 12:25:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BZRP/YEUZ8RoSb8Ypgb3DGxVhdoAtHRN1N0p0L0pWpA=;
-        b=IfegH4nwN/o6kcQDvfu01nenDUeNQgBkda4/dhczUdP0kMFXcvE572DUDzf1wvqGpa
-         nyp1a/D73Mflnvnu40XfTC32OrNKnzCHp2mvGEYcnzK1KJ6+dezHuXb9vC5VNmLGIhTb
-         kwAV9e9OpEVj4sQ6ggzRYYm32tqaPtdzoptpI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BZRP/YEUZ8RoSb8Ypgb3DGxVhdoAtHRN1N0p0L0pWpA=;
-        b=se8gSA0hyxt+kk3kTDw47hUQlsGQNig+QsH6MC/GYHCm1/t5bTeQknqv/UvE0+1Sxi
-         xP1OTF4cWnllae2y3RE+ce5kQXa8bDlitz7sOIezTK1Hl2uKTpNKwKRFH6QTBbL3FNcf
-         04PKoCzg9HsiS0b7qTRXGvT99eH5wPJt0CwP7PNtvoxlLGTNnXZRbdpqQACnSEPeVpHe
-         RtP6xZbXoFNx3sdfyocHm1ZE/Lv4Cd6GygvlJ3ifkVPBrV3Wy+iQzddPOIiySJpkSXw2
-         3Gd4SBm8QEoK04vCacK5TSdrsaBLjxBJ90jjCaVXP+eZ8Bgfde1/lVoi60UPgFZMth4X
-         tZIA==
-X-Gm-Message-State: AOAM533JI87bwy8Pcmbmj688ub3pxDLXM8qWozOQfDYZatjtwhCqv9n6
-        eMbtMKh9aFWRiid/voEunGC9yFy/uLQ4VlbhgVb4Rw==
-X-Google-Smtp-Source: ABdhPJzhvBCanKpF9yHYf4rPvV3OgJoXcQ8bSZqPwzVGdWv0uBGdiJso5tL8awsEi+dW1GpdYavbUXQPpc/1p2uOTug=
-X-Received: by 2002:aca:6083:: with SMTP id u125mr2929990oib.14.1602098701967;
- Wed, 07 Oct 2020 12:25:01 -0700 (PDT)
+        id S1728291AbgJGTdV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Oct 2020 15:33:21 -0400
+Received: from z5.mailgun.us ([104.130.96.5]:12226 "EHLO z5.mailgun.us"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728270AbgJGTdV (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 7 Oct 2020 15:33:21 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1602099200; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=fRcWPobA2wPZBFDePlMJ/eyWKggBDekfCZ/qz5wXYKc=;
+ b=CVvolVrTFyQv7wvB5dF9GnpOEIsIvp4iMJ6SdKq2imKZBfJpzOR3DsW3q8u+wDspLMh95fPJ
+ O+ws4he/PkTtKuHrqC4FnVY2rlie7DZc7uVN22NRxPOFyNK1/yOnTZjYFuApUpBVWYj66IYY
+ lyHTrScW+2/svbuDJR91eq2tIbA=
+X-Mailgun-Sending-Ip: 104.130.96.5
+X-Mailgun-Sid: WyI3ZjU0NiIsICJsaW51eC1tZWRpYUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
+ 5f7e17ffbfed2afaa6d13e96 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 07 Oct 2020 19:33:19
+ GMT
+Sender: vgarodia=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id D65B5C433F1; Wed,  7 Oct 2020 19:33:18 +0000 (UTC)
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: vgarodia)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id B04A9C433CA;
+        Wed,  7 Oct 2020 19:33:13 +0000 (UTC)
 MIME-Version: 1.0
-References: <20201007164426.1812530-11-daniel.vetter@ffwll.ch> <20201007184131.GA3259154@bjorn-Precision-5520>
-In-Reply-To: <20201007184131.GA3259154@bjorn-Precision-5520>
-From:   Daniel Vetter <daniel.vetter@ffwll.ch>
-Date:   Wed, 7 Oct 2020 21:24:49 +0200
-Message-ID: <CAKMK7uEi-PaoP2mSgg-aub49gctjTbwW6-X4nuRLnv1uzTh9dQ@mail.gmail.com>
-Subject: Re: [PATCH 10/13] PCI: revoke mappings like devmem
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
-        Linux MM <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>, linux-s390@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Kees Cook <keescook@chromium.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Jan Kara <jack@suse.cz>, Bjorn Helgaas <bhelgaas@google.com>,
-        Linux PCI <linux-pci@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Thu, 08 Oct 2020 01:03:13 +0530
+From:   vgarodia@codeaurora.org
+To:     Tomasz Figa <tfiga@chromium.org>
+Cc:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Dikshita Agarwal <dikshita@codeaurora.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH 2/2] venus: venc: fix handlig of S_SELECTION and
+ G_SELECTION
+In-Reply-To: <CAAFQd5BdeG44SmT4xhrarsmgnFc-1LCdoFwz=XXYsLdHcMyz-Q@mail.gmail.com>
+References: <1600968674-11559-1-git-send-email-dikshita@codeaurora.org>
+ <1600968674-11559-3-git-send-email-dikshita@codeaurora.org>
+ <CAAFQd5CTyjagd7grrCkret2WnvoLHQk83fg+1QPK+V1NbhKTvw@mail.gmail.com>
+ <b977eb27-9646-1c73-5acb-c3a74460e426@linaro.org>
+ <CAAFQd5BdeG44SmT4xhrarsmgnFc-1LCdoFwz=XXYsLdHcMyz-Q@mail.gmail.com>
+Message-ID: <89783dd42e698593d30dc0f37b52cf73@codeaurora.org>
+X-Sender: vgarodia@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Oct 7, 2020 at 8:41 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> Capitalize subject, like other patches in this series and previous
-> drivers/pci history.
->
-> On Wed, Oct 07, 2020 at 06:44:23PM +0200, Daniel Vetter wrote:
-> > Since 3234ac664a87 ("/dev/mem: Revoke mappings when a driver claims
-> > the region") /dev/kmem zaps ptes when the kernel requests exclusive
-> > acccess to an iomem region. And with CONFIG_IO_STRICT_DEVMEM, this is
-> > the default for all driver uses.
-> >
-> > Except there's two more ways to access pci bars: sysfs and proc mmap
-> > support. Let's plug that hole.
->
-> s/pci/PCI/ in commit logs and comments.
->
-> > For revoke_devmem() to work we need to link our vma into the same
-> > address_space, with consistent vma->vm_pgoff. ->pgoff is already
-> > adjusted, because that's how (io_)remap_pfn_range works, but for the
-> > mapping we need to adjust vma->vm_file->f_mapping. Usually that's done
-> > at ->open time, but that's a bit tricky here with all the entry points
-> > and arch code. So instead create a fake file and adjust vma->vm_file.
-> >
-> > Note this only works for ARCH_GENERIC_PCI_MMAP_RESOURCE. But that
-> > seems to be a subset of architectures support STRICT_DEVMEM, so we
-> > should be good.
-> >
-> > The only difference in access checks left is that sysfs pci mmap does
-> > not check for CAP_RAWIO. But I think that makes some sense compared to
-> > /dev/mem and proc, where one file gives you access to everything and
-> > no ownership applies.
->
-> > --- a/drivers/char/mem.c
-> > +++ b/drivers/char/mem.c
-> > @@ -810,6 +810,7 @@ static loff_t memory_lseek(struct file *file, loff_t offset, int orig)
-> >  }
-> >
-> >  static struct inode *devmem_inode;
-> > +static struct vfsmount *devmem_vfs_mount;
-> >
-> >  #ifdef CONFIG_IO_STRICT_DEVMEM
-> >  void revoke_devmem(struct resource *res)
-> > @@ -843,6 +844,20 @@ void revoke_devmem(struct resource *res)
-> >
-> >       unmap_mapping_range(inode->i_mapping, res->start, resource_size(res), 1);
-> >  }
-> > +
-> > +struct file *devmem_getfile(void)
-> > +{
-> > +     struct file *file;
-> > +
-> > +     file = alloc_file_pseudo(devmem_inode, devmem_vfs_mount, "devmem",
-> > +                              O_RDWR, &kmem_fops);
-> > +     if (IS_ERR(file))
-> > +             return NULL;
-> > +
-> > +     file->f_mapping = devmem_indoe->i_mapping;
->
-> "devmem_indoe"?  Obviously not compiled, I guess?
+Hi Tomasz,
 
-Yeah apologies, I forgot to compile this with CONFIG_IO_STRICT_DEVMEM
-set. The entire series is more rfc about the overall problem really, I
-need to also figure out how to even this this somehow. I guess there's
-nothing really ready made here?
--Daniel
+On 2020-10-01 20:47, Tomasz Figa wrote:
+> On Thu, Oct 1, 2020 at 3:32 AM Stanimir Varbanov
+> <stanimir.varbanov@linaro.org> wrote:
+>> 
+>> Hi Tomasz,
+>> 
+>> On 9/25/20 11:55 PM, Tomasz Figa wrote:
+>> > Hi Dikshita, Stanimir,
+>> >
+>> > On Thu, Sep 24, 2020 at 7:31 PM Dikshita Agarwal
+>> > <dikshita@codeaurora.org> wrote:
+>> >>
+>> >> From: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+>> >>
+>> >> - return correct width and height for G_SELECTION
+>> >> - if requested rectangle wxh doesn't match with capture port wxh
+>> >>   adjust the rectangle to supported wxh.
+>> >>
+>> >> Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
+>> >> ---
+>> >>  drivers/media/platform/qcom/venus/venc.c | 20 ++++++++++++--------
+>> >>  1 file changed, 12 insertions(+), 8 deletions(-)
+>> >>
+>> >> diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
+>> >> index 7d2aaa8..a2cc12d 100644
+>> >> --- a/drivers/media/platform/qcom/venus/venc.c
+>> >> +++ b/drivers/media/platform/qcom/venus/venc.c
+>> >> @@ -463,13 +463,13 @@ static int venc_g_fmt(struct file *file, void *fh, struct v4l2_format *f)
+>> >>         switch (s->target) {
+>> >>         case V4L2_SEL_TGT_CROP_DEFAULT:
+>> >>         case V4L2_SEL_TGT_CROP_BOUNDS:
+>> >> -               s->r.width = inst->width;
+>> >> -               s->r.height = inst->height;
+>> >> -               break;
+>> >> -       case V4L2_SEL_TGT_CROP:
+>> >>                 s->r.width = inst->out_width;
+>> >>                 s->r.height = inst->out_height;
+>> >>                 break;
+>> >> +       case V4L2_SEL_TGT_CROP:
+>> >> +               s->r.width = inst->width;
+>> >> +               s->r.height = inst->height;
+>> >> +               break;
+>> >>         default:
+>> >>                 return -EINVAL;
+>> >>         }inter
+>> >> @@ -490,10 +490,14 @@ static int venc_g_fmt(struct file *file, void *fh, struct v4l2_format *f)
+>> >>
+>> >>         switch (s->target) {
+>> >>         case V4L2_SEL_TGT_CROP:
+>> >> -               if (s->r.width != inst->out_width ||
+>> >> -                   s->r.height != inst->out_height ||
+>> >> -                   s->r.top != 0 || s->r.left != 0)
+>> >> -                       return -EINVAL;
+>> >> +               if (s->r.width != inst->width ||
+>> >> +                   s->r.height != inst->height ||
+>> >> +                   s->r.top != 0 || s->r.left != 0) {
+>> >> +                       s->r.top = 0;
+>> >> +                       s->r.left = 0;
+>> >> +                       s->r.width = inst->width;
+>> >> +                       s->r.height = inst->height;
+>> >
+>> > What's the point of exposing the selection API if no selection can
+>> > actually be done?
+>> 
+>> If someone can guarantee that dropping of s_selection will not break
+>> userspace applications I'm fine with removing it.
+> 
+> Indeed the specification could be made more clear about this. The
+> visible rectangle configuration is described as optional, so I'd
+> consider the capability to be optional as well.
+> 
+> Of course it doesn't change the fact that something that is optional
+> in the API may be mandatory for some specific integrations, like
+> Chrome OS or Android.
+> 
+>> 
+>> I implemented g/s_selection with the idea to add crop functionality
+>> later because with current firmware interface it needs more work.
+> 
+> I suggested one thing internally, but not sure if it was understood 
+> correctly:
+> 
+> Most of the encoders only support partial cropping, with the rectangle
+> limited to top = 0 and left = 0, in other words, only setting the
+> visible width and height. This can be easily implemented on most of
+> the hardware, even those that don't have dedicated cropping
+> capability, by configuring the hardware as follows:
+> 
+> stride = CAPTURE format width (or bytesperline)
+> width = CROP width
+> height = CROP height
 
-> > --- a/include/linux/ioport.h
-> > +++ b/include/linux/ioport.h
-> > @@ -304,8 +304,10 @@ struct resource *request_free_mem_region(struct resource *base,
-> >
-> >  #ifdef CONFIG_IO_STRICT_DEVMEM
-> >  void revoke_devmem(struct resource *res);
-> > +struct file *devm_getfile(void);
-> >  #else
-> >  static inline void revoke_devmem(struct resource *res) { };
-> > +static inline struct file *devmem_getfile(void) { return NULL; };
->
-> I guess these names are supposed to match?
->
-> >  #endif
-> >
-> >  #endif /* __ASSEMBLY__ */
-> > --
-> > 2.28.0
-> >
+Assuming the bitstream height and width would be configured with capture 
+plane
+setting (s_fmt), configuring the crop as height/width would indicate to 
+venus
+hardware as scaling. To distinguish scaling with crop, firmware needs to 
+be
+configured separately indicating crop rectangle.
 
+> I believe Android requires the hardware to support stride and AFAIK
+> this hardware is also commonly used on Android, so perhaps it's
+> possible to achieve the above without any firmware changes?
 
+Yes, the hardware is used and also supported in android. The interface 
+to configure
+crop rectangle to firmware is via extradata. This extradata info is 
+passed from v4l2
+clients via a separate plane in v4l2 buffer. The extradata payload is 
+passed to
+firmware as is and the firmware parses it to know if crop, roi, etc.
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+> Best regards,
+> Tomasz
