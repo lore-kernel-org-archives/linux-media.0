@@ -7,29 +7,29 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11255C4727E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A463DC47420
 	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B93152080A
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5C12A2080A
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727963AbgJGIqE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727969AbgJGIqE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 7 Oct 2020 04:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35030 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727915AbgJGIqB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:01 -0400
+        with ESMTP id S1727948AbgJGIqC (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:02 -0400
 Received: from hillosipuli.retiisi.eu (hillosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::81:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBB5C061755
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E203BC0613D2
         for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 01:46:01 -0700 (PDT)
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 71E69634C93
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id B262E634C96
         for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:16 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH v2 010/106] smiapp: Use CCS limits in reading data format descriptors
-Date:   Wed,  7 Oct 2020 11:44:30 +0300
-Message-Id: <20201007084557.25843-10-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 013/106] smiapp: Remove quirk function for writing a single 8-bit register
+Date:   Wed,  7 Oct 2020 11:44:33 +0300
+Message-Id: <20201007084557.25843-13-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201007084557.25843-1-sakari.ailus@linux.intel.com>
 References: <20201007084505.25761-1-sakari.ailus@linux.intel.com>
@@ -40,69 +40,71 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The CCS limits have the information so use it instead.
+This function is no longer needed as the smiapp_write() function can be
+used to write 8-bit registers with plain register addresses.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/smiapp/smiapp-core.c | 22 +++++++++-------------
- 1 file changed, 9 insertions(+), 13 deletions(-)
+ drivers/media/i2c/smiapp/smiapp-quirk.c | 15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/media/i2c/smiapp/smiapp-core.c b/drivers/media/i2c/smiapp/smiapp-core.c
-index af94df9dbc7d..0f703860af0e 100644
---- a/drivers/media/i2c/smiapp/smiapp-core.c
-+++ b/drivers/media/i2c/smiapp/smiapp-core.c
-@@ -842,10 +842,7 @@ static int smiapp_get_mbus_formats(struct smiapp_sensor *sensor)
- 	unsigned int i, pixel_order;
+diff --git a/drivers/media/i2c/smiapp/smiapp-quirk.c b/drivers/media/i2c/smiapp/smiapp-quirk.c
+index 24630c7650d2..9422eb61b424 100644
+--- a/drivers/media/i2c/smiapp/smiapp-quirk.c
++++ b/drivers/media/i2c/smiapp/smiapp-quirk.c
+@@ -14,11 +14,6 @@
+ 
+ #include "smiapp.h"
+ 
+-static int smiapp_write_8(struct smiapp_sensor *sensor, u16 reg, u8 val)
+-{
+-	return smiapp_write(sensor, reg, val);
+-}
+-
+ static int smiapp_write_8s(struct smiapp_sensor *sensor,
+ 			   const struct smiapp_reg_8 *regs, int len)
+ {
+@@ -26,7 +21,7 @@ static int smiapp_write_8s(struct smiapp_sensor *sensor,
  	int rval;
  
--	rval = smiapp_read(
--		sensor, SMIAPP_REG_U8_DATA_FORMAT_MODEL_TYPE, &type);
--	if (rval)
--		return rval;
-+	type = CCS_LIM(sensor, DATA_FORMAT_MODEL_TYPE);
+ 	for (; len > 0; len--, regs++) {
+-		rval = smiapp_write_8(sensor, regs->reg, regs->val);
++		rval = smiapp_write(sensor, regs->reg, regs->val);
+ 		if (rval < 0) {
+ 			dev_err(&client->dev,
+ 				"error %d writing reg 0x%4.4x, val 0x%2.2x",
+@@ -170,7 +165,7 @@ static int jt8ev1_post_poweron(struct smiapp_sensor *sensor)
  
- 	dev_dbg(&client->dev, "data_format_model_type %d\n", type);
+ static int jt8ev1_pre_streamon(struct smiapp_sensor *sensor)
+ {
+-	return smiapp_write_8(sensor, 0x3328, 0x00);
++	return smiapp_write(sensor, 0x3328, 0x00);
+ }
  
-@@ -863,11 +860,11 @@ static int smiapp_get_mbus_formats(struct smiapp_sensor *sensor)
- 		pixel_order_str[pixel_order]);
+ static int jt8ev1_post_streamoff(struct smiapp_sensor *sensor)
+@@ -178,7 +173,7 @@ static int jt8ev1_post_streamoff(struct smiapp_sensor *sensor)
+ 	int rval;
  
- 	switch (type) {
--	case SMIAPP_DATA_FORMAT_MODEL_TYPE_NORMAL:
-+	case CCS_DATA_FORMAT_MODEL_TYPE_NORMAL:
- 		n = SMIAPP_DATA_FORMAT_MODEL_TYPE_NORMAL_N;
- 		break;
--	case SMIAPP_DATA_FORMAT_MODEL_TYPE_EXTENDED:
--		n = SMIAPP_DATA_FORMAT_MODEL_TYPE_EXTENDED_N;
-+	case CCS_DATA_FORMAT_MODEL_TYPE_EXTENDED:
-+		n = CCS_LIM_DATA_FORMAT_DESCRIPTOR_MAX_N + 1;
- 		break;
- 	default:
- 		return -EINVAL;
-@@ -879,11 +876,7 @@ static int smiapp_get_mbus_formats(struct smiapp_sensor *sensor)
- 	for (i = 0; i < n; i++) {
- 		unsigned int fmt, j;
+ 	/* Workaround: allows fast standby to work properly */
+-	rval = smiapp_write_8(sensor, 0x3205, 0x04);
++	rval = smiapp_write(sensor, 0x3205, 0x04);
+ 	if (rval < 0)
+ 		return rval;
  
--		rval = smiapp_read(
--			sensor,
--			SMIAPP_REG_U16_DATA_FORMAT_DESCRIPTOR(i), &fmt);
--		if (rval)
--			return rval;
-+		fmt = CCS_LIM_AT(sensor, DATA_FORMAT_DESCRIPTOR, i);
+@@ -186,11 +181,11 @@ static int jt8ev1_post_streamoff(struct smiapp_sensor *sensor)
+ 	usleep_range(2000, 2050);
  
- 		dev_dbg(&client->dev, "%u: bpp %u, compressed %u\n",
- 			i, fmt >> 8, (u8)fmt);
-@@ -895,7 +888,10 @@ static int smiapp_get_mbus_formats(struct smiapp_sensor *sensor)
- 			if (f->pixel_order != SMIAPP_PIXEL_ORDER_GRBG)
- 				continue;
+ 	/* Restore it */
+-	rval = smiapp_write_8(sensor, 0x3205, 0x00);
++	rval = smiapp_write(sensor, 0x3205, 0x00);
+ 	if (rval < 0)
+ 		return rval;
  
--			if (f->width != fmt >> 8 || f->compressed != (u8)fmt)
-+			if (f->width != fmt >>
-+			    CCS_DATA_FORMAT_DESCRIPTOR_UNCOMPRESSED_SHIFT ||
-+			    f->compressed !=
-+			    (fmt & CCS_DATA_FORMAT_DESCRIPTOR_COMPRESSED_MASK))
- 				continue;
+-	return smiapp_write_8(sensor, 0x3328, 0x80);
++	return smiapp_write(sensor, 0x3328, 0x80);
+ }
  
- 			dev_dbg(&client->dev, "jolly good! %d\n", j);
+ static int jt8ev1_init(struct smiapp_sensor *sensor)
 -- 
 2.27.0
 
