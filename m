@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEBC8C41604
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BB83C4741F
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7DC232080A
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 07E2C2080A
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728074AbgJGIqZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Oct 2020 04:46:25 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:57082 "EHLO
+        id S1728069AbgJGIqW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Oct 2020 04:46:22 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:57076 "EHLO
         hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728025AbgJGIqU (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:20 -0400
+        with ESMTP id S1728055AbgJGIqS (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:18 -0400
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 2559A634C97
-        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:23 +0300 (EEST)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id F21A7634D10
+        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:22 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH v2 102/106] ccs: Add support for alternate analogue global gain
-Date:   Wed,  7 Oct 2020 11:45:53 +0300
-Message-Id: <20201007084557.25843-93-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 099/106] v4l: uapi: ccs: Add controls for analogue gain constants
+Date:   Wed,  7 Oct 2020 11:45:50 +0300
+Message-Id: <20201007084557.25843-90-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201007084557.25843-1-sakari.ailus@linux.intel.com>
 References: <20201007084505.25761-1-sakari.ailus@linux.intel.com>
@@ -37,87 +37,49 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The CCS spec defines an alternative implementation for global analogue
-gain. Add support for that in the driver.
+Add a V4L2 controls for analogue gai constants required to control
+analogue gain. The values are device specific and thus need to be obtained
+from the driver.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 55 ++++++++++++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+ MAINTAINERS              |  1 +
+ include/uapi/linux/ccs.h | 14 ++++++++++++++
+ 2 files changed, 15 insertions(+)
+ create mode 100644 include/uapi/linux/ccs.h
 
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 2a507b63bafc..0ba06a580951 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -674,6 +674,17 @@ static int ccs_set_ctrl(struct v4l2_ctrl *ctrl)
+diff --git a/MAINTAINERS b/MAINTAINERS
+index b72f666b8b60..c173e503b0b7 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11569,6 +11569,7 @@ F:	drivers/media/i2c/ccs/
+ F:	drivers/media/i2c/ccs-pll.c
+ F:	drivers/media/i2c/ccs-pll.h
+ F:	include/uapi/linux/smiapp.h
++F:	include/uapi/linux/ccs.h
  
- 		break;
- 
-+	case V4L2_CID_CCS_ANALOGUE_LINEAR_GAIN:
-+		rval = ccs_write(sensor, ANALOG_LINEAR_GAIN_GLOBAL, ctrl->val);
+ MIPS
+ M:	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+diff --git a/include/uapi/linux/ccs.h b/include/uapi/linux/ccs.h
+new file mode 100644
+index 000000000000..bcdce95955b0
+--- /dev/null
++++ b/include/uapi/linux/ccs.h
+@@ -0,0 +1,14 @@
++/* SPDX-License-Identifier: GPL-2.0-only AND BSD-3-Clause */
++/* Copyright (C) 2020 Intel Corporation */
 +
-+		break;
++#ifndef __UAPI_CCS_H__
++#define __UAPI_CCS_H__
 +
-+	case V4L2_CID_CCS_ANALOGUE_EXPONENTIAL_GAIN:
-+		rval = ccs_write(sensor, ANALOG_EXPONENTIAL_GAIN_GLOBAL,
-+				 ctrl->val);
++#include <linux/videodev2.h>
 +
-+		break;
++#define V4L2_CID_CCS_ANALOGUE_GAIN_M0		(V4L2_CID_USER_CCS_BASE + 1)
++#define V4L2_CID_CCS_ANALOGUE_GAIN_C0		(V4L2_CID_USER_CCS_BASE + 2)
++#define V4L2_CID_CCS_ANALOGUE_GAIN_M1		(V4L2_CID_USER_CCS_BASE + 3)
++#define V4L2_CID_CCS_ANALOGUE_GAIN_C1		(V4L2_CID_USER_CCS_BASE + 4)
 +
- 	case V4L2_CID_DIGITAL_GAIN:
- 		if (CCS_LIM(sensor, DIGITAL_GAIN_CAPABILITY) ==
- 		    CCS_DIGITAL_GAIN_CAPABILITY_GLOBAL) {
-@@ -820,6 +831,50 @@ static int ccs_init_controls(struct ccs_sensor *sensor)
- 				  max(CCS_LIM(sensor, ANALOG_GAIN_CODE_STEP),
- 				      1U),
- 				  CCS_LIM(sensor, ANALOG_GAIN_CODE_MIN));
-+	}
-+		break;
-+
-+	case CCS_ANALOG_GAIN_CAPABILITY_ALTERNATE_GLOBAL: {
-+		struct {
-+			const char *name;
-+			u32 id;
-+			u16 min, max, step;
-+		} const gain_ctrls[] = {
-+			{
-+				"Analogue Linear Gain",
-+				V4L2_CID_CCS_ANALOGUE_LINEAR_GAIN,
-+				CCS_LIM(sensor, ANALOG_LINEAR_GAIN_MIN),
-+				CCS_LIM(sensor, ANALOG_LINEAR_GAIN_MAX),
-+				max(CCS_LIM(sensor,
-+					    ANALOG_LINEAR_GAIN_STEP_SIZE),
-+				    1U),
-+			},
-+			{
-+				"Analogue Exponential Gain",
-+				V4L2_CID_CCS_ANALOGUE_EXPONENTIAL_GAIN,
-+				CCS_LIM(sensor, ANALOG_EXPONENTIAL_GAIN_MIN),
-+				CCS_LIM(sensor, ANALOG_EXPONENTIAL_GAIN_MAX),
-+				max(CCS_LIM(sensor,
-+					    ANALOG_EXPONENTIAL_GAIN_STEP_SIZE),
-+				    1U),
-+			},
-+		};
-+		struct v4l2_ctrl_config ctrl_cfg = {
-+			.type = V4L2_CTRL_TYPE_INTEGER,
-+			.ops = &ccs_ctrl_ops,
-+		};
-+		unsigned int i;
-+
-+		for (i = 0; i < ARRAY_SIZE(gain_ctrls); i++) {
-+			ctrl_cfg.name = gain_ctrls[i].name;
-+			ctrl_cfg.min = ctrl_cfg.def = gain_ctrls[i].min;
-+			ctrl_cfg.max = gain_ctrls[i].max;
-+			ctrl_cfg.step = gain_ctrls[i].step;
-+			ctrl_cfg.id = gain_ctrls[i].id;
-+
-+			v4l2_ctrl_new_custom(&sensor->pixel_array->ctrl_handler,
-+					     &ctrl_cfg, NULL);
-+		}
- 	}
- 	}
- 
++#endif
 -- 
 2.27.0
 
