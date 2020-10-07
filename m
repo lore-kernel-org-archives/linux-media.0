@@ -2,31 +2,31 @@ Return-Path: <SRS0=q2TO=DO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3473C4727F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 444E0C4741F
 	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5E34E212CC
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F2F7E2083B
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728008AbgJGIqK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1728005AbgJGIqK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 7 Oct 2020 04:46:10 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:57076 "EHLO
+Received: from retiisi.org.uk ([95.216.213.190]:57052 "EHLO
         hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727988AbgJGIqI (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:08 -0400
+        with ESMTP id S1727975AbgJGIqH (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:07 -0400
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 7AAE8634CD9
-        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:19 +0300 (EEST)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id BAD0B634CCF
+        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:18 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH v2 050/106] ccs: Add device compatible identifiers for telling SMIA and CCS apart
-Date:   Wed,  7 Oct 2020 11:45:03 +0300
-Message-Id: <20201007084557.25843-43-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 042/106] ccs: Read ireal numbers correctly
+Date:   Wed,  7 Oct 2020 11:44:55 +0300
+Message-Id: <20201007084557.25843-35-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201007084557.25843-1-sakari.ailus@linux.intel.com>
 References: <20201007084505.25761-1-sakari.ailus@linux.intel.com>
@@ -37,53 +37,122 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add device data specific to DT compatible ID to tell SMIA and CCS devices
-apart already in power-up.
+Some limit values are available in q16.q16 format, referred to as 32-bit
+unsigned ireal in CCS. Read these correctly.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+ drivers/media/i2c/ccs/ccs-core.c       | 10 ++--------
+ drivers/media/i2c/ccs/ccs-reg-access.c | 23 +++++++++++++++++++++--
+ drivers/media/i2c/ccs/ccs.h            |  9 +++++++++
+ 3 files changed, 32 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 5f1665f08b9f..940b5327a388 100644
+index 5b7f142b2432..cd8978c085d4 100644
 --- a/drivers/media/i2c/ccs/ccs-core.c
 +++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -59,6 +59,12 @@ static const struct ccs_module_ident ccs_module_idents[] = {
- 	CCS_IDENT_LQ(0x10, 0x4241, -1, "imx125es", &smiapp_imx125es_quirk),
- };
- 
-+#define CCS_DEVICE_FLAG_IS_SMIA		BIT(0)
-+
-+struct ccs_device {
-+	unsigned char flags;
-+};
-+
- /*
-  *
-  * Dynamic Capability Identification
-@@ -3276,11 +3282,17 @@ static int ccs_remove(struct i2c_client *client)
- 	return 0;
+@@ -120,8 +120,8 @@ void ccs_replace_limit(struct ccs_sensor *sensor,
+ 	ccs_assign_limit(ptr, ccs_reg_width(linfo->reg), val);
  }
  
-+static const struct ccs_device smia_device = {
-+	.flags = CCS_DEVICE_FLAG_IS_SMIA,
-+};
+-static u32 ccs_get_limit(struct ccs_sensor *sensor,
+-			 unsigned int limit, unsigned int offset)
++u32 ccs_get_limit(struct ccs_sensor *sensor, unsigned int limit,
++		  unsigned int offset)
+ {
+ 	void *ptr;
+ 	u32 val;
+@@ -149,12 +149,6 @@ static u32 ccs_get_limit(struct ccs_sensor *sensor,
+ 	return ccs_reg_conv(sensor, ccs_limits[limit].reg, val);
+ }
+ 
+-#define CCS_LIM(sensor, limit) \
+-	ccs_get_limit(sensor, CCS_L_##limit, 0)
+-
+-#define CCS_LIM_AT(sensor, limit, offset)	\
+-	ccs_get_limit(sensor, CCS_L_##limit, CCS_L_##limit##_OFFSET(offset))
+-
+ static int ccs_read_all_limits(struct ccs_sensor *sensor)
+ {
+ 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
+diff --git a/drivers/media/i2c/ccs/ccs-reg-access.c b/drivers/media/i2c/ccs/ccs-reg-access.c
+index fe6112cba6be..91ccbca11577 100644
+--- a/drivers/media/i2c/ccs/ccs-reg-access.c
++++ b/drivers/media/i2c/ccs/ccs-reg-access.c
+@@ -15,6 +15,7 @@
+ #include <linux/i2c.h>
+ 
+ #include "ccs.h"
++#include "ccs-limits.h"
+ 
+ static uint32_t float_to_u32_mul_1000000(struct i2c_client *client,
+ 					 uint32_t phloat)
+@@ -143,12 +144,30 @@ unsigned int ccs_reg_width(u32 reg)
+ 	return sizeof(uint8_t);
+ }
+ 
++static u32 ireal32_to_u32_mul_1000000(struct i2c_client *client, u32 val)
++{
++	if (val >> 10 > U32_MAX / 15625) {
++		dev_warn(&client->dev, "value %u overflows!\n", val);
++		return U32_MAX;
++	}
 +
-+static const struct ccs_device ccs_device = {};
++	return ((val >> 10) * 15625) +
++		(val & GENMASK(9, 0)) * 15625 / 1024;
++}
 +
- static const struct of_device_id ccs_of_table[] = {
--	{ .compatible = "mipi-ccs-1.1" },
--	{ .compatible = "mipi-ccs-1.0" },
--	{ .compatible = "mipi-ccs" },
--	{ .compatible = "nokia,smia" },
-+	{ .compatible = "mipi-ccs-1.1", .data = &ccs_device },
-+	{ .compatible = "mipi-ccs-1.0", .data = &ccs_device },
-+	{ .compatible = "mipi-ccs", .data = &ccs_device },
-+	{ .compatible = "nokia,smia", .data = &smia_device },
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, ccs_of_table);
+ u32 ccs_reg_conv(struct ccs_sensor *sensor, u32 reg, u32 val)
+ {
+ 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
+ 
+-	if (reg & CCS_FL_FLOAT_IREAL)
+-		val = float_to_u32_mul_1000000(client, val);
++	if (reg & CCS_FL_FLOAT_IREAL) {
++		if (CCS_LIM(sensor, CLOCK_CAPA_TYPE_CAPABILITY) &
++		    CCS_CLOCK_CAPA_TYPE_CAPABILITY_IREAL)
++			val = ireal32_to_u32_mul_1000000(client, val);
++		else
++			val = float_to_u32_mul_1000000(client, val);
++	} else if (reg & CCS_FL_IREAL) {
++		val = ireal32_to_u32_mul_1000000(client, val);
++	}
+ 
+ 	return val;
+ }
+diff --git a/drivers/media/i2c/ccs/ccs.h b/drivers/media/i2c/ccs/ccs.h
+index cbcd93b519da..f60d1801c469 100644
+--- a/drivers/media/i2c/ccs/ccs.h
++++ b/drivers/media/i2c/ccs/ccs.h
+@@ -17,6 +17,7 @@
+ #include <media/v4l2-subdev.h>
+ 
+ #include "ccs-data.h"
++#include "ccs-limits.h"
+ #include "ccs-quirk.h"
+ #include "ccs-regs.h"
+ #include "ccs-reg-access.h"
+@@ -50,6 +51,12 @@
+ #define CCS_DFL_I2C_ADDR	(0x20 >> 1) /* Default I2C Address */
+ #define CCS_ALT_I2C_ADDR	(0x6e >> 1) /* Alternate I2C Address */
+ 
++#define CCS_LIM(sensor, limit) \
++	ccs_get_limit(sensor, CCS_L_##limit, 0)
++
++#define CCS_LIM_AT(sensor, limit, offset)	\
++	ccs_get_limit(sensor, CCS_L_##limit, CCS_L_##limit##_OFFSET(offset))
++
+ /*
+  * Sometimes due to board layout considerations the camera module can be
+  * mounted rotated. The typical rotation used is 180 degrees which can be
+@@ -277,5 +284,7 @@ struct ccs_sensor {
+ 
+ void ccs_replace_limit(struct ccs_sensor *sensor,
+ 		       unsigned int limit, unsigned int offset, u32 val);
++u32 ccs_get_limit(struct ccs_sensor *sensor, unsigned int limit,
++		  unsigned int offset);
+ 
+ #endif /* __CCS_H__ */
 -- 
 2.27.0
 
