@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00412C4727F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C54DEC4727E
 	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B601620797
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 85A5F20797
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728104AbgJGIqt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Oct 2020 04:46:49 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:57052 "EHLO
+        id S1728106AbgJGIqu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Oct 2020 04:46:50 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:57082 "EHLO
         hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728019AbgJGIqN (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:13 -0400
+        with ESMTP id S1728017AbgJGIqM (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:12 -0400
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 1E371634CED
-        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:21 +0300 (EEST)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id DFF15634CEA
+        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:20 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH v2 074/106] ccs-pll: Add support for extended input PLL clock divider
-Date:   Wed,  7 Oct 2020 11:45:25 +0300
-Message-Id: <20201007084557.25843-65-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 071/106] ccs-pll: Add support for lane speed model
+Date:   Wed,  7 Oct 2020 11:45:22 +0300
+Message-Id: <20201007084557.25843-62-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201007084557.25843-1-sakari.ailus@linux.intel.com>
 References: <20201007084505.25761-1-sakari.ailus@linux.intel.com>
@@ -37,58 +37,136 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-CCS allows odd PLL dividers other than 1, granted that the corresponding
-capability bit is set. Support this both in the PLL calculator and the CCS
-driver.
+CCS PLL includes a capability to calculate the VT clocks on per-lane
+basis. Add support for this feature.
+
+Move calculation of the pixel rate on the CSI-2 bus early in the function
+as everything needed to calculate it is already available.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs-pll.c      | 4 +++-
- drivers/media/i2c/ccs-pll.h      | 1 +
- drivers/media/i2c/ccs/ccs-core.c | 3 +++
- 3 files changed, 7 insertions(+), 1 deletion(-)
+ drivers/media/i2c/ccs-pll.c | 36 +++++++++++++++++++++++++-----------
+ drivers/media/i2c/ccs-pll.h |  6 ++++++
+ 2 files changed, 31 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/media/i2c/ccs-pll.c b/drivers/media/i2c/ccs-pll.c
-index cb19a36e54df..62939ca5b8e2 100644
+index d33a2575329c..9750b49d834a 100644
 --- a/drivers/media/i2c/ccs-pll.c
 +++ b/drivers/media/i2c/ccs-pll.c
-@@ -478,7 +478,9 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+@@ -251,11 +251,12 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 	op_pll_fr->pll_op_clk_freq_hz = op_pll_fr->pll_ip_clk_freq_hz
+ 		* op_pll_fr->pll_multiplier;
  
- 	for (op_pll_fr->pre_pll_clk_div = min_op_pre_pll_clk_div;
- 	     op_pll_fr->pre_pll_clk_div <= max_op_pre_pll_clk_div;
--	     op_pll_fr->pre_pll_clk_div += 2 - (op_pll_fr->pre_pll_clk_div & 1)) {
-+	     op_pll_fr->pre_pll_clk_div +=
-+		     (pll->flags & CCS_PLL_FLAG_EXT_IP_PLL_DIVIDER) ? 1 :
-+		     2 - (op_pll_fr->pre_pll_clk_div & 1)) {
- 		rval = __ccs_pll_calculate(dev, lim, op_lim_fr, op_lim_bk, pll,
- 					   op_pll_fr, op_pll_bk, mul, div);
- 		if (rval)
+-	op_pll_bk->pix_clk_div = pll->bits_per_pixel;
+-	dev_dbg(dev, "op_pix_clk_div: %u\n", op_pll_bk->pix_clk_div);
+-
++	op_pll_bk->pix_clk_div = pll->bits_per_pixel
++		* pll->op_lanes / pll->csi2.lanes;
+ 	op_pll_bk->pix_clk_freq_hz =
+ 		op_pll_bk->sys_clk_freq_hz / op_pll_bk->pix_clk_div;
++	dev_dbg(dev, "op_pix_clk_div: %u\n", op_pll_bk->pix_clk_div);
++
+ 
+ 	if (pll->flags & CCS_PLL_FLAG_NO_OP_CLOCKS) {
+ 		/* No OP clocks --- VT clocks are used instead. */
+@@ -283,15 +284,16 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 	 * divisors. One must make sure that horizontal blanking is
+ 	 * enough to accommodate the CSI-2 sync codes.
+ 	 *
+-	 * Take scaling factor into account as well.
++	 * Take scaling factor and number of VT lanes into account as well.
+ 	 *
+ 	 * Find absolute limits for the factor of vt divider.
+ 	 */
+ 	dev_dbg(dev, "scale_m: %u\n", pll->scale_m);
+ 	min_vt_div = DIV_ROUND_UP(op_pll_bk->pix_clk_div
+-				  * op_pll_bk->sys_clk_div * pll->scale_n,
+-				  lane_op_clock_ratio * vt_op_binning_div
+-				  * pll->scale_m);
++				  * op_pll_bk->sys_clk_div * pll->scale_n
++				  * pll->vt_lanes,
++				  pll->op_lanes * vt_op_binning_div
++				  * pll->scale_m * lane_op_clock_ratio);
+ 
+ 	/* Find smallest and biggest allowed vt divisor. */
+ 	dev_dbg(dev, "min_vt_div: %u\n", min_vt_div);
+@@ -387,9 +389,8 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 		pll->vt_bk.sys_clk_freq_hz / pll->vt_bk.pix_clk_div;
+ 
+ out_skip_vt_calc:
+-	pll->pixel_rate_csi =
+-		op_pll_bk->pix_clk_freq_hz * lane_op_clock_ratio;
+-	pll->pixel_rate_pixel_array = pll->vt_bk.pix_clk_freq_hz;
++	pll->pixel_rate_pixel_array =
++		pll->vt_bk.pix_clk_freq_hz * pll->vt_lanes;
+ 
+ 	return check_all_bounds(dev, lim, op_lim_fr, op_lim_bk, pll, op_pll_fr,
+ 				op_pll_bk);
+@@ -409,6 +410,13 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 	uint32_t i;
+ 	int rval = -EINVAL;
+ 
++	if (!(pll->flags & CCS_PLL_FLAG_LANE_SPEED_MODEL)) {
++		pll->op_lanes = 1;
++		pll->vt_lanes = 1;
++	}
++	dev_dbg(dev, "vt_lanes: %u\n", pll->vt_lanes);
++	dev_dbg(dev, "op_lanes: %u\n", pll->op_lanes);
++
+ 	if (pll->flags & CCS_PLL_FLAG_NO_OP_CLOCKS) {
+ 		/*
+ 		 * If there's no OP PLL at all, use the VT values
+@@ -433,12 +441,18 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 	case CCS_PLL_BUS_TYPE_CSI2_DPHY:
+ 		/* CSI transfers 2 bits per clock per lane; thus times 2 */
+ 		op_pll_bk->sys_clk_freq_hz = pll->link_freq * 2
+-			* (pll->csi2.lanes / lane_op_clock_ratio);
++			* (pll->flags & CCS_PLL_FLAG_LANE_SPEED_MODEL ?
++			   1 : pll->csi2.lanes) / lane_op_clock_ratio;
+ 		break;
+ 	default:
+ 		return -EINVAL;
+ 	}
+ 
++	pll->pixel_rate_csi =
++		op_pll_bk->pix_clk_freq_hz
++		* (pll->flags & CCS_PLL_FLAG_LANE_SPEED_MODEL ?
++		   pll->csi2.lanes : 1) * lane_op_clock_ratio;
++
+ 	/* Figure out limits for OP pre-pll divider based on extclk */
+ 	dev_dbg(dev, "min / max op_pre_pll_clk_div: %u / %u\n",
+ 		op_lim_fr->min_pre_pll_clk_div, op_lim_fr->max_pre_pll_clk_div);
 diff --git a/drivers/media/i2c/ccs-pll.h b/drivers/media/i2c/ccs-pll.h
-index 165de20af079..7c2b7a85de6a 100644
+index f772ed8ef579..57308b8f3a8a 100644
 --- a/drivers/media/i2c/ccs-pll.h
 +++ b/drivers/media/i2c/ccs-pll.h
-@@ -25,6 +25,7 @@
- /* CCS PLL flags */
- #define CCS_PLL_FLAG_LANE_SPEED_MODEL				BIT(2)
- #define CCS_PLL_FLAG_LINK_DECOUPLED				BIT(3)
-+#define CCS_PLL_FLAG_EXT_IP_PLL_DIVIDER				BIT(4)
+@@ -22,6 +22,8 @@
+ /* op pix clock is for all lanes in total normally */
+ #define CCS_PLL_FLAG_OP_PIX_CLOCK_PER_LANE			BIT(0)
+ #define CCS_PLL_FLAG_NO_OP_CLOCKS				BIT(1)
++/* CCS PLL flags */
++#define CCS_PLL_FLAG_LANE_SPEED_MODEL				BIT(2)
  
  /**
   * struct ccs_pll_branch_fr - CCS PLL configuration (front)
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index c3c4f59670e2..00957568407a 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -3211,6 +3211,9 @@ static int ccs_probe(struct i2c_client *client)
- 			sensor->pll.op_lanes = sensor->pll.csi2.lanes;
- 		}
- 	}
-+	if (CCS_LIM(sensor, CLOCK_TREE_PLL_CAPABILITY) &
-+	    CCS_CLOCK_TREE_PLL_CAPABILITY_EXT_DIVIDER)
-+		sensor->pll.flags |= CCS_PLL_FLAG_EXT_IP_PLL_DIVIDER;
- 	sensor->pll.ext_clk_freq_hz = sensor->hwcfg.ext_clk;
- 	sensor->pll.scale_n = CCS_LIM(sensor, SCALER_N_MIN);
- 
+@@ -63,6 +65,8 @@ struct ccs_pll_branch_bk {
+  * All information required to calculate CCS PLL configuration.
+  *
+  * @bus_type: Type of the data bus, CCS_PLL_BUS_TYPE_* (input)
++ * @op_lanes: Number of operational lanes (input)
++ * @vt_lanes: Number of video timing lanes (input)
+  * @csi2.lanes: The number of the CSI-2 data lanes (input)
+  * @binning_vertical: Vertical binning factor (input)
+  * @binning_horizontal: Horizontal binning factor (input)
+@@ -83,6 +87,8 @@ struct ccs_pll_branch_bk {
+ struct ccs_pll {
+ 	/* input values */
+ 	uint8_t bus_type;
++	uint8_t op_lanes;
++	uint8_t vt_lanes;
+ 	struct {
+ 		uint8_t lanes;
+ 	} csi2;
 -- 
 2.27.0
 
