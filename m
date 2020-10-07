@@ -5,55 +5,55 @@ X-Spam-Level:
 X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7BCEC47426
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 16:44:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7544C4742F
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 16:44:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6F37A21789
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 16:44:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 82DC2216C4
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 16:44:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="GwLaASBB"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="i5NErQDA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728126AbgJGQol (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Oct 2020 12:44:41 -0400
+        id S1728591AbgJGQow (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Oct 2020 12:44:52 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728003AbgJGQoj (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 12:44:39 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B861C0613E0
-        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 09:44:38 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id z22so4896722wmi.0
-        for <linux-media@vger.kernel.org>; Wed, 07 Oct 2020 09:44:38 -0700 (PDT)
+        with ESMTP id S1728300AbgJGQoq (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 12:44:46 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04461C0613DF
+        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 09:44:46 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id 13so3064860wmf.0
+        for <linux-media@vger.kernel.org>; Wed, 07 Oct 2020 09:44:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=fbQ4UHoMI3gmmgUudGaz4yL7TM4S3Iddi1GT7Ee/+0U=;
-        b=GwLaASBB1efTh6MPYPZRJ8sRahCLRvTt+3ohcP4zw6YZTX22OiwAXRVD6PAfYgfgqP
-         MCyytYGELOTCoMpkehTDRE8nAbzQtjgDaBnw+1Ojb8/wCoU+VYASX13tI1VU/7VWuEaC
-         0AeT2tPwf+0OAmbFt5CWbHSjCY7HVIdMBTY9A=
+        bh=8QP2Wenq2GK6EY3ahrpWajGkuysCGV7MvFRxQ1vZo3s=;
+        b=i5NErQDABG3xyWhRS4Xp5UE+yc175cKBosuLwqs+5Zn8/i+6EDik/ClkH01I13hX0C
+         vHWn8ZQwXSRppGzO1ARSqAorvzmm5jdaYhrHwKoWTQQ7RJGkEeKz3LKPRWsgEBq8z632
+         MOPWrvux1Ic5Czns6RqQXDLB3M9PMsSLbSN64=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=fbQ4UHoMI3gmmgUudGaz4yL7TM4S3Iddi1GT7Ee/+0U=;
-        b=FYh6A/efu16mAUpW4bDso3nO6UOUBnB/AehOy5Anh2Mgorn5uP16s6Oi2MOBq18Zp+
-         6Kqdgnx74P3iD6Ja4AoUQr8SgKWHN2qY3Bz1pL2wFzoeVzTShGV/TfTDEB+g1EDR7CrR
-         1RK8J5JlKF6OuGz9Te9vCAU1eJiHeDpCu7l83cqQyreIQaMN4mDWsNlPGopbt3EorkEc
-         0EmnqsomYCuQrc1UFsbVSFBpi5rFO+VYSbv5tVOv/6JU4bkPRCn5uwwohRTZCrnl861P
-         +27SGHNH2EPGFYS/Ug2BMObZykL/u6nly59+9fUdiSE2ytXH1OtX+hFIfTagVNKpCjC/
-         zkEA==
-X-Gm-Message-State: AOAM530x2XFoT7DPxoRiOlCPOOAXg/odjgYeLUWG3a9yy92Hcl5UUJVG
-        kCISap/Q+8fwM/2SiX8wrm7DHQ==
-X-Google-Smtp-Source: ABdhPJwEu4LC2Cz1K2rgxVwQrYuYinT+uwWru1r5SWZOb1CzlJ/0rEY8IUuIAasACAWLOr06TRZTNA==
-X-Received: by 2002:a1c:1983:: with SMTP id 125mr4134376wmz.29.1602089077113;
-        Wed, 07 Oct 2020 09:44:37 -0700 (PDT)
+        bh=8QP2Wenq2GK6EY3ahrpWajGkuysCGV7MvFRxQ1vZo3s=;
+        b=eAfCS3SZX5an8ahRBVQkMknpL3GLp0y0CAC/dToc8wdK1toY32q/wkcuiJW2aXZ76A
+         cvuom+c+VskFJaHrVp2V0H8rUAsyfP7LpgGpLwahL4MOD9lDvGf4LXqA2PmPfqYkIr/Y
+         NnZK1DIN5TYlquoH9VMxkIy0xUwXGu14G77emtJ8eIuRXlSCRS/81R0jgOYQiv5h9Kpg
+         y8ctB9YsG3xj1sRZk55dsfY++LCtMvYd+k9RonFkU85tiqxOOk6MDIy2LeXH8J66wvDG
+         hDzYWh3aFDfRng6S/z1tkFeo/OSdO5VIc8Q6jZoUJ1nrVOZzdJWvZaTspgYa/VoopAXk
+         illQ==
+X-Gm-Message-State: AOAM532ABeIr2LJaCpYb29gsIhCucAt/gTmTxNA1d3epFBNuJ9ngcsD1
+        X5SYscj2ukmIpdCGN9VvSyBDXg==
+X-Google-Smtp-Source: ABdhPJxWzivkD3PWGA++mhqeycKy3eCML2xayttch0jMto2/MWxaF4znXSjgUbtngV+YgelXTwteig==
+X-Received: by 2002:a7b:c847:: with SMTP id c7mr4407500wml.41.1602089084693;
+        Wed, 07 Oct 2020 09:44:44 -0700 (PDT)
 Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id z191sm3332280wme.40.2020.10.07.09.44.35
+        by smtp.gmail.com with ESMTPSA id z191sm3332280wme.40.2020.10.07.09.44.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Oct 2020 09:44:36 -0700 (PDT)
+        Wed, 07 Oct 2020 09:44:44 -0700 (PDT)
 From:   Daniel Vetter <daniel.vetter@ffwll.ch>
 To:     DRI Development <dri-devel@lists.freedesktop.org>,
         LKML <linux-kernel@vger.kernel.org>
@@ -63,21 +63,17 @@ Cc:     kvm@vger.kernel.org, linux-mm@kvack.org,
         linux-s390@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
         Daniel Vetter <daniel.vetter@intel.com>,
         Jason Gunthorpe <jgg@ziepe.ca>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Kees Cook <keescook@chromium.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         John Hubbard <jhubbard@nvidia.com>,
         =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
         Jan Kara <jack@suse.cz>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>,
-        Omer Shpigelman <oshpigelman@habana.ai>,
-        Ofir Bitton <obitton@habana.ai>,
-        Tomer Tayar <ttayar@habana.ai>,
-        Moti Haimovski <mhaimovski@habana.ai>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pawel Piskorski <ppiskorski@habana.ai>
-Subject: [PATCH 03/13] misc/habana: Stop using frame_vector helpers
-Date:   Wed,  7 Oct 2020 18:44:16 +0200
-Message-Id: <20201007164426.1812530-4-daniel.vetter@ffwll.ch>
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Subject: [PATCH 08/13] s390/pci: Remove races against pte updates
+Date:   Wed,  7 Oct 2020 18:44:21 +0200
+Message-Id: <20201007164426.1812530-9-daniel.vetter@ffwll.ch>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201007164426.1812530-1-daniel.vetter@ffwll.ch>
 References: <20201007164426.1812530-1-daniel.vetter@ffwll.ch>
@@ -88,11 +84,33 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-All we need are a pages array, pin_user_pages_fast can give us that
-directly. Plus this avoids the entire raw pfn side of get_vaddr_frames.
+Way back it was a reasonable assumptions that iomem mappings never
+change the pfn range they point at. But this has changed:
+
+- gpu drivers dynamically manage their memory nowadays, invalidating
+ptes with unmap_mapping_range when buffers get moved
+
+- contiguous dma allocations have moved from dedicated carvetouts to
+cma regions. This means if we miss the unmap the pfn might contain
+pagecache or anon memory (well anything allocated with GFP_MOVEABLE)
+
+- even /dev/mem now invalidates mappings when the kernel requests that
+iomem region when CONFIG_IO_STRICT_DEVMEM is set, see 3234ac664a87
+("/dev/mem: Revoke mappings when a driver claims the region")
+
+Accessing pfns obtained from ptes without holding all the locks is
+therefore no longer a good idea. Fix this.
+
+Since zpci_memcpy_from|toio seems to not do anything nefarious with
+locks we just need to open code get_pfn and follow_pfn and make sure
+we drop the locks only after we've done. The write function also needs
+the copy_from_user move, since we can't take userspace faults while
+holding the mmap sem.
 
 Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
 Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: Kees Cook <keescook@chromium.org>
 Cc: Andrew Morton <akpm@linux-foundation.org>
 Cc: John Hubbard <jhubbard@nvidia.com>
 Cc: Jérôme Glisse <jglisse@redhat.com>
@@ -102,141 +120,177 @@ Cc: linux-mm@kvack.org
 Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-samsung-soc@vger.kernel.org
 Cc: linux-media@vger.kernel.org
-Cc: Oded Gabbay <oded.gabbay@gmail.com>
-Cc: Omer Shpigelman <oshpigelman@habana.ai>
-Cc: Ofir Bitton <obitton@habana.ai>
-Cc: Tomer Tayar <ttayar@habana.ai>
-Cc: Moti Haimovski <mhaimovski@habana.ai>
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Pawel Piskorski <ppiskorski@habana.ai>
+Cc: Niklas Schnelle <schnelle@linux.ibm.com>
+Cc: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Cc: linux-s390@vger.kernel.org
 ---
- drivers/misc/habanalabs/Kconfig             |  1 -
- drivers/misc/habanalabs/common/habanalabs.h |  3 +-
- drivers/misc/habanalabs/common/memory.c     | 51 +++++++++------------
- 3 files changed, 23 insertions(+), 32 deletions(-)
+ arch/s390/pci/pci_mmio.c | 98 +++++++++++++++++++++++-----------------
+ 1 file changed, 57 insertions(+), 41 deletions(-)
 
-diff --git a/drivers/misc/habanalabs/Kconfig b/drivers/misc/habanalabs/Kconfig
-index 8eb5d38c618e..2f04187f7167 100644
---- a/drivers/misc/habanalabs/Kconfig
-+++ b/drivers/misc/habanalabs/Kconfig
-@@ -6,7 +6,6 @@
- config HABANA_AI
- 	tristate "HabanaAI accelerators (habanalabs)"
- 	depends on PCI && HAS_IOMEM
--	select FRAME_VECTOR
- 	select DMA_SHARED_BUFFER
- 	select GENERIC_ALLOCATOR
- 	select HWMON
-diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
-index edbd627b29d2..c1b3ad613b15 100644
---- a/drivers/misc/habanalabs/common/habanalabs.h
-+++ b/drivers/misc/habanalabs/common/habanalabs.h
-@@ -881,7 +881,8 @@ struct hl_ctx_mgr {
- struct hl_userptr {
- 	enum vm_type_t		vm_type; /* must be first */
- 	struct list_head	job_node;
--	struct frame_vector	*vec;
-+	struct page		**pages;
-+	unsigned int		npages;
- 	struct sg_table		*sgt;
- 	enum dma_data_direction dir;
- 	struct list_head	debugfs_list;
-diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
-index 5ff4688683fd..ef89cfa2f95a 100644
---- a/drivers/misc/habanalabs/common/memory.c
-+++ b/drivers/misc/habanalabs/common/memory.c
-@@ -1281,45 +1281,41 @@ static int get_user_memory(struct hl_device *hdev, u64 addr, u64 size,
- 		return -EFAULT;
- 	}
- 
--	userptr->vec = frame_vector_create(npages);
--	if (!userptr->vec) {
-+	userptr->pages = kvmalloc_array(npages, sizeof(*userptr->pages),
-+					GFP_KERNEL);
-+	if (!userptr->pages) {
- 		dev_err(hdev->dev, "Failed to create frame vector\n");
- 		return -ENOMEM;
- 	}
- 
--	rc = get_vaddr_frames(start, npages, FOLL_FORCE | FOLL_WRITE,
--				userptr->vec);
-+	rc = pin_user_pages_fast(start, npages, FOLL_FORCE | FOLL_WRITE,
-+				 userptr->pages);
- 
- 	if (rc != npages) {
- 		dev_err(hdev->dev,
- 			"Failed to map host memory, user ptr probably wrong\n");
- 		if (rc < 0)
--			goto destroy_framevec;
-+			goto destroy_pages;
-+		npages = rc;
- 		rc = -EFAULT;
--		goto put_framevec;
--	}
--
--	if (frame_vector_to_pages(userptr->vec) < 0) {
--		dev_err(hdev->dev,
--			"Failed to translate frame vector to pages\n");
--		rc = -EFAULT;
--		goto put_framevec;
-+		goto put_pages;
- 	}
-+	userptr->npages = npages;
- 
- 	rc = sg_alloc_table_from_pages(userptr->sgt,
--					frame_vector_pages(userptr->vec),
--					npages, offset, size, GFP_ATOMIC);
-+				       userptr->pages,
-+				       npages, offset, size, GFP_ATOMIC);
- 	if (rc < 0) {
- 		dev_err(hdev->dev, "failed to create SG table from pages\n");
--		goto put_framevec;
-+		goto put_pages;
- 	}
- 
- 	return 0;
- 
--put_framevec:
--	put_vaddr_frames(userptr->vec);
--destroy_framevec:
--	frame_vector_destroy(userptr->vec);
-+put_pages:
-+	unpin_user_pages(userptr->pages, npages);
-+destroy_pages:
-+	kvfree(userptr->pages);
+diff --git a/arch/s390/pci/pci_mmio.c b/arch/s390/pci/pci_mmio.c
+index 401cf670a243..4d194cb09372 100644
+--- a/arch/s390/pci/pci_mmio.c
++++ b/arch/s390/pci/pci_mmio.c
+@@ -119,33 +119,15 @@ static inline int __memcpy_toio_inuser(void __iomem *dst,
  	return rc;
  }
  
-@@ -1405,7 +1401,7 @@ int hl_pin_host_memory(struct hl_device *hdev, u64 addr, u64 size,
-  */
- void hl_unpin_host_memory(struct hl_device *hdev, struct hl_userptr *userptr)
- {
--	struct page **pages;
-+	int i;
- 
- 	hl_debugfs_remove_userptr(hdev, userptr);
- 
-@@ -1414,15 +1410,10 @@ void hl_unpin_host_memory(struct hl_device *hdev, struct hl_userptr *userptr)
- 							userptr->sgt->nents,
- 							userptr->dir);
- 
--	pages = frame_vector_pages(userptr->vec);
--	if (!IS_ERR(pages)) {
--		int i;
+-static long get_pfn(unsigned long user_addr, unsigned long access,
+-		    unsigned long *pfn)
+-{
+-	struct vm_area_struct *vma;
+-	long ret;
 -
--		for (i = 0; i < frame_vector_count(userptr->vec); i++)
--			set_page_dirty_lock(pages[i]);
--	}
--	put_vaddr_frames(userptr->vec);
--	frame_vector_destroy(userptr->vec);
-+	for (i = 0; i < userptr->npages; i++)
-+		set_page_dirty_lock(userptr->pages[i]);
-+	unpin_user_pages(userptr->pages, userptr->npages);
-+	kvfree(userptr->pages);
+-	mmap_read_lock(current->mm);
+-	ret = -EINVAL;
+-	vma = find_vma(current->mm, user_addr);
+-	if (!vma)
+-		goto out;
+-	ret = -EACCES;
+-	if (!(vma->vm_flags & access))
+-		goto out;
+-	ret = follow_pfn(vma, user_addr, pfn);
+-out:
+-	mmap_read_unlock(current->mm);
+-	return ret;
+-}
+-
+ SYSCALL_DEFINE3(s390_pci_mmio_write, unsigned long, mmio_addr,
+ 		const void __user *, user_buffer, size_t, length)
+ {
+ 	u8 local_buf[64];
+ 	void __iomem *io_addr;
+ 	void *buf;
+-	unsigned long pfn;
++	struct vm_area_struct *vma;
++	pte_t *ptep;
++	spinlock_t *ptl;
+ 	long ret;
  
- 	list_del(&userptr->job_node);
+ 	if (!zpci_is_enabled())
+@@ -158,7 +140,7 @@ SYSCALL_DEFINE3(s390_pci_mmio_write, unsigned long, mmio_addr,
+ 	 * We only support write access to MIO capable devices if we are on
+ 	 * a MIO enabled system. Otherwise we would have to check for every
+ 	 * address if it is a special ZPCI_ADDR and would have to do
+-	 * a get_pfn() which we don't need for MIO capable devices.  Currently
++	 * a pfn lookup which we don't need for MIO capable devices.  Currently
+ 	 * ISM devices are the only devices without MIO support and there is no
+ 	 * known need for accessing these from userspace.
+ 	 */
+@@ -176,21 +158,37 @@ SYSCALL_DEFINE3(s390_pci_mmio_write, unsigned long, mmio_addr,
+ 	} else
+ 		buf = local_buf;
  
+-	ret = get_pfn(mmio_addr, VM_WRITE, &pfn);
++	ret = -EFAULT;
++	if (copy_from_user(buf, user_buffer, length))
++		goto out_free;
++
++	mmap_read_lock(current->mm);
++	ret = -EINVAL;
++	vma = find_vma(current->mm, mmio_addr);
++	if (!vma)
++		goto out_unlock_mmap;
++	ret = -EACCES;
++	if (!(vma->vm_flags & VM_WRITE))
++		goto out_unlock_mmap;
++	if (!(vma->vm_flags & (VM_IO | VM_PFNMAP)))
++		goto out_unlock_mmap;
++
++	ret = follow_pte_pmd(vma->vm_mm, mmio_addr, NULL, &ptep, NULL, &ptl);
+ 	if (ret)
+-		goto out;
+-	io_addr = (void __iomem *)((pfn << PAGE_SHIFT) |
++		goto out_unlock_mmap;
++
++	io_addr = (void __iomem *)((pte_pfn(*ptep) << PAGE_SHIFT) |
+ 			(mmio_addr & ~PAGE_MASK));
+ 
+-	ret = -EFAULT;
+ 	if ((unsigned long) io_addr < ZPCI_IOMAP_ADDR_BASE)
+-		goto out;
+-
+-	if (copy_from_user(buf, user_buffer, length))
+-		goto out;
++		goto out_unlock_pt;
+ 
+ 	ret = zpci_memcpy_toio(io_addr, buf, length);
+-out:
++out_unlock_pt:
++	pte_unmap_unlock(ptep, ptl);
++out_unlock_mmap:
++	mmap_read_unlock(current->mm);
++out_free:
+ 	if (buf != local_buf)
+ 		kfree(buf);
+ 	return ret;
+@@ -274,7 +272,9 @@ SYSCALL_DEFINE3(s390_pci_mmio_read, unsigned long, mmio_addr,
+ 	u8 local_buf[64];
+ 	void __iomem *io_addr;
+ 	void *buf;
+-	unsigned long pfn;
++	struct vm_area_struct *vma;
++	pte_t *ptep;
++	spinlock_t *ptl;
+ 	long ret;
+ 
+ 	if (!zpci_is_enabled())
+@@ -287,7 +287,7 @@ SYSCALL_DEFINE3(s390_pci_mmio_read, unsigned long, mmio_addr,
+ 	 * We only support read access to MIO capable devices if we are on
+ 	 * a MIO enabled system. Otherwise we would have to check for every
+ 	 * address if it is a special ZPCI_ADDR and would have to do
+-	 * a get_pfn() which we don't need for MIO capable devices.  Currently
++	 * a pfn lookup which we don't need for MIO capable devices.  Currently
+ 	 * ISM devices are the only devices without MIO support and there is no
+ 	 * known need for accessing these from userspace.
+ 	 */
+@@ -306,22 +306,38 @@ SYSCALL_DEFINE3(s390_pci_mmio_read, unsigned long, mmio_addr,
+ 		buf = local_buf;
+ 	}
+ 
+-	ret = get_pfn(mmio_addr, VM_READ, &pfn);
++	mmap_read_lock(current->mm);
++	ret = -EINVAL;
++	vma = find_vma(current->mm, mmio_addr);
++	if (!vma)
++		goto out_unlock_mmap;
++	ret = -EACCES;
++	if (!(vma->vm_flags & VM_WRITE))
++		goto out_unlock_mmap;
++	if (!(vma->vm_flags & (VM_IO | VM_PFNMAP)))
++		goto out_unlock_mmap;
++
++	ret = follow_pte_pmd(vma->vm_mm, mmio_addr, NULL, &ptep, NULL, &ptl);
+ 	if (ret)
+-		goto out;
+-	io_addr = (void __iomem *)((pfn << PAGE_SHIFT) | (mmio_addr & ~PAGE_MASK));
++		goto out_unlock_mmap;
++
++	io_addr = (void __iomem *)((pte_pfn(*ptep) << PAGE_SHIFT) |
++			(mmio_addr & ~PAGE_MASK));
+ 
+ 	if ((unsigned long) io_addr < ZPCI_IOMAP_ADDR_BASE) {
+ 		ret = -EFAULT;
+-		goto out;
++		goto out_unlock_pt;
+ 	}
+ 	ret = zpci_memcpy_fromio(buf, io_addr, length);
+-	if (ret)
+-		goto out;
+-	if (copy_to_user(user_buffer, buf, length))
++
++out_unlock_pt:
++	pte_unmap_unlock(ptep, ptl);
++out_unlock_mmap:
++	mmap_read_unlock(current->mm);
++
++	if (!ret && copy_to_user(user_buffer, buf, length))
+ 		ret = -EFAULT;
+ 
+-out:
+ 	if (buf != local_buf)
+ 		kfree(buf);
+ 	return ret;
 -- 
 2.28.0
 
