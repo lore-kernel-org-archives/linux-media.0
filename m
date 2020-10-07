@@ -2,31 +2,31 @@ Return-Path: <SRS0=q2TO=DO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1ADF9C41604
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 876FFC4727F
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CE40F2083B
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 506FD2080A
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728042AbgJGIqe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Oct 2020 04:46:34 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:57056 "EHLO
+        id S1728045AbgJGIqP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Oct 2020 04:46:15 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:57058 "EHLO
         hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728038AbgJGIqQ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:16 -0400
+        with ESMTP id S1728006AbgJGIqM (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:12 -0400
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 322F6634C98
-        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:22 +0300 (EEST)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 7A7E7634CE3
+        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:20 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH v2 088/106] ccs: Dual PLL support
-Date:   Wed,  7 Oct 2020 11:45:39 +0300
-Message-Id: <20201007084557.25843-79-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 065/106] ccs-pll: Begin calculation from OP system clock frequency
+Date:   Wed,  7 Oct 2020 11:45:16 +0300
+Message-Id: <20201007084557.25843-56-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201007084557.25843-1-sakari.ailus@linux.intel.com>
 References: <20201007084505.25761-1-sakari.ailus@linux.intel.com>
@@ -37,114 +37,63 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support for sensors that either require dual PLL or support single or
-dual PLL but use dual PLL as default.
+The OP system clock frequency defines the CSI-2 bus clock frequency, not
+the PLL output clock frequency. Both values were overwritten in the end,
+but the wrong limit value was used for the OP system clock frequency,
+possibly leading to too high frequencies being used.
 
-Use sensor default configuration for sensors that support both modes.
+Also remove now duplicated calculation of OP system clock frequency later
+in the PLL calculator.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs-pll.c      |  9 +++++--
- drivers/media/i2c/ccs/ccs-core.c | 45 +++++++++++++++++++++++++++++++-
- 2 files changed, 51 insertions(+), 3 deletions(-)
+ drivers/media/i2c/ccs-pll.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/media/i2c/ccs-pll.c b/drivers/media/i2c/ccs-pll.c
-index 91b578a05a98..7df7b96e78e6 100644
+index c6435ed0597e..584be36f8c66 100644
 --- a/drivers/media/i2c/ccs-pll.c
 +++ b/drivers/media/i2c/ccs-pll.c
-@@ -331,7 +331,10 @@ __ccs_pll_calculate_vt_tree(struct device *dev,
- 			continue;
- 		}
+@@ -247,10 +247,6 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 	op_pll_fr->pll_op_clk_freq_hz = op_pll_fr->pll_ip_clk_freq_hz
+ 		* op_pll_fr->pll_multiplier;
  
--		if (pix_div * sys_div <= best_div) {
-+		dev_dbg(dev, "sys/pix/best_pix: %u,%u,%u\n", sys_div, pix_div,
-+			best_pix_div);
-+
-+		if (pix_div * sys_div <= best_pix_div) {
- 			best_pix_div = pix_div;
- 			best_div = pix_div * sys_div;
- 		}
-@@ -804,7 +807,9 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
- 		if (rval)
- 			continue;
+-	/* Derive pll_op_clk_freq_hz. */
+-	op_pll_bk->sys_clk_freq_hz =
+-		op_pll_fr->pll_op_clk_freq_hz / op_pll_bk->sys_clk_div;
+-
+ 	op_pll_bk->pix_clk_div = pll->bits_per_pixel;
+ 	dev_dbg(dev, "op_pix_clk_div: %u\n", op_pll_bk->pix_clk_div);
  
--		rval = check_fr_bounds(dev, lim, pll, PLL_VT);
-+		rval = check_fr_bounds(dev, lim, pll,
-+				       pll->flags & CCS_PLL_FLAG_DUAL_PLL ?
-+				       PLL_OP : PLL_VT);
- 		if (rval)
- 			continue;
+@@ -432,7 +428,7 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 	switch (pll->bus_type) {
+ 	case CCS_PLL_BUS_TYPE_CSI2_DPHY:
+ 		/* CSI transfers 2 bits per clock per lane; thus times 2 */
+-		op_pll_fr->pll_op_clk_freq_hz = pll->link_freq * 2
++		op_pll_bk->sys_clk_freq_hz = pll->link_freq * 2
+ 			* (pll->csi2.lanes / lane_op_clock_ratio);
+ 		break;
+ 	default:
+@@ -454,8 +450,8 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 	dev_dbg(dev, "pre-pll check: min / max op_pre_pll_clk_div: %u / %u\n",
+ 		min_op_pre_pll_clk_div, max_op_pre_pll_clk_div);
  
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index a169656c4560..b280abb40433 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -396,7 +396,23 @@ static int ccs_pll_configure(struct ccs_sensor *sensor)
- 	if (rval < 0)
- 		return rval;
+-	i = gcd(op_pll_fr->pll_op_clk_freq_hz, pll->ext_clk_freq_hz);
+-	mul = op_pll_fr->pll_op_clk_freq_hz / i;
++	i = gcd(op_pll_bk->sys_clk_freq_hz, pll->ext_clk_freq_hz);
++	mul = op_pll_bk->sys_clk_freq_hz / i;
+ 	div = pll->ext_clk_freq_hz / i;
+ 	dev_dbg(dev, "mul %u / div %u\n", mul, div);
  
--	return ccs_write(sensor, OP_SYS_CLK_DIV, pll->op_bk.sys_clk_div);
-+	rval = ccs_write(sensor, OP_SYS_CLK_DIV, pll->op_bk.sys_clk_div);
-+	if (rval < 0)
-+		return rval;
-+
-+	if (!(pll->flags & CCS_PLL_FLAG_DUAL_PLL))
-+		return 0;
-+
-+	rval = ccs_write(sensor, PLL_MODE, CCS_PLL_MODE_DUAL);
-+	if (rval < 0)
-+		return rval;
-+
-+	rval = ccs_write(sensor, OP_PRE_PLL_CLK_DIV,
-+			 pll->op_fr.pre_pll_clk_div);
-+	if (rval < 0)
-+		return rval;
-+
-+	return ccs_write(sensor, OP_PLL_MULTIPLIER, pll->op_fr.pll_multiplier);
- }
+@@ -463,7 +459,7 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 		max_t(uint16_t, min_op_pre_pll_clk_div,
+ 		      clk_div_even_up(
+ 			      DIV_ROUND_UP(mul * pll->ext_clk_freq_hz,
+-					   op_lim_fr->max_pll_op_clk_freq_hz)));
++					   op_lim_bk->max_sys_clk_freq_hz)));
+ 	dev_dbg(dev, "pll_op check: min / max op_pre_pll_clk_div: %u / %u\n",
+ 		min_op_pre_pll_clk_div, max_op_pre_pll_clk_div);
  
- static int ccs_pll_try(struct ccs_sensor *sensor, struct ccs_pll *pll)
-@@ -413,6 +429,16 @@ static int ccs_pll_try(struct ccs_sensor *sensor, struct ccs_pll *pll)
- 			.min_pll_op_clk_freq_hz = CCS_LIM(sensor, MIN_PLL_OP_CLK_FREQ_MHZ),
- 			.max_pll_op_clk_freq_hz = CCS_LIM(sensor, MAX_PLL_OP_CLK_FREQ_MHZ),
- 		},
-+		.op_fr = {
-+			.min_pre_pll_clk_div = CCS_LIM(sensor, MIN_OP_PRE_PLL_CLK_DIV),
-+			.max_pre_pll_clk_div = CCS_LIM(sensor, MAX_OP_PRE_PLL_CLK_DIV),
-+			.min_pll_ip_clk_freq_hz = CCS_LIM(sensor, MIN_OP_PLL_IP_CLK_FREQ_MHZ),
-+			.max_pll_ip_clk_freq_hz = CCS_LIM(sensor, MAX_OP_PLL_IP_CLK_FREQ_MHZ),
-+			.min_pll_multiplier = CCS_LIM(sensor, MIN_OP_PLL_MULTIPLIER),
-+			.max_pll_multiplier = CCS_LIM(sensor, MAX_OP_PLL_MULTIPLIER),
-+			.min_pll_op_clk_freq_hz = CCS_LIM(sensor, MIN_OP_PLL_OP_CLK_FREQ_MHZ),
-+			.max_pll_op_clk_freq_hz = CCS_LIM(sensor, MAX_OP_PLL_OP_CLK_FREQ_MHZ),
-+		},
- 		.op_bk = {
- 			 .min_sys_clk_div = CCS_LIM(sensor, MIN_OP_SYS_CLK_DIV),
- 			 .max_sys_clk_div = CCS_LIM(sensor, MAX_OP_SYS_CLK_DIV),
-@@ -3223,6 +3249,23 @@ static int ccs_probe(struct i2c_client *client)
- 	    CCS_FIFO_SUPPORT_CAPABILITY_DERATING_OVERRATING)
- 		sensor->pll.flags |= CCS_PLL_FLAG_FIFO_DERATING |
- 				     CCS_PLL_FLAG_FIFO_OVERRATING;
-+	if (CCS_LIM(sensor, CLOCK_TREE_PLL_CAPABILITY) &
-+	    CCS_CLOCK_TREE_PLL_CAPABILITY_DUAL_PLL) {
-+		if (CCS_LIM(sensor, CLOCK_TREE_PLL_CAPABILITY) &
-+		    CCS_CLOCK_TREE_PLL_CAPABILITY_SINGLE_PLL) {
-+			u32 v;
-+
-+			/* Use sensor default in PLL mode selection */
-+			rval = ccs_read(sensor, PLL_MODE, &v);
-+			if (rval)
-+				goto out_cleanup;
-+
-+			if (v == CCS_PLL_MODE_DUAL)
-+				sensor->pll.flags |= CCS_PLL_FLAG_DUAL_PLL;
-+		} else {
-+			sensor->pll.flags |= CCS_PLL_FLAG_DUAL_PLL;
-+		}
-+	}
- 	sensor->pll.op_bits_per_lane = CCS_LIM(sensor, OP_BITS_PER_LANE);
- 	sensor->pll.ext_clk_freq_hz = sensor->hwcfg.ext_clk;
- 	sensor->pll.scale_n = CCS_LIM(sensor, SCALER_N_MIN);
 -- 
 2.27.0
 
