@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4BA5C4363C
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A03AC47427
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:47:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7EC0F20870
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4DBC020870
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:47:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728114AbgJGIq6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Oct 2020 04:46:58 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:57044 "EHLO
+        id S1728116AbgJGIrA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Oct 2020 04:47:00 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:57038 "EHLO
         hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727998AbgJGIqK (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:10 -0400
+        with ESMTP id S1727983AbgJGIqI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:08 -0400
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 13751634C87
-        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:20 +0300 (EEST)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 3EF0C634CD5
+        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:19 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH v2 059/106] ccs-pll: End search if there are no better values available
-Date:   Wed,  7 Oct 2020 11:45:10 +0300
-Message-Id: <20201007084557.25843-50-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 047/106] ccs: Use static data read-only registers
+Date:   Wed,  7 Oct 2020 11:45:00 +0300
+Message-Id: <20201007084557.25843-40-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201007084557.25843-1-sakari.ailus@linux.intel.com>
 References: <20201007084505.25761-1-sakari.ailus@linux.intel.com>
@@ -37,45 +37,107 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The VT divisor search can be ended if we've already found the value that
-corresponds exactly the total divisor, as there are no better (lower)
-values available.
+Access read-only registers from CCS static data.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs-pll.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/media/i2c/ccs/ccs-reg-access.c | 64 ++++++++++++++++++++++++--
+ 1 file changed, 60 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/i2c/ccs-pll.c b/drivers/media/i2c/ccs-pll.c
-index ea0f84fc8a90..22e29127804a 100644
---- a/drivers/media/i2c/ccs-pll.c
-+++ b/drivers/media/i2c/ccs-pll.c
-@@ -352,6 +352,7 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
- 		     sys_div <= max_sys_div;
- 		     sys_div += 2 - (sys_div & 1)) {
- 			uint16_t pix_div = DIV_ROUND_UP(vt_div, sys_div);
-+			uint16_t rounded_div;
+diff --git a/drivers/media/i2c/ccs/ccs-reg-access.c b/drivers/media/i2c/ccs/ccs-reg-access.c
+index 9fda16b221a7..02af2b0abdaf 100644
+--- a/drivers/media/i2c/ccs/ccs-reg-access.c
++++ b/drivers/media/i2c/ccs/ccs-reg-access.c
+@@ -198,11 +198,67 @@ static int __ccs_read_addr(struct ccs_sensor *sensor, u32 reg, u32 *val,
+ 	return 0;
+ }
  
- 			if (pix_div < lim->vt_bk.min_pix_clk_div
- 			    || pix_div > lim->vt_bk.max_pix_clk_div) {
-@@ -363,10 +364,15 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
- 				continue;
- 			}
++static int __ccs_read_data(struct ccs_reg *regs, size_t num_regs,
++			   u32 reg, u32 *val)
++{
++	unsigned int width = ccs_reg_width(reg);
++	size_t i;
++
++	for (i = 0; i < num_regs; i++, regs++) {
++		uint8_t *data;
++
++		if (regs->addr + regs->len < CCS_REG_ADDR(reg) + width)
++			continue;
++
++		if (regs->addr > CCS_REG_ADDR(reg))
++			break;
++
++		data = &regs->value[CCS_REG_ADDR(reg) - regs->addr];
++
++		switch (width) {
++		case sizeof(uint8_t):
++			*val = *data;
++			break;
++		case sizeof(uint16_t):
++			*val = get_unaligned_be16(data);
++			break;
++		case sizeof(uint32_t):
++			*val = get_unaligned_be32(data);
++			break;
++		default:
++			WARN_ON(1);
++			return -EINVAL;
++		}
++
++		return 0;
++	}
++
++	return -ENOENT;
++}
++
++static int ccs_read_data(struct ccs_sensor *sensor, u32 reg, u32 *val)
++{
++	if (!__ccs_read_data(sensor->sdata.sensor_read_only_regs,
++			     sensor->sdata.num_sensor_read_only_regs,
++			     reg, val))
++		return 0;
++
++	return __ccs_read_data(sensor->mdata.module_read_only_regs,
++			       sensor->mdata.num_module_read_only_regs,
++			       reg, val);
++}
++
+ static int ccs_read_addr_raw(struct ccs_sensor *sensor, u32 reg, u32 *val,
+-			     bool force8, bool quirk, bool conv)
++			     bool force8, bool quirk, bool conv, bool data)
+ {
+ 	int rval;
  
-+			rounded_div = roundup(vt_div, best_pix_div);
++	if (data) {
++		rval = ccs_read_data(sensor, reg, val);
++		if (!rval)
++			return 0;
++	}
 +
- 			/* Check if this one is better. */
--			if (pix_div * sys_div
--			    <= roundup(vt_div, best_pix_div))
-+			if (pix_div * sys_div <= rounded_div)
- 				best_pix_div = pix_div;
-+
-+			/* Bail out if we've already found the best value. */
-+			if (vt_div == rounded_div)
-+				break;
- 		}
- 		if (best_pix_div < INT_MAX >> 1)
- 			break;
+ 	if (quirk) {
+ 		*val = 0;
+ 		rval = ccs_call_quirk(sensor, reg_access, false, &reg, val);
+@@ -223,17 +279,17 @@ static int ccs_read_addr_raw(struct ccs_sensor *sensor, u32 reg, u32 *val,
+ 
+ int ccs_read_addr(struct ccs_sensor *sensor, u32 reg, u32 *val)
+ {
+-	return ccs_read_addr_raw(sensor, reg, val, false, true, true);
++	return ccs_read_addr_raw(sensor, reg, val, false, true, true, true);
+ }
+ 
+ int ccs_read_addr_8only(struct ccs_sensor *sensor, u32 reg, u32 *val)
+ {
+-	return ccs_read_addr_raw(sensor, reg, val, true, true, true);
++	return ccs_read_addr_raw(sensor, reg, val, true, true, true, true);
+ }
+ 
+ int ccs_read_addr_noconv(struct ccs_sensor *sensor, u32 reg, u32 *val)
+ {
+-	return ccs_read_addr_raw(sensor, reg, val, false, true, false);
++	return ccs_read_addr_raw(sensor, reg, val, false, true, false, true);
+ }
+ 
+ static int ccs_write_retry(struct i2c_client *client, struct i2c_msg *msg)
 -- 
 2.27.0
 
