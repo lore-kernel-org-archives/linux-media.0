@@ -7,126 +7,110 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE134C4727E
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:45:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C6B4C4727E
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A49332080A
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:45:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C567F20870
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:45:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727915AbgJGIpO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Oct 2020 04:45:14 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:56950 "EHLO
+        id S1727932AbgJGIp7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Oct 2020 04:45:59 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:57022 "EHLO
         hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727536AbgJGIpM (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:45:12 -0400
+        with ESMTP id S1727926AbgJGIp6 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:45:58 -0400
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id E8A28634C90;
-        Wed,  7 Oct 2020 11:44:24 +0300 (EEST)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id B86FA634C8C
+        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:15 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Cc:     devicetree@vger.kernel.org
-Subject: [PATCH v2 025/106] dt-bindings: nokia,smia: Amend SMIA bindings with MIPI CCS support
-Date:   Wed,  7 Oct 2020 11:45:02 +0300
-Message-Id: <20201007084505.25761-7-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 003/106] smiapp: Calculate CCS limit offsets and limit buffer size
+Date:   Wed,  7 Oct 2020 11:44:23 +0300
+Message-Id: <20201007084557.25843-3-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201007084505.25761-1-sakari.ailus@linux.intel.com>
+In-Reply-To: <20201007084557.25843-1-sakari.ailus@linux.intel.com>
 References: <20201007084505.25761-1-sakari.ailus@linux.intel.com>
+ <20201007084557.25843-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Amend the existing SMIA bindings by adding MIPI CCS support, with separate
-compatible strings for CCS 1.0 and CCS 1.1. Rename the old bindings
-accordingly as CCS is the current standard.
+Calculate the limit offsets and the size of the limit buffer. CCS limits
+are read into this buffer, and the offsets are helpful in accessing the
+information in it.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- .../i2c/{nokia,smia.yaml => mipi-ccs.yaml}    | 23 ++++++++++++++-----
- MAINTAINERS                                   |  2 +-
- 2 files changed, 18 insertions(+), 7 deletions(-)
- rename Documentation/devicetree/bindings/media/i2c/{nokia,smia.yaml => mipi-ccs.yaml} (81%)
+ drivers/media/i2c/smiapp/smiapp-core.c | 40 +++++++++++++++++++++++++-
+ 1 file changed, 39 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml b/Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml
-similarity index 81%
-rename from Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml
-rename to Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml
-index 47df08338a42..a386ee246956 100644
---- a/Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml
-@@ -1,26 +1,37 @@
- # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- # Copyright (C) 2014--2020 Intel Corporation
+diff --git a/drivers/media/i2c/smiapp/smiapp-core.c b/drivers/media/i2c/smiapp/smiapp-core.c
+index 105ef29152e8..47e983e9cd87 100644
+--- a/drivers/media/i2c/smiapp/smiapp-core.c
++++ b/drivers/media/i2c/smiapp/smiapp-core.c
+@@ -27,6 +27,7 @@
+ #include <media/v4l2-fwnode.h>
+ #include <media/v4l2-device.h>
  
--$id: http://devicetree.org/schemas/media/i2c/nokia,smia.yaml#
-+$id: http://devicetree.org/schemas/media/i2c/mipi-ccs.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
++#include "ccs-limits.h"
+ #include "smiapp.h"
  
--title: SMIA/SMIA++ sensor
-+title: MIPI CCS, SMIA++ and SMIA compliant camera sensors
+ #define SMIAPP_ALIGN_DIM(dim, flags)	\
+@@ -34,6 +35,11 @@
+ 	 ? ALIGN((dim), 2)		\
+ 	 : (dim) & ~1)
  
- maintainers:
-   - Sakari Ailus <sakari.ailus@linux.intel.com>
- 
- description:
- 
-+  CCS (Camera Command Set) is a raw Bayer camera sensor standard defined by the
-+  MIPI Alliance; see
-+  <URL:https://www.mipi.org/specifications/camera-command-set>.
++struct ccs_limit_offset {
++	u16	lim;
++	u16	info;
++} ccs_limit_offsets[CCS_L_LAST + 1];
 +
-   SMIA (Standard Mobile Imaging Architecture) is an image sensor standard
-   defined jointly by Nokia and ST. SMIA++, defined by Nokia, is an extension of
--  that. These definitions are valid for both types of sensors.
-+  that.
+ /*
+  * smiapp_module_idents - supported camera modules
+  */
+@@ -3166,7 +3172,39 @@ static struct i2c_driver smiapp_i2c_driver = {
+ 	.id_table = smiapp_id_table,
+ };
  
-   More detailed documentation can be found in
-   Documentation/devicetree/bindings/media/video-interfaces.txt .
+-module_i2c_driver(smiapp_i2c_driver);
++static int smiapp_module_init(void)
++{
++	unsigned int i, l;
++
++	for (i = 0, l = 0; ccs_limits[i].size && l < CCS_L_LAST; i++) {
++		if (!(ccs_limits[i].flags & CCS_L_FL_SAME_REG)) {
++			ccs_limit_offsets[l + 1].lim =
++				ALIGN(ccs_limit_offsets[l].lim +
++				      ccs_limits[i].size,
++				      ccs_reg_width(ccs_limits[i + 1].reg));
++			ccs_limit_offsets[l].info = i;
++			l++;
++		} else {
++			ccs_limit_offsets[l].lim += ccs_limits[i].size;
++		}
++	}
++
++	if (WARN_ON(ccs_limits[i].size))
++		return -EINVAL;
++
++	if (WARN_ON(l != CCS_L_LAST))
++		return -EINVAL;
++
++	return i2c_register_driver(THIS_MODULE, &smiapp_i2c_driver);
++}
++
++static void smiapp_module_cleanup(void)
++{
++	i2c_del_driver(&smiapp_i2c_driver);
++}
++
++module_init(smiapp_module_init);
++module_exit(smiapp_module_cleanup);
  
- properties:
-   compatible:
--    const: nokia,smia
-+    oneOf:
-+      - items:
-+        - const: mipi-ccs-1.1
-+        - const: mipi-ccs
-+      - items:
-+        - const: mipi-ccs-1.0
-+        - const: mipi-ccs
-+      - const: nokia,smia
- 
-   reg:
-     maxItems: 1
-@@ -89,14 +100,14 @@ examples:
-         clock-frequency = <400000>;
- 
-         camera-sensor@10 {
--            compatible = "nokia,smia";
-+            compatible = "mipi-ccs-1.0", "mipi-ccs";
-             reg = <0x10>;
-             reset-gpios = <&gpio3 20 GPIO_ACTIVE_LOW>;
-             vana-supply = <&vaux3>;
-             clocks = <&omap3_isp 0>;
-             clock-frequency = <9600000>;
-             port {
--                smiapp_ep: endpoint {
-+                ccs_ep: endpoint {
-                     data-lanes = <1 2>;
-                     remote-endpoint = <&csi2a_ep>;
-                     link-frequencies = /bits/ 64 <199200000 210000000
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ec99e94e2273..135d41b823a4 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11564,7 +11564,7 @@ MIPI CCS, SMIA AND SMIA++ IMAGE SENSOR DRIVER
- M:	Sakari Ailus <sakari.ailus@linux.intel.com>
- L:	linux-media@vger.kernel.org
- S:	Maintained
--F:	Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml
-+F:	Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml
- F:	drivers/media/i2c/ccs/
- F:	drivers/media/i2c/smiapp-pll.c
- F:	drivers/media/i2c/smiapp-pll.h
+ MODULE_AUTHOR("Sakari Ailus <sakari.ailus@iki.fi>");
+ MODULE_DESCRIPTION("Generic SMIA/SMIA++ camera module driver");
 -- 
 2.27.0
 
