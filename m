@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52738C41604
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:47:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51E27C47425
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:47:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 160482184D
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:47:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E2F621D24
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:47:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727992AbgJGIqI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Oct 2020 04:46:08 -0400
+        id S1727974AbgJGIqF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Oct 2020 04:46:05 -0400
 Received: from retiisi.org.uk ([95.216.213.190]:57052 "EHLO
         hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727915AbgJGIqF (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:05 -0400
+        with ESMTP id S1727943AbgJGIqD (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:03 -0400
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 1E0C5634C8E
-        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:18 +0300 (EEST)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 459C0634CA3
+        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:17 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH v2 034/106] ccs: Combine revision number major and minor into one
-Date:   Wed,  7 Oct 2020 11:44:47 +0300
-Message-Id: <20201007084557.25843-27-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 018/106] ccs: Remove profile concept
+Date:   Wed,  7 Oct 2020 11:44:38 +0300
+Message-Id: <20201007084557.25843-18-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201007084557.25843-1-sakari.ailus@linux.intel.com>
 References: <20201007084505.25761-1-sakari.ailus@linux.intel.com>
@@ -37,126 +37,87 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The module revision number major and minor are both 8 bits while the
-sensor revision number is 16 bits. Combine the module revision into one
-number.
-
-This also adds printing the lowest 8 bits of the module version through
-the sysfs attribute.
+The driver doesn't do anything tangible with profiles. Remove the notion,
+and use the capabilities directly.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c  | 25 ++++++++++++++-----------
- drivers/media/i2c/ccs/ccs-quirk.c |  2 +-
- drivers/media/i2c/ccs/ccs.h       |  3 +--
- 3 files changed, 16 insertions(+), 14 deletions(-)
+ drivers/media/i2c/ccs/ccs-core.c | 23 ++++++-----------------
+ drivers/media/i2c/ccs/ccs.h      |  2 --
+ 2 files changed, 6 insertions(+), 19 deletions(-)
 
 diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 19ff15eda246..34e86ddbb06a 100644
+index 6a47a5c16bb1..22050d33f0e8 100644
 --- a/drivers/media/i2c/ccs/ccs-core.c
 +++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -2421,11 +2421,11 @@ ccs_sysfs_ident_read(struct device *dev, struct device_attribute *attr,
- 	if (minfo->mipi_manufacturer_id)
- 		return snprintf(buf, PAGE_SIZE, "%4.4x%4.4x%2.2x\n",
- 				minfo->mipi_manufacturer_id, minfo->model_id,
--				minfo->revision_number_major) + 1;
-+				minfo->revision_number) + 1;
- 	else
- 		return snprintf(buf, PAGE_SIZE, "%2.2x%4.4x%2.2x\n",
- 				minfo->smia_manufacturer_id, minfo->model_id,
--				minfo->revision_number_major) + 1;
-+				minfo->revision_number) + 1;
- }
+@@ -377,7 +377,7 @@ static int ccs_pll_configure(struct ccs_sensor *sensor)
+ 	rval = ccs_write(sensor, REQUESTED_LINK_RATE,
+ 			 DIV_ROUND_UP(pll->op.sys_clk_freq_hz,
+ 				      1000000 / 256 / 256));
+-	if (rval < 0 || sensor->minfo.smiapp_profile == SMIAPP_PROFILE_0)
++	if (rval < 0 || sensor->pll.flags & SMIAPP_PLL_FLAG_NO_OP_CLOCKS)
+ 		return rval;
  
- static DEVICE_ATTR(ident, S_IRUGO, ccs_sysfs_ident_read, NULL);
-@@ -2439,6 +2439,7 @@ static int ccs_identify_module(struct ccs_sensor *sensor)
- 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
- 	struct ccs_module_info *minfo = &sensor->minfo;
- 	unsigned int i;
-+	u32 rev;
- 	int rval = 0;
- 
- 	/* Module info */
-@@ -2454,11 +2455,13 @@ static int ccs_identify_module(struct ccs_sensor *sensor)
- 	if (!rval)
- 		rval = ccs_read_addr_8only(sensor,
- 					   CCS_R_MODULE_REVISION_NUMBER_MAJOR,
--					   &minfo->revision_number_major);
--	if (!rval)
-+					   &rev);
-+	if (!rval) {
- 		rval = ccs_read_addr_8only(sensor,
- 					   CCS_R_MODULE_REVISION_NUMBER_MINOR,
--					   &minfo->revision_number_minor);
-+					   &minfo->revision_number);
-+		minfo->revision_number |= rev << 8;
-+	}
- 	if (!rval)
- 		rval = ccs_read_addr_8only(sensor, CCS_R_MODULE_DATE_YEAR,
- 					   &minfo->module_year);
-@@ -2513,9 +2516,9 @@ static int ccs_identify_module(struct ccs_sensor *sensor)
- 			minfo->smia_manufacturer_id, minfo->model_id);
- 
- 	dev_dbg(&client->dev,
--		"module revision 0x%2.2x-0x%2.2x date %2.2d-%2.2d-%2.2d\n",
--		minfo->revision_number_major, minfo->revision_number_minor,
--		minfo->module_year, minfo->module_month, minfo->module_day);
-+		"module revision 0x%4.4x date %2.2d-%2.2d-%2.2d\n",
-+		minfo->revision_number, minfo->module_year, minfo->module_month,
-+		minfo->module_day);
- 
- 	if (minfo->sensor_mipi_manufacturer_id)
- 		dev_dbg(&client->dev, "MIPI CCS sensor 0x%4.4x-0x%4.4x\n",
-@@ -2553,7 +2556,7 @@ static int ccs_identify_module(struct ccs_sensor *sensor)
- 		minfo->smia_manufacturer_id =
- 			minfo->sensor_smia_manufacturer_id;
- 		minfo->model_id = minfo->sensor_model_id;
--		minfo->revision_number_major = minfo->sensor_revision_number;
-+		minfo->revision_number = minfo->sensor_revision_number;
+ 	rval = ccs_write(sensor, OP_PIX_CLK_DIV, pll->op.pix_clk_div);
+@@ -3096,23 +3096,17 @@ static int ccs_probe(struct i2c_client *client)
+ 		}
  	}
  
- 	for (i = 0; i < ARRAY_SIZE(ccs_module_idents); i++) {
-@@ -2570,11 +2573,11 @@ static int ccs_identify_module(struct ccs_sensor *sensor)
- 		if (ccs_module_idents[i].flags
- 		    & CCS_MODULE_IDENT_FLAG_REV_LE) {
- 			if (ccs_module_idents[i].revision_number_major
--			    < minfo->revision_number_major)
-+			    < (minfo->revision_number >> 8))
- 				continue;
- 		} else {
- 			if (ccs_module_idents[i].revision_number_major
--			    != minfo->revision_number_major)
-+			    != (minfo->revision_number >> 8))
- 				continue;
- 		}
+-	/* We consider this as profile 0 sensor if any of these are zero. */
+ 	if (!CCS_LIM(sensor, MIN_OP_SYS_CLK_DIV) ||
+ 	    !CCS_LIM(sensor, MAX_OP_SYS_CLK_DIV) ||
+ 	    !CCS_LIM(sensor, MIN_OP_PIX_CLK_DIV) ||
+ 	    !CCS_LIM(sensor, MAX_OP_PIX_CLK_DIV)) {
+-		sensor->minfo.smiapp_profile = SMIAPP_PROFILE_0;
++		/* No OP clock branch */
++		sensor->pll.flags |= SMIAPP_PLL_FLAG_NO_OP_CLOCKS;
+ 	} else if (CCS_LIM(sensor, SCALING_CAPABILITY)
+-		   != CCS_SCALING_CAPABILITY_NONE) {
+-		if (CCS_LIM(sensor, SCALING_CAPABILITY)
+-		    == CCS_SCALING_CAPABILITY_HORIZONTAL)
+-			sensor->minfo.smiapp_profile = SMIAPP_PROFILE_1;
+-		else
+-			sensor->minfo.smiapp_profile = SMIAPP_PROFILE_2;
+-		sensor->scaler = &sensor->ssds[sensor->ssds_used];
+-		sensor->ssds_used++;
+-	} else if (CCS_LIM(sensor, DIGITAL_CROP_CAPABILITY)
++		   != CCS_SCALING_CAPABILITY_NONE ||
++		   CCS_LIM(sensor, DIGITAL_CROP_CAPABILITY)
+ 		   == CCS_DIGITAL_CROP_CAPABILITY_INPUT_CROP) {
++		/* We have a scaler or digital crop. */
+ 		sensor->scaler = &sensor->ssds[sensor->ssds_used];
+ 		sensor->ssds_used++;
+ 	}
+@@ -3128,16 +3122,11 @@ static int ccs_probe(struct i2c_client *client)
+ 	sensor->pll.csi2.lanes = sensor->hwcfg->lanes;
+ 	sensor->pll.ext_clk_freq_hz = sensor->hwcfg->ext_clk;
+ 	sensor->pll.scale_n = CCS_LIM(sensor, SCALER_N_MIN);
+-	/* Profile 0 sensors have no separate OP clock branch. */
+-	if (sensor->minfo.smiapp_profile == SMIAPP_PROFILE_0)
+-		sensor->pll.flags |= SMIAPP_PLL_FLAG_NO_OP_CLOCKS;
  
-diff --git a/drivers/media/i2c/ccs/ccs-quirk.c b/drivers/media/i2c/ccs/ccs-quirk.c
-index facec28f8447..07c5733b4244 100644
---- a/drivers/media/i2c/ccs/ccs-quirk.c
-+++ b/drivers/media/i2c/ccs/ccs-quirk.c
-@@ -35,7 +35,7 @@ static int ccs_write_addr_8s(struct ccs_sensor *sensor,
+ 	ccs_create_subdev(sensor, sensor->scaler, " scaler", 2);
+ 	ccs_create_subdev(sensor, sensor->binner, " binner", 2);
+ 	ccs_create_subdev(sensor, sensor->pixel_array, " pixel_array", 1);
  
- static int jt8ew9_limits(struct ccs_sensor *sensor)
- {
--	if (sensor->minfo.revision_number_major < 0x03)
-+	if (sensor->minfo.revision_number < 0x0300)
- 		sensor->frame_skip = 1;
+-	dev_dbg(&client->dev, "profile %d\n", sensor->minfo.smiapp_profile);
+-
+ 	sensor->pixel_array->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
  
- 	/* Below 24 gain doesn't have effect at all, */
+ 	rval = ccs_init_controls(sensor);
 diff --git a/drivers/media/i2c/ccs/ccs.h b/drivers/media/i2c/ccs/ccs.h
-index 2d1e8339f663..ad2ff5a74424 100644
+index 7f6ed95b7b78..8933f3d40fa5 100644
 --- a/drivers/media/i2c/ccs/ccs.h
 +++ b/drivers/media/i2c/ccs/ccs.h
-@@ -107,8 +107,7 @@ struct ccs_module_info {
- 	u32 smia_manufacturer_id;
- 	u32 mipi_manufacturer_id;
- 	u32 model_id;
--	u32 revision_number_major;
--	u32 revision_number_minor;
-+	u32 revision_number;
+@@ -124,8 +124,6 @@ struct ccs_module_info {
+ 	u32 smiapp_version;
+ 	u32 ccs_version;
  
- 	u32 module_year;
- 	u32 module_month;
+-	u32 smiapp_profile;
+-
+ 	char *name;
+ 	const struct ccs_quirk *quirk;
+ };
 -- 
 2.27.0
 
