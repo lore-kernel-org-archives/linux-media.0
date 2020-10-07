@@ -7,29 +7,26 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09CDEC41604
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90A40C4741F
 	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:47:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BC7C521D94
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:47:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 56FD321D7A
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:47:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727908AbgJGIqD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Oct 2020 04:46:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35022 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727937AbgJGIqB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:01 -0400
-Received: from hillosipuli.retiisi.eu (hillosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::81:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7661EC0613D2
-        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 01:46:00 -0700 (PDT)
+        id S1728128AbgJGIrN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Oct 2020 04:47:13 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:57058 "EHLO
+        hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727953AbgJGIqD (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:03 -0400
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 137D3634C8F
-        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:16 +0300 (EEST)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 6BF00634C8C
+        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:17 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH v2 006/106] smiapp: Use MIPI CCS version and manufacturer ID information
-Date:   Wed,  7 Oct 2020 11:44:26 +0300
-Message-Id: <20201007084557.25843-6-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 027/106] ccs: Request for "reset" GPIO
+Date:   Wed,  7 Oct 2020 11:44:40 +0300
+Message-Id: <20201007084557.25843-20-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201007084557.25843-1-sakari.ailus@linux.intel.com>
 References: <20201007084505.25761-1-sakari.ailus@linux.intel.com>
@@ -40,249 +37,79 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Read MIPI CCS manufacturer and version information, and use the CCS IDs
-over SMIA whenever they are set.
+The DT bindings documented "reset-gpios" property but the driver never
+made use of it. Instead it used a GPIO called "xshutdown", with apprently
+wrong polarity.
+
+Fix this by requesting "reset" GPIO with the right polarity first, and if
+that fails, then request "xshutdown" GPIO with the old polarity. This way
+it works for new users as expected while if someone, somewhere, depended
+on "xshutdown" GPIO, that continues to work as well.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/smiapp/smiapp-core.c | 76 +++++++++++++++++++-------
- drivers/media/i2c/smiapp/smiapp.h      | 20 ++++---
- 2 files changed, 68 insertions(+), 28 deletions(-)
+ drivers/media/i2c/ccs/ccs-core.c | 14 ++++++++++++--
+ drivers/media/i2c/ccs/ccs.h      |  1 +
+ 2 files changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/i2c/smiapp/smiapp-core.c b/drivers/media/i2c/smiapp/smiapp-core.c
-index 47e983e9cd87..10900ac4aa1a 100644
---- a/drivers/media/i2c/smiapp/smiapp-core.c
-+++ b/drivers/media/i2c/smiapp/smiapp-core.c
-@@ -2356,9 +2356,14 @@ smiapp_sysfs_ident_read(struct device *dev, struct device_attribute *attr,
- 	struct smiapp_sensor *sensor = to_smiapp_sensor(subdev);
- 	struct smiapp_module_info *minfo = &sensor->minfo;
- 
--	return snprintf(buf, PAGE_SIZE, "%2.2x%4.4x%2.2x\n",
--			minfo->manufacturer_id, minfo->model_id,
--			minfo->revision_number_major) + 1;
-+	if (minfo->mipi_manufacturer_id)
-+		return snprintf(buf, PAGE_SIZE, "%4.4x%4.4x%2.2x\n",
-+				minfo->mipi_manufacturer_id, minfo->model_id,
-+				minfo->revision_number_major) + 1;
-+	else
-+		return snprintf(buf, PAGE_SIZE, "%2.2x%4.4x%2.2x\n",
-+				minfo->smia_manufacturer_id, minfo->model_id,
-+				minfo->revision_number_major) + 1;
- }
- 
- static DEVICE_ATTR(ident, S_IRUGO, smiapp_sysfs_ident_read, NULL);
-@@ -2377,8 +2382,11 @@ static int smiapp_identify_module(struct smiapp_sensor *sensor)
- 	minfo->name = SMIAPP_NAME;
- 
- 	/* Module info */
--	rval = smiapp_read_8only(sensor, SMIAPP_REG_U8_MANUFACTURER_ID,
--				 &minfo->manufacturer_id);
-+	rval = ccs_read(sensor, MODULE_MANUFACTURER_ID,
-+			&minfo->mipi_manufacturer_id);
-+	if (!rval && !minfo->mipi_manufacturer_id)
-+		rval = smiapp_read_8only(sensor, SMIAPP_REG_U8_MANUFACTURER_ID,
-+					 &minfo->smia_manufacturer_id);
- 	if (!rval)
- 		rval = smiapp_read_8only(sensor, SMIAPP_REG_U16_MODEL_ID,
- 					 &minfo->model_id);
-@@ -2404,9 +2412,12 @@ static int smiapp_identify_module(struct smiapp_sensor *sensor)
- 
- 	/* Sensor info */
- 	if (!rval)
-+		rval = ccs_read(sensor, SENSOR_MANUFACTURER_ID,
-+				&minfo->sensor_mipi_manufacturer_id);
-+	if (!rval && !minfo->sensor_mipi_manufacturer_id)
- 		rval = smiapp_read_8only(sensor,
- 					 SMIAPP_REG_U8_SENSOR_MANUFACTURER_ID,
--					 &minfo->sensor_manufacturer_id);
-+					 &minfo->sensor_smia_manufacturer_id);
- 	if (!rval)
- 		rval = smiapp_read_8only(sensor,
- 					 SMIAPP_REG_U16_SENSOR_MODEL_ID,
-@@ -2422,9 +2433,11 @@ static int smiapp_identify_module(struct smiapp_sensor *sensor)
- 
- 	/* SMIA */
- 	if (!rval)
-+		rval = ccs_read(sensor, MIPI_CCS_VERSION, &minfo->ccs_version);
-+	if (!rval && !minfo->ccs_version)
- 		rval = smiapp_read_8only(sensor, SMIAPP_REG_U8_SMIA_VERSION,
- 					 &minfo->smia_version);
--	if (!rval)
-+	if (!rval && !minfo->ccs_version)
- 		rval = smiapp_read_8only(sensor, SMIAPP_REG_U8_SMIAPP_VERSION,
- 					 &minfo->smiapp_version);
- 
-@@ -2433,38 +2446,62 @@ static int smiapp_identify_module(struct smiapp_sensor *sensor)
- 		return -ENODEV;
+diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
+index 1880ed31845e..775037ce361f 100644
+--- a/drivers/media/i2c/ccs/ccs-core.c
++++ b/drivers/media/i2c/ccs/ccs-core.c
+@@ -1295,6 +1295,7 @@ static int ccs_power_on(struct device *dev)
  	}
+ 	usleep_range(1000, 1000);
  
--	dev_dbg(&client->dev, "module 0x%2.2x-0x%4.4x\n",
--		minfo->manufacturer_id, minfo->model_id);
-+	if (minfo->mipi_manufacturer_id)
-+		dev_dbg(&client->dev, "MIPI CCS module 0x%4.4x-0x%4.4x\n",
-+			minfo->mipi_manufacturer_id, minfo->model_id);
-+	else
-+		dev_dbg(&client->dev, "SMIA module 0x%2.2x-0x%4.4x\n",
-+			minfo->smia_manufacturer_id, minfo->model_id);
++	gpiod_set_value(sensor->reset, 0);
+ 	gpiod_set_value(sensor->xshutdown, 1);
  
- 	dev_dbg(&client->dev,
- 		"module revision 0x%2.2x-0x%2.2x date %2.2d-%2.2d-%2.2d\n",
- 		minfo->revision_number_major, minfo->revision_number_minor,
- 		minfo->module_year, minfo->module_month, minfo->module_day);
- 
--	dev_dbg(&client->dev, "sensor 0x%2.2x-0x%4.4x\n",
--		minfo->sensor_manufacturer_id, minfo->sensor_model_id);
-+	if (minfo->sensor_mipi_manufacturer_id)
-+		dev_dbg(&client->dev, "MIPI CCS sensor 0x%4.4x-0x%4.4x\n",
-+			minfo->sensor_mipi_manufacturer_id,
-+			minfo->sensor_model_id);
-+	else
-+		dev_dbg(&client->dev, "SMIA sensor 0x%2.2x-0x%4.4x\n",
-+			minfo->sensor_smia_manufacturer_id,
-+			minfo->sensor_model_id);
- 
- 	dev_dbg(&client->dev,
- 		"sensor revision 0x%2.2x firmware version 0x%2.2x\n",
- 		minfo->sensor_revision_number, minfo->sensor_firmware_version);
- 
--	dev_dbg(&client->dev, "smia version %2.2d smiapp version %2.2d\n",
--		minfo->smia_version, minfo->smiapp_version);
-+	if (minfo->ccs_version)
-+		dev_dbg(&client->dev, "MIPI CCS version %u.%u",
-+			(minfo->ccs_version & CCS_MIPI_CCS_VERSION_MAJOR_MASK)
-+			>> CCS_MIPI_CCS_VERSION_MAJOR_SHIFT,
-+			(minfo->ccs_version & CCS_MIPI_CCS_VERSION_MINOR_MASK));
-+	else
-+		dev_dbg(&client->dev,
-+			"smia version %2.2d smiapp version %2.2d\n",
-+			minfo->smia_version, minfo->smiapp_version);
- 
- 	/*
- 	 * Some modules have bad data in the lvalues below. Hope the
- 	 * rvalues have better stuff. The lvalues are module
- 	 * parameters whereas the rvalues are sensor parameters.
- 	 */
--	if (!minfo->manufacturer_id && !minfo->model_id) {
--		minfo->manufacturer_id = minfo->sensor_manufacturer_id;
-+	if (minfo->sensor_smia_manufacturer_id &&
-+	    !minfo->smia_manufacturer_id && !minfo->model_id) {
-+		minfo->smia_manufacturer_id =
-+			minfo->sensor_smia_manufacturer_id;
- 		minfo->model_id = minfo->sensor_model_id;
- 		minfo->revision_number_major = minfo->sensor_revision_number;
- 	}
- 
- 	for (i = 0; i < ARRAY_SIZE(smiapp_module_idents); i++) {
--		if (smiapp_module_idents[i].manufacturer_id
--		    != minfo->manufacturer_id)
-+		if (smiapp_module_idents[i].mipi_manufacturer_id &&
-+		    smiapp_module_idents[i].mipi_manufacturer_id
-+		    != minfo->mipi_manufacturer_id)
-+			continue;
-+		if (smiapp_module_idents[i].smia_manufacturer_id &&
-+		    smiapp_module_idents[i].smia_manufacturer_id
-+		    != minfo->smia_manufacturer_id)
- 			continue;
- 		if (smiapp_module_idents[i].model_id != minfo->model_id)
- 			continue;
-@@ -2488,9 +2525,8 @@ static int smiapp_identify_module(struct smiapp_sensor *sensor)
- 		dev_warn(&client->dev,
- 			 "no quirks for this module; let's hope it's fully compliant\n");
- 
--	dev_dbg(&client->dev, "the sensor is called %s, ident %2.2x%4.4x%2.2x\n",
--		minfo->name, minfo->manufacturer_id, minfo->model_id,
--		minfo->revision_number_major);
-+	dev_dbg(&client->dev, "the sensor is called %s\n",
-+		minfo->name);
- 
+ 	sleep = SMIAPP_RESET_DELAY(sensor->hwcfg->ext_clk);
+@@ -1381,6 +1382,7 @@ static int ccs_power_on(struct device *dev)
  	return 0;
- }
-diff --git a/drivers/media/i2c/smiapp/smiapp.h b/drivers/media/i2c/smiapp/smiapp.h
-index 7cef97db7f47..b1d0e3d71630 100644
---- a/drivers/media/i2c/smiapp/smiapp.h
-+++ b/drivers/media/i2c/smiapp/smiapp.h
-@@ -91,8 +91,9 @@ struct smiapp_quirk;
- #define SMIAPP_MODULE_IDENT_FLAG_REV_LE		(1 << 0)
  
- struct smiapp_module_ident {
--	u8 manufacturer_id;
-+	u16 mipi_manufacturer_id;
- 	u16 model_id;
-+	u8 smia_manufacturer_id;
- 	u8 revision_number_major;
+ out_cci_addr_fail:
++	gpiod_set_value(sensor->reset, 1);
+ 	gpiod_set_value(sensor->xshutdown, 0);
+ 	clk_disable_unprepare(sensor->ext_clk);
  
- 	u8 flags;
-@@ -102,7 +103,8 @@ struct smiapp_module_ident {
- };
+@@ -1407,6 +1409,7 @@ static int ccs_power_off(struct device *dev)
+ 	if (sensor->hwcfg->i2c_addr_alt)
+ 		ccs_write(sensor, SOFTWARE_RESET, CCS_SOFTWARE_RESET_ON);
  
- struct smiapp_module_info {
--	u32 manufacturer_id;
-+	u32 smia_manufacturer_id;
-+	u32 mipi_manufacturer_id;
- 	u32 model_id;
- 	u32 revision_number_major;
- 	u32 revision_number_minor;
-@@ -111,13 +113,15 @@ struct smiapp_module_info {
- 	u32 module_month;
- 	u32 module_day;
++	gpiod_set_value(sensor->reset, 1);
+ 	gpiod_set_value(sensor->xshutdown, 0);
+ 	clk_disable_unprepare(sensor->ext_clk);
+ 	usleep_range(5000, 5000);
+@@ -3008,8 +3011,15 @@ static int ccs_probe(struct i2c_client *client)
+ 		return -EINVAL;
+ 	}
  
--	u32 sensor_manufacturer_id;
-+	u32 sensor_smia_manufacturer_id;
-+	u32 sensor_mipi_manufacturer_id;
- 	u32 sensor_model_id;
- 	u32 sensor_revision_number;
- 	u32 sensor_firmware_version;
+-	sensor->xshutdown = devm_gpiod_get_optional(&client->dev, "xshutdown",
+-						    GPIOD_OUT_LOW);
++	sensor->reset = devm_gpiod_get_optional(&client->dev, "reset",
++						GPIOD_OUT_HIGH);
++	if (IS_ERR(sensor->reset))
++		return PTR_ERR(sensor->reset);
++	/* Support old users that may have used "xshutdown" property. */
++	if (!sensor->reset)
++		sensor->xshutdown = devm_gpiod_get_optional(&client->dev,
++							    "xshutdown",
++							    GPIOD_OUT_LOW);
+ 	if (IS_ERR(sensor->xshutdown))
+ 		return PTR_ERR(sensor->xshutdown);
  
- 	u32 smia_version;
- 	u32 smiapp_version;
-+	u32 ccs_version;
- 
- 	u32 smiapp_profile;
- 
-@@ -126,7 +130,7 @@ struct smiapp_module_info {
- };
- 
- #define SMIAPP_IDENT_FQ(manufacturer, model, rev, fl, _name, _quirk)	\
--	{ .manufacturer_id = manufacturer,				\
-+	{ .smia_manufacturer_id = manufacturer,				\
- 	  .model_id = model,						\
- 	  .revision_number_major = rev,					\
- 	  .flags = fl,							\
-@@ -134,7 +138,7 @@ struct smiapp_module_info {
- 	  .quirk = _quirk, }
- 
- #define SMIAPP_IDENT_LQ(manufacturer, model, rev, _name, _quirk)	\
--	{ .manufacturer_id = manufacturer,				\
-+	{ .smia_manufacturer_id = manufacturer,				\
- 	  .model_id = model,						\
- 	  .revision_number_major = rev,					\
- 	  .flags = SMIAPP_MODULE_IDENT_FLAG_REV_LE,			\
-@@ -142,14 +146,14 @@ struct smiapp_module_info {
- 	  .quirk = _quirk, }
- 
- #define SMIAPP_IDENT_L(manufacturer, model, rev, _name)			\
--	{ .manufacturer_id = manufacturer,				\
-+	{ .smia_manufacturer_id = manufacturer,				\
- 	  .model_id = model,						\
- 	  .revision_number_major = rev,					\
- 	  .flags = SMIAPP_MODULE_IDENT_FLAG_REV_LE,			\
- 	  .name = _name, }
- 
- #define SMIAPP_IDENT_Q(manufacturer, model, rev, _name, _quirk)		\
--	{ .manufacturer_id = manufacturer,				\
-+	{ .smia_manufacturer_id = manufacturer,				\
- 	  .model_id = model,						\
- 	  .revision_number_major = rev,					\
- 	  .flags = 0,							\
-@@ -157,7 +161,7 @@ struct smiapp_module_info {
- 	  .quirk = _quirk, }
- 
- #define SMIAPP_IDENT(manufacturer, model, rev, _name)			\
--	{ .manufacturer_id = manufacturer,				\
-+	{ .smia_manufacturer_id = manufacturer,				\
- 	  .model_id = model,						\
- 	  .revision_number_major = rev,					\
- 	  .flags = 0,							\
+diff --git a/drivers/media/i2c/ccs/ccs.h b/drivers/media/i2c/ccs/ccs.h
+index 8933f3d40fa5..bfe39e02f5e9 100644
+--- a/drivers/media/i2c/ccs/ccs.h
++++ b/drivers/media/i2c/ccs/ccs.h
+@@ -219,6 +219,7 @@ struct ccs_sensor {
+ 	struct regulator *vana;
+ 	struct clk *ext_clk;
+ 	struct gpio_desc *xshutdown;
++	struct gpio_desc *reset;
+ 	void *ccs_limits;
+ 	u8 nbinning_subtypes;
+ 	struct ccs_binning_subtype binning_subtypes[CCS_LIM_BINNING_SUB_TYPE_MAX_N + 1];
 -- 
 2.27.0
 
