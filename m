@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D257DC4741F
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04172C47426
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:47:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 85C7F2176B
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B0B122137B
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:47:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728112AbgJGIq4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Oct 2020 04:46:56 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:57072 "EHLO
+        id S1728115AbgJGIq7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Oct 2020 04:46:59 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:57052 "EHLO
         hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728001AbgJGIqK (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:10 -0400
+        with ESMTP id S1727960AbgJGIqI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:08 -0400
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 69B39634CE1
-        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:20 +0300 (EEST)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 99656634C90
+        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:19 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH v2 064/106] ccs-pll: Use the BIT macro
-Date:   Wed,  7 Oct 2020 11:45:15 +0300
-Message-Id: <20201007084557.25843-55-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 052/106] ccs: Remove unnecessary delays from power-up sequence
+Date:   Wed,  7 Oct 2020 11:45:05 +0300
+Message-Id: <20201007084557.25843-45-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201007084557.25843-1-sakari.ailus@linux.intel.com>
 References: <20201007084505.25761-1-sakari.ailus@linux.intel.com>
@@ -37,36 +37,32 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use the BIT macro for setting individual bits.
+SMIA nor CCS need these delays; remove them.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs-pll.h | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/media/i2c/ccs/ccs-core.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/media/i2c/ccs-pll.h b/drivers/media/i2c/ccs-pll.h
-index e01359f61476..f772ed8ef579 100644
---- a/drivers/media/i2c/ccs-pll.h
-+++ b/drivers/media/i2c/ccs-pll.h
-@@ -12,13 +12,16 @@
- #ifndef CCS_PLL_H
- #define CCS_PLL_H
+diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
+index 94661275d599..8bf42fc222c1 100644
+--- a/drivers/media/i2c/ccs/ccs-core.c
++++ b/drivers/media/i2c/ccs/ccs-core.c
+@@ -1309,14 +1309,12 @@ static int ccs_power_on(struct device *dev)
+ 		dev_err(dev, "failed to enable vana regulator\n");
+ 		return rval;
+ 	}
+-	usleep_range(1000, 1000);
  
-+#include <linux/bits.h>
-+
- /* CSI-2 or CCP-2 */
- #define CCS_PLL_BUS_TYPE_CSI2_DPHY				0x00
- #define CCS_PLL_BUS_TYPE_CSI2_CPHY				0x01
+ 	rval = clk_prepare_enable(sensor->ext_clk);
+ 	if (rval < 0) {
+ 		dev_dbg(dev, "failed to enable xclk\n");
+ 		goto out_xclk_fail;
+ 	}
+-	usleep_range(1000, 1000);
  
-+/* Old SMIA and implementation specific flags */
- /* op pix clock is for all lanes in total normally */
--#define CCS_PLL_FLAG_OP_PIX_CLOCK_PER_LANE			(1 << 0)
--#define CCS_PLL_FLAG_NO_OP_CLOCKS				(1 << 1)
-+#define CCS_PLL_FLAG_OP_PIX_CLOCK_PER_LANE			BIT(0)
-+#define CCS_PLL_FLAG_NO_OP_CLOCKS				BIT(1)
- 
- /**
-  * struct ccs_pll_branch_fr - CCS PLL configuration (front)
+ 	gpiod_set_value(sensor->reset, 0);
+ 	gpiod_set_value(sensor->xshutdown, 1);
 -- 
 2.27.0
 
