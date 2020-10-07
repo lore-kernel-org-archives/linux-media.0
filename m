@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04172C47426
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:47:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BB99C41604
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B0B122137B
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:47:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1749A2080A
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 08:46:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728115AbgJGIq7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Oct 2020 04:46:59 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:57052 "EHLO
+        id S1728111AbgJGIq4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Oct 2020 04:46:56 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:57082 "EHLO
         hillosipuli.retiisi.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727960AbgJGIqI (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:08 -0400
+        with ESMTP id S1727999AbgJGIqL (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 04:46:11 -0400
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 99656634C90
-        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:19 +0300 (EEST)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 24CE6634C93
+        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 11:45:20 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH v2 052/106] ccs: Remove unnecessary delays from power-up sequence
-Date:   Wed,  7 Oct 2020 11:45:05 +0300
-Message-Id: <20201007084557.25843-45-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 060/106] ccs-pll: Remove parallel bus support
+Date:   Wed,  7 Oct 2020 11:45:11 +0300
+Message-Id: <20201007084557.25843-51-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201007084557.25843-1-sakari.ailus@linux.intel.com>
 References: <20201007084505.25761-1-sakari.ailus@linux.intel.com>
@@ -37,32 +37,62 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-SMIA nor CCS need these delays; remove them.
+The parallel bus PLL calculation has no users. Remove it.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/media/i2c/ccs-pll.c |  5 -----
+ drivers/media/i2c/ccs-pll.h | 14 ++++----------
+ 2 files changed, 4 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 94661275d599..8bf42fc222c1 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -1309,14 +1309,12 @@ static int ccs_power_on(struct device *dev)
- 		dev_err(dev, "failed to enable vana regulator\n");
- 		return rval;
+diff --git a/drivers/media/i2c/ccs-pll.c b/drivers/media/i2c/ccs-pll.c
+index 22e29127804a..da97a2b91717 100644
+--- a/drivers/media/i2c/ccs-pll.c
++++ b/drivers/media/i2c/ccs-pll.c
+@@ -435,11 +435,6 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 		op_pll_fr->pll_op_clk_freq_hz = pll->link_freq * 2
+ 			* (pll->csi2.lanes / lane_op_clock_ratio);
+ 		break;
+-	case CCS_PLL_BUS_TYPE_PARALLEL:
+-		op_pll_fr->pll_op_clk_freq_hz = pll->link_freq * pll->bits_per_pixel
+-			/ DIV_ROUND_UP(pll->bits_per_pixel,
+-				       pll->parallel.bus_width);
+-		break;
+ 	default:
+ 		return -EINVAL;
  	}
--	usleep_range(1000, 1000);
+diff --git a/drivers/media/i2c/ccs-pll.h b/drivers/media/i2c/ccs-pll.h
+index 03b1d8d11423..578c9272688a 100644
+--- a/drivers/media/i2c/ccs-pll.h
++++ b/drivers/media/i2c/ccs-pll.h
+@@ -13,8 +13,7 @@
+ #define CCS_PLL_H
  
- 	rval = clk_prepare_enable(sensor->ext_clk);
- 	if (rval < 0) {
- 		dev_dbg(dev, "failed to enable xclk\n");
- 		goto out_xclk_fail;
- 	}
--	usleep_range(1000, 1000);
+ /* CSI-2 or CCP-2 */
+-#define CCS_PLL_BUS_TYPE_CSI2				0x00
+-#define CCS_PLL_BUS_TYPE_PARALLEL				0x01
++#define CCS_PLL_BUS_TYPE_CSI2					0x00
  
- 	gpiod_set_value(sensor->reset, 0);
- 	gpiod_set_value(sensor->xshutdown, 1);
+ /* op pix clock is for all lanes in total normally */
+ #define CCS_PLL_FLAG_OP_PIX_CLOCK_PER_LANE			(1 << 0)
+@@ -37,14 +36,9 @@ struct ccs_pll_branch_bk {
+ struct ccs_pll {
+ 	/* input values */
+ 	uint8_t bus_type;
+-	union {
+-		struct {
+-			uint8_t lanes;
+-		} csi2;
+-		struct {
+-			uint8_t bus_width;
+-		} parallel;
+-	};
++	struct {
++		uint8_t lanes;
++	} csi2;
+ 	unsigned long flags;
+ 	uint8_t binning_horizontal;
+ 	uint8_t binning_vertical;
 -- 
 2.27.0
 
