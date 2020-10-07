@@ -2,69 +2,85 @@ Return-Path: <SRS0=q2TO=DO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0CF5C47095
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 16:44:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E665C47427
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 16:44:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CA2A32176B
-	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 16:44:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D1763206FC
+	for <linux-media@archiver.kernel.org>; Wed,  7 Oct 2020 16:44:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="LKBDOiNh"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="M9/9cFkL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727993AbgJGQog (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Oct 2020 12:44:36 -0400
+        id S1728143AbgJGQom (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Oct 2020 12:44:42 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727903AbgJGQof (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 12:44:35 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C216C0613D4
-        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 09:44:34 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id w5so2972762wrp.8
-        for <linux-media@vger.kernel.org>; Wed, 07 Oct 2020 09:44:34 -0700 (PDT)
+        with ESMTP id S1728029AbgJGQok (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Oct 2020 12:44:40 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E41A1C061755
+        for <linux-media@vger.kernel.org>; Wed,  7 Oct 2020 09:44:39 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id p15so3041802wmi.4
+        for <linux-media@vger.kernel.org>; Wed, 07 Oct 2020 09:44:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ioe0Byeg/DIJ2PK+KoHAeY/RgUBhGUsvQd2LPXMyjpk=;
-        b=LKBDOiNhqwNLkwa9WP1zzXHrjwlM9UxdR+2aww5WQtbHhuceIwa/VXYYnC9UZ6hdtp
-         mvYMFJ7UpZJyZnXE8eOz53fPGIesR/n7+X+8Z0F7CtzFKuDxeUJ2E389J/P0gE5voMHe
-         oEJ9yMHSIcqvjSDbm4eT0/N3ZkXflXq1Fg4A8=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=CXmXX9/hQfgNA2sDFICXZ2LHoeIrjelysU1qQvq0pLo=;
+        b=M9/9cFkLYvtsV+XSvB3EIEIsseQMf3Ht42LRs7L3X5P1WwWl9Oi2KvxQBCacCcF14m
+         fJV8CQS9LPrjIIfBd4aiNt1OxGBmDjd9OCGq8SR0MHNMsO52kAQKbH++f9zP6zkYkuCb
+         ir3n+83k7vXH52uffeOAdQ1DpKcQF6dl1WTl4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ioe0Byeg/DIJ2PK+KoHAeY/RgUBhGUsvQd2LPXMyjpk=;
-        b=RUC5yWXmyF3VyRPxn04f6JdOpkTPa/3tJUti6PrCwZwRCx8rUSfzxB5DiPXAJS/pU2
-         VESlLUrJx2JsJjR2aQ/Cl4OcQm9hvLHtKGMDHqQOKCjVaDvEozUSB6cuk6qTV4Nvgi0c
-         ApCdBTVmyvsPLLZYxJhNGJ0q3DX3JuGszZEKM205XnQ6VPw81RoL8Rlu1ZaPNkGRdbpS
-         RAuqgtVzP5/Ya0B+WS7ADfbe6R08df5Emmwd+6QIxBGgJRABCgObji6rBr9ag8Z4V45L
-         j6a3goKYX1P9vRKkO14J6s+MC4ez7FtCNAaj13GmsUkqXkEKh/tN4bIq3mGJ6LKSjD6i
-         om1g==
-X-Gm-Message-State: AOAM533ZNlXPp6BfS5Be/aKj9EfoUU+dkQweYLeGqLYTBJCqFe02PozL
-        gTmeHPF56Qv1JwKgFn7jYKPLzw==
-X-Google-Smtp-Source: ABdhPJzRELPHTJISw4N/fSU+gR/P4h8ZIocAzvLavw2ceiWiegfiQvvhsxcd+sZUYD7qwXN8jRsOdg==
-X-Received: by 2002:adf:e74d:: with SMTP id c13mr4372958wrn.45.1602089072696;
-        Wed, 07 Oct 2020 09:44:32 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=CXmXX9/hQfgNA2sDFICXZ2LHoeIrjelysU1qQvq0pLo=;
+        b=JxWUxBaNB9XcQzH9P9pixUpLwBufjBucvjXNfBY7PvRnx7DVFBJJgp4YbGQaCEPs9T
+         ijEssYzjK+qpkK2+V9uTWxq6UGqiet3d1lORhcyOD2kN+e+nKVsxWysxxDKZSLm++tNT
+         vISVxsYo1ok9NI3KKB/NQrZL6TxbWVM3W1Ru7zNQ49u9Nena9eLLltluZWLBP3M9QxM9
+         Y7O29nuUswPZdd6OpS5zfbw2RWi8mbk0W8kTxdnDHmCsASGwhEtkyeaHOUiap3ceLRGo
+         JfMNnpUQccWHGBzU4gXLQPCT4ch9u6MPA57jYjsYaIiczrum9PU98DuKg4X6ZBgtXeIT
+         PK5w==
+X-Gm-Message-State: AOAM532eG3q1bNkz79j0j5FwYKRJkrGQYcBQ1cpXHhmRjBMW+Y3+uFcT
+        kzeBizn1wtutctEpz04vZw8UYA==
+X-Google-Smtp-Source: ABdhPJxC/lomxhrpmJUvYBJInJM6vUgAB59jFw18I6b4BWoKkPAiJCuoXppD6fu/bxyn6KUpfhv2Zw==
+X-Received: by 2002:a05:600c:1149:: with SMTP id z9mr1651741wmz.180.1602089078573;
+        Wed, 07 Oct 2020 09:44:38 -0700 (PDT)
 Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id z191sm3332280wme.40.2020.10.07.09.44.31
+        by smtp.gmail.com with ESMTPSA id z191sm3332280wme.40.2020.10.07.09.44.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Oct 2020 09:44:32 -0700 (PDT)
+        Wed, 07 Oct 2020 09:44:37 -0700 (PDT)
 From:   Daniel Vetter <daniel.vetter@ffwll.ch>
 To:     DRI Development <dri-devel@lists.freedesktop.org>,
         LKML <linux-kernel@vger.kernel.org>
 Cc:     kvm@vger.kernel.org, linux-mm@kvack.org,
         linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-s390@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>
-Subject: [PATCH 00/13] follow_pfn and other iomap races
-Date:   Wed,  7 Oct 2020 18:44:13 +0200
-Message-Id: <20201007164426.1812530-1-daniel.vetter@ffwll.ch>
+        linux-s390@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        Jan Kara <jack@suse.cz>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>,
+        Omer Shpigelman <oshpigelman@habana.ai>,
+        Ofir Bitton <obitton@habana.ai>,
+        Tomer Tayar <ttayar@habana.ai>,
+        Moti Haimovski <mhaimovski@habana.ai>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Pawel Piskorski <ppiskorski@habana.ai>
+Subject: [PATCH 04/13] misc/habana: Use FOLL_LONGTERM for userptr
+Date:   Wed,  7 Oct 2020 18:44:17 +0200
+Message-Id: <20201007164426.1812530-5-daniel.vetter@ffwll.ch>
 X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20201007164426.1812530-1-daniel.vetter@ffwll.ch>
+References: <20201007164426.1812530-1-daniel.vetter@ffwll.ch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -72,74 +88,45 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi all,
+These are persistent, not just for the duration of a dma operation.
 
-This developed from a discussion with Jason, starting with some patches
-touching get_vaddr_frame that I typed up.
+Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: John Hubbard <jhubbard@nvidia.com>
+Cc: Jérôme Glisse <jglisse@redhat.com>
+Cc: Jan Kara <jack@suse.cz>
+Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: linux-mm@kvack.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-samsung-soc@vger.kernel.org
+Cc: linux-media@vger.kernel.org
+Cc: Oded Gabbay <oded.gabbay@gmail.com>
+Cc: Omer Shpigelman <oshpigelman@habana.ai>
+Cc: Ofir Bitton <obitton@habana.ai>
+Cc: Tomer Tayar <ttayar@habana.ai>
+Cc: Moti Haimovski <mhaimovski@habana.ai>
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Pawel Piskorski <ppiskorski@habana.ai>
+---
+ drivers/misc/habanalabs/common/memory.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-The problem is that way back VM_IO | VM_PFNMAP mappings were pretty
-static, and so just following the ptes to derive a pfn and then use that
-somewhere else was ok.
-
-But we're no longer in such a world, there's tons of little races and some
-fundamental problems.
-
-This series here is an attempt to at least scope the problem, it's all the
-issues I've found with quite some code reading all over the tree:
-- first part tries to move mm/frame-vector.c away, it's fundamentally an
-  unsafe thing
-- two patches to close follow_pfn races by holding pt locks
-- two pci patches where I spotted inconsinstencies between the 3 different
-  ways userspace can map pci bars
-- and finally some patches to mark up the remaining issue
-
-No testing beyond "it compiles", this is very much an rfc to figure out
-whether this makes sense, whether it's a real thing, and how to fix this
-up properly.
-
-Cheers, Daniel
-
-Daniel Vetter (13):
-  drm/exynos: Stop using frame_vector helpers
-  drm/exynos: Use FOLL_LONGTERM for g2d cmdlists
-  misc/habana: Stop using frame_vector helpers
-  misc/habana: Use FOLL_LONGTERM for userptr
-  mm/frame-vector: Use FOLL_LONGTERM
-  media: videobuf2: Move frame_vector into media subsystem
-  mm: close race in generic_access_phys
-  s390/pci: Remove races against pte updates
-  PCI: obey iomem restrictions for procfs mmap
-  PCI: revoke mappings like devmem
-  mm: add unsafe_follow_pfn
-  media/videbuf1|2: Mark follow_pfn usage as unsafe
-  vfio/type1: Mark follow_pfn as unsafe
-
- arch/s390/pci/pci_mmio.c                      | 98 +++++++++++--------
- drivers/char/mem.c                            | 16 ++-
- drivers/gpu/drm/exynos/Kconfig                |  1 -
- drivers/gpu/drm/exynos/exynos_drm_g2d.c       | 49 +++++-----
- drivers/media/common/videobuf2/Kconfig        |  1 -
- drivers/media/common/videobuf2/Makefile       |  1 +
- .../media/common/videobuf2}/frame_vector.c    | 40 +++-----
- drivers/media/platform/omap/Kconfig           |  1 -
- drivers/media/v4l2-core/videobuf-dma-contig.c |  2 +-
- drivers/misc/habanalabs/Kconfig               |  1 -
- drivers/misc/habanalabs/common/habanalabs.h   |  3 +-
- drivers/misc/habanalabs/common/memory.c       | 52 +++++-----
- drivers/pci/mmap.c                            |  3 +
- drivers/pci/proc.c                            |  5 +
- drivers/vfio/vfio_iommu_type1.c               |  4 +-
- include/linux/ioport.h                        |  2 +
- include/linux/mm.h                            | 47 +--------
- include/media/videobuf2-core.h                | 42 ++++++++
- mm/Kconfig                                    |  3 -
- mm/Makefile                                   |  1 -
- mm/memory.c                                   | 76 +++++++++++++-
- mm/nommu.c                                    | 17 ++++
- security/Kconfig                              | 13 +++
- 23 files changed, 296 insertions(+), 182 deletions(-)
- rename {mm => drivers/media/common/videobuf2}/frame_vector.c (90%)
-
+diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
+index ef89cfa2f95a..94bef8faa82a 100644
+--- a/drivers/misc/habanalabs/common/memory.c
++++ b/drivers/misc/habanalabs/common/memory.c
+@@ -1288,7 +1288,8 @@ static int get_user_memory(struct hl_device *hdev, u64 addr, u64 size,
+ 		return -ENOMEM;
+ 	}
+ 
+-	rc = pin_user_pages_fast(start, npages, FOLL_FORCE | FOLL_WRITE,
++	rc = pin_user_pages_fast(start, npages,
++				 FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
+ 				 userptr->pages);
+ 
+ 	if (rc != npages) {
 -- 
 2.28.0
 
