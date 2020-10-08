@@ -2,102 +2,116 @@ Return-Path: <SRS0=tBT7=DP=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96E50C43467
-	for <linux-media@archiver.kernel.org>; Thu,  8 Oct 2020 10:21:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08F74C4727F
+	for <linux-media@archiver.kernel.org>; Thu,  8 Oct 2020 11:23:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 45A612177B
-	for <linux-media@archiver.kernel.org>; Thu,  8 Oct 2020 10:21:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 96F1A217BA
+	for <linux-media@archiver.kernel.org>; Thu,  8 Oct 2020 11:23:51 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cf1RVSf2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729419AbgJHKVx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 8 Oct 2020 06:21:53 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:21776 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729325AbgJHKVx (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Oct 2020 06:21:53 -0400
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 08 Oct 2020 03:21:52 -0700
-X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 08 Oct 2020 03:21:50 -0700
-X-QCInternal: smtphost
-Received: from dikshita-linux.qualcomm.com ([10.204.65.237])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 08 Oct 2020 15:51:32 +0530
-Received: by dikshita-linux.qualcomm.com (Postfix, from userid 347544)
-        id 6372350C1; Thu,  8 Oct 2020 15:51:31 +0530 (IST)
-From:   Dikshita Agarwal <dikshita@codeaurora.org>
-To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        ezequiel@collabora.com, stanimir.varbanov@linaro.org,
-        vgarodia@codeaurora.org, majja@codeaurora.org,
-        Dikshita Agarwal <dikshita@codeaurora.org>
-Subject: [PATCH] media: v4l2-ctrl: Add base layer priority id control.
-Date:   Thu,  8 Oct 2020 15:51:20 +0530
-Message-Id: <1602152480-3930-1-git-send-email-dikshita@codeaurora.org>
-X-Mailer: git-send-email 1.9.1
+        id S1729795AbgJHLXr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 8 Oct 2020 07:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56152 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725871AbgJHLXr (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Oct 2020 07:23:47 -0400
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9470C061755;
+        Thu,  8 Oct 2020 04:23:46 -0700 (PDT)
+Received: by mail-ed1-x543.google.com with SMTP id x1so5457014eds.1;
+        Thu, 08 Oct 2020 04:23:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=JsjjPHzjofiTjxIZU4zLpu7KElZkR0RdFNQVI4MgOuI=;
+        b=Cf1RVSf2Wd5WKqBEQe/s36QG8XPfHBaG2UWWLmc7AROqUPPPQzryQaYWEUL3oqek8t
+         bJAWEG3kKcAlgth9M38k2B/Nt+MG9IFqUTNhiYyms9eyVbvr8NcfwpPUj/XllhPiA0lR
+         CEOK7HNJLYHG2ro7ZcBAavoxQL+en5L6fLiIqlSMlj8iywTFoAQE8nxzlrsyLbgjMxpi
+         aofcNv/eTwnrxMk1doVKqyCl2Lzj63kYoISdf1LGyZfeO4qxt1PCfDKoVBAEDuVy+NFE
+         Aa5I9mDCi/xhlOeDfBYRqyWBA93TrkNz+9HNhzXjHl+Z5vLOKICpcpqiYFyy5VDMaDh4
+         4ZPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=JsjjPHzjofiTjxIZU4zLpu7KElZkR0RdFNQVI4MgOuI=;
+        b=IIaUkMpXCMrL5pKAm2RqqRZORERWa+aSKvmiM+bdas3S3HPFsKQtiDkJF2lkLf1vRC
+         Y+6Rzr03yaaAFaJYjgn23QtRL/1ktFZL/praZLVqksABaJ3pvtlC0CXOiOisO7RfOsQx
+         EacX/Lzxs2PmUa1HuMYPvrdkLZsinZNPWgIB/F2tovMwFWRbJUh2tP0wrfDbrRhLC+s/
+         y8lJUfer63WSphgbXLF7G8h0nCeBkRrUfEVR6ndaIrLtUykRxp9SbC/x1PvYHROVbzYM
+         PryXM/rsE8abaYfpB0E07wyAbMW6WpN/TeM0qg0x3da1TDOccurWooNwzGoAC1ImF5MX
+         LKNw==
+X-Gm-Message-State: AOAM531mFLHs3G0sS4mPisGkksbAUg/nInjT+xdautEHR11JERYUmntt
+        2IhJuDIl13iMaNxrCT7Z2Po=
+X-Google-Smtp-Source: ABdhPJwDRyJHE6THipTubGPFIEhicDT26J0ZkLEqMYptkgqx4YSyy8HXoku93odOoEECNMopX74sdQ==
+X-Received: by 2002:aa7:c7c2:: with SMTP id o2mr8673537eds.366.1602156225590;
+        Thu, 08 Oct 2020 04:23:45 -0700 (PDT)
+Received: from abel.fritz.box ([2a02:908:1252:fb60:4c64:a9a0:5e0:905a])
+        by smtp.gmail.com with ESMTPSA id i20sm3529030edv.96.2020.10.08.04.23.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Oct 2020 04:23:45 -0700 (PDT)
+From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
+        <ckoenig.leichtzumerken@gmail.com>
+X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, chris@chris-wilson.co.uk,
+        airlied@redhat.com, akpm@linux-foundation.org, daniel@ffwll.ch,
+        sumit.semwal@linaro.org
+Subject: [PATCH 2/4] drm/prime: document that use the page array is deprecated
+Date:   Thu,  8 Oct 2020 13:23:40 +0200
+Message-Id: <20201008112342.9394-2-christian.koenig@amd.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20201008112342.9394-1-christian.koenig@amd.com>
+References: <20201008112342.9394-1-christian.koenig@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This control indicates the priority id to be applied
-to base layer.
+We have reoccurring requests on this so better document that
+this approach doesn't work and dma_buf_mmap() needs to be used instead.
 
-Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
+Signed-off-by: Christian König <christian.koenig@amd.com>
 ---
- Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 9 +++++++++
- drivers/media/v4l2-core/v4l2-ctrls.c                      | 1 +
- include/uapi/linux/v4l2-controls.h                        | 1 +
- 3 files changed, 11 insertions(+)
+ drivers/gpu/drm/drm_prime.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index 690b066..264fb83 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -1251,6 +1251,15 @@ enum v4l2_mpeg_video_h264_entropy_mode -
-     Force a key frame for the next queued buffer. Applicable to
-     encoders. This is a general, codec-agnostic keyframe control.
- 
-+``V4L2_CID_MPEG_VIDEO_BASELAYER_PRIORITYID (integer)``
-+	Specifies a priority identifier for the NAL unit,
-+	which will be applied to base layer.
-+	By default this value is set to 0 for base layer.
-+	And the next layer will have priority ID assigned as 1,2,3 and so on.
-+	Video encode can't decide the priority id to be applied to a layer
-+	so this has to come from client.
-+	Valid Range: from 0 to 63
-+
- .. _v4l2-mpeg-video-h264-cpb-size:
- 
- ``V4L2_CID_MPEG_VIDEO_H264_CPB_SIZE (integer)``
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 9296294..ec78510 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -958,6 +958,7 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_MPEG_VIDEO_MV_V_SEARCH_RANGE:		return "Vertical MV Search Range";
- 	case V4L2_CID_MPEG_VIDEO_REPEAT_SEQ_HEADER:		return "Repeat Sequence Header";
- 	case V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME:		return "Force Key Frame";
-+	case V4L2_CID_MPEG_VIDEO_BASELAYER_PRIORITYID:		return "Base Layer Priority ID"
- 	case V4L2_CID_MPEG_VIDEO_MPEG2_SLICE_PARAMS:		return "MPEG-2 Slice Parameters";
- 	case V4L2_CID_MPEG_VIDEO_MPEG2_QUANTIZATION:		return "MPEG-2 Quantization Matrices";
- 	case V4L2_CID_MPEG_VIDEO_FWHT_PARAMS:			return "FWHT Stateless Parameters";
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index b869b54..9ed3e39 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -415,6 +415,7 @@ enum v4l2_mpeg_video_multi_slice_mode {
- #define V4L2_CID_MPEG_VIDEO_MV_H_SEARCH_RANGE		(V4L2_CID_MPEG_BASE+227)
- #define V4L2_CID_MPEG_VIDEO_MV_V_SEARCH_RANGE		(V4L2_CID_MPEG_BASE+228)
- #define V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME		(V4L2_CID_MPEG_BASE+229)
-+#define V4L2_CID_MPEG_VIDEO_BASELAYER_PRIORITYID	(V4L2_CID_MPEG_BASE+230)
- 
- /* CIDs for the MPEG-2 Part 2 (H.262) codec */
- #define V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL			(V4L2_CID_MPEG_BASE+270)
+diff --git a/drivers/gpu/drm/drm_prime.c b/drivers/gpu/drm/drm_prime.c
+index 4910c446db83..16fa2bfc271e 100644
+--- a/drivers/gpu/drm/drm_prime.c
++++ b/drivers/gpu/drm/drm_prime.c
+@@ -956,7 +956,7 @@ EXPORT_SYMBOL(drm_gem_prime_import);
+ /**
+  * drm_prime_sg_to_page_addr_arrays - convert an sg table into a page array
+  * @sgt: scatter-gather table to convert
+- * @pages: optional array of page pointers to store the page array in
++ * @pages: deprecated array of page pointers to store the page array in
+  * @addrs: optional array to store the dma bus address of each page
+  * @max_entries: size of both the passed-in arrays
+  *
+@@ -965,6 +965,11 @@ EXPORT_SYMBOL(drm_gem_prime_import);
+  *
+  * Drivers can use this in their &drm_driver.gem_prime_import_sg_table
+  * implementation.
++ *
++ * Specifying the pages array is deprecated and strongly discouraged for new
++ * drivers. The pages array is only useful for page faults and those can
++ * corrupt fields in the struct page if they are not handled by the exporting
++ * driver.
+  */
+ int drm_prime_sg_to_page_addr_arrays(struct sg_table *sgt, struct page **pages,
+ 				     dma_addr_t *addrs, int max_entries)
 -- 
-1.9.1
+2.17.1
 
