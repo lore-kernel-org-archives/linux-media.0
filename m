@@ -8,56 +8,56 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C92FC4363A
-	for <linux-media@archiver.kernel.org>; Thu,  8 Oct 2020 11:24:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D54E8C43467
+	for <linux-media@archiver.kernel.org>; Thu,  8 Oct 2020 11:24:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E40442145D
-	for <linux-media@archiver.kernel.org>; Thu,  8 Oct 2020 11:24:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7BE7721527
+	for <linux-media@archiver.kernel.org>; Thu,  8 Oct 2020 11:24:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oQGX/WsE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RRd5pSd2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729810AbgJHLXx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 8 Oct 2020 07:23:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56160 "EHLO
+        id S1729765AbgJHLXq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 8 Oct 2020 07:23:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725871AbgJHLXt (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Oct 2020 07:23:49 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDFCDC0613D2;
-        Thu,  8 Oct 2020 04:23:48 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id dg9so3080640edb.12;
-        Thu, 08 Oct 2020 04:23:48 -0700 (PDT)
+        with ESMTP id S1725871AbgJHLXq (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Oct 2020 07:23:46 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B47C061755;
+        Thu,  8 Oct 2020 04:23:46 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id ly6so7556585ejb.8;
+        Thu, 08 Oct 2020 04:23:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+        h=from:to:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=aQ0/dy64GNY6E3PqMvkOeCw7tku1OiiEuNnrmc12zf0=;
-        b=oQGX/WsERCpgW2PogHIJy5UBog3JDnWJXgvx4OWfsN9DG11XTYcsi8LkNCKGUswsVJ
-         I/ov2amMxLnqIS7y4T22v9Dpr4t+K5E5otszIUDv8ceaAoz9l1kOIpoAtfRbN0cW9vxW
-         XoO6hAvzi/rD1B5/9Tib6A+YWTA/+ziwvMiiPNhRgQbJPSQ4i7ZPrHay6IredJCY7ywU
-         oCXJOIQM3zfmTvuY/V4JGrac322do81ACOrYW/hQtAvN3pDSoZ8MvC7G8Yt1SQd6rg++
-         FljU/RLi97GP7ZDzZTA8xdONUTEzhdw0OqO//PQqjZc4QERaSl6M+ThTNtf645yCZnqg
-         FSwQ==
+        bh=g5slpzPB5zKh1WzF1mxgqBWxGWWJNpTg+Z0FPcFsWtg=;
+        b=RRd5pSd2IwREt4izuuLm8dVSSb/OhWaKv4Raq6h8J84S8I+NOIk/xh7iDBib7SdVO1
+         2ueWE41eulixX+/eFqp9ZdPonlVOYP7vpnvg802TdM2IYrhe3+2KBB4nbruPLk0Xxtms
+         AF183RMBIsiZWFiVzRtlol7CmehCFswX4QkfHebY6Q3g0rlF+KK9zWW9TErlt+9CMsQv
+         EC5RBtQRAWZ8p+3RYRrOitr6nk8N3Nellvqnel9wyIFDKmQrTAebnwpD8611fPlcjMcp
+         TqtvVtAolzV5vWZG41B13APAK1geRMi1CW/ESBxBymQ8ltP/zBX0D1F1HOmMGWORjPqV
+         rATg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=aQ0/dy64GNY6E3PqMvkOeCw7tku1OiiEuNnrmc12zf0=;
-        b=JDQGXxHX/VW+u5/MYhVKkFCFayDn+EnOOPMVyZXVuvpnidhIxyDChoUkzELL1tDc42
-         AH7j3u8bt/2mDr0BNPnW4CCG6J/jV/g4plJ5BlBNzInji3IsTKiOCv/65g/sTV8vPvAF
-         5ZbJuK1QgDNZdeDAQM8Czkze2tS/T1gvR7uLFuu4jpIVkLK+7GhFCDDWVN/78fEM+9ru
-         2nnQD6s/5jfne+IQxUvku8/hNoQcsvKb4CUSw8gmkuu8fHmHVV5Kk/EMG0kpqfpJQ5P8
-         cQJ//4Fz1aB2X2B6FT9r/emzqySMoM8DrVlG8/nBWnxjS1WJDlfiE/IhWRC7QjjJNSUK
-         WhCw==
-X-Gm-Message-State: AOAM531j+zMj+B6DHbk//S4qFuX9EjeocYcjCcvu0++IdfqRDSzcYQue
-        n+55PohZBJRv/LlkcYvwOyQ=
-X-Google-Smtp-Source: ABdhPJyiM0N9wnzLQ1YaVSJXHnbIsEHI6Q6KUCzWN69nNbgBewaYrw2PtECQxiDDM9OMzbILYW8xFw==
-X-Received: by 2002:a05:6402:396:: with SMTP id o22mr8312612edv.361.1602156227564;
-        Thu, 08 Oct 2020 04:23:47 -0700 (PDT)
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=g5slpzPB5zKh1WzF1mxgqBWxGWWJNpTg+Z0FPcFsWtg=;
+        b=WM7V4ohxwy8npm0bRkxG3Oq+gzITGnf1PJ1ere+evEl1sP0jIqwpuScbmxxcpMfzAM
+         +g9m1arvJCSnpd9nqW0nFW11KVG3zNnVL5DUbaRFZD5elGYTwRVB0B60oTOsyop/w24M
+         XpJN949rVnOtw5v/XLG6TBwMGUeZXMrvVW78hDCmRGqK2YM1OXKFAg6gFOSsfuv+uuUd
+         MgiraMZ6YDgpKgvCscXIAOACGs5iTV6t4FfMHDxJVawe4kmi/+Wnomp4/rBaKySPCzrB
+         fDYEjcFkxgRSqE7AQ1tyHJxQ8K5S68KtZokVfuH6dJDWNn6j84WVsDpluaW0srIzOrrn
+         p+eQ==
+X-Gm-Message-State: AOAM530SALzgQIM+XvBRRClWzkYRNioA27HONGBTNOKoO561393za9TX
+        MRWCDVAekw03Q86RHFYqq/1rvbk6NYQ=
+X-Google-Smtp-Source: ABdhPJxL+c3qJ91ehT1z0omwcR8U0j/1R6BZHCRub4+KUwONUqk/Q7OikaBhK2zqj3mk6LY7IhEcXA==
+X-Received: by 2002:a17:906:2b85:: with SMTP id m5mr8624058ejg.143.1602156224656;
+        Thu, 08 Oct 2020 04:23:44 -0700 (PDT)
 Received: from abel.fritz.box ([2a02:908:1252:fb60:4c64:a9a0:5e0:905a])
-        by smtp.gmail.com with ESMTPSA id i20sm3529030edv.96.2020.10.08.04.23.46
+        by smtp.gmail.com with ESMTPSA id i20sm3529030edv.96.2020.10.08.04.23.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Oct 2020 04:23:47 -0700 (PDT)
+        Thu, 08 Oct 2020 04:23:44 -0700 (PDT)
 From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
         <ckoenig.leichtzumerken@gmail.com>
 X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
@@ -66,12 +66,10 @@ To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org, chris@chris-wilson.co.uk,
         airlied@redhat.com, akpm@linux-foundation.org, daniel@ffwll.ch,
         sumit.semwal@linaro.org
-Subject: [PATCH 4/4] drm/amdgpu: stop using pages with drm_prime_sg_to_page_addr_arrays
-Date:   Thu,  8 Oct 2020 13:23:42 +0200
-Message-Id: <20201008112342.9394-4-christian.koenig@amd.com>
+Subject: [PATCH 1/4] mm: introduce vma_set_file function v2
+Date:   Thu,  8 Oct 2020 13:23:39 +0200
+Message-Id: <20201008112342.9394-1-christian.koenig@amd.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201008112342.9394-1-christian.koenig@amd.com>
-References: <20201008112342.9394-1-christian.koenig@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -79,37 +77,201 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This is deprecated.
+Add the new vma_set_file() function to allow changing
+vma->vm_file with the necessary refcount dance.
+
+v2: add more users of this.
 
 Signed-off-by: Christian König <christian.koenig@amd.com>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/dma-buf/dma-buf.c                  | 16 +++++-----------
+ drivers/gpu/drm/etnaviv/etnaviv_gem.c      |  4 +---
+ drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c |  3 +--
+ drivers/gpu/drm/i915/gem/i915_gem_mman.c   |  4 ++--
+ drivers/gpu/drm/msm/msm_gem.c              |  4 +---
+ drivers/gpu/drm/omapdrm/omap_gem.c         |  3 +--
+ drivers/gpu/drm/vgem/vgem_drv.c            |  3 +--
+ drivers/staging/android/ashmem.c           |  5 ++---
+ include/linux/mm.h                         |  2 ++
+ mm/mmap.c                                  | 16 ++++++++++++++++
+ 10 files changed, 32 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-index 399961035ae6..ac463e706b19 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-@@ -1011,8 +1011,8 @@ static int amdgpu_ttm_tt_pin_userptr(struct ttm_bo_device *bdev,
- 		goto release_sg;
+diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+index a6ba4d598f0e..e4316aa7e0f4 100644
+--- a/drivers/dma-buf/dma-buf.c
++++ b/drivers/dma-buf/dma-buf.c
+@@ -1163,20 +1163,14 @@ int dma_buf_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma,
+ 		return -EINVAL;
  
- 	/* convert SG to linear array of pages and dma addresses */
--	drm_prime_sg_to_page_addr_arrays(ttm->sg, ttm->pages,
--					 gtt->ttm.dma_address, ttm->num_pages);
-+	drm_prime_sg_to_page_addr_arrays(ttm->sg, NULL, gtt->ttm.dma_address,
-+					 ttm->num_pages);
+ 	/* readjust the vma */
+-	get_file(dmabuf->file);
+-	oldfile = vma->vm_file;
+-	vma->vm_file = dmabuf->file;
++	oldfile = vma_set_file(vma, dmabuf->file);
+ 	vma->vm_pgoff = pgoff;
+ 
+ 	ret = dmabuf->ops->mmap(dmabuf, vma);
+-	if (ret) {
+-		/* restore old parameters on failure */
+-		vma->vm_file = oldfile;
+-		fput(dmabuf->file);
+-	} else {
+-		if (oldfile)
+-			fput(oldfile);
+-	}
++	/* restore old parameters on failure */
++	if (ret)
++		vma_set_file(vma, oldfile);
++
+ 	return ret;
+ 
+ }
+diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem.c b/drivers/gpu/drm/etnaviv/etnaviv_gem.c
+index 312e9d58d5a7..10ce267c0947 100644
+--- a/drivers/gpu/drm/etnaviv/etnaviv_gem.c
++++ b/drivers/gpu/drm/etnaviv/etnaviv_gem.c
+@@ -145,10 +145,8 @@ static int etnaviv_gem_mmap_obj(struct etnaviv_gem_object *etnaviv_obj,
+ 		 * address_space (so unmap_mapping_range does what we want,
+ 		 * in particular in the case of mmap'd dmabufs)
+ 		 */
+-		fput(vma->vm_file);
+-		get_file(etnaviv_obj->base.filp);
+ 		vma->vm_pgoff = 0;
+-		vma->vm_file  = etnaviv_obj->base.filp;
++		vma_set_file(vma, etnaviv_obj->base.filp);
+ 
+ 		vma->vm_page_prot = vm_page_prot;
+ 	}
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c b/drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c
+index fec0e1e3dc3e..8ce4c9e28b87 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c
+@@ -119,8 +119,7 @@ static int i915_gem_dmabuf_mmap(struct dma_buf *dma_buf, struct vm_area_struct *
+ 	if (ret)
+ 		return ret;
+ 
+-	fput(vma->vm_file);
+-	vma->vm_file = get_file(obj->base.filp);
++	vma_set_file(vma, obj->base.filp);
  
  	return 0;
+ }
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_mman.c b/drivers/gpu/drm/i915/gem/i915_gem_mman.c
+index 3d69e51f3e4d..c9d5f1a38af3 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_mman.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_mman.c
+@@ -893,8 +893,8 @@ int i915_gem_mmap(struct file *filp, struct vm_area_struct *vma)
+ 	 * requires avoiding extraneous references to their filp, hence why
+ 	 * we prefer to use an anonymous file for their mmaps.
+ 	 */
+-	fput(vma->vm_file);
+-	vma->vm_file = anon;
++	vma_set_file(vma, anon);
++	fput(anon);
  
-@@ -1345,7 +1345,7 @@ static int amdgpu_ttm_tt_populate(struct ttm_bo_device *bdev,
- 			ttm->sg = sgt;
- 		}
+ 	switch (mmo->mmap_type) {
+ 	case I915_MMAP_TYPE_WC:
+diff --git a/drivers/gpu/drm/msm/msm_gem.c b/drivers/gpu/drm/msm/msm_gem.c
+index de915ff6f4b4..a71f42870d5e 100644
+--- a/drivers/gpu/drm/msm/msm_gem.c
++++ b/drivers/gpu/drm/msm/msm_gem.c
+@@ -223,10 +223,8 @@ int msm_gem_mmap_obj(struct drm_gem_object *obj,
+ 		 * address_space (so unmap_mapping_range does what we want,
+ 		 * in particular in the case of mmap'd dmabufs)
+ 		 */
+-		fput(vma->vm_file);
+-		get_file(obj->filp);
+ 		vma->vm_pgoff = 0;
+-		vma->vm_file  = obj->filp;
++		vma_set_file(vma, obj->filp);
  
--		drm_prime_sg_to_page_addr_arrays(ttm->sg, ttm->pages,
-+		drm_prime_sg_to_page_addr_arrays(ttm->sg, NULL,
- 						 gtt->ttm.dma_address,
- 						 ttm->num_pages);
- 		ttm_tt_set_populated(ttm);
+ 		vma->vm_page_prot = vm_get_page_prot(vma->vm_flags);
+ 	}
+diff --git a/drivers/gpu/drm/omapdrm/omap_gem.c b/drivers/gpu/drm/omapdrm/omap_gem.c
+index 979d53a93c2b..0d4542ff1d7d 100644
+--- a/drivers/gpu/drm/omapdrm/omap_gem.c
++++ b/drivers/gpu/drm/omapdrm/omap_gem.c
+@@ -564,9 +564,8 @@ int omap_gem_mmap_obj(struct drm_gem_object *obj,
+ 		 * address_space (so unmap_mapping_range does what we want,
+ 		 * in particular in the case of mmap'd dmabufs)
+ 		 */
+-		fput(vma->vm_file);
+ 		vma->vm_pgoff = 0;
+-		vma->vm_file  = get_file(obj->filp);
++		vma_set_file(vma, obj->filp);
+ 
+ 		vma->vm_page_prot = vm_get_page_prot(vma->vm_flags);
+ 	}
+diff --git a/drivers/gpu/drm/vgem/vgem_drv.c b/drivers/gpu/drm/vgem/vgem_drv.c
+index fa54a6d1403d..ea0eecae5153 100644
+--- a/drivers/gpu/drm/vgem/vgem_drv.c
++++ b/drivers/gpu/drm/vgem/vgem_drv.c
+@@ -397,8 +397,7 @@ static int vgem_prime_mmap(struct drm_gem_object *obj,
+ 	if (ret)
+ 		return ret;
+ 
+-	fput(vma->vm_file);
+-	vma->vm_file = get_file(obj->filp);
++	vma_set_file(vma, obj->filp);
+ 	vma->vm_flags |= VM_DONTEXPAND | VM_DONTDUMP;
+ 	vma->vm_page_prot = pgprot_writecombine(vm_get_page_prot(vma->vm_flags));
+ 
+diff --git a/drivers/staging/android/ashmem.c b/drivers/staging/android/ashmem.c
+index 10b4be1f3e78..a51dc089896e 100644
+--- a/drivers/staging/android/ashmem.c
++++ b/drivers/staging/android/ashmem.c
+@@ -450,9 +450,8 @@ static int ashmem_mmap(struct file *file, struct vm_area_struct *vma)
+ 		vma_set_anonymous(vma);
+ 	}
+ 
+-	if (vma->vm_file)
+-		fput(vma->vm_file);
+-	vma->vm_file = asma->file;
++	vma_set_file(vma, asma->file);
++	fput(asma->file);
+ 
+ out:
+ 	mutex_unlock(&ashmem_mutex);
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index ca6e6a81576b..a558602afe1b 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -2693,6 +2693,8 @@ static inline void vma_set_page_prot(struct vm_area_struct *vma)
+ }
+ #endif
+ 
++struct file *vma_set_file(struct vm_area_struct *vma, struct file *file);
++
+ #ifdef CONFIG_NUMA_BALANCING
+ unsigned long change_prot_numa(struct vm_area_struct *vma,
+ 			unsigned long start, unsigned long end);
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 40248d84ad5f..d3c3c510f643 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -136,6 +136,22 @@ void vma_set_page_prot(struct vm_area_struct *vma)
+ 	WRITE_ONCE(vma->vm_page_prot, vm_page_prot);
+ }
+ 
++/*
++ * Change backing file, only valid to use during initial VMA setup.
++ */
++struct file *vma_set_file(struct vm_area_struct *vma, struct file *file)
++{
++	if (file)
++	        get_file(file);
++
++	swap(vma->vm_file, file);
++
++	if (file)
++		fput(file);
++
++	return file;
++}
++
+ /*
+  * Requires inode->i_mapping->i_mmap_rwsem
+  */
 -- 
 2.17.1
 
