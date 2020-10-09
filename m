@@ -2,113 +2,114 @@ Return-Path: <SRS0=wJZ5=DQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94488C433E7
-	for <linux-media@archiver.kernel.org>; Fri,  9 Oct 2020 12:31:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 238A6C43457
+	for <linux-media@archiver.kernel.org>; Fri,  9 Oct 2020 12:33:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 510AB222B8
-	for <linux-media@archiver.kernel.org>; Fri,  9 Oct 2020 12:31:17 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="cdaBlGmB"
+	by mail.kernel.org (Postfix) with ESMTP id E405C222C8
+	for <linux-media@archiver.kernel.org>; Fri,  9 Oct 2020 12:33:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733219AbgJIMbM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 9 Oct 2020 08:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35040 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731782AbgJIMbM (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Oct 2020 08:31:12 -0400
-Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55014C0613D6
-        for <linux-media@vger.kernel.org>; Fri,  9 Oct 2020 05:31:12 -0700 (PDT)
-Received: by mail-qt1-x843.google.com with SMTP id o21so7755622qtp.2
-        for <linux-media@vger.kernel.org>; Fri, 09 Oct 2020 05:31:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=K8oqjNwy1IItwzS5nAtnJfKoqbYdlnvHoUJ/yQIxMlE=;
-        b=cdaBlGmBZL4cakXZlvJuZERmIRIX6jD7dwzimgC10KWdoWEXxqnVyCAO2D0RVxCrE3
-         SiHI343vdap2cRRglH6ua6mGWuo7/fxfox6RkGqmDhIsAnKFSeohUX9VYGJSKAwhIU6B
-         2TcxKC37KpT1QUH/a9OmlQtDEo327+kakIXLdXGqBOKFhRN4BS67JiDu+bvG4a5CPI+r
-         pqcyhIAj+gFL2/lmzDWusy4E62ErCo67w+IagQCo+gX4l+6CaOr61WFu2i1yy0l+Wgf3
-         xGuhQ4gDKh6os3wK0BjatM5g2y6nWPQvLIHBtHwaCM52uhc/sKGK0XWe8qKcZr9st8fm
-         fLCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=K8oqjNwy1IItwzS5nAtnJfKoqbYdlnvHoUJ/yQIxMlE=;
-        b=eeU87hMvi6ExAAw6LUX5S1tBFSjRU1moJwbQYYGCzEEykXWMDTixqDfbADvIEKoxmd
-         2N6MqYIfXxGHTNZ8xribgw9ziZpiVDOKXrtvbA13Nw3nP+360/A5bVE2JbAflCSMzXE+
-         W/+4HQolSO7WhhKdfH6N+plOeVVuIxM8Nm5ZqfC3ysqU2ivK7Ec93h4dT2EyAywo/ejI
-         qELQZs8WVfNxQscEBHAZVgwA2ggqqz4L0gJzqn38JVI/YUpHGMDaU4x0hHABySLd4p7r
-         a+OxOjYLTyZJCTm1ScOCIqvW31gZrsdr1qWRGJj7tflQXIh7i6kVA6vnyi+VpE570mkO
-         5Zkg==
-X-Gm-Message-State: AOAM532jfgSziua/L6ITmdbPuKpdXSBJVogIioQHtNquRldLjdebmulJ
-        1ICQV3ifIbKrHy0NNYPFfFi+2g==
-X-Google-Smtp-Source: ABdhPJxG8zCIXDditfEGKgb8JSFeGI61awPyS7AMuV2YFh9LkEtvSTVL1XgAfKTEjxIzUEviyqvgUw==
-X-Received: by 2002:ac8:d8d:: with SMTP id s13mr12568868qti.42.1602246671500;
-        Fri, 09 Oct 2020 05:31:11 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-156-34-48-30.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.48.30])
-        by smtp.gmail.com with ESMTPSA id g1sm6069368qtp.74.2020.10.09.05.31.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2020 05:31:10 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1kQrYD-001xsF-Sz; Fri, 09 Oct 2020 09:31:09 -0300
-Date:   Fri, 9 Oct 2020 09:31:09 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
-        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-s390@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        =?utf-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
-        Jan Kara <jack@suse.cz>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH v2 14/17] resource: Move devmem revoke code to resource
- framework
-Message-ID: <20201009123109.GO5177@ziepe.ca>
-References: <20201009075934.3509076-1-daniel.vetter@ffwll.ch>
- <20201009075934.3509076-15-daniel.vetter@ffwll.ch>
+        id S1733241AbgJIMd4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 9 Oct 2020 08:33:56 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:47904 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730142AbgJIMd4 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 9 Oct 2020 08:33:56 -0400
+Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 688D11796B7DAEA600FB;
+        Fri,  9 Oct 2020 20:33:51 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by DGGEMS414-HUB.china.huawei.com
+ (10.3.19.214) with Microsoft SMTP Server id 14.3.487.0; Fri, 9 Oct 2020
+ 20:33:45 +0800
+From:   Yu Kuai <yukuai3@huawei.com>
+To:     <rick.chang@mediatek.com>, <bin.liu@mediatek.com>,
+        <mchehab@kernel.org>, <matthias.bgg@gmail.com>,
+        <tiffany.lin@mediatek.com>, <andrew-ct.chen@mediatek.com>,
+        <tfiga@chromium.org>, <xia.jiang@mediatek.com>,
+        <hverkuil-cisco@xs4all.nl>, <jcliang@chromium.org>,
+        <minghsiu.tsai@mediatek.com>
+CC:     <linux-media@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
+        <yi.zhang@huawei.com>
+Subject: [PATCH 4/7] media: mtk-vcodec: add missing put_device() call in mtk_vcodec_init_dec_pm()
+Date:   Fri, 9 Oct 2020 20:38:01 +0800
+Message-ID: <20201009123804.3977562-5-yukuai3@huawei.com>
+X-Mailer: git-send-email 2.25.4
+In-Reply-To: <20201009123804.3977562-1-yukuai3@huawei.com>
+References: <20201009123804.3977562-1-yukuai3@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201009075934.3509076-15-daniel.vetter@ffwll.ch>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Oct 09, 2020 at 09:59:31AM +0200, Daniel Vetter wrote:
+if of_find_device_by_node() succeed, mtk_vcodec_init_dec_pm() doesn't have
+a corresponding put_device(). Thus add jump target to fix the exception
+handling for this function implementation.
 
-> +struct address_space *iomem_get_mapping(void)
-> +{
-> +	return iomem_inode->i_mapping;
+Fixes: 590577a4e525 ("[media] vcodec: mediatek: Add Mediatek V4L2 Video Decoder Driver")
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+---
+ .../platform/mtk-vcodec/mtk_vcodec_dec_pm.c    | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-This should pair an acquire with the release below
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+index 36dfe3fc056a..f6a6b42865fb 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+@@ -47,11 +47,14 @@ int mtk_vcodec_init_dec_pm(struct mtk_vcodec_dev *mtkdev)
+ 		dec_clk->clk_info = devm_kcalloc(&pdev->dev,
+ 			dec_clk->clk_num, sizeof(*clk_info),
+ 			GFP_KERNEL);
+-		if (!dec_clk->clk_info)
+-			return -ENOMEM;
++		if (!dec_clk->clk_info) {
++			ret = -ENOMEM;
++			goto put_device;
++		}
+ 	} else {
+ 		mtk_v4l2_err("Failed to get vdec clock count");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto put_device;
+ 	}
+ 
+ 	for (i = 0; i < dec_clk->clk_num; i++) {
+@@ -60,19 +63,22 @@ int mtk_vcodec_init_dec_pm(struct mtk_vcodec_dev *mtkdev)
+ 			"clock-names", i, &clk_info->clk_name);
+ 		if (ret) {
+ 			mtk_v4l2_err("Failed to get clock name id = %d", i);
+-			return ret;
++			goto put_device;
+ 		}
+ 		clk_info->vcodec_clk = devm_clk_get(&pdev->dev,
+ 			clk_info->clk_name);
+ 		if (IS_ERR(clk_info->vcodec_clk)) {
+ 			mtk_v4l2_err("devm_clk_get (%d)%s fail", i,
+ 				clk_info->clk_name);
+-			return PTR_ERR(clk_info->vcodec_clk);
++			ret = PTR_ERR(clk_info->vcodec_clk);
++			goto put_device;
+ 		}
+ 	}
+ 
+ 	pm_runtime_enable(&pdev->dev);
+-
++	return 0;
++put_device:
++	put_device(pm->larbvdec);
+ 	return ret;
+ }
+ 
+-- 
+2.25.4
 
-> +	/*
-> +	 * Publish /dev/mem initialized.
-> +	 * Pairs with smp_load_acquire() in revoke_iomem().
-> +	 */
-> +	smp_store_release(&iomem_inode, inode);
-
-However, this seems abnormal, initcalls rarely do this kind of stuff
-with global data..
-
-The kernel crashes if this fs_initcall is raced with
-iomem_get_mapping() due to the unconditional dereference, so I think
-it can be safely switched to a simple assignment.
-
-Jason
