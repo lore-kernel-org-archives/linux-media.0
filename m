@@ -2,133 +2,146 @@ Return-Path: <SRS0=wJZ5=DQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A19C7C433E7
-	for <linux-media@archiver.kernel.org>; Fri,  9 Oct 2020 17:41:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E404C43457
+	for <linux-media@archiver.kernel.org>; Fri,  9 Oct 2020 17:52:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 26D122227E
-	for <linux-media@archiver.kernel.org>; Fri,  9 Oct 2020 17:41:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 08CD5222E8
+	for <linux-media@archiver.kernel.org>; Fri,  9 Oct 2020 17:52:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="HG4sPlrZ"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="L4kTmlRV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733006AbgJIRQ2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 9 Oct 2020 13:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51172 "EHLO
+        id S2390049AbgJIRwT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 9 Oct 2020 13:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733034AbgJIRPn (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Oct 2020 13:15:43 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D50C0613D2
-        for <linux-media@vger.kernel.org>; Fri,  9 Oct 2020 10:15:43 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2187D539;
-        Fri,  9 Oct 2020 19:15:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1602263742;
-        bh=iGikRoc5tLt2PbUKHNqPjws9QgJcPuhkSS9EZiiS5Hg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HG4sPlrZY7aGQVcWAzDnWHZs7rH/9Dw0HXfnFypwcTsUq+YWVBIt+0cnnlbahlN+J
-         cka8qbDYCbmstWEDQZ5RLVeV3T0q/oHwZu0xHGfVV+cwlGzcPj17ieJjev966rSjIc
-         ZZGJYXU5FMZmtwq8Ch2YdrW9CrvV435hmRLuB79U=
-Date:   Fri, 9 Oct 2020 20:14:59 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-media@vger.kernel.org, Tsuchiya Yuto <kitakar@gmail.com>,
-        bingbu.cao@intel.com, Yong Zhi <yong.zhi@intel.com>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>
-Subject: Re: [PATCH 4/5] ipu3-cio2: Validate mbus format in setting subdev
- format
-Message-ID: <20201009171459.GA24849@pendragon.ideasonboard.com>
-References: <20201009150756.3397-1-sakari.ailus@linux.intel.com>
- <20201009150756.3397-5-sakari.ailus@linux.intel.com>
+        with ESMTP id S2389973AbgJIRwT (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Oct 2020 13:52:19 -0400
+Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603D0C0613D8
+        for <linux-media@vger.kernel.org>; Fri,  9 Oct 2020 10:52:17 -0700 (PDT)
+Received: by mail-ot1-x341.google.com with SMTP id o8so9778329otl.4
+        for <linux-media@vger.kernel.org>; Fri, 09 Oct 2020 10:52:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Chc8637Rd8yI9tLS7AREeItMweAw4M0AE06Zuj7bhU0=;
+        b=L4kTmlRVcZoe/avVgvgJLaWOs03iPF87kjF+Wg5Dr1BO68grQeWij+sKeGLbjkKVnS
+         uWxXV8aahQlRlzimSn7k7/L57rwPuRVe9l/HoPbmKuzL42kNzmiAubvKP93NNRPozIcb
+         M7wzXGB/zvSu+un9zoWu7yVJIqeg+g4rBMVIc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Chc8637Rd8yI9tLS7AREeItMweAw4M0AE06Zuj7bhU0=;
+        b=NYgzHpajqWi2xT7CMDytjmZmF+Nd2oa2/aCQxIcTJU2krVEbpA3sToa0kaO3sN67yz
+         D9IrJaVUEOL0i3ouvfQPRSR0QBwqonwAPhK27IkQO381fkxj27nb2iCg7HgdXE/HRUI/
+         9vFS29lP6Ep/Z/Ppcxg+/ATah5vyuMHU5bTFqt1jBVdms+T8iDYonYoLcSU8kp2Ja01h
+         FWHHiR/Y1K6JrGL+Q2tL4HfpGS/wkc1lIUEwqUIcYK3SThZq37T9sdKrRgXgsADUxFFt
+         I747kvV0FQMVkboRJs8Mj1/hW3/lNZz2QHgMokv0qSN69kpHHy6P3X/BRnCbtFMxOOTD
+         G7SA==
+X-Gm-Message-State: AOAM5319Yb0gpJb5iHZGhtJI3KhBNOSkI0M0zm8/Acj0BMcWf0WxhFiG
+        x3oi5tvr/iOZ0oolq25KZa3St+irmhZ80vyBEMIZ/g==
+X-Google-Smtp-Source: ABdhPJxFnmBLRj+lrjXy7n2SbqbKqfPXOoR4PVOcPvoZoMGu71c5Uydzax6ZExKmO8/pv5qIPQDGfl3spZzjZBbiaDw=
+X-Received: by 2002:a05:6830:1647:: with SMTP id h7mr10168614otr.281.1602265936612;
+ Fri, 09 Oct 2020 10:52:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201009150756.3397-5-sakari.ailus@linux.intel.com>
+References: <20201009075934.3509076-1-daniel.vetter@ffwll.ch>
+ <20201009075934.3509076-10-daniel.vetter@ffwll.ch> <20201009123421.67a80d72@coco.lan>
+ <20201009122111.GN5177@ziepe.ca> <20201009143723.45609bfb@coco.lan> <20201009124850.GP5177@ziepe.ca>
+In-Reply-To: <20201009124850.GP5177@ziepe.ca>
+From:   Daniel Vetter <daniel.vetter@ffwll.ch>
+Date:   Fri, 9 Oct 2020 19:52:05 +0200
+Message-ID: <CAKMK7uF-hrSwzFQkp6qEP88hM1Qg8TMQOunuRHh=f2+D8MaMRg@mail.gmail.com>
+Subject: Re: [PATCH v2 09/17] mm: Add unsafe_follow_pfn
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Jan Kara <jack@suse.cz>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sakari,
+On Fri, Oct 9, 2020 at 2:48 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
+>
+> On Fri, Oct 09, 2020 at 02:37:23PM +0200, Mauro Carvalho Chehab wrote:
+>
+> > I'm not a mm/ expert, but, from what I understood from Daniel's patch
+> > description is that this is unsafe *only if*  __GFP_MOVABLE is used.
+>
+> No, it is unconditionally unsafe. The CMA movable mappings are
+> specific VMAs that will have bad issues here, but there are other
+> types too.
+>
+> The only way to do something at a VMA level is to have a list of OK
+> VMAs, eg because they were creatd via a special mmap helper from the
+> media subsystem.
+>
+> > Well, no drivers inside the media subsystem uses such flag, although
+> > they may rely on some infrastructure that could be using it behind
+> > the bars.
+>
+> It doesn't matter, nothing prevents the user from calling media APIs
+> on mmaps it gets from other subsystems.
 
-Thank you for the patch.
+I think a good first step would be to disable userptr of non struct
+page backed storage going forward for any new hw support. Even on
+existing drivers. dma-buf sharing has been around for long enough now
+that this shouldn't be a problem. Unfortunately right now this doesn't
+seem to exist, so the entire problem keeps getting perpetuated.
 
-On Fri, Oct 09, 2020 at 06:07:55PM +0300, Sakari Ailus wrote:
-> Validate media bus code, width and height when setting the subdev format.
-> 
-> This effectively reworks how setting subdev format is implemented in the
-> driver.
-> 
-> Fixes: c2a6a07afe4a ("media: intel-ipu3: cio2: add new MIPI-CSI2 driver")
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
->  drivers/media/pci/intel/ipu3/ipu3-cio2.c | 28 ++++++++++++++++--------
->  1 file changed, 19 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-> index 9c7b527a8800..9726091c9985 100644
-> --- a/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-> +++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-> @@ -1257,6 +1257,9 @@ static int cio2_subdev_set_fmt(struct v4l2_subdev *sd,
->  			       struct v4l2_subdev_format *fmt)
->  {
->  	struct cio2_queue *q = container_of(sd, struct cio2_queue, subdev);
-> +	struct v4l2_mbus_framefmt *mbus;
-> +	u32 mbus_code = fmt->format.code;
-> +	unsigned int i;
->  
->  	/*
->  	 * Only allow setting sink pad format;
-> @@ -1265,18 +1268,25 @@ static int cio2_subdev_set_fmt(struct v4l2_subdev *sd,
->  	if (fmt->pad == CIO2_PAD_SOURCE)
->  		return cio2_subdev_get_fmt(sd, cfg, fmt);
->  
-> -	mutex_lock(&q->subdev_lock);
-> +	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
-> +		mbus = v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
-> +	else
-> +		mbus = &q->subdev_fmt;
->  
-> -	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
-> -		*v4l2_subdev_get_try_format(sd, cfg, fmt->pad) = fmt->format;
-> -	} else {
-> -		/* It's the sink, allow changing frame size */
-> -		q->subdev_fmt.width = fmt->format.width;
-> -		q->subdev_fmt.height = fmt->format.height;
-> -		q->subdev_fmt.code = fmt->format.code;
-> -		fmt->format = q->subdev_fmt;
-> +	fmt->format.code = formats[0].mbus_code;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(formats); i++) {
-> +		if (formats[i].mbus_code == fmt->format.code) {
-> +			fmt->format.code = mbus_code;
-> +			break;
-> +		}
->  	}
+> > If this is the case, the proper fix seems to have a GFP_NOT_MOVABLE
+> > flag that it would be denying the core mm code to set __GFP_MOVABLE.
+>
+> We can't tell from the VMA these kinds of details..
+>
+> It has to go the other direction, evey mmap that might be used as a
+> userptr here has to be found and the VMA specially created to allow
+> its use. At least that is a kernel only change, but will need people
+> with the HW to do this work.
 
-I really, really wish C had a for...else construct as in Python :-(
+I think the only reasonable way to keep this working is:
+- add a struct dma_buf *vma_tryget_dma_buf(struct vm_area_struct *vma);
+- add dma-buf export support to fbdev and v4l
+- roll this out everywhere we still need it.
 
->  
-> +	fmt->format.width = min(fmt->format.width, CIO2_IMAGE_MAX_WIDTH);
-> +	fmt->format.height = min(fmt->format.height, CIO2_IMAGE_MAX_LENGTH);
+Realistically this just isn't going to happen. And anything else just
+reimplements half of dma-buf, which is kinda pointless (you need
+minimally refcounting and some way to get at a promise of a permanent
+sg list for dma. Plus probably the vmap for kernel cpu access.
 
-This looks good, but it would be worth renaming CIO2_IMAGE_MAX_LENGTH to
-CIO2_IMAGE_MAX_HEIGHT in a separate patch.
+> > Please let address the issue on this way, instead of broken an
+> > userspace API that it is there since 1991.
+>
+> It has happened before :( It took 4 years for RDMA to undo the uAPI
+> breakage caused by a security fix for something that was a 15 years
+> old bug.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> +
-> +	mutex_lock(&q->subdev_lock);
-> +	*mbus = fmt->format;
->  	mutex_unlock(&q->subdev_lock);
->  
->  	return 0;
-
+Yeah we have a bunch of these on the drm side too. Some of them are
+really just "you have to upgrade userspace", and there's no real fix
+for the security nightmare without that.
+-Daniel
 -- 
-Regards,
-
-Laurent Pinchart
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
