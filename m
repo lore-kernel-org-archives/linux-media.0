@@ -5,55 +5,55 @@ X-Spam-Level:
 X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEEA0C433E7
-	for <linux-media@archiver.kernel.org>; Fri,  9 Oct 2020 08:01:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B8B3C3279D
+	for <linux-media@archiver.kernel.org>; Fri,  9 Oct 2020 08:01:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 677D722275
-	for <linux-media@archiver.kernel.org>; Fri,  9 Oct 2020 08:01:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 34E2622269
+	for <linux-media@archiver.kernel.org>; Fri,  9 Oct 2020 08:01:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="D1VJi6UD"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="WPX0SQh+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732879AbgJIIBe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 9 Oct 2020 04:01:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49460 "EHLO
+        id S1732563AbgJIIBj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 9 Oct 2020 04:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732719AbgJIIAN (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Oct 2020 04:00:13 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6307BC0610E1
-        for <linux-media@vger.kernel.org>; Fri,  9 Oct 2020 01:00:09 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id n15so9250055wrq.2
-        for <linux-media@vger.kernel.org>; Fri, 09 Oct 2020 01:00:09 -0700 (PDT)
+        with ESMTP id S1732694AbgJIIAM (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Oct 2020 04:00:12 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F01C0613AB
+        for <linux-media@vger.kernel.org>; Fri,  9 Oct 2020 01:00:00 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id e23so1832356wme.2
+        for <linux-media@vger.kernel.org>; Fri, 09 Oct 2020 01:00:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=le1GUptU9JjBH114uU563JmUcYegKwYn9xh0zAQdRv8=;
-        b=D1VJi6UDBiQk2hO8dFve4gh+DKwL/4hvYIL5H14t+/WkC6EkC0QuzB+xVNaIVhimgb
-         u3J/6YYVnKsy9E3ATy/UWE+cLNXaPddTma9scUgc+w9imr71cIasK3qOPcYgE9YB/pK2
-         huXf9HsnQzVH0icRGFbigbp5CUz+XW5pf1/tI=
+        bh=VGrUY4m6p5xG/5TwFTmhTR39yvHelSEgKxkZWp9gwIE=;
+        b=WPX0SQh+d+jDaKjHU8oXPWwTFZ6I9d8chtJOOB3w8FfTWBwLtHGTAa8q7Z5CACAZY3
+         UkSQDp1/O2GnYgBbniIxNjhdXdLdXrAJABesUu7pGtQKY9YclRRFLDYKvNjJkG8Ypaxd
+         nZyL986vmmMLudJmb5AlQdezveAb4RTPx7bHo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=le1GUptU9JjBH114uU563JmUcYegKwYn9xh0zAQdRv8=;
-        b=l600LLEIzkKNVKAQgUlY0n5naCifaEae3dNA+wds9cj0uiwMDXPgiyKjSwRKWl2nT9
-         4NMX1dY45m6BP5dfH2lsS321EGk4VL+iU6LwZgw8Smub56OG809FjgaTezW5ZN+e9J63
-         uDRnkTQmVyzRJtOZ+7LqbyUk6ZJpNvDhiP2uFIhR+0VPiRw602+cjVrnbQf94MlJrBkB
-         H4gCloIatx3YrRlKRoYo/fCW9Jk1qynOxKM/SEnemuuOPk5C0Wfc/IZI4gb2POoJnluw
-         93TmPPk3Qnfl/wJnPIUeijJPDyrLN1Q3yCrVSWS+XJ4WSBjjIrmPR+ihJaxAtnaY5NBh
-         5YUg==
-X-Gm-Message-State: AOAM533DvrHp5YfdkLP364HJzIEUHtKQ3fpZYjTEBgNdXyDbJrm5VzIh
-        ZtcZsfvRQaSq00cKFIExhrE3wQ==
-X-Google-Smtp-Source: ABdhPJz4MKP5KGohAdR58eqqZNbRUjATksd5quRpBzCsMu6hT8STZxdOkUvTUNe8EYXb+jIiohIVBA==
-X-Received: by 2002:adf:bc14:: with SMTP id s20mr14299261wrg.220.1602230408064;
-        Fri, 09 Oct 2020 01:00:08 -0700 (PDT)
+        bh=VGrUY4m6p5xG/5TwFTmhTR39yvHelSEgKxkZWp9gwIE=;
+        b=g7sFnLVFRfenn9nyU0DdFFrF6bkcfbqoRyL53+sJMLziuteN1ZAjmkrgl+Qnp1TWj5
+         zoOTLwCZkZKkEZfg3Jk4Vq1Z26Qj9XPGiheErZhapKeZuxX2yGwB7w/4W6M+kUCWP6Gg
+         eAOh4/ASPkvVgtJ0Yk6ZP19TnP/TDrxqQZkr7KJmn8svib5onwjfyNd80Rz2p+PKnPGx
+         y0dZWZY5K1v5VOByGLnf9QoN1jPofMwim1WnMxYJfA4PMNQCLwqlX/9TMki/iV1n2LKu
+         fqGFtJ3wAPCOUwKR8NOb38vhwOeLSsLhU3KcyMecudHtG7aYd0YavTy2hDZyecTFtLsj
+         RTyQ==
+X-Gm-Message-State: AOAM530isa2wOvprMIWUXTqyIKeE/XEBC9SzYMTAPVBkw9qOH9fTe/+a
+        RFTOFeDmod2PtdaFXPd4EgTFLw==
+X-Google-Smtp-Source: ABdhPJza4YHBFB+hGZoQR0pL1SAV181vUPmZGDI7HJVs1HjO1uxQPcpRwnUTFuwYtwPHyDbyitWzBQ==
+X-Received: by 2002:a1c:e045:: with SMTP id x66mr12816887wmg.104.1602230399345;
+        Fri, 09 Oct 2020 00:59:59 -0700 (PDT)
 Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id u17sm11634118wri.45.2020.10.09.01.00.06
+        by smtp.gmail.com with ESMTPSA id u17sm11634118wri.45.2020.10.09.00.59.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2020 01:00:07 -0700 (PDT)
+        Fri, 09 Oct 2020 00:59:58 -0700 (PDT)
 From:   Daniel Vetter <daniel.vetter@ffwll.ch>
 To:     DRI Development <dri-devel@lists.freedesktop.org>,
         LKML <linux-kernel@vger.kernel.org>
@@ -63,17 +63,19 @@ Cc:     kvm@vger.kernel.org, linux-mm@kvack.org,
         linux-s390@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
         Daniel Vetter <daniel.vetter@intel.com>,
         Jason Gunthorpe <jgg@ziepe.ca>,
-        Kees Cook <keescook@chromium.org>,
-        Dan Williams <dan.j.williams@intel.com>,
+        Pawel Osciak <pawel@osciak.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         John Hubbard <jhubbard@nvidia.com>,
         =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
         Jan Kara <jack@suse.cz>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>
-Subject: [PATCH v2 11/17] vfio/type1: Mark follow_pfn as unsafe
-Date:   Fri,  9 Oct 2020 09:59:28 +0200
-Message-Id: <20201009075934.3509076-12-daniel.vetter@ffwll.ch>
+        Dan Williams <dan.j.williams@intel.com>
+Subject: [PATCH v2 05/17] mm/frame-vector: Use FOLL_LONGTERM
+Date:   Fri,  9 Oct 2020 09:59:22 +0200
+Message-Id: <20201009075934.3509076-6-daniel.vetter@ffwll.ch>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201009075934.3509076-1-daniel.vetter@ffwll.ch>
 References: <20201009075934.3509076-1-daniel.vetter@ffwll.ch>
@@ -84,21 +86,24 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The code seems to stuff these pfns into iommu pts (or something like
-that, I didn't follow), but there's no mmu_notifier to ensure that
-access is synchronized with pte updates.
+This is used by media/videbuf2 for persistent dma mappings, not just
+for a single dma operation and then freed again, so needs
+FOLL_LONGTERM.
 
-Hence mark these as unsafe. This means that with
-CONFIG_STRICT_FOLLOW_PFN, these will be rejected.
+Unfortunately current pup_locked doesn't support FOLL_LONGTERM due to
+locking issues. Rework the code to pull the pup path out from the
+mmap_sem critical section as suggested by Jason.
 
-Real fix is to wire up an mmu_notifier ... somehow. Probably means any
-invalidate is a fatal fault for this vfio device, but then this
-shouldn't ever happen if userspace is reasonable.
+By relying entirely on the vma checks in pin_user_pages and follow_pfn
+(for vm_flags and vma_is_fsdax) we can also streamline the code a lot.
 
 Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
 Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: Pawel Osciak <pawel@osciak.com>
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: Kyungmin Park <kyungmin.park@samsung.com>
+Cc: Tomasz Figa <tfiga@chromium.org>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc: Andrew Morton <akpm@linux-foundation.org>
 Cc: John Hubbard <jhubbard@nvidia.com>
 Cc: Jérôme Glisse <jglisse@redhat.com>
@@ -108,35 +113,98 @@ Cc: linux-mm@kvack.org
 Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-samsung-soc@vger.kernel.org
 Cc: linux-media@vger.kernel.org
-Cc: Alex Williamson <alex.williamson@redhat.com>
-Cc: Cornelia Huck <cohuck@redhat.com>
-Cc: kvm@vger.kernel.org
+--
+v2: Streamline the code and further simplify the loop checks (Jason)
 ---
- drivers/vfio/vfio_iommu_type1.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ mm/frame_vector.c | 50 ++++++++++++++---------------------------------
+ 1 file changed, 15 insertions(+), 35 deletions(-)
 
-diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
-index 5fbf0c1f7433..a4d53f3d0a35 100644
---- a/drivers/vfio/vfio_iommu_type1.c
-+++ b/drivers/vfio/vfio_iommu_type1.c
-@@ -421,7 +421,7 @@ static int follow_fault_pfn(struct vm_area_struct *vma, struct mm_struct *mm,
- {
- 	int ret;
+diff --git a/mm/frame_vector.c b/mm/frame_vector.c
+index 10f82d5643b6..d44779e56313 100644
+--- a/mm/frame_vector.c
++++ b/mm/frame_vector.c
+@@ -38,7 +38,6 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
+ 	struct vm_area_struct *vma;
+ 	int ret = 0;
+ 	int err;
+-	int locked;
  
--	ret = follow_pfn(vma, vaddr, pfn);
-+	ret = unsafe_follow_pfn(vma, vaddr, pfn);
- 	if (ret) {
- 		bool unlocked = false;
+ 	if (nr_frames == 0)
+ 		return 0;
+@@ -48,40 +47,25 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
  
-@@ -435,7 +435,7 @@ static int follow_fault_pfn(struct vm_area_struct *vma, struct mm_struct *mm,
- 		if (ret)
- 			return ret;
+ 	start = untagged_addr(start);
  
--		ret = follow_pfn(vma, vaddr, pfn);
-+		ret = unsafe_follow_pfn(vma, vaddr, pfn);
+-	mmap_read_lock(mm);
+-	locked = 1;
+-	vma = find_vma_intersection(mm, start, start + 1);
+-	if (!vma) {
+-		ret = -EFAULT;
+-		goto out;
+-	}
+-
+-	/*
+-	 * While get_vaddr_frames() could be used for transient (kernel
+-	 * controlled lifetime) pinning of memory pages all current
+-	 * users establish long term (userspace controlled lifetime)
+-	 * page pinning. Treat get_vaddr_frames() like
+-	 * get_user_pages_longterm() and disallow it for filesystem-dax
+-	 * mappings.
+-	 */
+-	if (vma_is_fsdax(vma)) {
+-		ret = -EOPNOTSUPP;
+-		goto out;
+-	}
+-
+-	if (!(vma->vm_flags & (VM_IO | VM_PFNMAP))) {
++	ret = pin_user_pages_fast(start, nr_frames,
++				  FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
++				  (struct page **)(vec->ptrs));
++	if (ret > 0) {
+ 		vec->got_ref = true;
+ 		vec->is_pfns = false;
+-		ret = pin_user_pages_locked(start, nr_frames,
+-			gup_flags, (struct page **)(vec->ptrs), &locked);
+-		goto out;
++		goto out_unlocked;
  	}
  
- 	return ret;
++	mmap_read_lock(mm);
+ 	vec->got_ref = false;
+ 	vec->is_pfns = true;
+ 	do {
+ 		unsigned long *nums = frame_vector_pfns(vec);
+ 
++		vma = find_vma_intersection(mm, start, start + 1);
++		if (!vma)
++			break;
++
+ 		while (ret < nr_frames && start + PAGE_SIZE <= vma->vm_end) {
+ 			err = follow_pfn(vma, start, &nums[ret]);
+ 			if (err) {
+@@ -92,17 +76,13 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
+ 			start += PAGE_SIZE;
+ 			ret++;
+ 		}
+-		/*
+-		 * We stop if we have enough pages or if VMA doesn't completely
+-		 * cover the tail page.
+-		 */
+-		if (ret >= nr_frames || start < vma->vm_end)
++		/* Bail out if VMA doesn't completely cover the tail page. */
++		if (start < vma->vm_end)
+ 			break;
+-		vma = find_vma_intersection(mm, start, start + 1);
+-	} while (vma && vma->vm_flags & (VM_IO | VM_PFNMAP));
++	} while (ret < nr_frames);
+ out:
+-	if (locked)
+-		mmap_read_unlock(mm);
++	mmap_read_unlock(mm);
++out_unlocked:
+ 	if (!ret)
+ 		ret = -EFAULT;
+ 	if (ret > 0)
 -- 
 2.28.0
 
