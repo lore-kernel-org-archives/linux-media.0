@@ -2,152 +2,96 @@ Return-Path: <SRS0=wJZ5=DQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EAC54C43457
-	for <linux-media@archiver.kernel.org>; Fri,  9 Oct 2020 15:04:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9F5FC433E7
+	for <linux-media@archiver.kernel.org>; Fri,  9 Oct 2020 15:07:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B8A36222BA
-	for <linux-media@archiver.kernel.org>; Fri,  9 Oct 2020 15:04:15 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aa4N1QGk"
+	by mail.kernel.org (Postfix) with ESMTP id 8331622260
+	for <linux-media@archiver.kernel.org>; Fri,  9 Oct 2020 15:07:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388984AbgJIPDs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 9 Oct 2020 11:03:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58658 "EHLO
+        id S2389180AbgJIPH7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 9 Oct 2020 11:07:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388803AbgJIPDr (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Oct 2020 11:03:47 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A72BC0613D2;
-        Fri,  9 Oct 2020 08:03:46 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id l16so9688552eds.3;
-        Fri, 09 Oct 2020 08:03:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HfGOHdnl8P4UkAJXJm+asFhJ2S9PMVltmlEIidPYuz0=;
-        b=aa4N1QGk9MW7oVueE84pS3IhklP/XdU7RdM9t04ujPc6+KsxPbCNzpAmnfSeiYSmsC
-         KZHr/LYqlvTGsoZDC8fMF7aq5OM7PcEj+UFzb/n5MBMqNsV4HiFNcfPx+U870RxwOmLw
-         GRoRXjF2T5oyi2JVye4+SIOr5LZDF+F7fqGvrZu/jXjQRTccEH+EzI3DH/xZJp/mz+yO
-         OwWK8xhq3V2y4QsDyDIf+dMsxIEbHlQTRm4WK0p8lbBa0q8jYQfoCm/ZoqeSuAefFrVZ
-         0MuUPGHPEXS1TyeXAZHNNS1KCQ/ZLCrRDgD86GSjDsitEqB1cZOrUExVxuVKJacSGZqs
-         I2BA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HfGOHdnl8P4UkAJXJm+asFhJ2S9PMVltmlEIidPYuz0=;
-        b=heExrcx6mH4nPlsNCo8CsxnAjrr1e/q6wGfr6J+seyDBOHDGdVy7N9Ob65Pj7txBFo
-         nXwuXkwhjDYxI0gOCDn5J5OmaD1GdVik5CVbr60qHTQDSDRc7HkzZ2jnE7MPXRUKKhuc
-         xkR7u5b+YktKOg0X6WLyzJWi577CiYTGBc9JVwZdRFb6zUH/0VXBRV4TSzgQ0fgiJ58Q
-         AsuGtFPNzUku1xmVMaqRBW7PfjHf9LkvrPXRPA9yZ9Ht0NNiZ+S0w0zYwVAoC1KxaHxJ
-         tOMzeBVdVv3kPDoyo0hLACh/dqNXUbsYRja58dIJ1rkvU+XLzTGv9B9571+q4cOQBEUG
-         P27w==
-X-Gm-Message-State: AOAM531K/vYsSKIKUcjIoXY7nUJSstTNyxAxNYuMboK+doeCTQd9lrc3
-        8lEap5ZZds8Da3HhomhJnDA=
-X-Google-Smtp-Source: ABdhPJyibPjE78lcVPlBYyG6PW0fP1GpDj3X5Tpm1VzsO7r6v4QYdB2IMOhxokvqNlnbjQNZuzUauQ==
-X-Received: by 2002:aa7:cc18:: with SMTP id q24mr8619083edt.108.1602255824666;
-        Fri, 09 Oct 2020 08:03:44 -0700 (PDT)
-Received: from abel.fritz.box ([2a02:908:1252:fb60:65f3:51d4:50d0:15b0])
-        by smtp.gmail.com with ESMTPSA id v14sm789364edy.68.2020.10.09.08.03.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2020 08:03:43 -0700 (PDT)
-From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
-        <ckoenig.leichtzumerken@gmail.com>
-X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, chris@chris-wilson.co.uk,
-        airlied@redhat.com, akpm@linux-foundation.org, daniel@ffwll.ch,
-        sumit.semwal@linaro.org, willy@infradead.org, jhubbard@nvidia.com,
-        jgg@ziepe.ca
-Subject: [PATCH 1/6] mm: mmap: fix fput in error path
-Date:   Fri,  9 Oct 2020 17:03:37 +0200
-Message-Id: <20201009150342.1979-1-christian.koenig@amd.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S2389124AbgJIPH6 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Oct 2020 11:07:58 -0400
+Received: from hillosipuli.retiisi.eu (hillosipuli.retiisi.eu [IPv6:2a01:4f9:c010:4572::81:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F80C0613D2
+        for <linux-media@vger.kernel.org>; Fri,  9 Oct 2020 08:07:58 -0700 (PDT)
+Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 44515634C89;
+        Fri,  9 Oct 2020 18:07:05 +0300 (EEST)
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     Tsuchiya Yuto <kitakar@gmail.com>, bingbu.cao@intel.com,
+        Yong Zhi <yong.zhi@intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        laurent.pinchart@ideasonboard.com
+Subject: [PATCH 1/5] ipu3-cio2: Return actual subdev format
+Date:   Fri,  9 Oct 2020 18:07:52 +0300
+Message-Id: <20201009150756.3397-2-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20201009150756.3397-1-sakari.ailus@linux.intel.com>
+References: <20201009150756.3397-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Patch "495c10cc1c0c CHROMIUM: dma-buf: restore args..."
-adds a workaround for a bug in mmap_region.
+Return actual subdev format on ipu3-cio2 subdev pads. The earlier
+implementation was based on an infinite recursion that exhausted the
+stack.
 
-As the comment states ->mmap() callback can change
-vma->vm_file and so we might call fput() on the wrong file.
-
-Revert the workaround and proper fix this in mmap_region.
-
-Signed-off-by: Christian König <christian.koenig@amd.com>
+Reported-by: Tsuchiya Yuto <kitakar@gmail.com>
+Fixes: c2a6a07afe4a ("media: intel-ipu3: cio2: add new MIPI-CSI2 driver")
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/dma-buf/dma-buf.c | 22 +++++-----------------
- mm/mmap.c                 |  2 +-
- 2 files changed, 6 insertions(+), 18 deletions(-)
+ drivers/media/pci/intel/ipu3/ipu3-cio2.c | 24 +++---------------------
+ 1 file changed, 3 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index a6ba4d598f0e..edd57402a48a 100644
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -1143,9 +1143,6 @@ EXPORT_SYMBOL_GPL(dma_buf_end_cpu_access);
- int dma_buf_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma,
- 		 unsigned long pgoff)
+diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
+index 4e598e937dfe..afa472026ba4 100644
+--- a/drivers/media/pci/intel/ipu3/ipu3-cio2.c
++++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
+@@ -1232,29 +1232,11 @@ static int cio2_subdev_get_fmt(struct v4l2_subdev *sd,
+ 			       struct v4l2_subdev_format *fmt)
  {
--	struct file *oldfile;
+ 	struct cio2_queue *q = container_of(sd, struct cio2_queue, subdev);
+-	struct v4l2_subdev_format format;
 -	int ret;
--
- 	if (WARN_ON(!dmabuf || !vma))
- 		return -EINVAL;
  
-@@ -1163,22 +1160,13 @@ int dma_buf_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma,
- 		return -EINVAL;
- 
- 	/* readjust the vma */
--	get_file(dmabuf->file);
--	oldfile = vma->vm_file;
--	vma->vm_file = dmabuf->file;
--	vma->vm_pgoff = pgoff;
-+	if (vma->vm_file)
-+		fput(vma->vm_file);
- 
--	ret = dmabuf->ops->mmap(dmabuf, vma);
--	if (ret) {
--		/* restore old parameters on failure */
--		vma->vm_file = oldfile;
--		fput(dmabuf->file);
--	} else {
--		if (oldfile)
--			fput(oldfile);
+-	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
++	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
+ 		fmt->format = *v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
+-		return 0;
 -	}
--	return ret;
-+	vma->vm_file = get_file(dmabuf->file);
-+	vma->vm_pgoff = pgoff;
+-
+-	if (fmt->pad == CIO2_PAD_SINK) {
+-		format.which = V4L2_SUBDEV_FORMAT_ACTIVE;
+-		ret = v4l2_subdev_call(sd, pad, get_fmt, NULL,
+-				       &format);
+-
+-		if (ret)
+-			return ret;
+-		/* update colorspace etc */
+-		q->subdev_fmt.colorspace = format.format.colorspace;
+-		q->subdev_fmt.ycbcr_enc = format.format.ycbcr_enc;
+-		q->subdev_fmt.quantization = format.format.quantization;
+-		q->subdev_fmt.xfer_func = format.format.xfer_func;
+-	}
+-
+-	fmt->format = q->subdev_fmt;
++	else
++		fmt->format = q->subdev_fmt;
  
-+	return dmabuf->ops->mmap(dmabuf, vma);
+ 	return 0;
  }
- EXPORT_SYMBOL_GPL(dma_buf_mmap);
- 
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 40248d84ad5f..3a2670d73355 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -1852,8 +1852,8 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
- 	return addr;
- 
- unmap_and_free_vma:
-+	fput(vma->vm_file);
- 	vma->vm_file = NULL;
--	fput(file);
- 
- 	/* Undo any partial mapping done by a device driver. */
- 	unmap_region(mm, vma, prev, vma->vm_start, vma->vm_end);
 -- 
-2.17.1
+2.27.0
 
