@@ -7,53 +7,53 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1580C43457
-	for <linux-media@archiver.kernel.org>; Fri,  9 Oct 2020 08:01:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2460C43467
+	for <linux-media@archiver.kernel.org>; Fri,  9 Oct 2020 08:01:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7BD0522275
-	for <linux-media@archiver.kernel.org>; Fri,  9 Oct 2020 08:01:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 73F1D22277
+	for <linux-media@archiver.kernel.org>; Fri,  9 Oct 2020 08:01:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="Sgyv+GC9"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="bKzq2hZG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732886AbgJIIBn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 9 Oct 2020 04:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49534 "EHLO
+        id S1732705AbgJIIB6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 9 Oct 2020 04:01:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732703AbgJIIAM (ORCPT
+        with ESMTP id S1732709AbgJIIAM (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Fri, 9 Oct 2020 04:00:12 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1C5C0613B5
-        for <linux-media@vger.kernel.org>; Fri,  9 Oct 2020 01:00:03 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id v12so8901196wmh.3
-        for <linux-media@vger.kernel.org>; Fri, 09 Oct 2020 01:00:03 -0700 (PDT)
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83256C0613E0
+        for <linux-media@vger.kernel.org>; Fri,  9 Oct 2020 00:59:57 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id 13so8866508wmf.0
+        for <linux-media@vger.kernel.org>; Fri, 09 Oct 2020 00:59:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=tJHrg9nZGBiu6u9pKmTg4Lb9xj/KgbHamws8Cnd3i7Q=;
-        b=Sgyv+GC9qcYcx0cF5qjyVAtK6D5sL3Wk7ULZQ9+WSVVIQIlPGZBXmKdtm0HWFIIX0o
-         +lrV5GRXB4bQGBqEC3tLPCyASOS/Sev3rbO8w/fP4WgQReecrsSTbu8VufeY1dWQVICh
-         pss3YDY5f+PbGnzEQocQL+ftqimx7hwXjF67c=
+        bh=L2oZv7vxEZZWtTO3C1Lp0XtxkN66QV3fUnWxu78Rh38=;
+        b=bKzq2hZGOXu0fkRVuHIJG2XdpMLBMLxx8G3yFQUHXKyWtYO+OHOAhvEMdWtfddJPky
+         lUh2trsfuVCq/RGQTrV1pHhiifcSTHeUjmS3vMPfONOs+Ca+ALkk3BA4oWopUBar7jBe
+         WASwfm88dJqsT9h2tML16LqS2STnW0TBm//DA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=tJHrg9nZGBiu6u9pKmTg4Lb9xj/KgbHamws8Cnd3i7Q=;
-        b=PVgFlH12hTmHXIxCLWsa761knU2Gn7BDEB9XAmvVeztT6GUZnJsfr+KkW9MLntOIz/
-         sYf6RkLPEssmbEtBq9HDYmTaZfFMn7Hak+MUv2qGZgGok3wdcsVfupdpRkMnbMDKL8e3
-         6ya5IbhOA1vcbf3lr+MNNOisSxe56Ee6FCBXzSNs5AzV6pFSLsce/sjMJru8wZifFWBW
-         XlJRk6MNttN3P4ajZzCEZuX5rYb4w6Mn9MwNEr2uTOx0mO0wSNujGlPQMCmziZqTcA8s
-         7pYLZNDUh+snmfrUsOKbNb0paLeQUFZjIZazLvCEl4mpn91YFmgiZTZXlYQ2Djtg4/gi
-         PcQQ==
-X-Gm-Message-State: AOAM53238XA7OR+DS39RSMX0TaVnKp2fINr1p+Cb7jjnCoBi5+mRXZoC
-        ewbDgWk4q2HxAhh+mU52E/prWg==
-X-Google-Smtp-Source: ABdhPJwetaxR6ll4ilUh/Fp8VLuDghFZN6gvxIHweAnOQrTLclejLy2OfI/39IlqYUyaZlGaM/mfBQ==
-X-Received: by 2002:a1c:a3c3:: with SMTP id m186mr12641072wme.172.1602230402301;
-        Fri, 09 Oct 2020 01:00:02 -0700 (PDT)
+        bh=L2oZv7vxEZZWtTO3C1Lp0XtxkN66QV3fUnWxu78Rh38=;
+        b=YHwfsV+CQwVVsZFzzc62LLswQMaNU493r5IYkb0dgAmLhm2zbt3+Wn+A0SYUi6mCLa
+         NB92hJjTC6nV4USKPo6/W49O0qSvA2zD483Tst+dlh0IUObPos1e8iVu5T9v0JpMa7aq
+         qJm7PlM3JrxUCdqDQZfnzwlw5CNt+HY5rqRELLmS/H/uXzilV6bfiQ18t1R91pQxfL+S
+         V3bpcvYZ6Mm93QwnxHsg8MPvboer7xtOQIr588sWUsTFggaHE7FS3BrmPO1i9Cf1l7Sc
+         DJGyuEu/hczaHu23rGTBMwC22MyjJeD8z3G+brkaiidTqEhzRaArYHlIBb57xBZJsweO
+         u0fw==
+X-Gm-Message-State: AOAM533Dg+VoJgxx5Cqdz1xyycnYxkLZdOsNiW820cInNjHHZ9c2lTP5
+        ymILjiD6drbJPHnwnfUgfleq+Q==
+X-Google-Smtp-Source: ABdhPJzG3BYXEMIUcMAsDOoP86h0w2yTKkQt8nM1pRPVArdkv8JKqITJk6zo5uSkNezo/eZMOHu0cw==
+X-Received: by 2002:a1c:8057:: with SMTP id b84mr12530132wmd.116.1602230396240;
+        Fri, 09 Oct 2020 00:59:56 -0700 (PDT)
 Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id u17sm11634118wri.45.2020.10.09.01.00.00
+        by smtp.gmail.com with ESMTPSA id u17sm11634118wri.45.2020.10.09.00.59.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2020 01:00:01 -0700 (PDT)
+        Fri, 09 Oct 2020 00:59:55 -0700 (PDT)
 From:   Daniel Vetter <daniel.vetter@ffwll.ch>
 To:     DRI Development <dri-devel@lists.freedesktop.org>,
         LKML <linux-kernel@vger.kernel.org>
@@ -61,20 +61,23 @@ Cc:     kvm@vger.kernel.org, linux-mm@kvack.org,
         linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-media@vger.kernel.org,
         linux-s390@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Daniel Vetter <daniel.vetter@intel.com>,
         Jason Gunthorpe <jgg@ziepe.ca>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Rik van Riel <riel@redhat.com>,
-        Benjamin Herrensmidt <benh@kernel.crashing.org>,
-        Dave Airlie <airlied@linux.ie>,
         Andrew Morton <akpm@linux-foundation.org>,
         John Hubbard <jhubbard@nvidia.com>,
         =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
         Jan Kara <jack@suse.cz>,
-        Daniel Vetter <daniel.vetter@intel.com>
-Subject: [PATCH v2 07/17] mm: Close race in generic_access_phys
-Date:   Fri,  9 Oct 2020 09:59:24 +0200
-Message-Id: <20201009075934.3509076-8-daniel.vetter@ffwll.ch>
+        Dan Williams <dan.j.williams@intel.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>,
+        Omer Shpigelman <oshpigelman@habana.ai>,
+        Ofir Bitton <obitton@habana.ai>,
+        Tomer Tayar <ttayar@habana.ai>,
+        Moti Haimovski <mhaimovski@habana.ai>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Pawel Piskorski <ppiskorski@habana.ai>
+Subject: [PATCH v2 03/17] misc/habana: Stop using frame_vector helpers
+Date:   Fri,  9 Oct 2020 09:59:20 +0200
+Message-Id: <20201009075934.3509076-4-daniel.vetter@ffwll.ch>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201009075934.3509076-1-daniel.vetter@ffwll.ch>
 References: <20201009075934.3509076-1-daniel.vetter@ffwll.ch>
@@ -85,38 +88,11 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Way back it was a reasonable assumptions that iomem mappings never
-change the pfn range they point at. But this has changed:
+All we need are a pages array, pin_user_pages_fast can give us that
+directly. Plus this avoids the entire raw pfn side of get_vaddr_frames.
 
-- gpu drivers dynamically manage their memory nowadays, invalidating
-  ptes with unmap_mapping_range when buffers get moved
-
-- contiguous dma allocations have moved from dedicated carvetouts to
-  cma regions. This means if we miss the unmap the pfn might contain
-  pagecache or anon memory (well anything allocated with GFP_MOVEABLE)
-
-- even /dev/mem now invalidates mappings when the kernel requests that
-  iomem region when CONFIG_IO_STRICT_DEVMEM is set, see 3234ac664a87
-  ("/dev/mem: Revoke mappings when a driver claims the region")
-
-Accessing pfns obtained from ptes without holding all the locks is
-therefore no longer a good idea. Fix this.
-
-Since ioremap might need to manipulate pagetables too we need to drop
-the pt lock and have a retry loop if we raced.
-
-While at it, also add kerneldoc and improve the comment for the
-vma_ops->access function. It's for accessing, not for moving the
-memory from iomem to system memory, as the old comment seemed to
-suggest.
-
-References: 28b2ee20c7cb ("access_process_vm device memory infrastructure")
+Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
 Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Rik van Riel <riel@redhat.com>
-Cc: Benjamin Herrensmidt <benh@kernel.crashing.org>
-Cc: Dave Airlie <airlied@linux.ie>
 Cc: Andrew Morton <akpm@linux-foundation.org>
 Cc: John Hubbard <jhubbard@nvidia.com>
 Cc: Jérôme Glisse <jglisse@redhat.com>
@@ -126,103 +102,141 @@ Cc: linux-mm@kvack.org
 Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-samsung-soc@vger.kernel.org
 Cc: linux-media@vger.kernel.org
-Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+Cc: Oded Gabbay <oded.gabbay@gmail.com>
+Cc: Omer Shpigelman <oshpigelman@habana.ai>
+Cc: Ofir Bitton <obitton@habana.ai>
+Cc: Tomer Tayar <ttayar@habana.ai>
+Cc: Moti Haimovski <mhaimovski@habana.ai>
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Pawel Piskorski <ppiskorski@habana.ai>
 --
-v2: Fix inversion in the retry check (John).
+v2: Use unpin_user_pages_dirty_lock (John)
 ---
- include/linux/mm.h |  3 ++-
- mm/memory.c        | 44 ++++++++++++++++++++++++++++++++++++++++++--
- 2 files changed, 44 insertions(+), 3 deletions(-)
+ drivers/misc/habanalabs/Kconfig             |  1 -
+ drivers/misc/habanalabs/common/habanalabs.h |  3 +-
+ drivers/misc/habanalabs/common/memory.c     | 49 ++++++++-------------
+ 3 files changed, 20 insertions(+), 33 deletions(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index acd60fbf1a5a..2a16631c1fda 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -566,7 +566,8 @@ struct vm_operations_struct {
- 	vm_fault_t (*pfn_mkwrite)(struct vm_fault *vmf);
+diff --git a/drivers/misc/habanalabs/Kconfig b/drivers/misc/habanalabs/Kconfig
+index 8eb5d38c618e..2f04187f7167 100644
+--- a/drivers/misc/habanalabs/Kconfig
++++ b/drivers/misc/habanalabs/Kconfig
+@@ -6,7 +6,6 @@
+ config HABANA_AI
+ 	tristate "HabanaAI accelerators (habanalabs)"
+ 	depends on PCI && HAS_IOMEM
+-	select FRAME_VECTOR
+ 	select DMA_SHARED_BUFFER
+ 	select GENERIC_ALLOCATOR
+ 	select HWMON
+diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
+index edbd627b29d2..c1b3ad613b15 100644
+--- a/drivers/misc/habanalabs/common/habanalabs.h
++++ b/drivers/misc/habanalabs/common/habanalabs.h
+@@ -881,7 +881,8 @@ struct hl_ctx_mgr {
+ struct hl_userptr {
+ 	enum vm_type_t		vm_type; /* must be first */
+ 	struct list_head	job_node;
+-	struct frame_vector	*vec;
++	struct page		**pages;
++	unsigned int		npages;
+ 	struct sg_table		*sgt;
+ 	enum dma_data_direction dir;
+ 	struct list_head	debugfs_list;
+diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
+index 5ff4688683fd..327b64479f97 100644
+--- a/drivers/misc/habanalabs/common/memory.c
++++ b/drivers/misc/habanalabs/common/memory.c
+@@ -1281,45 +1281,41 @@ static int get_user_memory(struct hl_device *hdev, u64 addr, u64 size,
+ 		return -EFAULT;
+ 	}
  
- 	/* called by access_process_vm when get_user_pages() fails, typically
--	 * for use by special VMAs that can switch between memory and hardware
-+	 * for use by special VMAs. See also generic_access_phys() for a generic
-+	 * implementation useful for any iomem mapping.
- 	 */
- 	int (*access)(struct vm_area_struct *vma, unsigned long addr,
- 		      void *buf, int len, int write);
-diff --git a/mm/memory.c b/mm/memory.c
-index fcfc4ca36eba..f7cbc4dde0ef 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -4873,28 +4873,68 @@ int follow_phys(struct vm_area_struct *vma,
- 	return ret;
- }
- 
-+/**
-+ * generic_access_phys - generic implementation for iomem mmap access
-+ * @vma: the vma to access
-+ * @addr: userspace addres, not relative offset within @vma
-+ * @buf: buffer to read/write
-+ * @len: length of transfer
-+ * @write: set to FOLL_WRITE when writing, otherwise reading
-+ *
-+ * This is a generic implementation for &vm_operations_struct.access for an
-+ * iomem mapping. This callback is used by access_process_vm() when the @vma is
-+ * not page based.
-+ */
- int generic_access_phys(struct vm_area_struct *vma, unsigned long addr,
- 			void *buf, int len, int write)
- {
- 	resource_size_t phys_addr;
- 	unsigned long prot = 0;
- 	void __iomem *maddr;
-+	pte_t *ptep, pte;
-+	spinlock_t *ptl;
- 	int offset = addr & (PAGE_SIZE-1);
-+	int ret = -EINVAL;
-+
-+	if (!(vma->vm_flags & (VM_IO | VM_PFNMAP)))
-+		return -EINVAL;
-+
-+retry:
-+	if (follow_pte(vma->vm_mm, addr, &ptep, &ptl))
-+		return -EINVAL;
-+	pte = *ptep;
-+	pte_unmap_unlock(ptep, ptl);
- 
--	if (follow_phys(vma, addr, write, &prot, &phys_addr))
-+	prot = pgprot_val(pte_pgprot(pte));
-+	phys_addr = (resource_size_t)pte_pfn(pte) << PAGE_SHIFT;
-+
-+	if ((write & FOLL_WRITE) && !pte_write(pte))
- 		return -EINVAL;
- 
- 	maddr = ioremap_prot(phys_addr, PAGE_ALIGN(len + offset), prot);
- 	if (!maddr)
+-	userptr->vec = frame_vector_create(npages);
+-	if (!userptr->vec) {
++	userptr->pages = kvmalloc_array(npages, sizeof(*userptr->pages),
++					GFP_KERNEL);
++	if (!userptr->pages) {
+ 		dev_err(hdev->dev, "Failed to create frame vector\n");
  		return -ENOMEM;
+ 	}
  
-+	if (follow_pte(vma->vm_mm, addr, &ptep, &ptl))
-+		goto out_unmap;
-+
-+	if (!pte_same(pte, *ptep)) {
-+		pte_unmap_unlock(ptep, ptl);
-+		iounmap(maddr);
-+
-+		goto retry;
-+	}
-+
- 	if (write)
- 		memcpy_toio(maddr + offset, buf, len);
- 	else
- 		memcpy_fromio(buf, maddr + offset, len);
-+	ret = len;
-+	pte_unmap_unlock(ptep, ptl);
-+out_unmap:
- 	iounmap(maddr);
+-	rc = get_vaddr_frames(start, npages, FOLL_FORCE | FOLL_WRITE,
+-				userptr->vec);
++	rc = pin_user_pages_fast(start, npages, FOLL_FORCE | FOLL_WRITE,
++				 userptr->pages);
  
--	return len;
-+	return ret;
+ 	if (rc != npages) {
+ 		dev_err(hdev->dev,
+ 			"Failed to map host memory, user ptr probably wrong\n");
+ 		if (rc < 0)
+-			goto destroy_framevec;
++			goto destroy_pages;
++		npages = rc;
+ 		rc = -EFAULT;
+-		goto put_framevec;
+-	}
+-
+-	if (frame_vector_to_pages(userptr->vec) < 0) {
+-		dev_err(hdev->dev,
+-			"Failed to translate frame vector to pages\n");
+-		rc = -EFAULT;
+-		goto put_framevec;
++		goto put_pages;
+ 	}
++	userptr->npages = npages;
+ 
+ 	rc = sg_alloc_table_from_pages(userptr->sgt,
+-					frame_vector_pages(userptr->vec),
+-					npages, offset, size, GFP_ATOMIC);
++				       userptr->pages,
++				       npages, offset, size, GFP_ATOMIC);
+ 	if (rc < 0) {
+ 		dev_err(hdev->dev, "failed to create SG table from pages\n");
+-		goto put_framevec;
++		goto put_pages;
+ 	}
+ 
+ 	return 0;
+ 
+-put_framevec:
+-	put_vaddr_frames(userptr->vec);
+-destroy_framevec:
+-	frame_vector_destroy(userptr->vec);
++put_pages:
++	unpin_user_pages(userptr->pages, npages);
++destroy_pages:
++	kvfree(userptr->pages);
+ 	return rc;
  }
- EXPORT_SYMBOL_GPL(generic_access_phys);
- #endif
+ 
+@@ -1405,8 +1401,6 @@ int hl_pin_host_memory(struct hl_device *hdev, u64 addr, u64 size,
+  */
+ void hl_unpin_host_memory(struct hl_device *hdev, struct hl_userptr *userptr)
+ {
+-	struct page **pages;
+-
+ 	hl_debugfs_remove_userptr(hdev, userptr);
+ 
+ 	if (userptr->dma_mapped)
+@@ -1414,15 +1408,8 @@ void hl_unpin_host_memory(struct hl_device *hdev, struct hl_userptr *userptr)
+ 							userptr->sgt->nents,
+ 							userptr->dir);
+ 
+-	pages = frame_vector_pages(userptr->vec);
+-	if (!IS_ERR(pages)) {
+-		int i;
+-
+-		for (i = 0; i < frame_vector_count(userptr->vec); i++)
+-			set_page_dirty_lock(pages[i]);
+-	}
+-	put_vaddr_frames(userptr->vec);
+-	frame_vector_destroy(userptr->vec);
++	unpin_user_pages_dirty_lock(userptr->pages, userptr->npages, true);
++	kvfree(userptr->pages);
+ 
+ 	list_del(&userptr->job_node);
+ 
 -- 
 2.28.0
 
