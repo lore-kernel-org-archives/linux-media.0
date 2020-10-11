@@ -1,162 +1,186 @@
-Return-Path: <SRS0=LyFS=DR=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=pQVR=DS=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F1E0C4363A
-	for <linux-media@archiver.kernel.org>; Sat, 10 Oct 2020 23:09:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23673C433E7
+	for <linux-media@archiver.kernel.org>; Sun, 11 Oct 2020 03:39:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EDE812075E
-	for <linux-media@archiver.kernel.org>; Sat, 10 Oct 2020 23:09:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1602371365;
-	bh=/M97QDk4dmePHLGMz8L/1LDgfweGz0LFfE/UcKJE7Us=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=IOFRm6Bi2+6DsDGVk3PoqboX2rIfVdTBaomOZbaDO6kzU4o2DVME6kB/EDhTXL9XR
-	 /7OrzJRgiUv1oF2P1vNRNvS/ATH2x+ZnGFsKuB3Or3u0+atjOGp2TKby2OWldEhpG2
-	 DYbTl9Rschlwr2MoGRvAnn74sieZhRSOv2iloW54=
+	by mail.kernel.org (Postfix) with ESMTP id 4269320781
+	for <linux-media@archiver.kernel.org>; Sun, 11 Oct 2020 03:39:38 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="SVcTngqM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390243AbgJJW4u (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 10 Oct 2020 18:56:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56966 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731025AbgJJTxO (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 10 Oct 2020 15:53:14 -0400
-Received: from coco.lan (ip5f5ad5ce.dynamic.kabel-deutschland.de [95.90.213.206])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9E166207CD;
-        Sat, 10 Oct 2020 09:24:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602321866;
-        bh=/M97QDk4dmePHLGMz8L/1LDgfweGz0LFfE/UcKJE7Us=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=0WfcGZ/NRaNLmDS+jOh+NTKZmtgBMPUVlTwtRgayCgG8fNqT9ga5dKdpSd17V6cdr
-         HukrmYrFiRiZHk4mzgeyyRmliXyLjN62NnFMnyCvZOm9KoAKj1aPSNb/0Gk/GRwb/0
-         cnkcKxRZlgiEC0lyCm9ojQx8D9uJxVDmS5Ffiehg=
-Date:   Sat, 10 Oct 2020 11:24:16 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
-        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-s390@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Kees Cook <keescook@chromium.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        =?UTF-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
-        Jan Kara <jack@suse.cz>, Pawel Osciak <pawel@osciak.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        Michel Lespinasse <walken@google.com>
-Subject: Re: [PATCH v2 10/17] media/videbuf1|2: Mark follow_pfn usage as
- unsafe
-Message-ID: <20201010112416.4259249a@coco.lan>
-In-Reply-To: <20201009075934.3509076-11-daniel.vetter@ffwll.ch>
-References: <20201009075934.3509076-1-daniel.vetter@ffwll.ch>
-        <20201009075934.3509076-11-daniel.vetter@ffwll.ch>
-X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+        id S1729217AbgJKDjh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 10 Oct 2020 23:39:37 -0400
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:49213 "EHLO
+        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728715AbgJKDjh (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Sat, 10 Oct 2020 23:39:37 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id RSCqkQQJrTHgxRSCskMW6b; Sun, 11 Oct 2020 05:39:34 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1602387574; bh=oaMFU7gkKjcjOrvgbAA2Wj8Ty4IZ4bTppMN6/b8lk1U=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=SVcTngqMQn4MaoiUCYV/RTtof4RrhzaFGG+ANdqP0Yp2DiZvkkzp5V4grnuxHYPjR
+         ZWmMdH8F2atx0rAS2dq85FlNZtUFpXT5QWkDUXg34YmwUg97trhMZk4mNPEvXr5sEk
+         ffBrHQN8na61mvKbdz8HAFkSR0cvQIEQ+Dw0+S74ytLXoV8q3ALUXRwlI8MI7vVdb+
+         LxmF7EGUSy9wO31yc7L1PeZGX4Mdsmm49QFofcV4pGbMc2eu0WdRw949I/3CKCKgwO
+         v5ilhtIY9wHvyB/CyoXy3k3RRomX0bKIQrFlpZCOHgbWG1W64RhLwunr3SvEu060B6
+         /vp5TCa9oh9Ww==
+Message-ID: <985a172d02531885c93a63a2ef7d5441@smtp-cloud8.xs4all.net>
+Date:   Sun, 11 Oct 2020 05:39:32 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: WARNINGS
+X-CMAE-Envelope: MS4wfOpmqjnsQHvHYf81/syA7HW1TSvH+/5Pbb/Nve+aVWJRRasAYmb+kC78LRKqiCXmNe+HFtTjZcEkKJpc4vUTdIsPRqBiWRDlYRO3qzHn7y5rcg3152yM
+ pbaD/ur6qu/0VR4Fy02TfX3guCsnN5OMTQEEOfFeQO8uU1hRFhlsSAPojJJ/ogDDzdGp3VVGuTPxyR6vJAo/j2sin7k4VvynHUgnvsiPNhSRf3zBRSh0aDDG
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Fri,  9 Oct 2020 09:59:27 +0200
-Daniel Vetter <daniel.vetter@ffwll.ch> escreveu:
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-> The media model assumes that buffers are all preallocated, so that
-> when a media pipeline is running we never miss a deadline because the
-> buffers aren't allocated or available.
->=20
-> This means we cannot fix the v4l follow_pfn usage through
-> mmu_notifier, without breaking how this all works. The only real fix
-> is to deprecate userptr support for VM_IO | VM_PFNMAP mappings and
-> tell everyone to cut over to dma-buf memory sharing for zerocopy.
->=20
-> userptr for normal memory will keep working as-is.
+Results of the daily build of media_tree:
 
-I won't repeat here the discussions for patch 09/17, but
-just to be clear about this one:
+date:			Sun Oct 11 05:00:13 CEST 2020
+media-tree git hash:	c386e0797d26a32e354daf4480c5d40165db66a1
+media_build git hash:	e0136eadb6f4c24b7f8fcb50ef4d4d5ffb2af31d
+v4l-utils git hash:	28df3d403be3d7769d7b10cda3e372a0dbbfa410
+edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
+gcc version:		i686-linux-gcc (GCC) 10.2.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		v0.6.2-1-gfebba84c
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		v0.5.0-6793-g0248ebb06
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 9783287347a0d95925f345313520f04869f439ab
+host hardware:		x86_64
+host os:		5.7.0-1-amd64
 
-NACK.
+linux-git-sh: OK
+linux-git-powerpc64: OK
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-stm32: OK
+linux-git-arm-pxa: OK
+linux-git-mips: OK
+linux-git-arm64: OK
+linux-git-arm-multi: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.81-i686: OK
+linux-3.16.81-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.238-i686: OK
+linux-4.4.238-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.238-i686: OK
+linux-4.9.238-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.200-i686: OK
+linux-4.14.200-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.149-i686: OK
+linux-4.19.149-x86_64: OK
+linux-4.20.17-i686: OK
+linux-4.20.17-x86_64: OK
+linux-5.0.21-i686: OK
+linux-5.0.21-x86_64: OK
+linux-5.1.21-i686: OK
+linux-5.1.21-x86_64: OK
+linux-5.2.21-i686: OK
+linux-5.2.21-x86_64: OK
+linux-5.3.18-i686: OK
+linux-5.3.18-x86_64: OK
+linux-5.4.69-i686: OK
+linux-5.4.69-x86_64: OK
+linux-5.5.19-i686: OK
+linux-5.5.19-x86_64: OK
+linux-5.6.19-i686: OK
+linux-5.6.19-x86_64: OK
+linux-5.7.19-i686: OK
+linux-5.7.19-x86_64: OK
+linux-5.8.13-i686: OK
+linux-5.8.13-x86_64: OK
+linux-5.9-rc7-i686: OK
+linux-5.9-rc7-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 2943, Succeeded: 2943, Failed: 0, Warnings: 0
+virtme-32: WARNINGS: Final Summary: 2779, Succeeded: 2779, Failed: 0, Warnings: 2
+sparse: OK
+smatch: OK
 
-We need a better alternative to avoid breaking existing
-media applications.
+Detailed results are available here:
 
->=20
-> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: John Hubbard <jhubbard@nvidia.com>
-> Cc: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
-> Cc: Jan Kara <jack@suse.cz>
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: linux-mm@kvack.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-samsung-soc@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: Pawel Osciak <pawel@osciak.com>
-> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-> Cc: Kyungmin Park <kyungmin.park@samsung.com>
-> Cc: Tomasz Figa <tfiga@chromium.org>
-> Cc: Laurent Dufour <ldufour@linux.ibm.com>
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: Daniel Jordan <daniel.m.jordan@oracle.com>
-> Cc: Michel Lespinasse <walken@google.com>
-> ---
->  drivers/media/common/videobuf2/frame_vector.c | 2 +-
->  drivers/media/v4l2-core/videobuf-dma-contig.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/media/common/videobuf2/frame_vector.c b/drivers/medi=
-a/common/videobuf2/frame_vector.c
-> index 2b0b97761d15..a1b85fe9e7c1 100644
-> --- a/drivers/media/common/videobuf2/frame_vector.c
-> +++ b/drivers/media/common/videobuf2/frame_vector.c
-> @@ -69,7 +69,7 @@ int get_vaddr_frames(unsigned long start, unsigned int =
-nr_frames,
->  			break;
-> =20
->  		while (ret < nr_frames && start + PAGE_SIZE <=3D vma->vm_end) {
-> -			err =3D follow_pfn(vma, start, &nums[ret]);
-> +			err =3D unsafe_follow_pfn(vma, start, &nums[ret]);
->  			if (err) {
->  				if (ret =3D=3D 0)
->  					ret =3D err;
-> diff --git a/drivers/media/v4l2-core/videobuf-dma-contig.c b/drivers/medi=
-a/v4l2-core/videobuf-dma-contig.c
-> index 52312ce2ba05..821c4a76ab96 100644
-> --- a/drivers/media/v4l2-core/videobuf-dma-contig.c
-> +++ b/drivers/media/v4l2-core/videobuf-dma-contig.c
-> @@ -183,7 +183,7 @@ static int videobuf_dma_contig_user_get(struct videob=
-uf_dma_contig_memory *mem,
->  	user_address =3D untagged_baddr;
-> =20
->  	while (pages_done < (mem->size >> PAGE_SHIFT)) {
-> -		ret =3D follow_pfn(vma, user_address, &this_pfn);
-> +		ret =3D unsafe_follow_pfn(vma, user_address, &this_pfn);
->  		if (ret)
->  			break;
-> =20
+http://www.xs4all.nl/~hverkuil/logs/Sunday.log
 
+Detailed regression test results are available here:
 
+http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media-dmesg.log
 
-Thanks,
-Mauro
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Sunday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
