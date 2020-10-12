@@ -4,25 +4,28 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA438C433DF
-	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 20:59:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1DD6C433E7
+	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 20:59:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7969F21D7F
-	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 20:59:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A25F12222F
+	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 20:59:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731627AbgJLU64 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Oct 2020 16:58:56 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:49772 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729460AbgJLU64 (ORCPT
+        id S1731766AbgJLU7F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Oct 2020 16:59:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42844 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731678AbgJLU65 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Oct 2020 16:58:56 -0400
+        Mon, 12 Oct 2020 16:58:57 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9236C0613D1;
+        Mon, 12 Oct 2020 13:58:56 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: aratiu)
-        with ESMTPSA id 6294E1F44C2A
+        with ESMTPSA id 3CB661F44C33
 From:   Adrian Ratiu <adrian.ratiu@collabora.com>
 To:     Ezequiel Garcia <ezequiel@collabora.com>,
         Philipp Zabel <p.zabel@pengutronix.de>
@@ -33,9 +36,9 @@ Cc:     Mark Brown <broonie@kernel.org>,
         Daniel Vetter <daniel@ffwll.ch>, kernel@collabora.com,
         linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 01/18] media: hantro: document all int reg bits up to vc8000
-Date:   Mon, 12 Oct 2020 23:59:40 +0300
-Message-Id: <20201012205957.889185-2-adrian.ratiu@collabora.com>
+Subject: [PATCH 04/18] media: hantro: add reset controller support
+Date:   Mon, 12 Oct 2020 23:59:43 +0300
+Message-Id: <20201012205957.889185-5-adrian.ratiu@collabora.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201012205957.889185-1-adrian.ratiu@collabora.com>
 References: <20201012205957.889185-1-adrian.ratiu@collabora.com>
@@ -45,67 +48,62 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-These do not all strictly belong to the g1 core and even the majority
-of previously documented bits were not used (yet) by the driver irq
-handlers, but it's still very useful to have an overview of all IRQs,
-especially since starting with core versions vc8000 and later the irq
-bits previously used by G1 and G2 have been merged at the same address.
+Some SoCs might have a reset controller which disables clocks
+by default in reset state which then drivers need to unreset
+before being able to ungate a specific clock.
+
+In this specific case, the hantro driver needs to ensure the
+peripheral clock can be properly ungated otherwise MMIO reg
+values can't be accessed.
+
+If the SoC has no reset controller or there is no "resets" DT
+property defined, this new code will have no effect.
 
 Signed-off-by: Adrian Ratiu <adrian.ratiu@collabora.com>
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- drivers/staging/media/hantro/hantro_g1_regs.h | 39 +++++++++++++------
- 1 file changed, 28 insertions(+), 11 deletions(-)
+ drivers/staging/media/hantro/hantro.h     | 1 +
+ drivers/staging/media/hantro/hantro_drv.c | 8 ++++++++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/drivers/staging/media/hantro/hantro_g1_regs.h b/drivers/staging/media/hantro/hantro_g1_regs.h
-index c1756e3d5391..80ff297f6f68 100644
---- a/drivers/staging/media/hantro/hantro_g1_regs.h
-+++ b/drivers/staging/media/hantro/hantro_g1_regs.h
-@@ -13,17 +13,34 @@
+diff --git a/drivers/staging/media/hantro/hantro.h b/drivers/staging/media/hantro/hantro.h
+index 65f9f7ea7dcf..bb442eb1974e 100644
+--- a/drivers/staging/media/hantro/hantro.h
++++ b/drivers/staging/media/hantro/hantro.h
+@@ -183,6 +183,7 @@ struct hantro_dev {
+ 	struct platform_device *pdev;
+ 	struct device *dev;
+ 	struct clk_bulk_data *clocks;
++	struct reset_control *reset;
+ 	void __iomem **reg_bases;
+ 	void __iomem *enc_base;
+ 	void __iomem *dec_base;
+diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+index 3cd00cc0a364..c2ea54552ce9 100644
+--- a/drivers/staging/media/hantro/hantro_drv.c
++++ b/drivers/staging/media/hantro/hantro_drv.c
+@@ -17,6 +17,7 @@
+ #include <linux/pm.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/slab.h>
++#include <linux/reset.h>
+ #include <linux/videodev2.h>
+ #include <linux/workqueue.h>
+ #include <media/v4l2-event.h>
+@@ -747,6 +748,13 @@ static int hantro_probe(struct platform_device *pdev)
  
- /* Decoder registers. */
- #define G1_REG_INTERRUPT				0x004
--#define     G1_REG_INTERRUPT_DEC_PIC_INF		BIT(24)
--#define     G1_REG_INTERRUPT_DEC_TIMEOUT		BIT(18)
--#define     G1_REG_INTERRUPT_DEC_SLICE_INT		BIT(17)
--#define     G1_REG_INTERRUPT_DEC_ERROR_INT		BIT(16)
--#define     G1_REG_INTERRUPT_DEC_ASO_INT		BIT(15)
--#define     G1_REG_INTERRUPT_DEC_BUFFER_INT		BIT(14)
--#define     G1_REG_INTERRUPT_DEC_BUS_INT		BIT(13)
--#define     G1_REG_INTERRUPT_DEC_RDY_INT		BIT(12)
--#define     G1_REG_INTERRUPT_DEC_IRQ			BIT(8)
--#define     G1_REG_INTERRUPT_DEC_IRQ_DIS		BIT(4)
--#define     G1_REG_INTERRUPT_DEC_E			BIT(0)
-+/* Interrupt bits. Some are present in:
-+ *    - all core versions (">= g1")
-+ *    - g1, missing in g2, but added back starting with vc8000d ("not in g2")
-+ *    - vc8000d and later (">= vc8000d")
-+ */
-+#define     G1_REG_INTERRUPT_DEC_PIC_INF		BIT(24) /* not in g2 */
-+#define     G1_REG_INTERRUPT_DEC_TILE_INT		BIT(23) /* >= vc8000d */
-+#define     G1_REG_INTERRUPT_DEC_LINE_CNT_INT		BIT(22) /* >= vc8000d */
-+#define     G1_REG_INTERRUPT_DEC_EXT_TIMEOUT_INT	BIT(21) /* >= vc8000d */
-+#define     G1_REG_INTERRUPT_DEC_NO_SLICE_INT		BIT(20) /* >= vc8000d */
-+#define     G1_REG_INTERRUPT_DEC_LAST_SLICE_INT		BIT(19) /* >= vc8000d */
-+#define     G1_REG_INTERRUPT_DEC_TIMEOUT		BIT(18) /* >= g1 */
-+#define     G1_REG_INTERRUPT_DEC_SLICE_INT		BIT(17) /* not in g2 */
-+#define     G1_REG_INTERRUPT_DEC_ERROR_INT		BIT(16) /* >= g1 */
-+#define     G1_REG_INTERRUPT_DEC_ASO_INT		BIT(15) /* not in g2 */
-+#define     G1_REG_INTERRUPT_DEC_BUFFER_INT		BIT(14) /* >= g1 */
-+#define     G1_REG_INTERRUPT_DEC_BUS_INT		BIT(13) /* >= g1 */
-+#define     G1_REG_INTERRUPT_DEC_RDY_INT		BIT(12) /* >= g1 */
-+#define     G1_REG_INTERRUPT_DEC_ABORT_INT		BIT(11) /* >= g2 */
-+#define     G1_REG_INTERRUPT_DEC_IRQ			BIT(8) /* >= g1 */
-+#define     G1_REG_INTERRUPT_DEC_TILE_INT_E		BIT(7) /* >= vc8000d */
-+#define     G1_REG_INTERRUPT_DEC_SELF_RESET_DIS		BIT(6) /* >= vc8000d */
-+#define     G1_REG_INTERRUPT_DEC_ABORT_E		BIT(5) /* >= vc8000d */
-+#define     G1_REG_INTERRUPT_DEC_IRQ_DIS		BIT(4) /* >= g1 */
-+#define     G1_REG_INTERRUPT_DEC_TIMEOUT_SOURCE		BIT(3) /* >= vc8000d */
-+#define     G1_REG_INTERRUPT_DEC_BUS_INT_DIS		BIT(2) /* >= vc8000d */
-+#define     G1_REG_INTERRUPT_DEC_STRM_CORRUPTED		BIT(1) /* >= vc8000d */
-+#define     G1_REG_INTERRUPT_DEC_E			BIT(0) /* >= g1 */
- #define G1_REG_CONFIG					0x008
- #define     G1_REG_CONFIG_DEC_AXI_RD_ID(x)		(((x) & 0xff) << 24)
- #define     G1_REG_CONFIG_DEC_TIMEOUT_E			BIT(23)
+ 	INIT_DELAYED_WORK(&vpu->watchdog_work, hantro_watchdog);
+ 
++	vpu->reset = devm_reset_control_get_optional_exclusive(&pdev->dev,
++							       NULL);
++	if (IS_ERR(vpu->reset))
++		vpu->reset = NULL;
++
++	reset_control_reset(vpu->reset);
++
+ 	vpu->clocks = devm_kcalloc(&pdev->dev, vpu->variant->num_clocks,
+ 				   sizeof(*vpu->clocks), GFP_KERNEL);
+ 	if (!vpu->clocks)
 -- 
 2.28.0
 
