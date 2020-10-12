@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E161C433E7
-	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 20:59:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA438C433DF
+	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 20:59:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C96C922227
+	by mail.kernel.org (Postfix) with ESMTP id 7969F21D7F
 	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 20:59:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731722AbgJLU7A (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Oct 2020 16:59:00 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:49802 "EHLO
+        id S1731627AbgJLU64 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Oct 2020 16:58:56 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:49772 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730339AbgJLU64 (ORCPT
+        with ESMTP id S1729460AbgJLU64 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 12 Oct 2020 16:58:56 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: aratiu)
-        with ESMTPSA id 984B81F44C2C
+        with ESMTPSA id 6294E1F44C2A
 From:   Adrian Ratiu <adrian.ratiu@collabora.com>
 To:     Ezequiel Garcia <ezequiel@collabora.com>,
         Philipp Zabel <p.zabel@pengutronix.de>
@@ -33,9 +33,9 @@ Cc:     Mark Brown <broonie@kernel.org>,
         Daniel Vetter <daniel@ffwll.ch>, kernel@collabora.com,
         linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 03/18] media: hantro: make G1_REG_SOFT_RESET Rockchip specific
-Date:   Mon, 12 Oct 2020 23:59:42 +0300
-Message-Id: <20201012205957.889185-4-adrian.ratiu@collabora.com>
+Subject: [PATCH 01/18] media: hantro: document all int reg bits up to vc8000
+Date:   Mon, 12 Oct 2020 23:59:40 +0300
+Message-Id: <20201012205957.889185-2-adrian.ratiu@collabora.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201012205957.889185-1-adrian.ratiu@collabora.com>
 References: <20201012205957.889185-1-adrian.ratiu@collabora.com>
@@ -45,54 +45,67 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This register is not documented in either the G1 or VC8000D register
-maps and on VC8000D there is a conflict because at the same offset the
-VPU IP defines another register with a very different meaning.
-
-What likely happened is the HW integrator which uses only the G1 IP
-core added some reset/control logic at the end of the VPU map, so
-it makes sense to make this register RK-specific.
+These do not all strictly belong to the g1 core and even the majority
+of previously documented bits were not used (yet) by the driver irq
+handlers, but it's still very useful to have an overview of all IRQs,
+especially since starting with core versions vc8000 and later the irq
+bits previously used by G1 and G2 have been merged at the same address.
 
 Signed-off-by: Adrian Ratiu <adrian.ratiu@collabora.com>
 ---
- drivers/staging/media/hantro/hantro_g1_regs.h | 1 -
- drivers/staging/media/hantro/rk3288_vpu_hw.c  | 4 +++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ drivers/staging/media/hantro/hantro_g1_regs.h | 39 +++++++++++++------
+ 1 file changed, 28 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/staging/media/hantro/hantro_g1_regs.h b/drivers/staging/media/hantro/hantro_g1_regs.h
-index 073b64cbe295..a482a2ba6dfe 100644
+index c1756e3d5391..80ff297f6f68 100644
 --- a/drivers/staging/media/hantro/hantro_g1_regs.h
 +++ b/drivers/staging/media/hantro/hantro_g1_regs.h
-@@ -315,7 +315,6 @@
- #define     G1_REG_REF_BUF_CTRL2_REFBU2_THR(x)		(((x) & 0xfff) << 19)
- #define     G1_REG_REF_BUF_CTRL2_REFBU2_PICID(x)	(((x) & 0x1f) << 14)
- #define     G1_REG_REF_BUF_CTRL2_APF_THRESHOLD(x)	(((x) & 0x3fff) << 0)
--#define G1_REG_SOFT_RESET				0x194
+@@ -13,17 +13,34 @@
  
- /* Post-processor registers. */
- #define G1_REG_PP_INTERRUPT		G1_SWREG(60)
-diff --git a/drivers/staging/media/hantro/rk3288_vpu_hw.c b/drivers/staging/media/hantro/rk3288_vpu_hw.c
-index 7b299ee3e93d..4ad578b1236e 100644
---- a/drivers/staging/media/hantro/rk3288_vpu_hw.c
-+++ b/drivers/staging/media/hantro/rk3288_vpu_hw.c
-@@ -13,6 +13,8 @@
- #include "hantro_g1_regs.h"
- #include "hantro_h1_regs.h"
- 
-+#define VDPU_REG_SOFT_RESET 0x194
-+
- #define RK3288_ACLK_MAX_FREQ (400 * 1000 * 1000)
- 
- /*
-@@ -167,7 +169,7 @@ static void rk3288_vpu_dec_reset(struct hantro_ctx *ctx)
- 
- 	vdpu_write(vpu, G1_REG_INTERRUPT_DEC_IRQ_DIS, G1_REG_INTERRUPT);
- 	vdpu_write(vpu, G1_REG_CONFIG_DEC_CLK_GATE_E, G1_REG_CONFIG);
--	vdpu_write(vpu, 1, G1_REG_SOFT_RESET);
-+	vdpu_write(vpu, 1, VDPU_REG_SOFT_RESET);
- }
- 
- /*
+ /* Decoder registers. */
+ #define G1_REG_INTERRUPT				0x004
+-#define     G1_REG_INTERRUPT_DEC_PIC_INF		BIT(24)
+-#define     G1_REG_INTERRUPT_DEC_TIMEOUT		BIT(18)
+-#define     G1_REG_INTERRUPT_DEC_SLICE_INT		BIT(17)
+-#define     G1_REG_INTERRUPT_DEC_ERROR_INT		BIT(16)
+-#define     G1_REG_INTERRUPT_DEC_ASO_INT		BIT(15)
+-#define     G1_REG_INTERRUPT_DEC_BUFFER_INT		BIT(14)
+-#define     G1_REG_INTERRUPT_DEC_BUS_INT		BIT(13)
+-#define     G1_REG_INTERRUPT_DEC_RDY_INT		BIT(12)
+-#define     G1_REG_INTERRUPT_DEC_IRQ			BIT(8)
+-#define     G1_REG_INTERRUPT_DEC_IRQ_DIS		BIT(4)
+-#define     G1_REG_INTERRUPT_DEC_E			BIT(0)
++/* Interrupt bits. Some are present in:
++ *    - all core versions (">= g1")
++ *    - g1, missing in g2, but added back starting with vc8000d ("not in g2")
++ *    - vc8000d and later (">= vc8000d")
++ */
++#define     G1_REG_INTERRUPT_DEC_PIC_INF		BIT(24) /* not in g2 */
++#define     G1_REG_INTERRUPT_DEC_TILE_INT		BIT(23) /* >= vc8000d */
++#define     G1_REG_INTERRUPT_DEC_LINE_CNT_INT		BIT(22) /* >= vc8000d */
++#define     G1_REG_INTERRUPT_DEC_EXT_TIMEOUT_INT	BIT(21) /* >= vc8000d */
++#define     G1_REG_INTERRUPT_DEC_NO_SLICE_INT		BIT(20) /* >= vc8000d */
++#define     G1_REG_INTERRUPT_DEC_LAST_SLICE_INT		BIT(19) /* >= vc8000d */
++#define     G1_REG_INTERRUPT_DEC_TIMEOUT		BIT(18) /* >= g1 */
++#define     G1_REG_INTERRUPT_DEC_SLICE_INT		BIT(17) /* not in g2 */
++#define     G1_REG_INTERRUPT_DEC_ERROR_INT		BIT(16) /* >= g1 */
++#define     G1_REG_INTERRUPT_DEC_ASO_INT		BIT(15) /* not in g2 */
++#define     G1_REG_INTERRUPT_DEC_BUFFER_INT		BIT(14) /* >= g1 */
++#define     G1_REG_INTERRUPT_DEC_BUS_INT		BIT(13) /* >= g1 */
++#define     G1_REG_INTERRUPT_DEC_RDY_INT		BIT(12) /* >= g1 */
++#define     G1_REG_INTERRUPT_DEC_ABORT_INT		BIT(11) /* >= g2 */
++#define     G1_REG_INTERRUPT_DEC_IRQ			BIT(8) /* >= g1 */
++#define     G1_REG_INTERRUPT_DEC_TILE_INT_E		BIT(7) /* >= vc8000d */
++#define     G1_REG_INTERRUPT_DEC_SELF_RESET_DIS		BIT(6) /* >= vc8000d */
++#define     G1_REG_INTERRUPT_DEC_ABORT_E		BIT(5) /* >= vc8000d */
++#define     G1_REG_INTERRUPT_DEC_IRQ_DIS		BIT(4) /* >= g1 */
++#define     G1_REG_INTERRUPT_DEC_TIMEOUT_SOURCE		BIT(3) /* >= vc8000d */
++#define     G1_REG_INTERRUPT_DEC_BUS_INT_DIS		BIT(2) /* >= vc8000d */
++#define     G1_REG_INTERRUPT_DEC_STRM_CORRUPTED		BIT(1) /* >= vc8000d */
++#define     G1_REG_INTERRUPT_DEC_E			BIT(0) /* >= g1 */
+ #define G1_REG_CONFIG					0x008
+ #define     G1_REG_CONFIG_DEC_AXI_RD_ID(x)		(((x) & 0xff) << 24)
+ #define     G1_REG_CONFIG_DEC_TIMEOUT_E			BIT(23)
 -- 
 2.28.0
 
