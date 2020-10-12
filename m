@@ -2,93 +2,97 @@ Return-Path: <SRS0=qt09=DT=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B063C433E7
-	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 18:36:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E161C433E7
+	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 20:59:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DDE1220870
-	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 18:36:25 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="B0ndyMNN"
+	by mail.kernel.org (Postfix) with ESMTP id C96C922227
+	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 20:59:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387655AbgJLSgZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Oct 2020 14:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48694 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726636AbgJLSgZ (ORCPT
+        id S1731722AbgJLU7A (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Oct 2020 16:59:00 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:49802 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730339AbgJLU64 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Oct 2020 14:36:25 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379E5C0613D0
-        for <linux-media@vger.kernel.org>; Mon, 12 Oct 2020 11:36:25 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C3FD0A42;
-        Mon, 12 Oct 2020 20:36:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1602527784;
-        bh=D93+otkTYV0IlZcQSLlgB+vhv47saVqxtdZnP0naeEI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B0ndyMNN3lMccD/yDqjVOBEaLvL2Lrr6AK8NNiwpd9BodJZEwV3Ul01bpSLEtbZ9v
-         62/JfI34QGLaXGCs5F+D7RcSC6CXbDUrX0jW6o6g+VV7usDfPgRM+0x1JZkL+IcTQt
-         AeqNn3YtTibh8+eImkNoerTqCULO+CFimx203gf0=
-Date:   Mon, 12 Oct 2020 21:35:38 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-media@vger.kernel.org, Tsuchiya Yuto <kitakar@gmail.com>,
-        bingbu.cao@intel.com, Yong Zhi <yong.zhi@intel.com>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>
-Subject: Re: [PATCH v3 6/8] ipu3-cio2: Remove explicit type from frame size
- checks
-Message-ID: <20201012183538.GC740@pendragon.ideasonboard.com>
-References: <20201012180414.11579-1-sakari.ailus@linux.intel.com>
- <20201012180414.11579-7-sakari.ailus@linux.intel.com>
+        Mon, 12 Oct 2020 16:58:56 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: aratiu)
+        with ESMTPSA id 984B81F44C2C
+From:   Adrian Ratiu <adrian.ratiu@collabora.com>
+To:     Ezequiel Garcia <ezequiel@collabora.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Fruehberger Peter <Peter.Fruehberger@de.bosch.com>,
+        kuhanh.murugasen.krishnan@intel.com,
+        Daniel Vetter <daniel@ffwll.ch>, kernel@collabora.com,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 03/18] media: hantro: make G1_REG_SOFT_RESET Rockchip specific
+Date:   Mon, 12 Oct 2020 23:59:42 +0300
+Message-Id: <20201012205957.889185-4-adrian.ratiu@collabora.com>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20201012205957.889185-1-adrian.ratiu@collabora.com>
+References: <20201012205957.889185-1-adrian.ratiu@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201012180414.11579-7-sakari.ailus@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sakari,
+This register is not documented in either the G1 or VC8000D register
+maps and on VC8000D there is a conflict because at the same offset the
+VPU IP defines another register with a very different meaning.
 
-Thank you for the patch.
+What likely happened is the HW integrator which uses only the G1 IP
+core added some reset/control logic at the end of the VPU map, so
+it makes sense to make this register RK-specific.
 
-On Mon, Oct 12, 2020 at 09:04:12PM +0300, Sakari Ailus wrote:
-> Now that the values are unsigned, we can remove explicit cast to u32.
-> 
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Adrian Ratiu <adrian.ratiu@collabora.com>
+---
+ drivers/staging/media/hantro/hantro_g1_regs.h | 1 -
+ drivers/staging/media/hantro/rk3288_vpu_hw.c  | 4 +++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-With Andy's comment addressed,
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> ---
->  drivers/media/pci/intel/ipu3/ipu3-cio2.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-> index 87d040e176f7..e42177f8c426 100644
-> --- a/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-> +++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-> @@ -1282,9 +1282,8 @@ static int cio2_subdev_set_fmt(struct v4l2_subdev *sd,
->  		}
->  	}
->  
-> -	fmt->format.width = min_t(u32, fmt->format.width, CIO2_IMAGE_MAX_WIDTH);
-> -	fmt->format.height = min_t(u32, fmt->format.height,
-> -				   CIO2_IMAGE_MAX_LENGTH);
-> +	fmt->format.width = min(fmt->format.width, CIO2_IMAGE_MAX_WIDTH);
-> +	fmt->format.height = min(fmt->format.height, CIO2_IMAGE_MAX_LENGTH);
->  	fmt->format.field = V4L2_FIELD_NONE;
->  
->  	mutex_lock(&q->subdev_lock);
-
+diff --git a/drivers/staging/media/hantro/hantro_g1_regs.h b/drivers/staging/media/hantro/hantro_g1_regs.h
+index 073b64cbe295..a482a2ba6dfe 100644
+--- a/drivers/staging/media/hantro/hantro_g1_regs.h
++++ b/drivers/staging/media/hantro/hantro_g1_regs.h
+@@ -315,7 +315,6 @@
+ #define     G1_REG_REF_BUF_CTRL2_REFBU2_THR(x)		(((x) & 0xfff) << 19)
+ #define     G1_REG_REF_BUF_CTRL2_REFBU2_PICID(x)	(((x) & 0x1f) << 14)
+ #define     G1_REG_REF_BUF_CTRL2_APF_THRESHOLD(x)	(((x) & 0x3fff) << 0)
+-#define G1_REG_SOFT_RESET				0x194
+ 
+ /* Post-processor registers. */
+ #define G1_REG_PP_INTERRUPT		G1_SWREG(60)
+diff --git a/drivers/staging/media/hantro/rk3288_vpu_hw.c b/drivers/staging/media/hantro/rk3288_vpu_hw.c
+index 7b299ee3e93d..4ad578b1236e 100644
+--- a/drivers/staging/media/hantro/rk3288_vpu_hw.c
++++ b/drivers/staging/media/hantro/rk3288_vpu_hw.c
+@@ -13,6 +13,8 @@
+ #include "hantro_g1_regs.h"
+ #include "hantro_h1_regs.h"
+ 
++#define VDPU_REG_SOFT_RESET 0x194
++
+ #define RK3288_ACLK_MAX_FREQ (400 * 1000 * 1000)
+ 
+ /*
+@@ -167,7 +169,7 @@ static void rk3288_vpu_dec_reset(struct hantro_ctx *ctx)
+ 
+ 	vdpu_write(vpu, G1_REG_INTERRUPT_DEC_IRQ_DIS, G1_REG_INTERRUPT);
+ 	vdpu_write(vpu, G1_REG_CONFIG_DEC_CLK_GATE_E, G1_REG_CONFIG);
+-	vdpu_write(vpu, 1, G1_REG_SOFT_RESET);
++	vdpu_write(vpu, 1, VDPU_REG_SOFT_RESET);
+ }
+ 
+ /*
 -- 
-Regards,
+2.28.0
 
-Laurent Pinchart
