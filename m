@@ -2,324 +2,243 @@ Return-Path: <SRS0=qt09=DT=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4AD4C433DF
-	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 13:09:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C840C433DF
+	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 13:31:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 921FE20838
-	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 13:09:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AD7AE2076E
+	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 13:31:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388657AbgJLNJj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Oct 2020 09:09:39 -0400
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:44666 "EHLO
-        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388651AbgJLNJj (ORCPT
+        id S1726780AbgJLNbo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Oct 2020 09:31:44 -0400
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:57473 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726724AbgJLNbn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Oct 2020 09:09:39 -0400
-Received: from relay1-d.mail.gandi.net (unknown [217.70.183.193])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id 342963B2B91;
-        Mon, 12 Oct 2020 13:00:51 +0000 (UTC)
+        Mon, 12 Oct 2020 09:31:43 -0400
+X-Greylist: delayed 1871 seconds by postgrey-1.27 at vger.kernel.org; Mon, 12 Oct 2020 09:31:42 EDT
 X-Originating-IP: 93.34.118.233
 Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 38632240003;
-        Mon, 12 Oct 2020 13:00:24 +0000 (UTC)
-Date:   Mon, 12 Oct 2020 15:04:25 +0200
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 6F166E0002;
+        Mon, 12 Oct 2020 13:31:38 +0000 (UTC)
+Date:   Mon, 12 Oct 2020 15:35:38 +0200
 From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Eugen.Hristev@microchip.com
-Cc:     laurent.pinchart@ideasonboard.com, robh+dt@kernel.org,
-        sakari.ailus@iki.fi, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 1/3] dt-bindings: media: atmel: csi2dc: add bindings
- for microchip csi2dc
-Message-ID: <20201012130425.2rszhgd7eh7nffrv@uno.localdomain>
-References: <20200826065142.205000-1-eugen.hristev@microchip.com>
- <20201010211743.GB3939@pendragon.ideasonboard.com>
- <c5d27d11-891b-afd8-0be1-02bf5eb8bef9@microchip.com>
+To:     Hugues Fruchet <hugues.fruchet@st.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Alain Volmat <alain.volmat@st.com>
+Subject: Re: [PATCH] media: ov5640: fix support of BT656 bus mode
+Message-ID: <20201012133538.2k6jpn6k2py7h2ym@uno.localdomain>
+References: <1602080692-6383-1-git-send-email-hugues.fruchet@st.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <c5d27d11-891b-afd8-0be1-02bf5eb8bef9@microchip.com>
+In-Reply-To: <1602080692-6383-1-git-send-email-hugues.fruchet@st.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
-   just my 2 cents, as I've noticed this patch skimming through the
-   list
+Hi Hugues,
 
-On Mon, Oct 12, 2020 at 07:19:43AM +0000, Eugen.Hristev@microchip.com wrote:
-> On 11.10.2020 00:17, Laurent Pinchart wrote:
-> > Hi Eugen,
-> >
-> > Thank you for the patch.
->
-> Hi,
->
-> Thank you for your review,
->
-> >
-> > On Wed, Aug 26, 2020 at 09:51:40AM +0300, Eugen Hristev wrote:
-> >> Add bindings documentation for Microchip CSI2 Demultiplexer controller.
-> >>
-> >> CSI2DC is a demultiplexer from Synopsys IDI interface specification to
-> >> parallel interface connection or direct memory access.
-> >>
-> >> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-> >> ---
-> >> Changes in v3:
-> >> - Removed some text from description, as it was explained in the schema
-> >> - fixed other things as per Rob's review
-> >> - moved some text inside the schema, like the clock description
-> >>
-> >> Changes in v2:
-> >> - fixed warnings reported by dt_binding_check
-> >>
-> >>   .../bindings/media/microchip,csi2dc.yaml      | 174 ++++++++++++++++++
-> >>   1 file changed, 174 insertions(+)
-> >>   create mode 100644 Documentation/devicetree/bindings/media/microchip,csi2dc.yaml
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/media/microchip,csi2dc.yaml b/Documentation/devicetree/bindings/media/microchip,csi2dc.yaml
-> >> new file mode 100644
-> >> index 000000000000..b4c1b8800a3b
-> >> --- /dev/null
-> >> +++ b/Documentation/devicetree/bindings/media/microchip,csi2dc.yaml
-> >> @@ -0,0 +1,174 @@
-> >> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> >> +%YAML 1.2
-> >> +---
-> >> +$id: http://devicetree.org/schemas/media/microchip,csi2dc.yaml#
-> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >> +
-> >> +title: Microchip CSI2 Demux Controller (CSI2DC)
-> >> +
-> >> +maintainers:
-> >> +  - Eugen Hristev <eugen.hristev@microchip.com>
-> >> +
-> >> +description:
-> >> +  CSI2DC - Camera Serial Interface 2 Demux Controller
-> >> +
-> >> +  CSI2DC is a hardware block that receives incoming data from an IDI interface
-> >> +  and filters packets based on their data type and virtual channel identifier,
-> >> +  then converts the byte stream into a cross clock domain to a pixel stream
-> >> +  to a parallel interface that can be read by a sensor controller.
-> >> +
-> >> +  CSI2DC provides two pipes, one video pipe and one data pipe. Video pipe
-> >> +  is connected to a sensor controller and the data pipe is accessible
-> >> +  as a DMA slave port to a DMA controller.
-> >> +
-> >> +  CSI2DC supports a single 'port' node as a source pad with Synopsys 32-bit
-> >> +  IDI interface. The connected endpoint must be a IDI interface compatible
-> >> +  device (like Synopsys CSI2HOST) , that can provide 32-bit IDI interface
-> >> +  connection as sink pad.
-> >> +  For media entity and endpoints please refer to the bindings defined in
-> >> +  Documentation/devicetree/bindings/media/video-interfaces.txt.
-> >> +  For Synopsys IDI interface please refer to
-> >> +  Documentation/devicetree/bindings/media/snps,dw-csi-plat.txt
-> >> +
-> >> +  CSI2DC supports one 'port' node as sink pad with parallel interface. This is
-> >> +  called video pipe.
-> >> +  This port has an 'endpoint' can then be used as a source pad for another
-> >> +  controller (next in pipeline).
-> >> +  Please refer to the bindings defined in
-> >> +  Documentation/devicetree/bindings/media/video-interfaces.txt.
-> >> +
-> >> +  CSI2DC also supports direct access to the data through AHB, via DMA channel,
-> >> +  called data pipe.
-> >> +  Because of this, the sink 'port' child node (second) is not mandatory.
-> >> +  If the sink 'port' child node is missing, only data pipe is available.
-> >> +
-> >> +properties:
-> >> +  compatible:
-> >> +    const: microchip,sama7g5-csi2dc
-> >> +
-> >> +  reg:
-> >> +    maxItems: 1
-> >> +
-> >> +  clocks:
-> >> +    maxItems: 2
-> >> +
-> >> +  clock-names:
-> >> +    description:
-> >> +      CSI2DC must have two clocks to function correctly. One clock is the
-> >> +      peripheral clock for the inside functionality of the hardware block.
-> >> +      This is named 'pclk'. The second clock must be the cross domain clock,
-> >> +      in which CSI2DC will perform clock crossing. This clock must be fed
-> >> +      by the next controller in pipeline, which usually is a sensor controller.
-> >> +      Normally this clock should be given by this sensor controller who
-> >> +      is also a clock source. This clock is named 'scck', sensor controller clock.
-> >> +    items:
-> >> +      - const: pclk
-> >> +      - const: scck
-> >> +
-> >> +  microchip,clk-gated:
-> >> +    type: boolean
-> >> +    description:
-> >> +      If present, indicates that the clock is gated.
-> >> +      Otherwise, the clock is free-running.
-> >
-> > I don't think this belongs to the DT bindings, it should instead be
-> > queried from the source subdev at runtime.
->
-> If this should be queried, do you know what is the v4l2 mechanism to
-> query such information ?
-> The subdevice is connected through a port interface to this device, so
-> it was natural for me to fully describe the interface in the devicetree
-> port description
->
+On Wed, Oct 07, 2020 at 04:24:52PM +0200, Hugues Fruchet wrote:
+> fixes: 4039b03720f7 ("media: i2c: ov5640: Add support for BT656 mode")
 
-Is this property describing the CSI-2 clock continuous, non-continuous
-mode configuration, or did I mis-interpreted it ?
-
-We added support for retrieving run-time configuration of the media
-bus with the get_mbus_config pad operations recently. Among the
-configuration flags for MBUS_CSI2_DPHY there are inded CONTINUOUS and
-NON_CONTINUOUS clock flags.
-
-> >
-> >> +
-> >> +  microchip,inter-line-delay:
-> >> +    allOf:
-> >> +    - $ref: /schemas/types.yaml#/definitions/uint32
-> >> +    - minimum: 1
-> >> +    - maximum: 16
-> >> +    default: 16
-> >> +    description:
-> >> +      Indicates how many clock cycles should be introduced between each line.
-> >
-> > This also sounds like a configuration parameter. How does one compute
-> > the right value for this ?
->
-> I think this is a delay that can be added inside the hardware block,
-> depending on the interface speed and bandwidth. I will try to understand
-> more details from the hardware design and come back with a more detailed
-> answer.
->
-> >
-> >> +
-> >> +  port@0:
-> >> +    type: object
-> >> +    description:
-> >> +      Input port node, single endpoint describing the input pad.
-> >> +
-> >> +    properties:
-> >> +      reg:
-> >> +        const: 0
-> >> +
-> >> +      endpoint:
-> >> +        type: object
-> >> +
-> >> +        properties:
-> >> +          remote-endpoint: true
-> >> +
-> >> +        required:
-> >> +          - remote-endpoint
-> >> +
-> >> +        additionalProperties: false
-> >> +
-> >> +    additionalProperties: false
-> >> +
-> >> +  port@1:
-> >> +    type: object
-> >> +    description:
-> >> +      Output port node, single endpoint, describing the output pad.
-> >> +
-> >> +    properties:
-> >> +      '#address-cells':
-> >> +        const: 1
-> >> +
-> >> +      '#size-cells':
-> >> +        const: 0
-> >> +
-> >> +      reg:
-> >> +        const: 1
-> >> +
-> >> +    patternProperties:
-> >> +      "^endpoint@[0-3]$":
-> >> +        type: object
-> >> +
-> >> +        properties:
-> >> +          reg:
-> >> +            enum: [0, 1, 2, 3]
-> >> +            description: virtual channel for the endpoint
-> >
-> > The virtual channel used by the source is also something that needs to
-> > be queried from the source at runtime, it doesn't belong to this
-> > binding.
->
-> The same question as for the gated clock configuration. How can we use
-> v4l2 subdevice API to obtain such information from the subdevice? And if
-> the subdevice does not offer such information ?
-
-I think the subdev driver should be instrumented to report it instead of
-hard-coding the information in DT which should be otherwise updated
-depending on which sensor is connected to the board. Does it make
-sense to you ?
-
-Cheers
-   j
+As per the comment from Sakari in another patch, 'Fixes' (capital 'F')
+usually comes before Signed-off/Reviewed-by tags
 
 >
-> Thanks again,
+> Fix PCLK polarity not being taken into account.
+> Fix ov5640_write_reg()return value unchecked at power off.
+
+Am I wrong or you broke out this part to a separate patch ?
+As commented there, I don't think it's a good idea.
+
+Are you planning to send a v2 of this patch ?
+
+Thanks
+  j
+
+> Reformat code to keep register access below the register description.
+> Remove useless ov5640_set_stream_bt656() function.
 >
-> Eugen
-> >
-> >> +
-> >> +          remote-endpoint: true
-> >> +
-> >> +        required:
-> >> +          - remote-endpoint
-> >> +          - reg
-> >> +
-> >> +        additionalProperties: false
-> >> +
-> >> +    additionalProperties: false
-> >> +
-> >> +required:
-> >> +  - compatible
-> >> +  - reg
-> >> +  - clocks
-> >> +  - clock-names
-> >> +  - port@0
-> >> +
-> >> +examples:
-> >> +  - |
-> >> +    csi2dc@e1404000 {
-> >> +        compatible = "microchip,sama7g5-csi2dc";
-> >> +        #address-cells = <1>;
-> >> +        #size-cells = <0>;
-> >> +        reg = <0xe1404000 0x500>;
-> >> +        clocks = <&pclk>, <&scck>;
-> >> +        clock-names = "pclk", "scck";
-> >> +
-> >> +        port@0 {
-> >> +               reg = <0>; /* must be 0, first child port */
-> >> +               csi2dc_in: endpoint { /* input from IDI interface */
-> >> +                     remote-endpoint = <&csi2host_out>;
-> >> +               };
-> >> +        };
-> >> +
-> >> +        port@1 {
-> >> +                #address-cells = <1>;
-> >> +                #size-cells = <0>;
-> >> +                reg = <1>; /* must be 1, second child port */
-> >> +                csi2dc_out: endpoint@2 {
-> >> +                        reg = <2>;  /* virtual channel identifier */
-> >> +                        remote-endpoint = <&xisc_in>; /* output to sensor controller */
-> >> +                };
-> >> +        };
-> >> +    };
-> >> +
-> >> +...
-> >
-> > --
-> > Regards,
-> >
-> > Laurent Pinchart
-> >
+> Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
+> ---
+>  drivers/media/i2c/ov5640.c | 95 +++++++++++++++++++++++++---------------------
+>  1 file changed, 51 insertions(+), 44 deletions(-)
+>
+> diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+> index 8d0254d..1b20db7 100644
+> --- a/drivers/media/i2c/ov5640.c
+> +++ b/drivers/media/i2c/ov5640.c
+> @@ -1216,20 +1216,6 @@ static int ov5640_set_autogain(struct ov5640_dev *sensor, bool on)
+>  			      BIT(1), on ? 0 : BIT(1));
+>  }
+>
+> -static int ov5640_set_stream_bt656(struct ov5640_dev *sensor, bool on)
+> -{
+> -	int ret;
+> -
+> -	ret = ov5640_write_reg(sensor, OV5640_REG_CCIR656_CTRL00,
+> -			       on ? 0x1 : 0x00);
+> -	if (ret)
+> -		return ret;
+> -
+> -	return ov5640_write_reg(sensor, OV5640_REG_SYS_CTRL0, on ?
+> -				OV5640_REG_SYS_CTRL0_SW_PWUP :
+> -				OV5640_REG_SYS_CTRL0_SW_PWDN);
+> -}
+> -
+>  static int ov5640_set_stream_dvp(struct ov5640_dev *sensor, bool on)
+>  {
+>  	return ov5640_write_reg(sensor, OV5640_REG_SYS_CTRL0, on ?
+> @@ -1994,20 +1980,12 @@ static int ov5640_set_power_mipi(struct ov5640_dev *sensor, bool on)
+>  static int ov5640_set_power_dvp(struct ov5640_dev *sensor, bool on)
+>  {
+>  	unsigned int flags = sensor->ep.bus.parallel.flags;
+> +	bool bt656 = sensor->ep.bus_type == V4L2_MBUS_BT656;
+>  	u8 pclk_pol = 0;
+>  	u8 hsync_pol = 0;
+>  	u8 vsync_pol = 0;
+>  	int ret;
+>
+> -	if (!on) {
+> -		/* Reset settings to their default values. */
+> -		ov5640_write_reg(sensor, OV5640_REG_IO_MIPI_CTRL00, 0x58);
+> -		ov5640_write_reg(sensor, OV5640_REG_POLARITY_CTRL00, 0x20);
+> -		ov5640_write_reg(sensor, OV5640_REG_PAD_OUTPUT_ENABLE01, 0x00);
+> -		ov5640_write_reg(sensor, OV5640_REG_PAD_OUTPUT_ENABLE02, 0x00);
+> -		return 0;
+> -	}
+> -
+>  	/*
+>  	 * Note about parallel port configuration.
+>  	 *
+> @@ -2024,27 +2002,57 @@ static int ov5640_set_power_dvp(struct ov5640_dev *sensor, bool on)
+>  	 * - VSYNC:	active high
+>  	 * - HREF:	active low
+>  	 * - PCLK:	active low
+> +	 *
+> +	 * VSYNC & HREF are not configured if BT656 bus mode is selected
+>  	 */
+> +
+>  	/*
+> -	 * configure parallel port control lines polarity
+> +	 * BT656 embedded synchronization configuration
+> +	 *
+> +	 * CCIR656 CTRL00
+> +	 * - [7]:	SYNC code selection (0: auto generate sync code,
+> +	 *		1: sync code from regs 0x4732-0x4735)
+> +	 * - [6]:	f value in CCIR656 SYNC code when fixed f value
+> +	 * - [5]:	Fixed f value
+> +	 * - [4:3]:	Blank toggle data options (00: data=1'h040/1'h200,
+> +	 *		01: data from regs 0x4736-0x4738, 10: always keep 0)
+> +	 * - [1]:	Clip data disable
+> +	 * - [0]:	CCIR656 mode enable
+>  	 *
+> -	 * POLARITY CTRL0
+> -	 * - [5]:	PCLK polarity (0: active low, 1: active high)
+> -	 * - [1]:	HREF polarity (0: active low, 1: active high)
+> -	 * - [0]:	VSYNC polarity (mismatch here between
+> -	 *		datasheet and hardware, 0 is active high
+> -	 *		and 1 is active low...)
+> +	 * Default CCIR656 SAV/EAV mode with default codes
+> +	 * SAV=0xff000080 & EAV=0xff00009d is enabled here with settings:
+> +	 * - CCIR656 mode enable
+> +	 * - auto generation of sync codes
+> +	 * - blank toggle data 1'h040/1'h200
+> +	 * - clip reserved data (0x00 & 0xff changed to 0x01 & 0xfe)
+>  	 */
+> -	if (sensor->ep.bus_type == V4L2_MBUS_PARALLEL) {
+> +	ret = ov5640_write_reg(sensor, OV5640_REG_CCIR656_CTRL00,
+> +			       on && bt656 ? 0x01 : 0x00);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (on) {
+> +		/*
+> +		 * configure parallel port control lines polarity
+> +		 *
+> +		 * POLARITY CTRL0
+> +		 * - [5]:	PCLK polarity (0: active low, 1: active high)
+> +		 * - [1]:	HREF polarity (0: active low, 1: active high)
+> +		 * - [0]:	VSYNC polarity (mismatch here between
+> +		 *		datasheet and hardware, 0 is active high
+> +		 *		and 1 is active low...)
+> +		 */
+>  		if (flags & V4L2_MBUS_PCLK_SAMPLE_RISING)
+>  			pclk_pol = 1;
+> -		if (flags & V4L2_MBUS_HSYNC_ACTIVE_HIGH)
+> +		if (!bt656 && flags & V4L2_MBUS_HSYNC_ACTIVE_HIGH)
+>  			hsync_pol = 1;
+> -		if (flags & V4L2_MBUS_VSYNC_ACTIVE_LOW)
+> +		if (!bt656 && flags & V4L2_MBUS_VSYNC_ACTIVE_LOW)
+>  			vsync_pol = 1;
+>
+> -		ret = ov5640_write_reg(sensor, OV5640_REG_POLARITY_CTRL00,
+> -				       (pclk_pol << 5) | (hsync_pol << 1) |
+> +		ret = ov5640_write_reg(sensor,
+> +				       OV5640_REG_POLARITY_CTRL00,
+> +				       (pclk_pol << 5) |
+> +				       (hsync_pol << 1) |
+>  				       vsync_pol);
+>
+>  		if (ret)
+> @@ -2052,12 +2060,12 @@ static int ov5640_set_power_dvp(struct ov5640_dev *sensor, bool on)
+>  	}
+>
+>  	/*
+> -	 * powerdown MIPI TX/RX PHY & disable MIPI
+> +	 * powerdown MIPI TX/RX PHY & enable DVP
+>  	 *
+>  	 * MIPI CONTROL 00
+> -	 * 4:	 PWDN PHY TX
+> -	 * 3:	 PWDN PHY RX
+> -	 * 2:	 MIPI enable
+> +	 * [4] = 1	: Power down MIPI HS Tx
+> +	 * [3] = 1	: Power down MIPI LS Rx
+> +	 * [2] = 0	: DVP enable (MIPI disable)
+>  	 */
+>  	ret = ov5640_write_reg(sensor, OV5640_REG_IO_MIPI_CTRL00, 0x18);
+>  	if (ret)
+> @@ -2074,8 +2082,7 @@ static int ov5640_set_power_dvp(struct ov5640_dev *sensor, bool on)
+>  	 * - [3:0]:	D[9:6] output enable
+>  	 */
+>  	ret = ov5640_write_reg(sensor, OV5640_REG_PAD_OUTPUT_ENABLE01,
+> -			       sensor->ep.bus_type == V4L2_MBUS_PARALLEL ?
+> -			       0x7f : 0x1f);
+> +			       on ? (bt656 ? 0x1f : 0x7f) : 0x00);
+>  	if (ret)
+>  		return ret;
+>
+> @@ -2085,7 +2092,9 @@ static int ov5640_set_power_dvp(struct ov5640_dev *sensor, bool on)
+>  	 * PAD OUTPUT ENABLE 02
+>  	 * - [7:2]:	D[5:0] output enable
+>  	 */
+> -	return ov5640_write_reg(sensor, OV5640_REG_PAD_OUTPUT_ENABLE02, 0xfc);
+> +	return ov5640_write_reg(sensor,
+> +				OV5640_REG_PAD_OUTPUT_ENABLE02,
+> +				on ? 0xfc : 0);
+>  }
+>
+>  static int ov5640_set_power(struct ov5640_dev *sensor, bool on)
+> @@ -2925,8 +2934,6 @@ static int ov5640_s_stream(struct v4l2_subdev *sd, int enable)
+>
+>  		if (sensor->ep.bus_type == V4L2_MBUS_CSI2_DPHY)
+>  			ret = ov5640_set_stream_mipi(sensor, enable);
+> -		else if (sensor->ep.bus_type == V4L2_MBUS_BT656)
+> -			ret = ov5640_set_stream_bt656(sensor, enable);
+>  		else
+>  			ret = ov5640_set_stream_dvp(sensor, enable);
+>
+> --
+> 2.7.4
 >
