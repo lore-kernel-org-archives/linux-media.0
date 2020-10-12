@@ -2,122 +2,135 @@ Return-Path: <SRS0=qt09=DT=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0389C43457
-	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 17:58:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30302C433DF
+	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 18:04:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 980FD20797
-	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 17:58:01 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="khQzpyDe"
+	by mail.kernel.org (Postfix) with ESMTP id 001F22076D
+	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 18:04:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403943AbgJLR56 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Oct 2020 13:57:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42726 "EHLO
+        id S2404166AbgJLSEe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Oct 2020 14:04:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389885AbgJLR56 (ORCPT
+        with ESMTP id S2404156AbgJLSEa (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Oct 2020 13:57:58 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF14C0613D0;
-        Mon, 12 Oct 2020 10:57:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=cZw4jayN3HAr2KMB9YTkmcSf5Sy+pt/3xMbdYKhhmXk=; b=khQzpyDeKla36P5IttD3Sh6t/T
-        IWz0Ju5rITG17faaDRhAMVCL/re6DGaVfUD8rSCdezrYmSxQHHMEn7ng8iUCL8nzbxL7v4+IiOebZ
-        3J3mupjtOiqBHkBY1qu+lXdaTS44FHjdUzvfEAoY4YCLjCwSDxHzK6goj/DquZ3T3jAZu05Ud60M3
-        klQPzj1vvhDNnK9ZsZQWJKixFvWX2vl9G8+dGCRJ//CkeYAxaRTGjNk3iPD1YtNtpUwYPMoCAGaL5
-        H0Yv//MA2CUfLNNo4uNMXreNMPBx7nGhMiwOW9xpiVzihCvi/2Yavn0ZEzcYl4gJYdVqGVJDQelph
-        FFuelRoQ==;
-Received: from [2601:1c0:6280:3f0::507c]
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kS252-0000ia-UZ; Mon, 12 Oct 2020 17:57:54 +0000
-Subject: Re: [PATCH v3 2/2] media: mtk-vcodec: fix build breakage when one of
- VPU or SCP is enabled
-To:     Alexandre Courbot <acourbot@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, gnurou@gmail.com
-References: <20201012053557.4102148-1-acourbot@chromium.org>
- <20201012053557.4102148-3-acourbot@chromium.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <b333d437-02a0-6d2f-67fc-e798a0a562ff@infradead.org>
-Date:   Mon, 12 Oct 2020 10:57:49 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        Mon, 12 Oct 2020 14:04:30 -0400
+Received: from hillosipuli.retiisi.eu (hillosipuli.retiisi.eu [IPv6:2a01:4f9:c010:4572::81:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C50C0613D0
+        for <linux-media@vger.kernel.org>; Mon, 12 Oct 2020 11:04:30 -0700 (PDT)
+Received: from lanttu.localdomain (unknown [IPv6:2a01:4f9:c010:4572::e1:1002])
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 0B99E634C8C;
+        Mon, 12 Oct 2020 21:03:22 +0300 (EEST)
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     Tsuchiya Yuto <kitakar@gmail.com>, bingbu.cao@intel.com,
+        Yong Zhi <yong.zhi@intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        laurent.pinchart@ideasonboard.com
+Subject: [PATCH v3 2/8] ipu3-cio2: Serialise access to pad format
+Date:   Mon, 12 Oct 2020 21:04:08 +0300
+Message-Id: <20201012180414.11579-3-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20201012180414.11579-1-sakari.ailus@linux.intel.com>
+References: <20201012180414.11579-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20201012053557.4102148-3-acourbot@chromium.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Pad format can be accessed from user space. Serialise access to it.
 
-For the Kconfig entries, specifically the help text:
+Fixes: c2a6a07afe4a ("media: intel-ipu3: cio2: add new MIPI-CSI2 driver")
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Bingbu Cao <bingbu.cao@intel.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: stable@vger.kernel.org # v4.16 and up
+---
+ drivers/media/pci/intel/ipu3/ipu3-cio2.c | 11 +++++++++++
+ drivers/media/pci/intel/ipu3/ipu3-cio2.h |  1 +
+ 2 files changed, 12 insertions(+)
 
-
-On 10/11/20 10:35 PM, Alexandre Courbot wrote:
-> ---
->  drivers/media/platform/Kconfig                | 22 +++++++++++++++----
->  drivers/media/platform/mtk-vcodec/Makefile    | 10 +++++++--
->  .../platform/mtk-vcodec/mtk_vcodec_fw_priv.h  | 18 +++++++++++++++
->  3 files changed, 44 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-> index a3cb104956d5..457b6c39ddc0 100644
-> --- a/drivers/media/platform/Kconfig
-> +++ b/drivers/media/platform/Kconfig
-> @@ -253,18 +253,32 @@ config VIDEO_MEDIATEK_VCODEC
->  	depends on MTK_IOMMU || COMPILE_TEST
->  	depends on VIDEO_DEV && VIDEO_V4L2
->  	depends on ARCH_MEDIATEK || COMPILE_TEST
-> +	depends on VIDEO_MEDIATEK_VPU || MTK_SCP
-> +	# The two following lines ensure we have the same state ("m" or "y") as
-> +	# our dependencies, to avoid missing symbols during link.
-> +	depends on VIDEO_MEDIATEK_VPU || !VIDEO_MEDIATEK_VPU
-> +	depends on MTK_SCP || !MTK_SCP
->  	select VIDEOBUF2_DMA_CONTIG
->  	select V4L2_MEM2MEM_DEV
-> -	select VIDEO_MEDIATEK_VPU
-> -	select MTK_SCP
-> +	select VIDEO_MEDIATEK_VCODEC_VPU if VIDEO_MEDIATEK_VPU
-> +	select VIDEO_MEDIATEK_VCODEC_SCP if MTK_SCP
->  	help
->  	    Mediatek video codec driver provides HW capability to
-> -	    encode and decode in a range of video formats
-> -	    This driver rely on VPU driver to communicate with VPU.
-> +	    encode and decode in a range of video formats on MT8173
-> +	    and MT8183.
-> +
-> +	    Note that support for MT8173 requires VIDEO_MEDIATEK_VPU to
-> +	    also be selected. Support for MT8183 depends on MTK_SCP.
->  
->  	    To compile this driver as modules, choose M here: the
->  	    modules will be called mtk-vcodec-dec and mtk-vcodec-enc.
-
-Please follow coding-style for Kconfig files:
-
-from Documentation/process/coding-style.rst, section 10):
-
-For all of the Kconfig* configuration files throughout the source tree,
-the indentation is somewhat different.  Lines under a ``config`` definition
-are indented with one tab, while help text is indented an additional two
-spaces.
-
-
-thanks.
+diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
+index afa472026ba4..b3a08196e08c 100644
+--- a/drivers/media/pci/intel/ipu3/ipu3-cio2.c
++++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
+@@ -1233,11 +1233,15 @@ static int cio2_subdev_get_fmt(struct v4l2_subdev *sd,
+ {
+ 	struct cio2_queue *q = container_of(sd, struct cio2_queue, subdev);
+ 
++	mutex_lock(&q->subdev_lock);
++
+ 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
+ 		fmt->format = *v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
+ 	else
+ 		fmt->format = q->subdev_fmt;
+ 
++	mutex_unlock(&q->subdev_lock);
++
+ 	return 0;
+ }
+ 
+@@ -1261,6 +1265,8 @@ static int cio2_subdev_set_fmt(struct v4l2_subdev *sd,
+ 	if (fmt->pad == CIO2_PAD_SOURCE)
+ 		return cio2_subdev_get_fmt(sd, cfg, fmt);
+ 
++	mutex_lock(&q->subdev_lock);
++
+ 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
+ 		*v4l2_subdev_get_try_format(sd, cfg, fmt->pad) = fmt->format;
+ 	} else {
+@@ -1271,6 +1277,8 @@ static int cio2_subdev_set_fmt(struct v4l2_subdev *sd,
+ 		fmt->format = q->subdev_fmt;
+ 	}
+ 
++	mutex_unlock(&q->subdev_lock);
++
+ 	return 0;
+ }
+ 
+@@ -1529,6 +1537,7 @@ static int cio2_queue_init(struct cio2_device *cio2, struct cio2_queue *q)
+ 
+ 	/* Initialize miscellaneous variables */
+ 	mutex_init(&q->lock);
++	mutex_init(&q->subdev_lock);
+ 
+ 	/* Initialize formats to default values */
+ 	fmt = &q->subdev_fmt;
+@@ -1645,6 +1654,7 @@ static int cio2_queue_init(struct cio2_device *cio2, struct cio2_queue *q)
+ fail_subdev_media_entity:
+ 	cio2_fbpt_exit(q, &cio2->pci_dev->dev);
+ fail_fbpt:
++	mutex_destroy(&q->subdev_lock);
+ 	mutex_destroy(&q->lock);
+ 
+ 	return r;
+@@ -1657,6 +1667,7 @@ static void cio2_queue_exit(struct cio2_device *cio2, struct cio2_queue *q)
+ 	v4l2_device_unregister_subdev(&q->subdev);
+ 	media_entity_cleanup(&q->subdev.entity);
+ 	cio2_fbpt_exit(q, &cio2->pci_dev->dev);
++	mutex_destroy(&q->subdev_lock);
+ 	mutex_destroy(&q->lock);
+ }
+ 
+diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.h b/drivers/media/pci/intel/ipu3/ipu3-cio2.h
+index 549b08f88f0c..146492383aa5 100644
+--- a/drivers/media/pci/intel/ipu3/ipu3-cio2.h
++++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.h
+@@ -335,6 +335,7 @@ struct cio2_queue {
+ 
+ 	/* Subdev, /dev/v4l-subdevX */
+ 	struct v4l2_subdev subdev;
++	struct mutex subdev_lock; /* Serialise acces to subdev_fmt field */
+ 	struct media_pad subdev_pads[CIO2_PADS];
+ 	struct v4l2_mbus_framefmt subdev_fmt;
+ 	atomic_t frame_sequence;
 -- 
-~Randy
+2.27.0
 
