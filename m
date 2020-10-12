@@ -2,134 +2,90 @@ Return-Path: <SRS0=qt09=DT=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1E38C433E7
-	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 15:32:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B1C5C43457
+	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 15:34:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8A828208D5
-	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 15:32:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 178662087E
+	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 15:34:06 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ZsQM1e84"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389450AbgJLPcM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Oct 2020 11:32:12 -0400
-Received: from relay10.mail.gandi.net ([217.70.178.230]:55289 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389340AbgJLPcL (ORCPT
+        id S2390058AbgJLPeD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Oct 2020 11:34:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388881AbgJLPeD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Oct 2020 11:32:11 -0400
-X-Greylist: delayed 4107 seconds by postgrey-1.27 at vger.kernel.org; Mon, 12 Oct 2020 11:32:11 EDT
-Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 5C4A5240002;
-        Mon, 12 Oct 2020 15:32:08 +0000 (UTC)
-Date:   Mon, 12 Oct 2020 17:36:08 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Hugues Fruchet <hugues.fruchet@st.com>
-Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mon, 12 Oct 2020 11:34:03 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC686C0613D0;
+        Mon, 12 Oct 2020 08:34:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=b14no4l2W0cwTYuxAXqjsdbPmsvyURsrR0Rs82reQUE=; b=ZsQM1e848ya6X2CPTTVAHDqzs+
+        lPEBbvqqKt4/EbYEvcF/nWMj5gogkdSRLhqwlzkNj+rwjq7AzqoRfWEDq+0g9awZb0TuVABt/pmK3
+        iWHNGRwopkdBNabq7Z2XYASPvQntq9wZyAINv5+kKG6ni6CxsAxodcf9NgxSKPkAgtPIB5zfEyJJQ
+        lh2q+fxnQ8iGZqQXHRZRaaU8P+QvpelfliYjG7Vw/Sb55Zh7yOEx/pmQLD2/Ct1zIlhyAGbtFgFpQ
+        Qh0Zw89Q6d7f8UlqAP/uCWZzcxww90hItVLbDoGSe3fgxLgGCbUCwSigGNLdhrSOjqnYCccJi569t
+        SjdEjDNw==;
+Received: from [2601:1c0:6280:3f0::507c]
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kRzpk-0008Ff-Gv; Mon, 12 Oct 2020 15:33:57 +0000
+Subject: Re: linux-next: Tree for Oct 12 (drivers/staging/media/atomisp/)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Alain Volmat <alain.volmat@st.com>
-Subject: Re: [PATCH v3] media: ov5640: add support of 160x120 resolution
-Message-ID: <20201012153608.mex6m7qmjv7vy4s5@uno.localdomain>
-References: <1602145756-4354-1-git-send-email-hugues.fruchet@st.com>
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+References: <20201012205906.51237c67@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <e9339988-4ff0-ddf6-9a52-09863ca66963@infradead.org>
+Date:   Mon, 12 Oct 2020 08:33:53 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
+In-Reply-To: <20201012205906.51237c67@canb.auug.org.au>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1602145756-4354-1-git-send-email-hugues.fruchet@st.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hugues,
+On 10/12/20 2:59 AM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20201009:
+> 
 
-On Thu, Oct 08, 2020 at 10:29:16AM +0200, Hugues Fruchet wrote:
-> Add support of 160x120 resolution.
->
-> Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
 
-Looks good, the new mode works for me on a CSI-2 2 lanes setup
+on x86_64:
 
-Tested-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+In file included from ../drivers/staging/media/atomisp//pci/ia_css_control.h:25:0,
+                 from ../drivers/staging/media/atomisp//pci/ia_css.h:28,
+                 from ../drivers/staging/media/atomisp//pci/atomisp_compat_css20.h:24,
+                 from ../drivers/staging/media/atomisp//pci/atomisp_compat.h:22,
+                 from ../drivers/staging/media/atomisp/pci/mmu/sh_mmu_mrfld.c:23:
+../drivers/staging/media/atomisp//pci/ia_css_firmware.h:52:29: warning: ‘struct device’ declared inside parameter list will not be visible outside of this definition or declaration
+ ia_css_load_firmware(struct device *dev, const struct ia_css_env *env,
+                             ^~~~~~
+In file included from ../drivers/staging/media/atomisp//pci/ia_css.h:28:0,
+                 from ../drivers/staging/media/atomisp//pci/atomisp_compat_css20.h:24,
+                 from ../drivers/staging/media/atomisp//pci/atomisp_compat.h:22,
+                 from ../drivers/staging/media/atomisp/pci/mmu/sh_mmu_mrfld.c:23:
+../drivers/staging/media/atomisp//pci/ia_css_control.h:49:24: warning: ‘struct device’ declared inside parameter list will not be visible outside of this definition or declaration
+ int ia_css_init(struct device           *dev,
+                        ^~~~~~
 
-> ---
-> version 3:
->   - fix wrong array affectation
->
-> version 2:
->   - fix missing max framerate
->
->  drivers/media/i2c/ov5640.c | 26 +++++++++++++++++++++++++-
->  1 file changed, 25 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-> index 8d0254d..40d6983 100644
-> --- a/drivers/media/i2c/ov5640.c
-> +++ b/drivers/media/i2c/ov5640.c
-> @@ -98,7 +98,8 @@
->  #define OV5640_REG_AVG_READOUT		0x56a1
->
->  enum ov5640_mode_id {
-> -	OV5640_MODE_QCIF_176_144 = 0,
-> +	OV5640_MODE_QQVGA_160_120 = 0,
-> +	OV5640_MODE_QCIF_176_144,
->  	OV5640_MODE_QVGA_320_240,
->  	OV5640_MODE_VGA_640_480,
->  	OV5640_MODE_NTSC_720_480,
-> @@ -416,6 +417,24 @@ static const struct reg_value ov5640_setting_QVGA_320_240[] = {
->  	{0x3824, 0x02, 0, 0}, {0x5001, 0xa3, 0, 0},
->  };
->
-> +static const struct reg_value ov5640_setting_QQVGA_160_120[] = {
-> +	{0x3c07, 0x08, 0, 0},
-> +	{0x3c09, 0x1c, 0, 0}, {0x3c0a, 0x9c, 0, 0}, {0x3c0b, 0x40, 0, 0},
-> +	{0x3814, 0x31, 0, 0},
-> +	{0x3815, 0x31, 0, 0}, {0x3800, 0x00, 0, 0}, {0x3801, 0x00, 0, 0},
-> +	{0x3802, 0x00, 0, 0}, {0x3803, 0x04, 0, 0}, {0x3804, 0x0a, 0, 0},
-> +	{0x3805, 0x3f, 0, 0}, {0x3806, 0x07, 0, 0}, {0x3807, 0x9b, 0, 0},
-> +	{0x3810, 0x00, 0, 0},
-> +	{0x3811, 0x10, 0, 0}, {0x3812, 0x00, 0, 0}, {0x3813, 0x06, 0, 0},
-> +	{0x3618, 0x00, 0, 0}, {0x3612, 0x29, 0, 0}, {0x3708, 0x64, 0, 0},
-> +	{0x3709, 0x52, 0, 0}, {0x370c, 0x03, 0, 0}, {0x3a02, 0x03, 0, 0},
-> +	{0x3a03, 0xd8, 0, 0}, {0x3a08, 0x01, 0, 0}, {0x3a09, 0x27, 0, 0},
-> +	{0x3a0a, 0x00, 0, 0}, {0x3a0b, 0xf6, 0, 0}, {0x3a0e, 0x03, 0, 0},
-> +	{0x3a0d, 0x04, 0, 0}, {0x3a14, 0x03, 0, 0}, {0x3a15, 0xd8, 0, 0},
-> +	{0x4001, 0x02, 0, 0}, {0x4004, 0x02, 0, 0},
-> +	{0x4407, 0x04, 0, 0}, {0x5001, 0xa3, 0, 0},
-> +};
-> +
->  static const struct reg_value ov5640_setting_QCIF_176_144[] = {
->  	{0x3c07, 0x08, 0, 0},
->  	{0x3c09, 0x1c, 0, 0}, {0x3c0a, 0x9c, 0, 0}, {0x3c0b, 0x40, 0, 0},
-> @@ -552,6 +571,11 @@ static const struct ov5640_mode_info ov5640_mode_init_data = {
->
->  static const struct ov5640_mode_info
->  ov5640_mode_data[OV5640_NUM_MODES] = {
-> +	{OV5640_MODE_QQVGA_160_120, SUBSAMPLING,
-> +	 160, 1896, 120, 984,
 
-These values do not match what's actually applied on the sensor, but
-this is not only related to this patch.
-
-See ff66ea3a-bd2e-9bd6-894c-bf372de69a31@ti.com
-I should try to re-submit Tomi's patch and the on-top clock rework.
-
-You have a CSI-2 setup too, right ?
-
-Thanks
-  j
-
-> +	 ov5640_setting_QQVGA_160_120,
-> +	 ARRAY_SIZE(ov5640_setting_QQVGA_160_120),
-> +	 OV5640_30_FPS},
->  	{OV5640_MODE_QCIF_176_144, SUBSAMPLING,
->  	 176, 1896, 144, 984,
->  	 ov5640_setting_QCIF_176_144,
-> --
-> 2.7.4
->
+-- 
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
