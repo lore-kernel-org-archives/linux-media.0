@@ -2,30 +2,26 @@ Return-Path: <SRS0=qt09=DT=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BCA1C433E7
-	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 21:00:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB2E0C433E7
+	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 21:00:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 044F820797
-	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 21:00:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 75D7E208D5
+	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 21:00:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732012AbgJLVAE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Oct 2020 17:00:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42854 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731693AbgJLU66 (ORCPT
+        id S1730730AbgJLU6z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Oct 2020 16:58:55 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:49752 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727340AbgJLU6z (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Oct 2020 16:58:58 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85667C0613D2;
-        Mon, 12 Oct 2020 13:58:58 -0700 (PDT)
+        Mon, 12 Oct 2020 16:58:55 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: aratiu)
-        with ESMTPSA id 046F91F44C3A
+        with ESMTPSA id C2D091F40F09
 From:   Adrian Ratiu <adrian.ratiu@collabora.com>
 To:     Ezequiel Garcia <ezequiel@collabora.com>,
         Philipp Zabel <p.zabel@pengutronix.de>
@@ -36,165 +32,96 @@ Cc:     Mark Brown <broonie@kernel.org>,
         Daniel Vetter <daniel@ffwll.ch>, kernel@collabora.com,
         linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 07/18] regmap: mmio: add config option to allow relaxed MMIO accesses
-Date:   Mon, 12 Oct 2020 23:59:46 +0300
-Message-Id: <20201012205957.889185-8-adrian.ratiu@collabora.com>
+Subject: [PATCH 00/18] Add Hantro regmap and VC8000 h264 decode support
+Date:   Mon, 12 Oct 2020 23:59:39 +0300
+Message-Id: <20201012205957.889185-1-adrian.ratiu@collabora.com>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201012205957.889185-1-adrian.ratiu@collabora.com>
-References: <20201012205957.889185-1-adrian.ratiu@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On some platforms (eg armv7 due to the CONFIG_ARM_DMA_MEM_BUFFERABLE)
-MMIO R/W operations always add memory barriers which can increase load,
-decrease battery life or in general reduce performance unnecessarily
-on devices which access a lot of configuration registers and where
-ordering does not matter (eg. media accelerators like the Verisilicon /
-Hantro video decoders).
+Dear all,
 
-Drivers used to call the relaxed MMIO variants directly but since they
-are now accessing the MMIO registers via regmaps (to compensate for
-for different VPU HW reg layouts via regmap fields), there is a need
-for a relaxed API / config to preserve their existing behaviour.
+This series introduces a regmap infrastructure for the Hantro driver
+which is used to compensate for different HW-revision register layouts.
+To justify it h264 decoding capability is added for newer VC8000 chips.
 
-Signed-off-by: Adrian Ratiu <adrian.ratiu@collabora.com>
----
- drivers/base/regmap/regmap-mmio.c | 34 +++++++++++++++++++++++++++----
- include/linux/regmap.h            |  5 +++++
- 2 files changed, 35 insertions(+), 4 deletions(-)
+This is a gradual conversion to the new infra - a complete conversion
+would have been very big and I do not have all the HW yet to test (I'm
+expecting a RK3399 shipment next week though ;). I think converting the
+h264 decoder provides a nice blueprint for how the other codecs can be
+converted and enabled for different HW revisions.
 
-diff --git a/drivers/base/regmap/regmap-mmio.c b/drivers/base/regmap/regmap-mmio.c
-index af967d8f975e..21193ef2a923 100644
---- a/drivers/base/regmap/regmap-mmio.c
-+++ b/drivers/base/regmap/regmap-mmio.c
-@@ -16,6 +16,7 @@
- struct regmap_mmio_context {
- 	void __iomem *regs;
- 	unsigned val_bytes;
-+	bool relaxed_mmio;
- 
- 	bool attached_clk;
- 	struct clk *clk;
-@@ -72,14 +73,20 @@ static void regmap_mmio_write8(struct regmap_mmio_context *ctx,
- 				unsigned int reg,
- 				unsigned int val)
- {
--	writeb(val, ctx->regs + reg);
-+	if (ctx->relaxed_mmio)
-+		writeb_relaxed(val, ctx->regs + reg);
-+	else
-+		writeb(val, ctx->regs + reg);
- }
- 
- static void regmap_mmio_write16le(struct regmap_mmio_context *ctx,
- 				  unsigned int reg,
- 				  unsigned int val)
- {
--	writew(val, ctx->regs + reg);
-+	if (ctx->relaxed_mmio)
-+		writew_relaxed(val, ctx->regs + reg);
-+	else
-+		writew(val, ctx->regs + reg);
- }
- 
- static void regmap_mmio_write16be(struct regmap_mmio_context *ctx,
-@@ -93,7 +100,10 @@ static void regmap_mmio_write32le(struct regmap_mmio_context *ctx,
- 				  unsigned int reg,
- 				  unsigned int val)
- {
--	writel(val, ctx->regs + reg);
-+	if (ctx->relaxed_mmio)
-+		writel_relaxed(val, ctx->regs + reg);
-+	else
-+		writel(val, ctx->regs + reg);
- }
- 
- static void regmap_mmio_write32be(struct regmap_mmio_context *ctx,
-@@ -108,7 +118,10 @@ static void regmap_mmio_write64le(struct regmap_mmio_context *ctx,
- 				  unsigned int reg,
- 				  unsigned int val)
- {
--	writeq(val, ctx->regs + reg);
-+	if (ctx->relaxed_mmio)
-+		writeq_relaxed(val, ctx->regs + reg);
-+	else
-+		writeq(val, ctx->regs + reg);
- }
- #endif
- 
-@@ -134,12 +147,18 @@ static int regmap_mmio_write(void *context, unsigned int reg, unsigned int val)
- static unsigned int regmap_mmio_read8(struct regmap_mmio_context *ctx,
- 				      unsigned int reg)
- {
-+	if (ctx->relaxed_mmio)
-+		return readb_relaxed(ctx->regs + reg);
-+
- 	return readb(ctx->regs + reg);
- }
- 
- static unsigned int regmap_mmio_read16le(struct regmap_mmio_context *ctx,
- 				         unsigned int reg)
- {
-+	if (ctx->relaxed_mmio)
-+		return readw_relaxed(ctx->regs + reg);
-+
- 	return readw(ctx->regs + reg);
- }
- 
-@@ -152,6 +171,9 @@ static unsigned int regmap_mmio_read16be(struct regmap_mmio_context *ctx,
- static unsigned int regmap_mmio_read32le(struct regmap_mmio_context *ctx,
- 				         unsigned int reg)
- {
-+	if (ctx->relaxed_mmio)
-+		return readl_relaxed(ctx->regs + reg);
-+
- 	return readl(ctx->regs + reg);
- }
- 
-@@ -165,6 +187,9 @@ static unsigned int regmap_mmio_read32be(struct regmap_mmio_context *ctx,
- static unsigned int regmap_mmio_read64le(struct regmap_mmio_context *ctx,
- 				         unsigned int reg)
- {
-+	if (ctx->relaxed_mmio)
-+		return readq_relaxed(ctx->regs + reg);
-+
- 	return readq(ctx->regs + reg);
- }
- #endif
-@@ -237,6 +262,7 @@ static struct regmap_mmio_context *regmap_mmio_gen_context(struct device *dev,
- 
- 	ctx->regs = regs;
- 	ctx->val_bytes = config->val_bits / 8;
-+	ctx->relaxed_mmio = config->use_relaxed_mmio;
- 	ctx->clk = ERR_PTR(-ENODEV);
- 
- 	switch (regmap_get_val_endian(dev, &regmap_mmio, config)) {
-diff --git a/include/linux/regmap.h b/include/linux/regmap.h
-index e7834d98207f..126fe700d1d8 100644
---- a/include/linux/regmap.h
-+++ b/include/linux/regmap.h
-@@ -315,6 +315,10 @@ typedef void (*regmap_unlock)(void *);
-  *                   masks are used.
-  * @zero_flag_mask: If set, read_flag_mask and write_flag_mask are used even
-  *                   if they are both empty.
-+ * @use_relaxed_mmio: If set, MMIO R/W operations will not use memory barriers.
-+ *                    This can avoid load on devices which don't require strict
-+ *                    orderings, but drivers should carefully add any explicit
-+ *                    memory barriers when they may require them.
-  * @use_single_read: If set, converts the bulk read operation into a series of
-  *                   single read operations. This is useful for a device that
-  *                   does not support  bulk read.
-@@ -388,6 +392,7 @@ struct regmap_config {
- 
- 	bool use_single_read;
- 	bool use_single_write;
-+	bool use_relaxed_mmio;
- 	bool can_multi_write;
- 
- 	enum regmap_endian reg_format_endian;
+The end goal of this is to make the driver more generic and eliminate
+entirely custom boilerplate like `struct hantro_reg` or headers with
+core-specific bit manipulations like `hantro_g1_regs.h` and instead rely
+on the well-tested albeit more verbose regmap subsytem.
+
+To give just two examples of bugs which are easily discovered by using
+more verbose regmap fields (very easy to compare with the datasheets)
+instead of relying on bit-magic tricks: G1_REG_DEC_CTRL3_INIT_QP(x) was
+off-by-1 and the wrong .clk_gate bit was set in hantro_postproc.c.
+
+Anyway, this series also extends the MMIO regmap API to allow relaxed
+writes for the theoretical reason that avoiding unnecessary membarriers
+leads to less CPU usage and small improvements to battery life. However,
+in practice I could not measure differences between relaxed/non-relaxed
+IO, so I'm on the fence whether to keep or remove the relaxed calls.
+
+What I could masure is the performance impact of adding more sub-reg
+field acesses: a constant ~ 20 microsecond bump per G1 h264 frame. This
+is acceptable considering the total time to decode a frame takes three
+orders of magnitude longer, i.e. miliseconds ranges, depending on the
+frame size and bitstream params, so it is an acceptable trade-off to
+have a more generic driver.
+
+This has been tested on next-20201009 with imx8mq for G1 and an SoC with
+VC8000 which has not yet been added (hopefuly support lands soon).
+
+Kind regards,
+Adrian
+
+Adrian Ratiu (18):
+  media: hantro: document all int reg bits up to vc8000
+  media: hantro: make consistent use of decimal register notation
+  media: hantro: make G1_REG_SOFT_RESET Rockchip specific
+  media: hantro: add reset controller support
+  media: hantro: prepare clocks before variant inits are run
+  media: hantro: imx8mq: simplify ctrlblk reset logic
+  regmap: mmio: add config option to allow relaxed MMIO accesses
+  media: hantro: add initial MMIO regmap infrastructure
+  media: hantro: default regmap to relaxed MMIO
+  media: hantro: convert G1 h264 decoder to regmap fields
+  media: hantro: convert G1 postproc to regmap
+  media: hantro: add VC8000D h264 decoding
+  media: hantro: add VC8000D postproc support
+  media: hantro: make PP enablement logic a bit smarter
+  media: hantro: add user-selectable, platform-selectable H264 High10
+  media: hantro: rename h264_dec as it's not G1 specific anymore
+  media: hantro: add dump registers debug option before decode start
+  media: hantro: document encoder reg fields
+
+ drivers/base/regmap/regmap-mmio.c             |   34 +-
+ drivers/staging/media/hantro/Makefile         |    3 +-
+ drivers/staging/media/hantro/hantro.h         |   79 +-
+ drivers/staging/media/hantro/hantro_drv.c     |   41 +-
+ drivers/staging/media/hantro/hantro_g1_regs.h |   92 +-
+ ...hantro_g1_h264_dec.c => hantro_h264_dec.c} |  237 +++-
+ drivers/staging/media/hantro/hantro_hw.h      |   23 +-
+ .../staging/media/hantro/hantro_postproc.c    |  144 ++-
+ drivers/staging/media/hantro/hantro_regmap.c  | 1015 +++++++++++++++++
+ drivers/staging/media/hantro/hantro_regmap.h  |  295 +++++
+ drivers/staging/media/hantro/hantro_v4l2.c    |    3 +-
+ drivers/staging/media/hantro/imx8m_vpu_hw.c   |   75 +-
+ drivers/staging/media/hantro/rk3288_vpu_hw.c  |    5 +-
+ include/linux/regmap.h                        |    5 +
+ 14 files changed, 1795 insertions(+), 256 deletions(-)
+ rename drivers/staging/media/hantro/{hantro_g1_h264_dec.c => hantro_h264_dec.c} (58%)
+ create mode 100644 drivers/staging/media/hantro/hantro_regmap.c
+ create mode 100644 drivers/staging/media/hantro/hantro_regmap.h
+
 -- 
 2.28.0
 
