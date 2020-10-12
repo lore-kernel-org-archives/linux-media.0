@@ -2,35 +2,39 @@ Return-Path: <SRS0=qt09=DT=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29E7DC433E7
-	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 18:04:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75F64C433DF
+	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 18:04:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ED4BD2076D
-	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 18:04:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4692B2076D
+	for <linux-media@archiver.kernel.org>; Mon, 12 Oct 2020 18:04:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404141AbgJLSEa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Oct 2020 14:04:30 -0400
-Received: from retiisi.eu ([95.216.213.190]:45478 "EHLO hillosipuli.retiisi.eu"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404139AbgJLSE2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Oct 2020 14:04:28 -0400
+        id S2404167AbgJLSEm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Oct 2020 14:04:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43752 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2403994AbgJLSEl (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 12 Oct 2020 14:04:41 -0400
+Received: from hillosipuli.retiisi.eu (hillosipuli.retiisi.eu [IPv6:2a01:4f9:c010:4572::81:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E34C0613D0
+        for <linux-media@vger.kernel.org>; Mon, 12 Oct 2020 11:04:41 -0700 (PDT)
 Received: from lanttu.localdomain (unknown [IPv6:2a01:4f9:c010:4572::e1:1002])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 53CB7634C89;
-        Mon, 12 Oct 2020 21:03:20 +0300 (EEST)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 35FE2634C8B;
+        Mon, 12 Oct 2020 21:03:32 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     Tsuchiya Yuto <kitakar@gmail.com>, bingbu.cao@intel.com,
         Yong Zhi <yong.zhi@intel.com>,
         Tianshu Qiu <tian.shu.qiu@intel.com>,
         laurent.pinchart@ideasonboard.com
-Subject: [PATCH v3 1/8] ipu3-cio2: Return actual subdev format
-Date:   Mon, 12 Oct 2020 21:04:07 +0300
-Message-Id: <20201012180414.11579-2-sakari.ailus@linux.intel.com>
+Subject: [PATCH v3 6/8] ipu3-cio2: Remove explicit type from frame size checks
+Date:   Mon, 12 Oct 2020 21:04:12 +0300
+Message-Id: <20201012180414.11579-7-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201012180414.11579-1-sakari.ailus@linux.intel.com>
 References: <20201012180414.11579-1-sakari.ailus@linux.intel.com>
@@ -40,58 +44,29 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Return actual subdev format on ipu3-cio2 subdev pads. The earlier
-implementation was based on an infinite recursion that exhausted the
-stack.
+Now that the values are unsigned, we can remove explicit cast to u32.
 
-Reported-by: Tsuchiya Yuto <kitakar@gmail.com>
-Fixes: c2a6a07afe4a ("media: intel-ipu3: cio2: add new MIPI-CSI2 driver")
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Bingbu Cao <bingbu.cao@intel.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: stable@vger.kernel.org # v4.16 and up
 ---
- drivers/media/pci/intel/ipu3/ipu3-cio2.c | 24 +++---------------------
- 1 file changed, 3 insertions(+), 21 deletions(-)
+ drivers/media/pci/intel/ipu3/ipu3-cio2.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-index 4e598e937dfe..afa472026ba4 100644
+index 87d040e176f7..e42177f8c426 100644
 --- a/drivers/media/pci/intel/ipu3/ipu3-cio2.c
 +++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-@@ -1232,29 +1232,11 @@ static int cio2_subdev_get_fmt(struct v4l2_subdev *sd,
- 			       struct v4l2_subdev_format *fmt)
- {
- 	struct cio2_queue *q = container_of(sd, struct cio2_queue, subdev);
--	struct v4l2_subdev_format format;
--	int ret;
+@@ -1282,9 +1282,8 @@ static int cio2_subdev_set_fmt(struct v4l2_subdev *sd,
+ 		}
+ 	}
  
--	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
-+	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
- 		fmt->format = *v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
--		return 0;
--	}
--
--	if (fmt->pad == CIO2_PAD_SINK) {
--		format.which = V4L2_SUBDEV_FORMAT_ACTIVE;
--		ret = v4l2_subdev_call(sd, pad, get_fmt, NULL,
--				       &format);
--
--		if (ret)
--			return ret;
--		/* update colorspace etc */
--		q->subdev_fmt.colorspace = format.format.colorspace;
--		q->subdev_fmt.ycbcr_enc = format.format.ycbcr_enc;
--		q->subdev_fmt.quantization = format.format.quantization;
--		q->subdev_fmt.xfer_func = format.format.xfer_func;
--	}
--
--	fmt->format = q->subdev_fmt;
-+	else
-+		fmt->format = q->subdev_fmt;
+-	fmt->format.width = min_t(u32, fmt->format.width, CIO2_IMAGE_MAX_WIDTH);
+-	fmt->format.height = min_t(u32, fmt->format.height,
+-				   CIO2_IMAGE_MAX_LENGTH);
++	fmt->format.width = min(fmt->format.width, CIO2_IMAGE_MAX_WIDTH);
++	fmt->format.height = min(fmt->format.height, CIO2_IMAGE_MAX_LENGTH);
+ 	fmt->format.field = V4L2_FIELD_NONE;
  
- 	return 0;
- }
+ 	mutex_lock(&q->subdev_lock);
 -- 
 2.27.0
 
