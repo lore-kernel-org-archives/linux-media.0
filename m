@@ -2,74 +2,88 @@ Return-Path: <SRS0=sDFD=DU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DAEFC43457
-	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 14:27:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07629C433DF
+	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 14:39:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 19C0D24829
-	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 14:27:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A8C5B24842
+	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 14:39:28 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="2ORlbvHK";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="BdtfAdjz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388594AbgJMO16 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 13 Oct 2020 10:27:58 -0400
-Received: from retiisi.eu ([95.216.213.190]:53670 "EHLO hillosipuli.retiisi.eu"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387516AbgJMO16 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 13 Oct 2020 10:27:58 -0400
-Received: from lanttu.localdomain (unknown [IPv6:2a01:4f9:c010:4572::e1:1002])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 78C2E634C87;
-        Tue, 13 Oct 2020 17:26:47 +0300 (EEST)
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     laurent.pinchart@ideasonboard.com
-Subject: [PATCH 2/2] Documentation: v4l: Document required controls on camera sensors
-Date:   Tue, 13 Oct 2020 17:27:51 +0300
-Message-Id: <20201013142751.26228-3-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201013142751.26228-1-sakari.ailus@linux.intel.com>
-References: <20201013142751.26228-1-sakari.ailus@linux.intel.com>
+        id S1730048AbgJMOjY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 13 Oct 2020 10:39:24 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:52370 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729656AbgJMOjY (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 13 Oct 2020 10:39:24 -0400
+Message-Id: <20201013142616.118697527@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1602599962;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=WYttoZQBVnlZi5CIrd2nl7FrtaNidcslV10mrzt6KO8=;
+        b=2ORlbvHKKR7ZAqZuOj8rj/14hza1IdaFe/bNqRgEl8hlzSBgZBLDNRwN1NQ5J0ZtZ0u70K
+        qiGCbjDUBGIuEqqO+HohqaxM2USAsyPEzQlyHlwLC4Tlag3oz1mv3S/jXW8vGyQ6UIxkyy
+        iPGHqF65deDukz1KUZwP42l0H7W939cLU6g3zU9oQ8WeZ5FGzRRgfCmwji77WmxL+Sc1ws
+        lbQzE0Vn+saniEGA/xjoKzqNunpBWlrltr2bPtSH7QzuVCIHaFi+eHfmTGBJ510GZapEoK
+        bfzDapgU5bE1bwpVvdilBE0Vb78yKguynbbtYzKNW9sMAYoxAFkYouMvXmuKlw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1602599962;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=WYttoZQBVnlZi5CIrd2nl7FrtaNidcslV10mrzt6KO8=;
+        b=BdtfAdjzrcIrQ1EVLKI5m7Ukon1T7gtMt66OfUEBNDCo8ClXSr7/lPmULdKFFtT9+Diku5
+        4HNAtPyRr+MkAHAw==
+Date:   Tue, 13 Oct 2020 16:26:16 +0200
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [patch 0/4] media: Cleanup in_interrupt() usage
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Raw camera sensors connected to parallel or CSI-2 busses need to implement
-V4L2_CID_LINK_FREQ control so receiver drivers can configure the hardware
-accordingly.
-
-Document this. Also say V4L2_CID_PIXEL_RATE is recommended for such
-hardware.
-
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- Documentation/driver-api/media/camera-sensor.rst | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
-
-diff --git a/Documentation/driver-api/media/camera-sensor.rst b/Documentation/driver-api/media/camera-sensor.rst
-index 4d1ae12b9b4d..ffb0cad8137a 100644
---- a/Documentation/driver-api/media/camera-sensor.rst
-+++ b/Documentation/driver-api/media/camera-sensor.rst
-@@ -132,3 +132,16 @@ used to obtain device's power state after the power state transition:
- The function returns a non-zero value if it succeeded getting the power count or
- runtime PM was disabled, in either of which cases the driver may proceed to
- access the device.
-+
-+Controls
-+--------
-+
-+For camera sensors that are connected to a bus where transmitter and receiver
-+require common configuration set by drivers, such as CSI-2 or parallel (BT.601
-+or BT.656) bus, the ``V4L2_CID_LINK_FREQ`` control is mandatory on transmitter
-+drivers. Receiver drivers can use the ``V4L2_CID_LINK_FREQ`` to query the
-+frequency used on the bus.
-+
-+The transmitter drivers should also implement ``V4L2_CID_PIXEL_RATE`` control in
-+order to tell the maximum pixel rate to the receiver. This is required on raw
-+camera sensors.
--- 
-2.27.0
-
+Rm9sa3MsCgppbiB0aGUgZGlzY3Vzc2lvbiBhYm91dCBwcmVlbXB0IGNvdW50IGNvbnNpc3RlbmN5
+IGFjY3Jvc3Mga2VybmVsCmNvbmZpZ3VyYXRpb25zOgoKIGh0dHBzOi8vbG9yZS5rZXJuZWwub3Jn
+L3IvMjAyMDA5MTQyMDQyMDkuMjU2MjY2MDkzQGxpbnV0cm9uaXguZGUvCgppdCB3YXMgY29uY2x1
+ZGVkIHRoYXQgdGhlIHVzYWdlIG9mIGluX2ludGVycnVwdCgpIGFuZCByZWxhdGVkIGNvbnRleHQK
+Y2hlY2tzIHNob3VsZCBiZSByZW1vdmVkIGZyb20gbm9uLWNvcmUgY29kZS4KClRoZSBtZWRpYSBz
+dWJzeXN0ZW0gaGFzIGEgZmV3IGluc3RhbmNlcyBvZiBpbl9pbnRlcnJ1cHQoKSB1c2FnZToKCiAx
+KSBCVUdfT04oaW5faW50ZXJydXB0KCkKCiAgICBCVUdfT04oKSBpcyBjb25zaWRlcmVkIHRoZSBs
+YXN0IHJlc29ydCBhbmQgdGhlIHVzYWdlIHRoZXJlIGlzIGNsZWFybHkKICAgIG5vdCBpbiB0aGF0
+IGNhdGVnb3J5LiBJdCBjb3VsZCBiZSByZXBsYWNlZCBieSBhCiAgICBsb2NrZGVwX2Fzc2VydF9w
+cmVlbXB0aW9uX2VuYWJsZWQoKSwgYnV0IGFsbCB0aGVzZSB1c2FnZSBzaXRlcyBpbnZva2UKICAg
+IGNvcmUgZnVuY3Rpb25hbGl0eSB3aGljaCB3aWxsIGNhdGNoIGluY29ycmVjdCBjb250ZXh0IGFs
+cmVhZHkuIFNvCiAgICBhZGRpbmcgbW9yZSB0aGVyZSBpcyBub3QgcmVhbGx5IHVzZWZ1bAoKIDIp
+IENvbW1lbnRzIGFuZCBwcmludGsoKSdzCgogICAgVGhlIGNvbW1lbnQgaXMgbWlzbGVhZGluZyBh
+bmQgdGhlIGNoZWNrcyBpbiB0aGUgcHJpbnRrKCkncyBhcmUKICAgIHBvaW50bGVzcyBhcyB0aGUg
+Y29kZSBjYW4gbmV2ZXIgYmUgY2FsbGVkIGZyb20gaW5faW50ZXJydXB0KCkgYXMgaXQKICAgIGNv
+bnRhaW5zIEdGUF9LRVJORUwgYWxsb2NhdGlvbnMuCgpJJ20gY29sbGVjdGluZyByZWxhdGVkIGNs
+ZWFudXBzIGFsbCBvdmVyIHRoZSB0cmVlLCBidXQgZmVlbCBmcmVlIHRvIHJvdXRlCnRoZW0gdGhy
+b3VnaCB0aGUgbWVkaWEgdHJlZSBhcyB0aGV5IGhhdmUgbm8gZGVwZW5kZW5jaWVzLiBMZXQgbWUg
+a25vdyB3aGljaApyb3V0ZSB5b3UgcHJlZmVyLgoKVGhhbmtzLAoKCXRnbHgKLS0tCiBjb21tb24v
+c2FhNzE0Ni9zYWE3MTQ2X2ZvcHMuYyB8ICAgIDIgLS0KIHBjaS9idDh4eC9idHR2LXJpc2MuYyAg
+ICAgICAgIHwgICAgMSAtCiBwY2kvY3gyMzg4NS9jeDIzODg1LWNvcmUuYyAgICB8ICAgIDEgLQog
+cGNpL2N4MjU4MjEvY3gyNTgyMS1jb3JlLmMgICAgfCAgICAxIC0KIHBsYXRmb3JtL2ZzbC12aXUu
+YyAgICAgICAgICAgIHwgICAgMiAtLQogcGxhdGZvcm0vb21hcDNpc3AvaXNwY2NkYy5jICAgfCAg
+ICA1ICsrLS0tCiB1c2IvYXUwODI4L2F1MDgyOC12aWRlby5jICAgICB8ICAgIDUgKystLS0KIHVz
+Yi9jeDIzMXh4L2N4MjMxeHgtY29yZS5jICAgIHwgICAxMCArKysrLS0tLS0tCiB1c2IvY3gyMzF4
+eC9jeDIzMXh4LXZiaS5jICAgICB8ICAgIDMgKy0tCiB1c2IvdG02MDAwL3RtNjAwMC12aWRlby5j
+ICAgICB8ICAgIDIgLS0KIHVzYi96cjM2NHh4L3pyMzY0eHguYyAgICAgICAgIHwgICAgMiAtLQog
+MTEgZmlsZXMgY2hhbmdlZCwgOSBpbnNlcnRpb25zKCspLCAyNSBkZWxldGlvbnMoLSkKCg==
