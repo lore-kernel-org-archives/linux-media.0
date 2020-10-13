@@ -2,121 +2,72 @@ Return-Path: <SRS0=sDFD=DU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=BAYES_40,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 697FAC433DF
-	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 08:12:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18CB0C433E7
+	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 08:20:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 268F8207C3
-	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 08:12:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C902A207C3
+	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 08:20:18 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=fastestway24.com header.i=@fastestway24.com header.b="bfIO/u9h"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391035AbgJMIM5 convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 13 Oct 2020 04:12:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34088 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391120AbgJMIML (ORCPT
+        id S2390813AbgJMIUS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 13 Oct 2020 04:20:18 -0400
+Received: from mail.fastestway24.com ([5.249.159.217]:34182 "EHLO
+        mail.fastestway24.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390282AbgJMIUS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 13 Oct 2020 04:12:11 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68434C0613D9
-        for <linux-media@vger.kernel.org>; Tue, 13 Oct 2020 01:12:08 -0700 (PDT)
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1kSFPX-0001LU-SH; Tue, 13 Oct 2020 10:11:55 +0200
-Received: from pza by lupine with local (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1kSFPV-0003Qg-TN; Tue, 13 Oct 2020 10:11:53 +0200
-Message-ID: <35ebc7a7c56c86dee523812bfb55d1bac96f4b42.camel@pengutronix.de>
-Subject: Re: [PATCH 04/18] media: hantro: add reset controller support
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Adrian Ratiu <adrian.ratiu@collabora.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Fruehberger Peter <Peter.Fruehberger@de.bosch.com>,
-        kuhanh.murugasen.krishnan@intel.com,
-        Daniel Vetter <daniel@ffwll.ch>, kernel@collabora.com,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 13 Oct 2020 10:11:53 +0200
-In-Reply-To: <20201012205957.889185-5-adrian.ratiu@collabora.com>
-References: <20201012205957.889185-1-adrian.ratiu@collabora.com>
-         <20201012205957.889185-5-adrian.ratiu@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.30.5-1.1 
+        Tue, 13 Oct 2020 04:20:18 -0400
+X-Greylist: delayed 491 seconds by postgrey-1.27 at vger.kernel.org; Tue, 13 Oct 2020 04:20:17 EDT
+Received: by mail.fastestway24.com (Postfix, from userid 1001)
+        id 2CE1EA2E89; Tue, 13 Oct 2020 09:11:40 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fastestway24.com;
+        s=mail; t=1602576723;
+        bh=YGOlxoddnI3PXnh41XMWUfU0z9xsorZLZcAPNbcZr/c=;
+        h=Date:From:To:Subject:From;
+        b=bfIO/u9hbBP9FONXlGSZoWxXWwZU2cO7fYjqS708B2UZAmSQ7oZvy4qCmJFQY6laP
+         VVs8NAXJAISKVipwZqP0/v0TaNDmPQTZbVnUUa36SC5/2QVrLLYkkI4E5xmYM9eIf7
+         DCCF66IQm/jrc1dDEm8rs5kzx4/Xk0XOQMJR0SG3g9wHJ72LXxwyrCdPrwLb7UiaNH
+         JwaiVw7u41yUoHod6b8/ejXLBxi29OfntjsUEw2qjddd6r+/cxow/0j8ugZ6k7BhxV
+         WZkKB2ZsKpAcOX7zzhVgVbzRpoV1VIoFWlkQ1BJBmmguJTbroFcFd8bP7oiBLitQsn
+         6lQXsnif7cRBA==
+Received: by mail.fastestway24.com for <linux-media@vger.kernel.org>; Tue, 13 Oct 2020 08:11:18 GMT
+Message-ID: <20201013074502-0.1.4d.9kz1.0.zdz7gbx15m@fastestway24.com>
+Date:   Tue, 13 Oct 2020 08:11:18 GMT
+From:   "William Jones" <william.jones@fastestway24.com>
+To:     <linux-media@vger.kernel.org>
+Subject: Disinfectant
+X-Mailer: mail.fastestway24.com
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Adrian,
+Good morning,
 
-On Mon, 2020-10-12 at 23:59 +0300, Adrian Ratiu wrote:
-> Some SoCs might have a reset controller which disables clocks
-> by default in reset state which then drivers need to unreset
-> before being able to ungate a specific clock.
-> 
-> In this specific case, the hantro driver needs to ensure the
-> peripheral clock can be properly ungated otherwise MMIO reg
-> values can't be accessed.
-> 
-> If the SoC has no reset controller or there is no "resets" DT
-> property defined, this new code will have no effect.
-> 
-> Signed-off-by: Adrian Ratiu <adrian.ratiu@collabora.com>
-> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> ---
->  drivers/staging/media/hantro/hantro.h     | 1 +
->  drivers/staging/media/hantro/hantro_drv.c | 8 ++++++++
->  2 files changed, 9 insertions(+)
-> 
-> diff --git a/drivers/staging/media/hantro/hantro.h b/drivers/staging/media/hantro/hantro.h
-> index 65f9f7ea7dcf..bb442eb1974e 100644
-> --- a/drivers/staging/media/hantro/hantro.h
-> +++ b/drivers/staging/media/hantro/hantro.h
-> @@ -183,6 +183,7 @@ struct hantro_dev {
->  	struct platform_device *pdev;
->  	struct device *dev;
->  	struct clk_bulk_data *clocks;
-> +	struct reset_control *reset;
->  	void __iomem **reg_bases;
->  	void __iomem *enc_base;
->  	void __iomem *dec_base;
-> diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-> index 3cd00cc0a364..c2ea54552ce9 100644
-> --- a/drivers/staging/media/hantro/hantro_drv.c
-> +++ b/drivers/staging/media/hantro/hantro_drv.c
-> @@ -17,6 +17,7 @@
->  #include <linux/pm.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/slab.h>
-> +#include <linux/reset.h>
->  #include <linux/videodev2.h>
->  #include <linux/workqueue.h>
->  #include <media/v4l2-event.h>
-> @@ -747,6 +748,13 @@ static int hantro_probe(struct platform_device *pdev)
->  
->  	INIT_DELAYED_WORK(&vpu->watchdog_work, hantro_watchdog);
->  
-> +	vpu->reset = devm_reset_control_get_optional_exclusive(&pdev->dev,
-> +							       NULL);
-> +	if (IS_ERR(vpu->reset))
-> +		vpu->reset = NULL;
+looking for companies interested in raising additional capital by diversi=
+fying their offer in soaps, liquids and gels for hand disinfection and co=
+smetics for body and hair care.
 
-Please return the error. If the optional reset is missing from the
-device tree, devm_reset_control_get_optional_exclusive() returns NULL
-already.
+The distribution of innovative products corresponding to the current pref=
+erences of customers in the field of hygiene and preventive healthcare al=
+lows our partners to gain new markets and achieve better economic results=
+=2E
 
-regards
-Philipp
+In addition to products with bactericidal action, our range includes show=
+er gels, shampoos and hair conditioners, as well as efficient, concentrat=
+ed detergents.
+
+The versatility (suitable for all skin types) combined with an affordable=
+ price means that customers make an informed choice of a product among ot=
+hers available on the market.
+
+Are you interested in cooperation?
+
+
+William Jones
