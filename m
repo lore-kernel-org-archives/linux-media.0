@@ -2,602 +2,215 @@ Return-Path: <SRS0=sDFD=DU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FAFBC433E7
-	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 12:44:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7415DC433E7
+	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 12:52:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C3FD5224DF
-	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 12:44:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 32067225A9
+	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 12:52:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="namv7hM2"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SSGZcyzI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728068AbgJMMoo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 13 Oct 2020 08:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48060 "EHLO
+        id S1728276AbgJMMwU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 13 Oct 2020 08:52:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728063AbgJMMom (ORCPT
+        with ESMTP id S1728264AbgJMMwQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 13 Oct 2020 08:44:42 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E14FC0613D7
-        for <linux-media@vger.kernel.org>; Tue, 13 Oct 2020 05:44:42 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id g16so652622pjv.3
-        for <linux-media@vger.kernel.org>; Tue, 13 Oct 2020 05:44:42 -0700 (PDT)
+        Tue, 13 Oct 2020 08:52:16 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05764C0613D2
+        for <linux-media@vger.kernel.org>; Tue, 13 Oct 2020 05:52:15 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id g12so23882093wrp.10
+        for <linux-media@vger.kernel.org>; Tue, 13 Oct 2020 05:52:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=tI9og2Mp3SvB/KIpM56bpbcWr59ULpoa9Os216f3JV0=;
-        b=namv7hM2qX01p7pSVLVigshcmygAVma6KdSlv7b3MnVFtx05UOh3CHmCQeZriDzTnQ
-         wVQ9qGrVMf/fkAp/Xcc2ZTEOqitbUztrR++k7ZeqMP1I8ZDedrv2ctaroVotc5zLD9Yj
-         o8GiXTWaB6nckvOdz0X/JK5g8ctnfjo6Jba6o=
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=LS+HMgito630Z8wdvbTvwB3oR4AOb/+K/YWZe6JSBwQ=;
+        b=SSGZcyzIr776WTsuIhH9HiaHbRPNmlM4yqL9xNAmigJQj2MC+C/DVDBuqNrtCwarPA
+         Fvcm9O1myYeCph+0gQ8AOw+q4fAqwbyvnbQ42wwLic3SpfEzjiWpWx9JN46/GB8KEG09
+         Ap30EREazTEBq/XvkpsiSjAolG23UyS+tCxSq1UjjQh8fLby//jHq+yaBqm+S21VAtrk
+         v2QXL3r2mTGVdxuBRXfSGWpN7DNdoq0qmKjI0yOR0oY6DUhsVKVBWvR7C0cR1JBs/aiI
+         /KAVnG2+EjPDMuC1u7LFeHzucVnu/G2T4pqjCBejvMHx+R8hzI0Kq1GJe6P7T1cbzqfW
+         uPaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=tI9og2Mp3SvB/KIpM56bpbcWr59ULpoa9Os216f3JV0=;
-        b=Hw8cvnRlklAocLQDZHsePyr6r46xDx/mna9SmU02MizUBAvikKu3vyU0h6YhFduF1O
-         hWFVn2A7Hu6GgtYwMheVkhWOcpDnYTXpVJEQFG8pnDT2fJMswrkRTkf/VZBB+ICdRADH
-         sXQHFa5u8Lo3kJpZL1nifH/gkFezo8PJVECoa3hRT7kaSWnk/TjXX5HKa9Js5ruCEMJ+
-         cm/2gpz8h3x59bbXQ7eD+zEg6kdxQbkPp+9Jn8HU6r1/8k8s7tlDr/8E2p4Tfc8z4i8k
-         sVDiFe4Q+nrUS1pq+Acpu+Rpdo9PcBy1nIPNY9M7IHhTPwA6pdiCYA/jNpYZsIdbTnB4
-         JVVQ==
-X-Gm-Message-State: AOAM530UJ/YwDfPtexP9lczS0hxGD3VWHAIP7nMgMelCu66wDMkJcft3
-        Z1QS5g+xHarDuoaPfqVQz2t4Iw==
-X-Google-Smtp-Source: ABdhPJyvAFvA4FZovSEnBAa4U4tIeAwOcgqT0/xB3z4J//fyGanoVqHLlyPaPtOUY8w8nLoEbzjGOA==
-X-Received: by 2002:a17:902:9a84:b029:d2:9390:5e6 with SMTP id w4-20020a1709029a84b02900d2939005e6mr28510417plp.37.1602593081790;
-        Tue, 13 Oct 2020 05:44:41 -0700 (PDT)
-Received: from acourbot.tok.corp.google.com ([2401:fa00:8f:203:eeb1:d7ff:fe57:b7e5])
-        by smtp.gmail.com with ESMTPSA id b20sm18914536pjo.37.2020.10.13.05.44.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Oct 2020 05:44:41 -0700 (PDT)
-From:   Alexandre Courbot <acourbot@chromium.org>
-To:     Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Alexandre Courbot <acourbot@chromium.org>
-Subject: [PATCH v4 1/2] media: mtk-vcodec: move firmware implementations into their own files
-Date:   Tue, 13 Oct 2020 21:44:27 +0900
-Message-Id: <20201013124428.783025-2-acourbot@chromium.org>
-X-Mailer: git-send-email 2.29.0.rc1.297.gfa9743e501-goog
-In-Reply-To: <20201013124428.783025-1-acourbot@chromium.org>
-References: <20201013124428.783025-1-acourbot@chromium.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=LS+HMgito630Z8wdvbTvwB3oR4AOb/+K/YWZe6JSBwQ=;
+        b=RAL2oyi3DdCkQonRiw7VoWtLWhj3X+rYXMmLxljte6kV/r64y4kosCkWmVI93Yukss
+         Z9q3ApRNFNDKl/pBw8lbqWOk7FB23nTDe9Li8OjdMDVVAL5wjHfZqjqtz2moZb14/Zgc
+         pt7n6Xy7h+RzkabjgwxepgdcBnWCPpoWxPcjItqVCjIV5JpXihbMyEkZq2y8tuslqhuc
+         T3EFB4TDM60qMuLp235xraEII0Hrtb1KchsWd2zma40Lu7cUmbyaWRs5v4s5k3drz7cz
+         lRIbIQ4lI59y+/DMvST6IerIKlZyXDgU9+Ag4UDgHDwuKiiQIAw3qfY51sEKW6Nooqwc
+         KY0g==
+X-Gm-Message-State: AOAM533pXgEyYvOBnZw+9LVf335iLhbucTp6jzqPxPvcYc9wXGFFipVX
+        T513Aeb9yEjo5BPEuh7acr2aml0Hvj/VkA==
+X-Google-Smtp-Source: ABdhPJzG1B24xEhxPwzT1OZRd9Dhno3qLc+usyxzYOsTo4fUHqZY+f0jJxTPMSfwonsmm0p/RYjCww==
+X-Received: by 2002:adf:814f:: with SMTP id 73mr15669899wrm.174.1602593533669;
+        Tue, 13 Oct 2020 05:52:13 -0700 (PDT)
+Received: from [192.168.1.8] (hst-221-122.medicom.bg. [84.238.221.122])
+        by smtp.googlemail.com with ESMTPSA id t6sm32248867wre.30.2020.10.13.05.52.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Oct 2020 05:52:13 -0700 (PDT)
+Subject: Re: [PATCH] v4l2-ctrl: add control for thumnails
+To:     Tomasz Figa <tfiga@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>
+References: <20200526085446.30956-1-stanimir.varbanov@linaro.org>
+ <65ac9697-a43f-7025-e6fe-69c4a44c6d9a@xs4all.nl>
+ <ce28a840-a763-6700-16dd-d708e570d55c@linaro.org>
+ <d02c6cd0-a502-dc52-519e-54b6328d5373@linaro.org>
+ <544b19dd-4883-bae0-b488-46c856eb207d@xs4all.nl>
+ <6f71931a-9060-a399-835c-a1cf1f05dc79@linaro.org>
+ <1bc10e88-8cbe-3da9-daeb-d015f42d7acc@xs4all.nl>
+ <CAAFQd5Aorm-O7OMcHsnRUEGQq2qoPDRtAuukiLHgC9g54oAW9Q@mail.gmail.com>
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Message-ID: <de40cdf1-0b84-a252-0137-a550f078d28b@linaro.org>
+Date:   Tue, 13 Oct 2020 15:52:11 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAFQd5Aorm-O7OMcHsnRUEGQq2qoPDRtAuukiLHgC9g54oAW9Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-mtk-vcodec supports two kinds of firmware, VPU and SCP. Both were
-supported from the same source files, but this is clearly unclean and
-makes it more difficult to disable support for one or the other.
+Hi,
 
-Move these implementations into their own file, after adding the
-necessary private interfaces.
+On 6/4/20 3:57 PM, Tomasz Figa wrote:
+> On Thu, Jun 4, 2020 at 2:56 PM Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
+>>
+>> On 04/06/2020 14:34, Stanimir Varbanov wrote:
+>>> Hi Hans,
+>>>
+>>> On 6/4/20 12:08 PM, Hans Verkuil wrote:
+>>>> On 04/06/2020 11:02, Stanimir Varbanov wrote:
+>>>>> Hi Hans,
+>>>>>
+>>>>> On 5/27/20 12:53 AM, Stanimir Varbanov wrote:
+>>>>>> Hi Hans,
+>>>>>>
+>>>>>> On 5/26/20 3:04 PM, Hans Verkuil wrote:
+>>>>>>> On 26/05/2020 10:54, Stanimir Varbanov wrote:
+>>>>>>>> Add v4l2 control for decoder thumbnail.
+>>>>>>>>
+>>>>>>>> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+>>>>>>>> ---
+>>>>>>>>  Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 7 +++++++
+>>>>>>>>  drivers/media/v4l2-core/v4l2-ctrls.c                      | 2 ++
+>>>>>>>>  include/uapi/linux/v4l2-controls.h                        | 2 ++
+>>>>>>>>  3 files changed, 11 insertions(+)
+>>>>>>>>
+>>>>>>>> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>>>>>>>> index d0d506a444b1..e838e410651b 100644
+>>>>>>>> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>>>>>>>> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>>>>>>>> @@ -3726,6 +3726,13 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>>>>>>>>      disables generating SPS and PPS at every IDR. Setting it to one enables
+>>>>>>>>      generating SPS and PPS at every IDR.
+>>>>>>>>
+>>>>>>>> +``V4L2_CID_MPEG_VIDEO_DECODER_THUMBNAIL (button)``
+>>>>>>>> +    Instructs the decoder to produce immediate output. The decoder should
+>>>>>>>> +    consume first input buffer for progressive stream (or first two buffers
+>>>>>>>> +    for interlace). Decoder should not allocate more output buffers that it
+>>>>>>>> +    is required to consume one input frame. Usually the decoder input
+>>>>>>>> +    buffers will contain only I/IDR frames but it is not mandatory.
+>>>>>>>
+>>>>>>> This is very vague. It doesn't explain why the control is called 'THUMBNAIL',
+>>>>>>> but more importantly it doesn't explain how this relates to normal decoding.
+>>>>>>
+>>>>>> If in the normal decode the capture queue buffers are 5, in the
+>>>>>> thumbnail mode the number of buffers will be only 1 (if the bitstream is
+>>>>>> progressive) and this will guarantee low memory usage. The other
+>>>>>> difference is that the decoder will produce decoded frames (without
+>>>>>> errors) only for I/IDR (sync frames).
+>>>>
+>>>> Isn't this really a "DECODE_SYNC_FRAMES_ONLY" control? That's what it does,
+>>>> right? Skip any B/P frames and only decode sync frames.
+>>>
+>>> Yes, it is.
+>>> To me V4L2_CID_MPEG_VIDEO_DECODE_SYNC_FRAMES sounds better. If you are
+>>> fine I can send a new patch.
+>>>
+>>> The definition of "sync frames" is a bit difficult for codec-agnostic
+>>> controls. Is it sound better "INTRA", DECODE_INTRA_FRAMES (ONLY)?
+>>
+>> INTRA is better. DECODE_INTRA_FRAMES_ONLY is a good name, I think.
+>>
+>> Thumbnail creation can be given as an example in the description of the
+>> control, but that's just a use-case.
+> 
+> How about the other aspect of the behavior?
+> 
+> "Decoder should not allocate more output buffers that it
+> is required to consume one input frame."
+> 
 
-Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
----
- drivers/media/platform/mtk-vcodec/Makefile    |   4 +-
- .../platform/mtk-vcodec/mtk_vcodec_dec_drv.c  |   2 +-
- .../platform/mtk-vcodec/mtk_vcodec_enc_drv.c  |   2 +-
- .../media/platform/mtk-vcodec/mtk_vcodec_fw.c | 174 +-----------------
- .../media/platform/mtk-vcodec/mtk_vcodec_fw.h |   7 +-
- .../platform/mtk-vcodec/mtk_vcodec_fw_priv.h  |  34 ++++
- .../platform/mtk-vcodec/mtk_vcodec_fw_scp.c   |  73 ++++++++
- .../platform/mtk-vcodec/mtk_vcodec_fw_vpu.c   | 109 +++++++++++
- 8 files changed, 232 insertions(+), 173 deletions(-)
- create mode 100644 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_priv.h
- create mode 100644 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_scp.c
- create mode 100644 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c
+In fact I have to refine this; It looks like that picture type decode vs
+thumbnail are two different modes.
 
-diff --git a/drivers/media/platform/mtk-vcodec/Makefile b/drivers/media/platform/mtk-vcodec/Makefile
-index f679c6e1a3e9..6e1ea3a9f052 100644
---- a/drivers/media/platform/mtk-vcodec/Makefile
-+++ b/drivers/media/platform/mtk-vcodec/Makefile
-@@ -24,4 +24,6 @@ mtk-vcodec-enc-y := venc/venc_vp8_if.o \
- 
- mtk-vcodec-common-y := mtk_vcodec_intr.o \
- 		mtk_vcodec_util.o \
--		mtk_vcodec_fw.o
-+		mtk_vcodec_fw.o \
-+		mtk_vcodec_fw_vpu.o \
-+		mtk_vcodec_fw_scp.o
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-index d14bc208ea5e..145686d2c219 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-@@ -241,7 +241,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 	}
- 	dma_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
- 
--	dev->fw_handler = mtk_vcodec_fw_select(dev, fw_type, VPU_RST_DEC);
-+	dev->fw_handler = mtk_vcodec_fw_select(dev, fw_type, DECODER);
- 	if (IS_ERR(dev->fw_handler))
- 		return PTR_ERR(dev->fw_handler);
- 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-index dcfa2c2d4def..3be8a04c4c67 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-@@ -293,7 +293,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 	}
- 	dma_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
- 
--	dev->fw_handler = mtk_vcodec_fw_select(dev, fw_type, VPU_RST_ENC);
-+	dev->fw_handler = mtk_vcodec_fw_select(dev, fw_type, ENCODER);
- 	if (IS_ERR(dev->fw_handler))
- 		return PTR_ERR(dev->fw_handler);
- 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.c
-index 6c2a2568d844..94b39ae5c2e1 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.c
-@@ -1,193 +1,29 @@
- // SPDX-License-Identifier: GPL-2.0
- 
- #include "mtk_vcodec_fw.h"
-+#include "mtk_vcodec_fw_priv.h"
- #include "mtk_vcodec_util.h"
- #include "mtk_vcodec_drv.h"
- 
--struct mtk_vcodec_fw_ops {
--	int (*load_firmware)(struct mtk_vcodec_fw *fw);
--	unsigned int (*get_vdec_capa)(struct mtk_vcodec_fw *fw);
--	unsigned int (*get_venc_capa)(struct mtk_vcodec_fw *fw);
--	void * (*map_dm_addr)(struct mtk_vcodec_fw *fw, u32 dtcm_dmem_addr);
--	int (*ipi_register)(struct mtk_vcodec_fw *fw, int id,
--			    mtk_vcodec_ipi_handler handler, const char *name, void *priv);
--	int (*ipi_send)(struct mtk_vcodec_fw *fw, int id, void *buf,
--			unsigned int len, unsigned int wait);
--};
--
--struct mtk_vcodec_fw {
--	enum mtk_vcodec_fw_type type;
--	const struct mtk_vcodec_fw_ops *ops;
--	struct platform_device *pdev;
--	struct mtk_scp *scp;
--};
--
--static int mtk_vcodec_vpu_load_firmware(struct mtk_vcodec_fw *fw)
--{
--	return vpu_load_firmware(fw->pdev);
--}
--
--static unsigned int mtk_vcodec_vpu_get_vdec_capa(struct mtk_vcodec_fw *fw)
--{
--	return vpu_get_vdec_hw_capa(fw->pdev);
--}
--
--static unsigned int mtk_vcodec_vpu_get_venc_capa(struct mtk_vcodec_fw *fw)
--{
--	return vpu_get_venc_hw_capa(fw->pdev);
--}
--
--static void *mtk_vcodec_vpu_map_dm_addr(struct mtk_vcodec_fw *fw,
--					u32 dtcm_dmem_addr)
--{
--	return vpu_mapping_dm_addr(fw->pdev, dtcm_dmem_addr);
--}
--
--static int mtk_vcodec_vpu_set_ipi_register(struct mtk_vcodec_fw *fw, int id,
--					   mtk_vcodec_ipi_handler handler,
--					   const char *name, void *priv)
--{
--	/*
--	 * The handler we receive takes a void * as its first argument. We
--	 * cannot change this because it needs to be passed down to the rproc
--	 * subsystem when SCP is used. VPU takes a const argument, which is
--	 * more constrained, so the conversion below is safe.
--	 */
--	ipi_handler_t handler_const = (ipi_handler_t)handler;
--
--	return vpu_ipi_register(fw->pdev, id, handler_const, name, priv);
--}
--
--static int mtk_vcodec_vpu_ipi_send(struct mtk_vcodec_fw *fw, int id, void *buf,
--				   unsigned int len, unsigned int wait)
--{
--	return vpu_ipi_send(fw->pdev, id, buf, len);
--}
--
--static const struct mtk_vcodec_fw_ops mtk_vcodec_vpu_msg = {
--	.load_firmware = mtk_vcodec_vpu_load_firmware,
--	.get_vdec_capa = mtk_vcodec_vpu_get_vdec_capa,
--	.get_venc_capa = mtk_vcodec_vpu_get_venc_capa,
--	.map_dm_addr = mtk_vcodec_vpu_map_dm_addr,
--	.ipi_register = mtk_vcodec_vpu_set_ipi_register,
--	.ipi_send = mtk_vcodec_vpu_ipi_send,
--};
--
--static int mtk_vcodec_scp_load_firmware(struct mtk_vcodec_fw *fw)
--{
--	return rproc_boot(scp_get_rproc(fw->scp));
--}
--
--static unsigned int mtk_vcodec_scp_get_vdec_capa(struct mtk_vcodec_fw *fw)
--{
--	return scp_get_vdec_hw_capa(fw->scp);
--}
--
--static unsigned int mtk_vcodec_scp_get_venc_capa(struct mtk_vcodec_fw *fw)
--{
--	return scp_get_venc_hw_capa(fw->scp);
--}
--
--static void *mtk_vcodec_vpu_scp_dm_addr(struct mtk_vcodec_fw *fw,
--					u32 dtcm_dmem_addr)
--{
--	return scp_mapping_dm_addr(fw->scp, dtcm_dmem_addr);
--}
--
--static int mtk_vcodec_scp_set_ipi_register(struct mtk_vcodec_fw *fw, int id,
--					   mtk_vcodec_ipi_handler handler,
--					   const char *name, void *priv)
--{
--	return scp_ipi_register(fw->scp, id, handler, priv);
--}
--
--static int mtk_vcodec_scp_ipi_send(struct mtk_vcodec_fw *fw, int id, void *buf,
--				   unsigned int len, unsigned int wait)
--{
--	return scp_ipi_send(fw->scp, id, buf, len, wait);
--}
--
--static const struct mtk_vcodec_fw_ops mtk_vcodec_rproc_msg = {
--	.load_firmware = mtk_vcodec_scp_load_firmware,
--	.get_vdec_capa = mtk_vcodec_scp_get_vdec_capa,
--	.get_venc_capa = mtk_vcodec_scp_get_venc_capa,
--	.map_dm_addr = mtk_vcodec_vpu_scp_dm_addr,
--	.ipi_register = mtk_vcodec_scp_set_ipi_register,
--	.ipi_send = mtk_vcodec_scp_ipi_send,
--};
--
--static void mtk_vcodec_reset_handler(void *priv)
--{
--	struct mtk_vcodec_dev *dev = priv;
--	struct mtk_vcodec_ctx *ctx;
--
--	mtk_v4l2_err("Watchdog timeout!!");
--
--	mutex_lock(&dev->dev_mutex);
--	list_for_each_entry(ctx, &dev->ctx_list, list) {
--		ctx->state = MTK_STATE_ABORT;
--		mtk_v4l2_debug(0, "[%d] Change to state MTK_STATE_ABORT",
--			       ctx->id);
--	}
--	mutex_unlock(&dev->dev_mutex);
--}
--
- struct mtk_vcodec_fw *mtk_vcodec_fw_select(struct mtk_vcodec_dev *dev,
- 					   enum mtk_vcodec_fw_type type,
--					   enum rst_id rst_id)
-+					   enum mtk_vcodec_fw_use fw_use)
- {
--	const struct mtk_vcodec_fw_ops *ops;
--	struct mtk_vcodec_fw *fw;
--	struct platform_device *fw_pdev = NULL;
--	struct mtk_scp *scp = NULL;
--
- 	switch (type) {
- 	case VPU:
--		ops = &mtk_vcodec_vpu_msg;
--		fw_pdev = vpu_get_plat_device(dev->plat_dev);
--		if (!fw_pdev) {
--			mtk_v4l2_err("firmware device is not ready");
--			return ERR_PTR(-EINVAL);
--		}
--		vpu_wdt_reg_handler(fw_pdev, mtk_vcodec_reset_handler,
--				    dev, rst_id);
--		break;
-+		return mtk_vcodec_fw_vpu_init(dev, fw_use);
- 	case SCP:
--		ops = &mtk_vcodec_rproc_msg;
--		scp = scp_get(dev->plat_dev);
--		if (!scp) {
--			mtk_v4l2_err("could not get vdec scp handle");
--			return ERR_PTR(-EPROBE_DEFER);
--		}
--		break;
-+		return mtk_vcodec_fw_scp_init(dev);
- 	default:
- 		mtk_v4l2_err("invalid vcodec fw type");
- 		return ERR_PTR(-EINVAL);
- 	}
--
--	fw = devm_kzalloc(&dev->plat_dev->dev, sizeof(*fw), GFP_KERNEL);
--	if (!fw)
--		return ERR_PTR(-EINVAL);
--
--	fw->type = type;
--	fw->ops = ops;
--	fw->pdev = fw_pdev;
--	fw->scp = scp;
--
--	return fw;
- }
- EXPORT_SYMBOL_GPL(mtk_vcodec_fw_select);
- 
- void mtk_vcodec_fw_release(struct mtk_vcodec_fw *fw)
- {
--	switch (fw->type) {
--	case VPU:
--		put_device(&fw->pdev->dev);
--		break;
--	case SCP:
--		scp_put(fw->scp);
--		break;
--	}
-+	fw->ops->release(fw);
- }
- EXPORT_SYMBOL_GPL(mtk_vcodec_fw_release);
- 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.h
-index fadbbe6ba6cd..539bb626772c 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.h
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.h
-@@ -15,6 +15,11 @@ enum mtk_vcodec_fw_type {
- 	SCP,
- };
- 
-+enum mtk_vcodec_fw_use {
-+	DECODER,
-+	ENCODER,
-+};
-+
- struct mtk_vcodec_fw;
- 
- typedef void (*mtk_vcodec_ipi_handler) (void *data,
-@@ -22,7 +27,7 @@ typedef void (*mtk_vcodec_ipi_handler) (void *data,
- 
- struct mtk_vcodec_fw *mtk_vcodec_fw_select(struct mtk_vcodec_dev *dev,
- 					   enum mtk_vcodec_fw_type type,
--					   enum rst_id rst_id);
-+					   enum mtk_vcodec_fw_use fw_use);
- void mtk_vcodec_fw_release(struct mtk_vcodec_fw *fw);
- 
- int mtk_vcodec_fw_load_firmware(struct mtk_vcodec_fw *fw);
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_priv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_priv.h
-new file mode 100644
-index 000000000000..51f1694a7c7d
---- /dev/null
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_priv.h
-@@ -0,0 +1,34 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifndef _MTK_VCODEC_FW_PRIV_H_
-+#define _MTK_VCODEC_FW_PRIV_H_
-+
-+#include "mtk_vcodec_fw.h"
-+
-+struct mtk_vcodec_dev;
-+
-+struct mtk_vcodec_fw {
-+	enum mtk_vcodec_fw_type type;
-+	const struct mtk_vcodec_fw_ops *ops;
-+	struct platform_device *pdev;
-+	struct mtk_scp *scp;
-+};
-+
-+struct mtk_vcodec_fw_ops {
-+	int (*load_firmware)(struct mtk_vcodec_fw *fw);
-+	unsigned int (*get_vdec_capa)(struct mtk_vcodec_fw *fw);
-+	unsigned int (*get_venc_capa)(struct mtk_vcodec_fw *fw);
-+	void *(*map_dm_addr)(struct mtk_vcodec_fw *fw, u32 dtcm_dmem_addr);
-+	int (*ipi_register)(struct mtk_vcodec_fw *fw, int id,
-+			    mtk_vcodec_ipi_handler handler, const char *name,
-+			    void *priv);
-+	int (*ipi_send)(struct mtk_vcodec_fw *fw, int id, void *buf,
-+			unsigned int len, unsigned int wait);
-+	void (*release)(struct mtk_vcodec_fw *fw);
-+};
-+
-+struct mtk_vcodec_fw *mtk_vcodec_fw_vpu_init(struct mtk_vcodec_dev *dev,
-+					     enum mtk_vcodec_fw_use fw_use);
-+struct mtk_vcodec_fw *mtk_vcodec_fw_scp_init(struct mtk_vcodec_dev *dev);
-+
-+#endif /* _MTK_VCODEC_FW_PRIV_H_ */
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_scp.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_scp.c
-new file mode 100644
-index 000000000000..d8e66b645bd8
---- /dev/null
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_scp.c
-@@ -0,0 +1,73 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "mtk_vcodec_fw_priv.h"
-+#include "mtk_vcodec_util.h"
-+#include "mtk_vcodec_drv.h"
-+
-+static int mtk_vcodec_scp_load_firmware(struct mtk_vcodec_fw *fw)
-+{
-+	return rproc_boot(scp_get_rproc(fw->scp));
-+}
-+
-+static unsigned int mtk_vcodec_scp_get_vdec_capa(struct mtk_vcodec_fw *fw)
-+{
-+	return scp_get_vdec_hw_capa(fw->scp);
-+}
-+
-+static unsigned int mtk_vcodec_scp_get_venc_capa(struct mtk_vcodec_fw *fw)
-+{
-+	return scp_get_venc_hw_capa(fw->scp);
-+}
-+
-+static void *mtk_vcodec_vpu_scp_dm_addr(struct mtk_vcodec_fw *fw,
-+					u32 dtcm_dmem_addr)
-+{
-+	return scp_mapping_dm_addr(fw->scp, dtcm_dmem_addr);
-+}
-+
-+static int mtk_vcodec_scp_set_ipi_register(struct mtk_vcodec_fw *fw, int id,
-+					   mtk_vcodec_ipi_handler handler,
-+					   const char *name, void *priv)
-+{
-+	return scp_ipi_register(fw->scp, id, handler, priv);
-+}
-+
-+static int mtk_vcodec_scp_ipi_send(struct mtk_vcodec_fw *fw, int id, void *buf,
-+				   unsigned int len, unsigned int wait)
-+{
-+	return scp_ipi_send(fw->scp, id, buf, len, wait);
-+}
-+
-+static void mtk_vcodec_scp_release(struct mtk_vcodec_fw *fw)
-+{
-+	scp_put(fw->scp);
-+}
-+
-+static const struct mtk_vcodec_fw_ops mtk_vcodec_rproc_msg = {
-+	.load_firmware = mtk_vcodec_scp_load_firmware,
-+	.get_vdec_capa = mtk_vcodec_scp_get_vdec_capa,
-+	.get_venc_capa = mtk_vcodec_scp_get_venc_capa,
-+	.map_dm_addr = mtk_vcodec_vpu_scp_dm_addr,
-+	.ipi_register = mtk_vcodec_scp_set_ipi_register,
-+	.ipi_send = mtk_vcodec_scp_ipi_send,
-+	.release = mtk_vcodec_scp_release,
-+};
-+
-+struct mtk_vcodec_fw *mtk_vcodec_fw_scp_init(struct mtk_vcodec_dev *dev)
-+{
-+	struct mtk_vcodec_fw *fw;
-+	struct mtk_scp *scp;
-+
-+	scp = scp_get(dev->plat_dev);
-+	if (!scp) {
-+		mtk_v4l2_err("could not get vdec scp handle");
-+		return ERR_PTR(-EPROBE_DEFER);
-+	}
-+
-+	fw = devm_kzalloc(&dev->plat_dev->dev, sizeof(*fw), GFP_KERNEL);
-+	fw->type = SCP;
-+	fw->ops = &mtk_vcodec_rproc_msg;
-+	fw->scp = scp;
-+
-+	return fw;
-+}
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c
-new file mode 100644
-index 000000000000..4cd512101542
---- /dev/null
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c
-@@ -0,0 +1,109 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "mtk_vcodec_fw_priv.h"
-+#include "mtk_vcodec_util.h"
-+#include "mtk_vcodec_drv.h"
-+
-+static int mtk_vcodec_vpu_load_firmware(struct mtk_vcodec_fw *fw)
-+{
-+	return vpu_load_firmware(fw->pdev);
-+}
-+
-+static unsigned int mtk_vcodec_vpu_get_vdec_capa(struct mtk_vcodec_fw *fw)
-+{
-+	return vpu_get_vdec_hw_capa(fw->pdev);
-+}
-+
-+static unsigned int mtk_vcodec_vpu_get_venc_capa(struct mtk_vcodec_fw *fw)
-+{
-+	return vpu_get_venc_hw_capa(fw->pdev);
-+}
-+
-+static void *mtk_vcodec_vpu_map_dm_addr(struct mtk_vcodec_fw *fw,
-+					u32 dtcm_dmem_addr)
-+{
-+	return vpu_mapping_dm_addr(fw->pdev, dtcm_dmem_addr);
-+}
-+
-+static int mtk_vcodec_vpu_set_ipi_register(struct mtk_vcodec_fw *fw, int id,
-+					   mtk_vcodec_ipi_handler handler,
-+					   const char *name, void *priv)
-+{
-+	/*
-+	 * The handler we receive takes a void * as its first argument. We
-+	 * cannot change this because it needs to be passed down to the rproc
-+	 * subsystem when SCP is used. VPU takes a const argument, which is
-+	 * more constrained, so the conversion below is safe.
-+	 */
-+	ipi_handler_t handler_const = (ipi_handler_t)handler;
-+
-+	return vpu_ipi_register(fw->pdev, id, handler_const, name, priv);
-+}
-+
-+static int mtk_vcodec_vpu_ipi_send(struct mtk_vcodec_fw *fw, int id, void *buf,
-+				   unsigned int len, unsigned int wait)
-+{
-+	return vpu_ipi_send(fw->pdev, id, buf, len);
-+}
-+
-+static void mtk_vcodec_vpu_release(struct mtk_vcodec_fw *fw)
-+{
-+	put_device(&fw->pdev->dev);
-+}
-+
-+static void mtk_vcodec_vpu_reset_handler(void *priv)
-+{
-+	struct mtk_vcodec_dev *dev = priv;
-+	struct mtk_vcodec_ctx *ctx;
-+
-+	mtk_v4l2_err("Watchdog timeout!!");
-+
-+	mutex_lock(&dev->dev_mutex);
-+	list_for_each_entry(ctx, &dev->ctx_list, list) {
-+		ctx->state = MTK_STATE_ABORT;
-+		mtk_v4l2_debug(0, "[%d] Change to state MTK_STATE_ABORT",
-+			       ctx->id);
-+	}
-+	mutex_unlock(&dev->dev_mutex);
-+}
-+
-+static const struct mtk_vcodec_fw_ops mtk_vcodec_vpu_msg = {
-+	.load_firmware = mtk_vcodec_vpu_load_firmware,
-+	.get_vdec_capa = mtk_vcodec_vpu_get_vdec_capa,
-+	.get_venc_capa = mtk_vcodec_vpu_get_venc_capa,
-+	.map_dm_addr = mtk_vcodec_vpu_map_dm_addr,
-+	.ipi_register = mtk_vcodec_vpu_set_ipi_register,
-+	.ipi_send = mtk_vcodec_vpu_ipi_send,
-+	.release = mtk_vcodec_vpu_release,
-+};
-+
-+struct mtk_vcodec_fw *mtk_vcodec_fw_vpu_init(struct mtk_vcodec_dev *dev,
-+					     enum mtk_vcodec_fw_use fw_use)
-+{
-+	struct platform_device *fw_pdev;
-+	struct mtk_vcodec_fw *fw;
-+	enum rst_id rst_id;
-+
-+	switch (fw_use) {
-+	case ENCODER:
-+		rst_id = VPU_RST_ENC;
-+		break;
-+	case DECODER:
-+		rst_id = VPU_RST_DEC;
-+		break;
-+	}
-+
-+	fw_pdev = vpu_get_plat_device(dev->plat_dev);
-+	if (!fw_pdev) {
-+		mtk_v4l2_err("firmware device is not ready");
-+		return ERR_PTR(-EINVAL);
-+	}
-+	vpu_wdt_reg_handler(fw_pdev, mtk_vcodec_vpu_reset_handler, dev, rst_id);
-+
-+	fw = devm_kzalloc(&dev->plat_dev->dev, sizeof(*fw), GFP_KERNEL);
-+	fw->type = VPU;
-+	fw->ops = &mtk_vcodec_vpu_msg;
-+	fw->pdev = fw_pdev;
-+
-+	return fw;
-+}
+Thumbnail mode - first frame decode without additional memory (one input
+buffer and one output buffer). The first frame can be even non-intra
+frame as well. Also no matter frame parser is sending, the decoder will
+try to produce output for thumbnail generation.
+
+> Best regards,
+> Tomasz
+> 
+>>
+>> Regards,
+>>
+>>         Hans
+>>
+>>>
+>>>>
+>>>> That this is useful for creating thumbnails is just a specific use-case.
+>>>>
+>>>> Regards,
+>>>>
+>>>>      Hans
+>>>>
+>>>>>>
+>>>>>>>
+>>>>>>> I.e. if you are decoding and 'press' this control, what happens then?
+>>>>>>
+>>>>>> Might be the button type wasn't great idea. In fact the control should
+>>>>>> be set before streamon so that the driver returns min_capture_bufs 1.
+>>>>>>
+>>>>>>>
+>>>>>>> What exactly is the use-case?
+>>>>>>
+>>>>>> It could be used to generate thumbnails of all video clips in a folder
+>>>>>> or when you open a Gallery application on your phone.
+>>>>>>
+>>>>>
+>>>>> What is your opinion on that control? I could consider to make it Venus
+>>>>> custom control but from the use-case it looks other drivers also can
+>>>>> benefit of it.
+>>>>>
+>>>>> I tried to make more generic one [1] but it looks it will be too difficult.
+>>>>>
+>>>>
+>>>
+>>
+
 -- 
-2.29.0.rc1.297.gfa9743e501-goog
-
+regards,
+Stan
