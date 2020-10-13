@@ -2,172 +2,228 @@ Return-Path: <SRS0=sDFD=DU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,MIME_BASE64_TEXT,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1588FC43467
-	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 13:05:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 210B0C433E7
+	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 13:13:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B892122B48
-	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 13:05:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C2F7322D08
+	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 13:13:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="O+rKgE9Z"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="YMkUEMOX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387613AbgJMNF0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 13 Oct 2020 09:05:26 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:37253 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2387449AbgJMNFY (ORCPT
+        id S2387725AbgJMNNE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 13 Oct 2020 09:13:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52436 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387620AbgJMNND (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 13 Oct 2020 09:05:24 -0400
-X-UUID: b36b6a61f2c44cd3805e5e92586327f3-20201013
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=bndLGSikPfI1mM6O4xy/Rg0ViLM5gRBelwKg4mAZ0Dc=;
-        b=O+rKgE9Zi0g+mGk1/MyACxQ6qzS/l2lY2KcMsA7G74PAMt5KQMtG5fPc/Rr+xvO20KzgB64fq/+4Mcpif6mhdCxVfGyJktC6P62GwGqin/xGZMxIj+USocIoAUOfyFPO+ClKEoXqazctPTl/lO7me0nH78hNqpdcagCa+aBg6Cc=;
-X-UUID: b36b6a61f2c44cd3805e5e92586327f3-20201013
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
-        (envelope-from <dongchun.zhu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1026025803; Tue, 13 Oct 2020 21:05:15 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 13 Oct 2020 21:05:09 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 13 Oct 2020 21:05:08 +0800
-From:   Dongchun Zhu <dongchun.zhu@mediatek.com>
-To:     <mchehab@kernel.org>, <andriy.shevchenko@linux.intel.com>,
-        <robh+dt@kernel.org>, <mark.rutland@arm.com>,
-        <sakari.ailus@linux.intel.com>, <drinkcat@chromium.org>,
-        <tfiga@chromium.org>, <matthias.bgg@gmail.com>,
-        <bingbu.cao@intel.com>
-CC:     <srv_heupstream@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <sj.huang@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <louis.kuo@mediatek.com>, <shengnan.wang@mediatek.com>,
-        <dongchun.zhu@mediatek.com>
-Subject: [PATCH v15 1/2] media: dt-bindings: media: i2c: Document OV02A10 bindings
-Date:   Tue, 13 Oct 2020 21:05:02 +0800
-Message-ID: <20201013130503.2412-2-dongchun.zhu@mediatek.com>
-X-Mailer: git-send-email 2.9.2
-In-Reply-To: <20201013130503.2412-1-dongchun.zhu@mediatek.com>
-References: <20201013130503.2412-1-dongchun.zhu@mediatek.com>
+        Tue, 13 Oct 2020 09:13:03 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE920C0613D0
+        for <linux-media@vger.kernel.org>; Tue, 13 Oct 2020 06:13:01 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id x7so18072051eje.8
+        for <linux-media@vger.kernel.org>; Tue, 13 Oct 2020 06:13:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zUTR1na3Qa05gyhmhDFmvq03v/zx4fi0gFtqH+OKyWU=;
+        b=YMkUEMOXtUWNimXqzoY70gOvJhuH3owo6E/8URbjAoCRURFQLe1HRvPGm9LzkClgNh
+         hqKd4OCtyy1fzhGhpa5ca7+hduaG64OKkvaOPuB2adHMgN+8xX7nbVN9iy1rnlH1GE3u
+         w/Xw1YYWYPXiIDPI3gmpRA/ituQIIUSJ3IapM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zUTR1na3Qa05gyhmhDFmvq03v/zx4fi0gFtqH+OKyWU=;
+        b=WCaxZE+S8l3pHkUGqqckfO4uAbAvzc1W4Kgk0VrHm7DUTq03Yu3wSidcM3l+HvCTL/
+         5RMsxao/J2JAsfS/7b/jC6PhCAPKbDfsvk/GqGQclYkZnsDsv4/eBlIOUTyUmHi+PotO
+         CDVCPapz1RmjSaAFlEYSCa7oIsHuYiJXzr+ZWWtr519CrmDYJBY72YHiJYstuEHwFS8V
+         Nqg8M3NaYRyn5NJzpOc2oXpWG4fAKkx8KiBxbhefP7lxCpvhj7S7tL4u1wRSKsxfZ/bT
+         CP97SnFb6cMtx1auIHU7eu4XZiXdGiNgmj4L13vd+Ol6B0dFaOQvjqrnp+WDtB7lqJog
+         bOXA==
+X-Gm-Message-State: AOAM533DA6Gqxm74fgJX/CA5MXfhc1n2EPCZ4xeYgQtVfYC8M35JQb5S
+        Z100YU3qfNmQafw+7lFciJvjnJ2mOcI2B32t
+X-Google-Smtp-Source: ABdhPJwiSvpVsbDD5qRAtH8aGsS8HkVtfebbWm/mMPsBE8wdiyuLXzOrss5/wAaLjvSjC/qMlgysQA==
+X-Received: by 2002:a17:906:f14b:: with SMTP id gw11mr33681148ejb.41.1602594779599;
+        Tue, 13 Oct 2020 06:12:59 -0700 (PDT)
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
+        by smtp.gmail.com with ESMTPSA id mc4sm12247630ejb.61.2020.10.13.06.12.57
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Oct 2020 06:12:58 -0700 (PDT)
+Received: by mail-wr1-f45.google.com with SMTP id n6so23684433wrm.13
+        for <linux-media@vger.kernel.org>; Tue, 13 Oct 2020 06:12:57 -0700 (PDT)
+X-Received: by 2002:adf:ab05:: with SMTP id q5mr9380716wrc.32.1602594777300;
+ Tue, 13 Oct 2020 06:12:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: 36001AE281E88D0AA2A9CA2DDD5268F17D6F890B5DE78199E5933A8DC8D91FD32000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+References: <20200526085446.30956-1-stanimir.varbanov@linaro.org>
+ <65ac9697-a43f-7025-e6fe-69c4a44c6d9a@xs4all.nl> <ce28a840-a763-6700-16dd-d708e570d55c@linaro.org>
+ <d02c6cd0-a502-dc52-519e-54b6328d5373@linaro.org> <544b19dd-4883-bae0-b488-46c856eb207d@xs4all.nl>
+ <6f71931a-9060-a399-835c-a1cf1f05dc79@linaro.org> <1bc10e88-8cbe-3da9-daeb-d015f42d7acc@xs4all.nl>
+ <CAAFQd5Aorm-O7OMcHsnRUEGQq2qoPDRtAuukiLHgC9g54oAW9Q@mail.gmail.com> <de40cdf1-0b84-a252-0137-a550f078d28b@linaro.org>
+In-Reply-To: <de40cdf1-0b84-a252-0137-a550f078d28b@linaro.org>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Tue, 13 Oct 2020 15:12:46 +0200
+X-Gmail-Original-Message-ID: <CAAFQd5A7MdFXsYWVx+3DY-dt=HZTg_Kt1uhntoEzzjp+e02R=Q@mail.gmail.com>
+Message-ID: <CAAFQd5A7MdFXsYWVx+3DY-dt=HZTg_Kt1uhntoEzzjp+e02R=Q@mail.gmail.com>
+Subject: Re: [PATCH] v4l2-ctrl: add control for thumnails
+To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-QWRkIFlBTUwgZGV2aWNlIHRyZWUgYmluZGluZyBmb3IgT1YwMkExMCBDTU9TIGltYWdlIHNlbnNv
-ciwgYW5kIHRoZQ0KcmVsZXZhbnQgTUFJTlRBSU5FUlMgZW50cmllcy4NCg0KU2lnbmVkLW9mZi1i
-eTogRG9uZ2NodW4gWmh1IDxkb25nY2h1bi56aHVAbWVkaWF0ZWsuY29tPg0KLS0tDQogLi4uL2Jp
-bmRpbmdzL21lZGlhL2kyYy9vdnRpLG92MDJhMTAueWFtbCAgICAgICAgICAgfCAxNjIgKysrKysr
-KysrKysrKysrKysrKysrDQogTUFJTlRBSU5FUlMgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgfCAgIDcgKw0KIDIgZmlsZXMgY2hhbmdlZCwgMTY5IGluc2VydGlvbnMoKykN
-CiBjcmVhdGUgbW9kZSAxMDA2NDQgRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL21l
-ZGlhL2kyYy9vdnRpLG92MDJhMTAueWFtbA0KDQpkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9k
-ZXZpY2V0cmVlL2JpbmRpbmdzL21lZGlhL2kyYy9vdnRpLG92MDJhMTAueWFtbCBiL0RvY3VtZW50
-YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9tZWRpYS9pMmMvb3Z0aSxvdjAyYTEwLnlhbWwNCm5l
-dyBmaWxlIG1vZGUgMTAwNjQ0DQppbmRleCAwMDAwMDAwLi5mYjk4OTY0DQotLS0gL2Rldi9udWxs
-DQorKysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvbWVkaWEvaTJjL292dGks
-b3YwMmExMC55YW1sDQpAQCAtMCwwICsxLDE2MiBAQA0KKyMgU1BEWC1MaWNlbnNlLUlkZW50aWZp
-ZXI6IChHUEwtMi4wIE9SIEJTRC0yLUNsYXVzZSkNCisjIENvcHlyaWdodCAoYykgMjAyMCBNZWRp
-YVRlayBJbmMuDQorJVlBTUwgMS4yDQorLS0tDQorJGlkOiBodHRwOi8vZGV2aWNldHJlZS5vcmcv
-c2NoZW1hcy9tZWRpYS9pMmMvb3Z0aSxvdjAyYTEwLnlhbWwjDQorJHNjaGVtYTogaHR0cDovL2Rl
-dmljZXRyZWUub3JnL21ldGEtc2NoZW1hcy9jb3JlLnlhbWwjDQorDQordGl0bGU6IE9tbml2aXNp
-b24gT1YwMkExMCBDTU9TIFNlbnNvciBEZXZpY2UgVHJlZSBCaW5kaW5ncw0KKw0KK21haW50YWlu
-ZXJzOg0KKyAgLSBEb25nY2h1biBaaHUgPGRvbmdjaHVuLnpodUBtZWRpYXRlay5jb20+DQorDQor
-ZGVzY3JpcHRpb246IHwtDQorICBUaGUgT21uaXZpc2lvbiBPVjAyQTEwIGlzIGEgbG93LWNvc3Qs
-IGhpZ2ggcGVyZm9ybWFuY2UsIDEvNS1pbmNoLCAyIG1lZ2FwaXhlbA0KKyAgaW1hZ2Ugc2Vuc29y
-LCB3aGljaCBpcyB0aGUgbGF0ZXN0IHByb2R1Y3Rpb24gZGVyaXZlZCBmcm9tIE9tbml2aXNpb24n
-cyBDTU9TDQorICBpbWFnZSBzZW5zb3IgdGVjaG5vbG9neS4gSWhpcyBjaGlwIHN1cHBvcnRzIGhp
-Z2ggZnJhbWUgcmF0ZSBzcGVlZHMgdXAgdG8gMzBmcHMNCisgIEAgMTYwMHgxMjAwIChVWEdBKSBy
-ZXNvbHV0aW9uIHRyYW5zZmVycmVkIG92ZXIgYSAxLWxhbmUgTUlQSSBpbnRlcmZhY2UuIFRoZQ0K
-KyAgc2Vuc29yIG91dHB1dCBpcyBhdmFpbGFibGUgdmlhIENTSS0yIHNlcmlhbCBkYXRhIG91dHB1
-dC4NCisNCitwcm9wZXJ0aWVzOg0KKyAgY29tcGF0aWJsZToNCisgICAgY29uc3Q6IG92dGksb3Yw
-MmExMA0KKw0KKyAgcmVnOg0KKyAgICBtYXhJdGVtczogMQ0KKw0KKyAgY2xvY2tzOg0KKyAgICBt
-YXhJdGVtczogMQ0KKw0KKyAgY2xvY2stbmFtZXM6DQorICAgIGRlc2NyaXB0aW9uOg0KKyAgICAg
-IEV4dGVybmFsIGNsb2NrIGZvciB0aGUgc2Vuc29yLg0KKyAgICBpdGVtczoNCisgICAgICAtIGNv
-bnN0OiBlY2xrDQorDQorICBjbG9jay1mcmVxdWVuY3k6DQorICAgIGRlc2NyaXB0aW9uOg0KKyAg
-ICAgIEZyZXF1ZW5jeSBvZiB0aGUgZWNsayBjbG9jayBpbiBIei4NCisNCisgIGRvdmRkLXN1cHBs
-eToNCisgICAgZGVzY3JpcHRpb246DQorICAgICAgRGVmaW5pdGlvbiBvZiB0aGUgcmVndWxhdG9y
-IHVzZWQgYXMgRGlnaXRhbCBJL08gdm9sdGFnZSBzdXBwbHkuDQorDQorICBhdmRkLXN1cHBseToN
-CisgICAgZGVzY3JpcHRpb246DQorICAgICAgRGVmaW5pdGlvbiBvZiB0aGUgcmVndWxhdG9yIHVz
-ZWQgYXMgQW5hbG9nIHZvbHRhZ2Ugc3VwcGx5Lg0KKw0KKyAgZHZkZC1zdXBwbHk6DQorICAgIGRl
-c2NyaXB0aW9uOg0KKyAgICAgIERlZmluaXRpb24gb2YgdGhlIHJlZ3VsYXRvciB1c2VkIGFzIERp
-Z2l0YWwgY29yZSB2b2x0YWdlIHN1cHBseS4NCisNCisgIHBvd2VyZG93bi1ncGlvczoNCisgICAg
-ZGVzY3JpcHRpb246DQorICAgICAgTXVzdCBiZSB0aGUgZGV2aWNlIHRyZWUgaWRlbnRpZmllciBv
-ZiB0aGUgR1BJTyBjb25uZWN0ZWQgdG8gdGhlDQorICAgICAgUERfUEFEIHBpbi4gVGhpcyBwaW4g
-aXMgdXNlZCB0byBwbGFjZSB0aGUgT1YwMkExMCBpbnRvIHN0YW5kYnkgbW9kZQ0KKyAgICAgIG9y
-IHNodXRkb3duIG1vZGUuIEFzIHRoZSBsaW5lIG5lZWRzIHRvIGJlIGhpZ2ggZm9yIHRoZSBwb3dl
-cmRvd24gbW9kZQ0KKyAgICAgIHRvIGJlIGFjdGl2ZSwgaXQgc2hvdWxkIGJlIG1hcmtlZCBHUElP
-X0FDVElWRV9ISUdILg0KKyAgICBtYXhJdGVtczogMQ0KKw0KKyAgcmVzZXQtZ3Bpb3M6DQorICAg
-IGRlc2NyaXB0aW9uOg0KKyAgICAgIE11c3QgYmUgdGhlIGRldmljZSB0cmVlIGlkZW50aWZpZXIg
-b2YgdGhlIEdQSU8gY29ubmVjdGVkIHRvIHRoZQ0KKyAgICAgIFJTVF9QRCBwaW4uIElmIHNwZWNp
-ZmllZCwgaXQgd2lsbCBiZSBhc3NlcnRlZCBkdXJpbmcgZHJpdmVyIHByb2JlLg0KKyAgICAgIEFz
-IHRoZSBsaW5lIG5lZWRzIHRvIGJlIGxvdyBmb3IgdGhlIHJlc2V0IHRvIGJlIGFjdGl2ZSwgaXQg
-c2hvdWxkIGJlDQorICAgICAgbWFya2VkIEdQSU9fQUNUSVZFX0xPVy4NCisgICAgbWF4SXRlbXM6
-IDENCisNCisgIHJvdGF0aW9uOg0KKyAgICBkZXNjcmlwdGlvbjoNCisgICAgICBEZWZpbml0aW9u
-IG9mIHRoZSBzZW5zb3IncyBwbGFjZW1lbnQuDQorICAgIGFsbE9mOg0KKyAgICAgIC0gJHJlZjog
-Ii9zY2hlbWFzL3R5cGVzLnlhbWwjL2RlZmluaXRpb25zL3VpbnQzMiINCisgICAgICAtIGVudW06
-DQorICAgICAgICAgIC0gMCAgICAjIFNlbnNvciBNb3VudGVkIFVwcmlnaHQNCisgICAgICAgICAg
-LSAxODAgICMgU2Vuc29yIE1vdW50ZWQgVXBzaWRlIERvd24NCisgICAgICAgIGRlZmF1bHQ6IDAN
-CisNCisgIG92dGksbWlwaS1jbG9jay12b2x0YWdlOg0KKyAgICBkZXNjcmlwdGlvbjoNCisgICAg
-ICBBbiBhcnJheSBvZiAyLXR1cGxlcyBpdGVtcywgYW5kIGVhY2ggaXRlbSBjb25zaXN0cyBvZiBs
-aW5rIGZyZXF1ZW5jeSBhbmQNCisgICAgICBNSVBJIGNsb2NrIHZvbHRhZ2UgdW5pdCBsaWtlIDxm
-cmVxLWtIeiB2b2x0LXVuaXQ+LiBDbG9jayB2b2x0YWdlIHVuaXQgaXMNCisgICAgICBkZXBlbmRl
-bnQgdXBvbiBsaW5rIHNwZWVkLCBpbmRpY2F0aW5nIE1JUEkgdHJhbnNtaXNzaW9uIHNwZWVkIHNl
-bGVjdCB0aGF0DQorICAgICAgY29udHJvbHMgRC1QSFkgdGltaW5nIHNldHRpbmcgYnkgYWRqdXN0
-aW5nIE1JUEkgY2xvY2sgdm9sdGFnZSB0byBpbXByb3ZlDQorICAgICAgdGhlIGNsb2NrIGRyaXZl
-ciBjYXBhYmlsaXR5Lg0KKyAgICAkcmVmOiAiL3NjaGVtYXMvdHlwZXMueWFtbCMvZGVmaW5pdGlv
-bnMvdWludDMyLWFycmF5Ig0KKyAgICBtaW5JdGVtczogMg0KKyAgICBkZWZhdWx0OiBbMzkwMDAw
-LCA0XQ0KKw0KKyAgIyBTZWUgLi4vdmlkZW8taW50ZXJmYWNlcy50eHQgZm9yIGRldGFpbHMNCisg
-IHBvcnQ6DQorICAgIHR5cGU6IG9iamVjdA0KKyAgICBhZGRpdGlvbmFsUHJvcGVydGllczogZmFs
-c2UNCisgICAgZGVzY3JpcHRpb246DQorICAgICAgT3V0cHV0IHBvcnQgbm9kZSwgc2luZ2xlIGVu
-ZHBvaW50IGRlc2NyaWJpbmcgdGhlIENTSS0yIHRyYW5zbWl0dGVyLg0KKw0KKyAgICBwcm9wZXJ0
-aWVzOg0KKyAgICAgIGVuZHBvaW50Og0KKyAgICAgICAgdHlwZTogb2JqZWN0DQorICAgICAgICBh
-ZGRpdGlvbmFsUHJvcGVydGllczogZmFsc2UNCisNCisgICAgICAgIHByb3BlcnRpZXM6DQorICAg
-ICAgICAgIGxpbmstZnJlcXVlbmNpZXM6IHRydWUNCisgICAgICAgICAgcmVtb3RlLWVuZHBvaW50
-OiB0cnVlDQorDQorICAgICAgICByZXF1aXJlZDoNCisgICAgICAgICAgLSBsaW5rLWZyZXF1ZW5j
-aWVzDQorICAgICAgICAgIC0gcmVtb3RlLWVuZHBvaW50DQorDQorICAgIHJlcXVpcmVkOg0KKyAg
-ICAgIC0gZW5kcG9pbnQNCisNCityZXF1aXJlZDoNCisgIC0gY29tcGF0aWJsZQ0KKyAgLSByZWcN
-CisgIC0gY2xvY2tzDQorICAtIGNsb2NrLW5hbWVzDQorICAtIGNsb2NrLWZyZXF1ZW5jeQ0KKyAg
-LSBkb3ZkZC1zdXBwbHkNCisgIC0gYXZkZC1zdXBwbHkNCisgIC0gZHZkZC1zdXBwbHkNCisgIC0g
-cG93ZXJkb3duLWdwaW9zDQorICAtIHJlc2V0LWdwaW9zDQorICAtIHBvcnQNCisNCithZGRpdGlv
-bmFsUHJvcGVydGllczogZmFsc2UNCisNCitleGFtcGxlczoNCisgIC0gfA0KKyAgICAjaW5jbHVk
-ZSA8ZHQtYmluZGluZ3MvZ3Bpby9ncGlvLmg+DQorDQorICAgIGkyYyB7DQorICAgICAgICAjYWRk
-cmVzcy1jZWxscyA9IDwxPjsNCisgICAgICAgICNzaXplLWNlbGxzID0gPDA+Ow0KKw0KKyAgICAg
-ICAgb3YwMmExMDogY2FtZXJhLXNlbnNvckAzZCB7DQorICAgICAgICAgICAgY29tcGF0aWJsZSA9
-ICJvdnRpLG92MDJhMTAiOw0KKyAgICAgICAgICAgIHJlZyA9IDwweDNkPjsNCisNCisgICAgICAg
-ICAgICBwb3dlcmRvd24tZ3Bpb3MgPSA8JnBpbyAxMDcgR1BJT19BQ1RJVkVfSElHSD47DQorICAg
-ICAgICAgICAgcmVzZXQtZ3Bpb3MgPSA8JnBpbyAxMDkgR1BJT19BQ1RJVkVfTE9XPjsNCisNCisg
-ICAgICAgICAgICBjbG9ja3MgPSA8Jm92MDJhMTBfY2xrPjsNCisgICAgICAgICAgICBjbG9jay1u
-YW1lcyA9ICJlY2xrIjsNCisgICAgICAgICAgICBjbG9jay1mcmVxdWVuY3kgPSA8MjQwMDAwMDA+
-Ow0KKw0KKyAgICAgICAgICAgIHJvdGF0aW9uID0gPDE4MD47DQorICAgICAgICAgICAgb3Z0aSxt
-aXBpLWNsb2NrLXZvbHRhZ2UgPSA8MzkwMDAwIDQ+Ow0KKw0KKyAgICAgICAgICAgIGRvdmRkLXN1
-cHBseSA9IDwmb3YwMmExMF9kb3ZkZD47DQorICAgICAgICAgICAgYXZkZC1zdXBwbHkgPSA8Jm92
-MDJhMTBfYXZkZD47DQorICAgICAgICAgICAgZHZkZC1zdXBwbHkgPSA8Jm92MDJhMTBfZHZkZD47
-DQorDQorICAgICAgICAgICAgcG9ydCB7DQorICAgICAgICAgICAgICAgIHdjYW1fb3V0OiBlbmRw
-b2ludCB7DQorICAgICAgICAgICAgICAgICAgICBsaW5rLWZyZXF1ZW5jaWVzID0gL2JpdHMvIDY0
-IDwzOTAwMDAwMDA+Ow0KKyAgICAgICAgICAgICAgICAgICAgcmVtb3RlLWVuZHBvaW50ID0gPCZt
-aXBpX2luX3djYW0+Ow0KKyAgICAgICAgICAgICAgICB9Ow0KKyAgICAgICAgICAgIH07DQorICAg
-ICAgICB9Ow0KKyAgICB9Ow0KKw0KKy4uLg0KZGlmZiAtLWdpdCBhL01BSU5UQUlORVJTIGIvTUFJ
-TlRBSU5FUlMNCmluZGV4IGRlYWFmYjYuLjQ4YWE3YTcgMTAwNjQ0DQotLS0gYS9NQUlOVEFJTkVS
-Uw0KKysrIGIvTUFJTlRBSU5FUlMNCkBAIC0xMjcxOCw2ICsxMjcxOCwxMyBAQCBNOglIYXJhbGQg
-V2VsdGUgPGxhZm9yZ2VAZ251bW9ua3Mub3JnPg0KIFM6CU1haW50YWluZWQNCiBGOglkcml2ZXJz
-L2NoYXIvcGNtY2lhL2NtNDA0MF9jcy4qDQogDQorT01OSVZJU0lPTiBPVjAyQTEwIFNFTlNPUiBE
-UklWRVINCitNOglEb25nY2h1biBaaHUgPGRvbmdjaHVuLnpodUBtZWRpYXRlay5jb20+DQorTDoJ
-bGludXgtbWVkaWFAdmdlci5rZXJuZWwub3JnDQorUzoJTWFpbnRhaW5lZA0KK1Q6CWdpdCBnaXQ6
-Ly9saW51eHR2Lm9yZy9tZWRpYV90cmVlLmdpdA0KK0Y6CURvY3VtZW50YXRpb24vZGV2aWNldHJl
-ZS9iaW5kaW5ncy9tZWRpYS9pMmMvb3Z0aSxvdjAyYTEwLnlhbWwNCisNCiBPTU5JVklTSU9OIE9W
-MTM4NTggU0VOU09SIERSSVZFUg0KIE06CVNha2FyaSBBaWx1cyA8c2FrYXJpLmFpbHVzQGxpbnV4
-LmludGVsLmNvbT4NCiBMOglsaW51eC1tZWRpYUB2Z2VyLmtlcm5lbC5vcmcNCi0tIA0KMi45LjIN
-Cg==
+On Tue, Oct 13, 2020 at 2:52 PM Stanimir Varbanov
+<stanimir.varbanov@linaro.org> wrote:
+>
+> Hi,
+>
+> On 6/4/20 3:57 PM, Tomasz Figa wrote:
+> > On Thu, Jun 4, 2020 at 2:56 PM Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
+> >>
+> >> On 04/06/2020 14:34, Stanimir Varbanov wrote:
+> >>> Hi Hans,
+> >>>
+> >>> On 6/4/20 12:08 PM, Hans Verkuil wrote:
+> >>>> On 04/06/2020 11:02, Stanimir Varbanov wrote:
+> >>>>> Hi Hans,
+> >>>>>
+> >>>>> On 5/27/20 12:53 AM, Stanimir Varbanov wrote:
+> >>>>>> Hi Hans,
+> >>>>>>
+> >>>>>> On 5/26/20 3:04 PM, Hans Verkuil wrote:
+> >>>>>>> On 26/05/2020 10:54, Stanimir Varbanov wrote:
+> >>>>>>>> Add v4l2 control for decoder thumbnail.
+> >>>>>>>>
+> >>>>>>>> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+> >>>>>>>> ---
+> >>>>>>>>  Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 7 +++++++
+> >>>>>>>>  drivers/media/v4l2-core/v4l2-ctrls.c                      | 2 ++
+> >>>>>>>>  include/uapi/linux/v4l2-controls.h                        | 2 ++
+> >>>>>>>>  3 files changed, 11 insertions(+)
+> >>>>>>>>
+> >>>>>>>> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> >>>>>>>> index d0d506a444b1..e838e410651b 100644
+> >>>>>>>> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> >>>>>>>> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> >>>>>>>> @@ -3726,6 +3726,13 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+> >>>>>>>>      disables generating SPS and PPS at every IDR. Setting it to one enables
+> >>>>>>>>      generating SPS and PPS at every IDR.
+> >>>>>>>>
+> >>>>>>>> +``V4L2_CID_MPEG_VIDEO_DECODER_THUMBNAIL (button)``
+> >>>>>>>> +    Instructs the decoder to produce immediate output. The decoder should
+> >>>>>>>> +    consume first input buffer for progressive stream (or first two buffers
+> >>>>>>>> +    for interlace). Decoder should not allocate more output buffers that it
+> >>>>>>>> +    is required to consume one input frame. Usually the decoder input
+> >>>>>>>> +    buffers will contain only I/IDR frames but it is not mandatory.
+> >>>>>>>
+> >>>>>>> This is very vague. It doesn't explain why the control is called 'THUMBNAIL',
+> >>>>>>> but more importantly it doesn't explain how this relates to normal decoding.
+> >>>>>>
+> >>>>>> If in the normal decode the capture queue buffers are 5, in the
+> >>>>>> thumbnail mode the number of buffers will be only 1 (if the bitstream is
+> >>>>>> progressive) and this will guarantee low memory usage. The other
+> >>>>>> difference is that the decoder will produce decoded frames (without
+> >>>>>> errors) only for I/IDR (sync frames).
+> >>>>
+> >>>> Isn't this really a "DECODE_SYNC_FRAMES_ONLY" control? That's what it does,
+> >>>> right? Skip any B/P frames and only decode sync frames.
+> >>>
+> >>> Yes, it is.
+> >>> To me V4L2_CID_MPEG_VIDEO_DECODE_SYNC_FRAMES sounds better. If you are
+> >>> fine I can send a new patch.
+> >>>
+> >>> The definition of "sync frames" is a bit difficult for codec-agnostic
+> >>> controls. Is it sound better "INTRA", DECODE_INTRA_FRAMES (ONLY)?
+> >>
+> >> INTRA is better. DECODE_INTRA_FRAMES_ONLY is a good name, I think.
+> >>
+> >> Thumbnail creation can be given as an example in the description of the
+> >> control, but that's just a use-case.
+> >
+> > How about the other aspect of the behavior?
+> >
+> > "Decoder should not allocate more output buffers that it
+> > is required to consume one input frame."
+> >
+>
+> In fact I have to refine this; It looks like that picture type decode vs
+> thumbnail are two different modes.
+>
+> Thumbnail mode - first frame decode without additional memory (one input
+> buffer and one output buffer). The first frame can be even non-intra
+> frame as well.
 
+How comes it can be decoded without additional memory to store the
+reference frames then?
+
+> Also no matter frame parser is sending, the decoder will
+> try to produce output for thumbnail generation.
+
+Well, thinking of it now, actually DECODE_INTRA_FRAMES_ONLY makes
+sense here - if it is set, only 1 CAPTURE buffer could be allowed
+indeed, because no reference frames are needed for decoding.
+
+If inter frames are needed, I believe full DPB needs to be allocated,
+because it all depends on the stream how the references are set, so
+this is equivalent to normal decoding.
+
+best regards,
+Tomasz
+
+>
+> > Best regards,
+> > Tomasz
+> >
+> >>
+> >> Regards,
+> >>
+> >>         Hans
+> >>
+> >>>
+> >>>>
+> >>>> That this is useful for creating thumbnails is just a specific use-case.
+> >>>>
+> >>>> Regards,
+> >>>>
+> >>>>      Hans
+> >>>>
+> >>>>>>
+> >>>>>>>
+> >>>>>>> I.e. if you are decoding and 'press' this control, what happens then?
+> >>>>>>
+> >>>>>> Might be the button type wasn't great idea. In fact the control should
+> >>>>>> be set before streamon so that the driver returns min_capture_bufs 1.
+> >>>>>>
+> >>>>>>>
+> >>>>>>> What exactly is the use-case?
+> >>>>>>
+> >>>>>> It could be used to generate thumbnails of all video clips in a folder
+> >>>>>> or when you open a Gallery application on your phone.
+> >>>>>>
+> >>>>>
+> >>>>> What is your opinion on that control? I could consider to make it Venus
+> >>>>> custom control but from the use-case it looks other drivers also can
+> >>>>> benefit of it.
+> >>>>>
+> >>>>> I tried to make more generic one [1] but it looks it will be too difficult.
+> >>>>>
+> >>>>
+> >>>
+> >>
+>
+> --
+> regards,
+> Stan
