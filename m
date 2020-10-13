@@ -5,53 +5,52 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F851C433DF
-	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 12:00:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6043C4363D
+	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 12:01:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D73422080A
-	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 12:00:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7EB092080A
+	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 12:01:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1602590408;
-	bh=22a5l6Hf0yUtyosId6lhXH3QUxL5aOgd9d9m1cYYZrE=;
+	s=default; t=1602590491;
+	bh=LwOArSpTP20nI9G50WhOo2j8DQQMKkmQjlArryB8tsI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=jbVkKCOy4EPVB+4GLc03lFIa/p7jcUE1h/C7u8nrRLh5wYuwD5hvIBRa1K0zaG8Hb
-	 9VTacjECcuk7NNjiREotnP7jwQbrS34bc2d71dwbZ7pIefgn/CN3D4Jjozibb8zrMj
-	 vHyljEEXGP33WGmaYchlo7PrfzKZqN6eUTjD4GUM=
+	b=BiA8CtNzkZbSP+rFykOI1V7xPyYldCKG/z9Jin6v9YNvTz0vn4PHkm1QnfVZN+A7J
+	 GC2sLrbEb7eLZW7PhyZ9leMC16wLGRMGQw6et6jShAiNWunotdF9Vn5rulFQ/kn0n1
+	 QaHPpXPwrShFx+RFCPj2JOCJOVZIctZd8e8wLIKc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728602AbgJML7n (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 13 Oct 2020 07:59:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57420 "EHLO mail.kernel.org"
+        id S1728905AbgJMMBa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 13 Oct 2020 08:01:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57642 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727391AbgJMLyn (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 13 Oct 2020 07:54:43 -0400
+        id S1727382AbgJMLym (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 13 Oct 2020 07:54:42 -0400
 Received: from mail.kernel.org (ip5f5ad5b2.dynamic.kabel-deutschland.de [95.90.213.178])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 13EEF2225F;
-        Tue, 13 Oct 2020 11:54:40 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9F012221FC;
+        Tue, 13 Oct 2020 11:54:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1602590080;
-        bh=22a5l6Hf0yUtyosId6lhXH3QUxL5aOgd9d9m1cYYZrE=;
+        bh=LwOArSpTP20nI9G50WhOo2j8DQQMKkmQjlArryB8tsI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vwo9Vj/C6GGGBRBfEnTxnK3BkSyH4WStPnRNiwDpQpP4pJndlVNO22eczb38FNSU9
-         D7CpNZIBCct3ABrp2GFykNF43RMze7+ICmsGishO0hajT9YgqsxXP14cDb5zOzU6aZ
-         nw52yRynzQqfg7Ee/8Dpwwz/LondUhsnChawElg4=
+        b=GtGL42a88FpGiy7LoOTljy0FuZL9Ckniowjgu7JIAKVbBJVss8gXbWEakjNwps0nn
+         ++0Ivv8t/6QID1ST/6Qo/yOiqfT2tfn3H4/qHgfxSAdE4rEfGoXqTWTo9IfG6ADBV0
+         cYesEt72isPy4At/2EX8VmDkNne62GGO7k4VuWTQ=
 Received: from mchehab by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1kSIt3-006CU4-V2; Tue, 13 Oct 2020 13:54:37 +0200
+        id 1kSIt3-006CTn-Hg; Tue, 13 Oct 2020 13:54:37 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         "Jonathan Corbet" <corbet@lwn.net>,
-        Alexandre Courbot <acourbot@chromium.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v6 19/80] media: docs: make MC documents more compatible with Sphinx 3.1+
-Date:   Tue, 13 Oct 2020 13:53:34 +0200
-Message-Id: <04668c79a2e525d9432f370db35a958ec9ffa9b8.1602589096.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v6 16/80] media: docs: make CEC documents compatible with Sphinx 3.1+
+Date:   Tue, 13 Oct 2020 13:53:31 +0200
+Message-Id: <13cf74a294fc1e7302da045bb8b2ba8c84ce12a3.1602589096.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1602589096.git.mchehab+huawei@kernel.org>
 References: <cover.1602589096.git.mchehab+huawei@kernel.org>
@@ -68,36 +67,32 @@ be re-written, in order to use the new c domain notation.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../media/mediactl/media-func-close.rst            | 10 +++-------
- .../media/mediactl/media-func-ioctl.rst            | 10 +++-------
- .../media/mediactl/media-func-open.rst             | 10 +++-------
- .../media/mediactl/media-ioc-device-info.rst       | 13 ++++---------
- .../media/mediactl/media-ioc-enum-entities.rst     | 11 ++++-------
- .../media/mediactl/media-ioc-enum-links.rst        | 13 ++++---------
- .../media/mediactl/media-ioc-g-topology.rst        | 14 ++++----------
- .../media/mediactl/media-ioc-request-alloc.rst     | 11 +++++------
- .../media/mediactl/media-ioc-setup-link.rst        | 10 ++++------
- .../media/mediactl/media-request-ioc-queue.rst     |  7 +++----
- .../media/mediactl/media-request-ioc-reinit.rst    |  8 ++++----
- .../userspace-api/media/mediactl/request-api.rst   |  5 +++--
- .../media/mediactl/request-func-close.rst          |  8 ++------
- .../media/mediactl/request-func-ioctl.rst          |  8 ++------
- .../media/mediactl/request-func-poll.rst           | 12 ++++--------
- 15 files changed, 52 insertions(+), 98 deletions(-)
+ .../media/cec/cec-func-close.rst              | 10 +++-------
+ .../media/cec/cec-func-ioctl.rst              | 11 ++++------
+ .../userspace-api/media/cec/cec-func-open.rst | 10 +++-------
+ .../userspace-api/media/cec/cec-func-poll.rst | 14 +++++--------
+ .../media/cec/cec-ioc-adap-g-caps.rst         | 10 +++++-----
+ .../media/cec/cec-ioc-adap-g-conn-info.rst    | 11 +++++-----
+ .../media/cec/cec-ioc-adap-g-log-addrs.rst    | 20 ++++++++-----------
+ .../media/cec/cec-ioc-adap-g-phys-addr.rst    | 15 +++++++-------
+ .../media/cec/cec-ioc-dqevent.rst             | 15 +++++---------
+ .../media/cec/cec-ioc-g-mode.rst              | 16 +++++++--------
+ .../media/cec/cec-ioc-receive.rst             | 18 ++++++++---------
+ 11 files changed, 63 insertions(+), 87 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/mediactl/media-func-close.rst b/Documentation/userspace-api/media/mediactl/media-func-close.rst
-index ec571b34ce69..8ac2443e76c1 100644
---- a/Documentation/userspace-api/media/mediactl/media-func-close.rst
-+++ b/Documentation/userspace-api/media/mediactl/media-func-close.rst
+diff --git a/Documentation/userspace-api/media/cec/cec-func-close.rst b/Documentation/userspace-api/media/cec/cec-func-close.rst
+index 33c563f414a8..409e70a5f80f 100644
+--- a/Documentation/userspace-api/media/cec/cec-func-close.rst
++++ b/Documentation/userspace-api/media/cec/cec-func-close.rst
 @@ -1,4 +1,5 @@
  .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-+.. c:namespace:: MC
++.. c:namespace:: CEC
  
- .. _media-func-close:
+ .. _cec-func-close:
  
 @@ -11,7 +12,6 @@ Name
  
- media-close - Close a media device
+ cec-close - Close a cec device
  
 -
  Synopsis
@@ -109,68 +104,60 @@ index ec571b34ce69..8ac2443e76c1 100644
  
 -
  .. c:function:: int close( int fd )
--    :name: mc-close
+-    :name: cec-close
  
  Arguments
  =========
  
  ``fd``
--    File descriptor returned by :c:func:`open() <mc-open>`.
+-    File descriptor returned by :c:func:`open() <cec-open>`.
 -
 +    File descriptor returned by :c:func:`open()`.
  
  Description
  ===========
 @@ -36,11 +33,10 @@ Description
- Closes the media device. Resources associated with the file descriptor
- are freed. The device configuration remain unchanged.
+ Closes the cec device. Resources associated with the file descriptor are
+ freed. The device configuration remain unchanged.
  
 -
  Return Value
  ============
  
--:ref:`close() <media-func-close>` returns 0 on success. On error, -1 is returned, and
+-:c:func:`close() <cec-close>` returns 0 on success. On error, -1 is returned, and
 +:c:func:`close()` returns 0 on success. On error, -1 is returned, and
  ``errno`` is set appropriately. Possible error codes are:
  
- EBADF
-diff --git a/Documentation/userspace-api/media/mediactl/media-func-ioctl.rst b/Documentation/userspace-api/media/mediactl/media-func-ioctl.rst
-index 35ed549bec0e..9e9a838f4795 100644
---- a/Documentation/userspace-api/media/mediactl/media-func-ioctl.rst
-+++ b/Documentation/userspace-api/media/mediactl/media-func-ioctl.rst
+ ``EBADF``
+diff --git a/Documentation/userspace-api/media/cec/cec-func-ioctl.rst b/Documentation/userspace-api/media/cec/cec-func-ioctl.rst
+index 3b88230fad80..7c93f86de6cc 100644
+--- a/Documentation/userspace-api/media/cec/cec-func-ioctl.rst
++++ b/Documentation/userspace-api/media/cec/cec-func-ioctl.rst
 @@ -1,4 +1,5 @@
  .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-+.. c:namespace:: MC
++.. c:namespace:: CEC
  
- .. _media-func-ioctl:
+ .. _cec-func-ioctl:
  
-@@ -11,7 +12,6 @@ Name
- 
- media-ioctl - Control a media device
- 
--
- Synopsis
- ========
- 
-@@ -19,15 +19,13 @@ Synopsis
+@@ -18,15 +19,13 @@ Synopsis
  
      #include <sys/ioctl.h>
  
 -
 -.. c:function:: int ioctl( int fd, int request, void *argp )
--    :name: mc-ioctl
+-   :name: cec-ioctl
 +``int ioctl(int fd, int request, void *argp)``
  
  Arguments
  =========
  
  ``fd``
--    File descriptor returned by :c:func:`open() <mc-open>`.
+-    File descriptor returned by :c:func:`open() <cec-open>`.
 +    File descriptor returned by :c:func:`open()`.
  
  ``request``
-     Media ioctl request code as defined in the media.h header file, for
-@@ -36,7 +34,6 @@ Arguments
+     CEC ioctl request code as defined in the cec.h header file, for
+@@ -35,11 +34,10 @@ Arguments
  ``argp``
      Pointer to a request-specific structure.
  
@@ -178,56 +165,54 @@ index 35ed549bec0e..9e9a838f4795 100644
  Description
  ===========
  
-@@ -52,7 +49,6 @@ their parameters are located in the media.h header file. All media ioctl
+-The :c:func:`ioctl() <cec-ioctl>` function manipulates cec device parameters. The
++The :c:func:`ioctl()` function manipulates cec device parameters. The
+ argument ``fd`` must be an open file descriptor.
+ 
+ The ioctl ``request`` code specifies the cec function to be called. It
+@@ -51,7 +49,6 @@ their parameters are located in the cec.h header file. All cec ioctl
  requests, their respective function and parameters are specified in
- :ref:`media-user-func`.
+ :ref:`cec-user-func`.
  
 -
  Return Value
  ============
  
-diff --git a/Documentation/userspace-api/media/mediactl/media-func-open.rst b/Documentation/userspace-api/media/mediactl/media-func-open.rst
-index 2c2595157ea3..24487cb0a308 100644
---- a/Documentation/userspace-api/media/mediactl/media-func-open.rst
-+++ b/Documentation/userspace-api/media/mediactl/media-func-open.rst
+diff --git a/Documentation/userspace-api/media/cec/cec-func-open.rst b/Documentation/userspace-api/media/cec/cec-func-open.rst
+index 887bfd2a755e..d86563a34b9e 100644
+--- a/Documentation/userspace-api/media/cec/cec-func-open.rst
++++ b/Documentation/userspace-api/media/cec/cec-func-open.rst
 @@ -1,4 +1,5 @@
  .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-+.. c:namespace:: MC
++.. c:namespace:: CEC
  
- .. _media-func-open:
+ .. _cec-func-open:
  
-@@ -11,7 +12,6 @@ Name
- 
- media-open - Open a media device
- 
--
- Synopsis
- ========
- 
-@@ -19,9 +19,7 @@ Synopsis
+@@ -18,10 +19,7 @@ Synopsis
  
      #include <fcntl.h>
  
 -
  .. c:function:: int open( const char *device_name, int flags )
--    :name: mc-open
+-   :name: cec-open
+-
  
  Arguments
  =========
-@@ -33,11 +31,10 @@ Arguments
-     Open flags. Access mode must be either ``O_RDONLY`` or ``O_RDWR``.
+@@ -42,11 +40,10 @@ Arguments
+ 
      Other flags have no effect.
  
 -
  Description
  ===========
  
--To open a media device applications call :ref:`open() <media-func-open>` with the
-+To open a media device applications call :c:func:`open()` with the
+-To open a cec device applications call :c:func:`open() <cec-open>` with the
++To open a cec device applications call :c:func:`open()` with the
  desired device name. The function has no side effects; the device
  configuration remain unchanged.
  
-@@ -45,11 +42,10 @@ When the device is opened in read-only mode, attempts to modify its
+@@ -54,11 +51,10 @@ When the device is opened in read-only mode, attempts to modify its
  configuration will result in an error, and ``errno`` will be set to
  EBADF.
  
@@ -235,580 +220,24 @@ index 2c2595157ea3..24487cb0a308 100644
  Return Value
  ============
  
--:ref:`open() <func-open>` returns the new file descriptor on success. On error,
+-:c:func:`open() <cec-open>` returns the new file descriptor on success. On error,
 +:c:func:`open()` returns the new file descriptor on success. On error,
  -1 is returned, and ``errno`` is set appropriately. Possible error codes
- are:
+ include:
  
-diff --git a/Documentation/userspace-api/media/mediactl/media-ioc-device-info.rst b/Documentation/userspace-api/media/mediactl/media-ioc-device-info.rst
-index cde1ddfc0bfb..0c4c5d2cfcb2 100644
---- a/Documentation/userspace-api/media/mediactl/media-ioc-device-info.rst
-+++ b/Documentation/userspace-api/media/mediactl/media-ioc-device-info.rst
+diff --git a/Documentation/userspace-api/media/cec/cec-func-poll.rst b/Documentation/userspace-api/media/cec/cec-func-poll.rst
+index 2d87136e9a3f..980bbfc0bcce 100644
+--- a/Documentation/userspace-api/media/cec/cec-func-poll.rst
++++ b/Documentation/userspace-api/media/cec/cec-func-poll.rst
 @@ -1,4 +1,5 @@
  .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-+.. c:namespace:: MC
++.. c:namespace:: CEC
  
- .. _media_ioc_device_info:
- 
-@@ -11,24 +12,22 @@ Name
- 
- MEDIA_IOC_DEVICE_INFO - Query device information
- 
--
- Synopsis
- ========
- 
--.. c:function:: int ioctl( int fd, MEDIA_IOC_DEVICE_INFO, struct media_device_info *argp )
--    :name: MEDIA_IOC_DEVICE_INFO
-+.. c:macro:: MEDIA_IOC_DEVICE_INFO
- 
-+``int ioctl(int fd, MEDIA_IOC_DEVICE_INFO, struct media_device_info *argp)``
- 
- Arguments
- =========
- 
- ``fd``
--    File descriptor returned by :ref:`open() <media-func-open>`.
-+    File descriptor returned by :c:func:`open()`.
- 
- ``argp``
-     Pointer to struct :c:type:`media_device_info`.
- 
--
- Description
- ===========
- 
-@@ -38,7 +37,6 @@ a struct :c:type:`media_device_info`. The driver
- fills the structure and returns the information to the application. The
- ioctl never fails.
- 
--
- .. c:type:: media_device_info
- 
- .. tabularcolumns:: |p{4.4cm}|p{4.4cm}|p{8.7cm}|
-@@ -48,7 +46,6 @@ ioctl never fails.
-     :stub-columns: 0
-     :widths:       1 1 2
- 
--
-     *  -  char
-        -  ``driver``\ [16]
-        -  Name of the driver implementing the media API as a NUL-terminated
-@@ -94,7 +91,6 @@ ioctl never fails.
-        -  Reserved for future extensions. Drivers and applications must set
- 	  this array to zero.
- 
--
- The ``serial`` and ``bus_info`` fields can be used to distinguish
- between multiple instances of otherwise identical hardware. The serial
- number takes precedence when provided and can be assumed to be unique.
-@@ -102,7 +98,6 @@ If the serial number is an empty string, the ``bus_info`` field can be
- used instead. The ``bus_info`` field is guaranteed to be unique, but can
- vary across reboots or device unplug/replug.
- 
--
- Return Value
- ============
- 
-diff --git a/Documentation/userspace-api/media/mediactl/media-ioc-enum-entities.rst b/Documentation/userspace-api/media/mediactl/media-ioc-enum-entities.rst
-index 93e35f198f47..92dd8ecd538c 100644
---- a/Documentation/userspace-api/media/mediactl/media-ioc-enum-entities.rst
-+++ b/Documentation/userspace-api/media/mediactl/media-ioc-enum-entities.rst
-@@ -1,4 +1,5 @@
- .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-+.. c:namespace:: MC
- 
- .. _media_ioc_enum_entities:
- 
-@@ -11,24 +12,22 @@ Name
- 
- MEDIA_IOC_ENUM_ENTITIES - Enumerate entities and their properties
- 
--
- Synopsis
- ========
- 
--.. c:function:: int ioctl( int fd, MEDIA_IOC_ENUM_ENTITIES, struct media_entity_desc *argp )
--    :name: MEDIA_IOC_ENUM_ENTITIES
-+.. c:macro:: MEDIA_IOC_ENUM_ENTITIES
- 
-+``int ioctl(int fd, MEDIA_IOC_ENUM_ENTITIES, struct media_entity_desc *argp)``
- 
- Arguments
- =========
- 
- ``fd``
--    File descriptor returned by :ref:`open() <media-func-open>`.
-+    File descriptor returned by :c:func:`open()`.
- 
- ``argp``
-     Pointer to struct :c:type:`media_entity_desc`.
- 
--
- Description
- ===========
- 
-@@ -49,7 +48,6 @@ Entity IDs can be non-contiguous. Applications must *not* try to
- enumerate entities by calling MEDIA_IOC_ENUM_ENTITIES with increasing
- id's until they get an error.
- 
--
- .. c:type:: media_entity_desc
- 
- .. tabularcolumns:: |p{1.5cm}|p{1.7cm}|p{1.6cm}|p{1.5cm}|p{11.2cm}|
-@@ -136,7 +134,6 @@ id's until they get an error.
-     *  - }
-        -
- 
--
- Return Value
- ============
- 
-diff --git a/Documentation/userspace-api/media/mediactl/media-ioc-enum-links.rst b/Documentation/userspace-api/media/mediactl/media-ioc-enum-links.rst
-index f3e94c7b5dc3..3bc98a6a2ec5 100644
---- a/Documentation/userspace-api/media/mediactl/media-ioc-enum-links.rst
-+++ b/Documentation/userspace-api/media/mediactl/media-ioc-enum-links.rst
-@@ -1,4 +1,5 @@
- .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-+.. c:namespace:: MC
- 
- .. _media_ioc_enum_links:
- 
-@@ -11,24 +12,22 @@ Name
- 
- MEDIA_IOC_ENUM_LINKS - Enumerate all pads and links for a given entity
- 
--
- Synopsis
- ========
- 
--.. c:function:: int ioctl( int fd, MEDIA_IOC_ENUM_LINKS, struct media_links_enum *argp )
--    :name: MEDIA_IOC_ENUM_LINKS
-+.. c:macro:: MEDIA_IOC_ENUM_LINKS
- 
-+``int ioctl(int fd, MEDIA_IOC_ENUM_LINKS, struct media_links_enum *argp)``
- 
- Arguments
- =========
- 
- ``fd``
--    File descriptor returned by :ref:`open() <media-func-open>`.
-+    File descriptor returned by :c:func:`open()`.
- 
- ``argp``
-     Pointer to struct :c:type:`media_links_enum`.
- 
--
- Description
- ===========
- 
-@@ -53,7 +52,6 @@ outbound links can be retrieved with :ref:`MEDIA_IOC_ENUM_ENTITIES`.
- Only forward links that originate at one of the entity's source pads are
- returned during the enumeration process.
- 
--
- .. c:type:: media_links_enum
- 
- .. tabularcolumns:: |p{4.4cm}|p{4.4cm}|p{8.7cm}|
-@@ -82,7 +80,6 @@ returned during the enumeration process.
-        -  Reserved for future extensions. Drivers and applications must set
-           the array to zero.
- 
--
- .. c:type:: media_pad_desc
- 
- .. tabularcolumns:: |p{4.4cm}|p{4.4cm}|p{8.7cm}|
-@@ -110,7 +107,6 @@ returned during the enumeration process.
-           the array to zero.
- 
- 
--
- .. c:type:: media_link_desc
- 
- .. tabularcolumns:: |p{4.4cm}|p{4.4cm}|p{8.7cm}|
-@@ -137,7 +133,6 @@ returned during the enumeration process.
-        -  Reserved for future extensions. Drivers and applications must set
-           the array to zero.
- 
--
- Return Value
- ============
- 
-diff --git a/Documentation/userspace-api/media/mediactl/media-ioc-g-topology.rst b/Documentation/userspace-api/media/mediactl/media-ioc-g-topology.rst
-index 9b7d2296b7fd..8f8b3b586edd 100644
---- a/Documentation/userspace-api/media/mediactl/media-ioc-g-topology.rst
-+++ b/Documentation/userspace-api/media/mediactl/media-ioc-g-topology.rst
-@@ -1,4 +1,5 @@
- .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-+.. c:namespace:: MC
- 
- .. _media_ioc_g_topology:
- 
-@@ -11,24 +12,22 @@ Name
- 
- MEDIA_IOC_G_TOPOLOGY - Enumerate the graph topology and graph element properties
- 
--
- Synopsis
- ========
- 
--.. c:function:: int ioctl( int fd, MEDIA_IOC_G_TOPOLOGY, struct media_v2_topology *argp )
--    :name: MEDIA_IOC_G_TOPOLOGY
-+.. c:macro:: MEDIA_IOC_G_TOPOLOGY
- 
-+``int ioctl(int fd, MEDIA_IOC_G_TOPOLOGY, struct media_v2_topology *argp)``
- 
- Arguments
- =========
- 
- ``fd``
--    File descriptor returned by :ref:`open() <media-func-open>`.
-+    File descriptor returned by :c:func:`open()`.
- 
- ``argp``
-     Pointer to struct :c:type:`media_v2_topology`.
- 
--
- Description
- ===========
- 
-@@ -120,7 +119,6 @@ desired arrays with the media graph elements.
- 	  converted to a 64-bits integer. It can be zero. if zero, the ioctl
- 	  won't store the links. It will just update ``num_links``
- 
--
- .. tabularcolumns:: |p{1.6cm}|p{3.2cm}|p{12.7cm}|
- 
- .. c:type:: media_v2_entity
-@@ -158,7 +156,6 @@ desired arrays with the media graph elements.
-        -  Reserved for future extensions. Drivers and applications must set
- 	  this array to zero.
- 
--
- .. tabularcolumns:: |p{1.6cm}|p{3.2cm}|p{12.7cm}|
- 
- .. c:type:: media_v2_interface
-@@ -192,7 +189,6 @@ desired arrays with the media graph elements.
-        -  Used only for device node interfaces. See
- 	  :c:type:`media_v2_intf_devnode` for details.
- 
--
- .. tabularcolumns:: |p{1.6cm}|p{3.2cm}|p{12.7cm}|
- 
- .. c:type:: media_v2_intf_devnode
-@@ -245,7 +241,6 @@ desired arrays with the media graph elements.
-        -  Reserved for future extensions. Drivers and applications must set
- 	  this array to zero.
- 
--
- .. tabularcolumns:: |p{1.6cm}|p{3.2cm}|p{12.7cm}|
- 
- .. c:type:: media_v2_link
-@@ -282,7 +277,6 @@ desired arrays with the media graph elements.
-        -  Reserved for future extensions. Drivers and applications must set
- 	  this array to zero.
- 
--
- Return Value
- ============
- 
-diff --git a/Documentation/userspace-api/media/mediactl/media-ioc-request-alloc.rst b/Documentation/userspace-api/media/mediactl/media-ioc-request-alloc.rst
-index ea05ff0c5382..9195b4b8bf20 100644
---- a/Documentation/userspace-api/media/mediactl/media-ioc-request-alloc.rst
-+++ b/Documentation/userspace-api/media/mediactl/media-ioc-request-alloc.rst
-@@ -1,4 +1,5 @@
- .. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
-+.. c:namespace:: MC
- 
- .. _media_ioc_request_alloc:
- 
-@@ -11,24 +12,22 @@ Name
- 
- MEDIA_IOC_REQUEST_ALLOC - Allocate a request
- 
--
- Synopsis
- ========
- 
--.. c:function:: int ioctl( int fd, MEDIA_IOC_REQUEST_ALLOC, int *argp )
--    :name: MEDIA_IOC_REQUEST_ALLOC
-+.. c:macro:: MEDIA_IOC_REQUEST_ALLOC
- 
-+``int ioctl(int fd, MEDIA_IOC_REQUEST_ALLOC, int *argp)``
- 
- Arguments
- =========
- 
- ``fd``
--    File descriptor returned by :ref:`open() <media-func-open>`.
-+    File descriptor returned by :c:func:`open()`.
- 
- ``argp``
-     Pointer to an integer.
- 
--
- Description
- ===========
- 
-@@ -51,7 +50,7 @@ Finally, the file descriptor can be :ref:`polled <request-func-poll>` to wait
- for the request to complete.
- 
- The request will remain allocated until all the file descriptors associated
--with it are closed by :ref:`close() <request-func-close>` and the driver no
-+with it are closed by :c:func:`close()` and the driver no
- longer uses the request internally. See also
- :ref:`here <media-request-life-time>` for more information.
- 
-diff --git a/Documentation/userspace-api/media/mediactl/media-ioc-setup-link.rst b/Documentation/userspace-api/media/mediactl/media-ioc-setup-link.rst
-index e2aa51015783..23208300cb61 100644
---- a/Documentation/userspace-api/media/mediactl/media-ioc-setup-link.rst
-+++ b/Documentation/userspace-api/media/mediactl/media-ioc-setup-link.rst
-@@ -1,4 +1,5 @@
- .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-+.. c:namespace:: MC
- 
- .. _media_ioc_setup_link:
- 
-@@ -11,24 +12,22 @@ Name
- 
- MEDIA_IOC_SETUP_LINK - Modify the properties of a link
- 
--
- Synopsis
- ========
- 
--.. c:function:: int ioctl( int fd, MEDIA_IOC_SETUP_LINK, struct media_link_desc *argp )
--    :name: MEDIA_IOC_SETUP_LINK
-+.. c:macro:: MEDIA_IOC_SETUP_LINK
- 
-+``int ioctl(int fd, MEDIA_IOC_SETUP_LINK, struct media_link_desc *argp)``
- 
- Arguments
- =========
- 
- ``fd``
--    File descriptor returned by :ref:`open() <media-func-open>`.
-+    File descriptor returned by :c:func:`open()`.
- 
- ``argp``
-     Pointer to struct :c:type:`media_link_desc`.
- 
--
- Description
- ===========
- 
-@@ -53,7 +52,6 @@ non-dynamic link will return an ``EBUSY`` error code.
- If the specified link can't be found the driver returns with an ``EINVAL``
- error code.
- 
--
- Return Value
- ============
- 
-diff --git a/Documentation/userspace-api/media/mediactl/media-request-ioc-queue.rst b/Documentation/userspace-api/media/mediactl/media-request-ioc-queue.rst
-index ca1b33196242..04b33db2bb45 100644
---- a/Documentation/userspace-api/media/mediactl/media-request-ioc-queue.rst
-+++ b/Documentation/userspace-api/media/mediactl/media-request-ioc-queue.rst
-@@ -1,4 +1,5 @@
- .. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
-+.. c:namespace:: MC
- 
- .. _media_request_ioc_queue:
- 
-@@ -11,13 +12,12 @@ Name
- 
- MEDIA_REQUEST_IOC_QUEUE - Queue a request
- 
--
- Synopsis
- ========
- 
--.. c:function:: int ioctl( int request_fd, MEDIA_REQUEST_IOC_QUEUE )
--    :name: MEDIA_REQUEST_IOC_QUEUE
-+.. c:macro:: MEDIA_REQUEST_IOC_QUEUE
- 
-+``int ioctl(int request_fd, MEDIA_REQUEST_IOC_QUEUE)``
- 
- Arguments
- =========
-@@ -25,7 +25,6 @@ Arguments
- ``request_fd``
-     File descriptor returned by :ref:`MEDIA_IOC_REQUEST_ALLOC`.
- 
--
- Description
- ===========
- 
-diff --git a/Documentation/userspace-api/media/mediactl/media-request-ioc-reinit.rst b/Documentation/userspace-api/media/mediactl/media-request-ioc-reinit.rst
-index cfd503bdef70..57567b87b985 100644
---- a/Documentation/userspace-api/media/mediactl/media-request-ioc-reinit.rst
-+++ b/Documentation/userspace-api/media/mediactl/media-request-ioc-reinit.rst
-@@ -1,4 +1,5 @@
- .. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
-+.. c:namespace:: MC
- 
- .. _media_request_ioc_reinit:
- 
-@@ -11,13 +12,12 @@ Name
- 
- MEDIA_REQUEST_IOC_REINIT - Re-initialize a request
- 
--
- Synopsis
- ========
- 
--.. c:function:: int ioctl( int request_fd, MEDIA_REQUEST_IOC_REINIT )
--    :name: MEDIA_REQUEST_IOC_REINIT
-+.. c:macro:: MEDIA_REQUEST_IOC_REINIT
- 
-+``int ioctl(int request_fd, MEDIA_REQUEST_IOC_REINIT)``
- 
- Arguments
- =========
-@@ -33,7 +33,7 @@ this request ioctl can be used to re-initialize a previously allocated
- request.
- 
- Re-initializing a request will clear any existing data from the request.
--This avoids having to :ref:`close() <request-func-close>` a completed
-+This avoids having to :c:func:`close()` a completed
- request and allocate a new request. Instead the completed request can just
- be re-initialized and it is ready to be used again.
- 
-diff --git a/Documentation/userspace-api/media/mediactl/request-api.rst b/Documentation/userspace-api/media/mediactl/request-api.rst
-index c0fa4dbb2b28..6c4cbd9f08a5 100644
---- a/Documentation/userspace-api/media/mediactl/request-api.rst
-+++ b/Documentation/userspace-api/media/mediactl/request-api.rst
-@@ -1,4 +1,5 @@
- .. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
-+.. c:namespace:: MC
- 
- .. _media-request-api:
- 
-@@ -93,7 +94,7 @@ regardless of whether a request is in use or not.
-    Setting the same control through a request and also directly can lead to
-    undefined behavior!
- 
--User-space can :ref:`poll() <request-func-poll>` a request file descriptor in
-+User-space can :c:func:`poll()` a request file descriptor in
- order to wait until the request completes. A request is considered complete
- once all its associated buffers are available for dequeuing and all the
- associated controls have been updated with the values at the time of completion.
-@@ -115,7 +116,7 @@ Recycling and Destruction
- -------------------------
- 
- Finally, a completed request can either be discarded or be reused. Calling
--:ref:`close() <request-func-close>` on a request file descriptor will make
-+:c:func:`close()` on a request file descriptor will make
- that file descriptor unusable and the request will be freed once it is no
- longer in use by the kernel. That is, if the request is queued and then the
- file descriptor is closed, then it won't be freed until the driver completed
-diff --git a/Documentation/userspace-api/media/mediactl/request-func-close.rst b/Documentation/userspace-api/media/mediactl/request-func-close.rst
-index 04e00bb9defd..f4b8eb385ad7 100644
---- a/Documentation/userspace-api/media/mediactl/request-func-close.rst
-+++ b/Documentation/userspace-api/media/mediactl/request-func-close.rst
-@@ -1,4 +1,5 @@
- .. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
-+.. c:namespace:: MC.request
- 
- .. _request-func-close:
+ .. _cec-func-poll:
  
 @@ -11,7 +12,6 @@ Name
  
- request-close - Close a request file descriptor
- 
--
- Synopsis
- ========
- 
-@@ -19,9 +19,7 @@ Synopsis
- 
-     #include <unistd.h>
- 
--
- .. c:function:: int close( int fd )
--    :name: req-close
- 
- Arguments
- =========
-@@ -29,7 +27,6 @@ Arguments
- ``fd``
-     File descriptor returned by :ref:`MEDIA_IOC_REQUEST_ALLOC`.
- 
--
- Description
- ===========
- 
-@@ -38,11 +35,10 @@ are freed once all file descriptors associated with the request are closed
- and the driver has completed the request.
- See :ref:`here <media-request-life-time>` for more information.
- 
--
- Return Value
- ============
- 
--:ref:`close() <request-func-close>` returns 0 on success. On error, -1 is
-+:c:func:`close()` returns 0 on success. On error, -1 is
- returned, and ``errno`` is set appropriately. Possible error codes are:
- 
- EBADF
-diff --git a/Documentation/userspace-api/media/mediactl/request-func-ioctl.rst b/Documentation/userspace-api/media/mediactl/request-func-ioctl.rst
-index 1e1c5edb860c..4fb3d2ef32d1 100644
---- a/Documentation/userspace-api/media/mediactl/request-func-ioctl.rst
-+++ b/Documentation/userspace-api/media/mediactl/request-func-ioctl.rst
-@@ -1,4 +1,5 @@
- .. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
-+.. c:namespace:: MC
- 
- .. _request-func-ioctl:
- 
-@@ -11,7 +12,6 @@ Name
- 
- request-ioctl - Control a request file descriptor
- 
--
- Synopsis
- ========
- 
-@@ -19,9 +19,7 @@ Synopsis
- 
-     #include <sys/ioctl.h>
- 
--
--.. c:function:: int ioctl( int fd, int cmd, void *argp )
--    :name: req-ioctl
-+``int ioctl(int fd, int cmd, void *argp)``
- 
- Arguments
- =========
-@@ -36,7 +34,6 @@ Arguments
- ``argp``
-     Pointer to a request-specific structure.
- 
--
- Description
- ===========
- 
-@@ -52,7 +49,6 @@ their parameters are located in the media.h header file. All request ioctl
- commands, their respective function and parameters are specified in
- :ref:`media-user-func`.
- 
--
- Return Value
- ============
- 
-diff --git a/Documentation/userspace-api/media/mediactl/request-func-poll.rst b/Documentation/userspace-api/media/mediactl/request-func-poll.rst
-index 92947213d3d5..ce0043dbe7da 100644
---- a/Documentation/userspace-api/media/mediactl/request-func-poll.rst
-+++ b/Documentation/userspace-api/media/mediactl/request-func-poll.rst
-@@ -1,4 +1,5 @@
- .. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
-+.. c:namespace:: MC
- 
- .. _request-func-poll:
- 
-@@ -11,7 +12,6 @@ Name
- 
- request-poll - Wait for some event on a file descriptor
+ cec-poll - Wait for some event on a file descriptor
  
 -
  Synopsis
@@ -820,7 +249,7 @@ index 92947213d3d5..ce0043dbe7da 100644
  
 -
  .. c:function:: int poll( struct pollfd *ufds, unsigned int nfds, int timeout )
--   :name: request-poll
+-   :name: cec-poll
  
  Arguments
  =========
@@ -832,28 +261,457 @@ index 92947213d3d5..ce0043dbe7da 100644
  Description
  ===========
  
--With the :c:func:`poll() <request-func-poll>` function applications can wait
-+With the :c:func:`poll()` function applications can wait
- for a request to complete.
+-With the :c:func:`poll() <cec-poll>` function applications can wait for CEC
++With the :c:func:`poll()` function applications can wait for CEC
+ events.
  
--On success :c:func:`poll() <request-func-poll>` returns the number of file
-+On success :c:func:`poll()` returns the number of file
- descriptors that have been selected (that is, file descriptors for which the
+-On success :c:func:`poll() <cec-poll>` returns the number of file descriptors
++On success :c:func:`poll()` returns the number of file descriptors
+ that have been selected (that is, file descriptors for which the
  ``revents`` field of the respective struct :c:type:`pollfd`
- is non-zero). Request file descriptor set the ``POLLPRI`` flag in ``revents``
-@@ -53,11 +50,10 @@ set appropriately.
- Attempting to poll for a request that is not yet queued will
- set the ``POLLERR`` flag in ``revents``.
+ is non-zero). CEC devices set the ``POLLIN`` and ``POLLRDNORM`` flags in
+@@ -53,13 +50,12 @@ then the ``POLLPRI`` flag is set. When the function times out it returns
+ a value of zero, on failure it returns -1 and the ``errno`` variable is
+ set appropriately.
+ 
+-For more details see the :c:func:`poll() <cec-poll>` manual page.
+-
++For more details see the :c:func:`poll()` manual page.
+ 
+ Return Value
+ ============
+ 
+-On success, :c:func:`poll() <cec-poll>` returns the number structures which have
++On success, :c:func:`poll()` returns the number structures which have
+ non-zero ``revents`` fields, or zero if the call timed out. On error -1
+ is returned, and the ``errno`` variable is set appropriately:
+ 
+diff --git a/Documentation/userspace-api/media/cec/cec-ioc-adap-g-caps.rst b/Documentation/userspace-api/media/cec/cec-ioc-adap-g-caps.rst
+index 7f25365ce0fb..c7309a2fcbce 100644
+--- a/Documentation/userspace-api/media/cec/cec-ioc-adap-g-caps.rst
++++ b/Documentation/userspace-api/media/cec/cec-ioc-adap-g-caps.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++.. c:namespace:: CEC
+ 
+ .. _CEC_ADAP_G_CAPS:
+ 
+@@ -14,18 +15,18 @@ CEC_ADAP_G_CAPS - Query device capabilities
+ Synopsis
+ ========
+ 
+-.. c:function:: int ioctl( int fd, CEC_ADAP_G_CAPS, struct cec_caps *argp )
+-    :name: CEC_ADAP_G_CAPS
++.. c:macro:: CEC_ADAP_G_CAPS
++
++``int ioctl(int fd, CEC_ADAP_G_CAPS, struct cec_caps *argp)``
+ 
+ Arguments
+ =========
+ 
+ ``fd``
+-    File descriptor returned by :c:func:`open() <cec-open>`.
++    File descriptor returned by :c:func:`open()`.
+ 
+ ``argp``
+ 
+-
+ Description
+ ===========
+ 
+@@ -62,7 +63,6 @@ returns the information to the application. The ioctl never fails.
+       - CEC Framework API version, formatted with the ``KERNEL_VERSION()``
+ 	macro.
+ 
+-
+ .. tabularcolumns:: |p{4.4cm}|p{2.5cm}|p{10.6cm}|
+ 
+ .. _cec-capabilities:
+diff --git a/Documentation/userspace-api/media/cec/cec-ioc-adap-g-conn-info.rst b/Documentation/userspace-api/media/cec/cec-ioc-adap-g-conn-info.rst
+index 6818ddf1495c..13116b0b5c17 100644
+--- a/Documentation/userspace-api/media/cec/cec-ioc-adap-g-conn-info.rst
++++ b/Documentation/userspace-api/media/cec/cec-ioc-adap-g-conn-info.rst
+@@ -2,6 +2,8 @@
+ ..
+ .. Copyright 2019 Google LLC
+ ..
++.. c:namespace:: CEC
++
+ .. _CEC_ADAP_G_CONNECTOR_INFO:
+ 
+ *******************************
+@@ -16,18 +18,18 @@ CEC_ADAP_G_CONNECTOR_INFO - Query HDMI connector information
+ Synopsis
+ ========
+ 
+-.. c:function:: int ioctl( int fd, CEC_ADAP_G_CONNECTOR_INFO, struct cec_connector_info *argp )
+-    :name: CEC_ADAP_G_CONNECTOR_INFO
++.. c:macro:: CEC_ADAP_G_CONNECTOR_INFO
++
++``int ioctl(int fd, CEC_ADAP_G_CONNECTOR_INFO, struct cec_connector_info *argp)``
+ 
+ Arguments
+ =========
+ 
+ ``fd``
+-    File descriptor returned by :c:func:`open() <cec-open>`.
++    File descriptor returned by :c:func:`open()`.
+ 
+ ``argp``
+ 
+-
+ Description
+ ===========
+ 
+@@ -57,7 +59,6 @@ is only available if the ``CEC_CAP_CONNECTOR_INFO`` capability is set.
+     * - }
+       -
+ 
+-
+ .. tabularcolumns:: |p{4.4cm}|p{2.5cm}|p{10.6cm}|
+ 
+ .. _connector-type:
+diff --git a/Documentation/userspace-api/media/cec/cec-ioc-adap-g-log-addrs.rst b/Documentation/userspace-api/media/cec/cec-ioc-adap-g-log-addrs.rst
+index 1ca893270ae9..c760c07b6b3f 100644
+--- a/Documentation/userspace-api/media/cec/cec-ioc-adap-g-log-addrs.rst
++++ b/Documentation/userspace-api/media/cec/cec-ioc-adap-g-log-addrs.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++.. c:namespace:: CEC
+ 
+ .. _CEC_ADAP_LOG_ADDRS:
+ .. _CEC_ADAP_G_LOG_ADDRS:
+@@ -13,21 +14,22 @@ Name
+ 
+ CEC_ADAP_G_LOG_ADDRS, CEC_ADAP_S_LOG_ADDRS - Get or set the logical addresses
+ 
+-
+ Synopsis
+ ========
+ 
+-.. c:function:: int ioctl( int fd, CEC_ADAP_G_LOG_ADDRS, struct cec_log_addrs *argp )
+-   :name: CEC_ADAP_G_LOG_ADDRS
++.. c:macro:: CEC_ADAP_G_LOG_ADDRS
+ 
+-.. c:function:: int ioctl( int fd, CEC_ADAP_S_LOG_ADDRS, struct cec_log_addrs *argp )
+-   :name: CEC_ADAP_S_LOG_ADDRS
++``int ioctl(int fd, CEC_ADAP_G_LOG_ADDRS, struct cec_log_addrs *argp)``
++
++.. c:macro:: CEC_ADAP_S_LOG_ADDRS
++
++``int ioctl(int fd, CEC_ADAP_S_LOG_ADDRS, struct cec_log_addrs *argp)``
+ 
+ Arguments
+ =========
+ 
+ ``fd``
+-    File descriptor returned by :c:func:`open() <cec-open>`.
++    File descriptor returned by :c:func:`open()`.
+ 
+ ``argp``
+     Pointer to struct :c:type:`cec_log_addrs`.
+@@ -148,7 +150,6 @@ logical address types are already defined will return with error ``EBUSY``.
+         give the CEC framework more information about the device type, even
+         though the framework won't use it directly in the CEC message.
+ 
+-
+ .. tabularcolumns:: |p{7.8cm}|p{1.0cm}|p{8.7cm}|
+ 
+ .. _cec-log-addrs-flags:
+@@ -185,7 +186,6 @@ logical address types are already defined will return with error ``EBUSY``.
+ 
+ 	All other messages are ignored.
+ 
+-
+ .. tabularcolumns:: |p{7.8cm}|p{1.0cm}|p{8.7cm}|
+ 
+ .. _cec-versions:
+@@ -211,7 +211,6 @@ logical address types are already defined will return with error ``EBUSY``.
+       - 6
+       - CEC version according to the HDMI 2.0 standard.
+ 
+-
+ .. tabularcolumns:: |p{6.6cm}|p{2.2cm}|p{8.7cm}|
+ 
+ .. _cec-prim-dev-types:
+@@ -257,7 +256,6 @@ logical address types are already defined will return with error ``EBUSY``.
+       - 7
+       - Use for a video processor device.
+ 
+-
+ .. tabularcolumns:: |p{6.6cm}|p{2.2cm}|p{8.7cm}|
+ 
+ .. _cec-log-addr-types:
+@@ -306,7 +304,6 @@ logical address types are already defined will return with error ``EBUSY``.
+ 	Control).
+ 
+ 
+-
+ .. tabularcolumns:: |p{6.6cm}|p{2.2cm}|p{8.7cm}|
+ 
+ .. _cec-all-dev-types-flags:
+@@ -348,7 +345,6 @@ logical address types are already defined will return with error ``EBUSY``.
+       - This supports the CEC Switch or Video Processing type.
+ 
  
 -
  Return Value
  ============
  
--On success, :c:func:`poll() <request-func-poll>` returns the number of
-+On success, :c:func:`poll()` returns the number of
- structures which have non-zero ``revents`` fields, or zero if the call
- timed out. On error -1 is returned, and the ``errno`` variable is set
- appropriately:
+diff --git a/Documentation/userspace-api/media/cec/cec-ioc-adap-g-phys-addr.rst b/Documentation/userspace-api/media/cec/cec-ioc-adap-g-phys-addr.rst
+index a10443be1b26..fb22f6894f26 100644
+--- a/Documentation/userspace-api/media/cec/cec-ioc-adap-g-phys-addr.rst
++++ b/Documentation/userspace-api/media/cec/cec-ioc-adap-g-phys-addr.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++.. c:namespace:: CEC
+ 
+ .. _CEC_ADAP_PHYS_ADDR:
+ .. _CEC_ADAP_G_PHYS_ADDR:
+@@ -13,21 +14,22 @@ Name
+ 
+ CEC_ADAP_G_PHYS_ADDR, CEC_ADAP_S_PHYS_ADDR - Get or set the physical address
+ 
+-
+ Synopsis
+ ========
+ 
+-.. c:function:: int ioctl( int fd, CEC_ADAP_G_PHYS_ADDR, __u16 *argp )
+-    :name: CEC_ADAP_G_PHYS_ADDR
++.. c:macro:: CEC_ADAP_G_PHYS_ADDR
+ 
+-.. c:function:: int ioctl( int fd, CEC_ADAP_S_PHYS_ADDR, __u16 *argp )
+-    :name: CEC_ADAP_S_PHYS_ADDR
++``int ioctl(int fd, CEC_ADAP_G_PHYS_ADDR, __u16 *argp)``
++
++.. c:macro:: CEC_ADAP_S_PHYS_ADDR
++
++``int ioctl(int fd, CEC_ADAP_S_PHYS_ADDR, __u16 *argp)``
+ 
+ Arguments
+ =========
+ 
+ ``fd``
+-    File descriptor returned by :c:func:`open() <cec-open>`.
++    File descriptor returned by :c:func:`open()`.
+ 
+ ``argp``
+     Pointer to the CEC address.
+@@ -71,7 +73,6 @@ For example, the EDID for each HDMI input of the TV will have a
+ different physical address of the form a.0.0.0 that the sources will
+ read out and use as their physical address.
+ 
+-
+ Return Value
+ ============
+ 
+diff --git a/Documentation/userspace-api/media/cec/cec-ioc-dqevent.rst b/Documentation/userspace-api/media/cec/cec-ioc-dqevent.rst
+index 3bc81fc5a73f..736fda5ad73d 100644
+--- a/Documentation/userspace-api/media/cec/cec-ioc-dqevent.rst
++++ b/Documentation/userspace-api/media/cec/cec-ioc-dqevent.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++.. c:namespace:: CEC
+ 
+ .. _CEC_DQEVENT:
+ 
+@@ -11,22 +12,21 @@ Name
+ 
+ CEC_DQEVENT - Dequeue a CEC event
+ 
+-
+ Synopsis
+ ========
+ 
+-.. c:function:: int ioctl( int fd, CEC_DQEVENT, struct cec_event *argp )
+-    :name: CEC_DQEVENT
++.. c:macro:: CEC_DQEVENT
++
++``int ioctl(int fd, CEC_DQEVENT, struct cec_event *argp)``
+ 
+ Arguments
+ =========
+ 
+ ``fd``
+-    File descriptor returned by :c:func:`open() <cec-open>`.
++    File descriptor returned by :c:func:`open()`.
+ 
+ ``argp``
+ 
+-
+ Description
+ ===========
+ 
+@@ -72,7 +72,6 @@ it is guaranteed that the state did change in between the two events.
+         the HDMI driver is still configuring the device or because the HDMI
+         device was unbound.
+ 
+-
+ .. c:type:: cec_event_lost_msgs
+ 
+ .. tabularcolumns:: |p{1.0cm}|p{2.0cm}|p{14.5cm}|
+@@ -94,7 +93,6 @@ it is guaranteed that the state did change in between the two events.
+ 	replied to within a second according to the CEC specification,
+ 	this is more than enough.
+ 
+-
+ .. tabularcolumns:: |p{1.0cm}|p{4.4cm}|p{2.5cm}|p{9.6cm}|
+ 
+ .. c:type:: cec_event
+@@ -130,7 +128,6 @@ it is guaranteed that the state did change in between the two events.
+     * - }
+       -
+ 
+-
+ .. tabularcolumns:: |p{5.6cm}|p{0.9cm}|p{11.0cm}|
+ 
+ .. _cec-events:
+@@ -204,7 +201,6 @@ it is guaranteed that the state did change in between the two events.
+ 	if the 5V is high, then an initial event will be generated for that
+ 	filehandle.
+ 
+-
+ .. tabularcolumns:: |p{6.0cm}|p{0.6cm}|p{10.9cm}|
+ 
+ .. _cec-event-flags:
+@@ -230,7 +226,6 @@ it is guaranteed that the state did change in between the two events.
+         This is an indication that the application cannot keep up.
+ 
+ 
+-
+ Return Value
+ ============
+ 
+diff --git a/Documentation/userspace-api/media/cec/cec-ioc-g-mode.rst b/Documentation/userspace-api/media/cec/cec-ioc-g-mode.rst
+index 2093e373c93c..d3387b1fa7c5 100644
+--- a/Documentation/userspace-api/media/cec/cec-ioc-g-mode.rst
++++ b/Documentation/userspace-api/media/cec/cec-ioc-g-mode.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++.. c:namespace:: CEC
+ 
+ .. _CEC_MODE:
+ .. _CEC_G_MODE:
+@@ -13,17 +14,19 @@ CEC_G_MODE, CEC_S_MODE - Get or set exclusive use of the CEC adapter
+ Synopsis
+ ========
+ 
+-.. c:function:: int ioctl( int fd, CEC_G_MODE, __u32 *argp )
+-   :name: CEC_G_MODE
++.. c:macro:: CEC_G_MODE
+ 
+-.. c:function:: int ioctl( int fd, CEC_S_MODE, __u32 *argp )
+-   :name: CEC_S_MODE
++``int ioctl(int fd, CEC_G_MODE, __u32 *argp)``
++
++.. c:macro:: CEC_S_MODE
++
++``int ioctl(int fd, CEC_S_MODE, __u32 *argp)``
+ 
+ Arguments
+ =========
+ 
+ ``fd``
+-    File descriptor returned by :c:func:`open() <cec-open>`.
++    File descriptor returned by :c:func:`open()`.
+ 
+ ``argp``
+     Pointer to CEC mode.
+@@ -101,7 +104,6 @@ Available initiator modes are:
+ 	then an attempt to become one will return the ``EBUSY`` error code
+ 	error.
+ 
+-
+ Available follower modes are:
+ 
+ .. tabularcolumns:: |p{6.6cm}|p{0.9cm}|p{10.0cm}|
+@@ -193,7 +195,6 @@ Available follower modes are:
+ 	the process has the ``CAP_NET_ADMIN`` capability. If that is not
+ 	set, then the ``EPERM`` error code is returned.
+ 
+-
+ Core message processing details:
+ 
+ .. tabularcolumns:: |p{6.6cm}|p{10.9cm}|
+@@ -272,7 +273,6 @@ Core message processing details:
+ 	and then just pass the message on to the follower(s).
+ 
+ 
+-
+ Return Value
+ ============
+ 
+diff --git a/Documentation/userspace-api/media/cec/cec-ioc-receive.rst b/Documentation/userspace-api/media/cec/cec-ioc-receive.rst
+index 9d629d46973c..b2fc051e99f4 100644
+--- a/Documentation/userspace-api/media/cec/cec-ioc-receive.rst
++++ b/Documentation/userspace-api/media/cec/cec-ioc-receive.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++.. c:namespace:: CEC
+ 
+ .. _CEC_TRANSMIT:
+ .. _CEC_RECEIVE:
+@@ -12,21 +13,22 @@ Name
+ 
+ CEC_RECEIVE, CEC_TRANSMIT - Receive or transmit a CEC message
+ 
+-
+ Synopsis
+ ========
+ 
+-.. c:function:: int ioctl( int fd, CEC_RECEIVE, struct cec_msg \*argp )
+-    :name: CEC_RECEIVE
++.. c:macro:: CEC_RECEIVE
+ 
+-.. c:function:: int ioctl( int fd, CEC_TRANSMIT, struct cec_msg \*argp )
+-    :name: CEC_TRANSMIT
++``int ioctl(int fd, CEC_RECEIVE, struct cec_msg *argp)``
++
++.. c:macro:: CEC_TRANSMIT
++
++``int ioctl(int fd, CEC_TRANSMIT, struct cec_msg *argp)``
+ 
+ Arguments
+ =========
+ 
+ ``fd``
+-    File descriptor returned by :c:func:`open() <cec-open>`.
++    File descriptor returned by :c:func:`open()`.
+ 
+ ``argp``
+     Pointer to struct cec_msg.
+@@ -194,7 +196,6 @@ View On' messages from initiator 0xf ('Unregistered') to destination 0 ('TV').
+ 	supports this, otherwise it is always 0. This counter is only
+ 	valid if the :ref:`CEC_TX_STATUS_ERROR <CEC-TX-STATUS-ERROR>` status bit is set.
+ 
+-
+ .. tabularcolumns:: |p{6.2cm}|p{1.0cm}|p{10.3cm}|
+ 
+ .. _cec-msg-flags:
+@@ -228,7 +229,6 @@ View On' messages from initiator 0xf ('Unregistered') to destination 0 ('TV').
+ 	capability. If that is not set, then the ``EPERM`` error code is
+ 	returned.
+ 
+-
+ .. tabularcolumns:: |p{5.6cm}|p{0.9cm}|p{11.0cm}|
+ 
+ .. _cec-tx-status:
+@@ -298,7 +298,6 @@ View On' messages from initiator 0xf ('Unregistered') to destination 0 ('TV').
+       - The transmit timed out. This should not normally happen and this
+ 	indicates a driver problem.
+ 
+-
+ .. tabularcolumns:: |p{5.6cm}|p{0.9cm}|p{11.0cm}|
+ 
+ .. _cec-rx-status:
+@@ -335,7 +334,6 @@ View On' messages from initiator 0xf ('Unregistered') to destination 0 ('TV').
+ 	reply was interrupted.
+ 
+ 
+-
+ Return Value
+ ============
+ 
 -- 
 2.26.2
 
