@@ -2,97 +2,256 @@ Return-Path: <SRS0=sDFD=DU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 383C1C433E7
-	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 10:27:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A6E2C433E7
+	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 11:55:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EC70B22228
-	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 10:27:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2FC842080A
+	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 11:55:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1602584830;
-	bh=19VK6zpHdezOuuklZf7plr8Sr0Qgx/oJRYyG6wSDmqA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=t1WJfuu6Ecww299btrEWgLcwlA+/Ck2i//HIkqNz5BqEuKDm0JiGLnQsBGY3cqjyW
-	 Ny92FdLz4BaHk1yOR5xBpKXs9Gk45mzSMADnmKuYTwNDynWjaDXSXZ+TdGATH9/5E3
-	 HhYnLb0R/JLyNSE+jUzdEdcQFsJnnjfoABilhgZg=
+	s=default; t=1602590122;
+	bh=OJC+w0qcbW9yHm4g3J8pvhMQfAwAW0kVnEPzeJJGYqE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=TTHALmnp2Z4X7+DI7Wnv+Ul72NJZ657CwD7Tj3kmUUcD1DydxOK4IS/wzpd97eWWH
+	 xEhL17J5N5JPsnF2j1u0mz2JreO5yOKb/fEuydnFeDGKzLbP5n3ppU0zaevC1i766I
+	 IhCeYra5yvV67iHM1BHdWqq/8Pyc3YJeyjsf8Ai0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730716AbgJMK1F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 13 Oct 2020 06:27:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58932 "EHLO mail.kernel.org"
+        id S1727796AbgJMLzV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 13 Oct 2020 07:55:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57508 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730508AbgJMK1C (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 13 Oct 2020 06:27:02 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        id S1727783AbgJMLzQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 13 Oct 2020 07:55:16 -0400
+Received: from mail.kernel.org (ip5f5ad5b2.dynamic.kabel-deutschland.de [95.90.213.178])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A8FA32080A;
-        Tue, 13 Oct 2020 10:27:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A54B322B2C;
+        Tue, 13 Oct 2020 11:54:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602584822;
-        bh=19VK6zpHdezOuuklZf7plr8Sr0Qgx/oJRYyG6wSDmqA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tJD3ZNlx+zgGQVmwQIEJy8GJzYiSbN7sxe5T+h7NPSViVO3e/dOYlWxi5AXaAHbaH
-         24cjQgTtTOIzMvXCvwr+yVJamjEORZ6Hu+ao/OqFQS7UJ9idcv9YpeEIt91Npl6IfH
-         QmW+JGyWMkWblEEIKKUSnT9Bdd2iP1vIp7GJ48ds=
-Date:   Tue, 13 Oct 2020 11:26:56 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Adrian Ratiu <adrian.ratiu@collabora.com>
-Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+        s=default; t=1602590081;
+        bh=OJC+w0qcbW9yHm4g3J8pvhMQfAwAW0kVnEPzeJJGYqE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=k0BxG69AG+5iW+BQA82ih0ugLW2wkvfA18eOnWckyri03Hb3hKXnJkJyBSgKyt9vv
+         8qgXYbd6st3EajaGj0SXB8TXpA4HXz2WPZZB1npfzfJR3XDD6vp2LpUzqevQzpFgdv
+         DliuhA71qYSU87xOsMxKHif/oQPKHVkW2d/0xhUU=
+Received: from mchehab by mail.kernel.org with local (Exim 4.94)
+        (envelope-from <mchehab@kernel.org>)
+        id 1kSIt5-006CVq-A2; Tue, 13 Oct 2020 13:54:39 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Andy Gross <agross@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Cheng-Yi Chiang <cychiang@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jyri Sarha <jsarha@ti.com>,
+        Kathiravan T <kathirav@codeaurora.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Fruehberger Peter <Peter.Fruehberger@de.bosch.com>,
-        kuhanh.murugasen.krishnan@intel.com,
-        Daniel Vetter <daniel@ffwll.ch>, kernel@collabora.com,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 07/18] regmap: mmio: add config option to allow relaxed
- MMIO accesses
-Message-ID: <20201013102656.GA5425@sirena.org.uk>
-References: <20201012205957.889185-1-adrian.ratiu@collabora.com>
- <20201012205957.889185-8-adrian.ratiu@collabora.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-pwm@vger.kernel.org
+Subject: [PATCH v6 56/80] dt-bindings: fix references to files converted to yaml
+Date:   Tue, 13 Oct 2020 13:54:11 +0200
+Message-Id: <81fe11d0079aaa48ff85370fd359150160943341.1602589096.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <cover.1602589096.git.mchehab+huawei@kernel.org>
+References: <cover.1602589096.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mP3DRpeJDSE+ciuQ"
-Content-Disposition: inline
-In-Reply-To: <20201012205957.889185-8-adrian.ratiu@collabora.com>
-X-Cookie: do {
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+There were several files converted to yaml, but the .txt file
+is still referenced somewhere else.
 
---mP3DRpeJDSE+ciuQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Update the references for them to point to the right file.
 
-On Mon, Oct 12, 2020 at 11:59:46PM +0300, Adrian Ratiu wrote:
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ .../bindings/display/tilcdc/tilcdc.txt           |  2 +-
+ .../devicetree/bindings/mailbox/omap-mailbox.txt |  2 +-
+ .../devicetree/bindings/media/i2c/tvp5150.txt    |  2 +-
+ .../bindings/pwm/google,cros-ec-pwm.yaml         |  2 +-
+ .../bindings/soc/qcom/qcom,smd-rpm.yaml          |  2 +-
+ .../bindings/sound/google,cros-ec-codec.yaml     |  2 +-
+ MAINTAINERS                                      | 16 ++++++++--------
+ 7 files changed, 14 insertions(+), 14 deletions(-)
 
-> -	writeb(val, ctx->regs + reg);
-> +	if (ctx->relaxed_mmio)
-> +		writeb_relaxed(val, ctx->regs + reg);
-> +	else
-> +		writeb(val, ctx->regs + reg);
+diff --git a/Documentation/devicetree/bindings/display/tilcdc/tilcdc.txt b/Documentation/devicetree/bindings/display/tilcdc/tilcdc.txt
+index 8b2a71395647..3e64075ac7ec 100644
+--- a/Documentation/devicetree/bindings/display/tilcdc/tilcdc.txt
++++ b/Documentation/devicetree/bindings/display/tilcdc/tilcdc.txt
+@@ -37,7 +37,7 @@ Optional nodes:
+    supports a single port with a single endpoint.
+ 
+  - See also Documentation/devicetree/bindings/display/tilcdc/panel.txt and
+-   Documentation/devicetree/bindings/display/bridge/ti,tfp410.txt for connecting
++   Documentation/devicetree/bindings/display/bridge/ti,tfp410.yaml for connecting
+    tfp410 DVI encoder or lcd panel to lcdc
+ 
+ [1] There is an errata about AM335x color wiring. For 16-bit color mode
+diff --git a/Documentation/devicetree/bindings/mailbox/omap-mailbox.txt b/Documentation/devicetree/bindings/mailbox/omap-mailbox.txt
+index 35c3f56b7f7b..5fe80c1c19fc 100644
+--- a/Documentation/devicetree/bindings/mailbox/omap-mailbox.txt
++++ b/Documentation/devicetree/bindings/mailbox/omap-mailbox.txt
+@@ -69,7 +69,7 @@ The following are mandatory properties for the K3 AM65x and J721E SoCs only:
+ 			the interrupt routes between the IP and the main GIC
+ 			controllers. See the following binding for additional
+ 			details,
+-			Documentation/devicetree/bindings/interrupt-controller/ti,sci-intr.txt
++			Documentation/devicetree/bindings/interrupt-controller/ti,sci-intr.yaml
+ 
+ Child Nodes:
+ ============
+diff --git a/Documentation/devicetree/bindings/media/i2c/tvp5150.txt b/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
+index 6c88ce858d08..719b2995dc17 100644
+--- a/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
++++ b/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
+@@ -56,7 +56,7 @@ Optional Connector Properties:
+                   instead of using the autodetection mechnism. Please look at
+                   [1] for more information.
+ 
+-[1] Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt.
++[1] Documentation/devicetree/bindings/display/connector/analog-tv-connector.yaml.
+ 
+ Example - three input sources:
+ #include <dt-bindings/display/sdtv-standards.h>
+diff --git a/Documentation/devicetree/bindings/pwm/google,cros-ec-pwm.yaml b/Documentation/devicetree/bindings/pwm/google,cros-ec-pwm.yaml
+index 41ece1d85315..4cfbffd8414a 100644
+--- a/Documentation/devicetree/bindings/pwm/google,cros-ec-pwm.yaml
++++ b/Documentation/devicetree/bindings/pwm/google,cros-ec-pwm.yaml
+@@ -14,7 +14,7 @@ description: |
+   Google's ChromeOS EC PWM is a simple PWM attached to the Embedded Controller
+   (EC) and controlled via a host-command interface.
+   An EC PWM node should be only found as a sub-node of the EC node (see
+-  Documentation/devicetree/bindings/mfd/cros-ec.txt).
++  Documentation/devicetree/bindings/mfd/google,cros-ec.yaml).
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
+index 468d658ce3e7..2684f22a1d85 100644
+--- a/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
++++ b/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
+@@ -20,7 +20,7 @@ description: |
+   present and this subnode may contain children that designate regulator
+   resources.
+ 
+-  Refer to Documentation/devicetree/bindings/regulator/qcom,smd-rpm-regulator.txt
++  Refer to Documentation/devicetree/bindings/regulator/qcom,smd-rpm-regulator.yaml
+   for information on the regulator subnodes that can exist under the
+   rpm_requests.
+ 
+diff --git a/Documentation/devicetree/bindings/sound/google,cros-ec-codec.yaml b/Documentation/devicetree/bindings/sound/google,cros-ec-codec.yaml
+index c84e656afb0a..3b9143af2c7c 100644
+--- a/Documentation/devicetree/bindings/sound/google,cros-ec-codec.yaml
++++ b/Documentation/devicetree/bindings/sound/google,cros-ec-codec.yaml
+@@ -13,7 +13,7 @@ description: |
+   Google's ChromeOS EC codec is a digital mic codec provided by the
+   Embedded Controller (EC) and is controlled via a host-command interface.
+   An EC codec node should only be found as a sub-node of the EC node (see
+-  Documentation/devicetree/bindings/mfd/cros-ec.txt).
++  Documentation/devicetree/bindings/mfd/google,cros-ec.yaml).
+ 
+ properties:
+   compatible:
+diff --git a/MAINTAINERS b/MAINTAINERS
+index dffa948a2124..9e0f7b68bba5 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1523,7 +1523,7 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/arm/actions.yaml
+ F:	Documentation/devicetree/bindings/clock/actions,owl-cmu.txt
+-F:	Documentation/devicetree/bindings/dma/owl-dma.txt
++F:	Documentation/devicetree/bindings/dma/owl-dma.yaml
+ F:	Documentation/devicetree/bindings/i2c/i2c-owl.txt
+ F:	Documentation/devicetree/bindings/mmc/owl-mmc.yaml
+ F:	Documentation/devicetree/bindings/pinctrl/actions,s900-pinctrl.txt
+@@ -5827,7 +5827,7 @@ L:	linux-renesas-soc@vger.kernel.org
+ S:	Supported
+ T:	git git://linuxtv.org/pinchartl/media drm/du/next
+ F:	Documentation/devicetree/bindings/display/bridge/renesas,dw-hdmi.txt
+-F:	Documentation/devicetree/bindings/display/bridge/renesas,lvds.txt
++F:	Documentation/devicetree/bindings/display/bridge/renesas,lvds.yaml
+ F:	Documentation/devicetree/bindings/display/renesas,du.txt
+ F:	drivers/gpu/drm/rcar-du/
+ F:	drivers/gpu/drm/shmobile/
+@@ -6952,7 +6952,7 @@ M:	Frank Li <Frank.li@nxp.com>
+ L:	linux-arm-kernel@lists.infradead.org
+ S:	Maintained
+ F:	Documentation/admin-guide/perf/imx-ddr.rst
+-F:	Documentation/devicetree/bindings/perf/fsl-imx-ddr.txt
++F:	Documentation/devicetree/bindings/perf/fsl-imx-ddr.yaml
+ F:	drivers/perf/fsl_imx8_ddr_perf.c
+ 
+ FREESCALE IMX I2C DRIVER
+@@ -6960,7 +6960,7 @@ M:	Oleksij Rempel <o.rempel@pengutronix.de>
+ R:	Pengutronix Kernel Team <kernel@pengutronix.de>
+ L:	linux-i2c@vger.kernel.org
+ S:	Maintained
+-F:	Documentation/devicetree/bindings/i2c/i2c-imx.txt
++F:	Documentation/devicetree/bindings/i2c/i2c-imx.yaml
+ F:	drivers/i2c/busses/i2c-imx.c
+ 
+ FREESCALE IMX LPI2C DRIVER
+@@ -6968,7 +6968,7 @@ M:	Dong Aisheng <aisheng.dong@nxp.com>
+ L:	linux-i2c@vger.kernel.org
+ L:	linux-imx@nxp.com
+ S:	Maintained
+-F:	Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.txt
++F:	Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml
+ F:	drivers/i2c/busses/i2c-imx-lpi2c.c
+ 
+ FREESCALE QORIQ DPAA ETHERNET DRIVER
+@@ -11600,7 +11600,7 @@ MIPS GENERIC PLATFORM
+ M:	Paul Burton <paulburton@kernel.org>
+ L:	linux-mips@vger.kernel.org
+ S:	Supported
+-F:	Documentation/devicetree/bindings/power/mti,mips-cpc.txt
++F:	Documentation/devicetree/bindings/power/mti,mips-cpc.yaml
+ F:	arch/mips/generic/
+ F:	arch/mips/tools/generic-board-config.sh
+ 
+@@ -12455,7 +12455,7 @@ NXP SGTL5000 DRIVER
+ M:	Fabio Estevam <festevam@gmail.com>
+ L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
+ S:	Maintained
+-F:	Documentation/devicetree/bindings/sound/sgtl5000.txt
++F:	Documentation/devicetree/bindings/sound/sgtl5000.yaml
+ F:	sound/soc/codecs/sgtl5000*
+ 
+ NXP SJA1105 ETHERNET SWITCH DRIVER
+@@ -16737,7 +16737,7 @@ SYNOPSYS DESIGNWARE DMAC DRIVER
+ M:	Viresh Kumar <vireshk@kernel.org>
+ R:	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+ S:	Maintained
+-F:	Documentation/devicetree/bindings/dma/snps-dma.txt
++F:	Documentation/devicetree/bindings/dma/snps,dma-spear1340.yaml
+ F:	drivers/dma/dw/
+ F:	include/dt-bindings/dma/dw-dmac.h
+ F:	include/linux/dma/dw.h
+-- 
+2.26.2
 
-There is no point in doing a conditional operation on every I/O, it'd be
-better to register a different set of ops when doing relaxed I/O.
-
---mP3DRpeJDSE+ciuQ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl+FgOwACgkQJNaLcl1U
-h9DfBAf/aCgHrO/JPO6kC9zlq8FPBcVZgOCd/XI9J+z55ZKCSSN6Ikr+Bf8JqOpd
-E6QaabPUOJUcGLeJh3bf04rAq8De42ez6sq71N9UzwHEuQtDjqNExwkAdS5UjlD7
-2nFyJwB6xg5tFRX8yJTKI8A2i1HSWBOz7COQ9+c88EnziZHIpMVK/CKln+dUM4Iq
-SaxqQpcFtLqAOgq2EGB3SEViUui5oBGqMrKzZMNvDnHJSRqT0FijXPCw2IhOs7fe
-gEP8AL3QDSJCNe/nLC3UT1/hw1RMWbpEUN2cVWuqCnFAUrAKIIuGAQLBb4zH9AuE
-XTXIVY9BdeTsBxaQZCIQVHVn6Jvbhg==
-=S9Bp
------END PGP SIGNATURE-----
-
---mP3DRpeJDSE+ciuQ--
