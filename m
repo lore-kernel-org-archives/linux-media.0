@@ -2,57 +2,57 @@ Return-Path: <SRS0=sDFD=DU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB933C433E7
-	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 14:39:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EB93C433E7
+	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 14:39:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 673DC2485F
-	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 14:39:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C6FC124867
+	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 14:39:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="EGkAmJQI";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="SBBf6DeI"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="E8JNBJ4v";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="YrjAhCjF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388408AbgJMOjc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 13 Oct 2020 10:39:32 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:52386 "EHLO
+        id S1730196AbgJMOjb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 13 Oct 2020 10:39:31 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:52410 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729832AbgJMOjZ (ORCPT
+        with ESMTP id S1730075AbgJMOj1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 13 Oct 2020 10:39:25 -0400
-Message-Id: <20201013143731.563049429@linutronix.de>
+        Tue, 13 Oct 2020 10:39:27 -0400
+Message-Id: <20201013143731.859749817@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1602599963;
+        s=2020; t=1602599965;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=Kt7syLlkwliIK4Vw2o2WQSVVoFIsSjJ4Z19KFu4kzkY=;
-        b=EGkAmJQIMjH8XEWyTcEPAbG6aoAfIAwTXpvd5xmhzfh00kwI7+yYrNqumjQrgoSafxJ2Xn
-        lZAU5lPizhgU63I4kr+C2QhdZx4Rqo+ztrG6xbmGgNQl7gAvZ7o0B3CxaoRPx9o3eZZmqS
-        /+mJ23UQYYqYRZp1Yz+8AafcxV/GKCXTDBY8g0MSvJpem+TyKTKZuP5r8jgzPBWmXNfaCi
-        sZDddc75xhJGv6IkLuxNbOVSVIJQ1xUMff2DY/BdfrNzW8OoS2aDX1W32n+vRT0IcKjt5H
-        brMjUm3awCanQZd7XPn51wDFoZKUcUIlt8dH4WrlZU8E6yCeaeMT/IMth1vw7w==
+        bh=HbKaPIGycRqaOzLEdRLNBqBq8/efplDiFnYYkQ1e0mQ=;
+        b=E8JNBJ4vUwDEYCdHMsfPowMSaseHnVbGEW0LYPQZbvWVX8lHxLhnE1tI/RVm4xd6zeEkFr
+        iasw68fm+bN32PBzCrXpFuBShoFSNxcbvVDiRrHFyhXfDx9muEvyy1gK4bytCKarYxs/y2
+        BCZEQblMPYeHOERWAZ5ZyWmpkViRCaFsb4zVXbDhd0mhh/QKONu41tf6ntT2e0JWaL1Dxb
+        uTot1jEgFCRG+oYpml38BgNAmAByCFSKFwt/vpUVk/MQ+olDNCywrz29NiVVGdc/2S0/8M
+        g0Sum2dY32xofzdilysVp0ZvaDeLaTpBmOJvFQARkAT6nx7vtkQD0s35dZpPNQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1602599963;
+        s=2020e; t=1602599965;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=Kt7syLlkwliIK4Vw2o2WQSVVoFIsSjJ4Z19KFu4kzkY=;
-        b=SBBf6DeIAvBVI1JTWw3BsxbVXtBYgteaT4Fxdz36fh4VCqjiNSXAUeXO+efsnGpbD4nzh3
-        bi6OYsY4XC0YV6AQ==
-Date:   Tue, 13 Oct 2020 16:26:17 +0200
+        bh=HbKaPIGycRqaOzLEdRLNBqBq8/efplDiFnYYkQ1e0mQ=;
+        b=YrjAhCjFWe1WsH7m8GEx76K4ptmEC2qC95qAKZfu7nyceO8HSzmUS3935fAz8Uq2DLefv1
+        ThH0UAegqrRQI0Aw==
+Date:   Tue, 13 Oct 2020 16:26:19 +0200
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [patch 1/4] media: Bulk remove BUG_ON(in_interrupt())
+        linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-usb@vger.kernel.org
+Subject: [patch 3/4] media: au0828: Consolidate dmesg output
 References: <20201013142616.118697527@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,110 +61,41 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-None of these BUG_ON()'s is justified. BUG_ON() should only be used when
-there is really no way to survive.
+The memory allocations in au0828_init_isoc() happen all in task context
+with GFP_KERNEL. Therefore a printk() trying to deduce whether this is
+called from task or interrupt context is pretty useless.
 
-If at all these could be replaced by lockdep_assert_preemption_enabled() to
-cover all invalid caller context and not just those covered by
-in_interrupt().
-
-But all functions which are invoked from those places contain already debug
-mechanisms to catch wrong context, so having these extra checks is not
-having any advantage.
+Convert it to au0828_isocdbg() as the other one in that function and for
+completeness sake add one for the URB allocation as well.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: Hans Verkuil <hverkuil@xs4all.nl>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc: linux-media@vger.kernel.org
-Cc: linux-usb@vger.kernel.org
 
-diff --git a/drivers/media/common/saa7146/saa7146_fops.c b/drivers/media/common/saa7146/saa7146_fops.c
-index d6531874faa6..e936c56b0378 100644
---- a/drivers/media/common/saa7146/saa7146_fops.c
-+++ b/drivers/media/common/saa7146/saa7146_fops.c
-@@ -55,8 +55,6 @@ void saa7146_dma_free(struct saa7146_dev *dev,struct videobuf_queue *q,
- 	struct videobuf_dmabuf *dma=videobuf_to_dma(&buf->vb);
- 	DEB_EE("dev:%p, buf:%p\n", dev, buf);
- 
--	BUG_ON(in_interrupt());
--
- 	videobuf_waiton(q, &buf->vb, 0, 0);
- 	videobuf_dma_unmap(q->dev, dma);
- 	videobuf_dma_free(dma);
-diff --git a/drivers/media/pci/bt8xx/bttv-risc.c b/drivers/media/pci/bt8xx/bttv-risc.c
-index 4af72826b006..32fa4a7fe76f 100644
---- a/drivers/media/pci/bt8xx/bttv-risc.c
-+++ b/drivers/media/pci/bt8xx/bttv-risc.c
-@@ -572,7 +572,6 @@ bttv_dma_free(struct videobuf_queue *q,struct bttv *btv, struct bttv_buffer *buf
- {
- 	struct videobuf_dmabuf *dma=videobuf_to_dma(&buf->vb);
- 
--	BUG_ON(in_interrupt());
- 	videobuf_waiton(q, &buf->vb, 0, 0);
- 	videobuf_dma_unmap(q->dev, dma);
- 	videobuf_dma_free(dma);
-diff --git a/drivers/media/pci/cx23885/cx23885-core.c b/drivers/media/pci/cx23885/cx23885-core.c
-index 4b0c53f61fb7..16eb4ab0e73e 100644
---- a/drivers/media/pci/cx23885/cx23885-core.c
-+++ b/drivers/media/pci/cx23885/cx23885-core.c
-@@ -1322,7 +1322,6 @@ void cx23885_free_buffer(struct cx23885_dev *dev, struct cx23885_buffer *buf)
- {
- 	struct cx23885_riscmem *risc = &buf->risc;
- 
--	BUG_ON(in_interrupt());
- 	pci_free_consistent(dev->pci, risc->size, risc->cpu, risc->dma);
- }
- 
-diff --git a/drivers/media/pci/cx25821/cx25821-core.c b/drivers/media/pci/cx25821/cx25821-core.c
-index 55018d9e439f..6f8ffab8840f 100644
---- a/drivers/media/pci/cx25821/cx25821-core.c
-+++ b/drivers/media/pci/cx25821/cx25821-core.c
-@@ -1198,7 +1198,6 @@ EXPORT_SYMBOL(cx25821_risc_databuffer_audio);
- 
- void cx25821_free_buffer(struct cx25821_dev *dev, struct cx25821_buffer *buf)
- {
--	BUG_ON(in_interrupt());
- 	if (WARN_ON(buf->risc.size == 0))
- 		return;
- 	pci_free_consistent(dev->pci,
-diff --git a/drivers/media/platform/fsl-viu.c b/drivers/media/platform/fsl-viu.c
-index 84633a3b8475..e0c51cd779b8 100644
---- a/drivers/media/platform/fsl-viu.c
-+++ b/drivers/media/platform/fsl-viu.c
-@@ -381,8 +381,6 @@ static void free_buffer(struct videobuf_queue *vq, struct viu_buf *buf)
- 	struct videobuf_buffer *vb = &buf->vb;
- 	void *vaddr = NULL;
- 
--	BUG_ON(in_interrupt());
--
- 	videobuf_waiton(vq, &buf->vb, 0, 0);
- 
- 	if (vq->int_ops && vq->int_ops->vaddr)
-diff --git a/drivers/media/usb/tm6000/tm6000-video.c b/drivers/media/usb/tm6000/tm6000-video.c
-index bfba06ea60e9..9b44462c5332 100644
---- a/drivers/media/usb/tm6000/tm6000-video.c
-+++ b/drivers/media/usb/tm6000/tm6000-video.c
-@@ -692,8 +692,6 @@ static void free_buffer(struct videobuf_queue *vq, struct tm6000_buffer *buf)
- 	struct tm6000_core   *dev = fh->dev;
- 	unsigned long flags;
- 
--	BUG_ON(in_interrupt());
--
- 	/* We used to wait for the buffer to finish here, but this didn't work
- 	   because, as we were keeping the state as VIDEOBUF_QUEUED,
- 	   videobuf_queue_cancel marked it as finished for us.
-diff --git a/drivers/media/usb/zr364xx/zr364xx.c b/drivers/media/usb/zr364xx/zr364xx.c
-index 8c670934d920..83221c0b6e6d 100644
---- a/drivers/media/usb/zr364xx/zr364xx.c
-+++ b/drivers/media/usb/zr364xx/zr364xx.c
-@@ -357,8 +357,6 @@ static void free_buffer(struct videobuf_queue *vq, struct zr364xx_buffer *buf)
- {
- 	_DBG("%s\n", __func__);
- 
--	BUG_ON(in_interrupt());
--
- 	videobuf_vmalloc_free(&buf->vb);
- 	buf->vb.state = VIDEOBUF_NEEDS_INIT;
- }
+---
+ drivers/media/usb/au0828/au0828-video.c |    5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+--- a/drivers/media/usb/au0828/au0828-video.c
++++ b/drivers/media/usb/au0828/au0828-video.c
+@@ -231,6 +231,7 @@ static int au0828_init_isoc(struct au082
+ 	for (i = 0; i < dev->isoc_ctl.num_bufs; i++) {
+ 		urb = usb_alloc_urb(max_packets, GFP_KERNEL);
+ 		if (!urb) {
++			au0828_isocdbg("cannot allocate URB\n");
+ 			au0828_uninit_isoc(dev);
+ 			return -ENOMEM;
+ 		}
+@@ -239,9 +240,7 @@ static int au0828_init_isoc(struct au082
+ 		dev->isoc_ctl.transfer_buffer[i] = usb_alloc_coherent(dev->usbdev,
+ 			sb_size, GFP_KERNEL, &urb->transfer_dma);
+ 		if (!dev->isoc_ctl.transfer_buffer[i]) {
+-			printk("unable to allocate %i bytes for transfer buffer %i%s\n",
+-					sb_size, i,
+-					in_interrupt() ? " while in int" : "");
++			au0828_isocdbg("cannot allocate transfer buffer\n");
+ 			au0828_uninit_isoc(dev);
+ 			return -ENOMEM;
+ 		}
 
