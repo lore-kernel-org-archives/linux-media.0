@@ -5,52 +5,52 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6043C4363D
-	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 12:01:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33851C43457
+	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 12:01:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7EB092080A
-	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 12:01:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D313E221EB
+	for <linux-media@archiver.kernel.org>; Tue, 13 Oct 2020 12:01:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1602590491;
-	bh=LwOArSpTP20nI9G50WhOo2j8DQQMKkmQjlArryB8tsI=;
+	s=default; t=1602590499;
+	bh=zJOxucCXGY+/g1Zhqy7+Iy3zmsjOu4tR8o67hpj1+5I=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=BiA8CtNzkZbSP+rFykOI1V7xPyYldCKG/z9Jin6v9YNvTz0vn4PHkm1QnfVZN+A7J
-	 GC2sLrbEb7eLZW7PhyZ9leMC16wLGRMGQw6et6jShAiNWunotdF9Vn5rulFQ/kn0n1
-	 QaHPpXPwrShFx+RFCPj2JOCJOVZIctZd8e8wLIKc=
+	b=YAzYEY1mYyZP9e1lmOj2tro4F215y4krWY4clSo2nu77x7hhNwlSIGhkkqbMS7ltD
+	 Ikx7VCyOWed5t+9SOvCX8RjWOLvBJtyfT1LVWMAzTWzOSOT1+yXCowIjdDNoIe4Enj
+	 Vbdy3OJyb+xEvpBWMNCrBQb6lPoMOPuDe8BT9++M=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728905AbgJMMBa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1729001AbgJMMBa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 13 Oct 2020 08:01:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57642 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:57414 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727382AbgJMLym (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1727397AbgJMLym (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 13 Oct 2020 07:54:42 -0400
 Received: from mail.kernel.org (ip5f5ad5b2.dynamic.kabel-deutschland.de [95.90.213.178])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9F012221FC;
-        Tue, 13 Oct 2020 11:54:39 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 275D222261;
+        Tue, 13 Oct 2020 11:54:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1602590080;
-        bh=LwOArSpTP20nI9G50WhOo2j8DQQMKkmQjlArryB8tsI=;
+        bh=zJOxucCXGY+/g1Zhqy7+Iy3zmsjOu4tR8o67hpj1+5I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GtGL42a88FpGiy7LoOTljy0FuZL9Ckniowjgu7JIAKVbBJVss8gXbWEakjNwps0nn
-         ++0Ivv8t/6QID1ST/6Qo/yOiqfT2tfn3H4/qHgfxSAdE4rEfGoXqTWTo9IfG6ADBV0
-         cYesEt72isPy4At/2EX8VmDkNne62GGO7k4VuWTQ=
+        b=oXZ0rxBXfiKJjdxNA0/ExvydRhpJBu0tR4aL+xGWegJr2nNqo9LEfgU7R7KbqPZx7
+         q+2YNrYkKq63itMEVU0J2KqQ++sje4Z9wv7MWOYoyFldlrqL8CC4hSOB9VukJnwf7E
+         WB7G+K++2m0ufzIRxCGYzXDlIqFFJSo85Gx9X3pM=
 Received: from mchehab by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1kSIt3-006CTn-Hg; Tue, 13 Oct 2020 13:54:37 +0200
+        id 1kSIt4-006CU6-1I; Tue, 13 Oct 2020 13:54:38 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         "Jonathan Corbet" <corbet@lwn.net>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v6 16/80] media: docs: make CEC documents compatible with Sphinx 3.1+
-Date:   Tue, 13 Oct 2020 13:53:31 +0200
-Message-Id: <13cf74a294fc1e7302da045bb8b2ba8c84ce12a3.1602589096.git.mchehab+huawei@kernel.org>
+        Sean Young <sean@mess.org>, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH v6 20/80] media: docs: make RC documents more compatible with Sphinx 3.1+
+Date:   Tue, 13 Oct 2020 13:53:35 +0200
+Message-Id: <a8b561bf548d4a892e23409ab2a92366b100158c.1602589096.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1602589096.git.mchehab+huawei@kernel.org>
 References: <cover.1602589096.git.mchehab+huawei@kernel.org>
@@ -67,177 +67,621 @@ be re-written, in order to use the new c domain notation.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../media/cec/cec-func-close.rst              | 10 +++-------
- .../media/cec/cec-func-ioctl.rst              | 11 ++++------
- .../userspace-api/media/cec/cec-func-open.rst | 10 +++-------
- .../userspace-api/media/cec/cec-func-poll.rst | 14 +++++--------
- .../media/cec/cec-ioc-adap-g-caps.rst         | 10 +++++-----
- .../media/cec/cec-ioc-adap-g-conn-info.rst    | 11 +++++-----
- .../media/cec/cec-ioc-adap-g-log-addrs.rst    | 20 ++++++++-----------
- .../media/cec/cec-ioc-adap-g-phys-addr.rst    | 15 +++++++-------
- .../media/cec/cec-ioc-dqevent.rst             | 15 +++++---------
- .../media/cec/cec-ioc-g-mode.rst              | 16 +++++++--------
- .../media/cec/cec-ioc-receive.rst             | 18 ++++++++---------
- 11 files changed, 63 insertions(+), 87 deletions(-)
+ .../userspace-api/media/rc/lirc-get-features.rst   |  9 ++++-----
+ .../userspace-api/media/rc/lirc-get-rec-mode.rst   | 12 +++++++-----
+ .../media/rc/lirc-get-rec-resolution.rst           |  8 ++++----
+ .../userspace-api/media/rc/lirc-get-send-mode.rst  | 14 +++++++-------
+ .../userspace-api/media/rc/lirc-get-timeout.rst    | 13 +++++++------
+ Documentation/userspace-api/media/rc/lirc-read.rst | 10 +++-------
+ .../media/rc/lirc-set-measure-carrier-mode.rst     |  8 ++++----
+ .../media/rc/lirc-set-rec-carrier-range.rst        |  6 ++++--
+ .../media/rc/lirc-set-rec-carrier.rst              |  8 ++++----
+ .../media/rc/lirc-set-rec-timeout-reports.rst      |  8 ++++----
+ .../media/rc/lirc-set-rec-timeout.rst              | 13 +++++++------
+ .../media/rc/lirc-set-send-carrier.rst             |  8 ++++----
+ .../media/rc/lirc-set-send-duty-cycle.rst          |  8 ++++----
+ .../media/rc/lirc-set-transmitter-mask.rst         |  8 ++++----
+ .../media/rc/lirc-set-wideband-receiver.rst        |  8 ++++----
+ .../userspace-api/media/rc/lirc-write.rst          |  7 ++-----
+ 16 files changed, 73 insertions(+), 75 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/cec/cec-func-close.rst b/Documentation/userspace-api/media/cec/cec-func-close.rst
-index 33c563f414a8..409e70a5f80f 100644
---- a/Documentation/userspace-api/media/cec/cec-func-close.rst
-+++ b/Documentation/userspace-api/media/cec/cec-func-close.rst
+diff --git a/Documentation/userspace-api/media/rc/lirc-get-features.rst b/Documentation/userspace-api/media/rc/lirc-get-features.rst
+index 6846ae99848c..66a243dbd437 100644
+--- a/Documentation/userspace-api/media/rc/lirc-get-features.rst
++++ b/Documentation/userspace-api/media/rc/lirc-get-features.rst
 @@ -1,4 +1,5 @@
  .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-+.. c:namespace:: CEC
++.. c:namespace:: RC
  
- .. _cec-func-close:
+ .. _lirc_get_features:
+ 
+@@ -14,8 +15,9 @@ LIRC_GET_FEATURES - Get the underlying hardware device's features
+ Synopsis
+ ========
+ 
+-.. c:function:: int ioctl( int fd, LIRC_GET_FEATURES, __u32 *features)
+-    :name: LIRC_GET_FEATURES
++.. c:macro:: LIRC_GET_FEATURES
++
++``int ioctl(int fd, LIRC_GET_FEATURES, __u32 *features)``
+ 
+ Arguments
+ =========
+@@ -26,11 +28,9 @@ Arguments
+ ``features``
+     Bitmask with the LIRC features.
+ 
+-
+ Description
+ ===========
+ 
+-
+ Get the underlying hardware device's features. If a driver does not
+ announce support of certain features, calling of the corresponding ioctls
+ is undefined.
+@@ -184,7 +184,6 @@ LIRC features
+ 
+     Unused. Kept just to avoid breaking uAPI.
+ 
+-
+ Return Value
+ ============
+ 
+diff --git a/Documentation/userspace-api/media/rc/lirc-get-rec-mode.rst b/Documentation/userspace-api/media/rc/lirc-get-rec-mode.rst
+index e8f397a87331..188478ed1233 100644
+--- a/Documentation/userspace-api/media/rc/lirc-get-rec-mode.rst
++++ b/Documentation/userspace-api/media/rc/lirc-get-rec-mode.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++.. c:namespace:: RC
+ 
+ .. _lirc_get_rec_mode:
+ .. _lirc_set_rec_mode:
+@@ -15,11 +16,13 @@ LIRC_GET_REC_MODE/LIRC_SET_REC_MODE - Get/set current receive mode.
+ Synopsis
+ ========
+ 
+-.. c:function:: int ioctl( int fd, LIRC_GET_REC_MODE, __u32 *mode)
+-	:name: LIRC_GET_REC_MODE
++.. c:macro:: LIRC_GET_REC_MODE
+ 
+-.. c:function:: int ioctl( int fd, LIRC_SET_REC_MODE, __u32 *mode)
+-	:name: LIRC_SET_REC_MODE
++``int ioctl(int fd, LIRC_GET_REC_MODE, __u32 *mode)``
++
++.. c:macro:: LIRC_SET_REC_MODE
++
++``int ioctl(int fd, LIRC_SET_REC_MODE, __u32 *mode)``
+ 
+ Arguments
+ =========
+@@ -47,7 +50,6 @@ Return Value
+     :header-rows:  0
+     :stub-columns: 0
+ 
+-
+     -  .. row 1
+ 
+        -  ``ENODEV``
+diff --git a/Documentation/userspace-api/media/rc/lirc-get-rec-resolution.rst b/Documentation/userspace-api/media/rc/lirc-get-rec-resolution.rst
+index 3f08aa7c24a9..e29445c5ce16 100644
+--- a/Documentation/userspace-api/media/rc/lirc-get-rec-resolution.rst
++++ b/Documentation/userspace-api/media/rc/lirc-get-rec-resolution.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++.. c:namespace:: RC
+ 
+ .. _lirc_get_rec_resolution:
+ 
+@@ -14,8 +15,9 @@ LIRC_GET_REC_RESOLUTION - Obtain the value of receive resolution, in microsecond
+ Synopsis
+ ========
+ 
+-.. c:function:: int ioctl( int fd, LIRC_GET_REC_RESOLUTION, __u32 *microseconds)
+-    :name: LIRC_GET_REC_RESOLUTION
++.. c:macro:: LIRC_GET_REC_RESOLUTION
++
++``int ioctl(int fd, LIRC_GET_REC_RESOLUTION, __u32 *microseconds)``
+ 
+ Arguments
+ =========
+@@ -26,7 +28,6 @@ Arguments
+ ``microseconds``
+     Resolution, in microseconds.
+ 
+-
+ Description
+ ===========
+ 
+@@ -38,7 +39,6 @@ This ioctl returns the integer value with such resolution, with can be
+ used by userspace applications like lircd to automatically adjust the
+ tolerance value.
+ 
+-
+ Return Value
+ ============
+ 
+diff --git a/Documentation/userspace-api/media/rc/lirc-get-send-mode.rst b/Documentation/userspace-api/media/rc/lirc-get-send-mode.rst
+index f93b30c92193..77472fb5608a 100644
+--- a/Documentation/userspace-api/media/rc/lirc-get-send-mode.rst
++++ b/Documentation/userspace-api/media/rc/lirc-get-send-mode.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++.. c:namespace:: RC
+ 
+ .. _lirc_get_send_mode:
+ .. _lirc_set_send_mode:
+@@ -15,11 +16,13 @@ LIRC_GET_SEND_MODE/LIRC_SET_SEND_MODE - Get/set current transmit mode.
+ Synopsis
+ ========
+ 
+-.. c:function:: int ioctl( int fd, LIRC_GET_SEND_MODE, __u32 *mode )
+-    :name: LIRC_GET_SEND_MODE
++.. c:macro:: LIRC_GET_SEND_MODE
+ 
+-.. c:function:: int ioctl( int fd, LIRC_SET_SEND_MODE, __u32 *mode )
+-    :name: LIRC_SET_SEND_MODE
++``int ioctl(int fd, LIRC_GET_SEND_MODE, __u32 *mode)``
++
++.. c:macro:: LIRC_SET_SEND_MODE
++
++``int ioctl(int fd, LIRC_SET_SEND_MODE, __u32 *mode)``
+ 
+ Arguments
+ =========
+@@ -30,7 +33,6 @@ Arguments
+ ``mode``
+     The mode used for transmitting.
+ 
+-
+ Description
+ ===========
+ 
+@@ -44,14 +46,12 @@ modes the driver supports.
+ Return Value
+ ============
+ 
+-
+ .. tabularcolumns:: |p{2.5cm}|p{15.0cm}|
+ 
+ .. flat-table::
+     :header-rows:  0
+     :stub-columns: 0
+ 
+-
+     -  .. row 1
+ 
+        -  ``ENODEV``
+diff --git a/Documentation/userspace-api/media/rc/lirc-get-timeout.rst b/Documentation/userspace-api/media/rc/lirc-get-timeout.rst
+index ec191a383d75..f5f3e06d6206 100644
+--- a/Documentation/userspace-api/media/rc/lirc-get-timeout.rst
++++ b/Documentation/userspace-api/media/rc/lirc-get-timeout.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++.. c:namespace:: RC
+ 
+ .. _lirc_get_min_timeout:
+ .. _lirc_get_max_timeout:
+@@ -16,11 +17,13 @@ range for IR receive.
+ Synopsis
+ ========
+ 
+-.. c:function:: int ioctl( int fd, LIRC_GET_MIN_TIMEOUT, __u32 *timeout)
+-    :name: LIRC_GET_MIN_TIMEOUT
++.. c:macro:: LIRC_GET_MIN_TIMEOUT
+ 
+-.. c:function:: int ioctl( int fd, LIRC_GET_MAX_TIMEOUT, __u32 *timeout)
+-    :name: LIRC_GET_MAX_TIMEOUT
++``int ioctl(int fd, LIRC_GET_MIN_TIMEOUT, __u32 *timeout)``
++
++.. c:macro:: LIRC_GET_MAX_TIMEOUT
++
++``int ioctl(int fd, LIRC_GET_MAX_TIMEOUT, __u32 *timeout)``
+ 
+ Arguments
+ =========
+@@ -31,7 +34,6 @@ Arguments
+ ``timeout``
+     Timeout, in microseconds.
+ 
+-
+ Description
+ ===========
+ 
+@@ -47,7 +49,6 @@ that can be set.
+    both ioctls will return the same value even though the timeout
+    cannot be changed via :ref:`LIRC_SET_REC_TIMEOUT`.
+ 
+-
+ Return Value
+ ============
+ 
+diff --git a/Documentation/userspace-api/media/rc/lirc-read.rst b/Documentation/userspace-api/media/rc/lirc-read.rst
+index b94a349bd99e..d589560214f4 100644
+--- a/Documentation/userspace-api/media/rc/lirc-read.rst
++++ b/Documentation/userspace-api/media/rc/lirc-read.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++.. c:namespace:: RC
+ 
+ .. _lirc-read:
  
 @@ -11,7 +12,6 @@ Name
  
- cec-close - Close a cec device
+ lirc-read - Read from a LIRC device
  
 -
  Synopsis
  ========
  
-@@ -19,16 +19,13 @@ Synopsis
+@@ -19,10 +19,7 @@ Synopsis
  
      #include <unistd.h>
  
 -
- .. c:function:: int close( int fd )
--    :name: cec-close
+ .. c:function:: ssize_t read( int fd, void *buf, size_t count )
+-    :name: lirc-read
+-
  
  Arguments
  =========
- 
- ``fd``
--    File descriptor returned by :c:func:`open() <cec-open>`.
--
-+    File descriptor returned by :c:func:`open()`.
- 
+@@ -39,9 +36,9 @@ Arguments
  Description
  ===========
-@@ -36,11 +33,10 @@ Description
- Closes the cec device. Resources associated with the file descriptor are
- freed. The device configuration remain unchanged.
+ 
+-:ref:`read() <lirc-read>` attempts to read up to ``count`` bytes from file
++:c:func:`read()` attempts to read up to ``count`` bytes from file
+ descriptor ``fd`` into the buffer starting at ``buf``.  If ``count`` is zero,
+-:ref:`read() <lirc-read>` returns zero and has no other results. If ``count``
++:c:func:`read()` returns zero and has no other results. If ``count``
+ is greater than ``SSIZE_MAX``, the result is unspecified.
+ 
+ The exact format of the data depends on what :ref:`lirc_modes` a driver
+@@ -59,7 +56,6 @@ by hardware decoders. The :c:type:`rc_proto` member is set to the
+ used for transmission, and ``scancode`` to the decoded scancode,
+ and the ``keycode`` set to the keycode or ``KEY_RESERVED``.
  
 -
  Return Value
  ============
  
--:c:func:`close() <cec-close>` returns 0 on success. On error, -1 is returned, and
-+:c:func:`close()` returns 0 on success. On error, -1 is returned, and
- ``errno`` is set appropriately. Possible error codes are:
- 
- ``EBADF``
-diff --git a/Documentation/userspace-api/media/cec/cec-func-ioctl.rst b/Documentation/userspace-api/media/cec/cec-func-ioctl.rst
-index 3b88230fad80..7c93f86de6cc 100644
---- a/Documentation/userspace-api/media/cec/cec-func-ioctl.rst
-+++ b/Documentation/userspace-api/media/cec/cec-func-ioctl.rst
+diff --git a/Documentation/userspace-api/media/rc/lirc-set-measure-carrier-mode.rst b/Documentation/userspace-api/media/rc/lirc-set-measure-carrier-mode.rst
+index 820d6bf28c1c..9bf9811a905a 100644
+--- a/Documentation/userspace-api/media/rc/lirc-set-measure-carrier-mode.rst
++++ b/Documentation/userspace-api/media/rc/lirc-set-measure-carrier-mode.rst
 @@ -1,4 +1,5 @@
  .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-+.. c:namespace:: CEC
++.. c:namespace:: RC
  
- .. _cec-func-ioctl:
+ .. _lirc_set_measure_carrier_mode:
  
-@@ -18,15 +19,13 @@ Synopsis
+@@ -14,8 +15,9 @@ LIRC_SET_MEASURE_CARRIER_MODE - enable or disable measure mode
+ Synopsis
+ ========
  
-     #include <sys/ioctl.h>
- 
--
--.. c:function:: int ioctl( int fd, int request, void *argp )
--   :name: cec-ioctl
-+``int ioctl(int fd, int request, void *argp)``
+-.. c:function:: int ioctl( int fd, LIRC_SET_MEASURE_CARRIER_MODE, __u32 *enable )
+-    :name: LIRC_SET_MEASURE_CARRIER_MODE
++.. c:macro:: LIRC_SET_MEASURE_CARRIER_MODE
++
++``int ioctl(int fd, LIRC_SET_MEASURE_CARRIER_MODE, __u32 *enable)``
  
  Arguments
  =========
- 
- ``fd``
--    File descriptor returned by :c:func:`open() <cec-open>`.
-+    File descriptor returned by :c:func:`open()`.
- 
- ``request``
-     CEC ioctl request code as defined in the cec.h header file, for
-@@ -35,11 +34,10 @@ Arguments
- ``argp``
-     Pointer to a request-specific structure.
+@@ -27,7 +29,6 @@ Arguments
+     enable = 1 means enable measure mode, enable = 0 means disable measure
+     mode.
  
 -
  Description
  ===========
  
--The :c:func:`ioctl() <cec-ioctl>` function manipulates cec device parameters. The
-+The :c:func:`ioctl()` function manipulates cec device parameters. The
- argument ``fd`` must be an open file descriptor.
- 
- The ioctl ``request`` code specifies the cec function to be called. It
-@@ -51,7 +49,6 @@ their parameters are located in the cec.h header file. All cec ioctl
- requests, their respective function and parameters are specified in
- :ref:`cec-user-func`.
+@@ -37,7 +38,6 @@ Enable or disable measure mode. If enabled, from the next key
+ press on, the driver will send ``LIRC_MODE2_FREQUENCY`` packets. By
+ default this should be turned off.
  
 -
  Return Value
  ============
  
-diff --git a/Documentation/userspace-api/media/cec/cec-func-open.rst b/Documentation/userspace-api/media/cec/cec-func-open.rst
-index 887bfd2a755e..d86563a34b9e 100644
---- a/Documentation/userspace-api/media/cec/cec-func-open.rst
-+++ b/Documentation/userspace-api/media/cec/cec-func-open.rst
+diff --git a/Documentation/userspace-api/media/rc/lirc-set-rec-carrier-range.rst b/Documentation/userspace-api/media/rc/lirc-set-rec-carrier-range.rst
+index e33e6a320b7a..530bc223930a 100644
+--- a/Documentation/userspace-api/media/rc/lirc-set-rec-carrier-range.rst
++++ b/Documentation/userspace-api/media/rc/lirc-set-rec-carrier-range.rst
 @@ -1,4 +1,5 @@
  .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-+.. c:namespace:: CEC
++.. c:namespace:: RC
  
- .. _cec-func-open:
+ .. _lirc_set_rec_carrier_range:
  
-@@ -18,10 +19,7 @@ Synopsis
+@@ -15,8 +16,9 @@ IR receive.
+ Synopsis
+ ========
  
-     #include <fcntl.h>
- 
--
- .. c:function:: int open( const char *device_name, int flags )
--   :name: cec-open
--
+-.. c:function:: int ioctl( int fd, LIRC_SET_REC_CARRIER_RANGE, __u32 *frequency )
+-    :name: LIRC_SET_REC_CARRIER_RANGE
++.. c:macro:: LIRC_SET_REC_CARRIER_RANGE
++
++``int ioctl(int fd, LIRC_SET_REC_CARRIER_RANGE, __u32 *frequency)``
  
  Arguments
  =========
-@@ -42,11 +40,10 @@ Arguments
+diff --git a/Documentation/userspace-api/media/rc/lirc-set-rec-carrier.rst b/Documentation/userspace-api/media/rc/lirc-set-rec-carrier.rst
+index a6784d5e59c8..28c928f1cc14 100644
+--- a/Documentation/userspace-api/media/rc/lirc-set-rec-carrier.rst
++++ b/Documentation/userspace-api/media/rc/lirc-set-rec-carrier.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++.. c:namespace:: RC
  
-     Other flags have no effect.
+ .. _lirc_set_rec_carrier:
+ 
+@@ -11,12 +12,12 @@ Name
+ 
+ LIRC_SET_REC_CARRIER - Set carrier used to modulate IR receive.
+ 
+-
+ Synopsis
+ ========
+ 
+-.. c:function:: int ioctl( int fd, LIRC_SET_REC_CARRIER, __u32 *frequency )
+-    :name: LIRC_SET_REC_CARRIER
++.. c:macro:: LIRC_SET_REC_CARRIER
++
++``int ioctl(int fd, LIRC_SET_REC_CARRIER, __u32 *frequency)``
+ 
+ Arguments
+ =========
+@@ -37,7 +38,6 @@ Set receive carrier used to modulate IR PWM pulses and spaces.
+    If called together with :ref:`LIRC_SET_REC_CARRIER_RANGE`, this ioctl
+    sets the upper bound frequency that will be recognized by the device.
+ 
+-
+ Return Value
+ ============
+ 
+diff --git a/Documentation/userspace-api/media/rc/lirc-set-rec-timeout-reports.rst b/Documentation/userspace-api/media/rc/lirc-set-rec-timeout-reports.rst
+index 55be65df7d5a..83e7155c5796 100644
+--- a/Documentation/userspace-api/media/rc/lirc-set-rec-timeout-reports.rst
++++ b/Documentation/userspace-api/media/rc/lirc-set-rec-timeout-reports.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++.. c:namespace:: RC
+ 
+ .. _lirc_set_rec_timeout_reports:
+ 
+@@ -14,8 +15,9 @@ LIRC_SET_REC_TIMEOUT_REPORTS - enable or disable timeout reports for IR receive
+ Synopsis
+ ========
+ 
+-.. c:function:: int ioctl( int fd, LIRC_SET_REC_TIMEOUT_REPORTS, __u32 *enable )
+-    :name: LIRC_SET_REC_TIMEOUT_REPORTS
++.. c:macro:: LIRC_SET_REC_TIMEOUT_REPORTS
++
++``int ioctl(int fd, LIRC_SET_REC_TIMEOUT_REPORTS, __u32 *enable)``
+ 
+ Arguments
+ =========
+@@ -27,7 +29,6 @@ Arguments
+     enable = 1 means enable timeout report, enable = 0 means disable timeout
+     reports.
  
 -
  Description
  ===========
  
--To open a cec device applications call :c:func:`open() <cec-open>` with the
-+To open a cec device applications call :c:func:`open()` with the
- desired device name. The function has no side effects; the device
- configuration remain unchanged.
+@@ -40,7 +41,6 @@ should be turned off.
  
-@@ -54,11 +51,10 @@ When the device is opened in read-only mode, attempts to modify its
- configuration will result in an error, and ``errno`` will be set to
- EBADF.
+    This ioctl is only valid for :ref:`LIRC_MODE_MODE2 <lirc-mode-mode2>`.
  
 -
  Return Value
  ============
  
--:c:func:`open() <cec-open>` returns the new file descriptor on success. On error,
-+:c:func:`open()` returns the new file descriptor on success. On error,
- -1 is returned, and ``errno`` is set appropriately. Possible error codes
- include:
- 
-diff --git a/Documentation/userspace-api/media/cec/cec-func-poll.rst b/Documentation/userspace-api/media/cec/cec-func-poll.rst
-index 2d87136e9a3f..980bbfc0bcce 100644
---- a/Documentation/userspace-api/media/cec/cec-func-poll.rst
-+++ b/Documentation/userspace-api/media/cec/cec-func-poll.rst
+diff --git a/Documentation/userspace-api/media/rc/lirc-set-rec-timeout.rst b/Documentation/userspace-api/media/rc/lirc-set-rec-timeout.rst
+index e91a0daecde6..8f3f9adf54ab 100644
+--- a/Documentation/userspace-api/media/rc/lirc-set-rec-timeout.rst
++++ b/Documentation/userspace-api/media/rc/lirc-set-rec-timeout.rst
 @@ -1,4 +1,5 @@
  .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-+.. c:namespace:: CEC
++.. c:namespace:: RC
  
- .. _cec-func-poll:
+ .. _lirc_set_rec_timeout:
+ .. _lirc_get_rec_timeout:
+@@ -15,11 +16,13 @@ LIRC_GET_REC_TIMEOUT/LIRC_SET_REC_TIMEOUT - Get/set the integer value for IR ina
+ Synopsis
+ ========
+ 
+-.. c:function:: int ioctl( int fd, LIRC_GET_REC_TIMEOUT, __u32 *timeout )
+-    :name: LIRC_GET_REC_TIMEOUT
++.. c:macro:: LIRC_GET_REC_TIMEOUT
+ 
+-.. c:function:: int ioctl( int fd, LIRC_SET_REC_TIMEOUT, __u32 *timeout )
+-    :name: LIRC_SET_REC_TIMEOUT
++``int ioctl(int fd, LIRC_GET_REC_TIMEOUT, __u32 *timeout)``
++
++.. c:macro:: LIRC_SET_REC_TIMEOUT
++
++``int ioctl(int fd, LIRC_SET_REC_TIMEOUT, __u32 *timeout)``
+ 
+ Arguments
+ =========
+@@ -30,7 +33,6 @@ Arguments
+ ``timeout``
+     Timeout, in microseconds.
+ 
+-
+ Description
+ ===========
+ 
+@@ -45,7 +47,6 @@ given value should be set.
+ 
+    The range of supported timeout is given by :ref:`LIRC_GET_MIN_TIMEOUT`.
+ 
+-
+ Return Value
+ ============
+ 
+diff --git a/Documentation/userspace-api/media/rc/lirc-set-send-carrier.rst b/Documentation/userspace-api/media/rc/lirc-set-send-carrier.rst
+index e199aac7d8e0..e3810ba58746 100644
+--- a/Documentation/userspace-api/media/rc/lirc-set-send-carrier.rst
++++ b/Documentation/userspace-api/media/rc/lirc-set-send-carrier.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++.. c:namespace:: RC
+ 
+ .. _lirc_set_send_carrier:
+ 
+@@ -11,12 +12,12 @@ Name
+ 
+ LIRC_SET_SEND_CARRIER - Set send carrier used to modulate IR TX.
+ 
+-
+ Synopsis
+ ========
+ 
+-.. c:function:: int ioctl( int fd, LIRC_SET_SEND_CARRIER, __u32 *frequency )
+-    :name: LIRC_SET_SEND_CARRIER
++.. c:macro:: LIRC_SET_SEND_CARRIER
++
++``int ioctl(int fd, LIRC_SET_SEND_CARRIER, __u32 *frequency)``
+ 
+ Arguments
+ =========
+@@ -32,7 +33,6 @@ Description
+ 
+ Set send carrier used to modulate IR PWM pulses and spaces.
+ 
+-
+ Return Value
+ ============
+ 
+diff --git a/Documentation/userspace-api/media/rc/lirc-set-send-duty-cycle.rst b/Documentation/userspace-api/media/rc/lirc-set-send-duty-cycle.rst
+index a9074f4fb058..52a072529af9 100644
+--- a/Documentation/userspace-api/media/rc/lirc-set-send-duty-cycle.rst
++++ b/Documentation/userspace-api/media/rc/lirc-set-send-duty-cycle.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++.. c:namespace:: RC
+ 
+ .. _lirc_set_send_duty_cycle:
+ 
+@@ -15,8 +16,9 @@ IR transmit.
+ Synopsis
+ ========
+ 
+-.. c:function:: int ioctl( int fd, LIRC_SET_SEND_DUTY_CYCLE, __u32 *duty_cycle)
+-    :name: LIRC_SET_SEND_DUTY_CYCLE
++.. c:macro:: LIRC_SET_SEND_DUTY_CYCLE
++
++``int ioctl(int fd, LIRC_SET_SEND_DUTY_CYCLE, __u32 *duty_cycle)``
+ 
+ Arguments
+ =========
+@@ -28,7 +30,6 @@ Arguments
+     Duty cicle, describing the pulse width in percent (from 1 to 99) of
+     the total cycle. Values 0 and 100 are reserved.
+ 
+-
+ Description
+ ===========
+ 
+@@ -38,7 +39,6 @@ Currently, no special meaning is defined for 0 or 100, but this
+ could be used to switch off carrier generation in the future, so
+ these values should be reserved.
+ 
+-
+ Return Value
+ ============
+ 
+diff --git a/Documentation/userspace-api/media/rc/lirc-set-transmitter-mask.rst b/Documentation/userspace-api/media/rc/lirc-set-transmitter-mask.rst
+index 1f5527427281..68f4cc2e3ae3 100644
+--- a/Documentation/userspace-api/media/rc/lirc-set-transmitter-mask.rst
++++ b/Documentation/userspace-api/media/rc/lirc-set-transmitter-mask.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++.. c:namespace:: RC
+ 
+ .. _lirc_set_transmitter_mask:
+ 
+@@ -14,8 +15,9 @@ LIRC_SET_TRANSMITTER_MASK - Enables send codes on a given set of transmitters
+ Synopsis
+ ========
+ 
+-.. c:function:: int ioctl( int fd, LIRC_SET_TRANSMITTER_MASK, __u32 *mask )
+-    :name: LIRC_SET_TRANSMITTER_MASK
++.. c:macro:: LIRC_SET_TRANSMITTER_MASK
++
++``int ioctl(int fd, LIRC_SET_TRANSMITTER_MASK, __u32 *mask)``
+ 
+ Arguments
+ =========
+@@ -26,7 +28,6 @@ Arguments
+ ``mask``
+     Mask with channels to enable tx. Channel 0 is the least significant bit.
+ 
+-
+ Description
+ ===========
+ 
+@@ -42,7 +43,6 @@ When an invalid bit mask is given, i.e. a bit is set, even though the device
+ does not have so many transitters, then this ioctl returns the number of
+ available transitters and does nothing otherwise.
+ 
+-
+ Return Value
+ ============
+ 
+diff --git a/Documentation/userspace-api/media/rc/lirc-set-wideband-receiver.rst b/Documentation/userspace-api/media/rc/lirc-set-wideband-receiver.rst
+index 2c43b620b3f3..be5321c4a91f 100644
+--- a/Documentation/userspace-api/media/rc/lirc-set-wideband-receiver.rst
++++ b/Documentation/userspace-api/media/rc/lirc-set-wideband-receiver.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++.. c:namespace:: RC
+ 
+ .. _lirc_set_wideband_receiver:
+ 
+@@ -14,8 +15,9 @@ LIRC_SET_WIDEBAND_RECEIVER - enable wide band receiver.
+ Synopsis
+ ========
+ 
+-.. c:function:: int ioctl( int fd, LIRC_SET_WIDEBAND_RECEIVER, __u32 *enable )
+-    :name: LIRC_SET_WIDEBAND_RECEIVER
++.. c:macro:: LIRC_SET_WIDEBAND_RECEIVER
++
++``int ioctl(int fd, LIRC_SET_WIDEBAND_RECEIVER, __u32 *enable)``
+ 
+ Arguments
+ =========
+@@ -27,7 +29,6 @@ Arguments
+     enable = 1 means enable wideband receiver, enable = 0 means disable
+     wideband receiver.
+ 
+-
+ Description
+ ===========
+ 
+@@ -47,7 +48,6 @@ reduced range of reception.
+     carrier reports. Trying to disable wide band receiver while carrier
+     reports are active will do nothing.
+ 
+-
+ Return Value
+ ============
+ 
+diff --git a/Documentation/userspace-api/media/rc/lirc-write.rst b/Documentation/userspace-api/media/rc/lirc-write.rst
+index 421de2cfa4ca..c1c3230d4fd6 100644
+--- a/Documentation/userspace-api/media/rc/lirc-write.rst
++++ b/Documentation/userspace-api/media/rc/lirc-write.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++.. c:namespace:: RC
+ 
+ .. _lirc-write:
  
 @@ -11,7 +12,6 @@ Name
  
- cec-poll - Wait for some event on a file descriptor
+ lirc-write - Write to a LIRC device
  
 -
  Synopsis
@@ -245,468 +689,26 @@ index 2d87136e9a3f..980bbfc0bcce 100644
  
 @@ -19,9 +19,7 @@ Synopsis
  
-     #include <sys/poll.h>
+     #include <unistd.h>
  
 -
- .. c:function:: int poll( struct pollfd *ufds, unsigned int nfds, int timeout )
--   :name: cec-poll
+ .. c:function:: ssize_t write( int fd, void *buf, size_t count )
+-    :name: lirc-write
  
  Arguments
  =========
-@@ -35,14 +33,13 @@ Arguments
- ``timeout``
-    Timeout to wait for events
- 
--
+@@ -38,7 +36,7 @@ Arguments
  Description
  ===========
  
--With the :c:func:`poll() <cec-poll>` function applications can wait for CEC
-+With the :c:func:`poll()` function applications can wait for CEC
- events.
- 
--On success :c:func:`poll() <cec-poll>` returns the number of file descriptors
-+On success :c:func:`poll()` returns the number of file descriptors
- that have been selected (that is, file descriptors for which the
- ``revents`` field of the respective struct :c:type:`pollfd`
- is non-zero). CEC devices set the ``POLLIN`` and ``POLLRDNORM`` flags in
-@@ -53,13 +50,12 @@ then the ``POLLPRI`` flag is set. When the function times out it returns
- a value of zero, on failure it returns -1 and the ``errno`` variable is
- set appropriately.
- 
--For more details see the :c:func:`poll() <cec-poll>` manual page.
--
-+For more details see the :c:func:`poll()` manual page.
- 
- Return Value
- ============
- 
--On success, :c:func:`poll() <cec-poll>` returns the number structures which have
-+On success, :c:func:`poll()` returns the number structures which have
- non-zero ``revents`` fields, or zero if the call timed out. On error -1
- is returned, and the ``errno`` variable is set appropriately:
- 
-diff --git a/Documentation/userspace-api/media/cec/cec-ioc-adap-g-caps.rst b/Documentation/userspace-api/media/cec/cec-ioc-adap-g-caps.rst
-index 7f25365ce0fb..c7309a2fcbce 100644
---- a/Documentation/userspace-api/media/cec/cec-ioc-adap-g-caps.rst
-+++ b/Documentation/userspace-api/media/cec/cec-ioc-adap-g-caps.rst
-@@ -1,4 +1,5 @@
- .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-+.. c:namespace:: CEC
- 
- .. _CEC_ADAP_G_CAPS:
- 
-@@ -14,18 +15,18 @@ CEC_ADAP_G_CAPS - Query device capabilities
- Synopsis
- ========
- 
--.. c:function:: int ioctl( int fd, CEC_ADAP_G_CAPS, struct cec_caps *argp )
--    :name: CEC_ADAP_G_CAPS
-+.. c:macro:: CEC_ADAP_G_CAPS
-+
-+``int ioctl(int fd, CEC_ADAP_G_CAPS, struct cec_caps *argp)``
- 
- Arguments
- =========
- 
- ``fd``
--    File descriptor returned by :c:func:`open() <cec-open>`.
-+    File descriptor returned by :c:func:`open()`.
- 
- ``argp``
- 
--
- Description
- ===========
- 
-@@ -62,7 +63,6 @@ returns the information to the application. The ioctl never fails.
-       - CEC Framework API version, formatted with the ``KERNEL_VERSION()``
- 	macro.
- 
--
- .. tabularcolumns:: |p{4.4cm}|p{2.5cm}|p{10.6cm}|
- 
- .. _cec-capabilities:
-diff --git a/Documentation/userspace-api/media/cec/cec-ioc-adap-g-conn-info.rst b/Documentation/userspace-api/media/cec/cec-ioc-adap-g-conn-info.rst
-index 6818ddf1495c..13116b0b5c17 100644
---- a/Documentation/userspace-api/media/cec/cec-ioc-adap-g-conn-info.rst
-+++ b/Documentation/userspace-api/media/cec/cec-ioc-adap-g-conn-info.rst
-@@ -2,6 +2,8 @@
- ..
- .. Copyright 2019 Google LLC
- ..
-+.. c:namespace:: CEC
-+
- .. _CEC_ADAP_G_CONNECTOR_INFO:
- 
- *******************************
-@@ -16,18 +18,18 @@ CEC_ADAP_G_CONNECTOR_INFO - Query HDMI connector information
- Synopsis
- ========
- 
--.. c:function:: int ioctl( int fd, CEC_ADAP_G_CONNECTOR_INFO, struct cec_connector_info *argp )
--    :name: CEC_ADAP_G_CONNECTOR_INFO
-+.. c:macro:: CEC_ADAP_G_CONNECTOR_INFO
-+
-+``int ioctl(int fd, CEC_ADAP_G_CONNECTOR_INFO, struct cec_connector_info *argp)``
- 
- Arguments
- =========
- 
- ``fd``
--    File descriptor returned by :c:func:`open() <cec-open>`.
-+    File descriptor returned by :c:func:`open()`.
- 
- ``argp``
- 
--
- Description
- ===========
- 
-@@ -57,7 +59,6 @@ is only available if the ``CEC_CAP_CONNECTOR_INFO`` capability is set.
-     * - }
-       -
- 
--
- .. tabularcolumns:: |p{4.4cm}|p{2.5cm}|p{10.6cm}|
- 
- .. _connector-type:
-diff --git a/Documentation/userspace-api/media/cec/cec-ioc-adap-g-log-addrs.rst b/Documentation/userspace-api/media/cec/cec-ioc-adap-g-log-addrs.rst
-index 1ca893270ae9..c760c07b6b3f 100644
---- a/Documentation/userspace-api/media/cec/cec-ioc-adap-g-log-addrs.rst
-+++ b/Documentation/userspace-api/media/cec/cec-ioc-adap-g-log-addrs.rst
-@@ -1,4 +1,5 @@
- .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-+.. c:namespace:: CEC
- 
- .. _CEC_ADAP_LOG_ADDRS:
- .. _CEC_ADAP_G_LOG_ADDRS:
-@@ -13,21 +14,22 @@ Name
- 
- CEC_ADAP_G_LOG_ADDRS, CEC_ADAP_S_LOG_ADDRS - Get or set the logical addresses
- 
--
- Synopsis
- ========
- 
--.. c:function:: int ioctl( int fd, CEC_ADAP_G_LOG_ADDRS, struct cec_log_addrs *argp )
--   :name: CEC_ADAP_G_LOG_ADDRS
-+.. c:macro:: CEC_ADAP_G_LOG_ADDRS
- 
--.. c:function:: int ioctl( int fd, CEC_ADAP_S_LOG_ADDRS, struct cec_log_addrs *argp )
--   :name: CEC_ADAP_S_LOG_ADDRS
-+``int ioctl(int fd, CEC_ADAP_G_LOG_ADDRS, struct cec_log_addrs *argp)``
-+
-+.. c:macro:: CEC_ADAP_S_LOG_ADDRS
-+
-+``int ioctl(int fd, CEC_ADAP_S_LOG_ADDRS, struct cec_log_addrs *argp)``
- 
- Arguments
- =========
- 
- ``fd``
--    File descriptor returned by :c:func:`open() <cec-open>`.
-+    File descriptor returned by :c:func:`open()`.
- 
- ``argp``
-     Pointer to struct :c:type:`cec_log_addrs`.
-@@ -148,7 +150,6 @@ logical address types are already defined will return with error ``EBUSY``.
-         give the CEC framework more information about the device type, even
-         though the framework won't use it directly in the CEC message.
- 
--
- .. tabularcolumns:: |p{7.8cm}|p{1.0cm}|p{8.7cm}|
- 
- .. _cec-log-addrs-flags:
-@@ -185,7 +186,6 @@ logical address types are already defined will return with error ``EBUSY``.
- 
- 	All other messages are ignored.
- 
--
- .. tabularcolumns:: |p{7.8cm}|p{1.0cm}|p{8.7cm}|
- 
- .. _cec-versions:
-@@ -211,7 +211,6 @@ logical address types are already defined will return with error ``EBUSY``.
-       - 6
-       - CEC version according to the HDMI 2.0 standard.
- 
--
- .. tabularcolumns:: |p{6.6cm}|p{2.2cm}|p{8.7cm}|
- 
- .. _cec-prim-dev-types:
-@@ -257,7 +256,6 @@ logical address types are already defined will return with error ``EBUSY``.
-       - 7
-       - Use for a video processor device.
- 
--
- .. tabularcolumns:: |p{6.6cm}|p{2.2cm}|p{8.7cm}|
- 
- .. _cec-log-addr-types:
-@@ -306,7 +304,6 @@ logical address types are already defined will return with error ``EBUSY``.
- 	Control).
- 
- 
--
- .. tabularcolumns:: |p{6.6cm}|p{2.2cm}|p{8.7cm}|
- 
- .. _cec-all-dev-types-flags:
-@@ -348,7 +345,6 @@ logical address types are already defined will return with error ``EBUSY``.
-       - This supports the CEC Switch or Video Processing type.
- 
- 
--
- Return Value
- ============
- 
-diff --git a/Documentation/userspace-api/media/cec/cec-ioc-adap-g-phys-addr.rst b/Documentation/userspace-api/media/cec/cec-ioc-adap-g-phys-addr.rst
-index a10443be1b26..fb22f6894f26 100644
---- a/Documentation/userspace-api/media/cec/cec-ioc-adap-g-phys-addr.rst
-+++ b/Documentation/userspace-api/media/cec/cec-ioc-adap-g-phys-addr.rst
-@@ -1,4 +1,5 @@
- .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-+.. c:namespace:: CEC
- 
- .. _CEC_ADAP_PHYS_ADDR:
- .. _CEC_ADAP_G_PHYS_ADDR:
-@@ -13,21 +14,22 @@ Name
- 
- CEC_ADAP_G_PHYS_ADDR, CEC_ADAP_S_PHYS_ADDR - Get or set the physical address
- 
--
- Synopsis
- ========
- 
--.. c:function:: int ioctl( int fd, CEC_ADAP_G_PHYS_ADDR, __u16 *argp )
--    :name: CEC_ADAP_G_PHYS_ADDR
-+.. c:macro:: CEC_ADAP_G_PHYS_ADDR
- 
--.. c:function:: int ioctl( int fd, CEC_ADAP_S_PHYS_ADDR, __u16 *argp )
--    :name: CEC_ADAP_S_PHYS_ADDR
-+``int ioctl(int fd, CEC_ADAP_G_PHYS_ADDR, __u16 *argp)``
-+
-+.. c:macro:: CEC_ADAP_S_PHYS_ADDR
-+
-+``int ioctl(int fd, CEC_ADAP_S_PHYS_ADDR, __u16 *argp)``
- 
- Arguments
- =========
- 
- ``fd``
--    File descriptor returned by :c:func:`open() <cec-open>`.
-+    File descriptor returned by :c:func:`open()`.
- 
- ``argp``
-     Pointer to the CEC address.
-@@ -71,7 +73,6 @@ For example, the EDID for each HDMI input of the TV will have a
- different physical address of the form a.0.0.0 that the sources will
- read out and use as their physical address.
- 
--
- Return Value
- ============
- 
-diff --git a/Documentation/userspace-api/media/cec/cec-ioc-dqevent.rst b/Documentation/userspace-api/media/cec/cec-ioc-dqevent.rst
-index 3bc81fc5a73f..736fda5ad73d 100644
---- a/Documentation/userspace-api/media/cec/cec-ioc-dqevent.rst
-+++ b/Documentation/userspace-api/media/cec/cec-ioc-dqevent.rst
-@@ -1,4 +1,5 @@
- .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-+.. c:namespace:: CEC
- 
- .. _CEC_DQEVENT:
- 
-@@ -11,22 +12,21 @@ Name
- 
- CEC_DQEVENT - Dequeue a CEC event
- 
--
- Synopsis
- ========
- 
--.. c:function:: int ioctl( int fd, CEC_DQEVENT, struct cec_event *argp )
--    :name: CEC_DQEVENT
-+.. c:macro:: CEC_DQEVENT
-+
-+``int ioctl(int fd, CEC_DQEVENT, struct cec_event *argp)``
- 
- Arguments
- =========
- 
- ``fd``
--    File descriptor returned by :c:func:`open() <cec-open>`.
-+    File descriptor returned by :c:func:`open()`.
- 
- ``argp``
- 
--
- Description
- ===========
- 
-@@ -72,7 +72,6 @@ it is guaranteed that the state did change in between the two events.
-         the HDMI driver is still configuring the device or because the HDMI
-         device was unbound.
- 
--
- .. c:type:: cec_event_lost_msgs
- 
- .. tabularcolumns:: |p{1.0cm}|p{2.0cm}|p{14.5cm}|
-@@ -94,7 +93,6 @@ it is guaranteed that the state did change in between the two events.
- 	replied to within a second according to the CEC specification,
- 	this is more than enough.
- 
--
- .. tabularcolumns:: |p{1.0cm}|p{4.4cm}|p{2.5cm}|p{9.6cm}|
- 
- .. c:type:: cec_event
-@@ -130,7 +128,6 @@ it is guaranteed that the state did change in between the two events.
-     * - }
-       -
- 
--
- .. tabularcolumns:: |p{5.6cm}|p{0.9cm}|p{11.0cm}|
- 
- .. _cec-events:
-@@ -204,7 +201,6 @@ it is guaranteed that the state did change in between the two events.
- 	if the 5V is high, then an initial event will be generated for that
- 	filehandle.
- 
--
- .. tabularcolumns:: |p{6.0cm}|p{0.6cm}|p{10.9cm}|
- 
- .. _cec-event-flags:
-@@ -230,7 +226,6 @@ it is guaranteed that the state did change in between the two events.
-         This is an indication that the application cannot keep up.
- 
- 
--
- Return Value
- ============
- 
-diff --git a/Documentation/userspace-api/media/cec/cec-ioc-g-mode.rst b/Documentation/userspace-api/media/cec/cec-ioc-g-mode.rst
-index 2093e373c93c..d3387b1fa7c5 100644
---- a/Documentation/userspace-api/media/cec/cec-ioc-g-mode.rst
-+++ b/Documentation/userspace-api/media/cec/cec-ioc-g-mode.rst
-@@ -1,4 +1,5 @@
- .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-+.. c:namespace:: CEC
- 
- .. _CEC_MODE:
- .. _CEC_G_MODE:
-@@ -13,17 +14,19 @@ CEC_G_MODE, CEC_S_MODE - Get or set exclusive use of the CEC adapter
- Synopsis
- ========
- 
--.. c:function:: int ioctl( int fd, CEC_G_MODE, __u32 *argp )
--   :name: CEC_G_MODE
-+.. c:macro:: CEC_G_MODE
- 
--.. c:function:: int ioctl( int fd, CEC_S_MODE, __u32 *argp )
--   :name: CEC_S_MODE
-+``int ioctl(int fd, CEC_G_MODE, __u32 *argp)``
-+
-+.. c:macro:: CEC_S_MODE
-+
-+``int ioctl(int fd, CEC_S_MODE, __u32 *argp)``
- 
- Arguments
- =========
- 
- ``fd``
--    File descriptor returned by :c:func:`open() <cec-open>`.
-+    File descriptor returned by :c:func:`open()`.
- 
- ``argp``
-     Pointer to CEC mode.
-@@ -101,7 +104,6 @@ Available initiator modes are:
- 	then an attempt to become one will return the ``EBUSY`` error code
- 	error.
- 
--
- Available follower modes are:
- 
- .. tabularcolumns:: |p{6.6cm}|p{0.9cm}|p{10.0cm}|
-@@ -193,7 +195,6 @@ Available follower modes are:
- 	the process has the ``CAP_NET_ADMIN`` capability. If that is not
- 	set, then the ``EPERM`` error code is returned.
- 
--
- Core message processing details:
- 
- .. tabularcolumns:: |p{6.6cm}|p{10.9cm}|
-@@ -272,7 +273,6 @@ Core message processing details:
- 	and then just pass the message on to the follower(s).
- 
- 
--
- Return Value
- ============
- 
-diff --git a/Documentation/userspace-api/media/cec/cec-ioc-receive.rst b/Documentation/userspace-api/media/cec/cec-ioc-receive.rst
-index 9d629d46973c..b2fc051e99f4 100644
---- a/Documentation/userspace-api/media/cec/cec-ioc-receive.rst
-+++ b/Documentation/userspace-api/media/cec/cec-ioc-receive.rst
-@@ -1,4 +1,5 @@
- .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-+.. c:namespace:: CEC
- 
- .. _CEC_TRANSMIT:
- .. _CEC_RECEIVE:
-@@ -12,21 +13,22 @@ Name
- 
- CEC_RECEIVE, CEC_TRANSMIT - Receive or transmit a CEC message
- 
--
- Synopsis
- ========
- 
--.. c:function:: int ioctl( int fd, CEC_RECEIVE, struct cec_msg \*argp )
--    :name: CEC_RECEIVE
-+.. c:macro:: CEC_RECEIVE
- 
--.. c:function:: int ioctl( int fd, CEC_TRANSMIT, struct cec_msg \*argp )
--    :name: CEC_TRANSMIT
-+``int ioctl(int fd, CEC_RECEIVE, struct cec_msg *argp)``
-+
-+.. c:macro:: CEC_TRANSMIT
-+
-+``int ioctl(int fd, CEC_TRANSMIT, struct cec_msg *argp)``
- 
- Arguments
- =========
- 
- ``fd``
--    File descriptor returned by :c:func:`open() <cec-open>`.
-+    File descriptor returned by :c:func:`open()`.
- 
- ``argp``
-     Pointer to struct cec_msg.
-@@ -194,7 +196,6 @@ View On' messages from initiator 0xf ('Unregistered') to destination 0 ('TV').
- 	supports this, otherwise it is always 0. This counter is only
- 	valid if the :ref:`CEC_TX_STATUS_ERROR <CEC-TX-STATUS-ERROR>` status bit is set.
- 
--
- .. tabularcolumns:: |p{6.2cm}|p{1.0cm}|p{10.3cm}|
- 
- .. _cec-msg-flags:
-@@ -228,7 +229,6 @@ View On' messages from initiator 0xf ('Unregistered') to destination 0 ('TV').
- 	capability. If that is not set, then the ``EPERM`` error code is
- 	returned.
- 
--
- .. tabularcolumns:: |p{5.6cm}|p{0.9cm}|p{11.0cm}|
- 
- .. _cec-tx-status:
-@@ -298,7 +298,6 @@ View On' messages from initiator 0xf ('Unregistered') to destination 0 ('TV').
-       - The transmit timed out. This should not normally happen and this
- 	indicates a driver problem.
- 
--
- .. tabularcolumns:: |p{5.6cm}|p{0.9cm}|p{11.0cm}|
- 
- .. _cec-rx-status:
-@@ -335,7 +334,6 @@ View On' messages from initiator 0xf ('Unregistered') to destination 0 ('TV').
- 	reply was interrupted.
- 
+-:ref:`write() <lirc-write>` writes up to ``count`` bytes to the device
++:c:func:`write()` writes up to ``count`` bytes to the device
+ referenced by the file descriptor ``fd`` from the buffer starting at
+ ``buf``.
+ 
+@@ -64,7 +62,6 @@ for the protocol or the scancode is not valid for the specified protocol,
+ ``EINVAL`` is returned. The write function blocks until the scancode
+ is transmitted by the hardware.
  
 -
  Return Value
