@@ -2,29 +2,44 @@ Return-Path: <SRS0=7hcH=DV=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2553BC433E7
-	for <linux-media@archiver.kernel.org>; Wed, 14 Oct 2020 11:50:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A1CAC43457
+	for <linux-media@archiver.kernel.org>; Wed, 14 Oct 2020 12:13:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D228320848
-	for <linux-media@archiver.kernel.org>; Wed, 14 Oct 2020 11:50:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2243120848
+	for <linux-media@archiver.kernel.org>; Wed, 14 Oct 2020 12:13:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1602677580;
+	bh=cmKTV1EBll0j+ItdD8eP3aHKUumuPZb6PnNWSGoC0ec=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=DWA+n2P3Q9JIJXCKDebKHjF00P99Q4HJFx5rX+dFTb7hioFtL2XyRWMxgzaRse2T1
+	 2adYYpijG1z+GeOCTsm+rvG3y6t2QHoQsOYgebZ772ms6E7zg/JPhzGGqsXqa2vhg5
+	 oouJ5MgK4WPAp4cmFnUlTBL1djZUL8r56vuwyjMQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388484AbgJNLuO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 14 Oct 2020 07:50:14 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:45358 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388327AbgJNLuO (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 14 Oct 2020 07:50:14 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: aratiu)
-        with ESMTPSA id 1FFD51F40ED4
-From:   Adrian Ratiu <adrian.ratiu@collabora.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Adrian Ratiu <adrian.ratiu@collabora.com>
+        id S1729548AbgJNMM4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 14 Oct 2020 08:12:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38566 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726105AbgJNMM4 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 14 Oct 2020 08:12:56 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CF06320848;
+        Wed, 14 Oct 2020 12:12:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602677575;
+        bh=cmKTV1EBll0j+ItdD8eP3aHKUumuPZb6PnNWSGoC0ec=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lFyLPmV+KiUAhxMxiAYwGMF8OsX3RT+mdfLJ/P03BmP4zIS/RIqVxwt9BeXs8dKVc
+         oKu26geObF7+BU8Be0buKPtbEmJFASNBtI2iE+CtnyS9ZuHFlPNBtrG53AaGWqIBJ7
+         CWgdTUIE9BIx/5uUDyu7suGLzcwKXYDE0/6GG++U=
+Date:   Wed, 14 Oct 2020 13:12:49 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Adrian Ratiu <adrian.ratiu@collabora.com>
 Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -35,44 +50,79 @@ Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 07/18] regmap: mmio: add config option to allow relaxed
  MMIO accesses
-In-Reply-To: <20201013102656.GA5425@sirena.org.uk>
+Message-ID: <20201014121249.GA4580@sirena.org.uk>
 References: <20201012205957.889185-1-adrian.ratiu@collabora.com>
  <20201012205957.889185-8-adrian.ratiu@collabora.com>
  <20201013102656.GA5425@sirena.org.uk>
-Date:   Wed, 14 Oct 2020 14:51:14 +0300
-Message-ID: <87o8l581ql.fsf@collabora.com>
+ <87o8l581ql.fsf@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="AqsLC8rIMeq19msA"
+Content-Disposition: inline
+In-Reply-To: <87o8l581ql.fsf@collabora.com>
+X-Cookie: Take an astronaut to launch.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello Mark,
 
-On Tue, 13 Oct 2020, Mark Brown <broonie@kernel.org> wrote:
-> On Mon, Oct 12, 2020 at 11:59:46PM +0300, Adrian Ratiu wrote: 
-> 
->> -	writeb(val, ctx->regs + reg); +	if (ctx->relaxed_mmio) + 
->> writeb_relaxed(val, ctx->regs + reg); +	else + 
->> writeb(val, ctx->regs + reg); 
-> 
-> There is no point in doing a conditional operation on every I/O, 
-> it'd be better to register a different set of ops when doing 
-> relaxed I/O. 
+--AqsLC8rIMeq19msA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Indeed I have considered adding new functions but went with this 
-solution because it's easier for the users to only have to define 
-a "relaxed" config then test the regmap ctx as above.
+On Wed, Oct 14, 2020 at 02:51:14PM +0300, Adrian Ratiu wrote:
+> On Tue, 13 Oct 2020, Mark Brown <broonie@kernel.org> wrote:
+> > On Mon, Oct 12, 2020 at 11:59:46PM +0300, Adrian Ratiu wrote:
 
-Thinking a bit more about it, yes, it makes more sense to have 
-dedicated ops: this way users don't have to be explicit about 
-adding membarriers and can combine relaxed and non-relaxed more 
-easily, so it's also a better API trade-off in addition to 
-avoiding the conditional. Thanks!
+> > > -	writeb(val, ctx->regs + reg); +	if (ctx->relaxed_mmio) +
+> > > writeb_relaxed(val, ctx->regs + reg); +	else + writeb(val, ctx->regs
+> > > + reg);
 
-Question: Do you want me to split this patch from the series and 
-send it separately just for the regmap subsystem to be easier to 
-review / apply?
+> > There is no point in doing a conditional operation on every I/O, it'd be
+> > better to register a different set of ops when doing relaxed I/O.
 
-Kind regards,
-Adrian
+> Indeed I have considered adding new functions but went with this solution
+> because it's easier for the users to only have to define a "relaxed" config
+> then test the regmap ctx as above.
+
+It seems like you've taken this in a direction other than what  I was
+thinking of here - defining separate ops doesn't mean we have to do
+anything which has any impact on the interface seen by users.  The
+regmap config is supplied at registration time, it's just as available
+then as it is when doing I/O.
+
+> Thinking a bit more about it, yes, it makes more sense to have dedicated
+> ops: this way users don't have to be explicit about adding membarriers and
+> can combine relaxed and non-relaxed more easily, so it's also a better API
+> trade-off in addition to avoiding the conditional. Thanks!
+
+I'm not sure what you're proposing here - it does seem useful to be able
+to combine relaxed and non-relaxed I/O but that seems like it'd break
+down the abstraction for regmap since tht's not really a concept other
+buses are going to have?  Unless we provide an operation to switch by
+setting flags or somethin possibly and integrate it with the cache
+perhaps.  Could you be a bit more specific about what you were thinking
+of here please?
+
+> Question: Do you want me to split this patch from the series and send it
+> separately just for the regmap subsystem to be easier to review / apply?
+
+Sure.
+
+--AqsLC8rIMeq19msA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl+G60AACgkQJNaLcl1U
+h9B+Jwf/XOdvtPoXpgJ7rC8kdzSUBfvgEXpd8VEr0zJtWSXU2NbIb3vbR0fVsRSL
+ybbGwGTzR7DzFlOqNfl+Rq7/DxGjL5WXo+HAdlOreida+X5fq9hsPjijp/cMuY8K
+pQPU55p+uXFdbKQ4YnQKI32wgdFJE0zNAsmPJ4xPTVjL8f35D5Sz7jPLzke8AyPX
+1AU+ZLrsdkb3FbPc/9iFR/rK2dHJnP1+4+869Q2nqdQRmBS6J3rhgMDIII3WjjcE
+2f6eTQ9Nfk2Bh5RUhv06v7XSgAFa52SjxPntzcSycw1NeWw4LG+xd38Mhbs0qGR9
+Y7XiGt0GEcQ76mjFHzyzV6GD6OELdw==
+=gcB2
+-----END PGP SIGNATURE-----
+
+--AqsLC8rIMeq19msA--
