@@ -2,167 +2,164 @@ Return-Path: <SRS0=VvXC=DW=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A349C433E7
-	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 15:42:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6661EC433E7
+	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 16:03:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B1A4C2225A
-	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 15:42:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F271622255
+	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 16:03:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="rpRhMwqO"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="UPZ3hvPL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731085AbgJOPmL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Oct 2020 11:42:11 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:26468 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1731061AbgJOPmL (ORCPT
+        id S2389565AbgJOQDx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Oct 2020 12:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43664 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388549AbgJOQDw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Oct 2020 11:42:11 -0400
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09FFWPqM021470;
-        Thu, 15 Oct 2020 17:41:56 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=STMicroelectronics;
- bh=5M9z+VJHpdMPslK5yQUX1WHh1hOOIDzT8UXdnP4viN8=;
- b=rpRhMwqOI8skSMIeeESJ2ENU7YmRahj/fKUC0OAR/VDOxL070/IAzAqpEuYaRtN83gR9
- xrhSVQPms7Vnmzq3WZHd06k/3/EW958yp6ioJC1FT1G7m+wVHLe5tnbCJYcrrzcoeJ6X
- Xzu6dJdsXq4uAa5aoZ6PheBdfCFMUvIQfZ7+Y1beFVRfJrdYzZOu35vj7QDJDrpvkJk5
- 2XyIVmPX3nQejPZZCer29rV97V7osWxtr4o8W1zAAY3urVsjT+06R5menn7YGm3c0+uM
- hIjLHbTGllfkYiuidDP8/B3W9FZW59/gxweGeoEs40Z9xyqlm/XsJPgJUv3+KXahV4Qa Jw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 34353wqrkk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Oct 2020 17:41:56 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C3BF1100034;
-        Thu, 15 Oct 2020 17:41:55 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A14452CA82E;
-        Thu, 15 Oct 2020 17:41:55 +0200 (CEST)
-Received: from SFHDAG1NODE1.st.com (10.75.127.1) by SFHDAG3NODE2.st.com
- (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 15 Oct
- 2020 17:41:55 +0200
-Received: from SFHDAG1NODE1.st.com ([fe80::91:9840:ca1f:420f]) by
- SFHDAG1NODE1.st.com ([fe80::91:9840:ca1f:420f%20]) with mapi id
- 15.00.1473.003; Thu, 15 Oct 2020 17:41:55 +0200
-From:   Hugues FRUCHET <hugues.fruchet@st.com>
-To:     Sakari Ailus <sakari.ailus@iki.fi>
-CC:     Alexandre TORGUE <alexandre.torgue@st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Alain VOLMAT <alain.volmat@st.com>,
-        Yannick FERTRE <yannick.fertre@st.com>,
-        Philippe CORNU <philippe.cornu@st.com>
-Subject: Re: [PATCH] media: stm32-dcmi: add support of BT656 bus
-Thread-Topic: [PATCH] media: stm32-dcmi: add support of BT656 bus
-Thread-Index: AQHWoUBkV9IGF/l+kUSwjdCwug2yKamYr2IA
-Date:   Thu, 15 Oct 2020 15:41:55 +0000
-Message-ID: <1e1eb9d1-75af-c560-7d06-14d25bb52b3f@st.com>
-References: <1602087290-18020-1-git-send-email-hugues.fruchet@st.com>
- <20201013090704.GL6413@valkosipuli.retiisi.org.uk>
-In-Reply-To: <20201013090704.GL6413@valkosipuli.retiisi.org.uk>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.75.127.48]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <126D0E0F6D08C44292F7D889E518AF9A@st.com>
-Content-Transfer-Encoding: base64
+        Thu, 15 Oct 2020 12:03:52 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0ABC061755
+        for <linux-media@vger.kernel.org>; Thu, 15 Oct 2020 09:03:52 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id f21so3718592wml.3
+        for <linux-media@vger.kernel.org>; Thu, 15 Oct 2020 09:03:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=DbRyVIR2jUJWgBTF659QP8SY1vAxnN7ExneR3zyZD7o=;
+        b=UPZ3hvPLTlXmhC8krIzkANQBFOV7zqrdoR6Fe7UlmT0cANShHVycdvBxmLUvXiyRIe
+         Co4WdaFgeSbnNz2VfojqOtcRY3LHLu2NTO2jtx8Pxz3YtW+DEz7oxBESx2kltqVKdVHm
+         AygMOfTDbWW4g/dCDV5ASow9sXqRCMvKG8Vkc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DbRyVIR2jUJWgBTF659QP8SY1vAxnN7ExneR3zyZD7o=;
+        b=s26H9zCrNFvmWrx9dKKVRAS/PimUKholMslg2/3SW5ONw3UpduMDSbg5VD8NqShj6u
+         SNxgisPntK/4UInT8sVO2fY3YPp/Pct+8Vvj7nuvPkxzUqsYeEebpbBKoWooxtmq1Upp
+         y8YzEdal23obUIB/J6PONGOTxUUylgIuxM01vjGsEwTGRGG/tyhCUz2jaLaGtmP0BSlM
+         9vjAVEjfxCLY6ozo5G3DkIq8CqT6GDIUGLcSdTXy/OeDXNtV0NR5CpFTdhuoOYVUPB7s
+         EBAKSHlTCqGwiuE+vVoSVZNi7BPgCkdROybu+Fv7N5iK/9n/PaaK5+2SnnXqFyL75Qfj
+         BKfQ==
+X-Gm-Message-State: AOAM533zc5XDBu2Ni1NPPX/WEm8smbeJEL3MYmtIgiO6qd+cB+bkzVle
+        UHrr+XtEwP0D9hIcP2VJIPs9RQ==
+X-Google-Smtp-Source: ABdhPJw+VHwW09aRmuNanGKHGz+vL0Ww3co+chUob9D38zTudXVAwzdJco8FucmxzOZX1GLH21V0Lg==
+X-Received: by 2002:a1c:4856:: with SMTP id v83mr4957083wma.118.1602777831187;
+        Thu, 15 Oct 2020 09:03:51 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id n9sm5512439wrq.72.2020.10.15.09.03.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Oct 2020 09:03:50 -0700 (PDT)
+Date:   Thu, 15 Oct 2020 18:03:44 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Jianxin Xiong <jianxin.xiong@intel.com>
+Cc:     linux-rdma@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        Leon Romanovsky <leon@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Doug Ledford <dledford@redhat.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Christian Koenig <christian.koenig@amd.com>
+Subject: Re: [PATCH v4 5/5] dma-buf: Clarify that dma-buf sg lists are page
+ aligned
+Message-ID: <20201015160344.GA401619@phenom.ffwll.local>
+References: <1602692161-107096-1-git-send-email-jianxin.xiong@intel.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-10-15_09:2020-10-14,2020-10-15 signatures=0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1602692161-107096-1-git-send-email-jianxin.xiong@intel.com>
+X-Operating-System: Linux phenom 5.7.0-1-amd64 
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-SGkgU2FrYXJpLA0KDQpUaGFua3MgZm9yIHJldmlld2luZywNCg0KT24gMTAvMTMvMjAgMTE6MDcg
-QU0sIFNha2FyaSBBaWx1cyB3cm90ZToNCj4gSGkgSHVndWVzLA0KPiANCj4gT24gV2VkLCBPY3Qg
-MDcsIDIwMjAgYXQgMDY6MTQ6NTBQTSArMDIwMCwgSHVndWVzIEZydWNoZXQgd3JvdGU6DQo+PiBB
-ZGQgc3VwcG9ydCBvZiBCVDY1NiBlbWJlZGRlZCBzeW5jaHJvbml6YXRpb24gYnVzLg0KPj4gVGhp
-cyBtb2RlIGFsbG93cyB0byBzYXZlIGhhcmR3YXJlIHN5bmNocm8gbGluZXMgaHN5bmMgJiB2c3lu
-Yw0KPj4gYnkgcmVwbGFjaW5nIHRoZW0gd2l0aCBzeW5jaHJvIGNvZGVzIGVtYmVkZGVkIGluIGRh
-dGEgc3RyZWFtLg0KPj4gVGhpcyBidXMgdHlwZSBpcyBvbmx5IGNvbXBhdGlibGUgd2l0aCA4IGJp
-dHMgd2lkdGggZGF0YSBidXMuDQo+PiBEdWUgdG8gcmVzZXJ2ZWQgdmFsdWVzIDB4MDAgJiAweGZm
-IHVzZWQgZm9yIHN5bmNocm8gY29kZXMsDQo+PiB2YWxpZCBkYXRhIG9ubHkgdmFyeSBmcm9tIDB4
-MSB0byAweGZlLCB0aGlzIGlzIHVwIHRvIHNlbnNvcg0KPj4gdG8gY2xpcCBhY2NvcmRpbmdseSBw
-aXhlbCBkYXRhLiBBcyBhIGNvbnNlcXVlbmNlIG9mIHRoaXMNCj4+IGNsaXBwaW5nLCBKUEVHIGlz
-IG5vdCBzdXBwb3J0ZWQgd2hlbiB1c2luZyB0aGlzIGJ1cyB0eXBlLg0KPj4gRENNSSBjcm9wIGZl
-YXR1cmUgaXMgYWxzbyBub3QgYXZhaWxhYmxlIHdpdGggdGhpcyBidXMgdHlwZS4NCj4gDQo+IFlv
-dSBjYW4gaGF2ZSBtb3JlIHRoYW4gNjIgY2hhcmFjdGVycyBwZXIgbGluZS4gSW4gZmFjdCwgNzUg
-aXMgdGhlDQo+IHJlY29tbWVuZGVkIG1heGltdW0uDQo+IA0KPiBZb3Ugc2hvdWxkIGFsc28gYW1l
-bmQgdGhlIGJpbmRpbmdzIHRvIGNvdmVyIEJULjY1NiBtb2RlLiBBbHNvIGJ1cy10eXBlDQo+IHNo
-b3VsZCBwcm9iYWJseSBiZSBtYWRlIG1hbmRhdG9yeSwgdG9vLg0KV2lsbCBkbyBib3RoLg0KDQo+
-IA0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IEh1Z3VlcyBGcnVjaGV0IDxodWd1ZXMuZnJ1Y2hldEBz
-dC5jb20+DQo+PiAtLS0NCj4+ICAgZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9zdG0zMi9zdG0zMi1k
-Y21pLmMgfCAzNyArKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0tDQo+PiAgIDEgZmlsZSBj
-aGFuZ2VkLCAzNSBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQ0KPj4NCj4+IGRpZmYgLS1n
-aXQgYS9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL3N0bTMyL3N0bTMyLWRjbWkuYyBiL2RyaXZlcnMv
-bWVkaWEvcGxhdGZvcm0vc3RtMzIvc3RtMzItZGNtaS5jDQo+PiBpbmRleCBmZDFjNDFjLi5kN2Q3
-Y2RiIDEwMDY0NA0KPj4gLS0tIGEvZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9zdG0zMi9zdG0zMi1k
-Y21pLmMNCj4+ICsrKyBiL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vc3RtMzIvc3RtMzItZGNtaS5j
-DQo+PiBAQCAtMTU3LDYgKzE1Nyw3IEBAIHN0cnVjdCBzdG0zMl9kY21pIHsNCj4+ICAgCXN0cnVj
-dCB2YjJfcXVldWUJCXF1ZXVlOw0KPj4gICANCj4+ICAgCXN0cnVjdCB2NGwyX2Z3bm9kZV9idXNf
-cGFyYWxsZWwJYnVzOw0KPj4gKwllbnVtIHY0bDJfbWJ1c190eXBlCQlidXNfdHlwZTsNCj4+ICAg
-CXN0cnVjdCBjb21wbGV0aW9uCQljb21wbGV0ZTsNCj4+ICAgCXN0cnVjdCBjbGsJCQkqbWNsazsN
-Cj4+ICAgCWVudW0gc3RhdGUJCQlzdGF0ZTsNCj4+IEBAIC03NzcsNiArNzc4LDIzIEBAIHN0YXRp
-YyBpbnQgZGNtaV9zdGFydF9zdHJlYW1pbmcoc3RydWN0IHZiMl9xdWV1ZSAqdnEsIHVuc2lnbmVk
-IGludCBjb3VudCkNCj4+ICAgCWlmIChkY21pLT5idXMuZmxhZ3MgJiBWNEwyX01CVVNfUENMS19T
-QU1QTEVfUklTSU5HKQ0KPj4gICAJCXZhbCB8PSBDUl9QQ0tQT0w7DQo+PiAgIA0KPj4gKwkvKg0K
-Pj4gKwkgKiBCVDY1NiBlbWJlZGRlZCBzeW5jaHJvbmlzYXRpb24gYnVzIG1vZGUuDQo+PiArCSAq
-DQo+PiArCSAqIERlZmF1bHQgU0FWL0VBViBtb2RlIGlzIHN1cHBvcnRlZCBoZXJlIHdpdGggZGVm
-YXVsdCBjb2Rlcw0KPj4gKwkgKiBTQVY9MHhmZjAwMDA4MCAmIEVBVj0weGZmMDAwMDlkLg0KPj4g
-KwkgKiBXaXRoIERDTUkgdGhpcyBtZWFucyBMU0M9U0FWPTB4ODAgJiBMRUM9RUFWPTB4OWQuDQo+
-PiArCSAqLw0KPj4gKwlpZiAoZGNtaS0+YnVzX3R5cGUgPT0gVjRMMl9NQlVTX0JUNjU2KSB7DQo+
-PiArCQl2YWwgfD0gQ1JfRVNTOw0KPj4gKw0KPj4gKwkJLyogVW5tYXNrIGFsbCBjb2RlcyAqLw0K
-Pj4gKwkJcmVnX3dyaXRlKGRjbWktPnJlZ3MsIERDTUlfRVNVUiwgMHhmZmZmZmZmZik7LyogRkVD
-OkxFQzpMU0M6RlNDICovDQo+PiArDQo+PiArCQkvKiBUcmlnIG9uIExTQz0weDgwICYgTEVDPTB4
-OWQgY29kZXMsIGlnbm9yZSBGU0MgYW5kIEZFQyAqLw0KPj4gKwkJcmVnX3dyaXRlKGRjbWktPnJl
-Z3MsIERDTUlfRVNDUiwgMHhmZjlkODBmZik7LyogRkVDOkxFQzpMU0M6RlNDICovDQo+PiArCX0N
-Cj4+ICsNCj4+ICAgCXJlZ193cml0ZShkY21pLT5yZWdzLCBEQ01JX0NSLCB2YWwpOw0KPj4gICAN
-Cj4+ICAgCS8qIFNldCBjcm9wICovDQo+PiBAQCAtMTA2Nyw4ICsxMDg1LDkgQEAgc3RhdGljIGlu
-dCBkY21pX3NldF9mbXQoc3RydWN0IHN0bTMyX2RjbWkgKmRjbWksIHN0cnVjdCB2NGwyX2Zvcm1h
-dCAqZikNCj4+ICAgCWlmIChyZXQpDQo+PiAgIAkJcmV0dXJuIHJldDsNCj4+ICAgDQo+PiAtCS8q
-IERpc2FibGUgY3JvcCBpZiBKUEVHIGlzIHJlcXVlc3RlZCAqLw0KPj4gLQlpZiAocGl4LT5waXhl
-bGZvcm1hdCA9PSBWNEwyX1BJWF9GTVRfSlBFRykNCj4+ICsJLyogRGlzYWJsZSBjcm9wIGlmIEpQ
-RUcgaXMgcmVxdWVzdGVkIG9yIEJUNjU2IGJ1cyBpcyBzZWxlY3RlZCAqLw0KPj4gKwlpZiAocGl4
-LT5waXhlbGZvcm1hdCA9PSBWNEwyX1BJWF9GTVRfSlBFRyAmJg0KPj4gKwkgICAgZGNtaS0+YnVz
-X3R5cGUgIT0gVjRMMl9NQlVTX0JUNjU2KQ0KPj4gICAJCWRjbWktPmRvX2Nyb3AgPSBmYWxzZTsN
-Cj4+ICAgDQo+PiAgIAkvKiBwaXggdG8gbWJ1cyBmb3JtYXQgKi8NCj4+IEBAIC0xNTkyLDYgKzE2
-MTEsMTEgQEAgc3RhdGljIGludCBkY21pX2Zvcm1hdHNfaW5pdChzdHJ1Y3Qgc3RtMzJfZGNtaSAq
-ZGNtaSkNCj4+ICAgCQkJaWYgKGRjbWlfZm9ybWF0c1tpXS5tYnVzX2NvZGUgIT0gbWJ1c19jb2Rl
-LmNvZGUpDQo+PiAgIAkJCQljb250aW51ZTsNCj4+ICAgDQo+PiArCQkJLyogRXhjbHVkZSBKUEVH
-IGlmIEJUNjU2IGJ1cyBpcyBzZWxlY3RlZCAqLw0KPj4gKwkJCWlmIChkY21pX2Zvcm1hdHNbaV0u
-Zm91cmNjID09IFY0TDJfUElYX0ZNVF9KUEVHICYmDQo+PiArCQkJICAgIGRjbWktPmJ1c190eXBl
-ID09IFY0TDJfTUJVU19CVDY1NikNCj4+ICsJCQkJY29udGludWU7DQo+PiArDQo+PiAgIAkJCS8q
-IENvZGUgc3VwcG9ydGVkLCBoYXZlIHdlIGdvdCB0aGlzIGZvdXJjYyB5ZXQ/ICovDQo+PiAgIAkJ
-CWZvciAoaiA9IDA7IGogPCBudW1fZm10czsgaisrKQ0KPj4gICAJCQkJaWYgKHNkX2ZtdHNbal0t
-PmZvdXJjYyA9PQ0KPj4gQEAgLTE4NzMsOSArMTg5NywxOCBAQCBzdGF0aWMgaW50IGRjbWlfcHJv
-YmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikNCj4+ICAgCQlkZXZfZXJyKCZwZGV2LT5k
-ZXYsICJDU0kgYnVzIG5vdCBzdXBwb3J0ZWRcbiIpOw0KPj4gICAJCXJldHVybiAtRU5PREVWOw0K
-Pj4gICAJfQ0KPj4gKw0KPj4gKwlpZiAoZXAuYnVzX3R5cGUgPT0gVjRMMl9NQlVTX0JUNjU2ICYm
-DQo+PiArCSAgICBlcC5idXMucGFyYWxsZWwuYnVzX3dpZHRoICE9IDgpIHsNCj4+ICsJCWRldl9l
-cnIoJnBkZXYtPmRldiwgIkJUNjU2IGJ1cyBjb25mbGljdHMgd2l0aCAlZCBiaXRzIGJ1cyB3aWR0
-aCAoOCBiaXRzIHJlcXVpcmVkKVxuIiwNCj4+ICsJCQllcC5idXMucGFyYWxsZWwuYnVzX3dpZHRo
-KTsNCj4gDQo+IGJ1c193aWR0aCBpcyB1bnNpZ25lZCBoZXJlLg0KSSB3aWxsIGZpeCBpdC4NCg0K
-PiANCj4+ICsJCXJldHVybiAtRU5PREVWOw0KPj4gKwl9DQo+PiArDQo+PiAgIAlkY21pLT5idXMu
-ZmxhZ3MgPSBlcC5idXMucGFyYWxsZWwuZmxhZ3M7DQo+PiAgIAlkY21pLT5idXMuYnVzX3dpZHRo
-ID0gZXAuYnVzLnBhcmFsbGVsLmJ1c193aWR0aDsNCj4+ICAgCWRjbWktPmJ1cy5kYXRhX3NoaWZ0
-ID0gZXAuYnVzLnBhcmFsbGVsLmRhdGFfc2hpZnQ7DQo+PiArCWRjbWktPmJ1c190eXBlID0gZXAu
-YnVzX3R5cGU7DQo+PiAgIA0KPj4gICAJaXJxID0gcGxhdGZvcm1fZ2V0X2lycShwZGV2LCAwKTsN
-Cj4+ICAgCWlmIChpcnEgPD0gMCkNCj4gDQoNCkJSLA0KSHVndWVzLg==
+On Wed, Oct 14, 2020 at 09:16:01AM -0700, Jianxin Xiong wrote:
+> The dma-buf API have been used under the assumption that the sg lists
+> returned from dma_buf_map_attachment() are fully page aligned. Lots of
+> stuff can break otherwise all over the place. Clarify this in the
+> documentation and add a check when DMA API debug is enabled.
+> 
+> Signed-off-by: Jianxin Xiong <jianxin.xiong@intel.com>
+
+lgtm, thanks for creating this and giving it a spin.
+
+I'll queue this up in drm-misc-next for 5.11, should show up in linux-next
+after the merge window is closed.
+
+Cheers, Daniel
+
+> ---
+>  drivers/dma-buf/dma-buf.c | 21 +++++++++++++++++++++
+>  include/linux/dma-buf.h   |  3 ++-
+>  2 files changed, 23 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+> index 844967f..7309c83 100644
+> --- a/drivers/dma-buf/dma-buf.c
+> +++ b/drivers/dma-buf/dma-buf.c
+> @@ -851,6 +851,9 @@ void dma_buf_unpin(struct dma_buf_attachment *attach)
+>   * Returns sg_table containing the scatterlist to be returned; returns ERR_PTR
+>   * on error. May return -EINTR if it is interrupted by a signal.
+>   *
+> + * On success, the DMA addresses and lengths in the returned scatterlist are
+> + * PAGE_SIZE aligned.
+> + *
+>   * A mapping must be unmapped by using dma_buf_unmap_attachment(). Note that
+>   * the underlying backing storage is pinned for as long as a mapping exists,
+>   * therefore users/importers should not hold onto a mapping for undue amounts of
+> @@ -904,6 +907,24 @@ struct sg_table *dma_buf_map_attachment(struct dma_buf_attachment *attach,
+>  		attach->dir = direction;
+>  	}
+>  
+> +#ifdef CONFIG_DMA_API_DEBUG
+> +	{
+> +		struct scatterlist *sg;
+> +		u64 addr;
+> +		int len;
+> +		int i;
+> +
+> +		for_each_sgtable_dma_sg(sg_table, sg, i) {
+> +			addr = sg_dma_address(sg);
+> +			len = sg_dma_len(sg);
+> +			if (!PAGE_ALIGNED(addr) || !PAGE_ALIGNED(len)) {
+> +				pr_debug("%s: addr %llx or len %x is not page aligned!\n",
+> +					 __func__, addr, len);
+> +			}
+> +		}
+> +	}
+> +#endif /* CONFIG_DMA_API_DEBUG */
+> +
+>  	return sg_table;
+>  }
+>  EXPORT_SYMBOL_GPL(dma_buf_map_attachment);
+> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
+> index a2ca294e..4a5fa70 100644
+> --- a/include/linux/dma-buf.h
+> +++ b/include/linux/dma-buf.h
+> @@ -145,7 +145,8 @@ struct dma_buf_ops {
+>  	 *
+>  	 * A &sg_table scatter list of or the backing storage of the DMA buffer,
+>  	 * already mapped into the device address space of the &device attached
+> -	 * with the provided &dma_buf_attachment.
+> +	 * with the provided &dma_buf_attachment. The addresses and lengths in
+> +	 * the scatter list are PAGE_SIZE aligned.
+>  	 *
+>  	 * On failure, returns a negative error value wrapped into a pointer.
+>  	 * May also return -EINTR when a signal was received while being
+> -- 
+> 1.8.3.1
+> 
+> _______________________________________________
+> dri-devel mailing list
+> dri-devel@lists.freedesktop.org
+> https://lists.freedesktop.org/mailman/listinfo/dri-devel
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
