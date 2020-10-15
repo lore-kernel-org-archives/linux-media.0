@@ -2,406 +2,172 @@ Return-Path: <SRS0=VvXC=DW=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1040C433E7
-	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 13:53:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3610C43457
+	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 13:57:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 780892222B
-	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 13:53:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9343B2225B
+	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 13:57:29 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rWAhsjFj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729935AbgJONxN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Oct 2020 09:53:13 -0400
-Received: from relay11.mail.gandi.net ([217.70.178.231]:44627 "EHLO
-        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729760AbgJONxN (ORCPT
+        id S1730142AbgJON52 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Oct 2020 09:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52292 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729498AbgJON52 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Oct 2020 09:53:13 -0400
-Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 5BBD4100015;
-        Thu, 15 Oct 2020 13:53:07 +0000 (UTC)
-Date:   Thu, 15 Oct 2020 17:52:51 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Rui Miguel Silva <rmfrfs@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, sakari.ailus@linux.intel.com,
-        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] dt-bindings: imx7-mipi-csi2: convert bindings to
- yaml
-Message-ID: <20201015155251.3npqi2t4oghuguab@uno.localdomain>
-References: <20201014142759.726823-1-rmfrfs@gmail.com>
- <20201014142759.726823-4-rmfrfs@gmail.com>
+        Thu, 15 Oct 2020 09:57:28 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C941EC061755;
+        Thu, 15 Oct 2020 06:57:26 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id p15so3766179ejm.7;
+        Thu, 15 Oct 2020 06:57:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=reply-to:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=eqy7Jg2fPCw6JKPfho3FMkiXLNsZ2vOMeF3B2A8Mojc=;
+        b=rWAhsjFjxNV2tSGmRZgmV07f7lkrurQgCx9bPljwSM5dlr+cFdfNcNP8TqDYr6RpmV
+         kJKrteO6A0BWcah5RksBap2thah0f3FCug6g9rOyet2tvKS6wLurIXPy+sSprVRdDpXO
+         IOnftXETFpeSKiWgWdWvXjoSMVSdBSpoxhozwHThiDlqjFFzd9Q9u5Oejc6caqTfdyr4
+         wAOCXRStBQxEeLEOZzM3R4MwjLF5LE07MQ+q90DEXSJbdui7Ftt93dj8CphKOBSXE/1U
+         TA9yRTGiIYdnvyfGyrO3NxXvENUg3bN9B4wUskFws67k2dcY70IkWJVmV0uurT9DwBTX
+         hYoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:reply-to:subject:to:cc:references:from
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-transfer-encoding:content-language;
+        bh=eqy7Jg2fPCw6JKPfho3FMkiXLNsZ2vOMeF3B2A8Mojc=;
+        b=ZiRcefnAtWU4dqlUXuA72SMS54KcNm9aDkHtBjGQ9wCyuupkluZilFFh9TPHScwi7W
+         8SNTDOl3RRuW0maYrpOkuoPfbsNSAyynIRpVjOSya1l/T141p/mrQAiLc2PZE4tJAbrU
+         PleDCY9lCIE/DiKkDK7b7d2It09OVTbrp5U/rctufoJPrD0/PaiNA5G0oOy7lSpEssYx
+         7nEj37bRSbsFYvcr33mCDlzy8Xb8O3ySkSSFEyW99X046CBWXWhXEqDZwv5pISg0SAhl
+         j9tN9Se8jtuS4nfAW0ng/bCHH2xFes9YFBOvwEqUQQ4z9n5S4zItP/rPLienkMstxwLF
+         4lIg==
+X-Gm-Message-State: AOAM531e1OGsbHjXTFwdukCBri7/gXbcXu0222VzyM8SPB1JANOeaDwZ
+        yHzFWCYirDcl6Gd88uEenJwcObVYidNAaw==
+X-Google-Smtp-Source: ABdhPJzF6r3Ll5i0gnC5JVk814gY1eCy0pl3+e4WV+JpVGbNy1VCb75/aaDOiQbf2OJV/MzOqd48ag==
+X-Received: by 2002:a17:906:f4f:: with SMTP id h15mr4501249ejj.17.1602770245105;
+        Thu, 15 Oct 2020 06:57:25 -0700 (PDT)
+Received: from [192.168.137.56] (tmo-123-114.customers.d1-online.com. [80.187.123.114])
+        by smtp.gmail.com with ESMTPSA id i8sm1619354ejg.84.2020.10.15.06.57.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Oct 2020 06:57:24 -0700 (PDT)
+Reply-To: christian.koenig@amd.com
+Subject: Re: [PATCH v4 01/10] drm/vram-helper: Remove invariant parameters
+ from internal kmap function
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        airlied@linux.ie, daniel@ffwll.ch, sam@ravnborg.org,
+        alexander.deucher@amd.com, christian.koenig@amd.com,
+        kraxel@redhat.com, l.stach@pengutronix.de,
+        linux+etnaviv@armlinux.org.uk, christian.gmeiner@gmail.com,
+        inki.dae@samsung.com, jy0922.shim@samsung.com,
+        sw0312.kim@samsung.com, kyungmin.park@samsung.com,
+        kgene@kernel.org, krzk@kernel.org, yuq825@gmail.com,
+        bskeggs@redhat.com, robh@kernel.org, tomeu.vizoso@collabora.com,
+        steven.price@arm.com, alyssa.rosenzweig@collabora.com,
+        hjc@rock-chips.com, heiko@sntech.de, hdegoede@redhat.com,
+        sean@poorly.run, eric@anholt.net, oleksandr_andrushchenko@epam.com,
+        ray.huang@amd.com, sumit.semwal@linaro.org,
+        emil.velikov@collabora.com, luben.tuikov@amd.com, apaneers@amd.com,
+        linus.walleij@linaro.org, melissa.srw@gmail.com,
+        chris@chris-wilson.co.uk, miaoqinglang@huawei.com
+Cc:     linux-samsung-soc@vger.kernel.org, lima@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        etnaviv@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org,
+        linaro-mm-sig@lists.linaro.org, linux-rockchip@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, xen-devel@lists.xenproject.org,
+        spice-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
+References: <20201015123806.32416-1-tzimmermann@suse.de>
+ <20201015123806.32416-2-tzimmermann@suse.de>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+Message-ID: <06cab96a-5224-46dc-dbd2-8eb4950946cc@gmail.com>
+Date:   Thu, 15 Oct 2020 15:57:14 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201014142759.726823-4-rmfrfs@gmail.com>
+In-Reply-To: <20201015123806.32416-2-tzimmermann@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Rui,
-
-On Wed, Oct 14, 2020 at 03:27:59PM +0100, Rui Miguel Silva wrote:
-> Convert imx7 mipi csi2 bindings documentation to yaml schema, remove
-> the textual document and update MAINTAINERS entry.
+Am 15.10.20 um 14:37 schrieb Thomas Zimmermann:
+> The parameters map and is_iomem are always of the same value. Removed them
+> to prepares the function for conversion to struct dma_buf_map.
 >
-> Signed-off-by: Rui Miguel Silva <rmfrfs@gmail.com>
+> v4:
+> 	* don't check for !kmap->virtual; will always be false
+>
+> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+> Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+
+Reviewed-by: Christian König <christian.koenig@amd.com>
+
 > ---
->  .../bindings/media/imx7-mipi-csi2.txt         |  90 ---------
->  .../bindings/media/nxp,imx7-mipi-csi2.yaml    | 181 ++++++++++++++++++
->  MAINTAINERS                                   |   2 +-
->  3 files changed, 182 insertions(+), 91 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt
->  create mode 100644 Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
+>   drivers/gpu/drm/drm_gem_vram_helper.c | 18 ++++--------------
+>   1 file changed, 4 insertions(+), 14 deletions(-)
 >
-> diff --git a/Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt b/Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt
-> deleted file mode 100644
-> index 71fd74ed3ec8..000000000000
-> --- a/Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt
-> +++ /dev/null
-> @@ -1,90 +0,0 @@
-> -Freescale i.MX7 Mipi CSI2
-> -=========================
+> diff --git a/drivers/gpu/drm/drm_gem_vram_helper.c b/drivers/gpu/drm/drm_gem_vram_helper.c
+> index 3213429f8444..2d5ed30518f1 100644
+> --- a/drivers/gpu/drm/drm_gem_vram_helper.c
+> +++ b/drivers/gpu/drm/drm_gem_vram_helper.c
+> @@ -382,32 +382,22 @@ int drm_gem_vram_unpin(struct drm_gem_vram_object *gbo)
+>   }
+>   EXPORT_SYMBOL(drm_gem_vram_unpin);
+>   
+> -static void *drm_gem_vram_kmap_locked(struct drm_gem_vram_object *gbo,
+> -				      bool map, bool *is_iomem)
+> +static void *drm_gem_vram_kmap_locked(struct drm_gem_vram_object *gbo)
+>   {
+>   	int ret;
+>   	struct ttm_bo_kmap_obj *kmap = &gbo->kmap;
+> +	bool is_iomem;
+>   
+>   	if (gbo->kmap_use_count > 0)
+>   		goto out;
+>   
+> -	if (kmap->virtual || !map)
+> -		goto out;
 > -
-> -mipi_csi2 node
-> ---------------
-> -
-> -This is the device node for the MIPI CSI-2 receiver core in i.MX7 SoC. It is
-> -compatible with previous version of Samsung D-phy.
-> -
-> -Required properties:
-> -
-> -- compatible    : "fsl,imx7-mipi-csi2";
-> -- reg           : base address and length of the register set for the device;
-> -- interrupts    : should contain MIPI CSIS interrupt;
-> -- clocks        : list of clock specifiers, see
-> -        Documentation/devicetree/bindings/clock/clock-bindings.txt for details;
-> -- clock-names   : must contain "pclk", "wrap" and "phy" entries, matching
-> -                  entries in the clock property;
-> -- power-domains : a phandle to the power domain, see
-> -          Documentation/devicetree/bindings/power/power_domain.txt for details.
-> -- reset-names   : should include following entry "mrst";
-> -- resets        : a list of phandle, should contain reset entry of
-> -                  reset-names;
-> -- phy-supply    : from the generic phy bindings, a phandle to a regulator that
-> -	          provides power to MIPI CSIS core;
-> -
-> -Optional properties:
-> -
-> -- clock-frequency : The IP's main (system bus) clock frequency in Hz, default
-> -		    value when this property is not specified is 166 MHz;
-> -- fsl,csis-hs-settle : differential receiver (HS-RX) settle time;
-> -
-> -The device node should contain two 'port' child nodes with one child 'endpoint'
-> -node, according to the bindings defined in:
-> - Documentation/devicetree/bindings/ media/video-interfaces.txt.
-> - The following are properties specific to those nodes.
-> -
-> -port node
-> ----------
-> -
-> -- reg		  : (required) can take the values 0 or 1, where 0 shall be
-> -                     related to the sink port and port 1 shall be the source
-> -                     one;
-> -
-> -endpoint node
-> --------------
-> -
-> -- data-lanes    : (required) an array specifying active physical MIPI-CSI2
-> -		    data input lanes and their mapping to logical lanes; this
-> -                    shall only be applied to port 0 (sink port), the array's
-> -                    content is unused only its length is meaningful,
-> -                    in this case the maximum length supported is 2;
-> -
-> -example:
-> -
-> -        mipi_csi: mipi-csi@30750000 {
-> -                #address-cells = <1>;
-> -                #size-cells = <0>;
-> -
-> -                compatible = "fsl,imx7-mipi-csi2";
-> -                reg = <0x30750000 0x10000>;
-> -                interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
-> -                clocks = <&clks IMX7D_IPG_ROOT_CLK>,
-> -                                <&clks IMX7D_MIPI_CSI_ROOT_CLK>,
-> -                                <&clks IMX7D_MIPI_DPHY_ROOT_CLK>;
-> -                clock-names = "pclk", "wrap", "phy";
-> -                clock-frequency = <166000000>;
-> -                power-domains = <&pgc_mipi_phy>;
-> -                phy-supply = <&reg_1p0d>;
-> -                resets = <&src IMX7_RESET_MIPI_PHY_MRST>;
-> -                reset-names = "mrst";
-> -                fsl,csis-hs-settle = <3>;
-> -
-> -                port@0 {
-> -                        reg = <0>;
-> -
-> -                        mipi_from_sensor: endpoint {
-> -                                remote-endpoint = <&ov2680_to_mipi>;
-> -                                data-lanes = <1>;
-> -                        };
-> -                };
-> -
-> -                port@1 {
-> -                        reg = <1>;
-> -
-> -                        mipi_vc0_to_csi_mux: endpoint {
-> -                                remote-endpoint = <&csi_mux_from_mipi_vc0>;
-> -                        };
-> -                };
-> -        };
-> diff --git a/Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
-> new file mode 100644
-> index 000000000000..0438b28232ed
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
-> @@ -0,0 +1,181 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
+>   	ret = ttm_bo_kmap(&gbo->bo, 0, gbo->bo.num_pages, kmap);
+>   	if (ret)
+>   		return ERR_PTR(ret);
+>   
+>   out:
+> -	if (!kmap->virtual) {
+> -		if (is_iomem)
+> -			*is_iomem = false;
+> -		return NULL; /* not mapped; don't increment ref */
+> -	}
+>   	++gbo->kmap_use_count;
+> -	if (is_iomem)
+> -		return ttm_kmap_obj_virtual(kmap, is_iomem);
+> -	return kmap->virtual;
+> +	return ttm_kmap_obj_virtual(kmap, &is_iomem);
+>   }
+>   
+>   static void drm_gem_vram_kunmap_locked(struct drm_gem_vram_object *gbo)
+> @@ -452,7 +442,7 @@ void *drm_gem_vram_vmap(struct drm_gem_vram_object *gbo)
+>   	ret = drm_gem_vram_pin_locked(gbo, 0);
+>   	if (ret)
+>   		goto err_ttm_bo_unreserve;
+> -	base = drm_gem_vram_kmap_locked(gbo, true, NULL);
+> +	base = drm_gem_vram_kmap_locked(gbo);
+>   	if (IS_ERR(base)) {
+>   		ret = PTR_ERR(base);
+>   		goto err_drm_gem_vram_unpin_locked;
 
-Same question about dual licensing
-
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/nxp,imx7-mipi-csi2.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: NXP i.MX7 Mipi CSI2
-> +
-> +maintainers:
-> +  - Rui Miguel Silva <rmfrfs@gmail.com>
-> +
-> +description: |
-> +  this is the device node for the mipi csi-2 receiver core in i.mx7 soc. it is
-> +  compatible with previous version of samsung d-phy.
-
-nit: missing a few captial letters (beginning and after a full stop).
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - fsl,imx7-mipi-csi2
-
-Should enum with a single item be expressed as a const ?
-
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 3
-> +
-> +  clock-names:
-> +    items:
-> +      - const: pclk
-> +      - const: wrap
-> +      - const: phy
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  phy-supply:
-> +    description:
-> +      Phandle to a regulator that provides power to the PHY. This
-> +      regulator will be managed during the PHY power on/off sequence.
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  reset-names:
-> +    const: mrst
-> +
-> +  clock-frequency:
-
-This was here already, but shouldn't this property be assigned in the
-clock provider and you should have here a reference to it ? Otherwise,
-is this really a custom property hijacking a standard property name ?
-
-I see it is mentioned in the example-schema.yaml, so it's probably
-correct.
-
-> +    description:
-> +      The IP main (system bus) clock frequency in Hertz
-> +    default: 166000000
-> +
-> +  fsl,csis-hs-settle:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      differential receiver (HS-RX) settle time
-
-You have used capital letters at the beginning of documentation blocks
-before.
-
-> +
-> +  ports:
-> +    type: object
-> +    description:
-> +      A node containing input and output port nodes with endpoint definitions
-> +      as documented in
-> +      Documentation/devicetree/bindings/media/video-interfaces.txt
-> +
-> +    properties:
-> +      '#address-cells':
-> +        const: 1
-> +
-> +      '#size-cells':
-> +        const: 0
-> +
-> +      port@0:
-> +        type: object
-> +        description:
-> +          Input port node, single endpoint describing the CSI-2 transmitter.
-> +
-> +        properties:
-> +          reg:
-> +            const: 0
-> +
-> +          endpoint:
-> +            type: object
-> +
-> +            properties:
-> +              data-lanes:
-> +                maxItems: 1
-
-How many data lanes does this receiver supports ? I see in the txt
-bindingsd:
-    data-lanes    : (required) an array specifying active physical MIPI-CSI2
-                    data input lanes and their mapping to logical lanes; this
-                    shall only be applied to port 0 (sink port), the array's
-                    content is unused only its length is meaningful,
-                    in this case the maximum length supported is 2;
-
-I'm not sure I fully get this. Does this mean up to 2 data lanes are
-supported ?
-
-> +
-> +              remote-endpoint: true
-> +
-> +            required:
-> +              - data-lanes
-> +              - remote-endpoint
-> +
-> +            additionalProperties: false
-> +
-> +        additionalProperties: false
-> +
-> +      port@1:
-> +        type: object
-> +        description:
-> +          Output port node,
-
-Rougue ',' at the end. You probably want a full stop or
-> +
-> +        properties:
-> +          reg:
-> +            const: 1
-> +
-> +          endpoint:
-> +              type: object
-> +
-> +              properties:
-> +                remote-endpoint: true
-> +
-> +              required:
-> +                - remote-endpoint
-> +
-> +              additionalProperties: false
-
-As no other endpoint property is specified, the whole 'endpoint' block
-can probably be omitted ?
-
-> +
-> +        additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - power-domains
-> +  - resets
-> +  - reset-names
-> +  - ports
-
-phy-supply was listed as required in the txt bindings
-
-> +
-> +unevaluatedProperties: false
-
-additionalProperties: false
-
-Thanks
-  j
-
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/imx7d-clock.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/reset/imx7-reset.h>
-> +
-> +    mipi_csi: mipi-csi@30750000 {
-> +            compatible = "fsl,imx7-mipi-csi2";
-> +            reg = <0x30750000 0x10000>;
-> +            interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +            clocks = <&clks IMX7D_IPG_ROOT_CLK>,
-> +                     <&clks IMX7D_MIPI_CSI_ROOT_CLK>,
-> +                     <&clks IMX7D_MIPI_DPHY_ROOT_CLK>;
-> +            clock-names = "pclk", "wrap", "phy";
-> +            clock-frequency = <166000000>;
-> +
-> +            power-domains = <&pgc_mipi_phy>;
-> +            phy-supply = <&reg_1p0d>;
-> +            resets = <&src IMX7_RESET_MIPI_PHY_MRST>;
-> +            reset-names = "mrst";
-> +            fsl,csis-hs-settle = <3>;
-> +
-> +            ports {
-> +                    #address-cells = <1>;
-> +                    #size-cells = <0>;
-> +
-> +                    port@0 {
-> +                            reg = <0>;
-> +
-> +                            mipi_from_sensor: endpoint {
-> +                                    remote-endpoint = <&ov2680_to_mipi>;
-> +                                    data-lanes = <1>;
-> +                            };
-> +                    };
-> +
-> +                    port@1 {
-> +                            reg = <1>;
-> +
-> +                            mipi_vc0_to_csi_mux: endpoint {
-> +                                    remote-endpoint = <&csi_mux_from_mipi_vc0>;
-> +                            };
-> +                    };
-> +            };
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index b7f7f14cd85b..9da67222b0c7 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -10773,8 +10773,8 @@ L:	linux-media@vger.kernel.org
->  S:	Maintained
->  T:	git git://linuxtv.org/media_tree.git
->  F:	Documentation/admin-guide/media/imx7.rst
-> -F:	Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt
->  F:	Documentation/devicetree/bindings/media/nxp,imx7-csi.yaml
-> +F:	Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
->  F:	drivers/staging/media/imx/imx7-media-csi.c
->  F:	drivers/staging/media/imx/imx7-mipi-csis.c
->
-> --
-> 2.28.0
->
