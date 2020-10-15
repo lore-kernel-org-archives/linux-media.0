@@ -2,26 +2,27 @@ Return-Path: <SRS0=VvXC=DW=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 888FFC433DF
-	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 12:38:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 135B0C41604
+	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 12:38:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 38F9022268
+	by mail.kernel.org (Postfix) with ESMTP id BF0C6222C2
 	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 12:38:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726321AbgJOMiN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Oct 2020 08:38:13 -0400
-Received: from mx2.suse.de ([195.135.220.15]:43710 "EHLO mx2.suse.de"
+        id S1726987AbgJOMiP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Oct 2020 08:38:15 -0400
+Received: from mx2.suse.de ([195.135.220.15]:43764 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725899AbgJOMiN (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Oct 2020 08:38:13 -0400
+        id S1726142AbgJOMiO (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 15 Oct 2020 08:38:14 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 6FF9FABD1;
-        Thu, 15 Oct 2020 12:38:10 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 800E2B181;
+        Thu, 15 Oct 2020 12:38:12 +0000 (UTC)
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
         airlied@linux.ie, daniel@ffwll.ch, sam@ravnborg.org,
@@ -48,132 +49,68 @@ Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
         linux-rockchip@lists.infradead.org, xen-devel@lists.xenproject.org,
         linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
         Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v4 00/10] Support GEM object mappings from I/O memory
-Date:   Thu, 15 Oct 2020 14:37:56 +0200
-Message-Id: <20201015123806.32416-1-tzimmermann@suse.de>
+Subject: [PATCH v4 03/10] drm/etnaviv: Remove empty etnaviv_gem_prime_vunmap()
+Date:   Thu, 15 Oct 2020 14:37:59 +0200
+Message-Id: <20201015123806.32416-4-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20201015123806.32416-1-tzimmermann@suse.de>
+References: <20201015123806.32416-1-tzimmermann@suse.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-DRM's fbdev console uses regular load and store operations to update
-framebuffer memory. The bochs driver on sparc64 requires the use of
-I/O-specific load and store operations. We have a workaround, but need
-a long-term solution to the problem.
+The function etnaviv_gem_prime_vunmap() is empty. Remove it before
+changing the interface to use struct drm_buf_map.
 
-This patchset changes GEM's vmap/vunmap interfaces to forward pointers
-of type struct dma_buf_map and updates the generic fbdev emulation to
-use them correctly. This enables I/O-memory operations on all framebuffers
-that require and support them.
+Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+---
+ drivers/gpu/drm/etnaviv/etnaviv_drv.h       | 1 -
+ drivers/gpu/drm/etnaviv/etnaviv_gem.c       | 1 -
+ drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c | 5 -----
+ 3 files changed, 7 deletions(-)
 
-Patches #1 to #4 prepare VRAM helpers and drivers.
-
-Next is the update of the GEM vmap functions. Patch #5 adds vmap and vunmap
-that is usable with TTM-based GEM drivers, and patch #6 updates GEM's
-vmap/vunmap callback to forward instances of type struct dma_buf_map. While
-the patch touches many files throughout the DRM modules, the applied changes
-are mostly trivial interface fixes. Several TTM-based GEM drivers now use
-the new vmap code. Patch #7 updates GEM's internal vmap/vunmap functions to
-forward struct dma_buf_map.
-
-With struct dma_buf_map propagated through the layers, patches #9 and #10
-convert DRM clients and generic fbdev emulation to use it. Updating the
-fbdev framebuffer will select the correct functions, either for system or
-I/O memory.
-
-v4:
-	* provide TTM vmap/vunmap plus GEM helpers and convert drivers
-	  over (Christian, Daniel)
-	* remove several empty functions
-	* more TODOs and documentation (Daniel)
-
-v3:
-	* recreate the whole patchset on top of struct dma_buf_map
-
-v2:
-	* RFC patchset
-
-Thomas Zimmermann (10):
-  drm/vram-helper: Remove invariant parameters from internal kmap
-    function
-  drm/cma-helper: Remove empty drm_gem_cma_prime_vunmap()
-  drm/etnaviv: Remove empty etnaviv_gem_prime_vunmap()
-  drm/exynos: Remove empty exynos_drm_gem_prime_{vmap,vunmap}()
-  drm/ttm: Add vmap/vunmap to TTM and TTM GEM helpers
-  drm/gem: Use struct dma_buf_map in GEM vmap ops and convert GEM
-    backends
-  drm/gem: Update internal GEM vmap/vunmap interfaces to use struct
-    dma_buf_map
-  drm/gem: Store client buffer mappings as struct dma_buf_map
-  dma-buf-map: Add memcpy and pointer-increment interfaces
-  drm/fb_helper: Support framebuffers in I/O memory
-
- Documentation/gpu/todo.rst                  |  37 ++-
- drivers/gpu/drm/Kconfig                     |   2 +
- drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c |  36 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.h |   2 -
- drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c     |   5 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_object.h  |   1 -
- drivers/gpu/drm/ast/ast_cursor.c            |  27 ++-
- drivers/gpu/drm/ast/ast_drv.h               |   7 +-
- drivers/gpu/drm/bochs/bochs_kms.c           |   1 -
- drivers/gpu/drm/drm_client.c                |  38 ++--
- drivers/gpu/drm/drm_fb_helper.c             | 238 ++++++++++++++++++--
- drivers/gpu/drm/drm_gem.c                   |  29 ++-
- drivers/gpu/drm/drm_gem_cma_helper.c        |  27 +--
- drivers/gpu/drm/drm_gem_shmem_helper.c      |  48 ++--
- drivers/gpu/drm/drm_gem_ttm_helper.c        |  38 ++++
- drivers/gpu/drm/drm_gem_vram_helper.c       | 117 +++++-----
- drivers/gpu/drm/drm_internal.h              |   5 +-
- drivers/gpu/drm/drm_prime.c                 |  14 +-
- drivers/gpu/drm/etnaviv/etnaviv_drv.h       |   3 +-
- drivers/gpu/drm/etnaviv/etnaviv_gem.c       |   1 -
- drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c |  12 +-
- drivers/gpu/drm/exynos/exynos_drm_gem.c     |  12 -
- drivers/gpu/drm/exynos/exynos_drm_gem.h     |   2 -
- drivers/gpu/drm/lima/lima_gem.c             |   6 +-
- drivers/gpu/drm/lima/lima_sched.c           |  11 +-
- drivers/gpu/drm/mgag200/mgag200_mode.c      |  10 +-
- drivers/gpu/drm/nouveau/Kconfig             |   1 +
- drivers/gpu/drm/nouveau/nouveau_bo.h        |   2 -
- drivers/gpu/drm/nouveau/nouveau_gem.c       |   6 +-
- drivers/gpu/drm/nouveau/nouveau_gem.h       |   2 -
- drivers/gpu/drm/nouveau/nouveau_prime.c     |  20 --
- drivers/gpu/drm/panfrost/panfrost_perfcnt.c |  14 +-
- drivers/gpu/drm/qxl/qxl_display.c           |  11 +-
- drivers/gpu/drm/qxl/qxl_draw.c              |  14 +-
- drivers/gpu/drm/qxl/qxl_drv.h               |  11 +-
- drivers/gpu/drm/qxl/qxl_object.c            |  31 ++-
- drivers/gpu/drm/qxl/qxl_object.h            |   2 +-
- drivers/gpu/drm/qxl/qxl_prime.c             |  12 +-
- drivers/gpu/drm/radeon/radeon.h             |   1 -
- drivers/gpu/drm/radeon/radeon_gem.c         |   7 +-
- drivers/gpu/drm/radeon/radeon_prime.c       |  20 --
- drivers/gpu/drm/rockchip/rockchip_drm_gem.c |  22 +-
- drivers/gpu/drm/rockchip/rockchip_drm_gem.h |   4 +-
- drivers/gpu/drm/tiny/cirrus.c               |  10 +-
- drivers/gpu/drm/tiny/gm12u320.c             |  10 +-
- drivers/gpu/drm/ttm/ttm_bo_util.c           |  72 ++++++
- drivers/gpu/drm/udl/udl_modeset.c           |   8 +-
- drivers/gpu/drm/vboxvideo/vbox_mode.c       |  11 +-
- drivers/gpu/drm/vc4/vc4_bo.c                |   7 +-
- drivers/gpu/drm/vc4/vc4_drv.h               |   2 +-
- drivers/gpu/drm/vgem/vgem_drv.c             |  16 +-
- drivers/gpu/drm/xen/xen_drm_front_gem.c     |  18 +-
- drivers/gpu/drm/xen/xen_drm_front_gem.h     |   6 +-
- include/drm/drm_client.h                    |   7 +-
- include/drm/drm_gem.h                       |   5 +-
- include/drm/drm_gem_cma_helper.h            |   3 +-
- include/drm/drm_gem_shmem_helper.h          |   4 +-
- include/drm/drm_gem_ttm_helper.h            |   6 +
- include/drm/drm_gem_vram_helper.h           |  14 +-
- include/drm/drm_mode_config.h               |  12 -
- include/drm/ttm/ttm_bo_api.h                |  28 +++
- include/linux/dma-buf-map.h                 |  92 +++++++-
- 62 files changed, 817 insertions(+), 423 deletions(-)
-
+diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.h b/drivers/gpu/drm/etnaviv/etnaviv_drv.h
+index 914f0867ff71..9682c26d89bb 100644
+--- a/drivers/gpu/drm/etnaviv/etnaviv_drv.h
++++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.h
+@@ -52,7 +52,6 @@ int etnaviv_gem_mmap(struct file *filp, struct vm_area_struct *vma);
+ int etnaviv_gem_mmap_offset(struct drm_gem_object *obj, u64 *offset);
+ struct sg_table *etnaviv_gem_prime_get_sg_table(struct drm_gem_object *obj);
+ void *etnaviv_gem_prime_vmap(struct drm_gem_object *obj);
+-void etnaviv_gem_prime_vunmap(struct drm_gem_object *obj, void *vaddr);
+ int etnaviv_gem_prime_mmap(struct drm_gem_object *obj,
+ 			   struct vm_area_struct *vma);
+ struct drm_gem_object *etnaviv_gem_prime_import_sg_table(struct drm_device *dev,
+diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem.c b/drivers/gpu/drm/etnaviv/etnaviv_gem.c
+index 67d9a2b9ea6a..bbd235473645 100644
+--- a/drivers/gpu/drm/etnaviv/etnaviv_gem.c
++++ b/drivers/gpu/drm/etnaviv/etnaviv_gem.c
+@@ -571,7 +571,6 @@ static const struct drm_gem_object_funcs etnaviv_gem_object_funcs = {
+ 	.unpin = etnaviv_gem_prime_unpin,
+ 	.get_sg_table = etnaviv_gem_prime_get_sg_table,
+ 	.vmap = etnaviv_gem_prime_vmap,
+-	.vunmap = etnaviv_gem_prime_vunmap,
+ 	.vm_ops = &vm_ops,
+ };
+ 
+diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c b/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
+index 135fbff6fecf..a6d9932a32ae 100644
+--- a/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
++++ b/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
+@@ -27,11 +27,6 @@ void *etnaviv_gem_prime_vmap(struct drm_gem_object *obj)
+ 	return etnaviv_gem_vmap(obj);
+ }
+ 
+-void etnaviv_gem_prime_vunmap(struct drm_gem_object *obj, void *vaddr)
+-{
+-	/* TODO msm_gem_vunmap() */
+-}
+-
+ int etnaviv_gem_prime_mmap(struct drm_gem_object *obj,
+ 			   struct vm_area_struct *vma)
+ {
 -- 
 2.28.0
 
