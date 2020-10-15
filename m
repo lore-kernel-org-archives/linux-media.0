@@ -7,95 +7,122 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F92FC433E7
-	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 11:05:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBBB1C43467
+	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 12:38:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C38642072D
-	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 11:05:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 870BA22254
+	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 12:38:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727717AbgJOLFv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Oct 2020 07:05:51 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:55499 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726144AbgJOLFv (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Oct 2020 07:05:51 -0400
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 15 Oct 2020 04:05:50 -0700
-X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 15 Oct 2020 04:05:49 -0700
-X-QCInternal: smtphost
-Received: from dikshita-linux.qualcomm.com ([10.204.65.237])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 15 Oct 2020 16:35:46 +0530
-Received: by dikshita-linux.qualcomm.com (Postfix, from userid 347544)
-        id 7A8B6522C; Thu, 15 Oct 2020 16:35:45 +0530 (IST)
-From:   Dikshita Agarwal <dikshita@codeaurora.org>
-To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        ezequiel@collabora.com, stanimir.varbanov@linaro.org,
-        vgarodia@codeaurora.org, majja@codeaurora.org,
-        Dikshita Agarwal <dikshita@codeaurora.org>
-Subject: [PATCH v2] media: v4l2-ctrl: Add base layer priority id control.
-Date:   Thu, 15 Oct 2020 16:35:35 +0530
-Message-Id: <1602759935-12965-1-git-send-email-dikshita@codeaurora.org>
-X-Mailer: git-send-email 1.9.1
+        id S1726517AbgJOMiN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Oct 2020 08:38:13 -0400
+Received: from mx2.suse.de ([195.135.220.15]:43740 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726019AbgJOMiN (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 15 Oct 2020 08:38:13 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 2BA4EAFEA;
+        Thu, 15 Oct 2020 12:38:11 +0000 (UTC)
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+To:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        airlied@linux.ie, daniel@ffwll.ch, sam@ravnborg.org,
+        alexander.deucher@amd.com, christian.koenig@amd.com,
+        kraxel@redhat.com, l.stach@pengutronix.de,
+        linux+etnaviv@armlinux.org.uk, christian.gmeiner@gmail.com,
+        inki.dae@samsung.com, jy0922.shim@samsung.com,
+        sw0312.kim@samsung.com, kyungmin.park@samsung.com,
+        kgene@kernel.org, krzk@kernel.org, yuq825@gmail.com,
+        bskeggs@redhat.com, robh@kernel.org, tomeu.vizoso@collabora.com,
+        steven.price@arm.com, alyssa.rosenzweig@collabora.com,
+        hjc@rock-chips.com, heiko@sntech.de, hdegoede@redhat.com,
+        sean@poorly.run, eric@anholt.net, oleksandr_andrushchenko@epam.com,
+        ray.huang@amd.com, sumit.semwal@linaro.org,
+        emil.velikov@collabora.com, luben.tuikov@amd.com, apaneers@amd.com,
+        linus.walleij@linaro.org, melissa.srw@gmail.com,
+        chris@chris-wilson.co.uk, miaoqinglang@huawei.com
+Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org,
+        etnaviv@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, lima@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, spice-devel@lists.freedesktop.org,
+        linux-rockchip@lists.infradead.org, xen-devel@lists.xenproject.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Subject: [PATCH v4 01/10] drm/vram-helper: Remove invariant parameters from internal kmap function
+Date:   Thu, 15 Oct 2020 14:37:57 +0200
+Message-Id: <20201015123806.32416-2-tzimmermann@suse.de>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20201015123806.32416-1-tzimmermann@suse.de>
+References: <20201015123806.32416-1-tzimmermann@suse.de>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This control indicates the priority id to be applied
-to base layer.
+The parameters map and is_iomem are always of the same value. Removed them
+to prepares the function for conversion to struct dma_buf_map.
 
-Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
+v4:
+	* don't check for !kmap->virtual; will always be false
+
+Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 ---
- Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 9 +++++++++
- drivers/media/v4l2-core/v4l2-ctrls.c                      | 1 +
- include/uapi/linux/v4l2-controls.h                        | 1 +
- 3 files changed, 11 insertions(+)
+ drivers/gpu/drm/drm_gem_vram_helper.c | 18 ++++--------------
+ 1 file changed, 4 insertions(+), 14 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index 6e9240a..aac1ea3 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -4407,3 +4407,12 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
-        to the LTR index max LTR count-1.
-        This is applicable to H264 and HEVC encoder and can be applied using
-        request api.
-+
-+``V4L2_CID_MPEG_VIDEO_BASELAYER_PRIORITYID (integer)``
-+       Specifies a priority identifier for the NAL unit,
-+       which will be applied to base layer.
-+       By default this value is set to 0 for base layer.
-+       And the next layer will have priority ID assigned as 1,2,3 and so on.
-+       Video encode can't decide the priority id to be applied to a layer
-+       so this has to come from client.
-+       Valid Range: from 0 to 63
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 046198f..c973058 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -952,6 +952,7 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_MPEG_VIDEO_LTR_COUNT:			return "LTR Count";
- 	case V4L2_CID_MPEG_VIDEO_FRAME_LTR_INDEX:		return "Mark LTR frame index";
- 	case V4L2_CID_MPEG_VIDEO_USE_LTR_FRAME:			return "Use LTR Frame";
-+	case V4L2_CID_MPEG_VIDEO_BASELAYER_PRIORITYID:		return "Base Layer Priority ID";
- 	case V4L2_CID_MPEG_VIDEO_MPEG2_SLICE_PARAMS:		return "MPEG-2 Slice Parameters";
- 	case V4L2_CID_MPEG_VIDEO_MPEG2_QUANTIZATION:		return "MPEG-2 Quantization Matrices";
- 	case V4L2_CID_MPEG_VIDEO_FWHT_PARAMS:			return "FWHT Stateless Parameters";
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index 3801372..433e119 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -418,6 +418,7 @@ enum v4l2_mpeg_video_multi_slice_mode {
- #define V4L2_CID_MPEG_VIDEO_LTR_COUNT                  (V4L2_CID_MPEG_BASE+230)
- #define V4L2_CID_MPEG_VIDEO_FRAME_LTR_INDEX            (V4L2_CID_MPEG_BASE+231)
- #define V4L2_CID_MPEG_VIDEO_USE_LTR_FRAME              (V4L2_CID_MPEG_BASE+232)
-+#define V4L2_CID_MPEG_VIDEO_BASELAYER_PRIORITYID       (V4L2_CID_MPEG_BASE+233)
+diff --git a/drivers/gpu/drm/drm_gem_vram_helper.c b/drivers/gpu/drm/drm_gem_vram_helper.c
+index 3213429f8444..2d5ed30518f1 100644
+--- a/drivers/gpu/drm/drm_gem_vram_helper.c
++++ b/drivers/gpu/drm/drm_gem_vram_helper.c
+@@ -382,32 +382,22 @@ int drm_gem_vram_unpin(struct drm_gem_vram_object *gbo)
+ }
+ EXPORT_SYMBOL(drm_gem_vram_unpin);
  
- /* CIDs for the MPEG-2 Part 2 (H.262) codec */
- #define V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL			(V4L2_CID_MPEG_BASE+270)
+-static void *drm_gem_vram_kmap_locked(struct drm_gem_vram_object *gbo,
+-				      bool map, bool *is_iomem)
++static void *drm_gem_vram_kmap_locked(struct drm_gem_vram_object *gbo)
+ {
+ 	int ret;
+ 	struct ttm_bo_kmap_obj *kmap = &gbo->kmap;
++	bool is_iomem;
+ 
+ 	if (gbo->kmap_use_count > 0)
+ 		goto out;
+ 
+-	if (kmap->virtual || !map)
+-		goto out;
+-
+ 	ret = ttm_bo_kmap(&gbo->bo, 0, gbo->bo.num_pages, kmap);
+ 	if (ret)
+ 		return ERR_PTR(ret);
+ 
+ out:
+-	if (!kmap->virtual) {
+-		if (is_iomem)
+-			*is_iomem = false;
+-		return NULL; /* not mapped; don't increment ref */
+-	}
+ 	++gbo->kmap_use_count;
+-	if (is_iomem)
+-		return ttm_kmap_obj_virtual(kmap, is_iomem);
+-	return kmap->virtual;
++	return ttm_kmap_obj_virtual(kmap, &is_iomem);
+ }
+ 
+ static void drm_gem_vram_kunmap_locked(struct drm_gem_vram_object *gbo)
+@@ -452,7 +442,7 @@ void *drm_gem_vram_vmap(struct drm_gem_vram_object *gbo)
+ 	ret = drm_gem_vram_pin_locked(gbo, 0);
+ 	if (ret)
+ 		goto err_ttm_bo_unreserve;
+-	base = drm_gem_vram_kmap_locked(gbo, true, NULL);
++	base = drm_gem_vram_kmap_locked(gbo);
+ 	if (IS_ERR(base)) {
+ 		ret = PTR_ERR(base);
+ 		goto err_drm_gem_vram_unpin_locked;
 -- 
-1.9.1
+2.28.0
 
