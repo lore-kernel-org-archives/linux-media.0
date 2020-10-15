@@ -2,670 +2,194 @@ Return-Path: <SRS0=VvXC=DW=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E674BC433DF
-	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 16:28:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DFDEC433E7
+	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 16:31:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 855EA22255
-	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 16:28:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 08B4822255
+	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 16:31:54 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=amdcloud.onmicrosoft.com header.i=@amdcloud.onmicrosoft.com header.b="StHOjFyT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389762AbgJOQ1l (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Oct 2020 12:27:41 -0400
-Received: from relay9-d.mail.gandi.net ([217.70.183.199]:51007 "EHLO
-        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389570AbgJOQ1j (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Oct 2020 12:27:39 -0400
-X-Originating-IP: 93.34.118.233
-Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 81FFCFF80B;
-        Thu, 15 Oct 2020 16:27:34 +0000 (UTC)
-From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
-To:     kieran.bingham+renesas@ideasonboard.com,
-        laurent.pinchart+renesas@ideasonboard.com,
-        niklas.soderlund+renesas@ragnatech.se
-Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hyun Kwon <hyunk@xilinx.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v2 1/7] media: i2c: Add driver for RDACM21 camera module
-Date:   Thu, 15 Oct 2020 20:27:04 +0200
-Message-Id: <20201015182710.54795-2-jacopo+renesas@jmondi.org>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201015182710.54795-1-jacopo+renesas@jmondi.org>
-References: <20201015182710.54795-1-jacopo+renesas@jmondi.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        id S2390046AbgJOQbx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Oct 2020 12:31:53 -0400
+Received: from mail-dm6nam10on2084.outbound.protection.outlook.com ([40.107.93.84]:54464
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2390013AbgJOQbx (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 15 Oct 2020 12:31:53 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nbuRt07AT1qcA9xfIknZ0nz8vr/3dJEi04W7hGdPnc9gRZ9yB15LWxfLFvqBZrI5bS/oaZRKYjaimVHsJXkO5DelUivhC6v42q5q5VVpWxo5K51gqBJMn85j9H4SnyLcO5Qqp3I45n2KRJc/0iT/834pCl0zFdCS8YGweS4XVJzs0N4gwqTAYt7V+deGE/wBKm8T590VKOKYj8cNDLkdPtrDfkkwsaNi1wqMyFZC7l7M+JAF4I9qvwtAanP+UhAknxQu3r7yIZ6eWANnlxQtkCu/uJ2eShbRoAyFEjEjfabANr8E5tJ04PS+ieTx8cXGgpwR8d9RULrj3adwpl4y5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=u4ktphmCmhn5MbN64FLj978WmpHUMi7g09O453FLsAs=;
+ b=eY0iZ1dktlDb8FVLRc5pm7TkG0FfjNVjnxkhCVK1muWKvfqnHAXRG6uBLL3WI2IkF8uCYd+X3zXYWK79QeVXH7YXVxBi4Q5BE6AXUGFxsY4EFbN02zGH+uU16aIxQEQU8KZHmodUzHVodkUtOlROzPegjC+wFxeWCL95Z9H8K7fi89T468anGZuRTDKaNS7YdkBjq2n7v02a30caAUFKRMsEiJOy1I77OQu3ZdWX2Fa5lhy/pTUuoYcldd/f5eogmk2OJh6xr95xH6joBv97242AgC7R91D4oE0nRaPBVNnyCUWfj47xEkoOtUNYgAgByyCirrUDX5KM6Fbq5s0wZA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=u4ktphmCmhn5MbN64FLj978WmpHUMi7g09O453FLsAs=;
+ b=StHOjFyTHsV2iqzMXpVNyZw8nzJyozjKWf6R8t/Vf3dUleA83GPp647QE25h0L9qZ55jJ8gDYEFu1v6aBXAu1P4TLmkIkmKAbDvL6kKGNErX1X7s0b97AZvMNm7YvaJPVJhVWemutJTyTkSsQ3JSDKEstqXh3JiX7ZRPd1kDwuU=
+Authentication-Results: intel.com; dkim=none (message not signed)
+ header.d=none;intel.com; dmarc=none action=none header.from=amd.com;
+Received: from MN2PR12MB3775.namprd12.prod.outlook.com (2603:10b6:208:159::19)
+ by MN2PR12MB4797.namprd12.prod.outlook.com (2603:10b6:208:a4::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.24; Thu, 15 Oct
+ 2020 16:31:49 +0000
+Received: from MN2PR12MB3775.namprd12.prod.outlook.com
+ ([fe80::f8f7:7403:1c92:3a60]) by MN2PR12MB3775.namprd12.prod.outlook.com
+ ([fe80::f8f7:7403:1c92:3a60%6]) with mapi id 15.20.3477.021; Thu, 15 Oct 2020
+ 16:31:49 +0000
+Subject: Re: [PATCH v4 5/5] dma-buf: Clarify that dma-buf sg lists are page
+ aligned
+To:     Daniel Vetter <daniel@ffwll.ch>,
+        Jianxin Xiong <jianxin.xiong@intel.com>
+Cc:     linux-rdma@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        Leon Romanovsky <leon@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Doug Ledford <dledford@redhat.com>,
+        Daniel Vetter <daniel.vetter@intel.com>
+References: <1602692161-107096-1-git-send-email-jianxin.xiong@intel.com>
+ <20201015160344.GA401619@phenom.ffwll.local>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Message-ID: <5d7609d0-5548-eab7-b170-c420f6cb3de3@amd.com>
+Date:   Thu, 15 Oct 2020 18:31:31 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+In-Reply-To: <20201015160344.GA401619@phenom.ffwll.local>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Originating-IP: [46.114.105.76]
+X-ClientProxiedBy: AM4PR07CA0018.eurprd07.prod.outlook.com
+ (2603:10a6:205:1::31) To MN2PR12MB3775.namprd12.prod.outlook.com
+ (2603:10b6:208:159::19)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [192.168.137.56] (46.114.105.76) by AM4PR07CA0018.eurprd07.prod.outlook.com (2603:10a6:205:1::31) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.9 via Frontend Transport; Thu, 15 Oct 2020 16:31:44 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 3a2a3b9a-98e2-4959-fe66-08d87127d088
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4797:
+X-Microsoft-Antispam-PRVS: <MN2PR12MB4797F2FBB0D9B4947B8A63D583020@MN2PR12MB4797.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VCXjbZPPrmKsrbVgIdvDiX5hqooncuVngQi1u7NXrpSZIxpLpz3xwJiPoOX+eX/F3pwk/l+wUlYlG/hm6scOHs4/HtwS49DLWAyS+zh9g/fzMfILqhK8/BCLbzZq2BEe50etXribafM3PqpqbK9TYSTqQmKQI1VsrYr7DwGvOZQk8dnwroU0qRBq6VAKNyev13dqLB7MJ7kAY1vut3YtqD/K46UIEZQVarhukN6V9hmYRkOId8/lybZe5+3jkc86oMQRyPRbEbYCvcK436WPTUM1FEthZVh04bkRNaVwNeOf+wFyGnOsyjIhgjMQsA2rFyIQPhTCjQHVQolx+RtQJmFo5eeY+wm0F6XdnobR1n2aQ1WlMYho6fV3jGClvD7eFiASSTGrZfSYPSBnDFwy3Pc+8YgO//W6r+vQijApTKCPCP5ojldwRTZdwcSxN4qFntOW1OOkNN+fosWZQDDeng==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3775.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(346002)(136003)(366004)(39860400002)(396003)(66574015)(31696002)(5660300002)(6486002)(83380400001)(86362001)(66556008)(66946007)(6666004)(66476007)(36756003)(26005)(54906003)(8676002)(31686004)(16526019)(45080400002)(316002)(956004)(16576012)(52116002)(186003)(110136005)(2616005)(34490700002)(2906002)(4326008)(7416002)(478600001)(966005)(8936002)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: rM8l8uf/Yd0cqJJo6bI4ltHpBvsW8cqk4R1HOOsr3JLc+IKtTtHZ+K/PK3XaLh9eU8+Q2dW71+G3hWvReMHLDm2epNCKLpl3TaV20CvhEBWF9juZKbtymB7XsM+/igNOPD20mtpwE15oQEXkMEOuwKFDFtVg7J6Ip9ftd59BERJgOyXkShlOGqb2w4ymIq1Ds0NtpGzB67Dt0TshJKhq7t0fBdlj1iiaJf+/Wm0rgNDTjX6jyUBKrZzAbwDe0/xQ2dCQ4YRmDyd7QdmZ+6C7S4IVXOyeAklv4gg5+MoxaT/aDSkLwEbLyGJaZEFbQFf/Z7GURXcoJNmrse1kSguD3+u5GYck6ofNYuIbgtklUEE1EeVFf8an+4+9S7F0u98FXwCn24yBXS0TuNdktzQowZrSc8FVlMp+iCAsl/0UJP6WKjJaw9ymWQvyx2i/gESDS6aSvwrb7iU6LIXgJt8Zkm4FKHnkPivN6cht0RfghYeuFbCncDbgyqfsMAoh6fzcLSxsmLxDqA2T0K1s2xbuI7ZPEO4/M+jS9W0Kwfs3mLQJGoEHnk8+COyxK3shnsCU2NNZjkRMHc0pj9rPbXbLXDoIhDuYLc9QZJ4G3G7JinHBCeKESfujs6T6FjS3UrIos3It9sgOJx6IpnCs+GFlRg==
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3a2a3b9a-98e2-4959-fe66-08d87127d088
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3775.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Oct 2020 16:31:49.3255
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: p6v0hs5bed+SYOHAVxkakmwVOlUtEy+drvRxqlHfYNWv6zV9mExj5bnIHSD89P5q
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4797
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The RDACM21 is a GMSL camera supporting 1280x1080 resolution images
-developed by IMI based on an Omnivision OV10640 sensor, an Omnivision
-OV490 ISP and a Maxim MAX9271 GMSL serializer.
+Am 15.10.20 um 18:03 schrieb Daniel Vetter:
+> On Wed, Oct 14, 2020 at 09:16:01AM -0700, Jianxin Xiong wrote:
+>> The dma-buf API have been used under the assumption that the sg lists
+>> returned from dma_buf_map_attachment() are fully page aligned. Lots of
+>> stuff can break otherwise all over the place. Clarify this in the
+>> documentation and add a check when DMA API debug is enabled.
+>>
+>> Signed-off-by: Jianxin Xiong <jianxin.xiong@intel.com>
 
-The driver uses the max9271 library module, to maximize code reuse with
-other camera module drivers using the same serializer, such as rdacm20.
+Reviewed-by: Christian König <christian.koenig@amd.com>
 
-Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
----
- MAINTAINERS                 |  12 +
- drivers/media/i2c/Kconfig   |  13 +
- drivers/media/i2c/Makefile  |   2 +
- drivers/media/i2c/rdacm21.c | 538 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 565 insertions(+)
- create mode 100644 drivers/media/i2c/rdacm21.c
+> lgtm, thanks for creating this and giving it a spin.
+>
+> I'll queue this up in drm-misc-next for 5.11, should show up in linux-next
+> after the merge window is closed.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 05ebf59d7685..574fe011c661 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14668,6 +14668,18 @@ F:	drivers/media/i2c/max9271.c
- F:	drivers/media/i2c/max9271.h
- F:	drivers/media/i2c/rdacm20.c
- 
-+RDACM21 Camera Sensor
-+M:	Jacopo Mondi <jacopo+renesas@jmondi.org>
-+M:	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-+M:	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-+M:	Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-+L:	linux-media@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/media/i2c/rdacm2x-gmsl.yaml
-+F:	drivers/media/i2c/max9271.c
-+F:	drivers/media/i2c/max9271.h
-+F:	drivers/media/i2c/rdacm21.c
-+
- RDC R-321X SoC
- M:	Florian Fainelli <florian@openwrt.org>
- S:	Maintained
-diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-index 878f66ef2719..cfb3f0bcc4fc 100644
---- a/drivers/media/i2c/Kconfig
-+++ b/drivers/media/i2c/Kconfig
-@@ -1184,6 +1184,19 @@ config VIDEO_RDACM20
- 	  This camera should be used in conjunction with a GMSL
- 	  deserialiser such as the MAX9286.
- 
-+config VIDEO_RDACM21
-+	tristate "IMI RDACM21 camera support"
-+	depends on I2C
-+	select V4L2_FWNODE
-+	select VIDEO_V4L2_SUBDEV_API
-+	select MEDIA_CONTROLLER
-+	help
-+	  This driver supports the IMI RDACM21 GMSL camera, used in
-+	  ADAS systems.
-+
-+	  This camera should be used in conjunction with a GMSL
-+	  deserialiser such as the MAX9286.
-+
- config VIDEO_RJ54N1
- 	tristate "Sharp RJ54N1CB0C sensor support"
- 	depends on I2C && VIDEO_V4L2
-diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
-index f0a77473979d..f3641b58929d 100644
---- a/drivers/media/i2c/Makefile
-+++ b/drivers/media/i2c/Makefile
-@@ -122,6 +122,8 @@ obj-$(CONFIG_VIDEO_IMX355)	+= imx355.o
- obj-$(CONFIG_VIDEO_MAX9286)	+= max9286.o
- rdacm20-camera_module-objs	:= rdacm20.o max9271.o
- obj-$(CONFIG_VIDEO_RDACM20)	+= rdacm20-camera_module.o
-+rdacm21-camera_module-objs	:= rdacm21.o max9271.o
-+obj-$(CONFIG_VIDEO_RDACM21)	+= rdacm21-camera_module.o
- obj-$(CONFIG_VIDEO_ST_MIPID02) += st-mipid02.o
- 
- obj-$(CONFIG_SDR_MAX2175) += max2175.o
-diff --git a/drivers/media/i2c/rdacm21.c b/drivers/media/i2c/rdacm21.c
-new file mode 100644
-index 000000000000..279cbe213f32
---- /dev/null
-+++ b/drivers/media/i2c/rdacm21.c
-@@ -0,0 +1,538 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * IMI RDACM21 GMSL Camera Driver
-+ *
-+ * Copyright (C) 2017-2020 Jacopo Mondi
-+ * Copyright (C) 2017-2019 Kieran Bingham
-+ * Copyright (C) 2017-2019 Laurent Pinchart
-+ * Copyright (C) 2017-2019 Niklas Söderlund
-+ * Copyright (C) 2016 Renesas Electronics Corporation
-+ * Copyright (C) 2015 Cogent Embedded, Inc.
-+ */
-+
-+#include <linux/delay.h>
-+#include <linux/fwnode.h>
-+#include <linux/init.h>
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/slab.h>
-+#include <linux/videodev2.h>
-+
-+#include <media/v4l2-async.h>
-+#include <media/v4l2-ctrls.h>
-+#include <media/v4l2-subdev.h>
-+#include "max9271.h"
-+
-+#define OV10640_I2C_ADDRESS		0x30
-+#define OV10640_ID_LOW			0xa6
-+
-+#define OV490_I2C_ADDRESS		0x24
-+
-+#define OV490_ISP_HSIZE_LOW		0x60
-+#define OV490_ISP_HSIZE_HIGH		0x61
-+#define OV490_ISP_VSIZE_LOW		0x62
-+#define OV490_ISP_VSIZE_HIGH		0x63
-+
-+#define OV490_PID			0x300a
-+#define OV490_VER			0x300b
-+#define OV490_ID_VAL			0x0490
-+#define OV490_ID(_p, _v)		((((_p) & 0xff) << 8) | ((_v) & 0xff))
-+
-+#define OV10640_PIXEL_RATE		(55000000)
-+
-+struct rdacm21_device {
-+	struct device			*dev;
-+	struct max9271_device		*serializer;
-+	struct i2c_client		*isp;
-+	struct v4l2_subdev		sd;
-+	struct media_pad		pad;
-+	struct v4l2_mbus_framefmt	fmt;
-+	struct v4l2_ctrl_handler	ctrls;
-+	u32				addrs[32];
-+};
-+
-+static inline struct rdacm21_device *sd_to_rdacm21(struct v4l2_subdev *sd)
-+{
-+	return container_of(sd, struct rdacm21_device, sd);
-+}
-+
-+static inline struct rdacm21_device *i2c_to_rdacm21(struct i2c_client *client)
-+{
-+	return sd_to_rdacm21(i2c_get_clientdata(client));
-+}
-+
-+static const struct ov490_reg {
-+	u16 reg;
-+	u8 val;
-+} ov490_regs_wizard[] = {
-+	{0xfffd, 0x80},
-+	{0xfffe, 0x82},
-+	{0x0071, 0x11},
-+	{0x0075, 0x11},
-+	{0xfffe, 0x29},
-+	{0x6010, 0x01},
-+	/*
-+	 * OV490 EMB line disable in YUV and RAW data,
-+	 * NOTE: EMB line is still used in ISP and sensor
-+	 */
-+	{0xe000, 0x14},
-+	{0xfffe, 0x28},
-+	{0x6000, 0x04},
-+	{0x6004, 0x00},
-+	/*
-+	 * PCLK polarity - useless due to silicon bug.
-+	 * Use 0x808000bb register instead.
-+	 */
-+	{0x6008, 0x00},
-+	{0xfffe, 0x80},
-+	{0x0091, 0x00},
-+	/* bit[3]=0 - PCLK polarity workaround. */
-+	{0x00bb, 0x1d},
-+	/* Ov490 FSIN: app_fsin_from_fsync */
-+	{0xfffe, 0x85},
-+	{0x0008, 0x00},
-+	{0x0009, 0x01},
-+	/* FSIN0 source. */
-+	{0x000A, 0x05},
-+	{0x000B, 0x00},
-+	/* FSIN0 delay. */
-+	{0x0030, 0x02},
-+	{0x0031, 0x00},
-+	{0x0032, 0x00},
-+	{0x0033, 0x00},
-+	/* FSIN1 delay. */
-+	{0x0038, 0x02},
-+	{0x0039, 0x00},
-+	{0x003A, 0x00},
-+	{0x003B, 0x00},
-+	/* FSIN0 length. */
-+	{0x0070, 0x2C},
-+	{0x0071, 0x01},
-+	{0x0072, 0x00},
-+	{0x0073, 0x00},
-+	/* FSIN1 length. */
-+	{0x0074, 0x64},
-+	{0x0075, 0x00},
-+	{0x0076, 0x00},
-+	{0x0077, 0x00},
-+	{0x0000, 0x14},
-+	{0x0001, 0x00},
-+	{0x0002, 0x00},
-+	{0x0003, 0x00},
-+	/*
-+	 * Load fsin0,load fsin1,load other,
-+	 * It will be cleared automatically.
-+	 */
-+	{0x0004, 0x32},
-+	{0x0005, 0x00},
-+	{0x0006, 0x00},
-+	{0x0007, 0x00},
-+	{0xfffe, 0x80},
-+	/* Sensor FSIN. */
-+	{0x0081, 0x00},
-+	/* ov10640 FSIN enable */
-+	{0xfffe, 0x19},
-+	{0x5000, 0x00},
-+	{0x5001, 0x30},
-+	{0x5002, 0x8c},
-+	{0x5003, 0xb2},
-+	{0xfffe, 0x80},
-+	{0x00c0, 0xc1},
-+	/* ov10640 HFLIP=1 by default */
-+	{0xfffe, 0x19},
-+	{0x5000, 0x01},
-+	{0x5001, 0x00},
-+	{0xfffe, 0x80},
-+	{0x00c0, 0xdc},
-+};
-+
-+static int ov490_read(struct rdacm21_device *dev, u16 reg, u8 *val)
-+{
-+	u8 buf[2] = { reg >> 8, reg & 0xff };
-+	int ret;
-+
-+	ret = i2c_master_send(dev->isp, buf, 2);
-+	if (ret == 2)
-+		ret = i2c_master_recv(dev->isp, val, 1);
-+
-+	if (ret < 0) {
-+		dev_dbg(dev->dev, "%s: register 0x%04x read failed (%d)\n",
-+			__func__, reg, ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ov490_write(struct rdacm21_device *dev, u16 reg, u8 val)
-+{
-+	u8 buf[3] = { reg >> 8, reg & 0xff, val };
-+	int ret;
-+
-+	dev_dbg(dev->dev, "%s: 0x%04x = 0x%02x\n", __func__, reg, val);
-+
-+	ret = i2c_master_send(dev->isp, buf, 3);
-+	if (ret < 0) {
-+		dev_err(dev->dev, "%s: register 0x%04x write failed (%d)\n",
-+			__func__, reg, ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int rdacm21_s_stream(struct v4l2_subdev *sd, int enable)
-+{
-+	struct rdacm21_device *dev = sd_to_rdacm21(sd);
-+
-+	/*
-+	 * Enable serial link now that the ISP provides a valid pixel clock
-+	 * to start serializing video data on the GMSL link.
-+	 */
-+	return max9271_set_serial_link(dev->serializer, enable);
-+}
-+
-+static int rdacm21_enum_mbus_code(struct v4l2_subdev *sd,
-+				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_mbus_code_enum *code)
-+{
-+	if (code->pad || code->index > 0)
-+		return -EINVAL;
-+
-+	code->code = MEDIA_BUS_FMT_YUYV8_1X16;
-+
-+	return 0;
-+}
-+
-+static int rdacm21_get_fmt(struct v4l2_subdev *sd,
-+			   struct v4l2_subdev_pad_config *cfg,
-+			   struct v4l2_subdev_format *format)
-+{
-+	struct v4l2_mbus_framefmt *mf = &format->format;
-+	struct rdacm21_device *dev = sd_to_rdacm21(sd);
-+
-+	if (format->pad)
-+		return -EINVAL;
-+
-+	mf->width		= dev->fmt.width;
-+	mf->height		= dev->fmt.height;
-+	mf->code		= MEDIA_BUS_FMT_YUYV8_1X16;
-+	mf->colorspace		= V4L2_COLORSPACE_SRGB;
-+	mf->field		= V4L2_FIELD_NONE;
-+	mf->ycbcr_enc		= V4L2_YCBCR_ENC_601;
-+	mf->quantization	= V4L2_QUANTIZATION_FULL_RANGE;
-+	mf->xfer_func		= V4L2_XFER_FUNC_NONE;
-+
-+	return 0;
-+}
-+
-+static struct v4l2_subdev_video_ops rdacm21_video_ops = {
-+	.s_stream	= rdacm21_s_stream,
-+};
-+
-+static const struct v4l2_subdev_pad_ops rdacm21_subdev_pad_ops = {
-+	.enum_mbus_code = rdacm21_enum_mbus_code,
-+	.get_fmt	= rdacm21_get_fmt,
-+	.set_fmt	= rdacm21_get_fmt,
-+};
-+
-+static struct v4l2_subdev_ops rdacm21_subdev_ops = {
-+	.video		= &rdacm21_video_ops,
-+	.pad		= &rdacm21_subdev_pad_ops,
-+};
-+
-+static int ov490_initialize(struct rdacm21_device *dev)
-+{
-+	unsigned int ov490_pid_retry = 20;
-+	unsigned int timeout;
-+	u8 pid, ver, val;
-+	unsigned int i;
-+	int ret;
-+
-+	/* Read OV490 Id to test communications. */
-+pid_retry:
-+	ret = ov490_write(dev, 0xfffd, 0x80);
-+	ret = ov490_write(dev, 0xfffe, 0x80);
-+	usleep_range(100, 150);
-+
-+	ret = ov490_read(dev, OV490_PID, &pid);
-+	if (ret < 0) {
-+		/* Give OV490 a few more cycles to exit from reset. */
-+		if (ov490_pid_retry--) {
-+			usleep_range(500, 1000);
-+			goto pid_retry;
-+		}
-+
-+		dev_err(dev->dev, "OV490 PID read failed (%d)\n", ret);
-+		return ret;
-+	}
-+
-+	ret = ov490_read(dev, OV490_VER, &ver);
-+	if (ret < 0) {
-+		dev_err(dev->dev, "OV490 VERSION read failed (%d)\n", ret);
-+		return ret;
-+	}
-+
-+	if (OV490_ID(pid, ver) != OV490_ID_VAL) {
-+		dev_err(dev->dev, "OV490 ID mismatch: (0x%04x)\n",
-+			OV490_ID(pid, ver));
-+		return -ENODEV;
-+	}
-+
-+	/* Wait for firmware boot by reading streamon status. */
-+	ov490_write(dev, 0xfffd, 0x80);
-+	ov490_write(dev, 0xfffe, 0x29);
-+	usleep_range(100, 150);
-+	for (timeout = 300; timeout > 0; timeout--) {
-+		ov490_read(dev, 0xd000, &val);
-+		if (val == 0x0c)
-+			break;
-+		mdelay(1);
-+	}
-+	if (!timeout) {
-+		dev_err(dev->dev, "Timeout firmware boot wait\n");
-+		return -ENODEV;
-+	}
-+	dev_dbg(dev->dev, "Firmware booted in %u msec\n", 300 - timeout);
-+
-+	/* Read OV10640 Id to test communications. */
-+	ov490_write(dev, 0xfffd, 0x80);
-+	ov490_write(dev, 0xfffe, 0x19);
-+	usleep_range(100, 150);
-+
-+	ov490_write(dev, 0x5000, 0x01);
-+	ov490_write(dev, 0x5001, 0x30);
-+	ov490_write(dev, 0x5002, 0x0a);
-+
-+	ov490_write(dev, 0xfffe, 0x80);
-+	usleep_range(100, 150);
-+	ov490_write(dev, 0xc0, 0xc1);
-+	ov490_write(dev, 0xfffe, 0x19);
-+	usleep_range(1000, 1500);
-+	ov490_read(dev, 0x5000, &val);
-+	if (val != OV10640_ID_LOW) {
-+		dev_err(dev->dev, "OV10640 ID mismatch: (0x%02x)\n", val);
-+		return -ENODEV;
-+	}
-+
-+	dev_dbg(dev->dev, "OV10640 ID = 0x%2x\n", val);
-+
-+	for (i = 0; i < ARRAY_SIZE(ov490_regs_wizard); ++i) {
-+		ret = ov490_write(dev, ov490_regs_wizard[i].reg,
-+				  ov490_regs_wizard[i].val);
-+		if (ret < 0) {
-+			dev_err(dev->dev,
-+				"%s: register %u (0x%04x) write failed (%d)\n",
-+				__func__, i, ov490_regs_wizard[i].reg, ret);
-+
-+			return -EIO;
-+		}
-+
-+		usleep_range(100, 150);
-+	}
-+
-+	/*
-+	 * The ISP is programmed with the content of a serial flash memory.
-+	 * Read the firmware configuration to reflect it through the V4L2 APIs.
-+	 */
-+	ov490_write(dev, 0xfffd, 0x80);
-+	ov490_write(dev, 0xfffe, 0x82);
-+	usleep_range(100, 150);
-+	ov490_read(dev, OV490_ISP_HSIZE_HIGH, &val);
-+	dev->fmt.width = (val & 0xf) << 8;
-+	ov490_read(dev, OV490_ISP_HSIZE_LOW, &val);
-+	dev->fmt.width |= (val & 0xff);
-+
-+	ov490_read(dev, OV490_ISP_VSIZE_HIGH, &val);
-+	dev->fmt.height = (val & 0xf) << 8;
-+	ov490_read(dev, OV490_ISP_VSIZE_LOW, &val);
-+	dev->fmt.height |= val & 0xff;
-+
-+	/* Set bus width to 12 bits [0:11] */
-+	ov490_write(dev, 0xfffd, 0x80);
-+	ov490_write(dev, 0xfffe, 0x28);
-+	usleep_range(100, 150);
-+	ov490_write(dev, 0x6009, 0x10);
-+
-+	dev_info(dev->dev, "Identified RDACM21 camera module\n");
-+
-+	return 0;
-+}
-+
-+static int rdacm21_initialize(struct rdacm21_device *dev)
-+{
-+	int ret;
-+
-+	/* Verify communication with the MAX9271: ping to wakeup. */
-+	dev->serializer->client->addr = MAX9271_DEFAULT_ADDR;
-+	i2c_smbus_read_byte(dev->serializer->client);
-+
-+	/* Serial link disabled during config as it needs a valid pixel clock. */
-+	ret = max9271_set_serial_link(dev->serializer, false);
-+	if (ret)
-+		return ret;
-+
-+	/* Set GPO high to hold OV490 in reset during max9271 configuration. */
-+	ret = max9271_set_gpios(dev->serializer, MAX9271_GPO);
-+	if (ret)
-+		return ret;
-+
-+	/* Configure I2C bus at 105Kbps speed and configure GMSL link. */
-+	ret = max9271_configure_i2c(dev->serializer,
-+				    MAX9271_I2CSLVSH_469NS_234NS |
-+				    MAX9271_I2CSLVTO_1024US |
-+				    MAX9271_I2CMSTBT_105KBPS);
-+	if (ret)
-+		return ret;
-+
-+	ret = max9271_configure_gmsl_link(dev->serializer);
-+	if (ret)
-+		return ret;
-+
-+	ret = max9271_set_address(dev->serializer, dev->addrs[0]);
-+	if (ret)
-+		return ret;
-+	dev->serializer->client->addr = dev->addrs[0];
-+
-+	/*
-+	 * Release OV490 from reset and program address translation
-+	 * before performing OV490 configuration.
-+	 */
-+	ret = max9271_clear_gpios(dev->serializer, MAX9271_GPO);
-+	if (ret)
-+		return ret;
-+
-+	ret = max9271_set_translation(dev->serializer, dev->addrs[1],
-+				      OV490_I2C_ADDRESS);
-+	if (ret)
-+		return ret;
-+	dev->isp->addr = dev->addrs[1];
-+
-+	ret = ov490_initialize(dev);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Set reverse channel high threshold to increase noise immunity.
-+	 *
-+	 * This should be compensated by increasing the reverse channel
-+	 * amplitude on the remote deserializer side.
-+	 */
-+	ret = max9271_set_high_threshold(dev->serializer, true);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static int rdacm21_probe(struct i2c_client *client)
-+{
-+	struct rdacm21_device *dev;
-+	struct fwnode_handle *ep;
-+	int ret;
-+
-+	dev = devm_kzalloc(&client->dev, sizeof(*dev), GFP_KERNEL);
-+	if (!dev)
-+		return -ENOMEM;
-+	dev->dev = &client->dev;
-+
-+	dev->serializer = devm_kzalloc(&client->dev, sizeof(*dev->serializer),
-+				       GFP_KERNEL);
-+	if (!dev->serializer)
-+		return -ENOMEM;
-+
-+	dev->serializer->client = client;
-+
-+	ret = of_property_read_u32_array(client->dev.of_node, "reg",
-+					 dev->addrs, 2);
-+	if (ret < 0) {
-+		dev_err(dev->dev, "Invalid DT reg property: %d\n", ret);
-+		return -EINVAL;
-+	}
-+
-+	/* Create the dummy I2C client for the sensor. */
-+	dev->isp = i2c_new_dummy_device(client->adapter, OV490_I2C_ADDRESS);
-+	if (IS_ERR(dev->isp))
-+		return PTR_ERR(dev->isp);
-+
-+	ret = rdacm21_initialize(dev);
-+	if (ret < 0)
-+		goto error;
-+
-+	/* Initialize and register the subdevice. */
-+	v4l2_i2c_subdev_init(&dev->sd, client, &rdacm21_subdev_ops);
-+	dev->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-+
-+	v4l2_ctrl_handler_init(&dev->ctrls, 1);
-+	v4l2_ctrl_new_std(&dev->ctrls, NULL, V4L2_CID_PIXEL_RATE,
-+			  OV10640_PIXEL_RATE, OV10640_PIXEL_RATE, 1,
-+			  OV10640_PIXEL_RATE);
-+	dev->sd.ctrl_handler = &dev->ctrls;
-+
-+	ret = dev->ctrls.error;
-+	if (ret)
-+		goto error_free_ctrls;
-+
-+	dev->pad.flags = MEDIA_PAD_FL_SOURCE;
-+	dev->sd.entity.flags |= MEDIA_ENT_F_CAM_SENSOR;
-+	ret = media_entity_pads_init(&dev->sd.entity, 1, &dev->pad);
-+	if (ret < 0)
-+		goto error_free_ctrls;
-+
-+	ep = fwnode_graph_get_next_endpoint(dev_fwnode(&client->dev), NULL);
-+	if (!ep) {
-+		dev_err(&client->dev,
-+			"Unable to get endpoint in node %pOF\n",
-+			client->dev.of_node);
-+		ret = -ENOENT;
-+		goto error_free_ctrls;
-+	}
-+	dev->sd.fwnode = ep;
-+
-+	ret = v4l2_async_register_subdev(&dev->sd);
-+	if (ret)
-+		goto error_put_node;
-+
-+	return 0;
-+
-+error_put_node:
-+	fwnode_handle_put(dev->sd.fwnode);
-+error_free_ctrls:
-+	v4l2_ctrl_handler_free(&dev->ctrls);
-+error:
-+	i2c_unregister_device(dev->isp);
-+
-+	return ret;
-+}
-+
-+static int rdacm21_remove(struct i2c_client *client)
-+{
-+	struct rdacm21_device *dev = i2c_to_rdacm21(client);
-+
-+	fwnode_handle_put(dev->sd.fwnode);
-+	v4l2_async_unregister_subdev(&dev->sd);
-+	i2c_unregister_device(dev->isp);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id rdacm21_of_ids[] = {
-+	{ .compatible = "imi,rdacm21" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, rdacm21_of_ids);
-+
-+static struct i2c_driver rdacm21_i2c_driver = {
-+	.driver	= {
-+		.name	= "rdacm21",
-+		.of_match_table = rdacm21_of_ids,
-+	},
-+	.probe_new	= rdacm21_probe,
-+	.remove		= rdacm21_remove,
-+};
-+
-+module_i2c_driver(rdacm21_i2c_driver);
-+
-+MODULE_DESCRIPTION("GMSL Camera driver for RDACM21");
-+MODULE_AUTHOR("Jacopo Mondi, Kieran Bingham, Laurent Pinchart, Niklas Söderlund, Vladimir Barinov");
-+MODULE_LICENSE("GPL v2");
--- 
-2.28.0
+Thanks, I'm currently without landline internet and need to rely on my 
+mobile.
+
+Christian.
+
+>
+> Cheers, Daniel
+>
+>> ---
+>>   drivers/dma-buf/dma-buf.c | 21 +++++++++++++++++++++
+>>   include/linux/dma-buf.h   |  3 ++-
+>>   2 files changed, 23 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+>> index 844967f..7309c83 100644
+>> --- a/drivers/dma-buf/dma-buf.c
+>> +++ b/drivers/dma-buf/dma-buf.c
+>> @@ -851,6 +851,9 @@ void dma_buf_unpin(struct dma_buf_attachment *attach)
+>>    * Returns sg_table containing the scatterlist to be returned; returns ERR_PTR
+>>    * on error. May return -EINTR if it is interrupted by a signal.
+>>    *
+>> + * On success, the DMA addresses and lengths in the returned scatterlist are
+>> + * PAGE_SIZE aligned.
+>> + *
+>>    * A mapping must be unmapped by using dma_buf_unmap_attachment(). Note that
+>>    * the underlying backing storage is pinned for as long as a mapping exists,
+>>    * therefore users/importers should not hold onto a mapping for undue amounts of
+>> @@ -904,6 +907,24 @@ struct sg_table *dma_buf_map_attachment(struct dma_buf_attachment *attach,
+>>   		attach->dir = direction;
+>>   	}
+>>   
+>> +#ifdef CONFIG_DMA_API_DEBUG
+>> +	{
+>> +		struct scatterlist *sg;
+>> +		u64 addr;
+>> +		int len;
+>> +		int i;
+>> +
+>> +		for_each_sgtable_dma_sg(sg_table, sg, i) {
+>> +			addr = sg_dma_address(sg);
+>> +			len = sg_dma_len(sg);
+>> +			if (!PAGE_ALIGNED(addr) || !PAGE_ALIGNED(len)) {
+>> +				pr_debug("%s: addr %llx or len %x is not page aligned!\n",
+>> +					 __func__, addr, len);
+>> +			}
+>> +		}
+>> +	}
+>> +#endif /* CONFIG_DMA_API_DEBUG */
+>> +
+>>   	return sg_table;
+>>   }
+>>   EXPORT_SYMBOL_GPL(dma_buf_map_attachment);
+>> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
+>> index a2ca294e..4a5fa70 100644
+>> --- a/include/linux/dma-buf.h
+>> +++ b/include/linux/dma-buf.h
+>> @@ -145,7 +145,8 @@ struct dma_buf_ops {
+>>   	 *
+>>   	 * A &sg_table scatter list of or the backing storage of the DMA buffer,
+>>   	 * already mapped into the device address space of the &device attached
+>> -	 * with the provided &dma_buf_attachment.
+>> +	 * with the provided &dma_buf_attachment. The addresses and lengths in
+>> +	 * the scatter list are PAGE_SIZE aligned.
+>>   	 *
+>>   	 * On failure, returns a negative error value wrapped into a pointer.
+>>   	 * May also return -EINTR when a signal was received while being
+>> -- 
+>> 1.8.3.1
+>>
+>> _______________________________________________
+>> dri-devel mailing list
+>> dri-devel@lists.freedesktop.org
+>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flists.freedesktop.org%2Fmailman%2Flistinfo%2Fdri-devel&amp;data=04%7C01%7Cchristian.koenig%40amd.com%7C58ee8712041e4e742fe408d87123e970%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637383746351346603%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=EwAEVcJa6gboHMEQ6XUymC%2BtjFoWd0wl8YUyzdnV5N8%3D&amp;reserved=0
 
