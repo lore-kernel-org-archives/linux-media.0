@@ -2,164 +2,102 @@ Return-Path: <SRS0=VvXC=DW=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6661EC433E7
-	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 16:03:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 252A5C433DF
+	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 16:27:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F271622255
-	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 16:03:53 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="UPZ3hvPL"
+	by mail.kernel.org (Postfix) with ESMTP id CE40922267
+	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 16:27:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389565AbgJOQDx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Oct 2020 12:03:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43664 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388549AbgJOQDw (ORCPT
+        id S2389578AbgJOQ1g (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Oct 2020 12:27:36 -0400
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:36689 "EHLO
+        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388357AbgJOQ1g (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Oct 2020 12:03:52 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0ABC061755
-        for <linux-media@vger.kernel.org>; Thu, 15 Oct 2020 09:03:52 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id f21so3718592wml.3
-        for <linux-media@vger.kernel.org>; Thu, 15 Oct 2020 09:03:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DbRyVIR2jUJWgBTF659QP8SY1vAxnN7ExneR3zyZD7o=;
-        b=UPZ3hvPLTlXmhC8krIzkANQBFOV7zqrdoR6Fe7UlmT0cANShHVycdvBxmLUvXiyRIe
-         Co4WdaFgeSbnNz2VfojqOtcRY3LHLu2NTO2jtx8Pxz3YtW+DEz7oxBESx2kltqVKdVHm
-         AygMOfTDbWW4g/dCDV5ASow9sXqRCMvKG8Vkc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DbRyVIR2jUJWgBTF659QP8SY1vAxnN7ExneR3zyZD7o=;
-        b=s26H9zCrNFvmWrx9dKKVRAS/PimUKholMslg2/3SW5ONw3UpduMDSbg5VD8NqShj6u
-         SNxgisPntK/4UInT8sVO2fY3YPp/Pct+8Vvj7nuvPkxzUqsYeEebpbBKoWooxtmq1Upp
-         y8YzEdal23obUIB/J6PONGOTxUUylgIuxM01vjGsEwTGRGG/tyhCUz2jaLaGtmP0BSlM
-         9vjAVEjfxCLY6ozo5G3DkIq8CqT6GDIUGLcSdTXy/OeDXNtV0NR5CpFTdhuoOYVUPB7s
-         EBAKSHlTCqGwiuE+vVoSVZNi7BPgCkdROybu+Fv7N5iK/9n/PaaK5+2SnnXqFyL75Qfj
-         BKfQ==
-X-Gm-Message-State: AOAM533zc5XDBu2Ni1NPPX/WEm8smbeJEL3MYmtIgiO6qd+cB+bkzVle
-        UHrr+XtEwP0D9hIcP2VJIPs9RQ==
-X-Google-Smtp-Source: ABdhPJw+VHwW09aRmuNanGKHGz+vL0Ww3co+chUob9D38zTudXVAwzdJco8FucmxzOZX1GLH21V0Lg==
-X-Received: by 2002:a1c:4856:: with SMTP id v83mr4957083wma.118.1602777831187;
-        Thu, 15 Oct 2020 09:03:51 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id n9sm5512439wrq.72.2020.10.15.09.03.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2020 09:03:50 -0700 (PDT)
-Date:   Thu, 15 Oct 2020 18:03:44 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Jianxin Xiong <jianxin.xiong@intel.com>
-Cc:     linux-rdma@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        Leon Romanovsky <leon@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Doug Ledford <dledford@redhat.com>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Christian Koenig <christian.koenig@amd.com>
-Subject: Re: [PATCH v4 5/5] dma-buf: Clarify that dma-buf sg lists are page
- aligned
-Message-ID: <20201015160344.GA401619@phenom.ffwll.local>
-References: <1602692161-107096-1-git-send-email-jianxin.xiong@intel.com>
+        Thu, 15 Oct 2020 12:27:36 -0400
+X-Originating-IP: 93.34.118.233
+Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 72CB2FF802;
+        Thu, 15 Oct 2020 16:27:31 +0000 (UTC)
+From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
+To:     kieran.bingham+renesas@ideasonboard.com,
+        laurent.pinchart+renesas@ideasonboard.com,
+        niklas.soderlund+renesas@ragnatech.se
+Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hyun Kwon <hyunk@xilinx.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v2 0/7] media: i2c: Add support for RDACM21 camera module
+Date:   Thu, 15 Oct 2020 20:27:03 +0200
+Message-Id: <20201015182710.54795-1-jacopo+renesas@jmondi.org>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1602692161-107096-1-git-send-email-jianxin.xiong@intel.com>
-X-Operating-System: Linux phenom 5.7.0-1-amd64 
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Oct 14, 2020 at 09:16:01AM -0700, Jianxin Xiong wrote:
-> The dma-buf API have been used under the assumption that the sg lists
-> returned from dma_buf_map_attachment() are fully page aligned. Lots of
-> stuff can break otherwise all over the place. Clarify this in the
-> documentation and add a check when DMA API debug is enabled.
-> 
-> Signed-off-by: Jianxin Xiong <jianxin.xiong@intel.com>
+Hello,
+  v2 of support for RDACM21 camera module in this series.
 
-lgtm, thanks for creating this and giving it a spin.
+Patch [1/7] introduces the camera module driver.
+Only change compared to v1:
+- Increase pixel clock to 55MHz
 
-I'll queue this up in drm-misc-next for 5.11, should show up in linux-next
-after the merge window is closed.
+From [2/7] to [5/7] there's a proposal of a possible way to support
+both RDACM20 and RDACM21 with the same deserializer driver.
+See v1 cover letter for details:
+https://www.spinics.net/lists/linux-renesas-soc/msg52886.html
 
-Cheers, Daniel
+I have tested on Eagle V3M with 4 RDACM21, but the whole point of
+this series is to retain compatibility with RDACM20.
 
-> ---
->  drivers/dma-buf/dma-buf.c | 21 +++++++++++++++++++++
->  include/linux/dma-buf.h   |  3 ++-
->  2 files changed, 23 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-> index 844967f..7309c83 100644
-> --- a/drivers/dma-buf/dma-buf.c
-> +++ b/drivers/dma-buf/dma-buf.c
-> @@ -851,6 +851,9 @@ void dma_buf_unpin(struct dma_buf_attachment *attach)
->   * Returns sg_table containing the scatterlist to be returned; returns ERR_PTR
->   * on error. May return -EINTR if it is interrupted by a signal.
->   *
-> + * On success, the DMA addresses and lengths in the returned scatterlist are
-> + * PAGE_SIZE aligned.
-> + *
->   * A mapping must be unmapped by using dma_buf_unmap_attachment(). Note that
->   * the underlying backing storage is pinned for as long as a mapping exists,
->   * therefore users/importers should not hold onto a mapping for undue amounts of
-> @@ -904,6 +907,24 @@ struct sg_table *dma_buf_map_attachment(struct dma_buf_attachment *attach,
->  		attach->dir = direction;
->  	}
->  
-> +#ifdef CONFIG_DMA_API_DEBUG
-> +	{
-> +		struct scatterlist *sg;
-> +		u64 addr;
-> +		int len;
-> +		int i;
-> +
-> +		for_each_sgtable_dma_sg(sg_table, sg, i) {
-> +			addr = sg_dma_address(sg);
-> +			len = sg_dma_len(sg);
-> +			if (!PAGE_ALIGNED(addr) || !PAGE_ALIGNED(len)) {
-> +				pr_debug("%s: addr %llx or len %x is not page aligned!\n",
-> +					 __func__, addr, len);
-> +			}
-> +		}
-> +	}
-> +#endif /* CONFIG_DMA_API_DEBUG */
-> +
->  	return sg_table;
->  }
->  EXPORT_SYMBOL_GPL(dma_buf_map_attachment);
-> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-> index a2ca294e..4a5fa70 100644
-> --- a/include/linux/dma-buf.h
-> +++ b/include/linux/dma-buf.h
-> @@ -145,7 +145,8 @@ struct dma_buf_ops {
->  	 *
->  	 * A &sg_table scatter list of or the backing storage of the DMA buffer,
->  	 * already mapped into the device address space of the &device attached
-> -	 * with the provided &dma_buf_attachment.
-> +	 * with the provided &dma_buf_attachment. The addresses and lengths in
-> +	 * the scatter list are PAGE_SIZE aligned.
->  	 *
->  	 * On failure, returns a negative error value wrapped into a pointer.
->  	 * May also return -EINTR when a signal was received while being
-> -- 
-> 1.8.3.1
-> 
-> _______________________________________________
-> dri-devel mailing list
-> dri-devel@lists.freedesktop.org
-> https://lists.freedesktop.org/mailman/listinfo/dri-devel
+For this reason I have included 2 patches on top, not intended for merge
+that re-propose DTS support for the MAXIM max9286 expansion board connected
+to Salvator-X and add the newly introduced property to the DTS file.
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Kieran, I know you have a working setup with RDACM20, the final two patches are
+meant for ease your testing. Can you give this series a spin ?
+For your convenience I pushed a branch
+git://jmondi.org/linux #gmsl/jmondi/renesas-drivers-2020-10-13-v5.9/rdacm21_high-threshold
+
+Series based on latest renesas-drivers tag: renesas-drivers-2020-10-13-v5.9
+
+If I get a confirmation this setup works on Salvator-X, I'll submit the new
+property for inclusion to devicetree people, which I have left out at the
+moment.
+
+Thanks
+  j
+
+Jacopo Mondi (6):
+  media: i2c: Add driver for RDACM21 camera module
+  dt-bindings: media: max9286: Document 'maxim,high-threshold'
+  media: i2c: max9286: Break-out reverse channel setup
+  media: i2c: max9286: Make channel amplitude programmable
+  media: i2c: max9286: Configure reverse channel amplitude
+  [DNI] arm64: dts: renesas: salvator-x-max9286: Use high-threshold
+
+Laurent Pinchart (1):
+  arm64: dts: renesas: salvator-x: Add MAX9286 expansion board
+
+ .../bindings/media/i2c/maxim,max9286.yaml     |  15 +
+ MAINTAINERS                                   |  12 +
+ .../boot/dts/renesas/salvator-x-max9286.dtsi  | 396 +++++++++++++
+ drivers/media/i2c/Kconfig                     |  13 +
+ drivers/media/i2c/Makefile                    |   2 +
+ drivers/media/i2c/max9286.c                   |  54 +-
+ drivers/media/i2c/rdacm21.c                   | 538 ++++++++++++++++++
+ 7 files changed, 1020 insertions(+), 10 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/renesas/salvator-x-max9286.dtsi
+ create mode 100644 drivers/media/i2c/rdacm21.c
+
+--
+2.28.0
+
