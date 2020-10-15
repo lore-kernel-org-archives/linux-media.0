@@ -7,25 +7,25 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED814C433DF
-	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 23:14:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73311C433E7
+	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 23:14:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A2ADE2080C
-	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 23:14:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2086B207C4
+	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 23:14:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731173AbgJOXOa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Oct 2020 19:14:30 -0400
-Received: from bin-mail-out-05.binero.net ([195.74.38.228]:62666 "EHLO
-        bin-mail-out-05.binero.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730957AbgJOXOa (ORCPT
+        id S2387422AbgJOXOg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Oct 2020 19:14:36 -0400
+Received: from bin-mail-out-06.binero.net ([195.74.38.229]:46490 "EHLO
+        bin-mail-out-06.binero.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731189AbgJOXOb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Oct 2020 19:14:30 -0400
-X-Halon-ID: 24f6fac1-0f3c-11eb-9f83-005056917a89
+        Thu, 15 Oct 2020 19:14:31 -0400
+X-Halon-ID: 25deee0c-0f3c-11eb-9f83-005056917a89
 Authorized-sender: niklas.soderlund@fsdn.se
 Received: from bismarck.berto.se (p4fca2fef.dip0.t-ipconnect.de [79.202.47.239])
         by bin-vsp-out-01.atm.binero.net (Halon) with ESMTPA
-        id 24f6fac1-0f3c-11eb-9f83-005056917a89;
-        Fri, 16 Oct 2020 01:14:16 +0200 (CEST)
+        id 25deee0c-0f3c-11eb-9f83-005056917a89;
+        Fri, 16 Oct 2020 01:14:17 +0200 (CEST)
 From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -33,9 +33,9 @@ To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
 Cc:     linux-renesas-soc@vger.kernel.org,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>
-Subject: [PATCH 3/5] rcar-vin: Cache the CSI-2 channel selection value
-Date:   Fri, 16 Oct 2020 01:14:06 +0200
-Message-Id: <20201015231408.2399933-4-niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH 5/5] rcar-vin: Add support for suspend and resume
+Date:   Fri, 16 Oct 2020 01:14:08 +0200
+Message-Id: <20201015231408.2399933-6-niklas.soderlund+renesas@ragnatech.se>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201015231408.2399933-1-niklas.soderlund+renesas@ragnatech.se>
 References: <20201015231408.2399933-1-niklas.soderlund+renesas@ragnatech.se>
@@ -46,49 +46,130 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In preparation of suspend/resume support cache the chsel value when
-written to the register so it can be restored on resume if needed.
+Add support for suspend and resume by stopping and starting the video
+pipeline while still retaining all buffers given to the driver by
+user-space and internally allocated ones, this gives the application a
+seamless experience.
+
+Buffers are never returned to user-space unprocessed so user-space don't
+notice when suspending. When resuming the driver restarts the capture
+session using the internal scratch buffer, this happens before
+user-space is unfrozen, this leads to speedy response times once the
+application resumes its execution.
+
+As the entire pipeline is stopped on suspend all subdevices in use are
+also stopped, and if they enter a shutdown state when not streaming
+(such as the R-Car CSI-2 driver) they too will be suspended and resumed
+in sync with the VIN driver.
+
+To be able to do keep track of which VINs should be resumed a new
+internal state SUSPENDED is added to recode this.
 
 Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/platform/rcar-vin/rcar-dma.c | 2 ++
- drivers/media/platform/rcar-vin/rcar-vin.h | 2 ++
- 2 files changed, 4 insertions(+)
+ drivers/media/platform/rcar-vin/rcar-core.c | 51 +++++++++++++++++++++
+ drivers/media/platform/rcar-vin/rcar-vin.h  | 10 ++--
+ 2 files changed, 57 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/rcar-vin/rcar-dma.c b/drivers/media/platform/rcar-vin/rcar-dma.c
-index 680160f9f851d8a3..f65deac4c2dbed54 100644
---- a/drivers/media/platform/rcar-vin/rcar-dma.c
-+++ b/drivers/media/platform/rcar-vin/rcar-dma.c
-@@ -1456,6 +1456,8 @@ int rvin_set_channel_routing(struct rvin_dev *vin, u8 chsel)
+diff --git a/drivers/media/platform/rcar-vin/rcar-core.c b/drivers/media/platform/rcar-vin/rcar-core.c
+index 34d003e0e9b9c25a..4adf4ce518f79c93 100644
+--- a/drivers/media/platform/rcar-vin/rcar-core.c
++++ b/drivers/media/platform/rcar-vin/rcar-core.c
+@@ -918,6 +918,54 @@ static int rvin_mc_init(struct rvin_dev *vin)
+ 	return ret;
+ }
  
- 	vin_dbg(vin, "Set IFMD 0x%x\n", ifmd);
- 
-+	vin->chsel = chsel;
++/* -----------------------------------------------------------------------------
++ * Suspend / Resume
++ */
 +
- 	/* Restore VNMC. */
- 	rvin_write(vin, vnmc, VNMC_REG);
++static int __maybe_unused rvin_suspend(struct device *dev)
++{
++	struct rvin_dev *vin = dev_get_drvdata(dev);
++
++	if (vin->state != RUNNING)
++		return 0;
++
++	rvin_stop_streaming(vin);
++
++	vin->state = SUSPENDED;
++
++	return 0;
++}
++
++static int __maybe_unused rvin_resume(struct device *dev)
++{
++	struct rvin_dev *vin = dev_get_drvdata(dev);
++
++	if (vin->state != SUSPENDED)
++		return 0;
++
++	/*
++	 * Restore group master CHSEL setting.
++	 *
++	 * This needs to be by every VIN resuming not only the master
++	 * as we don't know if and in which order the master VINs will
++	 * be resumed.
++	 */
++	if (vin->info->use_mc) {
++		unsigned int master_id = rvin_group_id_to_master(vin->id);
++		struct rvin_dev *master = vin->group->vin[master_id];
++		int ret;
++
++		if (WARN_ON(!master))
++			return -ENODEV;
++
++		ret = rvin_set_channel_routing(master, master->chsel);
++		if (ret)
++			return ret;
++	}
++
++	return rvin_start_streaming(vin);
++}
++
+ /* -----------------------------------------------------------------------------
+  * Platform Device Driver
+  */
+@@ -1421,9 +1469,12 @@ static int rcar_vin_remove(struct platform_device *pdev)
+ 	return 0;
+ }
  
++static SIMPLE_DEV_PM_OPS(rvin_pm_ops, rvin_suspend, rvin_resume);
++
+ static struct platform_driver rcar_vin_driver = {
+ 	.driver = {
+ 		.name = "rcar-vin",
++		.pm = &rvin_pm_ops,
+ 		.of_match_table = rvin_of_id_table,
+ 	},
+ 	.probe = rcar_vin_probe,
 diff --git a/drivers/media/platform/rcar-vin/rcar-vin.h b/drivers/media/platform/rcar-vin/rcar-vin.h
-index 8396e0e45478fe4f..2fef23470e3ddfe3 100644
+index 4ec8584709c847a9..4539bd53d9d41e9c 100644
 --- a/drivers/media/platform/rcar-vin/rcar-vin.h
 +++ b/drivers/media/platform/rcar-vin/rcar-vin.h
-@@ -189,6 +189,7 @@ struct rvin_info {
-  * @state:		keeps track of operation state
-  *
-  * @is_csi:		flag to mark the VIN as using a CSI-2 subdevice
-+ * @chsel		Cached value of the current CSI-2 channel selection
-  *
-  * @mbus_code:		media bus format code
-  * @format:		active V4L2 pixel format
-@@ -232,6 +233,7 @@ struct rvin_dev {
- 	enum rvin_dma_state state;
+@@ -49,16 +49,18 @@ enum rvin_csi_id {
+ };
  
- 	bool is_csi;
-+	unsigned int chsel;
+ /**
+- * STOPPED  - No operation in progress
+- * STARTING - Capture starting up
+- * RUNNING  - Operation in progress have buffers
+- * STOPPING - Stopping operation
++ * STOPPED   - No operation in progress
++ * STARTING  - Capture starting up
++ * RUNNING   - Operation in progress have buffers
++ * STOPPING  - Stopping operation
++ * SUSPENDED - Capture is suspended
+  */
+ enum rvin_dma_state {
+ 	STOPPED = 0,
+ 	STARTING,
+ 	RUNNING,
+ 	STOPPING,
++	SUSPENDED,
+ };
  
- 	u32 mbus_code;
- 	struct v4l2_pix_format format;
+ /**
 -- 
 2.28.0
 
