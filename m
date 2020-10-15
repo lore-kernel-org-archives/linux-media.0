@@ -2,29 +2,29 @@ Return-Path: <SRS0=VvXC=DW=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 252A5C433DF
-	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 16:27:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6390C433DF
+	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 16:27:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CE40922267
-	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 16:27:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8787F22267
+	for <linux-media@archiver.kernel.org>; Thu, 15 Oct 2020 16:27:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389578AbgJOQ1g (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Oct 2020 12:27:36 -0400
-Received: from relay9-d.mail.gandi.net ([217.70.183.199]:36689 "EHLO
+        id S2389854AbgJOQ1o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Oct 2020 12:27:44 -0400
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:40973 "EHLO
         relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388357AbgJOQ1g (ORCPT
+        with ESMTP id S2389798AbgJOQ1n (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Oct 2020 12:27:36 -0400
+        Thu, 15 Oct 2020 12:27:43 -0400
 X-Originating-IP: 93.34.118.233
 Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 72CB2FF802;
-        Thu, 15 Oct 2020 16:27:31 +0000 (UTC)
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 074E4FF807;
+        Thu, 15 Oct 2020 16:27:39 +0000 (UTC)
 From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
 To:     kieran.bingham+renesas@ideasonboard.com,
         laurent.pinchart+renesas@ideasonboard.com,
@@ -33,71 +33,77 @@ Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
         linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         linux-kernel@vger.kernel.org, Hyun Kwon <hyunk@xilinx.com>,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v2 0/7] media: i2c: Add support for RDACM21 camera module
-Date:   Thu, 15 Oct 2020 20:27:03 +0200
-Message-Id: <20201015182710.54795-1-jacopo+renesas@jmondi.org>
+Subject: [PATCH v2 4/7] media: i2c: max9286: Make channel amplitude programmable
+Date:   Thu, 15 Oct 2020 20:27:07 +0200
+Message-Id: <20201015182710.54795-5-jacopo+renesas@jmondi.org>
 X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20201015182710.54795-1-jacopo+renesas@jmondi.org>
+References: <20201015182710.54795-1-jacopo+renesas@jmondi.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
-  v2 of support for RDACM21 camera module in this series.
+Instrument the function that configures the reverse channel with a
+programmable amplitude value.
 
-Patch [1/7] introduces the camera module driver.
-Only change compared to v1:
-- Increase pixel clock to 55MHz
+This change serves to prepare to adjust the reverse channel amplitude
+depending on the remote end high-threshold configuration.
 
-From [2/7] to [5/7] there's a proposal of a possible way to support
-both RDACM20 and RDACM21 with the same deserializer driver.
-See v1 cover letter for details:
-https://www.spinics.net/lists/linux-renesas-soc/msg52886.html
+Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+---
+ drivers/media/i2c/max9286.c | 22 ++++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
 
-I have tested on Eagle V3M with 4 RDACM21, but the whole point of
-this series is to retain compatibility with RDACM20.
-
-For this reason I have included 2 patches on top, not intended for merge
-that re-propose DTS support for the MAXIM max9286 expansion board connected
-to Salvator-X and add the newly introduced property to the DTS file.
-
-Kieran, I know you have a working setup with RDACM20, the final two patches are
-meant for ease your testing. Can you give this series a spin ?
-For your convenience I pushed a branch
-git://jmondi.org/linux #gmsl/jmondi/renesas-drivers-2020-10-13-v5.9/rdacm21_high-threshold
-
-Series based on latest renesas-drivers tag: renesas-drivers-2020-10-13-v5.9
-
-If I get a confirmation this setup works on Salvator-X, I'll submit the new
-property for inclusion to devicetree people, which I have left out at the
-moment.
-
-Thanks
-  j
-
-Jacopo Mondi (6):
-  media: i2c: Add driver for RDACM21 camera module
-  dt-bindings: media: max9286: Document 'maxim,high-threshold'
-  media: i2c: max9286: Break-out reverse channel setup
-  media: i2c: max9286: Make channel amplitude programmable
-  media: i2c: max9286: Configure reverse channel amplitude
-  [DNI] arm64: dts: renesas: salvator-x-max9286: Use high-threshold
-
-Laurent Pinchart (1):
-  arm64: dts: renesas: salvator-x: Add MAX9286 expansion board
-
- .../bindings/media/i2c/maxim,max9286.yaml     |  15 +
- MAINTAINERS                                   |  12 +
- .../boot/dts/renesas/salvator-x-max9286.dtsi  | 396 +++++++++++++
- drivers/media/i2c/Kconfig                     |  13 +
- drivers/media/i2c/Makefile                    |   2 +
- drivers/media/i2c/max9286.c                   |  54 +-
- drivers/media/i2c/rdacm21.c                   | 538 ++++++++++++++++++
- 7 files changed, 1020 insertions(+), 10 deletions(-)
- create mode 100644 arch/arm64/boot/dts/renesas/salvator-x-max9286.dtsi
- create mode 100644 drivers/media/i2c/rdacm21.c
-
---
+diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
+index 89a7248f5c25..163e102199e3 100644
+--- a/drivers/media/i2c/max9286.c
++++ b/drivers/media/i2c/max9286.c
+@@ -906,19 +906,29 @@ static void max9286_v4l2_unregister(struct max9286_priv *priv)
+  * Probe/Remove
+  */
+ 
+-static void max9286_reverse_channel_setup(struct max9286_priv *priv)
++static void max9286_reverse_channel_setup(struct max9286_priv *priv,
++					  unsigned int chan_amplitude)
+ {
++	/* Reverse channel transmission time: default to 1. */
++	u8 chan_config = MAX9286_REV_TRF(1);
++
+ 	/*
+ 	 * Reverse channel setup.
+ 	 *
+ 	 * - Enable custom reverse channel configuration (through register 0x3f)
+ 	 *   and set the first pulse length to 35 clock cycles.
+-	 * - Increase the reverse channel amplitude to 170mV to accommodate the
+-	 *   high threshold enabled by the serializer driver.
++	 * - Adjust reverse channel amplitude: values > 130 are programmed
++	 *   using the additional +100mV REV_AMP_X boost flag
+ 	 */
+ 	max9286_write(priv, 0x3f, MAX9286_EN_REV_CFG | MAX9286_REV_FLEN(35));
+-	max9286_write(priv, 0x3b, MAX9286_REV_TRF(1) | MAX9286_REV_AMP(70) |
+-		      MAX9286_REV_AMP_X);
++
++	if (chan_amplitude > 100) {
++		/* It is not possible express values (100 < x < 130) */
++		chan_amplitude = chan_amplitude < 130
++			       ? 30 : chan_amplitude - 100;
++		chan_config |= MAX9286_REV_AMP_X;
++	}
++	max9286_write(priv, 0x3b, chan_config | MAX9286_REV_AMP(chan_amplitude));
+ 	usleep_range(2000, 2500);
+ }
+ 
+@@ -957,7 +967,7 @@ static int max9286_setup(struct max9286_priv *priv)
+ 	 * only. This should be disabled after the mux is initialised.
+ 	 */
+ 	max9286_configure_i2c(priv, true);
+-	max9286_reverse_channel_setup(priv);
++	max9286_reverse_channel_setup(priv, 170);
+ 
+ 	/*
+ 	 * Enable GMSL links, mask unused ones and autodetect link
+-- 
 2.28.0
 
