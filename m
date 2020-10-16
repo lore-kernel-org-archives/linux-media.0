@@ -2,120 +2,248 @@ Return-Path: <SRS0=DXSC=DX=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53113C43467
-	for <linux-media@archiver.kernel.org>; Fri, 16 Oct 2020 07:54:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75202C433DF
+	for <linux-media@archiver.kernel.org>; Fri, 16 Oct 2020 07:54:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0028E2084C
-	for <linux-media@archiver.kernel.org>; Fri, 16 Oct 2020 07:54:32 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="OPXG7m+s"
+	by mail.kernel.org (Postfix) with ESMTP id 1F71E207F7
+	for <linux-media@archiver.kernel.org>; Fri, 16 Oct 2020 07:54:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404888AbgJPHy3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 16 Oct 2020 03:54:29 -0400
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:11276 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404799AbgJPHy2 (ORCPT
+        id S2404903AbgJPHyp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 16 Oct 2020 03:54:45 -0400
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:57869 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404864AbgJPHyp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 16 Oct 2020 03:54:28 -0400
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5f8951870000>; Fri, 16 Oct 2020 00:53:43 -0700
-Received: from [10.2.49.77] (172.20.13.39) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 16 Oct
- 2020 07:54:19 +0000
-Subject: Re: [PATCH v2 05/17] mm/frame-vector: Use FOLL_LONGTERM
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-CC:     <kvm@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-s390@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Pawel Osciak <pawel@osciak.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        "Kyungmin Park" <kyungmin.park@samsung.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Jan Kara <jack@suse.cz>,
-        Dan Williams <dan.j.williams@intel.com>
-References: <20201009075934.3509076-1-daniel.vetter@ffwll.ch>
- <20201009075934.3509076-6-daniel.vetter@ffwll.ch>
-From:   John Hubbard <jhubbard@nvidia.com>
-Message-ID: <4685181e-8306-0d96-8be6-592b3c563cbf@nvidia.com>
-Date:   Fri, 16 Oct 2020 00:54:18 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        Fri, 16 Oct 2020 03:54:45 -0400
+X-Originating-IP: 93.34.118.233
+Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id B3E9760003;
+        Fri, 16 Oct 2020 07:54:40 +0000 (UTC)
+Date:   Fri, 16 Oct 2020 11:54:25 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        laurent.pinchart+renesas@ideasonboard.com,
+        niklas.soderlund+renesas@ragnatech.se, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hyun Kwon <hyunk@xilinx.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: Re: [PATCH v2 5/7] media: i2c: max9286: Configure reverse channel
+ amplitude
+Message-ID: <20201016095425.ywmxsv5gjhoky7e2@uno.localdomain>
+References: <20201015182710.54795-1-jacopo+renesas@jmondi.org>
+ <20201015182710.54795-6-jacopo+renesas@jmondi.org>
+ <daa257eb-62a7-1996-082b-eecda8251b61@ideasonboard.com>
 MIME-Version: 1.0
-In-Reply-To: <20201009075934.3509076-6-daniel.vetter@ffwll.ch>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- HQMAIL107.nvidia.com (172.20.187.13)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1602834823; bh=x8+KhcjN/0jeBmkHwcjBNjUK8qbDE0ZVZJYKZ9Z6VGs=;
-        h=Subject:To:CC:References:From:Message-ID:Date:User-Agent:
-         MIME-Version:In-Reply-To:Content-Type:Content-Language:
-         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
-        b=OPXG7m+swcryyW3+1c3mxRCD9ELJ64r6RX1Dgjsv/DxKINT3TrWkfzRvFH5oOjwQ9
-         kbmWxE8cjt++1sfq9zZBm7pAsjxLHRKxIkJrIYBO5d5BHLfs1GBTG4uNWzgJwAYEib
-         a0tpEVj2BXEbDUUj0WNA08KLGk0UpBLrh6Q4zl4oRKuwi2vFzQU7IWPvzl60U5doRa
-         9Sx7wqrwS1T6lY56FeeLMgq9fZLnJB5MNWWrmUCdHStngTzwSQOW6ZGYVnKoe93gas
-         pNw8s4iejdBCZ9jkBUIDbZgPpbSPLosjj5nPK4785xOzYYi5NQgwhH2Nz6WyvBj4Gr
-         OGagG2GGGM95w==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <daa257eb-62a7-1996-082b-eecda8251b61@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 10/9/20 12:59 AM, Daniel Vetter wrote:
-...
-> @@ -48,40 +47,25 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
->   
->   	start = untagged_addr(start);
->   
-> -	mmap_read_lock(mm);
-> -	locked = 1;
-> -	vma = find_vma_intersection(mm, start, start + 1);
-> -	if (!vma) {
-> -		ret = -EFAULT;
-> -		goto out;
-> -	}
-> -
-> -	/*
-> -	 * While get_vaddr_frames() could be used for transient (kernel
-> -	 * controlled lifetime) pinning of memory pages all current
-> -	 * users establish long term (userspace controlled lifetime)
-> -	 * page pinning. Treat get_vaddr_frames() like
-> -	 * get_user_pages_longterm() and disallow it for filesystem-dax
-> -	 * mappings.
-> -	 */
-> -	if (vma_is_fsdax(vma)) {
-> -		ret = -EOPNOTSUPP;
-> -		goto out;
-> -	}
-> -
-> -	if (!(vma->vm_flags & (VM_IO | VM_PFNMAP))) {
-> +	ret = pin_user_pages_fast(start, nr_frames,
-> +				  FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
-> +				  (struct page **)(vec->ptrs));
-> +	if (ret > 0) {
+Hi Kieran,
 
-None of the callers that we have today will accept anything less than
-ret == nr_frames. And the whole partially pinned region idea turns out
-to be just not useful for almost everyone, from what I recall of the gup/pup
-call sites. So I wonder if we should just have get_vaddr_frames do the
-cleanup here and return -EFAULT, if ret != nr_frames ?
+On Thu, Oct 15, 2020 at 08:52:01PM +0100, Kieran Bingham wrote:
+> Hi Jacopo,
+>
+> On 15/10/2020 19:27, Jacopo Mondi wrote:
+> > Adjust reverse channel amplitude according to the presence of
+> > the 'high-threshold" DTS property.
+> >
+> > If no high threshold compensation is required, start with a low
+> > amplitude (100mV) and increase it after the remote serializers
+> > have probed and have enabled noise immunity on their reverse
+> > channels.
+> >
+> > If high threshold compensation is required, configure the reverse
+> > channel with a 170mV amplitude before the remote serializers have
+> > probed.
+> >
+> > This change is required for both rdacm20 and rdacm21 camera modules
+> > to be correctly probed when used in combination with the max9286
+> > deserializer.
+> >
+> > Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+> > ---
+> >  drivers/media/i2c/max9286.c | 74 +++++++++++++++++++++++--------------
+> >  1 file changed, 47 insertions(+), 27 deletions(-)
+> >
+> > diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
+> > index 163e102199e3..4b59a9e0228a 100644
+> > --- a/drivers/media/i2c/max9286.c
+> > +++ b/drivers/media/i2c/max9286.c
+> > @@ -163,6 +163,8 @@ struct max9286_priv {
+> >  	unsigned int mux_channel;
+> >  	bool mux_open;
+> >
+> > +	bool high_threshold;
+> > +
+> >  	struct v4l2_ctrl_handler ctrls;
+> >  	struct v4l2_ctrl *pixelrate;
+> >
+> > @@ -436,6 +438,32 @@ static int max9286_check_config_link(struct max9286_priv *priv,
+> >  	return 0;
+> >  }
+> >
+> > +static void max9286_reverse_channel_setup(struct max9286_priv *priv,
+> > +					  unsigned int chan_amplitude)
+>
+> This looks like you're adding a new function - how about we add this
+> function here, in the first place when you add it in 3/7
+>
 
-thanks,
--- 
-John Hubbard
-NVIDIA
+I'll move it up in 3/7
+
+> > +{
+> > +	/* Reverse channel transmission time: default to 1. */
+> > +	u8 chan_config = MAX9286_REV_TRF(1);
+> > +
+> > +	/*
+> > +	 * Reverse channel setup.
+> > +	 *
+> > +	 * - Enable custom reverse channel configuration (through register 0x3f)
+> > +	 *   and set the first pulse length to 35 clock cycles.
+> > +	 * - Adjust reverse channel amplitude: values > 130 are programmed
+> > +	 *   using the additional +100mV REV_AMP_X boost flag
+> > +	 */
+> > +	max9286_write(priv, 0x3f, MAX9286_EN_REV_CFG | MAX9286_REV_FLEN(35));
+> > +
+> > +	if (chan_amplitude > 100) {
+> > +		/* It is not possible express values (100 < x < 130) */
+> > +		chan_amplitude = chan_amplitude < 130
+> > +			       ? 30 : chan_amplitude - 100;
+> > +		chan_config |= MAX9286_REV_AMP_X;
+> > +	}
+> > +	max9286_write(priv, 0x3b, chan_config | MAX9286_REV_AMP(chan_amplitude));
+> > +	usleep_range(2000, 2500);
+> > +}
+> > +
+> >  /* -----------------------------------------------------------------------------
+> >   * V4L2 Subdev
+> >   */
+> > @@ -531,10 +559,14 @@ static int max9286_notify_bound(struct v4l2_async_notifier *notifier,
+> >  	 * All enabled sources have probed and enabled their reverse control
+> >  	 * channels:
+> >  	 *
+> > +	 * - Increase the reverse channel amplitude to compensate for the
+> > +	 *   remote ends high threshold, if not done already
+> >  	 * - Verify all configuration links are properly detected
+> >  	 * - Disable auto-ack as communication on the control channel are now
+> >  	 *   stable.
+> >  	 */
+> > +	if (!priv->high_threshold)
+> > +		max9286_reverse_channel_setup(priv, 170);
+>
+> is it troublesome to re-set it if it's already set? I guess it's just
+> unnecessary. so that's fine.
+>
+> >  	max9286_check_config_link(priv, priv->source_mask);
+> >
+> >  	/*
+> > @@ -906,32 +938,6 @@ static void max9286_v4l2_unregister(struct max9286_priv *priv)
+> >   * Probe/Remove
+> >   */
+> >
+> > -static void max9286_reverse_channel_setup(struct max9286_priv *priv,
+> > -					  unsigned int chan_amplitude)
+> > -{
+> > -	/* Reverse channel transmission time: default to 1. */
+> > -	u8 chan_config = MAX9286_REV_TRF(1);
+> > -
+> > -	/*
+> > -	 * Reverse channel setup.
+> > -	 *
+> > -	 * - Enable custom reverse channel configuration (through register 0x3f)
+> > -	 *   and set the first pulse length to 35 clock cycles.
+> > -	 * - Adjust reverse channel amplitude: values > 130 are programmed
+> > -	 *   using the additional +100mV REV_AMP_X boost flag
+> > -	 */
+> > -	max9286_write(priv, 0x3f, MAX9286_EN_REV_CFG | MAX9286_REV_FLEN(35));
+> > -
+> > -	if (chan_amplitude > 100) {
+> > -		/* It is not possible express values (100 < x < 130) */
+> > -		chan_amplitude = chan_amplitude < 130
+> > -			       ? 30 : chan_amplitude - 100;
+> > -		chan_config |= MAX9286_REV_AMP_X;
+> > -	}
+> > -	max9286_write(priv, 0x3b, chan_config | MAX9286_REV_AMP(chan_amplitude));
+> > -	usleep_range(2000, 2500);
+> > -}
+> > -
+> >  static int max9286_setup(struct max9286_priv *priv)
+> >  {
+> >  	/*
+> > @@ -967,7 +973,15 @@ static int max9286_setup(struct max9286_priv *priv)
+> >  	 * only. This should be disabled after the mux is initialised.
+> >  	 */
+> >  	max9286_configure_i2c(priv, true);
+> > -	max9286_reverse_channel_setup(priv, 170);
+> > +
+> > +	/*
+> > +	 * Compensate the remote end high threshold with a larger channel
+> > +	 * amplitude if necessary.
+> > +	 */
+> > +	if (priv->high_threshold)
+> > +		max9286_reverse_channel_setup(priv, 170);
+> > +	else
+> > +		max9286_reverse_channel_setup(priv, 100);
+>
+> Hrm... ternery is more concise here, but is it helpful?
+>
+
+Ternary is nicer, you're right!
+
+>   max9286_reverse_channel_setup(priv, priv->high_threshold ? 170 : 100);
+>
+> The high-threshold could also be parsed in
+> max9286_reverse_channel_setup(), but I like it being passed in.
+>
+> >
+> >  	/*
+> >  	 * Enable GMSL links, mask unused ones and autodetect link
+> > @@ -1235,6 +1249,12 @@ static int max9286_parse_dt(struct max9286_priv *priv)
+> >  	}
+> >  	of_node_put(node);
+> >
+> > +	/*
+> > +	 * Parse 'high_threshold' property to configure the reverse channel
+> > +	 * amplitude.
+> > +	 */
+> > +	priv->high_threshold = device_property_present(dev, "high_threshold");
+> > +
+>
+> Oh, I think I like this, it's a neat way to express what it needs to do
+> from the DT depending on the attached cameras.
+>
+> It's sort of dependant upon the cameras though, I guess making this
+> something that we query from the remote endpoint isn't so easy ...?
+
+That's the real question. Is it fair to express as a deserializer
+property a setting of the remote serializer(s) ? What if the remotes
+have different configurations (we had to play with pre-programmed and
+non-pre-programmed RDACM20s in the past iirc).
+
+I've detailed a few possible way forward and their pros and cons in
+the v1 cover letter [1] and I'm happy to discuss them as I'm not sure
+this is the best possible way forward.
+
+Thanks
+  j
+
+[1] For reference: https://www.spinics.net/lists/linux-renesas-soc/msg52886.html
+
+>
+>
+>
+> >  	priv->route_mask = priv->source_mask;
+> >
+> >  	return 0;
+> >
+>
