@@ -2,198 +2,193 @@ Return-Path: <SRS0=DXSC=DX=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A184C433E7
-	for <linux-media@archiver.kernel.org>; Fri, 16 Oct 2020 13:27:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3201FC433E7
+	for <linux-media@archiver.kernel.org>; Fri, 16 Oct 2020 13:52:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B28F12087D
-	for <linux-media@archiver.kernel.org>; Fri, 16 Oct 2020 13:27:33 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="f8apDp9M"
+	by mail.kernel.org (Postfix) with ESMTP id D6AC62063A
+	for <linux-media@archiver.kernel.org>; Fri, 16 Oct 2020 13:52:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407657AbgJPN1c (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 16 Oct 2020 09:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44740 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2407253AbgJPN1b (ORCPT
+        id S2408418AbgJPNw3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 16 Oct 2020 09:52:29 -0400
+Received: from relay10.mail.gandi.net ([217.70.178.230]:41531 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2408355AbgJPNw3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 16 Oct 2020 09:27:31 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC3FC0613D3;
-        Fri, 16 Oct 2020 06:27:31 -0700 (PDT)
-Received: from [192.168.0.20] (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 30A74528;
-        Fri, 16 Oct 2020 15:27:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1602854849;
-        bh=HxEc82FtEItR3ZGOUen8zEBFZpr6AfpnCCwNtqxTMiI=;
-        h=Reply-To:Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=f8apDp9MfctycBMrK19+YzBXEe15Vgd3jAvCWQPVpt/yG+iK01VQCrax8r8MGbUQO
-         YvFZGZaz0S9VSKPGjWPI7OsGpRPTUDRMMDWmH+0uraiod2eTVuHpxflkOvNt6ksbaQ
-         QIikFq+O+NDd7Cz7TmnmEGBZGDb6Cm4SI5ldjFeQ=
-Reply-To: kieran.bingham+renesas@ideasonboard.com
-Subject: Re: [PATCH v3 2/7] dt-bindings: media: max9286: Document
- 'maxim,high-threshold'
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hyun Kwon <hyunk@xilinx.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-References: <20201016120625.64337-1-jacopo+renesas@jmondi.org>
- <20201016120625.64337-3-jacopo+renesas@jmondi.org>
- <CAMuHMdUof5Yb=5notGDYycJtZyLzGp2RPjJ=m6GVodBRDxw9ow@mail.gmail.com>
- <20201016145603.bapqjxsvezn6flyv@uno.localdomain>
- <CAMuHMdWwK=3yOQ8b5suN-U8YtGVomjOZ+gZrTHpUaix2xDP8hw@mail.gmail.com>
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Organization: Ideas on Board
-Message-ID: <cb3d0334-29c0-a79e-b716-6ab49480619d@ideasonboard.com>
-Date:   Fri, 16 Oct 2020 14:27:26 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Fri, 16 Oct 2020 09:52:29 -0400
+X-Greylist: delayed 3366 seconds by postgrey-1.27 at vger.kernel.org; Fri, 16 Oct 2020 09:52:27 EDT
+Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 54FD9240010;
+        Fri, 16 Oct 2020 13:52:25 +0000 (UTC)
+Date:   Fri, 16 Oct 2020 17:52:10 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Niklas =?utf-8?Q?S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH 1/5] rcar-vin: Use scratch buffer when not in running
+ state
+Message-ID: <20201016155210.lz6zb4kwqhwe3hod@uno.localdomain>
+References: <20201015231408.2399933-1-niklas.soderlund+renesas@ragnatech.se>
+ <20201015231408.2399933-2-niklas.soderlund+renesas@ragnatech.se>
 MIME-Version: 1.0
-In-Reply-To: <CAMuHMdWwK=3yOQ8b5suN-U8YtGVomjOZ+gZrTHpUaix2xDP8hw@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201015231408.2399933-2-niklas.soderlund+renesas@ragnatech.se>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jacopo,
+Hi Niklas,
 
-On 16/10/2020 14:04, Geert Uytterhoeven wrote:
-> Hi Jacopo,
-> 
-> On Fri, Oct 16, 2020 at 2:56 PM Jacopo Mondi <jacopo@jmondi.org> wrote:
->> On Fri, Oct 16, 2020 at 01:50:34PM +0200, Geert Uytterhoeven wrote:
->>> On Fri, Oct 16, 2020 at 12:09 PM Jacopo Mondi <jacopo+renesas@jmondi.org> wrote:
->>>> Document the 'maxim,high-threshold' vendor property in the bindings
->>>> document of the max9286 driver.
->>>>
->>>> The newly introduced boolean property allows controlling the initial
->>>> configuration of the GMSL reverse control channel to accommodate
->>>> remote serializers pre-programmed with the high threshold power
->>>> supply noise immunity enabled.
->>>>
->>>> Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
->>>
->>> Thanks for your patch!
->>>
->>>> --- a/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
->>>> +++ b/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
->>>> @@ -51,6 +51,19 @@ properties:
->>>>    '#gpio-cells':
->>>>      const: 2
->>>>
->>>> +  maxim,high-threshold:
->>>> +    description: |
->>>> +      A boolean property to increase the initial amplitude of the reverse
->>>> +      control channel to compensate for remote serializers pre-programmed with
->>>> +      high threshold noise-immunity.
->>>> +
->>>> +      Some camera modules (in example the RDACM20 one) include an on-board MCU
->>>> +      that pre-programs the embedded serializer with reverse channel power
->>>> +      supply noise immunity enabled. The deserializer shall increase its
->>>> +      reverse channel amplitude to compensate that and be able to communicate
->>>> +      with the remote end.
->>>> +    type: boolean
->>>
->>> Does this "high" threshold correspond to some numerical value?
->>> I.e. could we run into a future need to support more values than just
->>> true/false?
->>> If yes, we may want to use a numerical value from the start.
->>
->> So, this boolean property controls the initial setting of the reverse
->> channel amplitude, which has to be opportunely adjusted to be able to
->> probe the remote devices as i2c messages are bridged on the reverse
->> channel from the deserializer to the remote serializers.
->>
->> It also implies that if the initial setting is not "high" it has to be
->> increased after the remotes have probed, as it is assumed at the end
->> the remotes' probe() routine they have enabled their high threshold
->> noise immunity feature.
->>
->> The register that controls the de-serializer reverse channel amplitude
->> is not fully documented in the chip manual version I have, but the
->> application developer guide shows that it can range from 30mV to
->> 200mV. The same developer guide shows 100mV and 170mV as "initial" and
->> "high threshold" values to be used.
->>
->> On the serializer's side (MAX9271 at least) high threshold is a
->> boolean control, it is either enabled or disabled.
->>
->> Hence I suspect that for the max9286-max9271 combo, using fixed 100mV
->> and 170mV values is enough. Other serializers might allow a more fine
->> grained control of the noise cancelling threshold, and might require a
->> more precise adjustment of the deserializer side. I'm honestly not
->> sure at this point not having seen any other one.
->>
->> So yes, this is a deserializer setting that depends on the serializer
->> in use, and I'm not 100% comfortable expressing it as a deserializer
->> property. That said, having an initial numerical value might serve the
->> same purpose allowing more flexibility, if other serializers require a
->> more precise control of the initial amplitude.
+On Fri, Oct 16, 2020 at 01:14:04AM +0200, Niklas Söderlund wrote:
+> In its early stages the VIN driver did not use an internal scratch
+> buffer. This lead to a unnecessary complex start and stop behavior,
 
-And one of the benefits of your series, is that you've codified the
-conversion from the input value to the register value, which is really
-helpful.
+This leads
 
-I think the fact that you've implemented the required feature, means
-exposing the value here makes more sense.
+> specially for TB/BT. The driver now always allocates a scratch buffer to
+> deal with buffer under-runs, use the scratch buffer to also simplify
+> starting and stopping.
+>
+> When capture is starting use the scratch buffer instead of a user-space
+> buffers while syncing the driver with the hardware state. This allows
+> the driver to know that no user-space buffers is given to the hardware
 
-However, once exposed outside of the driver, I'd add some clamping on
-the allowed min/max values in the max9286_reverse_channel_setup() function.
+s/buffers/buffer
 
->>
->> After the remotes have probed, we could also re-explore the
->> possibility of getting the bus configuration using get_mbus_config, as
->> detailed in the v1 cover letter [1] as at that time their sub-devices
->> have been registered and we can call operations on them. But again,
->> this might be not required at all.
-> 
-> Sounds like "maxim,<foo>-threshold-mV" is the way to go?
-> If you don't know the exact register configuration, and need to
-> convert to a boolean in the driver, you can still use something like
-> "threshold < 150 ? ... : ...".
+> before the running state is reached.
+>
+> When capture is stopping use the scratch buffer instead of leaving the
+> user-space buffers in place and add a check that all user-space buffers
+> are processed by the hardware before transitioning from the stopping to
+> stopped state. This allows the driver to know all user-space buffers
+> given to the hardware are fully processed.
+>
+> This change in itself does not improve the driver much but it paves way
 
-This sounds like a reasonable path to me - I'm still really weary that
-it's defining it on the deser, rather than the serialiser - but perhaps
-there's no current option to do that.
+paves the way ?
 
+> for future simplifications and enhancements. One direct improvement of
+> this change is that TB/BT buffers returned to user-space wile stopping
 
-I presume we can't wait until we can obtain a value through
-get_mbus_config() ?
+s/wile/while
 
-That's going to be chicken and egg, as the camera can't probe until we
-have the i2c channels set up ... yet the information we want, doesn't
-need the bus to be configured... so there's indeed some missing pieces
-to the puzzle for that to happen ;-(
+> will always contains both fields, that was not guaranteed before.
 
-also - I guess the other key issue that would make me believe we keep
-this as a deserialiser property, is that it affects the whole
-configuration right? It's not just one of the four links - it's all of
-them collectively.
+contain
 
-(well, unless we called max9286_reverse_channel_setup() separately for
-each link bring up ...)
+>
+> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+> ---
+>  drivers/media/platform/rcar-vin/rcar-dma.c | 30 +++++++++++++++-------
+>  1 file changed, 21 insertions(+), 9 deletions(-)
+>
+> diff --git a/drivers/media/platform/rcar-vin/rcar-dma.c b/drivers/media/platform/rcar-vin/rcar-dma.c
+> index 692dea300b0de8b5..ca90bde8d29f77d1 100644
+> --- a/drivers/media/platform/rcar-vin/rcar-dma.c
+> +++ b/drivers/media/platform/rcar-vin/rcar-dma.c
+> @@ -905,7 +905,7 @@ static void rvin_fill_hw_slot(struct rvin_dev *vin, int slot)
+>  				vin->format.sizeimage / 2;
+>  			break;
+>  		}
+> -	} else if (list_empty(&vin->buf_list)) {
+> +	} else if (vin->state != RUNNING || list_empty(&vin->buf_list)) {
 
---
-Kieran
+Does this make the
 
+	for (slot = 0; slot < HW_BUFFER_NUM; slot++)
+		rvin_fill_hw_slot(vin, slot);
 
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
+cycle in rvin_capture_start() a no-op, as it already sets
 
+	for (slot = 0; slot < HW_BUFFER_NUM; slot++) {
+		vin->buf_hw[slot].buffer = NULL;
+		vin->buf_hw[slot].type = FULL;
+	}
+
+just before that entering the loop ?
+
+>  		vin->buf_hw[slot].buffer = NULL;
+>  		vin->buf_hw[slot].type = FULL;
+>  		phys_addr = vin->scratch_phys;
+> @@ -998,12 +998,6 @@ static irqreturn_t rvin_irq(int irq, void *data)
+>  		goto done;
+>  	}
+>
+> -	/* Nothing to do if capture status is 'STOPPING' */
+> -	if (vin->state == STOPPING) {
+> -		vin_dbg(vin, "IRQ while state stopping\n");
+> -		goto done;
+> -	}
+> -
+>  	/* Prepare for capture and update state */
+>  	vnms = rvin_read(vin, VNMS_REG);
+>  	slot = (vnms & VNMS_FBS_MASK) >> VNMS_FBS_SHIFT;
+> @@ -1313,14 +1307,32 @@ static int rvin_start_streaming(struct vb2_queue *vq, unsigned int count)
+>  static void rvin_stop_streaming(struct vb2_queue *vq)
+>  {
+>  	struct rvin_dev *vin = vb2_get_drv_priv(vq);
+> +	unsigned int i, retries;
+>  	unsigned long flags;
+> -	int retries = 0;
+> +	bool buffersFreed;
+>
+>  	spin_lock_irqsave(&vin->qlock, flags);
+>
+>  	vin->state = STOPPING;
+>
+> +	/* Wait until only scratch buffer is used, max 3 interrupts. */
+
+nit: I see RVIN_RETRIES being 10. The number of buffers is 3. The number
+of interrutps is less relevant than the fact we might end up waiting
+1 second (10 * 100ms) before stopping ?
+
+> +	retries = 0;
+> +	while (retries++ < RVIN_RETRIES) {
+
+> +		for (i = 0; i < HW_BUFFER_NUM; i++)
+> +			if (vin->buf_hw[i].buffer)
+> +				buffersFreed = false;
+> +
+> +		if (buffersFreed)
+> +			break;
+> +
+> +		spin_unlock_irqrestore(&vin->qlock, flags);
+> +		msleep(RVIN_TIMEOUT_MS);
+
+As you're waiting for an interrupt, msleep_interruptible() might be a
+better choice ?
+
+Mostly just nits, so:
+Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+
+Thanks
+  j
+
+> +		spin_lock_irqsave(&vin->qlock, flags);
+> +	}
+> +
+>  	/* Wait for streaming to stop */
+> +	retries = 0;
+>  	while (retries++ < RVIN_RETRIES) {
+>
+>  		rvin_capture_stop(vin);
+> @@ -1336,7 +1348,7 @@ static void rvin_stop_streaming(struct vb2_queue *vq)
+>  		spin_lock_irqsave(&vin->qlock, flags);
+>  	}
+>
+> -	if (vin->state != STOPPED) {
+> +	if (!buffersFreed || vin->state != STOPPED) {
+>  		/*
+>  		 * If this happens something have gone horribly wrong.
+>  		 * Set state to stopped to prevent the interrupt handler
+> --
+> 2.28.0
+>
