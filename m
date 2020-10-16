@@ -2,357 +2,459 @@ Return-Path: <SRS0=DXSC=DX=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40A58C4363A
-	for <linux-media@archiver.kernel.org>; Fri, 16 Oct 2020 15:55:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94D8DC43467
+	for <linux-media@archiver.kernel.org>; Fri, 16 Oct 2020 16:02:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D96AD20874
-	for <linux-media@archiver.kernel.org>; Fri, 16 Oct 2020 15:55:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1602863755;
-	bh=z2tbTr7tnHlmYmxqskDFDAcJg7zvPas5KxUnQhaJZ48=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=sokFPUmj3yQ39JhD5083o7rHfnP/TeUBoNZJmMQ7eGe7Oc39jkSAHV0Lm8PyAnd1y
-	 yGvzKu6sex1E3aLHgtuyzOuAh6edwcrHZ3OTHCT1AEP2i2F62hQW1ayMAO1w3BTCti
-	 eN+C93q0OJzLQslmLyh/qLW5T7KAEsugD/gGRrzo=
+	by mail.kernel.org (Postfix) with ESMTP id 43973207BC
+	for <linux-media@archiver.kernel.org>; Fri, 16 Oct 2020 16:02:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2410478AbgJPPzu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 16 Oct 2020 11:55:50 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:42215 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2408799AbgJPPzt (ORCPT
+        id S2410529AbgJPQCd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 16 Oct 2020 12:02:33 -0400
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:52549 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2410466AbgJPQCd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 16 Oct 2020 11:55:49 -0400
-Received: by mail-ot1-f68.google.com with SMTP id 65so2818872otu.9;
-        Fri, 16 Oct 2020 08:55:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+Ez8CC1zWtrfiNp8XEXa9lgUhVSM8GoPykiMmK2kDQo=;
-        b=BiijRR4hIENCQmXMG2KCB5LYAcsT4kFMOvY8USlJfegWiNh7A+oZ+SB+3ITSUGIhH6
-         E0FYHyyUI87z4zHYzj4WhaMo8Lp7HVXz8uIfZ0nZd/oXpJTSJI9Gj3+wXU4Ycro42+gw
-         OOozTnnqy93q9XPnVqLESPBDky1PJrohppaGuFQNNomZjAjvXBRpb6VVmklfPFVItwLt
-         0M+omGa1qpvs06f2rKWPvswb/nR2elLp4us8BV3Ur3/4LWeQqdUDUB8GIaabQqc5+QI4
-         9hC2FUHvaIIbvFTJBW0Tq9fZYZAfCagAi9JzpMIdQIQ2ZmHqCdC2pdB+YFL9wWQ9FwRk
-         Oo3Q==
-X-Gm-Message-State: AOAM531snpa0UKicTD/ZH83PdRdCM5HG2AOcBknvyoAFWU+tWRuEuiU9
-        PX2DKJkejtIjTynb2awQpw==
-X-Google-Smtp-Source: ABdhPJz+IerI5d7lXT42c2ORwBHcv21/DYUgbbNNBcNWL6ME2VKukKGO7g/qHIz5BgdbQxG08G+m9A==
-X-Received: by 2002:a9d:6a85:: with SMTP id l5mr3258056otq.77.1602863747644;
-        Fri, 16 Oct 2020 08:55:47 -0700 (PDT)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id h25sm1064530otj.41.2020.10.16.08.55.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Oct 2020 08:55:47 -0700 (PDT)
-Received: (nullmailer pid 1483632 invoked by uid 1000);
-        Fri, 16 Oct 2020 15:55:46 -0000
-Date:   Fri, 16 Oct 2020 10:55:46 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Ramesh Shanmugasundaram <rashanmu@gmail.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: Re: [PATCH v4 2/5] media: dt-bindings: media: renesas,drif: Convert
- to json-schema
-Message-ID: <20201016155546.GB1474949@bogus>
-References: <20201014155719.15120-1-fabrizio.castro.jz@renesas.com>
- <20201014155719.15120-3-fabrizio.castro.jz@renesas.com>
+        Fri, 16 Oct 2020 12:02:33 -0400
+X-Originating-IP: 93.34.118.233
+Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 9C508E000F;
+        Fri, 16 Oct 2020 16:02:28 +0000 (UTC)
+Date:   Fri, 16 Oct 2020 20:02:13 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Rui Miguel Silva <rmfrfs@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, sakari.ailus@linux.intel.com,
+        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] dt-bindings: imx7-mipi-csi2: convert bindings to
+ yaml
+Message-ID: <20201016180213.obpok77vb3rwserd@uno.localdomain>
+References: <20201014142759.726823-1-rmfrfs@gmail.com>
+ <20201014142759.726823-4-rmfrfs@gmail.com>
+ <20201015155251.3npqi2t4oghuguab@uno.localdomain>
+ <20201016145109.lscb56fwfs3k4jct@arch-thunder.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201014155719.15120-3-fabrizio.castro.jz@renesas.com>
+In-Reply-To: <20201016145109.lscb56fwfs3k4jct@arch-thunder.localdomain>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Oct 14, 2020 at 04:57:16PM +0100, Fabrizio Castro wrote:
-> Convert the Renesas DRIF bindings to DT schema and update
-> MAINTAINERS accordingly.
-> 
-> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-> Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
-> v3->v4:
-> * Replace "if" statement with "else" statement for the branch
->   rejecting pinctrl-0 and pinctrl-names properties, as suggested
->   by Geert
-> v2->v3:
-> * Removed the definition of pinctrl-0 and pinctrl-names, as
->   suggested by Geert
-> * Added "power-domains" to the list of required properties,
->   as suggested by Geert
-> v1->v2:
-> * s/controller/Controller/ in the title of renesas,drif.yaml
->   as suggested by Laurent.
-> 
->  .../bindings/media/renesas,drif.txt           | 177 -----------
->  .../bindings/media/renesas,drif.yaml          | 277 ++++++++++++++++++
->  MAINTAINERS                                   |   2 +-
->  3 files changed, 278 insertions(+), 178 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/media/renesas,drif.txt
->  create mode 100644 Documentation/devicetree/bindings/media/renesas,drif.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/media/renesas,drif.txt b/Documentation/devicetree/bindings/media/renesas,drif.txt
-> deleted file mode 100644
-> index 0d8974aa8b38..000000000000
-> --- a/Documentation/devicetree/bindings/media/renesas,drif.txt
-> +++ /dev/null
-> @@ -1,177 +0,0 @@
-> -Renesas R-Car Gen3 Digital Radio Interface controller (DRIF)
-> -------------------------------------------------------------
-> -
-> -R-Car Gen3 DRIF is a SPI like receive only slave device. A general
-> -representation of DRIF interfacing with a master device is shown below.
-> -
-> -+---------------------+                +---------------------+
-> -|                     |-----SCK------->|CLK                  |
-> -|       Master        |-----SS-------->|SYNC  DRIFn (slave)  |
-> -|                     |-----SD0------->|D0                   |
-> -|                     |-----SD1------->|D1                   |
-> -+---------------------+                +---------------------+
-> -
-> -As per datasheet, each DRIF channel (drifn) is made up of two internal
-> -channels (drifn0 & drifn1). These two internal channels share the common
-> -CLK & SYNC. Each internal channel has its own dedicated resources like
-> -irq, dma channels, address space & clock. This internal split is not
-> -visible to the external master device.
-> -
-> -The device tree model represents each internal channel as a separate node.
-> -The internal channels sharing the CLK & SYNC are tied together by their
-> -phandles using a property called "renesas,bonding". For the rest of
-> -the documentation, unless explicitly stated, the word channel implies an
-> -internal channel.
-> -
-> -When both internal channels are enabled they need to be managed together
-> -as one (i.e.) they cannot operate alone as independent devices. Out of the
-> -two, one of them needs to act as a primary device that accepts common
-> -properties of both the internal channels. This channel is identified by a
-> -property called "renesas,primary-bond".
-> -
-> -To summarize,
-> -   - When both the internal channels that are bonded together are enabled,
-> -     the zeroth channel is selected as primary-bond. This channels accepts
-> -     properties common to all the members of the bond.
-> -   - When only one of the bonded channels need to be enabled, the property
-> -     "renesas,bonding" or "renesas,primary-bond" will have no effect. That
-> -     enabled channel can act alone as any other independent device.
-> -
-> -Required properties of an internal channel:
-> --------------------------------------------
-> -- compatible:	"renesas,r8a7795-drif" if DRIF controller is a part of R8A7795 SoC.
-> -		"renesas,r8a7796-drif" if DRIF controller is a part of R8A7796 SoC.
-> -		"renesas,rcar-gen3-drif" for a generic R-Car Gen3 compatible device.
-> -
-> -		When compatible with the generic version, nodes must list the
-> -		SoC-specific version corresponding to the platform first
-> -		followed by the generic version.
-> -
-> -- reg: offset and length of that channel.
-> -- interrupts: associated with that channel.
-> -- clocks: phandle and clock specifier of that channel.
-> -- clock-names: clock input name string: "fck".
-> -- dmas: phandles to the DMA channels.
-> -- dma-names: names of the DMA channel: "rx".
-> -- renesas,bonding: phandle to the other channel.
-> -
-> -Optional properties of an internal channel:
-> --------------------------------------------
-> -- power-domains: phandle to the respective power domain.
-> -
-> -Required properties of an internal channel when:
-> -	- It is the only enabled channel of the bond (or)
-> -	- If it acts as primary among enabled bonds
-> ---------------------------------------------------------
-> -- pinctrl-0: pin control group to be used for this channel.
-> -- pinctrl-names: must be "default".
-> -- renesas,primary-bond: empty property indicating the channel acts as primary
-> -			among the bonded channels.
-> -- port: child port node corresponding to the data input, in accordance with
-> -	the video interface bindings defined in
-> -	Documentation/devicetree/bindings/media/video-interfaces.txt. The port
-> -	node must contain at least one endpoint.
-> -
-> -Optional endpoint property:
-> ----------------------------
-> -- sync-active: Indicates sync signal polarity, 0/1 for low/high respectively.
-> -	       This property maps to SYNCAC bit in the hardware manual. The
-> -	       default is 1 (active high).
-> -
-> -Example:
-> ---------
-> -
-> -(1) Both internal channels enabled:
-> ------------------------------------
-> -
-> -When interfacing with a third party tuner device with two data pins as shown
-> -below.
-> -
-> -+---------------------+                +---------------------+
-> -|                     |-----SCK------->|CLK                  |
-> -|       Master        |-----SS-------->|SYNC  DRIFn (slave)  |
-> -|                     |-----SD0------->|D0                   |
-> -|                     |-----SD1------->|D1                   |
-> -+---------------------+                +---------------------+
-> -
-> -	drif00: rif@e6f40000 {
-> -		compatible = "renesas,r8a7795-drif",
-> -			     "renesas,rcar-gen3-drif";
-> -		reg = <0 0xe6f40000 0 0x64>;
-> -		interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
-> -		clocks = <&cpg CPG_MOD 515>;
-> -		clock-names = "fck";
-> -		dmas = <&dmac1 0x20>, <&dmac2 0x20>;
-> -		dma-names = "rx", "rx";
-> -		power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-> -		renesas,bonding = <&drif01>;
-> -		renesas,primary-bond;
-> -		pinctrl-0 = <&drif0_pins>;
-> -		pinctrl-names = "default";
-> -		port {
-> -			drif0_ep: endpoint {
-> -			     remote-endpoint = <&tuner_ep>;
-> -			};
-> -		};
-> -	};
-> -
-> -	drif01: rif@e6f50000 {
-> -		compatible = "renesas,r8a7795-drif",
-> -			     "renesas,rcar-gen3-drif";
-> -		reg = <0 0xe6f50000 0 0x64>;
-> -		interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
-> -		clocks = <&cpg CPG_MOD 514>;
-> -		clock-names = "fck";
-> -		dmas = <&dmac1 0x22>, <&dmac2 0x22>;
-> -		dma-names = "rx", "rx";
-> -		power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-> -		renesas,bonding = <&drif00>;
-> -	};
-> -
-> -
-> -(2) Internal channel 1 alone is enabled:
-> -----------------------------------------
-> -
-> -When interfacing with a third party tuner device with one data pin as shown
-> -below.
-> -
-> -+---------------------+                +---------------------+
-> -|                     |-----SCK------->|CLK                  |
-> -|       Master        |-----SS-------->|SYNC  DRIFn (slave)  |
-> -|                     |                |D0 (unused)          |
-> -|                     |-----SD-------->|D1                   |
-> -+---------------------+                +---------------------+
-> -
-> -	drif00: rif@e6f40000 {
-> -		compatible = "renesas,r8a7795-drif",
-> -			     "renesas,rcar-gen3-drif";
-> -		reg = <0 0xe6f40000 0 0x64>;
-> -		interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
-> -		clocks = <&cpg CPG_MOD 515>;
-> -		clock-names = "fck";
-> -		dmas = <&dmac1 0x20>, <&dmac2 0x20>;
-> -		dma-names = "rx", "rx";
-> -		power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-> -		renesas,bonding = <&drif01>;
-> -	};
-> -
-> -	drif01: rif@e6f50000 {
-> -		compatible = "renesas,r8a7795-drif",
-> -			     "renesas,rcar-gen3-drif";
-> -		reg = <0 0xe6f50000 0 0x64>;
-> -		interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
-> -		clocks = <&cpg CPG_MOD 514>;
-> -		clock-names = "fck";
-> -		dmas = <&dmac1 0x22>, <&dmac2 0x22>;
-> -		dma-names = "rx", "rx";
-> -		power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-> -		renesas,bonding = <&drif00>;
-> -		pinctrl-0 = <&drif0_pins>;
-> -		pinctrl-names = "default";
-> -		port {
-> -			drif0_ep: endpoint {
-> -			     remote-endpoint = <&tuner_ep>;
-> -			     sync-active = <0>;
-> -			};
-> -		};
-> -	};
-> diff --git a/Documentation/devicetree/bindings/media/renesas,drif.yaml b/Documentation/devicetree/bindings/media/renesas,drif.yaml
-> new file mode 100644
-> index 000000000000..3832ce837553
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/renesas,drif.yaml
-> @@ -0,0 +1,277 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/renesas,drif.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Renesas R-Car Gen3 Digital Radio Interface Controller (DRIF)
-> +
-> +maintainers:
-> +  - Ramesh Shanmugasundaram <rashanmu@gmail.com>
-> +  - Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-> +
-> +description: |
-> +  R-Car Gen3 DRIF is a SPI like receive only slave device. A general
-> +  representation of DRIF interfacing with a master device is shown below.
-> +
-> +  +---------------------+                +---------------------+
-> +  |                     |-----SCK------->|CLK                  |
-> +  |       Master        |-----SS-------->|SYNC  DRIFn (slave)  |
-> +  |                     |-----SD0------->|D0                   |
-> +  |                     |-----SD1------->|D1                   |
-> +  +---------------------+                +---------------------+
-> +
-> +  As per datasheet, each DRIF channel (drifn) is made up of two internal
-> +  channels (drifn0 & drifn1). These two internal channels share the common
-> +  CLK & SYNC. Each internal channel has its own dedicated resources like
-> +  irq, dma channels, address space & clock. This internal split is not
-> +  visible to the external master device.
-> +
-> +  The device tree model represents each internal channel as a separate node.
-> +  The internal channels sharing the CLK & SYNC are tied together by their
-> +  phandles using a property called "renesas,bonding". For the rest of
-> +  the documentation, unless explicitly stated, the word channel implies an
-> +  internal channel.
-> +
-> +  When both internal channels are enabled they need to be managed together
-> +  as one (i.e.) they cannot operate alone as independent devices. Out of the
-> +  two, one of them needs to act as a primary device that accepts common
-> +  properties of both the internal channels. This channel is identified by a
-> +  property called "renesas,primary-bond".
-> +
-> +  To summarize,
-> +     * When both the internal channels that are bonded together are enabled,
-> +       the zeroth channel is selected as primary-bond. This channels accepts
-> +       properties common to all the members of the bond.
-> +     * When only one of the bonded channels need to be enabled, the property
-> +       "renesas,bonding" or "renesas,primary-bond" will have no effect. That
-> +       enabled channel can act alone as any other independent device.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +        - renesas,r8a7795-drif        # R-Car H3
-> +        - renesas,r8a7796-drif        # R-Car M3-W
+Hi Rui,
 
-Note the bot error is from yamllint which just got added to the checks. 
-Need 2 more spaces indent here.
+On Fri, Oct 16, 2020 at 03:51:09PM +0100, Rui Miguel Silva wrote:
+> Hi again Jacopo,
+> On Thu, Oct 15, 2020 at 05:52:51PM +0200, Jacopo Mondi wrote:
+> > Hi Rui,
+> >
+> > On Wed, Oct 14, 2020 at 03:27:59PM +0100, Rui Miguel Silva wrote:
+> > > Convert imx7 mipi csi2 bindings documentation to yaml schema, remove
+> > > the textual document and update MAINTAINERS entry.
+> > >
+> > > Signed-off-by: Rui Miguel Silva <rmfrfs@gmail.com>
+> > > ---
+> > >  .../bindings/media/imx7-mipi-csi2.txt         |  90 ---------
+> > >  .../bindings/media/nxp,imx7-mipi-csi2.yaml    | 181 ++++++++++++++++++
+> > >  MAINTAINERS                                   |   2 +-
+> > >  3 files changed, 182 insertions(+), 91 deletions(-)
+> > >  delete mode 100644 Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt
+> > >  create mode 100644 Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt b/Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt
+> > > deleted file mode 100644
+> > > index 71fd74ed3ec8..000000000000
+> > > --- a/Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt
+> > > +++ /dev/null
+> > > @@ -1,90 +0,0 @@
+> > > -Freescale i.MX7 Mipi CSI2
+> > > -=========================
+> > > -
+> > > -mipi_csi2 node
+> > > ---------------
+> > > -
+> > > -This is the device node for the MIPI CSI-2 receiver core in i.MX7 SoC. It is
+> > > -compatible with previous version of Samsung D-phy.
+> > > -
+> > > -Required properties:
+> > > -
+> > > -- compatible    : "fsl,imx7-mipi-csi2";
+> > > -- reg           : base address and length of the register set for the device;
+> > > -- interrupts    : should contain MIPI CSIS interrupt;
+> > > -- clocks        : list of clock specifiers, see
+> > > -        Documentation/devicetree/bindings/clock/clock-bindings.txt for details;
+> > > -- clock-names   : must contain "pclk", "wrap" and "phy" entries, matching
+> > > -                  entries in the clock property;
+> > > -- power-domains : a phandle to the power domain, see
+> > > -          Documentation/devicetree/bindings/power/power_domain.txt for details.
+> > > -- reset-names   : should include following entry "mrst";
+> > > -- resets        : a list of phandle, should contain reset entry of
+> > > -                  reset-names;
+> > > -- phy-supply    : from the generic phy bindings, a phandle to a regulator that
+> > > -	          provides power to MIPI CSIS core;
+> > > -
+> > > -Optional properties:
+> > > -
+> > > -- clock-frequency : The IP's main (system bus) clock frequency in Hz, default
+> > > -		    value when this property is not specified is 166 MHz;
+> > > -- fsl,csis-hs-settle : differential receiver (HS-RX) settle time;
+> > > -
+> > > -The device node should contain two 'port' child nodes with one child 'endpoint'
+> > > -node, according to the bindings defined in:
+> > > - Documentation/devicetree/bindings/ media/video-interfaces.txt.
+> > > - The following are properties specific to those nodes.
+> > > -
+> > > -port node
+> > > ----------
+> > > -
+> > > -- reg		  : (required) can take the values 0 or 1, where 0 shall be
+> > > -                     related to the sink port and port 1 shall be the source
+> > > -                     one;
+> > > -
+> > > -endpoint node
+> > > --------------
+> > > -
+> > > -- data-lanes    : (required) an array specifying active physical MIPI-CSI2
+> > > -		    data input lanes and their mapping to logical lanes; this
+> > > -                    shall only be applied to port 0 (sink port), the array's
+> > > -                    content is unused only its length is meaningful,
+> > > -                    in this case the maximum length supported is 2;
+> > > -
+> > > -example:
+> > > -
+> > > -        mipi_csi: mipi-csi@30750000 {
+> > > -                #address-cells = <1>;
+> > > -                #size-cells = <0>;
+> > > -
+> > > -                compatible = "fsl,imx7-mipi-csi2";
+> > > -                reg = <0x30750000 0x10000>;
+> > > -                interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
+> > > -                clocks = <&clks IMX7D_IPG_ROOT_CLK>,
+> > > -                                <&clks IMX7D_MIPI_CSI_ROOT_CLK>,
+> > > -                                <&clks IMX7D_MIPI_DPHY_ROOT_CLK>;
+> > > -                clock-names = "pclk", "wrap", "phy";
+> > > -                clock-frequency = <166000000>;
+> > > -                power-domains = <&pgc_mipi_phy>;
+> > > -                phy-supply = <&reg_1p0d>;
+> > > -                resets = <&src IMX7_RESET_MIPI_PHY_MRST>;
+> > > -                reset-names = "mrst";
+> > > -                fsl,csis-hs-settle = <3>;
+> > > -
+> > > -                port@0 {
+> > > -                        reg = <0>;
+> > > -
+> > > -                        mipi_from_sensor: endpoint {
+> > > -                                remote-endpoint = <&ov2680_to_mipi>;
+> > > -                                data-lanes = <1>;
+> > > -                        };
+> > > -                };
+> > > -
+> > > -                port@1 {
+> > > -                        reg = <1>;
+> > > -
+> > > -                        mipi_vc0_to_csi_mux: endpoint {
+> > > -                                remote-endpoint = <&csi_mux_from_mipi_vc0>;
+> > > -                        };
+> > > -                };
+> > > -        };
+> > > diff --git a/Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
+> > > new file mode 100644
+> > > index 000000000000..0438b28232ed
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
+> > > @@ -0,0 +1,181 @@
+> > > +# SPDX-License-Identifier: GPL-2.0-only
+> >
+> > Same question about dual licensing
+> >
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/media/nxp,imx7-mipi-csi2.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: NXP i.MX7 Mipi CSI2
+> > > +
+> > > +maintainers:
+> > > +  - Rui Miguel Silva <rmfrfs@gmail.com>
+> > > +
+> > > +description: |
+> > > +  this is the device node for the mipi csi-2 receiver core in i.mx7 soc. it is
+> > > +  compatible with previous version of samsung d-phy.
+> >
+> > nit: missing a few captial letters (beginning and after a full stop).
+>
+> will fix along all document.
+>
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    items:
+> > > +      - enum:
+> > > +          - fsl,imx7-mipi-csi2
+> >
+> > Should enum with a single item be expressed as a const ?
+>
+> agree.
+>
+> >
+> > > +
+> > > +  reg:
+> > > +    maxItems: 1
+> > > +
+> > > +  interrupts:
+> > > +    maxItems: 1
+> > > +
+> > > +  clocks:
+> > > +    minItems: 3
+> > > +
+> > > +  clock-names:
+> > > +    items:
+> > > +      - const: pclk
+> > > +      - const: wrap
+> > > +      - const: phy
+> > > +
+> > > +  power-domains:
+> > > +    maxItems: 1
+> > > +
+> > > +  phy-supply:
+> > > +    description:
+> > > +      Phandle to a regulator that provides power to the PHY. This
+> > > +      regulator will be managed during the PHY power on/off sequence.
+> > > +
+> > > +  resets:
+> > > +    maxItems: 1
+> > > +
+> > > +  reset-names:
+> > > +    const: mrst
+> > > +
+> > > +  clock-frequency:
+> >
+> > This was here already, but shouldn't this property be assigned in the
+> > clock provider and you should have here a reference to it ? Otherwise,
+> > is this really a custom property hijacking a standard property name ?
+> >
+> > I see it is mentioned in the example-schema.yaml, so it's probably
+> > correct.
+>
+> I think limits and default can be assigned here.
+>
+> >
+> > > +    description:
+> > > +      The IP main (system bus) clock frequency in Hertz
+> > > +    default: 166000000
+> > > +
+> > > +  fsl,csis-hs-settle:
+> > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > +    description:
+> > > +      differential receiver (HS-RX) settle time
+> >
+> > You have used capital letters at the beginning of documentation blocks
+> > before.
+> >
+> > > +
+> > > +  ports:
+> > > +    type: object
+> > > +    description:
+> > > +      A node containing input and output port nodes with endpoint definitions
+> > > +      as documented in
+> > > +      Documentation/devicetree/bindings/media/video-interfaces.txt
+> > > +
+> > > +    properties:
+> > > +      '#address-cells':
+> > > +        const: 1
+> > > +
+> > > +      '#size-cells':
+> > > +        const: 0
+> > > +
+> > > +      port@0:
+> > > +        type: object
+> > > +        description:
+> > > +          Input port node, single endpoint describing the CSI-2 transmitter.
+> > > +
+> > > +        properties:
+> > > +          reg:
+> > > +            const: 0
+> > > +
+> > > +          endpoint:
+> > > +            type: object
+> > > +
+> > > +            properties:
+> > > +              data-lanes:
+> > > +                maxItems: 1
+> >
+> > How many data lanes does this receiver supports ? I see in the txt
+> > bindingsd:
+> >     data-lanes    : (required) an array specifying active physical MIPI-CSI2
+> >                     data input lanes and their mapping to logical lanes; this
+> >                     shall only be applied to port 0 (sink port), the array's
+> >                     content is unused only its length is meaningful,
+> >                     in this case the maximum length supported is 2;
+> >
+> > I'm not sure I fully get this. Does this mean up to 2 data lanes are
+> > supported ?
+>
+> yeah, it supports up to 2 data lanes. Will fix
+>
 
-With that,
+This one might get nasty then. For reference, this is what I've been
+suggested to use by Laurent and Rob in the imx214 conversion (not yet
+landed afaict) to express that <1 2> and <1 2 3 4> where allowed:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
++        properties:
++          data-lanes:
++            $ref: /schemas/types.yaml#/definitions/uint32-array
++            description: See ../video-interfaces.txt
++            anyOf:
++              - items:
++                - const: 1
++                - const: 2
++              - items:
++                - const: 1
++                - const: 2
++                - const: 3
++                - const: 4
+
+Hope it helps.
+
+Thanks
+  j
+
+> >
+> > > +
+> > > +              remote-endpoint: true
+> > > +
+> > > +            required:
+> > > +              - data-lanes
+> > > +              - remote-endpoint
+> > > +
+> > > +            additionalProperties: false
+> > > +
+> > > +        additionalProperties: false
+> > > +
+> > > +      port@1:
+> > > +        type: object
+> > > +        description:
+> > > +          Output port node,
+> >
+> > Rougue ',' at the end. You probably want a full stop or
+> > > +
+> > > +        properties:
+> > > +          reg:
+> > > +            const: 1
+> > > +
+> > > +          endpoint:
+> > > +              type: object
+> > > +
+> > > +              properties:
+> > > +                remote-endpoint: true
+> > > +
+> > > +              required:
+> > > +                - remote-endpoint
+> > > +
+> > > +              additionalProperties: false
+> >
+> > As no other endpoint property is specified, the whole 'endpoint' block
+> > can probably be omitted ?
+> >
+> > > +
+> > > +        additionalProperties: false
+> > > +
+> > > +required:
+> > > +  - compatible
+> > > +  - reg
+> > > +  - interrupts
+> > > +  - clocks
+> > > +  - clock-names
+> > > +  - power-domains
+> > > +  - resets
+> > > +  - reset-names
+> > > +  - ports
+> >
+> > phy-supply was listed as required in the txt bindings
+>
+> good catch.
+>
+> >
+> > > +
+> > > +unevaluatedProperties: false
+> >
+> > additionalProperties: false
+> >
+>
+> Thanks again for your review.
+>
+> Cheers,
+>    Rui
+>
+> > Thanks
+> >   j
+> >
+> > > +
+> > > +examples:
+> > > +  - |
+> > > +    #include <dt-bindings/clock/imx7d-clock.h>
+> > > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > > +    #include <dt-bindings/interrupt-controller/irq.h>
+> > > +    #include <dt-bindings/reset/imx7-reset.h>
+> > > +
+> > > +    mipi_csi: mipi-csi@30750000 {
+> > > +            compatible = "fsl,imx7-mipi-csi2";
+> > > +            reg = <0x30750000 0x10000>;
+> > > +            interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
+> > > +
+> > > +            clocks = <&clks IMX7D_IPG_ROOT_CLK>,
+> > > +                     <&clks IMX7D_MIPI_CSI_ROOT_CLK>,
+> > > +                     <&clks IMX7D_MIPI_DPHY_ROOT_CLK>;
+> > > +            clock-names = "pclk", "wrap", "phy";
+> > > +            clock-frequency = <166000000>;
+> > > +
+> > > +            power-domains = <&pgc_mipi_phy>;
+> > > +            phy-supply = <&reg_1p0d>;
+> > > +            resets = <&src IMX7_RESET_MIPI_PHY_MRST>;
+> > > +            reset-names = "mrst";
+> > > +            fsl,csis-hs-settle = <3>;
+> > > +
+> > > +            ports {
+> > > +                    #address-cells = <1>;
+> > > +                    #size-cells = <0>;
+> > > +
+> > > +                    port@0 {
+> > > +                            reg = <0>;
+> > > +
+> > > +                            mipi_from_sensor: endpoint {
+> > > +                                    remote-endpoint = <&ov2680_to_mipi>;
+> > > +                                    data-lanes = <1>;
+> > > +                            };
+> > > +                    };
+> > > +
+> > > +                    port@1 {
+> > > +                            reg = <1>;
+> > > +
+> > > +                            mipi_vc0_to_csi_mux: endpoint {
+> > > +                                    remote-endpoint = <&csi_mux_from_mipi_vc0>;
+> > > +                            };
+> > > +                    };
+> > > +            };
+> > > +    };
+> > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > index b7f7f14cd85b..9da67222b0c7 100644
+> > > --- a/MAINTAINERS
+> > > +++ b/MAINTAINERS
+> > > @@ -10773,8 +10773,8 @@ L:	linux-media@vger.kernel.org
+> > >  S:	Maintained
+> > >  T:	git git://linuxtv.org/media_tree.git
+> > >  F:	Documentation/admin-guide/media/imx7.rst
+> > > -F:	Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt
+> > >  F:	Documentation/devicetree/bindings/media/nxp,imx7-csi.yaml
+> > > +F:	Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
+> > >  F:	drivers/staging/media/imx/imx7-media-csi.c
+> > >  F:	drivers/staging/media/imx/imx7-mipi-csis.c
+> > >
+> > > --
+> > > 2.28.0
+> > >
