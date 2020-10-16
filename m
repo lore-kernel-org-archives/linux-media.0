@@ -2,124 +2,229 @@ Return-Path: <SRS0=DXSC=DX=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25788C433E7
-	for <linux-media@archiver.kernel.org>; Fri, 16 Oct 2020 15:50:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C7ACC43457
+	for <linux-media@archiver.kernel.org>; Fri, 16 Oct 2020 15:54:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C5B192083B
-	for <linux-media@archiver.kernel.org>; Fri, 16 Oct 2020 15:50:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1602863412;
-	bh=3uZ8iCVi97/xqOw5dNwkCFdlRszntn8jKJhD2k1FR/8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=vnqAd+mOCkFsPrSa3Yp/gj9X7mcSh1e/F9rxPPG5Nq8QCkjrOK9aXB76Hhms1CYTC
-	 d6NUlZyDBqKNRUX/TlZXPJ9dvvsm9s5CV9YM0cmaJkS3Vc4nHLi89kacaZhyXFIFMc
-	 eeZNKZpACFVcJSKEwv3ZvBk2AholWyPM1HzETKug=
+	by mail.kernel.org (Postfix) with ESMTP id 139442084C
+	for <linux-media@archiver.kernel.org>; Fri, 16 Oct 2020 15:54:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408731AbgJPPuJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 16 Oct 2020 11:50:09 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:37459 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406693AbgJPPuJ (ORCPT
+        id S2408907AbgJPPy1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 16 Oct 2020 11:54:27 -0400
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:42499 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2408822AbgJPPy1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 16 Oct 2020 11:50:09 -0400
-Received: by mail-oi1-f196.google.com with SMTP id t77so2934197oie.4;
-        Fri, 16 Oct 2020 08:50:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OutJAEBktoisySZZcByItl3Q7TUScJ10GyZHZCfE+J8=;
-        b=WBHnu0sdCeXQExMxfrAoTMM4WheW06fz5d47dHxqW0hgWRtXy5ItaJt5IJKlquY9hK
-         AMBfTkH5uw4V5JhDGYh5HIc6CgnDWApBtvUyDxP7jENDp7wATKZnFLQ7rSKunvnCipBD
-         HlGvg4ZIO2rEVV1UVlycIPki5+3Z1yH93qkGOwAs6Rk1LYSd/WQARR4l1FtQ3zSfKo2O
-         ms6x98YHiGn/aD36ziHH13PKobfB+OnoxwX/dV50cmTHRvgyNaFL4P+FA3Ppxq50Xvge
-         bniqCRtmkjup5AiLUxl0ShQZuqRNvq6hGO4zm2TpLGAQ+kPn2JXZCw0En49wg6G8MWiR
-         XG7A==
-X-Gm-Message-State: AOAM533aylxuP0ld8RduMhoRL+4mpqaeGiL6cB8oRKxdZaWOQYxDg7RQ
-        A2j1XFnQB+wvEJKM5cmO6A==
-X-Google-Smtp-Source: ABdhPJwLBfdFmgtP6mYMrzKLPn0KqWGaktsmZbu5Mz+71BRtAeCHaNgIuZl/yqNpm/RQeW/wtTsCIQ==
-X-Received: by 2002:aca:b642:: with SMTP id g63mr2743291oif.165.1602863408002;
-        Fri, 16 Oct 2020 08:50:08 -0700 (PDT)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id v22sm1164318oia.7.2020.10.16.08.50.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Oct 2020 08:50:07 -0700 (PDT)
-Received: (nullmailer pid 1475301 invoked by uid 1000);
-        Fri, 16 Oct 2020 15:50:06 -0000
-Date:   Fri, 16 Oct 2020 10:50:06 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-media@vger.kernel.org,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Ramesh Shanmugasundaram <rashanmu@gmail.com>
-Subject: Re: [PATCH v4 2/5] media: dt-bindings: media: renesas,drif: Convert
- to json-schema
-Message-ID: <20201016155006.GA1474949@bogus>
-References: <20201014155719.15120-1-fabrizio.castro.jz@renesas.com>
- <20201014155719.15120-3-fabrizio.castro.jz@renesas.com>
+        Fri, 16 Oct 2020 11:54:27 -0400
+X-Originating-IP: 93.34.118.233
+Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 620264000A;
+        Fri, 16 Oct 2020 15:54:20 +0000 (UTC)
+Date:   Fri, 16 Oct 2020 19:54:06 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Eugen.Hristev@microchip.com
+Cc:     laurent.pinchart@ideasonboard.com, robh+dt@kernel.org,
+        sakari.ailus@iki.fi, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 1/3] dt-bindings: media: atmel: csi2dc: add bindings
+ for microchip csi2dc
+Message-ID: <20201016175406.meg2wbsjmhj4xf7z@uno.localdomain>
+References: <20200826065142.205000-1-eugen.hristev@microchip.com>
+ <20201010211743.GB3939@pendragon.ideasonboard.com>
+ <c5d27d11-891b-afd8-0be1-02bf5eb8bef9@microchip.com>
+ <20201012130425.2rszhgd7eh7nffrv@uno.localdomain>
+ <c473748a-18f9-082a-9121-9c04c663e434@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201014155719.15120-3-fabrizio.castro.jz@renesas.com>
+In-Reply-To: <c473748a-18f9-082a-9121-9c04c663e434@microchip.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, 14 Oct 2020 16:57:16 +0100, Fabrizio Castro wrote:
-> Convert the Renesas DRIF bindings to DT schema and update
-> MAINTAINERS accordingly.
-> 
-> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-> Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
-> v3->v4:
-> * Replace "if" statement with "else" statement for the branch
->   rejecting pinctrl-0 and pinctrl-names properties, as suggested
->   by Geert
-> v2->v3:
-> * Removed the definition of pinctrl-0 and pinctrl-names, as
->   suggested by Geert
-> * Added "power-domains" to the list of required properties,
->   as suggested by Geert
-> v1->v2:
-> * s/controller/Controller/ in the title of renesas,drif.yaml
->   as suggested by Laurent.
-> 
->  .../bindings/media/renesas,drif.txt           | 177 -----------
->  .../bindings/media/renesas,drif.yaml          | 277 ++++++++++++++++++
->  MAINTAINERS                                   |   2 +-
->  3 files changed, 278 insertions(+), 178 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/media/renesas,drif.txt
->  create mode 100644 Documentation/devicetree/bindings/media/renesas,drif.yaml
-> 
+Hello Eugen,
 
+On Fri, Oct 16, 2020 at 12:30:59PM +0000, Eugen.Hristev@microchip.com wrote:
+> On 12.10.2020 16:04, Jacopo Mondi wrote:
+> > Hello,
+> >     just my 2 cents, as I've noticed this patch skimming through the
+> >     list
+> >
+> > On Mon, Oct 12, 2020 at 07:19:43AM +0000, Eugen.Hristev@microchip.com wrote:
 
-My bot found errors running 'make dt_binding_check' on your patch:
+[snip]
 
-./Documentation/devicetree/bindings/media/renesas,drif.yaml:54:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
+>
+> Hi,
+>
+> Thanks for helping,
+> >
+> > Is this property describing the CSI-2 clock continuous, non-continuous
+> > mode configuration, or did I mis-interpreted it ?
+>
+> I think so. This is a setting inside the csi2dc regarding clock. If we
+> can obtain it from pads operations, then it's good, but the question is,
+> if the devices can provide this or not ?
 
+The transmitter can provide this information, as it knows which clock
+mode it is going to use (it's not clear from the CSI-2 spec which side
+is in charge of the selection, but it seems natural to me that it's up
+to the transmitter side). Whether they implement the right operation
+to do so, well... see below
 
-See https://patchwork.ozlabs.org/patch/1382223
+> >
+> > We added support for retrieving run-time configuration of the media
+> > bus with the get_mbus_config pad operations recently. Among the
+> > configuration flags for MBUS_CSI2_DPHY there are inded CONTINUOUS and
+> > NON_CONTINUOUS clock flags.
+> >
+> >>>
+> >>>> +
+> >>>> +  microchip,inter-line-delay:
+> >>>> +    allOf:
+> >>>> +    - $ref: /schemas/types.yaml#/definitions/uint32
+> >>>> +    - minimum: 1
+> >>>> +    - maximum: 16
+> >>>> +    default: 16
+> >>>> +    description:
+> >>>> +      Indicates how many clock cycles should be introduced between each line.
+> >>>
+> >>> This also sounds like a configuration parameter. How does one compute
+> >>> the right value for this ?
+> >>
+> >> I think this is a delay that can be added inside the hardware block,
+> >> depending on the interface speed and bandwidth. I will try to understand
+> >> more details from the hardware design and come back with a more detailed
+> >> answer.
+> >>
+>
+> Regarding this, I will remove it. Our design team advised to have a
+> hardcoded value for this product.
+>
+> >>>
+> >>>> +
+> >>>> +
+> >>>> +        properties:
+> >>>> +          reg:
+> >>>> +            enum: [0, 1, 2, 3]
+> >>>> +            description: virtual channel for the endpoint
+> >>>
+> >>> The virtual channel used by the source is also something that needs to
+> >>> be queried from the source at runtime, it doesn't belong to this
+> >>> binding.
+> >>
+> >> The same question as for the gated clock configuration. How can we use
+> >> v4l2 subdevice API to obtain such information from the subdevice? And if
+> >> the subdevice does not offer such information ?
+> >
+> > I think the subdev driver should be instrumented to report it instead of
+> > hard-coding the information in DT which should be otherwise updated
+> > depending on which sensor is connected to the board. Does it make
+> > sense to you ?
+>
+> It does, but then, it won't work unless connected to instrumented
+> subdevices. Which is not really something I would do, since it would
+> completely limit the usability.
+> Do you have any example on how to get the virtual id from the subdev ?
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure dt-schema is up to date:
+As examples of CSI-2 transmitters implementing get_mbus_config() we
+have tc358743 and adv748x reporting the number of active data lanes.
 
-pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
+Reporting the virtual channel in use is a matter of using one of the
+following flags:
 
-Please check and re-submit.
+/* CSI-2 Virtual Channel identifiers. */
+#define V4L2_MBUS_CSI2_CHANNEL_0		BIT(4)
+#define V4L2_MBUS_CSI2_CHANNEL_1		BIT(5)
+#define V4L2_MBUS_CSI2_CHANNEL_2		BIT(6)
+#define V4L2_MBUS_CSI2_CHANNEL_3		BIT(7)
 
+As an example of a receiver driver rcar-csi2 uses the operation to
+dynamically negotiate the number of data lanes. To handle virtual
+channel you would need to inspect which of the above flags have been
+set by the subdevice.
+
+On deciding if this better handled by using a subdev operation or a DT
+property, I understand the subdev driver needs to implement
+get_mbus_config, but hardcoding it in DT I fear is a no-go for
+mainline and honestly it doesn't sound much more advantageous, as it
+needs to be adapted according to the connected sensor anyway, doesn't
+it ? But I'm happy to defer this call to the maintainers, I hope I
+just have provided some useful references.
+
+Cheers
+   j
+
+>
+> Thanks again,
+>
+> Eugen
+> >
+> > Cheers
+> >     j
+> >
+> >>
+> >> Thanks again,
+> >>
+> >> Eugen
+> >>>
+> >>>> +
+> >>>> +          remote-endpoint: true
+> >>>> +
+> >>>> +        required:
+> >>>> +          - remote-endpoint
+> >>>> +          - reg
+> >>>> +
+> >>>> +        additionalProperties: false
+> >>>> +
+> >>>> +    additionalProperties: false
+> >>>> +
+> >>>> +required:
+> >>>> +  - compatible
+> >>>> +  - reg
+> >>>> +  - clocks
+> >>>> +  - clock-names
+> >>>> +  - port@0
+> >>>> +
+> >>>> +examples:
+> >>>> +  - |
+> >>>> +    csi2dc@e1404000 {
+> >>>> +        compatible = "microchip,sama7g5-csi2dc";
+> >>>> +        #address-cells = <1>;
+> >>>> +        #size-cells = <0>;
+> >>>> +        reg = <0xe1404000 0x500>;
+> >>>> +        clocks = <&pclk>, <&scck>;
+> >>>> +        clock-names = "pclk", "scck";
+> >>>> +
+> >>>> +        port@0 {
+> >>>> +               reg = <0>; /* must be 0, first child port */
+> >>>> +               csi2dc_in: endpoint { /* input from IDI interface */
+> >>>> +                     remote-endpoint = <&csi2host_out>;
+> >>>> +               };
+> >>>> +        };
+> >>>> +
+> >>>> +        port@1 {
+> >>>> +                #address-cells = <1>;
+> >>>> +                #size-cells = <0>;
+> >>>> +                reg = <1>; /* must be 1, second child port */
+> >>>> +                csi2dc_out: endpoint@2 {
+> >>>> +                        reg = <2>;  /* virtual channel identifier */
+> >>>> +                        remote-endpoint = <&xisc_in>; /* output to sensor controller */
+> >>>> +                };
+> >>>> +        };
+> >>>> +    };
+> >>>> +
+> >>>> +...
+> >>>
+> >>> --
+> >>> Regards,
+> >>>
+> >>> Laurent Pinchart
+> >>>
+> >>
+>
