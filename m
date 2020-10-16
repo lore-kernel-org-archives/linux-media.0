@@ -2,112 +2,192 @@ Return-Path: <SRS0=DXSC=DX=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-9.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 759A2C433E7
-	for <linux-media@archiver.kernel.org>; Fri, 16 Oct 2020 10:08:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B049C433DF
+	for <linux-media@archiver.kernel.org>; Fri, 16 Oct 2020 10:09:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 27F4E20848
-	for <linux-media@archiver.kernel.org>; Fri, 16 Oct 2020 10:08:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F38192145D
+	for <linux-media@archiver.kernel.org>; Fri, 16 Oct 2020 10:09:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406576AbgJPKHK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 16 Oct 2020 06:07:10 -0400
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:49505 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406557AbgJPKHD (ORCPT
+        id S2406586AbgJPKJJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 16 Oct 2020 06:09:09 -0400
+Received: from asavdk3.altibox.net ([109.247.116.14]:42220 "EHLO
+        asavdk3.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406539AbgJPKJJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 16 Oct 2020 06:07:03 -0400
-X-Originating-IP: 93.34.118.233
-Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id C6659E0017;
-        Fri, 16 Oct 2020 10:06:58 +0000 (UTC)
-From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
-To:     kieran.bingham+renesas@ideasonboard.com,
-        laurent.pinchart+renesas@ideasonboard.com,
-        niklas.soderlund+renesas@ragnatech.se
-Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hyun Kwon <hyunk@xilinx.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Kieran Bingham <kieran.bingham+renesasa@ideasonboard.com>
-Subject: [PATCH v3 3/7] media: i2c: max9286: Break-out reverse channel setup
-Date:   Fri, 16 Oct 2020 14:06:21 +0200
-Message-Id: <20201016120625.64337-4-jacopo+renesas@jmondi.org>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201016120625.64337-1-jacopo+renesas@jmondi.org>
-References: <20201016120625.64337-1-jacopo+renesas@jmondi.org>
+        Fri, 16 Oct 2020 06:09:09 -0400
+Received: from ravnborg.org (unknown [188.228.123.71])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by asavdk3.altibox.net (Postfix) with ESMTPS id DC35220027;
+        Fri, 16 Oct 2020 12:08:55 +0200 (CEST)
+Date:   Fri, 16 Oct 2020 12:08:54 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        airlied@linux.ie, daniel@ffwll.ch, alexander.deucher@amd.com,
+        christian.koenig@amd.com, kraxel@redhat.com,
+        l.stach@pengutronix.de, linux+etnaviv@armlinux.org.uk,
+        christian.gmeiner@gmail.com, inki.dae@samsung.com,
+        jy0922.shim@samsung.com, sw0312.kim@samsung.com,
+        kyungmin.park@samsung.com, kgene@kernel.org, krzk@kernel.org,
+        yuq825@gmail.com, bskeggs@redhat.com, robh@kernel.org,
+        tomeu.vizoso@collabora.com, steven.price@arm.com,
+        alyssa.rosenzweig@collabora.com, hjc@rock-chips.com,
+        heiko@sntech.de, hdegoede@redhat.com, sean@poorly.run,
+        eric@anholt.net, oleksandr_andrushchenko@epam.com,
+        ray.huang@amd.com, sumit.semwal@linaro.org,
+        emil.velikov@collabora.com, luben.tuikov@amd.com, apaneers@amd.com,
+        linus.walleij@linaro.org, melissa.srw@gmail.com,
+        chris@chris-wilson.co.uk, miaoqinglang@huawei.com,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org,
+        etnaviv@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, lima@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, spice-devel@lists.freedesktop.org,
+        linux-rockchip@lists.infradead.org, xen-devel@lists.xenproject.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH v4 09/10] dma-buf-map: Add memcpy and pointer-increment
+ interfaces
+Message-ID: <20201016100854.GA1042954@ravnborg.org>
+References: <20201015123806.32416-1-tzimmermann@suse.de>
+ <20201015123806.32416-10-tzimmermann@suse.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201015123806.32416-10-tzimmermann@suse.de>
+X-CMAE-Score: 0
+X-CMAE-Analysis: v=2.3 cv=S433PrkP c=1 sm=1 tr=0
+        a=S6zTFyMACwkrwXSdXUNehg==:117 a=S6zTFyMACwkrwXSdXUNehg==:17
+        a=kj9zAlcOel0A:10 a=7gkXJVJtAAAA:8 a=0A2xud3A4b7FAmx5SMIA:9
+        a=7a1rlSNJFqSX5uOf:21 a=OU_kl8OV53ZSq-ss:21 a=CjuIK1q_8ugA:10
+        a=E9Po1WZjFZOl8hwRPBS3:22
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Break out the reverse channel setup configuration procedure to its own
-function.
+Hi Thomas.
 
-This change prepares for configuring the reverse channel conditionally
-to the remote side high threshold configuration.
+On Thu, Oct 15, 2020 at 02:38:05PM +0200, Thomas Zimmermann wrote:
+> To do framebuffer updates, one needs memcpy from system memory and a
+> pointer-increment function. Add both interfaces with documentation.
+> 
+> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 
-No functional changes intended.
+Looks good.
+Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
 
-Reviewed-by: Kieran Bingham <kieran.bingham+renesasa@ideasonboard.com>
-Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
----
- drivers/media/i2c/max9286.c | 30 +++++++++++++++++-------------
- 1 file changed, 17 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
-index d969ac21a058..526b6e557dfb 100644
---- a/drivers/media/i2c/max9286.c
-+++ b/drivers/media/i2c/max9286.c
-@@ -336,6 +336,22 @@ static void max9286_configure_i2c(struct max9286_priv *priv, bool localack)
- 	usleep_range(3000, 5000);
- }
- 
-+static void max9286_reverse_channel_setup(struct max9286_priv *priv)
-+{
-+	/*
-+	 * Reverse channel setup.
-+	 *
-+	 * - Enable custom reverse channel configuration (through register 0x3f)
-+	 *   and set the first pulse length to 35 clock cycles.
-+	 * - Increase the reverse channel amplitude to 170mV to accommodate the
-+	 *   high threshold enabled by the serializer driver.
-+	 */
-+	max9286_write(priv, 0x3f, MAX9286_EN_REV_CFG | MAX9286_REV_FLEN(35));
-+	max9286_write(priv, 0x3b, MAX9286_REV_TRF(1) | MAX9286_REV_AMP(70) |
-+		      MAX9286_REV_AMP_X);
-+	usleep_range(2000, 2500);
-+}
-+
- /*
-  * max9286_check_video_links() - Make sure video links are detected and locked
-  *
-@@ -941,19 +957,7 @@ static int max9286_setup(struct max9286_priv *priv)
- 	 * only. This should be disabled after the mux is initialised.
- 	 */
- 	max9286_configure_i2c(priv, true);
--
--	/*
--	 * Reverse channel setup.
--	 *
--	 * - Enable custom reverse channel configuration (through register 0x3f)
--	 *   and set the first pulse length to 35 clock cycles.
--	 * - Increase the reverse channel amplitude to 170mV to accommodate the
--	 *   high threshold enabled by the serializer driver.
--	 */
--	max9286_write(priv, 0x3f, MAX9286_EN_REV_CFG | MAX9286_REV_FLEN(35));
--	max9286_write(priv, 0x3b, MAX9286_REV_TRF(1) | MAX9286_REV_AMP(70) |
--		      MAX9286_REV_AMP_X);
--	usleep_range(2000, 2500);
-+	max9286_reverse_channel_setup(priv);
- 
- 	/*
- 	 * Enable GMSL links, mask unused ones and autodetect link
--- 
-2.28.0
-
+> ---
+>  include/linux/dma-buf-map.h | 72 +++++++++++++++++++++++++++++++------
+>  1 file changed, 62 insertions(+), 10 deletions(-)
+> 
+> diff --git a/include/linux/dma-buf-map.h b/include/linux/dma-buf-map.h
+> index 2e8bbecb5091..6ca0f304dda2 100644
+> --- a/include/linux/dma-buf-map.h
+> +++ b/include/linux/dma-buf-map.h
+> @@ -32,6 +32,14 @@
+>   * accessing the buffer. Use the returned instance and the helper functions
+>   * to access the buffer's memory in the correct way.
+>   *
+> + * The type :c:type:`struct dma_buf_map <dma_buf_map>` and its helpers are
+> + * actually independent from the dma-buf infrastructure. When sharing buffers
+> + * among devices, drivers have to know the location of the memory to access
+> + * the buffers in a safe way. :c:type:`struct dma_buf_map <dma_buf_map>`
+> + * solves this problem for dma-buf and its users. If other drivers or
+> + * sub-systems require similar functionality, the type could be generalized
+> + * and moved to a more prominent header file.
+> + *
+>   * Open-coding access to :c:type:`struct dma_buf_map <dma_buf_map>` is
+>   * considered bad style. Rather then accessing its fields directly, use one
+>   * of the provided helper functions, or implement your own. For example,
+> @@ -51,6 +59,14 @@
+>   *
+>   *	dma_buf_map_set_vaddr_iomem(&map. 0xdeadbeaf);
+>   *
+> + * Instances of struct dma_buf_map do not have to be cleaned up, but
+> + * can be cleared to NULL with dma_buf_map_clear(). Cleared mappings
+> + * always refer to system memory.
+> + *
+> + * .. code-block:: c
+> + *
+> + *	dma_buf_map_clear(&map);
+> + *
+>   * Test if a mapping is valid with either dma_buf_map_is_set() or
+>   * dma_buf_map_is_null().
+>   *
+> @@ -73,17 +89,19 @@
+>   *	if (dma_buf_map_is_equal(&sys_map, &io_map))
+>   *		// always false
+>   *
+> - * Instances of struct dma_buf_map do not have to be cleaned up, but
+> - * can be cleared to NULL with dma_buf_map_clear(). Cleared mappings
+> - * always refer to system memory.
+> + * A set up instance of struct dma_buf_map can be used to access or manipulate
+> + * the buffer memory. Depending on the location of the memory, the provided
+> + * helpers will pick the correct operations. Data can be copied into the memory
+> + * with dma_buf_map_memcpy_to(). The address can be manipulated with
+> + * dma_buf_map_incr().
+>   *
+> - * The type :c:type:`struct dma_buf_map <dma_buf_map>` and its helpers are
+> - * actually independent from the dma-buf infrastructure. When sharing buffers
+> - * among devices, drivers have to know the location of the memory to access
+> - * the buffers in a safe way. :c:type:`struct dma_buf_map <dma_buf_map>`
+> - * solves this problem for dma-buf and its users. If other drivers or
+> - * sub-systems require similar functionality, the type could be generalized
+> - * and moved to a more prominent header file.
+> + * .. code-block:: c
+> + *
+> + *	const void *src = ...; // source buffer
+> + *	size_t len = ...; // length of src
+> + *
+> + *	dma_buf_map_memcpy_to(&map, src, len);
+> + *	dma_buf_map_incr(&map, len); // go to first byte after the memcpy
+>   */
+>  
+>  /**
+> @@ -210,4 +228,38 @@ static inline void dma_buf_map_clear(struct dma_buf_map *map)
+>  	}
+>  }
+>  
+> +/**
+> + * dma_buf_map_memcpy_to - Memcpy into dma-buf mapping
+> + * @dst:	The dma-buf mapping structure
+> + * @src:	The source buffer
+> + * @len:	The number of byte in src
+> + *
+> + * Copies data into a dma-buf mapping. The source buffer is in system
+> + * memory. Depending on the buffer's location, the helper picks the correct
+> + * method of accessing the memory.
+> + */
+> +static inline void dma_buf_map_memcpy_to(struct dma_buf_map *dst, const void *src, size_t len)
+> +{
+> +	if (dst->is_iomem)
+> +		memcpy_toio(dst->vaddr_iomem, src, len);
+> +	else
+> +		memcpy(dst->vaddr, src, len);
+> +}
+> +
+> +/**
+> + * dma_buf_map_incr - Increments the address stored in a dma-buf mapping
+> + * @map:	The dma-buf mapping structure
+> + * @incr:	The number of bytes to increment
+> + *
+> + * Increments the address stored in a dma-buf mapping. Depending on the
+> + * buffer's location, the correct value will be updated.
+> + */
+> +static inline void dma_buf_map_incr(struct dma_buf_map *map, size_t incr)
+> +{
+> +	if (map->is_iomem)
+> +		map->vaddr_iomem += incr;
+> +	else
+> +		map->vaddr += incr;
+> +}
+> +
+>  #endif /* __DMA_BUF_MAP_H__ */
+> -- 
+> 2.28.0
