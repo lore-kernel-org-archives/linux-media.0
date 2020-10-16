@@ -2,215 +2,100 @@ Return-Path: <SRS0=DXSC=DX=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C60D6C433DF
-	for <linux-media@archiver.kernel.org>; Fri, 16 Oct 2020 15:26:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4A6BC4363A
+	for <linux-media@archiver.kernel.org>; Fri, 16 Oct 2020 15:46:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5CD2C206DD
-	for <linux-media@archiver.kernel.org>; Fri, 16 Oct 2020 15:26:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6B87D20848
+	for <linux-media@archiver.kernel.org>; Fri, 16 Oct 2020 15:46:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1602863169;
+	bh=lDZFCSvT0azQKXOH+ryPay9aic1NPT3sFnrAJoZjZPw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=g3mCHpNG1KlKctXSKFSIKSHp7gMU5aWTDmkSL2pzUZWYjOO/IlfzVJr8i6wf8MNTn
+	 6Cu5Db9YUBlfFBRj67612Dr8MYPsvmqYjjUH76E8Osyi62BxpO5Yg6PIToIkIiIcfB
+	 +NMqQdH4/GSdnysbEeUbXkPy7LjR/fmNp7uHudf0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2410050AbgJPP0S (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 16 Oct 2020 11:26:18 -0400
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:6801 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2410005AbgJPP0S (ORCPT
+        id S2436499AbgJPPqA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 16 Oct 2020 11:46:00 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:38189 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2436492AbgJPPqA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 16 Oct 2020 11:26:18 -0400
-X-Originating-IP: 93.34.118.233
-Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id E63F0240010;
-        Fri, 16 Oct 2020 15:26:14 +0000 (UTC)
-Date:   Fri, 16 Oct 2020 19:26:00 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Niklas =?utf-8?Q?S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH 5/5] rcar-vin: Add support for suspend and resume
-Message-ID: <20201016172600.n66gz2qmwmjjdwb3@uno.localdomain>
-References: <20201015231408.2399933-1-niklas.soderlund+renesas@ragnatech.se>
- <20201015231408.2399933-6-niklas.soderlund+renesas@ragnatech.se>
- <20201016160718.klbkccgcbnpoi7bq@uno.localdomain>
- <20201016141503.kas7h5lumwm3wmal@oden.dyn.berto.se>
+        Fri, 16 Oct 2020 11:46:00 -0400
+Received: by mail-ot1-f68.google.com with SMTP id i12so2805169ota.5;
+        Fri, 16 Oct 2020 08:45:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iPvlTs6OoobJfJVJSiPEYBQcBLpEIvnmvgQxKnYTOdw=;
+        b=PP4FsqTl4GIoCFGgjXH8yurgIN0w9K79BT80xtRWZYb43tckz+OytdnENizbCbbQbg
+         DFK5A3C1Lo+m+/LS+Hkdl+k8WrvlKgkJb9dpmuN3wwNVCFyiNO2NyUQxOhfOWJNOVZVW
+         78/nyaWO5tjTcCr4+nrmv7nuFbybbl7yVRSM9cn6VyjAjapTavE8NBtzVQrh1WzGLZAQ
+         U6yAYXPXT9IjgHrD4imHnISxfUy3itN5F+4/ow/FET5lp19keyQ11YptT5LOjVw1Oq5m
+         NTwneDtPhgx9bTPjmggpC/fL8cI+21cUt7p8ospNa8f8TCE8R7sI/WvHQGkn9HIdtE4Z
+         Ajtw==
+X-Gm-Message-State: AOAM532ET61vbV89eCvua8vtLx41TBVqGdKBcNGOoxaiJK+8wRRwkhY/
+        nIwRACCSheEIlwpz3/gEEg==
+X-Google-Smtp-Source: ABdhPJzsEx8YohXRxoZLwFQ6cq9xth/ljkv21fGHXMUMn2X/2dXe4dmrEqSBNAKZV/25Wl8t0ODUYA==
+X-Received: by 2002:a9d:5d0c:: with SMTP id b12mr3245009oti.170.1602863159049;
+        Fri, 16 Oct 2020 08:45:59 -0700 (PDT)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id k21sm1100315otr.27.2020.10.16.08.45.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Oct 2020 08:45:58 -0700 (PDT)
+Received: (nullmailer pid 1469664 invoked by uid 1000);
+        Fri, 16 Oct 2020 15:45:57 -0000
+Date:   Fri, 16 Oct 2020 10:45:57 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Rui Miguel Silva <rmfrfs@gmail.com>
+Cc:     sakari.ailus@linux.intel.com, Hans Verkuil <hverkuil@xs4all.nl>,
+        devicetree@vger.kernel.org, linux-media@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v2 3/3] dt-bindings: imx7-mipi-csi2: convert bindings to
+ yaml
+Message-ID: <20201016154557.GA1469085@bogus>
+References: <20201014142759.726823-1-rmfrfs@gmail.com>
+ <20201014142759.726823-4-rmfrfs@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201016141503.kas7h5lumwm3wmal@oden.dyn.berto.se>
+In-Reply-To: <20201014142759.726823-4-rmfrfs@gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Niklas,
+On Wed, 14 Oct 2020 15:27:59 +0100, Rui Miguel Silva wrote:
+> Convert imx7 mipi csi2 bindings documentation to yaml schema, remove
+> the textual document and update MAINTAINERS entry.
+> 
+> Signed-off-by: Rui Miguel Silva <rmfrfs@gmail.com>
+> ---
+>  .../bindings/media/imx7-mipi-csi2.txt         |  90 ---------
+>  .../bindings/media/nxp,imx7-mipi-csi2.yaml    | 181 ++++++++++++++++++
+>  MAINTAINERS                                   |   2 +-
+>  3 files changed, 182 insertions(+), 91 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt
+>  create mode 100644 Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
+> 
 
-On Fri, Oct 16, 2020 at 04:15:03PM +0200, Niklas Söderlund wrote:
-> Hi Jacopo,
->
-> Thanks for your feedback.
->
-> On 2020-10-16 18:07:18 +0200, Jacopo Mondi wrote:
-> > Hi Niklas,
-> >
-> > On Fri, Oct 16, 2020 at 01:14:08AM +0200, Niklas Söderlund wrote:
-> > > Add support for suspend and resume by stopping and starting the video
-> > > pipeline while still retaining all buffers given to the driver by
-> > > user-space and internally allocated ones, this gives the application a
-> > > seamless experience.
-> > >
-> > > Buffers are never returned to user-space unprocessed so user-space don't
-> > > notice when suspending. When resuming the driver restarts the capture
-> > > session using the internal scratch buffer, this happens before
-> > > user-space is unfrozen, this leads to speedy response times once the
-> > > application resumes its execution.
-> > >
-> > > As the entire pipeline is stopped on suspend all subdevices in use are
-> > > also stopped, and if they enter a shutdown state when not streaming
-> > > (such as the R-Car CSI-2 driver) they too will be suspended and resumed
-> > > in sync with the VIN driver.
-> > >
-> > > To be able to do keep track of which VINs should be resumed a new
-> >
-> > s/to do/to/
-> >
-> > > internal state SUSPENDED is added to recode this.
-> > >
-> > > Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-> > > ---
-> > >  drivers/media/platform/rcar-vin/rcar-core.c | 51 +++++++++++++++++++++
-> > >  drivers/media/platform/rcar-vin/rcar-vin.h  | 10 ++--
-> > >  2 files changed, 57 insertions(+), 4 deletions(-)
-> > >
-> > > diff --git a/drivers/media/platform/rcar-vin/rcar-core.c b/drivers/media/platform/rcar-vin/rcar-core.c
-> > > index 34d003e0e9b9c25a..4adf4ce518f79c93 100644
-> > > --- a/drivers/media/platform/rcar-vin/rcar-core.c
-> > > +++ b/drivers/media/platform/rcar-vin/rcar-core.c
-> > > @@ -918,6 +918,54 @@ static int rvin_mc_init(struct rvin_dev *vin)
-> > >  	return ret;
-> > >  }
-> > >
-> > > +/* -----------------------------------------------------------------------------
-> > > + * Suspend / Resume
-> > > + */
-> > > +
-> > > +static int __maybe_unused rvin_suspend(struct device *dev)
-> > > +{
-> > > +	struct rvin_dev *vin = dev_get_drvdata(dev);
-> > > +
-> > > +	if (vin->state != RUNNING)
-> > > +		return 0;
-> > > +
-> > > +	rvin_stop_streaming(vin);
-> >
-> > This delay suspend untill all the userspace queued buffers are not
-> > completed, right ?
->
-> Yes it will delay suspend until all the buffers queued by user-space AND
-> have been written to one of the 3 hardware slots are completed. So the
-> worst case scenario is a delay of 3 frames to complete.
->
-> Buffers queued by an application not yet commited to a slot are not
-> waited for. Instead they are used when capture is resumed.
 
-Ah right! I think exhausting the 3 filled slots it's an acceptable
-delay during suspend operation.
+My bot found errors running 'make dt_binding_check' on your patch:
 
-Please add:
-Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
-which I forgot in the previous reply
+./Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml:111:15: [warning] wrong indentation: expected 12 but found 14 (indentation)
 
-Thanks
-  j
 
->
-> >
-> > > +
-> > > +	vin->state = SUSPENDED;
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static int __maybe_unused rvin_resume(struct device *dev)
-> > > +{
-> > > +	struct rvin_dev *vin = dev_get_drvdata(dev);
-> > > +
-> > > +	if (vin->state != SUSPENDED)
-> > > +		return 0;
-> > > +
-> > > +	/*
-> > > +	 * Restore group master CHSEL setting.
-> > > +	 *
-> > > +	 * This needs to be by every VIN resuming not only the master
-> > > +	 * as we don't know if and in which order the master VINs will
-> > > +	 * be resumed.
-> > > +	 */
-> > > +	if (vin->info->use_mc) {
-> > > +		unsigned int master_id = rvin_group_id_to_master(vin->id);
-> > > +		struct rvin_dev *master = vin->group->vin[master_id];
-> > > +		int ret;
-> > > +
-> > > +		if (WARN_ON(!master))
-> > > +			return -ENODEV;
-> > > +
-> > > +		ret = rvin_set_channel_routing(master, master->chsel);
-> > > +		if (ret)
-> > > +			return ret;
-> > > +	}
-> > > +
-> > > +	return rvin_start_streaming(vin);
-> > > +}
-> > > +
-> > >  /* -----------------------------------------------------------------------------
-> > >   * Platform Device Driver
-> > >   */
-> > > @@ -1421,9 +1469,12 @@ static int rcar_vin_remove(struct platform_device *pdev)
-> > >  	return 0;
-> > >  }
-> > >
-> > > +static SIMPLE_DEV_PM_OPS(rvin_pm_ops, rvin_suspend, rvin_resume);
-> > > +
-> > >  static struct platform_driver rcar_vin_driver = {
-> > >  	.driver = {
-> > >  		.name = "rcar-vin",
-> > > +		.pm = &rvin_pm_ops,
-> > >  		.of_match_table = rvin_of_id_table,
-> > >  	},
-> > >  	.probe = rcar_vin_probe,
-> > > diff --git a/drivers/media/platform/rcar-vin/rcar-vin.h b/drivers/media/platform/rcar-vin/rcar-vin.h
-> > > index 4ec8584709c847a9..4539bd53d9d41e9c 100644
-> > > --- a/drivers/media/platform/rcar-vin/rcar-vin.h
-> > > +++ b/drivers/media/platform/rcar-vin/rcar-vin.h
-> > > @@ -49,16 +49,18 @@ enum rvin_csi_id {
-> > >  };
-> > >
-> > >  /**
-> > > - * STOPPED  - No operation in progress
-> > > - * STARTING - Capture starting up
-> > > - * RUNNING  - Operation in progress have buffers
-> > > - * STOPPING - Stopping operation
-> > > + * STOPPED   - No operation in progress
-> > > + * STARTING  - Capture starting up
-> > > + * RUNNING   - Operation in progress have buffers
-> > > + * STOPPING  - Stopping operation
-> > > + * SUSPENDED - Capture is suspended
-> > >   */
-> > >  enum rvin_dma_state {
-> > >  	STOPPED = 0,
-> > >  	STARTING,
-> > >  	RUNNING,
-> > >  	STOPPING,
-> > > +	SUSPENDED,
-> > >  };
-> > >
-> > >  /**
-> > > --
-> > > 2.28.0
-> > >
->
-> --
-> Regards,
-> Niklas Söderlund
+See https://patchwork.ozlabs.org/patch/1382165
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure dt-schema is up to date:
+
+pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
+
+Please check and re-submit.
+
