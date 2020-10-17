@@ -1,133 +1,187 @@
-Return-Path: <SRS0=DXSC=DX=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=gKlv=DY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B83F3C433DF
-	for <linux-media@archiver.kernel.org>; Fri, 16 Oct 2020 23:15:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7A98C433DF
+	for <linux-media@archiver.kernel.org>; Sat, 17 Oct 2020 05:56:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5FAB720878
-	for <linux-media@archiver.kernel.org>; Fri, 16 Oct 2020 23:15:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D6DEA20720
+	for <linux-media@archiver.kernel.org>; Sat, 17 Oct 2020 05:56:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Oi+V1WJt"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="HdaXak++"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2410928AbgJPXPw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 16 Oct 2020 19:15:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51194 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393118AbgJPXPs (ORCPT
+        id S2436700AbgJQF42 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 17 Oct 2020 01:56:28 -0400
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:41503 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2436667AbgJQF42 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 16 Oct 2020 19:15:48 -0400
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D2BC0613D3
-        for <linux-media@vger.kernel.org>; Fri, 16 Oct 2020 16:15:46 -0700 (PDT)
-Received: by mail-ot1-x341.google.com with SMTP id f10so4069656otb.6
-        for <linux-media@vger.kernel.org>; Fri, 16 Oct 2020 16:15:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=z/utRDTKVHmHoEv/2/0Wo96JPENEebgv5nLtf2BjNsM=;
-        b=Oi+V1WJt62DGA+OLvUtpmMrFw9shQt3hUS/kNEujvoDH0S+ng6vAYPzCIgge+f3w9u
-         TKWiYzRhkNSA9GoKq34ilGiHvwx6EY6aftODB89USCCvqSBrOF9Ahb1YH6AVXBZCgQig
-         4DlUkffsXOsF1pIm13wAFD7dnXVaJqoYN2sqj94xan8ytJ2xtxnef5agl5SMLLqg4NgB
-         QpAQQPmcmS3RUog/rS5HW2x/+33CWgbJZeTEULDKM2cMYyziRnQ50KtbeBtD/GX0MMx9
-         fEvYXSp+sAAsczFNL8AvoNylNDa3YEDww1jbOh3ovT1X6SZKJrjCeHi3LzO3cklJhFnp
-         KO+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=z/utRDTKVHmHoEv/2/0Wo96JPENEebgv5nLtf2BjNsM=;
-        b=R9PTY80kK81GZFwg4B7ky9U0shxxTFNj8J+lSsoyy73zPzatLFzXPyDNdzOmiMzme2
-         6EdUK3j0uCys1rKGa5haL5y4vj6f6ZIKMKrfR8K87PGjEGrG1Ib0NobTST24velku7u1
-         oeLlqPlbeceBkugA7Eg3k3YzcwFXaBazWPUMS1AvF8jTfFqvfOy3TYdTHbs3ivZePVc+
-         dBbWwLSiT6Ugy3K04ye+KG8i9df6qhI6wox99YACJ1lyo2uP54QseW5Pvf/fX1wDIoRX
-         zLKQvm6LzSrVBQkU+IgnrZ4ri6/Ao67cma342HGxGc0evFIy/sD/v3UkNvS6p6QVUztu
-         Pw4A==
-X-Gm-Message-State: AOAM531QSd5+NGEV16vj10vx3SRxCkHkEACvI/sVeIYe2a8FILEMkCE0
-        V5HcNgkK9aFH3r9oEZ7X6rPIZeFHunfmJRTMiZ/4Bg==
-X-Google-Smtp-Source: ABdhPJx+Js3ydQFBUP7ACgCzkoV+mCC9MxMLL2meKWUMIA/Fue2cHeE5SzEFTuMIFXv2hDabWqdWiVicuLD7Dfqz5J4=
-X-Received: by 2002:a05:6830:1082:: with SMTP id y2mr4127841oto.221.1602890146021;
- Fri, 16 Oct 2020 16:15:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20201003040257.62768-1-john.stultz@linaro.org>
- <20201003040257.62768-8-john.stultz@linaro.org> <20201008115101.4qi6wh3hhkb6krg5@DESKTOP-E1NTVVP.localdomain>
- <CALAqxLWrbgHoh=BCnuB4US77AOPMYmgGrE85WT6DYnEV-bad-A@mail.gmail.com>
-In-Reply-To: <CALAqxLWrbgHoh=BCnuB4US77AOPMYmgGrE85WT6DYnEV-bad-A@mail.gmail.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Fri, 16 Oct 2020 16:15:32 -0700
-Message-ID: <CALAqxLUQkg1uDdLXoP4W7McxQUwFgsncnMxJSOE_VZ4dRRpzFg@mail.gmail.com>
-Subject: Re: [PATCH v3 7/7] dma-buf: system_heap: Add a system-uncached heap
- re-using the system heap
-To:     Brian Starkey <brian.starkey@arm.com>
-Cc:     lkml <linux-kernel@vger.kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sandeep Patil <sspatil@google.com>,
-        Daniel Mentz <danielmentz@google.com>,
-        Chris Goldsworthy <cgoldswo@codeaurora.org>,
-        =?UTF-8?Q?=C3=98rjan_Eide?= <orjan.eide@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Simon Ser <contact@emersion.fr>,
-        James Jones <jajones@nvidia.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>, nd <nd@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+        Sat, 17 Oct 2020 01:56:28 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id Td3WkwGLHGDeXTd3XkkvmB; Sat, 17 Oct 2020 05:38:58 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1602905938; bh=C3VyRGm5NguaLKBdVjMjMMFiPc8onc9MjStcMmv78ow=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=HdaXak++HZW4x95tuBns5+nnwpOhDl5jzmRKW1it5IkwPGqbOuXtY6b2jzy8iMXtM
+         /EsJ8twFcS9d2s/Jyo9u8tN5STRw4zd2wqeyCJn2b+qLcilU46TlGxKWTTsBM3K+Jk
+         /zArwK4lErQ9j4kPLR9kH7KTVpaTLnpnUc8/wuw+LyQQBsIbwHOd+Kju0s/Ug5Gq1s
+         ssnLMPNmmc0rgtDf/+E8IzQqBmArGTblGwuGEPGievHsqCAWtLTn5eMuhdFk2kRAA7
+         3POt6Ii4eUHHqPMfUNrZ38kDYt1AhjCD3ESxTDN4kq00R6MEpnqhVmZSf3dI03IXRQ
+         W9iAXZlKbEhlA==
+Message-ID: <312a4848d6c85245efbdeacd8f4e62cc@smtp-cloud9.xs4all.net>
+Date:   Sat, 17 Oct 2020 05:38:54 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: WARNINGS
+X-CMAE-Envelope: MS4xfHzGG5zqYs09O5liZWEQSmylKEqj+m/dzii1wer2CWEd/LnCX71uFlBnWStj/IGTT/FUBkOsPQ3LP3Bgoy+QajcNJKlwGAHgQKQCNgdR9mJbs2ohRg41
+ h7yzyYx++ASBxm4GXMiQpMKYrw8wNa4Kk9ARBAFtu7SEQ694p316scuXkMVdCrT5KF5Esvpaw1AWQrnpSqjI99/1JQG/g7jlbcr5KveUGvAcq1w1rtcie+36
+ 5SxPkIaqG9EtcUifjb91xw==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Oct 16, 2020 at 12:03 PM John Stultz <john.stultz@linaro.org> wrote:
-> On Thu, Oct 8, 2020 at 4:51 AM Brian Starkey <brian.starkey@arm.com> wrote:
-> > On Sat, Oct 03, 2020 at 04:02:57AM +0000, John Stultz wrote:
-> > > @@ -426,6 +487,16 @@ static int system_heap_create(void)
-> > >       if (IS_ERR(sys_heap))
-> > >               return PTR_ERR(sys_heap);
-> > >
-> > > +     exp_info.name = "system-uncached";
-> > > +     exp_info.ops = &system_uncached_heap_ops;
-> > > +     exp_info.priv = NULL;
-> > > +
-> > > +     sys_uncached_heap = dma_heap_add(&exp_info);
-> > > +     if (IS_ERR(sys_uncached_heap))
-> > > +             return PTR_ERR(sys_heap);
-> > > +
-> >
-> > In principle, there's a race here between the heap getting registered
-> > to sysfs and the dma_mask getting updated.
-> >
-> > I don't think it would cause a problem in practice, but with the API
-> > as it is, there's no way to avoid it - so I wonder if the
-> > dma_heap_get_dev() accessor isn't the right API design.
->
-> Hrm.  I guess to address your concern we would need split
-> dma_heap_add() into something like:
->   dma_heap_create()
->   dma_heap_add()
->
-> Which breaks the creation of the heap with the registering it to the
-> subsystem, so some attributes can be tweaked inbetween?
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Looking at this some more, this approach isn't going to work. We
-create the device and then we call dma_coerce_mask_and_coherent() on
-it, but as soon as the device is created it seems possible for
-userland to directly access it. Again, though, as you mentioned this
-isn't terribly likely in practice.
+Results of the daily build of media_tree:
 
-The best thing I can think of for now is to have the uncached heap's
-allocate pointer initially point to a dummy function that returns
-EBUSY and then after we update the dma mask then we can set it to the
-real alloc.  I'll go with that for now, but let me know if you have
-other suggestions.
+date:			Sat Oct 17 05:00:18 CEST 2020
+media-tree git hash:	c386e0797d26a32e354daf4480c5d40165db66a1
+media_build git hash:	e0136eadb6f4c24b7f8fcb50ef4d4d5ffb2af31d
+v4l-utils git hash:	28df3d403be3d7769d7b10cda3e372a0dbbfa410
+edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
+gcc version:		i686-linux-gcc (GCC) 10.2.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		v0.6.2-1-gfebba84c
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		v0.5.0-6793-g0248ebb06
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 9783287347a0d95925f345313520f04869f439ab
+host hardware:		x86_64
+host os:		5.7.0-1-amd64
 
-thanks
--john
+linux-git-sh: OK
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-stm32: OK
+linux-git-arm-pxa: OK
+linux-git-mips: OK
+linux-git-arm64: OK
+linux-git-powerpc64: OK
+linux-git-arm-multi: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.81-i686: OK
+linux-3.16.81-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.238-i686: OK
+linux-4.4.238-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.238-i686: OK
+linux-4.9.238-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.200-i686: OK
+linux-4.14.200-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.149-i686: OK
+linux-4.19.149-x86_64: OK
+linux-4.20.17-i686: OK
+linux-4.20.17-x86_64: OK
+linux-5.0.21-i686: OK
+linux-5.0.21-x86_64: OK
+linux-5.1.21-i686: OK
+linux-5.1.21-x86_64: OK
+linux-5.2.21-i686: OK
+linux-5.2.21-x86_64: OK
+linux-5.3.18-i686: OK
+linux-5.3.18-x86_64: OK
+linux-5.4.69-i686: OK
+linux-5.4.69-x86_64: OK
+linux-5.5.19-i686: OK
+linux-5.5.19-x86_64: OK
+linux-5.6.19-i686: OK
+linux-5.6.19-x86_64: OK
+linux-5.7.19-i686: OK
+linux-5.7.19-x86_64: OK
+linux-5.8.13-i686: OK
+linux-5.8.13-x86_64: OK
+linux-5.9-rc7-i686: OK
+linux-5.9-rc7-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: WARNINGS: Final Summary: 2943, Succeeded: 2943, Failed: 0, Warnings: 1
+virtme-32: WARNINGS: Final Summary: 2779, Succeeded: 2779, Failed: 0, Warnings: 2
+sparse: OK
+smatch: OK
+
+Detailed results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Saturday.log
+
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Saturday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
