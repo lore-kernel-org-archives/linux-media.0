@@ -7,49 +7,51 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADB79C43457
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:24:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1AD6C43457
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:25:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 711872236F
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:24:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 74ED4223B0
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:25:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603049086;
-	bh=h3lhKVwNNqO84gRm1v6CxPFXZOUV0dnlo5dbHzA65SM=;
+	s=default; t=1603049142;
+	bh=Cf5hZJ1OuNNK3oLI0/j/J8SLXiDMr90JtPLHcPIBgCo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=g62px7Rt/qD8XKYGscs7xzV2cAc7JgXwJ6jhpb21Y3G/pwjqfy3uGw2kjD/jtmb6/
-	 xCFrtu1rvza33jnYv0eIE4+1ciuHw6q3VEiwQeLxj/tmtarX9eGjCl1BewH/3/luqo
-	 M+di3K5d4MYP56kvB4zkse0xW6LsxeehspUcazEM=
+	b=U2LDnrtlu6ULFLZizc/w0VRTTDHhi5Uyoyf/IMjaqiNCh16N9bBtQGXRHEaLTDpty
+	 ArFfITqsXe4MUV6LSQDYBbV/7suZW+IT2VclFfcIGguXNFKgYZr1ESPi2p7+ax/7SZ
+	 74g+ue16smiTIOWxNxmmJQ2vKaQfB5GavV+HA+S4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730897AbgJRTYo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Oct 2020 15:24:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38818 "EHLO mail.kernel.org"
+        id S1731355AbgJRTZk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Oct 2020 15:25:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40356 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730885AbgJRTYn (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:24:43 -0400
+        id S1731335AbgJRTZk (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:25:40 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5848E22314;
-        Sun, 18 Oct 2020 19:24:42 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 98163223AB;
+        Sun, 18 Oct 2020 19:25:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603049083;
-        bh=h3lhKVwNNqO84gRm1v6CxPFXZOUV0dnlo5dbHzA65SM=;
+        s=default; t=1603049139;
+        bh=Cf5hZJ1OuNNK3oLI0/j/J8SLXiDMr90JtPLHcPIBgCo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FGRI4kKEsZ8ng8VQ7C+XgSsMaw2giYxC7oAv75ObR36B7RpDORF8ssBRDzUOM+FIt
-         TVmWzfQFA4zAc4/uJULnkAB8Sc5JwRIs5Kuk/rHftJGjoCo4i/8JVeWyamp/tq6EWz
-         nhG8VfhR6AqNcug0bBxRKWi53A/epRurKFI55YSA=
+        b=Z3FIRKQg0zuwXM28HXx7w1s7zFVT+mfR8Ef597IezRSdT0nBfJvpUqUzXcjYAASZ3
+         9io0D78N5wbcE/o+Yzje++6K1pDKFBoPBx+4aellHjdQmL+Q//5hsuWSb2c9Nw/iEW
+         WRJmVW9P3gll1hDY733DMxi+rD3txZDSAXDRitpE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dinghao Liu <dinghao.liu@zju.edu.cn>,
+Cc:     Qiushi Wu <wu000273@umn.edu>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 20/56] media: venus: core: Fix runtime PM imbalance in venus_probe
-Date:   Sun, 18 Oct 2020 15:23:41 -0400
-Message-Id: <20201018192417.4055228-20-sashal@kernel.org>
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 07/52] media: exynos4-is: Fix a reference count leak due to pm_runtime_get_sync
+Date:   Sun, 18 Oct 2020 15:24:44 -0400
+Message-Id: <20201018192530.4055730-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201018192417.4055228-1-sashal@kernel.org>
-References: <20201018192417.4055228-1-sashal@kernel.org>
+In-Reply-To: <20201018192530.4055730-1-sashal@kernel.org>
+References: <20201018192530.4055730-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -58,51 +60,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dinghao Liu <dinghao.liu@zju.edu.cn>
+From: Qiushi Wu <wu000273@umn.edu>
 
-[ Upstream commit bbe516e976fce538db96bd2b7287df942faa14a3 ]
+[ Upstream commit c47f7c779ef0458a58583f00c9ed71b7f5a4d0a2 ]
 
-pm_runtime_get_sync() increments the runtime PM usage counter even
-when it returns an error code. Thus a pairing decrement is needed on
-the error handling path to keep the counter balanced. For other error
-paths after this call, things are the same.
+On calling pm_runtime_get_sync() the reference count of the device
+is incremented. In case of failure, decrement the
+reference count before returning the error.
 
-Fix this by adding pm_runtime_put_noidle() after 'err_runtime_disable'
-label. But in this case, the error path after pm_runtime_put_sync()
-will decrease PM usage counter twice. Thus add an extra
-pm_runtime_get_noresume() in this path to balance PM counter.
-
-Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+Signed-off-by: Qiushi Wu <wu000273@umn.edu>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/qcom/venus/core.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/media/platform/exynos4-is/media-dev.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-index 60069869596cb..168f5af6abcc2 100644
---- a/drivers/media/platform/qcom/venus/core.c
-+++ b/drivers/media/platform/qcom/venus/core.c
-@@ -321,8 +321,10 @@ static int venus_probe(struct platform_device *pdev)
- 		goto err_dev_unregister;
+diff --git a/drivers/media/platform/exynos4-is/media-dev.c b/drivers/media/platform/exynos4-is/media-dev.c
+index f772c9b92d9ba..1cab30578e166 100644
+--- a/drivers/media/platform/exynos4-is/media-dev.c
++++ b/drivers/media/platform/exynos4-is/media-dev.c
+@@ -479,8 +479,10 @@ static int fimc_md_register_sensor_entities(struct fimc_md *fmd)
+ 		return -ENXIO;
  
- 	ret = pm_runtime_put_sync(dev);
--	if (ret)
-+	if (ret) {
-+		pm_runtime_get_noresume(dev);
- 		goto err_dev_unregister;
+ 	ret = pm_runtime_get_sync(fmd->pmf);
+-	if (ret < 0)
++	if (ret < 0) {
++		pm_runtime_put(fmd->pmf);
+ 		return ret;
 +	}
  
- 	return 0;
+ 	fmd->num_sensors = 0;
  
-@@ -333,6 +335,7 @@ static int venus_probe(struct platform_device *pdev)
- err_venus_shutdown:
- 	venus_shutdown(dev);
- err_runtime_disable:
-+	pm_runtime_put_noidle(dev);
- 	pm_runtime_set_suspended(dev);
- 	pm_runtime_disable(dev);
- 	hfi_destroy(core);
 -- 
 2.25.1
 
