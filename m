@@ -4,51 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4052AC433E7
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:27:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 675E7C43467
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:30:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0CE7822282
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:27:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2EE10207DE
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:30:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603049259;
-	bh=/HqbitK00QkLIbbHhw5jTLcPPXOHnA8KQORgGAso0Bw=;
+	s=default; t=1603049410;
+	bh=fqJxabfMkz6RU154unbmDzgV5qtAy8Ka4yXuq2UqcNg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=1uPfLb8tEDMsMLVhTWTl5RwxS4ZsmHMKGP/vmXyW4NxHvJL6zJOA99UsVG1+YfVq2
-	 Vx850e0Qa9W+YeR9ATEBs1T6nyaS3leF8VlbN+s2yK9v9V/yyuM+a/h3ritiolgt6T
-	 0fOoX7Gz5pIk0UToIAkReDEoT5P7Ssk+HwLtWtIA=
+	b=piEza1uBSFczKfj2kf1esqrvsZAP89ChrVP6Uzk0m6zDyJ34tX17BSbJdx7Vg7pNn
+	 L82nFTvBMGekwH4cCcSX0+H77vJKIrecpPGnaZhSBOuaeR+45FkBJM56wVbC6lgyVS
+	 /sHnPuXUcbEVT8vXkpYTYkwnj/w5GdNg12uW61KI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732146AbgJRT1h (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Oct 2020 15:27:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43504 "EHLO mail.kernel.org"
+        id S1732169AbgJRT1o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Oct 2020 15:27:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43676 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732134AbgJRT1g (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:27:36 -0400
+        id S1728127AbgJRT1l (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:27:41 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B2A3922274;
-        Sun, 18 Oct 2020 19:27:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BBCC822284;
+        Sun, 18 Oct 2020 19:27:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603049255;
-        bh=/HqbitK00QkLIbbHhw5jTLcPPXOHnA8KQORgGAso0Bw=;
+        s=default; t=1603049261;
+        bh=fqJxabfMkz6RU154unbmDzgV5qtAy8Ka4yXuq2UqcNg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sEBGh/03Uac2+9eU03LjjjSGm/eK7badB4EY6rArxrUxrh4NwOFO4HlLwcDeGiZhr
-         GajSz/Zae+RNF3nuWwaKB+FqNlhoowT4qq1xG0EqKWgfkXAunD+3OBQA9cSxyFu2MS
-         NG1fWnep6LlggkkjjD7On2AsIX6jAiFPzIryUFJE=
+        b=KjazmJEhL3O/SsNY4GCPJxjXgxubaamz2OZL327vFKZcLu9K3BWDhZStvTzcOx38F
+         X9a/SYO24OA+QDfncBYmBekR32J7+pWzpaIJRfJqZU+Y97AoHK7z8GGw32WoKOoLLR
+         tJENTzKK804ELUxfomgKpCdmdV6cALrD2V8WpCjA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Qiushi Wu <wu000273@umn.edu>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 05/33] media: exynos4-is: Fix a reference count leak
-Date:   Sun, 18 Oct 2020 15:27:00 -0400
-Message-Id: <20201018192728.4056577-5-sashal@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.4 10/33] media: saa7134: avoid a shift overflow
+Date:   Sun, 18 Oct 2020 15:27:05 -0400
+Message-Id: <20201018192728.4056577-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201018192728.4056577-1-sashal@kernel.org>
 References: <20201018192728.4056577-1-sashal@kernel.org>
@@ -60,39 +56,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Qiushi Wu <wu000273@umn.edu>
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit 64157b2cb1940449e7df2670e85781c690266588 ]
+[ Upstream commit 15a36aae1ec1c1f17149b6113b92631791830740 ]
 
-pm_runtime_get_sync() increments the runtime PM usage counter even
-when it returns an error code, causing incorrect ref count if
-pm_runtime_put_noidle() is not called in error handling paths.
-Thus call pm_runtime_put_noidle() if pm_runtime_get_sync() fails.
+As reported by smatch:
+	drivers/media/pci/saa7134//saa7134-tvaudio.c:686 saa_dsp_writel() warn: should 'reg << 2' be a 64 bit type?
 
-Signed-off-by: Qiushi Wu <wu000273@umn.edu>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+On a 64-bits Kernel, the shift might be bigger than 32 bits.
+
+In real, this should never happen, but let's shut up the warning.
+
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/exynos4-is/mipi-csis.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/media/pci/saa7134/saa7134-tvaudio.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/exynos4-is/mipi-csis.c b/drivers/media/platform/exynos4-is/mipi-csis.c
-index 4b85105dc159b..4f7a0f59f36c2 100644
---- a/drivers/media/platform/exynos4-is/mipi-csis.c
-+++ b/drivers/media/platform/exynos4-is/mipi-csis.c
-@@ -513,8 +513,10 @@ static int s5pcsis_s_stream(struct v4l2_subdev *sd, int enable)
- 	if (enable) {
- 		s5pcsis_clear_counters(state);
- 		ret = pm_runtime_get_sync(&state->pdev->dev);
--		if (ret && ret != 1)
-+		if (ret && ret != 1) {
-+			pm_runtime_put_noidle(&state->pdev->dev);
- 			return ret;
-+		}
- 	}
+diff --git a/drivers/media/pci/saa7134/saa7134-tvaudio.c b/drivers/media/pci/saa7134/saa7134-tvaudio.c
+index 21a579309575d..02407983ce236 100644
+--- a/drivers/media/pci/saa7134/saa7134-tvaudio.c
++++ b/drivers/media/pci/saa7134/saa7134-tvaudio.c
+@@ -696,7 +696,8 @@ int saa_dsp_writel(struct saa7134_dev *dev, int reg, u32 value)
+ {
+ 	int err;
  
- 	mutex_lock(&state->lock);
+-	audio_dbg(2, "dsp write reg 0x%x = 0x%06x\n", reg << 2, value);
++	audio_dbg(2, "dsp write reg 0x%x = 0x%06x\n",
++		  (reg << 2) & 0xffffffff, value);
+ 	err = saa_dsp_wait_bit(dev,SAA7135_DSP_RWSTATE_WRR);
+ 	if (err < 0)
+ 		return err;
 -- 
 2.25.1
 
