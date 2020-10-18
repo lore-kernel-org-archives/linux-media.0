@@ -7,48 +7,47 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72420C43467
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:33:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C37B2C433E7
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:33:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3B4D1207DE
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:33:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 91375207DE
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:33:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603049606;
-	bh=xV8v4HsfW/T/pSVmTp0YC8+BuJdwI81D8/nK9ImUFdk=;
+	s=default; t=1603049618;
+	bh=jHv1IA6LQU7+/SPx/H7AeHePLNsVE4JaFt4uu2TZIe0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=N9/A90fOOM7h0RAq1l+CkFRtADIjgdJQloVEevQPyNNAPlvC0bv/rlF18EZVJbepv
-	 YRkrp/P0NupaUf4uU5weL2modk8z5IqhAk9Xt526Eqkr3UirrX6RSU/r+XENr2V7ST
-	 vj2FqQMZEodr45ngKsYWJ+voaaIyRBKKND+BaUiA=
+	b=TLBD0Zj6cso3jA1MkFNXrK/JgQ1wFNWOev+m4czckp5aojwPuDFMZTURRwayrUAX5
+	 J4+UA3UzlW1TREwdN8m7EmtiDMfJiiBrr8BJ9zOsGGDjFALPkAy5QodQlzSdCDt4ga
+	 MPADbQNxLfjNIPkDNdY7DSgwotFd/Zfpn3flul6w=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732320AbgJRTdZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Oct 2020 15:33:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42134 "EHLO mail.kernel.org"
+        id S1732621AbgJRTdc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Oct 2020 15:33:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41950 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731813AbgJRT0s (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:26:48 -0400
+        id S1731783AbgJRT0k (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:26:40 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6A03E20791;
-        Sun, 18 Oct 2020 19:26:46 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 74295222C8;
+        Sun, 18 Oct 2020 19:26:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603049207;
-        bh=xV8v4HsfW/T/pSVmTp0YC8+BuJdwI81D8/nK9ImUFdk=;
+        s=default; t=1603049200;
+        bh=jHv1IA6LQU7+/SPx/H7AeHePLNsVE4JaFt4uu2TZIe0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eNE+MArCXnpH+3gWclpCbwMtv5O350iwunm/bx5KOFdjnsCidbaP6M6jd3++96HoE
-         p+AhQTugMduA1La43lQWIrIKDDJaSZc1nnj8Yv/i1g40xPos5x9AvH8CMaj/MkWB9Q
-         3g+2hc5YgafPxSB0Ic53jbZoMVq1f8gDJHOja5Sc=
+        b=V9JpNhVGIMp/OmaY2QvaxcDjJMZknJLbChntdyh6YyNlz4JY1kLlFBky+t2wSrsEo
+         DRqfL+54QGpOA6IXCdCi5XWqAq5qFXE/31gN4bRqyVJACOvsJAx5Y/Q+3YlV0LhMmY
+         zPjGkfYvIDTYImNZS9svnURCmeqh23DeiZ/+ulC4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dinghao Liu <dinghao.liu@zju.edu.cn>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        syzbot+998261c2ae5932458f6c@syzkaller.appspotmail.com,
+        Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 08/41] media: platform: s3c-camif: Fix runtime PM imbalance on error
-Date:   Sun, 18 Oct 2020 15:26:02 -0400
-Message-Id: <20201018192635.4056198-8-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.9 03/41] media: ati_remote: sanity check for both endpoints
+Date:   Sun, 18 Oct 2020 15:25:57 -0400
+Message-Id: <20201018192635.4056198-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201018192635.4056198-1-sashal@kernel.org>
 References: <20201018192635.4056198-1-sashal@kernel.org>
@@ -60,51 +59,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dinghao Liu <dinghao.liu@zju.edu.cn>
+From: Oliver Neukum <oneukum@suse.com>
 
-[ Upstream commit dafa3605fe60d5a61239d670919b2a36e712481e ]
+[ Upstream commit a8be80053ea74bd9c3f9a3810e93b802236d6498 ]
 
-pm_runtime_get_sync() increments the runtime PM usage counter even
-when it returns an error code. Thus a pairing decrement is needed on
-the error handling path to keep the counter balanced.
+If you do sanity checks, you should do them for both endpoints.
+Hence introduce checking for endpoint type for the output
+endpoint, too.
 
-Also, call pm_runtime_disable() when pm_runtime_get_sync() returns
-an error code.
-
-Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
-Reviewed-by: Sylwester Nawrocki <snawrocki@kernel.org>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reported-by: syzbot+998261c2ae5932458f6c@syzkaller.appspotmail.com
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Signed-off-by: Sean Young <sean@mess.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/s3c-camif/camif-core.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/media/rc/ati_remote.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/media/platform/s3c-camif/camif-core.c b/drivers/media/platform/s3c-camif/camif-core.c
-index ec40019703132..560e1ff236508 100644
---- a/drivers/media/platform/s3c-camif/camif-core.c
-+++ b/drivers/media/platform/s3c-camif/camif-core.c
-@@ -476,7 +476,7 @@ static int s3c_camif_probe(struct platform_device *pdev)
+diff --git a/drivers/media/rc/ati_remote.c b/drivers/media/rc/ati_remote.c
+index 9f5b59706741c..7f98db4bc0277 100644
+--- a/drivers/media/rc/ati_remote.c
++++ b/drivers/media/rc/ati_remote.c
+@@ -850,6 +850,10 @@ static int ati_remote_probe(struct usb_interface *interface,
+ 		err("%s: endpoint_in message size==0? \n", __func__);
+ 		return -ENODEV;
+ 	}
++	if (!usb_endpoint_is_int_out(endpoint_out)) {
++		err("%s: Unexpected endpoint_out\n", __func__);
++		return -ENODEV;
++	}
  
- 	ret = camif_media_dev_init(camif);
- 	if (ret < 0)
--		goto err_alloc;
-+		goto err_pm;
- 
- 	ret = camif_register_sensor(camif);
- 	if (ret < 0)
-@@ -510,10 +510,9 @@ static int s3c_camif_probe(struct platform_device *pdev)
- 	media_device_unregister(&camif->media_dev);
- 	media_device_cleanup(&camif->media_dev);
- 	camif_unregister_media_entities(camif);
--err_alloc:
-+err_pm:
- 	pm_runtime_put(dev);
- 	pm_runtime_disable(dev);
--err_pm:
- 	camif_clk_put(camif);
- err_clk:
- 	s3c_camif_unregister_subdev(camif);
+ 	ati_remote = kzalloc(sizeof (struct ati_remote), GFP_KERNEL);
+ 	rc_dev = rc_allocate_device();
 -- 
 2.25.1
 
