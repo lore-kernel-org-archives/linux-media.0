@@ -7,46 +7,48 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 454D4C433DF
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:33:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E031BC43467
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:33:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 133C62137B
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:33:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AF596207DE
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:33:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603049589;
-	bh=p3pFILez5YQJvA/6MJwHVDzp90Rm0RNchtWcV42fhIc=;
+	s=default; t=1603049592;
+	bh=y1xu6YN5n8PCbz6xT8fVPb2HFgWucIGP9wF1PWqUmCo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=pkvWqpE1JVKbup1f+4v3rkbTv2zANKd2kJI1l0YT3efc8n56PZ/bgAsC7sA7B9QpR
-	 Z1anexiJZi/QdgSVFS+7M6CEyHv0GtlLhgByfctdzBGBUxWI0IFnSB85eV+Oyeu3Ik
-	 DdLzhR9QWIiyzYzOLBVzQJ0Hp1derJNd84uUkecU=
+	b=cUHY3uSC3xzHdyuzRuWdnG+i8Odjo/TuVQ79w0lE47NQ+ETAY7YdwFcdClk8w+cmo
+	 d0Yt5J2s9tGHuSfGnNvvMmEWScJG3UKXxNyQ1yMW3SNSkJMmskMxDrKQcNxJU3KLSs
+	 LJ6OW6EEaxjB113jj0H3feFqcCxTakuhXBB4e2+o=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732478AbgJRTdF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Oct 2020 15:33:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42208 "EHLO mail.kernel.org"
+        id S1731853AbgJRT0u (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Oct 2020 15:26:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41982 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731859AbgJRT0v (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:26:51 -0400
+        id S1731793AbgJRT0m (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:26:42 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 33AB3222C8;
-        Sun, 18 Oct 2020 19:26:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C10B020791;
+        Sun, 18 Oct 2020 19:26:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603049210;
-        bh=p3pFILez5YQJvA/6MJwHVDzp90Rm0RNchtWcV42fhIc=;
+        s=default; t=1603049201;
+        bh=y1xu6YN5n8PCbz6xT8fVPb2HFgWucIGP9wF1PWqUmCo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yGHJWLXnMZr4JElT61NAK1aQhkEPimOebI2NMiskD7rV0+D3x+FYj5/dc0IPF1iVq
-         9nbjIn+YP84zXKextRhLenBFk7iyee6z4dQj9YhfGztvKL1goApmk3GO7sFZQSIQuf
-         k9e85HzASRsXmLX2ZtJyakZeG1RQ3qnHfFfrRRFo=
+        b=OogYVG985oa/zLaLYpdivHG0piP/y6jiWt2ZUi1OHpa4+1i9jvoOoRO5dhMDPbrv0
+         Ab+e1zB6urKlta7vO2O0vOlM+zCzn7989O4eqILSyws8jkC2ZriwLJwwVCDclFrhib
+         +q3ohGYiGjgzKxU0Y8gdiiuOpv2nCvRq0T+hfP2Y=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Xiaolong Huang <butterflyhuangxx@gmail.com>,
+Cc:     Qiushi Wu <wu000273@umn.edu>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 11/41] media: media/pci: prevent memory leak in bttv_probe
-Date:   Sun, 18 Oct 2020 15:26:05 -0400
-Message-Id: <20201018192635.4056198-11-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.9 04/41] media: exynos4-is: Fix several reference count leaks due to pm_runtime_get_sync
+Date:   Sun, 18 Oct 2020 15:25:58 -0400
+Message-Id: <20201018192635.4056198-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201018192635.4056198-1-sashal@kernel.org>
 References: <20201018192635.4056198-1-sashal@kernel.org>
@@ -58,63 +60,52 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Xiaolong Huang <butterflyhuangxx@gmail.com>
+From: Qiushi Wu <wu000273@umn.edu>
 
-[ Upstream commit 7b817585b730665126b45df5508dd69526448bc8 ]
+[ Upstream commit 7ef64ceea0008c17e94a8a2c60c5d6d46f481996 ]
 
-In bttv_probe if some functions such as pci_enable_device,
-pci_set_dma_mask and request_mem_region fails the allocated
- memory for btv should be released.
+On calling pm_runtime_get_sync() the reference count of the device
+is incremented. In case of failure, decrement the
+reference count before returning the error.
 
-Signed-off-by: Xiaolong Huang <butterflyhuangxx@gmail.com>
+Signed-off-by: Qiushi Wu <wu000273@umn.edu>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/bt8xx/bttv-driver.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ drivers/media/platform/exynos4-is/fimc-isp.c  | 4 +++-
+ drivers/media/platform/exynos4-is/fimc-lite.c | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
-index 97b91a9f9fa93..1d6173998a299 100644
---- a/drivers/media/pci/bt8xx/bttv-driver.c
-+++ b/drivers/media/pci/bt8xx/bttv-driver.c
-@@ -4059,11 +4059,13 @@ static int bttv_probe(struct pci_dev *dev, const struct pci_device_id *pci_id)
- 	btv->id  = dev->device;
- 	if (pci_enable_device(dev)) {
- 		pr_warn("%d: Can't enable device\n", btv->c.nr);
--		return -EIO;
-+		result = -EIO;
-+		goto free_mem;
- 	}
- 	if (pci_set_dma_mask(dev, DMA_BIT_MASK(32))) {
- 		pr_warn("%d: No suitable DMA available\n", btv->c.nr);
--		return -EIO;
-+		result = -EIO;
-+		goto free_mem;
- 	}
- 	if (!request_mem_region(pci_resource_start(dev,0),
- 				pci_resource_len(dev,0),
-@@ -4071,7 +4073,8 @@ static int bttv_probe(struct pci_dev *dev, const struct pci_device_id *pci_id)
- 		pr_warn("%d: can't request iomem (0x%llx)\n",
- 			btv->c.nr,
- 			(unsigned long long)pci_resource_start(dev, 0));
--		return -EBUSY;
-+		result = -EBUSY;
-+		goto free_mem;
- 	}
- 	pci_set_master(dev);
- 	pci_set_command(dev);
-@@ -4257,6 +4260,10 @@ static int bttv_probe(struct pci_dev *dev, const struct pci_device_id *pci_id)
- 	release_mem_region(pci_resource_start(btv->c.pci,0),
- 			   pci_resource_len(btv->c.pci,0));
- 	pci_disable_device(btv->c.pci);
-+
-+free_mem:
-+	bttvs[btv->c.nr] = NULL;
-+	kfree(btv);
- 	return result;
- }
+diff --git a/drivers/media/platform/exynos4-is/fimc-isp.c b/drivers/media/platform/exynos4-is/fimc-isp.c
+index 8efe9160ab346..dbc4f57f34a52 100644
+--- a/drivers/media/platform/exynos4-is/fimc-isp.c
++++ b/drivers/media/platform/exynos4-is/fimc-isp.c
+@@ -311,8 +311,10 @@ static int fimc_isp_subdev_s_power(struct v4l2_subdev *sd, int on)
  
+ 	if (on) {
+ 		ret = pm_runtime_get_sync(&is->pdev->dev);
+-		if (ret < 0)
++		if (ret < 0) {
++			pm_runtime_put(&is->pdev->dev);
+ 			return ret;
++		}
+ 		set_bit(IS_ST_PWR_ON, &is->state);
+ 
+ 		ret = fimc_is_start_firmware(is);
+diff --git a/drivers/media/platform/exynos4-is/fimc-lite.c b/drivers/media/platform/exynos4-is/fimc-lite.c
+index b91abf1c4d43b..f1921e06ffe1b 100644
+--- a/drivers/media/platform/exynos4-is/fimc-lite.c
++++ b/drivers/media/platform/exynos4-is/fimc-lite.c
+@@ -480,7 +480,7 @@ static int fimc_lite_open(struct file *file)
+ 	set_bit(ST_FLITE_IN_USE, &fimc->state);
+ 	ret = pm_runtime_get_sync(&fimc->pdev->dev);
+ 	if (ret < 0)
+-		goto unlock;
++		goto err_pm;
+ 
+ 	ret = v4l2_fh_open(file);
+ 	if (ret < 0)
 -- 
 2.25.1
 
