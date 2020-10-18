@@ -5,48 +5,50 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B853FC43457
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:22:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D3FBC433DF
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:22:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8381E222B9
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:22:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3D770222B9
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:22:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603048968;
-	bh=6EsG4J3qaTfb+6PTdylTCV8RwtHyBqmGpqFKCjSOQ5I=;
+	s=default; t=1603048969;
+	bh=xYIbL3WOQmMf9lGdWrtLAap8INKhbld2Gfp8EA2iGos=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=O1+vW9/f6KZhvCcDdjoyVOD4Xg+knmdvGGD3navBvFLK0U1qGK4PhtVxr6MLiO+g6
-	 PrjDtfliMR7W6PHpPzDTZtp8ZUXjO12s6U3ELx/TsS33QbFmfCO/qJrQ2bqGmJyzdD
-	 rg5Jx/mf/GB9Ml06mqDdjokiCrarz8VKEww7i/Hw=
+	b=HKYmLRlwelXqFEKeiO5UASOgeWqDqDIBOtfrL7oWycYJYREhw731GfGOZbh1mtMlo
+	 6wWrusuEEEtIp4BDo5AKGQn8sGxh5tWrwLRvr4TPbbnHddAoRamKGAk0FHXh8zUetw
+	 nzwhygScGp8odwR2O6+ZeIt7ogVft4TwzMIxgpXs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729972AbgJRTWr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Oct 2020 15:22:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35578 "EHLO mail.kernel.org"
+        id S1729952AbgJRTWs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Oct 2020 15:22:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35690 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729941AbgJRTWn (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:22:43 -0400
+        id S1729967AbgJRTWr (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:22:47 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EAB54207DE;
-        Sun, 18 Oct 2020 19:22:41 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9D15E20791;
+        Sun, 18 Oct 2020 19:22:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603048962;
-        bh=6EsG4J3qaTfb+6PTdylTCV8RwtHyBqmGpqFKCjSOQ5I=;
+        s=default; t=1603048966;
+        bh=xYIbL3WOQmMf9lGdWrtLAap8INKhbld2Gfp8EA2iGos=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V0+uLe80S0mMRqf7d05WkIRJrwNP4PL1B6T4WbhWChBe8tr0ZUfvJy+LGmpaMt5lQ
-         oI148gD/LQ3GDHCExinMD/kaxtisBOmyght5AuKdgv18bB49Mr8sFzedPxSXoRtdbs
-         4laRPnbjQRAkTOLW7+t3gadTagmLe7aFuHg4l86s=
+        b=HtoYm0oPVpSeh2m6u8QKtq4DIklSH/NQthYhNF1tkcK2ZzaMoyJCS42fhAV5ubmg4
+         tHFt9Ek07hCMDAuvy67/AHiptJI0CBwDlKhwcpOkEQrJjB1H7fGsCAWESsripNGks+
+         2gt6PvV3DcawVyG3Mx3oTJ2BZ5avooM5+vCwL2Yc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Aditya Pakki <pakki001@umn.edu>,
+Cc:     Qiushi Wu <wu000273@umn.edu>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 08/80] media: st-delta: Fix reference count leak in delta_run_work
-Date:   Sun, 18 Oct 2020 15:21:19 -0400
-Message-Id: <20201018192231.4054535-8-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 11/80] media: exynos4-is: Fix a reference count leak due to pm_runtime_get_sync
+Date:   Sun, 18 Oct 2020 15:21:22 -0400
+Message-Id: <20201018192231.4054535-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201018192231.4054535-1-sashal@kernel.org>
 References: <20201018192231.4054535-1-sashal@kernel.org>
@@ -58,38 +60,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Aditya Pakki <pakki001@umn.edu>
+From: Qiushi Wu <wu000273@umn.edu>
 
-[ Upstream commit 57cc666d36adc7b45e37ba4cd7bc4e44ec4c43d7 ]
+[ Upstream commit c47f7c779ef0458a58583f00c9ed71b7f5a4d0a2 ]
 
-delta_run_work() calls delta_get_sync() that increments
-the reference counter. In case of failure, decrement the reference
-count by calling delta_put_autosuspend().
+On calling pm_runtime_get_sync() the reference count of the device
+is incremented. In case of failure, decrement the
+reference count before returning the error.
 
-Signed-off-by: Aditya Pakki <pakki001@umn.edu>
+Signed-off-by: Qiushi Wu <wu000273@umn.edu>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/sti/delta/delta-v4l2.c | 4 +++-
+ drivers/media/platform/exynos4-is/media-dev.c | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/sti/delta/delta-v4l2.c b/drivers/media/platform/sti/delta/delta-v4l2.c
-index 91369fb3ffaa4..2791107e641bc 100644
---- a/drivers/media/platform/sti/delta/delta-v4l2.c
-+++ b/drivers/media/platform/sti/delta/delta-v4l2.c
-@@ -954,8 +954,10 @@ static void delta_run_work(struct work_struct *work)
- 	/* enable the hardware */
- 	if (!dec->pm) {
- 		ret = delta_get_sync(ctx);
--		if (ret)
-+		if (ret) {
-+			delta_put_autosuspend(ctx);
- 			goto err;
-+		}
- 	}
+diff --git a/drivers/media/platform/exynos4-is/media-dev.c b/drivers/media/platform/exynos4-is/media-dev.c
+index 9c31d950cddf7..29e12d57b12d7 100644
+--- a/drivers/media/platform/exynos4-is/media-dev.c
++++ b/drivers/media/platform/exynos4-is/media-dev.c
+@@ -484,8 +484,10 @@ static int fimc_md_register_sensor_entities(struct fimc_md *fmd)
+ 		return -ENXIO;
  
- 	/* decode this access unit */
+ 	ret = pm_runtime_get_sync(fmd->pmf);
+-	if (ret < 0)
++	if (ret < 0) {
++		pm_runtime_put(fmd->pmf);
+ 		return ret;
++	}
+ 
+ 	fmd->num_sensors = 0;
+ 
 -- 
 2.25.1
 
