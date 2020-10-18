@@ -5,49 +5,50 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1D3DC433E7
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:40:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4A0DC433DF
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:40:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AD0202137B
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:40:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 91728206CA
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:40:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603050039;
-	bh=LJo36oZvjES6iiePu+aWwhNnfptmuFWCkAh8BvbK3bo=;
+	s=default; t=1603050047;
+	bh=ubTthlQXPGpbLr5597toqvhjvnhASr4vmo2xJWKCu+c=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=TRPNA+NID5C+J8/2ej48Xt/ANcpB0FEz/9klCbB1I0OtgDNahFa3JK08B7emdl0qT
-	 pO5gRWytepNK9LkXMdpNiY5E0aXUa5rygAWW1KmnLA33kguDgNGY3vXWrFaFj4eo7x
-	 sDluQHG2HGdgqz7Vgla2AHvizJ4H/HM+Rnofc57M=
+	b=WA/3CC82Ea6P2KkZBnXSeZg9HMxzV2UDBbRYgf1MWlI8r/A9AAK06a912jGst2qxi
+	 zKcdqCwtYh4rGeS0Nu1y1OhwOsgaRW8i2CTzz6LlzzGetCw7f2AHtj4rmTuiIdH35d
+	 f/WlV1NKY/+KFX1nKLE5NhVmZ72vv90PgoZoIflM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732051AbgJRTki (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Oct 2020 15:40:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38340 "EHLO mail.kernel.org"
+        id S1733142AbgJRTkp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Oct 2020 15:40:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38560 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730720AbgJRTYW (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:24:22 -0400
+        id S1730805AbgJRTYd (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:24:33 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 18D2C222E7;
-        Sun, 18 Oct 2020 19:24:21 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EEC7F207DE;
+        Sun, 18 Oct 2020 19:24:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603049062;
-        bh=LJo36oZvjES6iiePu+aWwhNnfptmuFWCkAh8BvbK3bo=;
+        s=default; t=1603049072;
+        bh=ubTthlQXPGpbLr5597toqvhjvnhASr4vmo2xJWKCu+c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I0f3E1YLICghb8/ry/zDo7UvXp2AZ3gcLpufPuwg66a3ZnSM5nsuwC7XEXjImbNh+
-         DwGA3omJpWz6FVCg2sgMEQp37KsF8bVD4zVGZKuLxaPbAu3+LwhBxbazwolXCab4Jp
-         n+I5vs8PD7hJ0ZvF3L5PufPgO2wetu2Ty9MsJfDg=
+        b=GA0TUYHHi4MV4fqkkS9B1xwXeBdBueAY1vql2pPc9YqZ4MgZF7ZJ3Y+dldWNspGWg
+         eqFXkklUtXzcue7Xxw6P3CPAQPgjUbgR4aUW83ytgtsKaX15fTJRkPqTubgUSqm900
+         cwMYKkqWGaNwIzj441qEM8Z0XagAmC9cnEhmu+Gg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Pavel Machek <pavel@ucw.cz>, Pavel Machek <pavel@denx.de>,
+Cc:     Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        Sylwester Nawrocki <snawrocki@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux1394-devel@lists.sourceforge.net
-Subject: [PATCH AUTOSEL 4.19 03/56] media: firewire: fix memory leak
-Date:   Sun, 18 Oct 2020 15:23:24 -0400
-Message-Id: <20201018192417.4055228-3-sashal@kernel.org>
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 11/56] media: platform: s3c-camif: Fix runtime PM imbalance on error
+Date:   Sun, 18 Oct 2020 15:23:32 -0400
+Message-Id: <20201018192417.4055228-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201018192417.4055228-1-sashal@kernel.org>
 References: <20201018192417.4055228-1-sashal@kernel.org>
@@ -59,37 +60,51 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Pavel Machek <pavel@ucw.cz>
+From: Dinghao Liu <dinghao.liu@zju.edu.cn>
 
-[ Upstream commit b28e32798c78a346788d412f1958f36bb760ec03 ]
+[ Upstream commit dafa3605fe60d5a61239d670919b2a36e712481e ]
 
-Fix memory leak in node_probe.
+pm_runtime_get_sync() increments the runtime PM usage counter even
+when it returns an error code. Thus a pairing decrement is needed on
+the error handling path to keep the counter balanced.
 
-Signed-off-by: Pavel Machek (CIP) <pavel@denx.de>
+Also, call pm_runtime_disable() when pm_runtime_get_sync() returns
+an error code.
+
+Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+Reviewed-by: Sylwester Nawrocki <snawrocki@kernel.org>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/firewire/firedtv-fw.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/media/platform/s3c-camif/camif-core.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/firewire/firedtv-fw.c b/drivers/media/firewire/firedtv-fw.c
-index eaf94b817dbc0..2ac9d24d3f0cd 100644
---- a/drivers/media/firewire/firedtv-fw.c
-+++ b/drivers/media/firewire/firedtv-fw.c
-@@ -271,8 +271,10 @@ static int node_probe(struct fw_unit *unit, const struct ieee1394_device_id *id)
+diff --git a/drivers/media/platform/s3c-camif/camif-core.c b/drivers/media/platform/s3c-camif/camif-core.c
+index 79bc0ef6bb413..8d8ed72bd0aaf 100644
+--- a/drivers/media/platform/s3c-camif/camif-core.c
++++ b/drivers/media/platform/s3c-camif/camif-core.c
+@@ -476,7 +476,7 @@ static int s3c_camif_probe(struct platform_device *pdev)
  
- 	name_len = fw_csr_string(unit->directory, CSR_MODEL,
- 				 name, sizeof(name));
--	if (name_len < 0)
--		return name_len;
-+	if (name_len < 0) {
-+		err = name_len;
-+		goto fail_free;
-+	}
- 	for (i = ARRAY_SIZE(model_names); --i; )
- 		if (strlen(model_names[i]) <= name_len &&
- 		    strncmp(name, model_names[i], name_len) == 0)
+ 	ret = camif_media_dev_init(camif);
+ 	if (ret < 0)
+-		goto err_alloc;
++		goto err_pm;
+ 
+ 	ret = camif_register_sensor(camif);
+ 	if (ret < 0)
+@@ -510,10 +510,9 @@ static int s3c_camif_probe(struct platform_device *pdev)
+ 	media_device_unregister(&camif->media_dev);
+ 	media_device_cleanup(&camif->media_dev);
+ 	camif_unregister_media_entities(camif);
+-err_alloc:
++err_pm:
+ 	pm_runtime_put(dev);
+ 	pm_runtime_disable(dev);
+-err_pm:
+ 	camif_clk_put(camif);
+ err_clk:
+ 	s3c_camif_unregister_subdev(camif);
 -- 
 2.25.1
 
