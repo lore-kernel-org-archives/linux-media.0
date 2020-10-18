@@ -4,49 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8C20C433DF
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:59:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AA3CC433E7
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:59:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A0AB022269
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:59:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5EC3E2226B
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:59:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603051158;
-	bh=uMiewmmEqIP9o+WBAyBsct7iMPd6w8XJY4CYwUbB3zc=;
+	s=default; t=1603051167;
+	bh=+8n3zIMFKJL0z8oTl5RIgi6vXA1uqJNn2INj3/z1hNM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=In4SmMgGcDRlLmWoTJnPBJj6ncWqhf2zKnrK1P+wfS4myzj852+nvY3l+/3aZBWq1
-	 VArixfoeSh7RuIhEVWdn/sb06WP5WzSMalXghqtM+fwY8HgV8TvcWSQOxkc27rxKJr
-	 9DtgADzUvOmLdSiqBOSxcBXOblOHdaGkuYf954eQ=
+	b=AQB7xfq39U337ufxxTW+6b1/rMW0GwyBPbr2WEOnK4cF1EntNTY1e6rRMYbeT2V2M
+	 LsNSZti8ymamgGhJQUcvZ9jPUPmXaBEDn5FddWnfUZJXl+aqN5NWEakWToNSldGths
+	 VjnvzinAGQktNosfqS2m9WVlUU+pqf+OvfNXlHc0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727134AbgJRTSx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Oct 2020 15:18:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57072 "EHLO mail.kernel.org"
+        id S2388630AbgJRT70 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Oct 2020 15:59:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57058 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727857AbgJRTSu (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:18:50 -0400
+        id S1727294AbgJRTSt (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:18:49 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F1664222EB;
-        Sun, 18 Oct 2020 19:18:48 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AA285222E7;
+        Sun, 18 Oct 2020 19:18:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603048729;
-        bh=uMiewmmEqIP9o+WBAyBsct7iMPd6w8XJY4CYwUbB3zc=;
+        s=default; t=1603048728;
+        bh=+8n3zIMFKJL0z8oTl5RIgi6vXA1uqJNn2INj3/z1hNM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wiZ0pskQTjxF3vNzqfGB/0ZxXdH2YFJC0O154vRR6D/j2f57tZr6FTGi/v3gV/dhA
-         JBZdCvKw/jnPrPHcDgvBlo0a4H/dbXIZOnlVo8oRphGJJU9k1AqgoO2N3nH80s58oG
-         VJfhYCAD5pC1o1kqj/wQCRp3Ja/E5lU4T0TD9T2o=
+        b=06jbujW9/8bemzDJFAnNVyEY3daVzoM1v+7m6Mya1GITA31wWWv5zOhHDYuQ9u8xW
+         PkYlKFcC+iboJycise9dx4OieNBTCbFij1W/a17p5ovAbi3dj7hmNETlrTl1jGss22
+         xiImF5rs5g/Vf1yI8i1bK8ZVCgv1TX3PjVgfo0vY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dinghao Liu <dinghao.liu@zju.edu.cn>,
+Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.9 034/111] media: venus: core: Fix runtime PM imbalance in venus_probe
-Date:   Sun, 18 Oct 2020 15:16:50 -0400
-Message-Id: <20201018191807.4052726-34-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.9 033/111] media: venus: core: Fix error handling in probe
+Date:   Sun, 18 Oct 2020 15:16:49 -0400
+Message-Id: <20201018191807.4052726-33-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201018191807.4052726-1-sashal@kernel.org>
 References: <20201018191807.4052726-1-sashal@kernel.org>
@@ -58,51 +60,70 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dinghao Liu <dinghao.liu@zju.edu.cn>
+From: Rajendra Nayak <rnayak@codeaurora.org>
 
-[ Upstream commit bbe516e976fce538db96bd2b7287df942faa14a3 ]
+[ Upstream commit 98cd831088c64aa8fe7e1d2a8bb94b6faba0462b ]
 
-pm_runtime_get_sync() increments the runtime PM usage counter even
-when it returns an error code. Thus a pairing decrement is needed on
-the error handling path to keep the counter balanced. For other error
-paths after this call, things are the same.
+Post a successful pm_ops->core_get, an error in probe
+should exit by doing a pm_ops->core_put which seems
+to be missing. So fix it.
 
-Fix this by adding pm_runtime_put_noidle() after 'err_runtime_disable'
-label. But in this case, the error path after pm_runtime_put_sync()
-will decrease PM usage counter twice. Thus add an extra
-pm_runtime_get_noresume() in this path to balance PM counter.
-
-Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/qcom/venus/core.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/media/platform/qcom/venus/core.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-index bfcaba37d60fe..321ad77cb6cf4 100644
+index 203c6538044fb..bfcaba37d60fe 100644
 --- a/drivers/media/platform/qcom/venus/core.c
 +++ b/drivers/media/platform/qcom/venus/core.c
-@@ -289,8 +289,10 @@ static int venus_probe(struct platform_device *pdev)
- 		goto err_core_deinit;
+@@ -224,13 +224,15 @@ static int venus_probe(struct platform_device *pdev)
  
- 	ret = pm_runtime_put_sync(dev);
--	if (ret)
-+	if (ret) {
-+		pm_runtime_get_noresume(dev);
- 		goto err_dev_unregister;
-+	}
+ 	ret = dma_set_mask_and_coherent(dev, core->res->dma_mask);
+ 	if (ret)
+-		return ret;
++		goto err_core_put;
  
- 	return 0;
+ 	if (!dev->dma_parms) {
+ 		dev->dma_parms = devm_kzalloc(dev, sizeof(*dev->dma_parms),
+ 					      GFP_KERNEL);
+-		if (!dev->dma_parms)
+-			return -ENOMEM;
++		if (!dev->dma_parms) {
++			ret = -ENOMEM;
++			goto err_core_put;
++		}
+ 	}
+ 	dma_set_max_seg_size(dev, DMA_BIT_MASK(32));
  
-@@ -301,6 +303,7 @@ static int venus_probe(struct platform_device *pdev)
- err_venus_shutdown:
- 	venus_shutdown(core);
- err_runtime_disable:
-+	pm_runtime_put_noidle(dev);
+@@ -242,11 +244,11 @@ static int venus_probe(struct platform_device *pdev)
+ 					IRQF_TRIGGER_HIGH | IRQF_ONESHOT,
+ 					"venus", core);
+ 	if (ret)
+-		return ret;
++		goto err_core_put;
+ 
+ 	ret = hfi_create(core, &venus_core_ops);
+ 	if (ret)
+-		return ret;
++		goto err_core_put;
+ 
+ 	pm_runtime_enable(dev);
+ 
+@@ -302,6 +304,9 @@ static int venus_probe(struct platform_device *pdev)
  	pm_runtime_set_suspended(dev);
  	pm_runtime_disable(dev);
  	hfi_destroy(core);
++err_core_put:
++	if (core->pm_ops->core_put)
++		core->pm_ops->core_put(dev);
+ 	return ret;
+ }
+ 
 -- 
 2.25.1
 
