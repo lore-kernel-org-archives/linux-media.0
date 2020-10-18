@@ -2,119 +2,91 @@ Return-Path: <SRS0=tdip=DZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0640C4363A
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:52:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3855C43457
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:52:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4A8A720657
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:52:35 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="QOZMzgTQ";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="QOZMzgTQ"
+	by mail.kernel.org (Postfix) with ESMTP id 94A8020657
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:52:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1603050757;
+	bh=RbRdRmxmA7c51+g6PuhXswlxwb3qBKIwuI4P+E8fAes=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=iQjRJTV+T6j1eTVTHqgGAnkZ1fH2JfrDuvM8jJLdDUlXplc4aYpOVSsELqGPPfdeg
+	 5hXI079KWkwj9sDcg6qWX1m6q2xWwE/y1tbn0k5TB7DkSIa26jMRzJSWCKZsPFTI5f
+	 5nNOZCLMxYkRv+J+S+OMEm5cT1waW6OUUtSd/P8I=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729165AbgJRTVC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Oct 2020 15:21:02 -0400
-Received: from bedivere.hansenpartnership.com ([96.44.175.130]:39020 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729093AbgJRTVA (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:21:00 -0400
-X-Greylist: delayed 424 seconds by postgrey-1.27 at vger.kernel.org; Sun, 18 Oct 2020 15:20:56 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 6E9191280300;
-        Sun, 18 Oct 2020 12:13:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1603048418;
-        bh=z260bBy56dgN8y3lDRHRQeuKrIr1eALRZNoNPoXlSSo=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=QOZMzgTQH16i5avnDNVW0Ktw3okhOk0UWDzTWl7121p+F93A1Quw31cCRVLQH+SGW
-         zn7QBaZkwCTKpROUCnm6j2wnXTspVYtdUU68F1++PaWc9wHgdj5YeqG30CVReBaxSQ
-         7zgTTXbB0BvsKBkgxIK2UI/Iu/DopS5PndAYThf8=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id JsjuUxZpqgrR; Sun, 18 Oct 2020 12:13:38 -0700 (PDT)
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::c447])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1729309AbgJRTwg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Oct 2020 15:52:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32820 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729022AbgJRTVB (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:21:01 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 1ED2912802BA;
-        Sun, 18 Oct 2020 12:13:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1603048418;
-        bh=z260bBy56dgN8y3lDRHRQeuKrIr1eALRZNoNPoXlSSo=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=QOZMzgTQH16i5avnDNVW0Ktw3okhOk0UWDzTWl7121p+F93A1Quw31cCRVLQH+SGW
-         zn7QBaZkwCTKpROUCnm6j2wnXTspVYtdUU68F1++PaWc9wHgdj5YeqG30CVReBaxSQ
-         7zgTTXbB0BvsKBkgxIK2UI/Iu/DopS5PndAYThf8=
-Message-ID: <45efa7780c79972eae9ca9bdeb9f7edbab4f3643.camel@HansenPartnership.com>
-Subject: Re: [Ocfs2-devel] [RFC] treewide: cleanup unreachable breaks
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Matthew Wilcox <willy@infradead.org>, trix@redhat.com
-Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        clang-built-linux@googlegroups.com, linux-iio@vger.kernel.org,
-        nouveau@lists.freedesktop.org, storagedev@microchip.com,
-        dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org,
-        keyrings@vger.kernel.org, linux-mtd@lists.infradead.org,
-        ath10k@lists.infradead.org, MPT-FusionLinux.pdl@broadcom.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        usb-storage@lists.one-eyed-alien.net,
-        linux-watchdog@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-samsung-soc@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-nvdimm@lists.01.org, amd-gfx@lists.freedesktop.org,
-        linux-acpi@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        industrypack-devel@lists.sourceforge.net,
-        linux-pci@vger.kernel.org, spice-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-nfc@lists.01.org, linux-pm@vger.kernel.org,
-        linux-can@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-gpio@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-amlogic@lists.infradead.org,
-        openipmi-developer@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-crypto@vger.kernel.org, patches@opensource.cirrus.com,
-        bpf@vger.kernel.org, ocfs2-devel@oss.oracle.com,
-        linux-power@fi.rohmeurope.com
-Date:   Sun, 18 Oct 2020 12:13:35 -0700
-In-Reply-To: <20201018185943.GM20115@casper.infradead.org>
-References: <20201017160928.12698-1-trix@redhat.com>
-         <20201018185943.GM20115@casper.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        by mail.kernel.org (Postfix) with ESMTPSA id 92A0B222E9;
+        Sun, 18 Oct 2020 19:21:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603048861;
+        bh=RbRdRmxmA7c51+g6PuhXswlxwb3qBKIwuI4P+E8fAes=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=MiMsrNAn5lz6dRx3YwPdQzW/CiedzQXKVFyy+yRE8A4zrTL6FiuLUVdtfIZlSViUv
+         lfBIAEUetpvAPFWp/hSrspcbjkkhi42qfXxyS4mQs/wBbvGFN9XoGX0h6uRZBIxoTb
+         7aaHHGW30nqWWOSAET+4JnVR5bJ9T/SZTQFqWoag=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        devel@driverdev.osuosl.org
+Subject: [PATCH AUTOSEL 5.8 028/101] media: atomisp: fix memleak in ia_css_stream_create
+Date:   Sun, 18 Oct 2020 15:19:13 -0400
+Message-Id: <20201018192026.4053674-28-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201018192026.4053674-1-sashal@kernel.org>
+References: <20201018192026.4053674-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sun, 2020-10-18 at 19:59 +0100, Matthew Wilcox wrote:
-> On Sat, Oct 17, 2020 at 09:09:28AM -0700, trix@redhat.com wrote:
-> > clang has a number of useful, new warnings see
-> > https://urldefense.com/v3/__https://clang.llvm.org/docs/DiagnosticsReference.html__;!!GqivPVa7Brio!Krxz78O3RKcB9JBMVo_F98FupVhj_jxX60ddN6tKGEbv_cnooXc1nnBmchm-e_O9ieGnyQ$ 
-> 
-> Please get your IT department to remove that stupidity.  If you
-> can't, please send email from a non-Red Hat email address.
+From: Dinghao Liu <dinghao.liu@zju.edu.cn>
 
-Actually, the problem is at Oracle's end somewhere in the ocfs2 list
-... if you could fix it, that would be great.  The usual real mailing
-lists didn't get this transformation
+[ Upstream commit c1bca5b5ced0cbd779d56f60cdbc9f5e6f6449fe ]
 
-https://lore.kernel.org/bpf/20201017160928.12698-1-trix@redhat.com/
+When aspect_ratio_crop_init() fails, curr_stream needs
+to be freed just like what we've done in the following
+error paths. However, current code is returning directly
+and ends up leaking memory.
 
-but the ocfs2 list archive did:
+Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/staging/media/atomisp/pci/sh_css.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-https://oss.oracle.com/pipermail/ocfs2-devel/2020-October/015330.html
-
-I bet Oracle IT has put some spam filter on the list that mangles URLs
-this way.
-
-James
-
+diff --git a/drivers/staging/media/atomisp/pci/sh_css.c b/drivers/staging/media/atomisp/pci/sh_css.c
+index 54434c2dbaf90..8473e14370747 100644
+--- a/drivers/staging/media/atomisp/pci/sh_css.c
++++ b/drivers/staging/media/atomisp/pci/sh_css.c
+@@ -9521,7 +9521,7 @@ ia_css_stream_create(const struct ia_css_stream_config *stream_config,
+ 	if (err)
+ 	{
+ 		IA_CSS_LEAVE_ERR(err);
+-		return err;
++		goto ERR;
+ 	}
+ #endif
+ 	for (i = 0; i < num_pipes; i++)
+-- 
+2.25.1
 
