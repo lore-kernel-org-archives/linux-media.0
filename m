@@ -5,48 +5,50 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89E9CC433DF
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:52:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC2F2C433DF
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:52:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 42BC022269
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:52:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7A71E20714
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:52:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603050731;
-	bh=uMiewmmEqIP9o+WBAyBsct7iMPd6w8XJY4CYwUbB3zc=;
+	s=default; t=1603050753;
+	bh=+m6xu3aGhCkPp0WNGUiov9exqKq/HXvY0saNarZFAsA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Jfsy9Nws6Cx4H7PI56NjXBTTN+jFBUq4iyMpLDH7Kdi5ZReg7I8Tb+zGGZZXrs1SF
-	 XmDuZ10CXIXk9B6huGLsNmWv3lAFZAODmcktUXHBAiepnrnJMm2krRfPkLbWLfVPhX
-	 vschrx7QFyUyo8TB/1x/2QAzYMHVjR0LS/1Nw5do=
+	b=ef6ooXNVasRr8Mc8XUOyisALAQICxTQZrQC7ODknjcE4tXpJwn59H4NwMld4Kl/8I
+	 5Pjjhjd+JJE9JcE2sB+dkdbQgdTYVoe2l/CtapWBZfWc82ADQU158OqW8j0MZrYYjy
+	 f+RIJdf47s1FmEjAnMTVNxeJLLjQBp7yMAHnSrA4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387837AbgJRTwK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Oct 2020 15:52:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33006 "EHLO mail.kernel.org"
+        id S2387872AbgJRTw3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Oct 2020 15:52:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32874 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729219AbgJRTVG (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:21:06 -0400
+        id S1729174AbgJRTVD (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:21:03 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 71D17222B9;
-        Sun, 18 Oct 2020 19:21:05 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BA7A5222EB;
+        Sun, 18 Oct 2020 19:21:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603048866;
-        bh=uMiewmmEqIP9o+WBAyBsct7iMPd6w8XJY4CYwUbB3zc=;
+        s=default; t=1603048862;
+        bh=+m6xu3aGhCkPp0WNGUiov9exqKq/HXvY0saNarZFAsA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1pAzcTaj7hYrYJJ7zf0xANxT8Wz2c7dRUURVY4QFVbs1w4Szsm9OV/qzIMRrmUlJw
-         Ljap8Vyv3nO1MhpzF3pPWYzSZSqqwqmf2PWEtgX/vfNdJwbtzkH9qazmNbPN2Y4Y6l
-         iOt92+FMIHoUuad/DmfWmc9SWyfQwofRhMo2jj5M=
+        b=LcmvQ9RdrP6xqSGOIYpVRiHUGhWTRzukbbmUsOC5zefE1uBdelgSBMe+msL7aKhtM
+         iQlc3QgA7KsreTthwwVpbTDrU5SNoa5rA28yFlv5bH0u4oB6WGAIH0nuhEorU1Fly0
+         GIG/nsX2WMPtA8MQRXuO4fmG4FVxcGqtVvUgTjTQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dinghao Liu <dinghao.liu@zju.edu.cn>,
+Cc:     Vikash Garodia <vgarodia@codeaurora.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 032/101] media: venus: core: Fix runtime PM imbalance in venus_probe
-Date:   Sun, 18 Oct 2020 15:19:17 -0400
-Message-Id: <20201018192026.4053674-32-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.8 029/101] media: venus: fixes for list corruption
+Date:   Sun, 18 Oct 2020 15:19:14 -0400
+Message-Id: <20201018192026.4053674-29-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201018192026.4053674-1-sashal@kernel.org>
 References: <20201018192026.4053674-1-sashal@kernel.org>
@@ -58,51 +60,77 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dinghao Liu <dinghao.liu@zju.edu.cn>
+From: Vikash Garodia <vgarodia@codeaurora.org>
 
-[ Upstream commit bbe516e976fce538db96bd2b7287df942faa14a3 ]
+[ Upstream commit e1c69c4eef61ffe295b747992c6fd849e6cd747d ]
 
-pm_runtime_get_sync() increments the runtime PM usage counter even
-when it returns an error code. Thus a pairing decrement is needed on
-the error handling path to keep the counter balanced. For other error
-paths after this call, things are the same.
+There are few list handling issues while adding and deleting
+node in the registered buf list in the driver.
+1. list addition - buffer added into the list during buf_init
+while not deleted during cleanup.
+2. list deletion - In capture streamoff, the list was reinitialized.
+As a result, if any node was present in the list, it would
+lead to issue while cleaning up that node during buf_cleanup.
 
-Fix this by adding pm_runtime_put_noidle() after 'err_runtime_disable'
-label. But in this case, the error path after pm_runtime_put_sync()
-will decrease PM usage counter twice. Thus add an extra
-pm_runtime_get_noresume() in this path to balance PM counter.
+Corresponding call traces below:
+[  165.751014] Call trace:
+[  165.753541]  __list_add_valid+0x58/0x88
+[  165.757532]  venus_helper_vb2_buf_init+0x74/0xa8 [venus_core]
+[  165.763450]  vdec_buf_init+0x34/0xb4 [venus_dec]
+[  165.768271]  __buf_prepare+0x598/0x8a0 [videobuf2_common]
+[  165.773820]  vb2_core_qbuf+0xb4/0x334 [videobuf2_common]
+[  165.779298]  vb2_qbuf+0x78/0xb8 [videobuf2_v4l2]
+[  165.784053]  v4l2_m2m_qbuf+0x80/0xf8 [v4l2_mem2mem]
+[  165.789067]  v4l2_m2m_ioctl_qbuf+0x2c/0x38 [v4l2_mem2mem]
+[  165.794624]  v4l_qbuf+0x48/0x58
 
-Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+[ 1797.556001] Call trace:
+[ 1797.558516]  __list_del_entry_valid+0x88/0x9c
+[ 1797.562989]  vdec_buf_cleanup+0x54/0x228 [venus_dec]
+[ 1797.568088]  __buf_prepare+0x270/0x8a0 [videobuf2_common]
+[ 1797.573625]  vb2_core_qbuf+0xb4/0x338 [videobuf2_common]
+[ 1797.579082]  vb2_qbuf+0x78/0xb8 [videobuf2_v4l2]
+[ 1797.583830]  v4l2_m2m_qbuf+0x80/0xf8 [v4l2_mem2mem]
+[ 1797.588843]  v4l2_m2m_ioctl_qbuf+0x2c/0x38 [v4l2_mem2mem]
+[ 1797.594389]  v4l_qbuf+0x48/0x58
+
+Signed-off-by: Vikash Garodia <vgarodia@codeaurora.org>
+Reviewed-by: Fritz Koenig <frkoenig@chromium.org>
+Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/qcom/venus/core.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/media/platform/qcom/venus/vdec.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-index bfcaba37d60fe..321ad77cb6cf4 100644
---- a/drivers/media/platform/qcom/venus/core.c
-+++ b/drivers/media/platform/qcom/venus/core.c
-@@ -289,8 +289,10 @@ static int venus_probe(struct platform_device *pdev)
- 		goto err_core_deinit;
+diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+index 7c4c483d54389..76be14efbfb09 100644
+--- a/drivers/media/platform/qcom/venus/vdec.c
++++ b/drivers/media/platform/qcom/venus/vdec.c
+@@ -1088,8 +1088,6 @@ static int vdec_stop_capture(struct venus_inst *inst)
+ 		break;
+ 	}
  
- 	ret = pm_runtime_put_sync(dev);
--	if (ret)
-+	if (ret) {
-+		pm_runtime_get_noresume(dev);
- 		goto err_dev_unregister;
-+	}
+-	INIT_LIST_HEAD(&inst->registeredbufs);
+-
+ 	return ret;
+ }
  
- 	return 0;
+@@ -1189,6 +1187,14 @@ static int vdec_buf_init(struct vb2_buffer *vb)
+ static void vdec_buf_cleanup(struct vb2_buffer *vb)
+ {
+ 	struct venus_inst *inst = vb2_get_drv_priv(vb->vb2_queue);
++	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++	struct venus_buffer *buf = to_venus_buffer(vbuf);
++
++	mutex_lock(&inst->lock);
++	if (vb->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE)
++		if (!list_empty(&inst->registeredbufs))
++			list_del_init(&buf->reg_list);
++	mutex_unlock(&inst->lock);
  
-@@ -301,6 +303,7 @@ static int venus_probe(struct platform_device *pdev)
- err_venus_shutdown:
- 	venus_shutdown(core);
- err_runtime_disable:
-+	pm_runtime_put_noidle(dev);
- 	pm_runtime_set_suspended(dev);
- 	pm_runtime_disable(dev);
- 	hfi_destroy(core);
+ 	inst->buf_count--;
+ 	if (!inst->buf_count)
 -- 
 2.25.1
 
