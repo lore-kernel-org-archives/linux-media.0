@@ -7,48 +7,47 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33FF6C433E7
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:46:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5492FC43467
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:46:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F032722267
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:46:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1B713206ED
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:46:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603050381;
-	bh=xSI6GVNCFkFvJXIuLdB7QNqj8UQDNWjO7EfhUzUaK28=;
+	s=default; t=1603050390;
+	bh=lnUQmhdxI1R7NBgmIqelYj+WNGdFerjAL0lYGwFQWbo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=h5Pt5+ri34K3S4bD2pPaEeKeDHBJApO0MdChoaQo4k5sPOKhCFbN81CE2jICcQVHh
-	 d/48q701aiopo6ogMtOVh7HW0pcAexQBbPyqZNeXkgBvLn+URN5irNL/1d/OwcE7kO
-	 rURHAxYBxfUeC7E/fOWxhEE/3q/yTfC/K4fqf7g0=
+	b=pwSufEqfZ1BOnL3/KOe6ZyYXfM7jE1c5e6keZTQWoNwRjnIA+d9UFrGbLUEc8mpZO
+	 9AruYkm9lYgksX5l9aF6knEmGq+kSzevewjpuWWrM8QmaKCxjJ/iWG2JuPtJqQ8l/7
+	 YzLZI6H/3gGpvSxuNCZH6Znmh9Gxt1yJysj863Bw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731223AbgJRTqT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Oct 2020 15:46:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35668 "EHLO mail.kernel.org"
+        id S1730038AbgJRTq2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Oct 2020 15:46:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35566 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729954AbgJRTWp (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:22:45 -0400
+        id S1728109AbgJRTWl (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:22:41 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 48F512225F;
-        Sun, 18 Oct 2020 19:22:44 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B2A1A20791;
+        Sun, 18 Oct 2020 19:22:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603048965;
-        bh=xSI6GVNCFkFvJXIuLdB7QNqj8UQDNWjO7EfhUzUaK28=;
+        s=default; t=1603048961;
+        bh=lnUQmhdxI1R7NBgmIqelYj+WNGdFerjAL0lYGwFQWbo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uVRCFA7BYmfpsX0EkdSxLfFIj1KRKZfINrA99tizeUYRMHYVXSOlZjFbNN3+xO6Za
-         ApR+6RQoMeKwdFKjbMp8MvCCymHdIQzzRFajsg9pm3ewimbNsY605lGtCyAzRzrLNI
-         zB9/cC68hSO8OamRWH+Ddr7Q1NhKUXKRv1sXGQuY=
+        b=1V4gIAL2iSTzT2fcRyxcqbxc50N0tsbBh6rWPtk9JMbggYHTBbWyeDFEWWVU6S+hY
+         gW4n7mszfP1U87pt3uIGLWKFuvQKIDOeJE79FM7sQ/Ujzn7Q2wU7bjMUAI4Cv7TsaV
+         Gwzxt3MOWBeqnork1UXB2vaHd0qWp7nJjpSCsIU4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Qiushi Wu <wu000273@umn.edu>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        syzbot+998261c2ae5932458f6c@syzkaller.appspotmail.com,
+        Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 10/80] media: exynos4-is: Fix several reference count leaks due to pm_runtime_get_sync
-Date:   Sun, 18 Oct 2020 15:21:21 -0400
-Message-Id: <20201018192231.4054535-10-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 07/80] media: ati_remote: sanity check for both endpoints
+Date:   Sun, 18 Oct 2020 15:21:18 -0400
+Message-Id: <20201018192231.4054535-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201018192231.4054535-1-sashal@kernel.org>
 References: <20201018192231.4054535-1-sashal@kernel.org>
@@ -60,52 +59,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Qiushi Wu <wu000273@umn.edu>
+From: Oliver Neukum <oneukum@suse.com>
 
-[ Upstream commit 7ef64ceea0008c17e94a8a2c60c5d6d46f481996 ]
+[ Upstream commit a8be80053ea74bd9c3f9a3810e93b802236d6498 ]
 
-On calling pm_runtime_get_sync() the reference count of the device
-is incremented. In case of failure, decrement the
-reference count before returning the error.
+If you do sanity checks, you should do them for both endpoints.
+Hence introduce checking for endpoint type for the output
+endpoint, too.
 
-Signed-off-by: Qiushi Wu <wu000273@umn.edu>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reported-by: syzbot+998261c2ae5932458f6c@syzkaller.appspotmail.com
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Signed-off-by: Sean Young <sean@mess.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/exynos4-is/fimc-isp.c  | 4 +++-
- drivers/media/platform/exynos4-is/fimc-lite.c | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ drivers/media/rc/ati_remote.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/media/platform/exynos4-is/fimc-isp.c b/drivers/media/platform/exynos4-is/fimc-isp.c
-index cde0d254ec1c4..a77c49b185115 100644
---- a/drivers/media/platform/exynos4-is/fimc-isp.c
-+++ b/drivers/media/platform/exynos4-is/fimc-isp.c
-@@ -305,8 +305,10 @@ static int fimc_isp_subdev_s_power(struct v4l2_subdev *sd, int on)
+diff --git a/drivers/media/rc/ati_remote.c b/drivers/media/rc/ati_remote.c
+index 9cdef17b4793f..c12dda73cdd53 100644
+--- a/drivers/media/rc/ati_remote.c
++++ b/drivers/media/rc/ati_remote.c
+@@ -835,6 +835,10 @@ static int ati_remote_probe(struct usb_interface *interface,
+ 		err("%s: endpoint_in message size==0? \n", __func__);
+ 		return -ENODEV;
+ 	}
++	if (!usb_endpoint_is_int_out(endpoint_out)) {
++		err("%s: Unexpected endpoint_out\n", __func__);
++		return -ENODEV;
++	}
  
- 	if (on) {
- 		ret = pm_runtime_get_sync(&is->pdev->dev);
--		if (ret < 0)
-+		if (ret < 0) {
-+			pm_runtime_put(&is->pdev->dev);
- 			return ret;
-+		}
- 		set_bit(IS_ST_PWR_ON, &is->state);
- 
- 		ret = fimc_is_start_firmware(is);
-diff --git a/drivers/media/platform/exynos4-is/fimc-lite.c b/drivers/media/platform/exynos4-is/fimc-lite.c
-index e87c6a09205bd..efd06621951c7 100644
---- a/drivers/media/platform/exynos4-is/fimc-lite.c
-+++ b/drivers/media/platform/exynos4-is/fimc-lite.c
-@@ -470,7 +470,7 @@ static int fimc_lite_open(struct file *file)
- 	set_bit(ST_FLITE_IN_USE, &fimc->state);
- 	ret = pm_runtime_get_sync(&fimc->pdev->dev);
- 	if (ret < 0)
--		goto unlock;
-+		goto err_pm;
- 
- 	ret = v4l2_fh_open(file);
- 	if (ret < 0)
+ 	ati_remote = kzalloc(sizeof (struct ati_remote), GFP_KERNEL);
+ 	rc_dev = rc_allocate_device(RC_DRIVER_SCANCODE);
 -- 
 2.25.1
 
