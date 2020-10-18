@@ -5,48 +5,48 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FE14C433E7
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:22:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F330AC43457
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:22:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 50C7C2231B
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:22:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BBB01207DE
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:22:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603048975;
-	bh=L2+RJXccCaMCISHwYIWzmgF0+1Wiq4nILRjct3Rac6w=;
+	s=default; t=1603048978;
+	bh=jTrFZs9DIx+gxbsNBqwlk6WWIe4DLgg7bsS91k+8FkU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=aZ526Y27sWDpQHY+ke9GJv4tJ7PJ0FM7cE9Luv4d381OGNEemjxcaMD+LcZeCup3Q
-	 APXhJJi8ahYkwVdkLhF1p1nZ7AxUi+tVXlLB8Qrm1LNiX6RGbXoifzXnX0z2iy/GfL
-	 seLUQfxNEBhQ8sU1fnwitR300AzNWgZ859r9L/Ns=
+	b=nXU8JC7Naa8T+A/Rhw8P2JUwelmbGB0V4PCDsXs924MZQuaqw7fdsQs2sqHlN36pj
+	 7OLacRnjhTmZIrIGFoNTriWGWVC8+i0sithH+E++yL1KIEAwMoc520G7L+enO9/0/m
+	 lYPQz7q7gXsX8cOazr1qZrV5J2VDeAlpzKdbcKkE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730045AbgJRTWx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Oct 2020 15:22:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35808 "EHLO mail.kernel.org"
+        id S1730064AbgJRTW5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Oct 2020 15:22:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35894 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730026AbgJRTWw (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:22:52 -0400
+        id S1730050AbgJRTWz (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:22:55 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3C90320791;
-        Sun, 18 Oct 2020 19:22:51 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B2912223AB;
+        Sun, 18 Oct 2020 19:22:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603048972;
-        bh=L2+RJXccCaMCISHwYIWzmgF0+1Wiq4nILRjct3Rac6w=;
+        s=default; t=1603048974;
+        bh=jTrFZs9DIx+gxbsNBqwlk6WWIe4DLgg7bsS91k+8FkU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Vy4V1bXlwQ85ozHNlOPBQzOXjXd3UiZKinOKG850O9OcG3186a/I7IJy6NFnl3tF8
-         Zqf4v07xFO446Zo0kNOXQJ+ZtMk1RS1M2VYYzcVUQbCJZiYXhYcfQbcI2F3X+nYs9o
-         U6MEH4gXj3/IUoWuXezammZIJUcZfSBLRIXlwUYA=
+        b=TNlmpYHPGN9cj6C1j/RnjcLQUMNDKGO4qqr8nIH4aFnIlk6/sR//w7LLSyabixT4C
+         4kWbuf9L+CuPcV1Lc4PtA1bxwpXfoyGtWAHzY2rTdicCk9kNZivbqsOmwi3+LfwAgU
+         e6+ZxMnrAgwHvN5BIHH9B62eL7o9PYPCKWwFeOHI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dinghao Liu <dinghao.liu@zju.edu.cn>,
+Cc:     Xiaolong Huang <butterflyhuangxx@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 15/80] media: platform: sti: hva: Fix runtime PM imbalance on error
-Date:   Sun, 18 Oct 2020 15:21:26 -0400
-Message-Id: <20201018192231.4054535-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 17/80] media: media/pci: prevent memory leak in bttv_probe
+Date:   Sun, 18 Oct 2020 15:21:28 -0400
+Message-Id: <20201018192231.4054535-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201018192231.4054535-1-sashal@kernel.org>
 References: <20201018192231.4054535-1-sashal@kernel.org>
@@ -58,35 +58,63 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dinghao Liu <dinghao.liu@zju.edu.cn>
+From: Xiaolong Huang <butterflyhuangxx@gmail.com>
 
-[ Upstream commit d912a1d9e9afe69c6066c1ceb6bfc09063074075 ]
+[ Upstream commit 7b817585b730665126b45df5508dd69526448bc8 ]
 
-pm_runtime_get_sync() increments the runtime PM usage counter even
-when it returns an error code. Thus a pairing decrement is needed on
-the error handling path to keep the counter balanced.
+In bttv_probe if some functions such as pci_enable_device,
+pci_set_dma_mask and request_mem_region fails the allocated
+ memory for btv should be released.
 
-Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+Signed-off-by: Xiaolong Huang <butterflyhuangxx@gmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/sti/hva/hva-hw.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/pci/bt8xx/bttv-driver.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/sti/hva/hva-hw.c b/drivers/media/platform/sti/hva/hva-hw.c
-index bb13348be0832..43f279e2a6a38 100644
---- a/drivers/media/platform/sti/hva/hva-hw.c
-+++ b/drivers/media/platform/sti/hva/hva-hw.c
-@@ -389,7 +389,7 @@ int hva_hw_probe(struct platform_device *pdev, struct hva_dev *hva)
- 	ret = pm_runtime_get_sync(dev);
- 	if (ret < 0) {
- 		dev_err(dev, "%s     failed to set PM\n", HVA_PREFIX);
--		goto err_clk;
-+		goto err_pm;
+diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
+index a359da7773a90..ff2962cea6164 100644
+--- a/drivers/media/pci/bt8xx/bttv-driver.c
++++ b/drivers/media/pci/bt8xx/bttv-driver.c
+@@ -4013,11 +4013,13 @@ static int bttv_probe(struct pci_dev *dev, const struct pci_device_id *pci_id)
+ 	btv->id  = dev->device;
+ 	if (pci_enable_device(dev)) {
+ 		pr_warn("%d: Can't enable device\n", btv->c.nr);
+-		return -EIO;
++		result = -EIO;
++		goto free_mem;
  	}
+ 	if (pci_set_dma_mask(dev, DMA_BIT_MASK(32))) {
+ 		pr_warn("%d: No suitable DMA available\n", btv->c.nr);
+-		return -EIO;
++		result = -EIO;
++		goto free_mem;
+ 	}
+ 	if (!request_mem_region(pci_resource_start(dev,0),
+ 				pci_resource_len(dev,0),
+@@ -4025,7 +4027,8 @@ static int bttv_probe(struct pci_dev *dev, const struct pci_device_id *pci_id)
+ 		pr_warn("%d: can't request iomem (0x%llx)\n",
+ 			btv->c.nr,
+ 			(unsigned long long)pci_resource_start(dev, 0));
+-		return -EBUSY;
++		result = -EBUSY;
++		goto free_mem;
+ 	}
+ 	pci_set_master(dev);
+ 	pci_set_command(dev);
+@@ -4211,6 +4214,10 @@ static int bttv_probe(struct pci_dev *dev, const struct pci_device_id *pci_id)
+ 	release_mem_region(pci_resource_start(btv->c.pci,0),
+ 			   pci_resource_len(btv->c.pci,0));
+ 	pci_disable_device(btv->c.pci);
++
++free_mem:
++	bttvs[btv->c.nr] = NULL;
++	kfree(btv);
+ 	return result;
+ }
  
- 	/* check IP hardware version */
 -- 
 2.25.1
 
