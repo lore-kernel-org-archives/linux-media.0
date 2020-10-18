@@ -4,55 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2858DC43457
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:33:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8014C388F7
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:35:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E335E207DE
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:33:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B68B422272
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:35:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603049620;
-	bh=lvpSOiowpkc4Fz/zItNb7eMapzCbdBEdXFPaVboawhE=;
+	s=default; t=1603049711;
+	bh=IM4R2jkcH/ab5xP+juABRDNyOLsIs9Nn0nnzMjGRMvw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=FIie2yYy/gWmTpIPlPsSSR9Bq7zm8DoxUbBZhqw6jh5/kQff4rL7VKQrzVW6fs/E7
-	 pKy0menaW2S1pICprfcRYRRmVzFGbG5Ypn3mSOwNPfHVl24bjv93C6dHh3DoCjyFgc
-	 c9cVIGKCbIrNyMPjiB736s5MZphcYFC+89qsl5Ag=
+	b=SKj9w0EAJh1Ose+fhmK2UA7NmJu6Eq79se7HH39jyYk9+MqP/9bOxmBeintxNEYD0
+	 04RQC+CFovwjhso5fzg4InHByvEXr/yI6HyghQnrgWm/Vhh/sdka2BEPTfEFAFvqO5
+	 ue1Q8jbEGFd+vax17PJKhsb1P8Pf8IfR2DmhRfmE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731802AbgJRTdb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Oct 2020 15:33:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42070 "EHLO mail.kernel.org"
+        id S1731443AbgJRTZw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Oct 2020 15:25:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40778 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731780AbgJRT0q (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:26:46 -0400
+        id S1731432AbgJRTZw (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:25:52 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DD951222C8;
-        Sun, 18 Oct 2020 19:26:44 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 04367222EB;
+        Sun, 18 Oct 2020 19:25:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603049205;
-        bh=lvpSOiowpkc4Fz/zItNb7eMapzCbdBEdXFPaVboawhE=;
+        s=default; t=1603049151;
+        bh=IM4R2jkcH/ab5xP+juABRDNyOLsIs9Nn0nnzMjGRMvw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rfYWbNqOIQVNLPYIIToV5+xfjjDD5H0Pb8i/7/5cHI6x5HP59OL3mH7GyIeIpgQtL
-         MX6O/QOvl5AUymUreK9MMXkLovWbWfqYEjkQHA9NkXNQuI/3VEX692PnHzNMXYK8IX
-         IhKDM3KEFC9ZZjmKSzokS6hDgrO3nM2bCdrk3b5w=
+        b=FimpYS5hBzuNlba3ztrlsmXW0euM3lp7vlMj9ZVSV+J2arRFHG6h4V4TI++L1dyoj
+         oLZlRZfOV+dwU6AAMaPXOAUleXekhsd+Y8+i0ePE7wyVhMle5Lnx4nOS7vnfxsSCoc
+         LnB1qlhd2MNeadpLoC2RRkiCS4rlD66d9GSiXphg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dinghao Liu <dinghao.liu@zju.edu.cn>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 07/41] media: vsp1: Fix runtime PM imbalance on error
-Date:   Sun, 18 Oct 2020 15:26:01 -0400
-Message-Id: <20201018192635.4056198-7-sashal@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 17/52] media: saa7134: avoid a shift overflow
+Date:   Sun, 18 Oct 2020 15:24:54 -0400
+Message-Id: <20201018192530.4055730-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201018192635.4056198-1-sashal@kernel.org>
-References: <20201018192635.4056198-1-sashal@kernel.org>
+In-Reply-To: <20201018192530.4055730-1-sashal@kernel.org>
+References: <20201018192530.4055730-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -61,57 +56,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dinghao Liu <dinghao.liu@zju.edu.cn>
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit 98fae901c8883640202802174a4bd70a1b9118bd ]
+[ Upstream commit 15a36aae1ec1c1f17149b6113b92631791830740 ]
 
-pm_runtime_get_sync() increments the runtime PM usage counter even
-when it returns an error code. Thus a pairing decrement is needed on
-the error handling path to keep the counter balanced.
+As reported by smatch:
+	drivers/media/pci/saa7134//saa7134-tvaudio.c:686 saa_dsp_writel() warn: should 'reg << 2' be a 64 bit type?
 
-Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+On a 64-bits Kernel, the shift might be bigger than 32 bits.
+
+In real, this should never happen, but let's shut up the warning.
+
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/vsp1/vsp1_drv.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ drivers/media/pci/saa7134/saa7134-tvaudio.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/vsp1/vsp1_drv.c b/drivers/media/platform/vsp1/vsp1_drv.c
-index 4ac1ff482a0b3..fcb1838d670d4 100644
---- a/drivers/media/platform/vsp1/vsp1_drv.c
-+++ b/drivers/media/platform/vsp1/vsp1_drv.c
-@@ -487,7 +487,12 @@ int vsp1_device_get(struct vsp1_device *vsp1)
- 	int ret;
+diff --git a/drivers/media/pci/saa7134/saa7134-tvaudio.c b/drivers/media/pci/saa7134/saa7134-tvaudio.c
+index 68d400e1e240e..8c3da6f7a60f1 100644
+--- a/drivers/media/pci/saa7134/saa7134-tvaudio.c
++++ b/drivers/media/pci/saa7134/saa7134-tvaudio.c
+@@ -693,7 +693,8 @@ int saa_dsp_writel(struct saa7134_dev *dev, int reg, u32 value)
+ {
+ 	int err;
  
- 	ret = pm_runtime_get_sync(vsp1->dev);
--	return ret < 0 ? ret : 0;
-+	if (ret < 0) {
-+		pm_runtime_put_noidle(vsp1->dev);
-+		return ret;
-+	}
-+
-+	return 0;
- }
- 
- /*
-@@ -727,12 +732,12 @@ static int vsp1_probe(struct platform_device *pdev)
- 	/* Configure device parameters based on the version register. */
- 	pm_runtime_enable(&pdev->dev);
- 
--	ret = pm_runtime_get_sync(&pdev->dev);
-+	ret = vsp1_device_get(vsp1);
- 	if (ret < 0)
- 		goto done;
- 
- 	vsp1->version = vsp1_read(vsp1, VI6_IP_VERSION);
--	pm_runtime_put_sync(&pdev->dev);
-+	vsp1_device_put(vsp1);
- 
- 	for (i = 0; i < ARRAY_SIZE(vsp1_device_infos); ++i) {
- 		if ((vsp1->version & VI6_IP_VERSION_MODEL_MASK) ==
+-	audio_dbg(2, "dsp write reg 0x%x = 0x%06x\n", reg << 2, value);
++	audio_dbg(2, "dsp write reg 0x%x = 0x%06x\n",
++		  (reg << 2) & 0xffffffff, value);
+ 	err = saa_dsp_wait_bit(dev,SAA7135_DSP_RWSTATE_WRR);
+ 	if (err < 0)
+ 		return err;
 -- 
 2.25.1
 
