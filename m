@@ -2,135 +2,119 @@ Return-Path: <SRS0=tdip=DZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC2F2C433DF
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:52:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0640C4363A
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:52:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7A71E20714
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:52:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603050753;
-	bh=+m6xu3aGhCkPp0WNGUiov9exqKq/HXvY0saNarZFAsA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=ef6ooXNVasRr8Mc8XUOyisALAQICxTQZrQC7ODknjcE4tXpJwn59H4NwMld4Kl/8I
-	 5Pjjhjd+JJE9JcE2sB+dkdbQgdTYVoe2l/CtapWBZfWc82ADQU158OqW8j0MZrYYjy
-	 f+RIJdf47s1FmEjAnMTVNxeJLLjQBp7yMAHnSrA4=
+	by mail.kernel.org (Postfix) with ESMTP id 4A8A720657
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:52:35 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="QOZMzgTQ";
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="QOZMzgTQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387872AbgJRTw3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Oct 2020 15:52:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:32874 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729174AbgJRTVD (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:21:03 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1729165AbgJRTVC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Oct 2020 15:21:02 -0400
+Received: from bedivere.hansenpartnership.com ([96.44.175.130]:39020 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729093AbgJRTVA (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:21:00 -0400
+X-Greylist: delayed 424 seconds by postgrey-1.27 at vger.kernel.org; Sun, 18 Oct 2020 15:20:56 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 6E9191280300;
+        Sun, 18 Oct 2020 12:13:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1603048418;
+        bh=z260bBy56dgN8y3lDRHRQeuKrIr1eALRZNoNPoXlSSo=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=QOZMzgTQH16i5avnDNVW0Ktw3okhOk0UWDzTWl7121p+F93A1Quw31cCRVLQH+SGW
+         zn7QBaZkwCTKpROUCnm6j2wnXTspVYtdUU68F1++PaWc9wHgdj5YeqG30CVReBaxSQ
+         7zgTTXbB0BvsKBkgxIK2UI/Iu/DopS5PndAYThf8=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id JsjuUxZpqgrR; Sun, 18 Oct 2020 12:13:38 -0700 (PDT)
+Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::c447])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BA7A5222EB;
-        Sun, 18 Oct 2020 19:21:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603048862;
-        bh=+m6xu3aGhCkPp0WNGUiov9exqKq/HXvY0saNarZFAsA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LcmvQ9RdrP6xqSGOIYpVRiHUGhWTRzukbbmUsOC5zefE1uBdelgSBMe+msL7aKhtM
-         iQlc3QgA7KsreTthwwVpbTDrU5SNoa5rA28yFlv5bH0u4oB6WGAIH0nuhEorU1Fly0
-         GIG/nsX2WMPtA8MQRXuO4fmG4FVxcGqtVvUgTjTQ=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Vikash Garodia <vgarodia@codeaurora.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 029/101] media: venus: fixes for list corruption
-Date:   Sun, 18 Oct 2020 15:19:14 -0400
-Message-Id: <20201018192026.4053674-29-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201018192026.4053674-1-sashal@kernel.org>
-References: <20201018192026.4053674-1-sashal@kernel.org>
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 1ED2912802BA;
+        Sun, 18 Oct 2020 12:13:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1603048418;
+        bh=z260bBy56dgN8y3lDRHRQeuKrIr1eALRZNoNPoXlSSo=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=QOZMzgTQH16i5avnDNVW0Ktw3okhOk0UWDzTWl7121p+F93A1Quw31cCRVLQH+SGW
+         zn7QBaZkwCTKpROUCnm6j2wnXTspVYtdUU68F1++PaWc9wHgdj5YeqG30CVReBaxSQ
+         7zgTTXbB0BvsKBkgxIK2UI/Iu/DopS5PndAYThf8=
+Message-ID: <45efa7780c79972eae9ca9bdeb9f7edbab4f3643.camel@HansenPartnership.com>
+Subject: Re: [Ocfs2-devel] [RFC] treewide: cleanup unreachable breaks
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Matthew Wilcox <willy@infradead.org>, trix@redhat.com
+Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        clang-built-linux@googlegroups.com, linux-iio@vger.kernel.org,
+        nouveau@lists.freedesktop.org, storagedev@microchip.com,
+        dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org,
+        keyrings@vger.kernel.org, linux-mtd@lists.infradead.org,
+        ath10k@lists.infradead.org, MPT-FusionLinux.pdl@broadcom.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        usb-storage@lists.one-eyed-alien.net,
+        linux-watchdog@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-samsung-soc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-nvdimm@lists.01.org, amd-gfx@lists.freedesktop.org,
+        linux-acpi@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        industrypack-devel@lists.sourceforge.net,
+        linux-pci@vger.kernel.org, spice-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-nfc@lists.01.org, linux-pm@vger.kernel.org,
+        linux-can@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-gpio@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-amlogic@lists.infradead.org,
+        openipmi-developer@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-crypto@vger.kernel.org, patches@opensource.cirrus.com,
+        bpf@vger.kernel.org, ocfs2-devel@oss.oracle.com,
+        linux-power@fi.rohmeurope.com
+Date:   Sun, 18 Oct 2020 12:13:35 -0700
+In-Reply-To: <20201018185943.GM20115@casper.infradead.org>
+References: <20201017160928.12698-1-trix@redhat.com>
+         <20201018185943.GM20115@casper.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Vikash Garodia <vgarodia@codeaurora.org>
+On Sun, 2020-10-18 at 19:59 +0100, Matthew Wilcox wrote:
+> On Sat, Oct 17, 2020 at 09:09:28AM -0700, trix@redhat.com wrote:
+> > clang has a number of useful, new warnings see
+> > https://urldefense.com/v3/__https://clang.llvm.org/docs/DiagnosticsReference.html__;!!GqivPVa7Brio!Krxz78O3RKcB9JBMVo_F98FupVhj_jxX60ddN6tKGEbv_cnooXc1nnBmchm-e_O9ieGnyQ$ 
+> 
+> Please get your IT department to remove that stupidity.  If you
+> can't, please send email from a non-Red Hat email address.
 
-[ Upstream commit e1c69c4eef61ffe295b747992c6fd849e6cd747d ]
+Actually, the problem is at Oracle's end somewhere in the ocfs2 list
+... if you could fix it, that would be great.  The usual real mailing
+lists didn't get this transformation
 
-There are few list handling issues while adding and deleting
-node in the registered buf list in the driver.
-1. list addition - buffer added into the list during buf_init
-while not deleted during cleanup.
-2. list deletion - In capture streamoff, the list was reinitialized.
-As a result, if any node was present in the list, it would
-lead to issue while cleaning up that node during buf_cleanup.
+https://lore.kernel.org/bpf/20201017160928.12698-1-trix@redhat.com/
 
-Corresponding call traces below:
-[  165.751014] Call trace:
-[  165.753541]  __list_add_valid+0x58/0x88
-[  165.757532]  venus_helper_vb2_buf_init+0x74/0xa8 [venus_core]
-[  165.763450]  vdec_buf_init+0x34/0xb4 [venus_dec]
-[  165.768271]  __buf_prepare+0x598/0x8a0 [videobuf2_common]
-[  165.773820]  vb2_core_qbuf+0xb4/0x334 [videobuf2_common]
-[  165.779298]  vb2_qbuf+0x78/0xb8 [videobuf2_v4l2]
-[  165.784053]  v4l2_m2m_qbuf+0x80/0xf8 [v4l2_mem2mem]
-[  165.789067]  v4l2_m2m_ioctl_qbuf+0x2c/0x38 [v4l2_mem2mem]
-[  165.794624]  v4l_qbuf+0x48/0x58
+but the ocfs2 list archive did:
 
-[ 1797.556001] Call trace:
-[ 1797.558516]  __list_del_entry_valid+0x88/0x9c
-[ 1797.562989]  vdec_buf_cleanup+0x54/0x228 [venus_dec]
-[ 1797.568088]  __buf_prepare+0x270/0x8a0 [videobuf2_common]
-[ 1797.573625]  vb2_core_qbuf+0xb4/0x338 [videobuf2_common]
-[ 1797.579082]  vb2_qbuf+0x78/0xb8 [videobuf2_v4l2]
-[ 1797.583830]  v4l2_m2m_qbuf+0x80/0xf8 [v4l2_mem2mem]
-[ 1797.588843]  v4l2_m2m_ioctl_qbuf+0x2c/0x38 [v4l2_mem2mem]
-[ 1797.594389]  v4l_qbuf+0x48/0x58
+https://oss.oracle.com/pipermail/ocfs2-devel/2020-October/015330.html
 
-Signed-off-by: Vikash Garodia <vgarodia@codeaurora.org>
-Reviewed-by: Fritz Koenig <frkoenig@chromium.org>
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/media/platform/qcom/venus/vdec.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+I bet Oracle IT has put some spam filter on the list that mangles URLs
+this way.
 
-diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-index 7c4c483d54389..76be14efbfb09 100644
---- a/drivers/media/platform/qcom/venus/vdec.c
-+++ b/drivers/media/platform/qcom/venus/vdec.c
-@@ -1088,8 +1088,6 @@ static int vdec_stop_capture(struct venus_inst *inst)
- 		break;
- 	}
- 
--	INIT_LIST_HEAD(&inst->registeredbufs);
--
- 	return ret;
- }
- 
-@@ -1189,6 +1187,14 @@ static int vdec_buf_init(struct vb2_buffer *vb)
- static void vdec_buf_cleanup(struct vb2_buffer *vb)
- {
- 	struct venus_inst *inst = vb2_get_drv_priv(vb->vb2_queue);
-+	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
-+	struct venus_buffer *buf = to_venus_buffer(vbuf);
-+
-+	mutex_lock(&inst->lock);
-+	if (vb->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE)
-+		if (!list_empty(&inst->registeredbufs))
-+			list_del_init(&buf->reg_list);
-+	mutex_unlock(&inst->lock);
- 
- 	inst->buf_count--;
- 	if (!inst->buf_count)
--- 
-2.25.1
+James
+
 
