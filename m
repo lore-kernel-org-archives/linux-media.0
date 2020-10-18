@@ -5,49 +5,50 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE5D0C43457
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:20:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B3DBC4363D
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:21:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B60B722365
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:20:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3386A222E7
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:21:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603048859;
-	bh=bKe3MNMrhUKZGjJmilsT28wL8uxdUhmboq/eRPyBLps=;
+	s=default; t=1603048868;
+	bh=+8n3zIMFKJL0z8oTl5RIgi6vXA1uqJNn2INj3/z1hNM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=YM7JEEvungbAVdHvyyP6tzsctLy83qblDai5cIM7sAwVq/nLkqB9uuTAqjH+tzMxW
-	 3PjiJfDHLOIUVX8Y4vhOJfEiBzXu8ADcCXsKOSBxeOaKkFW+jzqyGaqhQo33wS0j14
-	 ukXtO8p6QmCefg6sB65CW63Ib3MkXga5etNNs80U=
+	b=h3LpdkAZQStLHU+5toWAn+3JlV9GES7z/Ry8nRqyOYWvR+yRKT5q4xL7m15EBWAPw
+	 EIzHjqnPkbHTgKc8GEyQqRfvvea243wxUunX4eHz1XZyrMTuGG5yuohF/dtgHlt0Tb
+	 KP3wfok4tK88LWo7y1TK69j8Rl42SlxADdx7D0b0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729132AbgJRTU6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Oct 2020 15:20:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60878 "EHLO mail.kernel.org"
+        id S1729230AbgJRTVH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Oct 2020 15:21:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32966 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729074AbgJRTU5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:20:57 -0400
+        id S1729216AbgJRTVF (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:21:05 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2E710222EC;
-        Sun, 18 Oct 2020 19:20:55 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 26F0A222E7;
+        Sun, 18 Oct 2020 19:21:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603048856;
-        bh=bKe3MNMrhUKZGjJmilsT28wL8uxdUhmboq/eRPyBLps=;
+        s=default; t=1603048865;
+        bh=+8n3zIMFKJL0z8oTl5RIgi6vXA1uqJNn2INj3/z1hNM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=w6A4Xq9tYn9+vqbiWL3/OmMbPAVrgE0V+LSUaMh2ELp/z/JmjlkHiQgDnpUwYJeiM
-         +98i9gMPG/Byxa+nM6yvCnh668JddkBNnjI99noR7h6afbVcKn4BgyXhDuMIN0SDIn
-         2SVKntzVREzaF9h7QCav5iGb9B25IEfj+uSRMe9c=
+        b=u+tCkmqr6XeIsUGHlBkqLANylq06nxMzAW4KOm3uN7QkmH1jSFvy/ZexslWQfYfeM
+         /YwYwjJXabP+o0ugdKSMVZeuN7C6j5KLoMR94lB7a4rEePQU+rcKRhZJ5k8dJyGOgR
+         WbCK4eJhM8e+8Xgc07kcoHUgYX0d0vPFSdkCP7fs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 023/101] media: rcar_drif: Fix fwnode reference leak when parsing DT
-Date:   Sun, 18 Oct 2020 15:19:08 -0400
-Message-Id: <20201018192026.4053674-23-sashal@kernel.org>
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.8 031/101] media: venus: core: Fix error handling in probe
+Date:   Sun, 18 Oct 2020 15:19:16 -0400
+Message-Id: <20201018192026.4053674-31-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201018192026.4053674-1-sashal@kernel.org>
 References: <20201018192026.4053674-1-sashal@kernel.org>
@@ -59,61 +60,70 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+From: Rajendra Nayak <rnayak@codeaurora.org>
 
-[ Upstream commit cdd4f7824994c9254acc6e415750529ea2d2cfe0 ]
+[ Upstream commit 98cd831088c64aa8fe7e1d2a8bb94b6faba0462b ]
 
-The fwnode reference corresponding to the endpoint is leaked in an error
-path of the rcar_drif_parse_subdevs() function. Fix it, and reorganize
-fwnode reference handling in the function to release references early,
-simplifying error paths.
+Post a successful pm_ops->core_get, an error in probe
+should exit by doing a pm_ops->core_put which seems
+to be missing. So fix it.
 
-Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/rcar_drif.c | 16 +++++-----------
- 1 file changed, 5 insertions(+), 11 deletions(-)
+ drivers/media/platform/qcom/venus/core.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/platform/rcar_drif.c b/drivers/media/platform/rcar_drif.c
-index 3d2451ac347d7..3f1e5cb8b1976 100644
---- a/drivers/media/platform/rcar_drif.c
-+++ b/drivers/media/platform/rcar_drif.c
-@@ -1227,28 +1227,22 @@ static int rcar_drif_parse_subdevs(struct rcar_drif_sdr *sdr)
- 	if (!ep)
- 		return 0;
+diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+index 203c6538044fb..bfcaba37d60fe 100644
+--- a/drivers/media/platform/qcom/venus/core.c
++++ b/drivers/media/platform/qcom/venus/core.c
+@@ -224,13 +224,15 @@ static int venus_probe(struct platform_device *pdev)
  
-+	/* Get the endpoint properties */
-+	rcar_drif_get_ep_properties(sdr, ep);
-+
- 	fwnode = fwnode_graph_get_remote_port_parent(ep);
-+	fwnode_handle_put(ep);
- 	if (!fwnode) {
- 		dev_warn(sdr->dev, "bad remote port parent\n");
--		fwnode_handle_put(ep);
- 		return -EINVAL;
- 	}
- 
- 	sdr->ep.asd.match.fwnode = fwnode;
- 	sdr->ep.asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
- 	ret = v4l2_async_notifier_add_subdev(notifier, &sdr->ep.asd);
--	if (ret) {
--		fwnode_handle_put(fwnode);
+ 	ret = dma_set_mask_and_coherent(dev, core->res->dma_mask);
+ 	if (ret)
 -		return ret;
--	}
--
--	/* Get the endpoint properties */
--	rcar_drif_get_ep_properties(sdr, ep);
--
- 	fwnode_handle_put(fwnode);
--	fwnode_handle_put(ep);
++		goto err_core_put;
  
--	return 0;
-+	return ret;
+ 	if (!dev->dma_parms) {
+ 		dev->dma_parms = devm_kzalloc(dev, sizeof(*dev->dma_parms),
+ 					      GFP_KERNEL);
+-		if (!dev->dma_parms)
+-			return -ENOMEM;
++		if (!dev->dma_parms) {
++			ret = -ENOMEM;
++			goto err_core_put;
++		}
+ 	}
+ 	dma_set_max_seg_size(dev, DMA_BIT_MASK(32));
+ 
+@@ -242,11 +244,11 @@ static int venus_probe(struct platform_device *pdev)
+ 					IRQF_TRIGGER_HIGH | IRQF_ONESHOT,
+ 					"venus", core);
+ 	if (ret)
+-		return ret;
++		goto err_core_put;
+ 
+ 	ret = hfi_create(core, &venus_core_ops);
+ 	if (ret)
+-		return ret;
++		goto err_core_put;
+ 
+ 	pm_runtime_enable(dev);
+ 
+@@ -302,6 +304,9 @@ static int venus_probe(struct platform_device *pdev)
+ 	pm_runtime_set_suspended(dev);
+ 	pm_runtime_disable(dev);
+ 	hfi_destroy(core);
++err_core_put:
++	if (core->pm_ops->core_put)
++		core->pm_ops->core_put(dev);
+ 	return ret;
  }
  
- /* Check if the given device is the primary bond */
 -- 
 2.25.1
 
