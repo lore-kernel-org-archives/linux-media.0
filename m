@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8570EC433DF
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:30:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E9EFC433DF
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:30:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 52FBA207DE
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:30:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DD8E1207DE
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:30:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603049429;
-	bh=JjFAo99wLYDWX9mwBwYWun0+eXHqmGfCOhVzOD6lR3E=;
+	s=default; t=1603049434;
+	bh=48/ROL0ZxjWmq5FTb8/M9d7rMnjGK4fTPh4kuFxn3Mo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Si5wfz5AVuqe6WahbqILO2nCdyszlB/Y7yVnLCgpDWnGljGL1FtOLyHySUIvD7PBH
-	 rIplvh/drwCpgpY8PpmwXKq2GRxXZ0a7fDhG8R6KNZOt3jeAe93O5Qby0Hr77F0i+S
-	 /DTxeL96BK6d7SxzPwckWy7zmFTSEy19NxcBeGRQ=
+	b=QsAG+LTbBVE1RcQqLbhMBl4CbE01qxJltnjMtWXz+82KHEhmO1QVNB37+DTQmEaCP
+	 27Pc2vpaNmKApo8oURq04r+h5aNFjCpCI3Opm662IGqySbGrnLZBkJBz1JLNUV9kRC
+	 jCNRzBbEdh2ue10sPWbBlW/ZoEElAJx76wkUi7po=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732464AbgJRTaQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Oct 2020 15:30:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43630 "EHLO mail.kernel.org"
+        id S1732559AbgJRTac (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Oct 2020 15:30:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43556 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732154AbgJRT1j (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:27:39 -0400
+        id S1728210AbgJRT1i (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:27:38 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7966922272;
-        Sun, 18 Oct 2020 19:27:38 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5633622277;
+        Sun, 18 Oct 2020 19:27:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603049259;
-        bh=JjFAo99wLYDWX9mwBwYWun0+eXHqmGfCOhVzOD6lR3E=;
+        s=default; t=1603049258;
+        bh=48/ROL0ZxjWmq5FTb8/M9d7rMnjGK4fTPh4kuFxn3Mo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S6rxlHUSyz8DE76kBuxI6C7cLyY7QEmNRtg7my9mu24Vk2vtRn0QwA3LVk6nWNo1p
-         4QF56JlYqdNt+SNCsTjsa/9tYtcf9eiG5ujPrK3yuo4jWjqcGGf4KBvEhhwYk+yTRQ
-         ZaoZTmdWXcqFWoBNduglVYU3G7r9iZEp4txH10Pk=
+        b=SbuSuab+/oytLv5iVjPrlTkYhwohuKofzDpeRBj1uVd3Cbt7UL7jRacuOYNQ2hX1r
+         boNPuZdhdAKsg0KLew3hyNdKp53I633mORLWwRtLJkBT4ukIe3tOnAQXw20FfGiu7U
+         OPNyfdUBRbI6pqyJdenKCDZF/EYdGvM2T9Hbipy0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Adam Goode <agoode@google.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+Cc:     Xiaolong Huang <butterflyhuangxx@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 08/33] media: uvcvideo: Ensure all probed info is returned to v4l2
-Date:   Sun, 18 Oct 2020 15:27:03 -0400
-Message-Id: <20201018192728.4056577-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 07/33] media: media/pci: prevent memory leak in bttv_probe
+Date:   Sun, 18 Oct 2020 15:27:02 -0400
+Message-Id: <20201018192728.4056577-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201018192728.4056577-1-sashal@kernel.org>
 References: <20201018192728.4056577-1-sashal@kernel.org>
@@ -58,81 +58,62 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Adam Goode <agoode@google.com>
+From: Xiaolong Huang <butterflyhuangxx@gmail.com>
 
-[ Upstream commit 8a652a17e3c005dcdae31b6c8fdf14382a29cbbe ]
+[ Upstream commit 7b817585b730665126b45df5508dd69526448bc8 ]
 
-bFrameIndex and bFormatIndex can be negotiated by the camera during
-probing, resulting in the camera choosing a different format than
-expected. v4l2 can already accommodate such changes, but the code was
-not updating the proper fields.
+In bttv_probe if some functions such as pci_enable_device,
+pci_set_dma_mask and request_mem_region fails the allocated
+ memory for btv should be released.
 
-Without such a change, v4l2 would potentially interpret the payload
-incorrectly, causing corrupted output. This was happening on the
-Elgato HD60 S+, which currently always renegotiates to format 1.
-
-As an aside, the Elgato firmware is buggy and should not be renegotating,
-but it is still a valid thing for the camera to do. Both macOS and Windows
-will properly probe and read uncorrupted images from this camera.
-
-With this change, both qv4l2 and chromium can now read uncorrupted video
-from the Elgato HD60 S+.
-
-[Add blank lines, remove periods at the of messages]
-
-Signed-off-by: Adam Goode <agoode@google.com>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Xiaolong Huang <butterflyhuangxx@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/uvc/uvc_v4l2.c | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ drivers/media/pci/bt8xx/bttv-driver.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-index 0e7d16fe84d42..a0a544628053d 100644
---- a/drivers/media/usb/uvc/uvc_v4l2.c
-+++ b/drivers/media/usb/uvc/uvc_v4l2.c
-@@ -242,11 +242,41 @@ static int uvc_v4l2_try_format(struct uvc_streaming *stream,
- 	if (ret < 0)
- 		goto done;
- 
-+	/* After the probe, update fmt with the values returned from
-+	 * negotiation with the device.
-+	 */
-+	for (i = 0; i < stream->nformats; ++i) {
-+		if (probe->bFormatIndex == stream->format[i].index) {
-+			format = &stream->format[i];
-+			break;
-+		}
-+	}
+diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
+index 51dbef2f9a489..10c9c078af014 100644
+--- a/drivers/media/pci/bt8xx/bttv-driver.c
++++ b/drivers/media/pci/bt8xx/bttv-driver.c
+@@ -4053,11 +4053,13 @@ static int bttv_probe(struct pci_dev *dev, const struct pci_device_id *pci_id)
+ 	btv->id  = dev->device;
+ 	if (pci_enable_device(dev)) {
+ 		pr_warn("%d: Can't enable device\n", btv->c.nr);
+-		return -EIO;
++		result = -EIO;
++		goto free_mem;
+ 	}
+ 	if (pci_set_dma_mask(dev, DMA_BIT_MASK(32))) {
+ 		pr_warn("%d: No suitable DMA available\n", btv->c.nr);
+-		return -EIO;
++		result = -EIO;
++		goto free_mem;
+ 	}
+ 	if (!request_mem_region(pci_resource_start(dev,0),
+ 				pci_resource_len(dev,0),
+@@ -4065,7 +4067,8 @@ static int bttv_probe(struct pci_dev *dev, const struct pci_device_id *pci_id)
+ 		pr_warn("%d: can't request iomem (0x%llx)\n",
+ 			btv->c.nr,
+ 			(unsigned long long)pci_resource_start(dev, 0));
+-		return -EBUSY;
++		result = -EBUSY;
++		goto free_mem;
+ 	}
+ 	pci_set_master(dev);
+ 	pci_set_command(dev);
+@@ -4251,6 +4254,10 @@ static int bttv_probe(struct pci_dev *dev, const struct pci_device_id *pci_id)
+ 	release_mem_region(pci_resource_start(btv->c.pci,0),
+ 			   pci_resource_len(btv->c.pci,0));
+ 	pci_disable_device(btv->c.pci);
 +
-+	if (i == stream->nformats) {
-+		uvc_trace(UVC_TRACE_FORMAT, "Unknown bFormatIndex %u\n",
-+			  probe->bFormatIndex);
-+		return -EINVAL;
-+	}
-+
-+	for (i = 0; i < format->nframes; ++i) {
-+		if (probe->bFrameIndex == format->frame[i].bFrameIndex) {
-+			frame = &format->frame[i];
-+			break;
-+		}
-+	}
-+
-+	if (i == format->nframes) {
-+		uvc_trace(UVC_TRACE_FORMAT, "Unknown bFrameIndex %u\n",
-+			  probe->bFrameIndex);
-+		return -EINVAL;
-+	}
-+
- 	fmt->fmt.pix.width = frame->wWidth;
- 	fmt->fmt.pix.height = frame->wHeight;
- 	fmt->fmt.pix.field = V4L2_FIELD_NONE;
- 	fmt->fmt.pix.bytesperline = format->bpp * frame->wWidth / 8;
- 	fmt->fmt.pix.sizeimage = probe->dwMaxVideoFrameSize;
-+	fmt->fmt.pix.pixelformat = format->fcc;
- 	fmt->fmt.pix.colorspace = format->colorspace;
- 	fmt->fmt.pix.priv = 0;
++free_mem:
++	bttvs[btv->c.nr] = NULL;
++	kfree(btv);
+ 	return result;
+ }
  
 -- 
 2.25.1
