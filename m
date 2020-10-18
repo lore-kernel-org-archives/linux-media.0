@@ -7,48 +7,46 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88D5BC433E7
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:53:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54530C433E7
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:53:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 50E9A2227E
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:53:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1330822263
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:53:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603050806;
-	bh=xYIbL3WOQmMf9lGdWrtLAap8INKhbld2Gfp8EA2iGos=;
+	s=default; t=1603050814;
+	bh=+n1S3A+tYy55zl/N+PuWYLmn/WLTr5AUGrt5WVfD6Nk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=QppqEDr3QAk8GOGvSEfYgzcGJrSB44Nel2IGKkGI89QFWS74YqgVLDBDoxACAn8OC
-	 oeHx0NYT7ojfdrJQy+TMNfyZ1bAGGjv+IgDW1L+9RxwG0EWjGouSGEpLELUyysOtix
-	 RYal9wyKm5oJEEqJsYfz4x33f5InFS2Z2PjFOoVM=
+	b=AFKCzTxw3MsInzUZAOa2aIinU6aoAqfTP1iYYNxITXKJt7Uu+74rL/u0NhbzzDTlf
+	 jotnhO0QcezgkdMcUaOvYWJ/+BDomW8UhuZPQSI7a2HDnZbjqjs5EY7zE/IFaniGII
+	 BR7LnroZXDj64J7zYwszUCX35Or1qaiDJ153RdiI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387980AbgJRTxZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Oct 2020 15:53:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60514 "EHLO mail.kernel.org"
+        id S2387992AbgJRTxc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Oct 2020 15:53:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60470 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728976AbgJRTUm (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:20:42 -0400
+        id S1728968AbgJRTUk (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:20:40 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 76D83222EA;
-        Sun, 18 Oct 2020 19:20:41 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DD841222EB;
+        Sun, 18 Oct 2020 19:20:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603048842;
-        bh=xYIbL3WOQmMf9lGdWrtLAap8INKhbld2Gfp8EA2iGos=;
+        s=default; t=1603048839;
+        bh=+n1S3A+tYy55zl/N+PuWYLmn/WLTr5AUGrt5WVfD6Nk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WiLFRzhU35ZXSfxthhjctnJcKcBhPuBE1M/qJQOBzGFOIjetPcbp/76vs9YHee7A6
-         8ztDfPTBBIqbIJSALhgshjWhTt+3rUxDmriQYqpE+4maGkTUC8vXvzgivStqt/n8cw
-         JcJ4JlyKADtfUCKJi0O2LokbgkNAMEG1mu8uN6c8=
+        b=NYuhRXqyYNrQ2fKylgbDv7UJ/xCYd4bTH6Hnn3vme6A39EDNAOJbofu+B7DFQ927M
+         5SgNzZUiiluupebQFO81OrvWj3vb51qnpE4xFDgU7VSwEFUKyA2jLv/tgJpE4Qf3lP
+         X0D3LBZEDwyq1iPJLk3edGLM3jA46+boKeeTKAFc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Qiushi Wu <wu000273@umn.edu>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 012/101] media: exynos4-is: Fix a reference count leak due to pm_runtime_get_sync
-Date:   Sun, 18 Oct 2020 15:18:57 -0400
-Message-Id: <20201018192026.4053674-12-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.8 010/101] media: sti: Fix reference count leaks
+Date:   Sun, 18 Oct 2020 15:18:55 -0400
+Message-Id: <20201018192026.4053674-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201018192026.4053674-1-sashal@kernel.org>
 References: <20201018192026.4053674-1-sashal@kernel.org>
@@ -62,36 +60,41 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Qiushi Wu <wu000273@umn.edu>
 
-[ Upstream commit c47f7c779ef0458a58583f00c9ed71b7f5a4d0a2 ]
+[ Upstream commit 6f4432bae9f2d12fc1815b5e26cc07e69bcad0df ]
 
-On calling pm_runtime_get_sync() the reference count of the device
-is incremented. In case of failure, decrement the
-reference count before returning the error.
+pm_runtime_get_sync() increments the runtime PM usage counter even
+when it returns an error code, causing incorrect ref count if
+pm_runtime_put_noidle() is not called in error handling paths.
+Thus call pm_runtime_put_noidle() if pm_runtime_get_sync() fails.
 
 Signed-off-by: Qiushi Wu <wu000273@umn.edu>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/exynos4-is/media-dev.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/media/platform/sti/hva/hva-hw.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/platform/exynos4-is/media-dev.c b/drivers/media/platform/exynos4-is/media-dev.c
-index 9c31d950cddf7..29e12d57b12d7 100644
---- a/drivers/media/platform/exynos4-is/media-dev.c
-+++ b/drivers/media/platform/exynos4-is/media-dev.c
-@@ -484,8 +484,10 @@ static int fimc_md_register_sensor_entities(struct fimc_md *fmd)
- 		return -ENXIO;
+diff --git a/drivers/media/platform/sti/hva/hva-hw.c b/drivers/media/platform/sti/hva/hva-hw.c
+index 401aaafa17109..bb13348be0832 100644
+--- a/drivers/media/platform/sti/hva/hva-hw.c
++++ b/drivers/media/platform/sti/hva/hva-hw.c
+@@ -272,6 +272,7 @@ static unsigned long int hva_hw_get_ip_version(struct hva_dev *hva)
  
- 	ret = pm_runtime_get_sync(fmd->pmf);
--	if (ret < 0)
-+	if (ret < 0) {
-+		pm_runtime_put(fmd->pmf);
- 		return ret;
-+	}
+ 	if (pm_runtime_get_sync(dev) < 0) {
+ 		dev_err(dev, "%s     failed to get pm_runtime\n", HVA_PREFIX);
++		pm_runtime_put_noidle(dev);
+ 		mutex_unlock(&hva->protect_mutex);
+ 		return -EFAULT;
+ 	}
+@@ -553,6 +554,7 @@ void hva_hw_dump_regs(struct hva_dev *hva, struct seq_file *s)
  
- 	fmd->num_sensors = 0;
- 
+ 	if (pm_runtime_get_sync(dev) < 0) {
+ 		seq_puts(s, "Cannot wake up IP\n");
++		pm_runtime_put_noidle(dev);
+ 		mutex_unlock(&hva->protect_mutex);
+ 		return;
+ 	}
 -- 
 2.25.1
 
