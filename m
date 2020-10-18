@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35706C43457
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:52:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A45F0C433E7
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:53:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0799222272
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:52:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6695822268
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:53:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603050772;
-	bh=TPSg9F6aclc44MNfpeDtKYRLYQIcsA9t3mTkIqI3l/0=;
+	s=default; t=1603050786;
+	bh=L2+RJXccCaMCISHwYIWzmgF0+1Wiq4nILRjct3Rac6w=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Cisf+iSrmRrKYFcKZXutg3PvIukTaNW6fXFhRwpsd8TLu1kMuRelbV0JsJ3rWYUH8
-	 TPobWlCKS22/UouujpcEfQQs9C2hCjq5WOWHxe5MvIBE78cLaB92luJJBFQ7/q3jA8
-	 tmtVCCMXsieHdNUZ4aqe8yA7/GfzWBKNjLxBvZ8o=
+	b=G06J9jIg29yUJsUSBfQveXau3sruag2uk/kk6TAbPX9BlVUyfhdJ3c5H4Yqk832gi
+	 ++gdcPKQ96MU2RbZpIUq3T+gZAG3t9Z7Sq+SizzT7eON8Z10K+xdXHL2egR+4Q17Fv
+	 sYYdNM0H5XHDJ8PkpPhefgPRpNY09k8tsB9Scg2o=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729327AbgJRTwp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Oct 2020 15:52:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60920 "EHLO mail.kernel.org"
+        id S1729057AbgJRTUt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Oct 2020 15:20:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60658 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729124AbgJRTU6 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:20:58 -0400
+        id S1729036AbgJRTUs (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:20:48 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6FD7D222E7;
-        Sun, 18 Oct 2020 19:20:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 03D64222EA;
+        Sun, 18 Oct 2020 19:20:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603048857;
-        bh=TPSg9F6aclc44MNfpeDtKYRLYQIcsA9t3mTkIqI3l/0=;
+        s=default; t=1603048847;
+        bh=L2+RJXccCaMCISHwYIWzmgF0+1Wiq4nILRjct3Rac6w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L4rF4LNBKqQeFr2omJTDDfTQMzP0gOnzyhotvQBQZgi4S7u4tGACZSxrkjV8EjzHl
-         lavLwo4q4hC8CqFjntxUk9dEPNix9M8bSHKc1gXVDLb4r87XmqA0Pf5HjOg1Z02qSg
-         6Pp1oa/dUjQ15pKStH03TdBegrsNHLn/sbc/9Z68=
+        b=fxwa+NfkKNsHoNmeF30vzCDrCtHPlXu6yOlVNuigmqoT37Wtw//l1OtA8Q9D+FZwM
+         I8UY9q9wgK4QAnoVxijYmHsfy2XQRD3kMyHOKn0c2rHBshZvqxLxE2QvaX6SuyTD7J
+         amRyo1zKGbg6GwG22lZjV0FaWUtKOEr5gSSGK02c=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Adam Goode <agoode@google.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+Cc:     Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 024/101] media: uvcvideo: Ensure all probed info is returned to v4l2
-Date:   Sun, 18 Oct 2020 15:19:09 -0400
-Message-Id: <20201018192026.4053674-24-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.8 016/101] media: platform: sti: hva: Fix runtime PM imbalance on error
+Date:   Sun, 18 Oct 2020 15:19:01 -0400
+Message-Id: <20201018192026.4053674-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201018192026.4053674-1-sashal@kernel.org>
 References: <20201018192026.4053674-1-sashal@kernel.org>
@@ -58,82 +58,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Adam Goode <agoode@google.com>
+From: Dinghao Liu <dinghao.liu@zju.edu.cn>
 
-[ Upstream commit 8a652a17e3c005dcdae31b6c8fdf14382a29cbbe ]
+[ Upstream commit d912a1d9e9afe69c6066c1ceb6bfc09063074075 ]
 
-bFrameIndex and bFormatIndex can be negotiated by the camera during
-probing, resulting in the camera choosing a different format than
-expected. v4l2 can already accommodate such changes, but the code was
-not updating the proper fields.
+pm_runtime_get_sync() increments the runtime PM usage counter even
+when it returns an error code. Thus a pairing decrement is needed on
+the error handling path to keep the counter balanced.
 
-Without such a change, v4l2 would potentially interpret the payload
-incorrectly, causing corrupted output. This was happening on the
-Elgato HD60 S+, which currently always renegotiates to format 1.
-
-As an aside, the Elgato firmware is buggy and should not be renegotating,
-but it is still a valid thing for the camera to do. Both macOS and Windows
-will properly probe and read uncorrupted images from this camera.
-
-With this change, both qv4l2 and chromium can now read uncorrupted video
-from the Elgato HD60 S+.
-
-[Add blank lines, remove periods at the of messages]
-
-Signed-off-by: Adam Goode <agoode@google.com>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/uvc/uvc_v4l2.c | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ drivers/media/platform/sti/hva/hva-hw.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-index 0335e69b70abe..5e6f3153b5ff8 100644
---- a/drivers/media/usb/uvc/uvc_v4l2.c
-+++ b/drivers/media/usb/uvc/uvc_v4l2.c
-@@ -247,11 +247,41 @@ static int uvc_v4l2_try_format(struct uvc_streaming *stream,
- 	if (ret < 0)
- 		goto done;
+diff --git a/drivers/media/platform/sti/hva/hva-hw.c b/drivers/media/platform/sti/hva/hva-hw.c
+index bb13348be0832..43f279e2a6a38 100644
+--- a/drivers/media/platform/sti/hva/hva-hw.c
++++ b/drivers/media/platform/sti/hva/hva-hw.c
+@@ -389,7 +389,7 @@ int hva_hw_probe(struct platform_device *pdev, struct hva_dev *hva)
+ 	ret = pm_runtime_get_sync(dev);
+ 	if (ret < 0) {
+ 		dev_err(dev, "%s     failed to set PM\n", HVA_PREFIX);
+-		goto err_clk;
++		goto err_pm;
+ 	}
  
-+	/* After the probe, update fmt with the values returned from
-+	 * negotiation with the device.
-+	 */
-+	for (i = 0; i < stream->nformats; ++i) {
-+		if (probe->bFormatIndex == stream->format[i].index) {
-+			format = &stream->format[i];
-+			break;
-+		}
-+	}
-+
-+	if (i == stream->nformats) {
-+		uvc_trace(UVC_TRACE_FORMAT, "Unknown bFormatIndex %u\n",
-+			  probe->bFormatIndex);
-+		return -EINVAL;
-+	}
-+
-+	for (i = 0; i < format->nframes; ++i) {
-+		if (probe->bFrameIndex == format->frame[i].bFrameIndex) {
-+			frame = &format->frame[i];
-+			break;
-+		}
-+	}
-+
-+	if (i == format->nframes) {
-+		uvc_trace(UVC_TRACE_FORMAT, "Unknown bFrameIndex %u\n",
-+			  probe->bFrameIndex);
-+		return -EINVAL;
-+	}
-+
- 	fmt->fmt.pix.width = frame->wWidth;
- 	fmt->fmt.pix.height = frame->wHeight;
- 	fmt->fmt.pix.field = V4L2_FIELD_NONE;
- 	fmt->fmt.pix.bytesperline = uvc_v4l2_get_bytesperline(format, frame);
- 	fmt->fmt.pix.sizeimage = probe->dwMaxVideoFrameSize;
-+	fmt->fmt.pix.pixelformat = format->fcc;
- 	fmt->fmt.pix.colorspace = format->colorspace;
- 
- 	if (uvc_format != NULL)
+ 	/* check IP hardware version */
 -- 
 2.25.1
 
