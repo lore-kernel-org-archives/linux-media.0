@@ -7,46 +7,48 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6056FC433E7
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:36:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 129CAC43467
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:36:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1FD9C207DE
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:36:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C5F27204FD
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:36:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603049770;
-	bh=xVDHc69iXsYbLU/rVvI+TzvkH9zIEGHQK0rAHhXPLG8=;
+	s=default; t=1603049771;
+	bh=ESmYsFwdjMvGzq6UJYwPaDKEGd2RRZovAo1COkQR6ZA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=qErsMQ3NYP4v066cT6Dxq4D3H4JnhgPA+cM8M8AEL/xwMOipQOdwAEPccwpTRaKMJ
-	 dzyglxLk9E1Y6NYqT7VuU/UVUzljR3eLpxEuO8Ya1M2DzIuPyxlEDvwlSFmmpC3k3c
-	 7KjCmoo5H1K2MhACkw1BA2eVr8mwnoNp2TzrHieY=
+	b=i8TLZS7cqDrz9z+tNf3ybN8Iytam2qMGvQjwpC6Lx+aXgzhs6t/I51QOARrgeB3OZ
+	 HbkamFz9v1eUgBT0fS07xnkX2PODbaFJAcyLC1hoS33cubMue6pEFXxrBshYOPsVMe
+	 4ReC8t1pmywpA/G+oVAyGTmmPa3R+E06sZ9vkvu4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732091AbgJRTgG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Oct 2020 15:36:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40616 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731404AbgJRTZr (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1731401AbgJRTZr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Sun, 18 Oct 2020 15:25:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40486 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731376AbgJRTZo (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:25:44 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8B13B22314;
-        Sun, 18 Oct 2020 19:25:46 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C1AAE2236F;
+        Sun, 18 Oct 2020 19:25:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603049147;
-        bh=xVDHc69iXsYbLU/rVvI+TzvkH9zIEGHQK0rAHhXPLG8=;
+        s=default; t=1603049143;
+        bh=ESmYsFwdjMvGzq6UJYwPaDKEGd2RRZovAo1COkQR6ZA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WJjONbR5MuLTEWSjAEWxDjDsTH2QNPN+UhOeuoHHlxEH9D0iLDBS6bopOcr6U7GUc
-         W65pneW1UgIo1t9Hlka/5H10KK6uLGZCa/7r1NUFcqCnznhSzD0JJfwfisun1O8tDe
-         cZIf3TMjav9qfcyJvD7k5lo2okryAE7QV53Mg/GM=
+        b=xCi4OHWKHvd/k3cMatxh0jCLmivGiwcYEstJ6Sd/Pj0dtR8ebGYH/S1w3S9QoDbXA
+         N5PhS69q6Ql7AjU65FeiUx9W3coPfnjFN1+42m5imA/wPZUsr43uaRZwjd3XqSqtZs
+         diYoBZQjXjVUJ+pbzk+cuiKdt9/2o7FeSimv/7zU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Xiaolong Huang <butterflyhuangxx@gmail.com>,
+Cc:     Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        Sylwester Nawrocki <snawrocki@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 13/52] media: media/pci: prevent memory leak in bttv_probe
-Date:   Sun, 18 Oct 2020 15:24:50 -0400
-Message-Id: <20201018192530.4055730-13-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 10/52] media: platform: s3c-camif: Fix runtime PM imbalance on error
+Date:   Sun, 18 Oct 2020 15:24:47 -0400
+Message-Id: <20201018192530.4055730-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201018192530.4055730-1-sashal@kernel.org>
 References: <20201018192530.4055730-1-sashal@kernel.org>
@@ -58,63 +60,51 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Xiaolong Huang <butterflyhuangxx@gmail.com>
+From: Dinghao Liu <dinghao.liu@zju.edu.cn>
 
-[ Upstream commit 7b817585b730665126b45df5508dd69526448bc8 ]
+[ Upstream commit dafa3605fe60d5a61239d670919b2a36e712481e ]
 
-In bttv_probe if some functions such as pci_enable_device,
-pci_set_dma_mask and request_mem_region fails the allocated
- memory for btv should be released.
+pm_runtime_get_sync() increments the runtime PM usage counter even
+when it returns an error code. Thus a pairing decrement is needed on
+the error handling path to keep the counter balanced.
 
-Signed-off-by: Xiaolong Huang <butterflyhuangxx@gmail.com>
+Also, call pm_runtime_disable() when pm_runtime_get_sync() returns
+an error code.
+
+Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+Reviewed-by: Sylwester Nawrocki <snawrocki@kernel.org>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/bt8xx/bttv-driver.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ drivers/media/platform/s3c-camif/camif-core.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
-index 227086a2e99c8..9e38c8b3ea762 100644
---- a/drivers/media/pci/bt8xx/bttv-driver.c
-+++ b/drivers/media/pci/bt8xx/bttv-driver.c
-@@ -4055,11 +4055,13 @@ static int bttv_probe(struct pci_dev *dev, const struct pci_device_id *pci_id)
- 	btv->id  = dev->device;
- 	if (pci_enable_device(dev)) {
- 		pr_warn("%d: Can't enable device\n", btv->c.nr);
--		return -EIO;
-+		result = -EIO;
-+		goto free_mem;
- 	}
- 	if (pci_set_dma_mask(dev, DMA_BIT_MASK(32))) {
- 		pr_warn("%d: No suitable DMA available\n", btv->c.nr);
--		return -EIO;
-+		result = -EIO;
-+		goto free_mem;
- 	}
- 	if (!request_mem_region(pci_resource_start(dev,0),
- 				pci_resource_len(dev,0),
-@@ -4067,7 +4069,8 @@ static int bttv_probe(struct pci_dev *dev, const struct pci_device_id *pci_id)
- 		pr_warn("%d: can't request iomem (0x%llx)\n",
- 			btv->c.nr,
- 			(unsigned long long)pci_resource_start(dev, 0));
--		return -EBUSY;
-+		result = -EBUSY;
-+		goto free_mem;
- 	}
- 	pci_set_master(dev);
- 	pci_set_command(dev);
-@@ -4253,6 +4256,10 @@ static int bttv_probe(struct pci_dev *dev, const struct pci_device_id *pci_id)
- 	release_mem_region(pci_resource_start(btv->c.pci,0),
- 			   pci_resource_len(btv->c.pci,0));
- 	pci_disable_device(btv->c.pci);
-+
-+free_mem:
-+	bttvs[btv->c.nr] = NULL;
-+	kfree(btv);
- 	return result;
- }
+diff --git a/drivers/media/platform/s3c-camif/camif-core.c b/drivers/media/platform/s3c-camif/camif-core.c
+index c4ab63986c8f0..95b11f69555c3 100644
+--- a/drivers/media/platform/s3c-camif/camif-core.c
++++ b/drivers/media/platform/s3c-camif/camif-core.c
+@@ -475,7 +475,7 @@ static int s3c_camif_probe(struct platform_device *pdev)
  
+ 	ret = camif_media_dev_init(camif);
+ 	if (ret < 0)
+-		goto err_alloc;
++		goto err_pm;
+ 
+ 	ret = camif_register_sensor(camif);
+ 	if (ret < 0)
+@@ -509,10 +509,9 @@ static int s3c_camif_probe(struct platform_device *pdev)
+ 	media_device_unregister(&camif->media_dev);
+ 	media_device_cleanup(&camif->media_dev);
+ 	camif_unregister_media_entities(camif);
+-err_alloc:
++err_pm:
+ 	pm_runtime_put(dev);
+ 	pm_runtime_disable(dev);
+-err_pm:
+ 	camif_clk_put(camif);
+ err_clk:
+ 	s3c_camif_unregister_subdev(camif);
 -- 
 2.25.1
 
