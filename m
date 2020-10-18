@@ -4,51 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AA3CC433E7
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:59:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E05D2C433E7
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:59:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5EC3E2226B
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:59:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9C75B22269
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:59:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603051167;
-	bh=+8n3zIMFKJL0z8oTl5RIgi6vXA1uqJNn2INj3/z1hNM=;
+	s=default; t=1603051199;
+	bh=TbvKyiIsY8u3aNEGtQ4lzndNOknupo3iNqO8vf8zft4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=AQB7xfq39U337ufxxTW+6b1/rMW0GwyBPbr2WEOnK4cF1EntNTY1e6rRMYbeT2V2M
-	 LsNSZti8ymamgGhJQUcvZ9jPUPmXaBEDn5FddWnfUZJXl+aqN5NWEakWToNSldGths
-	 VjnvzinAGQktNosfqS2m9WVlUU+pqf+OvfNXlHc0=
+	b=YYMP/fqyUFvs/m3SctuTGEFOkicwJK66Y7UUL3ZQDmoAqMoZ+wCPLeNp7IZtD9Z5U
+	 6TZuTdCbiHFTarSIztWBiNJEaUuK9Up9AYChu7bhrzSnb3nCt9xirHNR+z3mwVJTR7
+	 Z1qPAkKf5ny1ZRKqLNmoxhoYl+RtENbDpZRhUegw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388630AbgJRT70 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Oct 2020 15:59:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57058 "EHLO mail.kernel.org"
+        id S1727787AbgJRTSn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Oct 2020 15:18:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56904 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727294AbgJRTSt (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:18:49 -0400
+        id S1727719AbgJRTSm (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:18:42 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AA285222E7;
-        Sun, 18 Oct 2020 19:18:47 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 94A7522384;
+        Sun, 18 Oct 2020 19:18:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603048728;
-        bh=+8n3zIMFKJL0z8oTl5RIgi6vXA1uqJNn2INj3/z1hNM=;
+        s=default; t=1603048722;
+        bh=TbvKyiIsY8u3aNEGtQ4lzndNOknupo3iNqO8vf8zft4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=06jbujW9/8bemzDJFAnNVyEY3daVzoM1v+7m6Mya1GITA31wWWv5zOhHDYuQ9u8xW
-         PkYlKFcC+iboJycise9dx4OieNBTCbFij1W/a17p5ovAbi3dj7hmNETlrTl1jGss22
-         xiImF5rs5g/Vf1yI8i1bK8ZVCgv1TX3PjVgfo0vY=
+        b=m78rkQ0BHC7dXVloDiYC20XSsd/XXnARgEvFfNnJGn3huONbYYs0W0GjFu8hP2MF4
+         AVgPavitf6EgGS8m6SFueFT62qyeQl9OPlaOSr7NdKMBjJKBdqcn8VeGrenc6CRfaW
+         dgIxeklz9k6s82jk+2nw5Jh/TJHxNTYWIsKdMAts=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.9 033/111] media: venus: core: Fix error handling in probe
-Date:   Sun, 18 Oct 2020 15:16:49 -0400
-Message-Id: <20201018191807.4052726-33-sashal@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.9 028/111] media: saa7134: avoid a shift overflow
+Date:   Sun, 18 Oct 2020 15:16:44 -0400
+Message-Id: <20201018191807.4052726-28-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201018191807.4052726-1-sashal@kernel.org>
 References: <20201018191807.4052726-1-sashal@kernel.org>
@@ -60,70 +56,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Rajendra Nayak <rnayak@codeaurora.org>
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit 98cd831088c64aa8fe7e1d2a8bb94b6faba0462b ]
+[ Upstream commit 15a36aae1ec1c1f17149b6113b92631791830740 ]
 
-Post a successful pm_ops->core_get, an error in probe
-should exit by doing a pm_ops->core_put which seems
-to be missing. So fix it.
+As reported by smatch:
+	drivers/media/pci/saa7134//saa7134-tvaudio.c:686 saa_dsp_writel() warn: should 'reg << 2' be a 64 bit type?
 
-Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+On a 64-bits Kernel, the shift might be bigger than 32 bits.
+
+In real, this should never happen, but let's shut up the warning.
+
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/qcom/venus/core.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ drivers/media/pci/saa7134/saa7134-tvaudio.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-index 203c6538044fb..bfcaba37d60fe 100644
---- a/drivers/media/platform/qcom/venus/core.c
-+++ b/drivers/media/platform/qcom/venus/core.c
-@@ -224,13 +224,15 @@ static int venus_probe(struct platform_device *pdev)
+diff --git a/drivers/media/pci/saa7134/saa7134-tvaudio.c b/drivers/media/pci/saa7134/saa7134-tvaudio.c
+index 79e1afb710758..5cc4ef21f9d37 100644
+--- a/drivers/media/pci/saa7134/saa7134-tvaudio.c
++++ b/drivers/media/pci/saa7134/saa7134-tvaudio.c
+@@ -683,7 +683,8 @@ int saa_dsp_writel(struct saa7134_dev *dev, int reg, u32 value)
+ {
+ 	int err;
  
- 	ret = dma_set_mask_and_coherent(dev, core->res->dma_mask);
- 	if (ret)
--		return ret;
-+		goto err_core_put;
- 
- 	if (!dev->dma_parms) {
- 		dev->dma_parms = devm_kzalloc(dev, sizeof(*dev->dma_parms),
- 					      GFP_KERNEL);
--		if (!dev->dma_parms)
--			return -ENOMEM;
-+		if (!dev->dma_parms) {
-+			ret = -ENOMEM;
-+			goto err_core_put;
-+		}
- 	}
- 	dma_set_max_seg_size(dev, DMA_BIT_MASK(32));
- 
-@@ -242,11 +244,11 @@ static int venus_probe(struct platform_device *pdev)
- 					IRQF_TRIGGER_HIGH | IRQF_ONESHOT,
- 					"venus", core);
- 	if (ret)
--		return ret;
-+		goto err_core_put;
- 
- 	ret = hfi_create(core, &venus_core_ops);
- 	if (ret)
--		return ret;
-+		goto err_core_put;
- 
- 	pm_runtime_enable(dev);
- 
-@@ -302,6 +304,9 @@ static int venus_probe(struct platform_device *pdev)
- 	pm_runtime_set_suspended(dev);
- 	pm_runtime_disable(dev);
- 	hfi_destroy(core);
-+err_core_put:
-+	if (core->pm_ops->core_put)
-+		core->pm_ops->core_put(dev);
- 	return ret;
- }
- 
+-	audio_dbg(2, "dsp write reg 0x%x = 0x%06x\n", reg << 2, value);
++	audio_dbg(2, "dsp write reg 0x%x = 0x%06x\n",
++		  (reg << 2) & 0xffffffff, value);
+ 	err = saa_dsp_wait_bit(dev,SAA7135_DSP_RWSTATE_WRR);
+ 	if (err < 0)
+ 		return err;
 -- 
 2.25.1
 
