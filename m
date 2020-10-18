@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA259C388D1
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 20:00:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88110C433DF
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 20:00:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7D64722277
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 20:00:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 55DB322277
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 20:00:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603051204;
-	bh=TPSg9F6aclc44MNfpeDtKYRLYQIcsA9t3mTkIqI3l/0=;
+	s=default; t=1603051224;
+	bh=N5QeLT4lYf6VW3DsLZV3yTNIyO2Q9L2kglcl6ro5PDg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=QmBssAPuRTq+0BklPhV2xj3fcPHI7tPo0RVXGr2LPW8VooWhows0gTqFGCDm8UPJG
-	 05MkaEkLX+EJP4ukQKytNbZ6L4NlGuqxuXpE1E+BwqFZVAVr/glT28mj2JclaNchsP
-	 BfW8RGSf0jsoW/C6XoEB64Z4M7C3GnqJeLu1jE6w=
+	b=RwtyqwW80T25d8LT40qr87gc/AQ+ZVecKpDW1Oo52y6ECZyQrnJY6o/ifPdQNRvuK
+	 bRABMxshSG7Hl5Gl9IaQiWtq0bTHLA7SbGHhQY2W8W95oyj0+MCq5mHfzdfhreKrz8
+	 VYXvh1WImpHstIrXWs7Oljxys6NhbKMNiyHf7STc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388961AbgJRUAC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Oct 2020 16:00:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56818 "EHLO mail.kernel.org"
+        id S2388951AbgJRUAB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Oct 2020 16:00:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56942 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727725AbgJRTSj (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:18:39 -0400
+        id S1727786AbgJRTSn (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:18:43 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5E89B222B9;
-        Sun, 18 Oct 2020 19:18:38 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9633C222B9;
+        Sun, 18 Oct 2020 19:18:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603048719;
-        bh=TPSg9F6aclc44MNfpeDtKYRLYQIcsA9t3mTkIqI3l/0=;
+        s=default; t=1603048723;
+        bh=N5QeLT4lYf6VW3DsLZV3yTNIyO2Q9L2kglcl6ro5PDg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KUQYDV5thrbmyXrMXhDWtuWuqU1FutgEObiHylcIKQTZDEJqEm6Txotfqw1ZdjxuO
-         BqaR4YO//U55ttW4pkSZrCiudPA3Cj9h61GCEq2+Ni3aUjiQHSx132fQV2cI4zamDC
-         ICOJiKYXLkrrGYVpS7tusxlPZA+a2rC9KXQzGp1Y=
+        b=tMdnw3boagkMJEYDFlds4XBJRtPuDZdKBiAhT71Cks6dKT4/qKp9RiG1H0ZWHdxHw
+         +MLU3xhz3er/2KpecPu67FEjvtvZv93PsNBoQi0wx6nzszj8XG/AYi5IbY/12/vy/3
+         UmYqm3XVeEpGBfSTNXWhU7cKb/ouy7Zky7l5VzIE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Adam Goode <agoode@google.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+Cc:     Dinghao Liu <dinghao.liu@zju.edu.cn>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.9 025/111] media: uvcvideo: Ensure all probed info is returned to v4l2
-Date:   Sun, 18 Oct 2020 15:16:41 -0400
-Message-Id: <20201018191807.4052726-25-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        devel@driverdev.osuosl.org
+Subject: [PATCH AUTOSEL 5.9 029/111] media: atomisp: fix memleak in ia_css_stream_create
+Date:   Sun, 18 Oct 2020 15:16:45 -0400
+Message-Id: <20201018191807.4052726-29-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201018191807.4052726-1-sashal@kernel.org>
 References: <20201018191807.4052726-1-sashal@kernel.org>
@@ -58,82 +58,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Adam Goode <agoode@google.com>
+From: Dinghao Liu <dinghao.liu@zju.edu.cn>
 
-[ Upstream commit 8a652a17e3c005dcdae31b6c8fdf14382a29cbbe ]
+[ Upstream commit c1bca5b5ced0cbd779d56f60cdbc9f5e6f6449fe ]
 
-bFrameIndex and bFormatIndex can be negotiated by the camera during
-probing, resulting in the camera choosing a different format than
-expected. v4l2 can already accommodate such changes, but the code was
-not updating the proper fields.
+When aspect_ratio_crop_init() fails, curr_stream needs
+to be freed just like what we've done in the following
+error paths. However, current code is returning directly
+and ends up leaking memory.
 
-Without such a change, v4l2 would potentially interpret the payload
-incorrectly, causing corrupted output. This was happening on the
-Elgato HD60 S+, which currently always renegotiates to format 1.
-
-As an aside, the Elgato firmware is buggy and should not be renegotating,
-but it is still a valid thing for the camera to do. Both macOS and Windows
-will properly probe and read uncorrupted images from this camera.
-
-With this change, both qv4l2 and chromium can now read uncorrupted video
-from the Elgato HD60 S+.
-
-[Add blank lines, remove periods at the of messages]
-
-Signed-off-by: Adam Goode <agoode@google.com>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/uvc/uvc_v4l2.c | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ drivers/staging/media/atomisp/pci/sh_css.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-index 0335e69b70abe..5e6f3153b5ff8 100644
---- a/drivers/media/usb/uvc/uvc_v4l2.c
-+++ b/drivers/media/usb/uvc/uvc_v4l2.c
-@@ -247,11 +247,41 @@ static int uvc_v4l2_try_format(struct uvc_streaming *stream,
- 	if (ret < 0)
- 		goto done;
- 
-+	/* After the probe, update fmt with the values returned from
-+	 * negotiation with the device.
-+	 */
-+	for (i = 0; i < stream->nformats; ++i) {
-+		if (probe->bFormatIndex == stream->format[i].index) {
-+			format = &stream->format[i];
-+			break;
-+		}
-+	}
-+
-+	if (i == stream->nformats) {
-+		uvc_trace(UVC_TRACE_FORMAT, "Unknown bFormatIndex %u\n",
-+			  probe->bFormatIndex);
-+		return -EINVAL;
-+	}
-+
-+	for (i = 0; i < format->nframes; ++i) {
-+		if (probe->bFrameIndex == format->frame[i].bFrameIndex) {
-+			frame = &format->frame[i];
-+			break;
-+		}
-+	}
-+
-+	if (i == format->nframes) {
-+		uvc_trace(UVC_TRACE_FORMAT, "Unknown bFrameIndex %u\n",
-+			  probe->bFrameIndex);
-+		return -EINVAL;
-+	}
-+
- 	fmt->fmt.pix.width = frame->wWidth;
- 	fmt->fmt.pix.height = frame->wHeight;
- 	fmt->fmt.pix.field = V4L2_FIELD_NONE;
- 	fmt->fmt.pix.bytesperline = uvc_v4l2_get_bytesperline(format, frame);
- 	fmt->fmt.pix.sizeimage = probe->dwMaxVideoFrameSize;
-+	fmt->fmt.pix.pixelformat = format->fcc;
- 	fmt->fmt.pix.colorspace = format->colorspace;
- 
- 	if (uvc_format != NULL)
+diff --git a/drivers/staging/media/atomisp/pci/sh_css.c b/drivers/staging/media/atomisp/pci/sh_css.c
+index a68cbb4995f0f..33a0f8ff82aa8 100644
+--- a/drivers/staging/media/atomisp/pci/sh_css.c
++++ b/drivers/staging/media/atomisp/pci/sh_css.c
+@@ -9521,7 +9521,7 @@ ia_css_stream_create(const struct ia_css_stream_config *stream_config,
+ 	if (err)
+ 	{
+ 		IA_CSS_LEAVE_ERR(err);
+-		return err;
++		goto ERR;
+ 	}
+ #endif
+ 	for (i = 0; i < num_pipes; i++)
 -- 
 2.25.1
 
