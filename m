@@ -7,44 +7,47 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E05D2C433E7
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:59:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E3D6C43457
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 20:00:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9C75B22269
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:59:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 004B422274
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 20:00:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603051199;
-	bh=TbvKyiIsY8u3aNEGtQ4lzndNOknupo3iNqO8vf8zft4=;
+	s=default; t=1603051205;
+	bh=GoSqQEARzAKSAKjWOHK/Ao1vS2GosYLx66ZPYAdDW4A=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=YYMP/fqyUFvs/m3SctuTGEFOkicwJK66Y7UUL3ZQDmoAqMoZ+wCPLeNp7IZtD9Z5U
-	 6TZuTdCbiHFTarSIztWBiNJEaUuK9Up9AYChu7bhrzSnb3nCt9xirHNR+z3mwVJTR7
-	 Z1qPAkKf5ny1ZRKqLNmoxhoYl+RtENbDpZRhUegw=
+	b=YPdJT/JsCY/OuXzlGsfAlF9Z7tNFQGyE3uFJjIryyqrSmpvijgSqALxekG5YtSqAA
+	 w9HpQdvICXISyQL4mZmo8fq6EzhLHZ6aPuIQXVz/MDuP5E1XyRMff8br+hXYxyHtkZ
+	 HBAxxP3HzaHnKLNLtLwR3cms7BJMjvMS/hSbt+nk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727787AbgJRTSn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Oct 2020 15:18:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56904 "EHLO mail.kernel.org"
+        id S2388967AbgJRUAD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Oct 2020 16:00:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56532 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727719AbgJRTSm (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:18:42 -0400
+        id S1727682AbgJRTSa (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:18:30 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 94A7522384;
-        Sun, 18 Oct 2020 19:18:41 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A6B57222C3;
+        Sun, 18 Oct 2020 19:18:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603048722;
-        bh=TbvKyiIsY8u3aNEGtQ4lzndNOknupo3iNqO8vf8zft4=;
+        s=default; t=1603048709;
+        bh=GoSqQEARzAKSAKjWOHK/Ao1vS2GosYLx66ZPYAdDW4A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m78rkQ0BHC7dXVloDiYC20XSsd/XXnARgEvFfNnJGn3huONbYYs0W0GjFu8hP2MF4
-         AVgPavitf6EgGS8m6SFueFT62qyeQl9OPlaOSr7NdKMBjJKBdqcn8VeGrenc6CRfaW
-         dgIxeklz9k6s82jk+2nw5Jh/TJHxNTYWIsKdMAts=
+        b=h71jz+femRJOpvKmAQ+VamhdkvQfTd3MKHfHGruN01+6OzkE1Fhf4jsr0RwuBJjYj
+         Qzt5hWiQNb/JORxmJWhPPul9OhXz3gNwYrmTLHB3Olh9qCBMwPVoMFwGDi4f0vnTpn
+         SRS+gLverRixEVsKUmJTghCYveerAgZCVvTwfwvw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+Cc:     Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        Fabien Dessenne <fabien.dessenne@st.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.9 028/111] media: saa7134: avoid a shift overflow
-Date:   Sun, 18 Oct 2020 15:16:44 -0400
-Message-Id: <20201018191807.4052726-28-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.9 017/111] media: bdisp: Fix runtime PM imbalance on error
+Date:   Sun, 18 Oct 2020 15:16:33 -0400
+Message-Id: <20201018191807.4052726-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201018191807.4052726-1-sashal@kernel.org>
 References: <20201018191807.4052726-1-sashal@kernel.org>
@@ -56,37 +59,44 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+From: Dinghao Liu <dinghao.liu@zju.edu.cn>
 
-[ Upstream commit 15a36aae1ec1c1f17149b6113b92631791830740 ]
+[ Upstream commit dbd2f2dc025f9be8ae063e4f270099677238f620 ]
 
-As reported by smatch:
-	drivers/media/pci/saa7134//saa7134-tvaudio.c:686 saa_dsp_writel() warn: should 'reg << 2' be a 64 bit type?
+pm_runtime_get_sync() increments the runtime PM usage counter even
+when it returns an error code. Thus a pairing decrement is needed on
+the error handling path to keep the counter balanced.
 
-On a 64-bits Kernel, the shift might be bigger than 32 bits.
-
-In real, this should never happen, but let's shut up the warning.
-
+Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+Reviewed-by: Fabien Dessenne <fabien.dessenne@st.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/saa7134/saa7134-tvaudio.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/media/platform/sti/bdisp/bdisp-v4l2.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/media/pci/saa7134/saa7134-tvaudio.c b/drivers/media/pci/saa7134/saa7134-tvaudio.c
-index 79e1afb710758..5cc4ef21f9d37 100644
---- a/drivers/media/pci/saa7134/saa7134-tvaudio.c
-+++ b/drivers/media/pci/saa7134/saa7134-tvaudio.c
-@@ -683,7 +683,8 @@ int saa_dsp_writel(struct saa7134_dev *dev, int reg, u32 value)
- {
- 	int err;
+diff --git a/drivers/media/platform/sti/bdisp/bdisp-v4l2.c b/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
+index af2d5eb782cee..e1d150584bdc2 100644
+--- a/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
++++ b/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
+@@ -1371,7 +1371,7 @@ static int bdisp_probe(struct platform_device *pdev)
+ 	ret = pm_runtime_get_sync(dev);
+ 	if (ret < 0) {
+ 		dev_err(dev, "failed to set PM\n");
+-		goto err_dbg;
++		goto err_pm;
+ 	}
  
--	audio_dbg(2, "dsp write reg 0x%x = 0x%06x\n", reg << 2, value);
-+	audio_dbg(2, "dsp write reg 0x%x = 0x%06x\n",
-+		  (reg << 2) & 0xffffffff, value);
- 	err = saa_dsp_wait_bit(dev,SAA7135_DSP_RWSTATE_WRR);
- 	if (err < 0)
- 		return err;
+ 	/* Filters */
+@@ -1399,7 +1399,6 @@ static int bdisp_probe(struct platform_device *pdev)
+ 	bdisp_hw_free_filters(bdisp->dev);
+ err_pm:
+ 	pm_runtime_put(dev);
+-err_dbg:
+ 	bdisp_debugfs_remove(bdisp);
+ err_v4l2:
+ 	v4l2_device_unregister(&bdisp->v4l2_dev);
 -- 
 2.25.1
 
