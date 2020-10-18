@@ -5,50 +5,49 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF076C433E7
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B55EBC433DF
 	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:46:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A357322274
+	by mail.kernel.org (Postfix) with ESMTP id 739DD22267
 	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:46:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1603050362;
-	bh=XiJLm7dJT4iYtMQfAyf59AS4prF8Kb681A/GW+JkWyM=;
+	bh=4DCuPeW3yW2U9oJ3tflmq+0xSP9pSKrKh9VbhaYRndk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=B/P+YrBsH9xPujBeIA0xweFeCUIEgJDgaPG6kAUypr7Y/GpB+tneBsiO0qkMw5pIo
-	 W8V/OfCDhLQ++rJfcVhIY5aHpZprf4QRnbQ9ODFhqBwo+ge4UtIxlohQ92e4on4/y6
-	 pHiTTRVvdEEh/08FrGwTMb/p8+IBNYuZTUd+BBDU=
+	b=X+awJmjEbTy8UmA82xJKtGIILOBgU1wNL1O5bl/25/jbvqcTvvlUO9hK+ttiZoBYi
+	 WYXlfXzef3T/qypLAbR/5LGum13nvgtZIDI192BHVxOWk/xQt1tnefarvR2abh5jpN
+	 vSW+RF281QR2UOHEzLbhpNFJ+6oP3cg2u5tZT1sk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730037AbgJRTWw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Oct 2020 15:22:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35780 "EHLO mail.kernel.org"
+        id S1730490AbgJRTqB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Oct 2020 15:46:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35848 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730006AbgJRTWv (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:22:51 -0400
+        id S1730046AbgJRTWx (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:22:53 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CD61B207DE;
-        Sun, 18 Oct 2020 19:22:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6CB08222EC;
+        Sun, 18 Oct 2020 19:22:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603048970;
-        bh=XiJLm7dJT4iYtMQfAyf59AS4prF8Kb681A/GW+JkWyM=;
+        s=default; t=1603048973;
+        bh=4DCuPeW3yW2U9oJ3tflmq+0xSP9pSKrKh9VbhaYRndk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ha1Ukp1HjOToAYNao53ydl848tckf2C5ORNRlvK6/5eOlJRMLU1QhrwUDh1AEQzzR
-         F2MmcAKD5Ab7ZQWjK+EQflqfY4iac/4JQLxn/SeCai/HYlz4DRyzhWyogjb/AOHI0x
-         VJwtrZfhgEwXnSUiUHX9l4PI3Sh1ckYQyFOz1Wvw=
+        b=mi8h0059MX17TsZMxD7Y/jO67lfTuCd3+cDYXPpbdyV3jKew5JFemf1Ve2SkCyPZb
+         rL8AgQhDS94gRocA+K7ncnRfc2ldvKOZ3BzT02YEYEGdNpK+eqyUh8rFdpeickrml8
+         hXP7H06HE/g1SdVfoB1cLfgnXYMg10U41dYNqoPI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Dinghao Liu <dinghao.liu@zju.edu.cn>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
+        Fabien Dessenne <fabien.dessenne@st.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 14/80] media: platform: s3c-camif: Fix runtime PM imbalance on error
-Date:   Sun, 18 Oct 2020 15:21:25 -0400
-Message-Id: <20201018192231.4054535-14-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 16/80] media: bdisp: Fix runtime PM imbalance on error
+Date:   Sun, 18 Oct 2020 15:21:27 -0400
+Message-Id: <20201018192231.4054535-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201018192231.4054535-1-sashal@kernel.org>
 References: <20201018192231.4054535-1-sashal@kernel.org>
@@ -62,49 +61,42 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Dinghao Liu <dinghao.liu@zju.edu.cn>
 
-[ Upstream commit dafa3605fe60d5a61239d670919b2a36e712481e ]
+[ Upstream commit dbd2f2dc025f9be8ae063e4f270099677238f620 ]
 
 pm_runtime_get_sync() increments the runtime PM usage counter even
 when it returns an error code. Thus a pairing decrement is needed on
 the error handling path to keep the counter balanced.
 
-Also, call pm_runtime_disable() when pm_runtime_get_sync() returns
-an error code.
-
 Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
-Reviewed-by: Sylwester Nawrocki <snawrocki@kernel.org>
+Reviewed-by: Fabien Dessenne <fabien.dessenne@st.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/s3c-camif/camif-core.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/media/platform/sti/bdisp/bdisp-v4l2.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/s3c-camif/camif-core.c b/drivers/media/platform/s3c-camif/camif-core.c
-index c6fbcd7036d6d..ee624804862e2 100644
---- a/drivers/media/platform/s3c-camif/camif-core.c
-+++ b/drivers/media/platform/s3c-camif/camif-core.c
-@@ -464,7 +464,7 @@ static int s3c_camif_probe(struct platform_device *pdev)
- 
- 	ret = camif_media_dev_init(camif);
- 	if (ret < 0)
--		goto err_alloc;
+diff --git a/drivers/media/platform/sti/bdisp/bdisp-v4l2.c b/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
+index 675b5f2b4c2ee..a55ddf8d185d5 100644
+--- a/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
++++ b/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
+@@ -1367,7 +1367,7 @@ static int bdisp_probe(struct platform_device *pdev)
+ 	ret = pm_runtime_get_sync(dev);
+ 	if (ret < 0) {
+ 		dev_err(dev, "failed to set PM\n");
+-		goto err_dbg;
 +		goto err_pm;
+ 	}
  
- 	ret = camif_register_sensor(camif);
- 	if (ret < 0)
-@@ -498,10 +498,9 @@ static int s3c_camif_probe(struct platform_device *pdev)
- 	media_device_unregister(&camif->media_dev);
- 	media_device_cleanup(&camif->media_dev);
- 	camif_unregister_media_entities(camif);
--err_alloc:
-+err_pm:
+ 	/* Filters */
+@@ -1395,7 +1395,6 @@ static int bdisp_probe(struct platform_device *pdev)
+ 	bdisp_hw_free_filters(bdisp->dev);
+ err_pm:
  	pm_runtime_put(dev);
- 	pm_runtime_disable(dev);
--err_pm:
- 	camif_clk_put(camif);
- err_clk:
- 	s3c_camif_unregister_subdev(camif);
+-err_dbg:
+ 	bdisp_debugfs_remove(bdisp);
+ err_v4l2:
+ 	v4l2_device_unregister(&bdisp->v4l2_dev);
 -- 
 2.25.1
 
