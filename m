@@ -4,53 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8F73C433DF
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:31:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7504C43457
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:32:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 950BE2137B
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:31:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7F26F204FD
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:32:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603049461;
-	bh=1hl3tSGkMvAO2zttaOP20rG5Ux1kiz5ts/NfBrKhXiY=;
+	s=default; t=1603049566;
+	bh=y0nrALnpN+wNQd4dB09u9lMUX8CA2OB73naCORAG4Ok=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=ymo/YRQnWJXxQTwpxKFedpWR3blSWBvBrEV4VlgJEuwLRmTvW7ffa27pB8U0wbHae
-	 rz8drBxkxBOxK0dEGIWz+DEcI534ZAIVeEXtnxdXqKXXQNaVIxOY+VftTVOwguIlaP
-	 wg2nFPX+wLmNK/QIosba78t99m8CdmKzx11JghoI=
+	b=vyaKqwrf056/2vqDtaH7r9RLlpBNo/p1rl6MBLSPxhJ6XWrAwYjOWFYfaNEojK6ei
+	 l6r/gMzqe6houutfjCBo2UYdDAJwSHV3AYS/KL2iS54GtOksGFks4nUiW0ivWFL6vU
+	 UHx3KYk3L359jEt8cnIzQ8JV+gmJKh11u5VsQTOM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732647AbgJRTaw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Oct 2020 15:30:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43392 "EHLO mail.kernel.org"
+        id S1731904AbgJRT05 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Oct 2020 15:26:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42312 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732118AbgJRT1c (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:27:32 -0400
+        id S1730950AbgJRT0y (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:26:54 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C427522273;
-        Sun, 18 Oct 2020 19:27:30 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 81ECB222E9;
+        Sun, 18 Oct 2020 19:26:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603049251;
-        bh=1hl3tSGkMvAO2zttaOP20rG5Ux1kiz5ts/NfBrKhXiY=;
+        s=default; t=1603049214;
+        bh=y0nrALnpN+wNQd4dB09u9lMUX8CA2OB73naCORAG4Ok=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kpoh1Unmrw6GQEX9d5000y3nxRH44vRyBkMBX5YWlvEggAHJm6+8MOt0ahwt0sg0C
-         cdl6IMaHdLdpaTWeUnO2MJHq5AGOovJKBllm/zgWlCcB9GSQR1Sx8DWUWCauULw0Ed
-         1K/cCd7SuZp33Vv/aqnnIP8WTOLQg+60SypDsjGg=
+        b=OsoAeB+vw8zwKFQfkfy0h1Pa98TfrpNHvsYEPfk7izqjMg+1DX8IAZXeBfuoz0z3t
+         3R7zAYzvJUEEqjiSlM0PgsU3zdwr0sTZQXSIZTXiJVaGq9pojKrvROvJnY/tJqePPj
+         K+5oMoAKHSQuIt5cqM7EGtvW19L8oKdw6vKJcjz4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        syzbot+998261c2ae5932458f6c@syzkaller.appspotmail.com,
-        Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 02/33] media: ati_remote: sanity check for both endpoints
-Date:   Sun, 18 Oct 2020 15:26:57 -0400
-Message-Id: <20201018192728.4056577-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 14/41] media: saa7134: avoid a shift overflow
+Date:   Sun, 18 Oct 2020 15:26:08 -0400
+Message-Id: <20201018192635.4056198-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201018192728.4056577-1-sashal@kernel.org>
-References: <20201018192728.4056577-1-sashal@kernel.org>
+In-Reply-To: <20201018192635.4056198-1-sashal@kernel.org>
+References: <20201018192635.4056198-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -59,38 +56,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Oliver Neukum <oneukum@suse.com>
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit a8be80053ea74bd9c3f9a3810e93b802236d6498 ]
+[ Upstream commit 15a36aae1ec1c1f17149b6113b92631791830740 ]
 
-If you do sanity checks, you should do them for both endpoints.
-Hence introduce checking for endpoint type for the output
-endpoint, too.
+As reported by smatch:
+	drivers/media/pci/saa7134//saa7134-tvaudio.c:686 saa_dsp_writel() warn: should 'reg << 2' be a 64 bit type?
 
-Reported-by: syzbot+998261c2ae5932458f6c@syzkaller.appspotmail.com
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
-Signed-off-by: Sean Young <sean@mess.org>
+On a 64-bits Kernel, the shift might be bigger than 32 bits.
+
+In real, this should never happen, but let's shut up the warning.
+
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/rc/ati_remote.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/media/pci/saa7134/saa7134-tvaudio.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/rc/ati_remote.c b/drivers/media/rc/ati_remote.c
-index a35631891cc00..3c3f4c4f6be40 100644
---- a/drivers/media/rc/ati_remote.c
-+++ b/drivers/media/rc/ati_remote.c
-@@ -843,6 +843,10 @@ static int ati_remote_probe(struct usb_interface *interface,
- 		err("%s: endpoint_in message size==0? \n", __func__);
- 		return -ENODEV;
- 	}
-+	if (!usb_endpoint_is_int_out(endpoint_out)) {
-+		err("%s: Unexpected endpoint_out\n", __func__);
-+		return -ENODEV;
-+	}
+diff --git a/drivers/media/pci/saa7134/saa7134-tvaudio.c b/drivers/media/pci/saa7134/saa7134-tvaudio.c
+index 38f94b742e283..0b5d6f4994571 100644
+--- a/drivers/media/pci/saa7134/saa7134-tvaudio.c
++++ b/drivers/media/pci/saa7134/saa7134-tvaudio.c
+@@ -697,7 +697,8 @@ int saa_dsp_writel(struct saa7134_dev *dev, int reg, u32 value)
+ {
+ 	int err;
  
- 	ati_remote = kzalloc(sizeof (struct ati_remote), GFP_KERNEL);
- 	rc_dev = rc_allocate_device();
+-	audio_dbg(2, "dsp write reg 0x%x = 0x%06x\n", reg << 2, value);
++	audio_dbg(2, "dsp write reg 0x%x = 0x%06x\n",
++		  (reg << 2) & 0xffffffff, value);
+ 	err = saa_dsp_wait_bit(dev,SAA7135_DSP_RWSTATE_WRR);
+ 	if (err < 0)
+ 		return err;
 -- 
 2.25.1
 
