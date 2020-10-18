@@ -7,49 +7,49 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24517C433DF
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:40:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08FD1C433E7
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:45:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D368E207DE
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:40:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B7976207DE
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:45:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603050055;
-	bh=geRJY0xLy8R+4B4GRoxx5jSa4RHjSi3iK571iegNvGE=;
+	s=default; t=1603050322;
+	bh=rK51jplwA3YwpR3Dp5dzZgzEV6e/HF4Q/7N3mCQY+AY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=gGpi6HMRpoXXnDnO1OxUGXfSpJMotDJ9U7vdLCspTm9LarSG2Rm/cF7r4FJUR4vBV
-	 A5VxJ/j/Q2sVo/wCwNZGT2Gq9j5oZCrLTNax/hp4k/cym3q7Jw6kKIvfGFGWj8zw32
-	 Wk6o/R8+cM+ax+KNaFfEV2wiIClJRnFVaJlXiU14=
+	b=zkD7XWwaxqNFsdm7nlD7BebRLjfwmnlvpeMDJm+1MZr/t6wKEI7DImVrhJvy/ZFub
+	 pcLrHgaTgmCzmIWIxWKL9j8+R5abaQS9duPPlWmVaWP+V7UgJqf+/hrO/5R43C8JfF
+	 87TBpTptkULEGXg/5Ma4cJ+b8jYrkm+c6FoIi9a0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733109AbgJRTko (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Oct 2020 15:40:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38592 "EHLO mail.kernel.org"
+        id S2387757AbgJRTpV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Oct 2020 15:45:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36180 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730810AbgJRTYe (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:24:34 -0400
+        id S1730124AbgJRTXG (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:23:06 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 552EA20791;
-        Sun, 18 Oct 2020 19:24:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AE87320791;
+        Sun, 18 Oct 2020 19:23:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603049074;
-        bh=geRJY0xLy8R+4B4GRoxx5jSa4RHjSi3iK571iegNvGE=;
+        s=default; t=1603048985;
+        bh=rK51jplwA3YwpR3Dp5dzZgzEV6e/HF4Q/7N3mCQY+AY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nq0ucp+9zxa+Yx6S4HjgWYMGsqxmNXjxuJkMXF4ciLda/uDco38WlhcRMGIksaaSA
-         FxMXGYKkDDD0iCfBVD8FwyPz5Dlt+cMCWbTSjPOASFRl2vSqAYY/CowHAOl5oWzvtL
-         pYe0IrF+GZRoxNOd+7pyQHg3TKKQZFqllEOekS5Q=
+        b=gS9PKgY8GvvU+hbEMPA0HV7buG7tn49jL8/Y8GrokbLqN6f/jxyOC2YcXw4137U1q
+         psERHU1FQOsErBPiApwM7JAaYBTRcnBwrOiitlsCK50H4XULnNaGoIAIDALf0PCTCD
+         Ld2LWvRhE103InHEmVHCfIe8fRzwi4Lk9xLz2eH0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Dinghao Liu <dinghao.liu@zju.edu.cn>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 12/56] media: platform: sti: hva: Fix runtime PM imbalance on error
-Date:   Sun, 18 Oct 2020 15:23:33 -0400
-Message-Id: <20201018192417.4055228-12-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 26/80] media: venus: core: Fix runtime PM imbalance in venus_probe
+Date:   Sun, 18 Oct 2020 15:21:37 -0400
+Message-Id: <20201018192231.4054535-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201018192417.4055228-1-sashal@kernel.org>
-References: <20201018192417.4055228-1-sashal@kernel.org>
+In-Reply-To: <20201018192231.4054535-1-sashal@kernel.org>
+References: <20201018192231.4054535-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -60,33 +60,49 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Dinghao Liu <dinghao.liu@zju.edu.cn>
 
-[ Upstream commit d912a1d9e9afe69c6066c1ceb6bfc09063074075 ]
+[ Upstream commit bbe516e976fce538db96bd2b7287df942faa14a3 ]
 
 pm_runtime_get_sync() increments the runtime PM usage counter even
 when it returns an error code. Thus a pairing decrement is needed on
-the error handling path to keep the counter balanced.
+the error handling path to keep the counter balanced. For other error
+paths after this call, things are the same.
+
+Fix this by adding pm_runtime_put_noidle() after 'err_runtime_disable'
+label. But in this case, the error path after pm_runtime_put_sync()
+will decrease PM usage counter twice. Thus add an extra
+pm_runtime_get_noresume() in this path to balance PM counter.
 
 Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/sti/hva/hva-hw.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/qcom/venus/core.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/sti/hva/hva-hw.c b/drivers/media/platform/sti/hva/hva-hw.c
-index 166ed30bbfce5..d826c011c0952 100644
---- a/drivers/media/platform/sti/hva/hva-hw.c
-+++ b/drivers/media/platform/sti/hva/hva-hw.c
-@@ -393,7 +393,7 @@ int hva_hw_probe(struct platform_device *pdev, struct hva_dev *hva)
- 	ret = pm_runtime_get_sync(dev);
- 	if (ret < 0) {
- 		dev_err(dev, "%s     failed to set PM\n", HVA_PREFIX);
--		goto err_clk;
-+		goto err_pm;
- 	}
+diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+index 84e982f259a06..bbc430a003443 100644
+--- a/drivers/media/platform/qcom/venus/core.c
++++ b/drivers/media/platform/qcom/venus/core.c
+@@ -316,8 +316,10 @@ static int venus_probe(struct platform_device *pdev)
+ 		goto err_core_deinit;
  
- 	/* check IP hardware version */
+ 	ret = pm_runtime_put_sync(dev);
+-	if (ret)
++	if (ret) {
++		pm_runtime_get_noresume(dev);
+ 		goto err_dev_unregister;
++	}
+ 
+ 	return 0;
+ 
+@@ -328,6 +330,7 @@ static int venus_probe(struct platform_device *pdev)
+ err_venus_shutdown:
+ 	venus_shutdown(core);
+ err_runtime_disable:
++	pm_runtime_put_noidle(dev);
+ 	pm_runtime_set_suspended(dev);
+ 	pm_runtime_disable(dev);
+ 	hfi_destroy(core);
 -- 
 2.25.1
 
