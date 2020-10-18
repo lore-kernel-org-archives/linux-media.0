@@ -4,47 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8014C388F7
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:35:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6056FC433E7
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:36:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B68B422272
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:35:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1FD9C207DE
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:36:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603049711;
-	bh=IM4R2jkcH/ab5xP+juABRDNyOLsIs9Nn0nnzMjGRMvw=;
+	s=default; t=1603049770;
+	bh=xVDHc69iXsYbLU/rVvI+TzvkH9zIEGHQK0rAHhXPLG8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=SKj9w0EAJh1Ose+fhmK2UA7NmJu6Eq79se7HH39jyYk9+MqP/9bOxmBeintxNEYD0
-	 04RQC+CFovwjhso5fzg4InHByvEXr/yI6HyghQnrgWm/Vhh/sdka2BEPTfEFAFvqO5
-	 ue1Q8jbEGFd+vax17PJKhsb1P8Pf8IfR2DmhRfmE=
+	b=qErsMQ3NYP4v066cT6Dxq4D3H4JnhgPA+cM8M8AEL/xwMOipQOdwAEPccwpTRaKMJ
+	 dzyglxLk9E1Y6NYqT7VuU/UVUzljR3eLpxEuO8Ya1M2DzIuPyxlEDvwlSFmmpC3k3c
+	 7KjCmoo5H1K2MhACkw1BA2eVr8mwnoNp2TzrHieY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731443AbgJRTZw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Oct 2020 15:25:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40778 "EHLO mail.kernel.org"
+        id S1732091AbgJRTgG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Oct 2020 15:36:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40616 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731432AbgJRTZw (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:25:52 -0400
+        id S1731404AbgJRTZr (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:25:47 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 04367222EB;
-        Sun, 18 Oct 2020 19:25:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8B13B22314;
+        Sun, 18 Oct 2020 19:25:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603049151;
-        bh=IM4R2jkcH/ab5xP+juABRDNyOLsIs9Nn0nnzMjGRMvw=;
+        s=default; t=1603049147;
+        bh=xVDHc69iXsYbLU/rVvI+TzvkH9zIEGHQK0rAHhXPLG8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FimpYS5hBzuNlba3ztrlsmXW0euM3lp7vlMj9ZVSV+J2arRFHG6h4V4TI++L1dyoj
-         oLZlRZfOV+dwU6AAMaPXOAUleXekhsd+Y8+i0ePE7wyVhMle5Lnx4nOS7vnfxsSCoc
-         LnB1qlhd2MNeadpLoC2RRkiCS4rlD66d9GSiXphg=
+        b=WJjONbR5MuLTEWSjAEWxDjDsTH2QNPN+UhOeuoHHlxEH9D0iLDBS6bopOcr6U7GUc
+         W65pneW1UgIo1t9Hlka/5H10KK6uLGZCa/7r1NUFcqCnznhSzD0JJfwfisun1O8tDe
+         cZIf3TMjav9qfcyJvD7k5lo2okryAE7QV53Mg/GM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+Cc:     Xiaolong Huang <butterflyhuangxx@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 17/52] media: saa7134: avoid a shift overflow
-Date:   Sun, 18 Oct 2020 15:24:54 -0400
-Message-Id: <20201018192530.4055730-17-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 13/52] media: media/pci: prevent memory leak in bttv_probe
+Date:   Sun, 18 Oct 2020 15:24:50 -0400
+Message-Id: <20201018192530.4055730-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201018192530.4055730-1-sashal@kernel.org>
 References: <20201018192530.4055730-1-sashal@kernel.org>
@@ -56,37 +58,63 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+From: Xiaolong Huang <butterflyhuangxx@gmail.com>
 
-[ Upstream commit 15a36aae1ec1c1f17149b6113b92631791830740 ]
+[ Upstream commit 7b817585b730665126b45df5508dd69526448bc8 ]
 
-As reported by smatch:
-	drivers/media/pci/saa7134//saa7134-tvaudio.c:686 saa_dsp_writel() warn: should 'reg << 2' be a 64 bit type?
+In bttv_probe if some functions such as pci_enable_device,
+pci_set_dma_mask and request_mem_region fails the allocated
+ memory for btv should be released.
 
-On a 64-bits Kernel, the shift might be bigger than 32 bits.
-
-In real, this should never happen, but let's shut up the warning.
-
+Signed-off-by: Xiaolong Huang <butterflyhuangxx@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/saa7134/saa7134-tvaudio.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/media/pci/bt8xx/bttv-driver.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/pci/saa7134/saa7134-tvaudio.c b/drivers/media/pci/saa7134/saa7134-tvaudio.c
-index 68d400e1e240e..8c3da6f7a60f1 100644
---- a/drivers/media/pci/saa7134/saa7134-tvaudio.c
-+++ b/drivers/media/pci/saa7134/saa7134-tvaudio.c
-@@ -693,7 +693,8 @@ int saa_dsp_writel(struct saa7134_dev *dev, int reg, u32 value)
- {
- 	int err;
+diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
+index 227086a2e99c8..9e38c8b3ea762 100644
+--- a/drivers/media/pci/bt8xx/bttv-driver.c
++++ b/drivers/media/pci/bt8xx/bttv-driver.c
+@@ -4055,11 +4055,13 @@ static int bttv_probe(struct pci_dev *dev, const struct pci_device_id *pci_id)
+ 	btv->id  = dev->device;
+ 	if (pci_enable_device(dev)) {
+ 		pr_warn("%d: Can't enable device\n", btv->c.nr);
+-		return -EIO;
++		result = -EIO;
++		goto free_mem;
+ 	}
+ 	if (pci_set_dma_mask(dev, DMA_BIT_MASK(32))) {
+ 		pr_warn("%d: No suitable DMA available\n", btv->c.nr);
+-		return -EIO;
++		result = -EIO;
++		goto free_mem;
+ 	}
+ 	if (!request_mem_region(pci_resource_start(dev,0),
+ 				pci_resource_len(dev,0),
+@@ -4067,7 +4069,8 @@ static int bttv_probe(struct pci_dev *dev, const struct pci_device_id *pci_id)
+ 		pr_warn("%d: can't request iomem (0x%llx)\n",
+ 			btv->c.nr,
+ 			(unsigned long long)pci_resource_start(dev, 0));
+-		return -EBUSY;
++		result = -EBUSY;
++		goto free_mem;
+ 	}
+ 	pci_set_master(dev);
+ 	pci_set_command(dev);
+@@ -4253,6 +4256,10 @@ static int bttv_probe(struct pci_dev *dev, const struct pci_device_id *pci_id)
+ 	release_mem_region(pci_resource_start(btv->c.pci,0),
+ 			   pci_resource_len(btv->c.pci,0));
+ 	pci_disable_device(btv->c.pci);
++
++free_mem:
++	bttvs[btv->c.nr] = NULL;
++	kfree(btv);
+ 	return result;
+ }
  
--	audio_dbg(2, "dsp write reg 0x%x = 0x%06x\n", reg << 2, value);
-+	audio_dbg(2, "dsp write reg 0x%x = 0x%06x\n",
-+		  (reg << 2) & 0xffffffff, value);
- 	err = saa_dsp_wait_bit(dev,SAA7135_DSP_RWSTATE_WRR);
- 	if (err < 0)
- 		return err;
 -- 
 2.25.1
 
