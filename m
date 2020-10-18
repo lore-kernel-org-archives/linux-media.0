@@ -7,47 +7,48 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3547C43457
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:45:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF076C433E7
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:46:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A049D206ED
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:45:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A357322274
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:46:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603050358;
-	bh=VwfiyVImG4KNBSklL8nDqKwntMq1xxLWJNG+hRC/SFw=;
+	s=default; t=1603050362;
+	bh=XiJLm7dJT4iYtMQfAyf59AS4prF8Kb681A/GW+JkWyM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=S+W2BieAWvzd4lv5j2tl/G9jd0KXDXCYyVpk3pvqB1cbGgaoWsAU1XXkWr0gIOnMy
-	 FHtL60WZN7WfrChMmdV9qS6+qJ7dKZZFA1c28bdXVEd9PCbB6XdzSCog8NOImFrQdv
-	 7yQ9f6gRKJAccAbHqrDp2+wEe7m4gkQ9OLuslR2w=
+	b=B/P+YrBsH9xPujBeIA0xweFeCUIEgJDgaPG6kAUypr7Y/GpB+tneBsiO0qkMw5pIo
+	 W8V/OfCDhLQ++rJfcVhIY5aHpZprf4QRnbQ9ODFhqBwo+ge4UtIxlohQ92e4on4/y6
+	 pHiTTRVvdEEh/08FrGwTMb/p8+IBNYuZTUd+BBDU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387422AbgJRTpx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Oct 2020 15:45:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35956 "EHLO mail.kernel.org"
+        id S1730037AbgJRTWw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Oct 2020 15:22:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35780 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728716AbgJRTW5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:22:57 -0400
+        id S1730006AbgJRTWv (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:22:51 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 41E22222EB;
-        Sun, 18 Oct 2020 19:22:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CD61B207DE;
+        Sun, 18 Oct 2020 19:22:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603048977;
-        bh=VwfiyVImG4KNBSklL8nDqKwntMq1xxLWJNG+hRC/SFw=;
+        s=default; t=1603048970;
+        bh=XiJLm7dJT4iYtMQfAyf59AS4prF8Kb681A/GW+JkWyM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b/WNWdOVMbEnJB4goX1Jvm4H+EqZ5/ait1XrE/avt23q8+0PO8BxZKNNyb6033zgb
-         CfmIjdb3QjJ2hXB8utT2ZgH3/El3ngJSjrNbeBAip8HfV2xdALsk6BSLzX6xEIU+Xm
-         N2V0zXgP93EHt3QXd40iz4AeceXc8fB/AydmTwIk=
+        b=Ha1Ukp1HjOToAYNao53ydl848tckf2C5ORNRlvK6/5eOlJRMLU1QhrwUDh1AEQzzR
+         F2MmcAKD5Ab7ZQWjK+EQflqfY4iac/4JQLxn/SeCai/HYlz4DRyzhWyogjb/AOHI0x
+         VJwtrZfhgEwXnSUiUHX9l4PI3Sh1ckYQyFOz1Wvw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+Cc:     Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        Sylwester Nawrocki <snawrocki@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 19/80] media: rcar_drif: Fix fwnode reference leak when parsing DT
-Date:   Sun, 18 Oct 2020 15:21:30 -0400
-Message-Id: <20201018192231.4054535-19-sashal@kernel.org>
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 14/80] media: platform: s3c-camif: Fix runtime PM imbalance on error
+Date:   Sun, 18 Oct 2020 15:21:25 -0400
+Message-Id: <20201018192231.4054535-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201018192231.4054535-1-sashal@kernel.org>
 References: <20201018192231.4054535-1-sashal@kernel.org>
@@ -59,61 +60,51 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+From: Dinghao Liu <dinghao.liu@zju.edu.cn>
 
-[ Upstream commit cdd4f7824994c9254acc6e415750529ea2d2cfe0 ]
+[ Upstream commit dafa3605fe60d5a61239d670919b2a36e712481e ]
 
-The fwnode reference corresponding to the endpoint is leaked in an error
-path of the rcar_drif_parse_subdevs() function. Fix it, and reorganize
-fwnode reference handling in the function to release references early,
-simplifying error paths.
+pm_runtime_get_sync() increments the runtime PM usage counter even
+when it returns an error code. Thus a pairing decrement is needed on
+the error handling path to keep the counter balanced.
 
-Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Also, call pm_runtime_disable() when pm_runtime_get_sync() returns
+an error code.
+
+Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+Reviewed-by: Sylwester Nawrocki <snawrocki@kernel.org>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/rcar_drif.c | 16 +++++-----------
- 1 file changed, 5 insertions(+), 11 deletions(-)
+ drivers/media/platform/s3c-camif/camif-core.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/rcar_drif.c b/drivers/media/platform/rcar_drif.c
-index 0f267a237b424..208ff260b0c10 100644
---- a/drivers/media/platform/rcar_drif.c
-+++ b/drivers/media/platform/rcar_drif.c
-@@ -1223,28 +1223,22 @@ static int rcar_drif_parse_subdevs(struct rcar_drif_sdr *sdr)
- 	if (!ep)
- 		return 0;
+diff --git a/drivers/media/platform/s3c-camif/camif-core.c b/drivers/media/platform/s3c-camif/camif-core.c
+index c6fbcd7036d6d..ee624804862e2 100644
+--- a/drivers/media/platform/s3c-camif/camif-core.c
++++ b/drivers/media/platform/s3c-camif/camif-core.c
+@@ -464,7 +464,7 @@ static int s3c_camif_probe(struct platform_device *pdev)
  
-+	/* Get the endpoint properties */
-+	rcar_drif_get_ep_properties(sdr, ep);
-+
- 	fwnode = fwnode_graph_get_remote_port_parent(ep);
-+	fwnode_handle_put(ep);
- 	if (!fwnode) {
- 		dev_warn(sdr->dev, "bad remote port parent\n");
--		fwnode_handle_put(ep);
- 		return -EINVAL;
- 	}
+ 	ret = camif_media_dev_init(camif);
+ 	if (ret < 0)
+-		goto err_alloc;
++		goto err_pm;
  
- 	sdr->ep.asd.match.fwnode = fwnode;
- 	sdr->ep.asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
- 	ret = v4l2_async_notifier_add_subdev(notifier, &sdr->ep.asd);
--	if (ret) {
--		fwnode_handle_put(fwnode);
--		return ret;
--	}
--
--	/* Get the endpoint properties */
--	rcar_drif_get_ep_properties(sdr, ep);
--
- 	fwnode_handle_put(fwnode);
--	fwnode_handle_put(ep);
- 
--	return 0;
-+	return ret;
- }
- 
- /* Check if the given device is the primary bond */
+ 	ret = camif_register_sensor(camif);
+ 	if (ret < 0)
+@@ -498,10 +498,9 @@ static int s3c_camif_probe(struct platform_device *pdev)
+ 	media_device_unregister(&camif->media_dev);
+ 	media_device_cleanup(&camif->media_dev);
+ 	camif_unregister_media_entities(camif);
+-err_alloc:
++err_pm:
+ 	pm_runtime_put(dev);
+ 	pm_runtime_disable(dev);
+-err_pm:
+ 	camif_clk_put(camif);
+ err_clk:
+ 	s3c_camif_unregister_subdev(camif);
 -- 
 2.25.1
 
