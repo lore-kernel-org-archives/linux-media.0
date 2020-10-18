@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EDE5C43457
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:25:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 981A7C43467
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:25:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 59AE52137B
-	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:25:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5A8B622314
+	for <linux-media@archiver.kernel.org>; Sun, 18 Oct 2020 19:25:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603049152;
-	bh=VJ/ti9RtMM+hdwGMo8aZ8xgoV+5/fs+zqncW0cvvWGM=;
+	s=default; t=1603049158;
+	bh=nzyNKnlvQUFwa97D46h/9JH6DNevRH/OniOTgNqcPjg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=v38QINRYmR6i1KnfW6eNI6nTz7wQ+ZXa6YLLXBgg9pSWcu+3+UxV4VXCJol1SdmFg
-	 dwanQB/x4f/JCMW63djsVeNCy7A0gninaZnLpXNaGEzObC4IhNUYDlHfpzqXhSmFBb
-	 A9OgGqWA+FkNG5iySOCwgWBSbkoORGAvtHSlo5+A=
+	b=XmeDiT4TgOngPeaF2oAmtnX5tJmhZ/hBtRy5mzCohepZ1JrOrCmFq8nGhuMg/vBpD
+	 hTLvMF3FmmcJCYBRtCQ4cXfJ/eSiGk6pX15fxUEHT0LYAbnWKPMTEi+3pFk8fUwBgH
+	 RW8QLCXoshIMG8zrrUUcGjB2u11eubUdRj55HjsY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731429AbgJRTZv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Oct 2020 15:25:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40654 "EHLO mail.kernel.org"
+        id S1731474AbgJRTZ5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Oct 2020 15:25:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40826 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731413AbgJRTZt (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:25:49 -0400
+        id S1731376AbgJRTZy (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:25:54 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B5E9322365;
-        Sun, 18 Oct 2020 19:25:47 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 21A25207DE;
+        Sun, 18 Oct 2020 19:25:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603049148;
-        bh=VJ/ti9RtMM+hdwGMo8aZ8xgoV+5/fs+zqncW0cvvWGM=;
+        s=default; t=1603049153;
+        bh=nzyNKnlvQUFwa97D46h/9JH6DNevRH/OniOTgNqcPjg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K1Dl5VVfaO+2fe+Fk/wrmNfiT2fg/tkxG956qsLzvO4EsgIhHrZYEkOBMEhjUuaYY
-         8b+zPvVDCqcIaUciEHm+0Nea2iQs6Yd8s1+XhPf4xb6okv4Gp3jhCTfcbA5ZMCTqT0
-         FHOSZ45Qw7hLHjYnpZYoSbdKa/aVuVFntbeIhDBA=
+        b=Q2yEovwPVbkCbW+/j2IFifIKTvtV0ltCUtQpHrP2Bv6lznuSPiDWuR0xFYB3V4fb9
+         z0GO5aCChoP0cIdaU9KeCCwDRy/OiLOeScPqRQ3YTruehaantKcJvALi44h2HEMuuD
+         Jkfzkxo7Jqh9Ueh3ul77/4fcFUKLsJ2Y9e+OH1fw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Adam Goode <agoode@google.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+Cc:     Dinghao Liu <dinghao.liu@zju.edu.cn>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 14/52] media: uvcvideo: Ensure all probed info is returned to v4l2
-Date:   Sun, 18 Oct 2020 15:24:51 -0400
-Message-Id: <20201018192530.4055730-14-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 19/52] media: venus: core: Fix runtime PM imbalance in venus_probe
+Date:   Sun, 18 Oct 2020 15:24:56 -0400
+Message-Id: <20201018192530.4055730-19-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201018192530.4055730-1-sashal@kernel.org>
 References: <20201018192530.4055730-1-sashal@kernel.org>
@@ -58,82 +58,51 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Adam Goode <agoode@google.com>
+From: Dinghao Liu <dinghao.liu@zju.edu.cn>
 
-[ Upstream commit 8a652a17e3c005dcdae31b6c8fdf14382a29cbbe ]
+[ Upstream commit bbe516e976fce538db96bd2b7287df942faa14a3 ]
 
-bFrameIndex and bFormatIndex can be negotiated by the camera during
-probing, resulting in the camera choosing a different format than
-expected. v4l2 can already accommodate such changes, but the code was
-not updating the proper fields.
+pm_runtime_get_sync() increments the runtime PM usage counter even
+when it returns an error code. Thus a pairing decrement is needed on
+the error handling path to keep the counter balanced. For other error
+paths after this call, things are the same.
 
-Without such a change, v4l2 would potentially interpret the payload
-incorrectly, causing corrupted output. This was happening on the
-Elgato HD60 S+, which currently always renegotiates to format 1.
+Fix this by adding pm_runtime_put_noidle() after 'err_runtime_disable'
+label. But in this case, the error path after pm_runtime_put_sync()
+will decrease PM usage counter twice. Thus add an extra
+pm_runtime_get_noresume() in this path to balance PM counter.
 
-As an aside, the Elgato firmware is buggy and should not be renegotating,
-but it is still a valid thing for the camera to do. Both macOS and Windows
-will properly probe and read uncorrupted images from this camera.
-
-With this change, both qv4l2 and chromium can now read uncorrupted video
-from the Elgato HD60 S+.
-
-[Add blank lines, remove periods at the of messages]
-
-Signed-off-by: Adam Goode <agoode@google.com>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/uvc/uvc_v4l2.c | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ drivers/media/platform/qcom/venus/core.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-index 3e7e283a44a8e..644afd55c0f0f 100644
---- a/drivers/media/usb/uvc/uvc_v4l2.c
-+++ b/drivers/media/usb/uvc/uvc_v4l2.c
-@@ -252,11 +252,41 @@ static int uvc_v4l2_try_format(struct uvc_streaming *stream,
- 	if (ret < 0)
- 		goto done;
+diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+index 9360b36b82cd8..0a011b117a6db 100644
+--- a/drivers/media/platform/qcom/venus/core.c
++++ b/drivers/media/platform/qcom/venus/core.c
+@@ -236,8 +236,10 @@ static int venus_probe(struct platform_device *pdev)
+ 		goto err_dev_unregister;
  
-+	/* After the probe, update fmt with the values returned from
-+	 * negotiation with the device.
-+	 */
-+	for (i = 0; i < stream->nformats; ++i) {
-+		if (probe->bFormatIndex == stream->format[i].index) {
-+			format = &stream->format[i];
-+			break;
-+		}
+ 	ret = pm_runtime_put_sync(dev);
+-	if (ret)
++	if (ret) {
++		pm_runtime_get_noresume(dev);
+ 		goto err_dev_unregister;
 +	}
-+
-+	if (i == stream->nformats) {
-+		uvc_trace(UVC_TRACE_FORMAT, "Unknown bFormatIndex %u\n",
-+			  probe->bFormatIndex);
-+		return -EINVAL;
-+	}
-+
-+	for (i = 0; i < format->nframes; ++i) {
-+		if (probe->bFrameIndex == format->frame[i].bFrameIndex) {
-+			frame = &format->frame[i];
-+			break;
-+		}
-+	}
-+
-+	if (i == format->nframes) {
-+		uvc_trace(UVC_TRACE_FORMAT, "Unknown bFrameIndex %u\n",
-+			  probe->bFrameIndex);
-+		return -EINVAL;
-+	}
-+
- 	fmt->fmt.pix.width = frame->wWidth;
- 	fmt->fmt.pix.height = frame->wHeight;
- 	fmt->fmt.pix.field = V4L2_FIELD_NONE;
- 	fmt->fmt.pix.bytesperline = uvc_v4l2_get_bytesperline(format, frame);
- 	fmt->fmt.pix.sizeimage = probe->dwMaxVideoFrameSize;
-+	fmt->fmt.pix.pixelformat = format->fcc;
- 	fmt->fmt.pix.colorspace = format->colorspace;
- 	fmt->fmt.pix.priv = 0;
  
+ 	return 0;
+ 
+@@ -248,6 +250,7 @@ static int venus_probe(struct platform_device *pdev)
+ err_venus_shutdown:
+ 	venus_shutdown(dev);
+ err_runtime_disable:
++	pm_runtime_put_noidle(dev);
+ 	pm_runtime_set_suspended(dev);
+ 	pm_runtime_disable(dev);
+ 	hfi_destroy(core);
 -- 
 2.25.1
 
