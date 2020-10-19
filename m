@@ -5,59 +5,59 @@ X-Spam-Level:
 X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB160C433DF
-	for <linux-media@archiver.kernel.org>; Mon, 19 Oct 2020 22:59:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30425C433DF
+	for <linux-media@archiver.kernel.org>; Mon, 19 Oct 2020 22:59:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8F9002240C
-	for <linux-media@archiver.kernel.org>; Mon, 19 Oct 2020 22:59:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E299422447
+	for <linux-media@archiver.kernel.org>; Mon, 19 Oct 2020 22:59:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TF5Jwu+n"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ju9qu2KV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388770AbgJSW7c (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Oct 2020 18:59:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36904 "EHLO
+        id S2388813AbgJSW7m (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Oct 2020 18:59:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388762AbgJSW7b (ORCPT
+        with ESMTP id S2388777AbgJSW7e (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 19 Oct 2020 18:59:31 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56CCBC0613CE;
-        Mon, 19 Oct 2020 15:59:31 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id t9so1463609wrq.11;
-        Mon, 19 Oct 2020 15:59:31 -0700 (PDT)
+        Mon, 19 Oct 2020 18:59:34 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EAF6C0613D0;
+        Mon, 19 Oct 2020 15:59:34 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id p15so51061wmi.4;
+        Mon, 19 Oct 2020 15:59:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=trR1UyLEyLhYwu/ZZWzIY8LJsFTVfoHaHUYXqU+RuAo=;
-        b=TF5Jwu+n+5hsltmAMe9WKqv/GARSvja2+5FEGnab0MdKWMrKg1f/QjxmTj8C7QrRd6
-         PIJqzMxHUUF1pYeifpwLnFYggN/F+tGMxOpdH0hVkK5ueG3itpwjGwA+TUSlzhScVukx
-         fkKBC51ZIEIEqefIDLzaUTUdu3m4xZFWlFm1erc+LiakYeUFHNC9eb3fZbvgeTgGIB1P
-         RFgCMHrduVRuKlMvmx7w/Ur/P+C/c35IDLwwe2/sHzS5EPfJTl9VQZwYWNb9Wob96xTF
-         I/ic7GYTELhshBP4ubByOVpzwOqpLsApJ5fAX3LCGamEVAl5mxIU+OevoYbCxiv5Cuh7
-         NDaA==
+        bh=uXAvp5LtBdgbmLALmSSkahZ9MLe+wKaeLg7vdYQ5N7s=;
+        b=Ju9qu2KVU0kjcYhZtRrgsEZobWmPqSRsa1sUQxIaabHIlhXB/5GnDaMp18EAqaxEeA
+         1ITA1BoCcxRAEIvYzFwmKUjmXKkMUdqJv41Rh0/gtF6IKgPQVoMPhKPFZ2j/9sDaaHcl
+         y8GwLmrg/PTnNzqaoEUHokTdyHxbaDksWub4pfL4FlqaYSFZ4qs0Tw1+YUS1D1AFT2vr
+         7B0DEukrXPppkF9zt+aUk231pLPriBkmAJasfW13ryy3Y/BT4rvNmLRB6Wr6SoRa5IEG
+         VD0fOlWnIIoGYKtLrE8BirOcvTtYY67H+PDUQGkD89HyOU3gxdAQNM+9kluBHPl4QJMd
+         VllA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=trR1UyLEyLhYwu/ZZWzIY8LJsFTVfoHaHUYXqU+RuAo=;
-        b=Cwyt3ry/K/J2UpnL+2pShzEBbQXJ8cgrq4vCzj0gJhJNhtj/dlBD1D6EM1SWzhO/Kc
-         v9F5p1NHTk35fu1AuNd0kGdAUIcEG0OuEWYKWeXYaCO5TEMEdzDaPBi1+xyE9FLlVrxA
-         QGXcW/0IA3/VwF8GoLXeX/W9//gqMb4Ot3rxnPqAMMQCI0oE0BAYKGYprnllVRNu37Jd
-         3e1HCnEV7lh1S3UOGZF5Zvqc9Q/xOdizSBoHGF/V+fWDm/eNGBX1OpVqwhe+Gd6vW0kS
-         I6Fl4R2/D4SSvZrmZfPWghiJEDF1mjUWKln3j2Im1fXup5pa8el+GhrUmSySZxc5VzBO
-         ABeQ==
-X-Gm-Message-State: AOAM532TO6pssGa7RbJk+Hz9n9Ri2vzBDvVZ94ic7afN5JWS6QvWag3O
-        VVPDaqgC0IBcfMGW4U3j5JUYQ1c82D+Kd5h8
-X-Google-Smtp-Source: ABdhPJxjhq/YTmJ2G6MVC68lqjRQxQBK0/XdAew4CZD2KivXEbQGSctjjGhNzjBWJ+UoFgECxztSwA==
-X-Received: by 2002:adf:f246:: with SMTP id b6mr1597747wrp.111.1603148369737;
-        Mon, 19 Oct 2020 15:59:29 -0700 (PDT)
+        bh=uXAvp5LtBdgbmLALmSSkahZ9MLe+wKaeLg7vdYQ5N7s=;
+        b=YcDGQD9f3wZMNmXkZZM8Ovy/nsg6lMvOPPFFC4Ybd6EwYuVdC1auksjsZ3f7S6Sbo2
+         DN/QSsdzvrqb6T/BpNIkqhOJrMeMm4KmwzC6IFlmEUaXK1REJrYrBiQnW2SCZf7Bx2AQ
+         jIjH/le+krskLue5dh+vkgMOc27TotGaq8j9P6oZbe8GChRfPUVbJuyPABhDo6ju36Q6
+         0gVqi+AfuC4nS0PEGZ0JK6XGy4Ty+6AxXb86kZilJfA1ofkUyGQnq0IZ1lrOD1Lb/ToT
+         h+8ipxcEC0A6lDYVJ5FD6pgxlNx4N4w8b0EPZQ9cz6+pI96Y0yQy/ConahY6VWGZ6GND
+         k1Cw==
+X-Gm-Message-State: AOAM531nELD8eiKAgWV9jB1AwSSVZ/aN4RrCc1YQdT3T8nN+S9P+S/+2
+        g7sI2FGHBTPUXZ8poFlm6bcETYVNF6hdY4HR
+X-Google-Smtp-Source: ABdhPJzM2kg+xorqYoAsmGjO7WFk+5jvwnUtwkzDb++X6p/fab4dwmYI/Cp6SZ82G03V6zVGv64+Og==
+X-Received: by 2002:a1c:3285:: with SMTP id y127mr89507wmy.183.1603148372632;
+        Mon, 19 Oct 2020 15:59:32 -0700 (PDT)
 Received: from djrscally-MIIX-510-12ISK.home ([2.26.187.29])
-        by smtp.gmail.com with ESMTPSA id u20sm76505wmm.29.2020.10.19.15.59.28
+        by smtp.gmail.com with ESMTPSA id u20sm76505wmm.29.2020.10.19.15.59.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Oct 2020 15:59:29 -0700 (PDT)
+        Mon, 19 Oct 2020 15:59:32 -0700 (PDT)
 From:   Daniel Scally <djrscally@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
 Cc:     linux.walleij@linaro.org, prabhakar.mahadev-lad.rj@bp.renesas.com,
@@ -71,9 +71,9 @@ Cc:     linux.walleij@linaro.org, prabhakar.mahadev-lad.rj@bp.renesas.com,
         sakari.ailus@linux.intel.com, yong.zhi@intel.com,
         rafael@kernel.org, gregkh@linuxfoundation.org, kitakar@gmail.com,
         dan.carpenter@oracle.org
-Subject: [RFC PATCH v3 6/9] ipu3-cio2: Rename ipu3-cio2.c to allow module to be built from multiple sources files retaining ipu3-cio2 name
-Date:   Mon, 19 Oct 2020 23:59:00 +0100
-Message-Id: <20201019225903.14276-7-djrscally@gmail.com>
+Subject: [RFC PATCH v3 8/9] media: v4l2-core: v4l2-async: Check possible match in match_fwnode based on sd->fwnode->secondary
+Date:   Mon, 19 Oct 2020 23:59:02 +0100
+Message-Id: <20201019225903.14276-9-djrscally@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20201019225903.14276-1-djrscally@gmail.com>
 References: <20201019225903.14276-1-djrscally@gmail.com>
@@ -81,33 +81,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-ipu3-cio2 driver needs extending with multiple files; rename the main
-source file and specify the renamed file in Makefile to accommodate that.
+Where the fwnode graph is comprised of software_nodes, these will be
+assigned as the secondary to dev->fwnode. Check the v4l2_subdev's fwnode
+for a secondary and attempt to match against it during match_fwnode() to
+accommodate that possibility.
 
 Signed-off-by: Daniel Scally <djrscally@gmail.com>
 ---
 Changes in v3:
 	- patch introduced
 
- drivers/media/pci/intel/ipu3/Makefile                          | 2 ++
- drivers/media/pci/intel/ipu3/{ipu3-cio2.c => ipu3-cio2-main.c} | 0
- 2 files changed, 2 insertions(+)
- rename drivers/media/pci/intel/ipu3/{ipu3-cio2.c => ipu3-cio2-main.c} (100%)
+ drivers/media/v4l2-core/v4l2-async.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/media/pci/intel/ipu3/Makefile b/drivers/media/pci/intel/ipu3/Makefile
-index 98ddd5bea..b4e3266d9 100644
---- a/drivers/media/pci/intel/ipu3/Makefile
-+++ b/drivers/media/pci/intel/ipu3/Makefile
-@@ -1,2 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0-only
- obj-$(CONFIG_VIDEO_IPU3_CIO2) += ipu3-cio2.o
+diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+index e3ab003a6..6486dbde7 100644
+--- a/drivers/media/v4l2-core/v4l2-async.c
++++ b/drivers/media/v4l2-core/v4l2-async.c
+@@ -87,6 +87,14 @@ static bool match_fwnode(struct v4l2_async_notifier *notifier,
+ 	if (sd->fwnode == asd->match.fwnode)
+ 		return true;
+ 
++	/*
++	 * Check the same situation for any possible secondary assigned to the
++	 * subdev's fwnode
++	 */
++	if ((!IS_ERR_OR_NULL(sd->fwnode->secondary)) &&
++	    sd->fwnode->secondary == asd->match.fwnode)
++		return true;
 +
-+ipu3-cio2-y += ipu3-cio2-main.o
-\ No newline at end of file
-diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
-similarity index 100%
-rename from drivers/media/pci/intel/ipu3/ipu3-cio2.c
-rename to drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
+ 	/*
+ 	 * Otherwise, check if the sd fwnode and the asd fwnode refer to an
+ 	 * endpoint or a device. If they're of the same type, there's no match.
 -- 
 2.17.1
 
