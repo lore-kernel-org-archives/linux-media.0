@@ -2,202 +2,137 @@ Return-Path: <SRS0=R2Oz=D2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_FROM,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17AF1C433DF
-	for <linux-media@archiver.kernel.org>; Mon, 19 Oct 2020 14:29:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADF47C43457
+	for <linux-media@archiver.kernel.org>; Mon, 19 Oct 2020 14:49:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B73CE222C3
-	for <linux-media@archiver.kernel.org>; Mon, 19 Oct 2020 14:29:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 507A92224D
+	for <linux-media@archiver.kernel.org>; Mon, 19 Oct 2020 14:49:34 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="s8OB4I8y"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729223AbgJSO3Q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Oct 2020 10:29:16 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:60139 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728311AbgJSO3Q (ORCPT
+        id S1729751AbgJSOtd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Oct 2020 10:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44550 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729743AbgJSOtd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 19 Oct 2020 10:29:16 -0400
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 19 Oct 2020 07:29:16 -0700
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 19 Oct 2020 07:29:14 -0700
-X-QCInternal: smtphost
-Received: from dikshita-linux.qualcomm.com ([10.204.65.237])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 19 Oct 2020 19:59:00 +0530
-Received: by dikshita-linux.qualcomm.com (Postfix, from userid 347544)
-        id 5492F52E7; Mon, 19 Oct 2020 19:58:59 +0530 (IST)
-From:   Dikshita Agarwal <dikshita@codeaurora.org>
-To:     linux-media@vger.kernel.org, stanimir.varbanov@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        vgarodia@codeaurora.org, Dikshita Agarwal <dikshita@codeaurora.org>
-Subject: [PATCH] venus: venc: add handling for VIDIOC_ENCODER_CMD
-Date:   Mon, 19 Oct 2020 19:58:57 +0530
-Message-Id: <1603117737-16965-1-git-send-email-dikshita@codeaurora.org>
-X-Mailer: git-send-email 1.9.1
+        Mon, 19 Oct 2020 10:49:33 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB471C0613CE;
+        Mon, 19 Oct 2020 07:49:32 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id k21so168028wmi.1;
+        Mon, 19 Oct 2020 07:49:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XPta4rekIVbia9VF5yEVUkoev5tfVS1mlF3jAfoEQbw=;
+        b=s8OB4I8yRyVM1D2CTyGaUErAsiEk2MIaiavNfWsqPFHsB603xhHJ5pOJpyciBlg5xE
+         T7LRWtS8AuU3diyZ4WoOA+3DuSHEtyycSdMwHmEHVil/OeS2XLK1XjrDahhzlrXBZjy0
+         fnrGh72xik/9PXx5a2xozDI0VDSqUtJhi4nQHTv8xNjmS+kj7Y/Cn0kDu11K9HboYyf3
+         tqjDpsTYaXEyUuEI5AtwaJeVN9jGtSJCGZ1H5qe1saaeunWLqEIk5lnZkC/0CeZ9cm4x
+         acldD1H+MxjpajKSkJMlvOD2mnU6+bA3JpJfSDJIsYfzumHzmd6SaZHBKzb7YPLy87FO
+         SP2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XPta4rekIVbia9VF5yEVUkoev5tfVS1mlF3jAfoEQbw=;
+        b=HOatFmmpA0COGI4+d7P3baMTJSfgjqY6x2snWmtSJSccfY3gsmBnbHnLS2TMVE+hWC
+         FO07b53p/u66kjnO8MZflMyKw3v/O2XSW1j1pMcyO0HFOzX1Uwpcb5ysdb2xRJG3YUNA
+         jMqB0SINg4vJugzf+K7QyySv6+tWTbAktp8EpDjVEWLchsH73WuYZFxYTV7GRErOlI1C
+         /DfYbC6AMYMFYqSJHGIkBhTzd5oITl1qohxRBN8Aty2X512SX1looLOsVbJ9fLw3K1qj
+         yYiQzrXgeTacNlM6wbVBvW37eD3OTHZJkQJF/owxQDxHpT3dmILMGmyuXP8m0TGyrQja
+         Pw5A==
+X-Gm-Message-State: AOAM532/1hOjOi9je60FkFsjY1+IwbvFH3MFOvMpVrqup9m++sB/YG0J
+        OLivLeEKx6WB+3vdVB7zayI=
+X-Google-Smtp-Source: ABdhPJxm+pkdadTlCgU4PZjquNu1saM3yq3n9q/xgtEjR8MlYO0bewnlTXt9axFgLyJcosaOgNNpAg==
+X-Received: by 2002:a1c:4c13:: with SMTP id z19mr17919948wmf.121.1603118971448;
+        Mon, 19 Oct 2020 07:49:31 -0700 (PDT)
+Received: from arch-thunder.local (a109-49-46-234.cpe.netcabo.pt. [109.49.46.234])
+        by smtp.gmail.com with ESMTPSA id d4sm18319243wrp.47.2020.10.19.07.49.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Oct 2020 07:49:30 -0700 (PDT)
+From:   Rui Miguel Silva <rmfrfs@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>, sakari.ailus@linux.intel.com,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        Rui Miguel Silva <rmfrfs@gmail.com>
+Subject: [PATCH v3 0/3] dt-bindings: media: imx7 and ov2680 updates to yaml
+Date:   Mon, 19 Oct 2020 15:49:22 +0100
+Message-Id: <20201019144925.1627715-1-rmfrfs@gmail.com>
+X-Mailer: git-send-email 2.28.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add handling for below commands in encoder:
-1. V4L2_ENC_CMD_STOP
-2. V4L2_ENC_CMD_START
+Update bindings documentation to json-schema yaml in imx7 csi, mipi csi and
+ov2680 sensor media devices along the respective MAINTAINERS entry.
 
-Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
----
- drivers/media/platform/qcom/venus/core.h |  9 +++++
- drivers/media/platform/qcom/venus/venc.c | 64 +++++++++++++++++++++++++++++++-
- 2 files changed, 72 insertions(+), 1 deletion(-)
+Cheers,
+  Rui
 
-diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
-index e30eeaf..5c46936 100644
---- a/drivers/media/platform/qcom/venus/core.h
-+++ b/drivers/media/platform/qcom/venus/core.h
-@@ -276,6 +276,14 @@ enum venus_dec_state {
- 	VENUS_DEC_STATE_DRC		= 7,
- };
+v2 -> v3:
+  Jacopo Mondi:
+  Patch 1/3:
+    https://lore.kernel.org/linux-media/20201015144905.4b23k5uy7ycuhvlo@uno.localdomain/
+    - add prefix ovti to yaml file
+    - remove double space
+    - adjust port properties
+    - fix additional properties
+    - fix end of file line and empty line before ...
+    - add Jacopo Reviewed-by tag
+
+  Patch 2/3:
+    https://lore.kernel.org/linux-media/20201015144905.4b23k5uy7ycuhvlo@uno.localdomain/
+    - fix dual license
+    - rearrange ports properties
+    - add Jacopo Reviewed-by tag
+
+  Patch 3/3:
+    https://lore.kernel.org/linux-media/20201015144905.4b23k5uy7ycuhvlo@uno.localdomain/
+    - fix dual license
+    - capital letters fix
+    - const instead of enum in compatible
+    - data lanes array setup
+    - add phy-supply to required
+    - additionalProperties replace
  
-+enum venus_enc_state {
-+	VENUS_ENC_STATE_DEINIT		= 0,
-+	VENUS_ENC_STATE_INIT		= 1,
-+	VENUS_ENC_STATE_ENCODING	= 2,
-+	VENUS_ENC_STATE_STOPPED		= 3,
-+	VENUS_ENC_STATE_DRAIN		= 4,
-+};
-+
- struct venus_ts_metadata {
- 	bool used;
- 	u64 ts_ns;
-@@ -367,6 +375,7 @@ struct venus_inst {
- 	u8 quantization;
- 	u8 xfer_func;
- 	enum venus_dec_state codec_state;
-+	enum venus_enc_state enc_state;
- 	wait_queue_head_t reconf_wait;
- 	unsigned int subscriptions;
- 	int buf_count;
-diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
-index f7fb6e3..c6143b0 100644
---- a/drivers/media/platform/qcom/venus/venc.c
-+++ b/drivers/media/platform/qcom/venus/venc.c
-@@ -498,6 +498,46 @@ static int venc_enum_frameintervals(struct file *file, void *fh,
- 	return 0;
- }
- 
-+static int
-+venc_encoder_cmd(struct file *file, void *fh, struct v4l2_encoder_cmd *cmd)
-+{
-+	struct venus_inst *inst = to_inst(file);
-+	struct hfi_frame_data fdata = {0};
-+	int ret = 0;
-+
-+	ret = v4l2_m2m_ioctl_try_encoder_cmd(file, fh, cmd);
-+	if (ret)
-+		return ret;
-+
-+	mutex_lock(&inst->lock);
-+
-+	if (cmd->cmd == V4L2_ENC_CMD_STOP &&
-+	    inst->enc_state == VENUS_ENC_STATE_ENCODING) {
-+		/*
-+		 * Implement V4L2_ENC_CMD_STOP by enqueue an empty buffer on
-+		 * encoder input to signal EOS.
-+		 */
-+		if (!(inst->streamon_out && inst->streamon_cap))
-+			goto unlock;
-+
-+		fdata.buffer_type = HFI_BUFFER_INPUT;
-+		fdata.flags |= HFI_BUFFERFLAG_EOS;
-+		fdata.device_addr = 0xdeadb000;
-+
-+		ret = hfi_session_process_buf(inst, &fdata);
-+
-+		inst->enc_state = VENUS_ENC_STATE_DRAIN;
-+	} else if (cmd->cmd == V4L2_ENC_CMD_START &&
-+		inst->enc_state == VENUS_ENC_STATE_STOPPED) {
-+		vb2_clear_last_buffer_dequeued(&inst->fh.m2m_ctx->cap_q_ctx.q);
-+		inst->enc_state = VENUS_ENC_STATE_ENCODING;
-+	}
-+
-+unlock:
-+	mutex_unlock(&inst->lock);
-+	return ret;
-+}
-+
- static const struct v4l2_ioctl_ops venc_ioctl_ops = {
- 	.vidioc_querycap = venc_querycap,
- 	.vidioc_enum_fmt_vid_cap = venc_enum_fmt,
-@@ -525,6 +565,7 @@ static int venc_enum_frameintervals(struct file *file, void *fh,
- 	.vidioc_enum_frameintervals = venc_enum_frameintervals,
- 	.vidioc_subscribe_event = v4l2_ctrl_subscribe_event,
- 	.vidioc_unsubscribe_event = v4l2_event_unsubscribe,
-+	.vidioc_encoder_cmd = venc_encoder_cmd,
- };
- 
- static int venc_set_properties(struct venus_inst *inst)
-@@ -884,6 +925,8 @@ static int venc_start_streaming(struct vb2_queue *q, unsigned int count)
- 	if (ret)
- 		goto deinit_sess;
- 
-+	inst->enc_state = VENUS_ENC_STATE_ENCODING;
-+
- 	mutex_unlock(&inst->lock);
- 
- 	return 0;
-@@ -903,8 +946,19 @@ static int venc_start_streaming(struct vb2_queue *q, unsigned int count)
- static void venc_vb2_buf_queue(struct vb2_buffer *vb)
- {
- 	struct venus_inst *inst = vb2_get_drv_priv(vb->vb2_queue);
-+	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
- 
- 	mutex_lock(&inst->lock);
-+
-+	if (inst->enc_state == VENUS_ENC_STATE_STOPPED) {
-+		vbuf->sequence = inst->sequence_cap++;
-+		vbuf->field = V4L2_FIELD_NONE;
-+		vb2_set_plane_payload(vb, 0, 0);
-+		v4l2_m2m_buf_done(vbuf, VB2_BUF_STATE_DONE);
-+		mutex_unlock(&inst->lock);
-+		return;
-+	}
-+
- 	venus_helper_vb2_buf_queue(vb);
- 	mutex_unlock(&inst->lock);
- }
-@@ -943,6 +997,11 @@ static void venc_buf_done(struct venus_inst *inst, unsigned int buf_type,
- 		vb->planes[0].data_offset = data_offset;
- 		vb->timestamp = timestamp_us * NSEC_PER_USEC;
- 		vbuf->sequence = inst->sequence_cap++;
-+
-+		if ((vbuf->flags & V4L2_BUF_FLAG_LAST) &&
-+		    inst->enc_state == VENUS_ENC_STATE_DRAIN) {
-+			inst->enc_state = VENUS_ENC_STATE_STOPPED;
-+		}
- 	} else {
- 		vbuf->sequence = inst->sequence_out++;
- 	}
-@@ -1041,6 +1100,9 @@ static int venc_open(struct file *file)
- 	inst->clk_data.core_id = VIDC_CORE_ID_DEFAULT;
- 	inst->core_acquired = false;
- 
-+	if (inst->enc_state == VENUS_ENC_STATE_DEINIT)
-+		inst->enc_state = VENUS_ENC_STATE_INIT;
-+
- 	venus_helper_init_instance(inst);
- 
- 	ret = pm_runtime_get_sync(core->dev_enc);
-@@ -1105,7 +1167,7 @@ static int venc_close(struct file *file)
- 	mutex_destroy(&inst->lock);
- 	v4l2_fh_del(&inst->fh);
- 	v4l2_fh_exit(&inst->fh);
--
-+	inst->enc_state = VENUS_ENC_STATE_DEINIT;
- 	pm_runtime_put_sync(inst->core->dev_enc);
- 
- 	kfree(inst);
+v1 -> v2:
+  Sakari Ailus - Patch 1/3:
+  https://lore.kernel.org/linux-media/20201013160908.GC13341@paasikivi.fi.intel.com/
+  - omit remote-endpoint
+  - remove not needed clock-lanes and data-lanes
+
+
+Rui Miguel Silva (3):
+  dt-bindings: ov2680: convert bindings to yaml
+  dt-bindings: imx7-csi: convert bindings to yaml
+  dt-bindings: imx7-mipi-csi2: convert bindings to yaml
+
+ .../devicetree/bindings/media/i2c/ov2680.txt  |  46 -----
+ .../bindings/media/i2c/ovti,ov2680.yaml       | 101 ++++++++++
+ .../devicetree/bindings/media/imx7-csi.txt    |  42 -----
+ .../bindings/media/imx7-mipi-csi2.txt         |  90 ---------
+ .../bindings/media/nxp,imx7-csi.yaml          |  71 ++++++++
+ .../bindings/media/nxp,imx7-mipi-csi2.yaml    | 172 ++++++++++++++++++
+ MAINTAINERS                                   |   6 +-
+ 7 files changed, 347 insertions(+), 181 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/media/i2c/ov2680.txt
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov2680.yaml
+ delete mode 100644 Documentation/devicetree/bindings/media/imx7-csi.txt
+ delete mode 100644 Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt
+ create mode 100644 Documentation/devicetree/bindings/media/nxp,imx7-csi.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
+
 -- 
-1.9.1
+2.28.0
 
