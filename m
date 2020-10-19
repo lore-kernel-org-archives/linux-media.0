@@ -2,113 +2,104 @@ Return-Path: <SRS0=R2Oz=D2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9963EC4363A
-	for <linux-media@archiver.kernel.org>; Mon, 19 Oct 2020 17:26:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29594C433DF
+	for <linux-media@archiver.kernel.org>; Mon, 19 Oct 2020 18:56:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4B2D5222EA
-	for <linux-media@archiver.kernel.org>; Mon, 19 Oct 2020 17:26:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603128419;
-	bh=J40kgzyzsj/0YMfP/Jq1oo6X7s7MkmBqimZTxeq7XMM=;
-	h=From:To:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=zQKV33Un/yZRgD34hV3d0zblMOySs4vThIQHtRwLJDmSlbkWLgNMy/MiuanuGrif/
-	 kVSZNG4AZ9mG4otONIjaTfuI58WkBYl24FqtjpbFBR9UuBo+BJXepSwINxNA+ovdYm
-	 B3oe5kGDa0Gv6eFvnqFyCisPOVNiW+SyoSqK5ao4=
+	by mail.kernel.org (Postfix) with ESMTP id A3A34223FB
+	for <linux-media@archiver.kernel.org>; Mon, 19 Oct 2020 18:56:29 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SUgkMpSe"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731120AbgJSR0h (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Oct 2020 13:26:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41848 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730999AbgJSR0g (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 19 Oct 2020 13:26:36 -0400
-Received: from localhost.localdomain (unknown [194.230.155.171])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A526922282;
-        Mon, 19 Oct 2020 17:26:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603128395;
-        bh=J40kgzyzsj/0YMfP/Jq1oo6X7s7MkmBqimZTxeq7XMM=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=XPOW6OG++5rjrcug+BL22mtDakDKnAcQlsNRF0W7/aC3/3PgoggkF181O/umRQpWe
-         eVyCklD+Ugzf5go0ioYe3mMDpYtoaC+j+Rc2pt84mwlTJWmff6nnQSOmVwDZ2k+GOM
-         7UPTwejEvCpM1VanbZ23fiYsR9iS4I7+RS+N/fBw=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 3/4] media: i2c: imx258: simplify getting state container
-Date:   Mon, 19 Oct 2020 19:26:16 +0200
-Message-Id: <20201019172617.92815-2-krzk@kernel.org>
+        id S1730945AbgJSS42 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Oct 2020 14:56:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55428 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727681AbgJSS41 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 19 Oct 2020 14:56:27 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1072C0613D0
+        for <linux-media@vger.kernel.org>; Mon, 19 Oct 2020 11:56:25 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id u8so605604ejg.1
+        for <linux-media@vger.kernel.org>; Mon, 19 Oct 2020 11:56:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RLocozs5mbe7AkMYzaqpP1i1qJatxmouRrdruwt75Oo=;
+        b=SUgkMpSeKR9pxdYjl+vNR90oMTmi2vfyrxitjrBaRFgZlA9T0Bg7UCvJRgbkUFj8oD
+         GA5TrYQ1gsvqtggr57LCs0nrQdU8ktnqdO/NFtb+Z+8TFVxMWdoq7RdoJ/JFUe+zyM5j
+         LfnJCslB2mine0mhx7MsgjzqU8aOgy1zhmbr5F4W6SWxuHzJzKYwmQMU1cmOa0hd/7RN
+         WWBJolOR4Vgbfzk0BywBwHd6nVC2oVe2jqX9/HOzAtAzodM9R1CPtYsUi5DtxtqcEtfF
+         qFtFN12tKm0EItNgC6Uz+Mdcse5g6eSG/wtUrcoKG6MW5LiU+sgTY3B0j2Pv4N2jtaUK
+         haUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RLocozs5mbe7AkMYzaqpP1i1qJatxmouRrdruwt75Oo=;
+        b=ZvgMjGihwAOnde2uAEgeRx+bmgOLB1OtFKuZ21bkL3M71brn/1du7CrBLx+HVumCBf
+         +qejbLzriTixmhW58iYaZxWTAdTKG9LMrn5HTyuSAcNfaF7M1Exyv7Q2pqm0vFxKuFOI
+         Fiq0EX44E9w84CTRyTSPo6k3X72ZlwweAv0FDTORKXX+XR2jd/3YDHVU/7dtuRL2AOtz
+         MNnwgST/BE1oc/Lpm6XYYOUPvsQ2IYCEx/J9QWCbCQZSAIYOSdbuViXMv0Y11X637U6/
+         oWl85X5wueRHaHO6Q8qEmFj3s77YYsqCD7ws4bSQs8wh2m23oOO3tcjjvS7Y4NtOTyls
+         3MYQ==
+X-Gm-Message-State: AOAM532cOgmfa9Uh1StU3pjevflJWn0Q2OhmsVeBx53VU1mqElItGh6Y
+        zd73rV9wZskxLoh2l3AVK5OLIw==
+X-Google-Smtp-Source: ABdhPJxnzG1+v1cAInX66kZTH1zNkf1PABNQOw5MZFqEbuBoFHUbZZ1/rnw8zFnCkuOznZsDawCFzA==
+X-Received: by 2002:a17:906:4d10:: with SMTP id r16mr1402335eju.68.1603133784402;
+        Mon, 19 Oct 2020 11:56:24 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:2450:102f:d6a:80be:1251:f194:889a])
+        by smtp.gmail.com with ESMTPSA id u26sm707236eds.2.2020.10.19.11.56.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Oct 2020 11:56:23 -0700 (PDT)
+From:   Robert Foss <robert.foss@linaro.org>
+To:     Loic Poulain <loic.poulain@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-kernel@vger.kernel.org, Todor Tomov <todor.too@gmail.com>,
+        linux-media@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Robert Foss <robert.foss@linaro.org>
+Subject: [RESEND PATCH v1] MAINTAINERS: camss: Add Robert Foss as co-maintainer
+Date:   Mon, 19 Oct 2020 20:56:20 +0200
+Message-Id: <20201019185620.493967-1-robert.foss@linaro.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201019172617.92815-1-krzk@kernel.org>
-References: <20201019170247.92002-1-krzk@kernel.org>
- <20201019172617.92815-1-krzk@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The pointer to 'struct v4l2_subdev' is stored in drvdata via
-v4l2_i2c_subdev_init() so there is no point of a dance like:
+I would like to contribute some of my time to co-maintain the CAMSS
+driver. I'm currently working to extend CAMSS to new hardware platforms.
 
-struct i2c_client *client = to_i2c_client(struct device *dev)
-struct v4l2_subdev *sd = i2c_get_clientdata(client);
-
-This allows to remove local variable 'client' and few pointer
-dereferences.
-
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-
+Signed-off-by: Robert Foss <robert.foss@linaro.org>
 ---
 
-Changes since v3:
-1. None
+I'd like to volunteer as co-maintainer or maintainer. Currently I don't
+know how active Todor is, but if he is inactive or indeed would like to
+hand over the full maintainership, that would also be ok with me.
 
-Changes since v2:
-1. New patch
----
- drivers/media/i2c/imx258.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
-index ed79bfb4c991..ae183b0dbba9 100644
---- a/drivers/media/i2c/imx258.c
-+++ b/drivers/media/i2c/imx258.c
-@@ -1018,8 +1018,7 @@ static int imx258_set_stream(struct v4l2_subdev *sd, int enable)
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 5919b758c708..45fea22ed28b 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14443,6 +14443,7 @@ W:	https://wireless.wiki.kernel.org/en/users/Drivers/ath9k
+ F:	drivers/net/wireless/ath/ath9k/
  
- static int __maybe_unused imx258_suspend(struct device *dev)
- {
--	struct i2c_client *client = to_i2c_client(dev);
--	struct v4l2_subdev *sd = i2c_get_clientdata(client);
-+	struct v4l2_subdev *sd = dev_get_drvdata(dev);
- 	struct imx258 *imx258 = to_imx258(sd);
- 
- 	if (imx258->streaming)
-@@ -1030,8 +1029,7 @@ static int __maybe_unused imx258_suspend(struct device *dev)
- 
- static int __maybe_unused imx258_resume(struct device *dev)
- {
--	struct i2c_client *client = to_i2c_client(dev);
--	struct v4l2_subdev *sd = i2c_get_clientdata(client);
-+	struct v4l2_subdev *sd = dev_get_drvdata(dev);
- 	struct imx258 *imx258 = to_imx258(sd);
- 	int ret;
- 
+ QUALCOMM CAMERA SUBSYSTEM DRIVER
++M:	Robert Foss <robert.foss@linaro.org>
+ M:	Todor Tomov <todor.too@gmail.com>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
 -- 
 2.25.1
 
