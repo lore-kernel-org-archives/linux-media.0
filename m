@@ -2,112 +2,175 @@ Return-Path: <SRS0=VxL7=D3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92C6EC433E7
-	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 10:05:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D5B3C43457
+	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 10:15:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4167B22253
-	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 10:05:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AE37D22253
+	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 10:15:12 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="bdRMFVb4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405904AbgJTKFS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 20 Oct 2020 06:05:18 -0400
-Received: from mga17.intel.com ([192.55.52.151]:9626 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405412AbgJTKFS (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 20 Oct 2020 06:05:18 -0400
-IronPort-SDR: 4pu+Qx3YSahBQ4f9shrHwmz37sx+ZcSb9LIGB4MuH5jHCF3TylbSyY+ykPahLPrupBpUDmfVDd
- yU5JqfD+y9QQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9779"; a="147041745"
-X-IronPort-AV: E=Sophos;i="5.77,396,1596524400"; 
-   d="scan'208";a="147041745"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2020 03:05:18 -0700
-IronPort-SDR: 35GOW96f0+iCOOvX8X8vt+j0U8FL8ZJ+CjbcpGTt1NuTnA+G5U/f7dnbITHEhGicyhF70Yq6m8
- AxXeIHh0WV5w==
-X-IronPort-AV: E=Sophos;i="5.77,396,1596524400"; 
-   d="scan'208";a="465879281"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2020 03:05:12 -0700
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id A9E252068C; Tue, 20 Oct 2020 13:05:10 +0300 (EEST)
-Date:   Tue, 20 Oct 2020 13:05:10 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Daniel Scally <djrscally@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux.walleij@linaro.org, prabhakar.mahadev-lad.rj@bp.renesas.com,
-        heikki.krogerus@linux.intel.com, dmitry.torokhov@gmail.com,
-        laurent.pinchart+renesas@ideasonboard.com,
-        kieran.bingham+renesas@ideasonboard.com, jacopo+renesas@jmondi.org,
-        robh@kernel.org, davem@davemloft.net, linux@rasmusvillemoes.dk,
-        andriy.shevchenko@linux.intel.com, sergey.senozhatsky@gmail.com,
-        rostedt@goodmis.org, pmladek@suse.com, mchehab@kernel.org,
-        tian.shu.qiu@intel.com, bingbu.cao@intel.com, yong.zhi@intel.com,
-        rafael@kernel.org, gregkh@linuxfoundation.org, kitakar@gmail.com,
-        dan.carpenter@oracle.org
-Subject: Re: [RFC PATCH v3 1/9] software_node: Add helper function to
- unregister arrays of software_nodes ordered parent to child
-Message-ID: <20201020100510.GS13341@paasikivi.fi.intel.com>
-References: <20201019225903.14276-1-djrscally@gmail.com>
- <20201019225903.14276-2-djrscally@gmail.com>
+        id S2406004AbgJTKPI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 20 Oct 2020 06:15:08 -0400
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:27132 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1733130AbgJTKPG (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 20 Oct 2020 06:15:06 -0400
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09KAC0Me028116;
+        Tue, 20 Oct 2020 12:14:53 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=STMicroelectronics;
+ bh=VlIPvqN556x6We0Z5ZCWHUxsDDwlLtSPq21CGa4llNs=;
+ b=bdRMFVb4+TTM+B9gavHUPk0mCPSrOe2Dwqvf7nuaLZKx+wuoiz2HZLeSyIZURrrjIdVM
+ Kr/0MmGdFZkXHwb74xmeeCDp4P4cdVzsTRMYe14l21OqeXczkkWFzsmPmGKJoMctk9VG
+ CMrbLUhvjvZnw+R48VQyLmp4XqygPbuNxcB22A2l2Qxxo5DNaqf/7V7KObaPIdzaheGP
+ +x223WRBFwgoLfL4i8GqSd4MBvmDJQlMpaocuuZpbBa5U0iVle69auFCcus6plCPb8Ap
+ SBDO4Z7KwQRlQpFi4lkN34SlW18tPV+aMYx/HmUT9FqdRjON8wLMISgdtgDr+GJRXzox 2Q== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 347p30j15h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Oct 2020 12:14:53 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 213EA100038;
+        Tue, 20 Oct 2020 12:14:53 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag1node1.st.com [10.75.127.1])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 111AD2C4CC5;
+        Tue, 20 Oct 2020 12:14:53 +0200 (CEST)
+Received: from localhost (10.75.127.47) by SFHDAG1NODE1.st.com (10.75.127.1)
+ with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 20 Oct 2020 12:14:52
+ +0200
+From:   Hugues Fruchet <hugues.fruchet@st.com>
+To:     Alexandre Torgue <alexandre.torgue@st.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Hugues Fruchet <hugues.fruchet@st.com>,
+        Alain Volmat <alain.volmat@st.com>,
+        Yannick Fertre <yannick.fertre@st.com>,
+        Philippe CORNU <philippe.cornu@st.com>
+Subject: [PATCH v4 1/2] media: stm32-dcmi: add support of BT656 bus
+Date:   Tue, 20 Oct 2020 12:14:48 +0200
+Message-ID: <1603188889-23664-2-git-send-email-hugues.fruchet@st.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1603188889-23664-1-git-send-email-hugues.fruchet@st.com>
+References: <1603188889-23664-1-git-send-email-hugues.fruchet@st.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201019225903.14276-2-djrscally@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG4NODE2.st.com (10.75.127.11) To SFHDAG1NODE1.st.com
+ (10.75.127.1)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-10-20_04:2020-10-20,2020-10-20 signatures=0
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Daniel, Andy,
+Add support of BT656 embedded synchronization bus.
+This mode allows to save hardware synchro lines hsync & vsync by replacing
+them with synchro codes embedded in data stream.
+This bus type is only compatible with 8 bits width data bus.
+Due to reserved values 0x00 & 0xff used for synchro codes, valid data vary
+from 0x1 to 0xfe, this is up to sensor to clip accordingly pixel data. As
+a consequence of this clipping, JPEG is not supported with this bus type.
+DCMI crop feature is also not available with this bus type.
 
-On Mon, Oct 19, 2020 at 11:58:55PM +0100, Daniel Scally wrote:
-> Software nodes that are children of another software node should be
-> unregistered before their parent. To allow easy unregistering of an array
-> of software_nodes ordered parent to child, add a helper function to loop
-> over and unregister nodes in such an array in reverse order.
-> 
-> Suggested-by: Andriy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Daniel Scally <djrscally@gmail.com>
-> ---
-> Changes in v3:
-> 	- patch introduced.
-> 
->  drivers/base/swnode.c    | 21 +++++++++++++++++++++
->  include/linux/property.h |  1 +
->  2 files changed, 22 insertions(+)
-> 
-> diff --git a/drivers/base/swnode.c b/drivers/base/swnode.c
-> index 010828fc7..f01b1cc61 100644
-> --- a/drivers/base/swnode.c
-> +++ b/drivers/base/swnode.c
-> @@ -727,6 +727,27 @@ void software_node_unregister_nodes(const struct software_node *nodes)
->  }
->  EXPORT_SYMBOL_GPL(software_node_unregister_nodes);
->  
-> +/**
-> + * software_node_unregister_nodes_reverse - Unregister an array of software
-> + * nodes in reverse order.
-> + * @nodes: Array of software nodes to be unregistered.
-> + *
-> + * NOTE: The same warning applies as with software_node_unregister_nodes.
-> + * Unless you are _sure_ that the array of nodes is ordered parent to child
-> + * it is wiser to remove them individually in the correct order.
+Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
+---
+ drivers/media/platform/stm32/stm32-dcmi.c | 37 +++++++++++++++++++++++++++++--
+ 1 file changed, 35 insertions(+), 2 deletions(-)
 
-Could the default order in software_node_unregister_nodes() be reversed
-instead? There are no users so this should be easy to change.
-
-Doing this only one way may require enforcing the registration order in
-software_node_register_nodes(), but the end result would be safer.
-
-What do you think?
-
+diff --git a/drivers/media/platform/stm32/stm32-dcmi.c b/drivers/media/platform/stm32/stm32-dcmi.c
+index fd1c41c..7705683 100644
+--- a/drivers/media/platform/stm32/stm32-dcmi.c
++++ b/drivers/media/platform/stm32/stm32-dcmi.c
+@@ -157,6 +157,7 @@ struct stm32_dcmi {
+ 	struct vb2_queue		queue;
+ 
+ 	struct v4l2_fwnode_bus_parallel	bus;
++	enum v4l2_mbus_type		bus_type;
+ 	struct completion		complete;
+ 	struct clk			*mclk;
+ 	enum state			state;
+@@ -777,6 +778,23 @@ static int dcmi_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 	if (dcmi->bus.flags & V4L2_MBUS_PCLK_SAMPLE_RISING)
+ 		val |= CR_PCKPOL;
+ 
++	/*
++	 * BT656 embedded synchronisation bus mode.
++	 *
++	 * Default SAV/EAV mode is supported here with default codes
++	 * SAV=0xff000080 & EAV=0xff00009d.
++	 * With DCMI this means LSC=SAV=0x80 & LEC=EAV=0x9d.
++	 */
++	if (dcmi->bus_type == V4L2_MBUS_BT656) {
++		val |= CR_ESS;
++
++		/* Unmask all codes */
++		reg_write(dcmi->regs, DCMI_ESUR, 0xffffffff);/* FEC:LEC:LSC:FSC */
++
++		/* Trig on LSC=0x80 & LEC=0x9d codes, ignore FSC and FEC */
++		reg_write(dcmi->regs, DCMI_ESCR, 0xff9d80ff);/* FEC:LEC:LSC:FSC */
++	}
++
+ 	reg_write(dcmi->regs, DCMI_CR, val);
+ 
+ 	/* Set crop */
+@@ -1067,8 +1085,9 @@ static int dcmi_set_fmt(struct stm32_dcmi *dcmi, struct v4l2_format *f)
+ 	if (ret)
+ 		return ret;
+ 
+-	/* Disable crop if JPEG is requested */
+-	if (pix->pixelformat == V4L2_PIX_FMT_JPEG)
++	/* Disable crop if JPEG is requested or BT656 bus is selected */
++	if (pix->pixelformat == V4L2_PIX_FMT_JPEG &&
++	    dcmi->bus_type != V4L2_MBUS_BT656)
+ 		dcmi->do_crop = false;
+ 
+ 	/* pix to mbus format */
+@@ -1592,6 +1611,11 @@ static int dcmi_formats_init(struct stm32_dcmi *dcmi)
+ 			if (dcmi_formats[i].mbus_code != mbus_code.code)
+ 				continue;
+ 
++			/* Exclude JPEG if BT656 bus is selected */
++			if (dcmi_formats[i].fourcc == V4L2_PIX_FMT_JPEG &&
++			    dcmi->bus_type == V4L2_MBUS_BT656)
++				continue;
++
+ 			/* Code supported, have we got this fourcc yet? */
+ 			for (j = 0; j < num_fmts; j++)
+ 				if (sd_fmts[j]->fourcc ==
+@@ -1873,9 +1897,18 @@ static int dcmi_probe(struct platform_device *pdev)
+ 		dev_err(&pdev->dev, "CSI bus not supported\n");
+ 		return -ENODEV;
+ 	}
++
++	if (ep.bus_type == V4L2_MBUS_BT656 &&
++	    ep.bus.parallel.bus_width != 8) {
++		dev_err(&pdev->dev, "BT656 bus conflicts with %u bits bus width (8 bits required)\n",
++			ep.bus.parallel.bus_width);
++		return -ENODEV;
++	}
++
+ 	dcmi->bus.flags = ep.bus.parallel.flags;
+ 	dcmi->bus.bus_width = ep.bus.parallel.bus_width;
+ 	dcmi->bus.data_shift = ep.bus.parallel.data_shift;
++	dcmi->bus_type = ep.bus_type;
+ 
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq <= 0)
 -- 
-Regards,
+2.7.4
 
-Sakari Ailus
