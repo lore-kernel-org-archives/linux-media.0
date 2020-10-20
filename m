@@ -5,47 +5,47 @@ X-Spam-Level:
 X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CE2AC43457
-	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 09:54:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A39BC433DF
+	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 10:02:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CA6D7222E8
-	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 09:54:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BCFBA222E8
+	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 10:02:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="KXdd/Mp0"
+	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="SEyYjz6R"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404577AbgJTJyh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 20 Oct 2020 05:54:37 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:34548 "EHLO
+        id S2405873AbgJTKCw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 20 Oct 2020 06:02:52 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:37606 "EHLO
         mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1731354AbgJTJyb (ORCPT
+        by vger.kernel.org with ESMTP id S1728719AbgJTKCt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 20 Oct 2020 05:54:31 -0400
+        Tue, 20 Oct 2020 06:02:49 -0400
 Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09K9le8U020170;
-        Tue, 20 Oct 2020 11:54:19 +0200
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09K9lfPC020200;
+        Tue, 20 Oct 2020 12:02:39 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-type; s=STMicroelectronics;
- bh=N+2+cys/SP2b8HEqnZoYmnu+m4rGEs7Q3gcWoN8KWQw=;
- b=KXdd/Mp0MqPeQeZKBtJJpyqIQlRu7WfRxo0wmSf4eu0ejazs6E9faWma3TjXUKws0ds4
- 9F23SASie2VL1LTKGDBDhhG981XhJ7NPCD6Unqm2QLsOwxvFp/tfB2Wso18LYezjybgM
- /iyKEsHu3D75OsryjyBQD3W4SF9mpowd8LhH3fdJAVNf9bVqkuYAY9kGzeRXGDeJ0ji5
- fwmvS+/6lvPrg7mjUMIU8PY/EYhbNy+gde5QvWIM4gzTSyrcpQB6mh7Wbv3nCfZumQfM
- NH+C0f5nVlPh1LHDX8X9zg3362f/njkrz7Z/Y8aVMZ887xJmoycJUnw0GC8HSeR/umOU zA== 
+ bh=/j33qpeZfaUQLxxHi6rLARP7ZssD9qJ8OVQRuqRHx/8=;
+ b=SEyYjz6RVScVlxLDJtQfZTcF8hC/GWrMBvSj9AlMB+wRVhUTF7QuRTu0brh+yWn/DeK1
+ oAddzzkByji3FDkz4EIkaxQO79lE4aMQkKW81mcmvCyVoO6eaGygs43cl5OJGP22WM2P
+ JI/1p1xhrvX/pjCMvs4JTi3zghKLg7hjp9Gv8GHIDP0oBu+OgoKvkLAPVPQVbJkz56tM
+ 9O7YgjxOQeqDpJADoSI0/U6pqGPCdEod0WjyyFqL7qakcrLGazjVhaI+iubPmJXQyKzU
+ VgiZnJoMn6TK67qWvvD5xn/XesCrqGOgCiGT0Ob05JWRrKuNrwfrrZfowa4/cQaaiZkn fQ== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 347qgg2c87-1
+        by mx07-00178001.pphosted.com with ESMTP id 347qgg2e1e-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Oct 2020 11:54:19 +0200
+        Tue, 20 Oct 2020 12:02:38 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 88630100034;
-        Tue, 20 Oct 2020 11:54:18 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6EA6410003A;
+        Tue, 20 Oct 2020 12:02:36 +0200 (CEST)
 Received: from Webmail-eu.st.com (sfhdag1node1.st.com [10.75.127.1])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 70E712C41FA;
-        Tue, 20 Oct 2020 11:54:18 +0200 (CEST)
-Received: from localhost (10.75.127.45) by SFHDAG1NODE1.st.com (10.75.127.1)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 20 Oct 2020 11:54:18
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5E5282C41F8;
+        Tue, 20 Oct 2020 12:02:36 +0200 (CEST)
+Received: from localhost (10.75.127.44) by SFHDAG1NODE1.st.com (10.75.127.1)
+ with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 20 Oct 2020 12:02:35
  +0200
 From:   Hugues Fruchet <hugues.fruchet@st.com>
 To:     Alexandre Torgue <alexandre.torgue@st.com>,
@@ -61,16 +61,16 @@ CC:     <devicetree@vger.kernel.org>,
         Alain Volmat <alain.volmat@st.com>,
         Yannick Fertre <yannick.fertre@st.com>,
         Philippe CORNU <philippe.cornu@st.com>
-Subject: [PATCH v2 1/2] media: stm32-dcmi: add support of BT656 bus
-Date:   Tue, 20 Oct 2020 11:54:05 +0200
-Message-ID: <1603187646-13184-2-git-send-email-hugues.fruchet@st.com>
+Subject: [PATCH v3 1/2] media: stm32-dcmi: add support of BT656 bus
+Date:   Tue, 20 Oct 2020 12:02:31 +0200
+Message-ID: <1603188152-22783-2-git-send-email-hugues.fruchet@st.com>
 X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1603187646-13184-1-git-send-email-hugues.fruchet@st.com>
-References: <1603187646-13184-1-git-send-email-hugues.fruchet@st.com>
+In-Reply-To: <1603188152-22783-1-git-send-email-hugues.fruchet@st.com>
+References: <1603188152-22783-1-git-send-email-hugues.fruchet@st.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG4NODE2.st.com (10.75.127.11) To SFHDAG1NODE1.st.com
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG7NODE1.st.com (10.75.127.19) To SFHDAG1NODE1.st.com
  (10.75.127.1)
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-10-20_04:2020-10-20,2020-10-20 signatures=0
@@ -95,7 +95,7 @@ Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
  1 file changed, 35 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/platform/stm32/stm32-dcmi.c b/drivers/media/platform/stm32/stm32-dcmi.c
-index fd1c41c..d7d7cdb 100644
+index fd1c41c..7705683 100644
 --- a/drivers/media/platform/stm32/stm32-dcmi.c
 +++ b/drivers/media/platform/stm32/stm32-dcmi.c
 @@ -157,6 +157,7 @@ struct stm32_dcmi {
@@ -161,7 +161,7 @@ index fd1c41c..d7d7cdb 100644
 +
 +	if (ep.bus_type == V4L2_MBUS_BT656 &&
 +	    ep.bus.parallel.bus_width != 8) {
-+		dev_err(&pdev->dev, "BT656 bus conflicts with %d bits bus width (8 bits required)\n",
++		dev_err(&pdev->dev, "BT656 bus conflicts with %u bits bus width (8 bits required)\n",
 +			ep.bus.parallel.bus_width);
 +		return -ENODEV;
 +	}
