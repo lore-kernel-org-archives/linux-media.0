@@ -2,243 +2,186 @@ Return-Path: <SRS0=VxL7=D3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C97BC55ABD
-	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 12:21:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C34EAC43457
+	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 12:26:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B838522409
-	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 12:21:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 710FA22283
+	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 12:26:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1603196791;
+	bh=Sxo3AbJUiol4vFrVYVnbM5stlBr7xZ6KItkZ4GJ+X2A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=weLDQGlodYw1Knppjmr28YUioHUwTZN3tyHZUQKu3SQcWMKAuei7bocsUkEteq4hO
+	 942rqecNZgbqxEvFMu3UoEaKHhrdzc/Zhydbu/b4L5dQh+UC2H43lyi45akE7d7ljA
+	 xVbRKT1Y9KIoBYcv8LB0mu+XRT0LXZHg26kqj+WU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405899AbgJTMU5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 20 Oct 2020 08:20:57 -0400
-Received: from mx2.suse.de ([195.135.220.15]:53720 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405874AbgJTMU5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 20 Oct 2020 08:20:57 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 7EEE3B1BF;
-        Tue, 20 Oct 2020 12:20:54 +0000 (UTC)
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        airlied@linux.ie, daniel@ffwll.ch, sam@ravnborg.org,
-        alexander.deucher@amd.com, christian.koenig@amd.com,
-        kraxel@redhat.com, l.stach@pengutronix.de,
-        linux+etnaviv@armlinux.org.uk, christian.gmeiner@gmail.com,
-        inki.dae@samsung.com, jy0922.shim@samsung.com,
-        sw0312.kim@samsung.com, kyungmin.park@samsung.com,
-        kgene@kernel.org, krzk@kernel.org, yuq825@gmail.com,
-        bskeggs@redhat.com, robh@kernel.org, tomeu.vizoso@collabora.com,
-        steven.price@arm.com, alyssa.rosenzweig@collabora.com,
-        hjc@rock-chips.com, heiko@sntech.de, hdegoede@redhat.com,
-        sean@poorly.run, eric@anholt.net, oleksandr_andrushchenko@epam.com,
-        ray.huang@amd.com, sumit.semwal@linaro.org,
-        emil.velikov@collabora.com, luben.tuikov@amd.com, apaneers@amd.com,
-        linus.walleij@linaro.org, melissa.srw@gmail.com,
-        chris@chris-wilson.co.uk, miaoqinglang@huawei.com
-Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org,
-        etnaviv@lists.freedesktop.org,
+        id S2405994AbgJTM02 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 20 Oct 2020 08:26:28 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:41099 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2394284AbgJTM01 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 20 Oct 2020 08:26:27 -0400
+Received: by mail-wr1-f65.google.com with SMTP id s9so1890216wro.8;
+        Tue, 20 Oct 2020 05:26:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=m0pVRuj0M2nZqf8Wm9BAPNQzfIxN4rcRXkQ0qVAU77o=;
+        b=IEJLK8hy1linB/zxPHF1uvATyPzxLqSEuLRDYQ+h5sUkXYTo7FFc9s2ip3jLIBywET
+         jcHqtywwYZDIqXp4J2JZnXL8lETsZLcaRjhm3G4SjdS5a5puvx7gnRsqrhFA8j9BNOr8
+         zxQOhtd5GsFR12MEkXiTz86Xs5FEc8YluinSC1MqUADylZlbMEiaDe1CzTVVodE1GP0W
+         g6cQTwCCe4sJUGdV1G8oAcJwkSUTAeNjuz3VpngtcYnsrgNDT3vQ5xQBhvV9VrmCDyIP
+         n3AOTqeTkqnMNbdNkSlEo6nT6bxNgJFZmqnTtX+C1xzBt5Pd+RPHQrTZ04/okDE28TdU
+         3oQg==
+X-Gm-Message-State: AOAM533yTkoAsLLymcntVupu7Dac0em/U/VzEzeQWVHKwke71G2Nn19V
+        oXsM56j9U5ouCgnKa7se8Kc=
+X-Google-Smtp-Source: ABdhPJzJ4IfSkdpsol8AyRt80yXAXWp/BGDLmqEcL3uejEZmveMHiGjUKxbbGboz4mTyukzsYyU83Q==
+X-Received: by 2002:adf:bb43:: with SMTP id x3mr3235381wrg.250.1603196785071;
+        Tue, 20 Oct 2020 05:26:25 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.171])
+        by smtp.googlemail.com with ESMTPSA id 67sm2492253wmb.31.2020.10.20.05.26.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Oct 2020 05:26:23 -0700 (PDT)
+Date:   Tue, 20 Oct 2020 14:26:21 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, lima@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, spice-devel@lists.freedesktop.org,
-        linux-rockchip@lists.infradead.org, xen-devel@lists.xenproject.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Subject: [PATCH v5 07/10] drm/gem: Update internal GEM vmap/vunmap interfaces to use struct dma_buf_map
-Date:   Tue, 20 Oct 2020 14:20:43 +0200
-Message-Id: <20201020122046.31167-8-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201020122046.31167-1-tzimmermann@suse.de>
-References: <20201020122046.31167-1-tzimmermann@suse.de>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v5 1/4] dt-bindings: media: imx258: add bindings for
+ IMX258 sensor
+Message-ID: <20201020122621.GA126891@kozik-lap>
+References: <20201019170247.92002-1-krzk@kernel.org>
+ <20201020103833.GT13341@paasikivi.fi.intel.com>
+ <CAJKOXPdKHCQikYDLKDS2Y3NVyCjMYYH1pcxgaMoYgOK19vQCrQ@mail.gmail.com>
+ <20201020120058.GU13341@paasikivi.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201020120058.GU13341@paasikivi.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-GEM's vmap and vunmap interfaces now wrap memory pointers in struct
-dma_buf_map.
+On Tue, Oct 20, 2020 at 03:00:58PM +0300, Sakari Ailus wrote:
+> Hi Krzysztof,
+> 
+> On Tue, Oct 20, 2020 at 12:54:09PM +0200, Krzysztof Kozlowski wrote:
+> > On Tue, 20 Oct 2020 at 12:38, Sakari Ailus <sakari.ailus@linux.intel.com> wrote:
+> > >
+> > > Hi Krzysztof,
+> > >
+> > > On Mon, Oct 19, 2020 at 07:02:44PM +0200, Krzysztof Kozlowski wrote:
+> > > > Add bindings for the IMX258 camera sensor.  The bindings, just like the
+> > > > driver, are quite limited, e.g. do not support regulator supplies.
+> > > >
+> > > > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> > > > Reviewed-by: Rob Herring <robh@kernel.org>
+> > > >
+> > > > ---
+> > > >
+> > > > Changes since v4:
+> > > > 1. Add clock-lanes,
+> > > > 2. Add Rob's review,
+> > > > 3. Add one more example and extend existing one,
+> > > > 4. Add common clock properties (assigned-*).
+> > >
+> > > Using the assigned-* clock properties may be workable for this driver at
+> > > the moment. But using these properties does not guarantee the external
+> > > clock frequency intended to be used on the hardware.
+> > 
+> > It guarantees it. The clock frequency will be as expected (except if
+> > someone misconfigures the DTS).
+> 
+> Is that guaranteed?
+> 
+> I'm not saying no to the approach, but if we change how camera sensor DT
+> bindings are defined, I'd prefer an informed decision is made on the
+> matter.
+> 
+> > 
+> > > Using other
+> > > frequencies *is not* expected to work. That applies to this driver as well.
+> > 
+> > This is the binding which is HW description. According to HW datasheet
+> > other frequencies from described range are accepted and expected to
+> > work.
+> 
+> As per datasheet, yes, different external clock frequencies can be used.
+> But the link frequency is still not independent of the external clock
+> frequency.
+> 
+> The properties of the sensor's PLL tree determines what can be achieved
+> given a certain external clock frequency. So picking a wrong external clock
+> frequency quite possibly means that none of the designated link frequencies
+> are available, rendering the sensor inoperable.
 
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Tested-by: Sam Ravnborg <sam@ravnborg.org>
----
- drivers/gpu/drm/drm_client.c   | 18 +++++++++++-------
- drivers/gpu/drm/drm_gem.c      | 26 +++++++++++++-------------
- drivers/gpu/drm/drm_internal.h |  5 +++--
- drivers/gpu/drm/drm_prime.c    | 14 ++++----------
- 4 files changed, 31 insertions(+), 32 deletions(-)
+The driver then controls the HW and knows exactly what is needed. If
+link frequency (which has its own DT property) requires some clock
+frequency, the driver will configure the clock to that value. The same
+going other direction. Driver has the knowledge about both its input
+clock and link frequency, therefore it can make the best decision.
 
-diff --git a/drivers/gpu/drm/drm_client.c b/drivers/gpu/drm/drm_client.c
-index 495f47d23d87..ac0082bed966 100644
---- a/drivers/gpu/drm/drm_client.c
-+++ b/drivers/gpu/drm/drm_client.c
-@@ -3,6 +3,7 @@
-  * Copyright 2018 Noralf Trønnes
-  */
- 
-+#include <linux/dma-buf-map.h>
- #include <linux/list.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
-@@ -304,7 +305,8 @@ drm_client_buffer_create(struct drm_client_dev *client, u32 width, u32 height, u
-  */
- void *drm_client_buffer_vmap(struct drm_client_buffer *buffer)
- {
--	void *vaddr;
-+	struct dma_buf_map map;
-+	int ret;
- 
- 	if (buffer->vaddr)
- 		return buffer->vaddr;
-@@ -317,13 +319,13 @@ void *drm_client_buffer_vmap(struct drm_client_buffer *buffer)
- 	 * fd_install step out of the driver backend hooks, to make that
- 	 * final step optional for internal users.
- 	 */
--	vaddr = drm_gem_vmap(buffer->gem);
--	if (IS_ERR(vaddr))
--		return vaddr;
-+	ret = drm_gem_vmap(buffer->gem, &map);
-+	if (ret)
-+		return ERR_PTR(ret);
- 
--	buffer->vaddr = vaddr;
-+	buffer->vaddr = map.vaddr;
- 
--	return vaddr;
-+	return map.vaddr;
- }
- EXPORT_SYMBOL(drm_client_buffer_vmap);
- 
-@@ -337,7 +339,9 @@ EXPORT_SYMBOL(drm_client_buffer_vmap);
-  */
- void drm_client_buffer_vunmap(struct drm_client_buffer *buffer)
- {
--	drm_gem_vunmap(buffer->gem, buffer->vaddr);
-+	struct dma_buf_map map = DMA_BUF_MAP_INIT_VADDR(buffer->vaddr);
-+
-+	drm_gem_vunmap(buffer->gem, &map);
- 	buffer->vaddr = NULL;
- }
- EXPORT_SYMBOL(drm_client_buffer_vunmap);
-diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
-index a89ad4570e3c..4d5fff4bd821 100644
---- a/drivers/gpu/drm/drm_gem.c
-+++ b/drivers/gpu/drm/drm_gem.c
-@@ -1206,32 +1206,32 @@ void drm_gem_unpin(struct drm_gem_object *obj)
- 		obj->funcs->unpin(obj);
- }
- 
--void *drm_gem_vmap(struct drm_gem_object *obj)
-+int drm_gem_vmap(struct drm_gem_object *obj, struct dma_buf_map *map)
- {
--	struct dma_buf_map map;
- 	int ret;
- 
- 	if (!obj->funcs->vmap)
--		return ERR_PTR(-EOPNOTSUPP);
-+		return -EOPNOTSUPP;
- 
--	ret = obj->funcs->vmap(obj, &map);
-+	ret = obj->funcs->vmap(obj, map);
- 	if (ret)
--		return ERR_PTR(ret);
--	else if (dma_buf_map_is_null(&map))
--		return ERR_PTR(-ENOMEM);
-+		return ret;
-+	else if (dma_buf_map_is_null(map))
-+		return -ENOMEM;
- 
--	return map.vaddr;
-+	return 0;
- }
- 
--void drm_gem_vunmap(struct drm_gem_object *obj, void *vaddr)
-+void drm_gem_vunmap(struct drm_gem_object *obj, struct dma_buf_map *map)
- {
--	struct dma_buf_map map = DMA_BUF_MAP_INIT_VADDR(vaddr);
--
--	if (!vaddr)
-+	if (dma_buf_map_is_null(map))
- 		return;
- 
- 	if (obj->funcs->vunmap)
--		obj->funcs->vunmap(obj, &map);
-+		obj->funcs->vunmap(obj, map);
-+
-+	/* Always set the mapping to NULL. Callers may rely on this. */
-+	dma_buf_map_clear(map);
- }
- 
- /**
-diff --git a/drivers/gpu/drm/drm_internal.h b/drivers/gpu/drm/drm_internal.h
-index b65865c630b0..58832d75a9bd 100644
---- a/drivers/gpu/drm/drm_internal.h
-+++ b/drivers/gpu/drm/drm_internal.h
-@@ -33,6 +33,7 @@
- 
- struct dentry;
- struct dma_buf;
-+struct dma_buf_map;
- struct drm_connector;
- struct drm_crtc;
- struct drm_framebuffer;
-@@ -187,8 +188,8 @@ void drm_gem_print_info(struct drm_printer *p, unsigned int indent,
- 
- int drm_gem_pin(struct drm_gem_object *obj);
- void drm_gem_unpin(struct drm_gem_object *obj);
--void *drm_gem_vmap(struct drm_gem_object *obj);
--void drm_gem_vunmap(struct drm_gem_object *obj, void *vaddr);
-+int drm_gem_vmap(struct drm_gem_object *obj, struct dma_buf_map *map);
-+void drm_gem_vunmap(struct drm_gem_object *obj, struct dma_buf_map *map);
- 
- /* drm_debugfs.c drm_debugfs_crc.c */
- #if defined(CONFIG_DEBUG_FS)
-diff --git a/drivers/gpu/drm/drm_prime.c b/drivers/gpu/drm/drm_prime.c
-index 89e2a2496734..cb8fbeeb731b 100644
---- a/drivers/gpu/drm/drm_prime.c
-+++ b/drivers/gpu/drm/drm_prime.c
-@@ -667,21 +667,15 @@ EXPORT_SYMBOL(drm_gem_unmap_dma_buf);
-  *
-  * Sets up a kernel virtual mapping. This can be used as the &dma_buf_ops.vmap
-  * callback. Calls into &drm_gem_object_funcs.vmap for device specific handling.
-+ * The kernel virtual address is returned in map.
-  *
-- * Returns the kernel virtual address or NULL on failure.
-+ * Returns 0 on success or a negative errno code otherwise.
-  */
- int drm_gem_dmabuf_vmap(struct dma_buf *dma_buf, struct dma_buf_map *map)
- {
- 	struct drm_gem_object *obj = dma_buf->priv;
--	void *vaddr;
- 
--	vaddr = drm_gem_vmap(obj);
--	if (IS_ERR(vaddr))
--		return PTR_ERR(vaddr);
--
--	dma_buf_map_set_vaddr(map, vaddr);
--
--	return 0;
-+	return drm_gem_vmap(obj, map);
- }
- EXPORT_SYMBOL(drm_gem_dmabuf_vmap);
- 
-@@ -697,7 +691,7 @@ void drm_gem_dmabuf_vunmap(struct dma_buf *dma_buf, struct dma_buf_map *map)
- {
- 	struct drm_gem_object *obj = dma_buf->priv;
- 
--	drm_gem_vunmap(obj, map->vaddr);
-+	drm_gem_vunmap(obj, map);
- }
- EXPORT_SYMBOL(drm_gem_dmabuf_vunmap);
- 
--- 
-2.28.0
+If someone configures DT or the driver to wrong frequencies (making the
+link frequencies not available), the solution is not to add more
+properties. It would be a band aid. The solution is to configure it
+correctly.
+
+> 
+> > 
+> > > This, instead of the clock-frequency property, effectively removes the
+> > > ability to set the correct frequency from the driver, at least with current
+> > > set of the used APIs.
+> > 
+> > It seems you confuse DT bindings with some specific driver
+> > implementation. Bindings do not describe the driver behavior but the
+> > HW. The ability to set the correct frequency from the driver is not
+> > removed. It was never part of the bindings and never should. It is
+> > part of the driver.
+> > 
+> > >
+> > > I suppose you could add a function to set the assigned clock frequency and
+> > > keep it, just as clk_set_rate_exclusive does?
+
+I did not reply to this comment, so let me know. Of course, one could
+add such functions. It's not a job for DT bindings, though.
+
+> > >
+> > > Cc the common clock framework list + maintainers.
+> > 
+> > The bindings have Rob review which is the DT maintainer. His
+> > ack/review is needed for the bindings to be accepted. What more do you
+> > need? Shall I point to submitting-bindings document?
+> > 
+> > I am really tired of discussing this. You raise some concerns about
+> > driver behavior in the wrong context - in the patch for device tree
+> > bindings. You use the arguments about the driver while we talk about
+> > bindings. This is clearly not correct. I am all the time repeating
+> > myself - the bindings describe the hardware, not the driver.
+> 
+> My concerns are not related to the current driver implementation nor the
+> driver patches in this set.
+
+Yet you refer to driver related tasks (configuring provided clock) while
+discussing the bindings.
+
+Best regards,
+Krzysztof
 
