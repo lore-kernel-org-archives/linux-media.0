@@ -7,25 +7,22 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CE8FC54FB2
-	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 19:40:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 105A9C54FB2
+	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 19:40:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D60AC2225D
-	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 19:40:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B784A2225F
+	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 19:40:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438273AbgJTTjb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 20 Oct 2020 15:39:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60088 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2438225AbgJTTja (ORCPT
+        id S2409243AbgJTTkn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 20 Oct 2020 15:40:43 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:44998 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404703AbgJTTjk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 20 Oct 2020 15:39:30 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818B8C0613CE;
-        Tue, 20 Oct 2020 12:39:30 -0700 (PDT)
+        Tue, 20 Oct 2020 15:39:40 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: koike)
-        with ESMTPSA id 6F4E11F44DB5
+        with ESMTPSA id 64CF51F44DB5
 From:   Helen Koike <helen.koike@collabora.com>
 To:     linux-media@vger.kernel.org
 Cc:     devicetree@vger.kernel.org, linux-rockchip@lists.infradead.org,
@@ -35,9 +32,9 @@ Cc:     devicetree@vger.kernel.org, linux-rockchip@lists.infradead.org,
         mark.rutland@arm.com, karthik.poduval@gmail.com,
         eddie.cai.linux@gmail.com, jbx6244@gmail.com,
         zhengsq@rock-chips.com, robin.murphy@arm.com
-Subject: [PATCH v6 6/9] dt-bindings: media: rkisp1: move rockchip-isp1 bindings out of staging
-Date:   Tue, 20 Oct 2020 16:38:47 -0300
-Message-Id: <20201020193850.1460644-7-helen.koike@collabora.com>
+Subject: [PATCH v6 8/9] arm64: dts: rockchip: add isp0 node for rk3399
+Date:   Tue, 20 Oct 2020 16:38:49 -0300
+Message-Id: <20201020193850.1460644-9-helen.koike@collabora.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201020193850.1460644-1-helen.koike@collabora.com>
 References: <20201020193850.1460644-1-helen.koike@collabora.com>
@@ -47,23 +44,63 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Move rkisp1 bindings to Documentation/devicetree/bindings/media
+From: Shunqian Zheng <zhengsq@rock-chips.com>
+
+RK3399 has two ISPs, but only isp0 was tested.
+Add isp0 node in rk3399 dtsi
 
 Verified with:
-make ARCH=arm64 dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/media/rockchip-isp1.yaml
+make ARCH=arm64 dtbs_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/media/rockchip-isp1.yaml
 
+Signed-off-by: Shunqian Zheng <zhengsq@rock-chips.com>
+Signed-off-by: Jacob Chen <jacob2.chen@rock-chips.com>
 Signed-off-by: Helen Koike <helen.koike@collabora.com>
-Acked-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Tomasz Figa <tfiga@chromium.org>
----
- .../devicetree/bindings/media/rockchip-isp1.yaml                  | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
- rename {drivers/staging/media/rkisp1/Documentation => Documentation}/devicetree/bindings/media/rockchip-isp1.yaml (100%)
 
-diff --git a/drivers/staging/media/rkisp1/Documentation/devicetree/bindings/media/rockchip-isp1.yaml b/Documentation/devicetree/bindings/media/rockchip-isp1.yaml
-similarity index 100%
-rename from drivers/staging/media/rkisp1/Documentation/devicetree/bindings/media/rockchip-isp1.yaml
-rename to Documentation/devicetree/bindings/media/rockchip-isp1.yaml
+---
+
+Changes in v6:
+- Add status = "disabled" in the isp0 node
+---
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi | 26 ++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+index ada724b12f014..af5f8e2c5e64d 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+@@ -1723,6 +1723,32 @@ vopb_mmu: iommu@ff903f00 {
+ 		status = "disabled";
+ 	};
+ 
++	isp0: isp0@ff910000 {
++		compatible = "rockchip,rk3399-cif-isp";
++		reg = <0x0 0xff910000 0x0 0x4000>;
++		interrupts = <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH 0>;
++		clocks = <&cru SCLK_ISP0>,
++			 <&cru ACLK_ISP0_WRAPPER>,
++			 <&cru HCLK_ISP0_WRAPPER>;
++		clock-names = "isp", "aclk", "hclk";
++		iommus = <&isp0_mmu>;
++		phys = <&mipi_dphy_rx0>;
++		phy-names = "dphy";
++		power-domains = <&power RK3399_PD_ISP0>;
++		status = "disabled";
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++			};
++		};
++	};
++
+ 	isp0_mmu: iommu@ff914000 {
+ 		compatible = "rockchip,iommu";
+ 		reg = <0x0 0xff914000 0x0 0x100>, <0x0 0xff915000 0x0 0x100>;
 -- 
 2.28.0
 
