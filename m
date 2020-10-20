@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20FDCC54FB2
-	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 12:20:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3566C4363D
+	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 12:21:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BB5762247F
-	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 12:20:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8E66E22265
+	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 12:21:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405881AbgJTMUz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 20 Oct 2020 08:20:55 -0400
-Received: from mx2.suse.de ([195.135.220.15]:53338 "EHLO mx2.suse.de"
+        id S2405910AbgJTMU7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 20 Oct 2020 08:20:59 -0400
+Received: from mx2.suse.de ([195.135.220.15]:53846 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405803AbgJTMUy (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 20 Oct 2020 08:20:54 -0400
+        id S2405803AbgJTMU5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 20 Oct 2020 08:20:57 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 5E2CDB1D2;
-        Tue, 20 Oct 2020 12:20:52 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id C12D7B1DE;
+        Tue, 20 Oct 2020 12:20:55 +0000 (UTC)
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
         airlied@linux.ie, daniel@ffwll.ch, sam@ravnborg.org,
@@ -49,75 +49,142 @@ Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
         linux-rockchip@lists.infradead.org, xen-devel@lists.xenproject.org,
         linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
         Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v5 04/10] drm/exynos: Remove empty exynos_drm_gem_prime_{vmap,vunmap}()
-Date:   Tue, 20 Oct 2020 14:20:40 +0200
-Message-Id: <20201020122046.31167-5-tzimmermann@suse.de>
+Subject: [PATCH v5 09/10] dma-buf-map: Add memcpy and pointer-increment interfaces
+Date:   Tue, 20 Oct 2020 14:20:45 +0200
+Message-Id: <20201020122046.31167-10-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201020122046.31167-1-tzimmermann@suse.de>
 References: <20201020122046.31167-1-tzimmermann@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The functions exynos_drm_gem_prime_{vmap,vunmap}() are empty. Remove
-them before changing the interface to use struct drm_buf_map. As a side
-effect of removing drm_gem_prime_vmap(), the error code changes from
-ENOMEM to EOPNOTSUPP.
+To do framebuffer updates, one needs memcpy from system memory and a
+pointer-increment function. Add both interfaces with documentation.
+
+v5:
+	* include <linux/string.h> to build on sparc64 (Sam)
 
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Acked-by: Christian König <christian.koenig@amd.com>
+Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
 Tested-by: Sam Ravnborg <sam@ravnborg.org>
 ---
- drivers/gpu/drm/exynos/exynos_drm_gem.c | 12 ------------
- drivers/gpu/drm/exynos/exynos_drm_gem.h |  2 --
- 2 files changed, 14 deletions(-)
+ include/linux/dma-buf-map.h | 73 ++++++++++++++++++++++++++++++++-----
+ 1 file changed, 63 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/gpu/drm/exynos/exynos_drm_gem.c b/drivers/gpu/drm/exynos/exynos_drm_gem.c
-index e7a6eb96f692..13a35623ac04 100644
---- a/drivers/gpu/drm/exynos/exynos_drm_gem.c
-+++ b/drivers/gpu/drm/exynos/exynos_drm_gem.c
-@@ -137,8 +137,6 @@ static const struct vm_operations_struct exynos_drm_gem_vm_ops = {
- static const struct drm_gem_object_funcs exynos_drm_gem_object_funcs = {
- 	.free = exynos_drm_gem_free_object,
- 	.get_sg_table = exynos_drm_gem_prime_get_sg_table,
--	.vmap = exynos_drm_gem_prime_vmap,
--	.vunmap	= exynos_drm_gem_prime_vunmap,
- 	.vm_ops = &exynos_drm_gem_vm_ops,
- };
+diff --git a/include/linux/dma-buf-map.h b/include/linux/dma-buf-map.h
+index 2e8bbecb5091..583a3a1f9447 100644
+--- a/include/linux/dma-buf-map.h
++++ b/include/linux/dma-buf-map.h
+@@ -7,6 +7,7 @@
+ #define __DMA_BUF_MAP_H__
  
-@@ -471,16 +469,6 @@ exynos_drm_gem_prime_import_sg_table(struct drm_device *dev,
- 	return &exynos_gem->base;
+ #include <linux/io.h>
++#include <linux/string.h>
+ 
+ /**
+  * DOC: overview
+@@ -32,6 +33,14 @@
+  * accessing the buffer. Use the returned instance and the helper functions
+  * to access the buffer's memory in the correct way.
+  *
++ * The type :c:type:`struct dma_buf_map <dma_buf_map>` and its helpers are
++ * actually independent from the dma-buf infrastructure. When sharing buffers
++ * among devices, drivers have to know the location of the memory to access
++ * the buffers in a safe way. :c:type:`struct dma_buf_map <dma_buf_map>`
++ * solves this problem for dma-buf and its users. If other drivers or
++ * sub-systems require similar functionality, the type could be generalized
++ * and moved to a more prominent header file.
++ *
+  * Open-coding access to :c:type:`struct dma_buf_map <dma_buf_map>` is
+  * considered bad style. Rather then accessing its fields directly, use one
+  * of the provided helper functions, or implement your own. For example,
+@@ -51,6 +60,14 @@
+  *
+  *	dma_buf_map_set_vaddr_iomem(&map. 0xdeadbeaf);
+  *
++ * Instances of struct dma_buf_map do not have to be cleaned up, but
++ * can be cleared to NULL with dma_buf_map_clear(). Cleared mappings
++ * always refer to system memory.
++ *
++ * .. code-block:: c
++ *
++ *	dma_buf_map_clear(&map);
++ *
+  * Test if a mapping is valid with either dma_buf_map_is_set() or
+  * dma_buf_map_is_null().
+  *
+@@ -73,17 +90,19 @@
+  *	if (dma_buf_map_is_equal(&sys_map, &io_map))
+  *		// always false
+  *
+- * Instances of struct dma_buf_map do not have to be cleaned up, but
+- * can be cleared to NULL with dma_buf_map_clear(). Cleared mappings
+- * always refer to system memory.
++ * A set up instance of struct dma_buf_map can be used to access or manipulate
++ * the buffer memory. Depending on the location of the memory, the provided
++ * helpers will pick the correct operations. Data can be copied into the memory
++ * with dma_buf_map_memcpy_to(). The address can be manipulated with
++ * dma_buf_map_incr().
+  *
+- * The type :c:type:`struct dma_buf_map <dma_buf_map>` and its helpers are
+- * actually independent from the dma-buf infrastructure. When sharing buffers
+- * among devices, drivers have to know the location of the memory to access
+- * the buffers in a safe way. :c:type:`struct dma_buf_map <dma_buf_map>`
+- * solves this problem for dma-buf and its users. If other drivers or
+- * sub-systems require similar functionality, the type could be generalized
+- * and moved to a more prominent header file.
++ * .. code-block:: c
++ *
++ *	const void *src = ...; // source buffer
++ *	size_t len = ...; // length of src
++ *
++ *	dma_buf_map_memcpy_to(&map, src, len);
++ *	dma_buf_map_incr(&map, len); // go to first byte after the memcpy
+  */
+ 
+ /**
+@@ -210,4 +229,38 @@ static inline void dma_buf_map_clear(struct dma_buf_map *map)
+ 	}
  }
  
--void *exynos_drm_gem_prime_vmap(struct drm_gem_object *obj)
--{
--	return NULL;
--}
--
--void exynos_drm_gem_prime_vunmap(struct drm_gem_object *obj, void *vaddr)
--{
--	/* Nothing to do */
--}
--
- int exynos_drm_gem_prime_mmap(struct drm_gem_object *obj,
- 			      struct vm_area_struct *vma)
- {
-diff --git a/drivers/gpu/drm/exynos/exynos_drm_gem.h b/drivers/gpu/drm/exynos/exynos_drm_gem.h
-index 74e926abeff0..a23272fb96fb 100644
---- a/drivers/gpu/drm/exynos/exynos_drm_gem.h
-+++ b/drivers/gpu/drm/exynos/exynos_drm_gem.h
-@@ -107,8 +107,6 @@ struct drm_gem_object *
- exynos_drm_gem_prime_import_sg_table(struct drm_device *dev,
- 				     struct dma_buf_attachment *attach,
- 				     struct sg_table *sgt);
--void *exynos_drm_gem_prime_vmap(struct drm_gem_object *obj);
--void exynos_drm_gem_prime_vunmap(struct drm_gem_object *obj, void *vaddr);
- int exynos_drm_gem_prime_mmap(struct drm_gem_object *obj,
- 			      struct vm_area_struct *vma);
- 
++/**
++ * dma_buf_map_memcpy_to - Memcpy into dma-buf mapping
++ * @dst:	The dma-buf mapping structure
++ * @src:	The source buffer
++ * @len:	The number of byte in src
++ *
++ * Copies data into a dma-buf mapping. The source buffer is in system
++ * memory. Depending on the buffer's location, the helper picks the correct
++ * method of accessing the memory.
++ */
++static inline void dma_buf_map_memcpy_to(struct dma_buf_map *dst, const void *src, size_t len)
++{
++	if (dst->is_iomem)
++		memcpy_toio(dst->vaddr_iomem, src, len);
++	else
++		memcpy(dst->vaddr, src, len);
++}
++
++/**
++ * dma_buf_map_incr - Increments the address stored in a dma-buf mapping
++ * @map:	The dma-buf mapping structure
++ * @incr:	The number of bytes to increment
++ *
++ * Increments the address stored in a dma-buf mapping. Depending on the
++ * buffer's location, the correct value will be updated.
++ */
++static inline void dma_buf_map_incr(struct dma_buf_map *map, size_t incr)
++{
++	if (map->is_iomem)
++		map->vaddr_iomem += incr;
++	else
++		map->vaddr += incr;
++}
++
+ #endif /* __DMA_BUF_MAP_H__ */
 -- 
 2.28.0
 
