@@ -2,106 +2,112 @@ Return-Path: <SRS0=VxL7=D3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1DFCC433DF
-	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 10:03:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92C6EC433E7
+	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 10:05:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 98F8E22282
-	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 10:03:00 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="kbnNLxlq"
+	by mail.kernel.org (Postfix) with ESMTP id 4167B22253
+	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 10:05:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405857AbgJTKCr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 20 Oct 2020 06:02:47 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:37584 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728719AbgJTKCr (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 20 Oct 2020 06:02:47 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09K9lgqw020208;
-        Tue, 20 Oct 2020 12:02:36 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=STMicroelectronics;
- bh=JsMBxHUR3TyEsbIKx2nG3z57ppPOW5UA7QwvTV532t8=;
- b=kbnNLxlqWbCjkY2Bwk0VDNN5S51L8KJaqAsybrNqqn4MPRN6hweKMm3x/WeIaxeanjY5
- 9CF9BDosAefuWyWh5aFekhyECx8mSNReU/0sM/o0C8CZdH/YIAWj7OMxQhMQ6Z6CoIO1
- I337pfElzXt2rOHPv0x2KzvGkyWFweeFm/QaqLqx0PS9qPcKTxfoYL1HmW0p07FgG5LF
- UdAKhZWeD5964qXhZSkxiAZskzAOrCkBefx+AKUL1MFo16v1tAGVwRA3CWOODrYXTBqz
- qHVQEpBTERjNVfu4lKw4kJ96UeRcdtK1Dak9kqR3GiW7gxaHoYXwCnYpYRxZIJDTg22o MA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 347qgg2e16-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Oct 2020 12:02:36 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B8F74100034;
-        Tue, 20 Oct 2020 12:02:35 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag1node1.st.com [10.75.127.1])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A1D6A2C41F8;
-        Tue, 20 Oct 2020 12:02:35 +0200 (CEST)
-Received: from localhost (10.75.127.46) by SFHDAG1NODE1.st.com (10.75.127.1)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 20 Oct 2020 12:02:35
- +0200
-From:   Hugues Fruchet <hugues.fruchet@st.com>
-To:     Alexandre Torgue <alexandre.torgue@st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Hugues Fruchet <hugues.fruchet@st.com>,
-        Alain Volmat <alain.volmat@st.com>,
-        Yannick Fertre <yannick.fertre@st.com>,
-        Philippe CORNU <philippe.cornu@st.com>
-Subject: [PATCH v3 0/2] DCMI BT656 parallel bus mode support
-Date:   Tue, 20 Oct 2020 12:02:30 +0200
-Message-ID: <1603188152-22783-1-git-send-email-hugues.fruchet@st.com>
-X-Mailer: git-send-email 2.7.4
+        id S2405904AbgJTKFS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 20 Oct 2020 06:05:18 -0400
+Received: from mga17.intel.com ([192.55.52.151]:9626 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2405412AbgJTKFS (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 20 Oct 2020 06:05:18 -0400
+IronPort-SDR: 4pu+Qx3YSahBQ4f9shrHwmz37sx+ZcSb9LIGB4MuH5jHCF3TylbSyY+ykPahLPrupBpUDmfVDd
+ yU5JqfD+y9QQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9779"; a="147041745"
+X-IronPort-AV: E=Sophos;i="5.77,396,1596524400"; 
+   d="scan'208";a="147041745"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2020 03:05:18 -0700
+IronPort-SDR: 35GOW96f0+iCOOvX8X8vt+j0U8FL8ZJ+CjbcpGTt1NuTnA+G5U/f7dnbITHEhGicyhF70Yq6m8
+ AxXeIHh0WV5w==
+X-IronPort-AV: E=Sophos;i="5.77,396,1596524400"; 
+   d="scan'208";a="465879281"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2020 03:05:12 -0700
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id A9E252068C; Tue, 20 Oct 2020 13:05:10 +0300 (EEST)
+Date:   Tue, 20 Oct 2020 13:05:10 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Daniel Scally <djrscally@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux.walleij@linaro.org, prabhakar.mahadev-lad.rj@bp.renesas.com,
+        heikki.krogerus@linux.intel.com, dmitry.torokhov@gmail.com,
+        laurent.pinchart+renesas@ideasonboard.com,
+        kieran.bingham+renesas@ideasonboard.com, jacopo+renesas@jmondi.org,
+        robh@kernel.org, davem@davemloft.net, linux@rasmusvillemoes.dk,
+        andriy.shevchenko@linux.intel.com, sergey.senozhatsky@gmail.com,
+        rostedt@goodmis.org, pmladek@suse.com, mchehab@kernel.org,
+        tian.shu.qiu@intel.com, bingbu.cao@intel.com, yong.zhi@intel.com,
+        rafael@kernel.org, gregkh@linuxfoundation.org, kitakar@gmail.com,
+        dan.carpenter@oracle.org
+Subject: Re: [RFC PATCH v3 1/9] software_node: Add helper function to
+ unregister arrays of software_nodes ordered parent to child
+Message-ID: <20201020100510.GS13341@paasikivi.fi.intel.com>
+References: <20201019225903.14276-1-djrscally@gmail.com>
+ <20201019225903.14276-2-djrscally@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG1NODE1.st.com
- (10.75.127.1)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-10-20_04:2020-10-20,2020-10-20 signatures=0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201019225903.14276-2-djrscally@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support of BT656 embedded synchronization bus.
-This mode allows to save hardware synchro lines hsync & vsync
-by replacing them with synchro codes embedded in data stream.
-This mode is enabled when hsync-active & vsync-active
-fields are not specified in devicetree.
+Hi Daniel, Andy,
 
-===========
-= history =
-===========
-version 3:
-  - Fix bus_width print to %u as per Sakari comment
+On Mon, Oct 19, 2020 at 11:58:55PM +0100, Daniel Scally wrote:
+> Software nodes that are children of another software node should be
+> unregistered before their parent. To allow easy unregistering of an array
+> of software_nodes ordered parent to child, add a helper function to loop
+> over and unregister nodes in such an array in reverse order.
+> 
+> Suggested-by: Andriy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Daniel Scally <djrscally@gmail.com>
+> ---
+> Changes in v3:
+> 	- patch introduced.
+> 
+>  drivers/base/swnode.c    | 21 +++++++++++++++++++++
+>  include/linux/property.h |  1 +
+>  2 files changed, 22 insertions(+)
+> 
+> diff --git a/drivers/base/swnode.c b/drivers/base/swnode.c
+> index 010828fc7..f01b1cc61 100644
+> --- a/drivers/base/swnode.c
+> +++ b/drivers/base/swnode.c
+> @@ -727,6 +727,27 @@ void software_node_unregister_nodes(const struct software_node *nodes)
+>  }
+>  EXPORT_SYMBOL_GPL(software_node_unregister_nodes);
+>  
+> +/**
+> + * software_node_unregister_nodes_reverse - Unregister an array of software
+> + * nodes in reverse order.
+> + * @nodes: Array of software nodes to be unregistered.
+> + *
+> + * NOTE: The same warning applies as with software_node_unregister_nodes.
+> + * Unless you are _sure_ that the array of nodes is ordered parent to child
+> + * it is wiser to remove them individually in the correct order.
 
-version 2:
-  - As per Sakari remark, revisit commit message and document
-    BT656 parallel bus mode in bindings
+Could the default order in software_node_unregister_nodes() be reversed
+instead? There are no users so this should be easy to change.
 
-version 1:
-  - Initial submission
+Doing this only one way may require enforcing the registration order in
+software_node_register_nodes(), but the end result would be safer.
 
-Hugues Fruchet (2):
-  media: stm32-dcmi: add support of BT656 bus
-  media: dt-bindings: media: st,stm32-dcmi: Add support of BT656
-
- .../devicetree/bindings/media/st,stm32-dcmi.yaml   | 30 ++++++++++++++++++
- drivers/media/platform/stm32/stm32-dcmi.c          | 37 ++++++++++++++++++++--
- 2 files changed, 65 insertions(+), 2 deletions(-)
+What do you think?
 
 -- 
-2.7.4
+Regards,
 
+Sakari Ailus
