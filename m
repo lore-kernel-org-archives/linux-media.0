@@ -2,83 +2,145 @@ Return-Path: <SRS0=VxL7=D3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_FROM,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E9D2C433E7
-	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 09:19:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AB66C433E7
+	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 09:19:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1FD46222C8
-	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 09:19:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E0992242E
+	for <linux-media@archiver.kernel.org>; Tue, 20 Oct 2020 09:19:27 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H5pxUAMI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392382AbgJTJTD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 20 Oct 2020 05:19:03 -0400
-Received: from mga17.intel.com ([192.55.52.151]:5080 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391205AbgJTJTC (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 20 Oct 2020 05:19:02 -0400
-IronPort-SDR: wUhLC7L0YMUAyXGslRYhDFncWBGA6nDdYjtltzZqh3iLrFA72c/jMz+rQFY3zZ5j/4cqgv6C6K
- y6BaMqsQa2hA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9779"; a="147037018"
-X-IronPort-AV: E=Sophos;i="5.77,396,1596524400"; 
-   d="scan'208";a="147037018"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2020 02:19:02 -0700
-IronPort-SDR: CMrq0FA3VNHs1JPZfErt9eYtSM2/0dTXWFAK82KHqJWn7lss5wKkvYs8tOkD0mq7vjXcBNGeE2
- APKZzZG9GLkw==
-X-IronPort-AV: E=Sophos;i="5.77,396,1596524400"; 
-   d="scan'208";a="353272831"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2020 02:18:56 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kUnoE-00BJu4-Lr; Tue, 20 Oct 2020 12:19:58 +0300
-Date:   Tue, 20 Oct 2020 12:19:58 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Daniel Scally <djrscally@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux.walleij@linaro.org, prabhakar.mahadev-lad.rj@bp.renesas.com,
-        heikki.krogerus@linux.intel.com, dmitry.torokhov@gmail.com,
-        laurent.pinchart+renesas@ideasonboard.com,
-        kieran.bingham+renesas@ideasonboard.com, jacopo+renesas@jmondi.org,
-        robh@kernel.org, davem@davemloft.net, linux@rasmusvillemoes.dk,
-        sergey.senozhatsky@gmail.com, rostedt@goodmis.org,
-        pmladek@suse.com, mchehab@kernel.org, tian.shu.qiu@intel.com,
-        bingbu.cao@intel.com, sakari.ailus@linux.intel.com,
-        yong.zhi@intel.com, rafael@kernel.org, gregkh@linuxfoundation.org,
-        kitakar@gmail.com, dan.carpenter@oracle.org
-Subject: Re: [RFC PATCH v3 7/9] ipu3-cio2: Check if pci_dev->dev's fwnode is
- a software_node in cio2_parse_firmware() and set
- FWNODE_GRAPH_DEVICE_DISABLED if so
-Message-ID: <20201020091958.GC4077@smile.fi.intel.com>
-References: <20201019225903.14276-1-djrscally@gmail.com>
- <20201019225903.14276-8-djrscally@gmail.com>
+        id S2392673AbgJTJT1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 20 Oct 2020 05:19:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48320 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391238AbgJTJT0 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 20 Oct 2020 05:19:26 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAB6C061755;
+        Tue, 20 Oct 2020 02:19:26 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id n6so1199691wrm.13;
+        Tue, 20 Oct 2020 02:19:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=G55jsoO41AdZ7cjprwBTVcg52NPKR1+58eYRGpqfSgc=;
+        b=H5pxUAMI8AUZf3bcCMhDwNh6szblzd+C6n2Ae9LaiXW2AGFOjsJudpUPR5GmDCnYJq
+         KctPbP9gDeI6RO5IELne1KXUUKQTB95r9uZ/sJnmrfskoeuOsPqx9qtxeLCa46VJYOSi
+         ct4KLXmSA/gQtE6lMG2jbMyWY1dyv0n65n99Nbf49GHR7TuveE2iHZkiiEp0bfm0SrNX
+         QCnOw3Agpysb/3g/QUS8I2d4e+QebYET1T1fBq2cfjSI5bKov+4ypCjAUpXsLVqCKzSZ
+         5zlPcYqp6s+7fqxjzNK4BlElP2JnV4S2FBmMa5ET5Zg04+FcFpf6CK/+EON26xXql8yK
+         vs0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=G55jsoO41AdZ7cjprwBTVcg52NPKR1+58eYRGpqfSgc=;
+        b=OSgYOr86xOr9g8tnKTzMWxNmGjAnzMPTWIVUg80TZb4xWR4Rgrk/f//A64gem10MOT
+         WPyJowQdUwzBXchJ9z/r6DlYApsYWMewbI+3h/sCisBv6Bm2W5Cx24HOf7TTwUQahRMC
+         4AG4tbosC2EsEg6nlYARYaepFpSyf//+VjkR7cnJwwDnv9w16htZEk82zLBm94H6bTtj
+         D1/HHGYrxXAnE06y+kmV70bzQXRGlN/N98k/gmMlujUYWzZSW2LQyU42hsQCkRRn1KNA
+         BAhkTVTDQFlUz25zQ3Dj04ykovEjkXYmU+LgQJpKnZp3aU4Gk2k1zDyr4e6lXhUQCyUF
+         JoCw==
+X-Gm-Message-State: AOAM530r4X4xV8DGTMV6rvVluViE3FtdckcBQlnJx5KckAofSaOhtqj0
+        1QNa+eMBmKgWs+Ub5+FcrQjBkDdtP5QWkg==
+X-Google-Smtp-Source: ABdhPJw6xDviu+Aknk/OFvgM0nEyNiQpfBndDHeEZkcARpLTvHFI0N/EudeXQrGOqJcWtJ1tbidApA==
+X-Received: by 2002:a5d:62cf:: with SMTP id o15mr2310697wrv.49.1603185565225;
+        Tue, 20 Oct 2020 02:19:25 -0700 (PDT)
+Received: from arch-thunder.local (a109-49-46-234.cpe.netcabo.pt. [109.49.46.234])
+        by smtp.gmail.com with ESMTPSA id g5sm1773660wmi.4.2020.10.20.02.19.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Oct 2020 02:19:24 -0700 (PDT)
+From:   Rui Miguel Silva <rmfrfs@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>, sakari.ailus@linux.intel.com,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        Rui Miguel Silva <rmfrfs@gmail.com>
+Subject: [PATCH v4 0/3] dt-bindings: media: imx7 and ov2680 updates to yaml
+Date:   Tue, 20 Oct 2020 10:19:18 +0100
+Message-Id: <20201020091921.1730003-1-rmfrfs@gmail.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201019225903.14276-8-djrscally@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Oct 19, 2020 at 11:59:01PM +0100, Daniel Scally wrote:
-> fwnode_graph_get_endpoint_by_id() will optionally parse enabled devices
-> only; that status being determined through the .device_is_available() op
-> of the device's fwnode. As software_nodes don't have that operation and
-> adding it is meaningless, we instead need to check if the device's fwnode
-> is a software_node and if so pass the appropriate flag to disable that
-> check
+Update bindings documentation to json-schema yaml in imx7 csi, mipi csi and
+ov2680 sensor media devices along the respective MAINTAINERS entry.
 
-Period.
+Cheers,
+  Rui
 
-I'm wondering if actually this can be hidden in fwnode_graph_get_endpoint_by_id().
+v3 -> v4:
+  Rob Herring:
+  Patch 1/3:
+    https://lore.kernel.org/linux-media/20201019203910.GB3550266@bogus/
+    - remove clock-names description
+    - add maxItems to reset-gpios
+
+v2 -> v3:
+  Jacopo Mondi:
+  Patch 1/3:
+    https://lore.kernel.org/linux-media/20201015144905.4b23k5uy7ycuhvlo@uno.localdomain/
+    - add prefix ovti to yaml file
+    - remove double space
+    - adjust port properties
+    - fix additional properties
+    - fix end of file line and empty line before ...
+    - add Jacopo Reviewed-by tag
+
+  Patch 2/3:
+    https://lore.kernel.org/linux-media/20201015144905.4b23k5uy7ycuhvlo@uno.localdomain/
+    - fix dual license
+    - rearrange ports properties
+    - add Jacopo Reviewed-by tag
+
+  Patch 3/3:
+    https://lore.kernel.org/linux-media/20201015144905.4b23k5uy7ycuhvlo@uno.localdomain/
+    - fix dual license
+    - capital letters fix
+    - const instead of enum in compatible
+    - data lanes array setup
+    - add phy-supply to required
+    - additionalProperties replace
+
+v1 -> v2:
+  Sakari Ailus - Patch 1/3:
+  https://lore.kernel.org/linux-media/20201013160908.GC13341@paasikivi.fi.intel.com/
+  - omit remote-endpoint
+  - remove not needed clock-lanes and data-lanes
+
+
+
+Rui Miguel Silva (3):
+  dt-bindings: ov2680: convert bindings to yaml
+  dt-bindings: imx7-csi: convert bindings to yaml
+  dt-bindings: imx7-mipi-csi2: convert bindings to yaml
+
+ .../devicetree/bindings/media/i2c/ov2680.txt  |  46 -----
+ .../bindings/media/i2c/ovti,ov2680.yaml       |  99 ++++++++++
+ .../devicetree/bindings/media/imx7-csi.txt    |  42 -----
+ .../bindings/media/imx7-mipi-csi2.txt         |  90 ---------
+ .../bindings/media/nxp,imx7-csi.yaml          |  71 ++++++++
+ .../bindings/media/nxp,imx7-mipi-csi2.yaml    | 172 ++++++++++++++++++
+ MAINTAINERS                                   |   6 +-
+ 7 files changed, 345 insertions(+), 181 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/media/i2c/ov2680.txt
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov2680.yaml
+ delete mode 100644 Documentation/devicetree/bindings/media/imx7-csi.txt
+ delete mode 100644 Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt
+ create mode 100644 Documentation/devicetree/bindings/media/nxp,imx7-csi.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.28.0
 
