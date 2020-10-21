@@ -2,136 +2,152 @@ Return-Path: <SRS0=alUM=D4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-5.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_FROM,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D82C7C56201
-	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 20:51:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71EB0C388F9
+	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 20:59:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5759A24196
-	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 20:51:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0169124182
+	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 20:59:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QESSSmiD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qKfACjW2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505520AbgJUUvO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 21 Oct 2020 16:51:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39614 "EHLO
+        id S2440004AbgJUU7L (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 21 Oct 2020 16:59:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2505515AbgJUUvO (ORCPT
+        with ESMTP id S2393312AbgJUU7I (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 21 Oct 2020 16:51:14 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72545C0613CE;
-        Wed, 21 Oct 2020 13:51:13 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id e17so4536157wru.12;
-        Wed, 21 Oct 2020 13:51:13 -0700 (PDT)
+        Wed, 21 Oct 2020 16:59:08 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCE7C0613CE;
+        Wed, 21 Oct 2020 13:59:08 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id z22so3178052wmi.0;
+        Wed, 21 Oct 2020 13:59:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FgxhUD02c/xYovXfydIbXjUJaRV+G+vpW2pE3oaVlJw=;
-        b=QESSSmiDd2vM8yLaF3qB6SeYC9e/M9UvddRdTU+1Bgr/HzpycnrtPmGbjQNMctJJ3h
-         wGNzCs9JSQRHhl+EbAvcE/uKiORyefG39vLW4v6n3KSWm9bNAFFUuMxk4QFun3Cijr1o
-         s8SvKFE216/aJsS5Y1nGRX9v97mdIQ/Ta+T6FcHNBuHy5A6mtTYuHalEL5rpywfG/FTk
-         odXBNLlS4PENthIoG+ekZxcHmEiQaNwZk0jNDS9MQ0D36zAy7JTRwejuVVqE+PTV1K1R
-         LxDAYe8aF6UI2AxHxlFgegUMTs3l1/ePFIaLezCKi7XUevV7AuDav51v/LQBVUm9HXDI
-         OxJw==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=Q1NKMcSOe9b+qsiaH8aTA03vYMnG2ZoSX2yxXb05R/Y=;
+        b=qKfACjW2xnC0rvQ9v1HOxbYmaCSjKpED0TSJihI0QBTvhtCiis0darmOpowu4MyWKS
+         Q8P26L902olFs+g5evVwyF8DDWzqwmRQndqWngey3FHPxuPNg1UNwL14CMrUugqEVG/g
+         upnRt+sLlY6bj2cNLmnQ5mOmHLZA8S2jbAKyauglzuQToySTmdGAph/DARBqyo12GD5S
+         32ncNvCWM2md84bQtQHoTVmnJzb3WR3gjXiG1hbbCr1VCiNhAeKLL+nxhHYECuIpFBSn
+         lP3PiiXZjUuFe1H1T5cWnBkGw6CHDXcgn8bsXHnCAncLGgEnJYx0gV8Uy/KV9PLcIEs1
+         etWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FgxhUD02c/xYovXfydIbXjUJaRV+G+vpW2pE3oaVlJw=;
-        b=gLvPZm9waVue3LLuJEKydh64wuX6JlHVpCcrGTILR/KsHGqxfKFUAKeHiDlTpq073R
-         c63g/drsOXMYGk18vO7tVhGdskNrkrLU9RK990nDziNFpCwO6V4B/kadveO8ipd/rP0U
-         J9z6GN4Qta5nHq7lUNHnCzZ5FCIRkhnDKdlTenWwFhyPK+hbdVUgm/j1CPbPaI6iJVTg
-         mxLQZu33FUaCSBT8Ck6Wuht7spQvmn+QhM1078loYUTqr5F29E5hCBYn7n4KPccpejZh
-         iicSV9gf0yQfHyUOhvotOp3xWwmkBKodaldqVdt14Wv0pUAf4Ha4Hn4+oQ9nO3LMBj87
-         bH2A==
-X-Gm-Message-State: AOAM531CNXvMc9EXmYVe5XPbPdQUtNOf6VhOy6ifHIv7IXwuBDzCYVdf
-        gJqorUzce3Q8Wv8KncSu5IY=
-X-Google-Smtp-Source: ABdhPJxxn6Svk4YyzRPkXggAogLMbnp4GF40t4QTnAcBwtPeNZHRtBAb4KLFknjMSrsdUd5cZ8srNQ==
-X-Received: by 2002:adf:ed8f:: with SMTP id c15mr6342089wro.136.1603313472107;
-        Wed, 21 Oct 2020 13:51:12 -0700 (PDT)
-Received: from arch-thunder.localdomain (a109-49-46-234.cpe.netcabo.pt. [109.49.46.234])
-        by smtp.gmail.com with ESMTPSA id p9sm5001726wma.12.2020.10.21.13.51.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Oct 2020 13:51:11 -0700 (PDT)
-Date:   Wed, 21 Oct 2020 21:51:08 +0100
-From:   Rui Miguel Silva <rmfrfs@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=Q1NKMcSOe9b+qsiaH8aTA03vYMnG2ZoSX2yxXb05R/Y=;
+        b=R2APsGJRNCRpB8I0Hl8357+y65f6KeNV9hazHeehcvX2D7Yj4OghhoQdHT4oL4t5CL
+         /wUMgHJd+JhF1sZ37+5pdLibu1S2pTLKQhYbWbRCcF4y4lIv5cGwSk8R7NYw5EL+gedp
+         Wf8u/0G9R9eEAx0H34VuM1qLO5CM3iaNeHCJurlIcl9rFz5vSNrrGeLJILneHLnRd8EU
+         QkPVpYM2Jmxv2he3rWW4DWY0/NF1hc6IGCT2sw9tcXBzQLPTmOrQP1Q/dw4vLxbx16mJ
+         nmRgSRvDb6BOALcWS7ZGwu3E5arjH6oJf/OYIY0pzBhOq/uP9AC8JO/WzQuGyDSntjOL
+         p0gQ==
+X-Gm-Message-State: AOAM532+JMuGBUrmX6c8rqabWY5b1nZ/rFJG9miqYSQzq5cPQ9jGc0/x
+        Iiu8/TfeLHr0aYi/jbo74Xj17VrkgfLzlHdv
+X-Google-Smtp-Source: ABdhPJxk7m3kz98eLybI4oIBAgM3mVENX60rImBbxPPZhlnRmpb2+OzopUJImL3tVZBjRQx9m2Xe8w==
+X-Received: by 2002:a1c:4904:: with SMTP id w4mr4739912wma.99.1603313947284;
+        Wed, 21 Oct 2020 13:59:07 -0700 (PDT)
+Received: from [192.168.1.158] ([2.26.187.29])
+        by smtp.gmail.com with ESMTPSA id d30sm5980990wrc.19.2020.10.21.13.59.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Oct 2020 13:59:06 -0700 (PDT)
+Subject: Re: [RFC PATCH v3 0/9] Add functionality to ipu3-cio2 driver allowing
+ software_node connections to sensors on platforms designed for Windows
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Media Mailing List <linux-media@vger.kernel.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] dt-bindings: imx7-mipi-csi2: convert bindings to
- yaml
-Message-ID: <20201021205108.jjmxk6p62cou3rjm@arch-thunder.localdomain>
-References: <20201020091921.1730003-1-rmfrfs@gmail.com>
- <20201020091921.1730003-4-rmfrfs@gmail.com>
- <20201020153044.GA875273@bogus>
- <20201020185206.qst2uksgcy3axbnh@arch-thunder.localdomain>
- <CAL_JsqKzvMj4WZz3N8wf=H8p3bZGo_vohWE9pdaSWwjxB5tDgQ@mail.gmail.com>
+        prabhakar.mahadev-lad.rj@bp.renesas.com,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Rob Herring <robh@kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        tian.shu.qiu@intel.com, Bingbu Cao <bingbu.cao@intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        yong.zhi@intel.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kitakar@gmail.com, dan.carpenter@oracle.org,
+        Linus Walleij <linus.walleij@linaro.org>
+References: <20201019225903.14276-1-djrscally@gmail.com>
+ <CAJZ5v0g2hQV9RNq3LZqrpQ5LP0rR+fxwdWcwwnzWh1g2dLdmjw@mail.gmail.com>
+From:   Daniel Scally <djrscally@gmail.com>
+Message-ID: <6aa10740-ae07-16c3-d3a2-8c42af2a259a@gmail.com>
+Date:   Wed, 21 Oct 2020 21:59:04 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqKzvMj4WZz3N8wf=H8p3bZGo_vohWE9pdaSWwjxB5tDgQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0g2hQV9RNq3LZqrpQ5LP0rR+fxwdWcwwnzWh1g2dLdmjw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Rob,
-On Wed, Oct 21, 2020 at 08:05:53AM -0500, Rob Herring wrote:
-> On Tue, Oct 20, 2020 at 1:52 PM Rui Miguel Silva <rmfrfs@gmail.com> wrote:
-> >
-> > Hi Rob Bot,
-> > On Tue, Oct 20, 2020 at 10:30:44AM -0500, Rob Herring wrote:
-> > > On Tue, 20 Oct 2020 10:19:21 +0100, Rui Miguel Silva wrote:
-> > > > Convert imx7 mipi csi2 bindings documentation to yaml schema, remove
-> > > > the textual document and update MAINTAINERS entry.
-> > > >
-> > > > Signed-off-by: Rui Miguel Silva <rmfrfs@gmail.com>
-> > > > ---
-> > > >  .../bindings/media/imx7-mipi-csi2.txt         |  90 ---------
-> > > >  .../bindings/media/nxp,imx7-mipi-csi2.yaml    | 172 ++++++++++++++++++
-> > > >  MAINTAINERS                                   |   2 +-
-> > > >  3 files changed, 173 insertions(+), 91 deletions(-)
-> > > >  delete mode 100644 Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt
-> > > >  create mode 100644 Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
-> > > >
-> > >
-> > >
-> > > My bot found errors running 'make dt_binding_check' on your patch:
-> > >
-> > > ./Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml:91:21: [warning] wrong indentation: expected 22 but found 20 (indentation)
-> > > ./Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml:93:21: [warning] wrong indentation: expected 22 but found 20 (indentation)
-> >
-> > Strange not to complain on line 94 also.
-> >
-> > >
-> > >
-> > > See https://patchwork.ozlabs.org/patch/1384742
-> > >
-> > > If you already ran 'make dt_binding_check' and didn't see the above
-> > > error(s), then make sure dt-schema is up to date:
-> > >
-> > > pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
-> >
-> > I have done this and I am at version:
-> > 2020.8.2.dev4+g341f3e35180a
-> >
-> > and still do not get any warning on this file. Nevertheless I
-> > found the indentation issue and will:
-> 
-> It's coming from yamllint which is recently added (this merge window)
-> and is optionally run if yamllint is present. Will clarify this in the
-> email.
-
-Got it, thanks for the explanation.
-
-------
-Cheers,
-     Rui
+On 20/10/2020 14:38, Rafael J. Wysocki wrote:
+> [Fix the Linus Walleij's address.]
+Thanks - much appreciated
+> On Tue, Oct 20, 2020 at 12:59 AM Daniel Scally <djrscally@gmail.com> wrote:
+>> Hello all
+>>
+>> This series adds support to the ipu3-cio2 driver for fwnode connections
+>> between cio2 and sensors to be defined via software_nodes. The final patch
+>> in the series deals wholly with those changes - the preceding patches are
+>> either supporting changes to accommodate that or incidental fixes along
+>> the way:
+>>
+>> 1/9 adds a function to drivers/base/swnode.c unwinding arrays of software
+>> nodes in reverse order
+>>
+>> 2/9 uses that function in lib/test_printf.c
+>>
+>> 3/9 fixes what seems to me to be a bug in the existing swnode.c code in
+>> that software_node_get_next_child() does not increase the refcount of the
+>> returned node (in contrast to, for example, of_get_next_child_node() which
+>> does increase the count)
+>>
+>> 4/9 adds the fwnode_graph*() family of functions to the software_node
+>> implementation
+>>
+>> 5/9 adds a T: entry to MAINTAINERS for the ipu3-cio2 driver
+>>
+>> 6/9 renames the ipu3-cio2.c file to ipu3-cio2-main.c and fixes Makefile
+>> to accommodate that change
+>>
+>> 7/9 alters the ipu3-cio2 driver to check if the pci_dev's fwnode is a
+>> software_node and pass flags to fwnode_graph_get_endpoint_by_id() if so
+>>
+>> 8/9 alters match_fwnode() in v4l2-async.c to additionally try to match on
+>> a fwnode_handle's secondary if the primary doesn't match
+>>
+>> 9/9 alters the ipu3-cio2 driver to do the actual building of software_node
+>> connections between the sensor devices and the cio2 device.
+>>
+>> This is still not ready for integration - hence the RFC label - as there
+>> is ongoing work to extend the ipu3-cio2 driver further to parse ACPI
+>> to discover resources such as regulators and GPIOs that are defined there
+>> in unusual ways and map them to the sensor devices so that their drivers
+>> can consume them transparently through the usual frameworks. Given this
+>> has changed quite extensively from v2 though, I wanted to submit it for
+>> feedback at this point in case it needs further large scale change.
+> I would appreciate it if you posted the next version of this series
+> (all patches) to linux-acpi@vger.kernel.org for easier review.
+>
+> Thanks!
+Sure thing, I'll make sure to add that list to next version
