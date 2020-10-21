@@ -7,54 +7,54 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56EF9C83011
-	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 08:57:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4969BC83002
+	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 08:58:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EEAEB2227F
-	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 08:57:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 19BCC22251
+	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 08:58:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="D88rd5Jf"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="T/wziZBv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2441177AbgJUI5k (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 21 Oct 2020 04:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41426 "EHLO
+        id S2502389AbgJUI5Z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 21 Oct 2020 04:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2502422AbgJUI5a (ORCPT
+        with ESMTP id S2502342AbgJUI5R (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 21 Oct 2020 04:57:30 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FDF5C0613A8
-        for <linux-media@vger.kernel.org>; Wed, 21 Oct 2020 01:57:27 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id s9so2075912wro.8
-        for <linux-media@vger.kernel.org>; Wed, 21 Oct 2020 01:57:27 -0700 (PDT)
+        Wed, 21 Oct 2020 04:57:17 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90BCC0613D9
+        for <linux-media@vger.kernel.org>; Wed, 21 Oct 2020 01:57:16 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id b8so2198444wrn.0
+        for <linux-media@vger.kernel.org>; Wed, 21 Oct 2020 01:57:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ylZkHmK3aE1VlYRsGRUx3nUrnQWYBOnVeS+ToU4JUCI=;
-        b=D88rd5JfQWap5HZksMfg9cXMMl3QwJVhjS6+VSQvUjjDd24gp69dQjtY144venALwF
-         VsrNY/8fJu7KcREUK2gdnkvUKz4v4CFfNVYD7BE7l4swdssS9MrlGthSCyyUQikNqz1t
-         3VSJEkLS9OteyMKDcMhL8pGN2qtRl9K89wcCU=
+        bh=6FXNrAQVDv1GTk8GGIBMBQb/Z7TasoUYfJDj34pJUVI=;
+        b=T/wziZBvTeYdpgXtCKfWeTCOgG6ZxQR1iNX7ttAqm5X7cINbcDOihlyivfIStE4ANr
+         0qrqTjm8QE7XBP58Kl+sS22BQ+9w8LYcHgu8lltEf/ygHjiE7VPVTCnywJMpDHX3sgzA
+         Ygc4PLFqiL0ZtCsDJT7/VAACIReSV3eUwGPjQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ylZkHmK3aE1VlYRsGRUx3nUrnQWYBOnVeS+ToU4JUCI=;
-        b=OEMHCEZstFLugyesUQ/giUbMm7FxyUXhG+r9l/lEaQXATbEAqRix5FMdDAX6QosabV
-         bVkBgsVXwhRnDuuHqSfe1DS4I/+3gsyPKuJNF6fRi4bCO2icybe6RwmgflDnldeXpvU/
-         aSZ+ZhWGmt4+q+Cxh6HVyTeIrX1/DEtx/sIJSF5/65kOvNxKVWVBcS9O81BtFzqi0j3h
-         AUGihvU6tYKtgFkEPA0FI/mID/Sdqd8WPuK0pSNujtyE/AD/5D5My29NXgGRVRpeUQx0
-         BzT1zxUP2PaKl01LuyzH+SaRtokLeR12I3q1aK0zT6keXuksUMDxb97wtzfdOCcPWQP9
-         fHVw==
-X-Gm-Message-State: AOAM530Kb2JnCN1j4k4kWDGpTfpiLncqLg1PbcFqch3gQR04clGSIt9M
-        QDiX1Ue7jFPlB4saSGFXZ0r5GQ==
-X-Google-Smtp-Source: ABdhPJyRYpgvahsTCZYVhKWO7YaUqSYEiS71WxybX5MQOWBTVSJxRg21hOuSPVSQTJs5khc2TIcK9w==
-X-Received: by 2002:adf:f810:: with SMTP id s16mr3280019wrp.424.1603270646012;
-        Wed, 21 Oct 2020 01:57:26 -0700 (PDT)
+        bh=6FXNrAQVDv1GTk8GGIBMBQb/Z7TasoUYfJDj34pJUVI=;
+        b=OG5viyz9AW0X+60c5tcO0ahRmMAs5EKiUUQWc4M68hiJRc9HXBNEFm3AVgSHxafAeZ
+         dHMNxuzw6fMDtP/02Owoabdqh6WGBmJNqA0o71mIfj5PNxD3M7xoIQheunoYO1WEZqJW
+         fwALLQQkKaLBnmxCi06GbebxrZ3tU0z4B9jUZHzBAyVJExVJlAZTE+H4KFMfRU41us1p
+         9xVNE90oQZ2qtYXtkmidAjHT14N24Jjh0r1RDmfEJwDxNlj0UekXLsGBYiMggVoiZ9Vz
+         KSfhFDHFg9vsjlWNU4PFSz1KfeVFSi9dm6SNVcN8pywMao5S6z+URSYm4wnERoKYQcte
+         bevg==
+X-Gm-Message-State: AOAM533pEeyJriifZHpMuSU33gA8ILlYvZ9BD4ZBDJ/9FjPf2LTo3HhN
+        4aNGR77uI5J6V6GpT1W5LRXXRw==
+X-Google-Smtp-Source: ABdhPJw8jFUGdXy3ZpYF3vCPjAT9o/iNmVHD7rY86u4NG9L79ReYww5XLftER1AdoF7j6wSADq055Q==
+X-Received: by 2002:adf:94e3:: with SMTP id 90mr3176123wrr.380.1603270635628;
+        Wed, 21 Oct 2020 01:57:15 -0700 (PDT)
 Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id q8sm2675939wro.32.2020.10.21.01.57.24
+        by smtp.gmail.com with ESMTPSA id q8sm2675939wro.32.2020.10.21.01.57.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Oct 2020 01:57:25 -0700 (PDT)
+        Wed, 21 Oct 2020 01:57:14 -0700 (PDT)
 From:   Daniel Vetter <daniel.vetter@ffwll.ch>
 To:     DRI Development <dri-devel@lists.freedesktop.org>,
         LKML <linux-kernel@vger.kernel.org>
@@ -70,12 +70,10 @@ Cc:     kvm@vger.kernel.org, linux-mm@kvack.org,
         John Hubbard <jhubbard@nvidia.com>,
         =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
         Jan Kara <jack@suse.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
         Daniel Vetter <daniel.vetter@ffwll.com>
-Subject: [PATCH v3 16/16] PCI: Revoke mappings like devmem
-Date:   Wed, 21 Oct 2020 10:56:55 +0200
-Message-Id: <20201021085655.1192025-17-daniel.vetter@ffwll.ch>
+Subject: [PATCH v3 09/16] mm: Add unsafe_follow_pfn
+Date:   Wed, 21 Oct 2020 10:56:48 +0200
+Message-Id: <20201021085655.1192025-10-daniel.vetter@ffwll.ch>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201021085655.1192025-1-daniel.vetter@ffwll.ch>
 References: <20201021085655.1192025-1-daniel.vetter@ffwll.ch>
@@ -86,40 +84,29 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Since 3234ac664a87 ("/dev/mem: Revoke mappings when a driver claims
-the region") /dev/kmem zaps ptes when the kernel requests exclusive
-acccess to an iomem region. And with CONFIG_IO_STRICT_DEVMEM, this is
-the default for all driver uses.
+Way back it was a reasonable assumptions that iomem mappings never
+change the pfn range they point at. But this has changed:
 
-Except there's two more ways to access PCI BARs: sysfs and proc mmap
-support. Let's plug that hole.
+- gpu drivers dynamically manage their memory nowadays, invalidating
+ptes with unmap_mapping_range when buffers get moved
 
-For revoke_devmem() to work we need to link our vma into the same
-address_space, with consistent vma->vm_pgoff. ->pgoff is already
-adjusted, because that's how (io_)remap_pfn_range works, but for the
-mapping we need to adjust vma->vm_file->f_mapping. The cleanest way is
-to adjust this at at ->open time:
+- contiguous dma allocations have moved from dedicated carvetouts to
+cma regions. This means if we miss the unmap the pfn might contain
+pagecache or anon memory (well anything allocated with GFP_MOVEABLE)
 
-- for sysfs this is easy, now that binary attributes support this. We
-  just set bin_attr->mapping when mmap is supported
-- for procfs it's a bit more tricky, since procfs pci access has only
-  one file per device, and access to a specific resources first needs
-  to be set up with some ioctl calls. But mmap is only supported for
-  the same resources as sysfs exposes with mmap support, and otherwise
-  rejected, so we can set the mapping unconditionally at open time
-  without harm.
+- even /dev/mem now invalidates mappings when the kernel requests that
+iomem region when CONFIG_IO_STRICT_DEVMEM is set, see 3234ac664a87
+("/dev/mem: Revoke mappings when a driver claims the region")
 
-A special consideration is for arch_can_pci_mmap_io() - we need to
-make sure that the ->f_mapping doesn't alias between ioport and iomem
-space. There's only 2 ways in-tree to support mmap of ioports: generic
-pci mmap (ARCH_GENERIC_PCI_MMAP_RESOURCE), and sparc as the single
-architecture hand-rolling. Both approach support ioport mmap through a
-special pfn range and not through magic pte attributes. Aliasing is
-therefore not a problem.
+Accessing pfns obtained from ptes without holding all the locks is
+therefore no longer a good idea.
 
-The only difference in access checks left is that sysfs PCI mmap does
-not check for CAP_RAWIO. I'm not really sure whether that should be
-added or not.
+Unfortunately there's some users where this is not fixable (like v4l
+userptr of iomem mappings) or involves a pile of work (vfio type1
+iommu). For now annotate these as unsafe and splat appropriately.
+
+This patch adds an unsafe_follow_pfn, which later patches will then
+roll out to all appropriate places.
 
 Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
 Cc: Jason Gunthorpe <jgg@ziepe.ca>
@@ -130,65 +117,134 @@ Cc: John Hubbard <jhubbard@nvidia.com>
 Cc: Jérôme Glisse <jglisse@redhat.com>
 Cc: Jan Kara <jack@suse.cz>
 Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: linux-mm@kvack.org
 Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-samsung-soc@vger.kernel.org
 Cc: linux-media@vger.kernel.org
-Cc: Bjorn Helgaas <bhelgaas@google.com>
-Cc: linux-pci@vger.kernel.org
+Cc: kvm@vger.kernel.org
 Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.com>
---
-v2:
-- Totally new approach: Adjust filp->f_mapping at open time. Note that
-  this now works on all architectures, not just those support
-  ARCH_GENERIC_PCI_MMAP_RESOURCE
 ---
- drivers/pci/pci-sysfs.c | 4 ++++
- drivers/pci/proc.c      | 1 +
- 2 files changed, 5 insertions(+)
+ include/linux/mm.h |  2 ++
+ mm/memory.c        | 32 +++++++++++++++++++++++++++++++-
+ mm/nommu.c         | 17 +++++++++++++++++
+ security/Kconfig   | 13 +++++++++++++
+ 4 files changed, 63 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
-index 6d78df981d41..cee38fcb4a86 100644
---- a/drivers/pci/pci-sysfs.c
-+++ b/drivers/pci/pci-sysfs.c
-@@ -928,6 +928,7 @@ void pci_create_legacy_files(struct pci_bus *b)
- 	b->legacy_io->read = pci_read_legacy_io;
- 	b->legacy_io->write = pci_write_legacy_io;
- 	b->legacy_io->mmap = pci_mmap_legacy_io;
-+	b->legacy_io->mapping = iomem_get_mapping();
- 	pci_adjust_legacy_attr(b, pci_mmap_io);
- 	error = device_create_bin_file(&b->dev, b->legacy_io);
- 	if (error)
-@@ -940,6 +941,7 @@ void pci_create_legacy_files(struct pci_bus *b)
- 	b->legacy_mem->size = 1024*1024;
- 	b->legacy_mem->attr.mode = 0600;
- 	b->legacy_mem->mmap = pci_mmap_legacy_mem;
-+	b->legacy_io->mapping = iomem_get_mapping();
- 	pci_adjust_legacy_attr(b, pci_mmap_mem);
- 	error = device_create_bin_file(&b->dev, b->legacy_mem);
- 	if (error)
-@@ -1155,6 +1157,8 @@ static int pci_create_attr(struct pci_dev *pdev, int num, int write_combine)
- 			res_attr->mmap = pci_mmap_resource_uc;
- 		}
- 	}
-+	if (res_attr->mmap)
-+		res_attr->mapping = iomem_get_mapping();
- 	res_attr->attr.name = res_attr_name;
- 	res_attr->attr.mode = 0600;
- 	res_attr->size = pci_resource_len(pdev, num);
-diff --git a/drivers/pci/proc.c b/drivers/pci/proc.c
-index 3a2f90beb4cb..9bab07302bbf 100644
---- a/drivers/pci/proc.c
-+++ b/drivers/pci/proc.c
-@@ -298,6 +298,7 @@ static int proc_bus_pci_open(struct inode *inode, struct file *file)
- 	fpriv->write_combine = 0;
- 
- 	file->private_data = fpriv;
-+	file->f_mapping = iomem_get_mapping();
- 
- 	return 0;
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 2a16631c1fda..ec8c90928fc9 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -1653,6 +1653,8 @@ int follow_pte_pmd(struct mm_struct *mm, unsigned long address,
+ 		   pte_t **ptepp, pmd_t **pmdpp, spinlock_t **ptlp);
+ int follow_pfn(struct vm_area_struct *vma, unsigned long address,
+ 	unsigned long *pfn);
++int unsafe_follow_pfn(struct vm_area_struct *vma, unsigned long address,
++		      unsigned long *pfn);
+ int follow_phys(struct vm_area_struct *vma, unsigned long address,
+ 		unsigned int flags, unsigned long *prot, resource_size_t *phys);
+ int generic_access_phys(struct vm_area_struct *vma, unsigned long addr,
+diff --git a/mm/memory.c b/mm/memory.c
+index fff817608eb4..bcba4e8f1501 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -4788,7 +4788,12 @@ EXPORT_SYMBOL(follow_pte_pmd);
+  * @address: user virtual address
+  * @pfn: location to store found PFN
+  *
+- * Only IO mappings and raw PFN mappings are allowed.
++ * Only IO mappings and raw PFN mappings are allowed. Note that callers must
++ * ensure coherency with pte updates by using a &mmu_notifier to follow updates.
++ * If this is not feasible, or the access to the @pfn is only very short term,
++ * use follow_pte_pmd() instead and hold the pagetable lock for the duration of
++ * the access instead. Any caller not following these requirements must use
++ * unsafe_follow_pfn() instead.
+  *
+  * Return: zero and the pfn at @pfn on success, -ve otherwise.
+  */
+@@ -4811,6 +4816,31 @@ int follow_pfn(struct vm_area_struct *vma, unsigned long address,
  }
+ EXPORT_SYMBOL(follow_pfn);
+ 
++/**
++ * unsafe_follow_pfn - look up PFN at a user virtual address
++ * @vma: memory mapping
++ * @address: user virtual address
++ * @pfn: location to store found PFN
++ *
++ * Only IO mappings and raw PFN mappings are allowed.
++ *
++ * Returns zero and the pfn at @pfn on success, -ve otherwise.
++ */
++int unsafe_follow_pfn(struct vm_area_struct *vma, unsigned long address,
++	unsigned long *pfn)
++{
++#ifdef CONFIG_STRICT_FOLLOW_PFN
++	pr_info("unsafe follow_pfn usage rejected, see CONFIG_STRICT_FOLLOW_PFN\n");
++	return -EINVAL;
++#else
++	WARN_ONCE(1, "unsafe follow_pfn usage\n");
++	add_taint(TAINT_USER, LOCKDEP_STILL_OK);
++
++	return follow_pfn(vma, address, pfn);
++#endif
++}
++EXPORT_SYMBOL(unsafe_follow_pfn);
++
+ #ifdef CONFIG_HAVE_IOREMAP_PROT
+ int follow_phys(struct vm_area_struct *vma,
+ 		unsigned long address, unsigned int flags,
+diff --git a/mm/nommu.c b/mm/nommu.c
+index 75a327149af1..3db2910f0d64 100644
+--- a/mm/nommu.c
++++ b/mm/nommu.c
+@@ -132,6 +132,23 @@ int follow_pfn(struct vm_area_struct *vma, unsigned long address,
+ }
+ EXPORT_SYMBOL(follow_pfn);
+ 
++/**
++ * unsafe_follow_pfn - look up PFN at a user virtual address
++ * @vma: memory mapping
++ * @address: user virtual address
++ * @pfn: location to store found PFN
++ *
++ * Only IO mappings and raw PFN mappings are allowed.
++ *
++ * Returns zero and the pfn at @pfn on success, -ve otherwise.
++ */
++int unsafe_follow_pfn(struct vm_area_struct *vma, unsigned long address,
++	unsigned long *pfn)
++{
++	return follow_pfn(vma, address, pfn);
++}
++EXPORT_SYMBOL(unsafe_follow_pfn);
++
+ LIST_HEAD(vmap_area_list);
+ 
+ void vfree(const void *addr)
+diff --git a/security/Kconfig b/security/Kconfig
+index 7561f6f99f1d..48945402e103 100644
+--- a/security/Kconfig
++++ b/security/Kconfig
+@@ -230,6 +230,19 @@ config STATIC_USERMODEHELPER_PATH
+ 	  If you wish for all usermode helper programs to be disabled,
+ 	  specify an empty string here (i.e. "").
+ 
++config STRICT_FOLLOW_PFN
++	bool "Disable unsafe use of follow_pfn"
++	depends on MMU
++	help
++	  Some functionality in the kernel follows userspace mappings to iomem
++	  ranges in an unsafe matter. Examples include v4l userptr for zero-copy
++	  buffers sharing.
++
++	  If this option is switched on, such access is rejected. Only enable
++	  this option when you must run userspace which requires this.
++
++	  If in doubt, say Y.
++
+ source "security/selinux/Kconfig"
+ source "security/smack/Kconfig"
+ source "security/tomoyo/Kconfig"
 -- 
 2.28.0
 
