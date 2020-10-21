@@ -7,54 +7,54 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4969BC83002
-	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 08:58:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0670C71156
+	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 08:58:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 19BCC22251
-	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 08:58:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 90F35221FC
+	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 08:58:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="T/wziZBv"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="Q5xIQ5ZZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502389AbgJUI5Z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 21 Oct 2020 04:57:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41438 "EHLO
+        id S2502386AbgJUI6F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 21 Oct 2020 04:58:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2502342AbgJUI5R (ORCPT
+        with ESMTP id S2502379AbgJUI5Y (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 21 Oct 2020 04:57:17 -0400
+        Wed, 21 Oct 2020 04:57:24 -0400
 Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90BCC0613D9
-        for <linux-media@vger.kernel.org>; Wed, 21 Oct 2020 01:57:16 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id b8so2198444wrn.0
-        for <linux-media@vger.kernel.org>; Wed, 21 Oct 2020 01:57:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D028C0613E6
+        for <linux-media@vger.kernel.org>; Wed, 21 Oct 2020 01:57:22 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id e17so2017154wru.12
+        for <linux-media@vger.kernel.org>; Wed, 21 Oct 2020 01:57:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6FXNrAQVDv1GTk8GGIBMBQb/Z7TasoUYfJDj34pJUVI=;
-        b=T/wziZBvTeYdpgXtCKfWeTCOgG6ZxQR1iNX7ttAqm5X7cINbcDOihlyivfIStE4ANr
-         0qrqTjm8QE7XBP58Kl+sS22BQ+9w8LYcHgu8lltEf/ygHjiE7VPVTCnywJMpDHX3sgzA
-         Ygc4PLFqiL0ZtCsDJT7/VAACIReSV3eUwGPjQ=
+        bh=uPFBW3zdBbgXKQwmFhj6n2htyRlDiIM2JKOjMDR2Svk=;
+        b=Q5xIQ5ZZYYOT58QTfrI5br9Ppx/bLZ105j8P0fIicibYOu5IC1Sg/+iyIB7NDvjNKa
+         v8dXdU35mjbOyyP8u0IJ7eEZ+vL/X1lNG63n9af15UXY4ydu5XizX8BQwljv+vmiyhWM
+         HFmJ5amWKsGB1BdrFdTO0WHgPqyFGMOuvguGg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6FXNrAQVDv1GTk8GGIBMBQb/Z7TasoUYfJDj34pJUVI=;
-        b=OG5viyz9AW0X+60c5tcO0ahRmMAs5EKiUUQWc4M68hiJRc9HXBNEFm3AVgSHxafAeZ
-         dHMNxuzw6fMDtP/02Owoabdqh6WGBmJNqA0o71mIfj5PNxD3M7xoIQheunoYO1WEZqJW
-         fwALLQQkKaLBnmxCi06GbebxrZ3tU0z4B9jUZHzBAyVJExVJlAZTE+H4KFMfRU41us1p
-         9xVNE90oQZ2qtYXtkmidAjHT14N24Jjh0r1RDmfEJwDxNlj0UekXLsGBYiMggVoiZ9Vz
-         KSfhFDHFg9vsjlWNU4PFSz1KfeVFSi9dm6SNVcN8pywMao5S6z+URSYm4wnERoKYQcte
-         bevg==
-X-Gm-Message-State: AOAM533pEeyJriifZHpMuSU33gA8ILlYvZ9BD4ZBDJ/9FjPf2LTo3HhN
-        4aNGR77uI5J6V6GpT1W5LRXXRw==
-X-Google-Smtp-Source: ABdhPJw8jFUGdXy3ZpYF3vCPjAT9o/iNmVHD7rY86u4NG9L79ReYww5XLftER1AdoF7j6wSADq055Q==
-X-Received: by 2002:adf:94e3:: with SMTP id 90mr3176123wrr.380.1603270635628;
-        Wed, 21 Oct 2020 01:57:15 -0700 (PDT)
+        bh=uPFBW3zdBbgXKQwmFhj6n2htyRlDiIM2JKOjMDR2Svk=;
+        b=l6+Qy8TpTfcptvvn2Ds5KNB29eypUf3dGWjUvDPd3nLD5kqsgeKlGVESmB+pC7ukP8
+         fQcqtgZhy0b99ayRMybyfv8e5PYPbcWb5dLILZ3QxvljAYGCme2TS56/XjUkLuyzLhEH
+         WK5wy6nXqFLsiWkNeR+Sp2Xm4Z7foq2gdnG+1OAkH/7G43S4ufm5y/yX6r5Cnq16N30I
+         ZiWcCG6NbyB4ic24BY1z+ONDcqUO4/YYJ1JMsWpSpNm39SnRSwsfv4QXctlGHj2Yqqp3
+         dLYfZg+hBWOac+xDClpHmgQCyi8ZAWerqWNHNUdY53UYpME5gVupSCdbpavNr9gav8DJ
+         5FmQ==
+X-Gm-Message-State: AOAM531DKfIoZo0AmLn8hSLIuEx5kLa453MpowEpnkl4OTi+OGKcn3LD
+        E33QjXJYloP3T6YZFJ5TtAd21A==
+X-Google-Smtp-Source: ABdhPJy8GRdMv9VFxpslmlWygSQvuKUEKPEZC0G0JfmHSUQJEjAtWYN/WzAaxZWK8SwF8l2Bb92lIg==
+X-Received: by 2002:a5d:6a85:: with SMTP id s5mr3550223wru.90.1603270641395;
+        Wed, 21 Oct 2020 01:57:21 -0700 (PDT)
 Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id q8sm2675939wro.32.2020.10.21.01.57.14
+        by smtp.gmail.com with ESMTPSA id q8sm2675939wro.32.2020.10.21.01.57.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Oct 2020 01:57:14 -0700 (PDT)
+        Wed, 21 Oct 2020 01:57:20 -0700 (PDT)
 From:   Daniel Vetter <daniel.vetter@ffwll.ch>
 To:     DRI Development <dri-devel@lists.freedesktop.org>,
         LKML <linux-kernel@vger.kernel.org>
@@ -71,9 +71,9 @@ Cc:     kvm@vger.kernel.org, linux-mm@kvack.org,
         =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
         Jan Kara <jack@suse.cz>,
         Daniel Vetter <daniel.vetter@ffwll.com>
-Subject: [PATCH v3 09/16] mm: Add unsafe_follow_pfn
-Date:   Wed, 21 Oct 2020 10:56:48 +0200
-Message-Id: <20201021085655.1192025-10-daniel.vetter@ffwll.ch>
+Subject: [PATCH v3 13/16] /dev/mem: Only set filp->f_mapping
+Date:   Wed, 21 Oct 2020 10:56:52 +0200
+Message-Id: <20201021085655.1192025-14-daniel.vetter@ffwll.ch>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201021085655.1192025-1-daniel.vetter@ffwll.ch>
 References: <20201021085655.1192025-1-daniel.vetter@ffwll.ch>
@@ -84,29 +84,15 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Way back it was a reasonable assumptions that iomem mappings never
-change the pfn range they point at. But this has changed:
+When we care about pagecache maintenance, we need to make sure that
+both f_mapping and i_mapping point at the right mapping.
 
-- gpu drivers dynamically manage their memory nowadays, invalidating
-ptes with unmap_mapping_range when buffers get moved
-
-- contiguous dma allocations have moved from dedicated carvetouts to
-cma regions. This means if we miss the unmap the pfn might contain
-pagecache or anon memory (well anything allocated with GFP_MOVEABLE)
-
-- even /dev/mem now invalidates mappings when the kernel requests that
-iomem region when CONFIG_IO_STRICT_DEVMEM is set, see 3234ac664a87
-("/dev/mem: Revoke mappings when a driver claims the region")
-
-Accessing pfns obtained from ptes without holding all the locks is
-therefore no longer a good idea.
-
-Unfortunately there's some users where this is not fixable (like v4l
-userptr of iomem mappings) or involves a pile of work (vfio type1
-iommu). For now annotate these as unsafe and splat appropriately.
-
-This patch adds an unsafe_follow_pfn, which later patches will then
-roll out to all appropriate places.
+But for iomem mappings we only care about the virtual/pte side of
+things, so f_mapping is enough. Also setting inode->i_mapping was
+confusing me as a driver maintainer, since in e.g. drivers/gpu we
+don't do that. Per Dan this seems to be copypasta from places which do
+care about pagecache consistency, but not needed. Hence remove it for
+slightly less confusion.
 
 Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
 Cc: Jason Gunthorpe <jgg@ziepe.ca>
@@ -121,130 +107,23 @@ Cc: linux-mm@kvack.org
 Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-samsung-soc@vger.kernel.org
 Cc: linux-media@vger.kernel.org
-Cc: kvm@vger.kernel.org
 Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.com>
 ---
- include/linux/mm.h |  2 ++
- mm/memory.c        | 32 +++++++++++++++++++++++++++++++-
- mm/nommu.c         | 17 +++++++++++++++++
- security/Kconfig   | 13 +++++++++++++
- 4 files changed, 63 insertions(+), 1 deletion(-)
+ drivers/char/mem.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 2a16631c1fda..ec8c90928fc9 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1653,6 +1653,8 @@ int follow_pte_pmd(struct mm_struct *mm, unsigned long address,
- 		   pte_t **ptepp, pmd_t **pmdpp, spinlock_t **ptlp);
- int follow_pfn(struct vm_area_struct *vma, unsigned long address,
- 	unsigned long *pfn);
-+int unsafe_follow_pfn(struct vm_area_struct *vma, unsigned long address,
-+		      unsigned long *pfn);
- int follow_phys(struct vm_area_struct *vma, unsigned long address,
- 		unsigned int flags, unsigned long *prot, resource_size_t *phys);
- int generic_access_phys(struct vm_area_struct *vma, unsigned long addr,
-diff --git a/mm/memory.c b/mm/memory.c
-index fff817608eb4..bcba4e8f1501 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -4788,7 +4788,12 @@ EXPORT_SYMBOL(follow_pte_pmd);
-  * @address: user virtual address
-  * @pfn: location to store found PFN
-  *
-- * Only IO mappings and raw PFN mappings are allowed.
-+ * Only IO mappings and raw PFN mappings are allowed. Note that callers must
-+ * ensure coherency with pte updates by using a &mmu_notifier to follow updates.
-+ * If this is not feasible, or the access to the @pfn is only very short term,
-+ * use follow_pte_pmd() instead and hold the pagetable lock for the duration of
-+ * the access instead. Any caller not following these requirements must use
-+ * unsafe_follow_pfn() instead.
-  *
-  * Return: zero and the pfn at @pfn on success, -ve otherwise.
-  */
-@@ -4811,6 +4816,31 @@ int follow_pfn(struct vm_area_struct *vma, unsigned long address,
- }
- EXPORT_SYMBOL(follow_pfn);
+diff --git a/drivers/char/mem.c b/drivers/char/mem.c
+index abd4ffdc8cde..5502f56f3655 100644
+--- a/drivers/char/mem.c
++++ b/drivers/char/mem.c
+@@ -864,7 +864,6 @@ static int open_port(struct inode *inode, struct file *filp)
+ 	 * revocations when drivers want to take over a /dev/mem mapped
+ 	 * range.
+ 	 */
+-	inode->i_mapping = devmem_inode->i_mapping;
+ 	filp->f_mapping = inode->i_mapping;
  
-+/**
-+ * unsafe_follow_pfn - look up PFN at a user virtual address
-+ * @vma: memory mapping
-+ * @address: user virtual address
-+ * @pfn: location to store found PFN
-+ *
-+ * Only IO mappings and raw PFN mappings are allowed.
-+ *
-+ * Returns zero and the pfn at @pfn on success, -ve otherwise.
-+ */
-+int unsafe_follow_pfn(struct vm_area_struct *vma, unsigned long address,
-+	unsigned long *pfn)
-+{
-+#ifdef CONFIG_STRICT_FOLLOW_PFN
-+	pr_info("unsafe follow_pfn usage rejected, see CONFIG_STRICT_FOLLOW_PFN\n");
-+	return -EINVAL;
-+#else
-+	WARN_ONCE(1, "unsafe follow_pfn usage\n");
-+	add_taint(TAINT_USER, LOCKDEP_STILL_OK);
-+
-+	return follow_pfn(vma, address, pfn);
-+#endif
-+}
-+EXPORT_SYMBOL(unsafe_follow_pfn);
-+
- #ifdef CONFIG_HAVE_IOREMAP_PROT
- int follow_phys(struct vm_area_struct *vma,
- 		unsigned long address, unsigned int flags,
-diff --git a/mm/nommu.c b/mm/nommu.c
-index 75a327149af1..3db2910f0d64 100644
---- a/mm/nommu.c
-+++ b/mm/nommu.c
-@@ -132,6 +132,23 @@ int follow_pfn(struct vm_area_struct *vma, unsigned long address,
- }
- EXPORT_SYMBOL(follow_pfn);
- 
-+/**
-+ * unsafe_follow_pfn - look up PFN at a user virtual address
-+ * @vma: memory mapping
-+ * @address: user virtual address
-+ * @pfn: location to store found PFN
-+ *
-+ * Only IO mappings and raw PFN mappings are allowed.
-+ *
-+ * Returns zero and the pfn at @pfn on success, -ve otherwise.
-+ */
-+int unsafe_follow_pfn(struct vm_area_struct *vma, unsigned long address,
-+	unsigned long *pfn)
-+{
-+	return follow_pfn(vma, address, pfn);
-+}
-+EXPORT_SYMBOL(unsafe_follow_pfn);
-+
- LIST_HEAD(vmap_area_list);
- 
- void vfree(const void *addr)
-diff --git a/security/Kconfig b/security/Kconfig
-index 7561f6f99f1d..48945402e103 100644
---- a/security/Kconfig
-+++ b/security/Kconfig
-@@ -230,6 +230,19 @@ config STATIC_USERMODEHELPER_PATH
- 	  If you wish for all usermode helper programs to be disabled,
- 	  specify an empty string here (i.e. "").
- 
-+config STRICT_FOLLOW_PFN
-+	bool "Disable unsafe use of follow_pfn"
-+	depends on MMU
-+	help
-+	  Some functionality in the kernel follows userspace mappings to iomem
-+	  ranges in an unsafe matter. Examples include v4l userptr for zero-copy
-+	  buffers sharing.
-+
-+	  If this option is switched on, such access is rejected. Only enable
-+	  this option when you must run userspace which requires this.
-+
-+	  If in doubt, say Y.
-+
- source "security/selinux/Kconfig"
- source "security/smack/Kconfig"
- source "security/tomoyo/Kconfig"
+ 	return 0;
 -- 
 2.28.0
 
