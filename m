@@ -2,238 +2,85 @@ Return-Path: <SRS0=alUM=D4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4FB8C5DF9F
-	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 08:59:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3E79C4363A
+	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 09:20:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8CDB322453
-	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 08:59:14 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="Hd5qr7pZ"
+	by mail.kernel.org (Postfix) with ESMTP id 404BE21D7B
+	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 09:20:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440515AbgJUI7O (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 21 Oct 2020 04:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41372 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2441037AbgJUI5F (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 21 Oct 2020 04:57:05 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90478C0613CF
-        for <linux-media@vger.kernel.org>; Wed, 21 Oct 2020 01:57:04 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id n15so2162464wrq.2
-        for <linux-media@vger.kernel.org>; Wed, 21 Oct 2020 01:57:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=K95D/JeFvwIRswqJ5AyZx2c3o+Go5rbi2d1Aft3apVY=;
-        b=Hd5qr7pZZO1AF760IHt5p0pXKDL2hqdJ3sUJVr7XIGUMaqaAvNysYEec4f09iASZfR
-         NNiTDBnpFl36ANaTjQP9R6ClT5cy809US9aIQXED4/OldrY173V7OBDkje/vz4pn3KvB
-         rgWsXHgy+UPbTuurH+E1eCmRcP1XEOsN6bb/U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=K95D/JeFvwIRswqJ5AyZx2c3o+Go5rbi2d1Aft3apVY=;
-        b=VW3GURPnLXkzPgHWwKpptX6p5zIxYwVmZD46b8qYkr+6lMhgefCrJvcEkiXBXDQLR8
-         HH6PJrNrZ7OJnMz4VinOVefyGf24NXzdTfW5i49TeNpuBvhneP+bik80mA/liIpluSYw
-         Rp2KDB97EAhFJ7iS/sFN4tBGvWuo/2GFr9+Eis1ZvZEArDrCqzlxARmexaHSdaaPXmKh
-         TsVrPWupJv9nBewYmxg8nG2IT1rT/iUbU9DB+BS9G3NoOevcIS/ln8eoExMkjZXy+O1H
-         JLw0+sRIwrj6KSxl5p6sX9QiTLdij5ULSprQ5r/XhMT4QrVhrLCLoZ9SzB6/6ki13u1t
-         qo4A==
-X-Gm-Message-State: AOAM532EDpaj5eq4EbSOcDNJyDlhy2FXcD2d0yjQUItc/ieRlmdlynjI
-        c9Z8OTYE2ns29UeRcpLLRQcjDA==
-X-Google-Smtp-Source: ABdhPJw2XMtVnZfoQx45xaQNDg3qnrf6WmNn/N8qNOBOueDi4hxOOcHlcdccOX48m/SzW3eHWMyAJw==
-X-Received: by 2002:a5d:4dc1:: with SMTP id f1mr3452736wru.42.1603270623303;
-        Wed, 21 Oct 2020 01:57:03 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id q8sm2675939wro.32.2020.10.21.01.57.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Oct 2020 01:57:02 -0700 (PDT)
-From:   Daniel Vetter <daniel.vetter@ffwll.ch>
-To:     DRI Development <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     kvm@vger.kernel.org, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-s390@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Inki Dae <inki.dae@samsung.com>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-        Jan Kara <jack@suse.cz>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.com>
-Subject: [PATCH v3 01/16] drm/exynos: Stop using frame_vector helpers
-Date:   Wed, 21 Oct 2020 10:56:40 +0200
-Message-Id: <20201021085655.1192025-2-daniel.vetter@ffwll.ch>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201021085655.1192025-1-daniel.vetter@ffwll.ch>
-References: <20201021085655.1192025-1-daniel.vetter@ffwll.ch>
+        id S2437765AbgJUJUz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 21 Oct 2020 05:20:55 -0400
+Received: from mga06.intel.com ([134.134.136.31]:55857 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2437619AbgJUJUz (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 21 Oct 2020 05:20:55 -0400
+IronPort-SDR: VcJJnXrtHtYz0dtFA5QgoRCG3r4vLrI3V3rgcisnItMSAZZlVzdjCX02fy5w/y/tlnHt0ms8Yw
+ /mmMPkDHMQRQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9780"; a="228964220"
+X-IronPort-AV: E=Sophos;i="5.77,400,1596524400"; 
+   d="scan'208";a="228964220"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2020 02:20:49 -0700
+IronPort-SDR: gggVILlSD/5P5JllA7+E7WJbs6+IfNmd+hOXfji2YGktVFcbFZPr368uNbHEgnC76USrtU2VvY
+ rZzrq16mRCXA==
+X-IronPort-AV: E=Sophos;i="5.77,400,1596524400"; 
+   d="scan'208";a="320954500"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2020 02:20:46 -0700
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id 853D320815; Wed, 21 Oct 2020 12:20:43 +0300 (EEST)
+Date:   Wed, 21 Oct 2020 12:20:43 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Bingbu Cao <bingbu.cao@intel.com>
+Cc:     linux-media@vger.kernel.org, senozhatsky@chromium.org,
+        tfiga@chromium.org, bingbu.cao@linux.intel.com
+Subject: Re: [PATCH] media: ov2740: change the minimal exposure value to 4
+Message-ID: <20201021092043.GD2703@paasikivi.fi.intel.com>
+References: <1603248250-24847-1-git-send-email-bingbu.cao@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1603248250-24847-1-git-send-email-bingbu.cao@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-All we need are a pages array, pin_user_pages_fast can give us that
-directly. Plus this avoids the entire raw pfn side of get_vaddr_frames.
+Hi Bingbu,
 
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
-Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Inki Dae <inki.dae@samsung.com>
-Cc: Joonyoung Shim <jy0922.shim@samsung.com>
-Cc: Seung-Woo Kim <sw0312.kim@samsung.com>
-Cc: Kyungmin Park <kyungmin.park@samsung.com>
-Cc: Kukjin Kim <kgene@kernel.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: John Hubbard <jhubbard@nvidia.com>
-Cc: Jérôme Glisse <jglisse@redhat.com>
-Cc: Jan Kara <jack@suse.cz>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: linux-mm@kvack.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-samsung-soc@vger.kernel.org
-Cc: linux-media@vger.kernel.org
-Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.com>
---
-v2: Use unpin_user_pages_dirty_lock (John)
----
- drivers/gpu/drm/exynos/Kconfig          |  1 -
- drivers/gpu/drm/exynos/exynos_drm_g2d.c | 47 +++++++++++--------------
- 2 files changed, 20 insertions(+), 28 deletions(-)
+On Wed, Oct 21, 2020 at 10:44:10AM +0800, Bingbu Cao wrote:
+> The minimal valid exposure value should be 4 lines instead of 8 for
+> ov2740 mannual exposure control.
+> 
+> Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
+> ---
+>  drivers/media/i2c/ov2740.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
+> index bd0d45b0d43f..0dbae4949cb3 100644
+> --- a/drivers/media/i2c/ov2740.c
+> +++ b/drivers/media/i2c/ov2740.c
+> @@ -37,7 +37,7 @@
+>  
+>  /* Exposure controls from sensor */
+>  #define OV2740_REG_EXPOSURE		0x3500
+> -#define OV2740_EXPOSURE_MIN		8
+> +#define OV2740_EXPOSURE_MIN		4
+>  #define OV2740_EXPOSURE_MAX_MARGIN	8
+>  #define OV2740_EXPOSURE_STEP		1
 
-diff --git a/drivers/gpu/drm/exynos/Kconfig b/drivers/gpu/drm/exynos/Kconfig
-index 6417f374b923..43257ef3c09d 100644
---- a/drivers/gpu/drm/exynos/Kconfig
-+++ b/drivers/gpu/drm/exynos/Kconfig
-@@ -88,7 +88,6 @@ comment "Sub-drivers"
- config DRM_EXYNOS_G2D
- 	bool "G2D"
- 	depends on VIDEO_SAMSUNG_S5P_G2D=n || COMPILE_TEST
--	select FRAME_VECTOR
- 	help
- 	  Choose this option if you want to use Exynos G2D for DRM.
- 
-diff --git a/drivers/gpu/drm/exynos/exynos_drm_g2d.c b/drivers/gpu/drm/exynos/exynos_drm_g2d.c
-index 967a5cdc120e..ecede41af9b9 100644
---- a/drivers/gpu/drm/exynos/exynos_drm_g2d.c
-+++ b/drivers/gpu/drm/exynos/exynos_drm_g2d.c
-@@ -205,7 +205,8 @@ struct g2d_cmdlist_userptr {
- 	dma_addr_t		dma_addr;
- 	unsigned long		userptr;
- 	unsigned long		size;
--	struct frame_vector	*vec;
-+	struct page		**pages;
-+	unsigned int		npages;
- 	struct sg_table		*sgt;
- 	atomic_t		refcount;
- 	bool			in_pool;
-@@ -378,7 +379,6 @@ static void g2d_userptr_put_dma_addr(struct g2d_data *g2d,
- 					bool force)
- {
- 	struct g2d_cmdlist_userptr *g2d_userptr = obj;
--	struct page **pages;
- 
- 	if (!obj)
- 		return;
-@@ -398,15 +398,9 @@ static void g2d_userptr_put_dma_addr(struct g2d_data *g2d,
- 	dma_unmap_sgtable(to_dma_dev(g2d->drm_dev), g2d_userptr->sgt,
- 			  DMA_BIDIRECTIONAL, 0);
- 
--	pages = frame_vector_pages(g2d_userptr->vec);
--	if (!IS_ERR(pages)) {
--		int i;
--
--		for (i = 0; i < frame_vector_count(g2d_userptr->vec); i++)
--			set_page_dirty_lock(pages[i]);
--	}
--	put_vaddr_frames(g2d_userptr->vec);
--	frame_vector_destroy(g2d_userptr->vec);
-+	unpin_user_pages_dirty_lock(g2d_userptr->pages, g2d_userptr->npages,
-+				    true);
-+	kvfree(g2d_userptr->pages);
- 
- 	if (!g2d_userptr->out_of_list)
- 		list_del_init(&g2d_userptr->list);
-@@ -474,35 +468,34 @@ static dma_addr_t *g2d_userptr_get_dma_addr(struct g2d_data *g2d,
- 	offset = userptr & ~PAGE_MASK;
- 	end = PAGE_ALIGN(userptr + size);
- 	npages = (end - start) >> PAGE_SHIFT;
--	g2d_userptr->vec = frame_vector_create(npages);
--	if (!g2d_userptr->vec) {
-+	g2d_userptr->pages = kvmalloc_array(npages, sizeof(*g2d_userptr->pages),
-+					    GFP_KERNEL);
-+	if (!g2d_userptr->pages) {
- 		ret = -ENOMEM;
- 		goto err_free;
- 	}
- 
--	ret = get_vaddr_frames(start, npages, FOLL_FORCE | FOLL_WRITE,
--		g2d_userptr->vec);
-+	ret = pin_user_pages_fast(start, npages, FOLL_FORCE | FOLL_WRITE,
-+				  g2d_userptr->pages);
- 	if (ret != npages) {
- 		DRM_DEV_ERROR(g2d->dev,
- 			      "failed to get user pages from userptr.\n");
- 		if (ret < 0)
--			goto err_destroy_framevec;
--		ret = -EFAULT;
--		goto err_put_framevec;
--	}
--	if (frame_vector_to_pages(g2d_userptr->vec) < 0) {
-+			goto err_destroy_pages;
-+		npages = ret;
- 		ret = -EFAULT;
--		goto err_put_framevec;
-+		goto err_unpin_pages;
- 	}
-+	g2d_userptr->npages = npages;
- 
- 	sgt = kzalloc(sizeof(*sgt), GFP_KERNEL);
- 	if (!sgt) {
- 		ret = -ENOMEM;
--		goto err_put_framevec;
-+		goto err_unpin_pages;
- 	}
- 
- 	ret = sg_alloc_table_from_pages(sgt,
--					frame_vector_pages(g2d_userptr->vec),
-+					g2d_userptr->pages,
- 					npages, offset, size, GFP_KERNEL);
- 	if (ret < 0) {
- 		DRM_DEV_ERROR(g2d->dev, "failed to get sgt from pages.\n");
-@@ -538,11 +531,11 @@ static dma_addr_t *g2d_userptr_get_dma_addr(struct g2d_data *g2d,
- err_free_sgt:
- 	kfree(sgt);
- 
--err_put_framevec:
--	put_vaddr_frames(g2d_userptr->vec);
-+err_unpin_pages:
-+	unpin_user_pages(g2d_userptr->pages, npages);
- 
--err_destroy_framevec:
--	frame_vector_destroy(g2d_userptr->vec);
-+err_destroy_pages:
-+	kvfree(g2d_userptr->pages);
- 
- err_free:
- 	kfree(g2d_userptr);
+This is already in my tree --- I may forgotten to push master after
+applying many patches, it is up-to-date now.
+
 -- 
-2.28.0
+Regards,
 
+Sakari Ailus
