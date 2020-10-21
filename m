@@ -2,567 +2,228 @@ Return-Path: <SRS0=alUM=D4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26BB2C55178
-	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 13:54:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AAF2EC55179
+	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 13:54:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C226721481
-	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 13:54:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6866A21481
+	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 13:54:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2442124AbgJUNxq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 21 Oct 2020 09:53:46 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:28592 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2442099AbgJUNxp (ORCPT
+        id S2442135AbgJUNye (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 21 Oct 2020 09:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59660 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2411322AbgJUNye (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 21 Oct 2020 09:53:45 -0400
-X-IronPort-AV: E=Sophos;i="5.77,401,1596466800"; 
-   d="scan'208";a="60194893"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 21 Oct 2020 22:53:44 +0900
-Received: from devel.example.org?044ree.adwin.renesas.com (unknown [10.226.36.120])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 594E842980AC;
-        Wed, 21 Oct 2020 22:53:41 +0900 (JST)
-From:   Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Ramesh Shanmugasundaram <rashanmu@gmail.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v5 2/5] media: dt-bindings: media: renesas,drif: Convert to json-schema
-Date:   Wed, 21 Oct 2020 14:53:29 +0100
-Message-Id: <20201021135332.4928-3-fabrizio.castro.jz@renesas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201021135332.4928-1-fabrizio.castro.jz@renesas.com>
-References: <20201021135332.4928-1-fabrizio.castro.jz@renesas.com>
+        Wed, 21 Oct 2020 09:54:34 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2459BC0613CE;
+        Wed, 21 Oct 2020 06:54:34 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: koike)
+        with ESMTPSA id 454921F459CF
+Subject: Re: [PATCH v5 5/9] media: staging: rkisp1: remove unecessary clocks
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:STAGING SUBSYSTEM" <devel@driverdev.osuosl.org>,
+        "heiko@sntech.de" <heiko@sntech.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Collabora Kernel ML <kernel@collabora.com>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Mark Rutland <mark.rutland@arm.com>, karthik.poduval@gmail.com,
+        Johan Jonker <jbx6244@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Eddie Cai <eddie.cai.linux@gmail.com>,
+        Shunqian Zheng <zhengsq@rock-chips.com>,
+        Robin Murphy <robin.murphy@arm.com>
+References: <20200722155533.252844-1-helen.koike@collabora.com>
+ <20200722155533.252844-6-helen.koike@collabora.com>
+ <CAL_Jsq+qB=yUtHKKujiUWrsq+W-3ggM3B_SuuDzfYEheczn=8g@mail.gmail.com>
+ <2dcdda41-bdb4-55a8-557f-8175983effb5@collabora.com>
+ <CAL_Jsq+-8Jyms3LJBjTxABcuTa5GduXtJ1jdOgp7xcPoQzdtGQ@mail.gmail.com>
+From:   Helen Koike <helen.koike@collabora.com>
+Message-ID: <c0da2c06-4838-2bb3-004e-799e196cb35c@collabora.com>
+Date:   Wed, 21 Oct 2020 10:54:23 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAL_Jsq+-8Jyms3LJBjTxABcuTa5GduXtJ1jdOgp7xcPoQzdtGQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Convert the Renesas DRIF bindings to DT schema and update
-MAINTAINERS accordingly.
+Hi Rob,
 
-Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
-v4->v5:
-* Fixed warning as suggested by Rob (thank you Prabhakar for your
-  help with reproducing and fixing the issue pointed out by Rob)
-v3->v4:
-* Replaced "if" statement with "else" statement for the branch
-  rejecting pinctrl-0 and pinctrl-names properties, as suggested
-  by Geert
-v2->v3:
-* Removed the definition of pinctrl-0 and pinctrl-names, as
-  suggested by Geert
-* Added "power-domains" to the list of required properties,
-  as suggested by Geert
-v1->v2:
-* s/controller/Controller/ in the title of renesas,drif.yaml
-  as suggested by Laurent.
+On 10/20/20 12:14 PM, Rob Herring wrote:
+> On Wed, Oct 14, 2020 at 11:46 AM Helen Koike <helen.koike@collabora.com> wrote:
+>>
+>> Hi Rob,
+>>
+>> Thnaks for your reply.
+>>
+>> On 9/22/20 11:24 AM, Rob Herring wrote:
+>>> On Wed, Jul 22, 2020 at 9:56 AM Helen Koike <helen.koike@collabora.com> wrote:
+>>>>
+>>>> aclk_isp_wrap is a child of aclk_isp, and hclk_isp_wrap is a child of
+>>>> hclk_isp, thus we can remove parents from the list.
+>>>>
+>>>> Also, for the isp0, we only need the ISP clock, ACLK and HCLK.
+>>>> In the future we'll need a pixel clock for RK3288 and RK3399, and a JPEG
+>>>> clock for RK3288.
+>>>>
+>>>> So with the goal to cleanup the dt-bindings and remove it from staging,
+>>>> simplify clock names to isp, aclk and hclk.
+>>>>
+>>>> Assigned clocks are meant to refer to the full path in the clock tree,
+>>>> i.e. the leaf in the tree.
+>>>> For instance, in RK3399, the clock responsible for ACLK (ISP AXI CLOCK)
+>>>> is aclk_isp0_wrapper.
+>>>>
+>>>> For reference, this is the isp clock topology on RK3399:
+>>>>
+>>>>  xin24m
+>>>>     pll_npll
+>>>>        npll
+>>>>           clk_isp1
+>>>>           clk_isp0
+>>>>     pll_cpll
+>>>>        cpll
+>>>>           aclk_isp1
+>>>>              aclk_isp1_noc
+>>>>              hclk_isp1
+>>>>                 aclk_isp1_wrapper
+>>>>                 hclk_isp1_noc
+>>>>           aclk_isp0
+>>>>              hclk_isp1_wrapper
+>>>>              aclk_isp0_wrapper
+>>>>              aclk_isp0_noc
+>>>>              hclk_isp0
+>>>>                 hclk_isp0_wrapper
+>>>>                 hclk_isp0_noc
+>>>>  pclkin_isp1_wrapper
+>>>>
+>>>> Signed-off-by: Helen Koike <helen.koike@collabora.com>
+>>>>
+>>>> ---
+>>>> Changes in V5:
+>>>> - Use if/then schema as suggested by Rob Herring on
+>>>> https://patchwork.linuxtv.org/project/linux-media/patch/20200702191322.2639681-6-helen.koike@collabora.com/#119729
+>>>>
+>>>> Changes in V4:
+>>>> - update binding according to suggestion by Robin Murphy
+>>>> on https://patchwork.kernel.org/patch/11475007/
+>>>>
+>>>> Changes in V3:
+>>>> - this is a new patch in the series
+>>>> ---
+>>>>  .../bindings/media/rockchip-isp1.yaml         | 50 ++++++++++++-------
+>>>>  drivers/staging/media/rkisp1/rkisp1-dev.c     |  8 ++-
+>>>>  2 files changed, 36 insertions(+), 22 deletions(-)
+>>>>
+>>>> diff --git a/drivers/staging/media/rkisp1/Documentation/devicetree/bindings/media/rockchip-isp1.yaml b/drivers/staging/media/rkisp1/Documentation/devicetree/bindings/media/rockchip-isp1.yaml
+>>>> index 62a6b9c959498..23c677d15037a 100644
+>>>> --- a/drivers/staging/media/rkisp1/Documentation/devicetree/bindings/media/rockchip-isp1.yaml
+>>>> +++ b/drivers/staging/media/rkisp1/Documentation/devicetree/bindings/media/rockchip-isp1.yaml
+>>>> @@ -24,20 +24,10 @@ properties:
+>>>>      maxItems: 1
+>>>>
+>>>>    clocks:
+>>>> -    items:
+>>>> -      - description: ISP clock
+>>>> -      - description: ISP AXI clock clock
+>>>> -      - description: ISP AXI clock  wrapper clock
+>>>> -      - description: ISP AHB clock clock
+>>>> -      - description: ISP AHB wrapper clock
+>>>> +    minItems: 3
+>>>
+>>> You need maxItems here too or it will always be 3.
+>>>
+>>>>
+>>>>    clock-names:
+>>>> -    items:
+>>>> -      - const: clk_isp
+>>>> -      - const: aclk_isp
+>>>> -      - const: aclk_isp_wrap
+>>>> -      - const: hclk_isp
+>>>> -      - const: hclk_isp_wrap
+>>>> +    minItems: 3
+>>>>
+>>>>    iommus:
+>>>>      maxItems: 1
+>>>> @@ -116,6 +106,34 @@ required:
+>>>>    - power-domains
+>>>>    - ports
+>>>>
+>>>> +if:
+>>>> +  properties:
+>>>> +    compatible:
+>>>> +      contains:
+>>>> +        const: rockchip,rk3399-cif-isp
+>>>> +then:
+>>>> +  properties:
+>>>> +    clocks:
+>>>> +      maxItems: 4
+>>>> +      minItems: 3
+>>>
+>>> For a single compatible you shouldn't really have a variable number of clocks.
+>>
+>> I'm not entirely sure how to make this separation, since isp0 and isp1 (not yet supported)
+>> would use the same compatible.
+>> Unless if we separate in two compatibles, but maybe this is an overhead just for an extra clock.
+>> What do you think?
+> 
+> In that case, it's fine.
+> 
+>>
+>>>
+>>>> +      items:
+>>>> +        # isp0 and isp1
+>>>> +        - description: ISP clock
+>>>> +        - description: ISP AXI clock
+>>>> +        - description: ISP AHB clock
+>>>> +        # only for isp1
+>>>> +        - description: ISP Pixel clock
+>>>> +    clock-names:
+>>>> +      maxItems: 4
+>>>> +      minItems: 3
+>>>> +      items:
+>>>> +        # isp0 and isp1
+>>>> +        - const: isp
+>>>> +        - const: aclk
+>>>> +        - const: hclk
+>>>> +        # only for isp1
+>>>> +        - const: pclk_isp
+>>>
+>>> Don't you need an 'else' clause. For not rockchip,rk3399-cif-isp,
+>>> there's no definition of what clocks there are.
+>>
+>> There is only one compatible defined for now, rk3288 will be added later.
+>> The idea to add if/then is to make it easier to add rk3288:
+>>
+>> https://patchwork.kernel.org/project/linux-media/patch/20200406073017.19462-4-karthik.poduval@gmail.com/
+> 
+> Hopefully, the clock names will be aligned? Looks like they are the
+> same with just 1 additional clock. Ideally, you define them all at the
+> top level and the if/then schema just defines how many clocks for each
+> compatible.
 
- .../bindings/media/renesas,drif.txt           | 177 -----------
- .../bindings/media/renesas,drif.yaml          | 277 ++++++++++++++++++
- MAINTAINERS                                   |   2 +-
- 3 files changed, 278 insertions(+), 178 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/media/renesas,drif.txt
- create mode 100644 Documentation/devicetree/bindings/media/renesas,drif.yaml
+I submitted another version, where I try to capture what you suggested here,
+please check if I got it right this time (or not).
+Maybe I misunderstood which kind of alignment you are expecting for the clock names,
+should they be each in a different line?
 
-diff --git a/Documentation/devicetree/bindings/media/renesas,drif.txt b/Documentation/devicetree/bindings/media/renesas,drif.txt
-deleted file mode 100644
-index 0d8974aa8b38..000000000000
---- a/Documentation/devicetree/bindings/media/renesas,drif.txt
-+++ /dev/null
-@@ -1,177 +0,0 @@
--Renesas R-Car Gen3 Digital Radio Interface controller (DRIF)
--------------------------------------------------------------
--
--R-Car Gen3 DRIF is a SPI like receive only slave device. A general
--representation of DRIF interfacing with a master device is shown below.
--
--+---------------------+                +---------------------+
--|                     |-----SCK------->|CLK                  |
--|       Master        |-----SS-------->|SYNC  DRIFn (slave)  |
--|                     |-----SD0------->|D0                   |
--|                     |-----SD1------->|D1                   |
--+---------------------+                +---------------------+
--
--As per datasheet, each DRIF channel (drifn) is made up of two internal
--channels (drifn0 & drifn1). These two internal channels share the common
--CLK & SYNC. Each internal channel has its own dedicated resources like
--irq, dma channels, address space & clock. This internal split is not
--visible to the external master device.
--
--The device tree model represents each internal channel as a separate node.
--The internal channels sharing the CLK & SYNC are tied together by their
--phandles using a property called "renesas,bonding". For the rest of
--the documentation, unless explicitly stated, the word channel implies an
--internal channel.
--
--When both internal channels are enabled they need to be managed together
--as one (i.e.) they cannot operate alone as independent devices. Out of the
--two, one of them needs to act as a primary device that accepts common
--properties of both the internal channels. This channel is identified by a
--property called "renesas,primary-bond".
--
--To summarize,
--   - When both the internal channels that are bonded together are enabled,
--     the zeroth channel is selected as primary-bond. This channels accepts
--     properties common to all the members of the bond.
--   - When only one of the bonded channels need to be enabled, the property
--     "renesas,bonding" or "renesas,primary-bond" will have no effect. That
--     enabled channel can act alone as any other independent device.
--
--Required properties of an internal channel:
---------------------------------------------
--- compatible:	"renesas,r8a7795-drif" if DRIF controller is a part of R8A7795 SoC.
--		"renesas,r8a7796-drif" if DRIF controller is a part of R8A7796 SoC.
--		"renesas,rcar-gen3-drif" for a generic R-Car Gen3 compatible device.
--
--		When compatible with the generic version, nodes must list the
--		SoC-specific version corresponding to the platform first
--		followed by the generic version.
--
--- reg: offset and length of that channel.
--- interrupts: associated with that channel.
--- clocks: phandle and clock specifier of that channel.
--- clock-names: clock input name string: "fck".
--- dmas: phandles to the DMA channels.
--- dma-names: names of the DMA channel: "rx".
--- renesas,bonding: phandle to the other channel.
--
--Optional properties of an internal channel:
---------------------------------------------
--- power-domains: phandle to the respective power domain.
--
--Required properties of an internal channel when:
--	- It is the only enabled channel of the bond (or)
--	- If it acts as primary among enabled bonds
----------------------------------------------------------
--- pinctrl-0: pin control group to be used for this channel.
--- pinctrl-names: must be "default".
--- renesas,primary-bond: empty property indicating the channel acts as primary
--			among the bonded channels.
--- port: child port node corresponding to the data input, in accordance with
--	the video interface bindings defined in
--	Documentation/devicetree/bindings/media/video-interfaces.txt. The port
--	node must contain at least one endpoint.
--
--Optional endpoint property:
-----------------------------
--- sync-active: Indicates sync signal polarity, 0/1 for low/high respectively.
--	       This property maps to SYNCAC bit in the hardware manual. The
--	       default is 1 (active high).
--
--Example:
----------
--
--(1) Both internal channels enabled:
-------------------------------------
--
--When interfacing with a third party tuner device with two data pins as shown
--below.
--
--+---------------------+                +---------------------+
--|                     |-----SCK------->|CLK                  |
--|       Master        |-----SS-------->|SYNC  DRIFn (slave)  |
--|                     |-----SD0------->|D0                   |
--|                     |-----SD1------->|D1                   |
--+---------------------+                +---------------------+
--
--	drif00: rif@e6f40000 {
--		compatible = "renesas,r8a7795-drif",
--			     "renesas,rcar-gen3-drif";
--		reg = <0 0xe6f40000 0 0x64>;
--		interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
--		clocks = <&cpg CPG_MOD 515>;
--		clock-names = "fck";
--		dmas = <&dmac1 0x20>, <&dmac2 0x20>;
--		dma-names = "rx", "rx";
--		power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
--		renesas,bonding = <&drif01>;
--		renesas,primary-bond;
--		pinctrl-0 = <&drif0_pins>;
--		pinctrl-names = "default";
--		port {
--			drif0_ep: endpoint {
--			     remote-endpoint = <&tuner_ep>;
--			};
--		};
--	};
--
--	drif01: rif@e6f50000 {
--		compatible = "renesas,r8a7795-drif",
--			     "renesas,rcar-gen3-drif";
--		reg = <0 0xe6f50000 0 0x64>;
--		interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
--		clocks = <&cpg CPG_MOD 514>;
--		clock-names = "fck";
--		dmas = <&dmac1 0x22>, <&dmac2 0x22>;
--		dma-names = "rx", "rx";
--		power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
--		renesas,bonding = <&drif00>;
--	};
--
--
--(2) Internal channel 1 alone is enabled:
------------------------------------------
--
--When interfacing with a third party tuner device with one data pin as shown
--below.
--
--+---------------------+                +---------------------+
--|                     |-----SCK------->|CLK                  |
--|       Master        |-----SS-------->|SYNC  DRIFn (slave)  |
--|                     |                |D0 (unused)          |
--|                     |-----SD-------->|D1                   |
--+---------------------+                +---------------------+
--
--	drif00: rif@e6f40000 {
--		compatible = "renesas,r8a7795-drif",
--			     "renesas,rcar-gen3-drif";
--		reg = <0 0xe6f40000 0 0x64>;
--		interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
--		clocks = <&cpg CPG_MOD 515>;
--		clock-names = "fck";
--		dmas = <&dmac1 0x20>, <&dmac2 0x20>;
--		dma-names = "rx", "rx";
--		power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
--		renesas,bonding = <&drif01>;
--	};
--
--	drif01: rif@e6f50000 {
--		compatible = "renesas,r8a7795-drif",
--			     "renesas,rcar-gen3-drif";
--		reg = <0 0xe6f50000 0 0x64>;
--		interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
--		clocks = <&cpg CPG_MOD 514>;
--		clock-names = "fck";
--		dmas = <&dmac1 0x22>, <&dmac2 0x22>;
--		dma-names = "rx", "rx";
--		power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
--		renesas,bonding = <&drif00>;
--		pinctrl-0 = <&drif0_pins>;
--		pinctrl-names = "default";
--		port {
--			drif0_ep: endpoint {
--			     remote-endpoint = <&tuner_ep>;
--			     sync-active = <0>;
--			};
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/media/renesas,drif.yaml b/Documentation/devicetree/bindings/media/renesas,drif.yaml
-new file mode 100644
-index 000000000000..7d86c581a65f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/renesas,drif.yaml
-@@ -0,0 +1,277 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/renesas,drif.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Renesas R-Car Gen3 Digital Radio Interface Controller (DRIF)
-+
-+maintainers:
-+  - Ramesh Shanmugasundaram <rashanmu@gmail.com>
-+  - Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-+
-+description: |
-+  R-Car Gen3 DRIF is a SPI like receive only slave device. A general
-+  representation of DRIF interfacing with a master device is shown below.
-+
-+  +---------------------+                +---------------------+
-+  |                     |-----SCK------->|CLK                  |
-+  |       Master        |-----SS-------->|SYNC  DRIFn (slave)  |
-+  |                     |-----SD0------->|D0                   |
-+  |                     |-----SD1------->|D1                   |
-+  +---------------------+                +---------------------+
-+
-+  As per datasheet, each DRIF channel (drifn) is made up of two internal
-+  channels (drifn0 & drifn1). These two internal channels share the common
-+  CLK & SYNC. Each internal channel has its own dedicated resources like
-+  irq, dma channels, address space & clock. This internal split is not
-+  visible to the external master device.
-+
-+  The device tree model represents each internal channel as a separate node.
-+  The internal channels sharing the CLK & SYNC are tied together by their
-+  phandles using a property called "renesas,bonding". For the rest of
-+  the documentation, unless explicitly stated, the word channel implies an
-+  internal channel.
-+
-+  When both internal channels are enabled they need to be managed together
-+  as one (i.e.) they cannot operate alone as independent devices. Out of the
-+  two, one of them needs to act as a primary device that accepts common
-+  properties of both the internal channels. This channel is identified by a
-+  property called "renesas,primary-bond".
-+
-+  To summarize,
-+     * When both the internal channels that are bonded together are enabled,
-+       the zeroth channel is selected as primary-bond. This channels accepts
-+       properties common to all the members of the bond.
-+     * When only one of the bonded channels need to be enabled, the property
-+       "renesas,bonding" or "renesas,primary-bond" will have no effect. That
-+       enabled channel can act alone as any other independent device.
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - renesas,r8a7795-drif        # R-Car H3
-+          - renesas,r8a7796-drif        # R-Car M3-W
-+      - const: renesas,rcar-gen3-drif   # Generic R-Car Gen3 compatible device
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    maxItems: 1
-+    items:
-+      - const: fck
-+
-+  resets:
-+    maxItems: 1
-+
-+  dmas:
-+    minItems: 1
-+    maxItems: 2
-+
-+  dma-names:
-+    minItems: 1
-+    maxItems: 2
-+    items:
-+      - const: rx
-+      - const: rx
-+
-+  renesas,bonding:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      The phandle to the other internal channel of DRIF
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  renesas,primary-bond:
-+    type: boolean
-+    description:
-+      Indicates that the channel acts as primary among the bonded channels.
-+
-+  port:
-+    type: object
-+    description:
-+      Child port node corresponding to the data input, in accordance with the
-+      video interface bindings defined in
-+      Documentation/devicetree/bindings/media/video-interfaces.txt.
-+      The port node must contain at least one endpoint.
-+
-+    properties:
-+      endpoint:
-+        type: object
-+
-+        properties:
-+          remote-endpoint:
-+            description:
-+              A phandle to the remote tuner endpoint subnode in remote node
-+              port.
-+
-+          sync-active:
-+            enum: [0, 1]
-+            description:
-+              Indicates sync signal polarity, 0/1 for low/high respectively.
-+              This property maps to SYNCAC bit in the hardware manual. The
-+              default is 1 (active high).
-+
-+        additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - resets
-+  - dmas
-+  - dma-names
-+  - renesas,bonding
-+  - power-domains
-+
-+allOf:
-+  - if:
-+      required:
-+        - renesas,primary-bond
-+    then:
-+      required:
-+        - pinctrl-0
-+        - pinctrl-names
-+        - port
-+
-+  - if:
-+      required:
-+        - port
-+    then:
-+      required:
-+        - pinctrl-0
-+        - pinctrl-names
-+    else:
-+      properties:
-+        pinctrl-0: false
-+        pinctrl-names: false
-+
-+additionalProperties: false
-+
-+examples:
-+  # Example with both internal channels enabled.
-+  #
-+  # When interfacing with a third party tuner device with two data pins as shown
-+  # below.
-+  #
-+  # +---------------------+                +---------------------+
-+  # |                     |-----SCK------->|CLK                  |
-+  # |       Master        |-----SS-------->|SYNC  DRIFn (slave)  |
-+  # |                     |-----SD0------->|D0                   |
-+  # |                     |-----SD1------->|D1                   |
-+  # +---------------------+                +---------------------+
-+  - |
-+    #include <dt-bindings/clock/r8a7795-cpg-mssr.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/power/r8a7795-sysc.h>
-+
-+    soc {
-+            #address-cells = <2>;
-+            #size-cells = <2>;
-+
-+            drif00: rif@e6f40000 {
-+                    compatible = "renesas,r8a7795-drif",
-+                                 "renesas,rcar-gen3-drif";
-+                    reg = <0 0xe6f40000 0 0x64>;
-+                    interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
-+                    clocks = <&cpg CPG_MOD 515>;
-+                    clock-names = "fck";
-+                    dmas = <&dmac1 0x20>, <&dmac2 0x20>;
-+                    dma-names = "rx", "rx";
-+                    power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-+                    renesas,bonding = <&drif01>;
-+                    resets = <&cpg 515>;
-+                    renesas,primary-bond;
-+                    pinctrl-0 = <&drif0_pins>;
-+                    pinctrl-names = "default";
-+                    port {
-+                            drif0_ep: endpoint {
-+                                 remote-endpoint = <&tuner_ep>;
-+                            };
-+                    };
-+            };
-+
-+            drif01: rif@e6f50000 {
-+                    compatible = "renesas,r8a7795-drif",
-+                                 "renesas,rcar-gen3-drif";
-+                    reg = <0 0xe6f50000 0 0x64>;
-+                    interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
-+                    clocks = <&cpg CPG_MOD 514>;
-+                    clock-names = "fck";
-+                    dmas = <&dmac1 0x22>, <&dmac2 0x22>;
-+                    dma-names = "rx", "rx";
-+                    power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-+                    renesas,bonding = <&drif00>;
-+                    resets = <&cpg 514>;
-+            };
-+    };
-+
-+  # Example with internal channel 1 alone enabled.
-+  #
-+  # When interfacing with a third party tuner device with one data pin as shown
-+  # below.
-+  #
-+  # +---------------------+                +---------------------+
-+  # |                     |-----SCK------->|CLK                  |
-+  # |       Master        |-----SS-------->|SYNC  DRIFn (slave)  |
-+  # |                     |                |D0 (unused)          |
-+  # |                     |-----SD-------->|D1                   |
-+  # +---------------------+                +---------------------+
-+  - |
-+    #include <dt-bindings/clock/r8a7795-cpg-mssr.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/power/r8a7795-sysc.h>
-+
-+    soc {
-+            #address-cells = <2>;
-+            #size-cells = <2>;
-+
-+            drif10: rif@e6f60000 {
-+                    compatible = "renesas,r8a7795-drif",
-+                                 "renesas,rcar-gen3-drif";
-+                    reg = <0 0xe6f60000 0 0x64>;
-+                    interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
-+                    clocks = <&cpg CPG_MOD 513>;
-+                    clock-names = "fck";
-+                    dmas = <&dmac1 0x24>, <&dmac2 0x24>;
-+                    dma-names = "rx", "rx";
-+                    power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-+                    resets = <&cpg 513>;
-+                    renesas,bonding = <&drif11>;
-+                    status = "disabled";
-+            };
-+
-+            drif11: rif@e6f70000 {
-+                    compatible = "renesas,r8a7795-drif",
-+                                 "renesas,rcar-gen3-drif";
-+                    reg = <0 0xe6f70000 0 0x64>;
-+                    interrupts = <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>;
-+                    clocks = <&cpg CPG_MOD 512>;
-+                    clock-names = "fck";
-+                    dmas = <&dmac1 0x26>, <&dmac2 0x26>;
-+                    dma-names = "rx", "rx";
-+                    power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-+                    resets = <&cpg 512>;
-+                    renesas,bonding = <&drif10>;
-+                    pinctrl-0 = <&drif1_pins>;
-+                    pinctrl-names = "default";
-+                    port {
-+                            drif1_ep: endpoint {
-+                                 remote-endpoint = <&tuner_ep1>;
-+                                 sync-active = <0>;
-+                            };
-+                    };
-+            };
-+    };
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 07dce09e08dd..692f58107056 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10930,7 +10930,7 @@ L:	linux-media@vger.kernel.org
- L:	linux-renesas-soc@vger.kernel.org
- S:	Supported
- T:	git git://linuxtv.org/media_tree.git
--F:	Documentation/devicetree/bindings/media/renesas,drif.txt
-+F:	Documentation/devicetree/bindings/media/renesas,drif.yaml
- F:	drivers/media/platform/rcar_drif.c
- 
- MEDIA DRIVERS FOR RENESAS - FCP
--- 
-2.25.1
+https://patchwork.linuxtv.org/project/linux-media/patch/20201020193850.1460644-6-helen.koike@collabora.com/
 
+Thanks
+Helen
