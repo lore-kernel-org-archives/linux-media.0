@@ -9,57 +9,57 @@ X-Spam-Status: No, score=-17.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AF96C56201
-	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 21:25:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 528D2C61DD8
+	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 21:26:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 37FE6241A4
-	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 21:25:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DB1D424198
+	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 21:26:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iHtJntPm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZSmdRFmI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2506022AbgJUVZ4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 21 Oct 2020 17:25:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44946 "EHLO
+        id S2506107AbgJUV0A (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 21 Oct 2020 17:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2441532AbgJUVZz (ORCPT
+        with ESMTP id S2441532AbgJUVZ6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 21 Oct 2020 17:25:55 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD95C0613CE;
-        Wed, 21 Oct 2020 14:25:54 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id d78so3571691wmd.3;
-        Wed, 21 Oct 2020 14:25:54 -0700 (PDT)
+        Wed, 21 Oct 2020 17:25:58 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A14FC0613CE;
+        Wed, 21 Oct 2020 14:25:58 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id q5so4143721wmq.0;
+        Wed, 21 Oct 2020 14:25:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Ugm6/vQLOS9NE/9xqZYIqQtzl6U+6a3UdZf0AL0JY0c=;
-        b=iHtJntPmjqGjrqkbsEOs5jKiPHqrrc6uXDiFsAbw56f4JBog0eka43/O4+NcoWwPFv
-         F3x2+Th5ujGqpWKehIIku6HqJJ0t/tuOyJadr01+8HzME60xJmsAzv7G2GpOppBATvFl
-         SP6pvoIX/hkJxT35GeyqzF4PLYDLA8YTOX1Kf/66+wo8ImH77OyNIn5cB8YFov1H7Vzk
-         ycjsKNR3QoBAHmvNGWOWEz5lEIJApMYwUlf5o3K6flbdNysR8aojsMfeSndqokvZseDD
-         AzUBOHvAcjjQRAm0vtPwAU1W3jgzj8E0vTsJ8bI91I84aYj3GEaEaDgnDeiolny4CWh/
-         gRHQ==
+        bh=LLHxzUEm8ov14FX65KjHPaUEVi76U8LpTXdl5/7xhP4=;
+        b=ZSmdRFmIX/6Ik98343I4rKLYrZTF07Q4af2rqjoJUMD/ROt12KB/qg48jAjHjxGjvI
+         AS72IaVNKKnZLQLdB9+RQEXKJQNafthegGlvRz6SVZRfImmMGyW7F5Xp4mEU8qbIKjun
+         TFieQX1XlWcZK+YsvrTKK2gbYg5z2iGG36em1VJPSOqb8xuCtr6W6Rcq10Ojy/wucvBc
+         dOpwZazubPrygxqLWWguM/Zm7lcj0Kzu/fcckWbwWs7HE/AiRXOwYtmIpinnXtVrBks3
+         UaHMH6p3/h6C7BtmChi+LvBpGBZl1JaKFdb3Cyn1RqqesXXFtRShG3xRW1M5YPAiPBHi
+         qG3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Ugm6/vQLOS9NE/9xqZYIqQtzl6U+6a3UdZf0AL0JY0c=;
-        b=ORIpyQqxSiWMHVnYO4lOZuiag0wtSqEMiv1c/6hkZl62ggdu8XmVpJfGG4kBOec4va
-         Uc1uc74cDywnJh5wS3YuZ+2BEC85kUQUfmO367s2Jy96jBxkI/2b1AyDag2ov88ldgMz
-         vbSXQxW6eqdzpuWO8U+HI1vpFnz8k/JQ+jfimftbTNR4kgvQYUwKmqYZF+uL90Vw/Qmm
-         F6WGX2eUN7N8pDdSYwqEGRHAQaLHOKtwGplf91PdaVOW8ns6xrDmiXaoltyX6/wkUoJN
-         X2q+TCBr8ZdHey2BERdaVXhW7F5ejlYci8efsfTdv+ZgZGqGWqsFPxeRW6JnSCYwdln4
-         Bc5g==
-X-Gm-Message-State: AOAM531PD9blLFXVlS75zOQ6dSpamNJRbzdILMz/wDzISc7LG21/2S+3
-        pauZOL1y7A0M3b2WWTP/Ruc=
-X-Google-Smtp-Source: ABdhPJyVjZ4vGAgHh6QjzpYEZND0GN19S9AyBgxTljNgheVMDgN1BITFI0ML/Nx5ife1sSyy5yRO8g==
-X-Received: by 2002:a1c:6546:: with SMTP id z67mr5188908wmb.98.1603315553071;
-        Wed, 21 Oct 2020 14:25:53 -0700 (PDT)
+        bh=LLHxzUEm8ov14FX65KjHPaUEVi76U8LpTXdl5/7xhP4=;
+        b=cwHEMwC5TgZ/5gRz5Mjo704VmSuHpeaEHOgkfGVGgcPbIYskUjqCfvyuTl6QvzPGQY
+         bYHeUX1N/g1onOaz/zzUU3wqmiTBYRoV8PDfy8N23m7M/SmrXyBnLZ0vMfbcFOyHy/0v
+         ZZhbjwsCmM/ZS9eTslZBLwHxaF3PiHn+97LL6+KjrbMwhp6mrBMY/2HxQI/OvTAHqVDy
+         b6oi6gEqTWqsRNbGFpH3PN/AGOTWRJda4bWCDKofcrJTNw0sDsfN4uYnduVgwNXj8H5N
+         /deguZnX8tigp4rwbVOC8AthEpuB4apl6H6j2Jn6uC7fWt+awBAGdZxTULzUG70onev0
+         XgdQ==
+X-Gm-Message-State: AOAM530s6WpGr0fj9xgwMbBl9ZNdQfnoZAkDhkqAJNXSB3mQAZY9ZqVg
+        LzoyjaCds2E2quiFxP94das=
+X-Google-Smtp-Source: ABdhPJwythRXUS4TroGkBaw8tSAj9jmth3EH36PdkAVABWl+nA7Vpy+4gdGaQE7/6xFq7T8cZDgCEQ==
+X-Received: by 2002:a1c:2042:: with SMTP id g63mr5180312wmg.174.1603315557118;
+        Wed, 21 Oct 2020 14:25:57 -0700 (PDT)
 Received: from arch-thunder.local (a109-49-46-234.cpe.netcabo.pt. [109.49.46.234])
-        by smtp.gmail.com with ESMTPSA id c18sm5877220wrq.5.2020.10.21.14.25.51
+        by smtp.gmail.com with ESMTPSA id c18sm5877220wrq.5.2020.10.21.14.25.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Oct 2020 14:25:52 -0700 (PDT)
+        Wed, 21 Oct 2020 14:25:56 -0700 (PDT)
 From:   Rui Miguel Silva <rmfrfs@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>, sakari.ailus@linux.intel.com,
         Hans Verkuil <hverkuil@xs4all.nl>,
@@ -67,9 +67,9 @@ To:     Rob Herring <robh+dt@kernel.org>, sakari.ailus@linux.intel.com,
 Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         Rui Miguel Silva <rmfrfs@gmail.com>,
         Jacopo Mondi <jacopo+renesas@jmondi.org>
-Subject: [PATCH v6 1/3] dt-bindings: ov2680: convert bindings to yaml
-Date:   Wed, 21 Oct 2020 22:25:41 +0100
-Message-Id: <20201021212543.1920793-2-rmfrfs@gmail.com>
+Subject: [PATCH v6 3/3] dt-bindings: imx7-mipi-csi2: convert bindings to yaml
+Date:   Wed, 21 Oct 2020 22:25:43 +0100
+Message-Id: <20201021212543.1920793-4-rmfrfs@gmail.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201021212543.1920793-1-rmfrfs@gmail.com>
 References: <20201021212543.1920793-1-rmfrfs@gmail.com>
@@ -79,189 +79,317 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Convert ov2680 sensor bindings documentation to yaml schema, remove
-the textual bindings document and update MAINTAINERS entry.
+Convert imx7 mipi csi2 bindings documentation to yaml schema, remove
+the textual document and update MAINTAINERS entry.
 
 Signed-off-by: Rui Miguel Silva <rmfrfs@gmail.com>
 Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 ---
- .../devicetree/bindings/media/i2c/ov2680.txt  | 46 ---------
- .../bindings/media/i2c/ovti,ov2680.yaml       | 99 +++++++++++++++++++
- MAINTAINERS                                   |  2 +-
- 3 files changed, 100 insertions(+), 47 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/media/i2c/ov2680.txt
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov2680.yaml
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/ov2680.txt b/Documentation/devicetree/bindings/media/i2c/ov2680.txt
+v5 -> v6:
+  Jacopo Mondi:
+  Patch 3/3:
+    https://lore.kernel.org/linux-media/20201021155016.bs2n5ixuhxwjzjy2@uno.localdomain/
+    - fix capital MIPI CSI-2 and i.MX in description
+    - add maxItems in clocks
+    - add Jacopo Reviewed-by tag
+  
+ .../bindings/media/imx7-mipi-csi2.txt         |  90 ---------
+ .../bindings/media/nxp,imx7-mipi-csi2.yaml    | 173 ++++++++++++++++++
+ MAINTAINERS                                   |   2 +-
+ 3 files changed, 174 insertions(+), 91 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt
+ create mode 100644 Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
+
+diff --git a/Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt b/Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt
 deleted file mode 100644
-index 11e925ed9dad..000000000000
---- a/Documentation/devicetree/bindings/media/i2c/ov2680.txt
+index 71fd74ed3ec8..000000000000
+--- a/Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt
 +++ /dev/null
-@@ -1,46 +0,0 @@
--* Omnivision OV2680 MIPI CSI-2 sensor
+@@ -1,90 +0,0 @@
+-Freescale i.MX7 Mipi CSI2
+-=========================
 -
--Required Properties:
--- compatible: should be "ovti,ov2680".
--- clocks: reference to the xvclk input clock.
--- clock-names: should be "xvclk".
--- DOVDD-supply: Digital I/O voltage supply.
--- DVDD-supply: Digital core voltage supply.
--- AVDD-supply: Analog voltage supply.
+-mipi_csi2 node
+---------------
 -
--Optional Properties:
--- reset-gpios: reference to the GPIO connected to the powerdown/reset pin,
--               if any. This is an active low signal to the OV2680.
+-This is the device node for the MIPI CSI-2 receiver core in i.MX7 SoC. It is
+-compatible with previous version of Samsung D-phy.
 -
--The device node must contain one 'port' child node for its digital output
--video port, and this port must have a single endpoint in accordance with
-- the video interface bindings defined in
--Documentation/devicetree/bindings/media/video-interfaces.txt.
+-Required properties:
 -
--Endpoint node required properties for CSI-2 connection are:
--- remote-endpoint: a phandle to the bus receiver's endpoint node.
--- clock-lanes: should be set to <0> (clock lane on hardware lane 0).
--- data-lanes: should be set to <1> (one CSI-2 lane supported).
+-- compatible    : "fsl,imx7-mipi-csi2";
+-- reg           : base address and length of the register set for the device;
+-- interrupts    : should contain MIPI CSIS interrupt;
+-- clocks        : list of clock specifiers, see
+-        Documentation/devicetree/bindings/clock/clock-bindings.txt for details;
+-- clock-names   : must contain "pclk", "wrap" and "phy" entries, matching
+-                  entries in the clock property;
+-- power-domains : a phandle to the power domain, see
+-          Documentation/devicetree/bindings/power/power_domain.txt for details.
+-- reset-names   : should include following entry "mrst";
+-- resets        : a list of phandle, should contain reset entry of
+-                  reset-names;
+-- phy-supply    : from the generic phy bindings, a phandle to a regulator that
+-	          provides power to MIPI CSIS core;
 -
--Example:
+-Optional properties:
 -
--&i2c2 {
--	ov2680: camera-sensor@36 {
--		compatible = "ovti,ov2680";
--		reg = <0x36>;
--		clocks = <&osc>;
--		clock-names = "xvclk";
--		reset-gpios = <&gpio1 3 GPIO_ACTIVE_LOW>;
--		DOVDD-supply = <&sw2_reg>;
--		DVDD-supply = <&sw2_reg>;
--		AVDD-supply = <&reg_peri_3p15v>;
+-- clock-frequency : The IP's main (system bus) clock frequency in Hz, default
+-		    value when this property is not specified is 166 MHz;
+-- fsl,csis-hs-settle : differential receiver (HS-RX) settle time;
 -
--		port {
--			ov2680_to_mipi: endpoint {
--				remote-endpoint = <&mipi_from_sensor>;
--				clock-lanes = <0>;
--				data-lanes = <1>;
--			};
--		};
--	};
--};
-diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov2680.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov2680.yaml
+-The device node should contain two 'port' child nodes with one child 'endpoint'
+-node, according to the bindings defined in:
+- Documentation/devicetree/bindings/ media/video-interfaces.txt.
+- The following are properties specific to those nodes.
+-
+-port node
+----------
+-
+-- reg		  : (required) can take the values 0 or 1, where 0 shall be
+-                     related to the sink port and port 1 shall be the source
+-                     one;
+-
+-endpoint node
+--------------
+-
+-- data-lanes    : (required) an array specifying active physical MIPI-CSI2
+-		    data input lanes and their mapping to logical lanes; this
+-                    shall only be applied to port 0 (sink port), the array's
+-                    content is unused only its length is meaningful,
+-                    in this case the maximum length supported is 2;
+-
+-example:
+-
+-        mipi_csi: mipi-csi@30750000 {
+-                #address-cells = <1>;
+-                #size-cells = <0>;
+-
+-                compatible = "fsl,imx7-mipi-csi2";
+-                reg = <0x30750000 0x10000>;
+-                interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
+-                clocks = <&clks IMX7D_IPG_ROOT_CLK>,
+-                                <&clks IMX7D_MIPI_CSI_ROOT_CLK>,
+-                                <&clks IMX7D_MIPI_DPHY_ROOT_CLK>;
+-                clock-names = "pclk", "wrap", "phy";
+-                clock-frequency = <166000000>;
+-                power-domains = <&pgc_mipi_phy>;
+-                phy-supply = <&reg_1p0d>;
+-                resets = <&src IMX7_RESET_MIPI_PHY_MRST>;
+-                reset-names = "mrst";
+-                fsl,csis-hs-settle = <3>;
+-
+-                port@0 {
+-                        reg = <0>;
+-
+-                        mipi_from_sensor: endpoint {
+-                                remote-endpoint = <&ov2680_to_mipi>;
+-                                data-lanes = <1>;
+-                        };
+-                };
+-
+-                port@1 {
+-                        reg = <1>;
+-
+-                        mipi_vc0_to_csi_mux: endpoint {
+-                                remote-endpoint = <&csi_mux_from_mipi_vc0>;
+-                        };
+-                };
+-        };
+diff --git a/Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
 new file mode 100644
-index 000000000000..43bf749807e1
+index 000000000000..0668332959e7
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov2680.yaml
-@@ -0,0 +1,99 @@
++++ b/Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
+@@ -0,0 +1,173 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/media/i2c/ovti,ov2680.yaml#
++$id: http://devicetree.org/schemas/media/nxp,imx7-mipi-csi2.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Omnivision OV2680 CMOS Sensor
++title: NXP i.MX7 Mipi CSI2
 +
 +maintainers:
 +  - Rui Miguel Silva <rmfrfs@gmail.com>
 +
-+description: |-
-+  The OV2680 color sensor is a low voltage, high performance 1/5 inch UXGA (2
-+  megapixel) CMOS image sensor that provides a single-chip UXGA (1600 x 1200)
-+  camera. It provides full-frame, sub-sampled, or windowed 10-bit images in
-+  various formats via the control of the Serial Camera Control Bus (SCCB)
-+  interface. The OV2680 has an image array capable of operating at up to 30
-+  frames per second (fps) in UXGA resolution.
++description: |
++  This is the device node for the MIPI CSI-2 receiver core in i.MX7 soc. It is
++  compatible with previous version of samsung d-phy.
 +
 +properties:
 +  compatible:
-+    const: ovti,ov2680
++    const: fsl,imx7-mipi-csi2
 +
 +  reg:
 +    maxItems: 1
 +
-+  clocks:
++  interrupts:
 +    maxItems: 1
++
++  clocks:
++    minItems: 3
++    maxItems: 3
 +
 +  clock-names:
-+    const: xvclk
++    items:
++      - const: pclk
++      - const: wrap
++      - const: phy
 +
-+  reset-gpios:
-+    description:
-+      The phandle and specifier for the GPIO that controls sensor reset.
-+      This corresponds to the hardware pin XSHUTDOWN which is physically
-+      active low.
++  power-domains:
 +    maxItems: 1
 +
-+  dovdd-supply:
++  phy-supply:
 +    description:
-+      Definition of the regulator used as interface power supply.
++      Phandle to a regulator that provides power to the PHY. This
++      regulator will be managed during the PHY power on/off sequence.
 +
-+  avdd-supply:
++  resets:
++    maxItems: 1
++
++  reset-names:
++    const: mrst
++
++  clock-frequency:
 +    description:
-+      Definition of the regulator used as analog power supply.
++      The IP main (system bus) clock frequency in Hertz
++    default: 166000000
 +
-+  dvdd-supply:
++  fsl,csis-hs-settle:
++    $ref: /schemas/types.yaml#/definitions/uint32
 +    description:
-+      Definition of the regulator used as digital power supply.
++      Differential receiver (HS-RX) settle time
 +
-+  port:
++  ports:
 +    type: object
 +    description:
-+      A node containing an output port node with an endpoint definition
++      A node containing input and output port nodes with endpoint definitions
 +      as documented in
 +      Documentation/devicetree/bindings/media/video-interfaces.txt
++
++    properties:
++      '#address-cells':
++        const: 1
++
++      '#size-cells':
++        const: 0
++
++      port@0:
++        type: object
++        description:
++          Input port node, single endpoint describing the CSI-2 transmitter.
++
++        properties:
++          reg:
++            const: 0
++
++          endpoint:
++            type: object
++
++            properties:
++              data-lanes:
++                $ref: /schemas/types.yaml#/definitions/uint32-array
++                description: See ../video-interfaces.txt
++                oneOf:
++                  - items:
++                      - const: 1
++                  - items:
++                      - const: 1
++                      - const: 2
++
++              remote-endpoint: true
++
++            required:
++              - data-lanes
++              - remote-endpoint
++
++            additionalProperties: false
++
++        additionalProperties: false
++
++      port@1:
++        type: object
++        description:
++          Output port node
 +
 +required:
 +  - compatible
 +  - reg
++  - interrupts
 +  - clocks
 +  - clock-names
-+  - dovdd-supply
-+  - avdd-supply
-+  - dvdd-supply
-+  - reset-gpios
-+  - port
++  - power-domains
++  - phy-supply
++  - resets
++  - reset-names
++  - ports
 +
 +additionalProperties: false
 +
 +examples:
 +  - |
-+    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/clock/imx7d-clock.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/reset/imx7-reset.h>
 +
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
++    mipi_csi: mipi-csi@30750000 {
++            compatible = "fsl,imx7-mipi-csi2";
++            reg = <0x30750000 0x10000>;
++            interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
 +
-+        ov2680: camera-sensor@36 {
-+                compatible = "ovti,ov2680";
-+                reg = <0x36>;
-+                clocks = <&osc>;
-+                clock-names = "xvclk";
-+                reset-gpios = <&gpio1 3 GPIO_ACTIVE_LOW>;
++            clocks = <&clks IMX7D_IPG_ROOT_CLK>,
++                     <&clks IMX7D_MIPI_CSI_ROOT_CLK>,
++                     <&clks IMX7D_MIPI_DPHY_ROOT_CLK>;
++            clock-names = "pclk", "wrap", "phy";
++            clock-frequency = <166000000>;
 +
-+                dovdd-supply = <&sw2_reg>;
-+                dvdd-supply = <&sw2_reg>;
-+                avdd-supply = <&reg_peri_3p15v>;
++            power-domains = <&pgc_mipi_phy>;
++            phy-supply = <&reg_1p0d>;
++            resets = <&src IMX7_RESET_MIPI_PHY_MRST>;
++            reset-names = "mrst";
++            fsl,csis-hs-settle = <3>;
 +
-+                port {
-+                        ov2680_to_mipi: endpoint {
-+                                remote-endpoint = <&mipi_from_sensor>;
-+                        };
-+                };
-+        };
++            ports {
++                    #address-cells = <1>;
++                    #size-cells = <0>;
++
++                    port@0 {
++                            reg = <0>;
++
++                            mipi_from_sensor: endpoint {
++                                    remote-endpoint = <&ov2680_to_mipi>;
++                                    data-lanes = <1>;
++                            };
++                    };
++
++                    port@1 {
++                            reg = <1>;
++
++                            mipi_vc0_to_csi_mux: endpoint {
++                                    remote-endpoint = <&csi_mux_from_mipi_vc0>;
++                            };
++                    };
++            };
 +    };
 +
 +...
 diff --git a/MAINTAINERS b/MAINTAINERS
-index f2757c6068e3..2cb2a5c60a1d 100644
+index 557713b3ee95..34e53a1570aa 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -12781,7 +12781,7 @@ M:	Rui Miguel Silva <rmfrfs@gmail.com>
- L:	linux-media@vger.kernel.org
+@@ -10779,8 +10779,8 @@ L:	linux-media@vger.kernel.org
  S:	Maintained
  T:	git git://linuxtv.org/media_tree.git
--F:	Documentation/devicetree/bindings/media/i2c/ov2680.txt
-+F:	Documentation/devicetree/bindings/media/i2c/ov2680.yaml
- F:	drivers/media/i2c/ov2680.c
+ F:	Documentation/admin-guide/media/imx7.rst
+-F:	Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt
+ F:	Documentation/devicetree/bindings/media/nxp,imx7-csi.yaml
++F:	Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
+ F:	drivers/staging/media/imx/imx7-media-csi.c
+ F:	drivers/staging/media/imx/imx7-mipi-csis.c
  
- OMNIVISION OV2685 SENSOR DRIVER
 -- 
 2.28.0
 
