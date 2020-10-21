@@ -4,29 +4,29 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B1D1C55179
-	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 13:53:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7D73C55178
+	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 13:53:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 281D4223C7
-	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 13:53:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9A13A21655
+	for <linux-media@archiver.kernel.org>; Wed, 21 Oct 2020 13:53:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2442084AbgJUNxn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 21 Oct 2020 09:53:43 -0400
+        id S2443103AbgJUNxt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 21 Oct 2020 09:53:49 -0400
 Received: from relmlor1.renesas.com ([210.160.252.171]:29050 "EHLO
         relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2442065AbgJUNxm (ORCPT
+        by vger.kernel.org with ESMTP id S2443030AbgJUNxs (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 21 Oct 2020 09:53:42 -0400
+        Wed, 21 Oct 2020 09:53:48 -0400
 X-IronPort-AV: E=Sophos;i="5.77,401,1596466800"; 
-   d="scan'208";a="60410342"
+   d="scan'208";a="60410357"
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 21 Oct 2020 22:53:40 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 21 Oct 2020 22:53:47 +0900
 Received: from devel.example.org?044ree.adwin.renesas.com (unknown [10.226.36.120])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 5170542980AB;
-        Wed, 21 Oct 2020 22:53:38 +0900 (JST)
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id B1B7E429809D;
+        Wed, 21 Oct 2020 22:53:44 +0900 (JST)
 From:   Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -38,10 +38,11 @@ Cc:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
         Chris Paterson <Chris.Paterson2@renesas.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCH v5 1/5] MAINTAINERS: Update MAINTAINERS for Renesas DRIF driver
-Date:   Wed, 21 Oct 2020 14:53:28 +0100
-Message-Id: <20201021135332.4928-2-fabrizio.castro.jz@renesas.com>
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v5 3/5] media: dt-bindings: media: renesas,drif: Add r8a77990 support
+Date:   Wed, 21 Oct 2020 14:53:30 +0100
+Message-Id: <20201021135332.4928-4-fabrizio.castro.jz@renesas.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201021135332.4928-1-fabrizio.castro.jz@renesas.com>
 References: <20201021135332.4928-1-fabrizio.castro.jz@renesas.com>
@@ -51,39 +52,41 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add Fabrizio castro and remove Ramesh Shanmugasundaram.
+The r8a77990 (a.k.a. R-Car E3) device tree schema is
+compatible with R-Car H3 and M3-W schema.
+
+Document r8a77990 support within renesas,drif.yaml.
 
 Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Ramesh Shanmugasundaram <rashanmu@gmail.com>
+Acked-by: Rob Herring <robh@kernel.org>
 ---
 v4->v5:
-* No change
+* Fixed indentation
 v3->v4:
 * No change
 v2->v3:
-* Removed Ramesh Shanmugasundaram as maintainer, as suggested
-  by Ramesh
-* Reworked commit title and changelog
+* No change
 v1->v2:
 * No change
 
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/media/renesas,drif.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 743b4e2135da..07dce09e08dd 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10925,7 +10925,7 @@ F:	drivers/media/platform/renesas-ceu.c
- F:	include/media/drv-intf/renesas-ceu.h
+diff --git a/Documentation/devicetree/bindings/media/renesas,drif.yaml b/Documentation/devicetree/bindings/media/renesas,drif.yaml
+index 7d86c581a65f..0b1a25ccb959 100644
+--- a/Documentation/devicetree/bindings/media/renesas,drif.yaml
++++ b/Documentation/devicetree/bindings/media/renesas,drif.yaml
+@@ -53,6 +53,7 @@ properties:
+       - enum:
+           - renesas,r8a7795-drif        # R-Car H3
+           - renesas,r8a7796-drif        # R-Car M3-W
++          - renesas,r8a77990-drif       # R-Car E3
+       - const: renesas,rcar-gen3-drif   # Generic R-Car Gen3 compatible device
  
- MEDIA DRIVERS FOR RENESAS - DRIF
--M:	Ramesh Shanmugasundaram <rashanmu@gmail.com>
-+M:	Fabrizio Castro <fabrizio.castro.jz@renesas.com>
- L:	linux-media@vger.kernel.org
- L:	linux-renesas-soc@vger.kernel.org
- S:	Supported
+   reg:
 -- 
 2.25.1
 
