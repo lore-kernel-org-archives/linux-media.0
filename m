@@ -2,288 +2,126 @@ Return-Path: <SRS0=ffI8=D5=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B7A2C56201
-	for <linux-media@archiver.kernel.org>; Thu, 22 Oct 2020 17:09:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9646DC56202
+	for <linux-media@archiver.kernel.org>; Thu, 22 Oct 2020 17:47:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1B72624655
-	for <linux-media@archiver.kernel.org>; Thu, 22 Oct 2020 17:09:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3A36020663
+	for <linux-media@archiver.kernel.org>; Thu, 22 Oct 2020 17:47:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="uZrAsZeo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gKeLXQTM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2898690AbgJVRJM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 22 Oct 2020 13:09:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58128 "EHLO
+        id S369288AbgJVRrY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 22 Oct 2020 13:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2506307AbgJVRJM (ORCPT
+        with ESMTP id S369281AbgJVRrX (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 22 Oct 2020 13:09:12 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D37C0613CE;
-        Thu, 22 Oct 2020 10:09:10 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id d78so2963084wmd.3;
-        Thu, 22 Oct 2020 10:09:10 -0700 (PDT)
+        Thu, 22 Oct 2020 13:47:23 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05BEAC0613CE;
+        Thu, 22 Oct 2020 10:47:23 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id n6so3543702wrm.13;
+        Thu, 22 Oct 2020 10:47:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RQKnUzJXc7xO6ebK8GDO7+QlfO2qKCjrrriFCYvIvWU=;
-        b=uZrAsZeoP1x9wvIqnpZA03Z5PW0qciwH860sY9m2bvbZQBma3oVYqFgRaPqhhWSsGs
-         YU49ik+FjfkFBn/6H9D/R07Cu4Hj2irEG+qRlz+7r3coKB8KCvk6P7XwJ0HlaygglVol
-         GuGpMvrbnOpM9sLsKHJOd6Fq4eedySN8JfQrjet6juC0VTNV3J9Uj85nBe89DpLhMSS2
-         ulTG/NmNH//i5IQ2O/rLu0i/XYU2FsXTaLfNiW63DmA+6Ch3c+xptthFus5oSwP9no4E
-         vOa8rGBwCiW5FGB4uW6eNrBriM4I4i880tZvP9GAK3PofCQ+m8gHz9YSBaynJ87gizT7
-         58AA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=lpJOF/BOpUDwhpTSwmF/7JRrywChTu+z2nyDcUw7Tfk=;
+        b=gKeLXQTMv19Fqgdqdaa5GLce9N1RcxFKLMYVoVpplJa/OUsq/Vt/YZ8oPB93sVlp6E
+         5/Jda5QKpZT2GrCjN75dGNwNfQ3ke1GFh5JE47zAEYkq55VTI8JOsGnwoWV2O01uSzjX
+         oOxOO34PUBiucQuZmE2IV3RKKySSGne0rJeWIjBXiO+ACN522XAukKxDb/9aYN2dLUnS
+         /GExnH9euh7cgTcVFo8pyqU6Ek571Wg8eXYqNwOevODPXaxkxfnWP1gQuoFfnMmTasRn
+         zfKfDjK0Iyy5vm1twZxID4SLzxBeJKJUpU31XApN6CFQ0gyijeKKjCitMWsU+LzONrtx
+         eHtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RQKnUzJXc7xO6ebK8GDO7+QlfO2qKCjrrriFCYvIvWU=;
-        b=buKONf9Uo+K+cfV7Puq1K3veuZUnIIOCMLw3jqtDSS6S/XaU6nPptuzMUUnHJzX5jb
-         6LPE3a9w0MxxhYggonPoxX+U6IeTyvzqNZNjBIGcLGYvu1oJBv9SLjs69SlDESRA2S65
-         DRzY7CW/c+JgFjtwlQ3fjpAqVNqRla801EU0684TCorIC6vV9yt5H3Wv7uuP8DC06z/c
-         JvztoTH8qNTJNsM5iiAbvT/E/aENHm0JcOgOiEsu1SGDeVnMqdqkv45LdRtVPkhi6aMV
-         s4SmUXjundTx/sRV/aat3TG+lcgR9hKp4qTYtoRhhlXn4bH8+MXEROA0KsUQufCqymEu
-         TPAw==
-X-Gm-Message-State: AOAM530P6qX2jYrTO2h533JPdE37tbXkpIPlk9XMeNz1pHwGW00VSDu6
-        3WrDqBfNGkfDr38LviGXIwEbmECHtEYcrWkX/fE=
-X-Google-Smtp-Source: ABdhPJzbsY0m+CyLX72PLRam30SzyzsbKOi2+o71S8ttMkcznbkEZl45y/vpEa2OY+mCqS1yzDAnCJYaWq2SvZiQnFA=
-X-Received: by 2002:a1c:98d2:: with SMTP id a201mr3374691wme.166.1603386549017;
- Thu, 22 Oct 2020 10:09:09 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=lpJOF/BOpUDwhpTSwmF/7JRrywChTu+z2nyDcUw7Tfk=;
+        b=WcuKt+QTDRA3KMPl/ehnSDSHM+L+5JumL8rUSY24FQw0HgB/aoApwywi2iEzNaqyBn
+         BflQZPfXLsGLWYr3Ov+g+jW5h+HLqXWGeUccMDFLEHljrLmkA70znhBtbQC7Ozke16ex
+         Cx/Z1TD9FvBbWSAfGaFINmMjQanzE1TAhuF3LGKalqzlTY88YhFP47+SoN7PFJFjHRDg
+         cadAXEP6JNSuihGnEGiJ4lOzTVeV498uz0MKEka4jKof+B00+/wwan9OOj1wL9ZLFlDi
+         xDke1diJfyPvKIM6BNqzRwAYLGBui2V4QWPsXFOkjVlXxH92aXHQixcaQGhA1klwDwRn
+         rIIQ==
+X-Gm-Message-State: AOAM532RtghksrtnMJe2p3A8v3n3cuYsZOM46CNRQS8BptAWcZys5Y4v
+        DrHinRmVJkpgCwFiextrGH4=
+X-Google-Smtp-Source: ABdhPJxrDhXXWKowm2XfRzuRu+N5k3eIZxpjYVZWoEQWmMaLeHZ2zSH1IHlA4s6JdgZCaBx2beP8Yg==
+X-Received: by 2002:adf:d0cf:: with SMTP id z15mr4187395wrh.213.1603388841695;
+        Thu, 22 Oct 2020 10:47:21 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu ([2.237.20.237])
+        by smtp.gmail.com with ESMTPSA id u202sm5368355wmu.23.2020.10.22.10.47.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Oct 2020 10:47:21 -0700 (PDT)
+From:   kholk11@gmail.com
+To:     todor.too@gmail.com
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, mchehab@kernel.org,
+        robh+dt@kernel.org, marijns95@gmail.com, konradybcio@gmail.com,
+        martin.botka1@gmail.com, linux-arm-msm@vger.kernel.org,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robert.foss@linaro.org,
+        AngeloGioacchino Del Regno <kholk11@gmail.com>
+Subject: [PATCH v2 5/7] media: camss: csiphy-3ph: Add support for SDM630/660
+Date:   Thu, 22 Oct 2020 19:47:04 +0200
+Message-Id: <20201022174706.8813-6-kholk11@gmail.com>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20201022174706.8813-1-kholk11@gmail.com>
+References: <20201022174706.8813-1-kholk11@gmail.com>
 MIME-Version: 1.0
-References: <20201018125237.16717-1-kholk11@gmail.com> <20201018125237.16717-3-kholk11@gmail.com>
- <CAG3jFysokz0+NCHLp9-nhxG3wGVzk1TAFBwZmhMgViUr-sk-BA@mail.gmail.com> <CAG3jFysUQJXdy0ogK1shbgW1Tmk6DJbS26EaeRPMDEnObQ2_zg@mail.gmail.com>
-In-Reply-To: <CAG3jFysUQJXdy0ogK1shbgW1Tmk6DJbS26EaeRPMDEnObQ2_zg@mail.gmail.com>
-From:   AngeloGioacchino Del Regno <kholk11@gmail.com>
-Date:   Thu, 22 Oct 2020 19:08:57 +0200
-Message-ID: <CAK7fi1ZUE+C+Q7V-j=xR1V2OvUwmk=ZRcBwNLBDrjUr+rOW0Cw@mail.gmail.com>
-Subject: Re: [PATCH 2/6] media: camss: ispif: Correctly reset based on the VFE ID
-To:     Robert Foss <robert.foss@linaro.org>
-Cc:     Todor Tomov <todor.too@gmail.com>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, marijns95@gmail.com,
-        konradybcio@gmail.com, martin.botka1@gmail.com,
-        MSM <linux-arm-msm@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Il giorno mar 20 ott 2020 alle ore 11:03 Robert Foss
-<robert.foss@linaro.org> ha scritto:
->
-> I found a build issue in this commit.
->
->
-> On Tue, 20 Oct 2020 at 10:59, Robert Foss <robert.foss@linaro.org> wrote:
-> >
-> > Nice catch! This patch looks good to me.
-> >
-Thank you! :)))
+From: AngeloGioacchino Del Regno <kholk11@gmail.com>
 
-> > Signed-off-by: Robert Foss <robert.foss@linaro.org>
-> >
-> > On Sun, 18 Oct 2020 at 14:54, <kholk11@gmail.com> wrote:
-> > >
-> > > From: AngeloGioacchino Del Regno <kholk11@gmail.com>
-> > >
-> > > Resetting the ISPIF VFE0 context is wrong if we are using the VFE1
-> > > for dual-camera or simply because a secondary camera is connected
-> > > to it: in this case the reset will always happen on the VFE0 ctx
-> > > of the ISPIF, which is .. useless.
-> > >
-> > > Fix this usecase by adding the ISPIF_RST_CMD_1 address and choose
-> > > where to do the (or what to) reset based on the VFE line id.
-> > >
-> > > Signed-off-by: AngeloGioacchino Del Regno <kholk11@gmail.com>
-> > > ---
-> > >  .../media/platform/qcom/camss/camss-ispif.c   | 87 ++++++++++++-------
-> > >  .../media/platform/qcom/camss/camss-ispif.h   |  2 +-
-> > >  2 files changed, 57 insertions(+), 32 deletions(-)
-> > >
-> > > diff --git a/drivers/media/platform/qcom/camss/camss-ispif.c b/drivers/media/platform/qcom/camss/camss-ispif.c
-> > > index db94cfd6c508..252db6b33dab 100644
-> > > --- a/drivers/media/platform/qcom/camss/camss-ispif.c
-> > > +++ b/drivers/media/platform/qcom/camss/camss-ispif.c
-> > > @@ -26,6 +26,7 @@
-> > >  #define MSM_ISPIF_NAME "msm_ispif"
-> > >
-> > >  #define ISPIF_RST_CMD_0                        0x008
-> > > +#define ISPIF_RST_CMD_1                        0x00c
-> > >  #define ISPIF_RST_CMD_0_STROBED_RST_EN         (1 << 0)
-> > >  #define ISPIF_RST_CMD_0_MISC_LOGIC_RST         (1 << 1)
-> > >  #define ISPIF_RST_CMD_0_SW_REG_RST             (1 << 2)
-> > > @@ -179,7 +180,10 @@ static irqreturn_t ispif_isr_8x96(int irq, void *dev)
-> > >         writel(0x1, ispif->base + ISPIF_IRQ_GLOBAL_CLEAR_CMD);
-> > >
-> > >         if ((value0 >> 27) & 0x1)
-> > > -               complete(&ispif->reset_complete);
-> > > +               complete(&ispif->reset_complete[0]);
-> > > +
-> > > +       if ((value3 >> 27) & 0x1)
-> > > +               complete(&ispif->reset_complete[1]);
-> > >
-> > >         if (unlikely(value0 & ISPIF_VFE_m_IRQ_STATUS_0_PIX0_OVERFLOW))
-> > >                 dev_err_ratelimited(to_device(ispif), "VFE0 pix0 overflow\n");
-> > > @@ -237,7 +241,7 @@ static irqreturn_t ispif_isr_8x16(int irq, void *dev)
-> > >         writel(0x1, ispif->base + ISPIF_IRQ_GLOBAL_CLEAR_CMD);
-> > >
-> > >         if ((value0 >> 27) & 0x1)
-> > > -               complete(&ispif->reset_complete);
-> > > +               complete(&ispif->reset_complete[0]);
-> > >
-> > >         if (unlikely(value0 & ISPIF_VFE_m_IRQ_STATUS_0_PIX0_OVERFLOW))
-> > >                 dev_err_ratelimited(to_device(ispif), "VFE0 pix0 overflow\n");
-> > > @@ -257,33 +261,17 @@ static irqreturn_t ispif_isr_8x16(int irq, void *dev)
-> > >         return IRQ_HANDLED;
-> > >  }
-> > >
-> > > -/*
-> > > - * ispif_reset - Trigger reset on ISPIF module and wait to complete
-> > > - * @ispif: ISPIF device
-> > > - *
-> > > - * Return 0 on success or a negative error code otherwise
-> > > - */
-> > > -static int ispif_reset(struct ispif_device *ispif)
-> > > +static int ispif_vfe_reset(struct ispif_device *ispif, u8 vfe_id)
-> > >  {
-> > > -       unsigned long time;
-> > >         u32 val;
-> > > -       int ret;
-> > > -
-> > > -       ret = camss_pm_domain_on(to_camss(ispif), PM_DOMAIN_VFE0);
-> > > -       if (ret < 0)
-> > > -               return ret;
-> > >
-> > > -       ret = camss_pm_domain_on(to_camss(ispif), PM_DOMAIN_VFE1);
-> > > -       if (ret < 0)
-> > > -               return ret;
-> > > -
-> > > -       ret = camss_enable_clocks(ispif->nclocks_for_reset,
-> > > -                                 ispif->clock_for_reset,
-> > > -                                 to_device(ispif));
-> > > -       if (ret < 0)
-> > > -               return ret;
-> > > +       if (vfe_id > (to_camss(ispif)->vfe_num - 1)) {
-> > > +               dev_err(to_device(ispif),
-> > > +                       "Error: asked reset for invalid VFE%d\n", vfe_id);
-> > > +               return -ENOENT;
-> > > +       }
-> > >
-> > > -       reinit_completion(&ispif->reset_complete);
-> > > +       reinit_completion(&ispif->reset_complete[vfe_id]);
-> > >
-> > >         val = ISPIF_RST_CMD_0_STROBED_RST_EN |
-> > >                 ISPIF_RST_CMD_0_MISC_LOGIC_RST |
-> > > @@ -303,15 +291,51 @@ static int ispif_reset(struct ispif_device *ispif)
-> > >                 ISPIF_RST_CMD_0_RDI_OUTPUT_1_MISR_RST |
-> > >                 ISPIF_RST_CMD_0_RDI_OUTPUT_2_MISR_RST;
-> > >
-> > > -       writel_relaxed(val, ispif->base + ISPIF_RST_CMD_0);
-> > > +       if (vfe_id == 1)
-> > > +               writel_relaxed(val, ispif->base + ISPIF_RST_CMD_1);
-> > > +       else
-> > > +               writel_relaxed(val, ispif->base + ISPIF_RST_CMD_0);
-> > >
-> > > -       time = wait_for_completion_timeout(&ispif->reset_complete,
-> > > +       time = wait_for_completion_timeout(&ispif->reset_complete[vfe_id],
->
-> 'time' is not a variable that exists in this scope, so the build fails.
->
-Sorry about that, it looks like I've messed up a fix for that and it
-went into another
-unrelated commit instead of this one.
-In V2 it's definitely going to be moved here.
+The CSIPHY on SDM630/660 needs a slightly longer T_HS_CLK_MISS
+configuration on lanes CFG4.
 
-> > >                 msecs_to_jiffies(ISPIF_RESET_TIMEOUT_MS));
-> > >         if (!time) {
-> > > -               dev_err(to_device(ispif), "ISPIF reset timeout\n");
-> > > -               ret = -EIO;
-> > > +               dev_err(to_device(ispif),
-> > > +                       "ISPIF for VFE%d reset timeout\n", vfe_id);
-> > > +               return -EIO;
-> > >         }
-> > >
-> > > +       return 0;
-> > > +}
-> > > +
-> > > +/*
-> > > + * ispif_reset - Trigger reset on ISPIF module and wait to complete
-> > > + * @ispif: ISPIF device
-> > > + *
-> > > + * Return 0 on success or a negative error code otherwise
-> > > + */
-> > > +static int ispif_reset(struct ispif_device *ispif, u8 vfe_id)
-> > > +{
-> > > +       unsigned long time;
-> > > +       int ret;
-> > > +
-> > > +       ret = camss_pm_domain_on(to_camss(ispif), PM_DOMAIN_VFE0);
-> > > +       if (ret < 0)
-> > > +               return ret;
-> > > +
-> > > +       ret = camss_pm_domain_on(to_camss(ispif), PM_DOMAIN_VFE1);
-> > > +       if (ret < 0)
-> > > +               return ret;
-> > > +
-> > > +       ret = camss_enable_clocks(ispif->nclocks_for_reset,
-> > > +                                 ispif->clock_for_reset,
-> > > +                                 to_device(ispif));
-> > > +       if (ret < 0)
-> > > +               return ret;
-> > > +
-> > > +       ret = ispif_vfe_reset(ispif, vfe_id);
-> > > +       if (ret)
-> > > +               dev_dbg(to_device(ispif), "ISPIF Reset failed\n");
-> > > +
-> > >         camss_disable_clocks(ispif->nclocks_for_reset, ispif->clock_for_reset);
-> > >
-> > >         camss_pm_domain_off(to_camss(ispif), PM_DOMAIN_VFE0);
-> > > @@ -355,7 +379,7 @@ static int ispif_set_power(struct v4l2_subdev *sd, int on)
-> > >                         goto exit;
-> > >                 }
-> > >
-> > > -               ret = ispif_reset(ispif);
-> > > +               ret = ispif_reset(ispif, line->vfe_id);
-> > >                 if (ret < 0) {
-> > >                         pm_runtime_put_sync(dev);
-> > >                         camss_disable_clocks(ispif->nclocks, ispif->clock);
-> > > @@ -1192,7 +1216,8 @@ int msm_ispif_subdev_init(struct ispif_device *ispif,
-> > >
-> > >         mutex_init(&ispif->config_lock);
-> > >
-> > > -       init_completion(&ispif->reset_complete);
-> > > +       for (i = 0; i < MSM_ISPIF_VFE_NUM; i++)
-> > > +               init_completion(&ispif->reset_complete[i]);
-> > >
-> > >         return 0;
-> > >  }
-> > > diff --git a/drivers/media/platform/qcom/camss/camss-ispif.h b/drivers/media/platform/qcom/camss/camss-ispif.h
-> > > index 1a5ba2425a42..4132174f7ea1 100644
-> > > --- a/drivers/media/platform/qcom/camss/camss-ispif.h
-> > > +++ b/drivers/media/platform/qcom/camss/camss-ispif.h
-> > > @@ -56,7 +56,7 @@ struct ispif_device {
-> > >         int nclocks;
-> > >         struct camss_clock  *clock_for_reset;
-> > >         int nclocks_for_reset;
-> > > -       struct completion reset_complete;
-> > > +       struct completion reset_complete[MSM_ISPIF_VFE_NUM];
-> > >         int power_count;
-> > >         struct mutex power_lock;
-> > >         struct ispif_intf_cmd_reg intf_cmd[MSM_ISPIF_VFE_NUM];
-> > > --
-> > > 2.28.0
-> > >
+Signed-off-by: AngeloGioacchino Del Regno <kholk11@gmail.com>
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
+---
+ drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Regards,
-Angelo
+diff --git a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+index 2e65caf1ecae..97cb9de85031 100644
+--- a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
++++ b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+@@ -8,6 +8,7 @@
+  * Copyright (C) 2016-2018 Linaro Ltd.
+  */
+ 
++#include "camss.h"
+ #include "camss-csiphy.h"
+ 
+ #include <linux/delay.h>
+@@ -21,6 +22,7 @@
+ #define CSIPHY_3PH_LNn_CFG3(n)			(0x008 + 0x100 * (n))
+ #define CSIPHY_3PH_LNn_CFG4(n)			(0x00c + 0x100 * (n))
+ #define CSIPHY_3PH_LNn_CFG4_T_HS_CLK_MISS	0xa4
++#define CSIPHY_3PH_LNn_CFG4_T_HS_CLK_MISS_660	0xa5
+ #define CSIPHY_3PH_LNn_CFG5(n)			(0x010 + 0x100 * (n))
+ #define CSIPHY_3PH_LNn_CFG5_T_HS_DTERM		0x02
+ #define CSIPHY_3PH_LNn_CFG5_HS_REC_EQ_FQ_INT	0x50
+@@ -198,7 +200,10 @@ static void csiphy_lanes_enable(struct csiphy_device *csiphy,
+ 	val = CSIPHY_3PH_LNn_CFG1_SWI_REC_DLY_PRG;
+ 	writel_relaxed(val, csiphy->base + CSIPHY_3PH_LNn_CFG1(l));
+ 
+-	val = CSIPHY_3PH_LNn_CFG4_T_HS_CLK_MISS;
++	if (csiphy->camss->version == CAMSS_660)
++		val = CSIPHY_3PH_LNn_CFG4_T_HS_CLK_MISS_660;
++	else
++		val = CSIPHY_3PH_LNn_CFG4_T_HS_CLK_MISS;
+ 	writel_relaxed(val, csiphy->base + CSIPHY_3PH_LNn_CFG4(l));
+ 
+ 	val = CSIPHY_3PH_LNn_MISC1_IS_CLKLANE;
+-- 
+2.28.0
+
