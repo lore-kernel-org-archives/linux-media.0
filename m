@@ -2,122 +2,283 @@ Return-Path: <SRS0=ffI8=D5=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FC7EC55179
-	for <linux-media@archiver.kernel.org>; Thu, 22 Oct 2020 13:04:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18156C388F7
+	for <linux-media@archiver.kernel.org>; Thu, 22 Oct 2020 13:38:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F0ED924197
-	for <linux-media@archiver.kernel.org>; Thu, 22 Oct 2020 13:04:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A6DA62465B
+	for <linux-media@archiver.kernel.org>; Thu, 22 Oct 2020 13:38:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="hFupg462"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="SckECCy2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2899249AbgJVNE2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 22 Oct 2020 09:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48366 "EHLO
+        id S2900224AbgJVNiC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 22 Oct 2020 09:38:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2899239AbgJVNE1 (ORCPT
+        with ESMTP id S2900219AbgJVNiC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 22 Oct 2020 09:04:27 -0400
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31D6C0613D6
-        for <linux-media@vger.kernel.org>; Thu, 22 Oct 2020 06:04:26 -0700 (PDT)
-Received: by mail-ot1-x341.google.com with SMTP id e20so1378125otj.11
-        for <linux-media@vger.kernel.org>; Thu, 22 Oct 2020 06:04:26 -0700 (PDT)
+        Thu, 22 Oct 2020 09:38:02 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA37EC0613CF
+        for <linux-media@vger.kernel.org>; Thu, 22 Oct 2020 06:38:01 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id l15so2290786wmi.3
+        for <linux-media@vger.kernel.org>; Thu, 22 Oct 2020 06:38:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZyNrxU7+apn6xOGNK6avkKI1+/ers9vOGia4XvYK0qo=;
-        b=hFupg462AQWF/3SYEGt7TdCBz7vmVV24cGf5H3PsZJ3NHOF7ARTtk1Xj9pQ6xHZuZX
-         osgTY+1RlCMoExun5CEMIKW0/Q22JFrGKszrr35SoM6z+n1XQ4DOZb0ztKWF8FqsQ0rj
-         YYO9Ror43OTX+8WLAdJnTsM4HmBRXtLFYIBBA=
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=LQlAmo6BNhIFqjQ+zkGnWRNX5gpSqBwFOcKZJzUofPg=;
+        b=SckECCy2+VsWIIftp+wBGjSx9MkI4JqmuoATkubZM79pWgywJLF5F3jwXzsdWYhBjL
+         TNDE+aH0mmGaInlW8hc+EdlNsznMVGcwkUdedUMb5b8Z1q3X783cXdfOCv+/Ovb9Y85u
+         huSzLzuCkY3UL2N1ocVMZdjQfhrEnZMyYmKcc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZyNrxU7+apn6xOGNK6avkKI1+/ers9vOGia4XvYK0qo=;
-        b=fnl22mA1PCYgN7pXnz+U5mb3sXi1g1Ic9wPx6fKonnlzPFPuC8Hm0mvqKP8M9uvnnY
-         97mZfO2VTFQlWMXtuqSliEjGaAUnpwVZoOnF/ngzYqOx/rbbkXCcTuwvMNKfpewWS3i6
-         wWw0mYJFXU4C3ZToPNmZLhIgTZ2SJ0FlQTLSAhl2xt6m83Q6NC5W+gR/31PMBITM3TfZ
-         djoixXZkMXXiftXsaeO0YgNgi0Lm+Lt7XNG2ENfmVSGrUOWO03JQszTmrcgj6RfCcn8B
-         XB8Xg2piasG+798lONHxDR5hx1jrOX8iEeUoZSihtoPkskUzdMmWZH9+NFDHUXdTVnAt
-         i72A==
-X-Gm-Message-State: AOAM5300lIb3vZIpuwuoU6TG2nwef7POG62ue65xR8abTcPMHgyL6htE
-        To2zNDzenLYt/2OzGpzQMjFveT6fkG7k6Ir05D/SgQ==
-X-Google-Smtp-Source: ABdhPJx8bjchuHtk5X5j8AOy5uSsJ+M716njPCO+bint+3P1gD9xIsXgxoepgb7cnqWbI4FroPmfqz6vrX/g4fdQHsY=
-X-Received: by 2002:a05:6830:1647:: with SMTP id h7mr1916643otr.281.1603371865933;
- Thu, 22 Oct 2020 06:04:25 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=LQlAmo6BNhIFqjQ+zkGnWRNX5gpSqBwFOcKZJzUofPg=;
+        b=lZvlksdhAjJj7t/+3duHp4ofSTkzUcBpaSOeSW1mEAO4a1dgmZMy3iNEkFKBW0jgyr
+         9VgnHclHwZZYjkGWL9EpO3dnsggpy3/DBI4W4sJ8vGol6WRnIRxX8mmgtxMZhpNYpq9M
+         GGGByUhdI+dXY92E6nRNPUh6BHFsZ5m9ypVDugNkjX7DsU97PmKgGv2349xOWQweDr8s
+         8bwHtl1iBML34Qh+IvjpNOvpEdUYSFn4sgRdWGwfT3r87EWtJa1c/IaoStvnCPGHbX+/
+         ACJx62/fBlOAU8cC5QQfG7pzS5dOcw10Ka8n+HSYoFbM6l3FK0eP1cwY0OdLDIFs1dFN
+         34Wg==
+X-Gm-Message-State: AOAM531uPUjrBXn8I6RAtw5T+3PFFLe4LXnSrQZ8fHKSlq9IFY68Nfzj
+        iE3BMzgsp6Lj2D8zLJ3jZFjgIw==
+X-Google-Smtp-Source: ABdhPJyH8dRWJldq/eGklfAVifq8/nLddWUt2x85UlqaF3RnfJ/ybzuVmssu1EkzKPJ/8O5pzgTxPg==
+X-Received: by 2002:a1c:a749:: with SMTP id q70mr2781440wme.117.1603373880532;
+        Thu, 22 Oct 2020 06:38:00 -0700 (PDT)
+Received: from alco.lan ([80.71.134.83])
+        by smtp.gmail.com with ESMTPSA id q10sm4094031wrp.83.2020.10.22.06.37.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Oct 2020 06:38:00 -0700 (PDT)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     tfiga@chromium.org, Ricardo Ribalda <ribalda@chromium.org>
+Subject: [PATCH 5/6] media: uvcvideo: Implement UVC_GPIO_UNIT
+Date:   Thu, 22 Oct 2020 15:37:52 +0200
+Message-Id: <20201022133753.310506-6-ribalda@chromium.org>
+X-Mailer: git-send-email 2.29.0.rc1.297.gfa9743e501-goog
+In-Reply-To: <20201022133753.310506-1-ribalda@chromium.org>
+References: <20201022133753.310506-1-ribalda@chromium.org>
 MIME-Version: 1.0
-References: <20201021085655.1192025-1-daniel.vetter@ffwll.ch>
- <20201021085655.1192025-13-daniel.vetter@ffwll.ch> <20201021125030.GK36674@ziepe.ca>
- <CAKMK7uEWe8CaT7zjcZ6dJAKHxtxtqzjVB35fCFviwhcnqksDfw@mail.gmail.com>
- <20201021151352.GL36674@ziepe.ca> <CAKMK7uGq0=ks7Zj1Et44k7x9FwE9u_ua4zANSqrLRri0v01V+Q@mail.gmail.com>
- <20201021163702.GM36674@ziepe.ca> <CAKMK7uEjE5sHUq0hV_bnYjPKRxYyBnty0sLre+owANGZjLJg9Q@mail.gmail.com>
- <20201021232022.GN36674@ziepe.ca> <CAKMK7uEkAK42+19KRo06XzJFuMCVriEEg0jxqXq8oAdt2ExLsQ@mail.gmail.com>
- <20201022114345.GO36674@ziepe.ca>
-In-Reply-To: <20201022114345.GO36674@ziepe.ca>
-From:   Daniel Vetter <daniel.vetter@ffwll.ch>
-Date:   Thu, 22 Oct 2020 15:04:14 +0200
-Message-ID: <CAKMK7uHUufuyCXF5jUZG1zZ8SeaAFOi-9dA1sejc2R5fnLTJVA@mail.gmail.com>
-Subject: Re: [PATCH v3 12/16] PCI: Obey iomem restrictions for procfs mmap
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Jan Kara <jack@suse.cz>, Bjorn Helgaas <bhelgaas@google.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Oct 22, 2020 at 1:43 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
->
-> On Thu, Oct 22, 2020 at 09:00:44AM +0200, Daniel Vetter wrote:
-> > On Thu, Oct 22, 2020 at 1:20 AM Jason Gunthorpe <jgg@ziepe.ca> wrote:
-> > >
-> > > On Wed, Oct 21, 2020 at 09:24:08PM +0200, Daniel Vetter wrote:
-> > > > On Wed, Oct 21, 2020 at 6:37 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
-> > > > >
-> > > > > On Wed, Oct 21, 2020 at 05:54:54PM +0200, Daniel Vetter wrote:
-> > > > >
-> > > > > > The trouble is that io_remap_pfn adjust vma->pgoff, so we'd need to
-> > > > > > split that. So ideally ->mmap would never set up any ptes.
-> > > > >
-> > > > > /dev/mem makes pgoff == pfn so it doesn't get changed by remap.
-> > > > >
-> > > > > pgoff doesn't get touched for MAP_SHARED either, so there are other
-> > > > > users that could work like this - eg anyone mmaping IO memory is
-> > > > > probably OK.
-> > > >
-> > > > I was more generally thinking for io_remap_pfn_users because of the
-> > > > mkwrite use-case we might have in fbdev emulation in drm.
-> > >
-> > > You have a use case for MAP_PRIVATE and io_remap_pfn_range()??
-> >
-> > Uh no :-)
->
-> So it is fine, the pgoff mangling only happens for MAP_PRIVATE
+Some devices can implement a physical switch to disable the input of the
+camera on demand. Think of it like an elegant privacy sticker.
 
-Ah right I got confused, thanks for clarifying.
--Daniel
+The system can read the status of the privacy switch via a GPIO.
+
+It is important to know the status of the switch, e.g. to notify the
+user when the camera will produce black frames and a videochat
+application is used.
+
+Since the uvc device is not aware of this pin (and it should't), we need
+to implement a virtual entity that can interact with such pin.
+
+The location of the GPIO is specified via acpi or DT. on the usb device Eg:
+
+    Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
+    {
+        GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
+            "\\_SB.PCI0.GPIO", 0x00, ResourceConsumer, ,
+            )
+            {   // Pin list
+                0x0064
+            }
+    })
+    Name (_DSD, Package (0x02)  // _DSD: Device-Specific Data
+    {
+        ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301") /* Device Properties for _DSD */,
+        Package (0x01)
+        {
+            Package (0x02)
+            {
+                "privacy-gpio",
+                Package (0x04)
+                {
+                    \_SB.PCI0.XHCI.RHUB.HS07,
+                    Zero,
+                    Zero,
+                    One
+                }
+            }
+        }
+    })
+
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+ drivers/media/usb/uvc/uvc_ctrl.c   |  3 ++
+ drivers/media/usb/uvc/uvc_driver.c | 72 ++++++++++++++++++++++++++++++
+ drivers/media/usb/uvc/uvcvideo.h   |  8 ++++
+ 3 files changed, 83 insertions(+)
+
+diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+index 786498e66646..3a49a1326a90 100644
+--- a/drivers/media/usb/uvc/uvc_ctrl.c
++++ b/drivers/media/usb/uvc/uvc_ctrl.c
+@@ -2332,6 +2332,9 @@ int uvc_ctrl_init_device(struct uvc_device *dev)
+ 		} else if (UVC_ENTITY_TYPE(entity) == UVC_ITT_CAMERA) {
+ 			bmControls = entity->camera.bmControls;
+ 			bControlSize = entity->camera.bControlSize;
++		} else if (UVC_ENTITY_TYPE(entity) == UVC_GPIO_UNIT) {
++			bmControls = entity->gpio.bmControls;
++			bControlSize = entity->gpio.bControlSize;
+ 		}
+ 
+ 		/* Remove bogus/blacklisted controls */
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index ddb9eaa11be7..180e503e900f 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -7,6 +7,7 @@
+  */
+ 
+ #include <linux/atomic.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/kernel.h>
+ #include <linux/list.h>
+ #include <linux/module.h>
+@@ -1440,6 +1441,58 @@ static int uvc_parse_control(struct uvc_device *dev)
+ 	return 0;
+ }
+ 
++static int uvc_gpio_get_cur(struct uvc_entity *entity, u8 cs, void *data, u16 size)
++{
++	if ((cs != UVC_CT_PRIVACY_CONTROL) || (size < 1))
++		return -EINVAL;
++
++	*(uint8_t *)data = gpiod_get_value(entity->gpio.gpio_privacy);
++	return 0;
++}
++
++static int uvc_gpio_get_info(struct uvc_entity *entity, u8 cs, u8 *caps)
++{
++
++	if (cs != UVC_CT_PRIVACY_CONTROL)
++		return -EINVAL;
++
++	*caps = UVC_CONTROL_CAP_GET | UVC_CONTROL_CAP_AUTOUPDATE;
++	return 0;
++}
++
++static int uvc_parse_gpio(struct uvc_device *dev)
++{
++	struct uvc_entity *unit;
++	struct gpio_desc *gpio_privacy;
++	int irq;
++	int ret;
++
++	gpio_privacy = devm_gpiod_get_optional(&dev->udev->dev, "privacy", GPIOD_IN);
++
++	if (IS_ERR(gpio_privacy))
++		return PTR_ERR(gpio_privacy);
++
++	if (!gpio_privacy)
++		return 0;
++
++	unit = uvc_alloc_entity(UVC_GPIO_UNIT, 0xff, 1, 2);
++	if (!unit)
++		return -ENOMEM;
++
++	unit->gpio.gpio_privacy = gpio_privacy;
++	unit->gpio.bControlSize = 1;
++	unit->gpio.bmControls = (u8 *)unit + sizeof(*unit);
++	unit->gpio.bmControls[0] = 1;
++	unit->get_cur = uvc_gpio_get_cur;
++	unit->get_info = uvc_gpio_get_info;
++
++	sprintf(unit->name, "GPIO Unit");
++
++	list_add_tail(&unit->list, &dev->entities);
++
++	return 0;
++}
++
+ /* ------------------------------------------------------------------------
+  * UVC device scan
+  */
+@@ -1532,6 +1585,12 @@ static int uvc_scan_chain_entity(struct uvc_video_chain *chain,
+ 
+ 		break;
+ 
++	case UVC_GPIO_UNIT:
++		if (uvc_trace_param & UVC_TRACE_PROBE)
++			printk(KERN_CONT " GPIO %d", entity->id);
++
++		break;
++
+ 	case UVC_TT_STREAMING:
+ 		if (UVC_ENTITY_IS_ITERM(entity)) {
+ 			if (uvc_trace_param & UVC_TRACE_PROBE)
+@@ -1929,6 +1988,13 @@ static int uvc_scan_device(struct uvc_device *dev)
+ 		return -1;
+ 	}
+ 
++	/* Add GPIO entities to the first_chain */
++	chain = list_first_entry(&dev->chains, struct uvc_video_chain, list);
++	list_for_each_entry(term, &dev->entities, list) {
++		if (UVC_ENTITY_TYPE(term) == UVC_GPIO_UNIT)
++			list_add_tail(&term->chain, &chain->entities);
++	}
++
+ 	return 0;
+ }
+ 
+@@ -2261,6 +2327,12 @@ static int uvc_probe(struct usb_interface *intf,
+ 		goto error;
+ 	}
+ 
++	/* Parse the associated GPIOs */
++	if (uvc_parse_gpio(dev) < 0) {
++		uvc_trace(UVC_TRACE_PROBE, "Unable to parse UVC GPIOs\n");
++		goto error;
++	}
++
+ 	uvc_printk(KERN_INFO, "Found UVC %u.%02x device %s (%04x:%04x)\n",
+ 		dev->uvc_version >> 8, dev->uvc_version & 0xff,
+ 		udev->product ? udev->product : "<unnamed>",
+diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+index a493bc383d3e..7ca78005b6a9 100644
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -6,6 +6,7 @@
+ #error "The uvcvideo.h header is deprecated, use linux/uvcvideo.h instead."
+ #endif /* __KERNEL__ */
+ 
++#include <linux/gpio/consumer.h>
+ #include <linux/kernel.h>
+ #include <linux/poll.h>
+ #include <linux/usb.h>
+@@ -37,6 +38,7 @@
+ 	(UVC_ENTITY_IS_TERM(entity) && \
+ 	((entity)->type & 0x8000) == UVC_TERM_OUTPUT)
+ 
++#define UVC_GPIO_UNIT 0x7ffe
+ 
+ /* ------------------------------------------------------------------------
+  * GUIDs
+@@ -351,6 +353,12 @@ struct uvc_entity {
+ 			u8  *bmControls;
+ 			u8  *bmControlsType;
+ 		} extension;
++
++		struct {
++			u8  bControlSize;
++			u8  *bmControls;
++			struct gpio_desc *gpio_privacy;
++		} gpio;
+ 	};
+ 
+ 	u8 bNrInPins;
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.29.0.rc1.297.gfa9743e501-goog
+
