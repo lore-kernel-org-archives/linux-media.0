@@ -2,100 +2,396 @@ Return-Path: <SRS0=ffI8=D5=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96F5DC388F7
-	for <linux-media@archiver.kernel.org>; Thu, 22 Oct 2020 20:09:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19C82C388F7
+	for <linux-media@archiver.kernel.org>; Thu, 22 Oct 2020 23:08:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4487624654
-	for <linux-media@archiver.kernel.org>; Thu, 22 Oct 2020 20:09:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603397380;
-	bh=js1xVi8azsx4//F3LDMoMhOlgktwnKS5gIAhVHl2EFU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=XvdN40XqTyvSOBV/ZdQKOln+X2GvFljXvR0AMUCVibzE+iIiCLRBrQNSH8cHrNh1r
-	 Y+tNqZSnmqXx8H0HH5KXDxYbkCR7/+nRiIc5mG+i5HA9SZI2kAlnrRQzLXmJwatQ5y
-	 2RdzxSul6AQMEy6t5SXS7Jh8xNErgetVj5V6lEU0=
+	by mail.kernel.org (Postfix) with ESMTP id A1FD5207EA
+	for <linux-media@archiver.kernel.org>; Thu, 22 Oct 2020 23:08:53 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="i5JeO8x/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2897584AbgJVUJg convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 22 Oct 2020 16:09:36 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:39785 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2502779AbgJVUJa (ORCPT
+        id S373230AbgJVXIw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 22 Oct 2020 19:08:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57212 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S373228AbgJVXIw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 22 Oct 2020 16:09:30 -0400
-Received: by mail-wr1-f68.google.com with SMTP id y12so4697084wrp.6;
-        Thu, 22 Oct 2020 13:09:29 -0700 (PDT)
+        Thu, 22 Oct 2020 19:08:52 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA77C0613CE
+        for <linux-media@vger.kernel.org>; Thu, 22 Oct 2020 16:08:52 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id dn5so3411379edb.10
+        for <linux-media@vger.kernel.org>; Thu, 22 Oct 2020 16:08:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uWSV54B/OKBo4pW8L/Me40CYC2u6/kw5r3V8Ega2+lk=;
+        b=i5JeO8x/xEltuPI7T1halh5uUdO2NDp/hxZnOlQv9tH/Cem4ogw+XRB090nUdyYUQb
+         EY/TMyXiIAQG712S5/l5DgiR5gK8jzyPEuDwdDCEw74OIEShnow46jrzv/PjoyH+mG4P
+         tHssejz+LXi9GIDvmCptUTHBDxrmwOL8UKjKQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=pG/K91KXSZtDns2AvPosts1iq0wuPSbXqFIa1nMAu2w=;
-        b=N6WfAfaXGeTqPKErIbTwDhPl3VBZvktGZ/Xksp+FXeJP16OXkSTEyqZ7Npp8Mdnae8
-         s3b8rmu6w+BxuTiA5Bi4gSAyatg629Jb99VIMPb/37228LUC1A5AP7BoEHcTOhJK/njA
-         RNWmKEJ5Pz8mEiR0XMhGoapwU5sif+GjaW9ZSDncvtuTguIkxp2ka3I/nFDULrIrNFHE
-         hVxciUT5KjemIzJgVjzQExyH5fULRkO1ULN3bxlzMU9v082xIvSvvfdBmtOt8jUdD5eX
-         Fd3F8HBRuP1Ehxcxoj4mbWRWDWqn5HaFAYGkEqRktOEBJa0fg3sfJlj3PQdY2p9LP7AB
-         EeWQ==
-X-Gm-Message-State: AOAM530Za/PZw2ktAZxrhXM7xC3/uP/6jmryUgu8UDMyFV69ZJ4KBeUG
-        A0+RrVaIL0oFwRR39XrUzOo=
-X-Google-Smtp-Source: ABdhPJzUGE+RlNXwy0g9TwXZfxBn1ZcK5RdACIJ17IaoA7fVJ337UFCiXYdwy0tV3Mwcv7KXKaZwHw==
-X-Received: by 2002:adf:80cb:: with SMTP id 69mr4350348wrl.325.1603397368769;
-        Thu, 22 Oct 2020 13:09:28 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.171])
-        by smtp.googlemail.com with ESMTPSA id c18sm5874798wrq.5.2020.10.22.13.09.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Oct 2020 13:09:27 -0700 (PDT)
-Date:   Thu, 22 Oct 2020 22:09:25 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Andrzej Hajda <a.hajda@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
-        Kamil Debski <kamil@wypas.org>
-Subject: Re: [PATCH 1/4] MAINTAINERS: move Kamil Debski to credits
-Message-ID: <20201022200925.GA2525@kozik-lap>
-References: <20201016151528.7553-1-krzk@kernel.org>
- <20201022191314.plesyizmczgdmodr@pengutronix.de>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uWSV54B/OKBo4pW8L/Me40CYC2u6/kw5r3V8Ega2+lk=;
+        b=Nk8EIDnCG9jQBm3D8Qx0KMA3S0GsdWxKEI7IakQLLFqMQVcwXHrdQEvWlXkuluzrF6
+         nsA0kA8tpJPEZyIWVjlQE+CM8dg/Gy3RTIY5077dZzQfsvg4wKuUlXFUj5B+Ms51eKZm
+         yIjb3RzhOLuCva2tp9uHbNlB8l7pZDlBcWIkekSYidK9tx0XHth/IhIxO5JRYF5qru3Y
+         aN4Sqj32AIfsKuUjhHKGo8cIzJDzuJQveUG4ptpB3DttcLcHzQ3L4ypiP8OHhAvkShlb
+         cufne8Ul74Es+X/K7PDXKOFbvV5j8laCyvrPU3vIWesFGfJ37/zCHmRScU7KGslHhleE
+         Fh+Q==
+X-Gm-Message-State: AOAM533LtYYIGlzAN/LvKaalUcUCG8lNaNUteXajOK5TmalJLE6xztxy
+        +Pjk3CYlHku7C/4WsOOg5LJbDzrUpnBMIg==
+X-Google-Smtp-Source: ABdhPJzUnjdsspQLAZ0jqfI7Ro9ysEn+PYPhMWAJeqxkFrOnbGvVO6Fk5PkTpAumTsuJAxBAkBZhjA==
+X-Received: by 2002:a05:6402:1201:: with SMTP id c1mr686884edw.210.1603408130305;
+        Thu, 22 Oct 2020 16:08:50 -0700 (PDT)
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
+        by smtp.gmail.com with ESMTPSA id bq8sm1629092ejb.53.2020.10.22.16.08.48
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Oct 2020 16:08:49 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id i1so5710174wro.1
+        for <linux-media@vger.kernel.org>; Thu, 22 Oct 2020 16:08:48 -0700 (PDT)
+X-Received: by 2002:adf:82e5:: with SMTP id 92mr4749388wrc.192.1603408127948;
+ Thu, 22 Oct 2020 16:08:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <20201022191314.plesyizmczgdmodr@pengutronix.de>
+References: <1600968674-11559-1-git-send-email-dikshita@codeaurora.org>
+ <1600968674-11559-3-git-send-email-dikshita@codeaurora.org>
+ <CAAFQd5CTyjagd7grrCkret2WnvoLHQk83fg+1QPK+V1NbhKTvw@mail.gmail.com>
+ <b977eb27-9646-1c73-5acb-c3a74460e426@linaro.org> <CAAFQd5BdeG44SmT4xhrarsmgnFc-1LCdoFwz=XXYsLdHcMyz-Q@mail.gmail.com>
+ <89783dd42e698593d30dc0f37b52cf73@codeaurora.org> <CAAFQd5B8_=ikPoX9s8s8mqibBMGiOkQTio+Os+OfJncFcZm_5w@mail.gmail.com>
+ <9a107a2a4a167c2b36aa4fa6cb0f97ef@codeaurora.org> <20201013133924.GA1596704@chromium.org>
+ <e22edcb77ed83154baba158f1748d6a7@codeaurora.org>
+In-Reply-To: <e22edcb77ed83154baba158f1748d6a7@codeaurora.org>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Fri, 23 Oct 2020 01:08:37 +0200
+X-Gmail-Original-Message-ID: <CAAFQd5AnA-fm0kNxcGkgsMxWTBvQgyccc9YZL80Estmq_jL+eg@mail.gmail.com>
+Message-ID: <CAAFQd5AnA-fm0kNxcGkgsMxWTBvQgyccc9YZL80Estmq_jL+eg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] venus: venc: fix handlig of S_SELECTION and G_SELECTION
+To:     Vikash Garodia <vgarodia@codeaurora.org>
+Cc:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Dikshita Agarwal <dikshita@codeaurora.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Oct 22, 2020 at 09:13:14PM +0200, Uwe Kleine-König wrote:
-> Hello,
-> 
-> this series doesn't seem to be applied and looking at the list of people
-> this mail was sent "To:" it's not obvious who is expected to take it. I
-> assume it is not for us linux-pwm guys and will tag it as
-> "not-applicable" in our patchwork.
+On Thu, Oct 22, 2020 at 6:37 AM <vgarodia@codeaurora.org> wrote:
+>
+> Hi Tomasz,
+>
+> On 2020-10-13 19:09, Tomasz Figa wrote:
+> > Hi Vikash,
+> >
+> > On Tue, Oct 13, 2020 at 02:56:21PM +0530, vgarodia@codeaurora.org
+> > wrote:
+> >>
+> >> On 2020-10-08 19:51, Tomasz Figa wrote:
+> >> > On Wed, Oct 7, 2020 at 9:33 PM <vgarodia@codeaurora.org> wrote:
+> >> > >
+> >> > > Hi Tomasz,
+> >> > >
+> >> > > On 2020-10-01 20:47, Tomasz Figa wrote:
+> >> > > > On Thu, Oct 1, 2020 at 3:32 AM Stanimir Varbanov
+> >> > > > <stanimir.varbanov@linaro.org> wrote:
+> >> > > >>
+> >> > > >> Hi Tomasz,
+> >> > > >>
+> >> > > >> On 9/25/20 11:55 PM, Tomasz Figa wrote:
+> >> > > >> > Hi Dikshita, Stanimir,
+> >> > > >> >
+> >> > > >> > On Thu, Sep 24, 2020 at 7:31 PM Dikshita Agarwal
+> >> > > >> > <dikshita@codeaurora.org> wrote:
+> >> > > >> >>
+> >> > > >> >> From: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+> >> > > >> >>
+> >> > > >> >> - return correct width and height for G_SELECTION
+> >> > > >> >> - if requested rectangle wxh doesn't match with capture port wxh
+> >> > > >> >>   adjust the rectangle to supported wxh.
+> >> > > >> >>
+> >> > > >> >> Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
+> >> > > >> >> ---
+> >> > > >> >>  drivers/media/platform/qcom/venus/venc.c | 20 ++++++++++++--------
+> >> > > >> >>  1 file changed, 12 insertions(+), 8 deletions(-)
+> >> > > >> >>
+> >> > > >> >> diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
+> >> > > >> >> index 7d2aaa8..a2cc12d 100644
+> >> > > >> >> --- a/drivers/media/platform/qcom/venus/venc.c
+> >> > > >> >> +++ b/drivers/media/platform/qcom/venus/venc.c
+> >> > > >> >> @@ -463,13 +463,13 @@ static int venc_g_fmt(struct file *file, void *fh, struct v4l2_format *f)
+> >> > > >> >>         switch (s->target) {
+> >> > > >> >>         case V4L2_SEL_TGT_CROP_DEFAULT:
+> >> > > >> >>         case V4L2_SEL_TGT_CROP_BOUNDS:
+> >> > > >> >> -               s->r.width = inst->width;
+> >> > > >> >> -               s->r.height = inst->height;
+> >> > > >> >> -               break;
+> >> > > >> >> -       case V4L2_SEL_TGT_CROP:
+> >> > > >> >>                 s->r.width = inst->out_width;
+> >> > > >> >>                 s->r.height = inst->out_height;
+> >> > > >> >>                 break;
+> >> > > >> >> +       case V4L2_SEL_TGT_CROP:
+> >> > > >> >> +               s->r.width = inst->width;
+> >> > > >> >> +               s->r.height = inst->height;
+> >> > > >> >> +               break;
+> >> > > >> >>         default:
+> >> > > >> >>                 return -EINVAL;
+> >> > > >> >>         }inter
+> >> > > >> >> @@ -490,10 +490,14 @@ static int venc_g_fmt(struct file *file, void *fh, struct v4l2_format *f)
+> >> > > >> >>
+> >> > > >> >>         switch (s->target) {
+> >> > > >> >>         case V4L2_SEL_TGT_CROP:
+> >> > > >> >> -               if (s->r.width != inst->out_width ||
+> >> > > >> >> -                   s->r.height != inst->out_height ||
+> >> > > >> >> -                   s->r.top != 0 || s->r.left != 0)
+> >> > > >> >> -                       return -EINVAL;
+> >> > > >> >> +               if (s->r.width != inst->width ||
+> >> > > >> >> +                   s->r.height != inst->height ||
+> >> > > >> >> +                   s->r.top != 0 || s->r.left != 0) {
+> >> > > >> >> +                       s->r.top = 0;
+> >> > > >> >> +                       s->r.left = 0;
+> >> > > >> >> +                       s->r.width = inst->width;
+> >> > > >> >> +                       s->r.height = inst->height;
+> >> > > >> >
+> >> > > >> > What's the point of exposing the selection API if no selection can
+> >> > > >> > actually be done?
+> >> > > >>
+> >> > > >> If someone can guarantee that dropping of s_selection will not break
+> >> > > >> userspace applications I'm fine with removing it.
+> >> > > >
+> >> > > > Indeed the specification could be made more clear about this. The
+> >> > > > visible rectangle configuration is described as optional, so I'd
+> >> > > > consider the capability to be optional as well.
+> >> > > >
+> >> > > > Of course it doesn't change the fact that something that is optional
+> >> > > > in the API may be mandatory for some specific integrations, like
+> >> > > > Chrome OS or Android.
+> >> > > >
+> >> > > >>
+> >> > > >> I implemented g/s_selection with the idea to add crop functionality
+> >> > > >> later because with current firmware interface it needs more work.
+> >> > > >
+> >> > > > I suggested one thing internally, but not sure if it was understood
+> >> > > > correctly:
+> >> > > >
+> >> > > > Most of the encoders only support partial cropping, with the rectangle
+> >> > > > limited to top = 0 and left = 0, in other words, only setting the
+> >> > > > visible width and height. This can be easily implemented on most of
+> >> > > > the hardware, even those that don't have dedicated cropping
+> >> > > > capability, by configuring the hardware as follows:
+> >> > > >
+> >> > > > stride = CAPTURE format width (or bytesperline)
+> >> > > > width = CROP width
+> >> > > > height = CROP height
+> >> > >
+> >> > > Assuming the bitstream height and width would be configured with
+> >> > > capture
+> >> > > plane
+> >> > > setting (s_fmt), configuring the crop as height/width would indicate
+> >> > > to
+> >> > > venus
+> >> > > hardware as scaling. To distinguish scaling with crop, firmware
+> >> > > needs to
+> >> > > be
+> >> > > configured separately indicating crop rectangle.
+> >> >
+> >> > The V4L2 encoder API does _not_ configure the bitstream width and
+> >> > height currently. Scaling is not defined in the API at the moment. As
+> >> > per the spec [1], the CAPTURE width and height fields are
+> >> > ignored/read-only.
+> >> >
+> >> > [1]
+> >> > https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/dev-encoder.html#initialization
+> >> >
+> >> > Currently there are following parameters configured by the V4L2 API:
+> >> >
+> >> > OUTPUT format width: the number of pixels per line of the input
+> >> > buffer, including any padding pixels, i.e. stride in pixels,
+> >> > OUTPUT format height: the total number of lines of the input buffer.
+> >> > including or not, any padding lines (for NV12 non-M format any padding
+> >> > lines must be included, as plane offsets are calculated based on
+> >> > this),
+> >> > CROP left, width: horizontal position of valid pixel data in the
+> >> > buffer; left is typically 0 and width can be less than OUTPUT format
+> >> > width,
+> >> > CROP top, height: vertical position of valid pixel data in the buffer:
+> >> > top is typically 0 and height can be less than OUTPUT format height,
+> >>
+> >> I was trying to find if there is any way we can configure the encoder
+> >> with
+> >> actual YUV size and the required CROP rectangle. Incase the S_FMT on
+> >> CAPTURE
+> >> plane is ignored, will we ever be able to encode a bitstream with a
+> >> desired
+> >> crop parameters different than YUV WxH, for ex. the bitstream WxH
+> >> could be
+> >> 320x192, whereas the CROP in SPS would suggest it to 320x180.
+> >> In my ex. the YUV is 320x192.
+> >>
+> >
+> > Crop in SPS should be exactly what is set in the selection CROP
+> > rectangle. Bitstream WxH (i.e. the number of macroblocks) is entirely
+> > at
+> > the discretion of the encoder.
+> >
+> >> > >
+> >> > > > I believe Android requires the hardware to support stride and AFAIK
+> >> > > > this hardware is also commonly used on Android, so perhaps it's
+> >> > > > possible to achieve the above without any firmware changes?
+> >> > >
+> >> > > Yes, the hardware is used and also supported in android. The interface
+> >> > > to configure
+> >> > > crop rectangle to firmware is via extradata. This extradata info is
+> >> > > passed from v4l2
+> >> > > clients via a separate plane in v4l2 buffer. The extradata payload is
+> >> > > passed to
+> >> > > firmware as is and the firmware parses it to know if crop, roi, etc.
+> >> >
+> >> > Okay, so do I get it correctly that without extradata, the firmware
+> >> > can only handle the case where width == stride?
+> >>
+> >> Firmware can support for case when width different than stride,
+> >> without any
+> >> additional interface requirement. Only when crop is different than YUV
+> >> dimension,
+> >> it would need the additional interface.
+> >
+> > Sorry, what is the relation between width/stride and YUV dimension? To
+> > me "width" is the number of meaningful pixels in the line of the YUV
+> > source frame and "stride" is the total number of bytes of the full YUV
+> > line including padding.
+> >
+> >> Please confirm if the dimensions from S_SELECTION CROP could be set to
+> >> firmware
+> >> as bitstream dimensions.
+> >>
+> >
+> > Selection CROP rectangle should be set as the SPS crop.
+> >
+> > Imagine the following example:
+> >
+> >  |<- stride                                   ->|
+> >  |<- width                          ->|         |
+> >  +------------------------------------+---------+----
+> >  |                                    |         | ^ ^
+> >  | meaningful                         |  line   | | |
+> >  | pixels                             | padding |
+> >  |                                    |         |   b
+> >  |                                    |         |   u
+> >  |                                    |         |   f
+> >  |                                    |         |   f
+> >  |                                    |         |   e
+> >  |                                    |         | h r
+> >  |                                    |         | e
+> >  |                                    |         | i h
+> >  |                                    |         | g e
+> >  |                                    |         | h i
+> >  |                                    |         | t g
+> >  |                                    |         |   h
+> >  |                                    |         | | t
+> >  |                                    |         | V
+> >  +------------------------------------+---------+-- |
+> >  | plane padding                                |   v
+> >  +----------------------------------------------+----
+> >
+> > The encoder cares only about encoding the meaningful frame data that
+> > occupies
+> > the top-left-most width x height pixels. Since it needs to produce full
+> > macroblocks, the input might need to be rounded up to full macroblock
+> > dimensions, typically:
+> >
+> > coded_width = ALIGN(width, 16)
+> > coded_height = ALIGN(height, 16)
+> >
+> > The resulting bitstream would have the resolution of coded_width x
+> > coded_height, however since it only contains width x height of
+> > meaningful pixels, the crop information (in SPS for H.264) would be
+> > equal to width x height.
+> >
+> > Now in V4L2,
+> >
+> > - width is given by selection CROP rectangle width,
+> > - height is given by selection CROP rectangle height,
+> > - stride is given by OUTPUT format width,
+> > - buffer height is given by OUTPUT format height.
+> >
+> > Hopefully this explains it well now.
+>
+> I am experimenting more on this by setting the stride to Venus during
+> s_fmt on
+> OUTPUT plane format. And setting the bitstream dimensions to firmware
+> from the
+> CROP selection. There are below limitations in this approach w.r.t Venus
+> hardware
+> 1. Stride would work for linear YUVs (NV12). For compressed (UBWC) YUV,
+> fixed stride
+> have few hardware limitations.
+> 2. Stride and CROP can work when the left and top are [0,0]. At the
+> moment, there
+> isn't an interface to specify the start offset to firmware.
 
-Hi Uwe,
+Thanks for the investigation. In the meantime I also studied the venus
+driver more closely and I noticed that actually it already supports
+what you described above and does it in a way that is against the
+specification.
 
-All of the patches, including the one here, touch actually multiple
-subsystems, so if this is OK with you, I could take them through
-Samsung SoC.
+It expects that the userspace sets width and height to the CAPTURE
+queue and uses it as the visible resolution for the encoded stream.
+The way mandated by the specification is to ignore CAPTURE width and
+height and take these values from the selection CROP rectangle
+instead.
+
+Would you be able to work on modifying the driver to follow the compliant way?
+
+>
+> Also, do we think, we should make S_SELECTION as mandatory in the
+> initialization
+> sequence ? It would work without S_SELECTION as well, but the encoded
+> bitstream
+> would have dimensions as the aligned ones (strides) as set in S_FMT
+> (OUTPUT plane).
+
+The meaning of something being mandatory in V4L2 is a bit fuzzy,
+because V4L2 is expected to always retain valid state. In case of
+selection, the CROP_DEFAULT rectangle is defined to be the full frame
+size and it could work in many cases. For example, it's not uncommon
+for desktop Linux applications to manage the source buffers the
+opposite way - first negotiate the format with the encoder and
+allocate buffers and only then produce the contents appropriately to
+match the encoded stream.
 
 Best regards,
-Krzysztof
+Tomasz
 
+>
+> >> > If so, it sounds like this extradata should be generated by the driver
+> >> > internally based on the selection CROP rectangle. In fact, the driver
+> >> > already seems to have a definition of struct hfi_extradata_input_crop
+> >> > [2]. So perhaps it wouldn't require much effort to implement the crop
+> >> > properly?
+> >> IIRC, Stan has done some experiments around the same. Would let him
+> >> share
+> >> his
+> >> observations for this request.
+> >
+> > I think I'm a bit confused now, because I read in your message now that
+> > extradata is not required to handle stride. Let's make sure that we're
+> > on the same page first before starting to research the extradata topic.
+> >
+> > Best regards,
+> > Tomasz
+> >
+> >>
+> >> > [2]
+> >> > https://elixir.bootlin.com/linux/v5.9-rc8/source/drivers/media/platform/qcom/venus/hfi_helper.h#L817
+> >> >
+> >> > Best regards,
+> >> > Tomasz
