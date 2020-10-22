@@ -5,60 +5,60 @@ X-Spam-Level:
 X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56C46C388F7
-	for <linux-media@archiver.kernel.org>; Thu, 22 Oct 2020 17:47:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3469CC388F7
+	for <linux-media@archiver.kernel.org>; Thu, 22 Oct 2020 17:47:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 004472065D
-	for <linux-media@archiver.kernel.org>; Thu, 22 Oct 2020 17:47:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D0CEE206DD
+	for <linux-media@archiver.kernel.org>; Thu, 22 Oct 2020 17:47:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FbUY1Hpw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c+LgKAFI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S369327AbgJVRrm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 22 Oct 2020 13:47:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35950 "EHLO
+        id S369278AbgJVRrX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 22 Oct 2020 13:47:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S369287AbgJVRrY (ORCPT
+        with ESMTP id S2900872AbgJVRrV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 22 Oct 2020 13:47:24 -0400
+        Thu, 22 Oct 2020 13:47:21 -0400
 Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6B6C0613CE;
-        Thu, 22 Oct 2020 10:47:24 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id s9so3558205wro.8;
-        Thu, 22 Oct 2020 10:47:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93EBC0613CE;
+        Thu, 22 Oct 2020 10:47:20 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id b8so3588126wrn.0;
+        Thu, 22 Oct 2020 10:47:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=jH/ymGX8PoDvgpabHM/T5bVI+BdOAPlLIfRyuOHjEQI=;
-        b=FbUY1HpwA26SipLrAG85P9mW0HIXjCTlolMVt9/V5oak9lBnb4uEYdtvtYYVfagoQk
-         D1kZG5r+3wUaKre9Azx+M18d1RIjYS/F7KnVWtLEG/1961AthM8yeeyNaIZ8ly80zEvq
-         3Yjg+FYwmYO0cD8D0deGBz9B86IlNkevDvAnQYjar5lguS/kbTgtCxkpIQPT58stCajW
-         WqYekRXC/sudRXy6Us0lJZk/LSXHqoWDaSuoL5qlXPhfhz2SSJOYoKveNk0UWW41lGZm
-         UhYMx6PYnyB170VeZRekSO7FsBs3unixmkeNRvSPf0Kaev4rDiDa7iPgKHYbdsc9TXMO
-         r/wA==
+        bh=YDKD/4kES32xLnMEZnjIyG4gujN1bUpwWJxuJXMEomE=;
+        b=c+LgKAFISy6TfUohEbqIsGi5NxQ4ONVcrGeQgthf6YM/6DySrZ9nbhWJUQQbK7+v51
+         QZDTo8mrnek7weR5NdsbrNUUEclDy1WIehe5o2YgXsUUzxdTSxJTwPWVrzeMBmoRZ7j5
+         FGPzccyPNRyBr1R5F0nXVZkIZjrOomGsPabfuGIReHASZp06KItmFhCuH0nC5QPhM9AZ
+         dQ/OTHCTp/dykwy7w7XhkFZVOBzPSLNJwopwUAczHsInYB/iohMRTG/as/rUS6/K/nH5
+         8MaGCOdH5Xv7ZBeiEIXFSbfQKjAzWgvVfJaDUufVDLY2xPC4HO3O0B4KeR8o5Gj5WoXp
+         upNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=jH/ymGX8PoDvgpabHM/T5bVI+BdOAPlLIfRyuOHjEQI=;
-        b=VFRVIkpDbIqTBvVgrpfBtVEAPhvOZxMTEGbgmlCVWRsxo9qXYSV1aCZJ+C8X/aIyvx
-         QSyKm7/Ne2C4WUP+i7tqP8WPdoU7dM8ZNhO2Y4aYVtU5ygYr7DF1sJWzpCoTZaST/Pol
-         eXSlkLzOENbNWAr4i4AeqIu3SI1aEwDyU/6avA9vNsgI6QbpC3b4FgUCSCdsz0yk+HSj
-         kxijo0rxZPTJm2d+F3BNwMG7iNY4E8yfxdXwmTHWZdnEvo7+cBMAR/fgNfpyITe9/pcC
-         deo+6cGTlXhiwTzO0XaI3FgmqqaEO1E8Kg9Ul7bmgxl2ICMI0ZiOLiTTwgLilcemS/w9
-         SDfA==
-X-Gm-Message-State: AOAM532xlsL/v03P9JgvRJuQ6r3HoeRRyp1djrHx8+vzADeDlIST7TgQ
-        JdHU+vK5+VMQ2osL8gzsyZPdaZdfDCnRkMd4
-X-Google-Smtp-Source: ABdhPJxmFONADjaKkwOtRDdTyie6u8BOmNegv6NapdqPaa7u2WhGTqHfmgcl98EGyo5GQcTSWoXO/w==
-X-Received: by 2002:adf:ea4d:: with SMTP id j13mr4033766wrn.345.1603388842936;
-        Thu, 22 Oct 2020 10:47:22 -0700 (PDT)
+        bh=YDKD/4kES32xLnMEZnjIyG4gujN1bUpwWJxuJXMEomE=;
+        b=nd5A/pjBhTdolJ0WoTiSXzschkDZVKvPOR8o4AjmBESBFKOKSeAr3rvx1wHTdAZ1jN
+         YzDquA3lc7259v6izOmj4oa6M17rDmQ3Wq/F263m9me28UPl8zO+QaZk+gCnYigX+/3s
+         NisJDexHtS7nikdDnIr2g2fgJXszF/Qgnqzr75EIz34fKxR9qSGINEYtdRlI4wkhrhQi
+         /guckVkXRerMrApqxIrHkvM4u5E32fLDFhoZNmYPgiNyqJWUK+tyEW4/fmE94+AP1Lxp
+         rTkXnFi1aTV0pzj3fq6fLdK49nzz+ClCODDDMx3N3X5YXgKYOo7dHe5Ro40MQbYzzLL7
+         qKNg==
+X-Gm-Message-State: AOAM532SKDQsq6aHzUxjJw/8OU255op8D1r/mGgbKiEGeS0M9Vrmaj09
+        M0S7Mv9nvn5+JKQ5qIdgPbU=
+X-Google-Smtp-Source: ABdhPJy5MgRvxc88KZuHZSHu44U5E04fBclYyzrI5cReRLbi184Oyr4USIJlVH25Blpc7Ym1q+dTJQ==
+X-Received: by 2002:adf:de91:: with SMTP id w17mr3858877wrl.84.1603388839266;
+        Thu, 22 Oct 2020 10:47:19 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu ([2.237.20.237])
-        by smtp.gmail.com with ESMTPSA id u202sm5368355wmu.23.2020.10.22.10.47.21
+        by smtp.gmail.com with ESMTPSA id u202sm5368355wmu.23.2020.10.22.10.47.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Oct 2020 10:47:22 -0700 (PDT)
+        Thu, 22 Oct 2020 10:47:18 -0700 (PDT)
 From:   kholk11@gmail.com
 To:     todor.too@gmail.com
 Cc:     agross@kernel.org, bjorn.andersson@linaro.org, mchehab@kernel.org,
@@ -67,9 +67,9 @@ Cc:     agross@kernel.org, bjorn.andersson@linaro.org, mchehab@kernel.org,
         linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, robert.foss@linaro.org,
         AngeloGioacchino Del Regno <kholk11@gmail.com>
-Subject: [PATCH v2 6/7] media: dt-bindings: media: qcom,camss: Add bindings for SDM660 camss
-Date:   Thu, 22 Oct 2020 19:47:05 +0200
-Message-Id: <20201022174706.8813-7-kholk11@gmail.com>
+Subject: [PATCH v2 3/7] media: camss: vfe: Add support for VFE 4.8
+Date:   Thu, 22 Oct 2020 19:47:02 +0200
+Message-Id: <20201022174706.8813-4-kholk11@gmail.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201022174706.8813-1-kholk11@gmail.com>
 References: <20201022174706.8813-1-kholk11@gmail.com>
@@ -81,64 +81,174 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: AngeloGioacchino Del Regno <kholk11@gmail.com>
 
-Add bindings for qcom,sdm660-camss in order to support the camera
-subsystem on SDM630/660 and SDA variants.
+Add the support for VFE 4.8 in the camss-vfe-4-7 driver, as this one
+really is a minor revision, requiring the very same management and
+basically having the same register layout as VFE 4.7, but needing
+a different QoS and DS configuration, using a different register to
+enable the wm and habing the same UB size for both instances (instead
+of a different size between instance 0 and 1).
 
 Signed-off-by: AngeloGioacchino Del Regno <kholk11@gmail.com>
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
 ---
- Documentation/devicetree/bindings/media/qcom,camss.txt | 7 +++++++
- 1 file changed, 7 insertions(+)
+ .../media/platform/qcom/camss/camss-vfe-4-7.c | 115 ++++++++++++++++++
+ drivers/media/platform/qcom/camss/camss-vfe.h |   1 +
+ 2 files changed, 116 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/qcom,camss.txt b/Documentation/devicetree/bindings/media/qcom,camss.txt
-index 09eb6ed99114..498234629e21 100644
---- a/Documentation/devicetree/bindings/media/qcom,camss.txt
-+++ b/Documentation/devicetree/bindings/media/qcom,camss.txt
-@@ -8,6 +8,7 @@ Qualcomm Camera Subsystem
- 	Definition: Should contain one of:
- 		- "qcom,msm8916-camss"
- 		- "qcom,msm8996-camss"
-+		- "qcom,sdm660-camss"
- - reg:
- 	Usage: required
- 	Value type: <prop-encoded-array>
-@@ -64,30 +65,36 @@ Qualcomm Camera Subsystem
- 	Value type: <stringlist>
- 	Definition: Should contain the following entries:
- 		- "top_ahb"
-+		- "throttle_axi"	(660 only)
- 		- "ispif_ahb"
- 		- "csiphy0_timer"
- 		- "csiphy1_timer"
- 		- "csiphy2_timer"	(8996 only)
-+		- "csiphy_ahb2crif"	(660 only)
- 		- "csi0_ahb"
- 		- "csi0"
- 		- "csi0_phy"
- 		- "csi0_pix"
- 		- "csi0_rdi"
-+		- "cphy_csid0"		(660 only)
- 		- "csi1_ahb"
- 		- "csi1"
- 		- "csi1_phy"
- 		- "csi1_pix"
- 		- "csi1_rdi"
-+		- "cphy_csid1"		(660 only)
- 		- "csi2_ahb"		(8996 only)
- 		- "csi2"		(8996 only)
- 		- "csi2_phy"		(8996 only)
- 		- "csi2_pix"		(8996 only)
- 		- "csi2_rdi"		(8996 only)
-+		- "cphy_csid2"		(660 only)
- 		- "csi3_ahb"		(8996 only)
- 		- "csi3"		(8996 only)
- 		- "csi3_phy"		(8996 only)
- 		- "csi3_pix"		(8996 only)
- 		- "csi3_rdi"		(8996 only)
-+		- "cphy_csid3"		(660 only)
- 		- "ahb"
- 		- "vfe0"
- 		- "csi_vfe0"
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-4-7.c b/drivers/media/platform/qcom/camss/camss-vfe-4-7.c
+index 6f380a450ca1..b5704a2f119b 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe-4-7.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-4-7.c
+@@ -133,6 +133,11 @@
+ #define VFE_0_BUS_BDG_QOS_CFG_7		0x420
+ #define VFE_0_BUS_BDG_QOS_CFG_7_CFG	0x0001aaa9
+ 
++#define VFE48_0_BUS_BDG_QOS_CFG_0_CFG	0xaaa5aaa5
++#define VFE48_0_BUS_BDG_QOS_CFG_3_CFG	0xaa55aaa5
++#define VFE48_0_BUS_BDG_QOS_CFG_4_CFG	0xaa55aa55
++#define VFE48_0_BUS_BDG_QOS_CFG_7_CFG	0x0005aa55
++
+ #define VFE_0_BUS_BDG_DS_CFG_0		0x424
+ #define VFE_0_BUS_BDG_DS_CFG_0_CFG	0xcccc0011
+ #define VFE_0_BUS_BDG_DS_CFG_1		0x428
+@@ -153,6 +158,9 @@
+ #define VFE_0_BUS_BDG_DS_CFG_16		0x464
+ #define VFE_0_BUS_BDG_DS_CFG_16_CFG	0x40000103
+ 
++#define VFE48_0_BUS_BDG_DS_CFG_0_CFG	0xcccc1111
++#define VFE48_0_BUS_BDG_DS_CFG_16_CFG	0x00000110
++
+ #define VFE_0_RDI_CFG_x(x)		(0x46c + (0x4 * (x)))
+ #define VFE_0_RDI_CFG_x_RDI_STREAM_SEL_SHIFT	28
+ #define VFE_0_RDI_CFG_x_RDI_STREAM_SEL_MASK	(0xf << 28)
+@@ -231,6 +239,9 @@
+ #define VFE_0_REALIGN_BUF_CFG_CR_ODD_PIXEL     BIT(3)
+ #define VFE_0_REALIGN_BUF_CFG_HSUB_ENABLE      BIT(4)
+ 
++#define VFE48_0_BUS_IMAGE_MASTER_CMD		0xcec
++#define VFE48_0_BUS_IMAGE_MASTER_n_SHIFT(x)	(2 * (x))
++
+ #define CAMIF_TIMEOUT_SLEEP_US 1000
+ #define CAMIF_TIMEOUT_ALL_US 1000000
+ 
+@@ -1139,3 +1150,107 @@ const struct vfe_hw_ops vfe_ops_4_7 = {
+ 	.violation_read = vfe_violation_read,
+ 	.isr = vfe_isr,
+ };
++
++static u16 vfe48_get_ub_size(u8 vfe_id)
++{
++	/* On VFE4.8 the ub-size is the same on both instances */
++	return MSM_VFE_VFE0_UB_SIZE_RDI;
++}
++
++static void vfe48_wm_enable(struct vfe_device *vfe, u8 wm, u8 enable)
++{
++	if (enable)
++		writel_relaxed(2 << VFE48_0_BUS_IMAGE_MASTER_n_SHIFT(wm),
++			       vfe->base + VFE48_0_BUS_IMAGE_MASTER_CMD);
++	else
++		writel_relaxed(1 << VFE48_0_BUS_IMAGE_MASTER_n_SHIFT(wm),
++			       vfe->base + VFE48_0_BUS_IMAGE_MASTER_CMD);
++
++	/* The WM must be enabled before sending other commands */
++	wmb();
++}
++
++static void vfe48_set_qos(struct vfe_device *vfe)
++{
++	u32 val = VFE48_0_BUS_BDG_QOS_CFG_0_CFG;
++	u32 val3 = VFE48_0_BUS_BDG_QOS_CFG_3_CFG;
++	u32 val4 = VFE48_0_BUS_BDG_QOS_CFG_4_CFG;
++	u32 val7 = VFE48_0_BUS_BDG_QOS_CFG_7_CFG;
++
++	writel_relaxed(val, vfe->base + VFE_0_BUS_BDG_QOS_CFG_0);
++	writel_relaxed(val, vfe->base + VFE_0_BUS_BDG_QOS_CFG_1);
++	writel_relaxed(val, vfe->base + VFE_0_BUS_BDG_QOS_CFG_2);
++	writel_relaxed(val3, vfe->base + VFE_0_BUS_BDG_QOS_CFG_3);
++	writel_relaxed(val4, vfe->base + VFE_0_BUS_BDG_QOS_CFG_4);
++	writel_relaxed(val4, vfe->base + VFE_0_BUS_BDG_QOS_CFG_5);
++	writel_relaxed(val4, vfe->base + VFE_0_BUS_BDG_QOS_CFG_6);
++	writel_relaxed(val7, vfe->base + VFE_0_BUS_BDG_QOS_CFG_7);
++}
++
++static void vfe48_set_ds(struct vfe_device *vfe)
++{
++	u32 val = VFE48_0_BUS_BDG_DS_CFG_0_CFG;
++	u32 val16 = VFE48_0_BUS_BDG_DS_CFG_16_CFG;
++
++	writel_relaxed(val, vfe->base + VFE_0_BUS_BDG_DS_CFG_0);
++	writel_relaxed(val, vfe->base + VFE_0_BUS_BDG_DS_CFG_1);
++	writel_relaxed(val, vfe->base + VFE_0_BUS_BDG_DS_CFG_2);
++	writel_relaxed(val, vfe->base + VFE_0_BUS_BDG_DS_CFG_3);
++	writel_relaxed(val, vfe->base + VFE_0_BUS_BDG_DS_CFG_4);
++	writel_relaxed(val, vfe->base + VFE_0_BUS_BDG_DS_CFG_5);
++	writel_relaxed(val, vfe->base + VFE_0_BUS_BDG_DS_CFG_6);
++	writel_relaxed(val, vfe->base + VFE_0_BUS_BDG_DS_CFG_7);
++	writel_relaxed(val, vfe->base + VFE_0_BUS_BDG_DS_CFG_8);
++	writel_relaxed(val, vfe->base + VFE_0_BUS_BDG_DS_CFG_9);
++	writel_relaxed(val, vfe->base + VFE_0_BUS_BDG_DS_CFG_10);
++	writel_relaxed(val, vfe->base + VFE_0_BUS_BDG_DS_CFG_11);
++	writel_relaxed(val, vfe->base + VFE_0_BUS_BDG_DS_CFG_12);
++	writel_relaxed(val, vfe->base + VFE_0_BUS_BDG_DS_CFG_13);
++	writel_relaxed(val, vfe->base + VFE_0_BUS_BDG_DS_CFG_14);
++	writel_relaxed(val, vfe->base + VFE_0_BUS_BDG_DS_CFG_15);
++	writel_relaxed(val16, vfe->base + VFE_0_BUS_BDG_DS_CFG_16);
++}
++
++const struct vfe_hw_ops vfe_ops_4_8 = {
++	.hw_version_read = vfe_hw_version_read,
++	.get_ub_size = vfe48_get_ub_size,
++	.global_reset = vfe_global_reset,
++	.halt_request = vfe_halt_request,
++	.halt_clear = vfe_halt_clear,
++	.wm_enable = vfe48_wm_enable,
++	.wm_frame_based = vfe_wm_frame_based,
++	.wm_line_based = vfe_wm_line_based,
++	.wm_set_framedrop_period = vfe_wm_set_framedrop_period,
++	.wm_set_framedrop_pattern = vfe_wm_set_framedrop_pattern,
++	.wm_set_ub_cfg = vfe_wm_set_ub_cfg,
++	.bus_reload_wm = vfe_bus_reload_wm,
++	.wm_set_ping_addr = vfe_wm_set_ping_addr,
++	.wm_set_pong_addr = vfe_wm_set_pong_addr,
++	.wm_get_ping_pong_status = vfe_wm_get_ping_pong_status,
++	.bus_enable_wr_if = vfe_bus_enable_wr_if,
++	.bus_connect_wm_to_rdi = vfe_bus_connect_wm_to_rdi,
++	.wm_set_subsample = vfe_wm_set_subsample,
++	.bus_disconnect_wm_from_rdi = vfe_bus_disconnect_wm_from_rdi,
++	.set_xbar_cfg = vfe_set_xbar_cfg,
++	.set_realign_cfg = vfe_set_realign_cfg,
++	.set_rdi_cid = vfe_set_rdi_cid,
++	.reg_update = vfe_reg_update,
++	.reg_update_clear = vfe_reg_update_clear,
++	.enable_irq_wm_line = vfe_enable_irq_wm_line,
++	.enable_irq_pix_line = vfe_enable_irq_pix_line,
++	.enable_irq_common = vfe_enable_irq_common,
++	.set_demux_cfg = vfe_set_demux_cfg,
++	.set_scale_cfg = vfe_set_scale_cfg,
++	.set_crop_cfg = vfe_set_crop_cfg,
++	.set_clamp_cfg = vfe_set_clamp_cfg,
++	.set_qos = vfe48_set_qos,
++	.set_ds = vfe48_set_ds,
++	.set_cgc_override = vfe_set_cgc_override,
++	.set_camif_cfg = vfe_set_camif_cfg,
++	.set_camif_cmd = vfe_set_camif_cmd,
++	.set_module_cfg = vfe_set_module_cfg,
++	.camif_wait_for_stop = vfe_camif_wait_for_stop,
++	.isr_read = vfe_isr_read,
++	.violation_read = vfe_violation_read,
++	.isr = vfe_isr,
++};
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.h b/drivers/media/platform/qcom/camss/camss-vfe.h
+index a90b0d2cc6de..5bce6736e4bb 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe.h
++++ b/drivers/media/platform/qcom/camss/camss-vfe.h
+@@ -180,5 +180,6 @@ void msm_vfe_get_vfe_line_id(struct media_entity *entity, enum vfe_line_id *id);
+ 
+ extern const struct vfe_hw_ops vfe_ops_4_1;
+ extern const struct vfe_hw_ops vfe_ops_4_7;
++extern const struct vfe_hw_ops vfe_ops_4_8;
+ 
+ #endif /* QC_MSM_CAMSS_VFE_H */
 -- 
 2.28.0
 
