@@ -2,125 +2,103 @@ Return-Path: <SRS0=ffI8=D5=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF7E9C388F2
-	for <linux-media@archiver.kernel.org>; Thu, 22 Oct 2020 13:38:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9140FC388F2
+	for <linux-media@archiver.kernel.org>; Thu, 22 Oct 2020 13:38:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 712D82463C
-	for <linux-media@archiver.kernel.org>; Thu, 22 Oct 2020 13:38:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 383A4241A3
+	for <linux-media@archiver.kernel.org>; Thu, 22 Oct 2020 13:38:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="drgjWM3O"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ird/YN9l"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2900210AbgJVNiB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 22 Oct 2020 09:38:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53616 "EHLO
+        id S2900196AbgJVNh6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 22 Oct 2020 09:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2900206AbgJVNiA (ORCPT
+        with ESMTP id S2900191AbgJVNh6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 22 Oct 2020 09:38:00 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC19CC0613CE
-        for <linux-media@vger.kernel.org>; Thu, 22 Oct 2020 06:37:59 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id c194so2144020wme.2
-        for <linux-media@vger.kernel.org>; Thu, 22 Oct 2020 06:37:59 -0700 (PDT)
+        Thu, 22 Oct 2020 09:37:58 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB17C0613CF
+        for <linux-media@vger.kernel.org>; Thu, 22 Oct 2020 06:37:57 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id n6so2435531wrm.13
+        for <linux-media@vger.kernel.org>; Thu, 22 Oct 2020 06:37:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+mHsFLlMVlL11cWsjoM3qFi8Cc1D8z4TpYaeydwCncs=;
-        b=drgjWM3OlnhGwNGhZKErQKrd6uDvrnRJ4cMfZcyLAT9fOmev8q6RXok1j63AtmDCuZ
-         dwG9X71FrdzL9rU/5deqOwGr0W5HZhk6YBNPNmohYHWz/mHBSgoVy954/xCtAQW8vW29
-         MmItJNGErIuT/74MhrGizN0j+db9hDONJd8/M=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VK4FgjtpkHHYUN2/U6FSltdeDbo7aonVsHt4FDf3Llc=;
+        b=ird/YN9lH1BtBZ8Hed7YgeAeT5tU18FYvjLagm5kFiAIzqkS7YnirxsmUHHEnhQLhb
+         6hWmyaetMck/VZVm7Jy3Ckp9huRBvTs4e1bCst7zuc/OuPwBLPy0OJu0vyS0350wy1bJ
+         0y+ou/mHS7B1rzft7O+VzXHDXyuVcnIKLHaHA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+mHsFLlMVlL11cWsjoM3qFi8Cc1D8z4TpYaeydwCncs=;
-        b=srM+TzCuzmHvsk2GGXX643+W/CZ9Qk3he8LqVnSlCtnwP1oop3NT6DtHEVxTqMIlmP
-         6zJ4fOK/6tbvl28NbGWc8kBnzSramQY2Ef3VBF5EYjf5Eo9pOzFomYHeWVSVU7Pxiflp
-         1ENl1i7G6G30TB9A2Fffv94IyRbGymMbjHSg/uRdDKdFmovU3M2aBwP1PQPZBgWqXVed
-         GxarKNPj4+xoFQc3gLSTe3P9oWeysyFDkja2+8w5xyh1HXnFNB0eVhwJB8XsihJzyN92
-         rm97tmtSBDn1oHGP28CbZSZaobhU9X1F6na9bcGHBNxIRU26Uw1jzjp5bVq6+n2LBVeI
-         v+2Q==
-X-Gm-Message-State: AOAM533LKRPJJOlDAxmi17JQpXVM+NuAFme3o73tJVxv1a7OB3XzUh5K
-        8IEoVPm2TBbUUR0pSeD0zHrHkg==
-X-Google-Smtp-Source: ABdhPJyYtzaUhtFF8vMOUrH1wSrwhFdfj98FZ0qf9pSvkbkU+R6OHX9OvtFphu32JgwpBm5eQfElpg==
-X-Received: by 2002:a1c:dc8b:: with SMTP id t133mr2733099wmg.151.1603373878705;
-        Thu, 22 Oct 2020 06:37:58 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VK4FgjtpkHHYUN2/U6FSltdeDbo7aonVsHt4FDf3Llc=;
+        b=NQ2xTPt36r5YH0jipH/p9r4u2RDke6OLNwEy8C8VwCy9gk6zkKDigFe7twSlPnBP8M
+         LyLlLnFYFF4ifgknPDemvrOhKllEYPCohzQj5HxQTcM1G2+ZDDpbH0LDeFe33f2bjYd1
+         WWpOGylH5+8fOOv4XZ5AP15eAY5DmZwMSohB1flT96xGFIGtKv6o/GGJZtcFQdOmYYe1
+         JWseVBA4sm+ocuWMqvx6CRYdw5huZwQfOcsxOrngAH0BRvOElhqWzcUOVIS014SGNjcj
+         6uIBTCG8efpRcL0v6oYmH7hbi1t76y4mEsKJaFvjysflv7i/C3+C0K4OhhayVbYKaIvX
+         21MA==
+X-Gm-Message-State: AOAM533zOJmdI+0bHHlatDjY1FyNIg4q4S74LoJCCg03hkLuHMQUSXLN
+        hipN13CCjD9tj1zSVp/9+ZzFTA==
+X-Google-Smtp-Source: ABdhPJzwijLPW+SG7YfBNlKDFj8QOg+9H2CDvF1LuekVvASb0hAlxfQ0fAqaiAtQCAFFbzbOYLvIfA==
+X-Received: by 2002:adf:f20f:: with SMTP id p15mr2813167wro.339.1603373876297;
+        Thu, 22 Oct 2020 06:37:56 -0700 (PDT)
 Received: from alco.lan ([80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id q10sm4094031wrp.83.2020.10.22.06.37.58
+        by smtp.gmail.com with ESMTPSA id q10sm4094031wrp.83.2020.10.22.06.37.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Oct 2020 06:37:58 -0700 (PDT)
+        Thu, 22 Oct 2020 06:37:55 -0700 (PDT)
 From:   Ricardo Ribalda <ribalda@chromium.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     tfiga@chromium.org, Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH 3/6] media: uvcvideo: Add UVC_GUID_EXT_GPIO_CONTROLLER
-Date:   Thu, 22 Oct 2020 15:37:50 +0200
-Message-Id: <20201022133753.310506-4-ribalda@chromium.org>
+Subject: [PATCH 0/6] Show privacy_gpio as a v4l2_ctrl
+Date:   Thu, 22 Oct 2020 15:37:47 +0200
+Message-Id: <20201022133753.310506-1-ribalda@chromium.org>
 X-Mailer: git-send-email 2.29.0.rc1.297.gfa9743e501-goog
-In-Reply-To: <20201022133753.310506-1-ribalda@chromium.org>
-References: <20201022133753.310506-1-ribalda@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Create a new GUID for GPIO controller entities that do not belong to the
-USB video device.
+Some devices can implement a physical switch to disable the input of the
+camera on demand. Think of it like an elegant privacy sticker.
+    
+The system can read the status of the privacy switch via a GPIO.
 
-This GUID is selected on an address range completely different that the
-UVC standard to avoid collisions.
+The ACPI table maps this GPIO to the USB device via _CRS and _DSD
+descriptors, so the kernel can find it.
 
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
- drivers/media/usb/uvc/uvc_ctrl.c | 4 ++++
- drivers/media/usb/uvc/uvcvideo.h | 3 +++
- 2 files changed, 7 insertions(+)
+The userspace applications need to know if the privacy pin is enabled
+or not. 
 
-diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-index 0a8835742d49..913739915863 100644
---- a/drivers/media/usb/uvc/uvc_ctrl.c
-+++ b/drivers/media/usb/uvc/uvc_ctrl.c
-@@ -830,6 +830,7 @@ static const u8 uvc_processing_guid[16] = UVC_GUID_UVC_PROCESSING;
- static const u8 uvc_camera_guid[16] = UVC_GUID_UVC_CAMERA;
- static const u8 uvc_media_transport_input_guid[16] =
- 	UVC_GUID_UVC_MEDIA_TRANSPORT_INPUT;
-+static const u8 uvc_gpio_guid[16] = UVC_GUID_EXT_GPIO_CONTROLLER;
- 
- static int uvc_entity_match_guid(const struct uvc_entity *entity,
- 	const u8 guid[16])
-@@ -848,6 +849,9 @@ static int uvc_entity_match_guid(const struct uvc_entity *entity,
- 		return memcmp(entity->extension.guidExtensionCode,
- 			      guid, 16) == 0;
- 
-+	case UVC_GPIO_UNIT:
-+		return memcmp(uvc_gpio_guid, guid, 16) == 0;
-+
- 	default:
- 		return 0;
- 	}
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index 08922d889bb6..8e5a9fc35820 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -56,6 +56,9 @@
- #define UVC_GUID_UVC_SELECTOR \
- 	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
- 	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x02}
-+#define UVC_GUID_EXT_GPIO_CONTROLLER \
-+	{0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xf, \
-+	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x01}
- 
- #define UVC_GUID_FORMAT_MJPEG \
- 	{ 'M',  'J',  'P',  'G', 0x00, 0x00, 0x10, 0x00, \
+The obvious way to show it to userspace is via the V4L2_CID_PRIVACY control.
+
+This patchset implement this functionality.
+
+Ricardo Ribalda (6):
+  media: uvcvideo: Add UVC_CTRL_FLAG_ENTITY_GET_INFO
+  media: uvcvideo: Add UVC_CTRL_FLAG_ENTITY_GET_CUR
+  media: uvcvideo: Add UVC_GUID_EXT_GPIO_CONTROLLER
+  media: uvcvideo: Add Privacy control based on EXT_GPIO
+  media: uvcvideo: Implement UVC_GPIO_UNIT
+  media: uvcvideo: Handle IRQs from the privacy_pin
+
+ drivers/media/usb/uvc/uvc_ctrl.c   |  56 ++++++++++++++--
+ drivers/media/usb/uvc/uvc_driver.c | 102 +++++++++++++++++++++++++++++
+ drivers/media/usb/uvc/uvcvideo.h   |  14 ++++
+ include/uapi/linux/uvcvideo.h      |   3 +
+ 4 files changed, 169 insertions(+), 6 deletions(-)
+
 -- 
 2.29.0.rc1.297.gfa9743e501-goog
 
