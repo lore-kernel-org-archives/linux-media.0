@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00CD6C55179
-	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 18:11:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DF41C388F9
+	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 18:12:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ABD9D2168B
-	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 18:11:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E852122254
+	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 18:12:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1754432AbgJWSLt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 23 Oct 2020 14:11:49 -0400
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:51956 "EHLO
+        id S1754371AbgJWSLW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 23 Oct 2020 14:11:22 -0400
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:52038 "EHLO
         mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1754320AbgJWSLY (ORCPT
+        with ESMTP id S1754351AbgJWSLU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 23 Oct 2020 14:11:24 -0400
+        Fri, 23 Oct 2020 14:11:20 -0400
 Received: from relay8-d.mail.gandi.net (unknown [217.70.183.201])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id C3B643B09B3;
-        Fri, 23 Oct 2020 17:47:00 +0000 (UTC)
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id 347EC3A0C1A;
+        Fri, 23 Oct 2020 17:46:48 +0000 (UTC)
 X-Originating-IP: 93.29.109.196
 Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
         (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 02EB11BF203;
-        Fri, 23 Oct 2020 17:46:37 +0000 (UTC)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 0D4931BF20C;
+        Fri, 23 Oct 2020 17:46:24 +0000 (UTC)
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -47,9 +47,9 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Hans Verkuil <hverkuil@xs4all.nl>, kevin.lhopital@hotmail.com
-Subject: [PATCH 14/14] media: sunxi: sun8i-a83t-mipi-csi2: Avoid using the (unsolicited) interrupt
-Date:   Fri, 23 Oct 2020 19:45:46 +0200
-Message-Id: <20201023174546.504028-15-paul.kocialkowski@bootlin.com>
+Subject: [PATCH 07/14] dt-bindings: media: i2c: Add A31 MIPI CSI-2 bindings documentation
+Date:   Fri, 23 Oct 2020 19:45:39 +0200
+Message-Id: <20201023174546.504028-8-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201023174546.504028-1-paul.kocialkowski@bootlin.com>
 References: <20201023174546.504028-1-paul.kocialkowski@bootlin.com>
@@ -59,83 +59,189 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The A83T MIPI CSI-2 apparently produces interrupts regardless of the mask
-registers, for example when a transmission error occurs.
-
-This generates quite a flood when unsolicited interrupts are received on
-each received frame. As a result, disable the interrupt for now since
-we are not currently using it for error reporting.
+This introduces YAML bindings documentation for the A31 MIPI CSI-2
+controller.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
- .../sun8i_a83t_mipi_csi2.c                    | 40 -------------------
- 1 file changed, 40 deletions(-)
+ .../media/allwinner,sun6i-a31-mipi-csi2.yaml  | 168 ++++++++++++++++++
+ 1 file changed, 168 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml
 
-diff --git a/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c b/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c
-index 1ff6f5dfd81a..26af3e3f5f89 100644
---- a/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c
-+++ b/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c
-@@ -25,34 +25,6 @@
- 
- /* Core */
- 
--static irqreturn_t sun8i_a83t_mipi_csi2_isr(int irq, void *dev_id)
--{
--	struct sun8i_a83t_mipi_csi2_dev *cdev =
--		(struct sun8i_a83t_mipi_csi2_dev *)dev_id;
--	struct regmap *regmap = cdev->regmap;
--	u32 status;
--
--	WARN_ONCE(1, MODULE_NAME
--		  ": Unsolicited interrupt, an error likely occurred!\n");
--
--	regmap_read(regmap, SUN8I_A83T_MIPI_CSI2_INT_STA0_REG, &status);
--	regmap_write(regmap, SUN8I_A83T_MIPI_CSI2_INT_STA0_REG, status);
--
--	regmap_read(regmap, SUN8I_A83T_MIPI_CSI2_INT_STA1_REG, &status);
--	regmap_write(regmap, SUN8I_A83T_MIPI_CSI2_INT_STA1_REG, status);
--
--	regmap_read(regmap, SUN8I_A83T_MIPI_CSI2_INT_MSK0_REG, &status);
--	regmap_read(regmap, SUN8I_A83T_MIPI_CSI2_INT_MSK1_REG, &status);
--
--	/*
--	 * The interrupt can be used to catch transmission errors.
--	 * However, we currently lack plumbing for reporting that to the
--	 * A31 CSI controller driver.
--	 */
--
--	return IRQ_HANDLED;
--}
--
- static void sun8i_a83t_mipi_csi2_init(struct sun8i_a83t_mipi_csi2_dev *cdev)
- {
- 	struct regmap *regmap = cdev->regmap;
-@@ -587,7 +559,6 @@ static int sun8i_a83t_mipi_csi2_resource_request(struct sun8i_a83t_mipi_csi2_dev
- {
- 	struct resource *res;
- 	void __iomem *io_base;
--	int irq;
- 	int ret;
- 
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-@@ -626,17 +597,6 @@ static int sun8i_a83t_mipi_csi2_resource_request(struct sun8i_a83t_mipi_csi2_dev
- 		return PTR_ERR(cdev->reset);
- 	}
- 
--	irq = platform_get_irq(pdev, 0);
--	if (irq < 0)
--		return -ENXIO;
--
--	ret = devm_request_irq(&pdev->dev, irq, sun8i_a83t_mipi_csi2_isr, 0,
--			       MODULE_NAME, cdev);
--	if (ret) {
--		dev_err(&pdev->dev, "failed to request MIPI CSI-2 IRQ\n");
--		return ret;
--	}
--
- 	ret = sun8i_a83t_dphy_register(cdev);
- 	if (ret) {
- 		dev_err(&pdev->dev, "failed to init MIPI D-PHY\n");
+diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml
+new file mode 100644
+index 000000000000..9adc0bc27033
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml
+@@ -0,0 +1,168 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/allwinner,sun6i-a31-mipi-csi2.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Allwinner A31 MIPI CSI-2 Device Tree Bindings
++
++maintainers:
++  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
++
++properties:
++  compatible:
++    oneOf:
++      - const: allwinner,sun6i-a31-mipi-csi2
++      - items:
++          - const: allwinner,sun8i-v3s-mipi-csi2
++          - const: allwinner,sun6i-a31-mipi-csi2
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: Bus Clock
++      - description: Module Clock
++
++  clock-names:
++    items:
++      - const: bus
++      - const: mod
++
++  phys:
++    items:
++      - description: MIPI D-PHY
++
++  phy-names:
++    items:
++      - const: dphy
++
++  resets:
++    maxItems: 1
++
++  # See ./video-interfaces.txt for details
++  ports:
++    type: object
++
++    properties:
++      port@0:
++        type: object
++        description: Input port, connect to a MIPI CSI-2 sensor
++
++        properties:
++          reg:
++            const: 0
++
++          endpoint:
++            type: object
++
++            properties:
++              remote-endpoint: true
++
++              bus-type:
++                const: 4
++
++              clock-lanes:
++                maxItems: 1
++
++              data-lanes:
++                minItems: 1
++                maxItems: 4
++
++            required:
++              - bus-type
++              - data-lanes
++              - remote-endpoint
++
++            additionalProperties: false
++
++        required:
++          - endpoint
++
++        additionalProperties: false
++
++      port@1:
++        type: object
++        description: Output port, connect to a CSI controller
++
++        properties:
++          reg:
++            const: 1
++
++          endpoint:
++            type: object
++
++            properties:
++              remote-endpoint: true
++
++              bus-type:
++                const: 4
++
++            additionalProperties: false
++
++        required:
++          - endpoint
++
++        additionalProperties: false
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++  - resets
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/sun8i-v3s-ccu.h>
++    #include <dt-bindings/reset/sun8i-v3s-ccu.h>
++
++    mipi_csi2: mipi-csi2@1cb1000 {
++        compatible = "allwinner,sun8i-v3s-mipi-csi2",
++                     "allwinner,sun6i-a31-mipi-csi2";
++        reg = <0x01cb1000 0x1000>;
++        interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
++        clocks = <&ccu CLK_BUS_CSI>,
++                 <&ccu CLK_CSI1_SCLK>;
++        clock-names = "bus", "mod";
++        resets = <&ccu RST_BUS_CSI>;
++
++        phys = <&dphy>;
++        phy-names = "dphy";
++
++        ports {
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            mipi_csi2_in: port@0 {
++                reg = <0>;
++
++                mipi_csi2_in_ov5648: endpoint {
++                    bus-type = <4>; /* MIPI CSI-2 D-PHY */
++                    clock-lanes = <0>;
++                    data-lanes = <1 2 3 4>;
++
++                    remote-endpoint = <&ov5648_out_mipi_csi2>;
++                };
++            };
++
++            mipi_csi2_out: port@1 {
++                reg = <1>;
++
++                mipi_csi2_out_csi0: endpoint {
++                    bus-type = <4>; /* MIPI CSI-2 D-PHY */
++                    remote-endpoint = <&csi0_in_mipi_csi2>;
++                };
++            };
++        };
++    };
++
++...
 -- 
 2.28.0
 
