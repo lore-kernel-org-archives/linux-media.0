@@ -5,78 +5,69 @@ X-Spam-Level:
 X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3F74C83012
-	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 12:23:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6FCFC63699
+	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 12:22:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8539A2225F
-	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 12:23:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 64EA82463D
+	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 12:22:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="GWMzMlOo"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="Edq/tGIR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S463670AbgJWMXG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 23 Oct 2020 08:23:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38030 "EHLO
+        id S463630AbgJWMWr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 23 Oct 2020 08:22:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S463669AbgJWMXF (ORCPT
+        with ESMTP id S463626AbgJWMWq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 23 Oct 2020 08:23:05 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675B3C0613D4
-        for <linux-media@vger.kernel.org>; Fri, 23 Oct 2020 05:23:04 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id j7so1563332wrt.9
-        for <linux-media@vger.kernel.org>; Fri, 23 Oct 2020 05:23:04 -0700 (PDT)
+        Fri, 23 Oct 2020 08:22:46 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E1AC0613D2
+        for <linux-media@vger.kernel.org>; Fri, 23 Oct 2020 05:22:46 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id b8so1599852wrn.0
+        for <linux-media@vger.kernel.org>; Fri, 23 Oct 2020 05:22:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6WV52rOTICG5gX8Y1zv7jCBKQNXPiDy4YHeczZNq5R8=;
-        b=GWMzMlOoM30W5hlxnVdv3gz53647+4fdHXYymDsOfzhTNsk0z0MfJMjx4w6nZ94KSK
-         sfbyQuNDRBSJ7z7dwGyDhR7Ol6tkx4xZWRKmmTirMfsl0A+bAFoETnuyiBBVhYpf0FVO
-         4tjClYte6Izd5GcvbhbzB5NvdIfaex+qSjX5g=
+        bh=fHzwpOVHrIbQLdmsuDmh6xvbrH+DqYzNXJD+pE0pvSU=;
+        b=Edq/tGIRKQ88HrDhuJq2i7oTlejAOjJ2LX7qUq3NrAb27IYCN8NuptMkKr0dm/Z2VB
+         TdWm4oN9A72isl4LC2F7iKYqPLd2Cmmtbz5kTmVHXWXyiGCWYR2PYPeTtVfm/xHi+K2Q
+         YmBw7hL8GMCn4q/q9NBEdTONzn/v6ye+CqNio=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6WV52rOTICG5gX8Y1zv7jCBKQNXPiDy4YHeczZNq5R8=;
-        b=TIeYa7+bgPtZTd8GH0b6K5Pq7qrUHR+Rxog+6qYgek6eLrGTGzrKFhH2P9iid2b2ZX
-         VL2iM9DCVYxMfcW0k+zayIYvY9D0oc7HJoepa/bwvaCR/+QdhHCEFK7Wjkst7a3E60Om
-         xA9I+h9IdXVLBe+aQVJfv4UwfJtAUirpAtv2a5OBYK6+Ll0V/3iZAecPFhUfESgrHN8u
-         emK0csEM3RDFBbQrbxPXOQsF5kPf4bQNYApBmzu+/xjp5vIYFOuXMvggr/OvkCZZp7Qc
-         nx3VZToT2XIvC+6XYbNpfC6wN/QQ5BZhdFXdaCht0pdumA9OwqiA580voKJwa+ZUSbwq
-         7Ujw==
-X-Gm-Message-State: AOAM530ml7l0Yg5UgI/opvVcn0ykIAW2lkZRSVg6NAVUYK4gHpHuejBu
-        rMzsR4s9uB2KBgT5m6ZMQd2aTw==
-X-Google-Smtp-Source: ABdhPJyf0rFBdStZWr3ETjOPszhGAdp3As8uqEIf5/xUW6NvJZpiJwjwaGUkv0kEBGdr8o9LmQTEEg==
-X-Received: by 2002:adf:e549:: with SMTP id z9mr2523394wrm.12.1603455783113;
-        Fri, 23 Oct 2020 05:23:03 -0700 (PDT)
+        bh=fHzwpOVHrIbQLdmsuDmh6xvbrH+DqYzNXJD+pE0pvSU=;
+        b=Hg/xY7KUD7TyJhbXvgAWOE5iBAqjZo0CUOw2PfqoViM3nvFRoTiU6+cmWtXImbkV1E
+         PS2x/xtc95v0iVWdOdCJbqN7aIPNSZc3ZEmqMPKhlCfJcEqhmYh4Ro6M+vLIUW9imtSO
+         vGJf/wgqt7GceQzGBKpYcMTNR9nMDXFmoMshsOrZQsJWjh3TpwQB5eLt65y1lkZTRqjr
+         Mx7J8xL+Jfze1Msf3NBmtzplfbeiSz03bq+1gpVVbccvR7+dxytHMf4rFq+fS2WISlJl
+         AdRNJHzMcJJD1QyMLoJJ+cZeUHII3HXwtnfC8BxqHcmHk+0UmGg0OxaGVWRA2iLPbOkt
+         sV0A==
+X-Gm-Message-State: AOAM531lYqI8Gu6M89+Cr3FcAlrEbkqsWv2bLksKXfq8T7QPBV9/V2ZZ
+        94D5ATtwOVBLfRE5TpTXeffVlw==
+X-Google-Smtp-Source: ABdhPJx8O/4FjcZWjwjAl63soPWTKchHeUQbq383W3x/1+VQsikl3G0yQpze6wY/eIGgJ5a6pGKAwQ==
+X-Received: by 2002:adf:fc08:: with SMTP id i8mr2537904wrr.116.1603455764887;
+        Fri, 23 Oct 2020 05:22:44 -0700 (PDT)
 Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id y4sm3056484wrp.74.2020.10.23.05.23.01
+        by smtp.gmail.com with ESMTPSA id y4sm3056484wrp.74.2020.10.23.05.22.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Oct 2020 05:23:02 -0700 (PDT)
+        Fri, 23 Oct 2020 05:22:44 -0700 (PDT)
 From:   Daniel Vetter <daniel.vetter@ffwll.ch>
 To:     DRI Development <dri-devel@lists.freedesktop.org>
 Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
         Daniel Vetter <daniel.vetter@ffwll.ch>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Pawel Osciak <pawel@osciak.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-        Jan Kara <jack@suse.cz>,
-        Dan Williams <dan.j.williams@intel.com>, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 35/65] media: videobuf2: Move frame_vector into media subsystem
-Date:   Fri, 23 Oct 2020 14:21:46 +0200
-Message-Id: <20201023122216.2373294-35-daniel.vetter@ffwll.ch>
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-rdma@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Daniel Vetter <daniel.vetter@intel.com>
+Subject: [PATCH 20/65] drm/scheduler: use dma-fence annotations in tdr work
+Date:   Fri, 23 Oct 2020 14:21:31 +0200
+Message-Id: <20201023122216.2373294-20-daniel.vetter@ffwll.ch>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201023122216.2373294-1-daniel.vetter@ffwll.ch>
 References: <20201021163242.1458885-1-daniel.vetter@ffwll.ch>
@@ -88,241 +79,115 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-It's the only user. This also garbage collects the CONFIG_FRAME_VECTOR
-symbol from all over the tree (well just one place, somehow omap media
-driver still had this in its Kconfig, despite not using it).
+In the face of unpriviledged userspace being able to submit bogus gpu
+workloads the kernel needs gpu timeout and reset (tdr) to guarantee
+that dma_fences actually complete. Annotate this worker to make sure
+we don't have any accidental locking inversions or other problems
+lurking.
 
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
-Acked-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Pawel Osciak <pawel@osciak.com>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: Kyungmin Park <kyungmin.park@samsung.com>
-Cc: Tomasz Figa <tfiga@chromium.org>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: John Hubbard <jhubbard@nvidia.com>
-Cc: Jérôme Glisse <jglisse@redhat.com>
-Cc: Jan Kara <jack@suse.cz>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: linux-mm@kvack.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-samsung-soc@vger.kernel.org
+Originally this was part of the overall scheduler annotation patch.
+But amdgpu has some glorious inversions here:
+
+- grabs console_lock
+- does a full modeset, which grabs all kinds of locks
+  (drm_modeset_lock, dma_resv_lock) which can deadlock with
+  dma_fence_wait held inside them.
+- almost minor at that point, but the modeset code also allocates
+  memory
+
+These all look like they'll be very hard to fix properly, the hardware
+seems to require a full display reset with any gpu recovery.
+
+Hence split out as a seperate patch.
+
+Since amdgpu isn't the only hardware driver that needs to reset the
+display (at least gen2/3 on intel have the same problem) we need a
+generic solution for this. There's two tricks we could still from
+drm/i915 and lift to dma-fence:
+
+- The big whack, aka force-complete all fences. i915 does this for all
+  pending jobs if the reset is somehow stuck. Trouble is we'd need to
+  do this for all fences in the entire system, and just the
+  book-keeping for that will be fun. Plus lots of drivers use fences
+  for all kinds of internal stuff like memory management, so
+  unconditionally resetting all of them doesn't work.
+
+  I'm also hoping that with these fence annotations we could enlist
+  lockdep in finding the last offenders causing deadlocks, and we
+  could remove this get-out-of-jail trick.
+
+- The more feasible approach (across drivers at least as part of the
+  dma_fence contract) is what drm/i915 does for gen2/3: When we need
+  to reset the display we wake up all dma_fence_wait_interruptible
+  calls, or well at least the equivalent of those in i915 internally.
+
+  Relying on ioctl restart we force all other threads to release their
+  locks, which means the tdr thread is guaranteed to be able to get
+  them. I think we could implement this at the dma_fence level,
+  including proper lockdep annotations.
+
+  dma_fence_begin_tdr():
+  - must be nested within a dma_fence_begin/end_signalling section
+  - will wake up all interruptible (but not the non-interruptible)
+    dma_fence_wait() calls and force them to complete with a
+    -ERESTARTSYS errno code. All new interrupitble calls to
+    dma_fence_wait() will immeidately fail with the same error code.
+
+  dma_fence_end_trdr():
+  - this will convert dma_fence_wait() calls back to normal.
+
+  Of course interrupting dma_fence_wait is only ok if the caller
+  specified that, which means we need to split the annotations into
+  interruptible and non-interruptible version. If we then make sure
+  that we only use interruptible dma_fence_wait() calls while holding
+  drm_modeset_lock we can grab them in tdr code, and allow display
+  resets. Doing the same for dma_resv_lock might be a lot harder, so
+  buffer updates must be avoided.
+
+  What's worse, we're not going to be able to make the dma_fence_wait
+  calls in mmu-notifiers interruptible, that doesn't work. So
+  allocating memory still wont' be allowed, even in tdr sections. Plus
+  obviously we can use this trick only in tdr, it is rather intrusive.
+
 Cc: linux-media@vger.kernel.org
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
-Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
---
-v3:
-- Create a new frame_vector.h header for this (Mauro)
+Cc: linaro-mm-sig@lists.linaro.org
+Cc: linux-rdma@vger.kernel.org
+Cc: amd-gfx@lists.freedesktop.org
+Cc: intel-gfx@lists.freedesktop.org
+Cc: Chris Wilson <chris@chris-wilson.co.uk>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc: Christian König <christian.koenig@amd.com>
+Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
 ---
- drivers/media/common/videobuf2/Kconfig        |  1 -
- drivers/media/common/videobuf2/Makefile       |  1 +
- .../media/common/videobuf2}/frame_vector.c    |  2 +
- drivers/media/platform/omap/Kconfig           |  1 -
- include/linux/mm.h                            | 42 -----------------
- include/media/frame_vector.h                  | 47 +++++++++++++++++++
- include/media/videobuf2-core.h                |  1 +
- mm/Kconfig                                    |  3 --
- mm/Makefile                                   |  1 -
- 9 files changed, 51 insertions(+), 48 deletions(-)
- rename {mm => drivers/media/common/videobuf2}/frame_vector.c (99%)
- create mode 100644 include/media/frame_vector.h
+ drivers/gpu/drm/scheduler/sched_main.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/media/common/videobuf2/Kconfig b/drivers/media/common/videobuf2/Kconfig
-index edbc99ebba87..d2223a12c95f 100644
---- a/drivers/media/common/videobuf2/Kconfig
-+++ b/drivers/media/common/videobuf2/Kconfig
-@@ -9,7 +9,6 @@ config VIDEOBUF2_V4L2
+diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
+index f69abc4e70d3..ae0d5ceca49a 100644
+--- a/drivers/gpu/drm/scheduler/sched_main.c
++++ b/drivers/gpu/drm/scheduler/sched_main.c
+@@ -281,9 +281,12 @@ static void drm_sched_job_timedout(struct work_struct *work)
+ {
+ 	struct drm_gpu_scheduler *sched;
+ 	struct drm_sched_job *job;
++	bool fence_cookie;
  
- config VIDEOBUF2_MEMOPS
- 	tristate
--	select FRAME_VECTOR
+ 	sched = container_of(work, struct drm_gpu_scheduler, work_tdr.work);
  
- config VIDEOBUF2_DMA_CONTIG
- 	tristate
-diff --git a/drivers/media/common/videobuf2/Makefile b/drivers/media/common/videobuf2/Makefile
-index 77bebe8b202f..54306f8d096c 100644
---- a/drivers/media/common/videobuf2/Makefile
-+++ b/drivers/media/common/videobuf2/Makefile
-@@ -1,5 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- videobuf2-common-objs := videobuf2-core.o
-+videobuf2-common-objs += frame_vector.o
++	fence_cookie = dma_fence_begin_signalling();
++
+ 	/* Protects against concurrent deletion in drm_sched_get_cleanup_job */
+ 	spin_lock(&sched->job_list_lock);
+ 	job = list_first_entry_or_null(&sched->ring_mirror_list,
+@@ -315,6 +318,8 @@ static void drm_sched_job_timedout(struct work_struct *work)
+ 	spin_lock(&sched->job_list_lock);
+ 	drm_sched_start_timeout(sched);
+ 	spin_unlock(&sched->job_list_lock);
++
++	dma_fence_end_signalling(fence_cookie);
+ }
  
- ifeq ($(CONFIG_TRACEPOINTS),y)
-   videobuf2-common-objs += vb2-trace.o
-diff --git a/mm/frame_vector.c b/drivers/media/common/videobuf2/frame_vector.c
-similarity index 99%
-rename from mm/frame_vector.c
-rename to drivers/media/common/videobuf2/frame_vector.c
-index d44779e56313..6590987c14bd 100644
---- a/mm/frame_vector.c
-+++ b/drivers/media/common/videobuf2/frame_vector.c
-@@ -8,6 +8,8 @@
- #include <linux/pagemap.h>
- #include <linux/sched.h>
- 
-+#include <media/frame_vector.h>
-+
- /**
-  * get_vaddr_frames() - map virtual addresses to pfns
-  * @start:	starting user address
-diff --git a/drivers/media/platform/omap/Kconfig b/drivers/media/platform/omap/Kconfig
-index f73b5893220d..de16de46c0f4 100644
---- a/drivers/media/platform/omap/Kconfig
-+++ b/drivers/media/platform/omap/Kconfig
-@@ -12,6 +12,5 @@ config VIDEO_OMAP2_VOUT
- 	depends on VIDEO_V4L2
- 	select VIDEOBUF2_DMA_CONTIG
- 	select OMAP2_VRFB if ARCH_OMAP2 || ARCH_OMAP3
--	select FRAME_VECTOR
- 	help
- 	  V4L2 Display driver support for OMAP2/3 based boards.
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 16b799a0522c..acd60fbf1a5a 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1743,48 +1743,6 @@ int account_locked_vm(struct mm_struct *mm, unsigned long pages, bool inc);
- int __account_locked_vm(struct mm_struct *mm, unsigned long pages, bool inc,
- 			struct task_struct *task, bool bypass_rlim);
- 
--/* Container for pinned pfns / pages */
--struct frame_vector {
--	unsigned int nr_allocated;	/* Number of frames we have space for */
--	unsigned int nr_frames;	/* Number of frames stored in ptrs array */
--	bool got_ref;		/* Did we pin pages by getting page ref? */
--	bool is_pfns;		/* Does array contain pages or pfns? */
--	void *ptrs[];		/* Array of pinned pfns / pages. Use
--				 * pfns_vector_pages() or pfns_vector_pfns()
--				 * for access */
--};
--
--struct frame_vector *frame_vector_create(unsigned int nr_frames);
--void frame_vector_destroy(struct frame_vector *vec);
--int get_vaddr_frames(unsigned long start, unsigned int nr_pfns,
--		     unsigned int gup_flags, struct frame_vector *vec);
--void put_vaddr_frames(struct frame_vector *vec);
--int frame_vector_to_pages(struct frame_vector *vec);
--void frame_vector_to_pfns(struct frame_vector *vec);
--
--static inline unsigned int frame_vector_count(struct frame_vector *vec)
--{
--	return vec->nr_frames;
--}
--
--static inline struct page **frame_vector_pages(struct frame_vector *vec)
--{
--	if (vec->is_pfns) {
--		int err = frame_vector_to_pages(vec);
--
--		if (err)
--			return ERR_PTR(err);
--	}
--	return (struct page **)(vec->ptrs);
--}
--
--static inline unsigned long *frame_vector_pfns(struct frame_vector *vec)
--{
--	if (!vec->is_pfns)
--		frame_vector_to_pfns(vec);
--	return (unsigned long *)(vec->ptrs);
--}
--
- struct kvec;
- int get_kernel_pages(const struct kvec *iov, int nr_pages, int write,
- 			struct page **pages);
-diff --git a/include/media/frame_vector.h b/include/media/frame_vector.h
-new file mode 100644
-index 000000000000..1ed0cd64510d
---- /dev/null
-+++ b/include/media/frame_vector.h
-@@ -0,0 +1,47 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#ifndef _MEDIA_FRAME_VECTOR_H
-+#define _MEDIA_FRAME_VECTOR_H
-+
-+/* Container for pinned pfns / pages in frame_vector.c */
-+struct frame_vector {
-+	unsigned int nr_allocated;	/* Number of frames we have space for */
-+	unsigned int nr_frames;	/* Number of frames stored in ptrs array */
-+	bool got_ref;		/* Did we pin pages by getting page ref? */
-+	bool is_pfns;		/* Does array contain pages or pfns? */
-+	void *ptrs[];		/* Array of pinned pfns / pages. Use
-+				 * pfns_vector_pages() or pfns_vector_pfns()
-+				 * for access */
-+};
-+
-+struct frame_vector *frame_vector_create(unsigned int nr_frames);
-+void frame_vector_destroy(struct frame_vector *vec);
-+int get_vaddr_frames(unsigned long start, unsigned int nr_pfns,
-+		     unsigned int gup_flags, struct frame_vector *vec);
-+void put_vaddr_frames(struct frame_vector *vec);
-+int frame_vector_to_pages(struct frame_vector *vec);
-+void frame_vector_to_pfns(struct frame_vector *vec);
-+
-+static inline unsigned int frame_vector_count(struct frame_vector *vec)
-+{
-+	return vec->nr_frames;
-+}
-+
-+static inline struct page **frame_vector_pages(struct frame_vector *vec)
-+{
-+	if (vec->is_pfns) {
-+		int err = frame_vector_to_pages(vec);
-+
-+		if (err)
-+			return ERR_PTR(err);
-+	}
-+	return (struct page **)(vec->ptrs);
-+}
-+
-+static inline unsigned long *frame_vector_pfns(struct frame_vector *vec)
-+{
-+	if (!vec->is_pfns)
-+		frame_vector_to_pfns(vec);
-+	return (unsigned long *)(vec->ptrs);
-+}
-+
-+#endif /* _MEDIA_FRAME_VECTOR_H */
-diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
-index bbb3f26fbde9..d045e3a5a1d8 100644
---- a/include/media/videobuf2-core.h
-+++ b/include/media/videobuf2-core.h
-@@ -18,6 +18,7 @@
- #include <linux/dma-buf.h>
- #include <linux/bitops.h>
- #include <media/media-request.h>
-+#include <media/frame_vector.h>
- 
- #define VB2_MAX_FRAME	(32)
- #define VB2_MAX_PLANES	(8)
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 6c974888f86f..da6c943fe9f1 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -815,9 +815,6 @@ config DEVICE_PRIVATE
- 	  memory; i.e., memory that is only accessible from the device (or
- 	  group of devices). You likely also want to select HMM_MIRROR.
- 
--config FRAME_VECTOR
--	bool
--
- config ARCH_USES_HIGH_VMA_FLAGS
- 	bool
- config ARCH_HAS_PKEYS
-diff --git a/mm/Makefile b/mm/Makefile
-index d5649f1c12c0..a025fd6c6afd 100644
---- a/mm/Makefile
-+++ b/mm/Makefile
-@@ -111,7 +111,6 @@ obj-$(CONFIG_PAGE_EXTENSION) += page_ext.o
- obj-$(CONFIG_CMA_DEBUGFS) += cma_debug.o
- obj-$(CONFIG_USERFAULTFD) += userfaultfd.o
- obj-$(CONFIG_IDLE_PAGE_TRACKING) += page_idle.o
--obj-$(CONFIG_FRAME_VECTOR) += frame_vector.o
- obj-$(CONFIG_DEBUG_PAGE_REF) += debug_page_ref.o
- obj-$(CONFIG_HARDENED_USERCOPY) += usercopy.o
- obj-$(CONFIG_PERCPU_STATS) += percpu-stats.o
+  /**
 -- 
 2.28.0
 
