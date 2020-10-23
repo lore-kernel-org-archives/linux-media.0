@@ -2,68 +2,148 @@ Return-Path: <SRS0=FqJP=D6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA60FC388F9
-	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 18:12:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E9CEC388F9
+	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 18:12:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 630992225E
-	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 18:12:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0346D2192A
+	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 18:12:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1754491AbgJWSMm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1754485AbgJWSMm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Fri, 23 Oct 2020 14:12:42 -0400
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:54444 "EHLO
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:51956 "EHLO
         mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1754480AbgJWSMk (ORCPT
+        with ESMTP id S1754310AbgJWSLS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 23 Oct 2020 14:12:40 -0400
-Received: from relay2-d.mail.gandi.net (unknown [217.70.183.194])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id 1734B3B1A62;
-        Fri, 23 Oct 2020 17:50:20 +0000 (UTC)
+        Fri, 23 Oct 2020 14:11:18 -0400
+Received: from relay8-d.mail.gandi.net (unknown [217.70.183.201])
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id 4D85F3A910D;
+        Fri, 23 Oct 2020 17:46:44 +0000 (UTC)
 X-Originating-IP: 93.29.109.196
 Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
         (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 756B740006;
-        Fri, 23 Oct 2020 17:49:57 +0000 (UTC)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id EB05A1BF20D;
+        Fri, 23 Oct 2020 17:46:20 +0000 (UTC)
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-sunxi@googlegroups.com
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Yong Deng <yong.deng@magewell.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>
-Subject: [PATCH 0/2] media: i2c: OV5648 image sensor support
-Date:   Fri, 23 Oct 2020 19:49:42 +0200
-Message-Id: <20201023174944.504358-1-paul.kocialkowski@bootlin.com>
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>, kevin.lhopital@hotmail.com,
+        =?UTF-8?q?K=C3=A9vin=20L=27h=C3=B4pital?= 
+        <kevin.lhopital@bootlin.com>
+Subject: [PATCH 05/14] media: sun6i-csi: Only configure the interface data width for parallel
+Date:   Fri, 23 Oct 2020 19:45:37 +0200
+Message-Id: <20201023174546.504028-6-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20201023174546.504028-1-paul.kocialkowski@bootlin.com>
+References: <20201023174546.504028-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series adds support for the OV5648 image sensor,
-as a V4L2 subdev driver.
+Bits related to the interface data width do not have any effect when
+the CSI controller is taking input from the MIPI CSI-2 controller.
 
-Paul Kocialkowski (2):
-  dt-bindings: media: i2c: Add OV5648 bindings documentation
-  media: i2c: Add support for the OV5648 image sensor
+In prevision of adding support for this case, set these bits
+conditionally so there is no ambiguity.
 
- .../bindings/media/i2c/ovti,ov5648.yaml       |  115 +
- drivers/media/i2c/Kconfig                     |   14 +
- drivers/media/i2c/Makefile                    |    1 +
- drivers/media/i2c/ov5648.c                    | 2680 +++++++++++++++++
- 4 files changed, 2810 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5648.yaml
- create mode 100644 drivers/media/i2c/ov5648.c
+Co-developed-by: Kévin L'hôpital <kevin.lhopital@bootlin.com>
+Signed-off-by: Kévin L'hôpital <kevin.lhopital@bootlin.com>
+Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+---
+ .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 42 +++++++++++--------
+ 1 file changed, 25 insertions(+), 17 deletions(-)
 
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+index 5d2389a5cd17..a876a05ea3c7 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+@@ -378,8 +378,13 @@ static void sun6i_csi_setup_bus(struct sun6i_csi_dev *sdev)
+ 	unsigned char bus_width;
+ 	u32 flags;
+ 	u32 cfg;
++	bool input_parallel = false;
+ 	bool input_interlaced = false;
+ 
++	if (endpoint->bus_type == V4L2_MBUS_PARALLEL ||
++	    endpoint->bus_type == V4L2_MBUS_BT656)
++		input_parallel = true;
++
+ 	if (csi->config.field == V4L2_FIELD_INTERLACED
+ 	    || csi->config.field == V4L2_FIELD_INTERLACED_TB
+ 	    || csi->config.field == V4L2_FIELD_INTERLACED_BT)
+@@ -395,6 +400,26 @@ static void sun6i_csi_setup_bus(struct sun6i_csi_dev *sdev)
+ 		 CSI_IF_CFG_HREF_POL_MASK | CSI_IF_CFG_FIELD_MASK |
+ 		 CSI_IF_CFG_SRC_TYPE_MASK);
+ 
++	if (input_parallel) {
++		switch (bus_width) {
++		case 8:
++			cfg |= CSI_IF_CFG_IF_DATA_WIDTH_8BIT;
++			break;
++		case 10:
++			cfg |= CSI_IF_CFG_IF_DATA_WIDTH_10BIT;
++			break;
++		case 12:
++			cfg |= CSI_IF_CFG_IF_DATA_WIDTH_12BIT;
++			break;
++		case 16: /* No need to configure DATA_WIDTH for 16bit */
++			break;
++		default:
++			dev_warn(sdev->dev, "Unsupported bus width: %u\n",
++				 bus_width);
++			break;
++		}
++	}
++
+ 	if (input_interlaced)
+ 		cfg |= CSI_IF_CFG_SRC_TYPE_INTERLACED;
+ 	else
+@@ -440,23 +465,6 @@ static void sun6i_csi_setup_bus(struct sun6i_csi_dev *sdev)
+ 		break;
+ 	}
+ 
+-	switch (bus_width) {
+-	case 8:
+-		cfg |= CSI_IF_CFG_IF_DATA_WIDTH_8BIT;
+-		break;
+-	case 10:
+-		cfg |= CSI_IF_CFG_IF_DATA_WIDTH_10BIT;
+-		break;
+-	case 12:
+-		cfg |= CSI_IF_CFG_IF_DATA_WIDTH_12BIT;
+-		break;
+-	case 16: /* No need to configure DATA_WIDTH for 16bit */
+-		break;
+-	default:
+-		dev_warn(sdev->dev, "Unsupported bus width: %u\n", bus_width);
+-		break;
+-	}
+-
+ 	regmap_write(sdev->regmap, CSI_IF_CFG_REG, cfg);
+ }
+ 
 -- 
 2.28.0
 
