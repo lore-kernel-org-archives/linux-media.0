@@ -7,58 +7,59 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CAE6C8301A
-	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 12:23:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2D52C56202
+	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 12:23:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 49B1E24650
-	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 12:23:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 777A324641
+	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 12:23:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="braem6Gm"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="e5hphnls"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S463683AbgJWMXJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 23 Oct 2020 08:23:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
+        id S463703AbgJWMXP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 23 Oct 2020 08:23:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S463677AbgJWMXI (ORCPT
+        with ESMTP id S463698AbgJWMXO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 23 Oct 2020 08:23:08 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E61C0613CE
-        for <linux-media@vger.kernel.org>; Fri, 23 Oct 2020 05:23:08 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id 13so1240745wmf.0
-        for <linux-media@vger.kernel.org>; Fri, 23 Oct 2020 05:23:08 -0700 (PDT)
+        Fri, 23 Oct 2020 08:23:14 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A550CC0613D2
+        for <linux-media@vger.kernel.org>; Fri, 23 Oct 2020 05:23:13 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id j7so1563906wrt.9
+        for <linux-media@vger.kernel.org>; Fri, 23 Oct 2020 05:23:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=fFEiUvLl06c3j38++d5NzLL6L7leWWZ4E8u91rYq/3A=;
-        b=braem6GmR1a0W1U9n+P0ZjCixCoaNwItneKf4XXmwiM+nUddiP16QJccIkWq1nfeRZ
-         9G1sNxdp8zuH24WxTyNX0vImxMRYFV400Sbo4uC5sqzrP2mUvG1zzNo4wpm+ElGlMrv0
-         BVEObXOiwYJO5XRjv1iDH7j7YCFz5rnvbq8qg=
+        bh=Eh+QFd2rUGVvEdUIq62q2ZCwC5wIklTNSjxdtgUk2/Y=;
+        b=e5hphnlsMYsasyR/YI69NuX59uzEdX2qcimMYImOZm1M/LT2BHrGVpvWCoO3kcKnbz
+         Ov4evujMm+wUa0eaaQI03YI0d3JG8wQ5tVEwmAcc8BYd5ts9ASXWcikA5h+6IZPLJgkT
+         Q5UjRznd6tk9kE/aYdy5AZJulxidfuYuKArx4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=fFEiUvLl06c3j38++d5NzLL6L7leWWZ4E8u91rYq/3A=;
-        b=n9JAdU9QeVB3FlxEI92/8HithpEaO6NJHKH9PDeMYHzLCpKOXfnzX9lIjDJ3f9y23w
-         4rq+bK5xL1T3gMu1TLQmeckZ2a5L8kNaBmQyqdR2jMjATdmChBdGBgqGqA0HOnEfgWR+
-         3gvmGrkre+yh8krC3d9iH22mfX+EW0mCiT6rubtMjZCX+4YrG7dXTUx1ONVCqFl+mlo6
-         wXs3NNwc0Hfbq5MRPXp6sLj36xA7nKodlGI8A2Pu32iqdQDka3eK/dQVBxZAyKXqDcqS
-         ai/WYgG/NuWiZa129CpUWkyI7KR96Lkw6uSj/whipUmzKPlp1/goxAYS70k6suGTbe6s
-         wIWA==
-X-Gm-Message-State: AOAM530JMdOhI+6AsNAI9V1HcG9aIkE4Pq2J6o4Ah4eKKvXYsNr4kUHo
-        mgi9g1YC1sStS7Po4gKaSW8CxA==
-X-Google-Smtp-Source: ABdhPJx8R5/3dC+619rMxj0G4kaFtGbCPSV2VZg+ru6CCCIKgtbWbWS3poGnwIzyRcabuPIieQR+6w==
-X-Received: by 2002:a1c:2042:: with SMTP id g63mr1996821wmg.174.1603455787244;
-        Fri, 23 Oct 2020 05:23:07 -0700 (PDT)
+        bh=Eh+QFd2rUGVvEdUIq62q2ZCwC5wIklTNSjxdtgUk2/Y=;
+        b=a5RDXHIcvDwPH3z1QCMvgTMfjADWyN5Rq7XenybzDf2UTIQA7Nzdn8OUX4cqWUP0S5
+         4u8owgDfa8864SJUKS/G2s3p+f5kZKaXfdwfFaf1UB5n4bEjXpU/5lZoCBrhQ3nIF/Su
+         +yqQLks7FJaQAdE/fGSmntY8ZGZRkZJ+xXHJMpAZjz8+6GgUdSg7p92ttJnn3D4o4UNy
+         WEURsbehT6wJEyomO2nQBO117uTo/42gPFnXc8KYhrLe+YSB9cQTt/rWRO0bZQP1L9M/
+         gZtkaxuv1I1rUCR1G8afLiXapSNQiFxBBbM0bUxCwdb9gNWvKZYnV1TDx/wKLURGIbmb
+         H6Qw==
+X-Gm-Message-State: AOAM532SqWTPg8VW4l+kICAC3kYCSLSdNVUXAy90C4afLcOZhYa9gfII
+        7m/4bRcKXgRr73/rjG6vP/O6fw==
+X-Google-Smtp-Source: ABdhPJwnOL4dnmc6lyGNP0x67dHlVVixkc5nrJQk3+7ioO7moXdzTELeRqRSEuYEwVn0xorg8Qblnw==
+X-Received: by 2002:adf:e549:: with SMTP id z9mr2524031wrm.12.1603455792411;
+        Fri, 23 Oct 2020 05:23:12 -0700 (PDT)
 Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id y4sm3056484wrp.74.2020.10.23.05.23.05
+        by smtp.gmail.com with ESMTPSA id y4sm3056484wrp.74.2020.10.23.05.23.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Oct 2020 05:23:06 -0700 (PDT)
+        Fri, 23 Oct 2020 05:23:11 -0700 (PDT)
 From:   Daniel Vetter <daniel.vetter@ffwll.ch>
 To:     DRI Development <dri-devel@lists.freedesktop.org>
 Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
         Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Daniel Vetter <daniel.vetter@intel.com>,
         Jason Gunthorpe <jgg@ziepe.ca>,
         Kees Cook <keescook@chromium.org>,
@@ -69,17 +70,12 @@ Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
         Jan Kara <jack@suse.cz>, linux-mm@kvack.org,
         linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-media@vger.kernel.org,
-        Pawel Osciak <pawel@osciak.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        Michel Lespinasse <walken@google.com>
-Subject: [PATCH 38/65] media/videbuf1|2: Mark follow_pfn usage as unsafe
-Date:   Fri, 23 Oct 2020 14:21:49 +0200
-Message-Id: <20201023122216.2373294-38-daniel.vetter@ffwll.ch>
+        Arnd Bergmann <arnd@arndb.de>,
+        David Hildenbrand <david@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH 42/65] resource: Move devmem revoke code to resource framework
+Date:   Fri, 23 Oct 2020 14:21:53 +0200
+Message-Id: <20201023122216.2373294-42-daniel.vetter@ffwll.ch>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201023122216.2373294-1-daniel.vetter@ffwll.ch>
 References: <20201021163242.1458885-1-daniel.vetter@ffwll.ch>
@@ -91,19 +87,15 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The media model assumes that buffers are all preallocated, so that
-when a media pipeline is running we never miss a deadline because the
-buffers aren't allocated or available.
+We want all iomem mmaps to consistently revoke ptes when the kernel
+takes over and CONFIG_IO_STRICT_DEVMEM is enabled. This includes the
+pci bar mmaps available through procfs and sysfs, which currently do
+not revoke mappings.
 
-This means we cannot fix the v4l follow_pfn usage through
-mmu_notifier, without breaking how this all works. The only real fix
-is to deprecate userptr support for VM_IO | VM_PFNMAP mappings and
-tell everyone to cut over to dma-buf memory sharing for zerocopy.
+To prepare for this, move the code from the /dev/kmem driver to
+kernel/resource.c.
 
-userptr for normal memory will keep working as-is, this only affects
-the zerocopy userptr usage enabled in 50ac952d2263 ("[media]
-videobuf2-dma-sg: Support io userptr operations on io memory").
-
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
 Cc: Jason Gunthorpe <jgg@ziepe.ca>
 Cc: Kees Cook <keescook@chromium.org>
@@ -117,53 +109,303 @@ Cc: linux-mm@kvack.org
 Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-samsung-soc@vger.kernel.org
 Cc: linux-media@vger.kernel.org
-Cc: Pawel Osciak <pawel@osciak.com>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: Kyungmin Park <kyungmin.park@samsung.com>
-Cc: Tomasz Figa <tfiga@chromium.org>
-Cc: Laurent Dufour <ldufour@linux.ibm.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: Daniel Jordan <daniel.m.jordan@oracle.com>
-Cc: Michel Lespinasse <walken@google.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc: David Hildenbrand <david@redhat.com>
+Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
 Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 --
 v3:
-- Reference the commit that enabled the zerocopy userptr use case to
-  make it abundandtly clear that this patch only affects that, and not
-  normal memory userptr. The old commit message already explained that
-  normal memory userptr is unaffected, but I guess that was not clear
-  enough.
+- add barrier for consistency and document why we don't have to check
+  for NULL (Jason)
+v4
+- Adjust comments to reflect the general nature of this iomem revoke
+  code now (Dan)
 ---
- drivers/media/common/videobuf2/frame_vector.c | 2 +-
- drivers/media/v4l2-core/videobuf-dma-contig.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/char/mem.c     |  85 +---------------------------------
+ include/linux/ioport.h |   6 +--
+ kernel/resource.c      | 101 ++++++++++++++++++++++++++++++++++++++++-
+ 3 files changed, 102 insertions(+), 90 deletions(-)
 
-diff --git a/drivers/media/common/videobuf2/frame_vector.c b/drivers/media/common/videobuf2/frame_vector.c
-index 6590987c14bd..e630494da65c 100644
---- a/drivers/media/common/videobuf2/frame_vector.c
-+++ b/drivers/media/common/videobuf2/frame_vector.c
-@@ -69,7 +69,7 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
- 			break;
+diff --git a/drivers/char/mem.c b/drivers/char/mem.c
+index 5502f56f3655..53338aad8d28 100644
+--- a/drivers/char/mem.c
++++ b/drivers/char/mem.c
+@@ -31,9 +31,6 @@
+ #include <linux/uio.h>
+ #include <linux/uaccess.h>
+ #include <linux/security.h>
+-#include <linux/pseudo_fs.h>
+-#include <uapi/linux/magic.h>
+-#include <linux/mount.h>
  
- 		while (ret < nr_frames && start + PAGE_SIZE <= vma->vm_end) {
--			err = follow_pfn(vma, start, &nums[ret]);
-+			err = unsafe_follow_pfn(vma, start, &nums[ret]);
- 			if (err) {
- 				if (ret == 0)
- 					ret = err;
-diff --git a/drivers/media/v4l2-core/videobuf-dma-contig.c b/drivers/media/v4l2-core/videobuf-dma-contig.c
-index 52312ce2ba05..821c4a76ab96 100644
---- a/drivers/media/v4l2-core/videobuf-dma-contig.c
-+++ b/drivers/media/v4l2-core/videobuf-dma-contig.c
-@@ -183,7 +183,7 @@ static int videobuf_dma_contig_user_get(struct videobuf_dma_contig_memory *mem,
- 	user_address = untagged_baddr;
+ #ifdef CONFIG_IA64
+ # include <linux/efi.h>
+@@ -809,42 +806,6 @@ static loff_t memory_lseek(struct file *file, loff_t offset, int orig)
+ 	return ret;
+ }
  
- 	while (pages_done < (mem->size >> PAGE_SHIFT)) {
--		ret = follow_pfn(vma, user_address, &this_pfn);
-+		ret = unsafe_follow_pfn(vma, user_address, &this_pfn);
- 		if (ret)
- 			break;
+-static struct inode *devmem_inode;
+-
+-#ifdef CONFIG_IO_STRICT_DEVMEM
+-void revoke_devmem(struct resource *res)
+-{
+-	/* pairs with smp_store_release() in devmem_init_inode() */
+-	struct inode *inode = smp_load_acquire(&devmem_inode);
+-
+-	/*
+-	 * Check that the initialization has completed. Losing the race
+-	 * is ok because it means drivers are claiming resources before
+-	 * the fs_initcall level of init and prevent /dev/mem from
+-	 * establishing mappings.
+-	 */
+-	if (!inode)
+-		return;
+-
+-	/*
+-	 * The expectation is that the driver has successfully marked
+-	 * the resource busy by this point, so devmem_is_allowed()
+-	 * should start returning false, however for performance this
+-	 * does not iterate the entire resource range.
+-	 */
+-	if (devmem_is_allowed(PHYS_PFN(res->start)) &&
+-	    devmem_is_allowed(PHYS_PFN(res->end))) {
+-		/*
+-		 * *cringe* iomem=relaxed says "go ahead, what's the
+-		 * worst that can happen?"
+-		 */
+-		return;
+-	}
+-
+-	unmap_mapping_range(inode->i_mapping, res->start, resource_size(res), 1);
+-}
+-#endif
+-
+ static int open_port(struct inode *inode, struct file *filp)
+ {
+ 	int rc;
+@@ -864,7 +825,7 @@ static int open_port(struct inode *inode, struct file *filp)
+ 	 * revocations when drivers want to take over a /dev/mem mapped
+ 	 * range.
+ 	 */
+-	filp->f_mapping = inode->i_mapping;
++	filp->f_mapping = iomem_get_mapping();
  
+ 	return 0;
+ }
+@@ -995,48 +956,6 @@ static char *mem_devnode(struct device *dev, umode_t *mode)
+ 
+ static struct class *mem_class;
+ 
+-static int devmem_fs_init_fs_context(struct fs_context *fc)
+-{
+-	return init_pseudo(fc, DEVMEM_MAGIC) ? 0 : -ENOMEM;
+-}
+-
+-static struct file_system_type devmem_fs_type = {
+-	.name		= "devmem",
+-	.owner		= THIS_MODULE,
+-	.init_fs_context = devmem_fs_init_fs_context,
+-	.kill_sb	= kill_anon_super,
+-};
+-
+-static int devmem_init_inode(void)
+-{
+-	static struct vfsmount *devmem_vfs_mount;
+-	static int devmem_fs_cnt;
+-	struct inode *inode;
+-	int rc;
+-
+-	rc = simple_pin_fs(&devmem_fs_type, &devmem_vfs_mount, &devmem_fs_cnt);
+-	if (rc < 0) {
+-		pr_err("Cannot mount /dev/mem pseudo filesystem: %d\n", rc);
+-		return rc;
+-	}
+-
+-	inode = alloc_anon_inode(devmem_vfs_mount->mnt_sb);
+-	if (IS_ERR(inode)) {
+-		rc = PTR_ERR(inode);
+-		pr_err("Cannot allocate inode for /dev/mem: %d\n", rc);
+-		simple_release_fs(&devmem_vfs_mount, &devmem_fs_cnt);
+-		return rc;
+-	}
+-
+-	/*
+-	 * Publish /dev/mem initialized.
+-	 * Pairs with smp_load_acquire() in revoke_devmem().
+-	 */
+-	smp_store_release(&devmem_inode, inode);
+-
+-	return 0;
+-}
+-
+ static int __init chr_dev_init(void)
+ {
+ 	int minor;
+@@ -1058,8 +977,6 @@ static int __init chr_dev_init(void)
+ 		 */
+ 		if ((minor == DEVPORT_MINOR) && !arch_has_dev_port())
+ 			continue;
+-		if ((minor == DEVMEM_MINOR) && devmem_init_inode() != 0)
+-			continue;
+ 
+ 		device_create(mem_class, NULL, MKDEV(MEM_MAJOR, minor),
+ 			      NULL, devlist[minor].name);
+diff --git a/include/linux/ioport.h b/include/linux/ioport.h
+index 6c2b06fe8beb..8ffb61b36606 100644
+--- a/include/linux/ioport.h
++++ b/include/linux/ioport.h
+@@ -302,11 +302,7 @@ struct resource *devm_request_free_mem_region(struct device *dev,
+ struct resource *request_free_mem_region(struct resource *base,
+ 		unsigned long size, const char *name);
+ 
+-#ifdef CONFIG_IO_STRICT_DEVMEM
+-void revoke_devmem(struct resource *res);
+-#else
+-static inline void revoke_devmem(struct resource *res) { };
+-#endif
++extern struct address_space *iomem_get_mapping(void);
+ 
+ #endif /* __ASSEMBLY__ */
+ #endif	/* _LINUX_IOPORT_H */
+diff --git a/kernel/resource.c b/kernel/resource.c
+index 841737bbda9e..a800acbc578c 100644
+--- a/kernel/resource.c
++++ b/kernel/resource.c
+@@ -18,12 +18,15 @@
+ #include <linux/spinlock.h>
+ #include <linux/fs.h>
+ #include <linux/proc_fs.h>
++#include <linux/pseudo_fs.h>
+ #include <linux/sched.h>
+ #include <linux/seq_file.h>
+ #include <linux/device.h>
+ #include <linux/pfn.h>
+ #include <linux/mm.h>
++#include <linux/mount.h>
+ #include <linux/resource_ext.h>
++#include <uapi/linux/magic.h>
+ #include <asm/io.h>
+ 
+ 
+@@ -1112,6 +1115,58 @@ resource_size_t resource_alignment(struct resource *res)
+ 
+ static DECLARE_WAIT_QUEUE_HEAD(muxed_resource_wait);
+ 
++static struct inode *iomem_inode;
++
++#ifdef CONFIG_IO_STRICT_DEVMEM
++static void revoke_iomem(struct resource *res)
++{
++	/* pairs with smp_store_release() in iomem_init_inode() */
++	struct inode *inode = smp_load_acquire(&iomem_inode);
++
++	/*
++	 * Check that the initialization has completed. Losing the race
++	 * is ok because it means drivers are claiming resources before
++	 * the fs_initcall level of init and prevent iomem_get_mapping users
++	 * from establishing mappings.
++	 */
++	if (!inode)
++		return;
++
++	/*
++	 * The expectation is that the driver has successfully marked
++	 * the resource busy by this point, so devmem_is_allowed()
++	 * should start returning false, however for performance this
++	 * does not iterate the entire resource range.
++	 */
++	if (devmem_is_allowed(PHYS_PFN(res->start)) &&
++	    devmem_is_allowed(PHYS_PFN(res->end))) {
++		/*
++		 * *cringe* iomem=relaxed says "go ahead, what's the
++		 * worst that can happen?"
++		 */
++		return;
++	}
++
++	unmap_mapping_range(inode->i_mapping, res->start, resource_size(res), 1);
++}
++struct address_space *iomem_get_mapping(void)
++{
++	/*
++	 * This function is only called from file open paths, hence guaranteed
++	 * that fs_initcalls have completed and no need to check for NULL. But
++	 * since revoke_iomem can be called before the initcall we still need
++	 * the barrier to appease checkers.
++	 */
++	return smp_load_acquire(&iomem_inode)->i_mapping;
++}
++#else
++static void revoke_iomem(struct resource *res) {}
++struct address_space *iomem_get_mapping(void)
++{
++	return NULL;
++}
++#endif
++
+ /**
+  * __request_region - create a new busy resource region
+  * @parent: parent resource descriptor
+@@ -1179,7 +1234,7 @@ struct resource * __request_region(struct resource *parent,
+ 	write_unlock(&resource_lock);
+ 
+ 	if (res && orig_parent == &iomem_resource)
+-		revoke_devmem(res);
++		revoke_iomem(res);
+ 
+ 	return res;
+ }
+@@ -1713,4 +1768,48 @@ static int __init strict_iomem(char *str)
+ 	return 1;
+ }
+ 
++static int iomem_fs_init_fs_context(struct fs_context *fc)
++{
++	return init_pseudo(fc, DEVMEM_MAGIC) ? 0 : -ENOMEM;
++}
++
++static struct file_system_type iomem_fs_type = {
++	.name		= "iomem",
++	.owner		= THIS_MODULE,
++	.init_fs_context = iomem_fs_init_fs_context,
++	.kill_sb	= kill_anon_super,
++};
++
++static int __init iomem_init_inode(void)
++{
++	static struct vfsmount *iomem_vfs_mount;
++	static int iomem_fs_cnt;
++	struct inode *inode;
++	int rc;
++
++	rc = simple_pin_fs(&iomem_fs_type, &iomem_vfs_mount, &iomem_fs_cnt);
++	if (rc < 0) {
++		pr_err("Cannot mount iomem pseudo filesystem: %d\n", rc);
++		return rc;
++	}
++
++	inode = alloc_anon_inode(iomem_vfs_mount->mnt_sb);
++	if (IS_ERR(inode)) {
++		rc = PTR_ERR(inode);
++		pr_err("Cannot allocate inode for iomem: %d\n", rc);
++		simple_release_fs(&iomem_vfs_mount, &iomem_fs_cnt);
++		return rc;
++	}
++
++	/*
++	 * Publish iomem revocation inode initialized.
++	 * Pairs with smp_load_acquire() in revoke_iomem().
++	 */
++	smp_store_release(&iomem_inode, inode);
++
++	return 0;
++}
++
++fs_initcall(iomem_init_inode);
++
+ __setup("iomem=", strict_iomem);
 -- 
 2.28.0
 
