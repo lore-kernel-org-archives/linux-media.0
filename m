@@ -2,236 +2,68 @@ Return-Path: <SRS0=FqJP=D6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D638C388F9
-	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 18:12:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA60FC388F9
+	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 18:12:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0129B2072E
-	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 18:12:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 630992225E
+	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 18:12:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1754385AbgJWSMC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 23 Oct 2020 14:12:02 -0400
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:52146 "EHLO
+        id S1754491AbgJWSMm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 23 Oct 2020 14:12:42 -0400
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:54444 "EHLO
         mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1754366AbgJWSLX (ORCPT
+        with ESMTP id S1754480AbgJWSMk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 23 Oct 2020 14:11:23 -0400
-Received: from relay8-d.mail.gandi.net (unknown [217.70.183.201])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id CFD703A3284;
-        Fri, 23 Oct 2020 17:46:56 +0000 (UTC)
+        Fri, 23 Oct 2020 14:12:40 -0400
+Received: from relay2-d.mail.gandi.net (unknown [217.70.183.194])
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id 1734B3B1A62;
+        Fri, 23 Oct 2020 17:50:20 +0000 (UTC)
 X-Originating-IP: 93.29.109.196
 Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
         (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id A09011BF213;
-        Fri, 23 Oct 2020 17:46:32 +0000 (UTC)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 756B740006;
+        Fri, 23 Oct 2020 17:49:57 +0000 (UTC)
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-sunxi@googlegroups.com
+        linux-kernel@vger.kernel.org
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Yong Deng <yong.deng@magewell.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>, kevin.lhopital@hotmail.com
-Subject: [PATCH 11/14] dt-bindings: media: i2c: Add A83T MIPI CSI-2 bindings documentation
-Date:   Fri, 23 Oct 2020 19:45:43 +0200
-Message-Id: <20201023174546.504028-12-paul.kocialkowski@bootlin.com>
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>
+Subject: [PATCH 0/2] media: i2c: OV5648 image sensor support
+Date:   Fri, 23 Oct 2020 19:49:42 +0200
+Message-Id: <20201023174944.504358-1-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201023174546.504028-1-paul.kocialkowski@bootlin.com>
-References: <20201023174546.504028-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This introduces YAML bindings documentation for the A83T MIPI CSI-2
-controller.
+This series adds support for the OV5648 image sensor,
+as a V4L2 subdev driver.
 
-Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
----
- .../media/allwinner,sun8i-a83t-mipi-csi2.yaml | 158 ++++++++++++++++++
- 1 file changed, 158 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun8i-a83t-mipi-csi2.yaml
+Paul Kocialkowski (2):
+  dt-bindings: media: i2c: Add OV5648 bindings documentation
+  media: i2c: Add support for the OV5648 image sensor
 
-diff --git a/Documentation/devicetree/bindings/media/allwinner,sun8i-a83t-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/allwinner,sun8i-a83t-mipi-csi2.yaml
-new file mode 100644
-index 000000000000..2384ae4e7be0
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/allwinner,sun8i-a83t-mipi-csi2.yaml
-@@ -0,0 +1,158 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/allwinner,sun8i-a83t-mipi-csi2.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Allwinner A83T MIPI CSI-2 Device Tree Bindings
-+
-+maintainers:
-+  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-+
-+properties:
-+  compatible:
-+    const: allwinner,sun8i-a83t-mipi-csi2
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: Bus Clock
-+      - description: Module Clock
-+      - description: MIPI-specific Clock
-+      - description: Misc CSI Clock
-+
-+  clock-names:
-+    items:
-+      - const: bus
-+      - const: mod
-+      - const: mipi
-+      - const: misc
-+
-+  resets:
-+    maxItems: 1
-+
-+  # See ./video-interfaces.txt for details
-+  ports:
-+    type: object
-+
-+    properties:
-+      port@0:
-+        type: object
-+        description: Input port, connect to a MIPI CSI-2 sensor
-+
-+        properties:
-+          reg:
-+            const: 0
-+
-+          endpoint:
-+            type: object
-+
-+            properties:
-+              remote-endpoint: true
-+
-+              bus-type:
-+                const: 4
-+
-+              clock-lanes:
-+                maxItems: 1
-+
-+              data-lanes:
-+                minItems: 1
-+                maxItems: 4
-+
-+            required:
-+              - bus-type
-+              - data-lanes
-+              - remote-endpoint
-+
-+            additionalProperties: false
-+
-+        required:
-+          - endpoint
-+
-+        additionalProperties: false
-+
-+      port@1:
-+        type: object
-+        description: Output port, connect to a CSI controller
-+
-+        properties:
-+          reg:
-+            const: 1
-+
-+          endpoint:
-+            type: object
-+
-+            properties:
-+              remote-endpoint: true
-+
-+              bus-type:
-+                const: 4
-+
-+            additionalProperties: false
-+
-+        required:
-+          - endpoint
-+
-+        additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - resets
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/sun8i-a83t-ccu.h>
-+    #include <dt-bindings/reset/sun8i-a83t-ccu.h>
-+
-+    mipi_csi2: mipi-csi2@1cb1000 {
-+        compatible = "allwinner,sun8i-a83t-mipi-csi2";
-+        reg = <0x01cb1000 0x1000>;
-+        interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&ccu CLK_BUS_CSI>,
-+                 <&ccu CLK_CSI_SCLK>,
-+                 <&ccu CLK_MIPI_CSI>,
-+                 <&ccu CLK_CSI_MISC>;
-+        clock-names = "bus", "mod", "mipi", "misc";
-+        resets = <&ccu RST_BUS_CSI>;
-+
-+        ports {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            mipi_csi2_in: port@0 {
-+                reg = <0>;
-+
-+                mipi_csi2_in_ov8865: endpoint {
-+                    bus-type = <4>; /* MIPI CSI-2 D-PHY */
-+                    clock-lanes = <0>;
-+                    data-lanes = <1 2 3 4>;
-+
-+                    remote-endpoint = <&ov8865_out_mipi_csi2>;
-+                };
-+            };
-+
-+            mipi_csi2_out: port@1 {
-+                reg = <1>;
-+
-+                mipi_csi2_out_csi: endpoint {
-+                    bus-type = <4>; /* MIPI CSI-2 D-PHY */
-+                    remote-endpoint = <&csi_in_mipi_csi2>;
-+                };
-+            };
-+        };
-+    };
-+
-+...
+ .../bindings/media/i2c/ovti,ov5648.yaml       |  115 +
+ drivers/media/i2c/Kconfig                     |   14 +
+ drivers/media/i2c/Makefile                    |    1 +
+ drivers/media/i2c/ov5648.c                    | 2680 +++++++++++++++++
+ 4 files changed, 2810 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5648.yaml
+ create mode 100644 drivers/media/i2c/ov5648.c
+
 -- 
 2.28.0
 
