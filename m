@@ -5,61 +5,60 @@ X-Spam-Level:
 X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4005BC83029
-	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 12:23:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B01E5C64EBC
+	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 12:23:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1273D24640
-	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 12:23:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5862B24650
+	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 12:23:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="X9fvYwj+"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="URbjYqZv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S463700AbgJWMXT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 23 Oct 2020 08:23:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38094 "EHLO
+        id S463686AbgJWMXL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 23 Oct 2020 08:23:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S463701AbgJWMXP (ORCPT
+        with ESMTP id S463674AbgJWMXK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 23 Oct 2020 08:23:15 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E45EC0613D2
-        for <linux-media@vger.kernel.org>; Fri, 23 Oct 2020 05:23:15 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id d3so1295557wma.4
-        for <linux-media@vger.kernel.org>; Fri, 23 Oct 2020 05:23:15 -0700 (PDT)
+        Fri, 23 Oct 2020 08:23:10 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9EFFC0613CE
+        for <linux-media@vger.kernel.org>; Fri, 23 Oct 2020 05:23:09 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id l15so1299027wmi.3
+        for <linux-media@vger.kernel.org>; Fri, 23 Oct 2020 05:23:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=kkmJ6ZmKgmcd6yJ6bv+WDWEfAJ+atBjrBRrq3Oi6xEA=;
-        b=X9fvYwj+CM1uPA1P8WC5HSgT+LzVZQ+OD1o+k+agSuOPsfZl3UPk7123oRH9IvG99j
-         GfkfDQWLVGKw2EbuNrvibQZy+U+qtkpV3YLZht2b4ThR9SdJpdsR19OQn6pLGfNk0QFs
-         ZOzs+xrJyUetOFvNliSHp5y1W0rt8j+J+9iN0=
+        bh=hp7lChw6Uow+58XPniSHemIeAoNErbB/sdK6im80Iug=;
+        b=URbjYqZvij6vMp6zpIk/3WlniapSCelkh8qPhM9XSJmSi3JP0Pkq6JfYZq+gC0V2Ja
+         Jq8vCQ4Ho/GAm6SQXrzJhiajzuA2XAwJXKB1Cll6tMyrVwJYz4NCmG2PdfE0KkUS7bh0
+         l5/AnqPDLrJU4JyaIv3jCsFac60g5JtxDcFVQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=kkmJ6ZmKgmcd6yJ6bv+WDWEfAJ+atBjrBRrq3Oi6xEA=;
-        b=e1B2trefb75n5ZOok6IAww/CtJQ7/dx3zG7cidJ8IW8JOSFebkSi8NtLAWiLurcgqC
-         w0mk8cquIPtL3mhI/oggCZRKebTf3jWi43a5NJ/xcx2+406OhIeOTgodRvIVEGgd9wNp
-         FbkADcY1eak4CnILs+bc8HLeRk1QZPUQ8AJFzl+vEFEGJZhTWFvck2sPesSoTWpVzONw
-         KPgjLYWuitT2t7GGVb8TBjL/sxUcYGpXA5GZO0wp1lD3hkzIhuLPTZ1FBK7GnHoS1IYs
-         hHjeaZC/g0fW5emQbZPKVfj9nQQF3sN/6cuGfoM50JqQ5m8ETrbNYX5vr11NHusik13u
-         cHFw==
-X-Gm-Message-State: AOAM531/TD2Ue+yMU3qAyMmIa1nDYPT4gtq6nehjrUzlOy3EU5NPzRTO
-        28s91ytuG5IiOv71QqNjWDMIiA==
-X-Google-Smtp-Source: ABdhPJyAocM64pOIP3LBDQAV0GBJxakbq+ElmbOKnaH+G79tsDURZz/ywBYbGb5p2YID6L6RLw4GKg==
-X-Received: by 2002:a1c:9a93:: with SMTP id c141mr2199856wme.168.1603455793854;
-        Fri, 23 Oct 2020 05:23:13 -0700 (PDT)
+        bh=hp7lChw6Uow+58XPniSHemIeAoNErbB/sdK6im80Iug=;
+        b=uAdF1E8uEEcs9s48dYw0pYEkIRCPQstOAMZITBOiFTb0pRhOcP1cyZI1Mfj/9cGpeS
+         NGDDtsaYvhR9INSujxGtGaNzauf1BKngenTijOXVrI4Je8Y23//9wPQC4BMqBe7Ur37M
+         fKoxyfePzFDtjzR+7uVASccxy7dlafyQeXpg7KJ0Nhs4dB2sREeQljNiP0GaGbsugvzr
+         ikGseo5N7eAHXmCY1AUPeRZqmU4wDbCz2MgLxRTsnhebkbbC9C5mYc/fU/A0hx3hahEd
+         2hemh+OuYq9HgrqKqnWAul+wn8k1lVVOlj48dmMG7JYbiyr/z8b0WHUTtHEG9304WHDo
+         bGRg==
+X-Gm-Message-State: AOAM532/4564/sHmj4Bmn5d8PaHyYO54RFVg/aufrpLttkxYob5oLUqa
+        AXktiRavlLnHv4Z0ImpRzbj7Fg==
+X-Google-Smtp-Source: ABdhPJwqZWBmXRQ8vY8ZKJrjdPXGP2WILf15a1TrVl8Pgis8iT7Odd2hX51Nk7fKP5ClvyukHiQ2vg==
+X-Received: by 2002:a1c:4d05:: with SMTP id o5mr1994877wmh.94.1603455788583;
+        Fri, 23 Oct 2020 05:23:08 -0700 (PDT)
 Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id y4sm3056484wrp.74.2020.10.23.05.23.12
+        by smtp.gmail.com with ESMTPSA id y4sm3056484wrp.74.2020.10.23.05.23.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Oct 2020 05:23:13 -0700 (PDT)
+        Fri, 23 Oct 2020 05:23:08 -0700 (PDT)
 From:   Daniel Vetter <daniel.vetter@ffwll.ch>
 To:     DRI Development <dri-devel@lists.freedesktop.org>
 Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
         Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Daniel Vetter <daniel.vetter@intel.com>,
         Jason Gunthorpe <jgg@ziepe.ca>,
         Kees Cook <keescook@chromium.org>,
@@ -70,17 +69,11 @@ Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
         Jan Kara <jack@suse.cz>, linux-mm@kvack.org,
         linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-media@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sourabh Jain <sourabhjain@linux.ibm.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Nayna Jain <nayna@linux.ibm.com>
-Subject: [PATCH 43/65] sysfs: Support zapping of binary attr mmaps
-Date:   Fri, 23 Oct 2020 14:21:54 +0200
-Message-Id: <20201023122216.2373294-43-daniel.vetter@ffwll.ch>
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>, kvm@vger.kernel.org
+Subject: [PATCH 39/65] vfio/type1: Mark follow_pfn as unsafe
+Date:   Fri, 23 Oct 2020 14:21:50 +0200
+Message-Id: <20201023122216.2373294-39-daniel.vetter@ffwll.ch>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201023122216.2373294-1-daniel.vetter@ffwll.ch>
 References: <20201021163242.1458885-1-daniel.vetter@ffwll.ch>
@@ -92,21 +85,17 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-We want to be able to revoke pci mmaps so that the same access rules
-applies as for /dev/kmem. Revoke support for devmem was added in
-3234ac664a87 ("/dev/mem: Revoke mappings when a driver claims the
-region").
+The code seems to stuff these pfns into iommu pts (or something like
+that, I didn't follow), but there's no mmu_notifier to ensure that
+access is synchronized with pte updates.
 
-The simplest way to achieve this is by having the same filp->f_mapping
-for all mappings, so that unmap_mapping_range can find them all, no
-matter through which file they've been created. Since this must be set
-at open time we need sysfs support for this.
+Hence mark these as unsafe. This means that with
+CONFIG_STRICT_FOLLOW_PFN, these will be rejected.
 
-Add an optional mapping parameter bin_attr, which is only consulted
-when there's also an mmap callback, since without mmap support
-allowing to adjust the ->f_mapping makes no sense.
+Real fix is to wire up an mmu_notifier ... somehow. Probably means any
+invalidate is a fatal fault for this vfio device, but then this
+shouldn't ever happen if userspace is reasonable.
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
 Cc: Jason Gunthorpe <jgg@ziepe.ca>
 Cc: Kees Cook <keescook@chromium.org>
@@ -120,70 +109,36 @@ Cc: linux-mm@kvack.org
 Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-samsung-soc@vger.kernel.org
 Cc: linux-media@vger.kernel.org
-Cc: Bjorn Helgaas <bhelgaas@google.com>
-Cc: linux-pci@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Christian Brauner <christian.brauner@ubuntu.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Sourabh Jain <sourabhjain@linux.ibm.com>
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc: Nayna Jain <nayna@linux.ibm.com>
+Cc: Alex Williamson <alex.williamson@redhat.com>
+Cc: Cornelia Huck <cohuck@redhat.com>
+Cc: kvm@vger.kernel.org
 Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 ---
- fs/sysfs/file.c       | 11 +++++++++++
- include/linux/sysfs.h |  2 ++
- 2 files changed, 13 insertions(+)
+ drivers/vfio/vfio_iommu_type1.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/sysfs/file.c b/fs/sysfs/file.c
-index eb6897ab78e7..9d8ccdb000e3 100644
---- a/fs/sysfs/file.c
-+++ b/fs/sysfs/file.c
-@@ -169,6 +169,16 @@ static int sysfs_kf_bin_mmap(struct kernfs_open_file *of,
- 	return battr->mmap(of->file, kobj, battr, vma);
- }
- 
-+static int sysfs_kf_bin_open(struct kernfs_open_file *of)
-+{
-+	struct bin_attribute *battr = of->kn->priv;
-+
-+	if (battr->mapping)
-+		of->file->f_mapping = battr->mapping;
-+
-+	return 0;
-+}
-+
- void sysfs_notify(struct kobject *kobj, const char *dir, const char *attr)
+diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
+index 5fbf0c1f7433..a4d53f3d0a35 100644
+--- a/drivers/vfio/vfio_iommu_type1.c
++++ b/drivers/vfio/vfio_iommu_type1.c
+@@ -421,7 +421,7 @@ static int follow_fault_pfn(struct vm_area_struct *vma, struct mm_struct *mm,
  {
- 	struct kernfs_node *kn = kobj->sd, *tmp;
-@@ -240,6 +250,7 @@ static const struct kernfs_ops sysfs_bin_kfops_mmap = {
- 	.read		= sysfs_kf_bin_read,
- 	.write		= sysfs_kf_bin_write,
- 	.mmap		= sysfs_kf_bin_mmap,
-+	.open		= sysfs_kf_bin_open,
- };
+ 	int ret;
  
- int sysfs_add_file_mode_ns(struct kernfs_node *parent,
-diff --git a/include/linux/sysfs.h b/include/linux/sysfs.h
-index 34e84122f635..a17a474d1601 100644
---- a/include/linux/sysfs.h
-+++ b/include/linux/sysfs.h
-@@ -164,11 +164,13 @@ __ATTRIBUTE_GROUPS(_name)
+-	ret = follow_pfn(vma, vaddr, pfn);
++	ret = unsafe_follow_pfn(vma, vaddr, pfn);
+ 	if (ret) {
+ 		bool unlocked = false;
  
- struct file;
- struct vm_area_struct;
-+struct address_space;
+@@ -435,7 +435,7 @@ static int follow_fault_pfn(struct vm_area_struct *vma, struct mm_struct *mm,
+ 		if (ret)
+ 			return ret;
  
- struct bin_attribute {
- 	struct attribute	attr;
- 	size_t			size;
- 	void			*private;
-+	struct address_space	*mapping;
- 	ssize_t (*read)(struct file *, struct kobject *, struct bin_attribute *,
- 			char *, loff_t, size_t);
- 	ssize_t (*write)(struct file *, struct kobject *, struct bin_attribute *,
+-		ret = follow_pfn(vma, vaddr, pfn);
++		ret = unsafe_follow_pfn(vma, vaddr, pfn);
+ 	}
+ 
+ 	return ret;
 -- 
 2.28.0
 
