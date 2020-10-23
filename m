@@ -5,74 +5,77 @@ X-Spam-Level:
 X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E916CC83021
-	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 12:23:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D367AC8300F
+	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 12:23:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 64C4924631
-	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 12:23:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 83DEE24631
+	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 12:23:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="C2WlQm6Y"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="AEIa/7Rt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S463697AbgJWMXO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 23 Oct 2020 08:23:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38066 "EHLO
+        id S463666AbgJWMXE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 23 Oct 2020 08:23:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S463687AbgJWMXL (ORCPT
+        with ESMTP id S463663AbgJWMXD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 23 Oct 2020 08:23:11 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29180C0613CE
-        for <linux-media@vger.kernel.org>; Fri, 23 Oct 2020 05:23:11 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id x7so1596763wrl.3
-        for <linux-media@vger.kernel.org>; Fri, 23 Oct 2020 05:23:11 -0700 (PDT)
+        Fri, 23 Oct 2020 08:23:03 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F91C0613CE
+        for <linux-media@vger.kernel.org>; Fri, 23 Oct 2020 05:23:03 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id h5so1575171wrv.7
+        for <linux-media@vger.kernel.org>; Fri, 23 Oct 2020 05:23:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=5W4UqFTJMoDRzu7XpmV7m/mIx7tbXZK4TFNNVek8jNg=;
-        b=C2WlQm6Y7/BLr8qzfIPZbRoqOaxbXAT3hL2x0db/Vq7QIa9HiiDV68fCYfgycZtA+x
-         GcQT5YHcVe38UBZQ7KU9yFXVhUTzN+GFKBdcS0mcPQCEf6Uxqwp+fW97FHKul4o73JoP
-         PYYcx5UtzedMnl7YfV4Rz5BNzjRWhqXORNHQA=
+        bh=cXs1UvblKDwz1YQCIe37x2wwQ5T1EiKP8bli0y6YQUo=;
+        b=AEIa/7RtMPcTkOS17xaoZ+tZ2WHJwDB/uLw+Jxwkknjzz0o8Pvb3jK8xNmI5+rkacH
+         RvXPWyHDVHuGWcl22HeQn+NbqKDCOAf9Q9GDKtS71H17YcqVr/FxJsbfr3QL5ROHJrug
+         tpVEoVnRUaDsKK3bbvDbpWdN2Mh/1JfyJptkk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5W4UqFTJMoDRzu7XpmV7m/mIx7tbXZK4TFNNVek8jNg=;
-        b=iy5AMc4euP95u246fSmnlXo4WSJuW2/OyNdYMMwG2c80hsXrz79PRVBmTFVWn/BzIf
-         5Mje/1i3u1KUfoofZiK/OwTVTZ7XzJQH9iQD3QCY0ah0fyA3TP+fYTgC44Sfz8RCfclB
-         SkWLSMx2+P6/e1yZUipLv5EQZexZUBnVNz+kettS9Pq2dGS6ZmF6Rp7y2xcyGZi1ocXD
-         k0SZTMXRr466PNPbPmqt3ogUGX95TBzasrg61hV1jppk82z3lDjwQ66s9FYNs/z2XSVf
-         vFhoao49vaRWdA4Wta4YiOIPHGlGdED6uq46si00d1ybpMqPS+uhOd/KAlAEKPvcqc4P
-         GiGQ==
-X-Gm-Message-State: AOAM533hGo23HPozQk1WrCPAtMuZFVT2UzQr3TtcL16AuX5b3FTXcI/0
-        9Dnyap6lP1mkEVjxw2KGPIva7Q==
-X-Google-Smtp-Source: ABdhPJw3Pb3vhwtwwYNFMVzcx8Z/llu6fU2csM/RXOrVwDY9ekmNXTKA2S1lYyLiAIKDJCOf9S0bYg==
-X-Received: by 2002:a5d:6cae:: with SMTP id a14mr2454800wra.187.1603455789882;
-        Fri, 23 Oct 2020 05:23:09 -0700 (PDT)
+        bh=cXs1UvblKDwz1YQCIe37x2wwQ5T1EiKP8bli0y6YQUo=;
+        b=YNass2sic5EvIqOR3AhOg54iPET4ow48VLkbN9agblmnv/n44l0QQnTdLWtgcW5Z43
+         0oWL7sJLSWMT9UweZ4OxV4hvbWjQDihcuhEmzXfnremV42jZTcqL/8vOGZ/6kLBOkc+G
+         hH5+zT1V5x0U0sK+5nQEZBpGKrnXqgiLUZO+4mvBa2MIFt1WyJFnmlnkskI1geJDTvrh
+         Jr+D+mnnNVG9g34kqWer3n7rGoDbBiMo67OYuwGZF2zMaaeL/xCUCP+DDJ3Appqwsl41
+         uX9KEGKT90q0bPd263cmYyIaAefkRVDaAlQeNvBO6m+PDXBnKjNvGNGvIQFqcNrUq+Ez
+         pUiQ==
+X-Gm-Message-State: AOAM533kS7VAGmaPXEG4WeTLOt8MgT8yJsjJYaW32zabZXNs969qiGvp
+        DH79UoiAYUvfZ8mkbDCZWFQnqQ==
+X-Google-Smtp-Source: ABdhPJwugsOja41agH4JeM0mB6q18uXcawtusiYBwFAiX2c/bgyl3tIOiZ8ZGxA9kMQgDSsksw1WPw==
+X-Received: by 2002:adf:fd8a:: with SMTP id d10mr2236246wrr.85.1603455781768;
+        Fri, 23 Oct 2020 05:23:01 -0700 (PDT)
 Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id y4sm3056484wrp.74.2020.10.23.05.23.08
+        by smtp.gmail.com with ESMTPSA id y4sm3056484wrp.74.2020.10.23.05.23.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Oct 2020 05:23:09 -0700 (PDT)
+        Fri, 23 Oct 2020 05:23:01 -0700 (PDT)
 From:   Daniel Vetter <daniel.vetter@ffwll.ch>
 To:     DRI Development <dri-devel@lists.freedesktop.org>
 Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
         Daniel Vetter <daniel.vetter@ffwll.ch>,
         Daniel Vetter <daniel.vetter@intel.com>,
         Jason Gunthorpe <jgg@ziepe.ca>,
-        Kees Cook <keescook@chromium.org>,
-        Dan Williams <dan.j.williams@intel.com>,
+        Pawel Osciak <pawel@osciak.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         John Hubbard <jhubbard@nvidia.com>,
         =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-        Jan Kara <jack@suse.cz>, linux-mm@kvack.org,
+        Jan Kara <jack@suse.cz>,
+        Dan Williams <dan.j.williams@intel.com>, linux-mm@kvack.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-media@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Subject: [PATCH 40/65] PCI: Obey iomem restrictions for procfs mmap
-Date:   Fri, 23 Oct 2020 14:21:51 +0200
-Message-Id: <20201023122216.2373294-40-daniel.vetter@ffwll.ch>
+        linux-samsung-soc@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 34/65] mm/frame-vector: Use FOLL_LONGTERM
+Date:   Fri, 23 Oct 2020 14:21:45 +0200
+Message-Id: <20201023122216.2373294-34-daniel.vetter@ffwll.ch>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201023122216.2373294-1-daniel.vetter@ffwll.ch>
 References: <20201021163242.1458885-1-daniel.vetter@ffwll.ch>
@@ -84,20 +87,24 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There's three ways to access PCI BARs from userspace: /dev/mem, sysfs
-files, and the old proc interface. Two check against
-iomem_is_exclusive, proc never did. And with CONFIG_IO_STRICT_DEVMEM,
-this starts to matter, since we don't want random userspace having
-access to PCI BARs while a driver is loaded and using it.
+This is used by media/videbuf2 for persistent dma mappings, not just
+for a single dma operation and then freed again, so needs
+FOLL_LONGTERM.
 
-Fix this by adding the same iomem_is_exclusive() check we already have
-on the sysfs side in pci_mmap_resource().
+Unfortunately current pup_locked doesn't support FOLL_LONGTERM due to
+locking issues. Rework the code to pull the pup path out from the
+mmap_sem critical section as suggested by Jason.
 
-References: 90a545e98126 ("restrict /dev/mem to idle io memory ranges")
+By relying entirely on the vma checks in pin_user_pages and follow_pfn
+(for vm_flags and vma_is_fsdax) we can also streamline the code a lot.
+
 Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
 Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: Pawel Osciak <pawel@osciak.com>
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: Kyungmin Park <kyungmin.park@samsung.com>
+Cc: Tomasz Figa <tfiga@chromium.org>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc: Andrew Morton <akpm@linux-foundation.org>
 Cc: John Hubbard <jhubbard@nvidia.com>
 Cc: Jérôme Glisse <jglisse@redhat.com>
@@ -107,31 +114,99 @@ Cc: linux-mm@kvack.org
 Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-samsung-soc@vger.kernel.org
 Cc: linux-media@vger.kernel.org
-Cc: Bjorn Helgaas <bhelgaas@google.com>
-Cc: linux-pci@vger.kernel.org
 Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 --
-v2: Improve commit message (Bjorn)
+v2: Streamline the code and further simplify the loop checks (Jason)
 ---
- drivers/pci/proc.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ mm/frame_vector.c | 50 ++++++++++++++---------------------------------
+ 1 file changed, 15 insertions(+), 35 deletions(-)
 
-diff --git a/drivers/pci/proc.c b/drivers/pci/proc.c
-index d35186b01d98..3a2f90beb4cb 100644
---- a/drivers/pci/proc.c
-+++ b/drivers/pci/proc.c
-@@ -274,6 +274,11 @@ static int proc_bus_pci_mmap(struct file *file, struct vm_area_struct *vma)
- 		else
- 			return -EINVAL;
+diff --git a/mm/frame_vector.c b/mm/frame_vector.c
+index 10f82d5643b6..d44779e56313 100644
+--- a/mm/frame_vector.c
++++ b/mm/frame_vector.c
+@@ -38,7 +38,6 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
+ 	struct vm_area_struct *vma;
+ 	int ret = 0;
+ 	int err;
+-	int locked;
+ 
+ 	if (nr_frames == 0)
+ 		return 0;
+@@ -48,40 +47,25 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
+ 
+ 	start = untagged_addr(start);
+ 
+-	mmap_read_lock(mm);
+-	locked = 1;
+-	vma = find_vma_intersection(mm, start, start + 1);
+-	if (!vma) {
+-		ret = -EFAULT;
+-		goto out;
+-	}
+-
+-	/*
+-	 * While get_vaddr_frames() could be used for transient (kernel
+-	 * controlled lifetime) pinning of memory pages all current
+-	 * users establish long term (userspace controlled lifetime)
+-	 * page pinning. Treat get_vaddr_frames() like
+-	 * get_user_pages_longterm() and disallow it for filesystem-dax
+-	 * mappings.
+-	 */
+-	if (vma_is_fsdax(vma)) {
+-		ret = -EOPNOTSUPP;
+-		goto out;
+-	}
+-
+-	if (!(vma->vm_flags & (VM_IO | VM_PFNMAP))) {
++	ret = pin_user_pages_fast(start, nr_frames,
++				  FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
++				  (struct page **)(vec->ptrs));
++	if (ret > 0) {
+ 		vec->got_ref = true;
+ 		vec->is_pfns = false;
+-		ret = pin_user_pages_locked(start, nr_frames,
+-			gup_flags, (struct page **)(vec->ptrs), &locked);
+-		goto out;
++		goto out_unlocked;
  	}
+ 
++	mmap_read_lock(mm);
+ 	vec->got_ref = false;
+ 	vec->is_pfns = true;
+ 	do {
+ 		unsigned long *nums = frame_vector_pfns(vec);
+ 
++		vma = find_vma_intersection(mm, start, start + 1);
++		if (!vma)
++			break;
 +
-+	if (dev->resource[i].flags & IORESOURCE_MEM &&
-+	    iomem_is_exclusive(dev->resource[i].start))
-+		return -EINVAL;
-+
- 	ret = pci_mmap_page_range(dev, i, vma,
- 				  fpriv->mmap_state, write_combine);
- 	if (ret < 0)
+ 		while (ret < nr_frames && start + PAGE_SIZE <= vma->vm_end) {
+ 			err = follow_pfn(vma, start, &nums[ret]);
+ 			if (err) {
+@@ -92,17 +76,13 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
+ 			start += PAGE_SIZE;
+ 			ret++;
+ 		}
+-		/*
+-		 * We stop if we have enough pages or if VMA doesn't completely
+-		 * cover the tail page.
+-		 */
+-		if (ret >= nr_frames || start < vma->vm_end)
++		/* Bail out if VMA doesn't completely cover the tail page. */
++		if (start < vma->vm_end)
+ 			break;
+-		vma = find_vma_intersection(mm, start, start + 1);
+-	} while (vma && vma->vm_flags & (VM_IO | VM_PFNMAP));
++	} while (ret < nr_frames);
+ out:
+-	if (locked)
+-		mmap_read_unlock(mm);
++	mmap_read_unlock(mm);
++out_unlocked:
+ 	if (!ret)
+ 		ret = -EFAULT;
+ 	if (ret > 0)
 -- 
 2.28.0
 
