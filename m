@@ -2,131 +2,139 @@ Return-Path: <SRS0=FqJP=D6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 927E8C388F9
-	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 12:57:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DBCAC388F9
+	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 14:23:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 462282168B
-	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 12:57:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3CF8921527
+	for <linux-media@archiver.kernel.org>; Fri, 23 Oct 2020 14:23:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YSUyy99R"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="uk0kFLBb"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S464176AbgJWM5v (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 23 Oct 2020 08:57:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
+        id S465171AbgJWOXI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 23 Oct 2020 10:23:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S464131AbgJWM5X (ORCPT
+        with ESMTP id S374830AbgJWOXI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 23 Oct 2020 08:57:23 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59BB9C0613D5
-        for <linux-media@vger.kernel.org>; Fri, 23 Oct 2020 05:57:23 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id q5so1439215wmq.0
-        for <linux-media@vger.kernel.org>; Fri, 23 Oct 2020 05:57:23 -0700 (PDT)
+        Fri, 23 Oct 2020 10:23:08 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA67C0613CE;
+        Fri, 23 Oct 2020 07:23:06 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id v6so2276318lfa.13;
+        Fri, 23 Oct 2020 07:23:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=ZFseCIKmd4AutdezcJJkL4SrWd2bZ1+/6MDl5tIHNnc=;
-        b=YSUyy99Rkveptn5PzX5hv4IkjbPMMugLbvjuzfzkr96YHYPqTot2Ym3PIFQbNsDADW
-         +LyYKNtpy9GHP3FWlcFzXQ2vJx+KwdYl8mYo3gYkugu4ORGpP8OsCspJQPQ2eV7S0zKo
-         X8zh8zhobD0GBED+11SQDKq18CGTBwxos/NIalT6kmWUK/qk5gj59feAnpN3DQTa07gn
-         3arL8KyFlaMixoJ1hmdn/ic95g348jXonXv3DZGxOolqBHnTpTNciXyiAzvu62ItqraW
-         QehWjbwbom5rckpgGNfAiFRN0fwyOCk4umm8X0FzXUJfP9qGPurNsUNXbnEJhX2UZGh6
-         d++w==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=o98sUAeRbrb+A+UaiLkMy3FmWgT2O18cCb+RARaOj3E=;
+        b=uk0kFLBbLZO4GwgQ14jK2wL+oqKrewXhlwH6K47Z0OaPIIvsL2bUlreldaFF+oHn5A
+         1xF7FcCLiurGrzazkcshhKVhPrCv9qeYG/kC1aaAGHXhObNyZDToylrFz6FSW2Z0CoN+
+         1ZE51zDezLl+B3LFJBrs7Zb/dxvFw780+ShOXRbvwB3s501TvMBfOzQg0c3ZHIh3bu4w
+         rwh/kW5i/jGmiTH7OHt4Ynbq82o6VR6SrrIqCsd+9bhue+1Pl/FAcr0UMz7cZPkeYFli
+         jgqkix0JOtjMEBv+ktKK+1EsfuFp7OXBdJglYTR2fj/I2xXbJcD+ZKVRa3S6mxBOHagu
+         obxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=ZFseCIKmd4AutdezcJJkL4SrWd2bZ1+/6MDl5tIHNnc=;
-        b=s4+54/YGRFQAp6cxL6GSxPjftQlV6Msyud+6qjtSYFYp9D9kXNiMPt5gyaZx6c1/JX
-         d1Wsrp8PDo8VkK2mhUZyvzfzj3f2BEDTH5U+E0ZmIzWqfoF+MybACgjUWw47JfnonT51
-         z7zj/Lvlt8MvnM+A03rnq/m2BOelaMXrUWPX9vhR1+nqSAN6NzRLbugjvXkBQVO112zW
-         3aFF2S++6Wi7yPLhzPOpktPNSmNzIhuX1fBX7IGce4sKFr2LKlysrUzjaNCpax9mBnjU
-         YDWntB4QvoIdY9oqupvDMNlrDgFF6Gh+1V/M3Vx9BHbFyDlY6f/3g1fIrUPr6QE2cfY4
-         4YtA==
-X-Gm-Message-State: AOAM532VWjjVHuKyVtjjhsDYZihDx05qmyxuF67rPQpI8Cl3tPA4DLc7
-        PZ/38l3L56+p00e3YqmXbAtEYH0IZfKajwUR
-X-Google-Smtp-Source: ABdhPJyeZZ9bzyZYKpr/fdm9hlTUGXOVfcvjpWFXRM7+3BGWOKN/dr4ppE4nP9V7lWvvdA17YpLJ0A==
-X-Received: by 2002:a1c:383:: with SMTP id 125mr660940wmd.175.1603457841937;
-        Fri, 23 Oct 2020 05:57:21 -0700 (PDT)
-Received: from localhost.localdomain (hst-221-77.medicom.bg. [84.238.221.77])
-        by smtp.gmail.com with ESMTPSA id s19sm3475873wmc.0.2020.10.23.05.57.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Oct 2020 05:57:21 -0700 (PDT)
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-To:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Vikash Garodia <vgarodia@codeaurora.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Dikshita Agarwal <dikshita@codeaurora.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH 2/4] venus: helpers: Add a new helper for buffer processing
-Date:   Fri, 23 Oct 2020 15:57:02 +0300
-Message-Id: <20201023125704.4984-3-stanimir.varbanov@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201023125704.4984-1-stanimir.varbanov@linaro.org>
-References: <20201023125704.4984-1-stanimir.varbanov@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=o98sUAeRbrb+A+UaiLkMy3FmWgT2O18cCb+RARaOj3E=;
+        b=ZtERHIjG4uGEuNdQpV9AAsNtxVpt2felKwuFRA8PTd9wLKHkb47Pjxm3XYl4QVK177
+         Iu1iLQLTbwk4fITM9SxAZbDze3M9JySrHn7XYj20hZoxjS1UmHqsLWv2x/kun2STeR48
+         ejSeojqenVtOJ5e99zODyNIVaR7R+tTrO+DzmnDRQQzLmK+0RVe1uRCocSJf3PCpgTJm
+         rFKmEdEhf0/GbVrMU2M0zCMcXkLzOHAbKLtVF/XWZdmevx+21Q43os7jSiILGNjH2WlX
+         ZKBrCRUm+HGFnUkOyC1wncaDXcR8GV5h9wY4tA3+EHk/x9J9360+oANfkBDSQOxx4n4y
+         T14w==
+X-Gm-Message-State: AOAM530Y5NlLGauHPlbOWVqEk2OUbnvq874PelPGLf7NV2pwKeKJ81np
+        0jZG7KhKRQJDf/YFvVQ7ZUht8/qR8XBjhGy03T4=
+X-Google-Smtp-Source: ABdhPJwgpoExunuD3z+CFCmAmQnUOxHL9KEOxmodPiG+o6BfjQjmAOAw9j4PuUH3O5RHY0D3tPDLOJZ2XzpkVyWqyDI=
+X-Received: by 2002:a19:8114:: with SMTP id c20mr774275lfd.77.1603462984856;
+ Fri, 23 Oct 2020 07:23:04 -0700 (PDT)
+MIME-Version: 1.0
+References: <20201022122421.133976-1-gnurou@gmail.com>
+In-Reply-To: <20201022122421.133976-1-gnurou@gmail.com>
+From:   Alexandre Courbot <gnurou@gmail.com>
+Date:   Fri, 23 Oct 2020 23:22:52 +0900
+Message-ID: <CAAVeFu+P-3pkQGZJgvoX6cRZj8keek70sNy5ZkRozeygiLCwKQ@mail.gmail.com>
+Subject: Re: [PATCH] media: v4l2-mem2mem: always call poll_wait() on queues
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     linux-media <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The new helper will be used from encoder and decoder drivers
-to enqueue buffers for processing by firmware.
+On Thu, Oct 22, 2020 at 9:24 PM Alexandre Courbot <gnurou@gmail.com> wrote:
+>
+> do_poll()/do_select() seem to set the _qproc member of poll_table to
+> NULL the first time they are called on a given table, making subsequent
+> calls of poll_wait() on that table no-ops. This is a problem for mem2mem
+> which calls poll_wait() on the V4L2 queues' waitqueues only when a
+> queue-related event is requested, which may not necessarily be the case
+> during the first poll.
+>
+> For instance, a stateful decoder is typically only interested in
+> EPOLLPRI events when it starts, and will switch to listening to both
+> EPOLLPRI and EPOLLIN after receiving the initial resolution change event
+> and configuring the CAPTURE queue. However by the time that switch
+> happens and v4l2_m2m_poll_for_data() is called for the first time,
+> poll_wait() has become a no-op and the V4L2 queues waitqueues thus
+> cannot be registered.
+>
+> Fix this by moving the registration to v4l2_m2m_poll() and do it whether
+> or not one of the queue-related events are requested.
+>
+> Signed-off-by: Alexandre Courbot <gnurou@gmail.com>
+> ---
+> I seem to be hitting all the polling corner cases recently! ^_^; This
+> time I was wondering why epoll_wait() never returned after I received
+> the first resolution change event from the vicodec stateful decoder.
+> This is why - please take a look!
+>
+>  drivers/media/v4l2-core/v4l2-mem2mem.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
+> index b221b4e438a1..65476ef2879f 100644
+> --- a/drivers/media/v4l2-core/v4l2-mem2mem.c
+> +++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+> @@ -887,9 +887,6 @@ static __poll_t v4l2_m2m_poll_for_data(struct file *file,
+>         src_q = v4l2_m2m_get_src_vq(m2m_ctx);
+>         dst_q = v4l2_m2m_get_dst_vq(m2m_ctx);
+>
+> -       poll_wait(file, &src_q->done_wq, wait);
+> -       poll_wait(file, &dst_q->done_wq, wait);
+> -
+>         /*
+>          * There has to be at least one buffer queued on each queued_list, which
+>          * means either in driver already or waiting for driver to claim it
+> @@ -922,9 +919,14 @@ __poll_t v4l2_m2m_poll(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+>                        struct poll_table_struct *wait)
+>  {
+>         struct video_device *vfd = video_devdata(file);
+> +       struct vb2_queue *src_q = v4l2_m2m_get_src_vq(m2m_ctx);
+> +       struct vb2_queue *dst_q = v4l2_m2m_get_dst_vq(m2m_ctx);
+>         __poll_t req_events = poll_requested_events(wait);
+>         __poll_t rc = 0;
+>
+> +       poll_wait(file, &src_q->done_wq, wait);
+> +       poll_wait(file, &dst_q->done_wq, wait);
 
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
----
- drivers/media/platform/qcom/venus/helpers.c | 20 ++++++++++++++++++++
- drivers/media/platform/qcom/venus/helpers.h |  1 +
- 2 files changed, 21 insertions(+)
+This should probably include a comment to not move this back to
+v4l2_m2m_poll_for_data(). I'll add one and send a v2 unless someone
+points out that the premise of this patch is a bad idea to begin with.
 
-diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
-index 2b6925b6c274..8d0ca70d740d 100644
---- a/drivers/media/platform/qcom/venus/helpers.c
-+++ b/drivers/media/platform/qcom/venus/helpers.c
-@@ -1369,6 +1369,26 @@ void venus_helper_vb2_buf_queue(struct vb2_buffer *vb)
- }
- EXPORT_SYMBOL_GPL(venus_helper_vb2_buf_queue);
- 
-+void venus_helper_process_buf(struct vb2_buffer *vb)
-+{
-+	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
-+	struct venus_inst *inst = vb2_get_drv_priv(vb->vb2_queue);
-+	int ret;
-+
-+	cache_payload(inst, vb);
-+
-+	if (vb2_start_streaming_called(vb->vb2_queue)) {
-+		ret = is_buf_refed(inst, vbuf);
-+		if (ret)
-+			return;
-+
-+		ret = session_process_buf(inst, vbuf);
-+		if (ret)
-+			return_buf_error(inst, vbuf);
-+	}
-+}
-+EXPORT_SYMBOL_GPL(venus_helper_process_buf);
-+
- void venus_helper_buffers_done(struct venus_inst *inst, unsigned int type,
- 			       enum vb2_buffer_state state)
- {
-diff --git a/drivers/media/platform/qcom/venus/helpers.h b/drivers/media/platform/qcom/venus/helpers.h
-index a4a0562bc83f..dca4794c05d9 100644
---- a/drivers/media/platform/qcom/venus/helpers.h
-+++ b/drivers/media/platform/qcom/venus/helpers.h
-@@ -19,6 +19,7 @@ void venus_helper_buffers_done(struct venus_inst *inst, unsigned int type,
- int venus_helper_vb2_buf_init(struct vb2_buffer *vb);
- int venus_helper_vb2_buf_prepare(struct vb2_buffer *vb);
- void venus_helper_vb2_buf_queue(struct vb2_buffer *vb);
-+void venus_helper_process_buf(struct vb2_buffer *vb);
- void venus_helper_vb2_stop_streaming(struct vb2_queue *q);
- int venus_helper_vb2_start_streaming(struct venus_inst *inst);
- void venus_helper_m2m_device_run(void *priv);
--- 
-2.17.1
 
+> +
+>         if (req_events & (EPOLLOUT | EPOLLWRNORM | EPOLLIN | EPOLLRDNORM))
+>                 rc = v4l2_m2m_poll_for_data(file, m2m_ctx, wait);
+>
+> --
+> 2.29.0
+>
