@@ -7,52 +7,51 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3200C4363A
-	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 00:28:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AF0FC64E90
+	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 00:46:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9E08920882
-	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 00:28:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 370552080A
+	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 00:46:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603758525;
-	bh=S2MHAPoe+Fmcjs3Mdb0IAiTXN/hDS47FXlvqopW9HD8=;
+	s=default; t=1603759569;
+	bh=SK9zudvrywtJq/m9EgjmbBefuNPDXV6s1teD0suvgyc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=laShjHm0QsEfG5abP7My3rvDbx1HqaS9Drc7DLul8IlVYGFyP4vO85xljAildkBSm
-	 zWjbaYflI0VwK3lWvMKHAlGsUhTezseVp8Z8nyyUKeanUbOPSPdlnR4h1wOUyXV/cR
-	 ScUyCyYDFXRLPd+o0VZCLB5ENgJIzOwqdmYi5bco=
+	b=DymOYEqVshM63r8Z0wJFjRUdMgCWMJO41USDlI/bjSFsMEijSuGVlQvFGm2pdSdEp
+	 Snxv6Iit1Jiz/+tzBn8kMZILnW3NzL1w7wU+J7CXrgV359gBs6LpmUM4+NiJFS7rgf
+	 a6PnRZT9MnlP9JhVRveXmWCqTucg1Aj2l99/PvRY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2411553AbgJ0A2b (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 26 Oct 2020 20:28:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56280 "EHLO mail.kernel.org"
+        id S2502359AbgJ0An3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 26 Oct 2020 20:43:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49152 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2409900AbgJZXwy (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 26 Oct 2020 19:52:54 -0400
+        id S2408771AbgJZXuJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 26 Oct 2020 19:50:09 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 21C072225C;
-        Mon, 26 Oct 2020 23:52:53 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AB26B216FD;
+        Mon, 26 Oct 2020 23:50:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603756374;
-        bh=S2MHAPoe+Fmcjs3Mdb0IAiTXN/hDS47FXlvqopW9HD8=;
+        s=default; t=1603756208;
+        bh=SK9zudvrywtJq/m9EgjmbBefuNPDXV6s1teD0suvgyc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1xKyEYVirbm7Ag3hcuWiQPfmGmLwfYyk9UiUmOkpuhygRORheZqjrhOuFyg9XfETl
-         p9YqOQGdcN/v6j6/6NINk1A6WLFjcDbNyydC8KrW9XoYJ+TRK5SVPE7IDbrXFGUC8H
-         8k0DFf8Se4yADUH/Y7BxpPx/FQHlnmyeFf6K2utE=
+        b=UzmZsZ6s86NaTvL1SO/REsuPvcWqA4U5MWMJH/quYpj4OFrFo9QV7tb5EsHt2V/wc
+         wbHisav7LHISYLc6xl9AREllX/i3Dv4mvL9BnSDPx22w13Jsc3gzOgXOvmeN/MZAbp
+         +Amltw22o0WjIABwT+yVxcNbxCDcgif7HO0KeWiw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Xia Jiang <xia.jiang@mediatek.com>,
-        Tomasz Figa <tfiga@chromium.org>,
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.8 040/132] media: platform: Improve queue set up flow for bug fixing
-Date:   Mon, 26 Oct 2020 19:50:32 -0400
-Message-Id: <20201026235205.1023962-40-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.9 050/147] media: imx274: fix frame interval handling
+Date:   Mon, 26 Oct 2020 19:47:28 -0400
+Message-Id: <20201026234905.1022767-50-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201026235205.1023962-1-sashal@kernel.org>
-References: <20201026235205.1023962-1-sashal@kernel.org>
+In-Reply-To: <20201026234905.1022767-1-sashal@kernel.org>
+References: <20201026234905.1022767-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -61,39 +60,52 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Xia Jiang <xia.jiang@mediatek.com>
+From: Hans Verkuil <hverkuil@xs4all.nl>
 
-[ Upstream commit 5095a6413a0cf896ab468009b6142cb0fe617e66 ]
+[ Upstream commit 49b20d981d723fae5a93843c617af2b2c23611ec ]
 
-Add checking created buffer size follow in mtk_jpeg_queue_setup().
+1) the numerator and/or denominator might be 0, in that case
+   fall back to the default frame interval. This is per the spec
+   and this caused a v4l2-compliance failure.
 
-Reviewed-by: Tomasz Figa <tfiga@chromium.org>
-Signed-off-by: Xia Jiang <xia.jiang@mediatek.com>
+2) the updated frame interval wasn't returned in the s_frame_interval
+   subdev op.
+
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/media/i2c/imx274.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
-index f82a81a3bdee2..c4b16dc2c0161 100644
---- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
-+++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
-@@ -571,6 +571,13 @@ static int mtk_jpeg_queue_setup(struct vb2_queue *q,
- 	if (!q_data)
- 		return -EINVAL;
+diff --git a/drivers/media/i2c/imx274.c b/drivers/media/i2c/imx274.c
+index 6011cec5e351d..e6aa9f32b6a83 100644
+--- a/drivers/media/i2c/imx274.c
++++ b/drivers/media/i2c/imx274.c
+@@ -1235,6 +1235,8 @@ static int imx274_s_frame_interval(struct v4l2_subdev *sd,
+ 	ret = imx274_set_frame_interval(imx274, fi->interval);
  
-+	if (*num_planes) {
-+		for (i = 0; i < *num_planes; i++)
-+			if (sizes[i] < q_data->sizeimage[i])
-+				return -EINVAL;
-+		return 0;
-+	}
+ 	if (!ret) {
++		fi->interval = imx274->frame_interval;
 +
- 	*num_planes = q_data->fmt->colplanes;
- 	for (i = 0; i < q_data->fmt->colplanes; i++) {
- 		sizes[i] = q_data->sizeimage[i];
+ 		/*
+ 		 * exposure time range is decided by frame interval
+ 		 * need to update it after frame interval changes
+@@ -1730,9 +1732,9 @@ static int imx274_set_frame_interval(struct stimx274 *priv,
+ 		__func__, frame_interval.numerator,
+ 		frame_interval.denominator);
+ 
+-	if (frame_interval.numerator == 0) {
+-		err = -EINVAL;
+-		goto fail;
++	if (frame_interval.numerator == 0 || frame_interval.denominator == 0) {
++		frame_interval.denominator = IMX274_DEF_FRAME_RATE;
++		frame_interval.numerator = 1;
+ 	}
+ 
+ 	req_frame_rate = (u32)(frame_interval.denominator
 -- 
 2.25.1
 
