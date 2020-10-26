@@ -2,226 +2,189 @@ Return-Path: <SRS0=KMyM=EB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7CC6C4363A
-	for <linux-media@archiver.kernel.org>; Mon, 26 Oct 2020 22:15:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3800CC2D0A3
+	for <linux-media@archiver.kernel.org>; Mon, 26 Oct 2020 22:25:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7415621655
-	for <linux-media@archiver.kernel.org>; Mon, 26 Oct 2020 22:15:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EF4EF20878
+	for <linux-media@archiver.kernel.org>; Mon, 26 Oct 2020 22:25:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="kkBWmOfR"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="GNTlaoul"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392617AbgJZWPY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 26 Oct 2020 18:15:24 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:51535 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392573AbgJZWPY (ORCPT
+        id S2394082AbgJZWZS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 26 Oct 2020 18:25:18 -0400
+Received: from mail-ej1-f65.google.com ([209.85.218.65]:40823 "EHLO
+        mail-ej1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2393445AbgJZWZR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 26 Oct 2020 18:15:24 -0400
-Received: by mail-wm1-f65.google.com with SMTP id v5so13187587wmh.1
-        for <linux-media@vger.kernel.org>; Mon, 26 Oct 2020 15:15:22 -0700 (PDT)
+        Mon, 26 Oct 2020 18:25:17 -0400
+Received: by mail-ej1-f65.google.com with SMTP id z5so16154577ejw.7
+        for <linux-media@vger.kernel.org>; Mon, 26 Oct 2020 15:25:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=wSFQl5tEZJlMW2FF6sx0fmEDfKkZOvTzLyUG7GjevAQ=;
-        b=kkBWmOfRGiGfynKFUUsY6Bg1cuklrhT3VBOwm/J9YiPw9z4cVdpY9sATV1o7Idrq4y
-         00hLvWtKsiLWja7bX9HLg4TGqnRGU4YCOAVHW3FIdKeAgKvYbKa00UPb9+F6C9BiFdwx
-         tqpkyBwyQ5Oqzusk6GTT3vSRGHf/YxvJsuWk8=
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wOSWawwOJaxKHaS8ENCZeWsIF1Iow1iXBJnU2sPUuKA=;
+        b=GNTlaoulxKvajwFKjQzgBtOx7geAKdRmk8+ftlJM7fcuRgNYtSqxavBhjjP21I8z6p
+         x864K2nIRT+Jon9erEs+Vn0HN+H4z0q61xOQXxAVnwgalHKRnLBhKZdbb7I2J7pxCvUD
+         fsZK6dl7ul54n6Fww3Aj1C/89hDruWv6yXMeQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=wSFQl5tEZJlMW2FF6sx0fmEDfKkZOvTzLyUG7GjevAQ=;
-        b=L/EVUo++Fb4wThp1ISScMJ4z6gEl37d6ZNL48VfVuhdKLdf9Nc+TIQGcsSS13At6hg
-         pPUpOCYSUWaJsnycGMALomxy26+HITlrYS/BWUdsv6K695jPiSu23yDiRZ2R5B87+h4W
-         sxZDeZaY6TD4Qm7g5Nj+6tEAV0cK8O412K5FEHcykZIzBfu7gz4v8bnSOS5zgPkizqIP
-         3V4gCYda6EzwULISymZN2aOdIQjKaR8gg/pfH4UwBWlbWJiiWdMAoN6ddLEsZCsIqjT6
-         odxlueQIetw19lWzU9I5BwEhDee6vtF2ROctRW+jGQtgORtlXsNJ84hI4+6cLWc8eWRz
-         +pnQ==
-X-Gm-Message-State: AOAM532FOOU7+ZwtgEcstemco6YvIDRbHxR8+RNszG1dL05e8zLjYu0K
-        Deh9nvkocxQtxBw5WY2DLy3EePxz6D0ixw==
-X-Google-Smtp-Source: ABdhPJyCNb7QwTcRnF+7btKQht31eA1jnpozPoni78IGAJc6AIIgtmLd2KT94mvBmswfJX1TK6OixA==
-X-Received: by 2002:a1c:3243:: with SMTP id y64mr18039466wmy.175.1603750522164;
-        Mon, 26 Oct 2020 15:15:22 -0700 (PDT)
-Received: from chromium.org (216.131.76.34.bc.googleusercontent.com. [34.76.131.216])
-        by smtp.gmail.com with ESMTPSA id f17sm23103391wme.22.2020.10.26.15.15.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2020 15:15:21 -0700 (PDT)
-Date:   Mon, 26 Oct 2020 22:15:20 +0000
-From:   Tomasz Figa <tfiga@chromium.org>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
-        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-s390@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Pawel Osciak <pawel@osciak.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
-        Jan Kara <jack@suse.cz>,
-        Dan Williams <dan.j.williams@intel.com>
-Subject: Re: [PATCH v4 05/15] mm/frame-vector: Use FOLL_LONGTERM
-Message-ID: <20201026221520.GC2802004@chromium.org>
-References: <20201026105818.2585306-1-daniel.vetter@ffwll.ch>
- <20201026105818.2585306-6-daniel.vetter@ffwll.ch>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wOSWawwOJaxKHaS8ENCZeWsIF1Iow1iXBJnU2sPUuKA=;
+        b=hQVXdlFvgQ1+bUPq64cgMQ0XLU+LVSRl/LOT8a8+n61mMtjsv1wCI5Zg9org16/KrW
+         EIHuW8e43Vr2xGOm28aD0sXHJcepqvm5e5+sMiOxDP+sX5LlG7Vz6hYHjR02lnhSLYOs
+         WXsDIBXgcVW3/BVyLC4T/lHLD7uc/KM9z/idNkPvxjZdQftHOJgCHZY8nFiySLL3u6A8
+         caknypMRM5eE3O2fAJAk5mMoqy9kzvTf4oUDMvQfN9ZxDQZD9kNYTBiV83cnzw/Fj8Yt
+         CJvld9TjiWY4npOcUlDFpSmAkeOAVMSsQMXFWF47vyGqyHTX7FTM0L+sVhp3sxV5yXo/
+         CERA==
+X-Gm-Message-State: AOAM533dDph7+I4LWPWhuDrd0TkcYfUhjyDG/cUNPB+OwtdJON+yvfJz
+        kRqtJXP21bSswQWdiuzpzcX8YsKcEsCDKw==
+X-Google-Smtp-Source: ABdhPJx4l5kyss18yZZUxsMuA/Xa0msynDnOtqjrJZ4vqSfY56HsZy7kfOCBu9g5zAiX5vPLYgmSLQ==
+X-Received: by 2002:a17:906:bc98:: with SMTP id lv24mr17732548ejb.536.1603751114254;
+        Mon, 26 Oct 2020 15:25:14 -0700 (PDT)
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
+        by smtp.gmail.com with ESMTPSA id m25sm5896785edp.36.2020.10.26.15.25.12
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Oct 2020 15:25:13 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id n18so14710536wrs.5
+        for <linux-media@vger.kernel.org>; Mon, 26 Oct 2020 15:25:12 -0700 (PDT)
+X-Received: by 2002:adf:ab05:: with SMTP id q5mr19528918wrc.32.1603751112403;
+ Mon, 26 Oct 2020 15:25:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201026105818.2585306-6-daniel.vetter@ffwll.ch>
+References: <20201013130503.2412-1-dongchun.zhu@mediatek.com>
+ <20201013130503.2412-2-dongchun.zhu@mediatek.com> <20201013161938.GE13341@paasikivi.fi.intel.com>
+ <1602641418.4733.80.camel@mhfsdcap03> <20201014083139.GG13341@paasikivi.fi.intel.com>
+ <CAAFQd5BVzN=49s4S98E9mGNuxzOt4633dAw9mbyu3Sr-rA61qw@mail.gmail.com>
+ <20201019082759.GL13341@paasikivi.fi.intel.com> <CAAFQd5B9inO_-WJdJg_EMULw-e0EAAo8DXNgo5d+qrGvq6F8qQ@mail.gmail.com>
+In-Reply-To: <CAAFQd5B9inO_-WJdJg_EMULw-e0EAAo8DXNgo5d+qrGvq6F8qQ@mail.gmail.com>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Mon, 26 Oct 2020 23:25:00 +0100
+X-Gmail-Original-Message-ID: <CAAFQd5Cq5tY22vmX1xBJF_aUtR3KAzRaKFObEskd8qtWAJXGog@mail.gmail.com>
+Message-ID: <CAAFQd5Cq5tY22vmX1xBJF_aUtR3KAzRaKFObEskd8qtWAJXGog@mail.gmail.com>
+Subject: Re: [PATCH v15 1/2] media: dt-bindings: media: i2c: Document OV02A10 bindings
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Dongchun Zhu <dongchun.zhu@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Cao Bing Bu <bingbu.cao@intel.com>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
+        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
+        Sj Huang <sj.huang@mediatek.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-devicetree <devicetree@vger.kernel.org>,
+        Louis Kuo <louis.kuo@mediatek.com>,
+        =?UTF-8?B?U2hlbmduYW4gV2FuZyAo546L5Zyj55S3KQ==?= 
+        <shengnan.wang@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Daniel,
+On Mon, Oct 19, 2020 at 9:20 PM Tomasz Figa <tfiga@chromium.org> wrote:
+>
+> On Mon, Oct 19, 2020 at 10:28 AM Sakari Ailus
+> <sakari.ailus@linux.intel.com> wrote:
+> >
+> > On Wed, Oct 14, 2020 at 01:48:00PM +0200, Tomasz Figa wrote:
+> > > On Wed, Oct 14, 2020 at 10:31 AM Sakari Ailus
+> > > <sakari.ailus@linux.intel.com> wrote:
+> > > >
+> > > > On Wed, Oct 14, 2020 at 10:10:18AM +0800, Dongchun Zhu wrote:
+> > > > > Hello Sakari,
+> > > > >
+> > > > > Thanks for your timely review.
+> > > > >
+> > > > > On Tue, 2020-10-13 at 19:19 +0300, Sakari Ailus wrote:
+> > > > > > Hi Dongchun,
+> > > > > >
+> > > > > > On Tue, Oct 13, 2020 at 09:05:02PM +0800, Dongchun Zhu wrote:
+> > > > > > > Add YAML device tree binding for OV02A10 CMOS image sensor, and the
+> > > > > > > relevant MAINTAINERS entries.
+> > > > > > >
+> > > > > > > Signed-off-by: Dongchun Zhu <dongchun.zhu@mediatek.com>
+> > > > > > > ---
+> > > > > > >  .../bindings/media/i2c/ovti,ov02a10.yaml           | 162 +++++++++++++++++++++
+> > > > > > >  MAINTAINERS                                        |   7 +
+> > > > > > >  2 files changed, 169 insertions(+)
+> > > > > > >  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov02a10.yaml
+> > > > > > >
+> > > > >
+> > > > > [snip]...
+> > > > >
+> > > > > > > +  ovti,mipi-clock-voltage:
+> > > > > > > +    description:
+> > > > > > > +      An array of 2-tuples items, and each item consists of link frequency and
+> > > > > > > +      MIPI clock voltage unit like <freq-kHz volt-unit>. Clock voltage unit is
+> > > > > > > +      dependent upon link speed, indicating MIPI transmission speed select that
+> > > > > > > +      controls D-PHY timing setting by adjusting MIPI clock voltage to improve
+> > > > > > > +      the clock driver capability.
+> > > > > > > +    $ref: "/schemas/types.yaml#/definitions/uint32-array"
+> > > > > > > +    minItems: 2
+> > > > > > > +    default: [390000, 4]
+> > > > > >
+> > > > > > Why do you have the link frequency here as well?
+> > > > > >
+> > > > > > In principle this does belong to the endpoint as link frequencies are
+> > > > > > specific to that, but I don't mind; there's just a single port anyway.
+> > > > > >
+> > > > >
+> > > > > This is an optional property which we model as an array of <link speed,
+> > > > > clock voltage> pairs. An example to have all link speeds up to 390MHz
+> > > > > use the value 4 for current driver. If one wants to select different
+> > > > > voltage for different link, they could do so as well.
+> > > >
+> > > > If you think you'd need that, then you need to put this to the endpoint.
+> > >
+> > > The mipi-clock-voltage property is not a property of the endpoint. The
+> > > link frequency there does not set the link frequency - it only
+> > > specifies which link frequency the given voltage should be used for.
+> >
+> > If it is not bound to the endpoint --- that specifies the properties of the
+> > link --- then you could just put it to the driver, couldn't you?
+> >
+> > But earlier on, we established that this is specific to a given board, or a
+> > given link. Endpoints are used to describe connections that a device may
+> > have to other devices. Therefore their properties are different.
+> >
+> > The graph bindings allow for several endpoints on a single physical port,
+> > some may be disabled in that case. This is admittedly mostly done with
+> > CSI-2 receivers.
+> >
+> > Either way, putting this property to the device may affect how DT source is
+> > arranged for boards that have this device. Any similar configuration on
+> > other devices with multiple transmitters or receivers would be in endpoints
+> > anyway --- because they have to, so I don't see why bindings for this
+> > device should be different.
+> >
+> > If you put it to endpoint, the driver also doesn't need to match the link
+> > frequencies in kHz and Hz between the two properties, but just use the same
+> > index for both.
+>
+> I agree in general, but I think in this case this is a device-specific
+> property and the sensor only has 1 CSI-2 interface, so maybe it
+> doesn't really matter?
+>
+> Specifying frequency, voltage pairs is a common practice in other
+> bindings, such as the OPP bindings, by the way.
+>
+> That said, if you insist, I'm fine with this being moved to the
+> endpoint node too.
 
-On Mon, Oct 26, 2020 at 11:58:08AM +0100, Daniel Vetter wrote:
-> This is used by media/videbuf2 for persistent dma mappings, not just
-> for a single dma operation and then freed again, so needs
-> FOLL_LONGTERM.
-> 
-> Unfortunately current pup_locked doesn't support FOLL_LONGTERM due to
-> locking issues. Rework the code to pull the pup path out from the
-> mmap_sem critical section as suggested by Jason.
-> 
-> By relying entirely on the vma checks in pin_user_pages and follow_pfn
-> (for vm_flags and vma_is_fsdax) we can also streamline the code a lot.
-> 
-> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: Pawel Osciak <pawel@osciak.com>
-> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-> Cc: Kyungmin Park <kyungmin.park@samsung.com>
-> Cc: Tomasz Figa <tfiga@chromium.org>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: John Hubbard <jhubbard@nvidia.com>
-> Cc: Jérôme Glisse <jglisse@redhat.com>
-> Cc: Jan Kara <jack@suse.cz>
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: linux-mm@kvack.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-samsung-soc@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-> --
-> v2: Streamline the code and further simplify the loop checks (Jason)
-> ---
->  mm/frame_vector.c | 50 ++++++++++++++---------------------------------
->  1 file changed, 15 insertions(+), 35 deletions(-)
-> 
-
-Thank you for the patch. Please see my comments inline.
-
-> diff --git a/mm/frame_vector.c b/mm/frame_vector.c
-> index 10f82d5643b6..d44779e56313 100644
-> --- a/mm/frame_vector.c
-> +++ b/mm/frame_vector.c
-> @@ -38,7 +38,6 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
->  	struct vm_area_struct *vma;
->  	int ret = 0;
->  	int err;
-> -	int locked;
->  
->  	if (nr_frames == 0)
->  		return 0;
-> @@ -48,40 +47,25 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
->  
->  	start = untagged_addr(start);
->  
-> -	mmap_read_lock(mm);
-> -	locked = 1;
-> -	vma = find_vma_intersection(mm, start, start + 1);
-> -	if (!vma) {
-> -		ret = -EFAULT;
-> -		goto out;
-> -	}
-> -
-> -	/*
-> -	 * While get_vaddr_frames() could be used for transient (kernel
-> -	 * controlled lifetime) pinning of memory pages all current
-> -	 * users establish long term (userspace controlled lifetime)
-> -	 * page pinning. Treat get_vaddr_frames() like
-> -	 * get_user_pages_longterm() and disallow it for filesystem-dax
-> -	 * mappings.
-> -	 */
-> -	if (vma_is_fsdax(vma)) {
-> -		ret = -EOPNOTSUPP;
-> -		goto out;
-> -	}
-> -
-> -	if (!(vma->vm_flags & (VM_IO | VM_PFNMAP))) {
-> +	ret = pin_user_pages_fast(start, nr_frames,
-> +				  FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
-> +				  (struct page **)(vec->ptrs));
-> +	if (ret > 0) {
->  		vec->got_ref = true;
->  		vec->is_pfns = false;
-> -		ret = pin_user_pages_locked(start, nr_frames,
-> -			gup_flags, (struct page **)(vec->ptrs), &locked);
-
-Should we drop the gup_flags argument, since it's ignored now?
-
-> -		goto out;
-> +		goto out_unlocked;
->  	}
->  
-
-Should we initialize ret with 0 here, since pin_user_pages_fast() can
-return a negative error code, but below we use it as a counter for the
-looked up frames?
+Is the conclusion that it needs to be moved?
 
 Best regards,
 Tomasz
-
-> +	mmap_read_lock(mm);
->  	vec->got_ref = false;
->  	vec->is_pfns = true;
->  	do {
->  		unsigned long *nums = frame_vector_pfns(vec);
->  
-> +		vma = find_vma_intersection(mm, start, start + 1);
-> +		if (!vma)
-> +			break;
-> +
->  		while (ret < nr_frames && start + PAGE_SIZE <= vma->vm_end) {
->  			err = follow_pfn(vma, start, &nums[ret]);
->  			if (err) {
-> @@ -92,17 +76,13 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
->  			start += PAGE_SIZE;
->  			ret++;
->  		}
-> -		/*
-> -		 * We stop if we have enough pages or if VMA doesn't completely
-> -		 * cover the tail page.
-> -		 */
-> -		if (ret >= nr_frames || start < vma->vm_end)
-> +		/* Bail out if VMA doesn't completely cover the tail page. */
-> +		if (start < vma->vm_end)
->  			break;
-> -		vma = find_vma_intersection(mm, start, start + 1);
-> -	} while (vma && vma->vm_flags & (VM_IO | VM_PFNMAP));
-> +	} while (ret < nr_frames);
->  out:
-> -	if (locked)
-> -		mmap_read_unlock(mm);
-> +	mmap_read_unlock(mm);
-> +out_unlocked:
->  	if (!ret)
->  		ret = -EFAULT;
->  	if (ret > 0)
-> -- 
-> 2.28.0
-> 
