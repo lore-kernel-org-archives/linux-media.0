@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 560DEC64E7D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD3EAC64EBC
 	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 00:46:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 12590221F7
+	by mail.kernel.org (Postfix) with ESMTP id 865C42080A
 	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 00:46:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1603759569;
-	bh=sJKzSfQY8uzihmpRwVTN/EAgVg3GpFoCkG/vfM+f3PY=;
+	bh=kI8a4ZAt7Nnbp8EYD8u1w6iA4ykp9eMx63jY/V9xDyo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=BE6iR+V0j95Z1/SaobN6LDXZW1St/GWWv3ShySUTYrHkU7pLXN2Z+u3nTYrwHdOsW
-	 gFBd8+BXEI2+jSOLu0pN4Hg6XjfnkpCNQrI0cmnKGTmxvy3Kp2W0TURtU0mCw7l4rP
-	 iMenzcR0vNmilUqSoP0yfvCJ6NHFYmBySVzLkumM=
+	b=qOpTjOaN/w8s13A+ymG7tF1ojBuLW9mg3XeFAZLK9L+aj25p6JERp9Bab8D1JSleB
+	 K45AdyzrI656V7KGeo3h3Zhuvr0Ie6NQPTsH21Sq5zh6zt1nUSgszR6zpiCv8YG/uL
+	 QbJY/rHTcGfFkHw5d4na0l8d/IBImbzfeydSOVgM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409109AbgJ0Anb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 26 Oct 2020 20:43:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49908 "EHLO mail.kernel.org"
+        id S2502349AbgJ0An2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 26 Oct 2020 20:43:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49012 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2409111AbgJZXu1 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 26 Oct 2020 19:50:27 -0400
+        id S2409017AbgJZXuG (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 26 Oct 2020 19:50:06 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9529421655;
-        Mon, 26 Oct 2020 23:50:25 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2AA8120872;
+        Mon, 26 Oct 2020 23:50:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603756226;
-        bh=sJKzSfQY8uzihmpRwVTN/EAgVg3GpFoCkG/vfM+f3PY=;
+        s=default; t=1603756205;
+        bh=kI8a4ZAt7Nnbp8EYD8u1w6iA4ykp9eMx63jY/V9xDyo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JUftdwyxFUfPUJ8P4o78xqgg55LBzKMHdhIrwaVZ7zW9c2Ta/7n/YPksl28nIttiR
-         JjYII4JB9ZcN/wjoe6Nv1gc/SZpbXeh2arQtEwZ/yQuD9ehh793LG7AkdDsVEgbHFm
-         ISZI6u9IIorpMo3rGiSZLj/uBD1/hlPbD35pqNf8=
+        b=j42e3FcWw3Chkw3b9WmVUxdrJUgmJUWMrlAoE3Q3i8G3bALheQYjNukdwvyBofSqK
+         dz+AVAwDQQxWjYRbIpvaAt63R59YbX5w9AmYoQXrl0Szls4eh3MeRh0yPEzMQ+6svB
+         X5g7ooFf+9xYbvmDT9sMR2OYaKhVwvRu/B9vpRGw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+Cc:     Tom Rix <trix@redhat.com>, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.9 065/147] media: uvcvideo: Fix dereference of out-of-bound list iterator
-Date:   Mon, 26 Oct 2020 19:47:43 -0400
-Message-Id: <20201026234905.1022767-65-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        clang-built-linux@googlegroups.com
+Subject: [PATCH AUTOSEL 5.9 048/147] media: tw5864: check status of tw5864_frameinterval_get
+Date:   Mon, 26 Oct 2020 19:47:26 -0400
+Message-Id: <20201026234905.1022767-48-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201026234905.1022767-1-sashal@kernel.org>
 References: <20201026234905.1022767-1-sashal@kernel.org>
@@ -58,73 +58,61 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
+From: Tom Rix <trix@redhat.com>
 
-[ Upstream commit f875bcc375c738bf2f599ff2e1c5b918dbd07c45 ]
+[ Upstream commit 780d815dcc9b34d93ae69385a8465c38d423ff0f ]
 
-Fixes the following coccinelle report:
+clang static analysis reports this problem
 
-drivers/media/usb/uvc/uvc_ctrl.c:1860:5-11:
-ERROR: invalid reference to the index variable of the iterator on line 1854
+tw5864-video.c:773:32: warning: The left expression of the compound
+  assignment is an uninitialized value.
+  The computed value will also be garbage
+        fintv->stepwise.max.numerator *= std_max_fps;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
 
-by adding a boolean variable to check if the loop has found the
+stepwise.max is set with frameinterval, which comes from
 
-Found using - Coccinelle (http://coccinelle.lip6.fr)
+	ret = tw5864_frameinterval_get(input, &frameinterval);
+	fintv->stepwise.step = frameinterval;
+	fintv->stepwise.min = frameinterval;
+	fintv->stepwise.max = frameinterval;
+	fintv->stepwise.max.numerator *= std_max_fps;
 
-[Replace cursor variable with bool found]
+When tw5864_frameinterval_get() fails, frameinterval is not
+set. So check the status and fix another similar problem.
 
-Signed-off-by: Daniel W. S. Almeida <dwlsalmeida@gmail.com>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Tom Rix <trix@redhat.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/uvc/uvc_ctrl.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ drivers/media/pci/tw5864/tw5864-video.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-index e399b9fad7574..aed84528758f6 100644
---- a/drivers/media/usb/uvc/uvc_ctrl.c
-+++ b/drivers/media/usb/uvc/uvc_ctrl.c
-@@ -1844,30 +1844,35 @@ int uvc_xu_ctrl_query(struct uvc_video_chain *chain,
- {
- 	struct uvc_entity *entity;
- 	struct uvc_control *ctrl;
--	unsigned int i, found = 0;
-+	unsigned int i;
-+	bool found;
- 	u32 reqflags;
- 	u16 size;
- 	u8 *data = NULL;
- 	int ret;
+diff --git a/drivers/media/pci/tw5864/tw5864-video.c b/drivers/media/pci/tw5864/tw5864-video.c
+index ec1e06da7e4fb..a65114e7ca346 100644
+--- a/drivers/media/pci/tw5864/tw5864-video.c
++++ b/drivers/media/pci/tw5864/tw5864-video.c
+@@ -767,6 +767,9 @@ static int tw5864_enum_frameintervals(struct file *file, void *priv,
+ 	fintv->type = V4L2_FRMIVAL_TYPE_STEPWISE;
  
- 	/* Find the extension unit. */
-+	found = false;
- 	list_for_each_entry(entity, &chain->entities, chain) {
- 		if (UVC_ENTITY_TYPE(entity) == UVC_VC_EXTENSION_UNIT &&
--		    entity->id == xqry->unit)
-+		    entity->id == xqry->unit) {
-+			found = true;
- 			break;
-+		}
- 	}
+ 	ret = tw5864_frameinterval_get(input, &frameinterval);
++	if (ret)
++		return ret;
++
+ 	fintv->stepwise.step = frameinterval;
+ 	fintv->stepwise.min = frameinterval;
+ 	fintv->stepwise.max = frameinterval;
+@@ -785,6 +788,9 @@ static int tw5864_g_parm(struct file *file, void *priv,
+ 	cp->capability = V4L2_CAP_TIMEPERFRAME;
  
--	if (entity->id != xqry->unit) {
-+	if (!found) {
- 		uvc_trace(UVC_TRACE_CONTROL, "Extension unit %u not found.\n",
- 			xqry->unit);
- 		return -ENOENT;
- 	}
- 
- 	/* Find the control and perform delayed initialization if needed. */
-+	found = false;
- 	for (i = 0; i < entity->ncontrols; ++i) {
- 		ctrl = &entity->controls[i];
- 		if (ctrl->index == xqry->selector - 1) {
--			found = 1;
-+			found = true;
- 			break;
- 		}
- 	}
+ 	ret = tw5864_frameinterval_get(input, &cp->timeperframe);
++	if (ret)
++		return ret;
++
+ 	cp->timeperframe.numerator *= input->frame_interval;
+ 	cp->capturemode = 0;
+ 	cp->readbuffers = 2;
 -- 
 2.25.1
 
