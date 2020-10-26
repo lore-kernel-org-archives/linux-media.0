@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 995BEC63699
-	for <linux-media@archiver.kernel.org>; Mon, 26 Oct 2020 10:59:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 819B6C6379F
+	for <linux-media@archiver.kernel.org>; Mon, 26 Oct 2020 10:59:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5F73722282
-	for <linux-media@archiver.kernel.org>; Mon, 26 Oct 2020 10:59:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 469EB223EA
+	for <linux-media@archiver.kernel.org>; Mon, 26 Oct 2020 10:59:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="AyLC83NY"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="KLr497mr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1772877AbgJZK64 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 26 Oct 2020 06:58:56 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:54076 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1772854AbgJZK6t (ORCPT
+        id S1772825AbgJZK7U (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 26 Oct 2020 06:59:20 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:35573 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1772815AbgJZK6n (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 26 Oct 2020 06:58:49 -0400
-Received: by mail-wm1-f65.google.com with SMTP id d78so11148343wmd.3
-        for <linux-media@vger.kernel.org>; Mon, 26 Oct 2020 03:58:46 -0700 (PDT)
+        Mon, 26 Oct 2020 06:58:43 -0400
+Received: by mail-wr1-f68.google.com with SMTP id n15so11914257wrq.2
+        for <linux-media@vger.kernel.org>; Mon, 26 Oct 2020 03:58:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=kkmJ6ZmKgmcd6yJ6bv+WDWEfAJ+atBjrBRrq3Oi6xEA=;
-        b=AyLC83NYGpnIvuLIFq1n+EYb5RD2pj+8NwDHlA6VA5HNxtYkzMI28Z+nvka4pfH0sh
-         7KSsyqM99nYdq6/YaTlJmbbjYh4uyOjgl1qj0NJ0XKlEnX0r9gulONO+zSqW5ASovylx
-         roszmSmlQTJoMIlY94WrJZfxbZNLo6JFHhNE0=
+        bh=5W4UqFTJMoDRzu7XpmV7m/mIx7tbXZK4TFNNVek8jNg=;
+        b=KLr497mrTXuUWmZaofaXk1hyxgArLSK5Z8LFA7VwpBwSz2E3+nE1glgvLx0JiQdQzn
+         dm5kaVp9H5reVf+JjmNdCZ0s9dozztPh2nQ4nrraI1YOy9mqE/zZOpL+5xkTYVff+uRk
+         JdfMqSudDhC/KCWc2IX1OVFNm25KGK/VrwkWA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=kkmJ6ZmKgmcd6yJ6bv+WDWEfAJ+atBjrBRrq3Oi6xEA=;
-        b=R75ztz6TRSCeluvUntfqk0msd8LGyITgc6vI8rKUA4tFvEUCupUXJtoTbaTfnOZMoB
-         J3CbZy81v20yE///CKgCqtqCFpgIb9FlhAcUZSsbTleWn6KGgdxYOAPdM2hiTDqBg2Eu
-         Y5MkGWjC8D9RwhJLh0lwPfHiCBve1CSqEmmIx7Wr1IchSGhd4ohcnXVyJN4BM5gOZD7Z
-         iUjt4jspmupDkhzso/0eZlTwrr6KaeKxKLM3C5DvaflBT/PacQtvkDii6mGzR82bqIvD
-         VQFAFL+ctRVLP/d/wOKo2kYk/hsW+d7adXGlVfSl5+JHgQsMBa+DExFzeKGcs+S+hJdj
-         Fp/g==
-X-Gm-Message-State: AOAM532ghBLCW0uFz4XNOOB2XivZ/gd3a9mFCmjWUgCkGegKLCMrpPeR
-        MMlBNPHNVWdXk/x5cKswcpCOpw==
-X-Google-Smtp-Source: ABdhPJytw73HXFA7BGESL3jqxl9OmapvxqxjO7CWItldlXvB0eWL3Kk5ZZkwwQloESg/WFGowlh1eg==
-X-Received: by 2002:a1c:4306:: with SMTP id q6mr16417557wma.189.1603709925752;
-        Mon, 26 Oct 2020 03:58:45 -0700 (PDT)
+        bh=5W4UqFTJMoDRzu7XpmV7m/mIx7tbXZK4TFNNVek8jNg=;
+        b=gdZGl9wWAqWv6NyGcpY44jQKxfbdy99B1pGU9S2LDAA+gI555/c3/ZcY/d9TfRaXDZ
+         MicuOy8ucmPerPx0ARt+0dVFAJphmca6Gx4Onm2SGmd89VQ2WrQk5QKWkkPUzN+UP8hj
+         yZ8umq6Ma3691xAwaVLM4+0+Ol99tRUlJobymvwqLkUa1RiQLa/239/EnUvFSrslgHbE
+         aVgzkiL+JG6iKyZSQ5lDRsnPsX1Q354Bja8wU0yDv24pZE/JmfirX+NH8ZMtz5KF0lwf
+         zyIuhwz5EhZ6SqQTemWEdQz6ZEmoHwSy6GSIVBu7FaocxFV48E+vrypoQeTeaDPuxDLL
+         YeZA==
+X-Gm-Message-State: AOAM5303CCnxaQ0AfvCFFp8DOuL6IlvZQ+D3OsH2HPwpAr4tkKTyz+FY
+        MNL8OyMGBRdxNkKu2dq96RErww==
+X-Google-Smtp-Source: ABdhPJz2su0SrOVqm3DeypSb7RJN8qc1fEsNaBh1v2aKMDuErJYYfZ5yJi5C/1uI817lBc+Ai9qYTQ==
+X-Received: by 2002:adf:f3cb:: with SMTP id g11mr18177850wrp.210.1603709921142;
+        Mon, 26 Oct 2020 03:58:41 -0700 (PDT)
 Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id w83sm21165156wmg.48.2020.10.26.03.58.44
+        by smtp.gmail.com with ESMTPSA id w83sm21165156wmg.48.2020.10.26.03.58.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2020 03:58:45 -0700 (PDT)
+        Mon, 26 Oct 2020 03:58:40 -0700 (PDT)
 From:   Daniel Vetter <daniel.vetter@ffwll.ch>
 To:     DRI Development <dri-devel@lists.freedesktop.org>,
         LKML <linux-kernel@vger.kernel.org>
@@ -59,7 +59,6 @@ Cc:     kvm@vger.kernel.org, linux-mm@kvack.org,
         linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-media@vger.kernel.org,
         linux-s390@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Daniel Vetter <daniel.vetter@intel.com>,
         Jason Gunthorpe <jgg@ziepe.ca>,
         Kees Cook <keescook@chromium.org>,
@@ -68,16 +67,10 @@ Cc:     kvm@vger.kernel.org, linux-mm@kvack.org,
         John Hubbard <jhubbard@nvidia.com>,
         =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
         Jan Kara <jack@suse.cz>, Bjorn Helgaas <bhelgaas@google.com>,
-        linux-pci@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sourabh Jain <sourabhjain@linux.ibm.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Nayna Jain <nayna@linux.ibm.com>
-Subject: [PATCH v4 14/15] sysfs: Support zapping of binary attr mmaps
-Date:   Mon, 26 Oct 2020 11:58:17 +0100
-Message-Id: <20201026105818.2585306-15-daniel.vetter@ffwll.ch>
+        linux-pci@vger.kernel.org
+Subject: [PATCH v4 11/15] PCI: Obey iomem restrictions for procfs mmap
+Date:   Mon, 26 Oct 2020 11:58:14 +0100
+Message-Id: <20201026105818.2585306-12-daniel.vetter@ffwll.ch>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201026105818.2585306-1-daniel.vetter@ffwll.ch>
 References: <20201026105818.2585306-1-daniel.vetter@ffwll.ch>
@@ -88,21 +81,16 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-We want to be able to revoke pci mmaps so that the same access rules
-applies as for /dev/kmem. Revoke support for devmem was added in
-3234ac664a87 ("/dev/mem: Revoke mappings when a driver claims the
-region").
+There's three ways to access PCI BARs from userspace: /dev/mem, sysfs
+files, and the old proc interface. Two check against
+iomem_is_exclusive, proc never did. And with CONFIG_IO_STRICT_DEVMEM,
+this starts to matter, since we don't want random userspace having
+access to PCI BARs while a driver is loaded and using it.
 
-The simplest way to achieve this is by having the same filp->f_mapping
-for all mappings, so that unmap_mapping_range can find them all, no
-matter through which file they've been created. Since this must be set
-at open time we need sysfs support for this.
+Fix this by adding the same iomem_is_exclusive() check we already have
+on the sysfs side in pci_mmap_resource().
 
-Add an optional mapping parameter bin_attr, which is only consulted
-when there's also an mmap callback, since without mmap support
-allowing to adjust the ->f_mapping makes no sense.
-
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: 90a545e98126 ("restrict /dev/mem to idle io memory ranges")
 Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
 Cc: Jason Gunthorpe <jgg@ziepe.ca>
 Cc: Kees Cook <keescook@chromium.org>
@@ -118,68 +106,29 @@ Cc: linux-samsung-soc@vger.kernel.org
 Cc: linux-media@vger.kernel.org
 Cc: Bjorn Helgaas <bhelgaas@google.com>
 Cc: linux-pci@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Christian Brauner <christian.brauner@ubuntu.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Sourabh Jain <sourabhjain@linux.ibm.com>
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc: Nayna Jain <nayna@linux.ibm.com>
 Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+--
+v2: Improve commit message (Bjorn)
 ---
- fs/sysfs/file.c       | 11 +++++++++++
- include/linux/sysfs.h |  2 ++
- 2 files changed, 13 insertions(+)
+ drivers/pci/proc.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/fs/sysfs/file.c b/fs/sysfs/file.c
-index eb6897ab78e7..9d8ccdb000e3 100644
---- a/fs/sysfs/file.c
-+++ b/fs/sysfs/file.c
-@@ -169,6 +169,16 @@ static int sysfs_kf_bin_mmap(struct kernfs_open_file *of,
- 	return battr->mmap(of->file, kobj, battr, vma);
- }
- 
-+static int sysfs_kf_bin_open(struct kernfs_open_file *of)
-+{
-+	struct bin_attribute *battr = of->kn->priv;
+diff --git a/drivers/pci/proc.c b/drivers/pci/proc.c
+index d35186b01d98..3a2f90beb4cb 100644
+--- a/drivers/pci/proc.c
++++ b/drivers/pci/proc.c
+@@ -274,6 +274,11 @@ static int proc_bus_pci_mmap(struct file *file, struct vm_area_struct *vma)
+ 		else
+ 			return -EINVAL;
+ 	}
 +
-+	if (battr->mapping)
-+		of->file->f_mapping = battr->mapping;
++	if (dev->resource[i].flags & IORESOURCE_MEM &&
++	    iomem_is_exclusive(dev->resource[i].start))
++		return -EINVAL;
 +
-+	return 0;
-+}
-+
- void sysfs_notify(struct kobject *kobj, const char *dir, const char *attr)
- {
- 	struct kernfs_node *kn = kobj->sd, *tmp;
-@@ -240,6 +250,7 @@ static const struct kernfs_ops sysfs_bin_kfops_mmap = {
- 	.read		= sysfs_kf_bin_read,
- 	.write		= sysfs_kf_bin_write,
- 	.mmap		= sysfs_kf_bin_mmap,
-+	.open		= sysfs_kf_bin_open,
- };
- 
- int sysfs_add_file_mode_ns(struct kernfs_node *parent,
-diff --git a/include/linux/sysfs.h b/include/linux/sysfs.h
-index 34e84122f635..a17a474d1601 100644
---- a/include/linux/sysfs.h
-+++ b/include/linux/sysfs.h
-@@ -164,11 +164,13 @@ __ATTRIBUTE_GROUPS(_name)
- 
- struct file;
- struct vm_area_struct;
-+struct address_space;
- 
- struct bin_attribute {
- 	struct attribute	attr;
- 	size_t			size;
- 	void			*private;
-+	struct address_space	*mapping;
- 	ssize_t (*read)(struct file *, struct kobject *, struct bin_attribute *,
- 			char *, loff_t, size_t);
- 	ssize_t (*write)(struct file *, struct kobject *, struct bin_attribute *,
+ 	ret = pci_mmap_page_range(dev, i, vma,
+ 				  fpriv->mmap_state, write_combine);
+ 	if (ret < 0)
 -- 
 2.28.0
 
