@@ -2,129 +2,238 @@ Return-Path: <SRS0=KMyM=EB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A36EAC61DD8
-	for <linux-media@archiver.kernel.org>; Mon, 26 Oct 2020 11:00:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14249C2D0A3
+	for <linux-media@archiver.kernel.org>; Mon, 26 Oct 2020 13:33:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5D1432225C
-	for <linux-media@archiver.kernel.org>; Mon, 26 Oct 2020 11:00:56 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="Ghd448Qe"
+	by mail.kernel.org (Postfix) with ESMTP id BC063206DD
+	for <linux-media@archiver.kernel.org>; Mon, 26 Oct 2020 13:33:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1603719231;
+	bh=FeJ9/71/Ny6xT4zIUQHZ7iTaAuW5Fk4cKGSTnCbWrqI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=O4zbTq17R8j4eBQ4x5auxkeQQT5Q3jebkkS2dTBwO+9S6NMLTy38H0GVMJob+qWqF
+	 NGAcE7K/tSrPs9tjujtcqeiSNeodAj9vi1rEbRDTgouQ+TA/F3YCJ/Qd0FlzORqoQT
+	 aTDwk9r3zkVRTCORr3fkoi0GY10S+gan0n1Zkfxs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1773023AbgJZLAy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 26 Oct 2020 07:00:54 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:40410 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1771906AbgJZK6a (ORCPT
+        id S1775350AbgJZNdr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 26 Oct 2020 09:33:47 -0400
+Received: from mail-oo1-f68.google.com ([209.85.161.68]:35450 "EHLO
+        mail-oo1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1775337AbgJZNdr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 26 Oct 2020 06:58:30 -0400
-Received: by mail-wr1-f66.google.com with SMTP id h5so11861505wrv.7
-        for <linux-media@vger.kernel.org>; Mon, 26 Oct 2020 03:58:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=VujIMeu4s9glQHD7csuDCyNoNKl6Zu7MMMJFOASMnXs=;
-        b=Ghd448QeH/JpCHvVE51pHD/gv1aq9xL/1owNFBCiwBZSBWw36ulRGro2rbjavW8HCm
-         tpvgHYSA74mCT5+uyBNL8JCAIV8+TSzuSAdovyibD14KcIKytMRX6O8hoK25tjhehc2D
-         7GZJatk+wlASdgpbFnGrN0Wke1bO/fVz4YTuI=
+        Mon, 26 Oct 2020 09:33:47 -0400
+Received: by mail-oo1-f68.google.com with SMTP id n16so1175864ooj.2;
+        Mon, 26 Oct 2020 06:33:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=VujIMeu4s9glQHD7csuDCyNoNKl6Zu7MMMJFOASMnXs=;
-        b=gdSOQLFVqIew6LidxzZZVFDhyNsdJb10tF6faB5Icgli71rE439Ygq+1YKUMcp14Cw
-         DsVRn7a+vwFLjuOsB1NtRHu5tKiaUM5T9x3Rjw5KKmtrubKmlfhp/CUjiQ7vvmbfzCEh
-         ohmIO9odQQIEmxSg2T4p1yyGGwFXtJ+Xx2x4ij0GGkzsaCzs5In34m/o6Tj8vCEmGuxQ
-         tEcrSkkApzQgTQe82XhlTjlCLfCUG8uhib5fxbFWNfULOu2Qr5EErH0ej0S4ozRjy3H2
-         o3o++PYFAlkP0CrbfLTDAP0TdMyd6uUEZ/hxxwz4B4Pl34ajZ/dc6Tzo982L/F7ErUDb
-         ZVng==
-X-Gm-Message-State: AOAM5314HPzHk+Mgg8RZXWIk+p3DQu0DKvxVfQjLPtqVVAbu3DVfBTx6
-        3Jj+d0UqBtPJ+Q+ivjQVig4HjQ==
-X-Google-Smtp-Source: ABdhPJypi/6Cbees0NGq1yum4JVfOyvtLJ54ljnHY5mG0+HM7dRuCdSdcl5NsPm+FmtB0NGqEYAv1Q==
-X-Received: by 2002:adf:f3cb:: with SMTP id g11mr18176883wrp.210.1603709908008;
-        Mon, 26 Oct 2020 03:58:28 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id w83sm21165156wmg.48.2020.10.26.03.58.26
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IP4iyQJswqAok5YqCaA2i0INTs3TLOZl4gZPXVizm4k=;
+        b=BAbD/XnQyx0qwyRrYeb5dxOZGE39hPTnb/wQm53m6c5SYip1lNf1mjHtJJHYfal5tl
+         6kV8PtUB9dLbTnj9mamsLUg5p5n2yv9YNYQO8NBGJJHrg9TYzjqHyj6TO6wCVVNiRJEb
+         7UoBFIyq7Kyv3wPE0pCgbdkWkP+s6arlFNytgceXmpih6/ypNy7HEvKXlsoBmgANm5BE
+         bAkOytfoyCoSa5lFYGjv2LZkCr1Y16OftIgs2K3sAUBa/QrJTph9Htc6XjlXlylyJb2A
+         osKVUhwNfCLm+fdaW5O44AqVE9i+babVwO1WqFarQCO6uLj1NW/odJ+k1WfPf1e5IN9K
+         fFHQ==
+X-Gm-Message-State: AOAM532LpIS8n1QhiGAX9aZA9TprtzvTgWiUZreXXImNhxRj/5dI/3vb
+        SHCcVP5DZ6ZRG+kRioLLRg==
+X-Google-Smtp-Source: ABdhPJwwG8ar0qV0qkYQrQi3UOmSi48GDAQAgsW9zYDOfxpN1Y1iuY9C8rW1hpp7KJUy3YYIhmbxsA==
+X-Received: by 2002:a4a:e1bc:: with SMTP id 28mr14244535ooy.53.1603719225403;
+        Mon, 26 Oct 2020 06:33:45 -0700 (PDT)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id g11sm3496989otl.12.2020.10.26.06.33.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2020 03:58:27 -0700 (PDT)
-From:   Daniel Vetter <daniel.vetter@ffwll.ch>
-To:     DRI Development <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     kvm@vger.kernel.org, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-s390@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Inki Dae <inki.dae@samsung.com>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-        Jan Kara <jack@suse.cz>,
-        Dan Williams <dan.j.williams@intel.com>
-Subject: [PATCH v4 02/15] drm/exynos: Use FOLL_LONGTERM for g2d cmdlists
-Date:   Mon, 26 Oct 2020 11:58:05 +0100
-Message-Id: <20201026105818.2585306-3-daniel.vetter@ffwll.ch>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201026105818.2585306-1-daniel.vetter@ffwll.ch>
-References: <20201026105818.2585306-1-daniel.vetter@ffwll.ch>
+        Mon, 26 Oct 2020 06:33:44 -0700 (PDT)
+Received: (nullmailer pid 37444 invoked by uid 1000);
+        Mon, 26 Oct 2020 13:33:44 -0000
+Date:   Mon, 26 Oct 2020 08:33:44 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     kholk11@gmail.com
+Cc:     mchehab@kernel.org, marijns95@gmail.com, konradybcio@gmail.com,
+        martin.botka1@gmail.com, devicetree@vger.kernel.org,
+        linux-media@vger.kernel.org, phone-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] media: dt-bindings: media: i2c: Add IMX300 CMOS
+ sensor binding
+Message-ID: <20201026133344.GA33253@bogus>
+References: <20201018123106.14917-1-kholk11@gmail.com>
+ <20201018123106.14917-3-kholk11@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201018123106.14917-3-kholk11@gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The exynos g2d interface is very unusual, but it looks like the
-userptr objects are persistent. Hence they need FOLL_LONGTERM.
+On Sun, Oct 18, 2020 at 02:31:06PM +0200, kholk11@gmail.com wrote:
+> From: AngeloGioacchino Del Regno <kholk11@gmail.com>
+> 
+> Add YAML device tree binding for IMX300 CMOS image sensor, and
+> the relevant MAINTAINERS entries.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <kholk11@gmail.com>
+> ---
+>  .../devicetree/bindings/media/i2c/imx300.yaml | 115 ++++++++++++++++++
 
-Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Inki Dae <inki.dae@samsung.com>
-Cc: Joonyoung Shim <jy0922.shim@samsung.com>
-Cc: Seung-Woo Kim <sw0312.kim@samsung.com>
-Cc: Kyungmin Park <kyungmin.park@samsung.com>
-Cc: Kukjin Kim <kgene@kernel.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: John Hubbard <jhubbard@nvidia.com>
-Cc: Jérôme Glisse <jglisse@redhat.com>
-Cc: Jan Kara <jack@suse.cz>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: linux-mm@kvack.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-samsung-soc@vger.kernel.org
-Cc: linux-media@vger.kernel.org
-Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
----
- drivers/gpu/drm/exynos/exynos_drm_g2d.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+sony,imx300.yaml
 
-diff --git a/drivers/gpu/drm/exynos/exynos_drm_g2d.c b/drivers/gpu/drm/exynos/exynos_drm_g2d.c
-index ecede41af9b9..1e0c5a7f206e 100644
---- a/drivers/gpu/drm/exynos/exynos_drm_g2d.c
-+++ b/drivers/gpu/drm/exynos/exynos_drm_g2d.c
-@@ -475,7 +475,8 @@ static dma_addr_t *g2d_userptr_get_dma_addr(struct g2d_data *g2d,
- 		goto err_free;
- 	}
- 
--	ret = pin_user_pages_fast(start, npages, FOLL_FORCE | FOLL_WRITE,
-+	ret = pin_user_pages_fast(start, npages,
-+				  FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
- 				  g2d_userptr->pages);
- 	if (ret != npages) {
- 		DRM_DEV_ERROR(g2d->dev,
--- 
-2.28.0
+>  MAINTAINERS                                   |   8 ++
+>  2 files changed, 123 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/imx300.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/i2c/imx300.yaml b/Documentation/devicetree/bindings/media/i2c/imx300.yaml
+> new file mode 100644
+> index 000000000000..82fb19c5018c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/i2c/imx300.yaml
+> @@ -0,0 +1,115 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/i2c/imx300.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Sony 1/2.3-Inch 8Mpixel Stacked CMOS Digital Image Sensor
+> +
+> +maintainers:
+> +  - AngeloGioacchino Del Regno <kholk11@gmail.com>
+> +
+> +description: |-
+> +  The Sony IMX300 is a 1/2.3-inch Stacked CMOS (Exmor-RS) digital image
+> +  sensor with a pixel size of 1.08um and an active array size of
+> +  5948H x 4140V. It is programmable through I2C interface at address 0x10.
+> +  Image data is sent through MIPI CSI-2, which is configured as either 2 or
+> +  4 data lanes.
+> +
+> +properties:
+> +  compatible:
+> +    const: sony,imx300
+> +
+> +  reg:
+> +    description: I2C device address
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  VDIG-supply:
+> +    description:
+> +      Digital I/O voltage supply, 1.15-1.20 volts
+> +
+> +  VANA-supply:
+> +    description:
+> +      Analog voltage supply, 2.2 volts
+> +
+> +  VDDL-supply:
+> +    description:
+> +      Digital core voltage supply, 1.8 volts
+> +
+> +  reset-gpios:
+> +    description: |-
+> +      Reference to the GPIO connected to the xclr pin, if any.
+> +      Must be released (set high) after all supplies are applied.
+> +
+> +  # See ../video-interfaces.txt for more details
+> +  port:
+> +    type: object
+> +    properties:
+> +      endpoint:
+> +        type: object
+> +        properties:
+> +          data-lanes:
+> +            description: |-
+> +              The sensor supports either two-lane, or four-lane operation.
+> +              If this property is omitted four-lane operation is assumed.
+> +              For four-lane operation the property must be set to <0 1 2 3>.
+> +            items:
+> +              - const: 0
+> +              - const: 1
+> +              - const: 2
+> +              - const: 3
+> +
+> +          clock-noncontinuous:
+> +            type: boolean
+> +            description: |-
+> +              MIPI CSI-2 clock is non-continuous if this property is present,
+> +              otherwise it's continuous.
 
+No need to redefine a common property. Just 'clock-noncontinuous: true' 
+to indicate using it.
+
+> +
+> +          link-frequencies:
+> +            $ref: /schemas/types.yaml#/definitions/uint64-array
+> +            description:
+> +              Allowed data bus frequencies.
+
+Any constraints on frequencies?
+
+> +
+> +        required:
+> +          - link-frequencies
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - VANA-supply
+> +  - VDIG-supply
+> +  - VDDL-supply
+> +  - port
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c0 {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        imx300: sensor@10 {
+> +            compatible = "sony,imx300";
+> +            reg = <0x10>;
+> +            clocks = <&imx300_xclk>;
+> +            VANA-supply = <&imx300_vana>;   /* 2.2v */
+> +            VDIG-supply = <&imx300_vdig>;   /* 1.2v */
+> +            VDDL-supply = <&imx300_vddl>;   /* 1.8v */
+> +
+> +            port {
+> +                imx300_0: endpoint {
+> +                    remote-endpoint = <&csi1_ep>;
+> +                    data-lanes = <0 1 2 3>;
+> +                    clock-noncontinuous;
+> +                    link-frequencies = /bits/ 64 <780000000 480000000>;
+> +                };
+> +            };
+> +        };
+> +    };
+> +
+> +...
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index c66710dd7e0a..231937d9d16a 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -16279,6 +16279,14 @@ T:	git git://linuxtv.org/media_tree.git
+>  F:	Documentation/devicetree/bindings/media/i2c/imx290.txt
+>  F:	drivers/media/i2c/imx290.c
+>  
+> +SONY IMX300 SENSOR DRIVER
+> +M:	AngeloGioacchino Del Regno <kholk11@gmail.com>
+> +L:	linux-media@vger.kernel.org
+> +S:	Maintained
+> +T:	git git://linuxtv.org/media_tree.git
+> +F:	Documentation/devicetree/bindings/media/i2c/imx300.yaml
+> +F:	drivers/media/i2c/imx300.c
+> +
+>  SONY IMX319 SENSOR DRIVER
+>  M:	Bingbu Cao <bingbu.cao@intel.com>
+>  L:	linux-media@vger.kernel.org
+> -- 
+> 2.28.0
+> 
