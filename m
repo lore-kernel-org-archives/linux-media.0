@@ -2,102 +2,146 @@ Return-Path: <SRS0=KMyM=EB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35E7CC4363A
-	for <linux-media@archiver.kernel.org>; Mon, 26 Oct 2020 18:12:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3430C5517A
+	for <linux-media@archiver.kernel.org>; Mon, 26 Oct 2020 19:50:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EC75A20704
-	for <linux-media@archiver.kernel.org>; Mon, 26 Oct 2020 18:12:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 937B220773
+	for <linux-media@archiver.kernel.org>; Mon, 26 Oct 2020 19:50:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rOPmEVV1"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="b5LA8oRf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1789269AbgJZSMt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 26 Oct 2020 14:12:49 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:44010 "EHLO
+        id S1728825AbgJZTud (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 26 Oct 2020 15:50:33 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:34995 "EHLO
         mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1783561AbgJZSMt (ORCPT
+        with ESMTP id S1728665AbgJZTuc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 26 Oct 2020 14:12:49 -0400
-Received: by mail-pl1-f195.google.com with SMTP id o9so5109767plx.10;
-        Mon, 26 Oct 2020 11:12:49 -0700 (PDT)
+        Mon, 26 Oct 2020 15:50:32 -0400
+Received: by mail-pl1-f195.google.com with SMTP id 1so5243326ple.2
+        for <linux-media@vger.kernel.org>; Mon, 26 Oct 2020 12:50:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=5HO3BVg0bRzxOwVnCXHaH7lLzHwWVLX1pNvQSsPVR34=;
-        b=rOPmEVV1mJNejym0bVuvH9D4QxMR/bgR/uiSbmV/sI7ehBqx9zE3tPQI3irbzRxDDd
-         NVkrepuMoOB1w0rze3dUFqEABBGq17D70yo/wQS+XFRhJ1knlr0TapHWZeaLm0lLgVCk
-         ajbJ95GkSBe22vslkDkxh0/mNDW9UCzxwEqwbcAtBcZ3rWDFT8cs/8wr40BP+cKqQAHf
-         Xqaj+8TzKs8sGYoowwCqyFoKjAJxNF44AEdMxKebFyX5QZoG10rCJsWZXnAoU8L+BFA/
-         TxvFoEMzVN/jfugVoIQqz07xC2kpg1KYm5gwFSxpUVe5PR3Uwti4rO2g8TWdiFD7Ja6N
-         cmJg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dlpTSDPfA0UrBOKMG6J79aMdLO6WWnbzuFkDbchHp4c=;
+        b=b5LA8oRftaz6Vkp7FSDYjIdNtYZup3hkcqo74rSDdXpfCVE/1t5tFU2/kX5foF4QSM
+         Ci629Gr/wY//Cp7rtHlzuOm4b/QoxC5Lmpbb34b7UsqKdT4G9WCig9ezpomztxykxdbm
+         ROx07IWYKt8LSokAhrEUsjR06qeunt397stKbNaGEdd/FICK9iqT0UJt7KXp/+Fm7Atz
+         KF130+q84KImCUlZLudjKJZuXpg/dIQnkTkkJkQpf0CuSU4A/Qiqow8VUit8oEMroNCx
+         3nCYLqbclfeVGls496Bf+FB/Vnq1nQAn1U3aD0hx9WrKl3Xy2eU5YQvjJIs1fntLbDEa
+         ZLag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=5HO3BVg0bRzxOwVnCXHaH7lLzHwWVLX1pNvQSsPVR34=;
-        b=hJjUPnzRcU0CDylnY5MTueLeZfswLbDbI3vHy+iIVLocsl9shvOH9lnvKKN9XNvi+4
-         GPazkX8anEvfjSsw4Jsn6svgX8n1IfUEWRmx+F5jF7cE9sYbngaEf/65XuhfFMtR6QM4
-         U/kXY6IKeebr/PZpO6b3fF6oLSb+TSEIzUay6w3moA9w4gLN15227F6pOdCZoIxJQnLF
-         ggTat6JE4iYol9rRo6iMWogUbiz27N6iUa/xEdbuES/0w8Ubh0ovCIrZAig7vowGKRH4
-         wiS23oahCeknW9r/XeWMfGF6LXpXy5RcpGltTauyGpuDPVMzF+lV8bzcP6uaHlWeh8HL
-         sOdw==
-X-Gm-Message-State: AOAM5334yd3ebPj/JmoRyf9FzSl+w2tm0eINznjS0xPArG253k8GqJT6
-        CgveekQWjtgMhjwt8uIXAzI=
-X-Google-Smtp-Source: ABdhPJw3MC9VJsJhf5LCjsccN1B3MXJSG0DukEpFAVyN8RH/TmAVMPOYgh2O/ngXwLl+nzdW6ZCrPw==
-X-Received: by 2002:a17:90a:ca:: with SMTP id v10mr22381893pjd.18.1603735968845;
-        Mon, 26 Oct 2020 11:12:48 -0700 (PDT)
-Received: from adolin ([49.207.196.21])
-        by smtp.gmail.com with ESMTPSA id m3sm7813796pfd.217.2020.10.26.11.12.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2020 11:12:48 -0700 (PDT)
-Date:   Mon, 26 Oct 2020 23:42:42 +0530
-From:   Sumera Priyadarsini <sylphrenadin@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     daniel@ffwll.ch, Felix.Kuehling@amd.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, airlied@linux.ie,
-        sumit.semwal@linaro.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        outreachy-kernel@googlegroups.com, melissa.srw@gmail.com
-Subject: [Outreachy][PATCH] drm/amdgpu: use true and false for bool
- initialisations
-Message-ID: <20201026181242.76bf3b6gx2yx7hr7@adolin>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dlpTSDPfA0UrBOKMG6J79aMdLO6WWnbzuFkDbchHp4c=;
+        b=QYoJywYNeLuGBtZm9hcdZzOXgzw/PwOIY4U0gICJITYg9LcyrwJsot/djrxuicWqSv
+         49TlxvyIDX6PkDw0CC80v3hAcsZz2+TAm06nBV5I4ye7NYNwzeyoMKLammbL7UJvg7Ud
+         DaRieGVzR4LpF6P/O6XmhVWKN/5d2SlTYYvUbC5DWAm5B4y2OA0OCdcS5Tw5cX136UIo
+         AvVEmRVOqQzp3B9yqK25mnTd0k3BKGfkHEj51pMyZmls7FHydhftOkJxiSam/11pCicv
+         DBEH5j/yTfEFMEG0gKOX7croBuTkzsuRmiSaTFhJKqzIgUZJe2I/c89LmO7XCp1KcBOE
+         RcsA==
+X-Gm-Message-State: AOAM530/1MWq5dw8GpJ7+ARfOnxziCjDmN3jKlgxqnl973mp+mAkPRT7
+        SOtY1hxNHJHUL7ltje5RLFIsk5fNL9xrbsHqlS+OIA==
+X-Google-Smtp-Source: ABdhPJwIiThTbhw+igCvl9C27O7ZcOpplD58EFuW1KI6p+s7uLzuPmvh5EXboo7kHLxLMIgbUZU0/EZ/lH2yKhGnEZU=
+X-Received: by 2002:a17:90a:160f:: with SMTP id n15mr17980256pja.75.1603741829917;
+ Mon, 26 Oct 2020 12:50:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20201022174706.8813-1-kholk11@gmail.com>
+In-Reply-To: <20201022174706.8813-1-kholk11@gmail.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Mon, 26 Oct 2020 20:50:19 +0100
+Message-ID: <CAG3jFyvePZ8OZ+0_8pK7t=-UECd5q8tZ4a=c-dbMcNm6pgfnrQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/7] Add support for SDM630/660 Camera Subsystem
+To:     kholk11@gmail.com
+Cc:     Todor Tomov <todor.too@gmail.com>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, marijns95@gmail.com,
+        konradybcio@gmail.com, martin.botka1@gmail.com,
+        linux-arm-msm@vger.kernel.org,
+        linux-media <linux-media@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Bool initialisation should use 'true' and 'false' values instead of 0
-and 1.
+Hey Angelo,
 
-Modify amdgpu_amdkfd_gpuvm.c to initialise variable is_imported
-to false instead of 0.
+I can't functionally test the code myself, but the series looks good to me now.
 
-Issue found with Coccinelle.
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
 
-Signed-off-by: Sumera Priyadarsini <sylphrenadin@gmail.com>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-index 64d4b5ff95d6..ba4bd06bfcc5 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-@@ -1288,7 +1288,7 @@ int amdgpu_amdkfd_gpuvm_free_memory_of_gpu(
- 	struct ttm_validate_buffer *bo_list_entry;
- 	unsigned int mapped_to_gpu_memory;
- 	int ret;
--	bool is_imported = 0;
-+	bool is_imported = false;
- 
- 	mutex_lock(&mem->lock);
- 	mapped_to_gpu_memory = mem->mapped_to_gpu_memory;
--- 
-2.25.1
-
+On Thu, 22 Oct 2020 at 19:47, <kholk11@gmail.com> wrote:
+>
+> From: AngeloGioacchino Del Regno <kholk11@gmail.com>
+>
+> This patch series implements support for the entire camera subsystem
+> found in SDM630/636/660 and SDA variants, including CSIPHY 3-Phase,
+> CSID v5.0, ISPIF 3.0 (though it didn't need any adaptation) and
+> VFE 4.8.
+>
+> One small note about VFE4.8, even if I wrote it in the commit that
+> adds support for it: I know, the VFE support here is split in
+> multiple files having the name of the actual VFE version that it is
+> targeting... but it didn't feel right to commonize the VFE 4.7 file
+> and make another one only for VFE4.8, when it's just about something
+> like 3 small differences.
+> That VFE 4.8 seems to be just a minor revision of VFE 4.7.
+>
+> While at it, also fix a small issue when using two VFEs: only one
+> of them was being resetted (always VFE0) so, after the first usage
+> of VFE1, in case we leave it in a bad state, it would not properly
+> start again. Now... it's fine :)))
+>
+> P.S.: SDM630/660's camss seems to be *very* similar to MSM8998, so
+>       likely 90% of this series should be reusable on that one, too!
+>
+> Tested on:
+>  - Sony Xperia XA2 (IMX300 on CSI0/PHY0/VFE0, IMX219 on CSI2,PHY2,VFE1)
+>    * VFE0/1 RDI only, as the VIDEO one does not work with SRGGB Bayer
+>      formats yet. As far as I can see, that color format hasn't been
+>      implemented yet in the video interface.
+>
+> Changes in v2:
+>  - Splitted out VFE 4.7 functions rename from the VFE 4.8 support commit
+>  - Moved a commit so that sequentially picking patches from this series
+>    still results in buildable code (heh, oops! sorry!)
+>  - Fixed ispif reset commit (moved the fix for itfrom the wrong commit
+>    to the right one: that was a "funny" overlook).
+>
+> AngeloGioacchino Del Regno (7):
+>   media: camss: ispif: Correctly reset based on the VFE ID
+>   media: camss: vfe-4-7: Rename get_ub_size, set_qos, set_ds, wm_enable
+>   media: camss: vfe: Add support for VFE 4.8
+>   media: camss: Add support for SDM630/636/660 camera subsystem
+>   media: camss: csiphy-3ph: Add support for SDM630/660
+>   media: dt-bindings: media: qcom,camss: Add bindings for SDM660 camss
+>   media: camss: csiphy: Set rate on csiX_phy clock on SDM630/660
+>
+>  .../devicetree/bindings/media/qcom,camss.txt  |   7 +
+>  .../media/platform/qcom/camss/camss-csid.c    |   9 +-
+>  .../qcom/camss/camss-csiphy-3ph-1-0.c         |   7 +-
+>  .../media/platform/qcom/camss/camss-csiphy.c  |  25 ++-
+>  .../media/platform/qcom/camss/camss-csiphy.h  |   1 +
+>  .../media/platform/qcom/camss/camss-ispif.c   | 100 ++++++---
+>  .../media/platform/qcom/camss/camss-ispif.h   |   2 +-
+>  .../media/platform/qcom/camss/camss-vfe-4-7.c | 131 ++++++++++-
+>  drivers/media/platform/qcom/camss/camss-vfe.c |  19 +-
+>  drivers/media/platform/qcom/camss/camss-vfe.h |   1 +
+>  .../media/platform/qcom/camss/camss-video.c   |   3 +-
+>  drivers/media/platform/qcom/camss/camss.c     | 206 +++++++++++++++++-
+>  drivers/media/platform/qcom/camss/camss.h     |   1 +
+>  13 files changed, 450 insertions(+), 62 deletions(-)
+>
+> --
+> 2.28.0
+>
