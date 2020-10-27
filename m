@@ -7,49 +7,52 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1016BC56201
-	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 00:18:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 228C5C2D0A3
+	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 00:18:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B045921707
-	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 00:17:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CD33420708
+	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 00:18:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603757879;
-	bh=DLiyFuipU/ude/kExnWV2+NR1aV8KPIt8fhk/KEgN1U=;
+	s=default; t=1603757920;
+	bh=9D7kmQ3FNBNYxNJKulpvsSrMjLS6gEb8R+lb/VaU9o8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=MJPBTtsC4UN6Fzpp5K8ovqlUTK1TwaK5wRGIML91122d0d4TMA+LUed2/LBAWxEZN
-	 TJyM6YoSjAGvZuL+PMB71SWZpxpfBYc4L/PNagqfq7PFrykeJ14oLIw6thsB0eOnwh
-	 U/bHMD7KnzCH43/WSYipsLGfehSxauHfXAGKvqkM=
+	b=gJ2o0FUdMSzvVQKCN5uZqjc3JDi2Z97EzL/Fz/0VwZRZJQFcibAUeav9eyuqIMmDs
+	 N68TQToToR+jeH0t5ffqDboPpUc/h6hioChMEVSXFLSYBmEXw526/g4FXu7uwU4Xyr
+	 ZaQpvshTykwDnTVrTmbDwJMqYVTt+WB4f5ugTtyE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440649AbgJ0AQq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 26 Oct 2020 20:16:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60286 "EHLO mail.kernel.org"
+        id S2411522AbgJ0AKG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 26 Oct 2020 20:10:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58768 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404314AbgJ0AK5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 26 Oct 2020 20:10:57 -0400
+        id S2411517AbgJ0AKF (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 26 Oct 2020 20:10:05 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 19AE821741;
-        Tue, 27 Oct 2020 00:10:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6B6B2217A0;
+        Tue, 27 Oct 2020 00:10:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603757456;
-        bh=DLiyFuipU/ude/kExnWV2+NR1aV8KPIt8fhk/KEgN1U=;
+        s=default; t=1603757405;
+        bh=9D7kmQ3FNBNYxNJKulpvsSrMjLS6gEb8R+lb/VaU9o8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bJ5aXXYDaQkG2qvvXtsxZOkjK5jJa4O54WomjNYDQ8Qd5FDUDH6iRAcROIw9oC97P
-         O1bSwaY8BdGUtFJVkPYOGDh2rRwZEtmFRwz3xaxx9eniXzCu2CkK99V5oKvGUqjnG5
-         Vo78K498yEp2hBnRGOe3Dq8rIlPZ+B20p7DoXru4=
+        b=I4c2soXxrvi9bOmWQZ407zwANt+63TVc14XecOdjFm9510TzqZaPCKPguGC5I/re7
+         KPAqTOBaSiDXL1oMjDLItO/iiWnGnciI94zX4TyazbLDEFhOlMe5ATnbeCh9pCrjMV
+         GqP21/GarH59kg6XL5zlwu6OLY/aFnWKJ6t1ist4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tom Rix <trix@redhat.com>, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Xia Jiang <xia.jiang@mediatek.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: [PATCH AUTOSEL 4.9 10/30] media: tw5864: check status of tw5864_frameinterval_get
-Date:   Mon, 26 Oct 2020 20:10:24 -0400
-Message-Id: <20201027001044.1027349-10-sashal@kernel.org>
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH AUTOSEL 4.14 15/46] media: platform: Improve queue set up flow for bug fixing
+Date:   Mon, 26 Oct 2020 20:09:14 -0400
+Message-Id: <20201027000946.1026923-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201027001044.1027349-1-sashal@kernel.org>
-References: <20201027001044.1027349-1-sashal@kernel.org>
+In-Reply-To: <20201027000946.1026923-1-sashal@kernel.org>
+References: <20201027000946.1026923-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -58,61 +61,39 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+From: Xia Jiang <xia.jiang@mediatek.com>
 
-[ Upstream commit 780d815dcc9b34d93ae69385a8465c38d423ff0f ]
+[ Upstream commit 5095a6413a0cf896ab468009b6142cb0fe617e66 ]
 
-clang static analysis reports this problem
+Add checking created buffer size follow in mtk_jpeg_queue_setup().
 
-tw5864-video.c:773:32: warning: The left expression of the compound
-  assignment is an uninitialized value.
-  The computed value will also be garbage
-        fintv->stepwise.max.numerator *= std_max_fps;
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-
-stepwise.max is set with frameinterval, which comes from
-
-	ret = tw5864_frameinterval_get(input, &frameinterval);
-	fintv->stepwise.step = frameinterval;
-	fintv->stepwise.min = frameinterval;
-	fintv->stepwise.max = frameinterval;
-	fintv->stepwise.max.numerator *= std_max_fps;
-
-When tw5864_frameinterval_get() fails, frameinterval is not
-set. So check the status and fix another similar problem.
-
-Signed-off-by: Tom Rix <trix@redhat.com>
+Reviewed-by: Tomasz Figa <tfiga@chromium.org>
+Signed-off-by: Xia Jiang <xia.jiang@mediatek.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/tw5864/tw5864-video.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/media/pci/tw5864/tw5864-video.c b/drivers/media/pci/tw5864/tw5864-video.c
-index 27ff6e0d98453..023ff9ebde5e7 100644
---- a/drivers/media/pci/tw5864/tw5864-video.c
-+++ b/drivers/media/pci/tw5864/tw5864-video.c
-@@ -767,6 +767,9 @@ static int tw5864_enum_frameintervals(struct file *file, void *priv,
- 	fintv->type = V4L2_FRMIVAL_TYPE_STEPWISE;
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
+index 46c996936798a..fd9e13500fe7f 100644
+--- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
++++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
+@@ -579,6 +579,13 @@ static int mtk_jpeg_queue_setup(struct vb2_queue *q,
+ 	if (!q_data)
+ 		return -EINVAL;
  
- 	ret = tw5864_frameinterval_get(input, &frameinterval);
-+	if (ret)
-+		return ret;
++	if (*num_planes) {
++		for (i = 0; i < *num_planes; i++)
++			if (sizes[i] < q_data->sizeimage[i])
++				return -EINVAL;
++		return 0;
++	}
 +
- 	fintv->stepwise.step = frameinterval;
- 	fintv->stepwise.min = frameinterval;
- 	fintv->stepwise.max = frameinterval;
-@@ -785,6 +788,9 @@ static int tw5864_g_parm(struct file *file, void *priv,
- 	cp->capability = V4L2_CAP_TIMEPERFRAME;
- 
- 	ret = tw5864_frameinterval_get(input, &cp->timeperframe);
-+	if (ret)
-+		return ret;
-+
- 	cp->timeperframe.numerator *= input->frame_interval;
- 	cp->capturemode = 0;
- 	cp->readbuffers = 2;
+ 	*num_planes = q_data->fmt->colplanes;
+ 	for (i = 0; i < q_data->fmt->colplanes; i++) {
+ 		sizes[i] = q_data->sizeimage[i];
 -- 
 2.25.1
 
