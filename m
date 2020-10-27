@@ -2,193 +2,247 @@ Return-Path: <SRS0=Zg/f=EC=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38B00C55178
-	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 03:20:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BEDCDC55179
+	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 08:07:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E49892151B
-	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 03:20:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5757E21D24
+	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 08:07:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="cFHiyNEe"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="Xy9/3e57"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2504847AbgJ0DUq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 26 Oct 2020 23:20:46 -0400
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:15480 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2504564AbgJ0DTa (ORCPT
+        id S2508757AbgJ0IHC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Oct 2020 04:07:02 -0400
+Received: from mail-oo1-f68.google.com ([209.85.161.68]:38751 "EHLO
+        mail-oo1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2894386AbgJ0IFP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 26 Oct 2020 23:19:30 -0400
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5f9791c50000>; Mon, 26 Oct 2020 20:19:33 -0700
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 27 Oct
- 2020 03:19:28 +0000
-Received: from skomatineni-linux.nvidia.com (172.20.13.39) by mail.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
- Transport; Tue, 27 Oct 2020 03:19:28 +0000
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <hverkuil@xs4all.nl>
-CC:     <mchehab@kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 05/10] media: tegra-video: Add DV timing support
-Date:   Mon, 26 Oct 2020 20:19:18 -0700
-Message-ID: <1603768763-25590-6-git-send-email-skomatineni@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1603768763-25590-1-git-send-email-skomatineni@nvidia.com>
-References: <1603768763-25590-1-git-send-email-skomatineni@nvidia.com>
-X-NVConfidentiality: public
+        Tue, 27 Oct 2020 04:05:15 -0400
+Received: by mail-oo1-f68.google.com with SMTP id v123so115883ooa.5
+        for <linux-media@vger.kernel.org>; Tue, 27 Oct 2020 01:05:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=iRVTkxIJnHwaBLHokGGgZRE0TJVDnrQ64zJBBqMFGs0=;
+        b=Xy9/3e579FMjjTLWAuxWgipn5uXab1XIWYf2dD59Ue8ydsa3nziuf3dnpX6I3eKQXi
+         LX0Fhct8zwQ9LPuwvLWtj2sHUJJ3/cbghGd13edFhR4n655CEK2nlwMk9XgeGlojhrCH
+         MtcfG6S4mtBZzrOUEzua2bUtpL2rn4D1Bjj1E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=iRVTkxIJnHwaBLHokGGgZRE0TJVDnrQ64zJBBqMFGs0=;
+        b=aC5rWud9D/Krsn0Gsh17bzRzI9jZMdvU5W5JWwypPtz0ee6Lh034akB8QRLqRr/xgh
+         cstbRn7/Fu8UYlenOK4dVXhi89enTDcAo+zNXoHq0NOLGhstWAeck0kYFIwo/qtz8ZpG
+         1sc8Gmwx5Db93FdD9gqGnCWrEQMrQnTj5HapiTmqXiyMg8BQsVUQpnBY/EjsUOb6m53u
+         AdUpo7IVkVWOpl57Zmqhuu7TWpAKtYtKxdL82LAKo30sTYZ5gDSHo8ieyg4s5eKCDV5P
+         xVREcgmOr09r63EGr1+qxmw5Qh8EHQKvKz0oEN3OVAAWOWnM1qXBfxFk2GHyLx7plYrt
+         XT6Q==
+X-Gm-Message-State: AOAM530enqiN+TTV2V/rkC4itdQt4RG7nGv1ROdwZ+mMSl4LEtMT5pUD
+        X3zTstgt1z+tAaLzgscsnefJ33139IA5jRGDsGhxzg==
+X-Google-Smtp-Source: ABdhPJwUquARZelitGIpZLDuhwl8Qo3TUgFyzzaUCWDMIxNpoISTQyK7JTuU9JW1uR1xbLdlZOvSwHCimNolpOBBW1c=
+X-Received: by 2002:a4a:b503:: with SMTP id r3mr809275ooo.28.1603785913727;
+ Tue, 27 Oct 2020 01:05:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1603768773; bh=LiaXgDHJz9gTg1dN9RrtBEXYHCuprW00WoLXWidqB+4=;
-        h=From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
-         References:X-NVConfidentiality:MIME-Version:Content-Type;
-        b=cFHiyNEenggApaLAFglCG++JtPQ2HXe9BflQTUEUwj8PQEloCYW1Qk3wC4GI50aTT
-         VNSbAbUSGv4r9iX/dauXPlQ/dow9XqrhicxOWOUVaUIbUvtDTIF+hOwLcddQhXGUG4
-         QnkAp5yp7epGiv7VTBnih1D97laS5tERbSJRuagxWB7mqtFCF/DFzwpYvxhTcWb1Hq
-         J5FtoXibtXUtQVrnih6DEZXjAh6rYX1bviwH8P4ZxN59kn6rbYu4+e/nvppHXXrUTw
-         sA1iNfIoqn8CcOkm7b4ulEq8Mhr/rR0sJBjZSDwOE6na9XP8h7E9kY16hUgj9Tss0B
-         TYMnC3iJ9thNg==
+References: <20201026105818.2585306-1-daniel.vetter@ffwll.ch>
+ <20201026105818.2585306-6-daniel.vetter@ffwll.ch> <20201026221520.GC2802004@chromium.org>
+In-Reply-To: <20201026221520.GC2802004@chromium.org>
+From:   Daniel Vetter <daniel.vetter@ffwll.ch>
+Date:   Tue, 27 Oct 2020 09:05:01 +0100
+Message-ID: <CAKMK7uG4f_7=9VgdQ9AE876gzLTNsszicMD9pKqeqvQybDSDpQ@mail.gmail.com>
+Subject: Re: [PATCH v4 05/15] mm/frame-vector: Use FOLL_LONGTERM
+To:     Tomasz Figa <tfiga@chromium.org>
+Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Pawel Osciak <pawel@osciak.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Jan Kara <jack@suse.cz>,
+        Dan Williams <dan.j.williams@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch adds below v4l2 DV timing ioctls to support HDMI-to-CSI
-bridges.
+On Mon, Oct 26, 2020 at 11:15 PM Tomasz Figa <tfiga@chromium.org> wrote:
+>
+> Hi Daniel,
+>
+> On Mon, Oct 26, 2020 at 11:58:08AM +0100, Daniel Vetter wrote:
+> > This is used by media/videbuf2 for persistent dma mappings, not just
+> > for a single dma operation and then freed again, so needs
+> > FOLL_LONGTERM.
+> >
+> > Unfortunately current pup_locked doesn't support FOLL_LONGTERM due to
+> > locking issues. Rework the code to pull the pup path out from the
+> > mmap_sem critical section as suggested by Jason.
+> >
+> > By relying entirely on the vma checks in pin_user_pages and follow_pfn
+> > (for vm_flags and vma_is_fsdax) we can also streamline the code a lot.
+> >
+> > Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+> > Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> > Cc: Pawel Osciak <pawel@osciak.com>
+> > Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+> > Cc: Kyungmin Park <kyungmin.park@samsung.com>
+> > Cc: Tomasz Figa <tfiga@chromium.org>
+> > Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> > Cc: Andrew Morton <akpm@linux-foundation.org>
+> > Cc: John Hubbard <jhubbard@nvidia.com>
+> > Cc: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
+> > Cc: Jan Kara <jack@suse.cz>
+> > Cc: Dan Williams <dan.j.williams@intel.com>
+> > Cc: linux-mm@kvack.org
+> > Cc: linux-arm-kernel@lists.infradead.org
+> > Cc: linux-samsung-soc@vger.kernel.org
+> > Cc: linux-media@vger.kernel.org
+> > Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+> > --
+> > v2: Streamline the code and further simplify the loop checks (Jason)
+> > ---
+> >  mm/frame_vector.c | 50 ++++++++++++++---------------------------------
+> >  1 file changed, 15 insertions(+), 35 deletions(-)
+> >
+>
+> Thank you for the patch. Please see my comments inline.
+>
+> > diff --git a/mm/frame_vector.c b/mm/frame_vector.c
+> > index 10f82d5643b6..d44779e56313 100644
+> > --- a/mm/frame_vector.c
+> > +++ b/mm/frame_vector.c
+> > @@ -38,7 +38,6 @@ int get_vaddr_frames(unsigned long start, unsigned in=
+t nr_frames,
+> >       struct vm_area_struct *vma;
+> >       int ret =3D 0;
+> >       int err;
+> > -     int locked;
+> >
+> >       if (nr_frames =3D=3D 0)
+> >               return 0;
+> > @@ -48,40 +47,25 @@ int get_vaddr_frames(unsigned long start, unsigned =
+int nr_frames,
+> >
+> >       start =3D untagged_addr(start);
+> >
+> > -     mmap_read_lock(mm);
+> > -     locked =3D 1;
+> > -     vma =3D find_vma_intersection(mm, start, start + 1);
+> > -     if (!vma) {
+> > -             ret =3D -EFAULT;
+> > -             goto out;
+> > -     }
+> > -
+> > -     /*
+> > -      * While get_vaddr_frames() could be used for transient (kernel
+> > -      * controlled lifetime) pinning of memory pages all current
+> > -      * users establish long term (userspace controlled lifetime)
+> > -      * page pinning. Treat get_vaddr_frames() like
+> > -      * get_user_pages_longterm() and disallow it for filesystem-dax
+> > -      * mappings.
+> > -      */
+> > -     if (vma_is_fsdax(vma)) {
+> > -             ret =3D -EOPNOTSUPP;
+> > -             goto out;
+> > -     }
+> > -
+> > -     if (!(vma->vm_flags & (VM_IO | VM_PFNMAP))) {
+> > +     ret =3D pin_user_pages_fast(start, nr_frames,
+> > +                               FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM=
+,
+> > +                               (struct page **)(vec->ptrs));
+> > +     if (ret > 0) {
+> >               vec->got_ref =3D true;
+> >               vec->is_pfns =3D false;
+> > -             ret =3D pin_user_pages_locked(start, nr_frames,
+> > -                     gup_flags, (struct page **)(vec->ptrs), &locked);
+>
+> Should we drop the gup_flags argument, since it's ignored now?
 
-Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
----
- drivers/staging/media/tegra-video/vi.c | 97 ++++++++++++++++++++++++++++++++++
- 1 file changed, 97 insertions(+)
+Hm right I think an earlier version even had that, but then I moved to
+inlining the functionality in all the places it's used.
 
-diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
-index 525c087..d0d84da 100644
---- a/drivers/staging/media/tegra-video/vi.c
-+++ b/drivers/staging/media/tegra-video/vi.c
-@@ -18,6 +18,7 @@
- #include <linux/pm_runtime.h>
- #include <linux/slab.h>
- 
-+#include <media/v4l2-dv-timings.h>
- #include <media/v4l2-event.h>
- #include <media/v4l2-fh.h>
- #include <media/v4l2-fwnode.h>
-@@ -720,6 +721,97 @@ static int tegra_channel_s_selection(struct file *file, void *fh,
- 	return ret;
- }
- 
-+static int tegra_channel_g_dv_timings(struct file *file, void *fh,
-+				      struct v4l2_dv_timings *timings)
-+{
-+	struct tegra_vi_channel *chan = video_drvdata(file);
-+	struct v4l2_subdev *subdev;
-+
-+	subdev = tegra_channel_get_remote_source_subdev(chan);
-+	if (!v4l2_subdev_has_op(subdev, video, g_dv_timings))
-+		return -ENOTTY;
-+
-+	return v4l2_device_call_until_err(chan->video.v4l2_dev, 0,
-+					  video, g_dv_timings, timings);
-+}
-+
-+static int tegra_channel_s_dv_timings(struct file *file, void *fh,
-+				      struct v4l2_dv_timings *timings)
-+{
-+	struct tegra_vi_channel *chan = video_drvdata(file);
-+	struct v4l2_subdev *subdev;
-+	struct v4l2_bt_timings *bt = &timings->bt;
-+	struct v4l2_dv_timings curr_timings;
-+	int ret;
-+
-+	subdev = tegra_channel_get_remote_source_subdev(chan);
-+	if (!v4l2_subdev_has_op(subdev, video, s_dv_timings))
-+		return -ENOTTY;
-+
-+	ret = tegra_channel_g_dv_timings(file, fh, &curr_timings);
-+	if (ret)
-+		return ret;
-+
-+	if (v4l2_match_dv_timings(timings, &curr_timings, 0, false))
-+		return 0;
-+
-+	if (vb2_is_busy(&chan->queue))
-+		return -EBUSY;
-+
-+	ret = v4l2_device_call_until_err(chan->video.v4l2_dev, 0,
-+					 video, s_dv_timings, timings);
-+	if (ret)
-+		return ret;
-+
-+	chan->format.width = bt->width;
-+	chan->format.height = bt->height;
-+	chan->format.bytesperline = bt->width * chan->fmtinfo->bpp;
-+	chan->format.sizeimage = chan->format.bytesperline * bt->height;
-+	tegra_channel_fmt_align(chan, &chan->format, chan->fmtinfo->bpp);
-+
-+	return 0;
-+}
-+
-+static int tegra_channel_query_dv_timings(struct file *file, void *fh,
-+					  struct v4l2_dv_timings *timings)
-+{
-+	struct tegra_vi_channel *chan = video_drvdata(file);
-+	struct v4l2_subdev *subdev;
-+
-+	subdev = tegra_channel_get_remote_source_subdev(chan);
-+	if (!v4l2_subdev_has_op(subdev, video, query_dv_timings))
-+		return -ENOTTY;
-+
-+	return v4l2_device_call_until_err(chan->video.v4l2_dev, 0,
-+					  video, query_dv_timings, timings);
-+}
-+
-+static int tegra_channel_enum_dv_timings(struct file *file, void *fh,
-+					 struct v4l2_enum_dv_timings *timings)
-+{
-+	struct tegra_vi_channel *chan = video_drvdata(file);
-+	struct v4l2_subdev *subdev;
-+
-+	subdev = tegra_channel_get_remote_source_subdev(chan);
-+	if (!v4l2_subdev_has_op(subdev, pad, enum_dv_timings))
-+		return -ENOTTY;
-+
-+	return v4l2_subdev_call(subdev, pad, enum_dv_timings, timings);
-+}
-+
-+static int tegra_channel_dv_timings_cap(struct file *file, void *fh,
-+					struct v4l2_dv_timings_cap *cap)
-+{
-+	struct tegra_vi_channel *chan = video_drvdata(file);
-+	struct v4l2_subdev *subdev;
-+
-+	subdev = tegra_channel_get_remote_source_subdev(chan);
-+	if (!v4l2_subdev_has_op(subdev, pad, dv_timings_cap))
-+		return -ENOTTY;
-+
-+	return v4l2_subdev_call(subdev, pad, dv_timings_cap, cap);
-+}
-+
- static int tegra_channel_enum_input(struct file *file, void *fh,
- 				    struct v4l2_input *inp)
- {
-@@ -779,6 +871,11 @@ static const struct v4l2_ioctl_ops tegra_channel_ioctl_ops = {
- 	.vidioc_unsubscribe_event	= v4l2_event_unsubscribe,
- 	.vidioc_g_selection		= tegra_channel_g_selection,
- 	.vidioc_s_selection		= tegra_channel_s_selection,
-+	.vidioc_g_dv_timings		= tegra_channel_g_dv_timings,
-+	.vidioc_s_dv_timings		= tegra_channel_s_dv_timings,
-+	.vidioc_query_dv_timings	= tegra_channel_query_dv_timings,
-+	.vidioc_enum_dv_timings		= tegra_channel_enum_dv_timings,
-+	.vidioc_dv_timings_cap		= tegra_channel_dv_timings_cap,
- };
- 
- /*
--- 
-2.7.4
+I'll drop the gup flag.
 
+> > -             goto out;
+> > +             goto out_unlocked;
+> >       }
+> >
+>
+> Should we initialize ret with 0 here, since pin_user_pages_fast() can
+> return a negative error code, but below we use it as a counter for the
+> looked up frames?
+
+Indeed, that's a bug. Will fix for v5.
+-Daniel
+
+> Best regards,
+> Tomasz
+>
+> > +     mmap_read_lock(mm);
+> >       vec->got_ref =3D false;
+> >       vec->is_pfns =3D true;
+> >       do {
+> >               unsigned long *nums =3D frame_vector_pfns(vec);
+> >
+> > +             vma =3D find_vma_intersection(mm, start, start + 1);
+> > +             if (!vma)
+> > +                     break;
+> > +
+> >               while (ret < nr_frames && start + PAGE_SIZE <=3D vma->vm_=
+end) {
+> >                       err =3D follow_pfn(vma, start, &nums[ret]);
+> >                       if (err) {
+> > @@ -92,17 +76,13 @@ int get_vaddr_frames(unsigned long start, unsigned =
+int nr_frames,
+> >                       start +=3D PAGE_SIZE;
+> >                       ret++;
+> >               }
+> > -             /*
+> > -              * We stop if we have enough pages or if VMA doesn't comp=
+letely
+> > -              * cover the tail page.
+> > -              */
+> > -             if (ret >=3D nr_frames || start < vma->vm_end)
+> > +             /* Bail out if VMA doesn't completely cover the tail page=
+. */
+> > +             if (start < vma->vm_end)
+> >                       break;
+> > -             vma =3D find_vma_intersection(mm, start, start + 1);
+> > -     } while (vma && vma->vm_flags & (VM_IO | VM_PFNMAP));
+> > +     } while (ret < nr_frames);
+> >  out:
+> > -     if (locked)
+> > -             mmap_read_unlock(mm);
+> > +     mmap_read_unlock(mm);
+> > +out_unlocked:
+> >       if (!ret)
+> >               ret =3D -EFAULT;
+> >       if (ret > 0)
+> > --
+> > 2.28.0
+> >
+
+
+
+--=20
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
