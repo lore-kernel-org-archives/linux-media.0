@@ -8,37 +8,37 @@ X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35DD2C2D0A3
-	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 03:20:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A648C4363A
+	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 03:20:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DDE83218AC
-	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 03:20:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E248B20872
+	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 03:20:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="sOXh/7fE"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="YgnaC/R+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2504551AbgJ0DT1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 26 Oct 2020 23:19:27 -0400
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:14408 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2504542AbgJ0DT1 (ORCPT
+        id S2504832AbgJ0DUn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 26 Oct 2020 23:20:43 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:18928 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2504583AbgJ0DTc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 26 Oct 2020 23:19:27 -0400
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5f9791a90000>; Mon, 26 Oct 2020 20:19:05 -0700
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 27 Oct
- 2020 03:19:26 +0000
+        Mon, 26 Oct 2020 23:19:32 -0400
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5f9791ca0000>; Mon, 26 Oct 2020 20:19:38 -0700
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 27 Oct
+ 2020 03:19:31 +0000
 Received: from skomatineni-linux.nvidia.com (172.20.13.39) by mail.nvidia.com
  (172.20.187.15) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
- Transport; Tue, 27 Oct 2020 03:19:26 +0000
+ Transport; Tue, 27 Oct 2020 03:19:30 +0000
 From:   Sowjanya Komatineni <skomatineni@nvidia.com>
 To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
         <jonathanh@nvidia.com>, <hverkuil@xs4all.nl>
 CC:     <mchehab@kernel.org>, <linux-media@vger.kernel.org>,
         <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 01/10] media: tegra-video: Use zero crop settings if subdev has no get_selection
-Date:   Mon, 26 Oct 2020 20:19:14 -0700
-Message-ID: <1603768763-25590-2-git-send-email-skomatineni@nvidia.com>
+Subject: [PATCH v2 09/10] media: tegra-video: Implement V4L2 device notify callback
+Date:   Mon, 26 Oct 2020 20:19:22 -0700
+Message-ID: <1603768763-25590-10-git-send-email-skomatineni@nvidia.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1603768763-25590-1-git-send-email-skomatineni@nvidia.com>
 References: <1603768763-25590-1-git-send-email-skomatineni@nvidia.com>
@@ -46,63 +46,93 @@ X-NVConfidentiality: public
 MIME-Version: 1.0
 Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1603768745; bh=ERCkCneZmXlmcSkkK9fGRHPBppn9DardS4Sr/wZUI/E=;
+        t=1603768778; bh=xWtjeqZACAKCgSw2RHdrYwyQIBNwajqC+8SWI/tdbs0=;
         h=From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
          References:X-NVConfidentiality:MIME-Version:Content-Type;
-        b=sOXh/7fEqrJnV/vidg8kp7R0h85iGmbLqXyKzGp2Qw3MyJJsutu/NslN6rxYOFxu5
-         RGASNVlX7rm+sV93TjFDhZ/E23EuRKO9rHqzWpnfkpjhsF0eH+yCk+scKDFByaZY1c
-         dc2lCNdUrmM6GaPrDncVJitRhlpE4uSNtllhqixKZEoJvad33OEebsIt6lwVjy1m3e
-         ZUxd6vxpjtUX1KouLrDOzk2wBAO+R8IA/aTsG8zeknRvF1H4ysBaEtMO3kn3vNr89Y
-         X8Tr8UQRsZzk8RVbsjPhkYBPQvC37cwSz30QZndDwzRjix84V0jU3g5gSgxFwYJo6w
-         XgordTUwoUyyQ==
+        b=YgnaC/R+07E1WDGY25IESREdCQuRe4naJtX6MQCJuo0lj89OK1OJfzG7sZN3Mr0/1
+         7ukxL6jhGemgW9/+j5Q5c4Ya75rcFnCOgzM+73oxH+E/UsOerTl3ow/CtuBTdBVkFG
+         AXwGRQVTdE1KVQW974qkJ1z10mardt069K48SLChVSU0IG94BH2Hc0/zajTynvMLHz
+         tAcKQ8BhuAmb29MH/XRccZ05Pnc6aD4hGBGqPDchraQuhuqNgURk7eoT7gzwmZtJ1B
+         Bs4gHwfba997dz2oESJwkol4h1vjH756SBXE3YZc7HdyXzfvYRBU0eJQMfVEdXDF89
+         lJ+/wBUgQ5Tlg==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Currently try format implementation doesn't check if subdevice has
-get_selection ops implemented and returns -EINVAL on error from
-direct v4l2_subdev_call of get_selection.
+Implement V4L2 device notify callback to handle
+V4L2_EVENT_SOURCE_CHANGE event from subdevices.
 
-Selection API's are not mandatory for all V4L2 subdevices.
+HDMI-to-CSI bridge drivers trigger V4L2_EVENT_SOURCE_CHANGE when
+source DV timing changes are detected or when HDMI hotplug happens.
 
-This patch fixes it by adding v4l2_subdev_has_ops check prior to
-calling get_selection ops and continues with try or set format with
-zero crop settings for subdevices that don't have get_selection and
-returns -EINVAL only for subdevices that has get_selection ops.
+Runtime source parameter changes during active streaming is not
+allowed and Tegra video driver calls vb2_queue_error to signal a
+fatal error if a notification of this event happens during an active
+streaming.
 
 Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
 ---
- drivers/staging/media/tegra-video/vi.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+ drivers/staging/media/tegra-video/vi.c    |  3 +++
+ drivers/staging/media/tegra-video/video.c | 18 ++++++++++++++++++
+ 2 files changed, 21 insertions(+)
 
 diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
-index 560d8b3..7edd35c 100644
+index 28c06a9..e866f7d 100644
 --- a/drivers/staging/media/tegra-video/vi.c
 +++ b/drivers/staging/media/tegra-video/vi.c
-@@ -533,11 +533,18 @@ static int __tegra_channel_try_format(struct tegra_vi_channel *chan,
- 	fse.code = fmtinfo->code;
- 	ret = v4l2_subdev_call(subdev, pad, enum_frame_size, pad_cfg, &fse);
- 	if (ret) {
--		ret = v4l2_subdev_call(subdev, pad, get_selection, NULL, &sdsel);
--		if (ret)
--			return -EINVAL;
--		pad_cfg->try_crop.width = sdsel.r.width;
--		pad_cfg->try_crop.height = sdsel.r.height;
-+		if (!v4l2_subdev_has_op(subdev, pad, get_selection)) {
-+			pad_cfg->try_crop.width = 0;
-+			pad_cfg->try_crop.height = 0;
-+		} else {
-+			ret = v4l2_subdev_call(subdev, pad, get_selection,
-+					       NULL, &sdsel);
-+			if (ret)
-+				return -EINVAL;
+@@ -1634,6 +1634,9 @@ static int tegra_vi_graph_notify_complete(struct v4l2_async_notifier *notifier)
+ 
+ 	v4l2_set_subdev_hostdata(subdev, chan);
+ 
++	subdev = tegra_channel_get_remote_source_subdev(chan);
++	v4l2_set_subdev_hostdata(subdev, chan);
 +
-+			pad_cfg->try_crop.width = sdsel.r.width;
-+			pad_cfg->try_crop.height = sdsel.r.height;
-+		}
- 	} else {
- 		pad_cfg->try_crop.width = fse.max_width;
- 		pad_cfg->try_crop.height = fse.max_height;
+ 	return 0;
+ 
+ unregister_video:
+diff --git a/drivers/staging/media/tegra-video/video.c b/drivers/staging/media/tegra-video/video.c
+index e50bd70..d966b31 100644
+--- a/drivers/staging/media/tegra-video/video.c
++++ b/drivers/staging/media/tegra-video/video.c
+@@ -7,6 +7,8 @@
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ 
++#include <media/v4l2-event.h>
++
+ #include "video.h"
+ 
+ static void tegra_v4l2_dev_release(struct v4l2_device *v4l2_dev)
+@@ -24,6 +26,21 @@ static void tegra_v4l2_dev_release(struct v4l2_device *v4l2_dev)
+ 	kfree(vid);
+ }
+ 
++static void tegra_v4l2_dev_notify(struct v4l2_subdev *sd,
++				  unsigned int notification, void *arg)
++{
++	struct tegra_vi_channel *chan;
++	const struct v4l2_event *ev = arg;
++
++	if (notification != V4L2_DEVICE_NOTIFY_EVENT)
++		return;
++
++	chan = v4l2_get_subdev_hostdata(sd);
++	v4l2_event_queue(&chan->video, arg);
++	if (ev->type == V4L2_EVENT_SOURCE_CHANGE && vb2_is_streaming(&chan->queue))
++		vb2_queue_error(&chan->queue);
++}
++
+ static int host1x_video_probe(struct host1x_device *dev)
+ {
+ 	struct tegra_video_device *vid;
+@@ -49,6 +66,7 @@ static int host1x_video_probe(struct host1x_device *dev)
+ 
+ 	vid->v4l2_dev.mdev = &vid->media_dev;
+ 	vid->v4l2_dev.release = tegra_v4l2_dev_release;
++	vid->v4l2_dev.notify = tegra_v4l2_dev_notify;
+ 	ret = v4l2_device_register(&dev->dev, &vid->v4l2_dev);
+ 	if (ret < 0) {
+ 		dev_err(&dev->dev,
 -- 
 2.7.4
 
