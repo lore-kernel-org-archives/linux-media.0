@@ -5,169 +5,114 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91BB0C55178
-	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 00:06:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1016BC56201
+	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 00:18:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5C80420791
-	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 00:06:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B045921707
+	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 00:17:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603757203;
-	bh=6QfnvC4Bo1nyrqZvPlGsP1hwRIQeoxX+poOhfilRcV4=;
+	s=default; t=1603757879;
+	bh=DLiyFuipU/ude/kExnWV2+NR1aV8KPIt8fhk/KEgN1U=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=f1CLBi1JHPkzxhaCaiAgTfKCOTLKUpj4DE5ZvmmxHWdxP4OuWHAZjxEnlpihhDfYX
-	 zuspgPuNhgJJsc+rSUpA3RimVc2n6pc9BHbA9HDAiqXJFSdPPgBBuwWxusjcicFt5z
-	 LZq+8J3wU9X5QXmPVTftZhHp3r/CgiEqoAVY8V2c=
+	b=MJPBTtsC4UN6Fzpp5K8ovqlUTK1TwaK5wRGIML91122d0d4TMA+LUed2/LBAWxEZN
+	 TJyM6YoSjAGvZuL+PMB71SWZpxpfBYc4L/PNagqfq7PFrykeJ14oLIw6thsB0eOnwh
+	 U/bHMD7KnzCH43/WSYipsLGfehSxauHfXAGKvqkM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438777AbgJ0AGl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 26 Oct 2020 20:06:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53104 "EHLO mail.kernel.org"
+        id S2440649AbgJ0AQq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 26 Oct 2020 20:16:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60286 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2437644AbgJ0AEg (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 26 Oct 2020 20:04:36 -0400
+        id S2404314AbgJ0AK5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 26 Oct 2020 20:10:57 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DC6DD217A0;
-        Tue, 27 Oct 2020 00:04:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 19AE821741;
+        Tue, 27 Oct 2020 00:10:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603757075;
-        bh=6QfnvC4Bo1nyrqZvPlGsP1hwRIQeoxX+poOhfilRcV4=;
+        s=default; t=1603757456;
+        bh=DLiyFuipU/ude/kExnWV2+NR1aV8KPIt8fhk/KEgN1U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Nb2vnkrviNDjP6tQtUOaJ01Jx0C4TVWJ+KPXawJmJxLf2Dd+CxgE6TC6XE4GtQgWG
-         9NqNrc5XZwvlg37gZmyeBVsCS7mjF0ovZ4Gv6B/mrOYv3UGFWSdqxj3ieJ7SoPReYC
-         3S88S9X6SwSfM9FXV6P/ZxRVO5dxbPYhVuT2Io24=
+        b=bJ5aXXYDaQkG2qvvXtsxZOkjK5jJa4O54WomjNYDQ8Qd5FDUDH6iRAcROIw9oC97P
+         O1bSwaY8BdGUtFJVkPYOGDh2rRwZEtmFRwz3xaxx9eniXzCu2CkK99V5oKvGUqjnG5
+         Vo78K498yEp2hBnRGOe3Dq8rIlPZ+B20p7DoXru4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Tom Rix <trix@redhat.com>, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-doc@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 16/60] media: videodev2.h: RGB BT2020 and HSV are always full range
-Date:   Mon, 26 Oct 2020 20:03:31 -0400
-Message-Id: <20201027000415.1026364-16-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        clang-built-linux@googlegroups.com
+Subject: [PATCH AUTOSEL 4.9 10/30] media: tw5864: check status of tw5864_frameinterval_get
+Date:   Mon, 26 Oct 2020 20:10:24 -0400
+Message-Id: <20201027001044.1027349-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201027000415.1026364-1-sashal@kernel.org>
-References: <20201027000415.1026364-1-sashal@kernel.org>
+In-Reply-To: <20201027001044.1027349-1-sashal@kernel.org>
+References: <20201027001044.1027349-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+From: Tom Rix <trix@redhat.com>
 
-[ Upstream commit b305dfe2e93434b12d438434461b709641f62af4 ]
+[ Upstream commit 780d815dcc9b34d93ae69385a8465c38d423ff0f ]
 
-The default RGB quantization range for BT.2020 is full range (just as for
-all the other RGB pixel encodings), not limited range.
+clang static analysis reports this problem
 
-Update the V4L2_MAP_QUANTIZATION_DEFAULT macro and documentation
-accordingly.
+tw5864-video.c:773:32: warning: The left expression of the compound
+  assignment is an uninitialized value.
+  The computed value will also be garbage
+        fintv->stepwise.max.numerator *= std_max_fps;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
 
-Also mention that HSV is always full range and cannot be limited range.
+stepwise.max is set with frameinterval, which comes from
 
-When RGB BT2020 was introduced in V4L2 it was not clear whether it should
-be limited or full range, but full range is the right (and consistent)
-choice.
+	ret = tw5864_frameinterval_get(input, &frameinterval);
+	fintv->stepwise.step = frameinterval;
+	fintv->stepwise.min = frameinterval;
+	fintv->stepwise.max = frameinterval;
+	fintv->stepwise.max.numerator *= std_max_fps;
 
+When tw5864_frameinterval_get() fails, frameinterval is not
+set. So check the status and fix another similar problem.
+
+Signed-off-by: Tom Rix <trix@redhat.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../media/uapi/v4l/colorspaces-defs.rst         |  9 ++++-----
- .../media/uapi/v4l/colorspaces-details.rst      |  5 ++---
- include/uapi/linux/videodev2.h                  | 17 ++++++++---------
- 3 files changed, 14 insertions(+), 17 deletions(-)
+ drivers/media/pci/tw5864/tw5864-video.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/media/uapi/v4l/colorspaces-defs.rst b/Documentation/media/uapi/v4l/colorspaces-defs.rst
-index f24615544792b..16e46bec80934 100644
---- a/Documentation/media/uapi/v4l/colorspaces-defs.rst
-+++ b/Documentation/media/uapi/v4l/colorspaces-defs.rst
-@@ -29,8 +29,7 @@ whole range, 0-255, dividing the angular value by 1.41. The enum
- :c:type:`v4l2_hsv_encoding` specifies which encoding is used.
+diff --git a/drivers/media/pci/tw5864/tw5864-video.c b/drivers/media/pci/tw5864/tw5864-video.c
+index 27ff6e0d98453..023ff9ebde5e7 100644
+--- a/drivers/media/pci/tw5864/tw5864-video.c
++++ b/drivers/media/pci/tw5864/tw5864-video.c
+@@ -767,6 +767,9 @@ static int tw5864_enum_frameintervals(struct file *file, void *priv,
+ 	fintv->type = V4L2_FRMIVAL_TYPE_STEPWISE;
  
- .. note:: The default R'G'B' quantization is full range for all
--   colorspaces except for BT.2020 which uses limited range R'G'B'
--   quantization.
-+   colorspaces. HSV formats are always full range.
+ 	ret = tw5864_frameinterval_get(input, &frameinterval);
++	if (ret)
++		return ret;
++
+ 	fintv->stepwise.step = frameinterval;
+ 	fintv->stepwise.min = frameinterval;
+ 	fintv->stepwise.max = frameinterval;
+@@ -785,6 +788,9 @@ static int tw5864_g_parm(struct file *file, void *priv,
+ 	cp->capability = V4L2_CAP_TIMEPERFRAME;
  
- .. tabularcolumns:: |p{6.0cm}|p{11.5cm}|
- 
-@@ -162,8 +161,8 @@ whole range, 0-255, dividing the angular value by 1.41. The enum
-       - Details
-     * - ``V4L2_QUANTIZATION_DEFAULT``
-       - Use the default quantization encoding as defined by the
--	colorspace. This is always full range for R'G'B' (except for the
--	BT.2020 colorspace) and HSV. It is usually limited range for Y'CbCr.
-+	colorspace. This is always full range for R'G'B' and HSV.
-+	It is usually limited range for Y'CbCr.
-     * - ``V4L2_QUANTIZATION_FULL_RANGE``
-       - Use the full range quantization encoding. I.e. the range [0…1] is
- 	mapped to [0…255] (with possible clipping to [1…254] to avoid the
-@@ -173,4 +172,4 @@ whole range, 0-255, dividing the angular value by 1.41. The enum
-     * - ``V4L2_QUANTIZATION_LIM_RANGE``
-       - Use the limited range quantization encoding. I.e. the range [0…1]
- 	is mapped to [16…235]. Cb and Cr are mapped from [-0.5…0.5] to
--	[16…240].
-+	[16…240]. Limited Range cannot be used with HSV.
-diff --git a/Documentation/media/uapi/v4l/colorspaces-details.rst b/Documentation/media/uapi/v4l/colorspaces-details.rst
-index 09fabf4cd4126..ca7176cae8dd8 100644
---- a/Documentation/media/uapi/v4l/colorspaces-details.rst
-+++ b/Documentation/media/uapi/v4l/colorspaces-details.rst
-@@ -370,9 +370,8 @@ Colorspace BT.2020 (V4L2_COLORSPACE_BT2020)
- The :ref:`itu2020` standard defines the colorspace used by Ultra-high
- definition television (UHDTV). The default transfer function is
- ``V4L2_XFER_FUNC_709``. The default Y'CbCr encoding is
--``V4L2_YCBCR_ENC_BT2020``. The default R'G'B' quantization is limited
--range (!), and so is the default Y'CbCr quantization. The chromaticities
--of the primary colors and the white reference are:
-+``V4L2_YCBCR_ENC_BT2020``. The default Y'CbCr quantization is limited range.
-+The chromaticities of the primary colors and the white reference are:
- 
- 
- 
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 1aae2e4b8f102..b73f4423bc09d 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -362,9 +362,9 @@ enum v4l2_hsv_encoding {
- 
- enum v4l2_quantization {
- 	/*
--	 * The default for R'G'B' quantization is always full range, except
--	 * for the BT2020 colorspace. For Y'CbCr the quantization is always
--	 * limited range, except for COLORSPACE_JPEG: this is full range.
-+	 * The default for R'G'B' quantization is always full range.
-+	 * For Y'CbCr the quantization is always limited range, except
-+	 * for COLORSPACE_JPEG: this is full range.
- 	 */
- 	V4L2_QUANTIZATION_DEFAULT     = 0,
- 	V4L2_QUANTIZATION_FULL_RANGE  = 1,
-@@ -373,14 +373,13 @@ enum v4l2_quantization {
- 
- /*
-  * Determine how QUANTIZATION_DEFAULT should map to a proper quantization.
-- * This depends on whether the image is RGB or not, the colorspace and the
-- * Y'CbCr encoding.
-+ * This depends on whether the image is RGB or not, the colorspace.
-+ * The Y'CbCr encoding is not used anymore, but is still there for backwards
-+ * compatibility.
-  */
- #define V4L2_MAP_QUANTIZATION_DEFAULT(is_rgb_or_hsv, colsp, ycbcr_enc) \
--	(((is_rgb_or_hsv) && (colsp) == V4L2_COLORSPACE_BT2020) ? \
--	 V4L2_QUANTIZATION_LIM_RANGE : \
--	 (((is_rgb_or_hsv) || (colsp) == V4L2_COLORSPACE_JPEG) ? \
--	 V4L2_QUANTIZATION_FULL_RANGE : V4L2_QUANTIZATION_LIM_RANGE))
-+	(((is_rgb_or_hsv) || (colsp) == V4L2_COLORSPACE_JPEG) ? \
-+	 V4L2_QUANTIZATION_FULL_RANGE : V4L2_QUANTIZATION_LIM_RANGE)
- 
- /*
-  * Deprecated names for opRGB colorspace (IEC 61966-2-5)
+ 	ret = tw5864_frameinterval_get(input, &cp->timeperframe);
++	if (ret)
++		return ret;
++
+ 	cp->timeperframe.numerator *= input->frame_interval;
+ 	cp->capturemode = 0;
+ 	cp->readbuffers = 2;
 -- 
 2.25.1
 
