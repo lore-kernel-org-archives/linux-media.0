@@ -2,44 +2,71 @@ Return-Path: <SRS0=Zg/f=EC=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F19FC4363A
-	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 17:08:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 327BEC388F9
+	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 18:02:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5475E21D42
-	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 17:08:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E06EC21655
+	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 18:02:04 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20150623.gappssmtp.com header.i=@bgdev-pl.20150623.gappssmtp.com header.b="UoiZn2ej"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1816649AbgJ0RIQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Oct 2020 13:08:16 -0400
-Received: from smtprelay0063.hostedemail.com ([216.40.44.63]:47840 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1816629AbgJ0RIO (ORCPT
+        id S1824036AbgJ0SB6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Oct 2020 14:01:58 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:43303 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1823685AbgJ0SA7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Oct 2020 13:08:14 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay08.hostedemail.com (Postfix) with ESMTP id 45489182CED2A;
-        Tue, 27 Oct 2020 17:08:10 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-HE-Tag: rake71_590ddfb2727d
-X-Filterd-Recvd-Size: 4916
-Received: from XPS-9350.home (unknown [47.151.133.149])
-        (Authenticated sender: joe@perches.com)
-        by omf05.hostedemail.com (Postfix) with ESMTPA;
-        Tue, 27 Oct 2020 17:08:04 +0000 (UTC)
-Message-ID: <2767969b94fd66db1fb0fc13b5783ae65b7deb2f.camel@perches.com>
+        Tue, 27 Oct 2020 14:00:59 -0400
+Received: by mail-io1-f66.google.com with SMTP id h21so2507063iob.10
+        for <linux-media@vger.kernel.org>; Tue, 27 Oct 2020 11:00:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ed3AIF7qFllVghkuMSpgY+e4IbkAvQfdceeKpQaUdxk=;
+        b=UoiZn2ejgC7wXGBMzC5P1HZYY0nl6Wa3KE0/4S9Ciuieo7WYMXpDS0Iaqpc4XiAPdO
+         qMSPbldaS4qotDJxt10RTbnG9MLtwWkVWivTQZrOtp1ibfKEiirPfM/hcYKscWcE5G9+
+         hdA0OqGIyHCG+6wpH2Tcj5TcpWPTkljgGKnbGOzRrgHXz7X+jipA9gLH6g8zN/Jx0l4s
+         /OKkLzKstGxFD2CYIuU1B33wI1K0Ml8+qKW5x8c0LoZzpt+1zSKoX87G79JYtOSZ/rG6
+         gJ+d5QJ1DFf7m/UdqRG6MK7XEwKpEIVQ7cBBbC41y7jJlAMtCPK8jhzSkqrf6tO37h92
+         JCSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ed3AIF7qFllVghkuMSpgY+e4IbkAvQfdceeKpQaUdxk=;
+        b=BVOXetiQ5/CenNfFeAm3YU/VJU63DtGzY34sYUCZVZ1Gnbg1eSCI+eNzKBOhQsLqOc
+         O7gGiugZy+LBgXQ83xDwL1Vtp5o8Bf9shNkEroQfVbNFv2qXxBUXLTeS/ToPWjXW3klC
+         uVW6UJpP+ezwiA5mbPK7SQXJhOjOkzSKLh2DHdlUT/OxS/cWgc22ke65e2moSue9s+cU
+         JtZa0MljA7p+3Ux5FagEoPhlbyiOUi3j4HIRSbtWZ2WAfwcWbv8ei/fWmJrCWD+JBxIj
+         t8BuBKKV5lHNus4cXsSMWOb+3/fP7IevKKm9XL4WVySVPZDAadtdWMDvArHAcf3wzxbN
+         OGLA==
+X-Gm-Message-State: AOAM531etmI0QBwg7+xuFWQ5m1YfdeqMhQ01vyrIzjXa7ksmOsmVqyp8
+        dS8IFTW5FHuZHrZBO4h7rc5G2lbeS7H3Aw41sZvoTw==
+X-Google-Smtp-Source: ABdhPJwN08N0ZyzhoITVdnvB4ryeaKood+3vq0iIUYgCE2JJfuXumCj2bIDB2qD60OdiaWwDhRbGH3iAIo+DCc+ziro=
+X-Received: by 2002:a6b:f401:: with SMTP id i1mr3323522iog.130.1603821657825;
+ Tue, 27 Oct 2020 11:00:57 -0700 (PDT)
+MIME-Version: 1.0
+References: <20201027121725.24660-1-brgl@bgdev.pl> <20201027121725.24660-4-brgl@bgdev.pl>
+ <20201027112607-mutt-send-email-mst@kernel.org> <685d850347a1191bba8ba7766fc409b140d18f03.camel@perches.com>
+ <CAMpxmJU0C84DjPmqmWvPgv0zwgGLhkpKLRDuKkZHAa=wi+LvBA@mail.gmail.com> <2767969b94fd66db1fb0fc13b5783ae65b7deb2f.camel@perches.com>
+In-Reply-To: <2767969b94fd66db1fb0fc13b5783ae65b7deb2f.camel@perches.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 27 Oct 2020 19:00:46 +0100
+Message-ID: <CAMRc=McvW_E0aE2Ep=3aZvb=kNDMz6=ZH-EQzARAD-tyJG5Rrg@mail.gmail.com>
 Subject: Re: [PATCH 3/8] vhost: vringh: use krealloc_array()
-From:   Joe Perches <joe@perches.com>
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
+To:     Joe Perches <joe@perches.com>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Sumit Semwal <sumit.semwal@linaro.org>,
         Gustavo Padovan <gustavo@padovan.org>,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Borislav Petkov <bp@alien8.de>,
         Tony Luck <tony.luck@intel.com>,
@@ -68,80 +95,84 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         virtualization@lists.linux-foundation.org,
         netdev <netdev@vger.kernel.org>, linux-mm@kvack.org,
         Linux-ALSA <alsa-devel@alsa-project.org>
-Date:   Tue, 27 Oct 2020 10:08:02 -0700
-In-Reply-To: <CAMpxmJU0C84DjPmqmWvPgv0zwgGLhkpKLRDuKkZHAa=wi+LvBA@mail.gmail.com>
-References: <20201027121725.24660-1-brgl@bgdev.pl>
-         <20201027121725.24660-4-brgl@bgdev.pl>
-         <20201027112607-mutt-send-email-mst@kernel.org>
-         <685d850347a1191bba8ba7766fc409b140d18f03.camel@perches.com>
-         <CAMpxmJU0C84DjPmqmWvPgv0zwgGLhkpKLRDuKkZHAa=wi+LvBA@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.38.1-1 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, 2020-10-27 at 17:58 +0100, Bartosz Golaszewski wrote:
-> On Tue, Oct 27, 2020 at 5:50 PM Joe Perches <joe@perches.com> wrote:
-> > 
-> > On Tue, 2020-10-27 at 11:28 -0400, Michael S. Tsirkin wrote:
-> > > On Tue, Oct 27, 2020 at 01:17:20PM +0100, Bartosz Golaszewski wrote:
-> > > > From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> > > > 
-> > > > Use the helper that checks for overflows internally instead of manually
-> > > > calculating the size of the new array.
-> > > > 
-> > > > Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> > > 
-> > > No problem with the patch, it does introduce some symmetry in the code.
-> > 
-> > Perhaps more symmetry by using kmemdup
-> > ---
-> >  drivers/vhost/vringh.c | 23 ++++++++++-------------
-> >  1 file changed, 10 insertions(+), 13 deletions(-)
-> > 
-> > diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
-> > index 8bd8b403f087..99222a3651cd 100644
-> > --- a/drivers/vhost/vringh.c
-> > +++ b/drivers/vhost/vringh.c
-> > @@ -191,26 +191,23 @@ static int move_to_indirect(const struct vringh *vrh,
-> >  static int resize_iovec(struct vringh_kiov *iov, gfp_t gfp)
-> >  {
-> >         struct kvec *new;
-> > -       unsigned int flag, new_num = (iov->max_num & ~VRINGH_IOV_ALLOCATED) * 2;
-> > +       size_t new_num = (iov->max_num & ~VRINGH_IOV_ALLOCATED) * 2;
-> > +       size_t size;
-> > 
-> >         if (new_num < 8)
-> >                 new_num = 8;
-> > 
-> > -       flag = (iov->max_num & VRINGH_IOV_ALLOCATED);
-> > -       if (flag)
-> > -               new = krealloc(iov->iov, new_num * sizeof(struct iovec), gfp);
-> > -       else {
-> > -               new = kmalloc_array(new_num, sizeof(struct iovec), gfp);
-> > -               if (new) {
-> > -                       memcpy(new, iov->iov,
-> > -                              iov->max_num * sizeof(struct iovec));
-> > -                       flag = VRINGH_IOV_ALLOCATED;
-> > -               }
-> > -       }
-> > +       if (unlikely(check_mul_overflow(new_num, sizeof(struct iovec), &size)))
-> > +               return -ENOMEM;
-> > +
-> 
-> The whole point of using helpers such as kmalloc_array() is not doing
-> these checks manually.
+On Tue, Oct 27, 2020 at 6:08 PM Joe Perches <joe@perches.com> wrote:
+>
+> On Tue, 2020-10-27 at 17:58 +0100, Bartosz Golaszewski wrote:
+> > On Tue, Oct 27, 2020 at 5:50 PM Joe Perches <joe@perches.com> wrote:
+> > >
+> > > On Tue, 2020-10-27 at 11:28 -0400, Michael S. Tsirkin wrote:
+> > > > On Tue, Oct 27, 2020 at 01:17:20PM +0100, Bartosz Golaszewski wrote:
+> > > > > From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> > > > >
+> > > > > Use the helper that checks for overflows internally instead of manually
+> > > > > calculating the size of the new array.
+> > > > >
+> > > > > Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> > > >
+> > > > No problem with the patch, it does introduce some symmetry in the code.
+> > >
+> > > Perhaps more symmetry by using kmemdup
+> > > ---
+> > >  drivers/vhost/vringh.c | 23 ++++++++++-------------
+> > >  1 file changed, 10 insertions(+), 13 deletions(-)
+> > >
+> > > diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
+> > > index 8bd8b403f087..99222a3651cd 100644
+> > > --- a/drivers/vhost/vringh.c
+> > > +++ b/drivers/vhost/vringh.c
+> > > @@ -191,26 +191,23 @@ static int move_to_indirect(const struct vringh *vrh,
+> > >  static int resize_iovec(struct vringh_kiov *iov, gfp_t gfp)
+> > >  {
+> > >         struct kvec *new;
+> > > -       unsigned int flag, new_num = (iov->max_num & ~VRINGH_IOV_ALLOCATED) * 2;
+> > > +       size_t new_num = (iov->max_num & ~VRINGH_IOV_ALLOCATED) * 2;
+> > > +       size_t size;
+> > >
+> > >         if (new_num < 8)
+> > >                 new_num = 8;
+> > >
+> > > -       flag = (iov->max_num & VRINGH_IOV_ALLOCATED);
+> > > -       if (flag)
+> > > -               new = krealloc(iov->iov, new_num * sizeof(struct iovec), gfp);
+> > > -       else {
+> > > -               new = kmalloc_array(new_num, sizeof(struct iovec), gfp);
+> > > -               if (new) {
+> > > -                       memcpy(new, iov->iov,
+> > > -                              iov->max_num * sizeof(struct iovec));
+> > > -                       flag = VRINGH_IOV_ALLOCATED;
+> > > -               }
+> > > -       }
+> > > +       if (unlikely(check_mul_overflow(new_num, sizeof(struct iovec), &size)))
+> > > +               return -ENOMEM;
+> > > +
+> >
+> > The whole point of using helpers such as kmalloc_array() is not doing
+> > these checks manually.
+>
+> Tradeoffs for in readability for overflow and not mistyping or doing
+> the multiplication of iov->max_num * sizeof(struct iovec) twice.
+>
 
-Tradeoffs for in readability for overflow and not mistyping or doing
-the multiplication of iov->max_num * sizeof(struct iovec) twice.
+It's out of scope for this series - I want to add users for
+krealloc_array(), not refactor code I don't really know. If the
+maintainer of this bit objects, it can be dropped.
 
-Just fyi:
+> Just fyi:
+>
+> the realloc doesn't do a multiplication overflow test as written so the
+> suggestion is slightly more resistant to defect.
+>
 
-the realloc doesn't do a multiplication overflow test as written so the
-suggestion is slightly more resistant to defect.
+I'm not sure what your point is. I used krealloc_array() exactly for
+this reason - to add the overflow test.
 
-   
+BTW I suppose kmalloc_array() here can be replaced with
+krealloc_array() if the original pointer is NULL the first time it's
+called.
 
+Bartosz
