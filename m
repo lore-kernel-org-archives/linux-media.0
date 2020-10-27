@@ -2,171 +2,109 @@ Return-Path: <SRS0=Zg/f=EC=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 549E9C63798
-	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 00:46:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28A06C55178
+	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 03:19:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 23F7A2080A
-	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 00:46:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603759608;
-	bh=VOxMMo4V2lcTvWnRHQD5OBL+/VBQ8aR57ezL+qXysVE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=gZMIbBV+YQOD4e+LoiQTKRJJVn3UBHdevV/vlf3vumtJQAbeEr+c3ZtE3PdUZWC6F
-	 XB0ZO4HHMRXS09gjQQotAxT9Kchhn6U2B+6Jydmz3qbtHWM2xUCuHz4aAOBVeWPxzG
-	 ke1fK0AwpyQgwRDBJhQingsNacTrxvyu3Va7qyRY=
+	by mail.kernel.org (Postfix) with ESMTP id D4DBB21D42
+	for <linux-media@archiver.kernel.org>; Tue, 27 Oct 2020 03:19:30 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="XGjlbH92"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409028AbgJ0AnQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 26 Oct 2020 20:43:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48616 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2408968AbgJZXuB (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 26 Oct 2020 19:50:01 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6E6242075B;
-        Mon, 26 Oct 2020 23:49:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603756199;
-        bh=VOxMMo4V2lcTvWnRHQD5OBL+/VBQ8aR57ezL+qXysVE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XeYecVmzWCd8C90QU4XwkqXEylOx0r1LeCc3I1d1apD5/eGOiwzisyJ+aVgT84uDh
-         LEjn6AAlei72zqSVuioMKl6AM+N6Wnd/jgjFJFrsDp1D57dzusG9tDxz1kkEM+SJ6A
-         qc5U2N4Z5lts2+Wb6Og3m0haGCIqcuDWwwcrgYt8=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.9 042/147] media: videodev2.h: RGB BT2020 and HSV are always full range
-Date:   Mon, 26 Oct 2020 19:47:20 -0400
-Message-Id: <20201026234905.1022767-42-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201026234905.1022767-1-sashal@kernel.org>
-References: <20201026234905.1022767-1-sashal@kernel.org>
+        id S2504571AbgJ0DTa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 26 Oct 2020 23:19:30 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:14410 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2441488AbgJ0DT1 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 26 Oct 2020 23:19:27 -0400
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5f9791aa0000>; Mon, 26 Oct 2020 20:19:06 -0700
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 27 Oct
+ 2020 03:19:27 +0000
+Received: from skomatineni-linux.nvidia.com (172.20.13.39) by mail.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
+ Transport; Tue, 27 Oct 2020 03:19:26 +0000
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <hverkuil@xs4all.nl>
+CC:     <mchehab@kernel.org>, <linux-media@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 02/10] media: tegra-video: Enable VI pixel transform for YUV and RGB formats
+Date:   Mon, 26 Oct 2020 20:19:15 -0700
+Message-ID: <1603768763-25590-3-git-send-email-skomatineni@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1603768763-25590-1-git-send-email-skomatineni@nvidia.com>
+References: <1603768763-25590-1-git-send-email-skomatineni@nvidia.com>
+X-NVConfidentiality: public
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1603768746; bh=3KvReLIRXcuW/kRnBsqtVyD+GiWXJeSQRRku54/yeMg=;
+        h=From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
+         References:X-NVConfidentiality:MIME-Version:Content-Type;
+        b=XGjlbH92SXPLcF8XZPx1bllHmakZpxbmhVxrArGKGSy9pV8wnMxHRKgKJ085q7//F
+         fVBY7vp+HFXcziS85D/SKOZeGCLb01O3beVrr2jihH7kzsnDjOGSQ+PD6KtqvoBSzS
+         llv3aOotaapnv7Y1eh7HAnBx3d+wdFDOCusOj1LCx4Auqu+KdjlZon9r+fJd9ttfx1
+         8Bc0wcQADXmzP3UQFR1CGJXMOxtxtWH63FZDS3eOWsKkZi4QOc1wlq/Iqkc/nAflhn
+         k43KN6BsTn9ERl24gg3DqCTmP/1n3IzAecE8iBJzlE32otCSSwpUgIUh3qewL19ju7
+         35EWtHO5y+s7Q==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+VI Pixel transforms converts source pixel data to selected
+destination pixel formats in memory and aligns properly.
 
-[ Upstream commit b305dfe2e93434b12d438434461b709641f62af4 ]
+YUV and RGB formats need this pixel transform to be enabled.
 
-The default RGB quantization range for BT.2020 is full range (just as for
-all the other RGB pixel encodings), not limited range.
+RAW formats use T_R16_I destination pixel format in memory and
+does not need pixel transform as they support direct write to
+memory.
 
-Update the V4L2_MAP_QUANTIZATION_DEFAULT macro and documentation
-accordingly.
+So, this patch enables pixel transform for YUV and RGB and keeps
+it bypass for RAW formats.
 
-Also mention that HSV is always full range and cannot be limited range.
-
-When RGB BT2020 was introduced in V4L2 it was not clear whether it should
-be limited or full range, but full range is the right (and consistent)
-choice.
-
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
 ---
- .../media/v4l/colorspaces-defs.rst              |  9 ++++-----
- .../media/v4l/colorspaces-details.rst           |  5 ++---
- include/uapi/linux/videodev2.h                  | 17 ++++++++---------
- 3 files changed, 14 insertions(+), 17 deletions(-)
+ drivers/staging/media/tegra-video/tegra210.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/colorspaces-defs.rst b/Documentation/userspace-api/media/v4l/colorspaces-defs.rst
-index 01404e1f609a7..4089f426258d6 100644
---- a/Documentation/userspace-api/media/v4l/colorspaces-defs.rst
-+++ b/Documentation/userspace-api/media/v4l/colorspaces-defs.rst
-@@ -36,8 +36,7 @@ whole range, 0-255, dividing the angular value by 1.41. The enum
- :c:type:`v4l2_hsv_encoding` specifies which encoding is used.
+diff --git a/drivers/staging/media/tegra-video/tegra210.c b/drivers/staging/media/tegra-video/tegra210.c
+index ac066c0..6b23aa7 100644
+--- a/drivers/staging/media/tegra-video/tegra210.c
++++ b/drivers/staging/media/tegra-video/tegra210.c
+@@ -178,10 +178,23 @@ static int tegra_channel_capture_setup(struct tegra_vi_channel *chan)
+ 	u32 format = chan->fmtinfo->img_fmt;
+ 	u32 data_type = chan->fmtinfo->img_dt;
+ 	u32 word_count = (width * chan->fmtinfo->bit_width) / 8;
++	u32 bypass_pixel_transform = BIT(BYPASS_PXL_TRANSFORM_OFFSET);
++
++	/*
++	 * VI Pixel transformation unit converts source pixels data format
++	 * into selected destination pixel format and aligns properly while
++	 * interfacing with memory packer.
++	 * This pixel transformation should be enabled for YUV and RGB
++	 * formats and should be bypassed for RAW formats as RAW formats
++	 * only support direct to memory.
++	 */
++	if (chan->pg_mode || data_type == TEGRA_IMAGE_DT_YUV422_8 ||
++	    data_type == TEGRA_IMAGE_DT_RGB888)
++		bypass_pixel_transform = 0;
  
- .. note:: The default R'G'B' quantization is full range for all
--   colorspaces except for BT.2020 which uses limited range R'G'B'
--   quantization.
-+   colorspaces. HSV formats are always full range.
- 
- .. tabularcolumns:: |p{6.7cm}|p{10.8cm}|
- 
-@@ -169,8 +168,8 @@ whole range, 0-255, dividing the angular value by 1.41. The enum
-       - Details
-     * - ``V4L2_QUANTIZATION_DEFAULT``
-       - Use the default quantization encoding as defined by the
--	colorspace. This is always full range for R'G'B' (except for the
--	BT.2020 colorspace) and HSV. It is usually limited range for Y'CbCr.
-+	colorspace. This is always full range for R'G'B' and HSV.
-+	It is usually limited range for Y'CbCr.
-     * - ``V4L2_QUANTIZATION_FULL_RANGE``
-       - Use the full range quantization encoding. I.e. the range [0…1] is
- 	mapped to [0…255] (with possible clipping to [1…254] to avoid the
-@@ -180,4 +179,4 @@ whole range, 0-255, dividing the angular value by 1.41. The enum
-     * - ``V4L2_QUANTIZATION_LIM_RANGE``
-       - Use the limited range quantization encoding. I.e. the range [0…1]
- 	is mapped to [16…235]. Cb and Cr are mapped from [-0.5…0.5] to
--	[16…240].
-+	[16…240]. Limited Range cannot be used with HSV.
-diff --git a/Documentation/userspace-api/media/v4l/colorspaces-details.rst b/Documentation/userspace-api/media/v4l/colorspaces-details.rst
-index 300c5d2e7d0f0..cf1b825ec34a7 100644
---- a/Documentation/userspace-api/media/v4l/colorspaces-details.rst
-+++ b/Documentation/userspace-api/media/v4l/colorspaces-details.rst
-@@ -377,9 +377,8 @@ Colorspace BT.2020 (V4L2_COLORSPACE_BT2020)
- The :ref:`itu2020` standard defines the colorspace used by Ultra-high
- definition television (UHDTV). The default transfer function is
- ``V4L2_XFER_FUNC_709``. The default Y'CbCr encoding is
--``V4L2_YCBCR_ENC_BT2020``. The default R'G'B' quantization is limited
--range (!), and so is the default Y'CbCr quantization. The chromaticities
--of the primary colors and the white reference are:
-+``V4L2_YCBCR_ENC_BT2020``. The default Y'CbCr quantization is limited range.
-+The chromaticities of the primary colors and the white reference are:
- 
- 
- 
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 235db7754606d..f717826d5d7c0 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -373,9 +373,9 @@ enum v4l2_hsv_encoding {
- 
- enum v4l2_quantization {
- 	/*
--	 * The default for R'G'B' quantization is always full range, except
--	 * for the BT2020 colorspace. For Y'CbCr the quantization is always
--	 * limited range, except for COLORSPACE_JPEG: this is full range.
-+	 * The default for R'G'B' quantization is always full range.
-+	 * For Y'CbCr the quantization is always limited range, except
-+	 * for COLORSPACE_JPEG: this is full range.
- 	 */
- 	V4L2_QUANTIZATION_DEFAULT     = 0,
- 	V4L2_QUANTIZATION_FULL_RANGE  = 1,
-@@ -384,14 +384,13 @@ enum v4l2_quantization {
- 
- /*
-  * Determine how QUANTIZATION_DEFAULT should map to a proper quantization.
-- * This depends on whether the image is RGB or not, the colorspace and the
-- * Y'CbCr encoding.
-+ * This depends on whether the image is RGB or not, the colorspace.
-+ * The Y'CbCr encoding is not used anymore, but is still there for backwards
-+ * compatibility.
-  */
- #define V4L2_MAP_QUANTIZATION_DEFAULT(is_rgb_or_hsv, colsp, ycbcr_enc) \
--	(((is_rgb_or_hsv) && (colsp) == V4L2_COLORSPACE_BT2020) ? \
--	 V4L2_QUANTIZATION_LIM_RANGE : \
--	 (((is_rgb_or_hsv) || (colsp) == V4L2_COLORSPACE_JPEG) ? \
--	 V4L2_QUANTIZATION_FULL_RANGE : V4L2_QUANTIZATION_LIM_RANGE))
-+	(((is_rgb_or_hsv) || (colsp) == V4L2_COLORSPACE_JPEG) ? \
-+	 V4L2_QUANTIZATION_FULL_RANGE : V4L2_QUANTIZATION_LIM_RANGE)
- 
- /*
-  * Deprecated names for opRGB colorspace (IEC 61966-2-5)
+ 	vi_csi_write(chan, TEGRA_VI_CSI_ERROR_STATUS, 0xffffffff);
+ 	vi_csi_write(chan, TEGRA_VI_CSI_IMAGE_DEF,
+-		     ((chan->pg_mode ? 0 : 1) << BYPASS_PXL_TRANSFORM_OFFSET) |
++		     bypass_pixel_transform |
+ 		     (format << IMAGE_DEF_FORMAT_OFFSET) |
+ 		     IMAGE_DEF_DEST_MEM);
+ 	vi_csi_write(chan, TEGRA_VI_CSI_IMAGE_DT, data_type);
 -- 
-2.25.1
+2.7.4
 
