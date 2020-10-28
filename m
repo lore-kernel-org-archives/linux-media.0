@@ -2,130 +2,116 @@ Return-Path: <SRS0=okk5=EE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A02DCC5DF9D
-	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 01:23:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86C25C5517A
+	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 01:47:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 55F3820796
-	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 01:23:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 28C7120782
+	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 01:47:30 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="S3PDiK26"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732943AbgJ2BXY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Oct 2020 21:23:24 -0400
-Received: from mx2.suse.de ([195.135.220.15]:47960 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729807AbgJ1WDn (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:03:43 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 7C2E7B90C;
-        Wed, 28 Oct 2020 19:35:25 +0000 (UTC)
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        airlied@linux.ie, daniel@ffwll.ch, sam@ravnborg.org,
-        alexander.deucher@amd.com, christian.koenig@amd.com,
-        kraxel@redhat.com, l.stach@pengutronix.de,
-        linux+etnaviv@armlinux.org.uk, christian.gmeiner@gmail.com,
-        inki.dae@samsung.com, jy0922.shim@samsung.com,
-        sw0312.kim@samsung.com, kyungmin.park@samsung.com,
-        kgene@kernel.org, krzk@kernel.org, yuq825@gmail.com,
-        bskeggs@redhat.com, robh@kernel.org, tomeu.vizoso@collabora.com,
-        steven.price@arm.com, alyssa.rosenzweig@collabora.com,
-        hjc@rock-chips.com, heiko@sntech.de, hdegoede@redhat.com,
-        sean@poorly.run, eric@anholt.net, oleksandr_andrushchenko@epam.com,
-        ray.huang@amd.com, sumit.semwal@linaro.org,
-        emil.velikov@collabora.com, luben.tuikov@amd.com, apaneers@amd.com,
-        linus.walleij@linaro.org, melissa.srw@gmail.com,
-        chris@chris-wilson.co.uk, miaoqinglang@huawei.com
-Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org,
-        etnaviv@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, lima@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, spice-devel@lists.freedesktop.org,
-        linux-rockchip@lists.infradead.org, xen-devel@lists.xenproject.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v6 02/10] drm/cma-helper: Remove empty drm_gem_cma_prime_vunmap()
-Date:   Wed, 28 Oct 2020 20:35:13 +0100
-Message-Id: <20201028193521.2489-3-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.29.0
-In-Reply-To: <20201028193521.2489-1-tzimmermann@suse.de>
-References: <20201028193521.2489-1-tzimmermann@suse.de>
+        id S1732726AbgJ2BrT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Oct 2020 21:47:19 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:44964 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729098AbgJ2BqU (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 28 Oct 2020 21:46:20 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 09SHJQVl069453;
+        Wed, 28 Oct 2020 12:19:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1603905566;
+        bh=xw3/OYpYabhSVgmiGBRFSQkrGBCD4qoimkYDCSBz89A=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=S3PDiK26N0dO/2hGt1qpIWTwC9tp+4OUk+JJsqq+kP+ROnRhC8TzS5kxHCIrgTdKp
+         Zp2G+JU7O+AV7m73F6AYyi8AeJKmEfpFg5GG4qC2D62ufv7Y9YsI0Xll/sLw7wI5t2
+         K9VAlRb6+xNV0fDKF9SbgxnVBxS2q4cJZFH6cDho=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 09SHJQxJ108689
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 28 Oct 2020 12:19:26 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 28
+ Oct 2020 12:19:26 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Wed, 28 Oct 2020 12:19:26 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 09SHJOkq006523;
+        Wed, 28 Oct 2020 12:19:25 -0500
+Date:   Wed, 28 Oct 2020 22:49:24 +0530
+From:   Nikhil Devshatwar <nikhil.nd@ti.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ti.com>
+List-Id: <linux-firmware.lore.kernel.org>
+CC:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        <linux-firmware@kernel.org>, <linux-media@vger.kernel.org>,
+        Dan Murphy <dmurphy@ti.com>, Benoit Parrot <bparrot@ti.com>,
+        Sekhar Nori <nsekhar@ti.com>
+Subject: Re: [PATCH] vpdma: Move firmware to the toplevel
+Message-ID: <20201028171924.dk2swpi2uzpgz5az@NiksLab>
+References: <20201026200922.12719-1-nikhil.nd@ti.com>
+ <20201026210832.GE3756@pendragon.ideasonboard.com>
+ <868ff235-20c7-b0c0-df08-3d4582adb544@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <868ff235-20c7-b0c0-df08-3d4582adb544@ti.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The function drm_gem_cma_prime_vunmap() is empty. Remove it before
-changing the interface to use struct drm_buf_map.
+On 09:41-20201028, Tomi Valkeinen wrote:
+> On 26/10/2020 23:08, Laurent Pinchart wrote:
+> > Hi Nikhil,
+> > 
+> > Thank you for the patch.
+> > 
+> > On Tue, Oct 27, 2020 at 01:39:22AM +0530, Nikhil Devshatwar wrote:
+> >> Move the vpdma firmware to the toplevel directory so
+> >> that the existing drivers can use it with the same path.
+> >>
+> >> Fixes: 5b30b383ce ("linux-firmware: Add new VPDMA firmware 1b8.bin")
+> >> Signed-off-by: Nikhil Devshatwar <nikhil.nd@ti.com>
+> >> ---
+> >>  WHENCE                                         |   2 +-
+> >>  ti-connectivity/vpdma-1b8.bin => vpdma-1b8.bin | Bin
+> > 
+> > I think Tomi meant moving the file to ti/ instead of ti-connectivity/. I
+> > will let him comment on this.
+> 
+> I don't really have a strong opinion here, as I don't know if there are some rules or guidelines
+> about file/dir naming in linux-firmware.
+> 
+> But my argument is:
+> 
+> The fw should either be at the root dir, where the linux driver is already looking for it, OR, if we
+> do move it somewhere, move it to a "right" place. Afaics "ti-connectivity" is totally wrong place,
+> as vpdma has nothing to do with connectivity.
+> 
+> The root dir is a bit bad as "vpdma-1b8.bin" doesn't have TI or such in its name, so even if name
 
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Reviewed-by: Christian König <christian.koenig@amd.com>
-Tested-by: Sam Ravnborg <sam@ravnborg.org>
----
- drivers/gpu/drm/drm_gem_cma_helper.c | 17 -----------------
- drivers/gpu/drm/vc4/vc4_bo.c         |  1 -
- include/drm/drm_gem_cma_helper.h     |  1 -
- 3 files changed, 19 deletions(-)
+With this, I am more inclined to put it in ti/ directory.
 
-diff --git a/drivers/gpu/drm/drm_gem_cma_helper.c b/drivers/gpu/drm/drm_gem_cma_helper.c
-index 2165633c9b9e..d527485ea0b7 100644
---- a/drivers/gpu/drm/drm_gem_cma_helper.c
-+++ b/drivers/gpu/drm/drm_gem_cma_helper.c
-@@ -537,23 +537,6 @@ void *drm_gem_cma_prime_vmap(struct drm_gem_object *obj)
- }
- EXPORT_SYMBOL_GPL(drm_gem_cma_prime_vmap);
- 
--/**
-- * drm_gem_cma_prime_vunmap - unmap a CMA GEM object from the kernel's virtual
-- *     address space
-- * @obj: GEM object
-- * @vaddr: kernel virtual address where the CMA GEM object was mapped
-- *
-- * This function removes a buffer exported via DRM PRIME from the kernel's
-- * virtual address space. This is a no-op because CMA buffers cannot be
-- * unmapped from kernel space. Drivers using the CMA helpers should set this
-- * as their &drm_gem_object_funcs.vunmap callback.
-- */
--void drm_gem_cma_prime_vunmap(struct drm_gem_object *obj, void *vaddr)
--{
--	/* Nothing to do */
--}
--EXPORT_SYMBOL_GPL(drm_gem_cma_prime_vunmap);
--
- static const struct drm_gem_object_funcs drm_gem_cma_default_funcs = {
- 	.free = drm_gem_cma_free_object,
- 	.print_info = drm_gem_cma_print_info,
-diff --git a/drivers/gpu/drm/vc4/vc4_bo.c b/drivers/gpu/drm/vc4/vc4_bo.c
-index f432278173cd..557f0d1e6437 100644
---- a/drivers/gpu/drm/vc4/vc4_bo.c
-+++ b/drivers/gpu/drm/vc4/vc4_bo.c
-@@ -387,7 +387,6 @@ static const struct drm_gem_object_funcs vc4_gem_object_funcs = {
- 	.export = vc4_prime_export,
- 	.get_sg_table = drm_gem_cma_prime_get_sg_table,
- 	.vmap = vc4_prime_vmap,
--	.vunmap = drm_gem_cma_prime_vunmap,
- 	.vm_ops = &vc4_vm_ops,
- };
- 
-diff --git a/include/drm/drm_gem_cma_helper.h b/include/drm/drm_gem_cma_helper.h
-index 2bfa2502607a..a064b0d1c480 100644
---- a/include/drm/drm_gem_cma_helper.h
-+++ b/include/drm/drm_gem_cma_helper.h
-@@ -104,7 +104,6 @@ drm_gem_cma_prime_import_sg_table(struct drm_device *dev,
- int drm_gem_cma_prime_mmap(struct drm_gem_object *obj,
- 			   struct vm_area_struct *vma);
- void *drm_gem_cma_prime_vmap(struct drm_gem_object *obj);
--void drm_gem_cma_prime_vunmap(struct drm_gem_object *obj, void *vaddr);
- 
- struct drm_gem_object *
- drm_gem_cma_create_object_default_funcs(struct drm_device *dev, size_t size);
--- 
-2.29.0
+> conflict with some other fw feels quite unlikely, the name is still rather vague. And moving is a
+> bit bad as then the current driver won't find the fw...
 
+Since the current driver is not getting any firmware anyways, it should
+be fine to move it and update the driver accordingly.
+I will send v2 with the firmware moved to ti/
+
+> 
+>  Tomi
+> 
+> -- 
+> Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+> Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
