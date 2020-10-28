@@ -7,32 +7,32 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 904E3C4363A
-	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 22:57:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3CA5C55179
+	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 22:58:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2F92C20759
-	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 22:57:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5841D20757
+	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 22:58:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389873AbgJ1W5z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S2387581AbgJ1W5z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 28 Oct 2020 18:57:55 -0400
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:43341 "EHLO
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:46037 "EHLO
         relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389867AbgJ1W5Z (ORCPT
+        with ESMTP id S2389868AbgJ1W52 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:57:25 -0400
+        Wed, 28 Oct 2020 18:57:28 -0400
 X-Originating-IP: 2.224.242.101
 Received: from uno.lan (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id AC2106000B;
-        Wed, 28 Oct 2020 22:57:22 +0000 (UTC)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 789716000E;
+        Wed, 28 Oct 2020 22:57:25 +0000 (UTC)
 From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
 To:     hugues.fruchet@st.com, tomi.valkeinen@ti.com,
         sam@elite-embedded.com
 Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>, slongerbeam@gmail.com,
-        linux-media@vger.kernel.org, Jacopo Mondi <jacopo@jmondi.org>
-Subject: [RFC 1/3] media: i2c: ov5640: Adjust htot
-Date:   Wed, 28 Oct 2020 23:57:04 +0100
-Message-Id: <20201028225706.110078-2-jacopo+renesas@jmondi.org>
+        linux-media@vger.kernel.org
+Subject: [RFC 3/3] media: i2c: ov5640: Add V4L2_CID_LINK_FREQ support
+Date:   Wed, 28 Oct 2020 23:57:06 +0100
+Message-Id: <20201028225706.110078-4-jacopo+renesas@jmondi.org>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201028225706.110078-1-jacopo+renesas@jmondi.org>
 References: <20201028225706.110078-1-jacopo+renesas@jmondi.org>
@@ -42,77 +42,91 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Tomi Valkeinen <tomi.valkeinen@ti.com>
+Add support for the V4L2_CID_LINK_FREQ control in the ov5640
+driver.
 
-Adjust htot for most of the modes. The numbers are from the OV5640
-datasheet, and with these the driver works more reliably on DRA76 EVM +
-OV5640, using 2 datalanes.
+Unfortunately V4L2_CID_LINK_FREQ is a menu control and its supported
+values has to be pre-calculated.
 
-Without the patch, I see often ComplexIO (i.e. PHY) errors when
-starting the streaming, and 1280x720 does not work at all without this
-change.
-
-Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
-Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 ---
- drivers/media/i2c/ov5640.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ drivers/media/i2c/ov5640.c | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
 diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index 8d0254d0e5ea..117ac22683ad 100644
+index 236c684ca20b..8429269b9d7d 100644
 --- a/drivers/media/i2c/ov5640.c
 +++ b/drivers/media/i2c/ov5640.c
-@@ -553,42 +553,42 @@ static const struct ov5640_mode_info ov5640_mode_init_data = {
- static const struct ov5640_mode_info
- ov5640_mode_data[OV5640_NUM_MODES] = {
- 	{OV5640_MODE_QCIF_176_144, SUBSAMPLING,
--	 176, 1896, 144, 984,
-+	 176, 2844, 144, 984,
- 	 ov5640_setting_QCIF_176_144,
- 	 ARRAY_SIZE(ov5640_setting_QCIF_176_144),
- 	 OV5640_30_FPS},
- 	{OV5640_MODE_QVGA_320_240, SUBSAMPLING,
--	 320, 1896, 240, 984,
-+	 320, 2844, 240, 984,
- 	 ov5640_setting_QVGA_320_240,
- 	 ARRAY_SIZE(ov5640_setting_QVGA_320_240),
- 	 OV5640_30_FPS},
- 	{OV5640_MODE_VGA_640_480, SUBSAMPLING,
--	 640, 1896, 480, 1080,
-+	 640, 2844, 480, 1080,
- 	 ov5640_setting_VGA_640_480,
- 	 ARRAY_SIZE(ov5640_setting_VGA_640_480),
- 	 OV5640_60_FPS},
- 	{OV5640_MODE_NTSC_720_480, SUBSAMPLING,
--	 720, 1896, 480, 984,
-+	 720, 2844, 480, 984,
- 	 ov5640_setting_NTSC_720_480,
- 	 ARRAY_SIZE(ov5640_setting_NTSC_720_480),
- 	OV5640_30_FPS},
- 	{OV5640_MODE_PAL_720_576, SUBSAMPLING,
--	 720, 1896, 576, 984,
-+	 720, 2844, 576, 984,
- 	 ov5640_setting_PAL_720_576,
- 	 ARRAY_SIZE(ov5640_setting_PAL_720_576),
- 	 OV5640_30_FPS},
- 	{OV5640_MODE_XGA_1024_768, SUBSAMPLING,
--	 1024, 1896, 768, 1080,
-+	 1024, 2844, 768, 1080,
- 	 ov5640_setting_XGA_1024_768,
- 	 ARRAY_SIZE(ov5640_setting_XGA_1024_768),
- 	 OV5640_30_FPS},
- 	{OV5640_MODE_720P_1280_720, SUBSAMPLING,
--	 1280, 1892, 720, 740,
-+	 1280, 2844, 720, 740,
- 	 ov5640_setting_720P_1280_720,
- 	 ARRAY_SIZE(ov5640_setting_720P_1280_720),
- 	 OV5640_30_FPS},
- 	{OV5640_MODE_1080P_1920_1080, SCALING,
--	 1920, 2500, 1080, 1120,
-+	 1920, 2844, 1080, 1120,
- 	 ov5640_setting_1080P_1920_1080,
- 	 ARRAY_SIZE(ov5640_setting_1080P_1920_1080),
- 	 OV5640_30_FPS},
+@@ -144,6 +144,20 @@ static const struct ov5640_pixfmt ov5640_formats[] = {
+ 	{ MEDIA_BUS_FMT_SRGGB8_1X8, V4L2_COLORSPACE_SRGB, },
+ };
+ 
++static const s64 ov5640_link_freqs[] = {
++	126273600,
++	191116800,
++	184291200,
++	167909760,
++	252547200,
++	331724160,
++	335819520,
++	368582400,
++	382233600,
++	737164800,
++};
++#define OV5640_LINK_FREQS_NUM	ARRAY_SIZE(ov5640_link_freqs)
++
+ /*
+  * FIXME: remove this when a subdev API becomes available
+  * to set the MIPI CSI-2 virtual channel.
+@@ -220,6 +234,7 @@ struct ov5640_ctrls {
+ 	struct v4l2_ctrl *test_pattern;
+ 	struct v4l2_ctrl *hflip;
+ 	struct v4l2_ctrl *vflip;
++	struct v4l2_ctrl *link_freq;
+ };
+ 
+ struct ov5640_dev {
+@@ -928,6 +943,7 @@ static int ov5640_set_mipi_pclk(struct ov5640_dev *sensor,
+ 				unsigned long rate)
+ {
+ 	u8 bit_div, mipi_div, pclk_div, sclk_div, sclk2x_div, root_div;
++	unsigned int freq_index, i;
+ 	u8 prediv, mult, sysdiv;
+ 	unsigned long link_freq;
+ 	unsigned long sysclk;
+@@ -941,6 +957,19 @@ static int ov5640_set_mipi_pclk(struct ov5640_dev *sensor,
+ 	 * update the associated control.
+ 	 */
+ 	link_freq = rate / sensor->ep.bus.mipi_csi2.num_data_lanes / 2;
++	freq_index = OV5640_LINK_FREQS_NUM - 1;
++	for (i = 0; i < OV5640_LINK_FREQS_NUM; ++i) {
++		if (ov5640_link_freqs[i] == link_freq) {
++			freq_index = i;
++			break;
++		}
++	}
++	WARN_ONCE(i == OV5640_LINK_FREQS_NUM,
++		  "Link frequency %ld not supported", link_freq);
++
++	ret = __v4l2_ctrl_s_ctrl(sensor->ctrls.link_freq, freq_index);
++	if (ret < 0)
++		return ret;
+ 
+ 	/*
+ 	 * - mipi_div - Assumptions not supported by documentation
+@@ -2787,6 +2816,12 @@ static int ov5640_init_controls(struct ov5640_dev *sensor)
+ 				       V4L2_CID_POWER_LINE_FREQUENCY_AUTO, 0,
+ 				       V4L2_CID_POWER_LINE_FREQUENCY_50HZ);
+ 
++	ctrls->link_freq = v4l2_ctrl_new_int_menu(hdl, ops, V4L2_CID_LINK_FREQ,
++						  OV5640_LINK_FREQS_NUM - 1,
++						  0, ov5640_link_freqs);
++	if (ctrls->link_freq)
++		ctrls->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
++
+ 	if (hdl->error) {
+ 		ret = hdl->error;
+ 		goto free_ctrls;
 -- 
 2.28.0
 
