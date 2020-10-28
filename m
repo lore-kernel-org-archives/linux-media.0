@@ -2,154 +2,236 @@ Return-Path: <SRS0=8lr5=ED=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-	DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3ED0EC55179
-	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 22:36:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD456C4363A
+	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 22:57:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DDDA020747
-	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 22:36:56 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="G+Vy7vW9"
+	by mail.kernel.org (Postfix) with ESMTP id 5F3D72076B
+	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 22:57:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388462AbgJ1Wg4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Oct 2020 18:36:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56872 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388430AbgJ1Wgy (ORCPT
+        id S2389933AbgJ1W5z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Oct 2020 18:57:55 -0400
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:34999 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389866AbgJ1W51 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:36:54 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D09C0613CF
-        for <linux-media@vger.kernel.org>; Wed, 28 Oct 2020 15:36:53 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id v19so1138049edx.9
-        for <linux-media@vger.kernel.org>; Wed, 28 Oct 2020 15:36:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xht2uNZAIX5U2P4vlg3049+636CJvqI/it3IYYCQ9uQ=;
-        b=G+Vy7vW9jYQ4G4gsGIjnfxrI8tXAnoX2ZcNMsN3La8GReilyCGiagAkc6vFnavE4qH
-         SaLmg88oUtB8v0TWekXEDfpTabMzkF2kKYvOljmZRg5ogaxaaqHBorI+0MUJBQbFptTo
-         VoWyZK6iam2cE5+Xy7kMj0IkVJrivgMYdUb/8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xht2uNZAIX5U2P4vlg3049+636CJvqI/it3IYYCQ9uQ=;
-        b=tQ7/y3xl+onM7MyCEoCNJVFLOIZA6/w2bO5OhClyJUZeu8Vk8DRXXZ37zMVEL0IIhC
-         euKy7OydcCgHE4znR74ltJjXo88+KObk7vbZAbrf0KovYfxdhw5uwwmqE/ZFsgEw+qHQ
-         aHQ8IZiBwRcbX8WJhEzKThoYJVAFCkupY98GzH5Z4n1GMgBGNTu83a05Vf6j/NrLGzYX
-         7uEz7g78dwMBqCQg2mLOyi33EjNSNsw2uMqOv8279B0FA+GfYjcKh12sBZqDzvLgFXx7
-         shWj4cjqSuD5Oy+IPBQIaBZR89tGAT8VF5I3O7lKgALcBJ48nCGxXD5br9QwIbw64esN
-         7ruQ==
-X-Gm-Message-State: AOAM533q144F85ty5oZP6T1c3BuBF+fPKod3UJBd7hdmKsAzB1C8p5CQ
-        mnVTg25IX4+rKUo2g2pvv+05GCJVln5ufPded6RojhI9rPd1/stOmVQ=
-X-Google-Smtp-Source: ABdhPJx/XXP2+RVZr9d4sVSYyekwdrWCYrTf38pryUR03VODnNlT+tSmnKvXeHXqafI1rFC/yjZ6PA9TtiQkRYq5iV0=
-X-Received: by 2002:adf:d4ce:: with SMTP id w14mr9747522wrk.142.1603897907527;
- Wed, 28 Oct 2020 08:11:47 -0700 (PDT)
+        Wed, 28 Oct 2020 18:57:27 -0400
+X-Originating-IP: 2.224.242.101
+Received: from uno.lan (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 295966000C;
+        Wed, 28 Oct 2020 22:57:23 +0000 (UTC)
+From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
+To:     hugues.fruchet@st.com, tomi.valkeinen@ti.com,
+        sam@elite-embedded.com
+Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>, slongerbeam@gmail.com,
+        linux-media@vger.kernel.org
+Subject: [RFC 2/3] media: i2c: ov5640: Rework CSI-2 clock tree
+Date:   Wed, 28 Oct 2020 23:57:05 +0100
+Message-Id: <20201028225706.110078-3-jacopo+renesas@jmondi.org>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20201028225706.110078-1-jacopo+renesas@jmondi.org>
+References: <20201028225706.110078-1-jacopo+renesas@jmondi.org>
 MIME-Version: 1.0
-References: <20201022133753.310506-1-ribalda@chromium.org> <20201022133753.310506-7-ribalda@chromium.org>
-In-Reply-To: <20201022133753.310506-7-ribalda@chromium.org>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 28 Oct 2020 16:11:36 +0100
-Message-ID: <CAMrC3Ht49TtRaGs7RVH0HmzdgHEFUq_QdOyA15XWtDO01J4_EA@mail.gmail.com>
-Subject: Re: [PATCH 6/6] media: uvcvideo: Handle IRQs from the privacy_pin
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Tomasz Figa <tfiga@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi
+Re-work the ov5640_set_mipi_pclk() function to calculate the
+SYSCLK function based on the CSI-2 link frequency.
 
+Take into account and more clearly document the clock tree constraints
+reported in the PLL diagrams. Most values are still fixed and only tested
+with 16bpp YUYV formats with a 2 lanes CSI-2 setup.
 
-On Thu, Oct 22, 2020 at 3:38 PM Ricardo Ribalda <ribalda@chromium.org> wrote:
->
-> If the privacy pin produces an IRQ, read the gpio and notify userspace
-> via an event.
->
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
->  drivers/media/usb/uvc/uvc_ctrl.c   |  3 +++
->  drivers/media/usb/uvc/uvc_driver.c | 30 ++++++++++++++++++++++++++++++
->  2 files changed, 33 insertions(+)
->
-> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-> index 3a49a1326a90..00c41cba0f68 100644
-> --- a/drivers/media/usb/uvc/uvc_ctrl.c
-> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
-> @@ -1346,6 +1346,9 @@ static void uvc_ctrl_status_event_work(struct work_struct *work)
->
->         mutex_unlock(&chain->ctrl_mutex);
->
-> +       if (!w->urb)
-> +               return;
-> +
->         /* Resubmit the URB. */
->         w->urb->interval = dev->int_ep->desc.bInterval;
->         ret = usb_submit_urb(w->urb, GFP_KERNEL);
-> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> index 180e503e900f..d1260d131bd8 100644
-> --- a/drivers/media/usb/uvc/uvc_driver.c
-> +++ b/drivers/media/usb/uvc/uvc_driver.c
-> @@ -1460,6 +1460,25 @@ static int uvc_gpio_get_info(struct uvc_entity *entity, u8 cs, u8 *caps)
->         return 0;
->  }
->
-> +static irqreturn_t uvc_privacy_gpio_irq(int irq, void *data)
-> +{
-> +       struct uvc_device *dev = data;
-> +       struct uvc_video_chain *chain;
-> +       struct uvc_entity *term;
-> +       u8 value;
-> +
-> +       list_for_each_entry(chain, &dev->chains, list) {
-> +               list_for_each_entry(term, &dev->entities, list) {
-> +                       if (UVC_ENTITY_TYPE(term) == UVC_GPIO_UNIT) {
-> +                               value = gpiod_get_value(term->gpio.gpio_privacy);
-> +                               uvc_ctrl_status_event(NULL, chain, term->controls, &value);
-> +                       }
-> +               }
-> +       }
-> +
-> +       return IRQ_HANDLED;
-> +}
-> +
->  static int uvc_parse_gpio(struct uvc_device *dev)
->  {
->         struct uvc_entity *unit;
-> @@ -1490,6 +1509,17 @@ static int uvc_parse_gpio(struct uvc_device *dev)
->
->         list_add_tail(&unit->list, &dev->entities);
->
-> +       irq = gpiod_to_irq(gpio_privacy);
-> +
-> +       if (irq == -EPROBE_DEFER)
-> +               return -EPROBE_DEFER;
-> +
-> +       if (irq < 0)
-> +               return 0;
-> +
-> +       ret = devm_request_irq(&dev->udev->dev, irq, uvc_privacy_gpio_irq, IRQF_SHARED,
-> +                              "uvc_privacy_gpio", dev);
+Tested by capturing and validating images in all the sensor supported
+resolutions except full resolution 2592x1944.
 
-Here it should say IRQF_TRIGGER_FALLING | IRQF_TRIGGER_RISING instead
-of IRQF_SHARED.
+Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+---
+ drivers/media/i2c/ov5640.c | 125 ++++++++++++++++++++++---------------
+ 1 file changed, 75 insertions(+), 50 deletions(-)
 
-I will fix that on v2,
+diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+index 117ac22683ad..236c684ca20b 100644
+--- a/drivers/media/i2c/ov5640.c
++++ b/drivers/media/i2c/ov5640.c
+@@ -88,6 +88,7 @@
+ #define OV5640_REG_POLARITY_CTRL00	0x4740
+ #define OV5640_REG_MIPI_CTRL00		0x4800
+ #define OV5640_REG_DEBUG_MODE		0x4814
++#define OV5640_REG_PCLK_PERIOD		0x4837
+ #define OV5640_REG_ISP_FORMAT_MUX_CTRL	0x501f
+ #define OV5640_REG_PRE_ISP_TEST_SET1	0x503d
+ #define OV5640_REG_SDE_CTRL0		0x5580
+@@ -919,67 +920,88 @@ static unsigned long ov5640_calc_sys_clk(struct ov5640_dev *sensor,
+ /*
+  * ov5640_set_mipi_pclk() - Calculate the clock tree configuration values
+  *			    for the MIPI CSI-2 output.
+- *
+- * @rate: The requested bandwidth per lane in bytes per second.
+- *	  'Bandwidth Per Lane' is calculated as:
+- *	  bpl = HTOT * VTOT * FPS * bpp / num_lanes;
+- *
+- * This function use the requested bandwidth to calculate:
+- * - sample_rate = bpl / (bpp / num_lanes);
+- *	         = bpl / (PLL_RDIV * BIT_DIV * PCLK_DIV * MIPI_DIV / num_lanes);
+- *
+- * - mipi_sclk   = bpl / MIPI_DIV / 2; ( / 2 is for CSI-2 DDR)
+- *
+- * with these fixed parameters:
+- *	PLL_RDIV	= 2;
+- *	BIT_DIVIDER	= 2; (MIPI_BIT_MODE == 8 ? 2 : 2,5);
+- *	PCLK_DIV	= 1;
+- *
+- * The MIPI clock generation differs for modes that use the scaler and modes
+- * that do not. In case the scaler is in use, the MIPI_SCLK generates the MIPI
+- * BIT CLk, and thus:
+- *
+- * - mipi_sclk = bpl / MIPI_DIV / 2;
+- *   MIPI_DIV = 1;
+- *
+- * For modes that do not go through the scaler, the MIPI BIT CLOCK is generated
+- * from the pixel clock, and thus:
+- *
+- * - sample_rate = bpl / (bpp / num_lanes);
+- *	         = bpl / (2 * 2 * 1 * MIPI_DIV / num_lanes);
+- *		 = bpl / (4 * MIPI_DIV / num_lanes);
+- * - MIPI_DIV	 = bpp / (4 * num_lanes);
++ * @rate: The requested bitrate in bits per second.
+  *
+  * FIXME: this have been tested with 16bpp and 2 lanes setup only.
+- * MIPI_DIV is fixed to value 2, but it -might- be changed according to the
+- * above formula for setups with 1 lane or image formats with different bpp.
+- *
+- * FIXME: this deviates from the sensor manual documentation which is quite
+- * thin on the MIPI clock tree generation part.
+  */
+ static int ov5640_set_mipi_pclk(struct ov5640_dev *sensor,
+ 				unsigned long rate)
+ {
+-	const struct ov5640_mode_info *mode = sensor->current_mode;
++	u8 bit_div, mipi_div, pclk_div, sclk_div, sclk2x_div, root_div;
+ 	u8 prediv, mult, sysdiv;
+-	u8 mipi_div;
++	unsigned long link_freq;
++	unsigned long sysclk;
++	u8 pclk_period;
+ 	int ret;
 
-> +
->         return 0;
->  }
->
-> --
-> 2.29.0.rc1.297.gfa9743e501-goog
->
+ 	/*
+-	 * 1280x720 is reported to use 'SUBSAMPLING' only,
+-	 * but according to the sensor manual it goes through the
+-	 * scaler before subsampling.
++	 * The 'rate' parameter is the bitrate = VTOT * HTOT * FPS * BPP
++	 *
++	 * Adjust it to represent the CSI-2 link frequency and use it to
++	 * update the associated control.
+ 	 */
+-	if (mode->dn_mode == SCALING ||
+-	   (mode->id == OV5640_MODE_720P_1280_720))
+-		mipi_div = OV5640_MIPI_DIV_SCLK;
++	link_freq = rate / sensor->ep.bus.mipi_csi2.num_data_lanes / 2;
++
++	/*
++	 * - mipi_div - Assumptions not supported by documentation
++	 *
++	 *   The MIPI clock generation differs for modes that use the scaler and
++	 *   modes that do not.
++	 */
++	if (sensor->current_mode->dn_mode == SCALING)
++		mipi_div = 1;
+ 	else
+-		mipi_div = OV5640_MIPI_DIV_PCLK;
++		mipi_div = 2;
++
++	sysclk = link_freq * 2 * mipi_div;
++	ov5640_calc_sys_clk(sensor, sysclk, &prediv, &mult, &sysdiv);
++
++	/*
++	 * Adjust PLL parameters to maintain the MIPI_SCLK-to-PCLK ratio;
++	 *
++	 * - root_div = 2 (fixed)
++	 * - bit_div : MIPI 8-bit = 2
++	 *	       MIPI 10-bit = 2,5
++	 * - pclk_div = 1 (fixed)
++	 * - pll_div  = (2 lanes ? mipi_div : 2 * mipi_div)
++	 *   2 lanes: MIPI_SCLK = (4 or 5) * PCLK
++	 *   1 lanes: MIPI_SCLK = (8 or 10) * PCLK
++	 *
++	 * TODO: support 10-bit formats
++	 * TODO: support 1 lane
++	 */
++	root_div = OV5640_PLL_CTRL3_PLL_ROOT_DIV_2;
++	bit_div =  OV5640_PLL_CTRL0_MIPI_MODE_8BIT;
++	pclk_div = OV5640_PLL_SYS_ROOT_DIVIDER_BYPASS;
+
+-	ov5640_calc_sys_clk(sensor, rate, &prediv, &mult, &sysdiv);
++	/*
++	 * Scaler clock:
++	 * - YUV: PCLK >= 2 * SCLK
++	 * - RAW or JPEG: PCLK >= SCLK
++	 * - sclk2x_div = sclk_div / 2
++	 *
++	 * TODO: add support for RAW and JPEG modes. To maintain the
++	 * SCLK to PCLK ratio, the sclk_div should probably be
++	 * adjusted.
++	 */
++	sclk_div = ilog2(OV5640_SCLK_ROOT_DIV);
++	sclk2x_div = ilog2(OV5640_SCLK2X_ROOT_DIV);
++
++	/*
++	 * This is called pclk period, but it actually represents the
++	 * sample period expressed in ns with 1-bit decimal (0x01=0.5ns).
++	 *
++	 * - pclk = link_freq * 2 * lanes / bpp
++	 *
++	 * TODO: support 1 data lane; support modes with bpp != 16.
++	 */
++	pclk_period = 2000000000UL / (link_freq / 2);
+
++	/* Program the clock tree registers. */
+ 	ret = ov5640_mod_reg(sensor, OV5640_REG_SC_PLL_CTRL0,
+-			     0x0f, OV5640_PLL_CTRL0_MIPI_MODE_8BIT);
++			     0x0f, bit_div);
++	if (ret)
++		return ret;
+
+ 	ret = ov5640_mod_reg(sensor, OV5640_REG_SC_PLL_CTRL1,
+ 			     0xff, sysdiv << 4 | mipi_div);
+@@ -991,12 +1013,16 @@ static int ov5640_set_mipi_pclk(struct ov5640_dev *sensor,
+ 		return ret;
+
+ 	ret = ov5640_mod_reg(sensor, OV5640_REG_SC_PLL_CTRL3,
+-			     0x1f, OV5640_PLL_CTRL3_PLL_ROOT_DIV_2 | prediv);
++			     0x1f, root_div | prediv);
++	if (ret)
++		return ret;
++
++	ret = ov5640_mod_reg(sensor, OV5640_REG_SYS_ROOT_DIVIDER, 0x3f,
++			      (pclk_div << 4) | (sclk2x_div << 2) | sclk_div);
+ 	if (ret)
+ 		return ret;
+
+-	return ov5640_mod_reg(sensor, OV5640_REG_SYS_ROOT_DIVIDER,
+-			      0x30, OV5640_PLL_SYS_ROOT_DIVIDER_BYPASS);
++	return ov5640_write_reg(sensor, OV5640_REG_PCLK_PERIOD, pclk_period);
+ }
+
+ static unsigned long ov5640_calc_pclk(struct ov5640_dev *sensor,
+@@ -1775,7 +1801,6 @@ static int ov5640_set_mode(struct ov5640_dev *sensor)
+ 	 */
+ 	rate = ov5640_calc_pixel_rate(sensor) * 16;
+ 	if (sensor->ep.bus_type == V4L2_MBUS_CSI2_DPHY) {
+-		rate = rate / sensor->ep.bus.mipi_csi2.num_data_lanes;
+ 		ret = ov5640_set_mipi_pclk(sensor, rate);
+ 	} else {
+ 		rate = rate / sensor->ep.bus.parallel.bus_width;
+--
+2.28.0
+
