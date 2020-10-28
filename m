@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06F0AC61DD8
-	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 01:23:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60868C5517A
+	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 01:23:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B0D9D20796
-	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 01:23:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1A17920791
+	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 01:23:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732968AbgJ2BXY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Oct 2020 21:23:24 -0400
-Received: from mx2.suse.de ([195.135.220.15]:48074 "EHLO mx2.suse.de"
+        id S1729805AbgJ2BXZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Oct 2020 21:23:25 -0400
+Received: from mx2.suse.de ([195.135.220.15]:47946 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729809AbgJ1WDo (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:03:44 -0400
+        id S1729806AbgJ1WDn (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:03:43 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 22428B91A;
-        Wed, 28 Oct 2020 19:35:29 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id BFC24B18A;
+        Wed, 28 Oct 2020 19:35:24 +0000 (UTC)
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
         airlied@linux.ie, daniel@ffwll.ch, sam@ravnborg.org,
@@ -50,9 +50,9 @@ Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
         linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
         Thomas Zimmermann <tzimmermann@suse.de>,
         Daniel Vetter <daniel.vetter@ffwll.ch>
-Subject: [PATCH v6 07/10] drm/gem: Update internal GEM vmap/vunmap interfaces to use struct dma_buf_map
-Date:   Wed, 28 Oct 2020 20:35:18 +0100
-Message-Id: <20201028193521.2489-8-tzimmermann@suse.de>
+Subject: [PATCH v6 01/10] drm/vram-helper: Remove invariant parameters from internal kmap function
+Date:   Wed, 28 Oct 2020 20:35:12 +0100
+Message-Id: <20201028193521.2489-2-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.29.0
 In-Reply-To: <20201028193521.2489-1-tzimmermann@suse.de>
 References: <20201028193521.2489-1-tzimmermann@suse.de>
@@ -63,182 +63,69 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-GEM's vmap and vunmap interfaces now wrap memory pointers in struct
-dma_buf_map.
+The parameters map and is_iomem are always of the same value. Removed them
+to prepares the function for conversion to struct dma_buf_map.
+
+v4:
+	* don't check for !kmap->virtual; will always be false
 
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Reviewed-by: Christian König <christian.koenig@amd.com>
 Tested-by: Sam Ravnborg <sam@ravnborg.org>
 ---
- drivers/gpu/drm/drm_client.c   | 18 +++++++++++-------
- drivers/gpu/drm/drm_gem.c      | 26 +++++++++++++-------------
- drivers/gpu/drm/drm_internal.h |  5 +++--
- drivers/gpu/drm/drm_prime.c    | 14 ++++----------
- 4 files changed, 31 insertions(+), 32 deletions(-)
+ drivers/gpu/drm/drm_gem_vram_helper.c | 18 ++++--------------
+ 1 file changed, 4 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_client.c b/drivers/gpu/drm/drm_client.c
-index 495f47d23d87..ac0082bed966 100644
---- a/drivers/gpu/drm/drm_client.c
-+++ b/drivers/gpu/drm/drm_client.c
-@@ -3,6 +3,7 @@
-  * Copyright 2018 Noralf Trønnes
-  */
- 
-+#include <linux/dma-buf-map.h>
- #include <linux/list.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
-@@ -304,7 +305,8 @@ drm_client_buffer_create(struct drm_client_dev *client, u32 width, u32 height, u
-  */
- void *drm_client_buffer_vmap(struct drm_client_buffer *buffer)
- {
--	void *vaddr;
-+	struct dma_buf_map map;
-+	int ret;
- 
- 	if (buffer->vaddr)
- 		return buffer->vaddr;
-@@ -317,13 +319,13 @@ void *drm_client_buffer_vmap(struct drm_client_buffer *buffer)
- 	 * fd_install step out of the driver backend hooks, to make that
- 	 * final step optional for internal users.
- 	 */
--	vaddr = drm_gem_vmap(buffer->gem);
--	if (IS_ERR(vaddr))
--		return vaddr;
-+	ret = drm_gem_vmap(buffer->gem, &map);
-+	if (ret)
-+		return ERR_PTR(ret);
- 
--	buffer->vaddr = vaddr;
-+	buffer->vaddr = map.vaddr;
- 
--	return vaddr;
-+	return map.vaddr;
+diff --git a/drivers/gpu/drm/drm_gem_vram_helper.c b/drivers/gpu/drm/drm_gem_vram_helper.c
+index 9da823eb0edd..f445b84c43c4 100644
+--- a/drivers/gpu/drm/drm_gem_vram_helper.c
++++ b/drivers/gpu/drm/drm_gem_vram_helper.c
+@@ -379,32 +379,22 @@ int drm_gem_vram_unpin(struct drm_gem_vram_object *gbo)
  }
- EXPORT_SYMBOL(drm_client_buffer_vmap);
+ EXPORT_SYMBOL(drm_gem_vram_unpin);
  
-@@ -337,7 +339,9 @@ EXPORT_SYMBOL(drm_client_buffer_vmap);
-  */
- void drm_client_buffer_vunmap(struct drm_client_buffer *buffer)
+-static void *drm_gem_vram_kmap_locked(struct drm_gem_vram_object *gbo,
+-				      bool map, bool *is_iomem)
++static void *drm_gem_vram_kmap_locked(struct drm_gem_vram_object *gbo)
  {
--	drm_gem_vunmap(buffer->gem, buffer->vaddr);
-+	struct dma_buf_map map = DMA_BUF_MAP_INIT_VADDR(buffer->vaddr);
-+
-+	drm_gem_vunmap(buffer->gem, &map);
- 	buffer->vaddr = NULL;
- }
- EXPORT_SYMBOL(drm_client_buffer_vunmap);
-diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
-index a89ad4570e3c..4d5fff4bd821 100644
---- a/drivers/gpu/drm/drm_gem.c
-+++ b/drivers/gpu/drm/drm_gem.c
-@@ -1206,32 +1206,32 @@ void drm_gem_unpin(struct drm_gem_object *obj)
- 		obj->funcs->unpin(obj);
- }
- 
--void *drm_gem_vmap(struct drm_gem_object *obj)
-+int drm_gem_vmap(struct drm_gem_object *obj, struct dma_buf_map *map)
- {
--	struct dma_buf_map map;
  	int ret;
+ 	struct ttm_bo_kmap_obj *kmap = &gbo->kmap;
++	bool is_iomem;
  
- 	if (!obj->funcs->vmap)
--		return ERR_PTR(-EOPNOTSUPP);
-+		return -EOPNOTSUPP;
+ 	if (gbo->kmap_use_count > 0)
+ 		goto out;
  
--	ret = obj->funcs->vmap(obj, &map);
-+	ret = obj->funcs->vmap(obj, map);
+-	if (kmap->virtual || !map)
+-		goto out;
+-
+ 	ret = ttm_bo_kmap(&gbo->bo, 0, gbo->bo.num_pages, kmap);
  	if (ret)
--		return ERR_PTR(ret);
--	else if (dma_buf_map_is_null(&map))
--		return ERR_PTR(-ENOMEM);
-+		return ret;
-+	else if (dma_buf_map_is_null(map))
-+		return -ENOMEM;
+ 		return ERR_PTR(ret);
  
--	return map.vaddr;
-+	return 0;
+ out:
+-	if (!kmap->virtual) {
+-		if (is_iomem)
+-			*is_iomem = false;
+-		return NULL; /* not mapped; don't increment ref */
+-	}
+ 	++gbo->kmap_use_count;
+-	if (is_iomem)
+-		return ttm_kmap_obj_virtual(kmap, is_iomem);
+-	return kmap->virtual;
++	return ttm_kmap_obj_virtual(kmap, &is_iomem);
  }
  
--void drm_gem_vunmap(struct drm_gem_object *obj, void *vaddr)
-+void drm_gem_vunmap(struct drm_gem_object *obj, struct dma_buf_map *map)
- {
--	struct dma_buf_map map = DMA_BUF_MAP_INIT_VADDR(vaddr);
--
--	if (!vaddr)
-+	if (dma_buf_map_is_null(map))
- 		return;
- 
- 	if (obj->funcs->vunmap)
--		obj->funcs->vunmap(obj, &map);
-+		obj->funcs->vunmap(obj, map);
-+
-+	/* Always set the mapping to NULL. Callers may rely on this. */
-+	dma_buf_map_clear(map);
- }
- 
- /**
-diff --git a/drivers/gpu/drm/drm_internal.h b/drivers/gpu/drm/drm_internal.h
-index 2bdac3557765..81d386b5b92a 100644
---- a/drivers/gpu/drm/drm_internal.h
-+++ b/drivers/gpu/drm/drm_internal.h
-@@ -33,6 +33,7 @@
- 
- struct dentry;
- struct dma_buf;
-+struct dma_buf_map;
- struct drm_connector;
- struct drm_crtc;
- struct drm_framebuffer;
-@@ -187,8 +188,8 @@ void drm_gem_print_info(struct drm_printer *p, unsigned int indent,
- 
- int drm_gem_pin(struct drm_gem_object *obj);
- void drm_gem_unpin(struct drm_gem_object *obj);
--void *drm_gem_vmap(struct drm_gem_object *obj);
--void drm_gem_vunmap(struct drm_gem_object *obj, void *vaddr);
-+int drm_gem_vmap(struct drm_gem_object *obj, struct dma_buf_map *map);
-+void drm_gem_vunmap(struct drm_gem_object *obj, struct dma_buf_map *map);
- 
- /* drm_debugfs.c drm_debugfs_crc.c */
- #if defined(CONFIG_DEBUG_FS)
-diff --git a/drivers/gpu/drm/drm_prime.c b/drivers/gpu/drm/drm_prime.c
-index 89e2a2496734..cb8fbeeb731b 100644
---- a/drivers/gpu/drm/drm_prime.c
-+++ b/drivers/gpu/drm/drm_prime.c
-@@ -667,21 +667,15 @@ EXPORT_SYMBOL(drm_gem_unmap_dma_buf);
-  *
-  * Sets up a kernel virtual mapping. This can be used as the &dma_buf_ops.vmap
-  * callback. Calls into &drm_gem_object_funcs.vmap for device specific handling.
-+ * The kernel virtual address is returned in map.
-  *
-- * Returns the kernel virtual address or NULL on failure.
-+ * Returns 0 on success or a negative errno code otherwise.
-  */
- int drm_gem_dmabuf_vmap(struct dma_buf *dma_buf, struct dma_buf_map *map)
- {
- 	struct drm_gem_object *obj = dma_buf->priv;
--	void *vaddr;
- 
--	vaddr = drm_gem_vmap(obj);
--	if (IS_ERR(vaddr))
--		return PTR_ERR(vaddr);
--
--	dma_buf_map_set_vaddr(map, vaddr);
--
--	return 0;
-+	return drm_gem_vmap(obj, map);
- }
- EXPORT_SYMBOL(drm_gem_dmabuf_vmap);
- 
-@@ -697,7 +691,7 @@ void drm_gem_dmabuf_vunmap(struct dma_buf *dma_buf, struct dma_buf_map *map)
- {
- 	struct drm_gem_object *obj = dma_buf->priv;
- 
--	drm_gem_vunmap(obj, map->vaddr);
-+	drm_gem_vunmap(obj, map);
- }
- EXPORT_SYMBOL(drm_gem_dmabuf_vunmap);
- 
+ static void drm_gem_vram_kunmap_locked(struct drm_gem_vram_object *gbo)
+@@ -449,7 +439,7 @@ void *drm_gem_vram_vmap(struct drm_gem_vram_object *gbo)
+ 	ret = drm_gem_vram_pin_locked(gbo, 0);
+ 	if (ret)
+ 		goto err_ttm_bo_unreserve;
+-	base = drm_gem_vram_kmap_locked(gbo, true, NULL);
++	base = drm_gem_vram_kmap_locked(gbo);
+ 	if (IS_ERR(base)) {
+ 		ret = PTR_ERR(base);
+ 		goto err_drm_gem_vram_unpin_locked;
 -- 
 2.29.0
 
