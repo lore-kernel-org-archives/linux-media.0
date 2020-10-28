@@ -2,196 +2,152 @@ Return-Path: <SRS0=8lr5=ED=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DD2BC388F7
-	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 23:00:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EBC3C55179
+	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 23:05:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8FB142076A
-	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 23:00:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D918220759
+	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 23:05:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="BYAiD8gd"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="gFRUCQCF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731423AbgJ1XAO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Oct 2020 19:00:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60530 "EHLO
+        id S2387530AbgJ1XFD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Oct 2020 19:05:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387732AbgJ1W6l (ORCPT
+        with ESMTP id S2390048AbgJ1XE7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:58:41 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211A8C0613CF
-        for <linux-media@vger.kernel.org>; Wed, 28 Oct 2020 15:58:41 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id d24so993099ljg.10
-        for <linux-media@vger.kernel.org>; Wed, 28 Oct 2020 15:58:41 -0700 (PDT)
+        Wed, 28 Oct 2020 19:04:59 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2ABC0613CF
+        for <linux-media@vger.kernel.org>; Wed, 28 Oct 2020 16:04:59 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id a7so886897lfk.9
+        for <linux-media@vger.kernel.org>; Wed, 28 Oct 2020 16:04:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=gi/uzMl9VgWE8vfQyPlznR/izU6XqxRO/ItVHtgT6AU=;
-        b=BYAiD8gd7/RdlmG6htb6N56H/X78L1jnBPlSQsOiLfJ8Xuehl4KVRK2+nfZDbrQSNN
-         6HeXnW8sOhQe/KPg+0DEYbganV9P8xDkB3E96+4qLtkxzS5+sJuPHrrPGOCni+MM7t2u
-         rhSDKTicAJ+0dla6vBFQ0SgJNdOuJRhKmV0/A=
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6y4QOceXe8zRQKZs06ORTkquPOtHQn77ARvbGZP9r1M=;
+        b=gFRUCQCFuTR8+JtdmcXcAlK5X7E61XmvvyAGA/K18mnTt93AI2o+wSqfYUI4n8Y0lU
+         +48KACrQVO3Qw2aB5MwS/gPxeoLzJZw2XI2pEtuKlzoaB/ELqONtZsDRg2xOHXNYJiB6
+         ur5YGrTWS0kXoutcPvKSjtwakbK/45cyXDu+4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=gi/uzMl9VgWE8vfQyPlznR/izU6XqxRO/ItVHtgT6AU=;
-        b=GwHiDEIPfH3nEZb2iZ7JXQ2H6VBMKkUcnxN8FGbc9a1IBBeSTC0njjwAf+DR+NqYTu
-         XwAxITo7KAagtkmBA3JnmNT2v1nc+JmSyf+X3M6xMrQ/05AyYJXt1DKlPAIXz9Zs/nkF
-         Ohymq9ZvCI4qLkHIBkl6KXewXVBhvc2pgQzrrygHH5kIxQsKgkHyDZbdpMGigaOSxIYG
-         aPXo7PE0rCoqQKYPqIIFVw3E6ZweZZvWfiCO7dJawKkJ7j/0QbejEUzgry0ZJDwsq71Z
-         RytKw4DAZ4dbizr90+PWEexVp1KQ9AGBwych1KflR1K5+L8y4T1tSKGIQpTffUDpH9TW
-         cZ5g==
-X-Gm-Message-State: AOAM533tkhV41phq1hKjdsxvd68bgEtQHOtoxI552RftHnytVofRlYph
-        XdnK7tzY0CSjGqdmhtpQ0urlQ8LHrRYREmVg
-X-Google-Smtp-Source: ABdhPJyOzC7JNC7emtn0O/VIBDwemcIbpeRQF/UNhWe4y22pcew6DFyQi941pJPlBIMnwsDLyrEplA==
-X-Received: by 2002:a5d:54c8:: with SMTP id x8mr7620352wrv.286.1603880268229;
-        Wed, 28 Oct 2020 03:17:48 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id q12sm3287974wrx.13.2020.10.28.03.17.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2020 03:17:47 -0700 (PDT)
-Date:   Wed, 28 Oct 2020 11:17:44 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Boris Brezillon <boris.brezillon@collabora.com>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Inki Dae <inki.dae@samsung.com>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Rob Herring <robh@kernel.org>, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, stable@vger.kernel.org,
-        piotr.oniszczuk@gmail.com, Daniel Vetter <daniel.vetter@intel.com>
-Subject: Re: [PATCH] drm/shme-helpers: Fix dma_buf_mmap forwarding bug
-Message-ID: <20201028101744.GV401619@phenom.ffwll.local>
-References: <20201027214922.3566743-1-daniel.vetter@ffwll.ch>
- <20201028094415.7a7782b8@collabora.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6y4QOceXe8zRQKZs06ORTkquPOtHQn77ARvbGZP9r1M=;
+        b=mfHgDNfWxWbusafwhwMF6z53njJ2W3IdVu3JANX4d6fl7/TQZbxtESSQYwq3beMyHF
+         NsXt9GmB1ndcnR9q3ns0pCrlBAezNtxLVDItEnAFbfWTVlnWQBmmbSH/nuhFNpf0ZwBk
+         Zzc7aQavYcvRWN9l8jay05LFFckfBKtq/a4tpLBbzuCjjdUxj99y7w548XCnvacZJSaB
+         6gXQu1BTthRzEfcmaZmqbH8eIRVnj9m3m3pPgqxNXdRhgJ90JWd9vuPQHTrNTUUHQTMN
+         5Pt8nobF7I11Df3y3cyMCxqmhJkCsuBRmkwH1wJZTKBgTspKjFQoaNEc1iEAAMzl+27o
+         W2jw==
+X-Gm-Message-State: AOAM5312DCjKQHIGPa50mHVOSiqvwNaDwzliDsZrBo+xSWKAOTUHAGtY
+        j5wcSruiBQ4SCq7KeqTlqnptsnNpPBqV1w==
+X-Google-Smtp-Source: ABdhPJzPPkc9489U7NFWqV+uA8Og3GCnXRKnBTXmE8SkS20iK0uz9oZD+S/aSqbA0qwUPI/l/aJmwg==
+X-Received: by 2002:a17:907:2084:: with SMTP id pv4mr7534108ejb.315.1603886921540;
+        Wed, 28 Oct 2020 05:08:41 -0700 (PDT)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
+        by smtp.gmail.com with ESMTPSA id s12sm2796234edu.28.2020.10.28.05.08.40
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Oct 2020 05:08:40 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id t9so5380558wrq.11
+        for <linux-media@vger.kernel.org>; Wed, 28 Oct 2020 05:08:40 -0700 (PDT)
+X-Received: by 2002:adf:ab05:: with SMTP id q5mr8280571wrc.32.1603886919796;
+ Wed, 28 Oct 2020 05:08:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201028094415.7a7782b8@collabora.com>
-X-Operating-System: Linux phenom 5.7.0-1-amd64 
+References: <20201028091947.93097-1-krzk@kernel.org> <MWHPR11MB0046B799E9AD3648C6F67BFE87170@MWHPR11MB0046.namprd11.prod.outlook.com>
+ <CAJKOXPePfsRNZkY+L1XM3_iz6dMYFNZAJgrcut9JriuwYkKWsw@mail.gmail.com>
+ <CAJKOXPf6zhpu_3oQZ2bL_FnkBx7-NwH65N_OzVkH=Nh1bYkHxw@mail.gmail.com>
+ <20201028100311.GF26150@paasikivi.fi.intel.com> <CAJKOXPcjtZidY1prH1ZCj+i-SM1mhABGbS_6_g1cH5WSGVhOAA@mail.gmail.com>
+In-Reply-To: <CAJKOXPcjtZidY1prH1ZCj+i-SM1mhABGbS_6_g1cH5WSGVhOAA@mail.gmail.com>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Wed, 28 Oct 2020 13:08:28 +0100
+X-Gmail-Original-Message-ID: <CAAFQd5AwvuuxekSdDnHNB7KiC7+mHFisEkCW71F3XQMWaFqamw@mail.gmail.com>
+Message-ID: <CAAFQd5AwvuuxekSdDnHNB7KiC7+mHFisEkCW71F3XQMWaFqamw@mail.gmail.com>
+Subject: Re: [PATCH] media: i2c: imx258: correct mode to GBGB/RGRG
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Yeh, Andy" <andy.yeh@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jason Chen <jasonx.z.chen@intel.com>,
+        Alan Chiang <alanx.chiang@intel.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Oct 28, 2020 at 09:44:15AM +0100, Boris Brezillon wrote:
-> On Tue, 27 Oct 2020 22:49:22 +0100
-> Daniel Vetter <daniel.vetter@ffwll.ch> wrote:
-> 
-> > When we forward an mmap to the dma_buf exporter, they get to own
-> > everything. Unfortunately drm_gem_mmap_obj() overwrote
-> > vma->vm_private_data after the driver callback, wreaking the
-> > exporter complete. This was noticed because vb2_common_vm_close blew
-> > up on mali gpu with panfrost after commit 26d3ac3cb04d
-> > ("drm/shmem-helpers: Redirect mmap for imported dma-buf").
-> > 
-> > Unfortunately drm_gem_mmap_obj also acquires a surplus reference that
-> > we need to drop in shmem helpers, which is a bit of a mislayer
-> > situation. Maybe the entire dma_buf_mmap forwarding should be pulled
-> > into core gem code.
-> > 
-> > Note that the only two other drivers which forward mmap in their own
-> > code (etnaviv and exynos) get this somewhat right by overwriting the
-> > gem mmap code. But they seem to still have the leak. This might be a
-> > good excuse to move these drivers over to shmem helpers completely.
-> > 
-> > Note to stable team: There's a trivial context conflict with
-> > d693def4fd1c ("drm: Remove obsolete GEM and PRIME callbacks from
-> > struct drm_driver"). I'm assuming it's clear where to put the first
-> > hunk, otherwise I can send a 5.9 version of this.
-> > 
-> > Cc: Christian König <christian.koenig@amd.com>
-> > Cc: Sumit Semwal <sumit.semwal@linaro.org>
-> > Cc: Lucas Stach <l.stach@pengutronix.de>
-> > Cc: Russell King <linux+etnaviv@armlinux.org.uk>
-> > Cc: Christian Gmeiner <christian.gmeiner@gmail.com>
-> > Cc: Inki Dae <inki.dae@samsung.com>
-> > Cc: Joonyoung Shim <jy0922.shim@samsung.com>
-> > Cc: Seung-Woo Kim <sw0312.kim@samsung.com>
-> > Cc: Kyungmin Park <kyungmin.park@samsung.com>
-> > Fixes: 26d3ac3cb04d ("drm/shmem-helpers: Redirect mmap for imported dma-buf")
-> > Cc: Boris Brezillon <boris.brezillon@collabora.com>
-> 
-> Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
+On Wed, Oct 28, 2020 at 11:15 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>
+> On Wed, 28 Oct 2020 at 11:03, Sakari Ailus <sakari.ailus@linux.intel.com> wrote:
+> >
+> > On Wed, Oct 28, 2020 at 10:56:55AM +0100, Krzysztof Kozlowski wrote:
+> > > On Wed, 28 Oct 2020 at 10:45, Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> > > >
+> > > > On Wed, 28 Oct 2020 at 10:43, Yeh, Andy <andy.yeh@intel.com> wrote:
+> > > > >
+> > > > > But the sensor settings for the original submission is to output GRBG Bayer RAW.
+> > > > >
+> > > > > Regards, Andy
+> > > >
+> > > > No, not to my knowledge. There are no settings for color output
+> > > > because it is fixed to GBGB/RGRG. I was looking a lot into this driver
+> > > > (I have few other problems with it, already few other patches posted)
+> > > > and I could not find a setting for this in datasheet. If you know the
+> > > > setting for the other color - can you point me to it?
+> > >
+> > > And except the datasheet which mentions the specific format, the
+> > > testing confirms it. With original color the pictures are pink/purple.
+> > > With proper color, the pictures are correct (with more green color as
+> > > expected for bayer).
+> >
+> > Quoting the driver's start_streaming function:
+> >
+> >         /* Set Orientation be 180 degree */
+> >         ret = imx258_write_reg(imx258, REG_MIRROR_FLIP_CONTROL,
+> >                                IMX258_REG_VALUE_08BIT, REG_CONFIG_MIRROR_FLIP);
+>
+> I understand that you think it will replace the lines and columns and
+> the first line will be RG, instead of GB.... or actually BG because it
+> flips horizontal and vertical? So why does it not work?
 
-Patch pushed to drm-misc-fixes, thanks for taking a look.
--Daniel
+Any chance your SoC capture interface performs this flipping on its own as well?
 
-> 
-> > Cc: Thomas Zimmermann <tzimmermann@suse.de>
-> > Cc: Gerd Hoffmann <kraxel@redhat.com>
-> > Cc: Rob Herring <robh@kernel.org>
-> > Cc: dri-devel@lists.freedesktop.org
-> > Cc: linux-media@vger.kernel.org
-> > Cc: linaro-mm-sig@lists.linaro.org
-> > Cc: <stable@vger.kernel.org> # v5.9+
-> > Reported-and-tested-by: piotr.oniszczuk@gmail.com
-> > Cc: piotr.oniszczuk@gmail.com
-> > Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-> > ---
-> >  drivers/gpu/drm/drm_gem.c              | 4 ++--
-> >  drivers/gpu/drm/drm_gem_shmem_helper.c | 7 ++++++-
-> >  2 files changed, 8 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
-> > index 1da67d34e55d..d586068f5509 100644
-> > --- a/drivers/gpu/drm/drm_gem.c
-> > +++ b/drivers/gpu/drm/drm_gem.c
-> > @@ -1076,6 +1076,8 @@ int drm_gem_mmap_obj(struct drm_gem_object *obj, unsigned long obj_size,
-> >  	 */
-> >  	drm_gem_object_get(obj);
-> >  
-> > +	vma->vm_private_data = obj;
-> > +
-> >  	if (obj->funcs->mmap) {
-> >  		ret = obj->funcs->mmap(obj, vma);
-> >  		if (ret) {
-> > @@ -1096,8 +1098,6 @@ int drm_gem_mmap_obj(struct drm_gem_object *obj, unsigned long obj_size,
-> >  		vma->vm_page_prot = pgprot_decrypted(vma->vm_page_prot);
-> >  	}
-> >  
-> > -	vma->vm_private_data = obj;
-> > -
-> >  	return 0;
-> >  }
-> >  EXPORT_SYMBOL(drm_gem_mmap_obj);
-> > diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
-> > index fb11df7aced5..8233bda4692f 100644
-> > --- a/drivers/gpu/drm/drm_gem_shmem_helper.c
-> > +++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
-> > @@ -598,8 +598,13 @@ int drm_gem_shmem_mmap(struct drm_gem_object *obj, struct vm_area_struct *vma)
-> >  	/* Remove the fake offset */
-> >  	vma->vm_pgoff -= drm_vma_node_start(&obj->vma_node);
-> >  
-> > -	if (obj->import_attach)
-> > +	if (obj->import_attach) {
-> > +		/* Drop the reference drm_gem_mmap_obj() acquired.*/
-> > +		drm_gem_object_put(obj);
-> > +		vma->vm_private_data = NULL;
-> > +
-> >  		return dma_buf_mmap(obj->dma_buf, vma, 0);
-> > +	}
-> >  
-> >  	shmem = to_drm_gem_shmem_obj(obj);
-> >  
-> 
+>
+> BTW, this nicely points that the comment around
+> device_property_read_u32() for rotation is a little bit misleading :)
+>
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Are you referring to the comment below?
+
+/*
+* Check that the device is mounted upside down. The driver only
+* supports a single pixel order right now.
+*/
+ret = device_property_read_u32(&client->dev, "rotation", &val);
+if (ret || val != 180)
+    return -EINVAL;
+
+What's misleading about it?
+
+> >         if (ret) {
+> >                 dev_err(&client->dev, "%s failed to set orientation\n",
+> >                         __func__);
+> >                 return ret;
+> >         }
+> >
+> > Could it be you're taking pictures of pink objects? ;-)
+>
+> I can send a few sample pictures taken with GStreamer (RAW8, not
+> original RAW10)...
+>
+> Best regards,
+> Krzysztof
