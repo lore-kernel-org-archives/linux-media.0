@@ -2,57 +2,135 @@ Return-Path: <SRS0=8lr5=ED=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 629E1C55179
-	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 22:04:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4475DC55179
+	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 22:19:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 159F8246CD
-	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 22:04:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E7AA0206D9
+	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 22:19:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1603923557;
+	bh=QEXxMmSUj2Vd+E59vReAFx2mSILQlDhT0GF7L4nT79k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=RXZMz/lvGvyD3f+kZacaKhanFBxcu53CGG0p2wjK660klRMCGNeuKNvHjLX/g1ojQ
+	 lyaTKavV7Y6mXJ4nltQuKAo3BGv2KzRUArx7uwLqNVPGW1v5C/i+tjzUk/EZzjMIwm
+	 0InDLR55xcGWjOP3vcGjUmEp+3ZdCRxlzqReeSv0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729514AbgJ1WC3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Oct 2020 18:02:29 -0400
-Received: from retiisi.eu ([95.216.213.190]:47318 "EHLO hillosipuli.retiisi.eu"
+        id S1731813AbgJ1WTP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Oct 2020 18:19:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60504 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728094AbgJ1WC1 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:02:27 -0400
-Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 902B6634C8B
-        for <linux-media@vger.kernel.org>; Wed, 28 Oct 2020 12:10:28 +0200 (EET)
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Subject: [PATCH 1/1] imx258: Remove Jason Chen's e-mail
-Date:   Wed, 28 Oct 2020 12:05:20 +0200
-Message-Id: <20201028100520.16018-1-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.27.0
+        id S1731664AbgJ1WRk (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:17:40 -0400
+Received: from kernel.org (unknown [87.70.96.83])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 50EBD2465E;
+        Wed, 28 Oct 2020 08:47:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603874836;
+        bh=QEXxMmSUj2Vd+E59vReAFx2mSILQlDhT0GF7L4nT79k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qaRJrHspISAML2s3M6ow+As8fnofPQBijjHMbHMdR+I3658FQOTlnTwjnXNz0MlyX
+         aAw8A460MACJ1IDHW1x+02Uv9Atn0b3fP/Jb97ArZSIbrkmzQ92h9/ls1ePhoOhjJH
+         6jiwMskK6vWDnhTMrSRMXIc62N90Wg6wJ7a8TvRg=
+Date:   Wed, 28 Oct 2020 10:47:03 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-gpio@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-mm@kvack.org, alsa-devel@alsa-project.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: Re: [PATCH 1/8] mm: slab: provide krealloc_array()
+Message-ID: <20201028084703.GC1428094@kernel.org>
+References: <20201027121725.24660-1-brgl@bgdev.pl>
+ <20201027121725.24660-2-brgl@bgdev.pl>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201027121725.24660-2-brgl@bgdev.pl>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Remove Jason Chen's e-mail address for it no longer works.
+On Tue, Oct 27, 2020 at 01:17:18PM +0100, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> 
+> When allocating an array of elements, users should check for
+> multiplication overflow or preferably use one of the provided helpers
+> like: kmalloc_array().
+> 
+> There's no krealloc_array() counterpart but there are many users who use
+> regular krealloc() to reallocate arrays. Let's provide an actual
+> krealloc_array() implementation.
+> 
+> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> ---
+>  include/linux/slab.h | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/include/linux/slab.h b/include/linux/slab.h
+> index dd6897f62010..0e6683affee7 100644
+> --- a/include/linux/slab.h
+> +++ b/include/linux/slab.h
+> @@ -592,6 +592,17 @@ static inline void *kmalloc_array(size_t n, size_t size, gfp_t flags)
+>  	return __kmalloc(bytes, flags);
+>  }
+>  
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- drivers/media/i2c/imx258.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Can you please add kernel-doc here and a word or two about this function
+to Documentation/core-api/memory-allocation.rst?
 
-diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
-index ccb55fd1d506..df62c69a48c0 100644
---- a/drivers/media/i2c/imx258.c
-+++ b/drivers/media/i2c/imx258.c
-@@ -1305,6 +1305,6 @@ module_i2c_driver(imx258_i2c_driver);
- 
- MODULE_AUTHOR("Yeh, Andy <andy.yeh@intel.com>");
- MODULE_AUTHOR("Chiang, Alan");
--MODULE_AUTHOR("Chen, Jason <jasonx.z.chen@intel.com>");
-+MODULE_AUTHOR("Chen, Jason");
- MODULE_DESCRIPTION("Sony IMX258 sensor driver");
- MODULE_LICENSE("GPL v2");
+> +static __must_check inline void *
+> +krealloc_array(void *p, size_t new_n, size_t new_size, gfp_t flags)
+> +{
+> +	size_t bytes;
+> +
+> +	if (unlikely(check_mul_overflow(new_n, new_size, &bytes)))
+> +		return NULL;
+> +
+> +	return krealloc(p, bytes, flags);
+> +}
+> +
+>  /**
+>   * kcalloc - allocate memory for an array. The memory is set to zero.
+>   * @n: number of elements.
+> -- 
+> 2.29.1
+> 
+> 
+
 -- 
-2.27.0
-
+Sincerely yours,
+Mike.
