@@ -2,121 +2,100 @@ Return-Path: <SRS0=8lr5=ED=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08082C5DF9E
-	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 22:19:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AAE4C55179
+	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 22:31:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A0CE7206D9
-	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 22:19:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603923557;
-	bh=C+i9hSG3DC7PYTlPO4OOMAUq70uMqJhl4BFFF/S06X4=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=J8JD+3ciHSYwG7YR6RUrDlD4KtAa1B5qk0Q3jnmiqV07vV61ZuwH1vbTfo3S0UJT4
-	 QykPN+Dqyx3zpO2O+uZXMsKDzikfP6uE+YgOSxZ1JeCaEmvpD219nGaMKzk56ySd2C
-	 KUgGa0LPwoE6wnx5/EHMKRihK6MjCUXdTkJQ/nQw=
+	by mail.kernel.org (Postfix) with ESMTP id B68CE20725
+	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 22:31:17 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="DDXfpE9k"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731819AbgJ1WTQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Oct 2020 18:19:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60530 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731688AbgJ1WRl (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:17:41 -0400
-Received: from kozik-lap.proceq-device.com (unknown [194.230.155.184])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BF9FB2468F;
-        Wed, 28 Oct 2020 09:19:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603876799;
-        bh=C+i9hSG3DC7PYTlPO4OOMAUq70uMqJhl4BFFF/S06X4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=RM7TbMkLhzXq4/+CiVWwwhRX47sqvNzIlBi1osRLRkrdgFVTIQiFT+vkcSt9woh3O
-         Ty7Obt2tA3yjv9dw9ZlmRBw+nHfRwEr7EBWdhx9CLhGz8DDlk5YoPrgLhF45L43hYw
-         n2LfQopbnC1CEPTAuLhWEW71z6y2+RB30bqq+q/U=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Jason Chen <jasonx.z.chen@intel.com>,
-        Andy Yeh <andy.yeh@intel.com>,
-        Alan Chiang <alanx.chiang@intel.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH] media: i2c: imx258: correct mode to GBGB/RGRG
-Date:   Wed, 28 Oct 2020 10:19:47 +0100
-Message-Id: <20201028091947.93097-1-krzk@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        id S2387852AbgJ1WbQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Oct 2020 18:31:16 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:51808 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387861AbgJ1WbP (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:31:15 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 09SIgwps111356;
+        Wed, 28 Oct 2020 13:42:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1603910578;
+        bh=eUUQz9Q2QCafre6eevRBt7I6qddetRHPjoxk8mGd2wY=;
+        h=From:To:CC:Subject:Date;
+        b=DDXfpE9kd+hfsLt1+CIQFVs1tYkTPZEwwR/whhbsKkEKypWME8K4whVbOWNldKQOp
+         dKimbOY1wn3ieB8fJwMoWJmscTM7ob2NcXu0ZHmnCw/XPBKiecxHgANjRp+aUz7iZ5
+         yNZF6HiAA+EUCbsIg1l2aMiUWa2EBlyF0jOnt0I4=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 09SIgwG9106242
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 28 Oct 2020 13:42:58 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 28
+ Oct 2020 13:42:58 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Wed, 28 Oct 2020 13:42:58 -0500
+Received: from NiksLab.india.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 09SIgsuN094611;
+        Wed, 28 Oct 2020 13:42:55 -0500
+From:   Nikhil Devshatwar <nikhil.nd@ti.com>
+List-Id: <linux-firmware.lore.kernel.org>
+To:     <linux-firmware@kernel.org>, <linux-media@vger.kernel.org>
+CC:     Dan Murphy <dmurphy@ti.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Benoit Parrot <bparrot@ti.com>, Sekhar Nori <nsekhar@ti.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Nikhil Devshatwar <nikhil.nd@ti.com>
+Subject: [PATCH v2] vpdma: Move firmware to ti directory
+Date:   Thu, 29 Oct 2020 00:12:49 +0530
+Message-ID: <20201028184249.11293-1-nikhil.nd@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The IMX258 sensor outputs pixels in GBGB/RGRG mode.  This is described
-explicitly in datasheet and was actually mentioned in a comment inside
-the driver.  Using other - wrong mode - leads to pinkish pictures.
+Current ti-connectivity location for the firmware is not the
+correct place. It has all the wireless connectivity related firmwares.
+Move the vpdma firmware to the ti specific directory.
 
-Fixes: e4802cb00bfe ("media: imx258: Add imx258 camera sensor driver")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+Fixes: 5b30b383ce ("linux-firmware: Add new VPDMA firmware 1b8.bin")
+Signed-off-by: Nikhil Devshatwar <nikhil.nd@ti.com>
 ---
- drivers/media/i2c/imx258.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ WHENCE                                |   2 +-
+ {ti-connectivity => ti}/vpdma-1b8.bin | Bin
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+ rename {ti-connectivity => ti}/vpdma-1b8.bin (100%)
 
-diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
-index ef069333a969..bf75d4e597af 100644
---- a/drivers/media/i2c/imx258.c
-+++ b/drivers/media/i2c/imx258.c
-@@ -715,7 +715,7 @@ static int imx258_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- 	/* Initialize try_fmt */
- 	try_fmt->width = supported_modes[0].width;
- 	try_fmt->height = supported_modes[0].height;
--	try_fmt->code = MEDIA_BUS_FMT_SGRBG10_1X10;
-+	try_fmt->code = MEDIA_BUS_FMT_SGBRG10_1X10;
- 	try_fmt->field = V4L2_FIELD_NONE;
+diff --git a/WHENCE b/WHENCE
+index 473f6fb..d4efee2 100644
+--- a/WHENCE
++++ b/WHENCE
+@@ -2705,7 +2705,7 @@ Licence: Redistributable. See LICENCE.tda7706-firmware.txt for details.
  
- 	return 0;
-@@ -827,7 +827,7 @@ static int imx258_enum_mbus_code(struct v4l2_subdev *sd,
- 	if (code->index > 0)
- 		return -EINVAL;
+ Driver: ti-vpe - Texas Instruments V4L2 driver for Video Processing Engine
  
--	code->code = MEDIA_BUS_FMT_SGRBG10_1X10;
-+	code->code = MEDIA_BUS_FMT_SGBRG10_1X10;
+-File: ti-connectivity/vpdma-1b8.bin
++File: ti/vpdma-1b8.bin
  
- 	return 0;
- }
-@@ -839,7 +839,7 @@ static int imx258_enum_frame_size(struct v4l2_subdev *sd,
- 	if (fse->index >= ARRAY_SIZE(supported_modes))
- 		return -EINVAL;
+ Licence: Redistributable. See LICENCE.ti-tspa for details.
  
--	if (fse->code != MEDIA_BUS_FMT_SGRBG10_1X10)
-+	if (fse->code != MEDIA_BUS_FMT_SGBRG10_1X10)
- 		return -EINVAL;
- 
- 	fse->min_width = supported_modes[fse->index].width;
-@@ -855,7 +855,7 @@ static void imx258_update_pad_format(const struct imx258_mode *mode,
- {
- 	fmt->format.width = mode->width;
- 	fmt->format.height = mode->height;
--	fmt->format.code = MEDIA_BUS_FMT_SGRBG10_1X10;
-+	fmt->format.code = MEDIA_BUS_FMT_SGBRG10_1X10;
- 	fmt->format.field = V4L2_FIELD_NONE;
- }
- 
-@@ -902,7 +902,7 @@ static int imx258_set_pad_format(struct v4l2_subdev *sd,
- 	mutex_lock(&imx258->mutex);
- 
- 	/* Only one raw bayer(GBRG) order is supported */
--	fmt->format.code = MEDIA_BUS_FMT_SGRBG10_1X10;
-+	fmt->format.code = MEDIA_BUS_FMT_SGBRG10_1X10;
- 
- 	mode = v4l2_find_nearest_size(supported_modes,
- 		ARRAY_SIZE(supported_modes), width, height,
+diff --git a/ti-connectivity/vpdma-1b8.bin b/ti/vpdma-1b8.bin
+similarity index 100%
+rename from ti-connectivity/vpdma-1b8.bin
+rename to ti/vpdma-1b8.bin
 -- 
-2.25.1
+2.17.1
 
