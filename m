@@ -2,91 +2,161 @@ Return-Path: <SRS0=okk5=EE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8672C388F7
-	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 01:00:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8B61C5DF9D
+	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 01:00:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6E45220791
-	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 01:00:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7A2CE20790
+	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 01:00:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1603933212;
+	bh=M8m3wt8fV+3UIkqePGnLlIs932qbeqSRdOpauzBIzl4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=dGOUWzULa2f46KimgLsXbHAyZZJ+UcwzAvgaB3XrIoEOyrt+4zlHDnPPHUrOs9FoO
+	 RFD+OP8aBtHynfeAiJbqK6q33DRySoJP/v+YXA7VA9bB+XnSqmLQLNukgxqOzxCp7E
+	 dnth4iGmb8q8i/s/qY5WzL0T/0Rug0f6f179hWHQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403971AbgJ2A7y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Oct 2020 20:59:54 -0400
-Received: from verein.lst.de ([213.95.11.211]:45249 "EHLO verein.lst.de"
+        id S2404001AbgJ2BAL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Oct 2020 21:00:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60534 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731500AbgJ1WR3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:17:29 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 7742C68BFE; Wed, 28 Oct 2020 18:31:08 +0100 (CET)
-Date:   Wed, 28 Oct 2020 18:31:08 +0100
-From:   "hch@lst.de" <hch@lst.de>
-To:     Parav Pandit <parav@nvidia.com>
-Cc:     "hch@lst.de" <hch@lst.de>, Jakub Kicinski <kuba@kernel.org>,
-        syzbot <syzbot+34dc2fea3478e659af01@syzkaller.appspotmail.com>,
-        "christian.koenig@amd.com" <christian.koenig@amd.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linaro-mm-sig-owner@lists.linaro.org" 
-        <linaro-mm-sig-owner@lists.linaro.org>,
-        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
-        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
-Subject: Re: WARNING in dma_map_page_attrs
-Message-ID: <20201028173108.GA10135@lst.de>
-References: <000000000000335adc05b23300f6@google.com> <000000000000a0f8a305b261fe4a@google.com> <20201024111516.59abc9ec@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net> <BY5PR12MB4322CC03CE0D34B83269676ADC190@BY5PR12MB4322.namprd12.prod.outlook.com> <20201027081103.GA22877@lst.de> <BY5PR12MB43221380BB0259FF0693BB0CDC160@BY5PR12MB4322.namprd12.prod.outlook.com>
+        id S1731534AbgJ1WR2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:17:28 -0400
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C0E052469D;
+        Wed, 28 Oct 2020 09:45:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603878333;
+        bh=M8m3wt8fV+3UIkqePGnLlIs932qbeqSRdOpauzBIzl4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=1WiwlKhsc8n/OIAyFdRPwSKenfKayenRtyuBem2TNnguMJCJq6xZjAxZz7WBpJHYX
+         0Gaho7SDVhp6ubCYS9JGdPtLGlA7nTeICnzwtjulpIWKdc+i5+GzkpI2PEqKS+Esq1
+         miH/Vsarv8wlP3K5uaB7iDx8qweIQkufZbA2i3LQ=
+Received: by mail-ed1-f41.google.com with SMTP id v4so1813875edi.0;
+        Wed, 28 Oct 2020 02:45:32 -0700 (PDT)
+X-Gm-Message-State: AOAM530CCIitoXx0lRQPcvLClevVOjnY3yX1J4PvZprmVSFnigGUOXGe
+        +1MtRzcCcI82AkajSVMFAQxg0kfMPu5r9+6kplg=
+X-Google-Smtp-Source: ABdhPJzibAiayrfnX7e492BygNqJJBTGqPxQbqLX4ZxY4gkXNJonXNomrcKjOfLYhM5y3foaLpxExRMfn5JvGnPF1IQ=
+X-Received: by 2002:aa7:d1d5:: with SMTP id g21mr6950125edp.348.1603878331132;
+ Wed, 28 Oct 2020 02:45:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BY5PR12MB43221380BB0259FF0693BB0CDC160@BY5PR12MB4322.namprd12.prod.outlook.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+References: <20201028091947.93097-1-krzk@kernel.org> <MWHPR11MB0046B799E9AD3648C6F67BFE87170@MWHPR11MB0046.namprd11.prod.outlook.com>
+In-Reply-To: <MWHPR11MB0046B799E9AD3648C6F67BFE87170@MWHPR11MB0046.namprd11.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Wed, 28 Oct 2020 10:45:19 +0100
+X-Gmail-Original-Message-ID: <CAJKOXPePfsRNZkY+L1XM3_iz6dMYFNZAJgrcut9JriuwYkKWsw@mail.gmail.com>
+Message-ID: <CAJKOXPePfsRNZkY+L1XM3_iz6dMYFNZAJgrcut9JriuwYkKWsw@mail.gmail.com>
+Subject: Re: [PATCH] media: i2c: imx258: correct mode to GBGB/RGRG
+To:     "Yeh, Andy" <andy.yeh@intel.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Jason Chen <jasonx.z.chen@intel.com>,
+        Alan Chiang <alanx.chiang@intel.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Oct 27, 2020 at 12:52:30PM +0000, Parav Pandit wrote:
-> 
-> > From: hch@lst.de <hch@lst.de>
-> > Sent: Tuesday, October 27, 2020 1:41 PM
-> > 
-> > On Mon, Oct 26, 2020 at 05:23:48AM +0000, Parav Pandit wrote:
-> > > Hi Christoph,
-> > >
-> > > > From: Jakub Kicinski <kuba@kernel.org>
-> > > > Sent: Saturday, October 24, 2020 11:45 PM
-> > > >
-> > > > CC: rdma, looks like rdma from the stack trace
-> > > >
-> > > > On Fri, 23 Oct 2020 20:07:17 -0700 syzbot wrote:
-> > > > > syzbot has found a reproducer for the following issue on:
-> > > > >
-> > > > > HEAD commit:    3cb12d27 Merge tag 'net-5.10-rc1' of
-> > git://git.kernel.org/..
-> > >
-> > > In [1] you mentioned that dma_mask should not be set for dma_virt_ops.
-> > > So patch [2] removed it.
-> > >
-> > > But check to validate the dma mask for all dma_ops was added in [3].
-> > >
-> > > What is the right way? Did I misunderstood your comment about
-> > dma_mask in [1]?
-> > 
-> > No, I did not say we don't need the mask.  I said copying over the various
-> > dma-related fields from the parent is bogus.
-> > 
-> > I think rxe (and ther other drivers/infiniband/sw drivers) need a simple
-> > dma_coerce_mask_and_coherent and nothing else.
-> 
-> I see. Does below fix make sense?
-> Is DMA_MASK_NONE correct?
+On Wed, 28 Oct 2020 at 10:43, Yeh, Andy <andy.yeh@intel.com> wrote:
+>
+> But the sensor settings for the original submission is to output GRBG Bayer RAW.
+>
+> Regards, Andy
 
-DMA_MASK_NONE is gone in 5.10.  I think you want DMA_BIT_MASK(64).
-That isn't actually correct for 32-bit platforms, but good enough.
+No, not to my knowledge. There are no settings for color output
+because it is fixed to GBGB/RGRG. I was looking a lot into this driver
+(I have few other problems with it, already few other patches posted)
+and I could not find a setting for this in datasheet. If you know the
+setting for the other color - can you point me to it?
+
+Best regards,
+Krzysztof
+
+> >-----Original Message-----
+> >From: Krzysztof Kozlowski <krzk@kernel.org>
+> >Sent: Wednesday, October 28, 2020 5:20 PM
+> >To: Sakari Ailus <sakari.ailus@linux.intel.com>; Mauro Carvalho Chehab
+> ><mchehab@kernel.org>; Tomasz Figa <tfiga@chromium.org>; Jason Chen
+> ><jasonx.z.chen@intel.com>; Yeh, Andy <andy.yeh@intel.com>; Alan Chiang
+> ><alanx.chiang@intel.com>; linux-media@vger.kernel.org; linux-
+> >kernel@vger.kernel.org
+> >Cc: Krzysztof Kozlowski <krzk@kernel.org>; stable@vger.kernel.org
+> >Subject: [PATCH] media: i2c: imx258: correct mode to GBGB/RGRG
+> >
+> >The IMX258 sensor outputs pixels in GBGB/RGRG mode.  This is described
+> >explicitly in datasheet and was actually mentioned in a comment inside the
+> >driver.  Using other - wrong mode - leads to pinkish pictures.
+> >
+> >Fixes: e4802cb00bfe ("media: imx258: Add imx258 camera sensor driver")
+> >Cc: <stable@vger.kernel.org>
+> >Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> >---
+> > drivers/media/i2c/imx258.c | 10 +++++-----
+> > 1 file changed, 5 insertions(+), 5 deletions(-)
+> >
+> >diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c index
+> >ef069333a969..bf75d4e597af 100644
+> >--- a/drivers/media/i2c/imx258.c
+> >+++ b/drivers/media/i2c/imx258.c
+> >@@ -715,7 +715,7 @@ static int imx258_open(struct v4l2_subdev *sd, struct
+> >v4l2_subdev_fh *fh)
+> >       /* Initialize try_fmt */
+> >       try_fmt->width = supported_modes[0].width;
+> >       try_fmt->height = supported_modes[0].height;
+> >-      try_fmt->code = MEDIA_BUS_FMT_SGRBG10_1X10;
+> >+      try_fmt->code = MEDIA_BUS_FMT_SGBRG10_1X10;
+> >       try_fmt->field = V4L2_FIELD_NONE;
+> >
+> >       return 0;
+> >@@ -827,7 +827,7 @@ static int imx258_enum_mbus_code(struct
+> >v4l2_subdev *sd,
+> >       if (code->index > 0)
+> >               return -EINVAL;
+> >
+> >-      code->code = MEDIA_BUS_FMT_SGRBG10_1X10;
+> >+      code->code = MEDIA_BUS_FMT_SGBRG10_1X10;
+> >
+> >       return 0;
+> > }
+> >@@ -839,7 +839,7 @@ static int imx258_enum_frame_size(struct
+> >v4l2_subdev *sd,
+> >       if (fse->index >= ARRAY_SIZE(supported_modes))
+> >               return -EINVAL;
+> >
+> >-      if (fse->code != MEDIA_BUS_FMT_SGRBG10_1X10)
+> >+      if (fse->code != MEDIA_BUS_FMT_SGBRG10_1X10)
+> >               return -EINVAL;
+> >
+> >       fse->min_width = supported_modes[fse->index].width;
+> >@@ -855,7 +855,7 @@ static void imx258_update_pad_format(const struct
+> >imx258_mode *mode,  {
+> >       fmt->format.width = mode->width;
+> >       fmt->format.height = mode->height;
+> >-      fmt->format.code = MEDIA_BUS_FMT_SGRBG10_1X10;
+> >+      fmt->format.code = MEDIA_BUS_FMT_SGBRG10_1X10;
+> >       fmt->format.field = V4L2_FIELD_NONE;
+> > }
+> >
+> >@@ -902,7 +902,7 @@ static int imx258_set_pad_format(struct v4l2_subdev
+> >*sd,
+> >       mutex_lock(&imx258->mutex);
+> >
+> >       /* Only one raw bayer(GBRG) order is supported */
+> >-      fmt->format.code = MEDIA_BUS_FMT_SGRBG10_1X10;
+> >+      fmt->format.code = MEDIA_BUS_FMT_SGBRG10_1X10;
+> >
+> >       mode = v4l2_find_nearest_size(supported_modes,
+> >               ARRAY_SIZE(supported_modes), width, height,
+> >--
+> >2.25.1
+>
