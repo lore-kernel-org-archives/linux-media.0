@@ -2,109 +2,117 @@ Return-Path: <SRS0=okk5=EE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF922C388F7
-	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 00:21:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D182C388F7
+	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 00:54:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 64AC320782
-	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 00:21:29 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="raoGhAXm"
+	by mail.kernel.org (Postfix) with ESMTP id D25F920790
+	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 00:54:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1603932845;
+	bh=E57TRRP55Kk9vg5tur1KhYG5qx7b3ky4jZL+p+sXuoY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=FCqFQgJfWxYY7xXVt1xnQmxCWBVHiFsWmgGjwBKmJ9xmEUNpbxHYowYCxAV+hmvvN
+	 Y4jmY78xx5NAOYiITvwzlpIC598dcyMSPD6aNDESYndqtBohVTfGEH3gbYrPHeNjXL
+	 xbFN6FVy6Pn3P78LVL9MHnAfmcn0EUQZT4IdB3WM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390776AbgJ2AV1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Oct 2020 20:21:27 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:50560 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727552AbgJ2AVY (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Oct 2020 20:21:24 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 09S7fflf084854;
-        Wed, 28 Oct 2020 02:41:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1603870901;
-        bh=Ax5/lSVFdAWpt9N2W3x9j4u+NVI3bfPAN+kwxm2q5AI=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=raoGhAXmq3ocu16M6jlyQYXYzmVRaiB9n8hZw1ttz+o0924DH2aECLm7m9xafn1HX
-         WvgWroNC65gk0U6UOLc8fnnvvbZPDKNUBBU5liL92QxS1R39oTuyfH0/HyMD6/Hfso
-         4jAbxLxfq6L6+Yc9c6P3orNRTYIHKNq0uP0gAdbA=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 09S7ffpE084829
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 28 Oct 2020 02:41:41 -0500
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 28
- Oct 2020 02:41:41 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Wed, 28 Oct 2020 02:41:41 -0500
-Received: from [192.168.2.6] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 09S7fdQd121725;
-        Wed, 28 Oct 2020 02:41:40 -0500
-Subject: Re: [PATCH] vpdma: Move firmware to the toplevel
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Nikhil Devshatwar <nikhil.nd@ti.com>
-List-Id: <linux-firmware.lore.kernel.org>
-CC:     <linux-firmware@kernel.org>, <linux-media@vger.kernel.org>,
-        Dan Murphy <dmurphy@ti.com>, Benoit Parrot <bparrot@ti.com>,
-        Sekhar Nori <nsekhar@ti.com>
-References: <20201026200922.12719-1-nikhil.nd@ti.com>
- <20201026210832.GE3756@pendragon.ideasonboard.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ti.com>
-Message-ID: <868ff235-20c7-b0c0-df08-3d4582adb544@ti.com>
-Date:   Wed, 28 Oct 2020 09:41:39 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1731824AbgJ1WTR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Oct 2020 18:19:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60528 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731742AbgJ1WRo (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:17:44 -0400
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 47F50246B0;
+        Wed, 28 Oct 2020 10:15:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603880117;
+        bh=E57TRRP55Kk9vg5tur1KhYG5qx7b3ky4jZL+p+sXuoY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=MrdU+GtBcZwjT+vZ+g8Hw6gZHvwWzT4GZ+SrmHeBOThKai89DQFRg3IRa6i/wLsbi
+         9oXfv2GsWan0iTEVWd6s8Uc7GCICsJ7Vb4CS+WAncE8FpLa9n0f9+F/iZgTmtEHQim
+         Sc2XD/nbGU1AmKMLAuCRjVRBJorO4jHJsQVP7IqU=
+Received: by mail-ed1-f44.google.com with SMTP id x1so4523300eds.1;
+        Wed, 28 Oct 2020 03:15:17 -0700 (PDT)
+X-Gm-Message-State: AOAM532qAFPQWwXKiy51ycWtsZvHgS1ewyTUIiBpduGY/UUKlO4W5CHD
+        4gNHuMLG0UkgcDWsp0LIV8MrkxtUQkpcia5swfY=
+X-Google-Smtp-Source: ABdhPJz4yllQgyYZ8Tamki1QBJ8R6wNyadcvzqNfdvF4QwTASSCCiWTVEZ36r/fo7dWTUfe04TsIynmfdLIh/mOJ5uk=
+X-Received: by 2002:a05:6402:cf:: with SMTP id i15mr2651762edu.246.1603880115644;
+ Wed, 28 Oct 2020 03:15:15 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20201026210832.GE3756@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20201028091947.93097-1-krzk@kernel.org> <MWHPR11MB0046B799E9AD3648C6F67BFE87170@MWHPR11MB0046.namprd11.prod.outlook.com>
+ <CAJKOXPePfsRNZkY+L1XM3_iz6dMYFNZAJgrcut9JriuwYkKWsw@mail.gmail.com>
+ <CAJKOXPf6zhpu_3oQZ2bL_FnkBx7-NwH65N_OzVkH=Nh1bYkHxw@mail.gmail.com> <20201028100311.GF26150@paasikivi.fi.intel.com>
+In-Reply-To: <20201028100311.GF26150@paasikivi.fi.intel.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Wed, 28 Oct 2020 11:15:01 +0100
+X-Gmail-Original-Message-ID: <CAJKOXPcjtZidY1prH1ZCj+i-SM1mhABGbS_6_g1cH5WSGVhOAA@mail.gmail.com>
+Message-ID: <CAJKOXPcjtZidY1prH1ZCj+i-SM1mhABGbS_6_g1cH5WSGVhOAA@mail.gmail.com>
+Subject: Re: [PATCH] media: i2c: imx258: correct mode to GBGB/RGRG
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     "Yeh, Andy" <andy.yeh@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Jason Chen <jasonx.z.chen@intel.com>,
+        Alan Chiang <alanx.chiang@intel.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 26/10/2020 23:08, Laurent Pinchart wrote:
-> Hi Nikhil,
-> 
-> Thank you for the patch.
-> 
-> On Tue, Oct 27, 2020 at 01:39:22AM +0530, Nikhil Devshatwar wrote:
->> Move the vpdma firmware to the toplevel directory so
->> that the existing drivers can use it with the same path.
->>
->> Fixes: 5b30b383ce ("linux-firmware: Add new VPDMA firmware 1b8.bin")
->> Signed-off-by: Nikhil Devshatwar <nikhil.nd@ti.com>
->> ---
->>  WHENCE                                         |   2 +-
->>  ti-connectivity/vpdma-1b8.bin => vpdma-1b8.bin | Bin
-> 
-> I think Tomi meant moving the file to ti/ instead of ti-connectivity/. I
-> will let him comment on this.
+On Wed, 28 Oct 2020 at 11:03, Sakari Ailus <sakari.ailus@linux.intel.com> wrote:
+>
+> On Wed, Oct 28, 2020 at 10:56:55AM +0100, Krzysztof Kozlowski wrote:
+> > On Wed, 28 Oct 2020 at 10:45, Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> > >
+> > > On Wed, 28 Oct 2020 at 10:43, Yeh, Andy <andy.yeh@intel.com> wrote:
+> > > >
+> > > > But the sensor settings for the original submission is to output GRBG Bayer RAW.
+> > > >
+> > > > Regards, Andy
+> > >
+> > > No, not to my knowledge. There are no settings for color output
+> > > because it is fixed to GBGB/RGRG. I was looking a lot into this driver
+> > > (I have few other problems with it, already few other patches posted)
+> > > and I could not find a setting for this in datasheet. If you know the
+> > > setting for the other color - can you point me to it?
+> >
+> > And except the datasheet which mentions the specific format, the
+> > testing confirms it. With original color the pictures are pink/purple.
+> > With proper color, the pictures are correct (with more green color as
+> > expected for bayer).
+>
+> Quoting the driver's start_streaming function:
+>
+>         /* Set Orientation be 180 degree */
+>         ret = imx258_write_reg(imx258, REG_MIRROR_FLIP_CONTROL,
+>                                IMX258_REG_VALUE_08BIT, REG_CONFIG_MIRROR_FLIP);
 
-I don't really have a strong opinion here, as I don't know if there are some rules or guidelines
-about file/dir naming in linux-firmware.
+I understand that you think it will replace the lines and columns and
+the first line will be RG, instead of GB.... or actually BG because it
+flips horizontal and vertical? So why does it not work?
 
-But my argument is:
+BTW, this nicely points that the comment around
+device_property_read_u32() for rotation is a little bit misleading :)
 
-The fw should either be at the root dir, where the linux driver is already looking for it, OR, if we
-do move it somewhere, move it to a "right" place. Afaics "ti-connectivity" is totally wrong place,
-as vpdma has nothing to do with connectivity.
+>         if (ret) {
+>                 dev_err(&client->dev, "%s failed to set orientation\n",
+>                         __func__);
+>                 return ret;
+>         }
+>
+> Could it be you're taking pictures of pink objects? ;-)
 
-The root dir is a bit bad as "vpdma-1b8.bin" doesn't have TI or such in its name, so even if name
-conflict with some other fw feels quite unlikely, the name is still rather vague. And moving is a
-bit bad as then the current driver won't find the fw...
+I can send a few sample pictures taken with GStreamer (RAW8, not
+original RAW10)...
 
- Tomi
-
--- 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+Best regards,
+Krzysztof
