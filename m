@@ -2,92 +2,57 @@ Return-Path: <SRS0=8lr5=ED=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A083C56202
-	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 22:00:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 629E1C55179
+	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 22:04:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4F5E024724
-	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 22:00:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603922405;
-	bh=Uj7g3DMRK8LznkKzrwV0SCD7lT/uakY+h+XpQNoe8AQ=;
-	h=Date:From:To:Subject:References:In-Reply-To:List-ID:From;
-	b=ti+CcS5gpGG6LnbA/8JQjH+qV+7XqXMkXdPYt+HNQdGR3H78li661yAoYspI5qR3O
-	 Gs7qytcW4Kh9uexqV9PRJVYCFuabFaWCmdQQCxJKwZYy5qpCbXoH9nOVGY9RJbsRNL
-	 PMDcDo9zkxJRSQwX6KMlsVVqcsasd3hAIXLc3LTs=
+	by mail.kernel.org (Postfix) with ESMTP id 159F8246CD
+	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 22:04:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729370AbgJ1V75 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Oct 2020 17:59:57 -0400
-Received: from mail-ej1-f67.google.com ([209.85.218.67]:40271 "EHLO
-        mail-ej1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729309AbgJ1V73 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Oct 2020 17:59:29 -0400
-Received: by mail-ej1-f67.google.com with SMTP id z5so1045181ejw.7;
-        Wed, 28 Oct 2020 14:59:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IhJDr1KOFYKtq0dERU6JvhmpI21rDzVWNPeoxCOyP1g=;
-        b=tbGhUeim0JqJGZdMQyQxaDT9aWFfFODTsQFSdLkD8gzHmJdjC2LhrlzrKlOXZjAE7X
-         BGmNbLT2TsNwxadubr2OBZohm4EcTIddTGHgA/oxN4dx9TrGKeCXT/nbTOr2FDmyKvBh
-         rgpY3j+DZ5roYXfvpKr3J6j4KOXyjxPVde+xYnnLZAoanE7Dxg182BDFJc/4mnmmS8CS
-         GxfFOAHwwvAX6OkpJUsD3Y/A+2zJM4t4PqOU+/USkqDeyvJheuJ/EyZHCCDEBCARzBW0
-         FjLJBB/Z99FXcYApJ+zo8xnaqvB4pO6isN7teVJibHq6GpVDk06hBfebrgCY/77NjwYB
-         H20g==
-X-Gm-Message-State: AOAM533hGxwvguYn6sSe8kI/+GW0XF+Cy3nmvVM2bfVMtdlj+sgWOKVa
-        vexsGbWNiZeVb2A0R8YYUzo=
-X-Google-Smtp-Source: ABdhPJyaAY5hirP9AM9iwHk+7oGAO7czy2aUScLhsDaWHV8yGg0GD331nuyrXAgJnTfpCQ1We0SMKQ==
-X-Received: by 2002:a17:906:2ad3:: with SMTP id m19mr1116263eje.81.1603922367860;
-        Wed, 28 Oct 2020 14:59:27 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.184])
-        by smtp.googlemail.com with ESMTPSA id c3sm464228edl.60.2020.10.28.14.59.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2020 14:59:26 -0700 (PDT)
-Date:   Wed, 28 Oct 2020 22:59:24 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Andrzej Hajda <a.hajda@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org
-Subject: Re: [PATCH 4/4] CREDITS: remove trailing white spaces
-Message-ID: <20201028215924.GD269525@kozik-lap>
-References: <20201016151528.7553-1-krzk@kernel.org>
- <20201016151528.7553-4-krzk@kernel.org>
+        id S1729514AbgJ1WC3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Oct 2020 18:02:29 -0400
+Received: from retiisi.eu ([95.216.213.190]:47318 "EHLO hillosipuli.retiisi.eu"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728094AbgJ1WC1 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:02:27 -0400
+Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 902B6634C8B
+        for <linux-media@vger.kernel.org>; Wed, 28 Oct 2020 12:10:28 +0200 (EET)
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Subject: [PATCH 1/1] imx258: Remove Jason Chen's e-mail
+Date:   Wed, 28 Oct 2020 12:05:20 +0200
+Message-Id: <20201028100520.16018-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201016151528.7553-4-krzk@kernel.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Oct 16, 2020 at 05:15:28PM +0200, Krzysztof Kozlowski wrote:
-> Remove trailing white spaces.  No functional/substantive change.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> ---
->  CREDITS | 52 ++++++++++++++++++++++++++--------------------------
->  1 file changed, 26 insertions(+), 26 deletions(-)
+Remove Jason Chen's e-mail address for it no longer works.
 
-Applied.
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ drivers/media/i2c/imx258.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
+index ccb55fd1d506..df62c69a48c0 100644
+--- a/drivers/media/i2c/imx258.c
++++ b/drivers/media/i2c/imx258.c
+@@ -1305,6 +1305,6 @@ module_i2c_driver(imx258_i2c_driver);
+ 
+ MODULE_AUTHOR("Yeh, Andy <andy.yeh@intel.com>");
+ MODULE_AUTHOR("Chiang, Alan");
+-MODULE_AUTHOR("Chen, Jason <jasonx.z.chen@intel.com>");
++MODULE_AUTHOR("Chen, Jason");
+ MODULE_DESCRIPTION("Sony IMX258 sensor driver");
+ MODULE_LICENSE("GPL v2");
+-- 
+2.27.0
 
