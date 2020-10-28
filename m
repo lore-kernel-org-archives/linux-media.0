@@ -4,77 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A59DC56201
-	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 21:46:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 020F0C4363A
+	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 21:53:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2658824724
-	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 21:46:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A9C9124724
+	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 21:53:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603921598;
-	bh=1Zr/TDzr4j2BczDujlTXbyp5JW0OQhhIvYde2eIq4oo=;
-	h=Date:From:To:Subject:References:In-Reply-To:List-ID:From;
-	b=PoueZhCRt5Vghj/4+EbaZGM+iIBOhjlpzy8xIAN4eJTl4IH6FjMaCPQpSw33vKGQT
-	 NwKhaQiyn70ODYTkKpXvrzE6HXs82TBNqfUyVM4ILa0gJR5axRW3VHvpg1naTMlsZZ
-	 puNVucaOq0RH0hUSK39yLwilJ02+7anfaScgvMfk=
+	s=default; t=1603921995;
+	bh=K48cIIhZQNhSWsoocqVS4LgqZsrNGMpoM4yybgeO0nA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=YaDSpOsSp/FGFtGdv511FtZjWFFLEjb/8Dt5mGRoAc5I+1/VhY6tsiuetXRC2pIzg
+	 SklDNCFA1p6y3C9fZOSd6BT2r0vdapQ8+AKdmCk6QJ/otSv4GgylcAcfHezn9rTfto
+	 gq8bvV2zGbQ3O2jevrX7LsTa1sxwRjngWjbj6HSg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727406AbgJ1VqJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Oct 2020 17:46:09 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:46389 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725869AbgJ1VqH (ORCPT
+        id S1728402AbgJ1VxH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Oct 2020 17:53:07 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:33872 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728380AbgJ1VxE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Oct 2020 17:46:07 -0400
-Received: by mail-wr1-f65.google.com with SMTP id n6so597416wrm.13;
-        Wed, 28 Oct 2020 14:46:06 -0700 (PDT)
+        Wed, 28 Oct 2020 17:53:04 -0400
+Received: by mail-wr1-f68.google.com with SMTP id i1so689709wro.1;
+        Wed, 28 Oct 2020 14:53:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:references
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=xYyqVjGxVBN3EBsp63KVaNu+q8t9Scw3HyfXR69i9jY=;
-        b=gj9BuMa56Q2MqXIrfeWDdcQ8sdHi/l8Caq2UQfBLXWS4IDRloBEaLT5UGhmedz7Ca3
-         /DhEZCeXB+XbOWX/VFtOat79GgHbLzjgXLG9XzXGeWJfHZx/zkOjQzhSNF9D8ZLzBybk
-         z0mTGYhaHtHf+RJ6uOyCUqS2g4kEVF81KRpIEbjP7j7JUKa0++zWG4tqYy+SQW6huBd7
-         p7OAVeQvg8T+pqkwRVVvZt4toNPcCTa/VZidEjAv1fAj5dlKqO95LxfitMnUEhMSPVEs
-         dAxexBXkFc+bKqsa8a4y8cXKkoE0m8CT60TJP0ilKZ1fOyNhkyPJq6latytGTN8KffVu
-         55Cw==
-X-Gm-Message-State: AOAM530xdtfDw9TzNM5do5p3ShKTr2LqjJDU7vkGhSlqE6z11rPd+kRC
-        71llujgiTIpZ9r8v+OP0FG0PhFpQE5FWIA==
-X-Google-Smtp-Source: ABdhPJzDpghLl+3TD6eqjgXqttTTYOYYwYFz/QvwKAXHI2VfcG/Q6EcvM3sN1JHQc4hfW39DJGZF+w==
-X-Received: by 2002:a17:906:a282:: with SMTP id i2mr6365239ejz.39.1603874330838;
-        Wed, 28 Oct 2020 01:38:50 -0700 (PDT)
+        bh=5ZnXxaz23SCoShQOgk04jnieqtpf5ln6p39aeLgtVB8=;
+        b=LKW9u5UBBiaiMvt1+yJ6p89g8Y0Vrto+YLj98F6E6vKMeTnt6b6rob47hBju4kLsaU
+         J2JArWFhNPXUYJcD8nvBMEy2Ae2pTchacut8ubTUQH9bmHwqKxpS86MdE7ZpFpD0Cd6U
+         ENnWKkSAvW0htcwWvpe5M3+9rH3xIGraGsPDwlkeHCSHdoApeIKE25rtKwDh6bcD3A7S
+         PpP11SO/mES9AZvAYwIPZYypEsbcKdMkWU3cmWeGgXjlT5L1JPUJQib04l7wUdCyHcmY
+         GgiVtm++VwyLSgVdjZuwm8AAIypD6+p6M7fgwhRc1UvxIiwRs3zS7eISM3uzjNKks6cj
+         oeug==
+X-Gm-Message-State: AOAM5325aa4CwuKey/lFPpv3kx6PPCuwqIwjxPFPB/FFnlX7kdZ2aRnX
+        v86ZZjUrxD0rxva8YxZ80yA=
+X-Google-Smtp-Source: ABdhPJx6PPpAmbXbui196s2L7gRKKwN9GgVw23nSKqFPGMzwAEuM+i4FQGV8bGHvzHBeLrjYddOkng==
+X-Received: by 2002:adf:a501:: with SMTP id i1mr1586091wrb.162.1603921981824;
+        Wed, 28 Oct 2020 14:53:01 -0700 (PDT)
 Received: from kozik-lap ([194.230.155.184])
-        by smtp.googlemail.com with ESMTPSA id g8sm2472979ejp.73.2020.10.28.01.38.49
+        by smtp.googlemail.com with ESMTPSA id x1sm1250159wrl.41.2020.10.28.14.52.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2020 01:38:49 -0700 (PDT)
-Date:   Wed, 28 Oct 2020 09:38:47 +0100
+        Wed, 28 Oct 2020 14:53:00 -0700 (PDT)
+Date:   Wed, 28 Oct 2020 22:52:57 +0100
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+To:     Andrzej Hajda <a.hajda@samsung.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] media: i2c: imx258: add HDR control
-Message-ID: <20201028083847.GB32155@kozik-lap>
-References: <20201005151559.12003-1-krzk@kernel.org>
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org
+Cc:     Kamil Debski <kamil@wypas.org>
+Subject: Re: [PATCH 1/4] MAINTAINERS: move Kamil Debski to credits
+Message-ID: <20201028215257.GA269525@kozik-lap>
+References: <20201016151528.7553-1-krzk@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201005151559.12003-1-krzk@kernel.org>
+In-Reply-To: <20201016151528.7553-1-krzk@kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Oct 05, 2020 at 05:15:58PM +0200, Krzysztof Kozlowski wrote:
-> The IMX258 supports High Dynamic Range with 5 levels of low/high
-> exposure ratio.  Add a V4L2 control for HDR (WIDE_DYNAMIC_RANGE).
+On Fri, Oct 16, 2020 at 05:15:25PM +0200, Krzysztof Kozlowski wrote:
+> Kamil Debski has not been active on LKML since 2017:
+> https://lore.kernel.org/lkml/?q=f%3A%22Kamil+Debski%22
 > 
+> Move Kamil Debski to the CREDITS file.  Thank you for the effort you put
+> in to the upstream Linux kernel work.
+> 
+> Cc: Kamil Debski <kamil@wypas.org>
+> Cc: Andrzej Hajda <a.hajda@samsung.com>
+> Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+> Cc: Sylwester Nawrocki <s.nawrocki@samsung.com>
 > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 > ---
->  drivers/media/i2c/imx258.c | 28 ++++++++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
-> 
+>  CREDITS     | 6 ++++++
+>  MAINTAINERS | 4 ----
 
-Any comments here?
+Applied.
 
 Best regards,
 Krzysztof
+
