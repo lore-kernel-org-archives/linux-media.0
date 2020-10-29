@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0803C4363A
-	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 16:43:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84C8BC56201
+	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 16:43:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8C43E221EB
-	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 16:43:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2F1BC20838
+	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 16:43:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603989836;
-	bh=6mIHa/ObVyPo2R/u+eryKdODkXE97s7lir+Hh6dLp9I=;
+	s=default; t=1603989838;
+	bh=+YhrTdxTZ9IwtpRsXLWk8hGCvf874D+0Yy5rA92EFsw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=NuiJ0puDf+MTiLe04EsjQUZ3zKzSr0eZZvKD/kUbxdshPIV3KHWH2AtnrSHlZlSM9
-	 MgN8ZFJoF97ffQY0iF4HwMUoMoZVBESHAUHW6CFTmm9FKk8KSJfFuRbVrJ/XPPt3g/
-	 wYmlizXhIBBiUmJnDJ6P525shXa4cprVpKI45BVw=
+	b=BVwdw13UzudP4FRB53MW2t8zSjnuNFphcVUB5anNzeaUg9wgRHZ6trZVxMlDJSFVc
+	 bHKX3qN8n8iKz1uVzNBn56POhIk5Ojt1TDmE/FMmCdv8Lt19eYqmSQpYZV1vRRNHjv
+	 YHEg0iIRQJfE4lkJE9Wb+LtdZs7acOFPSFCQrwVU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727373AbgJ2Qnw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 29 Oct 2020 12:43:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52456 "EHLO mail.kernel.org"
+        id S1727445AbgJ2Qn4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 29 Oct 2020 12:43:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52564 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727079AbgJ2Qnv (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 29 Oct 2020 12:43:51 -0400
+        id S1727000AbgJ2Qnz (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 29 Oct 2020 12:43:55 -0400
 Received: from localhost.localdomain (adsl-84-226-167-205.adslplus.ch [84.226.167.205])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 18B5721481;
-        Thu, 29 Oct 2020 16:43:45 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 93D3022228;
+        Thu, 29 Oct 2020 16:43:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603989830;
-        bh=6mIHa/ObVyPo2R/u+eryKdODkXE97s7lir+Hh6dLp9I=;
+        s=default; t=1603989834;
+        bh=+YhrTdxTZ9IwtpRsXLWk8hGCvf874D+0Yy5rA92EFsw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m4hbIaDJE9digDF+r1MaUhczhUrRZoYSUwC56+Nr2KYzFydge2S3HIhvHLwQmiQQo
-         FelxSebQLoKAFy8PSxJvfzJBH9kfFY2ugr1vI0z0Cd35RlzSgtGqauEu4dCRK7/ZVk
-         TP9DUvjDZnXQ1P4cnZ0oJ/Ru2UE4HY7kOpu3CFuE=
+        b=xVI7U1/ns8qtAZsNJz7jZMmDHaQXB3y7rJCQ4c9M+hNICGYdRmIRVF37lEZC8H4nN
+         bPVQKXfduJPxWCN3UWNNA7ELc2WVhkoKZVn3kdkzuM2OKQljk0J84Lc+Nb1YFl9IbO
+         thPKRa2Xk/+2Q31fWu9jdtri/mQ9MZtxniQjbSNY=
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Pavel Machek <pavel@ucw.cz>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -58,9 +58,9 @@ To:     Pavel Machek <pavel@ucw.cz>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [RESEND PATCH 15/25] media: i2c: ov13858: simplify getting state container
-Date:   Thu, 29 Oct 2020 17:42:29 +0100
-Message-Id: <20201029164239.84240-15-krzk@kernel.org>
+Subject: [RESEND PATCH 16/25] media: i2c: ov2680: simplify getting state container
+Date:   Thu, 29 Oct 2020 17:42:30 +0100
+Message-Id: <20201029164239.84240-16-krzk@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201029164239.84240-1-krzk@kernel.org>
 References: <20201029164239.84240-1-krzk@kernel.org>
@@ -81,31 +81,31 @@ dereferences.
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- drivers/media/i2c/ov13858.c | 6 ++----
+ drivers/media/i2c/ov2680.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/i2c/ov13858.c b/drivers/media/i2c/ov13858.c
-index 236ad2c816b7..2f3be7a80cef 100644
---- a/drivers/media/i2c/ov13858.c
-+++ b/drivers/media/i2c/ov13858.c
-@@ -1505,8 +1505,7 @@ static int ov13858_set_stream(struct v4l2_subdev *sd, int enable)
+diff --git a/drivers/media/i2c/ov2680.c b/drivers/media/i2c/ov2680.c
+index 59cdbc33658c..178dfe985a25 100644
+--- a/drivers/media/i2c/ov2680.c
++++ b/drivers/media/i2c/ov2680.c
+@@ -1111,8 +1111,7 @@ static int ov2680_remove(struct i2c_client *client)
  
- static int __maybe_unused ov13858_suspend(struct device *dev)
+ static int __maybe_unused ov2680_suspend(struct device *dev)
  {
 -	struct i2c_client *client = to_i2c_client(dev);
 -	struct v4l2_subdev *sd = i2c_get_clientdata(client);
 +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
- 	struct ov13858 *ov13858 = to_ov13858(sd);
+ 	struct ov2680_dev *sensor = to_ov2680_dev(sd);
  
- 	if (ov13858->streaming)
-@@ -1517,8 +1516,7 @@ static int __maybe_unused ov13858_suspend(struct device *dev)
+ 	if (sensor->is_streaming)
+@@ -1123,8 +1122,7 @@ static int __maybe_unused ov2680_suspend(struct device *dev)
  
- static int __maybe_unused ov13858_resume(struct device *dev)
+ static int __maybe_unused ov2680_resume(struct device *dev)
  {
 -	struct i2c_client *client = to_i2c_client(dev);
 -	struct v4l2_subdev *sd = i2c_get_clientdata(client);
 +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
- 	struct ov13858 *ov13858 = to_ov13858(sd);
+ 	struct ov2680_dev *sensor = to_ov2680_dev(sd);
  	int ret;
  
 -- 
