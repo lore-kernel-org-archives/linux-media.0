@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96B5AC55179
-	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 16:43:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8D43C2D0A3
+	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 16:43:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 40CED20838
-	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 16:43:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 84BAD20825
+	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 16:43:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603989820;
-	bh=LIRs0Nt888yt2brtcgTrviGruxEU5fhoxGKpmTlYdbY=;
+	s=default; t=1603989824;
+	bh=Mk2QkU4k0+ab8zrpFEJUmQfk4RBoALQPIS97PfxH0fM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=heYuC9CZlcVWoZ8n0R1SAjlGw5oSDmr+lK+/FJWXhWhd5jnYxye+Nkhxx7HC8pI8H
-	 xjr0JHnq9Hhvp6M6YQPTcYQ3GReUQ7GU/z/rVdFAK5B2vJh71YNuqFyasMQmO0VSZR
-	 EcrR/iErtfJTn3Z5wcwwZ+KUqlXaWxlb65DkWX8Q=
+	b=yEZhRAlVF8su1wrvfVMvt5RFjz6/xlmLnFFACGVn1Inr5yJkYe+D86ifvfHarzAU+
+	 S793/gBoVLKyaTmsv/qLsfv3/vYz/blUOvblD3DZSsB4Z2oioSs7Ojq7QsIQ8JGeio
+	 bLWpSiB1ghO5kJzojryTFL8Yg8WviEO5As7RyMmM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727315AbgJ2Qnj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 29 Oct 2020 12:43:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52134 "EHLO mail.kernel.org"
+        id S1727274AbgJ2Qng (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 29 Oct 2020 12:43:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52064 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727293AbgJ2Qnh (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 29 Oct 2020 12:43:37 -0400
+        id S1727141AbgJ2Qnd (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 29 Oct 2020 12:43:33 -0400
 Received: from localhost.localdomain (adsl-84-226-167-205.adslplus.ch [84.226.167.205])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 320B621548;
-        Thu, 29 Oct 2020 16:43:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 17CD321481;
+        Thu, 29 Oct 2020 16:43:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603989816;
-        bh=LIRs0Nt888yt2brtcgTrviGruxEU5fhoxGKpmTlYdbY=;
+        s=default; t=1603989812;
+        bh=Mk2QkU4k0+ab8zrpFEJUmQfk4RBoALQPIS97PfxH0fM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mKC3Zm0qWY2C2TwITtMB+sofFHNzL7J0silJg+Tq6ZRUyNQBRQCOX3+0jWDY7yIer
-         yCeZiH/VYlZwYPY8+jI1lGOLSDUZ7Z7Fu+n1i4FMPs60x67drCx6cfqO8vXShNFO9Y
-         Le4mUlO74M4pR12ZANG0f+yH/2syG6XuPvsAEe/8=
+        b=KDfDNIfQjM+rgHtKxMdrU8x1S2Nub5dVLIVb6dPwjepQCPtSOt6kzCIWHJKyL5q7C
+         ZyP8uqggGKDjwBjR4fa8fWpfqzo9uI1s/Sfaagy6RVuoVCdTjwWMfj+DWMu7v6EvX6
+         A1PWQtcBOo7L9YM3WNeDoLCUWzXd5FYqWDLckKrU=
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Pavel Machek <pavel@ucw.cz>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -58,9 +58,9 @@ To:     Pavel Machek <pavel@ucw.cz>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [RESEND PATCH 12/25] media: i2c: dw9768: simplify getting state container
-Date:   Thu, 29 Oct 2020 17:42:26 +0100
-Message-Id: <20201029164239.84240-12-krzk@kernel.org>
+Subject: [RESEND PATCH 11/25] media: i2c: ak7375: simplify getting state container
+Date:   Thu, 29 Oct 2020 17:42:25 +0100
+Message-Id: <20201029164239.84240-11-krzk@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201029164239.84240-1-krzk@kernel.org>
 References: <20201029164239.84240-1-krzk@kernel.org>
@@ -81,32 +81,33 @@ dereferences.
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- drivers/media/i2c/dw9768.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/media/i2c/ak7375.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/i2c/dw9768.c b/drivers/media/i2c/dw9768.c
-index 45cdd924b565..8b8cb4b077b5 100644
---- a/drivers/media/i2c/dw9768.c
-+++ b/drivers/media/i2c/dw9768.c
-@@ -315,8 +315,7 @@ static int dw9768_release(struct dw9768 *dw9768)
+diff --git a/drivers/media/i2c/ak7375.c b/drivers/media/i2c/ak7375.c
+index 7b14b11605ca..e1f94ee0f48f 100644
+--- a/drivers/media/i2c/ak7375.c
++++ b/drivers/media/i2c/ak7375.c
+@@ -196,9 +196,7 @@ static int ak7375_remove(struct i2c_client *client)
+  */
+ static int __maybe_unused ak7375_vcm_suspend(struct device *dev)
+ {
+-
+-	struct i2c_client *client = to_i2c_client(dev);
+-	struct v4l2_subdev *sd = i2c_get_clientdata(client);
++	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+ 	struct ak7375_device *ak7375_dev = sd_to_ak7375_vcm(sd);
+ 	int ret, val;
  
- static int dw9768_runtime_suspend(struct device *dev)
+@@ -233,8 +231,7 @@ static int __maybe_unused ak7375_vcm_suspend(struct device *dev)
+  */
+ static int __maybe_unused ak7375_vcm_resume(struct device *dev)
  {
 -	struct i2c_client *client = to_i2c_client(dev);
 -	struct v4l2_subdev *sd = i2c_get_clientdata(client);
 +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
- 	struct dw9768 *dw9768 = sd_to_dw9768(sd);
- 
- 	dw9768_release(dw9768);
-@@ -328,8 +327,7 @@ static int dw9768_runtime_suspend(struct device *dev)
- 
- static int dw9768_runtime_resume(struct device *dev)
- {
--	struct i2c_client *client = to_i2c_client(dev);
--	struct v4l2_subdev *sd = i2c_get_clientdata(client);
-+	struct v4l2_subdev *sd = dev_get_drvdata(dev);
- 	struct dw9768 *dw9768 = sd_to_dw9768(sd);
- 	int ret;
+ 	struct ak7375_device *ak7375_dev = sd_to_ak7375_vcm(sd);
+ 	int ret, val;
  
 -- 
 2.25.1
