@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE0BAC4363A
-	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 16:44:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AB09C4363A
+	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 16:44:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 870C720825
-	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 16:44:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 342DF206F4
+	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 16:44:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603989871;
-	bh=3yDbRUPbvdZNMHVu/Vf0C06aok0ewXf5UT2lmCSYepc=;
+	s=default; t=1603989877;
+	bh=ohN4jmPLLF9AI0D2GnfqRAKU399Z6v8OgaI8Km2IjrA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=n/R/H3cPSxpVkEeF3feLHh2s+uNfV/NCGJo8dH9Qj4Mn868Vy8My0cx9khNoxhiPD
-	 FQG8hN5OXUR0xtpmb/UfkhztK2nwfO7NH2obLMuI1klJjFnS3lamre5JkW+5MsK9rm
-	 e8DFACpqKMhq7WnBQQtt7mshXrl/EyIw6MkuLG4s=
+	b=sCtly4jkfAX0yNb7bdZnTlddPpxi9cb0ivQ9c4MHJZhK2AQC4E1Y6H7B3oFueapKN
+	 E+Is8868gE64Rz5aJc124Wkjwqzn8SzZ3bT4nsyTLSPkj94yX72ibz/TmSLx+UHxJI
+	 N6+nUij6N/FMDHQPou9LcbH7QWXcv4+JjWAnNGYk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727970AbgJ2Qoa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 29 Oct 2020 12:44:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53466 "EHLO mail.kernel.org"
+        id S1727657AbgJ2QoS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 29 Oct 2020 12:44:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53118 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727966AbgJ2Qo3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 29 Oct 2020 12:44:29 -0400
+        id S1727661AbgJ2QoQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 29 Oct 2020 12:44:16 -0400
 Received: from localhost.localdomain (adsl-84-226-167-205.adslplus.ch [84.226.167.205])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8E09E21481;
-        Thu, 29 Oct 2020 16:44:24 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 19230206F4;
+        Thu, 29 Oct 2020 16:44:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603989868;
-        bh=3yDbRUPbvdZNMHVu/Vf0C06aok0ewXf5UT2lmCSYepc=;
+        s=default; t=1603989855;
+        bh=ohN4jmPLLF9AI0D2GnfqRAKU399Z6v8OgaI8Km2IjrA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YeDGP13Tib1i6Uhp99lYc1nHS411vJokupNilZ7VtfNAs2++DOZqeUcawv4pLXzJk
-         AiqkQ9gQ+//fIKqtM/wQ+awQfhsHsi0TDLoBC07zViBVSriyPHK8cNW+E/I1B9owih
-         nqVgxa4GupKcBUiCA6zZqiaNthlz0aSarVUNwYT8=
+        b=adRyuKQqJZsq8ejIs3fGkH+qCZXScN/2jIBjQyLj4gFrdOOpNAIUgRsXZ5+zpj/L5
+         poOwCKEVxvVtdSgM5CjisVpmCdztytf8gAC1it2t4SRierG4bZNtkuPRkMS6JjOWMp
+         N7U/mmGkrMApBtcyh9SWcf/nHNfOQXowOvQWJnps=
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Pavel Machek <pavel@ucw.cz>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -58,9 +58,9 @@ To:     Pavel Machek <pavel@ucw.cz>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [RESEND PATCH 24/25] media: i2c: smiapp: simplify getting state container
-Date:   Thu, 29 Oct 2020 17:42:38 +0100
-Message-Id: <20201029164239.84240-24-krzk@kernel.org>
+Subject: [RESEND PATCH 21/25] media: i2c: ov5695: simplify getting state container
+Date:   Thu, 29 Oct 2020 17:42:35 +0100
+Message-Id: <20201029164239.84240-21-krzk@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201029164239.84240-1-krzk@kernel.org>
 References: <20201029164239.84240-1-krzk@kernel.org>
@@ -81,127 +81,33 @@ dereferences.
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- drivers/media/i2c/smiapp/smiapp-core.c | 28 ++++++++++++--------------
- 1 file changed, 13 insertions(+), 15 deletions(-)
+ drivers/media/i2c/ov5695.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/i2c/smiapp/smiapp-core.c b/drivers/media/i2c/smiapp/smiapp-core.c
-index 6fc0680a93d0..105ef29152e8 100644
---- a/drivers/media/i2c/smiapp/smiapp-core.c
-+++ b/drivers/media/i2c/smiapp/smiapp-core.c
-@@ -1185,8 +1185,7 @@ static int smiapp_setup_flash_strobe(struct smiapp_sensor *sensor)
+diff --git a/drivers/media/i2c/ov5695.c b/drivers/media/i2c/ov5695.c
+index cc678d9d2e0d..bbccb6f9582f 100644
+--- a/drivers/media/i2c/ov5695.c
++++ b/drivers/media/i2c/ov5695.c
+@@ -1033,8 +1033,7 @@ static void __ov5695_power_off(struct ov5695 *ov5695)
  
- static int smiapp_power_on(struct device *dev)
+ static int __maybe_unused ov5695_runtime_resume(struct device *dev)
  {
 -	struct i2c_client *client = to_i2c_client(dev);
--	struct v4l2_subdev *subdev = i2c_get_clientdata(client);
-+	struct v4l2_subdev *subdev = dev_get_drvdata(dev);
- 	struct smiapp_subdev *ssd = to_smiapp_subdev(subdev);
- 	/*
- 	 * The sub-device related to the I2C device is always the
-@@ -1199,14 +1198,14 @@ static int smiapp_power_on(struct device *dev)
+-	struct v4l2_subdev *sd = i2c_get_clientdata(client);
++	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+ 	struct ov5695 *ov5695 = to_ov5695(sd);
  
- 	rval = regulator_enable(sensor->vana);
- 	if (rval) {
--		dev_err(&client->dev, "failed to enable vana regulator\n");
-+		dev_err(dev, "failed to enable vana regulator\n");
- 		return rval;
- 	}
- 	usleep_range(1000, 1000);
+ 	return __ov5695_power_on(ov5695);
+@@ -1042,8 +1041,7 @@ static int __maybe_unused ov5695_runtime_resume(struct device *dev)
  
- 	rval = clk_prepare_enable(sensor->ext_clk);
- 	if (rval < 0) {
--		dev_dbg(&client->dev, "failed to enable xclk\n");
-+		dev_dbg(dev, "failed to enable xclk\n");
- 		goto out_xclk_fail;
- 	}
- 	usleep_range(1000, 1000);
-@@ -1230,7 +1229,7 @@ static int smiapp_power_on(struct device *dev)
- 	if (sensor->hwcfg->i2c_addr_alt) {
- 		rval = smiapp_change_cci_addr(sensor);
- 		if (rval) {
--			dev_err(&client->dev, "cci address change error\n");
-+			dev_err(dev, "cci address change error\n");
- 			goto out_cci_addr_fail;
- 		}
- 	}
-@@ -1238,14 +1237,14 @@ static int smiapp_power_on(struct device *dev)
- 	rval = smiapp_write(sensor, SMIAPP_REG_U8_SOFTWARE_RESET,
- 			    SMIAPP_SOFTWARE_RESET);
- 	if (rval < 0) {
--		dev_err(&client->dev, "software reset failed\n");
-+		dev_err(dev, "software reset failed\n");
- 		goto out_cci_addr_fail;
- 	}
- 
- 	if (sensor->hwcfg->i2c_addr_alt) {
- 		rval = smiapp_change_cci_addr(sensor);
- 		if (rval) {
--			dev_err(&client->dev, "cci address change error\n");
-+			dev_err(dev, "cci address change error\n");
- 			goto out_cci_addr_fail;
- 		}
- 	}
-@@ -1253,7 +1252,7 @@ static int smiapp_power_on(struct device *dev)
- 	rval = smiapp_write(sensor, SMIAPP_REG_U16_COMPRESSION_MODE,
- 			    SMIAPP_COMPRESSION_MODE_SIMPLE_PREDICTOR);
- 	if (rval) {
--		dev_err(&client->dev, "compression mode set failed\n");
-+		dev_err(dev, "compression mode set failed\n");
- 		goto out_cci_addr_fail;
- 	}
- 
-@@ -1261,28 +1260,28 @@ static int smiapp_power_on(struct device *dev)
- 		sensor, SMIAPP_REG_U16_EXTCLK_FREQUENCY_MHZ,
- 		sensor->hwcfg->ext_clk / (1000000 / (1 << 8)));
- 	if (rval) {
--		dev_err(&client->dev, "extclk frequency set failed\n");
-+		dev_err(dev, "extclk frequency set failed\n");
- 		goto out_cci_addr_fail;
- 	}
- 
- 	rval = smiapp_write(sensor, SMIAPP_REG_U8_CSI_LANE_MODE,
- 			    sensor->hwcfg->lanes - 1);
- 	if (rval) {
--		dev_err(&client->dev, "csi lane mode set failed\n");
-+		dev_err(dev, "csi lane mode set failed\n");
- 		goto out_cci_addr_fail;
- 	}
- 
- 	rval = smiapp_write(sensor, SMIAPP_REG_U8_FAST_STANDBY_CTRL,
- 			    SMIAPP_FAST_STANDBY_CTRL_IMMEDIATE);
- 	if (rval) {
--		dev_err(&client->dev, "fast standby set failed\n");
-+		dev_err(dev, "fast standby set failed\n");
- 		goto out_cci_addr_fail;
- 	}
- 
- 	rval = smiapp_write(sensor, SMIAPP_REG_U8_CSI_SIGNALLING_MODE,
- 			    sensor->hwcfg->csi_signalling_mode);
- 	if (rval) {
--		dev_err(&client->dev, "csi signalling mode set failed\n");
-+		dev_err(dev, "csi signalling mode set failed\n");
- 		goto out_cci_addr_fail;
- 	}
- 
-@@ -1294,7 +1293,7 @@ static int smiapp_power_on(struct device *dev)
- 
- 	rval = smiapp_call_quirk(sensor, post_poweron);
- 	if (rval) {
--		dev_err(&client->dev, "post_poweron quirks failed\n");
-+		dev_err(dev, "post_poweron quirks failed\n");
- 		goto out_cci_addr_fail;
- 	}
- 
-@@ -1312,8 +1311,7 @@ static int smiapp_power_on(struct device *dev)
- 
- static int smiapp_power_off(struct device *dev)
+ static int __maybe_unused ov5695_runtime_suspend(struct device *dev)
  {
 -	struct i2c_client *client = to_i2c_client(dev);
--	struct v4l2_subdev *subdev = i2c_get_clientdata(client);
-+	struct v4l2_subdev *subdev = dev_get_drvdata(dev);
- 	struct smiapp_subdev *ssd = to_smiapp_subdev(subdev);
- 	struct smiapp_sensor *sensor =
- 		container_of(ssd, struct smiapp_sensor, ssds[0]);
+-	struct v4l2_subdev *sd = i2c_get_clientdata(client);
++	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+ 	struct ov5695 *ov5695 = to_ov5695(sd);
+ 
+ 	__ov5695_power_off(ov5695);
 -- 
 2.25.1
 
