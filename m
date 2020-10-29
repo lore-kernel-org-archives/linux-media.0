@@ -1,213 +1,212 @@
-Return-Path: <SRS0=8lr5=ED=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=okk5=EE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA9C5C388F7
-	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 23:17:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 052D6C388F7
+	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 00:17:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 61E6820790
-	for <linux-media@archiver.kernel.org>; Wed, 28 Oct 2020 23:17:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603927047;
-	bh=qkAXpSysgKo1NZ6R9MzhxEJKVMspafQ70cuRPVp+xG0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=S9JmUEtnBx8DX0B9oQS/SLAJAruZlWSkwO+GuNqlsOoXyyeqT0Uj0s4b1g3PaUHSC
-	 F3prT6FF1DF4JYCSEdpWKGFqjG3fUTSQF8oM7Di34TqCc3lz2Cvejm2mht1Lz+WSbc
-	 /Fq/91BoThva8tVNddrFqRYkdxbe4IP/5Tv9gXKE=
+	by mail.kernel.org (Postfix) with ESMTP id 954E920780
+	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 00:17:57 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sWTJuXyN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388046AbgJ1XRW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 28 Oct 2020 19:17:22 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:46883 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728511AbgJ1XRV (ORCPT
+        id S2390728AbgJ2ARn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 28 Oct 2020 20:17:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44946 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390715AbgJ2AQi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 28 Oct 2020 19:17:21 -0400
-Received: by mail-wr1-f67.google.com with SMTP id n6so775616wrm.13;
-        Wed, 28 Oct 2020 16:17:19 -0700 (PDT)
+        Wed, 28 Oct 2020 20:16:38 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A250EC0613CF
+        for <linux-media@vger.kernel.org>; Wed, 28 Oct 2020 17:16:38 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id a200so833110pfa.10
+        for <linux-media@vger.kernel.org>; Wed, 28 Oct 2020 17:16:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=P68wKVWfyCPNBm8l+XiI7Y585elPVzN5iuk0IO/H+/E=;
+        b=sWTJuXyNDCLZI28ci/F/8bQ4mgW8WKaoqb/ok2c5RN4T6cqgQei9ZDNeJkrrNvr9HU
+         r6ZQ4cQzuoL3YoFO1OMku66UN9TyjTlmvQVxFiULu0AWasjNVfsrbXLR+ZEir6/jJ+kf
+         jtMZYOIUUM6RavrfmjHtdvemSmAkeJDSOAt6cdlxwK0bf8IHOa7Fsfmc4D0mlBaZ6+KA
+         o6yb27kAo+ae6nHlILoG4r3qs4ZN/L/tFmzrhSNbc8CSvtlFofBu4sEnGr1KLqjrTg65
+         ax/B+xQNdu48Gf1zNjePOdiNoeuR2yAROor/qokG/2jDOt4D9QF3K6Pn80Us5RqZVeWp
+         Nnbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0DnG4LJjdv6mAxFeMJR8DGf+NctXJFLBf9GwLy+AxJQ=;
-        b=o8dt85FiopWcGhXhpt25kIrlJBkT7xuHrqLVBo2fDOCuGnm7LJbaKxbp04x0/TQKC4
-         8JWvvjn3IUu4FSy/iWT85nQz4dMXhSOPL8187t64GzS9u0HARKocB4kGRZg5iokCfPPn
-         XQCCYmL0jZDdTNlWO23UEQM6ORn2hvyP66lc68+t5S9djlRhfphA2VHhCvDmCXvzoOmC
-         ZYMcNDVw0ZJw5A9B874xObT0KoE1tmf/YRaXl/6jRJrPMxcCaiPKaQzAyg4LJNOi6lNB
-         5ObO+rPjJqsZzC1BfcgXNsszs9e/w1f3lpepPjpmLbt6CjfEOC01A+JvQEredxLI3EHl
-         ctGw==
-X-Gm-Message-State: AOAM533RFgqbzdCd0F79yN4y6YolCk/UKzf8IDS2E9Mn/ntUkax3KcOe
-        43033a5xQlyAeF2N/IWaair532W+wEtnzWWE
-X-Google-Smtp-Source: ABdhPJzfpLMuUvtJrSFwIFWjAp/ycvj6HKNRVF8qRIcs0RQFe6tX1Ju0ziEFEpJPgFr+LJbS453aoA==
-X-Received: by 2002:a17:907:204c:: with SMTP id pg12mr6158094ejb.464.1603874307610;
-        Wed, 28 Oct 2020 01:38:27 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.184])
-        by smtp.googlemail.com with ESMTPSA id v6sm2525073ejj.112.2020.10.28.01.38.25
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=P68wKVWfyCPNBm8l+XiI7Y585elPVzN5iuk0IO/H+/E=;
+        b=LPHVTF6YQfItmipOzNTz5LkhOU08Gy96kebJqeu+MVPPtFLQ7uI9espdWWZyNvBl4e
+         ZE9eG+66+1yJ+5cHuvAp06NzrW8I8WRrAEHNpsLTRCVXFHuHQIwfjSvOtZwmfwLE7g8i
+         PMkIRYDvk2pjz0bcaiNcRmE1SBkJaSpyTl41+tg5rRfxP6W63MCvmBSTu6EAxxl1yQcd
+         sdLlevzot1w773b9ES890uQAhFNIySdfo9f3Vliu8kqXqnFFOGMRxB5IK05o3ha3aK8q
+         ZZ5wRVyhVV6Wm6GAfTwDBu/rLT0wWjnEHrZjb63Elen6CuPz4Q0wqBu+jtvmlrGYAtDa
+         pq8g==
+X-Gm-Message-State: AOAM531iszv2NO6/N7HmSEQ8HepB0T1N//tDTAKUcc04RKG3qPIOZZM5
+        vM/0k0YHa1hS7DuYOs5f2AGr1Q==
+X-Google-Smtp-Source: ABdhPJzI740UrFZhPArstzKSQF+TYxwsPkseC3B5SFZZTFDVUlnVWmvZW4aDRDOTzm36sCMDWZUxIA==
+X-Received: by 2002:a17:90a:9414:: with SMTP id r20mr1438198pjo.29.1603930598200;
+        Wed, 28 Oct 2020 17:16:38 -0700 (PDT)
+Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
+        by smtp.gmail.com with ESMTPSA id u13sm727407pfl.162.2020.10.28.17.16.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2020 01:38:26 -0700 (PDT)
-Date:   Wed, 28 Oct 2020 09:38:24 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v5 1/4] dt-bindings: media: imx258: add bindings for
- IMX258 sensor
-Message-ID: <20201028083824.GA32155@kozik-lap>
-References: <20201019170247.92002-1-krzk@kernel.org>
- <20201020103833.GT13341@paasikivi.fi.intel.com>
- <CAJKOXPdKHCQikYDLKDS2Y3NVyCjMYYH1pcxgaMoYgOK19vQCrQ@mail.gmail.com>
- <20201020120058.GU13341@paasikivi.fi.intel.com>
- <20201020122621.GA126891@kozik-lap>
- <20201020124654.GX13341@paasikivi.fi.intel.com>
- <20201020125852.GA128323@kozik-lap>
+        Wed, 28 Oct 2020 17:16:37 -0700 (PDT)
+From:   John Stultz <john.stultz@linaro.org>
+To:     lkml <linux-kernel@vger.kernel.org>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@kernel.org>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sandeep Patil <sspatil@google.com>,
+        Daniel Mentz <danielmentz@google.com>,
+        Chris Goldsworthy <cgoldswo@codeaurora.org>,
+        =?UTF-8?q?=C3=98rjan=20Eide?= <orjan.eide@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Simon Ser <contact@emersion.fr>,
+        James Jones <jajones@nvidia.com>, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH v4 6/7] dma-buf: dma-heap: Keep track of the heap device struct
+Date:   Thu, 29 Oct 2020 00:16:23 +0000
+Message-Id: <20201029001624.17513-7-john.stultz@linaro.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20201029001624.17513-1-john.stultz@linaro.org>
+References: <20201029001624.17513-1-john.stultz@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201020125852.GA128323@kozik-lap>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Oct 20, 2020 at 02:58:52PM +0200, Krzysztof Kozlowski wrote:
-> On Tue, Oct 20, 2020 at 03:46:54PM +0300, Sakari Ailus wrote:
-> > On Tue, Oct 20, 2020 at 02:26:21PM +0200, Krzysztof Kozlowski wrote:
-> > > On Tue, Oct 20, 2020 at 03:00:58PM +0300, Sakari Ailus wrote:
-> > > > Hi Krzysztof,
-> > > > 
-> > > > On Tue, Oct 20, 2020 at 12:54:09PM +0200, Krzysztof Kozlowski wrote:
-> > > > > On Tue, 20 Oct 2020 at 12:38, Sakari Ailus <sakari.ailus@linux.intel.com> wrote:
-> > > > > >
-> > > > > > Hi Krzysztof,
-> > > > > >
-> > > > > > On Mon, Oct 19, 2020 at 07:02:44PM +0200, Krzysztof Kozlowski wrote:
-> > > > > > > Add bindings for the IMX258 camera sensor.  The bindings, just like the
-> > > > > > > driver, are quite limited, e.g. do not support regulator supplies.
-> > > > > > >
-> > > > > > > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> > > > > > > Reviewed-by: Rob Herring <robh@kernel.org>
-> > > > > > >
-> > > > > > > ---
-> > > > > > >
-> > > > > > > Changes since v4:
-> > > > > > > 1. Add clock-lanes,
-> > > > > > > 2. Add Rob's review,
-> > > > > > > 3. Add one more example and extend existing one,
-> > > > > > > 4. Add common clock properties (assigned-*).
-> > > > > >
-> > > > > > Using the assigned-* clock properties may be workable for this driver at
-> > > > > > the moment. But using these properties does not guarantee the external
-> > > > > > clock frequency intended to be used on the hardware.
-> > > > > 
-> > > > > It guarantees it. The clock frequency will be as expected (except if
-> > > > > someone misconfigures the DTS).
-> > > > 
-> > > > Is that guaranteed?
-> > > > 
-> > > > I'm not saying no to the approach, but if we change how camera sensor DT
-> > > > bindings are defined, I'd prefer an informed decision is made on the
-> > > > matter.
-> > > > 
-> > > > > 
-> > > > > > Using other
-> > > > > > frequencies *is not* expected to work. That applies to this driver as well.
-> > > > > 
-> > > > > This is the binding which is HW description. According to HW datasheet
-> > > > > other frequencies from described range are accepted and expected to
-> > > > > work.
-> > > > 
-> > > > As per datasheet, yes, different external clock frequencies can be used.
-> > > > But the link frequency is still not independent of the external clock
-> > > > frequency.
-> > > > 
-> > > > The properties of the sensor's PLL tree determines what can be achieved
-> > > > given a certain external clock frequency. So picking a wrong external clock
-> > > > frequency quite possibly means that none of the designated link frequencies
-> > > > are available, rendering the sensor inoperable.
-> > > 
-> > > The driver then controls the HW and knows exactly what is needed. If
-> > > link frequency (which has its own DT property) requires some clock
-> > > frequency, the driver will configure the clock to that value. The same
-> > 
-> > Well it doesn't if it doesn't get that information from DT.
-> 
-> It will get it - via clk_get_rate(). You do not need DT for this.
-> 
-> > The frequency is usually a range, and looking at these bindings, it's from
-> > 6 MHz to 27 MHz. That'd be a lot of frequencies for a driver to try.
-> 
-> It does not have to try all of them. Assuming link frequency is fixed,
-> just use any matching (or hard-coded) input clock frequency. Since the
-> input clock frequency most likely will be set with assigned-clock-rates,
-> there will be no job to do for the driver at all. Unless the driver
-> wants to do something more, of course.
-> 
-> > 
-> > > going other direction. Driver has the knowledge about both its input
-> > > clock and link frequency, therefore it can make the best decision.
-> > 
-> > Again you're assuming a particular driver implementation.
-> 
-> Actually not, I am talking about bindings as far away from the driver
-> implementation as possible.  This is why some specific frequency *is
-> not* part of the bindings.
-> 
-> > 
-> > Typically only a few frequencies are really available on platforms, so a in
-> > practice a driver would not be able to get any requested frequency. I
-> > wouldn't start hard-coding every possible frequency to camera sensor
-> > drivers
-> 
-> If the driver cannot get requested frequency which it apparently
-> requires, there is nothing more to do. It's broken HW implementation.
-> The input clock must be matching requirements, regardless of what
-> property you put in DT.  You can add "clock-frequency" property, you can
-> even add "really-i-require-clock-frequency" but if the real HW input
-> clock does not have, it won't work.
-> 
-> IOW, adding "clock-frequency" property does not change the reality - the
-> board (HW) must provide given frequency so the entire system works.
-> 
-> > 
-> > > > > > This, instead of the clock-frequency property, effectively removes the
-> > > > > > ability to set the correct frequency from the driver, at least with current
-> > > > > > set of the used APIs.
-> > > > > 
-> > > > > It seems you confuse DT bindings with some specific driver
-> > > > > implementation. Bindings do not describe the driver behavior but the
-> > > > > HW. The ability to set the correct frequency from the driver is not
-> > > > > removed. It was never part of the bindings and never should. It is
-> > > > > part of the driver.
-> > > > > 
-> > > > > >
-> > > > > > I suppose you could add a function to set the assigned clock frequency and
-> > > > > > keep it, just as clk_set_rate_exclusive does?
-> > > 
-> > > I did not reply to this comment, so let me know. Of course, one could
-> > > add such functions. It's not a job for DT bindings, though.
-> > 
-> > I'm not suggesting to add it to DT binding patch. What I'm saying that with
-> > this approach is looks like it may well be needed.
-> 
-> New properties can always be added to DT. However existing properties
-> cannot be removed. Their meaning or values cannot be changed.
+Keep track of the heap device struct.
 
-Any more comments on the bindings or the patchset?
+This will be useful for special DMA allocations
+and actions.
 
-Best regards,
-Krzysztof
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: Liam Mark <lmark@codeaurora.org>
+Cc: Laura Abbott <labbott@kernel.org>
+Cc: Brian Starkey <Brian.Starkey@arm.com>
+Cc: Hridya Valsaraju <hridya@google.com>
+Cc: Suren Baghdasaryan <surenb@google.com>
+Cc: Sandeep Patil <sspatil@google.com>
+Cc: Daniel Mentz <danielmentz@google.com>
+Cc: Chris Goldsworthy <cgoldswo@codeaurora.org>
+Cc: Ørjan Eide <orjan.eide@arm.com>
+Cc: Robin Murphy <robin.murphy@arm.com>
+Cc: Ezequiel Garcia <ezequiel@collabora.com>
+Cc: Simon Ser <contact@emersion.fr>
+Cc: James Jones <jajones@nvidia.com>
+Cc: linux-media@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Signed-off-by: John Stultz <john.stultz@linaro.org>
+---
+ drivers/dma-buf/dma-heap.c | 33 +++++++++++++++++++++++++--------
+ include/linux/dma-heap.h   |  9 +++++++++
+ 2 files changed, 34 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
+index afd22c9dbdcf..72c746755d89 100644
+--- a/drivers/dma-buf/dma-heap.c
++++ b/drivers/dma-buf/dma-heap.c
+@@ -30,6 +30,7 @@
+  * @heap_devt		heap device node
+  * @list		list head connecting to list of heaps
+  * @heap_cdev		heap char device
++ * @heap_dev		heap device struct
+  *
+  * Represents a heap of memory from which buffers can be made.
+  */
+@@ -40,6 +41,7 @@ struct dma_heap {
+ 	dev_t heap_devt;
+ 	struct list_head list;
+ 	struct cdev heap_cdev;
++	struct device *heap_dev;
+ };
+ 
+ static LIST_HEAD(heap_list);
+@@ -190,10 +192,21 @@ void *dma_heap_get_drvdata(struct dma_heap *heap)
+ 	return heap->priv;
+ }
+ 
++/**
++ * dma_heap_get_dev() - get device struct for the heap
++ * @heap: DMA-Heap to retrieve device struct from
++ *
++ * Returns:
++ * The device struct for the heap.
++ */
++struct device *dma_heap_get_dev(struct dma_heap *heap)
++{
++	return heap->heap_dev;
++}
++
+ struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
+ {
+ 	struct dma_heap *heap, *h, *err_ret;
+-	struct device *dev_ret;
+ 	unsigned int minor;
+ 	int ret;
+ 
+@@ -247,16 +260,20 @@ struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
+ 		goto err1;
+ 	}
+ 
+-	dev_ret = device_create(dma_heap_class,
+-				NULL,
+-				heap->heap_devt,
+-				NULL,
+-				heap->name);
+-	if (IS_ERR(dev_ret)) {
++	heap->heap_dev = device_create(dma_heap_class,
++				       NULL,
++				       heap->heap_devt,
++				       NULL,
++				       heap->name);
++	if (IS_ERR(heap->heap_dev)) {
+ 		pr_err("dma_heap: Unable to create device\n");
+-		err_ret = ERR_CAST(dev_ret);
++		err_ret = ERR_CAST(heap->heap_dev);
+ 		goto err2;
+ 	}
++
++	/* Make sure it doesn't disappear on us */
++	heap->heap_dev = get_device(heap->heap_dev);
++
+ 	/* Add heap to the list */
+ 	mutex_lock(&heap_list_lock);
+ 	list_add(&heap->list, &heap_list);
+diff --git a/include/linux/dma-heap.h b/include/linux/dma-heap.h
+index 454e354d1ffb..82857e096910 100644
+--- a/include/linux/dma-heap.h
++++ b/include/linux/dma-heap.h
+@@ -50,6 +50,15 @@ struct dma_heap_export_info {
+  */
+ void *dma_heap_get_drvdata(struct dma_heap *heap);
+ 
++/**
++ * dma_heap_get_dev() - get device struct for the heap
++ * @heap: DMA-Heap to retrieve device struct from
++ *
++ * Returns:
++ * The device struct for the heap.
++ */
++struct device *dma_heap_get_dev(struct dma_heap *heap);
++
+ /**
+  * dma_heap_add - adds a heap to dmabuf heaps
+  * @exp_info:		information needed to register this heap
+-- 
+2.17.1
 
