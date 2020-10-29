@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71E83C55179
-	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 16:43:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE228C2D0A3
+	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 16:43:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1CCE120FC3
-	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 16:43:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 81AF820FC3
+	for <linux-media@archiver.kernel.org>; Thu, 29 Oct 2020 16:43:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603989785;
-	bh=uk9rGJ4+N1u1qnJ9IKKuVxqrudCSLJSlLDbCV6jBqDY=;
+	s=default; t=1603989789;
+	bh=Dhl956BimS53xTQsVQBFS9A2KaCmEJWe4BIHgTaal0w=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Y3BX4BPvX5EGTgi4/N9GZnWRVBUb2GvQ/3WWyiSTcTOPlG0JubX9fo0vQCxC4eGA0
-	 1KTE0eKf9TBWT3oY+RfSTsmBqfaoz7PVMMZ6bfu7qtvm07Z7qQihJ42oygGmJYgfiY
-	 otBMZtjmIODSKoDpIHrDlUFoy541O3DoqZQ1Pukc=
+	b=tv6gUal4krDfu59sStB7vb69i5Pdbg9pfqDk31UwNWIQvyws1r0ixBk9lJruZOsT7
+	 ZWTnh7hJ7KtAvMq8ebToyB74ai/A0re2xucze5pvHM8bvsUedG9A559c4Zhu4QN+bR
+	 oA3vowx2JbQ0bCOgWsfAZ1e7s3iS2pxZdUB/yLwc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726517AbgJ2QnA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 29 Oct 2020 12:43:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51386 "EHLO mail.kernel.org"
+        id S1726719AbgJ2QnI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 29 Oct 2020 12:43:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51566 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726407AbgJ2QnA (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 29 Oct 2020 12:43:00 -0400
+        id S1726449AbgJ2QnI (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 29 Oct 2020 12:43:08 -0400
 Received: from localhost.localdomain (adsl-84-226-167-205.adslplus.ch [84.226.167.205])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 82C9E21548;
-        Thu, 29 Oct 2020 16:42:55 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D8AEA214DB;
+        Thu, 29 Oct 2020 16:43:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603989779;
-        bh=uk9rGJ4+N1u1qnJ9IKKuVxqrudCSLJSlLDbCV6jBqDY=;
+        s=default; t=1603989787;
+        bh=Dhl956BimS53xTQsVQBFS9A2KaCmEJWe4BIHgTaal0w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IDjw44w21QmtZs1Au7YBvPinl2v59/UfgZdJ6gUgSAyG4kGzRVgLLrsKD80VsEaXH
-         O9ETMzUMQDGluL+ppSjn8H0mKqTpgLb08+0g3fq+LmlKuT1Zw7O6diSTDLwC2wbd1U
-         IyvNV1PDqqEjiIibbDVfeKIco4b4h67lq8S3f5N8=
+        b=ZlZTvl+l+UQ9Y5MJfNXWbQ2IbOG1PPAS5ROOyG/OP31KzyTfIYDMVetjXuhhn0VwD
+         tb4ny9BwSaFwb32dpX+QkrqvH/8ODHurSTXaCa3hZtd3TJjXUc+9hnQWz9Ow4Bvfra
+         ViodVUPWNwAzli//4GySrMwWZkq/IheEG8RCDM/Q=
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Pavel Machek <pavel@ucw.cz>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -58,9 +58,9 @@ To:     Pavel Machek <pavel@ucw.cz>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [RESEND PATCH 03/25] media: i2c: imx290: simplify getting state container
-Date:   Thu, 29 Oct 2020 17:42:17 +0100
-Message-Id: <20201029164239.84240-3-krzk@kernel.org>
+Subject: [RESEND PATCH 05/25] media: i2c: imx319: silence unused acpi_device_id warning
+Date:   Thu, 29 Oct 2020 17:42:19 +0100
+Message-Id: <20201029164239.84240-5-krzk@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201029164239.84240-1-krzk@kernel.org>
 References: <20201029164239.84240-1-krzk@kernel.org>
@@ -70,58 +70,30 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The pointer to 'struct v4l2_subdev' is stored in drvdata via
-v4l2_i2c_subdev_init() so there is no point of a dance like:
+If driver is built without ACPI, the struct acpi_device_id won't be
+used:
 
-    struct i2c_client *client = to_i2c_client(struct device *dev)
-    struct v4l2_subdev *sd = i2c_get_clientdata(client);
-
-This allows to remove local variable 'client' and few pointer
-dereferences.  White at it, use 'dev' directly instead of 'imx290->dev'.
+  drivers/media/i2c/imx319.c:2536:36: warning:
+    'imx319_acpi_ids' defined but not used [-Wunused-const-variable=]
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- drivers/media/i2c/imx290.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ drivers/media/i2c/imx319.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
-index adcddf3204f7..6319a42057d2 100644
---- a/drivers/media/i2c/imx290.c
-+++ b/drivers/media/i2c/imx290.c
-@@ -842,20 +842,19 @@ static int imx290_set_data_lanes(struct imx290 *imx290)
+diff --git a/drivers/media/i2c/imx319.c b/drivers/media/i2c/imx319.c
+index 8b86fc65364e..8473c0bbb35d 100644
+--- a/drivers/media/i2c/imx319.c
++++ b/drivers/media/i2c/imx319.c
+@@ -2533,7 +2533,7 @@ static const struct dev_pm_ops imx319_pm_ops = {
+ 	SET_SYSTEM_SLEEP_PM_OPS(imx319_suspend, imx319_resume)
+ };
  
- static int imx290_power_on(struct device *dev)
- {
--	struct i2c_client *client = to_i2c_client(dev);
--	struct v4l2_subdev *sd = i2c_get_clientdata(client);
-+	struct v4l2_subdev *sd = dev_get_drvdata(dev);
- 	struct imx290 *imx290 = to_imx290(sd);
- 	int ret;
- 
- 	ret = clk_prepare_enable(imx290->xclk);
- 	if (ret) {
--		dev_err(imx290->dev, "Failed to enable clock\n");
-+		dev_err(dev, "Failed to enable clock\n");
- 		return ret;
- 	}
- 
- 	ret = regulator_bulk_enable(IMX290_NUM_SUPPLIES, imx290->supplies);
- 	if (ret) {
--		dev_err(imx290->dev, "Failed to enable regulators\n");
-+		dev_err(dev, "Failed to enable regulators\n");
- 		clk_disable_unprepare(imx290->xclk);
- 		return ret;
- 	}
-@@ -872,8 +871,7 @@ static int imx290_power_on(struct device *dev)
- 
- static int imx290_power_off(struct device *dev)
- {
--	struct i2c_client *client = to_i2c_client(dev);
--	struct v4l2_subdev *sd = i2c_get_clientdata(client);
-+	struct v4l2_subdev *sd = dev_get_drvdata(dev);
- 	struct imx290 *imx290 = to_imx290(sd);
- 
- 	clk_disable_unprepare(imx290->xclk);
+-static const struct acpi_device_id imx319_acpi_ids[] = {
++static const struct acpi_device_id imx319_acpi_ids[] __maybe_unused = {
+ 	{ "SONY319A" },
+ 	{ /* sentinel */ }
+ };
 -- 
 2.25.1
 
