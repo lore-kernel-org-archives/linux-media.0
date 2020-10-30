@@ -2,126 +2,136 @@ Return-Path: <SRS0=wnq3=EF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9A26C4363A
-	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 11:22:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A3D3C4363A
+	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 11:30:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9EE3220756
-	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 11:22:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BCFF42076D
+	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 11:29:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1604057399;
+	bh=n6g4sGoxK2MiPh2ZCN97YJRvhmqyInMlY7v/n5IiSao=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=LKO8vAn8+uaPT36pOjrEmeEQ0pGvIICQ42bNu89301b4UU04hZ2PoNpMnIxPpDW8t
+	 G6GPqOSqSq08YKVlS1q0pGbixEkA6adSo2Om7mgxj5+5PgPIsh3zgv1Ty7YYbaHzi6
+	 xbNAP+P9wlL7vVIjbZaxl7Tjo99sdqRpfcrqo2ns=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726481AbgJ3LWn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Oct 2020 07:22:43 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:58824 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725355AbgJ3LWm (ORCPT
+        id S1726363AbgJ3L34 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Oct 2020 07:29:56 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:41818 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725993AbgJ3L34 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Oct 2020 07:22:42 -0400
-Received: from floko.floko.floko (unknown [IPv6:2804:14c:483:7e3e::1005])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: koike)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id A4AC61F45EBD;
-        Fri, 30 Oct 2020 11:22:36 +0000 (GMT)
-From:   Helen Koike <helen.koike@collabora.com>
-To:     linux-media@vger.kernel.org
-Cc:     linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        heiko@sntech.de, kernel@collabora.com, hverkuil-cisco@xs4all.nl,
-        dafna.hirschfeld@collabora.com, zhengsq@rock-chips.com,
-        laurent.pinchart@ideasonboard.com, niklas.soderlund@ragnatech.se,
-        mchehab@kernel.org, tfiga@chromium.org, ribalda@google.com
-Subject: [PATCH v2 1/3] media: videodev2.h, v4l2-ioctl: add rkisp1 meta buffer format
-Date:   Fri, 30 Oct 2020 08:22:22 -0300
-Message-Id: <20201030112225.2095909-2-helen.koike@collabora.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201030112225.2095909-1-helen.koike@collabora.com>
-References: <20201030112225.2095909-1-helen.koike@collabora.com>
+        Fri, 30 Oct 2020 07:29:56 -0400
+Received: by mail-wr1-f65.google.com with SMTP id s9so6052469wro.8;
+        Fri, 30 Oct 2020 04:29:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LhExkFKP0pOFWSZ28CiIxBi5YE3jihKe7GINR2GtFFc=;
+        b=OOtCEEjMBa76vAm6p2bm4jw6EOqqgGmsaa8WNq7POFZW3qdYMXnW5S9XAsdwixVpdS
+         b43+EGYhdxEpZM9c8II9kpjoIpPPxTepCY3bhDOXcxyCSmuyqwUrAu8rWTm/z0sVFRAk
+         Iv4UeshiVcby53yJD76VaAKKJLOwruD+x0p2iPH5ElERaGk+pzpPvWreeVxVl06BhvJS
+         JtRea0eWy7slc9pnjO1yBRYC4hq/bI4vAGHptUbddmFJI7IbebM0eD9uhdw6nwcuVDz7
+         810wBUBif451xXxhl04jWLMHJDB04NJAUZ+vEbFTWB1mHfDJAUpyOfXICRrGthWewFPf
+         J5xg==
+X-Gm-Message-State: AOAM532uBBlg2JkpX2i+CaXMozeDtrdark5ecZC5xItqTrVg+wZPFj0l
+        CIxpG04WY2U0sqgkpFGbLLs=
+X-Google-Smtp-Source: ABdhPJyErWzEU5RBjEU1E36KUDPMtyEIj6QpRknkOU3p7AqVYIWHHoy4TqP0nRLVQrpt/1pkLydx5g==
+X-Received: by 2002:adf:deca:: with SMTP id i10mr2608162wrn.96.1604057392866;
+        Fri, 30 Oct 2020 04:29:52 -0700 (PDT)
+Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.googlemail.com with ESMTPSA id 1sm11230659wre.61.2020.10.30.04.29.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Oct 2020 04:29:51 -0700 (PDT)
+Date:   Fri, 30 Oct 2020 12:29:50 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     "Yeh, Andy" <andy.yeh@intel.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH] media: i2c: imx258: correct mode to GBGB/RGRG
+Message-ID: <20201030112950.GA36162@kozik-lap>
+References: <20201028091947.93097-1-krzk@kernel.org>
+ <MWHPR11MB0046B799E9AD3648C6F67BFE87170@MWHPR11MB0046.namprd11.prod.outlook.com>
+ <CAJKOXPePfsRNZkY+L1XM3_iz6dMYFNZAJgrcut9JriuwYkKWsw@mail.gmail.com>
+ <CAJKOXPf6zhpu_3oQZ2bL_FnkBx7-NwH65N_OzVkH=Nh1bYkHxw@mail.gmail.com>
+ <20201028100311.GF26150@paasikivi.fi.intel.com>
+ <MWHPR11MB0046CCA70D68CE1F3BA4FA4287170@MWHPR11MB0046.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <MWHPR11MB0046CCA70D68CE1F3BA4FA4287170@MWHPR11MB0046.namprd11.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Shunqian Zheng <zhengsq@rock-chips.com>
+On Wed, Oct 28, 2020 at 10:14:52AM +0000, Yeh, Andy wrote:
+> >-----Original Message-----
+> >From: Sakari Ailus <sakari.ailus@linux.intel.com>
+> >Sent: Wednesday, October 28, 2020 6:03 PM
+> >To: Krzysztof Kozlowski <krzk@kernel.org>
+> >Cc: Yeh, Andy <andy.yeh@intel.com>; Mauro Carvalho Chehab
+> ><mchehab@kernel.org>; Tomasz Figa <tfiga@chromium.org>; Jason Chen
+> ><jasonx.z.chen@intel.com>; Alan Chiang <alanx.chiang@intel.com>; linux-
+> >media@vger.kernel.org; linux-kernel@vger.kernel.org;
+> >stable@vger.kernel.org
+> >Subject: Re: [PATCH] media: i2c: imx258: correct mode to GBGB/RGRG
+> >
+> >On Wed, Oct 28, 2020 at 10:56:55AM +0100, Krzysztof Kozlowski wrote:
+> >> On Wed, 28 Oct 2020 at 10:45, Krzysztof Kozlowski <krzk@kernel.org>
+> >wrote:
+> >> >
+> >> > On Wed, 28 Oct 2020 at 10:43, Yeh, Andy <andy.yeh@intel.com> wrote:
+> >> > >
+> >> > > But the sensor settings for the original submission is to output GRBG
+> >Bayer RAW.
+> >> > >
+> >> > > Regards, Andy
+> >> >
+> >> > No, not to my knowledge. There are no settings for color output
+> >> > because it is fixed to GBGB/RGRG. I was looking a lot into this
+> >> > driver (I have few other problems with it, already few other patches
+> >> > posted) and I could not find a setting for this in datasheet. If you
+> >> > know the setting for the other color - can you point me to it?
+> >>
+> >> And except the datasheet which mentions the specific format, the
+> >> testing confirms it. With original color the pictures are pink/purple.
+> >> With proper color, the pictures are correct (with more green color as
+> >> expected for bayer).
+> >
+> >Quoting the driver's start_streaming function:
+> >
+> >        /* Set Orientation be 180 degree */
+> >        ret = imx258_write_reg(imx258, REG_MIRROR_FLIP_CONTROL,
+> >                               IMX258_REG_VALUE_08BIT, REG_CONFIG_MIRROR_FLIP);
+> >        if (ret) {
+> >                dev_err(&client->dev, "%s failed to set orientation\n",
+> >                        __func__);
+> >                return ret;
+> >        }
+> >
+> >Could it be you're taking pictures of pink objects? ;-)
+> >
+> >--
+> >Sakari Ailus
+> 
+> Sakari is right. IIRC since the default sensor settings outputs in GBRG, and after mirro/flip (it is the original application when submit the driver) the bayer order will be GRBG.
 
-Add the Rockchip ISP1 specific processing parameter format
-V4L2_META_FMT_RK_ISP1_PARAMS and metadata format
-V4L2_META_FMT_RK_ISP1_STAT_3A for 3A.
+Yes, you are all right. It seems I was using wrong color mode for
+Gstreamer, or I messed up something more.
 
-Signed-off-by: Shunqian Zheng <zhengsq@rock-chips.com>
-Signed-off-by: Jacob Chen <jacob2.chen@rock-chips.com>
-Signed-off-by: Helen Koike <helen.koike@collabora.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Thanks for help everyone!
 
----
-Hello,
+The patch can be dropped.
 
-This patch is a continuation of:
-
-https://patchwork.kernel.org/project/linux-arm-kernel/patch/20191106120132.6876-2-helen.koike@collabora.com/
-
-These formats are already documented under
-Documentation/userspace-api/media/v4l/pixfmt-meta-rkisp1.rst
-
-We had agreed to keep under
-drivers/staging/media/rkisp1/uapi/rkisp1-config.h while the driver was
-in staging, since we are moving it out of staging, I guess this is the
-time :)
-
-Regards,
-Helen
----
- drivers/media/v4l2-core/v4l2-ioctl.c              | 2 ++
- drivers/staging/media/rkisp1/uapi/rkisp1-config.h | 4 ----
- include/uapi/linux/videodev2.h                    | 4 ++++
- 3 files changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index eeff398fbdcc1..202597d031c6b 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -1402,6 +1402,8 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
- 	case V4L2_META_FMT_UVC:		descr = "UVC Payload Header Metadata"; break;
- 	case V4L2_META_FMT_D4XX:	descr = "Intel D4xx UVC Metadata"; break;
- 	case V4L2_META_FMT_VIVID:       descr = "Vivid Metadata"; break;
-+	case V4L2_META_FMT_RK_ISP1_PARAMS:	descr = "Rockchip ISP1 3A params"; break;
-+	case V4L2_META_FMT_RK_ISP1_STAT_3A:	descr = "Rockchip ISP1 3A statistics"; break;
- 
- 	default:
- 		/* Compressed formats */
-diff --git a/drivers/staging/media/rkisp1/uapi/rkisp1-config.h b/drivers/staging/media/rkisp1/uapi/rkisp1-config.h
-index 8d906cc7da8fc..6e449e7842605 100644
---- a/drivers/staging/media/rkisp1/uapi/rkisp1-config.h
-+++ b/drivers/staging/media/rkisp1/uapi/rkisp1-config.h
-@@ -9,10 +9,6 @@
- 
- #include <linux/types.h>
- 
--/* Vendor specific - used for RK_ISP1 camera sub-system */
--#define V4L2_META_FMT_RK_ISP1_PARAMS   v4l2_fourcc('R', 'K', '1', 'P') /* Rockchip ISP1 params */
--#define V4L2_META_FMT_RK_ISP1_STAT_3A  v4l2_fourcc('R', 'K', '1', 'S') /* Rockchip ISP1 3A statistics */
--
- /* Defect Pixel Cluster Detection */
- #define RKISP1_CIF_ISP_MODULE_DPCC		(1U << 0)
- /* Black Level Subtraction */
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 534eaa4d39bc8..c2e13ba81196b 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -770,6 +770,10 @@ struct v4l2_pix_format {
- #define V4L2_META_FMT_D4XX        v4l2_fourcc('D', '4', 'X', 'X') /* D4XX Payload Header metadata */
- #define V4L2_META_FMT_VIVID	  v4l2_fourcc('V', 'I', 'V', 'D') /* Vivid Metadata */
- 
-+/* Vendor specific - used for RK_ISP1 camera sub-system */
-+#define V4L2_META_FMT_RK_ISP1_PARAMS	v4l2_fourcc('R', 'K', '1', 'P') /* Rockchip ISP1 params */
-+#define V4L2_META_FMT_RK_ISP1_STAT_3A	v4l2_fourcc('R', 'K', '1', 'S') /* Rockchip ISP1 3A statistics */
-+
- /* priv field value to indicates that subsequent fields are valid. */
- #define V4L2_PIX_FMT_PRIV_MAGIC		0xfeedcafe
- 
--- 
-2.28.0
+Best regards,
+Krzysztof
 
