@@ -5,46 +5,46 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72439C4741F
-	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 16:55:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DE53C55179
+	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 16:55:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 26321221FF
-	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 16:55:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 277B4221EB
+	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 16:55:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1604076948;
-	bh=3HHkPHxUAoaKPZnU75UL9Fi/9SVSDzWYfAj9CVPMYC0=;
+	s=default; t=1604076954;
+	bh=dEREUX3pxpzvL1tLCjFym4TpPk2OqNcinSBxBhCK4bA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=j2EFqJ4zpB7qzZltLdy4hp/42+QvJXjF8/oGq1xZEi+njG2zXMKVc5+pMtWUXSvX2
-	 6fIMHdpAQGmrGfMtMP6RWbBSn2UBdUVcZ7ypHYU3kL2yaP6ebzfpbeImtCXyHv89Ez
-	 rf3KiCefLzbDrvtMLRkULRddaQRCDvHNn1dhrBEA=
+	b=E9VDvak346y79TvU1Tn5d/D2bF8eTpE4MD9VqGdF4hFtwOE2V0cmYZjNEXx/o4bhf
+	 tzElxUYpPBQ53R3KiZt1toB1g8Lte69OHs6ernyq22vc8/mkYcVSjt1WONoHsRHf1p
+	 g36Kgc/OtYo+XbxUWwi0eetXnU/rQu3E46h0Ncck=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727233AbgJ3Qzr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Oct 2020 12:55:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60776 "EHLO mail.kernel.org"
+        id S1727284AbgJ3Qzv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Oct 2020 12:55:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60862 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726239AbgJ3Qzq (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Oct 2020 12:55:46 -0400
+        id S1727264AbgJ3Qzu (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 30 Oct 2020 12:55:50 -0400
 Received: from localhost.localdomain (HSI-KBW-46-223-126-90.hsi.kabel-badenwuerttemberg.de [46.223.126.90])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8AE442076E;
-        Fri, 30 Oct 2020 16:55:43 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B58EF208B6;
+        Fri, 30 Oct 2020 16:55:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604076945;
-        bh=3HHkPHxUAoaKPZnU75UL9Fi/9SVSDzWYfAj9CVPMYC0=;
+        s=default; t=1604076949;
+        bh=dEREUX3pxpzvL1tLCjFym4TpPk2OqNcinSBxBhCK4bA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a6K2gEWcB6d5tQ/5C07Gq+IH4VCgUT6NhFkW6dKY5D9xKNfjZBWNQQRTi58uui2bn
-         O1BHCj5Rsu7zLDYyptT+tZDfT7yPAGKPVIyiqlT5IuNadBbCkhELQyTD+hoGVWC/dA
-         6qq1RL32uwhix6tpNPBZ0cPBxS0sKmjoaxcUpv4M=
+        b=oqzz1gl6XTf/LNcF0UFfNeyH2C6JfjmU9rYaSM/bc8TKKSMDkfS4HFAtUkR3IcBZs
+         fl12pC/IO9KjHKTl5ts81fOtcv8sGtnk+ApCbjhEPndF6oOx89Mfaq1/4XoOyzuWX0
+         FAaGnSKNtgNEcGdLh2xsif0e0jr+clPR4ZtWFlds=
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Hans Verkuil <hverkuil@xs4all.nl>
 Cc:     Arnd Bergmann <arnd@arndb.de>, linux-media@vger.kernel.org,
         mchehab@kernel.org, hch@lst.de, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/8] media: v4l2: move v4l2_ext_controls conversion
-Date:   Fri, 30 Oct 2020 17:55:24 +0100
-Message-Id: <20201030165529.1255175-4-arnd@kernel.org>
+Subject: [PATCH v2 5/8] media: v4l2: allocate v4l2_clip objects early
+Date:   Fri, 30 Oct 2020 17:55:26 +0100
+Message-Id: <20201030165529.1255175-6-arnd@kernel.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201030165529.1255175-1-arnd@kernel.org>
 References: <20201030165529.1255175-1-arnd@kernel.org>
@@ -56,346 +56,260 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The v4l2_ext_controls ioctl handlers use an indirect pointer to an
-incompatible data structure, making the conversion particularly tricky.
+The v4l2_format based ioctls can have an indirect pointer to an array
+of v4l2_clip structures for overlay mode, depending on the 'type' member.
+There are only five drivers that use the overlay mode and copy the
+data through the __user pointer.
 
-Moving the compat implementation to use the new
-v4l2_compat_get_user()/v4l2_compat_put_user() helpers makes it
-noticeably simpler.
+Change the five drivers to use memcpy() instead, and copy the data
+in common code using the check_array_args() helpers. This allows
+for a subsequent patch that use the same mechanism for compat
+ioctl handlers.
 
-In v4l2_compat_get_array_args()/v4l2_compat_put_array_args(),
-the 'file' argument needs to get passed to determine the
-exact format, which is a bit unfortunate, as no other conversion
-needs these.
+Note that there is another pointer for a 'bitmap' that is only
+used in the 'vivid' driver and nowhere else. There is no easy
+way to use the same trick without adding complexity to the
+common code, so this remains a __user pointer.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/media/v4l2-core/v4l2-compat-ioctl32.c | 236 +++++++-----------
- 1 file changed, 90 insertions(+), 146 deletions(-)
+ drivers/media/common/saa7146/saa7146_video.c  |  6 ++---
+ drivers/media/pci/bt8xx/bttv-driver.c         |  8 ++-----
+ drivers/media/pci/saa7134/saa7134-video.c     | 19 ++++++---------
+ .../media/test-drivers/vivid/vivid-vid-cap.c  | 18 ++++++---------
+ .../media/test-drivers/vivid/vivid-vid-out.c  | 18 ++++++---------
+ drivers/media/v4l2-core/v4l2-ioctl.c          | 23 ++++++++++++++++++-
+ include/uapi/linux/videodev2.h                |  2 +-
+ 7 files changed, 48 insertions(+), 46 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-compat-ioctl32.c b/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
-index a76f6ac5b1eb..fa94cdec7df5 100644
---- a/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
-+++ b/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
-@@ -1124,142 +1124,44 @@ static inline bool ctrl_is_pointer(struct file *file, u32 id)
- 		(qec.flags & V4L2_CTRL_FLAG_HAS_PAYLOAD);
- }
- 
--static int bufsize_v4l2_ext_controls(struct v4l2_ext_controls32 __user *p32,
--				     u32 *size)
--{
--	u32 count;
--
--	if (!access_ok(p32, sizeof(*p32)) ||
--	    get_user(count, &p32->count))
+diff --git a/drivers/media/common/saa7146/saa7146_video.c b/drivers/media/common/saa7146/saa7146_video.c
+index ccd15b4d4920..7b8795eca589 100644
+--- a/drivers/media/common/saa7146/saa7146_video.c
++++ b/drivers/media/common/saa7146/saa7146_video.c
+@@ -771,10 +771,8 @@ static int vidioc_s_fmt_vid_overlay(struct file *file, void *__fh, struct v4l2_f
+ 	vv->ov.nclips = f->fmt.win.clipcount;
+ 	if (vv->ov.nclips > 16)
+ 		vv->ov.nclips = 16;
+-	if (copy_from_user(vv->ov.clips, f->fmt.win.clips,
+-				sizeof(struct v4l2_clip) * vv->ov.nclips)) {
 -		return -EFAULT;
--	if (count > V4L2_CID_MAX_CTRLS)
--		return -EINVAL;
--	*size = count * sizeof(struct v4l2_ext_control);
--	return 0;
--}
--
--static int get_v4l2_ext_controls32(struct file *file,
--				   struct v4l2_ext_controls __user *p64,
--				   struct v4l2_ext_controls32 __user *p32,
--				   void __user *aux_buf, u32 aux_space)
-+static int get_v4l2_ext_controls32(struct v4l2_ext_controls *p64,
-+				   struct v4l2_ext_controls32 __user *p32)
- {
--	struct v4l2_ext_control32 __user *ucontrols;
--	struct v4l2_ext_control __user *kcontrols;
--	u32 count;
--	u32 n;
--	compat_caddr_t p;
--
--	if (!access_ok(p32, sizeof(*p32)) ||
--	    assign_in_user(&p64->which, &p32->which) ||
--	    get_user(count, &p32->count) ||
--	    put_user(count, &p64->count) ||
--	    assign_in_user(&p64->error_idx, &p32->error_idx) ||
--	    assign_in_user(&p64->request_fd, &p32->request_fd) ||
--	    copy_in_user(p64->reserved, p32->reserved, sizeof(p64->reserved)))
--		return -EFAULT;
-+	struct v4l2_ext_controls32 ec32;
- 
--	if (count == 0)
--		return put_user(NULL, &p64->controls);
--	if (count > V4L2_CID_MAX_CTRLS)
--		return -EINVAL;
--	if (get_user(p, &p32->controls))
--		return -EFAULT;
--	ucontrols = compat_ptr(p);
--	if (!access_ok(ucontrols, count * sizeof(*ucontrols)))
--		return -EFAULT;
--	if (aux_space < count * sizeof(*kcontrols))
-+	if (copy_from_user(&ec32, p32, sizeof(ec32)))
- 		return -EFAULT;
--	kcontrols = aux_buf;
--	if (put_user_force(kcontrols, &p64->controls))
--		return -EFAULT;
--
--	for (n = 0; n < count; n++) {
--		u32 id;
--
--		if (copy_in_user(kcontrols, ucontrols, sizeof(*ucontrols)))
--			return -EFAULT;
--
--		if (get_user(id, &kcontrols->id))
--			return -EFAULT;
- 
--		if (ctrl_is_pointer(file, id)) {
--			void __user *s;
-+	*p64 = (struct v4l2_ext_controls) {
-+		.which		= ec32.which,
-+		.count		= ec32.count,
-+		.error_idx	= ec32.error_idx,
-+		.request_fd	= ec32.request_fd,
-+		.reserved[0]	= ec32.reserved[0],
-+		.controls	= (void __force *)compat_ptr(ec32.controls),
-+	};
- 
--			if (get_user(p, &ucontrols->string))
--				return -EFAULT;
--			s = compat_ptr(p);
--			if (put_user(s, &kcontrols->string))
--				return -EFAULT;
--		}
--		ucontrols++;
--		kcontrols++;
 -	}
- 	return 0;
- }
++	memcpy(vv->ov.clips, f->fmt.win.clips,
++	       sizeof(struct v4l2_clip) * vv->ov.nclips);
  
--static int put_v4l2_ext_controls32(struct file *file,
--				   struct v4l2_ext_controls __user *p64,
-+static int put_v4l2_ext_controls32(struct v4l2_ext_controls *p64,
- 				   struct v4l2_ext_controls32 __user *p32)
- {
--	struct v4l2_ext_control32 __user *ucontrols;
--	struct v4l2_ext_control *kcontrols;
--	u32 count;
--	u32 n;
--	compat_caddr_t p;
--
--	/*
--	 * We need to define kcontrols without __user, even though it does
--	 * point to data in userspace here. The reason is that v4l2-ioctl.c
--	 * copies it from userspace to kernelspace, so its definition in
--	 * videodev2.h doesn't have a __user markup. Defining kcontrols
--	 * with __user causes smatch warnings, so instead declare it
--	 * without __user and cast it as a userspace pointer where needed.
--	 */
--	if (!access_ok(p32, sizeof(*p32)) ||
--	    assign_in_user(&p32->which, &p64->which) ||
--	    get_user(count, &p64->count) ||
--	    put_user(count, &p32->count) ||
--	    assign_in_user(&p32->error_idx, &p64->error_idx) ||
--	    assign_in_user(&p32->request_fd, &p64->request_fd) ||
--	    copy_in_user(p32->reserved, p64->reserved, sizeof(p32->reserved)) ||
--	    get_user(kcontrols, &p64->controls))
--		return -EFAULT;
-+	struct v4l2_ext_controls32 ec32;
-+
-+	memset(&ec32, 0, sizeof(ec32));
-+	ec32 = (struct v4l2_ext_controls32) {
-+		.which		= p64->which,
-+		.count		= p64->count,
-+		.error_idx	= p64->error_idx,
-+		.request_fd	= p64->request_fd,
-+		.reserved[0]	= p64->reserved[0],
-+		.controls	= (uintptr_t)p64->controls,
-+	};
- 
--	if (!count || count > (U32_MAX/sizeof(*ucontrols)))
--		return 0;
--	if (get_user(p, &p32->controls))
--		return -EFAULT;
--	ucontrols = compat_ptr(p);
--	if (!access_ok(ucontrols, count * sizeof(*ucontrols)))
-+	if (copy_to_user(p32, &ec32, sizeof(ec32)))
- 		return -EFAULT;
- 
--	for (n = 0; n < count; n++) {
--		unsigned int size = sizeof(*ucontrols);
--		u32 id;
--
--		if (get_user_cast(id, &kcontrols->id) ||
--		    put_user(id, &ucontrols->id) ||
--		    assign_in_user_cast(&ucontrols->size, &kcontrols->size) ||
--		    copy_in_user(&ucontrols->reserved2,
--				 (void __user *)&kcontrols->reserved2,
--				 sizeof(ucontrols->reserved2)))
+ 	/* vv->ov.fh is used to indicate that we have valid overlay information, too */
+ 	vv->ov.fh = fh;
+diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
+index 8824dd0fb331..b2fab7d96207 100644
+--- a/drivers/media/pci/bt8xx/bttv-driver.c
++++ b/drivers/media/pci/bt8xx/bttv-driver.c
+@@ -2143,12 +2143,8 @@ static int setup_window_lock(struct bttv_fh *fh, struct bttv *btv,
+ 	clips = kmalloc(size,GFP_KERNEL);
+ 	if (NULL == clips)
+ 		return -ENOMEM;
+-	if (n > 0) {
+-		if (copy_from_user(clips,win->clips,sizeof(struct v4l2_clip)*n)) {
+-			kfree(clips);
 -			return -EFAULT;
--
--		/*
--		 * Do not modify the pointer when copying a pointer control.
--		 * The contents of the pointer was changed, not the pointer
--		 * itself.
--		 */
--		if (ctrl_is_pointer(file, id))
--			size -= sizeof(ucontrols->value64);
--
--		if (copy_in_user(ucontrols,
--				 (void __user *)kcontrols, size))
--			return -EFAULT;
--
--		ucontrols++;
--		kcontrols++;
--	}
- 	return 0;
- }
- 
-@@ -1409,6 +1311,12 @@ static int put_v4l2_edid32(struct v4l2_edid __user *p64,
- unsigned int v4l2_compat_translate_cmd(unsigned int cmd)
- {
- 	switch (cmd) {
-+	case VIDIOC_G_EXT_CTRLS32:
-+		return VIDIOC_G_EXT_CTRLS;
-+	case VIDIOC_S_EXT_CTRLS32:
-+		return VIDIOC_S_EXT_CTRLS;
-+	case VIDIOC_TRY_EXT_CTRLS32:
-+		return VIDIOC_TRY_EXT_CTRLS;
- 	}
- 	return cmd;
- }
-@@ -1416,6 +1324,10 @@ unsigned int v4l2_compat_translate_cmd(unsigned int cmd)
- int v4l2_compat_get_user(void __user *arg, void *parg, unsigned int cmd)
- {
- 	switch (cmd) {
-+	case VIDIOC_G_EXT_CTRLS32:
-+	case VIDIOC_S_EXT_CTRLS32:
-+	case VIDIOC_TRY_EXT_CTRLS32:
-+		return get_v4l2_ext_controls32(parg, arg);
- 	}
- 	return 0;
- }
-@@ -1423,6 +1335,10 @@ int v4l2_compat_get_user(void __user *arg, void *parg, unsigned int cmd)
- int v4l2_compat_put_user(void __user *arg, void *parg, unsigned int cmd)
- {
- 	switch (cmd) {
-+	case VIDIOC_G_EXT_CTRLS32:
-+	case VIDIOC_S_EXT_CTRLS32:
-+	case VIDIOC_TRY_EXT_CTRLS32:
-+		return put_v4l2_ext_controls32(parg, arg);
- 	}
- 	return 0;
- }
-@@ -1434,6 +1350,29 @@ int v4l2_compat_get_array_args(struct file *file, void *mbuf,
- 	int err = 0;
- 
- 	switch (cmd) {
-+	case VIDIOC_G_EXT_CTRLS32:
-+	case VIDIOC_S_EXT_CTRLS32:
-+	case VIDIOC_TRY_EXT_CTRLS32: {
-+		struct v4l2_ext_controls *ecs64 = arg;
-+		struct v4l2_ext_control *ec64 = mbuf;
-+		struct v4l2_ext_control32 __user *ec32 = user_ptr;
-+		int n;
-+
-+		for (n = 0; n < ecs64->count; n++) {
-+			if (copy_from_user(ec64, ec32, sizeof(*ec32)))
-+				return -EFAULT;
-+
-+			if (ctrl_is_pointer(file, ec64->id)) {
-+				compat_uptr_t p;
-+				if (get_user(p, &ec32->string))
-+					return -EFAULT;
-+				ec64->string = compat_ptr(p);
-+			}
-+			ec32++;
-+			ec64++;
-+		}
-+		break;
-+	}
- 	default:
- 		if (copy_from_user(mbuf, user_ptr, array_size))
- 			err = -EFAULT;
-@@ -1450,6 +1389,33 @@ int v4l2_compat_put_array_args(struct file *file, void __user *user_ptr,
- 	int err = 0;
- 
- 	switch (cmd) {
-+	case VIDIOC_G_EXT_CTRLS32:
-+	case VIDIOC_S_EXT_CTRLS32:
-+	case VIDIOC_TRY_EXT_CTRLS32: {
-+		struct v4l2_ext_controls *ecs64 = arg;
-+		struct v4l2_ext_control *ec64 = mbuf;
-+		struct v4l2_ext_control32 __user *ec32 = user_ptr;
-+		int n;
-+
-+		for (n = 0; n < ecs64->count; n++) {
-+			unsigned int size = sizeof(*ec32);
-+			/*
-+			 * Do not modify the pointer when copying a pointer
-+			 * control.  The contents of the pointer was changed,
-+			 * not the pointer itself.
-+			 * The structures are otherwise compatible.
-+			 */
-+			if (ctrl_is_pointer(file, ec64->id))
-+				size -= sizeof(ec32->value64);
-+
-+			if (copy_to_user(ec32, ec64, size))
-+				return -EFAULT;
-+
-+			ec32++;
-+			ec64++;
-+		}
-+		break;
-+	}
- 	default:
- 		if (copy_to_user(user_ptr, mbuf, array_size))
- 			err = -EFAULT;
-@@ -1459,6 +1425,7 @@ int v4l2_compat_put_array_args(struct file *file, void __user *user_ptr,
- 	return err;
- }
- 
-+
- /**
-  * alloc_userspace() - Allocates a 64-bits userspace pointer compatible
-  *	for calling the native 64-bits version of an ioctl.
-@@ -1529,9 +1496,6 @@ static long do_video_ioctl(struct file *file, unsigned int cmd, unsigned long ar
- 	case VIDIOC_ENUMSTD32: ncmd = VIDIOC_ENUMSTD; break;
- 	case VIDIOC_ENUMINPUT32: ncmd = VIDIOC_ENUMINPUT; break;
- 	case VIDIOC_TRY_FMT32: ncmd = VIDIOC_TRY_FMT; break;
--	case VIDIOC_G_EXT_CTRLS32: ncmd = VIDIOC_G_EXT_CTRLS; break;
--	case VIDIOC_S_EXT_CTRLS32: ncmd = VIDIOC_S_EXT_CTRLS; break;
--	case VIDIOC_TRY_EXT_CTRLS32: ncmd = VIDIOC_TRY_EXT_CTRLS; break;
- #ifdef CONFIG_X86_64
- 	case VIDIOC_DQEVENT32: ncmd = VIDIOC_DQEVENT; break;
- 	case VIDIOC_DQEVENT32_TIME32: ncmd = VIDIOC_DQEVENT_TIME32; break;
-@@ -1647,20 +1611,6 @@ static long do_video_ioctl(struct file *file, unsigned int cmd, unsigned long ar
- 		compatible_arg = 0;
- 		break;
- 
--	case VIDIOC_G_EXT_CTRLS32:
--	case VIDIOC_S_EXT_CTRLS32:
--	case VIDIOC_TRY_EXT_CTRLS32:
--		err = bufsize_v4l2_ext_controls(p32, &aux_space);
--		if (!err)
--			err = alloc_userspace(sizeof(struct v4l2_ext_controls),
--					      aux_space, &new_p64);
--		if (!err) {
--			aux_buf = new_p64 + sizeof(struct v4l2_ext_controls);
--			err = get_v4l2_ext_controls32(file, new_p64, p32,
--						      aux_buf, aux_space);
 -		}
--		compatible_arg = 0;
--		break;
- #ifdef CONFIG_X86_64
- 	case VIDIOC_DQEVENT32:
- 		err = alloc_userspace(sizeof(struct v4l2_event), 0, &new_p64);
-@@ -1703,12 +1653,6 @@ static long do_video_ioctl(struct file *file, unsigned int cmd, unsigned long ar
- 	 * the blocks to maximum allowed value.
- 	 */
- 	switch (cmd) {
--	case VIDIOC_G_EXT_CTRLS32:
--	case VIDIOC_S_EXT_CTRLS32:
--	case VIDIOC_TRY_EXT_CTRLS32:
--		if (put_v4l2_ext_controls32(file, new_p64, p32))
+-	}
++	if (n > 0)
++		memcpy(clips, win->clips, sizeof(struct v4l2_clip)*n);
+ 
+ 	/* clip against screen */
+ 	if (NULL != btv->fbuf.base)
+diff --git a/drivers/media/pci/saa7134/saa7134-video.c b/drivers/media/pci/saa7134/saa7134-video.c
+index 9a6a6b68f8e3..7f35f8672f7c 100644
+--- a/drivers/media/pci/saa7134/saa7134-video.c
++++ b/drivers/media/pci/saa7134/saa7134-video.c
+@@ -1265,9 +1265,7 @@ static int saa7134_g_fmt_vid_overlay(struct file *file, void *priv,
+ 				struct v4l2_format *f)
+ {
+ 	struct saa7134_dev *dev = video_drvdata(file);
+-	struct v4l2_clip __user *clips = f->fmt.win.clips;
+ 	u32 clipcount = f->fmt.win.clipcount;
+-	int err = 0;
+ 	int i;
+ 
+ 	if (saa7134_no_overlay > 0) {
+@@ -1275,20 +1273,18 @@ static int saa7134_g_fmt_vid_overlay(struct file *file, void *priv,
+ 		return -EINVAL;
+ 	}
+ 	f->fmt.win = dev->win;
+-	f->fmt.win.clips = clips;
+-	if (clips == NULL)
++	if (!f->fmt.win.clips)
+ 		clipcount = 0;
+ 	if (dev->nclips < clipcount)
+ 		clipcount = dev->nclips;
+ 	f->fmt.win.clipcount = clipcount;
+ 
+-	for (i = 0; !err && i < clipcount; i++) {
+-		if (copy_to_user(&f->fmt.win.clips[i].c, &dev->clips[i].c,
+-					sizeof(struct v4l2_rect)))
 -			err = -EFAULT;
--		break;
- 	case VIDIOC_S_EDID32:
- 		if (put_v4l2_edid32(new_p64, p32))
- 			err = -EFAULT;
++	for (i = 0; i < clipcount; i++) {
++		memcpy(&f->fmt.win.clips[i].c, &dev->clips[i].c,
++					sizeof(struct v4l2_rect));
+ 	}
+ 
+-	return err;
++	return 0;
+ }
+ 
+ static int saa7134_try_fmt_vid_cap(struct file *file, void *priv,
+@@ -1396,9 +1392,8 @@ static int saa7134_s_fmt_vid_overlay(struct file *file, void *priv,
+ 	dev->win    = f->fmt.win;
+ 	dev->nclips = f->fmt.win.clipcount;
+ 
+-	if (copy_from_user(dev->clips, f->fmt.win.clips,
+-			   sizeof(struct v4l2_clip) * dev->nclips))
+-		return -EFAULT;
++	memcpy(dev->clips, f->fmt.win.clips,
++	       sizeof(struct v4l2_clip) * dev->nclips);
+ 
+ 	if (priv == dev->overlay_owner) {
+ 		spin_lock_irqsave(&dev->slock, flags);
+diff --git a/drivers/media/test-drivers/vivid/vivid-vid-cap.c b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
+index eadf28ab1e39..b9caa4b26209 100644
+--- a/drivers/media/test-drivers/vivid/vivid-vid-cap.c
++++ b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
+@@ -1107,11 +1107,9 @@ int vidioc_g_fmt_vid_overlay(struct file *file, void *priv,
+ 		    ((compose->width + 7) / 8) * compose->height))
+ 			return -EFAULT;
+ 	}
+-	if (clipcount && win->clips) {
+-		if (copy_to_user(win->clips, dev->clips_cap,
+-				 clipcount * sizeof(dev->clips_cap[0])))
+-			return -EFAULT;
+-	}
++	if (clipcount && win->clips)
++		memcpy(win->clips, dev->clips_cap,
++		       clipcount * sizeof(dev->clips_cap[0]));
+ 	return 0;
+ }
+ 
+@@ -1141,9 +1139,8 @@ int vidioc_try_fmt_vid_overlay(struct file *file, void *priv,
+ 	if (win->clipcount > MAX_CLIPS)
+ 		win->clipcount = MAX_CLIPS;
+ 	if (win->clipcount) {
+-		if (copy_from_user(dev->try_clips_cap, win->clips,
+-				   win->clipcount * sizeof(dev->clips_cap[0])))
+-			return -EFAULT;
++		memcpy(dev->try_clips_cap, win->clips,
++		       win->clipcount * sizeof(dev->clips_cap[0]));
+ 		for (i = 0; i < win->clipcount; i++) {
+ 			struct v4l2_rect *r = &dev->try_clips_cap[i].c;
+ 
+@@ -1166,9 +1163,8 @@ int vidioc_try_fmt_vid_overlay(struct file *file, void *priv,
+ 					return -EINVAL;
+ 			}
+ 		}
+-		if (copy_to_user(win->clips, dev->try_clips_cap,
+-				 win->clipcount * sizeof(dev->clips_cap[0])))
+-			return -EFAULT;
++		memcpy(win->clips, dev->try_clips_cap,
++		       win->clipcount * sizeof(dev->clips_cap[0]));
+ 	}
+ 	return 0;
+ }
+diff --git a/drivers/media/test-drivers/vivid/vivid-vid-out.c b/drivers/media/test-drivers/vivid/vivid-vid-out.c
+index ee3446e3217c..ac1e981e8342 100644
+--- a/drivers/media/test-drivers/vivid/vivid-vid-out.c
++++ b/drivers/media/test-drivers/vivid/vivid-vid-out.c
+@@ -857,11 +857,9 @@ int vidioc_g_fmt_vid_out_overlay(struct file *file, void *priv,
+ 		    ((dev->compose_out.width + 7) / 8) * dev->compose_out.height))
+ 			return -EFAULT;
+ 	}
+-	if (clipcount && win->clips) {
+-		if (copy_to_user(win->clips, dev->clips_out,
+-				 clipcount * sizeof(dev->clips_out[0])))
+-			return -EFAULT;
+-	}
++	if (clipcount && win->clips)
++		memcpy(win->clips, dev->clips_out,
++		       clipcount * sizeof(dev->clips_out[0]));
+ 	return 0;
+ }
+ 
+@@ -891,9 +889,8 @@ int vidioc_try_fmt_vid_out_overlay(struct file *file, void *priv,
+ 	if (win->clipcount > MAX_CLIPS)
+ 		win->clipcount = MAX_CLIPS;
+ 	if (win->clipcount) {
+-		if (copy_from_user(dev->try_clips_out, win->clips,
+-				   win->clipcount * sizeof(dev->clips_out[0])))
+-			return -EFAULT;
++		memcpy(dev->try_clips_out, win->clips,
++		       win->clipcount * sizeof(dev->clips_out[0]));
+ 		for (i = 0; i < win->clipcount; i++) {
+ 			struct v4l2_rect *r = &dev->try_clips_out[i].c;
+ 
+@@ -916,9 +913,8 @@ int vidioc_try_fmt_vid_out_overlay(struct file *file, void *priv,
+ 					return -EINVAL;
+ 			}
+ 		}
+-		if (copy_to_user(win->clips, dev->try_clips_out,
+-				 win->clipcount * sizeof(dev->clips_out[0])))
+-			return -EFAULT;
++		memcpy(win->clips, dev->try_clips_out,
++		       win->clipcount * sizeof(dev->clips_out[0]));
+ 	}
+ 	return 0;
+ }
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index b8be61a09776..f0f6906a879d 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -1582,7 +1582,7 @@ static int v4l_g_fmt(const struct v4l2_ioctl_ops *ops,
+ 	switch (p->type) {
+ 	case V4L2_BUF_TYPE_VIDEO_OVERLAY:
+ 	case V4L2_BUF_TYPE_VIDEO_OUTPUT_OVERLAY: {
+-		struct v4l2_clip __user *clips = p->fmt.win.clips;
++		struct v4l2_clip *clips = p->fmt.win.clips;
+ 		u32 clipcount = p->fmt.win.clipcount;
+ 		void __user *bitmap = p->fmt.win.bitmap;
+ 
+@@ -3084,6 +3084,27 @@ static int check_array_args(unsigned int cmd, void *parg, size_t *array_size,
+ 		}
+ 		break;
+ 	}
++	case VIDIOC_G_FMT:
++	case VIDIOC_S_FMT:
++	case VIDIOC_TRY_FMT: {
++		struct v4l2_format *fmt = parg;
++
++		if (fmt->type != V4L2_BUF_TYPE_VIDEO_OVERLAY &&
++		    fmt->type != V4L2_BUF_TYPE_VIDEO_OUTPUT_OVERLAY)
++			break;
++		if (fmt->fmt.win.clipcount > 2048)
++			return -EINVAL;
++		if (!fmt->fmt.win.clipcount)
++			break;
++
++		*user_ptr = (void __user *)fmt->fmt.win.clips;
++		*kernel_ptr = (void **)&fmt->fmt.win.clips;
++		*array_size = sizeof(struct v4l2_clip)
++				* fmt->fmt.win.clipcount;
++
++		ret = 1;
++		break;
++	}
+ 	}
+ 
+ 	return ret;
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 534eaa4d39bc..b10f102bbf6f 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -1185,7 +1185,7 @@ struct v4l2_window {
+ 	struct v4l2_rect        w;
+ 	__u32			field;	 /* enum v4l2_field */
+ 	__u32			chromakey;
+-	struct v4l2_clip	__user *clips;
++	struct v4l2_clip	*clips;
+ 	__u32			clipcount;
+ 	void			__user *bitmap;
+ 	__u8                    global_alpha;
 -- 
 2.27.0
 
