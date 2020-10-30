@@ -2,143 +2,207 @@ Return-Path: <SRS0=wnq3=EF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCDCDC5517A
-	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 16:56:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C96EC4741F
+	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 17:09:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 902C22076E
-	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 16:56:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1604076979;
-	bh=t7Sl1Pzu+/YBp2XhTNhTX6P+UIVbjjy0p02B2wp6jDA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=TIHwhp5UK5zPXN6OWh9lynq9eJU4GAx1YdyOQulrU9u+xMvPZDg4jDoVLeix93ePd
-	 //wyHaAm1OllGX3NYRowfVQzFWWFmNZmAotQed1b5iQtIQ1XTLGPkqz8Ba4S/erybm
-	 W2p+xeOh9OWVAzVMwDyexrVqXfjRnPuK0hxOp1r8=
+	by mail.kernel.org (Postfix) with ESMTP id 5ACF72075E
+	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 17:09:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726259AbgJ3Q4Q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Oct 2020 12:56:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60746 "EHLO mail.kernel.org"
+        id S1727313AbgJ3RJW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Oct 2020 13:09:22 -0400
+Received: from mga03.intel.com ([134.134.136.65]:52619 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727144AbgJ3Qzo (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Oct 2020 12:55:44 -0400
-Received: from localhost.localdomain (HSI-KBW-46-223-126-90.hsi.kabel-badenwuerttemberg.de [46.223.126.90])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BC99622242;
-        Fri, 30 Oct 2020 16:55:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604076943;
-        bh=t7Sl1Pzu+/YBp2XhTNhTX6P+UIVbjjy0p02B2wp6jDA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q1lrZVo4lBdUY4LcFXplHowysUMTk2NXo+MxhTuvVgqi9FQrOb/0gkz47B+mE70BQ
-         gtXNakXgd1TwWiMaeMcdHXWYkvf8XNS+aIvHq3styqNq4wORJUfbDxJoqx+xCrnxey
-         zCUtJv+0iFJK7+MMyB2+eHj28ZrgqwkW8IBh1ZUg=
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-media@vger.kernel.org,
-        mchehab@kernel.org, hch@lst.de, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/8] media: v4l2: remove unneeded compat ioctl handlers
-Date:   Fri, 30 Oct 2020 17:55:23 +0100
-Message-Id: <20201030165529.1255175-3-arnd@kernel.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201030165529.1255175-1-arnd@kernel.org>
-References: <20201030165529.1255175-1-arnd@kernel.org>
+        id S1726461AbgJ3RJV (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 30 Oct 2020 13:09:21 -0400
+IronPort-SDR: e1NsEu5GSFSTQ/6xpbbuAEUpOhddV8f/odcNrrja5FER7GlFENV1pqjdNVgX726wptxqupxy4Q
+ 0tyyuG1u9Q5g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9790"; a="168733504"
+X-IronPort-AV: E=Sophos;i="5.77,434,1596524400"; 
+   d="scan'208";a="168733504"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2020 10:09:19 -0700
+IronPort-SDR: BiLJew72EJoWCdLhy033Fh1u26n2eXAIZ+BnUAZR6QFJahl7/ks2vtcv2uDdcO4iNBHjTQXYoE
+ rsbRvcmmXQTQ==
+X-IronPort-AV: E=Sophos;i="5.77,434,1596524400"; 
+   d="scan'208";a="351930010"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2020 10:09:16 -0700
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id E60BA20C9F; Fri, 30 Oct 2020 18:37:22 +0200 (EET)
+Date:   Fri, 30 Oct 2020 18:37:22 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Maxime Ripard <mripard@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: media: i2c: Add OV5648 bindings
+ documentation
+Message-ID: <20201030163722.GS26150@paasikivi.fi.intel.com>
+References: <20201023174944.504358-1-paul.kocialkowski@bootlin.com>
+ <20201023174944.504358-2-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201023174944.504358-2-paul.kocialkowski@bootlin.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hi Paul,
 
-These seven commands are all compatible and do not need any
-conversion handlers. The existing ones just copy 32-bit
-integers around, and those are always compatible.
+On Fri, Oct 23, 2020 at 07:49:43PM +0200, Paul Kocialkowski wrote:
+> This introduces YAML bindings documentation for the OV5648
+> image sensor.
+> 
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> ---
+>  .../bindings/media/i2c/ovti,ov5648.yaml       | 115 ++++++++++++++++++
+>  1 file changed, 115 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5648.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov5648.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov5648.yaml
+> new file mode 100644
+> index 000000000000..347af925b450
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5648.yaml
+> @@ -0,0 +1,115 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/i2c/ovti,ov5648.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: OmniVision OV5648 Image Sensor Device Tree Bindings
+> +
+> +maintainers:
+> +  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: ovti,ov5648
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: XVCLK Clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: xvclk
+> +
+> +  dvdd-supply:
+> +    description: Digital Domain Power Supply
+> +
+> +  avdd-supply:
+> +    description: Analog Domain Power Supply (internal AVDD is used if missing)
+> +
+> +  dovdd-supply:
+> +    description: I/O Domain Power Supply
+> +
+> +  powerdown-gpios:
+> +    maxItems: 1
+> +    description: Power Down Pin GPIO Control (active low)
+> +
+> +  reset-gpios:
+> +    maxItems: 1
+> +    description: Reset Pin GPIO Control (active low)
+> +
+> +  port:
+> +    type: object
+> +    description: Input port, connect to a MIPI CSI-2 receiver
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/media/v4l2-core/v4l2-compat-ioctl32.c | 42 -------------------
- 1 file changed, 42 deletions(-)
+"Input"? I'd describe this as output.
 
-diff --git a/drivers/media/v4l2-core/v4l2-compat-ioctl32.c b/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
-index 7c939d5c5232..a76f6ac5b1eb 100644
---- a/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
-+++ b/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
-@@ -1406,14 +1406,6 @@ static int put_v4l2_edid32(struct v4l2_edid __user *p64,
- #define VIDIOC_PREPARE_BUF32	_IOWR('V', 93, struct v4l2_buffer32)
- #define VIDIOC_PREPARE_BUF32_TIME32 _IOWR('V', 93, struct v4l2_buffer32_time32)
- 
--#define VIDIOC_OVERLAY32	_IOW ('V', 14, s32)
--#define VIDIOC_STREAMON32	_IOW ('V', 18, s32)
--#define VIDIOC_STREAMOFF32	_IOW ('V', 19, s32)
--#define VIDIOC_G_INPUT32	_IOR ('V', 38, s32)
--#define VIDIOC_S_INPUT32	_IOWR('V', 39, s32)
--#define VIDIOC_G_OUTPUT32	_IOR ('V', 46, s32)
--#define VIDIOC_S_OUTPUT32	_IOWR('V', 47, s32)
--
- unsigned int v4l2_compat_translate_cmd(unsigned int cmd)
- {
- 	switch (cmd) {
-@@ -1544,13 +1536,6 @@ static long do_video_ioctl(struct file *file, unsigned int cmd, unsigned long ar
- 	case VIDIOC_DQEVENT32: ncmd = VIDIOC_DQEVENT; break;
- 	case VIDIOC_DQEVENT32_TIME32: ncmd = VIDIOC_DQEVENT_TIME32; break;
- #endif
--	case VIDIOC_OVERLAY32: ncmd = VIDIOC_OVERLAY; break;
--	case VIDIOC_STREAMON32: ncmd = VIDIOC_STREAMON; break;
--	case VIDIOC_STREAMOFF32: ncmd = VIDIOC_STREAMOFF; break;
--	case VIDIOC_G_INPUT32: ncmd = VIDIOC_G_INPUT; break;
--	case VIDIOC_S_INPUT32: ncmd = VIDIOC_S_INPUT; break;
--	case VIDIOC_G_OUTPUT32: ncmd = VIDIOC_G_OUTPUT; break;
--	case VIDIOC_S_OUTPUT32: ncmd = VIDIOC_S_OUTPUT; break;
- 	case VIDIOC_CREATE_BUFS32: ncmd = VIDIOC_CREATE_BUFS; break;
- 	case VIDIOC_PREPARE_BUF32: ncmd = VIDIOC_PREPARE_BUF; break;
- 	case VIDIOC_PREPARE_BUF32_TIME32: ncmd = VIDIOC_PREPARE_BUF_TIME32; break;
-@@ -1565,24 +1550,6 @@ static long do_video_ioctl(struct file *file, unsigned int cmd, unsigned long ar
- 	 * argument into it.
- 	 */
- 	switch (cmd) {
--	case VIDIOC_OVERLAY32:
--	case VIDIOC_STREAMON32:
--	case VIDIOC_STREAMOFF32:
--	case VIDIOC_S_INPUT32:
--	case VIDIOC_S_OUTPUT32:
--		err = alloc_userspace(sizeof(unsigned int), 0, &new_p64);
--		if (!err && assign_in_user((unsigned int __user *)new_p64,
--					   (compat_uint_t __user *)p32))
--			err = -EFAULT;
--		compatible_arg = 0;
--		break;
--
--	case VIDIOC_G_INPUT32:
--	case VIDIOC_G_OUTPUT32:
--		err = alloc_userspace(sizeof(unsigned int), 0, &new_p64);
--		compatible_arg = 0;
--		break;
--
- 	case VIDIOC_G_EDID32:
- 	case VIDIOC_S_EDID32:
- 		err = alloc_userspace(sizeof(struct v4l2_edid), 0, &new_p64);
-@@ -1755,15 +1722,6 @@ static long do_video_ioctl(struct file *file, unsigned int cmd, unsigned long ar
- 	 * the original 32 bits structure.
- 	 */
- 	switch (cmd) {
--	case VIDIOC_S_INPUT32:
--	case VIDIOC_S_OUTPUT32:
--	case VIDIOC_G_INPUT32:
--	case VIDIOC_G_OUTPUT32:
--		if (assign_in_user((compat_uint_t __user *)p32,
--				   ((unsigned int __user *)new_p64)))
--			err = -EFAULT;
--		break;
--
- 	case VIDIOC_G_FBUF32:
- 		err = put_v4l2_framebuffer32(new_p64, p32);
- 		break;
+How about e.g. "MIPI CSI-2 transmitter port"?
+
+> +
+> +    properties:
+> +      endpoint:
+> +        type: object
+> +
+> +        properties:
+> +          remote-endpoint: true
+> +
+> +          bus-type:
+> +            const: 4
+> +
+> +          clock-lanes:
+> +            maxItems: 1
+
+You can drop the two as they're always the same.
+
+> +
+> +          data-lanes:
+> +            minItems: 1
+> +            maxItems: 2
+> +
+> +        required:
+> +          - bus-type
+> +          - data-lanes
+> +          - remote-endpoint
+> +
+> +        additionalProperties: false
+> +
+> +    required:
+> +      - endpoint
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - dvdd-supply
+> +  - dovdd-supply
+> +  - port
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/sun8i-v3s-ccu.h>
+> +    #include <dt-bindings/gpio/gpio.h>
+> +
+> +    i2c0 {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        ov5648: camera@36 {
+> +            compatible = "ovti,ov5648";
+> +            reg = <0x36>;
+> +
+> +            dvdd-supply = <&ov5648_dvdd>;
+> +            avdd-supply = <&ov5648_avdd>;
+> +            dovdd-supply = <&ov5648_dovdd>;
+> +            clocks = <&ov5648_xvclk 0>;
+> +            clock-names = "xvclk";
+> +
+> +            ov5648_out: port {
+> +                ov5648_out_mipi_csi2: endpoint {
+> +                    bus-type = <4>; /* MIPI CSI-2 D-PHY */
+> +                    clock-lanes = <0>;
+> +                    data-lanes = <1 2>;
+> +
+> +                    remote-endpoint = <&mipi_csi2_in_ov5648>;
+> +                };
+> +            };
+> +        };
+> +    };
+
 -- 
-2.27.0
-
+Sakari Ailus
