@@ -2,118 +2,112 @@ Return-Path: <SRS0=wnq3=EF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 585F6C4363A
-	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 13:47:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E3B9C4363A
+	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 14:04:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0F985206CB
-	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 13:47:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 19D672087E
+	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 14:04:04 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="HiW60wDO"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726681AbgJ3NrC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Oct 2020 09:47:02 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:60390 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726101AbgJ3NrB (ORCPT
+        id S1726645AbgJ3OED (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Oct 2020 10:04:03 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:44620 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726355AbgJ3OED (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Oct 2020 09:47:01 -0400
-Received: from guri.fritz.box (p200300c7cf1c4d0058b3668391aeb6a8.dip0.t-ipconnect.de [IPv6:2003:c7:cf1c:4d00:58b3:6683:91ae:b6a8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: dafna)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 9C32D1F4492D;
-        Fri, 30 Oct 2020 13:46:18 +0000 (GMT)
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-To:     linux-media@vger.kernel.org
-Cc:     laurent.pinchart@ideasonboard.com, dafna.hirschfeld@collabora.com,
-        helen.koike@collabora.com, ezequiel@collabora.com,
-        hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
-        sakari.ailus@linux.intel.com, linux-rockchip@lists.infradead.org,
-        mchehab@kernel.org, tfiga@chromium.org
-Subject: [PATCH v3 1/2] media: uapi: add MEDIA_BUS_FMT_METADATA_FIXED media bus format.
-Date:   Fri, 30 Oct 2020 14:46:08 +0100
-Message-Id: <20201030134609.30020-1-dafna.hirschfeld@collabora.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 30 Oct 2020 10:04:03 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 09UE3xH1101871;
+        Fri, 30 Oct 2020 09:03:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1604066639;
+        bh=LJwkXXQ5RVpM34J6H9QijL5fs3JYCS/zxD8llRsNdIg=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=HiW60wDOu2IvxVT5RFT42rerEOoLDQedMuM7bjDMy+Ye2CAQiXnhx0pHnu43nG3NZ
+         ZxcpX3gug4SgLdDiLWkP+yj/o9UAMccN1cbaOQFrEtMdiy6ohymsI5fV2Z7Y/U+yKi
+         iUfxyd8IqjyGzcvgZaPrGBiB59ysLpIA6m/ihJ/4=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 09UE3xWF124739
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 30 Oct 2020 09:03:59 -0500
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 30
+ Oct 2020 09:03:59 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Fri, 30 Oct 2020 09:03:59 -0500
+Received: from [192.168.2.6] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 09UE3vaL112994;
+        Fri, 30 Oct 2020 09:03:57 -0500
+Subject: Re: [PATCH] media: platform: ti-vpe: Update the path to firmware
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Nikhil Devshatwar <nikhil.nd@ti.com>,
+        <linux-media@vger.kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+CC:     Benoit Parrot <bparrot@ti.com>, Sekhar Nori <nsekhar@ti.com>
+References: <20201012125200.11643-1-nikhil.nd@ti.com>
+ <14827fb7-4c2d-426d-cfde-221fd8c39c20@xs4all.nl>
+From:   Tomi Valkeinen <tomi.valkeinen@ti.com>
+Message-ID: <b785b507-fad4-34db-c7d1-e5ce190f6c41@ti.com>
+Date:   Fri, 30 Oct 2020 16:03:57 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <14827fb7-4c2d-426d-cfde-221fd8c39c20@xs4all.nl>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-MEDIA_BUS_FMT_METADATA_FIXED should be used when
-the same driver handles both sides of the link and
-the bus format is a fixed metadata format that is
-not configurable from userspace.
-The width and height will be set to 0 for this format.
+On 30/10/2020 11:57, Hans Verkuil wrote:
+> Hi Nikhil,
+> 
+> On 12/10/2020 14:52, Nikhil Devshatwar wrote:
+>> vpdma firmware is now available in the linux-firmware repo.
+>>
+>> https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/tree/ti-connectivity/vpdma-1b8.bin
+>>
+>> Update the firmware path requested by the VPDMA driver so that
+>> it gets looked up correctly in the filesystem.
+>>
+>> Signed-off-by: Nikhil Devshatwar <nikhil.nd@ti.com>
+>> ---
+>>  drivers/media/platform/ti-vpe/vpdma.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/media/platform/ti-vpe/vpdma.c b/drivers/media/platform/ti-vpe/vpdma.c
+>> index 2e5148ae7a0f..5a378449a4ff 100644
+>> --- a/drivers/media/platform/ti-vpe/vpdma.c
+>> +++ b/drivers/media/platform/ti-vpe/vpdma.c
+>> @@ -23,7 +23,7 @@
+>>  #include "vpdma.h"
+>>  #include "vpdma_priv.h"
+>>  
+>> -#define VPDMA_FIRMWARE	"vpdma-1b8.bin"
+>> +#define VPDMA_FIRMWARE	"ti-connectivity/vpdma-1b8.bin"
+> 
+> Based on the discussion, this will change to ti/vpdma-1b8.bin, right?
+> At least once linux-firmware has been updated.
+> 
+> I'll wait for a v2.
 
-Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Acked-by: Helen Koike <helen.koike@collabora.com>
----
-changes since v2:
-added documentation in subdev-formats.rst
-changes since v1:
-1. replace "This format may have 0 height and width."
-with "Width and height will be set to 0 for this format."
-and add it also to the commit log
-2. s/meida:/media:/ in the patch subject line
+Yes, please wait for v2. I think it'll be ti/vpdma-1b8.bin, or alternatively keep it as it is now
+(in the root).
 
- .../media/v4l/subdev-formats.rst              | 27 +++++++++++++++++++
- include/uapi/linux/media-bus-format.h         |  8 ++++++
- 2 files changed, 35 insertions(+)
+ Tomi
 
-diff --git a/Documentation/userspace-api/media/v4l/subdev-formats.rst b/Documentation/userspace-api/media/v4l/subdev-formats.rst
-index c9b7bb3ca089..7f16cbe46e5c 100644
---- a/Documentation/userspace-api/media/v4l/subdev-formats.rst
-+++ b/Documentation/userspace-api/media/v4l/subdev-formats.rst
-@@ -7899,3 +7899,30 @@ formats.
-       - 0x5001
-       - Interleaved raw UYVY and JPEG image format with embedded meta-data
- 	used by Samsung S3C73MX camera sensors.
-+
-+.. _v4l2-mbus-metadata-fmts:
-+
-+Metadata Formats
-+^^^^^^^^^^^^^^^^
-+
-+This section lists all metadata formats.
-+
-+The following table lists the existing metadata formats.
-+
-+.. tabularcolumns:: |p{8.0cm}|p{1.4cm}|p{7.7cm}|
-+
-+.. flat-table:: Metadata formats
-+    :header-rows:  1
-+    :stub-columns: 0
-+
-+    * - Identifier
-+      - Code
-+      - Comments
-+    * .. _MEDIA-BUS-FMT-METADATA-FIXED:
-+
-+      - MEDIA_BUS_FMT_METADATA_FIXED
-+      - 0x7001
-+      - This format should be used when the same driver handles
-+	both sides of the link and the bus format is a fixed
-+	metadata format that is not configurable from userspace.
-+	Width and height will be set to 0 for this format.
-diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/media-bus-format.h
-index 84fa53ffb13f..2ce3d891d344 100644
---- a/include/uapi/linux/media-bus-format.h
-+++ b/include/uapi/linux/media-bus-format.h
-@@ -156,4 +156,12 @@
- /* HSV - next is	0x6002 */
- #define MEDIA_BUS_FMT_AHSV8888_1X32		0x6001
- 
-+/*
-+ * This format should be used when the same driver handles
-+ * both sides of the link and the bus format is a fixed
-+ * metadata format that is not configurable from userspace.
-+ * Width and height will be set to 0 for this format.
-+ */
-+#define MEDIA_BUS_FMT_METADATA_FIXED		0x7001
-+
- #endif /* __LINUX_MEDIA_BUS_FORMAT_H */
 -- 
-2.17.1
-
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
