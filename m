@@ -2,135 +2,136 @@ Return-Path: <SRS0=wnq3=EF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB5E6C4741F
-	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 15:01:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF777C4363A
+	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 15:09:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 886C022246
-	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 15:01:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8038B20728
+	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 15:09:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=mg.codeaurora.org header.i=@mg.codeaurora.org header.b="uEdmCX24"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="v031qkcc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726948AbgJ3PBM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Oct 2020 11:01:12 -0400
-Received: from z5.mailgun.us ([104.130.96.5]:11695 "EHLO z5.mailgun.us"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726178AbgJ3PAa (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Oct 2020 11:00:30 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1604069973; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=NRiAvEzduLH4Fyb+nC9qHYSc/q8IvoaoKJXFIDpgOag=;
- b=uEdmCX24MegZT0stROoDcWddCJOxx/P6O/HhKTg5pAM6aVqIRgb23qqUhosEk7/oAfuJ0x+0
- II0tpPi4L2uZq4OnU70In/um6T/5IwTA6loCXdqqJ33Jt1WY5WWmdr48C89a+8lxTJCtWkrI
- 1E064YMT7gI/knG+CSDA/DC5FPc=
-X-Mailgun-Sending-Ip: 104.130.96.5
-X-Mailgun-Sid: WyI3ZjU0NiIsICJsaW51eC1tZWRpYUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
- 5f9c2a54b01cad7dbfeeadbe (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 30 Oct 2020 14:59:32
- GMT
-Sender: rojay=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 8E71FC433C6; Fri, 30 Oct 2020 14:59:32 +0000 (UTC)
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: rojay)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id E8E1BC433C9;
-        Fri, 30 Oct 2020 14:59:31 +0000 (UTC)
+        id S1726881AbgJ3PJL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Oct 2020 11:09:11 -0400
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:46933 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726785AbgJ3PJK (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 30 Oct 2020 11:09:10 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id YW1YkpKAhWvjMYW1ckHxWj; Fri, 30 Oct 2020 16:09:08 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1604070548; bh=p/He+fz0zQLb8/9KCljEG98pEvD5jnUi/OkVZ8SfxDo=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=v031qkcc3Gewu84bfGaSqCKYiXjTDI3z6hJE+ML02pAqTb3cn/sRGUcqz18n3sLAS
+         vMN3u/IRMSWvZUyrnCSZ1v4VgtF4aW5kox+4EVJD2GqZQFJ2/+cwlL460YzSRtI/we
+         XPCT6nSlqD94Lpb66WLx1j9H/LEdVr4MYPImz5QQa2wVsh6gzrLX1rAvVZ9yRAJaLZ
+         B4iGYz1JoyNbtLpeCGNDtpGZkpYW11ErdiNwXzPiAG+qQWpQLld1utf4SQ5Be6HQGQ
+         /WVGeGHS8ejt6ORZdHEEwqpF7RZC/75zqLqFSGEdYGrb+8gO0s08G/h1kLUnqjto7M
+         MJiZM9GQJv8Nw==
+Subject: Re: [PATCH] media: v4l2-mem2mem: always call poll_wait() on queues
+To:     Alexandre Courbot <gnurou@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20201022122421.133976-1-gnurou@gmail.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <c6454292-935b-f14a-e743-838ccabc6590@xs4all.nl>
+Date:   Fri, 30 Oct 2020 16:09:04 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+In-Reply-To: <20201022122421.133976-1-gnurou@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Date:   Fri, 30 Oct 2020 20:29:31 +0530
-From:   rojay@codeaurora.org
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     wsa@kernel.org, dianders@chromium.org,
-        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
-        mka@chromium.org, akashast@codeaurora.org,
-        msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
-        vkaur@codeaurora.org, pyarlaga@codeaurora.org,
-        rnayak@codeaurora.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sumit.semwal@linaro.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH V5 3/3] i2c: i2c-qcom-geni: Add shutdown callback for i2c
-In-Reply-To: <160168919332.310579.15311671258384969025@swboyd.mtv.corp.google.com>
-References: <20201001084425.23117-1-rojay@codeaurora.org>
- <20201001084425.23117-4-rojay@codeaurora.org>
- <160168919332.310579.15311671258384969025@swboyd.mtv.corp.google.com>
-Message-ID: <17edaa6ceded98199a6f94a505cbd436@codeaurora.org>
-X-Sender: rojay@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+X-CMAE-Envelope: MS4xfGFsfFaY0/0VfEBGvVNLj2ISLjx4frqhe7qquKzPhoieP0/FeCKNKGs6qt+DwFmmE5n5aqk2cBqsaf+kr2MC/i/6ukEM+YNS48k+ZedX2qhp+fmtS4ZK
+ Twbl+znnBFFjSq0uuYwNMqL8XLfgoPYYFS/5LALw94Rg0bU+DAu18uMopshGvvwAz5pzrZl7ffRXTKPSHH6+8lKB62/sdoPSIuwj+6RcZ2+JxDNRrhieXA4y
+ +4h2qHFpZJnG1l1cheGvm7RXucd3vLOigYQ3eDr59aGnOZlU4x2N1JPtpI675ZOQvwYJDBz7hBvRTFWSAWHTag==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Stephen,
+On 22/10/2020 14:24, Alexandre Courbot wrote:
+> do_poll()/do_select() seem to set the _qproc member of poll_table to
+> NULL the first time they are called on a given table, making subsequent
+> calls of poll_wait() on that table no-ops. This is a problem for mem2mem
+> which calls poll_wait() on the V4L2 queues' waitqueues only when a
+> queue-related event is requested, which may not necessarily be the case
+> during the first poll.
+> 
+> For instance, a stateful decoder is typically only interested in
+> EPOLLPRI events when it starts, and will switch to listening to both
+> EPOLLPRI and EPOLLIN after receiving the initial resolution change event
+> and configuring the CAPTURE queue. However by the time that switch
+> happens and v4l2_m2m_poll_for_data() is called for the first time,
+> poll_wait() has become a no-op and the V4L2 queues waitqueues thus
+> cannot be registered.
+> 
+> Fix this by moving the registration to v4l2_m2m_poll() and do it whether
+> or not one of the queue-related events are requested.
 
-On 2020-10-03 07:09, Stephen Boyd wrote:
-> Quoting Roja Rani Yarubandi (2020-10-01 01:44:25)
->> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c 
->> b/drivers/i2c/busses/i2c-qcom-geni.c
->> index aee2a1dd2c62..56d3fbfe7eb6 100644
->> --- a/drivers/i2c/busses/i2c-qcom-geni.c
->> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
->> @@ -380,6 +380,36 @@ static void geni_i2c_tx_msg_cleanup(struct 
->> geni_i2c_dev *gi2c,
->>         }
->>  }
->> 
->> +static void geni_i2c_stop_xfer(struct geni_i2c_dev *gi2c)
->> +{
->> +       int ret;
->> +       u32 geni_status;
->> +       unsigned long flags;
->> +       struct i2c_msg *cur;
->> +
->> +       /* Resume device, runtime suspend can happen anytime during 
->> transfer */
->> +       ret = pm_runtime_get_sync(gi2c->se.dev);
->> +       if (ret < 0) {
->> +               dev_err(gi2c->se.dev, "Failed to resume device: %d\n", 
->> ret);
->> +               return;
->> +       }
->> +
->> +       spin_lock_irqsave(&gi2c->lock, flags);
+This looks good, but would it be possible to add a test for this to
+v4l2-compliance? (Look for POLL_MODE_EPOLL in v4l2-test-buffers.cpp)
+
+If I understand this right, calling EPOLL_CTL_ADD for EPOLLPRI, then
+calling EPOLL_CTL_ADD for EPOLLIN/OUT would trigger this? Or does there
+have to be an epoll_wait call in between?
+
+Another reason for adding this test is that I wonder if regular capture
+or output V4L2 devices don't have the same issue.
+
+It's a very subtle bug and so adding a test for this to v4l2-compliance
+would be very useful.
+
+Regards,
+
+	Hans
+
 > 
-> We grab the lock here.
+> Signed-off-by: Alexandre Courbot <gnurou@gmail.com>
+> ---
+> I seem to be hitting all the polling corner cases recently! ^_^; This
+> time I was wondering why epoll_wait() never returned after I received
+> the first resolution change event from the vicodec stateful decoder.
+> This is why - please take a look!
 > 
->> +       geni_status = readl_relaxed(gi2c->se.base + SE_GENI_STATUS);
->> +       if (!(geni_status & M_GENI_CMD_ACTIVE))
->> +               goto out;
->> +
->> +       cur = gi2c->cur;
->> +       geni_i2c_abort_xfer(gi2c);
+>  drivers/media/v4l2-core/v4l2-mem2mem.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
 > 
-> But it looks like this function takes the lock again? Did you test this
-> with lockdep enabled? It should hang even without lockdep, so it seems
-> like this path of code has not been tested.
+> diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
+> index b221b4e438a1..65476ef2879f 100644
+> --- a/drivers/media/v4l2-core/v4l2-mem2mem.c
+> +++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+> @@ -887,9 +887,6 @@ static __poll_t v4l2_m2m_poll_for_data(struct file *file,
+>  	src_q = v4l2_m2m_get_src_vq(m2m_ctx);
+>  	dst_q = v4l2_m2m_get_dst_vq(m2m_ctx);
+>  
+> -	poll_wait(file, &src_q->done_wq, wait);
+> -	poll_wait(file, &dst_q->done_wq, wait);
+> -
+>  	/*
+>  	 * There has to be at least one buffer queued on each queued_list, which
+>  	 * means either in driver already or waiting for driver to claim it
+> @@ -922,9 +919,14 @@ __poll_t v4l2_m2m_poll(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+>  		       struct poll_table_struct *wait)
+>  {
+>  	struct video_device *vfd = video_devdata(file);
+> +	struct vb2_queue *src_q = v4l2_m2m_get_src_vq(m2m_ctx);
+> +	struct vb2_queue *dst_q = v4l2_m2m_get_dst_vq(m2m_ctx);
+>  	__poll_t req_events = poll_requested_events(wait);
+>  	__poll_t rc = 0;
+>  
+> +	poll_wait(file, &src_q->done_wq, wait);
+> +	poll_wait(file, &dst_q->done_wq, wait);
+> +
+>  	if (req_events & (EPOLLOUT | EPOLLWRNORM | EPOLLIN | EPOLLRDNORM))
+>  		rc = v4l2_m2m_poll_for_data(file, m2m_ctx, wait);
+>  
 > 
 
-Tested with lockdep enabled, and fixed the unsafe lock order issue here.
-And to be more proper moved spin_lock/unlock to cleanup functions.
-
->> +       if (cur->flags & I2C_M_RD)
->> +               geni_i2c_rx_msg_cleanup(gi2c, cur);
->> +       else
->> +               geni_i2c_tx_msg_cleanup(gi2c, cur);
->> +       spin_unlock_irqrestore(&gi2c->lock, flags);
->> +out:
->> +       pm_runtime_put_sync_suspend(gi2c->se.dev);
->> +}
->> +
->>  static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct 
->> i2c_msg *msg,
->>                                 u32 m_param)
->>  {
