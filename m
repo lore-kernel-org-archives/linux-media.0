@@ -2,207 +2,145 @@ Return-Path: <SRS0=wnq3=EF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-9.7 required=3.0 tests=BAYES_00,DATE_IN_PAST_03_06,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C96EC4741F
-	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 17:09:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7085C55179
+	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 17:09:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5ACF72075E
-	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 17:09:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 60ACA2083B
+	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 17:09:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727313AbgJ3RJW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Oct 2020 13:09:22 -0400
-Received: from mga03.intel.com ([134.134.136.65]:52619 "EHLO mga03.intel.com"
+        id S1727335AbgJ3RJX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Oct 2020 13:09:23 -0400
+Received: from mga07.intel.com ([134.134.136.100]:13402 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726461AbgJ3RJV (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Oct 2020 13:09:21 -0400
-IronPort-SDR: e1NsEu5GSFSTQ/6xpbbuAEUpOhddV8f/odcNrrja5FER7GlFENV1pqjdNVgX726wptxqupxy4Q
- 0tyyuG1u9Q5g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9790"; a="168733504"
+        id S1727263AbgJ3RJU (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 30 Oct 2020 13:09:20 -0400
+IronPort-SDR: ZdOj2Zrf8wkJIifKSVfGgPa/lZmHH9TCH0dyXsNgoYetIwVYbdNLvcq85JdaxiWVY6oxwVGMkB
+ qh+67tNTwWCA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9790"; a="232815551"
 X-IronPort-AV: E=Sophos;i="5.77,434,1596524400"; 
-   d="scan'208";a="168733504"
+   d="scan'208";a="232815551"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2020 10:09:19 -0700
-IronPort-SDR: BiLJew72EJoWCdLhy033Fh1u26n2eXAIZ+BnUAZR6QFJahl7/ks2vtcv2uDdcO4iNBHjTQXYoE
- rsbRvcmmXQTQ==
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2020 10:09:19 -0700
+IronPort-SDR: 5N2oZGH55VprlyiNlLydwafobFQ6yreOgcuf7zUhyzWb4eHAo6KeTv06azpEnyGk/Dii5CQ/vD
+ XgMeaOjoaRjw==
 X-IronPort-AV: E=Sophos;i="5.77,434,1596524400"; 
-   d="scan'208";a="351930010"
+   d="scan'208";a="335480145"
 Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2020 10:09:16 -0700
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2020 10:09:16 -0700
 Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id E60BA20C9F; Fri, 30 Oct 2020 18:37:22 +0200 (EET)
-Date:   Fri, 30 Oct 2020 18:37:22 +0200
+        id F2E6A20736; Fri, 30 Oct 2020 16:02:41 +0200 (EET)
+Date:   Fri, 30 Oct 2020 16:02:41 +0200
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Maxime Ripard <mripard@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: media: i2c: Add OV5648 bindings
- documentation
-Message-ID: <20201030163722.GS26150@paasikivi.fi.intel.com>
-References: <20201023174944.504358-1-paul.kocialkowski@bootlin.com>
- <20201023174944.504358-2-paul.kocialkowski@bootlin.com>
+To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Cc:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
+        helen.koike@collabora.com, ezequiel@collabora.com,
+        hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
+        linux-rockchip@lists.infradead.org, mchehab@kernel.org,
+        tfiga@chromium.org
+Subject: Re: [PATCH v3 1/2] media: uapi: add MEDIA_BUS_FMT_METADATA_FIXED
+ media bus format.
+Message-ID: <20201030140241.GQ26150@paasikivi.fi.intel.com>
+References: <20201030134609.30020-1-dafna.hirschfeld@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201023174944.504358-2-paul.kocialkowski@bootlin.com>
+In-Reply-To: <20201030134609.30020-1-dafna.hirschfeld@collabora.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Paul,
+Hi Dafna,
 
-On Fri, Oct 23, 2020 at 07:49:43PM +0200, Paul Kocialkowski wrote:
-> This introduces YAML bindings documentation for the OV5648
-> image sensor.
+On Fri, Oct 30, 2020 at 02:46:08PM +0100, Dafna Hirschfeld wrote:
+> MEDIA_BUS_FMT_METADATA_FIXED should be used when
+> the same driver handles both sides of the link and
+> the bus format is a fixed metadata format that is
+> not configurable from userspace.
+> The width and height will be set to 0 for this format.
 > 
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+> Acked-by: Helen Koike <helen.koike@collabora.com>
 > ---
->  .../bindings/media/i2c/ovti,ov5648.yaml       | 115 ++++++++++++++++++
->  1 file changed, 115 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5648.yaml
+> changes since v2:
+> added documentation in subdev-formats.rst
+> changes since v1:
+> 1. replace "This format may have 0 height and width."
+> with "Width and height will be set to 0 for this format."
+> and add it also to the commit log
+> 2. s/meida:/media:/ in the patch subject line
 > 
-> diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov5648.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov5648.yaml
-> new file mode 100644
-> index 000000000000..347af925b450
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5648.yaml
-> @@ -0,0 +1,115 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/i2c/ovti,ov5648.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>  .../media/v4l/subdev-formats.rst              | 27 +++++++++++++++++++
+>  include/uapi/linux/media-bus-format.h         |  8 ++++++
+>  2 files changed, 35 insertions(+)
+> 
+> diff --git a/Documentation/userspace-api/media/v4l/subdev-formats.rst b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+> index c9b7bb3ca089..7f16cbe46e5c 100644
+> --- a/Documentation/userspace-api/media/v4l/subdev-formats.rst
+> +++ b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+> @@ -7899,3 +7899,30 @@ formats.
+>        - 0x5001
+>        - Interleaved raw UYVY and JPEG image format with embedded meta-data
+>  	used by Samsung S3C73MX camera sensors.
 > +
-> +title: OmniVision OV5648 Image Sensor Device Tree Bindings
+> +.. _v4l2-mbus-metadata-fmts:
 > +
-> +maintainers:
-> +  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> +Metadata Formats
+> +^^^^^^^^^^^^^^^^
 > +
-> +properties:
-> +  compatible:
-> +    const: ovti,ov5648
+> +This section lists all metadata formats.
 > +
-> +  reg:
-> +    maxItems: 1
+> +The following table lists the existing metadata formats.
 > +
-> +  clocks:
-> +    items:
-> +      - description: XVCLK Clock
+> +.. tabularcolumns:: |p{8.0cm}|p{1.4cm}|p{7.7cm}|
 > +
-> +  clock-names:
-> +    items:
-> +      - const: xvclk
+> +.. flat-table:: Metadata formats
+> +    :header-rows:  1
+> +    :stub-columns: 0
 > +
-> +  dvdd-supply:
-> +    description: Digital Domain Power Supply
+> +    * - Identifier
+> +      - Code
+> +      - Comments
+> +    * .. _MEDIA-BUS-FMT-METADATA-FIXED:
 > +
-> +  avdd-supply:
-> +    description: Analog Domain Power Supply (internal AVDD is used if missing)
-> +
-> +  dovdd-supply:
-> +    description: I/O Domain Power Supply
-> +
-> +  powerdown-gpios:
-> +    maxItems: 1
-> +    description: Power Down Pin GPIO Control (active low)
-> +
-> +  reset-gpios:
-> +    maxItems: 1
-> +    description: Reset Pin GPIO Control (active low)
-> +
-> +  port:
-> +    type: object
-> +    description: Input port, connect to a MIPI CSI-2 receiver
+> +      - MEDIA_BUS_FMT_METADATA_FIXED
+> +      - 0x7001
+> +      - This format should be used when the same driver handles
+> +	both sides of the link and the bus format is a fixed
+> +	metadata format that is not configurable from userspace.
+> +	Width and height will be set to 0 for this format.
+> diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/media-bus-format.h
+> index 84fa53ffb13f..2ce3d891d344 100644
+> --- a/include/uapi/linux/media-bus-format.h
+> +++ b/include/uapi/linux/media-bus-format.h
+> @@ -156,4 +156,12 @@
+>  /* HSV - next is	0x6002 */
+>  #define MEDIA_BUS_FMT_AHSV8888_1X32		0x6001
+>  
+> +/*
+> + * This format should be used when the same driver handles
+> + * both sides of the link and the bus format is a fixed
+> + * metadata format that is not configurable from userspace.
+> + * Width and height will be set to 0 for this format.
+> + */
 
-"Input"? I'd describe this as output.
+Does this mean that metadata with dimensions should not use
+MEDIA_BUS_FMT_METADATA_FIXED? I guess that's not the intention? For some
+formats the dimensions would be relevant but for others not. I'd thus
+replace "will" by "may". Same for the documentation.
 
-How about e.g. "MIPI CSI-2 transmitter port"?
-
+> +#define MEDIA_BUS_FMT_METADATA_FIXED		0x7001
 > +
-> +    properties:
-> +      endpoint:
-> +        type: object
-> +
-> +        properties:
-> +          remote-endpoint: true
-> +
-> +          bus-type:
-> +            const: 4
-> +
-> +          clock-lanes:
-> +            maxItems: 1
-
-You can drop the two as they're always the same.
-
-> +
-> +          data-lanes:
-> +            minItems: 1
-> +            maxItems: 2
-> +
-> +        required:
-> +          - bus-type
-> +          - data-lanes
-> +          - remote-endpoint
-> +
-> +        additionalProperties: false
-> +
-> +    required:
-> +      - endpoint
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - dvdd-supply
-> +  - dovdd-supply
-> +  - port
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/sun8i-v3s-ccu.h>
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    i2c0 {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        ov5648: camera@36 {
-> +            compatible = "ovti,ov5648";
-> +            reg = <0x36>;
-> +
-> +            dvdd-supply = <&ov5648_dvdd>;
-> +            avdd-supply = <&ov5648_avdd>;
-> +            dovdd-supply = <&ov5648_dovdd>;
-> +            clocks = <&ov5648_xvclk 0>;
-> +            clock-names = "xvclk";
-> +
-> +            ov5648_out: port {
-> +                ov5648_out_mipi_csi2: endpoint {
-> +                    bus-type = <4>; /* MIPI CSI-2 D-PHY */
-> +                    clock-lanes = <0>;
-> +                    data-lanes = <1 2>;
-> +
-> +                    remote-endpoint = <&mipi_csi2_in_ov5648>;
-> +                };
-> +            };
-> +        };
-> +    };
+>  #endif /* __LINUX_MEDIA_BUS_FORMAT_H */
 
 -- 
+Kind regards,
+
 Sakari Ailus
