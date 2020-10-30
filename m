@@ -2,124 +2,71 @@ Return-Path: <SRS0=wnq3=EF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B04FC4363A
-	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 11:06:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27AD5C4363A
+	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 11:10:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B5DE620728
-	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 11:06:23 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="e+vUNUgP"
+	by mail.kernel.org (Postfix) with ESMTP id C7CB020728
+	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 11:10:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726110AbgJ3LGT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Oct 2020 07:06:19 -0400
-Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:58445 "EHLO
-        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725808AbgJ3LGT (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Oct 2020 07:06:19 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id YSEUknz6cWvjMYSEXkHAQf; Fri, 30 Oct 2020 12:06:17 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1604055977; bh=MPINL0x+YgE1zrfqIMBCjq16Ytw83Vxoo5XMTG3tTYM=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=e+vUNUgPZpLxrnDl+BVK9blSVoOJYn9lZMt595T4geL2DEc/Q/XRwGlwC06RMz1jk
-         PWpR8nK7g6/bhVtxebFYbn38zr2RJnaFFhs3vjVF6BVW1QJIt83JpqN4YsN8fgH4lk
-         gl5mYGoZmIpuRgvqgJTDE4h15vIHK+6ogqjEraGrO0eB2HU8y1iPRF4dXR2VsJ63a+
-         lD0xbNkUo13Hmi1sVtdxBL73iwCyfwAXQof9yr1gY9JNvPJylAlesLa0FzUCUXl3Na
-         camzeV1IfLpFSKXLvCx7jlOmEycgrFh9UKCOAaaaruMiWLqeix8Ev/NdSXwMi0HBJ3
-         53uu3QNZvb9YA==
-Subject: Re: [PATCH v2 0/6] ARM: dts: sun8i: v3s: Enable video decoder
-To:     Martin Cerveny <m.cerveny@computer.org>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     Chen-Yu Tsai <wens@csie.org>, devel@driverdev.osuosl.org,
-        devicetree@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>
-References: <20200912143052.30952-1-m.cerveny@computer.org>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <034d8de1-bcf3-88e6-4d23-9a13e8b950c3@xs4all.nl>
-Date:   Fri, 30 Oct 2020 12:06:10 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1726095AbgJ3LKJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Oct 2020 07:10:09 -0400
+Received: from www.linuxtv.org ([130.149.80.248]:44956 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725808AbgJ3LKJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 30 Oct 2020 07:10:09 -0400
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1kYSIJ-0079FH-N9; Fri, 30 Oct 2020 11:10:07 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1kYSLH-0000Z0-97; Fri, 30 Oct 2020 11:13:11 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL FOR v5.11] Various fixes (#68441)
+Date:   Fri, 30 Oct 2020 11:13:11 +0000
+Message-Id: <20201030111311.2125-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <2b144188-65f4-cd83-5b07-c2e84f1f1fd2@xs4all.nl>
+References: 
 MIME-Version: 1.0
-In-Reply-To: <20200912143052.30952-1-m.cerveny@computer.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfPk/Quh1gIPsgZdoLL3OS0LA/MmvP72jK4Pqvra+hdcwDaWr2TPMHaJSa/g/6I1V58Bij9/ny2pUg53Amjmyg3aVILlbz3CyRPr9yS3jSMAgtJkiYuJs
- mGLSNfSQNPiuzhHVAOZ9pRpCjmgE8G8pMqOofn+u1InxcFjy9hskNgZlk3ELhCVe3eyEzAymQOZArl/ePtTVllzjcDM2VahpTJVxlTpgl1ufv6dmSQN7rlMF
- 8GaNcO4srz611UC3uo1Vj56F/ItW/zy6RhqL1qEfK4QI4yKcP3LUsyE5pcQt3IGIqN1r1afA2wtvNGJaWNojcDh8R6BZjTQUNz1t2R1A9mHhbvhtakzKLxh8
- HP7QV7WtBK4IOczGKKRuRZRvVE6o47+Dqti4NTE8iezOok0c9MqphYs/XjGuNW0GDHZZNqs/wZdAVWd2AT9itQ3CqNJwuE862UDUqxV+wDeCYND4QCljne11
- CDWQa3nziKnDCcx68/YGo4lp4ykF9l82ExvE5LNHnlMAZxe0kMYS30a+2qfV8hhX0UrBN3XVk+9f0F9A/Fs79H/23OPec+fQl0oZUyZBZhGK4/oL2rrN8jVM
- hajsRByWqpLyL8JmeTX+w0+H
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Maxime,
+From: builder@linuxtv.org
 
-Are you OK with this series? It looks good to me.
+Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/2b144188-65f4-cd83-5b07-c2e84f1f1fd2@xs4all.nl/
+Build log: https://builder.linuxtv.org/job/patchwork/74822/
+Build time: 00:11:23
+Link: https://lore.kernel.org/linux-media/2b144188-65f4-cd83-5b07-c2e84f1f1fd2@xs4all.nl
 
-Regards,
+gpg: Signature made Fri 30 Oct 2020 10:49:45 AM UTC
+gpg:                using RSA key AAA7FFBA4D2D77EF4CAEA1421326E0CD23ABDCE5
+gpg: Good signature from "Hans Verkuil <hverkuil-cisco@xs4all.nl>" [unknown]
+gpg:                 aka "Hans Verkuil <hverkuil@xs4all.nl>" [full]
+gpg: Note: This key has expired!
+Primary key fingerprint: 052C DE7B C215 053B 689F  1BCA BD2D 6148 6614 3B4C
+     Subkey fingerprint: AAA7 FFBA 4D2D 77EF 4CAE  A142 1326 E0CD 23AB DCE5
 
-	Hans
+Summary: got 1/24 patches with issues, being 0 at build time, plus one error when buinding PDF document
 
-On 12/09/2020 16:30, Martin Cerveny wrote:
-> First patch extends cedrus capability to all decoders
-> because V3s missing MPEG2 decoder.
-> 
-> Next two patches add system control node (SRAM C1) and 
-> next three patches add support for Cedrus VPU.
-> 
-> Tested on "Lichee Zero" V3s platform with testing LCD patch
-> ( https://github.com/mcerveny/linux/tree/v3s_videocodec_v4 )
-> and V4L2 raw API testing utility
-> ( https://github.com/mcerveny/v4l2-request-test ):
-> - enabled LCD (DRM dual VI and sigle UI planes)
-> - added RGB panel
-> - enabled PWM
-> 
-> There is low memory on V3s (64MB) and maximum must be available to CMA:
-> - CONFIG_CMA_SIZE_MBYTES=28
-> - add swap to swapout other processes
-> - decrease buffers in v4l2-request-test (.buffers_count from 16 to 6)
-> 
-> Only H.264 decoder working - MPEG and H.265 unsupported by V3s,
-> JPEG/MJPEG still unimplemented, encoder unimplemented
-> 
-> best regards,
-> Martin
-> 
-> Changes since v1:
-> - patch 0005 rename
-> - added testing description
-> 
-> Martin Cerveny (6):
->   media: cedrus: Register all codecs as capability
->   dt-bindings: sram: allwinner,sun4i-a10-system-control: Add V3s
->     compatibles
->   ARM: dts: sun8i: v3s: Add node for system control
->   media: cedrus: Add support for V3s
->   dt-bindings: media: cedrus: Add V3s compatible
->   ARM: dts: sun8i: v3s: Add video engine node
-> 
->  .../allwinner,sun4i-a10-video-engine.yaml     |  1 +
->  .../allwinner,sun4i-a10-system-control.yaml   |  6 ++++
->  arch/arm/boot/dts/sun8i-v3s.dtsi              | 33 +++++++++++++++++++
->  drivers/staging/media/sunxi/cedrus/cedrus.c   | 28 +++++++++++++++-
->  drivers/staging/media/sunxi/cedrus/cedrus.h   |  2 ++
->  .../staging/media/sunxi/cedrus/cedrus_video.c |  2 ++
->  6 files changed, 71 insertions(+), 1 deletion(-)
-> 
+Error/warnings:
+
+patches/0003-media-pxa_camera-Use-fallthrough-pseudo-keyword.patch:
+
+   checkpatch.pl:
+	$ cat patches/0003-media-pxa_camera-Use-fallthrough-pseudo-keyword.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:11: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+
+
+Error #512 when building PDF docs
 
