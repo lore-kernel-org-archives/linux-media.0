@@ -7,44 +7,44 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DE53C55179
-	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 16:55:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B29D6C55178
+	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 16:56:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 277B4221EB
-	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 16:55:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5D5672075E
+	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 16:56:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1604076954;
-	bh=dEREUX3pxpzvL1tLCjFym4TpPk2OqNcinSBxBhCK4bA=;
+	s=default; t=1604076968;
+	bh=nD81YqJ3MtrM/BCkwrNITM6ew3jXY2PFsMLpEZfzE5M=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=E9VDvak346y79TvU1Tn5d/D2bF8eTpE4MD9VqGdF4hFtwOE2V0cmYZjNEXx/o4bhf
-	 tzElxUYpPBQ53R3KiZt1toB1g8Lte69OHs6ernyq22vc8/mkYcVSjt1WONoHsRHf1p
-	 g36Kgc/OtYo+XbxUWwi0eetXnU/rQu3E46h0Ncck=
+	b=018xNgmLjjjckOUQcExN/zzplUM5GAs9m07J9+PZ9kLgGcMauqNDrU7pMkg/Mglho
+	 KLJPEAdFiKeWqU7F6/GBzT55I57eltDhJQ+nKe5O8qnIeYKurJNUP93DHKoMhq9azu
+	 faYfHgw7LQu00TQqIeYRCUIpZSPKTFjfR6Iy68Fo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727284AbgJ3Qzv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Oct 2020 12:55:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60862 "EHLO mail.kernel.org"
+        id S1727327AbgJ3Qz5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Oct 2020 12:55:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32776 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727264AbgJ3Qzu (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Oct 2020 12:55:50 -0400
+        id S1727014AbgJ3Qzz (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 30 Oct 2020 12:55:55 -0400
 Received: from localhost.localdomain (HSI-KBW-46-223-126-90.hsi.kabel-badenwuerttemberg.de [46.223.126.90])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B58EF208B6;
-        Fri, 30 Oct 2020 16:55:47 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 25F7122268;
+        Fri, 30 Oct 2020 16:55:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604076949;
-        bh=dEREUX3pxpzvL1tLCjFym4TpPk2OqNcinSBxBhCK4bA=;
+        s=default; t=1604076954;
+        bh=nD81YqJ3MtrM/BCkwrNITM6ew3jXY2PFsMLpEZfzE5M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oqzz1gl6XTf/LNcF0UFfNeyH2C6JfjmU9rYaSM/bc8TKKSMDkfS4HFAtUkR3IcBZs
-         fl12pC/IO9KjHKTl5ts81fOtcv8sGtnk+ApCbjhEPndF6oOx89Mfaq1/4XoOyzuWX0
-         FAaGnSKNtgNEcGdLh2xsif0e0jr+clPR4ZtWFlds=
+        b=zxz5LHC9rzc/gWUoh0qVZdBPrHnsyiANZM2jgaFdtvAxDc8JhwiieMS5hTBJZG5w/
+         yZlNc8HI3S2sABFJ7CuytfdBZr94WUTPtEyclPTnwcyEVeqSHMUYR5LPv04xRcoPVd
+         pokL4QSMolGNE8lKONGKlRQtvLvpsP2zWfrRMClk=
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Hans Verkuil <hverkuil@xs4all.nl>
 Cc:     Arnd Bergmann <arnd@arndb.de>, linux-media@vger.kernel.org,
         mchehab@kernel.org, hch@lst.de, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 5/8] media: v4l2: allocate v4l2_clip objects early
-Date:   Fri, 30 Oct 2020 17:55:26 +0100
-Message-Id: <20201030165529.1255175-6-arnd@kernel.org>
+Subject: [PATCH v2 8/8] media: v4l2: remove remaining compat_ioctl
+Date:   Fri, 30 Oct 2020 17:55:29 +0100
+Message-Id: <20201030165529.1255175-9-arnd@kernel.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201030165529.1255175-1-arnd@kernel.org>
 References: <20201030165529.1255175-1-arnd@kernel.org>
@@ -56,260 +56,238 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The v4l2_format based ioctls can have an indirect pointer to an array
-of v4l2_clip structures for overlay mode, depending on the 'type' member.
-There are only five drivers that use the overlay mode and copy the
-data through the __user pointer.
-
-Change the five drivers to use memcpy() instead, and copy the data
-in common code using the check_array_args() helpers. This allows
-for a subsequent patch that use the same mechanism for compat
-ioctl handlers.
-
-Note that there is another pointer for a 'bitmap' that is only
-used in the 'vivid' driver and nowhere else. There is no easy
-way to use the same trick without adding complexity to the
-common code, so this remains a __user pointer.
+There are no remaining conversions in v4l2_compat_ioctl32(),
+so all the infrastructure for it can be removed, with the
+only remaining bit being the compat_ioctl32() callback into
+drivers that implement their own incompatible data structures.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/media/common/saa7146/saa7146_video.c  |  6 ++---
- drivers/media/pci/bt8xx/bttv-driver.c         |  8 ++-----
- drivers/media/pci/saa7134/saa7134-video.c     | 19 ++++++---------
- .../media/test-drivers/vivid/vivid-vid-cap.c  | 18 ++++++---------
- .../media/test-drivers/vivid/vivid-vid-out.c  | 18 ++++++---------
- drivers/media/v4l2-core/v4l2-ioctl.c          | 23 ++++++++++++++++++-
- include/uapi/linux/videodev2.h                |  2 +-
- 7 files changed, 48 insertions(+), 46 deletions(-)
+ drivers/media/v4l2-core/v4l2-compat-ioctl32.c | 197 +-----------------
+ 1 file changed, 2 insertions(+), 195 deletions(-)
 
-diff --git a/drivers/media/common/saa7146/saa7146_video.c b/drivers/media/common/saa7146/saa7146_video.c
-index ccd15b4d4920..7b8795eca589 100644
---- a/drivers/media/common/saa7146/saa7146_video.c
-+++ b/drivers/media/common/saa7146/saa7146_video.c
-@@ -771,10 +771,8 @@ static int vidioc_s_fmt_vid_overlay(struct file *file, void *__fh, struct v4l2_f
- 	vv->ov.nclips = f->fmt.win.clipcount;
- 	if (vv->ov.nclips > 16)
- 		vv->ov.nclips = 16;
--	if (copy_from_user(vv->ov.clips, f->fmt.win.clips,
--				sizeof(struct v4l2_clip) * vv->ov.nclips)) {
+diff --git a/drivers/media/v4l2-core/v4l2-compat-ioctl32.c b/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
+index f54f49bebea7..dfab9f662490 100644
+--- a/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
++++ b/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
+@@ -23,103 +23,6 @@
+ #include <media/v4l2-ctrls.h>
+ #include <media/v4l2-ioctl.h>
+ 
+-/**
+- * assign_in_user() - Copy from one __user var to another one
+- *
+- * @to: __user var where data will be stored
+- * @from: __user var where data will be retrieved.
+- *
+- * As this code very often needs to allocate userspace memory, it is easier
+- * to have a macro that will do both get_user() and put_user() at once.
+- *
+- * This function complements the macros defined at asm-generic/uaccess.h.
+- * It uses the same argument order as copy_in_user()
+- */
+-#define assign_in_user(to, from)					\
+-({									\
+-	typeof(*from) __assign_tmp;					\
+-									\
+-	get_user(__assign_tmp, from) || put_user(__assign_tmp, to);	\
+-})
+-
+-/**
+- * get_user_cast() - Stores at a kernelspace local var the contents from a
+- *		pointer with userspace data that is not tagged with __user.
+- *
+- * @__x: var where data will be stored
+- * @__ptr: var where data will be retrieved.
+- *
+- * Sometimes we need to declare a pointer without __user because it
+- * comes from a pointer struct field that will be retrieved from userspace
+- * by the 64-bit native ioctl handler. This function ensures that the
+- * @__ptr will be cast to __user before calling get_user() in order to
+- * avoid warnings with static code analyzers like smatch.
+- */
+-#define get_user_cast(__x, __ptr)					\
+-({									\
+-	get_user(__x, (typeof(*__ptr) __user *)(__ptr));		\
+-})
+-
+-/**
+- * put_user_force() - Stores the contents of a kernelspace local var
+- *		      into a userspace pointer, removing any __user cast.
+- *
+- * @__x: var where data will be stored
+- * @__ptr: var where data will be retrieved.
+- *
+- * Sometimes we need to remove the __user attribute from some data,
+- * by passing the __force macro. This function ensures that the
+- * @__ptr will be cast with __force before calling put_user(), in order to
+- * avoid warnings with static code analyzers like smatch.
+- */
+-#define put_user_force(__x, __ptr)					\
+-({									\
+-	put_user((typeof(*__x) __force *)(__x), __ptr);			\
+-})
+-
+-/**
+- * assign_in_user_cast() - Copy from one __user var to another one
+- *
+- * @to: __user var where data will be stored
+- * @from: var where data will be retrieved that needs to be cast to __user.
+- *
+- * As this code very often needs to allocate userspace memory, it is easier
+- * to have a macro that will do both get_user_cast() and put_user() at once.
+- *
+- * This function should be used instead of assign_in_user() when the @from
+- * variable was not declared as __user. See get_user_cast() for more details.
+- *
+- * This function complements the macros defined at asm-generic/uaccess.h.
+- * It uses the same argument order as copy_in_user()
+- */
+-#define assign_in_user_cast(to, from)					\
+-({									\
+-	typeof(*from) __assign_tmp;					\
+-									\
+-	get_user_cast(__assign_tmp, from) || put_user(__assign_tmp, to);\
+-})
+-
+-/**
+- * native_ioctl - Ancillary function that calls the native 64 bits ioctl
+- * handler.
+- *
+- * @file: pointer to &struct file with the file handler
+- * @cmd: ioctl to be called
+- * @arg: arguments passed from/to the ioctl handler
+- *
+- * This function calls the native ioctl handler at v4l2-dev, e. g. v4l2_ioctl()
+- */
+-static long native_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+-{
+-	long ret = -ENOIOCTLCMD;
+-
+-	if (file->f_op->unlocked_ioctl)
+-		ret = file->f_op->unlocked_ioctl(file, cmd, arg);
+-
+-	return ret;
+-}
+-
+-
+ /*
+  * Per-ioctl data copy handlers.
+  *
+@@ -1305,103 +1208,6 @@ int v4l2_compat_put_array_args(struct file *file, void __user *user_ptr,
+ 	return err;
+ }
+ 
+-
+-/**
+- * alloc_userspace() - Allocates a 64-bits userspace pointer compatible
+- *	for calling the native 64-bits version of an ioctl.
+- *
+- * @size:	size of the structure itself to be allocated.
+- * @aux_space:	extra size needed to store "extra" data, e.g. space for
+- *		other __user data that is pointed to fields inside the
+- *		structure.
+- * @new_p64:	pointer to a pointer to be filled with the allocated struct.
+- *
+- * Return:
+- *
+- * if it can't allocate memory, either -ENOMEM or -EFAULT will be returned.
+- * Zero otherwise.
+- */
+-static int alloc_userspace(unsigned int size, u32 aux_space,
+-			   void __user **new_p64)
+-{
+-	*new_p64 = compat_alloc_user_space(size + aux_space);
+-	if (!*new_p64)
+-		return -ENOMEM;
+-	if (clear_user(*new_p64, size))
 -		return -EFAULT;
+-	return 0;
+-}
+-
+-/**
+- * do_video_ioctl() - Ancillary function with handles a compat32 ioctl call
+- *
+- * @file: pointer to &struct file with the file handler
+- * @cmd: ioctl to be called
+- * @arg: arguments passed from/to the ioctl handler
+- *
+- * This function is called when a 32 bits application calls a V4L2 ioctl
+- * and the Kernel is compiled with 64 bits.
+- *
+- * This function is called by v4l2_compat_ioctl32() when the function is
+- * not private to some specific driver.
+- *
+- * It converts a 32-bits struct into a 64 bits one, calls the native 64-bits
+- * ioctl handler and fills back the 32-bits struct with the results of the
+- * native call.
+- */
+-static long do_video_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+-{
+-	void __user *p32 = compat_ptr(arg);
+-	void __user *new_p64 = NULL;
+-	void __user *aux_buf;
+-	u32 aux_space;
+-	int compatible_arg = 1;
+-	long err = 0;
+-	unsigned int ncmd;
+-
+-	/*
+-	 * 1. When struct size is different, converts the command.
+-	 */
+-	switch (cmd) {
+-	default: ncmd = cmd; break;
 -	}
-+	memcpy(vv->ov.clips, f->fmt.win.clips,
-+	       sizeof(struct v4l2_clip) * vv->ov.nclips);
- 
- 	/* vv->ov.fh is used to indicate that we have valid overlay information, too */
- 	vv->ov.fh = fh;
-diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
-index 8824dd0fb331..b2fab7d96207 100644
---- a/drivers/media/pci/bt8xx/bttv-driver.c
-+++ b/drivers/media/pci/bt8xx/bttv-driver.c
-@@ -2143,12 +2143,8 @@ static int setup_window_lock(struct bttv_fh *fh, struct bttv *btv,
- 	clips = kmalloc(size,GFP_KERNEL);
- 	if (NULL == clips)
- 		return -ENOMEM;
--	if (n > 0) {
--		if (copy_from_user(clips,win->clips,sizeof(struct v4l2_clip)*n)) {
--			kfree(clips);
--			return -EFAULT;
--		}
+-
+-	/*
+-	 * 2. Allocates a 64-bits userspace pointer to store the
+-	 * values of the ioctl and copy data from the 32-bits __user
+-	 * argument into it.
+-	 */
+-	switch (cmd) {
 -	}
-+	if (n > 0)
-+		memcpy(clips, win->clips, sizeof(struct v4l2_clip)*n);
- 
- 	/* clip against screen */
- 	if (NULL != btv->fbuf.base)
-diff --git a/drivers/media/pci/saa7134/saa7134-video.c b/drivers/media/pci/saa7134/saa7134-video.c
-index 9a6a6b68f8e3..7f35f8672f7c 100644
---- a/drivers/media/pci/saa7134/saa7134-video.c
-+++ b/drivers/media/pci/saa7134/saa7134-video.c
-@@ -1265,9 +1265,7 @@ static int saa7134_g_fmt_vid_overlay(struct file *file, void *priv,
- 				struct v4l2_format *f)
- {
- 	struct saa7134_dev *dev = video_drvdata(file);
--	struct v4l2_clip __user *clips = f->fmt.win.clips;
- 	u32 clipcount = f->fmt.win.clipcount;
--	int err = 0;
- 	int i;
- 
- 	if (saa7134_no_overlay > 0) {
-@@ -1275,20 +1273,18 @@ static int saa7134_g_fmt_vid_overlay(struct file *file, void *priv,
- 		return -EINVAL;
- 	}
- 	f->fmt.win = dev->win;
--	f->fmt.win.clips = clips;
--	if (clips == NULL)
-+	if (!f->fmt.win.clips)
- 		clipcount = 0;
- 	if (dev->nclips < clipcount)
- 		clipcount = dev->nclips;
- 	f->fmt.win.clipcount = clipcount;
- 
--	for (i = 0; !err && i < clipcount; i++) {
--		if (copy_to_user(&f->fmt.win.clips[i].c, &dev->clips[i].c,
--					sizeof(struct v4l2_rect)))
--			err = -EFAULT;
-+	for (i = 0; i < clipcount; i++) {
-+		memcpy(&f->fmt.win.clips[i].c, &dev->clips[i].c,
-+					sizeof(struct v4l2_rect));
- 	}
- 
+-	if (err)
+-		return err;
+-
+-	/*
+-	 * 3. Calls the native 64-bits ioctl handler.
+-	 *
+-	 * For the functions where a conversion was not needed,
+-	 * compatible_arg is true, and it will call it with the arguments
+-	 * provided by userspace and stored at @p32 var.
+-	 *
+-	 * Otherwise, it will pass the newly allocated @new_p64 argument.
+-	 */
+-	if (compatible_arg)
+-		err = native_ioctl(file, ncmd, (unsigned long)p32);
+-	else
+-		err = native_ioctl(file, ncmd, (unsigned long)new_p64);
+-
+-	if (err == -ENOTTY)
+-		return err;
+-
+-	/*
+-	 * 5. Copy the data returned at the 64 bits userspace pointer to
+-	 * the original 32 bits structure.
+-	 */
+-	switch (cmd) {
+-	}
 -	return err;
-+	return 0;
- }
+-}
+-
+ /**
+  * v4l2_compat_ioctl32() - Handles a compat32 ioctl call
+  *
+@@ -1425,7 +1231,8 @@ long v4l2_compat_ioctl32(struct file *file, unsigned int cmd, unsigned long arg)
+ 		return ret;
  
- static int saa7134_try_fmt_vid_cap(struct file *file, void *priv,
-@@ -1396,9 +1392,8 @@ static int saa7134_s_fmt_vid_overlay(struct file *file, void *priv,
- 	dev->win    = f->fmt.win;
- 	dev->nclips = f->fmt.win.clipcount;
+ 	if (_IOC_TYPE(cmd) == 'V' && _IOC_NR(cmd) < BASE_VIDIOC_PRIVATE)
+-		ret = do_video_ioctl(file, cmd, arg);
++		ret = file->f_op->unlocked_ioctl(file, cmd,
++					(unsigned long)compat_ptr(arg));
+ 	else if (vdev->fops->compat_ioctl32)
+ 		ret = vdev->fops->compat_ioctl32(file, cmd, arg);
  
--	if (copy_from_user(dev->clips, f->fmt.win.clips,
--			   sizeof(struct v4l2_clip) * dev->nclips))
--		return -EFAULT;
-+	memcpy(dev->clips, f->fmt.win.clips,
-+	       sizeof(struct v4l2_clip) * dev->nclips);
- 
- 	if (priv == dev->overlay_owner) {
- 		spin_lock_irqsave(&dev->slock, flags);
-diff --git a/drivers/media/test-drivers/vivid/vivid-vid-cap.c b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
-index eadf28ab1e39..b9caa4b26209 100644
---- a/drivers/media/test-drivers/vivid/vivid-vid-cap.c
-+++ b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
-@@ -1107,11 +1107,9 @@ int vidioc_g_fmt_vid_overlay(struct file *file, void *priv,
- 		    ((compose->width + 7) / 8) * compose->height))
- 			return -EFAULT;
- 	}
--	if (clipcount && win->clips) {
--		if (copy_to_user(win->clips, dev->clips_cap,
--				 clipcount * sizeof(dev->clips_cap[0])))
--			return -EFAULT;
--	}
-+	if (clipcount && win->clips)
-+		memcpy(win->clips, dev->clips_cap,
-+		       clipcount * sizeof(dev->clips_cap[0]));
- 	return 0;
- }
- 
-@@ -1141,9 +1139,8 @@ int vidioc_try_fmt_vid_overlay(struct file *file, void *priv,
- 	if (win->clipcount > MAX_CLIPS)
- 		win->clipcount = MAX_CLIPS;
- 	if (win->clipcount) {
--		if (copy_from_user(dev->try_clips_cap, win->clips,
--				   win->clipcount * sizeof(dev->clips_cap[0])))
--			return -EFAULT;
-+		memcpy(dev->try_clips_cap, win->clips,
-+		       win->clipcount * sizeof(dev->clips_cap[0]));
- 		for (i = 0; i < win->clipcount; i++) {
- 			struct v4l2_rect *r = &dev->try_clips_cap[i].c;
- 
-@@ -1166,9 +1163,8 @@ int vidioc_try_fmt_vid_overlay(struct file *file, void *priv,
- 					return -EINVAL;
- 			}
- 		}
--		if (copy_to_user(win->clips, dev->try_clips_cap,
--				 win->clipcount * sizeof(dev->clips_cap[0])))
--			return -EFAULT;
-+		memcpy(win->clips, dev->try_clips_cap,
-+		       win->clipcount * sizeof(dev->clips_cap[0]));
- 	}
- 	return 0;
- }
-diff --git a/drivers/media/test-drivers/vivid/vivid-vid-out.c b/drivers/media/test-drivers/vivid/vivid-vid-out.c
-index ee3446e3217c..ac1e981e8342 100644
---- a/drivers/media/test-drivers/vivid/vivid-vid-out.c
-+++ b/drivers/media/test-drivers/vivid/vivid-vid-out.c
-@@ -857,11 +857,9 @@ int vidioc_g_fmt_vid_out_overlay(struct file *file, void *priv,
- 		    ((dev->compose_out.width + 7) / 8) * dev->compose_out.height))
- 			return -EFAULT;
- 	}
--	if (clipcount && win->clips) {
--		if (copy_to_user(win->clips, dev->clips_out,
--				 clipcount * sizeof(dev->clips_out[0])))
--			return -EFAULT;
--	}
-+	if (clipcount && win->clips)
-+		memcpy(win->clips, dev->clips_out,
-+		       clipcount * sizeof(dev->clips_out[0]));
- 	return 0;
- }
- 
-@@ -891,9 +889,8 @@ int vidioc_try_fmt_vid_out_overlay(struct file *file, void *priv,
- 	if (win->clipcount > MAX_CLIPS)
- 		win->clipcount = MAX_CLIPS;
- 	if (win->clipcount) {
--		if (copy_from_user(dev->try_clips_out, win->clips,
--				   win->clipcount * sizeof(dev->clips_out[0])))
--			return -EFAULT;
-+		memcpy(dev->try_clips_out, win->clips,
-+		       win->clipcount * sizeof(dev->clips_out[0]));
- 		for (i = 0; i < win->clipcount; i++) {
- 			struct v4l2_rect *r = &dev->try_clips_out[i].c;
- 
-@@ -916,9 +913,8 @@ int vidioc_try_fmt_vid_out_overlay(struct file *file, void *priv,
- 					return -EINVAL;
- 			}
- 		}
--		if (copy_to_user(win->clips, dev->try_clips_out,
--				 win->clipcount * sizeof(dev->clips_out[0])))
--			return -EFAULT;
-+		memcpy(win->clips, dev->try_clips_out,
-+		       win->clipcount * sizeof(dev->clips_out[0]));
- 	}
- 	return 0;
- }
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index b8be61a09776..f0f6906a879d 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -1582,7 +1582,7 @@ static int v4l_g_fmt(const struct v4l2_ioctl_ops *ops,
- 	switch (p->type) {
- 	case V4L2_BUF_TYPE_VIDEO_OVERLAY:
- 	case V4L2_BUF_TYPE_VIDEO_OUTPUT_OVERLAY: {
--		struct v4l2_clip __user *clips = p->fmt.win.clips;
-+		struct v4l2_clip *clips = p->fmt.win.clips;
- 		u32 clipcount = p->fmt.win.clipcount;
- 		void __user *bitmap = p->fmt.win.bitmap;
- 
-@@ -3084,6 +3084,27 @@ static int check_array_args(unsigned int cmd, void *parg, size_t *array_size,
- 		}
- 		break;
- 	}
-+	case VIDIOC_G_FMT:
-+	case VIDIOC_S_FMT:
-+	case VIDIOC_TRY_FMT: {
-+		struct v4l2_format *fmt = parg;
-+
-+		if (fmt->type != V4L2_BUF_TYPE_VIDEO_OVERLAY &&
-+		    fmt->type != V4L2_BUF_TYPE_VIDEO_OUTPUT_OVERLAY)
-+			break;
-+		if (fmt->fmt.win.clipcount > 2048)
-+			return -EINVAL;
-+		if (!fmt->fmt.win.clipcount)
-+			break;
-+
-+		*user_ptr = (void __user *)fmt->fmt.win.clips;
-+		*kernel_ptr = (void **)&fmt->fmt.win.clips;
-+		*array_size = sizeof(struct v4l2_clip)
-+				* fmt->fmt.win.clipcount;
-+
-+		ret = 1;
-+		break;
-+	}
- 	}
- 
- 	return ret;
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 534eaa4d39bc..b10f102bbf6f 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -1185,7 +1185,7 @@ struct v4l2_window {
- 	struct v4l2_rect        w;
- 	__u32			field;	 /* enum v4l2_field */
- 	__u32			chromakey;
--	struct v4l2_clip	__user *clips;
-+	struct v4l2_clip	*clips;
- 	__u32			clipcount;
- 	void			__user *bitmap;
- 	__u8                    global_alpha;
 -- 
 2.27.0
 
