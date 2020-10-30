@@ -4,176 +4,165 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93C3FC5517A
-	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 09:18:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B877C00A89
+	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 09:33:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 333BE2225C
-	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 09:18:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7CEF620728
+	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 09:33:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="iRgOU0pO"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="pQkonOUR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726028AbgJ3JSO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Oct 2020 05:18:14 -0400
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:36843 "EHLO
+        id S1726177AbgJ3JdN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Oct 2020 05:33:13 -0400
+Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:37507 "EHLO
         lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725808AbgJ3JSO (ORCPT
+        by vger.kernel.org with ESMTP id S1725948AbgJ3JdN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Oct 2020 05:18:14 -0400
+        Fri, 30 Oct 2020 05:33:13 -0400
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id YQXtknNVdWvjMYQXxkGngZ; Fri, 30 Oct 2020 10:18:11 +0100
+        id YQkUknRqdWvjMYQkXkGqDX; Fri, 30 Oct 2020 10:31:10 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1604049491; bh=eJqDFG3kNVE3ve2waqjLKvPfyty1UrKzCD+TRJYT4nQ=;
+        t=1604050270; bh=RElqrL7khHx4DZJ3F6RTuvb8jcfHfWCfqYVJiwR4ENY=;
         h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
          Subject;
-        b=iRgOU0pOHEx+URk147BRvhkpqT4qeRYEv9tVpLinccZrgIqG++DxtzHxBHAHXTqCR
-         E/YiRx0RgkZ8TnOAErewaD8tT2cy1voY1mVOg7m774cLlyAIM92TRviGbr5IcOurny
-         7DcczPjjM9l9JbNelHrHGM/JcmylC69SYh8QI6LZX9u+R8Q7VBF8U+EhaevDIJEpQz
-         VXzzWrnHBq7ah9eiBYE1X18RSD0SiIRYZyJoYvRM6VfjDbPzgWljBh2zFaqNeBRzPN
-         6jGrIE89L3MJt7C2P/jnUCFVG7Yiwp27Kwui4JxiKYutu/TOim6/32gGR0R9FaiXQg
-         nusEhBnyPJy6A==
-Subject: Re: [PATCH 0/2] destage Rockchip ISP1 driver
-To:     Helen Koike <helen.koike@collabora.com>,
-        linux-media@vger.kernel.org
-Cc:     linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        heiko@sntech.de, kernel@collabora.com,
-        dafna.hirschfeld@collabora.com, zhengsq@rock-chips.com,
-        laurent.pinchart@ideasonboard.com, niklas.soderlund@ragnatech.se,
-        mchehab@kernel.org, tfiga@chromium.org, ribalda@google.com
-References: <20201030055153.1981530-1-helen.koike@collabora.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <822e7152-00c6-28fe-1997-f4f9b33ebce9@xs4all.nl>
-Date:   Fri, 30 Oct 2020 10:18:05 +0100
+        b=pQkonOURErQkXzujYOYlBQ8YqwCPuJduZKUFLOb51/NFraggPYG7PVKDk3FdkxNBy
+         JYeOrTyH1yK7jz9KiIbG0NgQfthcKkD0biUH7kZLaS0Fe+632ODGwHQiNAlQorayC4
+         rBtczLzeiClj3jVFnD/buWTo+szVHfJAQRez6Icjc0sr+4SonGgLKHSUmEQp7iYtVX
+         BfCxyXaj+UeQN45FJLT9jUEiU749XIHYu2OvQaMbL1EN1RJcFmO0nvU8eBZNhXD779
+         HxNySJKxrVs4Es+JVt2/R0JDg2HO0k7MQKdfktLbqCHlq6WqlyEzyrCclx+JvjcnGf
+         aRb4abAsb8nVw==
+Subject: Re: Suggestion regarding x8 gang mode device tree changes
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Sakari Ailus <sakari.ailus@iki.fi>
+Cc:     Thierry Reding <treding@nvidia.com>, linux-media@vger.kernel.org
+References: <e253fee3-5358-aaf1-d317-162dc8e98afc@nvidia.com>
+ <20201029145013.GA6899@valkosipuli.retiisi.org.uk>
+ <59f91ac7-84fc-a9fd-e331-35adf4e5f5b9@nvidia.com>
+ <2ac2eb3d-32df-a352-3ce5-918ddbf718af@nvidia.com>
+ <20201029165245.GB6899@valkosipuli.retiisi.org.uk>
+ <542bbb61-049e-85d8-c2d7-9f38e6625b3d@nvidia.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <7f64c771-a4ff-8909-4679-1cec58947e94@xs4all.nl>
+Date:   Fri, 30 Oct 2020 10:31:06 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201030055153.1981530-1-helen.koike@collabora.com>
+In-Reply-To: <542bbb61-049e-85d8-c2d7-9f38e6625b3d@nvidia.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfJRyz+DT4luHmHHm2mgdYQvH4KqYZq3wa36trLUyRu6kVI0niSbzKbY/nG9zbBUm/IdcJ+AUVN7H0rfFmiNn6o34bFdRg5TAPFNn9vCy2pj5oirHFCP6
- wWjVLg08GWMCBJKknv1oiXkqZ4YdwDEJFB0Ct9BkZAPpf0lQVt/Laz0Hw2nQmuSM25egCh1lb5s0xPaIr1SgiKm9vG8UQOjUXePj0KdbkgljebYxgUV2TvPM
- z8J32fmCl4VsTwT772sEhK4yEH/b8VgLy3kvWrHLK0GqaMzU8GbLeGyvyttPES0QMWL0rIJ8bejNZqPNms/OwCEYHnqA7ECRsjV4fJwOdU/HRYhlMT50bQIU
- qO0A0kS9z491O8D+epVRlVz6TZ8lgV3Rnm9z91hrLZ7ITn59GZjbZDiVPSNvGFkCkF4lgsyLk02Lr0Izh4DAFC0L5ifTHvZ7rmwLwuQiSHcUsAmiNxn3dyXS
- RNq4nMHBZYxmIB/FCLjmVZ2KG2eKc/uWpLnd9eGjoHACJjHs3aODSeqeYzps7rU4WLd8dB9QiA+wYhbrUFz6dja/NZ74NihdZhJdY1RLcP5eKiVVBV6SoLSr
- I6jjvvOg2e9Jq98OL4CGDZS4VKZRS/gF1D0yCyQ2PMlmSNM4uf5qemZi8CCQdinPsRY=
+X-CMAE-Envelope: MS4xfISqC6qw56tboAA6+32sh0SLM4KNd+DtvbMJOOIPYQn1+ymUPS3OA3on+3xSFHMWJ0BKwd8lAB39aFVyCe1wFjmYWkO8hSYbJfXNlXq4pRelsbxc7klK
+ SVSWZVHjZC55b0TImAVD9siFsWkLAnhyGbQP/gUSa4Y6gOHIKDWpTz8yDXXJk44jMGh9FZouOFMGIVUFaj055xHn5wxdkXruuYC0LTyL6e60F+00c6L0Unyc
+ FexPAi8gW2pdQ08S90GpkAOutBMyewZRoOsrVswekDOJTddspChOeqZBXMklGVbN
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 30/10/2020 06:51, Helen Koike wrote:
-> Hello,
+On 29/10/2020 18:07, Sowjanya Komatineni wrote:
 > 
-> I think it is time to move this driver out of staging.
+> On 10/29/20 9:52 AM, Sakari Ailus wrote:
+>> On Thu, Oct 29, 2020 at 09:49:57AM -0700, Sowjanya Komatineni wrote:
+>>> On 10/29/20 8:36 AM, Sowjanya Komatineni wrote:
+>>>> On 10/29/20 7:50 AM, Sakari Ailus wrote:
+>>>>> Hi Sowjanya,
+>>>>>
+>>>>> On Wed, Oct 28, 2020 at 06:48:59PM -0700, Sowjanya Komatineni wrote:
+>>>>>> Hi Sakari,
+>>>>>>
+>>>>>> Missed to add you to below patch series for HDMI2CSI bridge support
+>>>>>>
+>>>>>> https://patchwork.kernel.org/project/linux-media/cover/1603768763-25590-1-git-send-email-skomatineni@nvidia.com/
+>>>>>>
+>>>>>>
+>>>>>> Patch-10 of this series is for x8 capture from HDMI2CSI bridge.
+>>>>>>
+>>>>>> Would like to get your suggestion on x8 gang/combined ports capture
+>>>>>> implementation.
+>>>>> The majority of CSI-2 receiver devices support partitioning the
+>>>>> lanes among
+>>>>> different PHYs in various ways. They do support usually up to four
+>>>>> lanes,
+>>>>> but adding four more lanes is not a reason for making the API different.
+>>>>>
+>>>>> So instead, you should implement this as a single port that simply has 8
+>>>>> lanes.
+>>>>>
+>>>> Thanks Sakari for your reply.
+>>>>
+>>>> current v2 series treats as 8 lanes. You mean to not expose 2nd port in
+>>>> device tree as VI/CSI side takes care of 2nd port as combined to treat
+>>>> as 8 lane?
+>> Correct.
+>>
+>> Although you can have the second port connected if fewer lanes are assigned
+>> to the first one.
+>>
+>> How does it work for this device, are the lanes statically allocated to
+>> ports, apart from the special 8 lane mode?
 > 
-> Thanks all who contributed, specially to Dafna, who put a lot of
-> effort addressing all the items in the TODO list, fixing bugs,
-> cleaning the code, addressing past comments and testing.
+> Tegra CSI each port supports max 4 lanes. For x8, 2 x4 ports together 
+> are programmed for simultaneous streaming during the same video/subdev 
+> stream ops.
 > 
-> Please, review the driver, see if there is any other thing that should
-> be addressed before this change.
+> Physically, CSI RX side 4 lanes goes to x4 port and other 4 lanes goes 
+> to another x4 port.
+> 
+> HDMI Bridge TX0 -> CSI RX0 (x4 port)
+> 
+> HDMI Bridge TX1 -> CSI RX1 (x4 port)
+> 
+> HDMI bridge side single image is split into 2 x4 ports and on RX side 
+> image from both ports are captured simultaneously with buffer offsets 
+> adjusted side-by-side to get combined image for same video buf of video 
+> device.
+> 
+> Both these 2 x4 ports together are used for streaming by Tegra VI and 
+> buffer offsets are adjusted side by side for these ports and for video 
+> device node stream, its single buffer which contains combined image from 
+> capture.
+> 
+>>> AS csi2 bus type supports max 4 data lanes with endpoint parse API.
+>>>
+>>> Currently with x8 as single port, I am using bus-width with bus type as
+>>> parallel in device tree and when using x4 using data-lanes with csi2 bus
+>>> type and driver gets lanes based on either of this from DT.
+>>>
+>>> Instead should we update endpoint parse API for max up to 8 lanes for
+>>> data-lanes?
+>> Yes, please. Could you send a patch?
+>>
+>> The standard AFAIK supports up to four lanes but as we know, hardware
+>> sometimes has more than that.
+> 
+> Sure once Hans also agrees with this to have it as single x8 port (just 
+> like I have now in v2), will send v3 to update endpoint parse to allow 
+> upto max 8 data-lanes and will also update Tegra CSI driver accordingly 
+> to retrieve lanes using csi2 bus type.
+> 
+> Hans, Please confirm if you agree with this.
+> 
 
-I didn't see a MAINTAINERS patch!
+I'm not sure if I agree with this. Shouldn't a device tree reflect the
+hardware? And how would you represent the use case where the ganging
+mode stitches together two synced sensors (left and right) into a single
+3D side-by-side image? Then you would have:
+
+ Left Sensor TX -> CSI RX0 (x4 port)
+Right Sensor TX -> CSI RX1 (x4 port)
+
+And for the tc358840 something similar might be true: in the case of the
+Tegra you have this nice ganging mode available, but for other SoCs each
+half would have to go to a separate CSI port and captured via a separate
+video DMA channel, and software or a GPU is needed to combine the two
+halves.
+
+In both these examples it is my understanding that you have to model this
+in the DT as separate x4 ports.
 
 Regards,
 
 	Hans
-
-> 
->> media-ctl -p
-> http://ix.io/2Cso
-> 
->> media-ctl --print-dot
-> http://ix.io/2Csp
-> 
->> v4l2-compliance -m0
-> http://ix.io/2Csk
-> 
->> v4l2-compliance -v -d /dev/video0 -s10
-> http://ix.io/2Csq
-> 
->> v4l2-compliance -v -d /dev/video1 -s10
-> http://ix.io/2Css
-> 
-> This patch depends on the following series:
-> 
-> * media: staging: rkisp1: uapi: add "WITH Linux-syscall-note"
->   https://patchwork.linuxtv.org/project/linux-media/patch/20201020132514.26651-1-dafna.hirschfeld@collabora.com/
-> 
-> * [0/2] media: staging: rkisp1: Fix formats for metadata pads
->   https://patchwork.linuxtv.org/project/linux-media/cover/20200325212704.29862-1-dafna.hirschfeld@collabora.com/
-> 
-> * [v2,1/2] media: uapi: add MEDIA_BUS_FMT_METADATA_FIXED media bus format.
->   [v2,2/2] media: staging: rkisp1: isp: set metadata pads to MEDIA_BUS_FMT_METADATA_FIXED
->   https://patchwork.linuxtv.org/project/linux-media/patch/20201020154522.654-1-dafna.hirschfeld@collabora.com/
-> 
-> * [0/6] media: staging: rkisp1: improvements
->   https://patchwork.linuxtv.org/project/linux-media/cover/20201002184222.7094-1-dafna.hirschfeld@collabora.com/
-> 
-> * [0/4] media: staging: rkisp1: send cleanups and checkpatch fixes
->   https://patchwork.linuxtv.org/project/linux-media/cover/20201019205956.6980-1-dafna.hirschfeld@collabora.com/
-> 
-> * media: staging: rkisp1: capture: set default quantization on 'set_fmt'
->   https://patchwork.linuxtv.org/project/linux-media/patch/20201026162848.18310-1-dafna.hirschfeld@collabora.com/
-> 
-> * media: staging: rkisp1: remove TODO item to document quantization handling
->   https://patchwork.linuxtv.org/project/linux-media/patch/20200928152809.27490-1-dafna.hirschfeld@collabora.com/
-> 
-> * [v2] media: staging: rkisp1: cap: refactor enable/disable stream to allow multistreaming
->   https://patchwork.linuxtv.org/project/linux-media/patch/20201019160434.877568-1-helen.koike@collabora.com/
-> 
-> * [v6,0/9] move Rockchip ISP bindings out of staging / add ISP DT nodes for RK3399
->   https://patchwork.linuxtv.org/project/linux-media/patch/20201020193850.1460644-2-helen.koike@collabora.com/
-> 
-> You can also see all of them applied in this branch:
-> 
->     https://gitlab.collabora.com/koike/linux/-/tree/rockchip/isp/destage
-> 
-> Thanks
-> Helen
-> 
-> Helen Koike (1):
->   media: rockchip: rkisp1: destage Rockchip ISP1 driver
-> 
-> Shunqian Zheng (1):
->   media: videodev2.h, v4l2-ioctl: add rkisp1 meta buffer format
-> 
->  .../media/v4l/pixfmt-meta-rkisp1.rst          |  2 +-
->  drivers/media/platform/Kconfig                | 18 ++++++++++++++++++
->  drivers/media/platform/Makefile               |  1 +
->  .../platform/rockchip}/rkisp1/Makefile        |  0
->  .../rockchip}/rkisp1/rkisp1-capture.c         |  0
->  .../platform/rockchip}/rkisp1/rkisp1-common.c |  0
->  .../platform/rockchip}/rkisp1/rkisp1-common.h |  2 +-
->  .../platform/rockchip}/rkisp1/rkisp1-dev.c    |  0
->  .../platform/rockchip}/rkisp1/rkisp1-isp.c    |  0
->  .../platform/rockchip}/rkisp1/rkisp1-params.c |  0
->  .../platform/rockchip}/rkisp1/rkisp1-regs.h   |  0
->  .../rockchip}/rkisp1/rkisp1-resizer.c         |  0
->  .../platform/rockchip}/rkisp1/rkisp1-stats.c  |  0
->  drivers/media/v4l2-core/v4l2-ioctl.c          |  2 ++
->  drivers/staging/media/Kconfig                 |  2 --
->  drivers/staging/media/Makefile                |  1 -
->  drivers/staging/media/rkisp1/Kconfig          | 19 -------------------
->  drivers/staging/media/rkisp1/TODO             |  6 ------
->  .../uapi/linux}/rkisp1-config.h               |  4 ----
->  include/uapi/linux/videodev2.h                |  4 ++++
->  20 files changed, 27 insertions(+), 34 deletions(-)
->  rename drivers/{staging/media => media/platform/rockchip}/rkisp1/Makefile (100%)
->  rename drivers/{staging/media => media/platform/rockchip}/rkisp1/rkisp1-capture.c (100%)
->  rename drivers/{staging/media => media/platform/rockchip}/rkisp1/rkisp1-common.c (100%)
->  rename drivers/{staging/media => media/platform/rockchip}/rkisp1/rkisp1-common.h (99%)
->  rename drivers/{staging/media => media/platform/rockchip}/rkisp1/rkisp1-dev.c (100%)
->  rename drivers/{staging/media => media/platform/rockchip}/rkisp1/rkisp1-isp.c (100%)
->  rename drivers/{staging/media => media/platform/rockchip}/rkisp1/rkisp1-params.c (100%)
->  rename drivers/{staging/media => media/platform/rockchip}/rkisp1/rkisp1-regs.h (100%)
->  rename drivers/{staging/media => media/platform/rockchip}/rkisp1/rkisp1-resizer.c (100%)
->  rename drivers/{staging/media => media/platform/rockchip}/rkisp1/rkisp1-stats.c (100%)
->  delete mode 100644 drivers/staging/media/rkisp1/Kconfig
->  delete mode 100644 drivers/staging/media/rkisp1/TODO
->  rename {drivers/staging/media/rkisp1/uapi => include/uapi/linux}/rkisp1-config.h (99%)
-> 
-
