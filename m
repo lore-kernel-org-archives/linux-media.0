@@ -2,103 +2,97 @@ Return-Path: <SRS0=wnq3=EF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BEF8C00A89
-	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 09:46:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E937C00A89
+	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 09:48:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A4CB1221EB
-	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 09:46:57 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="s28uOHgQ"
+	by mail.kernel.org (Postfix) with ESMTP id D2E682076E
+	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 09:48:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726014AbgJ3Jqy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Oct 2020 05:46:54 -0400
-Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:56509 "EHLO
-        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725355AbgJ3Jqx (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Oct 2020 05:46:53 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id YQzdknX7BWvjMYQzgkGtCr; Fri, 30 Oct 2020 10:46:51 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1604051211; bh=Pdg2BqSmMwoZQGtV1iF1NAS1Qn9FHQFDjbWGQqM5wEs=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=s28uOHgQMtVsh/PbMfcJboYch0mb5dfZ4lF48s5NIPzrSEk7Rh3UM1DLA56IcyyzI
-         eERaxLiB+1UEdyS/IX6M0g+IXuDGQX8sAc3f5cx3GOnObgGFt1J+flwrefc/EuuhWk
-         ioVozMuSHDq0ntEH0vANjjCq7WkB+DuVgyKSJosTBGeafFTI/v/3910KLJSBZyCCIf
-         /Ui3TXWCRRZcKo4DIAMPt1qB6QRmQRg3xsD9ICvOajIo8Y8WohafKPRfxUZYre2FcM
-         +QSIEpsTiGHGr5DBwq2h4dI4s2HmnL3ZwgT81ozfSDLDHMF6bSD/Q7n+NzuFWqb2CV
-         stgWBd8p0ukVw==
-Subject: Re: [PATCH 2/7] media: platform: add missing put_device() call in
- mtk_jpeg_probe()
-To:     Yu Kuai <yukuai3@huawei.com>, rick.chang@mediatek.com,
-        bin.liu@mediatek.com, mchehab@kernel.org, matthias.bgg@gmail.com,
-        tiffany.lin@mediatek.com, andrew-ct.chen@mediatek.com,
-        tfiga@chromium.org, xia.jiang@mediatek.com, jcliang@chromium.org,
-        minghsiu.tsai@mediatek.com
-Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-References: <20201009123804.3977562-1-yukuai3@huawei.com>
- <20201009123804.3977562-3-yukuai3@huawei.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <4644b6ca-ecc9-191f-c335-9c6d692ef38c@xs4all.nl>
-Date:   Fri, 30 Oct 2020 10:46:45 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1726234AbgJ3Jsr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Oct 2020 05:48:47 -0400
+Received: from www.linuxtv.org ([130.149.80.248]:59238 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726208AbgJ3Jsp (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 30 Oct 2020 05:48:45 -0400
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1kYR1Y-0074BK-8J; Fri, 30 Oct 2020 09:48:44 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1kYR4V-0000Zt-Pz; Fri, 30 Oct 2020 09:51:47 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL FOR v5.11] rkisp1 fixes/changes (#68424)
+Date:   Fri, 30 Oct 2020 09:51:47 +0000
+Message-Id: <20201030095147.2180-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <613dc41c-7174-7c32-7c28-c05ff1e8348c@xs4all.nl>
+References: 
 MIME-Version: 1.0
-In-Reply-To: <20201009123804.3977562-3-yukuai3@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfHRSTXX2tuyjvrOe6szrQWoPECst5NygCfNPSzfWeuxB6owGDckhCYt7ROxCi6fE4GH2b/zI31EQ3ecHOlG/HAsYzCJbkBD++ECkCiZH2wC8ivZ1kvgC
- rFR1Cj+Y4LDNG4b9t2zP6ATQcGnbLn0Y53g+vlHsMUF6uk8n9p1vGsTcBHMwDvTYNUJCWNsobZI39NAfp9iqIrIxWUwOZnPMynjboXd4EucdEppyb10Z6mc9
- ErsFjjDPlgGgliU3ihqUP7zDu1iEtVgbt/tY0GQR9Tm6ppPmf/jazvLYXvi0QIxJNdZrbAtUo+X98xORM3XCJpbQ+icohzGoT9x9PQHX0ga60XkxHJz6+/Pv
- WnIwJVETnBqa6k5zGkcktsz1AS2x7boco9WAO9uioalVYyrjV4uafPdbDYoJrottRlSnwoBrijQJlsyHhDti6gny3CzyyzE/pPSUv4lssas+mOehkW+3upe4
- dmEbMv6IBKX28Hz6tgpfQXP7WoB1bx/Kls5pr5DIjfFx/ZdQl85CmNcb0pRKy+CRnig9aOb7S9IqdwPEQMWixiorejCTjxvmiWL2RQWgEvAVPGs8rvxfdeLA
- fZm+IPtCkMbB6v1NzlN/Xv0VMtvTpS7dMNrDIHyzNKRqpKFZw4Q4eBigQrSnLKizV1pRRB4ZgqatKqymeeP2X92I320AuKDtZQDigqdhiDf8OV91AKif+MzV
- ZcmfD2dAsyfqreuwYbX8mPy/UVRG8aLwOycfJ7i832ZvXPqAs7z+QA==
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 09/10/2020 14:37, Yu Kuai wrote:
-> if mtk_jpeg_clk_init() succeed, mtk_jpeg_probe() doesn't have a
-> corresponding put_device(). Thus add put_device() in jump target to fix
-> the exception handling for this function implementation.
-> 
-> Fixes: b2f0d2724ba4 ("[media] vcodec: mediatek: Add Mediatek JPEG Decoder Driver")
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> ---
->  drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
-> index 106543391c46..f0c412f96d61 100644
-> --- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
-> +++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
-> @@ -1436,6 +1436,7 @@ static int mtk_jpeg_probe(struct platform_device *pdev)
->  	v4l2_device_unregister(&jpeg->v4l2_dev);
->  
->  err_dev_register:
-> +	put_device(jpeg->larb);
->  
->  err_clk_init:
->  
-> 
+From: builder@linuxtv.org
 
-This is too confusing since it is not obvious that this is the
-counterpart of mtk_jpeg_clk_init. I think it would be much easier
-to understand if you add a mtk_jpeg_clk_release() which does this
-put_device, and call that new function both here and in mtk_jpeg_remove().
+Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/613dc41c-7174-7c32-7c28-c05ff1e8348c@xs4all.nl/
+Build log: https://builder.linuxtv.org/job/patchwork/74814/
+Build time: 00:14:06
+Link: https://lore.kernel.org/linux-media/613dc41c-7174-7c32-7c28-c05ff1e8348c@xs4all.nl
 
-Regards,
+gpg: Signature made Fri 30 Oct 2020 09:12:01 AM UTC
+gpg:                using RSA key AAA7FFBA4D2D77EF4CAEA1421326E0CD23ABDCE5
+gpg: Good signature from "Hans Verkuil <hverkuil-cisco@xs4all.nl>" [unknown]
+gpg:                 aka "Hans Verkuil <hverkuil@xs4all.nl>" [full]
+gpg: Note: This key has expired!
+Primary key fingerprint: 052C DE7B C215 053B 689F  1BCA BD2D 6148 6614 3B4C
+     Subkey fingerprint: AAA7 FFBA 4D2D 77EF 4CAE  A142 1326 E0CD 23AB DCE5
 
-	Hans
+Summary: got 5/17 patches with issues, being 0 at build time, plus one error when buinding PDF document
+
+Error/warnings:
+
+patches/0009-media-staging-rkisp1-capture-set-default-quantizatio.patch:
+
+   checkpatch.pl:
+	$ cat patches/0009-media-staging-rkisp1-capture-set-default-quantizatio.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:11: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+
+patches/0012-media-staging-dt-bindings-rkisp1-drop-i2c-unit-addre.patch:
+
+   checkpatch.pl:
+	$ cat patches/0012-media-staging-dt-bindings-rkisp1-drop-i2c-unit-addre.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:9: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+	-:10: WARNING: 'unecessary' may be misspelled - perhaps 'unnecessary'?
+
+patches/0014-media-staging-dt-bindings-rkisp1-drop-parent-unit-ad.patch:
+
+   checkpatch.pl:
+	$ cat patches/0014-media-staging-dt-bindings-rkisp1-drop-parent-unit-ad.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:9: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+
+patches/0015-media-staging-rkisp1-remove-unecessary-clocks.patch:
+
+   checkpatch.pl:
+	$ cat patches/0015-media-staging-rkisp1-remove-unecessary-clocks.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:4: WARNING: 'unecessary' may be misspelled - perhaps 'unnecessary'?
+
+patches/0016-dt-bindings-media-rkisp1-move-rockchip-isp1-bindings.patch:
+
+   checkpatch.pl:
+	$ cat patches/0016-dt-bindings-media-rkisp1-move-rockchip-isp1-bindings.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:9: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+	-:18: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+
+
+Error #512 when building PDF docs
+
