@@ -2,192 +2,161 @@ Return-Path: <SRS0=wnq3=EF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2679C4741F
-	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 11:13:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9C9FC00A89
+	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 11:22:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3B45F20731
-	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 11:13:05 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="frLzaxmw"
+	by mail.kernel.org (Postfix) with ESMTP id 946B02083B
+	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 11:22:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726353AbgJ3LMy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Oct 2020 07:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
+        id S1726433AbgJ3LWi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Oct 2020 07:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725355AbgJ3LMw (ORCPT
+        with ESMTP id S1725355AbgJ3LWh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Oct 2020 07:12:52 -0400
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B3FC0613D2;
-        Fri, 30 Oct 2020 04:11:55 -0700 (PDT)
-Received: by mail-il1-x143.google.com with SMTP id x20so6129335ilj.8;
-        Fri, 30 Oct 2020 04:11:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZV0ThIiPZfP1J2R9nyVt8QkuejC8cSVT80sCSgcOxz0=;
-        b=frLzaxmwhGcVkXjbtKiS94LkaEgTCIqs5lcLgp7qud2oXWRlC0QKI3bu8As+Qe/3+/
-         YswYlbhwudFEROgXLO0RidFvUATOBI7jk1lDLjY+whOmmq9Wr466RzZ5uuDqGV3FbAQG
-         l5ts/Dwn0MzkC2R6n6o7hulkK9e/L4r9462cvEbQnmU+Vp4izCFhUSz5rYUeyvvecom/
-         skR+qlhyOuiRDMt/6fAEhtpRAkvua7TqwnEmsCShc8NHMqgmHLM3NnLpiiyehNei+OWa
-         WZsv0NfFfxPPWvhOiranGCdFjTSZKT7qkP3ITLJ8wRX/70+d0XR4v07v323ob3Nx/pYz
-         m4IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZV0ThIiPZfP1J2R9nyVt8QkuejC8cSVT80sCSgcOxz0=;
-        b=JAHhXcjY+bpshnbwfRMrp/+oTiVji4VSyq64Gpk+BCp9iRc/Sk3DrPeEuWFueDJBD8
-         CbbqlJUq5/Tn+ktyohulyYBO9JsUEOAIVqBIEp2BosfSAThtjdRRnm1heolp6W7ppLGG
-         5ypWoN75ClhN9R95q45gLjfuN4Hk5/8iSynysaJKcz1HeGijSaoa716OnKOlTvlbGqHr
-         v0zwht3duKg50haXgEZKOd9clDVCbhStkn3hvHrd542cXZXQu5Le60Nk3kEEI/8LlLvN
-         c2bEfQYrjgevzJTvQ5lCX2k/OOSUQK0YbwZ13dSAE1vpy+lQGSJ43lrESGD+qXqGGgkm
-         DhYA==
-X-Gm-Message-State: AOAM531XuU18pk3UhSTd3DSUbzeg3sTTlipOkMRIzP6GZ6L31V7pbs5N
-        ZGcAOFXXyrEW1zxrl49zkOD3lGR+9vLedjYd1K0=
-X-Google-Smtp-Source: ABdhPJzTddVFvGcRMfdnfgtj3RhHYeI8lzSbPQsDbDZuu+e8Z0f5KxtsaoxhCUlFTZHA3Ubj6PmYhDwWjpnLL1nJZe4=
-X-Received: by 2002:a92:4442:: with SMTP id a2mr1368452ilm.220.1604056315371;
- Fri, 30 Oct 2020 04:11:55 -0700 (PDT)
+        Fri, 30 Oct 2020 07:22:37 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D201C0613CF;
+        Fri, 30 Oct 2020 04:22:37 -0700 (PDT)
+Received: from floko.floko.floko (unknown [IPv6:2804:14c:483:7e3e::1005])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: koike)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id E8EE21F45EBC;
+        Fri, 30 Oct 2020 11:22:32 +0000 (GMT)
+From:   Helen Koike <helen.koike@collabora.com>
+To:     linux-media@vger.kernel.org
+Cc:     linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        heiko@sntech.de, kernel@collabora.com, hverkuil-cisco@xs4all.nl,
+        dafna.hirschfeld@collabora.com, zhengsq@rock-chips.com,
+        laurent.pinchart@ideasonboard.com, niklas.soderlund@ragnatech.se,
+        mchehab@kernel.org, tfiga@chromium.org, ribalda@google.com
+Subject: [PATCH v2 0/3] destage Rockchip ISP1 driver
+Date:   Fri, 30 Oct 2020 08:22:21 -0300
+Message-Id: <20201030112225.2095909-1-helen.koike@collabora.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-References: <cover.1604042072.git.mchehab+huawei@kernel.org> <5bc78e5b68ed1e9e39135173857cb2e753be868f.1604042072.git.mchehab+huawei@kernel.org>
-In-Reply-To: <5bc78e5b68ed1e9e39135173857cb2e753be868f.1604042072.git.mchehab+huawei@kernel.org>
-From:   Ilya Dryomov <idryomov@gmail.com>
-Date:   Fri, 30 Oct 2020 12:11:54 +0100
-Message-ID: <CAOi1vP-gKLw7shFy5rUeH6Z14hr_B9fW0epaRyuw45tg4EuCcQ@mail.gmail.com>
-Subject: Re: [PATCH v2 31/39] docs: ABI: cleanup several ABI documents
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?TWFyZWsgQmVow7pu?= <marek.behun@nic.cz>,
-        =?UTF-8?Q?Marek_Marczykowski=2DG=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        =?UTF-8?Q?Roger_Pau_Monn=C3=A9?= <roger.pau@citrix.com>,
-        Alexander Antonov <alexander.antonov@linux.intel.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Andreas Klinger <ak@it-klinger.de>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Asutosh Das <asutoshd@codeaurora.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Chao Yu <chao@kernel.org>,
-        Christian Gromm <christian.gromm@microchip.com>,
-        Colin Cross <ccross@android.com>, Dan Murphy <dmurphy@ti.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Danil Kipnis <danil.kipnis@cloud.ionos.com>,
-        David Sterba <dsterba@suse.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Dongsheng Yang <dongsheng.yang@easystack.cn>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Frederic Barrat <fbarrat@linux.ibm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jack Wang <jinpu.wang@cloud.ionos.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Johan Hovold <johan@kernel.org>,
-        Jonas Meurer <jonas@freesources.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Konstantin Khlebnikov <koct9i@gmail.com>,
-        Kranthi Kuntala <kranthi.kuntala@intel.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Lee Jones <lee.jones@linaro.org>, Len Brown <lenb@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mario Limonciello <mario.limonciello@dell.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Oded Gabbay <oded.gabbay@gmail.com>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Oleh Kravchenko <oleg@kaa.org.ua>, Pavel Machek <pavel@ucw.cz>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Peter Chen <peter.chen@nxp.com>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Roman Sudarikov <roman.sudarikov@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Stefan Achatz <erazor_de@users.sourceforge.net>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tom Rix <trix@redhat.com>, Tony Luck <tony.luck@intel.com>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>,
-        Vineela Tummalapalli <vineela.tummalapalli@intel.com>,
-        Wu Hao <hao.wu@intel.com>,
-        Ceph Development <ceph-devel@vger.kernel.org>,
-        coresight@lists.linaro.org, dri-devel@lists.freedesktop.org,
-        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-fpga@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i3c@lists.infradead.org,
-        linux-iio@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linuxppc-dev@lists.ozlabs.org, netdev <netdev@vger.kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Oct 30, 2020 at 8:41 AM Mauro Carvalho Chehab
-<mchehab+huawei@kernel.org> wrote:
->
-> There are some ABI documents that, while they don't generate
-> any warnings, they have issues when parsed by get_abi.pl script
-> on its output result.
->
-> Address them, in order to provide a clean output.
->
-> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com> #for IIO
-> Reviewed-by: Tom Rix <trix@redhat.com> # for fpga-manager
-> Reviewed-By: Kajol Jain<kjain@linux.ibm.com> # for sysfs-bus-event_source-devices-hv_gpci and sysfs-bus-event_source-devices-hv_24x7
-> Acked-by: Oded Gabbay <oded.gabbay@gmail.com> # for Habanalabs
-> Acked-by: Vaibhav Jain <vaibhav@linux.ibm.com> # for sysfs-bus-papr-pmem
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
->
-> [...]
->
->  Documentation/ABI/testing/sysfs-bus-rbd       |  37 ++-
+Hello,
 
-Acked-by: Ilya Dryomov <idryomov@gmail.com> # for rbd
 
-Thanks,
+Changes in v2:
+- New patch updating MAINTAINERS file
+- No changes in other patches
 
-                Ilya
+
+I think it is time to move this driver out of staging.
+
+Thanks all who contributed, specially to Dafna, who put a lot of
+effort addressing all the items in the TODO list, fixing bugs,
+cleaning the code, addressing past comments and testing.
+
+Please, review the driver, see if there is any other thing that should
+be addressed before this change.
+
+> media-ctl -p
+http://ix.io/2Cso
+
+> media-ctl --print-dot
+http://ix.io/2Csp
+
+> v4l2-compliance -m0
+http://ix.io/2Csk
+
+> v4l2-compliance -v -d /dev/video0 -s10
+http://ix.io/2Csq
+
+> v4l2-compliance -v -d /dev/video1 -s10
+http://ix.io/2Css
+
+This patch depends on the following series:
+
+* media: staging: rkisp1: uapi: add "WITH Linux-syscall-note"
+  https://patchwork.linuxtv.org/project/linux-media/patch/20201020132514.26651-1-dafna.hirschfeld@collabora.com/
+
+* [0/2] media: staging: rkisp1: Fix formats for metadata pads
+  https://patchwork.linuxtv.org/project/linux-media/cover/20200325212704.29862-1-dafna.hirschfeld@collabora.com/
+
+* [v2,1/2] media: uapi: add MEDIA_BUS_FMT_METADATA_FIXED media bus format.
+  [v2,2/2] media: staging: rkisp1: isp: set metadata pads to MEDIA_BUS_FMT_METADATA_FIXED
+  https://patchwork.linuxtv.org/project/linux-media/patch/20201020154522.654-1-dafna.hirschfeld@collabora.com/
+
+* [0/6] media: staging: rkisp1: improvements
+  https://patchwork.linuxtv.org/project/linux-media/cover/20201002184222.7094-1-dafna.hirschfeld@collabora.com/
+
+* [0/4] media: staging: rkisp1: send cleanups and checkpatch fixes
+  https://patchwork.linuxtv.org/project/linux-media/cover/20201019205956.6980-1-dafna.hirschfeld@collabora.com/
+
+* media: staging: rkisp1: capture: set default quantization on 'set_fmt'
+  https://patchwork.linuxtv.org/project/linux-media/patch/20201026162848.18310-1-dafna.hirschfeld@collabora.com/
+
+* media: staging: rkisp1: remove TODO item to document quantization handling
+  https://patchwork.linuxtv.org/project/linux-media/patch/20200928152809.27490-1-dafna.hirschfeld@collabora.com/
+
+* [v2] media: staging: rkisp1: cap: refactor enable/disable stream to allow multistreaming
+  https://patchwork.linuxtv.org/project/linux-media/patch/20201019160434.877568-1-helen.koike@collabora.com/
+
+* [v6,0/9] move Rockchip ISP bindings out of staging / add ISP DT nodes for RK3399
+  https://patchwork.linuxtv.org/project/linux-media/patch/20201020193850.1460644-2-helen.koike@collabora.com/
+
+You can also see all of them applied in this branch:
+
+    https://gitlab.collabora.com/koike/linux/-/tree/rockchip/isp/destage
+
+Thanks
+Helen
+
+Helen Koike (2):
+  media: rockchip: rkisp1: destage Rockchip ISP1 driver
+  media: MAINTAINERS: Update rkisp1 files with new location
+
+Shunqian Zheng (1):
+  media: videodev2.h, v4l2-ioctl: add rkisp1 meta buffer format
+
+ .../media/v4l/pixfmt-meta-rkisp1.rst          |  2 +-
+ MAINTAINERS                                   |  3 ++-
+ drivers/media/platform/Kconfig                | 18 ++++++++++++++++++
+ drivers/media/platform/Makefile               |  1 +
+ .../platform/rockchip}/rkisp1/Makefile        |  0
+ .../rockchip}/rkisp1/rkisp1-capture.c         |  0
+ .../platform/rockchip}/rkisp1/rkisp1-common.c |  0
+ .../platform/rockchip}/rkisp1/rkisp1-common.h |  2 +-
+ .../platform/rockchip}/rkisp1/rkisp1-dev.c    |  0
+ .../platform/rockchip}/rkisp1/rkisp1-isp.c    |  0
+ .../platform/rockchip}/rkisp1/rkisp1-params.c |  0
+ .../platform/rockchip}/rkisp1/rkisp1-regs.h   |  0
+ .../rockchip}/rkisp1/rkisp1-resizer.c         |  0
+ .../platform/rockchip}/rkisp1/rkisp1-stats.c  |  0
+ drivers/media/v4l2-core/v4l2-ioctl.c          |  2 ++
+ drivers/staging/media/Kconfig                 |  2 --
+ drivers/staging/media/Makefile                |  1 -
+ drivers/staging/media/rkisp1/Kconfig          | 19 -------------------
+ drivers/staging/media/rkisp1/TODO             |  6 ------
+ .../uapi/linux}/rkisp1-config.h               |  4 ----
+ include/uapi/linux/videodev2.h                |  4 ++++
+ 21 files changed, 29 insertions(+), 35 deletions(-)
+ rename drivers/{staging/media => media/platform/rockchip}/rkisp1/Makefile (100%)
+ rename drivers/{staging/media => media/platform/rockchip}/rkisp1/rkisp1-capture.c (100%)
+ rename drivers/{staging/media => media/platform/rockchip}/rkisp1/rkisp1-common.c (100%)
+ rename drivers/{staging/media => media/platform/rockchip}/rkisp1/rkisp1-common.h (99%)
+ rename drivers/{staging/media => media/platform/rockchip}/rkisp1/rkisp1-dev.c (100%)
+ rename drivers/{staging/media => media/platform/rockchip}/rkisp1/rkisp1-isp.c (100%)
+ rename drivers/{staging/media => media/platform/rockchip}/rkisp1/rkisp1-params.c (100%)
+ rename drivers/{staging/media => media/platform/rockchip}/rkisp1/rkisp1-regs.h (100%)
+ rename drivers/{staging/media => media/platform/rockchip}/rkisp1/rkisp1-resizer.c (100%)
+ rename drivers/{staging/media => media/platform/rockchip}/rkisp1/rkisp1-stats.c (100%)
+ delete mode 100644 drivers/staging/media/rkisp1/Kconfig
+ delete mode 100644 drivers/staging/media/rkisp1/TODO
+ rename {drivers/staging/media/rkisp1/uapi => include/uapi/linux}/rkisp1-config.h (99%)
+
+-- 
+2.28.0
+
