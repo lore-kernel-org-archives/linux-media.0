@@ -2,152 +2,98 @@ Return-Path: <SRS0=wnq3=EF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F61EC4363A
-	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 13:43:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FC3BC388F9
+	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 13:47:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C6B022083B
-	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 13:43:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 11833206CB
+	for <linux-media@archiver.kernel.org>; Fri, 30 Oct 2020 13:47:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726681AbgJ3NnH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Oct 2020 09:43:07 -0400
-Received: from www.linuxtv.org ([130.149.80.248]:44796 "EHLO www.linuxtv.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726662AbgJ3NnH (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Oct 2020 09:43:07 -0400
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1kYUgK-007ImR-DV; Fri, 30 Oct 2020 13:43:04 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1kYUjH-0001ha-Vc; Fri, 30 Oct 2020 13:46:08 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL for 5.11] V4L2 cleanups and fixes mostly (#68448)
-Date:   Fri, 30 Oct 2020 13:46:07 +0000
-Message-Id: <20201030134607.6501-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20201030125658.GD6899@valkosipuli.retiisi.org.uk>
-References: 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726689AbgJ3NrC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Oct 2020 09:47:02 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:60412 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726178AbgJ3NrB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 30 Oct 2020 09:47:01 -0400
+Received: from guri.fritz.box (p200300c7cf1c4d0058b3668391aeb6a8.dip0.t-ipconnect.de [IPv6:2003:c7:cf1c:4d00:58b3:6683:91ae:b6a8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: dafna)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 1AABD1F44931;
+        Fri, 30 Oct 2020 13:46:19 +0000 (GMT)
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+To:     linux-media@vger.kernel.org
+Cc:     laurent.pinchart@ideasonboard.com, dafna.hirschfeld@collabora.com,
+        helen.koike@collabora.com, ezequiel@collabora.com,
+        hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
+        sakari.ailus@linux.intel.com, linux-rockchip@lists.infradead.org,
+        mchehab@kernel.org, tfiga@chromium.org
+Subject: [PATCH v3 2/2] media: staging: rkisp1: isp: set metadata pads to MEDIA_BUS_FMT_METADATA_FIXED
+Date:   Fri, 30 Oct 2020 14:46:09 +0100
+Message-Id: <20201030134609.30020-2-dafna.hirschfeld@collabora.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20201030134609.30020-1-dafna.hirschfeld@collabora.com>
+References: <20201030134609.30020-1-dafna.hirschfeld@collabora.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+Set the code of the metadata pads of the isp entity to
+MEDIA_BUS_FMT_METADATA_FIXED and set the width and
+height of their formats to 0. This solves the TODO
+item:
+"Fix pad format size for statistics and parameters entities."
 
-Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/20201030125658.GD6899@valkosipuli.retiisi.org.uk/
-Build log: https://builder.linuxtv.org/job/patchwork/74835/
-Build time: 00:34:38
-Link: https://lore.kernel.org/linux-media/20201030125658.GD6899@valkosipuli.retiisi.org.uk
+Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Acked-by: Helen Koike <helen.koike@collabora.com>
+---
+no changes since v1 and v2
 
-gpg: Signature made Fri 30 Oct 2020 12:47:54 PM UTC
-gpg:                using DSA key 53AC58A5F5948636C04A1BF8141DFA54A1EC8DEA
-gpg:                issuer "sakari.ailus@linux.intel.com"
-gpg: Can't check signature: No public key
+ drivers/staging/media/rkisp1/TODO         | 1 -
+ drivers/staging/media/rkisp1/rkisp1-isp.c | 8 ++++----
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-Summary: got 14/73 patches with issues, being 0 at build time, plus one error when buinding PDF document
-
-Error/warnings:
-
-patches/0027-media-ov2740-select-regmap.patch:
-
-   checkpatch.pl:
-	$ cat patches/0027-media-ov2740-select-regmap.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:8: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
-
-patches/0034-dt-bindings-media-mt9v111-Convert-to-json-schema.patch:
-
-   checkpatch.pl:
-	$ cat patches/0034-dt-bindings-media-mt9v111-Convert-to-json-schema.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:25: WARNING: DT binding docs and includes should be a separate patch. See: Documentation/devicetree/bindings/submitting-patches.rst
-	-:73: WARNING: DT binding docs and includes should be a separate patch. See: Documentation/devicetree/bindings/submitting-patches.rst
-
-patches/0035-dt-bindings-media-imx214-Convert-to-json-schema.patch:
-
-   checkpatch.pl:
-	$ cat patches/0035-dt-bindings-media-imx214-Convert-to-json-schema.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:25: WARNING: DT binding docs and includes should be a separate patch. See: Documentation/devicetree/bindings/submitting-patches.rst
-	-:80: WARNING: DT binding docs and includes should be a separate patch. See: Documentation/devicetree/bindings/submitting-patches.rst
-
-patches/0036-dt-bindings-media-ov772x-Convert-to-json-schema.patch:
-
-   checkpatch.pl:
-	$ cat patches/0036-dt-bindings-media-ov772x-Convert-to-json-schema.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:26: WARNING: DT binding docs and includes should be a separate patch. See: Documentation/devicetree/bindings/submitting-patches.rst
-	-:68: WARNING: DT binding docs and includes should be a separate patch. See: Documentation/devicetree/bindings/submitting-patches.rst
-
-patches/0039-media-dt-bindings-convert-CODA-VPU-bindings-to-yaml.patch:
-
-   checkpatch.pl:
-	$ cat patches/0039-media-dt-bindings-convert-CODA-VPU-bindings-to-yaml.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:50: WARNING: DT binding docs and includes should be a separate patch. See: Documentation/devicetree/bindings/submitting-patches.rst
-	-:83: WARNING: DT binding docs and includes should be a separate patch. See: Documentation/devicetree/bindings/submitting-patches.rst
-
-patches/0045-dt-bindings-adv7604-Fix-documentation-for-hpd-gpios.patch:
-
-   checkpatch.pl:
-	$ cat patches/0045-dt-bindings-adv7604-Fix-documentation-for-hpd-gpios.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:11: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
-
-patches/0046-dt-bindings-adv7604-Convert-bindings-to-json-schema.patch:
-
-   checkpatch.pl:
-	$ cat patches/0046-dt-bindings-adv7604-Convert-bindings-to-json-schema.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:22: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
-	-:25: WARNING: DT binding docs and includes should be a separate patch. See: Documentation/devicetree/bindings/submitting-patches.rst
-	-:114: WARNING: DT binding docs and includes should be a separate patch. See: Documentation/devicetree/bindings/submitting-patches.rst
-
-patches/0047-MAINTAINERS-Add-ADV7604-bindings-documentation.patch:
-
-   checkpatch.pl:
-	$ cat patches/0047-MAINTAINERS-Add-ADV7604-bindings-documentation.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:25: WARNING: Misordered MAINTAINERS entry - list file patterns in alphabetic order
-
-patches/0054-ipu3-cio2-Return-actual-subdev-format.patch:
-
-   checkpatch.pl:
-	$ cat patches/0054-ipu3-cio2-Return-actual-subdev-format.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:16: WARNING: email address 'stable@vger.kernel.org # v4.16 and up' might be better as 'stable@vger.kernel.org# v4.16 and up'
-
-patches/0055-ipu3-cio2-Serialise-access-to-pad-format.patch:
-
-   checkpatch.pl:
-	$ cat patches/0055-ipu3-cio2-Serialise-access-to-pad-format.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:13: WARNING: email address 'stable@vger.kernel.org # v4.16 and up' might be better as 'stable@vger.kernel.org# v4.16 and up'
-
-patches/0056-ipu3-cio2-Validate-mbus-format-in-setting-subdev-for.patch:
-
-   checkpatch.pl:
-	$ cat patches/0056-ipu3-cio2-Validate-mbus-format-in-setting-subdev-for.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:15: WARNING: email address 'stable@vger.kernel.org # v4.16 and up' might be better as 'stable@vger.kernel.org# v4.16 and up'
-
-patches/0057-ipu3-cio2-Make-the-field-on-subdev-format-V4L2_FIELD.patch:
-
-   checkpatch.pl:
-	$ cat patches/0057-ipu3-cio2-Make-the-field-on-subdev-format-V4L2_FIELD.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:14: WARNING: email address 'stable@vger.kernel.org # v4.16 and up' might be better as 'stable@vger.kernel.org# v4.16 and up'
-
-patches/0058-ipu3-cio2-Use-unsigned-values-where-appropriate.patch:
-
-   checkpatch.pl:
-	$ cat patches/0058-ipu3-cio2-Use-unsigned-values-where-appropriate.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:110: CHECK: Macro argument reuse 'dma' - possible side-effects?
-
-patches/0061-ipu3-cio2-Remove-traces-of-returned-buffers.patch:
-
-   checkpatch.pl:
-	$ cat patches/0061-ipu3-cio2-Remove-traces-of-returned-buffers.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:12: WARNING: email address 'stable@vger.kernel.org # v4.16 and up' might be better as 'stable@vger.kernel.org# v4.16 and up'
-
-
-Error #512 when building PDF docs
+diff --git a/drivers/staging/media/rkisp1/TODO b/drivers/staging/media/rkisp1/TODO
+index e7c8398fc2ce..c30c83681452 100644
+--- a/drivers/staging/media/rkisp1/TODO
++++ b/drivers/staging/media/rkisp1/TODO
+@@ -1,4 +1,3 @@
+-* Fix pad format size for statistics and parameters entities.
+ * Fix checkpatch errors.
+ * Add uapi docs. Remember to add documentation of how quantization is handled.
+ * streaming paths (mainpath and selfpath) check if the other path is streaming
+diff --git a/drivers/staging/media/rkisp1/rkisp1-isp.c b/drivers/staging/media/rkisp1/rkisp1-isp.c
+index a9715b0b7264..48d08ff87da2 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-isp.c
++++ b/drivers/staging/media/rkisp1/rkisp1-isp.c
+@@ -574,7 +574,7 @@ static int rkisp1_isp_enum_mbus_code(struct v4l2_subdev *sd,
+ 	} else {
+ 		if (code->index > 0)
+ 			return -EINVAL;
+-		code->code = MEDIA_BUS_FMT_FIXED;
++		code->code = MEDIA_BUS_FMT_METADATA_FIXED;
+ 		return 0;
+ 	}
+ 
+@@ -633,10 +633,10 @@ static int rkisp1_isp_init_config(struct v4l2_subdev *sd,
+ 					      RKISP1_ISP_PAD_SINK_PARAMS);
+ 	src_fmt = v4l2_subdev_get_try_format(sd, cfg,
+ 					     RKISP1_ISP_PAD_SOURCE_STATS);
+-	sink_fmt->width = RKISP1_DEFAULT_WIDTH;
+-	sink_fmt->height = RKISP1_DEFAULT_HEIGHT;
++	sink_fmt->width = 0;
++	sink_fmt->height = 0;
+ 	sink_fmt->field = V4L2_FIELD_NONE;
+-	sink_fmt->code = MEDIA_BUS_FMT_FIXED;
++	sink_fmt->code = MEDIA_BUS_FMT_METADATA_FIXED;
+ 	*src_fmt = *sink_fmt;
+ 
+ 	return 0;
+-- 
+2.17.1
 
