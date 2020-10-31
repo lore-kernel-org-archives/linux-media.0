@@ -2,62 +2,63 @@ Return-Path: <SRS0=b+Gc=EG=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC1B3C388F9
-	for <linux-media@archiver.kernel.org>; Sat, 31 Oct 2020 15:06:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D789CC56201
+	for <linux-media@archiver.kernel.org>; Sat, 31 Oct 2020 15:06:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8C5D420731
-	for <linux-media@archiver.kernel.org>; Sat, 31 Oct 2020 15:06:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9FF3F20702
+	for <linux-media@archiver.kernel.org>; Sat, 31 Oct 2020 15:06:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DjjxHoqM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sqy0RFY/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727926AbgJaPGC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 31 Oct 2020 11:06:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36814 "EHLO
+        id S1728025AbgJaPGQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 31 Oct 2020 11:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726115AbgJaPGB (ORCPT
+        with ESMTP id S1728018AbgJaPGO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 31 Oct 2020 11:06:01 -0400
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B217AC0617A6;
-        Sat, 31 Oct 2020 08:06:01 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id a64so4308570qkc.5;
-        Sat, 31 Oct 2020 08:06:01 -0700 (PDT)
+        Sat, 31 Oct 2020 11:06:14 -0400
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAA4C0617A6;
+        Sat, 31 Oct 2020 08:06:14 -0700 (PDT)
+Received: by mail-qk1-x742.google.com with SMTP id l2so7722632qkf.0;
+        Sat, 31 Oct 2020 08:06:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=r3BCGj3C/4k9OjwTa/exoIeLVH3IWgVh4YgNa/s9o/w=;
-        b=DjjxHoqMs3i8d7hTv0raGxsHvfU0if+6RQHN5j61MQRdpP74wWrmy89fthESuCFEdy
-         bvDUYCZDagOerpYqIfdAY3GZqQtlvbwRA2lNSdlsPLyTgoIo+AXCWoj+1lDXt0Lf/nEq
-         KaSns5ISpVZ/tDuuvv2J+JqMhvY+HDxtLXJRGrsIPYjmK5sVt5wJk8Q1FLhyYqt8YIX8
-         D5yy77N4iXbLRbB6DttkbuvB3GYvzQNH13kdaKpBcAqKz0dPxD+Eh3DVt1lN5fLjBtnc
-         M58ccxaPYPOKUHUsXlz7r+hYiKZNXpxwS6dlU02ZmlDouiGV4dDcGGTZCesW1ccGlHU+
-         UrVg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=FMq/fNztpvR6n0lvwq5zHAzZev9KmjvO/2C4S+XGV2g=;
+        b=sqy0RFY/MfeOPhhl6rIR6CG+D4m0Tf72yTGfCX4LITFhoJygziZP1epGUEkiheK2Lg
+         vGOwjCJDpjOCnsLzyCgaQh0dV3avfK8uS5/RN8OUhrHSVI+HzIyGamHvf7ErqiW5yb8F
+         ldidCKKLd1nlawbCaVFBV0CUsf8Ju0EkZxhxZvAFyobhozjHmRVdNiRRh3Hr31Q9AIpu
+         cDFD8nTZFHfXmnJTRLkJYRdKZeQ6b6ameR62Nap4v9/vPROYzLhQYShhq4wgWyxfofNT
+         w+iaRK6Dsy5hHkLFCOO8g3HWvRbJqhCPBfFNmWMB1gESx+Wuv7DNPQ8Ce3bsWyVsTOC4
+         6Dzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=r3BCGj3C/4k9OjwTa/exoIeLVH3IWgVh4YgNa/s9o/w=;
-        b=e9wR2hjcJFwmVTAcRXve/8XeifrEKFOv6at3biQ7y12OpaWQBfln+OgkEvHsayKfN9
-         PKUSYSGBL8avJ65rMEyMybpSvRyo5GtySTINbxGG+4Uu0OBHE8LE9YRc9p1ojPMRe71h
-         23BQ++E+7ZyPjCgoacjLqTAU74P8NB0NaQfDAOiOkkAntIWzaXS5Ix4fy92QuLsZy0x0
-         KcPze0C5koXZepe2ikMaqhEfesWtlDU3Hb2buror++OyatDmVvGyc8l0Y6BBoLYeTrPE
-         jqM6P5M1eja3FbtQ3nTxl74GZhlONz/GeaGQG2c0kLDqzSOzLs51c4OHo1chqfFmhTVG
-         YJ/w==
-X-Gm-Message-State: AOAM530+4yF3l+RVD03AExjFGq1GA2MbiFYj1KXfXltrwGIxKL7BPE2D
-        mrgqPttXJFos2vaMYl0is4tN6qm5udTMNg==
-X-Google-Smtp-Source: ABdhPJyaTt9+4OWhS1aI3woLrkS9QdLAkRnDNYHBoLAw29rPafj+veutMJTHAddNZMp0U7PyLZIinw==
-X-Received: by 2002:a37:aa49:: with SMTP id t70mr7254043qke.165.1604156760736;
-        Sat, 31 Oct 2020 08:06:00 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=FMq/fNztpvR6n0lvwq5zHAzZev9KmjvO/2C4S+XGV2g=;
+        b=ahEoVKOqhfqu60Ns2UZIM4M7Tb2aou5MapCRqUgvcBh47hLfeECljRswn3dXKdBzs/
+         TeNVIfQeU0Myg7GsydpK6JuiSoPb8PjtqcxSSv34MB8DL4MF2bunY44TLbmCvhcKNZhK
+         1x8O8t8MqKTquMq/vINnYIyFCAsOnomc+ukyvOrmd6Q7ugjfLAA1y2fy/I6qVYVb9N3G
+         iEoltnSt8cKEHbqls4ovWZEuobrB9dJrpW/OeZzTv+hvUd89uL9BdGzVi/yhrPI5W9Qb
+         q8MrXXOCE8KyFjbHG3MDBwV0oiktEwcI3v/hq5TAdZ6ohZ4SaZTVpfPOA9P2yaattbcP
+         sTEQ==
+X-Gm-Message-State: AOAM532GvHUk2z2Ye1Jbzm+XIL7DLKdY4GSaHHRlvT+aMHOG2g3g1yez
+        NR0z7uh/H3c6MPUSD50eDMc=
+X-Google-Smtp-Source: ABdhPJyjTFJT+02XBYj2Z0l4NloJ0n9c5KIdCYNieyDIhWSq8Dr6YTJWriFSPA4/GGI4cheUHRJTmA==
+X-Received: by 2002:ae9:e856:: with SMTP id a83mr6639664qkg.142.1604156773609;
+        Sat, 31 Oct 2020 08:06:13 -0700 (PDT)
 Received: from localhost.localdomain ([2804:14d:72b1:8920:a2ce:f815:f14d:bfac])
-        by smtp.gmail.com with ESMTPSA id z125sm2317030qke.54.2020.10.31.08.05.57
+        by smtp.gmail.com with ESMTPSA id z125sm2317030qke.54.2020.10.31.08.06.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Oct 2020 08:06:00 -0700 (PDT)
+        Sat, 31 Oct 2020 08:06:13 -0700 (PDT)
 From:   "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
 X-Google-Original-From: Daniel W. S. Almeida
 To:     mchehab+huawei@kernel.org, r.verdejo@samsung.com,
@@ -66,10 +67,12 @@ Cc:     "Daniel W . S . Almeida" <dwlsalmeida@gmail.com>,
         linux-media@vger.kernel.org, skhan@linuxfoundation.org,
         linux-kernel-mentees@lists.linuxfoundation.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/6] media: vidtv: Add support for more MPEG PSI tables
-Date:   Sat, 31 Oct 2020 12:05:46 -0300
-Message-Id: <20201031150552.663598-1-dwlsalmeida@gmail.com>
+Subject: [PATCH v2 4/6] media: vidtv: psi: extract descriptor chaining code into a helper
+Date:   Sat, 31 Oct 2020 12:05:50 -0300
+Message-Id: <20201031150552.663598-5-dwlsalmeida@gmail.com>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20201031150552.663598-1-dwlsalmeida@gmail.com>
+References: <20201031150552.663598-1-dwlsalmeida@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -78,35 +81,110 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Daniel W. S. Almeida <dwlsalmeida@gmail.com>
 
-Implement support for more MPEG PSI tables (i.e. NIT & EIT).
+The code to append a descriptor to the end of a chain is repeated
+throughout the psi generator code. Extract it into its own helper
+function to avoid cluttering.
 
-While we're at it, fix a few minor mistakes in the PSI generator.
+Signed-off-by: Daniel W. S. Almeida <dwlsalmeida@gmail.com>
+---
+ drivers/media/test-drivers/vidtv/vidtv_psi.c | 49 ++++++--------------
+ 1 file changed, 15 insertions(+), 34 deletions(-)
 
-I initially sent this without a cover letter and as WIP but I have
-now tidied it up and it's spotless. I tested the driver on a kernel
-with KASAN & Kmemleak and tested the output on DVBInspector.
-
-Daniel W. S. Almeida (6):
-  media: vidtv: extract the initial CRC value to into a #define
-  media: vidtv: psi: add a Network Information Table (NIT)
-  media: vidtv: psi: Implement an Event Information Table (EIT)
-  media: vidtv: psi: extract descriptor chaining code into a helper
-  media: vidtv: Move s302m specific fields into encoder context
-  media: vidtv: psi: fix missing assignments in while loops
-
- .../driver-api/media/drivers/vidtv.rst        |   8 +-
- .../media/test-drivers/vidtv/vidtv_bridge.c   |   4 +
- .../media/test-drivers/vidtv/vidtv_channel.c  | 130 +++-
- .../media/test-drivers/vidtv/vidtv_channel.h  |   3 +
- .../media/test-drivers/vidtv/vidtv_encoder.h  |   3 -
- drivers/media/test-drivers/vidtv/vidtv_mux.c  |  29 +
- drivers/media/test-drivers/vidtv/vidtv_mux.h  |  11 +
- drivers/media/test-drivers/vidtv/vidtv_psi.c  | 678 +++++++++++++++++-
- drivers/media/test-drivers/vidtv/vidtv_psi.h  | 240 ++++++-
- .../media/test-drivers/vidtv/vidtv_s302m.c    |  25 +-
- .../media/test-drivers/vidtv/vidtv_s302m.h    |   3 +
- 11 files changed, 1083 insertions(+), 51 deletions(-)
-
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_psi.c b/drivers/media/test-drivers/vidtv/vidtv_psi.c
+index b0b476545d65..ad2957efa483 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_psi.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_psi.c
+@@ -314,6 +314,16 @@ static u32 table_section_crc32_write_into(struct crc32_write_args args)
+ 	return nbytes;
+ }
+ 
++static void vidtv_psi_desc_chain(struct vidtv_psi_desc *head, struct vidtv_psi_desc *desc)
++{
++	if (head) {
++		while (head->next)
++			head = head->next;
++
++		head->next = desc;
++	}
++}
++
+ struct vidtv_psi_desc_service *vidtv_psi_service_desc_init(struct vidtv_psi_desc *head,
+ 							   enum service_type service_type,
+ 							   char *service_name,
+@@ -345,12 +355,7 @@ struct vidtv_psi_desc_service *vidtv_psi_service_desc_init(struct vidtv_psi_desc
+ 	if (provider_name && provider_name_len)
+ 		desc->provider_name = kstrdup(provider_name, GFP_KERNEL);
+ 
+-	if (head) {
+-		while (head->next)
+-			head = head->next;
+-
+-		head->next = (struct vidtv_psi_desc *)desc;
+-	}
++	vidtv_psi_desc_chain(head, (struct vidtv_psi_desc *)desc);
+ 	return desc;
+ }
+ 
+@@ -376,13 +381,7 @@ struct vidtv_psi_desc_registration
+ 		       additional_ident_info,
+ 		       additional_info_len);
+ 
+-	if (head) {
+-		while (head->next)
+-			head = head->next;
+-
+-		head->next = (struct vidtv_psi_desc *)desc;
+-	}
+-
++	vidtv_psi_desc_chain(head, (struct vidtv_psi_desc *)desc);
+ 	return desc;
+ }
+ 
+@@ -401,13 +400,7 @@ struct vidtv_psi_desc_network_name
+ 	if (network_name && network_name_len)
+ 		desc->network_name = kstrdup(network_name, GFP_KERNEL);
+ 
+-	if (head) {
+-		while (head->next)
+-			head = head->next;
+-
+-		head->next = (struct vidtv_psi_desc *)desc;
+-	}
+-
++	vidtv_psi_desc_chain(head, (struct vidtv_psi_desc *)desc);
+ 	return desc;
+ }
+ 
+@@ -445,13 +438,7 @@ struct vidtv_psi_desc_service_list
+ 	desc->length = length;
+ 	desc->service_list = head_e;
+ 
+-	if (head) {
+-		while (head->next)
+-			head = head->next;
+-
+-		head->next = (struct vidtv_psi_desc *)desc;
+-	}
+-
++	vidtv_psi_desc_chain(head, (struct vidtv_psi_desc *)desc);
+ 	return desc;
+ }
+ 
+@@ -490,13 +477,7 @@ struct vidtv_psi_desc_short_event
+ 	if (text && text_len)
+ 		desc->text = kstrdup(text, GFP_KERNEL);
+ 
+-	if (head) {
+-		while (head->next)
+-			head = head->next;
+-
+-		head->next = (struct vidtv_psi_desc *)desc;
+-	}
+-
++	vidtv_psi_desc_chain(head, (struct vidtv_psi_desc *)desc);
+ 	return desc;
+ }
+ 
 -- 
 2.29.2
 
