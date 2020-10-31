@@ -2,220 +2,476 @@ Return-Path: <SRS0=b+Gc=EG=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8644C388F9
-	for <linux-media@archiver.kernel.org>; Sat, 31 Oct 2020 09:58:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73DAFC55178
+	for <linux-media@archiver.kernel.org>; Sat, 31 Oct 2020 14:40:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2838C20791
-	for <linux-media@archiver.kernel.org>; Sat, 31 Oct 2020 09:58:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 178CC206A5
+	for <linux-media@archiver.kernel.org>; Sat, 31 Oct 2020 14:40:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="X3m2Pjo5"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="O6NovDNr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726627AbgJaJ57 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 31 Oct 2020 05:57:59 -0400
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:46565 "EHLO
-        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726580AbgJaJ57 (ORCPT
+        id S1727672AbgJaOkt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 31 Oct 2020 10:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32864 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727339AbgJaOkt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 31 Oct 2020 05:57:59 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id YndwktnDVWvjMYne0kJWJ5; Sat, 31 Oct 2020 10:57:56 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1604138276; bh=ppzM36EWvZxzr9SQsgshcXj9K5eECWb+y061duIGk3Y=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=X3m2Pjo5tA4mlKK/Hd/8XHdiitch4uuxC0AZNgUSMYFyU+Pji8Xzl6JLT1IEedqbC
-         3uBTIKZ7MxnzWxKFqqtSOfxjDIK6pp/9zi5FkItprQaF9bwscbdPfNRaIdRPpco+N/
-         EEaF76gLN3lXe9qhGL3vWTkAZcJfKHnUMuJpBV+gieaJUBgifHZ36R339nOVYoOWsy
-         UBJqTODfrzK+7Dx/82P8eKX0V91CXcSYRsaGZieK0m1CW+JvJtidIeOJ9pp/u9K5cA
-         JBzLG6GcV1Gz/+N22XOEvTKYN73vQfivgVLGNTQAlZpAjp0weNYAcpzS6QST2EBpW1
-         56w1fYsJvhAYg==
-Subject: Re: Suggestion regarding x8 gang mode device tree changes
-To:     Sakari Ailus <sakari.ailus@iki.fi>
-Cc:     Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Thierry Reding <treding@nvidia.com>,
-        linux-media@vger.kernel.org
-References: <e253fee3-5358-aaf1-d317-162dc8e98afc@nvidia.com>
- <20201029145013.GA6899@valkosipuli.retiisi.org.uk>
- <59f91ac7-84fc-a9fd-e331-35adf4e5f5b9@nvidia.com>
- <2ac2eb3d-32df-a352-3ce5-918ddbf718af@nvidia.com>
- <20201029165245.GB6899@valkosipuli.retiisi.org.uk>
- <542bbb61-049e-85d8-c2d7-9f38e6625b3d@nvidia.com>
- <7f64c771-a4ff-8909-4679-1cec58947e94@xs4all.nl>
- <20201030095642.GC6899@valkosipuli.retiisi.org.uk>
- <73cce478-c7b0-43b5-9c87-211b4a7c5b6b@xs4all.nl>
- <20201030223124.GE6899@valkosipuli.retiisi.org.uk>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <5246283a-6cec-cb47-9715-a461fa5961f8@xs4all.nl>
-Date:   Sat, 31 Oct 2020 10:57:52 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        Sat, 31 Oct 2020 10:40:49 -0400
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414C7C061A04
+        for <linux-media@vger.kernel.org>; Sat, 31 Oct 2020 07:40:47 -0700 (PDT)
+Received: by mail-ot1-x343.google.com with SMTP id h62so8326667oth.9
+        for <linux-media@vger.kernel.org>; Sat, 31 Oct 2020 07:40:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=JtO7Nja6RcTtOeq2s1LZwcLE76uoTTnCv1bvoi/jbRQ=;
+        b=O6NovDNrkmvyLeMFHQ9kK6wUcbzNTFA80tHkHLx4K1Rl1FiZWxl43rYqA2paTDUoG9
+         Xw8tEEg3vp7olCb3fkGN5R505BIXt9Vj5gLohBUOiYfhXy8e4m1xQZzJucvcpAOVyKpG
+         MKCmjLVQE+563SqK3v/+2eMm0Mi9X2tcHiKvE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=JtO7Nja6RcTtOeq2s1LZwcLE76uoTTnCv1bvoi/jbRQ=;
+        b=je13rhW8gcJ0cC4imNLfX/xPyM2hkkQsfvxoG7PuAn32xTIaSZsUpVJG0uLSjiActT
+         3FXXeZ20dRb3kfy03bpdZoeKP7aAx2SDV0xMWQKzOnn45sWQGAUhwjQlgSJBYjN/wFsd
+         ylcGPZ2H6nnI7yEoUDKztn7+QSNfhyagJRJa3NZr0mvYDAVdmyicMXCBcq7RYbrRj35B
+         /3d9cmNzJzIUOixDyj07ijx7CHctE7sRP9KLXz0CiSSnsCXxmG/usFBrmWqrQdPvMqN5
+         PHfg0OuDSVkKiAD++LLUkUWUQZmYAvOrLLWEpH61tHX6kPGNa6CdNRdJ1FYWtVwJ4uMB
+         08Jg==
+X-Gm-Message-State: AOAM533NBGu+vFZOe5OtgNMdK3Ga8Ei9WoiIuhpDKZgzXZbjnbyszgEf
+        CbddRbkaLkPL1Zu8JjsyDf46cp83NoDx37wfYtpwfA==
+X-Google-Smtp-Source: ABdhPJxqtsn7W7oKGTLHfMVhN6VELBcHyLa3p2v0hx77IIgGpAhWCkDOrTaCDOywAg1QbtLmxm3odFb5zBu4pEEm8pA=
+X-Received: by 2002:a9d:6e81:: with SMTP id a1mr5364593otr.303.1604155246273;
+ Sat, 31 Oct 2020 07:40:46 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20201030223124.GE6899@valkosipuli.retiisi.org.uk>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfA3GBvJ/jw6QgjO+XvUf/tTfO6rHVyW+R9h329epKVZexwxmDp5lC6U/oNOi1S+nBBHdov4btdTmo50ldEdRMcjUUtBsToEO3YqpA2ATx84Z3MuAsq+Q
- nNk9WViWGKQW6z1DWMpGTEH4nGRFCeMzx3a7tHQhdZO6Y3kPmcs1b2M1RhFMednDgEGBYyttmKg79Ni83K4nV/RSKe4Xsg9A4dpY9czasOnmBhQG/wCjm1bu
- B6wQpWeOJTH/Edjtx/2wX84JK6sRH+UpluaTOfKdhGM7VvaKTX6A7SKoy44WHeLn
+References: <20201030100815.2269-1-daniel.vetter@ffwll.ch> <20201030100815.2269-14-daniel.vetter@ffwll.ch>
+ <787f2914-5777-4703-4bee-68c4c3742817@nvidia.com>
+In-Reply-To: <787f2914-5777-4703-4bee-68c4c3742817@nvidia.com>
+From:   Daniel Vetter <daniel.vetter@ffwll.ch>
+Date:   Sat, 31 Oct 2020 15:40:35 +0100
+Message-ID: <CAKMK7uF=N1hGSnFscaX0PGxWVkrUoYK-H+gnBhYkG1KU_KvVEg@mail.gmail.com>
+Subject: Re: [PATCH v5 13/15] resource: Move devmem revoke code to resource framework
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kees Cook <keescook@chromium.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Jan Kara <jack@suse.cz>, Arnd Bergmann <arnd@arndb.de>,
+        David Hildenbrand <david@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 30/10/2020 23:31, Sakari Ailus wrote:
-> Hi Hans,
-> 
-> On Fri, Oct 30, 2020 at 11:06:18AM +0100, Hans Verkuil wrote:
->> On 30/10/2020 10:56, Sakari Ailus wrote:
->>> Hi Hans,
->>>
->>> On Fri, Oct 30, 2020 at 10:31:06AM +0100, Hans Verkuil wrote:
->>>> On 29/10/2020 18:07, Sowjanya Komatineni wrote:
->>>>>
->>>>> On 10/29/20 9:52 AM, Sakari Ailus wrote:
->>>>>> On Thu, Oct 29, 2020 at 09:49:57AM -0700, Sowjanya Komatineni wrote:
->>>>>>> On 10/29/20 8:36 AM, Sowjanya Komatineni wrote:
->>>>>>>> On 10/29/20 7:50 AM, Sakari Ailus wrote:
->>>>>>>>> Hi Sowjanya,
->>>>>>>>>
->>>>>>>>> On Wed, Oct 28, 2020 at 06:48:59PM -0700, Sowjanya Komatineni wrote:
->>>>>>>>>> Hi Sakari,
->>>>>>>>>>
->>>>>>>>>> Missed to add you to below patch series for HDMI2CSI bridge support
->>>>>>>>>>
->>>>>>>>>> https://patchwork.kernel.org/project/linux-media/cover/1603768763-25590-1-git-send-email-skomatineni@nvidia.com/
->>>>>>>>>>
->>>>>>>>>>
->>>>>>>>>> Patch-10 of this series is for x8 capture from HDMI2CSI bridge.
->>>>>>>>>>
->>>>>>>>>> Would like to get your suggestion on x8 gang/combined ports capture
->>>>>>>>>> implementation.
->>>>>>>>> The majority of CSI-2 receiver devices support partitioning the
->>>>>>>>> lanes among
->>>>>>>>> different PHYs in various ways. They do support usually up to four
->>>>>>>>> lanes,
->>>>>>>>> but adding four more lanes is not a reason for making the API different.
->>>>>>>>>
->>>>>>>>> So instead, you should implement this as a single port that simply has 8
->>>>>>>>> lanes.
->>>>>>>>>
->>>>>>>> Thanks Sakari for your reply.
->>>>>>>>
->>>>>>>> current v2 series treats as 8 lanes. You mean to not expose 2nd port in
->>>>>>>> device tree as VI/CSI side takes care of 2nd port as combined to treat
->>>>>>>> as 8 lane?
->>>>>> Correct.
->>>>>>
->>>>>> Although you can have the second port connected if fewer lanes are assigned
->>>>>> to the first one.
->>>>>>
->>>>>> How does it work for this device, are the lanes statically allocated to
->>>>>> ports, apart from the special 8 lane mode?
->>>>>
->>>>> Tegra CSI each port supports max 4 lanes. For x8, 2 x4 ports together 
->>>>> are programmed for simultaneous streaming during the same video/subdev 
->>>>> stream ops.
->>>>>
->>>>> Physically, CSI RX side 4 lanes goes to x4 port and other 4 lanes goes 
->>>>> to another x4 port.
->>>>>
->>>>> HDMI Bridge TX0 -> CSI RX0 (x4 port)
->>>>>
->>>>> HDMI Bridge TX1 -> CSI RX1 (x4 port)
->>>>>
->>>>> HDMI bridge side single image is split into 2 x4 ports and on RX side 
->>>>> image from both ports are captured simultaneously with buffer offsets 
->>>>> adjusted side-by-side to get combined image for same video buf of video 
->>>>> device.
->>>>>
->>>>> Both these 2 x4 ports together are used for streaming by Tegra VI and 
->>>>> buffer offsets are adjusted side by side for these ports and for video 
->>>>> device node stream, its single buffer which contains combined image from 
->>>>> capture.
->>>>>
->>>>>>> AS csi2 bus type supports max 4 data lanes with endpoint parse API.
->>>>>>>
->>>>>>> Currently with x8 as single port, I am using bus-width with bus type as
->>>>>>> parallel in device tree and when using x4 using data-lanes with csi2 bus
->>>>>>> type and driver gets lanes based on either of this from DT.
->>>>>>>
->>>>>>> Instead should we update endpoint parse API for max up to 8 lanes for
->>>>>>> data-lanes?
->>>>>> Yes, please. Could you send a patch?
->>>>>>
->>>>>> The standard AFAIK supports up to four lanes but as we know, hardware
->>>>>> sometimes has more than that.
->>>>>
->>>>> Sure once Hans also agrees with this to have it as single x8 port (just 
->>>>> like I have now in v2), will send v3 to update endpoint parse to allow 
->>>>> upto max 8 data-lanes and will also update Tegra CSI driver accordingly 
->>>>> to retrieve lanes using csi2 bus type.
->>>>>
->>>>> Hans, Please confirm if you agree with this.
->>>>>
->>>>
->>>> I'm not sure if I agree with this. Shouldn't a device tree reflect the
->>>> hardware? And how would you represent the use case where the ganging
->>>> mode stitches together two synced sensors (left and right) into a single
->>>> 3D side-by-side image? Then you would have:
->>>>
->>>>  Left Sensor TX -> CSI RX0 (x4 port)
->>>> Right Sensor TX -> CSI RX1 (x4 port)
->>>>
->>>> And for the tc358840 something similar might be true: in the case of the
->>>> Tegra you have this nice ganging mode available, but for other SoCs each
->>>> half would have to go to a separate CSI port and captured via a separate
->>>> video DMA channel, and software or a GPU is needed to combine the two
->>>> halves.
->>>>
->>>> In both these examples it is my understanding that you have to model this
->>>> in the DT as separate x4 ports.
->>>
->>> Do note that a "port" as such is a logical concept. On modern hardware, a
->>> port consists of two or more lanes --- one clock, plus at least one data
->>> lane. Perhaps an example could be useful. For instance, if you have ten
->>> lanes on a device, this could be split into following configurations, based
->>> on the board design:
->>>
->>> configuration \ data lanes	port 0	port 1	port 2	port 3
->>>
->>> 1:				4	4
->>> 2:				4	2	1
->>> 3:				2	2	2
->>> 4:				2	2	1	1
->>>
->>> So if you add one more, say:
->>>
->>> 5:				8
->>>
->>> So what we're discussing is just how the lanes are distributed across the
->>> ports.
->>>
->>> There are usually hardware specific limitations how the lanes can be
->>> distributed. The interface we have in DT (data-lanes + clock-lanes
->>> properties) allows describing the hardware in general case, so what the
->>> interface allows may not be possible in hardware, but what hardware
->>> implements is supported by the interface.
->>>
->>
->> So for this particular instance using a single logical 8-lane port would
->> make sense, but in the two other scenarios (left/right sensor or supporting
->> tc358840 in a SoC that doesn't support ganging) I described you would still
->> have to model it as two 4-lane ports.
-> 
-> If you have two sensors, yes, then it'll be two separate ports; one sensor
-> connected to each of them. The streams are usually separate, but other
-> kinds of implementations exist. Still, they generally have no effect on
-> CSI-2 bus configuration.
-> 
+On Sat, Oct 31, 2020 at 7:36 AM John Hubbard <jhubbard@nvidia.com> wrote:
+>
+> On 10/30/20 3:08 AM, Daniel Vetter wrote:
+> > We want all iomem mmaps to consistently revoke ptes when the kernel
+> > takes over and CONFIG_IO_STRICT_DEVMEM is enabled. This includes the
+> > pci bar mmaps available through procfs and sysfs, which currently do
+> > not revoke mappings.
+> >
+> > To prepare for this, move the code from the /dev/kmem driver to
+> > kernel/resource.c.
+>
+> This seems like it's doing a lot more than just code movement, right?
+> Should we list some of that here?
 
-OK, then we go with increasing the number of data lanes to 8.
+It was meant to be just moving code, but then the inevitable bikeshed
+showed up and I forgot to update the commit message properly. Will fix
+that.
 
-Regards,
+> Also, I'm seeing a crash due to this commit. More below:
 
-	Hans
+Uh that's not good.
+>
+> >
+> > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+> > Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> > Cc: Kees Cook <keescook@chromium.org>
+> > Cc: Dan Williams <dan.j.williams@intel.com>
+> > Cc: Andrew Morton <akpm@linux-foundation.org>
+> > Cc: John Hubbard <jhubbard@nvidia.com>
+> > Cc: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
+> > Cc: Jan Kara <jack@suse.cz>
+> > Cc: Dan Williams <dan.j.williams@intel.com>
+> > Cc: linux-mm@kvack.org
+> > Cc: linux-arm-kernel@lists.infradead.org
+> > Cc: linux-samsung-soc@vger.kernel.org
+> > Cc: linux-media@vger.kernel.org
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+> > Cc: David Hildenbrand <david@redhat.com>
+> > Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+> > Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+> > --
+> > v3:
+> > - add barrier for consistency and document why we don't have to check
+> >    for NULL (Jason)
+> > v4
+> > - Adjust comments to reflect the general nature of this iomem revoke
+> >    code now (Dan)
+> > ---
+> >   drivers/char/mem.c     |  85 +---------------------------------
+> >   include/linux/ioport.h |   6 +--
+> >   kernel/resource.c      | 101 ++++++++++++++++++++++++++++++++++++++++=
+-
+> >   3 files changed, 102 insertions(+), 90 deletions(-)
+> >
+> > diff --git a/drivers/char/mem.c b/drivers/char/mem.c
+> > index 7dcf9e4ea79d..43c871dc7477 100644
+> > --- a/drivers/char/mem.c
+> > +++ b/drivers/char/mem.c
+> > @@ -31,9 +31,6 @@
+> >   #include <linux/uio.h>
+> >   #include <linux/uaccess.h>
+> >   #include <linux/security.h>
+> > -#include <linux/pseudo_fs.h>
+> > -#include <uapi/linux/magic.h>
+> > -#include <linux/mount.h>
+> >
+> >   #ifdef CONFIG_IA64
+> >   # include <linux/efi.h>
+> > @@ -836,42 +833,6 @@ static loff_t memory_lseek(struct file *file, loff=
+_t offset, int orig)
+> >       return ret;
+> >   }
+> >
+> > -static struct inode *devmem_inode;
+> > -
+> > -#ifdef CONFIG_IO_STRICT_DEVMEM
+> > -void revoke_devmem(struct resource *res)
+> > -{
+> > -     /* pairs with smp_store_release() in devmem_init_inode() */
+> > -     struct inode *inode =3D smp_load_acquire(&devmem_inode);
+> > -
+> > -     /*
+> > -      * Check that the initialization has completed. Losing the race
+> > -      * is ok because it means drivers are claiming resources before
+> > -      * the fs_initcall level of init and prevent /dev/mem from
+> > -      * establishing mappings.
+> > -      */
+> > -     if (!inode)
+> > -             return;
+> > -
+> > -     /*
+> > -      * The expectation is that the driver has successfully marked
+> > -      * the resource busy by this point, so devmem_is_allowed()
+> > -      * should start returning false, however for performance this
+> > -      * does not iterate the entire resource range.
+> > -      */
+> > -     if (devmem_is_allowed(PHYS_PFN(res->start)) &&
+> > -         devmem_is_allowed(PHYS_PFN(res->end))) {
+> > -             /*
+> > -              * *cringe* iomem=3Drelaxed says "go ahead, what's the
+> > -              * worst that can happen?"
+> > -              */
+> > -             return;
+> > -     }
+> > -
+> > -     unmap_mapping_range(inode->i_mapping, res->start, resource_size(r=
+es), 1);
+> > -}
+> > -#endif
+> > -
+> >   static int open_port(struct inode *inode, struct file *filp)
+> >   {
+> >       int rc;
+> > @@ -891,7 +852,7 @@ static int open_port(struct inode *inode, struct fi=
+le *filp)
+> >        * revocations when drivers want to take over a /dev/mem mapped
+> >        * range.
+> >        */
+> > -     filp->f_mapping =3D inode->i_mapping;
+> > +     filp->f_mapping =3D iomem_get_mapping();
+>
+>
+> The problem is that iomem_get_mapping() returns NULL for the !CONFIG_IO_S=
+TRICT_DEVMEM
+> case. And then we have pre-existing fs code that expects to go "up and ov=
+er", like this:
+>
+>
+> static int do_dentry_open(struct file *f,
+>                           struct inode *inode,
+>                           int (*open)(struct inode *, struct file *))
+> {
+> ...
+>
+>         file_ra_state_init(&f->f_ra, f->f_mapping->host->i_mapping);
+>
+> ...and it crashes on that line fairly early in bootup.
+>
+> Not sure what to suggest for this patch, but wanted to get this report ou=
+t at least.
+
+Old code seems to have worked by always setting up the inode (we still
+do that) and always setting it (we don't do that anymore), just not
+revoking the ptes when the Kconfig is not set. I'll fix that up and
+remove the behaviour change here.
+-Daniel
+
+> thanks,
+> --
+> John Hubbard
+> NVIDIA
+>
+> >
+> >       return 0;
+> >   }
+> > @@ -1023,48 +984,6 @@ static char *mem_devnode(struct device *dev, umod=
+e_t *mode)
+> >
+> >   static struct class *mem_class;
+> >
+> > -static int devmem_fs_init_fs_context(struct fs_context *fc)
+> > -{
+> > -     return init_pseudo(fc, DEVMEM_MAGIC) ? 0 : -ENOMEM;
+> > -}
+> > -
+> > -static struct file_system_type devmem_fs_type =3D {
+> > -     .name           =3D "devmem",
+> > -     .owner          =3D THIS_MODULE,
+> > -     .init_fs_context =3D devmem_fs_init_fs_context,
+> > -     .kill_sb        =3D kill_anon_super,
+> > -};
+> > -
+> > -static int devmem_init_inode(void)
+> > -{
+> > -     static struct vfsmount *devmem_vfs_mount;
+> > -     static int devmem_fs_cnt;
+> > -     struct inode *inode;
+> > -     int rc;
+> > -
+> > -     rc =3D simple_pin_fs(&devmem_fs_type, &devmem_vfs_mount, &devmem_=
+fs_cnt);
+> > -     if (rc < 0) {
+> > -             pr_err("Cannot mount /dev/mem pseudo filesystem: %d\n", r=
+c);
+> > -             return rc;
+> > -     }
+> > -
+> > -     inode =3D alloc_anon_inode(devmem_vfs_mount->mnt_sb);
+> > -     if (IS_ERR(inode)) {
+> > -             rc =3D PTR_ERR(inode);
+> > -             pr_err("Cannot allocate inode for /dev/mem: %d\n", rc);
+> > -             simple_release_fs(&devmem_vfs_mount, &devmem_fs_cnt);
+> > -             return rc;
+> > -     }
+> > -
+> > -     /*
+> > -      * Publish /dev/mem initialized.
+> > -      * Pairs with smp_load_acquire() in revoke_devmem().
+> > -      */
+> > -     smp_store_release(&devmem_inode, inode);
+> > -
+> > -     return 0;
+> > -}
+> > -
+> >   static int __init chr_dev_init(void)
+> >   {
+> >       int minor;
+> > @@ -1086,8 +1005,6 @@ static int __init chr_dev_init(void)
+> >                */
+> >               if ((minor =3D=3D DEVPORT_MINOR) && !arch_has_dev_port())
+> >                       continue;
+> > -             if ((minor =3D=3D DEVMEM_MINOR) && devmem_init_inode() !=
+=3D 0)
+> > -                     continue;
+> >
+> >               device_create(mem_class, NULL, MKDEV(MEM_MAJOR, minor),
+> >                             NULL, devlist[minor].name);
+> > diff --git a/include/linux/ioport.h b/include/linux/ioport.h
+> > index 5135d4b86cd6..02a5466245c0 100644
+> > --- a/include/linux/ioport.h
+> > +++ b/include/linux/ioport.h
+> > @@ -307,11 +307,7 @@ struct resource *devm_request_free_mem_region(stru=
+ct device *dev,
+> >   struct resource *request_free_mem_region(struct resource *base,
+> >               unsigned long size, const char *name);
+> >
+> > -#ifdef CONFIG_IO_STRICT_DEVMEM
+> > -void revoke_devmem(struct resource *res);
+> > -#else
+> > -static inline void revoke_devmem(struct resource *res) { };
+> > -#endif
+> > +extern struct address_space *iomem_get_mapping(void);
+> >
+> >   #endif /* __ASSEMBLY__ */
+> >   #endif      /* _LINUX_IOPORT_H */
+> > diff --git a/kernel/resource.c b/kernel/resource.c
+> > index 3ae2f56cc79d..5ecc3187fe2d 100644
+> > --- a/kernel/resource.c
+> > +++ b/kernel/resource.c
+> > @@ -18,12 +18,15 @@
+> >   #include <linux/spinlock.h>
+> >   #include <linux/fs.h>
+> >   #include <linux/proc_fs.h>
+> > +#include <linux/pseudo_fs.h>
+> >   #include <linux/sched.h>
+> >   #include <linux/seq_file.h>
+> >   #include <linux/device.h>
+> >   #include <linux/pfn.h>
+> >   #include <linux/mm.h>
+> > +#include <linux/mount.h>
+> >   #include <linux/resource_ext.h>
+> > +#include <uapi/linux/magic.h>
+> >   #include <asm/io.h>
+> >
+> >
+> > @@ -1115,6 +1118,58 @@ resource_size_t resource_alignment(struct resour=
+ce *res)
+> >
+> >   static DECLARE_WAIT_QUEUE_HEAD(muxed_resource_wait);
+> >
+> > +static struct inode *iomem_inode;
+> > +
+> > +#ifdef CONFIG_IO_STRICT_DEVMEM
+> > +static void revoke_iomem(struct resource *res)
+> > +{
+> > +     /* pairs with smp_store_release() in iomem_init_inode() */
+> > +     struct inode *inode =3D smp_load_acquire(&iomem_inode);
+> > +
+> > +     /*
+> > +      * Check that the initialization has completed. Losing the race
+> > +      * is ok because it means drivers are claiming resources before
+> > +      * the fs_initcall level of init and prevent iomem_get_mapping us=
+ers
+> > +      * from establishing mappings.
+> > +      */
+> > +     if (!inode)
+> > +             return;
+> > +
+> > +     /*
+> > +      * The expectation is that the driver has successfully marked
+> > +      * the resource busy by this point, so devmem_is_allowed()
+> > +      * should start returning false, however for performance this
+> > +      * does not iterate the entire resource range.
+> > +      */
+> > +     if (devmem_is_allowed(PHYS_PFN(res->start)) &&
+> > +         devmem_is_allowed(PHYS_PFN(res->end))) {
+> > +             /*
+> > +              * *cringe* iomem=3Drelaxed says "go ahead, what's the
+> > +              * worst that can happen?"
+> > +              */
+> > +             return;
+> > +     }
+> > +
+> > +     unmap_mapping_range(inode->i_mapping, res->start, resource_size(r=
+es), 1);
+> > +}
+> > +struct address_space *iomem_get_mapping(void)
+> > +{
+> > +     /*
+> > +      * This function is only called from file open paths, hence guara=
+nteed
+> > +      * that fs_initcalls have completed and no need to check for NULL=
+. But
+> > +      * since revoke_iomem can be called before the initcall we still =
+need
+> > +      * the barrier to appease checkers.
+> > +      */
+> > +     return smp_load_acquire(&iomem_inode)->i_mapping;
+> > +}
+> > +#else
+> > +static void revoke_iomem(struct resource *res) {}
+> > +struct address_space *iomem_get_mapping(void)
+> > +{
+> > +     return NULL;
+> > +}
+> > +#endif
+> > +
+> >   /**
+> >    * __request_region - create a new busy resource region
+> >    * @parent: parent resource descriptor
+> > @@ -1182,7 +1237,7 @@ struct resource * __request_region(struct resourc=
+e *parent,
+> >       write_unlock(&resource_lock);
+> >
+> >       if (res && orig_parent =3D=3D &iomem_resource)
+> > -             revoke_devmem(res);
+> > +             revoke_iomem(res);
+> >
+> >       return res;
+> >   }
+> > @@ -1782,4 +1837,48 @@ static int __init strict_iomem(char *str)
+> >       return 1;
+> >   }
+> >
+> > +static int iomem_fs_init_fs_context(struct fs_context *fc)
+> > +{
+> > +     return init_pseudo(fc, DEVMEM_MAGIC) ? 0 : -ENOMEM;
+> > +}
+> > +
+> > +static struct file_system_type iomem_fs_type =3D {
+> > +     .name           =3D "iomem",
+> > +     .owner          =3D THIS_MODULE,
+> > +     .init_fs_context =3D iomem_fs_init_fs_context,
+> > +     .kill_sb        =3D kill_anon_super,
+> > +};
+> > +
+> > +static int __init iomem_init_inode(void)
+> > +{
+> > +     static struct vfsmount *iomem_vfs_mount;
+> > +     static int iomem_fs_cnt;
+> > +     struct inode *inode;
+> > +     int rc;
+> > +
+> > +     rc =3D simple_pin_fs(&iomem_fs_type, &iomem_vfs_mount, &iomem_fs_=
+cnt);
+> > +     if (rc < 0) {
+> > +             pr_err("Cannot mount iomem pseudo filesystem: %d\n", rc);
+> > +             return rc;
+> > +     }
+> > +
+> > +     inode =3D alloc_anon_inode(iomem_vfs_mount->mnt_sb);
+> > +     if (IS_ERR(inode)) {
+> > +             rc =3D PTR_ERR(inode);
+> > +             pr_err("Cannot allocate inode for iomem: %d\n", rc);
+> > +             simple_release_fs(&iomem_vfs_mount, &iomem_fs_cnt);
+> > +             return rc;
+> > +     }
+> > +
+> > +     /*
+> > +      * Publish iomem revocation inode initialized.
+> > +      * Pairs with smp_load_acquire() in revoke_iomem().
+> > +      */
+> > +     smp_store_release(&iomem_inode, inode);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +fs_initcall(iomem_init_inode);
+> > +
+> >   __setup("iomem=3D", strict_iomem);
+> >
+>
+>
+
+
+--=20
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
