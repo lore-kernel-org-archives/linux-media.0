@@ -2,47 +2,47 @@ Return-Path: <SRS0=lexf=EH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F13DC55179
-	for <linux-media@archiver.kernel.org>; Sun,  1 Nov 2020 14:43:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AFF6C2D0A3
+	for <linux-media@archiver.kernel.org>; Sun,  1 Nov 2020 14:43:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CF6F92225B
-	for <linux-media@archiver.kernel.org>; Sun,  1 Nov 2020 14:43:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 205602225B
+	for <linux-media@archiver.kernel.org>; Sun,  1 Nov 2020 14:43:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="bjNLOQV5"
+	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="mBdPD89Y"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726722AbgKAOnI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 1 Nov 2020 09:43:08 -0500
-Received: from mx0a-002e3701.pphosted.com ([148.163.147.86]:50502 "EHLO
+        id S1726848AbgKAOnO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 1 Nov 2020 09:43:14 -0500
+Received: from mx0a-002e3701.pphosted.com ([148.163.147.86]:43546 "EHLO
         mx0a-002e3701.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726499AbgKAOnH (ORCPT
+        by vger.kernel.org with ESMTP id S1726599AbgKAOnM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 1 Nov 2020 09:43:07 -0500
-Received: from pps.filterd (m0134422.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A1EgrGU020387;
-        Sun, 1 Nov 2020 14:42:53 GMT
+        Sun, 1 Nov 2020 09:43:12 -0500
+Received: from pps.filterd (m0134421.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A1Ef8OK003998;
+        Sun, 1 Nov 2020 14:42:59 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : mime-version; s=pps0720;
- bh=yv27s7RCBX/TWQjfzBWzQfYgerna7orjR+8Y7ZUqguI=;
- b=bjNLOQV5RV9jjfxMpG3nFxY0LXe/XIeyukJ+GfkwB++Mcbo1UX3z7ZhUTsw8rEAb+z/n
- QeqD43pRxexMm5y5S/CTyqg8fIDJPlqftnQWT6sq6nq6U4uwNDREYx9Rb9OYfSf7Ej4J
- VS7msfjhWcdH5yDIJsX+I8Sbe+9c8/nz8Xmk6NWLLqXrfYY0fgtHPHhtmv/1esPy4ef3
- MhfAZkOfYNmvvZsx58PtA33zB5m4WQhy7onvx7IEN5G84AXE42/9VyzVjuBX09/i5OcE
- ExeNu9jRcEs60zXVFzqtuepUWGcYC7ecslfNa1MSHzwbH5HRMnGKE00cgsGu+T055F8p gw== 
-Received: from g9t5008.houston.hpe.com (g9t5008.houston.hpe.com [15.241.48.72])
-        by mx0b-002e3701.pphosted.com with ESMTP id 34hhn5b68e-1
+ : date : message-id : in-reply-to : references; s=pps0720;
+ bh=OA1AyoIUxAdKprQIlZ9yrzznCb8iuBhc83hjN12ArsA=;
+ b=mBdPD89YSLvkEUDnDJsj+qaGMRsztQ2rc9voUZLErQsV/6T9+PNh8ZGa3R2TtqjVTjVT
+ stMB7T7x4y5BcOrx2SZiJIBalVZRs0gdEYCd2612RlzKR07iyN4kazjz91IMH2tnX1rP
+ 9uU1dF/PCEB+zcsG6w8+L3GuWx9UTLvd2/Aozg263Z42/8LxRwWV1WKxaNs8cPEnHL+Y
+ aqXiXGUv8IquDpzKE1/iUStT3E7efcQ3Uzl5mSd/K7Uv2AG0rdhE9vZ6q8JxNBQudGUe
+ SabI7Ige/atinoDTPARo7G5vZ8pIJPyn+0JnXdtidgr26gcCeXGawzj0PrOOu+mZBosX FA== 
+Received: from g9t5009.houston.hpe.com (g9t5009.houston.hpe.com [15.241.48.73])
+        by mx0b-002e3701.pphosted.com with ESMTP id 34hh9wb76k-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 01 Nov 2020 14:42:53 +0000
+        Sun, 01 Nov 2020 14:42:59 +0000
 Received: from g4t3433.houston.hpecorp.net (g4t3433.houston.hpecorp.net [16.208.49.245])
-        by g9t5008.houston.hpe.com (Postfix) with ESMTP id F3C7A53;
-        Sun,  1 Nov 2020 14:42:50 +0000 (UTC)
+        by g9t5009.houston.hpe.com (Postfix) with ESMTP id 79C7355;
+        Sun,  1 Nov 2020 14:42:58 +0000 (UTC)
 Received: from rfwz62.ftc.rdlabs.hpecorp.net (rfwz62.americas.hpqcorp.net [10.33.237.8])
-        by g4t3433.houston.hpecorp.net (Postfix) with ESMTP id 74F1949;
-        Sun,  1 Nov 2020 14:42:49 +0000 (UTC)
+        by g4t3433.houston.hpecorp.net (Postfix) with ESMTP id 7B31947;
+        Sun,  1 Nov 2020 14:42:57 +0000 (UTC)
 From:   rwright@hpe.com
 To:     jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
         rodrigo.vivi@intel.com, airlied@linux.ie, daniel@ffwll.ch,
@@ -53,18 +53,18 @@ To:     jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
         mika.kuoppala@linux.intel.com, rwright@hpe.com
 Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v3 0/3] Reduce context clear batch size to avoid gpu hang
-Date:   Sun,  1 Nov 2020 07:42:41 -0700
-Message-Id: <20201101144244.10086-1-rwright@hpe.com>
+Subject: [PATCH v3 2/3] drm/i915/display: Add function quirk_renderclear_reduced
+Date:   Sun,  1 Nov 2020 07:42:43 -0700
+Message-Id: <20201101144244.10086-3-rwright@hpe.com>
 X-Mailer: git-send-email 2.17.1
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+In-Reply-To: <20201101144244.10086-1-rwright@hpe.com>
+References: <20201101144244.10086-1-rwright@hpe.com>
 X-HPE-SCL: -1
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-11-01_05:2020-10-30,2020-11-01 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=915
- suspectscore=0 clxscore=1011 lowpriorityscore=0 impostorscore=0
- priorityscore=1501 mlxscore=0 bulkscore=0 phishscore=0 spamscore=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
+ lowpriorityscore=0 mlxlogscore=999 priorityscore=1501 adultscore=0
+ mlxscore=0 suspectscore=2 spamscore=0 phishscore=0 bulkscore=0
  malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2011010120
 Precedence: bulk
@@ -73,45 +73,46 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Randy Wright <rwright@hpe.com>
 
-For several months, I've been experiencing GPU hangs when  starting
-Cinnamon on an HP Pavilion Mini 300-020 if I try to run an upstream
-kernel.  I reported this recently in
-https://gitlab.freedesktop.org/drm/intel/-/issues/2413 where I have
-attached the requested evidence including the state collected from
-/sys/class/drm/card0/error and debug output from dmesg.
+Added function quirk_renderclear_reduced to set QUIRK_RENDERCLEAR_REDUCED
+for designated platforms.  Applying QUIRK_RENDERCLEAR_REDUCED for
+the HP Pavilion Mini 300-020 prevents a GPU hang.
 
-I ran a bisect to find the problem, which indicates this is the
-troublesome commit:
-
-  [47f8253d2b8947d79fd3196bf96c1959c0f25f20] drm/i915/gen7: Clear all EU/L3 residual contexts
-
-The nature of that commit suggested to me that reducing the
-batch size used in the context clear operation might help this
-relatively low-powered system to avoid the hang.... and it did!
-I simply forced this system to take the smaller batch length that is
-already used for non-Haswell systems.
-
-The first two versions of this patch were posted as RFC
-patches to the Intel-gfx list, implementing the same
-algorithmic change in function batch_get_defaults,
-but without employing a properly constructed quirk.
-
-I've now cleaned up the patch to employ a new QUIRK_RENDERCLEAR_REDUCED.
-The quirk is presently set only for the aforementioned HP Pavilion Mini
-300-020.  The patch now touches three files to define the quirk, set it,
-and then check for it in function batch_get_defaults.
-
-Randy Wright (3):
-  drm/i915: Introduce quirk QUIRK_RENDERCLEAR_REDUCED
-  drm/i915/display: Add function quirk_renderclear_reduced
-  drm/i915/gt: Force reduced batch size if new QUIRK_RENDERCLEAR_REDUCED
-    is set.
-
+Signed-off-by: Randy Wright <rwright@hpe.com>
+---
  drivers/gpu/drm/i915/display/intel_quirks.c | 13 +++++++++++++
- drivers/gpu/drm/i915/gt/gen7_renderclear.c  |  2 +-
- drivers/gpu/drm/i915/i915_drv.h             |  1 +
- 3 files changed, 15 insertions(+), 1 deletion(-)
+ 1 file changed, 13 insertions(+)
 
+diff --git a/drivers/gpu/drm/i915/display/intel_quirks.c b/drivers/gpu/drm/i915/display/intel_quirks.c
+index 46beb155d835..630b984ba49c 100644
+--- a/drivers/gpu/drm/i915/display/intel_quirks.c
++++ b/drivers/gpu/drm/i915/display/intel_quirks.c
+@@ -53,6 +53,16 @@ static void quirk_increase_ddi_disabled_time(struct drm_i915_private *i915)
+ 	drm_info(&i915->drm, "Applying Increase DDI Disabled quirk\n");
+ }
+ 
++/*
++ * Force use of smaller batch size in gen7_renderclear.c
++ * Needed on (at least) HP Pavilion Mini 300-020 to avoid GPU hang.
++ */
++static void quirk_renderclear_reduced(struct drm_i915_private *i915)
++{
++	i915->quirks |= QUIRK_RENDERCLEAR_REDUCED;
++	drm_info(&i915->drm, "Applying Renderclear Reduced quirk\n");
++}
++
+ struct intel_quirk {
+ 	int device;
+ 	int subsystem_vendor;
+@@ -141,6 +151,9 @@ static struct intel_quirk intel_quirks[] = {
+ 	/* HP Chromebook 14 (Celeron 2955U) */
+ 	{ 0x0a06, 0x103c, 0x21ed, quirk_backlight_present },
+ 
++	/* HP Mini 300-020 */
++	{ 0x0a06, 0x103c, 0x2b38, quirk_renderclear_reduced },
++
+ 	/* Dell Chromebook 11 */
+ 	{ 0x0a06, 0x1028, 0x0a35, quirk_backlight_present },
+ 
 -- 
 2.25.1
 
