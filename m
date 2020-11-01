@@ -8,42 +8,42 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1D31C388F9
-	for <linux-media@archiver.kernel.org>; Sun,  1 Nov 2020 17:42:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 761B5C4741F
+	for <linux-media@archiver.kernel.org>; Sun,  1 Nov 2020 17:42:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7BDD520874
-	for <linux-media@archiver.kernel.org>; Sun,  1 Nov 2020 17:42:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3F65A2076E
+	for <linux-media@archiver.kernel.org>; Sun,  1 Nov 2020 17:42:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="TglZpQGw"
+	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="HRUmIoz8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727228AbgKARmD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 1 Nov 2020 12:42:03 -0500
-Received: from mx0b-002e3701.pphosted.com ([148.163.143.35]:61750 "EHLO
+        id S1727251AbgKARmK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 1 Nov 2020 12:42:10 -0500
+Received: from mx0b-002e3701.pphosted.com ([148.163.143.35]:31358 "EHLO
         mx0b-002e3701.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727111AbgKARmA (ORCPT
+        by vger.kernel.org with ESMTP id S1727024AbgKARmJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 1 Nov 2020 12:42:00 -0500
-Received: from pps.filterd (m0134425.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A1HY60v007825;
-        Sun, 1 Nov 2020 17:41:43 GMT
+        Sun, 1 Nov 2020 12:42:09 -0500
+Received: from pps.filterd (m0134424.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A1HbMp3016477;
+        Sun, 1 Nov 2020 17:41:54 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references; s=pps0720;
- bh=XKYXzHc3s326T/Mq3Yl8HKAAp7g4arn3+L3mg5rGF5E=;
- b=TglZpQGwnBtvM8RcKeFMcu7JVb72gaEzpG/MWSjhbuK5ZU2ubvGsdMHgQukIuFGJlt9H
- 5P79ol/p8s416sI6S3cc24u+rUAPTDPHHvCmb1S/9k2CBi5y47M9x3cYo4uaKdzkpHoi
- ZFS8pYPFogAN4aY5vbej2bma0rCvk2NYQ65zI2pkQIpRSfJ5CUwVxV1JaDWV6iCZeywr
- qNyyQEejBpsc6Tst4jfgg9DbMPJWcMcn39GpWa0yzcl0mykf1+pJ9GkdRXgOAMjSjPcf
- O94sX4h05mJW33PKmi7kLifLB8NQYAP79ceB/+JNjCuw7MNeNT3u32mWgcs/9JFBjsBg EQ== 
-Received: from g2t2352.austin.hpe.com (g2t2352.austin.hpe.com [15.233.44.25])
-        by mx0b-002e3701.pphosted.com with ESMTP id 34h17n85e6-1
+ bh=kx2Vnw7P3Ro6SqdUG6oTQ7t5SJMOmmqS0+YD+3z0xdo=;
+ b=HRUmIoz80H8Q7VCpXeH01InoCdc92tYsAwU32engmfWnbdaxGz3MtvS3Ss1pl7Bz8LSx
+ EGj71j9haVAS6ewqOwbBcRLmPG7pLTn8IGZE8O31EvY/bGPaxKzzp1gtmLHUOv72TOGb
+ Bu+UQ/3kGTh55E9Ghj9KKlcAcvZpBQX6jGV1Ihw5vCwcvFYcoUSDot3FrK4DyvDv4o+X
+ 2JvomozIlUKDjcx1hLD0MOxTf/BYcA2+LkKRndnGd2SQaaPpkM6KYSNAPcgxQr5AEbQY
+ O1UVXmSEyVQmVkcyI6u4jW3G2Wy9rxpCxQZP1cnLHKua82jpjM/CZ0kCI5R1GQFAxK5u ag== 
+Received: from g2t2354.austin.hpe.com (g2t2354.austin.hpe.com [15.233.44.27])
+        by mx0b-002e3701.pphosted.com with ESMTP id 34h07grc2g-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 01 Nov 2020 17:41:43 +0000
+        Sun, 01 Nov 2020 17:41:54 +0000
 Received: from g2t2360.austin.hpecorp.net (g2t2360.austin.hpecorp.net [16.196.225.135])
-        by g2t2352.austin.hpe.com (Postfix) with ESMTP id 9D84F62;
-        Sun,  1 Nov 2020 17:41:42 +0000 (UTC)
+        by g2t2354.austin.hpe.com (Postfix) with ESMTP id 52A47AE;
+        Sun,  1 Nov 2020 17:41:53 +0000 (UTC)
 Received: from rfwz62.ftc.rdlabs.hpecorp.net (rfwz62.americas.hpqcorp.net [10.33.237.8])
-        by g2t2360.austin.hpecorp.net (Postfix) with ESMTP id A413F36;
-        Sun,  1 Nov 2020 17:41:41 +0000 (UTC)
+        by g2t2360.austin.hpecorp.net (Postfix) with ESMTP id 4A83336;
+        Sun,  1 Nov 2020 17:41:52 +0000 (UTC)
 From:   rwright@hpe.com
 To:     jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
         rodrigo.vivi@intel.com, airlied@linux.ie, daniel@ffwll.ch,
@@ -54,47 +54,47 @@ To:     jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
         mika.kuoppala@linux.intel.com, rwright@hpe.com
 Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v3 1/3] drm/i915: Introduce quirk QUIRK_RENDERCLEAR_REDUCED
-Date:   Sun,  1 Nov 2020 10:41:30 -0700
-Message-Id: <20201101174132.10513-2-rwright@hpe.com>
+Subject: [PATCH v3 3/3] drm/i915/gt: Force reduced batch size if new QUIRK_RENDERCLEAR_REDUCED is set.
+Date:   Sun,  1 Nov 2020 10:41:32 -0700
+Message-Id: <20201101174132.10513-4-rwright@hpe.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20201101174132.10513-1-rwright@hpe.com>
 References: <20201101174132.10513-1-rwright@hpe.com>
 X-HPE-SCL: -1
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-11-01_05:2020-10-30,2020-11-01 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- clxscore=1015 mlxscore=0 mlxlogscore=626 malwarescore=0 phishscore=0
- adultscore=0 spamscore=0 impostorscore=0 suspectscore=2 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2011010145
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=2 malwarescore=0
+ impostorscore=0 clxscore=1015 lowpriorityscore=0 phishscore=0 spamscore=0
+ priorityscore=1501 adultscore=0 mlxlogscore=987 mlxscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2011010145
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 From: Randy Wright <rwright@hpe.com>
 
-Introduce quirk QUIRK_RENDERCLEAR_REDUCED, which will be used
-to force a limited batch buffer size for clearing
-residual contexts in gen7_renderclear.c.
+In function batch_get_defaults, the smaller batch size
+will be selected if QUIRK_RENDERCLEAR_REDUCED is set.
 
 Signed-off-by: Randy Wright <rwright@hpe.com>
 ---
- drivers/gpu/drm/i915/i915_drv.h | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/i915/gt/gen7_renderclear.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/i915/i915_drv.h b/drivers/gpu/drm/i915/i915_drv.h
-index e4f7f6518945..e8873462eb2c 100644
---- a/drivers/gpu/drm/i915/i915_drv.h
-+++ b/drivers/gpu/drm/i915/i915_drv.h
-@@ -525,6 +525,7 @@ struct i915_psr {
- #define QUIRK_PIN_SWIZZLED_PAGES (1<<5)
- #define QUIRK_INCREASE_T12_DELAY (1<<6)
- #define QUIRK_INCREASE_DDI_DISABLED_TIME (1<<7)
-+#define QUIRK_RENDERCLEAR_REDUCED (1<<8)
- 
- struct intel_fbdev;
- struct intel_fbc_work;
+diff --git a/drivers/gpu/drm/i915/gt/gen7_renderclear.c b/drivers/gpu/drm/i915/gt/gen7_renderclear.c
+index d93d85cd3027..e5265cdf696b 100644
+--- a/drivers/gpu/drm/i915/gt/gen7_renderclear.c
++++ b/drivers/gpu/drm/i915/gt/gen7_renderclear.c
+@@ -49,7 +49,7 @@ struct batch_vals {
+ static void
+ batch_get_defaults(struct drm_i915_private *i915, struct batch_vals *bv)
+ {
+-	if (IS_HASWELL(i915)) {
++	if (IS_HASWELL(i915) && !(i915->quirks & QUIRK_RENDERCLEAR_REDUCED)) {
+ 		bv->max_primitives = 280;
+ 		bv->max_urb_entries = MAX_URB_ENTRIES;
+ 		bv->surface_height = 16 * 16;
 -- 
 2.25.1
 
