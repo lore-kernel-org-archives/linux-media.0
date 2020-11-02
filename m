@@ -2,169 +2,102 @@ Return-Path: <SRS0=t7pd=EI=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B9F2C388F2
-	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 15:22:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8041C00A89
+	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 15:39:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 014FA2222B
-	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 15:22:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 52CCC22400
+	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 15:39:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20150623.gappssmtp.com header.i=@bgdev-pl.20150623.gappssmtp.com header.b="hf6tvqnc"
+	dkim=pass (1024-bit key) header.d=mg.codeaurora.org header.i=@mg.codeaurora.org header.b="okvrbUBn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726472AbgKBPUq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 2 Nov 2020 10:20:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56698 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726483AbgKBPUp (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Nov 2020 10:20:45 -0500
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE738C061A49
-        for <linux-media@vger.kernel.org>; Mon,  2 Nov 2020 07:20:44 -0800 (PST)
-Received: by mail-wm1-x343.google.com with SMTP id k18so9866245wmj.5
-        for <linux-media@vger.kernel.org>; Mon, 02 Nov 2020 07:20:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=//ohTnlCNdzVCN7+X/oV4S8f/hxX7VdQ1OV3L6uwfhQ=;
-        b=hf6tvqncwp3fkOIckHP3XNhZspBIs+DJCE72k4fKwWNNEV8tVYATPrk61RVN2LLtoy
-         wyuT8kZJhciWHJYnIywhLp+tPKS38UhRZoDdJRNvydyfnF4jPWOOLNFaCIa5fWpPbqiE
-         CPEcfMQCT8yeENUO+TRhPv8NZwnqBa/5qBgOFPacWV7BhHFuUJ5ASnX9vmHxuqU/2Ygy
-         yl+QCczTs9fSAAWT/g0PiS+PxK7jWNW2R3D8R0j5FcPe+c2M0+55tW8i3tKhxnOrTffM
-         d3zN4lSBg/UxZjb51Fwl4foaEs43EhxOe1ue2FxQvf65j62JS7V+E/ior/FALPI70AY8
-         3BnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=//ohTnlCNdzVCN7+X/oV4S8f/hxX7VdQ1OV3L6uwfhQ=;
-        b=dtN0T4g6G9JMj60ClTU0KvubTg6YRmS6QBLBWzlA8VGc7ivyDTtfAcxYJTOA8enRn7
-         FippwVl8lWLeoqi12mj+Ab2+TWBpspxlImpSlchapQim6L0YVVzzz3s0e02VvkAKe3bg
-         MJHongRTRYhh/lBkHAb+c2Tj3CveDehg3+5JS+gDeRd+tENnx+ci88o7lqEEx3oe8xgN
-         e6K6SktLolGDfATAkldCZ8LkkchkYnlerkwp2fQs6/rAda823tv0cuAYTlV869oBzegA
-         kICxFZiJ2SzS0w04B4t94x8rbqtUykACGpGGrqs2kqqrvdDykoMDWd4qO1IOpfDHwa0U
-         vVkw==
-X-Gm-Message-State: AOAM532m6IYh144HVaow0FKLWvj/394lY5sdxA/txK46OUYPWeUvcnun
-        WtvcW735i6EW3CpMZ+A0PLdOpw==
-X-Google-Smtp-Source: ABdhPJxGlAsjxjuqTsCnImH4txzUDEh+1CeV9f1Ji5E5b7hmF0/rUwH1lj/uHarBz/RRB7bv+TJwGA==
-X-Received: by 2002:a7b:cf25:: with SMTP id m5mr18034156wmg.124.1604330443460;
-        Mon, 02 Nov 2020 07:20:43 -0800 (PST)
-Received: from debian-brgl.home (amarseille-656-1-4-167.w90-8.abo.wanadoo.fr. [90.8.158.167])
-        by smtp.gmail.com with ESMTPSA id b18sm15138014wmj.41.2020.11.02.07.20.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2020 07:20:42 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-gpio@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-mm@kvack.org,
-        alsa-devel@alsa-project.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: [PATCH v2 1/8] mm: slab: provide krealloc_array()
-Date:   Mon,  2 Nov 2020 16:20:30 +0100
-Message-Id: <20201102152037.963-2-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.29.1
-In-Reply-To: <20201102152037.963-1-brgl@bgdev.pl>
-References: <20201102152037.963-1-brgl@bgdev.pl>
+        id S1726511AbgKBPjT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 2 Nov 2020 10:39:19 -0500
+Received: from m42-4.mailgun.net ([69.72.42.4]:58696 "EHLO m42-4.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726228AbgKBPjS (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 2 Nov 2020 10:39:18 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1604331557; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=nWkWyhgDV1pCPYK9XrTbWNIO5s3A7DMr3m4XNRjMFEc=;
+ b=okvrbUBnIuPf+iS6Qi1q4ISf0sVDPiT+GCxkMlNg8vR9nFMV6DUY8T4q7jvtq14xUH3LLYnF
+ pjW7BKpu9mT4+8XaQPtsxNXxOZGIc0iPtSkO5w0MZcahvQqLh+NlVPekM9KPXHBPSpJndW/7
+ qHfWlOJHvUrIjHQoZsflYdGCvFU=
+X-Mailgun-Sending-Ip: 69.72.42.4
+X-Mailgun-Sid: WyI3ZjU0NiIsICJsaW51eC1tZWRpYUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
+ 5fa02825d8a9d167f3387cb8 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 02 Nov 2020 15:39:17
+ GMT
+Sender: vgarodia=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 3836AC433C9; Mon,  2 Nov 2020 15:39:17 +0000 (UTC)
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: vgarodia)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 710A0C433CB;
+        Mon,  2 Nov 2020 15:39:15 +0000 (UTC)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 02 Nov 2020 21:09:15 +0530
+From:   vgarodia@codeaurora.org
+To:     Mansur Alisha Shaik <mansur@codeaurora.org>
+Cc:     linux-media@vger.kernel.org, stanimir.varbanov@linaro.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [RESEND] venus: fix calculating mbps in calculate_inst_freq()
+In-Reply-To: <1604313097-2178-1-git-send-email-mansur@codeaurora.org>
+References: <1604313097-2178-1-git-send-email-mansur@codeaurora.org>
+Message-ID: <bf8acb0c470207289a09f63d829dfb08@codeaurora.org>
+X-Sender: vgarodia@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Hi Mansur,
 
-When allocating an array of elements, users should check for
-multiplication overflow or preferably use one of the provided helpers
-like: kmalloc_array().
+On 2020-11-02 16:01, Mansur Alisha Shaik wrote:
+> Currently in calculate_inst_freq(), video driver is calculating
+> macro blocks per frame in stead of macro blocks per second(mpbs).
+instead
 
-There's no krealloc_array() counterpart but there are many users who use
-regular krealloc() to reallocate arrays. Let's provide an actual
-krealloc_array() implementation.
+> Which results frequency is always setting to lower frequency (150MB)
+> as per frequency table for sc7180. Hence the playback is not smooth.
+150MHz
 
-While at it: add some documentation regarding krealloc.
+> 
+> Corrected this by correcting the mbps calculation in 
+> calculate_inst_freq().
+> 
+> Signed-off-by: Mansur Alisha Shaik <mansur@codeaurora.org>
+> ---
+>  drivers/media/platform/qcom/venus/pm_helpers.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c
+> b/drivers/media/platform/qcom/venus/pm_helpers.c
+> index 57877ea..001513f 100644
+> --- a/drivers/media/platform/qcom/venus/pm_helpers.c
+> +++ b/drivers/media/platform/qcom/venus/pm_helpers.c
+> @@ -928,7 +928,7 @@ static unsigned long calculate_inst_freq(struct
+> venus_inst *inst,
+>  	u32 fps = (u32)inst->fps;
+>  	u32 mbs_per_sec;
+> 
+> -	mbs_per_sec = load_per_instance(inst) / fps;
+> +	mbs_per_sec = load_per_instance(inst);
 
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
----
- Documentation/core-api/memory-allocation.rst |  4 ++++
- include/linux/slab.h                         | 18 ++++++++++++++++++
- 2 files changed, 22 insertions(+)
+Good find.
 
-diff --git a/Documentation/core-api/memory-allocation.rst b/Documentation/core-api/memory-allocation.rst
-index 4446a1ac36cc..6dc38b40439a 100644
---- a/Documentation/core-api/memory-allocation.rst
-+++ b/Documentation/core-api/memory-allocation.rst
-@@ -147,6 +147,10 @@ The address of a chunk allocated with `kmalloc` is aligned to at least
- ARCH_KMALLOC_MINALIGN bytes.  For sizes which are a power of two, the
- alignment is also guaranteed to be at least the respective size.
- 
-+Chunks allocated with `kmalloc` can be resized with `krealloc`. Similarly
-+to `kmalloc_array`: a helper for resising arrays is provided in the form of
-+`krealloc_array`.
-+
- For large allocations you can use vmalloc() and vzalloc(), or directly
- request pages from the page allocator. The memory allocated by `vmalloc`
- and related functions is not physically contiguous.
-diff --git a/include/linux/slab.h b/include/linux/slab.h
-index dd6897f62010..be4ba5867ac5 100644
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -592,6 +592,24 @@ static inline void *kmalloc_array(size_t n, size_t size, gfp_t flags)
- 	return __kmalloc(bytes, flags);
- }
- 
-+/**
-+ * krealloc_array - reallocate memory for an array.
-+ * @p: pointer to the memory chunk to reallocate
-+ * @new_n: new number of elements to alloc
-+ * @new_size: new size of a single member of the array
-+ * @flags: the type of memory to allocate (see kmalloc)
-+ */
-+static __must_check inline void *
-+krealloc_array(void *p, size_t new_n, size_t new_size, gfp_t flags)
-+{
-+	size_t bytes;
-+
-+	if (unlikely(check_mul_overflow(new_n, new_size, &bytes)))
-+		return NULL;
-+
-+	return krealloc(p, bytes, flags);
-+}
-+
- /**
-  * kcalloc - allocate memory for an array. The memory is set to zero.
-  * @n: number of elements.
--- 
-2.29.1
-
+Thanks,
+Vikash
