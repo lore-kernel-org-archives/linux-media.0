@@ -2,110 +2,73 @@ Return-Path: <SRS0=t7pd=EI=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4780FC4742C
-	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 13:24:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 537CEC388F2
+	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 14:15:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DFE532227F
-	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 13:24:14 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="Redsc76/"
+	by mail.kernel.org (Postfix) with ESMTP id 0C71021D91
+	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 14:15:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728936AbgKBNYK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 2 Nov 2020 08:24:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38534 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728414AbgKBNYK (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Nov 2020 08:24:10 -0500
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264FDC061A47
-        for <linux-media@vger.kernel.org>; Mon,  2 Nov 2020 05:24:10 -0800 (PST)
-Received: by mail-oi1-x241.google.com with SMTP id x1so14581854oic.13
-        for <linux-media@vger.kernel.org>; Mon, 02 Nov 2020 05:24:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JGM5iJVe1/YS3RI7Ox6P0c/NeEFHo7I8woI64ttdcHw=;
-        b=Redsc76//XOqhmrR47LrRhhRKZfVgrPgcKjaj3flUUV05IMeYYgYI96W5nS3FoZvN7
-         n0yN3r95mirzqxFiZdIGicTdRpE+APj1YYPKDXlNxKd2lAM4+mMT2WniX47hjE9Yln3I
-         Y2p0Ua++jSUdgHYquFbAF5VAHeKUIvWvGxWx4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JGM5iJVe1/YS3RI7Ox6P0c/NeEFHo7I8woI64ttdcHw=;
-        b=Q/tODQC3dXrxYaH+UtoWlI3KlDez7lB3F8lq7DjxbmZb5keiycLDO/9klwR0rF45az
-         qr3RiAAr3MDUbFsLt8dQKXWFocJlkTrid378ao/l7pw3LtvK2lPH06UbUUS8PcQG2LLX
-         0tSKWsjdTPj7x7C3p2XWAOsrKGKjJUfvWHl6nfALTEsLzVPNkPZmgAOkAW3CiV08lvYY
-         Wtt7djGYPRgSo7iC6HHrKPSzOi9KW2ts8qqvjRsfDSBAAWOFs5qQv3QJ1tyMx47r3w09
-         6sKd1oBV3pHKfXotF0+7z1n5S0En+5SF3GzGTFvSP6pcE1BvtOVJihHpGzEZ3g54dIkz
-         q+Jg==
-X-Gm-Message-State: AOAM531hGbwo99NnQusku4VXTB0DR1wEh3OvbAE5bSvWUtJJwPd/6pI+
-        IVwbSclNfikrudJSvNLKUHf/Uv92K+pZzYf9qlDmew==
-X-Google-Smtp-Source: ABdhPJz6z2w7hj9FcAzqiJvVAZYDEwQ1hz51TSyVs1UuhBMkzKJELH0Nji35ZsSbH8nvJRYlHjcaT+TvGc3KsVWMNe0=
-X-Received: by 2002:aca:b141:: with SMTP id a62mr9289032oif.101.1604323449305;
- Mon, 02 Nov 2020 05:24:09 -0800 (PST)
+        id S1726066AbgKBOPx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 2 Nov 2020 09:15:53 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:6735 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725913AbgKBOPw (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Nov 2020 09:15:52 -0500
+Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4CPw1T1Mdqzkb8p;
+        Mon,  2 Nov 2020 22:15:41 +0800 (CST)
+Received: from huawei.com (10.90.53.225) by DGGEMS414-HUB.china.huawei.com
+ (10.3.19.214) with Microsoft SMTP Server id 14.3.487.0; Mon, 2 Nov 2020
+ 22:15:38 +0800
+From:   Zhang Qilong <zhangqilong3@huawei.com>
+To:     <mripard@kernel.org>, <paul.kocialkowski@bootlin.com>,
+        <mchehab@kernel.org>, <wens@csie.org>
+CC:     <gregkh@linuxfoundation.org>, <linux-media@vger.kernel.org>,
+        <devel@driverdev.osuosl.org>
+Subject: [PATCH -next] media: cedrus: fix reference leak in cedrus_start_streaming
+Date:   Mon, 2 Nov 2020 22:26:22 +0800
+Message-ID: <20201102142622.140001-1-zhangqilong3@huawei.com>
+X-Mailer: git-send-email 2.26.0.106.g9fadedd
 MIME-Version: 1.0
-References: <20201030100815.2269-1-daniel.vetter@ffwll.ch> <20201030100815.2269-9-daniel.vetter@ffwll.ch>
- <20201102072931.GA16419@infradead.org> <CAKMK7uEe5FQuukYU7RhL90ttC9XyWw6wvdQrZ2JpP0jpbYTO6g@mail.gmail.com>
- <20201102130115.GC36674@ziepe.ca>
-In-Reply-To: <20201102130115.GC36674@ziepe.ca>
-From:   Daniel Vetter <daniel.vetter@ffwll.ch>
-Date:   Mon, 2 Nov 2020 14:23:58 +0100
-Message-ID: <CAKMK7uHeL=w7GoBaY4XrbRcpJabR9UWnP+oQ9Fg51OzL7=KxiA@mail.gmail.com>
-Subject: Re: [PATCH v5 08/15] mm: Add unsafe_follow_pfn
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "J??r??me Glisse" <jglisse@redhat.com>, Jan Kara <jack@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.90.53.225]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Nov 2, 2020 at 2:01 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
->
-> On Mon, Nov 02, 2020 at 01:56:10PM +0100, Daniel Vetter wrote:
-> > On Mon, Nov 2, 2020 at 8:29 AM Christoph Hellwig <hch@infradead.org> wrote:
-> > >
-> > > On Fri, Oct 30, 2020 at 11:08:08AM +0100, Daniel Vetter wrote:
-> > > > Also mark up follow_pfn as EXPORT_SYMBOL_GPL. The only safe way to use
-> > > > that by drivers/modules is together with an mmu_notifier, and that's
-> > > > all _GPL stuff.
-> > >
-> > > I also think it also needs to be renamed to explicitly break any existing
-> > > users out of tree or int the submission queue.
-> >
-> > Ok I looked at the mmu notifier locking again and noticed that
-> > mm->subscriptions has its own spinlock. Since there usually shouldn't
-> > be a huge pile of these I think it's feasible to check for the mmu
-> > notifier in follow_pfn. And that would stuff this gap for good. I'll
-> > throw that on top as a final patch and see what people think.
->
-> Probably the simplest is to just check mm_has_notifiers() when in
-> lockdep or something very simple like that
+pm_runtime_get_sync will increment pm usage counter even it
+failed. Forgetting to pm_runtime_put_noidle will result in
+reference leak in cedrus_start_streaming. We should fix it.
 
-lockdep feels wrong, was locking more at CONFIG_DEBUG_VM. And since
-generally you only have 1 mmu notifier (especially for kvm) I think we
-can also pay the 2nd cacheline miss and actually check the right mmu
-notifier is registered.
--Daniel
+Fixes: d5aecd289babf ("media: cedrus: Implement runtime PM")
+Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
+---
+ drivers/staging/media/sunxi/cedrus/cedrus_video.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_video.c b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+index 667b86dde1ee..911f607d9b09 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_video.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+@@ -479,8 +479,10 @@ static int cedrus_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 
+ 	if (V4L2_TYPE_IS_OUTPUT(vq->type)) {
+ 		ret = pm_runtime_get_sync(dev->dev);
+-		if (ret < 0)
++		if (ret < 0) {
++			pm_runtime_put_noidle(dev->dev);
+ 			goto err_cleanup;
++		}
+ 
+ 		if (dev->dec_ops[ctx->current_codec]->start) {
+ 			ret = dev->dec_ops[ctx->current_codec]->start(ctx);
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.17.1
+
