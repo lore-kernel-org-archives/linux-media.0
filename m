@@ -7,32 +7,32 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 537CEC388F2
-	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 14:15:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36AC1C4742C
+	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 14:18:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0C71021D91
-	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 14:15:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E5A0B22258
+	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 14:18:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726066AbgKBOPx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 2 Nov 2020 09:15:53 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:6735 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725913AbgKBOPw (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Nov 2020 09:15:52 -0500
-Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4CPw1T1Mdqzkb8p;
-        Mon,  2 Nov 2020 22:15:41 +0800 (CST)
-Received: from huawei.com (10.90.53.225) by DGGEMS414-HUB.china.huawei.com
- (10.3.19.214) with Microsoft SMTP Server id 14.3.487.0; Mon, 2 Nov 2020
- 22:15:38 +0800
+        id S1726207AbgKBOSQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 2 Nov 2020 09:18:16 -0500
+Received: from szxga06-in.huawei.com ([45.249.212.32]:7444 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726202AbgKBOSP (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Nov 2020 09:18:15 -0500
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4CPw4M6rmYzhd6b;
+        Mon,  2 Nov 2020 22:18:11 +0800 (CST)
+Received: from huawei.com (10.90.53.225) by DGGEMS404-HUB.china.huawei.com
+ (10.3.19.204) with Microsoft SMTP Server id 14.3.487.0; Mon, 2 Nov 2020
+ 22:18:07 +0800
 From:   Zhang Qilong <zhangqilong3@huawei.com>
-To:     <mripard@kernel.org>, <paul.kocialkowski@bootlin.com>,
-        <mchehab@kernel.org>, <wens@csie.org>
+To:     <helen.koike@collabora.com>, <dafna.hirschfeld@collabora.com>,
+        <mchehab@kernel.org>
 CC:     <gregkh@linuxfoundation.org>, <linux-media@vger.kernel.org>,
         <devel@driverdev.osuosl.org>
-Subject: [PATCH -next] media: cedrus: fix reference leak in cedrus_start_streaming
-Date:   Mon, 2 Nov 2020 22:26:22 +0800
-Message-ID: <20201102142622.140001-1-zhangqilong3@huawei.com>
+Subject: [PATCH -next] media: staging: rkisp1: cap: fix runtime PM imbalance on error
+Date:   Mon, 2 Nov 2020 22:28:52 +0800
+Message-ID: <20201102142852.141189-1-zhangqilong3@huawei.com>
 X-Mailer: git-send-email 2.26.0.106.g9fadedd
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
@@ -45,30 +45,27 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 pm_runtime_get_sync will increment pm usage counter even it
 failed. Forgetting to pm_runtime_put_noidle will result in
-reference leak in cedrus_start_streaming. We should fix it.
+reference imbalance in rkisp1_vb2_start_streaming, so we
+should fix it.
 
-Fixes: d5aecd289babf ("media: cedrus: Implement runtime PM")
+Fixes: 56e3b29f9f6b2 ("media: staging: rkisp1: add streaming paths")
 Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
 ---
- drivers/staging/media/sunxi/cedrus/cedrus_video.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/staging/media/rkisp1/rkisp1-capture.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_video.c b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
-index 667b86dde1ee..911f607d9b09 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_video.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
-@@ -479,8 +479,10 @@ static int cedrus_start_streaming(struct vb2_queue *vq, unsigned int count)
+diff --git a/drivers/staging/media/rkisp1/rkisp1-capture.c b/drivers/staging/media/rkisp1/rkisp1-capture.c
+index b6f497ce3e95..0c934ca5adaa 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-capture.c
++++ b/drivers/staging/media/rkisp1/rkisp1-capture.c
+@@ -992,6 +992,7 @@ rkisp1_vb2_start_streaming(struct vb2_queue *queue, unsigned int count)
  
- 	if (V4L2_TYPE_IS_OUTPUT(vq->type)) {
- 		ret = pm_runtime_get_sync(dev->dev);
--		if (ret < 0)
-+		if (ret < 0) {
-+			pm_runtime_put_noidle(dev->dev);
- 			goto err_cleanup;
-+		}
- 
- 		if (dev->dec_ops[ctx->current_codec]->start) {
- 			ret = dev->dec_ops[ctx->current_codec]->start(ctx);
+ 	ret = pm_runtime_get_sync(cap->rkisp1->dev);
+ 	if (ret < 0) {
++		pm_runtime_put_noidle(cap->rkisp1->dev);
+ 		dev_err(cap->rkisp1->dev, "power up failed %d\n", ret);
+ 		goto err_destroy_dummy;
+ 	}
 -- 
 2.17.1
 
