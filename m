@@ -2,114 +2,85 @@ Return-Path: <SRS0=t7pd=EI=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.5 required=3.0 tests=BAYES_00,
+	CHARSET_FARAWAY_HEADER,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D410C388F2
-	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 14:20:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5EA8C00A89
+	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 14:39:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A971B21556
-	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 14:20:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 834F52072C
+	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 14:39:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725999AbgKBOUf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 2 Nov 2020 09:20:35 -0500
-Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:43655 "EHLO
-        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726228AbgKBOSn (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 2 Nov 2020 09:18:43 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id B0D30EA1;
-        Mon,  2 Nov 2020 09:18:42 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Mon, 02 Nov 2020 09:18:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=0J+Fof+2UzXfo4XbpeTWRmJHnwd
-        Jb+SdD0W2rbcDMEM=; b=cFEJqd0foMqU5yTfyDfkuLtmylYLrYHNQPIJUXA9BBB
-        jrD9PvfuIZ/0Gyte44YKqNZ1mDAzVeWGxwJQRDc3wvI1/UdbBcMbC01gO5eUK2ok
-        0bqCN+3VXwUmjoMFHRUsP8IfIdnAaFlridMuQKzahhdmtsiga85FagqChdCFGyQj
-        dPi0W8GIn56VjQBmp112SVh91iKbKa/0m18N8w7ZWdbPXIj88EN2cB1eDdxynMS6
-        HsidWMneYpevACHuE4raM/2O6zJ6fyRCsrGscRIX0nwLA+qaMonkkVAIZWRy3/qx
-        Epre9ptGSigtj9/Z7Vu1dm3jcU8bzyh8+mHOoiSPgIQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=0J+Fof
-        +2UzXfo4XbpeTWRmJHnwdJb+SdD0W2rbcDMEM=; b=lu7la2A5HqroArYMl6+13u
-        zrZgTbt+4KWCInab4lU4fC3aQ3Khlnr8/XZ71CYkmpglTvI5gnU7gHJFt2h3UVrT
-        jhdMYBadH3dp0d3khKJYDvbIcHhVartmv9RID6Y6Z0pEnXae6bofc2ymGVwgYutJ
-        jpmaS1UQw3XgdyvOe3Wn8eH0ky5KtHEPaOZ19JIMXQeKh4oHXI6tRrjXXrJrKVW6
-        YPnoqiLT5IQ/mAZKrVgN2yv1vbjQACFQad1i43M4DVaBJrTuKBCBWYF37AbGaJAS
-        kViKMA0oYDce4z+2252SPSwyGL+9JaI7AOjyHjcVEBcYOpxGB2gukbrk/hHxcw9g
-        ==
-X-ME-Sender: <xms:QRWgX5sqhlcWTIjhhrZRVQhjGjPHU_xL8o1c-P6UFlFtdguSAHBvVQ>
-    <xme:QRWgXyeCQcdSgsvYNA1lj1UkqjYd7UVYGZYm9cuakjwFa96gqXV4tY9iijU22MiAj
-    pYLYeqOG4u6ccq59-0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedruddtuddgiedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
-    gedunecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:QRWgX8zMJ3d7tQlIML2qA9_tjXaUh4j7dn2_Afsjsfd4nHLUmj5p1A>
-    <xmx:QRWgXwPn5Ha8XDMbOIwFfFJTDLmxBOUMOuU2dNChFfvReGVibl4msA>
-    <xmx:QRWgX5_SChTgNelL4WcWcC_QMwXYSsV6D8Gav7vjW2z2oGCHwSD1tQ>
-    <xmx:QhWgX1ZipmndOhK5WGur2Ls9APqdwjEx6v5Kv4Ac_mz-r88csq7t7w>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id BC839328005D;
-        Mon,  2 Nov 2020 09:18:40 -0500 (EST)
-Date:   Mon, 2 Nov 2020 15:18:38 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Zhang Qilong <zhangqilong3@huawei.com>
-Cc:     paul.kocialkowski@bootlin.com, mchehab@kernel.org, wens@csie.org,
-        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
-        devel@driverdev.osuosl.org
-Subject: Re: [PATCH -next] media: cedrus: fix reference leak in
+        id S1726134AbgKBOjI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 2 Nov 2020 09:39:08 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:2361 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725788AbgKBOjH (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Nov 2020 09:39:07 -0500
+Received: from DGGEMM403-HUB.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4CPwXR0wPTz50fK;
+        Mon,  2 Nov 2020 22:39:03 +0800 (CST)
+Received: from dggema707-chm.china.huawei.com (10.3.20.71) by
+ DGGEMM403-HUB.china.huawei.com (10.3.20.211) with Microsoft SMTP Server (TLS)
+ id 14.3.487.0; Mon, 2 Nov 2020 22:39:05 +0800
+Received: from dggema755-chm.china.huawei.com (10.1.198.197) by
+ dggema707-chm.china.huawei.com (10.3.20.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1913.5; Mon, 2 Nov 2020 22:39:04 +0800
+Received: from dggema755-chm.china.huawei.com ([10.1.198.197]) by
+ dggema755-chm.china.huawei.com ([10.1.198.197]) with mapi id 15.01.1913.007;
+ Mon, 2 Nov 2020 22:39:05 +0800
+From:   zhangqilong <zhangqilong3@huawei.com>
+To:     Maxime Ripard <maxime@cerno.tech>
+CC:     "paul.kocialkowski@bootlin.com" <paul.kocialkowski@bootlin.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "wens@csie.org" <wens@csie.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "devel@driverdev.osuosl.org" <devel@driverdev.osuosl.org>
+Subject: =?gb2312?B?tPC4tDogW1BBVENIIC1uZXh0XSBtZWRpYTogY2VkcnVzOiBmaXggcmVmZXJl?=
+ =?gb2312?B?bmNlIGxlYWsgaW4gY2VkcnVzX3N0YXJ0X3N0cmVhbWluZw==?=
+Thread-Topic: [PATCH -next] media: cedrus: fix reference leak in
  cedrus_start_streaming
-Message-ID: <20201102141838.7oicqkeqy7vy3ki3@gilmour.lan>
+Thread-Index: AQHWsSMi4cifWjIJq02MoVkfrYwb0am05h5w
+Date:   Mon, 2 Nov 2020 14:39:04 +0000
+Message-ID: <f9f6d225275b466b86591ecfdbffb86f@huawei.com>
 References: <20201102142622.140001-1-zhangqilong3@huawei.com>
+ <20201102141838.7oicqkeqy7vy3ki3@gilmour.lan>
+In-Reply-To: <20201102141838.7oicqkeqy7vy3ki3@gilmour.lan>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.174.179.28]
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="iwerxiu77bwtbbop"
-Content-Disposition: inline
-In-Reply-To: <20201102142622.140001-1-zhangqilong3@huawei.com>
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-
---iwerxiu77bwtbbop
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Nov 02, 2020 at 10:26:22PM +0800, Zhang Qilong wrote:
-> pm_runtime_get_sync will increment pm usage counter even it
-> failed. Forgetting to pm_runtime_put_noidle will result in
-> reference leak in cedrus_start_streaming. We should fix it.
->=20
-> Fixes: d5aecd289babf ("media: cedrus: Implement runtime PM")
-> Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
-
-Shouldn't we fix pm_runtime_get_sync instead then? It seems that most of
-the callers get this wrong, and that's definitely non-obvious.
-
-Maxime
-
---iwerxiu77bwtbbop
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX6AVPgAKCRDj7w1vZxhR
-xc8yAQDyxx8eKyHeme5xPWzAq1llV7HnIhAEIKVmbZWo5Fr+fwD/R67eEuzTDgqH
-d501yUMJwaT4Ub1OAKf/fY7KGFizmgw=
-=ubmD
------END PGP SIGNATURE-----
-
---iwerxiu77bwtbbop--
+SGkNCg0KPiANCj4gT24gTW9uLCBOb3YgMDIsIDIwMjAgYXQgMTA6MjY6MjJQTSArMDgwMCwgWmhh
+bmcgUWlsb25nIHdyb3RlOg0KPiA+IHBtX3J1bnRpbWVfZ2V0X3N5bmMgd2lsbCBpbmNyZW1lbnQg
+cG0gdXNhZ2UgY291bnRlciBldmVuIGl0IGZhaWxlZC4NCj4gPiBGb3JnZXR0aW5nIHRvIHBtX3J1
+bnRpbWVfcHV0X25vaWRsZSB3aWxsIHJlc3VsdCBpbiByZWZlcmVuY2UgbGVhayBpbg0KPiA+IGNl
+ZHJ1c19zdGFydF9zdHJlYW1pbmcuIFdlIHNob3VsZCBmaXggaXQuDQo+ID4NCj4gPiBGaXhlczog
+ZDVhZWNkMjg5YmFiZiAoIm1lZGlhOiBjZWRydXM6IEltcGxlbWVudCBydW50aW1lIFBNIikNCj4g
+PiBTaWduZWQtb2ZmLWJ5OiBaaGFuZyBRaWxvbmcgPHpoYW5ncWlsb25nM0BodWF3ZWkuY29tPg0K
+PiANCj4gU2hvdWxkbid0IHdlIGZpeCBwbV9ydW50aW1lX2dldF9zeW5jIGluc3RlYWQgdGhlbj8g
+SXQgc2VlbXMgdGhhdCBtb3N0IG9mIHRoZQ0KPiBjYWxsZXJzIGdldCB0aGlzIHdyb25nLCBhbmQg
+dGhhdCdzIGRlZmluaXRlbHkgbm9uLW9idmlvdXMuDQo+DQoNCiANCkkgaGF2ZSBldmVyIHRob3Vn
+aHQgdG8gZml4IGZpeCBwbV9ydW50aW1lX2dldF9zeW5jLCB0aGVuIEkgd2VudCB0byByZWFkIHRo
+ZSBjb21tZW50IG9uIHRoaXMgZnVuY3Rpb24sIGFuZCBmb3VuZCB0aGF0IHRoaXMgaXMgd2hhdCB0
+aGUgYXV0aG9yIGludGVuZGVkIHRvIGRvKGNvbW1lbnQ6IFRoZSBwb3NzaWJsZSByZXR1cm4gdmFs
+dWVzIG9mIHRoaXMgZnVuY3Rpb24gYXJlIHRoZSBzYW1lIGFzIGZvciBwbV9ydW50aW1lX3Jlc3Vt
+ZSgpIGFuZCB0aGUgcnVudGltZSBQTSB1c2FnZSBjb3VudGVyIG9mIEBkZXYgcmVtYWlucyBpbmNy
+ZW1lbnRlZCBpbiBhbGwgY2FzZXMsIGV2ZW4gaWYgaXQgcmV0dXJucyBhbiBlcnJvciBjb2RlKS4g
+T24gdGhlIG90aGVyIGhhbmQsIEkgZm91bmQgdGhhdCB0aGUgbnVtYmVyIG9mIGNhbGxlcnMgdGhh
+dCBnZXR0aW5nIHRoaXMgcmlnaHQgaXMgbXVjaCBiaWdnZXIgdGhhbiBnZXR0aW5nIHRoaXMgd3Jv
+bmcgZXZlbiBtYW55IGNhbGxlcnMgZ2V0IHdyb25nLiBTbyBJIHN1Ym1pdCBzZXJ2ZXIgcGF0Y2hl
+cyB0byBmaXggdGhlbSBhcyBJIGNvdWxkLg0KDQpUaGFua3MsIGJlc3Qgd2lzaCENCg0KWmhhbmcg
+UWlsb25nDQogDQo+IE1heGltZQ0K
