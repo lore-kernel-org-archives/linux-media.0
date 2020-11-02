@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D77E4C00A89
-	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 16:53:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC898C55178
+	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 16:53:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ADEDF222B9
-	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 16:53:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8F68322277
+	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 16:53:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727552AbgKBQx0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 2 Nov 2020 11:53:26 -0500
-Received: from relay12.mail.gandi.net ([217.70.178.232]:46489 "EHLO
+        id S1727535AbgKBQxa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 2 Nov 2020 11:53:30 -0500
+Received: from relay12.mail.gandi.net ([217.70.178.232]:36931 "EHLO
         relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727543AbgKBQxZ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Nov 2020 11:53:25 -0500
+        with ESMTP id S1727172AbgKBQxa (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Nov 2020 11:53:30 -0500
 Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 9671D200005;
-        Mon,  2 Nov 2020 16:53:21 +0000 (UTC)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id ABF04200008;
+        Mon,  2 Nov 2020 16:53:26 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     linux-media@vger.kernel.org
 Cc:     Jacopo Mondi <jacopo@jmondi.org>, naush@raspberrypi.com,
@@ -30,9 +30,9 @@ Cc:     Jacopo Mondi <jacopo@jmondi.org>, naush@raspberrypi.com,
         kieran.bingham@ideasonboard.com, niklas.soderlund@ragnatech.se,
         hverkuil@xs4all.nl, sakari.ailus@iki.fi, nsaenzjulienne@suse.de,
         mchehab+huawei@kernel.org
-Subject: [PATCH v3 3/5] dt-bindings: media: Document BCM283x CSI2/CCP2 receiver
-Date:   Mon,  2 Nov 2020 17:52:56 +0100
-Message-Id: <20201102165258.408049-4-jacopo@jmondi.org>
+Subject: [PATCH v3 5/5] ARM: dts: bcm2711: Add Unicam DT nodes
+Date:   Mon,  2 Nov 2020 17:52:58 +0100
+Message-Id: <20201102165258.408049-6-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.29.1
 In-Reply-To: <20201102165258.408049-1-jacopo@jmondi.org>
 References: <20201102165258.408049-1-jacopo@jmondi.org>
@@ -42,180 +42,77 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-Document the DT bindings for the CSI2/CCP2 receiver peripheral (known as
-Unicam) on BCM283x SoCs.
+The Unicam IP cores are CSI-2/CCP2 receivers. They are part of VC4, but
+can be controlled directly from the operating system without going
+through the VPU firmware. Exposes them as DT nodes.
 
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- .../bindings/media/brcm,bcm2835-unicam.yaml   | 155 ++++++++++++++++++
- 1 file changed, 155 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
+ arch/arm/boot/dts/bcm2711.dtsi | 41 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml b/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
-new file mode 100644
-index 0000000000000..6ffc900e8ae8f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
-@@ -0,0 +1,155 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+# Copyright (C) 2020 Raspberry Pi (Trading) Ltd.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/brcm,bcm2835-unicam.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/arch/arm/boot/dts/bcm2711.dtsi b/arch/arm/boot/dts/bcm2711.dtsi
+index 4847dd305317a..68ac76e7c772d 100644
+--- a/arch/arm/boot/dts/bcm2711.dtsi
++++ b/arch/arm/boot/dts/bcm2711.dtsi
+@@ -2,6 +2,7 @@
+ #include "bcm283x.dtsi"
+
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
++#include <dt-bindings/power/raspberrypi-power.h>
+ #include <dt-bindings/soc/bcm2835-pm.h>
+
+ / {
+@@ -293,6 +294,46 @@ hvs: hvs@7e400000 {
+ 			interrupts = <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>;
+ 		};
+
++		csi0: csi@7e800000 {
++			compatible = "brcm,bcm2835-unicam";
++			reg = <0x7e800000 0x800>,
++			      <0x7e802000 0x4>;
++			interrupts = <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&clocks BCM2835_CLOCK_CAM0>,
++				 <&firmware_clocks 4>;
++			clock-names = "lp", "vpu";
++			power-domains = <&power RPI_POWER_DOMAIN_UNICAM0>;
++			brcm,num-data-lanes = <2>;
++			#clock-cells = <1>;
++			status = "disabled";
 +
-+title: Broadcom BCM283x Camera Interface (Unicam)
++			port {
++				endpoint {
++					data-lanes = <1 2>;
++				};
++			};
++		};
 +
-+maintainers:
-+  - Dave Stevenson <dave.stevenson@raspberrypi.com>
-+  - Raspberry Pi kernel list <kernel-list@raspberrypi.com>
++		csi1: csi@7e801000 {
++			compatible = "brcm,bcm2835-unicam";
++			reg = <0x7e801000 0x800>,
++			      <0x7e802004 0x4>;
++			interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&clocks BCM2835_CLOCK_CAM1>,
++				 <&firmware_clocks 4>;
++			clock-names = "lp", "vpu";
++			power-domains = <&power RPI_POWER_DOMAIN_UNICAM1>;
++			brcm,num-data-lanes = <4>;
++			#clock-cells = <1>;
++			status = "disabled";
 +
-+description:
-+  The Unicam block on BCM283x SoCs is the receiver for either CSI-2 or CCP2
-+  data from image sensors or similar devices.
++			port {
++				endpoint {
++					data-lanes = <1 2 3 4>;
++				};
++			};
++		};
 +
-+  The main platform using this SoC is the Raspberry Pi family of boards. On the
-+  Pi the VideoCore firmware can also control this hardware block, and driving
-+  it from two different processors will cause issues. To avoid this, the
-+  firmware checks the device tree configuration during boot. If it finds device
-+  tree nodes whose name starts with "csi" then it will stop the firmware
-+  accessing the block, and it can then safely be used via the device tree
-+  binding.
-+
-+properties:
-+  compatible:
-+    const: brcm,bcm2835-unicam
-+
-+  reg:
-+    items:
-+      - description: Main registers block
-+      - description: Clock registers block
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    minItems: 1
-+    maxItems: 2
-+
-+  clock-names:
-+    minItems: 1
-+    items:
-+      - const: lp
-+      - const: core
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  brcm,num-data-lanes:
-+    description:
-+      The number of data lanes supported by this Unicam instance. It may be
-+      larger than the number of data lanes routed on the board, as described by
-+      the data-lanes property of the endpoint.
-+    allOf:
-+      - $ref: "/schemas/types.yaml#/definitions/uint32"
-+      - enum: [1, 2, 4]
-+
-+  port:
-+    type: object
-+    description:
-+      Input port node, as described in video-interfaces.txt.
-+
-+    properties:
-+      endpoint:
-+        type: object
-+
-+        properties:
-+          clock-lanes:
-+            items:
-+              - const: 0
-+
-+          data-lanes:
-+            description:
-+              Lane reordering is not supported, items shall be in order,
-+              starting at 1.
-+            allOf:
-+              - $ref: "/schemas/types.yaml#/definitions/uint32-array"
-+              - maxItems: 1
-+                items:
-+                  minItems: 1
-+                  maxItems: 4
-+                  items:
-+                    - const: 1
-+                    - const: 2
-+                    - const: 3
-+                    - const: 4
-+
-+          lane-polarities:
-+            description:
-+              Lane inversion is not supported. If the property is specified, it
-+              shall contain all 0's.
-+            allOf:
-+              - $ref: "/schemas/types.yaml#/definitions/uint32-array"
-+              - maxItems: 1
-+                items:
-+                  minItems: 2
-+                  maxItems: 5
-+                  items:
-+                    - const: 0
-+                    - const: 0
-+                    - const: 0
-+                    - const: 0
-+                    - const: 0
-+
-+          remote-endpoint: true
-+
-+        required:
-+          - data-lanes
-+          - remote-endpoint
-+
-+        additionalProperties: false
-+
-+    required:
-+      - endpoint
-+
-+    additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - power-domains
-+  - brcm,num-data-lanes
-+  - port
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/bcm2835.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/power/raspberrypi-power.h>
-+
-+    csi@7e801000 {
-+        compatible = "brcm,bcm2835-unicam";
-+        reg = <0x7e801000 0x800>,
-+              <0x7e802004 0x4>;
-+        interrupts = <2 7>;
-+        clocks = <&clocks BCM2835_CLOCK_CAM1>;
-+        clock-names = "lp";
-+        power-domains = <&power RPI_POWER_DOMAIN_UNICAM1>;
-+        brcm,num-data-lanes = <4>;
-+
-+        port {
-+            csi1_ep: endpoint {
-+                remote-endpoint = <&imx219_0>;
-+                data-lanes = <1 2>;
-+            };
-+        };
-+    };
-+...
--- 
+ 		pixelvalve3: pixelvalve@7ec12000 {
+ 			compatible = "brcm,bcm2711-pixelvalve3";
+ 			reg = <0x7ec12000 0x100>;
+--
 2.29.1
 
