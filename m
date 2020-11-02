@@ -2,133 +2,137 @@ Return-Path: <SRS0=t7pd=EI=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AC31C388F2
-	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 16:42:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84DD7C55178
+	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 16:53:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4E69822275
-	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 16:42:39 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="DejrOT1E"
+	by mail.kernel.org (Postfix) with ESMTP id 64E10206F9
+	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 16:53:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727342AbgKBQme (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 2 Nov 2020 11:42:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41482 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726992AbgKBQmd (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Nov 2020 11:42:33 -0500
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A4AC0617A6
-        for <linux-media@vger.kernel.org>; Mon,  2 Nov 2020 08:42:32 -0800 (PST)
-Received: by mail-ot1-x342.google.com with SMTP id j14so2969703ots.1
-        for <linux-media@vger.kernel.org>; Mon, 02 Nov 2020 08:42:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LkcPNNpMLX6kEqUed20/jhdzhJZXy+qPlqOir1Z4UWg=;
-        b=DejrOT1ET977KzMedOZFf/nvESeZd35VW615DHzfUVNv/jtr5S39tQRR1rkXRrNQsS
-         8e7QakA0NQZajazNYknFTyPn7wzCTD0MaLh6LD79vAKy5J2WjkyqZwU1hUMlTMpcVTcY
-         aRcqJL/19jZSjJmXa+xeFfRoO2oW4s/0IBZV8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LkcPNNpMLX6kEqUed20/jhdzhJZXy+qPlqOir1Z4UWg=;
-        b=e4dwT4eRaDhX6xIoN8DFErZFfp1tkejBQLKkHa4pTt2ZESn4dFwjctiYHOvwNLwp7h
-         L8oFlo0I72yna5VhJAs1mSy30C/N7IzT15i7Q6EgpiHMVD/hjcpD5FVd6JfW5sThKSkn
-         ITjnbHZtsmQJOsSSJ++ZwZQnYeMAAkWI1h7D5T51fYUpu13IXmYuUbWX+geR70yqMblE
-         lnUG7AltAHSKm5h52gdsglfF5Y+akaejoYhmEPea/N0THzAdYQClJDS2YG+F5lTIAjdu
-         /sDr8S6Ndys9NxvJ6dj8h72+1JjALkJkvyRBuabJpvSeFpGta8g4TVe2bfBPWibQ1I3R
-         0gXA==
-X-Gm-Message-State: AOAM532nsr9wGypMPwu3uXsQOS3AWuAa5WVGHAvg9pKLAtVCT8zt5Sli
-        vSRiQy3/Dh0BYBU90vveF2DBn3dX+DEJJqpBieqzTg==
-X-Google-Smtp-Source: ABdhPJw6fgeaE8WrMv6/yjTLi0nLsEgIsTJGq7lnieyfjRKsxeZQjFjVvPlXPA1vJ6n1s7o3wIRvF8cXTGM5e/OE7rM=
-X-Received: by 2002:a05:6830:1647:: with SMTP id h7mr13325941otr.281.1604335352341;
- Mon, 02 Nov 2020 08:42:32 -0800 (PST)
+        id S1727534AbgKBQxW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 2 Nov 2020 11:53:22 -0500
+Received: from relay12.mail.gandi.net ([217.70.178.232]:47421 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727497AbgKBQxV (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Nov 2020 11:53:21 -0500
+Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id AE56E20000F;
+        Mon,  2 Nov 2020 16:53:16 +0000 (UTC)
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     linux-media@vger.kernel.org
+Cc:     Jacopo Mondi <jacopo@jmondi.org>, naush@raspberrypi.com,
+        dave.stevenson@raspberrypi.com, laurent.pinchart@ideasonboard.com,
+        kieran.bingham@ideasonboard.com, niklas.soderlund@ragnatech.se,
+        hverkuil@xs4all.nl, sakari.ailus@iki.fi, nsaenzjulienne@suse.de,
+        mchehab+huawei@kernel.org
+Subject: [PATCH v3 1/5] media: uapi: v4l2-core: Add sensor ancillary data V4L2 fourcc type
+Date:   Mon,  2 Nov 2020 17:52:54 +0100
+Message-Id: <20201102165258.408049-2-jacopo@jmondi.org>
+X-Mailer: git-send-email 2.29.1
+In-Reply-To: <20201102165258.408049-1-jacopo@jmondi.org>
+References: <20201102165258.408049-1-jacopo@jmondi.org>
 MIME-Version: 1.0
-References: <20201030100815.2269-1-daniel.vetter@ffwll.ch> <20201030100815.2269-9-daniel.vetter@ffwll.ch>
- <20201102072931.GA16419@infradead.org> <CAKMK7uEe5FQuukYU7RhL90ttC9XyWw6wvdQrZ2JpP0jpbYTO6g@mail.gmail.com>
- <20201102130115.GC36674@ziepe.ca> <CAKMK7uHeL=w7GoBaY4XrbRcpJabR9UWnP+oQ9Fg51OzL7=KxiA@mail.gmail.com>
- <20201102155256.GG36674@ziepe.ca>
-In-Reply-To: <20201102155256.GG36674@ziepe.ca>
-From:   Daniel Vetter <daniel.vetter@ffwll.ch>
-Date:   Mon, 2 Nov 2020 17:42:20 +0100
-Message-ID: <CAKMK7uFqkieBAXEmoeoBfnJBXcuHaNwrsaVyPsLQaXnrJo=scg@mail.gmail.com>
-Subject: Re: [PATCH v5 08/15] mm: Add unsafe_follow_pfn
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "J??r??me Glisse" <jglisse@redhat.com>, Jan Kara <jack@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Nov 2, 2020 at 4:52 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
->
-> On Mon, Nov 02, 2020 at 02:23:58PM +0100, Daniel Vetter wrote:
-> > On Mon, Nov 2, 2020 at 2:01 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
-> > >
-> > > On Mon, Nov 02, 2020 at 01:56:10PM +0100, Daniel Vetter wrote:
-> > > > On Mon, Nov 2, 2020 at 8:29 AM Christoph Hellwig <hch@infradead.org> wrote:
-> > > > >
-> > > > > On Fri, Oct 30, 2020 at 11:08:08AM +0100, Daniel Vetter wrote:
-> > > > > > Also mark up follow_pfn as EXPORT_SYMBOL_GPL. The only safe way to use
-> > > > > > that by drivers/modules is together with an mmu_notifier, and that's
-> > > > > > all _GPL stuff.
-> > > > >
-> > > > > I also think it also needs to be renamed to explicitly break any existing
-> > > > > users out of tree or int the submission queue.
-> > > >
-> > > > Ok I looked at the mmu notifier locking again and noticed that
-> > > > mm->subscriptions has its own spinlock. Since there usually shouldn't
-> > > > be a huge pile of these I think it's feasible to check for the mmu
-> > > > notifier in follow_pfn. And that would stuff this gap for good. I'll
-> > > > throw that on top as a final patch and see what people think.
-> > >
-> > > Probably the simplest is to just check mm_has_notifiers() when in
-> > > lockdep or something very simple like that
-> >
-> > lockdep feels wrong, was locking more at CONFIG_DEBUG_VM. And since
-> > generally you only have 1 mmu notifier (especially for kvm) I think we
-> > can also pay the 2nd cacheline miss and actually check the right mmu
-> > notifier is registered.
->
-> Need to hold the lock to check that and there are two ways to register
-> notifiers these days, so it feels to expensive to me.
+From: Naushir Patuck <naush@raspberrypi.com>
 
-Uh I mixed stuff up all along, struct mmu_notifier *subcription that
-all the mmu notifier users use has the ->mm pointer we want right
-there. That's good enough I think.
+Add V4L2_META_FMT_SENSOR_DATA format 4CC.
 
-Now I'm kinda lost in kvm code trying to wire it through, but it's
-looking ok-ish thus far :-)
--Daniel
+This new format will be used to return camera sensor embedded data.
 
-> CH's 'export symbol only for kvm' really does seem the most robust way
-> to handle this though.
->
-> Jason
+Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+---
+ .../userspace-api/media/v4l/meta-formats.rst  |  1 +
+ .../media/v4l/pixfmt-meta-sensor-data.rst     | 32 +++++++++++++++++++
+ drivers/media/v4l2-core/v4l2-ioctl.c          |  1 +
+ include/uapi/linux/videodev2.h                |  1 +
+ 4 files changed, 35 insertions(+)
+ create mode 100644 Documentation/userspace-api/media/v4l/pixfmt-meta-sensor-data.rst
 
-
-
+diff --git a/Documentation/userspace-api/media/v4l/meta-formats.rst b/Documentation/userspace-api/media/v4l/meta-formats.rst
+index fff25357fe860..b2201d1524eb6 100644
+--- a/Documentation/userspace-api/media/v4l/meta-formats.rst
++++ b/Documentation/userspace-api/media/v4l/meta-formats.rst
+@@ -15,6 +15,7 @@ These formats are used for the :ref:`metadata` interface only.
+     pixfmt-meta-d4xx
+     pixfmt-meta-intel-ipu3
+     pixfmt-meta-rkisp1
++    pixfmt-meta-sensor-data
+     pixfmt-meta-uvc
+     pixfmt-meta-vsp1-hgo
+     pixfmt-meta-vsp1-hgt
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-meta-sensor-data.rst b/Documentation/userspace-api/media/v4l/pixfmt-meta-sensor-data.rst
+new file mode 100644
+index 0000000000000..639ede1a8fee3
+--- /dev/null
++++ b/Documentation/userspace-api/media/v4l/pixfmt-meta-sensor-data.rst
+@@ -0,0 +1,32 @@
++.. Permission is granted to copy, distribute and/or modify this
++.. document under the terms of the GNU Free Documentation License,
++.. Version 1.1 or any later version published by the Free Software
++.. Foundation, with no Invariant Sections, no Front-Cover Texts
++.. and no Back-Cover Texts. A copy of the license is included at
++.. Documentation/media/uapi/fdl-appendix.rst.
++..
++.. TODO: replace it to GFDL-1.1-or-later WITH no-invariant-sections
++
++.. _v4l2-meta-fmt-sensor-data:
++
++***********************************
++V4L2_META_FMT_SENSOR_DATA  ('SENS')
++***********************************
++
++Sensor Ancillary Metadata
++
++Description
++===========
++
++This format describes ancillary data generated by a camera sensor and
++transmitted over a stream on the camera bus. Most sensor vendors have their
++own custom format for this ancillary data. Some vendors follow a generic
++CSI-2/SMIA embedded data format as described in the `CSI-2 specification.
++<https://mipi.org/specifications/csi-2>`_
++
++The size of the embedded buffer is defined as a single line with a pixel width
++specified in bytes. This is obtained by a call to the
++:c:type:`VIDIOC_SUBDEV_G_FMT` ioctl on the sensor subdevice where the ``pad``
++field in :c:type:`v4l2_subdev_format` is set to 1.  Note that this size is fixed
++and cannot be modified with a call to :c:type:`VIDIOC_SUBDEV_S_FMT`.
++
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index eeff398fbdcc1..d01d9ca6578df 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -1402,6 +1402,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+ 	case V4L2_META_FMT_UVC:		descr = "UVC Payload Header Metadata"; break;
+ 	case V4L2_META_FMT_D4XX:	descr = "Intel D4xx UVC Metadata"; break;
+ 	case V4L2_META_FMT_VIVID:       descr = "Vivid Metadata"; break;
++	case V4L2_META_FMT_SENSOR_DATA:	descr = "Sensor Ancillary Metadata"; break;
+ 
+ 	default:
+ 		/* Compressed formats */
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 534eaa4d39bc8..b7e3185e66631 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -769,6 +769,7 @@ struct v4l2_pix_format {
+ #define V4L2_META_FMT_UVC         v4l2_fourcc('U', 'V', 'C', 'H') /* UVC Payload Header metadata */
+ #define V4L2_META_FMT_D4XX        v4l2_fourcc('D', '4', 'X', 'X') /* D4XX Payload Header metadata */
+ #define V4L2_META_FMT_VIVID	  v4l2_fourcc('V', 'I', 'V', 'D') /* Vivid Metadata */
++#define V4L2_META_FMT_SENSOR_DATA v4l2_fourcc('S', 'E', 'N', 'S') /* Sensor Ancillary metadata */
+ 
+ /* priv field value to indicates that subsequent fields are valid. */
+ #define V4L2_PIX_FMT_PRIV_MAGIC		0xfeedcafe
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.29.1
+
