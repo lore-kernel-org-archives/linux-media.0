@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5421DC55179
-	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 03:10:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B1E0C388F2
+	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 03:11:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F08062224E
-	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 03:10:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3B0D922265
+	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 03:11:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="ixCdV53E"
+	dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="atqZBY+g"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727821AbgKBDKS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 1 Nov 2020 22:10:18 -0500
+        id S1727798AbgKBDKP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 1 Nov 2020 22:10:15 -0500
 Received: from mail-am6eur05on2083.outbound.protection.outlook.com ([40.107.22.83]:60192
         "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727781AbgKBDKQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 1 Nov 2020 22:10:16 -0500
+        id S1727470AbgKBDKN (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 1 Nov 2020 22:10:13 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e/O14qbC3nCQNOyXar0HOze8IhwFyTh26fRWo93YgOidcY1iZ+Zy/UQ+wmj6OOWrIFXT6ZtqJXBdIzkxNa7raPHP7LFN1sDs2gWyGwbzNvWYAPNye1eAiwLUN1VvkW9ITxt5YCsUQVR+0hG4oJwJ6J7O1Kba8J+NgSauhZEnE4VrrR87eD8B0yV9rIurh2JV7Uri9M3vrI4FjMn5HN9tEpiUEV4NkF6swUk5ljdYAzzIYgwd4vTUwc67o37TGlDJGWqFNzrmgTLKgJ0pGoWRQ5COFDbEL7sI2QnIl5E1XBP2pM0Qmzhceg5y1kJBZBoivxTJf9c1FAsIlRqmquXfVg==
+ b=R6QmSJP7n8wTgbY/yuwnBLqlOaXP8J5wzrEV89kqFFEDfCmMMC4gm8FadQxxQSKq9nDeTfFHYSex5M/qwYa+2PaCTVEiu/dgqZi/0thDU8vJOhyYJKnY0zus4WzIyK2quGx0felH25n6JHyhjtVYfKppbrq4TUTfsNZj2O1B+E9LvfhMuvUk/nlHa3wNMeXQk8c9Q9IpNoQBZcj+6a/NTkavmu+N7YL4d6S28Ygy8VIeWk7NXj0NdQSHTm4QduMLrwozUpJCyhZERUqjVI7CB5SKMGbeoyhu2dbGdPQbziMVu9f9vGQ06hQ3Q04/1r/VdkgIzUJR/oR9WPPeg3ExXQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AMOvSSgHNhcgFbSvMjgkrROxoUwvCKgAU8i+N1ujUyU=;
- b=CUEfGcmKize6EDO7Wt2KYyx4CFc69UDpov5iSu+UiH40X5xeM9ai6UwKWGGSlLI1bioBZFGFZm9J5aJ7Y1NYSfkywgqMABuX5bKu489v99ipsqHMe6O4a4xdj9e65E+VeReV+r3JKEoXm+Sb4HW8D1l/WUjFvlD/fu7kCDgYPOq5cc5RpAsINOvHxRkyo+iQYDqokltvpYpoLBmTi0VTqeYWp3IkA+CXuRbb/POBWtkWNUnu7t1RgJZWnuQnAYQTMfHJgs8IattKLghq4plUAqEWR1IyQLjBnHArdOm1N9xg2O/HaL+1BAM5qBS3YN82roOzH7awor9gieOrsT6uyA==
+ bh=/rBjIeMCPNcEwuZBeBkYxRtK5wxM+d9HcCOTsddZ0n8=;
+ b=AfhZ3QKgaS3OPJtqONlvklp6oqYm0LttH7CVrtuXavXPqGfGReSyvr8aY+WSSHcY8ji9qtspykG9MYJXzDN3Se7E/Dxv8I4dB/A/HjHU5Xg6Xadx29Mghxrd0xtdyI0xPNwPXD1RMq4X6aLqFL2Ui+VV426MoJlEOUiKNmexP9NXGhbNb2RNlFFRu3qx9fT1A/1gmvsWn0YQ4XjJIwwKz4AMEVjVEWuiOmwpqpRO2VqDu7aD64/LeBWWkdrc8QlXM4GIgCmKOCTXNMqWTzJ6WMtVNBOcjS6k8s7J1Og50uKuKBYMs904m9uiGUTlKxjLkpEqGJjsHL/I2To9LdFX7w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AMOvSSgHNhcgFbSvMjgkrROxoUwvCKgAU8i+N1ujUyU=;
- b=ixCdV53EWvCSnTcInbuAz7ufD/ohC0hvdFso6Wnio/3tXF1kmLROi8XpyhBMvPf/x5LBtMt6fPj03AmbjdOlonExHz0FHRoKWps2sI6WOnIiRKi4zIndNtzzi2DpWAVnNuZkk+6qhv8tPRNg4mnPoPmDaU+QNIDE8KqbRwRkRqs=
+ bh=/rBjIeMCPNcEwuZBeBkYxRtK5wxM+d9HcCOTsddZ0n8=;
+ b=atqZBY+gfcg0LUWQeA+k+Sa9MWnIBGTHd880DQN9S+37r1KXfa6Gr8egPQRSmXyWr2yHthyYuweozYflrVEQJMG8k/IyKvCcPuY6fSmv4kSm99i4EwPl0PolZrc7fNzH6Yjl1RDMcsxIjfE7MF7B9bHGjFKA2M3DDQJ9aoBLJzo=
 Authentication-Results: kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=none action=none header.from=oss.nxp.com;
 Received: from AM5PR04MB3137.eurprd04.prod.outlook.com (2603:10a6:206:c::18)
  by AM6PR04MB5173.eurprd04.prod.outlook.com (2603:10a6:20b:d::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.27; Mon, 2 Nov
- 2020 03:10:03 +0000
+ 2020 03:10:00 +0000
 Received: from AM5PR04MB3137.eurprd04.prod.outlook.com
  ([fe80::2d75:aaf5:5aa6:5de9]) by AM5PR04MB3137.eurprd04.prod.outlook.com
  ([fe80::2d75:aaf5:5aa6:5de9%6]) with mapi id 15.20.3499.029; Mon, 2 Nov 2020
- 03:10:03 +0000
+ 03:10:00 +0000
 From:   "Mirela Rabulea (OSS)" <mirela.rabulea@oss.nxp.com>
 To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl, shawnguo@kernel.org,
         robh+dt@kernel.org
@@ -61,9 +61,9 @@ Cc:     paul.kocialkowski@bootlin.com, linux-media@vger.kernel.org,
         niklas.soderlund+renesas@ragnatech.se,
         dafna.hirschfeld@collabora.com,
         Mirela Rabulea <mirela.rabulea@nxp.com>
-Subject: [PATCH v4 05/11] arm64: dts: imx8qxp: Add jpeg encoder/decoder nodes
-Date:   Mon,  2 Nov 2020 05:08:15 +0200
-Message-Id: <20201102030821.3049-6-mirela.rabulea@oss.nxp.com>
+Subject: [PATCH v4 03/11] media: dt-bindings: Add bindings for i.MX8QXP/QM JPEG driver
+Date:   Mon,  2 Nov 2020 05:08:13 +0200
+Message-Id: <20201102030821.3049-4-mirela.rabulea@oss.nxp.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20201102030821.3049-1-mirela.rabulea@oss.nxp.com>
 References: <20201102030821.3049-1-mirela.rabulea@oss.nxp.com>
@@ -74,30 +74,30 @@ X-ClientProxiedBy: AM0PR06CA0128.eurprd06.prod.outlook.com
  (2603:10a6:206:c::18)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from fsr-ub1664-134.ea.freescale.net (86.124.170.94) by AM0PR06CA0128.eurprd06.prod.outlook.com (2603:10a6:208:ab::33) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.19 via Frontend Transport; Mon, 2 Nov 2020 03:10:02 +0000
+Received: from fsr-ub1664-134.ea.freescale.net (86.124.170.94) by AM0PR06CA0128.eurprd06.prod.outlook.com (2603:10a6:208:ab::33) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.19 via Frontend Transport; Mon, 2 Nov 2020 03:09:59 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: d172a6f0-4b9a-4373-6065-08d87edccafd
+X-MS-Office365-Filtering-Correlation-Id: bddaabbe-6cfa-4239-dc5d-08d87edcc935
 X-MS-TrafficTypeDiagnostic: AM6PR04MB5173:
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM6PR04MB51734F74C43E9B0F9FEE0102CE100@AM6PR04MB5173.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
+X-Microsoft-Antispam-PRVS: <AM6PR04MB51735DEA5C864CFCC8211B4CCE100@AM6PR04MB5173.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3383;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9ytymTMiSlkhTD1oaZGW9FuKtx8wfhCPbAv9W6AoH3BEDpEj3yHTGbTAqCyPXDcrl3nmk7A+83QqRLj0cF9tCwdRiiy+7ISICebVHcv4o0vhZJbSGSoKIPNbNFyE+6Dxq5FdyRVAQFNxkEf7s/ir7T24IFxBypbVcSrIqHC7FRJSWuMPRdK9CybmbJLd5MZRlP9scFN/xiLOLmC4uRUL/RKWIVK3o5Q6Y9Y2wt6+DeXBJXOgy9v4J3KI8hN3ROapUqOFfWGfR6fL1+zvE9a85H6aWQTX5VIqv5Ng2Ma86e6Vzu63eyNE5/o0Y1lauRBkDOPX8SZVun+t61TKdlW4ObUdIDOohkq/hxjTBZV7EF0AeYegZBKAZtqnvFYBlWOy
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM5PR04MB3137.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(396003)(39860400002)(376002)(366004)(136003)(5660300002)(478600001)(86362001)(16526019)(186003)(8936002)(83380400001)(6512007)(6666004)(26005)(2906002)(6486002)(316002)(4326008)(66946007)(8676002)(52116002)(956004)(6506007)(1076003)(66476007)(2616005)(7416002)(66556008)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: BAKe5Oi3UeQ6TjFSaqnAggQ3uN4ir78NgGAeDSNEeh4K8HWbbmtKnr8jtj1ZGslrULsUjseizjp5IOPp0BKhrdMeOsvm16CTIkRFO/s8oT/PsYbvfilj/D+f1DDkSlcLktZkBYve28+BFx3XKWXix1nps46q7qpQMcZoYSwiuEvbTF71e7PlU5WvPyc93he3Ffb290Az9mPr06Tby2UpU5WdR3yQDYQLf9JHye8nUIKXyrgAyCsv9MaY/qkmKr48+UvdVw7Dn3ivG4pKPfRbmlGBZ4bspL3VfjHZJcWo/Cv1aIaoQDEM7o1TdpCvsWws3PBvEgNhy3zByA8rn2mAcARNIw+tSQM02pL1cHcivTjx2xp1aFcXi/awM0FpMpIx4lH/TYu6Q0FL/ZkWXAP32ZyAcrRTsU55MtMqwRenyQ/yU6Tuhl08FbOvCpEcdv0bbUJJGW4xqvNIM0FbrBo876l/gouz8H3gPK3e+t5DRLgjwOUB3BLR//ZADl0HwC00PMC8GiDmhM0pxXW5IbMmwnSDGtCwg9AFs/hjwDGnEx/8NVdalmNERlNl3YtLqVxgLgSGv5/DEDU4zc0GkSV0hQNvWTU0ex6HqpxL6dL7UeXvWOMi4M5UJA0witYHa7Px0cIxuGnkxQe9i/36pSu82g==
+X-Microsoft-Antispam-Message-Info: QtqTOlc8wKrDZWotUqQzXNBb7bkmzJe43HV6S7DgXycs4MG1Pp0+xZjXpEpUtHCjGk41uKJCf8y7Gm45u/U4rmF77c0qd+5WLd84LMaAtiSWHrPNkuAdk7zkJbFCTcpus5pEao2+05owUBYecHLyN2uwN+BWAHMPnqZtdvc60Fc0OVKZ2E47ctc1DR9w1TW4Q4plWOCYKaaBqsHJIj6Rdc8IOgrTHDpaiEDmCHIch404SkJXAh2fLMfR/s0689fx330it1xocugk0bX1VoXM3PpN85ca+48s0g4ufhO5X8+mum238bYXSJHyYioT1dVZPykkmz+2/DWnxrEtz4T8tduBpNl+y7k5I0Qw80cKYEcqPXeHM/QUE6DF4dqZrk1Egx06MSr/0GSdAwi6cam4Zg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM5PR04MB3137.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(396003)(39860400002)(376002)(366004)(136003)(5660300002)(478600001)(966005)(86362001)(16526019)(186003)(8936002)(6512007)(6666004)(26005)(2906002)(6486002)(316002)(4326008)(66946007)(8676002)(52116002)(956004)(6506007)(1076003)(66476007)(2616005)(7416002)(66556008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: FDvyr0tmfTmAaSAE3klLsGvuCrr8uKkBIx+qYPXaeFMZ/DWz6qoowF8TI1gOg5aSRh2DMqrhcUNYmQ2vcKzlEGaYlyaRoM8uQ2s+RHVYOkkEpOz8FOHuE9Ntah4YThgiih6jIp3I2CLFLEbmM1EYvhFhBTYuDsls3xgOfZhawJHbxBr0aOfzQObYEl86tmSvM/kSpTLu/z8An6qLhZgBdyTSopLtXY3oe0JL2v/3toDMxfeFjV3e4qbfC9TXS44gSxQIJ8JLDEpKMij1/lbi1BMi/v3LMNI69i9gvhPqsasLKaxKP4NHf0ICu4LrWWlHGX4ZNLSmLwc4Gqr6IA/VrtwiTNoHv8XPfw6K2sY3dnUj/5wRwvsQynVbUjllC6HZdyqQoNdKp2hhTOQL9WmjwOMwh5UgsBETA5ZpS3CUMBS43wguzcl2QFw8HRwKTNR+XxcpDPbnsuOcftmr4OsVOWCm3mOaDvAsSsyX9IzW2MiYDYClJTmRyyiLuhvnlHkZ7McTVNRl1Sz0kOnxb/nfr5cYn0ydmga4+KwSLNrDMSM8fFZAcQ1gzwdFTNP8ON0Rtw4vfznpmzcjF7L55o68ey0/mFYlK0RQXdkclrBbgI5q0HTIOa+096tJKLXM8BYsL1E92rgD9AHJUCu9ci4Z5Q==
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d172a6f0-4b9a-4373-6065-08d87edccafd
+X-MS-Exchange-CrossTenant-Network-Message-Id: bddaabbe-6cfa-4239-dc5d-08d87edcc935
 X-MS-Exchange-CrossTenant-AuthSource: AM5PR04MB3137.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2020 03:10:03.8241
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2020 03:10:00.8169
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tm+Y/vowgy9/fG2aL6v0y0uiXBudiyeV5JaPitrnqcz2Pv4MLlern5OIxkZqGlahvkJG0sLTRWWxCEkCBFnEmA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: zUyl0/K91dW6albP7JfxJsSUYLj0vpWWGk7uLtQIHquk3gWn7xHeO9+VfBKroRohiyL94vyfvUamLEk0wF1RGA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB5173
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -105,77 +105,103 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Mirela Rabulea <mirela.rabulea@nxp.com>
 
-Add jpeg decoder/encoder nodes, for now on imx8qxp only.
-The same should work on imx8qm, but it was not tested.
+Add bindings documentation for i.MX8QXP/QM JPEG decoder & encoder driver.
 
 Signed-off-by: Mirela Rabulea <mirela.rabulea@nxp.com>
 ---
- arch/arm64/boot/dts/freescale/imx8qxp-mek.dts |  8 ++++
- arch/arm64/boot/dts/freescale/imx8qxp.dtsi    | 37 +++++++++++++++++++
- 2 files changed, 45 insertions(+)
+ .../devicetree/bindings/media/imx8-jpeg.yaml  | 83 +++++++++++++++++++
+ 1 file changed, 83 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/imx8-jpeg.yaml
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts b/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
-index 46437d3c7a04..a0ad9789e9b8 100644
---- a/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
-@@ -270,3 +270,11 @@
- 		>;
- 	};
- };
+diff --git a/Documentation/devicetree/bindings/media/imx8-jpeg.yaml b/Documentation/devicetree/bindings/media/imx8-jpeg.yaml
+new file mode 100644
+index 000000000000..2df538d87bfd
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/imx8-jpeg.yaml
+@@ -0,0 +1,83 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/imx8-jpeg.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+&jpegdec {
-+	status = "okay";
-+};
++title: i.MX8QXP/QM JPEG decoder/encoder Device Tree Bindings
 +
-+&jpegenc {
-+	status = "okay";
-+};
-diff --git a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-index e46faac1fe71..774afa1d4665 100644
---- a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-@@ -629,4 +629,41 @@
- 			};
- 		};
- 	};
++maintainers:
++  - Mirela Rabulea <mirela.rabulea@nxp.com>
 +
-+	img_subsys: bus@58000000 {
-+		compatible = "simple-bus";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges = <0x58000000 0x0 0x58000000 0x1000000>;
++description: |-
++  The JPEG decoder/encoder present in.MXQXP/QM SoC is an
++  ISO/IEC 10918-1 JPEG standard compliant decoder/encoder, for Baseline
++  and Extended Sequential DCT modes.
 +
-+		jpegdec: jpegdec@58400000 {
-+			compatible = "fsl,imx8-jpgdec";
-+			reg = <0x58400000 0x00050000 >;
-+			interrupts = <GIC_SPI 309 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 310 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 311 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 312 IRQ_TYPE_LEVEL_HIGH>;
-+			power-domains = <&pd IMX_SC_R_MJPEG_DEC_MP>,
-+					<&pd IMX_SC_R_MJPEG_DEC_S0>,
-+					<&pd IMX_SC_R_MJPEG_DEC_S1>,
-+					<&pd IMX_SC_R_MJPEG_DEC_S2>,
-+					<&pd IMX_SC_R_MJPEG_DEC_S3>;
-+			status = "disabled";
-+		};
++properties:
++  compatible:
++    items:
++      - enum:
++            # JPEG decoder
++          - fsl,imx8-jpgdec
++            # JPEG encoder
++          - fsl,imx8-jpgenc
 +
-+		jpegenc: jpegenc@58450000 {
-+			compatible = "fsl,imx8-jpgenc";
-+			reg = <0x58450000 0x00050000 >;
-+			interrupts = <GIC_SPI 305 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 306 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 308 IRQ_TYPE_LEVEL_HIGH>;
-+			power-domains = <&pd IMX_SC_R_MJPEG_ENC_MP>,
-+					<&pd IMX_SC_R_MJPEG_ENC_S0>,
-+					<&pd IMX_SC_R_MJPEG_ENC_S1>,
-+					<&pd IMX_SC_R_MJPEG_ENC_S2>,
-+					<&pd IMX_SC_R_MJPEG_ENC_S3>;
-+			status = "disabled";
-+		};
-+	};
- };
++  reg:
++    maxItems: 1
++
++  interrupts:
++    description: |
++      There are 4 slots available in the IP
++      If a certain slot is used, it should have an associated interrupt
++    minItems: 1               # At least one slot should be available
++    maxItems: 4               # The IP has 4 slots available for use
++
++  power-domains:
++    description:
++      List of phandle and PM domain specifier as documented in
++      Documentation/devicetree/bindings/power/power_domain.txt
++    minItems: 2               # Wrapper and 1 slot
++    maxItems: 5               # Wrapper and 4 slots
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - power-domains
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/firmware/imx/rsrc.h>
++
++    jpegdec: jpegdec@58400000 {
++        compatible = "fsl,imx8-jpgdec";
++        reg = <0x58400000 0x00050000 >;
++        interrupts = <GIC_SPI 309 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 310 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 311 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 312 IRQ_TYPE_LEVEL_HIGH>;
++        power-domains = <&pd IMX_SC_R_MJPEG_DEC_MP>,
++                        <&pd IMX_SC_R_MJPEG_DEC_S0>,
++                        <&pd IMX_SC_R_MJPEG_DEC_S1>,
++                        <&pd IMX_SC_R_MJPEG_DEC_S2>,
++                        <&pd IMX_SC_R_MJPEG_DEC_S3>;
++    };
++
++    jpegenc: jpegenc@58450000 {
++        compatible = "fsl,imx8-jpgenc";
++        reg = <0x58450000 0x00050000 >;
++        interrupts = <GIC_SPI 305 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 306 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 308 IRQ_TYPE_LEVEL_HIGH>;
++        power-domains = <&pd IMX_SC_R_MJPEG_ENC_MP>,
++                        <&pd IMX_SC_R_MJPEG_ENC_S0>,
++                        <&pd IMX_SC_R_MJPEG_ENC_S1>,
++                        <&pd IMX_SC_R_MJPEG_ENC_S2>,
++                        <&pd IMX_SC_R_MJPEG_ENC_S3>;
++    };
++...
 -- 
 2.17.1
 
