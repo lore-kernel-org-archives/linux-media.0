@@ -6,48 +6,48 @@ X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
 	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D87B5C388F9
-	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 09:17:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C9D7C00A89
+	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 09:21:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7018A22226
-	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 09:17:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B3A52223AC
+	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 09:21:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728005AbgKBJRn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 2 Nov 2020 04:17:43 -0500
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:53477 "EHLO
+        id S1728285AbgKBJVQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 2 Nov 2020 04:21:16 -0500
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:53167 "EHLO
         new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727870AbgKBJRm (ORCPT
+        by vger.kernel.org with ESMTP id S1727992AbgKBJVP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 2 Nov 2020 04:17:42 -0500
+        Mon, 2 Nov 2020 04:21:15 -0500
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 5882E58016F;
-        Mon,  2 Nov 2020 04:17:41 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Mon, 02 Nov 2020 04:17:41 -0500
+        by mailnew.nyi.internal (Postfix) with ESMTP id 471EA580098;
+        Mon,  2 Nov 2020 04:21:14 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Mon, 02 Nov 2020 04:21:14 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
         date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=tRRcWPfLlcFd2I7QGyWsS+7dvdI
-        OTZe+96Cma1Ta4CQ=; b=cL3G91KomNggWKjP+ee8mXpLK4G1z9pJ8bTx5eXKhis
-        GamLNW5oJtfQL0KtTKdk4XkprWZy/NilCX9Oy4p0HgelbPXJ4UUmx/34oIMv0ly1
-        LN8unJdsZ05w4OZpPpO1R5o3JqESgXEEXJ7h6bQep0+tWmBwunfBU5E2JKqpCABa
-        GwSBhcMVfJaSut73Z493aIU/QumPfhV+8YapZbkfC5sMOVSGvRQkx5yUkhB5ZnLc
-        +jpyblW9JgwtPgqgQMSs4u0SWqvE9a582+EMUeAu3/T/KG3ju2Cn4Cn1dlgVGr7R
-        q36fwpDgg/WtYNZC+EUYIk5nX9gTB6nKh250LgSG5VQ==
+        :content-type:in-reply-to; s=fm1; bh=Io+FlZjpTIADTIzIW74U/CyYabR
+        lDgPOCEmLfu2QH3g=; b=qb9LVfNuiocCc5g3UUl8IPfkntSozd6qT7Sjrjx0tFo
+        4j1JdNHEYnblDITN5DgdPReu0/HzZss+XJSUrKrBVqFK0QMYJdbkeTPoebXS71Kk
+        8Gaex6NAxHWxCkW1Rno52RSemsIWEJ+BwxDpGvW+AiVzaBvsHHY1bHGufvupmaRx
+        1+3tUsW2Au1TvM5EZR8UmZzRzxXUb9tOdpr/oYKWgXDUIgiRaTsFrcw3ffK6EeAM
+        x5o1OoT0t14L5JePEiSj7xAQQVLvmaQBaw3CJn4e4QzuOjSrBOyYCZXCkI6NWx3V
+        EGC89ga7xIDALXACNjfvdnTdQVUAniArhP7Nc4F4KCQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-type:date:from:in-reply-to
         :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=tRRcWP
-        fLlcFd2I7QGyWsS+7dvdIOTZe+96Cma1Ta4CQ=; b=l8qcekuw3PsZNepLpODZWn
-        LhdpoORDReM4sQkchoftknnU6XmVE/up2/vmwIG3v0gYyejTScLCD1mt5MkfgDyQ
-        l9431eQQOP6dbWZdljCqyesRT5DO0nL7bNmI5UfOUB/oECEyR7pN9F8SeECBRNd7
-        CWyfsEJ5QQvYCu2W5gH9ay9IJHSkjz2B3XhXJiltRIK+hnvaAN3fbdehd2br5Grg
-        ksHwf5gj0R9ttQdkCQRl+R41qnGZxmRIjqC/fV7rVQ5ErtQ0vg5h14nbyC+gph2H
-        CYRhLqvU2dCG1yBIs2cTPCp25H7bcd+ZDaVVCVJfs77I3WlW6tSbYe5altqJxvWw
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=Io+FlZ
+        jpTIADTIzIW74U/CyYabRlDgPOCEmLfu2QH3g=; b=MMuWHDtj84vswQqq7yMhRs
+        I4Hi/O0pIbQAn/PwSSYTJOXHy/nJrv2FnTS5LJAIdTq3MD/mlaPzVP+gBqAIr6hJ
+        InQAzHpAT9JojXHU5JV9oBq9kZlNGEBJzaRyc0dEl4lRwwRf63oCOprmbPo2joqx
+        NGmp640Y3dHKQ3rHn9VxTD0lJQkt9grNvv3UZomq5znzKXdo4yXE97LfANR7Gvvb
+        N+6n/M4GFO3wqsNzSTd5tnM4eT0hRrSIJgm1V60wwGBHQ4Uh+EnhXiT1vgawuM2d
+        +shTWS/v6VqIaQkKdRZMfhvE3ac0s6Ru+qHfnjJCC+T7VUFS56HOaU1iMVYFOBGg
         ==
-X-ME-Sender: <xms:s86fX658A0K5A2ZGjNJbX175WWmBJjW4YsGIk5ePGuKNn-wqSnVEIg>
-    <xme:s86fXz6G3lmZpysw5zHmrDIm0lYhEOVKeUBriRN5hnKEOHrP6Ce1ys1ejaOD2jQDk
-    qpnSZ5XILFBv1zFgsc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedruddtuddgtddvucetufdoteggodetrfdotf
+X-ME-Sender: <xms:iM-fX8KP1DzyxIxewYJWDTSozS9-gVoDmXPk2zOY6_ODB4LqokrUVg>
+    <xme:iM-fX8Kdd-q8qUPTHMcV8g0MKNDgKJqCXQVGuU-Ufu7bshQYH1qaSvo97pFQu1g8s
+    fPiZRlScXIuKC4f7mA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedruddtuddgtdefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
@@ -55,14 +55,14 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedruddtuddgtddvucetufdoteggod
     htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
     gedunecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
     frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:s86fX5c046zh68969VRsxzsJ2VniePom1osuz3j_uGOQykv7jwxuEw>
-    <xmx:s86fX3J6FHCE70poP38xr42k2BHuE3xzZwfaz7X7f5h71VYZmCRwbA>
-    <xmx:s86fX-JSFhgTZx8GTIyFNN5fTRrVD3kwW-eMi0k0D0uUYqaDmuOGmg>
-    <xmx:tc6fXzDZ7JmADY70-TxDUkQx84AW2roweM4r__W7SuSpQDJF2YfQTg>
+X-ME-Proxy: <xmx:iM-fX8vP4u6C1aWqNQiiqi2DAvv04qCNBGo_I-w6ohgs_HhoVhV1KQ>
+    <xmx:iM-fX5ZHSlsqCtftC5cEMAkmh35AXyJs73_qu1p6tQH_jnQfxfVHWQ>
+    <xmx:iM-fXzYDfen_Fj9YFR1M3j392v6-Ar4yeTkBirbtJXK5tQyFcM30JQ>
+    <xmx:is-fXwQd6WJuN4-XtgH2ANeSZmZI_z7g2sEa9DGSctnxyKReorADvw>
 Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 2FC423280060;
-        Mon,  2 Nov 2020 04:17:39 -0500 (EST)
-Date:   Mon, 2 Nov 2020 10:17:37 +0100
+        by mail.messagingengine.com (Postfix) with ESMTPA id 390F83064674;
+        Mon,  2 Nov 2020 04:21:12 -0500 (EST)
+Date:   Mon, 2 Nov 2020 10:21:10 +0100
 From:   Maxime Ripard <maxime@cerno.tech>
 To:     Helen Koike <helen.koike@collabora.com>
 Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
@@ -80,48 +80,74 @@ Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Hans Verkuil <hverkuil@xs4all.nl>, kevin.lhopital@hotmail.com
-Subject: Re: [PATCH 00/14] Allwinner MIPI CSI-2 support for A31/V3s/A83T
-Message-ID: <20201102091737.pszii6znryssyh2e@gilmour.lan>
+Subject: Re: [PATCH 08/14] media: sunxi: Add support for the A31 MIPI CSI-2
+ controller
+Message-ID: <20201102092110.ro6a456lvbrktwoz@gilmour.lan>
 References: <20201023174546.504028-1-paul.kocialkowski@bootlin.com>
- <d15d724b-6af7-3e51-1316-7bdde5a42c60@collabora.com>
+ <20201023174546.504028-9-paul.kocialkowski@bootlin.com>
+ <1a3a615c-a058-e282-2dbb-c99dfa98be68@collabora.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="g7kesbwqqdzmkw7c"
+        protocol="application/pgp-signature"; boundary="r6wmi6wvpuneeypr"
 Content-Disposition: inline
-In-Reply-To: <d15d724b-6af7-3e51-1316-7bdde5a42c60@collabora.com>
+In-Reply-To: <1a3a615c-a058-e282-2dbb-c99dfa98be68@collabora.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 
---g7kesbwqqdzmkw7c
+--r6wmi6wvpuneeypr
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Hi
+On Fri, Oct 30, 2020 at 07:45:18PM -0300, Helen Koike wrote:
+> On 10/23/20 2:45 PM, Paul Kocialkowski wrote:
+> > The A31 MIPI CSI-2 controller is a dedicated MIPI CSI-2 controller
+> > found on Allwinner SoCs such as the A31 and V3/V3s.
+> >=20
+> > It is a standalone block, connected to the CSI controller on one side
+> > and to the MIPI D-PHY block on the other. It has a dedicated address
+> > space, interrupt line and clock.
+> >=20
+> > Currently, the MIPI CSI-2 controller is hard-tied to a specific CSI
+> > controller (CSI0) but newer SoCs (such as the V5) may allow switching
+> > MIPI CSI-2 controllers between CSI controllers.
+> >=20
+> > It is represented as a V4L2 subdev to the CSI controller and takes a
+> > MIPI CSI-2 sensor as its own subdev, all using the fwnode graph and
+> > media controller API.
+>=20
+> Maybe this is a bad idea, but I was thinking:
+> This driver basically just turn on/off and catch some interrupts for erro=
+rs,
+> and all the rest of v4l2 config you just forward to the next subdevice
+> on the pipeline.
+>=20
+> So instead of exposing it as a subdevice, I was wondering if modeling
+> this driver also through the phy subsystem wouldn't be cleaner, so
+> you won't need all the v4l2 subdevice/topology boilerplate code that
+> it seems you are not using (unless you have plans to add controls or
+> some specific configuration on this node later).
+>=20
+> But this would require changes on the sun6i-csi driver.
+>=20
+> What do you think?
 
-On Fri, Oct 30, 2020 at 07:44:28PM -0300, Helen Koike wrote:
-> On thing that is confusing me is the name csi2 with csi (that makes me
-> think of csi vesun6i-csirsion one, which is not the case), I would
-> rename it to sun6i-video (or maybe it is just me who gets confused).
->
-> I know this driver is already upstream and not part of this series,
-> but on the other hand it doesn't seem to be used.
-
-It's definitely confusing but CSI is the name of the IP, but it supports
-more than just MIPI-CSI :)
+Eventually we'll need to filter the virtual channels / datatypes I
+guess, so it's definitely valuable to have it in v4l2
 
 Maxime
 
---g7kesbwqqdzmkw7c
+--r6wmi6wvpuneeypr
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX5/OsQAKCRDj7w1vZxhR
-xf40AP0Yj4OpO5elQY4ecnN07dkmmp1tsjYm1SISQvGp6/ForwD/QpGFBl/5JOHe
-7sDR7zxwSn34cDklaiJF3Yw2jWuu6gA=
-=ETbw
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX5/PhgAKCRDj7w1vZxhR
+xdTqAP9BNW3DOvNEhXCUns3+K6kcuMjRRnDvKoZkb+YtDDRnxgD/VYACQnV5UMH0
+6qUJuIMi3BvClNZUn19ZMhW3WnIMkwM=
+=3I1e
 -----END PGP SIGNATURE-----
 
---g7kesbwqqdzmkw7c--
+--r6wmi6wvpuneeypr--
