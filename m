@@ -2,61 +2,61 @@ Return-Path: <SRS0=t7pd=EI=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BC5FC4742C
-	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 15:20:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D170FC55179
+	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 15:21:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B197122258
-	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 15:20:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9DF182222B
+	for <linux-media@archiver.kernel.org>; Mon,  2 Nov 2020 15:21:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20150623.gappssmtp.com header.i=@bgdev-pl.20150623.gappssmtp.com header.b="e5kjyidW"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20150623.gappssmtp.com header.i=@bgdev-pl.20150623.gappssmtp.com header.b="s1X5Rn6M"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726647AbgKBPU4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 2 Nov 2020 10:20:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56758 "EHLO
+        id S1726734AbgKBPVA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 2 Nov 2020 10:21:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726589AbgKBPUy (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Nov 2020 10:20:54 -0500
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 946F2C061A04
-        for <linux-media@vger.kernel.org>; Mon,  2 Nov 2020 07:20:54 -0800 (PST)
-Received: by mail-wm1-x343.google.com with SMTP id c18so9768681wme.2
-        for <linux-media@vger.kernel.org>; Mon, 02 Nov 2020 07:20:54 -0800 (PST)
+        with ESMTP id S1726713AbgKBPU7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Nov 2020 10:20:59 -0500
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F55C061A48
+        for <linux-media@vger.kernel.org>; Mon,  2 Nov 2020 07:20:58 -0800 (PST)
+Received: by mail-wm1-x341.google.com with SMTP id c9so8229353wml.5
+        for <linux-media@vger.kernel.org>; Mon, 02 Nov 2020 07:20:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=/Z+wwi/tFfEYyTBQIvrIHI75+eOD/rtT/HKhEUnLNfQ=;
-        b=e5kjyidWL8cmpiZH3KN4gbQ7mPV2yzGx2nkYanw2be0opJ+Vz0F/h7+cASkSpyPvft
-         Cq/QKHKgAn39kkunAelTRvo6+t//6O8sFAxBBIWVN/D/sXHLN0TcApD154vCBfBKfHLt
-         cLayxxCVPglJdryRP0qymWqoSldB8VezR3ze+ww/h6mL64irtmyW1Iv/4QeMsHgFEmU1
-         EnCxPQadIxfRrkqDHNb0AWnJ/TDZd1tbaPxP67i/kRiJU0AadmF8tkFzS5SiBFs65eHd
-         s2porevmNAwd7EJUylR58be5iKdfMpI6Ofog3Lr78MGsAlfmarg/IAiyvFrSdsneofbm
-         aJMQ==
+        bh=T2w+mckzOvrR699h8x/Xo77oVyHlYkQYkZ/tcGlQNKA=;
+        b=s1X5Rn6M3uEqYAtmP0kMjZBhh9+T3p5FrLN+EMPkAgjibT+uR/uD2Ngl5VYCdQB9ij
+         cQ6fxK8h+9iDfacQPynKZ5VyW7F6bKG7h/Mn2H7upcsowgEdGzkDXW0ZeoKAxWlZFX5x
+         pqI6X7Y1SxJBUvvLsIqozUVcIl4kjDlk/82AQ/NKJkAUAZxchqqk6ZD/i9gwMOE04t7b
+         WEkSas1VOVRvcMuWMty1ScX6mRMpJB2pYQQLO7hPytPI/lP2lQ51TXcmMAV2jxgLlrYn
+         9vORg+bb2oQsagTOeapcQPmylm4ykQl2cpkCX5KomC0i7s4Qx+hD5CK4/4R0xv0vDrV1
+         0OBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/Z+wwi/tFfEYyTBQIvrIHI75+eOD/rtT/HKhEUnLNfQ=;
-        b=D9PkO6YTvU/n7OOlwnTBIShJCR64Pt3KrVEMGwfTSH5ckuyCNCe3OSywyrKPnUZkm4
-         PIZfx9tS9Hw3eMddaanKkrDuexeMPgEbzMbTbfcMrNCXc1Q/OY5Xzsmt3Us0JM/BmBQq
-         AvMUr2XTcxt84lL00KiW/fHjoOAd1g96+VMyH1zGt9k4F3VhP+V/+4bLsqN/3v1+qcvu
-         BjSVWV/9b8ufO+ae+R1l2fJZ1DzBb+sa4dE3E6LmeiGeYCO7JFNmX3NVaFaLlwotG27I
-         vXFYAwe2YrJDoGN0pAk0NbtzBdLgu3a+7koTGGe6IO/z+NBxH+oicUS8YVjGPm0gM5fM
-         n8Mg==
-X-Gm-Message-State: AOAM531nXWdCldp1Wu4y6y5n2awZb9WCspkC6hkWuDDaXU33y+czNkX2
-        hmuddCQFby6YyBtEXeCS0SBO/g==
-X-Google-Smtp-Source: ABdhPJwLl/Yb+dmot3Qj9GobH6d2VSIEqfIwMoXbr9WYE4ZivqBC7akLVHb/L/C2gNGglG2Ytc/IgQ==
-X-Received: by 2002:a1c:1906:: with SMTP id 6mr17871137wmz.87.1604330453311;
-        Mon, 02 Nov 2020 07:20:53 -0800 (PST)
+        bh=T2w+mckzOvrR699h8x/Xo77oVyHlYkQYkZ/tcGlQNKA=;
+        b=FAzGcj4tozm6swcspAYBTQgW1LzLd9Mc84Pc23dFpPxkj9TV3kbb3pRePitDpktrxx
+         jlAGMnR/gCRddLLFwsFPWuc5XbLH/g5WOJe+4oHyYS7lB/hWUlz4yBsSE/CWze5tXZA3
+         2h7M/l1/cq98t7qE4DAn8oHHW6A0DStyN/mw7HBQfOc2HCTCcvaFFNres/2dnjrUJbc+
+         JHI0pRg2PubPLX/Ketcca7vWMNQ9h0nebLCmhfad4mQpMDNIBROTsNbOWobdkC/o+YUD
+         IYVH/jJdV9BwU9fyIZcwogB26+0KqlRgm3iuvTZ9D/AdcnHe/Ct/VviH+NWPKfoe0c3j
+         VA/g==
+X-Gm-Message-State: AOAM530cHde0Xl4TTQW6uJ2iNiYI2vwySxoO23QJzMz+0F/C4APC58T5
+        mS50GW6C68CNPyQHnCA0XyT+tA==
+X-Google-Smtp-Source: ABdhPJyD2xFNQ0mA6fkAF0MmLHKBRwPoEVnTSJcs4kw8eo3aVlf+gVmqgA5IOaVwyXiBRsxgcVYV4w==
+X-Received: by 2002:a1c:68c1:: with SMTP id d184mr17928489wmc.74.1604330457481;
+        Mon, 02 Nov 2020 07:20:57 -0800 (PST)
 Received: from debian-brgl.home (amarseille-656-1-4-167.w90-8.abo.wanadoo.fr. [90.8.158.167])
-        by smtp.gmail.com with ESMTPSA id b18sm15138014wmj.41.2020.11.02.07.20.51
+        by smtp.gmail.com with ESMTPSA id b18sm15138014wmj.41.2020.11.02.07.20.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2020 07:20:52 -0800 (PST)
+        Mon, 02 Nov 2020 07:20:56 -0800 (PST)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Sumit Semwal <sumit.semwal@linaro.org>,
@@ -88,15 +88,15 @@ Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
         kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
         netdev@vger.kernel.org, linux-mm@kvack.org,
         alsa-devel@alsa-project.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Subject: [PATCH v2 6/8] drm: atomic: use krealloc_array()
-Date:   Mon,  2 Nov 2020 16:20:35 +0100
-Message-Id: <20201102152037.963-7-brgl@bgdev.pl>
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: [PATCH v2 8/8] dma-buf: use krealloc_array()
+Date:   Mon,  2 Nov 2020 16:20:37 +0100
+Message-Id: <20201102152037.963-9-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.29.1
 In-Reply-To: <20201102152037.963-1-brgl@bgdev.pl>
 References: <20201102152037.963-1-brgl@bgdev.pl>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -108,24 +108,25 @@ Use the helper that checks for overflows internally instead of manually
 calculating the size of the new array.
 
 Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Acked-by: Christian König <christian.koenig@amd.com>
 ---
- drivers/gpu/drm/drm_atomic.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/dma-buf/sync_file.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_atomic.c b/drivers/gpu/drm/drm_atomic.c
-index 58527f151984..09ad6a2ec17b 100644
---- a/drivers/gpu/drm/drm_atomic.c
-+++ b/drivers/gpu/drm/drm_atomic.c
-@@ -960,7 +960,8 @@ drm_atomic_get_connector_state(struct drm_atomic_state *state,
- 		struct __drm_connnectors_state *c;
- 		int alloc = max(index + 1, config->num_connector);
+diff --git a/drivers/dma-buf/sync_file.c b/drivers/dma-buf/sync_file.c
+index 5a5a1da01a00..2925ea03eef0 100644
+--- a/drivers/dma-buf/sync_file.c
++++ b/drivers/dma-buf/sync_file.c
+@@ -270,8 +270,8 @@ static struct sync_file *sync_file_merge(const char *name, struct sync_file *a,
+ 		fences[i++] = dma_fence_get(a_fences[0]);
  
--		c = krealloc(state->connectors, alloc * sizeof(*state->connectors), GFP_KERNEL);
-+		c = krealloc_array(state->connectors, alloc,
-+				   sizeof(*state->connectors), GFP_KERNEL);
- 		if (!c)
- 			return ERR_PTR(-ENOMEM);
+ 	if (num_fences > i) {
+-		nfences = krealloc(fences, i * sizeof(*fences),
+-				  GFP_KERNEL);
++		nfences = krealloc_array(fences, i,
++					 sizeof(*fences), GFP_KERNEL);
+ 		if (!nfences)
+ 			goto err;
  
 -- 
 2.29.1
