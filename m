@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4688C6369E
-	for <linux-media@archiver.kernel.org>; Tue,  3 Nov 2020 09:30:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D626C64E7A
+	for <linux-media@archiver.kernel.org>; Tue,  3 Nov 2020 09:30:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9945B22453
-	for <linux-media@archiver.kernel.org>; Tue,  3 Nov 2020 09:30:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F225E22403
+	for <linux-media@archiver.kernel.org>; Tue,  3 Nov 2020 09:30:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727798AbgKCJaY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 Nov 2020 04:30:24 -0500
-Received: from mx2.suse.de ([195.135.220.15]:37154 "EHLO mx2.suse.de"
+        id S1727836AbgKCJa1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 3 Nov 2020 04:30:27 -0500
+Received: from mx2.suse.de ([195.135.220.15]:37856 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727109AbgKCJaW (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 3 Nov 2020 04:30:22 -0500
+        id S1725988AbgKCJa0 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 3 Nov 2020 04:30:26 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 012CEAEDA;
-        Tue,  3 Nov 2020 09:30:20 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 89ECFB1A5;
+        Tue,  3 Nov 2020 09:30:24 +0000 (UTC)
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
         airlied@linux.ie, daniel@ffwll.ch, sam@ravnborg.org,
@@ -49,71 +49,142 @@ Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
         linux-rockchip@lists.infradead.org, xen-devel@lists.xenproject.org,
         linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
         Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v7 03/10] drm/etnaviv: Remove empty etnaviv_gem_prime_vunmap()
-Date:   Tue,  3 Nov 2020 10:30:08 +0100
-Message-Id: <20201103093015.1063-4-tzimmermann@suse.de>
+Subject: [PATCH v7 09/10] dma-buf-map: Add memcpy and pointer-increment interfaces
+Date:   Tue,  3 Nov 2020 10:30:14 +0100
+Message-Id: <20201103093015.1063-10-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.29.0
 In-Reply-To: <20201103093015.1063-1-tzimmermann@suse.de>
 References: <20201103093015.1063-1-tzimmermann@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The function etnaviv_gem_prime_vunmap() is empty. Remove it before
-changing the interface to use struct drm_buf_map.
+To do framebuffer updates, one needs memcpy from system memory and a
+pointer-increment function. Add both interfaces with documentation.
+
+v5:
+	* include <linux/string.h> to build on sparc64 (Sam)
 
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Acked-by: Christian König <christian.koenig@amd.com>
+Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
 Tested-by: Sam Ravnborg <sam@ravnborg.org>
 ---
- drivers/gpu/drm/etnaviv/etnaviv_drv.h       | 1 -
- drivers/gpu/drm/etnaviv/etnaviv_gem.c       | 1 -
- drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c | 5 -----
- 3 files changed, 7 deletions(-)
+ include/linux/dma-buf-map.h | 73 ++++++++++++++++++++++++++++++++-----
+ 1 file changed, 63 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.h b/drivers/gpu/drm/etnaviv/etnaviv_drv.h
-index 914f0867ff71..9682c26d89bb 100644
---- a/drivers/gpu/drm/etnaviv/etnaviv_drv.h
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.h
-@@ -52,7 +52,6 @@ int etnaviv_gem_mmap(struct file *filp, struct vm_area_struct *vma);
- int etnaviv_gem_mmap_offset(struct drm_gem_object *obj, u64 *offset);
- struct sg_table *etnaviv_gem_prime_get_sg_table(struct drm_gem_object *obj);
- void *etnaviv_gem_prime_vmap(struct drm_gem_object *obj);
--void etnaviv_gem_prime_vunmap(struct drm_gem_object *obj, void *vaddr);
- int etnaviv_gem_prime_mmap(struct drm_gem_object *obj,
- 			   struct vm_area_struct *vma);
- struct drm_gem_object *etnaviv_gem_prime_import_sg_table(struct drm_device *dev,
-diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem.c b/drivers/gpu/drm/etnaviv/etnaviv_gem.c
-index 67d9a2b9ea6a..bbd235473645 100644
---- a/drivers/gpu/drm/etnaviv/etnaviv_gem.c
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_gem.c
-@@ -571,7 +571,6 @@ static const struct drm_gem_object_funcs etnaviv_gem_object_funcs = {
- 	.unpin = etnaviv_gem_prime_unpin,
- 	.get_sg_table = etnaviv_gem_prime_get_sg_table,
- 	.vmap = etnaviv_gem_prime_vmap,
--	.vunmap = etnaviv_gem_prime_vunmap,
- 	.vm_ops = &vm_ops,
- };
+diff --git a/include/linux/dma-buf-map.h b/include/linux/dma-buf-map.h
+index 2e8bbecb5091..583a3a1f9447 100644
+--- a/include/linux/dma-buf-map.h
++++ b/include/linux/dma-buf-map.h
+@@ -7,6 +7,7 @@
+ #define __DMA_BUF_MAP_H__
  
-diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c b/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
-index 135fbff6fecf..a6d9932a32ae 100644
---- a/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
-@@ -27,11 +27,6 @@ void *etnaviv_gem_prime_vmap(struct drm_gem_object *obj)
- 	return etnaviv_gem_vmap(obj);
+ #include <linux/io.h>
++#include <linux/string.h>
+ 
+ /**
+  * DOC: overview
+@@ -32,6 +33,14 @@
+  * accessing the buffer. Use the returned instance and the helper functions
+  * to access the buffer's memory in the correct way.
+  *
++ * The type :c:type:`struct dma_buf_map <dma_buf_map>` and its helpers are
++ * actually independent from the dma-buf infrastructure. When sharing buffers
++ * among devices, drivers have to know the location of the memory to access
++ * the buffers in a safe way. :c:type:`struct dma_buf_map <dma_buf_map>`
++ * solves this problem for dma-buf and its users. If other drivers or
++ * sub-systems require similar functionality, the type could be generalized
++ * and moved to a more prominent header file.
++ *
+  * Open-coding access to :c:type:`struct dma_buf_map <dma_buf_map>` is
+  * considered bad style. Rather then accessing its fields directly, use one
+  * of the provided helper functions, or implement your own. For example,
+@@ -51,6 +60,14 @@
+  *
+  *	dma_buf_map_set_vaddr_iomem(&map. 0xdeadbeaf);
+  *
++ * Instances of struct dma_buf_map do not have to be cleaned up, but
++ * can be cleared to NULL with dma_buf_map_clear(). Cleared mappings
++ * always refer to system memory.
++ *
++ * .. code-block:: c
++ *
++ *	dma_buf_map_clear(&map);
++ *
+  * Test if a mapping is valid with either dma_buf_map_is_set() or
+  * dma_buf_map_is_null().
+  *
+@@ -73,17 +90,19 @@
+  *	if (dma_buf_map_is_equal(&sys_map, &io_map))
+  *		// always false
+  *
+- * Instances of struct dma_buf_map do not have to be cleaned up, but
+- * can be cleared to NULL with dma_buf_map_clear(). Cleared mappings
+- * always refer to system memory.
++ * A set up instance of struct dma_buf_map can be used to access or manipulate
++ * the buffer memory. Depending on the location of the memory, the provided
++ * helpers will pick the correct operations. Data can be copied into the memory
++ * with dma_buf_map_memcpy_to(). The address can be manipulated with
++ * dma_buf_map_incr().
+  *
+- * The type :c:type:`struct dma_buf_map <dma_buf_map>` and its helpers are
+- * actually independent from the dma-buf infrastructure. When sharing buffers
+- * among devices, drivers have to know the location of the memory to access
+- * the buffers in a safe way. :c:type:`struct dma_buf_map <dma_buf_map>`
+- * solves this problem for dma-buf and its users. If other drivers or
+- * sub-systems require similar functionality, the type could be generalized
+- * and moved to a more prominent header file.
++ * .. code-block:: c
++ *
++ *	const void *src = ...; // source buffer
++ *	size_t len = ...; // length of src
++ *
++ *	dma_buf_map_memcpy_to(&map, src, len);
++ *	dma_buf_map_incr(&map, len); // go to first byte after the memcpy
+  */
+ 
+ /**
+@@ -210,4 +229,38 @@ static inline void dma_buf_map_clear(struct dma_buf_map *map)
+ 	}
  }
  
--void etnaviv_gem_prime_vunmap(struct drm_gem_object *obj, void *vaddr)
--{
--	/* TODO msm_gem_vunmap() */
--}
--
- int etnaviv_gem_prime_mmap(struct drm_gem_object *obj,
- 			   struct vm_area_struct *vma)
- {
++/**
++ * dma_buf_map_memcpy_to - Memcpy into dma-buf mapping
++ * @dst:	The dma-buf mapping structure
++ * @src:	The source buffer
++ * @len:	The number of byte in src
++ *
++ * Copies data into a dma-buf mapping. The source buffer is in system
++ * memory. Depending on the buffer's location, the helper picks the correct
++ * method of accessing the memory.
++ */
++static inline void dma_buf_map_memcpy_to(struct dma_buf_map *dst, const void *src, size_t len)
++{
++	if (dst->is_iomem)
++		memcpy_toio(dst->vaddr_iomem, src, len);
++	else
++		memcpy(dst->vaddr, src, len);
++}
++
++/**
++ * dma_buf_map_incr - Increments the address stored in a dma-buf mapping
++ * @map:	The dma-buf mapping structure
++ * @incr:	The number of bytes to increment
++ *
++ * Increments the address stored in a dma-buf mapping. Depending on the
++ * buffer's location, the correct value will be updated.
++ */
++static inline void dma_buf_map_incr(struct dma_buf_map *map, size_t incr)
++{
++	if (map->is_iomem)
++		map->vaddr_iomem += incr;
++	else
++		map->vaddr += incr;
++}
++
+ #endif /* __DMA_BUF_MAP_H__ */
 -- 
 2.29.0
 
