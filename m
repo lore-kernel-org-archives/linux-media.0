@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A64A7C55179
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F03BC55178
 	for <linux-media@archiver.kernel.org>; Tue,  3 Nov 2020 09:30:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 71AFE22403
+	by mail.kernel.org (Postfix) with ESMTP id 17E6522453
 	for <linux-media@archiver.kernel.org>; Tue,  3 Nov 2020 09:30:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727665AbgKCJaX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 Nov 2020 04:30:23 -0500
-Received: from mx2.suse.de ([195.135.220.15]:37260 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725988AbgKCJaW (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1727518AbgKCJaW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 3 Nov 2020 04:30:22 -0500
+Received: from mx2.suse.de ([195.135.220.15]:37026 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727068AbgKCJaV (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 3 Nov 2020 04:30:21 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id A7AA5B135;
-        Tue,  3 Nov 2020 09:30:20 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 20E19AF19;
+        Tue,  3 Nov 2020 09:30:19 +0000 (UTC)
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
         airlied@linux.ie, daniel@ffwll.ch, sam@ravnborg.org,
@@ -49,9 +49,9 @@ Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
         linux-rockchip@lists.infradead.org, xen-devel@lists.xenproject.org,
         linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
         Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v7 04/10] drm/exynos: Remove empty exynos_drm_gem_prime_{vmap,vunmap}()
-Date:   Tue,  3 Nov 2020 10:30:09 +0100
-Message-Id: <20201103093015.1063-5-tzimmermann@suse.de>
+Subject: [PATCH v7 02/10] drm/cma-helper: Remove empty drm_gem_cma_prime_vunmap()
+Date:   Tue,  3 Nov 2020 10:30:07 +0100
+Message-Id: <20201103093015.1063-3-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.29.0
 In-Reply-To: <20201103093015.1063-1-tzimmermann@suse.de>
 References: <20201103093015.1063-1-tzimmermann@suse.de>
@@ -62,62 +62,70 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The functions exynos_drm_gem_prime_{vmap,vunmap}() are empty. Remove
-them before changing the interface to use struct drm_buf_map. As a side
-effect of removing drm_gem_prime_vmap(), the error code changes from
-ENOMEM to EOPNOTSUPP.
+The function drm_gem_cma_prime_vunmap() is empty. Remove it before
+changing the interface to use struct drm_buf_map.
 
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Acked-by: Christian König <christian.koenig@amd.com>
+Reviewed-by: Christian König <christian.koenig@amd.com>
 Tested-by: Sam Ravnborg <sam@ravnborg.org>
 ---
- drivers/gpu/drm/exynos/exynos_drm_gem.c | 12 ------------
- drivers/gpu/drm/exynos/exynos_drm_gem.h |  2 --
- 2 files changed, 14 deletions(-)
+ drivers/gpu/drm/drm_gem_cma_helper.c | 17 -----------------
+ drivers/gpu/drm/vc4/vc4_bo.c         |  1 -
+ include/drm/drm_gem_cma_helper.h     |  1 -
+ 3 files changed, 19 deletions(-)
 
-diff --git a/drivers/gpu/drm/exynos/exynos_drm_gem.c b/drivers/gpu/drm/exynos/exynos_drm_gem.c
-index 4afbf5109cbf..4396224227d1 100644
---- a/drivers/gpu/drm/exynos/exynos_drm_gem.c
-+++ b/drivers/gpu/drm/exynos/exynos_drm_gem.c
-@@ -135,8 +135,6 @@ static const struct vm_operations_struct exynos_drm_gem_vm_ops = {
- static const struct drm_gem_object_funcs exynos_drm_gem_object_funcs = {
- 	.free = exynos_drm_gem_free_object,
- 	.get_sg_table = exynos_drm_gem_prime_get_sg_table,
--	.vmap = exynos_drm_gem_prime_vmap,
--	.vunmap	= exynos_drm_gem_prime_vunmap,
- 	.vm_ops = &exynos_drm_gem_vm_ops,
- };
- 
-@@ -469,16 +467,6 @@ exynos_drm_gem_prime_import_sg_table(struct drm_device *dev,
- 	return &exynos_gem->base;
+diff --git a/drivers/gpu/drm/drm_gem_cma_helper.c b/drivers/gpu/drm/drm_gem_cma_helper.c
+index 2165633c9b9e..d527485ea0b7 100644
+--- a/drivers/gpu/drm/drm_gem_cma_helper.c
++++ b/drivers/gpu/drm/drm_gem_cma_helper.c
+@@ -537,23 +537,6 @@ void *drm_gem_cma_prime_vmap(struct drm_gem_object *obj)
  }
+ EXPORT_SYMBOL_GPL(drm_gem_cma_prime_vmap);
  
--void *exynos_drm_gem_prime_vmap(struct drm_gem_object *obj)
--{
--	return NULL;
--}
--
--void exynos_drm_gem_prime_vunmap(struct drm_gem_object *obj, void *vaddr)
+-/**
+- * drm_gem_cma_prime_vunmap - unmap a CMA GEM object from the kernel's virtual
+- *     address space
+- * @obj: GEM object
+- * @vaddr: kernel virtual address where the CMA GEM object was mapped
+- *
+- * This function removes a buffer exported via DRM PRIME from the kernel's
+- * virtual address space. This is a no-op because CMA buffers cannot be
+- * unmapped from kernel space. Drivers using the CMA helpers should set this
+- * as their &drm_gem_object_funcs.vunmap callback.
+- */
+-void drm_gem_cma_prime_vunmap(struct drm_gem_object *obj, void *vaddr)
 -{
 -	/* Nothing to do */
 -}
+-EXPORT_SYMBOL_GPL(drm_gem_cma_prime_vunmap);
 -
- int exynos_drm_gem_prime_mmap(struct drm_gem_object *obj,
- 			      struct vm_area_struct *vma)
- {
-diff --git a/drivers/gpu/drm/exynos/exynos_drm_gem.h b/drivers/gpu/drm/exynos/exynos_drm_gem.h
-index 74e926abeff0..a23272fb96fb 100644
---- a/drivers/gpu/drm/exynos/exynos_drm_gem.h
-+++ b/drivers/gpu/drm/exynos/exynos_drm_gem.h
-@@ -107,8 +107,6 @@ struct drm_gem_object *
- exynos_drm_gem_prime_import_sg_table(struct drm_device *dev,
- 				     struct dma_buf_attachment *attach,
- 				     struct sg_table *sgt);
--void *exynos_drm_gem_prime_vmap(struct drm_gem_object *obj);
--void exynos_drm_gem_prime_vunmap(struct drm_gem_object *obj, void *vaddr);
- int exynos_drm_gem_prime_mmap(struct drm_gem_object *obj,
- 			      struct vm_area_struct *vma);
+ static const struct drm_gem_object_funcs drm_gem_cma_default_funcs = {
+ 	.free = drm_gem_cma_free_object,
+ 	.print_info = drm_gem_cma_print_info,
+diff --git a/drivers/gpu/drm/vc4/vc4_bo.c b/drivers/gpu/drm/vc4/vc4_bo.c
+index f432278173cd..557f0d1e6437 100644
+--- a/drivers/gpu/drm/vc4/vc4_bo.c
++++ b/drivers/gpu/drm/vc4/vc4_bo.c
+@@ -387,7 +387,6 @@ static const struct drm_gem_object_funcs vc4_gem_object_funcs = {
+ 	.export = vc4_prime_export,
+ 	.get_sg_table = drm_gem_cma_prime_get_sg_table,
+ 	.vmap = vc4_prime_vmap,
+-	.vunmap = drm_gem_cma_prime_vunmap,
+ 	.vm_ops = &vc4_vm_ops,
+ };
  
+diff --git a/include/drm/drm_gem_cma_helper.h b/include/drm/drm_gem_cma_helper.h
+index 2bfa2502607a..a064b0d1c480 100644
+--- a/include/drm/drm_gem_cma_helper.h
++++ b/include/drm/drm_gem_cma_helper.h
+@@ -104,7 +104,6 @@ drm_gem_cma_prime_import_sg_table(struct drm_device *dev,
+ int drm_gem_cma_prime_mmap(struct drm_gem_object *obj,
+ 			   struct vm_area_struct *vma);
+ void *drm_gem_cma_prime_vmap(struct drm_gem_object *obj);
+-void drm_gem_cma_prime_vunmap(struct drm_gem_object *obj, void *vaddr);
+ 
+ struct drm_gem_object *
+ drm_gem_cma_create_object_default_funcs(struct drm_device *dev, size_t size);
 -- 
 2.29.0
 
