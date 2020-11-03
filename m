@@ -2,276 +2,99 @@ Return-Path: <SRS0=g9gv=EJ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB9FFC55179
-	for <linux-media@archiver.kernel.org>; Tue,  3 Nov 2020 09:30:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C373C63699
+	for <linux-media@archiver.kernel.org>; Tue,  3 Nov 2020 09:31:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9F33222404
-	for <linux-media@archiver.kernel.org>; Tue,  3 Nov 2020 09:30:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D5C82223BD
+	for <linux-media@archiver.kernel.org>; Tue,  3 Nov 2020 09:31:16 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="tx/lZiWd"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727852AbgKCJab (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 Nov 2020 04:30:31 -0500
-Received: from mx2.suse.de ([195.135.220.15]:37726 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727109AbgKCJa0 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 3 Nov 2020 04:30:26 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id C5178AEDA;
-        Tue,  3 Nov 2020 09:30:23 +0000 (UTC)
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        airlied@linux.ie, daniel@ffwll.ch, sam@ravnborg.org,
-        alexander.deucher@amd.com, christian.koenig@amd.com,
-        kraxel@redhat.com, l.stach@pengutronix.de,
-        linux+etnaviv@armlinux.org.uk, christian.gmeiner@gmail.com,
-        inki.dae@samsung.com, jy0922.shim@samsung.com,
-        sw0312.kim@samsung.com, kyungmin.park@samsung.com,
-        kgene@kernel.org, krzk@kernel.org, yuq825@gmail.com,
-        bskeggs@redhat.com, robh@kernel.org, tomeu.vizoso@collabora.com,
-        steven.price@arm.com, alyssa.rosenzweig@collabora.com,
-        hjc@rock-chips.com, heiko@sntech.de, hdegoede@redhat.com,
-        sean@poorly.run, eric@anholt.net, oleksandr_andrushchenko@epam.com,
-        ray.huang@amd.com, sumit.semwal@linaro.org,
-        emil.velikov@collabora.com, luben.tuikov@amd.com, apaneers@amd.com,
-        linus.walleij@linaro.org, melissa.srw@gmail.com,
-        chris@chris-wilson.co.uk, miaoqinglang@huawei.com
-Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org,
-        etnaviv@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, lima@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, spice-devel@lists.freedesktop.org,
-        linux-rockchip@lists.infradead.org, xen-devel@lists.xenproject.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Subject: [PATCH v7 08/10] drm/gem: Store client buffer mappings as struct dma_buf_map
-Date:   Tue,  3 Nov 2020 10:30:13 +0100
-Message-Id: <20201103093015.1063-9-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.29.0
-In-Reply-To: <20201103093015.1063-1-tzimmermann@suse.de>
-References: <20201103093015.1063-1-tzimmermann@suse.de>
+        id S1727529AbgKCJbQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 3 Nov 2020 04:31:16 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:58354 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725993AbgKCJbQ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Nov 2020 04:31:16 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0A39V9pG028334;
+        Tue, 3 Nov 2020 03:31:09 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1604395869;
+        bh=8YUhMeCFGdJ9L2TYcFXAkJxTIuBTr+6CLuSIL8/BIBQ=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=tx/lZiWdLAXjyNzLCg7BxVLTvZ/VtgZ7R89ldQSaeaUvM0tS0kkuDfey2jcPqoAd9
+         RUmk9zqKluPb8WmhHfG48yFpS3sOUf4RSNJaGmdRv6HG+fuzUrGnDlsSEgpyHp873R
+         aKKsXe1MfBEy8+ErFz+yuvOuvnkjxCsuV9bKHqcQ=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0A39V87t033527
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 3 Nov 2020 03:31:08 -0600
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 3 Nov
+ 2020 03:31:08 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Tue, 3 Nov 2020 03:31:08 -0600
+Received: from [192.168.2.6] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0A39V6eh025024;
+        Tue, 3 Nov 2020 03:31:07 -0600
+Subject: Re: [RFC 0/3] media: ov5640: Adjust htot, rework clock tree, add
+ LINK_FREQ
+To:     Jacopo Mondi <jacopo@jmondi.org>
+CC:     Jacopo Mondi <jacopo+renesas@jmondi.org>, <hugues.fruchet@st.com>,
+        <sam@elite-embedded.com>, <slongerbeam@gmail.com>,
+        <linux-media@vger.kernel.org>
+References: <20201028225706.110078-1-jacopo+renesas@jmondi.org>
+ <1bc29f6f-20b1-245e-c346-9c57058b9a24@ti.com>
+ <20201103081945.pihysjlqha2noz2m@uno.localdomain>
+ <1123502e-f82f-182d-cf44-899fe54392f8@ti.com>
+ <20201103084544.ocgt33at7tkaumxv@uno.localdomain>
+From:   Tomi Valkeinen <tomi.valkeinen@ti.com>
+Message-ID: <82ccf16d-b9d1-ad95-07cd-442d7696a0bb@ti.com>
+Date:   Tue, 3 Nov 2020 11:31:06 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201103084544.ocgt33at7tkaumxv@uno.localdomain>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Kernel DRM clients now store their framebuffer address in an instance
-of struct dma_buf_map. Depending on the buffer's location, the address
-refers to system or I/O memory.
+On 03/11/2020 10:45, Jacopo Mondi wrote:
 
-Callers of drm_client_buffer_vmap() receive a copy of the value in
-the call's supplied arguments. It can be accessed and modified with
-dma_buf_map interfaces.
+>> I tested 640x480, 720x480, 720x576.
+>>
+>> I have only this sensor to test the CSI RX on AM6 EVM, so I would not be surprised if there are
+>> issues in the CSI RX driver (too). But this is super frustrating to debug, as the sensor is a badly
+>> documented black box, and I don't have means to probe the CSI lines...
+> 
+> I see.. I'm sure you noticed, but as you mentioned the 'second patch'
+> I'll point it out anyway: the series has to be applied in full, as the
+> last patch adds support for reporting the link frequency, that has
+> been re-calculated by patch 2/3. On imx6 and on Hugues' platforms
+> adjusting the receiver's link frequency based on what's reported makes a
+> difference.
 
-v6:
-	* don't call page_to_phys() on framebuffers in I/O memory;
-	  warn instead (Daniel)
+Yes, I first tried with all three, then tested one by one, and the second one started failing.
 
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Tested-by: Sam Ravnborg <sam@ravnborg.org>
----
- drivers/gpu/drm/drm_client.c    | 34 +++++++++++++++++++--------------
- drivers/gpu/drm/drm_fb_helper.c | 32 ++++++++++++++++++++-----------
- include/drm/drm_client.h        |  7 ++++---
- 3 files changed, 45 insertions(+), 28 deletions(-)
+drivers/media/platform/ti-vpe/cal-camerarx.c doesn't use V4L2_CID_LINK_FREQ (it uses
+V4L2_CID_PIXEL_RATE), though, so why would the third patch matter? Or do you mean that
+V4L2_CID_LINK_FREQ must be used to get ov5640 work? Aren't pixel rate and link freq directly linked?
 
-diff --git a/drivers/gpu/drm/drm_client.c b/drivers/gpu/drm/drm_client.c
-index ac0082bed966..fe573acf1067 100644
---- a/drivers/gpu/drm/drm_client.c
-+++ b/drivers/gpu/drm/drm_client.c
-@@ -235,7 +235,7 @@ static void drm_client_buffer_delete(struct drm_client_buffer *buffer)
- {
- 	struct drm_device *dev = buffer->client->dev;
- 
--	drm_gem_vunmap(buffer->gem, buffer->vaddr);
-+	drm_gem_vunmap(buffer->gem, &buffer->map);
- 
- 	if (buffer->gem)
- 		drm_gem_object_put(buffer->gem);
-@@ -291,25 +291,31 @@ drm_client_buffer_create(struct drm_client_dev *client, u32 width, u32 height, u
- /**
-  * drm_client_buffer_vmap - Map DRM client buffer into address space
-  * @buffer: DRM client buffer
-+ * @map_copy: Returns the mapped memory's address
-  *
-  * This function maps a client buffer into kernel address space. If the
-- * buffer is already mapped, it returns the mapping's address.
-+ * buffer is already mapped, it returns the existing mapping's address.
-  *
-  * Client buffer mappings are not ref'counted. Each call to
-  * drm_client_buffer_vmap() should be followed by a call to
-  * drm_client_buffer_vunmap(); or the client buffer should be mapped
-  * throughout its lifetime.
-  *
-+ * The returned address is a copy of the internal value. In contrast to
-+ * other vmap interfaces, you don't need it for the client's vunmap
-+ * function. So you can modify it at will during blit and draw operations.
-+ *
-  * Returns:
-- *	The mapped memory's address
-+ *	0 on success, or a negative errno code otherwise.
-  */
--void *drm_client_buffer_vmap(struct drm_client_buffer *buffer)
-+int
-+drm_client_buffer_vmap(struct drm_client_buffer *buffer, struct dma_buf_map *map_copy)
- {
--	struct dma_buf_map map;
-+	struct dma_buf_map *map = &buffer->map;
- 	int ret;
- 
--	if (buffer->vaddr)
--		return buffer->vaddr;
-+	if (dma_buf_map_is_set(map))
-+		goto out;
- 
- 	/*
- 	 * FIXME: The dependency on GEM here isn't required, we could
-@@ -319,13 +325,14 @@ void *drm_client_buffer_vmap(struct drm_client_buffer *buffer)
- 	 * fd_install step out of the driver backend hooks, to make that
- 	 * final step optional for internal users.
- 	 */
--	ret = drm_gem_vmap(buffer->gem, &map);
-+	ret = drm_gem_vmap(buffer->gem, map);
- 	if (ret)
--		return ERR_PTR(ret);
-+		return ret;
- 
--	buffer->vaddr = map.vaddr;
-+out:
-+	*map_copy = *map;
- 
--	return map.vaddr;
-+	return 0;
- }
- EXPORT_SYMBOL(drm_client_buffer_vmap);
- 
-@@ -339,10 +346,9 @@ EXPORT_SYMBOL(drm_client_buffer_vmap);
-  */
- void drm_client_buffer_vunmap(struct drm_client_buffer *buffer)
- {
--	struct dma_buf_map map = DMA_BUF_MAP_INIT_VADDR(buffer->vaddr);
-+	struct dma_buf_map *map = &buffer->map;
- 
--	drm_gem_vunmap(buffer->gem, &map);
--	buffer->vaddr = NULL;
-+	drm_gem_vunmap(buffer->gem, map);
- }
- EXPORT_SYMBOL(drm_client_buffer_vunmap);
- 
-diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
-index 92e0db30fdf7..a0d88130fedb 100644
---- a/drivers/gpu/drm/drm_fb_helper.c
-+++ b/drivers/gpu/drm/drm_fb_helper.c
-@@ -378,7 +378,7 @@ static void drm_fb_helper_dirty_blit_real(struct drm_fb_helper *fb_helper,
- 	unsigned int cpp = fb->format->cpp[0];
- 	size_t offset = clip->y1 * fb->pitches[0] + clip->x1 * cpp;
- 	void *src = fb_helper->fbdev->screen_buffer + offset;
--	void *dst = fb_helper->buffer->vaddr + offset;
-+	void *dst = fb_helper->buffer->map.vaddr + offset;
- 	size_t len = (clip->x2 - clip->x1) * cpp;
- 	unsigned int y;
- 
-@@ -400,7 +400,8 @@ static void drm_fb_helper_dirty_work(struct work_struct *work)
- 	struct drm_clip_rect *clip = &helper->dirty_clip;
- 	struct drm_clip_rect clip_copy;
- 	unsigned long flags;
--	void *vaddr;
-+	struct dma_buf_map map;
-+	int ret;
- 
- 	spin_lock_irqsave(&helper->dirty_lock, flags);
- 	clip_copy = *clip;
-@@ -413,8 +414,8 @@ static void drm_fb_helper_dirty_work(struct work_struct *work)
- 
- 		/* Generic fbdev uses a shadow buffer */
- 		if (helper->buffer) {
--			vaddr = drm_client_buffer_vmap(helper->buffer);
--			if (IS_ERR(vaddr))
-+			ret = drm_client_buffer_vmap(helper->buffer, &map);
-+			if (ret)
- 				return;
- 			drm_fb_helper_dirty_blit_real(helper, &clip_copy);
- 		}
-@@ -2060,7 +2061,8 @@ static int drm_fb_helper_generic_probe(struct drm_fb_helper *fb_helper,
- 	struct drm_framebuffer *fb;
- 	struct fb_info *fbi;
- 	u32 format;
--	void *vaddr;
-+	struct dma_buf_map map;
-+	int ret;
- 
- 	drm_dbg_kms(dev, "surface width(%d), height(%d) and bpp(%d)\n",
- 		    sizes->surface_width, sizes->surface_height,
-@@ -2096,14 +2098,22 @@ static int drm_fb_helper_generic_probe(struct drm_fb_helper *fb_helper,
- 		fb_deferred_io_init(fbi);
- 	} else {
- 		/* buffer is mapped for HW framebuffer */
--		vaddr = drm_client_buffer_vmap(fb_helper->buffer);
--		if (IS_ERR(vaddr))
--			return PTR_ERR(vaddr);
-+		ret = drm_client_buffer_vmap(fb_helper->buffer, &map);
-+		if (ret)
-+			return ret;
-+		if (map.is_iomem)
-+			fbi->screen_base = map.vaddr_iomem;
-+		else
-+			fbi->screen_buffer = map.vaddr;
- 
--		fbi->screen_buffer = vaddr;
--		/* Shamelessly leak the physical address to user-space */
-+		/*
-+		 * Shamelessly leak the physical address to user-space. As
-+		 * page_to_phys() is undefined for I/O memory, warn in this
-+		 * case.
-+		 */
- #if IS_ENABLED(CONFIG_DRM_FBDEV_LEAK_PHYS_SMEM)
--		if (drm_leak_fbdev_smem && fbi->fix.smem_start == 0)
-+		if (drm_leak_fbdev_smem && fbi->fix.smem_start == 0 &&
-+		    !drm_WARN_ON_ONCE(dev, map.is_iomem))
- 			fbi->fix.smem_start =
- 				page_to_phys(virt_to_page(fbi->screen_buffer));
- #endif
-diff --git a/include/drm/drm_client.h b/include/drm/drm_client.h
-index 7aaea665bfc2..f07f2fb02e75 100644
---- a/include/drm/drm_client.h
-+++ b/include/drm/drm_client.h
-@@ -3,6 +3,7 @@
- #ifndef _DRM_CLIENT_H_
- #define _DRM_CLIENT_H_
- 
-+#include <linux/dma-buf-map.h>
- #include <linux/lockdep.h>
- #include <linux/mutex.h>
- #include <linux/types.h>
-@@ -141,9 +142,9 @@ struct drm_client_buffer {
- 	struct drm_gem_object *gem;
- 
- 	/**
--	 * @vaddr: Virtual address for the buffer
-+	 * @map: Virtual address for the buffer
- 	 */
--	void *vaddr;
-+	struct dma_buf_map map;
- 
- 	/**
- 	 * @fb: DRM framebuffer
-@@ -155,7 +156,7 @@ struct drm_client_buffer *
- drm_client_framebuffer_create(struct drm_client_dev *client, u32 width, u32 height, u32 format);
- void drm_client_framebuffer_delete(struct drm_client_buffer *buffer);
- int drm_client_framebuffer_flush(struct drm_client_buffer *buffer, struct drm_rect *rect);
--void *drm_client_buffer_vmap(struct drm_client_buffer *buffer);
-+int drm_client_buffer_vmap(struct drm_client_buffer *buffer, struct dma_buf_map *map);
- void drm_client_buffer_vunmap(struct drm_client_buffer *buffer);
- 
- int drm_client_modeset_create(struct drm_client_dev *client);
+ Tomi
+
 -- 
-2.29.0
-
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
