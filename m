@@ -2,204 +2,163 @@ Return-Path: <SRS0=g9gv=EJ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6B00C388F9
-	for <linux-media@archiver.kernel.org>; Tue,  3 Nov 2020 21:36:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E39A8C2D0A3
+	for <linux-media@archiver.kernel.org>; Tue,  3 Nov 2020 21:49:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8F1DF2064C
-	for <linux-media@archiver.kernel.org>; Tue,  3 Nov 2020 21:36:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 99F1321556
+	for <linux-media@archiver.kernel.org>; Tue,  3 Nov 2020 21:49:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1604440196;
+	bh=H/bahLUtNGlRGYIevvmapEfWHWWFAfHpFt8kL4xiXQA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=tCOQINNY+gTZ/WCKL36uAeddxt0aUD7q4A//lNSLCQN8GGuPC/g60IP++zSeFJOwG
+	 22G20fLeLlfD15x3iT7n02/a3b18A2bPVOyBRbGGI4dsUeQ+PYVfwkhizxk0qqH6we
+	 wYx4yUN7jZXRg5O+bG1Wj8RWol+qwu3+ny5PKb6k=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730615AbgKCVfG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 Nov 2020 16:35:06 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:52648 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387875AbgKCVdD (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Nov 2020 16:33:03 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: ezequiel)
-        with ESMTPSA id 9D8E71F45881
-From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Philipp Zabel <p.zabel@pengutronix.de>, cphealy@gmail.com,
-        Benjamin.Bara@skidata.com, l.stach@pengutronix.de,
-        Ezequiel Garcia <ezequiel@collabora.com>, kernel@collabora.com
-Subject: [PATCH v3 2/2] coda: Add a V4L2 user for control error macroblocks count
-Date:   Tue,  3 Nov 2020 18:32:38 -0300
-Message-Id: <20201103213238.575909-3-ezequiel@collabora.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201103213238.575909-1-ezequiel@collabora.com>
-References: <20201103213238.575909-1-ezequiel@collabora.com>
+        id S1731532AbgKCUt1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 3 Nov 2020 15:49:27 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42284 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731535AbgKCUt0 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 3 Nov 2020 15:49:26 -0500
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 64561223FD;
+        Tue,  3 Nov 2020 20:49:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604436564;
+        bh=H/bahLUtNGlRGYIevvmapEfWHWWFAfHpFt8kL4xiXQA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=fZNhfo31Yy6TcO9SQ1wjM64U4BOIlj6Wt1UcsqvtLGLHktjT5qTQnj1D5bHJoSzzL
+         5urSeXgEO6V+Fn0upevWsZXDInHEwJQUSmzbVXFBSRsRXI0GAFJwPZhSFWRnGbWQCs
+         5dLw7muACcI7fKTFgepnuXq0aF8vAxYvRb32Aa58=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Inki Dae <inki.dae@samsung.com>,
+        Joonyoung Shim <jy0922.shim@samsung.com>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Rob Herring <robh@kernel.org>, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        piotr.oniszczuk@gmail.com, Daniel Vetter <daniel.vetter@intel.com>
+Subject: [PATCH 5.9 267/391] drm/shme-helpers: Fix dma_buf_mmap forwarding bug
+Date:   Tue,  3 Nov 2020 21:35:18 +0100
+Message-Id: <20201103203405.042055538@linuxfoundation.org>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20201103203348.153465465@linuxfoundation.org>
+References: <20201103203348.153465465@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-To avoid potentially overflowing the kernel logs in the case
-of corrupted streams, this commit replaces an error message with
-a per-stream counter to be read through a driver-specific
-control.
+From: Daniel Vetter <daniel.vetter@ffwll.ch>
 
-Applications can read the per-stream accumulated
-error macroblocks count.
+commit f49a51bfdc8ea717c97ccd4cc98b7e6daaa5553a upstream.
 
-The old error message is replaced by a rate-limited debug message.
+When we forward an mmap to the dma_buf exporter, they get to own
+everything. Unfortunately drm_gem_mmap_obj() overwrote
+vma->vm_private_data after the driver callback, wreaking the
+exporter complete. This was noticed because vb2_common_vm_close blew
+up on mali gpu with panfrost after commit 26d3ac3cb04d
+("drm/shmem-helpers: Redirect mmap for imported dma-buf").
 
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+Unfortunately drm_gem_mmap_obj also acquires a surplus reference that
+we need to drop in shmem helpers, which is a bit of a mislayer
+situation. Maybe the entire dma_buf_mmap forwarding should be pulled
+into core gem code.
+
+Note that the only two other drivers which forward mmap in their own
+code (etnaviv and exynos) get this somewhat right by overwriting the
+gem mmap code. But they seem to still have the leak. This might be a
+good excuse to move these drivers over to shmem helpers completely.
+
+Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
+Acked-by: Christian König <christian.koenig@amd.com>
+Cc: Christian König <christian.koenig@amd.com>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: Lucas Stach <l.stach@pengutronix.de>
+Cc: Russell King <linux+etnaviv@armlinux.org.uk>
+Cc: Christian Gmeiner <christian.gmeiner@gmail.com>
+Cc: Inki Dae <inki.dae@samsung.com>
+Cc: Joonyoung Shim <jy0922.shim@samsung.com>
+Cc: Seung-Woo Kim <sw0312.kim@samsung.com>
+Cc: Kyungmin Park <kyungmin.park@samsung.com>
+Fixes: 26d3ac3cb04d ("drm/shmem-helpers: Redirect mmap for imported dma-buf")
+Cc: Boris Brezillon <boris.brezillon@collabora.com>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: Gerd Hoffmann <kraxel@redhat.com>
+Cc: Rob Herring <robh@kernel.org>
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-media@vger.kernel.org
+Cc: linaro-mm-sig@lists.linaro.org
+Cc: <stable@vger.kernel.org> # v5.9+
+Reported-and-tested-by: piotr.oniszczuk@gmail.com
+Cc: piotr.oniszczuk@gmail.com
+Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20201027214922.3566743-1-daniel.vetter@ffwll.ch
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
 ---
- drivers/media/platform/coda/coda-bit.c    | 10 +++++++---
- drivers/media/platform/coda/coda-common.c | 18 ++++++++++++++++++
- drivers/media/platform/coda/coda.h        | 10 ++++++++++
- include/uapi/linux/v4l2-controls.h        |  4 ++++
- 4 files changed, 39 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/drm_gem.c              |    4 ++--
+ drivers/gpu/drm/drm_gem_shmem_helper.c |    7 ++++++-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/coda/coda-bit.c b/drivers/media/platform/coda/coda-bit.c
-index 919b36d753ec..6ff7a001e578 100644
---- a/drivers/media/platform/coda/coda-bit.c
-+++ b/drivers/media/platform/coda/coda-bit.c
-@@ -13,6 +13,7 @@
- #include <linux/kernel.h>
- #include <linux/log2.h>
- #include <linux/platform_device.h>
-+#include <linux/ratelimit.h>
- #include <linux/reset.h>
- #include <linux/slab.h>
- #include <linux/videodev2.h>
-@@ -2369,9 +2370,12 @@ static void coda_finish_decode(struct coda_ctx *ctx)
+--- a/drivers/gpu/drm/drm_gem.c
++++ b/drivers/gpu/drm/drm_gem.c
+@@ -1085,6 +1085,8 @@ int drm_gem_mmap_obj(struct drm_gem_obje
+ 	 */
+ 	drm_gem_object_get(obj);
+ 
++	vma->vm_private_data = obj;
++
+ 	if (obj->funcs && obj->funcs->mmap) {
+ 		ret = obj->funcs->mmap(obj, vma);
+ 		if (ret) {
+@@ -1107,8 +1109,6 @@ int drm_gem_mmap_obj(struct drm_gem_obje
+ 		vma->vm_page_prot = pgprot_decrypted(vma->vm_page_prot);
  	}
  
- 	err_mb = coda_read(dev, CODA_RET_DEC_PIC_ERR_MB);
--	if (err_mb > 0)
--		v4l2_err(&dev->v4l2_dev,
--			 "errors in %d macroblocks\n", err_mb);
-+	if (err_mb > 0) {
-+		if (__ratelimit(&dev->err_mb_rs))
-+			coda_dbg(1, ctx, "errors in %d macroblocks\n", err_mb);
-+		v4l2_ctrl_s_ctrl(ctx->err_mb_ctrl,
-+				 v4l2_ctrl_g_ctrl(ctx->err_mb_ctrl) + err_mb);
+-	vma->vm_private_data = obj;
+-
+ 	return 0;
+ }
+ EXPORT_SYMBOL(drm_gem_mmap_obj);
+--- a/drivers/gpu/drm/drm_gem_shmem_helper.c
++++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
+@@ -594,8 +594,13 @@ int drm_gem_shmem_mmap(struct drm_gem_ob
+ 	/* Remove the fake offset */
+ 	vma->vm_pgoff -= drm_vma_node_start(&obj->vma_node);
+ 
+-	if (obj->import_attach)
++	if (obj->import_attach) {
++		/* Drop the reference drm_gem_mmap_obj() acquired.*/
++		drm_gem_object_put(obj);
++		vma->vm_private_data = NULL;
++
+ 		return dma_buf_mmap(obj->dma_buf, vma, 0);
 +	}
  
- 	if (dev->devtype->product == CODA_HX4 ||
- 	    dev->devtype->product == CODA_7541) {
-diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
-index 487dd653b24a..d7b066a3300b 100644
---- a/drivers/media/platform/coda/coda-common.c
-+++ b/drivers/media/platform/coda/coda-common.c
-@@ -26,6 +26,7 @@
- #include <linux/videodev2.h>
- #include <linux/of.h>
- #include <linux/platform_data/media/coda.h>
-+#include <linux/ratelimit.h>
- #include <linux/reset.h>
+ 	shmem = to_drm_gem_shmem_obj(obj);
  
- #include <media/v4l2-ctrls.h>
-@@ -2062,6 +2063,7 @@ static int coda_start_streaming(struct vb2_queue *q, unsigned int count)
- 	if (q_data_dst->fourcc == V4L2_PIX_FMT_JPEG)
- 		ctx->params.gop_size = 1;
- 	ctx->gopcounter = ctx->params.gop_size - 1;
-+	v4l2_ctrl_s_ctrl(ctx->err_mb_ctrl, 0);
- 
- 	ret = ctx->ops->start_streaming(ctx);
- 	if (ctx->inst_type == CODA_INST_DECODER) {
-@@ -2462,6 +2464,15 @@ static void coda_decode_ctrls(struct coda_ctx *ctx)
- 		ctx->mpeg4_level_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
- }
- 
-+static const struct v4l2_ctrl_config coda_err_mb_ctrl_config = {
-+	.id	= V4L2_CID_CODA_MB_ERR_CNT,
-+	.name	= "Macroblocks Error Count",
-+	.type	= V4L2_CTRL_TYPE_INTEGER,
-+	.min	= 0,
-+	.max	= 0x7fffffff,
-+	.step	= 1,
-+};
-+
- static int coda_ctrls_setup(struct coda_ctx *ctx)
- {
- 	v4l2_ctrl_handler_init(&ctx->ctrls, 2);
-@@ -2484,6 +2495,12 @@ static int coda_ctrls_setup(struct coda_ctx *ctx)
- 				  1, 1, 1, 1);
- 		if (ctx->cvd->src_formats[0] == V4L2_PIX_FMT_H264)
- 			coda_decode_ctrls(ctx);
-+
-+		ctx->err_mb_ctrl = v4l2_ctrl_new_custom(&ctx->ctrls,
-+						&coda_err_mb_ctrl_config,
-+						NULL);
-+		if (ctx->err_mb_ctrl)
-+			ctx->err_mb_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
- 	}
- 
- 	if (ctx->ctrls.error) {
-@@ -3202,6 +3219,7 @@ static int coda_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
-+	ratelimit_default_init(&dev->err_mb_rs);
- 	mutex_init(&dev->dev_mutex);
- 	mutex_init(&dev->coda_mutex);
- 	ida_init(&dev->ida);
-diff --git a/drivers/media/platform/coda/coda.h b/drivers/media/platform/coda/coda.h
-index e53f7a65d532..4dd7bdbcde52 100644
---- a/drivers/media/platform/coda/coda.h
-+++ b/drivers/media/platform/coda/coda.h
-@@ -17,6 +17,7 @@
- #include <linux/mutex.h>
- #include <linux/kfifo.h>
- #include <linux/videodev2.h>
-+#include <linux/ratelimit.h>
- 
- #include <media/v4l2-ctrls.h>
- #include <media/v4l2-device.h>
-@@ -28,6 +29,13 @@
- #define CODA_MAX_FRAMEBUFFERS	19
- #define FMO_SLICE_SAVE_BUF_SIZE	(32)
- 
-+/*
-+ * This control allows aplications to read the per-stream
-+ * (i.e. per-context) Macroblocks Error Count. This value
-+ * is CODA specific.
-+ */
-+#define V4L2_CID_CODA_MB_ERR_CNT (V4L2_CID_USER_CODA_BASE + 0)
-+
- enum {
- 	V4L2_M2M_SRC = 0,
- 	V4L2_M2M_DST = 1,
-@@ -92,6 +100,7 @@ struct coda_dev {
- 	struct v4l2_m2m_dev	*m2m_dev;
- 	struct ida		ida;
- 	struct dentry		*debugfs_root;
-+	struct ratelimit_state	err_mb_rs;
- };
- 
- struct coda_codec {
-@@ -242,6 +251,7 @@ struct coda_ctx {
- 	struct v4l2_ctrl		*mpeg2_level_ctrl;
- 	struct v4l2_ctrl		*mpeg4_profile_ctrl;
- 	struct v4l2_ctrl		*mpeg4_level_ctrl;
-+	struct v4l2_ctrl		*err_mb_ctrl;
- 	struct v4l2_fh			fh;
- 	int				gopcounter;
- 	int				runcounter;
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index a184c4939438..b4481d9579e7 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -198,6 +198,10 @@ enum v4l2_colorfx {
-  */
- #define V4L2_CID_USER_ATMEL_ISC_BASE		(V4L2_CID_USER_BASE + 0x10c0)
- 
-+/* The base for the CODA driver controls.
-+ * We reserve 16 controls for this driver. */
-+#define V4L2_CID_USER_CODA_BASE			(V4L2_CID_USER_BASE + 0x10e0)
-+
- /* MPEG-class control IDs */
- /* The MPEG controls are applicable to all codec controls
-  * and the 'MPEG' part of the define is historical */
--- 
-2.27.0
+
 
