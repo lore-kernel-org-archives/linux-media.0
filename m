@@ -2,177 +2,109 @@ Return-Path: <SRS0=g9gv=EJ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C05FBC388F9
-	for <linux-media@archiver.kernel.org>; Tue,  3 Nov 2020 21:30:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B548C388F7
+	for <linux-media@archiver.kernel.org>; Tue,  3 Nov 2020 21:33:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8070022226
-	for <linux-media@archiver.kernel.org>; Tue,  3 Nov 2020 21:30:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1604439057;
-	bh=gFAgHCJWNmyQv8XlwrCh9kp3qGCPYDz+IyZljoQ6Ups=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:List-ID:From;
-	b=kvHqzm1+k0vRX+oPvxEARHaOTr1ByVCOEdge9mWZFk1x7hEICFYzzJ7DIJ8Xdn5z6
-	 BC6gm88EmY9EQbomPWDRmTOPSgY2/LJfULvPGmLqkUTcaS4sEIdg2iN8t+x2Qo1aY1
-	 3LrbYzGDPyQw7Wk4hgPvlDkeFNPkDKzamw4RaGgM=
+	by mail.kernel.org (Postfix) with ESMTP id 0E6152236F
+	for <linux-media@archiver.kernel.org>; Tue,  3 Nov 2020 21:33:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732753AbgKCVax (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 Nov 2020 16:30:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49892 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731546AbgKCVau (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 3 Nov 2020 16:30:50 -0500
-Received: from localhost (230.sub-72-107-127.myvzw.com [72.107.127.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 44A0721534;
-        Tue,  3 Nov 2020 21:30:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604439049;
-        bh=gFAgHCJWNmyQv8XlwrCh9kp3qGCPYDz+IyZljoQ6Ups=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=HPIF3XrIciMDdSu7IGKOJ2VjSvbDSacEXORbsIuVGj6fyf3x9OQrRmMY+UbQhcHod
-         S0PweedIfoil4rWheiyrbxThkEJx6xR3EmK7UER4Lwppn2I8mdb/JZGIaxfx9sH5wo
-         Y1sD3IWMwbGA0osqLFzmB0xss30QQlrpQVsT0BXs=
-Date:   Tue, 3 Nov 2020 15:30:47 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
-        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-media@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Kees Cook <keescook@chromium.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
-        Jan Kara <jack@suse.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v5 15/15] PCI: Revoke mappings like devmem
-Message-ID: <20201103213047.GA267004@bjorn-Precision-5520>
+        id S1732382AbgKCVc6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 3 Nov 2020 16:32:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57124 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732579AbgKCVc6 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Nov 2020 16:32:58 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5CBC0613D1
+        for <linux-media@vger.kernel.org>; Tue,  3 Nov 2020 13:32:57 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id 6CB411F45881
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     linux-media@vger.kernel.org
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Philipp Zabel <p.zabel@pengutronix.de>, cphealy@gmail.com,
+        Benjamin.Bara@skidata.com, l.stach@pengutronix.de,
+        Ezequiel Garcia <ezequiel@collabora.com>, kernel@collabora.com
+Subject: [PATCH v3 0/2] CODA timeout and macroblock error control
+Date:   Tue,  3 Nov 2020 18:32:36 -0300
+Message-Id: <20201103213238.575909-1-ezequiel@collabora.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201030100815.2269-16-daniel.vetter@ffwll.ch>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Oct 30, 2020 at 11:08:15AM +0100, Daniel Vetter wrote:
-> Since 3234ac664a87 ("/dev/mem: Revoke mappings when a driver claims
-> the region") /dev/kmem zaps ptes when the kernel requests exclusive
-> acccess to an iomem region. And with CONFIG_IO_STRICT_DEVMEM, this is
-> the default for all driver uses.
-> 
-> Except there's two more ways to access PCI BARs: sysfs and proc mmap
-> support. Let's plug that hole.
-> 
-> For revoke_devmem() to work we need to link our vma into the same
-> address_space, with consistent vma->vm_pgoff. ->pgoff is already
-> adjusted, because that's how (io_)remap_pfn_range works, but for the
-> mapping we need to adjust vma->vm_file->f_mapping. The cleanest way is
-> to adjust this at at ->open time:
-> 
-> - for sysfs this is easy, now that binary attributes support this. We
->   just set bin_attr->mapping when mmap is supported
-> - for procfs it's a bit more tricky, since procfs pci access has only
->   one file per device, and access to a specific resources first needs
->   to be set up with some ioctl calls. But mmap is only supported for
->   the same resources as sysfs exposes with mmap support, and otherwise
->   rejected, so we can set the mapping unconditionally at open time
->   without harm.
-> 
-> A special consideration is for arch_can_pci_mmap_io() - we need to
-> make sure that the ->f_mapping doesn't alias between ioport and iomem
-> space. There's only 2 ways in-tree to support mmap of ioports: generic
-> pci mmap (ARCH_GENERIC_PCI_MMAP_RESOURCE), and sparc as the single
-> architecture hand-rolling. Both approach support ioport mmap through a
-> special pfn range and not through magic pte attributes. Aliasing is
-> therefore not a problem.
-> 
-> The only difference in access checks left is that sysfs PCI mmap does
-> not check for CAP_RAWIO. I'm not really sure whether that should be
-> added or not.
-> 
-> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: John Hubbard <jhubbard@nvidia.com>
-> Cc: Jérôme Glisse <jglisse@redhat.com>
-> Cc: Jan Kara <jack@suse.cz>
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-mm@kvack.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-samsung-soc@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: linux-pci@vger.kernel.org
-> Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Hi all,
 
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+I'm sending here the patches that are pending in previous series [2].
 
-> --
-> v2:
-> - Totally new approach: Adjust filp->f_mapping at open time. Note that
->   this now works on all architectures, not just those support
->   ARCH_GENERIC_PCI_MMAP_RESOURCE
-> ---
->  drivers/pci/pci-sysfs.c | 4 ++++
->  drivers/pci/proc.c      | 1 +
->  2 files changed, 5 insertions(+)
-> 
-> diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
-> index d15c881e2e7e..3f1c31bc0b7c 100644
-> --- a/drivers/pci/pci-sysfs.c
-> +++ b/drivers/pci/pci-sysfs.c
-> @@ -929,6 +929,7 @@ void pci_create_legacy_files(struct pci_bus *b)
->  	b->legacy_io->read = pci_read_legacy_io;
->  	b->legacy_io->write = pci_write_legacy_io;
->  	b->legacy_io->mmap = pci_mmap_legacy_io;
-> +	b->legacy_io->mapping = iomem_get_mapping();
->  	pci_adjust_legacy_attr(b, pci_mmap_io);
->  	error = device_create_bin_file(&b->dev, b->legacy_io);
->  	if (error)
-> @@ -941,6 +942,7 @@ void pci_create_legacy_files(struct pci_bus *b)
->  	b->legacy_mem->size = 1024*1024;
->  	b->legacy_mem->attr.mode = 0600;
->  	b->legacy_mem->mmap = pci_mmap_legacy_mem;
-> +	b->legacy_io->mapping = iomem_get_mapping();
->  	pci_adjust_legacy_attr(b, pci_mmap_mem);
->  	error = device_create_bin_file(&b->dev, b->legacy_mem);
->  	if (error)
-> @@ -1156,6 +1158,8 @@ static int pci_create_attr(struct pci_dev *pdev, int num, int write_combine)
->  			res_attr->mmap = pci_mmap_resource_uc;
->  		}
->  	}
-> +	if (res_attr->mmap)
-> +		res_attr->mapping = iomem_get_mapping();
->  	res_attr->attr.name = res_attr_name;
->  	res_attr->attr.mode = 0600;
->  	res_attr->size = pci_resource_len(pdev, num);
-> diff --git a/drivers/pci/proc.c b/drivers/pci/proc.c
-> index 3a2f90beb4cb..9bab07302bbf 100644
-> --- a/drivers/pci/proc.c
-> +++ b/drivers/pci/proc.c
-> @@ -298,6 +298,7 @@ static int proc_bus_pci_open(struct inode *inode, struct file *file)
->  	fpriv->write_combine = 0;
->  
->  	file->private_data = fpriv;
-> +	file->f_mapping = iomem_get_mapping();
->  
->  	return 0;
->  }
-> -- 
-> 2.28.0
-> 
+The main motivation for this fix is to address a PIC_RUN
+timeout, which we managed to link with a hardware bitstream
+buffer underrun condition.
+
+Upon further investigation we discovered that the underrun
+was produced by a subtle issue in the way buffer_meta's were
+being tracked.
+
+The issue is fixed by patch "1/2 coda: coda_buffer_meta housekeeping fix".
+
+Also, while testing with corrupted bitstreams we realized
+the driver was logging too verbosely, so patch 2 addresses
+this by introducing a private control to read an macroblock-error
+counter.
+
+These patches have been tested against media's upstream
+and v5.4-based, on i.MX6 (Wandboard) with H.264 and MPEG-2
+streams.
+
+As reported by Benjamin Bara this fix is not sufficient
+to fix all timeouts. However, the fix does help to fix
+some of the cases.
+
+For instance, videos containing small black frames,
+are now fixed. See:
+
+gst-launch-1.0 videotestsrc pattern=black num-buffers=300 ! \
+video/x-raw,format=I420,width=176,height=120 ! avenc_mpeg2video ! \
+mpegvideoparse ! mpegtsmux ! filesink location=black-qcif-10s.ts
+
+Reviews and feedback are appreciated, as always.
+
+[1] https://lkml.org/lkml/2020/8/21/495
+[2] https://patchwork.linuxtv.org/project/linux-media/list/?series=3592
+
+Changelog
+---------
+
+v3:
+* Address Hans' feedback on patch 2.
+  In particular, the control is not marked as volatile,
+  since that was incorrect.
+  Also, move the control CID definition inside the driver header.
+
+v2:
+* Keep the error MB message, but move it to coda_dbg(1, ctx).
+* Add per-device rate limitting for the error MB message.
+* Rename V4L2_CID_CODA_ERR_MB description.
+* s/__coda_decoder_drop_used_metas/coda_decoder_drop_used_metas
+
+Ezequiel Garcia (2):
+  coda: coda_buffer_meta housekeeping fix
+  coda: Add a V4L2 user for control error macroblocks count
+
+ drivers/media/platform/coda/coda-bit.c    | 52 ++++++++++++++++++++---
+ drivers/media/platform/coda/coda-common.c | 18 ++++++++
+ drivers/media/platform/coda/coda.h        | 11 +++++
+ include/uapi/linux/v4l2-controls.h        |  4 ++
+ 4 files changed, 78 insertions(+), 7 deletions(-)
+
+-- 
+2.27.0
+
