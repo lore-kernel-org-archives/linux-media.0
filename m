@@ -5,59 +5,59 @@ X-Spam-Level:
 X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE96EC2D0A3
-	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 23:49:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC12CC388F7
+	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 23:49:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 81E152075E
-	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 23:49:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6F90A2075E
+	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 23:49:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ERKSO83J"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NdQEwwdM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387755AbgKDXtu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 4 Nov 2020 18:49:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48214 "EHLO
+        id S2387775AbgKDXtw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 4 Nov 2020 18:49:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733075AbgKDXpG (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Nov 2020 18:45:06 -0500
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFAB2C0613CF;
-        Wed,  4 Nov 2020 15:45:05 -0800 (PST)
-Received: by mail-lj1-x241.google.com with SMTP id m16so307120ljo.6;
-        Wed, 04 Nov 2020 15:45:05 -0800 (PST)
+        with ESMTP id S1733031AbgKDXpC (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Nov 2020 18:45:02 -0500
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD9ACC0613CF;
+        Wed,  4 Nov 2020 15:45:01 -0800 (PST)
+Received: by mail-lj1-x242.google.com with SMTP id 11so328100ljf.2;
+        Wed, 04 Nov 2020 15:45:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=yQimpkIRWNQnMpbdhCpUPNBZvo/GpufqvOqt4z0qAwA=;
-        b=ERKSO83J6tv0QUdt8vnWSOE1GpIwg7mIR1JUrs4PyfgPVzV1mH7mEpyAJOsSR12xY3
-         rsldAI/5QE2rxBoNdwYh3hxk/wzRAkSsKIoHuD22P4lN8jkkBxNCFgbBpKfwYVwMtiZk
-         hY1Z1gChPo7sDA1p9MxN+Mx1EdAo2nz8TwGsz+e38nVaIbWMWUcpVKqUAWxqflyFUc2z
-         zmVkx897k9/dL5uXgyLRVGwDyjmwfMJMHjINdfH3z7T1O6RmI6/62I+J/f3RaDIG1/F3
-         b5/NryfWaEyEXi653d2wn4BVQldGJhyt9pi+F4OHBx7bGp4zD1BVXptYQfB0SIoKU8RY
-         hraA==
+        bh=tp9Yqrg3ShDWskF8okk8dyCecDIPmsRhr05c/t0mOxA=;
+        b=NdQEwwdMZ/yJ8OPkD9uloM0o9Ugj2c5ieJ8wp9NIAg4kjdkCRrrp6Ude1JYuYIY5el
+         cQ6T9hxjtsLOMggnGayrIGviTd5zP5TmyeAhR19Q9fq/kaJCXx7OBuhnTCeqhvfrSguA
+         Rv4ks7q4ok1WjbMowL1f6z63nyrF+GmoOHEaAOUS5Fxj/XKxQW14PgoN1eaL3naw79IX
+         aLkXyfnX2RmIvqjqe6TajXkhlx2gBtY4zoXde/weS+BuPwWztMj9RUDljXw++NeoX+21
+         CEVubhkQvuVQyjMvWVwLaZygJnsPTNBVNntcOhwNXbHdInAh8pVfdkI0IC9sCjSOa/LH
+         qo2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=yQimpkIRWNQnMpbdhCpUPNBZvo/GpufqvOqt4z0qAwA=;
-        b=IwgLlblmv4oEz0X8GFhXSi1NawTXzJBOmCqbT24O4Z/uou33FoZn6A2xIc686i6Byy
-         AWVsI2bhBn7Q/PVQNox+kKh0hMina6igFUtwQ5LKa/9OqXHXELDeY96PqtfLJuBrXlfX
-         /uT+cS+5VkPufQ/D/cZGygUyH6brjSCD4tJiXvT8r7hX3jF3bgrVkDKbI9dOvv1FoqO3
-         44CpLq6KkynYXK2O4VybELiyhEqowTyMvGSQyv4/t4g3e3Hen2E6FWTLO2Ajm6WO+Dko
-         42DnU+/W4fcUKeHOQNrwSOJbrjd52FAmyRKVHE0StPaOZAb6w+FecGuzjpKU9NrDOnZg
-         p4kg==
-X-Gm-Message-State: AOAM531/WLVHSJg+Vgvx261wVKzzp4y+FyLZ1ASQl80C8tPaM8o8UP2y
-        2P0EvjAdgGRCLg5a/hkTs18=
-X-Google-Smtp-Source: ABdhPJzqZV2lUSiNvg9T7GHr724oG0dGwDbtok/GVt9MVRYZxSxIwkdsf2v5hnfIaDwbq85V2zwywA==
-X-Received: by 2002:a2e:b169:: with SMTP id a9mr156579ljm.84.1604533504504;
-        Wed, 04 Nov 2020 15:45:04 -0800 (PST)
+        bh=tp9Yqrg3ShDWskF8okk8dyCecDIPmsRhr05c/t0mOxA=;
+        b=GuYvKs6IlBYVuym5W3SCX+yQZ1ftk3igi0xdt38SS0m6NbWNVH9UjHo58iqG9ZSx7S
+         8+EtPtZv7n/TNPH1/TSYH6juymFVKG6MABeAC2nVd6pGpE3BhHHC7gCyWCR0BAgsyQqi
+         dmqGz0En9TgGB5qRE1ilWlUj9/jOsRUiEahDEp44OY/10vRUe0NaZsKkZm/hFkDGWCeh
+         xdyGG9as7e81JU9U/EJ92EUohVi4g68T/C6AEaGW6b6Gm1bCoH55C1HROmzde7q6JmW+
+         2rPMd7Lf1yGlJbpeXHvbajMqLTBxLD0bXjtKbFU+kQX5toPKxUQDepxM70CgPhr2r36o
+         MGLw==
+X-Gm-Message-State: AOAM533bgWQjzq69UbaRmaKF8yjnj6rhakPZ8GNcmSNN16tXRnjIQK8k
+        VCgJmzpGp1ahG6az2jpdX0pQDfEslrs=
+X-Google-Smtp-Source: ABdhPJyMzZS8yFbdeuBZmLEvuZcRuMGo/R+/3Gh1ylV5XVZW8SAuxgU/GPnV+T1exBhvuYiAMbxSkQ==
+X-Received: by 2002:a05:651c:32a:: with SMTP id b10mr125604ljp.256.1604533500240;
+        Wed, 04 Nov 2020 15:45:00 -0800 (PST)
 Received: from localhost.localdomain (109-252-192-83.dynamic.spd-mgts.ru. [109.252.192.83])
-        by smtp.gmail.com with ESMTPSA id m6sm640725ljc.112.2020.11.04.15.45.03
+        by smtp.gmail.com with ESMTPSA id m6sm640725ljc.112.2020.11.04.15.44.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2020 15:45:04 -0800 (PST)
+        Wed, 04 Nov 2020 15:44:59 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -82,9 +82,9 @@ Cc:     linux-samsung-soc@vger.kernel.org, devel@driverdev.osuosl.org,
         linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-media@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH v1 06/30] dt-bindings: usb: tegra-ehci: Document OPP and voltage regulator properties
-Date:   Thu,  5 Nov 2020 02:44:03 +0300
-Message-Id: <20201104234427.26477-7-digetx@gmail.com>
+Subject: [PATCH v1 03/30] dt-bindings: pwm: tegra: Document OPP and voltage regulator properties
+Date:   Thu,  5 Nov 2020 02:44:00 +0300
+Message-Id: <20201104234427.26477-4-digetx@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201104234427.26477-1-digetx@gmail.com>
 References: <20201104234427.26477-1-digetx@gmail.com>
@@ -95,23 +95,44 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 Document new DVFS OPP table and voltage regulator properties of the
-Tegra EHCI controller.
+PWM controller.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.txt | 2 ++
- 1 file changed, 2 insertions(+)
+ .../devicetree/bindings/pwm/nvidia,tegra20-pwm.txt  | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.txt b/Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.txt
-index f60785f73d3d..e4070ae21fd9 100644
---- a/Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.txt
-+++ b/Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.txt
-@@ -21,3 +21,5 @@ Required properties :
- Optional properties:
-  - nvidia,needs-double-reset : boolean is to be set for some of the Tegra20
-    USB ports, which need reset twice due to hardware issues.
-+ - operating-points-v2: See ../bindings/opp/opp.txt for details.
-+ - core-supply: Phandle of voltage regulator of the SoC "core" power domain.
+diff --git a/Documentation/devicetree/bindings/pwm/nvidia,tegra20-pwm.txt b/Documentation/devicetree/bindings/pwm/nvidia,tegra20-pwm.txt
+index 74c41e34c3b6..d4d1c44a2c04 100644
+--- a/Documentation/devicetree/bindings/pwm/nvidia,tegra20-pwm.txt
++++ b/Documentation/devicetree/bindings/pwm/nvidia,tegra20-pwm.txt
+@@ -32,6 +32,17 @@ The PWM node will have following optional properties.
+ pinctrl-names:	Pin state names. Must be "default" and "sleep".
+ pinctrl-0:	phandle for the default/active state of pin configurations.
+ pinctrl-1:	phandle for the sleep state of pin configurations.
++core-supply:	phandle for voltage regulator of the SoC "core" power domain.
++
++operating-points-v2: see ../bindings/opp/opp.txt for details.
++
++For each opp entry in 'operating-points-v2' table:
++- opp-supported-hw: One bitfield indicating:
++	On Tegra20: SoC process ID mask
++	On Tegra30+: SoC speedo ID mask
++
++	A bitwise AND is performed against the value and if any bit
++	matches, the OPP gets enabled.
+ 
+ Example:
+ 
+@@ -42,6 +53,8 @@ Example:
+ 		clocks = <&tegra_car 17>;
+ 		resets = <&tegra_car 17>;
+ 		reset-names = "pwm";
++		operating-points-v2 = <&dvfs_opp_table>;
++		core-supply = <&vdd_core>;
+ 	};
+ 
+ 
 -- 
 2.27.0
 
