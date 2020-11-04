@@ -2,62 +2,61 @@ Return-Path: <SRS0=eCLo=EK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F47CC55178
-	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 23:50:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A26BC61DD8
+	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 23:50:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C0E6620825
-	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 23:50:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 110F82075E
+	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 23:50:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RYHHskPJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QtXKfweB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732911AbgKDXtu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 4 Nov 2020 18:49:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
+        id S2387478AbgKDXup (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 4 Nov 2020 18:50:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733080AbgKDXpH (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Nov 2020 18:45:07 -0500
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6084CC0613CF;
-        Wed,  4 Nov 2020 15:45:07 -0800 (PST)
-Received: by mail-lf1-x144.google.com with SMTP id 74so173482lfo.5;
-        Wed, 04 Nov 2020 15:45:07 -0800 (PST)
+        with ESMTP id S1733029AbgKDXo6 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Nov 2020 18:44:58 -0500
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F16BC0613CF;
+        Wed,  4 Nov 2020 15:44:57 -0800 (PST)
+Received: by mail-lf1-x141.google.com with SMTP id y184so132955lfa.12;
+        Wed, 04 Nov 2020 15:44:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=8io/AuwE9hSBV+UikMlwrOCtvobyeL+cVj0iobaBFjY=;
-        b=RYHHskPJkgL8RbvQMCrIVAd/fnOIhkTQ7wgOEfNNTfAdG5lHXkftQLRxy5hk4POBGp
-         a7fJhZFX1tG1CyGd12dsPam7clbL5rpBMlgr9SnrNFcKFT1attyKsxu5dSt2CxGxGgt9
-         0/rI5A9TWa6bvDJqQO/RT5IfF1TXpDigjhYZ1a2vbIwVfPJVBKN2cntipdDXzs0d3JLY
-         C2E7CZ00Ow0Ewuq8AhJagmHq7ZQ+QpMYocFnngpmju4+fhIN0de+/bbrctY7MyBOeYmy
-         4t3RRE5LSW6sgjWbEyw9zUFePUAedZjPr0YLF1ysQRvJWsBvoQMGZTvL9yGxNO3F2iQ6
-         JTig==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mSwbQjJ1cVy439QSgrXK9AcLY7148KkOFvsAqpIxmwg=;
+        b=QtXKfweBRlsbGOAlYxZXOz/lYCy8unSAvDGjjvWSh/sezRhvIb291EkMy/Az42Eo7e
+         TAfz8YALCyTQ46RYjcz1KHr1bxx3QIW42M38LghlqXeAJIOhgwnXDJ2w5PFdGxUrDaJa
+         CgbvRUnmn+hP+Q9Jgoz/cIcjn3sh+vTzr920aJr959sxIfklRYfD0wQYr1mK7xUjvoYi
+         X2ev0EAqFLOjT7G0Gaih9PQ6buZ2mt73AMYcrCt1Dn2Wa1sOYP2Wywby9BlcF6QCpkRM
+         Ts50hSUFzQvXaYS6FgwlN+Yz+9QeF79aJ602AxxMXZAJiSKQWJJzQ4tzPEnhrIo8A+OP
+         CRyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=8io/AuwE9hSBV+UikMlwrOCtvobyeL+cVj0iobaBFjY=;
-        b=HWRXOIyKFYsdDpKolcth8YoSXcXalEhZU+L1064Vikg4CIz7CzBxg+re5F9SHcGSMP
-         djld1RaheJVYwWRNMfnSOgA+j04wGUR/ADDO/Uoe2tma/nnpDnDmAqQ3ZekrLnf2U9fp
-         IDWRPb7sfxLd/ypxDCrd5HdagsddWCFngl61PguDfKd61NhWMPbFa3H0TgFp3NthAXws
-         /rmGDZPCblOlkoDgXdSJ8hYvOefs6bXCzKHz+uJQ7bQhviGeyDtuO9dsuVDT3hr/lRbh
-         WnYGDuRbiNyA/GqTZ+W1NjNGyOiTVAX/GVbuiKu89rkeSwkKl/903qD/T4gey9mrHeqL
-         RBbg==
-X-Gm-Message-State: AOAM530eX1Zbffd+h+cyhU03NfhDbavGXPVL9zhg9XqldhFRLhJTNGtC
-        jY2Q4+4l1sq+HclZnpX/0Is=
-X-Google-Smtp-Source: ABdhPJzlkxK6JlDq7/JyguBWUauzapYlz0OXSjqbTR9Fc6MhZ6ofAqWYcl08mCtkPyVFyjp3Fqzsfw==
-X-Received: by 2002:a05:6512:36c5:: with SMTP id e5mr37374lfs.433.1604533505864;
-        Wed, 04 Nov 2020 15:45:05 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mSwbQjJ1cVy439QSgrXK9AcLY7148KkOFvsAqpIxmwg=;
+        b=CHfmP0EBUT82N4MB+0o69Qlqbx8NL1aILsx3GkrJy7iQbCsEosJv9mx7ydBOPYIQpB
+         EQsJrXzANjE6AnkbLT+V1esVVC9CzARvTGylZWjup6fwYiySwfX/cyH/nVRJZduWiPd3
+         cubZfxp8//zXhcuOsZYcwhW46nyS+OXy3o+VsCUyS4r3x85ChORNkU+7OcsbYS0Vo3QP
+         +DdOAX4BMm3ZOBy6g4iXZ4M7no2deXiJMKXeZqwLk+KncOYmhXtwrXXqjsMywBlNXGjr
+         SCqB9qMKXq27qJ7ePul5o2TN1NhB+lTrjU2UZ4wt8us8NCKCxMeS/7PG5JFYn7ec+CYC
+         GhVA==
+X-Gm-Message-State: AOAM5338YjWVZgPbgkJnag5JvK6trQIK3AOuqSvQGGxXar+mSRXaBdvc
+        jI4ifJJ0BUHOWL5xESbGbfw=
+X-Google-Smtp-Source: ABdhPJyAnR4d+zZoZfcUMnF37/CdTyI5a7cshqFtJeUxmjjzKi7K0NU+QmIwz6qwfyOY2SPBqOSB8Q==
+X-Received: by 2002:a19:c8c1:: with SMTP id y184mr46637lff.598.1604533495960;
+        Wed, 04 Nov 2020 15:44:55 -0800 (PST)
 Received: from localhost.localdomain (109-252-192-83.dynamic.spd-mgts.ru. [109.252.192.83])
-        by smtp.gmail.com with ESMTPSA id m6sm640725ljc.112.2020.11.04.15.45.04
+        by smtp.gmail.com with ESMTPSA id m6sm640725ljc.112.2020.11.04.15.44.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2020 15:45:05 -0800 (PST)
+        Wed, 04 Nov 2020 15:44:55 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -82,249 +81,129 @@ Cc:     linux-samsung-soc@vger.kernel.org, devel@driverdev.osuosl.org,
         linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-media@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH v1 07/30] soc/tegra: Add sync state API
-Date:   Thu,  5 Nov 2020 02:44:04 +0300
-Message-Id: <20201104234427.26477-8-digetx@gmail.com>
+Subject: [PATCH v1 00/30] Introduce core voltage scaling for NVIDIA Tegra20/30 SoCs
+Date:   Thu,  5 Nov 2020 02:43:57 +0300
+Message-Id: <20201104234427.26477-1-digetx@gmail.com>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201104234427.26477-1-digetx@gmail.com>
-References: <20201104234427.26477-1-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Introduce sync state API that will be used by Tegra device drivers. This
-new API is primarily needed for syncing state of SoC devices that are left
-ON after bootloader or permanently enabled. All these devices belong to a
-shared CORE voltage domain, and thus, we needed to bring all the devices
-into expected state before the voltage scaling could be performed.
+Introduce core voltage scaling for NVIDIA Tegra20/30 SoCs, which reduces
+power consumption and heating of the Tegra chips. Tegra SoC has multiple
+hardware units which belong to a core power domain of the SoC and share
+the core voltage. The voltage must be selected in accordance to a minimum
+requirement of every core hardware unit.
 
-All drivers of DVFS-critical devices shall sync theirs the state before
-Tegra's voltage regulator coupler will be allowed to perform a system-wide
-voltage scaling.
+The minimum core voltage requirement depends on:
 
-Tested-by: Peter Geis <pgwipeout@gmail.com>
-Tested-by: Nicolas Chauvet <kwizart@gmail.com>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/soc/tegra/common.c | 152 ++++++++++++++++++++++++++++++++++++-
- include/soc/tegra/common.h |  22 ++++++
- 2 files changed, 170 insertions(+), 4 deletions(-)
+  1. Clock enable state of a hardware unit.
+  2. Clock frequency.
+  3. Unit's internal idling/active state.
 
-diff --git a/drivers/soc/tegra/common.c b/drivers/soc/tegra/common.c
-index 3dc54f59cafe..f9b2b6f57887 100644
---- a/drivers/soc/tegra/common.c
-+++ b/drivers/soc/tegra/common.c
-@@ -3,13 +3,52 @@
-  * Copyright (C) 2014 NVIDIA CORPORATION.  All rights reserved.
-  */
- 
-+#define dev_fmt(fmt)	"%s: " fmt, __func__
-+#define pr_fmt(fmt)	"%s: " fmt, __func__
-+
-+#include <linux/export.h>
-+#include <linux/init.h>
-+#include <linux/mutex.h>
- #include <linux/of.h>
-+#include <linux/of_device.h>
- 
- #include <soc/tegra/common.h>
- 
-+#define terga_soc_for_each_device(__dev) \
-+	for ((__dev) = tegra_soc_devices; (__dev) && (__dev)->compatible; \
-+	     (__dev)++)
-+
-+struct tegra_soc_device {
-+	const char *compatible;
-+	const bool dvfs_critical;
-+	unsigned int sync_count;
-+};
-+
-+static DEFINE_MUTEX(tegra_soc_lock);
-+static struct tegra_soc_device *tegra_soc_devices;
-+
-+/*
-+ * DVFS-critical devices are either active at a boot time or permanently
-+ * active, like EMC for example.  System-wide DVFS should be deferred until
-+ * drivers of the critical devices synced theirs state.
-+ */
-+
-+static struct tegra_soc_device tegra20_soc_devices[] = {
-+	{ .compatible = "nvidia,tegra20-dc", .dvfs_critical = true, },
-+	{ .compatible = "nvidia,tegra20-emc", .dvfs_critical = true, },
-+	{ }
-+};
-+
-+static struct tegra_soc_device tegra30_soc_devices[] = {
-+	{ .compatible = "nvidia,tegra30-dc", .dvfs_critical = true, },
-+	{ .compatible = "nvidia,tegra30-emc", .dvfs_critical = true, },
-+	{ .compatible = "nvidia,tegra30-pwm", .dvfs_critical = true, },
-+	{ }
-+};
-+
- static const struct of_device_id tegra_machine_match[] = {
--	{ .compatible = "nvidia,tegra20", },
--	{ .compatible = "nvidia,tegra30", },
-+	{ .compatible = "nvidia,tegra20", .data = tegra20_soc_devices, },
-+	{ .compatible = "nvidia,tegra30", .data = tegra30_soc_devices, },
- 	{ .compatible = "nvidia,tegra114", },
- 	{ .compatible = "nvidia,tegra124", },
- 	{ .compatible = "nvidia,tegra132", },
-@@ -17,7 +56,7 @@ static const struct of_device_id tegra_machine_match[] = {
- 	{ }
- };
- 
--bool soc_is_tegra(void)
-+static const struct of_device_id *tegra_soc_of_match(void)
- {
- 	const struct of_device_id *match;
- 	struct device_node *root;
-@@ -29,5 +68,110 @@ bool soc_is_tegra(void)
- 	match = of_match_node(tegra_machine_match, root);
- 	of_node_put(root);
- 
--	return match != NULL;
-+	return match;
-+}
-+
-+bool soc_is_tegra(void)
-+{
-+	return tegra_soc_of_match() != NULL;
-+}
-+
-+void tegra_soc_device_sync_state(struct device *dev)
-+{
-+	struct tegra_soc_device *soc_dev;
-+
-+	mutex_lock(&tegra_soc_lock);
-+	terga_soc_for_each_device(soc_dev) {
-+		if (!of_device_is_compatible(dev->of_node, soc_dev->compatible))
-+			continue;
-+
-+		if (!soc_dev->sync_count) {
-+			dev_err(dev, "already synced\n");
-+			break;
-+		}
-+
-+		/*
-+		 * All DVFS-capable devices should have the CORE regulator
-+		 * phandle.  Older device-trees don't have it, hence state
-+		 * won't be synced for the older DTBs, allowing them to work
-+		 * properly.
-+		 */
-+		if (soc_dev->dvfs_critical &&
-+		    !device_property_present(dev, "core-supply")) {
-+			dev_dbg(dev, "doesn't have core supply\n");
-+			break;
-+		}
-+
-+		soc_dev->sync_count--;
-+		dev_dbg(dev, "sync_count=%u\n", soc_dev->sync_count);
-+		break;
-+	}
-+	mutex_unlock(&tegra_soc_lock);
-+}
-+EXPORT_SYMBOL_GPL(tegra_soc_device_sync_state);
-+
-+bool tegra_soc_dvfs_state_synced(void)
-+{
-+	struct tegra_soc_device *soc_dev;
-+	bool synced_state = true;
-+
-+	/*
-+	 * CORE voltage scaling is limited until drivers of the critical
-+	 * devices synced theirs state.
-+	 */
-+	mutex_lock(&tegra_soc_lock);
-+	terga_soc_for_each_device(soc_dev) {
-+		if (!soc_dev->sync_count || !soc_dev->dvfs_critical)
-+			continue;
-+
-+		pr_debug_ratelimited("%s: sync_count=%u\n",
-+				     soc_dev->compatible, soc_dev->sync_count);
-+
-+		synced_state = false;
-+		break;
-+	}
-+	mutex_unlock(&tegra_soc_lock);
-+
-+	return synced_state;
-+}
-+
-+static int __init tegra_soc_devices_init(void)
-+{
-+	struct device_node *np, *prev_np = NULL;
-+	struct tegra_soc_device *soc_dev;
-+	const struct of_device_id *match;
-+
-+	if (!soc_is_tegra())
-+		return 0;
-+
-+	match = tegra_soc_of_match();
-+	tegra_soc_devices = (void *)match->data;
-+
-+	/*
-+	 * If device node is disabled in a device-tree, then we shouldn't
-+	 * care about this device. Even if device is active during boot,
-+	 * its clock will be disabled by CCF as unused.
-+	 */
-+	terga_soc_for_each_device(soc_dev) {
-+		do {
-+			/*
-+			 * Devices like display controller have multiple
-+			 * instances with the same compatible. Hence we need
-+			 * to walk up the whole tree in order to account those
-+			 * multiple instances.
-+			 */
-+			np = of_find_compatible_node(prev_np, NULL,
-+						     soc_dev->compatible);
-+			of_node_put(prev_np);
-+			prev_np = np;
-+
-+			if (of_device_is_available(np)) {
-+				pr_debug("added %s\n", soc_dev->compatible);
-+				soc_dev->sync_count++;
-+			}
-+		} while (np);
-+	}
-+
-+	return 0;
- }
-+postcore_initcall_sync(tegra_soc_devices_init);
-diff --git a/include/soc/tegra/common.h b/include/soc/tegra/common.h
-index 98027a76ce3d..d3ddb96d0fe2 100644
---- a/include/soc/tegra/common.h
-+++ b/include/soc/tegra/common.h
-@@ -6,6 +6,28 @@
- #ifndef __SOC_TEGRA_COMMON_H__
- #define __SOC_TEGRA_COMMON_H__
- 
-+#include <linux/types.h>
-+
-+struct device;
-+
-+#ifdef CONFIG_ARCH_TEGRA
- bool soc_is_tegra(void);
-+void tegra_soc_device_sync_state(struct device *dev);
-+bool tegra_soc_dvfs_state_synced(void);
-+#else
-+static inline bool soc_is_tegra(void)
-+{
-+	return false;
-+}
-+
-+static inline void tegra_soc_device_sync_state(struct device *dev)
-+{
-+}
-+
-+static inline tegra_soc_dvfs_state_synced(void)
-+{
-+	return false;
-+}
-+#endif
- 
- #endif /* __SOC_TEGRA_COMMON_H__ */
+This series is tested on Acer A500 (T20), AC100 (T20), Nexus 7 (T30) and
+Ouya (T30) devices. I also added voltage scaling to the Ventana (T20) and
+Cardhu (T30) boards which are tested by NVIDIA's CI farm. Tegra30 is now up
+to 5C cooler on Nexus 7 and stays cool on Ouya (instead of becoming burning
+hot) while system is idling. It should be possible to improve this further
+by implementing a more advanced power management features for the kernel
+drivers.
+
+The DVFS support is opt-in for all boards, meaning that older DTBs will
+continue to work like they did it before this series. It should be possible
+to easily add the core voltage scaling support for Tegra114+ SoCs based on
+this grounding work later on, if anyone will want to implement it.
+
+WARNING(!) This series is made on top of the memory interconnect patches
+           which are currently under review [1]. The Tegra EMC driver
+           and devicetree-related patches need to be applied on top of
+           the ICC series.
+
+[1] https://patchwork.ozlabs.org/project/linux-tegra/list/?series=212196
+
+Dmitry Osipenko (30):
+  dt-bindings: host1x: Document OPP and voltage regulator properties
+  dt-bindings: mmc: tegra: Document OPP and voltage regulator properties
+  dt-bindings: pwm: tegra: Document OPP and voltage regulator properties
+  media: dt: bindings: tegra-vde: Document OPP and voltage regulator
+    properties
+  dt-binding: usb: ci-hdrc-usb2:  Document OPP and voltage regulator
+    properties
+  dt-bindings: usb: tegra-ehci: Document OPP and voltage regulator
+    properties
+  soc/tegra: Add sync state API
+  soc/tegra: regulators: Support Tegra SoC device sync state API
+  soc/tegra: regulators: Fix lockup when voltage-spread is out of range
+  regulator: Allow skipping disabled regulators in
+    regulator_check_consumers()
+  drm/tegra: dc: Support OPP and SoC core voltage scaling
+  drm/tegra: gr2d: Correct swapped device-tree compatibles
+  drm/tegra: gr2d: Support OPP and SoC core voltage scaling
+  drm/tegra: gr3d: Support OPP and SoC core voltage scaling
+  drm/tegra: hdmi: Support OPP and SoC core voltage scaling
+  gpu: host1x: Support OPP and SoC core voltage scaling
+  mmc: sdhci-tegra: Support OPP and core voltage scaling
+  pwm: tegra: Support OPP and core voltage scaling
+  media: staging: tegra-vde: Support OPP and SoC core voltage scaling
+  usb: chipidea: tegra: Support OPP and SoC core voltage scaling
+  usb: host: ehci-tegra: Support OPP and SoC core voltage scaling
+  memory: tegra20-emc: Support Tegra SoC device state syncing
+  memory: tegra30-emc: Support Tegra SoC device state syncing
+  ARM: tegra: Add OPP tables for Tegra20 peripheral devices
+  ARM: tegra: Add OPP tables for Tegra30 peripheral devices
+  ARM: tegra: ventana: Add voltage supplies to DVFS-capable devices
+  ARM: tegra: paz00: Add voltage supplies to DVFS-capable devices
+  ARM: tegra: acer-a500: Add voltage supplies to DVFS-capable devices
+  ARM: tegra: cardhu-a04: Add voltage supplies to DVFS-capable devices
+  ARM: tegra: nexus7: Add voltage supplies to DVFS-capable devices
+
+ .../display/tegra/nvidia,tegra20-host1x.txt   |  56 +++
+ .../bindings/media/nvidia,tegra-vde.txt       |  12 +
+ .../bindings/mmc/nvidia,tegra20-sdhci.txt     |  12 +
+ .../bindings/pwm/nvidia,tegra20-pwm.txt       |  13 +
+ .../devicetree/bindings/usb/ci-hdrc-usb2.txt  |   4 +
+ .../bindings/usb/nvidia,tegra20-ehci.txt      |   2 +
+ .../boot/dts/tegra20-acer-a500-picasso.dts    |  30 +-
+ arch/arm/boot/dts/tegra20-paz00.dts           |  40 +-
+ .../arm/boot/dts/tegra20-peripherals-opp.dtsi | 386 ++++++++++++++++
+ arch/arm/boot/dts/tegra20-ventana.dts         |  65 ++-
+ arch/arm/boot/dts/tegra20.dtsi                |  14 +
+ .../tegra30-asus-nexus7-grouper-common.dtsi   |  23 +
+ arch/arm/boot/dts/tegra30-cardhu-a04.dts      |  44 ++
+ .../arm/boot/dts/tegra30-peripherals-opp.dtsi | 415 ++++++++++++++++++
+ arch/arm/boot/dts/tegra30.dtsi                |  13 +
+ drivers/gpu/drm/tegra/Kconfig                 |   1 +
+ drivers/gpu/drm/tegra/dc.c                    | 138 +++++-
+ drivers/gpu/drm/tegra/dc.h                    |   5 +
+ drivers/gpu/drm/tegra/gr2d.c                  | 140 +++++-
+ drivers/gpu/drm/tegra/gr3d.c                  | 136 ++++++
+ drivers/gpu/drm/tegra/hdmi.c                  |  63 ++-
+ drivers/gpu/host1x/Kconfig                    |   1 +
+ drivers/gpu/host1x/dev.c                      |  87 ++++
+ drivers/memory/tegra/tegra20-emc.c            |   8 +-
+ drivers/memory/tegra/tegra30-emc.c            |   8 +-
+ drivers/mmc/host/Kconfig                      |   1 +
+ drivers/mmc/host/sdhci-tegra.c                |  70 ++-
+ drivers/pwm/Kconfig                           |   1 +
+ drivers/pwm/pwm-tegra.c                       |  84 +++-
+ drivers/regulator/core.c                      |  12 +-
+ .../soc/samsung/exynos-regulator-coupler.c    |   2 +-
+ drivers/soc/tegra/common.c                    | 152 ++++++-
+ drivers/soc/tegra/regulators-tegra20.c        |  25 +-
+ drivers/soc/tegra/regulators-tegra30.c        |  30 +-
+ drivers/staging/media/tegra-vde/Kconfig       |   1 +
+ drivers/staging/media/tegra-vde/vde.c         | 127 ++++++
+ drivers/staging/media/tegra-vde/vde.h         |   1 +
+ drivers/usb/chipidea/Kconfig                  |   1 +
+ drivers/usb/chipidea/ci_hdrc_tegra.c          |  79 ++++
+ drivers/usb/host/Kconfig                      |   1 +
+ drivers/usb/host/ehci-tegra.c                 |  79 ++++
+ include/linux/regulator/coupler.h             |   6 +-
+ include/soc/tegra/common.h                    |  22 +
+ 43 files changed, 2360 insertions(+), 50 deletions(-)
+
 -- 
 2.27.0
 
