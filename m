@@ -7,61 +7,61 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B125C4741F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA62AC4742C
 	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 18:07:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 29E1320825
+	by mail.kernel.org (Postfix) with ESMTP id 9D9B420825
 	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 18:07:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="XQy+ahFQ"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ZK73jgWM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732253AbgKDSHy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1732255AbgKDSHy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 4 Nov 2020 13:07:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51954 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732231AbgKDSHw (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Nov 2020 13:07:52 -0500
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393EEC0401C1
-        for <linux-media@vger.kernel.org>; Wed,  4 Nov 2020 10:07:51 -0800 (PST)
-Received: by mail-wm1-x343.google.com with SMTP id h2so651140wmm.0
-        for <linux-media@vger.kernel.org>; Wed, 04 Nov 2020 10:07:51 -0800 (PST)
+        with ESMTP id S1732204AbgKDSHu (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Nov 2020 13:07:50 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16713C0613D4
+        for <linux-media@vger.kernel.org>; Wed,  4 Nov 2020 10:07:49 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id k18so3190353wmj.5
+        for <linux-media@vger.kernel.org>; Wed, 04 Nov 2020 10:07:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JTfpViGp/YAR6eiRBzwI3JOg4O3Heq9bwynk1bWiaJc=;
-        b=XQy+ahFQF4UaoqmnsYHhsBvX6grINJ8mOqmb4n3whQ2VJAH53HkpDJ+t7dS4NjvG65
-         dwFnIlBMu3R0Ze6S6qDLXK2EZAux7WO/B1/F4Z6ByveOBpDvRT3Myadt9+lc+Eup1K6q
-         szK3NmINoG4MX7QNVVbqHOVGDew8/s8D+sShg=
+        bh=09aDl4ZmShm7ZTcFx/xGgLsr6c/hfG/TYOh2Eo8wu1E=;
+        b=ZK73jgWMRs9RG//Hq3zS8gfLp23l99spVZhcpaaoAXOjTW+xZ8wZjyZcUxU4kXftJe
+         JSqMUJizqIo9rK/tcCf5qBDuIpvM40+seOC6/Bd38VSbwb3AfZHWiqvsOYcLamrh67io
+         pfMl7ZXyWX+9ybint8oh1Owvz1ikKCh+4IC2I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JTfpViGp/YAR6eiRBzwI3JOg4O3Heq9bwynk1bWiaJc=;
-        b=ruFVSBHuS7AsFrimDr01x2TdQzUAWoCCeb6D+ES8X0T0/vW1Cc/zayoNcpn5Hlyeoe
-         72LEzvs4pCHzliagEySDYzdnUUdbJxM0DN+SuV1P5rB0RkWiEM6DJzkOMAFH7NdkbRMF
-         rAGld2lTsIDAvbNJI6z0QnaOceHnex50+vRkUw8MHV7dPvGXXAbZ6pXc4+gB+6ThKAb1
-         fnwifrIzU9Ctj/FXIvioKmoCbcUau2WyAP2C+7jSN8GO1Mn1JdZX1NLhxiqS+yw3WsjH
-         gIfmMocXHdDnRoqlAaYKOPnHyTt8WFQ5ZFCnqgNpP52jCu7WASzda2mUH51z+UGkbacK
-         uuhA==
-X-Gm-Message-State: AOAM530/efEjYXJORRQsZTiD/Cv6a6uBOtchi8IjuG/PHLtMBFw4BZrA
-        e9a2Ix2YWWniCscQGiSXH7l1FQ==
-X-Google-Smtp-Source: ABdhPJw6gti+ZBgjhBtFsUallZansd5igSs/VbMB/P6MMiDr5Df+oTbk5CEoHdkq4s9PnLcfQ8ynWw==
-X-Received: by 2002:a1c:9ec9:: with SMTP id h192mr5908044wme.8.1604513270005;
-        Wed, 04 Nov 2020 10:07:50 -0800 (PST)
+        bh=09aDl4ZmShm7ZTcFx/xGgLsr6c/hfG/TYOh2Eo8wu1E=;
+        b=TiB3R/UYglFlJeFmebvYNTQZAFjqbTHGg64d1VIz0iqC582fZzfIhDjaawMPmGOtxk
+         cdMjqrastNwgAH2Vc03CMm2dUDZ1Pi/Tl9vWSTlLndf7osKduquLUDS6NCKBI/Qacj9e
+         BjWBSkEDEu7MGTJGsny3zzBmFG8GkQV9LgnDF86mlM+CH4s+syCwImuwKpfHFeqFanCS
+         y+NprcYtChfvVXnSwnUSLkxLaRldnHn/jSs9Irajnr8+5/TYthEeQZP8gHk8kaDh8wAT
+         7u6xzbXq2D4ZHHWZDTJ9IZf3R1YpQJ0+idWUpyXSRd8Y/hHZva7wLH3MZZUnQ+qk9BhC
+         0h0w==
+X-Gm-Message-State: AOAM530znLV1LiiK0biHWuJHk1TLHtaOog4FygdhfbrltdXaeeKE59Eg
+        oaIIOJVl4m+7xMjioss8FLkaPA==
+X-Google-Smtp-Source: ABdhPJzufMPX2mGMtpxpxncJqaX/J71zkjGVYhYI2ZnRmXcsLl80pCF7ixko3HUzhQbKqT8p0EoYOQ==
+X-Received: by 2002:a05:600c:210:: with SMTP id 16mr5794857wmi.122.1604513267660;
+        Wed, 04 Nov 2020 10:07:47 -0800 (PST)
 Received: from alco.lan ([80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id y10sm3801841wru.94.2020.11.04.10.07.49
+        by smtp.gmail.com with ESMTPSA id y10sm3801841wru.94.2020.11.04.10.07.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2020 10:07:49 -0800 (PST)
+        Wed, 04 Nov 2020 10:07:47 -0800 (PST)
 From:   Ricardo Ribalda <ribalda@chromium.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v2 5/7] media: uvcvideo: Entity defined get_info and get_cur
-Date:   Wed,  4 Nov 2020 19:07:32 +0100
-Message-Id: <20201104180734.286789-6-ribalda@chromium.org>
+Subject: [PATCH v2 2/7] media: uvcvideo: Move guid to entity
+Date:   Wed,  4 Nov 2020 19:07:29 +0100
+Message-Id: <20201104180734.286789-3-ribalda@chromium.org>
 X-Mailer: git-send-email 2.29.1.341.ge80a0c044ae-goog
 In-Reply-To: <20201104180734.286789-1-ribalda@chromium.org>
 References: <20201104180734.286789-1-ribalda@chromium.org>
@@ -71,71 +71,146 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Allows controls to get their properties and current value
-from an entity-defined function instead of via a query to the USB
-device.
+Instead of having multiple copies of the entity guid on the code, move
+it to the entity structure.
 
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/usb/uvc/uvc_ctrl.c | 21 +++++++++++++++++----
- drivers/media/usb/uvc/uvcvideo.h |  3 +++
- 2 files changed, 20 insertions(+), 4 deletions(-)
+ drivers/media/usb/uvc/uvc_ctrl.c   | 30 ++++--------------------------
+ drivers/media/usb/uvc/uvc_driver.c | 21 +++++++++++++++++++--
+ drivers/media/usb/uvc/uvcvideo.h   |  2 +-
+ 3 files changed, 24 insertions(+), 29 deletions(-)
 
 diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-index 0e480b75e724..076f63af1031 100644
+index f479d8971dfb..0e480b75e724 100644
 --- a/drivers/media/usb/uvc/uvc_ctrl.c
 +++ b/drivers/media/usb/uvc/uvc_ctrl.c
-@@ -980,10 +980,19 @@ static int __uvc_ctrl_get(struct uvc_video_chain *chain,
- 		return -EACCES;
+@@ -826,31 +826,10 @@ static void uvc_set_le_value(struct uvc_control_mapping *mapping,
+  * Terminal and unit management
+  */
  
- 	if (!ctrl->loaded) {
--		ret = uvc_query_ctrl(chain->dev, UVC_GET_CUR, ctrl->entity->id,
--				chain->dev->intfnum, ctrl->info.selector,
-+		if (ctrl->entity->get_cur) {
-+			ret = ctrl->entity->get_cur(ctrl->entity,
-+				ctrl->info.selector,
- 				uvc_ctrl_data(ctrl, UVC_CTRL_DATA_CURRENT),
- 				ctrl->info.size);
-+		} else {
-+			ret = uvc_query_ctrl(chain->dev, UVC_GET_CUR,
-+				ctrl->entity->id,
-+				chain->dev->intfnum,
-+				ctrl->info.selector,
-+				uvc_ctrl_data(ctrl, UVC_CTRL_DATA_CURRENT),
-+				ctrl->info.size);
-+		}
- 		if (ret < 0)
- 			return ret;
+-static const u8 uvc_processing_guid[16] = UVC_GUID_UVC_PROCESSING;
+-static const u8 uvc_camera_guid[16] = UVC_GUID_UVC_CAMERA;
+-static const u8 uvc_media_transport_input_guid[16] =
+-	UVC_GUID_UVC_MEDIA_TRANSPORT_INPUT;
+-
+ static int uvc_entity_match_guid(const struct uvc_entity *entity,
+-	const u8 guid[16])
++				 const u8 guid[16])
+ {
+-	switch (UVC_ENTITY_TYPE(entity)) {
+-	case UVC_ITT_CAMERA:
+-		return memcmp(uvc_camera_guid, guid, 16) == 0;
+-
+-	case UVC_ITT_MEDIA_TRANSPORT_INPUT:
+-		return memcmp(uvc_media_transport_input_guid, guid, 16) == 0;
+-
+-	case UVC_VC_PROCESSING_UNIT:
+-		return memcmp(uvc_processing_guid, guid, 16) == 0;
+-
+-	case UVC_VC_EXTENSION_UNIT:
+-		return memcmp(entity->extension.guidExtensionCode,
+-			      guid, 16) == 0;
+-
+-	default:
+-		return 0;
+-	}
++	return memcmp(entity->guid, guid, sizeof(entity->guid)) == 0;
+ }
  
-@@ -1687,8 +1696,12 @@ static int uvc_ctrl_get_flags(struct uvc_device *dev,
+ /* ------------------------------------------------------------------------
+@@ -1776,8 +1755,7 @@ static int uvc_ctrl_fill_xu_info(struct uvc_device *dev,
  	if (data == NULL)
  		return -ENOMEM;
  
--	ret = uvc_query_ctrl(dev, UVC_GET_INFO, ctrl->entity->id, dev->intfnum,
--			     info->selector, data, 1);
-+	if (ctrl->entity->get_info)
-+		ret = ctrl->entity->get_info(ctrl->entity, ctrl->info.selector,
-+					     data);
-+	else
-+		ret = uvc_query_ctrl(dev, UVC_GET_INFO, ctrl->entity->id,
-+				     dev->intfnum, info->selector, data, 1);
- 	if (!ret)
- 		info->flags |= (data[0] & UVC_CONTROL_CAP_GET ?
- 				UVC_CTRL_FLAG_GET_CUR : 0)
+-	memcpy(info->entity, ctrl->entity->extension.guidExtensionCode,
+-	       sizeof(info->entity));
++	memcpy(info->entity, ctrl->entity->guid, sizeof(info->entity));
+ 	info->index = ctrl->index;
+ 	info->selector = ctrl->index + 1;
+ 
+@@ -1883,7 +1861,7 @@ int uvc_xu_ctrl_query(struct uvc_video_chain *chain,
+ 
+ 	if (!found) {
+ 		uvc_trace(UVC_TRACE_CONTROL, "Control %pUl/%u not found.\n",
+-			entity->extension.guidExtensionCode, xqry->selector);
++			entity->guid, xqry->selector);
+ 		return -ENOENT;
+ 	}
+ 
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index 9fc0b600eab1..77fea26faa9a 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -1019,6 +1019,11 @@ static int uvc_parse_streaming(struct uvc_device *dev,
+ 	return ret;
+ }
+ 
++static const u8 uvc_camera_guid[16] = UVC_GUID_UVC_CAMERA;
++static const u8 uvc_media_transport_input_guid[16] =
++	UVC_GUID_UVC_MEDIA_TRANSPORT_INPUT;
++static const u8 uvc_processing_guid[16] = UVC_GUID_UVC_PROCESSING;
++
+ static struct uvc_entity *uvc_alloc_entity(u16 type, u8 id,
+ 		unsigned int num_pads, unsigned int extra_size)
+ {
+@@ -1038,6 +1043,18 @@ static struct uvc_entity *uvc_alloc_entity(u16 type, u8 id,
+ 	entity->id = id;
+ 	entity->type = type;
+ 
++	switch (type) {
++	case UVC_ITT_CAMERA:
++		memcpy(entity->guid, uvc_camera_guid, 16);
++		break;
++	case UVC_ITT_MEDIA_TRANSPORT_INPUT:
++		memcpy(entity->guid, uvc_media_transport_input_guid, 16);
++		break;
++	case UVC_VC_PROCESSING_UNIT:
++		memcpy(entity->guid, uvc_processing_guid, 16);
++		break;
++	}
++
+ 	entity->num_links = 0;
+ 	entity->num_pads = num_pads;
+ 	entity->pads = ((void *)(entity + 1)) + extra_size;
+@@ -1109,7 +1126,7 @@ static int uvc_parse_vendor_control(struct uvc_device *dev,
+ 		if (unit == NULL)
+ 			return -ENOMEM;
+ 
+-		memcpy(unit->extension.guidExtensionCode, &buffer[4], 16);
++		memcpy(unit->guid, &buffer[4], 16);
+ 		unit->extension.bNumControls = buffer[20];
+ 		memcpy(unit->baSourceID, &buffer[22], p);
+ 		unit->extension.bControlSize = buffer[22+p];
+@@ -1368,7 +1385,7 @@ static int uvc_parse_standard_control(struct uvc_device *dev,
+ 		if (unit == NULL)
+ 			return -ENOMEM;
+ 
+-		memcpy(unit->extension.guidExtensionCode, &buffer[4], 16);
++		memcpy(unit->guid, &buffer[4], 16);
+ 		unit->extension.bNumControls = buffer[20];
+ 		memcpy(unit->baSourceID, &buffer[22], p);
+ 		unit->extension.bControlSize = buffer[22+p];
 diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index 00f985001c1d..776b083ed466 100644
+index a3dfacf069c4..df7bf2d104a3 100644
 --- a/drivers/media/usb/uvc/uvcvideo.h
 +++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -353,6 +353,9 @@ struct uvc_entity {
- 	u8 bNrInPins;
- 	u8 *baSourceID;
+@@ -304,6 +304,7 @@ struct uvc_entity {
+ 	u8 id;
+ 	u16 type;
+ 	char name[64];
++	u8 guid[16];
  
-+	int (*get_info)(struct uvc_entity *entity, u8 cs, u8 *caps);
-+	int (*get_cur)(struct uvc_entity *entity, u8 cs, void *data, u16 size);
-+
- 	unsigned int ncontrols;
- 	struct uvc_control *controls;
- };
+ 	/* Media controller-related fields. */
+ 	struct video_device *vdev;
+@@ -342,7 +343,6 @@ struct uvc_entity {
+ 		} selector;
+ 
+ 		struct {
+-			u8  guidExtensionCode[16];
+ 			u8  bNumControls;
+ 			u8  bControlSize;
+ 			u8  *bmControls;
 -- 
 2.29.1.341.ge80a0c044ae-goog
 
