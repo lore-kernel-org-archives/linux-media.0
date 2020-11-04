@@ -2,49 +2,50 @@ Return-Path: <SRS0=eCLo=EK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9DA0C2D0A3
-	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 17:32:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34435C388F9
+	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 17:32:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 72485221E2
-	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 17:32:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E315120759
+	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 17:32:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="r32wWw0I"
+	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="kz8KlySf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731553AbgKDRcp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 4 Nov 2020 12:32:45 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:44664 "EHLO
+        id S1731507AbgKDRco (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 4 Nov 2020 12:32:44 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:1605 "EHLO
         mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727006AbgKDRcn (ORCPT
+        by vger.kernel.org with ESMTP id S1730019AbgKDRco (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 4 Nov 2020 12:32:43 -0500
+        Wed, 4 Nov 2020 12:32:44 -0500
 Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A4HWDPo031393;
-        Wed, 4 Nov 2020 18:32:26 +0100
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A4HVs49031157;
+        Wed, 4 Nov 2020 18:32:30 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=STMicroelectronics;
- bh=0dGU7EjDFLfbmr+icg3Fbkz2c9T0BmmFtSmomDOPn/8=;
- b=r32wWw0ILSyyemrPcRcdQkBs2p/wHEoF0ErSHQ1Tu3f2H0m8Y0OWsMatCqJET75jaB0y
- 7tDQmlKwlW5GpTYWyByfPTz+N7GG7sWq9Wq2D0jCfSMmynFnLU0XyJ6Qoc/73y/BAqOg
- 5NjyASLRVEzmaJhRL02F4lJDApMwIqPY3Bv3HdiCgPn8+4VjLd/sbxFYcFevpL288NMf
- 1yxcXATEdf98acbeZuiKm+P8zAVNPoYR/dV5DSpo54tzgxQqlvQrQWV+yLVcLOa/Soei
- qqRLqOymu9oKKTiNYNN+Rt5OZ0K+JHT2bhjXQ8hvIUqEgnvx5D1+d2cRt/NA1OzHbcVE nQ== 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=STMicroelectronics;
+ bh=RD8lxnzr5dJzto5A8fvjT1RmhG9atPIVNFqjK/v2cWg=;
+ b=kz8KlySfDguwtPPwhOD30PU3rDNhSV/NXwCtuIhCvppuvER2jeNFvlEb/O3LkXJzQ5P2
+ XUhYEiHJpISju4c38waQztEtjQaJGwcUZNCw57UyBRmaT/wI9QAT+T51G5+qB+qlvDZJ
+ S1hvucJglJ5p843bJZwT48undVQziDWBI2bIO92/B6abI7Yj8O1hoXrMhqTAs7NgSAd7
+ RResEqnt0n7DIDQm7JfZg7sQ+uK99G3S/qfbr6DYRP8klppXd3KxCvfYm8W3B5Rb4Lph
+ lIook+BMjh6z8aRAQbNKaDkBkIqyX2lnjOVYZc4w7eCqrZVv6Qx4P24pIXlyryb9xflJ Zg== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 34h00egtyd-1
+        by mx07-00178001.pphosted.com with ESMTP id 34h00egtyr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Nov 2020 18:32:26 +0100
+        Wed, 04 Nov 2020 18:32:30 +0100
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7038410002A;
-        Wed,  4 Nov 2020 18:32:25 +0100 (CET)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E007510002A;
+        Wed,  4 Nov 2020 18:32:29 +0100 (CET)
 Received: from Webmail-eu.st.com (sfhdag1node1.st.com [10.75.127.1])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id F24F5225C2A;
-        Wed,  4 Nov 2020 18:32:24 +0100 (CET)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CD52F225C2A;
+        Wed,  4 Nov 2020 18:32:29 +0100 (CET)
 Received: from localhost (10.75.127.47) by SFHDAG1NODE1.st.com (10.75.127.1)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 4 Nov 2020 18:32:24
+ with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 4 Nov 2020 18:32:29
  +0100
 From:   Hugues Fruchet <hugues.fruchet@st.com>
 To:     Alexandre Torgue <alexandre.torgue@st.com>,
@@ -60,14 +61,16 @@ CC:     <devicetree@vger.kernel.org>,
         Alain Volmat <alain.volmat@st.com>,
         Yannick Fertre <yannick.fertre@st.com>,
         Philippe CORNU <philippe.cornu@st.com>
-Subject: [PATCH v5 0/4] DCMI BT656 parallel bus mode support
-Date:   Wed, 4 Nov 2020 18:32:08 +0100
-Message-ID: <1604511132-4014-1-git-send-email-hugues.fruchet@st.com>
+Subject: [PATCH v5 4/4] ARM: dts: stm32: set bus-type in DCMI endpoint for stm32429i-eval board
+Date:   Wed, 4 Nov 2020 18:32:12 +0100
+Message-ID: <1604511132-4014-5-git-send-email-hugues.fruchet@st.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1604511132-4014-1-git-send-email-hugues.fruchet@st.com>
+References: <1604511132-4014-1-git-send-email-hugues.fruchet@st.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG7NODE1.st.com (10.75.127.19) To SFHDAG1NODE1.st.com
+X-ClientProxiedBy: SFHDAG6NODE2.st.com (10.75.127.17) To SFHDAG1NODE1.st.com
  (10.75.127.1)
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-11-04_12:2020-11-04,2020-11-04 signatures=0
@@ -75,45 +78,25 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support of BT656 embedded synchronization bus.
-This mode allows to save hardware synchro lines hsync & vsync
-by replacing them with synchro codes embedded in data stream.
-Add "bus-type" property and make it required so that there is no
-ambiguity between parallel mode (bus-type=5) and BT656 mode (bus-type=6).
+Explicitly set bus-type to parallel mode in DCMI endpoint (bus-type=5).
 
-===========
-= history =
-===========
-version 5:
-  - Add revisited bindings and devicetree with explicit use of "bus-type"
+Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
+---
+ arch/arm/boot/dts/stm32429i-eval.dts | 1 +
+ 1 file changed, 1 insertion(+)
 
-version 4:
-  - Fix typo in commit message
-
-version 3:
-  - Fix bus_width print to %u as per Sakari comment
-
-version 2:
-  - As per Sakari remark, revisit commit message and document
-    BT656 parallel bus mode in bindings
-
-version 1:
-  - Initial submission
-
-Hugues Fruchet (4):
-  media: stm32-dcmi: add support of BT656 bus
-  media: dt-bindings: media: st,stm32-dcmi: add support of BT656 bus
-  ARM: dts: stm32: set bus-type in DCMI endpoint for stm32mp157c-ev1
-    board
-  ARM: dts: stm32: set bus-type in DCMI endpoint for stm32429i-eval
-    board
-
- .../devicetree/bindings/media/st,stm32-dcmi.yaml   | 38 ++++++++++++++++++++++
- arch/arm/boot/dts/stm32429i-eval.dts               |  1 +
- arch/arm/boot/dts/stm32mp157c-ev1.dts              |  1 +
- drivers/media/platform/stm32/stm32-dcmi.c          | 37 +++++++++++++++++++--
- 4 files changed, 75 insertions(+), 2 deletions(-)
-
+diff --git a/arch/arm/boot/dts/stm32429i-eval.dts b/arch/arm/boot/dts/stm32429i-eval.dts
+index 67e7648..7e10ae7 100644
+--- a/arch/arm/boot/dts/stm32429i-eval.dts
++++ b/arch/arm/boot/dts/stm32429i-eval.dts
+@@ -188,6 +188,7 @@
+ 	port {
+ 		dcmi_0: endpoint {
+ 			remote-endpoint = <&ov2640_0>;
++			bus-type = <5>;
+ 			bus-width = <8>;
+ 			hsync-active = <0>;
+ 			vsync-active = <0>;
 -- 
 2.7.4
 
