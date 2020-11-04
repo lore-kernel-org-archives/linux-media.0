@@ -2,236 +2,196 @@ Return-Path: <SRS0=eCLo=EK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 489E2C55178
-	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 10:30:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D228C2D0A3
+	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 10:36:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E8C5321734
-	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 10:30:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3130C20786
+	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 10:36:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729279AbgKDKaK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 4 Nov 2020 05:30:10 -0500
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:51877 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728607AbgKDK33 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Nov 2020 05:29:29 -0500
-X-Originating-IP: 93.29.109.196
-Received: from aptenodytes (196.109.29.93.rev.sfr.net [93.29.109.196])
-        (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id E660A60003;
-        Wed,  4 Nov 2020 10:29:23 +0000 (UTC)
-Date:   Wed, 4 Nov 2020 11:29:23 +0100
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Maxime Ripard <mripard@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: media: i2c: Add OV5648 bindings
- documentation
-Message-ID: <20201104102923.GA285779@aptenodytes>
-References: <20201023174944.504358-1-paul.kocialkowski@bootlin.com>
- <20201023174944.504358-2-paul.kocialkowski@bootlin.com>
- <20201030163722.GS26150@paasikivi.fi.intel.com>
+        id S1728645AbgKDKgm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 4 Nov 2020 05:36:42 -0500
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:37239 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728287AbgKDKgm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Nov 2020 05:36:42 -0500
+X-Originating-IP: 93.34.118.233
+Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id B4B092000E;
+        Wed,  4 Nov 2020 10:36:36 +0000 (UTC)
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     linux-media@vger.kernel.org
+Cc:     Jacopo Mondi <jacopo@jmondi.org>, mchehab@kernel.org,
+        sakari.ailus@linux.intel.com, hverkuil@xs4all.nl,
+        laurent.pinchart@ideasonboard.com,
+        roman.kovalivskyi@globallogic.com, dafna.hirschfeld@collabora.com,
+        dave.stevenson@raspberrypi.org, naush@raspberrypi.com,
+        erosca@de.adit-jv.com
+Subject: [PATCH v2 00/30] media: ov5647: Support RaspberryPi Camera Module v1
+Date:   Wed,  4 Nov 2020 11:35:52 +0100
+Message-Id: <20201104103622.595908-1-jacopo@jmondi.org>
+X-Mailer: git-send-email 2.29.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="8t9RHnE3ZwKMSgU+"
-Content-Disposition: inline
-In-Reply-To: <20201030163722.GS26150@paasikivi.fi.intel.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hello,
+   this second iteration of the series introduces a new feature and
+addresses comments received on v1 [0]
+[0] https://patchwork.linuxtv.org/project/linux-media/list/?series=2765
 
---8t9RHnE3ZwKMSgU+
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The major chanlog items is the introduction of pm_runtime_support to
+replace the deprecated s_power() operation.
 
-Hi Sakari,
+Other minor changes address comments received from Dafna and Sakari:
+- Rebased on most recent media master
+- Constify all driver structures
+- Protect against multiple s_stream() calls
+- Set default format to 640x480 SBGGR10_1X10 to match s_fmt()
+- Check for devm_gpiod_get_optional() return value in probe
+- A few more cosmetic changes
 
-On Fri 30 Oct 20, 18:37, Sakari Ailus wrote:
-> On Fri, Oct 23, 2020 at 07:49:43PM +0200, Paul Kocialkowski wrote:
-> > This introduces YAML bindings documentation for the OV5648
-> > image sensor.
-> >=20
-> > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> > ---
-> >  .../bindings/media/i2c/ovti,ov5648.yaml       | 115 ++++++++++++++++++
-> >  1 file changed, 115 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov=
-5648.yaml
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov5648.ya=
-ml b/Documentation/devicetree/bindings/media/i2c/ovti,ov5648.yaml
-> > new file mode 100644
-> > index 000000000000..347af925b450
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5648.yaml
-> > @@ -0,0 +1,115 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/media/i2c/ovti,ov5648.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: OmniVision OV5648 Image Sensor Device Tree Bindings
-> > +
-> > +maintainers:
-> > +  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: ovti,ov5648
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description: XVCLK Clock
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: xvclk
-> > +
-> > +  dvdd-supply:
-> > +    description: Digital Domain Power Supply
-> > +
-> > +  avdd-supply:
-> > +    description: Analog Domain Power Supply (internal AVDD is used if =
-missing)
-> > +
-> > +  dovdd-supply:
-> > +    description: I/O Domain Power Supply
-> > +
-> > +  powerdown-gpios:
-> > +    maxItems: 1
-> > +    description: Power Down Pin GPIO Control (active low)
-> > +
-> > +  reset-gpios:
-> > +    maxItems: 1
-> > +    description: Reset Pin GPIO Control (active low)
-> > +
-> > +  port:
-> > +    type: object
-> > +    description: Input port, connect to a MIPI CSI-2 receiver
->=20
-> "Input"? I'd describe this as output.
->=20
-> How about e.g. "MIPI CSI-2 transmitter port"?
+The only remaning open point, not clarified by the v1 discussion is:
+- Should sensor driver handle read-only controls ?
 
-Woops, that's definitely a mistake. Your suggestion sounds good, thanks!
+Tested on RPi capturing RGGB10 in all resolutions with yavta.
 
-> > +
-> > +    properties:
-> > +      endpoint:
-> > +        type: object
-> > +
-> > +        properties:
-> > +          remote-endpoint: true
-> > +
-> > +          bus-type:
-> > +            const: 4
-> > +
-> > +          clock-lanes:
-> > +            maxItems: 1
->=20
-> You can drop the two as they're always the same.
+v1 was tested by Dafna on rockpi:
+Tested-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+(should I apply this to all patches ? What's the correct procedure ?)
 
-See my reply to the same comment on the other series.
+RGGB8 seems to be broken, at least when capturing on RPi using mainline
+unicam driver. I wonder if it shouldn't be removed at all. I can't test if this
+is a regression as the mainline driver version fails to probe here.
 
-Cheers,
+v4l2-compliance report below: 1 error on event handling
 
-Paul
+-------------------------------------------------------------------------------
+v4l2-compliance 1.21.0-4679, 32 bits, 32-bit time_t
+v4l2-compliance SHA: 225c6c2a17be 2020-10-30 15:13:07
 
-> > +
-> > +          data-lanes:
-> > +            minItems: 1
-> > +            maxItems: 2
-> > +
-> > +        required:
-> > +          - bus-type
-> > +          - data-lanes
-> > +          - remote-endpoint
-> > +
-> > +        additionalProperties: false
-> > +
-> > +    required:
-> > +      - endpoint
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - clocks
-> > +  - clock-names
-> > +  - dvdd-supply
-> > +  - dovdd-supply
-> > +  - port
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/clock/sun8i-v3s-ccu.h>
-> > +    #include <dt-bindings/gpio/gpio.h>
-> > +
-> > +    i2c0 {
-> > +        #address-cells =3D <1>;
-> > +        #size-cells =3D <0>;
-> > +
-> > +        ov5648: camera@36 {
-> > +            compatible =3D "ovti,ov5648";
-> > +            reg =3D <0x36>;
-> > +
-> > +            dvdd-supply =3D <&ov5648_dvdd>;
-> > +            avdd-supply =3D <&ov5648_avdd>;
-> > +            dovdd-supply =3D <&ov5648_dovdd>;
-> > +            clocks =3D <&ov5648_xvclk 0>;
-> > +            clock-names =3D "xvclk";
-> > +
-> > +            ov5648_out: port {
-> > +                ov5648_out_mipi_csi2: endpoint {
-> > +                    bus-type =3D <4>; /* MIPI CSI-2 D-PHY */
-> > +                    clock-lanes =3D <0>;
-> > +                    data-lanes =3D <1 2>;
-> > +
-> > +                    remote-endpoint =3D <&mipi_csi2_in_ov5648>;
-> > +                };
-> > +            };
-> > +        };
-> > +    };
->=20
-> --=20
-> Sakari Ailus
+Compliance test for device /dev/v4l-subdev0:
 
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
 
---8t9RHnE3ZwKMSgU+
-Content-Type: application/pgp-signature; name="signature.asc"
+Required ioctls:
 
------BEGIN PGP SIGNATURE-----
+Allow for multiple opens:
+	test second /dev/v4l-subdev0 open: OK
+	test for unlimited opens: OK
 
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAl+igoMACgkQ3cLmz3+f
-v9Gi7Af+M3VHc6S+z8frqFhUa3rAyAf4FcwHUgEP3+/auAqIqarIHO+yVkdPhFY2
-Qh4ULYUJWWLChBU7HPXMDPoimuYoTaOr8H0Ijy8vImb1spA+Ey7laIfmbiMn4M6N
-4cOnF6t4JZNu4slFM4A4Rel7QVw7oQT3icHRdFHmGJtPRr1eOWryOsa6R/gV8Cvj
-XkU4tuqBk+oQePoyqMx8acT8x0Cmel8FTT+djw1S+W/IhDb+ZrArBOfQzvaYuik6
-yFGN6KSrbEk7QofF+HsZ5yjNpo8IF7ZtUy7nCUy3RxVK4yIchoogfb+mpENKdqeR
-w/WEJgDHX/e25MgL6A7auNTRfFuSMw==
-=SC2z
------END PGP SIGNATURE-----
+	test invalid ioctls: OK
+Debug ioctls:
+	test VIDIOC_LOG_STATUS: OK (Not Supported)
 
---8t9RHnE3ZwKMSgU+--
+Input ioctls:
+	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+	test VIDIOC_ENUMAUDIO: OK (Not Supported)
+	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+	test VIDIOC_G/S_AUDIO: OK (Not Supported)
+	Inputs: 0 Audio Inputs: 0 Tuners: 0
+
+Output ioctls:
+	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+	Outputs: 0 Audio Outputs: 0 Modulators: 0
+
+Input/Output configuration ioctls:
+	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+	test VIDIOC_G/S_EDID: OK (Not Supported)
+
+Control ioctls:
+	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
+	test VIDIOC_QUERYCTRL: OK
+	test VIDIOC_G/S_CTRL: OK
+	test VIDIOC_G/S/TRY_EXT_CTRLS: OK
+		fail: v4l2-test-controls.cpp(823): subscribe event for control 'User Controls' failed
+	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: FAIL
+	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+	Standard Controls: 12 Private Controls: 0
+
+Format ioctls:
+	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK (Not Supported)
+	test VIDIOC_G/S_PARM: OK (Not Supported)
+	test VIDIOC_G_FBUF: OK (Not Supported)
+	test VIDIOC_G_FMT: OK (Not Supported)
+	test VIDIOC_TRY_FMT: OK (Not Supported)
+	test VIDIOC_S_FMT: OK (Not Supported)
+	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+	test Cropping: OK (Not Supported)
+	test Composing: OK (Not Supported)
+	test Scaling: OK (Not Supported)
+
+Codec ioctls:
+	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
+
+Buffer ioctls:
+	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK (Not Supported)
+	test VIDIOC_EXPBUF: OK (Not Supported)
+	test Requests: OK (Not Supported)
+
+Total for device /dev/v4l-subdev0: 41, Succeeded: 40, Failed: 1, Warnings: 0
+-------------------------------------------------------------------------------
+
+Thanks
+  j
+
+Dave Stevenson (8):
+  media: ov5647: Add support for PWDN GPIO.
+  media: ov5647: Add support for non-continuous clock mode
+  media: ov5647: Add set_fmt and get_fmt calls.
+  media: ov5647: Add support for get_selection()
+  media: ov5647: Set V4L2_SUBDEV_FL_HAS_EVENTS flag
+  media: ov5647: Support V4L2_CID_PIXEL_RATE
+  media: ov5647: Support V4L2_CID_VBLANK control
+  media: ov5647: Advertise the correct exposure range
+
+David Plowman (1):
+  media: ov5647: Support gain, exposure and AWB controls
+
+Jacopo Mondi (21):
+  dt-bindings: media: i2c: Rename ov5647.yaml
+  media: ov5647: Fix format initialization
+  media: ov5647: Fix style issues
+  media: ov5647: Replace license with SPDX identifier
+  media: ov5647: Fix return value from read/write
+  media: ov5647: Program mode at s_stream(1) time
+  media: ov5647: Implement enum_frame_size()
+  media: ov5647: Protect s_stream() with mutex
+  media: ov5647: Rationalize driver structure name
+  media: ov5647: Break out format handling
+  media: ov5647: Rename SBGGR8 VGA mode
+  media: ov5647: Add SGGBR10_1X10 modes
+  media: ov5647: Use SBGGR10_1X10 640x480 as default
+  media: ov5647: Implement set_fmt pad operation
+  media: ov5647: Program mode only if it has changed
+  media: ov5647: Support V4L2_CID_HBLANK control
+  media: ov5647: Use pm_runtime infrastructure
+  media: ov5647: Rework s_stream() operation
+  media: ov5647: Apply controls only when powered
+  media: ov5647: Constify oe_enable/disable reglist
+  media: ov5647: Reflow register-value lists
+
+ .../i2c/{ov5647.yaml => ovti,ov5647.yaml}     |    0
+ MAINTAINERS                                   |    2 +-
+ drivers/media/i2c/ov5647.c                    | 1237 +++++++++++++----
+ 3 files changed, 960 insertions(+), 279 deletions(-)
+ rename Documentation/devicetree/bindings/media/i2c/{ov5647.yaml => ovti,ov5647.yaml} (100%)
+
+--
+2.29.1
+
