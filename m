@@ -2,185 +2,135 @@ Return-Path: <SRS0=eCLo=EK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09F14C388F7
-	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 10:38:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DB97C4741F
+	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 10:38:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B2B772072C
-	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 10:38:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 545912072C
+	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 10:38:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729620AbgKDKiF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 4 Nov 2020 05:38:05 -0500
-Received: from relay11.mail.gandi.net ([217.70.178.231]:52851 "EHLO
-        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729627AbgKDKhv (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Nov 2020 05:37:51 -0500
-Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id A3081100013;
-        Wed,  4 Nov 2020 10:37:45 +0000 (UTC)
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     linux-media@vger.kernel.org
-Cc:     Jacopo Mondi <jacopo@jmondi.org>, mchehab@kernel.org,
-        sakari.ailus@linux.intel.com, hverkuil@xs4all.nl,
-        laurent.pinchart@ideasonboard.com,
-        roman.kovalivskyi@globallogic.com, dafna.hirschfeld@collabora.com,
-        dave.stevenson@raspberrypi.org, naush@raspberrypi.com,
-        erosca@de.adit-jv.com,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: [PATCH v2 22/30] media: ov5647: Support V4L2_CID_PIXEL_RATE
-Date:   Wed,  4 Nov 2020 11:36:14 +0100
-Message-Id: <20201104103622.595908-23-jacopo@jmondi.org>
-X-Mailer: git-send-email 2.29.1
-In-Reply-To: <20201104103622.595908-1-jacopo@jmondi.org>
-References: <20201104103622.595908-1-jacopo@jmondi.org>
+        id S1729534AbgKDKhk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 4 Nov 2020 05:37:40 -0500
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:36253 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729473AbgKDKhi (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Nov 2020 05:37:38 -0500
+X-Originating-IP: 93.29.109.196
+Received: from aptenodytes (196.109.29.93.rev.sfr.net [93.29.109.196])
+        (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 42D764000A;
+        Wed,  4 Nov 2020 10:37:32 +0000 (UTC)
+Date:   Wed, 4 Nov 2020 11:37:31 +0100
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-sunxi@googlegroups.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Yong Deng <yong.deng@magewell.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>, kevin.lhopital@hotmail.com
+Subject: Re: [PATCH 12/14] media: sunxi: Add support for the A83T MIPI CSI-2
+ controller
+Message-ID: <20201104103731.GC285779@aptenodytes>
+References: <20201023174546.504028-1-paul.kocialkowski@bootlin.com>
+ <20201023174546.504028-13-paul.kocialkowski@bootlin.com>
+ <20201026170041.qsjzxlurufuuhcsq@gilmour.lan>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="KN5l+BnMqAQyZLvT"
+Content-Disposition: inline
+In-Reply-To: <20201026170041.qsjzxlurufuuhcsq@gilmour.lan>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-Clients need to know the pixel rate in order to compute exposure
-and frame rate values. Advertise it.
+--KN5l+BnMqAQyZLvT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
----
- drivers/media/i2c/ov5647.c | 40 +++++++++++++++++++++++++++++++-------
- 1 file changed, 33 insertions(+), 7 deletions(-)
+Hi,
 
-diff --git a/drivers/media/i2c/ov5647.c b/drivers/media/i2c/ov5647.c
-index 21612b87eff45..b57704e1e15e3 100644
---- a/drivers/media/i2c/ov5647.c
-+++ b/drivers/media/i2c/ov5647.c
-@@ -76,6 +76,7 @@ struct regval_list {
- struct ov5647_mode {
- 	struct v4l2_mbus_framefmt	format;
- 	struct v4l2_rect		crop;
-+	u64				pixel_rate;
- 	const struct regval_list	*reg_list;
- 	unsigned int			num_regs;
- };
-@@ -97,6 +98,7 @@ struct ov5647 {
- 	struct v4l2_ctrl_handler	ctrls;
- 	const struct ov5647_mode	*mode;
- 	const struct ov5647_mode	*current_mode;
-+	struct v4l2_ctrl		*pixel_rate;
- };
- 
- static inline struct ov5647 *to_sensor(struct v4l2_subdev *sd)
-@@ -583,6 +585,7 @@ static const struct ov5647_mode ov5647_sbggr8_modes[] = {
- 			.width		= 1280,
- 			.height		= 960,
- 		},
-+		.pixel_rate	= 77291670,
- 		.reg_list	= ov5647_640x480_sbggr8,
- 		.num_regs	= ARRAY_SIZE(ov5647_640x480_sbggr8)
- 	},
-@@ -604,6 +607,7 @@ static const struct ov5647_mode ov5647_sbggr10_modes[] = {
- 			.width		= 2592,
- 			.height		= 1944
- 		},
-+		.pixel_rate	= 87500000,
- 		.reg_list	= ov5647_2592x1944_sbggr10,
- 		.num_regs	= ARRAY_SIZE(ov5647_2592x1944_sbggr10)
- 	},
-@@ -622,6 +626,7 @@ static const struct ov5647_mode ov5647_sbggr10_modes[] = {
- 			.width		= 1928,
- 			.height		= 1080,
- 		},
-+		.pixel_rate	= 81666700,
- 		.reg_list	= ov5647_1080p30_sbggr10,
- 		.num_regs	= ARRAY_SIZE(ov5647_1080p30_sbggr10)
- 	},
-@@ -640,6 +645,7 @@ static const struct ov5647_mode ov5647_sbggr10_modes[] = {
- 			.width		= 2592,
- 			.height		= 1944,
- 		},
-+		.pixel_rate	= 81666700,
- 		.reg_list	= ov5647_2x2binned_sbggr10,
- 		.num_regs	= ARRAY_SIZE(ov5647_2x2binned_sbggr10)
- 	},
-@@ -658,6 +664,7 @@ static const struct ov5647_mode ov5647_sbggr10_modes[] = {
- 			.width		= 2560,
- 			.height		= 1920,
- 		},
-+		.pixel_rate	= 55000000,
- 		.reg_list	= ov5647_640x480_sbggr10,
- 		.num_regs	= ARRAY_SIZE(ov5647_640x480_sbggr10)
- 	},
-@@ -1096,6 +1103,10 @@ static int ov5647_set_pad_fmt(struct v4l2_subdev *sd,
- 	/* Update the sensor mode and apply at it at streamon time. */
- 	mutex_lock(&sensor->lock);
- 	sensor->mode = mode;
-+
-+	__v4l2_ctrl_modify_range(sensor->pixel_rate, mode->pixel_rate,
-+				 mode->pixel_rate, 1, mode->pixel_rate);
-+
- 	*fmt = mode->format;
- 	mutex_unlock(&sensor->lock);
- 
-@@ -1297,6 +1308,9 @@ static int ov5647_s_ctrl(struct v4l2_ctrl *ctrl)
- 		return  ov5647_s_analogue_gain(sd, ctrl->val);
- 	case V4L2_CID_EXPOSURE:
- 		return ov5647_s_exposure(sd, ctrl->val);
-+	case V4L2_CID_PIXEL_RATE:
-+		/* Read-only, but we adjust it based on mode. */
-+		return 0;
- 	default:
- 		dev_info(&client->dev,
- 			 "Control (id:0x%x, val:0x%x) not supported\n",
-@@ -1315,7 +1329,7 @@ static int ov5647_init_controls(struct ov5647 *sensor)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->sd);
- 
--	v4l2_ctrl_handler_init(&sensor->ctrls, 5);
-+	v4l2_ctrl_handler_init(&sensor->ctrls, 6);
- 
- 	v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
- 			  V4L2_CID_AUTOGAIN, 0, 1, 1, 0);
-@@ -1335,17 +1349,29 @@ static int ov5647_init_controls(struct ov5647 *sensor)
- 	v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
- 			  V4L2_CID_ANALOGUE_GAIN, 16, 1023, 1, 32);
- 
--	if (sensor->ctrls.error) {
--		dev_err(&client->dev, "%s Controls initialization failed (%d)\n",
--			__func__, sensor->ctrls.error);
--		v4l2_ctrl_handler_free(&sensor->ctrls);
-+	/* By default, PIXEL_RATE is read only, but it does change per mode */
-+	sensor->pixel_rate = v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
-+					       V4L2_CID_PIXEL_RATE,
-+					       sensor->mode->pixel_rate,
-+					       sensor->mode->pixel_rate, 1,
-+					       sensor->mode->pixel_rate);
-+	if (!sensor->pixel_rate)
-+		goto handler_free;
-+	sensor->pixel_rate->flags |= V4L2_CTRL_FLAG_READ_ONLY;
- 
--		return sensor->ctrls.error;
--	}
-+	if (sensor->ctrls.error)
-+		goto handler_free;
- 
- 	sensor->sd.ctrl_handler = &sensor->ctrls;
- 
- 	return 0;
-+
-+handler_free:
-+	dev_err(&client->dev, "%s Controls initialization failed (%d)\n",
-+		__func__, sensor->ctrls.error);
-+	v4l2_ctrl_handler_free(&sensor->ctrls);
-+
-+	return sensor->ctrls.error;
- }
- 
- static int ov5647_parse_dt(struct ov5647 *sensor, struct device_node *np)
--- 
-2.29.1
+On Mon 26 Oct 20, 18:00, Maxime Ripard wrote:
+> On Fri, Oct 23, 2020 at 07:45:44PM +0200, Paul Kocialkowski wrote:
+> > The A83T supports MIPI CSI-2 with a composite controller, covering both=
+ the
+> > protocol logic and the D-PHY implementation. This controller seems to b=
+e found
+> > on the A83T only and probably was abandonned since.
+> >=20
+> > This implementation splits the protocol and D-PHY registers and uses th=
+e PHY
+> > framework internally. The D-PHY is not registered as a standalone PHY d=
+river
+> > since it cannot be used with any other controller.
+> >=20
+> > There are a few notable points about the controller:
+> > - The initialisation sequence involes writing specific magic init value=
+s that
+> >   do not seem to make any particular sense given the concerned register=
+ fields.
+> > - Interrupts appear to be hitting regardless of the interrupt mask regi=
+sters,
+> >   which can cause a serious flood when transmission errors occur.
+>=20
+> Ah, so it's a separate driver too.
+>=20
+> > This work is based on the first version of the driver submitted by
+> > K=C3=A9vin L'h=C3=B4pital, which was adapted to mainline from the Allwi=
+nner BSP.
+> > This version integrates MIPI CSI-2 support as a standalone V4L2 subdev
+> > instead of merging it in the sun6i-csi driver.
+> >=20
+> > It was tested on a Banana Pi M3 board with an OV8865 sensor in a 4-lane
+> > configuration.
+>=20
+> Co-developped-by and SoB from Kevin?
 
+Not really. I wrote this driver from scratch and even significantly reworked
+the register descriptions to the point that I don't think it makes sense to
+consider that he's an author. For parts that can be considered a derivative
+work, copyright attribution was given in the header.
+
+Cheers,
+
+Paul
+
+> Looking at the driver, the same comments from the v3s apply there
+>=20
+> Maxime
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--KN5l+BnMqAQyZLvT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAl+ihGcACgkQ3cLmz3+f
+v9HKqAf+OuoO0165XskKVuTp2nDVtSSL8D+0v2Fji8v+foCHk2qq8v2otrqY5Ey+
+ptEefRqzPa/VFRm5ZShzliEzeFK1vE+0/NE/n9QU4KdkhNUNnMGUIYGtEIvQr+Qo
+QOqecdSX0SR0qy/CMHbuNQJRRSzZ1AkYjq6g/023m3VMUOvGajq+2cwWYpYE0SC/
+Ngjd/deVC3yvosBdjwUfzyB2zj6pNOM8PQrUnIpiO2pBsZcXqqQ4QgLmi1UgtSrz
+RsTW9bMwsz7IRyogs4dCrb6s3ooCuK+Ox3v7bqng99Eqe/n6oIveLzRNS5QnlKMa
+rDjvmpkshuvTgPMU/kQlaGL1k20Lxw==
+=i052
+-----END PGP SIGNATURE-----
+
+--KN5l+BnMqAQyZLvT--
