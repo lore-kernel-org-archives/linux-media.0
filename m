@@ -2,123 +2,232 @@ Return-Path: <SRS0=eCLo=EK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D107BC4742C
-	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 19:37:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E229DC4742C
+	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 20:02:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7A0A520679
-	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 19:37:41 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mDUmwxxs"
+	by mail.kernel.org (Postfix) with ESMTP id 723FA20825
+	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 20:02:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1604520124;
+	bh=8AqEeJmzh+T28NQnJP96PJn3PLaUV8SMFxjUcDxF/h0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=dhnk3Eo4Lc+LknnSEN7NZ9QhkkXZNcgxxZI6vJJl5vyjSlkySqNtDQ+fJspuMJ5WS
+	 6O9vD5jQwPa+e/Aw3hx0SkHxwX34t3u+3c5Rdi1mU3aUPJiNEHRE2i3H3KcjmyRBWl
+	 RGEkRzSjEPZrWz+MclB5XssALKYfw2cDV4RqBgrc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731243AbgKDThd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 4 Nov 2020 14:37:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37614 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731485AbgKDTgi (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Nov 2020 14:36:38 -0500
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C07C061A4C
-        for <linux-media@vger.kernel.org>; Wed,  4 Nov 2020 11:36:36 -0800 (PST)
-Received: by mail-wr1-x441.google.com with SMTP id w1so23362529wrm.4
-        for <linux-media@vger.kernel.org>; Wed, 04 Nov 2020 11:36:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=LLsN4EencXRGtGh6NICYbwvfxRBgSaeY1vL5/hXBaSE=;
-        b=mDUmwxxsTe07lHZdCK2NULBQOzn4QryCvAiJRBiNod0SQqJoH9VRDVYsjyFYKGVo/W
-         reE/6DdkeQRZ5mln/8ZmhUKS1Roow+CuhxYEGWCbHlGiH6Qvhf2OzHgt7m1ca/RB6IfC
-         1Z/XDwPlOsKdZWNpKBMdu/7ai2sBwVtTD3IVxbySNMGnN2mYL5XCqTeOJDO84TsaAUgR
-         y4+ySv4XxyVtAkylZ1TZa2e5KfXHwqh1NYm4Q5nd7bi3EBSwCAabLS+uoRknth3lyNIL
-         4C639ZtdSlM3cWtK32QsZklz9nt/+PfSD/KdhAz8FygBldRS4KP1oWuJo4VC0x5CKunJ
-         1MpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=LLsN4EencXRGtGh6NICYbwvfxRBgSaeY1vL5/hXBaSE=;
-        b=VeXtu5r7ewTBBi7FJIKX2oyk/EJrAl2CFxCpEVZvaiFUbhL7Zsqe1Oj9bLur5ht+N9
-         H74VcWI+ARGdJBorceBfVf8cYwanZecbSgXA3jQt7kAWPVfLPiRke+qgLCdEjQlDMT04
-         WYmi2aFAI8k7L3LSHZzM3/miithcJCovSK1tFncFUbe5fSqtnUATmlmZYlIeF5j/nxRr
-         NBp7/YSR99P4ld3msz0Ynd3Zoc6qjy7SElPOudozdI85bcsbHHUhh5H/V4xCiNRD0qGq
-         17q/aMpgPFQJKXpiqfoYh9i1Ijr9W22rjtJgB9Zuui3H79kmuSNkR2Y7lkwvpCPJpQ74
-         0AoA==
-X-Gm-Message-State: AOAM531Y1GFUV/oL1PrJbX7+dWHP8Xdc0g3zeS0U6tzHr53HY+KvjsIj
-        Sdfj0mq5eW6MKXRe7LWNC9LGDQ==
-X-Google-Smtp-Source: ABdhPJwj69pglo5oKTGjibnfQaOnqOYeg+zi78YMRNFefrSr4xnzdjafE2tVb3anObZuT+KBZ5gsIg==
-X-Received: by 2002:adf:de89:: with SMTP id w9mr33569428wrl.212.1604518595494;
-        Wed, 04 Nov 2020 11:36:35 -0800 (PST)
-Received: from dell.default ([91.110.221.242])
-        by smtp.gmail.com with ESMTPSA id x10sm4034444wrp.62.2020.11.04.11.36.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2020 11:36:34 -0800 (PST)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        linux-serial@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 24/36] tty: serial: serial-tegra: Struct headers should start with 'struct <name>'
-Date:   Wed,  4 Nov 2020 19:35:37 +0000
-Message-Id: <20201104193549.4026187-25-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201104193549.4026187-1-lee.jones@linaro.org>
-References: <20201104193549.4026187-1-lee.jones@linaro.org>
+        id S1731256AbgKDUCD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 4 Nov 2020 15:02:03 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49228 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727013AbgKDUCC (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 4 Nov 2020 15:02:02 -0500
+Received: from coco.lan (ip5f5ad5bc.dynamic.kabel-deutschland.de [95.90.213.188])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AC13D20739;
+        Wed,  4 Nov 2020 20:01:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604520120;
+        bh=8AqEeJmzh+T28NQnJP96PJn3PLaUV8SMFxjUcDxF/h0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=xgRKmHhrR0NpEGqvdDttkeoeY8VRhRLZMdd4qPKcYMMC3PYoT87k1yV3vycoeszFQ
+         0z/bAPfoY5XfTCShtwfo79L0pTRNUnRsW798qpCojWRGIP6zdbjYfFdqWpMdPaOFN3
+         CuZBiihBXqNd3DLdrM12+vLDUUSZbpalpiSofT2M=
+Date:   Wed, 4 Nov 2020 21:01:55 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Gregor Hlawacek <g.hlawacek@hzdr.de>
+Cc:     linux-media@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: Re: Philips Monitor with webcam
+Message-ID: <20201104210155.353a0d6a@coco.lan>
+In-Reply-To: <b8fcc03ed79873f9e55ab394b4b95140ab8b215b.camel@hzdr.de>
+References: <51207fd712e3c1001b80c6642021b1a5d5763ade.camel@hzdr.de>
+        <20201104170233.0d405dff@coco.lan>
+        <59f848e83354ad72c11dacaf571f20a8084baf58.camel@hzdr.de>
+        <20201104174554.4bbec36a@coco.lan>
+        <b8fcc03ed79873f9e55ab394b4b95140ab8b215b.camel@hzdr.de>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fixes the following W=1 kernel build warning(s):
+Em Wed, 04 Nov 2020 20:43:27 +0100
+Gregor Hlawacek <g.hlawacek@hzdr.de> escreveu:
 
- drivers/tty/serial/serial-tegra.c:85: warning: cannot understand function prototype: 'struct tegra_uart_chip_data '
+I'm c/c Laurent, as he is the author of the UVC driver.
 
-Cc: Laxman Dewangan <ldewangan@nvidia.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Jiri Slaby <jirislaby@kernel.org>
-Cc: Thierry Reding <thierry.reding@gmail.com>
-Cc: Jonathan Hunter <jonathanh@nvidia.com>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: "Christian König" <christian.koenig@amd.com>
-Cc: linux-serial@vger.kernel.org
-Cc: linux-tegra@vger.kernel.org
-Cc: linux-media@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org
-Cc: linaro-mm-sig@lists.linaro.org
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
----
- drivers/tty/serial/serial-tegra.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> On Wed, 2020-11-04 at 17:45 +0100, Mauro Carvalho Chehab wrote:
+> > Em Wed, 04 Nov 2020 17:25:48 +0100
+> > Gregor Hlawacek <g.hlawacek@hzdr.de> escreveu:
+> >  =20
+> > > On Wed, 2020-11-04 at 17:02 +0100, Mauro Carvalho Chehab wrote: =20
+> > > > Em Wed, 04 Nov 2020 14:24:34 +0100
+> > > > Gregor Hlawacek <g.hlawacek@hzdr.de> escreveu:
+> > > > =C2=A0  =20
+> > > > > Hi all
+> > > > >=20
+> > > > > I own a Philips Brilliance 241B which has a webcam attached.
+> > > > > The
+> > > > > device
+> > > > > is listed as 0412:612b Chicony Electronics Co., Ltd, bubt
+> > > > > doesn't
+> > > > > work
+> > > > > with the latest UVC stock kernel driver. Is there any hope to
+> > > > > get
+> > > > > this
+> > > > > supported?
+> > > > >=20
+> > > > > uname -a:
+> > > > > Linux it72 5.9.3-arch1-1 #1 SMP PREEMPT Sun, 01 Nov 2020
+> > > > > 12:58:59
+> > > > > +0000
+> > > > > x86_64 GNU/Linux
+> > > > >=20
+> > > > > running Arch Linux on a Lenovo Thinkpad =C2=A0T490s
+> > > > >=20
+> > > > > dmesg:
+> > > > >=20
+> > > > > [76850.137838] usb 3-1.1.1.2: New USB device found,
+> > > > > idVendor=3D04f2,
+> > > > > idProduct=3Db612, bcdDevice=3D 2.10
+> > > > > [76850.137841] usb 3-1.1.1.2: New USB device strings: Mfr=3D1,
+> > > > > Product=3D2,
+> > > > > SerialNumber=3D3
+> > > > > [76850.137843] usb 3-1.1.1.2: Product: USB2.0 FHD UVC WebCam
+> > > > > [76850.137845] usb 3-1.1.1.2: Manufacturer: SunplusIT Inc
+> > > > > [76850.137846] usb 3-1.1.1.2: SerialNumber: 01.00.00
+> > > > > [76850.152761] uvcvideo: Found UVC 1.50 device USB2.0 FHD UVC
+> > > > > WebCam
+> > > > > (04f2:b612)
+> > > > > [76850.215683] input: USB2.0 FHD UVC WebCam: USB2.0 F as
+> > > > > /devices/pci0000:00/0000:00:1c.4/0000:04:00.0/0000:05:02.0/0000
+> > > > > :3c:
+> > > > > 00.0
+> > > > > /usb3/3-1/3-1.1/3-1.1.1/3-1.1.1.2/3-1.1.1.2:1.0/input/input66
+> > > > > [76850.223642] uvcvideo: Found UVC 1.50 device USB2.0 FHD UVC
+> > > > > WebCam
+> > > > > (04f2:b612)
+> > > > > [76850.232499] usb 4-1.1.2: new SuperSpeed Gen 1 USB device
+> > > > > number
+> > > > > 5
+> > > > > using xhci_hcd
+> > > > > [76850.241004] input: USB2.0 FHD UVC WebCam: IR Camer as
+> > > > > /devices/pci0000:00/0000:00:1c.4/0000:04:00.0/0000:05:02.0/0000
+> > > > > :3c:
+> > > > > 00.0
+> > > > > /usb3/3-1/3-1.1/3-1.1.1/3-1.1.1.2/3-1.1.1.2:1.2/input/input67=C2=
+=A0  =20
+> > > >=20
+> > > > Hmm... it sounds that the camera was properly detected here.=20
+> > > >=20
+> > > > Could you please enclose the contents of the following command?
+> > > >=20
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0$ v4l2-ctl --all
+> > > >=20
+> > > > Thanks,
+> > > > Mauro=C2=A0  =20
+> > >=20
+> > > Hi Mauro=C2=A0
+> > >=20
+> > > thanks for the quick answer. Here is the output but I am pretty
+> > > sure
+> > > that this come from the integrated laptop camera and not the one in
+> > > the
+> > > external monitor =20
+> >=20
+> > Well, you can use "-d" parameter to identify the device, like:
+> >=20
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0$ v4l2-ctl -d /dev/v4l/=
+by-path/pci-0000\:00\:14.0-usb-
+> > 0\:3.2\:1.0-video-index0 --all
+> >=20
+> > The real path depends on your camera - you can take a look at:
+> >=20
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0$ tree /dev/v4l/
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/dev/v4l/
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=E2=94=9C=E2=94=80=E2=
+=94=80 by-id
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=E2=94=82=C2=A0=C2=A0 =
+=E2=94=9C=E2=94=80=E2=94=80 usb-046d_HD_Pro_Webcam_C920_55DA1CCF-video-inde=
+x0 ->
+> > ../../video0
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=E2=94=82=C2=A0=C2=A0 =
+=E2=94=94=E2=94=80=E2=94=80 usb-046d_HD_Pro_Webcam_C920_55DA1CCF-video-inde=
+x1 ->
+> > ../../video1
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=E2=94=94=E2=94=80=E2=
+=94=80 by-path
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =E2=
+=94=9C=E2=94=80=E2=94=80 pci-0000:00:14.0-usb-0:3.2:1.0-video-index0 ->
+> > ../../video0
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =E2=
+=94=94=E2=94=80=E2=94=80 pci-0000:00:14.0-usb-0:3.2:1.0-video-index1 ->
+> > ../../video1
+> >=20
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0
+> > In order to check the ones that were detected.
+> >=20
+> > Regards,
+> > Mauro =20
+> =E2=94=9C=E2=94=80=E2=94=80 by-id
+> =E2=94=82=C2=A0=C2=A0 =E2=94=9C=E2=94=80=E2=94=80 usb-Chicony_Electronics=
+_Co._Ltd._Integrated_Camera_0001-video-
+> index0 -> ../../video0
+> =E2=94=82=C2=A0=C2=A0 =E2=94=9C=E2=94=80=E2=94=80 usb-Chicony_Electronics=
+_Co._Ltd._Integrated_Camera_0001-video-
+> index1 -> ../../video1
 
-diff --git a/drivers/tty/serial/serial-tegra.c b/drivers/tty/serial/serial-tegra.c
-index bd13014a1c537..c363ee0470f45 100644
---- a/drivers/tty/serial/serial-tegra.c
-+++ b/drivers/tty/serial/serial-tegra.c
-@@ -75,7 +75,7 @@
- #define TEGRA_UART_FCR_IIR_FIFO_EN		0x40
- 
- /**
-- * tegra_uart_chip_data: SOC specific data.
-+ * struct tegra_uart_chip_data: SOC specific data.
-  *
-  * @tx_fifo_full_status: Status flag available for checking tx fifo full.
-  * @allow_txfifo_reset_fifo_mode: allow_tx fifo reset with fifo mode or not.
--- 
-2.25.1
+Ok. So, /dev/video0 is the video streaming device (and /dev/video1
+carries on metadata).
 
+
+> =E2=94=82=C2=A0=C2=A0 =E2=94=9C=E2=94=80=E2=94=80 usb-SunplusIT_Inc_USB2.=
+0_FHD_UVC_WebCam_01.00.00-video-index0 -
+> > ../../video4 =20
+> =E2=94=82=C2=A0=C2=A0 =E2=94=94=E2=94=80=E2=94=80 usb-SunplusIT_Inc_USB2.=
+0_FHD_UVC_WebCam_01.00.00-video-index1 -
+> > ../../video5 =20
+> =E2=94=94=E2=94=80=E2=94=80 by-path
+>     =E2=94=9C=E2=94=80=E2=94=80 pci-0000:00:14.0-usb-0:8:1.0-video-index0=
+ -> ../../video0
+>     =E2=94=9C=E2=94=80=E2=94=80 pci-0000:00:14.0-usb-0:8:1.0-video-index1=
+ -> ../../video1
+>     =E2=94=9C=E2=94=80=E2=94=80 pci-0000:3c:00.0-usb-0:1.1.1.2:1.0-video-=
+index0 -> ../../video2
+>     =E2=94=9C=E2=94=80=E2=94=80 pci-0000:3c:00.0-usb-0:1.1.1.2:1.0-video-=
+index1 -> ../../video3
+>     =E2=94=9C=E2=94=80=E2=94=80 pci-0000:3c:00.0-usb-0:1.1.1.2:1.2-video-=
+index0 -> ../../video4
+>     =E2=94=94=E2=94=80=E2=94=80 pci-0000:3c:00.0-usb-0:1.1.1.2:1.2-video-=
+index1 -> ../../video5
+>=20
+> It seems non of them responds. They are either busy, can not be opened
+> or fail to produce any response.
+>=20
+> sudo v4l2-ctl -d /dev/v4l/by-id/usb-
+> sunplusIT_Inc_USB2.0_FHD_UVC_WebCam_01.00.00-video-index0
+> Failed to open /dev/v4l/by-id/usb-
+> SunplusIT_Inc_USB2.0_FHD_UVC_WebCam_01.00.00-video-index0: Device or
+> resource busy
+
+Weird. It is not usual to receive -EBUSY if there's no other program
+using the device at the same time.
+
+Yet, from what I understood, on this device, the camera is hidden inside
+the monitor until an application tries to use it.
+
+While uvc driver has support for Linux PM, perhaps this specific
+device requires some extra command to turn the camera on and to=20
+open it from the monitor case.
+
+After you called v4l2-ctl, does any message appears at dmesg?
+
+Thanks,
+Mauro
