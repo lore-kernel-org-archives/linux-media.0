@@ -5,64 +5,63 @@ X-Spam-Level:
 X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 483A1C4741F
-	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 18:07:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B125C4741F
+	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 18:07:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D6C3E2224D
-	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 18:07:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 29E1320825
+	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 18:07:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="aah+dx1A"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="XQy+ahFQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732212AbgKDSHt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 4 Nov 2020 13:07:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
+        id S1732253AbgKDSHy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 4 Nov 2020 13:07:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726608AbgKDSHs (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Nov 2020 13:07:48 -0500
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CED8C0613D4
-        for <linux-media@vger.kernel.org>; Wed,  4 Nov 2020 10:07:48 -0800 (PST)
-Received: by mail-wm1-x342.google.com with SMTP id k18so3190324wmj.5
-        for <linux-media@vger.kernel.org>; Wed, 04 Nov 2020 10:07:48 -0800 (PST)
+        with ESMTP id S1732231AbgKDSHw (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Nov 2020 13:07:52 -0500
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393EEC0401C1
+        for <linux-media@vger.kernel.org>; Wed,  4 Nov 2020 10:07:51 -0800 (PST)
+Received: by mail-wm1-x343.google.com with SMTP id h2so651140wmm.0
+        for <linux-media@vger.kernel.org>; Wed, 04 Nov 2020 10:07:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=KBJdPJKhHMcEG3i3MssFQOTFq5qAUMX15kP0Cu1fqHY=;
-        b=aah+dx1Av5pM+VYV1e9dWE3ehzZ6Vmsu1Py6GgjJk9e/aROc4f5UfmfHeDQljhQN0T
-         CPV7o4E/YzYf8QX6LU01ji019CT/C7s/u1/H4j2x4vCoxvoYL22c2SbuoIr14llnow1u
-         y8+QEf5Ij4uChguyvnyIkeaDyb7U0V0gYQyfY=
+        bh=JTfpViGp/YAR6eiRBzwI3JOg4O3Heq9bwynk1bWiaJc=;
+        b=XQy+ahFQF4UaoqmnsYHhsBvX6grINJ8mOqmb4n3whQ2VJAH53HkpDJ+t7dS4NjvG65
+         dwFnIlBMu3R0Ze6S6qDLXK2EZAux7WO/B1/F4Z6ByveOBpDvRT3Myadt9+lc+Eup1K6q
+         szK3NmINoG4MX7QNVVbqHOVGDew8/s8D+sShg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=KBJdPJKhHMcEG3i3MssFQOTFq5qAUMX15kP0Cu1fqHY=;
-        b=YVDKJGdElqMHs7usLLi2Rdfo+Y09jGQ273WM1YfhRMbENZOX7E2YgyZ1euj6qV5biC
-         xbjjMKOs52W9/mZrFeww4i4pJL2hH13UsLBRr087t7d7PBC6DAMw0gsK2EADQo8Ay1CM
-         DjwfZxBRvUQUWzu13ecJseDcDLCY0gCv0th25cmVqFBZtatQ1SZZ9qUriFdCpcNshrvE
-         zmXg0hJMT87zKVNyV4YY1jhEBl8gzl0SAIo1H+3X0T6PFvIM6QC2TruL6xRUSOF9LOtK
-         pipfmOrB+9WL6azVVZLLRJ7v6qjvpGpmYolOA/OUjcm0AR5FvMjqNkwnXoyqW8oCmj03
-         MQRQ==
-X-Gm-Message-State: AOAM530aqdF1IAzWX0vDWnMrKNWmDcPTPN7mZ6lbea+aQs6Ld8vaEPPz
-        tZjTX7XH6MqFyk/TJQUUIa3EDA==
-X-Google-Smtp-Source: ABdhPJyBKEK/HrrERt5hZuIKNep/zDOG7j7Egm92CqgQtPbFdEAPD53XzUWv6ghn9iwHxfvKVG9DRA==
-X-Received: by 2002:a1c:4b04:: with SMTP id y4mr5985826wma.93.1604513266866;
-        Wed, 04 Nov 2020 10:07:46 -0800 (PST)
+        bh=JTfpViGp/YAR6eiRBzwI3JOg4O3Heq9bwynk1bWiaJc=;
+        b=ruFVSBHuS7AsFrimDr01x2TdQzUAWoCCeb6D+ES8X0T0/vW1Cc/zayoNcpn5Hlyeoe
+         72LEzvs4pCHzliagEySDYzdnUUdbJxM0DN+SuV1P5rB0RkWiEM6DJzkOMAFH7NdkbRMF
+         rAGld2lTsIDAvbNJI6z0QnaOceHnex50+vRkUw8MHV7dPvGXXAbZ6pXc4+gB+6ThKAb1
+         fnwifrIzU9Ctj/FXIvioKmoCbcUau2WyAP2C+7jSN8GO1Mn1JdZX1NLhxiqS+yw3WsjH
+         gIfmMocXHdDnRoqlAaYKOPnHyTt8WFQ5ZFCnqgNpP52jCu7WASzda2mUH51z+UGkbacK
+         uuhA==
+X-Gm-Message-State: AOAM530/efEjYXJORRQsZTiD/Cv6a6uBOtchi8IjuG/PHLtMBFw4BZrA
+        e9a2Ix2YWWniCscQGiSXH7l1FQ==
+X-Google-Smtp-Source: ABdhPJw6gti+ZBgjhBtFsUallZansd5igSs/VbMB/P6MMiDr5Df+oTbk5CEoHdkq4s9PnLcfQ8ynWw==
+X-Received: by 2002:a1c:9ec9:: with SMTP id h192mr5908044wme.8.1604513270005;
+        Wed, 04 Nov 2020 10:07:50 -0800 (PST)
 Received: from alco.lan ([80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id y10sm3801841wru.94.2020.11.04.10.07.46
+        by smtp.gmail.com with ESMTPSA id y10sm3801841wru.94.2020.11.04.10.07.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2020 10:07:46 -0800 (PST)
+        Wed, 04 Nov 2020 10:07:49 -0800 (PST)
 From:   Ricardo Ribalda <ribalda@chromium.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v2 1/7] media: uvcvideo: Use pr_cont() macro
-Date:   Wed,  4 Nov 2020 19:07:28 +0100
-Message-Id: <20201104180734.286789-2-ribalda@chromium.org>
+Subject: [PATCH v2 5/7] media: uvcvideo: Entity defined get_info and get_cur
+Date:   Wed,  4 Nov 2020 19:07:32 +0100
+Message-Id: <20201104180734.286789-6-ribalda@chromium.org>
 X-Mailer: git-send-email 2.29.1.341.ge80a0c044ae-goog
 In-Reply-To: <20201104180734.286789-1-ribalda@chromium.org>
 References: <20201104180734.286789-1-ribalda@chromium.org>
@@ -72,132 +71,71 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Replace all the uses of printk(KERN_CONT ... with pr_cont().
+Allows controls to get their properties and current value
+from an entity-defined function instead of via a query to the USB
+device.
 
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/usb/uvc/uvc_driver.c | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ drivers/media/usb/uvc/uvc_ctrl.c | 21 +++++++++++++++++----
+ drivers/media/usb/uvc/uvcvideo.h |  3 +++
+ 2 files changed, 20 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index ddb9eaa11be7..9fc0b600eab1 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -1476,7 +1476,7 @@ static int uvc_scan_chain_entity(struct uvc_video_chain *chain,
- 	switch (UVC_ENTITY_TYPE(entity)) {
- 	case UVC_VC_EXTENSION_UNIT:
- 		if (uvc_trace_param & UVC_TRACE_PROBE)
--			printk(KERN_CONT " <- XU %d", entity->id);
-+			pr_cont(" <- XU %d", entity->id);
+diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+index 0e480b75e724..076f63af1031 100644
+--- a/drivers/media/usb/uvc/uvc_ctrl.c
++++ b/drivers/media/usb/uvc/uvc_ctrl.c
+@@ -980,10 +980,19 @@ static int __uvc_ctrl_get(struct uvc_video_chain *chain,
+ 		return -EACCES;
  
- 		if (entity->bNrInPins != 1) {
- 			uvc_trace(UVC_TRACE_DESCR, "Extension unit %d has more "
-@@ -1488,7 +1488,7 @@ static int uvc_scan_chain_entity(struct uvc_video_chain *chain,
+ 	if (!ctrl->loaded) {
+-		ret = uvc_query_ctrl(chain->dev, UVC_GET_CUR, ctrl->entity->id,
+-				chain->dev->intfnum, ctrl->info.selector,
++		if (ctrl->entity->get_cur) {
++			ret = ctrl->entity->get_cur(ctrl->entity,
++				ctrl->info.selector,
+ 				uvc_ctrl_data(ctrl, UVC_CTRL_DATA_CURRENT),
+ 				ctrl->info.size);
++		} else {
++			ret = uvc_query_ctrl(chain->dev, UVC_GET_CUR,
++				ctrl->entity->id,
++				chain->dev->intfnum,
++				ctrl->info.selector,
++				uvc_ctrl_data(ctrl, UVC_CTRL_DATA_CURRENT),
++				ctrl->info.size);
++		}
+ 		if (ret < 0)
+ 			return ret;
  
- 	case UVC_VC_PROCESSING_UNIT:
- 		if (uvc_trace_param & UVC_TRACE_PROBE)
--			printk(KERN_CONT " <- PU %d", entity->id);
-+			pr_cont(" <- PU %d", entity->id);
+@@ -1687,8 +1696,12 @@ static int uvc_ctrl_get_flags(struct uvc_device *dev,
+ 	if (data == NULL)
+ 		return -ENOMEM;
  
- 		if (chain->processing != NULL) {
- 			uvc_trace(UVC_TRACE_DESCR, "Found multiple "
-@@ -1501,7 +1501,7 @@ static int uvc_scan_chain_entity(struct uvc_video_chain *chain,
+-	ret = uvc_query_ctrl(dev, UVC_GET_INFO, ctrl->entity->id, dev->intfnum,
+-			     info->selector, data, 1);
++	if (ctrl->entity->get_info)
++		ret = ctrl->entity->get_info(ctrl->entity, ctrl->info.selector,
++					     data);
++	else
++		ret = uvc_query_ctrl(dev, UVC_GET_INFO, ctrl->entity->id,
++				     dev->intfnum, info->selector, data, 1);
+ 	if (!ret)
+ 		info->flags |= (data[0] & UVC_CONTROL_CAP_GET ?
+ 				UVC_CTRL_FLAG_GET_CUR : 0)
+diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+index 00f985001c1d..776b083ed466 100644
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -353,6 +353,9 @@ struct uvc_entity {
+ 	u8 bNrInPins;
+ 	u8 *baSourceID;
  
- 	case UVC_VC_SELECTOR_UNIT:
- 		if (uvc_trace_param & UVC_TRACE_PROBE)
--			printk(KERN_CONT " <- SU %d", entity->id);
-+			pr_cont(" <- SU %d", entity->id);
- 
- 		/* Single-input selector units are ignored. */
- 		if (entity->bNrInPins == 1)
-@@ -1520,7 +1520,7 @@ static int uvc_scan_chain_entity(struct uvc_video_chain *chain,
- 	case UVC_ITT_CAMERA:
- 	case UVC_ITT_MEDIA_TRANSPORT_INPUT:
- 		if (uvc_trace_param & UVC_TRACE_PROBE)
--			printk(KERN_CONT " <- IT %d\n", entity->id);
-+			pr_cont(" <- IT %d\n", entity->id);
- 
- 		break;
- 
-@@ -1528,17 +1528,17 @@ static int uvc_scan_chain_entity(struct uvc_video_chain *chain,
- 	case UVC_OTT_DISPLAY:
- 	case UVC_OTT_MEDIA_TRANSPORT_OUTPUT:
- 		if (uvc_trace_param & UVC_TRACE_PROBE)
--			printk(KERN_CONT " OT %d", entity->id);
-+			pr_cont(" OT %d", entity->id);
- 
- 		break;
- 
- 	case UVC_TT_STREAMING:
- 		if (UVC_ENTITY_IS_ITERM(entity)) {
- 			if (uvc_trace_param & UVC_TRACE_PROBE)
--				printk(KERN_CONT " <- IT %d\n", entity->id);
-+				pr_cont(" <- IT %d\n", entity->id);
- 		} else {
- 			if (uvc_trace_param & UVC_TRACE_PROBE)
--				printk(KERN_CONT " OT %d", entity->id);
-+				pr_cont(" OT %d", entity->id);
- 		}
- 
- 		break;
-@@ -1588,9 +1588,9 @@ static int uvc_scan_chain_forward(struct uvc_video_chain *chain,
- 			list_add_tail(&forward->chain, &chain->entities);
- 			if (uvc_trace_param & UVC_TRACE_PROBE) {
- 				if (!found)
--					printk(KERN_CONT " (->");
-+					pr_cont(" (->");
- 
--				printk(KERN_CONT " XU %d", forward->id);
-+				pr_cont(" XU %d", forward->id);
- 				found = 1;
- 			}
- 			break;
-@@ -1608,16 +1608,16 @@ static int uvc_scan_chain_forward(struct uvc_video_chain *chain,
- 			list_add_tail(&forward->chain, &chain->entities);
- 			if (uvc_trace_param & UVC_TRACE_PROBE) {
- 				if (!found)
--					printk(KERN_CONT " (->");
-+					pr_cont(" (->");
- 
--				printk(KERN_CONT " OT %d", forward->id);
-+				pr_cont(" OT %d", forward->id);
- 				found = 1;
- 			}
- 			break;
- 		}
- 	}
- 	if (found)
--		printk(KERN_CONT ")");
-+		pr_cont(")");
- 
- 	return 0;
- }
-@@ -1643,7 +1643,7 @@ static int uvc_scan_chain_backward(struct uvc_video_chain *chain,
- 		}
- 
- 		if (uvc_trace_param & UVC_TRACE_PROBE)
--			printk(KERN_CONT " <- IT");
-+			pr_cont(" <- IT");
- 
- 		chain->selector = entity;
- 		for (i = 0; i < entity->bNrInPins; ++i) {
-@@ -1664,14 +1664,14 @@ static int uvc_scan_chain_backward(struct uvc_video_chain *chain,
- 			}
- 
- 			if (uvc_trace_param & UVC_TRACE_PROBE)
--				printk(KERN_CONT " %d", term->id);
-+				pr_cont(" %d", term->id);
- 
- 			list_add_tail(&term->chain, &chain->entities);
- 			uvc_scan_chain_forward(chain, term, entity);
- 		}
- 
- 		if (uvc_trace_param & UVC_TRACE_PROBE)
--			printk(KERN_CONT "\n");
-+			pr_cont("\n");
- 
- 		id = 0;
- 		break;
++	int (*get_info)(struct uvc_entity *entity, u8 cs, u8 *caps);
++	int (*get_cur)(struct uvc_entity *entity, u8 cs, void *data, u16 size);
++
+ 	unsigned int ncontrols;
+ 	struct uvc_control *controls;
+ };
 -- 
 2.29.1.341.ge80a0c044ae-goog
 
