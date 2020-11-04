@@ -8,56 +8,56 @@ X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9141C5517A
-	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 23:47:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97BDBC55179
+	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 23:47:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 688CC20867
-	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 23:47:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 48D8220825
+	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 23:47:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eN4h8wmK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lIEXO/La"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733175AbgKDXq3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 4 Nov 2020 18:46:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48338 "EHLO
+        id S2387436AbgKDXrW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 4 Nov 2020 18:47:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733168AbgKDXpi (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Nov 2020 18:45:38 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E74C0613D2;
-        Wed,  4 Nov 2020 15:45:37 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id i6so197369lfd.1;
-        Wed, 04 Nov 2020 15:45:37 -0800 (PST)
+        with ESMTP id S1733143AbgKDXpZ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Nov 2020 18:45:25 -0500
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85234C0613CF;
+        Wed,  4 Nov 2020 15:45:25 -0800 (PST)
+Received: by mail-lf1-x141.google.com with SMTP id 74so174428lfo.5;
+        Wed, 04 Nov 2020 15:45:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JWa430PVIqmJIbeD7KBt0TZCN2r4IZvUOeKukZUULSM=;
-        b=eN4h8wmKVmc98I8VpVQD05mgPsSKIV8roZRuvQUi3EOcizAEVMxhK4XcKenNODUP57
-         Rxze2zWAWjLCIfL2dNIRIGywZvC28Gu+MslIDgcQBiINpAIgA8ayEvdgAWeaNJS/UoUw
-         AF/ln6R+1zf+7IT8b1pPX6qDWo8FajvGF+vv4uuipo2sXIA3JUzx7p8u+ktEcwm1o1pg
-         8EzDhwuYDylAakt40bWirCp8sipi2Klh9G/IBYON5H8zDXGqS29eR/JqRCTc9dW4pVKR
-         y1mExIRa9//FQnuJ5e8gfTLqClqNg3UUpnvkCzqL0KLmGCs6gxB1ftFcHku0KNIwUxDo
-         VvhA==
+        bh=bYI1lTU0u9qugSWMqSGv5A3HDa8DCxBYBbaISJenZIs=;
+        b=lIEXO/La7Zc0VwM0c4dDJ9vgZF6JXEGcQnUDRRMwyyD10nK8kcgrNp9DgX3Du75IIT
+         OzpoO+2Bl7PIc8Pyh1aBFhzzFuhxYw/EGzxr89Ll+MHvnacmt4aq+occ46DdFWbChWkL
+         izUIyLqX6Bqr0wRpJMiCGaqg2/bML9hVkLcegcNewXvrIjcjdirU/fjw5hxKasYetBF0
+         ag405LakLuvWIXmezrX37MwwgCR2hLz4ZwMbHvpDRnPUc1zYptM9IAdfmP4GvSqjJHt3
+         DpNnOKNZjLv+kBhz26qVrZFveREsWzpQVEUcELKxB05MXwMJE6kz+wM2C0LgbHfqMsKs
+         A2gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JWa430PVIqmJIbeD7KBt0TZCN2r4IZvUOeKukZUULSM=;
-        b=NJUutTGgR8RwypVHJLcSm5Y2Y48RPau6LXgiYq/Ov51mJ4IJYtz9/YMLf2bMebokUA
-         2+mE2hV6OOicjPedvV2xs/eMwzwkZGOhx9bRkhKVIX3skdvIQ6FB1wotTag11JeMI4Dh
-         n6b1YHYZaCkxe711w16iIcNt3K2nfkIHPPxRq2MNbnjlyPVZJ8lu4kFRZipHVjJgwLaS
-         I/3le7b7/2P5BtsA7FrUurg0OPkh35yi0iPBw5MI0JJDm+iJ+XyTRQpbzHHHa4f+Oxv+
-         5BKal+Due1LhQu2pxuZxGjyLaZV6V8JqVRCBlp8BcBvuHobq0WBa/z6iqqnVXnw5zy7N
-         pU6g==
-X-Gm-Message-State: AOAM5330L8GlKNXjfEpg8LfUsK6IuKAFJhdmbhP560/qqiA+n1koXEcR
-        7enXq0BOSzQ4nwcIcK8Pz2U=
-X-Google-Smtp-Source: ABdhPJz6df+Ge/OfH/yyY6XjwgEffIPjNRxtB5oKKiqUFuVW6jG9sorT54nuDmLv0xSqhkTx9fOGHg==
-X-Received: by 2002:a05:6512:3388:: with SMTP id h8mr60396lfg.318.1604533536417;
-        Wed, 04 Nov 2020 15:45:36 -0800 (PST)
+        bh=bYI1lTU0u9qugSWMqSGv5A3HDa8DCxBYBbaISJenZIs=;
+        b=VD23WUI/Iw9+s38Vg7zoOyUSj77CJTkl4oqVOeQuEVNk41Cr4W+AxINkEnY1yuBbK/
+         hMipYrDvC8bu1GWehfik3MJ7B2y5lCsu10ccyDIqJ5sONdz3WdF8RmWXGRFLFaR700mJ
+         426bTVx0DwyjSP9RLp9ZNgyKugM6L6YAwiOxkHfPcMuyiPnKcFD/yjT5tml4u9NAeyYL
+         EGA/dXqDnnD0gLZBcq74udmM+X23BQkmnSdmKZLFcNfGN9u1P5GW9270gs8qs2ejJa/9
+         LGCKqrvkKTqAHXGjg6jKZDRR83oXyNBlLC5pcbfM9nFOx0owMPnk/Fl4QvxuGeE6C2I9
+         P1xw==
+X-Gm-Message-State: AOAM532/a1dHDvUt+Fs3ZJ3azm+6o9KuzK28puFwj+akkEAj2pRJxnM4
+        VpzEfNqsZnKmwP/R6397MI0=
+X-Google-Smtp-Source: ABdhPJzQf9TUjFglxLujGELvxqeC4uglPytS2wsivLSpqjwqfzVF8NSmMtie4mgdOemR7ln3Z7XqDQ==
+X-Received: by 2002:a19:7409:: with SMTP id v9mr59130lfe.402.1604533524002;
+        Wed, 04 Nov 2020 15:45:24 -0800 (PST)
 Received: from localhost.localdomain (109-252-192-83.dynamic.spd-mgts.ru. [109.252.192.83])
-        by smtp.gmail.com with ESMTPSA id m6sm640725ljc.112.2020.11.04.15.45.35
+        by smtp.gmail.com with ESMTPSA id m6sm640725ljc.112.2020.11.04.15.45.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2020 15:45:35 -0800 (PST)
+        Wed, 04 Nov 2020 15:45:23 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -82,9 +82,9 @@ Cc:     linux-samsung-soc@vger.kernel.org, devel@driverdev.osuosl.org,
         linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-media@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH v1 29/30] ARM: tegra: cardhu-a04: Add voltage supplies to DVFS-capable devices
-Date:   Thu,  5 Nov 2020 02:44:26 +0300
-Message-Id: <20201104234427.26477-30-digetx@gmail.com>
+Subject: [PATCH v1 20/30] usb: chipidea: tegra: Support OPP and SoC core voltage scaling
+Date:   Thu,  5 Nov 2020 02:44:17 +0300
+Message-Id: <20201104234427.26477-21-digetx@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201104234427.26477-1-digetx@gmail.com>
 References: <20201104234427.26477-1-digetx@gmail.com>
@@ -94,76 +94,133 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add voltage supplies to DVFS-capable devices in order to enable
-system-wide voltage scaling.
+Add initial OPP and SoC CORE voltage scaling support to the Tegra UDC
+driver. This is required for enabling system-wide DVFS on older Tegra
+SoCs.
 
+Tested-by: Peter Geis <pgwipeout@gmail.com>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- arch/arm/boot/dts/tegra30-cardhu-a04.dts | 44 ++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ drivers/usb/chipidea/Kconfig         |  1 +
+ drivers/usb/chipidea/ci_hdrc_tegra.c | 79 ++++++++++++++++++++++++++++
+ 2 files changed, 80 insertions(+)
 
-diff --git a/arch/arm/boot/dts/tegra30-cardhu-a04.dts b/arch/arm/boot/dts/tegra30-cardhu-a04.dts
-index c1c0ca628af1..7149e5594537 100644
---- a/arch/arm/boot/dts/tegra30-cardhu-a04.dts
-+++ b/arch/arm/boot/dts/tegra30-cardhu-a04.dts
-@@ -93,6 +93,34 @@ vdd_bl2_reg: regulator@106 {
- 		gpio = <&gpio TEGRA_GPIO(DD, 0) GPIO_ACTIVE_HIGH>;
- 	};
+diff --git a/drivers/usb/chipidea/Kconfig b/drivers/usb/chipidea/Kconfig
+index 8bafcfc6080d..6a5bc08711d6 100644
+--- a/drivers/usb/chipidea/Kconfig
++++ b/drivers/usb/chipidea/Kconfig
+@@ -56,6 +56,7 @@ config USB_CHIPIDEA_TEGRA
+ 	tristate "Enable Tegra UDC glue driver" if EMBEDDED
+ 	depends on OF
+ 	depends on USB_CHIPIDEA_UDC
++	select PM_OPP
+ 	default USB_CHIPIDEA
  
-+	host1x@50000000 {
-+		core-supply = <&vddcore_reg>;
-+
-+		gr2d@54140000 {
-+			core-supply = <&vddcore_reg>;
-+		};
-+
-+		gr3d@54180000 {
-+			core-supply = <&vddcore_reg>;
-+		};
-+
-+		dc@54200000 {
-+			core-supply = <&vddcore_reg>;
-+		};
-+
-+		dc@54240000 {
-+			core-supply = <&vddcore_reg>;
-+		};
-+	};
-+
-+	vde@6001a000 {
-+		core-supply = <&vddcore_reg>;
-+	};
-+
-+	pwm: pwm@7000a000 {
-+		core-supply = <&vddcore_reg>;
-+	};
-+
- 	i2c@7000d000 {
- 		pmic: tps65911@2d {
- 			regulators {
-@@ -117,6 +145,22 @@ vddcore_reg: tps62361@60 {
- 		};
- 	};
+ endif
+diff --git a/drivers/usb/chipidea/ci_hdrc_tegra.c b/drivers/usb/chipidea/ci_hdrc_tegra.c
+index 7455df0ede49..7f0403e810fe 100644
+--- a/drivers/usb/chipidea/ci_hdrc_tegra.c
++++ b/drivers/usb/chipidea/ci_hdrc_tegra.c
+@@ -6,6 +6,7 @@
+ #include <linux/clk.h>
+ #include <linux/module.h>
+ #include <linux/of_device.h>
++#include <linux/pm_opp.h>
+ #include <linux/reset.h>
  
-+	memory-controller@7000f400 {
-+		core-supply = <&vddcore_reg>;
-+	};
+ #include <linux/usb/chipidea.h>
+@@ -47,6 +48,79 @@ static const struct of_device_id tegra_udc_of_match[] = {
+ };
+ MODULE_DEVICE_TABLE(of, tegra_udc_of_match);
+ 
++static void tegra_udc_deinit_opp_table(void *data)
++{
++	struct device *dev = data;
++	struct opp_table *opp_table;
 +
-+	mmc@78000000 {
-+		core-supply = <&vddcore_reg>;
-+	};
++	opp_table = dev_pm_opp_get_opp_table(dev);
++	dev_pm_opp_of_remove_table(dev);
++	dev_pm_opp_put_regulators(opp_table);
++	dev_pm_opp_put_opp_table(opp_table);
++}
 +
-+	mmc@78000600 {
-+		core-supply = <&vddcore_reg>;
-+	};
++static int devm_tegra_udc_init_opp_table(struct device *dev)
++{
++	unsigned long rate = ULONG_MAX;
++	struct opp_table *opp_table;
++	const char *rname = "core";
++	struct dev_pm_opp *opp;
++	int err;
 +
-+	usb@7d008000 {
-+		core-supply = <&vddcore_reg>;
-+	};
++	/* legacy device-trees don't have OPP table */
++	if (!device_property_present(dev, "operating-points-v2"))
++		return 0;
 +
- 	cpus {
- 		cpu0: cpu@0 {
- 			cpu-supply = <&vddctrl_reg>;
++	/* voltage scaling is optional */
++	if (device_property_present(dev, "core-supply"))
++		opp_table = dev_pm_opp_set_regulators(dev, &rname, 1);
++	else
++		opp_table = dev_pm_opp_get_opp_table(dev);
++
++	if (IS_ERR(opp_table))
++		return dev_err_probe(dev, PTR_ERR(opp_table),
++				     "failed to prepare OPP table\n");
++
++	err = dev_pm_opp_of_add_table(dev);
++	if (err) {
++		dev_err(dev, "failed to add OPP table: %d\n", err);
++		goto put_table;
++	}
++
++	/* find suitable OPP for the maximum clock rate */
++	opp = dev_pm_opp_find_freq_floor(dev, &rate);
++	err = PTR_ERR_OR_ZERO(opp);
++	if (err) {
++		dev_err(dev, "failed to get OPP: %d\n", err);
++		goto remove_table;
++	}
++
++	dev_pm_opp_put(opp);
++
++	/*
++	 * First dummy rate-set initializes voltage vote by setting voltage
++	 * in accordance to the clock rate.
++	 */
++	err = dev_pm_opp_set_rate(dev, rate);
++	if (err) {
++		dev_err(dev, "failed to initialize OPP clock: %d\n", err);
++		goto remove_table;
++	}
++
++	err = devm_add_action(dev, tegra_udc_deinit_opp_table, dev);
++	if (err)
++		goto remove_table;
++
++	return 0;
++
++remove_table:
++	dev_pm_opp_of_remove_table(dev);
++put_table:
++	dev_pm_opp_put_regulators(opp_table);
++
++	return err;
++}
++
+ static int tegra_udc_probe(struct platform_device *pdev)
+ {
+ 	const struct tegra_udc_soc_info *soc;
+@@ -77,6 +151,11 @@ static int tegra_udc_probe(struct platform_device *pdev)
+ 		return err;
+ 	}
+ 
++	err = devm_tegra_udc_init_opp_table(&pdev->dev);
++	if (err)
++		return dev_err_probe(&pdev->dev, err,
++				     "failed to initialize OPP\n");
++
+ 	err = clk_prepare_enable(udc->clk);
+ 	if (err < 0) {
+ 		dev_err(&pdev->dev, "failed to enable clock: %d\n", err);
 -- 
 2.27.0
 
