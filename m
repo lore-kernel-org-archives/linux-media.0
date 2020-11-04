@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CEBD8C63697
-	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 10:37:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32D0EC388F7
+	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 10:38:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8373822450
-	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 10:37:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DD7D222409
+	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 10:37:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729626AbgKDKht (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 4 Nov 2020 05:37:49 -0500
-Received: from relay11.mail.gandi.net ([217.70.178.231]:49443 "EHLO
+        id S1729624AbgKDKh4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 4 Nov 2020 05:37:56 -0500
+Received: from relay11.mail.gandi.net ([217.70.178.231]:54123 "EHLO
         relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729583AbgKDKhr (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Nov 2020 05:37:47 -0500
+        with ESMTP id S1729638AbgKDKhz (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Nov 2020 05:37:55 -0500
 Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id A0F7E100005;
-        Wed,  4 Nov 2020 10:37:42 +0000 (UTC)
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 31992100006;
+        Wed,  4 Nov 2020 10:37:51 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     linux-media@vger.kernel.org
 Cc:     Jacopo Mondi <jacopo@jmondi.org>, mchehab@kernel.org,
@@ -32,9 +32,9 @@ Cc:     Jacopo Mondi <jacopo@jmondi.org>, mchehab@kernel.org,
         dave.stevenson@raspberrypi.org, naush@raspberrypi.com,
         erosca@de.adit-jv.com,
         Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: [PATCH v2 21/30] media: ov5647: Set V4L2_SUBDEV_FL_HAS_EVENTS flag
-Date:   Wed,  4 Nov 2020 11:36:13 +0100
-Message-Id: <20201104103622.595908-22-jacopo@jmondi.org>
+Subject: [PATCH v2 24/30] media: ov5647: Support V4L2_CID_VBLANK control
+Date:   Wed,  4 Nov 2020 11:36:16 +0100
+Message-Id: <20201104103622.595908-25-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.29.1
 In-Reply-To: <20201104103622.595908-1-jacopo@jmondi.org>
 References: <20201104103622.595908-1-jacopo@jmondi.org>
@@ -46,28 +46,169 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-The ov5647 subdev can generate control events, therefore set
-the V4L2_SUBDEV_FL_HAS_EVENTS flag.
+Adds vblank control to allow for frame rate control.
 
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- drivers/media/i2c/ov5647.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/i2c/ov5647.c | 46 +++++++++++++++++++++++++++++++++++---
+ 1 file changed, 43 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/media/i2c/ov5647.c b/drivers/media/i2c/ov5647.c
-index 6e500fb548c74..21612b87eff45 100644
+index 82813f548702e..f3962071f8a97 100644
 --- a/drivers/media/i2c/ov5647.c
 +++ b/drivers/media/i2c/ov5647.c
-@@ -1424,7 +1424,7 @@ static int ov5647_probe(struct i2c_client *client)
- 	sd = &sensor->sd;
- 	v4l2_i2c_subdev_init(sd, client, &ov5647_subdev_ops);
- 	sd->internal_ops = &ov5647_subdev_internal_ops;
--	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-+	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE | V4L2_SUBDEV_FL_HAS_EVENTS;
+@@ -50,6 +50,8 @@
+ #define OV5647_REG_AEC_AGC		0x3503
+ #define OV5647_REG_GAIN_HI		0x350a
+ #define OV5647_REG_GAIN_LO		0x350b
++#define OV5647_REG_VTS_HI		0x380e
++#define OV5647_REG_VTS_LO		0x380f
+ #define OV5647_REG_FRAME_OFF_NUMBER	0x4202
+ #define OV5647_REG_MIPI_CTRL00		0x4800
+ #define OV5647_REG_MIPI_CTRL14		0x4814
+@@ -68,6 +70,9 @@
+ #define OV5647_PIXEL_ARRAY_WIDTH	2592U
+ #define OV5647_PIXEL_ARRAY_HEIGHT	1944U
  
- 	sensor->pad.flags = MEDIA_PAD_FL_SOURCE;
- 	sd->entity.function = MEDIA_ENT_F_CAM_SENSOR;
++#define OV5647_VBLANK_MIN		4
++#define OV5647_VTS_MAX			32767
++
+ struct regval_list {
+ 	u16 addr;
+ 	u8 data;
+@@ -78,6 +83,7 @@ struct ov5647_mode {
+ 	struct v4l2_rect		crop;
+ 	u64				pixel_rate;
+ 	int				hts;
++	int				vts;
+ 	const struct regval_list	*reg_list;
+ 	unsigned int			num_regs;
+ };
+@@ -101,6 +107,7 @@ struct ov5647 {
+ 	const struct ov5647_mode	*current_mode;
+ 	struct v4l2_ctrl		*pixel_rate;
+ 	struct v4l2_ctrl		*hblank;
++	struct v4l2_ctrl		*vblank;
+ };
+ 
+ static inline struct ov5647 *to_sensor(struct v4l2_subdev *sd)
+@@ -152,8 +159,6 @@ static const struct regval_list ov5647_640x480_sbggr8[] = {
+ 	{0x3b07, 0x0c},
+ 	{0x380c, 0x07},
+ 	{0x380d, 0x68},
+-	{0x380e, 0x03},
+-	{0x380f, 0xd8},
+ 	{0x3814, 0x31},
+ 	{0x3815, 0x31},
+ 	{0x3708, 0x64},
+@@ -589,6 +594,7 @@ static const struct ov5647_mode ov5647_sbggr8_modes[] = {
+ 		},
+ 		.pixel_rate	= 77291670,
+ 		.hts		= 1896,
++		.vts		= 0x3d8,
+ 		.reg_list	= ov5647_640x480_sbggr8,
+ 		.num_regs	= ARRAY_SIZE(ov5647_640x480_sbggr8)
+ 	},
+@@ -612,6 +618,7 @@ static const struct ov5647_mode ov5647_sbggr10_modes[] = {
+ 		},
+ 		.pixel_rate	= 87500000,
+ 		.hts		= 2844,
++		.vts		= 0x7b0,
+ 		.reg_list	= ov5647_2592x1944_sbggr10,
+ 		.num_regs	= ARRAY_SIZE(ov5647_2592x1944_sbggr10)
+ 	},
+@@ -632,6 +639,7 @@ static const struct ov5647_mode ov5647_sbggr10_modes[] = {
+ 		},
+ 		.pixel_rate	= 81666700,
+ 		.hts		= 2416,
++		.vts		= 0x450,
+ 		.reg_list	= ov5647_1080p30_sbggr10,
+ 		.num_regs	= ARRAY_SIZE(ov5647_1080p30_sbggr10)
+ 	},
+@@ -652,6 +660,7 @@ static const struct ov5647_mode ov5647_sbggr10_modes[] = {
+ 		},
+ 		.pixel_rate	= 81666700,
+ 		.hts		= 1896,
++		.vts		= 0x59b,
+ 		.reg_list	= ov5647_2x2binned_sbggr10,
+ 		.num_regs	= ARRAY_SIZE(ov5647_2x2binned_sbggr10)
+ 	},
+@@ -672,6 +681,7 @@ static const struct ov5647_mode ov5647_sbggr10_modes[] = {
+ 		},
+ 		.pixel_rate	= 55000000,
+ 		.hts		= 1852,
++		.vts		= 0x1f8,
+ 		.reg_list	= ov5647_640x480_sbggr10,
+ 		.num_regs	= ARRAY_SIZE(ov5647_640x480_sbggr10)
+ 	},
+@@ -696,6 +706,22 @@ static const struct ov5647_format_list ov5647_formats[] = {
+ #define OV5647_DEFAULT_MODE	(&ov5647_formats[1].modes[3])
+ #define OV5647_DEFAULT_FORMAT	(ov5647_formats[1].modes[3].format)
+ 
++static int ov5647_write16(struct v4l2_subdev *sd, u16 reg, u16 val)
++{
++	unsigned char data[4] = { reg >> 8, reg & 0xff, val >> 8, val & 0xff};
++	struct i2c_client *client = v4l2_get_subdevdata(sd);
++	int ret;
++
++	ret = i2c_master_send(client, data, 4);
++	if (ret < 0) {
++		dev_dbg(&client->dev, "%s: i2c write error, reg: %x\n",
++			__func__, reg);
++		return ret;
++	}
++
++	return 0;
++}
++
+ static int ov5647_write(struct v4l2_subdev *sd, u16 reg, u8 val)
+ {
+ 	unsigned char data[3] = { reg >> 8, reg & 0xff, val};
+@@ -1118,6 +1144,11 @@ static int ov5647_set_pad_fmt(struct v4l2_subdev *sd,
+ 	hblank = mode->hts - mode->format.width;
+ 	__v4l2_ctrl_modify_range(sensor->hblank, hblank, hblank, 1, hblank);
+ 
++	__v4l2_ctrl_modify_range(sensor->vblank, OV5647_VBLANK_MIN,
++				 OV5647_VTS_MAX - mode->format.height,
++				 1, mode->vts - mode->format.height);
++	__v4l2_ctrl_s_ctrl(sensor->vblank, mode->vts - mode->format.height);
++
+ 	*fmt = mode->format;
+ 	mutex_unlock(&sensor->lock);
+ 
+@@ -1325,6 +1356,9 @@ static int ov5647_s_ctrl(struct v4l2_ctrl *ctrl)
+ 	case V4L2_CID_HBLANK:
+ 		/* Read-only, but we adjust it based on mode. */
+ 		return 0;
++	case V4L2_CID_VBLANK:
++		return ov5647_write16(sd, OV5647_REG_VTS_HI,
++				      sensor->mode->format.height + ctrl->val);
+ 	default:
+ 		dev_info(&client->dev,
+ 			 "Control (id:0x%x, val:0x%x) not supported\n",
+@@ -1344,7 +1378,7 @@ static int ov5647_init_controls(struct ov5647 *sensor)
+ 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->sd);
+ 	int hblank;
+ 
+-	v4l2_ctrl_handler_init(&sensor->ctrls, 7);
++	v4l2_ctrl_handler_init(&sensor->ctrls, 8);
+ 
+ 	v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
+ 			  V4L2_CID_AUTOGAIN, 0, 1, 1, 0);
+@@ -1383,6 +1417,12 @@ static int ov5647_init_controls(struct ov5647 *sensor)
+ 		goto handler_free;
+ 	sensor->hblank->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+ 
++	sensor->vblank = v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
++					   V4L2_CID_VBLANK, OV5647_VBLANK_MIN,
++					   OV5647_VTS_MAX - sensor->mode->format.height,
++					   1, sensor->mode->vts -
++					      sensor->mode->format.height);
++
+ 	if (sensor->ctrls.error)
+ 		goto handler_free;
+ 
 -- 
 2.29.1
 
