@@ -2,101 +2,207 @@ Return-Path: <SRS0=eCLo=EK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1548DC388F9
-	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 17:33:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EFE0C2D0A3
+	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 17:43:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B418520782
-	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 17:33:55 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="JohsF+Kn"
+	by mail.kernel.org (Postfix) with ESMTP id 0AB0120759
+	for <linux-media@archiver.kernel.org>; Wed,  4 Nov 2020 17:43:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730264AbgKDRdw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 4 Nov 2020 12:33:52 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:57550 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726626AbgKDRdw (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 4 Nov 2020 12:33:52 -0500
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A4HVwQA020640;
-        Wed, 4 Nov 2020 18:32:29 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=esNF4SL0AEJ97ybmGFg+5aqJpXdsMZYhSkgtBP7u9pA=;
- b=JohsF+Knk3NOwg4Vvgb8zTQBFzfmznrgPOxgxjpRZ+eNer+lGTZsBMMh73stPgK8HbWL
- 2LTkJ7NICcbev57bqMYP9TaEAZzXIf7t2cd9ocldirUty7QSoXvM4PdP6NWPsP20iatS
- PjFbuSW+9C6aquKQR3KnfYg8DXroLBn1g4Tw5CKj+ATr9pyZ18slLJZOAeE2+fPkpizc
- nMK7hXcnkgfa5Tn8pxkTm/JDn4WycIAAk2SPhBOdV6tW51srwmZifmHqsZQG0P0EG2qm
- LIkpO/hJLUUfUa3/0y1AeJhU+r49GBCwV5kaGpi9JRVvvLNcCC6jIjhwFjh2dwwk6MTE QQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 34gywr2fm0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Nov 2020 18:32:29 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A3F2A10002A;
-        Wed,  4 Nov 2020 18:32:28 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag1node1.st.com [10.75.127.1])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 96968225C2A;
-        Wed,  4 Nov 2020 18:32:28 +0100 (CET)
-Received: from localhost (10.75.127.47) by SFHDAG1NODE1.st.com (10.75.127.1)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 4 Nov 2020 18:32:28
- +0100
-From:   Hugues Fruchet <hugues.fruchet@st.com>
-To:     Alexandre Torgue <alexandre.torgue@st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Hugues Fruchet <hugues.fruchet@st.com>,
-        Alain Volmat <alain.volmat@st.com>,
-        Yannick Fertre <yannick.fertre@st.com>,
-        Philippe CORNU <philippe.cornu@st.com>
-Subject: [PATCH v5 3/4] ARM: dts: stm32: set bus-type in DCMI endpoint for stm32mp157c-ev1 board
-Date:   Wed, 4 Nov 2020 18:32:11 +0100
-Message-ID: <1604511132-4014-4-git-send-email-hugues.fruchet@st.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1604511132-4014-1-git-send-email-hugues.fruchet@st.com>
-References: <1604511132-4014-1-git-send-email-hugues.fruchet@st.com>
+        id S1730564AbgKDRnb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 4 Nov 2020 12:43:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728675AbgKDRnb (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Nov 2020 12:43:31 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 231BEC0613D3
+        for <linux-media@vger.kernel.org>; Wed,  4 Nov 2020 09:43:31 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id 475CE1F45B79
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     linux-media@vger.kernel.org
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Philipp Zabel <p.zabel@pengutronix.de>, cphealy@gmail.com,
+        Benjamin.Bara@skidata.com, l.stach@pengutronix.de,
+        Ezequiel Garcia <ezequiel@collabora.com>, kernel@collabora.com
+Subject: [PATCH v4] coda: Add a V4L2 user for control error macroblocks count
+Date:   Wed,  4 Nov 2020 14:43:11 -0300
+Message-Id: <20201104174311.57288-1-ezequiel@collabora.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20201103213238.575909-3-ezequiel@collabora.com>
+References: <20201103213238.575909-3-ezequiel@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG6NODE2.st.com (10.75.127.17) To SFHDAG1NODE1.st.com
- (10.75.127.1)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-04_12:2020-11-04,2020-11-04 signatures=0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Explicitly set bus-type to parallel mode in DCMI endpoint (bus-type=5).
+To avoid potentially overflowing the kernel logs in the case
+of corrupted streams, this commit replaces an error message with
+a per-stream counter to be read through a driver-specific
+control.
 
-Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
+Applications can read the per-stream accumulated
+error macroblocks count.
+
+The old error message is replaced by a rate-limited debug message.
+
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- arch/arm/boot/dts/stm32mp157c-ev1.dts | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/platform/coda/coda-bit.c    | 10 +++++++---
+ drivers/media/platform/coda/coda-common.c | 18 ++++++++++++++++++
+ drivers/media/platform/coda/coda.h        | 10 ++++++++++
+ include/uapi/linux/v4l2-controls.h        |  4 ++++
+ 4 files changed, 39 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm/boot/dts/stm32mp157c-ev1.dts b/arch/arm/boot/dts/stm32mp157c-ev1.dts
-index 85628e1..6cc5d2a 100644
---- a/arch/arm/boot/dts/stm32mp157c-ev1.dts
-+++ b/arch/arm/boot/dts/stm32mp157c-ev1.dts
-@@ -90,6 +90,7 @@
- 	port {
- 		dcmi_0: endpoint {
- 			remote-endpoint = <&ov5640_0>;
-+			bus-type = <5>;
- 			bus-width = <8>;
- 			hsync-active = <0>;
- 			vsync-active = <0>;
+diff --git a/drivers/media/platform/coda/coda-bit.c b/drivers/media/platform/coda/coda-bit.c
+index 919b36d753ec..2f42808c43a4 100644
+--- a/drivers/media/platform/coda/coda-bit.c
++++ b/drivers/media/platform/coda/coda-bit.c
+@@ -13,6 +13,7 @@
+ #include <linux/kernel.h>
+ #include <linux/log2.h>
+ #include <linux/platform_device.h>
++#include <linux/ratelimit.h>
+ #include <linux/reset.h>
+ #include <linux/slab.h>
+ #include <linux/videodev2.h>
+@@ -2369,9 +2370,12 @@ static void coda_finish_decode(struct coda_ctx *ctx)
+ 	}
+ 
+ 	err_mb = coda_read(dev, CODA_RET_DEC_PIC_ERR_MB);
+-	if (err_mb > 0)
+-		v4l2_err(&dev->v4l2_dev,
+-			 "errors in %d macroblocks\n", err_mb);
++	if (err_mb > 0) {
++		if (__ratelimit(&dev->mb_err_rs))
++			coda_dbg(1, ctx, "errors in %d macroblocks\n", err_mb);
++		v4l2_ctrl_s_ctrl(ctx->mb_err_cnt_ctrl,
++				 v4l2_ctrl_g_ctrl(ctx->mb_err_cnt_ctrl) + err_mb);
++	}
+ 
+ 	if (dev->devtype->product == CODA_HX4 ||
+ 	    dev->devtype->product == CODA_7541) {
+diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
+index 487dd653b24a..20f70ef3ae7a 100644
+--- a/drivers/media/platform/coda/coda-common.c
++++ b/drivers/media/platform/coda/coda-common.c
+@@ -26,6 +26,7 @@
+ #include <linux/videodev2.h>
+ #include <linux/of.h>
+ #include <linux/platform_data/media/coda.h>
++#include <linux/ratelimit.h>
+ #include <linux/reset.h>
+ 
+ #include <media/v4l2-ctrls.h>
+@@ -2062,6 +2063,7 @@ static int coda_start_streaming(struct vb2_queue *q, unsigned int count)
+ 	if (q_data_dst->fourcc == V4L2_PIX_FMT_JPEG)
+ 		ctx->params.gop_size = 1;
+ 	ctx->gopcounter = ctx->params.gop_size - 1;
++	v4l2_ctrl_s_ctrl(ctx->mb_err_cnt_ctrl, 0);
+ 
+ 	ret = ctx->ops->start_streaming(ctx);
+ 	if (ctx->inst_type == CODA_INST_DECODER) {
+@@ -2462,6 +2464,15 @@ static void coda_decode_ctrls(struct coda_ctx *ctx)
+ 		ctx->mpeg4_level_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+ }
+ 
++static const struct v4l2_ctrl_config coda_mb_err_cnt_ctrl_config = {
++	.id	= V4L2_CID_CODA_MB_ERR_CNT,
++	.name	= "Macroblocks Error Count",
++	.type	= V4L2_CTRL_TYPE_INTEGER,
++	.min	= 0,
++	.max	= 0x7fffffff,
++	.step	= 1,
++};
++
+ static int coda_ctrls_setup(struct coda_ctx *ctx)
+ {
+ 	v4l2_ctrl_handler_init(&ctx->ctrls, 2);
+@@ -2484,6 +2495,12 @@ static int coda_ctrls_setup(struct coda_ctx *ctx)
+ 				  1, 1, 1, 1);
+ 		if (ctx->cvd->src_formats[0] == V4L2_PIX_FMT_H264)
+ 			coda_decode_ctrls(ctx);
++
++		ctx->mb_err_cnt_ctrl = v4l2_ctrl_new_custom(&ctx->ctrls,
++						&coda_mb_err_cnt_ctrl_config,
++						NULL);
++		if (ctx->mb_err_cnt_ctrl)
++			ctx->mb_err_cnt_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+ 	}
+ 
+ 	if (ctx->ctrls.error) {
+@@ -3202,6 +3219,7 @@ static int coda_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
++	ratelimit_default_init(&dev->mb_err_rs);
+ 	mutex_init(&dev->dev_mutex);
+ 	mutex_init(&dev->coda_mutex);
+ 	ida_init(&dev->ida);
+diff --git a/drivers/media/platform/coda/coda.h b/drivers/media/platform/coda/coda.h
+index e53f7a65d532..dcf35641c603 100644
+--- a/drivers/media/platform/coda/coda.h
++++ b/drivers/media/platform/coda/coda.h
+@@ -17,6 +17,7 @@
+ #include <linux/mutex.h>
+ #include <linux/kfifo.h>
+ #include <linux/videodev2.h>
++#include <linux/ratelimit.h>
+ 
+ #include <media/v4l2-ctrls.h>
+ #include <media/v4l2-device.h>
+@@ -28,6 +29,13 @@
+ #define CODA_MAX_FRAMEBUFFERS	19
+ #define FMO_SLICE_SAVE_BUF_SIZE	(32)
+ 
++/*
++ * This control allows applications to read the per-stream
++ * (i.e. per-context) Macroblocks Error Count. This value
++ * is CODA specific.
++ */
++#define V4L2_CID_CODA_MB_ERR_CNT (V4L2_CID_USER_CODA_BASE + 0)
++
+ enum {
+ 	V4L2_M2M_SRC = 0,
+ 	V4L2_M2M_DST = 1,
+@@ -92,6 +100,7 @@ struct coda_dev {
+ 	struct v4l2_m2m_dev	*m2m_dev;
+ 	struct ida		ida;
+ 	struct dentry		*debugfs_root;
++	struct ratelimit_state	mb_err_rs;
+ };
+ 
+ struct coda_codec {
+@@ -242,6 +251,7 @@ struct coda_ctx {
+ 	struct v4l2_ctrl		*mpeg2_level_ctrl;
+ 	struct v4l2_ctrl		*mpeg4_profile_ctrl;
+ 	struct v4l2_ctrl		*mpeg4_level_ctrl;
++	struct v4l2_ctrl		*mb_err_cnt_ctrl;
+ 	struct v4l2_fh			fh;
+ 	int				gopcounter;
+ 	int				runcounter;
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index a184c4939438..b4481d9579e7 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -198,6 +198,10 @@ enum v4l2_colorfx {
+  */
+ #define V4L2_CID_USER_ATMEL_ISC_BASE		(V4L2_CID_USER_BASE + 0x10c0)
+ 
++/* The base for the CODA driver controls.
++ * We reserve 16 controls for this driver. */
++#define V4L2_CID_USER_CODA_BASE			(V4L2_CID_USER_BASE + 0x10e0)
++
+ /* MPEG-class control IDs */
+ /* The MPEG controls are applicable to all codec controls
+  * and the 'MPEG' part of the define is historical */
 -- 
-2.7.4
+2.27.0
 
