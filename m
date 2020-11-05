@@ -2,227 +2,213 @@ Return-Path: <SRS0=XB3O=EL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEE2DC55179
-	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 14:45:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AC0FC5517A
+	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 14:52:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 727542087D
-	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 14:45:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BE32020719
+	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 14:52:30 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dduQNHED"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731180AbgKEOpC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Nov 2020 09:45:02 -0500
-Received: from mga18.intel.com ([134.134.136.126]:46445 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731146AbgKEOo6 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 5 Nov 2020 09:44:58 -0500
-IronPort-SDR: DQMfciFOYQux/QQrLTrMUx6GzVUaJobDZIEHLPHDzcPwhrplZ1IHDR/7EaGAmX12yBNUmApW/9
- Xu+nnx2xvKcQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9795"; a="157170530"
-X-IronPort-AV: E=Sophos;i="5.77,453,1596524400"; 
-   d="scan'208";a="157170530"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2020 06:44:57 -0800
-IronPort-SDR: ywPHE07AamyMKCKp+OiDPGAiXIAYQzkkTfleoPk6ZST0Frlx9Jd0Rj+xRsMVX9qUlj0y5fyawt
- +ZRKG86XH0ZQ==
-X-IronPort-AV: E=Sophos;i="5.77,453,1596524400"; 
-   d="scan'208";a="364360360"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2020 06:44:53 -0800
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 0B30420901; Thu,  5 Nov 2020 16:44:51 +0200 (EET)
-Date:   Thu, 5 Nov 2020 16:44:51 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
-        laurent.pinchart@ideasonboard.com, helen.koike@collabora.com,
-        ezequiel@collabora.com, kernel@collabora.com, dafna3@gmail.com,
-        linux-rockchip@lists.infradead.org, mchehab@kernel.org,
-        tfiga@chromium.org
-Subject: Re: [PATCH v3 1/2] media: uapi: add MEDIA_BUS_FMT_METADATA_FIXED
- media bus format.
-Message-ID: <20201105144450.GJ26150@paasikivi.fi.intel.com>
-References: <20201030134609.30020-1-dafna.hirschfeld@collabora.com>
- <20201030140241.GQ26150@paasikivi.fi.intel.com>
- <5c8852f5-a803-1bd0-7798-3cca0d7ee9ea@xs4all.nl>
- <20201104123218.GQ26150@paasikivi.fi.intel.com>
- <573fb8b3-e4fd-9239-a407-e904ed18ff3f@xs4all.nl>
- <20201104145456.GR26150@paasikivi.fi.intel.com>
- <98059490-6ab1-c895-5a20-e1b14b70c624@xs4all.nl>
- <20201105124542.GE26150@paasikivi.fi.intel.com>
- <851de312-7c6b-a0a0-0a3c-70a9a27cb0b5@collabora.com>
+        id S1731472AbgKEOw3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Nov 2020 09:52:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48160 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731443AbgKEOw2 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Nov 2020 09:52:28 -0500
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC0AC061A4A
+        for <linux-media@vger.kernel.org>; Thu,  5 Nov 2020 06:52:28 -0800 (PST)
+Received: by mail-wr1-x444.google.com with SMTP id x7so2105247wrl.3
+        for <linux-media@vger.kernel.org>; Thu, 05 Nov 2020 06:52:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=CiwuaHU0ZHFg8OQhxx1cJ0dSvWM+0RzNg9gjhgk/WPA=;
+        b=dduQNHED/EB0aCtpEb6ZPI3Ygd/DXzxcM6AtONVZiYH8oOWysFV+SV32BXj7CRawn8
+         3qPDx42rbOXx3GO70oulyAVbyR2HuKGl8RXT08Cum9UEJAzaBP1FnUZSSWqRwEliQcMG
+         7APPDUIFphi1rufMhTfciYQOCmVo//x1tN69RM3fTfdGHw4xQf2o4ZoDpYJ8Ac+9oO7M
+         f4JjmzCn5PLS9anQBkW3NK6Qa5ihhhyARqji7LRN742P39PzfEyRybjH33AIuve1EPSz
+         12K4QAR9lXYH+qh9QIDJR7F58wDmqFRQ4cfd2yM2AWfB/b2zvVkHWRmiqt3imMKyOaNg
+         USoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=CiwuaHU0ZHFg8OQhxx1cJ0dSvWM+0RzNg9gjhgk/WPA=;
+        b=RtNJn2rhsyn+7f9p2snQ1GO5I5/M50djSm6Sk4Cy7PMQkKXrGhip2LZ+pYR8Ux96cQ
+         Q1hUypWvXJUNwFYEv3YQz/KttdgygxwfgwwL0VmG/x6M4x/ywM46mFiBD/CHjFU+MAQx
+         rElUxiIa2V0fGGSL0cmGNOfemA9pjCnTbIAZTPWl/iLnuMdAxZuX9qY2qX03uIYGbIQE
+         yuTUvskbzIHfsSzuLn50AbfePes4V5PBOzdD9bDWHFw6XmvjImsks/+Yo5diFTFKiBEZ
+         hMssruIkD2HI64A8lWpIacxt5YjaBMwaeswtSlkEmZtEy8wNh+IrFJPI1ggt45ktOqdp
+         ReMw==
+X-Gm-Message-State: AOAM53142TaxU4e+72xSoEaAo+pyePXQXwCwbXrhTej2d9k/0AqBgxWa
+        5FIY3L/ou6KbDRipiFjaslk5iA==
+X-Google-Smtp-Source: ABdhPJx8+Xyxk3R3buvDFYahFOdmnHso41DjA+AdBII2gmx00vBAFsKsMfNfZ8R2RRVHTR/ZSpXreA==
+X-Received: by 2002:adf:e386:: with SMTP id e6mr3301874wrm.330.1604587947150;
+        Thu, 05 Nov 2020 06:52:27 -0800 (PST)
+Received: from dell.default ([91.110.221.242])
+        by smtp.gmail.com with ESMTPSA id f5sm2631243wmh.16.2020.11.05.06.52.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Nov 2020 06:52:26 -0800 (PST)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     lee.jones@linaro.org
+Cc:     linux-kernel@vger.kernel.org,
+        Christian Koenig <christian.koenig@amd.com>,
+        Huang Rui <ray.huang@amd.com>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org
+Subject: [PATCH 10/19] gpu: drm: ttm: ttm_bo: Fix one function header - demote lots of kernel-doc abuses
+Date:   Thu,  5 Nov 2020 14:45:08 +0000
+Message-Id: <20201105144517.1826692-11-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201105144517.1826692-1-lee.jones@linaro.org>
+References: <20201105144517.1826692-1-lee.jones@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <851de312-7c6b-a0a0-0a3c-70a9a27cb0b5@collabora.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Nov 05, 2020 at 03:21:45PM +0100, Dafna Hirschfeld wrote:
-> Hi
-> 
-> Am 05.11.20 um 13:45 schrieb Sakari Ailus:
-> > On Thu, Nov 05, 2020 at 01:35:00PM +0100, Hans Verkuil wrote:
-> > > On 04/11/2020 15:54, Sakari Ailus wrote:
-> > > > Hi Hans,
-> > > > 
-> > > > On Wed, Nov 04, 2020 at 02:46:39PM +0100, Hans Verkuil wrote:
-> > > > > On 04/11/2020 13:32, Sakari Ailus wrote:
-> > > > > > Hi Hans,
-> > > > > > 
-> > > > > > On Wed, Nov 04, 2020 at 01:16:03PM +0100, Hans Verkuil wrote:
-> > > > > > > On 30/10/2020 15:02, Sakari Ailus wrote:
-> > > > > > > > Hi Dafna,
-> > > > > > > > 
-> > > > > > > > On Fri, Oct 30, 2020 at 02:46:08PM +0100, Dafna Hirschfeld wrote:
-> > > > > > > > > MEDIA_BUS_FMT_METADATA_FIXED should be used when
-> > > > > > > > > the same driver handles both sides of the link and
-> > > > > > > > > the bus format is a fixed metadata format that is
-> > > > > > > > > not configurable from userspace.
-> > > > > > > > > The width and height will be set to 0 for this format.
-> > > > > > > > > 
-> > > > > > > > > Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-> > > > > > > > > Acked-by: Helen Koike <helen.koike@collabora.com>
-> > > > > > > > > ---
-> > > > > > > > > changes since v2:
-> > > > > > > > > added documentation in subdev-formats.rst
-> > > > > > > > > changes since v1:
-> > > > > > > > > 1. replace "This format may have 0 height and width."
-> > > > > > > > > with "Width and height will be set to 0 for this format."
-> > > > > > > > > and add it also to the commit log
-> > > > > > > > > 2. s/meida:/media:/ in the patch subject line
-> > > > > > > > > 
-> > > > > > > > >   .../media/v4l/subdev-formats.rst              | 27 +++++++++++++++++++
-> > > > > > > > >   include/uapi/linux/media-bus-format.h         |  8 ++++++
-> > > > > > > > >   2 files changed, 35 insertions(+)
-> > > > > > > > > 
-> > > > > > > > > diff --git a/Documentation/userspace-api/media/v4l/subdev-formats.rst b/Documentation/userspace-api/media/v4l/subdev-formats.rst
-> > > > > > > > > index c9b7bb3ca089..7f16cbe46e5c 100644
-> > > > > > > > > --- a/Documentation/userspace-api/media/v4l/subdev-formats.rst
-> > > > > > > > > +++ b/Documentation/userspace-api/media/v4l/subdev-formats.rst
-> > > > > > > > > @@ -7899,3 +7899,30 @@ formats.
-> > > > > > > > >         - 0x5001
-> > > > > > > > >         - Interleaved raw UYVY and JPEG image format with embedded meta-data
-> > > > > > > > >   	used by Samsung S3C73MX camera sensors.
-> > > > > > > > > +
-> > > > > > > > > +.. _v4l2-mbus-metadata-fmts:
-> > > > > > > > > +
-> > > > > > > > > +Metadata Formats
-> > > > > > > > > +^^^^^^^^^^^^^^^^
-> > > > > > > > > +
-> > > > > > > > > +This section lists all metadata formats.
-> > > > > > > > > +
-> > > > > > > > > +The following table lists the existing metadata formats.
-> > > > > > > > > +
-> > > > > > > > > +.. tabularcolumns:: |p{8.0cm}|p{1.4cm}|p{7.7cm}|
-> > > > > > > > > +
-> > > > > > > > > +.. flat-table:: Metadata formats
-> > > > > > > > > +    :header-rows:  1
-> > > > > > > > > +    :stub-columns: 0
-> > > > > > > > > +
-> > > > > > > > > +    * - Identifier
-> > > > > > > > > +      - Code
-> > > > > > > > > +      - Comments
-> > > > > > > > > +    * .. _MEDIA-BUS-FMT-METADATA-FIXED:
-> > > > > > > > > +
-> > > > > > > > > +      - MEDIA_BUS_FMT_METADATA_FIXED
-> > > > > > > > > +      - 0x7001
-> > > > > > > > > +      - This format should be used when the same driver handles
-> > > > > > > > > +	both sides of the link and the bus format is a fixed
-> > > > > > > > > +	metadata format that is not configurable from userspace.
-> > > > > > > > > +	Width and height will be set to 0 for this format.
-> > > > > > > > > diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/media-bus-format.h
-> > > > > > > > > index 84fa53ffb13f..2ce3d891d344 100644
-> > > > > > > > > --- a/include/uapi/linux/media-bus-format.h
-> > > > > > > > > +++ b/include/uapi/linux/media-bus-format.h
-> > > > > > > > > @@ -156,4 +156,12 @@
-> > > > > > > > >   /* HSV - next is	0x6002 */
-> > > > > > > > >   #define MEDIA_BUS_FMT_AHSV8888_1X32		0x6001
-> > > > > > > > > +/*
-> > > > > > > > > + * This format should be used when the same driver handles
-> > > > > > > > > + * both sides of the link and the bus format is a fixed
-> > > > > > > > > + * metadata format that is not configurable from userspace.
-> > > > > > > > > + * Width and height will be set to 0 for this format.
-> > > > > > > > > + */
-> > > > > > > > 
-> > > > > > > > Does this mean that metadata with dimensions should not use
-> > > > > > > > MEDIA_BUS_FMT_METADATA_FIXED? I guess that's not the intention? For some
-> > > > > > > > formats the dimensions would be relevant but for others not. I'd thus
-> > > > > > > > replace "will" by "may". Same for the documentation.
-> > > > > > > 
-> > > > > > > struct v4l2_meta_format as used with VIDIOC_G/S/TRY_FMT doesn't have
-> > > > > > > a width or height either. Supporting width and height for metadata
-> > > > > > > doesn't really make sense for me for metadata.
-> > > > > > > 
-> > > > > > > Explicitly specifying the width and height here indicates that the
-> > > > > > > data is basically an array of width x height of some sort which makes
-> > > > > > > sense for video devices.
-> > > > > > > 
-> > > > > > > Metadata is more complex data that cannot be represented like that.
-> > > > > > > If metadata is actually an array, then I'm not sure I would call it
-> > > > > > > metadata, I would probably see it as video with its own pixelformat
-> > > > > > > that contains non-video data.
-> > > > > > 
-> > > > > > Let's say the metadata is laid out in a similar way than an image; you have
-> > > > > > lines of data, followed by some padding at the end, and a line has length
-> > > > > > and a buffer has a number of lines. Sensor metadata falls into this
-> > > > > > description.
-> > > > > > 
-> > > > > > Would you then use struct v4l2_pix_format for it, and use
-> > > > > > V4L2_BUF_TYPE_VIDEO_CAPTURE for it?
-> > > > > 
-> > > > > Yes. It's still metadata, but it has the same 'format' as video data.
-> > > > > We have similar situations such as with v4l-touch devices: the data
-> > > > > is formatted like video, but it is actually pressure values from a
-> > > > > touch pad. But it is 'video-like' in its behavior.
-> > > > > 
-> > > > > > 
-> > > > > > That would make a few things easier but this is still metadata, not video
-> > > > > > data. Albeit I guess it's not important to be so strict about that
-> > > > > > interface-wise, indeed this is not a bad fit for such metadata. Still some
-> > > > > > fields such as colourspace and quantisation are not relevant, but that
-> > > > > > holds also for some pixel formats.
-> > > > > > 
-> > > > > 
-> > > > > So are you OK with setting width and height to 0 for MEDIA_BUS_FMT_METADATA_*?
-> > > > 
-> > > > One more question.
-> > > > 
-> > > > What do you do if a link can carry both metadata (as in
-> > > > V4L2_BUF_TYPE_METADATA_CAPTURE) as well as pixel data, but with a fixed
-> > > > format?
-> > > > 
-> > > > I'm not sure we have any such case at the moment but it's not
-> > > > inconceivable.
-> > > > 
-> > > 
-> > > This should be reflected in the mediabus format. So METADATA_FIXED if it carries
-> > > metadata, or a video format if it carries video. Userspace could configure this
-> > > with VIDIOC_SUBDEV_S_FMT if it is something that userspace can actually change.
-> > 
-> > Works for me.
-> > 
-> > Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > 
-> 
-> Hi,
-> There is another patch sent by jmondi that adds csi-2 embedded data format:
-> 
-> https://patchwork.kernel.org/project/linux-media/patch/20201102165258.408049-3-jacopo@jmondi.org/
-> 
-> Maybe it worth thinking already how those two patches should fit together.
-> Currently they both try to acquire 0x7001 code.
+Fixes the following W=1 kernel build warning(s):
 
-I'll reply to Jacopo. This will at least require discussion, as not all
-metadata is created equal.
+ drivers/gpu/drm/ttm/ttm_bo.c:51: warning: Function parameter or member 'ttm_global_mutex' not described in 'DEFINE_MUTEX'
+ drivers/gpu/drm/ttm/ttm_bo.c:286: warning: Function parameter or member 'bo' not described in 'ttm_bo_cleanup_memtype_use'
+ drivers/gpu/drm/ttm/ttm_bo.c:359: warning: Function parameter or member 'bo' not described in 'ttm_bo_cleanup_refs'
+ drivers/gpu/drm/ttm/ttm_bo.c:359: warning: Function parameter or member 'interruptible' not described in 'ttm_bo_cleanup_refs'
+ drivers/gpu/drm/ttm/ttm_bo.c:359: warning: Function parameter or member 'no_wait_gpu' not described in 'ttm_bo_cleanup_refs'
+ drivers/gpu/drm/ttm/ttm_bo.c:359: warning: Function parameter or member 'unlock_resv' not described in 'ttm_bo_cleanup_refs'
+ drivers/gpu/drm/ttm/ttm_bo.c:424: warning: Function parameter or member 'bdev' not described in 'ttm_bo_delayed_delete'
+ drivers/gpu/drm/ttm/ttm_bo.c:424: warning: Function parameter or member 'remove_all' not described in 'ttm_bo_delayed_delete'
+ drivers/gpu/drm/ttm/ttm_bo.c:635: warning: Function parameter or member 'bo' not described in 'ttm_bo_evict_swapout_allowable'
+ drivers/gpu/drm/ttm/ttm_bo.c:635: warning: Function parameter or member 'ctx' not described in 'ttm_bo_evict_swapout_allowable'
+ drivers/gpu/drm/ttm/ttm_bo.c:635: warning: Function parameter or member 'locked' not described in 'ttm_bo_evict_swapout_allowable'
+ drivers/gpu/drm/ttm/ttm_bo.c:635: warning: Function parameter or member 'busy' not described in 'ttm_bo_evict_swapout_allowable'
+ drivers/gpu/drm/ttm/ttm_bo.c:769: warning: Function parameter or member 'bo' not described in 'ttm_bo_add_move_fence'
+ drivers/gpu/drm/ttm/ttm_bo.c:769: warning: Function parameter or member 'man' not described in 'ttm_bo_add_move_fence'
+ drivers/gpu/drm/ttm/ttm_bo.c:769: warning: Function parameter or member 'mem' not described in 'ttm_bo_add_move_fence'
+ drivers/gpu/drm/ttm/ttm_bo.c:769: warning: Function parameter or member 'no_wait_gpu' not described in 'ttm_bo_add_move_fence'
+ drivers/gpu/drm/ttm/ttm_bo.c:806: warning: Function parameter or member 'bo' not described in 'ttm_bo_mem_force_space'
+ drivers/gpu/drm/ttm/ttm_bo.c:806: warning: Function parameter or member 'place' not described in 'ttm_bo_mem_force_space'
+ drivers/gpu/drm/ttm/ttm_bo.c:806: warning: Function parameter or member 'mem' not described in 'ttm_bo_mem_force_space'
+ drivers/gpu/drm/ttm/ttm_bo.c:806: warning: Function parameter or member 'ctx' not described in 'ttm_bo_mem_force_space'
+ drivers/gpu/drm/ttm/ttm_bo.c:872: warning: Function parameter or member 'bo' not described in 'ttm_bo_mem_space'
+ drivers/gpu/drm/ttm/ttm_bo.c:872: warning: Function parameter or member 'placement' not described in 'ttm_bo_mem_space'
+ drivers/gpu/drm/ttm/ttm_bo.c:872: warning: Function parameter or member 'mem' not described in 'ttm_bo_mem_space'
+ drivers/gpu/drm/ttm/ttm_bo.c:872: warning: Function parameter or member 'ctx' not described in 'ttm_bo_mem_space'
+ drivers/gpu/drm/ttm/ttm_bo.c:1387: warning: Function parameter or member 'ctx' not described in 'ttm_bo_swapout'
 
+Cc: Christian Koenig <christian.koenig@amd.com>
+Cc: Huang Rui <ray.huang@amd.com>
+Cc: David Airlie <airlied@linux.ie>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-media@vger.kernel.org
+Cc: linaro-mm-sig@lists.linaro.org
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+---
+ drivers/gpu/drm/ttm/ttm_bo.c | 23 ++++++++++++-----------
+ 1 file changed, 12 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/gpu/drm/ttm/ttm_bo.c b/drivers/gpu/drm/ttm/ttm_bo.c
+index c63b7ea1cd5d0..2b69c959d7f4d 100644
+--- a/drivers/gpu/drm/ttm/ttm_bo.c
++++ b/drivers/gpu/drm/ttm/ttm_bo.c
+@@ -45,7 +45,7 @@
+ 
+ static void ttm_bo_global_kobj_release(struct kobject *kobj);
+ 
+-/**
++/*
+  * ttm_global_mutex - protecting the global BO state
+  */
+ DEFINE_MUTEX(ttm_global_mutex);
+@@ -274,7 +274,7 @@ static int ttm_bo_handle_move_mem(struct ttm_buffer_object *bo,
+ 	return ret;
+ }
+ 
+-/**
++/*
+  * Call bo::reserved.
+  * Will release GPU memory type usage on destruction.
+  * This is the place to put in driver specific hooks to release
+@@ -348,9 +348,10 @@ static void ttm_bo_flush_all_fences(struct ttm_buffer_object *bo)
+  * Must be called with lru_lock and reservation held, this function
+  * will drop the lru lock and optionally the reservation lock before returning.
+  *
+- * @interruptible         Any sleeps should occur interruptibly.
+- * @no_wait_gpu           Never wait for gpu. Return -EBUSY instead.
+- * @unlock_resv           Unlock the reservation lock as well.
++ * @bo:                    The buffer object to clean-up
++ * @interruptible:         Any sleeps should occur interruptibly.
++ * @no_wait_gpu:           Never wait for gpu. Return -EBUSY instead.
++ * @unlock_resv:           Unlock the reservation lock as well.
+  */
+ 
+ static int ttm_bo_cleanup_refs(struct ttm_buffer_object *bo,
+@@ -416,7 +417,7 @@ static int ttm_bo_cleanup_refs(struct ttm_buffer_object *bo,
+ 	return 0;
+ }
+ 
+-/**
++/*
+  * Traverse the delayed list, and call ttm_bo_cleanup_refs on all
+  * encountered buffers.
+  */
+@@ -620,7 +621,7 @@ bool ttm_bo_eviction_valuable(struct ttm_buffer_object *bo,
+ }
+ EXPORT_SYMBOL(ttm_bo_eviction_valuable);
+ 
+-/**
++/*
+  * Check the target bo is allowable to be evicted or swapout, including cases:
+  *
+  * a. if share same reservation object with ctx->resv, have assumption
+@@ -759,7 +760,7 @@ int ttm_mem_evict_first(struct ttm_bo_device *bdev,
+ 	return ret;
+ }
+ 
+-/**
++/*
+  * Add the last move fence to the BO and reserve a new shared slot.
+  */
+ static int ttm_bo_add_move_fence(struct ttm_buffer_object *bo,
+@@ -795,7 +796,7 @@ static int ttm_bo_add_move_fence(struct ttm_buffer_object *bo,
+ 	return 0;
+ }
+ 
+-/**
++/*
+  * Repeatedly evict memory from the LRU for @mem_type until we create enough
+  * space, or we've evicted everything and there isn't enough space.
+  */
+@@ -857,7 +858,7 @@ static int ttm_bo_mem_placement(struct ttm_buffer_object *bo,
+ 	return 0;
+ }
+ 
+-/**
++/*
+  * Creates space for memory region @mem according to its type.
+  *
+  * This function first searches for free space in compatible memory types in
+@@ -1379,7 +1380,7 @@ int ttm_bo_wait(struct ttm_buffer_object *bo,
+ }
+ EXPORT_SYMBOL(ttm_bo_wait);
+ 
+-/**
++/*
+  * A buffer object shrink method that tries to swap out the first
+  * buffer object on the bo_global::swap_lru list.
+  */
 -- 
-Sakari Ailus
+2.25.1
+
