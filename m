@@ -2,207 +2,116 @@ Return-Path: <SRS0=XB3O=EL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05969C4742C
-	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 12:54:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36DA6C4741F
+	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 12:56:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A4AE92083B
-	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 12:54:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CCF752087D
+	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 12:56:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="bPPrnh4B"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="dENg2Rdu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730429AbgKEMyi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Nov 2020 07:54:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57810 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726777AbgKEMyi (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Nov 2020 07:54:38 -0500
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8E7C0613CF
-        for <linux-media@vger.kernel.org>; Thu,  5 Nov 2020 04:54:36 -0800 (PST)
-Received: by mail-wm1-x342.google.com with SMTP id s13so1508566wmh.4
-        for <linux-media@vger.kernel.org>; Thu, 05 Nov 2020 04:54:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=iR+CVMR9Igk+i7q6zQ360QpQoQUWwq9hKMxFO8Y7cGA=;
-        b=bPPrnh4BjIGHxssI9in0eI8avIf6lVSA1Fd+jmaHNuJRYj4GLesWwatvAf+cWdJ1Gn
-         +T1a9zT5WiAc7uq+YkZ1UAi9uQqINJcLFkN5pbawGR6HDSkkCEunVz0GKT5BPbCo522L
-         G94YF8sd+EF3xMH5d9NYF5qFQjmBr4VXc5pXs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iR+CVMR9Igk+i7q6zQ360QpQoQUWwq9hKMxFO8Y7cGA=;
-        b=DjXf0TjGOb0Y4pTZSdscTLAGzcBApFZPiDvGel0qTtTp2BTqi2wPtCG+wmBJsXWgmj
-         OF/lSm5dIBmeiqJVcZ2cEJscLZdxzor1zUPrqY8Onl0bkL5JgjONJCS2Kr7ydtxRazlp
-         gfEJHokiVjMCJLuGjM2Q8yflLeMSPWoCPDdueUR35tlDC5m4LUPLcKqiy8UiMvelnfDm
-         rzkqqfGgwWnOPSDEEmzv23NtPtE3sXNBEutvUO4AKKnvGZhEn/h9xNmTGesRUbSgFpw1
-         fLiYrm3UAUGdN9m7KF5dXfNj4fX1x3fW12BykCj2Ml9VrUt0fNyD18rMRHgznSBV9vaY
-         F+/w==
-X-Gm-Message-State: AOAM532Q/Xwmtli85epaD7+qobSjxBjdMfll/o4EG54RDKz2qBM1lAFk
-        u2ufH6L8rWtjt+p7iqcr9AXBGA==
-X-Google-Smtp-Source: ABdhPJwrW3OjL7kR/bAr74WjxI8azvpsj46DeaIlccjHcQq2wan765xbIbWOOKK6+3jptMrcJuyztQ==
-X-Received: by 2002:a1c:6843:: with SMTP id d64mr2670603wmc.131.1604580875284;
-        Thu, 05 Nov 2020 04:54:35 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id m12sm2468188wrs.92.2020.11.05.04.54.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2020 04:54:34 -0800 (PST)
-Date:   Thu, 5 Nov 2020 13:54:31 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Dave Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        linux+etnaviv@armlinux.org.uk,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Inki Dae <inki.dae@samsung.com>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>, yuq825@gmail.com,
-        Ben Skeggs <bskeggs@redhat.com>, Rob Herring <robh@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        steven.price@arm.com, alyssa.rosenzweig@collabora.com,
-        Sandy Huang <hjc@rock-chips.com>,
-        Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sean Paul <sean@poorly.run>, Eric Anholt <eric@anholt.net>,
-        Oleksandr Andrushchenko <oleksandr_andrushchenko@epam.com>,
-        ray.huang@amd.com, Sumit Semwal <sumit.semwal@linaro.org>,
-        Emil Velikov <emil.velikov@collabora.com>,
-        luben.tuikov@amd.com, apaneers@amd.com, melissa.srw@gmail.com,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Qinglang Miao <miaoqinglang@huawei.com>,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
-        amd-gfx@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org,
-        etnaviv@lists.freedesktop.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        lima@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        spice-devel@lists.freedesktop.org,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        xen-devel@lists.xenproject.org,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v5 09/10] dma-buf-map: Add memcpy and pointer-increment
- interfaces
-Message-ID: <20201105125431.GW401619@phenom.ffwll.local>
-References: <20201020122046.31167-1-tzimmermann@suse.de>
- <20201020122046.31167-10-tzimmermann@suse.de>
- <CACRpkdbvGWKo8y323actUJn9xXmxpgDw1EKLiPH4RqB_kFx=XQ@mail.gmail.com>
- <27acbd7e-d72e-4e05-c147-b50f56e21589@suse.de>
+        id S1730553AbgKEM4K (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Nov 2020 07:56:10 -0500
+Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:50493 "EHLO
+        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726067AbgKEM4H (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 5 Nov 2020 07:56:07 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id aeo6kD2FCNanzaeo9koO73; Thu, 05 Nov 2020 13:56:06 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1604580966; bh=lPvaY8EFns9S63OScL565fzyrRI4AT8uMsd+/iZrJwk=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=dENg2RduW3l5+ihEmWzm/I4tX7cL1e9MzrsiThQp56i/9W5+OEK82RUjHJCR5SqMQ
+         frPOv+VQUu2+DuA8cdX7Og8JXLMxcTlZOeK7Vfxl2y5rYBhiGJrVnibiQcIeaq2bt3
+         4xjotii74kfRGhCKChuZAUbe3/C/0Tj/zE+YuN2vT7pyhLtQmSHl9tIDdfjTgeJe3S
+         WMShuTBjLdtiGDscJ6ZXHjMTMuDO2QA5Gc3rotXGpNGPEoU5lpo1GT2LOeGwvmJfYP
+         ZSM2UWO3MpyXOP3hQdWyHONSjJ+pkAVBQT6a7jjlA+tvB9ObN8TRnqmLwjgDO9ePUh
+         cvleN+u6bSRqQ==
+Subject: Re: [PATCH v2 099/106] v4l: uapi: ccs: Add controls for analogue gain
+ constants
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org
+References: <20201007084505.25761-1-sakari.ailus@linux.intel.com>
+ <20201007084557.25843-1-sakari.ailus@linux.intel.com>
+ <20201007084557.25843-90-sakari.ailus@linux.intel.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <8dd2be66-e253-e535-ecfc-f51747204424@xs4all.nl>
+Date:   Thu, 5 Nov 2020 13:56:02 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <27acbd7e-d72e-4e05-c147-b50f56e21589@suse.de>
-X-Operating-System: Linux phenom 5.7.0-1-amd64 
+In-Reply-To: <20201007084557.25843-90-sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfE95Ud7WjnQYjwjT23tE7R0rgLgV4xHzAzVnj66AvNgW7p1ClCklL64I8Dy2gERxxp/JzoDyKwJgeP6/OGXRXIuarjpqqDkd0TMWW/H8XNmNGzJ1usjS
+ u2ismQjiSpRq+MBg767+7KymGhRQiPDGHOjZRgu0K5v/+lJMwj8uybEPqcsKOIiJ1J3p4Z3xQEDxLO/miSxasOTobaFVj3cY2S2+I9qpK7qyq2MmbEg3VwMG
+ 6wIRWnWNBAOzhccwVRHyiw==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Nov 05, 2020 at 11:37:08AM +0100, Thomas Zimmermann wrote:
-> Hi
+On 07/10/2020 10:45, Sakari Ailus wrote:
+> Add a V4L2 controls for analogue gai constants required to control
+> analogue gain. The values are device specific and thus need to be obtained
+> from the driver.
 > 
-> Am 05.11.20 um 11:07 schrieb Linus Walleij:
-> > Overall I like this, just an inline question:
-> > 
-> > On Tue, Oct 20, 2020 at 2:20 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> > 
-> >> To do framebuffer updates, one needs memcpy from system memory and a
-> >> pointer-increment function. Add both interfaces with documentation.
-> > 
-> > (...)
-> >> +/**
-> >> + * dma_buf_map_memcpy_to - Memcpy into dma-buf mapping
-> >> + * @dst:       The dma-buf mapping structure
-> >> + * @src:       The source buffer
-> >> + * @len:       The number of byte in src
-> >> + *
-> >> + * Copies data into a dma-buf mapping. The source buffer is in system
-> >> + * memory. Depending on the buffer's location, the helper picks the correct
-> >> + * method of accessing the memory.
-> >> + */
-> >> +static inline void dma_buf_map_memcpy_to(struct dma_buf_map *dst, const void *src, size_t len)
-> >> +{
-> >> +       if (dst->is_iomem)
-> >> +               memcpy_toio(dst->vaddr_iomem, src, len);
-> >> +       else
-> >> +               memcpy(dst->vaddr, src, len);
-> >> +}
-> > 
-> > Are these going to be really big memcpy() operations?
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> ---
+>  MAINTAINERS              |  1 +
+>  include/uapi/linux/ccs.h | 14 ++++++++++++++
+>  2 files changed, 15 insertions(+)
+>  create mode 100644 include/uapi/linux/ccs.h
 > 
-> Individually, each could be a scanline, so a few KiB. (4 bytes *
-> horizontal resolution). Updating a full framebuffer can sum up to
-> several MiB.
-> 
-> > 
-> > Some platforms have DMA offload engines that can perform memcpy(),They could be
-> > drivers/dma, include/linux/dmaengine.h
-> > especially if the CPU doesn't really need to touch the contents
-> > and flush caches etc.
-> > An example exist in some MTD drivers that move large quantities of
-> > data off flash memory like this:
-> > drivers/mtd/nand/raw/cadence-nand-controller.c
-> > 
-> > Notice that DMAengine and DMAbuf does not have much in common,
-> > the names can be deceiving.
-> > 
-> > The value of this varies with the system architecture. It is not just
-> > a question about performance but also about power and the CPU
-> > being able to do other stuff in parallel for large transfers. So *when*
-> > to use this facility to accelerate memcpy() is a delicate question.
-> > 
-> > What I'm after here is if these can be really big, do we want
-> > (in the long run, not now) open up to the idea to slot in
-> > hardware-accelerated memcpy() here?
-> 
-> We currently use this functionality for the graphical framebuffer
-> console that most DRM drivers provide. It's non-accelerated and slow,
-> but this has not been much of a problem so far.
-> 
-> Within DRM, we're more interested in removing console code from drivers
-> and going for the generic implementation.
-> 
-> Most of the graphics HW allocates framebuffers from video RAM, system
-> memory or CMA pools and does not really need these memcpys. Only a few
-> systems with small video RAM require a shadow buffer, which we flush
-> into VRAM as needed. Those might benefit.
-> 
-> OTOH, off-loading memcpys to hardware sounds reasonable if we can hide
-> it from the DRM code. I think it all depends on how invasive that change
-> would be.
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index b72f666b8b60..c173e503b0b7 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -11569,6 +11569,7 @@ F:	drivers/media/i2c/ccs/
+>  F:	drivers/media/i2c/ccs-pll.c
+>  F:	drivers/media/i2c/ccs-pll.h
+>  F:	include/uapi/linux/smiapp.h
+> +F:	include/uapi/linux/ccs.h
+>  
+>  MIPS
+>  M:	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> diff --git a/include/uapi/linux/ccs.h b/include/uapi/linux/ccs.h
+> new file mode 100644
+> index 000000000000..bcdce95955b0
+> --- /dev/null
+> +++ b/include/uapi/linux/ccs.h
+> @@ -0,0 +1,14 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only AND BSD-3-Clause */
+> +/* Copyright (C) 2020 Intel Corporation */
+> +
+> +#ifndef __UAPI_CCS_H__
+> +#define __UAPI_CCS_H__
 
-I wouldn't, all the additional locks this would pull in sound like
-nightmare. And when an oops happens, this might be the only thing that
-manages to get the oops to the user.
+What does CCS stand for? Provide a reference to the standard as well.
 
-Unless someone really starts caring about fbcon acceleration I really
-wouldn't bother. Ok maybe it also matters for fbdev, but the problem is
-that the page fault intercepting alone is already expensive, so the only
-real solution if you care about performance in that case is to use kms
-natively, and use a dirty rectangle flip (or the DIRTY syscall).
+Just looking at this header doesn't give you any clue as to what it
+related to.
 
-And in there drivers should (and do) use any dma engines they have to
-upload the frames already.
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Regards,
+
+	Hans
+
+> +
+> +#include <linux/videodev2.h>
+> +
+> +#define V4L2_CID_CCS_ANALOGUE_GAIN_M0		(V4L2_CID_USER_CCS_BASE + 1)
+> +#define V4L2_CID_CCS_ANALOGUE_GAIN_C0		(V4L2_CID_USER_CCS_BASE + 2)
+> +#define V4L2_CID_CCS_ANALOGUE_GAIN_M1		(V4L2_CID_USER_CCS_BASE + 3)
+> +#define V4L2_CID_CCS_ANALOGUE_GAIN_C1		(V4L2_CID_USER_CCS_BASE + 4)
+> +
+> +#endif
+> 
+
