@@ -2,141 +2,162 @@ Return-Path: <SRS0=XB3O=EL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-5.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4915C4742C
-	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 14:15:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6F8EC4741F
+	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 14:18:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8426E2071A
-	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 14:15:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 906382071A
+	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 14:18:35 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g4l+hVmv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730999AbgKEOPA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Nov 2020 09:15:00 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:48482 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729113AbgKEOO7 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Nov 2020 09:14:59 -0500
-Received: from [IPv6:2804:14c:483:7e3e::1003] (unknown [IPv6:2804:14c:483:7e3e::1003])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: koike)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 2E3581F4644C;
-        Thu,  5 Nov 2020 14:14:51 +0000 (GMT)
-Subject: Re: [PATCH 08/14] media: sunxi: Add support for the A31 MIPI CSI-2
- controller
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-sunxi@googlegroups.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Yong Deng <yong.deng@magewell.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
+        id S1730799AbgKEOSb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Nov 2020 09:18:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42798 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730501AbgKEOSa (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Nov 2020 09:18:30 -0500
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10FE6C0613CF;
+        Thu,  5 Nov 2020 06:18:30 -0800 (PST)
+Received: by mail-lf1-x144.google.com with SMTP id l28so2502565lfp.10;
+        Thu, 05 Nov 2020 06:18:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=a5y+ASdbJF7UbQ+vp77BCT2KDi+gpOYaKC8ivtEOGj0=;
+        b=g4l+hVmvZJ+r32x9EsssFNsZ5oXkz9HqijwiMWB20Hs8LV8tDeXO5wDP2AG/Ia3GaI
+         Hwuea13bqdIIKnem0td0/UpNjHWgB9DVjy6hdPRCWVbFoNJzj4M0fZUFU/7RNBU4rt3k
+         kc9tlA0jovLN0Gusx603CbzP46guXz28PiRbiR3kuvvviuP6Rb5iGKwNBBBKtt9lmPld
+         D87eVIe2ld++drVrg0eJZY1aSlqZ4dpJU4tfJCdDrFPZ7eVkJFF2a93Zl0nVR6L6/l3m
+         hrI6o51kHJEVFgIEDT2hWkgqUBcql4bZDnxqmeku7yRtNmSh5zeKlfoGUV2h+Y+8tAdf
+         yy6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=a5y+ASdbJF7UbQ+vp77BCT2KDi+gpOYaKC8ivtEOGj0=;
+        b=MH2/VWRm0UMjx6uGhpDHinf4zjncdaO5oC8dypzRnBITedBjZSPTmI+WpOynSr2lvF
+         dhjVaNMzSRfgy24FKK1VBylF9YH8vIWJQ+F+rnnEOJ2dg8CyUFSAPNGLOgtf0v11Rp3h
+         jF8GyePCS6PnW4tWJq5W+Qg49vrsMy0qdegZTWd8qUUTDNiHmPa9aIZwJuI5VNWDVoWn
+         59CHi9SGY2ra1O0TUCyxla8QibtFtH9KvulLO6+CDQK44r3hpICVoHIR79zg7jcWIrk4
+         EJDPvMKLh8zDy+2RXLUkKMt0OVqNPP7EZuFubuXTq+8fYMI18MMyjzvyGkyYh8UraB91
+         4ygg==
+X-Gm-Message-State: AOAM530JlbJKMr1gjMyJN0VFoYS2aRqC7oRP1CzC7VvwzUXC0v6gcrIy
+        /wNjuBPyQGzsnvq/xuVp5JrwtoH86eQ=
+X-Google-Smtp-Source: ABdhPJwoANVa5YaT/Dinn/I6WAD0v1YZJaRBuao5eyb3VmVXegLCD7snX/bqOHRg8V3ordcvrgDQ6A==
+X-Received: by 2002:a19:ad04:: with SMTP id t4mr1028403lfc.577.1604585908263;
+        Thu, 05 Nov 2020 06:18:28 -0800 (PST)
+Received: from [192.168.2.145] (109-252-192-83.dynamic.spd-mgts.ru. [109.252.192.83])
+        by smtp.googlemail.com with ESMTPSA id q4sm162676ljp.103.2020.11.05.06.18.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Nov 2020 06:18:27 -0800 (PST)
+Subject: Re: [PATCH v1 17/30] mmc: sdhci-tegra: Support OPP and core voltage
+ scaling
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>, kevin.lhopital@hotmail.com
-References: <20201023174546.504028-1-paul.kocialkowski@bootlin.com>
- <20201023174546.504028-9-paul.kocialkowski@bootlin.com>
- <1a3a615c-a058-e282-2dbb-c99dfa98be68@collabora.com>
- <20201102092110.ro6a456lvbrktwoz@gilmour.lan>
- <20201104111710.GB287014@aptenodytes>
- <f74e4d59-a391-36ab-74aa-8e02aca1b0bc@collabora.com>
- <20201104184538.f6qagsmjdoijbzmv@gilmour.lan>
-From:   Helen Koike <helen.koike@collabora.com>
-Message-ID: <3b99b055-ff53-c873-19b2-fd2ccc86956d@collabora.com>
-Date:   Thu, 5 Nov 2020 11:14:47 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        driver-dev <devel@driverdev.osuosl.org>,
+        linux-pwm@vger.kernel.org,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>, linux-usb@vger.kernel.org,
+        "open list:SECURE DIGITAL HO..." <linux-mmc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-tegra@vger.kernel.org, linux-media@vger.kernel.org
+References: <20201104234427.26477-1-digetx@gmail.com>
+ <20201104234427.26477-18-digetx@gmail.com>
+ <CAOh2x==sy1w7_oEV8=toC6uQnSN44wyOixbP_X0BrMsnm1AUFg@mail.gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <6fa54ce6-d5ae-d04f-7c77-b62c148d92b7@gmail.com>
+Date:   Thu, 5 Nov 2020 17:18:26 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20201104184538.f6qagsmjdoijbzmv@gilmour.lan>
-Content-Type: text/plain; charset=windows-1252
+In-Reply-To: <CAOh2x==sy1w7_oEV8=toC6uQnSN44wyOixbP_X0BrMsnm1AUFg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+05.11.2020 12:58, Viresh Kumar пишет:
+>> +static void sdhci_tegra_deinit_opp_table(void *data)
+>> +{
+>> +       struct device *dev = data;
+>> +       struct opp_table *opp_table;
+>> +
+>> +       opp_table = dev_pm_opp_get_opp_table(dev);
+> So you need to get an OPP table to put one :)
+> You need to save the pointer returned by dev_pm_opp_set_regulators() instead.
 
+This is intentional because why do we need to save the pointer if we're
+not using it and we know that we could get this pointer using OPP API?
+This is exactly the same what I did for the CPUFreq driver [1] :)
 
-On 11/4/20 3:45 PM, Maxime Ripard wrote:
-> On Wed, Nov 04, 2020 at 01:38:08PM -0300, Helen Koike wrote:
->>
->>
->> On 11/4/20 8:17 AM, Paul Kocialkowski wrote:
->>> Hi,
->>>
->>> On Mon 02 Nov 20, 10:21, Maxime Ripard wrote:
->>>> On Fri, Oct 30, 2020 at 07:45:18PM -0300, Helen Koike wrote:
->>>>> On 10/23/20 2:45 PM, Paul Kocialkowski wrote:
->>>>>> The A31 MIPI CSI-2 controller is a dedicated MIPI CSI-2 controller
->>>>>> found on Allwinner SoCs such as the A31 and V3/V3s.
->>>>>>
->>>>>> It is a standalone block, connected to the CSI controller on one side
->>>>>> and to the MIPI D-PHY block on the other. It has a dedicated address
->>>>>> space, interrupt line and clock.
->>>>>>
->>>>>> Currently, the MIPI CSI-2 controller is hard-tied to a specific CSI
->>>>>> controller (CSI0) but newer SoCs (such as the V5) may allow switching
->>>>>> MIPI CSI-2 controllers between CSI controllers.
->>>>>>
->>>>>> It is represented as a V4L2 subdev to the CSI controller and takes a
->>>>>> MIPI CSI-2 sensor as its own subdev, all using the fwnode graph and
->>>>>> media controller API.
->>>>>
->>>>> Maybe this is a bad idea, but I was thinking:
->>>>> This driver basically just turn on/off and catch some interrupts for errors,
->>>>> and all the rest of v4l2 config you just forward to the next subdevice
->>>>> on the pipeline.
->>>>>
->>>>> So instead of exposing it as a subdevice, I was wondering if modeling
->>>>> this driver also through the phy subsystem wouldn't be cleaner, so
->>>>> you won't need all the v4l2 subdevice/topology boilerplate code that
->>>>> it seems you are not using (unless you have plans to add controls or
->>>>> some specific configuration on this node later).
->>>>>
->>>>> But this would require changes on the sun6i-csi driver.
->>>>>
->>>>> What do you think?
->>>>
->>>> Eventually we'll need to filter the virtual channels / datatypes I
->>>> guess, so it's definitely valuable to have it in v4l2
->>
->> Which kind of datatypes? 
-> 
-> MIPI-CSI datatypes. Each packet on the MIPI-CSI bus is assigned a
-> virtual channel and data type so that you can multiplex multiple streams
-> (like a 3d camera would send for example, through the virtual channels)
-> and data types (like frames and metadata) and MIPI-CSI controllers
-> usually allow to filter them based on what you want.
-> 
->> I ask to know if this shouldn't be configured through the video node
->> instead of subdevice.
-> 
-> Not really, some setups have a mux that can split the multiple virtual
-> channels to multiple video nodes for example.
-> 
->> Regarding channels, we had a discussion to implement it through the video
->> node (and not subdevice) [1]. But we discussed about blitters and multi-scalers,
->> so now I'm wondering if we could use the same API for mipi-csi virtual channels
->> in the video entity device, or if it doesn't apply and we need another API
->> for that in a subdevice instead.
->>
->> [1] https://patchwork.linuxtv.org/project/linux-media/cover/20200717115435.2632623-1-helen.koike@collabora.com/
-> 
-> There's already an API to deal with MIPI-CSI virtual channels:
-> https://patchwork.kernel.org/project/linux-renesas-soc/cover/20190328200608.9463-1-jacopo+renesas@jmondi.org/
-> 
-> Maxime
-> 
+[1]
+https://elixir.bootlin.com/linux/v5.10-rc2/source/drivers/cpufreq/tegra20-cpufreq.c#L97
 
-Thanks for the explanation :)
+>> +       dev_pm_opp_of_remove_table(dev);
+>> +       dev_pm_opp_put_regulators(opp_table);
+>> +       dev_pm_opp_put_opp_table(opp_table);
+>> +}
+>> +
+>> +static int devm_sdhci_tegra_init_opp_table(struct device *dev)
+>> +{
+>> +       struct opp_table *opp_table;
+>> +       const char *rname = "core";
+>> +       int err;
+>> +
+>> +       /* voltage scaling is optional */
+>> +       if (device_property_present(dev, "core-supply"))
+>> +               opp_table = dev_pm_opp_set_regulators(dev, &rname, 1);
+>> +       else
+> 
+>> +               opp_table = dev_pm_opp_get_opp_table(dev);
+> Nice. I didn't think that someone will end up abusing this API and so made it
+> available for all, but someone just did that. I will fix that in the OPP core.
 
-Helen
+The dev_pm_opp_put_regulators() handles the case where regulator is
+missing by acting as dev_pm_opp_get_opp_table(), but the
+dev_pm_opp_set_regulators() doesn't do it. Hence I don't think this is
+an abuse, but the OPP API drawback.
+
+> Any idea why you are doing what you are doing here ?
+
+Two reasons:
+
+1. Voltage regulator is optional, but dev_pm_opp_set_regulators()
+doesn't support optional regulators.
+
+2. We need to balance the opp_table refcount in order to use OPP API
+without polluting code with if(have_regulator), hence the
+dev_pm_opp_get_opp_table() is needed for taking the opp_table reference
+to have the same refcount as in the case of the dev_pm_opp_set_regulators().
+
+I guess we could make dev_pm_opp_set_regulators(dev, count) to accept
+regulators count=0 and then act as dev_pm_opp_get_opp_table(dev), will
+it be acceptable?
