@@ -2,171 +2,111 @@ Return-Path: <SRS0=XB3O=EL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB751C5517A
-	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 20:51:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F23CDC388F7
+	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 21:20:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 53E8C20724
-	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 20:51:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5909120724
+	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 21:20:17 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b="WmzbITGf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732162AbgKEUvj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Nov 2020 15:51:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48146 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732176AbgKEUvh (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Nov 2020 15:51:37 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0892C0613CF;
-        Thu,  5 Nov 2020 12:51:36 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: ezequiel)
-        with ESMTPSA id 45C1F1F4662A
-From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v2 2/3] media: uapi: mpeg2: Remove unused slice size and offset
-Date:   Thu,  5 Nov 2020 17:51:17 -0300
-Message-Id: <20201105205118.178458-3-ezequiel@collabora.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201105205118.178458-1-ezequiel@collabora.com>
-References: <20201105205118.178458-1-ezequiel@collabora.com>
+        id S1731234AbgKEVUQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Nov 2020 16:20:16 -0500
+Received: from mail-vi1eur05on2072.outbound.protection.outlook.com ([40.107.21.72]:10561
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726729AbgKEVUQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 5 Nov 2020 16:20:16 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YBGYRIXrUVqAPCiE3KzNtMcNndj8RZ9gKeeFxvYRqzZb4UirE2/1TZESqxZP8PWqTn9dR3o75suiK+gzVZ8G52qZKGTC7bpqFGfKvX6Ptyoo0rTuVtGVLYxMW2amwAnZzNqhqjbWQ0zKk2fzAxl5x7jz9Xf4LxW4CFQonWMdgIt9OVMwANnUn9Nk5o7G8A1EmoOa+tnhES89BBQvDSRnAvsKVLKvgtUk7JDhiVpwaXosIw5UzrjFuIw5LhL3R45/THZRskVqmR5RU2xUqYAkIXUix6nouypLIvjIr+s64CLEjH/kKvtU+/1ed87K2TGHWqV0pD9ymDdoVOjanPYEew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cTdoGZj7CK/D2dJ/yHsfCDFlJMTRqml24Zc5BkArBAc=;
+ b=NdMceYn65jL3VFtJn6BkvTEh28lp+TNDBxl0xxtzR7V7G7rykeZ0TpKnNzpJkE+yJajU9zSW1J0Ee0ocN6gWWng4kPrcGPOkMlQx/yn9j6e3wKoiQjHyO1odvSaGF4mSnOoYbm1Oy9tJAfZTbVdCBoaQHOCWf2ubd1mHHvTUJPwisXRGDvLudrR2usUfwFzeiJS/LoFh6vSH2Y2xwNc6U4q+OKCM852d5E9zjOFS6E5Jeo+ie0oIaJ/EAc8j0WdtECfwtsqcUWML6IyvFwA9JD0ld6qMBGLHnMhz0qGLklwYoMDMIn/ogV1amgu5KsFcE0u5HRiP6wD45fMNJx+Tbg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wolfvision.net; dmarc=pass action=none
+ header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cTdoGZj7CK/D2dJ/yHsfCDFlJMTRqml24Zc5BkArBAc=;
+ b=WmzbITGfYxkzDfVXHDmu4x1jD3sfNbpA5h3hezYenfV3xHvfzmk5PFp1MKm057cGiHlXz1uVZ/Xd2jZHU6P4RodGgogSEvnawfm80ej9nKIcKP1c6nDPItOAkguqXUBICSSkO03N4rzo/0STQolDKpmiuRB3nES2d7lIREDvNH0=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none
+ header.from=wolfvision.net;
+Received: from VI1PR08MB4592.eurprd08.prod.outlook.com (2603:10a6:803:bc::19)
+ by VE1PR08MB5805.eurprd08.prod.outlook.com (2603:10a6:800:1aa::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.27; Thu, 5 Nov
+ 2020 21:20:12 +0000
+Received: from VI1PR08MB4592.eurprd08.prod.outlook.com
+ ([fe80::58fe:ecaa:744a:c338]) by VI1PR08MB4592.eurprd08.prod.outlook.com
+ ([fe80::58fe:ecaa:744a:c338%3]) with mapi id 15.20.3499.032; Thu, 5 Nov 2020
+ 21:20:12 +0000
+To:     linux-media@vger.kernel.org
+From:   Michael Riesch <michael.riesch@wolfvision.net>
+Subject: Does uvcvideo support dynamic format changes?
+Message-ID: <4f4d5537-4c83-ac22-c650-292d149fcda3@wolfvision.net>
+Date:   Thu, 5 Nov 2020 22:20:11 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [2a05:1141:1c9:7c00:ad8b:c078:f634:d22a]
+X-ClientProxiedBy: ZR0P278CA0007.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:16::17) To VI1PR08MB4592.eurprd08.prod.outlook.com
+ (2603:10a6:803:bc::19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2a05:1141:1c9:7c00:ad8b:c078:f634:d22a] (2a05:1141:1c9:7c00:ad8b:c078:f634:d22a) by ZR0P278CA0007.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:16::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21 via Frontend Transport; Thu, 5 Nov 2020 21:20:12 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 0fbc7f84-9278-4ccb-e1ee-08d881d094d0
+X-MS-TrafficTypeDiagnostic: VE1PR08MB5805:
+X-Microsoft-Antispam-PRVS: <VE1PR08MB58053D934A8B0FF3DE15B2B0F2EE0@VE1PR08MB5805.eurprd08.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 432owKOxFQC+vj0V60DG4sSvY8oe1K7a2OFuJZRlgLkEQVT7Nd3MksOpj3QfISgouw0LTFzerAaqhsZXGNRm/0nDIHD7s3X/0t9MWaq/48xbTrSABZBdKIBJpJ/5TRrTCsYCT1pJ3T5/hqqDZ3jTccKPdqrkWYoCX85EftnruNQYOyFt4BEFDFnqBNBhMdr5bZSjkS+ZTDt345Y/mj6zhW9R+W2EHee0KKPYAP/v+hbs9tij/HvmsK8cwgGFno02HbglR719TDfLbcnYk5Jrv+dnfCI3hcrc6WMaGDWeEw2PMXy6ADF2ZrWyksKF46O268yBgxxjagd+UMUFly2tcQ++urDgEozh7DIvz/wgOVMA2W+S7rfOaLpgt/CtjU/s
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR08MB4592.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(346002)(136003)(376002)(39830400003)(366004)(44832011)(186003)(31696002)(8936002)(8676002)(31686004)(2616005)(16526019)(6916009)(36756003)(2906002)(4744005)(52116002)(66946007)(478600001)(86362001)(316002)(66556008)(83380400001)(6486002)(5660300002)(66476007)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: N++nqVTgOV/wLB+yiT1N3j5/LhCxK0t/dIrGwMGVyCJMm0LR7A4+nQ9rdkiIzX47379nzi6IJDBa3jbolUdwHMdfBfynYv0CbXCjwThIXeeyr5afUu/NYvcysooTW9O66hg21gjiCm6XqEnCZEY6ZnXbL3AWnfkyYz0zHoty1U16fE4UYJKp4MzngIl+0C5f3C1B44GaaCKPW18VEAKOYty4/E1CU00QLxHPzs7MKw0j9ofevOOcPUKWJnzWeW1OjLVuCtwJwoDbxtC1+73KEFPbcjwpaXIhZ3y+m+55N1p61jYI2jC/d2Id/bTS5Dq4CTA3BW0zjJw5RZ7HqfnhRNHs6zbj9qo+U3SG7xI+ZK3y+pcNzziSwiM+CacWGCzU72C0ir1AEsrn6fzj3beCbqnD4MIU4l3/HP4jN+KDjQ9pabXPCsgEdQn4zTwgpiRvY2eKATzugmpcBfWNIB4SI8u3oBPZ9DlMECnczECkd6fEGQcVlfWIa7/UKTwFfPrIsNfSxP3lqcVjeRGtgfoNmpUIDPgstOJz1zcZ48bmAofYxnT2D5Blxk4yQ3hvmkG3IgIzd1XLpCzWcGr/FJJZgfi0zNaXXrvZ1Miq539Ea7OgkFQ2Z/ZQQlUjiVbc6Ze/c704vbxead4a9B63cdvjEuzpmmVeUUogAIUHr8Tj5cx2n7u0Wz+PIjK6Q5z+RmZ/4Sl50IkoyXFRITo3JwlaKQ==
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0fbc7f84-9278-4ccb-e1ee-08d881d094d0
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR08MB4592.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Nov 2020 21:20:12.4762
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZGlrBv7B0crfTPduAVjoG7hIVw/SyoCJl0HAbVxmDIdrhPdcfzXms5JMnRyUJBNlNfU5q+QcCk6Q1bFGD1QbD3VnmE3GBTg38Urlj0/IQF0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR08MB5805
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The MPEG2_SLICE_PARAMS control is designed to refer to a
-single slice. Conversely, in each request the OUTPUT buffer
-is expected to hold a single slice, so the offset
-and size fields are not needed.
+Hello all,
 
-The start of the slice is aligned to the start of the buffer,
-and the buffer's plane payload size is the slice size.
+The USB video class standard specifies a procedure (USB Video Class 1.1,
+Section 2.4.3.6, "Dynamic Format Change Support") that allows the format
+of input data to be changed during streaming. As an example, one could
+think of a media interface device that accepts a large range of
+resolutions via DVI, HDMI, ... during runtime and aims to forward the
+data without rescaling via USB. In this case, the input format is not
+necessarily known at device enumeration and might change at a later point.
 
-To reduce the API surface and avoid confusion drop these
-fields from control.
+After a quick glance over the current uvcvideo code I am wondering
+whether this feature is currently supported or (if not) whether there
+are plans to add support. Also, is this feature actually implemented in
+any device you have encountered?
 
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
----
- Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 6 ------
- drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c        | 4 ++--
- drivers/staging/media/hantro/rk3399_vpu_hw_mpeg2_dec.c    | 4 ++--
- drivers/staging/media/sunxi/cedrus/cedrus_mpeg2.c         | 7 +++----
- include/media/mpeg2-ctrls.h                               | 2 --
- 5 files changed, 7 insertions(+), 16 deletions(-)
+Looking forward to any comments and/or pointers. Thanks in advance!
 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index 7f5e331cda68..4c32b93f41a6 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -2218,12 +2218,6 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
-     :stub-columns: 0
-     :widths:       1 1 2
- 
--    * - __u32
--      - ``bit_size``
--      - Size (in bits) of the current slice data.
--    * - __u32
--      - ``data_bit_offset``
--      - Offset (in bits) to the video data in the current slice data.
-     * - struct :c:type:`v4l2_mpeg2_sequence`
-       - ``sequence``
-       - Structure with MPEG-2 sequence metadata, merging relevant fields from
-diff --git a/drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c b/drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c
-index 9fe442244eb9..b6086474d31f 100644
---- a/drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c
-+++ b/drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c
-@@ -206,7 +206,7 @@ void hantro_g1_mpeg2_dec_run(struct hantro_ctx *ctx)
- 	      G1_REG_TOPFIELDFIRST_E(pic->flags & V4L2_MPEG2_PIC_FLAG_TOP_FIELD_FIRST);
- 	vdpu_write_relaxed(vpu, reg, G1_SWREG(4));
- 
--	reg = G1_REG_STRM_START_BIT(slice_params->data_bit_offset) |
-+	reg = G1_REG_STRM_START_BIT(0) |
- 	      G1_REG_QSCALE_TYPE(pic->flags & V4L2_MPEG2_PIC_FLAG_Q_SCALE_TYPE) |
- 	      G1_REG_CON_MV_E(pic->flags & V4L2_MPEG2_PIC_FLAG_CONCEALMENT_MV) |
- 	      G1_REG_INTRA_DC_PREC(pic->intra_dc_precision) |
-@@ -215,7 +215,7 @@ void hantro_g1_mpeg2_dec_run(struct hantro_ctx *ctx)
- 	vdpu_write_relaxed(vpu, reg, G1_SWREG(5));
- 
- 	reg = G1_REG_INIT_QP(1) |
--	      G1_REG_STREAM_LEN(slice_params->bit_size >> 3);
-+	      G1_REG_STREAM_LEN(vb2_get_plane_payload(&src_buf->vb2_buf, 0));
- 	vdpu_write_relaxed(vpu, reg, G1_SWREG(6));
- 
- 	reg = G1_REG_ALT_SCAN_FLAG_E(pic->flags & V4L2_MPEG2_PIC_FLAG_ALT_SCAN) |
-diff --git a/drivers/staging/media/hantro/rk3399_vpu_hw_mpeg2_dec.c b/drivers/staging/media/hantro/rk3399_vpu_hw_mpeg2_dec.c
-index 9fdbf942cb99..28eb77b0569b 100644
---- a/drivers/staging/media/hantro/rk3399_vpu_hw_mpeg2_dec.c
-+++ b/drivers/staging/media/hantro/rk3399_vpu_hw_mpeg2_dec.c
-@@ -179,7 +179,7 @@ void rk3399_vpu_mpeg2_dec_run(struct hantro_ctx *ctx)
- 	vdpu_write_relaxed(vpu, reg, VDPU_SWREG(50));
- 
- 	reg = VDPU_REG_INIT_QP(1) |
--	      VDPU_REG_STREAM_LEN(slice_params->bit_size >> 3);
-+	      VDPU_REG_STREAM_LEN(vb2_get_plane_payload(&src_buf->vb2_buf, 0));
- 	vdpu_write_relaxed(vpu, reg, VDPU_SWREG(51));
- 
- 	reg = VDPU_REG_APF_THRESHOLD(8) |
-@@ -222,7 +222,7 @@ void rk3399_vpu_mpeg2_dec_run(struct hantro_ctx *ctx)
- 	      VDPU_REG_TOPFIELDFIRST_E(pic->flags & V4L2_MPEG2_PIC_FLAG_TOP_FIELD_FIRST);
- 	vdpu_write_relaxed(vpu, reg, VDPU_SWREG(120));
- 
--	reg = VDPU_REG_STRM_START_BIT(slice_params->data_bit_offset) |
-+	reg = VDPU_REG_STRM_START_BIT(0) |
- 	      VDPU_REG_QSCALE_TYPE(pic->flags & V4L2_MPEG2_PIC_FLAG_Q_SCALE_TYPE) |
- 	      VDPU_REG_CON_MV_E(pic->flags & V4L2_MPEG2_PIC_FLAG_CONCEALMENT_MV) |
- 	      VDPU_REG_INTRA_DC_PREC(pic->intra_dc_precision) |
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_mpeg2.c b/drivers/staging/media/sunxi/cedrus/cedrus_mpeg2.c
-index 855536702bc1..6a99893cdc77 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_mpeg2.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_mpeg2.c
-@@ -186,10 +186,9 @@ static void cedrus_mpeg2_setup(struct cedrus_ctx *ctx, struct cedrus_run *run)
- 
- 	/* Source offset and length in bits. */
- 
--	cedrus_write(dev, VE_DEC_MPEG_VLD_OFFSET,
--		     slice_params->data_bit_offset);
-+	cedrus_write(dev, VE_DEC_MPEG_VLD_OFFSET, 0);
- 
--	reg = slice_params->bit_size - slice_params->data_bit_offset;
-+	reg = vb2_get_plane_payload(&run->src->vb2_buf, 0) * 8;
- 	cedrus_write(dev, VE_DEC_MPEG_VLD_LEN, reg);
- 
- 	/* Source beginning and end addresses. */
-@@ -203,7 +202,7 @@ static void cedrus_mpeg2_setup(struct cedrus_ctx *ctx, struct cedrus_run *run)
- 
- 	cedrus_write(dev, VE_DEC_MPEG_VLD_ADDR, reg);
- 
--	reg = src_buf_addr + DIV_ROUND_UP(slice_params->bit_size, 8);
-+	reg = src_buf_addr + vb2_get_plane_payload(&run->src->vb2_buf, 0);
- 	cedrus_write(dev, VE_DEC_MPEG_VLD_END_ADDR, reg);
- 
- 	/* Macroblock address: start at the beginning. */
-diff --git a/include/media/mpeg2-ctrls.h b/include/media/mpeg2-ctrls.h
-index 6366035bfc54..5b0c916a44dd 100644
---- a/include/media/mpeg2-ctrls.h
-+++ b/include/media/mpeg2-ctrls.h
-@@ -68,8 +68,6 @@ struct v4l2_mpeg2_picture {
- };
- 
- struct v4l2_ctrl_mpeg2_slice_params {
--	__u32	bit_size;
--	__u32	data_bit_offset;
- 	__u64	backward_ref_ts;
- 	__u64	forward_ref_ts;
- 
--- 
-2.27.0
-
+Best regards,
+Michael
