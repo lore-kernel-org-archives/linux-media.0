@@ -7,50 +7,50 @@ X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 028E5C388F7
-	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 12:56:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7084AC4742C
+	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 12:58:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AE75720936
-	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 12:56:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2A6E5206DB
+	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 12:58:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729992AbgKEM4L (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Nov 2020 07:56:11 -0500
-Received: from mga17.intel.com ([192.55.52.151]:7001 "EHLO mga17.intel.com"
+        id S1730484AbgKEM6b (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Nov 2020 07:58:31 -0500
+Received: from mga05.intel.com ([192.55.52.43]:58714 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730519AbgKEM4K (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 5 Nov 2020 07:56:10 -0500
-IronPort-SDR: 1xcVq2zYwBmExXhGnrL4sK6kHBeTvmi/osucP3405jlkKnBOw4Jla38NGgpuWU3N1ESCeq3JOC
- Y9mxwNKZb9yA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9795"; a="149228430"
+        id S1726777AbgKEM6b (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 5 Nov 2020 07:58:31 -0500
+IronPort-SDR: 7J/8b7NAtNvFj8pp7F94jMlY9W7Zm+UvJrSXn7NY3UdzUKrNBvGR5hy4v68wvBJm4z5Rluc8ad
+ xfVmfLPXrWyA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9795"; a="254082198"
 X-IronPort-AV: E=Sophos;i="5.77,453,1596524400"; 
-   d="scan'208";a="149228430"
+   d="scan'208";a="254082198"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2020 04:55:51 -0800
-IronPort-SDR: 9N6ctu8bGgZ1fi0PRSAkoH2F4UnsZJWsPpVghBdEsbQxkrgFeFJK7zQhn2MdhryGn6yE6yx6Wj
- jw0TPIZsvPRg==
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2020 04:58:31 -0800
+IronPort-SDR: JOIy50hxA0eDjLE7kfO0qWVKnXwU+pruQuLUB5NQHuLHzWEHVFXXXRcnW2CHLJxIHuBi/S6LFn
+ frgGug74NgqQ==
 X-IronPort-AV: E=Sophos;i="5.77,453,1596524400"; 
-   d="scan'208";a="527952629"
+   d="scan'208";a="527953307"
 Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2020 04:55:50 -0800
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2020 04:58:30 -0800
 Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id CAB6F20901; Thu,  5 Nov 2020 14:55:48 +0200 (EET)
-Date:   Thu, 5 Nov 2020 14:55:48 +0200
+        id 263A220901; Thu,  5 Nov 2020 14:58:29 +0200 (EET)
+Date:   Thu, 5 Nov 2020 14:58:29 +0200
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     Hans Verkuil <hverkuil@xs4all.nl>
 Cc:     linux-media@vger.kernel.org
-Subject: Re: [PATCH v2 100/106] ccs: Add support for analogue gain
- coefficient controls
-Message-ID: <20201105125548.GG26150@paasikivi.fi.intel.com>
+Subject: Re: [PATCH v2 099/106] v4l: uapi: ccs: Add controls for analogue
+ gain constants
+Message-ID: <20201105125828.GH26150@paasikivi.fi.intel.com>
 References: <20201007084505.25761-1-sakari.ailus@linux.intel.com>
  <20201007084557.25843-1-sakari.ailus@linux.intel.com>
- <20201007084557.25843-91-sakari.ailus@linux.intel.com>
- <074fd0e4-f16c-c2cd-1d30-f55a1993ad36@xs4all.nl>
+ <20201007084557.25843-90-sakari.ailus@linux.intel.com>
+ <8dd2be66-e253-e535-ecfc-f51747204424@xs4all.nl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <074fd0e4-f16c-c2cd-1d30-f55a1993ad36@xs4all.nl>
+In-Reply-To: <8dd2be66-e253-e535-ecfc-f51747204424@xs4all.nl>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -58,112 +58,54 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Hi Hans,
 
-Thank you for the review!
-
-On Thu, Nov 05, 2020 at 01:46:46PM +0100, Hans Verkuil wrote:
+On Thu, Nov 05, 2020 at 01:56:02PM +0100, Hans Verkuil wrote:
 > On 07/10/2020 10:45, Sakari Ailus wrote:
-> > Add four controls for reading CCS analogue gain coefficients. The
-> > values are constants that are device specific.
+> > Add a V4L2 controls for analogue gai constants required to control
+> > analogue gain. The values are device specific and thus need to be obtained
+> > from the driver.
 > > 
 > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 > > ---
-> >  drivers/media/i2c/ccs/ccs-core.c | 38 ++++++++++++++++++++++++++++++--
-> >  1 file changed, 36 insertions(+), 2 deletions(-)
+> >  MAINTAINERS              |  1 +
+> >  include/uapi/linux/ccs.h | 14 ++++++++++++++
+> >  2 files changed, 15 insertions(+)
+> >  create mode 100644 include/uapi/linux/ccs.h
 > > 
-> > diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-> > index d6d6aeceb415..2a507b63bafc 100644
-> > --- a/drivers/media/i2c/ccs/ccs-core.c
-> > +++ b/drivers/media/i2c/ccs/ccs-core.c
-> > @@ -28,6 +28,7 @@
-> >  #include <linux/v4l2-mediabus.h>
-> >  #include <media/v4l2-fwnode.h>
-> >  #include <media/v4l2-device.h>
-> > +#include <uapi/linux/ccs.h>
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index b72f666b8b60..c173e503b0b7 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -11569,6 +11569,7 @@ F:	drivers/media/i2c/ccs/
+> >  F:	drivers/media/i2c/ccs-pll.c
+> >  F:	drivers/media/i2c/ccs-pll.h
+> >  F:	include/uapi/linux/smiapp.h
+> > +F:	include/uapi/linux/ccs.h
 > >  
-> >  #include "ccs.h"
-> >  
-> > @@ -772,14 +773,46 @@ static int ccs_init_controls(struct ccs_sensor *sensor)
-> >  	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
-> >  	int rval;
-> >  
-> > -	rval = v4l2_ctrl_handler_init(&sensor->pixel_array->ctrl_handler, 13);
-> > +	rval = v4l2_ctrl_handler_init(&sensor->pixel_array->ctrl_handler, 17);
-> >  	if (rval)
-> >  		return rval;
-> >  
-> >  	sensor->pixel_array->ctrl_handler.lock = &sensor->mutex;
-> >  
-> >  	switch (CCS_LIM(sensor, ANALOG_GAIN_CAPABILITY)) {
-> > -	case CCS_ANALOG_GAIN_CAPABILITY_GLOBAL:
-> > +	case CCS_ANALOG_GAIN_CAPABILITY_GLOBAL: {
-> > +		struct {
-> 
-> Can this be static?
-
-CCS_LIM(sensor, ...) translates to a value that is specific to a given
-model of a camera sensor, it's not a constant.
-
-> 
-> > +			const char *name;
-> > +			u32 id;
-> > +			s32 value;
-> > +		} const gain_ctrls[] = {
-> > +			{ "Analogue Gain m0", V4L2_CID_CCS_ANALOGUE_GAIN_M0,
-> 
-> Why lower case 'm0/1' and 'c0/1'? It looks odd.
-
-The spec uses lower case to refer to [cm][01].
-
-I can use upper case if you prefer though.
-
-> 
-> > +			  CCS_LIM(sensor, ANALOG_GAIN_M0), },
-> > +			{ "Analogue Gain c0", V4L2_CID_CCS_ANALOGUE_GAIN_C0,
-> > +			  CCS_LIM(sensor, ANALOG_GAIN_C0), },
-> > +			{ "Analogue Gain m1", V4L2_CID_CCS_ANALOGUE_GAIN_M1,
-> > +			  CCS_LIM(sensor, ANALOG_GAIN_M1), },
-> > +			{ "Analogue Gain c1", V4L2_CID_CCS_ANALOGUE_GAIN_C1,
-> > +			  CCS_LIM(sensor, ANALOG_GAIN_C1), },
-> > +		};
-> > +		struct v4l2_ctrl_config ctrl_cfg = {
-> > +			.type = V4L2_CTRL_TYPE_INTEGER,
-> > +			.ops = &ccs_ctrl_ops,
-> > +			.flags = V4L2_CTRL_FLAG_READ_ONLY,
-> > +			.step = 1,
-> > +		};
-> 
-> This looks a bit weird. Most drivers just define each control separately in
-> a static const struct v4l2_ctrl_config, then add them with v4l2_ctrl_new_custom.
-> 
-> Now the control definition data is split up in two data structures.
-> 
-> It's not wrong, it is just non-standard, and a bit harder to review.
-> 
-> > +		unsigned int i;
+> >  MIPS
+> >  M:	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > diff --git a/include/uapi/linux/ccs.h b/include/uapi/linux/ccs.h
+> > new file mode 100644
+> > index 000000000000..bcdce95955b0
+> > --- /dev/null
+> > +++ b/include/uapi/linux/ccs.h
+> > @@ -0,0 +1,14 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only AND BSD-3-Clause */
+> > +/* Copyright (C) 2020 Intel Corporation */
 > > +
-> > +		for (i = 0; i < ARRAY_SIZE(gain_ctrls); i++) {
-> > +			ctrl_cfg.name = gain_ctrls[i].name;
-> > +			ctrl_cfg.id = gain_ctrls[i].id;
-> > +			ctrl_cfg.min = ctrl_cfg.max = ctrl_cfg.def =
-> > +				gain_ctrls[i].value;
-> > +
-> > +			v4l2_ctrl_new_custom(&sensor->pixel_array->ctrl_handler,
-> > +					     &ctrl_cfg, NULL);
-> > +		}
-> > +
-> >  		v4l2_ctrl_new_std(&sensor->pixel_array->ctrl_handler,
-> >  				  &ccs_ctrl_ops, V4L2_CID_ANALOGUE_GAIN,
-> >  				  CCS_LIM(sensor, ANALOG_GAIN_CODE_MIN),
-> > @@ -788,6 +821,7 @@ static int ccs_init_controls(struct ccs_sensor *sensor)
-> >  				      1U),
-> >  				  CCS_LIM(sensor, ANALOG_GAIN_CODE_MIN));
-> >  	}
-> > +	}
-> >  
-> >  	if (CCS_LIM(sensor, DIGITAL_GAIN_CAPABILITY) ==
-> >  	    CCS_DIGITAL_GAIN_CAPABILITY_GLOBAL ||
-> > 
+> > +#ifndef __UAPI_CCS_H__
+> > +#define __UAPI_CCS_H__
 > 
+> What does CCS stand for? Provide a reference to the standard as well.
+> 
+> Just looking at this header doesn't give you any clue as to what it
+> related to.
+
+I'll add references to driver documentation I'm about to write to address
+Mauro's review comments. CCS stands for Camera Command Set.
+
+The spec can be found here:
+
+<URL:https://www.mipi.org/specifications/camera-command-set>
 
 -- 
 Regards,
