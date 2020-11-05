@@ -2,101 +2,175 @@ Return-Path: <SRS0=XB3O=EL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 764BEC00A89
-	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 09:19:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C701AC4742C
+	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 09:25:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CAB132071A
-	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 09:19:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5842921D81
+	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 09:25:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="lHGJ5M2P"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="Pk45fCQQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730145AbgKEJTL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Nov 2020 04:19:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52364 "EHLO
+        id S1727731AbgKEJZa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Nov 2020 04:25:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726371AbgKEJTL (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Nov 2020 04:19:11 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C784CC0613CF
-        for <linux-media@vger.kernel.org>; Thu,  5 Nov 2020 01:19:10 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 61530B93;
-        Thu,  5 Nov 2020 10:19:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1604567946;
-        bh=4SVIyNC7fF2x1a84grCvIts8TeUX6eJZdxFQa4KTXE4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lHGJ5M2PDYC4jBNXvOXovPCbyleNip1W/gJ6odfjLxQxeLqhdEKkURgh59OlmfF3x
-         FoHciN0d2E7fTAfLeOl7PfKmL9FJDhKYmK9wRG3b7pkpeh7RmEmh0oalG7QSrYNOw9
-         O+bwJCIks16dOP39AfD0tadloVAi713ShhniFryc=
-Date:   Thu, 5 Nov 2020 11:19:05 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Gregor Hlawacek <g.hlawacek@hzdr.de>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-media@vger.kernel.org
-Subject: Re: Philips Monitor with webcam
-Message-ID: <20201105091905.GD3988@pendragon.ideasonboard.com>
-References: <51207fd712e3c1001b80c6642021b1a5d5763ade.camel@hzdr.de>
- <20201104170233.0d405dff@coco.lan>
- <59f848e83354ad72c11dacaf571f20a8084baf58.camel@hzdr.de>
- <20201104174554.4bbec36a@coco.lan>
- <b8fcc03ed79873f9e55ab394b4b95140ab8b215b.camel@hzdr.de>
- <20201104210155.353a0d6a@coco.lan>
- <40a643d5fd9b6dd387d9cbde3e5ba1796b282f6a.camel@hzdr.de>
- <20201104221148.4d5c644d@coco.lan>
- <20201104212454.GF29958@pendragon.ideasonboard.com>
- <73b62785d882113351d0e69e3b552f0f271e4f2d.camel@hzdr.de>
+        with ESMTP id S1726371AbgKEJZ3 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Nov 2020 04:25:29 -0500
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD95C0613D2
+        for <linux-media@vger.kernel.org>; Thu,  5 Nov 2020 01:25:28 -0800 (PST)
+Received: by mail-wm1-x341.google.com with SMTP id h2so848680wmm.0
+        for <linux-media@vger.kernel.org>; Thu, 05 Nov 2020 01:25:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6viq27xeTxIz8acrTQ2jRGDu1L7mOoiJCMIWrZFHf74=;
+        b=Pk45fCQQ7XngdYs3ziaP+ymxGzpakbhoUL7YEZ1pNacSF/8myikkPFyZUaHYgYV+MI
+         jUFI0zhMI1Q5QNm1leQcIJl/cJaDXfbVVx+4uWz9xdSA/Fb7U7QrV97m7ySMNgMlnXw7
+         FTghP2yCD22NR5UHFnL7m1NqQXsahfUUgl95A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=6viq27xeTxIz8acrTQ2jRGDu1L7mOoiJCMIWrZFHf74=;
+        b=RCeLF8LO8zIDSrqztyGbHL/CJkoe/fRZZo3iv+wvpuSKjwBUmskE6RnOfBbz5rJpAJ
+         kvS+RjPcYzqdcm49nAFvTtvyLmrHcD+tzG1xgwaod7c9MPWw48OTgSFZjCbUtnvgPw6H
+         hbRdSLEbEmwQ+dLN19NVrI1dvB+jjctD+IrYcOUwhdzpUvYEJL0Jl5U4O24+IihxQ5UC
+         BKwrNTHYVY2dS5CP5Oixm0FNi+TkkmB0MILiU/IByavXTt2WaFY+HA/lyChVBS6Ekd+Q
+         QnsyajCQWVGXKqWm44BNeo/pVfdpFsX4v+LOOtAvnibG7oudvBxIBFiYAm3uyxnTw4YG
+         pTow==
+X-Gm-Message-State: AOAM533ge4aBRT5OboPv/TCKJggDoMN4woL6RyzWpyBbE3q3mUd6R0IV
+        eIQuWJm+gvDm9KRKQYUfhEZjIA==
+X-Google-Smtp-Source: ABdhPJy3n17GilkYmW9UEcOuB53n8WrP7NQoee5RAk40ap5hD72YnDNsNHhquJauR7fQm17EWWmhuQ==
+X-Received: by 2002:a1c:497:: with SMTP id 145mr1699932wme.127.1604568327398;
+        Thu, 05 Nov 2020 01:25:27 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id d63sm209171wmd.12.2020.11.05.01.25.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Nov 2020 01:25:26 -0800 (PST)
+Date:   Thu, 5 Nov 2020 10:25:24 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Christoph Hellwig <hch@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        J??r??me Glisse <jglisse@redhat.com>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        Jan Kara <jack@suse.cz>, Pawel Osciak <pawel@osciak.com>,
+        KVM list <kvm@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>
+Subject: Re: [PATCH v5 05/15] mm/frame-vector: Use FOLL_LONGTERM
+Message-ID: <20201105092524.GQ401619@phenom.ffwll.local>
+Mail-Followup-To: John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Christoph Hellwig <hch@infradead.org>,
+        J??r??me Glisse <jglisse@redhat.com>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        Jan Kara <jack@suse.cz>, Pawel Osciak <pawel@osciak.com>,
+        KVM list <kvm@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Tomasz Figa <tfiga@chromium.org>, Linux MM <linux-mm@kvack.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" <linux-media@vger.kernel.org>
+References: <7f29a42a-c408-525d-90b7-ef3c12b5826c@nvidia.com>
+ <CAKMK7uEw701AWXNJbRNM8Z+FkyUB5FbWegmSzyWPy9cG4W7OLA@mail.gmail.com>
+ <20201104140023.GQ36674@ziepe.ca>
+ <CAKMK7uH69hsFjYUkjg1aTh5f=q_3eswMSS5feFs6+ovz586+0A@mail.gmail.com>
+ <20201104162125.GA13007@infradead.org>
+ <CAKMK7uH=0+3FSR4LxP7bJUB4BsCcnCzfK2=D+2Am9QNmfZEmfw@mail.gmail.com>
+ <20201104163758.GA17425@infradead.org>
+ <20201104164119.GA18218@infradead.org>
+ <20201104181708.GU36674@ziepe.ca>
+ <d3497583-2338-596e-c764-8c571b7d22cf@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <73b62785d882113351d0e69e3b552f0f271e4f2d.camel@hzdr.de>
+In-Reply-To: <d3497583-2338-596e-c764-8c571b7d22cf@nvidia.com>
+X-Operating-System: Linux phenom 5.7.0-1-amd64 
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Gregor,
+On Wed, Nov 04, 2020 at 10:44:56AM -0800, John Hubbard wrote:
+> On 11/4/20 10:17 AM, Jason Gunthorpe wrote:
+> > On Wed, Nov 04, 2020 at 04:41:19PM +0000, Christoph Hellwig wrote:
+> > > On Wed, Nov 04, 2020 at 04:37:58PM +0000, Christoph Hellwig wrote:
+> > > > On Wed, Nov 04, 2020 at 05:26:58PM +0100, Daniel Vetter wrote:
+> > > > > What we're discussing is whether gup_fast and pup_fast also obey this,
+> > > > > or fall over and can give you the struct page that's backing the
+> > > > > dma_mmap_* memory. Since the _fast variant doesn't check for
+> > > > > vma->vm_flags, and afaict that's the only thing which closes this gap.
+> > > > > And like you restate, that would be a bit a problem. So where's that
+> > > > > check which Jason&me aren't spotting?
+> > > > 
+> > > > remap_pte_range uses pte_mkspecial to set up the PTEs, and gup_pte_range
+> > > > errors out on pte_special.  Of course this only works for the
+> > > > CONFIG_ARCH_HAS_PTE_SPECIAL case, for other architectures we do have
+> > > > a real problem.
+> > > 
+> > > Except that we don't really support pte-level gup-fast without
+> > > CONFIG_ARCH_HAS_PTE_SPECIAL, and in fact all architectures selecting
+> > > HAVE_FAST_GUP also select ARCH_HAS_PTE_SPECIAL, so we should be fine.
 
-On Thu, Nov 05, 2020 at 08:41:27AM +0100, Gregor Hlawacek wrote:
+Thanks for the explainer. I guess I can go back to _fast and instead
+adjust the commit message to explain why that's all fine.
 
-[snip]
-
-> Hi Mauro and Laurent
+> > Mm, I thought it was probably the special flag..
+> > 
+> > Knowing that CONFIG_HAVE_FAST_GUP can't be set without
+> > CONFIG_ARCH_HAS_PTE_SPECIAL is pretty insightful, can we put that in
+> > the Kconfig?
+> > 
+> > config HAVE_FAST_GUP
+> >          depends on MMU
+> >          depends on ARCH_HAS_PTE_SPECIAL
+> >          bool
+> > 
+> Well, the !CONFIG_ARCH_HAS_PTE_SPECIAL case points out in a comment that
+> gup-fast is not *completely* unavailable there, so I don't think you want
+> to shut it off like that:
 > 
-> @Mauro:
-> 
-> I think there is a confusion, which might be my fault as I talked about
-> a chicony cam in the external monitor. The chicony cam that shows up as
-> video0/1 is my internal laptop camera which is working fine. The
-> problematic one is the sunplusIT camera which has a chicony usb
-> identifier (0412). This is connected to video2-5 and also the one for
-> which I reported the above information.
-> 
-> @Laurent:
-> 
-> lsusb -v -d 0412:612b:
+> /*
+>  * If we can't determine whether or not a pte is special, then fail immediately
+>  * for ptes. Note, we can still pin HugeTLB and THP as these are guaranteed not
+>  * to be special.
+>  *
+>  * For a futex to be placed on a THP tail page, get_futex_key requires a
+>  * get_user_pages_fast_only implementation that can pin pages. Thus it's still
+>  * useful to have gup_huge_pmd even if we can't operate on ptes.
+>  */
 
-[snip]
-
-Thank for the information. Nothing strikes me as weird. Could you
-
-- Set the uvcvideo trace parameter to 0xffff:
-
-  sudo echo 0xffff > /sys/module/uvcvideo/parameters/trace
-
-- Unplug and replug the monitor
-- Open the video devices in turn with v4l2-ctl (use the video device
-  nodes /dev/video* directly, not the by-id links)
-- Send send the output of 'sudo dmesg'
-
-You can clear the kernel log with 'sudo dmesg -c' before doing so to
-avoid including unrelated data (or just strip it from the dmesg output
-manually when copying it to an e-mail).
-
+We support hugepage faults in gpu drivers since recently, and I'm not
+seeing a pud_mkhugespecial anywhere. So not sure this works, but probably
+just me missing something again.
+-Daniel
 -- 
-Regards,
-
-Laurent Pinchart
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
