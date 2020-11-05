@@ -2,79 +2,182 @@ Return-Path: <SRS0=XB3O=EL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DFC7EC55179
-	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 15:41:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B70C4C55178
+	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 16:07:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3C1162078E
-	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 15:41:12 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=fossekall.de header.i=@fossekall.de header.b="LoBRdBaU"
+	by mail.kernel.org (Postfix) with ESMTP id 6FA3120729
+	for <linux-media@archiver.kernel.org>; Thu,  5 Nov 2020 16:07:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730862AbgKEPlL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Nov 2020 10:41:11 -0500
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.23]:31157 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730721AbgKEPlL (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Nov 2020 10:41:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1604590869;
-        s=strato-dkim-0002; d=fossekall.de;
-        h=Message-ID:Subject:To:From:Date:X-RZG-CLASS-ID:X-RZG-AUTH:From:
-        Subject:Sender;
-        bh=MksCkLVp32sc7KG0WwW6Fy2Vs773dfXVxIGmZ4PKXd8=;
-        b=LoBRdBaU5Dxsv8H1Yw6DovI8qgSpsSMDVj6w6s2rNOkxwhrniMxh6zV6Hc5ulGFLge
-        BhqEwmAru6fBbkl0jUBByF46eZl5hl7oH+os78r6ypLjOeMLqyTrAI72T82HqQ97mlPP
-        emUVJ1nHgO32+gN0RvD/BXMEtmS6ze7i8zuTmC5MZ+ooFjjj0mo3jIqD0xk2sbSKrP+l
-        d0Mn4G2wwAa5mGdYKNHzdt6F5WfXl/goLP8usT0FmftK6x3BG3WT28Xq4dJmq4iJXvLB
-        KirCdlCHNwlZqyqLuXtIMSNjKyqjnIsmPm3mCHyzvTn2CvzMrJH23vTar4TPOW7PbqiZ
-        kx6Q==
-X-RZG-AUTH: ":O2kGeEG7b/pS1EzgE2y7nF0STYsSLflpbjNKxx7cGrBOdI6BL9pkS3QW19mO7I+/JwRspuzJFZuRzQ=="
-X-RZG-CLASS-ID: mo00
-Received: from aerfugl
-        by smtp.strato.de (RZmta 47.3.2 AUTH)
-        with ESMTPSA id 6072cdwA5FZ50Id
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate)
-        for <linux-media@vger.kernel.org>;
-        Thu, 5 Nov 2020 16:35:05 +0100 (CET)
-Received: from koltrast.a98shuttle.de ([192.168.1.27] helo=a98shuttle.de)
-        by aerfugl with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <michael@fossekall.de>)
-        id 1kahI0-0002J0-CN
-        for linux-media@vger.kernel.org; Thu, 05 Nov 2020 16:35:04 +0100
-Date:   Thu, 5 Nov 2020 16:35:03 +0100
-From:   Michael Klein <michael@fossekall.de>
-To:     linux-media@vger.kernel.org
-Subject: [PATCH v2 0/2] media: rc: gpio-ir-recv: add timeout property
-Message-ID: <cover.1604589023.git.michael@fossekall.de>
+        id S1730898AbgKEQHq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Nov 2020 11:07:46 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:54091 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1730174AbgKEQHp (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Nov 2020 11:07:45 -0500
+Received: (qmail 1615519 invoked by uid 1000); 5 Nov 2020 11:07:43 -0500
+Date:   Thu, 5 Nov 2020 11:07:43 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        linux-samsung-soc@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-usb@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v1 21/30] usb: host: ehci-tegra: Support OPP and SoC core
+ voltage scaling
+Message-ID: <20201105160743.GA1613614@rowland.harvard.edu>
+References: <20201104234427.26477-1-digetx@gmail.com>
+ <20201104234427.26477-22-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20201104234427.26477-22-digetx@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The default recorder timeout of 125ms is too high for some BPF protocol 
-decoders when a remote sends repeat codes at high rates. This makes the 
-timeout configurable via the devicetree.
+On Thu, Nov 05, 2020 at 02:44:18AM +0300, Dmitry Osipenko wrote:
+> Add initial OPP and SoC core voltage scaling support to the Tegra EHCI
+> driver. This is required for enabling system-wide DVFS on older Tegra
+> SoCs.
+> 
+> Tested-by: Peter Geis <pgwipeout@gmail.com>
+> Tested-by: Nicolas Chauvet <kwizart@gmail.com>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
 
-Changes in v2:
-  fix checkpatch.pl warnings
+I'm no expert on OPP stuff, but some of what you have done here looks 
+peculiar.
 
-Michael Klein (2):
-  media: rc: gpio-ir-recv: add recorder timeout property
-  media: bindings: media: gpio-ir-receiver: add linux,timeout-us
-    property
+> diff --git a/drivers/usb/host/ehci-tegra.c b/drivers/usb/host/ehci-tegra.c
+> index 869d9c4de5fc..0976577f54b4 100644
+> --- a/drivers/usb/host/ehci-tegra.c
+> +++ b/drivers/usb/host/ehci-tegra.c
+> @@ -17,6 +17,7 @@
+>  #include <linux/of_device.h>
+>  #include <linux/of_gpio.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/pm_opp.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/reset.h>
+>  #include <linux/slab.h>
+> @@ -364,6 +365,79 @@ static void tegra_ehci_unmap_urb_for_dma(struct usb_hcd *hcd, struct urb *urb)
+>  	free_dma_aligned_buffer(urb);
+>  }
+>  
+> +static void tegra_ehci_deinit_opp_table(void *data)
+> +{
+> +	struct device *dev = data;
+> +	struct opp_table *opp_table;
+> +
+> +	opp_table = dev_pm_opp_get_opp_table(dev);
+> +	dev_pm_opp_of_remove_table(dev);
+> +	dev_pm_opp_put_regulators(opp_table);
+> +	dev_pm_opp_put_opp_table(opp_table);
+> +}
+> +
+> +static int devm_tegra_ehci_init_opp_table(struct device *dev)
+> +{
+> +	unsigned long rate = ULONG_MAX;
+> +	struct opp_table *opp_table;
+> +	const char *rname = "core";
+> +	struct dev_pm_opp *opp;
+> +	int err;
+> +
+> +	/* legacy device-trees don't have OPP table */
+> +	if (!device_property_present(dev, "operating-points-v2"))
+> +		return 0;
+> +
+> +	/* voltage scaling is optional */
+> +	if (device_property_present(dev, "core-supply"))
+> +		opp_table = dev_pm_opp_set_regulators(dev, &rname, 1);
+> +	else
+> +		opp_table = dev_pm_opp_get_opp_table(dev);
+> +
+> +	if (IS_ERR(opp_table))
+> +		return dev_err_probe(dev, PTR_ERR(opp_table),
+> +				     "failed to prepare OPP table\n");
+> +
+> +	err = dev_pm_opp_of_add_table(dev);
+> +	if (err) {
+> +		dev_err(dev, "failed to add OPP table: %d\n", err);
+> +		goto put_table;
+> +	}
+> +
+> +	/* find suitable OPP for the maximum clock rate */
+> +	opp = dev_pm_opp_find_freq_floor(dev, &rate);
+> +	err = PTR_ERR_OR_ZERO(opp);
+> +	if (err) {
+> +		dev_err(dev, "failed to get OPP: %d\n", err);
+> +		goto remove_table;
+> +	}
+> +
+> +	dev_pm_opp_put(opp);
+> +
+> +	/*
+> +	 * First dummy rate-set initializes voltage vote by setting voltage
+> +	 * in accordance to the clock rate.
+> +	 */
+> +	err = dev_pm_opp_set_rate(dev, rate);
+> +	if (err) {
+> +		dev_err(dev, "failed to initialize OPP clock: %d\n", err);
+> +		goto remove_table;
+> +	}
+> +
+> +	err = devm_add_action(dev, tegra_ehci_deinit_opp_table, dev);
+> +	if (err)
+> +		goto remove_table;
+> +
+> +	return 0;
+> +
+> +remove_table:
+> +	dev_pm_opp_of_remove_table(dev);
+> +put_table:
+> +	dev_pm_opp_put_regulators(opp_table);
 
- .../devicetree/bindings/media/gpio-ir-receiver.txt          | 3 +++
- Documentation/devicetree/bindings/media/rc.yaml             | 6 ++++++
- drivers/media/rc/gpio-ir-recv.c                             | 3 ++-
- 3 files changed, 11 insertions(+), 1 deletion(-)
+Do you really want to use the same error unwinding for opp_table values 
+obtained from dev_pm_opp_set_regulators() as from 
+dev_pm_opp_get_opp_table()?
 
--- 
-2.28.0
+> +
+> +	return err;
+> +}
+> +
+>  static const struct tegra_ehci_soc_config tegra30_soc_config = {
+>  	.has_hostpc = true,
+>  };
+> @@ -431,6 +505,11 @@ static int tegra_ehci_probe(struct platform_device *pdev)
+>  		goto cleanup_hcd_create;
+>  	}
+>  
+> +	err = devm_tegra_ehci_init_opp_table(&pdev->dev);
+> +	if (err)
+> +		return dev_err_probe(&pdev->dev, err,
+> +				     "Failed to initialize OPP\n");
+
+Why log a second error message?  Just return err.
+
+Alan Stern
