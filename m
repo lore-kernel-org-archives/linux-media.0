@@ -7,62 +7,62 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AB14C55178
-	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 15:17:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82353C4741F
+	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 15:17:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EC46C22203
-	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 15:17:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2FB21206A4
+	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 15:17:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727801AbgKFPOp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 6 Nov 2020 10:14:45 -0500
-Received: from new3-smtp.messagingengine.com ([66.111.4.229]:33857 "EHLO
+        id S1727494AbgKFPOR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 6 Nov 2020 10:14:17 -0500
+Received: from new3-smtp.messagingengine.com ([66.111.4.229]:44497 "EHLO
         new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727569AbgKFPOU (ORCPT
+        by vger.kernel.org with ESMTP id S1726813AbgKFPOR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 6 Nov 2020 10:14:20 -0500
+        Fri, 6 Nov 2020 10:14:17 -0500
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 779F45806FE;
-        Fri,  6 Nov 2020 10:14:19 -0500 (EST)
+        by mailnew.nyi.internal (Postfix) with ESMTP id 161BF5806FB;
+        Fri,  6 Nov 2020 10:14:16 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Fri, 06 Nov 2020 10:14:19 -0500
+  by compute6.internal (MEProxy); Fri, 06 Nov 2020 10:14:16 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm1; bh=kt1qOxi6S/GR7
-        EnnkRTvKLS2suVMvFKnRKAgJVBIXG4=; b=Ad6e3Wbv6LcOPgen3WgWRD4leWKsG
-        YbmCJe6Vp03HU/cN/KZqNfTdbHM52YIsnA0jthGccXSFCmXL9RcinYX5F7KCNwXo
-        YqhoPhdwWD9tt9EFsmUz6H1PeFWqMUPEU/hkA+mcb+LtcgtBk/2JPR2VE52VWcBP
-        LDDGVjuURRnSHPe5OngQ0jWDnCwIkq2oE2OjOD/zdr8wEckand7KMKzvoHMlDc/e
-        iHgQKIS4Yi7Lthe5pzytaFglfBH1JgIj9+iuuXNu/3rvW8Tk86/fSfCLe4QRUP5a
-        ndJx6yC3PbODQEB96FQB+nV+Llv3SJnnvQr/fjeuAX2n8XAU5mgtBANHA==
+        :mime-version:content-transfer-encoding; s=fm1; bh=ujtkNFeASzsVa
+        wZs5/R3AU1Q1s3OP8qB0+DIpPNXq/I=; b=b0YipW4LKStX5rGppsvdjGv/tbP/j
+        7rJenmoArkeUF84kqbZMErzZwSCL4VKGUs3pbx7K4JOi2TEAq8QYs5hNb3Avnqf2
+        iq1axxXGyT85iQQ7uwBixNT6EK4rwpcGBbUkr8/nQZAI6NeXQ0wCtkSXwZxtIWdS
+        FBHAj9w0CkI6pON1vlfRWYk7kZb7eZdXApuVxnM9HNtH7BWLFddYdlrNn2qJTy7C
+        OZ41XVt9WfK2qQp+1MO4zFDvhtiZpY8OnQavb3kd5YIRxTwfAGsHMTk9swnvuutE
+        JzBua5zc67BUENmxGF1ApdPkcLjOzIe6iKMlqbFkqtVFn1f2vOzNzBNFA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:subject:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=kt1qOxi6S/GR7EnnkRTvKLS2suVMvFKnRKAgJVBIXG4=; b=qpU62Cd3
-        hJhrNkk3Kif7WcbWUKyY6zvr3G1h8p5cUmF/603zfzFqve9cWZQgTcjKw9yJfhs7
-        hkPqZFaCNIAAYW4x7vHnO1zpKvmor6CMMGFfhLk323PA0hek66cKHZagIGjhaOWm
-        2B/pVs+I52vCARBWOmUtuvxyBg+iEzDi7nFvy4FQUU3BtQ6BFg77kvrYOaBRU02w
-        4aDr1wadvURMbvlHhGG24P1z2B/2YyNSLdz9IhtuDvvSk0VyDbBWMhlZ1elvZnNr
-        jkpDH9UCMWjsKbWwzPmrRXhotF4Bd0LWQZWbRlu4L1C0dIhrDJHXkKoo6fw113I0
-        Nq7GmdAoIR536w==
-X-ME-Sender: <xms:S2ilXwLE4Tdi69dmOGB-0z6nlV2Dk0vr3ycnnXrhD_z0DeM1G6z14g>
-    <xme:S2ilXwJdCFegKFRbPefQomXu0hnlmkwlYIwUUmLoq6DZD_6oUEGAy16HO-bjclkll
-    HHyu4Qxg9do__lIZsw>
+        fm1; bh=ujtkNFeASzsVawZs5/R3AU1Q1s3OP8qB0+DIpPNXq/I=; b=bFg/vudt
+        x+2nFdPR2ji2ZvOxorD4fA27TG8S7p+7JoharMQCfXRFqlZol2FYp2oGQSSvXzBg
+        ZbUdbbN2rsr71hs0rfbJMSEoI+EeANITpUX72tE/LjPMIn5Lc7TotnkhpZxXpIGz
+        hCpZJ2afI+tG04OU+edWzUeXA3+iMU+A4pmYXX8L8LAOKnZxfalrvWPATCPaazzq
+        R6aMe5f8RWe9FC32c2H7lGKEM/dRz8un5txqQD/tExgajxvKyAsFC8pJpmU6XxCR
+        vbc+QaMS+8qD1fgRKQbM2qSHPsE+HzhYX2Rh84pqSAa5eFHcVp/OfCxz6eU+VKmU
+        HdnBD+LEP3amfA==
+X-ME-Sender: <xms:R2ilX8RurcPc_FDTSmzi_3aJZ1gAP2BwjRxkmgxzsGihsjj9Hb2Z_Q>
+    <xme:R2ilX5xdAn-egpftl-DSIAkyzMsDcHkAlvSBCKhqQZXYcwXzW7sCZ9S-FBh1DaQgJ
+    fpI16bRNFVIQ0IvOk0>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedruddtledgjeehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeforgigihhm
     vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
     htvghrnhepvdekleevfeffkeejhfffueelteelfeduieefheduudfggffhhfffheevveeh
-    hedvnecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgepfeenuc
+    hedvnecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
     frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:S2ilXwu-VwPhTbJ_v2KD8WKoJx94I1ooKCucx65POyDZ1HWZuuvPGA>
-    <xmx:S2ilX9Y4IUKmPzSJdRrOK3as34mne7nBdgk6rWgC-nUWfBzrz_9pNg>
-    <xmx:S2ilX3Y7wTYJ3ABre0Nxl0nJE8jLb2zfb5sqpfwQmPedTHE5Fks0-Q>
-    <xmx:S2ilX9zqwwra4H5fGhEmxzZ2Xhg2mt4DMhyeWrXTQv5M86gA0lldww>
+X-ME-Proxy: <xmx:R2ilX51bTL9JKZqDtAfjc1AH3BJvX3ir3c1gCF8b33w8t4x_Kxkzuw>
+    <xmx:R2ilXwB8ce0R9bglOIk7pKx8lGSm1LY-XgchY1_J45JwyxRoTtQ1Tw>
+    <xmx:R2ilX1iQ_Zpl9M6k3LWYNo0O54_aRkLyXD6e8KN7x8W0Y-TP4OhNCw>
+    <xmx:SGilX16wZ7lNznxw0P0X236P_Z6EEJ3NqlgkrXanHsFW3hw8Lthn7g>
 Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id ECF573060057;
-        Fri,  6 Nov 2020 10:14:18 -0500 (EST)
+        by mail.messagingengine.com (Postfix) with ESMTPA id BB724306005E;
+        Fri,  6 Nov 2020 10:14:14 -0500 (EST)
 From:   Maxime Ripard <maxime@cerno.tech>
 To:     Daniel Vetter <daniel.vetter@intel.com>,
         David Airlie <airlied@linux.ie>, Christoph Hellwig <hch@lst.de>
@@ -78,9 +78,9 @@ Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Maxime Ripard <maxime@cerno.tech>,
         Robin Murphy <robin.murphy@arm.com>,
         Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [PATCH 4/7] media: sun4i: Remove the MBUS quirks
-Date:   Fri,  6 Nov 2020 16:14:08 +0100
-Message-Id: <20201106151411.321743-5-maxime@cerno.tech>
+Subject: [PATCH 1/7] drm/sun4i: backend: Fix probe failure with multiple backends
+Date:   Fri,  6 Nov 2020 16:14:05 +0100
+Message-Id: <20201106151411.321743-2-maxime@cerno.tech>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201106151411.321743-1-maxime@cerno.tech>
 References: <20201106151411.321743-1-maxime@cerno.tech>
@@ -90,53 +90,41 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Now that the MBUS quirks are applied by our global notifier, we can
-remove them from our CSI driver for the A10.
+Commit e0d072782c73 ("dma-mapping: introduce DMA range map, supplanting
+dma_pfn_offset") introduced a regression in our code since the second
+backed to probe will now get -EINVAL back from dma_direct_set_offset and
+will prevent the entire DRM device from probing.
 
-Suggested-by: Christoph Hellwig <hch@lst.de>
+Ignore -EINVAL as a temporary measure to get it back working, before
+removing that call entirely.
+
+Fixes: e0d072782c73 ("dma-mapping: introduce DMA range map, supplanting dma_pfn_offset")
 Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 ---
- .../platform/sunxi/sun4i-csi/sun4i_csi.c      | 27 -------------------
- 1 file changed, 27 deletions(-)
+ drivers/gpu/drm/sun4i/sun4i_backend.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.c b/drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.c
-index eb15c8c725ca..ec46cff80fdb 100644
---- a/drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.c
-+++ b/drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.c
-@@ -167,33 +167,6 @@ static int sun4i_csi_probe(struct platform_device *pdev)
- 	if (!csi->traits)
- 		return -EINVAL;
+diff --git a/drivers/gpu/drm/sun4i/sun4i_backend.c b/drivers/gpu/drm/sun4i/sun4i_backend.c
+index 77497b45f9a2..55960cbb1019 100644
+--- a/drivers/gpu/drm/sun4i/sun4i_backend.c
++++ b/drivers/gpu/drm/sun4i/sun4i_backend.c
+@@ -814,9 +814,15 @@ static int sun4i_backend_bind(struct device *dev, struct device *master,
+ 		 *
+ 		 * XXX(hch): this has no business in a driver and needs to move
+ 		 * to the device tree.
++		 *
++		 * If we have two subsequent calls to dma_direct_set_offset
++		 * returns -EINVAL. Unfortunately, this happens when we have two
++		 * backends in the system, and will result in the driver
++		 * reporting an error while it has been setup properly before.
++		 * Ignore EINVAL, but it should really be removed eventually.
+ 		 */
+ 		ret = dma_direct_set_offset(drm->dev, PHYS_OFFSET, 0, SZ_4G);
+-		if (ret)
++		if (ret && ret != -EINVAL)
+ 			return ret;
+ 	}
  
--	/*
--	 * On Allwinner SoCs, some high memory bandwidth devices do DMA
--	 * directly over the memory bus (called MBUS), instead of the
--	 * system bus. The memory bus has a different addressing scheme
--	 * without the DRAM starting offset.
--	 *
--	 * In some cases this can be described by an interconnect in
--	 * the device tree. In other cases where the hardware is not
--	 * fully understood and the interconnect is left out of the
--	 * device tree, fall back to a default offset.
--	 */
--	if (of_find_property(csi->dev->of_node, "interconnects", NULL)) {
--		ret = of_dma_configure(csi->dev, csi->dev->of_node, true);
--		if (ret)
--			return ret;
--	} else {
--		/*
--		 * XXX(hch): this has no business in a driver and needs to move
--		 * to the device tree.
--		 */
--#ifdef PHYS_PFN_OFFSET
--		ret = dma_direct_set_offset(csi->dev, PHYS_OFFSET, 0, SZ_4G);
--		if (ret)
--			return ret;
--#endif
--	}
--
- 	csi->mdev.dev = csi->dev;
- 	strscpy(csi->mdev.model, "Allwinner Video Capture Device",
- 		sizeof(csi->mdev.model));
 -- 
 2.28.0
 
