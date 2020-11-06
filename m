@@ -2,178 +2,143 @@ Return-Path: <SRS0=vajg=EM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04AC3C2D0A3
-	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 21:49:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2C71C5517A
+	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 21:50:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7DFCD2087E
-	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 21:49:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 50EEA208C7
+	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 21:50:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="AjBsI4km"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HCGvUbcx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728547AbgKFVty (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 6 Nov 2020 16:49:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56878 "EHLO
+        id S1728792AbgKFVuP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 6 Nov 2020 16:50:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725868AbgKFVty (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Nov 2020 16:49:54 -0500
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBBCC0613CF
-        for <linux-media@vger.kernel.org>; Fri,  6 Nov 2020 13:49:54 -0800 (PST)
-Received: by mail-wm1-x341.google.com with SMTP id v5so2842253wmh.1
-        for <linux-media@vger.kernel.org>; Fri, 06 Nov 2020 13:49:54 -0800 (PST)
+        with ESMTP id S1728789AbgKFVuP (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Nov 2020 16:50:15 -0500
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E1CCC0613CF
+        for <linux-media@vger.kernel.org>; Fri,  6 Nov 2020 13:50:13 -0800 (PST)
+Received: by mail-wr1-x441.google.com with SMTP id g12so2772472wrp.10
+        for <linux-media@vger.kernel.org>; Fri, 06 Nov 2020 13:50:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=atRaJCXFVxAlihI4r4ojii808StzDT60z5Ec9SQAR/c=;
-        b=AjBsI4km7LOdpe3juQ0sb1PHk/smmBYDMBsiL8eKHCnqoSJbL14NUE8SdDRfeZgPkZ
-         +DxjrVqLYfdQ0RUisTVflMg4C+aK/13Y91yRQNt2TRkZa19sIVT0k9UG106xPxHr6j7u
-         yn20MAvlzzXtrV9HRoflVyWEBTeSdPv5cyZTveSv2dOvhkfAkOWkFbygv3qVFTMMjxy/
-         52UcUdPLLPv8JITzUPM4dNiblkAqiuytJJE/0W4mNpW0bhv8k+sQE+MplDFJdyAjcc3S
-         woDB1b9+/GwiKQm9qX3IEGWBR8b2Cqs2XAwypLa7SZ34SqSlqqYer1GahSbc0rV+0zfI
-         MYiQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=XN+cgxXjY3IWekASuJPYqV0dOA81c47vUDG0BBQb6c0=;
+        b=HCGvUbcx5ZEN2tfKGwHJicVvv+pm5x43BHYd0mWRsxxz1IOqVirgnGczw7oawgtQXB
+         7UygpB7ndYtvwbAuuhuaC6Qb2sfQK60p1OUOxbmCjKhcxzjmmm4TTDd1LFZtaWUZIudH
+         GCsTzPE/zuBUGTLoiaFz52M0clHGNBXnsdLFW2mOxaO0RaV/pUYsX07zEX7Z0XNI/n1q
+         AgU2ChqZX7giA7oo56qtWu8HkTrMDdt2oxJk+AYpkaHiYP0Ns4cEFV9WglGGP6sGMmVL
+         FmVkjlPKqeawp62wfvotAn2I65hfXYwautS3PIWf0NqQV4Ei7ry86OU7eRNamQLgA1q1
+         3crg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=atRaJCXFVxAlihI4r4ojii808StzDT60z5Ec9SQAR/c=;
-        b=MAe78RZKdlEQcoTTjKMEavqrwmGAyz51omviATqlSNYf1K1xNZyzyDatZHAnKWACAN
-         Z+tMyjwxZ5jd0dHdY6z3ssyOaT8xjFQRadD/uyFeRS/T+iUAZeIxV6jgLNEv8OBX9S2e
-         Kn/IWIon3+eZrVB6bP9Io4LLncoNcgnWw7u+98H+ThAt2ZG6GR45PY9GuO7FdKTxHCZw
-         26wU0k3IhATCMn0lzF+XdZwb1UgELIVZ5reXSSv13xdAcFML0UlqeQfvdrt6pBsQ7kwr
-         tqun4Nvw86/Swn2aN4v9uQpqvOS2JHoA2KOgFWTRlW6JwIcBaOprFKy/SI8LWrS3Ofm8
-         dMDw==
-X-Gm-Message-State: AOAM533Kyx+eoH9DZ2usPnu5SJgNb3k44L4Dsdx8RfJSJI0yr5Knd3Sa
-        0kG4Q/rjZg5ge5rZjNqrs2+iWQ==
-X-Google-Smtp-Source: ABdhPJyxSilLymaZgbLjfvWQZDTgj2OWOjONwp5UO++dwOgGyrFaukmAGiTHKU2EcOOknhLQDmeuVQ==
-X-Received: by 2002:a7b:c24b:: with SMTP id b11mr1515570wmj.109.1604699393111;
-        Fri, 06 Nov 2020 13:49:53 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=XN+cgxXjY3IWekASuJPYqV0dOA81c47vUDG0BBQb6c0=;
+        b=M1W3FcTQRb4qBgJoYLV8jBcywpXghPXiAMmDm9B0iVkqbkEm9gRKtwXJL9dpNZiOTd
+         Hh+Z9sSurenu/YiQw3dAl3Tsh9RTj04USNPQo2E32zkuFTibkGKQesx3XQWlQAddp2Ip
+         IuA3C9m6TIHbvf4GaQ7wG+qqvpzLJwoltZO4rJEVOgfyX4O+NiuyF1COe//qZDb+C+Aa
+         p50riLz2ufJi3A87VdNwPj1fwXKUYcI54+6Kb+OQruHrIm+sYgkpIo4/5ZyHfNMg73dw
+         i7DrQKY7ujmAtLr0uVBWS45pNkYFkBFUXr4cfvM1MOt8DMLmYNLdc9FgR31NN3r0XvRN
+         Tx9Q==
+X-Gm-Message-State: AOAM533zpi9L/d4Iz3Yguv3imTednksD+VAcCL+ym0qDP+gCfKsiqzo8
+        88LmmVsqlhFPVlTFek8SiS2M3Q==
+X-Google-Smtp-Source: ABdhPJz9VXDl2U52UY4eXa5169UHGNjCTgPviCAyaRgtL3TzMxHGPQw76W+ApIl3BeVptCZSq2myUQ==
+X-Received: by 2002:a5d:4001:: with SMTP id n1mr4927117wrp.426.1604699412401;
+        Fri, 06 Nov 2020 13:50:12 -0800 (PST)
 Received: from dell.default ([91.110.221.236])
-        by smtp.gmail.com with ESMTPSA id t199sm3981084wmt.46.2020.11.06.13.49.51
+        by smtp.gmail.com with ESMTPSA id t199sm3981084wmt.46.2020.11.06.13.50.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2020 13:49:52 -0800 (PST)
+        Fri, 06 Nov 2020 13:50:11 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org,
         Alex Deucher <alexander.deucher@amd.com>,
-        amd-gfx@lists.freedesktop.org, Andy Gross <andy.gross@ti.com>,
-        by <jhartmann@precisioninsight.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
         David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org, Eric Anholt <eric@anholt.net>,
-        Faith <faith@valinux.com>, Gareth Hughes <gareth@valinux.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Huang Rui <ray.huang@amd.com>,
-        Jeff Hartmann <jhartmann@valinux.com>,
-        Keith Whitwell <keith@tungstengraphics.com>,
-        Leo Li <sunpeng.li@amd.com>, linaro-mm-sig@lists.linaro.org,
-        linux-media@vger.kernel.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Clark <rob.clark@linaro.org>, Rob Clark <rob@ti.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Sumit Semwal <sumit.semwal@linaro.org>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>
-Subject: [PATCH 00/19] [Set 2] Rid W=1 warnings from GPU
-Date:   Fri,  6 Nov 2020 21:49:30 +0000
-Message-Id: <20201106214949.2042120-1-lee.jones@linaro.org>
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Subject: [PATCH 15/19] drm/radeon: Move prototypes to shared header
+Date:   Fri,  6 Nov 2020 21:49:45 +0000
+Message-Id: <20201106214949.2042120-16-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201106214949.2042120-1-lee.jones@linaro.org>
+References: <20201106214949.2042120-1-lee.jones@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This set is part of a larger effort attempting to clean-up W=1
-kernel builds, which are currently overwhelmingly riddled with
-niggly little warnings.
+Fixes the following W=1 kernel build warning(s):
 
-There are 5000 warnings to work through.  It will take a couple more
-sets.  Although, ("drm/amd/display/dc/basics/fixpt31_32: Move
-variables to where they're used") does take care of 2000 of them!
-
-Lee Jones (19):
-  drm/ttm/ttm_range_manager: Demote non-conformant kernel-doc header
-  drm/r128/ati_pcigart: Source file headers are not good candidates for
-    kernel-doc
-  drm/selftests/test-drm_dp_mst_helper: Move
-    'sideband_msg_req_encode_decode' onto the heap
-  drm/mga/mga_dma: Demote kernel-doc abusers to standard comment blocks
-  drm/mga/mga_state: Remove unused variable 'buf_priv'
-  drm/radeon/atom: Move prototype into shared location
-  drm/radeon/radeon_kms: Include header containing our own prototypes
-  drm/omapdrm/omap_gem: Fix misnamed and missing parameter descriptions
-  drm/omapdrm/omap_dmm_tiler: Demote abusive use of kernel-doc format
-  drm/radeon/radeon: Move prototype into shared header
-  drm/radeon/radeon_drv: Source file headers are not good candidates for
-    kernel-doc
-  drm/amd/display/dc/basics/fixpt31_32: Move variables to where they're
-    used
-  drm/radeon/radeon_drv: Move prototypes to a shared headerfile
-  drm/amd/amdgpu/amdgpu_device: Provide documentation for 'reg_addr'
-    params
-  drm/radeon: Move prototypes to shared header
-  drm/amd/amdgpu/amdgpu_kms: Remove 'struct drm_amdgpu_info_device
-    dev_info' from the stack
-  drm/radeon/radeon_kms: Fix misnaming of 'radeon_info_ioctl's dev param
-  drm/radeon/atombios_crtc: Remove description of non-existent function
-    param 'encoder'
-  drm/v3d/v3d_drv: Remove unused static variable 'v3d_v3d_pm_ops'
-
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c    |   2 +
- drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c       | 104 +++++++++---------
- .../drm/amd/display/dc/basics/fixpt31_32.c    |   5 +
- .../gpu/drm/amd/display/include/fixed31_32.h  |   6 -
- drivers/gpu/drm/mga/mga_dma.c                 |  10 +-
- drivers/gpu/drm/mga/mga_state.c               |   2 -
- drivers/gpu/drm/omapdrm/omap_dmm_tiler.c      |   6 +-
- drivers/gpu/drm/omapdrm/omap_gem.c            |   3 +-
- drivers/gpu/drm/r128/ati_pcigart.c            |   2 +-
- drivers/gpu/drm/radeon/atom.h                 |   6 +
- drivers/gpu/drm/radeon/atombios_crtc.c        |   1 -
- drivers/gpu/drm/radeon/atombios_encoders.c    |   4 -
- drivers/gpu/drm/radeon/radeon.h               |   6 +
- drivers/gpu/drm/radeon/radeon_device.c        |   1 +
- drivers/gpu/drm/radeon/radeon_device.h        |  32 ++++++
- drivers/gpu/drm/radeon/radeon_display.c       |   4 -
- drivers/gpu/drm/radeon/radeon_drv.c           |  11 +-
- drivers/gpu/drm/radeon/radeon_drv.h           |   7 ++
- drivers/gpu/drm/radeon/radeon_kms.c           |   3 +-
- .../drm/selftests/test-drm_dp_mst_helper.c    |  11 +-
- drivers/gpu/drm/ttm/ttm_range_manager.c       |   2 +-
- drivers/gpu/drm/v3d/v3d_drv.c                 |  36 ------
- 22 files changed, 138 insertions(+), 126 deletions(-)
- create mode 100644 drivers/gpu/drm/radeon/radeon_device.h
+ drivers/gpu/drm/radeon/radeon_kms.c:756:5: warning: no previous prototype for ‘radeon_get_vblank_counter_kms’ [-Wmissing-prototypes]
+ 756 | u32 radeon_get_vblank_counter_kms(struct drm_crtc *crtc)
+ | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ drivers/gpu/drm/radeon/radeon_kms.c:826:5: warning: no previous prototype for ‘radeon_enable_vblank_kms’ [-Wmissing-prototypes]
+ 826 | int radeon_enable_vblank_kms(struct drm_crtc *crtc)
+ | ^~~~~~~~~~~~~~~~~~~~~~~~
+ drivers/gpu/drm/radeon/radeon_kms.c:853:6: warning: no previous prototype for ‘radeon_disable_vblank_kms’ [-Wmissing-prototypes]
+ 853 | void radeon_disable_vblank_kms(struct drm_crtc *crtc)
+ | ^~~~~~~~~~~~~~~~~~~~~~~~~
 
 Cc: Alex Deucher <alexander.deucher@amd.com>
-Cc: amd-gfx@lists.freedesktop.org
-Cc: Andy Gross <andy.gross@ti.com>
-Cc: by <jhartmann@precisioninsight.com>
-Cc: Christian Koenig <christian.koenig@amd.com>
 Cc: "Christian König" <christian.koenig@amd.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
 Cc: David Airlie <airlied@linux.ie>
-Cc: dri-devel@lists.freedesktop.org
-Cc: Eric Anholt <eric@anholt.net>
-Cc: Faith <faith@valinux.com>
-Cc: Gareth Hughes <gareth@valinux.com>
-Cc: Harry Wentland <harry.wentland@amd.com>
-Cc: Huang Rui <ray.huang@amd.com>
-Cc: Jeff Hartmann <jhartmann@valinux.com>
-Cc: Keith Whitwell <keith@tungstengraphics.com>
-Cc: Leo Li <sunpeng.li@amd.com>
-Cc: linaro-mm-sig@lists.linaro.org
-Cc: linux-media@vger.kernel.org
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Rob Clark <rob.clark@linaro.org>
-Cc: Rob Clark <rob@ti.com>
+Cc: Daniel Vetter <daniel@ffwll.ch>
 Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: Tomi Valkeinen <tomi.valkeinen@ti.com>
+Cc: amd-gfx@lists.freedesktop.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-media@vger.kernel.org
+Cc: linaro-mm-sig@lists.linaro.org
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+---
+ drivers/gpu/drm/radeon/radeon.h         | 6 ++++++
+ drivers/gpu/drm/radeon/radeon_display.c | 4 ----
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/gpu/drm/radeon/radeon.h b/drivers/gpu/drm/radeon/radeon.h
+index e1132d86d2507..961a31b8805c2 100644
+--- a/drivers/gpu/drm/radeon/radeon.h
++++ b/drivers/gpu/drm/radeon/radeon.h
+@@ -2832,6 +2832,12 @@ extern void radeon_program_register_sequence(struct radeon_device *rdev,
+ 					     const u32 array_size);
+ struct radeon_device *radeon_get_rdev(struct ttm_bo_device *bdev);
+ 
++/* KMS */
++
++u32 radeon_get_vblank_counter_kms(struct drm_crtc *crtc);
++int radeon_enable_vblank_kms(struct drm_crtc *crtc);
++void radeon_disable_vblank_kms(struct drm_crtc *crtc);
++
+ /*
+  * vm
+  */
+diff --git a/drivers/gpu/drm/radeon/radeon_display.c b/drivers/gpu/drm/radeon/radeon_display.c
+index b79686cf8bdbd..bd60f16fd0d78 100644
+--- a/drivers/gpu/drm/radeon/radeon_display.c
++++ b/drivers/gpu/drm/radeon/radeon_display.c
+@@ -45,10 +45,6 @@
+ #include "atom.h"
+ #include "radeon.h"
+ 
+-u32 radeon_get_vblank_counter_kms(struct drm_crtc *crtc);
+-int radeon_enable_vblank_kms(struct drm_crtc *crtc);
+-void radeon_disable_vblank_kms(struct drm_crtc *crtc);
+-
+ static void avivo_crtc_load_lut(struct drm_crtc *crtc)
+ {
+ 	struct radeon_crtc *radeon_crtc = to_radeon_crtc(crtc);
 -- 
 2.25.1
 
