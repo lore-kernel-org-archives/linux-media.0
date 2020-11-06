@@ -2,86 +2,217 @@ Return-Path: <SRS0=vajg=EM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB6CBC2D0A3
-	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 11:48:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6973DC2D0A3
+	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 11:50:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8980B206E3
-	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 11:48:24 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QmxL1lFJ"
+	by mail.kernel.org (Postfix) with ESMTP id 08B6F20728
+	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 11:50:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727014AbgKFLsL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 6 Nov 2020 06:48:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46628 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726692AbgKFLsL (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Nov 2020 06:48:11 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C51C0613CF;
-        Fri,  6 Nov 2020 03:48:11 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id k9so959086edo.5;
-        Fri, 06 Nov 2020 03:48:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+cA+j1sGPJcErb4HuM5DHU6NQftn7SZ7mkcmrGBBfKQ=;
-        b=QmxL1lFJ66IFitDBaMOYxSPNd1JTKREmbAo4OAJufJzt5D4/Nr18va9o/IO8i+It5j
-         Drfecbh1X+MOyZUfFAv+i+jfuVKmFbJcHpdu3xrAR5mQ9dOP69OYvRMY/OyELJNDoVRi
-         IlOKunE28oYqedsnZR1uX7BugguRYz8+OcHyXIneR/rLTYaE0viHUjvMrbPqvPOYA7fM
-         x2Zb1eZuhCL3itYrz8T2ZW3Hn8da3lewnzkwGjgX46ovseM07goMz84/V0Y2YSYFxtmc
-         6pqTze14rgljgLPpMFkDhJn6lV5lezjeimLnq4lAp0drgIoDVMYNcdypb7EkSK/zBlEp
-         sBPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+cA+j1sGPJcErb4HuM5DHU6NQftn7SZ7mkcmrGBBfKQ=;
-        b=A99FklDCL2XIzgUc+U2uOzsLZfGASmcC8sN7lTZZU08fokAjvbG7E/9EwrBf6HE9aE
-         l3JqahXvH6DN6+RmcekRwoogvN/mZtwlpvDBg/AkYVUrcEeA7G9KpzHkX4qtF/o+2Ic8
-         t3KDnTCrrqDntnlMcD0HqcphZSfoCDnrSYafalZKOy06mxfRuTJfcp34B+RSUg7oHSma
-         7tCjYn5iZcGbM3tqOyyPx8Pg56wJjj6kg6ikxKLv5aI2GozXnWfx7rONpB1TOCu8bqHO
-         boCzNj17GT7bfirO6982lel6NeNLuBA/x0cLBi3+Fd6X6BhFTjj94Kel1omUcJW77bVL
-         1X+A==
-X-Gm-Message-State: AOAM530ok/CrCox9kpP01avrgAByZRepJfmBtYkKCj/c/pZ85Ae3LbOu
-        gUjntAM618zqlb6DG+pbCppvXST1sP4=
-X-Google-Smtp-Source: ABdhPJx1bUWAzpYpM+p3n6y8K2H67wUyqPozJYGi+fMszCHeVhpx8tb/VetBGJ/LvgazVDb1im3KFQ==
-X-Received: by 2002:a50:8c61:: with SMTP id p88mr1611814edp.257.1604663289749;
-        Fri, 06 Nov 2020 03:48:09 -0800 (PST)
-Received: from abel.fritz.box ([2a02:908:1252:fb60:c066:c9fc:f8c2:d50b])
-        by smtp.gmail.com with ESMTPSA id j8sm875933edk.79.2020.11.06.03.48.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2020 03:48:09 -0800 (PST)
-From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
-        <ckoenig.leichtzumerken@gmail.com>
-X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org
-Subject: cleanup a fix and add the vma_set_file function
-Date:   Fri,  6 Nov 2020 12:48:04 +0100
-Message-Id: <20201106114806.46015-1-christian.koenig@amd.com>
-X-Mailer: git-send-email 2.25.1
+        id S1726708AbgKFLuF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 6 Nov 2020 06:50:05 -0500
+Received: from mga11.intel.com ([192.55.52.93]:44944 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726565AbgKFLuF (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 6 Nov 2020 06:50:05 -0500
+IronPort-SDR: 8SfASqnl6PHEGifEXKYHKLoSC6GR+/NkNN/Btk1YN4vNjiHicE9DDprGm5d1VvscBspVzU7ujf
+ PeuP/F01KGQw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9796"; a="166025627"
+X-IronPort-AV: E=Sophos;i="5.77,456,1596524400"; 
+   d="scan'208";a="166025627"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2020 03:50:04 -0800
+IronPort-SDR: UX7Mpvj4t08jwCQHTgYUMPsR+KX44ybiaxVt8E+PthHlDt1wis5gOn9+BSbDNAuHU5kpPfW5aA
+ oV4X6poYcVJA==
+X-IronPort-AV: E=Sophos;i="5.77,456,1596524400"; 
+   d="scan'208";a="472039880"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2020 03:50:03 -0800
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id D58A0207BF; Fri,  6 Nov 2020 13:50:00 +0200 (EET)
+Date:   Fri, 6 Nov 2020 13:50:00 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Bingbu Cao <bingbu.cao@intel.com>
+Cc:     linux-media@vger.kernel.org, tfiga@chromium.org,
+        senozhatsky@chromium.org, bingbu.cao@linux.intel.com,
+        qingwu.zhang@intel.com
+Subject: Re: [PATCH 1/2] media: ov2740: only do OTP data read on demand from
+ user
+Message-ID: <20201106115000.GN26150@paasikivi.fi.intel.com>
+References: <1604644844-1551-1-git-send-email-bingbu.cao@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1604644844-1551-1-git-send-email-bingbu.cao@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Andrew,
+Hi Bingbu,
 
-can I get you Acked-by to merge this cleanup through the drm-misc-next branch? The affected drivers are mostly from the DRM subsystem.
+Thanks for the patch.
 
-The fix for the other problem you pointed out in mmap_region() has already shown up in that branch.
+On Fri, Nov 06, 2020 at 02:40:43PM +0800, Bingbu Cao wrote:
+> OTP data access of ov2740 in probe need power up, it may cause
+> the camera flash LED blink during probe if the LED use same power
+> rail with camera, this patch move the OTP data access out of
+> probe, it will only occur on demand from user by nvmem sysfs.
+> 
+> Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
+> Signed-off-by: Qingwu Zhang <qingwu.zhang@intel.com>
+> ---
+>  drivers/media/i2c/ov2740.c | 63 +++++++++++++++++++++++++++++++++++-----------
+>  1 file changed, 48 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
+> index 64ecb6917dd3..716c26c13c97 100644
+> --- a/drivers/media/i2c/ov2740.c
+> +++ b/drivers/media/i2c/ov2740.c
+> @@ -71,9 +71,11 @@
+>  #define OV2740_REG_OTP_CUSTOMER		0x7010
+>  
+>  struct nvm_data {
+> -	char *nvm_buffer;
+> +	struct i2c_client *client;
+>  	struct nvmem_device *nvmem;
+>  	struct regmap *regmap;
+> +	char *nvm_buffer;
+> +	bool ready;
+>  };
+>  
+>  enum {
+> @@ -335,6 +337,9 @@ struct ov2740 {
+>  
+>  	/* Streaming on/off */
+>  	bool streaming;
+> +
+> +	/* NVM data inforamtion */
+> +	struct nvm_data *nvm;
+>  };
+>  
+>  static inline struct ov2740 *to_ov2740(struct v4l2_subdev *subdev)
+> @@ -930,8 +935,9 @@ static int ov2740_remove(struct i2c_client *client)
+>  	return 0;
+>  }
+>  
+> -static int ov2740_load_otp_data(struct i2c_client *client, struct nvm_data *nvm)
+> +static int ov2740_load_otp_data(struct nvm_data *nvm)
+>  {
+> +	struct i2c_client *client = nvm->client;
+>  	struct ov2740 *ov2740 = to_ov2740(i2c_get_clientdata(client));
+>  	u32 isp_ctrl00 = 0;
+>  	u32 isp_ctrl01 = 0;
+> @@ -967,7 +973,7 @@ static int ov2740_load_otp_data(struct i2c_client *client, struct nvm_data *nvm)
+>  	ret = ov2740_write_reg(ov2740, OV2740_REG_MODE_SELECT, 1,
+>  			       OV2740_MODE_STREAMING);
+>  	if (ret) {
+> -		dev_err(&client->dev, "failed to start streaming\n");
+> +		dev_err(&client->dev, "failed to set streaming mode\n");
+>  		goto exit;
+>  	}
+>  
+> @@ -997,20 +1003,48 @@ static int ov2740_nvmem_read(void *priv, unsigned int off, void *val,
+>  			     size_t count)
+>  {
+>  	struct nvm_data *nvm = priv;
+> +	struct v4l2_subdev *sd = i2c_get_clientdata(nvm->client);
+> +	struct device *dev = &nvm->client->dev;
+> +	struct ov2740 *ov2740 = to_ov2740(sd);
+> +	int ret = 0;
+> +
+> +	mutex_lock(&ov2740->mutex);
+>  
+> -	memcpy(val, nvm->nvm_buffer + off, count);
+> +	if (!nvm->ready) {
+> +		if (ov2740->streaming) {
+> +			ret = -EBUSY;
+> +			goto exit;
+> +		}
+>  
+> -	return 0;
 
-Thanks in advance,
-Christian.
+If you also moved memory allocation here, you could omit the ready field. I
+think it'd be cleaner that way as well.
 
+> +		ret = pm_runtime_get_sync(dev);
+> +		if (ret < 0) {
+> +			pm_runtime_put_noidle(dev);
+> +			goto exit;
+> +		}
+> +		ret = ov2740_load_otp_data(nvm);
+> +		if (!ret)
+> +			nvm->ready = true;
+> +		pm_runtime_put(dev);
+> +	}
+> +
+> +exit:
+> +	mutex_unlock(&ov2740->mutex);
+> +
+> +	if (!ret)
+> +		memcpy(val, nvm->nvm_buffer + off, count);
+> +
+> +	return ret;
+>  }
+>  
+> -static int ov2740_register_nvmem(struct i2c_client *client)
+> +static int ov2740_register_nvmem(struct i2c_client *client,
+> +				 struct ov2740 *ov2740)
+>  {
+>  	struct nvm_data *nvm;
+>  	struct regmap_config regmap_config = { };
+>  	struct nvmem_config nvmem_config = { };
+>  	struct regmap *regmap;
+>  	struct device *dev = &client->dev;
+> -	int ret = 0;
+> +	int ret;
+>  
+>  	nvm = devm_kzalloc(dev, sizeof(*nvm), GFP_KERNEL);
+>  	if (!nvm)
+> @@ -1028,12 +1062,7 @@ static int ov2740_register_nvmem(struct i2c_client *client)
+>  		return PTR_ERR(regmap);
+>  
+>  	nvm->regmap = regmap;
+> -
+> -	ret = ov2740_load_otp_data(client, nvm);
+> -	if (ret) {
+> -		dev_err(dev, "failed to load OTP data, ret %d\n", ret);
+> -		return ret;
+> -	}
+> +	nvm->client = client;
+>  
+>  	nvmem_config.name = dev_name(dev);
+>  	nvmem_config.dev = dev;
+> @@ -1051,7 +1080,11 @@ static int ov2740_register_nvmem(struct i2c_client *client)
+>  
+>  	nvm->nvmem = devm_nvmem_register(dev, &nvmem_config);
+>  
+> -	return PTR_ERR_OR_ZERO(nvm->nvmem);
+> +	ret = PTR_ERR_OR_ZERO(nvm->nvmem);
+> +	if (!ret)
+> +		ov2740->nvm = nvm;
+> +
+> +	return ret;
+>  }
+>  
+>  static int ov2740_probe(struct i2c_client *client)
+> @@ -1103,7 +1136,7 @@ static int ov2740_probe(struct i2c_client *client)
+>  		goto probe_error_media_entity_cleanup;
+>  	}
+>  
+> -	ret = ov2740_register_nvmem(client);
+> +	ret = ov2740_register_nvmem(client, ov2740);
+>  	if (ret)
+>  		dev_warn(&client->dev, "register nvmem failed, ret %d\n", ret);
+>  
 
+-- 
+Regards,
+
+Sakari Ailus
