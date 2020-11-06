@@ -2,125 +2,126 @@ Return-Path: <SRS0=vajg=EM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03C6AC4741F
-	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 15:17:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4249BC4741F
+	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 16:03:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A28EA206A4
-	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 15:17:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DF08122202
+	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 16:03:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1604678625;
+	bh=k8bryvFui+YoGklp94RFUzRsPMzTAL7+JGvq9QXQg+s=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=IFc0A7HzmlGjO0Pkc/erkZeBFHmYxsMB6C+8G6Czlcw+bull7JMs8iJ3N/9oyZJUk
+	 4ze5+ua6595r0iCN5AWHIK+xNHAVReeWGvxUVwmbivlriFFQYzQnzBZUqgtLmijTT+
+	 2KwQtuVaEhcj4To8sHoVpzm9Z3b4m+oGXlmFL1QY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727811AbgKFPOx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 6 Nov 2020 10:14:53 -0500
-Received: from new3-smtp.messagingengine.com ([66.111.4.229]:49275 "EHLO
-        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726812AbgKFPOR (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 6 Nov 2020 10:14:17 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 14F995806FA;
-        Fri,  6 Nov 2020 10:14:16 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Fri, 06 Nov 2020 10:14:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        from:to:cc:subject:date:message-id:content-type:mime-version
-        :content-transfer-encoding; s=fm1; bh=0cSynKWzgk09s6YfF0S84Qn9cx
-        77ILObwbSgoXE1y18=; b=lx5ws79bgquU9wuamSzA3x0ZVzVykW22CapFSNlCIP
-        yS1ZrlhBd3GWaYkZSFmWYFWKK/lWyPC/NErVWSPpVKPv/0ajAmR4p8WnliZglLFa
-        OetzwZDCqF8YOYNtaHCxOpCOpAfift6r/0HKkUIYtFwnqGJnxQLUsm4O6NR2q+Ek
-        R5jKnbBzbsWtbA1Di/+qofrlR6ysclj8v40EpwU/L76hPKdC6KqrYofUb9aGCnOU
-        eWYRmIXV1ADz5dnMyWAAUihWhVvr2fn2NWc4Sl2GACunSFFq1FXe0EadpIzyxaBk
-        jy4VVQSFK3lXOvO+q2mg/NqkeYFVfYzqlLlk2munkPUA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:message-id:mime-version:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=0cSynK
-        Wzgk09s6YfF0S84Qn9cx77ILObwbSgoXE1y18=; b=SYvhdwg2Lf16TiD5A4Psj5
-        csk3uFLKflVVdLUUMay9n51Ia7Q6f9W7MXkY59hKyramJZTA88yYGlbkexFB11W7
-        2DkWVtxP9Mx4Ghx3c8qe4Bygs6GeouMGARpI6h/JuP8xuAMHeSMmDi+MRPubt/pv
-        muiMPvYbNy2llkeaibWao395HafbfgnZlH1sHoyh+aZ5/LughJfOF73uJwCLf9FB
-        fkZVgRNUX2qIT636r2PJkk6ASOCahyQ7IvyDRBMgr6mm2hL9totN6edWtLGu0d6P
-        xxTVaz8cTaP3hdh/7uCHQKyaYWsau8SNm91L5Na4v7rl+cvCmXBjXK50kk9lhhWQ
-        ==
-X-ME-Sender: <xms:RWilX9GyUVTo2jcG2OA309gwwNqnIOxNGNslX-slk93NnDlyMTAJbw>
-    <xme:RWilXyUFE6zWW7eO72tkbhMQMRnHv7WbVat-G8_5sRQU69SJxdrVKSe5vIC1obhFW
-    LkOYy82KeB0rJRa84M>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedruddtledgjeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffotggggfesthhqredtredtjeenucfhrhhomhepofgrgihimhgv
-    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
-    gvrhhnpeetieekgfffkeegkeeltdehudetteejgfekueevhffhteegudfgkedtueegfffg
-    feenucfkphepledtrdekledrieekrdejieenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:RWilX_LGNCYfMJAMHprxRTem7lKkDKMmIu96s3JrPzdUQNAfYA7Cfw>
-    <xmx:RWilXzGNMTe52PAvAvxgKDdtvb7i3PKh4X0p_ALiS1tB19vh0bLwbw>
-    <xmx:RWilXzXoYuhkHQkYJMxQX98FovLYebYiTAWd8mi83enhIWnZIcjX_g>
-    <xmx:SGilX0sORRT82W2kIZPOPlTlfAIshsS4_JGQzUi6Pr_PK46GBzfIag>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id D7D1F328037B;
-        Fri,  6 Nov 2020 10:14:12 -0500 (EST)
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Daniel Vetter <daniel.vetter@intel.com>,
-        David Airlie <airlied@linux.ie>, Christoph Hellwig <hch@lst.de>
-Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Yong Deng <yong.deng@magewell.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [PATCH 0/7] sunxi: Remove the calls to dma_direct_set_offset
-Date:   Fri,  6 Nov 2020 16:14:04 +0100
-Message-Id: <20201106151411.321743-1-maxime@cerno.tech>
-X-Mailer: git-send-email 2.28.0
-Content-Type: text/plain; charset="utf-8"
+        id S1726507AbgKFQDn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 6 Nov 2020 11:03:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59122 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726034AbgKFQDm (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 6 Nov 2020 11:03:42 -0500
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 66C2A22247;
+        Fri,  6 Nov 2020 16:03:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604678621;
+        bh=k8bryvFui+YoGklp94RFUzRsPMzTAL7+JGvq9QXQg+s=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hi/uyH5WXU66Rm2JLXwlxWHG0n5p4kipBD9wlwWxVHzvp+063vHGOKEpCMH1LUxHw
+         e6nFQ2VQhcxRGFOrda2acrUwOn11TDLqOXP/if7jmiZILokM3y6FesB5nFRHKsUSI2
+         +FGZE3vX2mkQrh666F9acUBGbYRDuZ6R+741q6o4=
+Received: by mail-lf1-f52.google.com with SMTP id u18so2621488lfd.9;
+        Fri, 06 Nov 2020 08:03:41 -0800 (PST)
+X-Gm-Message-State: AOAM531F51fbjo4t1JrT+K1Nt5DabMDJhuLwd8VpJse63Xpd+mmBpf93
+        r2SdBlWm0WqzrLfFHnqPZK0Sn0YBSkhVvQv1HaM=
+X-Google-Smtp-Source: ABdhPJy4L9sWNTrKjB39Lz4S8huMYtJ2miYTZnmYiCjhMmzPfT6Q8pHTbOo2LrWBLVMhDMAFLR/BADUAut2KfwSjmLs=
+X-Received: by 2002:a19:c354:: with SMTP id t81mr562644lff.283.1604678619488;
+ Fri, 06 Nov 2020 08:03:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+References: <20201106151411.321743-1-maxime@cerno.tech>
+In-Reply-To: <20201106151411.321743-1-maxime@cerno.tech>
+From:   Chen-Yu Tsai <wens@kernel.org>
+Date:   Sat, 7 Nov 2020 00:03:28 +0800
+X-Gmail-Original-Message-ID: <CAGb2v66N1BF+ReqMwJOUPESvJOwm7w7exuc3T52GULxJHJqKzg@mail.gmail.com>
+Message-ID: <CAGb2v66N1BF+ReqMwJOUPESvJOwm7w7exuc3T52GULxJHJqKzg@mail.gmail.com>
+Subject: Re: [PATCH 0/7] sunxi: Remove the calls to dma_direct_set_offset
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Daniel Vetter <daniel.vetter@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Christoph Hellwig <hch@lst.de>, devel@driverdev.osuosl.org,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,=0D
-=0D
-Here's an attempt to removing the dma_direct_set_offset calls we have in=0D
-numerous drivers and move all those quirks into a global notifier as sugges=
-ted=0D
-by Robin.=0D
-=0D
-Let me know what you think,=0D
-Maxime=0D
-=0D
-Maxime Ripard (7):=0D
-  drm/sun4i: backend: Fix probe failure with multiple backends=0D
-  soc: sunxi: Deal with the MBUS DMA offsets in a central place=0D
-  drm/sun4i: backend: Remove the MBUS quirks=0D
-  media: sun4i: Remove the MBUS quirks=0D
-  media: sun6i: Remove the MBUS quirks=0D
-  media: cedrus: Remove the MBUS quirks=0D
-  media: sun8i-di: Remove the call to of_dma_configure=0D
-=0D
- drivers/gpu/drm/sun4i/sun4i_backend.c         |  13 --=0D
- .../platform/sunxi/sun4i-csi/sun4i_csi.c      |  27 ----=0D
- .../platform/sunxi/sun6i-csi/sun6i_csi.c      |  17 ---=0D
- .../media/platform/sunxi/sun8i-di/sun8i-di.c  |   4 -=0D
- drivers/soc/sunxi/Kconfig                     |   8 ++=0D
- drivers/soc/sunxi/Makefile                    |   1 +=0D
- drivers/soc/sunxi/sunxi_mbus.c                | 132 ++++++++++++++++++=0D
- drivers/staging/media/sunxi/cedrus/cedrus.c   |   1 -=0D
- drivers/staging/media/sunxi/cedrus/cedrus.h   |   3 -=0D
- .../staging/media/sunxi/cedrus/cedrus_hw.c    |  18 ---=0D
- 10 files changed, 141 insertions(+), 83 deletions(-)=0D
- create mode 100644 drivers/soc/sunxi/sunxi_mbus.c=0D
-=0D
--- =0D
-2.28.0=0D
-=0D
+Hi,
+
+On Fri, Nov 6, 2020 at 11:15 PM Maxime Ripard <maxime@cerno.tech> wrote:
+>
+> Hi,
+>
+> Here's an attempt to removing the dma_direct_set_offset calls we have in
+> numerous drivers and move all those quirks into a global notifier as suggested
+> by Robin.
+>
+> Let me know what you think,
+> Maxime
+>
+> Maxime Ripard (7):
+>   drm/sun4i: backend: Fix probe failure with multiple backends
+>   soc: sunxi: Deal with the MBUS DMA offsets in a central place
+>   drm/sun4i: backend: Remove the MBUS quirks
+>   media: sun4i: Remove the MBUS quirks
+>   media: sun6i: Remove the MBUS quirks
+>   media: cedrus: Remove the MBUS quirks
+>   media: sun8i-di: Remove the call to of_dma_configure
+
+Whole series looks good to me.
+
+Reviewed-by: Chen-Yu Tsai <wens@csie.org>
+
+Now the question remaining is how do we merge this series so that
+the notifier gets merged before all the code dealing with the MBUS
+quirk gets removed.
+
+
+>  drivers/gpu/drm/sun4i/sun4i_backend.c         |  13 --
+>  .../platform/sunxi/sun4i-csi/sun4i_csi.c      |  27 ----
+>  .../platform/sunxi/sun6i-csi/sun6i_csi.c      |  17 ---
+>  .../media/platform/sunxi/sun8i-di/sun8i-di.c  |   4 -
+>  drivers/soc/sunxi/Kconfig                     |   8 ++
+>  drivers/soc/sunxi/Makefile                    |   1 +
+>  drivers/soc/sunxi/sunxi_mbus.c                | 132 ++++++++++++++++++
+>  drivers/staging/media/sunxi/cedrus/cedrus.c   |   1 -
+>  drivers/staging/media/sunxi/cedrus/cedrus.h   |   3 -
+>  .../staging/media/sunxi/cedrus/cedrus_hw.c    |  18 ---
+>  10 files changed, 141 insertions(+), 83 deletions(-)
+>  create mode 100644 drivers/soc/sunxi/sunxi_mbus.c
+>
+> --
+> 2.28.0
+>
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
