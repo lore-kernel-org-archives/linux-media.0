@@ -2,126 +2,103 @@ Return-Path: <SRS0=vajg=EM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53D95C2D0A3
-	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 21:50:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8DFEC388F9
+	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 22:26:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DEDF7208C7
-	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 21:50:53 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="u2YdzXP+"
+	by mail.kernel.org (Postfix) with ESMTP id 5A51E206C1
+	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 22:26:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728765AbgKFVux (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 6 Nov 2020 16:50:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56922 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728724AbgKFVuG (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Nov 2020 16:50:06 -0500
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B495EC0613D2
-        for <linux-media@vger.kernel.org>; Fri,  6 Nov 2020 13:50:04 -0800 (PST)
-Received: by mail-wm1-x343.google.com with SMTP id p19so1779612wmg.0
-        for <linux-media@vger.kernel.org>; Fri, 06 Nov 2020 13:50:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=socaU7um35iwEdYbuZIG6DpwnbxHw+sI5ykPEkbUzts=;
-        b=u2YdzXP+cI8hNzxPMwK6P2NcmDOFEzfBJQ1EpULD/0QTAzDAFswU3D9HeqnrXDaHgs
-         Oy1MEtKUiI0ihnz/ecIt2Zgh/i8gi71GIO72wLjJAI/LL7YwzoMcf0+q+tmjnKo6QcuJ
-         +Pey6urIMQgILLkxbg12Gxzk65TaqpK+n5BAvblzKUfHnkTnovij7Oz3MZsQst54SD4J
-         nN9l+QaZBIpPJG2iHMDHMANkmJHJXM/PXJq3dYk1iUFhneAtRGIYLAUkr2iWoOZDT5V0
-         /pv6XxQ+ZFkcmR/MEtxE2C/os+HjFieodE3x8YaO2IXZw4PxzJnvCd0D5EwooPWjpxl5
-         FXig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=socaU7um35iwEdYbuZIG6DpwnbxHw+sI5ykPEkbUzts=;
-        b=FCK6G2LGdK3fTe5dk71fDEyqwl2lu7RejHEV8CMMK4iMOi1Gp8tENPuUlc9l9StZV+
-         H4OGnjWH8RhDaSIZGaY7SKM9rvobwBwRgFNgPHxfBG67eUTS3aH5lCKFdtLAAFQR1oDe
-         6wkxdQb+dOM7l9Woa39jSvdJJWMVOMLooP7ie/Qds1iFcja2ifLfQT9CXxvCOfuLCYmh
-         3ZLH9/+n9YC/naU6vU0RLUsKB8sSDTWDRfHI5EdC79e9Oj+WY9SGlJKFnLhpIUrwyyAX
-         WNn4YRPX7yOs3Kit3OpuoQEgtjAWk45KjFvTV2ddHSyWDrGI04a2nC4LCFfQUxoQOc1X
-         VOSA==
-X-Gm-Message-State: AOAM532O0Is48VVjYoBEwTOIRgTODjn4Z34EdhcyvLlTOdEEOwNYg6sV
-        w1VPGVVpWGhd0v0PzXMjdvq7Gg==
-X-Google-Smtp-Source: ABdhPJxf2Mvms/vp2uquszu6id9VkQjR791be6+7w0PjmFHlbmzZeAI2kpvTw7QIRDdYtY7cmrQZ9w==
-X-Received: by 2002:a05:600c:210a:: with SMTP id u10mr1644995wml.98.1604699403507;
-        Fri, 06 Nov 2020 13:50:03 -0800 (PST)
-Received: from dell.default ([91.110.221.236])
-        by smtp.gmail.com with ESMTPSA id t199sm3981084wmt.46.2020.11.06.13.50.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2020 13:50:02 -0800 (PST)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org,
+        id S1728666AbgKFW0g (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 6 Nov 2020 17:26:36 -0500
+Received: from asavdk3.altibox.net ([109.247.116.14]:43772 "EHLO
+        asavdk3.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728482AbgKFW0f (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Nov 2020 17:26:35 -0500
+Received: from ravnborg.org (unknown [188.228.123.71])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by asavdk3.altibox.net (Postfix) with ESMTPS id 89B9520068;
+        Fri,  6 Nov 2020 23:26:31 +0100 (CET)
+Date:   Fri, 6 Nov 2020 23:26:30 +0100
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org,
+        Huang Rui <ray.huang@amd.com>, Rob Clark <rob@ti.com>,
+        Gareth Hughes <gareth@valinux.com>,
+        amd-gfx@lists.freedesktop.org, Rob Clark <rob.clark@linaro.org>,
         Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Rob Clark <rob.clark@linaro.org>,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 08/19] drm/omapdrm/omap_gem: Fix misnamed and missing parameter descriptions
-Date:   Fri,  6 Nov 2020 21:49:38 +0000
-Message-Id: <20201106214949.2042120-9-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201106214949.2042120-1-lee.jones@linaro.org>
+        Keith Whitwell <keith@tungstengraphics.com>,
+        Andy Gross <andy.gross@ti.com>, linux-media@vger.kernel.org,
+        Leo Li <sunpeng.li@amd.com>, linaro-mm-sig@lists.linaro.org,
+        by <jhartmann@precisioninsight.com>,
+        Jeff Hartmann <jhartmann@valinux.com>,
+        linux-kernel@vger.kernel.org, Faith <faith@valinux.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian Koenig <christian.koenig@amd.com>
+Subject: Re: [PATCH 00/19] [Set 2] Rid W=1 warnings from GPU
+Message-ID: <20201106222630.GD826715@ravnborg.org>
 References: <20201106214949.2042120-1-lee.jones@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201106214949.2042120-1-lee.jones@linaro.org>
+X-CMAE-Score: 0
+X-CMAE-Analysis: v=2.3 cv=VbvZwmh9 c=1 sm=1 tr=0
+        a=S6zTFyMACwkrwXSdXUNehg==:117 a=S6zTFyMACwkrwXSdXUNehg==:17
+        a=kj9zAlcOel0A:10 a=jxsCkVyRRZrjTV7aRhQA:9 a=CjuIK1q_8ugA:10
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fixes the following W=1 kernel build warning(s):
+Hi Lee and DRM folks.
 
- drivers/gpu/drm/omapdrm/omap_gem.c:593: warning: Function parameter or member 'file' not described in 'omap_gem_dumb_create'
- drivers/gpu/drm/omapdrm/omap_gem.c:593: warning: Excess function parameter 'drm_file' description in 'omap_gem_dumb_create'
- drivers/gpu/drm/omapdrm/omap_gem.c:619: warning: Function parameter or member 'offset' not described in 'omap_gem_dumb_map_offset'
+On Fri, Nov 06, 2020 at 09:49:30PM +0000, Lee Jones wrote:
+> This set is part of a larger effort attempting to clean-up W=1
+> kernel builds, which are currently overwhelmingly riddled with
+> niggly little warnings.
+> 
+> There are 5000 warnings to work through.  It will take a couple more
+> sets.  Although, ("drm/amd/display/dc/basics/fixpt31_32: Move
+> variables to where they're used") does take care of 2000 of them!
+> 
+> Lee Jones (19):
+>   drm/ttm/ttm_range_manager: Demote non-conformant kernel-doc header
+>   drm/r128/ati_pcigart: Source file headers are not good candidates for
+>     kernel-doc
+Applied
 
-Cc: Tomi Valkeinen <tomi.valkeinen@ti.com>
-Cc: David Airlie <airlied@linux.ie>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: "Christian König" <christian.koenig@amd.com>
-Cc: Rob Clark <rob.clark@linaro.org>
-Cc: dri-devel@lists.freedesktop.org
-Cc: linux-media@vger.kernel.org
-Cc: linaro-mm-sig@lists.linaro.org
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
----
- drivers/gpu/drm/omapdrm/omap_gem.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+>   drm/selftests/test-drm_dp_mst_helper: Move
+>     'sideband_msg_req_encode_decode' onto the heap
+>   drm/mga/mga_dma: Demote kernel-doc abusers to standard comment blocks
+>   drm/mga/mga_state: Remove unused variable 'buf_priv'
+Applied x2
 
-diff --git a/drivers/gpu/drm/omapdrm/omap_gem.c b/drivers/gpu/drm/omapdrm/omap_gem.c
-index d8e09792793ab..0e5adfaae6455 100644
---- a/drivers/gpu/drm/omapdrm/omap_gem.c
-+++ b/drivers/gpu/drm/omapdrm/omap_gem.c
-@@ -580,7 +580,7 @@ int omap_gem_mmap_obj(struct drm_gem_object *obj,
- 
- /**
-  * omap_gem_dumb_create	-	create a dumb buffer
-- * @drm_file: our client file
-+ * @file: our client file
-  * @dev: our device
-  * @args: the requested arguments copied from userspace
-  *
-@@ -610,6 +610,7 @@ int omap_gem_dumb_create(struct drm_file *file, struct drm_device *dev,
-  * @file: our drm client file
-  * @dev: drm device
-  * @handle: GEM handle to the object (from dumb_create)
-+ * @offset: memory map offset placeholder
-  *
-  * Do the necessary setup to allow the mapping of the frame buffer
-  * into user memory. We don't have to do much here at the moment.
--- 
-2.25.1
+>   drm/radeon/atom: Move prototype into shared location
+>   drm/radeon/radeon_kms: Include header containing our own prototypes
+>   drm/omapdrm/omap_gem: Fix misnamed and missing parameter descriptions
+>   drm/omapdrm/omap_dmm_tiler: Demote abusive use of kernel-doc format
+>   drm/radeon/radeon: Move prototype into shared header
+>   drm/radeon/radeon_drv: Source file headers are not good candidates for
+>     kernel-doc
+>   drm/amd/display/dc/basics/fixpt31_32: Move variables to where they're
+>     used
+>   drm/radeon/radeon_drv: Move prototypes to a shared headerfile
+>   drm/amd/amdgpu/amdgpu_device: Provide documentation for 'reg_addr'
+>     params
+>   drm/radeon: Move prototypes to shared header
+>   drm/amd/amdgpu/amdgpu_kms: Remove 'struct drm_amdgpu_info_device
+>     dev_info' from the stack
+>   drm/radeon/radeon_kms: Fix misnaming of 'radeon_info_ioctl's dev param
+>   drm/radeon/atombios_crtc: Remove description of non-existent function
+>     param 'encoder'
+>   drm/v3d/v3d_drv: Remove unused static variable 'v3d_v3d_pm_ops'
 
+I have applied the three patches that has no obvious maintainer as indicated
+above. I assume the respective maintaines to pick radeon, omapdrm, ttm,
+amd, v3d and selftest patches.
+
+	Sam
