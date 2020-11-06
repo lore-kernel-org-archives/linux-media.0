@@ -2,65 +2,122 @@ Return-Path: <SRS0=vajg=EM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2A4BC2D0A3
-	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 13:28:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1BB9C2D0A3
+	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 13:35:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 883FA207F7
-	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 13:28:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 346BB20715
+	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 13:35:59 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="egCCB8Z5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727326AbgKFN2A (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 6 Nov 2020 08:28:00 -0500
-Received: from www.linuxtv.org ([130.149.80.248]:60728 "EHLO www.linuxtv.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727214AbgKFN2A (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 6 Nov 2020 08:28:00 -0500
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1kb1mY-0002PC-Qh; Fri, 06 Nov 2020 13:27:58 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1kb1pY-0004gW-7M; Fri, 06 Nov 2020 13:31:04 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT FIXES FOR v5.10] Venus fixes for v5.10 (#68683)
-Date:   Fri,  6 Nov 2020 13:31:03 +0000
-Message-Id: <20201106133103.17967-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20201106131419.28034-1-stanimir.varbanov@linaro.org>
-References: 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1727352AbgKFNf6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 6 Nov 2020 08:35:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35584 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727214AbgKFNf6 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Nov 2020 08:35:58 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80234C0613CF
+        for <linux-media@vger.kernel.org>; Fri,  6 Nov 2020 05:35:56 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id q3so1258242edr.12
+        for <linux-media@vger.kernel.org>; Fri, 06 Nov 2020 05:35:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:subject:date:message-id;
+        bh=GLoS9H1CAwTsQc2kcdM/RQWCw8WmtKeua26oAihI5Ng=;
+        b=egCCB8Z56AccxhKfHFUnrIfE8mcx789gr8drooe4UW5RAnUfoFrvBYc+Ho3TaI4lQc
+         Y8Mi1fJZzzjTMceLrWpUK0OR7q/LImGC9X7yg51YwS1AR4NUU7s98nX8owbbdcy1gd2K
+         bE75AEL/gd0ITxrZWDwGq32Gg6YSSAINqcByoAVEdLxstFDkwm4CcMNISyGTBitpFVVz
+         w1NxSpY96eNnU/kTPL8u/17IFXxXF39FBX8QZGD/lBFZGEeHgxb38DDcHmzsNLgQYOOX
+         xgK0RQrVenzW8TLvywmzkxVImXqaMGmaaqxwH5AvJuzk8c2ARDzgNesCiYiHJTTlzt/N
+         h8Dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:subject:date:message-id;
+        bh=GLoS9H1CAwTsQc2kcdM/RQWCw8WmtKeua26oAihI5Ng=;
+        b=HPu98/+ZC6dKpF5wHCkWuw4I4pACqH96S94/h9QF/7ZxGyyxXYkiD5mnzgkLQbSFdi
+         x7HTSVlZmQ5rFYSUfaw6/dvBA/AK2SlstM/hgxh8ACIk6KJTa+9dbMVQzZxvu0lbG6ws
+         gfVHU/zlDK+r1KMS828dnFYqiqwCpYlp3wvJxNCFmOpHynN8KL6HvUMiA1vaB18zFf6G
+         WDRVEP2VBkYL+3zLGZDxAtxg0pk5DJddDmkg0Yd9nKKLBk80p5HX7IGf+OB/H719Bmx4
+         wHTKKZiyuV8KbEtXbLk0uGyxygL0kZyrrWc6DNypcjajXivcs75kDDU29itfyoI2hGuD
+         99Pg==
+X-Gm-Message-State: AOAM530a1BVBBxsh4L8QjX2z9RopUgrawYMre2rFS6LTrPXLnQqxP/Oj
+        G/ihx11kiKOXNrRCWcqfFHMfJWyaQe8fok4l
+X-Google-Smtp-Source: ABdhPJwXvOxEe06J5XomYbNJkmEZHBYe69I5IjtfAhMo3XcRHby5fOfXhy34WpnF8NdLPzITZULWdg==
+X-Received: by 2002:a50:fd15:: with SMTP id i21mr1797761eds.127.1604669754803;
+        Fri, 06 Nov 2020 05:35:54 -0800 (PST)
+Received: from localhost.localdomain (hst-221-81.medicom.bg. [84.238.221.81])
+        by smtp.gmail.com with ESMTPSA id a3sm1102325edl.89.2020.11.06.05.35.53
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Nov 2020 05:35:54 -0800 (PST)
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+To:     linux-media@vger.kernel.org
+Subject: [GIT PULL FOR v5.11] Venus updates
+Date:   Fri,  6 Nov 2020 15:35:36 +0200
+Message-Id: <20201106133536.1050-1-stanimir.varbanov@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+Hi Mauro,
 
-Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/20201106131419.28034-1-stanimir.varbanov@linaro.org/
-Build log: https://builder.linuxtv.org/job/patchwork/75842/
-Build time: 00:06:31
-Link: https://lore.kernel.org/linux-media/20201106131419.28034-1-stanimir.varbanov@linaro.org
+Venus driver updates for v5.11 includes:
 
-gpg: Signature made Fri 06 Nov 2020 01:07:34 PM UTC
-gpg:                using RSA key E1558C2497CE3CCC2B5AA30F25B55FC81B7035F2
-gpg: Good signature from "Stanimir Varbanov <stanimir.varbanov@linaro.org>" [unknown]
-gpg: WARNING: This key is not certified with a trusted signature!
-gpg:          There is no indication that the signature belongs to the owner.
-Primary key fingerprint: 34CF E039 8A16 AD93 18FD  D5E8 A6D0 26D8 E358 14D4
-     Subkey fingerprint: E155 8C24 97CE 3CCC 2B5A  A30F 25B5 5FC8 1B70 35F2
+ * Encoder fix for default capture format.
+ * Return decoder parsed crop from bitstream.
+ * Add shutdown callback.
+ * Interconnect vote fixes. 
+ * A fix when calculating macroblocks per second.
 
-Summary: got 0/2 patches with issues, being 0 at build time, plus one error when buinding PDF document
+Please pull.
 
-Error/warnings:
+regards,
+Stan
 
+The following changes since commit 0ab4f9087ea94ff92dc2ae68180faaf6bd443021:
 
-Error #512 when building PDF docs
+  media: platform: add missing put_device() call in mtk_jpeg_probe() and mtk_jpeg_remove() (2020-11-05 18:03:11 +0100)
 
+are available in the Git repository at:
+
+  git://linuxtv.org/svarbanov/media_tree.git tags/venus-for-v5.11
+
+for you to fetch changes up to 3723e65edbf93f12ec2e78fb22e26a2baa6a5d66:
+
+  venus: core: add shutdown callback for venus (2020-11-06 15:15:51 +0200)
+
+----------------------------------------------------------------
+Venus updates for v5.11
+
+----------------------------------------------------------------
+Alexandre Courbot (1):
+      venus: vdec: return parsed crop information from stream
+
+Mansur Alisha Shaik (8):
+      venus: core: change clk enable and disable order in resume and suspend
+      venus: core: vote for video-mem path
+      venus: core: vote with average bandwidth and peak bandwidth as zero
+      venus: put dummy vote on video-mem path after last session release
+      venus: fix calculating mbps in calculate_inst_freq()
+      venus: core: handle race condititon for core ops
+      venus: handle use after free for iommu_map/iommu_unmap
+      venus: core: add shutdown callback for venus
+
+Stanimir Varbanov (1):
+      venus: venc: Fix default capture format
+
+ drivers/media/platform/qcom/venus/core.c       | 41 +++++++++++++++++++++-----
+ drivers/media/platform/qcom/venus/core.h       |  1 +
+ drivers/media/platform/qcom/venus/firmware.c   | 17 ++++++++---
+ drivers/media/platform/qcom/venus/hfi.c        | 12 ++++++++
+ drivers/media/platform/qcom/venus/pm_helpers.c | 12 +++++++-
+ drivers/media/platform/qcom/venus/vdec.c       | 32 ++++++++++++++++----
+ drivers/media/platform/qcom/venus/venc.c       |  2 +-
+ 7 files changed, 99 insertions(+), 18 deletions(-)
