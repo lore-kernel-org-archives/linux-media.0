@@ -2,225 +2,275 @@ Return-Path: <SRS0=vajg=EM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DFF3C2D0A3
-	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 14:43:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56F92C2D0A3
+	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 15:14:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F187A2100A
-	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 14:43:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E828022247
+	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 15:14:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727233AbgKFOne (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 6 Nov 2020 09:43:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726317AbgKFOnd (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Nov 2020 09:43:33 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D70C0613CF
-        for <linux-media@vger.kernel.org>; Fri,  6 Nov 2020 06:43:33 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: koike)
-        with ESMTPSA id 3E88F1F46A75
-Subject: Re: [PATCH v3 06/12] media: staging: rkisp1: remove atomic operations
- for frame sequence
-To:     Tomasz Figa <tfiga@chromium.org>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>, kernel@collabora.com,
-        Dafna Hirschfeld <dafna3@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-References: <20200922113402.12442-1-dafna.hirschfeld@collabora.com>
- <20200922113402.12442-7-dafna.hirschfeld@collabora.com>
- <20200925204222.GG3607091@chromium.org>
- <bebacafe-11bb-5d9a-f889-4d16bb5d1817@collabora.com>
- <CAAFQd5BeWOYadUU8nBtFpaA5Eb2T0qFk0kDVf9eYmYzXJj+sZA@mail.gmail.com>
-From:   Helen Koike <helen.koike@collabora.com>
-Message-ID: <d6b893e1-1177-ba6d-0499-a3e45f79503b@collabora.com>
-Date:   Fri, 6 Nov 2020 11:43:17 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        id S1727543AbgKFPOS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 6 Nov 2020 10:14:18 -0500
+Received: from new3-smtp.messagingengine.com ([66.111.4.229]:34305 "EHLO
+        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726708AbgKFPOS (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 6 Nov 2020 10:14:18 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id BB1C15806FC;
+        Fri,  6 Nov 2020 10:14:16 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Fri, 06 Nov 2020 10:14:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-transfer-encoding; s=fm1; bh=Eg4JWQqjWxIR/
+        zO0gXgSwPEyTCTZbt2FCx+KcRhEn7I=; b=iyPyM3ECswpAxG3vT6eWTnxnhcMnO
+        7lewE6u2noPU3CteiyyHpGyhFFylbX6DZbVkgl+42Zs2fLEt28HeIP1JOjSNDzRp
+        RQbIpZf+wwIuOb4vd3T5umOaSDS5uana7+DA4koIYf0qpY0MN94pcqR4D6t3uA2i
+        Vm0j09ekvi+r8JV/jgIED7zNSs2tHrlSVoWNimS2uh+PSP3OFsmSba836okRWaHI
+        LvG2Z+qpu4wLpp9mdTiDKqYMjJThXClc4va7DTmNzg7RZgQSV/M1WyIkZIXQ8ZCf
+        IVH0fxuTdigKzvZ8VoHyOQullUfzWdu6YuSpv180AAsq+9Qqi73fmu1Cg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :in-reply-to:message-id:mime-version:references:subject:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; bh=Eg4JWQqjWxIR/zO0gXgSwPEyTCTZbt2FCx+KcRhEn7I=; b=XbXO4mFO
+        jpJDWloV0oLiDcfypahhUEPf0pvVWT7Fbnz+ptAuQND3QId9IzMl/CYIBKuzUV2o
+        FaSM2/qm7fYsKcUz9GaUAxa1UoURaH5J6JjuhdKCflZOpulNe2rJUshbYxTrP7s+
+        49byyGv+UizVX6jm7yaYliLKcRuVwiauACIO0+jBxg5CGpyg6fewvtu7JlODR9O6
+        7VXvm+yGfqSPOsGz0sVwwa0Wofjyp4A8rFNcbiQLdqZivNhdiqwqd6cxAvAXwlxx
+        T1kffanfpRU0aEPhpyEPdDri7yd/rq03YXa8Jh9O8v+v1332csz+X0uhEKdmmOfB
+        anFyq5ezezD7dA==
+X-ME-Sender: <xms:SGilX5jl8-04-_EtistVL2rLFkNaE3HSPuP2EC-yP_pEvibz3iopfg>
+    <xme:SGilX-BtNTEsGcB08YqdVptlkiyZQ7Y_7ll8lJza712ZLHKEQ0yM8c9gX2xS48mJJ
+    eqx50dTdhv9TTmRmrU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedruddtledgjeehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepvdekleevfeffkeejhfffueelteelfeduieefheduudfggffhhfffheevveeh
+    hedvnecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:SGilX5FgV3YrafQAewai08iGaqQHh8CRHNOlJZ6ckO1b8tuag3YXtA>
+    <xmx:SGilX-TPhexYOuTrNaOlHjxjP3GdNqH3Yh9keJHfWqQp36tB27EFfw>
+    <xmx:SGilX2wgNIj0rOYi-PCTL36L_-ZSE2Bvljr5W-7EM7oTjhPXC8SnCA>
+    <xmx:SGilX7KquAIA-ZDDUai-gnq4X-K9Ibe8F6UR7RyvSk-mBvu1JfNxFA>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 28304306005B;
+        Fri,  6 Nov 2020 10:14:16 -0500 (EST)
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Daniel Vetter <daniel.vetter@intel.com>,
+        David Airlie <airlied@linux.ie>, Christoph Hellwig <hch@lst.de>
+Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Yong Deng <yong.deng@magewell.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [PATCH 2/7] soc: sunxi: Deal with the MBUS DMA offsets in a central place
+Date:   Fri,  6 Nov 2020 16:14:06 +0100
+Message-Id: <20201106151411.321743-3-maxime@cerno.tech>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20201106151411.321743-1-maxime@cerno.tech>
+References: <20201106151411.321743-1-maxime@cerno.tech>
 MIME-Version: 1.0
-In-Reply-To: <CAAFQd5BeWOYadUU8nBtFpaA5Eb2T0qFk0kDVf9eYmYzXJj+sZA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Tomasz,
+So far most of the drivers with the MBUS quirks had to duplicate the
+code to deal with DT compatibility and enforcing the DMA offsets.
 
-(sorry for not had replied this earlier)
+Let's move for a more maintainable solution by putting everything in a
+notifier that would take care of setting up the DMA offsets for all the
+MBUS devices.
 
-On 10/2/20 12:30 PM, Tomasz Figa wrote:
-> On Fri, Oct 2, 2020 at 11:16 AM Dafna Hirschfeld
-> <dafna.hirschfeld@collabora.com> wrote:
->>
->> Hi,
->>
->> Am 25.09.20 um 22:42 schrieb Tomasz Figa:
->>> Hi Dafna,
->>>
->>> On Tue, Sep 22, 2020 at 01:33:56PM +0200, Dafna Hirschfeld wrote:
->>>> The isp.frame_sequence is now read only from the irq handlers
->>>> that are all fired from the same interrupt, so there is not need
->>>> for atomic operation.
->>>> In addition, the frame seq incrementation is moved from
->>>> rkisp1_isp_queue_event_sof to rkisp1_isp_isr to make the code
->>>> clearer and the incorrect inline comment is removed.
->>>>
->>>> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
->>>> Acked-by: Helen Koike <helen.koike@collabora.com>
->>>>
->>>> ---
->>>> changes since v2:
->>>> add a closing "}" to if condition
->>>> remove usless inline comment
->>>> ---
->>>>   drivers/staging/media/rkisp1/rkisp1-capture.c |  2 +-
->>>>   drivers/staging/media/rkisp1/rkisp1-common.h  |  2 +-
->>>>   drivers/staging/media/rkisp1/rkisp1-isp.c     | 16 +++++-----------
->>>>   drivers/staging/media/rkisp1/rkisp1-params.c  |  2 +-
->>>>   drivers/staging/media/rkisp1/rkisp1-stats.c   |  3 +--
->>>>   5 files changed, 9 insertions(+), 16 deletions(-)
->>>>
->>>
->>> Thank you for the patch. Please see my comments inline.
->>>
->>>> diff --git a/drivers/staging/media/rkisp1/rkisp1-capture.c b/drivers/staging/media/rkisp1/rkisp1-capture.c
->>>> index 0632582a95b4..1c762a369b63 100644
->>>> --- a/drivers/staging/media/rkisp1/rkisp1-capture.c
->>>> +++ b/drivers/staging/media/rkisp1/rkisp1-capture.c
->>>> @@ -632,7 +632,7 @@ static void rkisp1_handle_buffer(struct rkisp1_capture *cap)
->>>>      curr_buf = cap->buf.curr;
->>>>
->>>>      if (curr_buf) {
->>>> -            curr_buf->vb.sequence = atomic_read(&isp->frame_sequence);
->>>> +            curr_buf->vb.sequence = isp->frame_sequence;
->>>
->>> I wonder if with higher resolutions, let's say full 5 Mpix, and/or some
->>> memory-intensive system load, like video encoding and graphics rendering,
->>> the DMA wouldn't take enough time to have the MI_FRAME interrupt fire after
->>> the V_START for the next frame.
->>>
->>> I recall you did some testing back in time [1], showing that the two are
->>> interleaved. Do you remember what CAPTURE resolution was it?
->>
->> I ran the testing again, I added a patch to allow streaming simultanously from
->> both pathes: https://gitlab.collabora.com/dafna/linux/-/commit/8df0d15567b27cb88674fbbe33d1906c3c5a91da
->> Then I ran two tests:
->> stream simultaneously with 3280x2464 frames from the camera, and then downscaling them to 1920x1080 on selfpath, this is http://ix.io/2zoP
->> stream simultaneously with 640x480 frames from the camera, and upscaling them to 1920x1080 on the selfpath. this is http://ix.io/2zoR
->>
->> the pixelformat for both is 422P.
->> I don't know how meaningful and useful is to test it on the rockchip-pi4 board, I only use it with a serial console.
->> The functionality can probably only be tested on the scarlet.
-> 
-> Okay, thanks. It looks like there is always plenty of time margin on
-> the hardware side and if the interrupt handling is delayed for a short
-> time and both are handled by the same handler call, it's also going to
-> be handled fine because of rkisp1_capture_isr() being called before
-> rkisp1_isp_isr().
-> 
-> By the way, do we need the MIPI interrupts every frame? Perhaps we
-> could enable the RKISP1_CIF_MIPI_ERR_CTRL* interrupts only and then,
-> when we get an error, we disable it and enable
-> RKISP1_CIF_MIPI_FRAME_END, which would then re-enable
-> RKISP1_CIF_MIPI_ERR_CTRL* and disable itself? WDYT?
+Suggested-by: Robin Murphy <robin.murphy@arm.com>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+---
+ drivers/soc/sunxi/Kconfig      |   8 ++
+ drivers/soc/sunxi/Makefile     |   1 +
+ drivers/soc/sunxi/sunxi_mbus.c | 132 +++++++++++++++++++++++++++++++++
+ 3 files changed, 141 insertions(+)
+ create mode 100644 drivers/soc/sunxi/sunxi_mbus.c
 
-The driver already do this in a sense, it disables these interrupts on
-the first MIPI error and re-enable them on RKISP1_CIF_MIPI_FRAME_END.
+diff --git a/drivers/soc/sunxi/Kconfig b/drivers/soc/sunxi/Kconfig
+index f10fd6cae13e..1fef0e711056 100644
+--- a/drivers/soc/sunxi/Kconfig
++++ b/drivers/soc/sunxi/Kconfig
+@@ -2,6 +2,14 @@
+ #
+ # Allwinner sunXi SoC drivers
+ #
++
++config SUNXI_MBUS
++	bool
++	default ARCH_SUNXI
++	help
++	  Say y to enable the fixups needed to support the Allwinner
++	  MBUS DMA quirks.
++
+ config SUNXI_SRAM
+ 	bool
+ 	default ARCH_SUNXI
+diff --git a/drivers/soc/sunxi/Makefile b/drivers/soc/sunxi/Makefile
+index 7816fbbec387..549159571d4f 100644
+--- a/drivers/soc/sunxi/Makefile
++++ b/drivers/soc/sunxi/Makefile
+@@ -1,2 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0-only
++obj-$(CONFIG_SUNXI_MBUS) +=	sunxi_mbus.o
+ obj-$(CONFIG_SUNXI_SRAM) +=	sunxi_sram.o
+diff --git a/drivers/soc/sunxi/sunxi_mbus.c b/drivers/soc/sunxi/sunxi_mbus.c
+new file mode 100644
+index 000000000000..a9d077f73c3a
+--- /dev/null
++++ b/drivers/soc/sunxi/sunxi_mbus.c
+@@ -0,0 +1,132 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (C) 2020 Maxime Ripard <maxime@cerno.tech> */
++
++#include <linux/device.h>
++#include <linux/dma-mapping.h>
++#include <linux/init.h>
++#include <linux/notifier.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
++
++static const char * const sunxi_mbus_devices[] = {
++	/*
++	 * The display engine virtual devices are not strictly speaking
++	 * connected to the MBUS, but since DRM will perform all the
++	 * memory allocations and DMA operations through that device, we
++	 * need to have the quirk on those devices too.
++	 */
++	"allwinner,sun4i-a10-display-engine",
++	"allwinner,sun5i-a10s-display-engine",
++	"allwinner,sun5i-a13-display-engine",
++	"allwinner,sun6i-a31-display-engine",
++	"allwinner,sun6i-a31s-display-engine",
++	"allwinner,sun7i-a20-display-engine",
++	"allwinner,sun8i-a23-display-engine",
++	"allwinner,sun8i-a33-display-engine",
++	"allwinner,sun8i-a83t-display-engine",
++	"allwinner,sun8i-h3-display-engine",
++	"allwinner,sun8i-r40-display-engine",
++	"allwinner,sun8i-v3s-display-engine",
++	"allwinner,sun9i-a80-display-engine",
++	"allwinner,sun50i-a64-display-engine",
++
++	/*
++	 * And now we have the regular devices connected to the MBUS
++	 * (that we know of).
++	 */
++	"allwinner,sun4i-a10-csi1",
++	"allwinner,sun4i-a10-display-backend",
++	"allwinner,sun4i-a10-display-frontend",
++	"allwinner,sun4i-a10-video-engine",
++	"allwinner,sun5i-a13-display-backend",
++	"allwinner,sun5i-a13-video-engine",
++	"allwinner,sun6i-a31-csi",
++	"allwinner,sun6i-a31-display-backend",
++	"allwinner,sun7i-a20-csi0",
++	"allwinner,sun7i-a20-display-backend",
++	"allwinner,sun7i-a20-display-frontend",
++	"allwinner,sun7i-a20-video-engine",
++	"allwinner,sun8i-a23-display-backend",
++	"allwinner,sun8i-a23-display-frontend",
++	"allwinner,sun8i-a33-display-backend",
++	"allwinner,sun8i-a33-display-frontend",
++	"allwinner,sun8i-a33-video-engine",
++	"allwinner,sun8i-a83t-csi",
++	"allwinner,sun8i-h3-csi",
++	"allwinner,sun8i-h3-video-engine",
++	"allwinner,sun8i-v3s-csi",
++	"allwinner,sun9i-a80-display-backend",
++	"allwinner,sun50i-a64-csi",
++	"allwinner,sun50i-a64-video-engine",
++	"allwinner,sun50i-h5-video-engine",
++	NULL,
++};
++
++static int sunxi_mbus_notifier(struct notifier_block *nb,
++			       unsigned long event, void *__dev)
++{
++	struct device *dev = __dev;
++	int ret;
++
++	if (event != BUS_NOTIFY_ADD_DEVICE)
++		return NOTIFY_DONE;
++
++	/*
++	 * Only the devices that need a large memory bandwidth do DMA
++	 * directly over the memory bus (called MBUS), instead of going
++	 * through the regular system bus.
++	 */
++	if (!of_device_compatible_match(dev->of_node, sunxi_mbus_devices))
++		return NOTIFY_DONE;
++
++	/*
++	 * Devices with an interconnects property have the MBUS
++	 * relationship described in their DT and dealt with by
++	 * of_dma_configure, so we can just skip them.
++	 *
++	 * Older DTs or SoCs who are not clearly understood need to set
++	 * that DMA offset though.
++	 */
++	if (of_find_property(dev->of_node, "interconnects", NULL))
++		return NOTIFY_DONE;
++
++	ret = dma_direct_set_offset(dev, PHYS_OFFSET, 0, SZ_4G);
++	if (ret)
++		dev_err(dev, "Couldn't setup our DMA offset: %d\n", ret);
++
++	return NOTIFY_DONE;
++}
++
++static struct notifier_block sunxi_mbus_nb = {
++	.notifier_call = sunxi_mbus_notifier,
++};
++
++static const char * const sunxi_mbus_platforms[] __initconst = {
++	"allwinner,sun4i-a10",
++	"allwinner,sun5i-a10s",
++	"allwinner,sun5i-a13",
++	"allwinner,sun6i-a31",
++	"allwinner,sun7i-a20",
++	"allwinner,sun8i-a23",
++	"allwinner,sun8i-a33",
++	"allwinner,sun8i-a83t",
++	"allwinner,sun8i-h3",
++	"allwinner,sun8i-r40",
++	"allwinner,sun8i-v3",
++	"allwinner,sun8i-v3s",
++	"allwinner,sun9i-a80",
++	"allwinner,sun50i-a64",
++	"allwinner,sun50i-h5",
++	"nextthing,gr8",
++	NULL,
++};
++
++static int __init sunxi_mbus_init(void)
++{
++	if (!of_device_compatible_match(of_root, sunxi_mbus_platforms))
++		return 0;
++
++	bus_register_notifier(&platform_bus_type, &sunxi_mbus_nb);
++	return 0;
++}
++arch_initcall(sunxi_mbus_init);
+-- 
+2.28.0
 
-Please check:
-
-https://git.linuxtv.org/media_tree.git/tree/drivers/staging/media/rkisp1/rkisp1-isp.c#n1069
-
-For convenience:
-
-void rkisp1_mipi_isr(struct rkisp1_device *rkisp1)
-{
-	u32 val, status;
-
-	status = rkisp1_read(rkisp1, RKISP1_CIF_MIPI_MIS);
-	if (!status)
-		return;
-
-	rkisp1_write(rkisp1, status, RKISP1_CIF_MIPI_ICR);
-
-	/*
-	 * Disable DPHY errctrl interrupt, because this dphy
-	 * erctrl signal is asserted until the next changes
-	 * of line state. This time is may be too long and cpu
-	 * is hold in this interrupt.
-	 */
-	if (status & RKISP1_CIF_MIPI_ERR_CTRL(0x0f)) {
-		val = rkisp1_read(rkisp1, RKISP1_CIF_MIPI_IMSC);
-		rkisp1_write(rkisp1, val & ~RKISP1_CIF_MIPI_ERR_CTRL(0x0f),
-			     RKISP1_CIF_MIPI_IMSC);
-		rkisp1->isp.is_dphy_errctrl_disabled = true;
-	}
-
-	/*
-	 * Enable DPHY errctrl interrupt again, if mipi have receive
-	 * the whole frame without any error.
-	 */
-	if (status == RKISP1_CIF_MIPI_FRAME_END) {
-		/*
-		 * Enable DPHY errctrl interrupt again, if mipi have receive
-		 * the whole frame without any error.
-		 */
-		if (rkisp1->isp.is_dphy_errctrl_disabled) {
-			val = rkisp1_read(rkisp1, RKISP1_CIF_MIPI_IMSC);
-			val |= RKISP1_CIF_MIPI_ERR_CTRL(0x0f);
-			rkisp1_write(rkisp1, val, RKISP1_CIF_MIPI_IMSC);
-			rkisp1->isp.is_dphy_errctrl_disabled = false;
-		}
-	} else {
-		rkisp1->debug.mipi_error++;
-	}
-}
-
-Regards,
-Helen
-
-> 
-> Best regards,
-> Tomasz
-> 
->>
->> Thanks,
->> Dafna
->>
->>
->>
->>>
->>>>              curr_buf->vb.vb2_buf.timestamp = ktime_get_boottime_ns();
->>>>              curr_buf->vb.field = V4L2_FIELD_NONE;
->>>>              vb2_buffer_done(&curr_buf->vb.vb2_buf, VB2_BUF_STATE_DONE);
->>>> diff --git a/drivers/staging/media/rkisp1/rkisp1-common.h b/drivers/staging/media/rkisp1/rkisp1-common.h
->>>> index 232bee92d0eb..51c92a251ea5 100644
->>>> --- a/drivers/staging/media/rkisp1/rkisp1-common.h
->>>> +++ b/drivers/staging/media/rkisp1/rkisp1-common.h
->>>> @@ -131,7 +131,7 @@ struct rkisp1_isp {
->>>>      const struct rkisp1_isp_mbus_info *src_fmt;
->>>>      struct mutex ops_lock; /* serialize the subdevice ops */
->>>>      bool is_dphy_errctrl_disabled;
->>>> -    atomic_t frame_sequence;
->>>> +    __u32 frame_sequence;
->>>
->>> nit: The __ prefixed types are defined for the UAPI to avoid covering userspace
->>> types. For kernel types please just use the plain u32.
->>>
->>> Best regards,
->>> Tomasz
->>>
-> 
