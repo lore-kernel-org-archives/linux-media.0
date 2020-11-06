@@ -2,125 +2,118 @@ Return-Path: <SRS0=vajg=EM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1261EC5517A
-	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 07:05:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0A57C55178
+	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 08:22:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B0AF322210
-	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 07:05:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5227020A8B
+	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 08:22:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="x7tyrPda"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="R2rTxWy5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726320AbgKFHFT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 6 Nov 2020 02:05:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58868 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726050AbgKFHFT (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Nov 2020 02:05:19 -0500
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A620C0613D4
-        for <linux-media@vger.kernel.org>; Thu,  5 Nov 2020 23:05:19 -0800 (PST)
-Received: by mail-pf1-x444.google.com with SMTP id y7so447740pfq.11
-        for <linux-media@vger.kernel.org>; Thu, 05 Nov 2020 23:05:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=X+vlFfwXaQyT67tNUyi81s2s5dR5xJEgy0PknD0rbz4=;
-        b=x7tyrPdaqh682SqGflCsojgjTQx+BXzkcw1rNmmcDJ4f1/CcNFqWsU2TeslilqRYW6
-         zc5/q2J7DYA6GaZpIl9YJEuw5A+2BygaKtcNZGbiJXmhxkSHLYjjXBFUVrm/3kU2FfxF
-         HOpl09BHz7pxQM1vSb758PMQEHgdQo7a0vFwzSK04ezcCvy5z2tN77zFwQKb0oCEVS7Z
-         5Wf5xaSLDOcwVEQi6x3vCm1v9HcJ36wHsCS7oCefyqpWqoytt13+6MJpeHbxPKWMFUZ8
-         7D71Y1LBl2lTl2Ui7t2WW7/HoEOYoPNzVDuHeqlnp7Y7cKSpCWRT/VBoOVOVT9t0JXT2
-         P84Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=X+vlFfwXaQyT67tNUyi81s2s5dR5xJEgy0PknD0rbz4=;
-        b=B3OwofM0saoq8YpK8iVSmTeMlVlIXmz5A6xs8F18sXkSHSkvYgi8XhcRguSFCxYFJB
-         XRBg0jwrG9DMJ2T+ALDBc6psyCJ4DghEkiaImtPU/K3FEeXTNcMWqIg1irlsdcp1fjkM
-         eEcxrMmrAARF48vIvMgAXNqUf4zYG8wbEZ7F6lKT6iC3+rum0/XDVUw52KTdEXsrBmwj
-         sHtKq7MlHC7o0GeHa4V6Z6nhxysZUb54Z7N6zvaos2ERN1JJytMgtfC6ttARIJT8ntyg
-         D94vZnZ5loQQwRZ92tdO0cDgcURX70+BM4rb6Ib3xb6sQHLShkKFqq6pP4iXe815PTvw
-         K+Kg==
-X-Gm-Message-State: AOAM531luRGM9dMiXXvgkwXeiG+YiUgSzUewx5GWc0zB/h05JGIpehas
-        OkRRDKeucu/2KusL3N4yVmDf+w==
-X-Google-Smtp-Source: ABdhPJwjHQpNsy+GXHXCwxvkwHWtDNd475+Vq8i4kMmtZzheVVRcd/hAft+93Mx61nTSrMPFd3mZ/Q==
-X-Received: by 2002:a17:90a:af89:: with SMTP id w9mr989921pjq.72.1604646318621;
-        Thu, 05 Nov 2020 23:05:18 -0800 (PST)
-Received: from localhost ([122.172.12.172])
-        by smtp.gmail.com with ESMTPSA id r3sm1023098pjl.23.2020.11.05.23.05.17
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 05 Nov 2020 23:05:17 -0800 (PST)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Nishanth Menon <nm@ti.com>, Qiang Yu <yuq825@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rob Herring <robh@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>, digetx@gmail.com,
-        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Subject: [PATCH 0/7] opp: Allow dev_pm_opp_put_*() APIs to accept NULL opp_table
-Date:   Fri,  6 Nov 2020 12:33:20 +0530
-Message-Id: <cover.1604646059.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
+        id S1726655AbgKFIWs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 6 Nov 2020 03:22:48 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:55758 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725616AbgKFIWs (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Nov 2020 03:22:48 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0A68MimK005665;
+        Fri, 6 Nov 2020 02:22:44 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1604650964;
+        bh=Gvj1a9VvK5HiOxpFrAhqJ6CgkKx54KzKc+CFuUe9kbw=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=R2rTxWy5UlwKcWsKjTArylteKwdXmCnUnpYhP3+ngixuMvzm2PJxiAZ4Cww8KVa7a
+         AH3nS9IrNkV/43fxZJZg522wNq1RBZjBwO1kNOdj+dMzYeOQSxqMvZ/GeF6BsuMFs2
+         XqC0JJVHpJwCCKoyZaubZ/N8Hz0H1IxPOiTSA0oU=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0A68Mhdk027942
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 6 Nov 2020 02:22:43 -0600
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 6 Nov
+ 2020 02:22:43 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Fri, 6 Nov 2020 02:22:43 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0A68Mgp9033515;
+        Fri, 6 Nov 2020 02:22:43 -0600
+Date:   Fri, 6 Nov 2020 13:52:41 +0530
+From:   Nikhil Devshatwar <nikhil.nd@ti.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+List-Id: <linux-firmware.lore.kernel.org>
+CC:     <linux-firmware@kernel.org>, <linux-media@vger.kernel.org>,
+        Dan Murphy <dmurphy@ti.com>, Benoit Parrot <bparrot@ti.com>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: Re: [PATCH v2] vpdma: Move firmware to ti directory
+Message-ID: <20201106082241.m6pu6u4ywla6fic5@NiksLab>
+References: <20201028184249.11293-1-nikhil.nd@ti.com>
+ <6b7cb928-909f-36fd-3949-ba9fb32f7cfd@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <6b7cb928-909f-36fd-3949-ba9fb32f7cfd@ti.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+On 09:07-20201029, Tomi Valkeinen wrote:
+> On 28/10/2020 20:42, Nikhil Devshatwar wrote:
+> > Current ti-connectivity location for the firmware is not the
+> > correct place. It has all the wireless connectivity related firmwares.
+> > Move the vpdma firmware to the ti specific directory.
+> > 
+> > Fixes: 5b30b383ce ("linux-firmware: Add new VPDMA firmware 1b8.bin")
+> > Signed-off-by: Nikhil Devshatwar <nikhil.nd@ti.com>
 
-This patchset updates the dev_pm_opp_put_*() helpers to accept a NULL
-pointer for the OPP table, in order to allow the callers to drop the
-unnecessary checks they had to carry.
+ping
 
-All these must get merged upstream through the OPP tree as there is a
-hard dependency on the first patch here. Thanks.
+Please merge this, so that I can update the kernel patch
 
-Viresh Kumar (7):
-  opp: Allow dev_pm_opp_put_*() APIs to accept NULL opp_table
-  cpufreq: dt: dev_pm_opp_put_regulators() accepts NULL argument
-  cpufreq: qcom-cpufreq-nvmem: dev_pm_opp_put_*() accepts NULL argument
-  devfreq: exynos: dev_pm_opp_put_*() accepts NULL argument
-  drm/lima: dev_pm_opp_put_*() accepts NULL argument
-  drm/panfrost: dev_pm_opp_put_*() accepts NULL argument
-  media: venus: dev_pm_opp_put_*() accepts NULL argument
+Regards,
+Nikhil D
 
- drivers/cpufreq/cpufreq-dt.c                   |  6 ++----
- drivers/cpufreq/qcom-cpufreq-nvmem.c           | 15 ++++++---------
- drivers/devfreq/exynos-bus.c                   | 12 ++++--------
- drivers/gpu/drm/lima/lima_devfreq.c            | 13 ++++---------
- drivers/gpu/drm/panfrost/panfrost_devfreq.c    |  6 ++----
- drivers/media/platform/qcom/venus/pm_helpers.c |  3 +--
- drivers/opp/core.c                             | 18 ++++++++++++++++++
- 7 files changed, 37 insertions(+), 36 deletions(-)
-
--- 
-2.25.0.rc1.19.g042ed3e048af
-
+> > ---
+> >  WHENCE                                |   2 +-
+> >  {ti-connectivity => ti}/vpdma-1b8.bin | Bin
+> >  2 files changed, 1 insertion(+), 1 deletion(-)
+> >  rename {ti-connectivity => ti}/vpdma-1b8.bin (100%)
+> > 
+> > diff --git a/WHENCE b/WHENCE
+> > index 473f6fb..d4efee2 100644
+> > --- a/WHENCE
+> > +++ b/WHENCE
+> > @@ -2705,7 +2705,7 @@ Licence: Redistributable. See LICENCE.tda7706-firmware.txt for details.
+> >  
+> >  Driver: ti-vpe - Texas Instruments V4L2 driver for Video Processing Engine
+> >  
+> > -File: ti-connectivity/vpdma-1b8.bin
+> > +File: ti/vpdma-1b8.bin
+> >  
+> >  Licence: Redistributable. See LICENCE.ti-tspa for details.
+> >  
+> > diff --git a/ti-connectivity/vpdma-1b8.bin b/ti/vpdma-1b8.bin
+> > similarity index 100%
+> > rename from ti-connectivity/vpdma-1b8.bin
+> > rename to ti/vpdma-1b8.bin
+> 
+> Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
+> 
+>  Tomi
+> 
+> -- 
+> Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+> Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
