@@ -2,123 +2,144 @@ Return-Path: <SRS0=vajg=EM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-9.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3C74C55179
-	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 12:20:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29353C2D0A3
+	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 12:33:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AB7ED21556
-	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 12:20:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C60252087E
+	for <linux-media@archiver.kernel.org>; Fri,  6 Nov 2020 12:33:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727216AbgKFMTy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 6 Nov 2020 07:19:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726317AbgKFMTx (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Nov 2020 07:19:53 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C418FC0613CF;
-        Fri,  6 Nov 2020 04:19:53 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: koike)
-        with ESMTPSA id 7FD9F1F468B4
-From:   Helen Koike <helen.koike@collabora.com>
-To:     linux-media@vger.kernel.org
-Cc:     linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        heiko@sntech.de, kernel@collabora.com, hverkuil-cisco@xs4all.nl,
-        dafna.hirschfeld@collabora.com, zhengsq@rock-chips.com,
-        laurent.pinchart@ideasonboard.com, niklas.soderlund@ragnatech.se,
-        mchehab@kernel.org, tfiga@chromium.org, ribalda@google.com
-Subject: [PATCH v3 1/2] media: videodev2.h, v4l2-ioctl: add rkisp1 meta buffer format
-Date:   Fri,  6 Nov 2020 09:19:36 -0300
-Message-Id: <20201106121937.1459948-2-helen.koike@collabora.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201106121937.1459948-1-helen.koike@collabora.com>
-References: <20201106121937.1459948-1-helen.koike@collabora.com>
+        id S1727211AbgKFMdK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 6 Nov 2020 07:33:10 -0500
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:60233 "EHLO
+        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727008AbgKFMdK (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Nov 2020 07:33:10 -0500
+X-Originating-IP: 2.224.242.101
+Received: from uno.localdomain (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 980E4FF803;
+        Fri,  6 Nov 2020 12:33:06 +0000 (UTC)
+Date:   Fri, 6 Nov 2020 13:33:06 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Ricardo Ribalda Delgado <ricardo.ribalda@gmail.com>,
+        libcamera-devel@lists.libcamera.org,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: Re: [PATCH 4/4] media: i2c: imx219: Selection compliance fixes
+Message-ID: <20201106123306.2djzfifmopfl6og6@uno.localdomain>
+References: <20200805105721.15445-1-jacopo@jmondi.org>
+ <20200805105721.15445-5-jacopo@jmondi.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200805105721.15445-5-jacopo@jmondi.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Shunqian Zheng <zhengsq@rock-chips.com>
+Hi Hans,
 
-Add the Rockchip ISP1 specific processing parameter format
-V4L2_META_FMT_RK_ISP1_PARAMS and metadata format
-V4L2_META_FMT_RK_ISP1_STAT_3A for 3A.
+On Wed, Aug 05, 2020 at 12:57:21PM +0200, Jacopo Mondi wrote:
+> From: Hans Verkuil <hverkuil@xs4all.nl>
+>
+> To comply with the intended usage of the V4L2 selection target when
+> used to retrieve a sensor image properties, adjust the rectangles
+> returned by the imx219 driver.
+>
+> The top/left crop coordinates of the TGT_CROP rectangle were set to
+> (0, 0) instead of (8, 8) which is the offset from the larger physical
+> pixel array rectangle. This was also a mismatch with the default values
+> crop rectangle value, so this is corrected. Found with v4l2-compliance.
+>
+> While at it, add V4L2_SEL_TGT_CROP_BOUNDS support: CROP_DEFAULT and
+> CROP_BOUNDS have the same size as the non-active pixels are not readable
+> using the selection API. Found with v4l2-compliance.
+>
+> Fixes: e6d4ef7d58aa7 ("media: i2c: imx219: Implement get_selection")
+> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> [reword commit message, use macros for pixel offsets]
+> Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 
-Signed-off-by: Shunqian Zheng <zhengsq@rock-chips.com>
-Signed-off-by: Jacob Chen <jacob2.chen@rock-chips.com>
-Signed-off-by: Helen Koike <helen.koike@collabora.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Has this fallen to the cracks ? It was part of a larger series
+(abandoned for now) but I think this patch has merits and can be broke
+out.
 
----
-Hello,
+If that's the case I'll fix ov5647 which I have in the pipe which
+suffer from the same issue as this one and update the libcamera side
+that uses this information.
 
-This patch is a continuation of:
+Thanks
+  j
 
-https://patchwork.kernel.org/project/linux-arm-kernel/patch/20191106120132.6876-2-helen.koike@collabora.com/
-
-These formats are already documented under
-Documentation/userspace-api/media/v4l/pixfmt-meta-rkisp1.rst
-
-Changes in V3:
-- Rename description and comment to Parameters and Statistics.
-
-Regards,
-Helen
----
- drivers/media/v4l2-core/v4l2-ioctl.c              | 2 ++
- drivers/staging/media/rkisp1/uapi/rkisp1-config.h | 4 ----
- include/uapi/linux/videodev2.h                    | 4 ++++
- 3 files changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index f0f6906a879de..3198abdd538ce 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -1403,6 +1403,8 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
- 	case V4L2_META_FMT_UVC:		descr = "UVC Payload Header Metadata"; break;
- 	case V4L2_META_FMT_D4XX:	descr = "Intel D4xx UVC Metadata"; break;
- 	case V4L2_META_FMT_VIVID:       descr = "Vivid Metadata"; break;
-+	case V4L2_META_FMT_RK_ISP1_PARAMS:	descr = "Rockchip ISP1 3A Parameters"; break;
-+	case V4L2_META_FMT_RK_ISP1_STAT_3A:	descr = "Rockchip ISP1 3A Statistics"; break;
- 
- 	default:
- 		/* Compressed formats */
-diff --git a/drivers/staging/media/rkisp1/uapi/rkisp1-config.h b/drivers/staging/media/rkisp1/uapi/rkisp1-config.h
-index 8d906cc7da8fc..6e449e7842605 100644
---- a/drivers/staging/media/rkisp1/uapi/rkisp1-config.h
-+++ b/drivers/staging/media/rkisp1/uapi/rkisp1-config.h
-@@ -9,10 +9,6 @@
- 
- #include <linux/types.h>
- 
--/* Vendor specific - used for RK_ISP1 camera sub-system */
--#define V4L2_META_FMT_RK_ISP1_PARAMS   v4l2_fourcc('R', 'K', '1', 'P') /* Rockchip ISP1 params */
--#define V4L2_META_FMT_RK_ISP1_STAT_3A  v4l2_fourcc('R', 'K', '1', 'S') /* Rockchip ISP1 3A statistics */
--
- /* Defect Pixel Cluster Detection */
- #define RKISP1_CIF_ISP_MODULE_DPCC		(1U << 0)
- /* Black Level Subtraction */
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 927075fa9099e..761ac9da3ffda 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -768,6 +768,10 @@ struct v4l2_pix_format {
- #define V4L2_META_FMT_D4XX        v4l2_fourcc('D', '4', 'X', 'X') /* D4XX Payload Header metadata */
- #define V4L2_META_FMT_VIVID	  v4l2_fourcc('V', 'I', 'V', 'D') /* Vivid Metadata */
- 
-+/* Vendor specific - used for RK_ISP1 camera sub-system */
-+#define V4L2_META_FMT_RK_ISP1_PARAMS	v4l2_fourcc('R', 'K', '1', 'P') /* Rockchip ISP1 3A Parameters */
-+#define V4L2_META_FMT_RK_ISP1_STAT_3A	v4l2_fourcc('R', 'K', '1', 'S') /* Rockchip ISP1 3A Statistics */
-+
- /* priv field value to indicates that subsequent fields are valid. */
- #define V4L2_PIX_FMT_PRIV_MAGIC		0xfeedcafe
- 
--- 
-2.29.2
-
+> ---
+>  drivers/media/i2c/imx219.c | 17 +++++++++--------
+>  1 file changed, 9 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
+> index 60b23d113fc56..ff48a95b448b1 100644
+> --- a/drivers/media/i2c/imx219.c
+> +++ b/drivers/media/i2c/imx219.c
+> @@ -473,8 +473,8 @@ static const struct imx219_mode supported_modes[] = {
+>  		.width = 3280,
+>  		.height = 2464,
+>  		.crop = {
+> -			.left = 0,
+> -			.top = 0,
+> +			.left = IMX219_PIXEL_ARRAY_LEFT,
+> +			.top = IMX219_PIXEL_ARRAY_TOP,
+>  			.width = 3280,
+>  			.height = 2464
+>  		},
+> @@ -489,8 +489,8 @@ static const struct imx219_mode supported_modes[] = {
+>  		.width = 1920,
+>  		.height = 1080,
+>  		.crop = {
+> -			.left = 680,
+> -			.top = 692,
+> +			.left = 688,
+> +			.top = 700,
+>  			.width = 1920,
+>  			.height = 1080
+>  		},
+> @@ -505,8 +505,8 @@ static const struct imx219_mode supported_modes[] = {
+>  		.width = 1640,
+>  		.height = 1232,
+>  		.crop = {
+> -			.left = 0,
+> -			.top = 0,
+> +			.left = IMX219_PIXEL_ARRAY_LEFT,
+> +			.top = IMX219_PIXEL_ARRAY_TOP,
+>  			.width = 3280,
+>  			.height = 2464
+>  		},
+> @@ -521,8 +521,8 @@ static const struct imx219_mode supported_modes[] = {
+>  		.width = 640,
+>  		.height = 480,
+>  		.crop = {
+> -			.left = 1000,
+> -			.top = 752,
+> +			.left = 1008,
+> +			.top = 760,
+>  			.width = 1280,
+>  			.height = 960
+>  		},
+> @@ -1045,6 +1045,7 @@ static int imx219_get_selection(struct v4l2_subdev *sd,
+>  		return 0;
+>
+>  	case V4L2_SEL_TGT_CROP_DEFAULT:
+> +	case V4L2_SEL_TGT_CROP_BOUNDS:
+>  		sel->r.top = IMX219_PIXEL_ARRAY_TOP;
+>  		sel->r.left = IMX219_PIXEL_ARRAY_LEFT;
+>  		sel->r.width = IMX219_PIXEL_ARRAY_WIDTH;
+> --
+> 2.27.0
+>
