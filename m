@@ -2,71 +2,128 @@ Return-Path: <SRS0=NKcf=EP=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09171C2D0A3
-	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 09:23:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BE3BC4741F
+	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 09:43:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B74D320731
-	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 09:23:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 94E2A22227
+	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 09:43:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727920AbgKIJXu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 Nov 2020 04:23:50 -0500
-Received: from comms.puri.sm ([159.203.221.185]:58080 "EHLO comms.puri.sm"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726482AbgKIJXt (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 9 Nov 2020 04:23:49 -0500
-X-Greylist: delayed 537 seconds by postgrey-1.27 at vger.kernel.org; Mon, 09 Nov 2020 04:23:49 EST
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id B199EE0FD5;
-        Mon,  9 Nov 2020 01:14:21 -0800 (PST)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 8mQolxL0Qg_d; Mon,  9 Nov 2020 01:14:20 -0800 (PST)
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     rogerio.silva@nxp.com, slongerbeam@gmail.com,
-        p.zabel@pengutronix.de, mchehab@kernel.org, shawnguo@kernel.org,
-        festevam@gmail.com
-Cc:     iain.galloway@nxp.com, kernel@puri.sm, kernel@pengutronix.de,
-        linux-imx@nxp.com, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Martin Kepplinger <martin.kepplinger@puri.sm>
-Subject: [PATCH] staging: media: imx: drop dependency on ipuv3
-Date:   Mon,  9 Nov 2020 10:13:40 +0100
-Message-Id: <20201109091340.7223-1-martin.kepplinger@puri.sm>
-Content-Transfer-Encoding: 8bit
+        id S1729176AbgKIJnK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 Nov 2020 04:43:10 -0500
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:33657 "EHLO
+        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729119AbgKIJnJ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 9 Nov 2020 04:43:09 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 1456D580195;
+        Mon,  9 Nov 2020 04:43:08 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Mon, 09 Nov 2020 04:43:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=lmiqVPfBRO9HsD4eiakrDCNXKqB
+        n8TEbx/O27OWVDLI=; b=mypyW2SRGaFWVqh9eIwS+6XSviN7iSg5vBD0DujP08f
+        NTMwnLh+7qpBOyAYunecocrgYA+ZD83xDOK8186OMOoFQ+Xb0nOs2zQyXlkxhlw6
+        HPv8vT2JZq1TKs+X9DjJJUUqPy0aDbbd3pVpyIuUbMaFmpDcu9YttXA0ME5BnQU+
+        NcaufGiE2apM4uhQXjANLBhcteDxGlRwLTkXGVsU/zW13YivuK5ePcX7SSPvnSiC
+        kKmx6Y/c5qCfRB6yCY5NEzOLq4M2cUyL8aw1cmhpEM7yYILzhXH2Mca48y8YDMTT
+        EKe976E321k4CFGyXoCKSvuRwNw03gU6RZDx6NzuRbw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=lmiqVP
+        fBRO9HsD4eiakrDCNXKqBn8TEbx/O27OWVDLI=; b=H7qY1QFWL2E1stPQpyP9eg
+        AAJ4inT9BR8xe2fI1/fkS8WJi0i6ZctMYo+URIun6SRJm2+L4WN/fxQqwdjgfDPt
+        ygQ9aQNUbTllTVupPO7i8IqlrkLimVvKL4ZTPQk8aBq3f9DnNR2zi95Te3Iw+Kad
+        7hwMUljwZ6V/YSmI7p2I8dPUgAQYYjexVXkrIaXnYF6RIzR8o6iiJI//IyDqQbAW
+        zlG6aJJEq2h648P35sUz05qDSNox7LNPkaAyka7Ab/YwvSWwmrltpi1ZSwVMz76C
+        rgmGmYuvrqlNJKZEk0tutQTo7iwFqKEjmZnDm+Q7AQosE729qDxk192LxCSTf/VQ
+        ==
+X-ME-Sender: <xms:KQ-pXwe_i8dNiJZAY4tlnzKs9XbqOj8MBM7z25Mxwdov2thimc9DLg>
+    <xme:KQ-pXyO8ivi7WZ8BAwODuMeesd9QLkTkBWKTaIn0WyOYT9lYWpAF-L9znw6Jvor15
+    cieyRFDbpVwMEIUN8E>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrudduhedgtdekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
+    gedunecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:KQ-pXxjlvTmOlgd9bjlnbeGUPVWLSCvcZhonXSR4YQ4KX-CI1c81Ow>
+    <xmx:KQ-pX1-HsXhn-od1yaHQFkk1IpgBnrmnLSb9H6eruasLpI3dYiJP3w>
+    <xmx:KQ-pX8vBDU1Pcsf3hAEUlTyz0uO8CENMf2hwZwyqRlIqjkqsQvmEtw>
+    <xmx:LA-pX8FUnd_DscCKNzgrRd-uO6wlsVUSe8fyyt0RSAgNhH-tifm-HA>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 0230C3280065;
+        Mon,  9 Nov 2020 04:43:04 -0500 (EST)
+Date:   Mon, 9 Nov 2020 10:43:03 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Christoph Hellwig <hch@lst.de>, Hans Verkuil <hverkuil@xs4all.nl>,
+        wens@kernel.org
+Cc:     Daniel Vetter <daniel.vetter@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Yong Deng <yong.deng@magewell.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Robin Murphy <robin.murphy@arm.com>
+Subject: Re: [PATCH 0/7] sunxi: Remove the calls to dma_direct_set_offset
+Message-ID: <20201109094303.llqsxqoxjagiqa55@gilmour.lan>
+References: <20201106151411.321743-1-maxime@cerno.tech>
+ <20201106160737.GA31913@lst.de>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ukr2zryovmvm4axa"
+Content-Disposition: inline
+In-Reply-To: <20201106160737.GA31913@lst.de>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-As described in NXPs' linux tree, the imx8m SoC includes the same
-CSI bridge hardware that is part of imx7d. We should be able to
-use the "fsl,imx7-csi" driver for imx8m directly.
 
-Since ipuv3 is not relevant for imx8m, drop the build dependency
-for it.
+--ukr2zryovmvm4axa
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
----
- drivers/staging/media/imx/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Christoph, Chen-Yu, Hans,
 
-diff --git a/drivers/staging/media/imx/Kconfig b/drivers/staging/media/imx/Kconfig
-index f555aac8a9d5..98272fd92fe4 100644
---- a/drivers/staging/media/imx/Kconfig
-+++ b/drivers/staging/media/imx/Kconfig
-@@ -2,7 +2,7 @@
- config VIDEO_IMX_MEDIA
- 	tristate "i.MX5/6 V4L2 media core driver"
- 	depends on ARCH_MXC || COMPILE_TEST
--	depends on VIDEO_V4L2 && IMX_IPUV3_CORE
-+	depends on VIDEO_V4L2
- 	select MEDIA_CONTROLLER
- 	select VIDEO_V4L2_SUBDEV_API
- 	depends on HAS_DMA
--- 
-2.20.1
+On Fri, Nov 06, 2020 at 05:07:37PM +0100, Christoph Hellwig wrote:
+> Thanks,
+>=20
+> this looks good to me:
+>=20
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+>=20
+> Can you include this patch at the end of your series to that it gets
+> picked up with the other patches?
 
+I guess the easiest to avoid bisection issues would be to merge all this
+through drm-misc, would that work for you?
+
+Maxime
+
+--ukr2zryovmvm4axa
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX6kPJwAKCRDj7w1vZxhR
+xVdNAQDHWf5opH2Wk5MBiU7aGQjw4usXGRwBxWeeBmmVLm8FsQEA8Y3/aoi85/VG
+utrIfztWYorSmqfL/yhtZhR8bdeSEwg=
+=ZXtW
+-----END PGP SIGNATURE-----
+
+--ukr2zryovmvm4axa--
