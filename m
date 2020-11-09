@@ -2,59 +2,60 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C11ADC2D0A3
-	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 17:32:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D1DDC388F7
+	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 17:32:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2D0C32083B
-	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 17:32:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C6E2F20897
+	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 17:32:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lD9EKUCy"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="K/q9QV3O"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731778AbgKIRcR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 Nov 2020 12:32:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35100 "EHLO
+        id S1732111AbgKIRcW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 Nov 2020 12:32:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729814AbgKIRcR (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Nov 2020 12:32:17 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C7DEC0613CF
-        for <linux-media@vger.kernel.org>; Mon,  9 Nov 2020 09:32:15 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id f23so6798224ejk.2
-        for <linux-media@vger.kernel.org>; Mon, 09 Nov 2020 09:32:15 -0800 (PST)
+        with ESMTP id S1732095AbgKIRcV (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Nov 2020 12:32:21 -0500
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4781C0613D4
+        for <linux-media@vger.kernel.org>; Mon,  9 Nov 2020 09:32:19 -0800 (PST)
+Received: by mail-ed1-x542.google.com with SMTP id ay21so9640294edb.2
+        for <linux-media@vger.kernel.org>; Mon, 09 Nov 2020 09:32:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=3GbLYzMwvp6EZcDPr1mAsVCZayr8g+ANCOELRW9x3oI=;
-        b=lD9EKUCy7oUECftLGz0pJuJXfWUST9vdn8zNy7aZ0sJ1i2+htwpMpx18p1su3Hvqa7
-         KKWbeffmklr0iutDQZf5HVJhX6zpyJ2Jtfj+SlbscdNWWQBZETnFK6oabvbul+7HyWv3
-         iqUV4WCq2d6jBbBPdL2h+n62FPZ795ybRj/Y/LQI7KY47A9dPPFcXf/xEWuafxfJUew2
-         6z9mwI/ApECmiPKdiVDemmddiR07Flf/AF6B0urxkpX+RC0nobTwavyHBq3qIXOZ5yQW
-         qxLrdxpOe3XjZFBWgbTmhLWEOUUcyTxcJutA/lpOyZDJmL2/sOzN1Wbmdx3JTEQncVs+
-         IPAw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=FGNFPuj/SX/rcqMTW0uy7ZBhU7+E+vudgCF6hi4C9Do=;
+        b=K/q9QV3OM/pZlqVFg480sOR2HLKVB+UGI5Q88kxNCVOsAU1QmHphPzs7d/VJErln9/
+         pXBsgE9IW02Pk5v7PwoKTFCoD3cigdUPJtp1OLeWpF4DUT2aVaM4kEwWZn7jq2yyUVlX
+         YN7a3qZe3BNwFHcBvz5lb2eGI6l2u7FdvfqcPKgNGls3F1k01MK8aLh5AbKT0rc5Z1jn
+         Ecej351fPYLZy3WKX+ypYWJGgUu3I2qil96zviN/cKjgoVFAtNhsaRMIn8p90f3xz3Rx
+         3taElNqFCxCqhxHtJQRth5dh14iFtusqGWu+Sq4Hi3qc9Nw7FKLDeaD0yjKzvATHkQum
+         2tOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=3GbLYzMwvp6EZcDPr1mAsVCZayr8g+ANCOELRW9x3oI=;
-        b=dKdvFuxDYioV4G7TKaqtGJbZICXj7HP11zuCF4E2/r34BwekKtYaPYfvluHWPBoGPJ
-         6COkmd5x/rbnOM0TxOqvtXAk2xh5tP8jjpZIeFbLIQwPzTfPfBonWLkcJqHDVaUy33ih
-         jGM2t6JFtWUsk9mpLqQIHriZaobsneriqe9EZQd6yEIe+y8/iw9+vaEhUlUkVT50pAuD
-         yDLsGlu0KbpWtwl6YWJL4eiV8HI0cPRhp0GNCo5xkZ1g2UrIV4L9EHa3NHOanNBxM7NC
-         uj8T1l8uxu/EKwWWnIUfZEVfRhyKmBgN7ERenpSsI2honPrqUMnF+PJdQyQ2WPcmBunD
-         3uKA==
-X-Gm-Message-State: AOAM531io+eHWjQ3x0gKITTyKxhxVDhoMTlqzjGJjY0EGI4aYIHPRMXY
-        YOttx9SEJg2rhn8VdLE/dwz7D5gcJf+0K/8k
-X-Google-Smtp-Source: ABdhPJxX5c+OTDNapq6/UahETFkImzuMZoJ3WkHepRM8Jo8FjtVUZvBKfvF6IxDMzUP2zR9aTpFDTQ==
-X-Received: by 2002:a17:906:a149:: with SMTP id bu9mr15636458ejb.115.1604943133905;
-        Mon, 09 Nov 2020 09:32:13 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=FGNFPuj/SX/rcqMTW0uy7ZBhU7+E+vudgCF6hi4C9Do=;
+        b=OueRYJacrJCBeyVdoIqHcMGGNckQ7xtmadppvm4o0V2w/45BBNP0wyYR5ePwCVVn+p
+         stfxHhXQokNmQV2cqyloM9UQGq2jAc2YDYadFxwgmRLgmJXOMYaF/IbfVEUZ3aSKzMWy
+         H4/sWB51HIvoGNqLDisckBoBcIi1aGEh2CyPtzylo/4xqOgouswwoGEXwiC9QRNmPhFq
+         +lCGeJmRyza42qyyk80343Mr6hX8e57gnndpn/m2NR9VhekZ1XbkliN+eBMbIBMciOK1
+         igIyxD/W/NBenywGW3q4HXd5oJPi6/dxxe7Q1P/qn2+4gYNTIUwzy87LfbsNEoSzxWTy
+         s2ZQ==
+X-Gm-Message-State: AOAM533+FB6ccNDsxngMLIVSRHD2WM4/GsRwSjJpfN6dhYQeadvkrAZq
+        fTrQkYQLDVMR9liVs1jQlK2tv+lLfWjz8wwk
+X-Google-Smtp-Source: ABdhPJyMJQrQJTwuF2GzVsX8AOFWtNJg7ZZydyNbS+xqZZiVJZf1tHX/Sj9G4pF+MVgAR4WBTaqV+g==
+X-Received: by 2002:a50:f68b:: with SMTP id d11mr16978977edn.64.1604943138340;
+        Mon, 09 Nov 2020 09:32:18 -0800 (PST)
 Received: from localhost.localdomain (hst-221-32.medicom.bg. [84.238.221.32])
-        by smtp.gmail.com with ESMTPSA id w18sm5037005edq.43.2020.11.09.09.32.12
+        by smtp.gmail.com with ESMTPSA id w18sm5037005edq.43.2020.11.09.09.32.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2020 09:32:12 -0800 (PST)
+        Mon, 09 Nov 2020 09:32:17 -0800 (PST)
 From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
@@ -62,41 +63,92 @@ Cc:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
         Ezequiel Garcia <ezequiel@collabora.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH 0/3] HDR10 static metadata
-Date:   Mon,  9 Nov 2020 19:31:50 +0200
-Message-Id: <20201109173153.23720-1-stanimir.varbanov@linaro.org>
+Subject: [PATCH 2/3] docs: media: Document CLL and Mastering display
+Date:   Mon,  9 Nov 2020 19:31:52 +0200
+Message-Id: <20201109173153.23720-3-stanimir.varbanov@linaro.org>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20201109173153.23720-1-stanimir.varbanov@linaro.org>
+References: <20201109173153.23720-1-stanimir.varbanov@linaro.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+Document Content light level and Mastering display colour volume.
 
-This patchset adds two HDR10 HEVC v4l2 controls for Content Light Level
-and Mastering display colour volume plus implenmentation in Venus encoder
-driver.
-
-Comments are welcome!
-
-regards,
-Stan
-
-Stanimir Varbanov (3):
-  v4l: Add HDR10 HEVC static metadata controls
-  docs: media: Document CLL and Mastering display
-  venus: venc: Add support for CLL and Mastering display controls
-
+Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+---
  .../media/v4l/ext-ctrls-codec.rst             | 61 +++++++++++++++++++
- drivers/media/platform/qcom/venus/core.h      |  3 +
- drivers/media/platform/qcom/venus/hfi_cmds.c  |  8 +++
- .../media/platform/qcom/venus/hfi_helper.h    | 20 ++++++
- drivers/media/platform/qcom/venus/venc.c      | 29 +++++++++
- .../media/platform/qcom/venus/venc_ctrls.c    | 16 ++++-
- drivers/media/v4l2-core/v4l2-ctrls.c          | 61 +++++++++++++++++++
- include/media/hevc-ctrls.h                    | 41 +++++++++++++
- include/media/v4l2-ctrls.h                    |  2 +
- 9 files changed, 240 insertions(+), 1 deletion(-)
+ 1 file changed, 61 insertions(+)
 
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+index ce728c757eaf..39d0aab5ca3d 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+@@ -4382,3 +4382,64 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+       - Selecting this value specifies that HEVC slices are expected
+         to be prefixed by Annex B start codes. According to :ref:`hevc`
+         valid start codes can be 3-bytes 0x000001 or 4-bytes 0x00000001.
++
++``V4L2_CID_MPEG_VIDEO_HEVC_CLL_INFO (struct)``
++    The Content Light Level defines upper bounds for the nominal target
++    brightness light level of the pictures.
++
++.. c:type:: v4l2_ctrl_hevc_cll_info
++
++.. cssclass:: longtable
++
++.. flat-table:: struct v4l2_ctrl_hevc_cll_info
++    :header-rows:  0
++    :stub-columns: 0
++    :widths:       1 1 2
++
++    * - __u16
++      - ``max_content_light_level``
++      - An upper bound on the maximum light level among all individual
++        samples for the pictures of coded video sequence, cd/m2.
++    * - __u16
++      - ``max_pic_average_light_level``
++      - An upper bound on the maximum average light level among the
++        samples for any idividual picture of coded video sequence, cd/m2.
++
++``V4L2_CID_MPEG_VIDEO_HEVC_MASTERING_DISPLAY (struct)``
++    The mastering display defines the colour volume (the colour primaries,
++    white point and luminance range) of a display considered to be the
++    mastering display for current video content.
++
++.. c:type:: v4l2_ctrl_hevc_mastering_display
++
++.. cssclass:: longtable
++
++.. flat-table:: struct v4l2_ctrl_hevc_mastering_display
++    :header-rows:  0
++    :stub-columns: 0
++    :widths:       1 1 2
++
++    * - __u16
++      - ``display_primaries_x[3]``
++      - Specifies the normalized x chromaticity coordinate of the colour
++        primary component of the mastering display.
++    * - __u16
++      - ``display_primaries_y[3]``
++      - Specifies the normalized y chromaticity coordinate of the colour
++        primary component of the mastering display.
++    * - __u16
++      - ``white_point_x``
++      - Specifies the normalized x chromaticity coordinate of the white
++        point of the mastering display.
++    * - __u16
++      - ``white_point_y``
++      - Specifies the normalized y chromaticity coordinate of the white
++        point of the mastering display.
++    * - __u32
++      - ``max_luminance``
++      - Specifies the nominal maximum display luminance of the mastering
++        display.
++    * - __u32
++      - ``min_luminance``
++      - specifies the nominal minimum display luminance of the mastering
++        display.
 -- 
 2.17.1
 
