@@ -2,77 +2,83 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D27D5C2D0A3
-	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 15:25:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0435FC2D0A3
+	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 15:29:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8B6ED2074F
-	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 15:25:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 644EA2074F
+	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 15:29:34 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=fossekall.de header.i=@fossekall.de header.b="jfYXeSUp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730626AbgKIPZj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 Nov 2020 10:25:39 -0500
-Received: from asavdk4.altibox.net ([109.247.116.15]:43950 "EHLO
-        asavdk4.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727077AbgKIPZj (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Nov 2020 10:25:39 -0500
-Received: from ravnborg.org (unknown [188.228.123.71])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by asavdk4.altibox.net (Postfix) with ESMTPS id C30C58053A;
-        Mon,  9 Nov 2020 16:25:32 +0100 (CET)
-Date:   Mon, 9 Nov 2020 16:25:30 +0100
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH 10/19] drm/radeon/radeon: Move prototype into shared
- header
-Message-ID: <20201109152530.GA1888045@ravnborg.org>
-References: <20201106214949.2042120-1-lee.jones@linaro.org>
- <20201106214949.2042120-11-lee.jones@linaro.org>
- <20201107142651.GA1014611@ravnborg.org>
- <20201109110603.GV2063125@dell>
+        id S1731896AbgKIP3d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 Nov 2020 10:29:33 -0500
+Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.166]:20781 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730294AbgKIP3d (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Nov 2020 10:29:33 -0500
+X-Greylist: delayed 366 seconds by postgrey-1.27 at vger.kernel.org; Mon, 09 Nov 2020 10:29:32 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1604935772;
+        s=strato-dkim-0002; d=fossekall.de;
+        h=Message-Id:Date:Subject:Cc:To:From:X-RZG-CLASS-ID:X-RZG-AUTH:From:
+        Subject:Sender;
+        bh=MksCkLVp32sc7KG0WwW6Fy2Vs773dfXVxIGmZ4PKXd8=;
+        b=jfYXeSUpXbty7iDMhFRhiX4H8yq0BUcvbsUsNV2juVJwueEdgOrxCsVlaapMWlTdtg
+        G0dB73i/osvSOsSTdOGRsyblsUU92dtv0ncxvJ89VCrcp6+oQWZMNmovZRNX92A+gEvH
+        BSh2afsV9GgPp4z2hpiJ6HeJsvmWXX8AoVrsqwVQJ74CYDoxVP+TXwq2eG8XNJfXXvZt
+        roUzakKWQE3z9V2/IH/7Tes8evnjyYtSltV6LSpPN9aI3gcdsCV4wK7VOxP4TSGhBmYF
+        yV4iA4HsvqXFH/Er4SwEdNijJZ2kdyVB7d8566e9NR0Z6wD4RzklDxo1XnC3gL906x9A
+        bUSg==
+X-RZG-AUTH: ":O2kGeEG7b/pS1EzgE2y7nF0STYsSLflpbjNKxx7cGrBOdI6BL9pkS3QW19mO7I+/JwRspuzJFZuRzQ=="
+X-RZG-CLASS-ID: mo00
+Received: from aerfugl
+        by smtp.strato.de (RZmta 47.3.3 AUTH)
+        with ESMTPSA id Y03aecwA9FNPCI0
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+        Mon, 9 Nov 2020 16:23:25 +0100 (CET)
+Received: from koltrast.a98shuttle.de ([192.168.1.27] helo=a98shuttle.de)
+        by aerfugl with smtp (Exim 4.89)
+        (envelope-from <michael@a98shuttle.de>)
+        id 1kc90s-0008Oe-Cg; Mon, 09 Nov 2020 16:23:22 +0100
+Received: (nullmailer pid 3164306 invoked by uid 502);
+        Mon, 09 Nov 2020 15:23:22 -0000
+From:   Michael Klein <michael@fossekall.de>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Sean Young <sean@mess.org>
+Cc:     linux-media@vger.kernel.org, Michael Klein <michael@fossekall.de>
+Subject: [PATCH RESEND v2 0/2] media: rc: gpio-ir-recv: add timeout property
+Date:   Mon,  9 Nov 2020 16:23:09 +0100
+Message-ID: <cover.1604589023.git.michael@fossekall.de>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201109110603.GV2063125@dell>
-X-CMAE-Score: 0
-X-CMAE-Analysis: v=2.3 cv=VafZwmh9 c=1 sm=1 tr=0
-        a=S6zTFyMACwkrwXSdXUNehg==:117 a=S6zTFyMACwkrwXSdXUNehg==:17
-        a=IkcTkHD0fZMA:10 a=0bRNquZ1QDSsZ4hO3z4A:9 a=QEXdDO2ut3YA:10
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
+Message-ID: <20201109152309.jBT24xaP_A1n6OfxDD30s0yjfVRizGDPRg-pyzTGmLE@z>
 
-Hi Lee,
-> > 
-> > Other public functions in radeon_device.c have their prototype in
-> > radeon.h - for example radeon_is_px()
-> > 
-> > Add radeon_device_is_virtual() there so we avoiid this new header.
-> 
-> Oh yes, I remember why this wasn't a suitable solution now:
-> 
-> The macro "radeon_init" in radeon.h clashes with the init function of
-> the same name in radeon_drv.c:
-> 
->   In file included from drivers/gpu/drm/radeon/radeon_drv.c:53:
->   drivers/gpu/drm/radeon/radeon_drv.c:620:31: error: expected identifier or ‘(’ before ‘void’
->   620 | static int __init radeon_init(void)
-...
-> 
-> How would you like me to move forward?
+The default recorder timeout of 125ms is too high for some BPF protocol 
+decoders when a remote sends repeat codes at high rates. This makes the 
+timeout configurable via the devicetree.
 
-Fix the thousand of warnings in other places :-)
-I will take a look at radeon and post a new series based on your work
-with all W=1 warnings fixed.
+Changes in v2:
+  fix checkpatch.pl warnings
 
-	Sam
+Michael Klein (2):
+  media: rc: gpio-ir-recv: add recorder timeout property
+  media: bindings: media: gpio-ir-receiver: add linux,timeout-us
+    property
+
+ .../devicetree/bindings/media/gpio-ir-receiver.txt          | 3 +++
+ Documentation/devicetree/bindings/media/rc.yaml             | 6 ++++++
+ drivers/media/rc/gpio-ir-recv.c                             | 3 ++-
+ 3 files changed, 11 insertions(+), 1 deletion(-)
+
+-- 
+2.28.0
+
