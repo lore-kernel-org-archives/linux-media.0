@@ -2,169 +2,169 @@ Return-Path: <SRS0=NKcf=EP=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86A73C4741F
-	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 11:06:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06515C56202
+	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 11:07:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 27D632222B
-	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 11:06:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 99D452080C
+	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 11:07:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TKPmIbHz"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20150623.gappssmtp.com header.i=@bgdev-pl.20150623.gappssmtp.com header.b="aox5vh8y"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729302AbgKILGN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 Nov 2020 06:06:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59342 "EHLO
+        id S1729576AbgKILHI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 Nov 2020 06:07:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727774AbgKILGM (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Nov 2020 06:06:12 -0500
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8162DC0613D3
-        for <linux-media@vger.kernel.org>; Mon,  9 Nov 2020 03:06:12 -0800 (PST)
-Received: by mail-wm1-x343.google.com with SMTP id p22so7569195wmg.3
-        for <linux-media@vger.kernel.org>; Mon, 09 Nov 2020 03:06:12 -0800 (PST)
+        with ESMTP id S1729511AbgKILHE (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Nov 2020 06:07:04 -0500
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F8AC0613CF
+        for <linux-media@vger.kernel.org>; Mon,  9 Nov 2020 03:07:04 -0800 (PST)
+Received: by mail-wr1-x444.google.com with SMTP id o15so383525wru.6
+        for <linux-media@vger.kernel.org>; Mon, 09 Nov 2020 03:07:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=/TTLN5u5ntD12Tf50xVKp1qDLZNw1PZvWBuHFthUL88=;
-        b=TKPmIbHz/sJNchjhXki9tBdowYhfzhopEljHcLDYcu2bt52SrzWKjteWCU58KX353a
-         /P/wKKssgcalNm6WMoiInsUU0tYzqmWTdvvP1x2IC4lMkbZRYpg+8gP5TNFHScYSbQbf
-         zNFvHFuDW2gZ2fs7lZw50G9oLfMph4J7tRayNoOEWmnQba2vledcJcf/7z8jURCZlZ7a
-         q1nHIvFPWzIZXH/8EdX8up20/kjt7+d1ENZ+xWOQBxc7IIpx9GwZzr2Y1ubWdpjsgzd2
-         Ul6YISZB4Gbk64r1IG9P7c6sH25ulfmr2nRzCJeRtHvEfs63vwtVjnue1xJMXbGaFrRS
-         Tfug==
+        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=X2Rt2FzEDhfwvo5anIXOq/hUQeEl4/lxGNeKa+o6J0w=;
+        b=aox5vh8ytYutbWVc26/liVn7Z8hEPu2nlIMQId7oA48asO+6m3jeTPz78Xi5tKvZ5M
+         bwqHNNDNK70TD0NuDOZApqzQQQIxd7lpVAV+s12r5UTEgNsP0LLtTP/8WwzPWY/N5W3F
+         Npda/QnMuuCjfODUnOM6c1KUKnZ4sERDBgsxwJiNxobq6BnhL/yQBZO223GeqTICPw9m
+         vPcqcg/xsiMtQw2qzDEvFh+x8itNf6+A8g+1ljb0/aVhzJkxBCaUC9gPqB0T/1iCSeAD
+         Up5ueADAnhN5fgjIVO2va7mHiOxvK3gevDqJSukErF5i8yrzIC+ShGo5F2g2sSe+Tv4s
+         iVVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=/TTLN5u5ntD12Tf50xVKp1qDLZNw1PZvWBuHFthUL88=;
-        b=sIQRykMOe4LOtaNpa2gChpD85+BUo+7BdrlXfOngFS8t6BxFCpntWW9vyQwX0uQq2H
-         h1EdT0NlC1lI3psKS5Gn3zH8iU2ZzB69dj0VvizaMFR6gxDtsT0sy/RCVTNO2a5mDW4L
-         SZFTAOBD0nHGEdEzj+af6/q46tUlOx12UJuPdDZrWBwvxzSyfYmSy3YOA8SSwNlKOV1L
-         t191ib+4gKnumTZNwCRsdzZo8PAzRCaKf6q6FqXwb6scbzUST9PgPlw/XFiKsR4fDMsW
-         BDa67QcuD54eWCOoNFnc6OMs2/8AvLu8XedcLI745edW6ySsdyQeBjgPIcjzGRZOSOXU
-         cWhA==
-X-Gm-Message-State: AOAM532WD9MDp2q1GI5odH+YahpLPfL0RZYfVvCVitKnX2GlYJsMCqzk
-        2Lg5A4DPqes+lwmGms8wZpybsg==
-X-Google-Smtp-Source: ABdhPJwCQni2iqmE/lW8/SqfwjZzXNoAzBmb14stJp2vUaJpNmwq4rT99zQtmmQXUZir2cge7Fg/tA==
-X-Received: by 2002:a1c:67d5:: with SMTP id b204mr14273334wmc.92.1604919971242;
-        Mon, 09 Nov 2020 03:06:11 -0800 (PST)
-Received: from dell ([91.110.221.180])
-        by smtp.gmail.com with ESMTPSA id h62sm13193538wrh.82.2020.11.09.03.06.07
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=X2Rt2FzEDhfwvo5anIXOq/hUQeEl4/lxGNeKa+o6J0w=;
+        b=CqSIC+ugHWLUKaiYTRb7j8F62Knw0sD93Ml7FTgwsYKWonw9zCOjv15U7fj3RsuDDh
+         r9yyAhRtzfmtVRVtvrh12CqXAqbU5sL+0gBNX1N46u70LuPnmpGiSYNY1X9My3ulOuNM
+         JW1YJ/jvsgMHt14Wws1n64dRxjHAWJt9HpOaqZOLaJEE3zD9bOpszxzbT7QIL7eY+i5Y
+         H/xgjZ0PJUcJAx5tUz3HnCgd2IRRx68vcDJz3HsVyvpNckhBoehyQ8U1h/JqZTPfXwB3
+         dXXRPuejnss/dz5j64ETgbJZk127KS1zQDQqCNJAk9D2hb2WVw3xUNE0LqavQGRF4BDA
+         N6QQ==
+X-Gm-Message-State: AOAM530+ephyA59c7+dRpFPKjkIEHwtWp3REW7U8cKMQttp/ze/iEsU8
+        LbN/gC7iVlH6MYzbwlkdFhYc5A==
+X-Google-Smtp-Source: ABdhPJz9QUvKGU969idAKC9U5b3ocmwgTjZ8J0vtC/TaPYMbRMpLHkJeyp4aCBCLAgcQ+m/LRxWMMA==
+X-Received: by 2002:adf:9066:: with SMTP id h93mr18252530wrh.166.1604920022928;
+        Mon, 09 Nov 2020 03:07:02 -0800 (PST)
+Received: from localhost.localdomain (lfbn-nic-1-190-206.w2-15.abo.wanadoo.fr. [2.15.39.206])
+        by smtp.gmail.com with ESMTPSA id d3sm12815582wre.91.2020.11.09.03.07.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2020 03:06:10 -0800 (PST)
-Date:   Mon, 9 Nov 2020 11:06:03 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH 10/19] drm/radeon/radeon: Move prototype into shared
- header
-Message-ID: <20201109110603.GV2063125@dell>
-References: <20201106214949.2042120-1-lee.jones@linaro.org>
- <20201106214949.2042120-11-lee.jones@linaro.org>
- <20201107142651.GA1014611@ravnborg.org>
+        Mon, 09 Nov 2020 03:07:02 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-gpio@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-mm@kvack.org,
+        alsa-devel@alsa-project.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: [PATCH v3 2/9] mm: slab: provide krealloc_array()
+Date:   Mon,  9 Nov 2020 12:06:47 +0100
+Message-Id: <20201109110654.12547-3-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.29.1
+In-Reply-To: <20201109110654.12547-1-brgl@bgdev.pl>
+References: <20201109110654.12547-1-brgl@bgdev.pl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201107142651.GA1014611@ravnborg.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sat, 07 Nov 2020, Sam Ravnborg wrote:
+From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
-> Hi Lee,
-> 
-> On Fri, Nov 06, 2020 at 09:49:40PM +0000, Lee Jones wrote:
-> > Unfortunately, a suitable one didn't already exist.
-> > 
-> > Fixes the following W=1 kernel build warning(s):
-> > 
-> >  drivers/gpu/drm/radeon/radeon_device.c:637:6: warning: no previous prototype for ‘radeon_device_is_virtual’ [-Wmissing-prototypes]
-> >  637 | bool radeon_device_is_virtual(void)
-> >  | ^~~~~~~~~~~~~~~~~~~~~~~~
-> > 
-> > Cc: Alex Deucher <alexander.deucher@amd.com>
-> > Cc: "Christian König" <christian.koenig@amd.com>
-> > Cc: David Airlie <airlied@linux.ie>
-> > Cc: Daniel Vetter <daniel@ffwll.ch>
-> > Cc: Sumit Semwal <sumit.semwal@linaro.org>
-> > Cc: amd-gfx@lists.freedesktop.org
-> > Cc: dri-devel@lists.freedesktop.org
-> > Cc: linux-media@vger.kernel.org
-> > Cc: linaro-mm-sig@lists.linaro.org
-> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> > ---
-> >  drivers/gpu/drm/radeon/radeon_device.c |  1 +
-> >  drivers/gpu/drm/radeon/radeon_device.h | 32 ++++++++++++++++++++++++++
-> >  drivers/gpu/drm/radeon/radeon_drv.c    |  3 +--
-> >  3 files changed, 34 insertions(+), 2 deletions(-)
-> >  create mode 100644 drivers/gpu/drm/radeon/radeon_device.h
-> 
-> Other public functions in radeon_device.c have their prototype in
-> radeon.h - for example radeon_is_px()
-> 
-> Add radeon_device_is_virtual() there so we avoiid this new header.
+When allocating an array of elements, users should check for
+multiplication overflow or preferably use one of the provided helpers
+like: kmalloc_array().
 
-Oh yes, I remember why this wasn't a suitable solution now:
+There's no krealloc_array() counterpart but there are many users who use
+regular krealloc() to reallocate arrays. Let's provide an actual
+krealloc_array() implementation.
 
-The macro "radeon_init" in radeon.h clashes with the init function of
-the same name in radeon_drv.c:
+While at it: add some documentation regarding krealloc.
 
-  In file included from drivers/gpu/drm/radeon/radeon_drv.c:53:
-  drivers/gpu/drm/radeon/radeon_drv.c:620:31: error: expected identifier or ‘(’ before ‘void’
-  620 | static int __init radeon_init(void)
-  | ^~~~
-  drivers/gpu/drm/radeon/radeon.h:2705:28: note: in definition of macro ‘radeon_init’
-  2705 | #define radeon_init(rdev) (rdev)->asic->init((rdev))
-  | ^~~~
-  In file included from drivers/gpu/drm/radeon/radeon_drv.c:35:
-  drivers/gpu/drm/radeon/radeon_drv.c: In function ‘__inittest’:
-  drivers/gpu/drm/radeon/radeon_drv.c:653:13: error: ‘radeon_init’ undeclared (first use in this function); did you mean ‘radeon_exit’?
-  653 | module_init(radeon_init);
-  | ^~~~~~~~~~~
-  include/linux/module.h:133:11: note: in definition of macro ‘module_init’
-  133 | { return initfn; } | ^~~~~~
-  drivers/gpu/drm/radeon/radeon_drv.c:653:13: note: each undeclared identifier is reported only once for each function it appears in
-  653 | module_init(radeon_init);
-  | ^~~~~~~~~~~
-  include/linux/module.h:133:11: note: in definition of macro ‘module_init’
-  133 | { return initfn; } | ^~~~~~
-  In file included from include/linux/compiler_types.h:65,
-  from <command-line>:
-  drivers/gpu/drm/radeon/radeon_drv.c: At top level:
-  drivers/gpu/drm/radeon/radeon_drv.c:653:13: error: ‘radeon_init’ undeclared here (not in a function); did you mean ‘radeon_exit’?
-  653 | module_init(radeon_init);
-  | ^~~~~~~~~~~
-  include/linux/compiler_attributes.h:109:65: note: in definition of macro ‘__copy’
-  109 | # define __copy(symbol) __attribute__((__copy__(symbol)))
-  | ^~~~~~
-  drivers/gpu/drm/radeon/radeon_drv.c:653:1: note: in expansion of macro ‘module_init’
-  653 | module_init(radeon_init);
-  | ^~~~~~~~~~~
-  In file included from drivers/gpu/drm/radeon/radeon_drv.c:35:
-  include/linux/module.h:134:6: error: ‘init_module’ aliased to undefined symbol ‘radeon_init’
-  134 | int init_module(void) __copy(initfn) __attribute__((alias(#initfn)));
-  | ^~~~~~~~~~~
-  drivers/gpu/drm/radeon/radeon_drv.c:653:1: note: in expansion of macro ‘module_init’
-  653 | module_init(radeon_init);
-  | ^~~~~~~~~~~
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
+---
+ Documentation/core-api/memory-allocation.rst |  4 ++++
+ include/linux/slab.h                         | 18 ++++++++++++++++++
+ 2 files changed, 22 insertions(+)
 
-How would you like me to move forward?
-
+diff --git a/Documentation/core-api/memory-allocation.rst b/Documentation/core-api/memory-allocation.rst
+index 4446a1ac36cc..5954ddf6ee13 100644
+--- a/Documentation/core-api/memory-allocation.rst
++++ b/Documentation/core-api/memory-allocation.rst
+@@ -147,6 +147,10 @@ The address of a chunk allocated with `kmalloc` is aligned to at least
+ ARCH_KMALLOC_MINALIGN bytes.  For sizes which are a power of two, the
+ alignment is also guaranteed to be at least the respective size.
+ 
++Chunks allocated with kmalloc() can be resized with krealloc(). Similarly
++to kmalloc_array(): a helper for resizing arrays is provided in the form of
++krealloc_array().
++
+ For large allocations you can use vmalloc() and vzalloc(), or directly
+ request pages from the page allocator. The memory allocated by `vmalloc`
+ and related functions is not physically contiguous.
+diff --git a/include/linux/slab.h b/include/linux/slab.h
+index dd6897f62010..be4ba5867ac5 100644
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@ -592,6 +592,24 @@ static inline void *kmalloc_array(size_t n, size_t size, gfp_t flags)
+ 	return __kmalloc(bytes, flags);
+ }
+ 
++/**
++ * krealloc_array - reallocate memory for an array.
++ * @p: pointer to the memory chunk to reallocate
++ * @new_n: new number of elements to alloc
++ * @new_size: new size of a single member of the array
++ * @flags: the type of memory to allocate (see kmalloc)
++ */
++static __must_check inline void *
++krealloc_array(void *p, size_t new_n, size_t new_size, gfp_t flags)
++{
++	size_t bytes;
++
++	if (unlikely(check_mul_overflow(new_n, new_size, &bytes)))
++		return NULL;
++
++	return krealloc(p, bytes, flags);
++}
++
+ /**
+  * kcalloc - allocate memory for an array. The memory is set to zero.
+  * @n: number of elements.
 -- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.29.1
+
