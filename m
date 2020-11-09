@@ -2,152 +2,128 @@ Return-Path: <SRS0=NKcf=EP=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 007E4C4741F
-	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 11:08:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0015C388F7
+	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 11:17:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9F89E206E3
-	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 11:08:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4FEA820897
+	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 11:17:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20150623.gappssmtp.com header.i=@bgdev-pl.20150623.gappssmtp.com header.b="h63NN6JI"
+	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="mO7NLy1q"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729431AbgKILHB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 Nov 2020 06:07:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59478 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729289AbgKILHB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Nov 2020 06:07:01 -0500
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C65C0613D4
-        for <linux-media@vger.kernel.org>; Mon,  9 Nov 2020 03:07:00 -0800 (PST)
-Received: by mail-wr1-x444.google.com with SMTP id b8so8231742wrn.0
-        for <linux-media@vger.kernel.org>; Mon, 09 Nov 2020 03:07:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/BZufo5GeZBBjJpVBhVfUUqf7bDRhIufHOC+GeAXTjw=;
-        b=h63NN6JIr7BPg/L5K4tALUY+/tMHu7b/AohNm+Sq0AHtLr7C775RNCqPF5N91xMyBI
-         MOiY+0CB7+nr/djuF77eQh2JjzNwZIgYaGZcGaavyRIGIDOMtNAYYoguPo3Q8xFlwx6L
-         QddH+S2xNU+tvs03WMAyY063pe678sUddwGJwNwh+sGNbGg5ToLYxAiebC7qHygj5JKC
-         wX/om83DYWGS2MTV/IcOR6891AOSOJx6pnI6tFAZh8FUdpFrpM+edanMCufFGJCkBefi
-         wPu7sueEx5oa9fOWdtBQSKZ4a7oTEsuZvbf1jYwrHa9aigN1cKpCLLxVES7TkXXM96mf
-         VUKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/BZufo5GeZBBjJpVBhVfUUqf7bDRhIufHOC+GeAXTjw=;
-        b=jGSTRpdTy+OVsFLBTjcANA83+71BVrwgZGf8WC5JTGAUNytjXUWsFQ9vQfgoRIz5qB
-         3j13qLcgIZZZUPJpVtQ6zaE8IvsQU+XcmnDhaqTWh9V8J/3bjAuSsvAI+e/OkbD+n+rM
-         BzY7DuVnuBTAzG1um2V4abig1BU3W53RXd/vteT8097tVtdTIToiMjXT3NEtBx4JBtl/
-         PjqCg3chYfW35F6eGstgQKBEkCNo+EA7yH62lWoFx/EjEH+IQSsHvx4i5H+jNLGInGzP
-         1e81qERvgVz8ONCcVyYjCgd5Qoz7/+YItWfExuRw46+SZljx9UVnv4Hd2jdF1KA3Mmns
-         9Khg==
-X-Gm-Message-State: AOAM533xc5hHd1S5mhpV/rs1K/yIA5+tX0fro1p/LO/4Zb2DDu24BLNd
-        vShLk6erbK6nMr1h/Q453d6r0A==
-X-Google-Smtp-Source: ABdhPJyoLN1aG0XKVyv+yWfCk24OCLDvJjyIFGdAfhV/HDRuWRPPB2x0i9RWfrD3NWEqtPTk5g+kWQ==
-X-Received: by 2002:adf:9066:: with SMTP id h93mr18252220wrh.166.1604920019608;
-        Mon, 09 Nov 2020 03:06:59 -0800 (PST)
-Received: from localhost.localdomain (lfbn-nic-1-190-206.w2-15.abo.wanadoo.fr. [2.15.39.206])
-        by smtp.gmail.com with ESMTPSA id d3sm12815582wre.91.2020.11.09.03.06.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2020 03:06:58 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        id S1729316AbgKILRD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 Nov 2020 06:17:03 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:27220 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727774AbgKILRD (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 9 Nov 2020 06:17:03 -0500
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A9BBgXq015865;
+        Mon, 9 Nov 2020 12:16:52 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=+GKVxM0D3KkH2WcQ7+pofmMRwY/ZQf5vYpPY8etpHu4=;
+ b=mO7NLy1qnnydc88v9ir50jEPtNIW4K5bGzEy+1KYcU/UsNTVnG6pegaJhPtlIkA8EndZ
+ rR2xEQgFxrV+p63N1wwfZfeuKOeyfA6uGIIHW2t4ANH5Rh/3hv7t3AZTh4NbHdoIldWg
+ XPJUBZKRaW/4CatSLeysN3GMF6waUKHIhB7R3/RpRr32EmxWwZ8FZDKUBWMya4fMtPbF
+ HYICGfh7gjTFU/w3heOrmPnAMWjUEJbo1bSM3uruSChCByAHdYOZCOLFN+OqE1/CL5lg
+ /pdTg8O8xHs0aQDl+EX25kMu4w7uHStRWnDt1KQa70prTN14ybS9kpsp9O8SB7uzzcBU DA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 34nhkcj5d1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 Nov 2020 12:16:52 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 648D310002A;
+        Mon,  9 Nov 2020 12:16:51 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 4C0DF24D15C;
+        Mon,  9 Nov 2020 12:16:51 +0100 (CET)
+Received: from lmecxl0912.lme.st.com (10.75.127.46) by SFHDAG3NODE2.st.com
+ (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 9 Nov
+ 2020 12:16:50 +0100
+Subject: Re: [PATCH v5 0/4] DCMI BT656 parallel bus mode support
+To:     Hugues Fruchet <hugues.fruchet@st.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-gpio@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-mm@kvack.org,
-        alsa-devel@alsa-project.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [PATCH v3 0/9] slab: provide and use krealloc_array()
-Date:   Mon,  9 Nov 2020 12:06:45 +0100
-Message-Id: <20201109110654.12547-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.29.1
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Alain Volmat <alain.volmat@st.com>,
+        Yannick Fertre <yannick.fertre@st.com>,
+        Philippe CORNU <philippe.cornu@st.com>
+References: <1604511132-4014-1-git-send-email-hugues.fruchet@st.com>
+From:   Alexandre Torgue <alexandre.torgue@st.com>
+Message-ID: <e7358059-8c19-d69d-4e00-c30a2e44e335@st.com>
+Date:   Mon, 9 Nov 2020 12:16:08 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1604511132-4014-1-git-send-email-hugues.fruchet@st.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG3NODE1.st.com (10.75.127.7) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-09_02:2020-11-05,2020-11-09 signatures=0
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Hi Hugues
 
-Andy brought to my attention the fact that users allocating an array of
-equally sized elements should check if the size multiplication doesn't
-overflow. This is why we have helpers like kmalloc_array().
+On 11/4/20 6:32 PM, Hugues Fruchet wrote:
+> Add support of BT656 embedded synchronization bus.
+> This mode allows to save hardware synchro lines hsync & vsync
+> by replacing them with synchro codes embedded in data stream.
+> Add "bus-type" property and make it required so that there is no
+> ambiguity between parallel mode (bus-type=5) and BT656 mode (bus-type=6).
+> 
+> ===========
+> = history =
+> ===========
+> version 5:
+>    - Add revisited bindings and devicetree with explicit use of "bus-type"
+> 
+> version 4:
+>    - Fix typo in commit message
+> 
+> version 3:
+>    - Fix bus_width print to %u as per Sakari comment
+> 
+> version 2:
+>    - As per Sakari remark, revisit commit message and document
+>      BT656 parallel bus mode in bindings
+> 
+> version 1:
+>    - Initial submission
+> 
+> Hugues Fruchet (4):
+>    media: stm32-dcmi: add support of BT656 bus
+>    media: dt-bindings: media: st,stm32-dcmi: add support of BT656 bus
+>    ARM: dts: stm32: set bus-type in DCMI endpoint for stm32mp157c-ev1
+>      board
+>    ARM: dts: stm32: set bus-type in DCMI endpoint for stm32429i-eval
+>      board
+> 
+>   .../devicetree/bindings/media/st,stm32-dcmi.yaml   | 38 ++++++++++++++++++++++
+>   arch/arm/boot/dts/stm32429i-eval.dts               |  1 +
+>   arch/arm/boot/dts/stm32mp157c-ev1.dts              |  1 +
+>   drivers/media/platform/stm32/stm32-dcmi.c          | 37 +++++++++++++++++++--
+>   4 files changed, 75 insertions(+), 2 deletions(-)
+> 
 
-However we don't have krealloc_array() equivalent and there are many
-users who do their own multiplication when calling krealloc() for arrays.
+DT patches applied on stm32-next.
 
-This series provides krealloc_array() and uses it in a couple places.
-
-A separate series will follow adding devm_krealloc_array() which is
-needed in the xilinx adc driver.
-
-v1 -> v2:
-- added a kernel doc for krealloc_array()
-- mentioned krealloc et al in the docs
-- collected review tags
-
-v2 -> v3:
-- add a patch improving krealloc()'s kerneldoc
-- fix a typo
-- improve .rst doc
-- tweak line breaks
-
-Bartosz Golaszewski (9):
-  mm: slab: clarify krealloc()'s behavior with __GFP_ZERO
-  mm: slab: provide krealloc_array()
-  ALSA: pcm: use krealloc_array()
-  vhost: vringh: use krealloc_array()
-  pinctrl: use krealloc_array()
-  edac: ghes: use krealloc_array()
-  drm: atomic: use krealloc_array()
-  hwtracing: intel: use krealloc_array()
-  dma-buf: use krealloc_array()
-
- Documentation/core-api/memory-allocation.rst |  4 ++++
- drivers/dma-buf/sync_file.c                  |  3 +--
- drivers/edac/ghes_edac.c                     |  4 ++--
- drivers/gpu/drm/drm_atomic.c                 |  3 ++-
- drivers/hwtracing/intel_th/msu.c             |  2 +-
- drivers/pinctrl/pinctrl-utils.c              |  2 +-
- drivers/vhost/vringh.c                       |  3 ++-
- include/linux/slab.h                         | 18 ++++++++++++++++++
- mm/slab_common.c                             |  6 +++---
- sound/core/pcm_lib.c                         |  4 ++--
- 10 files changed, 36 insertions(+), 13 deletions(-)
-
--- 
-2.29.1
-
+Cheers
+Alex
