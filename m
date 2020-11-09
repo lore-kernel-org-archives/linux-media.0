@@ -5,58 +5,58 @@ X-Spam-Level:
 X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DB2FC388F7
-	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 11:07:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7A56C2D0A3
+	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 11:07:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1C6F822202
-	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 11:07:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9296E206E3
+	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 11:07:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20150623.gappssmtp.com header.i=@bgdev-pl.20150623.gappssmtp.com header.b="lrGFiV0J"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20150623.gappssmtp.com header.i=@bgdev-pl.20150623.gappssmtp.com header.b="RG2F+82o"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729615AbgKILHM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 Nov 2020 06:07:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
+        id S1729739AbgKILH1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 Nov 2020 06:07:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729586AbgKILHK (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Nov 2020 06:07:10 -0500
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02B8C061A4A
-        for <linux-media@vger.kernel.org>; Mon,  9 Nov 2020 03:07:07 -0800 (PST)
-Received: by mail-wr1-x444.google.com with SMTP id s8so1124681wrw.10
-        for <linux-media@vger.kernel.org>; Mon, 09 Nov 2020 03:07:07 -0800 (PST)
+        with ESMTP id S1729697AbgKILHR (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Nov 2020 06:07:17 -0500
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84062C0613D6
+        for <linux-media@vger.kernel.org>; Mon,  9 Nov 2020 03:07:16 -0800 (PST)
+Received: by mail-wr1-x441.google.com with SMTP id b8so8232642wrn.0
+        for <linux-media@vger.kernel.org>; Mon, 09 Nov 2020 03:07:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=m2ikj+dhQ1Zeha09QctzFr3Pm7l2AwdyE1EcOPpxBQc=;
-        b=lrGFiV0JEwMQZrmMw1exEx6p70DOim7QTqsGe9oOJfscxaaDbqtNd51mDY2gLrVO6e
-         AJaVU6gEvJ5Rqj0pmzF+RQrIAx3UUypf5ocQh5+MxoPZ8v5DbPYgi+LUXOO0xXncPOxJ
-         vazruXakD7raTY00eG7zaplUuhpuFOzAXeDC0+Go3Z91tS4RB4jYmtz+tumRzgHuHKVW
-         Q3APL+KmLaN9niAGudHytA7iWz6ha072HjPWCU0qqHVWmvaciARBx8JEUQUEjIamSyMq
-         CKw7PL+YgCXUcrNMDTeAPsCWzL8tuPTeq/pLQmlfpQnNOHY3qjMybpVo+6SdERNaMi03
-         sDgw==
+        bh=uU00Tfvm+17A7iE8x45GJfsjWZ/7CO3W5FPvjO+v7UE=;
+        b=RG2F+82oEqldWg6NTKGoC7UPk0O3vTxH9eTGTjyarUGvACcl6LwiyVBskaFEt1Pqm6
+         qMxcfA0KMfkW5wNV3g6IT+hgAs2iqXACJ3N3dvfqSrCeZzUAOMwEc5r60U68oM/abbdp
+         BVvztISZFGbho3XV9t5SL1u/kBS3vwLpauBxX0yXvm1ttFGAsQfYFHV+KUfWm52I7cCD
+         8gCnDBCe0CgXSwSibJtmk6kjahUuLaDNlL9UchomHElEtgRdetA4QUIzhJ3s2kqYQJIy
+         hMGwQ19uDlTKAD9Oe+7Y24DOg21aGPiQwGkonVuLgyYUV5H0Om/MAWDetrgEg+DE7LJv
+         /kLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=m2ikj+dhQ1Zeha09QctzFr3Pm7l2AwdyE1EcOPpxBQc=;
-        b=ii0R7fnsYrXj2/FEwZmQAzXLnXJz6H5M0/pF7iizN0YKrBg84wJf7lAJLXqH/MBO6z
-         LXCXw5qmG6+dvqqB4HSteRooQ7E8kgHJL+6DQj0KBjVIt20yZZD3x5tASsSNXmE7wdNB
-         cv0MRl2fqYbXZD1n8XfmmTnzkKDoewWvfxgX1ceQ4NOVPaSEta3cg1XipEVeUaRhIQVb
-         ys2+PmFzbBGTdO2Dzful6tHiiye1dJ9oFsa0SajJbWtbdkPdlwoilqleOXR/XEgIoL8O
-         C6nxS+xJT9Vec9z9MibmQndw4gY/7Fl3vV8RX3mIusR71MwO1J9ppvl0fzT2M/QY117f
-         HtHw==
-X-Gm-Message-State: AOAM532G+nNhynugPw6Fsddkx/CpKAP4CKsRGKDOsSvD1X+osOpdevY5
-        Fn9SjmJ/zymavzZYmnwa7I8lsg==
-X-Google-Smtp-Source: ABdhPJyDQDC3mJ8XBzXRPLr9tujc8yB1EaUC1zlVXx3gghE7oqzt7WatCScZ7dhRaCoAETe4X60pOw==
-X-Received: by 2002:a5d:54c5:: with SMTP id x5mr3869675wrv.297.1604920026445;
-        Mon, 09 Nov 2020 03:07:06 -0800 (PST)
+        bh=uU00Tfvm+17A7iE8x45GJfsjWZ/7CO3W5FPvjO+v7UE=;
+        b=f6oA9Z27pnmcvvAoRrxcTe0Gf6fVollU5oJiab5Sg9IuNfwqbwBRxiteCYpG2byVMf
+         8kB2u/g+V0bUlU58hEITb+5YXK3A1TpXftilQ/zxBAccq8ck1s4THijXk8Weu+IZVS8u
+         n9OBQsLGmDntHj/cQG4buQwPGhZmGIYeKcSRJZ9yBLniVnB+tuzYBCUyGh1oRUCBuCCi
+         otCRgiXZcH65SiWyhJP9LySUUqmTAFpSrtXSBTOShwKwdnxfQ3TLnXC5NNHxtr1gqNVQ
+         /K6Vcc77On1CpboLXRl7zXNJgGAbeglkXhu6MrLhZb1Tf912pm1sEcAoOK7EDbplb1WI
+         Klqg==
+X-Gm-Message-State: AOAM533qNMi7OMvgVwhPkyqTh6dYNOExL1idGsRWls8ALmSJeD3uq8U4
+        VIeDDgFi45Qfk62ScQqjC/73JQ==
+X-Google-Smtp-Source: ABdhPJxqEseYvyvPu8S4NoqtIS4iNC5GkWi9kRY0f7fjCzxFROga8iAwMRGM7mBzZtGU9vsmm1Ko/Q==
+X-Received: by 2002:a5d:6a83:: with SMTP id s3mr9918092wru.397.1604920035266;
+        Mon, 09 Nov 2020 03:07:15 -0800 (PST)
 Received: from localhost.localdomain (lfbn-nic-1-190-206.w2-15.abo.wanadoo.fr. [2.15.39.206])
-        by smtp.gmail.com with ESMTPSA id d3sm12815582wre.91.2020.11.09.03.07.04
+        by smtp.gmail.com with ESMTPSA id d3sm12815582wre.91.2020.11.09.03.07.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2020 03:07:05 -0800 (PST)
+        Mon, 09 Nov 2020 03:07:14 -0800 (PST)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Sumit Semwal <sumit.semwal@linaro.org>,
@@ -89,13 +89,14 @@ Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
         netdev@vger.kernel.org, linux-mm@kvack.org,
         alsa-devel@alsa-project.org,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [PATCH v3 4/9] vhost: vringh: use krealloc_array()
-Date:   Mon,  9 Nov 2020 12:06:49 +0100
-Message-Id: <20201109110654.12547-5-brgl@bgdev.pl>
+Subject: [PATCH v3 9/9] dma-buf: use krealloc_array()
+Date:   Mon,  9 Nov 2020 12:06:54 +0100
+Message-Id: <20201109110654.12547-10-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.29.1
 In-Reply-To: <20201109110654.12547-1-brgl@bgdev.pl>
 References: <20201109110654.12547-1-brgl@bgdev.pl>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -107,25 +108,25 @@ Use the helper that checks for overflows internally instead of manually
 calculating the size of the new array.
 
 Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
+Acked-by: Christian König <christian.koenig@amd.com>
 ---
- drivers/vhost/vringh.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/dma-buf/sync_file.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
-index 8bd8b403f087..08a0e1c842df 100644
---- a/drivers/vhost/vringh.c
-+++ b/drivers/vhost/vringh.c
-@@ -198,7 +198,8 @@ static int resize_iovec(struct vringh_kiov *iov, gfp_t gfp)
+diff --git a/drivers/dma-buf/sync_file.c b/drivers/dma-buf/sync_file.c
+index 5a5a1da01a00..20d9bddbb985 100644
+--- a/drivers/dma-buf/sync_file.c
++++ b/drivers/dma-buf/sync_file.c
+@@ -270,8 +270,7 @@ static struct sync_file *sync_file_merge(const char *name, struct sync_file *a,
+ 		fences[i++] = dma_fence_get(a_fences[0]);
  
- 	flag = (iov->max_num & VRINGH_IOV_ALLOCATED);
- 	if (flag)
--		new = krealloc(iov->iov, new_num * sizeof(struct iovec), gfp);
-+		new = krealloc_array(iov->iov, new_num,
-+				     sizeof(struct iovec), gfp);
- 	else {
- 		new = kmalloc_array(new_num, sizeof(struct iovec), gfp);
- 		if (new) {
+ 	if (num_fences > i) {
+-		nfences = krealloc(fences, i * sizeof(*fences),
+-				  GFP_KERNEL);
++		nfences = krealloc_array(fences, i, sizeof(*fences), GFP_KERNEL);
+ 		if (!nfences)
+ 			goto err;
+ 
 -- 
 2.29.1
 
