@@ -7,56 +7,56 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77F15C4741F
-	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 11:07:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05F82C388F7
+	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 11:07:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2B3E020719
-	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 11:07:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A7081206ED
+	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 11:07:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20150623.gappssmtp.com header.i=@bgdev-pl.20150623.gappssmtp.com header.b="xWDYj2fB"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20150623.gappssmtp.com header.i=@bgdev-pl.20150623.gappssmtp.com header.b="tjfVVqU7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729749AbgKILHo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 Nov 2020 06:07:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59572 "EHLO
+        id S1727930AbgKILHp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 Nov 2020 06:07:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729623AbgKILHN (ORCPT
+        with ESMTP id S1729637AbgKILHN (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Mon, 9 Nov 2020 06:07:13 -0500
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A01DC061A54
-        for <linux-media@vger.kernel.org>; Mon,  9 Nov 2020 03:07:09 -0800 (PST)
-Received: by mail-wr1-x442.google.com with SMTP id r17so4306394wrw.1
-        for <linux-media@vger.kernel.org>; Mon, 09 Nov 2020 03:07:09 -0800 (PST)
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA42EC040201
+        for <linux-media@vger.kernel.org>; Mon,  9 Nov 2020 03:07:12 -0800 (PST)
+Received: by mail-wm1-x343.google.com with SMTP id h62so7526352wme.3
+        for <linux-media@vger.kernel.org>; Mon, 09 Nov 2020 03:07:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=iECHQmtOjlKNpXGH67tnBHQ9XW515B1GPzEiiSpCWAs=;
-        b=xWDYj2fBLmHGr/Gy85P06U2gKM3D4irotg7Jdhw1AyiBnRSDDMWVsz+UsdmoIiJ1F6
-         nBdb9dPDrCjuHs2goVBwrr6i6L4C7nSkDDkQ52BSJEmC2Sc+Lp3e/ArXtKhoYyq2tjlm
-         enDVDKNvTwWmAC7ozqpXJrCXGsNiuZH44PQN4c/a7dPfoMS2oPpYh7i3mNmXgbZlJvFE
-         GIrrnt+rSBU33vfETv4kqGiEQcGPEdca2Jt17hBqqYBDAZWSOPL0sA/n+Zbdml7GLRC0
-         DkMxtT7MSeOhKhfcqgYLWG72cc/mZ35Yq91+n4gnXf+cL4HS0AnCOswBrOImbVlmN+XV
-         kQGQ==
+        bh=/Z+wwi/tFfEYyTBQIvrIHI75+eOD/rtT/HKhEUnLNfQ=;
+        b=tjfVVqU7R8IyKW2OW0hqxniG20DAxuXL1U31YiQAfRN+BbUoTlDF20ez4aqC9/5uW0
+         00hwc/b1caGHmtDgwFtcQTeA95vSaxFPG5Dn4I4WT//9X1vHXDHfVZSv7b68b2Gk+Ggo
+         GuV/WPBhQvweB/8nzh+JOIGU28BaLQQxoW0Qew8uhVen2qKctk4tkH6Xe9kG6J+foPfc
+         erqT54DF3qf5z2lmzDigmhC40Lmu2CCaR3SODiQR0zsXHTxRNzgzEn46xeTAsbTqzkbP
+         1FKBEQcVgIDxKxzGBxNluYDKXrOoCH+3ipKaqLWCZx68VW0e53YAPO8nIb1YuhtZ+35J
+         7AYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=iECHQmtOjlKNpXGH67tnBHQ9XW515B1GPzEiiSpCWAs=;
-        b=WKGDlZsDORHAEDVbSPmBIyy5N36XzWH/fdok0AU7srurAWkjFOiJhRuXE3D1HoLTWI
-         xmuvvZbJuD8460Lq9m6vLYNSmxVmLEL+iJkpbzDN5ymTi+hTEELWCpFeBWbWggmqYAKX
-         TgMDjwt/NS2+nvBGw77wq4dPu3YBfD7Tk/a+32GL4c1/20M+rZoOqNS85UhI64rBxjsk
-         uqctc0wHf0Tie2G3Y5u0jDM0ETadbxKH+IrcR9cvfprRMXuH1a4a7GYjui4VLTopeKg1
-         hkbUOVrjrjURGSGI3Mz8j+ikhaqrhIsmGlXNQyzWivKtwyl4zJ4W2CAzKyuhbj2QJ4QK
-         mmlg==
-X-Gm-Message-State: AOAM530YgmptOgKxYBKK7wRLTNuEMXT701T2vy+bhQMq5efN6l+eGNjn
-        5E0ULzNGGGZMBhGILZFdX3rY0A==
-X-Google-Smtp-Source: ABdhPJxJIoqvvP9l/776r7Kb43HV1AC5EVztuqTnCOgkzEIqxPExxehDC+JhspQEHF3syfUB3O2Rrw==
-X-Received: by 2002:adf:eb4f:: with SMTP id u15mr17320974wrn.165.1604920028177;
-        Mon, 09 Nov 2020 03:07:08 -0800 (PST)
+        bh=/Z+wwi/tFfEYyTBQIvrIHI75+eOD/rtT/HKhEUnLNfQ=;
+        b=DyTbJjjnp8JMPBc0q0FJKvKe04UKohVVDfoNHhAXMg+9IqBLqvNJqW7kQPt1ElsgE1
+         2VXD5vMhvHyjr21mAiGzbi3qUbgz2Fx2WtGHnpo4qhEFo37ZJ/rHHFzH0c2en6a2pJgy
+         lSmCU63YDCbgr+dnGDNTNKOezNZROhU5rmnwv5dUDX0H/KsDYa3fxCoN7KHg2KbTMnqy
+         s57DMpq0z4lLPPMH7j3gxW7BX676d/oxbOQiVyOabJB8vDQJVWOikJycmsF5GrMIfskP
+         irs+ktVrBIcePbjiYoJI0AOb/0hRMQJks7/5crbOMLzXj7a+XhTW4og+soQMlCLgjqBI
+         q+tg==
+X-Gm-Message-State: AOAM532d/cT+xHakTMcpIVqbFvZgphy+TawGqMebPcTZRQyKyHiAyMxC
+        4xS5qrvOkDpruiUygjbFLUh4Fw==
+X-Google-Smtp-Source: ABdhPJwkOvrpUKfB7tFd6Uj/97bXlddiGlW4tIGfcvqVJ2uUup2j5kk7Nqp7LIVYpPQ8tPEEkocJmw==
+X-Received: by 2002:a1c:5f45:: with SMTP id t66mr7223842wmb.132.1604920031725;
+        Mon, 09 Nov 2020 03:07:11 -0800 (PST)
 Received: from localhost.localdomain (lfbn-nic-1-190-206.w2-15.abo.wanadoo.fr. [2.15.39.206])
-        by smtp.gmail.com with ESMTPSA id d3sm12815582wre.91.2020.11.09.03.07.06
+        by smtp.gmail.com with ESMTPSA id d3sm12815582wre.91.2020.11.09.03.07.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2020 03:07:07 -0800 (PST)
+        Mon, 09 Nov 2020 03:07:11 -0800 (PST)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Sumit Semwal <sumit.semwal@linaro.org>,
@@ -88,10 +88,11 @@ Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
         kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
         netdev@vger.kernel.org, linux-mm@kvack.org,
         alsa-devel@alsa-project.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [PATCH v3 5/9] pinctrl: use krealloc_array()
-Date:   Mon,  9 Nov 2020 12:06:50 +0100
-Message-Id: <20201109110654.12547-6-brgl@bgdev.pl>
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Subject: [PATCH v3 7/9] drm: atomic: use krealloc_array()
+Date:   Mon,  9 Nov 2020 12:06:52 +0100
+Message-Id: <20201109110654.12547-8-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.29.1
 In-Reply-To: <20201109110654.12547-1-brgl@bgdev.pl>
 References: <20201109110654.12547-1-brgl@bgdev.pl>
@@ -107,24 +108,25 @@ Use the helper that checks for overflows internally instead of manually
 calculating the size of the new array.
 
 Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 ---
- drivers/pinctrl/pinctrl-utils.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/drm_atomic.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pinctrl/pinctrl-utils.c b/drivers/pinctrl/pinctrl-utils.c
-index f2bcbf62c03d..93df0d4c0a24 100644
---- a/drivers/pinctrl/pinctrl-utils.c
-+++ b/drivers/pinctrl/pinctrl-utils.c
-@@ -39,7 +39,7 @@ int pinctrl_utils_reserve_map(struct pinctrl_dev *pctldev,
- 	if (old_num >= new_num)
- 		return 0;
+diff --git a/drivers/gpu/drm/drm_atomic.c b/drivers/gpu/drm/drm_atomic.c
+index 58527f151984..09ad6a2ec17b 100644
+--- a/drivers/gpu/drm/drm_atomic.c
++++ b/drivers/gpu/drm/drm_atomic.c
+@@ -960,7 +960,8 @@ drm_atomic_get_connector_state(struct drm_atomic_state *state,
+ 		struct __drm_connnectors_state *c;
+ 		int alloc = max(index + 1, config->num_connector);
  
--	new_map = krealloc(*map, sizeof(*new_map) * new_num, GFP_KERNEL);
-+	new_map = krealloc_array(*map, new_num, sizeof(*new_map), GFP_KERNEL);
- 	if (!new_map) {
- 		dev_err(pctldev->dev, "krealloc(map) failed\n");
- 		return -ENOMEM;
+-		c = krealloc(state->connectors, alloc * sizeof(*state->connectors), GFP_KERNEL);
++		c = krealloc_array(state->connectors, alloc,
++				   sizeof(*state->connectors), GFP_KERNEL);
+ 		if (!c)
+ 			return ERR_PTR(-ENOMEM);
+ 
 -- 
 2.29.1
 
