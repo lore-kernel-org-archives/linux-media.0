@@ -2,59 +2,60 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CD00C388F7
-	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 17:36:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 378E9C2D0A3
+	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 17:36:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DC80A20897
-	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 17:36:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C5C8420E65
+	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 17:36:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Q/5EHT7K"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iqaR9WXs"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732007AbgKIRgG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 Nov 2020 12:36:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35714 "EHLO
+        id S1732153AbgKIRgO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 Nov 2020 12:36:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731756AbgKIRgF (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Nov 2020 12:36:05 -0500
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4467EC0613D4
-        for <linux-media@vger.kernel.org>; Mon,  9 Nov 2020 09:36:03 -0800 (PST)
-Received: by mail-ej1-x641.google.com with SMTP id dk16so13416409ejb.12
-        for <linux-media@vger.kernel.org>; Mon, 09 Nov 2020 09:36:03 -0800 (PST)
+        with ESMTP id S1731969AbgKIRgH (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Nov 2020 12:36:07 -0500
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344FEC0613D4
+        for <linux-media@vger.kernel.org>; Mon,  9 Nov 2020 09:36:06 -0800 (PST)
+Received: by mail-ej1-x644.google.com with SMTP id za3so13460999ejb.5
+        for <linux-media@vger.kernel.org>; Mon, 09 Nov 2020 09:36:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=JIvQBr7O5WeG1riAmknLOUpw/3YS8A77of4sXgFTgmE=;
-        b=Q/5EHT7KAZ6kEaKVGpvmN6+0dqwQ8GcJ3fEJ8b4fAMLdnWAVykMxIiv2nwNwIk4ZIE
-         h83UPx4WgJGV6/5Ci9sFcXVvg2aDi5bvULe8xuS5OQMPNKjH7/EwlArQlqIV/Kx4JqRb
-         Rdt7DGgjr9+/c/nno2SN1P0cZ+JSvRuzdUOfn3fQ7ndjAYq7IBEnD5yxpEbPBvftd9St
-         EX2copPgO1SietMK2eaehdn+XWOMkMRdrKQLmT2ckbnnJvfUyECSbzDOzw94q4GYk+Xw
-         s8K4DVO2Ydnmm1vAFst43LujSHoo7ZP4DVHa4i/Vu+nnrN4EimMxFHZw4sohy4ijW9/o
-         IesQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=pFnWMBmOgfjRF3Cwrlx3uYofQt37aDdlePhMz4xU5fM=;
+        b=iqaR9WXs1bpO3jxfnrqog2V3ZZ8NOeRIH1JbfpsU9eKC9o235qvTuKsqCqlmJgcOBw
+         pbxE10HHH1JwPmFc67hRNVCOhSr8dplvvLeDmbpc5ysEas6Ms1+jtfNlPx+WkvfOAGhm
+         4aBXO1QP4IafcuJ2LfpGCM4G/M3jQRaTWj92+SohjcOTyUk2sEUzdE8aC+hde4ZT5Ygg
+         RgaxXMEpqLD1r3RUAlMR656YhCshu7WssWky6m0OVkdyX2/h5snkzfoMsFIiS3nwDfax
+         7NRlWT96bzk7h7PT5uNlk1pK5ydXXtYiQO+XgMbHpxt8jkc8pOnDCFX9w8k9sVAx232O
+         fkOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=JIvQBr7O5WeG1riAmknLOUpw/3YS8A77of4sXgFTgmE=;
-        b=hSfrCDX19Mt687HkgkmLuAxrIi/rsM/ROqyTvq7akJKaSe5ewPwhLO/oQBx2iZ7pRc
-         h2wMuJ0vYSrjvvngxvFlpV5ErWMzy+SbBAYS3lQQrnsiPi+Ly6PMEubp6O1IHOjO0HJw
-         esZO7Vn9bNifX5ePnWrLhbdeZCGeCZ98grUrqZwBbiap4dCcXnAYEUpCsajR0jVerC/9
-         R6yFiviQwCmfmrRaYiRiLOuy+9euqlDBVtw+PGYG/fkaIsq7sK3i3YdiIHZZw2NUGtif
-         LLGvncA9W35adOMOUj5irms+kxj9vNUf1Y/o1dK37m9SjIQWEIiA1r6uUpSsrYjEXa/9
-         +UzQ==
-X-Gm-Message-State: AOAM532e9YyOnIkC97fZ346AqbNWslBbfnfamAAc0gvvmKq+cKTx8l0R
-        P76s06+m/arjOEYtYwOxLqLglHQVbHk+IqEt
-X-Google-Smtp-Source: ABdhPJxnWTaB3pO+sX/0RfT1E5OWwt55PoP9fDmPHyx0IXEvPIt41xAC+8UM6cWbLh75eYyQJ5S2Yw==
-X-Received: by 2002:a17:906:3644:: with SMTP id r4mr15791243ejb.517.1604943361656;
-        Mon, 09 Nov 2020 09:36:01 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=pFnWMBmOgfjRF3Cwrlx3uYofQt37aDdlePhMz4xU5fM=;
+        b=U3WV/qavbcNerk5SdR3vS3jLKTt4VQGhOiyaV7rbWstgIHfMZOQowLnKUbqP6GXTjy
+         0Wbvk++UAp438vjD/8iwGWdwxninVS7R8ocE4VUwgEzjWOO3qWtMW7gFLWAj1wZ6aSOe
+         m/9wgxZlZU1fumahla+EwhDoqp6ui3EHVLenu0pcVuRMJCyKaTQUafKhuQVEZTdjH2YS
+         KJW0p4NtkYp38PAdS2ySKUKfp2+vo4sRB3QWyMwpVSp86oOoHaYEP2RVLWWh8aFO6F44
+         H5YopzMBvt9ZIyNHck6g9/cuhE7GD14ZenPGrzbMpaHsZUzY0PabU7ClssMUUi5CaFri
+         +gDw==
+X-Gm-Message-State: AOAM531BEk/zCwNjcXFVmHiQDBGJ7StutfKNG1u+NYTNE+MkuIOnozDv
+        M5z0XuTREmCUJ5fLycYGwFxtw4iJZWcjwdyy
+X-Google-Smtp-Source: ABdhPJxUPFj4nGgGSzK1G1qrofBnlrXVnJNZzohF8BBx7bAX1rdpztMMWitJOyO4ATH/RlME7Q/nRw==
+X-Received: by 2002:a17:906:1b09:: with SMTP id o9mr16814643ejg.79.1604943364389;
+        Mon, 09 Nov 2020 09:36:04 -0800 (PST)
 Received: from localhost.localdomain (hst-221-89.medicom.bg. [84.238.221.89])
-        by smtp.gmail.com with ESMTPSA id jw7sm9123981ejb.54.2020.11.09.09.36.00
+        by smtp.gmail.com with ESMTPSA id jw7sm9123981ejb.54.2020.11.09.09.36.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2020 09:36:00 -0800 (PST)
+        Mon, 09 Nov 2020 09:36:03 -0800 (PST)
 From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
@@ -65,40 +66,110 @@ Cc:     Kyungmin Park <kyungmin.park@samsung.com>,
         Nicolas Dufresne <nicolas.dufresne@collabora.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH 0/4] MFC private ctrls to std ctrls
-Date:   Mon,  9 Nov 2020 19:35:37 +0200
-Message-Id: <20201109173541.10016-1-stanimir.varbanov@linaro.org>
+Subject: [PATCH 2/4] venus: vdec: Add support for display delay and delay enable controls
+Date:   Mon,  9 Nov 2020 19:35:39 +0200
+Message-Id: <20201109173541.10016-3-stanimir.varbanov@linaro.org>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20201109173541.10016-1-stanimir.varbanov@linaro.org>
+References: <20201109173541.10016-1-stanimir.varbanov@linaro.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Add support for display delay and display delay enable std controls.
+With this we implement decoder decode output order (decode vs display).
+Once firmware implement few new features the controls will be used
+for other use-cases.
 
-Those four patches makes two V4L2_CID_MPEG_VIDEO_DECODER_DISPLAY_DELAY
-and V4L2_CID_MPEG_VIDEO_DECODER_DISPLAY_DELAY_ENABLE private MFC controls
-standard v4l2 controls, and use them in Venus driver.
+Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+---
+ drivers/media/platform/qcom/venus/core.h       |  2 ++
+ drivers/media/platform/qcom/venus/vdec.c       | 10 +++++++++-
+ drivers/media/platform/qcom/venus/vdec_ctrls.c | 16 +++++++++++++++-
+ 3 files changed, 26 insertions(+), 2 deletions(-)
 
-Comments are welcome!
-
-regards,
-Stan
-
-Stanimir Varbanov (4):
-  v4l2-ctrl: Make display delay and display enable std controls
-  venus: vdec: Add support for display delay and delay enable controls
-  s5p-mfc: Use display delay and display enable std controls
-  docs: Deprecate mfc display delay controls
-
- .../media/v4l/ext-ctrls-codec.rst             | 25 +++++++++++++++++++
- drivers/media/platform/qcom/venus/core.h      |  2 ++
- drivers/media/platform/qcom/venus/vdec.c      | 10 +++++++-
- .../media/platform/qcom/venus/vdec_ctrls.c    | 16 +++++++++++-
- drivers/media/platform/s5p-mfc/s5p_mfc_dec.c  | 16 ++++++++++++
- drivers/media/v4l2-core/v4l2-ctrls.c          |  4 +++
- include/uapi/linux/v4l2-controls.h            |  2 ++
- 7 files changed, 73 insertions(+), 2 deletions(-)
-
+diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
+index 7b79a33dc9d6..a57fb6f70e61 100644
+--- a/drivers/media/platform/qcom/venus/core.h
++++ b/drivers/media/platform/qcom/venus/core.h
+@@ -210,6 +210,8 @@ struct vdec_controls {
+ 	u32 post_loop_deb_mode;
+ 	u32 profile;
+ 	u32 level;
++	u32 display_delay;
++	u32 display_delay_enable;
+ };
+ 
+ struct venc_controls {
+diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+index ea13170a6a2c..1b3b819ccc83 100644
+--- a/drivers/media/platform/qcom/venus/vdec.c
++++ b/drivers/media/platform/qcom/venus/vdec.c
+@@ -615,7 +615,7 @@ static int vdec_set_properties(struct venus_inst *inst)
+ {
+ 	struct vdec_controls *ctr = &inst->controls.dec;
+ 	struct hfi_enable en = { .enable = 1 };
+-	u32 ptype;
++	u32 ptype, decode_order;
+ 	int ret;
+ 
+ 	if (ctr->post_loop_deb_mode) {
+@@ -625,6 +625,14 @@ static int vdec_set_properties(struct venus_inst *inst)
+ 			return ret;
+ 	}
+ 
++	if (ctr->display_delay_enable && ctr->display_delay == 0) {
++		ptype = HFI_PROPERTY_PARAM_VDEC_OUTPUT_ORDER;
++		decode_order = HFI_OUTPUT_ORDER_DECODE;
++		ret = hfi_session_set_property(inst, ptype, &decode_order);
++		if (ret)
++			return ret;
++	}
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/media/platform/qcom/venus/vdec_ctrls.c b/drivers/media/platform/qcom/venus/vdec_ctrls.c
+index 974110b75b93..e1378532dec8 100644
+--- a/drivers/media/platform/qcom/venus/vdec_ctrls.c
++++ b/drivers/media/platform/qcom/venus/vdec_ctrls.c
+@@ -30,6 +30,12 @@ static int vdec_op_s_ctrl(struct v4l2_ctrl *ctrl)
+ 	case V4L2_CID_MPEG_VIDEO_VP9_LEVEL:
+ 		ctr->level = ctrl->val;
+ 		break;
++	case V4L2_CID_MPEG_VIDEO_DECODER_DISPLAY_DELAY:
++		ctr->display_delay = ctrl->val;
++		break;
++	case V4L2_CID_MPEG_VIDEO_DECODER_DISPLAY_DELAY_ENABLE:
++		ctr->display_delay_enable = ctrl->val;
++		break;
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -89,7 +95,7 @@ int vdec_ctrl_init(struct venus_inst *inst)
+ 	struct v4l2_ctrl *ctrl;
+ 	int ret;
+ 
+-	ret = v4l2_ctrl_handler_init(&inst->ctrl_handler, 9);
++	ret = v4l2_ctrl_handler_init(&inst->ctrl_handler, 11);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -158,6 +164,14 @@ int vdec_ctrl_init(struct venus_inst *inst)
+ 	if (ctrl)
+ 		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
+ 
++	v4l2_ctrl_new_std(&inst->ctrl_handler, &vdec_ctrl_ops,
++			  V4L2_CID_MPEG_VIDEO_DECODER_DISPLAY_DELAY,
++			  0, 16383, 1, 0);
++
++	v4l2_ctrl_new_std(&inst->ctrl_handler, &vdec_ctrl_ops,
++			  V4L2_CID_MPEG_VIDEO_DECODER_DISPLAY_DELAY_ENABLE,
++			  0, 1, 1, 0);
++
+ 	ret = inst->ctrl_handler.error;
+ 	if (ret) {
+ 		v4l2_ctrl_handler_free(&inst->ctrl_handler);
 -- 
 2.17.1
 
