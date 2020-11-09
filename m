@@ -7,55 +7,55 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8357C55ABD
-	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 17:36:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 018C1C2D0A3
+	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 17:36:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8C7AF20639
-	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 17:36:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 96B14205CA
+	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 17:36:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="O7BrI5oN"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PitAaj9R"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732276AbgKIRgk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1732223AbgKIRgk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 9 Nov 2020 12:36:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731962AbgKIRgG (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Nov 2020 12:36:06 -0500
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 956EEC0613D6
-        for <linux-media@vger.kernel.org>; Mon,  9 Nov 2020 09:36:05 -0800 (PST)
-Received: by mail-ed1-x542.google.com with SMTP id t9so6267261edq.8
-        for <linux-media@vger.kernel.org>; Mon, 09 Nov 2020 09:36:05 -0800 (PST)
+        with ESMTP id S1732068AbgKIRgI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Nov 2020 12:36:08 -0500
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D2AEC0613CF
+        for <linux-media@vger.kernel.org>; Mon,  9 Nov 2020 09:36:08 -0800 (PST)
+Received: by mail-ej1-x643.google.com with SMTP id oq3so13450181ejb.7
+        for <linux-media@vger.kernel.org>; Mon, 09 Nov 2020 09:36:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=4uG33267VrZPuq/TP2MGJz5yF4YqwpdNO7AQA5+ar2s=;
-        b=O7BrI5oNvRv+OmwF/UkCImulVAiaztkPKqytKHXY+phxO3mvlbqqkcs7BYsB3rn+Ek
-         gt/KpHJr49OZdbt3NADQHFhpcYjja0bSgE7+WXDaEpg9tTcJTvd6K9bJpFw7UGkQ6IPD
-         zQD8Op68Wh8S0LF2m8pknytLEj1QY2q0+RspgasOMtL1dALe96WnNFKUYYvK+hSXueoQ
-         +oLlVcUZJOe0gwrYm8fEiHaIm6U+zLyzi0+qN7XU+p4k1d/G15GbNbsUen5muluj1D8a
-         WN9VnyOW3Mgpq3uRVEuGPeRZVRta5YJGcTWNftJ1lbfp+i4BmT7fpVjOCs1UsKaMm7tV
-         6kuw==
+        bh=L9F3HkMW13rcGTb3bzExEGKic5ytenCIez631dN7HLE=;
+        b=PitAaj9RXayVuhqFAVZImb2FJzaptvJrhnw4hRd7qLhtpHZt3/13gByfP2V52MOaUX
+         aH5Y7+o8Wug0hJs2gyg/kpATu+uz4xGJqpaA+qMwMJNMx93z7o1RSZbdhe60teDElpma
+         MZWjsED9bHeNSqbizQ32mr7FDj01m120ZIF+PLqQ2hWlxXqmbfq7/C7qIMbzCia4vpk0
+         wNo+WpH7HTWxUI88xYoFekEvbl+0OmG3mqHshaIormsO/9qngltHSg3J2kMiMZiybVvo
+         rnnAax8INabenQwe0yl5nNUwZISmh+wVD3Xw0HE3/3I67qQhxFnAtuHbilgLmxjQDOnA
+         wLSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=4uG33267VrZPuq/TP2MGJz5yF4YqwpdNO7AQA5+ar2s=;
-        b=iKbmmtuHH5UBtK/zozQLwE4ip+a5pNRFiR9hhwS71bPJ4Smnpw7Pd/FJXtLgSglqFJ
-         HmWPiwRGz3mr+C6vLWkVWc2doVi8f7nn9tUQm4EhyAly1V+NGEbLmFqbHfPBszPru7yQ
-         6pgiWjHuLrSRhKYe/5Y1UV7qL1i9x1xWavQhVB2mxWG18K83fW1b+bgTmI7gW7RORF5H
-         cJ9q87BzAWdwxqDn7DiEtZ3VFLDEbD1IFGxVtioQT9Dr1zd7Yz/aYABl/e7IVHHecxnM
-         +Mb1H2X3u2ZzrsW+WxVcJ1+Z+XopIBsZ0/r7U2hS6mkl+tuqARIeLCUXFxeii10TLVgG
-         nLWw==
-X-Gm-Message-State: AOAM531TP+JHuuszVahx1P6BV7n4s2NKWFBnqTF5THVxN6RWaAjHL6zg
-        r2ju24CAyVin4bNCb847ZJBXRPha2UPW/Yo7
-X-Google-Smtp-Source: ABdhPJwd5XROm0SteLGhK+SA+asZkfwB4SG1O6GLXXZCMl1pEL4LS2NKMI2H3wIFjOKUXuYZgkXwcQ==
-X-Received: by 2002:a50:a40f:: with SMTP id u15mr17002139edb.307.1604943362974;
-        Mon, 09 Nov 2020 09:36:02 -0800 (PST)
+        bh=L9F3HkMW13rcGTb3bzExEGKic5ytenCIez631dN7HLE=;
+        b=VY5dMUKl7TPoWDxiaxshCo39m82DbHzTM/tpO1SQYuP6surzE36/09ykH8n5X0vvHL
+         OG6II1vL1qkBr3ZagT2ChRgee0YYYdr5W0Pt+gpFzZc0Pk96R3NMcUEQJRVeQcFZM2y/
+         spZmJtbvxmjqwGQMK7ec5OcWODVPBVJLJGgJCrFkI8VqglPz1LaTm5cuhSSuHBH4a46S
+         fBzyDyTdnhH3LfIaer2Nm8xiaC7YpDXyog6Y0TByOiPue2KZxj/vR9xW3qmZuqNSJ+b+
+         hl5UVH543usLAl8erS4BcH/Lzz6xo8WeHDDirxel38RbmGe1bpv7CUGgaUZvn0DGgrUv
+         P7nw==
+X-Gm-Message-State: AOAM532DD+5kcXtTGngw+2atc/Ygf//kvXhc3seWFKKqoik5t+7JeNw1
+        1qoco5Z9CqhOr/dyWK/xvJqcX2u1vFpKUYKs
+X-Google-Smtp-Source: ABdhPJyPOQ+Ryay5dRFIcvl4AnOiW4HTmIeH+B3sow5u7A2Zn8mHc5EEGOQcqZwKV+qqfynNNsUwQQ==
+X-Received: by 2002:a17:906:1381:: with SMTP id f1mr15609974ejc.87.1604943367038;
+        Mon, 09 Nov 2020 09:36:07 -0800 (PST)
 Received: from localhost.localdomain (hst-221-89.medicom.bg. [84.238.221.89])
-        by smtp.gmail.com with ESMTPSA id jw7sm9123981ejb.54.2020.11.09.09.36.01
+        by smtp.gmail.com with ESMTPSA id jw7sm9123981ejb.54.2020.11.09.09.36.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2020 09:36:02 -0800 (PST)
+        Mon, 09 Nov 2020 09:36:06 -0800 (PST)
 From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
@@ -66,9 +66,9 @@ Cc:     Kyungmin Park <kyungmin.park@samsung.com>,
         Nicolas Dufresne <nicolas.dufresne@collabora.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH 1/4] v4l2-ctrl: Make display delay and display enable std controls
-Date:   Mon,  9 Nov 2020 19:35:38 +0200
-Message-Id: <20201109173541.10016-2-stanimir.varbanov@linaro.org>
+Subject: [PATCH 4/4] docs: Deprecate mfc display delay controls
+Date:   Mon,  9 Nov 2020 19:35:41 +0200
+Message-Id: <20201109173541.10016-5-stanimir.varbanov@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20201109173541.10016-1-stanimir.varbanov@linaro.org>
 References: <20201109173541.10016-1-stanimir.varbanov@linaro.org>
@@ -76,86 +76,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Make display delay and display delay enable MFC controls standard v4l
-controls. This will allow reuse of the controls for other decoder
-drivers. Also the new proposed controls are now codec agnostic because
-they could be used for any codec.
+Deprecate mfc private display delay and display enable controls for
+new clients and use the standard controls instead.
 
 Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 ---
- .../userspace-api/media/v4l/ext-ctrls-codec.rst   | 15 +++++++++++++++
- drivers/media/v4l2-core/v4l2-ctrls.c              |  4 ++++
- include/uapi/linux/v4l2-controls.h                |  2 ++
- 3 files changed, 21 insertions(+)
+ .../userspace-api/media/v4l/ext-ctrls-codec.rst        | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index ce728c757eaf..82c9cda40270 100644
+index 82c9cda40270..b8f69c52b2a2 100644
 --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
 +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -679,6 +679,21 @@ enum v4l2_mpeg_video_frame_skip_mode -
-     otherwise the decoder expects a single frame in per buffer.
-     Applicable to the decoder, all codecs.
+@@ -2771,6 +2771,11 @@ MFC 5.1 Control IDs
+     feature can be used for example for generating thumbnails of videos.
+     Applicable to the H264 decoder.
  
-+``V4L2_CID_MPEG_VIDEO_DECODER_DISPLAY_DELAY_ENABLE (boolean)``
-+    If the display delay is enabled then the decoder is forced to return
-+    a CAPTURE buffer (decoded frame) after processing a certain number
-+    of OUTPUT buffers. The delay can be set through
-+    ``V4L2_CID_MPEG_VIDEO_DECODER_DISPLAY_DELAY``. This
-+    feature can be used for example for generating thumbnails of videos.
-+    Applicable to the decoder.
++    .. note::
 +
-+``V4L2_CID_MPEG_VIDEO_DECODER_DISPLAY_DELAY (integer)``
-+    Display delay value for decoder. The decoder is forced to
-+    return a decoded frame after the set 'display delay' number of
-+    frames. If this number is low it may result in frames returned out
-+    of display order, in addition the hardware may still be using the
-+    returned buffer as a reference picture for subsequent frames.
++       This control is deprecated. Use the standard
++       ``V4L2_CID_MPEG_VIDEO_DECODER_DISPLAY_DELAY_ENABLE`` control instead.
 +
- ``V4L2_CID_MPEG_VIDEO_H264_VUI_SAR_ENABLE (boolean)``
-     Enable writing sample aspect ratio in the Video Usability
-     Information. Applicable to the H264 encoder.
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index bd7f330c941c..4a21802e026b 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -874,6 +874,8 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_MPEG_VIDEO_HEADER_MODE:			return "Sequence Header Mode";
- 	case V4L2_CID_MPEG_VIDEO_MAX_REF_PIC:			return "Max Number of Reference Pics";
- 	case V4L2_CID_MPEG_VIDEO_FRAME_SKIP_MODE:		return "Frame Skip Mode";
-+	case V4L2_CID_MPEG_VIDEO_DECODER_DISPLAY_DELAY:		return "Display Delay";
-+	case V4L2_CID_MPEG_VIDEO_DECODER_DISPLAY_DELAY_ENABLE:	return "Display Delay Enable";
- 	case V4L2_CID_MPEG_VIDEO_H263_I_FRAME_QP:		return "H263 I-Frame QP Value";
- 	case V4L2_CID_MPEG_VIDEO_H263_P_FRAME_QP:		return "H263 P-Frame QP Value";
- 	case V4L2_CID_MPEG_VIDEO_H263_B_FRAME_QP:		return "H263 B-Frame QP Value";
-@@ -1221,6 +1223,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
- 	case V4L2_CID_FLASH_READY:
- 	case V4L2_CID_MPEG_VIDEO_DECODER_MPEG4_DEBLOCK_FILTER:
- 	case V4L2_CID_MPEG_VIDEO_DECODER_SLICE_INTERFACE:
-+	case V4L2_CID_MPEG_VIDEO_DECODER_DISPLAY_DELAY_ENABLE:
- 	case V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE:
- 	case V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE:
- 	case V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM:
-@@ -1256,6 +1259,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
- 		break;
- 	case V4L2_CID_MPEG_VIDEO_MV_H_SEARCH_RANGE:
- 	case V4L2_CID_MPEG_VIDEO_MV_V_SEARCH_RANGE:
-+	case V4L2_CID_MPEG_VIDEO_DECODER_DISPLAY_DELAY:
- 		*type = V4L2_CTRL_TYPE_INTEGER;
- 		break;
- 	case V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME:
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index 7035f4fb182c..d6b19f8d0022 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -773,6 +773,8 @@ enum v4l2_mpeg_video_frame_skip_mode {
- 	V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_LEVEL_LIMIT	= 1,
- 	V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT	= 2,
- };
-+#define V4L2_CID_MPEG_VIDEO_DECODER_DISPLAY_DELAY		(V4L2_CID_MPEG_BASE + 647)
-+#define V4L2_CID_MPEG_VIDEO_DECODER_DISPLAY_DELAY_ENABLE	(V4L2_CID_MPEG_BASE + 648)
+ ``V4L2_CID_MPEG_MFC51_VIDEO_DECODER_H264_DISPLAY_DELAY (integer)``
+     Display delay value for H264 decoder. The decoder is forced to
+     return a decoded frame after the set 'display delay' number of
+@@ -2778,6 +2783,11 @@ MFC 5.1 Control IDs
+     of display order, in addition the hardware may still be using the
+     returned buffer as a reference picture for subsequent frames.
  
- /*  MPEG-class control IDs specific to the CX2341x driver as defined by V4L2 */
- #define V4L2_CID_MPEG_CX2341X_BASE				(V4L2_CTRL_CLASS_MPEG | 0x1000)
++    .. note::
++
++       This control is deprecated. Use the standard
++       ``V4L2_CID_MPEG_VIDEO_DECODER_DISPLAY_DELAY`` control instead.
++
+ ``V4L2_CID_MPEG_MFC51_VIDEO_H264_NUM_REF_PIC_FOR_P (integer)``
+     The number of reference pictures used for encoding a P picture.
+     Applicable to the H264 encoder.
 -- 
 2.17.1
 
