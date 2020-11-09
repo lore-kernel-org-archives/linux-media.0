@@ -2,147 +2,115 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 843F1C2D0A3
-	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 21:20:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EA67C5517A
+	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 21:21:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 32DD12074F
-	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 21:20:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1A00B206CB
+	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 21:21:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yRHbohXs"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Eyj0wf9P"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731059AbgKIVUZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 Nov 2020 16:20:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42114 "EHLO
+        id S1730528AbgKIVV3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 Nov 2020 16:21:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731002AbgKIVTR (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Nov 2020 16:19:17 -0500
+        with ESMTP id S1729451AbgKIVV3 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Nov 2020 16:21:29 -0500
 Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2A7C0613CF
-        for <linux-media@vger.kernel.org>; Mon,  9 Nov 2020 13:19:16 -0800 (PST)
-Received: by mail-wm1-x343.google.com with SMTP id h62so911156wme.3
-        for <linux-media@vger.kernel.org>; Mon, 09 Nov 2020 13:19:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178D5C0613CF;
+        Mon,  9 Nov 2020 13:21:29 -0800 (PST)
+Received: by mail-wm1-x343.google.com with SMTP id d142so946241wmd.4;
+        Mon, 09 Nov 2020 13:21:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=RmvaQQVqTzYJ/ca4PPIPDIzgTk17HpnAY5XhUH8w95U=;
-        b=yRHbohXsw2QICXZKtP8ovBwjdAKlIxFQQZ0rhdvBYM4oJ5nxL/ORcz5DZJWVVZZIzN
-         2/DChFnHuAKzp22e7kROw5JKDyNwVhDN23V5qieSGG16WDx6KvMRGkdsZEMniuIP7nk+
-         Sb5HW0mH6htetyMcaUGgJnVqniObdZbyJiW3Ik/WG7Q/LVqaY071vIQevKfeYPRrQda/
-         h/2lcchdzqK1tzNe6NjIVVe1ICyMPAqusXyXJ/4pAYjNaiAky3LshKFGFmX1HHh2LkZ2
-         PSdzhquhWWOMtxj8kR90KE+YOqjwEr684dSRLXPld+Zdv6uH1lJGbb/qRzXwlwPBMggC
-         ylAw==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GDp8yb+Sw0EolRsci9v+WvLZ9nSbjiU3CL4VUAU4p3U=;
+        b=Eyj0wf9PKyzvgsvHQsyfgZxgGn5vIq16Y8gMdbnhJB78VNyMq8Mwjq0OGH9NFWYzqP
+         Jp6UuxRGSSt/WnTSuor53OoHOFjky9QEJ6mPUsUGscEyfMjbWSca3qO2SBpywYqVQzxx
+         BM493YCgTJ/d53de+QhRi2qbmgbsOr0/olWozoAeGnkl8EBuG7iZwkq5Qbvhl3u7+IL9
+         8YezRO3SLYsejT1YmFbagEQmv40oewW9JRsdViPZ6rQDcyvsRr3o+AVNMa3JTg2QMwHO
+         T6vopTIYAcQCly1h+WlGfDjczNUBTzqzsE5GrfocbjClUg5sdUd0PtV9pCrNHcQaE2+W
+         2HWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=RmvaQQVqTzYJ/ca4PPIPDIzgTk17HpnAY5XhUH8w95U=;
-        b=J3ewJA3SoYacr3KLFv0DLSAYVK3gK05UL5LKQyxV9U3z6d6uLu3ZSTxgoBaeVQualU
-         t2E0Gr5YjxAO/2VRSMSe8DlUk+cPcWi9/qDxhSz3uBgXCEWKkzlSyv4nEMYidkFLaFKS
-         TOVVKqNAET1MLuZ7ePs4ZsfCgG4G3nfNXg6W62MRb/ITYjEFbyFg6fI8beHE9c/DpSUN
-         hhuQvSv2H+0PMx2gh2EGtBvASByGFAWsLzkiuaDhZOnDEkeTTOW9fcq/cOrRUdOB9XkG
-         VnHF2MBgBwP6+556IJ6y/2pdfDlPWbE0xJulqpvN3CIQx9oGhStwfAoDMu3q4xGrelum
-         jkFg==
-X-Gm-Message-State: AOAM531zgIuVhYddzaDwCH8C/uJCoXsDAI67mQ3pVJDbUvY0Lx3EYcQu
-        4Rk2LI24rkkvB3cg5e6uk73y+w==
-X-Google-Smtp-Source: ABdhPJzpfrNh8azt6gGZ2jBaYLTeFKuZIomUyo4hzEGhYn1lqz7J9cTLXl66eW+SQsjVcl1+o9I3Jw==
-X-Received: by 2002:a1c:9e12:: with SMTP id h18mr1132707wme.11.1604956755622;
-        Mon, 09 Nov 2020 13:19:15 -0800 (PST)
-Received: from dell.default ([91.110.221.139])
-        by smtp.gmail.com with ESMTPSA id 71sm15170630wrm.20.2020.11.09.13.19.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2020 13:19:14 -0800 (PST)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 05/20] drm/radeon: Move 'radeon_add_legacy_encoder's prototype to shared location
-Date:   Mon,  9 Nov 2020 21:18:40 +0000
-Message-Id: <20201109211855.3340030-6-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201109211855.3340030-1-lee.jones@linaro.org>
-References: <20201109211855.3340030-1-lee.jones@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GDp8yb+Sw0EolRsci9v+WvLZ9nSbjiU3CL4VUAU4p3U=;
+        b=o0iCcHhYx3Aam+IgnEUOcNE9KzE3TTvfsPqzvQNpedE+XCK2nBZv59dCVpBNOJc7LY
+         SS5NinN/6UScvM2dwzhAE2n6bZfC3HeQKVLf0kWwDk6aT2XC3OMMnP4kL4zMCdMqtXRk
+         07bD0nalBE/OrATU3db2oyPTO5NNUkfxc4H+iaAlRu64izStcduJ7toBX2wFPONLb03I
+         BThmxYm3oLoTblXggG8a/RmZ5xpT1VWkpgzNOLMrYhWMoQjDBoHixJekdtDptKVCbwyU
+         YYOr4mhzIKyJ2pkArHWAC0faB1DRm+YM/bZgMRghDjkq1JHCME44jA/LKQyPsgSYbfrr
+         ZAjQ==
+X-Gm-Message-State: AOAM533e/gk/AtwZAztlRVL0Ycs5bmQ2piuRNRZT2fKh7DnWxhwcZ+3T
+        f54v0IWvkwzrV4uBcuFPdrntIAUReKTUj9vqGTU=
+X-Google-Smtp-Source: ABdhPJyIn9jY/EM3NsfRCWQKiTNIKSQPUd00zlTTnc7nT1mAHIfsQMOpQ0BCDXxFJdSy6q+gIIZeHW6pK4msqPWqZAo=
+X-Received: by 2002:a1c:46c6:: with SMTP id t189mr1159422wma.79.1604956887879;
+ Mon, 09 Nov 2020 13:21:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+References: <20201109210725.24668-1-unixbhaskar@gmail.com>
+In-Reply-To: <20201109210725.24668-1-unixbhaskar@gmail.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Mon, 9 Nov 2020 16:21:16 -0500
+Message-ID: <CADnq5_NOmgYM0_0fTQaYr+qn7M_Vrbo1E=mPmuoATQNjRRHTqg@mail.gmail.com>
+Subject: Re: [PATCH] drivers: amdgpu: amdgpu_display: Fixed the spelling of
+ falg to flag
+To:     Bhaskar Chowdhury <unixbhaskar@gmail.com>
+Cc:     "Deucher, Alexander" <alexander.deucher@amd.com>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Dave Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jean Delvare <jdelvare@suse.de>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fixes the following W=1 kernel build warning(s):
+On Mon, Nov 9, 2020 at 4:16 PM Bhaskar Chowdhury <unixbhaskar@gmail.com> wrote:
+>
+> s/falg/flag/p
+>
+> Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
 
-Cc: Alex Deucher <alexander.deucher@amd.com>
-Cc: "Christian König" <christian.koenig@amd.com>
-Cc: David Airlie <airlied@linux.ie>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: amd-gfx@lists.freedesktop.org
-Cc: dri-devel@lists.freedesktop.org
-Cc: linux-media@vger.kernel.org
-Cc: linaro-mm-sig@lists.linaro.org
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
----
- drivers/gpu/drm/radeon/radeon.h          | 2 ++
- drivers/gpu/drm/radeon/radeon_atombios.c | 5 -----
- drivers/gpu/drm/radeon/radeon_combios.c  | 5 -----
- 3 files changed, 2 insertions(+), 10 deletions(-)
+Applied.  Thanks!
 
-diff --git a/drivers/gpu/drm/radeon/radeon.h b/drivers/gpu/drm/radeon/radeon.h
-index 0cc8f081e113a..421f6b26512ed 100644
---- a/drivers/gpu/drm/radeon/radeon.h
-+++ b/drivers/gpu/drm/radeon/radeon.h
-@@ -2819,6 +2819,8 @@ extern int radeon_cs_parser_init(struct radeon_cs_parser *p, void *data);
- extern void radeon_legacy_set_clock_gating(struct radeon_device *rdev, int enable);
- extern void radeon_legacy_backlight_init(struct radeon_encoder *radeon_encoder,
- 					 struct drm_connector *drm_connector);
-+extern void radeon_add_legacy_encoder(struct drm_device *dev, uint32_t encoder_enum,
-+				      uint32_t supported_device);
- extern void radeon_atom_set_clock_gating(struct radeon_device *rdev, int enable);
- extern void radeon_ttm_placement_from_domain(struct radeon_bo *rbo, u32 domain);
- extern bool radeon_ttm_bo_is_radeon_bo(struct ttm_buffer_object *bo);
-diff --git a/drivers/gpu/drm/radeon/radeon_atombios.c b/drivers/gpu/drm/radeon/radeon_atombios.c
-index 5d25917251892..557960e3b204f 100644
---- a/drivers/gpu/drm/radeon/radeon_atombios.c
-+++ b/drivers/gpu/drm/radeon/radeon_atombios.c
-@@ -39,11 +39,6 @@ extern void
- radeon_add_atom_encoder(struct drm_device *dev, uint32_t encoder_enum,
- 			uint32_t supported_device, u16 caps);
- 
--/* from radeon_legacy_encoder.c */
--extern void
--radeon_add_legacy_encoder(struct drm_device *dev, uint32_t encoder_enum,
--			  uint32_t supported_device);
--
- union atom_supported_devices {
- 	struct _ATOM_SUPPORTED_DEVICES_INFO info;
- 	struct _ATOM_SUPPORTED_DEVICES_INFO_2 info_2;
-diff --git a/drivers/gpu/drm/radeon/radeon_combios.c b/drivers/gpu/drm/radeon/radeon_combios.c
-index d3c04df7e75d7..b8cd37d76d8bf 100644
---- a/drivers/gpu/drm/radeon/radeon_combios.c
-+++ b/drivers/gpu/drm/radeon/radeon_combios.c
-@@ -40,11 +40,6 @@
- #include <asm/prom.h>
- #endif /* CONFIG_PPC_PMAC */
- 
--/* from radeon_legacy_encoder.c */
--extern void
--radeon_add_legacy_encoder(struct drm_device *dev, uint32_t encoder_enum,
--			  uint32_t supported_device);
--
- /* old legacy ATI BIOS routines */
- 
- /* COMBIOS table offsets */
--- 
-2.25.1
+Alex
 
+> ---
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_display.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
+> index 2e8a8b57639f..9223502c1e5b 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
+> @@ -509,7 +509,7 @@ uint32_t amdgpu_display_supported_domains(struct amdgpu_device *adev,
+>          * to avoid hang caused by placement of scanout BO in GTT on certain
+>          * APUs. So force the BO placement to VRAM in case this architecture
+>          * will not allow USWC mappings.
+> -        * Also, don't allow GTT domain if the BO doens't have USWC falg set.
+> +        * Also, don't allow GTT domain if the BO doens't have USWC flag set.
+>          */
+>         if ((bo_flags & AMDGPU_GEM_CREATE_CPU_GTT_USWC) &&
+>             amdgpu_bo_support_uswc(bo_flags) &&
+> --
+> 2.26.2
+>
+> _______________________________________________
+> amd-gfx mailing list
+> amd-gfx@lists.freedesktop.org
+> https://lists.freedesktop.org/mailman/listinfo/amd-gfx
