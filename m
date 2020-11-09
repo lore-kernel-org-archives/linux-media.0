@@ -2,119 +2,112 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F3B3C388F7
-	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 18:22:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80F3FC5517A
+	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 18:32:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1457120781
-	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 18:22:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 26DFD206D8
+	for <linux-media@archiver.kernel.org>; Mon,  9 Nov 2020 18:32:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="E5ipTHd3"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="EtajP82p"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730263AbgKISWd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 Nov 2020 13:22:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42978 "EHLO
+        id S1729454AbgKIScJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 Nov 2020 13:32:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730181AbgKISWc (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Nov 2020 13:22:32 -0500
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D772EC0613CF
-        for <linux-media@vger.kernel.org>; Mon,  9 Nov 2020 10:22:31 -0800 (PST)
-Received: by mail-wm1-x342.google.com with SMTP id h2so410722wmm.0
-        for <linux-media@vger.kernel.org>; Mon, 09 Nov 2020 10:22:31 -0800 (PST)
+        with ESMTP id S1726952AbgKIScJ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Nov 2020 13:32:09 -0500
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8287C0613D3
+        for <linux-media@vger.kernel.org>; Mon,  9 Nov 2020 10:32:08 -0800 (PST)
+Received: by mail-ej1-x642.google.com with SMTP id za3so13718367ejb.5
+        for <linux-media@vger.kernel.org>; Mon, 09 Nov 2020 10:32:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=LEqBSYfgnwhk/ZNzzzB95lzeseOVAaohNofEs1LOZBI=;
-        b=E5ipTHd3WeDI78ksj0wsN8ta6sheG/AQB8BQ8iXDHY5Vcd5UP94Rmeb7qV39CI/m/s
-         b/TNUumxNIHspIcHhdFCsiyjqRYTDi6pnvzjl7SpwuZ+Oxt03xpdAj/3MRJXnqIcQqWJ
-         2CWq8IcW42vMXfoIzw9qhqEQzXFH2P7lqowbg2tr3Hh8NbC7AA/znooc5voi/95YHJWY
-         oayfshr76vF8oeDXsIWE4y755y3n4vV4To8KDCOWY1QgtknHx0PM6y01BzoWa4VjGVS3
-         lm90zOwPqown5kRN4b1GJ0vNIkHGg1TCABjsQk3PkyG7Wq5ZPMW7LC2B3OmnIXnbkm9I
-         pOkA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IleGIJZzQ/fVs3LTovTtPZbHIKvQDjde3rU/8zBLt+Y=;
+        b=EtajP82pPEWPNnuIMtZD9zDC0LVEjGeiy8Apk4BGecDfoXybbYQ/aAIolsdroW2DaU
+         eOB6zzKtGOvK6uDn/Mdm6f07Nqwz9BCc4pXgFcAn65dqhIX2G4nWPVpCpmHCEuHXvw5/
+         ion83q0HLIhTu0slRxGmhsZW+3QAWvKDoobJE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=LEqBSYfgnwhk/ZNzzzB95lzeseOVAaohNofEs1LOZBI=;
-        b=chQX6L1LdsbJqJ8XOZTaEq2jg/ref1FU3w3ovfuLjtYoWacGH5rApJn8HaVqttV0gl
-         jJvLk3DmPmn6BvPXe06YwQ6sFkhbzJPhL2Rukfbg2dJ4ksRVtPlpgqKpUDMj3vvcpR+5
-         oNj0E8p6OAgng/NJKSerV3H97O3GK6m4oXzq91iN0dEalQSunbwbABqu4k/oH3izx7JF
-         qJbE+R++BlWkZYnPZ5XsbhxCpmM3PHxCJyG3lkUJXjQ4mJeWNRjQxaugNeSAsPpJ/gdG
-         kC2/8qzgmsY8XPaKz52jg3ckQRG1rYI/e1jXfmDAES0UAeml0aWB7FqdZGhgbG3PmAwA
-         uN9A==
-X-Gm-Message-State: AOAM531WE/+MxO8jt2pXecZMsDXK9OONU+mhh4bCaExSoA1pstwJyUAe
-        hWLr5nIhfBW8NKAa0K6JzuCoRw==
-X-Google-Smtp-Source: ABdhPJyaVPP3HEd2IjowyvIOVawlg8jsDXag6dU6Ag6aKnnQvcujBiDSl7HF2Rx1NPFQXIBYU4qlLg==
-X-Received: by 2002:a1c:a98c:: with SMTP id s134mr443690wme.159.1604946150581;
-        Mon, 09 Nov 2020 10:22:30 -0800 (PST)
-Received: from dell.default ([91.110.221.180])
-        by smtp.gmail.com with ESMTPSA id g186sm735365wma.1.2020.11.09.10.22.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2020 10:22:29 -0800 (PST)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        linux-mtd@lists.infradead.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
-Subject: [PATCH v3 07/23] mtd: spi-nor: hisi-sfc: Demote non-conformant kernel-doc
-Date:   Mon,  9 Nov 2020 18:21:50 +0000
-Message-Id: <20201109182206.3037326-8-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201109182206.3037326-1-lee.jones@linaro.org>
-References: <20201109182206.3037326-1-lee.jones@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IleGIJZzQ/fVs3LTovTtPZbHIKvQDjde3rU/8zBLt+Y=;
+        b=WUOIjQPe6iOgOXi8jyIwotosH3hy1WcXZSicz87PR4OTM8kQ6fPPGouxygmtJX2aOt
+         2Kkn3TXh5vIwcbhPl3ilvdWHkxWaEE5JFqWa6edfEIo+b4y9aO2kZT4BX6KwBm1lALCw
+         2a37I/GjbpDHOaPyRlwGBvt5z+be7um4RiVE7sj6OBgPOSD1Hzqxs6yAU5ld4B9YebAs
+         RrTZfJSuFDl7x8kj4QZq5fgCLE5paTEqBj/XLiDwMcpmqFshdJygL6W4qXdn5tGZ5MAq
+         7mgPP50OlM4yGdm+Gt0ufZtzJMIkH2/NyCjCbnPOdU/GdcATBf/e60JfehRFRDDREsK3
+         0pvQ==
+X-Gm-Message-State: AOAM532RQeSQCk5/ZNfuvBBv4vXG2Yqusb8QHdX6UV3T/4BcwGfBtRmL
+        iCct/ciq6t0fsllxXsCXH/HMnqqe9hjWDQ==
+X-Google-Smtp-Source: ABdhPJzPJVjjQtNULOcusnYvkur7yb4kPdICzLDDgE4Klt5/val+jZkCQGSzvAhGoD+58XpMQuNbnw==
+X-Received: by 2002:a17:906:934d:: with SMTP id p13mr15839281ejw.245.1604946727188;
+        Mon, 09 Nov 2020 10:32:07 -0800 (PST)
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
+        by smtp.gmail.com with ESMTPSA id x1sm5530064edl.82.2020.11.09.10.32.06
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Nov 2020 10:32:06 -0800 (PST)
+Received: by mail-wm1-f54.google.com with SMTP id c9so416034wml.5
+        for <linux-media@vger.kernel.org>; Mon, 09 Nov 2020 10:32:06 -0800 (PST)
+X-Received: by 2002:a1c:1c3:: with SMTP id 186mr488018wmb.39.1604946725873;
+ Mon, 09 Nov 2020 10:32:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+References: <1604312674-1621-1-git-send-email-mansur@codeaurora.org>
+In-Reply-To: <1604312674-1621-1-git-send-email-mansur@codeaurora.org>
+From:   Fritz Koenig <frkoenig@chromium.org>
+Date:   Mon, 9 Nov 2020 10:31:53 -0800
+X-Gmail-Original-Message-ID: <CAMfZQbywEfmKHabwpC=6AuBXjiGpswE=+S4qKRRHArhOLGg7dQ@mail.gmail.com>
+Message-ID: <CAMfZQbywEfmKHabwpC=6AuBXjiGpswE=+S4qKRRHArhOLGg7dQ@mail.gmail.com>
+Subject: Re: [PATCH] venus: fix calculating mbps in calculate_inst_freq()
+To:     Mansur Alisha Shaik <mansur@codeaurora.org>
+Cc:     linux-media@vger.kernel.org,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Vikash Garodia <vgarodia@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fixes the following W=1 kernel build warning(s):
+On Mon, Nov 2, 2020 at 2:25 AM Mansur Alisha Shaik
+<mansur@codeaurora.org> wrote:
+>
+> Currently in calculate_inst_freq() video driver is calculating
+> macro blocks per frame in steam of macro blocks per second(mpbs).
+> Which results frequency is always setting to lower frequency (150MB)
+> as per frequency table for sc7180. Hence the playback is not smooth.
+>
+> Corrected this by correcting the mbps calculation.
+>
+> Signed-off-by: Mansur Alisha Shaik <mansur@codeaurora.org>
+> ---
+>  drivers/media/platform/qcom/venus/pm_helpers.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
+> index 57877ea..001513f 100644
+> --- a/drivers/media/platform/qcom/venus/pm_helpers.c
+> +++ b/drivers/media/platform/qcom/venus/pm_helpers.c
+> @@ -928,7 +928,7 @@ static unsigned long calculate_inst_freq(struct venus_inst *inst,
+>         u32 fps = (u32)inst->fps;
+>         u32 mbs_per_sec;
+>
+> -       mbs_per_sec = load_per_instance(inst) / fps;
+> +       mbs_per_sec = load_per_instance(inst);
+>
+>         vpp_freq = mbs_per_sec * inst->clk_data.codec_freq_data->vpp_freq;
+>         /* 21 / 20 is overhead factor */
+> --
+> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+> of Code Aurora Forum, hosted by The Linux Foundation
+>
 
- drivers/mtd/spi-nor/controllers/hisi-sfc.c:328: warning: Function parameter or member 'np' not described in 'hisi_spi_nor_register'
- drivers/mtd/spi-nor/controllers/hisi-sfc.c:328: warning: Function parameter or member 'host' not described in 'hisi_spi_nor_register'
-
-Cc: Tudor Ambarus <tudor.ambarus@microchip.com>
-Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Richard Weinberger <richard@nod.at>
-Cc: Vignesh Raghavendra <vigneshr@ti.com>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: "Christian König" <christian.koenig@amd.com>
-Cc: linux-mtd@lists.infradead.org
-Cc: linux-media@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org
-Cc: linaro-mm-sig@lists.linaro.org
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
-Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
----
- drivers/mtd/spi-nor/controllers/hisi-sfc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/mtd/spi-nor/controllers/hisi-sfc.c b/drivers/mtd/spi-nor/controllers/hisi-sfc.c
-index 95c502173cbda..7c26f8f565cba 100644
---- a/drivers/mtd/spi-nor/controllers/hisi-sfc.c
-+++ b/drivers/mtd/spi-nor/controllers/hisi-sfc.c
-@@ -320,7 +320,7 @@ static const struct spi_nor_controller_ops hisi_controller_ops = {
- 	.write = hisi_spi_nor_write,
- };
- 
--/**
-+/*
-  * Get spi flash device information and register it as a mtd device.
-  */
- static int hisi_spi_nor_register(struct device_node *np,
--- 
-2.25.1
-
+Reviewed-by: Fritz Koenig <frkoenig@chromium.org>
