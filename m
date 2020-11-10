@@ -2,3173 +2,759 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FAKE_REPLY_C,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C026DC4741F
-	for <linux-media@archiver.kernel.org>; Tue, 10 Nov 2020 17:41:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F98CC388F7
+	for <linux-media@archiver.kernel.org>; Tue, 10 Nov 2020 18:57:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5BAE5207D3
-	for <linux-media@archiver.kernel.org>; Tue, 10 Nov 2020 17:41:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7E88320797
+	for <linux-media@archiver.kernel.org>; Tue, 10 Nov 2020 18:57:25 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="MZmKaZB4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730504AbgKJRlD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Nov 2020 12:41:03 -0500
-Received: from relay9-d.mail.gandi.net ([217.70.183.199]:53701 "EHLO
-        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726557AbgKJRlC (ORCPT
+        id S1731613AbgKJS5V (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Nov 2020 13:57:21 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:60742 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730618AbgKJS5V (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Nov 2020 12:41:02 -0500
-X-Originating-IP: 93.34.118.233
-Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 8AA68FF805;
-        Tue, 10 Nov 2020 17:40:48 +0000 (UTC)
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     linux-media@vger.kernel.org
-Cc:     Jacopo Mondi <jacopo@jmondi.org>, naush@raspberrypi.com,
-        dave.stevenson@raspberrypi.com, laurent.pinchart@ideasonboard.com,
-        kieran.bingham@ideasonboard.com, niklas.soderlund@ragnatech.se,
-        dafna.hirschfeld@collabora.com, hverkuil@xs4all.nl,
-        sakari.ailus@iki.fi, nsaenzjulienne@suse.de,
-        mchehab+huawei@kernel.org
-Subject: [PATCH v4 3/5] media: bcm2835-unicam: Driver for CCP2/CSI2 camera interface
-Date:   Tue, 10 Nov 2020 18:40:34 +0100
-Message-Id: <20201110174036.220883-4-jacopo@jmondi.org>
-X-Mailer: git-send-email 2.29.1
-In-Reply-To: <20201110174036.220883-1-jacopo@jmondi.org>
-References: <20201110174036.220883-1-jacopo@jmondi.org>
+        Tue, 10 Nov 2020 13:57:21 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AAIiMBK014937;
+        Tue, 10 Nov 2020 18:56:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type : in-reply-to;
+ s=corp-2020-01-29; bh=ryh49OBk2mMnMhpd3oelolrjc0lRepSkOUFio8gS0yw=;
+ b=MZmKaZB4WpVaY6HqHNeFiFYv7LOZuiCuhHIEq7IpNqNjcIr6Q4ZhIh2yBFF6YNkuUgyO
+ kO/SpawPlpVNjbii/dM/Jf5U6T2kX64J/b25GwGuk2E6xpiyBFu94gqXq0RZajhuGB6T
+ p1P2E0PwqYeDMksIAdUT1wOl6eYGxfEQHmse0etOHGHKr0Q2LQkFqyBQ3Qdtiop+2k8s
+ Bcm51YUWHAP3cO+5ivWq9Z9VB+mdd+rA9ZCbsJSXqHVN7vfZ9x8gGTSWddvI1mNRQClA
+ W+xhumUEFgwNS6Ggy4hJtaZBAOtNnOizU94pG6dgvP4PpiC3Q/UuWvXCuqrNe6TBzIW4 Yw== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2120.oracle.com with ESMTP id 34nkhkw9yq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 10 Nov 2020 18:56:41 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AAIiqpm048054;
+        Tue, 10 Nov 2020 18:56:41 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3020.oracle.com with ESMTP id 34p5g0r8x2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 10 Nov 2020 18:56:41 +0000
+Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0AAIuXVD001923;
+        Tue, 10 Nov 2020 18:56:34 GMT
+Received: from kadam (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 10 Nov 2020 10:56:32 -0800
+Date:   Tue, 10 Nov 2020 21:56:23 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     kbuild@lists.01.org, Ezequiel Garcia <ezequiel@collabora.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     lkp@intel.com, kbuild-all@lists.01.org, kernel@collabora.com,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+Subject: Re: [PATCH v2 3/3] media: uapi: mpeg2: Split sequence and picture
+ parameters
+Message-ID: <20201110185623.GH29398@kadam>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed; boundary="mSxgbZZZvrAyzONB"
+Content-Disposition: inline
+In-Reply-To: <20201105205118.178458-4-ezequiel@collabora.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9801 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 malwarescore=0
+ adultscore=0 phishscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2011100129
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9801 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 priorityscore=1501
+ mlxscore=0 suspectscore=0 mlxlogscore=999 lowpriorityscore=0 spamscore=0
+ malwarescore=0 adultscore=0 clxscore=1011 bulkscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2011100129
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Naushir Patuck <naush@raspberrypi.com>
 
-Add a driver for the Unicam camera receiver block on BCM283x processors.
-Compared to the bcm2835-camera driver present in staging, this driver
-handles the Unicam block only (CSI-2 receiver), and doesn't depend on
-the VC4 firmware running on the VPU.
+--mSxgbZZZvrAyzONB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The commit is made up of a series of changes cherry-picked from the
-rpi-5.9.y branch of https://github.com/raspberrypi/linux/ at revision
-commit be371a8ffc012
-("media: bcm2835-unicam: change minimum number of vb2_queue buffers to 1")
-with additional enhancements, forward-ported to the mainline kernel.
+Hi Ezequiel,
 
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
----
- MAINTAINERS                                   |    7 +
- drivers/staging/media/Kconfig                 |    2 +
- drivers/staging/media/Makefile                |    1 +
- drivers/staging/media/bcm2835-unicam/Kconfig  |   21 +
- drivers/staging/media/bcm2835-unicam/Makefile |    3 +
- .../media/bcm2835-unicam/bcm2835-unicam.c     | 2750 +++++++++++++++++
- .../media/bcm2835-unicam/vc4-regs-unicam.h    |  253 ++
- 7 files changed, 3037 insertions(+)
- create mode 100644 drivers/staging/media/bcm2835-unicam/Kconfig
- create mode 100644 drivers/staging/media/bcm2835-unicam/Makefile
- create mode 100644 drivers/staging/media/bcm2835-unicam/bcm2835-unicam.c
- create mode 100644 drivers/staging/media/bcm2835-unicam/vc4-regs-unicam.h
+url:    https://github.com/0day-ci/linux/commits/Ezequiel-Garcia/MPEG-2-stateless-API-cleanup/20201106-045304
+base:   git://linuxtv.org/media_tree.git master
+config: i386-randconfig-m021-20201110 (attached as .config)
+compiler: gcc-9 (Debian 9.3.0-15) 9.3.0
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 811db1d3ca33b..69d55ed67e1cf 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3411,6 +3411,13 @@ N:	bcm113*
- N:	bcm216*
- N:	kona
- 
-+BROADCOM BCM2835 CAMERA DRIVER
-+M:	Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>
-+L:	linux-media@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
-+F:	drivers/staging/media/bcm2835/
-+
- BROADCOM BCM47XX MIPS ARCHITECTURE
- M:	Hauke Mehrtens <hauke@hauke-m.de>
- M:	Rafał Miłecki <zajec5@gmail.com>
-diff --git a/drivers/staging/media/Kconfig b/drivers/staging/media/Kconfig
-index 747c6cf1d795e..b734e882f63c9 100644
---- a/drivers/staging/media/Kconfig
-+++ b/drivers/staging/media/Kconfig
-@@ -46,4 +46,6 @@ source "drivers/staging/media/ipu3/Kconfig"
- 
- source "drivers/staging/media/rkisp1/Kconfig"
- 
-+source "drivers/staging/media/bcm2835-unicam/Kconfig"
-+
- endif
-diff --git a/drivers/staging/media/Makefile b/drivers/staging/media/Makefile
-index b59571826ba69..93d819ef243f1 100644
---- a/drivers/staging/media/Makefile
-+++ b/drivers/staging/media/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-$(CONFIG_VIDEO_ALLEGRO_DVT)	+= allegro-dvt/
- obj-$(CONFIG_INTEL_ATOMISP)     += atomisp/
-+obj-$(CONFIG_VIDEO_BCM2835_UNICAM)	+= bcm2835-unicam/
- obj-$(CONFIG_VIDEO_IMX_MEDIA)	+= imx/
- obj-$(CONFIG_VIDEO_MESON_VDEC)	+= meson/vdec/
- obj-$(CONFIG_VIDEO_OMAP4)	+= omap4iss/
-diff --git a/drivers/staging/media/bcm2835-unicam/Kconfig b/drivers/staging/media/bcm2835-unicam/Kconfig
-new file mode 100644
-index 0000000000000..bd13701996509
---- /dev/null
-+++ b/drivers/staging/media/bcm2835-unicam/Kconfig
-@@ -0,0 +1,21 @@
-+# Broadcom VideoCore4 V4L2 camera support
-+
-+config VIDEO_BCM2835_UNICAM
-+	tristate "Broadcom BCM283x/BCM271x Unicam video capture driver"
-+	depends on VIDEO_V4L2
-+	depends on ARCH_BCM2835 || COMPILE_TEST
-+	select VIDEO_V4L2_SUBDEV_API
-+	select MEDIA_CONTROLLER
-+	select VIDEOBUF2_DMA_CONTIG
-+	select V4L2_FWNODE
-+	help
-+	  Say Y here to enable support for the BCM283x/BCM271x CSI-2 receiver.
-+	  This is a V4L2 driver that controls the CSI-2 receiver directly,
-+	  independently from the VC4 firmware.
-+	  This driver is mutually exclusive with the use of bcm2835-camera. The
-+	  firmware will disable all access to the peripheral from within the
-+	  firmware if it finds a DT node using it, and bcm2835-camera will
-+	  therefore fail to probe.
-+
-+	  To compile this driver as a module, choose M here. The module will be
-+	  called bcm2835-unicam.
-diff --git a/drivers/staging/media/bcm2835-unicam/Makefile b/drivers/staging/media/bcm2835-unicam/Makefile
-new file mode 100644
-index 0000000000000..a98aba03598ab
---- /dev/null
-+++ b/drivers/staging/media/bcm2835-unicam/Makefile
-@@ -0,0 +1,3 @@
-+# Makefile for BCM2835 Unicam driver
-+
-+obj-$(CONFIG_VIDEO_BCM2835_UNICAM) += bcm2835-unicam.o
-diff --git a/drivers/staging/media/bcm2835-unicam/bcm2835-unicam.c b/drivers/staging/media/bcm2835-unicam/bcm2835-unicam.c
-new file mode 100644
-index 0000000000000..3e365baa8197f
---- /dev/null
-+++ b/drivers/staging/media/bcm2835-unicam/bcm2835-unicam.c
-@@ -0,0 +1,2750 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * BCM283x / BCM271x Unicam Capture Driver
-+ *
-+ * Copyright (C) 2017-2020 - Raspberry Pi (Trading) Ltd.
-+ *
-+ * Dave Stevenson <dave.stevenson@raspberrypi.com>
-+ *
-+ * Based on TI am437x driver by
-+ *   Benoit Parrot <bparrot@ti.com>
-+ *   Lad, Prabhakar <prabhakar.csengg@gmail.com>
-+ *
-+ * and TI CAL camera interface driver by
-+ *    Benoit Parrot <bparrot@ti.com>
-+ *
-+ *
-+ * There are two camera drivers in the kernel for BCM283x - this one
-+ * and bcm2835-camera (currently in staging).
-+ *
-+ * This driver directly controls the Unicam peripheral - there is no
-+ * involvement with the VideoCore firmware. Unicam receives CSI-2 or
-+ * CCP2 data and writes it into SDRAM.
-+ * The only potential processing options are to repack Bayer data into an
-+ * alternate format, and applying windowing.
-+ * The repacking does not shift the data, so can repack V4L2_PIX_FMT_Sxxxx10P
-+ * to V4L2_PIX_FMT_Sxxxx10, or V4L2_PIX_FMT_Sxxxx12P to V4L2_PIX_FMT_Sxxxx12,
-+ * but not generically up to V4L2_PIX_FMT_Sxxxx16. The driver will add both
-+ * formats where the relevant formats are defined, and will automatically
-+ * configure the repacking as required.
-+ * Support for windowing may be added later.
-+ *
-+ * It should be possible to connect this driver to any sensor with a
-+ * suitable output interface and V4L2 subdevice driver.
-+ *
-+ * bcm2835-camera uses the VideoCore firmware to control the sensor,
-+ * Unicam, ISP, and all tuner control loops. Fully processed frames are
-+ * delivered to the driver by the firmware. It only has sensor drivers
-+ * for Omnivision OV5647, and Sony IMX219 sensors.
-+ *
-+ * The two drivers are mutually exclusive for the same Unicam instance.
-+ * The VideoCore firmware checks the device tree configuration during boot.
-+ * If it finds device tree nodes called csi0 or csi1 it will block the
-+ * firmware from accessing the peripheral, and bcm2835-camera will
-+ * not be able to stream data.
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/delay.h>
-+#include <linux/device.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/err.h>
-+#include <linux/init.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/of_graph.h>
-+#include <linux/pinctrl/consumer.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/slab.h>
-+#include <linux/uaccess.h>
-+#include <linux/videodev2.h>
-+
-+#include <media/v4l2-common.h>
-+#include <media/v4l2-ctrls.h>
-+#include <media/v4l2-dev.h>
-+#include <media/v4l2-device.h>
-+#include <media/v4l2-dv-timings.h>
-+#include <media/v4l2-event.h>
-+#include <media/v4l2-ioctl.h>
-+#include <media/v4l2-fwnode.h>
-+#include <media/videobuf2-dma-contig.h>
-+
-+#include "vc4-regs-unicam.h"
-+
-+#define UNICAM_MODULE_NAME	"unicam"
-+#define UNICAM_VERSION		"0.1.0"
-+
-+/*
-+ * Unicam must request a minimum of 250Mhz from the VPU clock.
-+ * Otherwise the input FIFOs overrun and cause image corruption.
-+ */
-+#define MIN_VPU_CLOCK_RATE (250 * 1000 * 1000)
-+/*
-+ * To protect against a dodgy sensor driver never returning an error from
-+ * enum_mbus_code, set a maximum index value to be used.
-+ */
-+#define MAX_ENUM_MBUS_CODE	128
-+
-+/*
-+ * Stride is a 16 bit register, but also has to be a multiple of 32.
-+ */
-+#define BPL_ALIGNMENT		32
-+#define MAX_BYTESPERLINE	((1 << 16) - BPL_ALIGNMENT)
-+/*
-+ * Max width is therefore determined by the max stride divided by
-+ * the number of bits per pixel. Take 32bpp as a
-+ * worst case.
-+ * No imposed limit on the height, so adopt a square image for want
-+ * of anything better.
-+ */
-+#define MAX_WIDTH		(MAX_BYTESPERLINE / 4)
-+#define MAX_HEIGHT		MAX_WIDTH
-+/* Define a nominal minimum image size */
-+#define MIN_WIDTH		16
-+#define MIN_HEIGHT		16
-+
-+/*
-+ * Size of the dummy buffer. Can be any size really, but the DMA
-+ * allocation works in units of page sizes.
-+ */
-+#define DUMMY_BUF_SIZE		(PAGE_SIZE)
-+
-+/* Enumeration of the video device node identifiers. */
-+enum unicam_node_ids {
-+	IMAGE_NODE,
-+	METADATA_NODE,
-+	MAX_NODES
-+};
-+
-+/*
-+ * Associate video device nodes with the subdevice's source pad ids.
-+ * The image video device is connected to the subdevice pad #0;
-+ * The metadata video device is connected to the subdevice pad #1;
-+ */
-+unsigned int subdev_pads[2] = {
-+	[IMAGE_NODE]	= 0,
-+	[METADATA_NODE]	= 1,
-+};
-+
-+/*
-+ * struct unicam_fmt - Unicam media bus format information
-+ * @pixelformat: V4L2 pixel format FCC identifier. 0 if n/a.
-+ * @repacked_fourcc: V4L2 pixel format FCC identifier if the data is expanded
-+ * out to 16bpp. 0 if n/a.
-+ * @code: V4L2 media bus format code.
-+ * @depth: Bits per pixel as delivered from the source.
-+ * @csi_dt: CSI data type.
-+ * @check_variants: Flag to denote that there are multiple mediabus formats
-+ *		still in the list that could match this V4L2 format.
-+ */
-+struct unicam_fmt {
-+	u32	fourcc;
-+	u32	repacked_fourcc;
-+	u32	code;
-+	u8	depth;
-+	u8	csi_dt;
-+	u8	check_variants;
-+};
-+
-+static const struct unicam_fmt formats[] = {
-+	/* YUV Formats */
-+	{
-+		.fourcc		= V4L2_PIX_FMT_YUYV,
-+		.code		= MEDIA_BUS_FMT_YUYV8_2X8,
-+		.depth		= 16,
-+		.csi_dt		= 0x1e,
-+		.check_variants = 1,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_UYVY,
-+		.code		= MEDIA_BUS_FMT_UYVY8_2X8,
-+		.depth		= 16,
-+		.csi_dt		= 0x1e,
-+		.check_variants = 1,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_YVYU,
-+		.code		= MEDIA_BUS_FMT_YVYU8_2X8,
-+		.depth		= 16,
-+		.csi_dt		= 0x1e,
-+		.check_variants = 1,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_VYUY,
-+		.code		= MEDIA_BUS_FMT_VYUY8_2X8,
-+		.depth		= 16,
-+		.csi_dt		= 0x1e,
-+		.check_variants = 1,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_YUYV,
-+		.code		= MEDIA_BUS_FMT_YUYV8_1X16,
-+		.depth		= 16,
-+		.csi_dt		= 0x1e,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_UYVY,
-+		.code		= MEDIA_BUS_FMT_UYVY8_1X16,
-+		.depth		= 16,
-+		.csi_dt		= 0x1e,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_YVYU,
-+		.code		= MEDIA_BUS_FMT_YVYU8_1X16,
-+		.depth		= 16,
-+		.csi_dt		= 0x1e,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_VYUY,
-+		.code		= MEDIA_BUS_FMT_VYUY8_1X16,
-+		.depth		= 16,
-+		.csi_dt		= 0x1e,
-+	}, {
-+	/* RGB Formats */
-+		.fourcc		= V4L2_PIX_FMT_RGB565, /* gggbbbbb rrrrrggg */
-+		.code		= MEDIA_BUS_FMT_RGB565_2X8_LE,
-+		.depth		= 16,
-+		.csi_dt		= 0x22,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_RGB565X, /* rrrrrggg gggbbbbb */
-+		.code		= MEDIA_BUS_FMT_RGB565_2X8_BE,
-+		.depth		= 16,
-+		.csi_dt		= 0x22
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_RGB555, /* gggbbbbb arrrrrgg */
-+		.code		= MEDIA_BUS_FMT_RGB555_2X8_PADHI_LE,
-+		.depth		= 16,
-+		.csi_dt		= 0x21,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_RGB555X, /* arrrrrgg gggbbbbb */
-+		.code		= MEDIA_BUS_FMT_RGB555_2X8_PADHI_BE,
-+		.depth		= 16,
-+		.csi_dt		= 0x21,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_RGB24, /* rgb */
-+		.code		= MEDIA_BUS_FMT_RGB888_1X24,
-+		.depth		= 24,
-+		.csi_dt		= 0x24,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_BGR24, /* bgr */
-+		.code		= MEDIA_BUS_FMT_BGR888_1X24,
-+		.depth		= 24,
-+		.csi_dt		= 0x24,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_RGB32, /* argb */
-+		.code		= MEDIA_BUS_FMT_ARGB8888_1X32,
-+		.depth		= 32,
-+		.csi_dt		= 0x0,
-+	}, {
-+	/* Bayer Formats */
-+		.fourcc		= V4L2_PIX_FMT_SBGGR8,
-+		.code		= MEDIA_BUS_FMT_SBGGR8_1X8,
-+		.depth		= 8,
-+		.csi_dt		= 0x2a,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_SGBRG8,
-+		.code		= MEDIA_BUS_FMT_SGBRG8_1X8,
-+		.depth		= 8,
-+		.csi_dt		= 0x2a,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_SGRBG8,
-+		.code		= MEDIA_BUS_FMT_SGRBG8_1X8,
-+		.depth		= 8,
-+		.csi_dt		= 0x2a,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_SRGGB8,
-+		.code		= MEDIA_BUS_FMT_SRGGB8_1X8,
-+		.depth		= 8,
-+		.csi_dt		= 0x2a,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_SBGGR10P,
-+		.repacked_fourcc = V4L2_PIX_FMT_SBGGR10,
-+		.code		= MEDIA_BUS_FMT_SBGGR10_1X10,
-+		.depth		= 10,
-+		.csi_dt		= 0x2b,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_SGBRG10P,
-+		.repacked_fourcc = V4L2_PIX_FMT_SGBRG10,
-+		.code		= MEDIA_BUS_FMT_SGBRG10_1X10,
-+		.depth		= 10,
-+		.csi_dt		= 0x2b,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_SGRBG10P,
-+		.repacked_fourcc = V4L2_PIX_FMT_SGRBG10,
-+		.code		= MEDIA_BUS_FMT_SGRBG10_1X10,
-+		.depth		= 10,
-+		.csi_dt		= 0x2b,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_SRGGB10P,
-+		.repacked_fourcc = V4L2_PIX_FMT_SRGGB10,
-+		.code		= MEDIA_BUS_FMT_SRGGB10_1X10,
-+		.depth		= 10,
-+		.csi_dt		= 0x2b,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_SBGGR12P,
-+		.repacked_fourcc = V4L2_PIX_FMT_SBGGR12,
-+		.code		= MEDIA_BUS_FMT_SBGGR12_1X12,
-+		.depth		= 12,
-+		.csi_dt		= 0x2c,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_SGBRG12P,
-+		.repacked_fourcc = V4L2_PIX_FMT_SGBRG12,
-+		.code		= MEDIA_BUS_FMT_SGBRG12_1X12,
-+		.depth		= 12,
-+		.csi_dt		= 0x2c,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_SGRBG12P,
-+		.repacked_fourcc = V4L2_PIX_FMT_SGRBG12,
-+		.code		= MEDIA_BUS_FMT_SGRBG12_1X12,
-+		.depth		= 12,
-+		.csi_dt		= 0x2c,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_SRGGB12P,
-+		.repacked_fourcc = V4L2_PIX_FMT_SRGGB12,
-+		.code		= MEDIA_BUS_FMT_SRGGB12_1X12,
-+		.depth		= 12,
-+		.csi_dt		= 0x2c,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_SBGGR14P,
-+		.code		= MEDIA_BUS_FMT_SBGGR14_1X14,
-+		.depth		= 14,
-+		.csi_dt		= 0x2d,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_SGBRG14P,
-+		.code		= MEDIA_BUS_FMT_SGBRG14_1X14,
-+		.depth		= 14,
-+		.csi_dt		= 0x2d,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_SGRBG14P,
-+		.code		= MEDIA_BUS_FMT_SGRBG14_1X14,
-+		.depth		= 14,
-+		.csi_dt		= 0x2d,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_SRGGB14P,
-+		.code		= MEDIA_BUS_FMT_SRGGB14_1X14,
-+		.depth		= 14,
-+		.csi_dt		= 0x2d,
-+	}, {
-+	/*
-+	 * 16 bit Bayer formats could be supported, but there is no CSI2
-+	 * data_type defined for raw 16, and no sensors that produce it at
-+	 * present.
-+	 */
-+
-+	/* Greyscale formats */
-+		.fourcc		= V4L2_PIX_FMT_GREY,
-+		.code		= MEDIA_BUS_FMT_Y8_1X8,
-+		.depth		= 8,
-+		.csi_dt		= 0x2a,
-+	}, {
-+		.fourcc		= V4L2_PIX_FMT_Y10P,
-+		.repacked_fourcc = V4L2_PIX_FMT_Y10,
-+		.code		= MEDIA_BUS_FMT_Y10_1X10,
-+		.depth		= 10,
-+		.csi_dt		= 0x2b,
-+	}, {
-+		/* NB There is no packed V4L2 fourcc for this format. */
-+		.repacked_fourcc = V4L2_PIX_FMT_Y12,
-+		.code		= MEDIA_BUS_FMT_Y12_1X12,
-+		.depth		= 12,
-+		.csi_dt		= 0x2c,
-+	},
-+	/* Embedded data format */
-+	{
-+		.fourcc		= V4L2_META_FMT_SENSOR_DATA,
-+		.code		= MEDIA_BUS_FMT_CUSTOM_SENSOR_DATA,
-+		.depth		= 8,
-+	}
-+};
-+
-+struct unicam_buffer {
-+	struct vb2_v4l2_buffer vb;
-+	struct list_head list;
-+};
-+
-+static inline struct unicam_buffer *to_unicam_buffer(struct vb2_buffer *vb)
-+{
-+	return container_of(vb, struct unicam_buffer, vb.vb2_buf);
-+}
-+
-+struct unicam_node {
-+	bool registered;
-+	int open;
-+	bool streaming;
-+	unsigned int node_id;
-+	/* Pointer pointing to current v4l2_buffer */
-+	struct unicam_buffer *cur_frm;
-+	/* Pointer pointing to next v4l2_buffer */
-+	struct unicam_buffer *next_frm;
-+	/* video capture */
-+	const struct unicam_fmt *fmt;
-+	/* Used to store current pixel format */
-+	struct v4l2_format v_fmt;
-+	/* Used to store current mbus frame format */
-+	struct v4l2_mbus_framefmt m_fmt;
-+	/* Buffer queue used in video-buf */
-+	struct vb2_queue buffer_queue;
-+	/* Queue of filled frames */
-+	struct list_head dma_queue;
-+	/* IRQ lock for DMA queue */
-+	spinlock_t dma_queue_lock;
-+	/* lock used to access this structure */
-+	struct mutex lock;
-+	/* Identifies video device for this channel */
-+	struct video_device video_dev;
-+	/* Pointer to the parent handle */
-+	struct unicam_device *dev;
-+	struct media_pad pad;
-+	/*
-+	 * Dummy buffer intended to be used by unicam
-+	 * if we have no other queued buffers to swap to.
-+	 */
-+	void *dummy_buf_cpu_addr;
-+	dma_addr_t dummy_buf_dma_addr;
-+};
-+
-+struct unicam_device {
-+	struct device *dev;
-+
-+	/* V4l2 specific parameters */
-+	struct v4l2_async_subdev asd;
-+
-+	/* peripheral base address */
-+	void __iomem *base;
-+	/* clock gating base address */
-+	void __iomem *clk_gate_base;
-+	/* lp clock handle */
-+	struct clk *clock;
-+	/* vpu clock handle */
-+	struct clk *vpu_clock;
-+	/* V4l2 device */
-+	struct v4l2_device v4l2_dev;
-+	struct media_device mdev;
-+
-+	/* subdevice async Notifier */
-+	struct v4l2_async_notifier notifier;
-+	unsigned int sequence;
-+
-+	/* ptr to  sub device */
-+	struct v4l2_subdev *sensor;
-+	/* Pad config for the sensor */
-+	struct v4l2_subdev_pad_config *sensor_config;
-+
-+	enum v4l2_mbus_type bus_type;
-+	/*
-+	 * Stores bus.mipi_csi2.flags for CSI2 sensors, or
-+	 * bus.mipi_csi1.strobe for CCP2.
-+	 */
-+	unsigned int bus_flags;
-+	unsigned int max_data_lanes;
-+	unsigned int active_data_lanes;
-+
-+	struct unicam_node node[MAX_NODES];
-+	struct v4l2_ctrl_handler ctrl_handler;
-+};
-+
-+static inline struct unicam_device *
-+to_unicam_device(struct v4l2_device *v4l2_dev)
-+{
-+	return container_of(v4l2_dev, struct unicam_device, v4l2_dev);
-+}
-+
-+static char *print_fourcc(u32 fmt)
-+{
-+	static char code[16];
-+
-+	code[0] = (unsigned char)(fmt & 0xff);
-+	code[1] = (unsigned char)((fmt >> 8) & 0xff);
-+	code[2] = (unsigned char)((fmt >> 16) & 0xff);
-+	code[3] = (unsigned char)((fmt >> 24) & 0xff);
-+	snprintf(&code[4], 12, "=0x%8x", fmt);
-+
-+	return code;
-+}
-+
-+/* Hardware access */
-+static inline void clk_write(struct unicam_device *dev, u32 val)
-+{
-+	writel(val | 0x5a000000, dev->clk_gate_base);
-+}
-+
-+static inline u32 reg_read(struct unicam_device *dev, u32 offset)
-+{
-+	return readl(dev->base + offset);
-+}
-+
-+static inline void reg_write(struct unicam_device *dev, u32 offset, u32 val)
-+{
-+	writel(val, dev->base + offset);
-+}
-+
-+static inline int get_field(u32 value, u32 mask)
-+{
-+	return (value & mask) >> __ffs(mask);
-+}
-+
-+static inline void set_field(u32 *valp, u32 field, u32 mask)
-+{
-+	u32 val = *valp;
-+
-+	val &= ~mask;
-+	val |= (field << __ffs(mask)) & mask;
-+	*valp = val;
-+}
-+
-+static inline u32 reg_read_field(struct unicam_device *dev, u32 offset,
-+				 u32 mask)
-+{
-+	return get_field(reg_read(dev, offset), mask);
-+}
-+
-+static inline void reg_write_field(struct unicam_device *dev, u32 offset,
-+				   u32 field, u32 mask)
-+{
-+	u32 val = reg_read(dev, offset);
-+
-+	set_field(&val, field, mask);
-+	reg_write(dev, offset, val);
-+}
-+
-+/* Format setup functions */
-+static const struct unicam_fmt *find_format_by_code(u32 code)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(formats); i++) {
-+		if (formats[i].code == code)
-+			return &formats[i];
-+	}
-+
-+	return NULL;
-+}
-+
-+static int check_mbus_format(struct unicam_device *dev,
-+			     const struct unicam_fmt *format)
-+{
-+	unsigned int i;
-+	int ret = 0;
-+
-+	for (i = 0; !ret && i < MAX_ENUM_MBUS_CODE; i++) {
-+		struct v4l2_subdev_mbus_code_enum mbus_code = {
-+			.index	= i,
-+			.pad	= subdev_pads[IMAGE_NODE],
-+			.which	= V4L2_SUBDEV_FORMAT_ACTIVE,
-+		};
-+
-+		ret = v4l2_subdev_call(dev->sensor, pad, enum_mbus_code,
-+				       NULL, &mbus_code);
-+
-+		if (!ret && mbus_code.code == format->code)
-+			return 1;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct unicam_fmt *find_format_by_pix(struct unicam_device *dev,
-+						   u32 pixelformat)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(formats); i++) {
-+		if (formats[i].fourcc == pixelformat ||
-+		    formats[i].repacked_fourcc == pixelformat) {
-+			if (formats[i].check_variants &&
-+			    !check_mbus_format(dev, &formats[i]))
-+				continue;
-+			return &formats[i];
-+		}
-+	}
-+
-+	return NULL;
-+}
-+
-+static unsigned int bytes_per_line(u32 width, const struct unicam_fmt *fmt,
-+				   u32 v4l2_fourcc)
-+{
-+	if (v4l2_fourcc == fmt->repacked_fourcc)
-+		/* Repacking always goes to 16bpp */
-+		return ALIGN(width << 1, BPL_ALIGNMENT);
-+	else
-+		return ALIGN((width * fmt->depth) >> 3, BPL_ALIGNMENT);
-+}
-+
-+static int __subdev_get_format(struct unicam_device *dev,
-+			       struct v4l2_mbus_framefmt *fmt, int node_id)
-+{
-+	struct v4l2_subdev_format sd_fmt = {
-+		.which	= V4L2_SUBDEV_FORMAT_ACTIVE,
-+		.pad	= subdev_pads[node_id],
-+	};
-+	int ret;
-+
-+	ret = v4l2_subdev_call(dev->sensor, pad, get_fmt, dev->sensor_config,
-+			       &sd_fmt);
-+	if (ret < 0)
-+		return ret;
-+
-+	*fmt = sd_fmt.format;
-+
-+	dev_dbg(dev->dev, "%s %dx%d code:%04x\n", __func__,
-+		fmt->width, fmt->height, fmt->code);
-+
-+	return 0;
-+}
-+
-+static int __subdev_set_format(struct unicam_device *dev,
-+			       struct v4l2_mbus_framefmt *fmt, int node_id)
-+{
-+	struct v4l2_subdev_format sd_fmt = {
-+		.which	= V4L2_SUBDEV_FORMAT_ACTIVE,
-+		.pad	= subdev_pads[node_id],
-+	};
-+	int ret;
-+
-+	sd_fmt.format = *fmt;
-+
-+	ret = v4l2_subdev_call(dev->sensor, pad, set_fmt, dev->sensor_config,
-+			       &sd_fmt);
-+	if (ret < 0)
-+		return ret;
-+
-+	*fmt = sd_fmt.format;
-+
-+	if (node_id == IMAGE_NODE)
-+		dev_dbg(dev->dev, "%s %dx%d code:%04x\n", __func__, fmt->width,
-+			fmt->height, fmt->code);
-+	else
-+		dev_dbg(dev->dev, "%s Embedded data code:%04x\n", __func__,
-+			sd_fmt.format.code);
-+
-+	return 0;
-+}
-+
-+static int unicam_calc_format_size_bpl(struct unicam_device *dev,
-+				       const struct unicam_fmt *fmt,
-+				       struct v4l2_format *f)
-+{
-+	unsigned int min_bytesperline;
-+
-+	v4l_bound_align_image(&f->fmt.pix.width, MIN_WIDTH, MAX_WIDTH, 2,
-+			      &f->fmt.pix.height, MIN_HEIGHT, MAX_HEIGHT, 0,
-+			      0);
-+
-+	min_bytesperline = bytes_per_line(f->fmt.pix.width, fmt,
-+					  f->fmt.pix.pixelformat);
-+
-+	if (f->fmt.pix.bytesperline > min_bytesperline &&
-+	    f->fmt.pix.bytesperline <= MAX_BYTESPERLINE)
-+		f->fmt.pix.bytesperline = ALIGN(f->fmt.pix.bytesperline,
-+						BPL_ALIGNMENT);
-+	else
-+		f->fmt.pix.bytesperline = min_bytesperline;
-+
-+	f->fmt.pix.sizeimage = f->fmt.pix.height * f->fmt.pix.bytesperline;
-+
-+	dev_dbg(dev->dev, "%s: fourcc: %s size: %dx%d bpl:%d img_size:%d\n",
-+		__func__, print_fourcc(f->fmt.pix.pixelformat),
-+		f->fmt.pix.width, f->fmt.pix.height, f->fmt.pix.bytesperline,
-+		f->fmt.pix.sizeimage);
-+
-+	return 0;
-+}
-+
-+static int unicam_reset_format(struct unicam_node *node)
-+{
-+	struct unicam_device *dev = node->dev;
-+	struct v4l2_mbus_framefmt mbus_fmt;
-+	int ret;
-+
-+	ret = __subdev_get_format(dev, &mbus_fmt, node->node_id);
-+	if (ret) {
-+		dev_err(dev->dev, "Failed to get_format - ret %d\n", ret);
-+		return ret;
-+	}
-+
-+	if (mbus_fmt.code != node->fmt->code) {
-+		dev_err(dev->dev,
-+			"code mismatch - fmt->code %08x, mbus_fmt.code %08x\n",
-+			node->fmt->code, mbus_fmt.code);
-+		return ret;
-+	}
-+
-+	if (node->node_id == IMAGE_NODE) {
-+		v4l2_fill_pix_format(&node->v_fmt.fmt.pix, &mbus_fmt);
-+		node->v_fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-+		unicam_calc_format_size_bpl(dev, node->fmt, &node->v_fmt);
-+	} else {
-+		node->v_fmt.type = V4L2_BUF_TYPE_META_CAPTURE;
-+		node->v_fmt.fmt.meta.dataformat = V4L2_META_FMT_SENSOR_DATA;
-+		node->v_fmt.fmt.meta.buffersize = mbus_fmt.width
-+						* mbus_fmt.height;
-+	}
-+
-+	node->m_fmt = mbus_fmt;
-+	return 0;
-+}
-+
-+static void unicam_wr_dma_addr(struct unicam_device *dev, dma_addr_t dmaaddr,
-+			       unsigned int buffer_size, int node_id)
-+{
-+	dma_addr_t endaddr = dmaaddr + buffer_size;
-+
-+	if (node_id == IMAGE_NODE) {
-+		reg_write(dev, UNICAM_IBSA0, dmaaddr);
-+		reg_write(dev, UNICAM_IBEA0, endaddr);
-+	} else {
-+		reg_write(dev, UNICAM_DBSA0, dmaaddr);
-+		reg_write(dev, UNICAM_DBEA0, endaddr);
-+	}
-+}
-+
-+static unsigned int unicam_get_lines_done(struct unicam_device *dev)
-+{
-+	dma_addr_t start_addr, cur_addr;
-+	unsigned int stride = dev->node[IMAGE_NODE].v_fmt.fmt.pix.bytesperline;
-+	struct unicam_buffer *frm = dev->node[IMAGE_NODE].cur_frm;
-+
-+	if (!frm)
-+		return 0;
-+
-+	start_addr = vb2_dma_contig_plane_dma_addr(&frm->vb.vb2_buf, 0);
-+	cur_addr = reg_read(dev, UNICAM_IBWP);
-+	return (unsigned int)(cur_addr - start_addr) / stride;
-+}
-+
-+static void unicam_schedule_next_buffer(struct unicam_node *node)
-+{
-+	struct unicam_device *dev = node->dev;
-+	struct unicam_buffer *buf;
-+	unsigned int size;
-+	dma_addr_t addr;
-+
-+	buf = list_first_entry(&node->dma_queue, struct unicam_buffer, list);
-+	node->next_frm = buf;
-+	list_del(&buf->list);
-+
-+	addr = vb2_dma_contig_plane_dma_addr(&buf->vb.vb2_buf, 0);
-+	size = (node->node_id == IMAGE_NODE) ?
-+			node->v_fmt.fmt.pix.sizeimage :
-+			node->v_fmt.fmt.meta.buffersize;
-+
-+	unicam_wr_dma_addr(dev, addr, size, node->node_id);
-+}
-+
-+static void unicam_schedule_dummy_buffer(struct unicam_node *node)
-+{
-+	struct unicam_device *dev = node->dev;
-+
-+	dev_dbg(dev->dev, "Scheduling dummy buffer for node %d\n",
-+		node->node_id);
-+
-+	unicam_wr_dma_addr(dev, node->dummy_buf_dma_addr, DUMMY_BUF_SIZE,
-+			   node->node_id);
-+	node->next_frm = NULL;
-+}
-+
-+static void unicam_process_buffer_complete(struct unicam_node *node,
-+					   unsigned int sequence)
-+{
-+	node->cur_frm->vb.field = node->m_fmt.field;
-+	node->cur_frm->vb.sequence = sequence;
-+
-+	vb2_buffer_done(&node->cur_frm->vb.vb2_buf, VB2_BUF_STATE_DONE);
-+}
-+
-+static void unicam_queue_event_sof(struct unicam_device *unicam)
-+{
-+	struct v4l2_event event = {
-+		.type = V4L2_EVENT_FRAME_SYNC,
-+		.u.frame_sync.frame_sequence = unicam->sequence,
-+	};
-+
-+	v4l2_event_queue(&unicam->node[IMAGE_NODE].video_dev, &event);
-+}
-+
-+/*
-+ * unicam_isr : ISR handler for unicam capture
-+ * @irq: irq number
-+ * @dev_id: dev_id ptr
-+ *
-+ * It changes status of the captured buffer, takes next buffer from the queue
-+ * and sets its address in unicam registers
-+ */
-+static irqreturn_t unicam_isr(int irq, void *dev)
-+{
-+	struct unicam_device *unicam = dev;
-+	unsigned int lines_done = unicam_get_lines_done(dev);
-+	unsigned int sequence = unicam->sequence;
-+	unsigned int i;
-+	u32 ista, sta;
-+	u64 ts;
-+
-+	sta = reg_read(unicam, UNICAM_STA);
-+	/* Write value back to clear the interrupts */
-+	reg_write(unicam, UNICAM_STA, sta);
-+
-+	ista = reg_read(unicam, UNICAM_ISTA);
-+	/* Write value back to clear the interrupts */
-+	reg_write(unicam, UNICAM_ISTA, ista);
-+
-+	dev_dbg(unicam->dev,
-+		"ISR: ISTA: 0x%X, STA: 0x%X, sequence %d, lines done %d",
-+		ista, sta, sequence, lines_done);
-+
-+	if (!(sta & (UNICAM_IS | UNICAM_PI0)))
-+		return IRQ_HANDLED;
-+
-+	/*
-+	 * We must run the frame end handler first. If we have a valid next_frm
-+	 * and we get a simultaneout FE + FS interrupt, running the FS handler
-+	 * first would null out the next_frm ptr and we would have lost the
-+	 * buffer forever.
-+	 */
-+	if (ista & UNICAM_FEI || sta & UNICAM_PI0) {
-+		/*
-+		 * Ensure we have swapped buffers already as we can't
-+		 * stop the peripheral. If no buffer is available, use a
-+		 * dummy buffer to dump out frames until we get a new buffer
-+		 * to use.
-+		 */
-+		for (i = 0; i < ARRAY_SIZE(unicam->node); i++) {
-+			if (!unicam->node[i].streaming)
-+				continue;
-+
-+			if (unicam->node[i].cur_frm)
-+				unicam_process_buffer_complete(&unicam->node[i],
-+							       sequence);
-+			unicam->node[i].cur_frm = unicam->node[i].next_frm;
-+		}
-+		unicam->sequence++;
-+	}
-+
-+	if (ista & UNICAM_FSI) {
-+		/*
-+		 * Timestamp is to be when the first data byte was captured,
-+		 * aka frame start.
-+		 */
-+		ts = ktime_get_ns();
-+		for (i = 0; i < ARRAY_SIZE(unicam->node); i++) {
-+			if (!unicam->node[i].streaming)
-+				continue;
-+
-+			if (unicam->node[i].cur_frm)
-+				unicam->node[i].cur_frm->vb.vb2_buf.timestamp =
-+								ts;
-+			/*
-+			 * Set the next frame output to go to a dummy frame
-+			 * if we have not managed to obtain another frame
-+			 * from the queue.
-+			 */
-+			unicam_schedule_dummy_buffer(&unicam->node[i]);
-+		}
-+
-+		unicam_queue_event_sof(unicam);
-+	}
-+
-+	/*
-+	 * Cannot swap buffer at frame end, there may be a race condition
-+	 * where the HW does not actually swap it if the new frame has
-+	 * already started.
-+	 */
-+	if (ista & (UNICAM_FSI | UNICAM_LCI) && !(ista & UNICAM_FEI)) {
-+		for (i = 0; i < ARRAY_SIZE(unicam->node); i++) {
-+			if (!unicam->node[i].streaming)
-+				continue;
-+
-+			spin_lock(&unicam->node[i].dma_queue_lock);
-+			if (!list_empty(&unicam->node[i].dma_queue) &&
-+			    !unicam->node[i].next_frm)
-+				unicam_schedule_next_buffer(&unicam->node[i]);
-+			spin_unlock(&unicam->node[i].dma_queue_lock);
-+		}
-+	}
-+
-+	if (reg_read(unicam, UNICAM_ICTL) & UNICAM_FCM) {
-+		/* Switch out of trigger mode if selected */
-+		reg_write_field(unicam, UNICAM_ICTL, 1, UNICAM_TFC);
-+		reg_write_field(unicam, UNICAM_ICTL, 0, UNICAM_FCM);
-+	}
-+	return IRQ_HANDLED;
-+}
-+
-+static int unicam_querycap(struct file *file, void *priv,
-+			   struct v4l2_capability *cap)
-+{
-+	struct unicam_node *node = video_drvdata(file);
-+	struct unicam_device *dev = node->dev;
-+
-+	strscpy(cap->driver, UNICAM_MODULE_NAME, sizeof(cap->driver));
-+	strscpy(cap->card, UNICAM_MODULE_NAME, sizeof(cap->card));
-+
-+	snprintf(cap->bus_info, sizeof(cap->bus_info),
-+		 "platform:%s", dev_name(dev->dev));
-+
-+	cap->capabilities = V4L2_CAP_DEVICE_CAPS | V4L2_CAP_VIDEO_CAPTURE |
-+			    V4L2_CAP_META_CAPTURE | V4L2_CAP_READWRITE |
-+			    V4L2_CAP_STREAMING;
-+	return 0;
-+}
-+
-+static int unicam_enum_fmt_vid_cap(struct file *file, void  *priv,
-+				   struct v4l2_fmtdesc *f)
-+{
-+	struct unicam_node *node = video_drvdata(file);
-+	struct unicam_device *dev = node->dev;
-+	unsigned int index = 0;
-+	unsigned int i;
-+	int ret = 0;
-+
-+	if (node->node_id != IMAGE_NODE)
-+		return -EINVAL;
-+
-+	for (i = 0; !ret && i < MAX_ENUM_MBUS_CODE; i++) {
-+		struct v4l2_subdev_mbus_code_enum mbus_code = {
-+			.index = i,
-+			.which = V4L2_SUBDEV_FORMAT_ACTIVE,
-+		};
-+		const struct unicam_fmt *fmt;
-+
-+		ret = v4l2_subdev_call(dev->sensor, pad, enum_mbus_code,
-+				       NULL, &mbus_code);
-+		if (ret < 0) {
-+			dev_dbg(dev->dev,
-+				"subdev->enum_mbus_code idx %d = %d\n",
-+				i, ret);
-+			return -EINVAL;
-+		}
-+
-+		fmt = find_format_by_code(mbus_code.code);
-+		if (fmt) {
-+			if (fmt->fourcc) {
-+				if (index == f->index) {
-+					f->pixelformat = fmt->fourcc;
-+					break;
-+				}
-+				index++;
-+			}
-+			if (fmt->repacked_fourcc) {
-+				if (index == f->index) {
-+					f->pixelformat = fmt->repacked_fourcc;
-+					break;
-+				}
-+				index++;
-+			}
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int unicam_g_fmt_vid_cap(struct file *file, void *priv,
-+				struct v4l2_format *f)
-+{
-+	struct v4l2_mbus_framefmt mbus_fmt = {0};
-+	struct unicam_node *node = video_drvdata(file);
-+	struct unicam_device *dev = node->dev;
-+	const struct unicam_fmt *fmt = NULL;
-+	int ret;
-+
-+	if (node->node_id != IMAGE_NODE)
-+		return -EINVAL;
-+
-+	/*
-+	 * If a flip has occurred in the sensor, the fmt code might have
-+	 * changed. So we will need to re-fetch the format from the subdevice.
-+	 */
-+	ret = __subdev_get_format(dev, &mbus_fmt, node->node_id);
-+	if (ret)
-+		return -EINVAL;
-+
-+	/* Find the V4L2 format from mbus code. We must match a known format. */
-+	fmt = find_format_by_code(mbus_fmt.code);
-+	if (!fmt)
-+		return -EINVAL;
-+
-+	if (node->fmt != fmt) {
-+		/*
-+		 * The sensor format has changed so the pixelformat needs to
-+		 * be updated. Try and retain the packed/unpacked choice if
-+		 * at all possible.
-+		 */
-+		if (node->fmt->repacked_fourcc ==
-+						node->v_fmt.fmt.pix.pixelformat)
-+			/* Using the repacked format */
-+			node->v_fmt.fmt.pix.pixelformat = fmt->repacked_fourcc;
-+		else
-+			/* Using the native format */
-+			node->v_fmt.fmt.pix.pixelformat = fmt->fourcc;
-+
-+		node->fmt = fmt;
-+	}
-+
-+	*f = node->v_fmt;
-+
-+	return 0;
-+}
-+
-+static const struct unicam_fmt *
-+get_first_supported_format(struct unicam_device *dev)
-+{
-+	struct v4l2_subdev_mbus_code_enum mbus_code;
-+	const struct unicam_fmt *fmt = NULL;
-+	unsigned int i;
-+	int ret = 0;
-+
-+	for (i = 0; ret != -EINVAL && ret != -ENOIOCTLCMD; ++i) {
-+		memset(&mbus_code, 0, sizeof(mbus_code));
-+		mbus_code.index = i;
-+		mbus_code.pad = subdev_pads[IMAGE_NODE];
-+		mbus_code.which = V4L2_SUBDEV_FORMAT_ACTIVE;
-+
-+		ret = v4l2_subdev_call(dev->sensor, pad, enum_mbus_code, NULL,
-+				       &mbus_code);
-+		if (ret < 0) {
-+			dev_dbg(dev->dev,
-+				"subdev->enum_mbus_code idx %u = %d - continue\n",
-+				i, ret);
-+			continue;
-+		}
-+
-+		dev_dbg(dev->dev, "subdev %s: code: 0x%08x idx: %u\n",
-+			dev->sensor->name, mbus_code.code, i);
-+
-+		fmt = find_format_by_code(mbus_code.code);
-+		dev_dbg(dev->dev,
-+			"fmt 0x%08x returned as %p, V4L2 FOURCC %s, csi_dt 0x%02x\n",
-+			mbus_code.code, fmt,
-+			print_fourcc(fmt ? fmt->fourcc : 0),
-+			fmt ? fmt->csi_dt : 0);
-+		if (fmt)
-+			return fmt;
-+	}
-+
-+	return NULL;
-+}
-+
-+static int unicam_try_fmt_vid_cap(struct file *file, void *priv,
-+				  struct v4l2_format *f)
-+{
-+	struct unicam_node *node = video_drvdata(file);
-+	struct unicam_device *dev = node->dev;
-+	struct v4l2_subdev_format sd_fmt = {
-+		.which	= V4L2_SUBDEV_FORMAT_TRY,
-+		.pad	= subdev_pads[IMAGE_NODE],
-+	};
-+	struct v4l2_mbus_framefmt *mbus_fmt = &sd_fmt.format;
-+	const struct unicam_fmt *fmt;
-+	int ret;
-+
-+	if (node->node_id != IMAGE_NODE)
-+		return -EINVAL;
-+
-+	fmt = find_format_by_pix(dev, f->fmt.pix.pixelformat);
-+	if (!fmt) {
-+		/*
-+		 * Pixel format not supported by unicam. Choose the first
-+		 * supported format, and let the sensor choose something else.
-+		 */
-+		dev_dbg(dev->dev, "Fourcc %s not found. Use first one.\n",
-+			print_fourcc(f->fmt.pix.pixelformat));
-+
-+		fmt = &formats[0];
-+		f->fmt.pix.pixelformat = fmt->fourcc;
-+	}
-+
-+	v4l2_fill_mbus_format(mbus_fmt, &f->fmt.pix, fmt->code);
-+	/*
-+	 * No support for receiving interlaced video, so never
-+	 * request it from the sensor subdev.
-+	 */
-+	mbus_fmt->field = V4L2_FIELD_NONE;
-+
-+	ret = v4l2_subdev_call(dev->sensor, pad, set_fmt, dev->sensor_config,
-+			       &sd_fmt);
-+	if (ret && ret != -ENOIOCTLCMD && ret != -ENODEV)
-+		return ret;
-+
-+	if (mbus_fmt->field != V4L2_FIELD_NONE)
-+		dev_info(dev->dev,
-+			 "Sensor trying to send interlaced video - results may be unpredictable\n");
-+
-+	v4l2_fill_pix_format(&f->fmt.pix, &sd_fmt.format);
-+	if (mbus_fmt->code != fmt->code) {
-+		/* Sensor has returned an alternate format */
-+		fmt = find_format_by_code(mbus_fmt->code);
-+		if (!fmt) {
-+			/*
-+			 * The alternate format is one unicam can't support.
-+			 * Find the first format that is supported by both, and
-+			 * then set that.
-+			 */
-+			fmt = get_first_supported_format(dev);
-+			mbus_fmt->code = fmt->code;
-+
-+			ret = v4l2_subdev_call(dev->sensor, pad, set_fmt,
-+					       dev->sensor_config, &sd_fmt);
-+			if (ret && ret != -ENOIOCTLCMD && ret != -ENODEV)
-+				return ret;
-+
-+			if (mbus_fmt->field != V4L2_FIELD_NONE)
-+				dev_info(dev->dev,
-+					 "Sensor trying to send interlaced video - results may be unpredictable\n");
-+
-+			v4l2_fill_pix_format(&f->fmt.pix, &sd_fmt.format);
-+
-+			if (mbus_fmt->code != fmt->code) {
-+				/*
-+				 * We've set a format that the sensor reports
-+				 * as being supported, but it refuses to set it.
-+				 * Not much else we can do.
-+				 * Assume that the sensor driver may accept the
-+				 * format when it is set (rather than tried).
-+				 */
-+				dev_err(dev->dev,
-+					"Sensor won't accept default format, and Unicam can't support sensor default\n");
-+			}
-+		}
-+
-+		if (fmt->fourcc)
-+			f->fmt.pix.pixelformat = fmt->fourcc;
-+		else
-+			f->fmt.pix.pixelformat = fmt->repacked_fourcc;
-+	}
-+
-+	return unicam_calc_format_size_bpl(dev, fmt, f);
-+}
-+
-+static int unicam_s_fmt_vid_cap(struct file *file, void *priv,
-+				struct v4l2_format *f)
-+{
-+	struct unicam_node *node = video_drvdata(file);
-+	struct unicam_device *dev = node->dev;
-+	struct vb2_queue *q = &node->buffer_queue;
-+	struct v4l2_mbus_framefmt mbus_fmt = {0};
-+	const struct unicam_fmt *fmt;
-+	int ret;
-+
-+	if (vb2_is_busy(q))
-+		return -EBUSY;
-+
-+	ret = unicam_try_fmt_vid_cap(file, priv, f);
-+	if (ret < 0)
-+		return ret;
-+
-+	fmt = find_format_by_pix(dev, f->fmt.pix.pixelformat);
-+	if (!fmt) {
-+		/*
-+		 * Unknown pixel format - adopt a default.
-+		 * This shouldn't happen as try_fmt should have resolved any
-+		 * issues first.
-+		 */
-+		fmt = get_first_supported_format(dev);
-+		if (!fmt)
-+			/*
-+			 * It shouldn't be possible to get here with no
-+			 * supported formats
-+			 */
-+			return -EINVAL;
-+		f->fmt.pix.pixelformat = fmt->fourcc;
-+		return -EINVAL;
-+	}
-+
-+	v4l2_fill_mbus_format(&mbus_fmt, &f->fmt.pix, fmt->code);
-+
-+	ret = __subdev_set_format(dev, &mbus_fmt, node->node_id);
-+	if (ret) {
-+		dev_err(dev->dev, "%s set_format failed %d\n", __func__, ret);
-+		return ret;
-+	}
-+
-+	/* Just double check nothing has gone wrong */
-+	if (mbus_fmt.code != fmt->code) {
-+		dev_dbg(dev->dev,
-+			"%s subdev changed format, this should not happen\n",
-+			__func__);
-+		return -EINVAL;
-+	}
-+
-+	node->fmt = fmt;
-+	node->v_fmt.fmt.pix.pixelformat = f->fmt.pix.pixelformat;
-+	node->v_fmt.fmt.pix.bytesperline = f->fmt.pix.bytesperline;
-+	unicam_reset_format(node);
-+
-+	dev_dbg(dev->dev,
-+		"%s %dx%d, mbus_fmt 0x%08X, V4L2 pix %s.\n",
-+		__func__, node->v_fmt.fmt.pix.width,
-+		node->v_fmt.fmt.pix.height, mbus_fmt.code,
-+		print_fourcc(node->v_fmt.fmt.pix.pixelformat));
-+
-+	*f = node->v_fmt;
-+
-+	return 0;
-+}
-+
-+static int unicam_enum_fmt_meta_cap(struct file *file, void *priv,
-+				    struct v4l2_fmtdesc *f)
-+{
-+	struct unicam_node *node = video_drvdata(file);
-+	struct unicam_device *dev = node->dev;
-+	const struct unicam_fmt *fmt;
-+	u32 code;
-+	int ret;
-+
-+	struct v4l2_subdev_mbus_code_enum mbus_code = {
-+		.index	= f->index,
-+		.which	= V4L2_SUBDEV_FORMAT_ACTIVE,
-+		.pad	= subdev_pads[METADATA_NODE],
-+	};
-+
-+	if (node->node_id != METADATA_NODE || f->index != 0)
-+		return -EINVAL;
-+
-+	ret = v4l2_subdev_call(dev->sensor, pad, enum_mbus_code, NULL,
-+			       &mbus_code);
-+	if (ret < 0) {
-+		dev_err(dev->dev,
-+			"subdev->enum_mbus_code idx 0 = %d - invalid\n", ret);
-+		return -EINVAL;
-+	}
-+
-+	code = mbus_code.code;
-+
-+	fmt = find_format_by_code(code);
-+	if (fmt)
-+		f->pixelformat = fmt->fourcc;
-+
-+	return 0;
-+}
-+
-+static int unicam_fmt_meta_cap(struct file *file, void *priv,
-+			       struct v4l2_format *f)
-+{
-+	struct unicam_node *node = video_drvdata(file);
-+
-+	if (node->node_id != METADATA_NODE)
-+		return -EINVAL;
-+
-+	*f = node->v_fmt;
-+
-+	return 0;
-+}
-+
-+static int unicam_queue_setup(struct vb2_queue *vq,
-+			      unsigned int *nbuffers,
-+			      unsigned int *nplanes,
-+			      unsigned int sizes[],
-+			      struct device *alloc_devs[])
-+{
-+	struct unicam_node *node = vb2_get_drv_priv(vq);
-+	unsigned int size = node->node_id == IMAGE_NODE ?
-+				node->v_fmt.fmt.pix.sizeimage :
-+				node->v_fmt.fmt.meta.buffersize;
-+
-+	if (vq->num_buffers + *nbuffers < 3)
-+		*nbuffers = 3 - vq->num_buffers;
-+
-+	if (*nplanes)
-+		return sizes[0] < size ? -EINVAL : 0;
-+
-+	*nplanes = 1;
-+	sizes[0] = size;
-+
-+	return 0;
-+}
-+
-+static int unicam_buffer_prepare(struct vb2_buffer *vb)
-+{
-+	struct unicam_node *node = vb2_get_drv_priv(vb->vb2_queue);
-+	struct unicam_device *dev = node->dev;
-+	struct unicam_buffer *buf = to_unicam_buffer(vb);
-+	unsigned long size;
-+
-+	if (WARN_ON(!node->fmt))
-+		return -EINVAL;
-+
-+	size = node->node_id == IMAGE_NODE ? node->v_fmt.fmt.pix.sizeimage :
-+					   node->v_fmt.fmt.meta.buffersize;
-+	if (vb2_plane_size(vb, 0) < size) {
-+		dev_err(dev->dev, "data will not fit into plane (%lu < %lu)\n",
-+			vb2_plane_size(vb, 0), size);
-+		return -EINVAL;
-+	}
-+
-+	vb2_set_plane_payload(&buf->vb.vb2_buf, 0, size);
-+	return 0;
-+}
-+
-+static void unicam_buffer_queue(struct vb2_buffer *vb)
-+{
-+	struct unicam_node *node = vb2_get_drv_priv(vb->vb2_queue);
-+	struct unicam_buffer *buf = to_unicam_buffer(vb);
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&node->dma_queue_lock, flags);
-+	list_add_tail(&buf->list, &node->dma_queue);
-+	spin_unlock_irqrestore(&node->dma_queue_lock, flags);
-+}
-+
-+static void unicam_set_packing_config(struct unicam_device *dev)
-+{
-+	u32 pack, unpack;
-+	u32 val;
-+
-+	if (dev->node[IMAGE_NODE].v_fmt.fmt.pix.pixelformat ==
-+	    dev->node[IMAGE_NODE].fmt->fourcc) {
-+		unpack = UNICAM_PUM_NONE;
-+		pack = UNICAM_PPM_NONE;
-+	} else {
-+		switch (dev->node[IMAGE_NODE].fmt->depth) {
-+		case 8:
-+			unpack = UNICAM_PUM_UNPACK8;
-+			break;
-+		case 10:
-+			unpack = UNICAM_PUM_UNPACK10;
-+			break;
-+		case 12:
-+			unpack = UNICAM_PUM_UNPACK12;
-+			break;
-+		case 14:
-+			unpack = UNICAM_PUM_UNPACK14;
-+			break;
-+		case 16:
-+			unpack = UNICAM_PUM_UNPACK16;
-+			break;
-+		default:
-+			unpack = UNICAM_PUM_NONE;
-+			break;
-+		}
-+
-+		/* Repacking is always to 16bpp */
-+		pack = UNICAM_PPM_PACK16;
-+	}
-+
-+	val = 0;
-+	set_field(&val, unpack, UNICAM_PUM_MASK);
-+	set_field(&val, pack, UNICAM_PPM_MASK);
-+	reg_write(dev, UNICAM_IPIPE, val);
-+}
-+
-+static void unicam_cfg_image_id(struct unicam_device *dev)
-+{
-+	if (dev->bus_type == V4L2_MBUS_CSI2_DPHY) {
-+		/* CSI2 mode, hardcode VC 0 for now. */
-+		reg_write(dev, UNICAM_IDI0,
-+			  (0 << 6) | dev->node[IMAGE_NODE].fmt->csi_dt);
-+	} else {
-+		/* CCP2 mode */
-+		reg_write(dev, UNICAM_IDI0,
-+			  0x80 | dev->node[IMAGE_NODE].fmt->csi_dt);
-+	}
-+}
-+
-+static void unicam_enable_ed(struct unicam_device *dev)
-+{
-+	u32 val = reg_read(dev, UNICAM_DCS);
-+
-+	set_field(&val, 2, UNICAM_EDL_MASK);
-+	/* Do not wrap at the end of the embedded data buffer */
-+	set_field(&val, 0, UNICAM_DBOB);
-+
-+	reg_write(dev, UNICAM_DCS, val);
-+}
-+
-+static void unicam_start_rx(struct unicam_device *dev, dma_addr_t *addr)
-+{
-+	int line_int_freq = dev->node[IMAGE_NODE].v_fmt.fmt.pix.height >> 2;
-+	unsigned int size, i;
-+	u32 val;
-+
-+	if (line_int_freq < 128)
-+		line_int_freq = 128;
-+
-+	/* Enable lane clocks */
-+	val = 1;
-+	for (i = 0; i < dev->active_data_lanes; i++)
-+		val = val << 2 | 1;
-+	clk_write(dev, val);
-+
-+	/* Basic init */
-+	reg_write(dev, UNICAM_CTRL, UNICAM_MEM);
-+
-+	/* Enable analogue control, and leave in reset. */
-+	val = UNICAM_AR;
-+	set_field(&val, 7, UNICAM_CTATADJ_MASK);
-+	set_field(&val, 7, UNICAM_PTATADJ_MASK);
-+	reg_write(dev, UNICAM_ANA, val);
-+	usleep_range(1000, 2000);
-+
-+	/* Come out of reset */
-+	reg_write_field(dev, UNICAM_ANA, 0, UNICAM_AR);
-+
-+	/* Peripheral reset */
-+	reg_write_field(dev, UNICAM_CTRL, 1, UNICAM_CPR);
-+	reg_write_field(dev, UNICAM_CTRL, 0, UNICAM_CPR);
-+
-+	reg_write_field(dev, UNICAM_CTRL, 0, UNICAM_CPE);
-+
-+	/* Enable Rx control. */
-+	val = reg_read(dev, UNICAM_CTRL);
-+	if (dev->bus_type == V4L2_MBUS_CSI2_DPHY) {
-+		set_field(&val, UNICAM_CPM_CSI2, UNICAM_CPM_MASK);
-+		set_field(&val, UNICAM_DCM_STROBE, UNICAM_DCM_MASK);
-+	} else {
-+		set_field(&val, UNICAM_CPM_CCP2, UNICAM_CPM_MASK);
-+		set_field(&val, dev->bus_flags, UNICAM_DCM_MASK);
-+	}
-+	/* Packet framer timeout */
-+	set_field(&val, 0xf, UNICAM_PFT_MASK);
-+	set_field(&val, 128, UNICAM_OET_MASK);
-+	reg_write(dev, UNICAM_CTRL, val);
-+
-+	reg_write(dev, UNICAM_IHWIN, 0);
-+	reg_write(dev, UNICAM_IVWIN, 0);
-+
-+	/* AXI bus access QoS setup */
-+	val = reg_read(dev, UNICAM_PRI);
-+	set_field(&val, 0, UNICAM_BL_MASK);
-+	set_field(&val, 0, UNICAM_BS_MASK);
-+	set_field(&val, 0xe, UNICAM_PP_MASK);
-+	set_field(&val, 8, UNICAM_NP_MASK);
-+	set_field(&val, 2, UNICAM_PT_MASK);
-+	set_field(&val, 1, UNICAM_PE);
-+	reg_write(dev, UNICAM_PRI, val);
-+
-+	reg_write_field(dev, UNICAM_ANA, 0, UNICAM_DDL);
-+
-+	/* Always start in trigger frame capture mode (UNICAM_FCM set) */
-+	val = UNICAM_FSIE | UNICAM_FEIE | UNICAM_FCM | UNICAM_IBOB;
-+	set_field(&val, line_int_freq, UNICAM_LCIE_MASK);
-+	reg_write(dev, UNICAM_ICTL, val);
-+	reg_write(dev, UNICAM_STA, UNICAM_STA_MASK_ALL);
-+	reg_write(dev, UNICAM_ISTA, UNICAM_ISTA_MASK_ALL);
-+
-+	/* tclk_term_en */
-+	reg_write_field(dev, UNICAM_CLT, 2, UNICAM_CLT1_MASK);
-+	/* tclk_settle */
-+	reg_write_field(dev, UNICAM_CLT, 6, UNICAM_CLT2_MASK);
-+	/* td_term_en */
-+	reg_write_field(dev, UNICAM_DLT, 2, UNICAM_DLT1_MASK);
-+	/* ths_settle */
-+	reg_write_field(dev, UNICAM_DLT, 6, UNICAM_DLT2_MASK);
-+	/* trx_enable */
-+	reg_write_field(dev, UNICAM_DLT, 0, UNICAM_DLT3_MASK);
-+
-+	reg_write_field(dev, UNICAM_CTRL, 0, UNICAM_SOE);
-+
-+	/* Packet compare setup - required to avoid missing frame ends */
-+	val = 0;
-+	set_field(&val, 1, UNICAM_PCE);
-+	set_field(&val, 1, UNICAM_GI);
-+	set_field(&val, 1, UNICAM_CPH);
-+	set_field(&val, 0, UNICAM_PCVC_MASK);
-+	set_field(&val, 1, UNICAM_PCDT_MASK);
-+	reg_write(dev, UNICAM_CMP0, val);
-+
-+	/* Enable clock lane and set up terminations */
-+	val = 0;
-+	if (dev->bus_type == V4L2_MBUS_CSI2_DPHY) {
-+		/* CSI2 */
-+		set_field(&val, 1, UNICAM_CLE);
-+		set_field(&val, 1, UNICAM_CLLPE);
-+		if (dev->bus_flags & V4L2_MBUS_CSI2_CONTINUOUS_CLOCK) {
-+			set_field(&val, 1, UNICAM_CLTRE);
-+			set_field(&val, 1, UNICAM_CLHSE);
-+		}
-+	} else {
-+		/* CCP2 */
-+		set_field(&val, 1, UNICAM_CLE);
-+		set_field(&val, 1, UNICAM_CLHSE);
-+		set_field(&val, 1, UNICAM_CLTRE);
-+	}
-+	reg_write(dev, UNICAM_CLK, val);
-+
-+	/*
-+	 * Enable required data lanes with appropriate terminations.
-+	 * The same value needs to be written to UNICAM_DATn registers for
-+	 * the active lanes, and 0 for inactive ones.
-+	 */
-+	val = 0;
-+	if (dev->bus_type == V4L2_MBUS_CSI2_DPHY) {
-+		/* CSI2 */
-+		set_field(&val, 1, UNICAM_DLE);
-+		set_field(&val, 1, UNICAM_DLLPE);
-+		if (dev->bus_flags & V4L2_MBUS_CSI2_CONTINUOUS_CLOCK) {
-+			set_field(&val, 1, UNICAM_DLTRE);
-+			set_field(&val, 1, UNICAM_DLHSE);
-+		}
-+	} else {
-+		/* CCP2 */
-+		set_field(&val, 1, UNICAM_DLE);
-+		set_field(&val, 1, UNICAM_DLHSE);
-+		set_field(&val, 1, UNICAM_DLTRE);
-+	}
-+	reg_write(dev, UNICAM_DAT0, val);
-+
-+	if (dev->active_data_lanes == 1)
-+		val = 0;
-+	reg_write(dev, UNICAM_DAT1, val);
-+
-+	if (dev->max_data_lanes > 2) {
-+		/*
-+		 * Registers UNICAM_DAT2 and UNICAM_DAT3 only valid if the
-+		 * instance supports more than 2 data lanes.
-+		 */
-+		if (dev->active_data_lanes == 2)
-+			val = 0;
-+		reg_write(dev, UNICAM_DAT2, val);
-+
-+		if (dev->active_data_lanes == 3)
-+			val = 0;
-+		reg_write(dev, UNICAM_DAT3, val);
-+	}
-+
-+	reg_write(dev, UNICAM_IBLS,
-+		  dev->node[IMAGE_NODE].v_fmt.fmt.pix.bytesperline);
-+	size = dev->node[IMAGE_NODE].v_fmt.fmt.pix.sizeimage;
-+	unicam_wr_dma_addr(dev, addr[IMAGE_NODE], size, IMAGE_NODE);
-+	unicam_set_packing_config(dev);
-+	unicam_cfg_image_id(dev);
-+
-+	val = reg_read(dev, UNICAM_MISC);
-+	set_field(&val, 1, UNICAM_FL0);
-+	set_field(&val, 1, UNICAM_FL1);
-+	reg_write(dev, UNICAM_MISC, val);
-+
-+	if (dev->node[METADATA_NODE].streaming) {
-+		size = dev->node[METADATA_NODE].v_fmt.fmt.meta.buffersize;
-+		unicam_enable_ed(dev);
-+		unicam_wr_dma_addr(dev, addr[METADATA_NODE], size, METADATA_NODE);
-+	}
-+
-+	/* Enable peripheral */
-+	reg_write_field(dev, UNICAM_CTRL, 1, UNICAM_CPE);
-+
-+	/* Load image pointers */
-+	reg_write_field(dev, UNICAM_ICTL, 1, UNICAM_LIP_MASK);
-+
-+	/* Load embedded data buffer pointers if needed */
-+	if (dev->node[METADATA_NODE].streaming)
-+		reg_write_field(dev, UNICAM_DCS, 1, UNICAM_LDP);
-+
-+	/*
-+	 * Enable trigger only for the first frame to
-+	 * sync correctly to the FS from the source.
-+	 */
-+	reg_write_field(dev, UNICAM_ICTL, 1, UNICAM_TFC);
-+}
-+
-+static void unicam_disable(struct unicam_device *dev)
-+{
-+	/* Analogue lane control disable */
-+	reg_write_field(dev, UNICAM_ANA, 1, UNICAM_DDL);
-+
-+	/* Stop the output engine */
-+	reg_write_field(dev, UNICAM_CTRL, 1, UNICAM_SOE);
-+
-+	/* Disable the data lanes. */
-+	reg_write(dev, UNICAM_DAT0, 0);
-+	reg_write(dev, UNICAM_DAT1, 0);
-+
-+	if (dev->max_data_lanes > 2) {
-+		reg_write(dev, UNICAM_DAT2, 0);
-+		reg_write(dev, UNICAM_DAT3, 0);
-+	}
-+
-+	/* Peripheral reset */
-+	reg_write_field(dev, UNICAM_CTRL, 1, UNICAM_CPR);
-+	usleep_range(50, 100);
-+	reg_write_field(dev, UNICAM_CTRL, 0, UNICAM_CPR);
-+
-+	/* Disable peripheral */
-+	reg_write_field(dev, UNICAM_CTRL, 0, UNICAM_CPE);
-+
-+	/* Clear ED setup */
-+	reg_write(dev, UNICAM_DCS, 0);
-+
-+	/* Disable all lane clocks */
-+	clk_write(dev, 0);
-+}
-+
-+static void unicam_return_buffers(struct unicam_node *node,
-+				  enum vb2_buffer_state state)
-+{
-+	struct unicam_buffer *buf, *tmp;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&node->dma_queue_lock, flags);
-+	list_for_each_entry_safe(buf, tmp, &node->dma_queue, list) {
-+		list_del(&buf->list);
-+		vb2_buffer_done(&buf->vb.vb2_buf, state);
-+	}
-+
-+	if (node->cur_frm)
-+		vb2_buffer_done(&node->cur_frm->vb.vb2_buf,
-+				state);
-+	if (node->next_frm && node->cur_frm != node->next_frm)
-+		vb2_buffer_done(&node->next_frm->vb.vb2_buf,
-+				state);
-+
-+	node->cur_frm = NULL;
-+	node->next_frm = NULL;
-+	spin_unlock_irqrestore(&node->dma_queue_lock, flags);
-+}
-+
-+static int unicam_start_streaming(struct vb2_queue *vq, unsigned int count)
-+{
-+	struct unicam_node *node = vb2_get_drv_priv(vq);
-+	struct unicam_device *dev = node->dev;
-+	dma_addr_t buffer_addr[MAX_NODES] = { 0 };
-+	unsigned long flags;
-+	unsigned int i;
-+	int ret;
-+
-+	node->streaming = true;
-+	if (!(dev->node[IMAGE_NODE].open && dev->node[IMAGE_NODE].streaming &&
-+	      (!dev->node[METADATA_NODE].open ||
-+	       dev->node[METADATA_NODE].streaming))) {
-+		/*
-+		 * Metadata pad must be enabled before image pad if it is
-+		 * wanted.
-+		 */
-+		dev_dbg(dev->dev, "Not all nodes are streaming yet.");
-+		return 0;
-+	}
-+
-+	dev->sequence = 0;
-+	ret = pm_runtime_get_sync(dev->dev);
-+	if (ret < 0) {
-+		dev_err(dev->dev, "pm_runtime_get failed\n");
-+		goto err_streaming;
-+	}
-+
-+	/*
-+	 * TODO: Retrieve the number of active data lanes from the connected
-+	 * subdevice.
-+	 */
-+	dev->active_data_lanes = dev->max_data_lanes;
-+
-+	ret = clk_set_min_rate(dev->vpu_clock, MIN_VPU_CLOCK_RATE);
-+	if (ret) {
-+		dev_err(dev->dev, "failed to set up VPU clock\n");
-+		goto err_pm_put;
-+	}
-+
-+	ret = clk_prepare_enable(dev->vpu_clock);
-+	if (ret) {
-+		dev_err(dev->dev, "Failed to enable VPU clock: %d\n", ret);
-+		goto err_pm_put;
-+	}
-+
-+	ret = clk_set_rate(dev->clock, 100 * 1000 * 1000);
-+	if (ret) {
-+		dev_err(dev->dev, "failed to set up CSI clock\n");
-+		goto err_vpu_clock;
-+	}
-+
-+	ret = clk_prepare_enable(dev->clock);
-+	if (ret) {
-+		dev_err(dev->dev, "Failed to enable CSI clock: %d\n", ret);
-+		goto err_vpu_clock;
-+	}
-+
-+	for (i = 0; i < ARRAY_SIZE(dev->node); i++) {
-+		struct unicam_buffer *buf;
-+
-+		if (!dev->node[i].streaming)
-+			continue;
-+
-+		spin_lock_irqsave(&dev->node[i].dma_queue_lock, flags);
-+		buf = list_first_entry(&dev->node[i].dma_queue,
-+				       struct unicam_buffer, list);
-+		dev->node[i].cur_frm = buf;
-+		dev->node[i].next_frm = buf;
-+		list_del(&buf->list);
-+		spin_unlock_irqrestore(&dev->node[i].dma_queue_lock, flags);
-+
-+		buffer_addr[i] =
-+			vb2_dma_contig_plane_dma_addr(&buf->vb.vb2_buf, 0);
-+	}
-+
-+	unicam_start_rx(dev, buffer_addr);
-+
-+	ret = v4l2_subdev_call(dev->sensor, video, s_stream, 1);
-+	if (ret < 0) {
-+		dev_err(dev->dev, "stream on failed in subdev\n");
-+		goto err_disable_unicam;
-+	}
-+
-+	return 0;
-+
-+err_disable_unicam:
-+	unicam_disable(dev);
-+	clk_disable_unprepare(dev->clock);
-+err_vpu_clock:
-+	ret = clk_set_min_rate(dev->vpu_clock, 0);
-+	if (ret)
-+		dev_err(dev->dev, "failed to reset the VPU clock\n");
-+	clk_disable_unprepare(dev->vpu_clock);
-+err_pm_put:
-+	pm_runtime_put_sync(dev->dev);
-+err_streaming:
-+	unicam_return_buffers(node, VB2_BUF_STATE_QUEUED);
-+	node->streaming = false;
-+
-+	return ret;
-+}
-+
-+static void unicam_stop_streaming(struct vb2_queue *vq)
-+{
-+	struct unicam_node *node = vb2_get_drv_priv(vq);
-+	struct unicam_device *dev = node->dev;
-+
-+	node->streaming = false;
-+
-+	if (node->node_id == IMAGE_NODE) {
-+		int ret;
-+
-+		/*
-+		 * Stop streaming the sensor and disable the peripheral.
-+		 * We cannot continue streaming embedded data with the
-+		 * image pad disabled.
-+		 */
-+		if (v4l2_subdev_call(dev->sensor, video, s_stream, 0) < 0)
-+			dev_err(dev->dev, "stream off failed in subdev\n");
-+
-+		unicam_disable(dev);
-+
-+		ret = clk_set_min_rate(dev->vpu_clock, 0);
-+		if (ret)
-+			dev_err(dev->dev, "failed to reset the min VPU clock\n");
-+
-+		clk_disable_unprepare(dev->vpu_clock);
-+		clk_disable_unprepare(dev->clock);
-+		pm_runtime_put_sync(dev->dev);
-+
-+	} else if (node->node_id == METADATA_NODE) {
-+		/*
-+		 * Allow the hardware to spin in the dummy buffer.
-+		 * This is only really needed if the embedded data pad is
-+		 * disabled before the image pad.
-+		 */
-+		unicam_wr_dma_addr(dev, node->dummy_buf_dma_addr,
-+				   DUMMY_BUF_SIZE, METADATA_NODE);
-+	}
-+
-+	/* Clear all queued buffers for the node */
-+	unicam_return_buffers(node, VB2_BUF_STATE_ERROR);
-+}
-+
-+static int unicam_enum_input(struct file *file, void *priv,
-+			     struct v4l2_input *inp)
-+{
-+	struct unicam_node *node = video_drvdata(file);
-+	struct unicam_device *dev = node->dev;
-+
-+	if (inp->index != 0)
-+		return -EINVAL;
-+
-+	inp->type = V4L2_INPUT_TYPE_CAMERA;
-+	if (v4l2_subdev_has_op(dev->sensor, video, s_dv_timings)) {
-+		inp->capabilities = V4L2_IN_CAP_DV_TIMINGS;
-+		inp->std = 0;
-+	} else if (v4l2_subdev_has_op(dev->sensor, video, s_std)) {
-+		inp->capabilities = V4L2_IN_CAP_STD;
-+		if (v4l2_subdev_call(dev->sensor, video, g_tvnorms, &inp->std) < 0)
-+			inp->std = V4L2_STD_ALL;
-+	} else {
-+		inp->capabilities = 0;
-+		inp->std = 0;
-+	}
-+	strscpy(inp->name, "Camera 0", sizeof(inp->name));
-+	return 0;
-+}
-+
-+static int unicam_g_input(struct file *file, void *priv, unsigned int *i)
-+{
-+	*i = 0;
-+
-+	return 0;
-+}
-+
-+static int unicam_s_input(struct file *file, void *priv, unsigned int i)
-+{
-+	/*
-+	 * FIXME: Ideally we would like to be able to query the source
-+	 * subdevice for information over the input connectors it supports,
-+	 * and map that through in to a call to video_ops->s_routing.
-+	 * There is no infrastructure support for defining that within
-+	 * devicetree at present. Until that is implemented we can't
-+	 * map a user physical connector number to s_routing input number.
-+	 */
-+	if (i > 0)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static int unicam_querystd(struct file *file, void *priv,
-+			   v4l2_std_id *std)
-+{
-+	struct unicam_node *node = video_drvdata(file);
-+	struct unicam_device *dev = node->dev;
-+
-+	return v4l2_subdev_call(dev->sensor, video, querystd, std);
-+}
-+
-+static int unicam_g_std(struct file *file, void *priv, v4l2_std_id *std)
-+{
-+	struct unicam_node *node = video_drvdata(file);
-+	struct unicam_device *dev = node->dev;
-+
-+	return v4l2_subdev_call(dev->sensor, video, g_std, std);
-+}
-+
-+static int unicam_s_std(struct file *file, void *priv, v4l2_std_id std)
-+{
-+	struct unicam_node *node = video_drvdata(file);
-+	struct unicam_device *dev = node->dev;
-+	int ret;
-+	v4l2_std_id current_std;
-+
-+	ret = v4l2_subdev_call(dev->sensor, video, g_std, &current_std);
-+	if (ret)
-+		return ret;
-+
-+	if (std == current_std)
-+		return 0;
-+
-+	if (vb2_is_busy(&node->buffer_queue))
-+		return -EBUSY;
-+
-+	ret = v4l2_subdev_call(dev->sensor, video, s_std, std);
-+
-+	/* Force recomputation of bytesperline */
-+	node->v_fmt.fmt.pix.bytesperline = 0;
-+
-+	unicam_reset_format(node);
-+
-+	return ret;
-+}
-+
-+static int unicam_s_edid(struct file *file, void *priv, struct v4l2_edid *edid)
-+{
-+	struct unicam_node *node = video_drvdata(file);
-+	struct unicam_device *dev = node->dev;
-+
-+	return v4l2_subdev_call(dev->sensor, pad, set_edid, edid);
-+}
-+
-+static int unicam_g_edid(struct file *file, void *priv, struct v4l2_edid *edid)
-+{
-+	struct unicam_node *node = video_drvdata(file);
-+	struct unicam_device *dev = node->dev;
-+
-+	return v4l2_subdev_call(dev->sensor, pad, get_edid, edid);
-+}
-+
-+static int unicam_s_selection(struct file *file, void *priv,
-+			      struct v4l2_selection *sel)
-+{
-+	struct unicam_node *node = video_drvdata(file);
-+	struct unicam_device *dev = node->dev;
-+	struct v4l2_subdev_selection sdsel = {
-+		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
-+		.target = sel->target,
-+		.flags = sel->flags,
-+		.r = sel->r,
-+	};
-+
-+	if (sel->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
-+		return -EINVAL;
-+
-+	return v4l2_subdev_call(dev->sensor, pad, set_selection, NULL, &sdsel);
-+}
-+
-+static int unicam_g_selection(struct file *file, void *priv,
-+			      struct v4l2_selection *sel)
-+{
-+	struct unicam_node *node = video_drvdata(file);
-+	struct unicam_device *dev = node->dev;
-+	struct v4l2_subdev_selection sdsel = {
-+		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
-+		.target = sel->target,
-+	};
-+	int ret;
-+
-+	if (sel->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
-+		return -EINVAL;
-+
-+	ret = v4l2_subdev_call(dev->sensor, pad, get_selection, NULL, &sdsel);
-+	if (!ret)
-+		sel->r = sdsel.r;
-+
-+	return ret;
-+}
-+
-+static int unicam_enum_framesizes(struct file *file, void *priv,
-+				  struct v4l2_frmsizeenum *fsize)
-+{
-+	struct unicam_node *node = video_drvdata(file);
-+	struct unicam_device *dev = node->dev;
-+	const struct unicam_fmt *fmt;
-+	struct v4l2_subdev_frame_size_enum fse;
-+	int ret;
-+
-+	/* check for valid format */
-+	fmt = find_format_by_pix(dev, fsize->pixel_format);
-+	if (!fmt) {
-+		dev_err(dev->dev,
-+			"Invalid pixel code: %x\n", fsize->pixel_format);
-+		return -EINVAL;
-+	}
-+	fse.code = fmt->code;
-+
-+	fse.which = V4L2_SUBDEV_FORMAT_ACTIVE;
-+	fse.index = fsize->index;
-+	fse.pad = subdev_pads[node->node_id];
-+
-+	ret = v4l2_subdev_call(dev->sensor, pad, enum_frame_size, NULL, &fse);
-+	if (ret)
-+		return ret;
-+
-+	dev_dbg(dev->dev, "%s: index: %d code: %x W:[%d,%d] H:[%d,%d]\n",
-+		__func__, fse.index, fse.code, fse.min_width, fse.max_width,
-+		fse.min_height, fse.max_height);
-+
-+	fsize->type = V4L2_FRMSIZE_TYPE_DISCRETE;
-+	fsize->discrete.width = fse.max_width;
-+	fsize->discrete.height = fse.max_height;
-+
-+	return 0;
-+}
-+
-+static int unicam_enum_frameintervals(struct file *file, void *priv,
-+				      struct v4l2_frmivalenum *fival)
-+{
-+	struct unicam_node *node = video_drvdata(file);
-+	struct unicam_device *dev = node->dev;
-+	const struct unicam_fmt *fmt;
-+	struct v4l2_subdev_frame_interval_enum fie = {
-+		.index = fival->index,
-+		.width = fival->width,
-+		.height = fival->height,
-+		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
-+	};
-+	int ret;
-+
-+	fmt = find_format_by_pix(dev, fival->pixel_format);
-+	if (!fmt)
-+		return -EINVAL;
-+
-+	fie.code = fmt->code;
-+	ret = v4l2_subdev_call(dev->sensor, pad, enum_frame_interval,
-+			       NULL, &fie);
-+	if (ret)
-+		return ret;
-+
-+	fival->type = V4L2_FRMIVAL_TYPE_DISCRETE;
-+	fival->discrete = fie.interval;
-+
-+	return 0;
-+}
-+
-+static int unicam_g_parm(struct file *file, void *fh, struct v4l2_streamparm *a)
-+{
-+	struct unicam_node *node = video_drvdata(file);
-+	struct unicam_device *dev = node->dev;
-+
-+	return v4l2_g_parm_cap(video_devdata(file), dev->sensor, a);
-+}
-+
-+static int unicam_s_parm(struct file *file, void *fh, struct v4l2_streamparm *a)
-+{
-+	struct unicam_node *node = video_drvdata(file);
-+	struct unicam_device *dev = node->dev;
-+
-+	return v4l2_s_parm_cap(video_devdata(file), dev->sensor, a);
-+}
-+
-+static int unicam_g_dv_timings(struct file *file, void *priv,
-+			       struct v4l2_dv_timings *timings)
-+{
-+	struct unicam_node *node = video_drvdata(file);
-+	struct unicam_device *dev = node->dev;
-+
-+	return v4l2_subdev_call(dev->sensor, video, g_dv_timings, timings);
-+}
-+
-+static int unicam_s_dv_timings(struct file *file, void *priv,
-+			       struct v4l2_dv_timings *timings)
-+{
-+	struct unicam_node *node = video_drvdata(file);
-+	struct unicam_device *dev = node->dev;
-+	struct v4l2_dv_timings current_timings;
-+	int ret;
-+
-+	ret = v4l2_subdev_call(dev->sensor, video, g_dv_timings,
-+			       &current_timings);
-+
-+	if (ret < 0)
-+		return ret;
-+
-+	if (v4l2_match_dv_timings(timings, &current_timings, 0, false))
-+		return 0;
-+
-+	if (vb2_is_busy(&node->buffer_queue))
-+		return -EBUSY;
-+
-+	ret = v4l2_subdev_call(dev->sensor, video, s_dv_timings, timings);
-+
-+	/* Force recomputation of bytesperline */
-+	node->v_fmt.fmt.pix.bytesperline = 0;
-+
-+	unicam_reset_format(node);
-+
-+	return ret;
-+}
-+
-+static int unicam_query_dv_timings(struct file *file, void *priv,
-+				   struct v4l2_dv_timings *timings)
-+{
-+	struct unicam_node *node = video_drvdata(file);
-+	struct unicam_device *dev = node->dev;
-+
-+	return v4l2_subdev_call(dev->sensor, video, query_dv_timings, timings);
-+}
-+
-+static int unicam_enum_dv_timings(struct file *file, void *priv,
-+				  struct v4l2_enum_dv_timings *timings)
-+{
-+	struct unicam_node *node = video_drvdata(file);
-+	struct unicam_device *dev = node->dev;
-+
-+	return v4l2_subdev_call(dev->sensor, pad, enum_dv_timings, timings);
-+}
-+
-+static int unicam_dv_timings_cap(struct file *file, void *priv,
-+				 struct v4l2_dv_timings_cap *cap)
-+{
-+	struct unicam_node *node = video_drvdata(file);
-+	struct unicam_device *dev = node->dev;
-+
-+	return v4l2_subdev_call(dev->sensor, pad, dv_timings_cap, cap);
-+}
-+
-+static int unicam_subscribe_event(struct v4l2_fh *fh,
-+				  const struct v4l2_event_subscription *sub)
-+{
-+	switch (sub->type) {
-+	case V4L2_EVENT_FRAME_SYNC:
-+		return v4l2_event_subscribe(fh, sub, 2, NULL);
-+	case V4L2_EVENT_SOURCE_CHANGE:
-+		return v4l2_event_subscribe(fh, sub, 4, NULL);
-+	}
-+
-+	return v4l2_ctrl_subscribe_event(fh, sub);
-+}
-+
-+static int unicam_log_status(struct file *file, void *fh)
-+{
-+	struct unicam_node *node = video_drvdata(file);
-+	struct unicam_device *dev = node->dev;
-+	u32 reg;
-+
-+	/* status for sub devices */
-+	v4l2_device_call_all(&dev->v4l2_dev, 0, core, log_status);
-+
-+	dev_info(dev->dev, "-----Receiver status-----\n");
-+	dev_info(dev->dev, "V4L2 width/height:   %ux%u\n",
-+		 node->v_fmt.fmt.pix.width, node->v_fmt.fmt.pix.height);
-+	dev_info(dev->dev, "Mediabus format:     %08x\n", node->fmt->code);
-+	dev_info(dev->dev, "V4L2 format:         %08x\n",
-+		 node->v_fmt.fmt.pix.pixelformat);
-+	reg = reg_read(dev, UNICAM_IPIPE);
-+	dev_info(dev->dev, "Unpacking/packing:   %u / %u\n",
-+		 get_field(reg, UNICAM_PUM_MASK),
-+		 get_field(reg, UNICAM_PPM_MASK));
-+	dev_info(dev->dev, "----Live data----\n");
-+	dev_info(dev->dev, "Programmed stride:   %4u\n",
-+		 reg_read(dev, UNICAM_IBLS));
-+	dev_info(dev->dev, "Detected resolution: %ux%u\n",
-+		 reg_read(dev, UNICAM_IHSTA),
-+		 reg_read(dev, UNICAM_IVSTA));
-+	dev_info(dev->dev, "Write pointer:       %08x\n",
-+		 reg_read(dev, UNICAM_IBWP));
-+
-+	return 0;
-+}
-+
-+static void unicam_notify(struct v4l2_subdev *sd,
-+			  unsigned int notification, void *arg)
-+{
-+	struct unicam_device *dev = to_unicam_device(sd->v4l2_dev);
-+
-+	switch (notification) {
-+	case V4L2_DEVICE_NOTIFY_EVENT:
-+		v4l2_event_queue(&dev->node[IMAGE_NODE].video_dev, arg);
-+		break;
-+	default:
-+		break;
-+	}
-+}
-+
-+static const struct vb2_ops unicam_video_qops = {
-+	.wait_prepare		= vb2_ops_wait_prepare,
-+	.wait_finish		= vb2_ops_wait_finish,
-+	.queue_setup		= unicam_queue_setup,
-+	.buf_prepare		= unicam_buffer_prepare,
-+	.buf_queue		= unicam_buffer_queue,
-+	.start_streaming	= unicam_start_streaming,
-+	.stop_streaming		= unicam_stop_streaming,
-+};
-+
-+/*
-+ * unicam_v4l2_open : This function is based on the v4l2_fh_open helper
-+ * function. It has been augmented to handle sensor subdevice power management,
-+ */
-+static int unicam_v4l2_open(struct file *file)
-+{
-+	struct unicam_node *node = video_drvdata(file);
-+	struct unicam_device *dev = node->dev;
-+	int ret;
-+
-+	mutex_lock(&node->lock);
-+
-+	ret = v4l2_fh_open(file);
-+	if (ret) {
-+		dev_err(dev->dev, "v4l2_fh_open failed\n");
-+		goto unlock;
-+	}
-+
-+	node->open++;
-+
-+	if (!v4l2_fh_is_singular_file(file))
-+		goto unlock;
-+
-+	ret = v4l2_subdev_call(dev->sensor, core, s_power, 1);
-+	if (ret < 0 && ret != -ENOIOCTLCMD) {
-+		v4l2_fh_release(file);
-+		node->open--;
-+		goto unlock;
-+	}
-+
-+	ret = 0;
-+
-+unlock:
-+	mutex_unlock(&node->lock);
-+	return ret;
-+}
-+
-+static int unicam_v4l2_release(struct file *file)
-+{
-+	struct unicam_node *node = video_drvdata(file);
-+	struct unicam_device *dev = node->dev;
-+	struct v4l2_subdev *sd = dev->sensor;
-+	bool fh_singular;
-+	int ret;
-+
-+	mutex_lock(&node->lock);
-+
-+	fh_singular = v4l2_fh_is_singular_file(file);
-+
-+	ret = _vb2_fop_release(file, NULL);
-+
-+	if (fh_singular)
-+		v4l2_subdev_call(sd, core, s_power, 0);
-+
-+	node->open--;
-+	mutex_unlock(&node->lock);
-+
-+	return ret;
-+}
-+
-+/* unicam capture driver file operations */
-+static const struct v4l2_file_operations unicam_fops = {
-+	.owner		= THIS_MODULE,
-+	.open		= unicam_v4l2_open,
-+	.release	= unicam_v4l2_release,
-+	.read		= vb2_fop_read,
-+	.poll		= vb2_fop_poll,
-+	.unlocked_ioctl	= video_ioctl2,
-+	.mmap		= vb2_fop_mmap,
-+};
-+
-+/* unicam capture ioctl operations */
-+static const struct v4l2_ioctl_ops unicam_ioctl_ops = {
-+	.vidioc_querycap		= unicam_querycap,
-+	.vidioc_enum_fmt_vid_cap	= unicam_enum_fmt_vid_cap,
-+	.vidioc_g_fmt_vid_cap		= unicam_g_fmt_vid_cap,
-+	.vidioc_s_fmt_vid_cap		= unicam_s_fmt_vid_cap,
-+	.vidioc_try_fmt_vid_cap		= unicam_try_fmt_vid_cap,
-+
-+	.vidioc_enum_fmt_meta_cap	= unicam_enum_fmt_meta_cap,
-+	.vidioc_g_fmt_meta_cap		= unicam_fmt_meta_cap,
-+	.vidioc_s_fmt_meta_cap		= unicam_fmt_meta_cap,
-+	.vidioc_try_fmt_meta_cap	= unicam_fmt_meta_cap,
-+
-+	.vidioc_enum_input		= unicam_enum_input,
-+	.vidioc_g_input			= unicam_g_input,
-+	.vidioc_s_input			= unicam_s_input,
-+
-+	.vidioc_querystd		= unicam_querystd,
-+	.vidioc_s_std			= unicam_s_std,
-+	.vidioc_g_std			= unicam_g_std,
-+
-+	.vidioc_g_edid			= unicam_g_edid,
-+	.vidioc_s_edid			= unicam_s_edid,
-+
-+	.vidioc_enum_framesizes		= unicam_enum_framesizes,
-+	.vidioc_enum_frameintervals	= unicam_enum_frameintervals,
-+
-+	.vidioc_g_selection		= unicam_g_selection,
-+	.vidioc_s_selection		= unicam_s_selection,
-+
-+	.vidioc_g_parm			= unicam_g_parm,
-+	.vidioc_s_parm			= unicam_s_parm,
-+
-+	.vidioc_s_dv_timings		= unicam_s_dv_timings,
-+	.vidioc_g_dv_timings		= unicam_g_dv_timings,
-+	.vidioc_query_dv_timings	= unicam_query_dv_timings,
-+	.vidioc_enum_dv_timings		= unicam_enum_dv_timings,
-+	.vidioc_dv_timings_cap		= unicam_dv_timings_cap,
-+
-+	.vidioc_reqbufs			= vb2_ioctl_reqbufs,
-+	.vidioc_create_bufs		= vb2_ioctl_create_bufs,
-+	.vidioc_prepare_buf		= vb2_ioctl_prepare_buf,
-+	.vidioc_querybuf		= vb2_ioctl_querybuf,
-+	.vidioc_qbuf			= vb2_ioctl_qbuf,
-+	.vidioc_dqbuf			= vb2_ioctl_dqbuf,
-+	.vidioc_expbuf			= vb2_ioctl_expbuf,
-+	.vidioc_streamon		= vb2_ioctl_streamon,
-+	.vidioc_streamoff		= vb2_ioctl_streamoff,
-+
-+	.vidioc_log_status		= unicam_log_status,
-+	.vidioc_subscribe_event		= unicam_subscribe_event,
-+	.vidioc_unsubscribe_event	= v4l2_event_unsubscribe,
-+};
-+
-+static int unicam_async_bound(struct v4l2_async_notifier *notifier,
-+			      struct v4l2_subdev *subdev,
-+			      struct v4l2_async_subdev *asd)
-+{
-+	struct unicam_device *unicam = to_unicam_device(notifier->v4l2_dev);
-+
-+	if (unicam->sensor) {
-+		dev_info(unicam->dev, "Rejecting subdev %s (Already set!!)",
-+			 subdev->name);
-+		return 0;
-+	}
-+
-+	unicam->sensor = subdev;
-+	dev_dbg(unicam->dev, "Using sensor %s for capture\n", subdev->name);
-+
-+	return 0;
-+}
-+
-+static void unicam_release(struct v4l2_device *v4l2_dev)
-+{
-+	struct unicam_device *unicam =
-+		container_of(v4l2_dev, struct unicam_device, v4l2_dev);
-+
-+	v4l2_ctrl_handler_free(&unicam->ctrl_handler);
-+	media_device_cleanup(&unicam->mdev);
-+
-+	if (unicam->sensor_config)
-+		v4l2_subdev_free_pad_config(unicam->sensor_config);
-+
-+	kfree(unicam);
-+}
-+
-+static int register_node(struct unicam_device *unicam, struct unicam_node *node,
-+			 enum v4l2_buf_type type, int node_id)
-+{
-+	struct video_device *vdev;
-+	struct vb2_queue *q;
-+	struct v4l2_mbus_framefmt mbus_fmt = {0};
-+	const struct unicam_fmt *fmt;
-+	int ret;
-+
-+	if (node_id == IMAGE_NODE) {
-+		ret = __subdev_get_format(unicam, &mbus_fmt, node_id);
-+		if (ret) {
-+			dev_err(unicam->dev, "Failed to get_format - ret %d\n",
-+				ret);
-+			return ret;
-+		}
-+
-+		fmt = find_format_by_code(mbus_fmt.code);
-+		if (!fmt) {
-+			/*
-+			 * Find the first format that the sensor and unicam both
-+			 * support
-+			 */
-+			fmt = get_first_supported_format(unicam);
-+
-+			if (!fmt)
-+				/* No compatible formats */
-+				return -EINVAL;
-+
-+			mbus_fmt.code = fmt->code;
-+			ret = __subdev_set_format(unicam, &mbus_fmt, node_id);
-+			if (ret)
-+				return -EINVAL;
-+		}
-+		if (mbus_fmt.field != V4L2_FIELD_NONE) {
-+			/* Interlaced not supported - disable it now. */
-+			mbus_fmt.field = V4L2_FIELD_NONE;
-+			ret = __subdev_set_format(unicam, &mbus_fmt, node_id);
-+			if (ret)
-+				return -EINVAL;
-+		}
-+
-+		node->v_fmt.fmt.pix.pixelformat = fmt->fourcc ? fmt->fourcc
-+						: fmt->repacked_fourcc;
-+	} else {
-+		/* Fix this node format as embedded data. */
-+		fmt = find_format_by_code(MEDIA_BUS_FMT_CUSTOM_SENSOR_DATA);
-+		node->v_fmt.fmt.meta.dataformat = fmt->fourcc;
-+	}
-+
-+	node->dev = unicam;
-+	node->node_id = node_id;
-+	node->fmt = fmt;
-+
-+	/* Read current subdev format */
-+	unicam_reset_format(node);
-+
-+	if (v4l2_subdev_has_op(unicam->sensor, video, s_std)) {
-+		v4l2_std_id tvnorms;
-+
-+		if (WARN_ON(!v4l2_subdev_has_op(unicam->sensor, video,
-+						g_tvnorms)))
-+			/*
-+			 * Subdevice should not advertise s_std but not
-+			 * g_tvnorms
-+			 */
-+			return -EINVAL;
-+
-+		ret = v4l2_subdev_call(unicam->sensor, video,
-+				       g_tvnorms, &tvnorms);
-+		if (WARN_ON(ret))
-+			return -EINVAL;
-+		node->video_dev.tvnorms |= tvnorms;
-+	}
-+
-+	spin_lock_init(&node->dma_queue_lock);
-+	mutex_init(&node->lock);
-+
-+	vdev = &node->video_dev;
-+	if (node_id == IMAGE_NODE) {
-+		/* Add controls from the subdevice */
-+		ret = v4l2_ctrl_add_handler(&unicam->ctrl_handler,
-+					    unicam->sensor->ctrl_handler, NULL,
-+					    true);
-+		if (ret < 0)
-+			return ret;
-+
-+		/*
-+		 * If the sensor subdevice has any controls, associate the node
-+		 *  with the ctrl handler to allow access from userland.
-+		 */
-+		if (!list_empty(&unicam->ctrl_handler.ctrls))
-+			vdev->ctrl_handler = &unicam->ctrl_handler;
-+	}
-+
-+	q = &node->buffer_queue;
-+	q->type = type;
-+	q->io_modes = VB2_MMAP | VB2_DMABUF | VB2_READ;
-+	q->drv_priv = node;
-+	q->ops = &unicam_video_qops;
-+	q->mem_ops = &vb2_dma_contig_memops;
-+	q->buf_struct_size = sizeof(struct unicam_buffer);
-+	q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
-+	q->lock = &node->lock;
-+	q->min_buffers_needed = 1;
-+	q->dev = unicam->dev;
-+
-+	ret = vb2_queue_init(q);
-+	if (ret) {
-+		dev_err(unicam->dev, "vb2_queue_init() failed\n");
-+		return ret;
-+	}
-+
-+	INIT_LIST_HEAD(&node->dma_queue);
-+
-+	vdev->release = video_device_release_empty;
-+	vdev->fops = &unicam_fops;
-+	vdev->ioctl_ops = &unicam_ioctl_ops;
-+	vdev->v4l2_dev = &unicam->v4l2_dev;
-+	vdev->vfl_dir = VFL_DIR_RX;
-+	vdev->queue = q;
-+	vdev->lock = &node->lock;
-+	vdev->device_caps = (node_id == IMAGE_NODE) ?
-+				V4L2_CAP_VIDEO_CAPTURE : V4L2_CAP_META_CAPTURE;
-+	vdev->device_caps |= V4L2_CAP_READWRITE | V4L2_CAP_STREAMING;
-+
-+	/* Define the device names */
-+	snprintf(vdev->name, sizeof(vdev->name), "%s-%s", UNICAM_MODULE_NAME,
-+		 node_id == IMAGE_NODE ? "image" : "embedded");
-+
-+	video_set_drvdata(vdev, node);
-+	if (node_id == IMAGE_NODE)
-+		vdev->entity.flags |= MEDIA_ENT_FL_DEFAULT;
-+	node->pad.flags = MEDIA_PAD_FL_SINK;
-+	media_entity_pads_init(&vdev->entity, 1, &node->pad);
-+
-+	node->dummy_buf_cpu_addr = dma_alloc_coherent(unicam->dev,
-+						      DUMMY_BUF_SIZE,
-+						      &node->dummy_buf_dma_addr,
-+						      GFP_KERNEL);
-+	if (!node->dummy_buf_cpu_addr) {
-+		dev_err(unicam->dev, "Unable to allocate dummy buffer.\n");
-+		return -ENOMEM;
-+	}
-+	if (node_id == METADATA_NODE ||
-+	    !v4l2_subdev_has_op(unicam->sensor, video, s_std)) {
-+		v4l2_disable_ioctl(&node->video_dev, VIDIOC_S_STD);
-+		v4l2_disable_ioctl(&node->video_dev, VIDIOC_G_STD);
-+		v4l2_disable_ioctl(&node->video_dev, VIDIOC_ENUMSTD);
-+	}
-+	if (node_id == METADATA_NODE ||
-+	    !v4l2_subdev_has_op(unicam->sensor, video, querystd))
-+		v4l2_disable_ioctl(&node->video_dev, VIDIOC_QUERYSTD);
-+	if (node_id == METADATA_NODE ||
-+	    !v4l2_subdev_has_op(unicam->sensor, video, s_dv_timings)) {
-+		v4l2_disable_ioctl(&node->video_dev, VIDIOC_S_EDID);
-+		v4l2_disable_ioctl(&node->video_dev, VIDIOC_G_EDID);
-+		v4l2_disable_ioctl(&node->video_dev, VIDIOC_DV_TIMINGS_CAP);
-+		v4l2_disable_ioctl(&node->video_dev, VIDIOC_G_DV_TIMINGS);
-+		v4l2_disable_ioctl(&node->video_dev, VIDIOC_S_DV_TIMINGS);
-+		v4l2_disable_ioctl(&node->video_dev, VIDIOC_ENUM_DV_TIMINGS);
-+		v4l2_disable_ioctl(&node->video_dev, VIDIOC_QUERY_DV_TIMINGS);
-+	}
-+	if (node_id == METADATA_NODE ||
-+	    !v4l2_subdev_has_op(unicam->sensor, pad, enum_frame_interval))
-+		v4l2_disable_ioctl(&node->video_dev,
-+				   VIDIOC_ENUM_FRAMEINTERVALS);
-+	if (node_id == METADATA_NODE ||
-+	    !v4l2_subdev_has_op(unicam->sensor, video, g_frame_interval))
-+		v4l2_disable_ioctl(&node->video_dev, VIDIOC_G_PARM);
-+	if (node_id == METADATA_NODE ||
-+	    !v4l2_subdev_has_op(unicam->sensor, video, s_frame_interval))
-+		v4l2_disable_ioctl(&node->video_dev, VIDIOC_S_PARM);
-+
-+	if (node_id == METADATA_NODE ||
-+	    !v4l2_subdev_has_op(unicam->sensor, pad, enum_frame_size))
-+		v4l2_disable_ioctl(&node->video_dev, VIDIOC_ENUM_FRAMESIZES);
-+
-+	ret = video_register_device(vdev, VFL_TYPE_VIDEO, -1);
-+	if (ret) {
-+		dev_err(unicam->dev, "Unable to register video device %s\n",
-+			vdev->name);
-+		return ret;
-+	}
-+
-+	node->registered = true;
-+
-+	ret = media_create_pad_link(&unicam->sensor->entity, node_id,
-+				    &node->video_dev.entity, 0,
-+				    MEDIA_LNK_FL_ENABLED |
-+				    MEDIA_LNK_FL_IMMUTABLE);
-+	if (ret)
-+		dev_err(unicam->dev, "Unable to create link for %s\n",
-+			vdev->name);
-+
-+	return ret;
-+}
-+
-+static void unregister_nodes(struct unicam_device *unicam)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(unicam->node); i++) {
-+		struct unicam_node *node = &unicam->node[i];
-+
-+		if (node->dummy_buf_cpu_addr) {
-+			dma_free_coherent(unicam->dev, DUMMY_BUF_SIZE,
-+					  node->dummy_buf_cpu_addr,
-+					  node->dummy_buf_dma_addr);
-+		}
-+
-+		if (node->registered) {
-+			node->registered = false;
-+			video_unregister_device(&node->video_dev);
-+		}
-+	}
-+}
-+
-+static int unicam_async_complete(struct v4l2_async_notifier *notifier)
-+{
-+	struct unicam_device *unicam = to_unicam_device(notifier->v4l2_dev);
-+	int ret;
-+
-+	unicam->v4l2_dev.notify = unicam_notify;
-+
-+	unicam->sensor_config = v4l2_subdev_alloc_pad_config(unicam->sensor);
-+	if (!unicam->sensor_config)
-+		return -ENOMEM;
-+
-+	ret = register_node(unicam, &unicam->node[IMAGE_NODE],
-+			    V4L2_BUF_TYPE_VIDEO_CAPTURE, IMAGE_NODE);
-+	if (ret) {
-+		dev_err(unicam->dev, "Unable to register image video device.\n");
-+		goto unregister;
-+	}
-+
-+	/*
-+	 * Conditionally register the medatata video device if sensor provides
-+	 * an additional pad for embedded data.
-+	 */
-+	if (unicam->sensor->entity.num_pads >= 2) {
-+		ret = register_node(unicam, &unicam->node[METADATA_NODE],
-+				    V4L2_BUF_TYPE_META_CAPTURE, METADATA_NODE);
-+		if (ret) {
-+			dev_err(unicam->dev,
-+				"Unable to register metadata video device.\n");
-+			goto unregister;
-+		}
-+	}
-+
-+	ret = v4l2_device_register_ro_subdev_nodes(&unicam->v4l2_dev);
-+	if (ret) {
-+		dev_err(unicam->dev, "Unable to register subdev nodes.\n");
-+		goto unregister;
-+	}
-+	unicam->v4l2_dev.release = unicam_release;
-+
-+	return 0;
-+
-+unregister:
-+	unregister_nodes(unicam);
-+
-+	return ret;
-+}
-+
-+static const struct v4l2_async_notifier_operations unicam_async_ops = {
-+	.bound = unicam_async_bound,
-+	.complete = unicam_async_complete,
-+};
-+
-+static int of_unicam_connect_subdevs(struct unicam_device *dev)
-+{
-+	struct v4l2_fwnode_endpoint ep = { 0 };
-+	struct device_node *ep_node;
-+	int ret;
-+
-+	if (of_property_read_u32(dev->dev->of_node, "brcm,num-data-lanes",
-+				 &dev->max_data_lanes) < 0) {
-+		dev_err(dev->dev, "number of data lanes not set\n");
-+		return -EINVAL;
-+	}
-+
-+	/* Get the local endpoint and remote device. */
-+	ep_node = of_graph_get_next_endpoint(dev->dev->of_node, NULL);
-+	if (!ep_node) {
-+		dev_err(dev->dev, "can't get next endpoint\n");
-+		return -EINVAL;
-+	}
-+
-+	/* Parse the local endpoint and validate its configuration. */
-+	v4l2_fwnode_endpoint_parse(of_fwnode_handle(ep_node), &ep);
-+	dev->bus_type = ep.bus_type;
-+
-+	switch (ep.bus_type) {
-+	case V4L2_MBUS_CSI2_DPHY:
-+		switch (ep.bus.mipi_csi2.num_data_lanes) {
-+		case 1:
-+		case 2:
-+		case 4:
-+			break;
-+
-+		default:
-+			dev_err(dev->dev, "%u data lanes not supported\n",
-+				ep.bus.mipi_csi2.num_data_lanes);
-+			goto err_ep_config;
-+		}
-+
-+		if (ep.bus.mipi_csi2.num_data_lanes > dev->max_data_lanes) {
-+			dev_err(dev->dev,
-+				"%u lanes requested when %u are supported\n",
-+				ep.bus.mipi_csi2.num_data_lanes,
-+				dev->max_data_lanes);
-+			goto err_ep_config;
-+		}
-+
-+		dev->max_data_lanes = ep.bus.mipi_csi2.num_data_lanes;
-+		dev->bus_flags = ep.bus.mipi_csi2.flags;
-+		break;
-+
-+	case V4L2_MBUS_CCP2:
-+		if (ep.bus.mipi_csi1.clock_lane != 0 ||
-+		    ep.bus.mipi_csi1.data_lane != 1) {
-+			dev_err(dev->dev, "unsupported lanes configuration\n");
-+			goto err_ep_config;
-+		}
-+
-+		dev->max_data_lanes = 1;
-+		dev->bus_flags = ep.bus.mipi_csi1.strobe;
-+		break;
-+
-+	default:
-+		/* Unsupported bus type */
-+		dev_err(dev->dev, " unsupported bus type %u\n", ep.bus_type);
-+		goto err_ep_config;
-+	}
-+
-+	/* Initialize and register the async notifier. */
-+	v4l2_async_notifier_init(&dev->notifier);
-+	dev->notifier.ops = &unicam_async_ops;
-+
-+	ret = v4l2_async_notifier_add_fwnode_remote_subdev(&dev->notifier,
-+				of_fwnode_handle(ep_node), &dev->asd);
-+	of_node_put(ep_node);
-+	if (ret) {
-+		dev_err(dev->dev, "Error adding subdevice: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = v4l2_async_notifier_register(&dev->v4l2_dev, &dev->notifier);
-+	if (ret) {
-+		dev_err(dev->dev, "Error registering async notifier: %d\n",
-+			ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+
-+err_ep_config:
-+	of_node_put(ep_node);
-+	return -EINVAL;
-+}
-+
-+static int unicam_probe(struct platform_device *pdev)
-+{
-+	struct unicam_device *unicam;
-+	int ret;
-+
-+	unicam = devm_kzalloc(&pdev->dev, sizeof(*unicam), GFP_KERNEL);
-+	if (!unicam)
-+		return -ENOMEM;
-+
-+	unicam->dev = &pdev->dev;
-+	unicam->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(unicam->base)) {
-+		dev_err(unicam->dev, "Failed to get main io block\n");
-+		return PTR_ERR(unicam->base);
-+	}
-+
-+	unicam->clk_gate_base = devm_platform_ioremap_resource(pdev, 1);
-+	if (IS_ERR(unicam->clk_gate_base)) {
-+		dev_err(unicam->dev, "Failed to get 2nd io block\n");
-+		return PTR_ERR(unicam->clk_gate_base);
-+	}
-+
-+	unicam->clock = devm_clk_get(&pdev->dev, "lp");
-+	if (IS_ERR(unicam->clock)) {
-+		dev_err(unicam->dev, "Failed to get lp clock\n");
-+		return PTR_ERR(unicam->clock);
-+	}
-+
-+	unicam->vpu_clock = devm_clk_get(&pdev->dev, "vpu");
-+	if (IS_ERR(unicam->vpu_clock)) {
-+		dev_err(unicam->dev, "Failed to get vpu clock\n");
-+		return PTR_ERR(unicam->vpu_clock);
-+	}
-+
-+	ret = platform_get_irq(pdev, 0);
-+	if (ret <= 0) {
-+		dev_err(&pdev->dev, "No IRQ resource\n");
-+		return -EINVAL;
-+	}
-+
-+	ret = devm_request_irq(&pdev->dev, ret, unicam_isr, 0,
-+			       "unicam_capture0", unicam);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Unable to request interrupt\n");
-+		return -EINVAL;
-+	}
-+
-+	unicam->mdev.dev = &pdev->dev;
-+	strscpy(unicam->mdev.model, UNICAM_MODULE_NAME,
-+		sizeof(unicam->mdev.model));
-+	strscpy(unicam->mdev.serial, "", sizeof(unicam->mdev.serial));
-+	snprintf(unicam->mdev.bus_info, sizeof(unicam->mdev.bus_info),
-+		 "platform:%s", dev_name(&pdev->dev));
-+	unicam->mdev.hw_revision = 0;
-+
-+	media_device_init(&unicam->mdev);
-+
-+	unicam->v4l2_dev.mdev = &unicam->mdev;
-+
-+	ret = v4l2_device_register(&pdev->dev, &unicam->v4l2_dev);
-+	if (ret) {
-+		dev_err(unicam->dev, "Unable to register v4l2 device.\n");
-+		return ret;
-+	}
-+
-+	ret = media_device_register(&unicam->mdev);
-+	if (ret < 0) {
-+		dev_err(unicam->dev, "Unable to register media device.\n");
-+		goto err_v4l2_unregister;
-+	}
-+
-+	/* Reserve space for the controls */
-+	ret = v4l2_ctrl_handler_init(&unicam->ctrl_handler, 16);
-+	if (ret < 0)
-+		goto err_media_unregister;
-+
-+	/* set the driver data in platform device */
-+	platform_set_drvdata(pdev, unicam);
-+
-+	ret = of_unicam_connect_subdevs(unicam);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Failed to connect subdevs\n");
-+		goto err_media_unregister;
-+	}
-+
-+	pm_runtime_enable(&pdev->dev);
-+
-+	return 0;
-+
-+err_media_unregister:
-+	media_device_unregister(&unicam->mdev);
-+err_v4l2_unregister:
-+	v4l2_device_unregister(&unicam->v4l2_dev);
-+
-+	return ret;
-+}
-+
-+static int unicam_remove(struct platform_device *pdev)
-+{
-+	struct unicam_device *unicam = platform_get_drvdata(pdev);
-+
-+	v4l2_async_notifier_unregister(&unicam->notifier);
-+	v4l2_device_unregister(&unicam->v4l2_dev);
-+	media_device_unregister(&unicam->mdev);
-+	unregister_nodes(unicam);
-+
-+	pm_runtime_disable(&pdev->dev);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id unicam_of_match[] = {
-+	{ .compatible = "brcm,bcm2835-unicam", },
-+	{ /* sentinel */ },
-+};
-+MODULE_DEVICE_TABLE(of, unicam_of_match);
-+
-+static struct platform_driver unicam_driver = {
-+	.probe		= unicam_probe,
-+	.remove		= unicam_remove,
-+	.driver = {
-+		.name	= UNICAM_MODULE_NAME,
-+		.of_match_table = of_match_ptr(unicam_of_match),
-+	},
-+};
-+
-+module_platform_driver(unicam_driver);
-+
-+MODULE_AUTHOR("Dave Stevenson <dave.stevenson@raspberrypi.com>");
-+MODULE_DESCRIPTION("BCM2835 Unicam driver");
-+MODULE_LICENSE("GPL");
-+MODULE_VERSION(UNICAM_VERSION);
-diff --git a/drivers/staging/media/bcm2835-unicam/vc4-regs-unicam.h b/drivers/staging/media/bcm2835-unicam/vc4-regs-unicam.h
-new file mode 100644
-index 0000000000000..ae059a171d0fe
---- /dev/null
-+++ b/drivers/staging/media/bcm2835-unicam/vc4-regs-unicam.h
-@@ -0,0 +1,253 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+
-+/*
-+ * Copyright (C) 2017-2020 Raspberry Pi Trading.
-+ * Dave Stevenson <dave.stevenson@raspberrypi.com>
-+ */
-+
-+#ifndef VC4_REGS_UNICAM_H
-+#define VC4_REGS_UNICAM_H
-+
-+/*
-+ * The following values are taken from files found within the code drop
-+ * made by Broadcom for the BCM21553 Graphics Driver, predominantly in
-+ * brcm_usrlib/dag/vmcsx/vcinclude/hardware_vc4.h.
-+ * They have been modified to be only the register offset.
-+ */
-+#define UNICAM_CTRL	0x000
-+#define UNICAM_STA	0x004
-+#define UNICAM_ANA	0x008
-+#define UNICAM_PRI	0x00c
-+#define UNICAM_CLK	0x010
-+#define UNICAM_CLT	0x014
-+#define UNICAM_DAT0	0x018
-+#define UNICAM_DAT1	0x01c
-+#define UNICAM_DAT2	0x020
-+#define UNICAM_DAT3	0x024
-+#define UNICAM_DLT	0x028
-+#define UNICAM_CMP0	0x02c
-+#define UNICAM_CMP1	0x030
-+#define UNICAM_CAP0	0x034
-+#define UNICAM_CAP1	0x038
-+#define UNICAM_ICTL	0x100
-+#define UNICAM_ISTA	0x104
-+#define UNICAM_IDI0	0x108
-+#define UNICAM_IPIPE	0x10c
-+#define UNICAM_IBSA0	0x110
-+#define UNICAM_IBEA0	0x114
-+#define UNICAM_IBLS	0x118
-+#define UNICAM_IBWP	0x11c
-+#define UNICAM_IHWIN	0x120
-+#define UNICAM_IHSTA	0x124
-+#define UNICAM_IVWIN	0x128
-+#define UNICAM_IVSTA	0x12c
-+#define UNICAM_ICC	0x130
-+#define UNICAM_ICS	0x134
-+#define UNICAM_IDC	0x138
-+#define UNICAM_IDPO	0x13c
-+#define UNICAM_IDCA	0x140
-+#define UNICAM_IDCD	0x144
-+#define UNICAM_IDS	0x148
-+#define UNICAM_DCS	0x200
-+#define UNICAM_DBSA0	0x204
-+#define UNICAM_DBEA0	0x208
-+#define UNICAM_DBWP	0x20c
-+#define UNICAM_DBCTL	0x300
-+#define UNICAM_IBSA1	0x304
-+#define UNICAM_IBEA1	0x308
-+#define UNICAM_IDI1	0x30c
-+#define UNICAM_DBSA1	0x310
-+#define UNICAM_DBEA1	0x314
-+#define UNICAM_MISC	0x400
-+
-+/*
-+ * The following bitmasks are from the kernel released by Broadcom
-+ * for Android - https://android.googlesource.com/kernel/bcm/
-+ * The Rhea, Hawaii, and Java chips all contain the same VideoCore4
-+ * Unicam block as BCM2835, as defined in eg
-+ * arch/arm/mach-rhea/include/mach/rdb_A0/brcm_rdb_cam.h and similar.
-+ * Values reworked to use the kernel BIT and GENMASK macros.
-+ *
-+ * Some of the bit mnenomics have been amended to match the datasheet.
-+ */
-+/* UNICAM_CTRL Register */
-+#define UNICAM_CPE		BIT(0)
-+#define UNICAM_MEM		BIT(1)
-+#define UNICAM_CPR		BIT(2)
-+#define UNICAM_CPM_MASK		GENMASK(3, 3)
-+#define UNICAM_CPM_CSI2		0
-+#define UNICAM_CPM_CCP2		1
-+#define UNICAM_SOE		BIT(4)
-+#define UNICAM_DCM_MASK		GENMASK(5, 5)
-+#define UNICAM_DCM_STROBE	0
-+#define UNICAM_DCM_DATA		1
-+#define UNICAM_SLS		BIT(6)
-+#define UNICAM_PFT_MASK		GENMASK(11, 8)
-+#define UNICAM_OET_MASK		GENMASK(20, 12)
-+
-+/* UNICAM_STA Register */
-+#define UNICAM_SYN		BIT(0)
-+#define UNICAM_CS		BIT(1)
-+#define UNICAM_SBE		BIT(2)
-+#define UNICAM_PBE		BIT(3)
-+#define UNICAM_HOE		BIT(4)
-+#define UNICAM_PLE		BIT(5)
-+#define UNICAM_SSC		BIT(6)
-+#define UNICAM_CRCE		BIT(7)
-+#define UNICAM_OES		BIT(8)
-+#define UNICAM_IFO		BIT(9)
-+#define UNICAM_OFO		BIT(10)
-+#define UNICAM_BFO		BIT(11)
-+#define UNICAM_DL		BIT(12)
-+#define UNICAM_PS		BIT(13)
-+#define UNICAM_IS		BIT(14)
-+#define UNICAM_PI0		BIT(15)
-+#define UNICAM_PI1		BIT(16)
-+#define UNICAM_FSI_S		BIT(17)
-+#define UNICAM_FEI_S		BIT(18)
-+#define UNICAM_LCI_S		BIT(19)
-+#define UNICAM_BUF0_RDY		BIT(20)
-+#define UNICAM_BUF0_NO		BIT(21)
-+#define UNICAM_BUF1_RDY		BIT(22)
-+#define UNICAM_BUF1_NO		BIT(23)
-+#define UNICAM_DI		BIT(24)
-+
-+#define UNICAM_STA_MASK_ALL \
-+		(UNICAM_DL + \
-+		UNICAM_SBE + \
-+		UNICAM_PBE + \
-+		UNICAM_HOE + \
-+		UNICAM_PLE + \
-+		UNICAM_SSC + \
-+		UNICAM_CRCE + \
-+		UNICAM_IFO + \
-+		UNICAM_OFO + \
-+		UNICAM_PS + \
-+		UNICAM_PI0 + \
-+		UNICAM_PI1)
-+
-+/* UNICAM_ANA Register */
-+#define UNICAM_APD		BIT(0)
-+#define UNICAM_BPD		BIT(1)
-+#define UNICAM_AR		BIT(2)
-+#define UNICAM_DDL		BIT(3)
-+#define UNICAM_CTATADJ_MASK	GENMASK(7, 4)
-+#define UNICAM_PTATADJ_MASK	GENMASK(11, 8)
-+
-+/* UNICAM_PRI Register */
-+#define UNICAM_PE		BIT(0)
-+#define UNICAM_PT_MASK		GENMASK(2, 1)
-+#define UNICAM_NP_MASK		GENMASK(7, 4)
-+#define UNICAM_PP_MASK		GENMASK(11, 8)
-+#define UNICAM_BS_MASK		GENMASK(15, 12)
-+#define UNICAM_BL_MASK		GENMASK(17, 16)
-+
-+/* UNICAM_CLK Register */
-+#define UNICAM_CLE		BIT(0)
-+#define UNICAM_CLPD		BIT(1)
-+#define UNICAM_CLLPE		BIT(2)
-+#define UNICAM_CLHSE		BIT(3)
-+#define UNICAM_CLTRE		BIT(4)
-+#define UNICAM_CLAC_MASK	GENMASK(8, 5)
-+#define UNICAM_CLSTE		BIT(29)
-+
-+/* UNICAM_CLT Register */
-+#define UNICAM_CLT1_MASK	GENMASK(7, 0)
-+#define UNICAM_CLT2_MASK	GENMASK(15, 8)
-+
-+/* UNICAM_DATn Registers */
-+#define UNICAM_DLE		BIT(0)
-+#define UNICAM_DLPD		BIT(1)
-+#define UNICAM_DLLPE		BIT(2)
-+#define UNICAM_DLHSE		BIT(3)
-+#define UNICAM_DLTRE		BIT(4)
-+#define UNICAM_DLSM		BIT(5)
-+#define UNICAM_DLFO		BIT(28)
-+#define UNICAM_DLSTE		BIT(29)
-+
-+#define UNICAM_DAT_MASK_ALL (UNICAM_DLSTE + UNICAM_DLFO)
-+
-+/* UNICAM_DLT Register */
-+#define UNICAM_DLT1_MASK	GENMASK(7, 0)
-+#define UNICAM_DLT2_MASK	GENMASK(15, 8)
-+#define UNICAM_DLT3_MASK	GENMASK(23, 16)
-+
-+/* UNICAM_ICTL Register */
-+#define UNICAM_FSIE		BIT(0)
-+#define UNICAM_FEIE		BIT(1)
-+#define UNICAM_IBOB		BIT(2)
-+#define UNICAM_FCM		BIT(3)
-+#define UNICAM_TFC		BIT(4)
-+#define UNICAM_LIP_MASK		GENMASK(6, 5)
-+#define UNICAM_LCIE_MASK	GENMASK(28, 16)
-+
-+/* UNICAM_IDI0/1 Register */
-+#define UNICAM_ID0_MASK		GENMASK(7, 0)
-+#define UNICAM_ID1_MASK		GENMASK(15, 8)
-+#define UNICAM_ID2_MASK		GENMASK(23, 16)
-+#define UNICAM_ID3_MASK		GENMASK(31, 24)
-+
-+/* UNICAM_ISTA Register */
-+#define UNICAM_FSI		BIT(0)
-+#define UNICAM_FEI		BIT(1)
-+#define UNICAM_LCI		BIT(2)
-+
-+#define UNICAM_ISTA_MASK_ALL (UNICAM_FSI + UNICAM_FEI + UNICAM_LCI)
-+
-+/* UNICAM_IPIPE Register */
-+#define UNICAM_PUM_MASK		GENMASK(2, 0)
-+		/* Unpacking modes */
-+		#define UNICAM_PUM_NONE		0
-+		#define UNICAM_PUM_UNPACK6	1
-+		#define UNICAM_PUM_UNPACK7	2
-+		#define UNICAM_PUM_UNPACK8	3
-+		#define UNICAM_PUM_UNPACK10	4
-+		#define UNICAM_PUM_UNPACK12	5
-+		#define UNICAM_PUM_UNPACK14	6
-+		#define UNICAM_PUM_UNPACK16	7
-+#define UNICAM_DDM_MASK		GENMASK(6, 3)
-+#define UNICAM_PPM_MASK		GENMASK(9, 7)
-+		/* Packing modes */
-+		#define UNICAM_PPM_NONE		0
-+		#define UNICAM_PPM_PACK8	1
-+		#define UNICAM_PPM_PACK10	2
-+		#define UNICAM_PPM_PACK12	3
-+		#define UNICAM_PPM_PACK14	4
-+		#define UNICAM_PPM_PACK16	5
-+#define UNICAM_DEM_MASK		GENMASK(11, 10)
-+#define UNICAM_DEBL_MASK	GENMASK(14, 12)
-+#define UNICAM_ICM_MASK		GENMASK(16, 15)
-+#define UNICAM_IDM_MASK		GENMASK(17, 17)
-+
-+/* UNICAM_ICC Register */
-+#define UNICAM_ICFL_MASK	GENMASK(4, 0)
-+#define UNICAM_ICFH_MASK	GENMASK(9, 5)
-+#define UNICAM_ICST_MASK	GENMASK(12, 10)
-+#define UNICAM_ICLT_MASK	GENMASK(15, 13)
-+#define UNICAM_ICLL_MASK	GENMASK(31, 16)
-+
-+/* UNICAM_DCS Register */
-+#define UNICAM_DIE		BIT(0)
-+#define UNICAM_DIM		BIT(1)
-+#define UNICAM_DBOB		BIT(3)
-+#define UNICAM_FDE		BIT(4)
-+#define UNICAM_LDP		BIT(5)
-+#define UNICAM_EDL_MASK		GENMASK(15, 8)
-+
-+/* UNICAM_DBCTL Register */
-+#define UNICAM_DBEN		BIT(0)
-+#define UNICAM_BUF0_IE		BIT(1)
-+#define UNICAM_BUF1_IE		BIT(2)
-+
-+/* UNICAM_CMP[0,1] register */
-+#define UNICAM_PCE		BIT(31)
-+#define UNICAM_GI		BIT(9)
-+#define UNICAM_CPH		BIT(8)
-+#define UNICAM_PCVC_MASK	GENMASK(7, 6)
-+#define UNICAM_PCDT_MASK	GENMASK(5, 0)
-+
-+/* UNICAM_MISC register */
-+#define UNICAM_FL0		BIT(6)
-+#define UNICAM_FL1		BIT(9)
-+
-+#endif
--- 
-2.29.1
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 
+smatch warnings:
+drivers/media/v4l2-core/v4l2-ctrls.c:1809 std_validate_compound() warn: ignoring unreachable code.
+
+vim +1809 drivers/media/v4l2-core/v4l2-ctrls.c
+
+de8145452eebe55 Ezequiel Garcia   2019-07-11  1774  static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
+0176077a813933a Hans Verkuil      2014-04-27  1775  				 union v4l2_ctrl_ptr ptr)
+0176077a813933a Hans Verkuil      2014-04-27  1776  {
+0e380411d9f043f Ezequiel Garcia   2020-11-05  1777  	struct v4l2_ctrl_mpeg2_sequence *p_mpeg2_sequence;
+0e380411d9f043f Ezequiel Garcia   2020-11-05  1778  	struct v4l2_ctrl_mpeg2_picture *p_mpeg2_picture;
+c27bb30e7b6d385 Paul Kocialkowski 2018-09-13  1779  	struct v4l2_ctrl_mpeg2_slice_params *p_mpeg2_slice_params;
+298c62d3856111e Ezequiel Garcia   2019-07-11  1780  	struct v4l2_ctrl_vp8_frame_header *p_vp8_frame_header;
+d9358563179a7f0 Ezequiel Garcia   2020-08-25  1781  	struct v4l2_ctrl_h264_slice_params *p_h264_slice_params;
+f9879eb378295e8 Ezequiel Garcia   2020-08-25  1782  	struct v4l2_ctrl_h264_decode_params *p_h264_dec_params;
+256fa3920874b0f Paul Kocialkowski 2019-10-22  1783  	struct v4l2_ctrl_hevc_sps *p_hevc_sps;
+256fa3920874b0f Paul Kocialkowski 2019-10-22  1784  	struct v4l2_ctrl_hevc_pps *p_hevc_pps;
+256fa3920874b0f Paul Kocialkowski 2019-10-22  1785  	struct v4l2_ctrl_hevc_slice_params *p_hevc_slice_params;
+d1dc49370f8371b Ricardo Ribalda   2019-10-07  1786  	struct v4l2_area *area;
+de8145452eebe55 Ezequiel Garcia   2019-07-11  1787  	void *p = ptr.p + idx * ctrl->elem_size;
+256fa3920874b0f Paul Kocialkowski 2019-10-22  1788  	unsigned int i;
+de8145452eebe55 Ezequiel Garcia   2019-07-11  1789  
+de8145452eebe55 Ezequiel Garcia   2019-07-11  1790  	switch ((u32)ctrl->type) {
+0e380411d9f043f Ezequiel Garcia   2020-11-05  1791  	case V4L2_CTRL_TYPE_MPEG2_SEQUENCE:
+0e380411d9f043f Ezequiel Garcia   2020-11-05  1792  		p_mpeg2_sequence = p;
+de8145452eebe55 Ezequiel Garcia   2019-07-11  1793  
+0e380411d9f043f Ezequiel Garcia   2020-11-05  1794  		switch (p_mpeg2_sequence->chroma_format) {
+de8145452eebe55 Ezequiel Garcia   2019-07-11  1795  		case 1: /* 4:2:0 */
+de8145452eebe55 Ezequiel Garcia   2019-07-11  1796  		case 2: /* 4:2:2 */
+de8145452eebe55 Ezequiel Garcia   2019-07-11  1797  		case 3: /* 4:4:4 */
+de8145452eebe55 Ezequiel Garcia   2019-07-11  1798  			break;
+de8145452eebe55 Ezequiel Garcia   2019-07-11  1799  		default:
+de8145452eebe55 Ezequiel Garcia   2019-07-11  1800  			return -EINVAL;
+de8145452eebe55 Ezequiel Garcia   2019-07-11  1801  		}
+0e380411d9f043f Ezequiel Garcia   2020-11-05  1802  		zero_reserved(*p_mpeg2_sequence);
+0e380411d9f043f Ezequiel Garcia   2020-11-05  1803  		break;
+0e380411d9f043f Ezequiel Garcia   2020-11-05  1804  
+0e380411d9f043f Ezequiel Garcia   2020-11-05  1805  	case V4L2_CTRL_TYPE_MPEG2_PICTURE:
+0e380411d9f043f Ezequiel Garcia   2020-11-05  1806  		p_mpeg2_picture = p;
+0e380411d9f043f Ezequiel Garcia   2020-11-05  1807  		break;
+                                                                ^^^^^^
+
+de8145452eebe55 Ezequiel Garcia   2019-07-11  1808  
+0e380411d9f043f Ezequiel Garcia   2020-11-05 @1809  		switch (p_mpeg2_picture->intra_dc_precision) {
+                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Unreachable.
+
+de8145452eebe55 Ezequiel Garcia   2019-07-11  1810  		case 0: /* 8 bits */
+de8145452eebe55 Ezequiel Garcia   2019-07-11  1811  		case 1: /* 9 bits */
+de8145452eebe55 Ezequiel Garcia   2019-07-11  1812  		case 2: /* 10 bits */
+de8145452eebe55 Ezequiel Garcia   2019-07-11  1813  		case 3: /* 11 bits */
+de8145452eebe55 Ezequiel Garcia   2019-07-11  1814  			break;
+de8145452eebe55 Ezequiel Garcia   2019-07-11  1815  		default:
+de8145452eebe55 Ezequiel Garcia   2019-07-11  1816  			return -EINVAL;
+de8145452eebe55 Ezequiel Garcia   2019-07-11  1817  		}
+0e380411d9f043f Ezequiel Garcia   2020-11-05  1818  		break;
+de8145452eebe55 Ezequiel Garcia   2019-07-11  1819  
+
+
+--mSxgbZZZvrAyzONB
+Content-Type: application/gzip
+Content-Disposition: attachment; filename=".config.gz"
+Content-Transfer-Encoding: base64
+
+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
+
+--mSxgbZZZvrAyzONB--
