@@ -2,252 +2,149 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EE0CC55ABD
-	for <linux-media@archiver.kernel.org>; Tue, 10 Nov 2020 09:43:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6353AC63699
+	for <linux-media@archiver.kernel.org>; Tue, 10 Nov 2020 09:51:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 68D1920809
-	for <linux-media@archiver.kernel.org>; Tue, 10 Nov 2020 09:43:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0A92220780
+	for <linux-media@archiver.kernel.org>; Tue, 10 Nov 2020 09:51:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="k/whHSCZ"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="XBZqy3t9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729909AbgKJJnu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Nov 2020 04:43:50 -0500
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:56437 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727098AbgKJJnu (ORCPT
+        id S1731442AbgKJJut (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Nov 2020 04:50:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45330 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731671AbgKJJus (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Nov 2020 04:43:50 -0500
-X-Greylist: delayed 301 seconds by postgrey-1.27 at vger.kernel.org; Tue, 10 Nov 2020 04:43:47 EST
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id cQBjkko7yNanzcQBmk5E1g; Tue, 10 Nov 2020 10:43:46 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1605001426; bh=MeSyd1KqKJIQE9jS4gEXULd/EYWz5zEO3mrs7cy4T+8=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=k/whHSCZhLg30Yml6hdIf0pb5BmLuSGaGZr+7ic5z0HNOByZQgd/FJwJAXFvZ2f/7
-         wDvpkN1dEQ7HzSwMKrePb7Pe/16TySQP8BJ+2HouxrOzLCnQSEv8vQjTmAup8OR3PR
-         OoEvSaMykob8zOgn5x1bRKQwTtRz0/1r/c1Kth+skOswdlkqY4GmEJK9hbjhUJPpUZ
-         J/hN+GA6PIQ+/qa1wMpXEqn28GXYhZURtjtktCR+T8HKRBZp9YpbG9AlKFp7thmlPR
-         g/fI0fjFWgypJoH3QiUsVDATyBBu3TPAUNFZmljseteg/mT7jUqojVnkDhce3ebiq8
-         jiklLDZ6M8ToA==
-Subject: Re: [PATCH 1/3] v4l: Add HDR10 HEVC static metadata controls
-To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Cc:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>
-References: <20201109173153.23720-1-stanimir.varbanov@linaro.org>
- <20201109173153.23720-2-stanimir.varbanov@linaro.org>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <dc70bc75-62af-1bdb-1feb-bb58e6f1ff8c@xs4all.nl>
-Date:   Tue, 10 Nov 2020 10:43:43 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        Tue, 10 Nov 2020 04:50:48 -0500
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C87C0613D3
+        for <linux-media@vger.kernel.org>; Tue, 10 Nov 2020 01:50:47 -0800 (PST)
+Received: by mail-ej1-x643.google.com with SMTP id f23so9964921ejk.2
+        for <linux-media@vger.kernel.org>; Tue, 10 Nov 2020 01:50:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/xvo1QegjGszfBVPbZfwcJiTRf9LyLsH4tfXgS3DTXk=;
+        b=XBZqy3t9IZQRFydJbi3EOQsbNKSoGIh1pco/g0+bITyoIUkri4wfPjhNf10PvUjdHM
+         oiUisGj+v2Bm78WVce9YT8uqvFdrkdOzLCpu67P/MAJzNpCqHb4m8FThormd6bSjouLr
+         54cSY+5h7nBsSNX31MZu8MmYatBGeKY3cH/a8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/xvo1QegjGszfBVPbZfwcJiTRf9LyLsH4tfXgS3DTXk=;
+        b=OaHj4oNThfUbhxJgBQbVItgfYINZkYJSeXR/J9HMZBHT5bdPxiBEyKBMIH+tQhCBkc
+         jx3JHbIRWIioxIvbVh9+bKHbBnELiDobsfJGa6qEreM87n8+HAs2G2F8s0Qsr0b661iH
+         dV6gbi0mrLRmzk46j4Mllitb7nUSUgjr2cH04aVAxNW7KdBOaGZW9PV+tqIC/lGPwSru
+         uhMUsiL5ET0BXHLOSG2Dm2AOjb5+8FO2pqQbSQOWHKBa0dEaazmMTOAGFGaUO6NnG/37
+         Gr4jIKIng3Xmh/Hk/2vwnODm8wsYYtw2jkhS8VzwaITVENCDhhUpVxHMJh/4X6/pWN6F
+         KEXQ==
+X-Gm-Message-State: AOAM5304UnQuhvRbW/TFPPnhbYQ+xKd8CbEdfq3Qbxf37+D8ikZ8Aeep
+        Za3fOtNCDdZwwha4FmG7+cXK9GyF+8q9CQ==
+X-Google-Smtp-Source: ABdhPJyp7L18yfX+a3+74m3WSmf82NX+348FHIw3+ta56kuNj54YEERcYeSPKnjO8DjnXv3ji0PBXQ==
+X-Received: by 2002:a17:906:b0f:: with SMTP id u15mr19092856ejg.109.1605001845520;
+        Tue, 10 Nov 2020 01:50:45 -0800 (PST)
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
+        by smtp.gmail.com with ESMTPSA id og19sm10071071ejb.7.2020.11.10.01.50.44
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Nov 2020 01:50:44 -0800 (PST)
+Received: by mail-wr1-f46.google.com with SMTP id l1so7539185wrb.9
+        for <linux-media@vger.kernel.org>; Tue, 10 Nov 2020 01:50:44 -0800 (PST)
+X-Received: by 2002:adf:ed11:: with SMTP id a17mr8193482wro.197.1605001843595;
+ Tue, 10 Nov 2020 01:50:43 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20201109173153.23720-2-stanimir.varbanov@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfLp3dgU2LB7drb9G6Q7yYxulK6Q5GZXqntaedYrCZ0GeaO3RCMeL6v9FNdGum47vYyI5N9l2XrswUNe2DywGe31HyucPbAjLCv9GP/mQRU/m5gFEdnV/
- mTc9AoH9+lVI/h6pEkogOVzRbTNKgdiM0zqtCuc+h6VO7R5u9WSCs6wdP2dQKGhm1KgPGJdW+hDa85QuF7LrZCCBMO0v1vvYGfX/RgLm3kX1CbEiECMYjU61
- XkBVBxRKiXyKb9OrE3Htd+dAfptVGYcATO69Qse+T6rMrTlMMq7iWL/3F7kqwZADwyLMgepVUyGWG/6Rj0xR1Dq0IOKjT94YoQVU+/2S0mzRES864qfE47fn
- sXyXnHrxTabjbvMzn2fqnP5I7512lVqGSgiaV+0hjgs//72PE/iD8mHREOL8d30F6g8GpNdr
+References: <20200930160917.1234225-1-hch@lst.de> <20200930160917.1234225-9-hch@lst.de>
+ <CAAFQd5CttttqMXb=iDPb+Z0WGUa2g=W6JwXJ-5HbhmrDyxP+cQ@mail.gmail.com>
+ <CANiDSCtefXKw-xC3bskyggW-BzCmVPj6GGLvO=cCPZHbS1oTDA@mail.gmail.com>
+ <20201110092506.GA24469@lst.de> <CANiDSCsBUBV1WA2To9x26Uhc5SU-4xuh3m4wUwXBcGwA6n8now@mail.gmail.com>
+In-Reply-To: <CANiDSCsBUBV1WA2To9x26Uhc5SU-4xuh3m4wUwXBcGwA6n8now@mail.gmail.com>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Tue, 10 Nov 2020 18:50:32 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5CCOrp0OA_n_SHNO5RAhV-MQ2KuQJA+oWHQ76h_So=M2Q@mail.gmail.com>
+Message-ID: <CAAFQd5CCOrp0OA_n_SHNO5RAhV-MQ2KuQJA+oWHQ76h_So=M2Q@mail.gmail.com>
+Subject: Re: [PATCH 8/8] WIP: add a dma_alloc_contiguous API
+To:     Ricardo Ribalda <ribalda@chromium.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
+        Roedel <joro@8bytes.org>," <iommu@lists.linux-foundation.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 09/11/2020 18:31, Stanimir Varbanov wrote:
-> Add Content light level and Mastering display colour volume v4l2
-> compounf controls, relevant payload structures and validation.
+On Tue, Nov 10, 2020 at 6:33 PM Ricardo Ribalda <ribalda@chromium.org> wrote:
+>
+> Hi Christoph
+>
+> On Tue, Nov 10, 2020 at 10:25 AM Christoph Hellwig <hch@lst.de> wrote:
+> >
+> > On Mon, Nov 09, 2020 at 03:53:55PM +0100, Ricardo Ribalda wrote:
+> > > Hi Christoph
+> > >
+> > > I have started now to give a try to your patchset. Sorry for the delay.
+> > >
+> > > For uvc I have prepared this patch:
+> > > https://github.com/ribalda/linux/commit/9094fe223fe38f8c8ff21366d893b43cbbdf0113
+> > >
+> > > I have tested successfully in a x86_64 noteboot..., yes I know there
+> > > is no change for that platform :).
+> > > I am trying to get hold of an arm device that can run the latest
+> > > kernel from upstream.
+> > >
+> > > On the meanwhile if you could take a look to the patch to verify that
+> > > this the way that you expect the drivers to use your api I would
+> > > appreciate it
+> >
+> > This looks pretty reaosnable.
+> >
+>
+> Great
+>
 
-Typo: compounf -> compound
+Thanks Christoph for taking a look quickly.
 
-> 
-> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
-> ---
->  drivers/media/v4l2-core/v4l2-ctrls.c | 61 ++++++++++++++++++++++++++++
->  include/media/hevc-ctrls.h           | 41 +++++++++++++++++++
->  include/media/v4l2-ctrls.h           |  2 +
->  3 files changed, 104 insertions(+)
-> 
-> diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-> index bd7f330c941c..f70eaa6a46df 100644
-> --- a/drivers/media/v4l2-core/v4l2-ctrls.c
-> +++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-> @@ -1023,6 +1023,8 @@ const char *v4l2_ctrl_get_name(u32 id)
->  	case V4L2_CID_MPEG_VIDEO_HEVC_SLICE_PARAMS:		return "HEVC Slice Parameters";
->  	case V4L2_CID_MPEG_VIDEO_HEVC_DECODE_MODE:		return "HEVC Decode Mode";
->  	case V4L2_CID_MPEG_VIDEO_HEVC_START_CODE:		return "HEVC Start Code";
-> +	case V4L2_CID_MPEG_VIDEO_HEVC_CLL_INFO:			return "HEVC Content Light Info";
-> +	case V4L2_CID_MPEG_VIDEO_HEVC_MASTERING_DISPLAY:	return "HEVC Mastering Display";
+> Also FYI, I managed to boot an ARM device with that tree. But I could
+> not test the uvc driver (it was a remote device with no usb device
+> attached)
+>
+> Hopefully I will be able to test it for real this week.
+>
+> Any suggestions for how to measure performance difference?
 
-Why is this split up in two controls? Can you have one, but not the other?
+Back in time Kieran (+CC) shared a patch to add extra statistics for
+packet processing and payload assembly, with results of various
+approaches summarized in a spreadsheet:
+https://docs.google.com/spreadsheets/d/1uPdbdVcebO9OQ0LQ8hR2LGIEySWgSnGwwhzv7LPXAlU/edit#gid=0
 
-From what I can tell they are always combined (see CTA-861-G, SMPTE 2086).
+That and just simple CPU usage comparison would be enough.
 
-Regards,
+>
+> Thanks!
+>
+> > Note that ifdef  CONFIG_DMA_NONCOHERENT in the old code doesn't actually
+> > work, as that option is an internal thing just for mips and sh..
 
-	Hans
+In what terms it doesn't actually work? Last time I checked some
+platforms actually defined CONFIG_DMA_NONCOHERENT, so those would
+instead use the kmalloc() + dma_map() path. I don't have any
+background on why that was added and whether it needs to be preserved,
+though. Kieran, Laurent, do you have any insight?
 
->  
->  	/* CAMERA controls */
->  	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
-> @@ -1461,6 +1463,12 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
->  	case V4L2_CID_MPEG_VIDEO_HEVC_SLICE_PARAMS:
->  		*type = V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS;
->  		break;
-> +	case V4L2_CID_MPEG_VIDEO_HEVC_CLL_INFO:
-> +		*type = V4L2_CTRL_TYPE_HEVC_CLL_INFO;
-> +		break;
-> +	case V4L2_CID_MPEG_VIDEO_HEVC_MASTERING_DISPLAY:
-> +		*type = V4L2_CTRL_TYPE_HEVC_MASTERING_DISPLAY;
-> +		break;
->  	case V4L2_CID_UNIT_CELL_SIZE:
->  		*type = V4L2_CTRL_TYPE_AREA;
->  		*flags |= V4L2_CTRL_FLAG_READ_ONLY;
-> @@ -1775,6 +1783,7 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
->  	struct v4l2_ctrl_hevc_sps *p_hevc_sps;
->  	struct v4l2_ctrl_hevc_pps *p_hevc_pps;
->  	struct v4l2_ctrl_hevc_slice_params *p_hevc_slice_params;
-> +	struct v4l2_ctrl_hevc_mastering_display *p_hevc_mastering;
->  	struct v4l2_area *area;
->  	void *p = ptr.p + idx * ctrl->elem_size;
->  	unsigned int i;
-> @@ -1934,6 +1943,52 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
->  		zero_padding(*p_hevc_slice_params);
->  		break;
->  
-> +	case V4L2_CTRL_TYPE_HEVC_CLL_INFO:
-> +		break;
-> +
-> +	case V4L2_CTRL_TYPE_HEVC_MASTERING_DISPLAY:
-> +		p_hevc_mastering = p;
-> +
-> +		for (i = 0; i < 3; ++i) {
-> +			if (p_hevc_mastering->display_primaries_x[i] <
-> +				V4L2_HEVC_MASTERING_PRIMARIES_X_LOW ||
-> +			    p_hevc_mastering->display_primaries_x[i] >
-> +				V4L2_HEVC_MASTERING_PRIMARIES_X_HIGH ||
-> +			    p_hevc_mastering->display_primaries_y[i] <
-> +				V4L2_HEVC_MASTERING_PRIMARIES_Y_LOW ||
-> +			    p_hevc_mastering->display_primaries_y[i] >
-> +				V4L2_HEVC_MASTERING_PRIMARIES_Y_HIGH)
-> +				return -EINVAL;
-> +		}
-> +
-> +		if (p_hevc_mastering->white_point_x <
-> +			V4L2_HEVC_MASTERING_WHITE_POINT_X_LOW ||
-> +		    p_hevc_mastering->white_point_x >
-> +			V4L2_HEVC_MASTERING_WHITE_POINT_X_HIGH ||
-> +		    p_hevc_mastering->white_point_y <
-> +			V4L2_HEVC_MASTERING_WHITE_POINT_Y_LOW ||
-> +		    p_hevc_mastering->white_point_y >
-> +			V4L2_HEVC_MASTERING_WHITE_POINT_Y_HIGH)
-> +			return -EINVAL;
-> +
-> +		if (p_hevc_mastering->max_luminance <
-> +			V4L2_HEVC_MASTERING_MAX_LUMA_LOW ||
-> +		    p_hevc_mastering->max_luminance >
-> +			V4L2_HEVC_MASTERING_MAX_LUMA_HIGH ||
-> +		    p_hevc_mastering->min_luminance <
-> +			V4L2_HEVC_MASTERING_MIN_LUMA_LOW ||
-> +		    p_hevc_mastering->min_luminance >
-> +			V4L2_HEVC_MASTERING_MIN_LUMA_HIGH)
-> +			return -EINVAL;
-> +
-> +		if (p_hevc_mastering->max_luminance ==
-> +			V4L2_HEVC_MASTERING_MAX_LUMA_LOW &&
-> +		    p_hevc_mastering->min_luminance ==
-> +			V4L2_HEVC_MASTERING_MIN_LUMA_HIGH)
-> +			return -EINVAL;
-> +
-> +		break;
-> +
->  	case V4L2_CTRL_TYPE_AREA:
->  		area = p;
->  		if (!area->width || !area->height)
-> @@ -2626,6 +2681,12 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
->  	case V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS:
->  		elem_size = sizeof(struct v4l2_ctrl_hevc_slice_params);
->  		break;
-> +	case V4L2_CTRL_TYPE_HEVC_CLL_INFO:
-> +		elem_size = sizeof(struct v4l2_ctrl_hevc_cll_info);
-> +		break;
-> +	case V4L2_CTRL_TYPE_HEVC_MASTERING_DISPLAY:
-> +		elem_size = sizeof(struct v4l2_ctrl_hevc_mastering_display);
-> +		break;
->  	case V4L2_CTRL_TYPE_AREA:
->  		elem_size = sizeof(struct v4l2_area);
->  		break;
-> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
-> index 1009cf0891cc..d254457d2846 100644
-> --- a/include/media/hevc-ctrls.h
-> +++ b/include/media/hevc-ctrls.h
-> @@ -209,4 +209,45 @@ struct v4l2_ctrl_hevc_slice_params {
->  	__u64	flags;
->  };
->  
-> +/*
-> + * Content light level information.
-> + * Source Rec. ITU-T H.265 v7 (11/2019) HEVC; D.2.35
-> + */
-> +#define V4L2_CID_MPEG_VIDEO_HEVC_CLL_INFO	(V4L2_CID_MPEG_BASE + 1017)
-> +#define V4L2_CTRL_TYPE_HEVC_CLL_INFO		0x0123
-> +
-> +struct v4l2_ctrl_hevc_cll_info {
-> +	__u16 max_content_light_level;
-> +	__u16 max_pic_average_light_level;
-> +};
-> +
-> +/*
-> + * Mastering display colour volume.
-> + * Source Rec. ITU-T H.265 v7 (11/2019) HEVC; D.2.28
-> + */
-> +#define V4L2_CID_MPEG_VIDEO_HEVC_MASTERING_DISPLAY (V4L2_CID_MPEG_BASE + 1018)
-> +#define V4L2_CTRL_TYPE_HEVC_MASTERING_DISPLAY	0x0124
-> +
-> +#define V4L2_HEVC_MASTERING_PRIMARIES_X_LOW	5
-> +#define V4L2_HEVC_MASTERING_PRIMARIES_X_HIGH	37000
-> +#define V4L2_HEVC_MASTERING_PRIMARIES_Y_LOW	5
-> +#define V4L2_HEVC_MASTERING_PRIMARIES_Y_HIGH	42000
-> +#define V4L2_HEVC_MASTERING_WHITE_POINT_X_LOW	5
-> +#define V4L2_HEVC_MASTERING_WHITE_POINT_X_HIGH	37000
-> +#define V4L2_HEVC_MASTERING_WHITE_POINT_Y_LOW	5
-> +#define V4L2_HEVC_MASTERING_WHITE_POINT_Y_HIGH	42000
-> +#define V4L2_HEVC_MASTERING_MAX_LUMA_LOW	50000
-> +#define V4L2_HEVC_MASTERING_MAX_LUMA_HIGH	100000000
-> +#define V4L2_HEVC_MASTERING_MIN_LUMA_LOW	1
-> +#define V4L2_HEVC_MASTERING_MIN_LUMA_HIGH	50000
-> +
-> +struct v4l2_ctrl_hevc_mastering_display {
-> +	__u16 display_primaries_x[3];
-> +	__u16 display_primaries_y[3];
-> +	__u16 white_point_x;
-> +	__u16 white_point_y;
-> +	__u32 max_luminance;
-> +	__u32 min_luminance;
-> +};
-> +
->  #endif
-> diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
-> index cb25f345e9ad..6120e29945e1 100644
-> --- a/include/media/v4l2-ctrls.h
-> +++ b/include/media/v4l2-ctrls.h
-> @@ -80,6 +80,8 @@ union v4l2_ctrl_ptr {
->  	struct v4l2_ctrl_hevc_sps *p_hevc_sps;
->  	struct v4l2_ctrl_hevc_pps *p_hevc_pps;
->  	struct v4l2_ctrl_hevc_slice_params *p_hevc_slice_params;
-> +	struct v4l2_ctrl_hevc_cll_info *p_hevc_cll;
-> +	struct v4l2_ctrl_hevc_mastering_display *p_hevc_mastering;
->  	struct v4l2_area *p_area;
->  	void *p;
->  	const void *p_const;
-> 
-
+Best regards,
+Tomasz
