@@ -2,114 +2,116 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-5.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56BD1C56201
-	for <linux-media@archiver.kernel.org>; Wed, 11 Nov 2020 14:40:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62C31C388F9
+	for <linux-media@archiver.kernel.org>; Wed, 11 Nov 2020 14:43:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0115E2067D
-	for <linux-media@archiver.kernel.org>; Wed, 11 Nov 2020 14:40:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CA85F207BB
+	for <linux-media@archiver.kernel.org>; Wed, 11 Nov 2020 14:43:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Gke4ieIS"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="lpOJprwS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727321AbgKKOkn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 11 Nov 2020 09:40:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35838 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727027AbgKKOiV (ORCPT
+        id S1726988AbgKKOnQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 11 Nov 2020 09:43:16 -0500
+Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:34221 "EHLO
+        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726579AbgKKOnO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 11 Nov 2020 09:38:21 -0500
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D1FC0613D6
-        for <linux-media@vger.kernel.org>; Wed, 11 Nov 2020 06:38:20 -0800 (PST)
-Received: by mail-wm1-x342.google.com with SMTP id 19so2487363wmf.1
-        for <linux-media@vger.kernel.org>; Wed, 11 Nov 2020 06:38:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=HCKQOzFPpo+2K5yUahYtUtI8k6qp0+z3GG+IuN0ZApo=;
-        b=Gke4ieISLM/XI8kVcqy+0mz4yf0ilnZLu5L14Ham+FjQ7rwpzqo52LbuyxGEB+6d5B
-         UDpnhBJ0KU/otCehHd8K7SCm6O/Ehnx9Hkk40ZKbouSOo4fle/NTsagkA8DlNP+01pd0
-         DnnJeE2a6YL9Jqu4qUhdAsMV06K3YYxn62/6V1uj6cQhRTBMy4s4Nrp9ms/W0j3wtPoK
-         r1rvv/ufdxrricb97N372OISa6T7tESS73k60FsZ/gfyGYLabadPIscSnwADP2leufuT
-         fDhlTwPBMSlUzbMYLrc84v1CgetJfn7FUqRzDfloDuPeEyxlirDHoY7dPoS8TfX8Zail
-         FEWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=HCKQOzFPpo+2K5yUahYtUtI8k6qp0+z3GG+IuN0ZApo=;
-        b=V3TcJ1pNUKReeIxwgo5AcVXwRQnpFeMdm7O/58Rea17hzBSpmZjdWT1sAso8VC8OV8
-         5qfnPV3O7dduviEOVbajlQwLWWg28KWYVOC80b43FmxKxImRHFtIBN0utVp9cszwIHSV
-         ZYBUFhDXI/VLho/eRReo1MJCSuR7nkgA40avTBpy9SxsSMTYDN1ZVbgDA8iOBywKGvWC
-         GITQe668X5VijRkxHt9KF8oIuba7RfFSt6VqI4a1FZcxP5bRb0UYuB9n7EPSUeuW4iFd
-         5U7/Muol/pGQlGlffA1hUFgGS8TgmJ9rQbRgBiRs//CVyuLLTPU4lK6DJHT6oIO5wWjd
-         kC/g==
-X-Gm-Message-State: AOAM530eUteV53lOquUmJx03SVwanuM/jGFsge+xSHVJAi8+NFFWU1wx
-        kwbV5Imyvk7bchX4sQvJ3elIaV8GRGqrM/8o
-X-Google-Smtp-Source: ABdhPJzvkbMLLwR+nG6rjNxa+zEvikOX1rvi36jAIKrhuJYZt9qibdSW2YAQkwYi11nK78hOMR2Fvw==
-X-Received: by 2002:a1c:9a12:: with SMTP id c18mr4429807wme.22.1605105499188;
-        Wed, 11 Nov 2020 06:38:19 -0800 (PST)
-Received: from localhost.localdomain (hst-221-89.medicom.bg. [84.238.221.89])
-        by smtp.gmail.com with ESMTPSA id b8sm2991405wrv.57.2020.11.11.06.38.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2020 06:38:18 -0800 (PST)
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-To:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Vikash Garodia <vgarodia@codeaurora.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH v2 0/8] Venus stateful encoder compliance
-Date:   Wed, 11 Nov 2020 16:37:47 +0200
-Message-Id: <20201111143755.24541-1-stanimir.varbanov@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        Wed, 11 Nov 2020 09:43:14 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id crKtkC4mY1R0xcrKwkdPLD; Wed, 11 Nov 2020 15:43:12 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1605105792; bh=0NVL4vfED5OvbJq2XB5B3W6lWJSu6NdYA6DvnKQvUps=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=lpOJprwSCLpQWyU/LOYFDa1qo25qI1AHQ6cNttM1JVDb0fdI8O2BsGJD3OfjPi33g
+         1fMY7QuJIYSftMTb7+73cOLPRK2jiKodtTEjbSti7jl6nI7Qkj2DKdFMGhUwhxlNLY
+         TyAnwlUzTgSXN3Z9RZFveL2iA6dlp8RsN3c1jjnZuExh18Ls8ZtsDSghRxToh1/syH
+         SEwYapLZaI3ytIOZSiZ6l97eLKjEvPOCFyNahaPA1ChnhY6eAr48x4ZcdL3g2KiP3m
+         rvWcApFblu/V8e4+65hlwsafiQXr1OZ2OTCN+B4UsaiR9tXVLijNrpUMYwe9zsfqVc
+         Bkf4WA78JDoxg==
+Subject: Re: [PATCH 0/7] sunxi: Remove the calls to dma_direct_set_offset
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        David Airlie <airlied@linux.ie>, Christoph Hellwig <hch@lst.de>
+Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Yong Deng <yong.deng@magewell.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Robin Murphy <robin.murphy@arm.com>
+References: <20201106151411.321743-1-maxime@cerno.tech>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <33ed44c6-e54d-3769-2a59-ab6c50b49053@xs4all.nl>
+Date:   Wed, 11 Nov 2020 15:42:59 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
+MIME-Version: 1.0
+In-Reply-To: <20201106151411.321743-1-maxime@cerno.tech>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfGWKT/xz8lGQdJjgDVMSGoVA8Hwp4UdhceAu0LGX+mTjEfjeMRkngyPZ4+U5ztVBAFtyPA8cLTXLWbBeHzTSRcAAUaQ3FoSMQBCXKPm7WjqaxMbZt51e
+ MVaAZIlGQU0+PqOe4wzBEt+aisx7jLWq+BMkCG/pk4d36IRWMFJuaauCGo7sYK/sd3u+/KgFopMsaX8nsiFGsQ7ZZjAkS7UtFib5I/ie5e+f7FEYzgeSrQ0N
+ URxBJtS+soe40GR6t3kCWqBXPrRQv9kF7OcEqe46oKowd4RnF/X1McYk3ewDxLdlaBbajLUrnSwM6BRf85XN5Iq+CN4p2OImjzjACm0zy6I2WM0n4BZMjlTu
+ QWIyf5100NQ+/OpW/rbZdKY7XhH0shcHS+18/n0jsDeOV0x7P/YjMBvucz0UPeJ8JXzF4wvQvlYBslWMjMGIzOf5OlgCnlP4YMv2+/mqa5QuEW15yTF/a3EB
+ If4MQbKKcouCJ5chqk8j30lZ/9/1z25rXRYQYDUG84Gjz/NyUfv+3N3fEHb6S7jBMIPt5KWSCf3QyNxs/OSv1+VOsCRQPl27gm+A3Ew2IT5E7CCq/gFsEY1z
+ 52xhREXnWU29JEyG8insmmcwsQtXQVHbpO6ZYDAHKnBfWA5mSrwfuCS+/hmBzT7ZxpzY6N4tgwXfZpoQFcVh/HtgLupKlp58k4yAb/PNxVJlBqvizDjn4Jdz
+ iZJm8zcJs9ALpgb89W4KW/zywpoyW6DOSdZkLfTc6rd73k58gEOCaA==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+On 06/11/2020 16:14, Maxime Ripard wrote:
+> Hi,
+> 
+> Here's an attempt to removing the dma_direct_set_offset calls we have in
+> numerous drivers and move all those quirks into a global notifier as suggested
+> by Robin.
 
-Here is v2 of the subject patchset. 
+For patches 4-7:
 
-The patchset starts with few small preparation and fix patches, 1/8 to 5/8.
-6/8 is redesigned Dikshita's patch and 7/8 add Reset encoder state handling.
-The last 8/8 just delete not needed helper function.
+Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-The major changes are:
- * An attempt to reuse m2m helpers for drain and reset state in 6/8 and 7/8.
- * Use null encoder buffer to signal end-of-stream in 6/8.
+It's fine by me if this series is merged via the drm subsystem.
 
-Comments are welcome!
+Regards,
 
-regards,
-Stan
+	Hans
 
-Dikshita Agarwal (1):
-  venus: venc: add handling for VIDIOC_ENCODER_CMD
-
-Stanimir Varbanov (7):
-  venus: hfi: Use correct state in unload resources
-  venus: helpers: Add a new helper for buffer processing
-  venus: hfi_cmds: Allow null buffer address on encoder input
-  venus: helpers: Calculate properly compressed buffer size
-  venus: pm_helpers: Check instance state when calculate instance
-    frequency
-  venus: venc: Handle reset encoder state
-  venus: helpers: Delete unused stop streaming helper
-
- drivers/media/platform/qcom/venus/helpers.c   |  65 ++---
- drivers/media/platform/qcom/venus/helpers.h   |   2 +-
- drivers/media/platform/qcom/venus/hfi.c       |   2 +-
- drivers/media/platform/qcom/venus/hfi.h       |   1 -
- drivers/media/platform/qcom/venus/hfi_cmds.c  |   2 +-
- .../media/platform/qcom/venus/pm_helpers.c    |   3 +
- drivers/media/platform/qcom/venus/venc.c      | 232 +++++++++++++++---
- 7 files changed, 226 insertions(+), 81 deletions(-)
-
--- 
-2.17.1
+> 
+> Let me know what you think,
+> Maxime
+> 
+> Maxime Ripard (7):
+>   drm/sun4i: backend: Fix probe failure with multiple backends
+>   soc: sunxi: Deal with the MBUS DMA offsets in a central place
+>   drm/sun4i: backend: Remove the MBUS quirks
+>   media: sun4i: Remove the MBUS quirks
+>   media: sun6i: Remove the MBUS quirks
+>   media: cedrus: Remove the MBUS quirks
+>   media: sun8i-di: Remove the call to of_dma_configure
+> 
+>  drivers/gpu/drm/sun4i/sun4i_backend.c         |  13 --
+>  .../platform/sunxi/sun4i-csi/sun4i_csi.c      |  27 ----
+>  .../platform/sunxi/sun6i-csi/sun6i_csi.c      |  17 ---
+>  .../media/platform/sunxi/sun8i-di/sun8i-di.c  |   4 -
+>  drivers/soc/sunxi/Kconfig                     |   8 ++
+>  drivers/soc/sunxi/Makefile                    |   1 +
+>  drivers/soc/sunxi/sunxi_mbus.c                | 132 ++++++++++++++++++
+>  drivers/staging/media/sunxi/cedrus/cedrus.c   |   1 -
+>  drivers/staging/media/sunxi/cedrus/cedrus.h   |   3 -
+>  .../staging/media/sunxi/cedrus/cedrus_hw.c    |  18 ---
+>  10 files changed, 141 insertions(+), 83 deletions(-)
+>  create mode 100644 drivers/soc/sunxi/sunxi_mbus.c
+> 
 
