@@ -2,159 +2,163 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_SANE_2
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B5DEC388F9
-	for <linux-media@archiver.kernel.org>; Wed, 11 Nov 2020 11:52:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AD5EC56202
+	for <linux-media@archiver.kernel.org>; Wed, 11 Nov 2020 11:55:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AEF892075A
-	for <linux-media@archiver.kernel.org>; Wed, 11 Nov 2020 11:52:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F334D2075A
+	for <linux-media@archiver.kernel.org>; Wed, 11 Nov 2020 11:55:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="U/NO7q7l"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="JgGE6hff"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726544AbgKKLwG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 11 Nov 2020 06:52:06 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:56929 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726519AbgKKLvy (ORCPT
+        id S1726430AbgKKLze (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 11 Nov 2020 06:55:34 -0500
+Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:41197 "EHLO
+        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725995AbgKKLzd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 11 Nov 2020 06:51:54 -0500
-X-UUID: 578f816632e946a0a2429302cc0cc4b7-20201111
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=UhU4ckWuzFApvZG5zcI0GayqiwUyxV2bEVkr/AKfVEU=;
-        b=U/NO7q7lgEde9ZIKTFF6eOj+TpvDiQqej2D0xy8jVDw9sn5LNIEpqs31bxwwHoHLVLURiKPXH4+2LHVydDkCeu9IXb0QHyfLmPyLav0ozfq28BHqkTxJvE6Z9MgEZS8bOOufK6HvLKfl2die2hSALnXt4Q1cCbQMCvlGGZkYHoU=;
-X-UUID: 578f816632e946a0a2429302cc0cc4b7-20201111
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <jerry-ch.chen@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1464959215; Wed, 11 Nov 2020 19:51:50 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 11 Nov 2020 19:51:48 +0800
-Received: from [172.21.84.99] (172.21.84.99) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 11 Nov 2020 19:51:48 +0800
-Message-ID: <1605095509.28992.7.camel@mtksdccf07>
-Subject: Re: [RFC PATCH V4 0/4] media: platform: Add support for Face
- Detection (FD) on mt8183 SoC
-From:   Jerry-ch Chen <Jerry-ch.Chen@mediatek.com>
-To:     Tomasz Figa <tfiga@chromium.org>
-CC:     "hans.verkuil@cisco.com" <hans.verkuil@cisco.com>,
-        HansVerkuil <hverkuil@xs4all.nl>,
-        "laurent.pinchart+renesas@ideasonboard.com" 
-        <laurent.pinchart+renesas@ideasonboard.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "pihsun@chromium.org" <pihsun@chromium.org>,
-        "yuzhao@chromium.org" <yuzhao@chromium.org>,
-        "zwisler@chromium.org" <zwisler@chromium.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Sean Cheng =?UTF-8?Q?=28=E9=84=AD=E6=98=87=E5=BC=98=29?= 
-        <Sean.Cheng@mediatek.com>,
-        "Sj Huang =?UTF-8?Q?=28=E9=BB=83=E4=BF=A1=E7=92=8B=29?=" 
-        <sj.huang@mediatek.com>,
-        Christie Yu =?UTF-8?Q?=28=E6=B8=B8=E9=9B=85=E6=83=A0=29?= 
-        <christie.yu@mediatek.com>,
-        Frederic Chen =?UTF-8?Q?=28=E9=99=B3=E4=BF=8A=E5=85=83=29?= 
-        <Frederic.Chen@mediatek.com>,
-        Jungo Lin =?UTF-8?Q?=28=E6=9E=97=E6=98=8E=E4=BF=8A=29?= 
-        <jungo.lin@mediatek.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        srv_heupstream <srv_heupstream@mediatek.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Date:   Wed, 11 Nov 2020 19:51:49 +0800
-In-Reply-To: <20200630171912.GE1212092@chromium.org>
-References: <20191204124732.10932-1-Jerry-Ch.chen@mediatek.com>
-         <1588903371.16825.14.camel@mtksdccf07>
-         <CAAFQd5CP+gH3zG9fejBv_hTzeAExMoY+L38W8e4e3OSc-gVRHg@mail.gmail.com>
-         <20200521183825.GB249683@chromium.org>
-         <1593526253.29676.28.camel@mtksdccf07>
-         <20200630171912.GE1212092@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
+        Wed, 11 Nov 2020 06:55:33 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id coiQkmu7HRiwVcoiYkaFAK; Wed, 11 Nov 2020 12:55:28 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1605095730; bh=HDa7FQ+sDo6ODRLOp2q9uk1S/MYb4VsfJup3IA08iR4=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=JgGE6hffu5BzoWZs43uzImp9z946WleJZ6OwbT2VQdwBfVGdBNWHv6HQKAJb/b+bi
+         du9nDvvdZbgJaHLBzdLyUFu8AbcQUFMsgYSJ4rAj/xpwsq6W7zAt7VgTkpVeUDr15l
+         EEM7Eg2zeDE9wgxBOnef92vLDmijUl3cIbvSjvNJ+osPJ1juVncNX9LVViasDi/02I
+         C8MxmDPd+LslOgfJHYNZ+6xnXayTSXHP6Ph3g/fIeOgC2fX261ErtIjc4ncUnAwl2+
+         Ctxix7sQ/OG3XuzL6oGjjGSOb2wnpbjIwyxoSFJYDgBxdxdu5GSpyWOmfjb/GaFwKp
+         fY2Z9yAdZ3Inw==
+Subject: Re: [PATCH v2 2/2] media: v4l2-ctrl: Add layer wise bitrate controls
+ for h264
+To:     Dikshita Agarwal <dikshita@codeaurora.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Cc:     mchehab@kernel.org, ezequiel@collabora.com,
+        stanimir.varbanov@linaro.org, vgarodia@codeaurora.org,
+        majja@codeaurora.org
+References: <1600693440-3015-1-git-send-email-dikshita@codeaurora.org>
+ <1600693440-3015-3-git-send-email-dikshita@codeaurora.org>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <f6c94a1a-9f5b-ecec-9077-95548ea9838f@xs4all.nl>
+Date:   Wed, 11 Nov 2020 12:55:06 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <1600693440-3015-3-git-send-email-dikshita@codeaurora.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfPvegNORkRbCZqZp8V9rwKA2dm4lWEyRZhuxTHHxYpiQFjcEY4Ntqpdv2cq5F/F0gHtiiHQxgMnjO3nbwr64Y855jbO/e9s/vjkjgfD2eeOvaQRNcQwi
+ oJUVmu1y64HkdN5ThASiGA4Cvt0cClszD53X5rQLkVwii34ANKStFujLr/+LXXEXWF6kwuzRNZ5hi0aHSvwLAp2jEQ2S1b/ECol99HQuefaJr4kWDX2j1l2Z
+ 0591yzpet6z0g9oEjTmIjLEci+EXEREh3mr0PvmaVuNTuiSo9qB5u7ht0qpPKZhvSORiNISJ8/DCktCOzfKbICWL5t5bv8m43S0S3gsoYu/3nr5OfHGgPJPJ
+ ZDD6Fj1Llcci03UpdPp+OFufUuxF3Db59/jIzxPxorjM3nVdDg/IXog5rN95gKEJ+khBbcUCeRn2LH94Oqa1uQeblLLhMfHZ5Fdl7j4sB/hfzVH9VT+IcrUQ
+ QyRK4mAypFrCow0XbOIKUCXNeEwymv3BsSLdIQ==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-SGkgVG9tYXN6LA0KDQpPbiBXZWQsIDIwMjAtMDctMDEgYXQgMDE6MTkgKzA4MDAsIFRvbWFzeiBG
-aWdhIHdyb3RlOg0KPiBIaSBKZXJyeSwNCj4gDQo+IE9uIFR1ZSwgSnVuIDMwLCAyMDIwIGF0IDEw
-OjEwOjUzUE0gKzA4MDAsIEplcnJ5LWNoIENoZW4gd3JvdGU6DQo+ID4gSGkgVG9tYXN6LA0KPiA+
-IA0KPiA+IE9uIFRodSwgMjAyMC0wNS0yMSBhdCAxODozOCArMDAwMCwgVG9tYXN6IEZpZ2Egd3Jv
-dGU6DQo+ID4gPiBIaSBKZXJyeSwNCj4gPiA+IA0KPiA+ID4gT24gV2VkLCBNYXkgMTMsIDIwMjAg
-YXQgMTE6NDU6MzdQTSArMDIwMCwgVG9tYXN6IEZpZ2Egd3JvdGU6DQo+ID4gPiA+IEhpIEplcnJ5
-LA0KPiA+ID4gPiANCj4gPiA+ID4gT24gRnJpLCBNYXkgOCwgMjAyMCBhdCA0OjAzIEFNIEplcnJ5
-LWNoIENoZW4gPEplcnJ5LWNoLkNoZW5AbWVkaWF0ZWsuY29tPiB3cm90ZToNCj4gPiA+ID4gPg0K
-PiA+ID4gPiA+IEhpIExhdXJlbnQsIFRvbWFzeiwgTWF0dGhpYXMsDQo+ID4gPiA+ID4NCj4gPiA+
-ID4gPiBnZW50bGUgcGluZyBmb3IgdGhpcyBwYXRjaCBzZXQsDQo+ID4gPiA+ID4gSWYgbm8gbmV3
-IGNvbW1lbnRzLCBJIHdvdWxkIGxpa2UgdG8gc2VuZCBhIG5ld2VyIHZlcnNpb24uDQo+ID4gPiA+
-ID4NCj4gPiA+ID4gDQo+ID4gPiA+IFNvcnJ5LCBJIHN0aWxsIGhhdmVuJ3QgaGFkIGEgY2hhbmNl
-IHRvIGxvb2sgYXQgdGhlIHNlcmllcywgc28gZmVlbA0KPiA+ID4gPiBmcmVlIHRvIHNlbmQgYSBu
-ZXcgdmVyc2lvbiBhbmQgSSB3aWxsIHRha2UgYSBsb29rIGF0IHRoZSBuZXcgb25lLg0KPiA+ID4g
-PiANCj4gPiA+IA0KPiA+ID4gRmluYWxseSBmb3VuZCBzb21lIHRpbWUgdG8gcmV2aWV3IHRoZSBz
-ZXJpZXMuIEFnYWluIHNvcnJ5IGZvciB0aGUgZGVsYXkNCj4gPiA+IGFuZCB0aGFua3MgZm9yIHlv
-dXIgcGF0aWVuY2UuDQo+ID4gPiANCj4gPiA+IFNvbWUgZ2VuZXJhbCBjb21tZW50czoNCj4gPiA+
-IDEpIFRoZSBtZXRhZGF0YSBmb3JtYXQgRm91ckNDIHNob3VsZCBiZSBhZGRlZCBpbiBhIHNlcGFy
-YXRlIHBhdGNoLA0KPiA+ID4gdG9nZXRoZXIgd2l0aCBkb2N1bWVudGF0aW9uIGZvciBpdC4NCj4g
-PiA+IDIpIENvbnRyb2wgSURzLCBzdHJ1Y3RzIHVzZWQgYnkgdGhlIHVzZXJzcGFjZSwgZXRjLiBz
-aG91bGQgYmUgZGVmaW5lZCBpbg0KPiA+ID4gYSBoZWFkZXIgdW5kZXIgaW5jbHVkZS91YXBpL2xp
-bnV4Lg0KPiA+ID4gDQo+ID4gPiBQbGVhc2UgYWxzbyBjaGVjayBteSByZXBsaWVzIHRvIHBhcnRp
-Y3VsYXIgcGF0Y2hlcyBmb3IgZnVydGhlciBjb21tZW50cy4NCj4gPiA+IA0KPiA+ID4gQmVzdCBy
-ZWdhcmRzLA0KPiA+ID4gVG9tYXN6DQo+ID4gDQo+ID4gQXBwcmVjaWF0ZSBmb3IgeW91ciByZXBs
-eSwNCj4gPiANCj4gPiBTbyBmYXIsIEkndmUgbG9jYWxseSBjcmVhdGVkIGFuIHVhcGkgaGVhZGVy
-Og0KPiA+IGluY2x1ZGUvdWFwaS9saW51eC9tdGtfZmRfNDAuaA0KPiA+IHdoaWNoIHByb3ZpZGVz
-IHNvbWUgdmFsdWVzLCBjb250cm9sIGlkcywgYW5kIHRoZSBkZWZpbml0aW9ucyBvZg0KPiA+IHN0
-cnVjdHVyZXMgdGhhdCB3b3VsZCBiZSBuZWVkZWQgYnkgdXNlciBvZiBtdGtfZmRfNDAgZHJpdmVy
-Lg0KPiA+IEluIGFkZGl0aW9uLCBJIGFsc28gcHJvdmlkZSBhIE1BQ1JPIGFzIGV4YW1wbGUgaW4g
-Y29tbWVudHMgdGhhdCBjYW4NCj4gPiBleHRyYWN0IHRoZSBzdHJ1Y3QgbWVtYmVyIHdpdGggYml0
-IGxlbmd0aCBhbmQgb2Zmc2V0DQo+ID4gZGVmaW5pdGlvbnMoZWxpbWluYXRlIHRoZSBiaXQtZmll
-bGRzKS4NCj4gPiANCj4gPiBBbHNvLCBJIHdvdWxkIGxpa2UgdG8gcmVuYW1lIHN0cnVjdCBmZF91
-c2VyX291dHB1dCB3aXRoIHN0cnVjdA0KPiA+IG10a19mZF9od19yZXN1bHQuIEkgd29ycnkgZmRf
-dXNlcl9vdXRwdXQgd291bGQgYmUgYSBjb25mdXNpbmcgbmFtZS4NCj4gDQo+IFRoZSBjaGFuZ2Ug
-c291bmRzIGdvb2QgdG8gbWUuDQo+IA0KPiA+IEkgd2lsbCBhZGQgdGhlbSBpbiBhIHNlcGFyYXRl
-IHBhdGNoIGluIG5leHQgdmVyc2lvbi4NCj4gPiANCj4gDQo+IE9rYXkuDQo+IA0KPiA+IEkgYW0g
-c3RpbGwgd29ya2luZyBvbiB0aGUgZG9jdW1lbnRhdGlvbiwgd2hpY2ggbWlnaHQgYmUNCj4gPiBE
-b2N1bWVudGF0aW9uL21lZGlhL3VhcGkvdjRsL3BpeGZtdC1tZXRhLW10ay1mZC00MC5yc3QuDQo+
-ID4gUmVmZXJpbmcgdGhlIG90aGVyIHBpeGZtdC0qLnJzdCBmaWxlcywgSSB3aWxsIHRyeSB0byBw
-cm92aWRlIHRoZQ0KPiA+IGZsYXQtdGFibGUgb2YgdGhlIG1ldGFkYXRhIHdpdGggdGhlIHN0cnVj
-dHVyZSBvZiB0aGUgbXRrX2ZkX2h3X3Jlc3VsdC4NCj4gPiANCj4gDQo+IFNvdW5kcyBnb29kIHRv
-IG1lLg0KPiANCj4gPiBJIGFtIGNvbmZ1c2luZyB0aGF0IHNob3VsZCBJIHJlbWFpbiB0aGUgbmFt
-ZSB3aXRoIC00MCBpbiB0aGUgdGFpbCBvZiByc3QNCj4gPiBmaWxlPw0KPiANCj4gVGhlIGhlYWRl
-ciBhbmQgZG9jdW1lbnRhdGlvbiBmaWxlIG5hbWVzIHNob3VsZCBtYXRjaCB0aGUgZHJpdmVyIG5h
-bWUuICBJDQo+IGp1c3Qgbm90aWNlZCB0aGVyZSBpcyBzb21lIGluY29uc2lzdGVuY3kgaW4gdGhl
-IG5hbWluZywgdGhvdWdoLiBUaGUNCj4gZHJpdmVyIHNlZW1zIHRvIGJlIGxvY2F0ZWQgdW5kZXIg
-ZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9tdGstaXNwL2ZkLCBidXQNCj4gdGhlIGRyaXZlciBuYW1l
-IGluIHRoZSBwbGF0Zm9ybSBkcml2ZXIgc3RydWN0IGFuZCBhcyByZXBvcnRlZCBieQ0KPiBWSURJ
-T0NfUVVFUllDQVAgc2VlbXMgdG8gYmUgIm10ay1mZC00LjAiLiANCg0KPiBTaW5jZSB3ZSBoYXZl
-IG1hbnkgbXRrLSogZHJpdmVycyBpbiB0aGUgdHJlZSBjdXJyZW50bHksIEkgdGhpbmsgaXQgbWln
-aHQNCj4gbWFrZSBzZW5zZSB0byBjb25zb2xpZGF0ZSB0aGVtIHVuZGVyIGRyaXZlcnMvbWVkaWEv
-cGxhdGZvcm0vbWVkaWF0ZWssDQo+IHNpbWlsYXJseSB0byBkcml2ZXJzL21lZGlhL3BsYXRmb3Jt
-L3Fjb20gb3IgL3JvY2tjaGlwLiBCdXQgaXQgY291bGQgYmUNCj4gZG9uZSBsYXRlciwgYXMgYSBm
-b2xsb3ctdXAuDQo+IA0KPiBNeSBzdWdnZXN0aW9uIHdvdWxkIGJlIHRvIHBsYWNlIHRoZSBkcml2
-ZXIgdW5kZXINCj4gZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9tdGstZmQtNDAgYW5kIGFsc28gcmVu
-YW1lIHRoZSByZWxhdGVkIEtjb25maWcNCj4gc3ltYm9sIHRvIGluY2x1ZGUgdGhlIF80MCBzdWZm
-aXguDQo+IA0KPiBXaGF0IGRvIHlvdSB0aGluaz8NCj4gDQoNCkkgQXBwcmVjaWF0ZSB5b3VyIGNv
-bW1lbnRzLA0KU29ycnkgZm9yIHRoZSBsYXRlIHJlcGx5Lg0KDQpXb3VsZCBpdCBiZSBwb3NzaWJs
-ZSBmb3IgbWUgdG8gcmVwbGFjZSB0aGUgZHJpdmVyIGFzIGRyaXZlcnMvbWVkaWEvcGxhdGZvcm0v
-bXRrX2ZkL210ay1mZC00MD8oSnVzdCBsaWtlIG10ay1pc3AvaXNwXzUwKQ0KDQo+ID4gU2luY2Ug
-SSB0aGluayB0aGUgbGF5b3V0IG9mIG1ldGFkYXRhIG1pZ2h0IGJlIGRpZmZlcmVudCBpbiB0aGUg
-ZnV0dXJlDQo+ID4gbXRrIGZkIGRyaXZlcnMuIE1heWJlIHRoZXkgY3JlYXRlIGEgbmV3IG9uZSBv
-ciBzaG91bGQgdGhleSB1cGRhdGUgdGhlDQo+ID4gcnN0IGZpbGUgd2hlbiB0aGV5IGFyZSB1cHN0
-cmVhbWluZz8NCj4gPiANCj4gDQo+IEkgdGhpbmsgd2UnbGwgZGVjaWRlIHdoYXQgdG8gZG8gd2hl
-biB0aGF0IGhhcHBlbnMuIERlcGVuZGluZyBvbiB3aGV0aGVyDQo+IHRoZXJlIGlzIG1vcmUgZmFj
-ZSBkZXRlY3Rpb24gaGFyZHdhcmUgYXZhaWxhYmxlLCB3ZSBtaWdodCBiZSBhYmxlIHRvDQo+IG1p
-Z3JhdGUgdG8gc3RhbmRhcmQgY29udHJvbHMgYW5kIG1ldGFkYXRhIGJ1ZmZlciBmb3JtYXRzIGF0
-IHRoYXQgdGltZS4NCj4gDQpPay4NCg0KPiA+IE90aGVyIGNvbW1lbnRzIGFyZSBhbG1vc3QgZml4
-ZWQsIEkgd2lsbCBpbmZvcm0geW91IGJ5IHRoaXMgbWFpbCB0aHJlYWQNCj4gPiBhcyBzb29uIGFz
-IEkgZmluaXNoIHRoZSBkb2N1bWVudGF0aW9uIG9mIGZkIG1ldGFkYXRhIGZvcm1hdC4NCj4gDQo+
-IE9rYXksIHRoYW5rcy4NCj4gDQo+IEJlc3QgcmVnYXJkcywNCj4gVG9tYXN6DQoNClRoYW5rcyBh
-bmQgQmVzdCBSZWdhcmRzLA0KSmVycnkNCg0K
+On 21/09/2020 15:04, Dikshita Agarwal wrote:
+> Adds bitrate control for all coding layers for h264
+> same as hevc.
+> 
+> Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
+> ---
+>  .../userspace-api/media/v4l/ext-ctrls-codec.rst      | 20 ++++++++++++++++++++
+>  drivers/media/v4l2-core/v4l2-ctrls.c                 |  7 +++++++
+>  include/uapi/linux/v4l2-controls.h                   |  8 ++++++++
+>  3 files changed, 35 insertions(+)
+> 
+> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> index 26f8220..690b066 100644
+> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> @@ -1513,6 +1513,26 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
+>      * - Bit 16:32
+>        - Layer number
+>  
+> +``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L0_BR (integer)``
+> +    Indicates bit rate for hierarchical coding layer 0 for H264 encoder.
+> +
+> +``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L1_BR (integer)``
+> +    Indicates bit rate for hierarchical coding layer 1 for H264 encoder.
+> +
+> +``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L2_BR (integer)``
+> +    Indicates bit rate for hierarchical coding layer 2 for H264 encoder.
+> +
+> +``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L3_BR (integer)``
+> +    Indicates bit rate for hierarchical coding layer 3 for H264 encoder.
+> +
+> +``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L4_BR (integer)``
+> +    Indicates bit rate for hierarchical coding layer 4 for H264 encoder.
+> +
+> +``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L5_BR (integer)``
+> +    Indicates bit rate for hierarchical coding layer 5 for H264 encoder.
+> +
+> +``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L6_BR (integer)``
+> +    Indicates bit rate for hierarchical coding layer 6 for H264 encoder.
 
+The unit isn't specified here. I assume it is bits per second, but that should
+be stated explicitly.
+
+>  
+>  .. _v4l2-mpeg-h264:
+>  
+> diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
+> index abef73e..9296294 100644
+> --- a/drivers/media/v4l2-core/v4l2-ctrls.c
+> +++ b/drivers/media/v4l2-core/v4l2-ctrls.c
+> @@ -922,6 +922,13 @@ const char *v4l2_ctrl_get_name(u32 id)
+>  	case V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MAX_QP:		return "H264 P-Frame Maximum QP Value";
+>  	case V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MIN_QP:		return "H264 B-Frame Minimum QP Value";
+>  	case V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MAX_QP:		return "H264 B-Frame Maximum QP Value";
+> +	case V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L0_BR:	return "H264 Hierarchical Lay 0 BitRate";
+> +	case V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L1_BR:	return "H264 Hierarchical Lay 1 BitRate";
+> +	case V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L2_BR:	return "H264 Hierarchical Lay 2 BitRate";
+> +	case V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L3_BR:	return "H264 Hierarchical Lay 3 BitRate";
+> +	case V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L4_BR:	return "H264 Hierarchical Lay 4 BitRate";
+> +	case V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L5_BR:	return "H264 Hierarchical Lay 5 BitRate";
+> +	case V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L6_BR:	return "H264 Hierarchical Lay 6 BitRate";
+
+BitRate -> Bitrate
+
+>  	case V4L2_CID_MPEG_VIDEO_H264_SPS:			return "H264 Sequence Parameter Set";
+>  	case V4L2_CID_MPEG_VIDEO_H264_PPS:			return "H264 Picture Parameter Set";
+>  	case V4L2_CID_MPEG_VIDEO_H264_SCALING_MATRIX:		return "H264 Scaling Matrix";
+> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+> index 7ba05fe..b869b54 100644
+> --- a/include/uapi/linux/v4l2-controls.h
+> +++ b/include/uapi/linux/v4l2-controls.h
+> @@ -580,12 +580,20 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type {
+>  #define V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MAX_QP	(V4L2_CID_MPEG_BASE+388)
+>  #define V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MIN_QP	(V4L2_CID_MPEG_BASE+389)
+>  #define V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MAX_QP	(V4L2_CID_MPEG_BASE+390)
+> +#define V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L0_BR	(V4L2_CID_MPEG_BASE + 391)
+> +#define V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L1_BR	(V4L2_CID_MPEG_BASE + 392)
+> +#define V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L2_BR	(V4L2_CID_MPEG_BASE + 393)
+> +#define V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L3_BR	(V4L2_CID_MPEG_BASE + 394)
+> +#define V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L4_BR	(V4L2_CID_MPEG_BASE + 395)
+> +#define V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L5_BR	(V4L2_CID_MPEG_BASE + 396)
+> +#define V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L6_BR	(V4L2_CID_MPEG_BASE + 397)
+>  #define V4L2_CID_MPEG_VIDEO_MPEG4_I_FRAME_QP	(V4L2_CID_MPEG_BASE+400)
+>  #define V4L2_CID_MPEG_VIDEO_MPEG4_P_FRAME_QP	(V4L2_CID_MPEG_BASE+401)
+>  #define V4L2_CID_MPEG_VIDEO_MPEG4_B_FRAME_QP	(V4L2_CID_MPEG_BASE+402)
+>  #define V4L2_CID_MPEG_VIDEO_MPEG4_MIN_QP	(V4L2_CID_MPEG_BASE+403)
+>  #define V4L2_CID_MPEG_VIDEO_MPEG4_MAX_QP	(V4L2_CID_MPEG_BASE+404)
+>  #define V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL		(V4L2_CID_MPEG_BASE+405)
+> +
+>  enum v4l2_mpeg_video_mpeg4_level {
+>  	V4L2_MPEG_VIDEO_MPEG4_LEVEL_0	= 0,
+>  	V4L2_MPEG_VIDEO_MPEG4_LEVEL_0B	= 1,
+> 
+
+Regards,
+
+	Hans
