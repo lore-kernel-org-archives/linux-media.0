@@ -2,173 +2,111 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no
+X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDE88C5517A
-	for <linux-media@archiver.kernel.org>; Wed, 11 Nov 2020 18:37:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 884D6C388F9
+	for <linux-media@archiver.kernel.org>; Wed, 11 Nov 2020 19:08:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6A31720797
-	for <linux-media@archiver.kernel.org>; Wed, 11 Nov 2020 18:37:50 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KgAnGRoS"
+	by mail.kernel.org (Postfix) with ESMTP id 3FDCF207D3
+	for <linux-media@archiver.kernel.org>; Wed, 11 Nov 2020 19:08:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727676AbgKKSfu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 11 Nov 2020 13:35:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44506 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727192AbgKKSfu (ORCPT
+        id S1726744AbgKKTIC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 11 Nov 2020 14:08:02 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:33755 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726584AbgKKTIA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 11 Nov 2020 13:35:50 -0500
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB319C0613D1
-        for <linux-media@vger.kernel.org>; Wed, 11 Nov 2020 10:35:49 -0800 (PST)
-Received: by mail-wm1-x342.google.com with SMTP id 10so3173839wml.2
-        for <linux-media@vger.kernel.org>; Wed, 11 Nov 2020 10:35:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=M8WfWuBVHXpKLzkSsKEOW6BSD/IfhCkoHkgxrNpz2cI=;
-        b=KgAnGRoSC1GGHgGKylBif9BORNSvke76zr6Ku+V2dpq5zX/ppUCMXa6BZ50PLao2Su
-         wgMZIci54WmiIRlv8BP3RviUmpLeGnDrlWpT6nIPxFotxzTAPnKotPe48UujpPlgD+j1
-         y1GFe4cT54dk/av5cvpir2oc4RKEJtEREIwDqO8uIAsrZA6vLqrSIwrugO7Kdxktf/1n
-         APlL9KK3h7FFRXMHlz+ivY3DTvNGku3VsEE63RyF5f30IzuZl+NKcYSA4FkgXUhQm8Pl
-         CSyACifcZE6IrPwhFTqwNJUSD2NAOtiS+lrdG37fTlJOeWaAa6tQWymx0POpAzKY9VAR
-         fXpg==
+        Wed, 11 Nov 2020 14:08:00 -0500
+Received: by mail-oi1-f193.google.com with SMTP id k26so3420132oiw.0;
+        Wed, 11 Nov 2020 11:07:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=M8WfWuBVHXpKLzkSsKEOW6BSD/IfhCkoHkgxrNpz2cI=;
-        b=OISsEG3zNpKA9iLGu9pif6lq/jRYnvKMtNUZPA2rPFToWD64RT3X/Cupy+850eldlN
-         ZsdEXuWVbhSHA7c9f6LhciXi/9SQcv35G4bnLh0Y3mw5vDZndiylAY76PHznpD+Ej87u
-         P36T2ECqex9ymjBrxR6LMpox2vwVv6VHHV06z+R2Vn8znrKht1qGPFbnQs6uYGgNdBt7
-         UFi0oNrwBhE2WZwffEIWyGHR4manc81ozBVSOACne007Q4+OzxvKiKK3wqG40U6Y3lL3
-         reL2tVCCYPeUXwwyQsge45C0v9Fk1XIDci19jzd48NbCZotkigu0NYjx6sjT0m7QviZ/
-         iZZQ==
-X-Gm-Message-State: AOAM530Go1WgzDnsWvO2WIAriD+x9BsdKd2mW3JVWZdm7YjzE3W2SP6A
-        QeNZwCuCXDa2gkpjySu3sDdaLA==
-X-Google-Smtp-Source: ABdhPJwzCQY8CRZfDnAapb8rqhTNiyryIG+qh+R7rglcXlJeolDgqhoxLc5LLh/U2O6/sDSnl1BcJQ==
-X-Received: by 2002:a7b:cd92:: with SMTP id y18mr5624982wmj.178.1605119748648;
-        Wed, 11 Nov 2020 10:35:48 -0800 (PST)
-Received: from dell.default ([91.110.221.159])
-        by smtp.gmail.com with ESMTPSA id k84sm3558311wmf.42.2020.11.11.10.35.47
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lKYsuP7JcgZ3dTv8zCnL98F7cIgH1tSEd4tXAmcFHQg=;
+        b=Htr67OKZjfQNLbZ9YLUtJhrx7WkB+juE5D0kL0IAS+YB5uRjaxj30dbBgOR6pEoc2s
+         UrOyPWp7z3duiVOLq+zl3e26eGhSxKu9y9pLjrOwRj98LGV+vmzaoboswq+SrKV5qOz6
+         Aix9V+ncZtYGIOvzfHWVYJjW6msrMTtWmousSi8VjtqVB1kN5crqBO36s9eROb2Dz2zn
+         Ob7fGJ7SBAsbiemqLKpNNwPfVDXH4FIkJUcUl0se0lxsV43D805ErCJ9dfLYVb9eaAzX
+         i311TVZhCl8tUVzlOAwOnMKHgrVW6CoucKALDzhWoqoHp11ekshhqSVnbQiojo2XF5ut
+         s15w==
+X-Gm-Message-State: AOAM531IYW7sIBLlfHJ0Q+ztaX/9nhVzssd97FE7+y6ejq+tFDDQAl+L
+        9p9F10CcHdrPBsfINc57UQ==
+X-Google-Smtp-Source: ABdhPJykLz6virMM5Yvi3ZFNYUwrLseTff6cf1WfFdz4V9wMCnNso6n9l43zDqPnGljm/I/kIepOww==
+X-Received: by 2002:aca:3756:: with SMTP id e83mr3112437oia.31.1605121679378;
+        Wed, 11 Nov 2020 11:07:59 -0800 (PST)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id o29sm697824ote.7.2020.11.11.11.07.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2020 10:35:47 -0800 (PST)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        amd-gfx@lists.freedesktop.org,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-media@vger.kernel.org,
-        Slava Grigorev <slava.grigorev@amd.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-Subject: [PATCH 00/19] [Set 5] Rid W=1 warnings from GPU
-Date:   Wed, 11 Nov 2020 18:35:26 +0000
-Message-Id: <20201111183545.1756994-1-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Wed, 11 Nov 2020 11:07:58 -0800 (PST)
+Received: (nullmailer pid 1844741 invoked by uid 1000);
+        Wed, 11 Nov 2020 19:07:57 -0000
+Date:   Wed, 11 Nov 2020 13:07:57 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Eugen Hristev <eugen.hristev@microchip.com>
+Cc:     sakari.ailus@iki.fi, devicetree@vger.kernel.org, jacopo@jmondi.org,
+        laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, robh+dt@kernel.org
+Subject: Re: [PATCH v4 1/3] dt-bindings: media: atmel: csi2dc: add bindings
+ for microchip csi2dc
+Message-ID: <20201111190757.GB1844086@bogus>
+References: <20201110151116.161260-1-eugen.hristev@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201110151116.161260-1-eugen.hristev@microchip.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This set is part of a larger effort attempting to clean-up W=1
-kernel builds, which are currently overwhelmingly riddled with
-niggly little warnings.
+On Tue, 10 Nov 2020 17:11:14 +0200, Eugen Hristev wrote:
+> Add bindings documentation for Microchip CSI2 Demultiplexer controller.
+> 
+> CSI2DC is a demultiplexer from Synopsys IDI interface specification to
+> parallel interface connection or direct memory access.
+> 
+> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+> ---
+> Changes in v4:
+> - Removed property for inter-line-delay and for clock continuous/non-continuous
+> - Removed virtual channel by reg for second endpoint
+> 
+> Changes in v3:
+> - Removed some text from description, as it was explained in the schema
+> - fixed other things as per Rob's review
+> - moved some text inside the schema, like the clock description
+> 
+> Changes in v2:
+> - fixed warnings reported by dt_binding_check
+> 
+>  .../bindings/media/microchip,csi2dc.yaml      | 144 ++++++++++++++++++
+>  1 file changed, 144 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/microchip,csi2dc.yaml
+> 
 
-This finishes cleaning up Radeon.  AMD next!
 
-Lee Jones (19):
-  drm/radeon/evergreen_dma: Move 'evergreen_gpu_check_soft_reset()'s
-    prototype to shared header
-  drm/radeon/r600: Move 'evergreen_rlc_resume()'s prototype to shared
-    header
-  drm/radeon/ni_dma: Move 'cayman_gpu_check_soft_reset()'s prototype to
-    shared header
-  drm/radeon/radeon_atombios: Move 'radeon_add_atom_encoder()'s
-    prototype to shared header
-  drm/radeon/radeon_encoders: Move 'radeon_atom_backlight_init's
-    prototype to shared header
-  drm/radeon/ci_dpm: Move 'ci_*()'s prototypes to shared header
-  drm/radeon/si_dpm: Move 'si_mc_load_microcode()'s prototype to shared
-    header
-  drm/radeon/si_dma: Move 'si_gpu_check_soft_reset()'s prototype to
-    shared header
-  drm/radeon/cik: Move 'si_*()'s prototypes to shared header
-  drm/radeon/btc_dpm: Move 'evergreen_get_pi's prototype to shared
-    header
-  drm/radeon/radeon_audio: Move 'dce6_*()'s prototypes to shared header
-  drm/radeon/evergreen: Move 'si_get_csb_*()'s prototypes to shared
-    header
-  drm/radeon/cik_sdma: Move 'amdgpu_cik_gpu_check_soft_reset()'s
-    prototype to shared header
-  drm/radeon/evergreen: Move 'cik_*()'s prototypes to shared header
-  drm/radeon/ci_dpm: Move 'si_*()'s prototypes to shared header
-  drm/radeon/cik: Move 'Move 'cik_sdma_*()'s prototypes to shared header
-  drm/radeon/si_dpm: Move 'vce_v1_0_enable_mgcg()'s prototype to shared
-    header
-  drm/radeon/cik: Move 'vce_v2_0_enable_mgcg()'s prototype to shared
-    header
-  drm/radeon/evergreen_cs: Move 'r600_dma_cs_next_reloc()'s prototype to
-    shared header
+My bot found errors running 'make dt_binding_check' on your patch:
 
- drivers/gpu/drm/radeon/btc_dpm.c         |  3 +-
- drivers/gpu/drm/radeon/ci_dpm.c          | 13 +-----
- drivers/gpu/drm/radeon/cik.c             | 10 ++---
- drivers/gpu/drm/radeon/cik.h             | 40 ++++++++++++++++++
- drivers/gpu/drm/radeon/cik_sdma.c        |  3 +-
- drivers/gpu/drm/radeon/cypress_dpm.c     |  3 +-
- drivers/gpu/drm/radeon/dce6_afmt.c       |  1 +
- drivers/gpu/drm/radeon/dce6_afmt.h       | 52 ++++++++++++++++++++++++
- drivers/gpu/drm/radeon/evergreen.c       |  8 +---
- drivers/gpu/drm/radeon/evergreen.h       |  4 ++
- drivers/gpu/drm/radeon/evergreen_cs.c    |  3 +-
- drivers/gpu/drm/radeon/evergreen_dma.c   |  3 +-
- drivers/gpu/drm/radeon/ni.h              |  1 +
- drivers/gpu/drm/radeon/ni_dma.c          |  3 +-
- drivers/gpu/drm/radeon/ni_dpm.c          |  3 +-
- drivers/gpu/drm/radeon/r600.c            |  2 +-
- drivers/gpu/drm/radeon/r600.h            |  4 ++
- drivers/gpu/drm/radeon/r600_cs.c         |  1 +
- drivers/gpu/drm/radeon/radeon_atombios.c |  4 --
- drivers/gpu/drm/radeon/radeon_atombios.h |  8 ++++
- drivers/gpu/drm/radeon/radeon_audio.c    | 17 +-------
- drivers/gpu/drm/radeon/radeon_encoders.c |  6 +--
- drivers/gpu/drm/radeon/rv770_dpm.c       |  1 +
- drivers/gpu/drm/radeon/si.c              |  1 +
- drivers/gpu/drm/radeon/si.h              | 38 +++++++++++++++++
- drivers/gpu/drm/radeon/si_dma.c          |  3 +-
- drivers/gpu/drm/radeon/si_dpm.c          |  8 ++--
- drivers/gpu/drm/radeon/si_dpm.h          |  5 +++
- drivers/gpu/drm/radeon/trinity_dpm.c     |  2 +-
- drivers/gpu/drm/radeon/vce.h             | 35 ++++++++++++++++
- drivers/gpu/drm/radeon/vce_v1_0.c        |  1 +
- drivers/gpu/drm/radeon/vce_v2_0.c        |  1 +
- 32 files changed, 215 insertions(+), 72 deletions(-)
- create mode 100644 drivers/gpu/drm/radeon/cik.h
- create mode 100644 drivers/gpu/drm/radeon/dce6_afmt.h
- create mode 100644 drivers/gpu/drm/radeon/si.h
- create mode 100644 drivers/gpu/drm/radeon/vce.h
+yamllint warnings/errors:
 
-Cc: Alex Deucher <alexander.deucher@amd.com>
-Cc: amd-gfx@lists.freedesktop.org
-Cc: "Christian König" <christian.koenig@amd.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: David Airlie <airlied@linux.ie>
-Cc: dri-devel@lists.freedesktop.org
-Cc: linaro-mm-sig@lists.linaro.org
-Cc: linux-media@vger.kernel.org
-Cc: Slava Grigorev <slava.grigorev@amd.com>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
--- 
-2.25.1
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/microchip,csi2dc.yaml: 'additionalProperties' is a required property
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/microchip,csi2dc.yaml: ignoring, error in schema: 
+warning: no schema found in file: ./Documentation/devicetree/bindings/media/microchip,csi2dc.yaml
+
+
+See https://patchwork.ozlabs.org/patch/1397687
+
+The base for the patch is generally the last rc1. Any dependencies
+should be noted.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
