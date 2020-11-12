@@ -2,243 +2,147 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,LOTS_OF_MONEY,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86863C2D0A3
-	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 09:38:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8FCDC55ABD
+	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 10:25:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3C9E7221FC
-	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 09:38:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5F10822201
+	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 10:25:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726107AbgKLJiZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Nov 2020 04:38:25 -0500
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:60715 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725928AbgKLJiZ (ORCPT
+        id S1727656AbgKLKZu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Nov 2020 05:25:50 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:59638 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726061AbgKLKZt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Nov 2020 04:38:25 -0500
-X-Originating-IP: 93.34.118.233
-Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 030ABE0006;
-        Thu, 12 Nov 2020 09:38:19 +0000 (UTC)
-Date:   Thu, 12 Nov 2020 10:38:21 +0100
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Sakari Ailus <sakari.ailus@iki.fi>
-Cc:     linux-media@vger.kernel.org, naush@raspberrypi.com,
-        dave.stevenson@raspberrypi.com, laurent.pinchart@ideasonboard.com,
-        kieran.bingham@ideasonboard.com, niklas.soderlund@ragnatech.se,
-        hverkuil@xs4all.nl, nsaenzjulienne@suse.de,
-        mchehab+huawei@kernel.org
-Subject: Re: [PATCH v3 1/5] media: uapi: v4l2-core: Add sensor ancillary data
- V4L2 fourcc type
-Message-ID: <20201112093821.y676dnvtjxkbpxah@uno.localdomain>
-References: <20201102165258.408049-1-jacopo@jmondi.org>
- <20201102165258.408049-2-jacopo@jmondi.org>
- <20201111171929.GA6899@valkosipuli.retiisi.org.uk>
+        Thu, 12 Nov 2020 05:25:49 -0500
+Received: from [IPv6:2003:c7:cf0a:2300:85f8:bedb:3423:44d5] (p200300c7cf0a230085f8bedb342344d5.dip0.t-ipconnect.de [IPv6:2003:c7:cf0a:2300:85f8:bedb:3423:44d5])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: dafna)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id A98311F4624B;
+        Thu, 12 Nov 2020 10:25:39 +0000 (GMT)
+Subject: Re: [PATCH v3 0/2] destage Rockchip ISP1 driver
+To:     dave.stevenson@raspberrypi.com
+References: <20201106121937.1459948-1-helen.koike@collabora.com>
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Collabora Kernel ML <kernel@collabora.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Helen Koike <helen.koike@collabora.com>
+Message-ID: <7eb69eee-996c-6efb-8bee-6276d16a61e3@collabora.com>
+Date:   Thu, 12 Nov 2020 11:25:36 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201111171929.GA6899@valkosipuli.retiisi.org.uk>
+In-Reply-To: <20201106121937.1459948-1-helen.koike@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sakari,
-   I'll attempt a reply, Dave and Naush which first authored the patch
-might provide more valuable feedback than me.
 
-Also, please note v4 is out
 
-On Wed, Nov 11, 2020 at 07:19:29PM +0200, Sakari Ailus wrote:
-> Hi Jacopo,
->
-> On Mon, Nov 02, 2020 at 05:52:54PM +0100, Jacopo Mondi wrote:
-> > From: Naushir Patuck <naush@raspberrypi.com>
-> >
-> > Add V4L2_META_FMT_SENSOR_DATA format 4CC.
-> >
-> > This new format will be used to return camera sensor embedded data.
-> >
-> > Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
-> > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
-> > ---
-> >  .../userspace-api/media/v4l/meta-formats.rst  |  1 +
-> >  .../media/v4l/pixfmt-meta-sensor-data.rst     | 32 +++++++++++++++++++
-> >  drivers/media/v4l2-core/v4l2-ioctl.c          |  1 +
-> >  include/uapi/linux/videodev2.h                |  1 +
-> >  4 files changed, 35 insertions(+)
-> >  create mode 100644 Documentation/userspace-api/media/v4l/pixfmt-meta-sensor-data.rst
-> >
-> > diff --git a/Documentation/userspace-api/media/v4l/meta-formats.rst b/Documentation/userspace-api/media/v4l/meta-formats.rst
-> > index fff25357fe860..b2201d1524eb6 100644
-> > --- a/Documentation/userspace-api/media/v4l/meta-formats.rst
-> > +++ b/Documentation/userspace-api/media/v4l/meta-formats.rst
-> > @@ -15,6 +15,7 @@ These formats are used for the :ref:`metadata` interface only.
-> >      pixfmt-meta-d4xx
-> >      pixfmt-meta-intel-ipu3
-> >      pixfmt-meta-rkisp1
-> > +    pixfmt-meta-sensor-data
-> >      pixfmt-meta-uvc
-> >      pixfmt-meta-vsp1-hgo
-> >      pixfmt-meta-vsp1-hgt
-> > diff --git a/Documentation/userspace-api/media/v4l/pixfmt-meta-sensor-data.rst b/Documentation/userspace-api/media/v4l/pixfmt-meta-sensor-data.rst
-> > new file mode 100644
-> > index 0000000000000..639ede1a8fee3
-> > --- /dev/null
-> > +++ b/Documentation/userspace-api/media/v4l/pixfmt-meta-sensor-data.rst
-> > @@ -0,0 +1,32 @@
-> > +.. Permission is granted to copy, distribute and/or modify this
-> > +.. document under the terms of the GNU Free Documentation License,
-> > +.. Version 1.1 or any later version published by the Free Software
-> > +.. Foundation, with no Invariant Sections, no Front-Cover Texts
-> > +.. and no Back-Cover Texts. A copy of the license is included at
-> > +.. Documentation/media/uapi/fdl-appendix.rst.
-> > +..
-> > +.. TODO: replace it to GFDL-1.1-or-later WITH no-invariant-sections
-> > +
-> > +.. _v4l2-meta-fmt-sensor-data:
-> > +
-> > +***********************************
-> > +V4L2_META_FMT_SENSOR_DATA  ('SENS')
-> > +***********************************
-> > +
-> > +Sensor Ancillary Metadata
-> > +
-> > +Description
-> > +===========
-> > +
-> > +This format describes ancillary data generated by a camera sensor and
-> > +transmitted over a stream on the camera bus. Most sensor vendors have their
-> > +own custom format for this ancillary data. Some vendors follow a generic
-> > +CSI-2/SMIA embedded data format as described in the `CSI-2 specification.
-> > +<https://mipi.org/specifications/csi-2>`_
-> > +
-> > +The size of the embedded buffer is defined as a single line with a pixel width
-> > +specified in bytes. This is obtained by a call to the
-> > +:c:type:`VIDIOC_SUBDEV_G_FMT` ioctl on the sensor subdevice where the ``pad``
-> > +field in :c:type:`v4l2_subdev_format` is set to 1.  Note that this size is fixed
-> > +and cannot be modified with a call to :c:type:`VIDIOC_SUBDEV_S_FMT`.
-> > +
-> > diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-> > index eeff398fbdcc1..d01d9ca6578df 100644
-> > --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> > +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> > @@ -1402,6 +1402,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
-> >  	case V4L2_META_FMT_UVC:		descr = "UVC Payload Header Metadata"; break;
-> >  	case V4L2_META_FMT_D4XX:	descr = "Intel D4xx UVC Metadata"; break;
-> >  	case V4L2_META_FMT_VIVID:       descr = "Vivid Metadata"; break;
-> > +	case V4L2_META_FMT_SENSOR_DATA:	descr = "Sensor Ancillary Metadata"; break;
->
-> How about "Embedded" instead? This is called embedded data virtually
-> everywhere.
+Am 06.11.20 um 13:19 schrieb Helen Koike:
+> Hello,
+> 
+> Changes in v3:
+> - Moved Kconfig entry from M2M to Platform devices
+> - Rename description and comment to Parameters and Statistics.
+> - Patches squashed:
+> dt-bindings: media: rkisp1: move rockchip-isp1 bindings out of staging
+> media: MAINTAINERS: rkisp1: add path to dt-bindings
+> media: rockchip: rkisp1: destage Rockchip ISP1 driver
+> media: MAINTAINERS: Update rkisp1 files with new location
+> 
+> Changes in v2:
+> - New patch updating MAINTAINERS file
+> - No changes in other patches
+> 
+>> media-ctl -p
+> http://ix.io/2Cso
+> 
+>> media-ctl --print-dot
+> http://ix.io/2Csp
+> 
+>> v4l2-compliance -m0
+> http://ix.io/2Csk
 
-I like it better too, and that's the term also used by the csi-2
-and ccs specs if I'm not mistaken
+Hello Dave,
 
->
-> Is it meant that all sensors would use this mbus code, or just some? I was
-> thinking we'd have sensor specific embedded data formats, but this approach
-> admittedly makes implementation easier in quite a few places. What will be
-> the documentation requirements for embedded data formats? Anything goes,
-> or...? I'm not sure I like that idea. Thoughts, anyone?
->
-> If we use an opaque format here, it'll be impossible for the receiver
-> driver to know how to pack the data in memory. Although... I guess this is
-> generally the responsibility of the software.
->
+I see the above link that the imx219 does not pass the compliance:
 
-Dave gave a great summary of how defining less opaque formats might
-not be practical in his reply to Hans.
+fail: v4l2-test-controls.cpp(830): failed to find event for control 'Exposure'
+	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: FAIL
 
-In the current design sensors that produce embedded data expose and
-additional pad where it is possible to call the usual subdev_g_fmt to
-retrieve the size information. That's all the receiver needs to know
-to allocate buffers and properly transfer data there.
+I see this patch on downstream
+"media: i2c: imx219: Declare that the driver can create events"
 
-I see the CSS specs prescribing embedded data to have the same bit
-depth as the image data, but I assume not all vendors might comply,
-so this should probably be advertised. The simple solution is to
-return a format.width in bytes. You can see that in the unicam driver:
+That adds the flag V4L2_SUBDEV_FL_HAS_EVENTS, I suspect that is the patch
+that fixes the compliance issue.
 
-		node->v_fmt.fmt.meta.buffersize = mbus_fmt.width
-						* mbus_fmt.height;
+I can verify that and send the patch to the mailing list,
+is it ok with you?
 
-Where the mbus_fmt is fetched from pad #1 of the sensor subdev.
+Thanks,
+Dafna
 
-There's no unpacking or parsing as far as I'm aware, and this makes
-sense to me as knowledge of the sensor-specific format should not be
-in the receiver driver but delegated to a specialized user-space
-component. Having it in kernel simply doesn't scale imho (and I fail
-to see a need to do so, in the general case).
 
-> This approach will also have the consequence that we'll have an opaque
-> sensor embedded data format.
->
-> How does the receiver figure out the bits per pixel for this? That'll be
-> needed at least for calculating the buffer size when the data is written to
-> the memory.
->
 
-As said the current design of unicam and "augmented" sensor drivers
-relies on the presence of an additional pad where the receivers simply
-calls g_fmt to get the size information to calculate the meteadata
-buffer size.
-
-I know this is not v4l2 spec compliant, as the returned frame width
-should be in pixels and not bytes and because of the additional pad on
-the sensor subdevice. These are the reasons why this driver is in
-staging at the moment :)
-
-I think the real question is how this should be designed on mailine
-and the actual questions to answer are:
-
-1) How to handle the additional data stream. This can be generalized
-   to the question of how to handle CSI-2 VC/DT multiplexing
-
-2) Based on the answer to 1) decide how to advertise the packaging
-   information: encode them in the format (ie
-   V4L2_META_FMT_EMBEDDED_DATA8_1x8) or access them through one of the
-   existing uapi/kapi.
-
-In any case, I don't think any knoledge of anything else than
-packaging structure should be required in the reciver: ie parsing of
-the embedded data content should happen elsewhere.
-
-As 1) seems to be the million dollar question, for the time being I
-would rather define an opaque format. In v4 I went for
-V4L2_META_FMT_CUSTOM_SENSOR_DATA as suggested by Hans, but this could
-very well be V4L2_META_FMT_OPAQUE_EMBEDDED_DATA or similar, with the
-documentation more clearly stating that the format does not convey any
-information on the actual bit depth and it's up to the receiver to
-figure it out.
-
-Do we have anything like staging formats ?
-
-Thanks
-   j
-
-> >
-> >  	default:
-> >  		/* Compressed formats */
-> > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-> > index 534eaa4d39bc8..b7e3185e66631 100644
-> > --- a/include/uapi/linux/videodev2.h
-> > +++ b/include/uapi/linux/videodev2.h
-> > @@ -769,6 +769,7 @@ struct v4l2_pix_format {
-> >  #define V4L2_META_FMT_UVC         v4l2_fourcc('U', 'V', 'C', 'H') /* UVC Payload Header metadata */
-> >  #define V4L2_META_FMT_D4XX        v4l2_fourcc('D', '4', 'X', 'X') /* D4XX Payload Header metadata */
-> >  #define V4L2_META_FMT_VIVID	  v4l2_fourcc('V', 'I', 'V', 'D') /* Vivid Metadata */
-> > +#define V4L2_META_FMT_SENSOR_DATA v4l2_fourcc('S', 'E', 'N', 'S') /* Sensor Ancillary metadata */
-> >
-> >  /* priv field value to indicates that subsequent fields are valid. */
-> >  #define V4L2_PIX_FMT_PRIV_MAGIC		0xfeedcafe
->
-> --
-> Kind regards,
->
-> Sakari Ailus
+> 
+>> v4l2-compliance -v -d /dev/video0 -s10
+> http://ix.io/2Csq
+> 
+>> v4l2-compliance -v -d /dev/video1 -s10
+> http://ix.io/2Css
+> 
+> Helen Koike (1):
+>    media: rockchip: rkisp1: destage Rockchip ISP1 driver
+> 
+> Shunqian Zheng (1):
+>    media: videodev2.h, v4l2-ioctl: add rkisp1 meta buffer format
+> 
+>   .../bindings/media/rockchip-isp1.yaml         |  0
+>   .../media/v4l/pixfmt-meta-rkisp1.rst          |  2 +-
+>   MAINTAINERS                                   |  5 ++++-
+>   drivers/media/platform/Kconfig                | 18 ++++++++++++++++++
+>   drivers/media/platform/Makefile               |  1 +
+>   .../platform/rockchip}/rkisp1/Makefile        |  0
+>   .../rockchip}/rkisp1/rkisp1-capture.c         |  0
+>   .../platform/rockchip}/rkisp1/rkisp1-common.c |  0
+>   .../platform/rockchip}/rkisp1/rkisp1-common.h |  2 +-
+>   .../platform/rockchip}/rkisp1/rkisp1-dev.c    |  0
+>   .../platform/rockchip}/rkisp1/rkisp1-isp.c    |  0
+>   .../platform/rockchip}/rkisp1/rkisp1-params.c |  0
+>   .../platform/rockchip}/rkisp1/rkisp1-regs.h   |  0
+>   .../rockchip}/rkisp1/rkisp1-resizer.c         |  0
+>   .../platform/rockchip}/rkisp1/rkisp1-stats.c  |  0
+>   drivers/media/v4l2-core/v4l2-ioctl.c          |  2 ++
+>   drivers/staging/media/Kconfig                 |  2 --
+>   drivers/staging/media/Makefile                |  1 -
+>   drivers/staging/media/rkisp1/Kconfig          | 19 -------------------
+>   drivers/staging/media/rkisp1/TODO             |  6 ------
+>   .../uapi/linux}/rkisp1-config.h               |  4 ----
+>   include/uapi/linux/videodev2.h                |  4 ++++
+>   22 files changed, 31 insertions(+), 35 deletions(-)
+>   rename {drivers/staging/media/rkisp1/Documentation => Documentation}/devicetree/bindings/media/rockchip-isp1.yaml (100%)
+>   rename drivers/{staging/media => media/platform/rockchip}/rkisp1/Makefile (100%)
+>   rename drivers/{staging/media => media/platform/rockchip}/rkisp1/rkisp1-capture.c (100%)
+>   rename drivers/{staging/media => media/platform/rockchip}/rkisp1/rkisp1-common.c (100%)
+>   rename drivers/{staging/media => media/platform/rockchip}/rkisp1/rkisp1-common.h (99%)
+>   rename drivers/{staging/media => media/platform/rockchip}/rkisp1/rkisp1-dev.c (100%)
+>   rename drivers/{staging/media => media/platform/rockchip}/rkisp1/rkisp1-isp.c (100%)
+>   rename drivers/{staging/media => media/platform/rockchip}/rkisp1/rkisp1-params.c (100%)
+>   rename drivers/{staging/media => media/platform/rockchip}/rkisp1/rkisp1-regs.h (100%)
+>   rename drivers/{staging/media => media/platform/rockchip}/rkisp1/rkisp1-resizer.c (100%)
+>   rename drivers/{staging/media => media/platform/rockchip}/rkisp1/rkisp1-stats.c (100%)
+>   delete mode 100644 drivers/staging/media/rkisp1/Kconfig
+>   delete mode 100644 drivers/staging/media/rkisp1/TODO
+>   rename {drivers/staging/media/rkisp1/uapi => include/uapi/linux}/rkisp1-config.h (99%)
+> 
