@@ -2,251 +2,139 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C32BBC388F9
-	for <linux-media@archiver.kernel.org>; Wed, 11 Nov 2020 19:15:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C03BBC388F7
+	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 05:32:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 71519206F1
-	for <linux-media@archiver.kernel.org>; Wed, 11 Nov 2020 19:15:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4FC95208FE
+	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 05:32:17 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="JuVQHKjQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726204AbgKKTPf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 11 Nov 2020 14:15:35 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:46004 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725949AbgKKTPd (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 11 Nov 2020 14:15:33 -0500
-Received: by mail-ot1-f68.google.com with SMTP id k3so3156577otp.12;
-        Wed, 11 Nov 2020 11:15:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8gKCHEvFzJANeCSj/Y9iNsSZFzZ8Qf0AqO8I6cBIIJE=;
-        b=H3/GE5aKxRh/ljtNXu3KAmLUJa6E/EZmV/M9VCJzLNv05o60n45qTFRDXjVEcZeRhM
-         rkUwW3UVI74RrDezaZrHeC1wTDDr01NBsT+ESUezMuGNvbnwDnFrrMu0AYiGYjZaFgqZ
-         VQ8EUjrIGOsMWhgDKSSu0EY4hAzeKR9epFssRz/gKnlggaaEEH7q0WDWH1WEWxKuBpMF
-         Qrx6BSLRrIR7BpJlJ3/x9WJqNs8U1iwJphkSYs6L9rNaMGssP5ZFR+J52bAK0r3WoPT0
-         fLdcroSGpi7eMgCxLCoFKAaRolR02boH0ST94RpS+NlFpL5pOWWmCfsses1DPQCqTcRF
-         97/g==
-X-Gm-Message-State: AOAM532ynhNucEbjXx8jnrBrHThk5AYAeXqKOtWQ6OxlyaBWh7I2H8Kq
-        NLB6c7ejPbaaO69nc7iLBg==
-X-Google-Smtp-Source: ABdhPJzC2WcNGxa3VvkHl8Hj3vaDJyYVrenKAKyMQ7gEegGH0RsScqxeETtYU2hIe3kc6mY8OKMi2A==
-X-Received: by 2002:a9d:d37:: with SMTP id 52mr17544349oti.326.1605122132280;
-        Wed, 11 Nov 2020 11:15:32 -0800 (PST)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id i1sm700680ool.43.2020.11.11.11.15.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2020 11:15:31 -0800 (PST)
-Received: (nullmailer pid 1856229 invoked by uid 1000);
-        Wed, 11 Nov 2020 19:15:30 -0000
-Date:   Wed, 11 Nov 2020 13:15:30 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Eugen Hristev <eugen.hristev@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, sakari.ailus@iki.fi,
-        laurent.pinchart@ideasonboard.com, jacopo@jmondi.org
-Subject: Re: [PATCH v4 1/3] dt-bindings: media: atmel: csi2dc: add bindings
- for microchip csi2dc
-Message-ID: <20201111191530.GC1844086@bogus>
-References: <20201110151116.161260-1-eugen.hristev@microchip.com>
+        id S1726777AbgKLFcL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Nov 2020 00:32:11 -0500
+Received: from mail-vi1eur05on2044.outbound.protection.outlook.com ([40.107.21.44]:36416
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728062AbgKLDJP (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 11 Nov 2020 22:09:15 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KI6iWeMiFj7LCdkX+5dDifOP/Bf9SoqmnEQBxvMNN0Yn+f3Dt0sZuOBQAgJsXE8+LfMe1X3XCwn9Tf/5eOMad0i8mDTQfwuvUuT1WX1YIJDQOxB/rqYSCBMYITDWCxy99wQnVvegjlkhL+lsl54AuFxxzd0pdVTi4jn8T1m8kaQQYMVIC9yMTKx8JuieK1zc3DIpBCMVwc7pzWvRyitKyhhGudp9tny0N4NAl+Q2Y/7rGU59hmXoe5dGZlAod6XIummBrLJtdOutQo65OLJAXaWSV2i5a0UdKr4AMTiRr6UJ6NdZaqpm//Gyk9jZWaIfFtz96gsVSNnbA9jsr5Jpig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UWsCx/qYQ8TgnvLg3poctEK55oc/U+UjFaCkYLB/naQ=;
+ b=iAhpXJLXClPNAkH+yKvkqiBHXORTQhPVe8FQn9pxnxOAW1WnA4qIaAuaenkK/5UWX4yfvmCThba4gkVwFuyC6dbVvF1CqIklHsB4aoynyMrH8rnbkRPXfbMui/VBueKtXQhDmttGKxUaZFCO6pE7yRId5zh4pfcjYnhmkosJNHrOH7ulpqPTLKPL2WiHYQn/NUHqFrISzhf0fUzkfySq0SaZ95L1PNHcPGjGGrylnNSovAmgFgF2duuZKoFVe82bbDpdwjo1jeoSec+dHQbEVgKDa2jeB7IpfrFpkf0Nl9PiYx1AC+6fdPJv31NZHjY9WXL/rNPe892Z7VBez6p7kg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UWsCx/qYQ8TgnvLg3poctEK55oc/U+UjFaCkYLB/naQ=;
+ b=JuVQHKjQAvs2KBb7Y8Nlc5IcSxcJGX04B/Td0GDs7Ox2NaKy3vcb7A8rdrqW5X1kr1PQSoZwXHwPLYIubyrcOry6P3+oRtdFiI8fImZJpPiSSqsXG7I4SUq7KI3g/U+05K8A2nhg6ae6sMCrC6ttOtvJrTzLQcRxSLWWGzKPfEw=
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=oss.nxp.com;
+Received: from AM5PR04MB3137.eurprd04.prod.outlook.com (2603:10a6:206:c::18)
+ by AM7PR04MB6997.eurprd04.prod.outlook.com (2603:10a6:20b:10d::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21; Thu, 12 Nov
+ 2020 03:07:09 +0000
+Received: from AM5PR04MB3137.eurprd04.prod.outlook.com
+ ([fe80::2d75:aaf5:5aa6:5de9]) by AM5PR04MB3137.eurprd04.prod.outlook.com
+ ([fe80::2d75:aaf5:5aa6:5de9%6]) with mapi id 15.20.3541.025; Thu, 12 Nov 2020
+ 03:07:09 +0000
+From:   "Mirela Rabulea (OSS)" <mirela.rabulea@oss.nxp.com>
+To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl, shawnguo@kernel.org,
+        robh+dt@kernel.org, p.zabel@pengutronix.de
+Cc:     paul.kocialkowski@bootlin.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
+        s.hauer@pengutronix.de, aisheng.dong@nxp.com,
+        daniel.baluta@nxp.com, robert.chiras@nxp.com,
+        laurentiu.palcu@nxp.com, mark.rutland@arm.com,
+        devicetree@vger.kernel.org, ezequiel@collabora.com,
+        laurent.pinchart+renesas@ideasonboard.com,
+        niklas.soderlund+renesas@ragnatech.se,
+        dafna.hirschfeld@collabora.com,
+        Mirela Rabulea <mirela.rabulea@nxp.com>
+Subject: [PATCH v5 06/10] Add maintainer for IMX jpeg v4l2 driver
+Date:   Thu, 12 Nov 2020 05:05:53 +0200
+Message-Id: <20201112030557.8540-7-mirela.rabulea@oss.nxp.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20201112030557.8540-1-mirela.rabulea@oss.nxp.com>
+References: <20201112030557.8540-1-mirela.rabulea@oss.nxp.com>
+Content-Type: text/plain
+X-Originating-IP: [86.124.171.138]
+X-ClientProxiedBy: AM0PR06CA0100.eurprd06.prod.outlook.com
+ (2603:10a6:208:fa::41) To AM5PR04MB3137.eurprd04.prod.outlook.com
+ (2603:10a6:206:c::18)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201110151116.161260-1-eugen.hristev@microchip.com>
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from fsr-ub1664-134.ea.freescale.net (86.124.171.138) by AM0PR06CA0100.eurprd06.prod.outlook.com (2603:10a6:208:fa::41) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21 via Frontend Transport; Thu, 12 Nov 2020 03:07:07 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 962c5732-a296-41e1-6dfc-08d886b80add
+X-MS-TrafficTypeDiagnostic: AM7PR04MB6997:
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <AM7PR04MB699764007D600F46E58953EACEE70@AM7PR04MB6997.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4125;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xsEvTy9R4P/+lFFOwBZ45DWodui2UdCRMK8EtMIf6NYydMuTlj+gR65jSXTf3KEfL/0W2qO7MoP1TJmtXirhKY95KuBLZCmk5fdlzdC8us+efNcmvVI2wUFFPC8JzR91KfYWQHEKHZ96wNTm/1UY3F01JIgYoyeSjF+cdj55P6rRs82pnT+gAu+9T5Jcyt0SsX6Y33Xfr3CMNZ6/D1F48da2aPjBXbrxt2sUIOePr6ebqbEfsMofflk1SiBzfCY3t/ikzPvoUTeaRgV+YLPo6a+iAhDYwNWh5Lyg64+Qa3bBMqZPOTZSXhxtfkweQxOHq96VL1NZPfhG8Y0Qe8Q1Xw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM5PR04MB3137.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(376002)(346002)(396003)(136003)(366004)(6666004)(1076003)(316002)(26005)(478600001)(6506007)(4744005)(4326008)(6512007)(66946007)(66476007)(186003)(6486002)(2906002)(66556008)(5660300002)(16526019)(8676002)(52116002)(86362001)(7416002)(8936002)(2616005)(956004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: gdnnvKAp63nM0n0Tr12sAEoG4cR4F9Rm2lfkmlKy/GuO6fQxf/GXzbYR5QzLEe7zk9INQ++rThnGIleyJPU0JwScyp6+s6FLGFDqHNPjbAfT7O+cCJEZjbNdWZFW8Yj5qG2HDfJyni+KzAl4Z1Lsi5l+RBn7GxLj2ElXiu45trmu2Y8g4M6TTjWEkYZbPISB+d8jB+iKM42NCSEb7dQyTlx8nBO+Ma08EJCSzpCTo0AlI/Zk9y962LhCIIhT07rfsxGRf9tTQ0CwiF9IQiChQuKoppn/BGLWATPv9i/Hd+NOi1znOfIxzIOMknw3iDDMymNE/qFsBBcrjbsrggk5OpnrUlP6gjxFB5S4rvUd1sCENKRk+GGS7P5hJ7X0mmxZ8kFYgPbQh2RcieyXmB3AI6KcV+2KOzOGL04IXfamNAvl78jUvLlONpg0myV1QqPhDGoouSt79G/YRpIYW4QkUrSu34iw0nNj1hM4CBn9tk1wBNu6APvYEHWSpHCqJ5+k4J+5rxPE+xHGt9VuxQzCcSH48yhcaEe/N/47YFR362aK9rB1ytNCb26C8D1EKf0eQJBQTL3QSDgJQ2eVL/5IhgbBEqjXSsggxKrrBiXxTF8AxRJjQg41Qe9eUuRuG/LNJ0r4yOw9M/DRGR8EUOYp5AmVvCXX5/BhjiyfVQuCj9Tf3sMKcuLLgtWIie58XAl1FfPYB2IsMiYX90uxT3UoCPqjie2MHuDctB9RfCwasod1ZZBtRt6/RTDqIuGtgawcYTESeBxqIcHZRKufBCLEB7evneAc6f+UGgtTrnCqdLcc4Cbn1Y9yJ9ufu0hhrt+tLGfjx6IxRtvR8br/HirxiPiRmR55A/EyP6OKLQjksMA5QyHQMs4ugjmhpMzduZ1z2ZFYOabEqfVqKv0V9it+dg==
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 962c5732-a296-41e1-6dfc-08d886b80add
+X-MS-Exchange-CrossTenant-AuthSource: AM5PR04MB3137.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Nov 2020 03:07:09.1111
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1VynF6+G94IGC24R712woogkvdOvIH22VdYTIZv22//U5GiIV0XVs/BgQdBW7+CUq9Z68i6SkwUUVMNIijq12w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6997
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Nov 10, 2020 at 05:11:14PM +0200, Eugen Hristev wrote:
-> Add bindings documentation for Microchip CSI2 Demultiplexer controller.
-> 
-> CSI2DC is a demultiplexer from Synopsys IDI interface specification to
-> parallel interface connection or direct memory access.
-> 
-> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-> ---
-> Changes in v4:
-> - Removed property for inter-line-delay and for clock continuous/non-continuous
-> - Removed virtual channel by reg for second endpoint
-> 
-> Changes in v3:
-> - Removed some text from description, as it was explained in the schema
-> - fixed other things as per Rob's review
-> - moved some text inside the schema, like the clock description
-> 
-> Changes in v2:
-> - fixed warnings reported by dt_binding_check
-> 
->  .../bindings/media/microchip,csi2dc.yaml      | 144 ++++++++++++++++++
->  1 file changed, 144 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/microchip,csi2dc.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/media/microchip,csi2dc.yaml b/Documentation/devicetree/bindings/media/microchip,csi2dc.yaml
-> new file mode 100644
-> index 000000000000..967e8fefe363
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/microchip,csi2dc.yaml
-> @@ -0,0 +1,144 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/microchip,csi2dc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Microchip CSI2 Demux Controller (CSI2DC)
-> +
-> +maintainers:
-> +  - Eugen Hristev <eugen.hristev@microchip.com>
-> +
-> +description:
-> +  CSI2DC - Camera Serial Interface 2 Demux Controller
-> +
-> +  CSI2DC is a hardware block that receives incoming data from an IDI interface
-> +  and filters packets based on their data type and virtual channel identifier,
-> +  then converts the byte stream into a cross clock domain to a pixel stream
-> +  to a parallel interface that can be read by a sensor controller.
-> +
-> +  CSI2DC provides two pipes, one video pipe and one data pipe. Video pipe
-> +  is connected to a sensor controller and the data pipe is accessible
-> +  as a DMA slave port to a DMA controller.
-> +
-> +  CSI2DC supports a single 'port' node as a source pad with Synopsys 32-bit
-> +  IDI interface. The connected endpoint must be a IDI interface compatible
-> +  device (like Synopsys CSI2HOST) , that can provide 32-bit IDI interface
-> +  connection as sink pad.
-> +  For media entity and endpoints please refer to the bindings defined in
-> +  Documentation/devicetree/bindings/media/video-interfaces.txt.
-> +  For Synopsys IDI interface please refer to
-> +  Documentation/devicetree/bindings/media/snps,dw-csi-plat.txt
-> +
-> +  CSI2DC supports one 'port' node as sink pad with parallel interface. This is
-> +  called video pipe.
-> +  This port has an 'endpoint' can then be used as a source pad for another
-> +  controller (next in pipeline).
-> +  Please refer to the bindings defined in
-> +  Documentation/devicetree/bindings/media/video-interfaces.txt.
-> +
-> +  CSI2DC also supports direct access to the data through AHB, via DMA channel,
-> +  called data pipe.
-> +  Because of this, the sink 'port' child node (second) is not mandatory.
-> +  If the sink 'port' child node is missing, only data pipe is available.
-> +
-> +properties:
-> +  compatible:
-> +    const: microchip,sama7g5-csi2dc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 2
-> +
-> +  clock-names:
-> +    description:
-> +      CSI2DC must have two clocks to function correctly. One clock is the
-> +      peripheral clock for the inside functionality of the hardware block.
-> +      This is named 'pclk'. The second clock must be the cross domain clock,
-> +      in which CSI2DC will perform clock crossing. This clock must be fed
-> +      by the next controller in pipeline, which usually is a sensor controller.
-> +      Normally this clock should be given by this sensor controller who
-> +      is also a clock source. This clock is named 'scck', sensor controller clock.
-> +    items:
-> +      - const: pclk
-> +      - const: scck
-> +
-> +  port@0:
+From: Mirela Rabulea <mirela.rabulea@nxp.com>
 
-Put multiple 'port' nodes under a 'ports' node.
+The driver is located in drivers/media/platform/imx-jpeg,
+and it applies to the JPEG decoder from i.MX QXP and QM.
 
-> +    type: object
-> +    description:
-> +      Input port node, single endpoint describing the input pad.
+Signed-off-by: Mirela Rabulea <mirela.rabulea@nxp.com>
+---
+Changes in v5:
+move to NXP section in maintainers file
 
-This:
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-> +
-> +    properties:
-> +      reg:
-> +        const: 0
-> +
-> +      endpoint:
-> +        type: object
-> +
-> +        properties:
-> +          remote-endpoint: true
-> +
-> +        required:
-> +          - remote-endpoint
-> +
-> +        additionalProperties: false
-> +
-> +    additionalProperties: false
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f1f088a29bc2..f4c9b53d9077 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12692,6 +12692,14 @@ L:	linux-nfc@lists.01.org (moderated for non-subscribers)
+ S:	Supported
+ F:	drivers/nfc/nxp-nci
+ 
++NXP i.MX 8QXP/8QM JPEG V4L2 DRIVER
++M:	Mirela Rabulea <mirela.rabulea@nxp.com>
++R:	NXP Linux Team <linux-imx@nxp.com>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/media/imx8-jpeg.yaml
++F:	drivers/media/platform/imx-jpeg
++
+ OBJAGG
+ M:	Jiri Pirko <jiri@nvidia.com>
+ L:	netdev@vger.kernel.org
+-- 
+2.17.1
 
-...to here can be omitted.
-
-> +
-> +  port@1:
-> +    type: object
-> +    description:
-> +      Output port node, single endpoint, describing the output pad.
-> +
-> +    properties:
-> +      reg:
-> +        const: 1
-> +
-> +      endpoint:
-> +        type: object
-> +
-> +        properties:
-> +          remote-endpoint: true
-> +
-> +        required:
-> +          - remote-endpoint
-> +
-> +        additionalProperties: false
-> +
-> +    additionalProperties: false
-
-Same here.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - port@0
-> +
-> +examples:
-> +  - |
-> +    csi2dc@e1404000 {
-> +        compatible = "microchip,sama7g5-csi2dc";
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        reg = <0xe1404000 0x500>;
-> +        clocks = <&pclk>, <&scck>;
-> +        clock-names = "pclk", "scck";
-> +
-> +        port@0 {
-> +               reg = <0>; /* must be 0, first child port */
-> +               csi2dc_in: endpoint { /* input from IDI interface */
-> +                     remote-endpoint = <&csi2host_out>;
-> +               };
-> +        };
-> +
-> +        port@1 {
-> +                reg = <1>; /* must be 1, second child port */
-> +                csi2dc_out: endpoint {
-> +                        remote-endpoint = <&xisc_in>; /* output to sensor controller */
-> +                };
-> +        };
-> +    };
-> +
-> +...
-> -- 
-> 2.25.1
-> 
