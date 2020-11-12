@@ -4,37 +4,37 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2EBCC5519F
-	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 22:53:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AED54C388F7
+	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 22:53:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7FAA020B80
-	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 22:53:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B34A20A8B
+	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 22:53:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726749AbgKLWxK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Nov 2020 17:53:10 -0500
-Received: from vsp-unauthed02.binero.net ([195.74.38.227]:58873 "EHLO
+        id S1726774AbgKLWxM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Nov 2020 17:53:12 -0500
+Received: from vsp-unauthed02.binero.net ([195.74.38.227]:58862 "EHLO
         vsp-unauthed02.binero.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726578AbgKLWxK (ORCPT
+        with ESMTP id S1726102AbgKLWxM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Nov 2020 17:53:10 -0500
-X-Halon-ID: 82f64107-2539-11eb-bcc0-005056917f90
+        Thu, 12 Nov 2020 17:53:12 -0500
+X-Halon-ID: 81eed9d3-2539-11eb-bcc0-005056917f90
 Authorized-sender: niklas.soderlund@fsdn.se
 Received: from bismarck.berto.se (p4fca2458.dip0.t-ipconnect.de [79.202.36.88])
         by bin-vsp-out-02.atm.binero.net (Halon) with ESMTPA
-        id 82f64107-2539-11eb-bcc0-005056917f90;
-        Thu, 12 Nov 2020 23:50:50 +0100 (CET)
+        id 81eed9d3-2539-11eb-bcc0-005056917f90;
+        Thu, 12 Nov 2020 23:50:49 +0100 (CET)
 From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>
 To:     linux-media@vger.kernel.org
 Cc:     linux-renesas-soc@vger.kernel.org,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>
-Subject: [PATCH 3/4] rcar-vin: Stop stream when subdevice signal EOS
-Date:   Thu, 12 Nov 2020 23:51:46 +0100
-Message-Id: <20201112225147.1672622-4-niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH 1/4] rcar-vin: Do not try to stop stream if not running
+Date:   Thu, 12 Nov 2020 23:51:44 +0100
+Message-Id: <20201112225147.1672622-2-niklas.soderlund+renesas@ragnatech.se>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201112225147.1672622-1-niklas.soderlund+renesas@ragnatech.se>
 References: <20201112225147.1672622-1-niklas.soderlund+renesas@ragnatech.se>
@@ -45,43 +45,29 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When a subdevice signals end of stream stop the VIN in addition to
-informing user-space of the event.
+Do not attempt to stop the streaming if the stream is not running.
 
 Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 ---
- drivers/media/platform/rcar-vin/rcar-v4l2.c | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+ drivers/media/platform/rcar-vin/rcar-dma.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/rcar-vin/rcar-v4l2.c
-index dca3ab1656a66cef..fcaf68c3428b80fd 100644
---- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
-+++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
-@@ -969,9 +969,23 @@ void rvin_v4l2_unregister(struct rvin_dev *vin)
- static void rvin_notify_video_device(struct rvin_dev *vin,
- 				     unsigned int notification, void *arg)
- {
-+	const struct v4l2_event *event;
+diff --git a/drivers/media/platform/rcar-vin/rcar-dma.c b/drivers/media/platform/rcar-vin/rcar-dma.c
+index 5a5f0e5007478c8d..eae25972ed7df2b6 100644
+--- a/drivers/media/platform/rcar-vin/rcar-dma.c
++++ b/drivers/media/platform/rcar-vin/rcar-dma.c
+@@ -1302,6 +1302,11 @@ void rvin_stop_streaming(struct rvin_dev *vin)
+ 
+ 	spin_lock_irqsave(&vin->qlock, flags);
+ 
++	if (vin->state == STOPPED) {
++		spin_unlock_irqrestore(&vin->qlock, flags);
++		return;
++	}
 +
- 	switch (notification) {
- 	case V4L2_DEVICE_NOTIFY_EVENT:
--		v4l2_event_queue(&vin->vdev, arg);
-+		event = arg;
-+
-+		switch (event->type) {
-+		case V4L2_EVENT_EOS:
-+			rvin_stop_streaming(vin);
-+			v4l2_info(&vin->v4l2_dev,
-+				  "Subdevice signaled end of stream, stopping.\n");
-+			break;
-+		default:
-+			break;
-+		}
-+
-+		v4l2_event_queue(&vin->vdev, event);
- 		break;
- 	default:
- 		break;
+ 	vin->state = STOPPING;
+ 
+ 	/* Wait until only scratch buffer is used, max 3 interrupts. */
 -- 
 2.29.2
 
