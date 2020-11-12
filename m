@@ -2,594 +2,320 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE39DC61DD8
-	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 05:32:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B123C56201
+	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 05:32:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 86AE42076E
-	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 05:32:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A6F1320825
+	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 05:32:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="MlBffkiE"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="L8p3YmbJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727132AbgKLFcS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Nov 2020 00:32:18 -0500
-Received: from mail-eopbgr00043.outbound.protection.outlook.com ([40.107.0.43]:9485
-        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728084AbgKLDLC (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 11 Nov 2020 22:11:02 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YId3zSFwN1qjcnjJQxprL+fzQwOCbrsg3ySWrE9ucpdYBR88qj+ebRnCLw4ZFsY42ORewQ0lOcAREizB52nsQ2JgEbGbVrD//s4Nl0CcFd4YXG7/6gtDHNbO130L7USambCDRB1HeCDsaUoHQ7WrbUDhlz22HOmdRnwhAfKwQo269kVfc5I8Li3slOUzYOVyyOYvjBm9kAezDZLhoaxII5mcMScsdZjAHxppjehbc0CkQMU7pdsHgYwJpGFuAiweS+b5Ynp/8JA94XPFBv0hEjxeqC9o1DM4Smih9JSwoz8c+UMz9bGucL9JorMYIz/US4ksPxG01HaWhWUUHNpNnQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lOCVnnhRMggIA38hRJjquXagGp5OtUnJYI3IOCZ9iLA=;
- b=ZjWf7cwsKiRfrzf45JKoXSk2rHebSS9D8y2A/YCy+XwE5kTRcr9DwCQgn8hat0/Y7e45PvYXKlHQveM3a+bR/vBvkmkXtoB0aLnExK84bIxEVJGwvp9XueV//GulAQGQkuqoUi0UOps7PPY/FfbWepGFH6fxGRmgEMMMuoKvPpD2cIb1K9bhbd/0ZwdZFmY8B6zvbFggoiHAJv2vOmDZEv7R8Wk4Jio4ba11UlFsZEgDUy3vZ3kWUsLoXefpl39d9drfEz3Xho4d5VAjJnGiKsFgPa8Sm8evF3HhVVtHpU2jyEr39AaNsB2jBueqKKyUSAt5XNXi9CHpmZKy+U6vsQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lOCVnnhRMggIA38hRJjquXagGp5OtUnJYI3IOCZ9iLA=;
- b=MlBffkiEQomn4lZmlCoR8Rj4Z252rHtEItW0mnlJY6si45OodRaxc4G5GEzrz+BFvblEAoNH79T8TtZn6yOSfQgiE5FAurSvdrirKzSmycoi7fDo7gYFAcLlHDxVyMCWqO/NR/9CHxxCS2GJu/7kep8wgdoKsqmNJp0XL2L0acc=
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=oss.nxp.com;
-Received: from AM5PR04MB3137.eurprd04.prod.outlook.com (2603:10a6:206:c::18)
- by AM7PR04MB6997.eurprd04.prod.outlook.com (2603:10a6:20b:10d::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21; Thu, 12 Nov
- 2020 03:07:23 +0000
-Received: from AM5PR04MB3137.eurprd04.prod.outlook.com
- ([fe80::2d75:aaf5:5aa6:5de9]) by AM5PR04MB3137.eurprd04.prod.outlook.com
- ([fe80::2d75:aaf5:5aa6:5de9%6]) with mapi id 15.20.3541.025; Thu, 12 Nov 2020
- 03:07:23 +0000
-From:   "Mirela Rabulea (OSS)" <mirela.rabulea@oss.nxp.com>
-To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl, shawnguo@kernel.org,
-        robh+dt@kernel.org, p.zabel@pengutronix.de
-Cc:     paul.kocialkowski@bootlin.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
-        s.hauer@pengutronix.de, aisheng.dong@nxp.com,
-        daniel.baluta@nxp.com, robert.chiras@nxp.com,
-        laurentiu.palcu@nxp.com, mark.rutland@arm.com,
-        devicetree@vger.kernel.org, ezequiel@collabora.com,
-        laurent.pinchart+renesas@ideasonboard.com,
-        niklas.soderlund+renesas@ragnatech.se,
-        dafna.hirschfeld@collabora.com,
-        Mirela Rabulea <mirela.rabulea@nxp.com>
-Subject: [PATCH v5 10/10] media: imx-jpeg: Use v4l2 jpeg helpers in mxc-jpeg
-Date:   Thu, 12 Nov 2020 05:05:57 +0200
-Message-Id: <20201112030557.8540-11-mirela.rabulea@oss.nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201112030557.8540-1-mirela.rabulea@oss.nxp.com>
-References: <20201112030557.8540-1-mirela.rabulea@oss.nxp.com>
-Content-Type: text/plain
-X-Originating-IP: [86.124.171.138]
-X-ClientProxiedBy: AM0PR06CA0100.eurprd06.prod.outlook.com
- (2603:10a6:208:fa::41) To AM5PR04MB3137.eurprd04.prod.outlook.com
- (2603:10a6:206:c::18)
+        id S1727535AbgKLFc1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Nov 2020 00:32:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56420 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729211AbgKLFFM (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 12 Nov 2020 00:05:12 -0500
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2A4C0613D1
+        for <linux-media@vger.kernel.org>; Wed, 11 Nov 2020 21:05:11 -0800 (PST)
+Received: by mail-pg1-x543.google.com with SMTP id m13so3157053pgl.7
+        for <linux-media@vger.kernel.org>; Wed, 11 Nov 2020 21:05:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OvDC5ClvDREdrucI/PTMRSu0u9Y+8gDZD9AD9LCiJ28=;
+        b=L8p3YmbJnbEjlaM8ZyDl8YynX/QKGKhIc3egOAZEyxJQKHSsppHzmwQ8gVlaM4ntpK
+         xoB0h4HWVRpF6+ppRkuWgeEzrtkvxsYsPsa8PRcNTYG7VplwxN3r7mvnkLriQHVz2cnm
+         jGGC6+EzOEtT2wtqLunbMGmUUdQ4Ux2q/dReE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OvDC5ClvDREdrucI/PTMRSu0u9Y+8gDZD9AD9LCiJ28=;
+        b=ppKtcOu1eG+/fs3wUB2KXU2uLGh4d7tEyHSOCto/uJ9XD24ENyxItSdohMedgavWoJ
+         +J+yHbM6arP4iHaziFlYkbauNR8yCI06DoVdRrwuF679YYXIc/QMhCk0+YMm9sO7m83B
+         HwWXpmhzIurtccelXXvfV+WJ0gb7xk7In3NCfhl7OZHseyB34HYtLf6a027tvhHneYke
+         USBKpPuh1QNXj3BfcxS9qGMFDwL7mM6Q1EWhK28k892HO1mJ788XArtqm7ttGERGskEJ
+         3KtdnZF8V41cHqJlxVTwDaN5kKVeJuCqwH29Lz1mI2KTCqNbaigWbA8NRS+3V3yRhM+6
+         IvqQ==
+X-Gm-Message-State: AOAM532bwIu+7OOF5edwmo3+zvMHwu9q6j4P0s94tCnh6W62Vvi+Y0Yo
+        WdhN4luaNt8tiAHUAY0mf6nmOg==
+X-Google-Smtp-Source: ABdhPJzYEjcMjjkfJUZy/N+AKfrDFogffDAd2YWlLqg4dsrddbsWAhnVkS+t3BjIEDvutQ0yaG8q7Q==
+X-Received: by 2002:a63:5f86:: with SMTP id t128mr23937460pgb.385.1605157511195;
+        Wed, 11 Nov 2020 21:05:11 -0800 (PST)
+Received: from chromium.org ([2401:fa00:8f:2:a28c:fdff:fef0:43bf])
+        by smtp.gmail.com with ESMTPSA id c28sm4985322pfj.108.2020.11.11.21.05.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Nov 2020 21:05:10 -0800 (PST)
+Date:   Thu, 12 Nov 2020 14:05:07 +0900
+From:   Tomasz Figa <tfiga@chromium.org>
+To:     Bingbu Cao <bingbu.cao@intel.com>
+Cc:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
+        senozhatsky@chromium.org, bingbu.cao@linux.intel.com,
+        qingwu.zhang@intel.com
+Subject: Re: [PATCH v3 1/2] media: ov2740: only do OTP data read on demand
+ from user
+Message-ID: <20201112050507.GA2685362@chromium.org>
+References: <1605076797-31058-1-git-send-email-bingbu.cao@intel.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from fsr-ub1664-134.ea.freescale.net (86.124.171.138) by AM0PR06CA0100.eurprd06.prod.outlook.com (2603:10a6:208:fa::41) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21 via Frontend Transport; Thu, 12 Nov 2020 03:07:22 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 8a2ef134-340f-4fa5-06a4-08d886b8139f
-X-MS-TrafficTypeDiagnostic: AM7PR04MB6997:
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM7PR04MB69978E70F9BB934FA054BE08CEE70@AM7PR04MB6997.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mFe6wZMmVGZkZoD5rmhiBHGQCdy0J405gXaGHrsqnvJjre14DfxW5mfxnH6ooWwChryjsMH1TRWQd3fIxIrjzCI/+3TmFGaGMLANjnDThM8qCkRDgGmpfKgBdmiaHtnCdNOcO8QoklApYbLzIA5UWmGN7Q4lFECeas6zishPLdleXPHVXkE+OnFhw6RI3r6dxEGf6/COmWt9b+OZDCINcD3LPSA2AD30rcUvMQf9xG6PYYm4x3uc8iGbY7Y9U6QQnSVq65kBkuzuo6/R10SNjdy2Mqy+gP/1JgLsfhkHpQe7BpEr6Bs+kmwlqh77GYvMtkhLC2Ov9Y4Icg0yTIk6QQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM5PR04MB3137.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(376002)(346002)(396003)(136003)(366004)(30864003)(6666004)(1076003)(316002)(26005)(478600001)(6506007)(4326008)(6512007)(66946007)(66476007)(186003)(6486002)(2906002)(66556008)(5660300002)(16526019)(8676002)(52116002)(86362001)(7416002)(8936002)(2616005)(956004)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: hUgvTv1hRbx9l9hb90T+gQOWXh/Ku+si7vrNq6QuyoTUSJA+MQLu4RDfm+dIMX4ri0QvNeH/XMUfqv7f17nNAGibaeJhw0W5JuUFKfl5MLr44XV0k1DZjYFSw1wlhKrzNM1oZguxiuunBBG8LLcn1OQZKpWGHARlLW3CxCfppk5JFkYWiFE3Xguc9vL7ngkxn0vYa9d3BmNYpwu/p+LqpdV27GaFVRRen+cJ4fv6Z2sDCARStTDU2XUb6xDjivr+pFs54L2KCcUr8Bl3MibCYN/WMzGOsms608QhZnMbXNQrJ/Qw/S7J5B69HBLG95amXUyZclNvXjZFqXVxCwM3rjMxSCNHtUc3+sSbcyjdvcWmX/6IrIr6naeG8RILscJsqpQRnR9rFr2DB26xI7He43xyduSUcvKUSpihCe3OcBcz1JIMc9psoQlc85Lxniv8nO0YNDU7YhTbqnXU3O91ZeDETMvrzfJedh+u1WPmaGqfR+aQA2/E8TGpEis0G1bmcHhBV4wB2jjX6BSw2/IJ3n4B43/JZpK2OxcZKfZitunGN39pitHOYDdtUoFvzizQAszENnSSZ2RESvo1RVKOTFwGks0zze04KzyDZyWnALUX4hUuYcZiCB6LbacJ+3UlgWLQiNcFdDsbXxf/P7jJNB3ak57NcIDGwfDQ8mA0/Rd9fNYG0RJbzIt4X4yeotBjSu7Ld+42KVhz8HFiSiOBPR4ABFvxgcUBtlICsRvIUwGgp5L6YEpn76sN3vhRXxy0Lo2AHqcR8AQNb5naInEtsxuSR59ZOGKqMuSJR5vKwvtY6xxhZ1ENc0DLtTrwlSBMq5+d8BFJ1yWz0AhqHiC6d/1jchac70/od2Z1+252SpgBfyY7Y7zxGPnRS1M4DeGP4o9JnccBlxxjSONJVr8nng==
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8a2ef134-340f-4fa5-06a4-08d886b8139f
-X-MS-Exchange-CrossTenant-AuthSource: AM5PR04MB3137.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Nov 2020 03:07:23.6087
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JFJiwwa5voJu6wv3ijMXOVzA/YDOgRBi87EHQx/jX0dTk0OMSjOR5wKMSqkIyZjgV0pHiwgJM+Rm0n37LFTNQA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6997
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1605076797-31058-1-git-send-email-bingbu.cao@intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Mirela Rabulea <mirela.rabulea@nxp.com>
+Hi Bingbu,
 
-Use v4l2_jpeg_parse_header in mxc_jpeg_parse, remove the old
-parsing way, which was duplicated in other jpeg drivers.
+On Wed, Nov 11, 2020 at 02:39:56PM +0800, Bingbu Cao wrote:
+> OTP data access of ov2740 in probe need power up, it may cause
+> the camera flash LED blink during probe if the LED use same power
+> rail with camera, this patch move the OTP data access out of
+> probe, it will only occur on demand from user by nvmem sysfs.
+> 
+> Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
+> Signed-off-by: Qingwu Zhang <qingwu.zhang@intel.com>
+> ---
+>  drivers/media/i2c/ov2740.c | 111 ++++++++++++++++++++++++++++++++-------------
+>  1 file changed, 79 insertions(+), 32 deletions(-)
+> 
 
-Signed-off-by: Mirela Rabulea <mirela.rabulea@nxp.com>
----
-Changes in v5:
-This was patch 11 in previous version
-Change triggered by patch 7 (app14 data change struct -> int)
+With Sakari's comment addressed:
 
- drivers/media/platform/imx-jpeg/Kconfig    |   1 +
- drivers/media/platform/imx-jpeg/mxc-jpeg.c | 267 ++++++---------------
- drivers/media/platform/imx-jpeg/mxc-jpeg.h |  26 +-
- 3 files changed, 80 insertions(+), 214 deletions(-)
+Reviewed-by: Tomasz Figa <tfiga@chromium.org>
 
-diff --git a/drivers/media/platform/imx-jpeg/Kconfig b/drivers/media/platform/imx-jpeg/Kconfig
-index 7cc89e5eff90..d875f7c88cda 100644
---- a/drivers/media/platform/imx-jpeg/Kconfig
-+++ b/drivers/media/platform/imx-jpeg/Kconfig
-@@ -4,6 +4,7 @@ config VIDEO_IMX8_JPEG
- 	depends on VIDEO_DEV && VIDEO_V4L2
- 	select VIDEOBUF2_DMA_CONTIG
- 	select V4L2_MEM2MEM_DEV
-+	select V4L2_JPEG_HELPER
- 	default m
- 	help
- 	  This is a video4linux2 driver for the i.MX8 QXP/QM integrated
-diff --git a/drivers/media/platform/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/imx-jpeg/mxc-jpeg.c
-index 8f297803f2c3..d3b7581ce46e 100644
---- a/drivers/media/platform/imx-jpeg/mxc-jpeg.c
-+++ b/drivers/media/platform/imx-jpeg/mxc-jpeg.c
-@@ -52,6 +52,7 @@
- #include <linux/pm_domain.h>
- #include <linux/string.h>
- 
-+#include <media/v4l2-jpeg.h>
- #include <media/v4l2-mem2mem.h>
- #include <media/v4l2-ioctl.h>
- #include <media/v4l2-common.h>
-@@ -65,12 +66,16 @@ static struct mxc_jpeg_fmt mxc_formats[] = {
- 	{
- 		.name		= "JPEG",
- 		.fourcc		= V4L2_PIX_FMT_JPEG,
-+		.subsampling	= -1,
-+		.nc		= -1,
- 		.colplanes	= 1,
- 		.flags		= MXC_JPEG_FMT_TYPE_ENC,
- 	},
- 	{
- 		.name		= "RGB", /*RGBRGB packed format*/
- 		.fourcc		= V4L2_PIX_FMT_RGB24,
-+		.subsampling	= V4L2_JPEG_CHROMA_SUBSAMPLING_444,
-+		.nc		= 3,
- 		.depth		= 24,
- 		.colplanes	= 1,
- 		.h_align	= 3,
-@@ -80,6 +85,8 @@ static struct mxc_jpeg_fmt mxc_formats[] = {
- 	{
- 		.name		= "ARGB", /* ARGBARGB packed format */
- 		.fourcc		= V4L2_PIX_FMT_ARGB32,
-+		.subsampling	= V4L2_JPEG_CHROMA_SUBSAMPLING_444,
-+		.nc		= 4,
- 		.depth		= 32,
- 		.colplanes	= 1,
- 		.h_align	= 3,
-@@ -89,6 +96,8 @@ static struct mxc_jpeg_fmt mxc_formats[] = {
- 	{
- 		.name		= "YUV420", /* 1st plane = Y, 2nd plane = UV */
- 		.fourcc		= V4L2_PIX_FMT_NV12,
-+		.subsampling	= V4L2_JPEG_CHROMA_SUBSAMPLING_420,
-+		.nc		= 3,
- 		.depth		= 12, /* 6 bytes (4Y + UV) for 4 pixels */
- 		.colplanes	= 2, /* 1 plane Y, 1 plane UV interleaved */
- 		.h_align	= 4,
-@@ -98,6 +107,8 @@ static struct mxc_jpeg_fmt mxc_formats[] = {
- 	{
- 		.name		= "YUV422", /* YUYV */
- 		.fourcc		= V4L2_PIX_FMT_YUYV,
-+		.subsampling	= V4L2_JPEG_CHROMA_SUBSAMPLING_422,
-+		.nc		= 3,
- 		.depth		= 16,
- 		.colplanes	= 1,
- 		.h_align	= 4,
-@@ -107,6 +118,8 @@ static struct mxc_jpeg_fmt mxc_formats[] = {
- 	{
- 		.name		= "YUV444", /* YUVYUV */
- 		.fourcc		= V4L2_PIX_FMT_YUV24,
-+		.subsampling	= V4L2_JPEG_CHROMA_SUBSAMPLING_444,
-+		.nc		= 3,
- 		.depth		= 24,
- 		.colplanes	= 1,
- 		.h_align	= 3,
-@@ -116,6 +129,8 @@ static struct mxc_jpeg_fmt mxc_formats[] = {
- 	{
- 		.name		= "Gray", /* Gray (Y8/Y12) or Single Comp */
- 		.fourcc		= V4L2_PIX_FMT_GREY,
-+		.subsampling	= V4L2_JPEG_CHROMA_SUBSAMPLING_GRAY,
-+		.nc		= 1,
- 		.depth		= 8,
- 		.colplanes	= 1,
- 		.h_align	= 3,
-@@ -419,33 +434,6 @@ static enum mxc_jpeg_image_format mxc_jpeg_fourcc_to_imgfmt(u32 fourcc)
- 	}
- }
- 
--static int mxc_jpeg_imgfmt_to_fourcc(enum mxc_jpeg_image_format imgfmt,
--				     u32 *fourcc)
--{
--	switch (imgfmt) {
--	case MXC_JPEG_GRAY:
--		*fourcc = V4L2_PIX_FMT_GREY;
--		return 0;
--	case MXC_JPEG_YUV422:
--		*fourcc = V4L2_PIX_FMT_YUYV;
--		return 0;
--	case MXC_JPEG_YUV420:
--		*fourcc =  V4L2_PIX_FMT_NV12;
--		return 0;
--	case MXC_JPEG_YUV444:
--		*fourcc =  V4L2_PIX_FMT_YUV24;
--		return 0;
--	case MXC_JPEG_RGB:
--		*fourcc =  V4L2_PIX_FMT_RGB24;
--		return 0;
--	case MXC_JPEG_ARGB:
--		*fourcc =  V4L2_PIX_FMT_ARGB32;
--		return 0;
--	default:
--		return 1;
--	}
--}
--
- static struct mxc_jpeg_q_data *mxc_jpeg_get_q_data(struct mxc_jpeg_ctx *ctx,
- 						   enum v4l2_buf_type type)
- {
-@@ -1165,45 +1153,6 @@ static void mxc_jpeg_stop_streaming(struct vb2_queue *q)
- 	release_active_buffers(q, VB2_BUF_STATE_ERROR);
- }
- 
--struct mxc_jpeg_stream {
--	u8 *addr;
--	u32 loc;
--	u32 end;
--};
--
--static int get_byte(struct mxc_jpeg_stream *stream)
--{
--	int ret;
--
--	if (stream->loc >= stream->end)
--		return -1;
--	ret = stream->addr[stream->loc];
--	stream->loc++;
--	return ret;
--}
--
--static int get_sof(struct device *dev,
--		   struct mxc_jpeg_stream *stream,
--		   struct mxc_jpeg_sof *sof)
--{
--	int i;
--
--	if (stream->loc + sizeof(struct mxc_jpeg_sof) >= stream->end)
--		return -1;
--	memcpy(sof, &stream->addr[stream->loc], sizeof(struct mxc_jpeg_sof));
--	_bswap16(&sof->length);
--	_bswap16(&sof->height);
--	_bswap16(&sof->width);
--	dev_dbg(dev, "JPEG SOF: precision=%d\n", sof->precision);
--	dev_dbg(dev, "JPEG SOF: height=%d, width=%d\n",
--		sof->height, sof->width);
--	for (i = 0; i < sof->components_no; i++) {
--		dev_dbg(dev, "JPEG SOF: comp_id=%d, H=0x%x, V=0x%x\n",
--			sof->comp[i].id, sof->comp[i].v, sof->comp[i].h);
--	}
--	return 0;
--}
--
- static int mxc_jpeg_valid_comp_id(struct device *dev,
- 				  struct mxc_jpeg_sof *sof,
- 				  struct mxc_jpeg_sos *sos)
-@@ -1233,45 +1182,18 @@ static int mxc_jpeg_valid_comp_id(struct device *dev,
- 	return valid;
- }
- 
--static enum mxc_jpeg_image_format
--mxc_jpeg_get_image_format(struct device *dev, const struct mxc_jpeg_sof *sof)
-+static u32 mxc_jpeg_get_image_format(struct device *dev,
-+				     const struct v4l2_jpeg_header header)
- {
--	if (sof->components_no == 1) {
--		dev_dbg(dev, "IMAGE_FORMAT is: MXC_JPEG_GRAY\n");
--		return MXC_JPEG_GRAY;
--	}
--	if (sof->components_no == 3) {
--		if (sof->comp[0].h == 2 && sof->comp[0].v == 2 &&
--		    sof->comp[1].h == 1 && sof->comp[1].v == 1 &&
--		    sof->comp[2].h == 1 && sof->comp[2].v == 1){
--			dev_dbg(dev, "IMAGE_FORMAT is: MXC_JPEG_YUV420\n");
--			return MXC_JPEG_YUV420;
--		}
--		if (sof->comp[0].h == 2 && sof->comp[0].v == 1 &&
--		    sof->comp[1].h == 1 && sof->comp[1].v == 1 &&
--		    sof->comp[2].h == 1 && sof->comp[2].v == 1){
--			dev_dbg(dev, "IMAGE_FORMAT is: MXC_JPEG_YUV422\n");
--			return MXC_JPEG_YUV422;
--		}
--		if (sof->comp[0].h == 1 && sof->comp[0].v == 1 &&
--		    sof->comp[1].h == 1 && sof->comp[1].v == 1 &&
--		    sof->comp[2].h == 1 && sof->comp[2].v == 1){
--			dev_dbg(dev, "IMAGE_FORMAT is: MXC_JPEG_YUV444\n");
--			return MXC_JPEG_YUV444;
--		}
--	}
--	if (sof->components_no == 4) {
--		if (sof->comp[0].h == 1 && sof->comp[0].v == 1 &&
--		    sof->comp[1].h == 1 && sof->comp[1].v == 1 &&
--		    sof->comp[2].h == 1 && sof->comp[2].v == 1 &&
--		    sof->comp[3].h == 1 && sof->comp[3].v == 1){
--			/* this is not tested */
--			dev_dbg(dev, "IMAGE_FORMAT is: MXC_JPEG_ARGB\n");
--			return MXC_JPEG_ARGB;
--		}
--	}
-+	int i;
-+
-+	for (i = 0; i < MXC_JPEG_NUM_FORMATS; i++)
-+		if (mxc_formats[i].subsampling == header.frame.subsampling &&
-+		    mxc_formats[i].nc == header.frame.num_components)
-+			return mxc_formats[i].fourcc;
-+
- 	dev_err(dev, "Could not identify image format\n");
--	return MXC_JPEG_INVALID;
-+	return 0;
- }
- 
- static void mxc_jpeg_bytesperline(struct mxc_jpeg_q_data *q,
-@@ -1325,122 +1247,69 @@ static int mxc_jpeg_parse(struct mxc_jpeg_ctx *ctx,
- 	struct device *dev = ctx->mxc_jpeg->dev;
- 	struct mxc_jpeg_q_data *q_data_out, *q_data_cap;
- 	enum v4l2_buf_type cap_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
--	struct mxc_jpeg_stream stream;
--	bool notfound = true;
--	bool app14 = false;
- 	bool src_chg = false;
--	u8 app14_transform = 0;
--	struct mxc_jpeg_sof sof, *psof = NULL;
--	struct mxc_jpeg_sos *psos = NULL;
--	int byte;
--	u8 *next = NULL;
--	enum mxc_jpeg_image_format img_fmt;
- 	u32 fourcc;
-+	struct v4l2_jpeg_header header;
-+	struct mxc_jpeg_sof *psof = NULL;
-+	struct mxc_jpeg_sos *psos = NULL;
-+	int ret;
- 
--	memset(&sof, 0, sizeof(struct mxc_jpeg_sof));
--	stream.addr = src_addr;
--	stream.end = size;
--	stream.loc = 0;
--	*dht_needed = true;
-+	memset(&header, 0, sizeof(header));
-+	ret = v4l2_jpeg_parse_header((void *)src_addr, size, &header);
-+	if (ret < 0) {
-+		dev_err(dev, "Error parsing JPEG stream markers\n");
-+		return ret;
-+	}
- 
--	/* check stream starts with SOI */
--	byte = get_byte(&stream);
--	if (byte == -1 || byte != 0xFF)
--		return -EINVAL;
--	byte = get_byte(&stream);
--	if (byte == -1 || byte != 0xD8)
--		return -EINVAL;
-+	/* if DHT marker present, no need to inject default one */
-+	*dht_needed = (header.num_dht == 0);
- 
--	while (notfound) {
--		byte = get_byte(&stream);
--		if (byte == -1)
--			return -EINVAL;
--		if (byte != 0xff)
--			continue;
--		do {
--			byte = get_byte(&stream);
--		} while (byte == 0xff);
--		if (byte == -1)
--			return false;
--		if (byte == 0)
--			continue;
--		switch (byte) {
--		case DHT:
--			/* DHT marker present, no need to inject default one */
--			*dht_needed = false;
--			break;
--		case SOF2: /* Progressive DCF frame definition */
--			dev_err(dev,
--				"Progressive JPEG not supported by hardware");
--			return -EINVAL;
--		case SOF1: /* Extended sequential DCF frame definition */
--		case SOF0: /* Baseline sequential DCF frame definition */
--			if (get_sof(dev, &stream, &sof) == -1)
--				break;
--			next = stream.addr + stream.loc;
--			psof = (struct mxc_jpeg_sof *)next;
--			break;
--		case SOS:
--			next = stream.addr + stream.loc;
--			psos = (struct mxc_jpeg_sos *)next;
--			notfound = false;
--			break;
--		case APP14:
--			app14 = true;
--			/*
--			 * Application Data Syntax is:
--			 * 2 bytes(APPn:0xFF,0xEE), 2 bytes(Lp), Ap1...ApLp-2
--			 * The transform flag is in Ap12
--			 * stream.loc is now on APPn-0xEE byte
--			 */
--			app14_transform = *(stream.addr + stream.loc + 12 + 1);
--			break;
--		default:
--			notfound = true;
--		}
--	}
- 	q_data_out = mxc_jpeg_get_q_data(ctx,
- 					 V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
- 	if (q_data_out->w == 0 && q_data_out->h == 0) {
- 		dev_warn(dev, "Invalid user resolution 0x0");
- 		dev_warn(dev, "Keeping resolution from JPEG: %dx%d",
--			 sof.width, sof.height);
--		 q_data_out->w = sof.width;
--		 q_data_out->h = sof.height;
--	} else if (sof.width != q_data_out->w || sof.height != q_data_out->h) {
-+			 header.frame.width, header.frame.height);
-+		 q_data_out->w = header.frame.width;
-+		 q_data_out->h = header.frame.height;
-+	} else if (header.frame.width != q_data_out->w ||
-+		   header.frame.height != q_data_out->h) {
- 		dev_err(dev,
- 			"Resolution mismatch: %dx%d (JPEG) versus %dx%d(user)",
--			sof.width, sof.height, q_data_out->w, q_data_out->h);
-+			header.frame.width, header.frame.height,
-+			q_data_out->w, q_data_out->h);
- 		return -EINVAL;
- 	}
--	if (sof.width % 8 != 0 || sof.height % 8 != 0) {
-+	if (header.frame.width % 8 != 0 || header.frame.height % 8 != 0) {
- 		dev_err(dev, "JPEG width or height not multiple of 8: %dx%d\n",
--			sof.width, sof.height);
-+			header.frame.width, header.frame.height);
- 		return -EINVAL;
- 	}
--	if (sof.width > MXC_JPEG_MAX_WIDTH ||
--	    sof.height > MXC_JPEG_MAX_HEIGHT) {
-+	if (header.frame.width > MXC_JPEG_MAX_WIDTH ||
-+	    header.frame.height > MXC_JPEG_MAX_HEIGHT) {
- 		dev_err(dev, "JPEG width or height should be <= 8192: %dx%d\n",
--			sof.width, sof.height);
-+			header.frame.width, header.frame.height);
- 		return -EINVAL;
- 	}
--	if (sof.width < MXC_JPEG_MIN_WIDTH ||
--	    sof.height < MXC_JPEG_MIN_HEIGHT) {
-+	if (header.frame.width < MXC_JPEG_MIN_WIDTH ||
-+	    header.frame.height < MXC_JPEG_MIN_HEIGHT) {
- 		dev_err(dev, "JPEG width or height should be > 64: %dx%d\n",
--			sof.width, sof.height);
-+			header.frame.width, header.frame.height);
- 		return -EINVAL;
- 	}
--	if (sof.components_no > MXC_JPEG_MAX_COMPONENTS) {
-+	if (header.frame.num_components > V4L2_JPEG_MAX_COMPONENTS) {
- 		dev_err(dev, "JPEG number of components should be <=%d",
--			MXC_JPEG_MAX_COMPONENTS);
-+			V4L2_JPEG_MAX_COMPONENTS);
- 		return -EINVAL;
- 	}
- 	/* check and, if necessary, patch component IDs*/
-+	psof = (struct mxc_jpeg_sof *)header.sof.start;
-+	psos = (struct mxc_jpeg_sos *)header.sos.start;
- 	if (!mxc_jpeg_valid_comp_id(dev, psof, psos))
- 		dev_warn(dev, "JPEG component ids should be 0-3 or 1-4");
- 
--	img_fmt = mxc_jpeg_get_image_format(dev, &sof);
--	if (img_fmt == MXC_JPEG_INVALID)
-+	fourcc = mxc_jpeg_get_image_format(dev, header);
-+	if (fourcc == 0)
- 		return -EINVAL;
- 
- 	/*
-@@ -1448,12 +1317,11 @@ static int mxc_jpeg_parse(struct mxc_jpeg_ctx *ctx,
- 	 * encoded with 3 components have RGB colorspace, see Recommendation
- 	 * ITU-T T.872 chapter 6.5.3 APP14 marker segment for colour encoding
- 	 */
--	if (img_fmt == MXC_JPEG_YUV444 && app14 && app14_transform == 0)
--		img_fmt = MXC_JPEG_RGB;
--
--	if (mxc_jpeg_imgfmt_to_fourcc(img_fmt, &fourcc)) {
--		dev_err(dev, "Fourcc not found for %d", img_fmt);
--		return -EINVAL;
-+	if (fourcc == V4L2_PIX_FMT_YUV24 || fourcc == V4L2_PIX_FMT_RGB24) {
-+		if (header.app14_tf == 0)
-+			fourcc = V4L2_PIX_FMT_RGB24;
-+		else
-+			fourcc = V4L2_PIX_FMT_YUV24;
- 	}
- 
- 	/*
-@@ -1461,10 +1329,11 @@ static int mxc_jpeg_parse(struct mxc_jpeg_ctx *ctx,
- 	 * detected from the jpeg output stream
- 	 */
- 	q_data_cap = mxc_jpeg_get_q_data(ctx, cap_type);
--	if (q_data_cap->w != sof.width || q_data_cap->h != sof.height)
-+	if (q_data_cap->w != header.frame.width ||
-+	    q_data_cap->h != header.frame.height)
- 		src_chg = true;
--	q_data_cap->w = sof.width;
--	q_data_cap->h = sof.height;
-+	q_data_cap->w = header.frame.width;
-+	q_data_cap->h = header.frame.height;
- 	q_data_cap->fmt = mxc_jpeg_find_format(ctx, fourcc);
- 	q_data_cap->w_adjusted = q_data_cap->w;
- 	q_data_cap->h_adjusted = q_data_cap->h;
-@@ -1490,7 +1359,7 @@ static int mxc_jpeg_parse(struct mxc_jpeg_ctx *ctx,
- 		(fourcc >> 24) & 0xff);
- 
- 	/* setup bytesperline/sizeimage for capture queue */
--	mxc_jpeg_bytesperline(q_data_cap, sof.precision);
-+	mxc_jpeg_bytesperline(q_data_cap, header.frame.precision);
- 	mxc_jpeg_sizeimage(q_data_cap);
- 
- 	/*
-diff --git a/drivers/media/platform/imx-jpeg/mxc-jpeg.h b/drivers/media/platform/imx-jpeg/mxc-jpeg.h
-index ef1670dafeb4..313b09f831a4 100644
---- a/drivers/media/platform/imx-jpeg/mxc-jpeg.h
-+++ b/drivers/media/platform/imx-jpeg/mxc-jpeg.h
-@@ -42,6 +42,8 @@ enum mxc_jpeg_mode {
-  * struct jpeg_fmt - driver's internal color format data
-  * @name:	format description
-  * @fourcc:	fourcc code, 0 if not applicable
-+ * @subsampling subsampling of jpeg components
-+ * @nc:		number of color components
-  * @depth:	number of bits per pixel
-  * @colplanes:	number of color planes (1 for packed formats)
-  * @h_align:	horizontal alignment order (align to 2^h_align)
-@@ -49,13 +51,15 @@ enum mxc_jpeg_mode {
-  * @flags:	flags describing format applicability
-  */
- struct mxc_jpeg_fmt {
--	char	*name;
--	u32	fourcc;
--	int	depth;
--	int	colplanes;
--	int	h_align;
--	int	v_align;
--	u32	flags;
-+	char					*name;
-+	u32					fourcc;
-+	enum v4l2_jpeg_chroma_subsampling	subsampling;
-+	int					nc;
-+	int					depth;
-+	int					colplanes;
-+	int					h_align;
-+	int					v_align;
-+	u32					flags;
- };
- 
- struct mxc_jpeg_desc {
-@@ -117,14 +121,6 @@ struct mxc_jpeg_dev {
- 	struct device_link		**pd_link;
- };
- 
--/* JPEG marker identifiers */
--#define SOF0				0xC0
--#define SOF1				0xC1
--#define SOF2				0xC2
--#define SOS				0xDA
--#define DHT				0xC4
--#define APP14				0xEE
--
- /**
-  * struct mxc_jpeg_sof_comp - JPEG Start Of Frame component fields
-  * @id:				component id
--- 
-2.17.1
+Best regards,
+Tomasz
 
+> diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
+> index 64ecb6917dd3..41c17df46f47 100644
+> --- a/drivers/media/i2c/ov2740.c
+> +++ b/drivers/media/i2c/ov2740.c
+> @@ -71,9 +71,10 @@
+>  #define OV2740_REG_OTP_CUSTOMER		0x7010
+>  
+>  struct nvm_data {
+> -	char *nvm_buffer;
+> +	struct i2c_client *client;
+>  	struct nvmem_device *nvmem;
+>  	struct regmap *regmap;
+> +	char *nvm_buffer;
+>  };
+>  
+>  enum {
+> @@ -335,6 +336,9 @@ struct ov2740 {
+>  
+>  	/* Streaming on/off */
+>  	bool streaming;
+> +
+> +	/* NVM data inforamtion */
+> +	struct nvm_data *nvm;
+>  };
+>  
+>  static inline struct ov2740 *to_ov2740(struct v4l2_subdev *subdev)
+> @@ -930,45 +934,57 @@ static int ov2740_remove(struct i2c_client *client)
+>  	return 0;
+>  }
+>  
+> -static int ov2740_load_otp_data(struct i2c_client *client, struct nvm_data *nvm)
+> +static int ov2740_load_otp_data(struct nvm_data *nvm)
+>  {
+> +	struct i2c_client *client = nvm->client;
+>  	struct ov2740 *ov2740 = to_ov2740(i2c_get_clientdata(client));
+>  	u32 isp_ctrl00 = 0;
+>  	u32 isp_ctrl01 = 0;
+>  	int ret;
+>  
+> +	if (!nvm)
+> +		return -EINVAL;
+> +
+> +	if (nvm->nvm_buffer)
+> +		return 0;
+> +
+> +	nvm->nvm_buffer = kzalloc(CUSTOMER_USE_OTP_SIZE, GFP_KERNEL);
+> +	if (!nvm->nvm_buffer)
+> +		return -ENOMEM;
+> +
+>  	ret = ov2740_read_reg(ov2740, OV2740_REG_ISP_CTRL00, 1, &isp_ctrl00);
+>  	if (ret) {
+>  		dev_err(&client->dev, "failed to read ISP CTRL00\n");
+> -		goto exit;
+> +		goto err;
+>  	}
+> +
+>  	ret = ov2740_read_reg(ov2740, OV2740_REG_ISP_CTRL01, 1, &isp_ctrl01);
+>  	if (ret) {
+>  		dev_err(&client->dev, "failed to read ISP CTRL01\n");
+> -		goto exit;
+> +		goto err;
+>  	}
+>  
+>  	/* Clear bit 5 of ISP CTRL00 */
+>  	ret = ov2740_write_reg(ov2740, OV2740_REG_ISP_CTRL00, 1,
+>  			       isp_ctrl00 & ~BIT(5));
+>  	if (ret) {
+> -		dev_err(&client->dev, "failed to write ISP CTRL00\n");
+> -		goto exit;
+> +		dev_err(&client->dev, "failed to set ISP CTRL00\n");
+> +		goto err;
+>  	}
+>  
+>  	/* Clear bit 7 of ISP CTRL01 */
+>  	ret = ov2740_write_reg(ov2740, OV2740_REG_ISP_CTRL01, 1,
+>  			       isp_ctrl01 & ~BIT(7));
+>  	if (ret) {
+> -		dev_err(&client->dev, "failed to write ISP CTRL01\n");
+> -		goto exit;
+> +		dev_err(&client->dev, "failed to set ISP CTRL01\n");
+> +		goto err;
+>  	}
+>  
+>  	ret = ov2740_write_reg(ov2740, OV2740_REG_MODE_SELECT, 1,
+>  			       OV2740_MODE_STREAMING);
+>  	if (ret) {
+> -		dev_err(&client->dev, "failed to start streaming\n");
+> -		goto exit;
+> +		dev_err(&client->dev, "failed to set streaming mode\n");
+> +		goto err;
+>  	}
+>  
+>  	/*
+> @@ -981,15 +997,33 @@ static int ov2740_load_otp_data(struct i2c_client *client, struct nvm_data *nvm)
+>  			       nvm->nvm_buffer, CUSTOMER_USE_OTP_SIZE);
+>  	if (ret) {
+>  		dev_err(&client->dev, "failed to read OTP data, ret %d\n", ret);
+> -		goto exit;
+> +		goto err;
+>  	}
+>  
+> -	ov2740_write_reg(ov2740, OV2740_REG_MODE_SELECT, 1,
+> -			 OV2740_MODE_STANDBY);
+> -	ov2740_write_reg(ov2740, OV2740_REG_ISP_CTRL01, 1, isp_ctrl01);
+> -	ov2740_write_reg(ov2740, OV2740_REG_ISP_CTRL00, 1, isp_ctrl00);
+> +	ret = ov2740_write_reg(ov2740, OV2740_REG_MODE_SELECT, 1,
+> +			       OV2740_MODE_STANDBY);
+> +	if (ret) {
+> +		dev_err(&client->dev, "failed to set streaming mode\n");
+> +		goto err;
+> +	}
+> +
+> +	ret = ov2740_write_reg(ov2740, OV2740_REG_ISP_CTRL01, 1, isp_ctrl01);
+> +	if (ret) {
+> +		dev_err(&client->dev, "failed to set ISP CTRL01\n");
+> +		goto err;
+> +	}
+> +
+> +	ret = ov2740_write_reg(ov2740, OV2740_REG_ISP_CTRL00, 1, isp_ctrl00);
+> +	if (ret) {
+> +		dev_err(&client->dev, "failed to set ISP CTRL00\n");
+> +		goto err;
+> +	}
+> +
+> +	return 0;
+> +err:
+> +	kfree(nvm->nvm_buffer);
+> +	nvm->nvm_buffer = NULL;
+>  
+> -exit:
+>  	return ret;
+>  }
+>  
+> @@ -997,29 +1031,43 @@ static int ov2740_nvmem_read(void *priv, unsigned int off, void *val,
+>  			     size_t count)
+>  {
+>  	struct nvm_data *nvm = priv;
+> +	struct v4l2_subdev *sd = i2c_get_clientdata(nvm->client);
+> +	struct device *dev = &nvm->client->dev;
+> +	struct ov2740 *ov2740 = to_ov2740(sd);
+> +	int ret = 0;
+> +
+> +	mutex_lock(&ov2740->mutex);
+>  
+> -	memcpy(val, nvm->nvm_buffer + off, count);
+> +	ret = pm_runtime_get_sync(dev);
+> +	if (ret < 0) {
+> +		pm_runtime_put_noidle(dev);
+> +		goto exit;
+> +	}
+>  
+> -	return 0;
+> +	ret = ov2740_load_otp_data(nvm);
+> +	if (!ret)
+> +		memcpy(val, nvm->nvm_buffer + off, count);
+> +
+> +	pm_runtime_put(dev);
+> +exit:
+> +	mutex_unlock(&ov2740->mutex);
+> +	return ret;
+>  }
+>  
+> -static int ov2740_register_nvmem(struct i2c_client *client)
+> +static int ov2740_register_nvmem(struct i2c_client *client,
+> +				 struct ov2740 *ov2740)
+>  {
+>  	struct nvm_data *nvm;
+>  	struct regmap_config regmap_config = { };
+>  	struct nvmem_config nvmem_config = { };
+>  	struct regmap *regmap;
+>  	struct device *dev = &client->dev;
+> -	int ret = 0;
+> +	int ret;
+>  
+>  	nvm = devm_kzalloc(dev, sizeof(*nvm), GFP_KERNEL);
+>  	if (!nvm)
+>  		return -ENOMEM;
+>  
+> -	nvm->nvm_buffer = devm_kzalloc(dev, CUSTOMER_USE_OTP_SIZE, GFP_KERNEL);
+> -	if (!nvm->nvm_buffer)
+> -		return -ENOMEM;
+> -
+>  	regmap_config.val_bits = 8;
+>  	regmap_config.reg_bits = 16;
+>  	regmap_config.disable_locking = true;
+> @@ -1028,12 +1076,7 @@ static int ov2740_register_nvmem(struct i2c_client *client)
+>  		return PTR_ERR(regmap);
+>  
+>  	nvm->regmap = regmap;
+> -
+> -	ret = ov2740_load_otp_data(client, nvm);
+> -	if (ret) {
+> -		dev_err(dev, "failed to load OTP data, ret %d\n", ret);
+> -		return ret;
+> -	}
+> +	nvm->client = client;
+>  
+>  	nvmem_config.name = dev_name(dev);
+>  	nvmem_config.dev = dev;
+> @@ -1051,7 +1094,11 @@ static int ov2740_register_nvmem(struct i2c_client *client)
+>  
+>  	nvm->nvmem = devm_nvmem_register(dev, &nvmem_config);
+>  
+> -	return PTR_ERR_OR_ZERO(nvm->nvmem);
+> +	ret = PTR_ERR_OR_ZERO(nvm->nvmem);
+> +	if (!ret)
+> +		ov2740->nvm = nvm;
+> +
+> +	return ret;
+>  }
+>  
+>  static int ov2740_probe(struct i2c_client *client)
+> @@ -1103,7 +1150,7 @@ static int ov2740_probe(struct i2c_client *client)
+>  		goto probe_error_media_entity_cleanup;
+>  	}
+>  
+> -	ret = ov2740_register_nvmem(client);
+> +	ret = ov2740_register_nvmem(client, ov2740);
+>  	if (ret)
+>  		dev_warn(&client->dev, "register nvmem failed, ret %d\n", ret);
+>  
+> -- 
+> 2.7.4
+> 
