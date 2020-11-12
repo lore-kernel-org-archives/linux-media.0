@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C03BBC388F7
-	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 05:32:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67EDEC56202
+	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 05:32:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4FC95208FE
+	by mail.kernel.org (Postfix) with ESMTP id ECE482076E
 	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 05:32:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="JuVQHKjQ"
+	dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="Ggkf/hvH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726777AbgKLFcL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Nov 2020 00:32:11 -0500
-Received: from mail-vi1eur05on2044.outbound.protection.outlook.com ([40.107.21.44]:36416
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        id S1727012AbgKLFcP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Nov 2020 00:32:15 -0500
+Received: from mail-eopbgr00050.outbound.protection.outlook.com ([40.107.0.50]:15463
+        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728062AbgKLDJP (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 11 Nov 2020 22:09:15 -0500
+        id S1728074AbgKLDKN (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 11 Nov 2020 22:10:13 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KI6iWeMiFj7LCdkX+5dDifOP/Bf9SoqmnEQBxvMNN0Yn+f3Dt0sZuOBQAgJsXE8+LfMe1X3XCwn9Tf/5eOMad0i8mDTQfwuvUuT1WX1YIJDQOxB/rqYSCBMYITDWCxy99wQnVvegjlkhL+lsl54AuFxxzd0pdVTi4jn8T1m8kaQQYMVIC9yMTKx8JuieK1zc3DIpBCMVwc7pzWvRyitKyhhGudp9tny0N4NAl+Q2Y/7rGU59hmXoe5dGZlAod6XIummBrLJtdOutQo65OLJAXaWSV2i5a0UdKr4AMTiRr6UJ6NdZaqpm//Gyk9jZWaIfFtz96gsVSNnbA9jsr5Jpig==
+ b=AuirehO1NHfXjvyZNUj9tZMDRgXvg47+sLzdZW1Ivwm1wVVT74MLyjmmU1iqeUOM3oz3cKvUQGSRCGcGyOpeBZRbzjxoy92zNctvQ3FxUJqN9AZY28qrmN/CY6GRHB3XPUDMuTFoACkt5S4alS2dWsysNQJNW2PPdWyKlAlpLHdz8/Il8Ib5mB5LtDiXKNu+v03CPyLZIaB5YGX6k8SBA+PPHC9dKP2STW7herC0yu7NfCcL8RwKwtiRRAY+KHF7MrTX04IpF29ngMK4cG3T5m2rP1c5Xv1p1IN5PKh3C3BkFWDQfyebDpY7aBsXgeUM8sl9IEk3Tqv5jUJtc6Kt1Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UWsCx/qYQ8TgnvLg3poctEK55oc/U+UjFaCkYLB/naQ=;
- b=iAhpXJLXClPNAkH+yKvkqiBHXORTQhPVe8FQn9pxnxOAW1WnA4qIaAuaenkK/5UWX4yfvmCThba4gkVwFuyC6dbVvF1CqIklHsB4aoynyMrH8rnbkRPXfbMui/VBueKtXQhDmttGKxUaZFCO6pE7yRId5zh4pfcjYnhmkosJNHrOH7ulpqPTLKPL2WiHYQn/NUHqFrISzhf0fUzkfySq0SaZ95L1PNHcPGjGGrylnNSovAmgFgF2duuZKoFVe82bbDpdwjo1jeoSec+dHQbEVgKDa2jeB7IpfrFpkf0Nl9PiYx1AC+6fdPJv31NZHjY9WXL/rNPe892Z7VBez6p7kg==
+ bh=tJ8YCQb3ttORNAwWOOx8YlFqpmO90qAQ8LCvXlzv7KM=;
+ b=UET3qM1hyaNzAJJYBu5r1jEwxHTuJJX/Q2lxTg2NyvxCfYE+u7BT6u5iLOSKFCXWlMyXAl0Zrv8RU2+nNd3Mmlgqbr7AdJWuSG5KDamgAhD+BxlEyWQS0pZQjmTkQttpq9spp0snhbZNYjQRy611X83/DUYw1CkldTiI8KAjfOVCFkQ4mvbpwL+rqqHfapLZ0AcNQFqPeGK9coxkceulnKcybhIKHhpNg1T/Ecc+w0Bthu3KjpEZz08stqIcoRzoBmO+khAEbVcLajlDvXRoKuBF+nFItIlbreC9OmzYC1ZnJsxXzu6Z3YcvIWh7J2BsnYwJof/tXXRiM7AOK/LTRw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UWsCx/qYQ8TgnvLg3poctEK55oc/U+UjFaCkYLB/naQ=;
- b=JuVQHKjQAvs2KBb7Y8Nlc5IcSxcJGX04B/Td0GDs7Ox2NaKy3vcb7A8rdrqW5X1kr1PQSoZwXHwPLYIubyrcOry6P3+oRtdFiI8fImZJpPiSSqsXG7I4SUq7KI3g/U+05K8A2nhg6ae6sMCrC6ttOtvJrTzLQcRxSLWWGzKPfEw=
+ bh=tJ8YCQb3ttORNAwWOOx8YlFqpmO90qAQ8LCvXlzv7KM=;
+ b=Ggkf/hvHqop1sqUhq2mWlJXzRR4c8WxeOWnCzETsjX6SiN4nvpKcGkui8z+zz5IAejrTz8hdPB3c96ymmHLFhkt+cmmwXrtI8nOecWjF1pqYDljNu/BC6WKBRhi1ijSBlq6L3ceXiD9oayvQYS+7nf4qtmSpfBJK44whlsgwd4Y=
 Authentication-Results: kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=none action=none header.from=oss.nxp.com;
 Received: from AM5PR04MB3137.eurprd04.prod.outlook.com (2603:10a6:206:c::18)
  by AM7PR04MB6997.eurprd04.prod.outlook.com (2603:10a6:20b:10d::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21; Thu, 12 Nov
- 2020 03:07:09 +0000
+ 2020 03:07:17 +0000
 Received: from AM5PR04MB3137.eurprd04.prod.outlook.com
  ([fe80::2d75:aaf5:5aa6:5de9]) by AM5PR04MB3137.eurprd04.prod.outlook.com
  ([fe80::2d75:aaf5:5aa6:5de9%6]) with mapi id 15.20.3541.025; Thu, 12 Nov 2020
- 03:07:09 +0000
+ 03:07:17 +0000
 From:   "Mirela Rabulea (OSS)" <mirela.rabulea@oss.nxp.com>
 To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl, shawnguo@kernel.org,
         robh+dt@kernel.org, p.zabel@pengutronix.de
@@ -61,9 +61,9 @@ Cc:     paul.kocialkowski@bootlin.com, linux-media@vger.kernel.org,
         niklas.soderlund+renesas@ragnatech.se,
         dafna.hirschfeld@collabora.com,
         Mirela Rabulea <mirela.rabulea@nxp.com>
-Subject: [PATCH v5 06/10] Add maintainer for IMX jpeg v4l2 driver
-Date:   Thu, 12 Nov 2020 05:05:53 +0200
-Message-Id: <20201112030557.8540-7-mirela.rabulea@oss.nxp.com>
+Subject: [PATCH v5 08/10] media: Quit parsing stream if doesn't start with SOI
+Date:   Thu, 12 Nov 2020 05:05:55 +0200
+Message-Id: <20201112030557.8540-9-mirela.rabulea@oss.nxp.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20201112030557.8540-1-mirela.rabulea@oss.nxp.com>
 References: <20201112030557.8540-1-mirela.rabulea@oss.nxp.com>
@@ -74,30 +74,30 @@ X-ClientProxiedBy: AM0PR06CA0100.eurprd06.prod.outlook.com
  (2603:10a6:206:c::18)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from fsr-ub1664-134.ea.freescale.net (86.124.171.138) by AM0PR06CA0100.eurprd06.prod.outlook.com (2603:10a6:208:fa::41) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21 via Frontend Transport; Thu, 12 Nov 2020 03:07:07 +0000
+Received: from fsr-ub1664-134.ea.freescale.net (86.124.171.138) by AM0PR06CA0100.eurprd06.prod.outlook.com (2603:10a6:208:fa::41) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21 via Frontend Transport; Thu, 12 Nov 2020 03:07:16 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 962c5732-a296-41e1-6dfc-08d886b80add
+X-MS-Office365-Filtering-Correlation-Id: 0bcec7bf-2122-47db-a436-08d886b80ffa
 X-MS-TrafficTypeDiagnostic: AM7PR04MB6997:
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM7PR04MB699764007D600F46E58953EACEE70@AM7PR04MB6997.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4125;
+X-Microsoft-Antispam-PRVS: <AM7PR04MB69970E138FC0BFEFAF35BDAFCEE70@AM7PR04MB6997.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xsEvTy9R4P/+lFFOwBZ45DWodui2UdCRMK8EtMIf6NYydMuTlj+gR65jSXTf3KEfL/0W2qO7MoP1TJmtXirhKY95KuBLZCmk5fdlzdC8us+efNcmvVI2wUFFPC8JzR91KfYWQHEKHZ96wNTm/1UY3F01JIgYoyeSjF+cdj55P6rRs82pnT+gAu+9T5Jcyt0SsX6Y33Xfr3CMNZ6/D1F48da2aPjBXbrxt2sUIOePr6ebqbEfsMofflk1SiBzfCY3t/ikzPvoUTeaRgV+YLPo6a+iAhDYwNWh5Lyg64+Qa3bBMqZPOTZSXhxtfkweQxOHq96VL1NZPfhG8Y0Qe8Q1Xw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM5PR04MB3137.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(376002)(346002)(396003)(136003)(366004)(6666004)(1076003)(316002)(26005)(478600001)(6506007)(4744005)(4326008)(6512007)(66946007)(66476007)(186003)(6486002)(2906002)(66556008)(5660300002)(16526019)(8676002)(52116002)(86362001)(7416002)(8936002)(2616005)(956004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: gdnnvKAp63nM0n0Tr12sAEoG4cR4F9Rm2lfkmlKy/GuO6fQxf/GXzbYR5QzLEe7zk9INQ++rThnGIleyJPU0JwScyp6+s6FLGFDqHNPjbAfT7O+cCJEZjbNdWZFW8Yj5qG2HDfJyni+KzAl4Z1Lsi5l+RBn7GxLj2ElXiu45trmu2Y8g4M6TTjWEkYZbPISB+d8jB+iKM42NCSEb7dQyTlx8nBO+Ma08EJCSzpCTo0AlI/Zk9y962LhCIIhT07rfsxGRf9tTQ0CwiF9IQiChQuKoppn/BGLWATPv9i/Hd+NOi1znOfIxzIOMknw3iDDMymNE/qFsBBcrjbsrggk5OpnrUlP6gjxFB5S4rvUd1sCENKRk+GGS7P5hJ7X0mmxZ8kFYgPbQh2RcieyXmB3AI6KcV+2KOzOGL04IXfamNAvl78jUvLlONpg0myV1QqPhDGoouSt79G/YRpIYW4QkUrSu34iw0nNj1hM4CBn9tk1wBNu6APvYEHWSpHCqJ5+k4J+5rxPE+xHGt9VuxQzCcSH48yhcaEe/N/47YFR362aK9rB1ytNCb26C8D1EKf0eQJBQTL3QSDgJQ2eVL/5IhgbBEqjXSsggxKrrBiXxTF8AxRJjQg41Qe9eUuRuG/LNJ0r4yOw9M/DRGR8EUOYp5AmVvCXX5/BhjiyfVQuCj9Tf3sMKcuLLgtWIie58XAl1FfPYB2IsMiYX90uxT3UoCPqjie2MHuDctB9RfCwasod1ZZBtRt6/RTDqIuGtgawcYTESeBxqIcHZRKufBCLEB7evneAc6f+UGgtTrnCqdLcc4Cbn1Y9yJ9ufu0hhrt+tLGfjx6IxRtvR8br/HirxiPiRmR55A/EyP6OKLQjksMA5QyHQMs4ugjmhpMzduZ1z2ZFYOabEqfVqKv0V9it+dg==
+X-Microsoft-Antispam-Message-Info: 3Fm9bfxfozgo7s4qUcLJcp2LGpLAyL26wDumGgIZeMMJoaF/S1zGsHaCxy+9PMzhjVyghpeTDwSCt3Ibv2Vo35lxVvJwuV7lWF/XohlY5r9gB/bpGLw7xHwLihDK/+nk3a40TVbqsQMCzdVmD0H3gwJRoMnlQiSdTf148isLasLN3lZKS2QEPQOXkYHveKujB27SZoPQ46L4VWCjGBK6apct+nqm5IAjyd4TTVDDt1KqpSGt1uClrLW0vNp90ONJ73nD+40mY+VwCVru1LGzHyb001010UQBEqLYWW4YMonKU6XvEDFxDGNAFUBh2p/yf2JaKjbBOkgAuCRovBFS+w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM5PR04MB3137.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(376002)(346002)(396003)(136003)(366004)(6666004)(1076003)(316002)(26005)(478600001)(6506007)(4326008)(6512007)(66946007)(66476007)(186003)(6486002)(2906002)(66556008)(5660300002)(16526019)(8676002)(52116002)(86362001)(7416002)(8936002)(2616005)(956004)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: NWb8Z2NfEmEDQnpcClaP2hF2fOEMfMzDe+Gb1JQtEB8Wri7JcDGQvhCnAOskpch1RLjoYMLQOWQgFw+tyvI2YpZzmvd2JpCfnYHg5bkOFOI8K0RlF/HjisaU4NkhlnM00Bt6CLr8V6t7SWv56CFtcG5k/cJIzkku3jFOO2jHPz3QWMqMy5BzkSFICTmUaITO/6K4aXE2/Gqpt6AJ44DAKM39uF6k78W2J1nPyUvNRsBkhgGEFf2BS3/F77j0CI7/UQ9KrjFuwZle2Sr8NYJ6co1XVAJBBPc6OHdKHyfWWOLUKlGbinyeUK7gtRWDZjd+J0VE532mTRH5zj9BcmbG1WvhKvz2L1ghB1P7gD+d5TdAiiXkAbqnjTJMmFLsiFL63J4UUdrRAuemRfOKrt46/2UD8NLjaRPwBd/KW6i+0h11kkYUGpTng5QlExBGFeGsXVLOkVAT5KLYasgtM7yXRgEAkY6U2Hjw/bw3ot3WWZeI1UzYtvg/T1wUm7L8GNFkYYRV+6D8Oa4E3rEvJLtzEwJfeU3fUZAs0J8G2EutYwgrB9NJEPK/fcW72b9871+n81hUyYqRqKMyDcxnpQcxuhWMolxvJ5dSR/AINs7OjM6f4WM3f4Xk1sYxsCVcBsyuYmwttDJ5THBaGPyfotQIS0M+K7J4MtKcKTQJiBgAAPibY9aEQtpLHQiuvQ6q6GES2HIBJA1TuKE8l+2f2p7ZnxYiOlrV7Dqw9gz07TVU051+yJxQEBGDmy60GlsPCZsyxORlx6OKSrNBcVBq39hhEUNajUQXAeshYF5HtACUqVM4bZ5VTKNvyRRVjM6dtoo7F5q8gpta8CHL8iOkhhpCCgVzoBr26HO0IB7lDz7jX/De8cINKYTBEL6TyZybDTpmCAw53WX2tqVfB0bjD8hMbg==
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 962c5732-a296-41e1-6dfc-08d886b80add
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0bcec7bf-2122-47db-a436-08d886b80ffa
 X-MS-Exchange-CrossTenant-AuthSource: AM5PR04MB3137.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Nov 2020 03:07:09.1111
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Nov 2020 03:07:17.6721
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1VynF6+G94IGC24R712woogkvdOvIH22VdYTIZv22//U5GiIV0XVs/BgQdBW7+CUq9Z68i6SkwUUVMNIijq12w==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8lqzrplyrqpYPeDrIcMBupL9jc9T2euh9rd4j8zvfgGhxBJCeb4MWGALtDCjWmS4Xm3ueflel+tx+H1xeqGL5g==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6997
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -105,36 +105,35 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Mirela Rabulea <mirela.rabulea@nxp.com>
 
-The driver is located in drivers/media/platform/imx-jpeg,
-and it applies to the JPEG decoder from i.MX QXP and QM.
+In the case we get an invalid stream, such as from v4l2-compliance
+streaming test, jpeg_next_marker will end up parsing the entire
+stream. The standard describes the high level syntax of a jpeg
+as starting with SOI, ending with EOI, so return error if the very
+first 2 bytes are not SOI.
 
 Signed-off-by: Mirela Rabulea <mirela.rabulea@nxp.com>
 ---
-Changes in v5:
-move to NXP section in maintainers file
+ drivers/media/v4l2-core/v4l2-jpeg.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f1f088a29bc2..f4c9b53d9077 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12692,6 +12692,14 @@ L:	linux-nfc@lists.01.org (moderated for non-subscribers)
- S:	Supported
- F:	drivers/nfc/nxp-nci
+diff --git a/drivers/media/v4l2-core/v4l2-jpeg.c b/drivers/media/v4l2-core/v4l2-jpeg.c
+index 3181ce544f79..d77e04083d57 100644
+--- a/drivers/media/v4l2-core/v4l2-jpeg.c
++++ b/drivers/media/v4l2-core/v4l2-jpeg.c
+@@ -499,11 +499,8 @@ int v4l2_jpeg_parse_header(void *buf, size_t len, struct v4l2_jpeg_header *out)
+ 	out->num_dht = 0;
+ 	out->num_dqt = 0;
  
-+NXP i.MX 8QXP/8QM JPEG V4L2 DRIVER
-+M:	Mirela Rabulea <mirela.rabulea@nxp.com>
-+R:	NXP Linux Team <linux-imx@nxp.com>
-+L:	linux-media@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/media/imx8-jpeg.yaml
-+F:	drivers/media/platform/imx-jpeg
-+
- OBJAGG
- M:	Jiri Pirko <jiri@nvidia.com>
- L:	netdev@vger.kernel.org
+-	/* the first marker must be SOI */
+-	marker = jpeg_next_marker(&stream);
+-	if (marker < 0)
+-		return marker;
+-	if (marker != SOI)
++	/* the first bytes must be SOI, B.2.1 High-level syntax */
++	if (jpeg_get_word_be(&stream) != SOI)
+ 		return -EINVAL;
+ 
+ 	/* init value to signal if this marker is not present */
 -- 
 2.17.1
 
