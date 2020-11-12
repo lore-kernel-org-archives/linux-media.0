@@ -2,249 +2,105 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23D23C2D0A3
-	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 11:57:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EFD6C56201
+	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 11:57:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B8B0B2222A
-	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 11:57:23 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="S22X0xD4"
+	by mail.kernel.org (Postfix) with ESMTP id 527D82223F
+	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 11:57:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728227AbgKLL5U (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Nov 2020 06:57:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35476 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728238AbgKLL4x (ORCPT
+        id S1727964AbgKLL5e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Nov 2020 06:57:34 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:60924 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728184AbgKLL51 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Nov 2020 06:56:53 -0500
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B43C0617A6
-        for <linux-media@vger.kernel.org>; Thu, 12 Nov 2020 03:56:52 -0800 (PST)
-Received: by mail-lf1-x141.google.com with SMTP id i6so8006747lfd.1
-        for <linux-media@vger.kernel.org>; Thu, 12 Nov 2020 03:56:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2QnFX94ue+MfUcZEh811vnO774W9JyKEs6qXHdD7T6s=;
-        b=S22X0xD4Oq76x0B/GT0nueMl18VR4qJt2SNmPXKqeWc8UKg6kPL3fyGoaV2LWTK8jx
-         dDTCl2gOYfvv8mwyyEaSvT5FAF20wj2en61DghZjYyglEM55lym3rOXo4DE3zwoLZfhu
-         7kSJuORfsKSYTRGrqEQmfksmos1wCENuuS1rF0Usn+DM0CACglczSL8Xt0eZ5Cavq3Ue
-         8R6JYFVqAAcpthrlwTWVXzo6SPGMEE3E2Uzns7hbHmmfotteVtbssTTq7dADQ9T+ChbO
-         Pp2ZrzNOstE8jv5WZoF8/BBXM/343O21vdBgmPQFPHbg4WdP/q/XqdigwLPf8wXifRo7
-         ZXgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2QnFX94ue+MfUcZEh811vnO774W9JyKEs6qXHdD7T6s=;
-        b=Ru2z6vSMaSrxkNSX3VLoxxhXz2xWPhZP0fHgahChVEob9v+mS7pc8PeOtwhFaS2Z9o
-         CUg2bFmghFWttCv7iZoYGcOGdQuJujPtOO1wTqrOQmJww8kzd3Dn/7JLuqiCFaFGMcKY
-         mCT8Xlow96SIRByW2nVB4/kTXIEVKNY42Lfd4L65FZiaQmVo6Ke9AOAlbDxRnIpODGLZ
-         qRz9cq5C4SUVLlWmufaODWmNEhBBNVPEg4CsQ6+Cp0cniGvALyBFQBf8g932zGLBpu5v
-         e70Rg9tPIRdmBkwyS1RVOlCaaTQPZe3CaofqdmV1OLXfk/XiQ6DXZRJSI8bbFl7iB9Xc
-         O4+A==
-X-Gm-Message-State: AOAM533ln0vpMu/YnBeyQCew4u+erxGonczy+vAB9aqaIOXC5T2EyB8Z
-        46xtcA4C3xlX2BpEXyvaT3uBIA==
-X-Google-Smtp-Source: ABdhPJzF529uyx3/2mb9dv20cuXcbVHoUUik5NdvECpoIC6r6k0i0Xwq9a+wk4XCbTohLgsxglVEUw==
-X-Received: by 2002:a19:be13:: with SMTP id o19mr8527924lff.445.1605182211115;
-        Thu, 12 Nov 2020 03:56:51 -0800 (PST)
-Received: from localhost.bredbandsbolaget (c-92d7225c.014-348-6c756e10.bbcust.telenor.se. [92.34.215.146])
-        by smtp.gmail.com with ESMTPSA id v4sm534624lfa.309.2020.11.12.03.56.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2020 03:56:50 -0800 (PST)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>
-Cc:     linux-leds@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sakari Ailus <sakari.ailus@iki.fi>, newbytee@protonmail.com,
-        Stephan Gerhold <stephan@gerhold.net>,
-        phone-devel@vger.kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH 1/2 v4] dt-bindings: leds: Add DT binding for Richtek RT8515
-Date:   Thu, 12 Nov 2020 12:56:45 +0100
-Message-Id: <20201112115646.2562467-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.26.2
+        Thu, 12 Nov 2020 06:57:27 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id D20BB1F462E9
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: [PATCH 0/5] Stateless H.264 de-staging
+Date:   Thu, 12 Nov 2020 08:57:09 -0300
+Message-Id: <20201112115714.48081-1-ezequiel@collabora.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a YAML devicetree binding for the Richtek RT8515
-dual channel flash/torch LED driver.
+Now that H.264 stateless controls are solid, we can get it
+out of staging.
 
-Cc: Sakari Ailus <sakari.ailus@iki.fi>
-Cc: newbytee@protonmail.com
-Cc: Stephan Gerhold <stephan@gerhold.net>
-Cc: phone-devel@vger.kernel.org
-Cc: linux-media@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-ChangeLog v3->v4:
-- Add DT attributes for the RFS and RTS resistors, so that
-  the hardware-defined maximum current can be determined.
-- Add torch-max-microamp to the common bindings so we can
-  set an attribute for the max microamp in torch mode.
-- Add flash-max-microamp and torch-max-microamp as optional
-  to the LED node.
-- Slot in some elabortative descriptions of the new
-  properties and describe what the hardware is doing.
-- Cc phone-devel@vger.kernel.org
-ChangeLog v2->v3:
-- Add Sakari to CC
-- Resend
-ChangeLog v1->v2:
-- Explicitly inherit function, color and flash-max-timeout-us
-  from common.yaml
-- Add "led" node as required.
----
- .../devicetree/bindings/leds/common.yaml      |   6 +
- .../bindings/leds/richtek,rt8515.yaml         | 111 ++++++++++++++++++
- 2 files changed, 117 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/leds/richtek,rt8515.yaml
+Following some guidelines from Hans, this series creates a
+new stateless control class for the stable codec controls to land.
 
-diff --git a/Documentation/devicetree/bindings/leds/common.yaml b/Documentation/devicetree/bindings/leds/common.yaml
-index 08b6700ca61e..28bdf09b4af4 100644
---- a/Documentation/devicetree/bindings/leds/common.yaml
-+++ b/Documentation/devicetree/bindings/leds/common.yaml
-@@ -151,6 +151,12 @@ properties:
-       Maximum flash LED supply current in microamperes. Required for flash LED
-       nodes with configurable current.
- 
-+  torch-max-microamp:
-+    description:
-+      Maximum flash LED supply current in microamperes, when the flash LED is
-+      used as a torch (flashlight). This is usually lower than the flash mode
-+      maximum current, if the LED supports torch mode.
-+
-   flash-max-timeout-us:
-     description:
-       Maximum timeout in microseconds after which the flash LED is turned off.
-diff --git a/Documentation/devicetree/bindings/leds/richtek,rt8515.yaml b/Documentation/devicetree/bindings/leds/richtek,rt8515.yaml
-new file mode 100644
-index 000000000000..5f65a20b997d
---- /dev/null
-+++ b/Documentation/devicetree/bindings/leds/richtek,rt8515.yaml
-@@ -0,0 +1,111 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/leds/richtek,rt8515.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Richtek RT8515 1.5A dual channel LED driver
-+
-+maintainers:
-+  - Linus Walleij <linus.walleij@linaro.org>
-+
-+description: |
-+  The Richtek RT8515 is a dual channel (two mode) LED driver that
-+  supports driving a white LED in flash or torch mode. The maximum
-+  current for each mode is defined in hardware using two resistors
-+  RFS and RTS.
-+
-+properties:
-+  compatible:
-+    const: richtek,rt8515
-+
-+  enf-gpios:
-+    maxItems: 1
-+    description: A connection to the 'ENF' (enable flash) pin.
-+
-+  ent-gpios:
-+    maxItems: 1
-+    description: A connection to the 'ENT' (enable torch) pin.
-+
-+  richtek,rfs:
-+    maxItems: 1
-+    minimum: 7680
-+    maximum: 367000
-+    description: The resistance value of the RFS resisitor. This
-+      resistors limits the maximum flash current. This must be set
-+      for the property flash-max-microamp to work, the RFS resistor
-+      defines the range of the dimmer setting (brightness) of the
-+      flash LED.
-+
-+  richtek,rts:
-+    maxItems: 1
-+    minimum: 7680
-+    maximum: 367000
-+    description: The resistance value of the RTS resisitor. This
-+      resistors limits the maximum torch current. This must be set
-+      for the property torch-max-microamp to work, the RTS resistor
-+      defines the range of the dimmer setting (brightness) of the
-+      torch LED.
-+
-+  led:
-+    type: object
-+    $ref: common.yaml#
-+    properties:
-+      function: true
-+      color: true
-+      flash-max-timeout-us: true
-+
-+      flash-max-microamp:
-+        maximum: 700000
-+        description: The maximum current for flash mode
-+          is hardwired to the component using the RFS resistor to
-+          ground. The maximum hardware current setting is calculated
-+          according to the formula Imax = 5500 / RFS. The lowest
-+          allowed resistance value is 7.86 kOhm giving an absolute
-+          maximum current of 700mA. By setting this attribute in
-+          the device tree, you can further restrict the maximum
-+          current below the hardware limit. This requires the RFS
-+          to be defined as it defines the maximum range.
-+
-+      torch-max-microamp:
-+        maximum: 700000
-+        description: The maximum current for torch mode
-+          is hardwired to the component using the RTS resistor to
-+          ground. The maximum hardware current setting is calculated
-+          according to the formula Imax = 5500 / RTS. The lowest
-+          allowed resistance value is 7.86 kOhm giving an absolute
-+          maximum current of 700mA. By setting this attribute in
-+          the device tree, you can further restrict the maximum
-+          current below the hardware limit. This requires the RTS
-+          to be defined as it defines the maximum range.
-+
-+required:
-+  - compatible
-+  - ent-gpios
-+  - enf-gpios
-+  - led
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/leds/common.h>
-+
-+    led-controller {
-+        compatible = "richtek,rt8515";
-+        enf-gpios = <&gpio4 12 GPIO_ACTIVE_HIGH>;
-+        ent-gpios = <&gpio4 13 GPIO_ACTIVE_HIGH>;
-+        richtek,rfs = <16000>;
-+        richtek,rts = <100000>;
-+
-+        led {
-+            function = LED_FUNCTION_FLASH;
-+            color = <LED_COLOR_ID_WHITE>;
-+            flash-max-timeout-us = <250000>;
-+            flash-max-microamp = <150000>;
-+            torch-max-microamp = <25000>;
-+        };
-+    };
-+
-+...
+This is compile-tested for now, and I'm sending it just to
+check if the approach looks good, or otherwise get feedback.
+
+I'll be porting GStreamer v4l2codecs to the new interface
+and running some tests soon.
+
+As far as I'm aware, Ffmpeg/libavcodec support is ready and
+waiting for stable uAPIs, so we can expect that to be added
+shortly after we land this.
+
+Thanks,
+Ezequiel
+
+Ezequiel Garcia (4):
+  media: cedrus: h264: Support profile control
+  media: Rename stateful codec control macros
+  media: Clean stateless control includes
+  media: uapi: move H264 stateless controls out of staging
+
+Jonas Karlman (1):
+  media: rkvdec: h264: Support profile and level controls
+
+ .../userspace-api/media/v4l/common.rst        |   1 +
+ .../userspace-api/media/v4l/dev-mem2mem.rst   |   2 +-
+ .../media/v4l/ext-ctrls-codec-stateless.rst   | 674 ++++++++++++++++
+ .../media/v4l/ext-ctrls-codec.rst             | 696 +----------------
+ .../media/v4l/extended-controls.rst           |   8 +-
+ .../media/v4l/pixfmt-compressed.rst           |  14 +-
+ .../media/v4l/vidioc-g-ext-ctrls.rst          |   6 +-
+ drivers/media/common/cx2341x.c                |   4 +-
+ drivers/media/platform/s5p-mfc/s5p_mfc_dec.c  |   2 +-
+ drivers/media/platform/s5p-mfc/s5p_mfc_enc.c  |   2 +-
+ drivers/media/v4l2-core/v4l2-ctrls.c          |  40 +-
+ drivers/staging/media/hantro/hantro_drv.c     |  26 +-
+ drivers/staging/media/hantro/hantro_h264.c    |   8 +-
+ drivers/staging/media/hantro/hantro_hw.h      |   4 +-
+ drivers/staging/media/rkvdec/rkvdec-h264.c    |   8 +-
+ drivers/staging/media/rkvdec/rkvdec.c         |  39 +-
+ drivers/staging/media/sunxi/cedrus/cedrus.c   |  36 +-
+ .../staging/media/sunxi/cedrus/cedrus_dec.c   |  12 +-
+ include/media/fwht-ctrls.h                    |   2 +-
+ include/media/h264-ctrls.h                    | 406 ----------
+ include/media/hevc-ctrls.h                    |  10 +-
+ include/media/mpeg2-ctrls.h                   |   4 +-
+ include/media/v4l2-ctrls.h                    |   1 -
+ include/media/v4l2-h264.h                     |   2 +-
+ include/media/vp8-ctrls.h                     |   2 +-
+ include/uapi/linux/v4l2-controls.h            | 731 +++++++++++++-----
+ include/uapi/linux/videodev2.h                |   8 +
+ 27 files changed, 1368 insertions(+), 1380 deletions(-)
+ create mode 100644 Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
+ delete mode 100644 include/media/h264-ctrls.h
+
 -- 
-2.26.2
+2.27.0
 
