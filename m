@@ -2,27 +2,28 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5385C61DD8
-	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 16:27:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3590C61DD8
+	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 16:27:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9A95122201
-	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 16:27:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8520320B80
+	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 16:27:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728089AbgKLQ1s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Nov 2020 11:27:48 -0500
-Received: from relay11.mail.gandi.net ([217.70.178.231]:35083 "EHLO
+        id S1728210AbgKLQ1w (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Nov 2020 11:27:52 -0500
+Received: from relay11.mail.gandi.net ([217.70.178.231]:46259 "EHLO
         relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727646AbgKLQ1s (ORCPT
+        with ESMTP id S1727646AbgKLQ1w (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Nov 2020 11:27:48 -0500
+        Thu, 12 Nov 2020 11:27:52 -0500
 Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id AD989100011;
-        Thu, 12 Nov 2020 16:27:43 +0000 (UTC)
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 94C5A100013;
+        Thu, 12 Nov 2020 16:27:48 +0000 (UTC)
 From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
 To:     kieran.bingham+renesas@ideasonboard.com,
         laurent.pinchart+renesas@ideasonboard.com,
@@ -31,76 +32,79 @@ Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
         linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         linux-kernel@vger.kernel.org, Hyun Kwon <hyunk@xilinx.com>,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v4 0/8] media: i2c: Add RDACM21 camera module
-Date:   Thu, 12 Nov 2020 17:27:21 +0100
-Message-Id: <20201112162729.101384-1-jacopo+renesas@jmondi.org>
+Subject: [PATCH v4 2/8] dt-bindings: media: max9286: Document 'maxim,,initial-reverse-channel-mV"
+Date:   Thu, 12 Nov 2020 17:27:23 +0100
+Message-Id: <20201112162729.101384-3-jacopo+renesas@jmondi.org>
 X-Mailer: git-send-email 2.29.1
+In-Reply-To: <20201112162729.101384-1-jacopo+renesas@jmondi.org>
+References: <20201112162729.101384-1-jacopo+renesas@jmondi.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello, this v4 follows discussion on how to better handle the initial
-reverse channel amplitude and incorporate Geert's and Kieran suggestion
-to use the value in millivolts instead of relying on a boolean property.
+Document the 'initial-reverse-channel-mV' vendor property in the
+bindings document of the max9286 driver.
 
-v4:
-- Replace 'maxim-high-threshold' with 'maxim,initial-reverse-channel-mV'
-- Increse delay when reading OV490 chip ID to give it a bit more time to
-  exit reset
+The newly introduced property allows to specify the initial
+configuration of the GMSL reverse control channel to accommodate
+remote serializers pre-programmed with the high threshold power
+supply noise immunity enabled.
 
-v3:
-https://patchwork.linuxtv.org/project/linux-media/list/?series=3657
+Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+---
+ .../bindings/media/i2c/maxim,max9286.yaml     | 23 +++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-Background in v1 cover letter:
-https://www.spinics.net/lists/linux-renesas-soc/msg52886.html
-
-I have tested on Eagle V3M with 4 RDACM21, but the whole point of
-this series is to retain compatibility with RDACM20.
-
-For this reason I have included 2 patches on top, not intended for merge
-that re-propose DTS support for the MAXIM max9286 expansion board connected
-to Salvator-X and add the newly introduced property to the DTS file.
-
-Kieran, I know you have a working setup with RDACM20, the final two patches are
-meant for ease your testing. Can you give this series a spin ?
-
-Series based on latest renesas-drivers tag: renesas-drivers-2020-11-10-v5.10-rc3
-
-If I get a confirmation this setup works on Salvator-X, I'll submit the new
-property for inclusion to devicetree people, which I have left out at the
-moment.
-
-Thanks
-  j
-
-Jacopo Mondi (7):
-  media: i2c: Add driver for RDACM21 camera module
-  dt-bindings: media: max9286: Document
-    'maxim,,initial-reverse-channel-mV"
-  media: i2c: max9286: Break-out reverse channel setup
-  media: i2c: max9286: Make channel amplitude programmable
-  media: i2c: max9286: Configure reverse channel amplitude
-  [DNI] arm64: dts: renesas: salvator-x-max9286: Specify channel
-    amplitude
-  [DNI] arm64: dts: renesas: eagle: Specify channel amplitude
-
-Laurent Pinchart (1):
-  arm64: dts: renesas: salvator-x: Add MAX9286 expansion board
-
- .../bindings/media/i2c/maxim,max9286.yaml     |  23 +
- MAINTAINERS                                   |  12 +
- .../arm64/boot/dts/renesas/r8a77970-eagle.dts |   1 +
- .../boot/dts/renesas/salvator-x-max9286.dtsi  | 396 +++++++++++++
- drivers/media/i2c/Kconfig                     |  13 +
- drivers/media/i2c/Makefile                    |   2 +
- drivers/media/i2c/max9286.c                   |  58 +-
- drivers/media/i2c/rdacm21.c                   | 539 ++++++++++++++++++
- 8 files changed, 1031 insertions(+), 13 deletions(-)
- create mode 100644 arch/arm64/boot/dts/renesas/salvator-x-max9286.dtsi
- create mode 100644 drivers/media/i2c/rdacm21.c
-
---
+diff --git a/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml b/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
+index 9ea827092fdd..c506a0261325 100644
+--- a/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
++++ b/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
+@@ -51,6 +51,26 @@ properties:
+   '#gpio-cells':
+     const: 2
+ 
++  maxim,initial-reverse-channel-mV:
++    $ref: '/schemas/types.yaml#/definitions/uint32'
++    minimum: 30
++    maximum: 200
++    default: 170
++    description: |
++      Initial amplitude of the reverse control channel, in millivolts.
++
++      The initial amplitude shall be adjusted to a value compatible with the
++      configuration of the connected remote serializer.
++
++      Some camera modules (in example RDACM20) include an on-board MCU that
++      pre-programs the embedded serializer with power supply noise immunity
++      (high-threshold) enabled. A typical value of the deserializer's reverse
++      channel amplitude to communicate with pre-programmed serializers is 170mV.
++
++      A typical value for the reverse channel amplitude to communicate with
++      a remote serializer whose high-threshold noise immunity is not enabled
++      is 100mV.
++
+   ports:
+     type: object
+     description: |
+@@ -221,6 +241,7 @@ required:
+   - ports
+   - i2c-mux
+   - gpio-controller
++  - maxim,initial-reverse-channel-mV
+ 
+ additionalProperties: false
+ 
+@@ -243,6 +264,8 @@ examples:
+         gpio-controller;
+         #gpio-cells = <2>;
+ 
++        maxim,initial-reverse-channel-mV = <170>;
++
+         ports {
+           #address-cells = <1>;
+           #size-cells = <0>;
+-- 
 2.29.1
 
