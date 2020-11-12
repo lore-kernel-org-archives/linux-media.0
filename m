@@ -2,206 +2,141 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A040C56201
-	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 05:46:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0778C388F7
+	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 05:46:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 190DD20825
-	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 05:46:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9A8C7208FE
+	for <linux-media@archiver.kernel.org>; Thu, 12 Nov 2020 05:46:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="HWhp+x5n"
+	dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="QJFWfcV+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727261AbgKLFcY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Nov 2020 00:32:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50584 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728802AbgKLE04 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 11 Nov 2020 23:26:56 -0500
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273C4C0613D4
-        for <linux-media@vger.kernel.org>; Wed, 11 Nov 2020 20:26:54 -0800 (PST)
-Received: by mail-ej1-x642.google.com with SMTP id cw8so5782544ejb.8
-        for <linux-media@vger.kernel.org>; Wed, 11 Nov 2020 20:26:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PrJGFWR5LfPadBQJXtxR3X13DiYJSukzmCqstyB653Y=;
-        b=HWhp+x5nR3T+EuumQWwhx5XTPD7QV5SlMbprd7oGYb7NT1tsUS8M5b4CCExQirLXf1
-         n6xB1vMrsTHoCd3FbJvdOGzMuDQtsl1hs78cs62DjPqqlEQe7GQ0p/ZW5fyjKOmsxAtD
-         iRHM55F9z6oGEmav+yyjAu5YCy5KSCZCidFCw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PrJGFWR5LfPadBQJXtxR3X13DiYJSukzmCqstyB653Y=;
-        b=ZVITjXK+tEKaBqxqfG3LrYXKbRbWF8z/xZ52sRF8kazUhlUaEIOz+Jr6cy0TQH8767
-         DW5aMjx/wx/chn6iB2DdcSqXwg3DSgpG0Dpdk2s5m2Idvc7qddWU9G2Yakx1UANANhIe
-         ELqdhHAx7AUHTKmhyDRDmFDko5hJZ2k7WjKq6C9lDWLKnM3tG4xpK3LW8GVsQwCTjl/E
-         XF/9wPptEwkXkJBNZ97Mm+X/ywHJnMLsReLFlSApMlpJvTvVZft60mOBp0swY3VbqURb
-         5tK6eSjpd0hjOyRWU5HIrzTOX4qLIGW5lig38ax73Ie+EO1Hjnt3hRHuDXGyAqm7hpqM
-         amgg==
-X-Gm-Message-State: AOAM531h+1kZ/9ZV16fHpbDghTcUgNefkBBHRCRC5RqQLVP2u3w9I8ab
-        o4F/r6ixEzlcLhcbzWb4jTSRex2/Upq2UA==
-X-Google-Smtp-Source: ABdhPJxP09dUCisd/eXmV3fgAUbwtqyXQWOI1wJphbNSjYMlvkBt04+Q5n37oMChDHKHDhYBCmQTfA==
-X-Received: by 2002:a17:906:2490:: with SMTP id e16mr27818722ejb.17.1605155212626;
-        Wed, 11 Nov 2020 20:26:52 -0800 (PST)
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
-        by smtp.gmail.com with ESMTPSA id og19sm1565865ejb.7.2020.11.11.20.26.50
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Nov 2020 20:26:51 -0800 (PST)
-Received: by mail-wr1-f52.google.com with SMTP id l1so4559455wrb.9
-        for <linux-media@vger.kernel.org>; Wed, 11 Nov 2020 20:26:50 -0800 (PST)
-X-Received: by 2002:adf:e54f:: with SMTP id z15mr32685970wrm.159.1605155209811;
- Wed, 11 Nov 2020 20:26:49 -0800 (PST)
+        id S1727054AbgKLFcQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Nov 2020 00:32:16 -0500
+Received: from mail-eopbgr00046.outbound.protection.outlook.com ([40.107.0.46]:31189
+        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728076AbgKLDKr (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 11 Nov 2020 22:10:47 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JW5ayYW2RzHPi7I++ngjFauN8FEebfZRIdYgRBG9X8Au139V5Y7C6pCnUepSQEbPtAFQHgnmNmPLKAi05fZUCOrGc9xkk9g3/Vp/+4YGSgQN+0riumNc6oZpBnl/HFrXfpheIP6w2ifKvr9mBfPasCEXSRtHUHHkInRiX76BNNVHxK4QSQk6TT3Am3st85v6kPRGL/pFODI57GEiD6x4Av1cvBqDPS+EamZ/qizsx7/pToaYyBITb97YyV+7K2rGDwEx/y53KMTbQYMc20f4eFHbJjL7RH09L3aqYqxZvNRt2kk2slT2bdZLU3nmZEx2hgoih4b/oN0VGJXYimcTaA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7dGeUtH5KEQFsA6wylGwbxNg7IoxSf2rXu3u3FHZ62k=;
+ b=gIFXv+y/2vbq3cE5OkBs5iDpEH5kAGppWdQBcJ+o7lw5Sb+iukT827ftFWZdScmsGyK3BxVtLuUNdgXG1W+eYa0DM7nTmaQZ/jN5WtzrdDPQ1xzak1eYgQEL6TAQUw4kWvJlCqHCaPEKg6uE1I75OMfTeW3zmcRXFk3Xy3t8Xdl9aLQ4/UqQzMKaBnWcaz82uwP1a7IuREnQGEZtwyXbTA2m3Yr2LW148z2rxd/21Mg0zbeKdvemKtQ5ksxGfxuy1NdeWmar3iOwES89x1pquU+/2vLCs7XFi21A2ryRwouKY2AsX/MVP+LwrfbUnaLGtf2m4FI/EgT2jmLs6LP18Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7dGeUtH5KEQFsA6wylGwbxNg7IoxSf2rXu3u3FHZ62k=;
+ b=QJFWfcV+/IIvzYiLK3cl9G7I5mbSHT+Z4RkKhMCYqcCot2UItCJaHVOvX4QG9ohC5gvVe5kvTI/+X7ysZOWZBgDrTDXFsbhVgvLqE4//incqdVVVbdWQLFMQUuCqNcdMgT8XZ3OgbfFVIeDk5gREsliLKKp0aGbrXobDfd+B4zg=
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=oss.nxp.com;
+Received: from AM5PR04MB3137.eurprd04.prod.outlook.com (2603:10a6:206:c::18)
+ by AM7PR04MB6997.eurprd04.prod.outlook.com (2603:10a6:20b:10d::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21; Thu, 12 Nov
+ 2020 03:07:21 +0000
+Received: from AM5PR04MB3137.eurprd04.prod.outlook.com
+ ([fe80::2d75:aaf5:5aa6:5de9]) by AM5PR04MB3137.eurprd04.prod.outlook.com
+ ([fe80::2d75:aaf5:5aa6:5de9%6]) with mapi id 15.20.3541.025; Thu, 12 Nov 2020
+ 03:07:21 +0000
+From:   "Mirela Rabulea (OSS)" <mirela.rabulea@oss.nxp.com>
+To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl, shawnguo@kernel.org,
+        robh+dt@kernel.org, p.zabel@pengutronix.de
+Cc:     paul.kocialkowski@bootlin.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
+        s.hauer@pengutronix.de, aisheng.dong@nxp.com,
+        daniel.baluta@nxp.com, robert.chiras@nxp.com,
+        laurentiu.palcu@nxp.com, mark.rutland@arm.com,
+        devicetree@vger.kernel.org, ezequiel@collabora.com,
+        laurent.pinchart+renesas@ideasonboard.com,
+        niklas.soderlund+renesas@ragnatech.se,
+        dafna.hirschfeld@collabora.com,
+        Mirela Rabulea <mirela.rabulea@nxp.com>
+Subject: [PATCH v5 09/10] media: Avoid parsing quantization and huffman tables
+Date:   Thu, 12 Nov 2020 05:05:56 +0200
+Message-Id: <20201112030557.8540-10-mirela.rabulea@oss.nxp.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20201112030557.8540-1-mirela.rabulea@oss.nxp.com>
+References: <20201112030557.8540-1-mirela.rabulea@oss.nxp.com>
+Content-Type: text/plain
+X-Originating-IP: [86.124.171.138]
+X-ClientProxiedBy: AM0PR06CA0100.eurprd06.prod.outlook.com
+ (2603:10a6:208:fa::41) To AM5PR04MB3137.eurprd04.prod.outlook.com
+ (2603:10a6:206:c::18)
 MIME-Version: 1.0
-References: <20191204124732.10932-1-Jerry-Ch.chen@mediatek.com>
- <1588903371.16825.14.camel@mtksdccf07> <CAAFQd5CP+gH3zG9fejBv_hTzeAExMoY+L38W8e4e3OSc-gVRHg@mail.gmail.com>
- <20200521183825.GB249683@chromium.org> <1593526253.29676.28.camel@mtksdccf07>
- <20200630171912.GE1212092@chromium.org> <1605095509.28992.7.camel@mtksdccf07>
-In-Reply-To: <1605095509.28992.7.camel@mtksdccf07>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Thu, 12 Nov 2020 13:26:39 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5CeZYOAxwHjsVOV9eJRt15-npTsH15Y5idwr3-ux+85qQ@mail.gmail.com>
-Message-ID: <CAAFQd5CeZYOAxwHjsVOV9eJRt15-npTsH15Y5idwr3-ux+85qQ@mail.gmail.com>
-Subject: Re: [RFC PATCH V4 0/4] media: platform: Add support for Face
- Detection (FD) on mt8183 SoC
-To:     Jerry-ch Chen <Jerry-ch.Chen@mediatek.com>
-Cc:     "hans.verkuil@cisco.com" <hans.verkuil@cisco.com>,
-        HansVerkuil <hverkuil@xs4all.nl>,
-        "laurent.pinchart+renesas@ideasonboard.com" 
-        <laurent.pinchart+renesas@ideasonboard.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "pihsun@chromium.org" <pihsun@chromium.org>,
-        "yuzhao@chromium.org" <yuzhao@chromium.org>,
-        "zwisler@chromium.org" <zwisler@chromium.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        =?UTF-8?B?U2VhbiBDaGVuZyAo6YSt5piH5byYKQ==?= 
-        <Sean.Cheng@mediatek.com>,
-        =?UTF-8?B?U2ogSHVhbmcgKOm7g+S/oeeSiyk=?= <sj.huang@mediatek.com>,
-        =?UTF-8?B?Q2hyaXN0aWUgWXUgKOa4uOmbheaDoCk=?= 
-        <christie.yu@mediatek.com>,
-        =?UTF-8?B?RnJlZGVyaWMgQ2hlbiAo6Zmz5L+K5YWDKQ==?= 
-        <Frederic.Chen@mediatek.com>,
-        =?UTF-8?B?SnVuZ28gTGluICjmnpfmmI7kv4op?= <jungo.lin@mediatek.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        srv_heupstream <srv_heupstream@mediatek.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from fsr-ub1664-134.ea.freescale.net (86.124.171.138) by AM0PR06CA0100.eurprd06.prod.outlook.com (2603:10a6:208:fa::41) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21 via Frontend Transport; Thu, 12 Nov 2020 03:07:19 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 30ab7530-b30c-46b3-cf04-08d886b811e9
+X-MS-TrafficTypeDiagnostic: AM7PR04MB6997:
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <AM7PR04MB69978A4A5FA660367665C512CEE70@AM7PR04MB6997.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2331;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Fmv2jsmdERE9gI4gMuM3VVn2Q2kvLX+bVKOwatsMIW6W42GspZzLY/FJE5xSXRtQqF+OkRk4RuwQAuY9GxP9oSxfWEGLfnTEQFderc757raD5qfTnYU2oxkB0BdX8CI/ZlN0STgn4jahJuMyzcHntjwkKbHeG30CCQ6s4mdAeyX5G2ymZH1IcxhoqDFfzvHDllwDW0oCU/fceOuDDDFn1fb07NjfNTMSeB9YoDI2bR03GOztPM5R/9SFFOi6i0Vc2WJcyJXLZ3I0E3klA/IjgY6iliPEXr9Fx/3fOv9WyYne/mnaEhghnMXjpCaQ0glNXuGa0dL4QLEPuUGluSCa9g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM5PR04MB3137.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(376002)(346002)(396003)(136003)(366004)(6666004)(1076003)(316002)(26005)(478600001)(6506007)(4744005)(4326008)(6512007)(66946007)(66476007)(186003)(6486002)(2906002)(66556008)(5660300002)(16526019)(8676002)(52116002)(86362001)(7416002)(8936002)(2616005)(956004)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: n+62fehpmhj6npwL1DlP3DBF9XA7NYB0TUyXwifBfxQoJikl0GTPDTZok6RsdsBuNIS34c9HU+0St8+7n6RC7DZE2099rzoIDiJ+4NeKpAQ6u1wXNe1w3lL+335eMt8mmnK8z4QaFDYBxcu0lI9aG7I2dOy3F4zO4tQEoAfSB8IAqqwjDPF4YeabJ5Dbp8ZUqIWppqvpjKSE9r1w78a/aCI3eIiJPCq5tigqqEAKIxVf4GXnHZ5EzfTwk3jxLBYLSLnRUJf090ITvS/kI8M6v5teBF1LXFx5adMqBTYJ0QcG0izzQYY4fjaaertFNYbcNQL9XFnWVuJxriYGCP26uPUwfTPUeyYiDmBYlDlnNqqAQPhS2yB+QqjRLy/EYfhko0TjOhi8NgSPLUl/kOdCyZuIW+Yk0LJme2jApr/nwhuATy5j/wL2viKIKgFb9Nft10u9v5V92gq0oQ0gryuLfVQxhQcjgjw85PcN9GAWFYP6v0GWbMdQwWaRUCj6HlYPUkAv6B6yZbowRkxewaqLvgWjpEn5twtBPZXJ9egUEIt2/LMKXk6LzNBCS+3718YFROf7xnqpD0uk5Lo/J3FAsIpyMIg6g+kof2uohzHyxY5Oq564mzMY+OgJ1AW9RgiKNz3aiOOkh9c8UhiqD9pDqEa5L8cqMIXMU67ePstX2muZXZX910DmiiTupk61qQOMgkWDiY02sY5JOcz9DtJOGstgvPNO5U28TY/QwtRvYM849C3Xuw80Qzwqk6T0aQKY6FR0qKmui0QjTQmXQFuv5lMkKh+Z/9DD74X1RL34SOyudDzhusQEt9Tps+hA7LNj9Bfb+w0bdlzwZsvoDVXNjS/ZamN0RZqhig6OiZ3k7cpFPgwN/020Gr3VOk/k1MZOs3VJyFKREcjJMUIYcOG4tw==
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 30ab7530-b30c-46b3-cf04-08d886b811e9
+X-MS-Exchange-CrossTenant-AuthSource: AM5PR04MB3137.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Nov 2020 03:07:20.8213
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: v4ESul/35/Zwbf0rL1Rhgfy6j48XsDsi/fAUCszV1pfcAZtk3J2JW8ahyEx1mXhnif/JjCNnO0qEzSxoLpg7hg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6997
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Nov 11, 2020 at 8:51 PM Jerry-ch Chen
-<Jerry-ch.Chen@mediatek.com> wrote:
->
-> Hi Tomasz,
->
-> On Wed, 2020-07-01 at 01:19 +0800, Tomasz Figa wrote:
-> > Hi Jerry,
-> >
-> > On Tue, Jun 30, 2020 at 10:10:53PM +0800, Jerry-ch Chen wrote:
-> > > Hi Tomasz,
-> > >
-> > > On Thu, 2020-05-21 at 18:38 +0000, Tomasz Figa wrote:
-> > > > Hi Jerry,
-> > > >
-> > > > On Wed, May 13, 2020 at 11:45:37PM +0200, Tomasz Figa wrote:
-> > > > > Hi Jerry,
-> > > > >
-> > > > > On Fri, May 8, 2020 at 4:03 AM Jerry-ch Chen <Jerry-ch.Chen@mediatek.com> wrote:
-> > > > > >
-> > > > > > Hi Laurent, Tomasz, Matthias,
-> > > > > >
-> > > > > > gentle ping for this patch set,
-> > > > > > If no new comments, I would like to send a newer version.
-> > > > > >
-> > > > >
-> > > > > Sorry, I still haven't had a chance to look at the series, so feel
-> > > > > free to send a new version and I will take a look at the new one.
-> > > > >
-> > > >
-> > > > Finally found some time to review the series. Again sorry for the delay
-> > > > and thanks for your patience.
-> > > >
-> > > > Some general comments:
-> > > > 1) The metadata format FourCC should be added in a separate patch,
-> > > > together with documentation for it.
-> > > > 2) Control IDs, structs used by the userspace, etc. should be defined in
-> > > > a header under include/uapi/linux.
-> > > >
-> > > > Please also check my replies to particular patches for further comments.
-> > > >
-> > > > Best regards,
-> > > > Tomasz
-> > >
-> > > Appreciate for your reply,
-> > >
-> > > So far, I've locally created an uapi header:
-> > > include/uapi/linux/mtk_fd_40.h
-> > > which provides some values, control ids, and the definitions of
-> > > structures that would be needed by user of mtk_fd_40 driver.
-> > > In addition, I also provide a MACRO as example in comments that can
-> > > extract the struct member with bit length and offset
-> > > definitions(eliminate the bit-fields).
-> > >
-> > > Also, I would like to rename struct fd_user_output with struct
-> > > mtk_fd_hw_result. I worry fd_user_output would be a confusing name.
-> >
-> > The change sounds good to me.
-> >
-> > > I will add them in a separate patch in next version.
-> > >
-> >
-> > Okay.
-> >
-> > > I am still working on the documentation, which might be
-> > > Documentation/media/uapi/v4l/pixfmt-meta-mtk-fd-40.rst.
-> > > Refering the other pixfmt-*.rst files, I will try to provide the
-> > > flat-table of the metadata with the structure of the mtk_fd_hw_result.
-> > >
-> >
-> > Sounds good to me.
-> >
-> > > I am confusing that should I remain the name with -40 in the tail of rst
-> > > file?
-> >
-> > The header and documentation file names should match the driver name.  I
-> > just noticed there is some inconsistency in the naming, though. The
-> > driver seems to be located under drivers/media/platform/mtk-isp/fd, but
-> > the driver name in the platform driver struct and as reported by
-> > VIDIOC_QUERYCAP seems to be "mtk-fd-4.0".
->
-> > Since we have many mtk-* drivers in the tree currently, I think it might
-> > make sense to consolidate them under drivers/media/platform/mediatek,
-> > similarly to drivers/media/platform/qcom or /rockchip. But it could be
-> > done later, as a follow-up.
-> >
-> > My suggestion would be to place the driver under
-> > drivers/media/platform/mtk-fd-40 and also rename the related Kconfig
-> > symbol to include the _40 suffix.
-> >
-> > What do you think?
-> >
->
-> I Appreciate your comments,
-> Sorry for the late reply.
->
-> Would it be possible for me to replace the driver as drivers/media/platform/mtk_fd/mtk-fd-40?(Just like mtk-isp/isp_50)
->
+From: Mirela Rabulea <mirela.rabulea@nxp.com>
 
-I'm not a big fan of duplicating "mtk fd" in the path. How about just
-making it drivers/media/platform/mtk-fd-40?
+These are optional in struct v4l2_jpeg_header, so do not parse if
+not requested, save some time.
 
-Best regards,
-Tomasz
+Signed-off-by: Mirela Rabulea <mirela.rabulea@nxp.com>
+---
+ drivers/media/v4l2-core/v4l2-jpeg.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/media/v4l2-core/v4l2-jpeg.c b/drivers/media/v4l2-core/v4l2-jpeg.c
+index d77e04083d57..7576cd0ce6b9 100644
+--- a/drivers/media/v4l2-core/v4l2-jpeg.c
++++ b/drivers/media/v4l2-core/v4l2-jpeg.c
+@@ -307,6 +307,9 @@ static int jpeg_parse_quantization_tables(struct jpeg_stream *stream,
+ {
+ 	int len = jpeg_get_word_be(stream);
+ 
++	if (!tables)
++		return 0;
++
+ 	if (len < 0)
+ 		return len;
+ 	/* Lq = 2 + n * 65 (for baseline DCT), n >= 1 */
+@@ -361,6 +364,9 @@ static int jpeg_parse_huffman_tables(struct jpeg_stream *stream,
+ 	int mt;
+ 	int len = jpeg_get_word_be(stream);
+ 
++	if (!tables)
++		return 0;
++
+ 	if (len < 0)
+ 		return len;
+ 	/* Table B.5 - Huffman table specification parameter sizes and values */
+-- 
+2.17.1
+
