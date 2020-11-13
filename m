@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77EF6C63699
-	for <linux-media@archiver.kernel.org>; Fri, 13 Nov 2020 17:04:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA492C61DD8
+	for <linux-media@archiver.kernel.org>; Fri, 13 Nov 2020 17:04:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 415F121D7F
-	for <linux-media@archiver.kernel.org>; Fri, 13 Nov 2020 17:04:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A1EAE21D79
+	for <linux-media@archiver.kernel.org>; Fri, 13 Nov 2020 17:04:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726374AbgKMRE2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Nov 2020 12:04:28 -0500
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:60233 "EHLO
+        id S1726495AbgKMREb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Nov 2020 12:04:31 -0500
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:42857 "EHLO
         relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725959AbgKMRE1 (ORCPT
+        with ESMTP id S1726274AbgKMREa (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Nov 2020 12:04:27 -0500
+        Fri, 13 Nov 2020 12:04:30 -0500
 X-Originating-IP: 93.29.109.196
 Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
         (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id ECDB7E0010;
-        Fri, 13 Nov 2020 17:04:22 +0000 (UTC)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 89217E0012;
+        Fri, 13 Nov 2020 17:04:26 +0000 (UTC)
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
@@ -38,9 +38,9 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         =?UTF-8?q?K=C3=A9vin=20L=27h=C3=B4pital?= 
         <kevin.lhopital@bootlin.com>
-Subject: [PATCH v2 1/3] dt-bindings: media: i2c: Add OV8865 bindings documentation
-Date:   Fri, 13 Nov 2020 18:03:42 +0100
-Message-Id: <20201113170344.2252234-2-paul.kocialkowski@bootlin.com>
+Subject: [PATCH NOT FOR MERGE v2 3/3] ARM: dts: sun8i: a83t: bananapi-m3: Enable MIPI CSI-2 with OV8865
+Date:   Fri, 13 Nov 2020 18:03:44 +0100
+Message-Id: <20201113170344.2252234-4-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201113170344.2252234-1-paul.kocialkowski@bootlin.com>
 References: <20201113170344.2252234-1-paul.kocialkowski@bootlin.com>
@@ -51,143 +51,164 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This introduces YAML bindings documentation for the OV8865
-image sensor.
+From: Kévin L'hôpital <kevin.lhopital@bootlin.com>
 
-Co-developed-by: Kévin L'hôpital <kevin.lhopital@bootlin.com>
+The Bananapi M3 supports a camera module which includes an OV8865 sensor
+connected via the parallel CSI interface and an OV8865 sensor connected
+via MIPI CSI-2.
+
+The I2C2 bus is shared by the two sensors as well as the (active-low)
+reset signal, but each sensor has it own shutdown line.
+
 Signed-off-by: Kévin L'hôpital <kevin.lhopital@bootlin.com>
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
- .../bindings/media/i2c/ovti,ov8865.yaml       | 120 ++++++++++++++++++
- 1 file changed, 120 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov8865.yaml
+ arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts | 99 ++++++++++++++++++++
+ 1 file changed, 99 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov8865.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov8865.yaml
-new file mode 100644
-index 000000000000..47af90d6ebea
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov8865.yaml
-@@ -0,0 +1,120 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/ovti,ov8865.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts b/arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts
+index 431f70234d36..1915040b39bf 100644
+--- a/arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts
++++ b/arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts
+@@ -85,6 +85,30 @@ green {
+ 		};
+ 	};
+ 
++	reg_ov8865_avdd: ov8865-avdd {
++		compatible = "regulator-fixed";
++		regulator-name = "ov8865-avdd";
++		regulator-min-microvolt = <2800000>;
++		regulator-max-microvolt = <2800000>;
++		vin-supply = <&reg_dldo4>;
++	};
 +
-+title: OmniVision OV8865 Image Sensor Device Tree Bindings
++	reg_ov8865_dovdd: ov8865-dovdd {
++		compatible = "regulator-fixed";
++		regulator-name = "ov8865-dovdd";
++		regulator-min-microvolt = <2800000>;
++		regulator-max-microvolt = <2800000>;
++		vin-supply = <&reg_dldo4>;
++	};
 +
-+maintainers:
-+  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
++	reg_ov8865_dvdd: ov8865-dvdd {
++		compatible = "regulator-fixed";
++		regulator-name = "ov8865-dvdd";
++		regulator-min-microvolt = <1200000>;
++		regulator-max-microvolt = <1200000>;
++		vin-supply = <&reg_eldo1>;
++	};
 +
-+properties:
-+  compatible:
-+    const: ovti,ov8865
+ 	reg_usb1_vbus: reg-usb1-vbus {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "usb1-vbus";
+@@ -115,6 +139,17 @@ &cpu100 {
+ 	cpu-supply = <&reg_dcdc3>;
+ };
+ 
++&csi {
++	status = "okay";
++};
 +
-+  reg:
-+    maxItems: 1
++&csi_in {
++	csi_in_mipi_csi2: endpoint {
++		bus-type = <4>; /* CSI2_DPHY */
++		remote-endpoint = <&mipi_csi2_out_csi>;
++	};
++};
 +
-+  clocks:
-+    items:
-+      - description: EXTCLK Clock
+ &de {
+ 	status = "okay";
+ };
+@@ -147,6 +182,37 @@ hdmi_out_con: endpoint {
+ 	};
+ };
+ 
++&i2c2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c2_pe_pins>;
++	status = "okay";
 +
-+  assigned-clocks:
-+    maxItems: 1
++	ov8865: camera@36 {
++		compatible = "ovti,ov8865";
++		reg = <0x36>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&csi_mclk_pin>;
++		clocks = <&ccu CLK_CSI_MCLK>;
++		assigned-clocks = <&ccu CLK_CSI_MCLK>;
++		assigned-clock-rates = <24000000>;
++		avdd-supply = <&reg_ov8865_avdd>;
++		dovdd-supply = <&reg_ov8865_dovdd>;
++		dvdd-supply = <&reg_ov8865_dvdd>;
++		powerdown-gpios = <&pio 4 17 GPIO_ACTIVE_LOW>; /* PE17 */
++		reset-gpios = <&pio 4 16 GPIO_ACTIVE_LOW>; /* PE16 */
 +
-+  assigned-clock-rates:
-+    maxItems: 1
++		port {
++			ov8865_out_mipi_csi2: endpoint {
++				bus-type = <4>; /* MIPI CSI-2 D-PHY */
++				clock-lanes = <0>;
++				data-lanes = <1 2 3 4>;
 +
-+  dvdd-supply:
-+    description: Digital Domain Power Supply
++				remote-endpoint = <&mipi_csi2_in_ov8865>;
++			};
++		};
++	};
++};
 +
-+  avdd-supply:
-+    description: Analog Domain Power Supply (internal AVDD is used if missing)
+ &mdio {
+ 	rgmii_phy: ethernet-phy@1 {
+ 		compatible = "ethernet-phy-ieee802.3-c22";
+@@ -154,6 +220,26 @@ rgmii_phy: ethernet-phy@1 {
+ 	};
+ };
+ 
++&mipi_csi2 {
++	status = "okay";
++};
 +
-+  dovdd-supply:
-+    description: I/O Domain Power Supply
++&mipi_csi2_in {
++	mipi_csi2_in_ov8865: endpoint {
++		bus-type = <4>; /* MIPI CSI-2 D-PHY */
++		clock-lanes = <0>;
++		data-lanes = <1 2 3 4>;
 +
-+  powerdown-gpios:
-+    maxItems: 1
-+    description: Power Down Pin GPIO Control (active low)
++		remote-endpoint = <&ov8865_out_mipi_csi2>;
++	};
++};
 +
-+  reset-gpios:
-+    maxItems: 1
-+    description: Reset Pin GPIO Control (active low)
++&mipi_csi2_out {
++	mipi_csi2_out_csi: endpoint {
++		remote-endpoint = <&csi_in_mipi_csi2>;
++	};
++};
 +
-+  port:
-+    type: object
-+    description: MIPI CSI-2 transmitter port
+ &mmc0 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&mmc0_pins>;
+@@ -327,11 +413,24 @@ &reg_dldo3 {
+ 	regulator-name = "vcc-pd";
+ };
+ 
++&reg_dldo4 {
++	regulator-always-on;
++	regulator-min-microvolt = <2800000>;
++	regulator-max-microvolt = <2800000>;
++	regulator-name = "avdd-csi";
++};
 +
-+    properties:
-+      endpoint:
-+        type: object
+ &reg_drivevbus {
+ 	regulator-name = "usb0-vbus";
+ 	status = "okay";
+ };
+ 
++&reg_eldo1 {
++	regulator-min-microvolt = <1200000>;
++	regulator-max-microvolt = <1200000>;
++	regulator-name = "dvdd-csi-r";
++};
 +
-+        properties:
-+          remote-endpoint: true
-+
-+          data-lanes:
-+            minItems: 1
-+            maxItems: 4
-+
-+        required:
-+          - bus-type
-+          - data-lanes
-+          - remote-endpoint
-+
-+    required:
-+      - endpoint
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - assigned-clocks
-+  - assigned-clock-rates
-+  - dvdd-supply
-+  - dovdd-supply
-+  - port
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/sun8i-a83t-ccu.h>
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    i2c2 {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        ov8865: camera@36 {
-+            compatible = "ovti,ov8865";
-+            reg = <0x36>;
-+
-+            pinctrl-names = "default";
-+            pinctrl-0 = <&csi_mclk_pin>;
-+
-+            clocks = <&ccu CLK_CSI_MCLK>;
-+            assigned-clocks = <&ccu CLK_CSI_MCLK>;
-+            assigned-clock-rates = <24000000>;
-+
-+            avdd-supply = <&reg_ov8865_avdd>;
-+            dovdd-supply = <&reg_ov8865_dovdd>;
-+            dvdd-supply = <&reg_ov8865_dvdd>;
-+
-+            powerdown-gpios = <&pio 4 17 GPIO_ACTIVE_LOW>; /* PE17 */
-+            reset-gpios = <&pio 4 16 GPIO_ACTIVE_LOW>; /* PE16 */
-+
-+            port {
-+                ov8865_out_mipi_csi2: endpoint {
-+                    bus-type = <4>; /* MIPI CSI-2 D-PHY */
-+                    clock-lanes = <0>;
-+                    data-lanes = <1 2 3 4>;
-+
-+                    remote-endpoint = <&mipi_csi2_in_ov8865>;
-+                };
-+            };
-+        };
-+    };
-+
-+...
+ &reg_fldo1 {
+ 	regulator-min-microvolt = <1080000>;
+ 	regulator-max-microvolt = <1320000>;
 -- 
 2.28.0
 
