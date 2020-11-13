@@ -2,138 +2,105 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23468C61DD8
-	for <linux-media@archiver.kernel.org>; Fri, 13 Nov 2020 13:53:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2767C64E75
+	for <linux-media@archiver.kernel.org>; Fri, 13 Nov 2020 14:28:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E63112224A
-	for <linux-media@archiver.kernel.org>; Fri, 13 Nov 2020 13:53:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BE75C22245
+	for <linux-media@archiver.kernel.org>; Fri, 13 Nov 2020 14:28:36 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="qwxSTpA3";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="tWJCq6ro"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726855AbgKMNxd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Nov 2020 08:53:33 -0500
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:42814 "EHLO
-        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726915AbgKMNxc (ORCPT
+        id S1726821AbgKMO2f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Nov 2020 09:28:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58600 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726507AbgKMO2f (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Nov 2020 08:53:32 -0500
-Received: from relay4-d.mail.gandi.net (unknown [217.70.183.196])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id C7DE53B97EC;
-        Fri, 13 Nov 2020 13:46:41 +0000 (UTC)
-X-Originating-IP: 90.55.104.168
-Received: from pc-2.home (atoulouse-258-1-33-168.w90-55.abo.wanadoo.fr [90.55.104.168])
-        (Authenticated sender: maxime.chevallier@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id B832DE0010;
-        Fri, 13 Nov 2020 13:45:38 +0000 (UTC)
-From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Subject: [PATCH v2 2/3] media: dt-bindings: media: i2c: Add bindings for TW9900
-Date:   Fri, 13 Nov 2020 14:44:16 +0100
-Message-Id: <20201113134417.471445-3-maxime.chevallier@bootlin.com>
-X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20201113134417.471445-1-maxime.chevallier@bootlin.com>
-References: <20201113134417.471445-1-maxime.chevallier@bootlin.com>
+        Fri, 13 Nov 2020 09:28:35 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F479C0617A6
+        for <linux-media@vger.kernel.org>; Fri, 13 Nov 2020 06:28:35 -0800 (PST)
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1605277712;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=3e/1y5NTiNN/fPrJk51XZMUVt9qy7d3oPOhWRi5QioE=;
+        b=qwxSTpA39i6rxZjIy4xqWoKdn1Tcd42lQERjhK0j/xFuC69PDLWFnLKSiCZy7mZRX0Y5Un
+        beG3BYVYH5lmiimaP7ouiQ8TTPA3LWA0689/50he/QOX9ggyjqeyH9/3Qj+wSN4HD41hht
+        2lczCNhIiZrNPrKNb6QENITTe/CdYGdK23uLa9CpIqwGeukyLGDBvTeOkmIWfQ6jW1JCFD
+        5+CSfMmuFpTnF+K2ZfP6Nqg5fRm3TIyimVvxzcHEl14CXS6dASnzX+Uu9PICdr9rowSN8g
+        vZUzVRm3itVTvtV0twbOoKjRzPp3w79lczSEryb6arKgPjbxwpepaMzABINGLw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1605277713;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=3e/1y5NTiNN/fPrJk51XZMUVt9qy7d3oPOhWRi5QioE=;
+        b=tWJCq6roNi/vfYfNBmCKd+cvLDLUoAkfYgSfErHu3qdmiXXgGpV9DMykgOrsBP6xe/QS/t
+        vXOpdTpaHrC1YeAg==
+To:     linux-media@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH REPOST] media: omap3isp: Remove misleading comment
+Date:   Fri, 13 Nov 2020 15:28:31 +0100
+Message-Id: <20201113142831.2215880-1-bigeasy@linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The Techwell TW9900 is a video decoder supporting multiple input
-standards, such as PAL, NTSC and SECAM, and outputs a BT.656 video
-signal.
+From: Thomas Gleixner <tglx@linutronix.de>
 
-It's designed to be low-power, posesses some features such as a
-programmable comb-filter, and automatic input standard detection.
+in_interrupt() covers hard and soft interrupt servicing and bottom half
+disabled contexts, which is semantically undefined and useless.
 
-Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+The comment for __ccdc_lsc_configure() "Context: in_interrupt()" is
+therefore as useful as "Context: unknown'. Remove it.
+
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: linux-media@vger.kernel.org
 ---
-v1->v2: Fix the example not compiling
+Repost of https://lore.kernel.org/linux-media/20201013143731.704783731@linu=
+tronix.de/
+The other patches in this thread were applied.
 
- .../devicetree/bindings/media/i2c/tw9900.yaml | 60 +++++++++++++++++++
- 1 file changed, 60 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/tw9900.yaml
+ drivers/media/platform/omap3isp/ispccdc.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/tw9900.yaml b/Documentation/devicetree/bindings/media/i2c/tw9900.yaml
-new file mode 100644
-index 000000000000..fa7e237ca7a6
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/tw9900.yaml
-@@ -0,0 +1,60 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/tw9900.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Techwell TW9900 NTSC/PAL/SECAM video decoder
-+
-+maintainers:
-+  - Maxime Chevallier <maxime.chevallier@bootlin.com>
-+
-+description:
-+  The tw9900 is a multi-standard video decoder, supporting NTSC, PAL and SECAM
-+  standards with auto-detection features.
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - techwell,tw9900
-+
-+  reg:
-+    maxItems: 1
-+
-+  vdd-supply:
-+    description: VDD power supply
-+
-+  port:
-+    type: object
-+    description:
-+      A node containing a single endpoint as doucmented in
-+      Documentation/devicetree/bindings/media/video-interfaces.txt
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    i2c {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            tw9900: tw9900@44 {
-+                    compatible = "techwell,tw9900";
-+                    reg = <0x44>;
-+
-+                    vdd-supply = <&tw9900_supply>;
-+                    reset-gpio = <&gpio2 5 GPIO_ACTIVE_LOW>;
-+
-+                    port {
-+                            tw9900_out: endpoint {
-+                                    remote-endpoint = <&vip_in>;
-+                            };
-+                    };
-+            };
-+    };
--- 
-2.25.4
+diff --git a/drivers/media/platform/omap3isp/ispccdc.c b/drivers/media/plat=
+form/omap3isp/ispccdc.c
+index 0fbb2aa6dd2c0..4e8905ef362f2 100644
+--- a/drivers/media/platform/omap3isp/ispccdc.c
++++ b/drivers/media/platform/omap3isp/ispccdc.c
+@@ -299,11 +299,10 @@ static int ccdc_lsc_busy(struct isp_ccdc_device *ccdc)
+ 			     ISPCCDC_LSC_BUSY;
+ }
+=20
+-/* __ccdc_lsc_configure - Apply a new configuration to the LSC engine
++/*
++ * __ccdc_lsc_configure - Apply a new configuration to the LSC engine
+  * @ccdc: Pointer to ISP CCDC device
+  * @req: New configuration request
+- *
+- * context: in_interrupt()
+  */
+ static int __ccdc_lsc_configure(struct isp_ccdc_device *ccdc,
+ 				struct ispccdc_lsc_config_req *req)
+--=20
+2.29.2
 
