@@ -7,69 +7,70 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADF40C61DD8
-	for <linux-media@archiver.kernel.org>; Fri, 13 Nov 2020 13:51:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F885C63697
+	for <linux-media@archiver.kernel.org>; Fri, 13 Nov 2020 13:51:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 70F1A20639
-	for <linux-media@archiver.kernel.org>; Fri, 13 Nov 2020 13:51:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EE6FD2078D
+	for <linux-media@archiver.kernel.org>; Fri, 13 Nov 2020 13:51:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="p+qCr72t"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xzX7/w5J"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727239AbgKMNvZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Nov 2020 08:51:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52532 "EHLO
+        id S1726776AbgKMNvt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Nov 2020 08:51:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727109AbgKMNuY (ORCPT
+        with ESMTP id S1727076AbgKMNuW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Nov 2020 08:50:24 -0500
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D7AC0613D1
-        for <linux-media@vger.kernel.org>; Fri, 13 Nov 2020 05:50:11 -0800 (PST)
-Received: by mail-wm1-x342.google.com with SMTP id a3so8546706wmb.5
-        for <linux-media@vger.kernel.org>; Fri, 13 Nov 2020 05:50:11 -0800 (PST)
+        Fri, 13 Nov 2020 08:50:22 -0500
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF35C0617A7
+        for <linux-media@vger.kernel.org>; Fri, 13 Nov 2020 05:50:21 -0800 (PST)
+Received: by mail-wm1-x343.google.com with SMTP id a3so8547218wmb.5
+        for <linux-media@vger.kernel.org>; Fri, 13 Nov 2020 05:50:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=CQkfxQ/U8Tk4/T1pD4+koDIKxw+zqPvW8TyQwINa4Hk=;
-        b=p+qCr72t4ihE18soadDlaCQDbatISUugUvivCXWYBcpCtMq7piGK6yvdMfWe5dOlUz
-         epwJ2cODurA7r/6VuUAYrYXfYCAU309NoyA05LOmjaELk3tFujk8ElkHboNXnaQcpc8G
-         zZLHqhh1zUmkJivv/y8jjofUTY2mjY/xirZHrK5r42BuPbpXaoaH2hGm0sBHW0PClrfn
-         G3tz9jkPvZiZZK0f28wsPfX8I29xo+ErTlJfaLfsnvomw33WeZmaQHc1upjKvr0LlHdV
-         UJLl0EKZ4iN0XSw7CplmsnLCoN3kUHPWQWCAquy6HaUTX8YX0wKSNf3DqpVb36uZwhnF
-         2k/Q==
+        bh=Xrnyrit0v6fzfrooRNMi88M6HiPrfycz27kzVEg4yYM=;
+        b=xzX7/w5JkEJWFNmWJ9XhEULYWxZdlL484sgDqokJC2N74ZDAzRW9fNa/+pZRfQXoPX
+         w8vSlD7sbufyf6Tbg3R5IVs4V60sFs7/H1PbDBA3gNe9bY4Alpdn5tnIKN9vL33TD/0/
+         mBKobWhQGaWzcEpKoZgfmMMnI6AFkzBZ2vwAbhyHidq2K495ZRsaes76xKfe29AD2cyR
+         nySZLdB8HAYVQO489IHNmmRwG9MTK+nyLd/nS9jyON3UfUIlWkwfmGp8vli3eiE1+llt
+         U96cfho0m+d73d4rKqV6kECpeYyodlf1MvO+KdIAWSFaXtAEGdGp4kXCjLjro1ttEEA5
+         qnag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=CQkfxQ/U8Tk4/T1pD4+koDIKxw+zqPvW8TyQwINa4Hk=;
-        b=ErQwiPH2tcQKTmeUOokOCm7/PpNixwuVYyW1dOm4hJ6dghE72yAOQKhYRWjvUP+Cu6
-         uNbSS2ISoCY3l6ebHUv9uYP2Vb4TnxFoACbTMcg3MaSrUjqZPpFd0gRj13NEvLoE8tfw
-         guuzjBWaeOmFW/p+ECkUlBZJvngHy0TZmolniaWOGsxZQKTeVTbb6QSOsozwmhMXT9mr
-         B7TpSBld2ppomaJVx6THh18XESZPK1/y51qK/yJsik3sy7Y6H7Z/5sN+EpWpgh58ZfuN
-         26XhI3oX/NVipy4hV2dTkR9zHF5mHHHnLaBQsy0z1m61V5HAh2M3oM6EZTgZ1rzFRL2E
-         h2JA==
-X-Gm-Message-State: AOAM532dmUmkyRXnt14tTtWzc8NjJKzgTWt+Luj//MaqHT59YIXFHW6z
-        W709IZqpavZEylNjFj9gPvFP7A==
-X-Google-Smtp-Source: ABdhPJymL/fKIayM3ll+Scbr9dyC1LRXBH326riSmfGznT+FB8Ojz4hiHyuPNwQSLAqi/i9sv8er5g==
-X-Received: by 2002:a1c:6209:: with SMTP id w9mr2608331wmb.120.1605275410099;
-        Fri, 13 Nov 2020 05:50:10 -0800 (PST)
+        bh=Xrnyrit0v6fzfrooRNMi88M6HiPrfycz27kzVEg4yYM=;
+        b=dxWQLZRqNMBs0C+hwVCKLNu2mDQ3kHIj/MZotBusLPRMRnMBS73Y49Y4YPxEolvj3C
+         8xPqBjjrBImmbdy+5iypPcbqF99n9A1holaPjhfOG8jduxdlvax11d8587KLslxVvyjH
+         GdfRToAzZuJOxVe6rGtKV66DX1muGpwpHkTQWskvsku0/XRH0Zzk8+hT+/jYITac/cKn
+         zfxMTjW86k94rZ4WIyE8c9g5ifYRHAlcV7WFyg9vajwOewQakmylC6dAd/p4sgz1iDnL
+         u/mdDfsTXaBn5ZTqcUI8I5DJ8tJMDgRcXBZ+BMz8rKqM75RGkWXfA3/rWAL7dgFiybi1
+         3kSA==
+X-Gm-Message-State: AOAM530Xh6wfYsMheU0dwZkET3VBDa/sWTHNHfrm0W2EbMF+j14Q/rK2
+        nLj74aPD0zinIYnG0N+h0bf/uw==
+X-Google-Smtp-Source: ABdhPJxleAxe551m1648cnVusxHBA+2YOfp8Wr3sW/9AY28jfMWSIiglJKFPwmqZEbfjZhTBw2Q2Yw==
+X-Received: by 2002:a1c:448:: with SMTP id 69mr2516516wme.12.1605275420178;
+        Fri, 13 Nov 2020 05:50:20 -0800 (PST)
 Received: from dell.default ([91.110.221.159])
-        by smtp.gmail.com with ESMTPSA id t11sm4561614wrm.8.2020.11.13.05.50.09
+        by smtp.gmail.com with ESMTPSA id t11sm4561614wrm.8.2020.11.13.05.50.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Nov 2020 05:50:09 -0800 (PST)
+        Fri, 13 Nov 2020 05:50:19 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org, Qiang Yu <yuq825@gmail.com>,
+Cc:     linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
         David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
         Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 23/40] drm/lima/lima_sched: Remove unused and unnecessary variable 'ret'
-Date:   Fri, 13 Nov 2020 13:49:21 +0000
-Message-Id: <20201113134938.4004947-24-lee.jones@linaro.org>
+Subject: [PATCH 31/40] drm/amd/amdgpu/amdgpu_vm_sdma: Fix 'amdgpu_vm_sdma_prepare()'s doc-rot
+Date:   Fri, 13 Nov 2020 13:49:29 +0000
+Message-Id: <20201113134938.4004947-32-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201113134938.4004947-1-lee.jones@linaro.org>
 References: <20201113134938.4004947-1-lee.jones@linaro.org>
@@ -82,44 +83,40 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/gpu/drm/lima/lima_sched.c: In function ‘lima_sched_run_job’:
- drivers/gpu/drm/lima/lima_sched.c:227:20: warning: variable ‘ret’ set but not used [-Wunused-but-set-variable]
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vm_sdma.c:63: warning: Function parameter or member 'resv' not described in 'amdgpu_vm_sdma_prepare'
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vm_sdma.c:63: warning: Function parameter or member 'sync_mode' not described in 'amdgpu_vm_sdma_prepare'
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vm_sdma.c:63: warning: Excess function parameter 'owner' description in 'amdgpu_vm_sdma_prepare'
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vm_sdma.c:63: warning: Excess function parameter 'exclusive' description in 'amdgpu_vm_sdma_prepare'
 
-Cc: Qiang Yu <yuq825@gmail.com>
+Cc: Alex Deucher <alexander.deucher@amd.com>
+Cc: "Christian König" <christian.koenig@amd.com>
 Cc: David Airlie <airlied@linux.ie>
 Cc: Daniel Vetter <daniel@ffwll.ch>
 Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: "Christian König" <christian.koenig@amd.com>
+Cc: amd-gfx@lists.freedesktop.org
 Cc: dri-devel@lists.freedesktop.org
-Cc: lima@lists.freedesktop.org
 Cc: linux-media@vger.kernel.org
 Cc: linaro-mm-sig@lists.linaro.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/gpu/drm/lima/lima_sched.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vm_sdma.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/lima/lima_sched.c b/drivers/gpu/drm/lima/lima_sched.c
-index a070a85f8f368..63b4c5643f9cd 100644
---- a/drivers/gpu/drm/lima/lima_sched.c
-+++ b/drivers/gpu/drm/lima/lima_sched.c
-@@ -224,7 +224,6 @@ static struct dma_fence *lima_sched_run_job(struct drm_sched_job *job)
- 	struct lima_sched_pipe *pipe = to_lima_pipe(job->sched);
- 	struct lima_device *ldev = pipe->ldev;
- 	struct lima_fence *fence;
--	struct dma_fence *ret;
- 	int i, err;
- 
- 	/* after GPU reset */
-@@ -246,7 +245,7 @@ static struct dma_fence *lima_sched_run_job(struct drm_sched_job *job)
- 	/* for caller usage of the fence, otherwise irq handler
- 	 * may consume the fence before caller use it
- 	 */
--	ret = dma_fence_get(task->fence);
-+	dma_fence_get(task->fence);
- 
- 	pipe->current_task = task;
- 
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_sdma.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_sdma.c
+index db790574dc2e8..a83a646759c58 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_sdma.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_sdma.c
+@@ -51,8 +51,8 @@ static int amdgpu_vm_sdma_map_table(struct amdgpu_bo *table)
+  * amdgpu_vm_sdma_prepare - prepare SDMA command submission
+  *
+  * @p: see amdgpu_vm_update_params definition
+- * @owner: owner we need to sync to
+- * @exclusive: exclusive move fence we need to sync to
++ * @resv: reservation object with embedded fence
++ * @sync_mode: synchronization mode
+  *
+  * Returns:
+  * Negativ errno, 0 for success.
 -- 
 2.25.1
 
