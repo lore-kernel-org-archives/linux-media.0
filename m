@@ -2,88 +2,117 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38386C61DD8
-	for <linux-media@archiver.kernel.org>; Fri, 13 Nov 2020 13:35:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3D44C63697
+	for <linux-media@archiver.kernel.org>; Fri, 13 Nov 2020 13:50:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CF54E22242
-	for <linux-media@archiver.kernel.org>; Fri, 13 Nov 2020 13:35:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A51F12222F
+	for <linux-media@archiver.kernel.org>; Fri, 13 Nov 2020 13:50:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="oB6Nqu07"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Y1p0NVuH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726376AbgKMNff (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Nov 2020 08:35:35 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41526 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726160AbgKMNfe (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Nov 2020 08:35:34 -0500
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 58DD722201;
-        Fri, 13 Nov 2020 13:35:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605274526;
-        bh=4LrSB+L6f6m3Hv04Ngx55q6oO+x0uJsQ+LVSLRd8aeY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oB6Nqu07LPWM/yPVqcjSoxdeChM/3+UZpoP0QY3TavErbjzReKlVsatUNJLu+cZqe
-         rYh1uuhB7y8SFqunxtFjZ12yvPx2rGzG6a+PcDiqTRaAVVEF0bzNKAtsXJ3ZY0IoK+
-         ZlHcGi8Hky/88cnajPcI2iMRefrO4f1MbU7aECjk=
-Date:   Fri, 13 Nov 2020 14:36:23 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     thomas.haemmerle@wolfvision.net
-Cc:     laurent.pinchart@ideasonboard.com, balbi@kernel.org,
-        hverkuil@xs4all.nl, linux-usb@vger.kernel.org,
-        m.tretter@pengutronix.de, linux-media@vger.kernel.org
-Subject: Re: [PATCH v3] usb: gadget: uvc: fix multiple opens
-Message-ID: <X66L17t41LkoIOm1@kroah.com>
-References: <X6pmMFYmzO088p4g@kroah.com>
- <20201110143015.15134-1-thomas.haemmerle@wolfvision.net>
+        id S1726894AbgKMNt7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Nov 2020 08:49:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52442 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726923AbgKMNty (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 13 Nov 2020 08:49:54 -0500
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D642AC061A47
+        for <linux-media@vger.kernel.org>; Fri, 13 Nov 2020 05:49:49 -0800 (PST)
+Received: by mail-wm1-x344.google.com with SMTP id a65so8576605wme.1
+        for <linux-media@vger.kernel.org>; Fri, 13 Nov 2020 05:49:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=6/SblzwLdOmJ9tWarQDFSbsr05Zj/WUad2ODh3SNdKc=;
+        b=Y1p0NVuHUW4H9XgyeNEWCXTCVdtUlbV30yUCoYgsuqo4Y01RdEjka3nughIasrl1gp
+         /eqiX+NbO1uIk+A3G8OtTbt0AwZXPnEaxkpnpoX0txhxN5lZMtgFsh2BUkU/LiDjdh36
+         Ly8Ij7JoJsu4OIEFMhMk9bCFS5nA+jHJAv1qyMPRlaq1hSyddSb1ydx+hp1xs0J3hShO
+         zbbnJdr/fBEncMp+JHcFJNpQqw0FQ5p88wQWyBocKZ+5TV7ehN7RQUtW07XFUDBVEgF8
+         7dkkhHl5fRILzvVR8k65Yiax9xqCgRdFaUy/6BoiRrP+EWD61nsmY8gCMlxu2+ru4vjv
+         k0Yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=6/SblzwLdOmJ9tWarQDFSbsr05Zj/WUad2ODh3SNdKc=;
+        b=JMHmEez9bjQxVFFg/Itq3Nn5sUMGA86MG4bFpr42Q+NUdKPx01fmsx4TP59Z0ZA8NE
+         mOhbOGPQZJS4D2s/uM/PzTgMsNz1LI9UrGwYd0AqSgoTlbEx5qeu4CS1UwTkwKVz61i8
+         hCrVjo/LbJjxqWlwzbEQc32g1Rj6VDNLeBdDVZmwxXnPcBcjvXmPAyk35Rla0XvkfBjJ
+         UQPsosfr5fX1iguxXJigXhnKRz9Wcjz5T7sJBc8e1BpFvd8sZnGepNTZAVOFYB8umcYI
+         MLqR6dAgiCB1xc91KcdJQfmwkOZhtZJ+qMKCA5d00tsImuJZDl85swIOj4CWwidJuTur
+         n7aw==
+X-Gm-Message-State: AOAM533hGigvCp9Vk8pWtvoGMQVeaoz0KN+2iHZv+q0QGjt4RQAzLqpK
+        IX6sDK30JaaHFwI7H+gUpXyqtQ==
+X-Google-Smtp-Source: ABdhPJxrcuhGfoNe9QQTIoT/4z4aQpdapdF6KKqt0Msq0U2GXATSYUSIF5p6At39W9yFD+O2Ih7GmA==
+X-Received: by 2002:a1c:c286:: with SMTP id s128mr2672526wmf.88.1605275388627;
+        Fri, 13 Nov 2020 05:49:48 -0800 (PST)
+Received: from dell.default ([91.110.221.159])
+        by smtp.gmail.com with ESMTPSA id t11sm4561614wrm.8.2020.11.13.05.49.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Nov 2020 05:49:48 -0800 (PST)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     lee.jones@linaro.org
+Cc:     linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Subject: [PATCH 05/40] drm/amd/amdgpu/amdgpu_ring: Fix misnaming of param 'max_dw'
+Date:   Fri, 13 Nov 2020 13:49:03 +0000
+Message-Id: <20201113134938.4004947-6-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201113134938.4004947-1-lee.jones@linaro.org>
+References: <20201113134938.4004947-1-lee.jones@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201110143015.15134-1-thomas.haemmerle@wolfvision.net>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Nov 10, 2020 at 03:30:15PM +0100, thomas.haemmerle@wolfvision.net wrote:
-> From: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
-> 
-> Currently, the UVC function is activated when open on the corresponding
-> v4l2 device is called.
-> On another open the activation of the function fails since the
-> deactivation counter in `usb_function_activate` equals 0. However the
-> error is not returned to userspace since the open of the v4l2 device is
-> successful.
-> 
-> On a close the function is deactivated (since deactivation counter still
-> equals 0) and the video is disabled in `uvc_v4l2_release`, although the
-> UVC application potentially is streaming.
-> 
-> Move activation of UVC function to subscription on UVC_EVENT_SETUP
-> because there we can guarantee for a userspace application utilizing UVC.
-> Block subscription on UVC_EVENT_SETUP while another application already
-> is subscribed to it, indicated by `bool func_connected` in
-> `struct uvc_device`.
-> Extend the `struct uvc_file_handle` with member `bool is_uvc_app_handle`
-> to tag it as the handle used by the userspace UVC application.
-> 
-> With this a process is able to check capabilities of the v4l2 device
-> without deactivating the function for the actual UVC application.
-> 
-> Signed-off-by: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
-> ---
-> v3:
->  - replace `unsigned int connections` with `bool func_connected`
->  - rename `bool connected` to `bool is_uvc_app_handle`
+Fixes the following W=1 kernel build warning(s):
 
-Can you fix this up based on Hans's review?
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ring.c:168: warning: Function parameter or member 'max_dw' not described in 'amdgpu_ring_init'
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ring.c:168: warning: Excess function parameter 'max_ndw' description in 'amdgpu_ring_init'
 
-thanks,
+Cc: Alex Deucher <alexander.deucher@amd.com>
+Cc: "Christian König" <christian.koenig@amd.com>
+Cc: David Airlie <airlied@linux.ie>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: amd-gfx@lists.freedesktop.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-media@vger.kernel.org
+Cc: linaro-mm-sig@lists.linaro.org
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ring.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-greg k-h
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ring.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ring.c
+index a23b2079696a1..1a612f51ecd9e 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ring.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ring.c
+@@ -154,7 +154,7 @@ void amdgpu_ring_undo(struct amdgpu_ring *ring)
+  *
+  * @adev: amdgpu_device pointer
+  * @ring: amdgpu_ring structure holding ring information
+- * @max_ndw: maximum number of dw for ring alloc
++ * @max_dw: maximum number of dw for ring alloc
+  * @irq_src: interrupt source to use for this ring
+  * @irq_type: interrupt type to use for this ring
+  * @hw_prio: ring priority (NORMAL/HIGH)
+-- 
+2.25.1
+
