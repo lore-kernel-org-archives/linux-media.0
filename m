@@ -7,57 +7,57 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB004C64E7A
-	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 17:40:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F262C64E7B
+	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 17:40:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7C7B620B80
+	by mail.kernel.org (Postfix) with ESMTP id DDF2D20B80
 	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 17:40:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Vc5GZewO"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YrJA3W0C"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387622AbgKPRji (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Nov 2020 12:39:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45708 "EHLO
+        id S1733168AbgKPRjs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Nov 2020 12:39:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733216AbgKPRhP (ORCPT
+        with ESMTP id S1733175AbgKPRhJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Nov 2020 12:37:15 -0500
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16A6C0613CF
-        for <linux-media@vger.kernel.org>; Mon, 16 Nov 2020 09:37:14 -0800 (PST)
-Received: by mail-wr1-x443.google.com with SMTP id r17so19661971wrw.1
-        for <linux-media@vger.kernel.org>; Mon, 16 Nov 2020 09:37:14 -0800 (PST)
+        Mon, 16 Nov 2020 12:37:09 -0500
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BDF6C0613CF
+        for <linux-media@vger.kernel.org>; Mon, 16 Nov 2020 09:37:07 -0800 (PST)
+Received: by mail-wr1-x441.google.com with SMTP id b6so19641535wrt.4
+        for <linux-media@vger.kernel.org>; Mon, 16 Nov 2020 09:37:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=oQB5rAR+1+kEveAEir1T88yOeq9CZP66J4NDJ9xsMf8=;
-        b=Vc5GZewOWwNVlQxibWBU3viESAoqgPega2X6NU2xDrzPEahsS9QUDJyPFhPBGFxdC7
-         HBykf6FEj3VInb3HC2V6P17mmyOfqFSHC5kzDIQ8keYwRRL+9LrGlFxItlQxe7LbDUgS
-         LvE8HF7vZOo6iSgSePndqpGMp3P+yqXd28lpYJEDSCVc082lkOLc+G3gnEmolCbEa894
-         QD/47FaLCwFsP5QUfCCyofyVYQkoOV6DyHCYDTFnyF6pxQF1iMWWrePksIFBvIVqxZFF
-         WCeD2yvs8YItRj9sXCz0v5tGaQqPL9HrZnmh7TOfWG5b/iViPG4YuTZeBPSFhxFB7ae2
-         Nzvw==
+        bh=o9jTMX+lMkxyW4xpU+ilcx7gbWHjRBMJqKFY5D9XSUE=;
+        b=YrJA3W0C9dsPwTP/yfNgQAL9bO2bgqXFQArq4CGYlu7c0P+DN7wbawX9LjnxuhvONe
+         0quf3FrequM/kbem6PqJGbgOqmH4dK8JhvnywHvc14Exnz7jAqeyyf9bwYRWCxcSlbb8
+         e0VPOgEpGP757EDJ9zmk04yi14jhswRxOecc+Zamzk/uCgzYjg0t91Xi3v1zoTRpV08E
+         BlFq71iMwA3q6+kZpJPWrij4diWJje6TGuw8ZGjP5wrEK3YP7LRRiRJCo8uPb4D4CRiT
+         pScKHrntlfXnHZ75BhMpZ4l7sodrF3bTTSW32JnIQt/VeI5R4A36DnCBBPiSRCPhEmJY
+         219w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=oQB5rAR+1+kEveAEir1T88yOeq9CZP66J4NDJ9xsMf8=;
-        b=LQ+ovhFt1YrtpHDHETg6LnsCjUUxyCcrh9L4rMf3JumGtNgmruJgus7Opu9M+RDgui
-         M4Qk90UcCP8ZeKb/VOn2BHS+B7fkcBLCCPbeOT2IEkcsQoGDFDUCbtf2BUnh7gqbvdDP
-         LG1INDgewPjOm/czAsPqi97SDeO9YImb1gbzozJMlBbDp7PswT6RWUEzMix+r9Eb10O0
-         vQbeqRHJ/m0pGvDAzSpmwpawfoxi/9CdbwqzxUlAwPExQHjpz0oIHeIEg1tbTlxMerYt
-         DrgkIjYu0SurWdFGcYWMvX2M2K1SR9T/d+KzTdc0S1pWGI9ou9lhFuSaAfjHWEvyGUbF
-         0k9Q==
-X-Gm-Message-State: AOAM5305r0q80Zhznutv+HIaoBxVIimsGPOVCqbnzowGV5Q3lw9hmHHK
-        qR/i090XU0AIXN2ZRkzVMw7x/w==
-X-Google-Smtp-Source: ABdhPJzyMT4+odwIPp9VPe5j6JTcciaX+poblLtpI5iFjA5SyWdLDWAzEN7gzzZBk12h4g2H4yez3A==
-X-Received: by 2002:adf:f881:: with SMTP id u1mr21824326wrp.103.1605548233683;
-        Mon, 16 Nov 2020 09:37:13 -0800 (PST)
+        bh=o9jTMX+lMkxyW4xpU+ilcx7gbWHjRBMJqKFY5D9XSUE=;
+        b=t+b62KlSKL+np5L0BJiyxakmHvpJq1vsUjFZIYLHn/2ZHeBEgw43OQ5bRbIjJWI/KL
+         75KcziPH+FNf9yark6BBkM9iyQmkTvC/BsHeE52dBYbgAnobhk7voIbKoj+P73niK/PA
+         qEuo7gGgB5R8lhFFOWOrjLH97k7MoKNUcW56Jeyt/e+U6W0tOu0p6f1A9J+F78SH8yJO
+         n8kKdil8/NKfuHh6j4aW2cB2t7opvK9cuMPyICkA6xtBiWdR6GsPL0BBRERJ6KXWobia
+         QPfMaxKdL2dqahhXgcp3ixDEqQLrKaOyrZhfOpC3641ywWScAsX8C5s90GEgAUx4oXt8
+         fdTg==
+X-Gm-Message-State: AOAM533PIdageXqy9MuUSlht43BNZ/M19JWT35KrN5te9KR3fIAwO9Kp
+        iL2+tn/IZpSi8luy1/EyupCuHw==
+X-Google-Smtp-Source: ABdhPJwtiOEPOPwzQ5wAnO/EE8bSERvaF1LOYYr8RASu/2/tCRMZhqvPm8IGTArHT7ORS2Ednp76Fg==
+X-Received: by 2002:adf:c547:: with SMTP id s7mr20526713wrf.222.1605548226270;
+        Mon, 16 Nov 2020 09:37:06 -0800 (PST)
 Received: from dell.default ([91.110.221.159])
-        by smtp.gmail.com with ESMTPSA id 30sm16942828wrd.88.2020.11.16.09.37.11
+        by smtp.gmail.com with ESMTPSA id 30sm16942828wrd.88.2020.11.16.09.37.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2020 09:37:12 -0800 (PST)
+        Mon, 16 Nov 2020 09:37:05 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -68,9 +68,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Sumit Semwal <sumit.semwal@linaro.org>,
         amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 07/43] drm/radeon/radeon_legacy_encoders: Move 'radeon_add_legacy_encoder's prototype to shared location
-Date:   Mon, 16 Nov 2020 17:36:24 +0000
-Message-Id: <20201116173700.1830487-8-lee.jones@linaro.org>
+Subject: [PATCH 02/43] drm/radeon/radeon: Move prototype into shared header
+Date:   Mon, 16 Nov 2020 17:36:19 +0000
+Message-Id: <20201116173700.1830487-3-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201116173700.1830487-1-lee.jones@linaro.org>
 References: <20201116173700.1830487-1-lee.jones@linaro.org>
@@ -81,11 +81,13 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Unfortunately, a suitable one didn't already exist.
+
 Fixes the following W=1 kernel build warning(s):
 
- drivers/gpu/drm/radeon/radeon_legacy_encoders.c:1746:1: warning: no previous prototype for ‘radeon_add_legacy_encoder’ [-Wmissing-prototypes]
- 1746 | radeon_add_legacy_encoder(struct drm_device *dev, uint32_t encoder_enum, uint32_t supported_device)
- | ^~~~~~~~~~~~~~~~~~~~~~~~~
+ drivers/gpu/drm/radeon/radeon_device.c:637:6: warning: no previous prototype for ‘radeon_device_is_virtual’ [-Wmissing-prototypes]
+ 637 | bool radeon_device_is_virtual(void)
+ | ^~~~~~~~~~~~~~~~~~~~~~~~
 
 Cc: Alex Deucher <alexander.deucher@amd.com>
 Cc: "Christian König" <christian.koenig@amd.com>
@@ -98,69 +100,83 @@ Cc: linux-media@vger.kernel.org
 Cc: linaro-mm-sig@lists.linaro.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/gpu/drm/radeon/radeon_atombios.c        | 6 +-----
- drivers/gpu/drm/radeon/radeon_combios.c         | 6 +-----
- drivers/gpu/drm/radeon/radeon_legacy_encoders.h | 2 ++
- 3 files changed, 4 insertions(+), 10 deletions(-)
+ drivers/gpu/drm/radeon/radeon_device.c |  1 +
+ drivers/gpu/drm/radeon/radeon_device.h | 32 ++++++++++++++++++++++++++
+ drivers/gpu/drm/radeon/radeon_drv.c    |  3 +--
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/gpu/drm/radeon/radeon_device.h
 
-diff --git a/drivers/gpu/drm/radeon/radeon_atombios.c b/drivers/gpu/drm/radeon/radeon_atombios.c
-index 71bf2ed172697..cc80651b25773 100644
---- a/drivers/gpu/drm/radeon/radeon_atombios.c
-+++ b/drivers/gpu/drm/radeon/radeon_atombios.c
-@@ -35,16 +35,12 @@
- #include "atom-bits.h"
- #include "radeon_asic.h"
- #include "radeon_atombios.h"
-+#include "radeon_legacy_encoders.h"
- 
- extern void
- radeon_add_atom_encoder(struct drm_device *dev, uint32_t encoder_enum,
- 			uint32_t supported_device, u16 caps);
- 
--/* from radeon_legacy_encoder.c */
--extern void
--radeon_add_legacy_encoder(struct drm_device *dev, uint32_t encoder_enum,
--			  uint32_t supported_device);
--
- union atom_supported_devices {
- 	struct _ATOM_SUPPORTED_DEVICES_INFO info;
- 	struct _ATOM_SUPPORTED_DEVICES_INFO_2 info_2;
-diff --git a/drivers/gpu/drm/radeon/radeon_combios.c b/drivers/gpu/drm/radeon/radeon_combios.c
-index d3c04df7e75d7..ff2135059c071 100644
---- a/drivers/gpu/drm/radeon/radeon_combios.c
-+++ b/drivers/gpu/drm/radeon/radeon_combios.c
-@@ -31,6 +31,7 @@
+diff --git a/drivers/gpu/drm/radeon/radeon_device.c b/drivers/gpu/drm/radeon/radeon_device.c
+index 7f384ffe848a7..ad572f965190b 100644
+--- a/drivers/gpu/drm/radeon/radeon_device.c
++++ b/drivers/gpu/drm/radeon/radeon_device.c
+@@ -42,6 +42,7 @@
+ #include <drm/drm_probe_helper.h>
  #include <drm/radeon_drm.h>
  
++#include "radeon_device.h"
+ #include "radeon_reg.h"
  #include "radeon.h"
-+#include "radeon_legacy_encoders.h"
  #include "atom.h"
+diff --git a/drivers/gpu/drm/radeon/radeon_device.h b/drivers/gpu/drm/radeon/radeon_device.h
+new file mode 100644
+index 0000000000000..3112b99ae36f1
+--- /dev/null
++++ b/drivers/gpu/drm/radeon/radeon_device.h
+@@ -0,0 +1,32 @@
++/* radeon_device.h -- Private header for radeon device -*- linux-c -*-
++ *
++ * Copyright 1999 Precision Insight, Inc., Cedar Park, Texas.
++ * Copyright 2000 VA Linux Systems, Inc., Fremont, California.
++ * All rights reserved.
++ *
++ * Permission is hereby granted, free of charge, to any person obtaining a
++ * copy of this software and associated documentation files (the "Software"),
++ * to deal in the Software without restriction, including without limitation
++ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
++ * and/or sell copies of the Software, and to permit persons to whom the
++ * Software is furnished to do so, subject to the following conditions:
++ *
++ * The above copyright notice and this permission notice (including the next
++ * paragraph) shall be included in all copies or substantial portions of the
++ * Software.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
++ * PRECISION INSIGHT AND/OR ITS SUPPLIERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
++ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
++ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
++ * DEALINGS IN THE SOFTWARE.
++ */
++
++#ifndef __RADEON_DEVICE_H__
++#define __RADEON_DEVICE_H__
++
++bool radeon_device_is_virtual(void);
++
++#endif				/* __RADEON_DEVICE_H__ */
+diff --git a/drivers/gpu/drm/radeon/radeon_drv.c b/drivers/gpu/drm/radeon/radeon_drv.c
+index f813eb5e140dd..536b246b9a6aa 100644
+--- a/drivers/gpu/drm/radeon/radeon_drv.c
++++ b/drivers/gpu/drm/radeon/radeon_drv.c
+@@ -52,6 +52,7 @@
  
- #ifdef CONFIG_PPC_PMAC
-@@ -40,11 +41,6 @@
- #include <asm/prom.h>
- #endif /* CONFIG_PPC_PMAC */
+ #include "radeon_drv.h"
+ #include "radeon.h"
++#include "radeon_device.h"
  
--/* from radeon_legacy_encoder.c */
--extern void
--radeon_add_legacy_encoder(struct drm_device *dev, uint32_t encoder_enum,
--			  uint32_t supported_device);
+ /*
+  * KMS wrapper.
+@@ -293,8 +294,6 @@ MODULE_DEVICE_TABLE(pci, pciidlist);
+ 
+ static const struct drm_driver kms_driver;
+ 
+-bool radeon_device_is_virtual(void);
 -
- /* old legacy ATI BIOS routines */
- 
- /* COMBIOS table offsets */
-diff --git a/drivers/gpu/drm/radeon/radeon_legacy_encoders.h b/drivers/gpu/drm/radeon/radeon_legacy_encoders.h
-index a80b387559d4d..f4c7432267e67 100644
---- a/drivers/gpu/drm/radeon/radeon_legacy_encoders.h
-+++ b/drivers/gpu/drm/radeon/radeon_legacy_encoders.h
-@@ -30,5 +30,7 @@
- 
- void radeon_legacy_backlight_init(struct radeon_encoder *radeon_encoder,
- 				  struct drm_connector *drm_connector);
-+void radeon_add_legacy_encoder(struct drm_device *dev, uint32_t encoder_enum,
-+			       uint32_t supported_device);
- 
- #endif				/* __RADEON_LEGACY_ENCODERS_H__ */
+ static int radeon_pci_probe(struct pci_dev *pdev,
+ 			    const struct pci_device_id *ent)
+ {
 -- 
 2.25.1
 
