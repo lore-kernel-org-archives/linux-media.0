@@ -2,94 +2,87 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62A56C64E69
-	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 18:42:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F5A5C4742C
+	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 18:52:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DF1422242E
-	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 18:42:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A3C5F22370
+	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 18:52:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="OJO2wqzi"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="cH8dIzMh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728557AbgKPSls (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Nov 2020 13:41:48 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:51172 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727486AbgKPSls (ORCPT
+        id S1728639AbgKPSwT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Nov 2020 13:52:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57710 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728622AbgKPSwT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Nov 2020 13:41:48 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 49BA9A1B;
-        Mon, 16 Nov 2020 19:41:46 +0100 (CET)
+        Mon, 16 Nov 2020 13:52:19 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA0EC0613D1
+        for <linux-media@vger.kernel.org>; Mon, 16 Nov 2020 10:52:19 -0800 (PST)
+Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 89D38AD0;
+        Mon, 16 Nov 2020 19:52:16 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1605552106;
-        bh=5OeHQZRtfPi54rqgGt6jww7xRTdgxALSeq/6WvH4z6Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OJO2wqzivtTu2Y/XVErsqtKYSu226JX22o8zV4OKnjcRAuAkeKQS7la0m4CnmjYR/
-         D6webwiaEbtEXFtztsTcbbP2aocEGm+THVzLuK/qZI6dtrsFMXsGtx9GgqBQ3Oid50
-         tCU2TTNiwFRk7jK5P97SEXRJ2WDme9gvHfEFbkWs=
-Date:   Mon, 16 Nov 2020 20:41:41 +0200
+        s=mail; t=1605552737;
+        bh=shjNHWxOBLD3uXDrEfEoNFRGoe8oCY8RpnRYKIMwsJY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=cH8dIzMhTXposM3A6iW0kofi4iONVsRj6JpTsZLtjFwmKv9VQgpgxxQRg+a70ot7E
+         KL0u0NNiUhih7Raj/GzMuQrH8uWmI3mYW2AM1Nl7sxfBAx2dheAzkMVKG7jpuOMIrT
+         tSPkRZKWPzFO+82NGgo2wmdKoKLbpHvCVwNvflVA=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     linux-media@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+To:     linux-media@vger.kernel.org
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Dylan Yip <dylany@xilinx.com>,
         Vishal Sagar <vsagar@xilinx.com>,
         Nicolas Dufresne <nicolas@ndufresne.ca>
-Subject: Re: [PATCH v2 19/19] media: v4l2: Add 10-, 12- and 16-bpc 4:2:0 and
- 4:2:2 semi-planar YUV formats
-Message-ID: <20201116184141.GW6540@pendragon.ideasonboard.com>
-References: <20201102224102.30292-1-laurent.pinchart@ideasonboard.com>
- <20201102224102.30292-20-laurent.pinchart@ideasonboard.com>
- <6f172b50-15d7-fc38-65e3-08b009adcb41@xs4all.nl>
+Subject: [PATCH v3 01/21] media: videodev2.h: Remove unneeded comment about 4CC value
+Date:   Mon, 16 Nov 2020 20:51:47 +0200
+Message-Id: <20201116185207.13208-2-laurent.pinchart@ideasonboard.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20201116185207.13208-1-laurent.pinchart@ideasonboard.com>
+References: <20201116185207.13208-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <6f172b50-15d7-fc38-65e3-08b009adcb41@xs4all.nl>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans,
+The V4L2_PIX_FMT_BGRA444 format has a comment that explains why its 4CC
+value is GA12. This explains the development history and isn't of much
+interest to readers, it should have been part of a commit message
+instead. Drop the comment, anyone interested in history can turn to git.
 
-On Mon, Nov 16, 2020 at 01:17:10PM +0100, Hans Verkuil wrote:
-> On 02/11/2020 23:41, Laurent Pinchart wrote:
-> > Add semi-planar YUV formats with 10, 12 and 16 bits per components, in
-> > both 4:2:0 (NV12) and 4:2:2 (NV16) subsampling, and with both chroma
-> > orderings. They are used by the Xilinx Video Frame Buffer Read/Write IP
-> > cores.
-> > 
-> > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > ---
-> >  .../media/v4l/pixfmt-yuv-planar.rst           | 564 +++++++++++++++++-
-> >  include/uapi/linux/videodev2.h                |  12 +
-> >  2 files changed, 575 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> > index 07081ab05419..7f0fe2e4b668 100644
-> > --- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> > +++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> 
-> <snip>
-> 
-> >  Fully Planar YUV Formats
-> >  ========================
-> >  
-> 
-> I found a mistake in the "Overview of Fully Planar YUV Formats" table:
-> 
-> For formats V4L2_PIX_FMT_YVU420M and V4L2_PIX_FMT_YVU444M it gives "Y, Cb, Cr" as the
-> planes order, this should be "Y, Cr, Cb". Can you fix that in a new patch?
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ include/uapi/linux/videodev2.h | 6 ------
+ 1 file changed, 6 deletions(-)
 
-Thanks for spotting this. I'll fix it in v3 of "[PATCH v2 14/19] media:
-doc: pixfmt-yuv: Move all planar YUV formats to common file", as that's
-where the error was introduced.
-
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 534eaa4d39bc..4cbc02bd8b72 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -526,12 +526,6 @@ struct v4l2_pix_format {
+ #define V4L2_PIX_FMT_RGBX444 v4l2_fourcc('R', 'X', '1', '2') /* 16  rrrrgggg bbbbxxxx */
+ #define V4L2_PIX_FMT_ABGR444 v4l2_fourcc('A', 'B', '1', '2') /* 16  aaaabbbb ggggrrrr */
+ #define V4L2_PIX_FMT_XBGR444 v4l2_fourcc('X', 'B', '1', '2') /* 16  xxxxbbbb ggggrrrr */
+-
+-/*
+- * Originally this had 'BA12' as fourcc, but this clashed with the older
+- * V4L2_PIX_FMT_SGRBG12 which inexplicably used that same fourcc.
+- * So use 'GA12' instead for V4L2_PIX_FMT_BGRA444.
+- */
+ #define V4L2_PIX_FMT_BGRA444 v4l2_fourcc('G', 'A', '1', '2') /* 16  bbbbgggg rrrraaaa */
+ #define V4L2_PIX_FMT_BGRX444 v4l2_fourcc('B', 'X', '1', '2') /* 16  bbbbgggg rrrrxxxx */
+ #define V4L2_PIX_FMT_RGB555  v4l2_fourcc('R', 'G', 'B', 'O') /* 16  RGB-5-5-5     */
 -- 
 Regards,
 
 Laurent Pinchart
+
