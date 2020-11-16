@@ -2,179 +2,300 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA544C4742C
-	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 17:31:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C358C2D0A3
+	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 17:34:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6058320867
-	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 17:31:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BE74222245
+	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 17:34:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZrJ7nX+S"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="K3MiO7nm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732959AbgKPRas (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Nov 2020 12:30:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44572 "EHLO
+        id S1733032AbgKPReF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Nov 2020 12:34:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732924AbgKPRaO (ORCPT
+        with ESMTP id S1732986AbgKPReE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Nov 2020 12:30:14 -0500
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796CBC0613CF
-        for <linux-media@vger.kernel.org>; Mon, 16 Nov 2020 09:30:14 -0800 (PST)
-Received: by mail-wr1-x442.google.com with SMTP id s8so19582669wrw.10
-        for <linux-media@vger.kernel.org>; Mon, 16 Nov 2020 09:30:14 -0800 (PST)
+        Mon, 16 Nov 2020 12:34:04 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075A2C0613D2
+        for <linux-media@vger.kernel.org>; Mon, 16 Nov 2020 09:34:03 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id o15so19620873wru.6
+        for <linux-media@vger.kernel.org>; Mon, 16 Nov 2020 09:34:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=XmKc1pxfWNIhhVZbat4IeYMq2SqMBDzsHL5Wfk03ato=;
-        b=ZrJ7nX+Ss2SwWtGJ5a77Xmq6naZYfFaODqVex6B0ksRVu6CPODbPoqrLXrQzYtwaPO
-         g2v5cNvW2Nq96enR9+AbUk3KUpTCjHRBie7PJXTRF2+zjdR2dFZ5wzFfvYmprBW28PPX
-         gd8RqEttaE44L9FUKUGhdDo3sNt32I5PLbysKwTyGi5YOJN+PueBEhdW4f9haTBRn06T
-         /iMwHs1+TC6BEalMW/9cWcHAGfDzJnRwWBoQBrZ8mIkc02e5cKDWTcy2S2gs04DAvUAv
-         N8Kv7DD+nUHndcbDQag4Pqnp55eMgu8spglrTL8SXYWmnuOdWnT07R02S97rOIad1pmx
-         XPtA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2rD08UjkD5sCRxYS0F4REDAlR1ogAYBAyad+KWz2GEw=;
+        b=K3MiO7nmCnXKxJcjVRzgh23znPiMhQF02r4EEB7ilazh6Q3typAKfns3W275i/uPwe
+         6ki3g+RVNhc0vrXZq3g/NjcHDWs+0dIiR9hbHYjXkWaHA19vmEOkeiL3NWGUAzyrgJkN
+         tHQKXYzaVPK1Y726mGhFToAlmQJnLR0vrjWl/G6HFa2g8W8po3DfiLJSh4w3r3xm1/1J
+         4iKvoDgtchsphx/S761VXUii48yJOE65It3vRJ8WDhCFz/WQHdhzXpPzR3iG+qQI4OXV
+         Kn62IC/EEYXRvvO5sxXlSmdibfJONlvMFe2LSYETrMbq3r5KirnOZfjBqtRLpviug9+T
+         jXxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=XmKc1pxfWNIhhVZbat4IeYMq2SqMBDzsHL5Wfk03ato=;
-        b=B9Ah0scA5lQnIiHmyJ4ptifEbJUSJhFUMgn+JISZpwk7GquVsazf7VX8ajY+pHUBm8
-         gOrhBpHubvKoMN5I+sNrz1S8z+K4Xf84fg63GCnuzlGYNksSAv1YgZQJhZPf/orNVmHT
-         Uqza2c9fGEJJIjHhlCj2dpj8Ru/+1i9cV3i7vJt7nOgthw3i1mrvhqnrovwskSzz7qZh
-         TWJF2csqKY1MnJqeevaV3xnOTE+D42Yzt+jM6bl/nZ+SgxnRA8vyU+ZFVj+EJU7HhrPM
-         xxVy0hJW8/bjTMeXh2hmsqwPNgD/QYNH/cCtEhQrEp7M5AJxV4iJT7t7UmpoO8+fgB0Z
-         gTDg==
-X-Gm-Message-State: AOAM530upaiZWhingkeChD/sXWtoVsP22VpbKWhnE4lKqu7qACgFiXi9
-        1coZJdxDwjGMzpLj6mHW3kzUYQ==
-X-Google-Smtp-Source: ABdhPJxDW0C9hokk5Jgdhjsw1VAWin7x+QtQzgHNDV1EILyPJhWE374L4EcFm7kOrhI0qm1a5ONMjQ==
-X-Received: by 2002:adf:e287:: with SMTP id v7mr21597907wri.252.1605547813193;
-        Mon, 16 Nov 2020 09:30:13 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2rD08UjkD5sCRxYS0F4REDAlR1ogAYBAyad+KWz2GEw=;
+        b=cgogsSbO3M+oq3QQKqVeIvnwE6iUAEuULurDrt0y9b2KTbZ/egMH/mBN7ZailaMe/C
+         g79+NgpMhvr56SukgjOLllhnJgi38wPcIiHWkrr4DViEejr0EctKoLy0k0vu7yd3Adtu
+         3uRLZdq5vcVBq8v0Az27xgb1qjIYUs7DP/z6HS6NaicHwkT9Oeif3WVXkS/sP3o5AI5e
+         QunwehS0ENAhG2As8hyMDeZbvwS9rOfk6Q+zf/FOni8gW+ZdJYTxepK5KF7lRutv233S
+         nVZapO435leYREe4ziobmvMZdoj4Q0ijW744+DDPQ5NE+/vvKJ88W1aBxH18GRz751Ps
+         U8sQ==
+X-Gm-Message-State: AOAM532/YzZzssrrWpeupHbYL64wUNbjm95ijixovGmXwjUOT6ZK9ex0
+        VdTlpeL7vzAm1XPoV4XxMT7Nng==
+X-Google-Smtp-Source: ABdhPJynz1SYzcQjLU7vxkWKnYKhsXRdyUFjnGlTNdA6hFZ/AU7rgprYiT7u0t+B4P+Sd63V1F7+RA==
+X-Received: by 2002:adf:de12:: with SMTP id b18mr21161496wrm.187.1605548042617;
+        Mon, 16 Nov 2020 09:34:02 -0800 (PST)
 Received: from dell.default ([91.110.221.159])
-        by smtp.gmail.com with ESMTPSA id f23sm20054854wmb.43.2020.11.16.09.30.11
+        by smtp.gmail.com with ESMTPSA id k22sm20178562wmi.34.2020.11.16.09.34.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2020 09:30:12 -0800 (PST)
+        Mon, 16 Nov 2020 09:34:01 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org,
+        Ajay Kumar <ajaykumar.rs@samsung.com>,
+        Akshu Agarwal <akshua@gmail.com>,
         Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        David Airlie <airlied@linux.ie>,
+        amd-gfx@lists.freedesktop.org, Ben Skeggs <bskeggs@redhat.com>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Chris Zhong <zyw@rock-chips.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        David Francis <David.Francis@amd.com>,
+        dri-devel@lists.freedesktop.org, Eric Anholt <eric@anholt.net>,
+        Eunchul Kim <chulspro.kim@samsung.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        freedreno@lists.freedesktop.org,
+        =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>,
+        Huang Rui <ray.huang@amd.com>, Inki Dae <inki.dae@samsung.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Jie Qiu <jie.qiu@mediatek.com>,
+        Jinyoung Jeon <jy0.jeon@samsung.com>,
+        Joonyoung Shim <jy0922.shim@samsung.com>,
+        Kalyan Thota <kalyan_t@codeaurora.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        linaro-mm-sig@lists.linaro.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Mark Yao <mark.yao@rock-chips.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Nickey Yang <nickey.yang@rock-chips.com>,
+        Nirmoy Das <nirmoy.aiemd@gmail.com>,
+        nouveau@lists.freedesktop.org, NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Clark <robdclark@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Sandy Huang <hjc@rock-chips.com>,
+        Sangmin Lee <lsmin.lee@samsung.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sean Paul <sean@poorly.run>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Shawn Guo <shawnguo@kernel.org>,
         Sumit Semwal <sumit.semwal@linaro.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 03/43] drm/radeon/radeon_kms: Move 'radeon_*_kms' prototypes to shared header
-Date:   Mon, 16 Nov 2020 17:29:25 +0000
-Message-Id: <20201116173005.1825880-4-lee.jones@linaro.org>
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        YT SHEN <yt.shen@mediatek.com>
+Subject: [RESEND 00/42] Rid W=1 warnings from GPU (non-Radeon)
+Date:   Mon, 16 Nov 2020 17:33:14 +0000
+Message-Id: <20201116173356.1828478-1-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201116173005.1825880-1-lee.jones@linaro.org>
-References: <20201116173005.1825880-1-lee.jones@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fixes the following W=1 kernel build warning(s):
+This set contains fixes for some "wouldn't it be nice if" issues,
+however most of the patches seen here have been on the MLs, but
+were left unreviewed.
 
- drivers/gpu/drm/radeon/radeon_kms.c:756:5: warning: no previous prototype for ‘radeon_get_vblank_counter_kms’ [-Wmissing-prototypes]
- 756 | u32 radeon_get_vblank_counter_kms(struct drm_crtc *crtc)
- | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- drivers/gpu/drm/radeon/radeon_kms.c:826:5: warning: no previous prototype for ‘radeon_enable_vblank_kms’ [-Wmissing-prototypes]
- 826 | int radeon_enable_vblank_kms(struct drm_crtc *crtc)
- | ^~~~~~~~~~~~~~~~~~~~~~~~
- drivers/gpu/drm/radeon/radeon_kms.c:853:6: warning: no previous prototype for ‘radeon_disable_vblank_kms’ [-Wmissing-prototypes]
- 853 | void radeon_disable_vblank_kms(struct drm_crtc *crtc)
- | ^~~~~~~~~~~~~~~~~~~~~~~~~
+Lee Jones (42):
+  drm/amd/amdgpu/atombios_encoders: Remove set but unused variable
+    'backlight_level'
+  drm/armada/armada_overlay: Staticify local function
+    'armada_overlay_duplicate_state'
+  drm/drm_dp_mst_topology: Remove set but never used variable 'len'
+  drm/exynos/exynos7_drm_decon: Supply missing description for  param
+    'ctx'
+  drm/exynos/exynos_drm_fimd: Add missing description for param 'ctx'
+  drm/exynos/exynos_drm_gsc: Supply missing description for 'num_limits'
+  drm/mediatek/mtk_dpi: Remove unused struct definition
+    'mtk_dpi_encoder_funcs'
+  drm/mediatek/mtk_disp_color: Fix formatting and provide missing member
+    description
+  drm/mediatek/mtk_disp_ovl: Fix formatting and provide missing member
+    description
+  drm/mediatek/mtk_disp_rdma: Fix formatting and supply missing struct
+    member description
+  drm/mediatek/mtk_drm_crtc: Demote seriously out-of-date struct header
+  drm/mediatek/mtk_drm_drv: Staticise local function invoked by
+    reference
+  drm/meson/meson_venc: Make local function
+    'meson_venc_hdmi_get_dmt_vmode' static
+  drm/meson/meson_vclk: Make two local functions static
+  drm/msm/adreno/a6xx_gpu: Staticise local function 'a6xx_idle'
+  drm/msm/disp/mdp5/mdp5_crtc: Make local function
+    'mdp5_crtc_setup_pipeline()' static
+  drm/msm/disp/mdp5/mdp5_ctl: Demote non-conformant kernel-doc headers
+  drm/msm/disp/mdp5/mdp5_kms: Make local functions 'mdp5_{en,dis}able()'
+    static
+  drm/msm/disp/dpu1/dpu_core_perf: Remove set but unused variable
+    'dpu_cstate'
+  drm/msm/disp/dpu1/dpu_encoder: Remove a bunch of unused variables
+  drm/nouveau/nvkm/core/firmware: Fix formatting, provide missing param
+    description
+  drm/pl111/pl111_display: Make local function static
+  drm/pl111/pl111_debugfs: Make local function 'pl111_debugfs_regs()'
+    static
+  drm/rockchip/dw-mipi-dsi-rockchip: Demote non-conformant kernel-doc
+    headers
+  drm/rockchip/rockchip_rgb: Consume our own header
+  drm/rockchip/rockchip_lvds: Fix struct document formatting
+  drm/selftests/test-drm_mm: Mark 'hole_end' as always_unused
+  drm/selftests/test-drm_framebuffer: Remove set but unused variable
+    'fb'
+  drm/selftests/test-drm_dp_mst_helper: Place 'struct
+    drm_dp_sideband_msg_req_body' onto the heap
+  drm/selftests/test-drm_dp_mst_helper: Move
+    'sideband_msg_req_encode_decode' onto the heap
+  drm/ttm/ttm_bo: Fix one function header - demote lots of kernel-doc
+    abuses
+  drm/ttm/ttm_tt: Demote kernel-doc header format abuses
+  drm/ttm/ttm_range_manager: Demote non-conformant kernel-doc header
+  drm/v3d/v3d_drv: Remove unused static variable 'v3d_v3d_pm_ops'
+  drm/v3d/v3d_gem: Provide descriptions for 'v3d_lookup_bos's params
+  drm/v3d/v3d_sched: Demote non-conformant kernel-doc header
+  drm/vc4/vc4_hdmi_regs: Mark some data sets as __maybe_unused
+  drm/vc4/vc4_hdmi: Remove set but unused variable 'ret'
+  drm/vc4/vc4_v3d: Demote non-conformant kernel-doc headers
+  drm/vc4/vc4_debugfs: Demote non-conformant kernel-doc headers
+  gpu/ipu-v3/ipu-di: Strip out 2 unused 'di_sync_config' entries
+  include/drm/drm_atomic: Make use of 'new_crtc_state'
 
+ .../gpu/drm/amd/amdgpu/atombios_encoders.c    |  3 --
+ drivers/gpu/drm/armada/armada_overlay.c       |  2 +-
+ drivers/gpu/drm/drm_dp_mst_topology.c         |  4 +-
+ drivers/gpu/drm/exynos/exynos7_drm_decon.c    |  1 +
+ drivers/gpu/drm/exynos/exynos_drm_fimd.c      |  1 +
+ drivers/gpu/drm/exynos/exynos_drm_gsc.c       |  1 +
+ drivers/gpu/drm/mediatek/mtk_disp_color.c     |  5 ++-
+ drivers/gpu/drm/mediatek/mtk_disp_ovl.c       |  5 ++-
+ drivers/gpu/drm/mediatek/mtk_disp_rdma.c      |  5 ++-
+ drivers/gpu/drm/mediatek/mtk_dpi.c            |  9 -----
+ drivers/gpu/drm/mediatek/mtk_drm_crtc.c       |  4 +-
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c        |  4 +-
+ drivers/gpu/drm/meson/meson_vclk.c            |  8 ++--
+ drivers/gpu/drm/meson/meson_venc.c            |  4 +-
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c         |  2 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c |  3 --
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c   | 12 +-----
+ drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c     |  6 +--
+ drivers/gpu/drm/msm/disp/mdp5/mdp5_ctl.c      |  6 +--
+ drivers/gpu/drm/msm/disp/mdp5/mdp5_kms.c      |  4 +-
+ drivers/gpu/drm/nouveau/nvkm/core/firmware.c  |  9 +++--
+ drivers/gpu/drm/pl111/pl111_debugfs.c         |  2 +-
+ drivers/gpu/drm/pl111/pl111_display.c         |  2 +-
+ .../gpu/drm/rockchip/dw-mipi-dsi-rockchip.c   |  4 +-
+ drivers/gpu/drm/rockchip/rockchip_lvds.c      |  2 +-
+ drivers/gpu/drm/rockchip/rockchip_rgb.c       |  1 +
+ .../drm/selftests/test-drm_dp_mst_helper.c    | 40 +++++++++++++------
+ .../gpu/drm/selftests/test-drm_framebuffer.c  |  3 +-
+ drivers/gpu/drm/selftests/test-drm_mm.c       |  2 +-
+ drivers/gpu/drm/ttm/ttm_bo.c                  | 23 ++++++-----
+ drivers/gpu/drm/ttm/ttm_range_manager.c       |  2 +-
+ drivers/gpu/drm/ttm/ttm_tt.c                  |  4 +-
+ drivers/gpu/drm/v3d/v3d_drv.c                 | 36 -----------------
+ drivers/gpu/drm/v3d/v3d_gem.c                 |  2 +
+ drivers/gpu/drm/v3d/v3d_sched.c               |  2 +-
+ drivers/gpu/drm/vc4/vc4_debugfs.c             |  4 +-
+ drivers/gpu/drm/vc4/vc4_hdmi.c                |  3 +-
+ drivers/gpu/drm/vc4/vc4_hdmi_regs.h           |  6 +--
+ drivers/gpu/drm/vc4/vc4_v3d.c                 |  4 +-
+ drivers/gpu/ipu-v3/ipu-di.c                   |  4 --
+ include/drm/drm_atomic.h                      |  3 +-
+ 41 files changed, 105 insertions(+), 142 deletions(-)
+
+Cc: Ajay Kumar <ajaykumar.rs@samsung.com>
+Cc: Akshu Agarwal <akshua@gmail.com>
 Cc: Alex Deucher <alexander.deucher@amd.com>
-Cc: "Christian König" <christian.koenig@amd.com>
-Cc: David Airlie <airlied@linux.ie>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
 Cc: amd-gfx@lists.freedesktop.org
+Cc: Ben Skeggs <bskeggs@redhat.com>
+Cc: Christian Koenig <christian.koenig@amd.com>
+Cc: "Christian König" <christian.koenig@amd.com>
+Cc: Chris Zhong <zyw@rock-chips.com>
+Cc: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: David Airlie <airlied@linux.ie>
+Cc: David Francis <David.Francis@amd.com>
 Cc: dri-devel@lists.freedesktop.org
-Cc: linux-media@vger.kernel.org
+Cc: Eric Anholt <eric@anholt.net>
+Cc: Eunchul Kim <chulspro.kim@samsung.com>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: freedreno@lists.freedesktop.org
+Cc: "Heiko Stübner" <heiko@sntech.de>
+Cc: Huang Rui <ray.huang@amd.com>
+Cc: Inki Dae <inki.dae@samsung.com>
+Cc: Jerome Brunet <jbrunet@baylibre.com>
+Cc: Jie Qiu <jie.qiu@mediatek.com>
+Cc: Jinyoung Jeon <jy0.jeon@samsung.com>
+Cc: Joonyoung Shim <jy0922.shim@samsung.com>
+Cc: Kalyan Thota <kalyan_t@codeaurora.org>
+Cc: Kevin Hilman <khilman@baylibre.com>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Kyungmin Park <kyungmin.park@samsung.com>
 Cc: linaro-mm-sig@lists.linaro.org
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
----
- drivers/gpu/drm/radeon/radeon_display.c |  1 +
- drivers/gpu/drm/radeon/radeon_kms.c     |  1 +
- drivers/gpu/drm/radeon/radeon_kms.h     | 35 +++++++++++++++++++++++++
- 3 files changed, 37 insertions(+)
- create mode 100644 drivers/gpu/drm/radeon/radeon_kms.h
-
-diff --git a/drivers/gpu/drm/radeon/radeon_display.c b/drivers/gpu/drm/radeon/radeon_display.c
-index eb0d4cb95f0a6..3a6fedad002d7 100644
---- a/drivers/gpu/drm/radeon/radeon_display.c
-+++ b/drivers/gpu/drm/radeon/radeon_display.c
-@@ -44,6 +44,7 @@
- 
- #include "atom.h"
- #include "radeon.h"
-+#include "radeon_kms.h"
- 
- static void avivo_crtc_load_lut(struct drm_crtc *crtc)
- {
-diff --git a/drivers/gpu/drm/radeon/radeon_kms.c b/drivers/gpu/drm/radeon/radeon_kms.c
-index 3d31c04e4b3db..001940bca90a6 100644
---- a/drivers/gpu/drm/radeon/radeon_kms.c
-+++ b/drivers/gpu/drm/radeon/radeon_kms.c
-@@ -41,6 +41,7 @@
- #include "radeon.h"
- #include "radeon_asic.h"
- #include "radeon_drv.h"
-+#include "radeon_kms.h"
- 
- #if defined(CONFIG_VGA_SWITCHEROO)
- bool radeon_has_atpx(void);
-diff --git a/drivers/gpu/drm/radeon/radeon_kms.h b/drivers/gpu/drm/radeon/radeon_kms.h
-new file mode 100644
-index 0000000000000..36e73cea92154
---- /dev/null
-+++ b/drivers/gpu/drm/radeon/radeon_kms.h
-@@ -0,0 +1,35 @@
-+/* radeon_kms.h -- Private header for radeon driver -*- linux-c -*-
-+ *
-+ * Copyright 1999 Precision Insight, Inc., Cedar Park, Texas.
-+ * Copyright 2000 VA Linux Systems, Inc., Fremont, California.
-+ * All rights reserved.
-+ *
-+ * Permission is hereby granted, free of charge, to any person obtaining a
-+ * copy of this software and associated documentation files (the "Software"),
-+ * to deal in the Software without restriction, including without limitation
-+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
-+ * and/or sell copies of the Software, and to permit persons to whom the
-+ * Software is furnished to do so, subject to the following conditions:
-+ *
-+ * The above copyright notice and this permission notice (including the next
-+ * paragraph) shall be included in all copies or substantial portions of the
-+ * Software.
-+ *
-+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
-+ * PRECISION INSIGHT AND/OR ITS SUPPLIERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-+ * DEALINGS IN THE SOFTWARE.
-+ *
-+ */
-+
-+#ifndef __RADEON_KMS_H__
-+#define __RADEON_KMS_H__
-+
-+u32 radeon_get_vblank_counter_kms(struct drm_crtc *crtc);
-+int radeon_enable_vblank_kms(struct drm_crtc *crtc);
-+void radeon_disable_vblank_kms(struct drm_crtc *crtc);
-+
-+#endif				/* __RADEON_KMS_H__ */
+Cc: linux-amlogic@lists.infradead.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-arm-msm@vger.kernel.org
+Cc: linux-mediatek@lists.infradead.org
+Cc: linux-media@vger.kernel.org
+Cc: linux-rockchip@lists.infradead.org
+Cc: linux-samsung-soc@vger.kernel.org
+Cc: Luben Tuikov <luben.tuikov@amd.com>
+Cc: Lyude Paul <lyude@redhat.com>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc: Mark Yao <mark.yao@rock-chips.com>
+Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: Neil Armstrong <narmstrong@baylibre.com>
+Cc: Nickey Yang <nickey.yang@rock-chips.com>
+Cc: Nirmoy Das <nirmoy.aiemd@gmail.com>
+Cc: nouveau@lists.freedesktop.org
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Philipp Zabel <p.zabel@pengutronix.de>
+Cc: Rob Clark <robdclark@gmail.com>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Sandy Huang <hjc@rock-chips.com>
+Cc: Sangmin Lee <lsmin.lee@samsung.com>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Sean Paul <sean@poorly.run>
+Cc: Seung-Woo Kim <sw0312.kim@samsung.com>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: YT SHEN <yt.shen@mediatek.com>
 -- 
 2.25.1
 
