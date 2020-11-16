@@ -2,174 +2,118 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF5EFC4742C
-	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 09:25:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3F6AC4742C
+	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 09:26:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6952E22265
-	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 09:25:18 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="UKllBMZ3"
+	by mail.kernel.org (Postfix) with ESMTP id 6DCD420674
+	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 09:26:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728317AbgKPIx4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Nov 2020 03:53:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48902 "EHLO
+        id S1728195AbgKPI4T (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Nov 2020 03:56:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728314AbgKPIx4 (ORCPT
+        with ESMTP id S1727969AbgKPI4S (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Nov 2020 03:53:56 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5691CC0613CF;
-        Mon, 16 Nov 2020 00:53:56 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 736EAA1B;
-        Mon, 16 Nov 2020 09:53:54 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1605516834;
-        bh=2DuJ8uuilfq3ssxZCNNkX3ziGRqEMv53mlwaSsR+j+Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UKllBMZ3Xc+3uEOOEHrlAj01wp58umv670p8o1zTNwxYTzg5COn7gCNaxLKTcxuJi
-         pgg356+6kMaYy7pUzqYDDxLxC7QceZyjE5SMCk/Nigf5y42sA/k1Zefo6Hu+o8g2d0
-         CypjDtAaGDFo1fwK7Z9qP7Xwu+ZCLboxTFQzXnes=
-Date:   Mon, 16 Nov 2020 10:53:49 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Dan Scally <djrscally@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        prabhakar.mahadev-lad.rj@bp.renesas.com,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        laurent.pinchart+renesas@ideasonboard.com,
-        kieran.bingham+renesas@ideasonboard.com,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Rob Herring <robh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Petr Mladek <pmladek@suse.com>,
+        Mon, 16 Nov 2020 03:56:18 -0500
+X-Greylist: delayed 519 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 16 Nov 2020 00:56:18 PST
+Received: from mailout2.hostsharing.net (mailout2.hostsharing.net [IPv6:2a01:37:3000::53df:4ee9:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF2FC0613CF
+        for <linux-media@vger.kernel.org>; Mon, 16 Nov 2020 00:56:18 -0800 (PST)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
+        by mailout2.hostsharing.net (Postfix) with ESMTPS id 850C11018982B;
+        Mon, 16 Nov 2020 09:47:38 +0100 (CET)
+Received: from localhost (unknown [89.246.108.87])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by h08.hostsharing.net (Postfix) with ESMTPSA id 1372D6035EEE;
+        Mon, 16 Nov 2020 09:47:38 +0100 (CET)
+X-Mailbox-Line: From 48e6a396526bcd0a26e970036dbe3207cce57ea6 Mon Sep 17 00:00:00 2001
+Message-Id: <48e6a396526bcd0a26e970036dbe3207cce57ea6.1605512876.git.lukas@wunner.de>
+In-Reply-To: <73adc6ba84a4f968f2e1499a776e5c928fbdde56.1605512876.git.lukas@wunner.de>
+References: <73adc6ba84a4f968f2e1499a776e5c928fbdde56.1605512876.git.lukas@wunner.de>
+From:   Lukas Wunner <lukas@wunner.de>
+Date:   Mon, 16 Nov 2020 09:23:13 +0100
+Subject: [PATCH for-5.10] media: netup_unidvb: Don't leak SPI master in probe
+ error path
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, Kozlov Sergey <serjk@netup.ru>,
+        Abylay Ospan <aospan@netup.ru>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tian Shu Qiu <tian.shu.qiu@intel.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Yong Zhi <yong.zhi@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tsuchiya Yuto <kitakar@gmail.com>
-Subject: Re: [RFC PATCH v3 9/9] ipu3-cio2: Add functionality allowing
- software_node connections to sensors on platforms designed for Windows
-Message-ID: <20201116085349.GA6540@pendragon.ideasonboard.com>
-References: <20201024093702.GA3939@pendragon.ideasonboard.com>
- <20201026161050.GQ4077@smile.fi.intel.com>
- <20201029201918.GD15024@pendragon.ideasonboard.com>
- <CAHp75Vc9uYVvhBe3OyCJzCsU0EY9yi62hsxt3pAwppSfjB+jDg@mail.gmail.com>
- <20201029212930.GE15024@pendragon.ideasonboard.com>
- <20201029222215.GI4077@smile.fi.intel.com>
- <20201029225124.GI15024@pendragon.ideasonboard.com>
- <60b36af2-ad57-000b-76e4-379e1b58a3a0@gmail.com>
- <20201113162231.GO7524@pendragon.ideasonboard.com>
- <CAHp75VeGJKMeY-reNWgypVzJ6Myz5S2RXJPHqbPH5kzLYX3G4g@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHp75VeGJKMeY-reNWgypVzJ6Myz5S2RXJPHqbPH5kzLYX3G4g@mail.gmail.com>
+        linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Andy,
+If the call to spi_register_master() fails on probe of the NetUP
+Universal DVB driver, the spi_master struct is erroneously not freed.
 
-On Fri, Nov 13, 2020 at 09:45:00PM +0200, Andy Shevchenko wrote:
-> On Fri, Nov 13, 2020 at 6:22 PM Laurent Pinchart wrote:
-> > On Fri, Nov 13, 2020 at 10:02:30AM +0000, Dan Scally wrote:
-> > > On 29/10/2020 22:51, Laurent Pinchart wrote:
-> > > > On Fri, Oct 30, 2020 at 12:22:15AM +0200, Andy Shevchenko wrote:
-> > > >> On Thu, Oct 29, 2020 at 11:29:30PM +0200, Laurent Pinchart wrote:
-> 
-> ...
-> 
-> > > >> In this case we probably need something like
-> > > >>
-> > > >> struct acpi_device *
-> > > >> acpi_dev_get_next_match_dev(struct acpi_device *adev,
-> > > >>                        const char *hid, const char *uid, s64 hrv)
-> > > >> {
-> > > >>    struct device *start = adev ? &adev->dev : NULL;
-> > > >>    ...
-> > > >>    dev = bus_find_device(&acpi_bus_type, start, &match, acpi_dev_match_cb);
-> > > >>    ...
-> > > >> }
-> > > >>
-> > > >> in drivers/acpi/utils.c and
-> > > >>
-> > > >> static inline struct acpi_device *
-> > > >> acpi_dev_get_first_match_dev(const char *hid, const char *uid, s64 hrv)
-> > > >> {
-> > > >>    return acpi_dev_get_next_match_dev(NULL, hid, uid, hrv);
-> > > >> }
-> > > >>
-> > > >> in include/linux/acpi.h.
-> > > >>
-> > > >> Then we may add
-> > > >>
-> > > >> #define for_each_acpi_dev_match(adev, hid, uid, hrv)                       \
-> > > >>    for (adev = acpi_dev_get_first_match_dev(hid, uid, hrv);        \
-> > > >>         adev;                                                      \
-> > > >>         adev = acpi_dev_get_next_match_dev(adev, hid, uid, hrv))
-> > > >
-> > > > What the cio2-bridge code needs is indeed
-> > > >
-> > > >     for each hid in supported hids:
-> > > >             for each acpi device that is compatible with hid:
-> > > >                     ...
-> > > >
-> > > > which could also be expressed as
-> > > >
-> > > >     for each acpi device:
-> > > >             if acpi device hid is in supported hids:
-> > > >                     ...
-> > > >
-> > > > I don't mind either option, I'll happily follow the preference of the
-> > > > ACPI maintainers.
-> > >
-> > > Does this need raising elsewhere then? The original idea of just
-> > > bus_for_each_dev(&acpi_bus_type...) I have now tested and it works fine,
-> > > but it does mean that I need to export acpi_bus_type (currently that
-> > > symbol's not available)...that seems much simpler to me but I'm not sure
-> > > whether that's something to avoid, and if so whether Andy's approach is
-> > > better.
-> > >
-> > > Thoughts?
-> >
-> > I like simple options :-) A patch to export acpi_bus_type, with enough
-> > context in the commit message (and in the cover latter of the series),
-> > should be enough to provide all the information the ACPI maintainers
-> > need to decide which option is best. With a bit of luck that patch will
-> > be considered the best option and no extra work will be needed.
-> 
-> The problem with ACPI bus is that it is not as simple as other buses,
-> i.e. it may have purely ACPI devices along with *companion* devices,
-> which are usually represented by platform bus. On top of that for
-> several ACPI devices there can be one physical node and it will be not
-> so clear what you are exactly looking for by traversing acpi_bus_type.
-> I believe it's hidden on purpose.
+Likewise, if spi_new_device() fails, the spi_controller struct is
+not unregistered.  Plug the leaks.
 
-Maybe there's something I don't get, as I'm not very familiar with the
-ACPI implementation in the kernel, but the code in the cio2-bridge,
-unless I'm mistaken, is really interested in ACPI devices on the ACPI
-bus, not companions or other devices related to the ACPI devices. The
-iterators you have proposed above use bus_find_device() on
-acpi_bus_type, so I don't really see how they make a difference from a
-cio2-bridge point of view. Is your point that acpi_bus_type shouldn't be
-exported because it could then be misused by *other* drivers ? Couldn't
-those drivers then equally misuse the iterators ?
+While at it, fix an ordering issue in netup_spi_release() wherein
+spi_unregister_master() is called after fiddling with the IRQ control
+register.  The correct order is to call spi_unregister_master() *before*
+this teardown step because bus accesses may still be ongoing until that
+function returns.
 
+Fixes: 52b1eaf4c59a ("[media] netup_unidvb: NetUP Universal DVB-S/S2/T/T2/C PCI-E card driver")
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Cc: <stable@vger.kernel.org> # v4.3+: 5e844cc37a5c: spi: Introduce device-managed SPI controller allocation
+Cc: <stable@vger.kernel.org> # v4.3+
+Cc: Kozlov Sergey <serjk@netup.ru>
+---
+@Mauro Carvalho Chehab:
+This patch needs to go in through the spi tree because it depends on
+commit 5e844cc37a5c, which is on the spi/for-5.10 branch.
+Please ack (barring any objections).  Thanks!
+
+ drivers/media/pci/netup_unidvb/netup_unidvb_spi.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/pci/netup_unidvb/netup_unidvb_spi.c b/drivers/media/pci/netup_unidvb/netup_unidvb_spi.c
+index d4f12c250f91..526042d8afae 100644
+--- a/drivers/media/pci/netup_unidvb/netup_unidvb_spi.c
++++ b/drivers/media/pci/netup_unidvb/netup_unidvb_spi.c
+@@ -175,7 +175,7 @@ int netup_spi_init(struct netup_unidvb_dev *ndev)
+ 	struct spi_master *master;
+ 	struct netup_spi *nspi;
+ 
+-	master = spi_alloc_master(&ndev->pci_dev->dev,
++	master = devm_spi_alloc_master(&ndev->pci_dev->dev,
+ 		sizeof(struct netup_spi));
+ 	if (!master) {
+ 		dev_err(&ndev->pci_dev->dev,
+@@ -208,6 +208,7 @@ int netup_spi_init(struct netup_unidvb_dev *ndev)
+ 		ndev->pci_slot,
+ 		ndev->pci_func);
+ 	if (!spi_new_device(master, &netup_spi_board)) {
++		spi_unregister_master(master);
+ 		ndev->spi = NULL;
+ 		dev_err(&ndev->pci_dev->dev,
+ 			"%s(): unable to create SPI device\n", __func__);
+@@ -226,13 +227,13 @@ void netup_spi_release(struct netup_unidvb_dev *ndev)
+ 	if (!spi)
+ 		return;
+ 
++	spi_unregister_master(spi->master);
+ 	spin_lock_irqsave(&spi->lock, flags);
+ 	reg = readw(&spi->regs->control_stat);
+ 	writew(reg | NETUP_SPI_CTRL_IRQ, &spi->regs->control_stat);
+ 	reg = readw(&spi->regs->control_stat);
+ 	writew(reg & ~NETUP_SPI_CTRL_IMASK, &spi->regs->control_stat);
+ 	spin_unlock_irqrestore(&spi->lock, flags);
+-	spi_unregister_master(spi->master);
+ 	ndev->spi = NULL;
+ }
+ 
 -- 
-Regards,
+2.28.0
 
-Laurent Pinchart
