@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6A21C64E75
-	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 18:53:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 633AEC64E7D
+	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 18:53:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8B2192225E
-	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 18:53:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2280320575
+	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 18:53:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="f+MnZnGm"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="bcpv9rK6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728784AbgKPSwo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Nov 2020 13:52:44 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:51250 "EHLO
+        id S1728505AbgKPSws (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Nov 2020 13:52:48 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:51284 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728625AbgKPSwn (ORCPT
+        with ESMTP id S1728751AbgKPSws (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Nov 2020 13:52:43 -0500
+        Mon, 16 Nov 2020 13:52:48 -0500
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C7EB51287;
-        Mon, 16 Nov 2020 19:52:26 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 174B915CE;
+        Mon, 16 Nov 2020 19:52:31 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1605552747;
-        bh=J3PtZ68QJr2dm9jOD63vItKftcjk5VnJNEy+EMupDL8=;
+        s=mail; t=1605552751;
+        bh=BMlFQrY/pVfeJ3DjEWJ//i7/Po/wBgUENlQt7y2HJJ4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f+MnZnGmh5oGX2ASFSOSKV7zZRqSD6yf5j36A25PucF9rUIjLOcexuJXhTpzuRxvk
-         3ZvbVA8WgXyNirsX8ejy85oXnZoJ2PZ6hUoqH60ZkcIgPH70jnJkJoqvujw22aSlYD
-         DR81ecElBz+92OQrU6vZqHNsufV9AjflsxtCmB9A=
+        b=bcpv9rK67ZuyG/glb6ML13r73YUJaLIPiOK4KK5xdrFc/RTXiH3pKAZ6bhkhUM/bL
+         oycqhVcdf9e2SFKsKWXBx0RXllvhHngLV1gUgLXTblMErTGmQpBdxNODn4MPQZIHsI
+         qwaPPcCVwTSokdodov+EBjinTrd8ksekelm4z9FU=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -39,1223 +39,690 @@ Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Dylan Yip <dylany@xilinx.com>,
         Vishal Sagar <vsagar@xilinx.com>,
         Nicolas Dufresne <nicolas@ndufresne.ca>
-Subject: [PATCH v3 16/21] media: doc: pixfmt-yuv: Move all planar YUV formats to common file
-Date:   Mon, 16 Nov 2020 20:52:02 +0200
-Message-Id: <20201116185207.13208-17-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v3 21/21] media: v4l2: Add 10-, 12- and 16-bpc 4:2:0 and 4:2:2 semi-planar YUV formats
+Date:   Mon, 16 Nov 2020 20:52:07 +0200
+Message-Id: <20201116185207.13208-22-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201116185207.13208-1-laurent.pinchart@ideasonboard.com>
 References: <20201116185207.13208-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Planar pixel formats are documented in separate files. This duplicates
-information, as those formats share comon traits. Consolidate them in a
-single file and summarize their descriptions in a single table.
+Add semi-planar YUV formats with 10, 12 and 16 bits per components, in
+both 4:2:0 (NV12) and 4:2:2 (NV16) subsampling, and with both chroma
+orderings. They are used by the Xilinx Video Frame Buffer Read/Write IP
+cores.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
 Changes since v2:
 
-- Fix planes ordering for YVU420M and YVU444M
+- Replace 'Cr, Cr' with 'Cr, Cb'
 ---
- .../media/v4l/pixfmt-yuv-planar.rst           | 487 ++++++++++++++++++
- .../userspace-api/media/v4l/pixfmt-yuv410.rst |  72 ---
- .../media/v4l/pixfmt-yuv411p.rst              |  80 ---
- .../userspace-api/media/v4l/pixfmt-yuv420.rst |  81 ---
- .../media/v4l/pixfmt-yuv420m.rst              |  90 ----
- .../media/v4l/pixfmt-yuv422m.rst              | 101 ----
- .../media/v4l/pixfmt-yuv422p.rst              |  89 ----
- .../media/v4l/pixfmt-yuv444m.rst              | 110 ----
- .../userspace-api/media/v4l/yuv-formats.rst   |   7 -
- 9 files changed, 487 insertions(+), 630 deletions(-)
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-yuv410.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-yuv411p.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-yuv420.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-yuv420m.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-yuv422m.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-yuv422p.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-yuv444m.rst
+ .../media/v4l/pixfmt-yuv-planar.rst           | 574 +++++++++++++++++-
+ include/uapi/linux/videodev2.h                |  12 +
+ 2 files changed, 580 insertions(+), 6 deletions(-)
 
 diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-index 0ca01270bde5..7d4d39201a3f 100644
+index 7d4d39201a3f..4ac4c6a0290b 100644
 --- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
 +++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-@@ -461,3 +461,490 @@ number of lines as the luma plane.
-       - Cr\ :sub:`32`
-       - Cb\ :sub:`33`
+@@ -48,6 +48,11 @@ relationship between the luma and chroma line padding and stride.
+ 
+ All components are stored with the same number of bits per component.
+ 
++Formats with more than 8 bits per component pack, within each plane, multiple
++samples in a word (padded as necessary to reach a multiple of 8 bits), which is
++then stored in memory in little endian byte order. They are named with a suffix
++indicating the number of bits per component and the number of samples per word.
++
+ .. flat-table:: Overview of Semi-Planar YUV Formats
+     :header-rows:  1
+     :stub-columns: 0
+@@ -70,7 +75,7 @@ All components are stored with the same number of bits per component.
+       - 'NV21'
+       - 8
+       - 4:2:0
+-      - Cr, Cr
++      - Cr, Cb
+       - Yes
+       - Linear
+     * - V4L2_PIX_FMT_NV12M
+@@ -84,7 +89,7 @@ All components are stored with the same number of bits per component.
+       - 'NM21'
+       - 8
+       - 4:2:0
+-      - Cr, Cr
++      - Cr, Cb
+       - No
+       - Linear
+     * - V4L2_PIX_FMT_NV12MT
+@@ -114,7 +119,7 @@ All components are stored with the same number of bits per component.
+       - 'NV61'
+       - 8
+       - 4:2:2
+-      - Cr, Cr
++      - Cr, Cb
+       - Yes
+       - Linear
+     * - V4L2_PIX_FMT_NV16M
+@@ -128,7 +133,7 @@ All components are stored with the same number of bits per component.
+       - 'NM61'
+       - 8
+       - 4:2:2
+-      - Cr, Cr
++      - Cr, Cb
+       - No
+       - Linear
+     * - V4L2_PIX_FMT_NV24
+@@ -142,7 +147,91 @@ All components are stored with the same number of bits per component.
+       - 'NV42'
+       - 8
+       - 4:4:4
+-      - Cr, Cr
++      - Cr, Cb
++      - Yes
++      - Linear
++    * - V4L2_PIX_FMT_NV12_10_3
++      - 'N012'
++      - 10
++      - 4:2:0
++      - Cb, Cr
++      - Yes
++      - Linear
++    * - V4L2_PIX_FMT_NV21_10_3
++      - 'N061'
++      - 10
++      - 4:2:0
++      - Cr, Cb
++      - Yes
++      - Linear
++    * - V4L2_PIX_FMT_NV16_10_3
++      - 'N016'
++      - 10
++      - 4:2:2
++      - Cb, Cr
++      - Yes
++      - Linear
++    * - V4L2_PIX_FMT_NV61_10_3
++      - 'N061'
++      - 10
++      - 4:2:2
++      - Cr, Cb
++      - Yes
++      - Linear
++    * - V4L2_PIX_FMT_NV12_12_2
++      - 'N212'
++      - 12
++      - 4:2:0
++      - Cb, Cr
++      - Yes
++      - Linear
++    * - V4L2_PIX_FMT_NV21_12_2
++      - 'N261'
++      - 12
++      - 4:2:0
++      - Cr, Cb
++      - Yes
++      - Linear
++    * - V4L2_PIX_FMT_NV16_12_2
++      - 'N216'
++      - 12
++      - 4:2:2
++      - Cb, Cr
++      - Yes
++      - Linear
++    * - V4L2_PIX_FMT_NV61_12_2
++      - 'N261'
++      - 12
++      - 4:2:2
++      - Cr, Cb
++      - Yes
++      - Linear
++    * - V4L2_PIX_FMT_NV12_16_1
++      - 'N612'
++      - 16
++      - 4:2:0
++      - Cb, Cr
++      - Yes
++      - Linear
++    * - V4L2_PIX_FMT_NV21_16_1
++      - 'N661'
++      - 16
++      - 4:2:0
++      - Cr, Cb
++      - Yes
++      - Linear
++    * - V4L2_PIX_FMT_NV16_16_1
++      - 'N616'
++      - 16
++      - 4:2:2
++      - Cb, Cr
++      - Yes
++      - Linear
++    * - V4L2_PIX_FMT_NV61_16_1
++      - 'N661'
++      - 16
++      - 4:2:2
++      - Cr, Cb
+       - Yes
+       - Linear
+ 
+@@ -153,7 +242,6 @@ All components are stored with the same number of bits per component.
+       disjoint
+    .. [3] Macroblock size in pixels
+ 
+-
+ **Color Sample Location:**
+ Chroma samples are :ref:`interstitially sited<yuv-chroma-centered>`
+ horizontally.
+@@ -463,6 +551,480 @@ number of lines as the luma plane.
        - Cr\ :sub:`33`
+ 
+ 
++.. _V4L2-PIX-FMT-NV12-10-3:
++.. _V4L2-PIX-FMT-NV21-10-3:
++.. _V4L2-PIX-FMT-NV16-10-3:
++.. _V4L2-PIX-FMT-NV61-10-3:
 +
++NV12_10_3, NV21_10_3, NV16_10_3 and NV61_10_3
++---------------------------------------------
 +
-+Fully Planar YUV Formats
-+========================
++Semi-planar YUV 4:2:0 and 4:2:2 formats with 10 bits per component, stored with
++3 samples packed in 4 bytes.
 +
-+These formats store the Y, Cb and Cr components in three separate planes. The
-+luma plane comes first, and the order of the two chroma planes varies between
-+formats. The two chroma planes always use the same subsampling.
++Within a plane, 3 samples are packed in a 32-bit word, with 2 padding bits.
++The bits are organized as follows for the first three samples of a luma line
++and a chroma line.
 +
-+For memory contiguous formats, the number of padding pixels at the end of the
-+chroma lines is identical to the padding of the luma lines. The chroma line
-+stride (in bytes) is thus equal to the luma line stride divided by the
-+horizontal subsampling factor. Vertical subsampling doesn't affect the line
-+stride.
-+
-+For non-contiguous formats, no constraints are enforced by the format on the
-+relationship between the luma and chroma line padding and stride.
-+
-+All components are stored with the same number of bits per component.
-+
-+.. flat-table:: Overview of Fully Planar YUV Formats
-+    :header-rows:  1
++.. flat-table::
++    :header-rows:  0
 +    :stub-columns: 0
 +
-+    * - Identifier
-+      - Code
-+      - Bits per component
-+      - Subsampling
-+      - Planes order [4]_
-+      - Contiguous [5]_
++    * - 31:30
++      - 29:20
++      - 19:10
++      - 9:0
++    * - `-`\ [1:0]
++      - Y'\ :sub:`2`\ [9:0]
++      - Y'\ :sub:`1`\ [9:0]
++      - Y'\ :sub:`0`\ [9:0]
 +
-+    * - V4L2_PIX_FMT_YUV410
-+      - 'YUV9'
-+      - 8
-+      - 4:1:0
-+      - Y, Cb, Cr
-+      - Yes
-+    * - V4L2_PIX_FMT_YVU410
-+      - 'YVU9'
-+      - 8
-+      - 4:1:0
-+      - Y, Cr, Cb
-+      - Yes
-+    * - V4L2_PIX_FMT_YUV411P
-+      - '411P'
-+      - 8
-+      - 4:1:1
-+      - Y, Cb, Cr
-+      - Yes
-+    * - V4L2_PIX_FMT_YUV420M
-+      - 'YM12'
-+      - 8
-+      - 4:2:0
-+      - Y, Cb, Cr
-+      - No
-+    * - V4L2_PIX_FMT_YVU420M
-+      - 'YM21'
-+      - 8
-+      - 4:2:0
-+      - Y, Cr, Cb
-+      - No
-+    * - V4L2_PIX_FMT_YUV420
-+      - 'YU12'
-+      - 8
-+      - 4:2:0
-+      - Y, Cb, Cr
-+      - Yes
-+    * - V4L2_PIX_FMT_YVU420
-+      - 'YV12'
-+      - 8
-+      - 4:2:0
-+      - Y, Cr, Cb
-+      - Yes
-+    * - V4L2_PIX_FMT_YUV422P
-+      - '422P'
-+      - 8
-+      - 4:2:2
-+      - Y, Cb, Cr
-+      - Yes
-+    * - V4L2_PIX_FMT_YUV422M
-+      - 'YM16'
-+      - 8
-+      - 4:2:2
-+      - Y, Cb, Cr
-+      - No
-+    * - V4L2_PIX_FMT_YVU422M
-+      - 'YM61'
-+      - 8
-+      - 4:2:2
-+      - Y, Cr, Cb
-+      - No
-+    * - V4L2_PIX_FMT_YUV444M
-+      - 'YM24'
-+      - 8
-+      - 4:4:4
-+      - Y, Cb, Cr
-+      - No
-+    * - V4L2_PIX_FMT_YVU444M
-+      - 'YM42'
-+      - 8
-+      - 4:4:4
-+      - Y, Cr, Cb
-+      - No
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
 +
-+.. note::
++    * - 31:30
++      - 29:20
++      - 19:10
++      - 9:0
++    * - `-`\ [1:0]
++      - Cb\ :sub:`2`\ [9:0]
++      - Cr\ :sub:`0`\ [9:0]
++      - Cb\ :sub:`0`\ [9:0]
 +
-+   .. [4] Order of luma and chroma planes
-+   .. [5] Indicates if planes have to be contiguous in memory or can be
-+      disjoint
++Words are then stored in memory in little endian format. Due to a chroma word
++storing an odd number of samples, the image width must be a multiple of 6
++pixels.
 +
-+
-+**Color Sample Location:**
-+Chroma samples are :ref:`interstitially sited<yuv-chroma-centered>`
-+horizontally.
-+
-+.. _V4L2-PIX-FMT-YUV410:
-+.. _V4L2-PIX-FMT-YVU410:
-+
-+YUV410 and YVU410
-+-----------------
-+
-+Planar YUV 4:1:0 formats. The chroma planes are subsampled by 4 in each
-+direction. Chroma lines contain a quarter of the number of pixels and bytes of
-+the luma lines, and the chroma planes contain a quarter of the number of lines
-+of the luma plane.
-+
-+.. flat-table:: Sample 4x4 YUV410 Image
++.. flat-table:: Sample 6x4 NV12_10_3 Image
 +    :header-rows:  0
 +    :stub-columns: 0
 +
 +    * - start + 0:
-+      - Y'\ :sub:`00`
-+      - Y'\ :sub:`01`
-+      - Y'\ :sub:`02`
-+      - Y'\ :sub:`03`
-+    * - start + 4:
-+      - Y'\ :sub:`10`
-+      - Y'\ :sub:`11`
-+      - Y'\ :sub:`12`
-+      - Y'\ :sub:`13`
++      - Y'\ :sub:`00`\ [7:0]
++      - Y'\ :sub:`01`\ [5:0] Y'\ :sub:`00`\ [9:8]
++      - Y'\ :sub:`02`\ [3:0] Y'\ :sub:`01`\ [9:6]
++      - `-`\ [1:0] Y'\ :sub:`02`\ [9:4]
++      - Y'\ :sub:`03`\ [7:0]
++      - Y'\ :sub:`04`\ [5:0] Y'\ :sub:`04`\ [9:8]
++      - Y'\ :sub:`05`\ [3:0] Y'\ :sub:`05`\ [9:6]
++      - `-`\ [1:0] Y'\ :sub:`05`\ [9:4]
 +    * - start + 8:
-+      - Y'\ :sub:`20`
-+      - Y'\ :sub:`21`
-+      - Y'\ :sub:`22`
-+      - Y'\ :sub:`23`
-+    * - start + 12:
-+      - Y'\ :sub:`30`
-+      - Y'\ :sub:`31`
-+      - Y'\ :sub:`32`
-+      - Y'\ :sub:`33`
++      - Y'\ :sub:`10`\ [7:0]
++      - Y'\ :sub:`11`\ [5:0] Y'\ :sub:`10`\ [9:8]
++      - Y'\ :sub:`12`\ [3:0] Y'\ :sub:`11`\ [9:6]
++      - `-`\ [1:0] Y'\ :sub:`12`\ [9:4]
++      - Y'\ :sub:`13`\ [7:0]
++      - Y'\ :sub:`14`\ [5:0] Y'\ :sub:`14`\ [9:8]
++      - Y'\ :sub:`15`\ [3:0] Y'\ :sub:`15`\ [9:6]
++      - `-`\ [1:0] Y'\ :sub:`15`\ [9:4]
 +    * - start + 16:
-+      - Cr\ :sub:`00`
-+    * - start + 17:
-+      - Cb\ :sub:`00`
-+
-+
-+.. _V4L2-PIX-FMT-YUV411P:
-+
-+YUV411P
-+-------
-+
-+Planar YUV 4:1:1 formats. The chroma planes are subsampled by 4 in the
-+horizontal direction. Chroma lines contain a quarter of the number of pixels
-+and bytes of the luma lines, and the chroma planes contain the same number of
-+lines as the luma plane.
-+
-+.. flat-table:: Sample 4x4 YUV411P Image
-+    :header-rows:  0
-+    :stub-columns: 0
-+
-+    * - start + 0:
-+      - Y'\ :sub:`00`
-+      - Y'\ :sub:`01`
-+      - Y'\ :sub:`02`
-+      - Y'\ :sub:`03`
-+    * - start + 4:
-+      - Y'\ :sub:`10`
-+      - Y'\ :sub:`11`
-+      - Y'\ :sub:`12`
-+      - Y'\ :sub:`13`
-+    * - start + 8:
-+      - Y'\ :sub:`20`
-+      - Y'\ :sub:`21`
-+      - Y'\ :sub:`22`
-+      - Y'\ :sub:`23`
-+    * - start + 12:
-+      - Y'\ :sub:`30`
-+      - Y'\ :sub:`31`
-+      - Y'\ :sub:`32`
-+      - Y'\ :sub:`33`
-+    * - start + 16:
-+      - Cb\ :sub:`00`
-+    * - start + 17:
-+      - Cb\ :sub:`10`
-+    * - start + 18:
-+      - Cb\ :sub:`20`
-+    * - start + 19:
-+      - Cb\ :sub:`30`
-+    * - start + 20:
-+      - Cr\ :sub:`00`
-+    * - start + 21:
-+      - Cr\ :sub:`10`
-+    * - start + 22:
-+      - Cr\ :sub:`20`
-+    * - start + 23:
-+      - Cr\ :sub:`30`
-+
-+
-+.. _V4L2-PIX-FMT-YUV420:
-+.. _V4L2-PIX-FMT-YVU420:
-+.. _V4L2-PIX-FMT-YUV420M:
-+.. _V4L2-PIX-FMT-YVU420M:
-+
-+YUV420, YVU420, YUV420M and YVU420M
-+-----------------------------------
-+
-+Planar YUV 4:2:0 formats. The chroma planes are subsampled by 2 in each
-+direction. Chroma lines contain half of the number of pixels and bytes of the
-+luma lines, and the chroma planes contain half of the number of lines of the
-+luma plane.
-+
-+.. flat-table:: Sample 4x4 YUV420 Image
-+    :header-rows:  0
-+    :stub-columns: 0
-+
-+    * - start + 0:
-+      - Y'\ :sub:`00`
-+      - Y'\ :sub:`01`
-+      - Y'\ :sub:`02`
-+      - Y'\ :sub:`03`
-+    * - start + 4:
-+      - Y'\ :sub:`10`
-+      - Y'\ :sub:`11`
-+      - Y'\ :sub:`12`
-+      - Y'\ :sub:`13`
-+    * - start + 8:
-+      - Y'\ :sub:`20`
-+      - Y'\ :sub:`21`
-+      - Y'\ :sub:`22`
-+      - Y'\ :sub:`23`
-+    * - start + 12:
-+      - Y'\ :sub:`30`
-+      - Y'\ :sub:`31`
-+      - Y'\ :sub:`32`
-+      - Y'\ :sub:`33`
-+    * - start + 16:
-+      - Cr\ :sub:`00`
-+      - Cr\ :sub:`01`
-+    * - start + 18:
-+      - Cr\ :sub:`10`
-+      - Cr\ :sub:`11`
-+    * - start + 20:
-+      - Cb\ :sub:`00`
-+      - Cb\ :sub:`01`
-+    * - start + 22:
-+      - Cb\ :sub:`10`
-+      - Cb\ :sub:`11`
-+
-+.. flat-table:: Sample 4x4 YUV420M Image
-+    :header-rows:  0
-+    :stub-columns: 0
-+
-+    * - start0 + 0:
-+      - Y'\ :sub:`00`
-+      - Y'\ :sub:`01`
-+      - Y'\ :sub:`02`
-+      - Y'\ :sub:`03`
-+    * - start0 + 4:
-+      - Y'\ :sub:`10`
-+      - Y'\ :sub:`11`
-+      - Y'\ :sub:`12`
-+      - Y'\ :sub:`13`
-+    * - start0 + 8:
-+      - Y'\ :sub:`20`
-+      - Y'\ :sub:`21`
-+      - Y'\ :sub:`22`
-+      - Y'\ :sub:`23`
-+    * - start0 + 12:
-+      - Y'\ :sub:`30`
-+      - Y'\ :sub:`31`
-+      - Y'\ :sub:`32`
-+      - Y'\ :sub:`33`
-+    * -
-+    * - start1 + 0:
-+      - Cb\ :sub:`00`
-+      - Cb\ :sub:`01`
-+    * - start1 + 2:
-+      - Cb\ :sub:`10`
-+      - Cb\ :sub:`11`
-+    * -
-+    * - start2 + 0:
-+      - Cr\ :sub:`00`
-+      - Cr\ :sub:`01`
-+    * - start2 + 2:
-+      - Cr\ :sub:`10`
-+      - Cr\ :sub:`11`
-+
-+
-+.. _V4L2-PIX-FMT-YUV422P:
-+.. _V4L2-PIX-FMT-YUV422M:
-+.. _V4L2-PIX-FMT-YVU422M:
-+
-+YUV422P, YUV422M and YVU422M
-+----------------------------
-+
-+Planar YUV 4:2:2 formats. The chroma planes are subsampled by 2 in the
-+horizontal direction. Chroma lines contain half of the number of pixels and
-+bytes of the luma lines, and the chroma planes contain the same number of lines
-+as the luma plane.
-+
-+.. flat-table:: Sample 4x4 YUV422P Image
-+    :header-rows:  0
-+    :stub-columns: 0
-+
-+    * - start + 0:
-+      - Y'\ :sub:`00`
-+      - Y'\ :sub:`01`
-+      - Y'\ :sub:`02`
-+      - Y'\ :sub:`03`
-+    * - start + 4:
-+      - Y'\ :sub:`10`
-+      - Y'\ :sub:`11`
-+      - Y'\ :sub:`12`
-+      - Y'\ :sub:`13`
-+    * - start + 8:
-+      - Y'\ :sub:`20`
-+      - Y'\ :sub:`21`
-+      - Y'\ :sub:`22`
-+      - Y'\ :sub:`23`
-+    * - start + 12:
-+      - Y'\ :sub:`30`
-+      - Y'\ :sub:`31`
-+      - Y'\ :sub:`32`
-+      - Y'\ :sub:`33`
-+    * - start + 16:
-+      - Cb\ :sub:`00`
-+      - Cb\ :sub:`01`
-+    * - start + 18:
-+      - Cb\ :sub:`10`
-+      - Cb\ :sub:`11`
-+    * - start + 20:
-+      - Cb\ :sub:`20`
-+      - Cb\ :sub:`21`
-+    * - start + 22:
-+      - Cb\ :sub:`30`
-+      - Cb\ :sub:`31`
++      - Y'\ :sub:`20`\ [7:0]
++      - Y'\ :sub:`21`\ [5:0] Y'\ :sub:`20`\ [9:8]
++      - Y'\ :sub:`22`\ [3:0] Y'\ :sub:`21`\ [9:6]
++      - `-`\ [1:0] Y'\ :sub:`22`\ [9:4]
++      - Y'\ :sub:`23`\ [7:0]
++      - Y'\ :sub:`24`\ [5:0] Y'\ :sub:`24`\ [9:8]
++      - Y'\ :sub:`25`\ [3:0] Y'\ :sub:`25`\ [9:6]
++      - `-`\ [1:0] Y'\ :sub:`25`\ [9:4]
 +    * - start + 24:
-+      - Cr\ :sub:`00`
-+      - Cr\ :sub:`01`
-+    * - start + 26:
-+      - Cr\ :sub:`10`
-+      - Cr\ :sub:`11`
-+    * - start + 28:
-+      - Cr\ :sub:`20`
-+      - Cr\ :sub:`21`
++      - Y'\ :sub:`20`\ [7:0]
++      - Y'\ :sub:`21`\ [5:0] Y'\ :sub:`20`\ [9:8]
++      - Y'\ :sub:`22`\ [3:0] Y'\ :sub:`21`\ [9:6]
++      - `-`\ [1:0] Y'\ :sub:`22`\ [9:4]
++      - Y'\ :sub:`23`\ [7:0]
++      - Y'\ :sub:`24`\ [5:0] Y'\ :sub:`24`\ [9:8]
++      - Y'\ :sub:`25`\ [3:0] Y'\ :sub:`25`\ [9:6]
++      - `-`\ [1:0] Y'\ :sub:`25`\ [9:4]
++    * - start + 32:
++      - Cb\ :sub:`00`\ [7:0]
++      - Cr\ :sub:`00`\ [5:0] Cb\ :sub:`00`\ [9:8]
++      - Cb\ :sub:`02`\ [3:0] Cr\ :sub:`00`\ [9:6]
++      - `-`\ [1:0] Cb\ :sub:`02`\ [9:4]
++      - Cr\ :sub:`02`\ [7:0]
++      - Cb\ :sub:`04`\ [5:0] Cr\ :sub:`02`\ [9:8]
++      - Cr\ :sub:`04`\ [3:0] Cb\ :sub:`04`\ [9:6]
++      - `-`\ [1:0] Cr\ :sub:`04`\ [9:4]
++    * - start + 40:
++      - Cb\ :sub:`20`\ [7:0]
++      - Cr\ :sub:`20`\ [5:0] Cb\ :sub:`20`\ [9:8]
++      - Cb\ :sub:`22`\ [3:0] Cr\ :sub:`20`\ [9:6]
++      - `-`\ [1:0] Cb\ :sub:`22`\ [9:4]
++      - Cr\ :sub:`22`\ [7:0]
++      - Cb\ :sub:`24`\ [5:0] Cr\ :sub:`22`\ [9:8]
++      - Cr\ :sub:`24`\ [3:0] Cb\ :sub:`24`\ [9:6]
++      - `-`\ [1:0] Cr\ :sub:`24`\ [9:4]
++
++.. flat-table:: Sample 6x4 NV16_10_3 Image
++    :header-rows:  0
++    :stub-columns: 0
++
++    * - start + 0:
++      - Y'\ :sub:`00`\ [7:0]
++      - Y'\ :sub:`01`\ [5:0] Y'\ :sub:`00`\ [9:8]
++      - Y'\ :sub:`02`\ [3:0] Y'\ :sub:`01`\ [9:6]
++      - `-`\ [1:0] Y'\ :sub:`02`\ [9:4]
++      - Y'\ :sub:`03`\ [7:0]
++      - Y'\ :sub:`04`\ [5:0] Y'\ :sub:`04`\ [9:8]
++      - Y'\ :sub:`05`\ [3:0] Y'\ :sub:`05`\ [9:6]
++      - `-`\ [1:0] Y'\ :sub:`05`\ [9:4]
++    * - start + 8:
++      - Y'\ :sub:`10`\ [7:0]
++      - Y'\ :sub:`11`\ [5:0] Y'\ :sub:`10`\ [9:8]
++      - Y'\ :sub:`12`\ [3:0] Y'\ :sub:`11`\ [9:6]
++      - `-`\ [1:0] Y'\ :sub:`12`\ [9:4]
++      - Y'\ :sub:`13`\ [7:0]
++      - Y'\ :sub:`14`\ [5:0] Y'\ :sub:`14`\ [9:8]
++      - Y'\ :sub:`15`\ [3:0] Y'\ :sub:`15`\ [9:6]
++      - `-`\ [1:0] Y'\ :sub:`15`\ [9:4]
++    * - start + 16:
++      - Y'\ :sub:`20`\ [7:0]
++      - Y'\ :sub:`21`\ [5:0] Y'\ :sub:`20`\ [9:8]
++      - Y'\ :sub:`22`\ [3:0] Y'\ :sub:`21`\ [9:6]
++      - `-`\ [1:0] Y'\ :sub:`22`\ [9:4]
++      - Y'\ :sub:`23`\ [7:0]
++      - Y'\ :sub:`24`\ [5:0] Y'\ :sub:`24`\ [9:8]
++      - Y'\ :sub:`25`\ [3:0] Y'\ :sub:`25`\ [9:6]
++      - `-`\ [1:0] Y'\ :sub:`25`\ [9:4]
++    * - start + 24:
++      - Y'\ :sub:`20`\ [7:0]
++      - Y'\ :sub:`21`\ [5:0] Y'\ :sub:`20`\ [9:8]
++      - Y'\ :sub:`22`\ [3:0] Y'\ :sub:`21`\ [9:6]
++      - `-`\ [1:0] Y'\ :sub:`22`\ [9:4]
++      - Y'\ :sub:`23`\ [7:0]
++      - Y'\ :sub:`24`\ [5:0] Y'\ :sub:`24`\ [9:8]
++      - Y'\ :sub:`25`\ [3:0] Y'\ :sub:`25`\ [9:6]
++      - `-`\ [1:0] Y'\ :sub:`25`\ [9:4]
++    * - start + 32:
++      - Cb\ :sub:`00`\ [7:0]
++      - Cr\ :sub:`00`\ [5:0] Cb\ :sub:`00`\ [9:8]
++      - Cb\ :sub:`02`\ [3:0] Cr\ :sub:`00`\ [9:6]
++      - `-`\ [1:0] Cb\ :sub:`02`\ [9:4]
++      - Cr\ :sub:`02`\ [7:0]
++      - Cb\ :sub:`04`\ [5:0] Cr\ :sub:`02`\ [9:8]
++      - Cr\ :sub:`04`\ [3:0] Cb\ :sub:`04`\ [9:6]
++      - `-`\ [1:0] Cr\ :sub:`04`\ [9:4]
++    * - start + 40:
++      - Cb\ :sub:`10`\ [7:0]
++      - Cr\ :sub:`10`\ [5:0] Cb\ :sub:`10`\ [9:8]
++      - Cb\ :sub:`12`\ [3:0] Cr\ :sub:`10`\ [9:6]
++      - `-`\ [1:0] Cb\ :sub:`12`\ [9:4]
++      - Cr\ :sub:`12`\ [7:0]
++      - Cb\ :sub:`14`\ [5:0] Cr\ :sub:`12`\ [9:8]
++      - Cr\ :sub:`14`\ [3:0] Cb\ :sub:`14`\ [9:6]
++      - `-`\ [1:0] Cr\ :sub:`14`\ [9:4]
++    * - start + 48:
++      - Cb\ :sub:`20`\ [7:0]
++      - Cr\ :sub:`20`\ [5:0] Cb\ :sub:`20`\ [9:8]
++      - Cb\ :sub:`22`\ [3:0] Cr\ :sub:`20`\ [9:6]
++      - `-`\ [1:0] Cb\ :sub:`22`\ [9:4]
++      - Cr\ :sub:`22`\ [7:0]
++      - Cb\ :sub:`24`\ [5:0] Cr\ :sub:`22`\ [9:8]
++      - Cr\ :sub:`24`\ [3:0] Cb\ :sub:`24`\ [9:6]
++      - `-`\ [1:0] Cr\ :sub:`24`\ [9:4]
++    * - start + 56:
++      - Cb\ :sub:`30`\ [7:0]
++      - Cr\ :sub:`30`\ [5:0] Cb\ :sub:`30`\ [9:8]
++      - Cb\ :sub:`32`\ [3:0] Cr\ :sub:`30`\ [9:6]
++      - `-`\ [1:0] Cb\ :sub:`32`\ [9:4]
++      - Cr\ :sub:`32`\ [7:0]
++      - Cb\ :sub:`34`\ [5:0] Cr\ :sub:`32`\ [9:8]
++      - Cr\ :sub:`34`\ [3:0] Cb\ :sub:`34`\ [9:6]
++      - `-`\ [1:0] Cr\ :sub:`34`\ [9:4]
++
++
++.. _V4L2-PIX-FMT-NV12-12-2:
++.. _V4L2-PIX-FMT-NV21-12-2:
++.. _V4L2-PIX-FMT-NV16-12-2:
++.. _V4L2-PIX-FMT-NV61-12-2:
++
++NV12_12_2, NV21_12_2, NV16_12_2 and NV61_12_2
++---------------------------------------------
++
++Semi-planar YUV 4:2:0 and 4:2:2 formats with 12 bits per component, stored with
++2 samples packed in 3 bytes.
++
++Within a plane, 2 samples are packed in a 24-bit word, with no padding bits.
++The bits are organized as follows for the first two samples of a luma line
++and a chroma line.
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++
++    * - 23:12
++      - 11:0
++    * - Y'\ :sub:`1`\ [11:0]
++      - Y'\ :sub:`0`\ [11:0]
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++
++    * - 23:12
++      - 11:0
++    * - Cr\ :sub:`0`\ [11:0]
++      - Cb\ :sub:`0`\ [11:0]
++
++Words are then stored in memory in little endian format.
++
++.. flat-table:: Sample 4x4 NV12_12_2 Image
++    :header-rows:  0
++    :stub-columns: 0
++
++    * - start + 0:
++      - Y'\ :sub:`00`\ [7:0]
++      - Y'\ :sub:`01`\ [3:0] Y'\ :sub:`00`\ [11:8]
++      - Y'\ :sub:`01`\ [11:4]
++      - Y'\ :sub:`02`\ [7:0]
++      - Y'\ :sub:`03`\ [3:0] Y'\ :sub:`02`\ [11:8]
++      - Y'\ :sub:`03`\ [11:4]
++    * - start + 6:
++      - Y'\ :sub:`10`\ [7:0]
++      - Y'\ :sub:`11`\ [3:0] Y'\ :sub:`10`\ [11:8]
++      - Y'\ :sub:`11`\ [11:4]
++      - Y'\ :sub:`12`\ [7:0]
++      - Y'\ :sub:`13`\ [3:0] Y'\ :sub:`12`\ [11:8]
++      - Y'\ :sub:`13`\ [11:4]
++    * - start + 12:
++      - Y'\ :sub:`20`\ [7:0]
++      - Y'\ :sub:`21`\ [3:0] Y'\ :sub:`20`\ [11:8]
++      - Y'\ :sub:`21`\ [11:4]
++      - Y'\ :sub:`22`\ [7:0]
++      - Y'\ :sub:`23`\ [3:0] Y'\ :sub:`22`\ [11:8]
++      - Y'\ :sub:`23`\ [11:4]
++    * - start + 18:
++      - Y'\ :sub:`30`\ [7:0]
++      - Y'\ :sub:`31`\ [3:0] Y'\ :sub:`30`\ [11:8]
++      - Y'\ :sub:`31`\ [11:4]
++      - Y'\ :sub:`32`\ [7:0]
++      - Y'\ :sub:`33`\ [3:0] Y'\ :sub:`32`\ [11:8]
++      - Y'\ :sub:`33`\ [11:4]
++    * - start + 24:
++      - Cb\ :sub:`00`\ [7:0]
++      - Cr\ :sub:`00`\ [3:0] Cb\ :sub:`00`\ [11:8]
++      - Cr\ :sub:`00`\ [11:4]
++      - Cb\ :sub:`02`\ [7:0]
++      - Cr\ :sub:`02`\ [3:0] Cb\ :sub:`02`\ [11:8]
++      - Cr\ :sub:`02`\ [11:4]
 +    * - start + 30:
-+      - Cr\ :sub:`30`
-+      - Cr\ :sub:`31`
++      - Cb\ :sub:`20`\ [7:0]
++      - Cr\ :sub:`20`\ [3:0] Cb\ :sub:`20`\ [11:8]
++      - Cr\ :sub:`20`\ [11:4]
++      - Cb\ :sub:`22`\ [7:0]
++      - Cr\ :sub:`22`\ [3:0] Cb\ :sub:`22`\ [11:8]
++      - Cr\ :sub:`22`\ [11:4]
 +
-+.. flat-table:: Sample 4x4 YUV422M Image
++.. flat-table:: Sample 4x4 NV16_12_2 Image
 +    :header-rows:  0
 +    :stub-columns: 0
 +
-+    * - start0 + 0:
-+      - Y'\ :sub:`00`
-+      - Y'\ :sub:`01`
-+      - Y'\ :sub:`02`
-+      - Y'\ :sub:`03`
-+    * - start0 + 4:
-+      - Y'\ :sub:`10`
-+      - Y'\ :sub:`11`
-+      - Y'\ :sub:`12`
-+      - Y'\ :sub:`13`
-+    * - start0 + 8:
-+      - Y'\ :sub:`20`
-+      - Y'\ :sub:`21`
-+      - Y'\ :sub:`22`
-+      - Y'\ :sub:`23`
-+    * - start0 + 12:
-+      - Y'\ :sub:`30`
-+      - Y'\ :sub:`31`
-+      - Y'\ :sub:`32`
-+      - Y'\ :sub:`33`
-+    * -
-+    * - start1 + 0:
-+      - Cb\ :sub:`00`
-+      - Cb\ :sub:`01`
-+    * - start1 + 2:
-+      - Cb\ :sub:`10`
-+      - Cb\ :sub:`11`
-+    * - start1 + 4:
-+      - Cb\ :sub:`20`
-+      - Cb\ :sub:`21`
-+    * - start1 + 6:
-+      - Cb\ :sub:`30`
-+      - Cb\ :sub:`31`
-+    * -
-+    * - start2 + 0:
-+      - Cr\ :sub:`00`
-+      - Cr\ :sub:`01`
-+    * - start2 + 2:
-+      - Cr\ :sub:`10`
-+      - Cr\ :sub:`11`
-+    * - start2 + 4:
-+      - Cr\ :sub:`20`
-+      - Cr\ :sub:`21`
-+    * - start2 + 6:
-+      - Cr\ :sub:`30`
-+      - Cr\ :sub:`31`
++    * - start + 0:
++      - Y'\ :sub:`00`\ [7:0]
++      - Y'\ :sub:`01`\ [3:0] Y'\ :sub:`00`\ [11:8]
++      - Y'\ :sub:`01`\ [11:4]
++      - Y'\ :sub:`02`\ [7:0]
++      - Y'\ :sub:`03`\ [3:0] Y'\ :sub:`02`\ [11:8]
++      - Y'\ :sub:`03`\ [11:4]
++    * - start + 6:
++      - Y'\ :sub:`10`\ [7:0]
++      - Y'\ :sub:`11`\ [3:0] Y'\ :sub:`10`\ [11:8]
++      - Y'\ :sub:`11`\ [11:4]
++      - Y'\ :sub:`12`\ [7:0]
++      - Y'\ :sub:`13`\ [3:0] Y'\ :sub:`12`\ [11:8]
++      - Y'\ :sub:`13`\ [11:4]
++    * - start + 12:
++      - Y'\ :sub:`20`\ [7:0]
++      - Y'\ :sub:`21`\ [3:0] Y'\ :sub:`20`\ [11:8]
++      - Y'\ :sub:`21`\ [11:4]
++      - Y'\ :sub:`22`\ [7:0]
++      - Y'\ :sub:`23`\ [3:0] Y'\ :sub:`22`\ [11:8]
++      - Y'\ :sub:`23`\ [11:4]
++    * - start + 18:
++      - Y'\ :sub:`30`\ [7:0]
++      - Y'\ :sub:`31`\ [3:0] Y'\ :sub:`30`\ [11:8]
++      - Y'\ :sub:`31`\ [11:4]
++      - Y'\ :sub:`32`\ [7:0]
++      - Y'\ :sub:`33`\ [3:0] Y'\ :sub:`32`\ [11:8]
++      - Y'\ :sub:`33`\ [11:4]
++    * - start + 24:
++      - Cb\ :sub:`00`\ [7:0]
++      - Cr\ :sub:`00`\ [3:0] Cb\ :sub:`00`\ [11:8]
++      - Cr\ :sub:`00`\ [11:4]
++      - Cb\ :sub:`02`\ [7:0]
++      - Cr\ :sub:`02`\ [3:0] Cb\ :sub:`02`\ [11:8]
++      - Cr\ :sub:`02`\ [11:4]
++    * - start + 30:
++      - Cb\ :sub:`10`\ [7:0]
++      - Cr\ :sub:`10`\ [3:0] Cb\ :sub:`10`\ [11:8]
++      - Cr\ :sub:`10`\ [11:4]
++      - Cb\ :sub:`12`\ [7:0]
++      - Cr\ :sub:`12`\ [3:0] Cb\ :sub:`12`\ [11:8]
++      - Cr\ :sub:`12`\ [11:4]
++    * - start + 36:
++      - Cb\ :sub:`20`\ [7:0]
++      - Cr\ :sub:`20`\ [3:0] Cb\ :sub:`20`\ [11:8]
++      - Cr\ :sub:`20`\ [11:4]
++      - Cb\ :sub:`22`\ [7:0]
++      - Cr\ :sub:`22`\ [3:0] Cb\ :sub:`22`\ [11:8]
++      - Cr\ :sub:`22`\ [11:4]
++    * - start + 42:
++      - Cb\ :sub:`30`\ [7:0]
++      - Cr\ :sub:`30`\ [3:0] Cb\ :sub:`30`\ [11:8]
++      - Cr\ :sub:`30`\ [11:4]
++      - Cb\ :sub:`32`\ [7:0]
++      - Cr\ :sub:`32`\ [3:0] Cb\ :sub:`32`\ [11:8]
++      - Cr\ :sub:`32`\ [11:4]
 +
 +
-+.. _V4L2-PIX-FMT-YUV444M:
-+.. _V4L2-PIX-FMT-YVU444M:
++.. _V4L2-PIX-FMT-NV12-16-1:
++.. _V4L2-PIX-FMT-NV21-16-1:
++.. _V4L2-PIX-FMT-NV16-16-1:
++.. _V4L2-PIX-FMT-NV61-16-1:
 +
-+YUV444M and YVU444M
-+-------------------
++NV12_16_1, NV21_16_1, NV16_16_1 and NV61_16_1
++---------------------------------------------
 +
-+Planar YUV 4:4:4 formats. The chroma planes are no subsampled. Chroma lines
-+contain the same number of pixels and bytes of the luma lines, and the chroma
-+planes contain the same number of lines as the luma plane.
++Semi-planar YUV 4:2:0 and 4:2:2 formats with 16 bits per component. 16-bit
++samples are stored in memory in little endian format.
 +
-+.. flat-table:: Sample 4x4 YUV444M Image
++.. flat-table:: Sample 4x4 NV12_16_1 Image
 +    :header-rows:  0
 +    :stub-columns: 0
 +
-+    * - start0 + 0:
-+      - Y'\ :sub:`00`
-+      - Y'\ :sub:`01`
-+      - Y'\ :sub:`02`
-+      - Y'\ :sub:`03`
-+    * - start0 + 4:
-+      - Y'\ :sub:`10`
-+      - Y'\ :sub:`11`
-+      - Y'\ :sub:`12`
-+      - Y'\ :sub:`13`
-+    * - start0 + 8:
-+      - Y'\ :sub:`20`
-+      - Y'\ :sub:`21`
-+      - Y'\ :sub:`22`
-+      - Y'\ :sub:`23`
-+    * - start0 + 12:
-+      - Y'\ :sub:`30`
-+      - Y'\ :sub:`31`
-+      - Y'\ :sub:`32`
-+      - Y'\ :sub:`33`
-+    * -
-+    * - start1 + 0:
-+      - Cb\ :sub:`00`
-+      - Cb\ :sub:`01`
-+      - Cb\ :sub:`02`
-+      - Cb\ :sub:`03`
-+    * - start1 + 4:
-+      - Cb\ :sub:`10`
-+      - Cb\ :sub:`11`
-+      - Cb\ :sub:`12`
-+      - Cb\ :sub:`13`
-+    * - start1 + 8:
-+      - Cb\ :sub:`20`
-+      - Cb\ :sub:`21`
-+      - Cb\ :sub:`22`
-+      - Cb\ :sub:`23`
-+    * - start1 + 12:
-+      - Cb\ :sub:`20`
-+      - Cb\ :sub:`21`
-+      - Cb\ :sub:`32`
-+      - Cb\ :sub:`33`
-+    * -
-+    * - start2 + 0:
-+      - Cr\ :sub:`00`
-+      - Cr\ :sub:`01`
-+      - Cr\ :sub:`02`
-+      - Cr\ :sub:`03`
-+    * - start2 + 4:
-+      - Cr\ :sub:`10`
-+      - Cr\ :sub:`11`
-+      - Cr\ :sub:`12`
-+      - Cr\ :sub:`13`
-+    * - start2 + 8:
-+      - Cr\ :sub:`20`
-+      - Cr\ :sub:`21`
-+      - Cr\ :sub:`22`
-+      - Cr\ :sub:`23`
-+    * - start2 + 12:
-+      - Cr\ :sub:`30`
-+      - Cr\ :sub:`31`
-+      - Cr\ :sub:`32`
-+      - Cr\ :sub:`33`
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv410.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv410.rst
-deleted file mode 100644
-index d79cd46d5055..000000000000
---- a/Documentation/userspace-api/media/v4l/pixfmt-yuv410.rst
-+++ /dev/null
-@@ -1,72 +0,0 @@
--.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
--
--.. _V4L2-PIX-FMT-YVU410:
--.. _v4l2-pix-fmt-yuv410:
--
--**********************************************************
--V4L2_PIX_FMT_YVU410 ('YVU9'), V4L2_PIX_FMT_YUV410 ('YUV9')
--**********************************************************
--
--
--V4L2_PIX_FMT_YUV410
--Planar formats with ¼ horizontal and vertical chroma resolution, also
--known as YUV 4:1:0
--
--
--Description
--===========
--
--These are planar formats, as opposed to a packed format. The three
--components are separated into three sub-images or planes. The Y plane is
--first. The Y plane has one byte per pixel. For ``V4L2_PIX_FMT_YVU410``,
--the Cr plane immediately follows the Y plane in memory. The Cr plane is
--¼ the width and ¼ the height of the Y plane (and of the image). Each Cr
--belongs to 16 pixels, a four-by-four square of the image. Following the
--Cr plane is the Cb plane, just like the Cr plane.
--``V4L2_PIX_FMT_YUV410`` is the same, except the Cb plane comes first,
--then the Cr plane.
--
--If the Y plane has pad bytes after each row, then the Cr and Cb planes
--have ¼ as many pad bytes after their rows. In other words, four Cx rows
--(including padding) are exactly as long as one Y row (including
--padding).
--
--**Byte Order.**
--Each cell is one byte.
--
--
--
--
--.. flat-table::
--    :header-rows:  0
--    :stub-columns: 0
--
--    * - start + 0:
--      - Y'\ :sub:`00`
--      - Y'\ :sub:`01`
--      - Y'\ :sub:`02`
--      - Y'\ :sub:`03`
--    * - start + 4:
--      - Y'\ :sub:`10`
--      - Y'\ :sub:`11`
--      - Y'\ :sub:`12`
--      - Y'\ :sub:`13`
--    * - start + 8:
--      - Y'\ :sub:`20`
--      - Y'\ :sub:`21`
--      - Y'\ :sub:`22`
--      - Y'\ :sub:`23`
--    * - start + 12:
--      - Y'\ :sub:`30`
--      - Y'\ :sub:`31`
--      - Y'\ :sub:`32`
--      - Y'\ :sub:`33`
--    * - start + 16:
--      - Cr\ :sub:`00`
--    * - start + 17:
--      - Cb\ :sub:`00`
--
--
--**Color Sample Location:**
--Chroma samples are :ref:`interstitially sited<yuv-chroma-centered>`
--horizontally and vertically.
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv411p.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv411p.rst
-deleted file mode 100644
-index 8a70eeca8d83..000000000000
---- a/Documentation/userspace-api/media/v4l/pixfmt-yuv411p.rst
-+++ /dev/null
-@@ -1,80 +0,0 @@
--.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
--
--.. _V4L2-PIX-FMT-YUV411P:
--
--*****************************
--V4L2_PIX_FMT_YUV411P ('411P')
--*****************************
--
--
--Format with ¼ horizontal chroma resolution, also known as YUV 4:1:1.
--Planar layout as opposed to ``V4L2_PIX_FMT_Y41P``
--
--
--Description
--===========
--
--This format is not commonly used. This is a planar format similar to the
--4:2:2 planar format except with half as many chroma. The three
--components are separated into three sub-images or planes. The Y plane is
--first. The Y plane has one byte per pixel. The Cb plane immediately
--follows the Y plane in memory. The Cb plane is ¼ the width of the Y
--plane (and of the image). Each Cb belongs to 4 pixels all on the same
--row. For example, Cb\ :sub:`0` belongs to Y'\ :sub:`00`, Y'\ :sub:`01`,
--Y'\ :sub:`02` and Y'\ :sub:`03`. Following the Cb plane is the Cr plane,
--just like the Cb plane.
--
--If the Y plane has pad bytes after each row, then the Cr and Cb planes
--have ¼ as many pad bytes after their rows. In other words, four C x rows
--(including padding) is exactly as long as one Y row (including padding).
--
--**Byte Order.**
--Each cell is one byte.
--
--
--
--.. flat-table::
--    :header-rows:  0
--    :stub-columns: 0
--
--    * - start + 0:
--      - Y'\ :sub:`00`
--      - Y'\ :sub:`01`
--      - Y'\ :sub:`02`
--      - Y'\ :sub:`03`
--    * - start + 4:
--      - Y'\ :sub:`10`
--      - Y'\ :sub:`11`
--      - Y'\ :sub:`12`
--      - Y'\ :sub:`13`
--    * - start + 8:
--      - Y'\ :sub:`20`
--      - Y'\ :sub:`21`
--      - Y'\ :sub:`22`
--      - Y'\ :sub:`23`
--    * - start + 12:
--      - Y'\ :sub:`30`
--      - Y'\ :sub:`31`
--      - Y'\ :sub:`32`
--      - Y'\ :sub:`33`
--    * - start + 16:
--      - Cb\ :sub:`00`
--    * - start + 17:
--      - Cb\ :sub:`10`
--    * - start + 18:
--      - Cb\ :sub:`20`
--    * - start + 19:
--      - Cb\ :sub:`30`
--    * - start + 20:
--      - Cr\ :sub:`00`
--    * - start + 21:
--      - Cr\ :sub:`10`
--    * - start + 22:
--      - Cr\ :sub:`20`
--    * - start + 23:
--      - Cr\ :sub:`30`
--
--
--**Color Sample Location:**
--Chroma samples are :ref:`interstitially sited<yuv-chroma-centered>`
--horizontally.
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv420.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv420.rst
-deleted file mode 100644
-index a36ec8d6d8a4..000000000000
---- a/Documentation/userspace-api/media/v4l/pixfmt-yuv420.rst
-+++ /dev/null
-@@ -1,81 +0,0 @@
--.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
--
--.. _V4L2-PIX-FMT-YVU420:
--.. _V4L2-PIX-FMT-YUV420:
--
--**********************************************************
--V4L2_PIX_FMT_YVU420 ('YV12'), V4L2_PIX_FMT_YUV420 ('YU12')
--**********************************************************
--
--
--V4L2_PIX_FMT_YUV420
--Planar formats with ½ horizontal and vertical chroma resolution, also
--known as YUV 4:2:0
--
--
--Description
--===========
--
--These are planar formats, as opposed to a packed format. The three
--components are separated into three sub- images or planes. The Y plane
--is first. The Y plane has one byte per pixel. For
--``V4L2_PIX_FMT_YVU420``, the Cr plane immediately follows the Y plane in
--memory. The Cr plane is half the width and half the height of the Y
--plane (and of the image). Each Cr belongs to four pixels, a two-by-two
--square of the image. For example, Cr\ :sub:`0` belongs to Y'\ :sub:`00`,
--Y'\ :sub:`01`, Y'\ :sub:`10`, and Y'\ :sub:`11`. Following the Cr plane
--is the Cb plane, just like the Cr plane. ``V4L2_PIX_FMT_YUV420`` is the
--same except the Cb plane comes first, then the Cr plane.
--
--If the Y plane has pad bytes after each row, then the Cr and Cb planes
--have half as many pad bytes after their rows. In other words, two Cx
--rows (including padding) is exactly as long as one Y row (including
--padding).
--
--**Byte Order.**
--Each cell is one byte.
--
--
--
--
--.. flat-table::
--    :header-rows:  0
--    :stub-columns: 0
--
--    * - start + 0:
--      - Y'\ :sub:`00`
--      - Y'\ :sub:`01`
--      - Y'\ :sub:`02`
--      - Y'\ :sub:`03`
--    * - start + 4:
--      - Y'\ :sub:`10`
--      - Y'\ :sub:`11`
--      - Y'\ :sub:`12`
--      - Y'\ :sub:`13`
--    * - start + 8:
--      - Y'\ :sub:`20`
--      - Y'\ :sub:`21`
--      - Y'\ :sub:`22`
--      - Y'\ :sub:`23`
--    * - start + 12:
--      - Y'\ :sub:`30`
--      - Y'\ :sub:`31`
--      - Y'\ :sub:`32`
--      - Y'\ :sub:`33`
--    * - start + 16:
--      - Cr\ :sub:`00`
--      - Cr\ :sub:`01`
--    * - start + 18:
--      - Cr\ :sub:`10`
--      - Cr\ :sub:`11`
--    * - start + 20:
--      - Cb\ :sub:`00`
--      - Cb\ :sub:`01`
--    * - start + 22:
--      - Cb\ :sub:`10`
--      - Cb\ :sub:`11`
--
--
--**Color Sample Location:**
--Chroma samples are :ref:`interstitially sited<yuv-chroma-centered>`
--horizontally and vertically.
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv420m.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv420m.rst
-deleted file mode 100644
-index c2cf17b9743c..000000000000
---- a/Documentation/userspace-api/media/v4l/pixfmt-yuv420m.rst
-+++ /dev/null
-@@ -1,90 +0,0 @@
--.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
--
--.. _V4L2-PIX-FMT-YUV420M:
--.. _v4l2-pix-fmt-yvu420m:
--
--************************************************************
--V4L2_PIX_FMT_YUV420M ('YM12'), V4L2_PIX_FMT_YVU420M ('YM21')
--************************************************************
--
--
--V4L2_PIX_FMT_YVU420M
--Variation of ``V4L2_PIX_FMT_YUV420`` and ``V4L2_PIX_FMT_YVU420`` with
--planes non contiguous in memory.
--
--
--Description
--===========
--
--This is a multi-planar format, as opposed to a packed format. The three
--components are separated into three sub-images or planes.
--
--The Y plane is first. The Y plane has one byte per pixel. For
--``V4L2_PIX_FMT_YUV420M`` the Cb data constitutes the second plane which
--is half the width and half the height of the Y plane (and of the image).
--Each Cb belongs to four pixels, a two-by-two square of the image. For
--example, Cb\ :sub:`0` belongs to Y'\ :sub:`00`, Y'\ :sub:`01`,
--Y'\ :sub:`10`, and Y'\ :sub:`11`. The Cr data, just like the Cb plane,
--is in the third plane.
--
--``V4L2_PIX_FMT_YVU420M`` is the same except the Cr data is stored in the
--second plane and the Cb data in the third plane.
--
--If the Y plane has pad bytes after each row, then the Cb and Cr planes
--have half as many pad bytes after their rows. In other words, two Cx
--rows (including padding) is exactly as long as one Y row (including
--padding).
--
--``V4L2_PIX_FMT_YUV420M`` and ``V4L2_PIX_FMT_YVU420M`` are intended to be
--used only in drivers and applications that support the multi-planar API,
--described in :ref:`planar-apis`.
--
--**Byte Order.**
--Each cell is one byte.
--
--
--
--
--.. flat-table::
--    :header-rows:  0
--    :stub-columns: 0
--
--    * - start0 + 0:
--      - Y'\ :sub:`00`
--      - Y'\ :sub:`01`
--      - Y'\ :sub:`02`
--      - Y'\ :sub:`03`
--    * - start0 + 4:
--      - Y'\ :sub:`10`
--      - Y'\ :sub:`11`
--      - Y'\ :sub:`12`
--      - Y'\ :sub:`13`
--    * - start0 + 8:
--      - Y'\ :sub:`20`
--      - Y'\ :sub:`21`
--      - Y'\ :sub:`22`
--      - Y'\ :sub:`23`
--    * - start0 + 12:
--      - Y'\ :sub:`30`
--      - Y'\ :sub:`31`
--      - Y'\ :sub:`32`
--      - Y'\ :sub:`33`
--    * -
--    * - start1 + 0:
--      - Cb\ :sub:`00`
--      - Cb\ :sub:`01`
--    * - start1 + 2:
--      - Cb\ :sub:`10`
--      - Cb\ :sub:`11`
--    * -
--    * - start2 + 0:
--      - Cr\ :sub:`00`
--      - Cr\ :sub:`01`
--    * - start2 + 2:
--      - Cr\ :sub:`10`
--      - Cr\ :sub:`11`
--
--
--**Color Sample Location:**
--Chroma samples are :ref:`interstitially sited<yuv-chroma-centered>`
--horizontally and vertically.
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv422m.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv422m.rst
-deleted file mode 100644
-index f92b54853fc9..000000000000
---- a/Documentation/userspace-api/media/v4l/pixfmt-yuv422m.rst
-+++ /dev/null
-@@ -1,101 +0,0 @@
--.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
--
--.. _V4L2-PIX-FMT-YUV422M:
--.. _v4l2-pix-fmt-yvu422m:
--
--************************************************************
--V4L2_PIX_FMT_YUV422M ('YM16'), V4L2_PIX_FMT_YVU422M ('YM61')
--************************************************************
--
--
--V4L2_PIX_FMT_YVU422M
--Planar formats with ½ horizontal resolution, also known as YUV and YVU
--4:2:2
--
--
--Description
--===========
--
--This is a multi-planar format, as opposed to a packed format. The three
--components are separated into three sub-images or planes.
--
--The Y plane is first. The Y plane has one byte per pixel. For
--``V4L2_PIX_FMT_YUV422M`` the Cb data constitutes the second plane which
--is half the width of the Y plane (and of the image). Each Cb belongs to
--two pixels. For example, Cb\ :sub:`0` belongs to Y'\ :sub:`00`,
--Y'\ :sub:`01`. The Cr data, just like the Cb plane, is in the third
--plane.
--
--``V4L2_PIX_FMT_YVU422M`` is the same except the Cr data is stored in the
--second plane and the Cb data in the third plane.
--
--If the Y plane has pad bytes after each row, then the Cb and Cr planes
--have half as many pad bytes after their rows. In other words, two Cx
--rows (including padding) is exactly as long as one Y row (including
--padding).
--
--``V4L2_PIX_FMT_YUV422M`` and ``V4L2_PIX_FMT_YVU422M`` are intended to be
--used only in drivers and applications that support the multi-planar API,
--described in :ref:`planar-apis`.
--
--**Byte Order.**
--Each cell is one byte.
--
--
--
--
--.. flat-table::
--    :header-rows:  0
--    :stub-columns: 0
--
--    * - start0 + 0:
--      - Y'\ :sub:`00`
--      - Y'\ :sub:`01`
--      - Y'\ :sub:`02`
--      - Y'\ :sub:`03`
--    * - start0 + 4:
--      - Y'\ :sub:`10`
--      - Y'\ :sub:`11`
--      - Y'\ :sub:`12`
--      - Y'\ :sub:`13`
--    * - start0 + 8:
--      - Y'\ :sub:`20`
--      - Y'\ :sub:`21`
--      - Y'\ :sub:`22`
--      - Y'\ :sub:`23`
--    * - start0 + 12:
--      - Y'\ :sub:`30`
--      - Y'\ :sub:`31`
--      - Y'\ :sub:`32`
--      - Y'\ :sub:`33`
--    * -
--    * - start1 + 0:
--      - Cb\ :sub:`00`
--      - Cb\ :sub:`01`
--    * - start1 + 2:
--      - Cb\ :sub:`10`
--      - Cb\ :sub:`11`
--    * - start1 + 4:
--      - Cb\ :sub:`20`
--      - Cb\ :sub:`21`
--    * - start1 + 6:
--      - Cb\ :sub:`30`
--      - Cb\ :sub:`31`
--    * -
--    * - start2 + 0:
--      - Cr\ :sub:`00`
--      - Cr\ :sub:`01`
--    * - start2 + 2:
--      - Cr\ :sub:`10`
--      - Cr\ :sub:`11`
--    * - start2 + 4:
--      - Cr\ :sub:`20`
--      - Cr\ :sub:`21`
--    * - start2 + 6:
--      - Cr\ :sub:`30`
--      - Cr\ :sub:`31`
--
--
--**Color Sample Location:**
--Chroma samples are :ref:`interstitially sited<yuv-chroma-centered>`
--horizontally.
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv422p.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv422p.rst
-deleted file mode 100644
-index 33e6b923e325..000000000000
---- a/Documentation/userspace-api/media/v4l/pixfmt-yuv422p.rst
-+++ /dev/null
-@@ -1,89 +0,0 @@
--.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
--
--.. _V4L2-PIX-FMT-YUV422P:
--
--*****************************
--V4L2_PIX_FMT_YUV422P ('422P')
--*****************************
--
--
--Format with ½ horizontal chroma resolution, also known as YUV 4:2:2.
--Planar layout as opposed to ``V4L2_PIX_FMT_YUYV``
--
--
--Description
--===========
--
--This format is not commonly used. This is a planar version of the YUYV
--format. The three components are separated into three sub-images or
--planes. The Y plane is first. The Y plane has one byte per pixel. The Cb
--plane immediately follows the Y plane in memory. The Cb plane is half
--the width of the Y plane (and of the image). Each Cb belongs to two
--pixels. For example, Cb\ :sub:`0` belongs to Y'\ :sub:`00`,
--Y'\ :sub:`01`. Following the Cb plane is the Cr plane, just like the Cb
--plane.
--
--If the Y plane has pad bytes after each row, then the Cr and Cb planes
--have half as many pad bytes after their rows. In other words, two Cx
--rows (including padding) is exactly as long as one Y row (including
--padding).
--
--**Byte Order.**
--Each cell is one byte.
--
--
--
--
--.. flat-table::
--    :header-rows:  0
--    :stub-columns: 0
--
--    * - start + 0:
--      - Y'\ :sub:`00`
--      - Y'\ :sub:`01`
--      - Y'\ :sub:`02`
--      - Y'\ :sub:`03`
--    * - start + 4:
--      - Y'\ :sub:`10`
--      - Y'\ :sub:`11`
--      - Y'\ :sub:`12`
--      - Y'\ :sub:`13`
--    * - start + 8:
--      - Y'\ :sub:`20`
--      - Y'\ :sub:`21`
--      - Y'\ :sub:`22`
--      - Y'\ :sub:`23`
--    * - start + 12:
--      - Y'\ :sub:`30`
--      - Y'\ :sub:`31`
--      - Y'\ :sub:`32`
--      - Y'\ :sub:`33`
--    * - start + 16:
--      - Cb\ :sub:`00`
--      - Cb\ :sub:`01`
--    * - start + 18:
--      - Cb\ :sub:`10`
--      - Cb\ :sub:`11`
--    * - start + 20:
--      - Cb\ :sub:`20`
--      - Cb\ :sub:`21`
--    * - start + 22:
--      - Cb\ :sub:`30`
--      - Cb\ :sub:`31`
--    * - start + 24:
--      - Cr\ :sub:`00`
--      - Cr\ :sub:`01`
--    * - start + 26:
--      - Cr\ :sub:`10`
--      - Cr\ :sub:`11`
--    * - start + 28:
--      - Cr\ :sub:`20`
--      - Cr\ :sub:`21`
--    * - start + 30:
--      - Cr\ :sub:`30`
--      - Cr\ :sub:`31`
--
--
--**Color Sample Location:**
--Chroma samples are :ref:`interstitially sited<yuv-chroma-centered>`
--horizontally.
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv444m.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv444m.rst
-deleted file mode 100644
-index 7c03cc5b07d9..000000000000
---- a/Documentation/userspace-api/media/v4l/pixfmt-yuv444m.rst
-+++ /dev/null
-@@ -1,110 +0,0 @@
--.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
--
--.. _V4L2-PIX-FMT-YUV444M:
--.. _v4l2-pix-fmt-yvu444m:
--
--************************************************************
--V4L2_PIX_FMT_YUV444M ('YM24'), V4L2_PIX_FMT_YVU444M ('YM42')
--************************************************************
--
--
--V4L2_PIX_FMT_YVU444M
--Planar formats with full horizontal resolution, also known as YUV and
--YVU 4:4:4
--
--
--Description
--===========
--
--This is a multi-planar format, as opposed to a packed format. The three
--components are separated into three sub-images or planes.
--
--The Y plane is first. The Y plane has one byte per pixel. For
--``V4L2_PIX_FMT_YUV444M`` the Cb data constitutes the second plane which
--is the same width and height as the Y plane (and as the image). The Cr
--data, just like the Cb plane, is in the third plane.
--
--``V4L2_PIX_FMT_YVU444M`` is the same except the Cr data is stored in the
--second plane and the Cb data in the third plane.
--
--If the Y plane has pad bytes after each row, then the Cb and Cr planes
--have the same number of pad bytes after their rows.
--
--``V4L2_PIX_FMT_YUV444M`` and ``V4L2_PIX_FMT_YUV444M`` are intended to be
--used only in drivers and applications that support the multi-planar API,
--described in :ref:`planar-apis`.
--
--**Byte Order.**
--Each cell is one byte.
--
--
--.. flat-table::
--    :header-rows:  0
--    :stub-columns: 0
--
--    * - start0 + 0:
--      - Y'\ :sub:`00`
--      - Y'\ :sub:`01`
--      - Y'\ :sub:`02`
--      - Y'\ :sub:`03`
--    * - start0 + 4:
--      - Y'\ :sub:`10`
--      - Y'\ :sub:`11`
--      - Y'\ :sub:`12`
--      - Y'\ :sub:`13`
--    * - start0 + 8:
--      - Y'\ :sub:`20`
--      - Y'\ :sub:`21`
--      - Y'\ :sub:`22`
--      - Y'\ :sub:`23`
--    * - start0 + 12:
--      - Y'\ :sub:`30`
--      - Y'\ :sub:`31`
--      - Y'\ :sub:`32`
--      - Y'\ :sub:`33`
--    * -
--    * - start1 + 0:
--      - Cb\ :sub:`00`
--      - Cb\ :sub:`01`
--      - Cb\ :sub:`02`
--      - Cb\ :sub:`03`
--    * - start1 + 4:
--      - Cb\ :sub:`10`
--      - Cb\ :sub:`11`
--      - Cb\ :sub:`12`
--      - Cb\ :sub:`13`
--    * - start1 + 8:
--      - Cb\ :sub:`20`
--      - Cb\ :sub:`21`
--      - Cb\ :sub:`22`
--      - Cb\ :sub:`23`
--    * - start1 + 12:
--      - Cb\ :sub:`20`
--      - Cb\ :sub:`21`
--      - Cb\ :sub:`32`
--      - Cb\ :sub:`33`
--    * -
--    * - start2 + 0:
--      - Cr\ :sub:`00`
--      - Cr\ :sub:`01`
--      - Cr\ :sub:`02`
--      - Cr\ :sub:`03`
--    * - start2 + 4:
--      - Cr\ :sub:`10`
--      - Cr\ :sub:`11`
--      - Cr\ :sub:`12`
--      - Cr\ :sub:`13`
--    * - start2 + 8:
--      - Cr\ :sub:`20`
--      - Cr\ :sub:`21`
--      - Cr\ :sub:`22`
--      - Cr\ :sub:`23`
--    * - start2 + 12:
--      - Cr\ :sub:`30`
--      - Cr\ :sub:`31`
--      - Cr\ :sub:`32`
--      - Cr\ :sub:`33`
--
--
--**Color Sample Location:**
--Chroma samples are :ref:`co-sited<yuv-chroma-cosited>`.
-diff --git a/Documentation/userspace-api/media/v4l/yuv-formats.rst b/Documentation/userspace-api/media/v4l/yuv-formats.rst
-index 517499056f3b..24b34cdfa6fe 100644
---- a/Documentation/userspace-api/media/v4l/yuv-formats.rst
-+++ b/Documentation/userspace-api/media/v4l/yuv-formats.rst
-@@ -270,11 +270,4 @@ image.
-     pixfmt-y8i
-     pixfmt-y12i
-     pixfmt-uv8
--    pixfmt-yuv420
--    pixfmt-yuv420m
--    pixfmt-yuv422m
--    pixfmt-yuv444m
--    pixfmt-yuv410
--    pixfmt-yuv422p
--    pixfmt-yuv411p
-     pixfmt-m420
++    * - start + 0:
++      - Y'\ :sub:`00`\ [7:0]
++      - Y'\ :sub:`00`\ [15:8]
++      - Y'\ :sub:`01`\ [7:0]
++      - Y'\ :sub:`01`\ [15:8]
++      - Y'\ :sub:`02`\ [7:0]
++      - Y'\ :sub:`02`\ [15:8]
++      - Y'\ :sub:`03`\ [7:0]
++      - Y'\ :sub:`03`\ [15:8]
++    * - start + 8:
++      - Y'\ :sub:`10`\ [7:0]
++      - Y'\ :sub:`10`\ [15:8]
++      - Y'\ :sub:`11`\ [7:0]
++      - Y'\ :sub:`11`\ [15:8]
++      - Y'\ :sub:`12`\ [7:0]
++      - Y'\ :sub:`12`\ [15:8]
++      - Y'\ :sub:`13`\ [7:0]
++      - Y'\ :sub:`13`\ [15:8]
++    * - start + 16:
++      - Y'\ :sub:`20`\ [7:0]
++      - Y'\ :sub:`20`\ [15:8]
++      - Y'\ :sub:`21`\ [7:0]
++      - Y'\ :sub:`21`\ [15:8]
++      - Y'\ :sub:`22`\ [7:0]
++      - Y'\ :sub:`22`\ [15:8]
++      - Y'\ :sub:`23`\ [7:0]
++      - Y'\ :sub:`23`\ [15:8]
++    * - start + 24:
++      - Y'\ :sub:`30`\ [7:0]
++      - Y'\ :sub:`30`\ [15:8]
++      - Y'\ :sub:`31`\ [7:0]
++      - Y'\ :sub:`31`\ [15:8]
++      - Y'\ :sub:`32`\ [7:0]
++      - Y'\ :sub:`32`\ [15:8]
++      - Y'\ :sub:`33`\ [7:0]
++      - Y'\ :sub:`33`\ [15:8]
++    * - start + 32:
++      - Cb\ :sub:`00`\ [7:0]
++      - Cb\ :sub:`00`\ [15:8]
++      - Cr\ :sub:`00`\ [7:0]
++      - Cr\ :sub:`00`\ [15:8]
++      - Cb\ :sub:`02`\ [7:0]
++      - Cb\ :sub:`02`\ [15:8]
++      - Cr\ :sub:`02`\ [7:0]
++      - Cr\ :sub:`02`\ [15:8]
++    * - start + 40:
++      - Cb\ :sub:`20`\ [7:0]
++      - Cb\ :sub:`20`\ [15:8]
++      - Cr\ :sub:`20`\ [7:0]
++      - Cr\ :sub:`20`\ [15:8]
++      - Cb\ :sub:`22`\ [7:0]
++      - Cb\ :sub:`22`\ [15:8]
++      - Cr\ :sub:`22`\ [7:0]
++      - Cr\ :sub:`22`\ [15:8]
++
++.. flat-table:: Sample 4x4 NV16_16_1 Image
++    :header-rows:  0
++    :stub-columns: 0
++
++    * - start + 0:
++      - Y'\ :sub:`00`\ [7:0]
++      - Y'\ :sub:`00`\ [15:8]
++      - Y'\ :sub:`01`\ [7:0]
++      - Y'\ :sub:`01`\ [15:8]
++      - Y'\ :sub:`02`\ [7:0]
++      - Y'\ :sub:`02`\ [15:8]
++      - Y'\ :sub:`03`\ [7:0]
++      - Y'\ :sub:`03`\ [15:8]
++    * - start + 8:
++      - Y'\ :sub:`10`\ [7:0]
++      - Y'\ :sub:`10`\ [15:8]
++      - Y'\ :sub:`11`\ [7:0]
++      - Y'\ :sub:`11`\ [15:8]
++      - Y'\ :sub:`12`\ [7:0]
++      - Y'\ :sub:`12`\ [15:8]
++      - Y'\ :sub:`13`\ [7:0]
++      - Y'\ :sub:`13`\ [15:8]
++    * - start + 16:
++      - Y'\ :sub:`20`\ [7:0]
++      - Y'\ :sub:`20`\ [15:8]
++      - Y'\ :sub:`21`\ [7:0]
++      - Y'\ :sub:`21`\ [15:8]
++      - Y'\ :sub:`22`\ [7:0]
++      - Y'\ :sub:`22`\ [15:8]
++      - Y'\ :sub:`23`\ [7:0]
++      - Y'\ :sub:`23`\ [15:8]
++    * - start + 24:
++      - Y'\ :sub:`30`\ [7:0]
++      - Y'\ :sub:`30`\ [15:8]
++      - Y'\ :sub:`31`\ [7:0]
++      - Y'\ :sub:`31`\ [15:8]
++      - Y'\ :sub:`32`\ [7:0]
++      - Y'\ :sub:`32`\ [15:8]
++      - Y'\ :sub:`33`\ [7:0]
++      - Y'\ :sub:`33`\ [15:8]
++    * - start + 32:
++      - Cb\ :sub:`00`\ [7:0]
++      - Cb\ :sub:`00`\ [15:8]
++      - Cr\ :sub:`00`\ [7:0]
++      - Cr\ :sub:`00`\ [15:8]
++      - Cb\ :sub:`02`\ [7:0]
++      - Cb\ :sub:`02`\ [15:8]
++      - Cr\ :sub:`02`\ [7:0]
++      - Cr\ :sub:`02`\ [15:8]
++    * - start + 40:
++      - Cb\ :sub:`10`\ [7:0]
++      - Cb\ :sub:`10`\ [15:8]
++      - Cr\ :sub:`10`\ [7:0]
++      - Cr\ :sub:`10`\ [15:8]
++      - Cb\ :sub:`12`\ [7:0]
++      - Cb\ :sub:`12`\ [15:8]
++      - Cr\ :sub:`12`\ [7:0]
++      - Cr\ :sub:`12`\ [15:8]
++    * - start + 48:
++      - Cb\ :sub:`20`\ [7:0]
++      - Cb\ :sub:`20`\ [15:8]
++      - Cr\ :sub:`20`\ [7:0]
++      - Cr\ :sub:`20`\ [15:8]
++      - Cb\ :sub:`22`\ [7:0]
++      - Cb\ :sub:`22`\ [15:8]
++      - Cr\ :sub:`22`\ [7:0]
++      - Cr\ :sub:`22`\ [15:8]
++    * - start + 56:
++      - Cb\ :sub:`30`\ [7:0]
++      - Cb\ :sub:`30`\ [15:8]
++      - Cr\ :sub:`30`\ [7:0]
++      - Cr\ :sub:`30`\ [15:8]
++      - Cb\ :sub:`32`\ [7:0]
++      - Cb\ :sub:`32`\ [15:8]
++      - Cr\ :sub:`32`\ [7:0]
++      - Cr\ :sub:`32`\ [15:8]
++
++
+ Fully Planar YUV Formats
+ ========================
+ 
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index cf9288d270c6..3c4609ff83d6 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -616,6 +616,18 @@ struct v4l2_pix_format {
+ #define V4L2_PIX_FMT_NV24    v4l2_fourcc('N', 'V', '2', '4') /* 24  Y/CbCr 4:4:4  */
+ #define V4L2_PIX_FMT_NV42    v4l2_fourcc('N', 'V', '4', '2') /* 24  Y/CrCb 4:4:4  */
+ #define V4L2_PIX_FMT_HM12    v4l2_fourcc('H', 'M', '1', '2') /*  8  YUV 4:2:0 16x16 macroblocks */
++#define V4L2_PIX_FMT_NV12_10_3 v4l2_fourcc('N', '0', '1', '2') /* 16  Y/CbCr 4:2:0 10b */
++#define V4L2_PIX_FMT_NV21_10_3 v4l2_fourcc('N', '0', '2', '1') /* 16  Y/CrCb 4:2:0 10b */
++#define V4L2_PIX_FMT_NV16_10_3 v4l2_fourcc('N', '0', '1', '6') /* 64/3 Y/CbCr 4:2:2 10b */
++#define V4L2_PIX_FMT_NV61_10_3 v4l2_fourcc('N', '0', '6', '1') /* 64/3 Y/CrCb 4:2:2 10b */
++#define V4L2_PIX_FMT_NV12_12_2 v4l2_fourcc('N', '2', '1', '2') /* 18  Y/CbCr 4:2:0 12b */
++#define V4L2_PIX_FMT_NV21_12_2 v4l2_fourcc('N', '2', '2', '1') /* 18  Y/CrCb 4:2:0 12b */
++#define V4L2_PIX_FMT_NV16_12_2 v4l2_fourcc('N', '2', '1', '6') /* 24  Y/CbCr 4:2:2 12b */
++#define V4L2_PIX_FMT_NV61_12_2 v4l2_fourcc('N', '2', '6', '1') /* 24  Y/CrCb 4:2:2 12b */
++#define V4L2_PIX_FMT_NV12_16_1 v4l2_fourcc('N', '6', '1', '2') /* 24  Y/CbCr 4:2:0 16b */
++#define V4L2_PIX_FMT_NV21_16_1 v4l2_fourcc('N', '6', '2', '1') /* 24  Y/CrCb 4:2:0 16b */
++#define V4L2_PIX_FMT_NV16_16_1 v4l2_fourcc('N', '6', '1', '6') /* 32  Y/CbCr 4:2:2 16b */
++#define V4L2_PIX_FMT_NV61_16_1 v4l2_fourcc('N', '6', '6', '1') /* 32  Y/CrCb 4:2:2 16b */
+ 
+ /* two non contiguous planes - one Y, one Cr + Cb interleaved  */
+ #define V4L2_PIX_FMT_NV12M   v4l2_fourcc('N', 'M', '1', '2') /* 12  Y/CbCr 4:2:0  */
 -- 
 Regards,
 
