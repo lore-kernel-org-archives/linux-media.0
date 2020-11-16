@@ -2,36 +2,37 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C493C63798
-	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 18:53:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77638C6379F
+	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 18:53:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 479F520575
-	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 18:53:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 31F252225E
+	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 18:53:02 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="rG6mheGC"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Ig6UPkJk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728738AbgKPSwe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Nov 2020 13:52:34 -0500
+        id S1728807AbgKPSwn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Nov 2020 13:52:43 -0500
 Received: from perceval.ideasonboard.com ([213.167.242.64]:51284 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728505AbgKPSwe (ORCPT
+        with ESMTP id S1728505AbgKPSwm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Nov 2020 13:52:34 -0500
+        Mon, 16 Nov 2020 13:52:42 -0500
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E8BA918D8;
-        Mon, 16 Nov 2020 19:52:24 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3B6E71457;
+        Mon, 16 Nov 2020 19:52:29 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1605552745;
-        bh=H6oJsZMNBbfpSgqTD2ZEPfVTOPlb8s0pZIcO7pRXwfI=;
+        s=mail; t=1605552749;
+        bh=0gGzlqEsZ807R/bsGkqV8/x2Ed9tpK6c4MS9QHEIsvE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rG6mheGC4XGMWC+8ilbEPR8MfBMxhmQ1jB40i2lixWZy/qZ4SUtzHNUdctIK228tx
-         6YHLFF4z6K/lTQJx7VkXoH3XCbFzD3LJ3xP1/rziKum1AsRW0QqtWH062QwUNlpoLR
-         nNuhUVFu+YDD6amzEEVD6XiYc/WP9FjXWWj56SOs=
+        b=Ig6UPkJkQ40YFfQmCse9lL8GPxV2Vwy1H9UlOuEAQIC1iOXU0mKhn7JY/JaCirUCv
+         tbpUZ1xagh0AMFbXPcT2oORsFjXV3mgyWxfzd1b3kPEAu9YUFzteeFAFf7PdxEAk5H
+         t6F9RZLCqt6eRVIwdeejEU2d3hTRaOD5SUaYVeUE=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -39,9 +40,9 @@ Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Dylan Yip <dylany@xilinx.com>,
         Vishal Sagar <vsagar@xilinx.com>,
         Nicolas Dufresne <nicolas@ndufresne.ca>
-Subject: [PATCH v3 13/21] media: doc: pixfmt-packed-yuv: Clarify naming scheme for 4:4:4 formats
-Date:   Mon, 16 Nov 2020 20:51:59 +0200
-Message-Id: <20201116185207.13208-14-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v3 18/21] media: v4l2: Add a few missing packed YUV 4:4:4 formats
+Date:   Mon, 16 Nov 2020 20:52:04 +0200
+Message-Id: <20201116185207.13208-19-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201116185207.13208-1-laurent.pinchart@ideasonboard.com>
 References: <20201116185207.13208-1-laurent.pinchart@ideasonboard.com>
@@ -51,46 +52,86 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Document the naming scheme for the existing packed YUV 4:4:4 formats, as
-previously done for the RGB formats.
+Add three new formats belonging to the packed YUV 4:4:4 family. They are
+used by the Xilinx Video Frame Buffer Read/Write IP cores.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- .../userspace-api/media/v4l/pixfmt-packed-yuv.rst  | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+Changes since v2:
+
+- Fix YUVA32 to use 'A' instead of '-'
+- Replace '-' with 'X' for padding bits
+---
+ .../media/v4l/pixfmt-packed-yuv.rst           | 29 +++++++++++++++++++
+ include/uapi/linux/videodev2.h                |  3 ++
+ 2 files changed, 32 insertions(+)
 
 diff --git a/Documentation/userspace-api/media/v4l/pixfmt-packed-yuv.rst b/Documentation/userspace-api/media/v4l/pixfmt-packed-yuv.rst
-index 6f9f9d63a4ad..eb551b57557e 100644
+index eb551b57557e..e3fc3e554acb 100644
 --- a/Documentation/userspace-api/media/v4l/pixfmt-packed-yuv.rst
 +++ b/Documentation/userspace-api/media/v4l/pixfmt-packed-yuv.rst
-@@ -25,6 +25,14 @@ components and thus differ in how they interlave the three components.
- These formats do not subsample the chroma components and store each pixels as a
- full triplet of Y, Cb and Cr values.
+@@ -170,6 +170,15 @@ the second byte and Y'\ :sub:`7-0` in the third byte.
+       - Byte 2
+       - Byte 3
  
-+The next table lists the packed YUV 4:4:4 formats with less than 8 bits per
-+component. They are named based on the order of the Y, Cb and Cr components as
-+seen in a 16-bit word, which is then stored in memory in little endian byte
-+order, and on the number of bits for each component. For instance the YUV565
-+format stores a pixel in a 16-bit word [15:0] laid out at as [Y'\ :sub:`4-0`
-+Cb\ :sub:`5-0` Cr\ :sub:`4-0`], and stored in memory in two bytes,
-+[Cb\ :sub:`2-0` Cr\ :sub:`4-0`] followed by [Y'\ :sub:`4-0` Cb\ :sub:`5-3`].
++    * .. _V4L2-PIX-FMT-YUV24:
 +
- .. raw:: latex
- 
-     \begingroup
-@@ -145,6 +153,12 @@ full triplet of Y, Cb and Cr values.
-     <overlay>` or :ref:`Video Output Overlay <osd>`.
- 
- 
-+The next table lists the packed YUV 4:4:4 formats with 8 bits per component.
-+They are named based on the order of the Y, Cb and Cr components as stored in
-+memory, and on the total number of bits per pixel. For instance, the VUYX32
-+format stores a pixel with Cr\ :sub:`7-0` in the first byte, Cb\ :sub:`7-0` in
-+the second byte and Y'\ :sub:`7-0` in the third byte.
++      - ``V4L2_PIX_FMT_YUV24``
++      - 'YUV3'
 +
- .. flat-table:: Packed YUV Image Formats (8bpc)
-     :header-rows: 1
-     :stub-columns: 0
++      - Y'\ :sub:`7-0`
++      - Cb\ :sub:`7-0`
++      - Cr\ :sub:`7-0`
++
+     * .. _V4L2-PIX-FMT-YUV32:
+ 
+       - ``V4L2_PIX_FMT_YUV32``
+@@ -220,6 +229,26 @@ the second byte and Y'\ :sub:`7-0` in the third byte.
+       - Y'\ :sub:`7-0`
+       - X\ :sub:`7-0`
+ 
++    * .. _V4L2-PIX-FMT-YUVA32:
++
++      - ``V4L2_PIX_FMT_YUVA32``
++      - 'YUVA'
++
++      - Y'\ :sub:`7-0`
++      - Cb\ :sub:`7-0`
++      - Cr\ :sub:`7-0`
++      - A\ :sub:`7-0`
++
++    * .. _V4L2-PIX-FMT-YUVX32:
++
++      - ``V4L2_PIX_FMT_YUVX32``
++      - 'YUVX'
++
++      - Y'\ :sub:`7-0`
++      - Cb\ :sub:`7-0`
++      - Cr\ :sub:`7-0`
++      - X\ :sub:`7-0`
++
+ .. note::
+ 
+     - The alpha component is expected to contain a meaningful value that can be
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index fab1dbb1a618..afe3619bc77c 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -593,11 +593,14 @@ struct v4l2_pix_format {
+ #define V4L2_PIX_FMT_YUV444  v4l2_fourcc('Y', '4', '4', '4') /* 16  xxxxyyyy uuuuvvvv */
+ #define V4L2_PIX_FMT_YUV555  v4l2_fourcc('Y', 'U', 'V', 'O') /* 16  YUV-5-5-5     */
+ #define V4L2_PIX_FMT_YUV565  v4l2_fourcc('Y', 'U', 'V', 'P') /* 16  YUV-5-6-5     */
++#define V4L2_PIX_FMT_YUV24   v4l2_fourcc('Y', 'U', 'V', '3') /* 24  YUV-8-8-8     */
+ #define V4L2_PIX_FMT_YUV32   v4l2_fourcc('Y', 'U', 'V', '4') /* 32  YUV-8-8-8-8   */
+ #define V4L2_PIX_FMT_AYUV32  v4l2_fourcc('A', 'Y', 'U', 'V') /* 32  AYUV-8-8-8-8  */
+ #define V4L2_PIX_FMT_XYUV32  v4l2_fourcc('X', 'Y', 'U', 'V') /* 32  XYUV-8-8-8-8  */
+ #define V4L2_PIX_FMT_VUYA32  v4l2_fourcc('V', 'U', 'Y', 'A') /* 32  VUYA-8-8-8-8  */
+ #define V4L2_PIX_FMT_VUYX32  v4l2_fourcc('V', 'U', 'Y', 'X') /* 32  VUYX-8-8-8-8  */
++#define V4L2_PIX_FMT_YUVA32  v4l2_fourcc('Y', 'U', 'V', 'A') /* 32  YUVA-8-8-8-8  */
++#define V4L2_PIX_FMT_YUVX32  v4l2_fourcc('Y', 'U', 'V', 'X') /* 32  YUVX-8-8-8-8  */
+ #define V4L2_PIX_FMT_M420    v4l2_fourcc('M', '4', '2', '0') /* 12  YUV 4:2:0 2 lines y, 1 line uv interleaved */
+ 
+ /* two planes -- one Y, one Cr + Cb interleaved  */
 -- 
 Regards,
 
