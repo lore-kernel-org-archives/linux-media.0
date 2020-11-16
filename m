@@ -7,74 +7,73 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07010C63697
-	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 17:44:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E038C64E7B
+	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 17:44:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B6BDA20B80
-	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 17:44:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 229C622265
+	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 17:44:02 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="f7neOg4p"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cqmrXntl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387864AbgKPRn2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Nov 2020 12:43:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46666 "EHLO
+        id S1733203AbgKPRnt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Nov 2020 12:43:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387843AbgKPRmN (ORCPT
+        with ESMTP id S2387816AbgKPRmF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Nov 2020 12:42:13 -0500
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB80DC0617A6
-        for <linux-media@vger.kernel.org>; Mon, 16 Nov 2020 09:42:12 -0800 (PST)
-Received: by mail-wm1-x342.google.com with SMTP id 10so52078wml.2
-        for <linux-media@vger.kernel.org>; Mon, 16 Nov 2020 09:42:12 -0800 (PST)
+        Mon, 16 Nov 2020 12:42:05 -0500
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB68C0613D1
+        for <linux-media@vger.kernel.org>; Mon, 16 Nov 2020 09:42:05 -0800 (PST)
+Received: by mail-wr1-x442.google.com with SMTP id b6so19669955wrt.4
+        for <linux-media@vger.kernel.org>; Mon, 16 Nov 2020 09:42:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4XjzABzYijzfUYSQAFjSWGgtY8O6T4iGtJT/GdPVe/g=;
-        b=f7neOg4p2FtX/vppSn6QN4LztxxWXPO5PsEPG4P1pfWm9ayx4ZaCXP7Qy5MqXIyTJc
-         szXloESY6VRWVHOrJFA0WDsNDfNySfQbMAttyoqqqrPShI2NHvwtsWMnnVe90jgsu6/k
-         RfOFgRTAgrB9QnazseVDq0C31vlwqKRYp/3Iv9uR/1K+XMNC2FUSHUFAbjWZFBxEqLMJ
-         5yM7hZMKGVWVIANE4KarSM+svzza1WdFLdf+b51OHuQcgM4RzIu0shsgULOJyqo5wxmx
-         EpGBaE7lPbGEd1xXXmTdM9La82KremeZzH6buoeGQECFzv4wW0EUHa3LjPQsOWRIRaD3
-         rhfQ==
+        bh=B656eLYjE1FZlTbAcLYHtkBSzMjn1Kq22EcK7SpZuzI=;
+        b=cqmrXntlw3DQnt5lF1CYf3WMXHIXS25fxnTj07nOs1OnCw5c1rVANuO5n2oIQyYQHT
+         4Kt98XLHFVjJBheC9Pq5A3zK2E3iwNZTZW8CdMKt9h6k280mVzldBX0aBJU82KOHJNZC
+         K4troDtjJnBrA+vQSFbOol2J/naEt2ssUlg13Qi7VjG/pkYNnTOzYXXp7Lm8orIEbBCi
+         jUKtESeFbIhzclHqmUqIvYiMsRq5s0pj4xPEIgzIY+rs4PEQcxcSV2MODdody8XeS5vb
+         cSeQFWCIMzTqv0c9fI8pl12oKO06x1Cyskqe0LzQ2u+ZBjSrbR5ps1YitxXAG/GrnkoQ
+         4p9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4XjzABzYijzfUYSQAFjSWGgtY8O6T4iGtJT/GdPVe/g=;
-        b=g4mLUFpnjY9x+beYi+mNeJB4Ijsfx5cMNi3RvQlYoMtjXJHKdLl5QTtKoMcxWGwaGf
-         NhFgGVejTOEMfb4w1XoGzvGYuPnE24pdWD25M46ey/wfXBPLW1jDMMkrQiTsGqJ42CxQ
-         5J0NNXfmm+VhyqDpAftGy2zTFi90H2pEPZt+2bMzHNGj/yPbYSBZ3KH0n/FPNDFGNiFn
-         lSIPDcOzguvhPZpIkoQ0lQSSjVcc65m4WH5OgoRztjzFZPkJ4l2s8Ah8HQWblz3UO7AJ
-         GhUKRmrH2dHGMkO6XvZY1FaZmTsAzyBZC/o60QoFOrGSWTWnFakJDKim8aOdVgBkX2ZJ
-         578g==
-X-Gm-Message-State: AOAM531uBK0Y16CWrSnJxq/ZbuGLywNrN9iUFz9LDlC8xLb5zxYmSGtQ
-        0p1WNRFOCaxbKStR4VXPnDtW7A==
-X-Google-Smtp-Source: ABdhPJxD3PsXkkAcAPwL+o29CIkE9xzELIl6mVYJ526IXOd8g4jWPgod5PLCtsJAgJzqn/4rRNKQ/Q==
-X-Received: by 2002:a1c:c20a:: with SMTP id s10mr8267wmf.23.1605548531381;
-        Mon, 16 Nov 2020 09:42:11 -0800 (PST)
+        bh=B656eLYjE1FZlTbAcLYHtkBSzMjn1Kq22EcK7SpZuzI=;
+        b=Il0ijuqc0j41TrIdIvBLsbz7BDmPt8DVt2cpo7vx3mcMbmCo3Hcnv5mT6x3VikhXuf
+         ESKam3EjWeRED1J000bZ0N14hI9LZv2Aj1FO7E9Y84LvxMnzUDbrTZ1ZXALXYhAziJy0
+         MGUqZgGO3CtDw/pdo/9fAdJ0vwdIqvs6JhqEKrqQKx9pK7YZn+KxWzh/w/46AH6zjo8x
+         9v53WCnjr/CSYgB47xyaaHkUyUlGP5gNEOTI/YeMMQeFCuQRhbLlM9uza89sOpaOaiPh
+         v+0Q7fYEFJ7nQpsmtYmFeAG5ljVBEA3Gp7OyFxu1pFigkw14WF94iV2AgX9VqOp+zGYm
+         SK4w==
+X-Gm-Message-State: AOAM532v0RQ87EoBV+wdE2cnYNQ5lhWgBNXo8q6Om+c5GvHoKubXhPbN
+        xbugBEPN3dLbNb35xqvHJu9WJA==
+X-Google-Smtp-Source: ABdhPJwRo58jenu80k77aCwl2EeoUJqluDWvFSt2FOgVWWwXQC9e4UWksYqVOBVC3xnFTVOmp3u+zA==
+X-Received: by 2002:adf:e6c8:: with SMTP id y8mr20291446wrm.414.1605548524179;
+        Mon, 16 Nov 2020 09:42:04 -0800 (PST)
 Received: from dell.default ([91.110.221.159])
-        by smtp.gmail.com with ESMTPSA id n10sm24667224wrx.9.2020.11.16.09.42.10
+        by smtp.gmail.com with ESMTPSA id n10sm24667224wrx.9.2020.11.16.09.42.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2020 09:42:10 -0800 (PST)
+        Mon, 16 Nov 2020 09:42:03 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org, Eric Anholt <eric@anholt.net>,
-        David Airlie <airlied@linux.ie>,
+Cc:     linux-kernel@vger.kernel.org,
+        Christian Koenig <christian.koenig@amd.com>,
+        Huang Rui <ray.huang@amd.com>, David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
         Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
         dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
         linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 36/42] drm/v3d/v3d_sched: Demote non-conformant kernel-doc header
-Date:   Mon, 16 Nov 2020 17:41:06 +0000
-Message-Id: <20201116174112.1833368-37-lee.jones@linaro.org>
+Subject: [PATCH 31/42] drm/ttm/ttm_bo: Fix one function header - demote lots of kernel-doc abuses
+Date:   Mon, 16 Nov 2020 17:41:01 +0000
+Message-Id: <20201116174112.1833368-32-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201116174112.1833368-1-lee.jones@linaro.org>
 References: <20201116174112.1833368-1-lee.jones@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -82,35 +81,135 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/gpu/drm/v3d/v3d_sched.c:75: warning: Function parameter or member 'sched_job' not described in 'v3d_job_dependency'
- drivers/gpu/drm/v3d/v3d_sched.c:75: warning: Function parameter or member 's_entity' not described in 'v3d_job_dependency'
+ drivers/gpu/drm/ttm/ttm_bo.c:51: warning: Function parameter or member 'ttm_global_mutex' not described in 'DEFINE_MUTEX'
+ drivers/gpu/drm/ttm/ttm_bo.c:286: warning: Function parameter or member 'bo' not described in 'ttm_bo_cleanup_memtype_use'
+ drivers/gpu/drm/ttm/ttm_bo.c:359: warning: Function parameter or member 'bo' not described in 'ttm_bo_cleanup_refs'
+ drivers/gpu/drm/ttm/ttm_bo.c:359: warning: Function parameter or member 'interruptible' not described in 'ttm_bo_cleanup_refs'
+ drivers/gpu/drm/ttm/ttm_bo.c:359: warning: Function parameter or member 'no_wait_gpu' not described in 'ttm_bo_cleanup_refs'
+ drivers/gpu/drm/ttm/ttm_bo.c:359: warning: Function parameter or member 'unlock_resv' not described in 'ttm_bo_cleanup_refs'
+ drivers/gpu/drm/ttm/ttm_bo.c:424: warning: Function parameter or member 'bdev' not described in 'ttm_bo_delayed_delete'
+ drivers/gpu/drm/ttm/ttm_bo.c:424: warning: Function parameter or member 'remove_all' not described in 'ttm_bo_delayed_delete'
+ drivers/gpu/drm/ttm/ttm_bo.c:635: warning: Function parameter or member 'bo' not described in 'ttm_bo_evict_swapout_allowable'
+ drivers/gpu/drm/ttm/ttm_bo.c:635: warning: Function parameter or member 'ctx' not described in 'ttm_bo_evict_swapout_allowable'
+ drivers/gpu/drm/ttm/ttm_bo.c:635: warning: Function parameter or member 'locked' not described in 'ttm_bo_evict_swapout_allowable'
+ drivers/gpu/drm/ttm/ttm_bo.c:635: warning: Function parameter or member 'busy' not described in 'ttm_bo_evict_swapout_allowable'
+ drivers/gpu/drm/ttm/ttm_bo.c:769: warning: Function parameter or member 'bo' not described in 'ttm_bo_add_move_fence'
+ drivers/gpu/drm/ttm/ttm_bo.c:769: warning: Function parameter or member 'man' not described in 'ttm_bo_add_move_fence'
+ drivers/gpu/drm/ttm/ttm_bo.c:769: warning: Function parameter or member 'mem' not described in 'ttm_bo_add_move_fence'
+ drivers/gpu/drm/ttm/ttm_bo.c:769: warning: Function parameter or member 'no_wait_gpu' not described in 'ttm_bo_add_move_fence'
+ drivers/gpu/drm/ttm/ttm_bo.c:806: warning: Function parameter or member 'bo' not described in 'ttm_bo_mem_force_space'
+ drivers/gpu/drm/ttm/ttm_bo.c:806: warning: Function parameter or member 'place' not described in 'ttm_bo_mem_force_space'
+ drivers/gpu/drm/ttm/ttm_bo.c:806: warning: Function parameter or member 'mem' not described in 'ttm_bo_mem_force_space'
+ drivers/gpu/drm/ttm/ttm_bo.c:806: warning: Function parameter or member 'ctx' not described in 'ttm_bo_mem_force_space'
+ drivers/gpu/drm/ttm/ttm_bo.c:872: warning: Function parameter or member 'bo' not described in 'ttm_bo_mem_space'
+ drivers/gpu/drm/ttm/ttm_bo.c:872: warning: Function parameter or member 'placement' not described in 'ttm_bo_mem_space'
+ drivers/gpu/drm/ttm/ttm_bo.c:872: warning: Function parameter or member 'mem' not described in 'ttm_bo_mem_space'
+ drivers/gpu/drm/ttm/ttm_bo.c:872: warning: Function parameter or member 'ctx' not described in 'ttm_bo_mem_space'
+ drivers/gpu/drm/ttm/ttm_bo.c:1387: warning: Function parameter or member 'ctx' not described in 'ttm_bo_swapout'
 
-Cc: Eric Anholt <eric@anholt.net>
+Cc: Christian Koenig <christian.koenig@amd.com>
+Cc: Huang Rui <ray.huang@amd.com>
 Cc: David Airlie <airlied@linux.ie>
 Cc: Daniel Vetter <daniel@ffwll.ch>
 Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: "Christian König" <christian.koenig@amd.com>
 Cc: dri-devel@lists.freedesktop.org
 Cc: linux-media@vger.kernel.org
 Cc: linaro-mm-sig@lists.linaro.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/gpu/drm/v3d/v3d_sched.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/ttm/ttm_bo.c | 23 ++++++++++++-----------
+ 1 file changed, 12 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/gpu/drm/v3d/v3d_sched.c b/drivers/gpu/drm/v3d/v3d_sched.c
-index 0747614a78f0b..452682e2209f4 100644
---- a/drivers/gpu/drm/v3d/v3d_sched.c
-+++ b/drivers/gpu/drm/v3d/v3d_sched.c
-@@ -63,7 +63,7 @@ v3d_job_free(struct drm_sched_job *sched_job)
- 	v3d_job_put(job);
+diff --git a/drivers/gpu/drm/ttm/ttm_bo.c b/drivers/gpu/drm/ttm/ttm_bo.c
+index e6bcbfe530ecc..9a03c7834b1ed 100644
+--- a/drivers/gpu/drm/ttm/ttm_bo.c
++++ b/drivers/gpu/drm/ttm/ttm_bo.c
+@@ -45,7 +45,7 @@
+ 
+ static void ttm_bo_global_kobj_release(struct kobject *kobj);
+ 
+-/**
++/*
+  * ttm_global_mutex - protecting the global BO state
+  */
+ DEFINE_MUTEX(ttm_global_mutex);
+@@ -278,7 +278,7 @@ static int ttm_bo_handle_move_mem(struct ttm_buffer_object *bo,
+ 	return ret;
  }
  
 -/**
 +/*
-  * Returns the fences that the job depends on, one by one.
+  * Call bo::reserved.
+  * Will release GPU memory type usage on destruction.
+  * This is the place to put in driver specific hooks to release
+@@ -352,9 +352,10 @@ static void ttm_bo_flush_all_fences(struct ttm_buffer_object *bo)
+  * Must be called with lru_lock and reservation held, this function
+  * will drop the lru lock and optionally the reservation lock before returning.
   *
-  * If placed in the scheduler's .dependency method, the corresponding
+- * @interruptible         Any sleeps should occur interruptibly.
+- * @no_wait_gpu           Never wait for gpu. Return -EBUSY instead.
+- * @unlock_resv           Unlock the reservation lock as well.
++ * @bo:                    The buffer object to clean-up
++ * @interruptible:         Any sleeps should occur interruptibly.
++ * @no_wait_gpu:           Never wait for gpu. Return -EBUSY instead.
++ * @unlock_resv:           Unlock the reservation lock as well.
+  */
+ 
+ static int ttm_bo_cleanup_refs(struct ttm_buffer_object *bo,
+@@ -420,7 +421,7 @@ static int ttm_bo_cleanup_refs(struct ttm_buffer_object *bo,
+ 	return 0;
+ }
+ 
+-/**
++/*
+  * Traverse the delayed list, and call ttm_bo_cleanup_refs on all
+  * encountered buffers.
+  */
+@@ -628,7 +629,7 @@ bool ttm_bo_eviction_valuable(struct ttm_buffer_object *bo,
+ }
+ EXPORT_SYMBOL(ttm_bo_eviction_valuable);
+ 
+-/**
++/*
+  * Check the target bo is allowable to be evicted or swapout, including cases:
+  *
+  * a. if share same reservation object with ctx->resv, have assumption
+@@ -767,7 +768,7 @@ int ttm_mem_evict_first(struct ttm_bo_device *bdev,
+ 	return ret;
+ }
+ 
+-/**
++/*
+  * Add the last move fence to the BO and reserve a new shared slot.
+  */
+ static int ttm_bo_add_move_fence(struct ttm_buffer_object *bo,
+@@ -803,7 +804,7 @@ static int ttm_bo_add_move_fence(struct ttm_buffer_object *bo,
+ 	return 0;
+ }
+ 
+-/**
++/*
+  * Repeatedly evict memory from the LRU for @mem_type until we create enough
+  * space, or we've evicted everything and there isn't enough space.
+  */
+@@ -865,7 +866,7 @@ static int ttm_bo_mem_placement(struct ttm_buffer_object *bo,
+ 	return 0;
+ }
+ 
+-/**
++/*
+  * Creates space for memory region @mem according to its type.
+  *
+  * This function first searches for free space in compatible memory types in
+@@ -1430,7 +1431,7 @@ int ttm_bo_wait(struct ttm_buffer_object *bo,
+ }
+ EXPORT_SYMBOL(ttm_bo_wait);
+ 
+-/**
++/*
+  * A buffer object shrink method that tries to swap out the first
+  * buffer object on the bo_global::swap_lru list.
+  */
 -- 
 2.25.1
 
