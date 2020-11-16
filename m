@@ -7,37 +7,36 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E208C63798
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0DF5C64E75
 	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 13:53:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 533E2222B9
+	by mail.kernel.org (Postfix) with ESMTP id A68C322280
 	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 13:53:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729575AbgKPNxb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Nov 2020 08:53:31 -0500
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:37101 "EHLO
+        id S1729616AbgKPNxg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Nov 2020 08:53:36 -0500
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:53933 "EHLO
         relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726286AbgKPNxb (ORCPT
+        with ESMTP id S1729588AbgKPNxf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Nov 2020 08:53:31 -0500
+        Mon, 16 Nov 2020 08:53:35 -0500
 X-Originating-IP: 93.34.118.233
 Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 5B9514000B;
-        Mon, 16 Nov 2020 13:53:26 +0000 (UTC)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 6774640011;
+        Mon, 16 Nov 2020 13:53:31 +0000 (UTC)
 From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
 To:     kieran.bingham+renesas@ideasonboard.com,
         laurent.pinchart+renesas@ideasonboard.com,
-        niklas.soderlund+renesas@ragnatech.se, geert@linux-m68k.org,
-        robh@kernel.org, devicetree@vger.kernel.org
+        niklas.soderlund+renesas@ragnatech.se, geert@linux-m68k.org
 Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
         linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         linux-kernel@vger.kernel.org, Hyun Kwon <hyunk@xilinx.com>,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
         sergei.shtylyov@gmail.com
-Subject: [PATCH v5 2/8] dt-bindings: media: max9286: Document 'maxim,initial-reverse-channel-mV'
-Date:   Mon, 16 Nov 2020 14:52:59 +0100
-Message-Id: <20201116135305.81319-3-jacopo+renesas@jmondi.org>
+Subject: [PATCH v5 4/8] media: i2c: max9286: Make channel amplitude programmable
+Date:   Mon, 16 Nov 2020 14:53:01 +0100
+Message-Id: <20201116135305.81319-5-jacopo+renesas@jmondi.org>
 X-Mailer: git-send-email 2.29.1
 In-Reply-To: <20201116135305.81319-1-jacopo+renesas@jmondi.org>
 References: <20201116135305.81319-1-jacopo+renesas@jmondi.org>
@@ -47,68 +46,66 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Document the 'initial-reverse-channel-mV' vendor property in the
-bindings document of the max9286 driver.
+Instrument the function that configures the reverse channel with a
+programmable amplitude value.
 
-The newly introduced property allows to specifying the initial
-configuration of the GMSL reverse control channel to accommodate
-remote serializers pre-programmed with the high threshold power
-supply noise immunity enabled.
+This change serves to prepare to adjust the reverse channel amplitude
+depending on the remote end high-threshold configuration.
 
 Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 ---
- .../bindings/media/i2c/maxim,max9286.yaml     | 23 +++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ drivers/media/i2c/max9286.c | 22 ++++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml b/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
-index 9ea827092fdd..f61234d204fa 100644
---- a/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
-@@ -51,6 +51,26 @@ properties:
-   '#gpio-cells':
-     const: 2
-
-+  maxim,initial-reverse-channel-mV:
-+    $ref: '/schemas/types.yaml#/definitions/uint32'
-+    minimum: 30
-+    maximum: 200
-+    default: 170
-+    description: |
-+      Initial amplitude of the reverse control channel, in millivolts.
+diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
+index 526b6e557dfb..31e27d0f34f1 100644
+--- a/drivers/media/i2c/max9286.c
++++ b/drivers/media/i2c/max9286.c
+@@ -336,19 +336,29 @@ static void max9286_configure_i2c(struct max9286_priv *priv, bool localack)
+ 	usleep_range(3000, 5000);
+ }
+ 
+-static void max9286_reverse_channel_setup(struct max9286_priv *priv)
++static void max9286_reverse_channel_setup(struct max9286_priv *priv,
++					  unsigned int chan_amplitude)
+ {
++	/* Reverse channel transmission time: default to 1. */
++	u8 chan_config = MAX9286_REV_TRF(1);
 +
-+      The initial amplitude shall be adjusted to a value compatible with the
-+      configuration of the connected remote serializer.
+ 	/*
+ 	 * Reverse channel setup.
+ 	 *
+ 	 * - Enable custom reverse channel configuration (through register 0x3f)
+ 	 *   and set the first pulse length to 35 clock cycles.
+-	 * - Increase the reverse channel amplitude to 170mV to accommodate the
+-	 *   high threshold enabled by the serializer driver.
++	 * - Adjust reverse channel amplitude: values > 130 are programmed
++	 *   using the additional +100mV REV_AMP_X boost flag
+ 	 */
+ 	max9286_write(priv, 0x3f, MAX9286_EN_REV_CFG | MAX9286_REV_FLEN(35));
+-	max9286_write(priv, 0x3b, MAX9286_REV_TRF(1) | MAX9286_REV_AMP(70) |
+-		      MAX9286_REV_AMP_X);
 +
-+      Some camera modules (for example RDACM20) include an on-board MCU that
-+      pre-programs the embedded serializer with power supply noise immunity
-+      (high-threshold) enabled. A typical value of the deserializer's reverse
-+      channel amplitude to communicate with pre-programmed serializers is 170mV.
-+
-+      A typical value for the reverse channel amplitude to communicate with
-+      a remote serializer whose high-threshold noise immunity is not enabled
-+      is 100mV.
-+
-   ports:
-     type: object
-     description: |
-@@ -221,6 +241,7 @@ required:
-   - ports
-   - i2c-mux
-   - gpio-controller
-+  - maxim,initial-reverse-channel-mV
-
- additionalProperties: false
-
-@@ -243,6 +264,8 @@ examples:
-         gpio-controller;
-         #gpio-cells = <2>;
-
-+        maxim,initial-reverse-channel-mV = <170>;
-+
-         ports {
-           #address-cells = <1>;
-           #size-cells = <0>;
---
++	if (chan_amplitude > 100) {
++		/* It is not possible to express values (100 < x < 130) */
++		chan_amplitude = chan_amplitude < 130
++			       ? 30 : chan_amplitude - 100;
++		chan_config |= MAX9286_REV_AMP_X;
++	}
++	max9286_write(priv, 0x3b, chan_config | MAX9286_REV_AMP(chan_amplitude));
+ 	usleep_range(2000, 2500);
+ }
+ 
+@@ -957,7 +967,7 @@ static int max9286_setup(struct max9286_priv *priv)
+ 	 * only. This should be disabled after the mux is initialised.
+ 	 */
+ 	max9286_configure_i2c(priv, true);
+-	max9286_reverse_channel_setup(priv);
++	max9286_reverse_channel_setup(priv, 170);
+ 
+ 	/*
+ 	 * Enable GMSL links, mask unused ones and autodetect link
+-- 
 2.29.1
 
