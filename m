@@ -2,150 +2,82 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 150EFC64E7D
-	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 12:38:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AAF55C63699
+	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 13:02:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B17CA20853
-	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 12:38:34 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="wTVzcVbo"
+	by mail.kernel.org (Postfix) with ESMTP id 791A722245
+	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 13:02:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730067AbgKPMZt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Nov 2020 07:25:49 -0500
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:47431 "EHLO
-        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730061AbgKPMZt (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Nov 2020 07:25:49 -0500
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id edZnkedes6LFvedZqkPh9T; Mon, 16 Nov 2020 13:25:46 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1605529546; bh=bNRWm8pjYKbNlUVCz7AgTgHyvlHgaA9N7uq2lkePLLg=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=wTVzcVbojhnQxmBZZVNwMUciZa9r9im36ua4s6YRYT4y1gQlUO4DKB6WPpKZTAYHV
-         BEpOIZ7f6W+LrMlA1v4QhhXeKUNaEF/Y1uth8v0WCD4ccoqKzwn4v10mBX7EKk3Cir
-         wsnuAuLuOboxxtgP/Z7jQA2HfGvN4r6+8EBuObwOpfHoF9nfMQec5cTUmfQKzEw5kx
-         y1KRQBUM2IAStMPgOB70Vm9E1Nm2OS5rn0tAzMwzGU5+g1+RTGHAabpjWgSQ+lu/O0
-         ItknQSueYOPvg/Zjn6PpoeYt37AsnLM9EgJnyqt7u0QK0wqoF6CjrCY39YuHQcrOya
-         5nbMMEn393C6g==
-Subject: Re: [PATCH v2 16/19] media: v4l2: Add a few missing packed YUV 4:4:4
- formats
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Dylan Yip <dylany@xilinx.com>,
-        Vishal Sagar <vsagar@xilinx.com>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>
-References: <20201102224102.30292-1-laurent.pinchart@ideasonboard.com>
- <20201102224102.30292-17-laurent.pinchart@ideasonboard.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <680b4749-6f78-c163-6ee1-47321fc397eb@xs4all.nl>
-Date:   Mon, 16 Nov 2020 13:25:43 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1728675AbgKPNCK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Nov 2020 08:02:10 -0500
+Received: from gw.c-home.cz ([89.24.150.100]:33786 "EHLO dmz.c-home.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728594AbgKPNCJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 16 Nov 2020 08:02:09 -0500
+X-Greylist: delayed 305 seconds by postgrey-1.27 at vger.kernel.org; Mon, 16 Nov 2020 08:02:08 EST
+Received: from ubuntu2004.c-home.cz (unifi.c-home.cz [192.168.1.227])
+        by dmz.c-home.cz (8.14.4+Sun/8.14.4) with ESMTP id 0AGCuMlb021922;
+        Mon, 16 Nov 2020 13:56:46 +0100 (CET)
+From:   Martin Cerveny <m.cerveny@computer.org>
+To:     Maxime Ripard <mripard@kernel.org>
+Cc:     Martin Cerveny <m.cerveny@computer.org>,
+        Chen-Yu Tsai <wens@csie.org>, devel@driverdev.osuosl.org,
+        devicetree@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: [PATCH v3 6/6] ARM: dts: sun8i: v3s: Add video engine node
+Date:   Mon, 16 Nov 2020 13:56:17 +0100
+Message-Id: <20201116125617.7597-7-m.cerveny@computer.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201116125617.7597-1-m.cerveny@computer.org>
+References: <20201116125617.7597-1-m.cerveny@computer.org>
 MIME-Version: 1.0
-In-Reply-To: <20201102224102.30292-17-laurent.pinchart@ideasonboard.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfGAXdyrZRxmlEwrhqBdM9J0d1aE+RXOtPJYyjLU95VZyl51SewIjInjGncJ6zqMKDvALBUSYg71d3rWQqC12s7zXBJmXJmSoanmFUJy+1G4bzTZEABxb
- HTojWVM14On2AgEvTGdS+r0g4xgJxhfkvx4gCH4WPR5usj5NYa3tN6q9QaICyPB5MZVf9w3maNDH4+MUYjxvdo2TUfiw5G7B9cwZjKMrArsnNzaLVEuV6mfw
- UGOM/WjbRZqoPWZQntZXMVbrQJIe5K2sH0e7JTglxJnSGWHPj+5dXNpYZZANq1qeW2oLWq2XYR74NioSNe/jHgnAJQOckxTMPlJ8SyRe2w5wx+dSVxsv6C/q
- dWoIyq2kHwUVOZt3eG7kuq1ni78pfg==
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 02/11/2020 23:40, Laurent Pinchart wrote:
-> Add three new formats belonging to the packed YUV 4:4:4 family. They are
-> used by the Xilinx Video Frame Buffer Read/Write IP cores.
-> 
-> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> ---
->  .../media/v4l/pixfmt-packed-yuv.rst           | 29 +++++++++++++++++++
->  include/uapi/linux/videodev2.h                |  3 ++
->  2 files changed, 32 insertions(+)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-packed-yuv.rst b/Documentation/userspace-api/media/v4l/pixfmt-packed-yuv.rst
-> index 8f0f1405bfe3..6824898122aa 100644
-> --- a/Documentation/userspace-api/media/v4l/pixfmt-packed-yuv.rst
-> +++ b/Documentation/userspace-api/media/v4l/pixfmt-packed-yuv.rst
-> @@ -170,6 +170,15 @@ the second byte and Y'\ :sub:`7-0` in the third byte.
->        - Byte 2
->        - Byte 3
->  
-> +    * .. _V4L2-PIX-FMT-YUV24:
-> +
-> +      - ``V4L2_PIX_FMT_YUV24``
-> +      - 'YUV3'
-> +
-> +      - Y'\ :sub:`7-0`
-> +      - Cb\ :sub:`7-0`
-> +      - Cr\ :sub:`7-0`
-> +
->      * .. _V4L2-PIX-FMT-YUV32:
->  
->        - ``V4L2_PIX_FMT_YUV32``
-> @@ -220,6 +229,26 @@ the second byte and Y'\ :sub:`7-0` in the third byte.
->        - Y'\ :sub:`7-0`
->        - `-`\ :sub:`7-0`
->  
-> +    * .. _V4L2-PIX-FMT-YUVA32:
-> +
-> +      - ``V4L2_PIX_FMT_YUVA32``
-> +      - 'YUVA'
-> +
-> +      - Y'\ :sub:`7-0`
-> +      - Cb\ :sub:`7-0`
-> +      - Cr\ :sub:`7-0`
-> +      - `-`\ :sub:`7-0`
+Allwinner V3S SoC has a video engine.
+Add a node for it.
 
-'-' should be A here.
+Signed-off-by: Martin Cerveny <m.cerveny@computer.org>
+---
+ arch/arm/boot/dts/sun8i-v3s.dtsi | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Regards,
-
-	Hans
-
-> +
-> +    * .. _V4L2-PIX-FMT-YUVX32:
-> +
-> +      - ``V4L2_PIX_FMT_YUVX32``
-> +      - 'YUVX'
-> +
-> +      - Y'\ :sub:`7-0`
-> +      - Cb\ :sub:`7-0`
-> +      - Cr\ :sub:`7-0`
-> +      - `-`\ :sub:`7-0`
-> +
->  .. note::
->  
->      - The alpha component is expected to contain a meaningful value that can be
-> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-> index fab1dbb1a618..afe3619bc77c 100644
-> --- a/include/uapi/linux/videodev2.h
-> +++ b/include/uapi/linux/videodev2.h
-> @@ -593,11 +593,14 @@ struct v4l2_pix_format {
->  #define V4L2_PIX_FMT_YUV444  v4l2_fourcc('Y', '4', '4', '4') /* 16  xxxxyyyy uuuuvvvv */
->  #define V4L2_PIX_FMT_YUV555  v4l2_fourcc('Y', 'U', 'V', 'O') /* 16  YUV-5-5-5     */
->  #define V4L2_PIX_FMT_YUV565  v4l2_fourcc('Y', 'U', 'V', 'P') /* 16  YUV-5-6-5     */
-> +#define V4L2_PIX_FMT_YUV24   v4l2_fourcc('Y', 'U', 'V', '3') /* 24  YUV-8-8-8     */
->  #define V4L2_PIX_FMT_YUV32   v4l2_fourcc('Y', 'U', 'V', '4') /* 32  YUV-8-8-8-8   */
->  #define V4L2_PIX_FMT_AYUV32  v4l2_fourcc('A', 'Y', 'U', 'V') /* 32  AYUV-8-8-8-8  */
->  #define V4L2_PIX_FMT_XYUV32  v4l2_fourcc('X', 'Y', 'U', 'V') /* 32  XYUV-8-8-8-8  */
->  #define V4L2_PIX_FMT_VUYA32  v4l2_fourcc('V', 'U', 'Y', 'A') /* 32  VUYA-8-8-8-8  */
->  #define V4L2_PIX_FMT_VUYX32  v4l2_fourcc('V', 'U', 'Y', 'X') /* 32  VUYX-8-8-8-8  */
-> +#define V4L2_PIX_FMT_YUVA32  v4l2_fourcc('Y', 'U', 'V', 'A') /* 32  YUVA-8-8-8-8  */
-> +#define V4L2_PIX_FMT_YUVX32  v4l2_fourcc('Y', 'U', 'V', 'X') /* 32  YUVX-8-8-8-8  */
->  #define V4L2_PIX_FMT_M420    v4l2_fourcc('M', '4', '2', '0') /* 12  YUV 4:2:0 2 lines y, 1 line uv interleaved */
->  
->  /* two planes -- one Y, one Cr + Cb interleaved  */
-> 
+diff --git a/arch/arm/boot/dts/sun8i-v3s.dtsi b/arch/arm/boot/dts/sun8i-v3s.dtsi
+index 70193512c222..e8f304125e2d 100644
+--- a/arch/arm/boot/dts/sun8i-v3s.dtsi
++++ b/arch/arm/boot/dts/sun8i-v3s.dtsi
+@@ -211,6 +211,16 @@ tcon0_out: port@1 {
+ 			};
+ 		};
+ 
++		video-codec@1c0e000 {
++			compatible = "allwinner,sun8i-v3s-video-engine";
++			reg = <0x01c0e000 0x1000>;
++			clocks = <&ccu CLK_BUS_VE>, <&ccu CLK_VE>,
++				 <&ccu CLK_DRAM_VE>;
++			clock-names = "ahb", "mod", "ram";
++			resets = <&ccu RST_BUS_VE>;
++			interrupts = <GIC_SPI 58 IRQ_TYPE_LEVEL_HIGH>;
++			allwinner,sram = <&ve_sram 1>;
++		};
+ 
+ 		mmc0: mmc@1c0f000 {
+ 			compatible = "allwinner,sun7i-a20-mmc";
+-- 
+2.25.1
 
