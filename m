@@ -2,121 +2,113 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D90FC4742C
-	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 13:50:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E208C63798
+	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 13:53:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E07552074B
-	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 13:50:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 533E2222B9
+	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 13:53:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728667AbgKPNuZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Nov 2020 08:50:25 -0500
-Received: from mga05.intel.com ([192.55.52.43]:39860 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727248AbgKPNuZ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Nov 2020 08:50:25 -0500
-IronPort-SDR: SKkudBSW7IRMDmT44GOjVcDH2LjaLy1XdRhmTTqUs1qwyvvDlssQjZwqE7F9a2FGCabC8LNvVQ
- NkiuCzTa29cg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9806"; a="255456179"
-X-IronPort-AV: E=Sophos;i="5.77,482,1596524400"; 
-   d="scan'208";a="255456179"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2020 05:50:20 -0800
-IronPort-SDR: iWX6K9iU8GNx4K1MBPSZpa+MWJKKf0aeTiG/zcp9YA37jQFTzav66wqlC12SlwqcJADKddPpyC
- Gsw1+a8JzH1g==
-X-IronPort-AV: E=Sophos;i="5.77,482,1596524400"; 
-   d="scan'208";a="329681466"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2020 05:50:19 -0800
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id C9DAD208C5; Mon, 16 Nov 2020 15:50:16 +0200 (EET)
-Date:   Mon, 16 Nov 2020 15:50:16 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     linux-media@vger.kernel.org
-Subject: Re: [PATCH v2 105/106] ccs: Add shading correction and luminance
- correction level controls
-Message-ID: <20201116135016.GA3940@paasikivi.fi.intel.com>
-References: <20201007084505.25761-1-sakari.ailus@linux.intel.com>
- <20201007084557.25843-1-sakari.ailus@linux.intel.com>
- <20201007084557.25843-96-sakari.ailus@linux.intel.com>
- <eaf54ce4-54c5-6d1e-e8a1-29c6346dab04@xs4all.nl>
+        id S1729575AbgKPNxb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Nov 2020 08:53:31 -0500
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:37101 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726286AbgKPNxb (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 16 Nov 2020 08:53:31 -0500
+X-Originating-IP: 93.34.118.233
+Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 5B9514000B;
+        Mon, 16 Nov 2020 13:53:26 +0000 (UTC)
+From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
+To:     kieran.bingham+renesas@ideasonboard.com,
+        laurent.pinchart+renesas@ideasonboard.com,
+        niklas.soderlund+renesas@ragnatech.se, geert@linux-m68k.org,
+        robh@kernel.org, devicetree@vger.kernel.org
+Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hyun Kwon <hyunk@xilinx.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        sergei.shtylyov@gmail.com
+Subject: [PATCH v5 2/8] dt-bindings: media: max9286: Document 'maxim,initial-reverse-channel-mV'
+Date:   Mon, 16 Nov 2020 14:52:59 +0100
+Message-Id: <20201116135305.81319-3-jacopo+renesas@jmondi.org>
+X-Mailer: git-send-email 2.29.1
+In-Reply-To: <20201116135305.81319-1-jacopo+renesas@jmondi.org>
+References: <20201116135305.81319-1-jacopo+renesas@jmondi.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <eaf54ce4-54c5-6d1e-e8a1-29c6346dab04@xs4all.nl>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans,
+Document the 'initial-reverse-channel-mV' vendor property in the
+bindings document of the max9286 driver.
 
-On Thu, Nov 05, 2020 at 02:03:37PM +0100, Hans Verkuil wrote:
-> On 07/10/2020 10:45, Sakari Ailus wrote:
+The newly introduced property allows to specifying the initial
+configuration of the GMSL reverse control channel to accommodate
+remote serializers pre-programmed with the high threshold power
+supply noise immunity enabled.
 
-...
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+---
+ .../bindings/media/i2c/maxim,max9286.yaml     | 23 +++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-> > +			.name = "Luminance Shading Correction",
-> > +			.type = V4L2_CTRL_TYPE_BOOLEAN,
-> > +			.id = V4L2_CID_CCS_LUMINANCE_SHADING_CORRECTION,
-> > +			.ops = &ccs_ctrl_ops,
-> > +			.max = 255,
-> > +			.step = 1,
-> > +			.def = 128,
-> > +		};
-> > +
-> > +		v4l2_ctrl_new_custom(&sensor->pixel_array->ctrl_handler,
-> > +				     &ctrl_cfg, NULL);
-> > +	}
-> > +
-> > +	if (CCS_LIM(sensor, SHADING_CORRECTION_CAPABILITY) &
-> > +	    (CCS_SHADING_CORRECTION_CAPABILITY_COLOR_SHADING |
-> > +	     CCS_SHADING_CORRECTION_CAPABILITY_LUMINANCE_CORRECTION)) {
-> > +		u32 val =
-> > +			((CCS_LIM(sensor, SHADING_CORRECTION_CAPABILITY) &
-> > +			  CCS_SHADING_CORRECTION_CAPABILITY_COLOR_SHADING) ?
-> > +			 V4L2_CCS_SHADING_CORRECTION_COLOUR : 0) |
-> > +			((CCS_LIM(sensor, SHADING_CORRECTION_CAPABILITY) &
-> > +			   CCS_SHADING_CORRECTION_CAPABILITY_LUMINANCE_CORRECTION) ?
-> > +			 V4L2_CCS_SHADING_CORRECTION_LUMINANCE : 0);
-> > +		const struct v4l2_ctrl_config ctrl_cfg = {
-> > +			.name = "Shading Correction Capability",
-> > +			.type = V4L2_CTRL_TYPE_BITMASK,
-> > +			.id = V4L2_CID_CCS_SHADING_CORRECTION_CAPABILITY,
-> > +			.ops = &ccs_ctrl_ops,
-> > +			.max = val,
-> > +			.def = val,
-> > +			.flags = V4L2_CTRL_FLAG_READ_ONLY,
-> > +		};
-> 
-> Is this needed? If e.g. V4L2_CCS_SHADING_CORRECTION_COLOUR is not supported,
-> then the V4L2_CID_CCS_SHADING_CORRECTION control is simply not created.
-> So calling VIDIOC_QUERYCTRL would simply fail and so indicate that this
-> capability is not present.
-> 
-> If it really is needed, then having two bool controls makes more sense
-> because a bitmask is less intuitive.
+diff --git a/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml b/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
+index 9ea827092fdd..f61234d204fa 100644
+--- a/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
++++ b/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
+@@ -51,6 +51,26 @@ properties:
+   '#gpio-cells':
+     const: 2
 
-The CCS shading correction support has two capabilities but one bit to
-control both. Another (luminance correction) has the correction level
-(buggy in this patch, I'll fix for v4), so two controls aren't enough to
-tell what is being corrected; is it colour shading or not? Luminance
-correction level support is revealed by the luminance correction level
-control as well.
++  maxim,initial-reverse-channel-mV:
++    $ref: '/schemas/types.yaml#/definitions/uint32'
++    minimum: 30
++    maximum: 200
++    default: 170
++    description: |
++      Initial amplitude of the reverse control channel, in millivolts.
++
++      The initial amplitude shall be adjusted to a value compatible with the
++      configuration of the connected remote serializer.
++
++      Some camera modules (for example RDACM20) include an on-board MCU that
++      pre-programs the embedded serializer with power supply noise immunity
++      (high-threshold) enabled. A typical value of the deserializer's reverse
++      channel amplitude to communicate with pre-programmed serializers is 170mV.
++
++      A typical value for the reverse channel amplitude to communicate with
++      a remote serializer whose high-threshold noise immunity is not enabled
++      is 100mV.
++
+   ports:
+     type: object
+     description: |
+@@ -221,6 +241,7 @@ required:
+   - ports
+   - i2c-mux
+   - gpio-controller
++  - maxim,initial-reverse-channel-mV
 
-So I guess you could also have a boolean control to tell colour correction
-is supported.
+ additionalProperties: false
 
-I guess could also just omit the capability control now and see if someone
-needs it. I'd expect this to be rarely needed information.
+@@ -243,6 +264,8 @@ examples:
+         gpio-controller;
+         #gpio-cells = <2>;
 
--- 
-Kind regards,
++        maxim,initial-reverse-channel-mV = <170>;
++
+         ports {
+           #address-cells = <1>;
+           #size-cells = <0>;
+--
+2.29.1
 
-Sakari Ailus
