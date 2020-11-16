@@ -2,108 +2,229 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1817AC64E75
-	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 13:54:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F8E3C61DD8
+	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 13:56:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E8DBA222E8
-	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 13:54:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 516D222245
+	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 13:56:53 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g5vxtHx4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729184AbgKPNx1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Nov 2020 08:53:27 -0500
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:64191 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726286AbgKPNx0 (ORCPT
+        id S1729953AbgKPN4a (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Nov 2020 08:56:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39334 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728705AbgKPN43 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Nov 2020 08:53:26 -0500
-X-Originating-IP: 93.34.118.233
-Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id ACCF84000A;
-        Mon, 16 Nov 2020 13:53:21 +0000 (UTC)
-From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
-To:     kieran.bingham+renesas@ideasonboard.com,
-        laurent.pinchart+renesas@ideasonboard.com,
-        niklas.soderlund+renesas@ragnatech.se, geert@linux-m68k.org
-Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hyun Kwon <hyunk@xilinx.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        sergei.shtylyov@gmail.com
-Subject: [PATCH v5 0/8] media: i2c: Add RDACM21 camera module
-Date:   Mon, 16 Nov 2020 14:52:57 +0100
-Message-Id: <20201116135305.81319-1-jacopo+renesas@jmondi.org>
-X-Mailer: git-send-email 2.29.1
+        Mon, 16 Nov 2020 08:56:29 -0500
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159CAC0613CF;
+        Mon, 16 Nov 2020 05:56:29 -0800 (PST)
+Received: by mail-pg1-x541.google.com with SMTP id v21so570755pgi.2;
+        Mon, 16 Nov 2020 05:56:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=MXF0EBYvG5fT4YBRzFoSPae5jFIo7vWBbpd8hrhTyzk=;
+        b=g5vxtHx4xOV5mKzEUMBlsOpkFH0i8jzxZfL1/zIJ+q19ezrpdEfFsShrNlSfAp9Ran
+         FM5WWDC0uEeGhzHQUw9YpTVYlJ0NvJvJIlt9gZIi1Cxsv5hDSV61xi3+Akcbwi4g8QUb
+         Wnj54fXe3J4lGV1CmPH3xBMoFJZ8lurRERrVtXsDnD66MsJBgv1AGmz6JmgR+ICLBxAp
+         cztbBa7gLa4KLIY6UeblAt8E8kvKMXwCT9tgNXaOP4+iV8RCOAn/a5Jj4WpdhDrIybI7
+         0P4FFwBiRCcwK6+xhPmlWPPQfQhz2OrC6hhXCD3fJWF8xx9pVjnOR3pvZX5gpkww177C
+         vvZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=MXF0EBYvG5fT4YBRzFoSPae5jFIo7vWBbpd8hrhTyzk=;
+        b=CCWoaAyCxuNwnpCKN0zou5tDGJgZ0o87ddKxbdZGWcqUP/UJ5lKahWeYBJQsg4/N/F
+         EtsoWFkAutsrUNI4U/SH8OK1RCJjN39oUQFgF0nZhhuRvzqLNKNAuuEPN7y8hMKC7pUl
+         3TbNcIT0CxIWJA4MRO74ABxZjGOl1Yva9xCWJezVkk/J6lpgHzmsxkIc6S1t/N36Anqh
+         RK9OSG3ZyOYVE9fBp9xgAvTbKtUT8hu1ef1W6sT8MtDBCHTEQhvApYGUwenih/dCRvnq
+         3AuUgozODm03NvnoyxQck0kNYs/BAfubK2IbIIRM9e5DN3ESYICwP+GOBpfBpe7laIBR
+         PT2A==
+X-Gm-Message-State: AOAM530guvYl3hpcoKK2kp+k4nWL2RPsqwJ8s61s8i0UYO84GFpCAZKF
+        lRtllChOj2mwGMjvZOJH3lIIQ1Ow7rinfkB6PCnAD+tFE58=
+X-Google-Smtp-Source: ABdhPJwhUXNBGvC5oY7ZwEFf9361fmAw3WXxSDeY5s1mhQ51O/zQJ8sJO1SSOguQMCuFccGFyOYS/4+Mis/L4GQcD2Q=
+X-Received: by 2002:a62:7c95:0:b029:18c:5002:a1ab with SMTP id
+ x143-20020a627c950000b029018c5002a1abmr13602355pfc.40.1605534988548; Mon, 16
+ Nov 2020 05:56:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201024093702.GA3939@pendragon.ideasonboard.com>
+ <20201026161050.GQ4077@smile.fi.intel.com> <20201029201918.GD15024@pendragon.ideasonboard.com>
+ <CAHp75Vc9uYVvhBe3OyCJzCsU0EY9yi62hsxt3pAwppSfjB+jDg@mail.gmail.com>
+ <20201029212930.GE15024@pendragon.ideasonboard.com> <20201029222215.GI4077@smile.fi.intel.com>
+ <20201029225124.GI15024@pendragon.ideasonboard.com> <60b36af2-ad57-000b-76e4-379e1b58a3a0@gmail.com>
+ <20201113162231.GO7524@pendragon.ideasonboard.com> <CAHp75VeGJKMeY-reNWgypVzJ6Myz5S2RXJPHqbPH5kzLYX3G4g@mail.gmail.com>
+ <20201116085349.GA6540@pendragon.ideasonboard.com>
+In-Reply-To: <20201116085349.GA6540@pendragon.ideasonboard.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 16 Nov 2020 15:57:17 +0200
+Message-ID: <CAHp75Ve-O4u1B=dvC+HT-sg=YnoWSuV6kUkPmBSOx4w9OgoOoA@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 9/9] ipu3-cio2: Add functionality allowing
+ software_node connections to sensors on platforms designed for Windows
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Dan Scally <djrscally@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        prabhakar.mahadev-lad.rj@bp.renesas.com,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        laurent.pinchart+renesas@ideasonboard.com,
+        kieran.bingham+renesas@ideasonboard.com,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Rob Herring <robh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tian Shu Qiu <tian.shu.qiu@intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Yong Zhi <yong.zhi@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tsuchiya Yuto <kitakar@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
-   this v5 mostly changes how the rdacm21 driver handles writes to the
-OV490 chip by handling the 'high' part of the sensor register through an
-helper function as suggested by Kieran and Laurent.
+On Mon, Nov 16, 2020 at 10:53 AM Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+> On Fri, Nov 13, 2020 at 09:45:00PM +0200, Andy Shevchenko wrote:
+> > On Fri, Nov 13, 2020 at 6:22 PM Laurent Pinchart wrote:
+> > > On Fri, Nov 13, 2020 at 10:02:30AM +0000, Dan Scally wrote:
+> > > > On 29/10/2020 22:51, Laurent Pinchart wrote:
+> > > > > On Fri, Oct 30, 2020 at 12:22:15AM +0200, Andy Shevchenko wrote:
+> > > > >> On Thu, Oct 29, 2020 at 11:29:30PM +0200, Laurent Pinchart wrote=
+:
+> >
+> > ...
+> >
+> > > > >> In this case we probably need something like
+> > > > >>
+> > > > >> struct acpi_device *
+> > > > >> acpi_dev_get_next_match_dev(struct acpi_device *adev,
+> > > > >>                        const char *hid, const char *uid, s64 hrv=
+)
+> > > > >> {
+> > > > >>    struct device *start =3D adev ? &adev->dev : NULL;
+> > > > >>    ...
+> > > > >>    dev =3D bus_find_device(&acpi_bus_type, start, &match, acpi_d=
+ev_match_cb);
+> > > > >>    ...
+> > > > >> }
+> > > > >>
+> > > > >> in drivers/acpi/utils.c and
+> > > > >>
+> > > > >> static inline struct acpi_device *
+> > > > >> acpi_dev_get_first_match_dev(const char *hid, const char *uid, s=
+64 hrv)
+> > > > >> {
+> > > > >>    return acpi_dev_get_next_match_dev(NULL, hid, uid, hrv);
+> > > > >> }
+> > > > >>
+> > > > >> in include/linux/acpi.h.
+> > > > >>
+> > > > >> Then we may add
+> > > > >>
+> > > > >> #define for_each_acpi_dev_match(adev, hid, uid, hrv)            =
+           \
+> > > > >>    for (adev =3D acpi_dev_get_first_match_dev(hid, uid, hrv);   =
+     \
+> > > > >>         adev;                                                   =
+   \
+> > > > >>         adev =3D acpi_dev_get_next_match_dev(adev, hid, uid, hrv=
+))
+> > > > >
+> > > > > What the cio2-bridge code needs is indeed
+> > > > >
+> > > > >     for each hid in supported hids:
+> > > > >             for each acpi device that is compatible with hid:
+> > > > >                     ...
+> > > > >
+> > > > > which could also be expressed as
+> > > > >
+> > > > >     for each acpi device:
+> > > > >             if acpi device hid is in supported hids:
+> > > > >                     ...
+> > > > >
+> > > > > I don't mind either option, I'll happily follow the preference of=
+ the
+> > > > > ACPI maintainers.
+> > > >
+> > > > Does this need raising elsewhere then? The original idea of just
+> > > > bus_for_each_dev(&acpi_bus_type...) I have now tested and it works =
+fine,
+> > > > but it does mean that I need to export acpi_bus_type (currently tha=
+t
+> > > > symbol's not available)...that seems much simpler to me but I'm not=
+ sure
+> > > > whether that's something to avoid, and if so whether Andy's approac=
+h is
+> > > > better.
+> > > >
+> > > > Thoughts?
+> > >
+> > > I like simple options :-) A patch to export acpi_bus_type, with enoug=
+h
+> > > context in the commit message (and in the cover latter of the series)=
+,
+> > > should be enough to provide all the information the ACPI maintainers
+> > > need to decide which option is best. With a bit of luck that patch wi=
+ll
+> > > be considered the best option and no extra work will be needed.
+> >
+> > The problem with ACPI bus is that it is not as simple as other buses,
+> > i.e. it may have purely ACPI devices along with *companion* devices,
+> > which are usually represented by platform bus. On top of that for
+> > several ACPI devices there can be one physical node and it will be not
+> > so clear what you are exactly looking for by traversing acpi_bus_type.
+> > I believe it's hidden on purpose.
+>
+> Maybe there's something I don't get, as I'm not very familiar with the
+> ACPI implementation in the kernel, but the code in the cio2-bridge,
+> unless I'm mistaken, is really interested in ACPI devices on the ACPI
+> bus, not companions or other devices related to the ACPI devices.
 
-The diff is available at:
-https://paste.debian.net/1172700/
+AFAICS cio2-bridge wants to find ACPI companion devices which are
+enumerated as platform ones (or I=C2=B2C or SPI).
 
-Minor fixes in patches subjects and in bindings as reported by Sergei and
-Kieran.
+> The
+> iterators you have proposed above use bus_find_device() on
+> acpi_bus_type, so I don't really see how they make a difference from a
+> cio2-bridge point of view.
 
-Bindings have now been sent to DT people now that they've been reviewed
-by Kieran.
+This seems to be true. The iterators have no means to distinguish
+between companion devices and pure ACPI, for example.
+For this one needs to call something like 'get first physical node'
+followed by 'let's check that it has a companion and that the one we
+have already got from ACPI bus iterator'.
 
-v4: https://patchwork.linuxtv.org/project/linux-media/list/?series=3847
-v3: https://patchwork.linuxtv.org/project/linux-media/list/?series=3657
+> Is your point that acpi_bus_type shouldn't be
+> exported because it could then be misused by *other* drivers ? Couldn't
+> those drivers then equally misuse the iterators ?
 
-Background in v1 cover letter:
-https://www.spinics.net/lists/linux-renesas-soc/msg52886.html
+My point is that the ACPI bus type here is not homogenous.
+And thus I think it was the reason behind hiding it. I might be
+mistaken and you may ask ACPI maintainers for the clarification.
 
-I have tested on Eagle V3M with 4 RDACM21, but the whole point of
-this series is to retain compatibility with RDACM20.
+In summary I think we are trying to solve a problem that has not yet
+existed (devices with several same sensors). Do we have a DSDT of such
+to look into?
 
-For this reason I have included 2 patches on top, not intended for merge
-that re-propose DTS support for the MAXIM max9286 expansion board connected
-to Salvator-X and add the newly introduced property to the DTS file.
-
-Kieran, I know you have a working setup with RDACM20, the final patches are
-meant for ease your testing. Can you give this series a spin ?
-
-Series based on latest renesas-drivers tag: renesas-drivers-2020-11-10-v5.10-rc3
-
-Thanks
-  j
-
-Jacopo Mondi (7):
-  media: i2c: Add driver for RDACM21 camera module
-  dt-bindings: media: max9286: Document
-    'maxim,initial-reverse-channel-mV'
-  media: i2c: max9286: Break-out reverse channel setup
-  media: i2c: max9286: Make channel amplitude programmable
-  media: i2c: max9286: Configure reverse channel amplitude
-  [DNI] arm64: dts: renesas: salvator-x-max9286: Specify channel
-    amplitude
-  [DNI] arm64: dts: renesas: eagle: Specify channel amplitude
-
-Laurent Pinchart (1):
-  arm64: dts: renesas: salvator-x: Add MAX9286 expansion board
-
- .../bindings/media/i2c/maxim,max9286.yaml     |  23 +
- MAINTAINERS                                   |  12 +
- .../arm64/boot/dts/renesas/r8a77970-eagle.dts |   1 +
- .../boot/dts/renesas/salvator-x-max9286.dtsi  | 396 ++++++++++++
- drivers/media/i2c/Kconfig                     |  13 +
- drivers/media/i2c/Makefile                    |   2 +
- drivers/media/i2c/max9286.c                   |  58 +-
- drivers/media/i2c/rdacm21.c                   | 595 ++++++++++++++++++
- 8 files changed, 1087 insertions(+), 13 deletions(-)
- create mode 100644 arch/arm64/boot/dts/renesas/salvator-x-max9286.dtsi
- create mode 100644 drivers/media/i2c/rdacm21.c
-
---
-2.29.1
-
+--=20
+With Best Regards,
+Andy Shevchenko
