@@ -2,260 +2,181 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85463C63697
-	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 17:37:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C89EBC6379D
+	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 17:37:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4BB3320B80
-	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 17:37:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 77ABE223FB
+	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 17:37:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tllhDcFg"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mPuaAhSd"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733083AbgKPRhG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Nov 2020 12:37:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45668 "EHLO
+        id S1733209AbgKPRhO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Nov 2020 12:37:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732846AbgKPRhF (ORCPT
+        with ESMTP id S1733190AbgKPRhL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Nov 2020 12:37:05 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55E5CC0613D1
-        for <linux-media@vger.kernel.org>; Mon, 16 Nov 2020 09:37:05 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id 23so19603945wrc.8
-        for <linux-media@vger.kernel.org>; Mon, 16 Nov 2020 09:37:05 -0800 (PST)
+        Mon, 16 Nov 2020 12:37:11 -0500
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E10FC0613D1
+        for <linux-media@vger.kernel.org>; Mon, 16 Nov 2020 09:37:11 -0800 (PST)
+Received: by mail-wr1-x442.google.com with SMTP id k2so19677122wrx.2
+        for <linux-media@vger.kernel.org>; Mon, 16 Nov 2020 09:37:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rnCmLL25pCLDNOYAVS5vRDXtM8wklwyGg+VrKx5Ma2A=;
-        b=tllhDcFg6v1aQCkXpAymrypD3GV4OHum5p2/WrHJOhw21jBh1tzJJ5YQH3+f8rLq90
-         8fToMihvovq8zyX5/I8FXSc5WZkHtOfg5oa2zOsz6xOUoH8dFamywrLBkG1OT13Xw1oP
-         il6O++szmQO7CqwAPSxzz6EWh12ZQrDN4J7e/mbQ0NURGC7pTuhl5MwwChSE5D1Il1lk
-         HpwEfmWYN3pcLtOPHZ92fsiQtU0aldoiGcEJkWSyVvHh8bIcdsaplMyuupmxeuax+ogU
-         FRrxHweR5keMnn03xWcpPltyvudJv0QJkfwjngh09FALkU07xOZv4vXBx7iTdqHZiRWJ
-         xwSA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Sc1pkIB+FW/k5gLv6YQPQhC4CZ1RwfaoeaGhthq0b4c=;
+        b=mPuaAhSddpX0TY3ZOxs/irH2uOKqIchw+XgeJzhGsetdcsBXHVK93VOGNAfvw00h2A
+         RXXmy0+ahdAZxG37S0KzyocdNXVyH1e4Luo5P6OGLZUH3UmeHNgJhubVQ0P//WvV23EM
+         FlsR3laPq+0oWJlRkbm8x9gXl91boEdF8JdRy9dO8Es04tZC9zAaS//aUF+KveB8SpSk
+         uD4Okgb3cB0vsK7Iu6ALQ5nYFNr+Y7gM3OGe4WAz/RiItYAIMlMGMl62RJetUQLtVH85
+         FywTI4ViK53ViNmFVMYUo00yJwlS00aQBZ0C+XZ2Grt6XYuogGK9d5W0nlntcX9vOCUs
+         6dhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rnCmLL25pCLDNOYAVS5vRDXtM8wklwyGg+VrKx5Ma2A=;
-        b=L2wj/tLss5YT7UEQu2SLZ7vpYyeAEUbSbPJD9A+hustJqi01KNttOnurPDmfj+0zC+
-         YIVFulxYkmx/zuUWXIht9Ssb8wPjQF5dz7S2AV0hebgRUh918O8QYR3En2XlEHDw67HE
-         53RnW41GEYRDW2fUWq2GrIjR0ZGUaTImiYMakFQyaEpIdgtDew3KmBNu1whBTXQtHwrB
-         227sExhYSVy1BI/maWFEdDgIK6c4jG+LhFNdDJX7kkkjV+ivL03m5DM+bHFa7z26VHWT
-         U2f9+xQjPR1Ss7CHusynaGHxhFko4Uy7ZKDVIatREyFKb/v2Y1/ONpcnztO2G72qwg93
-         SJIw==
-X-Gm-Message-State: AOAM531TfwDTouyOYwkNNpxO1FBTKbomf+rgLkgm+0frlcdUDLaIp+Jn
-        trXIVj1fG+4K4TxCdUS44MVfOMBaw/LizuHt
-X-Google-Smtp-Source: ABdhPJzrvRFR93QE2mlsw9W/o6xTJR2iMN7IxdLb1TO4poszSjTKNNTUHXJ0m0aAMJICbuU0sVIMwQ==
-X-Received: by 2002:adf:cf0b:: with SMTP id o11mr20096726wrj.162.1605548223950;
-        Mon, 16 Nov 2020 09:37:03 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Sc1pkIB+FW/k5gLv6YQPQhC4CZ1RwfaoeaGhthq0b4c=;
+        b=cei8gDVYfHIeDygXZlkqGu4+0tecGIGyxbxnKUlGUFirSRgOH7XZ8REL3nJUF9rjqX
+         2Q5Bhjaua1Pa23z1zZSWWDAU+9yBCacK3Z1vgqdRLHVKVz2/IsoFa+OwCIQev3wA2XNk
+         RKkIjBl46Rd0QXQATC/lU6M05U0Zg4yZyWT/9B0ziufPNHCJBgMS4zAVR+npvkp1dtl5
+         4X558hwbEZqQOOvy575UJx2LTxBmLgAkCglAz2hxtt8HaLKYDdXZeDCppB1xvO7lnqpI
+         Yz5qYDVxtEdIN4xo0neDD0U08nSUzpB+0kzlUEtv3LwfFJSvqi41+CXjqeod+5tBId1Z
+         Iqrg==
+X-Gm-Message-State: AOAM531b/yi6f7rhenSKCQydC1vCPNuAr5rGxoFzZMulOK8Dt9xMoSO4
+        ANFkEJbk1ZA+B4zNxof34XGR2g==
+X-Google-Smtp-Source: ABdhPJx/CgDQnJgp2vUU18Py1OgzA+nGyj8bmKcejT6CvCOBDYKMmVYShIvkZKlWr78Pq9qiZQ96Zg==
+X-Received: by 2002:adf:9e48:: with SMTP id v8mr21993925wre.55.1605548229923;
+        Mon, 16 Nov 2020 09:37:09 -0800 (PST)
 Received: from dell.default ([91.110.221.159])
-        by smtp.gmail.com with ESMTPSA id 30sm16942828wrd.88.2020.11.16.09.37.02
+        by smtp.gmail.com with ESMTPSA id 30sm16942828wrd.88.2020.11.16.09.37.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2020 09:37:03 -0800 (PST)
+        Mon, 16 Nov 2020 09:37:09 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org,
         Alex Deucher <alexander.deucher@amd.com>,
-        amd-gfx@lists.freedesktop.org,
         =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org, Evan Quan <evan.quan@amd.com>,
-        Gareth Hughes <gareth@valinux.com>,
-        linaro-mm-sig@lists.linaro.org, linux-media@vger.kernel.org,
-        Slava Grigorev <slava.grigorev@amd.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-Subject: [RESEND v2 00/43] Rid W=1 warnings from GPU
-Date:   Mon, 16 Nov 2020 17:36:17 +0000
-Message-Id: <20201116173700.1830487-1-lee.jones@linaro.org>
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Subject: [PATCH 05/43] drm/radeon: Move radeon_ttm{init,fini} to shared location
+Date:   Mon, 16 Nov 2020 17:36:22 +0000
+Message-Id: <20201116173700.1830487-6-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201116173700.1830487-1-lee.jones@linaro.org>
+References: <20201116173700.1830487-1-lee.jones@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-[sending again, as `git send-email` crashed!]
+Fixes the following W=1 kernel build warning(s):
 
-This set contains fixes for some "wouldn't it be nice if" issues,
-however most of the patches seen here have been on the MLs, but
-were left unreviewed.
-
-Lee Jones (43):
-  drm/radeon/atombios_encoders: Move 'radeon_atom_get_tv_timings()'s
-    prototype into shared location
-  drm/radeon/radeon: Move prototype into shared header
-  drm/radeon/radeon_kms: Move 'radeon_*_kms' prototypes to shared header
-  drm/radeon/radeon_kms: Fix misnaming of 'radeon_info_ioctl's dev param
-  drm/radeon: Move radeon_ttm{init,fini} to shared location
-  drm/radeon/radeon_legacy_encoders: Move 'radeon_add_legacy_encoder'
-    prototype to shared header
-  drm/radeon/radeon_legacy_encoders: Move 'radeon_add_legacy_encoder's
-    prototype to shared location
-  drm/radeon/radeon_irq_kms: Demote non-conformant kernel-doc fix
-    another
-  drm/radeon/rv770: Move 'rv770_set_clk_bypass_mode' prototype to shared
-    location
-  drm/radeon/radeon_pm: Move 'radeon_pm_acpi_event_handler' prototype
-    into shared header
-  drm/radeon/radeon_audio: Move 'dce3_2_*' prototypes to shared location
-  drm/radeon/evergreen: Move 'evergreen_*' and 'sumo_*' prototypes out
-    to shared location
-  drm/radeon/radeon_drv: Move 'radeon_mmap()'s prototype to shared
-    header
-  drm/radeon/radeon_drv: Move 'radeon_driver_irq_handler_kms's prototype
-    into shared header
-  drm/radeon/atom: Move 'radeon_atom_hw_i2c_*()'s prototypes into shared
-    header
-  drm/radeon/radeon_gem: Move 'radeon_gem_prime_*()'s prototypes to
-    shared header
-  drm/radeon/evergreen_hdmi: Move 'evergreen_*()' and 'dce4_*()' HDMI
-    prototypes to shared header
-  drm/radeon/rv770: Move 'rv770_get_*()'s prototypes to shared header
-  drm/radeon/ni_dpm: Move 'ni_get_{pi,ps}()'s into shared header
-  drm/radeon/evergreen: Move 'cayman_*()'s prototypes to shared header
-  drm/radeon/r600_dma: Move 'r600_gpu_check_soft_reset()'s prototype to
-    shared location
-  drm/radeon/cik: Move 'r600_ih_ring_{alloc,fini}()'s prototypes to
-    shared header
-  drm/radeon/evergreen_dma: Move 'evergreen_gpu_check_soft_reset()'s
-    prototype to shared header
-  drm/radeon/r600: Move 'evergreen_rlc_resume()'s prototype to shared
-    header
-  drm/radeon/ni_dma: Move 'cayman_gpu_check_soft_reset()'s prototype to
-    shared header
-  drm/radeon/radeon_atombios: Move 'radeon_add_atom_encoder()'s
-    prototype to shared header
-  drm/radeon/radeon_encoders: Move 'radeon_atom_backlight_init's
-    prototype to shared header
-  drm/radeon/ci_dpm: Move 'ci_*()'s prototypes to shared header
-  drm/radeon/si_dpm: Move 'si_mc_load_microcode()'s prototype to shared
-    header
-  drm/radeon/si_dma: Move 'si_gpu_check_soft_reset()'s prototype to
-    shared header
-  drm/radeon/cik: Move 'si_*()'s prototypes to shared header
-  drm/radeon/btc_dpm: Move 'evergreen_get_pi's prototype to shared
-    header
-  drm/radeon/radeon_audio: Move 'dce6_*()'s prototypes to shared header
-  drm/radeon/evergreen: Move 'si_get_csb_*()'s prototypes to shared
-    header
-  drm/radeon/cik_sdma: Move 'amdgpu_cik_gpu_check_soft_reset()'s
-    prototype to shared header
-  drm/radeon/evergreen: Move 'cik_*()'s prototypes to shared header
-  drm/radeon/ci_dpm: Move 'si_*()'s prototypes to shared header
-  drm/radeon/cik: Move 'Move 'cik_sdma_*()'s prototypes to shared header
-  drm/radeon/si_dpm: Move 'vce_v1_0_enable_mgcg()'s prototype to shared
-    header
-  drm/radeon/cik: Move 'vce_v2_0_enable_mgcg()'s prototype to shared
-    header
-  drm/radeon/evergreen_cs: Move 'r600_dma_cs_next_reloc()'s prototype to
-    shared header
-  drm/radeon/radeon_audio: Move 'r600_*' prototypes into shared header
-  drm/radeon/radeon_drv: Move 'radeon_gem_prime_import_sg_table()'s
-    prototype to shared header
-
- drivers/gpu/drm/radeon/atom.h                 |  7 ++
- drivers/gpu/drm/radeon/atombios_encoders.c    |  5 +-
- drivers/gpu/drm/radeon/btc_dpm.c              |  6 +-
- drivers/gpu/drm/radeon/ci_dpm.c               | 13 +---
- drivers/gpu/drm/radeon/cik.c                  | 19 ++---
- drivers/gpu/drm/radeon/cik.h                  | 40 +++++++++++
- drivers/gpu/drm/radeon/cik_sdma.c             |  3 +-
- drivers/gpu/drm/radeon/cypress_dpm.c          |  6 +-
- drivers/gpu/drm/radeon/dce6_afmt.c            |  1 +
- drivers/gpu/drm/radeon/dce6_afmt.h            | 52 ++++++++++++++
- drivers/gpu/drm/radeon/evergreen.c            | 16 ++---
- drivers/gpu/drm/radeon/evergreen.h            | 55 +++++++++++++++
- drivers/gpu/drm/radeon/evergreen_cs.c         |  3 +-
- drivers/gpu/drm/radeon/evergreen_dma.c        |  3 +-
- drivers/gpu/drm/radeon/evergreen_hdmi.c       |  1 +
- drivers/gpu/drm/radeon/evergreen_hdmi.h       | 69 +++++++++++++++++++
- drivers/gpu/drm/radeon/ni.c                   | 17 +----
- drivers/gpu/drm/radeon/ni.h                   | 39 +++++++++++
- drivers/gpu/drm/radeon/ni_dma.c               |  3 +-
- drivers/gpu/drm/radeon/ni_dpm.c               |  5 +-
- drivers/gpu/drm/radeon/ni_dpm.h               |  3 +
- drivers/gpu/drm/radeon/r600.c                 |  5 +-
- drivers/gpu/drm/radeon/r600.h                 | 58 ++++++++++++++++
- drivers/gpu/drm/radeon/r600_cs.c              |  1 +
- drivers/gpu/drm/radeon/r600_dma.c             |  3 +-
- drivers/gpu/drm/radeon/r600_hdmi.c            |  1 +
- drivers/gpu/drm/radeon/radeon_acpi.c          |  3 +-
- drivers/gpu/drm/radeon/radeon_atombios.c      | 11 +--
- drivers/gpu/drm/radeon/radeon_atombios.h      | 45 ++++++++++++
- drivers/gpu/drm/radeon/radeon_audio.c         | 68 +-----------------
- drivers/gpu/drm/radeon/radeon_audio.h         | 12 ++++
- drivers/gpu/drm/radeon/radeon_combios.c       |  6 +-
- drivers/gpu/drm/radeon/radeon_device.c        |  1 +
- drivers/gpu/drm/radeon/radeon_device.h        | 32 +++++++++
- drivers/gpu/drm/radeon/radeon_display.c       |  1 +
- drivers/gpu/drm/radeon/radeon_drv.c           | 14 ++--
- drivers/gpu/drm/radeon/radeon_encoders.c      | 10 +--
- drivers/gpu/drm/radeon/radeon_gem.c           |  1 +
- drivers/gpu/drm/radeon/radeon_i2c.c           |  4 --
- drivers/gpu/drm/radeon/radeon_irq_kms.c       |  9 ++-
- drivers/gpu/drm/radeon/radeon_kms.c           |  3 +-
- drivers/gpu/drm/radeon/radeon_kms.h           | 40 +++++++++++
- .../gpu/drm/radeon/radeon_legacy_encoders.c   |  1 +
- .../gpu/drm/radeon/radeon_legacy_encoders.h   | 36 ++++++++++
- drivers/gpu/drm/radeon/radeon_object.c        |  3 +-
- drivers/gpu/drm/radeon/radeon_pm.c            |  1 +
- drivers/gpu/drm/radeon/radeon_pm.h            | 33 +++++++++
- drivers/gpu/drm/radeon/radeon_prime.c         |  1 +
- drivers/gpu/drm/radeon/radeon_prime.h         | 42 +++++++++++
- drivers/gpu/drm/radeon/radeon_ttm.c           |  1 +
- drivers/gpu/drm/radeon/radeon_ttm.h           | 37 ++++++++++
- drivers/gpu/drm/radeon/rv730_dpm.c            |  4 +-
- drivers/gpu/drm/radeon/rv740_dpm.c            |  3 +-
- drivers/gpu/drm/radeon/rv770.c                |  1 +
- drivers/gpu/drm/radeon/rv770.h                | 39 +++++++++++
- drivers/gpu/drm/radeon/rv770_dpm.c            |  2 +
- drivers/gpu/drm/radeon/si.c                   | 11 +--
- drivers/gpu/drm/radeon/si.h                   | 38 ++++++++++
- drivers/gpu/drm/radeon/si_dma.c               |  3 +-
- drivers/gpu/drm/radeon/si_dpm.c               | 13 ++--
- drivers/gpu/drm/radeon/si_dpm.h               |  5 ++
- drivers/gpu/drm/radeon/trinity_dpm.c          |  2 +-
- drivers/gpu/drm/radeon/vce.h                  | 35 ++++++++++
- drivers/gpu/drm/radeon/vce_v1_0.c             |  1 +
- drivers/gpu/drm/radeon/vce_v2_0.c             |  1 +
- 65 files changed, 794 insertions(+), 213 deletions(-)
- create mode 100644 drivers/gpu/drm/radeon/cik.h
- create mode 100644 drivers/gpu/drm/radeon/dce6_afmt.h
- create mode 100644 drivers/gpu/drm/radeon/evergreen.h
- create mode 100644 drivers/gpu/drm/radeon/evergreen_hdmi.h
- create mode 100644 drivers/gpu/drm/radeon/ni.h
- create mode 100644 drivers/gpu/drm/radeon/r600.h
- create mode 100644 drivers/gpu/drm/radeon/radeon_atombios.h
- create mode 100644 drivers/gpu/drm/radeon/radeon_device.h
- create mode 100644 drivers/gpu/drm/radeon/radeon_kms.h
- create mode 100644 drivers/gpu/drm/radeon/radeon_legacy_encoders.h
- create mode 100644 drivers/gpu/drm/radeon/radeon_pm.h
- create mode 100644 drivers/gpu/drm/radeon/radeon_prime.h
- create mode 100644 drivers/gpu/drm/radeon/radeon_ttm.h
- create mode 100644 drivers/gpu/drm/radeon/rv770.h
- create mode 100644 drivers/gpu/drm/radeon/si.h
- create mode 100644 drivers/gpu/drm/radeon/vce.h
+ drivers/gpu/drm/radeon/radeon_ttm.c: At top level:
+ drivers/gpu/drm/radeon/radeon_ttm.c:817:5: warning: no previous prototype for ‘radeon_ttm_init’ [-Wmissing-prototypes]
+ 817 | int radeon_ttm_init(struct radeon_device *rdev)
+ | ^~~~~~~~~~~~~~~
+ drivers/gpu/drm/radeon/radeon_ttm.c:878:6: warning: no previous prototype for ‘radeon_ttm_fini’ [-Wmissing-prototypes]
+ 878 | void radeon_ttm_fini(struct radeon_device *rdev)
+ | ^~~~~~~~~~~~~~~
 
 Cc: Alex Deucher <alexander.deucher@amd.com>
-Cc: amd-gfx@lists.freedesktop.org
 Cc: "Christian König" <christian.koenig@amd.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
 Cc: David Airlie <airlied@linux.ie>
-Cc: dri-devel@lists.freedesktop.org
-Cc: Evan Quan <evan.quan@amd.com>
-Cc: Gareth Hughes <gareth@valinux.com>
-Cc: linaro-mm-sig@lists.linaro.org
-Cc: linux-media@vger.kernel.org
-Cc: Slava Grigorev <slava.grigorev@amd.com>
+Cc: Daniel Vetter <daniel@ffwll.ch>
 Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: amd-gfx@lists.freedesktop.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-media@vger.kernel.org
+Cc: linaro-mm-sig@lists.linaro.org
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+---
+ drivers/gpu/drm/radeon/radeon_object.c |  3 +--
+ drivers/gpu/drm/radeon/radeon_ttm.c    |  1 +
+ drivers/gpu/drm/radeon/radeon_ttm.h    | 36 ++++++++++++++++++++++++++
+ 3 files changed, 38 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/gpu/drm/radeon/radeon_ttm.h
+
+diff --git a/drivers/gpu/drm/radeon/radeon_object.c b/drivers/gpu/drm/radeon/radeon_object.c
+index ab81e35cb0606..8bc5ad1d65857 100644
+--- a/drivers/gpu/drm/radeon/radeon_object.c
++++ b/drivers/gpu/drm/radeon/radeon_object.c
+@@ -40,9 +40,8 @@
+ 
+ #include "radeon.h"
+ #include "radeon_trace.h"
++#include "radeon_ttm.h"
+ 
+-int radeon_ttm_init(struct radeon_device *rdev);
+-void radeon_ttm_fini(struct radeon_device *rdev);
+ static void radeon_bo_clear_surface_reg(struct radeon_bo *bo);
+ 
+ /*
+diff --git a/drivers/gpu/drm/radeon/radeon_ttm.c b/drivers/gpu/drm/radeon/radeon_ttm.c
+index 2939e71ceb700..28b300ed200ea 100644
+--- a/drivers/gpu/drm/radeon/radeon_ttm.c
++++ b/drivers/gpu/drm/radeon/radeon_ttm.c
+@@ -51,6 +51,7 @@
+ 
+ #include "radeon_reg.h"
+ #include "radeon.h"
++#include "radeon_ttm.h"
+ 
+ static int radeon_ttm_debugfs_init(struct radeon_device *rdev);
+ static void radeon_ttm_debugfs_fini(struct radeon_device *rdev);
+diff --git a/drivers/gpu/drm/radeon/radeon_ttm.h b/drivers/gpu/drm/radeon/radeon_ttm.h
+new file mode 100644
+index 0000000000000..91ea7141bc812
+--- /dev/null
++++ b/drivers/gpu/drm/radeon/radeon_ttm.h
+@@ -0,0 +1,36 @@
++/* radeon_ttm.h -- Private header for radeon driver -*- linux-c -*-
++ *
++ * Copyright 1999 Precision Insight, Inc., Cedar Park, Texas.
++ * Copyright 2000 VA Linux Systems, Inc., Fremont, California.
++ * All rights reserved.
++ *
++ * Permission is hereby granted, free of charge, to any person obtaining a
++ * copy of this software and associated documentation files (the "Software"),
++ * to deal in the Software without restriction, including without limitation
++ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
++ * and/or sell copies of the Software, and to permit persons to whom the
++ * Software is furnished to do so, subject to the following conditions:
++ *
++ * The above copyright notice and this permission notice (including the next
++ * paragraph) shall be included in all copies or substantial portions of the
++ * Software.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
++ * PRECISION INSIGHT AND/OR ITS SUPPLIERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
++ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
++ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
++ * DEALINGS IN THE SOFTWARE.
++ *
++ */
++
++#ifndef __RADEON_TTM_H__
++#define __RADEON_TTM_H__
++
++struct radeon_device;
++
++int radeon_ttm_init(struct radeon_device *rdev);
++void radeon_ttm_fini(struct radeon_device *rdev);
++
++#endif				/* __RADEON_TTM_H__ */
 -- 
 2.25.1
 
