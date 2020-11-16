@@ -2,63 +2,62 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5E6EC6379D
-	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 17:38:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6F29C63798
+	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 17:39:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5F6EE222E8
-	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 17:38:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 60B4320B80
+	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 17:39:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="C1Q+CHNZ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dr2bVIZx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733312AbgKPRhi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Nov 2020 12:37:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45798 "EHLO
+        id S2387529AbgKPRiC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Nov 2020 12:38:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733296AbgKPRhh (ORCPT
+        with ESMTP id S2387523AbgKPRiA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Nov 2020 12:37:37 -0500
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B444C0613CF
-        for <linux-media@vger.kernel.org>; Mon, 16 Nov 2020 09:37:37 -0800 (PST)
-Received: by mail-wm1-x341.google.com with SMTP id p22so24744wmg.3
-        for <linux-media@vger.kernel.org>; Mon, 16 Nov 2020 09:37:37 -0800 (PST)
+        Mon, 16 Nov 2020 12:38:00 -0500
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A27C0613CF
+        for <linux-media@vger.kernel.org>; Mon, 16 Nov 2020 09:37:59 -0800 (PST)
+Received: by mail-wr1-x441.google.com with SMTP id b6so19646454wrt.4
+        for <linux-media@vger.kernel.org>; Mon, 16 Nov 2020 09:37:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6NqivdSoS8aJrg9SJeB6kGm72B7/tU0UIKTvRD3ut9A=;
-        b=C1Q+CHNZ+SnTO8vHJOinWbhc3vH3s30mod5pEkymEsYScz0GtjCroxKRsb7NQwoWde
-         KV66Y0C0gQr6Krra8A9aDTX9GBdHGPWgrxfye5m2RGA5tOY5LqLYrKaX7x0Rb/gvR7hV
-         zW1d6+ZnhsrFZ7oo1nbFKaf0UMMviNLMMDvZse1OretnkhtHys6LnzODOQNxHPpIoQG9
-         KBOzzhpsuSNKHFAT5JxEjV6Jwd5h4xxOa5XhZKacJ43uzU9jnNQ9BVIxwGC6oh2JnwKN
-         GLMxyUrLpqisq/HpJFKXLMi6C9Dgt5GcOrNkfmuxtlX1EEGwqudN1Lm+qCs+1pukF8XV
-         niXA==
+        bh=TL/uaiVIiwl4wzWU7OYi0ACx3zRr3WVOJb9wsR2ot/U=;
+        b=dr2bVIZxUH94BJWmoSkzDF3XGSLOpfJ1EqQiSFAWRLHQcBgTbLh3kaFJpwd82QBuYd
+         q5eD0fCw2PytG7MrtaZuQrihHCtR0/ffC0/76z0ydHogAVnjYYwV4D/gmAmE2dg6/Kia
+         SFmzCCdsLEa3IZQkGULmy3XV4x03kvLJNoqsO7C27vFIuD7C1U8VT6+X72NBPGil9DGm
+         0uuDUiU3czjeC+0sJvqiH3OcOej+u/yTQ5FJf+u3dNsfJW8435CYA8Hk4iRmAynz6eE+
+         KDlU21i/5Ln/UvT1YMpF6klItjrO7hXaIrgKevH2UKz09pVQf2x0HkrAkg43R9D6wq1n
+         DHcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6NqivdSoS8aJrg9SJeB6kGm72B7/tU0UIKTvRD3ut9A=;
-        b=Qla9ZRRfWvwfP7tUCDXSufevaE5nliuUty1pRzWzoFF63vRu/gdotYzhJuRRcJN8Im
-         g/czDeRzNOS4ceqgCacwK+R2cvgCzuLIhG0mdDTu5qC/zuWHSWpFdAv//3yWDCb2bima
-         lRNotT5JdKKtZov8Dj6iANvZidKjDC8YZB62iuoVcZkl8qh21c+ofNyGkQqXR2OmjyOA
-         IdV2u/yovaaoXe4oK91yxertz5YXaFRFMz8LUvhmhMoDSkFVvmmc+WhnquR1XwYUOewb
-         fj9DPZiCUYuS1chch7TUrf6GVyRxVLxB9w4MqEWhH/IRJ7YEpbM+met5utIBlJByVks5
-         krRQ==
-X-Gm-Message-State: AOAM531uyCLZisFj8aSlap7yjR7zYCfgrCrx9sSpsf6vl0iFTUgXQmPS
-        LOJcaTo2tGF6WMbNCza0EUoP8A==
-X-Google-Smtp-Source: ABdhPJwMJtLAFYyr97EyAPYpJ7qyi5IqvZswjgm4XdVLqLLHFtaXQNWZ3VEoGPX14yGcY/n1XEUokg==
-X-Received: by 2002:a1c:e3c1:: with SMTP id a184mr16024wmh.88.1605548255825;
-        Mon, 16 Nov 2020 09:37:35 -0800 (PST)
+        bh=TL/uaiVIiwl4wzWU7OYi0ACx3zRr3WVOJb9wsR2ot/U=;
+        b=uEaHC/oLc5T8/oGOmCoeDbSnAphnMzoEZ0rJNNclzoI6UuHkKEoWWrJeAv+WwmDsXH
+         3E5DAiw0Oeix9d8xmFijK3JNv3E5Hx/qYe/xQIKBHvqV2wHNLV+fqkIVIATFiL/dm00p
+         keDhDpobmBI60X+pTdNxWnL/tlygyhrgjB8Of63p4Ck6CgRSRmip98v+RyLJfza2vibv
+         Sp2I0wJLzTRztgUH3ll0bLHnxplPwW9oG1m2dQOqlcsSOs60A2/9Ew22BHvFEkVtHkJL
+         0lY9XuQ/ppicE5OdyEOepE8It8S3MDQB8g4kp2a5kfKT33xJUtkFegHa+1HsiKgl0E8K
+         46ow==
+X-Gm-Message-State: AOAM5336tFlvn2V0T9eJaQ9W9by5awRVhIVKRsJ59vWVQgCjh/OaFQei
+        eoEnKVfzFaDmNrpRu+0diL9GIg==
+X-Google-Smtp-Source: ABdhPJx+b4Ft/SDd+UqL/cZrV5C8FQkrs6vyGPH8CJVoRuoiWseV/LhptsVy4YAmxH9L0GMIyxyJew==
+X-Received: by 2002:a5d:5222:: with SMTP id i2mr21750649wra.247.1605548278544;
+        Mon, 16 Nov 2020 09:37:58 -0800 (PST)
 Received: from dell.default ([91.110.221.159])
-        by smtp.gmail.com with ESMTPSA id 30sm16942828wrd.88.2020.11.16.09.37.34
+        by smtp.gmail.com with ESMTPSA id 30sm16942828wrd.88.2020.11.16.09.37.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2020 09:37:35 -0800 (PST)
+        Mon, 16 Nov 2020 09:37:57 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -69,9 +68,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Sumit Semwal <sumit.semwal@linaro.org>,
         amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 22/43] drm/radeon/cik: Move 'r600_ih_ring_{alloc,fini}()'s prototypes to shared header
-Date:   Mon, 16 Nov 2020 17:36:39 +0000
-Message-Id: <20201116173700.1830487-23-lee.jones@linaro.org>
+Subject: [PATCH 40/43] drm/radeon/cik: Move 'vce_v2_0_enable_mgcg()'s prototype to shared header
+Date:   Mon, 16 Nov 2020 17:36:57 +0000
+Message-Id: <20201116173700.1830487-41-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201116173700.1830487-1-lee.jones@linaro.org>
 References: <20201116173700.1830487-1-lee.jones@linaro.org>
@@ -84,12 +83,9 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/gpu/drm/radeon/r600.c:3480:5: warning: no previous prototype for ‘r600_ih_ring_alloc’ [-Wmissing-prototypes]
- 3480 | int r600_ih_ring_alloc(struct radeon_device *rdev)
- | ^~~~~~~~~~~~~~~~~~
- drivers/gpu/drm/radeon/r600.c:3516:6: warning: no previous prototype for ‘r600_ih_ring_fini’ [-Wmissing-prototypes]
- 3516 | void r600_ih_ring_fini(struct radeon_device *rdev)
- | ^~~~~~~~~~~~~~~~~
+ drivers/gpu/drm/radeon/vce_v2_0.c:111:6: warning: no previous prototype for ‘vce_v2_0_enable_mgcg’ [-Wmissing-prototypes]
+ 111 | void vce_v2_0_enable_mgcg(struct radeon_device *rdev, bool enable)
+ | ^~~~~~~~~~~~~~~~~~~~
 
 Cc: Alex Deucher <alexander.deucher@amd.com>
 Cc: "Christian König" <christian.koenig@amd.com>
@@ -102,65 +98,54 @@ Cc: linux-media@vger.kernel.org
 Cc: linaro-mm-sig@lists.linaro.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/gpu/drm/radeon/cik.c  | 3 +--
- drivers/gpu/drm/radeon/r600.h | 2 ++
- drivers/gpu/drm/radeon/si.c   | 3 +--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/radeon/cik.c      | 2 +-
+ drivers/gpu/drm/radeon/vce.h      | 1 +
+ drivers/gpu/drm/radeon/vce_v2_0.c | 1 +
+ 3 files changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/gpu/drm/radeon/cik.c b/drivers/gpu/drm/radeon/cik.c
-index 315c4f3df3656..980b50d046cbc 100644
+index 2af76463906ad..8b7a4f7b75766 100644
 --- a/drivers/gpu/drm/radeon/cik.c
 +++ b/drivers/gpu/drm/radeon/cik.c
-@@ -34,6 +34,7 @@
- #include "cik_blit_shaders.h"
- #include "cikd.h"
- #include "clearstate_ci.h"
-+#include "r600.h"
- #include "radeon.h"
- #include "radeon_asic.h"
+@@ -41,6 +41,7 @@
  #include "radeon_audio.h"
-@@ -125,8 +126,6 @@ MODULE_FIRMWARE("radeon/mullins_mec.bin");
- MODULE_FIRMWARE("radeon/mullins_rlc.bin");
+ #include "radeon_ucode.h"
+ #include "si.h"
++#include "vce.h"
+ 
+ #define SH_MEM_CONFIG_GFX_DEFAULT \
+ 	ALIGNMENT_MODE(SH_MEM_ALIGNMENT_MODE_UNALIGNED)
+@@ -129,7 +130,6 @@ MODULE_FIRMWARE("radeon/mullins_rlc.bin");
  MODULE_FIRMWARE("radeon/mullins_sdma.bin");
  
--extern int r600_ih_ring_alloc(struct radeon_device *rdev);
--extern void r600_ih_ring_fini(struct radeon_device *rdev);
- extern void si_vram_gtt_location(struct radeon_device *rdev, struct radeon_mc *mc);
- extern void si_rlc_reset(struct radeon_device *rdev);
- extern void si_init_uvd_internal_cg(struct radeon_device *rdev);
-diff --git a/drivers/gpu/drm/radeon/r600.h b/drivers/gpu/drm/radeon/r600.h
-index 2a3915f0039e4..e66ef58706cd8 100644
---- a/drivers/gpu/drm/radeon/r600.h
-+++ b/drivers/gpu/drm/radeon/r600.h
-@@ -31,5 +31,7 @@
+ static u32 cik_get_cu_active_bitmap(struct radeon_device *rdev, u32 se, u32 sh);
+-extern void vce_v2_0_enable_mgcg(struct radeon_device *rdev, bool enable);
+ static void cik_rlc_stop(struct radeon_device *rdev);
+ static void cik_pcie_gen3_enable(struct radeon_device *rdev);
+ static void cik_program_aspm(struct radeon_device *rdev);
+diff --git a/drivers/gpu/drm/radeon/vce.h b/drivers/gpu/drm/radeon/vce.h
+index 1eb4f5715202e..ccc9c00f0d02c 100644
+--- a/drivers/gpu/drm/radeon/vce.h
++++ b/drivers/gpu/drm/radeon/vce.h
+@@ -30,5 +30,6 @@
  struct radeon_device;
  
- u32 r600_gpu_check_soft_reset(struct radeon_device *rdev);
-+int r600_ih_ring_alloc(struct radeon_device *rdev);
-+void r600_ih_ring_fini(struct radeon_device *rdev);
+ void vce_v1_0_enable_mgcg(struct radeon_device *rdev, bool enable);
++void vce_v2_0_enable_mgcg(struct radeon_device *rdev, bool enable);
  
- #endif				/* __R600_H__ */
-diff --git a/drivers/gpu/drm/radeon/si.c b/drivers/gpu/drm/radeon/si.c
-index 45076c27d7ded..d0407145c07b5 100644
---- a/drivers/gpu/drm/radeon/si.c
-+++ b/drivers/gpu/drm/radeon/si.c
-@@ -33,6 +33,7 @@
- #include "atom.h"
- #include "clearstate_si.h"
- #include "evergreen.h"
-+#include "r600.h"
+ #endif                         /* __VCE_H__ */
+diff --git a/drivers/gpu/drm/radeon/vce_v2_0.c b/drivers/gpu/drm/radeon/vce_v2_0.c
+index d6fde3659e65f..163c9bfc03da8 100644
+--- a/drivers/gpu/drm/radeon/vce_v2_0.c
++++ b/drivers/gpu/drm/radeon/vce_v2_0.c
+@@ -30,6 +30,7 @@
  #include "radeon.h"
  #include "radeon_asic.h"
- #include "radeon_audio.h"
-@@ -128,8 +129,6 @@ static void si_pcie_gen3_enable(struct radeon_device *rdev);
- static void si_program_aspm(struct radeon_device *rdev);
- extern void sumo_rlc_fini(struct radeon_device *rdev);
- extern int sumo_rlc_init(struct radeon_device *rdev);
--extern int r600_ih_ring_alloc(struct radeon_device *rdev);
--extern void r600_ih_ring_fini(struct radeon_device *rdev);
- static void si_enable_gui_idle_interrupt(struct radeon_device *rdev,
- 					 bool enable);
- static void si_init_pg(struct radeon_device *rdev);
+ #include "cikd.h"
++#include "vce.h"
+ 
+ #define VCE_V2_0_FW_SIZE	(256 * 1024)
+ #define VCE_V2_0_STACK_SIZE	(64 * 1024)
 -- 
 2.25.1
 
