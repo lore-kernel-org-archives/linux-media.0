@@ -2,370 +2,177 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2422BC6369E
-	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 17:29:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7E20C6369E
+	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 17:30:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A1928222E8
-	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 17:29:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A52DC22245
+	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 17:30:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="AhK49VcI"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lDIlK2xa"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732875AbgKPR3V (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Nov 2020 12:29:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44420 "EHLO
+        id S1732956AbgKPRaT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Nov 2020 12:30:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732873AbgKPR3V (ORCPT
+        with ESMTP id S1732908AbgKPRaS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Nov 2020 12:29:21 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 268D1C0613CF
-        for <linux-media@vger.kernel.org>; Mon, 16 Nov 2020 09:29:21 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DA488A1B;
-        Mon, 16 Nov 2020 18:29:18 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1605547759;
-        bh=GGXpqL70l5+O7z4cFr87UKODTsNqaFT7ITTCcGnwxGs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AhK49VcIecxg2i5MiDc2NpAshaPz1Z0Mx5L5BlnIk44pqF8xnFNtIc4dhVC135PZG
-         9Cr1hr5NkcC8ro52nazFijuYMzhZcA0xN4yreFUjsSGfZ6aQLuxS8+jbsJIMR/FVxZ
-         NLjogCL2loBWDg0hbXEEawscOtk2quOYrupezRL0=
-Date:   Mon, 16 Nov 2020 19:29:14 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     linux-media@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Dylan Yip <dylany@xilinx.com>,
-        Vishal Sagar <vsagar@xilinx.com>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>
-Subject: Re: [PATCH v2 06/19] media: doc: pixfmt-rgb: Clarify naming scheme
- for RGB formats
-Message-ID: <20201116172914.GT6540@pendragon.ideasonboard.com>
-References: <20201102224102.30292-1-laurent.pinchart@ideasonboard.com>
- <20201102224102.30292-7-laurent.pinchart@ideasonboard.com>
- <ae3848f7-9742-53d1-f476-03b4ded32073@xs4all.nl>
- <2445869e-bb73-27d3-0d5c-9531f08950b4@xs4all.nl>
+        Mon, 16 Nov 2020 12:30:18 -0500
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D87BC0613CF
+        for <linux-media@vger.kernel.org>; Mon, 16 Nov 2020 09:30:18 -0800 (PST)
+Received: by mail-wr1-x443.google.com with SMTP id l1so19595035wrb.9
+        for <linux-media@vger.kernel.org>; Mon, 16 Nov 2020 09:30:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=XYd0yK/RTvMALAHwJymskqLfNpbt6qhOE1pCsWZvd64=;
+        b=lDIlK2xaGwnzIz+QADs8o6Bo79L3RZPPz8VoCPoBcfthqdLDQPw8MO6yO/xZJQ+AvN
+         U5FYXK1M9NtFYOSvrc03rX/lLJ5sDK8K2tvTxpIGRbO0hU2a7vA9kPMLM2Wx5pa1umgs
+         SVQXaFlJd0LOiwLfm6Vd7w0r+4D6UUTOsWPfSwb66utl5bg/Dbb8t6gYcZlS4qt+QdZM
+         GlUPfcUz0K3rMn550b76K6Y/hFA/KmzeM+nivd+0YckiZXtpuCvU8l6E333ACnsr7yxq
+         Fsv/Ycmpzhi1MzqUT1drTicwjPwiKr9KzQKbIU0nzb4H6Zlxfs7g2AgD2lSQxi1An5vd
+         DZJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=XYd0yK/RTvMALAHwJymskqLfNpbt6qhOE1pCsWZvd64=;
+        b=Oqqn3vmuKW6874ndSudRwgXRb/SpX2EXvjFDuPithUnEhr9tNJZFuF5ojMNzTYgEv4
+         Bf0I/Vcots+v0b1+qoaV/oSvydVPgiulug20AS6WkgHeof+3pjtaxxUYU6rj71A88dgT
+         QxiPvt+QNez89SN0AQsk2hHdOl0qVQ+CkvNYGvD06Que0527fkHdOFdxP5laIYBuI6R4
+         hpW9IB5W0ttMlzVafkeqnr6lNRaeqDXL1O5kE+IouSxHkieFi+xcRZLFbYp5dxmvm7+o
+         DaUTI5VMttXl/RRU+eQ22YSKAoO+bTFjAqUq6dgPbsNB7xAxST1BNDMG86lCrLAs6Rez
+         +ceg==
+X-Gm-Message-State: AOAM532eF+uE/SW1uZruTkIvwSi9mqm4kyzaKsgH/bWTXTbHBkbUK945
+        ZmXr3XxBaswDlZ1j+HPrkSoNNQ==
+X-Google-Smtp-Source: ABdhPJxNnwwfVIVFwC1HbJsPcDz90XOXl0PIvrYJDAq7LbMVy0MJs++OUn9XFrPB1hSrWNurrLbtjA==
+X-Received: by 2002:a05:6000:1cf:: with SMTP id t15mr20965202wrx.92.1605547817138;
+        Mon, 16 Nov 2020 09:30:17 -0800 (PST)
+Received: from dell.default ([91.110.221.159])
+        by smtp.gmail.com with ESMTPSA id f23sm20054854wmb.43.2020.11.16.09.30.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Nov 2020 09:30:16 -0800 (PST)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     lee.jones@linaro.org
+Cc:     linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Subject: [PATCH 06/43] drm/radeon/radeon_legacy_encoders: Move 'radeon_add_legacy_encoder' prototype to shared header
+Date:   Mon, 16 Nov 2020 17:29:28 +0000
+Message-Id: <20201116173005.1825880-7-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201116173005.1825880-1-lee.jones@linaro.org>
+References: <20201116173005.1825880-1-lee.jones@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2445869e-bb73-27d3-0d5c-9531f08950b4@xs4all.nl>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans,
+Fixes the following W=1 kernel build warning(s):
 
-On Mon, Nov 16, 2020 at 12:58:51PM +0100, Hans Verkuil wrote:
-> On 16/11/2020 12:51, Hans Verkuil wrote:
-> > On 02/11/2020 23:40, Laurent Pinchart wrote:
-> >> The naming scheme for the RGB pixel formats has been developed
-> >> organically, and isn't consistent between formats stored in 1 or 2
-> >> bytes, and formats stored in 3 or 4 bytes. For the latter category, the
-> >> names use a components order convention that is the opposite of the
-> >> first category, and the opposite of DRM pixel formats. This has led to
-> >> lots of confusion in the past, and would really benefit from being
-> >> explained more precisely. Do so, which also prepares for the addition of
-> >> additional RGB pixels formats.
-> >>
-> >> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> >> ---
-> >> Changes since v1:
-> >>
-> >> - Clarify padding and padding requirements
-> >> - Fix typo
-> >> ---
-> >>  .../userspace-api/media/v4l/pixfmt-rgb.rst    | 195 ++++++++++++------
-> >>  include/uapi/linux/videodev2.h                |   4 +-
-> >>  2 files changed, 140 insertions(+), 59 deletions(-)
-> >>
-> >> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst b/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst
-> >> index 5045895e85e1..405d6f032078 100644
-> >> --- a/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst
-> >> +++ b/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst
-> >> @@ -6,13 +6,62 @@
-> >>  RGB Formats
-> >>  ***********
-> >>  
-> >> -Description
-> >> -===========
-> >> +These formats encode each pixel as a triplet of RGB values. They are packed
-> >> +formats, meaning that the RGB values for one pixel are stored consecutively in
-> >> +memory and each pixel consumes an integer number of bytes. When the number of
-> >> +bits required to store a pixel is not aligned to a byte boundary, the data is
-> >> +padded with additional bits to fill the remaining byte.
-> >>  
-> >> -These formats are designed to match the pixel formats of typical PC
-> >> -graphics frame buffers. They occupy 8, 16, 24 or 32 bits per pixel.
-> >> -These are all packed-pixel formats, meaning all the data for a pixel lie
-> >> -next to each other in memory.
-> >> +The formats differ by the number of bits per RGB component (typically but not
-> >> +always the same for all components), the order of components in memory, and the
-> >> +presence of an alpha component or additional padding bits.
-> >> +
-> >> +The usage and value of the alpha bits in formats that support them (named ARGB
-> >> +or a permutation thereof, collectively referred to as alpha formats) depend on
-> >> +the device type and hardware operation. :ref:`Capture <capture>` devices
-> >> +(including capture queues of mem-to-mem devices) fill the alpha component in
-> >> +memory. When the device captures an alpha channel the alpha component will have
-> >> +a meaningful value. Otherwise, when the device doesn't capture an alpha channel
-> >> +but can set the alpha bit to a user-configurable value, the
-> >> +:ref:`V4L2_CID_ALPHA_COMPONENT <v4l2-alpha-component>` control is used to
-> >> +specify that alpha value, and the alpha component of all pixels will be set to
-> >> +the value specified by that control. Otherwise a corresponding format without
-> >> +an alpha component (XRGB or XBGR) must be used instead of an alpha format.
-> >> +
-> >> +:ref:`Output <output>` devices (including output queues of mem-to-mem devices
-> >> +and :ref:`video output overlay <osd>` devices) read the alpha component from
-> >> +memory. When the device processes the alpha channel the alpha component must be
-> >> +filled with meaningful values by applications. Otherwise a corresponding format
-> >> +without an alpha component (XRGB or XBGR) must be used instead of an alpha
-> >> +format.
-> >> +
-> >> +Formats that contain padding bits are named XRGB (or a permutation thereof).
-> >> +The padding bits contain undefined values and must be ignored by applications,
-> >> +devices and drivers, for both :ref:`capture` and :ref:`output` devices.
-> >> +
-> >> +.. note::
-> >> +
-> >> +   - In all the tables that follow, bit 7 is the most significant bit in a byte.
-> >> +   - 'r', 'g' and 'b' denote bits of the red, green and blue components
-> >> +     respectively. 'a' denotes bits of the alpha component (if supported by the
-> >> +     format), and '-' denotes padding bits.
-> >> +
-> >> +
-> >> +8 or 16 Bits Per Pixel
-> >> +======================
-> >> +
-> >> +These formats store an RGB triplet in one or two bytes. They are named based on
-> >> +the order of the RGB components as seen in a 8- or 16-bit word, which is then
-> >> +stored in memory in little endian byte order (unless otherwise noted by the
-> >> +presence of bit 31 in the 4CC value), and on the number of bits for each
-> >> +component. For instance, the RGB565 format stores a pixel in a 16-bit word
-> >> +[15:0] laid out at as [R\ :sub:`4` R\ :sub:`3` R\ :sub:`2` R\ :sub:`1`
-> >> +R\ :sub:`0` G\ :sub:`5` G\ :sub:`4` G\ :sub:`3` G\ :sub:`2` G\ :sub:`1`
-> >> +G\ :sub:`0` B\ :sub:`4` B\ :sub:`3` B\ :sub:`2` B\ :sub:`1` B\ :sub:`0`], and
-> >> +stored in memory in two bytes, [R\ :sub:`4` R\ :sub:`3` R\ :sub:`2` R\ :sub:`1`
-> >> +R\ :sub:`0` G\ :sub:`5` G\ :sub:`4` G\ :sub:`3`] followed by [G\ :sub:`2`
-> >> +G\ :sub:`1` G\ :sub:`0` B\ :sub:`4` B\ :sub:`3` B\ :sub:`2` B\ :sub:`1`
-> >> +B\ :sub:`0`].
-> >>  
-> >>  .. raw:: latex
-> >>  
-> >> @@ -20,10 +69,10 @@ next to each other in memory.
-> >>      \tiny
-> >>      \setlength{\tabcolsep}{2pt}
-> >>  
-> >> -.. tabularcolumns:: |p{2.8cm}|p{2.0cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|
-> >> +.. tabularcolumns:: |p{2.8cm}|p{2.0cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|
-> >>  
-> >>  
-> >> -.. flat-table:: RGB Image Formats
-> >> +.. flat-table:: RGB Formats With 8 or 16 Bits Per Pixel
-> >>      :header-rows:  2
-> >>      :stub-columns: 0
-> >>  
-> >> @@ -31,8 +80,6 @@ next to each other in memory.
-> >>        - Code
-> >>        - :cspan:`7` Byte 0 in memory
-> >>        - :cspan:`7` Byte 1
-> >> -      - :cspan:`7` Byte 2
-> >> -      - :cspan:`7` Byte 3
-> >>      * -
-> >>        -
-> >>        - 7
-> >> @@ -52,24 +99,6 @@ next to each other in memory.
-> >>        - 2
-> >>        - 1
-> >>        - 0
-> >> -
-> >> -      - 7
-> >> -      - 6
-> >> -      - 5
-> >> -      - 4
-> >> -      - 3
-> >> -      - 2
-> >> -      - 1
-> >> -      - 0
-> >> -
-> >> -      - 7
-> >> -      - 6
-> >> -      - 5
-> >> -      - 4
-> >> -      - 3
-> >> -      - 2
-> >> -      - 1
-> >> -      - 0
-> >>      * .. _V4L2-PIX-FMT-RGB332:
-> >>  
-> >>        - ``V4L2_PIX_FMT_RGB332``
-> >> @@ -544,6 +573,82 @@ next to each other in memory.
-> >>        - b\ :sub:`1`
-> >>        - b\ :sub:`0`
-> >>        -
-> >> +
-> >> +.. raw:: latex
-> >> +
-> >> +    \endgroup
-> >> +
-> >> +
-> >> +24 or 32 Bits Per Pixel
-> > 
-> > Wouldn't it be better to call this "8 Bits Per Component"? Since we'll later get
-> > a section called "More Than 8 Bits Per Component".
-> 
-> Also, wouldn't it make sense to express these formats in a more compact way, just
-> like YCbCr 4:4:4? (See patch 10/19)
+  drivers/gpu/drm/radeon/radeon_legacy_encoders.c:1745:1: warning: no previous prototype for ‘radeon_add_legacy_encoder’ [-Wmissing-prototypes]
+ 1745 | radeon_add_legacy_encoder(struct drm_device *dev, uint32_t encoder_enum, uint32_t supported_device)
+ | ^~~~~~~~~~~~~~~~~~~~~~~~~
 
-Yes, I think it's a good idea. I'll do so in a separate patch though, as
-it's out of scope for the commit message of this patch.
+Cc: Alex Deucher <alexander.deucher@amd.com>
+Cc: "Christian König" <christian.koenig@amd.com>
+Cc: David Airlie <airlied@linux.ie>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: amd-gfx@lists.freedesktop.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-media@vger.kernel.org
+Cc: linaro-mm-sig@lists.linaro.org
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+---
+ drivers/gpu/drm/radeon/radeon_encoders.c      |  4 +--
+ .../gpu/drm/radeon/radeon_legacy_encoders.c   |  1 +
+ .../gpu/drm/radeon/radeon_legacy_encoders.h   | 34 +++++++++++++++++++
+ 3 files changed, 36 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/gpu/drm/radeon/radeon_legacy_encoders.h
 
-> >> +=======================
-> >> +
-> >> +These formats store an RGB triplet in three or four bytes. They are named based
-> >> +on the order of the RGB components as stored in memory, and on the total number
-> >> +of bits per pixel (with an exception for the BGR666 format). For instance,
-> >> +RGB24 format stores a pixel with [R\ :sub:`7` R\ :sub:`6` R\ :sub:`5`
-> >> +R\ :sub:`4` R\ :sub:`3` R\ :sub:`2` R\ :sub:`1` R\ :sub:`0`] in the first byte,
-> >> +[G\ :sub:`7` G\ :sub:`6` G\ :sub:`5` G\ :sub:`4` G\ :sub:`3` G\ :sub:`2`
-> >> +G\ :sub:`1` G\ :sub:`0`] in the second byte and [B\ :sub:`7` B\ :sub:`6`
-> >> +B\ :sub:`5` B\ :sub:`4` B\ :sub:`3` B\ :sub:`2` B\ :sub:`1` B\ :sub:`0`] in the
-> >> +third byte. This differs from the DRM format nomenclature that instead use the
-> >> +order of components as seen in a 24- or 32-bit little endian word.
-> >> +
-> >> +.. raw:: latex
-> >> +
-> >> +    \begingroup
-> >> +    \tiny
-> >> +    \setlength{\tabcolsep}{2pt}
-> >> +
-> >> +.. tabularcolumns:: |p{2.8cm}|p{2.0cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|
-> >> +
-> >> +
-> >> +.. flat-table:: RGB Formats With 24 or 32 Bits Per Pixel
-> >> +    :header-rows:  2
-> >> +    :stub-columns: 0
-> >> +
-> >> +    * - Identifier
-> >> +      - Code
-> >> +      - :cspan:`7` Byte 0 in memory
-> >> +      - :cspan:`7` Byte 1
-> >> +      - :cspan:`7` Byte 2
-> >> +      - :cspan:`7` Byte 3
-> >> +    * -
-> >> +      -
-> >> +      - 7
-> >> +      - 6
-> >> +      - 5
-> >> +      - 4
-> >> +      - 3
-> >> +      - 2
-> >> +      - 1
-> >> +      - 0
-> >> +
-> >> +      - 7
-> >> +      - 6
-> >> +      - 5
-> >> +      - 4
-> >> +      - 3
-> >> +      - 2
-> >> +      - 1
-> >> +      - 0
-> >> +
-> >> +      - 7
-> >> +      - 6
-> >> +      - 5
-> >> +      - 4
-> >> +      - 3
-> >> +      - 2
-> >> +      - 1
-> >> +      - 0
-> >> +
-> >> +      - 7
-> >> +      - 6
-> >> +      - 5
-> >> +      - 4
-> >> +      - 3
-> >> +      - 2
-> >> +      - 1
-> >> +      - 0
-> >>      * .. _V4L2-PIX-FMT-BGR24:
-> >>  
-> >>        - ``V4L2_PIX_FMT_BGR24``
-> >> @@ -973,40 +1078,14 @@ next to each other in memory.
-> >>  
-> >>      \endgroup
-> >>  
-> >> -.. note:: Bit 7 is the most significant bit.
-> >> -
-> >> -The usage and value of the alpha bits (a) in the ARGB and ABGR formats
-> >> -(collectively referred to as alpha formats) depend on the device type
-> >> -and hardware operation. :ref:`Capture <capture>` devices (including
-> >> -capture queues of mem-to-mem devices) fill the alpha component in
-> >> -memory. When the device outputs an alpha channel the alpha component
-> >> -will have a meaningful value. Otherwise, when the device doesn't output
-> >> -an alpha channel but can set the alpha bit to a user-configurable value,
-> >> -the :ref:`V4L2_CID_ALPHA_COMPONENT <v4l2-alpha-component>` control
-> >> -is used to specify that alpha value, and the alpha component of all
-> >> -pixels will be set to the value specified by that control. Otherwise a
-> >> -corresponding format without an alpha component (XRGB or XBGR) must be
-> >> -used instead of an alpha format.
-> >> -
-> >> -:ref:`Output <output>` devices (including output queues of mem-to-mem
-> >> -devices and :ref:`video output overlay <osd>` devices) read the alpha
-> >> -component from memory. When the device processes the alpha channel the
-> >> -alpha component must be filled with meaningful values by applications.
-> >> -Otherwise a corresponding format without an alpha component (XRGB or
-> >> -XBGR) must be used instead of an alpha format.
-> >> -
-> >> -The XRGB and XBGR formats contain undefined bits (-). Applications,
-> >> -devices and drivers must ignore those bits, for both
-> >> -:ref:`capture` and :ref:`output` devices.
-> >> -
-> >>  
-> >>  Deprecated RGB Formats
-> >>  ======================
-> >>  
-> >> -Formats defined in :ref:`pixfmt-rgb-deprecated` are deprecated and
-> >> -must not be used by new drivers. They are documented here for reference.
-> >> -The meaning of their alpha bits ``(a)`` are ill-defined and interpreted as in
-> >> -either the corresponding ARGB or XRGB format, depending on the driver.
-> >> +Formats defined in :ref:`pixfmt-rgb-deprecated` are deprecated and must not be
-> >> +used by new drivers. They are documented here for reference. The meaning of
-> >> +their alpha bits ``(a)`` is ill-defined and they are interpreted as in either
-> >> +the corresponding ARGB or XRGB format, depending on the driver.
-> >>  
-> >>  .. raw:: latex
-> >>  
-> >> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-> >> index 8775aebb3b6b..54b9fe3b7636 100644
-> >> --- a/include/uapi/linux/videodev2.h
-> >> +++ b/include/uapi/linux/videodev2.h
-> >> @@ -517,7 +517,7 @@ struct v4l2_pix_format {
-> >>  
-> >>  /*      Pixel format         FOURCC                          depth  Description  */
-> >>  
-> >> -/* RGB formats */
-> >> +/* RGB formats (1 or 2 bytes per pixel) */
-> >>  #define V4L2_PIX_FMT_RGB332  v4l2_fourcc('R', 'G', 'B', '1') /*  8  RGB-3-3-2     */
-> >>  #define V4L2_PIX_FMT_RGB444  v4l2_fourcc('R', '4', '4', '4') /* 16  xxxxrrrr ggggbbbb */
-> >>  #define V4L2_PIX_FMT_ARGB444 v4l2_fourcc('A', 'R', '1', '2') /* 16  aaaarrrr ggggbbbb */
-> >> @@ -542,6 +542,8 @@ struct v4l2_pix_format {
-> >>  #define V4L2_PIX_FMT_ARGB555X v4l2_fourcc_be('A', 'R', '1', '5') /* 16  ARGB-5-5-5 BE */
-> >>  #define V4L2_PIX_FMT_XRGB555X v4l2_fourcc_be('X', 'R', '1', '5') /* 16  XRGB-5-5-5 BE */
-> >>  #define V4L2_PIX_FMT_RGB565X v4l2_fourcc('R', 'G', 'B', 'R') /* 16  RGB-5-6-5 BE  */
-> >> +
-> >> +/* RGB formats (3 or 4 bytes per pixel) */
-> >>  #define V4L2_PIX_FMT_BGR666  v4l2_fourcc('B', 'G', 'R', 'H') /* 18  BGR-6-6-6	  */
-> >>  #define V4L2_PIX_FMT_BGR24   v4l2_fourcc('B', 'G', 'R', '3') /* 24  BGR-8-8-8     */
-> >>  #define V4L2_PIX_FMT_RGB24   v4l2_fourcc('R', 'G', 'B', '3') /* 24  RGB-8-8-8     */
-> >>
-
+diff --git a/drivers/gpu/drm/radeon/radeon_encoders.c b/drivers/gpu/drm/radeon/radeon_encoders.c
+index ced022fae19d7..b60a373d3ead3 100644
+--- a/drivers/gpu/drm/radeon/radeon_encoders.c
++++ b/drivers/gpu/drm/radeon/radeon_encoders.c
+@@ -31,11 +31,9 @@
+ #include <drm/radeon_drm.h>
+ 
+ #include "radeon.h"
++#include "radeon_legacy_encoders.h"
+ #include "atom.h"
+ 
+-extern void
+-radeon_legacy_backlight_init(struct radeon_encoder *radeon_encoder,
+-			     struct drm_connector *drm_connector);
+ extern void
+ radeon_atom_backlight_init(struct radeon_encoder *radeon_encoder,
+ 			   struct drm_connector *drm_connector);
+diff --git a/drivers/gpu/drm/radeon/radeon_legacy_encoders.c b/drivers/gpu/drm/radeon/radeon_legacy_encoders.c
+index 44d060f75318e..e64fd0ce67070 100644
+--- a/drivers/gpu/drm/radeon/radeon_legacy_encoders.c
++++ b/drivers/gpu/drm/radeon/radeon_legacy_encoders.c
+@@ -35,6 +35,7 @@
+ 
+ #include "radeon.h"
+ #include "radeon_asic.h"
++#include "radeon_legacy_encoders.h"
+ #include "atom.h"
+ #ifdef CONFIG_PMAC_BACKLIGHT
+ #include <asm/backlight.h>
+diff --git a/drivers/gpu/drm/radeon/radeon_legacy_encoders.h b/drivers/gpu/drm/radeon/radeon_legacy_encoders.h
+new file mode 100644
+index 0000000000000..a80b387559d4d
+--- /dev/null
++++ b/drivers/gpu/drm/radeon/radeon_legacy_encoders.h
+@@ -0,0 +1,34 @@
++/* radeon_legacy_encoders.h -- Private header for radeon driver -*- linux-c -*-
++ *
++ * Copyright 1999 Precision Insight, Inc., Cedar Park, Texas.
++ * Copyright 2000 VA Linux Systems, Inc., Fremont, California.
++ * All rights reserved.
++ *
++ * Permission is hereby granted, free of charge, to any person obtaining a
++ * copy of this software and associated documentation files (the "Software"),
++ * to deal in the Software without restriction, including without limitation
++ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
++ * and/or sell copies of the Software, and to permit persons to whom the
++ * Software is furnished to do so, subject to the following conditions:
++ *
++ * The above copyright notice and this permission notice (including the next
++ * paragraph) shall be included in all copies or substantial portions of the
++ * Software.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
++ * PRECISION INSIGHT AND/OR ITS SUPPLIERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
++ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
++ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
++ * DEALINGS IN THE SOFTWARE.
++ *
++ */
++
++#ifndef __RADEON_LEGACY_ENCODERS_H__
++#define __RADEON_LEGACY_ENCODERS_H__
++
++void radeon_legacy_backlight_init(struct radeon_encoder *radeon_encoder,
++				  struct drm_connector *drm_connector);
++
++#endif				/* __RADEON_LEGACY_ENCODERS_H__ */
 -- 
-Regards,
+2.25.1
 
-Laurent Pinchart
