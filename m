@@ -7,21 +7,21 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F378C64E75
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 811F2C64E7B
 	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 13:02:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F1E6822245
-	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 13:02:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 561F8223FB
+	for <linux-media@archiver.kernel.org>; Mon, 16 Nov 2020 13:02:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728726AbgKPNCQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Nov 2020 08:02:16 -0500
-Received: from gw.c-home.cz ([89.24.150.100]:33790 "EHLO dmz.c-home.cz"
+        id S1728759AbgKPNCW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Nov 2020 08:02:22 -0500
+Received: from gw.c-home.cz ([89.24.150.100]:33794 "EHLO dmz.c-home.cz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728583AbgKPNCP (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Nov 2020 08:02:15 -0500
+        id S1728583AbgKPNCW (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 16 Nov 2020 08:02:22 -0500
 Received: from ubuntu2004.c-home.cz (unifi.c-home.cz [192.168.1.227])
-        by dmz.c-home.cz (8.14.4+Sun/8.14.4) with ESMTP id 0AGCuMlY021922;
-        Mon, 16 Nov 2020 13:56:42 +0100 (CET)
+        by dmz.c-home.cz (8.14.4+Sun/8.14.4) with ESMTP id 0AGCuMla021922;
+        Mon, 16 Nov 2020 13:56:44 +0100 (CET)
 From:   Martin Cerveny <m.cerveny@computer.org>
 To:     Maxime Ripard <mripard@kernel.org>
 Cc:     Martin Cerveny <m.cerveny@computer.org>,
@@ -36,9 +36,9 @@ Cc:     Martin Cerveny <m.cerveny@computer.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Rob Herring <robh+dt@kernel.org>
-Subject: [PATCH v3 3/6] ARM: dts: sun8i: v3s: Add node for system control
-Date:   Mon, 16 Nov 2020 13:56:14 +0100
-Message-Id: <20201116125617.7597-4-m.cerveny@computer.org>
+Subject: [PATCH v3 5/6] dt-bindings: media: cedrus: Add V3s compatible
+Date:   Mon, 16 Nov 2020 13:56:16 +0100
+Message-Id: <20201116125617.7597-6-m.cerveny@computer.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201116125617.7597-1-m.cerveny@computer.org>
 References: <20201116125617.7597-1-m.cerveny@computer.org>
@@ -48,38 +48,25 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Allwinner V3s has system control and SRAM C1 region similar to H3.
+Allwinner V3s SoC contains video engine. Add compatible for it.
 
 Signed-off-by: Martin Cerveny <m.cerveny@computer.org>
 ---
- arch/arm/boot/dts/sun8i-v3s.dtsi | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ .../bindings/media/allwinner,sun4i-a10-video-engine.yaml         | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/boot/dts/sun8i-v3s.dtsi b/arch/arm/boot/dts/sun8i-v3s.dtsi
-index 0c7341676921..70193512c222 100644
---- a/arch/arm/boot/dts/sun8i-v3s.dtsi
-+++ b/arch/arm/boot/dts/sun8i-v3s.dtsi
-@@ -161,6 +161,20 @@ syscon: system-control@1c00000 {
- 			#address-cells = <1>;
- 			#size-cells = <1>;
- 			ranges;
-+
-+			sram_c: sram@1d00000 {
-+				compatible = "mmio-sram";
-+				reg = <0x01d00000 0x80000>;
-+				#address-cells = <1>;
-+				#size-cells = <1>;
-+				ranges = <0 0x01d00000 0x80000>;
-+
-+				ve_sram: sram-section@0 {
-+					compatible = "allwinner,sun8i-v3s-sram-c1",
-+						     "allwinner,sun4i-a10-sram-c1";
-+					reg = <0x000000 0x80000>;
-+				};
-+			};
- 		};
- 
- 		tcon0: lcd-controller@1c0c000 {
+diff --git a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-engine.yaml b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-engine.yaml
+index 0d58bbcd24d3..2f7058f7760c 100644
+--- a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-engine.yaml
++++ b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-engine.yaml
+@@ -18,6 +18,7 @@ properties:
+       - allwinner,sun7i-a20-video-engine
+       - allwinner,sun8i-a33-video-engine
+       - allwinner,sun8i-h3-video-engine
++      - allwinner,sun8i-v3s-video-engine
+       - allwinner,sun8i-r40-video-engine
+       - allwinner,sun50i-a64-video-engine
+       - allwinner,sun50i-h5-video-engine
 -- 
 2.25.1
 
