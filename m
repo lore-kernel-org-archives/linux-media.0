@@ -2,1104 +2,762 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA358C56202
-	for <linux-media@archiver.kernel.org>; Tue, 17 Nov 2020 12:10:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E66F3C63697
+	for <linux-media@archiver.kernel.org>; Tue, 17 Nov 2020 13:37:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 540522464E
-	for <linux-media@archiver.kernel.org>; Tue, 17 Nov 2020 12:10:20 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="T+4DGmwI"
+	by mail.kernel.org (Postfix) with ESMTP id 92B6424654
+	for <linux-media@archiver.kernel.org>; Tue, 17 Nov 2020 13:37:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728281AbgKQMKA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 Nov 2020 07:10:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48456 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725446AbgKQMKA (ORCPT
+        id S1732115AbgKQNhB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 17 Nov 2020 08:37:01 -0500
+Received: from relay12.mail.gandi.net ([217.70.178.232]:56395 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732598AbgKQNgh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 Nov 2020 07:10:00 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE3AC0613CF;
-        Tue, 17 Nov 2020 04:10:00 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1D61C2A3;
-        Tue, 17 Nov 2020 13:09:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1605614996;
-        bh=SzZcm8zzXSba9H0NLAythVCoQVy10lsfXRt9ya1VVI8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T+4DGmwIvZjuNdl0mCOD9HMybZao/IYa4LBaF5t46hPL3cH51EQg1+wpUUFiH9hPw
-         QbNU1pCkct+CXkDpfpMcNV5HJ1vJlcNstc1uGRXUqh22CQmbdsIsAE33UyNHWOPfBc
-         6mZa8QDvTb6vPcfUcwZwRnqP6AIM7Gem86abGFsg=
-Date:   Tue, 17 Nov 2020 14:09:51 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     Eugen Hristev <eugen.hristev@microchip.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org, sakari.ailus@iki.fi
-Subject: Re: [PATCH v5 2/3] media: atmel: introduce microchip csi2dc driver
-Message-ID: <20201117120951.GC3940@pendragon.ideasonboard.com>
-References: <20201112133437.372475-1-eugen.hristev@microchip.com>
- <20201112133437.372475-2-eugen.hristev@microchip.com>
- <20201117115902.unnrnccoj3s4gtam@uno.localdomain>
+        Tue, 17 Nov 2020 08:36:37 -0500
+Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 7EA6420001D;
+        Tue, 17 Nov 2020 13:36:32 +0000 (UTC)
+Date:   Tue, 17 Nov 2020 14:36:35 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        laurent.pinchart+renesas@ideasonboard.com,
+        niklas.soderlund+renesas@ragnatech.se, geert@linux-m68k.org,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hyun Kwon <hyunk@xilinx.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        sergei.shtylyov@gmail.com
+Subject: Re: [PATCH v5 1/8] media: i2c: Add driver for RDACM21 camera module
+Message-ID: <20201117133634.s62i32hcwzikmhzb@uno.localdomain>
+References: <20201116135305.81319-1-jacopo+renesas@jmondi.org>
+ <20201116135305.81319-2-jacopo+renesas@jmondi.org>
+ <df3ad394-66d6-951a-1ddf-621151a4d581@ideasonboard.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201117115902.unnrnccoj3s4gtam@uno.localdomain>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <df3ad394-66d6-951a-1ddf-621151a4d581@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello everybody,
+Hi Kieran,
 
-On Tue, Nov 17, 2020 at 12:59:02PM +0100, Jacopo Mondi wrote:
-> On Thu, Nov 12, 2020 at 03:34:36PM +0200, Eugen Hristev wrote:
-> > Microchip CSI2DC (CSI2 Demultiplexer Controller) is a misc bridge device
-> > that converts a byte stream in IDI Synopsys format (coming from a CSI2HOST)
-> > to a pixel stream that can be captured by a sensor controller.
+On Mon, Nov 16, 2020 at 02:47:49PM +0000, Kieran Bingham wrote:
+> On 16/11/2020 13:52, Jacopo Mondi wrote:
+> > The RDACM21 is a GMSL camera supporting 1280x1080 resolution images
+> > developed by IMI based on an Omnivision OV10640 sensor, an Omnivision
+> > OV490 ISP and a Maxim MAX9271 GMSL serializer.
 > >
-> > Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+> > The driver uses the max9271 library module, to maximize code reuse with
+> > other camera module drivers using the same serializer, such as rdacm20.
+> >
+> > Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 > > ---
-> > Hello,
+> >  MAINTAINERS                 |  12 +
+> >  drivers/media/i2c/Kconfig   |  13 +
+> >  drivers/media/i2c/Makefile  |   2 +
+> >  drivers/media/i2c/rdacm21.c | 595 ++++++++++++++++++++++++++++++++++++
+> >  4 files changed, 622 insertions(+)
+> >  create mode 100644 drivers/media/i2c/rdacm21.c
 > >
-> > There still are some open questions regarding the last reviews on the ML.
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index cef6b6090d76..9a5026fd6788 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -14750,6 +14750,18 @@ F:	drivers/media/i2c/max9271.c
+> >  F:	drivers/media/i2c/max9271.h
+> >  F:	drivers/media/i2c/rdacm20.c
 > >
-> > Regarding the format list which is not const, I cannot have it const because
-> > I reference elements from this list into a dynamic list which is non-const.
-> >
-> > Regarding the presence of the v4l2_dev, without this I cannot add a notifier
-> > for this device to have it async completed , when the underlying subdevice
-> > finishes probing.
-> 
-> I see you have a discussion with Sakari on-going on this, and I have
-> the very same comment he had.
-> 
-> Should a sub-notifier be used and this driver should not register any
-> v4l2_dev but integrate in the media graph of the receiver ?
-> 
-> For reference, rcar-csi2 uses sub-notifiers and register in the
-> rcar-vin media graph, it doesn't need to set up a v4l2_dev.
-> 
-> rcar-vin (the DMA engine driver) that register video nodes and the v4l2-dev
-> also registers the device nodes for all the connected subdevices.
-
-Sub-notifiers were invited for this purpose, so I think they're the
-right tool.
-
-> > Regarding the callbacks for set frame interval, set frame size, etc, I cannot
-> > remove them because losing functionality to the underlying subdevice, as
-> > explained in :
-> > https://lkml.org/lkml/2020/10/12/427
-> 
-> Using the frame sizes as in the example you reported, if this device has
-> limitations on the supported sizes, (a min and a max most
-> probably) that's the only thing that should be exposed from this
-> driver subdevice. The sensor subdevice instead will report the
-> available discrete sizes and userspace configures the sensor's source
-> pad and the bridge's sink pad with the same sizes to properly set up the
-> capture pipeline. video0 should not report the sizes exposed by the sensor
-> nor any information that depends on what's connected to it.
-
-Agreed. Subdev drivers should remain simple and cover only the subdev
-they manage. Bundling it together is the job of userspace. In the legacy
-model it uses to be the job of the top-level V4L2 driver (the one
-implementing v4l2_device), but that's legacy, especially for embedded
-camera use cases. In any case, the top-level logic must not be spread
-across subdevices.
-
-> I know what your next question is: what about existing application
-> that only know about video0 and want to setup everything from there. I
-> understand vendors not wanting to wrap gstreamer or what is used in
-> the wild in custom scripts that sets up the pipeline opportunely
-> before streaming, and I'm pretty sure you know what is the solution I
-> would propose for this :)
-> 
-> I've just gone through the same path with RPi's Unicam, that does the
-> same thing as your one does: it's an MC driver, but wants to control
-> the sensor through the v4l2-subdev kAPI to support legacy use cases
-> not covered by libcamera. The fact is that we're stuck in this limbo
-> where MC pipeline tries to decouple components one from each other and
-> delegate their configuration to userspace, but at the same time
-> vendors want to be able to use the simple plain video node centric
-> interface because of their existing user base, so I understand your
-> discomfort, but the 'simple plain' approach is what's preventing Linux
-> platforms to be in-par with proprietary and custom solutions for any
-> use case that is not a simple frame capture, so I think it's fair for
-> mainline to push for this evolution to happen. Just my2c of course.
-
-Compatibility with the userspace of downstream kernels is important, but
-that's a downstream kernel issue. In mainline we want to go the MC way,
-and downstream can then, if desired, implement the configuration of the
-pipeline in the top-level V4L2 driver in the kernel to support the
-existing userbase. For new drivers I wouldn't recommend that, for
-existing downstream drivers it may be required.
-
-> Some more comments on the implementation below
-> 
-> > Changes in v5:
-> > - only in bindings
-> >
-> > Changes in v4:
-> > - now using get_mbus_config ops to get data from the subdevice, like the
-> > virtual channel id, and the clock type.
-> > - now having possibility to select any of the RAW10 data modes
-> > - at completion time, select which formats are also available in the subdevice,
-> > and move to the dynamic list accordingly
-> > - changed the pipeline integration, do not advertise subdev ready at probe time.
-> > wait until completion is done, and then start a workqueue that will register
-> > this device as a subdevice for the next element in pipeline.
-> > - moved the s_power code into a different function called now csi2dc_power
-> > that is called with CONFIG_PM functions. This is also called at completion,
-> > to have the device ready in case CONFIG_PM is not selected on the platform.
-> > - merged try_fmt into set_fmt
-> > - driver cleanup, wrapped lines over 80 characters
-> >
-> > Changes in v2:
-> > - moved driver to platform/atmel
-> > - fixed minor things as per Sakari's review
-> > - still some things from v2 review are not yet addressed, to be followed up
-> >
-> >  drivers/media/platform/atmel/Kconfig          |  13 +
-> >  drivers/media/platform/atmel/Makefile         |   1 +
-> >  .../media/platform/atmel/microchip-csi2dc.c   | 785 ++++++++++++++++++
-> >  3 files changed, 799 insertions(+)
-> >  create mode 100644 drivers/media/platform/atmel/microchip-csi2dc.c
-> >
-> > diff --git a/drivers/media/platform/atmel/Kconfig b/drivers/media/platform/atmel/Kconfig
-> > index 99b51213f871..147e1c14129b 100644
-> > --- a/drivers/media/platform/atmel/Kconfig
-> > +++ b/drivers/media/platform/atmel/Kconfig
-> > @@ -32,3 +32,16 @@ config VIDEO_ATMEL_ISI
-> >  	help
-> >  	  This module makes the ATMEL Image Sensor Interface available
-> >  	  as a v4l2 device.
+> > +RDACM21 Camera Sensor
+> > +M:	Jacopo Mondi <jacopo+renesas@jmondi.org>
+> > +M:	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+> > +M:	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> > +M:	Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+> > +L:	linux-media@vger.kernel.org
+> > +S:	Maintained
+> > +F:	Documentation/devicetree/bindings/media/i2c/rdacm2x-gmsl.yaml
+> > +F:	drivers/media/i2c/max9271.c
+> > +F:	drivers/media/i2c/max9271.h
+> > +F:	drivers/media/i2c/rdacm21.c
 > > +
-> > +config VIDEO_MICROCHIP_CSI2DC
-> > +	tristate "Microchip CSI2 Demux Controller"
-> > +	depends on VIDEO_V4L2 && COMMON_CLK && OF
-> > +	depends on ARCH_AT91 || COMPILE_TEST
-> > +	select MEDIA_CONTROLLER
-> > +	select VIDEO_V4L2_SUBDEV_API
+> >  RDC R-321X SoC
+> >  M:	Florian Fainelli <florian@openwrt.org>
+> >  S:	Maintained
+> > diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+> > index c64326ca331c..64f4316d11ad 100644
+> > --- a/drivers/media/i2c/Kconfig
+> > +++ b/drivers/media/i2c/Kconfig
+> > @@ -1185,6 +1185,19 @@ config VIDEO_RDACM20
+> >  	  This camera should be used in conjunction with a GMSL
+> >  	  deserialiser such as the MAX9286.
+> >
+> > +config VIDEO_RDACM21
+> > +	tristate "IMI RDACM21 camera support"
+> > +	depends on I2C
 > > +	select V4L2_FWNODE
+> > +	select VIDEO_V4L2_SUBDEV_API
+> > +	select MEDIA_CONTROLLER
 > > +	help
-> > +	  CSI2 Demux Controller driver. CSI2DC is a helper chip
-> > +	  that converts IDI interface byte stream to a parallel pixel stream.
-> > +	  It supports various RAW formats as input.
-> > +	  Performs clock domain crossing between hardware blocks.
-> 
-> Is the last phrase necessary ? Also missing the usual
-> 
-> 	  To compile this driver as a module, choose M here: the
-> 	  module will be called ...
-> 
-> > diff --git a/drivers/media/platform/atmel/Makefile b/drivers/media/platform/atmel/Makefile
-> > index c5c01556c653..8e80af500bf5 100644
-> > --- a/drivers/media/platform/atmel/Makefile
-> > +++ b/drivers/media/platform/atmel/Makefile
-> > @@ -5,3 +5,4 @@ atmel-xisc-objs = atmel-sama7g5-isc.o atmel-isc-base.o
-> >  obj-$(CONFIG_VIDEO_ATMEL_ISI) += atmel-isi.o
-> >  obj-$(CONFIG_VIDEO_ATMEL_ISC) += atmel-isc.o
-> >  obj-$(CONFIG_VIDEO_ATMEL_XISC) += atmel-xisc.o
-> > +obj-$(CONFIG_VIDEO_MICROCHIP_CSI2DC) += microchip-csi2dc.o
-> > diff --git a/drivers/media/platform/atmel/microchip-csi2dc.c b/drivers/media/platform/atmel/microchip-csi2dc.c
+> > +	  This driver supports the IMI RDACM21 GMSL camera, used in
+> > +	  ADAS systems.
+> > +
+> > +	  This camera should be used in conjunction with a GMSL
+> > +	  deserialiser such as the MAX9286.
+> > +
+> >  config VIDEO_RJ54N1
+> >  	tristate "Sharp RJ54N1CB0C sensor support"
+> >  	depends on I2C && VIDEO_V4L2
+> > diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
+> > index f0a77473979d..f3641b58929d 100644
+> > --- a/drivers/media/i2c/Makefile
+> > +++ b/drivers/media/i2c/Makefile
+> > @@ -122,6 +122,8 @@ obj-$(CONFIG_VIDEO_IMX355)	+= imx355.o
+> >  obj-$(CONFIG_VIDEO_MAX9286)	+= max9286.o
+> >  rdacm20-camera_module-objs	:= rdacm20.o max9271.o
+> >  obj-$(CONFIG_VIDEO_RDACM20)	+= rdacm20-camera_module.o
+> > +rdacm21-camera_module-objs	:= rdacm21.o max9271.o
+> > +obj-$(CONFIG_VIDEO_RDACM21)	+= rdacm21-camera_module.o
+> >  obj-$(CONFIG_VIDEO_ST_MIPID02) += st-mipid02.o
+> >
+> >  obj-$(CONFIG_SDR_MAX2175) += max2175.o
+> > diff --git a/drivers/media/i2c/rdacm21.c b/drivers/media/i2c/rdacm21.c
 > > new file mode 100644
-> > index 000000000000..fda1d5882dbb
+> > index 000000000000..5f9267e26258
 > > --- /dev/null
-> > +++ b/drivers/media/platform/atmel/microchip-csi2dc.c
-> > @@ -0,0 +1,785 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> 
-> Nit: I see GPL-2.0 listed as deprecated by spdx.org
-> Should you use one of:
->         	GPL-2.0-only
->                	GPL-2.0-or-later
-> 
+> > +++ b/drivers/media/i2c/rdacm21.c
+> > @@ -0,0 +1,595 @@
+> > +// SPDX-License-Identifier: GPL-2.0+
 > > +/*
-> > + * Microchip CSI2 Demux Controller (CSI2DC) driver
+> > + * IMI RDACM21 GMSL Camera Driver
 > > + *
-> > + * Copyright (C) 2018-2020 Microchip Technology, Inc.
-> > + *
-> > + * Author: Eugen Hristev <eugen.hristev@microchip.com>
-> > + *
+> > + * Copyright (C) 2017-2020 Jacopo Mondi
+> > + * Copyright (C) 2017-2019 Kieran Bingham
+> > + * Copyright (C) 2017-2019 Laurent Pinchart
+> > + * Copyright (C) 2017-2019 Niklas Söderlund
+> > + * Copyright (C) 2016 Renesas Electronics Corporation
+> > + * Copyright (C) 2015 Cogent Embedded, Inc.
 > > + */
 > > +
-> > +#include <linux/clk.h>
+> > +#include <linux/delay.h>
+> > +#include <linux/fwnode.h>
+> > +#include <linux/init.h>
+> > +#include <linux/i2c.h>
 > > +#include <linux/module.h>
-> > +#include <linux/of.h>
-> > +#include <linux/of_graph.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/pm_runtime.h>
+> > +#include <linux/slab.h>
 > > +#include <linux/videodev2.h>
 > > +
-> > +#include <media/v4l2-device.h>
-> > +#include <media/v4l2-fwnode.h>
+> > +#include <media/v4l2-async.h>
+> > +#include <media/v4l2-ctrls.h>
 > > +#include <media/v4l2-subdev.h>
-> > +#include <media/videobuf2-dma-contig.h>
+> > +#include "max9271.h"
 > > +
-> > +/* Global configuration register */
-> > +#define CSI2DC_GCFG			0x0
+> > +#define OV10640_ID_LOW			0xa6
 > > +
-> > +/* MIPI sensor pixel clock is free running */
-> > +#define CSI2DC_GCFG_MIPIFRN		BIT(0)
-> > +/* Output waveform inter-line minimum delay */
-> > +#define CSI2DC_GCFG_HLC(v)		((v) << 4)
-> > +#define CSI2DC_GCFG_HLC_MASK		GENMASK(7, 4)
-> > +/* SAMA7G5 requires a HLC delay of 15 */
-> > +#define SAMA7G5_HLC			(15)
+> > +#define OV490_I2C_ADDRESS		0x24
 > > +
-> > +/* Global control register */
-> > +#define CSI2DC_GCTLR			0x04
-> > +#define CSI2DC_GCTLR_SWRST		BIT(0)
+> > +#define OV490_PAGE_HIGH_REG		0xfffd
+> > +#define OV490_PAGE_LOW_REG		0xfffe
 > > +
-> > +/* Global status register */
-> > +#define CSI2DC_GS			0x08
+> > +#define OV490_DVP_CTRL3			0x80286009
 > > +
-> > +/* SSP interrupt status register */
-> > +#define CSI2DC_SSPIS			0x28
-> > +/* Pipe update register */
-> > +#define CSI2DC_PU			0xC0
-> > +/* Video pipe attributes update */
-> > +#define CSI2DC_PU_VP			BIT(0)
+> > +#define OV490_ODS_CTRL_FRAME_OUTPUT_EN	0x0c
+> > +#define OV490_ODS_CTRL			0x8029d000
 > > +
-> > +/* Pipe update status register */
-> > +#define CSI2DC_PUS			0xC4
+> > +#define OV490_ID_VAL			0x0490
+> > +#define OV490_ID(_p, _v)		((((_p) & 0xff) << 8) | ((_v) & 0xff))
+> > +#define OV490_PID			0x8080300a
+> > +#define OV490_VER			0x8080300b
 > > +
-> > +/* Video pipeline enable register */
-> > +#define CSI2DC_VPE			0xF8
-> > +#define CSI2DC_VPE_ENABLE		BIT(0)
+> > +#define OV490_ISP_HSIZE_LOW		0x80820060
+> > +#define OV490_ISP_HSIZE_HIGH		0x80820061
+> > +#define OV490_ISP_VSIZE_LOW		0x80820062
+> > +#define OV490_ISP_VSIZE_HIGH		0x80820063
 > > +
-> > +/* Video pipeline configuration register */
-> > +#define CSI2DC_VPCFG			0xFC
-> > +/* Data type */
-> > +#define CSI2DC_VPCFG_DT(v)		((v) << 0)
-> > +#define CSI2DC_VPCFG_DT_MASK		GENMASK(5, 0)
-> > +/* Virtual channel identifier */
-> > +#define CSI2DC_VPCFG_VC(v)		((v) << 6)
-> > +#define CSI2DC_VPCFG_VC_MASK		GENMASK(7, 6)
-> > +/* Decompression enable */
-> > +#define CSI2DC_VPCFG_DE			BIT(8)
-> > +/* Decoder mode */
-> > +#define CSI2DC_VPCFG_DM(v)		((v) << 9)
-> > +#define CSI2DC_VPCFG_DM_DECODER8TO12	0
-> > +/* Decoder predictor 2 selection */
-> > +#define CSI2DC_VPCFG_DP2		BIT(12)
-> > +/* Recommended memory storage */
-> > +#define CSI2DC_VPCFG_RMS		BIT(13)
-> > +/* Post adjustment */
-> > +#define CSI2DC_VPCFG_PA			BIT(14)
+> > +#define OV10640_PIXEL_RATE		(55000000)
 > > +
-> > +/* Video pipeline column register */
-> > +#define CSI2DC_VPCOL			0x100
-> > +/* Column number */
-> > +#define CSI2DC_VPCOL_COL(v)		((v) << 0)
-> > +#define CSI2DC_VPCOL_COL_MASK		GENMASK(15, 0)
-> > +
-> > +/* Video pipeline row register */
-> > +#define CSI2DC_VPROW			0x104
-> > +/* Row number */
-> > +#define CSI2DC_VPROW_ROW(v)		((v) << 0)
-> > +#define CSI2DC_VPROW_ROW_MASK		GENMASK(15, 0)
-> > +
-> > +/* Version register */
-> > +#define CSI2DC_VERSION			0x1FC
-> > +
-> > +/* register read/write helpers */
-> > +#define csi2dc_readl(st, reg)		readl_relaxed((st)->base + (reg))
-> > +#define csi2dc_writel(st, reg, val)	writel_relaxed((val), \
-> > +					(st)->base + (reg))
-> > +
-> > +/* supported RAW data types */
-> > +#define CSI2DC_DT_RAW6			0x28
-> > +#define CSI2DC_DT_RAW7			0x29
-> > +#define CSI2DC_DT_RAW8			0x2A
-> > +#define CSI2DC_DT_RAW10			0x2B
-> > +#define CSI2DC_DT_RAW12			0x2C
-> > +#define CSI2DC_DT_RAW14			0x2D
-> > +
-> > +struct csi2dc_format {
-> > +	u32				mbus_code;
-> > +	u32				dt;
-> > +};
-> > +
-> > +static struct csi2dc_format csi2dc_formats_list[] = {
-> > +	{
-> > +		.mbus_code =		MEDIA_BUS_FMT_SRGGB10_1X10,
-> > +		.dt =			CSI2DC_DT_RAW10,
-> > +	}, {
-> > +		.mbus_code =		MEDIA_BUS_FMT_SBGGR10_1X10,
-> > +		.dt =			CSI2DC_DT_RAW10,
-> > +	}, {
-> > +		.mbus_code =		MEDIA_BUS_FMT_SGRBG10_1X10,
-> > +		.dt =			CSI2DC_DT_RAW10,
-> > +	}, {
-> > +		.mbus_code =		MEDIA_BUS_FMT_SGBRG10_1X10,
-> > +		.dt =			CSI2DC_DT_RAW10,
-> > +	},
-> > +};
-> > +
-> > +enum mipi_csi_pads {
-> > +	CSI2DC_PAD_SINK			= 0,
-> > +	CSI2DC_PAD_SOURCE		= 1,
-> > +	CSI2DC_PADS_NUM			= 2,
-> > +};
-> > +
-> > +struct csi2dc_device {
-> > +	void __iomem			*base;
-> > +	struct v4l2_subdev		csi2dc_sd;
+> > +struct rdacm21_device {
 > > +	struct device			*dev;
-> > +	struct v4l2_device		v4l2_dev;
-> > +	struct clk			*pclk;
-> > +	struct clk			*scck;
-> > +
-> > +	bool				video_pipe;
-> > +
-> > +	u32				num_fmts;
-> > +	struct csi2dc_format		**formats;
-> > +
-> > +	struct csi2dc_format		*cur_fmt;
-> > +	struct csi2dc_format		*try_fmt;
-> > +
-> > +	struct media_pad		pads[CSI2DC_PADS_NUM];
-> > +
-> > +	bool				clk_gated;
-> > +	u32				vc;
-> > +
-> > +	struct v4l2_async_subdev	*asd;
-> > +	struct v4l2_async_notifier	notifier;
-> > +
-> > +	struct v4l2_subdev		*input_sd;
-> > +
-> > +	u32				remote_pad;
-> > +
-> > +	bool				completed;
-> > +	bool				powered_on;
-> > +
-> > +	struct work_struct		workq;
+> > +	struct max9271_device		*serializer;
+> > +	struct i2c_client		*isp;
+> > +	struct v4l2_subdev		sd;
+> > +	struct media_pad		pad;
+> > +	struct v4l2_mbus_framefmt	fmt;
+> > +	struct v4l2_ctrl_handler	ctrls;
+> > +	u32				addrs[32];
+> > +	u16				last_page;
 > > +};
 > > +
-> > +static void csi2dc_vp_update(struct csi2dc_device *csi2dc)
+> > +static inline struct rdacm21_device *sd_to_rdacm21(struct v4l2_subdev *sd)
 > > +{
-> > +	u32 vp;
-> > +
-> > +	vp = CSI2DC_VPCFG_DT(csi2dc->cur_fmt->dt) & CSI2DC_VPCFG_DT_MASK;
-> > +	vp |= CSI2DC_VPCFG_VC(csi2dc->vc) & CSI2DC_VPCFG_VC_MASK;
-> > +	vp &= ~CSI2DC_VPCFG_DE;
-> > +	vp |= CSI2DC_VPCFG_DM(CSI2DC_VPCFG_DM_DECODER8TO12);
-> > +	vp &= ~CSI2DC_VPCFG_DP2;
-> > +	vp &= ~CSI2DC_VPCFG_RMS;
-> > +	vp |= CSI2DC_VPCFG_PA;
-> > +
-> > +	csi2dc_writel(csi2dc, CSI2DC_VPCFG, vp);
-> > +	csi2dc_writel(csi2dc, CSI2DC_VPE, CSI2DC_VPE_ENABLE);
-> > +	csi2dc_writel(csi2dc, CSI2DC_PU, CSI2DC_PU_VP);
+> > +	return container_of(sd, struct rdacm21_device, sd);
 > > +}
 > > +
-> > +static inline struct csi2dc_device *
-> > +csi2dc_sd_to_csi2dc_device(struct v4l2_subdev *csi2dc_sd)
+> > +static inline struct rdacm21_device *i2c_to_rdacm21(struct i2c_client *client)
 > > +{
-> > +	return container_of(csi2dc_sd, struct csi2dc_device, csi2dc_sd);
+> > +	return sd_to_rdacm21(i2c_get_clientdata(client));
 > > +}
 > > +
-> > +static int csi2dc_enum_mbus_code(struct v4l2_subdev *csi2dc_sd,
-> > +				 struct v4l2_subdev_pad_config *cfg,
-> > +				 struct v4l2_subdev_mbus_code_enum *code)
+> > +static const struct ov490_reg {
+> > +	u16 reg;
+> > +	u8 val;
+> > +} ov490_regs_wizard[] = {
+> > +	{0xfffd, 0x80},
+> > +	{0xfffe, 0x82},
+> > +	{0x0071, 0x11},
+> > +	{0x0075, 0x11},
+> > +	{0xfffe, 0x29},
+> > +	{0x6010, 0x01},
+> > +	/*
+> > +	 * OV490 EMB line disable in YUV and RAW data,
+> > +	 * NOTE: EMB line is still used in ISP and sensor
+> > +	 */
+> > +	{0xe000, 0x14},
+> > +	{0xfffe, 0x28},
+> > +	{0x6000, 0x04},
+> > +	{0x6004, 0x00},
+> > +	/*
+> > +	 * PCLK polarity - useless due to silicon bug.
+> > +	 * Use 0x808000bb register instead.
+> > +	 */
+> > +	{0x6008, 0x00},
+> > +	{0xfffe, 0x80},
+> > +	{0x0091, 0x00},
+> > +	/* bit[3]=0 - PCLK polarity workaround. */
+> > +	{0x00bb, 0x1d},
+> > +	/* Ov490 FSIN: app_fsin_from_fsync */
+> > +	{0xfffe, 0x85},
+> > +	{0x0008, 0x00},
+> > +	{0x0009, 0x01},
+> > +	/* FSIN0 source. */
+> > +	{0x000A, 0x05},
+> > +	{0x000B, 0x00},
+> > +	/* FSIN0 delay. */
+> > +	{0x0030, 0x02},
+> > +	{0x0031, 0x00},
+> > +	{0x0032, 0x00},
+> > +	{0x0033, 0x00},
+> > +	/* FSIN1 delay. */
+> > +	{0x0038, 0x02},
+> > +	{0x0039, 0x00},
+> > +	{0x003A, 0x00},
+> > +	{0x003B, 0x00},
+> > +	/* FSIN0 length. */
+> > +	{0x0070, 0x2C},
+> > +	{0x0071, 0x01},
+> > +	{0x0072, 0x00},
+> > +	{0x0073, 0x00},
+> > +	/* FSIN1 length. */
+> > +	{0x0074, 0x64},
+> > +	{0x0075, 0x00},
+> > +	{0x0076, 0x00},
+> > +	{0x0077, 0x00},
+> > +	{0x0000, 0x14},
+> > +	{0x0001, 0x00},
+> > +	{0x0002, 0x00},
+> > +	{0x0003, 0x00},
+> > +	/*
+> > +	 * Load fsin0,load fsin1,load other,
+> > +	 * It will be cleared automatically.
+> > +	 */
+> > +	{0x0004, 0x32},
+> > +	{0x0005, 0x00},
+> > +	{0x0006, 0x00},
+> > +	{0x0007, 0x00},
+> > +	{0xfffe, 0x80},
+> > +	/* Sensor FSIN. */
+> > +	{0x0081, 0x00},
+> > +	/* ov10640 FSIN enable */
+> > +	{0xfffe, 0x19},
+> > +	{0x5000, 0x00},
+> > +	{0x5001, 0x30},
+> > +	{0x5002, 0x8c},
+> > +	{0x5003, 0xb2},
+> > +	{0xfffe, 0x80},
+> > +	{0x00c0, 0xc1},
+> > +	/* ov10640 HFLIP=1 by default */
+> > +	{0xfffe, 0x19},
+> > +	{0x5000, 0x01},
+> > +	{0x5001, 0x00},
+> > +	{0xfffe, 0x80},
+> > +	{0x00c0, 0xdc},
+> > +};
+> > +
+> > +static int ov490_read(struct rdacm21_device *dev, u16 reg, u8 *val)
 > > +{
-> > +	struct csi2dc_device *csi2dc = csi2dc_sd_to_csi2dc_device(csi2dc_sd);
+> > +	u8 buf[2] = { reg >> 8, reg };
+> > +	int ret;
 > > +
-> > +	if (code->index >= csi2dc->num_fmts)
-> > +		return -EINVAL;
+> > +	ret = i2c_master_send(dev->isp, buf, 2);
+> > +	if (ret == 2)
+> > +		ret = i2c_master_recv(dev->isp, val, 1);
 > > +
-> > +	code->code = csi2dc->formats[code->index]->mbus_code;
-> > +	return 0;
-> > +}
-> > +
-> > +static int csi2dc_set_fmt(struct v4l2_subdev *csi2dc_sd,
-> > +			  struct v4l2_subdev_pad_config *cfg,
-> > +			  struct v4l2_subdev_format *req_fmt)
-> > +{
-> > +	struct csi2dc_device *csi2dc = csi2dc_sd_to_csi2dc_device(csi2dc_sd);
-> > +	struct csi2dc_format *fmt;
-> > +	int ret, i;
-> > +
-> > +	if (!csi2dc->completed) {
-> > +		dev_dbg((csi2dc)->dev, "subdev not registered yet\n");
-> > +		return 0;
-> > +	}
-> > +
-> > +	for (fmt = csi2dc->formats[0], i = 0; i < csi2dc->num_fmts; fmt++, i++)
-> > +		if (req_fmt->format.code == fmt->mbus_code)
-> > +			csi2dc->try_fmt = fmt;
-> > +
-> > +	/* in case we could not find the desired format, default to something */
-> > +	if (!csi2dc->try_fmt  ||
-> > +	    req_fmt->format.code != csi2dc->try_fmt->mbus_code) {
-> > +		csi2dc->try_fmt = csi2dc->formats[0];
-> > +
-> > +		dev_dbg(csi2dc->dev,
-> > +			"CSI2DC unsupported format 0x%x, defaulting to 0x%x\n",
-> > +			req_fmt->format.code, csi2dc->formats[0]->mbus_code);
-> > +
-> > +		req_fmt->format.code = csi2dc->formats[0]->mbus_code;
-> > +	}
-> > +
-> > +	/* if we are just trying, we are done */
-> > +	if (req_fmt->which == V4L2_SUBDEV_FORMAT_TRY)
-> > +		return 0;
-> > +
-> > +	ret = v4l2_subdev_call(csi2dc->input_sd, pad, set_fmt, cfg, req_fmt);
-> > +	if (ret) {
-> > +		dev_err(csi2dc->dev, "input subdev failed %d\n", ret);
+> > +	if (ret < 0) {
+> > +		dev_dbg(dev->dev, "%s: register 0x%04x read failed (%d)\n",
+> > +			__func__, reg, ret);
 > > +		return ret;
 > > +	}
 > > +
-> > +	csi2dc->cur_fmt = csi2dc->try_fmt;
-> > +	/* update video pipe */
-> > +	csi2dc_vp_update(csi2dc);
-> > +
-> > +	dev_dbg(csi2dc->dev, "CSI2DC new format: 0x%x\n", req_fmt->format.code);
 > > +	return 0;
 > > +}
 > > +
-> > +static int csi2dc_formats_init(struct csi2dc_device *csi2dc)
+> > +static int ov490_write(struct rdacm21_device *dev, u16 reg, u8 val)
 > > +{
-> > +	struct csi2dc_format *fmt;
-> > +	struct v4l2_subdev *subdev = csi2dc->input_sd;
-> > +	unsigned int num_fmts, i;
+> > +	u8 buf[3] = { reg >> 8, reg, val };
+> > +	int ret;
 > > +
-> > +	struct v4l2_subdev_mbus_code_enum mbus_code = {
-> > +		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
-> > +		.index = 0,
-> > +	};
-> > +
-> > +	num_fmts = 0;
-> > +
-> > +	csi2dc->formats = devm_kcalloc(csi2dc->dev,
-> > +				       ARRAY_SIZE(csi2dc_formats_list),
-> > +				       sizeof(*csi2dc->formats), GFP_KERNEL);
-> > +	if (!csi2dc->formats)
-> > +		return -ENOMEM;
-> > +
-> > +	while (!v4l2_subdev_call(subdev, pad, enum_mbus_code, NULL,
-> > +	       &mbus_code)) {
-> > +		mbus_code.index++;
-> > +		for (fmt = &csi2dc_formats_list[0], i = 0;
-> > +		     i < ARRAY_SIZE(csi2dc_formats_list); i++, fmt++)
-> > +			if (fmt->mbus_code == mbus_code.code) {
-> > +				csi2dc->formats[num_fmts] = fmt;
-> > +				num_fmts++;
-> > +			}
+> > +	ret = i2c_master_send(dev->isp, buf, 3);
+> > +	if (ret < 0) {
+> > +		dev_err(dev->dev, "%s: register 0x%04x write failed (%d)\n",
+> > +			__func__, reg, ret);
+> > +		return ret;
 > > +	}
-> 
-> For the reasons explained above and by Sakari, I think this should be dropped
-> 
-> > +
-> > +	if (!num_fmts)
-> > +		return -ENXIO;
-> > +
-> > +	csi2dc->num_fmts = num_fmts;
 > > +
 > > +	return 0;
 > > +}
 > > +
-> > +static int csi2dc_power(struct csi2dc_device *csi2dc, int on)
+> > +static int ov490_set_page(struct rdacm21_device *dev, u16 reg)
 > > +{
-> > +	int ret = 0;
+> > +	bool page_new = false;
+> > +	u8 page_high = reg >> 8;
+> > +	u8 page_low = reg;
+> > +	int ret;
 > > +
-> > +	if (!csi2dc->completed) {
-> > +		dev_dbg((csi2dc)->dev, "subdev not registered yet\n");
-> > +		return 0;
+> > +	if (page_high != (dev->last_page >> 8)) {
+> > +		ret = ov490_write(dev, OV490_PAGE_HIGH_REG, page_high);
+> > +		if (ret)
+> > +			return ret;
+> > +		page_new = true;
 > > +	}
-> 
-> Can this happen ?
-> 
 > > +
-> > +	if (csi2dc->powered_on == on)
-> > +		return 0;
-> 
-> Same question
-> 
+> > +	if (page_low != (u8)dev->last_page) {
+> > +		ret = ov490_write(dev, OV490_PAGE_LOW_REG, page_low);
+> > +		if (ret)
+> > +			return ret;
+> > +		page_new = true;
+> > +	}
 > > +
-> > +	if (on)
-> > +		ret = clk_prepare_enable(csi2dc->scck);
-> > +	else
-> > +		clk_disable_unprepare(csi2dc->scck);
+> > +	if (page_new) {
+> > +		dev->last_page = reg;
+> > +		usleep_range(100, 150);
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int ov490_read_reg(struct rdacm21_device *dev, u32 reg, u8 *val)
+> > +{
+> > +	int ret;
+> > +
+> > +	ret = ov490_set_page(dev, reg >> 16);
 > > +	if (ret)
-> > +		dev_err(csi2dc->dev, "failed to enable scck: %d\n", ret);
+> > +		return ret;
 > > +
-> > +	/* if powering up, deassert reset line */
-> > +	if (on)
-> > +		csi2dc_writel(csi2dc, CSI2DC_GCTLR, CSI2DC_GCTLR_SWRST);
+> > +	ret = ov490_read(dev, (u16)reg, val);
+> > +	if (ret)
+> > +		return ret;
 > > +
-> > +	/* if powering down, assert reset line */
-> > +	if (!on)
-> > +		csi2dc_writel(csi2dc, CSI2DC_GCTLR, !CSI2DC_GCTLR_SWRST);
-> > +	if (!ret)
-> > +		csi2dc->powered_on = on;
-> 
-> Wouldn't this be better coded as
-> 
->         if (on) {
->                 clk_prepare_enable
->                 csi2dc_writel(SWRST)
->                 powered_on = true
->         } else {
->                 clk_disable_unrepare
->                 csi2dc_writel(!SWRST)
->                 powered_on = false
->         }
+> > +	dev_dbg(dev->dev, "%s: 0x%08x = 0x%02x\n", __func__, reg, *val);
 > > +
-> > +	return ret;
+> > +	return 0;
 > > +}
 > > +
-> > +static int csi2dc_s_stream(struct v4l2_subdev *csi2dc_sd, int enable)
+> > +static int ov490_write_reg(struct rdacm21_device *dev, u32 reg, u8 val)
 > > +{
-> > +	struct csi2dc_device *csi2dc = csi2dc_sd_to_csi2dc_device(csi2dc_sd);
+> > +	int ret;
 > > +
-> > +	if (!csi2dc->completed) {
-> > +		dev_dbg((csi2dc)->dev, "subdev not registered yet\n");
-> > +		return 0;
-> > +	}
+> > +	ret = ov490_set_page(dev, reg >> 16);
+> > +	if (ret)
+> > +		return ret;
 > > +
-> > +	return v4l2_subdev_call(csi2dc->input_sd, video, s_stream, enable);
+> > +	ret = ov490_write(dev, (u16)reg, val);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	dev_dbg(dev->dev, "%s: 0x%08x = 0x%02x\n", __func__, reg, val);
+> > +
+> > +	return 0;
 > > +}
 > > +
-> > +static int csi2dc_g_frame_interval(struct v4l2_subdev *csi2dc_sd,
-> > +				   struct v4l2_subdev_frame_interval *interval)
+> > +static int rdacm21_s_stream(struct v4l2_subdev *sd, int enable)
 > > +{
-> > +	struct csi2dc_device *csi2dc = csi2dc_sd_to_csi2dc_device(csi2dc_sd);
+> > +	struct rdacm21_device *dev = sd_to_rdacm21(sd);
 > > +
-> > +	if (!csi2dc->completed) {
-> > +		dev_dbg((csi2dc)->dev, "subdev not registered yet\n");
-> > +		return 0;
-> > +	}
-> > +
-> > +	return v4l2_subdev_call(csi2dc->input_sd, video, g_frame_interval,
-> > +				interval);
+> > +	/*
+> > +	 * Enable serial link now that the ISP provides a valid pixel clock
+> > +	 * to start serializing video data on the GMSL link.
+> > +	 */
+> > +	return max9271_set_serial_link(dev->serializer, enable);
 > > +}
 > > +
-> > +static int csi2dc_s_frame_interval(struct v4l2_subdev *csi2dc_sd,
-> > +				   struct v4l2_subdev_frame_interval *interval)
-> > +{
-> > +	struct csi2dc_device *csi2dc = csi2dc_sd_to_csi2dc_device(csi2dc_sd);
-> > +
-> > +	if (!csi2dc->completed) {
-> > +		dev_dbg((csi2dc)->dev, "subdev not registered yet\n");
-> > +		return 0;
-> > +	}
-> > +
-> > +	return v4l2_subdev_call(csi2dc->input_sd, video, s_frame_interval,
-> > +				interval);
-> > +}
-> > +
-> > +static int csi2dc_enum_frame_size(struct v4l2_subdev *csi2dc_sd,
+> > +static int rdacm21_enum_mbus_code(struct v4l2_subdev *sd,
 > > +				  struct v4l2_subdev_pad_config *cfg,
-> > +				  struct v4l2_subdev_frame_size_enum *fse)
+> > +				  struct v4l2_subdev_mbus_code_enum *code)
 > > +{
-> > +	struct csi2dc_device *csi2dc = csi2dc_sd_to_csi2dc_device(csi2dc_sd);
+> > +	if (code->pad || code->index > 0)
+> > +		return -EINVAL;
 > > +
-> > +	if (!csi2dc->completed) {
-> > +		dev_dbg((csi2dc)->dev, "subdev not registered yet\n");
-> > +		return 0;
-> > +	}
+> > +	code->code = MEDIA_BUS_FMT_YUYV8_1X16;
 > > +
-> > +	return v4l2_subdev_call(csi2dc->input_sd, pad, enum_frame_size, cfg,
-> > +				fse);
+> > +	return 0;
 > > +}
 > > +
-> > +static int csi2dc_enum_frame_interval(struct v4l2_subdev *csi2dc_sd,
-> > +			      struct v4l2_subdev_pad_config *cfg,
-> > +			      struct v4l2_subdev_frame_interval_enum *fie)
+> > +static int rdacm21_get_fmt(struct v4l2_subdev *sd,
+> > +			   struct v4l2_subdev_pad_config *cfg,
+> > +			   struct v4l2_subdev_format *format)
 > > +{
-> > +	struct csi2dc_device *csi2dc = csi2dc_sd_to_csi2dc_device(csi2dc_sd);
+> > +	struct v4l2_mbus_framefmt *mf = &format->format;
+> > +	struct rdacm21_device *dev = sd_to_rdacm21(sd);
 > > +
-> > +	if (!csi2dc->completed) {
-> > +		dev_dbg((csi2dc)->dev, "subdev not registered yet\n");
-> > +		return 0;
-> > +	}
+> > +	if (format->pad)
+> > +		return -EINVAL;
 > > +
-> > +	return v4l2_subdev_call(csi2dc->input_sd, pad, enum_frame_interval, cfg,
-> > +				fie);
+> > +	mf->width		= dev->fmt.width;
+> > +	mf->height		= dev->fmt.height;
+> > +	mf->code		= MEDIA_BUS_FMT_YUYV8_1X16;
+> > +	mf->colorspace		= V4L2_COLORSPACE_SRGB;
+> > +	mf->field		= V4L2_FIELD_NONE;
+> > +	mf->ycbcr_enc		= V4L2_YCBCR_ENC_601;
+> > +	mf->quantization	= V4L2_QUANTIZATION_FULL_RANGE;
+> > +	mf->xfer_func		= V4L2_XFER_FUNC_NONE;
+> > +
+> > +	return 0;
 > > +}
 > > +
-> > +static const struct v4l2_subdev_pad_ops csi2dc_pad_ops = {
-> > +	.enum_mbus_code = csi2dc_enum_mbus_code,
-> > +	.set_fmt = csi2dc_set_fmt,
-> > +	.enum_frame_size = csi2dc_enum_frame_size,
-> > +	.enum_frame_interval = csi2dc_enum_frame_interval,
+> > +static struct v4l2_subdev_video_ops rdacm21_video_ops = {
+> > +	.s_stream	= rdacm21_s_stream,
 > > +};
 > > +
-> > +static const struct v4l2_subdev_video_ops csi2dc_video_ops = {
-> > +	.s_stream = csi2dc_s_stream,
-> > +	.g_frame_interval = csi2dc_g_frame_interval,
-> > +	.s_frame_interval = csi2dc_s_frame_interval,
+> > +static const struct v4l2_subdev_pad_ops rdacm21_subdev_pad_ops = {
+> > +	.enum_mbus_code = rdacm21_enum_mbus_code,
+> > +	.get_fmt	= rdacm21_get_fmt,
+> > +	.set_fmt	= rdacm21_get_fmt,
 > > +};
 > > +
-> > +static const struct v4l2_subdev_ops csi2dc_subdev_ops = {
-> > +	.pad = &csi2dc_pad_ops,
-> > +	.video = &csi2dc_video_ops,
+> > +static struct v4l2_subdev_ops rdacm21_subdev_ops = {
+> > +	.video		= &rdacm21_video_ops,
+> > +	.pad		= &rdacm21_subdev_pad_ops,
 > > +};
 > > +
-> > +static int csi2dc_get_mbus_config(struct csi2dc_device *csi2dc)
+> > +static int ov490_initialize(struct rdacm21_device *dev)
 > > +{
-> > +	struct v4l2_mbus_config mbus_config = { 0 };
+> > +	unsigned int ov490_pid_retry = 20;
+> > +	unsigned int timeout;
+> > +	u8 pid, ver, val;
+> > +	unsigned int i;
 > > +	int ret;
 > > +
-> > +	ret = v4l2_subdev_call(csi2dc->input_sd, pad, get_mbus_config,
-> > +			       csi2dc->remote_pad, &mbus_config);
-> > +	if (ret == -ENOIOCTLCMD) {
-> > +		dev_dbg(csi2dc->dev,
-> > +			"no remote mbus configuration available\n");
-> > +		goto csi2dc_get_mbus_config_defaults;
+> > +	/* Read OV490 Id to test communications. */
+> > +pid_retry:
+> > +	ret = ov490_read_reg(dev, OV490_PID, &pid);
+> > +	if (ret < 0) {
+> > +		/* Give OV490 a few more cycles to exit from reset. */
+> > +		if (ov490_pid_retry--) {
+> > +			usleep_range(1000, 2000);
+> > +			goto pid_retry;
+> > +		}
+> > +
+> > +		dev_err(dev->dev, "OV490 PID read failed (%d)\n", ret);
+> > +		return ret;
 > > +	}
 > > +
-> > +	if (ret) {
-> > +		dev_err(csi2dc->dev,
-> > +			"failed to get remote mbus configuration\n");
-> > +		goto csi2dc_get_mbus_config_defaults;
-> 
-> This should probably be an error reported to the caller. But this
-> function return value is not checked, so it's probably fine.
-> 
+> > +	ret = ov490_read_reg(dev, OV490_VER, &ver);
+> > +	if (ret < 0) {
+> > +		dev_err(dev->dev, "OV490 VERSION read failed (%d)\n", ret);
+> > +		return ret;
 > > +	}
 > > +
-> > +	if (mbus_config.flags & V4L2_MBUS_CSI2_CHANNEL_0)
-> > +		csi2dc->vc = 0;
-> > +	else if (mbus_config.flags & V4L2_MBUS_CSI2_CHANNEL_1)
-> > +		csi2dc->vc = 1;
-> > +	else if (mbus_config.flags & V4L2_MBUS_CSI2_CHANNEL_2)
-> > +		csi2dc->vc = 2;
-> > +	else if (mbus_config.flags & V4L2_MBUS_CSI2_CHANNEL_3)
-> > +		csi2dc->vc = 3;
+> > +	if (OV490_ID(pid, ver) != OV490_ID_VAL) {
+> > +		dev_err(dev->dev, "OV490 ID mismatch: (0x%04x)\n",
+> > +			OV490_ID(pid, ver));
+> > +		return -ENODEV;
+> > +	}
 > > +
-> > +	dev_dbg(csi2dc->dev, "subdev sending on channel %d\n", csi2dc->vc);
+> > +	/* Wait for firmware boot by reading streamon status. */
+> > +	for (timeout = 300; timeout > 0; timeout--) {
+> > +		ov490_read_reg(dev, OV490_ODS_CTRL, &val);
+> > +		if (val == OV490_ODS_CTRL_FRAME_OUTPUT_EN)
+> > +			break;
+> > +		mdelay(1);
+> > +	}
+> > +	if (!timeout) {
+> > +		dev_err(dev->dev, "Timeout firmware boot wait\n");
+> > +		return -ENODEV;
+> > +	}
+> > +	dev_dbg(dev->dev, "Firmware booted in %u msec\n", 300 - timeout);
 > > +
-> > +	csi2dc->clk_gated = mbus_config.flags &
-> > +			    V4L2_MBUS_CSI2_NONCONTINUOUS_CLOCK;
+> > +	/* Read OV10640 Id to test communications. */
+> > +	ov490_write(dev, 0xfffd, 0x80);
+> > +	ov490_write(dev, 0xfffe, 0x19);
+> > +	usleep_range(100, 150);
+>
+> Is that setting a page? Or doing something else?
+>
 > > +
-> > +	dev_dbg(csi2dc->dev, "%s clock\n",
-> > +		csi2dc->clk_gated ? "gated" : "free running");
+> > +	ov490_write(dev, 0x5000, 0x01);
+> > +	ov490_write(dev, 0x5001, 0x30);
+> > +	ov490_write(dev, 0x5002, 0x0a);
 > > +
-> > +	return 0;
+> > +	ov490_write(dev, 0xfffe, 0x80);
+> > +	usleep_range(100, 150);
+> > +	ov490_write(dev, 0xc0, 0xc1);
+> > +	ov490_write(dev, 0xfffe, 0x19);
+>
+> And here?
+>
+> Can this not go through the new helpers?
+>
+> If the 'read_reg', 'write_reg', helpers are not appropriate, at least
+> setting the pages could be done with set_page() ... but I'd be surprised
+> if those couldn't be handled with ov490_write_reg() ?
+
+As I've said in previous reply, I prefer the comunication with ov10640
+to be kept explicit as long as we don't have more users and I don't
+better understand what register 0x5000 is for.
+
+I can go through set_page() but the I have to pass 0x8019 which kind
+of defeat the purpose of defining registers by name
+
+I prefer to keep this as it is.
+
+>
+>
+>
+> > +	usleep_range(1000, 1500);
+> > +	ov490_read(dev, 0x5000, &val);
+> > +	if (val != OV10640_ID_LOW) {
+> > +		dev_err(dev->dev, "OV10640 ID mismatch: (0x%02x)\n", val);
+> > +		return -ENODEV;
+> > +	}
 > > +
-> > +csi2dc_get_mbus_config_defaults:
-> > +	csi2dc->vc = 0; /* Virtual ID 0 by default */
-> > +	csi2dc->clk_gated = false; /* Free running clock by default */
+> > +	dev_dbg(dev->dev, "OV10640 ID = 0x%2x\n", val);
+> > +
+> > +	for (i = 0; i < ARRAY_SIZE(ov490_regs_wizard); ++i) {
+> > +		ret = ov490_write(dev, ov490_regs_wizard[i].reg,
+> > +				  ov490_regs_wizard[i].val);
+> > +		if (ret < 0) {
+> > +			dev_err(dev->dev,
+> > +				"%s: register %u (0x%04x) write failed (%d)\n",
+> > +				__func__, i, ov490_regs_wizard[i].reg, ret);
+> > +
+> > +			return -EIO;
+> > +		}
+> > +
+> > +		usleep_range(100, 150);
+> > +	}
+> > +
+> > +	/*
+> > +	 * The ISP is programmed with the content of a serial flash memory.
+> > +	 * Read the firmware configuration to reflect it through the V4L2 APIs.
+> > +	 */
+> > +	ov490_read_reg(dev, OV490_ISP_HSIZE_HIGH, &val);
+> > +	dev->fmt.width = (val & 0xf) << 8;
+> > +	ov490_read_reg(dev, OV490_ISP_HSIZE_LOW, &val);
+> > +	dev->fmt.width |= (val & 0xff);
+> > +
+> > +	ov490_read_reg(dev, OV490_ISP_VSIZE_HIGH, &val);
+> > +	dev->fmt.height = (val & 0xf) << 8;
+> > +	ov490_read_reg(dev, OV490_ISP_VSIZE_LOW, &val);
+> > +	dev->fmt.height |= val & 0xff;
+> > +
+>
+>
+> Hrm, these look like "ov490_read_reg_long()", but given they're the only
+> occurrences of a "long read" I think we could leave it as is.
+>
+>
+> > +	/* Set bus width to 12 bits with [0:11] ordering. */
+> > +	ov490_write_reg(dev, OV490_DVP_CTRL3, 0x10);
+> > +
+> > +	dev_info(dev->dev, "Identified RDACM21 camera module\n");
 > > +
 > > +	return 0;
 > > +}
 > > +
-> > +static int csi2dc_async_bound(struct v4l2_async_notifier *notifier,
-> > +			      struct v4l2_subdev *subdev,
-> > +			      struct v4l2_async_subdev *asd)
+> > +static int rdacm21_initialize(struct rdacm21_device *dev)
 > > +{
-> > +	struct csi2dc_device *csi2dc = container_of(notifier->v4l2_dev,
-> > +					struct csi2dc_device, v4l2_dev);
-> > +	int pad;
-> > +
-> > +	csi2dc->input_sd = subdev;
-> > +
-> > +	pad = media_entity_get_fwnode_pad(&subdev->entity,
-> > +					  asd->match.fwnode,
-> > +					  MEDIA_PAD_FL_SOURCE);
-> > +	if (pad < 0) {
-> > +		dev_err(csi2dc->dev, "Failed to find pad for %s\n",
-> > +			subdev->name);
-> > +		return pad;
-> > +	}
-> > +
-> > +	csi2dc->remote_pad = pad;
-> > +
-> > +	csi2dc_get_mbus_config(csi2dc);
-> 
-> The closer to s_stream you call get_mbus_config, the less the chances
-> of receiving a stale configuration, if this can happen.
-> 
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int csi2dc_async_complete(struct v4l2_async_notifier *notifier)
-> > +{
-> > +	struct csi2dc_device *csi2dc =
-> > +		container_of(notifier->v4l2_dev, struct csi2dc_device,
-> > +			     v4l2_dev);
 > > +	int ret;
 > > +
-> > +	ret = csi2dc_formats_init(csi2dc);
+> > +	/* Verify communication with the MAX9271: ping to wakeup. */
+> > +	dev->serializer->client->addr = MAX9271_DEFAULT_ADDR;
+> > +	i2c_smbus_read_byte(dev->serializer->client);
+> > +
+> > +	/* Serial link disabled during config as it needs a valid pixel clock. */
+> > +	ret = max9271_set_serial_link(dev->serializer, false);
 > > +	if (ret)
 > > +		return ret;
 > > +
-> > +	ret = v4l2_device_register_subdev_nodes(&csi2dc->v4l2_dev);
-> > +	if (ret < 0) {
-> > +		v4l2_err(&csi2dc->v4l2_dev,
-> > +			 "failed to register subdev nodes\n");
+> > +	/* Set GPO high to hold OV490 in reset during max9271 configuration. */
+> > +	ret = max9271_set_gpios(dev->serializer, MAX9271_GPO);
+> > +	if (ret)
 > > +		return ret;
-> > +	}
 > > +
-> > +	csi2dc->completed = true;
+> > +	/* Configure I2C bus at 105Kbps speed and configure GMSL link. */
+> > +	ret = max9271_configure_i2c(dev->serializer,
+> > +				    MAX9271_I2CSLVSH_469NS_234NS |
+> > +				    MAX9271_I2CSLVTO_1024US |
+> > +				    MAX9271_I2CMSTBT_105KBPS);
+> > +	if (ret)
+> > +		return ret;
 > > +
-> > +	csi2dc_writel(csi2dc, CSI2DC_GCFG,
-> > +		      (SAMA7G5_HLC & CSI2DC_GCFG_HLC_MASK) |
-> > +		      (csi2dc->clk_gated ? 0 : CSI2DC_GCFG_MIPIFRN));
+> > +	ret = max9271_configure_gmsl_link(dev->serializer);
+> > +	if (ret)
+> > +		return ret;
 > > +
-> > +	csi2dc_writel(csi2dc, CSI2DC_VPCOL,
-> > +		      CSI2DC_VPCOL_COL(0xFFF) & CSI2DC_VPCOL_COL_MASK);
-> > +	csi2dc_writel(csi2dc, CSI2DC_VPROW,
-> > +		      CSI2DC_VPROW_ROW(0xFFF) & CSI2DC_VPROW_ROW_MASK);
+> > +	ret = max9271_set_address(dev->serializer, dev->addrs[0]);
+> > +	if (ret)
+> > +		return ret;
+> > +	dev->serializer->client->addr = dev->addrs[0];
 > > +
-> > +	/* once we are completed, we can register ourselves in the pipeline */
-> > +	schedule_work(&csi2dc->workq);
+> > +	/*
+> > +	 * Release OV490 from reset and program address translation
+> > +	 * before performing OV490 configuration.
+> > +	 */
+> > +	ret = max9271_clear_gpios(dev->serializer, MAX9271_GPO);
+> > +	if (ret)
+> > +		return ret;
 > > +
-> > +	return ret;
+> > +	ret = max9271_set_translation(dev->serializer, dev->addrs[1],
+> > +				      OV490_I2C_ADDRESS);
+> > +	if (ret)
+> > +		return ret;
+> > +	dev->isp->addr = dev->addrs[1];
+> > +
+> > +	ret = ov490_initialize(dev);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	/*
+> > +	 * Set reverse channel high threshold to increase noise immunity.
+> > +	 *
+> > +	 * This should be compensated by increasing the reverse channel
+> > +	 * amplitude on the remote deserializer side.
+> > +	 */
+> > +	ret = max9271_set_high_threshold(dev->serializer, true);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	return 0;
 > > +}
 > > +
-> > +static const struct v4l2_async_notifier_operations csi2dc_async_ops = {
-> > +	.bound = csi2dc_async_bound,
-> > +	.complete = csi2dc_async_complete,
-> > +};
-> > +
-> > +static void csi2dc_cleanup_notifier(struct csi2dc_device *csi2dc)
+> > +static int rdacm21_probe(struct i2c_client *client)
 > > +{
-> > +	v4l2_async_notifier_unregister(&csi2dc->notifier);
-> > +	v4l2_async_notifier_cleanup(&csi2dc->notifier);
-> > +}
-> > +
-> > +static int csi2dc_prepare_notifier(struct csi2dc_device *csi2dc,
-> > +				   struct device_node *input_parent)
-> > +{
+> > +	struct rdacm21_device *dev;
+> > +	struct fwnode_handle *ep;
 > > +	int ret;
 > > +
-> > +	v4l2_async_notifier_init(&csi2dc->notifier);
+> > +	dev = devm_kzalloc(&client->dev, sizeof(*dev), GFP_KERNEL);
+> > +	if (!dev)
+> > +		return -ENOMEM;
+> > +	dev->dev = &client->dev;
 > > +
-> > +	csi2dc->asd = kzalloc(sizeof(*csi2dc->asd), GFP_KERNEL);
-> > +	if (!csi2dc->asd)
+> > +	dev->serializer = devm_kzalloc(&client->dev, sizeof(*dev->serializer),
+> > +				       GFP_KERNEL);
+> > +	if (!dev->serializer)
 > > +		return -ENOMEM;
 > > +
-> > +	csi2dc->asd->match_type = V4L2_ASYNC_MATCH_FWNODE;
-> > +	csi2dc->asd->match.fwnode = of_fwnode_handle(input_parent);
-> 
-> If you use v4l2_async_notifier_add_fwnode_subdev() the framework does
-> this for you.
-> 
+> > +	dev->serializer->client = client;
 > > +
-> > +	ret = v4l2_async_notifier_add_subdev(&csi2dc->notifier, csi2dc->asd);
-> > +	if (ret) {
-> > +		dev_err(csi2dc->dev, "failed to add async notifier.\n");
-> > +		v4l2_async_notifier_cleanup(&csi2dc->notifier);
-> > +		goto csi2dc_prepare_notifier_err;
-> > +	}
-> > +
-> > +	csi2dc->notifier.ops = &csi2dc_async_ops;
-> > +
-> > +	ret = v4l2_async_notifier_register(&csi2dc->v4l2_dev,
-> > +					   &csi2dc->notifier);
-> > +
-> > +	if (ret) {
-> > +		dev_err(csi2dc->dev, "fail to register async notifier.\n");
-> 
-> Shouldn't you cleanup the notifier if registration fails ?
-> 
-> > +		goto csi2dc_prepare_notifier_err;
-> > +	}
-> > +
-> > +csi2dc_prepare_notifier_err:
-> > +	of_node_put(input_parent);
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +static int csi2dc_of_parse(struct csi2dc_device *csi2dc,
-> > +			   struct device_node *of_node)
-> > +{
-> > +	struct device_node *input_node, *sink_node, *input_parent;
-> > +	struct v4l2_fwnode_endpoint input_endpoint = { 0 },
-> > +				    sink_endpoint = { 0 };
-> > +	int ret;
-> > +
-> > +	input_node = of_graph_get_next_endpoint(of_node, NULL);
-> > +
-> > +	if (!input_node) {
-> > +		dev_err(csi2dc->dev,
-> > +			"missing port node at %s, input node is mandatory.\n",
-> 
-> Please use %pOF to print the node name
-> Also, input_node should be put in the error path
-> 
-> > +			of_node->full_name);
+> > +	ret = of_property_read_u32_array(client->dev.of_node, "reg",
+> > +					 dev->addrs, 2);
+> > +	if (ret < 0) {
+> > +		dev_err(dev->dev, "Invalid DT reg property: %d\n", ret);
 > > +		return -EINVAL;
 > > +	}
 > > +
-> > +	ret = v4l2_fwnode_endpoint_parse(of_fwnode_handle(input_node),
-> > +					 &input_endpoint);
-> 
-> Please set input_endpoint.bus_type if you know what kind of bus you're
-> dealing with (not having the bindings of the IDI transmitter I'm not
-> sure. Is this V4L2_MBUS_CSI2_DPHY ?)
-> 
+> > +	/* Create the dummy I2C client for the sensor. */
+> > +	dev->isp = i2c_new_dummy_device(client->adapter, OV490_I2C_ADDRESS);
+> > +	if (IS_ERR(dev->isp))
+> > +		return PTR_ERR(dev->isp);
 > > +
-> > +	if (ret) {
-> > +		dev_err(csi2dc->dev, "endpoint not defined at %s\n",
-> > +			of_node->full_name);
-> > +		return ret;
-> > +	}
-> > +
-> > +	input_parent = of_graph_get_remote_port_parent(input_node);
-> > +	if (!input_parent) {
-> 
-> Missing of_node_put(input_node)
-> 
-> > +		dev_err(csi2dc->dev,
-> > +			"could not get input node's parent node.\n");
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	sink_node = of_graph_get_next_endpoint(of_node, input_node);
-> > +
-> > +	if (sink_node)
-> > +		ret = v4l2_fwnode_endpoint_parse(of_fwnode_handle(sink_node),
-> > +						 &sink_endpoint);
-> 
-> Same, set sink_endpoint.bus_type if you know it's MBUS_PARALLEL
-> 
-> > +
-> > +	if (!sink_node || ret) {
-> 
-> If parsing fail you don't return an error but continue registering the
-> notifier and potentially end up registering the async subdev for this
-> entity even if the endpoint parsing failed.
-> 
-> > +		dev_info(csi2dc->dev,
-> > +			 "missing sink node at %s, data pipe available only.\n",
-> > +			 of_node->full_name);
-> > +	} else {
-> > +		csi2dc->video_pipe = true;
-> 
-> video_pipe is unused it seems
-> 
-> > +
-> > +		dev_dbg(csi2dc->dev, "block %s %d.%d->%d.%d video pipeline\n",
-> > +			of_node->full_name, input_endpoint.base.port,
-> > +			input_endpoint.base.id,	sink_endpoint.base.port,
-> > +			sink_endpoint.base.id);
-> > +	}
-> > +
-> > +	of_node_put(sink_node);
-> > +	of_node_put(input_node);
-> > +
-> > +	/* prepare async notifier for subdevice completion */
-> > +	return csi2dc_prepare_notifier(csi2dc, input_parent);
-> > +}
-> > +
-> > +static void csi2dc_workq_handler(struct work_struct *workq)
-> > +{
-> > +	struct csi2dc_device *csi2dc = container_of(workq,
-> > +					struct csi2dc_device, workq);
-> > +	int ret;
-> > +
-> > +	if (v4l2_async_register_subdev(&csi2dc->csi2dc_sd))
-> > +		dev_dbg(csi2dc->dev, "failed to register the subdevice\n");
-> 
-> That's peculiar, why do you have to schedule this to a workqueue
-> instead of doing this in the complete() callback ?
-> 
-> > +
-> > +	ret = csi2dc_power(csi2dc, true);
+> > +	ret = rdacm21_initialize(dev);
 > > +	if (ret < 0)
-> > +		v4l2_err(&csi2dc->v4l2_dev, "failed to power on\n");
-> 
-> Should the device be powered on at s_stream time ? Possibly with a
-> pm_runtime_get_sync() call ? I see you register pm_runtime operations,
-> but never call get_sync() or _put().
-> 
-> What if CONFIG_PM not selected ? Should this driver select it ? Do you
-> have use cases where that's not possible ?
-> 
-> > +}
+> > +		goto error;
 > > +
-> > +static int csi2dc_probe(struct platform_device *pdev)
-> > +{
-> > +	struct device *dev = &pdev->dev;
-> > +	struct csi2dc_device *csi2dc;
-> > +	struct resource *res = NULL;
-> > +	int ret = 0;
+> > +	/* Initialize and register the subdevice. */
+> > +	v4l2_i2c_subdev_init(&dev->sd, client, &rdacm21_subdev_ops);
+> > +	dev->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
 > > +
-> > +	csi2dc = devm_kzalloc(dev, sizeof(*csi2dc), GFP_KERNEL);
-> > +	if (!csi2dc)
-> > +		return -ENOMEM;
+> > +	v4l2_ctrl_handler_init(&dev->ctrls, 1);
+> > +	v4l2_ctrl_new_std(&dev->ctrls, NULL, V4L2_CID_PIXEL_RATE,
+> > +			  OV10640_PIXEL_RATE, OV10640_PIXEL_RATE, 1,
+> > +			  OV10640_PIXEL_RATE);
+> > +	dev->sd.ctrl_handler = &dev->ctrls;
 > > +
-> > +	csi2dc->dev = dev;
-> > +
-> > +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> > +	if (!res)
-> > +		return -EINVAL;
-> 
-> devm_ioremap_resource() checks for the validity of 'res' so you can
-> drop the previous two lines
-> 
-> > +
-> > +	csi2dc->base = devm_ioremap_resource(dev, res);
-> > +
-> 
-> Is the empy line intentional, sometimes you have one, sometimes you
-> don't ?
-> 
-> > +	if (IS_ERR(csi2dc->base)) {
-> > +		dev_err(dev, "base address not set\n");
-> 
-> 
-> > +		return PTR_ERR(csi2dc->base);
-> > +	}
-> > +
-> > +	csi2dc->pclk = devm_clk_get(dev, "pclk");
-> > +	if (IS_ERR(csi2dc->pclk)) {
-> > +		ret = PTR_ERR(csi2dc->pclk);
-> > +		dev_err(dev, "failed to get pclk: %d\n", ret);
-> > +		return ret;
-> 
-> Just return PTR_ERR instead of assigning to ret
-> 
-> > +	}
-> > +
-> > +	ret = clk_prepare_enable(csi2dc->pclk);
-> > +	if (ret) {
-> > +		dev_err(dev, "failed to enable pclk: %d\n", ret);
-> > +		return ret;
-> > +	}
-> 
-> Has this clock to be enabled here or can it be done in the
-> pm_runtime callback ?
-> 
-> > +
-> > +	csi2dc->scck = devm_clk_get(dev, "scck");
-> > +	if (IS_ERR(csi2dc->scck)) {
-> > +		ret = PTR_ERR(csi2dc->scck);
-> > +		dev_err(dev, "failed to get scck: %d\n", ret);
-> > +		goto csi2dc_clk_fail;
-> > +	}
-> > +
-> > +	ret = v4l2_device_register(dev, &csi2dc->v4l2_dev);
-> > +	if (ret) {
-> > +		dev_err(dev, "unable to register v4l2 device.\n");
-> > +		goto csi2dc_clk_fail;
-> > +	}
-> > +
-> > +	v4l2_subdev_init(&csi2dc->csi2dc_sd, &csi2dc_subdev_ops);
-> > +
-> > +	csi2dc->csi2dc_sd.owner = THIS_MODULE;
-> > +	csi2dc->csi2dc_sd.dev = dev;
-> > +	snprintf(csi2dc->csi2dc_sd.name, sizeof(csi2dc->csi2dc_sd.name),
-> > +		 "CSI2DC.0");
-> > +
-> > +	csi2dc->csi2dc_sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-> > +	csi2dc->csi2dc_sd.entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
-> > +	csi2dc->pads[CSI2DC_PAD_SINK].flags = MEDIA_PAD_FL_SINK;
-> > +	csi2dc->pads[CSI2DC_PAD_SOURCE].flags = MEDIA_PAD_FL_SOURCE;
-> 
-> Isn't the source pad presence conditional to the presence of
-> port@1 ?
-> 
-> > +
-> > +	ret = media_entity_pads_init(&csi2dc->csi2dc_sd.entity, CSI2DC_PADS_NUM,
-> > +				     csi2dc->pads);
-> > +	if (ret < 0) {
-> > +		dev_err(dev, "media entity init failed\n");
-> > +		goto csi2dc_probe_entity_err;
-> > +	}
-> > +
-> > +	v4l2_set_subdevdata(&csi2dc->csi2dc_sd, pdev);
-> > +
-> > +	platform_set_drvdata(pdev, &csi2dc->csi2dc_sd);
-> > +
-> > +	INIT_WORK(&csi2dc->workq, csi2dc_workq_handler);
-> > +
-> > +	ret = csi2dc_of_parse(csi2dc, dev->of_node);
+> > +	ret = dev->ctrls.error;
 > > +	if (ret)
-> > +		goto csi2dc_probe_entity_err;
+> > +		goto error_free_ctrls;
 > > +
-> > +	dev_info(dev, "Microchip CSI2DC version %x\n",
-> > +		 csi2dc_readl(csi2dc, CSI2DC_VERSION));
+> > +	dev->pad.flags = MEDIA_PAD_FL_SOURCE;
+> > +	dev->sd.entity.flags |= MEDIA_ENT_F_CAM_SENSOR;
+> > +	ret = media_entity_pads_init(&dev->sd.entity, 1, &dev->pad);
+> > +	if (ret < 0)
+> > +		goto error_free_ctrls;
 > > +
-> > +	pm_runtime_set_active(dev);
-> > +	pm_runtime_enable(dev);
-> > +	pm_request_idle(dev);
+> > +	ep = fwnode_graph_get_next_endpoint(dev_fwnode(&client->dev), NULL);
+> > +	if (!ep) {
+> > +		dev_err(&client->dev,
+> > +			"Unable to get endpoint in node %pOF\n",
+> > +			client->dev.of_node);
+> > +		ret = -ENOENT;
+> > +		goto error_free_ctrls;
+> > +	}
+> > +	dev->sd.fwnode = ep;
+> > +
+> > +	ret = v4l2_async_register_subdev(&dev->sd);
+> > +	if (ret)
+> > +		goto error_put_node;
 > > +
 > > +	return 0;
 > > +
-> > +csi2dc_probe_entity_err:
-> > +	media_entity_cleanup(&csi2dc->csi2dc_sd.entity);
-> > +	v4l2_device_unregister(&csi2dc->v4l2_dev);
-> > +csi2dc_clk_fail:
-> > +	clk_disable_unprepare(csi2dc->pclk);
+> > +error_put_node:
+> > +	fwnode_handle_put(dev->sd.fwnode);
+> > +error_free_ctrls:
+> > +	v4l2_ctrl_handler_free(&dev->ctrls);
+> > +error:
+> > +	i2c_unregister_device(dev->isp);
+> > +
 > > +	return ret;
 > > +}
 > > +
-> > +static int csi2dc_remove(struct platform_device *pdev)
+> > +static int rdacm21_remove(struct i2c_client *client)
 > > +{
-> > +	struct v4l2_subdev *csi2dc_sd = platform_get_drvdata(pdev);
-> > +	struct csi2dc_device *csi2dc = csi2dc_sd_to_csi2dc_device(csi2dc_sd);
+> > +	struct rdacm21_device *dev = i2c_to_rdacm21(client);
 > > +
-> > +	pm_runtime_disable(&pdev->dev);
-> > +
-> > +	v4l2_async_unregister_subdev(&csi2dc->csi2dc_sd);
-> > +	csi2dc_cleanup_notifier(csi2dc);
-> > +	media_entity_cleanup(&csi2dc->csi2dc_sd.entity);
-> > +	v4l2_device_unregister(&csi2dc->v4l2_dev);
-> > +	clk_disable_unprepare(csi2dc->pclk);
+> > +	fwnode_handle_put(dev->sd.fwnode);
+> > +	v4l2_async_unregister_subdev(&dev->sd);
+> > +	v4l2_ctrl_handler_free(&dev->ctrls);
+> > +	i2c_unregister_device(dev->isp);
 > > +
 > > +	return 0;
 > > +}
 > > +
-> > +static int __maybe_unused csi2dc_runtime_suspend(struct device *dev)
-> > +{
-> > +	struct csi2dc_device *csi2dc = dev_get_drvdata(dev);
-> > +
-> > +	return csi2dc_power(csi2dc, false);
-> > +}
-> > +
-> > +static int __maybe_unused csi2dc_runtime_resume(struct device *dev)
-> > +{
-> > +	struct csi2dc_device *csi2dc = dev_get_drvdata(dev);
-> > +
-> > +	return csi2dc_power(csi2dc, true);
-> > +}
-> > +
-> > +static const struct dev_pm_ops csi2dc_dev_pm_ops = {
-> > +	SET_RUNTIME_PM_OPS(csi2dc_runtime_suspend, csi2dc_runtime_resume, NULL)
-> > +};
-> > +
-> > +static const struct of_device_id csi2dc_of_match[] = {
-> > +	{ .compatible = "microchip,sama7g5-csi2dc" },
+> > +static const struct of_device_id rdacm21_of_ids[] = {
+> > +	{ .compatible = "imi,rdacm21" },
 > > +	{ }
 > > +};
+> > +MODULE_DEVICE_TABLE(of, rdacm21_of_ids);
 > > +
-> > +MODULE_DEVICE_TABLE(of, csi2dc_of_match);
-> > +
-> > +static struct platform_driver csi2dc_driver = {
-> > +	.probe	= csi2dc_probe,
-> > +	.remove	= csi2dc_remove,
+> > +static struct i2c_driver rdacm21_i2c_driver = {
 > > +	.driver	= {
-> > +		.name		= "microchip-csi2dc",
-> > +		.pm		= &csi2dc_dev_pm_ops,
-> > +		.of_match_table = of_match_ptr(csi2dc_of_match),
+> > +		.name	= "rdacm21",
+> > +		.of_match_table = rdacm21_of_ids,
 > > +	},
+> > +	.probe_new	= rdacm21_probe,
+> > +	.remove		= rdacm21_remove,
 > > +};
 > > +
-> > +module_platform_driver(csi2dc_driver);
+> > +module_i2c_driver(rdacm21_i2c_driver);
 > > +
-> > +MODULE_AUTHOR("Eugen Hristev <eugen.hristev@microchip.com>");
-> > +MODULE_DESCRIPTION("Microchip CSI2 Demux Controller driver");
+> > +MODULE_DESCRIPTION("GMSL Camera driver for RDACM21");
+> > +MODULE_AUTHOR("Jacopo Mondi, Kieran Bingham, Laurent Pinchart, Niklas Söderlund, Vladimir Barinov");
 > > +MODULE_LICENSE("GPL v2");
-> > +MODULE_SUPPORTED_DEVICE("video");
-> 
-> For my education, what's MODULE_SUPPORTED_DEVICE for ?
-
-It's "not yet implemented" since 2005, I think it can be dropped :-)
-
--- 
-Regards,
-
-Laurent Pinchart
+> >
+>
