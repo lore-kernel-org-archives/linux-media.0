@@ -2,73 +2,188 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5EB1C63777
-	for <linux-media@archiver.kernel.org>; Tue, 17 Nov 2020 02:52:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DB6FC2D0E4
+	for <linux-media@archiver.kernel.org>; Tue, 17 Nov 2020 04:40:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 88C482469D
-	for <linux-media@archiver.kernel.org>; Tue, 17 Nov 2020 02:52:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6A97B24695
+	for <linux-media@archiver.kernel.org>; Tue, 17 Nov 2020 04:40:14 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="h+uxeFCF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726440AbgKQCwP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Nov 2020 21:52:15 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:8098 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725804AbgKQCwO (ORCPT
+        id S1727228AbgKQEkO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Nov 2020 23:40:14 -0500
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:42045 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727211AbgKQEkN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Nov 2020 21:52:14 -0500
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4CZr7Y0RJfzLnv3;
-        Tue, 17 Nov 2020 10:51:53 +0800 (CST)
-Received: from huawei.com (10.175.103.91) by DGGEMS402-HUB.china.huawei.com
- (10.3.19.202) with Microsoft SMTP Server id 14.3.487.0; Tue, 17 Nov 2020
- 10:52:05 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-media@vger.kernel.org>, <devel@driverdev.osuosl.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <mchehab@kernel.org>, <gregkh@linuxfoundation.org>,
-        <yangyingliang@huawei.com>
-Subject: [PATCH] [media] omap4iss: return error code when omap4iss_get() failed
-Date:   Tue, 17 Nov 2020 10:50:41 +0800
-Message-ID: <20201117025041.3424574-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-CFilter-Loop: Reflected
+        Mon, 16 Nov 2020 23:40:13 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id esmnkkqc96LFvesmokSqPL; Tue, 17 Nov 2020 05:40:10 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1605588010; bh=Z6GbfQhib+8YODXXtD73daj6KlABAdp56SpST6LPuTM=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=h+uxeFCFSECs3JoNJ8BrhNYZ54gkfw9EKmP00AU2D1boHtj2zr1cs+4LDpgMyuUOu
+         3FlOQpgJfDLtHzT5mBVCf9O0sCdKeOyZnsSZ6z1QNSWCwohvd6bKzjowKTqlGSelYZ
+         M5df3KnW8hyMRIDjONAyH6L6qdw/37reEbNVhJTJLKxKBnWBqU87E/M4RPeTuPoMpQ
+         5ECKb79cBpBzvWbmO5X6PN2aCNcZNd41OJlRPw2kjkhNRG4mkO2HSRzYLsEumtYPc2
+         nIlRyXlDkNWQqTLZzlKTyDICBDdrzf6dkUu1HVoMSYMZpaBE0iN+QrH+q775oqMd/b
+         VRqnx0S5z6tCw==
+Message-ID: <44c892c48d92a7cd8c1ea197fccb9dc8@smtp-cloud9.xs4all.net>
+Date:   Tue, 17 Nov 2020 05:40:09 +0100
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: ERRORS
+X-CMAE-Envelope: MS4xfMqWQDj2Uuxe+DSq0L8V0/6Ap/hP4FSn66zp5u4oW5a/VKKMnqxqLda4nRYLgyVyYvGh9aL9p2ngRMR54JfnASUWFFQZZUMqu1/qHKPUhTPtgAo62Y1u
+ 5uyEL8KhdFexDXIkA9kd5xoEiZuX7UixEriuouWKpjM4F2f9HJfMa3Tk2bIuxuFdhRu9aw10H/zlF6peSvXlGUdL/OIJpnqyBVhWCdvCPkB+C5nPwYOGsS1h
+ MtLVieFFZK5epuYfyeF0xg==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If omap4iss_get() failed, it need return error code in iss_probe().
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Fixes: 59f0ad807681 ("[media] v4l: omap4iss: Add support for OMAP4...")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/staging/media/omap4iss/iss.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Results of the daily build of media_tree:
 
-diff --git a/drivers/staging/media/omap4iss/iss.c b/drivers/staging/media/omap4iss/iss.c
-index e06ea7ea1e50..3dac35f68238 100644
---- a/drivers/staging/media/omap4iss/iss.c
-+++ b/drivers/staging/media/omap4iss/iss.c
-@@ -1236,8 +1236,10 @@ static int iss_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		goto error;
- 
--	if (!omap4iss_get(iss))
-+	if (!omap4iss_get(iss)) {
-+		ret = -EINVAL;
- 		goto error;
-+	}
- 
- 	ret = iss_reset(iss);
- 	if (ret < 0)
--- 
-2.25.1
+date:			Tue Nov 17 05:00:18 CET 2020
+media-tree git hash:	b064945517ee368bfb6343bf3fb4613d537c4bbb
+media_build git hash:	bca336c7d6379c723eb388bb9e606db6785a953b
+v4l-utils git hash:	11da65eee7a271bba3f21d8117cdac428fe3a91e
+edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
+gcc version:		i686-linux-gcc (GCC) 10.2.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		v0.6.2-1-gfebba84c
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		v0.5.0-6793-g0248ebb06
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 5aabc25fda7a7122487b4bd429b4c635cb4df7d7
+host hardware:		x86_64
+host os:		5.7.0-1-amd64
 
+linux-git-sh: OK
+linux-git-arm-at91: OK
+linux-git-powerpc64: OK
+linux-git-arm-davinci: OK
+linux-git-arm-stm32: OK
+linux-git-arm-pxa: OK
+linux-git-mips: OK
+linux-git-arm64: OK
+linux-git-arm-multi: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.81-i686: OK
+linux-3.16.81-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.238-i686: OK
+linux-4.4.238-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.238-i686: OK
+linux-4.9.238-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.200-i686: OK
+linux-4.14.200-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.149-i686: OK
+linux-4.19.149-x86_64: OK
+linux-4.20.17-i686: OK
+linux-4.20.17-x86_64: OK
+linux-5.0.21-i686: OK
+linux-5.0.21-x86_64: OK
+linux-5.1.21-i686: OK
+linux-5.1.21-x86_64: OK
+linux-5.2.21-i686: OK
+linux-5.2.21-x86_64: OK
+linux-5.3.18-i686: OK
+linux-5.3.18-x86_64: OK
+linux-5.4.69-i686: OK
+linux-5.4.69-x86_64: OK
+linux-5.5.19-i686: OK
+linux-5.5.19-x86_64: OK
+linux-5.6.19-i686: OK
+linux-5.6.19-x86_64: OK
+linux-5.7.19-i686: OK
+linux-5.7.19-x86_64: OK
+linux-5.8.13-i686: OK
+linux-5.8.13-x86_64: OK
+linux-5.9.1-i686: OK
+linux-5.9.1-x86_64: OK
+linux-5.10-rc1-i686: OK
+linux-5.10-rc1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 2943, Succeeded: 2943, Failed: 0, Warnings: 0
+virtme-32: WARNINGS: Final Summary: 2779, Succeeded: 2779, Failed: 0, Warnings: 1
+sparse: OK
+smatch: ERRORS
+
+Detailed results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Tuesday.log
+
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Tuesday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
