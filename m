@@ -2,70 +2,70 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F93DC64E7B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 715BEC64E7C
 	for <linux-media@archiver.kernel.org>; Tue, 17 Nov 2020 08:45:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EE43224655
-	for <linux-media@archiver.kernel.org>; Tue, 17 Nov 2020 08:45:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 33B5824671
+	for <linux-media@archiver.kernel.org>; Tue, 17 Nov 2020 08:45:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="SazKex1e"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="UwXYEJoj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727202AbgKQIoy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727181AbgKQIoy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 17 Nov 2020 03:44:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45022 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727122AbgKQIov (ORCPT
+        with ESMTP id S1727162AbgKQIox (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 Nov 2020 03:44:51 -0500
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73724C0617A6
-        for <linux-media@vger.kernel.org>; Tue, 17 Nov 2020 00:44:51 -0800 (PST)
-Received: by mail-wm1-x342.google.com with SMTP id h21so2433037wmb.2
-        for <linux-media@vger.kernel.org>; Tue, 17 Nov 2020 00:44:51 -0800 (PST)
+        Tue, 17 Nov 2020 03:44:53 -0500
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D8CC0613CF
+        for <linux-media@vger.kernel.org>; Tue, 17 Nov 2020 00:44:52 -0800 (PST)
+Received: by mail-wr1-x441.google.com with SMTP id l1so22286698wrb.9
+        for <linux-media@vger.kernel.org>; Tue, 17 Nov 2020 00:44:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=OwtNdHIPSabqM1aRDu7jm8OQIX10dof411XMNae48b0=;
-        b=SazKex1e8Dpmw0wCTWs/sE3RvrSt39qvTnKOgvciTfR2KM6ODtIkjEjiEHadPqDO3w
-         gIW1sSOWuZv0I5EqxfJRNuRzkehDdoh35By/7es9E8jN25NeIbwIkmRSVwgNZ5N+i4xx
-         sM0qeH/Cd/5tqEK1EDL8DV5WeekkhzmO5phFKmA6EzLzZTjWtld1jqCx6VAelDipUuQT
-         EVZbqLRovTKGmpD9omMqEXI6lza8GlO5eECVcxCyaLWsw9kTb1KKDntjSPOCRJLW2+S9
-         01MtZ3HMu0hm3oAX9cfe3x0/AJxdiqyPrkfWtZPpyZzDsqhuop9RAQmEv033weo6aP+y
-         7FNw==
+        bh=MLQVEogLPpntY7/K46szj62exzsJj4q8MDOgKu+50fs=;
+        b=UwXYEJojzUWxuZWpoyALqr99KGTx93FqzgQE0G5qJdDTQq4GMPGDSFwSpEeMm/xeXp
+         Hl099niw1Dj7HM0JGkXGcXV2NY/Ojnrg5xr7g00JeztTpcgM2Q7HOwIl/32oCg2rCvzP
+         Mjvd8ZytXAMUIEgWGndAVc625d/Zm/t3W2wEln66xGXULcLjz8EHZKcw9dgiP4eAPlJi
+         rfhvftbtYSlWVm92G8MGHc5PQ/KiDN8MRWbvEAmCdfpjKgCZpZAtdsQ59SwkyU0DtxA9
+         3qsQP9DhgXVix2xiTF31NQaK+H7G00lLxmqE8Okonti3Dvy0zA+uToYhYTCoMMz7WZft
+         4J0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=OwtNdHIPSabqM1aRDu7jm8OQIX10dof411XMNae48b0=;
-        b=RmwWvlLo9hRPyuiJuWn9drbvWowG7iROcDZa92/ytaLRMP4IjjNUYIqX4aczuFCKsL
-         GQolsJ9unY9sdQo/tXZJ8SOOrHA8yQZRwAfrYLHB09r5i0Yvwt9H26IVsYPQ5waA4yQE
-         waDaq+FxPWMXx2uv5TqdJEDsYF1Sly/Bpx1o6wRurwWHg94b8MIJPkfPCxNCmdvhKffZ
-         JZr5em0e+BhgYfRZZwPbzCKpYr7ZeLaxs4NUaBx6+zh4MC2GVWjuByxFYUI06GiIk8aQ
-         bTq3XbKr5xmknqr7dWELFIhztrfsvcUJOsuCQOTPWoFwFYJm0kTbvff8uBerZN846fb+
-         +dVw==
-X-Gm-Message-State: AOAM533pLX8kMomztSjXTXi0Q5kVYBKxUB2VCEqJmB5ceAd4vTXHbcin
-        crn32FfQZOAnEwHcsnDSFERsZw==
-X-Google-Smtp-Source: ABdhPJyAd4+8h6Wy+fGQVwfIOyVyIO3OsEfT/liATAfN1Meh5H0R1ljGHSFXg0TujlFI1mvpl4eu0g==
-X-Received: by 2002:a1c:1b12:: with SMTP id b18mr3063879wmb.119.1605602690049;
-        Tue, 17 Nov 2020 00:44:50 -0800 (PST)
+        bh=MLQVEogLPpntY7/K46szj62exzsJj4q8MDOgKu+50fs=;
+        b=rf1ansgWC5AtDuNXaiI26n3ixyZQhHM7V0R0njKt3zrwg3yaoW65rRgbFHfPkWOyHn
+         DR6qGXVi3uYSNpmmD7OaW+WSR5lGdV2uukFN4zM6wsJ+7zXrB3Uf83gVREKHrAEQGCvE
+         5zucoOTETtrRW6u/yF+2o3QjMu0ZrwwSi0Lqp3824aPqw/qtSV4FsFBMnKRsGoARDDTa
+         WbbnZ4VilIGnzKIgPcrCZaFOVe1/SapV2S5B3YQalpGX5HV88R5vMQlVD7dTEDOtXg2l
+         bWB4FRbmU5lC+DtwKEOvdTXxx+0R8ml832YE2UDcn3LcOk/0Ysshh3t+Nvef1xf+cYpE
+         n5YQ==
+X-Gm-Message-State: AOAM531e2HdgzQL8o2j59mW2q3z3ijFiNj5KTDOTj3wAToPMTSZ42tZp
+        nlwsTIFE351iZCW/aetB0NzqKw==
+X-Google-Smtp-Source: ABdhPJy4mPCg/pB0fVmr1u4LTHLg4BZ8blydsOJL6dwkknwKcwDSczWGuEad0rzYeHrP98k4eq/aGw==
+X-Received: by 2002:adf:f607:: with SMTP id t7mr23588748wrp.169.1605602691496;
+        Tue, 17 Nov 2020 00:44:51 -0800 (PST)
 Received: from localhost.localdomain ([2a01:e35:2ec0:82b0:1561:9f4b:5829:8e26])
-        by smtp.gmail.com with ESMTPSA id s4sm25631423wro.10.2020.11.17.00.44.48
+        by smtp.gmail.com with ESMTPSA id s4sm25631423wro.10.2020.11.17.00.44.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Nov 2020 00:44:49 -0800 (PST)
+        Tue, 17 Nov 2020 00:44:50 -0800 (PST)
 From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     hverkuil@xs4all.nl
+To:     hverkuil@xs4all.nl, khilman@baylibre.com
 Cc:     Neil Armstrong <narmstrong@baylibre.com>,
         linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/4] MAINTAINERS: Add myself as maintainer of the Amlogic GE2D driver
-Date:   Tue, 17 Nov 2020 09:44:39 +0100
-Message-Id: <20201117084440.578540-4-narmstrong@baylibre.com>
+Subject: [PATCH v3 4/4] arm64: dts: meson-axg: add GE2D node
+Date:   Tue, 17 Nov 2020 09:44:40 +0100
+Message-Id: <20201117084440.578540-5-narmstrong@baylibre.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201117084440.578540-1-narmstrong@baylibre.com>
 References: <20201117084440.578540-1-narmstrong@baylibre.com>
@@ -75,31 +75,33 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+This adds the node for the GE2D accelerator unit.
+
 Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
 ---
- MAINTAINERS | 9 +++++++++
+ arch/arm64/boot/dts/amlogic/meson-axg.dtsi | 9 +++++++++
  1 file changed, 9 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e73636b75f29..db93156dcaba 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11412,6 +11412,15 @@ F:	Documentation/devicetree/bindings/media/amlogic,meson-gx-ao-cec.yaml
- F:	drivers/media/cec/platform/meson/ao-cec-g12a.c
- F:	drivers/media/cec/platform/meson/ao-cec.c
+diff --git a/arch/arm64/boot/dts/amlogic/meson-axg.dtsi b/arch/arm64/boot/dts/amlogic/meson-axg.dtsi
+index b9efc8469265..376f5c3f6188 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-axg.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-axg.dtsi
+@@ -1563,6 +1563,15 @@ saradc: adc@9000 {
+ 			};
+ 		};
  
-+MESON GE2D DRIVER FOR AMLOGIC SOCS
-+M:	Neil Armstrong <narmstrong@baylibre.com>
-+L:	linux-media@vger.kernel.org
-+L:	linux-amlogic@lists.infradead.org
-+S:	Supported
-+T:	git git://linuxtv.org/media_tree.git
-+F:	Documentation/devicetree/bindings/media/amlogic,axg-ge2d.yaml
-+F:	drivers/media/meson/ge2d/
++		ge2d: ge2d@ff940000 {
++			compatible = "amlogic,axg-ge2d";
++			reg = <0x0 0xff940000 0x0 0x10000>;
++			interrupts = <GIC_SPI 150 IRQ_TYPE_EDGE_RISING>;
++			clocks = <&clkc CLKID_VAPB>;
++			resets = <&reset RESET_GE2D>;
++			reset-names = "core";
++		};
 +
- MESON NAND CONTROLLER DRIVER FOR AMLOGIC SOCS
- M:	Liang Yang <liang.yang@amlogic.com>
- L:	linux-mtd@lists.infradead.org
+ 		gic: interrupt-controller@ffc01000 {
+ 			compatible = "arm,gic-400";
+ 			reg = <0x0 0xffc01000 0 0x1000>,
 -- 
 2.25.1
 
