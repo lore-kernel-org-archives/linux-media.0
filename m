@@ -2,141 +2,106 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59907C56202
-	for <linux-media@archiver.kernel.org>; Tue, 17 Nov 2020 13:50:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A79C9C64E69
+	for <linux-media@archiver.kernel.org>; Tue, 17 Nov 2020 14:08:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 05CA7216C4
-	for <linux-media@archiver.kernel.org>; Tue, 17 Nov 2020 13:50:47 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="HnRmDlJ6"
+	by mail.kernel.org (Postfix) with ESMTP id 755F320773
+	for <linux-media@archiver.kernel.org>; Tue, 17 Nov 2020 14:08:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732281AbgKQNcr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 Nov 2020 08:32:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42434 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732260AbgKQNcj (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 Nov 2020 08:32:39 -0500
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 084A321734;
-        Tue, 17 Nov 2020 13:32:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605619959;
-        bh=UhPbUt0ifa0Pxy/jnyzj9ZPKxGcEb087S7SG2WpZaGA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HnRmDlJ6kQxcZv0dRT+LMnGfjK66xE47O4TWTnxKT8CuZEaBalhPPWRmB2RBgz6bG
-         MNwjyLkpB8NwFUyma26xGn9Ayuvq3OItmI18VSjEbsaxX2IJMhYBdUevMX0b8EAiZb
-         VrKj+Nfc1LvO/Q5jlib5vBsyGmznSR0Wzvp5T/q0=
-Received: by mail-ot1-f41.google.com with SMTP id o3so8829550ota.8;
-        Tue, 17 Nov 2020 05:32:39 -0800 (PST)
-X-Gm-Message-State: AOAM531ZBcHzgday0pSwSaUwBTspXgdFIJL/cy6s30XsAcaSSl1H1BZf
-        IvXPDITh0T6D3eOciIup2gy0vUtCoqGjaijMHw==
-X-Google-Smtp-Source: ABdhPJzBrMqEp0ysXvtnc6eIolVq5PogUkN+PRIXAd0fio0+PJbIZS1ttpJ8osArtRMtoWVBgz3WHQ8G7Y+csVIn/Ho=
-X-Received: by 2002:a9d:5e14:: with SMTP id d20mr2812131oti.107.1605619958249;
- Tue, 17 Nov 2020 05:32:38 -0800 (PST)
-MIME-Version: 1.0
-References: <20201117013947.2479625-1-robh@kernel.org> <20201117095218.GB3940@pendragon.ideasonboard.com>
-In-Reply-To: <20201117095218.GB3940@pendragon.ideasonboard.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 17 Nov 2020 07:32:27 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+F2AP+Rm84+bjCuXJFqvvn-bhUc5N6o_7pNNFCVKnuZA@mail.gmail.com>
-Message-ID: <CAL_Jsq+F2AP+Rm84+bjCuXJFqvvn-bhUc5N6o_7pNNFCVKnuZA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: media: Use OF graph schema
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        devicetree@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        id S1730457AbgKQOHc convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 17 Nov 2020 09:07:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38324 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387917AbgKQOH3 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 17 Nov 2020 09:07:29 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555DCC0617A7
+        for <linux-media@vger.kernel.org>; Tue, 17 Nov 2020 06:07:29 -0800 (PST)
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1kf1dl-00022x-4X; Tue, 17 Nov 2020 15:07:25 +0100
+Received: from pza by lupine with local (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1kf1dk-00072q-SF; Tue, 17 Nov 2020 15:07:24 +0100
+Message-ID: <01cdd884e890f337a315362008cba05b10525b54.camel@pengutronix.de>
+Subject: Re: [PATCH] media: dt-bindings: coda: Add missing
+ 'additionalProperties'
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Rob Herring <robh@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     devicetree@vger.kernel.org,
         Linux Media Mailing List <linux-media@vger.kernel.org>
+Date:   Tue, 17 Nov 2020 15:07:24 +0100
+In-Reply-To: <CAL_Jsq+L4TOYWLgk=_xihtw_Jxfjigbn=h3J0LLXiPrMy0gjMA@mail.gmail.com>
+References: <20201112224917.165544-1-robh@kernel.org>
+         <CAL_Jsq+L4TOYWLgk=_xihtw_Jxfjigbn=h3J0LLXiPrMy0gjMA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.30.5-1.1 
+MIME-Version: 1.0
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Nov 17, 2020 at 3:52 AM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Rob,
->
-> Thank you for the patch.
->
-> On Mon, Nov 16, 2020 at 07:39:47PM -0600, Rob Herring wrote:
-> > Now that we have a graph schema, rework the media related schemas to
-> > use it. Mostly this is adding a reference to graph.yaml and dropping
-> > duplicate parts from schemas.
-> >
-> > Cc: Maxime Ripard <mripard@kernel.org>
+On Tue, 2020-11-17 at 07:48 -0600, Rob Herring wrote:
+> On Thu, Nov 12, 2020 at 4:49 PM Rob Herring <robh@kernel.org> wrote:
+> > 'additionalProperties' is now required by the meta-schema. Add it for
+> > coda.
+> > 
+> > Cc: Philipp Zabel <p.zabel@pengutronix.de>
 > > Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> > Cc: Jacopo Mondi <jacopo@jmondi.org>
-> > Cc: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 > > Cc: linux-media@vger.kernel.org
 > > Signed-off-by: Rob Herring <robh@kernel.org>
 > > ---
-> > This can go via the media tree. Ideally anything else subsequently added
-> > will be fixed up too.
-> >
-> >  .../media/allwinner,sun4i-a10-csi.yaml        |  1 +
-> >  .../media/allwinner,sun6i-a31-csi.yaml        |  1 +
-> >  .../bindings/media/i2c/adv7180.yaml           | 31 ++------
-> >  .../bindings/media/i2c/adv7604.yaml           | 32 ++------
-> >  .../bindings/media/i2c/aptina,mt9v111.yaml    |  2 +-
-> >  .../bindings/media/i2c/imi,rdacm2x-gmsl.yaml  | 25 +-----
-> >  .../devicetree/bindings/media/i2c/imx219.yaml |  4 +
-> >  .../bindings/media/i2c/maxim,max9286.yaml     | 76 ++++---------------
-> >  .../devicetree/bindings/media/i2c/ov5647.yaml |  5 +-
-> >  .../devicetree/bindings/media/i2c/ov8856.yaml |  5 +-
-> >  .../bindings/media/i2c/ovti,ov772x.yaml       |  1 +
-> >  .../bindings/media/i2c/sony,imx214.yaml       |  1 +
-> >  .../bindings/media/i2c/sony,imx274.yaml       |  3 +-
-> >  .../bindings/media/marvell,mmp2-ccic.yaml     |  1 +
-> >  .../bindings/media/renesas,ceu.yaml           |  1 +
-> >  .../bindings/media/renesas,csi2.yaml          | 36 ++-------
-> >  .../bindings/media/renesas,vin.yaml           |  7 +-
-> >  .../bindings/media/st,stm32-dcmi.yaml         |  7 +-
-> >  .../devicetree/bindings/media/ti,cal.yaml     | 15 +---
-> >  .../bindings/media/xilinx/xlnx,csi2rxss.yaml  | 21 +----
-> >  20 files changed, 61 insertions(+), 214 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-csi.yaml b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-csi.yaml
-> > index 09318830db47..0205f7dd7fdb 100644
-> > --- a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-csi.yaml
-> > +++ b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-csi.yaml
-> > @@ -70,6 +70,7 @@ properties:
-> >    # See ./video-interfaces.txt for details
-> >    port:
-> >      type: object
->
-> Could the type be dropped (here and below, I haven't mentioned it in all
-> locations) as it's specified in /schemas/graph.yaml#/properties/port ?
+> >  Documentation/devicetree/bindings/media/coda.yaml | 2 ++
+> >  1 file changed, 2 insertions(+)
+> 
+> I missed an error this introduces:
+> 
+> /home/rob/proj/git/linux-dt/.build-arm/Documentation/devicetree/bindings/media/coda.example.dt.yaml:
+> video-codec@63ff4000: 'interrupts' does not match any of the regexes:
+> 'pinctrl-[0-9]+'
+>         From schema:
+> /home/rob/proj/git/linux-dt/Documentation/devicetree/bindings/media/coda.yaml
 
-See my reply on the display patch for this.
+Right, because interrupts are only specified conditionally:
 
-> > +    $ref: /schemas/graph.yaml#/properties/port
-> >      additionalProperties: false
->
-> Don't we need to switch to unevaluatedProperties ?
+allOf:
+  - if:
+      properties:
+        compatible:
+          contains:
+            const: cnm,coda960
+    then:
+      properties:
+        interrupts:
+          items:
+            - description: BIT processor interrupt
+            - description: JPEG unit interrupt
 
-We could, but additionalProperties works here because 'endpoint' is
-the only one.
+        interrupt-names:
+          items:
+            - const: bit
+            - const: jpeg
+    else:
+      properties:
+        interrupts:
+          items:
+            - description: BIT processor interrupt
 
+What is the proper way to fix this?
 
-> > @@ -74,6 +76,8 @@ properties:
-> >          required:
-> >            - link-frequencies
-> >
-> > +    additionalProperties: false
->
-> I supppose additionalProperties works here as the endpoint property is
-> specified in this schema, but conceptually speaking, wouldn't
-> unevaluatedProperties be a better match ?
-
-Yes, except unevaluatedProperties is currently a nop, so I went the
-stricter route.
-
-Rob
+regards
+Philipp
