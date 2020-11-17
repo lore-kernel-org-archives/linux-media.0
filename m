@@ -2,786 +2,205 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50633C63798
-	for <linux-media@archiver.kernel.org>; Tue, 17 Nov 2020 09:52:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DAB28C63777
+	for <linux-media@archiver.kernel.org>; Tue, 17 Nov 2020 10:37:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CEC892468B
-	for <linux-media@archiver.kernel.org>; Tue, 17 Nov 2020 09:52:42 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="kTigat5A"
+	by mail.kernel.org (Postfix) with ESMTP id 926D924199
+	for <linux-media@archiver.kernel.org>; Tue, 17 Nov 2020 10:37:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727442AbgKQJw3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 Nov 2020 04:52:29 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:58084 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725774AbgKQJw2 (ORCPT
+        id S1727406AbgKQKhE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 17 Nov 2020 05:37:04 -0500
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:52969 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726853AbgKQKhE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 Nov 2020 04:52:28 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 625EA563;
-        Tue, 17 Nov 2020 10:52:23 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1605606743;
-        bh=HFsUyxT+VwjIjKr6Tk8TcIaHxXcdK2hfDv/i3MuI5JA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kTigat5AdPBC51pxFsC/RB+rMjFfBIRyoFLH//XPezXGNfdSLCg0yRgY/K1LWP+9B
-         RZefBs5xgZiUdGvGW9plOBfW3btVHocmuYNNUrUeFSi6IsaIoRIfCrX2nmG0boIePQ
-         JGkaxysDmlz5TC14vNhaXgq/ogtLZVN5kyIlYPV4=
-Date:   Tue, 17 Nov 2020 11:52:18 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        devicetree@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: media: Use OF graph schema
-Message-ID: <20201117095218.GB3940@pendragon.ideasonboard.com>
-References: <20201117013947.2479625-1-robh@kernel.org>
+        Tue, 17 Nov 2020 05:37:04 -0500
+X-Originating-IP: 93.34.118.233
+Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 072F82000C;
+        Tue, 17 Nov 2020 10:36:59 +0000 (UTC)
+Date:   Tue, 17 Nov 2020 11:37:02 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Eugen Hristev <eugen.hristev@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        sakari.ailus@iki.fi, laurent.pinchart@ideasonboard.com
+Subject: Re: [PATCH v5 1/3] dt-bindings: media: atmel: csi2dc: add bindings
+ for microchip csi2dc
+Message-ID: <20201117103702.2h77qvh7ebqx4yaq@uno.localdomain>
+References: <20201112133437.372475-1-eugen.hristev@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201117013947.2479625-1-robh@kernel.org>
+In-Reply-To: <20201112133437.372475-1-eugen.hristev@microchip.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Rob,
+Hi again,
 
-Thank you for the patch.
-
-On Mon, Nov 16, 2020 at 07:39:47PM -0600, Rob Herring wrote:
-> Now that we have a graph schema, rework the media related schemas to
-> use it. Mostly this is adding a reference to graph.yaml and dropping
-> duplicate parts from schemas.
-> 
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Jacopo Mondi <jacopo@jmondi.org>
-> Cc: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-> Cc: linux-media@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
+On Thu, Nov 12, 2020 at 03:34:35PM +0200, Eugen Hristev wrote:
+> Add bindings documentation for Microchip CSI2 Demultiplexer controller.
+>
+> CSI2DC is a demultiplexer from Synopsys IDI interface specification to
+> parallel interface connection or direct memory access.
+>
+> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
 > ---
-> This can go via the media tree. Ideally anything else subsequently added 
-> will be fixed up too.
-> 
->  .../media/allwinner,sun4i-a10-csi.yaml        |  1 +
->  .../media/allwinner,sun6i-a31-csi.yaml        |  1 +
->  .../bindings/media/i2c/adv7180.yaml           | 31 ++------
->  .../bindings/media/i2c/adv7604.yaml           | 32 ++------
->  .../bindings/media/i2c/aptina,mt9v111.yaml    |  2 +-
->  .../bindings/media/i2c/imi,rdacm2x-gmsl.yaml  | 25 +-----
->  .../devicetree/bindings/media/i2c/imx219.yaml |  4 +
->  .../bindings/media/i2c/maxim,max9286.yaml     | 76 ++++---------------
->  .../devicetree/bindings/media/i2c/ov5647.yaml |  5 +-
->  .../devicetree/bindings/media/i2c/ov8856.yaml |  5 +-
->  .../bindings/media/i2c/ovti,ov772x.yaml       |  1 +
->  .../bindings/media/i2c/sony,imx214.yaml       |  1 +
->  .../bindings/media/i2c/sony,imx274.yaml       |  3 +-
->  .../bindings/media/marvell,mmp2-ccic.yaml     |  1 +
->  .../bindings/media/renesas,ceu.yaml           |  1 +
->  .../bindings/media/renesas,csi2.yaml          | 36 ++-------
->  .../bindings/media/renesas,vin.yaml           |  7 +-
->  .../bindings/media/st,stm32-dcmi.yaml         |  7 +-
->  .../devicetree/bindings/media/ti,cal.yaml     | 15 +---
->  .../bindings/media/xilinx/xlnx,csi2rxss.yaml  | 21 +----
->  20 files changed, 61 insertions(+), 214 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-csi.yaml b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-csi.yaml
-> index 09318830db47..0205f7dd7fdb 100644
-> --- a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-csi.yaml
-> +++ b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-csi.yaml
-> @@ -70,6 +70,7 @@ properties:
->    # See ./video-interfaces.txt for details
->    port:
->      type: object
-
-Could the type be dropped (here and below, I haven't mentioned it in all
-locations) as it's specified in /schemas/graph.yaml#/properties/port ?
-
-> +    $ref: /schemas/graph.yaml#/properties/port
->      additionalProperties: false
-
-Don't we need to switch to unevaluatedProperties ?
-
->  
->      properties:
-> diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml
-> index 1fd9b5532a21..48d8f73ce7ab 100644
-> --- a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml
-> +++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml
-> @@ -43,6 +43,7 @@ properties:
->    # See ./video-interfaces.txt for details
->    port:
->      type: object
-> +    $ref: /schemas/graph.yaml#/properties/port
->  
->      properties:
->        endpoint:
-> diff --git a/Documentation/devicetree/bindings/media/i2c/adv7180.yaml b/Documentation/devicetree/bindings/media/i2c/adv7180.yaml
-> index d8c54f9d9506..7f28954a4508 100644
-> --- a/Documentation/devicetree/bindings/media/i2c/adv7180.yaml
-> +++ b/Documentation/devicetree/bindings/media/i2c/adv7180.yaml
-> @@ -36,17 +36,9 @@ properties:
->      maxItems: 1
->  
->    port:
-> -    type: object
-> -    description:
-> -      A node containing a single endpoint as doucmented in
-> -      Documentation/devicetree/bindings/media/video-interfaces.txt
-> -
-> -  ports:
-> -    type: object
-> -    description:
-> -      A node containing input and output port nodes with endpoint definitions
-> -      as documented in
-> -      Documentation/devicetree/bindings/media/video-interfaces.txt
-> +    $ref: /schemas/graph.yaml#/properties/port
+> Changes in v5:
+> - modified bindings as per Rob Herring review
+>
+> Changes in v4:
+> - Removed property for inter-line-delay and for clock continuous/non-continuous
+> - Removed virtual channel by reg for second endpoint
+>
+> Changes in v3:
+> - Removed some text from description, as it was explained in the schema
+> - fixed other things as per Rob's review
+> - moved some text inside the schema, like the clock description
+>
+> Changes in v2:
+> - fixed warnings reported by dt_binding_check
+>
+>  .../bindings/media/microchip,csi2dc.yaml      | 119 ++++++++++++++++++
+>  1 file changed, 119 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/microchip,csi2dc.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/media/microchip,csi2dc.yaml b/Documentation/devicetree/bindings/media/microchip,csi2dc.yaml
+> new file mode 100644
+> index 000000000000..e79f0d6ba9db
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/microchip,csi2dc.yaml
+> @@ -0,0 +1,119 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/microchip,csi2dc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +  ports: true
->  
->  additionalProperties: false
->  
-> @@ -80,24 +72,19 @@ allOf:
->      then:
->        properties:
->          ports:
-> +          $ref: /schemas/graph.yaml#/properties/ports
->            properties:
-> -            '#address-cells':
-> -              const: 1
-> -            '#size-cells':
-> -              const: 0
->              port@3:
-> -              type: object
->                description: Output port
->  
->            patternProperties:
->              "^port@[0-2]$":
-> -              type: object
->                description: Input port
->  
->            required:
->              - port@3
->  
-> -          additionalProperties: false
-> +          unevaluatedProperties: false
->  
->        required:
->          - ports
-> @@ -110,24 +97,20 @@ allOf:
->      then:
->        properties:
->          ports:
-> +          $ref: /schemas/graph.yaml#/properties/ports
->            properties:
-> -            '#address-cells':
-> -              const: 1
-> -            '#size-cells':
-> -              const: 0
->              port@6:
->                type: object
->                description: Output port
->  
->            patternProperties:
->              "^port@[0-5]$":
-> -              type: object
->                description: Input port
->  
->            required:
->              - port@6
->  
-> -          additionalProperties: false
-> +          unevaluatedProperties: false
->  
->        required:
->          - ports
-> diff --git a/Documentation/devicetree/bindings/media/i2c/adv7604.yaml b/Documentation/devicetree/bindings/media/i2c/adv7604.yaml
-> index 407baddfaa1d..693f31daf5aa 100644
-> --- a/Documentation/devicetree/bindings/media/i2c/adv7604.yaml
-> +++ b/Documentation/devicetree/bindings/media/i2c/adv7604.yaml
-> @@ -64,16 +64,12 @@ properties:
->      description:
->        Select which input is selected after reset.
->  
-> -  ports:
-> -    type: object
-> -    description:
-> -      A node containing input and output port nodes with endpoint definitions
-> -      as documented in
-> -      Documentation/devicetree/bindings/media/video-interfaces.txt
-> +  ports: true
->  
->  required:
->    - compatible
->    - reg
-> +  - ports
->  
->  additionalProperties: false
->  
-> @@ -86,25 +82,17 @@ allOf:
->      then:
->        properties:
->          ports:
-> +          $ref: /schemas/graph.yaml#/properties/ports
->            properties:
-> -            '#address-cells':
-> -              const: 1
-> -            '#size-cells':
-> -              const: 0
->              port@0:
-> -              type: object
->                description: Input port
->              port@1:
-> -              type: object
->                description: Output port
->  
->            required:
->              - port@1
->  
-> -          additionalProperties: false
-> -
-> -      required:
-> -        - ports
-> +          unevaluatedProperties: false
->  
->    - if:
->        properties:
-> @@ -114,27 +102,19 @@ allOf:
->      then:
->        properties:
->          ports:
-> +          $ref: /schemas/graph.yaml#/properties/ports
->            properties:
-> -            '#address-cells':
-> -              const: 1
-> -            '#size-cells':
-> -              const: 0
->              port@2:
-> -              type: object
->                description: Output port
->  
->            patternProperties:
->              "^port@[0-1]$":
-> -              type: object
->                description: Input port
->  
->            required:
->              - port@2
->  
-> -          additionalProperties: false
-> -
-> -      required:
-> -        - ports
-> +          unevaluatedProperties: false
->  
->  examples:
->    - |
-> diff --git a/Documentation/devicetree/bindings/media/i2c/aptina,mt9v111.yaml b/Documentation/devicetree/bindings/media/i2c/aptina,mt9v111.yaml
-> index ff9546e95d05..17ec4ab1dbd0 100644
-> --- a/Documentation/devicetree/bindings/media/i2c/aptina,mt9v111.yaml
-> +++ b/Documentation/devicetree/bindings/media/i2c/aptina,mt9v111.yaml
-> @@ -41,7 +41,7 @@ properties:
->      maxItems: 1
->  
->    port:
-> -    type: object
-> +    $ref: /schemas/graph.yaml#/properties/port
->      description: |
->        Output video port. See ../video-interfaces.txt.
->  
-> diff --git a/Documentation/devicetree/bindings/media/i2c/imi,rdacm2x-gmsl.yaml b/Documentation/devicetree/bindings/media/i2c/imi,rdacm2x-gmsl.yaml
-> index 3dc06c628e64..e0ea3acca89a 100644
-> --- a/Documentation/devicetree/bindings/media/i2c/imi,rdacm2x-gmsl.yaml
-> +++ b/Documentation/devicetree/bindings/media/i2c/imi,rdacm2x-gmsl.yaml
-> @@ -86,33 +86,12 @@ properties:
->      maxItems: 3
->  
->    port:
-> -    type: object
-> -    additionalProperties: false
-> -    description: -|
-> +    $ref: /schemas/graph.yaml#/properties/port
+> +title: Microchip CSI2 Demux Controller (CSI2DC)
+> +
+> +maintainers:
+> +  - Eugen Hristev <eugen.hristev@microchip.com>
+> +
+> +description:
+> +  CSI2DC - Camera Serial Interface 2 Demux Controller
+> +
+> +  CSI2DC is a hardware block that receives incoming data from an IDI interface
+> +  and filters packets based on their data type and virtual channel identifier,
+> +  then converts the byte stream into a cross clock domain to a pixel stream
+> +  to a parallel interface that can be read by a sensor controller.
+> +
+> +  CSI2DC provides two pipes, one video pipe and one data pipe. Video pipe
+> +  is connected to a sensor controller and the data pipe is accessible
+> +  as a DMA slave port to a DMA controller.
+> +
+> +  CSI2DC supports a single 'port' node as a source pad with Synopsys 32-bit
+> +  IDI interface. The connected endpoint must be a IDI interface compatible
+> +  device (like Synopsys CSI2HOST) , that can provide 32-bit IDI interface
+> +  connection as sink pad.
+> +  For media entity and endpoints please refer to the bindings defined in
+> +  Documentation/devicetree/bindings/media/video-interfaces.txt.
+> +  For Synopsys IDI interface please refer to
+> +  Documentation/devicetree/bindings/media/snps,dw-csi-plat.txt
+
+Is it me or this file doesn't exists on the most recent media/master
+and on v5.10-rc4 ?
+
+> +
+> +  CSI2DC supports one 'port' node as sink pad with parallel interface. This is
+> +  called video pipe.
+> +  This port has an 'endpoint' can then be used as a source pad for another
+> +  controller (next in pipeline).
+> +  Please refer to the bindings defined in
+> +  Documentation/devicetree/bindings/media/video-interfaces.txt.
+> +
+> +  CSI2DC also supports direct access to the data through AHB, via DMA channel,
+> +  called data pipe.
+> +  Because of this, the sink 'port' child node (second) is not mandatory.
+> +  If the sink 'port' child node is missing, only data pipe is available.
+> +
+> +properties:
+> +  compatible:
+> +    const: microchip,sama7g5-csi2dc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 2
+> +
+> +  clock-names:
 > +    description:
->        Connection to the remote GMSL endpoint are modelled using the OF graph
->        bindings in accordance with the video interface bindings defined in
->        Documentation/devicetree/bindings/media/video-interfaces.txt.
->  
-> -      The device node contains a single "port" child node with a single
-> -      "endpoint" sub-device.
-> -
-> -    properties:
-> -      endpoint:
-> -        type: object
-> -        additionalProperties: false
-> -
-> -        properties:
-> -          remote-endpoint:
-> -            description: -|
-> -              phandle to the remote GMSL endpoint sub-node in the remote node
-> -              port.
-> -            maxItems: 1
-> -
-> -        required:
-> -          - remote-endpoint
-> -
-> -    required:
-> -      - endpoint
->  
->  required:
->    - compatible
-> diff --git a/Documentation/devicetree/bindings/media/i2c/imx219.yaml b/Documentation/devicetree/bindings/media/i2c/imx219.yaml
-> index dfc4d29a4f04..bba42e015c98 100644
-> --- a/Documentation/devicetree/bindings/media/i2c/imx219.yaml
-> +++ b/Documentation/devicetree/bindings/media/i2c/imx219.yaml
-> @@ -47,6 +47,8 @@ properties:
->    # See ../video-interfaces.txt for more details
->    port:
->      type: object
-> +    $ref: /schemas/graph.yaml#/properties/port
+> +      CSI2DC must have two clocks to function correctly. One clock is the
+> +      peripheral clock for the inside functionality of the hardware block.
+> +      This is named 'pclk'. The second clock must be the cross domain clock,
+> +      in which CSI2DC will perform clock crossing. This clock must be fed
+> +      by the next controller in pipeline, which usually is a sensor controller.
+> +      Normally this clock should be given by this sensor controller who
+> +      is also a clock source. This clock is named 'scck', sensor controller clock.
+> +    items:
+> +      - const: pclk
+> +      - const: scck
 > +
->      properties:
->        endpoint:
->          type: object
-
-Can we drop type from the endpoint ?
-
-> @@ -74,6 +76,8 @@ properties:
->          required:
->            - link-frequencies
->  
-> +    additionalProperties: false
-
-I supppose additionalProperties works here as the endpoint property is
-specified in this schema, but conceptually speaking, wouldn't
-unevaluatedProperties be a better match ?
-
+> +  ports:
+> +    type: object
+> +    description:
+> +      List of ports
 > +
->  required:
->    - compatible
->    - reg
-> diff --git a/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml b/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
-> index 9ea827092fdd..2e89a5458afe 100644
-> --- a/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
-> +++ b/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
-> @@ -53,56 +53,25 @@ properties:
->  
->    ports:
->      type: object
-> -    description: |
-> -      The connections to the MAX9286 GMSL and its endpoint nodes are modelled
-> -      using the OF graph bindings in accordance with the video interface
-> -      bindings defined in
-> -      Documentation/devicetree/bindings/media/video-interfaces.txt.
-> -
-> -      The following table lists the port number corresponding to each device
-> -      port.
-> -
-> -        Port            Description
-> -        ----------------------------------------
-> -        Port 0          GMSL Input 0
-> -        Port 1          GMSL Input 1
-> -        Port 2          GMSL Input 2
-> -        Port 3          GMSL Input 3
-> -        Port 4          CSI-2 Output
-> +    $ref: /schemas/graph.yaml#/properties/ports
->  
->      properties:
-> -      '#address-cells':
-> -        const: 1
-> -
-> -      '#size-cells':
-> -        const: 0
+> +    properties:
 > +      port@0:
-> +        description: GMSL Input 0
->  
-> -      port@[0-3]:
-> -        type: object
-> -        properties:
-> -          reg:
-> -            enum: [ 0, 1, 2, 3 ]
+> +        type: object
+> +        description:
+> +          Input port node, single endpoint describing the input pad.
 > +      port@1:
-> +        description: GMSL Input 1
->  
-> -          endpoint:
-> -            type: object
-> +      port@2:
-> +        description: GMSL Input 2
->  
-> -            properties:
-> -              remote-endpoint:
-> -                description: |
-> -                 phandle to the remote GMSL source endpoint subnode in the
-> -                 remote node port.
-> -
-> -            required:
-> -              - remote-endpoint
-> -
-> -        required:
-> -          - reg
-> -          - endpoint
-> -
-> -        additionalProperties: false
-> +      port@3:
-> +        description: GMSL Input 3
->  
->        port@4:
->          type: object
-
-Dropping type here too ?
-
-> +        description: CSI-2 Output
+> +        type: object
+> +        description:
+> +          Output port node, single endpoint, describing the output pad.
 > +
->          properties:
->            reg:
->              const: 4
-> @@ -130,6 +99,8 @@ properties:
->      required:
->        - port@4
->  
-> +    unevaluatedProperties: false
+> +additionalProperties: false
 > +
->    i2c-mux:
->      type: object
->      description: |
-> @@ -184,25 +155,8 @@ properties:
->                    requirements of the currently connected remote device.
->  
->                port:
-> -                type: object
-> -
-> -                properties:
-> -                  endpoint:
-> -                    type: object
-> -
-> -                    properties:
-> -                      remote-endpoint:
-> -                        description: phandle to the MAX9286 sink endpoint.
-> -
-> -                    required:
-> -                      - remote-endpoint
-> -
-> -                    additionalProperties: false
-> -
-> -                required:
-> -                  - endpoint
-> -
-> -                additionalProperties: false
-> +                $ref: /schemas/graph.yaml#/properties/port
-> +                description: Connection to the MAX9286 sink.
->  
->              required:
->                - compatible
-> diff --git a/Documentation/devicetree/bindings/media/i2c/ov5647.yaml b/Documentation/devicetree/bindings/media/i2c/ov5647.yaml
-> index 280c62afae13..cd5291602a70 100644
-> --- a/Documentation/devicetree/bindings/media/i2c/ov5647.yaml
-> +++ b/Documentation/devicetree/bindings/media/i2c/ov5647.yaml
-> @@ -32,10 +32,7 @@ properties:
->  
->    port:
->      type: object
-> -    description: |-
-> -      Should contain one endpoint sub-node used to model connection to the
-> -      video receiver according to the specification defined in
-> -      Documentation/devicetree/bindings/media/video-interfaces.txt.
-> +    $ref: /schemas/graph.yaml#/properties/port
->  
->      properties:
->        endpoint:
-> diff --git a/Documentation/devicetree/bindings/media/i2c/ov8856.yaml b/Documentation/devicetree/bindings/media/i2c/ov8856.yaml
-> index cde85553fd01..2611eb69b3b2 100644
-> --- a/Documentation/devicetree/bindings/media/i2c/ov8856.yaml
-> +++ b/Documentation/devicetree/bindings/media/i2c/ov8856.yaml
-> @@ -58,11 +58,8 @@ properties:
->  
->    port:
->      type: object
-> +    $ref: /schemas/graph.yaml#/properties/port
->      additionalProperties: false
-> -    description:
-> -      A node containing an output port node with an endpoint definition
-> -      as documented in
-> -      Documentation/devicetree/bindings/media/video-interfaces.txt
->  
->      properties:
->        endpoint:
-> diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov772x.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov772x.yaml
-> index 6866c2cdac50..eedc560837d2 100644
-> --- a/Documentation/devicetree/bindings/media/i2c/ovti,ov772x.yaml
-> +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov772x.yaml
-> @@ -38,6 +38,7 @@ properties:
->  
->    port:
->      type: object
-> +    $ref: /schemas/graph.yaml#/properties/port
->      description: |
->        Video output port. See ../video-interfaces.txt.
->  
-> diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx214.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx214.yaml
-> index 1a3590dd0e98..0599df605a4f 100644
-> --- a/Documentation/devicetree/bindings/media/i2c/sony,imx214.yaml
-> +++ b/Documentation/devicetree/bindings/media/i2c/sony,imx214.yaml
-> @@ -55,6 +55,7 @@ properties:
->  
->    port:
->      type: object
-> +    $ref: /schemas/graph.yaml#/properties/port
->      description: |
->        Video output port. See ../video-interfaces.txt.
->  
-> diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx274.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx274.yaml
-> index f697e1a20beb..90828020e42a 100644
-> --- a/Documentation/devicetree/bindings/media/i2c/sony,imx274.yaml
-> +++ b/Documentation/devicetree/bindings/media/i2c/sony,imx274.yaml
-> @@ -44,8 +44,7 @@ properties:
->      maxItems: 1
->  
->    port:
-> -    type: object
-> -    description: Output video port. See ../video-interfaces.txt.
-> +    $ref: /schemas/graph.yaml#/properties/port
->  
->  required:
->    - compatible
-> diff --git a/Documentation/devicetree/bindings/media/marvell,mmp2-ccic.yaml b/Documentation/devicetree/bindings/media/marvell,mmp2-ccic.yaml
-> index 49bff738aca5..4832f55654cc 100644
-> --- a/Documentation/devicetree/bindings/media/marvell,mmp2-ccic.yaml
-> +++ b/Documentation/devicetree/bindings/media/marvell,mmp2-ccic.yaml
-> @@ -25,6 +25,7 @@ properties:
->  
->    port:
->      type: object
-> +    $ref: /schemas/graph.yaml#/properties/port
->      additionalProperties: false
->  
->      properties:
-> diff --git a/Documentation/devicetree/bindings/media/renesas,ceu.yaml b/Documentation/devicetree/bindings/media/renesas,ceu.yaml
-> index c7e1e4fe67e6..2d493d503d07 100644
-> --- a/Documentation/devicetree/bindings/media/renesas,ceu.yaml
-> +++ b/Documentation/devicetree/bindings/media/renesas,ceu.yaml
-> @@ -35,6 +35,7 @@ properties:
->  
->    port:
->      type: object
-> +    $ref: /schemas/graph.yaml#/properties/port
->      additionalProperties: false
->  
->      properties:
-> diff --git a/Documentation/devicetree/bindings/media/renesas,csi2.yaml b/Documentation/devicetree/bindings/media/renesas,csi2.yaml
-> index 533c2f181db7..e34dfbef25a2 100644
-> --- a/Documentation/devicetree/bindings/media/renesas,csi2.yaml
-> +++ b/Documentation/devicetree/bindings/media/renesas,csi2.yaml
-> @@ -47,10 +47,7 @@ properties:
->  
->    ports:
->      type: object
-> -    description:
-> -      A node containing input and output port nodes with endpoint definitions
-> -      as documented in
-> -      Documentation/devicetree/bindings/media/video-interfaces.txt
-> +    $ref: /schemas/graph.yaml#/properties/ports
->  
->      properties:
->        port@0:
-> @@ -84,38 +81,15 @@ properties:
->          additionalProperties: false
->  
->        port@1:
-> -        type: object
->          description:
->            Output port node, multiple endpoints describing all the R-Car VIN
->            modules connected the CSI-2 receiver.
->  
-> -        properties:
-> -          '#address-cells':
-> -            const: 1
-> -
-> -          '#size-cells':
-> -            const: 0
-> -
-> -          reg:
-> -            const: 1
-> -
-> -        patternProperties:
-> -          "^endpoint@[0-9a-f]$":
-> -            type: object
-> +    required:
-> +      - port@0
-> +      - port@1
->  
-> -            properties:
-> -              reg:
-> -                maxItems: 1
-> -
-> -              remote-endpoint: true
-> -
-> -            required:
-> -              - reg
-> -              - remote-endpoint
-> -
-> -            additionalProperties: false
-> -
-> -        additionalProperties: false
-> +    unevaluatedProperties: false
->  
->  required:
->    - compatible
-> diff --git a/Documentation/devicetree/bindings/media/renesas,vin.yaml b/Documentation/devicetree/bindings/media/renesas,vin.yaml
-> index ad2fe660364b..25a70dc89a4c 100644
-> --- a/Documentation/devicetree/bindings/media/renesas,vin.yaml
-> +++ b/Documentation/devicetree/bindings/media/renesas,vin.yaml
-> @@ -70,6 +70,7 @@ properties:
->    #The per-board settings for Gen2 and RZ/G1 platforms:
->    port:
->      type: object
-> +    $ref: /schemas/graph.yaml#/properties/port
->      description:
->        A node containing a parallel input with a single endpoint definitions as
->        documented in
-> @@ -124,9 +125,7 @@ properties:
->  
->    ports:
->      type: object
-> -    description:
-> -      A node containing input nodes with endpoint definitions as documented in
-> -      Documentation/devicetree/bindings/media/video-interfaces.txt
-> +    $ref: /schemas/graph.yaml#/properties/ports
->  
->      properties:
->        port@0:
-> @@ -272,6 +271,8 @@ properties:
->  
->          additionalProperties: false
->  
-> +    unevaluatedProperties: false
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - ports
 > +
->  required:
->    - compatible
->    - reg
-> diff --git a/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml b/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
-> index 3fe778cb5cc3..66bdef5e1273 100644
-> --- a/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
-> +++ b/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
-> @@ -37,12 +37,9 @@ properties:
->      maxItems: 1
->  
->    port:
-> -    type: object
-> +    $ref: /schemas/graph.yaml#/properties/port
->      description:
-> -      DCMI supports a single port node with parallel bus. It should contain
-> -      one 'port' child node with child 'endpoint' node. Please refer to the
-> -      bindings defined in
-> -      Documentation/devicetree/bindings/media/video-interfaces.txt.
-> +      DCMI supports a single port node with parallel bus.
->  
->  required:
->    - compatible
-> diff --git a/Documentation/devicetree/bindings/media/ti,cal.yaml b/Documentation/devicetree/bindings/media/ti,cal.yaml
-> index 5e066629287d..dc2c6be4fa4d 100644
-> --- a/Documentation/devicetree/bindings/media/ti,cal.yaml
-> +++ b/Documentation/devicetree/bindings/media/ti,cal.yaml
-> @@ -70,23 +70,18 @@ properties:
->    # See ./video-interfaces.txt for details
->    ports:
->      type: object
-> -    additionalProperties: false
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +    unevaluatedProperties: false
->  
->      properties:
-> -      "#address-cells":
-> -        const: 1
-> -
-> -      "#size-cells":
-> -        const: 0
-> -
->        port@0:
->          type: object
-> +        description: CSI2 Port #0
->          additionalProperties: false
->  
->          properties:
->            reg:
->              const: 0
-> -            description: CSI2 Port #0
->  
->          patternProperties:
->            endpoint:
-> @@ -108,12 +103,12 @@ properties:
->  
->        port@1:
->          type: object
-> +        description: CSI2 Port #1
->          additionalProperties: false
->  
->          properties:
->            reg:
->              const: 1
-> -            description: CSI2 Port #1
->  
->          patternProperties:
->            endpoint:
-> @@ -134,8 +129,6 @@ properties:
->            - reg
->  
->      required:
-> -      - "#address-cells"
-> -      - "#size-cells"
->        - port@0
->  
->  required:
-> diff --git a/Documentation/devicetree/bindings/media/xilinx/xlnx,csi2rxss.yaml b/Documentation/devicetree/bindings/media/xilinx/xlnx,csi2rxss.yaml
-> index 2961a5b6872f..0868718c3691 100644
-> --- a/Documentation/devicetree/bindings/media/xilinx/xlnx,csi2rxss.yaml
-> +++ b/Documentation/devicetree/bindings/media/xilinx/xlnx,csi2rxss.yaml
-> @@ -98,6 +98,7 @@ properties:
->  
->    ports:
->      type: object
-> +    $ref: /schemas/graph.yaml#/properties/ports
->  
->      properties:
->        port@0:
-> @@ -141,29 +142,11 @@ properties:
->          additionalProperties: false
->  
->        port@1:
-> -        type: object
->          description: |
->            Output / source port node, endpoint describing modules
->            connected the CSI-2 receiver.
->  
-> -        properties:
-> -
-> -          reg:
-> -            const: 1
-> -
-> -          endpoint:
-> -            type: object
-> -
-> -            properties:
-> -
-> -              remote-endpoint: true
-> -
-> -            required:
-> -              - remote-endpoint
-> -
-> -            additionalProperties: false
-> -
-> -        additionalProperties: false
-> +    unevaluatedProperties: false
->  
->  required:
->    - compatible
-
--- 
-Regards,
-
-Laurent Pinchart
+> +examples:
+> +  - |
+> +    csi2dc@e1404000 {
+> +        compatible = "microchip,sama7g5-csi2dc";
+> +        reg = <0xe1404000 0x500>;
+> +        clocks = <&pclk>, <&scck>;
+> +        clock-names = "pclk", "scck";
+> +
+> +        ports {
+> +               #address-cells = <1>;
+> +               #size-cells = <0>;
+> +               port@0 {
+> +                       reg = <0>; /* must be 0, first child port */
+> +                       csi2dc_in: endpoint { /* input from IDI interface */
+> +                               remote-endpoint = <&csi2host_out>;
+> +                       };
+> +               };
+> +
+> +               port@1 {
+> +                       reg = <1>; /* must be 1, second child port */
+> +                       csi2dc_out: endpoint {
+> +                               remote-endpoint = <&xisc_in>; /* output to sensor controller */
+> +                       };
+> +               };
+> +        };
+> +    };
+> +
+> +...
+> --
+> 2.25.1
+>
