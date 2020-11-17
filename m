@@ -2,595 +2,230 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3DEBC63697
-	for <linux-media@archiver.kernel.org>; Tue, 17 Nov 2020 18:20:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7217CC63697
+	for <linux-media@archiver.kernel.org>; Tue, 17 Nov 2020 19:12:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 55BBD2462E
-	for <linux-media@archiver.kernel.org>; Tue, 17 Nov 2020 18:20:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F368522228
+	for <linux-media@archiver.kernel.org>; Tue, 17 Nov 2020 19:12:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nrq2dsVs"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="X5xkpEln"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726979AbgKQSTz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 Nov 2020 13:19:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49450 "EHLO
+        id S1727562AbgKQTLj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 17 Nov 2020 14:11:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730534AbgKQSTy (ORCPT
+        with ESMTP id S1726315AbgKQTLi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 Nov 2020 13:19:54 -0500
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52FBC0613CF;
-        Tue, 17 Nov 2020 10:19:52 -0800 (PST)
-Received: by mail-pf1-x442.google.com with SMTP id 131so7300219pfb.9;
-        Tue, 17 Nov 2020 10:19:52 -0800 (PST)
+        Tue, 17 Nov 2020 14:11:38 -0500
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F409C0617A6
+        for <linux-media@vger.kernel.org>; Tue, 17 Nov 2020 11:11:38 -0800 (PST)
+Received: by mail-wm1-x343.google.com with SMTP id h21so4286626wmb.2
+        for <linux-media@vger.kernel.org>; Tue, 17 Nov 2020 11:11:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=mAgEy75lX1l08pwNKZ1bwH8Dg3sIGTaA6LNhifIcl8w=;
-        b=Nrq2dsVspzqYCS+JWYycWnW6yQ7fVIHAWiK0j71XYKps6sFHS+HnThXTYqsMlTHKbg
-         8i3OWieiAWM36uml45D/5tXMTtIEtkv8C7rpj94xg0gQTQiu6f8S1522+1jUOLBXntEL
-         qvK8zL3YINWQuMpaB9t1/M2+6s6v93bhCscUI4hyjoXPx3dvOVsBJeDUdzoUVE4IqxXR
-         y6TSYHfmduumZ3WurViMRVPvLoMMbBOvJTYQjMjXrriRJVFGj+Ix1voWmMpoxudCCLsL
-         3H3IX8P6xg7oIAj7bS2c86u1QGtcngPkdM8NltMtbEArJcQgrjk/pGmuzcAjvTwmoDme
-         hMxA==
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=hu7bOYUgtnFLMBiA1U9xKBu85h7yzSk1KLbNCN463rI=;
+        b=X5xkpElnuKlOphb7oubo5uykS6+OI+php6jhCFtFcZhmtzzwWArV8Df6/gG5zzJ117
+         AYrkJBx9rLECsYAk6+Z/lS3xFE5GUhpCTUDLmj4v406RilyJDbUB9Uyu+0VSDGYgvm2l
+         jukkd1AGe1UjqosgfxOcW7pjmYpNky0Zfc6wQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=mAgEy75lX1l08pwNKZ1bwH8Dg3sIGTaA6LNhifIcl8w=;
-        b=JSSWqdy4ZLIS30uy7EsIePa8GqtsNITV56xCq9suX9v6TPlhe+eLgXqt3yOgXhiQCV
-         xsbkteAAyarAj5bHGT2IbrwHe8O6+F1qF9sWeWkt7y6TcWCYfRuXwhclE6bIiUOvlX3R
-         RrFDzb6zzgNiszOyhGpMxJmDQOj2IDU20BKV52NQmHgfgtQGn98bZL+Cikj4PQNADgHF
-         8pGZBPsu3aTTa5sKKUOOPpxWHUlEH8+cxDwHGP4DNdgpsFG0J0innb4w4CbhYbwNYA1N
-         JLPzsxifNVGpfcdcSXyTIqQBLsz6oWKMaA4IT/jTBSCzI/G1ZdBdc+M1gYsMpLs18BV4
-         x/2w==
-X-Gm-Message-State: AOAM533TmG0gXmZGTjNDg1mt/jXM3LNyq4KFunUT1pN+I6YM/i/KQCOu
-        lB7jjgSIjWNZtLiBTFkv73A=
-X-Google-Smtp-Source: ABdhPJw6U2WzRE+W1IQuANAReU9W4CsUAyehfYTYekO3eDffAVo2cKA+Es/xydW1mMdAGU2RJGzAig==
-X-Received: by 2002:aa7:9a50:0:b029:18b:fa6b:f738 with SMTP id x16-20020aa79a500000b029018bfa6bf738mr576927pfj.64.1605637192345;
-        Tue, 17 Nov 2020 10:19:52 -0800 (PST)
-Received: from bbox-1.mtv.corp.google.com ([2620:15c:211:201:7220:84ff:fe09:5e58])
-        by smtp.gmail.com with ESMTPSA id h8sm4302639pjc.54.2020.11.17.10.19.49
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=hu7bOYUgtnFLMBiA1U9xKBu85h7yzSk1KLbNCN463rI=;
+        b=PRxms6TTXII2sBvXo3ZKvCOP3E8n/TD4PlalGfPVOBaFHsi//WXj9b8GpV+g548nSJ
+         mbH52+b5YynG8YVQtmiF/lEL9nUL66onG0UN0yVrOQJ5UOJH3YLEk3GjINwUuJJmOE/K
+         W9UrR6nkSJmVdDlK5SPrzy+21Yt0kFTtRp+sTwz6enhMcLbwiXNICPTMf7C9f5MBCCd6
+         zzLxBEUfxbjayTN5bn6lRpmWUoCDBIxGHrtsUqZEuYJCK1YjuYwjaHs60JVFhxPTeEwu
+         N+O8Op17fbBTCbLTsq/z7Dam2uFtbx70a7pJR/QTpuQRISHzelVI/er1916GAm1dllps
+         PrIQ==
+X-Gm-Message-State: AOAM532z7mwc3fITDznhbo+ZQXu0vJdBC6SMmvr7jRETDhEpf49Jfx4B
+        H7lKLjMPhPvs/WdxV6NXetvo8w==
+X-Google-Smtp-Source: ABdhPJwbYqX7pbIz2K9J0KeaqAR4C73oOOuRTBZ3QqO4swjxEvr2VoxyUPHO42dNRwlmR9/xM6NPWg==
+X-Received: by 2002:a7b:c1d2:: with SMTP id a18mr604240wmj.41.1605640297385;
+        Tue, 17 Nov 2020 11:11:37 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id a14sm4774135wmj.40.2020.11.17.11.11.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Nov 2020 10:19:51 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-From:   Minchan Kim <minchan@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
-        hyesoo.yu@samsung.com, willy@infradead.org, david@redhat.com,
-        iamjoonsoo.kim@lge.com, vbabka@suse.cz, surenb@google.com,
-        pullip.cho@samsung.com, joaodias@google.com, hridya@google.com,
-        sumit.semwal@linaro.org, john.stultz@linaro.org,
-        Brian.Starkey@arm.com, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, robh@kernel.org,
-        christian.koenig@amd.com, linaro-mm-sig@lists.linaro.org,
-        Minchan Kim <minchan@kernel.org>
-Subject: [PATCH 3/4] dma-buf: heaps: add chunk heap to dmabuf heaps
-Date:   Tue, 17 Nov 2020 10:19:34 -0800
-Message-Id: <20201117181935.3613581-4-minchan@kernel.org>
-X-Mailer: git-send-email 2.29.2.299.gdc1121823c-goog
-In-Reply-To: <20201117181935.3613581-1-minchan@kernel.org>
-References: <20201117181935.3613581-1-minchan@kernel.org>
+        Tue, 17 Nov 2020 11:11:36 -0800 (PST)
+Date:   Tue, 17 Nov 2020 20:11:34 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
+        Huang Rui <ray.huang@amd.com>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH 31/42] drm/ttm/ttm_bo: Fix one function header - demote
+ lots of kernel-doc abuses
+Message-ID: <20201117191134.GR401619@phenom.ffwll.local>
+Mail-Followup-To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
+        Huang Rui <ray.huang@amd.com>, David Airlie <airlied@linux.ie>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org
+References: <20201116174112.1833368-1-lee.jones@linaro.org>
+ <20201116174112.1833368-32-lee.jones@linaro.org>
+ <7745c8a0-12ad-8dcd-3740-51c640ea4ef2@amd.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <7745c8a0-12ad-8dcd-3740-51c640ea4ef2@amd.com>
+X-Operating-System: Linux phenom 5.7.0-1-amd64 
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hyesoo Yu <hyesoo.yu@samsung.com>
+On Mon, Nov 16, 2020 at 09:33:48PM +0100, Christian König wrote:
+> Am 16.11.20 um 18:41 schrieb Lee Jones:
+> > Fixes the following W=1 kernel build warning(s):
+> > 
+> >   drivers/gpu/drm/ttm/ttm_bo.c:51: warning: Function parameter or member 'ttm_global_mutex' not described in 'DEFINE_MUTEX'
+> >   drivers/gpu/drm/ttm/ttm_bo.c:286: warning: Function parameter or member 'bo' not described in 'ttm_bo_cleanup_memtype_use'
+> >   drivers/gpu/drm/ttm/ttm_bo.c:359: warning: Function parameter or member 'bo' not described in 'ttm_bo_cleanup_refs'
+> >   drivers/gpu/drm/ttm/ttm_bo.c:359: warning: Function parameter or member 'interruptible' not described in 'ttm_bo_cleanup_refs'
+> >   drivers/gpu/drm/ttm/ttm_bo.c:359: warning: Function parameter or member 'no_wait_gpu' not described in 'ttm_bo_cleanup_refs'
+> >   drivers/gpu/drm/ttm/ttm_bo.c:359: warning: Function parameter or member 'unlock_resv' not described in 'ttm_bo_cleanup_refs'
+> >   drivers/gpu/drm/ttm/ttm_bo.c:424: warning: Function parameter or member 'bdev' not described in 'ttm_bo_delayed_delete'
+> >   drivers/gpu/drm/ttm/ttm_bo.c:424: warning: Function parameter or member 'remove_all' not described in 'ttm_bo_delayed_delete'
+> >   drivers/gpu/drm/ttm/ttm_bo.c:635: warning: Function parameter or member 'bo' not described in 'ttm_bo_evict_swapout_allowable'
+> >   drivers/gpu/drm/ttm/ttm_bo.c:635: warning: Function parameter or member 'ctx' not described in 'ttm_bo_evict_swapout_allowable'
+> >   drivers/gpu/drm/ttm/ttm_bo.c:635: warning: Function parameter or member 'locked' not described in 'ttm_bo_evict_swapout_allowable'
+> >   drivers/gpu/drm/ttm/ttm_bo.c:635: warning: Function parameter or member 'busy' not described in 'ttm_bo_evict_swapout_allowable'
+> >   drivers/gpu/drm/ttm/ttm_bo.c:769: warning: Function parameter or member 'bo' not described in 'ttm_bo_add_move_fence'
+> >   drivers/gpu/drm/ttm/ttm_bo.c:769: warning: Function parameter or member 'man' not described in 'ttm_bo_add_move_fence'
+> >   drivers/gpu/drm/ttm/ttm_bo.c:769: warning: Function parameter or member 'mem' not described in 'ttm_bo_add_move_fence'
+> >   drivers/gpu/drm/ttm/ttm_bo.c:769: warning: Function parameter or member 'no_wait_gpu' not described in 'ttm_bo_add_move_fence'
+> >   drivers/gpu/drm/ttm/ttm_bo.c:806: warning: Function parameter or member 'bo' not described in 'ttm_bo_mem_force_space'
+> >   drivers/gpu/drm/ttm/ttm_bo.c:806: warning: Function parameter or member 'place' not described in 'ttm_bo_mem_force_space'
+> >   drivers/gpu/drm/ttm/ttm_bo.c:806: warning: Function parameter or member 'mem' not described in 'ttm_bo_mem_force_space'
+> >   drivers/gpu/drm/ttm/ttm_bo.c:806: warning: Function parameter or member 'ctx' not described in 'ttm_bo_mem_force_space'
+> >   drivers/gpu/drm/ttm/ttm_bo.c:872: warning: Function parameter or member 'bo' not described in 'ttm_bo_mem_space'
+> >   drivers/gpu/drm/ttm/ttm_bo.c:872: warning: Function parameter or member 'placement' not described in 'ttm_bo_mem_space'
+> >   drivers/gpu/drm/ttm/ttm_bo.c:872: warning: Function parameter or member 'mem' not described in 'ttm_bo_mem_space'
+> >   drivers/gpu/drm/ttm/ttm_bo.c:872: warning: Function parameter or member 'ctx' not described in 'ttm_bo_mem_space'
+> >   drivers/gpu/drm/ttm/ttm_bo.c:1387: warning: Function parameter or member 'ctx' not described in 'ttm_bo_swapout'
+> > 
+> > Cc: Christian Koenig <christian.koenig@amd.com>
+> > Cc: Huang Rui <ray.huang@amd.com>
+> > Cc: David Airlie <airlied@linux.ie>
+> > Cc: Daniel Vetter <daniel@ffwll.ch>
+> > Cc: Sumit Semwal <sumit.semwal@linaro.org>
+> > Cc: dri-devel@lists.freedesktop.org
+> > Cc: linux-media@vger.kernel.org
+> > Cc: linaro-mm-sig@lists.linaro.org
+> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> 
+> Reviewed-by: Christian König <christian.koenig@amd.com>
+> 
+> Going to pick that one up for upstreaming.
 
-This patch supports chunk heap that allocates the buffers that are
-made up of a list of fixed size chunks taken from a CMA.
+I mass applied this pile, so also this one. Thanks for patch&review.
+-Daniel
 
-The chunk heap doesn't use heap-helper although it can remove
-duplicated code since heap-helper is under deprecated process.[1]
+> 
+> Thanks,
+> Christian.
+> 
+> > ---
+> >   drivers/gpu/drm/ttm/ttm_bo.c | 23 ++++++++++++-----------
+> >   1 file changed, 12 insertions(+), 11 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/ttm/ttm_bo.c b/drivers/gpu/drm/ttm/ttm_bo.c
+> > index e6bcbfe530ecc..9a03c7834b1ed 100644
+> > --- a/drivers/gpu/drm/ttm/ttm_bo.c
+> > +++ b/drivers/gpu/drm/ttm/ttm_bo.c
+> > @@ -45,7 +45,7 @@
+> >   static void ttm_bo_global_kobj_release(struct kobject *kobj);
+> > -/**
+> > +/*
+> >    * ttm_global_mutex - protecting the global BO state
+> >    */
+> >   DEFINE_MUTEX(ttm_global_mutex);
+> > @@ -278,7 +278,7 @@ static int ttm_bo_handle_move_mem(struct ttm_buffer_object *bo,
+> >   	return ret;
+> >   }
+> > -/**
+> > +/*
+> >    * Call bo::reserved.
+> >    * Will release GPU memory type usage on destruction.
+> >    * This is the place to put in driver specific hooks to release
+> > @@ -352,9 +352,10 @@ static void ttm_bo_flush_all_fences(struct ttm_buffer_object *bo)
+> >    * Must be called with lru_lock and reservation held, this function
+> >    * will drop the lru lock and optionally the reservation lock before returning.
+> >    *
+> > - * @interruptible         Any sleeps should occur interruptibly.
+> > - * @no_wait_gpu           Never wait for gpu. Return -EBUSY instead.
+> > - * @unlock_resv           Unlock the reservation lock as well.
+> > + * @bo:                    The buffer object to clean-up
+> > + * @interruptible:         Any sleeps should occur interruptibly.
+> > + * @no_wait_gpu:           Never wait for gpu. Return -EBUSY instead.
+> > + * @unlock_resv:           Unlock the reservation lock as well.
+> >    */
+> >   static int ttm_bo_cleanup_refs(struct ttm_buffer_object *bo,
+> > @@ -420,7 +421,7 @@ static int ttm_bo_cleanup_refs(struct ttm_buffer_object *bo,
+> >   	return 0;
+> >   }
+> > -/**
+> > +/*
+> >    * Traverse the delayed list, and call ttm_bo_cleanup_refs on all
+> >    * encountered buffers.
+> >    */
+> > @@ -628,7 +629,7 @@ bool ttm_bo_eviction_valuable(struct ttm_buffer_object *bo,
+> >   }
+> >   EXPORT_SYMBOL(ttm_bo_eviction_valuable);
+> > -/**
+> > +/*
+> >    * Check the target bo is allowable to be evicted or swapout, including cases:
+> >    *
+> >    * a. if share same reservation object with ctx->resv, have assumption
+> > @@ -767,7 +768,7 @@ int ttm_mem_evict_first(struct ttm_bo_device *bdev,
+> >   	return ret;
+> >   }
+> > -/**
+> > +/*
+> >    * Add the last move fence to the BO and reserve a new shared slot.
+> >    */
+> >   static int ttm_bo_add_move_fence(struct ttm_buffer_object *bo,
+> > @@ -803,7 +804,7 @@ static int ttm_bo_add_move_fence(struct ttm_buffer_object *bo,
+> >   	return 0;
+> >   }
+> > -/**
+> > +/*
+> >    * Repeatedly evict memory from the LRU for @mem_type until we create enough
+> >    * space, or we've evicted everything and there isn't enough space.
+> >    */
+> > @@ -865,7 +866,7 @@ static int ttm_bo_mem_placement(struct ttm_buffer_object *bo,
+> >   	return 0;
+> >   }
+> > -/**
+> > +/*
+> >    * Creates space for memory region @mem according to its type.
+> >    *
+> >    * This function first searches for free space in compatible memory types in
+> > @@ -1430,7 +1431,7 @@ int ttm_bo_wait(struct ttm_buffer_object *bo,
+> >   }
+> >   EXPORT_SYMBOL(ttm_bo_wait);
+> > -/**
+> > +/*
+> >    * A buffer object shrink method that tries to swap out the first
+> >    * buffer object on the bo_global::swap_lru list.
+> >    */
+> 
 
-[1] https://lore.kernel.org/patchwork/patch/1336002
-
-Signed-off-by: Hyesoo Yu <hyesoo.yu@samsung.com>
-Signed-off-by: Minchan Kim <minchan@kernel.org>
----
- drivers/dma-buf/heaps/Kconfig      |   9 +
- drivers/dma-buf/heaps/Makefile     |   1 +
- drivers/dma-buf/heaps/chunk_heap.c | 458 +++++++++++++++++++++++++++++
- 3 files changed, 468 insertions(+)
- create mode 100644 drivers/dma-buf/heaps/chunk_heap.c
-
-diff --git a/drivers/dma-buf/heaps/Kconfig b/drivers/dma-buf/heaps/Kconfig
-index a5eef06c4226..9cc5366b8f5e 100644
---- a/drivers/dma-buf/heaps/Kconfig
-+++ b/drivers/dma-buf/heaps/Kconfig
-@@ -12,3 +12,12 @@ config DMABUF_HEAPS_CMA
- 	  Choose this option to enable dma-buf CMA heap. This heap is backed
- 	  by the Contiguous Memory Allocator (CMA). If your system has these
- 	  regions, you should say Y here.
-+
-+config DMABUF_HEAPS_CHUNK
-+	tristate "DMA-BUF CHUNK Heap"
-+	depends on DMABUF_HEAPS && DMA_CMA
-+	help
-+	  Choose this option to enable dma-buf CHUNK heap. This heap is backed
-+	  by the Contiguous Memory Allocator (CMA) and allocates the buffers that
-+	  arranged into a list of fixed size chunks taken from CMA. Chunk size
-+	  is configured when the heap is created.
-diff --git a/drivers/dma-buf/heaps/Makefile b/drivers/dma-buf/heaps/Makefile
-index 6e54cdec3da0..3b2a09869fd8 100644
---- a/drivers/dma-buf/heaps/Makefile
-+++ b/drivers/dma-buf/heaps/Makefile
-@@ -2,3 +2,4 @@
- obj-y					+= heap-helpers.o
- obj-$(CONFIG_DMABUF_HEAPS_SYSTEM)	+= system_heap.o
- obj-$(CONFIG_DMABUF_HEAPS_CMA)		+= cma_heap.o
-+obj-$(CONFIG_DMABUF_HEAPS_CHUNK)	+= chunk_heap.o
-diff --git a/drivers/dma-buf/heaps/chunk_heap.c b/drivers/dma-buf/heaps/chunk_heap.c
-new file mode 100644
-index 000000000000..427594f56e18
---- /dev/null
-+++ b/drivers/dma-buf/heaps/chunk_heap.c
-@@ -0,0 +1,458 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * ION Memory Allocator chunk heap exporter
-+ *
-+ * Copyright (c) 2020 Samsung Electronics Co., Ltd.
-+ * Author: <hyesoo.yu@samsung.com> for Samsung Electronics.
-+ */
-+
-+#include <linux/platform_device.h>
-+#include <linux/cma.h>
-+#include <linux/device.h>
-+#include <linux/dma-buf.h>
-+#include <linux/dma-heap.h>
-+#include <linux/dma-map-ops.h>
-+#include <linux/err.h>
-+#include <linux/errno.h>
-+#include <linux/highmem.h>
-+#include <linux/module.h>
-+#include <linux/slab.h>
-+#include <linux/scatterlist.h>
-+#include <linux/sched/signal.h>
-+#include <linux/of_reserved_mem.h>
-+#include <linux/of.h>
-+
-+struct chunk_heap {
-+	struct dma_heap *heap;
-+	unsigned int order;
-+	struct cma *cma;
-+};
-+
-+struct chunk_heap_buffer {
-+	struct chunk_heap *heap;
-+	struct list_head attachments;
-+	struct mutex lock;
-+	struct sg_table sg_table;
-+	unsigned long len;
-+	int vmap_cnt;
-+	void *vaddr;
-+};
-+
-+struct chunk_heap_attachment {
-+	struct device *dev;
-+	struct sg_table *table;
-+	struct list_head list;
-+	bool mapped;
-+};
-+
-+static struct sg_table *dup_sg_table(struct sg_table *table)
-+{
-+	struct sg_table *new_table;
-+	int ret, i;
-+	struct scatterlist *sg, *new_sg;
-+
-+	new_table = kzalloc(sizeof(*new_table), GFP_KERNEL);
-+	if (!new_table)
-+		return ERR_PTR(-ENOMEM);
-+
-+	ret = sg_alloc_table(new_table, table->orig_nents, GFP_KERNEL);
-+	if (ret) {
-+		kfree(new_table);
-+		return ERR_PTR(-ENOMEM);
-+	}
-+
-+	new_sg = new_table->sgl;
-+	for_each_sgtable_sg(table, sg, i) {
-+		sg_set_page(new_sg, sg_page(sg), sg->length, sg->offset);
-+		new_sg = sg_next(new_sg);
-+	}
-+
-+	return new_table;
-+}
-+
-+static int chunk_heap_attach(struct dma_buf *dmabuf, struct dma_buf_attachment *attachment)
-+{
-+	struct chunk_heap_buffer *buffer = dmabuf->priv;
-+	struct chunk_heap_attachment *a;
-+	struct sg_table *table;
-+
-+	a = kzalloc(sizeof(*a), GFP_KERNEL);
-+	if (!a)
-+		return -ENOMEM;
-+
-+	table = dup_sg_table(&buffer->sg_table);
-+	if (IS_ERR(table)) {
-+		kfree(a);
-+		return -ENOMEM;
-+	}
-+
-+	a->table = table;
-+	a->dev = attachment->dev;
-+	INIT_LIST_HEAD(&a->list);
-+	a->mapped = false;
-+
-+	attachment->priv = a;
-+
-+	mutex_lock(&buffer->lock);
-+	list_add(&a->list, &buffer->attachments);
-+	mutex_unlock(&buffer->lock);
-+
-+	return 0;
-+}
-+
-+static void chunk_heap_detach(struct dma_buf *dmabuf, struct dma_buf_attachment *attachment)
-+{
-+	struct chunk_heap_buffer *buffer = dmabuf->priv;
-+	struct chunk_heap_attachment *a = attachment->priv;
-+
-+	mutex_lock(&buffer->lock);
-+	list_del(&a->list);
-+	mutex_unlock(&buffer->lock);
-+
-+	sg_free_table(a->table);
-+	kfree(a->table);
-+	kfree(a);
-+}
-+
-+static struct sg_table *chunk_heap_map_dma_buf(struct dma_buf_attachment *attachment,
-+					       enum dma_data_direction direction)
-+{
-+	struct chunk_heap_attachment *a = attachment->priv;
-+	struct sg_table *table = a->table;
-+	int ret;
-+
-+	ret = dma_map_sgtable(attachment->dev, table, direction, 0);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	a->mapped = true;
-+	return table;
-+}
-+
-+static void chunk_heap_unmap_dma_buf(struct dma_buf_attachment *attachment,
-+				     struct sg_table *table,
-+				     enum dma_data_direction direction)
-+{
-+	struct chunk_heap_attachment *a = attachment->priv;
-+
-+	a->mapped = false;
-+	dma_unmap_sgtable(attachment->dev, table, direction, 0);
-+}
-+
-+static int chunk_heap_dma_buf_begin_cpu_access(struct dma_buf *dmabuf,
-+						enum dma_data_direction direction)
-+{
-+	struct chunk_heap_buffer *buffer = dmabuf->priv;
-+	struct chunk_heap_attachment *a;
-+
-+	mutex_lock(&buffer->lock);
-+
-+	if (buffer->vmap_cnt)
-+		invalidate_kernel_vmap_range(buffer->vaddr, buffer->len);
-+
-+	list_for_each_entry(a, &buffer->attachments, list) {
-+		if (!a->mapped)
-+			continue;
-+		dma_sync_sgtable_for_cpu(a->dev, a->table, direction);
-+	}
-+	mutex_unlock(&buffer->lock);
-+
-+	return 0;
-+}
-+
-+static int chunk_heap_dma_buf_end_cpu_access(struct dma_buf *dmabuf,
-+					      enum dma_data_direction direction)
-+{
-+	struct chunk_heap_buffer *buffer = dmabuf->priv;
-+	struct chunk_heap_attachment *a;
-+
-+	mutex_lock(&buffer->lock);
-+
-+	if (buffer->vmap_cnt)
-+		flush_kernel_vmap_range(buffer->vaddr, buffer->len);
-+
-+	list_for_each_entry(a, &buffer->attachments, list) {
-+		if (!a->mapped)
-+			continue;
-+		dma_sync_sgtable_for_device(a->dev, a->table, direction);
-+	}
-+	mutex_unlock(&buffer->lock);
-+
-+	return 0;
-+}
-+
-+static int chunk_heap_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma)
-+{
-+	struct chunk_heap_buffer *buffer = dmabuf->priv;
-+	struct sg_table *table = &buffer->sg_table;
-+	unsigned long addr = vma->vm_start;
-+	struct sg_page_iter piter;
-+	int ret;
-+
-+	for_each_sgtable_page(table, &piter, vma->vm_pgoff) {
-+		struct page *page = sg_page_iter_page(&piter);
-+
-+		ret = remap_pfn_range(vma, addr, page_to_pfn(page), PAGE_SIZE,
-+				      vma->vm_page_prot);
-+		if (ret)
-+			return ret;
-+		addr = PAGE_SIZE;
-+		if (addr >= vma->vm_end)
-+			return 0;
-+	}
-+	return 0;
-+}
-+
-+static void *chunk_heap_do_vmap(struct chunk_heap_buffer *buffer)
-+{
-+	struct sg_table *table = &buffer->sg_table;
-+	int npages = PAGE_ALIGN(buffer->len) / PAGE_SIZE;
-+	struct page **pages = vmalloc(sizeof(struct page *) * npages);
-+	struct page **tmp = pages;
-+	struct sg_page_iter piter;
-+	void *vaddr;
-+
-+	if (!pages)
-+		return ERR_PTR(-ENOMEM);
-+
-+	for_each_sgtable_page(table, &piter, 0) {
-+		WARN_ON(tmp - pages >= npages);
-+		*tmp++ = sg_page_iter_page(&piter);
-+	}
-+
-+	vaddr = vmap(pages, npages, VM_MAP, PAGE_KERNEL);
-+	vfree(pages);
-+
-+	if (!vaddr)
-+		return ERR_PTR(-ENOMEM);
-+
-+	return vaddr;
-+}
-+
-+static int chunk_heap_vmap(struct dma_buf *dmabuf, struct dma_buf_map *map)
-+{
-+	struct chunk_heap_buffer *buffer = dmabuf->priv;
-+	int ret = 0;
-+	void *vaddr;
-+
-+	mutex_lock(&buffer->lock);
-+	if (buffer->vmap_cnt) {
-+		vaddr = buffer->vaddr;
-+		goto done;
-+	}
-+
-+	vaddr = chunk_heap_do_vmap(buffer);
-+	if (IS_ERR(vaddr)) {
-+		ret = PTR_ERR(vaddr);
-+		goto err;
-+	}
-+
-+	buffer->vaddr = vaddr;
-+done:
-+	buffer->vmap_cnt++;
-+	dma_buf_map_set_vaddr(map, vaddr);
-+err:
-+	mutex_unlock(&buffer->lock);
-+
-+	return ret;
-+}
-+
-+static void chunk_heap_vunmap(struct dma_buf *dmabuf, struct dma_buf_map *map)
-+{
-+	struct chunk_heap_buffer *buffer = dmabuf->priv;
-+
-+	mutex_lock(&buffer->lock);
-+	if (!--buffer->vmap_cnt) {
-+		vunmap(buffer->vaddr);
-+		buffer->vaddr = NULL;
-+	}
-+	mutex_unlock(&buffer->lock);
-+}
-+
-+static void chunk_heap_dma_buf_release(struct dma_buf *dmabuf)
-+{
-+	struct chunk_heap_buffer *buffer = dmabuf->priv;
-+	struct chunk_heap *chunk_heap = buffer->heap;
-+	struct sg_table *table;
-+	struct scatterlist *sg;
-+	int i;
-+
-+	table = &buffer->sg_table;
-+	for_each_sgtable_sg(table, sg, i)
-+		cma_release(chunk_heap->cma, sg_page(sg), 1 << chunk_heap->order);
-+	sg_free_table(table);
-+	kfree(buffer);
-+}
-+
-+static const struct dma_buf_ops chunk_heap_buf_ops = {
-+	.attach = chunk_heap_attach,
-+	.detach = chunk_heap_detach,
-+	.map_dma_buf = chunk_heap_map_dma_buf,
-+	.unmap_dma_buf = chunk_heap_unmap_dma_buf,
-+	.begin_cpu_access = chunk_heap_dma_buf_begin_cpu_access,
-+	.end_cpu_access = chunk_heap_dma_buf_end_cpu_access,
-+	.mmap = chunk_heap_mmap,
-+	.vmap = chunk_heap_vmap,
-+	.vunmap = chunk_heap_vunmap,
-+	.release = chunk_heap_dma_buf_release,
-+};
-+
-+static int chunk_heap_allocate(struct dma_heap *heap, unsigned long len,
-+			       unsigned long fd_flags, unsigned long heap_flags)
-+{
-+	struct chunk_heap *chunk_heap = dma_heap_get_drvdata(heap);
-+	struct chunk_heap_buffer *buffer;
-+	DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
-+	struct dma_buf *dmabuf;
-+	struct sg_table *table;
-+	struct scatterlist *sg;
-+	struct page **pages;
-+	unsigned int chunk_size = PAGE_SIZE << chunk_heap->order;
-+	unsigned int count, alloced = 0;
-+	unsigned int num_retry = 5;
-+	int ret = -ENOMEM;
-+	pgoff_t pg;
-+
-+	buffer = kzalloc(sizeof(*buffer), GFP_KERNEL);
-+	if (!buffer)
-+		return ret;
-+
-+	INIT_LIST_HEAD(&buffer->attachments);
-+	mutex_init(&buffer->lock);
-+	buffer->heap = chunk_heap;
-+	buffer->len = ALIGN(len, chunk_size);
-+	count = buffer->len / chunk_size;
-+
-+	pages = kvmalloc_array(count, sizeof(*pages), GFP_KERNEL);
-+	if (!pages)
-+		goto err_pages;
-+
-+	while (num_retry--) {
-+		unsigned long nr_pages;
-+
-+		ret = cma_alloc_bulk(chunk_heap->cma, chunk_heap->order,
-+				     num_retry ? __GFP_NORETRY : 0,
-+				     chunk_heap->order, count - alloced,
-+				     pages + alloced, &nr_pages);
-+		alloced += nr_pages;
-+		if (alloced == count)
-+			break;
-+		if (ret != -EBUSY)
-+			break;
-+
-+	}
-+	if (ret < 0)
-+		goto err_alloc;
-+
-+	table = &buffer->sg_table;
-+	if (sg_alloc_table(table, count, GFP_KERNEL))
-+		goto err_alloc;
-+
-+	sg = table->sgl;
-+	for (pg = 0; pg < count; pg++) {
-+		sg_set_page(sg, pages[pg], chunk_size, 0);
-+		sg = sg_next(sg);
-+	}
-+
-+	exp_info.ops = &chunk_heap_buf_ops;
-+	exp_info.size = buffer->len;
-+	exp_info.flags = fd_flags;
-+	exp_info.priv = buffer;
-+	dmabuf = dma_buf_export(&exp_info);
-+	if (IS_ERR(dmabuf)) {
-+		ret = PTR_ERR(dmabuf);
-+		goto err_export;
-+	}
-+	kvfree(pages);
-+
-+	ret = dma_buf_fd(dmabuf, fd_flags);
-+	if (ret < 0) {
-+		dma_buf_put(dmabuf);
-+		return ret;
-+	}
-+
-+	return 0;
-+err_export:
-+	sg_free_table(table);
-+err_alloc:
-+	for (pg = 0; pg < alloced; pg++)
-+		cma_release(chunk_heap->cma, pages[pg], 1 << chunk_heap->order);
-+	kvfree(pages);
-+err_pages:
-+	kfree(buffer);
-+
-+	return ret;
-+}
-+
-+static void rmem_remove_callback(void *p)
-+{
-+	of_reserved_mem_device_release((struct device *)p);
-+}
-+
-+static const struct dma_heap_ops chunk_heap_ops = {
-+	.allocate = chunk_heap_allocate,
-+};
-+
-+static int chunk_heap_probe(struct platform_device *pdev)
-+{
-+	struct chunk_heap *chunk_heap;
-+	struct dma_heap_export_info exp_info;
-+	unsigned int alignment;
-+	int ret;
-+
-+	ret = of_reserved_mem_device_init(&pdev->dev);
-+	if (ret || !pdev->dev.cma_area) {
-+		dev_err(&pdev->dev, "The CMA reserved area is not assigned (ret %d)", ret);
-+		return -EINVAL;
-+	}
-+
-+	ret = devm_add_action(&pdev->dev, rmem_remove_callback, &pdev->dev);
-+	if (ret) {
-+		of_reserved_mem_device_release(&pdev->dev);
-+		return ret;
-+	}
-+
-+	chunk_heap = devm_kzalloc(&pdev->dev, sizeof(*chunk_heap), GFP_KERNEL);
-+	if (!chunk_heap)
-+		return -ENOMEM;
-+
-+	if (of_property_read_u32(pdev->dev.of_node, "alignment", &alignment))
-+		chunk_heap->order = 0;
-+	else
-+		chunk_heap->order = get_order(alignment);
-+
-+	chunk_heap->cma = pdev->dev.cma_area;
-+
-+	exp_info.name = cma_get_name(pdev->dev.cma_area);
-+	exp_info.ops = &chunk_heap_ops;
-+	exp_info.priv = chunk_heap;
-+
-+	chunk_heap->heap = dma_heap_add(&exp_info);
-+	if (IS_ERR(chunk_heap->heap))
-+		return PTR_ERR(chunk_heap->heap);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id chunk_heap_of_match[] = {
-+	{ .compatible = "dma_heap,chunk", },
-+	{ },
-+};
-+
-+MODULE_DEVICE_TABLE(of, chunk_heap_of_match);
-+
-+static struct platform_driver chunk_heap_driver = {
-+	.driver		= {
-+		.name	= "chunk_heap",
-+		.of_match_table = chunk_heap_of_match,
-+	},
-+	.probe		= chunk_heap_probe,
-+};
-+
-+static int __init chunk_heap_init(void)
-+{
-+	return platform_driver_register(&chunk_heap_driver);
-+}
-+module_init(chunk_heap_init);
-+MODULE_DESCRIPTION("DMA-BUF Chunk Heap");
-+MODULE_LICENSE("GPL v2");
 -- 
-2.29.2.299.gdc1121823c-goog
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
