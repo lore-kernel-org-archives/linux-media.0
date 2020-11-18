@@ -2,161 +2,195 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD5A3C56202
-	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 05:18:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1012C6379D
+	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 06:55:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 62A3A24654
-	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 05:18:54 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dhgZBRUw"
+	by mail.kernel.org (Postfix) with ESMTP id C0FFF246BA
+	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 06:55:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726444AbgKRFSb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 18 Nov 2020 00:18:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38814 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726234AbgKRFSb (ORCPT
+        id S1726696AbgKRGzd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 18 Nov 2020 01:55:33 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:26429 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726548AbgKRGzc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 18 Nov 2020 00:18:31 -0500
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14482C061A4F
-        for <linux-media@vger.kernel.org>; Tue, 17 Nov 2020 21:18:31 -0800 (PST)
-Received: by mail-ot1-x342.google.com with SMTP id o3so595973ota.8
-        for <linux-media@vger.kernel.org>; Tue, 17 Nov 2020 21:18:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=F7sKJwkzdbeLOyKiVuDYfrrRTcjeln31HNpMolHCz84=;
-        b=dhgZBRUwhlMJGYy5B5kg0/hTc+PVW/P9fwbxUQJYELxJr3sFTgqZUB3YOpBKAzffVk
-         DY8UNWEqVw/HybCxEg7v6elONW5OXpewFmWZL47EXnXpZ8KRUpN25OyEbQ9waYsX2RYx
-         Z7M6iEvChYlW5DZl2OVnarihlbMHfZ+iw9QzaRzN3biQjmkcdmZfzEv9o1SvTTS68wEa
-         j8YjGL9BGrbAOtVkCtPFjv7oRrzDU3i75AjHiOH8d7M/p3Fs5gn7lA76LSbCUU4yP3Pf
-         y279jWnjt9FlaQSVf4leq5rK885Ko1y0Kv581qhqm/jDkmphNYUXOMTTDpKcLJGF9Wct
-         d2EQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=F7sKJwkzdbeLOyKiVuDYfrrRTcjeln31HNpMolHCz84=;
-        b=QxGFzl48yIvddRFAS35Bl/pK/19C4JAT/anhx4fz3PsbPg0pagsFdyn4Z0Pui6Jia8
-         AH2oJeifMZnJC5QgYJdpxrZ45OGtFFT0A2Vexq3ft0zgXdvgRs62zjNH1mPeGCH2XlLc
-         HJ6cSJZ6tF+HRXfkx8IZjZUm9GmVQV9x1MSjeds7VbZ/tpjHLm+1j+qi0PuikDsqHPz7
-         rYJHZJSgwB+HlDCx4RdjpBnm4RG2Bot+On7sJZaJQo970WEan7IIXoB6Td1eBy9971pf
-         rm56ybPY7SNJDvM6+2M0WjgqCaA4XsCgk3AJAs5//kuvjKur4J2ZUstSAG7XxHbvAYHg
-         PRdw==
-X-Gm-Message-State: AOAM532rWwTOaJGLiLQsUrkap/TuqNw92OSXyQsCfXJUIkmtSx4GbWr+
-        +mNQRcdCD9XiaZVO9lk6K2LGC1rcEDnfTahDl2uTnA==
-X-Google-Smtp-Source: ABdhPJznMB7Dcm3wHiflI6UU5baKUw77SPDRMKIJ2o8sjGzcuUEIkHfXK7f360M22ZzOz3BxHb2BphgAFuVXhh6gpyE=
-X-Received: by 2002:a9d:64ce:: with SMTP id n14mr5354340otl.352.1605676710354;
- Tue, 17 Nov 2020 21:18:30 -0800 (PST)
-MIME-Version: 1.0
-References: <20201117181935.3613581-1-minchan@kernel.org> <20201117181935.3613581-3-minchan@kernel.org>
-In-Reply-To: <20201117181935.3613581-3-minchan@kernel.org>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Tue, 17 Nov 2020 21:18:17 -0800
-Message-ID: <CALAqxLX0BfH3G0eoA77dKyuVAUGmdJGhFuaoJdyG+TGqnmt2PA@mail.gmail.com>
-Subject: Re: [PATCH 2/4] dma-buf: add export symbol for dma-heap
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, Hyesoo Yu <hyesoo.yu@samsung.com>,
-        Matthew Wilcox <willy@infradead.org>, david@redhat.com,
-        iamjoonsoo.kim@lge.com, vbabka@suse.cz,
-        Suren Baghdasaryan <surenb@google.com>,
-        KyongHo Cho <pullip.cho@samsung.com>,
-        John Dias <joaodias@google.com>,
-        Hridya Valsaraju <hridya@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Rob Herring <robh@kernel.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        Christoph Hellwig <hch@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 18 Nov 2020 01:55:32 -0500
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 17 Nov 2020 22:55:30 -0800
+X-QCInternal: smtphost
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 17 Nov 2020 22:55:28 -0800
+X-QCInternal: smtphost
+Received: from dikshita-linux.qualcomm.com ([10.204.65.237])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 18 Nov 2020 12:25:22 +0530
+Received: by dikshita-linux.qualcomm.com (Postfix, from userid 347544)
+        id 93143212C6; Wed, 18 Nov 2020 12:25:21 +0530 (IST)
+From:   Dikshita Agarwal <dikshita@codeaurora.org>
+To:     linux-media@vger.kernel.org, hverkuil-cisco@xs4all.nl,
+        nicolas@ndufresne.ca, stanimir.varbanov@linaro.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        vgarodia@codeaurora.org, Dikshita Agarwal <dikshita@codeaurora.org>
+Subject: [PATCH v3 3/3] venus: venc: Add support for frame-specific min/max qp controls
+Date:   Wed, 18 Nov 2020 12:24:57 +0530
+Message-Id: <1605682497-29273-4-git-send-email-dikshita@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1605682497-29273-1-git-send-email-dikshita@codeaurora.org>
+References: <1605682497-29273-1-git-send-email-dikshita@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Nov 17, 2020 at 10:19 AM Minchan Kim <minchan@kernel.org> wrote:
->
-> From: Hyesoo Yu <hyesoo.yu@samsung.com>
->
-> The heaps could be added as module, so some functions should
-> be exported to register dma-heaps. And dma-heap of module can use
-> cma area to allocate and free. However the function related cma
-> is not exported now. Let's export them for next patches.
->
-> Signed-off-by: Hyesoo Yu <hyesoo.yu@samsung.com>
-> Signed-off-by: Minchan Kim <minchan@kernel.org>
-> ---
->  drivers/dma-buf/dma-heap.c | 2 ++
->  mm/cma.c                   | 3 +++
->  2 files changed, 5 insertions(+)
->
-> diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
-> index afd22c9dbdcf..cc6339cbca09 100644
-> --- a/drivers/dma-buf/dma-heap.c
-> +++ b/drivers/dma-buf/dma-heap.c
-> @@ -189,6 +189,7 @@ void *dma_heap_get_drvdata(struct dma_heap *heap)
->  {
->         return heap->priv;
->  }
-> +EXPORT_SYMBOL_GPL(dma_heap_get_drvdata);
->
->  struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
->  {
-> @@ -272,6 +273,7 @@ struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
->         kfree(heap);
->         return err_ret;
->  }
-> +EXPORT_SYMBOL_GPL(dma_heap_add);
->
->  static char *dma_heap_devnode(struct device *dev, umode_t *mode)
->  {
+Add support for frame type specific min and max qp controls
+for encoder.
 
-Thanks so much for sending this series along!
-I'm ok with the dma-heap exports to support modules.
+Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
+---
+ drivers/media/platform/qcom/venus/core.h       | 18 +++++++++
+ drivers/media/platform/qcom/venus/venc.c       | 21 ++++++++---
+ drivers/media/platform/qcom/venus/venc_ctrls.c | 51 ++++++++++++++++++++++++++
+ 3 files changed, 85 insertions(+), 5 deletions(-)
 
-> diff --git a/mm/cma.c b/mm/cma.c
-> index 7c11ec2dc04c..87834e2966fa 100644
-> --- a/mm/cma.c
-> +++ b/mm/cma.c
-> @@ -54,6 +54,7 @@ const char *cma_get_name(const struct cma *cma)
->  {
->         return cma->name;
->  }
-> +EXPORT_SYMBOL_GPL(cma_get_name);
->
->  static unsigned long cma_bitmap_aligned_mask(const struct cma *cma,
->                                              unsigned int align_order)
-> @@ -498,6 +499,7 @@ struct page *cma_alloc(struct cma *cma, size_t count, unsigned int align,
->         pr_debug("%s(): returned %p\n", __func__, page);
->         return page;
->  }
-> +EXPORT_SYMBOL_GPL(cma_alloc);
->
->  /*
->   * cma_alloc_bulk() - allocate high order bulk pages from contiguous area with
-> @@ -641,6 +643,7 @@ bool cma_release(struct cma *cma, const struct page *pages, unsigned int count)
->
->         return true;
->  }
-> +EXPORT_SYMBOL_GPL(cma_release);
->
->  int cma_for_each_area(int (*it)(struct cma *cma, void *data), void *data)
->  {
-> --
+diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
+index 3bc129a..6a764c9 100644
+--- a/drivers/media/platform/qcom/venus/core.h
++++ b/drivers/media/platform/qcom/venus/core.h
+@@ -230,10 +230,28 @@ struct venc_controls {
+ 	u32 h264_b_qp;
+ 	u32 h264_min_qp;
+ 	u32 h264_max_qp;
++	u32 h264_i_min_qp;
++	u32 h264_i_max_qp;
++	u32 h264_p_min_qp;
++	u32 h264_p_max_qp;
++	u32 h264_b_min_qp;
++	u32 h264_b_max_qp;
+ 	u32 h264_loop_filter_mode;
+ 	s32 h264_loop_filter_alpha;
+ 	s32 h264_loop_filter_beta;
+ 
++	u32 hevc_i_qp;
++	u32 hevc_p_qp;
++	u32 hevc_b_qp;
++	u32 hevc_min_qp;
++	u32 hevc_max_qp;
++	u32 hevc_i_min_qp;
++	u32 hevc_i_max_qp;
++	u32 hevc_p_min_qp;
++	u32 hevc_p_max_qp;
++	u32 hevc_b_min_qp;
++	u32 hevc_b_max_qp;
++
+ 	u32 vp8_min_qp;
+ 	u32 vp8_max_qp;
+ 
+diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
+index 0bf92cc..f2f5a85 100644
+--- a/drivers/media/platform/qcom/venus/venc.c
++++ b/drivers/media/platform/qcom/venus/venc.c
+@@ -668,17 +668,28 @@ static int venc_set_properties(struct venus_inst *inst)
+ 		return ret;
+ 
+ 	ptype = HFI_PROPERTY_PARAM_VENC_SESSION_QP;
+-	quant.qp_i = ctr->h264_i_qp;
+-	quant.qp_p = ctr->h264_p_qp;
+-	quant.qp_b = ctr->h264_b_qp;
++	if (inst->fmt_cap->pixfmt == V4L2_PIX_FMT_HEVC) {
++		quant.qp_i = ctr->hevc_i_qp;
++		quant.qp_p = ctr->hevc_p_qp;
++		quant.qp_b = ctr->hevc_b_qp;
++	} else {
++		quant.qp_i = ctr->h264_i_qp;
++		quant.qp_p = ctr->h264_p_qp;
++		quant.qp_b = ctr->h264_b_qp;
++	}
+ 	quant.layer_id = 0;
+ 	ret = hfi_session_set_property(inst, ptype, &quant);
+ 	if (ret)
+ 		return ret;
+ 
+ 	ptype = HFI_PROPERTY_PARAM_VENC_SESSION_QP_RANGE;
+-	quant_range.min_qp = ctr->h264_min_qp;
+-	quant_range.max_qp = ctr->h264_max_qp;
++	if (inst->fmt_cap->pixfmt == V4L2_PIX_FMT_HEVC) {
++		quant_range.min_qp = ctr->hevc_min_qp;
++		quant_range.max_qp = ctr->hevc_max_qp;
++	} else {
++		quant_range.min_qp = ctr->h264_min_qp;
++		quant_range.max_qp = ctr->h264_max_qp;
++	}
+ 	quant_range.layer_id = 0;
+ 	ret = hfi_session_set_property(inst, ptype, &quant_range);
+ 	if (ret)
+diff --git a/drivers/media/platform/qcom/venus/venc_ctrls.c b/drivers/media/platform/qcom/venus/venc_ctrls.c
+index 0708b3b..cd131e3 100644
+--- a/drivers/media/platform/qcom/venus/venc_ctrls.c
++++ b/drivers/media/platform/qcom/venus/venc_ctrls.c
+@@ -125,9 +125,60 @@ static int venc_op_s_ctrl(struct v4l2_ctrl *ctrl)
+ 	case V4L2_CID_MPEG_VIDEO_H264_MIN_QP:
+ 		ctr->h264_min_qp = ctrl->val;
+ 		break;
++	case V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MIN_QP:
++		ctr->h264_i_min_qp = ctrl->val;
++		break;
++	case V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MIN_QP:
++		ctr->h264_p_min_qp = ctrl->val;
++		break;
++	case V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MIN_QP:
++		ctr->h264_b_min_qp = ctrl->val;
++		break;
+ 	case V4L2_CID_MPEG_VIDEO_H264_MAX_QP:
+ 		ctr->h264_max_qp = ctrl->val;
+ 		break;
++	case V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MAX_QP:
++		ctr->h264_i_max_qp = ctrl->val;
++		break;
++	case V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MAX_QP:
++		ctr->h264_p_max_qp = ctrl->val;
++		break;
++	case V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MAX_QP:
++		ctr->h264_b_max_qp = ctrl->val;
++		break;
++	case V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_QP:
++		ctr->hevc_i_qp = ctrl->val;
++		break;
++	case V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_QP:
++		ctr->hevc_p_qp = ctrl->val;
++		break;
++	case V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_QP:
++		ctr->hevc_b_qp = ctrl->val;
++		break;
++	case V4L2_CID_MPEG_VIDEO_HEVC_MIN_QP:
++		ctr->hevc_min_qp = ctrl->val;
++		break;
++	case V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_MIN_QP:
++		ctr->hevc_i_min_qp = ctrl->val;
++		break;
++	case V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_MIN_QP:
++		ctr->hevc_p_min_qp = ctrl->val;
++		break;
++	case V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_MIN_QP:
++		ctr->hevc_b_min_qp = ctrl->val;
++		break;
++	case V4L2_CID_MPEG_VIDEO_HEVC_MAX_QP:
++		ctr->hevc_max_qp = ctrl->val;
++		break;
++	case V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_MAX_QP:
++		ctr->hevc_i_max_qp = ctrl->val;
++		break;
++	case V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_MAX_QP:
++		ctr->hevc_p_max_qp = ctrl->val;
++		break;
++	case V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_MAX_QP:
++		ctr->hevc_b_max_qp = ctrl->val;
++		break;
+ 	case V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MODE:
+ 		ctr->multi_slice_mode = ctrl->val;
+ 		break;
+-- 
+2.7.4
 
-Though Christoph's (cc'ed) input would probably be good for the cma
-ones, as I know he had concerns previously with similar patches.
-
-thanks
--john
