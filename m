@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41708C64E7C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87F93C64E7D
 	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 18:47:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 070432064B
-	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 18:47:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5BF552064B
+	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 18:47:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726629AbgKRSrN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 18 Nov 2020 13:47:13 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:37612 "EHLO
+        id S1726829AbgKRSr1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 18 Nov 2020 13:47:27 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:37666 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726224AbgKRSrN (ORCPT
+        with ESMTP id S1726700AbgKRSr1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 18 Nov 2020 13:47:13 -0500
+        Wed, 18 Nov 2020 13:47:27 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id DE85F1F4499B
+        with ESMTPSA id 42B6A1F4499B
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
@@ -33,9 +33,9 @@ Cc:     kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Jernej Skrabec <jernej.skrabec@siol.net>,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v3 01/13] media: ctrls: Add validate failure debug message
-Date:   Wed, 18 Nov 2020 15:46:48 -0300
-Message-Id: <20201118184700.331213-2-ezequiel@collabora.com>
+Subject: [PATCH v3 05/13] media: Clean stateless control includes
+Date:   Wed, 18 Nov 2020 15:46:52 -0300
+Message-Id: <20201118184700.331213-6-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201118184700.331213-1-ezequiel@collabora.com>
 References: <20201118184700.331213-1-ezequiel@collabora.com>
@@ -45,34 +45,47 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a debug message for control validation (validate_new)
-failures. This is useful to debug issues with ioctls such
-as VIDIOC_TRY_EXT_CTRLS and VIDIOC_S_EXT_CTRLS.
+Avoid including h264-ctrls.h, vp8-ctrls.h, etc,
+and instead just include v4l2-ctrls.h which does the right
+thing.
+
+This is in preparation for moving the stateless controls
+out of staging, which will mean removing some of these headers.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- drivers/media/v4l2-core/v4l2-ctrls.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/staging/media/hantro/hantro_hw.h | 4 +---
+ include/media/v4l2-h264.h                | 2 +-
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index e4613fa61d31..3896da01320e 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -4115,8 +4115,13 @@ static int try_set_ext_ctrls_common(struct v4l2_fh *fh,
- 			struct v4l2_ctrl *ctrl = helpers[idx].ref->ctrl;
+diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
+index 219283a06f52..34c9e4649a25 100644
+--- a/drivers/staging/media/hantro/hantro_hw.h
++++ b/drivers/staging/media/hantro/hantro_hw.h
+@@ -11,9 +11,7 @@
  
- 			ret = user_to_new(cs->controls + idx, ctrl);
--			if (!ret && ctrl->is_ptr)
-+			if (!ret && ctrl->is_ptr) {
- 				ret = validate_new(ctrl, ctrl->p_new);
-+				if (ret)
-+					dprintk(vdev,
-+						"failed to validate control %s (%d)\n",
-+						v4l2_ctrl_get_name(ctrl->id), ret);
-+			}
- 			idx = helpers[idx].next;
- 		} while (!ret && idx);
+ #include <linux/interrupt.h>
+ #include <linux/v4l2-controls.h>
+-#include <media/h264-ctrls.h>
+-#include <media/mpeg2-ctrls.h>
+-#include <media/vp8-ctrls.h>
++#include <media/v4l2-ctrls.h>
+ #include <media/videobuf2-core.h>
  
+ #define DEC_8190_ALIGN_MASK	0x07U
+diff --git a/include/media/v4l2-h264.h b/include/media/v4l2-h264.h
+index f08ba181263d..d2314f4d4490 100644
+--- a/include/media/v4l2-h264.h
++++ b/include/media/v4l2-h264.h
+@@ -10,7 +10,7 @@
+ #ifndef _MEDIA_V4L2_H264_H
+ #define _MEDIA_V4L2_H264_H
+ 
+-#include <media/h264-ctrls.h>
++#include <media/v4l2-ctrls.h>
+ 
+ /**
+  * struct v4l2_h264_reflist_builder - Reference list builder object
 -- 
 2.27.0
 
