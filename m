@@ -2,109 +2,89 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45824C63697
-	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 10:58:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E19DC64E69
+	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 11:00:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D390721D7E
-	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 10:58:03 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ec2dXjyK"
+	by mail.kernel.org (Postfix) with ESMTP id CAA10223C7
+	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 11:00:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726673AbgKRK5s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 18 Nov 2020 05:57:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34560 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725781AbgKRK5s (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 18 Nov 2020 05:57:48 -0500
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7C2C0613D4;
-        Wed, 18 Nov 2020 02:57:48 -0800 (PST)
-Received: by mail-ej1-x644.google.com with SMTP id k27so2089612ejs.10;
-        Wed, 18 Nov 2020 02:57:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=reply-to:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=Ujs+84h/AV5va5lsnNUE6Cha4z0WdYf4Awwp5uvYq2s=;
-        b=ec2dXjyKAgBuZgQiPsDp5dlX2Axa3/ZR+q3LPAUbNQK51MefRbkfyUzwGdwcFCNNsl
-         DmAkYKWSssBL8pDXSTuIMb03r27h8P3C7U+//k3tiWfmUbqOc6vYiFgAr7mFQguCiSkc
-         OrEEYzGMqPmV/YS7MOh6wuDzbz4ZtukA4ppcicdJqLSkgi9vmxq6hUetlEIql9xC1e+D
-         gJYjQu75/yP0gqDhZ9DoHavl6V6VBNPHDiB4x1nDLZ49YGYM471bij22ozZh9FBiPYHY
-         mft78EPbgAOqjcnAMJTpESq0Q+59GL2BcUtH6vopcqxr4H2uFtMKhBjytC9I6vggoFOh
-         CQlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:reply-to:subject:to:cc:references:from
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-transfer-encoding:content-language;
-        bh=Ujs+84h/AV5va5lsnNUE6Cha4z0WdYf4Awwp5uvYq2s=;
-        b=V9ajFqe9UWbjXQGfEom9Vox+CmaP+ESAfDcK/i95wz3Qre6nNZyeAsyLRiFUzzX+1d
-         7UxYmY5BwxHW+JV8wl/5z4eKNof9gArZMFS2etj5Y2HBWJeFGqb1iYHn4v5ZB3tzgQ0I
-         dFKpxR304qF0DfcGnXmGpGFLkGlxcV+XqkwNeY8mBibxESwe5ZveeRHIEjGUGDrqZPmO
-         bYe3b50A78yXICZ3WATXrxThWsCQ/txpkEIujk2GRFFMos7Tj9nqwQ19tpIDUVlJbrWp
-         rrvr8CQHemm3wtrAZTeG9jefMJuJJ6N+c3QC3zKOGudec0UvkxUDaYIqRJ3mCo+nRss9
-         hIlQ==
-X-Gm-Message-State: AOAM532vdPZ6fe1SA7Tf93YVY1wlP3KJNrU1cKKflxGssr2uNEKwTEag
-        qF3VR0oyc9o0Vv2FBjrBNKMXdJgSd78=
-X-Google-Smtp-Source: ABdhPJzwcar3mNBUaai8RXeIr42FsqX4abG+v5tYsTGBLf/nO0azD5aQGORqzDbjWMSqF0AU+Vgykw==
-X-Received: by 2002:a17:906:2e0f:: with SMTP id n15mr6409546eji.486.1605697066669;
-        Wed, 18 Nov 2020 02:57:46 -0800 (PST)
-Received: from ?IPv6:2a02:908:1252:fb60:be8a:bd56:1f94:86e7? ([2a02:908:1252:fb60:be8a:bd56:1f94:86e7])
-        by smtp.gmail.com with ESMTPSA id n12sm12761784ejs.19.2020.11.18.02.57.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Nov 2020 02:57:46 -0800 (PST)
-Reply-To: christian.koenig@amd.com
-Subject: Re: [PATCH 1/2] mm: mmap: fix fput in error path v2
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org
-References: <20201106114806.46015-1-christian.koenig@amd.com>
- <20201106114806.46015-2-christian.koenig@amd.com>
- <20201106144811.cf228ca9278ec78887d42960@linux-foundation.org>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-Message-ID: <e5a25173-ebea-d856-ed25-45437769f17f@gmail.com>
-Date:   Wed, 18 Nov 2020 11:57:44 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1727655AbgKRLAL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 18 Nov 2020 06:00:11 -0500
+Received: from www.linuxtv.org ([130.149.80.248]:50520 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727334AbgKRLAL (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 18 Nov 2020 06:00:11 -0500
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1kfLC6-00HRqE-9b; Wed, 18 Nov 2020 11:00:10 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1kfLFA-0000nT-T5; Wed, 18 Nov 2020 11:03:20 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL for 5.11] V4L2 sensor and CSI-2 driver patches (#69036)
+Date:   Wed, 18 Nov 2020 11:03:20 +0000
+Message-Id: <20201118110320.3022-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20201118104121.GE867@valkosipuli.retiisi.org.uk>
+References: 
 MIME-Version: 1.0
-In-Reply-To: <20201106144811.cf228ca9278ec78887d42960@linux-foundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Am 06.11.20 um 23:48 schrieb Andrew Morton:
-> On Fri,  6 Nov 2020 12:48:05 +0100 "Christian König" <ckoenig.leichtzumerken@gmail.com> wrote:
->
->> Patch "495c10cc1c0c CHROMIUM: dma-buf: restore args..."
->> adds a workaround for a bug in mmap_region.
->>
->> As the comment states ->mmap() callback can change
->> vma->vm_file and so we might call fput() on the wrong file.
->>
->> Revert the workaround and proper fix this in mmap_region.
->>
-> Seems correct, best I can tell.  Presumably all ->mmap() instances will
-> correctly fput() to original file* if they're rewriting vma->vm_file.
+From: builder@linuxtv.org
 
-Yes, exactly.
+Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/20201118104121.GE867@valkosipuli.retiisi.org.uk/
+Build log: https://builder.linuxtv.org/job/patchwork/77545/
+Build time: 00:08:16
+Link: https://lore.kernel.org/linux-media/20201118104121.GE867@valkosipuli.retiisi.org.uk
 
-Patch #2 provides a helper to make sure that everybody gets the 
-get_file()/fput() correctly while updating vma->vm_file.
+gpg: Signature made Wed 18 Nov 2020 10:33:24 AM UTC
+gpg:                using DSA key 53AC58A5F5948636C04A1BF8141DFA54A1EC8DEA
+gpg:                issuer "sakari.ailus@linux.intel.com"
+gpg: Can't check signature: No public key
 
-Can I add your acked-by to the patches and push them upstream through 
-drm-misc-next?
+Summary: got 4/12 patches with issues, being 0 at build time, plus one error when buinding PDF document
 
-Thanks,
-Christian.
+Error/warnings:
 
+patches/0002-media-i2c-Add-ov9734-image-sensor-driver.patch:
+
+   checkpatch.pl:
+	$ cat patches/0002-media-i2c-Add-ov9734-image-sensor-driver.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:35: WARNING: Possible repeated word: 'git'
+
+patches/0009-dt-bindings-ov2680-convert-bindings-to-yaml.patch:
+
+   checkpatch.pl:
+	$ cat patches/0009-dt-bindings-ov2680-convert-bindings-to-yaml.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:25: WARNING: DT binding docs and includes should be a separate patch. See: Documentation/devicetree/bindings/submitting-patches.rst
+	-:73: WARNING: DT binding docs and includes should be a separate patch. See: Documentation/devicetree/bindings/submitting-patches.rst
+
+patches/0010-dt-bindings-imx7-csi-convert-bindings-to-yaml.patch:
+
+   checkpatch.pl:
+	$ cat patches/0010-dt-bindings-imx7-csi-convert-bindings-to-yaml.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:25: WARNING: DT binding docs and includes should be a separate patch. See: Documentation/devicetree/bindings/submitting-patches.rst
+	-:69: WARNING: DT binding docs and includes should be a separate patch. See: Documentation/devicetree/bindings/submitting-patches.rst
+
+patches/0011-dt-bindings-imx7-mipi-csi2-convert-bindings-to-yaml.patch:
+
+   checkpatch.pl:
+	$ cat patches/0011-dt-bindings-imx7-mipi-csi2-convert-bindings-to-yaml.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:25: WARNING: DT binding docs and includes should be a separate patch. See: Documentation/devicetree/bindings/submitting-patches.rst
+	-:117: WARNING: DT binding docs and includes should be a separate patch. See: Documentation/devicetree/bindings/submitting-patches.rst
+
+
+Error #512 when building PDF docs
 
