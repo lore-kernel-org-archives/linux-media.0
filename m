@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7E43C64E7B
-	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 11:38:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77693C63697
+	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 11:38:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8E833246A7
-	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 11:38:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2B5B2246B0
+	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 11:38:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727838AbgKRLik (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 18 Nov 2020 06:38:40 -0500
-Received: from retiisi.eu ([95.216.213.190]:53500 "EHLO hillosipuli.retiisi.eu"
+        id S1727787AbgKRLif (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 18 Nov 2020 06:38:35 -0500
+Received: from retiisi.eu ([95.216.213.190]:53528 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726596AbgKRLib (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 18 Nov 2020 06:38:31 -0500
+        id S1727208AbgKRLie (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 18 Nov 2020 06:38:34 -0500
 Received: from lanttu.localdomain (lanttu.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::c1:2])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 62D28634CA3;
-        Wed, 18 Nov 2020 13:38:17 +0200 (EET)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 07D8A634CD4;
+        Wed, 18 Nov 2020 13:38:19 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, mchehab@kernel.org
-Subject: [PATCH 08/29] smiapp: Use MIPI CCS version and manufacturer ID information
-Date:   Wed, 18 Nov 2020 13:30:50 +0200
-Message-Id: <20201118113111.2548-9-sakari.ailus@linux.intel.com>
+Subject: [PATCH 25/29] dt-bindings: nokia,smia: Convert to YAML
+Date:   Wed, 18 Nov 2020 13:31:07 +0200
+Message-Id: <20201118113111.2548-26-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201118113111.2548-1-sakari.ailus@linux.intel.com>
 References: <20201118113111.2548-1-sakari.ailus@linux.intel.com>
@@ -37,249 +37,218 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Read MIPI CCS manufacturer and version information, and use the CCS IDs
-over SMIA whenever they are set.
+Convert nokia,smia DT bindings to YAML.
+
+Also add explicit license to bindings.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- drivers/media/i2c/smiapp/smiapp-core.c | 76 +++++++++++++++++++-------
- drivers/media/i2c/smiapp/smiapp.h      | 20 ++++---
- 2 files changed, 68 insertions(+), 28 deletions(-)
+ .../bindings/media/i2c/nokia,smia.txt         |  67 -----------
+ .../bindings/media/i2c/nokia,smia.yaml        | 106 ++++++++++++++++++
+ MAINTAINERS                                   |   2 +-
+ 3 files changed, 107 insertions(+), 68 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/media/i2c/nokia,smia.txt
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml
 
-diff --git a/drivers/media/i2c/smiapp/smiapp-core.c b/drivers/media/i2c/smiapp/smiapp-core.c
-index 75862e7647f8..bc9c80221d2f 100644
---- a/drivers/media/i2c/smiapp/smiapp-core.c
-+++ b/drivers/media/i2c/smiapp/smiapp-core.c
-@@ -2356,9 +2356,14 @@ smiapp_sysfs_ident_read(struct device *dev, struct device_attribute *attr,
- 	struct smiapp_sensor *sensor = to_smiapp_sensor(subdev);
- 	struct smiapp_module_info *minfo = &sensor->minfo;
- 
--	return snprintf(buf, PAGE_SIZE, "%2.2x%4.4x%2.2x\n",
--			minfo->manufacturer_id, minfo->model_id,
--			minfo->revision_number_major) + 1;
-+	if (minfo->mipi_manufacturer_id)
-+		return snprintf(buf, PAGE_SIZE, "%4.4x%4.4x%2.2x\n",
-+				minfo->mipi_manufacturer_id, minfo->model_id,
-+				minfo->revision_number_major) + 1;
-+	else
-+		return snprintf(buf, PAGE_SIZE, "%2.2x%4.4x%2.2x\n",
-+				minfo->smia_manufacturer_id, minfo->model_id,
-+				minfo->revision_number_major) + 1;
- }
- 
- static DEVICE_ATTR(ident, S_IRUGO, smiapp_sysfs_ident_read, NULL);
-@@ -2377,8 +2382,11 @@ static int smiapp_identify_module(struct smiapp_sensor *sensor)
- 	minfo->name = SMIAPP_NAME;
- 
- 	/* Module info */
--	rval = smiapp_read_8only(sensor, SMIAPP_REG_U8_MANUFACTURER_ID,
--				 &minfo->manufacturer_id);
-+	rval = ccs_read(sensor, MODULE_MANUFACTURER_ID,
-+			&minfo->mipi_manufacturer_id);
-+	if (!rval && !minfo->mipi_manufacturer_id)
-+		rval = smiapp_read_8only(sensor, SMIAPP_REG_U8_MANUFACTURER_ID,
-+					 &minfo->smia_manufacturer_id);
- 	if (!rval)
- 		rval = smiapp_read_8only(sensor, SMIAPP_REG_U16_MODEL_ID,
- 					 &minfo->model_id);
-@@ -2404,9 +2412,12 @@ static int smiapp_identify_module(struct smiapp_sensor *sensor)
- 
- 	/* Sensor info */
- 	if (!rval)
-+		rval = ccs_read(sensor, SENSOR_MANUFACTURER_ID,
-+				&minfo->sensor_mipi_manufacturer_id);
-+	if (!rval && !minfo->sensor_mipi_manufacturer_id)
- 		rval = smiapp_read_8only(sensor,
- 					 SMIAPP_REG_U8_SENSOR_MANUFACTURER_ID,
--					 &minfo->sensor_manufacturer_id);
-+					 &minfo->sensor_smia_manufacturer_id);
- 	if (!rval)
- 		rval = smiapp_read_8only(sensor,
- 					 SMIAPP_REG_U16_SENSOR_MODEL_ID,
-@@ -2422,9 +2433,11 @@ static int smiapp_identify_module(struct smiapp_sensor *sensor)
- 
- 	/* SMIA */
- 	if (!rval)
-+		rval = ccs_read(sensor, MIPI_CCS_VERSION, &minfo->ccs_version);
-+	if (!rval && !minfo->ccs_version)
- 		rval = smiapp_read_8only(sensor, SMIAPP_REG_U8_SMIA_VERSION,
- 					 &minfo->smia_version);
--	if (!rval)
-+	if (!rval && !minfo->ccs_version)
- 		rval = smiapp_read_8only(sensor, SMIAPP_REG_U8_SMIAPP_VERSION,
- 					 &minfo->smiapp_version);
- 
-@@ -2433,38 +2446,62 @@ static int smiapp_identify_module(struct smiapp_sensor *sensor)
- 		return -ENODEV;
- 	}
- 
--	dev_dbg(&client->dev, "module 0x%2.2x-0x%4.4x\n",
--		minfo->manufacturer_id, minfo->model_id);
-+	if (minfo->mipi_manufacturer_id)
-+		dev_dbg(&client->dev, "MIPI CCS module 0x%4.4x-0x%4.4x\n",
-+			minfo->mipi_manufacturer_id, minfo->model_id);
-+	else
-+		dev_dbg(&client->dev, "SMIA module 0x%2.2x-0x%4.4x\n",
-+			minfo->smia_manufacturer_id, minfo->model_id);
- 
- 	dev_dbg(&client->dev,
- 		"module revision 0x%2.2x-0x%2.2x date %2.2d-%2.2d-%2.2d\n",
- 		minfo->revision_number_major, minfo->revision_number_minor,
- 		minfo->module_year, minfo->module_month, minfo->module_day);
- 
--	dev_dbg(&client->dev, "sensor 0x%2.2x-0x%4.4x\n",
--		minfo->sensor_manufacturer_id, minfo->sensor_model_id);
-+	if (minfo->sensor_mipi_manufacturer_id)
-+		dev_dbg(&client->dev, "MIPI CCS sensor 0x%4.4x-0x%4.4x\n",
-+			minfo->sensor_mipi_manufacturer_id,
-+			minfo->sensor_model_id);
-+	else
-+		dev_dbg(&client->dev, "SMIA sensor 0x%2.2x-0x%4.4x\n",
-+			minfo->sensor_smia_manufacturer_id,
-+			minfo->sensor_model_id);
- 
- 	dev_dbg(&client->dev,
- 		"sensor revision 0x%2.2x firmware version 0x%2.2x\n",
- 		minfo->sensor_revision_number, minfo->sensor_firmware_version);
- 
--	dev_dbg(&client->dev, "smia version %2.2d smiapp version %2.2d\n",
--		minfo->smia_version, minfo->smiapp_version);
-+	if (minfo->ccs_version)
-+		dev_dbg(&client->dev, "MIPI CCS version %u.%u",
-+			(minfo->ccs_version & CCS_MIPI_CCS_VERSION_MAJOR_MASK)
-+			>> CCS_MIPI_CCS_VERSION_MAJOR_SHIFT,
-+			(minfo->ccs_version & CCS_MIPI_CCS_VERSION_MINOR_MASK));
-+	else
-+		dev_dbg(&client->dev,
-+			"smia version %2.2d smiapp version %2.2d\n",
-+			minfo->smia_version, minfo->smiapp_version);
- 
- 	/*
- 	 * Some modules have bad data in the lvalues below. Hope the
- 	 * rvalues have better stuff. The lvalues are module
- 	 * parameters whereas the rvalues are sensor parameters.
- 	 */
--	if (!minfo->manufacturer_id && !minfo->model_id) {
--		minfo->manufacturer_id = minfo->sensor_manufacturer_id;
-+	if (minfo->sensor_smia_manufacturer_id &&
-+	    !minfo->smia_manufacturer_id && !minfo->model_id) {
-+		minfo->smia_manufacturer_id =
-+			minfo->sensor_smia_manufacturer_id;
- 		minfo->model_id = minfo->sensor_model_id;
- 		minfo->revision_number_major = minfo->sensor_revision_number;
- 	}
- 
- 	for (i = 0; i < ARRAY_SIZE(smiapp_module_idents); i++) {
--		if (smiapp_module_idents[i].manufacturer_id
--		    != minfo->manufacturer_id)
-+		if (smiapp_module_idents[i].mipi_manufacturer_id &&
-+		    smiapp_module_idents[i].mipi_manufacturer_id
-+		    != minfo->mipi_manufacturer_id)
-+			continue;
-+		if (smiapp_module_idents[i].smia_manufacturer_id &&
-+		    smiapp_module_idents[i].smia_manufacturer_id
-+		    != minfo->smia_manufacturer_id)
- 			continue;
- 		if (smiapp_module_idents[i].model_id != minfo->model_id)
- 			continue;
-@@ -2488,9 +2525,8 @@ static int smiapp_identify_module(struct smiapp_sensor *sensor)
- 		dev_warn(&client->dev,
- 			 "no quirks for this module; let's hope it's fully compliant\n");
- 
--	dev_dbg(&client->dev, "the sensor is called %s, ident %2.2x%4.4x%2.2x\n",
--		minfo->name, minfo->manufacturer_id, minfo->model_id,
--		minfo->revision_number_major);
-+	dev_dbg(&client->dev, "the sensor is called %s\n",
-+		minfo->name);
- 
- 	return 0;
- }
-diff --git a/drivers/media/i2c/smiapp/smiapp.h b/drivers/media/i2c/smiapp/smiapp.h
-index 7cef97db7f47..b1d0e3d71630 100644
---- a/drivers/media/i2c/smiapp/smiapp.h
-+++ b/drivers/media/i2c/smiapp/smiapp.h
-@@ -91,8 +91,9 @@ struct smiapp_quirk;
- #define SMIAPP_MODULE_IDENT_FLAG_REV_LE		(1 << 0)
- 
- struct smiapp_module_ident {
--	u8 manufacturer_id;
-+	u16 mipi_manufacturer_id;
- 	u16 model_id;
-+	u8 smia_manufacturer_id;
- 	u8 revision_number_major;
- 
- 	u8 flags;
-@@ -102,7 +103,8 @@ struct smiapp_module_ident {
- };
- 
- struct smiapp_module_info {
--	u32 manufacturer_id;
-+	u32 smia_manufacturer_id;
-+	u32 mipi_manufacturer_id;
- 	u32 model_id;
- 	u32 revision_number_major;
- 	u32 revision_number_minor;
-@@ -111,13 +113,15 @@ struct smiapp_module_info {
- 	u32 module_month;
- 	u32 module_day;
- 
--	u32 sensor_manufacturer_id;
-+	u32 sensor_smia_manufacturer_id;
-+	u32 sensor_mipi_manufacturer_id;
- 	u32 sensor_model_id;
- 	u32 sensor_revision_number;
- 	u32 sensor_firmware_version;
- 
- 	u32 smia_version;
- 	u32 smiapp_version;
-+	u32 ccs_version;
- 
- 	u32 smiapp_profile;
- 
-@@ -126,7 +130,7 @@ struct smiapp_module_info {
- };
- 
- #define SMIAPP_IDENT_FQ(manufacturer, model, rev, fl, _name, _quirk)	\
--	{ .manufacturer_id = manufacturer,				\
-+	{ .smia_manufacturer_id = manufacturer,				\
- 	  .model_id = model,						\
- 	  .revision_number_major = rev,					\
- 	  .flags = fl,							\
-@@ -134,7 +138,7 @@ struct smiapp_module_info {
- 	  .quirk = _quirk, }
- 
- #define SMIAPP_IDENT_LQ(manufacturer, model, rev, _name, _quirk)	\
--	{ .manufacturer_id = manufacturer,				\
-+	{ .smia_manufacturer_id = manufacturer,				\
- 	  .model_id = model,						\
- 	  .revision_number_major = rev,					\
- 	  .flags = SMIAPP_MODULE_IDENT_FLAG_REV_LE,			\
-@@ -142,14 +146,14 @@ struct smiapp_module_info {
- 	  .quirk = _quirk, }
- 
- #define SMIAPP_IDENT_L(manufacturer, model, rev, _name)			\
--	{ .manufacturer_id = manufacturer,				\
-+	{ .smia_manufacturer_id = manufacturer,				\
- 	  .model_id = model,						\
- 	  .revision_number_major = rev,					\
- 	  .flags = SMIAPP_MODULE_IDENT_FLAG_REV_LE,			\
- 	  .name = _name, }
- 
- #define SMIAPP_IDENT_Q(manufacturer, model, rev, _name, _quirk)		\
--	{ .manufacturer_id = manufacturer,				\
-+	{ .smia_manufacturer_id = manufacturer,				\
- 	  .model_id = model,						\
- 	  .revision_number_major = rev,					\
- 	  .flags = 0,							\
-@@ -157,7 +161,7 @@ struct smiapp_module_info {
- 	  .quirk = _quirk, }
- 
- #define SMIAPP_IDENT(manufacturer, model, rev, _name)			\
--	{ .manufacturer_id = manufacturer,				\
-+	{ .smia_manufacturer_id = manufacturer,				\
- 	  .model_id = model,						\
- 	  .revision_number_major = rev,					\
- 	  .flags = 0,							\
+diff --git a/Documentation/devicetree/bindings/media/i2c/nokia,smia.txt b/Documentation/devicetree/bindings/media/i2c/nokia,smia.txt
+deleted file mode 100644
+index 5f39a7070c51..000000000000
+--- a/Documentation/devicetree/bindings/media/i2c/nokia,smia.txt
++++ /dev/null
+@@ -1,67 +0,0 @@
+-SMIA/SMIA++ sensor
+-
+-SMIA (Standard Mobile Imaging Architecture) is an image sensor standard
+-defined jointly by Nokia and ST. SMIA++, defined by Nokia, is an extension
+-of that. These definitions are valid for both types of sensors.
+-
+-More detailed documentation can be found in
+-Documentation/devicetree/bindings/media/video-interfaces.txt .
+-
+-The device node should contain a "port" node which may contain one or more
+-endpoint nodes, in accordance with video interface bindings defined in
+-Documentation/devicetree/bindings/media/video-interfaces.txt .
+-
+-Mandatory properties
+---------------------
+-
+-- compatible: "nokia,smia"
+-- reg: I2C address (0x10, or an alternative address)
+-- clocks: External clock to the sensor
+-- clock-frequency: Frequency of the external clock to the sensor
+-
+-
+-Optional properties
+--------------------
+-
+-- reset-gpios: XSHUTDOWN GPIO
+-- flash-leds: See ../video-interfaces.txt
+-- lens-focus: See ../video-interfaces.txt
+-- rotation: Integer property; valid values are 0 (sensor mounted upright)
+-	    and 180 (sensor mounted upside down). See
+-	    ../video-interfaces.txt .
+-- vana-supply: Analogue voltage supply (VANA), typically 2,8 volts (sensor
+-  dependent).
+-
+-
+-Endpoint node mandatory properties
+-----------------------------------
+-
+-- data-lanes: <1..n>
+-- link-frequencies: List of allowed data link frequencies. An array of
+-  64-bit elements.
+-
+-
+-Example
+--------
+-
+-&i2c2 {
+-	clock-frequency = <400000>;
+-
+-	camera-sensor@10 {
+-		compatible = "nokia,smia";
+-		reg = <0x10>;
+-		reset-gpios = <&gpio3 20 0>;
+-		vana-supply = <&vaux3>;
+-		clocks = <&omap3_isp 0>;
+-		clock-frequency = <9600000>;
+-		port {
+-			smiapp_ep: endpoint {
+-				data-lanes = <1 2>;
+-				remote-endpoint = <&csi2a_ep>;
+-				link-frequencies =
+-					/bits/ 64 <199200000 210000000
+-						   499200000>;
+-			};
+-		};
+-	};
+-};
+diff --git a/Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml b/Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml
+new file mode 100644
+index 000000000000..ee552489fa2b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml
+@@ -0,0 +1,106 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (C) 2014--2020 Intel Corporation
++
++$id: http://devicetree.org/schemas/media/i2c/nokia,smia.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: SMIA/SMIA++ sensor
++
++maintainers:
++  - Sakari Ailus <sakari.ailus@linux.intel.com>
++
++description:
++
++  SMIA (Standard Mobile Imaging Architecture) is an image sensor standard
++  defined jointly by Nokia and ST. SMIA++, defined by Nokia, is an extension of
++  that. These definitions are valid for both types of sensors.
++
++  More detailed documentation can be found in
++  Documentation/devicetree/bindings/media/video-interfaces.txt .
++
++properties:
++  compatible:
++    const: nokia,smia
++
++  reg:
++    maxItems: 1
++
++  vana-supply:
++    description: Analogue voltage supply (VANA), typically 2,8 volts (sensor
++      dependent).
++    maxItems: 1
++
++  clocks:
++    description: External clock to the sensor.
++    maxItems: 1
++
++  clock-frequency:
++    description: Frequency of the external clock to the sensor in Hz.
++
++  reset-gpios:
++    description: Reset GPIO. Also commonly called XSHUTDOWN in hardware
++      documentation.
++    maxItems: 1
++
++  flash-leds:
++    description: Flash LED phandles. See ../video-interfaces.txt for details.
++
++  lens-focus:
++    description: Lens focus controller phandles. See ../video-interfaces.txt
++      for details.
++
++  rotation:
++    description: Rotation of the sensor.  See ../video-interfaces.txt for
++      details.
++    enum: [ 0, 180 ]
++
++  port:
++    type: object
++    properties:
++      endpoint:
++        type: object
++        properties:
++          link-frequencies:
++            $ref: /schemas/types.yaml#/definitions/uint64-array
++            description: List of allowed data link frequencies.
++          data-lanes:
++            minItems: 1
++            maxItems: 8
++        required:
++          - link-frequencies
++          - data-lanes
++
++required:
++  - compatible
++  - reg
++  - clock-frequency
++  - clocks
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c2 {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        clock-frequency = <400000>;
++
++        camera-sensor@10 {
++            compatible = "nokia,smia";
++            reg = <0x10>;
++            reset-gpios = <&gpio3 20 0>;
++            vana-supply = <&vaux3>;
++            clocks = <&omap3_isp 0>;
++            clock-frequency = <9600000>;
++            port {
++                smiapp_ep: endpoint {
++                    data-lanes = <1 2>;
++                    remote-endpoint = <&csi2a_ep>;
++                    link-frequencies = /bits/ 64 <199200000 210000000
++                                                  499200000>;
++                };
++            };
++        };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 0fb68a0a38dc..fe5c49316864 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11666,7 +11666,7 @@ MIPI CCS, SMIA AND SMIA++ IMAGE SENSOR DRIVER
+ M:	Sakari Ailus <sakari.ailus@linux.intel.com>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+-F:	Documentation/devicetree/bindings/media/i2c/nokia,smia.txt
++F:	Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml
+ F:	drivers/media/i2c/ccs/
+ F:	drivers/media/i2c/smiapp-pll.c
+ F:	drivers/media/i2c/smiapp-pll.h
 -- 
 2.27.0
 
