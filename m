@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56542C5519F
-	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 11:38:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DBE0C64E8A
+	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 11:38:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 02B64246A6
-	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 11:38:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B49EA246B7
+	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 11:38:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727070AbgKRLia (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 18 Nov 2020 06:38:30 -0500
-Received: from retiisi.eu ([95.216.213.190]:53506 "EHLO hillosipuli.retiisi.eu"
+        id S1727793AbgKRLig (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 18 Nov 2020 06:38:36 -0500
+Received: from retiisi.eu ([95.216.213.190]:53504 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726733AbgKRLia (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 18 Nov 2020 06:38:30 -0500
+        id S1727334AbgKRLie (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 18 Nov 2020 06:38:34 -0500
 Received: from lanttu.localdomain (lanttu.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::c1:2])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id A7A75634CA9;
-        Wed, 18 Nov 2020 13:38:17 +0200 (EET)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 46982634CD8;
+        Wed, 18 Nov 2020 13:38:19 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, mchehab@kernel.org
-Subject: [PATCH 11/29] smiapp: Obtain frame descriptor from CCS limits
-Date:   Wed, 18 Nov 2020 13:30:53 +0200
-Message-Id: <20201118113111.2548-12-sakari.ailus@linux.intel.com>
+Subject: [PATCH 28/29] dt-bindings: mipi-ccs: Add bus-type for C-PHY support
+Date:   Wed, 18 Nov 2020 13:31:10 +0200
+Message-Id: <20201118113111.2548-29-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201118113111.2548-1-sakari.ailus@linux.intel.com>
 References: <20201118113111.2548-1-sakari.ailus@linux.intel.com>
@@ -37,155 +37,48 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Obtain the frame descriptor from the CCS limits, instead of reading them
-directly from the frame descriptor registers.
+The bus-type property is required for C-PHY support. Add it, including
+values for CCP2 and CSI-2 D-PHY.
+
+Also require the bus-type property. Effectively all new sensors are MIPI
+D-PHY or C-PHY that cannot be told apart without the bus-type property.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- drivers/media/i2c/smiapp/smiapp-core.c | 70 +++++++++++---------------
- 1 file changed, 30 insertions(+), 40 deletions(-)
+ .../devicetree/bindings/media/i2c/mipi-ccs.yaml          | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/media/i2c/smiapp/smiapp-core.c b/drivers/media/i2c/smiapp/smiapp-core.c
-index 2c1a13507965..daeff6186727 100644
---- a/drivers/media/i2c/smiapp/smiapp-core.c
-+++ b/drivers/media/i2c/smiapp/smiapp-core.c
-@@ -228,34 +228,29 @@ static int ccs_read_all_limits(struct smiapp_sensor *sensor)
- static int smiapp_read_frame_fmt(struct smiapp_sensor *sensor)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
--	u32 fmt_model_type, fmt_model_subtype, ncol_desc, nrow_desc;
-+	u8 fmt_model_type, fmt_model_subtype, ncol_desc, nrow_desc;
- 	unsigned int i;
- 	int pixel_count = 0;
- 	int line_count = 0;
--	int rval;
--
--	rval = smiapp_read(sensor, SMIAPP_REG_U8_FRAME_FORMAT_MODEL_TYPE,
--			   &fmt_model_type);
--	if (rval)
--		return rval;
- 
--	rval = smiapp_read(sensor, SMIAPP_REG_U8_FRAME_FORMAT_MODEL_SUBTYPE,
--			   &fmt_model_subtype);
--	if (rval)
--		return rval;
-+	fmt_model_type = CCS_LIM(sensor, FRAME_FORMAT_MODEL_TYPE);
-+	fmt_model_subtype = CCS_LIM(sensor, FRAME_FORMAT_MODEL_SUBTYPE);
- 
- 	ncol_desc = (fmt_model_subtype
--		     & SMIAPP_FRAME_FORMAT_MODEL_SUBTYPE_NCOLS_MASK)
--		>> SMIAPP_FRAME_FORMAT_MODEL_SUBTYPE_NCOLS_SHIFT;
-+		     & CCS_FRAME_FORMAT_MODEL_SUBTYPE_COLUMNS_MASK)
-+		>> CCS_FRAME_FORMAT_MODEL_SUBTYPE_COLUMNS_SHIFT;
- 	nrow_desc = fmt_model_subtype
--		& SMIAPP_FRAME_FORMAT_MODEL_SUBTYPE_NROWS_MASK;
-+		& CCS_FRAME_FORMAT_MODEL_SUBTYPE_ROWS_MASK;
- 
- 	dev_dbg(&client->dev, "format_model_type %s\n",
--		fmt_model_type == SMIAPP_FRAME_FORMAT_MODEL_TYPE_2BYTE
-+		fmt_model_type == CCS_FRAME_FORMAT_MODEL_TYPE_2_BYTE
- 		? "2 byte" :
--		fmt_model_type == SMIAPP_FRAME_FORMAT_MODEL_TYPE_4BYTE
-+		fmt_model_type == CCS_FRAME_FORMAT_MODEL_TYPE_4_BYTE
- 		? "4 byte" : "is simply bad");
- 
-+	dev_dbg(&client->dev, "%u column and %u row descriptors\n",
-+		ncol_desc, nrow_desc);
+diff --git a/Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml b/Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml
+index a386ee246956..1d90767a6196 100644
+--- a/Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml
++++ b/Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml
+@@ -77,9 +77,17 @@ properties:
+           data-lanes:
+             minItems: 1
+             maxItems: 8
++          bus-type:
++            description: The type of the data bus.
++            oneOf:
++              - const: 1 # CSI-2 C-PHY
++              - const: 3 # CCP2
++              - const: 4 # CSI-2 D-PHY
 +
- 	for (i = 0; i < ncol_desc + nrow_desc; i++) {
- 		u32 desc;
- 		u32 pixelcode;
-@@ -264,29 +259,24 @@ static int smiapp_read_frame_fmt(struct smiapp_sensor *sensor)
- 		char *what;
- 		u32 reg;
+         required:
+           - link-frequencies
+           - data-lanes
++          - bus-type
  
--		if (fmt_model_type == SMIAPP_FRAME_FORMAT_MODEL_TYPE_2BYTE) {
--			reg = SMIAPP_REG_U16_FRAME_FORMAT_DESCRIPTOR_2(i);
--			rval = smiapp_read(sensor, reg,	&desc);
--			if (rval)
--				return rval;
-+		if (fmt_model_type == CCS_FRAME_FORMAT_MODEL_TYPE_2_BYTE) {
-+			desc = CCS_LIM_AT(sensor, FRAME_FORMAT_DESCRIPTOR, i);
- 
- 			pixelcode =
- 				(desc
--				 & SMIAPP_FRAME_FORMAT_DESC_2_PIXELCODE_MASK)
--				>> SMIAPP_FRAME_FORMAT_DESC_2_PIXELCODE_SHIFT;
--			pixels = desc & SMIAPP_FRAME_FORMAT_DESC_2_PIXELS_MASK;
-+				 & CCS_FRAME_FORMAT_DESCRIPTOR_PCODE_MASK)
-+				>> CCS_FRAME_FORMAT_DESCRIPTOR_PCODE_SHIFT;
-+			pixels = desc & CCS_FRAME_FORMAT_DESCRIPTOR_PIXELS_MASK;
- 		} else if (fmt_model_type
--			   == SMIAPP_FRAME_FORMAT_MODEL_TYPE_4BYTE) {
--			reg = SMIAPP_REG_U32_FRAME_FORMAT_DESCRIPTOR_4(i);
--			rval = smiapp_read(sensor, reg, &desc);
--			if (rval)
--				return rval;
-+			   == CCS_FRAME_FORMAT_MODEL_TYPE_4_BYTE) {
-+			desc = CCS_LIM_AT(sensor, FRAME_FORMAT_DESCRIPTOR_4, i);
- 
- 			pixelcode =
- 				(desc
--				 & SMIAPP_FRAME_FORMAT_DESC_4_PIXELCODE_MASK)
--				>> SMIAPP_FRAME_FORMAT_DESC_4_PIXELCODE_SHIFT;
--			pixels = desc & SMIAPP_FRAME_FORMAT_DESC_4_PIXELS_MASK;
-+				 & CCS_FRAME_FORMAT_DESCRIPTOR_4_PCODE_MASK)
-+				>> CCS_FRAME_FORMAT_DESCRIPTOR_4_PCODE_SHIFT;
-+			pixels = desc &
-+				CCS_FRAME_FORMAT_DESCRIPTOR_4_PIXELS_MASK;
- 		} else {
- 			dev_dbg(&client->dev,
- 				"invalid frame format model type %d\n",
-@@ -300,19 +290,19 @@ static int smiapp_read_frame_fmt(struct smiapp_sensor *sensor)
- 			which = "rows";
- 
- 		switch (pixelcode) {
--		case SMIAPP_FRAME_FORMAT_DESC_PIXELCODE_EMBEDDED:
-+		case CCS_FRAME_FORMAT_DESCRIPTOR_PCODE_EMBEDDED:
- 			what = "embedded";
- 			break;
--		case SMIAPP_FRAME_FORMAT_DESC_PIXELCODE_DUMMY:
-+		case CCS_FRAME_FORMAT_DESCRIPTOR_PCODE_DUMMY_PIXEL:
- 			what = "dummy";
- 			break;
--		case SMIAPP_FRAME_FORMAT_DESC_PIXELCODE_BLACK:
-+		case CCS_FRAME_FORMAT_DESCRIPTOR_PCODE_BLACK_PIXEL:
- 			what = "black";
- 			break;
--		case SMIAPP_FRAME_FORMAT_DESC_PIXELCODE_DARK:
-+		case CCS_FRAME_FORMAT_DESCRIPTOR_PCODE_DARK_PIXEL:
- 			what = "dark";
- 			break;
--		case SMIAPP_FRAME_FORMAT_DESC_PIXELCODE_VISIBLE:
-+		case CCS_FRAME_FORMAT_DESCRIPTOR_PCODE_VISIBLE_PIXEL:
- 			what = "visible";
- 			break;
- 		default:
-@@ -326,7 +316,7 @@ static int smiapp_read_frame_fmt(struct smiapp_sensor *sensor)
- 
- 		if (i < ncol_desc) {
- 			if (pixelcode ==
--			    SMIAPP_FRAME_FORMAT_DESC_PIXELCODE_VISIBLE)
-+			    CCS_FRAME_FORMAT_DESCRIPTOR_PCODE_VISIBLE_PIXEL)
- 				sensor->visible_pixel_start = pixel_count;
- 			pixel_count += pixels;
- 			continue;
-@@ -334,13 +324,13 @@ static int smiapp_read_frame_fmt(struct smiapp_sensor *sensor)
- 
- 		/* Handle row descriptors */
- 		switch (pixelcode) {
--		case SMIAPP_FRAME_FORMAT_DESC_PIXELCODE_EMBEDDED:
-+		case CCS_FRAME_FORMAT_DESCRIPTOR_PCODE_EMBEDDED:
- 			if (sensor->embedded_end)
- 				break;
- 			sensor->embedded_start = line_count;
- 			sensor->embedded_end = line_count + pixels;
- 			break;
--		case SMIAPP_FRAME_FORMAT_DESC_PIXELCODE_VISIBLE:
-+		case CCS_FRAME_FORMAT_DESCRIPTOR_PCODE_VISIBLE_PIXEL:
- 			sensor->image_start = line_count;
- 			break;
- 		}
+ required:
+   - compatible
+@@ -112,6 +120,7 @@ examples:
+                     remote-endpoint = <&csi2a_ep>;
+                     link-frequencies = /bits/ 64 <199200000 210000000
+                                                   499200000>;
++                    bus-type = <4>;
+                 };
+             };
+         };
 -- 
 2.27.0
 
