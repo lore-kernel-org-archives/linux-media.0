@@ -7,22 +7,25 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BC87C64E8A
-	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 18:48:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73CADC64E7B
+	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 18:48:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F24EA246B9
+	by mail.kernel.org (Postfix) with ESMTP id 33037246B9
 	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 18:48:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727032AbgKRSsB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 18 Nov 2020 13:48:01 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:37748 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727027AbgKRSsB (ORCPT
+        id S1726977AbgKRSry (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 18 Nov 2020 13:47:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50876 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725822AbgKRSrx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 18 Nov 2020 13:48:01 -0500
+        Wed, 18 Nov 2020 13:47:53 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9498BC0613D4;
+        Wed, 18 Nov 2020 10:47:53 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id 8EB2A1F4499B
+        with ESMTPSA id 811671F4499B
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
@@ -33,9 +36,9 @@ Cc:     kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Jernej Skrabec <jernej.skrabec@siol.net>,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v3 11/13] media: controls: Log H264 stateless controls in .std_log
-Date:   Wed, 18 Nov 2020 15:46:58 -0300
-Message-Id: <20201118184700.331213-12-ezequiel@collabora.com>
+Subject: [PATCH v3 09/13] media: uapi: Move parsed H264 pixel format out of staging
+Date:   Wed, 18 Nov 2020 15:46:56 -0300
+Message-Id: <20201118184700.331213-10-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201118184700.331213-1-ezequiel@collabora.com>
 References: <20201118184700.331213-1-ezequiel@collabora.com>
@@ -45,45 +48,41 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-For now, only print the type of the control. In the future,
-we might want to be able to print the values of all
-the stateless codec controls currently set in the control handler,
-which should be useful for debugging reasons.
+Since we are ready to stabilize the H264 stateless API,
+start by first moving the parsed H264 pixel format.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- drivers/media/v4l2-core/v4l2-ctrls.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ include/media/h264-ctrls.h     | 3 ---
+ include/uapi/linux/videodev2.h | 1 +
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 472b46e8290b..e2c61d39b6b1 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -1737,6 +1737,24 @@ static void std_log(const struct v4l2_ctrl *ctrl)
- 	case V4L2_CTRL_TYPE_U32:
- 		pr_cont("%u", (unsigned)*ptr.p_u32);
- 		break;
-+	case V4L2_CTRL_TYPE_H264_SPS:
-+		pr_cont("H264_SPS");
-+		break;
-+	case V4L2_CTRL_TYPE_H264_PPS:
-+		pr_cont("H264_PPS");
-+		break;
-+	case V4L2_CTRL_TYPE_H264_SCALING_MATRIX:
-+		pr_cont("H264_SCALING_MATRIX");
-+		break;
-+	case V4L2_CTRL_TYPE_H264_SLICE_PARAMS:
-+		pr_cont("H264_SLICE_PARAMS");
-+		break;
-+	case V4L2_CTRL_TYPE_H264_DECODE_PARAMS:
-+		pr_cont("H264_DECODE_PARAMS");
-+		break;
-+	case V4L2_CTRL_TYPE_H264_PRED_WEIGHTS:
-+		pr_cont("H264_PRED_WEIGHTS");
-+		break;
- 	default:
- 		pr_cont("unknown type %d", ctrl->type);
- 		break;
+diff --git a/include/media/h264-ctrls.h b/include/media/h264-ctrls.h
+index e14307f1a77c..d00d52556b6f 100644
+--- a/include/media/h264-ctrls.h
++++ b/include/media/h264-ctrls.h
+@@ -21,9 +21,6 @@
+ 
+ #define V4L2_H264_REF_LIST_LEN (2 * V4L2_H264_NUM_DPB_ENTRIES)
+ 
+-/* Our pixel format isn't stable at the moment */
+-#define V4L2_PIX_FMT_H264_SLICE v4l2_fourcc('S', '2', '6', '4') /* H264 parsed slices */
+-
+ /*
+  * This is put insanely high to avoid conflicting with controls that
+  * would be added during the phase where those controls are not
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 927075fa9099..306d569bec11 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -703,6 +703,7 @@ struct v4l2_pix_format {
+ #define V4L2_PIX_FMT_HEVC     v4l2_fourcc('H', 'E', 'V', 'C') /* HEVC aka H.265 */
+ #define V4L2_PIX_FMT_FWHT     v4l2_fourcc('F', 'W', 'H', 'T') /* Fast Walsh Hadamard Transform (vicodec) */
+ #define V4L2_PIX_FMT_FWHT_STATELESS     v4l2_fourcc('S', 'F', 'W', 'H') /* Stateless FWHT (vicodec) */
++#define V4L2_PIX_FMT_H264_SLICE v4l2_fourcc('S', '2', '6', '4') /* H264 parsed slices */
+ 
+ /*  Vendor-specific formats   */
+ #define V4L2_PIX_FMT_CPIA1    v4l2_fourcc('C', 'P', 'I', 'A') /* cpia1 YUV */
 -- 
 2.27.0
 
