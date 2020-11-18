@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EC6BC56202
-	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 11:38:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FA65C63798
+	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 11:38:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E916820B80
-	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 11:38:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C53A2463B
+	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 11:38:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726795AbgKRLi3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 18 Nov 2020 06:38:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40878 "EHLO
+        id S1727000AbgKRLia (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 18 Nov 2020 06:38:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726156AbgKRLi2 (ORCPT
+        with ESMTP id S1726885AbgKRLia (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 18 Nov 2020 06:38:28 -0500
+        Wed, 18 Nov 2020 06:38:30 -0500
 Received: from hillosipuli.retiisi.eu (hillosipuli.retiisi.eu [IPv6:2a01:4f9:c010:4572::81:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C048C0613D6
-        for <linux-media@vger.kernel.org>; Wed, 18 Nov 2020 03:38:28 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08EF9C0613D4
+        for <linux-media@vger.kernel.org>; Wed, 18 Nov 2020 03:38:30 -0800 (PST)
 Received: from lanttu.localdomain (lanttu.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::c1:2])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id C3D6E634C95;
-        Wed, 18 Nov 2020 13:38:16 +0200 (EET)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 18AC7634C98;
+        Wed, 18 Nov 2020 13:38:17 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, mchehab@kernel.org
-Subject: [PATCH 02/29] Documentation: ccs: Add CCS driver documentation
-Date:   Wed, 18 Nov 2020 13:30:44 +0200
-Message-Id: <20201118113111.2548-3-sakari.ailus@linux.intel.com>
+Subject: [PATCH 05/29] smiapp: Calculate CCS limit offsets and limit buffer size
+Date:   Wed, 18 Nov 2020 13:30:47 +0200
+Message-Id: <20201118113111.2548-6-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201118113111.2548-1-sakari.ailus@linux.intel.com>
 References: <20201118113111.2548-1-sakari.ailus@linux.intel.com>
@@ -41,115 +41,80 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Document the MIPI CCS driver and the C register definition generator.
+Calculate the limit offsets and the size of the limit buffer. CCS limits
+are read into this buffer, and the offsets are helpful in accessing the
+information in it.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- .../driver-api/media/drivers/ccs/ccs.rst      | 82 +++++++++++++++++++
- .../driver-api/media/drivers/index.rst        |  1 +
- 2 files changed, 83 insertions(+)
- create mode 100644 Documentation/driver-api/media/drivers/ccs/ccs.rst
+ drivers/media/i2c/smiapp/smiapp-core.c | 40 +++++++++++++++++++++++++-
+ 1 file changed, 39 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/driver-api/media/drivers/ccs/ccs.rst b/Documentation/driver-api/media/drivers/ccs/ccs.rst
-new file mode 100644
-index 000000000000..93537307c6cd
---- /dev/null
-+++ b/Documentation/driver-api/media/drivers/ccs/ccs.rst
-@@ -0,0 +1,82 @@
-+.. SPDX-License-Identifier: GPL-2.0-only OR BSD-3-Clause
-+
-+.. include:: <isonum.txt>
-+
-+MIPI CCS camera sensor driver
-+=============================
-+
-+The MIPI CCS camera sensor driver is a generic driver for `MIPI CCS
-+<https://www.mipi.org/specifications/camera-command-set>`_ compliant
-+camera sensors. It exposes three sub-devices representing the pixel array,
-+the binner and the scaler.
-+
-+As the capabilities of individual devices vary, the driver exposes
-+interfaces based on the capabilities that exist in hardware.
-+
-+Pixel Array sub-device
-+----------------------
-+
-+The pixel array sub-device represents the camera sensor's pixel matrix, as well
-+as analogue crop functionality present in many compliant devices. The analogue
-+crop is configured using the ``V4L2_SEL_TGT_CROP`` on the source pad (0) of the
-+entity. The size of the pixel matrix can be obtained by getting the
-+``V4L2_SEL_TGT_NATIVE_SIZE`` target.
-+
-+Binner
-+------
-+
-+The binner sub-device represents the binning functionality on the sensor. For
-+that purpose, selection target ``V4L2_SEL_TGT_COMPOSE`` is supported on the
-+sink pad (0).
-+
-+Additionally, if a device has no scaler or digital crop functionality, the
-+source pad (1) expses another digital crop selection rectangle that can only
-+crop at the end of the lines and frames.
-+
-+Scaler
-+------
-+
-+The scaler sub-device represents the digital crop and scaling functionality of
-+the sensor. The V4L2 selection target ``V4L2_SEL_TGT_CROP`` is used to
-+configure the digital crop on the sink pad (0) when digital crop is supported.
-+Scaling is configured using selection target ``V4L2_SEL_TGT_COMPOSE`` on the
-+sink pad (0) as well.
-+
-+Additionally, if the scaler sub-device exists, its source pad (1) exposes
-+another digital crop selection rectangle that can only crop at the end of the
-+lines and frames.
-+
-+Digital and analogue crop
-+-------------------------
-+
-+Digital crop functionality is referred to as cropping that effectively works by
-+dropping some data on the floor. Analogue crop, on the other hand, means that
-+the cropped information is never retrieved. In case of camera sensors, the
-+analogue data is never read from the pixel matrix that are outside the
-+configured selection rectangle that designates crop. The difference has an
-+effect in device timing and likely also in power consumption.
-+
-+Register definition generator
-+-----------------------------
-+
-+The ccs-regs.txt file contains MIPI CCS register definitions that are used
-+to produce C source code files for definitions that can be better used by
-+programs written in C language. As there are many dependencies between the
-+produced files, please do not modify them manually as it's error-prone and
-+in vain, but instead change the script producing them.
-+
-+Usage
-+~~~~~
-+
-+Conventionally the script is called this way to update the CCS driver
-+definitions:
-+
-+.. code-block:: none
-+
-+	$ Documentation/driver-api/media/drivers/ccs/mk-ccs-regs \
-+		-e drivers/media/i2c/ccs/ccs-regs.h \
-+		-L drivers/media/i2c/ccs/ccs-limits.h \
-+		-l drivers/media/i2c/ccs/ccs-limits.c \
-+		-c Documentation/driver-api/media/drivers/ccs/ccs-regs.txt
-+
-+**Copyright** |copy| 2020 Intel Corporation
-diff --git a/Documentation/driver-api/media/drivers/index.rst b/Documentation/driver-api/media/drivers/index.rst
-index eb7011782863..426cda633bf0 100644
---- a/Documentation/driver-api/media/drivers/index.rst
-+++ b/Documentation/driver-api/media/drivers/index.rst
-@@ -26,6 +26,7 @@ Video4Linux (V4L) drivers
- 	tuners
- 	vimc-devel
- 	zoran
-+	ccs/ccs
+diff --git a/drivers/media/i2c/smiapp/smiapp-core.c b/drivers/media/i2c/smiapp/smiapp-core.c
+index 105ef29152e8..75862e7647f8 100644
+--- a/drivers/media/i2c/smiapp/smiapp-core.c
++++ b/drivers/media/i2c/smiapp/smiapp-core.c
+@@ -27,6 +27,7 @@
+ #include <media/v4l2-fwnode.h>
+ #include <media/v4l2-device.h>
  
++#include "ccs-limits.h"
+ #include "smiapp.h"
  
- Digital TV drivers
+ #define SMIAPP_ALIGN_DIM(dim, flags)	\
+@@ -34,6 +35,11 @@
+ 	 ? ALIGN((dim), 2)		\
+ 	 : (dim) & ~1)
+ 
++static struct ccs_limit_offset {
++	u16	lim;
++	u16	info;
++} ccs_limit_offsets[CCS_L_LAST + 1];
++
+ /*
+  * smiapp_module_idents - supported camera modules
+  */
+@@ -3166,7 +3172,39 @@ static struct i2c_driver smiapp_i2c_driver = {
+ 	.id_table = smiapp_id_table,
+ };
+ 
+-module_i2c_driver(smiapp_i2c_driver);
++static int smiapp_module_init(void)
++{
++	unsigned int i, l;
++
++	for (i = 0, l = 0; ccs_limits[i].size && l < CCS_L_LAST; i++) {
++		if (!(ccs_limits[i].flags & CCS_L_FL_SAME_REG)) {
++			ccs_limit_offsets[l + 1].lim =
++				ALIGN(ccs_limit_offsets[l].lim +
++				      ccs_limits[i].size,
++				      ccs_reg_width(ccs_limits[i + 1].reg));
++			ccs_limit_offsets[l].info = i;
++			l++;
++		} else {
++			ccs_limit_offsets[l].lim += ccs_limits[i].size;
++		}
++	}
++
++	if (WARN_ON(ccs_limits[i].size))
++		return -EINVAL;
++
++	if (WARN_ON(l != CCS_L_LAST))
++		return -EINVAL;
++
++	return i2c_register_driver(THIS_MODULE, &smiapp_i2c_driver);
++}
++
++static void smiapp_module_cleanup(void)
++{
++	i2c_del_driver(&smiapp_i2c_driver);
++}
++
++module_init(smiapp_module_init);
++module_exit(smiapp_module_cleanup);
+ 
+ MODULE_AUTHOR("Sakari Ailus <sakari.ailus@iki.fi>");
+ MODULE_DESCRIPTION("Generic SMIA/SMIA++ camera module driver");
 -- 
 2.27.0
 
