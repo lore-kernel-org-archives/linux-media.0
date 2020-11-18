@@ -7,27 +7,31 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38FA0C71156
-	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 11:38:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50A65C64E90
+	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 11:38:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E774A2462E
-	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 11:38:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 040E82462E
+	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 11:38:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727829AbgKRLij (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 18 Nov 2020 06:38:39 -0500
-Received: from retiisi.eu ([95.216.213.190]:53528 "EHLO hillosipuli.retiisi.eu"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727073AbgKRLic (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 18 Nov 2020 06:38:32 -0500
+        id S1727789AbgKRLig (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 18 Nov 2020 06:38:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40906 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727741AbgKRLif (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 18 Nov 2020 06:38:35 -0500
+Received: from hillosipuli.retiisi.eu (hillosipuli.retiisi.eu [IPv6:2a01:4f9:c010:4572::81:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61734C0613D4
+        for <linux-media@vger.kernel.org>; Wed, 18 Nov 2020 03:38:35 -0800 (PST)
 Received: from lanttu.localdomain (lanttu.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::c1:2])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 0BA0F634CBF;
-        Wed, 18 Nov 2020 13:38:18 +0200 (EET)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 5756F634CD9;
+        Wed, 18 Nov 2020 13:38:19 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, mchehab@kernel.org
-Subject: [PATCH 15/29] smiapp: Remove quirk function for writing a single 8-bit register
-Date:   Wed, 18 Nov 2020 13:30:57 +0200
-Message-Id: <20201118113111.2548-16-sakari.ailus@linux.intel.com>
+Subject: [PATCH 29/29] ccs: Request for "reset" GPIO
+Date:   Wed, 18 Nov 2020 13:31:11 +0200
+Message-Id: <20201118113111.2548-30-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201118113111.2548-1-sakari.ailus@linux.intel.com>
 References: <20201118113111.2548-1-sakari.ailus@linux.intel.com>
@@ -37,71 +41,79 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This function is no longer needed as the smiapp_write() function can be
-used to write 8-bit registers with plain register addresses.
+The DT bindings documented "reset-gpios" property but the driver never
+made use of it. Instead it used a GPIO called "xshutdown", with apprently
+wrong polarity.
+
+Fix this by requesting "reset" GPIO with the right polarity first, and if
+that fails, then request "xshutdown" GPIO with the old polarity. This way
+it works for new users as expected while if someone, somewhere, depended
+on "xshutdown" GPIO, that continues to work as well.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/smiapp/smiapp-quirk.c | 15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
+ drivers/media/i2c/ccs/ccs-core.c | 14 ++++++++++++--
+ drivers/media/i2c/ccs/ccs.h      |  1 +
+ 2 files changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/i2c/smiapp/smiapp-quirk.c b/drivers/media/i2c/smiapp/smiapp-quirk.c
-index 24630c7650d2..9422eb61b424 100644
---- a/drivers/media/i2c/smiapp/smiapp-quirk.c
-+++ b/drivers/media/i2c/smiapp/smiapp-quirk.c
-@@ -14,11 +14,6 @@
+diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
+index bddfee637f33..69e7990c65f3 100644
+--- a/drivers/media/i2c/ccs/ccs-core.c
++++ b/drivers/media/i2c/ccs/ccs-core.c
+@@ -1295,6 +1295,7 @@ static int ccs_power_on(struct device *dev)
+ 	}
+ 	usleep_range(1000, 1000);
  
- #include "smiapp.h"
++	gpiod_set_value(sensor->reset, 0);
+ 	gpiod_set_value(sensor->xshutdown, 1);
  
--static int smiapp_write_8(struct smiapp_sensor *sensor, u16 reg, u8 val)
--{
--	return smiapp_write(sensor, reg, val);
--}
--
- static int smiapp_write_8s(struct smiapp_sensor *sensor,
- 			   const struct smiapp_reg_8 *regs, int len)
- {
-@@ -26,7 +21,7 @@ static int smiapp_write_8s(struct smiapp_sensor *sensor,
- 	int rval;
+ 	sleep = SMIAPP_RESET_DELAY(sensor->hwcfg->ext_clk);
+@@ -1381,6 +1382,7 @@ static int ccs_power_on(struct device *dev)
+ 	return 0;
  
- 	for (; len > 0; len--, regs++) {
--		rval = smiapp_write_8(sensor, regs->reg, regs->val);
-+		rval = smiapp_write(sensor, regs->reg, regs->val);
- 		if (rval < 0) {
- 			dev_err(&client->dev,
- 				"error %d writing reg 0x%4.4x, val 0x%2.2x",
-@@ -170,7 +165,7 @@ static int jt8ev1_post_poweron(struct smiapp_sensor *sensor)
+ out_cci_addr_fail:
++	gpiod_set_value(sensor->reset, 1);
+ 	gpiod_set_value(sensor->xshutdown, 0);
+ 	clk_disable_unprepare(sensor->ext_clk);
  
- static int jt8ev1_pre_streamon(struct smiapp_sensor *sensor)
- {
--	return smiapp_write_8(sensor, 0x3328, 0x00);
-+	return smiapp_write(sensor, 0x3328, 0x00);
- }
+@@ -1407,6 +1409,7 @@ static int ccs_power_off(struct device *dev)
+ 	if (sensor->hwcfg->i2c_addr_alt)
+ 		ccs_write(sensor, SOFTWARE_RESET, CCS_SOFTWARE_RESET_ON);
  
- static int jt8ev1_post_streamoff(struct smiapp_sensor *sensor)
-@@ -178,7 +173,7 @@ static int jt8ev1_post_streamoff(struct smiapp_sensor *sensor)
- 	int rval;
++	gpiod_set_value(sensor->reset, 1);
+ 	gpiod_set_value(sensor->xshutdown, 0);
+ 	clk_disable_unprepare(sensor->ext_clk);
+ 	usleep_range(5000, 5000);
+@@ -3008,8 +3011,15 @@ static int ccs_probe(struct i2c_client *client)
+ 		return -EINVAL;
+ 	}
  
- 	/* Workaround: allows fast standby to work properly */
--	rval = smiapp_write_8(sensor, 0x3205, 0x04);
-+	rval = smiapp_write(sensor, 0x3205, 0x04);
- 	if (rval < 0)
- 		return rval;
+-	sensor->xshutdown = devm_gpiod_get_optional(&client->dev, "xshutdown",
+-						    GPIOD_OUT_LOW);
++	sensor->reset = devm_gpiod_get_optional(&client->dev, "reset",
++						GPIOD_OUT_HIGH);
++	if (IS_ERR(sensor->reset))
++		return PTR_ERR(sensor->reset);
++	/* Support old users that may have used "xshutdown" property. */
++	if (!sensor->reset)
++		sensor->xshutdown = devm_gpiod_get_optional(&client->dev,
++							    "xshutdown",
++							    GPIOD_OUT_LOW);
+ 	if (IS_ERR(sensor->xshutdown))
+ 		return PTR_ERR(sensor->xshutdown);
  
-@@ -186,11 +181,11 @@ static int jt8ev1_post_streamoff(struct smiapp_sensor *sensor)
- 	usleep_range(2000, 2050);
- 
- 	/* Restore it */
--	rval = smiapp_write_8(sensor, 0x3205, 0x00);
-+	rval = smiapp_write(sensor, 0x3205, 0x00);
- 	if (rval < 0)
- 		return rval;
- 
--	return smiapp_write_8(sensor, 0x3328, 0x80);
-+	return smiapp_write(sensor, 0x3328, 0x80);
- }
- 
- static int jt8ev1_init(struct smiapp_sensor *sensor)
+diff --git a/drivers/media/i2c/ccs/ccs.h b/drivers/media/i2c/ccs/ccs.h
+index 8933f3d40fa5..bfe39e02f5e9 100644
+--- a/drivers/media/i2c/ccs/ccs.h
++++ b/drivers/media/i2c/ccs/ccs.h
+@@ -219,6 +219,7 @@ struct ccs_sensor {
+ 	struct regulator *vana;
+ 	struct clk *ext_clk;
+ 	struct gpio_desc *xshutdown;
++	struct gpio_desc *reset;
+ 	void *ccs_limits;
+ 	u8 nbinning_subtypes;
+ 	struct ccs_binning_subtype binning_subtypes[CCS_LIM_BINNING_SUB_TYPE_MAX_N + 1];
 -- 
 2.27.0
 
