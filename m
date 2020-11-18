@@ -2,801 +2,1175 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9E97C64E8A
-	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 08:07:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67B49C5519F
+	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 09:12:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9E74E223C7
-	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 08:07:50 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=xilinx.onmicrosoft.com header.i=@xilinx.onmicrosoft.com header.b="CHWUkB7H"
+	by mail.kernel.org (Postfix) with ESMTP id 13444246AB
+	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 09:12:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727294AbgKRIHE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 18 Nov 2020 03:07:04 -0500
-Received: from mail-bn8nam11on2081.outbound.protection.outlook.com ([40.107.236.81]:13546
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727266AbgKRIHE (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 18 Nov 2020 03:07:04 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EVsEgGaEYU9nQguZeqjn3lx6ypOnf/JbR7I6fLCh19bohyjdFW2gna0RFyJAy3yvJpbk24QNAFUEyeogDsqp5q7Sn780D9erqkeTFjyauGUg1DSs4tYRceNlLaJmV7ZBFxOPkTXwMQGmEDYrcdTNA4gCVQc45nPO3ZZx9X6Hoox2bbcbW2fg4xBKeSfmwHjmcBkKJJpueZQXD3OKRiBEDrH5d+nFyaq2bp4J0VTNGXtVVC9DquIuvHseQ+O1JtjJVYiKyoig07cDZEh33iWfyc60I6nL/69ZIG1SNvaQ4H9Jy/d1GFmHUK0hM0aGUbFJp9C2r7L0IG1oneUsPORpOQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=U+FUXjcOxngFEfP4VMposQ15PthSjXjRPuA6RQUijAo=;
- b=dDsPR8j+27i+hfkJcUIX4RBd55eEjlyDjcT4K6cJckOO2UvYgirQ1W1i7X9PAojuCfPoYcdL/fYVb6XRsv59jSY+MtEycObkvX5MqQFjsUnX+o/zE23VHUJpFlsbMWxY7pvGrWDD5PER8qky+CveGoKYYhO7pdy7fZVchYKgu1GfwC/FeOHWxIo6v/9aQziCNKjKJGnytXfiOHyIeQ0oe6la1XevklI/SXWJTffKDtRKqc/P1huDC54PgSwT1nZ/lgwaJRkEr6j2JxU3dRJrbwAqjhJvqFZB/LHRS5CCclB9MUp1IAjD5PSUVxd+LUGF0ndUm27NKAMpZLT81WO+9Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
- dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
- not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=U+FUXjcOxngFEfP4VMposQ15PthSjXjRPuA6RQUijAo=;
- b=CHWUkB7HQJX+o23A+v4NbpjEC9c9jDzjGP1imAv9o7mXoajVH4W2n4gzuVER88eLZyZDZ++OTmjZbkoSZtaj1vdQR2+GsM4zor2S0f2BHPATHSomvXPzUwrmX0RiU+vHPIydnxDHmNvKPUkClYxuABpvg+e5PFEa/N5zfZuTOwE=
-Received: from SA0PR11CA0100.namprd11.prod.outlook.com (2603:10b6:806:d1::15)
- by SN4PR0201MB3472.namprd02.prod.outlook.com (2603:10b6:803:48::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3564.28; Wed, 18 Nov
- 2020 08:06:56 +0000
-Received: from SN1NAM02FT048.eop-nam02.prod.protection.outlook.com
- (2603:10b6:806:d1:cafe::c9) by SA0PR11CA0100.outlook.office365.com
- (2603:10b6:806:d1::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.20 via Frontend
- Transport; Wed, 18 Nov 2020 08:06:56 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=bestguesspass action=none
- header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT048.mail.protection.outlook.com (10.152.72.202) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.3564.22 via Frontend Transport; Wed, 18 Nov 2020 08:06:55 +0000
-Received: from xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Wed, 18 Nov 2020 00:06:33 -0800
-Received: from smtp.xilinx.com (172.19.127.95) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server id
- 15.1.1913.5 via Frontend Transport; Wed, 18 Nov 2020 00:06:33 -0800
-Envelope-to: michal.simek@xilinx.com,
- derek.kiernan@xilinx.com,
- dragan.cvetic@xilinx.com,
- rajan.vaja@xilinx.com,
- tejas.patel@xilinx.com,
- manish.narani@xilinx.com,
- ravi.patel@xilinx.com,
- wendy.liang@xilinx.com,
- robh+dt@kernel.org,
- arnd@arndb.de,
- gregkh@linuxfoundation.org,
- sumit.semwal@linaro.org,
- christian.koenig@amd.com,
- devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org,
- linaro-mm-sig@lists.linaro.org
-Received: from [172.19.2.167] (port=35936 helo=xsjjliang50.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <wendy.liang@xilinx.com>)
-        id 1kfIU5-0000Nk-Ls; Wed, 18 Nov 2020 00:06:33 -0800
-From:   Wendy Liang <wendy.liang@xilinx.com>
-To:     <robh+dt@kernel.org>, <michal.simek@xilinx.com>, <arnd@arndb.de>,
-        <gregkh@linuxfoundation.org>, <sumit.semwal@linaro.org>,
-        <christian.koenig@amd.com>, <derek.kiernan@xilinx.com>,
-        <dragan.cvetic@xilinx.com>, <rajan.vaja@xilinx.com>,
-        <tejas.patel@xilinx.com>, <manish.narani@xilinx.com>,
-        <ravi.patel@xilinx.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>,
-        <linaro-mm-sig@lists.linaro.org>,
-        "Wendy Liang" <wendy.liang@xilinx.com>
-Subject: [PATCH 4/9] misc: xilinx-ai-engine: expose AI engine tile memories to userspace
-Date:   Wed, 18 Nov 2020 00:06:15 -0800
-Message-ID: <1605686780-17886-5-git-send-email-wendy.liang@xilinx.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1605686780-17886-1-git-send-email-wendy.liang@xilinx.com>
-References: <1605686780-17886-1-git-send-email-wendy.liang@xilinx.com>
+        id S1727364AbgKRJLk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 18 Nov 2020 04:11:40 -0500
+Received: from relay12.mail.gandi.net ([217.70.178.232]:37957 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726015AbgKRJLi (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 18 Nov 2020 04:11:38 -0500
+Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id B977820001F;
+        Wed, 18 Nov 2020 09:11:30 +0000 (UTC)
+Date:   Wed, 18 Nov 2020 10:11:33 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Eugen.Hristev@microchip.com
+Cc:     laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, sakari.ailus@iki.fi
+Subject: Re: [PATCH v5 2/3] media: atmel: introduce microchip csi2dc driver
+Message-ID: <20201118091133.hr5iwjqijnj6tjfs@uno.localdomain>
+References: <20201112133437.372475-1-eugen.hristev@microchip.com>
+ <20201112133437.372475-2-eugen.hristev@microchip.com>
+ <20201117115902.unnrnccoj3s4gtam@uno.localdomain>
+ <20201117120951.GC3940@pendragon.ideasonboard.com>
+ <3615c6eb-e475-9a2b-21e5-0b8d8f64f9c6@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 83f61d42-2dea-4c1a-d9b1-08d88b98ea95
-X-MS-TrafficTypeDiagnostic: SN4PR0201MB3472:
-X-Microsoft-Antispam-PRVS: <SN4PR0201MB347297142DAC2C42AFF416F0B0E10@SN4PR0201MB3472.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:2089;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6vwQo9AqqLsl0fwaVjaU4oMzXoNyGBQTZ/c68A9yRI61lKusmkEkdMO4OASq2bIqGcWLyRgG2wDde4D8cIu0TvcBf7pTzzMs6kYKx5D+iL03ENg1426TpVNjRVNE37BQOHsMNcDuKKGPVI/OJLO0VtyUvDAuROU7EC+eAMVyQbR/TlHjIuEjcXJPjSqR2r0GOBCTxx2+15oErt7c7Y2VuONZxSDXvpHj7L2kutgof9MDqCeZ9v3GjJK6E8qXhTm63RZnK2Pi5gam6ZBQRlLzJ0vQxAJNvM+j8Sn2/H0OKdmh1bX+x9ivbCjl7Ovv6MyYT3jPoHMsfxmLDTj4WQJD1NwxwYj36Ho1wUvlziMhQlTZLGN+CrJpBxVTuu3ZU9JhNevRw7QEgjtbBhRktEseEjpSa7l+x3YZzWpcsGuzidkBIO3z2XmLwmQwcFuIfcRwuvIVLkB52DgdXO8T92unnnL9a9vkPHcPqJXMWp2fPQ8=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(376002)(396003)(39850400004)(346002)(136003)(46966005)(110136005)(6636002)(316002)(82740400003)(54906003)(36756003)(7696005)(2616005)(82310400003)(426003)(2906002)(336012)(8676002)(36906005)(47076004)(26005)(8936002)(7636003)(9786002)(356005)(107886003)(186003)(6666004)(4326008)(921005)(70206006)(44832011)(7416002)(478600001)(70586007)(83380400001)(30864003)(5660300002)(102446001)(461764006);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2020 08:06:55.9094
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 83f61d42-2dea-4c1a-d9b1-08d88b98ea95
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT048.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR0201MB3472
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <3615c6eb-e475-9a2b-21e5-0b8d8f64f9c6@microchip.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There is no concern to have userspace to directly access AI engine
-program and data memories. It will be much faster to directly copy
-data to and from these memories from userspace.
+Hello Eugen,
 
-We choose to use DMA buf for the data and program memory because of the
-DMA buf features. DMA buf can share the DMA memory between applications
-and different devices, which can benefit on how to share data with AI
-engine device in future.
+On Tue, Nov 17, 2020 at 05:24:30PM +0000, Eugen.Hristev@microchip.com wrote:
+> On 17.11.2020 14:09, Laurent Pinchart wrote:
+> > Hello everybody,
+> >
+> > On Tue, Nov 17, 2020 at 12:59:02PM +0100, Jacopo Mondi wrote:
+> >> On Thu, Nov 12, 2020 at 03:34:36PM +0200, Eugen Hristev wrote:
+> >>> Microchip CSI2DC (CSI2 Demultiplexer Controller) is a misc bridge device
+> >>> that converts a byte stream in IDI Synopsys format (coming from a CSI2HOST)
+> >>> to a pixel stream that can be captured by a sensor controller.
+> >>>
+> >>> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+> >>> ---
+> >>> Hello,
+> >>>
+> >>> There still are some open questions regarding the last reviews on the ML.
+> >>>
+> >>> Regarding the format list which is not const, I cannot have it const because
+> >>> I reference elements from this list into a dynamic list which is non-const.
+> >>>
+> >>> Regarding the presence of the v4l2_dev, without this I cannot add a notifier
+> >>> for this device to have it async completed , when the underlying subdevice
+> >>> finishes probing.
+> >>
+> >> I see you have a discussion with Sakari on-going on this, and I have
+> >> the very same comment he had.
+> >>
+> >> Should a sub-notifier be used and this driver should not register any
+> >> v4l2_dev but integrate in the media graph of the receiver ?
+> >>
+> >> For reference, rcar-csi2 uses sub-notifiers and register in the
+> >> rcar-vin media graph, it doesn't need to set up a v4l2_dev.
+> >>
+> >> rcar-vin (the DMA engine driver) that register video nodes and the v4l2-dev
+> >> also registers the device nodes for all the connected subdevices.
+> >
+> > Sub-notifiers were invited for this purpose, so I think they're the
+> > right tool.
+> >
+> >>> Regarding the callbacks for set frame interval, set frame size, etc, I cannot
+> >>> remove them because losing functionality to the underlying subdevice, as
+> >>> explained in :
+> >>> https://lkml.org/lkml/2020/10/12/427
+> >>
+> >> Using the frame sizes as in the example you reported, if this device has
+> >> limitations on the supported sizes, (a min and a max most
+> >> probably) that's the only thing that should be exposed from this
+> >> driver subdevice. The sensor subdevice instead will report the
+> >> available discrete sizes and userspace configures the sensor's source
+> >> pad and the bridge's sink pad with the same sizes to properly set up the
+> >> capture pipeline. video0 should not report the sizes exposed by the sensor
+> >> nor any information that depends on what's connected to it.
+> >
+> > Agreed. Subdev drivers should remain simple and cover only the subdev
+> > they manage. Bundling it together is the job of userspace. In the legacy
+> > model it uses to be the job of the top-level V4L2 driver (the one
+> > implementing v4l2_device), but that's legacy, especially for embedded
+> > camera use cases. In any case, the top-level logic must not be spread
+> > across subdevices.
+> >
+> >> I know what your next question is: what about existing application
+> >> that only know about video0 and want to setup everything from there. I
+> >> understand vendors not wanting to wrap gstreamer or what is used in
+> >> the wild in custom scripts that sets up the pipeline opportunely
+> >> before streaming, and I'm pretty sure you know what is the solution I
+> >> would propose for this :)
+> >>
+> >> I've just gone through the same path with RPi's Unicam, that does the
+> >> same thing as your one does: it's an MC driver, but wants to control
+> >> the sensor through the v4l2-subdev kAPI to support legacy use cases
+> >> not covered by libcamera. The fact is that we're stuck in this limbo
+> >> where MC pipeline tries to decouple components one from each other and
+> >> delegate their configuration to userspace, but at the same time
+> >> vendors want to be able to use the simple plain video node centric
+> >> interface because of their existing user base, so I understand your
+> >> discomfort, but the 'simple plain' approach is what's preventing Linux
+> >> platforms to be in-par with proprietary and custom solutions for any
+> >> use case that is not a simple frame capture, so I think it's fair for
+> >> mainline to push for this evolution to happen. Just my2c of course.
+> >
+> > Compatibility with the userspace of downstream kernels is important, but
+> > that's a downstream kernel issue. In mainline we want to go the MC way,
+> > and downstream can then, if desired, implement the configuration of the
+> > pipeline in the top-level V4L2 driver in the kernel to support the
+> > existing userbase. For new drivers I wouldn't recommend that, for
+> > existing downstream drivers it may be required.
+>
+> Hello,
+>
+> First of all thank you for the review and explanations.
+>
+> I am still confused about how does the userspace know which elements are
+> in the pipeline and how to connect them ?
 
-There is one DMA buf per type of memory in an AI engine partition. e.g.
-There is one DMA buf for all the tile core program memories in an AI
-engine partition. There is another DMA buf for all the tile data
-memories in an AI engine partition.
+Using the media-controller uAPI to inspect, explore and configure the
+media graph (it's mostly about enabling and disabling media links),
+and using the v4l2 subdev uAPI to configure formats, sizes and such on
+each subdevice device node associated with a media entity. Finally,
+using the v4l2 uAPI to stream from the top-level driver that expose a
+video device node.
 
-Signed-off-by: Wendy Liang <wendy.liang@xilinx.com>
-Reviewed-by: Hyun Kwon <hyun.kwon@xilinx.com>
----
- drivers/misc/xilinx-ai-engine/Makefile             |   1 +
- drivers/misc/xilinx-ai-engine/ai-engine-aie.c      |  36 +++
- drivers/misc/xilinx-ai-engine/ai-engine-internal.h |  30 +++
- drivers/misc/xilinx-ai-engine/ai-engine-mem.c      | 274 +++++++++++++++++++++
- drivers/misc/xilinx-ai-engine/ai-engine-part.c     |  47 ++++
- drivers/misc/xilinx-ai-engine/ai-engine-reset.c    |  38 +++
- include/uapi/linux/xlnx-ai-engine.h                |  49 ++++
- 7 files changed, 475 insertions(+)
- create mode 100644 drivers/misc/xilinx-ai-engine/ai-engine-mem.c
+It's really (conceptually) not different than doing the same using
+media-ctl and v4l2-ctl.
 
-diff --git a/drivers/misc/xilinx-ai-engine/Makefile b/drivers/misc/xilinx-ai-engine/Makefile
-index 39bec61..2dbed42 100644
---- a/drivers/misc/xilinx-ai-engine/Makefile
-+++ b/drivers/misc/xilinx-ai-engine/Makefile
-@@ -7,6 +7,7 @@ obj-$(CONFIG_XILINX_AIE)	+= xilinx-aie.o
- 
- xilinx-aie-$(CONFIG_XILINX_AIE) := ai-engine-aie.o \
- 				   ai-engine-dev.o \
-+				   ai-engine-mem.o \
- 				   ai-engine-part.o \
- 				   ai-engine-res.o \
- 				   ai-engine-reset.o
-diff --git a/drivers/misc/xilinx-ai-engine/ai-engine-aie.c b/drivers/misc/xilinx-ai-engine/ai-engine-aie.c
-index 36127f0..7fce2f00 100644
---- a/drivers/misc/xilinx-ai-engine/ai-engine-aie.c
-+++ b/drivers/misc/xilinx-ai-engine/ai-engine-aie.c
-@@ -12,10 +12,14 @@
- 
- #include "ai-engine-internal.h"
- 
-+#define KBYTES(n)	((n) * 1024)
-+
- #define AIE_ARRAY_SHIFT		30U
- #define AIE_COL_SHIFT		23U
- #define AIE_ROW_SHIFT		18U
- 
-+#define NUM_MEMS_PER_TILE	2U
-+
- /*
-  * Registers offsets
-  */
-@@ -114,6 +118,37 @@ static u32 aie_get_tile_type(struct aie_location *loc)
- 	return AIE_TILE_TYPE_SHIMNOC;
- }
- 
-+static unsigned int aie_get_mem_info(struct aie_range *range,
-+				     struct aie_part_mem *pmem)
-+{
-+	unsigned int i;
-+
-+	if (range->start.row + range->size.row <= 1) {
-+		/* SHIM row only, no memories in this range */
-+		return 0;
-+	}
-+	if (!pmem)
-+		return NUM_MEMS_PER_TILE;
-+
-+	for (i = 0; i < NUM_MEMS_PER_TILE; i++) {
-+		struct aie_mem *mem = &pmem[i].mem;
-+
-+		memcpy(&mem->range, range, sizeof(*range));
-+		if (!mem->range.start.row) {
-+			mem->range.start.row = 1;
-+			mem->range.size.row--;
-+		}
-+	}
-+	/* Setup tile data memory information */
-+	pmem[0].mem.offset = 0;
-+	pmem[0].mem.size = KBYTES(32);
-+	/* Setup program memory information */
-+	pmem[1].mem.offset = 0x20000;
-+	pmem[1].mem.size = KBYTES(16);
-+
-+	return NUM_MEMS_PER_TILE;
-+}
-+
- /**
-  * aie_set_shim_reset() - Set AI engine SHIM reset
-  * @adev: AI engine device
-@@ -170,6 +205,7 @@ static int aie_reset_shim(struct aie_device *adev, struct aie_range *range)
- 
- static const struct aie_tile_operations aie_ops = {
- 	.get_tile_type = aie_get_tile_type,
-+	.get_mem_info = aie_get_mem_info,
- 	.reset_shim = aie_reset_shim,
- };
- 
-diff --git a/drivers/misc/xilinx-ai-engine/ai-engine-internal.h b/drivers/misc/xilinx-ai-engine/ai-engine-internal.h
-index 2acd34f..e84610b 100644
---- a/drivers/misc/xilinx-ai-engine/ai-engine-internal.h
-+++ b/drivers/misc/xilinx-ai-engine/ai-engine-internal.h
-@@ -12,6 +12,8 @@
- #include <linux/bits.h>
- #include <linux/cdev.h>
- #include <linux/device.h>
-+#include <linux/dma-buf.h>
-+#include <linux/file.h>
- #include <linux/io.h>
- #include <linux/list.h>
- #include <linux/mutex.h>
-@@ -67,8 +69,30 @@ struct aie_device;
- struct aie_partition;
- 
- /**
-+ * struct aie_part_mem - AI engine partition memory information structure
-+ * @apart: AI engine partition
-+ * @dbuf: dmabuf pointer associated with the memory
-+ * @mem: memory information of a type of memory
-+ * @size: size of the total memories in the partition
-+ *
-+ * This structure is to keep the information of a type of memory in a
-+ * partition. The memory information will be stored in @mem property.
-+ * The following information will be keep:
-+ *  * memory start address offset within a tile
-+ *  * memory size
-+ *  * what tiles contain this type of memory
-+ */
-+struct aie_part_mem {
-+	struct aie_partition *apart;
-+	struct dma_buf *dbuf;
-+	struct aie_mem mem;
-+	size_t size;
-+};
-+
-+/**
-  * struct aie_tile_operations - AI engine device operations
-  * @get_tile_type: get type of tile based on tile operation
-+ * @get_mem_info: get different types of memories information
-  * @reset_shim: reset shim, it will assert and then release SHIM reset
-  *
-  * Different AI engine device version has its own device
-@@ -76,6 +100,8 @@ struct aie_partition;
-  */
- struct aie_tile_operations {
- 	u32 (*get_tile_type)(struct aie_location *loc);
-+	unsigned int (*get_mem_info)(struct aie_range *range,
-+				     struct aie_part_mem *pmem);
- 	int (*reset_shim)(struct aie_device *adev, struct aie_range *range);
- };
- 
-@@ -134,6 +160,7 @@ struct aie_device {
-  * struct aie_partition - AI engine partition structure
-  * @node: list node
-  * @adev: pointer to AI device instance
-+ * @pmems: pointer to partition memories types
-  * @range: range of partition
-  * @mlock: protection for AI engine partition operations
-  * @dev: device for the AI engine partition
-@@ -146,6 +173,7 @@ struct aie_device {
- struct aie_partition {
- 	struct list_head node;
- 	struct aie_device *adev;
-+	struct aie_part_mem *pmems;
- 	struct aie_range range;
- 	struct mutex mlock; /* protection for AI engine partition operations */
- 	struct device dev;
-@@ -256,5 +284,7 @@ struct aie_partition *of_aie_part_probe(struct aie_device *adev,
- void aie_part_remove(struct aie_partition *apart);
- int aie_part_clean(struct aie_partition *apart);
- 
-+int aie_mem_get_info(struct aie_partition *apart, unsigned long arg);
-+
- int aie_device_init(struct aie_device *adev);
- #endif /* AIE_INTERNAL_H */
-diff --git a/drivers/misc/xilinx-ai-engine/ai-engine-mem.c b/drivers/misc/xilinx-ai-engine/ai-engine-mem.c
-new file mode 100644
-index 0000000..5a06bdd0
---- /dev/null
-+++ b/drivers/misc/xilinx-ai-engine/ai-engine-mem.c
-@@ -0,0 +1,274 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Xilinx AI Engine device memory implementation
-+ *
-+ * Copyright (C) 2020 Xilinx, Inc.
-+ */
-+
-+#include <linux/dma-buf.h>
-+#include <linux/slab.h>
-+#include <linux/types.h>
-+#include <linux/uaccess.h>
-+#include <uapi/linux/xlnx-ai-engine.h>
-+
-+#include "ai-engine-internal.h"
-+
-+#define aie_cal_reg_goffset(adev, loc, regoff) ({ \
-+	struct aie_device *_adev = (adev); \
-+	struct aie_location *_loc = &(loc); \
-+	(_loc->col << _adev->col_shift) + \
-+	(_loc->row << _adev->row_shift) + (regoff); \
-+	})
-+
-+#define aie_cal_reg_pa(adev, loc, regoff) ({ \
-+	struct aie_device *__adev = (adev); \
-+	__adev->res->start + aie_cal_reg_goffset(__adev, loc, regoff); \
-+	})
-+
-+static struct sg_table *
-+aie_mem_map_dma_buf(struct dma_buf_attachment *attachment,
-+		    enum dma_data_direction direction)
-+{
-+	/*
-+	 * TODO: It is mandatory by DMA buf operation. It is used return
-+	 * scatterlist table of an attachment. We don't have the implementation
-+	 * for now. And thus it has empty implementation.
-+	 */
-+	(void)attachment;
-+	(void)direction;
-+	dev_warn(attachment->dev,
-+		 "AI engine memory map dma buf is not implemented.\n");
-+	return NULL;
-+}
-+
-+static void aie_mem_unmap_dma_buf(struct dma_buf_attachment *attachment,
-+				  struct sg_table *table,
-+				  enum dma_data_direction direction)
-+{
-+	/*
-+	 * TODO: It is mandatory by DMA buf operation. It is used deallocate
-+	 * scatterlist table of an attachment. We don't have the implementation
-+	 * for now. And thus it has empty implementation.
-+	 */
-+	(void)attachment;
-+	(void)table;
-+	(void)direction;
-+	dev_warn(attachment->dev,
-+		 "AI engine memory unmap dma buf is not implemented.\n");
-+}
-+
-+static int aie_mem_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma)
-+{
-+	struct aie_part_mem *pmem = dmabuf->priv;
-+	struct aie_mem *mem = &pmem->mem;
-+	struct aie_partition *apart = pmem->apart;
-+	struct aie_location loc;
-+	unsigned long addr = vma->vm_start;
-+	unsigned long offset = vma->vm_pgoff * PAGE_SIZE, moffset = 0;
-+	unsigned long remainder = vma->vm_end - addr;
-+	size_t msize = mem->size;
-+
-+	if (remainder + offset > pmem->size)
-+		return -EINVAL;
-+
-+	vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
-+	for (loc.col = mem->range.start.col;
-+	     loc.col < mem->range.start.col + mem->range.size.col; loc.col++) {
-+		for (loc.row = mem->range.start.row;
-+		     loc.row < mem->range.start.row + mem->range.size.row;
-+		     loc.row++) {
-+			unsigned long toffset, len;
-+			phys_addr_t mempa;
-+			int ret;
-+
-+			remainder = vma->vm_end - addr;
-+			if (!remainder)
-+				return 0;
-+
-+			if (moffset + msize < offset) {
-+				moffset += msize;
-+				continue;
-+			}
-+			/*
-+			 * calculate offset within the tile memory.
-+			 * offset is the offset to vma->start.
-+			 * moffset is the tile memory start offset to
-+			 * vma->start.
-+			 */
-+			toffset = offset - moffset;
-+			len = msize - toffset;
-+			if (len > remainder)
-+				len = remainder;
-+			mempa = aie_cal_reg_pa(apart->adev, loc,
-+					       toffset + mem->offset);
-+
-+			ret = remap_pfn_range(vma, addr, mempa >> PAGE_SHIFT,
-+					      len, vma->vm_page_prot);
-+			if (ret) {
-+				dev_err(&apart->dev,
-+					"failed to mmap (%u,%u)memory, remap failed, 0x%pa, 0x%lx.\n",
-+					loc.col, loc.row, &mempa, len);
-+				return ret;
-+			}
-+			addr += len;
-+			offset += len;
-+			moffset += msize;
-+		}
-+	}
-+	return 0;
-+}
-+
-+static void aie_mem_dmabuf_release(struct dma_buf *dmabuf)
-+{
-+	struct aie_part_mem *pmem = dmabuf->priv;
-+
-+	pmem->dbuf = NULL;
-+}
-+
-+static const struct dma_buf_ops aie_mem_dma_buf_ops = {
-+	.map_dma_buf = aie_mem_map_dma_buf,
-+	.unmap_dma_buf = aie_mem_unmap_dma_buf,
-+	.mmap = aie_mem_mmap,
-+	.release = aie_mem_dmabuf_release,
-+};
-+
-+/**
-+ * aie_mem_create_dmabuf() - creates DMA buffer for AI engine partition
-+ *			     memories
-+ * @apart: AI engine partition
-+ * @pmem: pointer to the partition memory information
-+ * @mem: pointer to where it store the memory information and DMA buf file
-+ *	 descriptor for user.
-+ * @return: 0 for success, negative value for failure
-+ *
-+ * This function will create DMA buffer for the AI engine partition memory
-+ * and will store the DMA buffer file descriptor and memory information in
-+ * @mem.
-+ */
-+static int aie_mem_create_dmabuf(struct aie_partition *apart,
-+				 struct aie_part_mem *pmem,
-+				 struct aie_mem *mem)
-+{
-+	struct dma_buf *dmabuf;
-+	int ret;
-+
-+	if (!PAGE_ALIGNED(pmem->mem.size)) {
-+		dev_warn(&apart->dev,
-+			 "no dmabuf for mem(0x%zx, 0x%zx), not aligned with page size.\n",
-+			 pmem->mem.offset, pmem->mem.size);
-+		return -EINVAL;
-+	}
-+
-+	dmabuf = pmem->dbuf;
-+	if (!dmabuf) {
-+		DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
-+
-+		exp_info.ops = &aie_mem_dma_buf_ops;
-+		exp_info.size = pmem->size;
-+		exp_info.flags = O_RDWR;
-+		exp_info.priv = pmem;
-+
-+		dmabuf = dma_buf_export(&exp_info);
-+		if (IS_ERR(dmabuf))
-+			return PTR_ERR(dmabuf);
-+
-+		pmem->dbuf = dmabuf;
-+	}
-+
-+	ret = dma_buf_fd(dmabuf, O_CLOEXEC);
-+	if (ret < 0) {
-+		dev_err(&apart->dev,
-+			"dmabuf creation failed, failed to get fd.\n");
-+		return ret;
-+	}
-+	memcpy(mem, &pmem->mem, sizeof(*mem));
-+	mem->fd = ret;
-+
-+	return 0;
-+}
-+
-+/**
-+ * aie_mem_get_info() - get AI engine memories information
-+ * @apart: AI engine partition
-+ * @arg: argument from user to enquire AI engine partition memory information
-+ * @return: 0 for success, and negative value for failure
-+ *
-+ * This function will get the memories information for the specified AI engine
-+ * partition. It will create DMA buf file descriptors for the memories and
-+ * return the DMA buf file descriptors to users.
-+ * It will create a DMA buffer per type of memories.
-+ * e.g. There will be a DMA buffer for all the tile program memories in the
-+ * partition, and another DMA buffer for all the tile data memories in the
-+ * partition.
-+ * User can first pass num_mems as 0 in the @arg to enquire for how many types
-+ * of memories in this AI engine partition. And then, user can allocate memory
-+ * to keep the information for different types of memories, and then use the
-+ * same enquiry with non-zero num_mems and none NULL pointer to ask for the
-+ * details of the information of all the types of memories in the AI engine
-+ * partition.
-+ */
-+int aie_mem_get_info(struct aie_partition *apart, unsigned long arg)
-+{
-+	struct aie_mem_args margs;
-+	struct aie_mem *mems;
-+	unsigned int num_mems, i;
-+	int ret;
-+
-+	if (copy_from_user(&margs, (void __user *)arg, sizeof(margs)))
-+		return -EFAULT;
-+
-+	num_mems = apart->adev->ops->get_mem_info(&apart->range, NULL);
-+	if (num_mems <= 0)
-+		return -EINVAL;
-+
-+	if (!margs.num_mems) {
-+		struct aie_mem_args __user *umargs_ptr = (void __user *)arg;
-+
-+		/* This enquiry is to get the number of types of memories. */
-+		if (copy_to_user((void __user *)&umargs_ptr->num_mems,
-+				 &num_mems, sizeof(num_mems)))
-+			return -EFAULT;
-+		return 0;
-+	}
-+
-+	if (num_mems != margs.num_mems) {
-+		dev_err(&apart->dev,
-+			"failed to get mem info, invalid num of mems %d,%d.\n",
-+			num_mems, margs.num_mems);
-+		return -EINVAL;
-+	}
-+	if (!margs.mems) {
-+		dev_err(&apart->dev,
-+			"failed to get mem info, mems pointer is NULL.\n");
-+		return -EINVAL;
-+	}
-+
-+	mems = kcalloc(num_mems, sizeof(*mems), GFP_KERNEL);
-+	if (!mems)
-+		return -ENOMEM;
-+
-+	/*
-+	 * Create DMA buffer for the memories.
-+	 * Each type of memory in the partition has its own DMA buf.
-+	 */
-+	for (i = 0; i < num_mems; i++) {
-+		ret = aie_mem_create_dmabuf(apart, &apart->pmems[i], &mems[i]);
-+		if (ret)
-+			break;
-+	}
-+	if (!ret) {
-+		if (copy_to_user((void __user *)margs.mems, mems,
-+				 num_mems * sizeof(mems[0])))
-+			ret = -EFAULT;
-+	}
-+
-+	if (ret) {
-+		for (i = 0; i < num_mems; i++) {
-+			if (mems[i].fd)
-+				put_unused_fd(mems[i].fd);
-+		}
-+	}
-+
-+	kfree(mems);
-+	return ret;
-+}
-diff --git a/drivers/misc/xilinx-ai-engine/ai-engine-part.c b/drivers/misc/xilinx-ai-engine/ai-engine-part.c
-index 98f125b..4be6d38 100644
---- a/drivers/misc/xilinx-ai-engine/ai-engine-part.c
-+++ b/drivers/misc/xilinx-ai-engine/ai-engine-part.c
-@@ -294,6 +294,8 @@ static long aie_part_ioctl(struct file *fp, unsigned int cmd, unsigned long arg)
- 		mutex_unlock(&apart->mlock);
- 		break;
- 	}
-+	case AIE_GET_MEM_IOCTL:
-+		return aie_mem_get_info(apart, arg);
- 	default:
- 		dev_err(&apart->dev, "Invalid ioctl command %u.\n", cmd);
- 		ret = -EINVAL;
-@@ -337,6 +339,41 @@ static void aie_part_release_device(struct device *dev)
- }
- 
- /**
-+ * aie_part_create_mems_info() - creates array to store the AI engine partition
-+ *				 different memories types information
-+ * @apart: AI engine partition
-+ * @return: 0 for success, negative value for failure
-+ *
-+ * This function will create array to store the information of different
-+ * memories types in the partition. This array is stored in @apart->pmems.
-+ */
-+static int aie_part_create_mems_info(struct aie_partition *apart)
-+{
-+	unsigned int i, num_mems;
-+
-+	num_mems = apart->adev->ops->get_mem_info(&apart->range, NULL);
-+	if (!num_mems)
-+		return 0;
-+
-+	apart->pmems = devm_kcalloc(&apart->dev, num_mems,
-+				    sizeof(struct aie_part_mem),
-+				    GFP_KERNEL);
-+	if (!apart->pmems)
-+		return -ENOMEM;
-+
-+	apart->adev->ops->get_mem_info(&apart->range, apart->pmems);
-+	for (i = 0; i < num_mems; i++) {
-+		struct aie_mem *mem = &apart->pmems[i].mem;
-+
-+		apart->pmems[i].apart = apart;
-+		apart->pmems[i].size = mem->size *
-+				       mem->range.size.col *
-+				       mem->range.size.row;
-+	}
-+	return 0;
-+}
-+
-+/**
-  * aie_create_partition() - create AI engine partition instance
-  * @adev: AI engine device
-  * @range: AI engine partition range to check. A range describes a group
-@@ -406,6 +443,16 @@ static struct aie_partition *aie_create_partition(struct aie_device *adev,
- 		return ERR_PTR(ret);
- 	}
- 
-+	/*
-+	 * Create array to keep the information of the different types of tile
-+	 * memories information of the AI engine partition.
-+	 */
-+	ret = aie_part_create_mems_info(apart);
-+	if (ret) {
-+		put_device(dev);
-+		return ERR_PTR(ret);
-+	}
-+
- 	ret = mutex_lock_interruptible(&adev->mlock);
- 	if (ret) {
- 		put_device(dev);
-diff --git a/drivers/misc/xilinx-ai-engine/ai-engine-reset.c b/drivers/misc/xilinx-ai-engine/ai-engine-reset.c
-index fc0262f7..d35cd8d 100644
---- a/drivers/misc/xilinx-ai-engine/ai-engine-reset.c
-+++ b/drivers/misc/xilinx-ai-engine/ai-engine-reset.c
-@@ -86,6 +86,43 @@ static void aie_part_set_cols_clkbuf(struct aie_partition *apart, bool enable)
- }
- 
- /**
-+ * aie_part_clear_mems() - clear memories of every tile in a partition
-+ * @apart: AI engine partition
-+ */
-+static void aie_part_clear_mems(struct aie_partition *apart)
-+{
-+	struct aie_device *adev = apart->adev;
-+	struct aie_part_mem *pmems = apart->pmems;
-+	u32 i, num_mems;
-+
-+	/* Get the number of different types of memories */
-+	num_mems = adev->ops->get_mem_info(&apart->range, NULL);
-+	if (!num_mems)
-+		return;
-+
-+	/* Clear each type of memories in the partition */
-+	for (i = 0; i < num_mems; i++) {
-+		struct aie_mem *mem = &pmems[i].mem;
-+		struct aie_range *range = &mem->range;
-+		u32 c, r;
-+
-+		for (c = range->start.col;
-+		     c < range->start.col + range->size.col; c++) {
-+			for (r = range->start.row;
-+			     r < range->start.row + range->size.row; r++) {
-+				struct aie_location loc;
-+				u32 memoff;
-+
-+				loc.col = c;
-+				loc.row = r;
-+				memoff = aie_cal_regoff(adev, loc, mem->offset);
-+				memset_io(adev->base + memoff, 0, mem->size);
-+			}
-+		}
-+	}
-+}
-+
-+/**
-  * aie_part_clean() - reset and clear AI engine partition
-  * @apart: AI engine partition
-  * @return: 0 for success and negative value for failure
-@@ -115,6 +152,7 @@ int aie_part_clean(struct aie_partition *apart)
- 	if (ret < 0)
- 		return ret;
- 
-+	aie_part_clear_mems(apart);
- 	aie_part_set_cols_clkbuf(apart, false);
- 
- 	return 0;
-diff --git a/include/uapi/linux/xlnx-ai-engine.h b/include/uapi/linux/xlnx-ai-engine.h
-index ed2823c..5e40d00 100644
---- a/include/uapi/linux/xlnx-ai-engine.h
-+++ b/include/uapi/linux/xlnx-ai-engine.h
-@@ -6,6 +6,10 @@
- #ifndef _UAPI_AI_ENGINE_H_
- #define _UAPI_AI_ENGINE_H_
- 
-+#ifndef __KERNEL__
-+#include <stdlib.h>
-+#endif
-+
- #include <linux/ioctl.h>
- #include <linux/types.h>
- 
-@@ -43,6 +47,32 @@ struct aie_range {
- };
- 
- /**
-+ * struct aie_mem - AIE memory information
-+ * @range: range of tiles of the memory
-+ * @offset: register offset within a tile of the memory
-+ * @size: of a the memory in one tile
-+ * @fd: file descriptor of the memory
-+ */
-+struct aie_mem {
-+	struct aie_range range;
-+	size_t offset;
-+	size_t size;
-+	int fd;
-+};
-+
-+/**
-+ * struct aie_mem_args - AIE memory enquiry arguments
-+ * @num_mems: number of "struct aie_mem" elements
-+ *	      e.g. two memory information elements, one for tile core memory,
-+ *	      and the other for tile data memory.
-+ * @mems: array of AI engine memory information elements
-+ */
-+struct aie_mem_args {
-+	unsigned int num_mems;
-+	struct aie_mem *mems;
-+};
-+
-+/**
-  * struct aie_reg_args - AIE access register arguments
-  * @op: if this request is to read, write or poll register
-  * @mask: mask for mask write, 0 for not mask write
-@@ -110,4 +140,23 @@ struct aie_partition_req {
- /* AI engine partition IOCTL operations */
- #define AIE_REG_IOCTL			_IOWR(AIE_IOCTL_BASE, 0x8, \
- 					      struct aie_reg_args)
-+/**
-+ * DOC: AIE_GET_MEM_IOCTL - enquire information of memories in the AI engine
-+ *			    partition
-+ * This ioctl is used to get the information of all the different types of
-+ * memories in the AI engine partition. Application can get the memories
-+ * information in two steps:
-+ * 1. passing 0 as @num_mems in struct aie_mem_args to enquire the number of
-+ *    different memories in the partition, the value will be returned in
-+ *    @num_mems.
-+ * 2. passing the number of memories in @num_mems and valid pointer as @mems of
-+ *    struct aie_mem_args to store the details information of different
-+ *    memories. The driver will create DMA buf for each type of memories, and
-+ *    will return the memory addressing information along with the DMA buf file
-+ *    descriptors in @mems.
-+ * After getting the memories information, user can use mmap() with the DMA buf
-+ * file descriptor to enable access the memories from userspace.
-+ */
-+#define AIE_GET_MEM_IOCTL		_IOWR(AIE_IOCTL_BASE, 0x9, \
-+					      struct aie_mem_args)
- #endif
--- 
-2.7.4
+> And if this is the case, what is the purpose of the endpoints in the DT ?
+>
 
+DTS describe the hardware. Usually a driver parses the firmware graph
+to create and model the media graph and the available connections
+between media entities but there's no requirement to have a 1-to-1
+match (as far I'm aware).
+
+Media links on a media graph then need to be enabled opportunely
+depending on the desired use case, the platform topology etc
+
+> At this moment, I just use the /dev/video0, because the top v4l2 driver
+> configures the subdevice, and this subdevice configures it's own
+> subdevice and so on, until the sensor itself.
+>
+> My top v4l2 driver will not 'complete' unless a subdevice registers
+> itself , and if this subdevice does not provide any information
+> regarding its formats, the probe of the top v4l2 driver will fail,
+> because it will not find compatibility between it's supported input
+> formats and what the subdevice provides.
+
+ouch, I see.. Which driver is that ?
+
+If that's an MC driver, and that seems the case, it should not bother
+validating the subdevice formats, but only care about listing what its
+capabilities are.
+
+>
+> So what to do in this case ? Libcamera will configure this whole
+> pipeline for me , if the drivers just probe ( and start/stop streaming
+> by selecting the respective registers) ? or how to do this whole
+> pipeline configuration ?
+>
+
+Well, libcamera offers a framework to enable specialized code (called
+"pipeline handler") to operate under an high-level API towards application
+and implement image tuning algorithms on top of that common API.
+
+The code to configure the pipeline is device specific (unless your
+pipeline is very simple). So it's not that libcamera just magically
+knows how to operate on every platforms it runs on, it needs platform
+specific code to do so. What you get in exchange is an high level API
+to offer to application developers, a framework to implement 3A and
+tuning algorithms, integration with a growing set of other userspace
+frameworks (android, gstreamer, pipewire and a legacy v4l2-compat
+layer)
+
+We have a lengthy pipeline handler writers guide that might help
+better explain this:
+
+https://git.linuxtv.org/libcamera.git/tree/Documentation/guides/pipeline-handler.rst
+(you might want to compile libcamera to be able to render it in a browser)
+
+Hope this helps to clarify things a bit
+
+>
+> >
+> >> Some more comments on the implementation below
+> >>
+> >>> Changes in v5:
+> >>> - only in bindings
+> >>>
+> >>> Changes in v4:
+> >>> - now using get_mbus_config ops to get data from the subdevice, like the
+> >>> virtual channel id, and the clock type.
+> >>> - now having possibility to select any of the RAW10 data modes
+> >>> - at completion time, select which formats are also available in the subdevice,
+> >>> and move to the dynamic list accordingly
+> >>> - changed the pipeline integration, do not advertise subdev ready at probe time.
+> >>> wait until completion is done, and then start a workqueue that will register
+> >>> this device as a subdevice for the next element in pipeline.
+> >>> - moved the s_power code into a different function called now csi2dc_power
+> >>> that is called with CONFIG_PM functions. This is also called at completion,
+> >>> to have the device ready in case CONFIG_PM is not selected on the platform.
+> >>> - merged try_fmt into set_fmt
+> >>> - driver cleanup, wrapped lines over 80 characters
+> >>>
+> >>> Changes in v2:
+> >>> - moved driver to platform/atmel
+> >>> - fixed minor things as per Sakari's review
+> >>> - still some things from v2 review are not yet addressed, to be followed up
+> >>>
+> >>>   drivers/media/platform/atmel/Kconfig          |  13 +
+> >>>   drivers/media/platform/atmel/Makefile         |   1 +
+> >>>   .../media/platform/atmel/microchip-csi2dc.c   | 785 ++++++++++++++++++
+> >>>   3 files changed, 799 insertions(+)
+> >>>   create mode 100644 drivers/media/platform/atmel/microchip-csi2dc.c
+> >>>
+> >>> diff --git a/drivers/media/platform/atmel/Kconfig b/drivers/media/platform/atmel/Kconfig
+> >>> index 99b51213f871..147e1c14129b 100644
+> >>> --- a/drivers/media/platform/atmel/Kconfig
+> >>> +++ b/drivers/media/platform/atmel/Kconfig
+> >>> @@ -32,3 +32,16 @@ config VIDEO_ATMEL_ISI
+> >>>      help
+> >>>        This module makes the ATMEL Image Sensor Interface available
+> >>>        as a v4l2 device.
+> >>> +
+> >>> +config VIDEO_MICROCHIP_CSI2DC
+> >>> +   tristate "Microchip CSI2 Demux Controller"
+> >>> +   depends on VIDEO_V4L2 && COMMON_CLK && OF
+> >>> +   depends on ARCH_AT91 || COMPILE_TEST
+> >>> +   select MEDIA_CONTROLLER
+> >>> +   select VIDEO_V4L2_SUBDEV_API
+> >>> +   select V4L2_FWNODE
+> >>> +   help
+> >>> +     CSI2 Demux Controller driver. CSI2DC is a helper chip
+> >>> +     that converts IDI interface byte stream to a parallel pixel stream.
+> >>> +     It supports various RAW formats as input.
+> >>> +     Performs clock domain crossing between hardware blocks.
+> >>
+> >> Is the last phrase necessary ? Also missing the usual
+> >>
+> >>          To compile this driver as a module, choose M here: the
+> >>          module will be called ...
+> >>
+> >>> diff --git a/drivers/media/platform/atmel/Makefile b/drivers/media/platform/atmel/Makefile
+> >>> index c5c01556c653..8e80af500bf5 100644
+> >>> --- a/drivers/media/platform/atmel/Makefile
+> >>> +++ b/drivers/media/platform/atmel/Makefile
+> >>> @@ -5,3 +5,4 @@ atmel-xisc-objs = atmel-sama7g5-isc.o atmel-isc-base.o
+> >>>   obj-$(CONFIG_VIDEO_ATMEL_ISI) += atmel-isi.o
+> >>>   obj-$(CONFIG_VIDEO_ATMEL_ISC) += atmel-isc.o
+> >>>   obj-$(CONFIG_VIDEO_ATMEL_XISC) += atmel-xisc.o
+> >>> +obj-$(CONFIG_VIDEO_MICROCHIP_CSI2DC) += microchip-csi2dc.o
+> >>> diff --git a/drivers/media/platform/atmel/microchip-csi2dc.c b/drivers/media/platform/atmel/microchip-csi2dc.c
+> >>> new file mode 100644
+> >>> index 000000000000..fda1d5882dbb
+> >>> --- /dev/null
+> >>> +++ b/drivers/media/platform/atmel/microchip-csi2dc.c
+> >>> @@ -0,0 +1,785 @@
+> >>> +// SPDX-License-Identifier: GPL-2.0
+> >>
+> >> Nit: I see GPL-2.0 listed as deprecated by spdx.org
+> >> Should you use one of:
+> >>                GPL-2.0-only
+> >>                        GPL-2.0-or-later
+> >>
+> >>> +/*
+> >>> + * Microchip CSI2 Demux Controller (CSI2DC) driver
+> >>> + *
+> >>> + * Copyright (C) 2018-2020 Microchip Technology, Inc.
+> >>> + *
+> >>> + * Author: Eugen Hristev <eugen.hristev@microchip.com>
+> >>> + *
+> >>> + */
+> >>> +
+> >>> +#include <linux/clk.h>
+> >>> +#include <linux/module.h>
+> >>> +#include <linux/of.h>
+> >>> +#include <linux/of_graph.h>
+> >>> +#include <linux/platform_device.h>
+> >>> +#include <linux/pm_runtime.h>
+> >>> +#include <linux/videodev2.h>
+> >>> +
+> >>> +#include <media/v4l2-device.h>
+> >>> +#include <media/v4l2-fwnode.h>
+> >>> +#include <media/v4l2-subdev.h>
+> >>> +#include <media/videobuf2-dma-contig.h>
+> >>> +
+> >>> +/* Global configuration register */
+> >>> +#define CSI2DC_GCFG                        0x0
+> >>> +
+> >>> +/* MIPI sensor pixel clock is free running */
+> >>> +#define CSI2DC_GCFG_MIPIFRN                BIT(0)
+> >>> +/* Output waveform inter-line minimum delay */
+> >>> +#define CSI2DC_GCFG_HLC(v)         ((v) << 4)
+> >>> +#define CSI2DC_GCFG_HLC_MASK               GENMASK(7, 4)
+> >>> +/* SAMA7G5 requires a HLC delay of 15 */
+> >>> +#define SAMA7G5_HLC                        (15)
+> >>> +
+> >>> +/* Global control register */
+> >>> +#define CSI2DC_GCTLR                       0x04
+> >>> +#define CSI2DC_GCTLR_SWRST         BIT(0)
+> >>> +
+> >>> +/* Global status register */
+> >>> +#define CSI2DC_GS                  0x08
+> >>> +
+> >>> +/* SSP interrupt status register */
+> >>> +#define CSI2DC_SSPIS                       0x28
+> >>> +/* Pipe update register */
+> >>> +#define CSI2DC_PU                  0xC0
+> >>> +/* Video pipe attributes update */
+> >>> +#define CSI2DC_PU_VP                       BIT(0)
+> >>> +
+> >>> +/* Pipe update status register */
+> >>> +#define CSI2DC_PUS                 0xC4
+> >>> +
+> >>> +/* Video pipeline enable register */
+> >>> +#define CSI2DC_VPE                 0xF8
+> >>> +#define CSI2DC_VPE_ENABLE          BIT(0)
+> >>> +
+> >>> +/* Video pipeline configuration register */
+> >>> +#define CSI2DC_VPCFG                       0xFC
+> >>> +/* Data type */
+> >>> +#define CSI2DC_VPCFG_DT(v)         ((v) << 0)
+> >>> +#define CSI2DC_VPCFG_DT_MASK               GENMASK(5, 0)
+> >>> +/* Virtual channel identifier */
+> >>> +#define CSI2DC_VPCFG_VC(v)         ((v) << 6)
+> >>> +#define CSI2DC_VPCFG_VC_MASK               GENMASK(7, 6)
+> >>> +/* Decompression enable */
+> >>> +#define CSI2DC_VPCFG_DE                    BIT(8)
+> >>> +/* Decoder mode */
+> >>> +#define CSI2DC_VPCFG_DM(v)         ((v) << 9)
+> >>> +#define CSI2DC_VPCFG_DM_DECODER8TO12       0
+> >>> +/* Decoder predictor 2 selection */
+> >>> +#define CSI2DC_VPCFG_DP2           BIT(12)
+> >>> +/* Recommended memory storage */
+> >>> +#define CSI2DC_VPCFG_RMS           BIT(13)
+> >>> +/* Post adjustment */
+> >>> +#define CSI2DC_VPCFG_PA                    BIT(14)
+> >>> +
+> >>> +/* Video pipeline column register */
+> >>> +#define CSI2DC_VPCOL                       0x100
+> >>> +/* Column number */
+> >>> +#define CSI2DC_VPCOL_COL(v)                ((v) << 0)
+> >>> +#define CSI2DC_VPCOL_COL_MASK              GENMASK(15, 0)
+> >>> +
+> >>> +/* Video pipeline row register */
+> >>> +#define CSI2DC_VPROW                       0x104
+> >>> +/* Row number */
+> >>> +#define CSI2DC_VPROW_ROW(v)                ((v) << 0)
+> >>> +#define CSI2DC_VPROW_ROW_MASK              GENMASK(15, 0)
+> >>> +
+> >>> +/* Version register */
+> >>> +#define CSI2DC_VERSION                     0x1FC
+> >>> +
+> >>> +/* register read/write helpers */
+> >>> +#define csi2dc_readl(st, reg)              readl_relaxed((st)->base + (reg))
+> >>> +#define csi2dc_writel(st, reg, val)        writel_relaxed((val), \
+> >>> +                                   (st)->base + (reg))
+> >>> +
+> >>> +/* supported RAW data types */
+> >>> +#define CSI2DC_DT_RAW6                     0x28
+> >>> +#define CSI2DC_DT_RAW7                     0x29
+> >>> +#define CSI2DC_DT_RAW8                     0x2A
+> >>> +#define CSI2DC_DT_RAW10                    0x2B
+> >>> +#define CSI2DC_DT_RAW12                    0x2C
+> >>> +#define CSI2DC_DT_RAW14                    0x2D
+> >>> +
+> >>> +struct csi2dc_format {
+> >>> +   u32                             mbus_code;
+> >>> +   u32                             dt;
+> >>> +};
+> >>> +
+> >>> +static struct csi2dc_format csi2dc_formats_list[] = {
+> >>> +   {
+> >>> +           .mbus_code =            MEDIA_BUS_FMT_SRGGB10_1X10,
+> >>> +           .dt =                   CSI2DC_DT_RAW10,
+> >>> +   }, {
+> >>> +           .mbus_code =            MEDIA_BUS_FMT_SBGGR10_1X10,
+> >>> +           .dt =                   CSI2DC_DT_RAW10,
+> >>> +   }, {
+> >>> +           .mbus_code =            MEDIA_BUS_FMT_SGRBG10_1X10,
+> >>> +           .dt =                   CSI2DC_DT_RAW10,
+> >>> +   }, {
+> >>> +           .mbus_code =            MEDIA_BUS_FMT_SGBRG10_1X10,
+> >>> +           .dt =                   CSI2DC_DT_RAW10,
+> >>> +   },
+> >>> +};
+> >>> +
+> >>> +enum mipi_csi_pads {
+> >>> +   CSI2DC_PAD_SINK                 = 0,
+> >>> +   CSI2DC_PAD_SOURCE               = 1,
+> >>> +   CSI2DC_PADS_NUM                 = 2,
+> >>> +};
+> >>> +
+> >>> +struct csi2dc_device {
+> >>> +   void __iomem                    *base;
+> >>> +   struct v4l2_subdev              csi2dc_sd;
+> >>> +   struct device                   *dev;
+> >>> +   struct v4l2_device              v4l2_dev;
+> >>> +   struct clk                      *pclk;
+> >>> +   struct clk                      *scck;
+> >>> +
+> >>> +   bool                            video_pipe;
+> >>> +
+> >>> +   u32                             num_fmts;
+> >>> +   struct csi2dc_format            **formats;
+> >>> +
+> >>> +   struct csi2dc_format            *cur_fmt;
+> >>> +   struct csi2dc_format            *try_fmt;
+> >>> +
+> >>> +   struct media_pad                pads[CSI2DC_PADS_NUM];
+> >>> +
+> >>> +   bool                            clk_gated;
+> >>> +   u32                             vc;
+> >>> +
+> >>> +   struct v4l2_async_subdev        *asd;
+> >>> +   struct v4l2_async_notifier      notifier;
+> >>> +
+> >>> +   struct v4l2_subdev              *input_sd;
+> >>> +
+> >>> +   u32                             remote_pad;
+> >>> +
+> >>> +   bool                            completed;
+> >>> +   bool                            powered_on;
+> >>> +
+> >>> +   struct work_struct              workq;
+> >>> +};
+> >>> +
+> >>> +static void csi2dc_vp_update(struct csi2dc_device *csi2dc)
+> >>> +{
+> >>> +   u32 vp;
+> >>> +
+> >>> +   vp = CSI2DC_VPCFG_DT(csi2dc->cur_fmt->dt) & CSI2DC_VPCFG_DT_MASK;
+> >>> +   vp |= CSI2DC_VPCFG_VC(csi2dc->vc) & CSI2DC_VPCFG_VC_MASK;
+> >>> +   vp &= ~CSI2DC_VPCFG_DE;
+> >>> +   vp |= CSI2DC_VPCFG_DM(CSI2DC_VPCFG_DM_DECODER8TO12);
+> >>> +   vp &= ~CSI2DC_VPCFG_DP2;
+> >>> +   vp &= ~CSI2DC_VPCFG_RMS;
+> >>> +   vp |= CSI2DC_VPCFG_PA;
+> >>> +
+> >>> +   csi2dc_writel(csi2dc, CSI2DC_VPCFG, vp);
+> >>> +   csi2dc_writel(csi2dc, CSI2DC_VPE, CSI2DC_VPE_ENABLE);
+> >>> +   csi2dc_writel(csi2dc, CSI2DC_PU, CSI2DC_PU_VP);
+> >>> +}
+> >>> +
+> >>> +static inline struct csi2dc_device *
+> >>> +csi2dc_sd_to_csi2dc_device(struct v4l2_subdev *csi2dc_sd)
+> >>> +{
+> >>> +   return container_of(csi2dc_sd, struct csi2dc_device, csi2dc_sd);
+> >>> +}
+> >>> +
+> >>> +static int csi2dc_enum_mbus_code(struct v4l2_subdev *csi2dc_sd,
+> >>> +                            struct v4l2_subdev_pad_config *cfg,
+> >>> +                            struct v4l2_subdev_mbus_code_enum *code)
+> >>> +{
+> >>> +   struct csi2dc_device *csi2dc = csi2dc_sd_to_csi2dc_device(csi2dc_sd);
+> >>> +
+> >>> +   if (code->index >= csi2dc->num_fmts)
+> >>> +           return -EINVAL;
+> >>> +
+> >>> +   code->code = csi2dc->formats[code->index]->mbus_code;
+> >>> +   return 0;
+> >>> +}
+> >>> +
+> >>> +static int csi2dc_set_fmt(struct v4l2_subdev *csi2dc_sd,
+> >>> +                     struct v4l2_subdev_pad_config *cfg,
+> >>> +                     struct v4l2_subdev_format *req_fmt)
+> >>> +{
+> >>> +   struct csi2dc_device *csi2dc = csi2dc_sd_to_csi2dc_device(csi2dc_sd);
+> >>> +   struct csi2dc_format *fmt;
+> >>> +   int ret, i;
+> >>> +
+> >>> +   if (!csi2dc->completed) {
+> >>> +           dev_dbg((csi2dc)->dev, "subdev not registered yet\n");
+> >>> +           return 0;
+> >>> +   }
+> >>> +
+> >>> +   for (fmt = csi2dc->formats[0], i = 0; i < csi2dc->num_fmts; fmt++, i++)
+> >>> +           if (req_fmt->format.code == fmt->mbus_code)
+> >>> +                   csi2dc->try_fmt = fmt;
+> >>> +
+> >>> +   /* in case we could not find the desired format, default to something */
+> >>> +   if (!csi2dc->try_fmt  ||
+> >>> +       req_fmt->format.code != csi2dc->try_fmt->mbus_code) {
+> >>> +           csi2dc->try_fmt = csi2dc->formats[0];
+> >>> +
+> >>> +           dev_dbg(csi2dc->dev,
+> >>> +                   "CSI2DC unsupported format 0x%x, defaulting to 0x%x\n",
+> >>> +                   req_fmt->format.code, csi2dc->formats[0]->mbus_code);
+> >>> +
+> >>> +           req_fmt->format.code = csi2dc->formats[0]->mbus_code;
+> >>> +   }
+> >>> +
+> >>> +   /* if we are just trying, we are done */
+> >>> +   if (req_fmt->which == V4L2_SUBDEV_FORMAT_TRY)
+> >>> +           return 0;
+> >>> +
+> >>> +   ret = v4l2_subdev_call(csi2dc->input_sd, pad, set_fmt, cfg, req_fmt);
+> >>> +   if (ret) {
+> >>> +           dev_err(csi2dc->dev, "input subdev failed %d\n", ret);
+> >>> +           return ret;
+> >>> +   }
+> >>> +
+> >>> +   csi2dc->cur_fmt = csi2dc->try_fmt;
+> >>> +   /* update video pipe */
+> >>> +   csi2dc_vp_update(csi2dc);
+> >>> +
+> >>> +   dev_dbg(csi2dc->dev, "CSI2DC new format: 0x%x\n", req_fmt->format.code);
+> >>> +   return 0;
+> >>> +}
+> >>> +
+> >>> +static int csi2dc_formats_init(struct csi2dc_device *csi2dc)
+> >>> +{
+> >>> +   struct csi2dc_format *fmt;
+> >>> +   struct v4l2_subdev *subdev = csi2dc->input_sd;
+> >>> +   unsigned int num_fmts, i;
+> >>> +
+> >>> +   struct v4l2_subdev_mbus_code_enum mbus_code = {
+> >>> +           .which = V4L2_SUBDEV_FORMAT_ACTIVE,
+> >>> +           .index = 0,
+> >>> +   };
+> >>> +
+> >>> +   num_fmts = 0;
+> >>> +
+> >>> +   csi2dc->formats = devm_kcalloc(csi2dc->dev,
+> >>> +                                  ARRAY_SIZE(csi2dc_formats_list),
+> >>> +                                  sizeof(*csi2dc->formats), GFP_KERNEL);
+> >>> +   if (!csi2dc->formats)
+> >>> +           return -ENOMEM;
+> >>> +
+> >>> +   while (!v4l2_subdev_call(subdev, pad, enum_mbus_code, NULL,
+> >>> +          &mbus_code)) {
+> >>> +           mbus_code.index++;
+> >>> +           for (fmt = &csi2dc_formats_list[0], i = 0;
+> >>> +                i < ARRAY_SIZE(csi2dc_formats_list); i++, fmt++)
+> >>> +                   if (fmt->mbus_code == mbus_code.code) {
+> >>> +                           csi2dc->formats[num_fmts] = fmt;
+> >>> +                           num_fmts++;
+> >>> +                   }
+> >>> +   }
+> >>
+> >> For the reasons explained above and by Sakari, I think this should be dropped
+> >>
+> >>> +
+> >>> +   if (!num_fmts)
+> >>> +           return -ENXIO;
+> >>> +
+> >>> +   csi2dc->num_fmts = num_fmts;
+> >>> +
+> >>> +   return 0;
+> >>> +}
+> >>> +
+> >>> +static int csi2dc_power(struct csi2dc_device *csi2dc, int on)
+> >>> +{
+> >>> +   int ret = 0;
+> >>> +
+> >>> +   if (!csi2dc->completed) {
+> >>> +           dev_dbg((csi2dc)->dev, "subdev not registered yet\n");
+> >>> +           return 0;
+> >>> +   }
+> >>
+> >> Can this happen ?
+> >>
+> >>> +
+> >>> +   if (csi2dc->powered_on == on)
+> >>> +           return 0;
+> >>
+> >> Same question
+> >>
+> >>> +
+> >>> +   if (on)
+> >>> +           ret = clk_prepare_enable(csi2dc->scck);
+> >>> +   else
+> >>> +           clk_disable_unprepare(csi2dc->scck);
+> >>> +   if (ret)
+> >>> +           dev_err(csi2dc->dev, "failed to enable scck: %d\n", ret);
+> >>> +
+> >>> +   /* if powering up, deassert reset line */
+> >>> +   if (on)
+> >>> +           csi2dc_writel(csi2dc, CSI2DC_GCTLR, CSI2DC_GCTLR_SWRST);
+> >>> +
+> >>> +   /* if powering down, assert reset line */
+> >>> +   if (!on)
+> >>> +           csi2dc_writel(csi2dc, CSI2DC_GCTLR, !CSI2DC_GCTLR_SWRST);
+> >>> +   if (!ret)
+> >>> +           csi2dc->powered_on = on;
+> >>
+> >> Wouldn't this be better coded as
+> >>
+> >>          if (on) {
+> >>                  clk_prepare_enable
+> >>                  csi2dc_writel(SWRST)
+> >>                  powered_on = true
+> >>          } else {
+> >>                  clk_disable_unrepare
+> >>                  csi2dc_writel(!SWRST)
+> >>                  powered_on = false
+> >>          }
+> >>> +
+> >>> +   return ret;
+> >>> +}
+> >>> +
+> >>> +static int csi2dc_s_stream(struct v4l2_subdev *csi2dc_sd, int enable)
+> >>> +{
+> >>> +   struct csi2dc_device *csi2dc = csi2dc_sd_to_csi2dc_device(csi2dc_sd);
+> >>> +
+> >>> +   if (!csi2dc->completed) {
+> >>> +           dev_dbg((csi2dc)->dev, "subdev not registered yet\n");
+> >>> +           return 0;
+> >>> +   }
+> >>> +
+> >>> +   return v4l2_subdev_call(csi2dc->input_sd, video, s_stream, enable);
+> >>> +}
+> >>> +
+> >>> +static int csi2dc_g_frame_interval(struct v4l2_subdev *csi2dc_sd,
+> >>> +                              struct v4l2_subdev_frame_interval *interval)
+> >>> +{
+> >>> +   struct csi2dc_device *csi2dc = csi2dc_sd_to_csi2dc_device(csi2dc_sd);
+> >>> +
+> >>> +   if (!csi2dc->completed) {
+> >>> +           dev_dbg((csi2dc)->dev, "subdev not registered yet\n");
+> >>> +           return 0;
+> >>> +   }
+> >>> +
+> >>> +   return v4l2_subdev_call(csi2dc->input_sd, video, g_frame_interval,
+> >>> +                           interval);
+> >>> +}
+> >>> +
+> >>> +static int csi2dc_s_frame_interval(struct v4l2_subdev *csi2dc_sd,
+> >>> +                              struct v4l2_subdev_frame_interval *interval)
+> >>> +{
+> >>> +   struct csi2dc_device *csi2dc = csi2dc_sd_to_csi2dc_device(csi2dc_sd);
+> >>> +
+> >>> +   if (!csi2dc->completed) {
+> >>> +           dev_dbg((csi2dc)->dev, "subdev not registered yet\n");
+> >>> +           return 0;
+> >>> +   }
+> >>> +
+> >>> +   return v4l2_subdev_call(csi2dc->input_sd, video, s_frame_interval,
+> >>> +                           interval);
+> >>> +}
+> >>> +
+> >>> +static int csi2dc_enum_frame_size(struct v4l2_subdev *csi2dc_sd,
+> >>> +                             struct v4l2_subdev_pad_config *cfg,
+> >>> +                             struct v4l2_subdev_frame_size_enum *fse)
+> >>> +{
+> >>> +   struct csi2dc_device *csi2dc = csi2dc_sd_to_csi2dc_device(csi2dc_sd);
+> >>> +
+> >>> +   if (!csi2dc->completed) {
+> >>> +           dev_dbg((csi2dc)->dev, "subdev not registered yet\n");
+> >>> +           return 0;
+> >>> +   }
+> >>> +
+> >>> +   return v4l2_subdev_call(csi2dc->input_sd, pad, enum_frame_size, cfg,
+> >>> +                           fse);
+> >>> +}
+> >>> +
+> >>> +static int csi2dc_enum_frame_interval(struct v4l2_subdev *csi2dc_sd,
+> >>> +                         struct v4l2_subdev_pad_config *cfg,
+> >>> +                         struct v4l2_subdev_frame_interval_enum *fie)
+> >>> +{
+> >>> +   struct csi2dc_device *csi2dc = csi2dc_sd_to_csi2dc_device(csi2dc_sd);
+> >>> +
+> >>> +   if (!csi2dc->completed) {
+> >>> +           dev_dbg((csi2dc)->dev, "subdev not registered yet\n");
+> >>> +           return 0;
+> >>> +   }
+> >>> +
+> >>> +   return v4l2_subdev_call(csi2dc->input_sd, pad, enum_frame_interval, cfg,
+> >>> +                           fie);
+> >>> +}
+> >>> +
+> >>> +static const struct v4l2_subdev_pad_ops csi2dc_pad_ops = {
+> >>> +   .enum_mbus_code = csi2dc_enum_mbus_code,
+> >>> +   .set_fmt = csi2dc_set_fmt,
+> >>> +   .enum_frame_size = csi2dc_enum_frame_size,
+> >>> +   .enum_frame_interval = csi2dc_enum_frame_interval,
+> >>> +};
+> >>> +
+> >>> +static const struct v4l2_subdev_video_ops csi2dc_video_ops = {
+> >>> +   .s_stream = csi2dc_s_stream,
+> >>> +   .g_frame_interval = csi2dc_g_frame_interval,
+> >>> +   .s_frame_interval = csi2dc_s_frame_interval,
+> >>> +};
+> >>> +
+> >>> +static const struct v4l2_subdev_ops csi2dc_subdev_ops = {
+> >>> +   .pad = &csi2dc_pad_ops,
+> >>> +   .video = &csi2dc_video_ops,
+> >>> +};
+> >>> +
+> >>> +static int csi2dc_get_mbus_config(struct csi2dc_device *csi2dc)
+> >>> +{
+> >>> +   struct v4l2_mbus_config mbus_config = { 0 };
+> >>> +   int ret;
+> >>> +
+> >>> +   ret = v4l2_subdev_call(csi2dc->input_sd, pad, get_mbus_config,
+> >>> +                          csi2dc->remote_pad, &mbus_config);
+> >>> +   if (ret == -ENOIOCTLCMD) {
+> >>> +           dev_dbg(csi2dc->dev,
+> >>> +                   "no remote mbus configuration available\n");
+> >>> +           goto csi2dc_get_mbus_config_defaults;
+> >>> +   }
+> >>> +
+> >>> +   if (ret) {
+> >>> +           dev_err(csi2dc->dev,
+> >>> +                   "failed to get remote mbus configuration\n");
+> >>> +           goto csi2dc_get_mbus_config_defaults;
+> >>
+> >> This should probably be an error reported to the caller. But this
+> >> function return value is not checked, so it's probably fine.
+> >>
+> >>> +   }
+> >>> +
+> >>> +   if (mbus_config.flags & V4L2_MBUS_CSI2_CHANNEL_0)
+> >>> +           csi2dc->vc = 0;
+> >>> +   else if (mbus_config.flags & V4L2_MBUS_CSI2_CHANNEL_1)
+> >>> +           csi2dc->vc = 1;
+> >>> +   else if (mbus_config.flags & V4L2_MBUS_CSI2_CHANNEL_2)
+> >>> +           csi2dc->vc = 2;
+> >>> +   else if (mbus_config.flags & V4L2_MBUS_CSI2_CHANNEL_3)
+> >>> +           csi2dc->vc = 3;
+> >>> +
+> >>> +   dev_dbg(csi2dc->dev, "subdev sending on channel %d\n", csi2dc->vc);
+> >>> +
+> >>> +   csi2dc->clk_gated = mbus_config.flags &
+> >>> +                       V4L2_MBUS_CSI2_NONCONTINUOUS_CLOCK;
+> >>> +
+> >>> +   dev_dbg(csi2dc->dev, "%s clock\n",
+> >>> +           csi2dc->clk_gated ? "gated" : "free running");
+> >>> +
+> >>> +   return 0;
+> >>> +
+> >>> +csi2dc_get_mbus_config_defaults:
+> >>> +   csi2dc->vc = 0; /* Virtual ID 0 by default */
+> >>> +   csi2dc->clk_gated = false; /* Free running clock by default */
+> >>> +
+> >>> +   return 0;
+> >>> +}
+> >>> +
+> >>> +static int csi2dc_async_bound(struct v4l2_async_notifier *notifier,
+> >>> +                         struct v4l2_subdev *subdev,
+> >>> +                         struct v4l2_async_subdev *asd)
+> >>> +{
+> >>> +   struct csi2dc_device *csi2dc = container_of(notifier->v4l2_dev,
+> >>> +                                   struct csi2dc_device, v4l2_dev);
+> >>> +   int pad;
+> >>> +
+> >>> +   csi2dc->input_sd = subdev;
+> >>> +
+> >>> +   pad = media_entity_get_fwnode_pad(&subdev->entity,
+> >>> +                                     asd->match.fwnode,
+> >>> +                                     MEDIA_PAD_FL_SOURCE);
+> >>> +   if (pad < 0) {
+> >>> +           dev_err(csi2dc->dev, "Failed to find pad for %s\n",
+> >>> +                   subdev->name);
+> >>> +           return pad;
+> >>> +   }
+> >>> +
+> >>> +   csi2dc->remote_pad = pad;
+> >>> +
+> >>> +   csi2dc_get_mbus_config(csi2dc);
+> >>
+> >> The closer to s_stream you call get_mbus_config, the less the chances
+> >> of receiving a stale configuration, if this can happen.
+> >>
+> >>> +
+> >>> +   return 0;
+> >>> +}
+> >>> +
+> >>> +static int csi2dc_async_complete(struct v4l2_async_notifier *notifier)
+> >>> +{
+> >>> +   struct csi2dc_device *csi2dc =
+> >>> +           container_of(notifier->v4l2_dev, struct csi2dc_device,
+> >>> +                        v4l2_dev);
+> >>> +   int ret;
+> >>> +
+> >>> +   ret = csi2dc_formats_init(csi2dc);
+> >>> +   if (ret)
+> >>> +           return ret;
+> >>> +
+> >>> +   ret = v4l2_device_register_subdev_nodes(&csi2dc->v4l2_dev);
+> >>> +   if (ret < 0) {
+> >>> +           v4l2_err(&csi2dc->v4l2_dev,
+> >>> +                    "failed to register subdev nodes\n");
+> >>> +           return ret;
+> >>> +   }
+> >>> +
+> >>> +   csi2dc->completed = true;
+> >>> +
+> >>> +   csi2dc_writel(csi2dc, CSI2DC_GCFG,
+> >>> +                 (SAMA7G5_HLC & CSI2DC_GCFG_HLC_MASK) |
+> >>> +                 (csi2dc->clk_gated ? 0 : CSI2DC_GCFG_MIPIFRN));
+> >>> +
+> >>> +   csi2dc_writel(csi2dc, CSI2DC_VPCOL,
+> >>> +                 CSI2DC_VPCOL_COL(0xFFF) & CSI2DC_VPCOL_COL_MASK);
+> >>> +   csi2dc_writel(csi2dc, CSI2DC_VPROW,
+> >>> +                 CSI2DC_VPROW_ROW(0xFFF) & CSI2DC_VPROW_ROW_MASK);
+> >>> +
+> >>> +   /* once we are completed, we can register ourselves in the pipeline */
+> >>> +   schedule_work(&csi2dc->workq);
+> >>> +
+> >>> +   return ret;
+> >>> +}
+> >>> +
+> >>> +static const struct v4l2_async_notifier_operations csi2dc_async_ops = {
+> >>> +   .bound = csi2dc_async_bound,
+> >>> +   .complete = csi2dc_async_complete,
+> >>> +};
+> >>> +
+> >>> +static void csi2dc_cleanup_notifier(struct csi2dc_device *csi2dc)
+> >>> +{
+> >>> +   v4l2_async_notifier_unregister(&csi2dc->notifier);
+> >>> +   v4l2_async_notifier_cleanup(&csi2dc->notifier);
+> >>> +}
+> >>> +
+> >>> +static int csi2dc_prepare_notifier(struct csi2dc_device *csi2dc,
+> >>> +                              struct device_node *input_parent)
+> >>> +{
+> >>> +   int ret;
+> >>> +
+> >>> +   v4l2_async_notifier_init(&csi2dc->notifier);
+> >>> +
+> >>> +   csi2dc->asd = kzalloc(sizeof(*csi2dc->asd), GFP_KERNEL);
+> >>> +   if (!csi2dc->asd)
+> >>> +           return -ENOMEM;
+> >>> +
+> >>> +   csi2dc->asd->match_type = V4L2_ASYNC_MATCH_FWNODE;
+> >>> +   csi2dc->asd->match.fwnode = of_fwnode_handle(input_parent);
+> >>
+> >> If you use v4l2_async_notifier_add_fwnode_subdev() the framework does
+> >> this for you.
+> >>
+> >>> +
+> >>> +   ret = v4l2_async_notifier_add_subdev(&csi2dc->notifier, csi2dc->asd);
+> >>> +   if (ret) {
+> >>> +           dev_err(csi2dc->dev, "failed to add async notifier.\n");
+> >>> +           v4l2_async_notifier_cleanup(&csi2dc->notifier);
+> >>> +           goto csi2dc_prepare_notifier_err;
+> >>> +   }
+> >>> +
+> >>> +   csi2dc->notifier.ops = &csi2dc_async_ops;
+> >>> +
+> >>> +   ret = v4l2_async_notifier_register(&csi2dc->v4l2_dev,
+> >>> +                                      &csi2dc->notifier);
+> >>> +
+> >>> +   if (ret) {
+> >>> +           dev_err(csi2dc->dev, "fail to register async notifier.\n");
+> >>
+> >> Shouldn't you cleanup the notifier if registration fails ?
+> >>
+> >>> +           goto csi2dc_prepare_notifier_err;
+> >>> +   }
+> >>> +
+> >>> +csi2dc_prepare_notifier_err:
+> >>> +   of_node_put(input_parent);
+> >>> +
+> >>> +   return ret;
+> >>> +}
+> >>> +
+> >>> +static int csi2dc_of_parse(struct csi2dc_device *csi2dc,
+> >>> +                      struct device_node *of_node)
+> >>> +{
+> >>> +   struct device_node *input_node, *sink_node, *input_parent;
+> >>> +   struct v4l2_fwnode_endpoint input_endpoint = { 0 },
+> >>> +                               sink_endpoint = { 0 };
+> >>> +   int ret;
+> >>> +
+> >>> +   input_node = of_graph_get_next_endpoint(of_node, NULL);
+> >>> +
+> >>> +   if (!input_node) {
+> >>> +           dev_err(csi2dc->dev,
+> >>> +                   "missing port node at %s, input node is mandatory.\n",
+> >>
+> >> Please use %pOF to print the node name
+> >> Also, input_node should be put in the error path
+> >>
+> >>> +                   of_node->full_name);
+> >>> +           return -EINVAL;
+> >>> +   }
+> >>> +
+> >>> +   ret = v4l2_fwnode_endpoint_parse(of_fwnode_handle(input_node),
+> >>> +                                    &input_endpoint);
+> >>
+> >> Please set input_endpoint.bus_type if you know what kind of bus you're
+> >> dealing with (not having the bindings of the IDI transmitter I'm not
+> >> sure. Is this V4L2_MBUS_CSI2_DPHY ?)
+> >>
+> >>> +
+> >>> +   if (ret) {
+> >>> +           dev_err(csi2dc->dev, "endpoint not defined at %s\n",
+> >>> +                   of_node->full_name);
+> >>> +           return ret;
+> >>> +   }
+> >>> +
+> >>> +   input_parent = of_graph_get_remote_port_parent(input_node);
+> >>> +   if (!input_parent) {
+> >>
+> >> Missing of_node_put(input_node)
+> >>
+> >>> +           dev_err(csi2dc->dev,
+> >>> +                   "could not get input node's parent node.\n");
+> >>> +           return -EINVAL;
+> >>> +   }
+> >>> +
+> >>> +   sink_node = of_graph_get_next_endpoint(of_node, input_node);
+> >>> +
+> >>> +   if (sink_node)
+> >>> +           ret = v4l2_fwnode_endpoint_parse(of_fwnode_handle(sink_node),
+> >>> +                                            &sink_endpoint);
+> >>
+> >> Same, set sink_endpoint.bus_type if you know it's MBUS_PARALLEL
+> >>
+> >>> +
+> >>> +   if (!sink_node || ret) {
+> >>
+> >> If parsing fail you don't return an error but continue registering the
+> >> notifier and potentially end up registering the async subdev for this
+> >> entity even if the endpoint parsing failed.
+> >>
+> >>> +           dev_info(csi2dc->dev,
+> >>> +                    "missing sink node at %s, data pipe available only.\n",
+> >>> +                    of_node->full_name);
+> >>> +   } else {
+> >>> +           csi2dc->video_pipe = true;
+> >>
+> >> video_pipe is unused it seems
+> >>
+> >>> +
+> >>> +           dev_dbg(csi2dc->dev, "block %s %d.%d->%d.%d video pipeline\n",
+> >>> +                   of_node->full_name, input_endpoint.base.port,
+> >>> +                   input_endpoint.base.id, sink_endpoint.base.port,
+> >>> +                   sink_endpoint.base.id);
+> >>> +   }
+> >>> +
+> >>> +   of_node_put(sink_node);
+> >>> +   of_node_put(input_node);
+> >>> +
+> >>> +   /* prepare async notifier for subdevice completion */
+> >>> +   return csi2dc_prepare_notifier(csi2dc, input_parent);
+> >>> +}
+> >>> +
+> >>> +static void csi2dc_workq_handler(struct work_struct *workq)
+> >>> +{
+> >>> +   struct csi2dc_device *csi2dc = container_of(workq,
+> >>> +                                   struct csi2dc_device, workq);
+> >>> +   int ret;
+> >>> +
+> >>> +   if (v4l2_async_register_subdev(&csi2dc->csi2dc_sd))
+> >>> +           dev_dbg(csi2dc->dev, "failed to register the subdevice\n");
+> >>
+> >> That's peculiar, why do you have to schedule this to a workqueue
+> >> instead of doing this in the complete() callback ?
+> >>
+> >>> +
+> >>> +   ret = csi2dc_power(csi2dc, true);
+> >>> +   if (ret < 0)
+> >>> +           v4l2_err(&csi2dc->v4l2_dev, "failed to power on\n");
+> >>
+> >> Should the device be powered on at s_stream time ? Possibly with a
+> >> pm_runtime_get_sync() call ? I see you register pm_runtime operations,
+> >> but never call get_sync() or _put().
+> >>
+> >> What if CONFIG_PM not selected ? Should this driver select it ? Do you
+> >> have use cases where that's not possible ?
+> >>
+> >>> +}
+> >>> +
+> >>> +static int csi2dc_probe(struct platform_device *pdev)
+> >>> +{
+> >>> +   struct device *dev = &pdev->dev;
+> >>> +   struct csi2dc_device *csi2dc;
+> >>> +   struct resource *res = NULL;
+> >>> +   int ret = 0;
+> >>> +
+> >>> +   csi2dc = devm_kzalloc(dev, sizeof(*csi2dc), GFP_KERNEL);
+> >>> +   if (!csi2dc)
+> >>> +           return -ENOMEM;
+> >>> +
+> >>> +   csi2dc->dev = dev;
+> >>> +
+> >>> +   res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> >>> +   if (!res)
+> >>> +           return -EINVAL;
+> >>
+> >> devm_ioremap_resource() checks for the validity of 'res' so you can
+> >> drop the previous two lines
+> >>
+> >>> +
+> >>> +   csi2dc->base = devm_ioremap_resource(dev, res);
+> >>> +
+> >>
+> >> Is the empy line intentional, sometimes you have one, sometimes you
+> >> don't ?
+> >>
+> >>> +   if (IS_ERR(csi2dc->base)) {
+> >>> +           dev_err(dev, "base address not set\n");
+> >>
+> >>
+> >>> +           return PTR_ERR(csi2dc->base);
+> >>> +   }
+> >>> +
+> >>> +   csi2dc->pclk = devm_clk_get(dev, "pclk");
+> >>> +   if (IS_ERR(csi2dc->pclk)) {
+> >>> +           ret = PTR_ERR(csi2dc->pclk);
+> >>> +           dev_err(dev, "failed to get pclk: %d\n", ret);
+> >>> +           return ret;
+> >>
+> >> Just return PTR_ERR instead of assigning to ret
+> >>
+> >>> +   }
+> >>> +
+> >>> +   ret = clk_prepare_enable(csi2dc->pclk);
+> >>> +   if (ret) {
+> >>> +           dev_err(dev, "failed to enable pclk: %d\n", ret);
+> >>> +           return ret;
+> >>> +   }
+> >>
+> >> Has this clock to be enabled here or can it be done in the
+> >> pm_runtime callback ?
+> >>
+> >>> +
+> >>> +   csi2dc->scck = devm_clk_get(dev, "scck");
+> >>> +   if (IS_ERR(csi2dc->scck)) {
+> >>> +           ret = PTR_ERR(csi2dc->scck);
+> >>> +           dev_err(dev, "failed to get scck: %d\n", ret);
+> >>> +           goto csi2dc_clk_fail;
+> >>> +   }
+> >>> +
+> >>> +   ret = v4l2_device_register(dev, &csi2dc->v4l2_dev);
+> >>> +   if (ret) {
+> >>> +           dev_err(dev, "unable to register v4l2 device.\n");
+> >>> +           goto csi2dc_clk_fail;
+> >>> +   }
+> >>> +
+> >>> +   v4l2_subdev_init(&csi2dc->csi2dc_sd, &csi2dc_subdev_ops);
+> >>> +
+> >>> +   csi2dc->csi2dc_sd.owner = THIS_MODULE;
+> >>> +   csi2dc->csi2dc_sd.dev = dev;
+> >>> +   snprintf(csi2dc->csi2dc_sd.name, sizeof(csi2dc->csi2dc_sd.name),
+> >>> +            "CSI2DC.0");
+> >>> +
+> >>> +   csi2dc->csi2dc_sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+> >>> +   csi2dc->csi2dc_sd.entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
+> >>> +   csi2dc->pads[CSI2DC_PAD_SINK].flags = MEDIA_PAD_FL_SINK;
+> >>> +   csi2dc->pads[CSI2DC_PAD_SOURCE].flags = MEDIA_PAD_FL_SOURCE;
+> >>
+> >> Isn't the source pad presence conditional to the presence of
+> >> port@1 ?
+> >>
+> >>> +
+> >>> +   ret = media_entity_pads_init(&csi2dc->csi2dc_sd.entity, CSI2DC_PADS_NUM,
+> >>> +                                csi2dc->pads);
+> >>> +   if (ret < 0) {
+> >>> +           dev_err(dev, "media entity init failed\n");
+> >>> +           goto csi2dc_probe_entity_err;
+> >>> +   }
+> >>> +
+> >>> +   v4l2_set_subdevdata(&csi2dc->csi2dc_sd, pdev);
+> >>> +
+> >>> +   platform_set_drvdata(pdev, &csi2dc->csi2dc_sd);
+> >>> +
+> >>> +   INIT_WORK(&csi2dc->workq, csi2dc_workq_handler);
+> >>> +
+> >>> +   ret = csi2dc_of_parse(csi2dc, dev->of_node);
+> >>> +   if (ret)
+> >>> +           goto csi2dc_probe_entity_err;
+> >>> +
+> >>> +   dev_info(dev, "Microchip CSI2DC version %x\n",
+> >>> +            csi2dc_readl(csi2dc, CSI2DC_VERSION));
+> >>> +
+> >>> +   pm_runtime_set_active(dev);
+> >>> +   pm_runtime_enable(dev);
+> >>> +   pm_request_idle(dev);
+> >>> +
+> >>> +   return 0;
+> >>> +
+> >>> +csi2dc_probe_entity_err:
+> >>> +   media_entity_cleanup(&csi2dc->csi2dc_sd.entity);
+> >>> +   v4l2_device_unregister(&csi2dc->v4l2_dev);
+> >>> +csi2dc_clk_fail:
+> >>> +   clk_disable_unprepare(csi2dc->pclk);
+> >>> +   return ret;
+> >>> +}
+> >>> +
+> >>> +static int csi2dc_remove(struct platform_device *pdev)
+> >>> +{
+> >>> +   struct v4l2_subdev *csi2dc_sd = platform_get_drvdata(pdev);
+> >>> +   struct csi2dc_device *csi2dc = csi2dc_sd_to_csi2dc_device(csi2dc_sd);
+> >>> +
+> >>> +   pm_runtime_disable(&pdev->dev);
+> >>> +
+> >>> +   v4l2_async_unregister_subdev(&csi2dc->csi2dc_sd);
+> >>> +   csi2dc_cleanup_notifier(csi2dc);
+> >>> +   media_entity_cleanup(&csi2dc->csi2dc_sd.entity);
+> >>> +   v4l2_device_unregister(&csi2dc->v4l2_dev);
+> >>> +   clk_disable_unprepare(csi2dc->pclk);
+> >>> +
+> >>> +   return 0;
+> >>> +}
+> >>> +
+> >>> +static int __maybe_unused csi2dc_runtime_suspend(struct device *dev)
+> >>> +{
+> >>> +   struct csi2dc_device *csi2dc = dev_get_drvdata(dev);
+> >>> +
+> >>> +   return csi2dc_power(csi2dc, false);
+> >>> +}
+> >>> +
+> >>> +static int __maybe_unused csi2dc_runtime_resume(struct device *dev)
+> >>> +{
+> >>> +   struct csi2dc_device *csi2dc = dev_get_drvdata(dev);
+> >>> +
+> >>> +   return csi2dc_power(csi2dc, true);
+> >>> +}
+> >>> +
+> >>> +static const struct dev_pm_ops csi2dc_dev_pm_ops = {
+> >>> +   SET_RUNTIME_PM_OPS(csi2dc_runtime_suspend, csi2dc_runtime_resume, NULL)
+> >>> +};
+> >>> +
+> >>> +static const struct of_device_id csi2dc_of_match[] = {
+> >>> +   { .compatible = "microchip,sama7g5-csi2dc" },
+> >>> +   { }
+> >>> +};
+> >>> +
+> >>> +MODULE_DEVICE_TABLE(of, csi2dc_of_match);
+> >>> +
+> >>> +static struct platform_driver csi2dc_driver = {
+> >>> +   .probe  = csi2dc_probe,
+> >>> +   .remove = csi2dc_remove,
+> >>> +   .driver = {
+> >>> +           .name           = "microchip-csi2dc",
+> >>> +           .pm             = &csi2dc_dev_pm_ops,
+> >>> +           .of_match_table = of_match_ptr(csi2dc_of_match),
+> >>> +   },
+> >>> +};
+> >>> +
+> >>> +module_platform_driver(csi2dc_driver);
+> >>> +
+> >>> +MODULE_AUTHOR("Eugen Hristev <eugen.hristev@microchip.com>");
+> >>> +MODULE_DESCRIPTION("Microchip CSI2 Demux Controller driver");
+> >>> +MODULE_LICENSE("GPL v2");
+> >>> +MODULE_SUPPORTED_DEVICE("video");
+> >>
+> >> For my education, what's MODULE_SUPPORTED_DEVICE for ?
+> >
+> > It's "not yet implemented" since 2005, I think it can be dropped :-)
+> >
+> > --
+> > Regards,
+> >
+> > Laurent Pinchart
+> >
+>
