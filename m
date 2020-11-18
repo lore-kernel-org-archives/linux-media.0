@@ -7,31 +7,27 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0B57C56202
-	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 11:38:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78570C64EBC
+	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 11:38:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 904D72468D
-	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 11:38:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2E1B422210
+	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 11:38:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727489AbgKRLie (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 18 Nov 2020 06:38:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40900 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727116AbgKRLid (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 18 Nov 2020 06:38:33 -0500
-Received: from hillosipuli.retiisi.eu (hillosipuli.retiisi.eu [IPv6:2a01:4f9:c010:4572::81:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695E6C0613D4
-        for <linux-media@vger.kernel.org>; Wed, 18 Nov 2020 03:38:33 -0800 (PST)
+        id S1727234AbgKRLic (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 18 Nov 2020 06:38:32 -0500
+Received: from retiisi.eu ([95.216.213.190]:53498 "EHLO hillosipuli.retiisi.eu"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726299AbgKRLib (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 18 Nov 2020 06:38:31 -0500
 Received: from lanttu.localdomain (lanttu.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::c1:2])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id ACB69634CCF;
-        Wed, 18 Nov 2020 13:38:18 +0200 (EET)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id D121E634CBD;
+        Wed, 18 Nov 2020 13:38:17 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, mchehab@kernel.org
-Subject: [PATCH 21/29] ccs: Give all subdevs a function
-Date:   Wed, 18 Nov 2020 13:31:03 +0200
-Message-Id: <20201118113111.2548-22-sakari.ailus@linux.intel.com>
+Subject: [PATCH 13/29] smiapp: Use CCS limits in reading binning capabilities
+Date:   Wed, 18 Nov 2020 13:30:55 +0200
+Message-Id: <20201118113111.2548-14-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201118113111.2548-1-sakari.ailus@linux.intel.com>
 References: <20201118113111.2548-1-sakari.ailus@linux.intel.com>
@@ -41,54 +37,53 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This removes a warning at driver probe time telling that one or two
-entities have no function set. The function used for both the binner and
-scaler is the scaler.
+Use CCS limits for obtaining binning capabilities and subtypes.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ drivers/media/i2c/smiapp/smiapp-core.c | 27 +++++++++-----------------
+ 1 file changed, 9 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index cc3a81200050..bddfee637f33 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -2685,7 +2685,7 @@ static void ccs_cleanup(struct ccs_sensor *sensor)
+diff --git a/drivers/media/i2c/smiapp/smiapp-core.c b/drivers/media/i2c/smiapp/smiapp-core.c
+index c332b6ecf0bd..d786f91c1eae 100644
+--- a/drivers/media/i2c/smiapp/smiapp-core.c
++++ b/drivers/media/i2c/smiapp/smiapp-core.c
+@@ -3105,26 +3105,17 @@ static int smiapp_probe(struct i2c_client *client)
+ 	}
  
- static void ccs_create_subdev(struct ccs_sensor *sensor,
- 			      struct ccs_subdev *ssd, const char *name,
--			      unsigned short num_pads)
-+			      unsigned short num_pads, u32 function)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
- 
-@@ -2696,6 +2696,7 @@ static void ccs_create_subdev(struct ccs_sensor *sensor,
- 		v4l2_subdev_init(&ssd->sd, &ccs_ops);
- 
- 	ssd->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-+	ssd->sd.entity.function = function;
- 	ssd->sensor = sensor;
- 
- 	ssd->npads = num_pads;
-@@ -3123,11 +3124,12 @@ static int ccs_probe(struct i2c_client *client)
- 	sensor->pll.ext_clk_freq_hz = sensor->hwcfg->ext_clk;
- 	sensor->pll.scale_n = CCS_LIM(sensor, SCALER_N_MIN);
- 
--	ccs_create_subdev(sensor, sensor->scaler, " scaler", 2);
--	ccs_create_subdev(sensor, sensor->binner, " binner", 2);
--	ccs_create_subdev(sensor, sensor->pixel_array, " pixel_array", 1);
+ 	if (CCS_LIM(sensor, BINNING_CAPABILITY)) {
+-		u32 val;
 -
--	sensor->pixel_array->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
-+	ccs_create_subdev(sensor, sensor->scaler, " scaler", 2,
-+			  MEDIA_ENT_F_CAM_SENSOR);
-+	ccs_create_subdev(sensor, sensor->binner, " binner", 2,
-+			  MEDIA_ENT_F_PROC_VIDEO_SCALER);
-+	ccs_create_subdev(sensor, sensor->pixel_array, " pixel_array", 1,
-+			  MEDIA_ENT_F_PROC_VIDEO_SCALER);
+-		rval = smiapp_read(sensor,
+-				   SMIAPP_REG_U8_BINNING_SUBTYPES, &val);
+-		if (rval < 0) {
+-			rval = -ENODEV;
+-			goto out_free_ccs_limits;
+-		}
+-		sensor->nbinning_subtypes = min_t(u8, val,
+-						  SMIAPP_BINNING_SUBTYPES);
++		sensor->nbinning_subtypes =
++			min_t(u8, CCS_LIM(sensor, BINNING_SUB_TYPES),
++			      CCS_LIM_BINNING_SUB_TYPE_MAX_N);
  
- 	rval = ccs_init_controls(sensor);
- 	if (rval < 0)
+ 		for (i = 0; i < sensor->nbinning_subtypes; i++) {
+-			rval = smiapp_read(
+-				sensor, SMIAPP_REG_U8_BINNING_TYPE_n(i), &val);
+-			if (rval < 0) {
+-				rval = -ENODEV;
+-				goto out_free_ccs_limits;
+-			}
+-			sensor->binning_subtypes[i] =
+-				*(struct smiapp_binning_subtype *)&val;
++			sensor->binning_subtypes[i].horizontal =
++				CCS_LIM_AT(sensor, BINNING_SUB_TYPE, i) >>
++				CCS_BINNING_SUB_TYPE_COLUMN_SHIFT;
++			sensor->binning_subtypes[i].vertical =
++				CCS_LIM_AT(sensor, BINNING_SUB_TYPE, i) &
++				CCS_BINNING_SUB_TYPE_ROW_MASK;
+ 
+ 			dev_dbg(&client->dev, "binning %xx%x\n",
+ 				sensor->binning_subtypes[i].horizontal,
 -- 
 2.27.0
 
