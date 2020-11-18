@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9D0EC64E7D
-	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 11:38:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38FA0C71156
+	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 11:38:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 934AB246B7
-	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 11:38:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E774A2462E
+	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 11:38:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727729AbgKRLif (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 18 Nov 2020 06:38:35 -0500
-Received: from retiisi.eu ([95.216.213.190]:53500 "EHLO hillosipuli.retiisi.eu"
+        id S1727829AbgKRLij (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 18 Nov 2020 06:38:39 -0500
+Received: from retiisi.eu ([95.216.213.190]:53528 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727346AbgKRLie (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 18 Nov 2020 06:38:34 -0500
+        id S1727073AbgKRLic (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 18 Nov 2020 06:38:32 -0500
 Received: from lanttu.localdomain (lanttu.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::c1:2])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 33336634CD7;
-        Wed, 18 Nov 2020 13:38:19 +0200 (EET)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 0BA0F634CBF;
+        Wed, 18 Nov 2020 13:38:18 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, mchehab@kernel.org
-Subject: [PATCH 27/29] dt-bindings: nokia,smia: Amend SMIA bindings with MIPI CCS support
-Date:   Wed, 18 Nov 2020 13:31:09 +0200
-Message-Id: <20201118113111.2548-28-sakari.ailus@linux.intel.com>
+Subject: [PATCH 15/29] smiapp: Remove quirk function for writing a single 8-bit register
+Date:   Wed, 18 Nov 2020 13:30:57 +0200
+Message-Id: <20201118113111.2548-16-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201118113111.2548-1-sakari.ailus@linux.intel.com>
 References: <20201118113111.2548-1-sakari.ailus@linux.intel.com>
@@ -37,97 +37,71 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Amend the existing SMIA bindings by adding MIPI CCS support, with separate
-compatible strings for CCS 1.0 and CCS 1.1. Rename the old bindings
-accordingly as CCS is the current standard.
+This function is no longer needed as the smiapp_write() function can be
+used to write 8-bit registers with plain register addresses.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- .../i2c/{nokia,smia.yaml => mipi-ccs.yaml}    | 23 ++++++++++++++-----
- MAINTAINERS                                   |  2 +-
- 2 files changed, 18 insertions(+), 7 deletions(-)
- rename Documentation/devicetree/bindings/media/i2c/{nokia,smia.yaml => mipi-ccs.yaml} (81%)
+ drivers/media/i2c/smiapp/smiapp-quirk.c | 15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml b/Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml
-similarity index 81%
-rename from Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml
-rename to Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml
-index 47df08338a42..a386ee246956 100644
---- a/Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml
-@@ -1,26 +1,37 @@
- # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- # Copyright (C) 2014--2020 Intel Corporation
+diff --git a/drivers/media/i2c/smiapp/smiapp-quirk.c b/drivers/media/i2c/smiapp/smiapp-quirk.c
+index 24630c7650d2..9422eb61b424 100644
+--- a/drivers/media/i2c/smiapp/smiapp-quirk.c
++++ b/drivers/media/i2c/smiapp/smiapp-quirk.c
+@@ -14,11 +14,6 @@
  
--$id: http://devicetree.org/schemas/media/i2c/nokia,smia.yaml#
-+$id: http://devicetree.org/schemas/media/i2c/mipi-ccs.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
+ #include "smiapp.h"
  
--title: SMIA/SMIA++ sensor
-+title: MIPI CCS, SMIA++ and SMIA compliant camera sensors
+-static int smiapp_write_8(struct smiapp_sensor *sensor, u16 reg, u8 val)
+-{
+-	return smiapp_write(sensor, reg, val);
+-}
+-
+ static int smiapp_write_8s(struct smiapp_sensor *sensor,
+ 			   const struct smiapp_reg_8 *regs, int len)
+ {
+@@ -26,7 +21,7 @@ static int smiapp_write_8s(struct smiapp_sensor *sensor,
+ 	int rval;
  
- maintainers:
-   - Sakari Ailus <sakari.ailus@linux.intel.com>
+ 	for (; len > 0; len--, regs++) {
+-		rval = smiapp_write_8(sensor, regs->reg, regs->val);
++		rval = smiapp_write(sensor, regs->reg, regs->val);
+ 		if (rval < 0) {
+ 			dev_err(&client->dev,
+ 				"error %d writing reg 0x%4.4x, val 0x%2.2x",
+@@ -170,7 +165,7 @@ static int jt8ev1_post_poweron(struct smiapp_sensor *sensor)
  
- description:
+ static int jt8ev1_pre_streamon(struct smiapp_sensor *sensor)
+ {
+-	return smiapp_write_8(sensor, 0x3328, 0x00);
++	return smiapp_write(sensor, 0x3328, 0x00);
+ }
  
-+  CCS (Camera Command Set) is a raw Bayer camera sensor standard defined by the
-+  MIPI Alliance; see
-+  <URL:https://www.mipi.org/specifications/camera-command-set>.
-+
-   SMIA (Standard Mobile Imaging Architecture) is an image sensor standard
-   defined jointly by Nokia and ST. SMIA++, defined by Nokia, is an extension of
--  that. These definitions are valid for both types of sensors.
-+  that.
+ static int jt8ev1_post_streamoff(struct smiapp_sensor *sensor)
+@@ -178,7 +173,7 @@ static int jt8ev1_post_streamoff(struct smiapp_sensor *sensor)
+ 	int rval;
  
-   More detailed documentation can be found in
-   Documentation/devicetree/bindings/media/video-interfaces.txt .
+ 	/* Workaround: allows fast standby to work properly */
+-	rval = smiapp_write_8(sensor, 0x3205, 0x04);
++	rval = smiapp_write(sensor, 0x3205, 0x04);
+ 	if (rval < 0)
+ 		return rval;
  
- properties:
-   compatible:
--    const: nokia,smia
-+    oneOf:
-+      - items:
-+        - const: mipi-ccs-1.1
-+        - const: mipi-ccs
-+      - items:
-+        - const: mipi-ccs-1.0
-+        - const: mipi-ccs
-+      - const: nokia,smia
+@@ -186,11 +181,11 @@ static int jt8ev1_post_streamoff(struct smiapp_sensor *sensor)
+ 	usleep_range(2000, 2050);
  
-   reg:
-     maxItems: 1
-@@ -89,14 +100,14 @@ examples:
-         clock-frequency = <400000>;
+ 	/* Restore it */
+-	rval = smiapp_write_8(sensor, 0x3205, 0x00);
++	rval = smiapp_write(sensor, 0x3205, 0x00);
+ 	if (rval < 0)
+ 		return rval;
  
-         camera-sensor@10 {
--            compatible = "nokia,smia";
-+            compatible = "mipi-ccs-1.0", "mipi-ccs";
-             reg = <0x10>;
-             reset-gpios = <&gpio3 20 GPIO_ACTIVE_LOW>;
-             vana-supply = <&vaux3>;
-             clocks = <&omap3_isp 0>;
-             clock-frequency = <9600000>;
-             port {
--                smiapp_ep: endpoint {
-+                ccs_ep: endpoint {
-                     data-lanes = <1 2>;
-                     remote-endpoint = <&csi2a_ep>;
-                     link-frequencies = /bits/ 64 <199200000 210000000
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fe5c49316864..d6892e1abdc5 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11666,7 +11666,7 @@ MIPI CCS, SMIA AND SMIA++ IMAGE SENSOR DRIVER
- M:	Sakari Ailus <sakari.ailus@linux.intel.com>
- L:	linux-media@vger.kernel.org
- S:	Maintained
--F:	Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml
-+F:	Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml
- F:	drivers/media/i2c/ccs/
- F:	drivers/media/i2c/smiapp-pll.c
- F:	drivers/media/i2c/smiapp-pll.h
+-	return smiapp_write_8(sensor, 0x3328, 0x80);
++	return smiapp_write(sensor, 0x3328, 0x80);
+ }
+ 
+ static int jt8ev1_init(struct smiapp_sensor *sensor)
 -- 
 2.27.0
 
