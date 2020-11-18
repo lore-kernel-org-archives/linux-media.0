@@ -7,28 +7,28 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40FC9C6379D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A41D2C64E69
 	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 23:48:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BE14E2470C
-	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 23:48:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 623A2246F2
+	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 23:48:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=xilinx.onmicrosoft.com header.i=@xilinx.onmicrosoft.com header.b="rVrz0YRY"
+	dkim=pass (1024-bit key) header.d=xilinx.onmicrosoft.com header.i=@xilinx.onmicrosoft.com header.b="tf2/XR1D"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727249AbgKRXsT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 18 Nov 2020 18:48:19 -0500
-Received: from mail-dm6nam08on2041.outbound.protection.outlook.com ([40.107.102.41]:49364
-        "EHLO NAM04-DM6-obe.outbound.protection.outlook.com"
+        id S1727665AbgKRXsb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 18 Nov 2020 18:48:31 -0500
+Received: from mail-bn7nam10on2055.outbound.protection.outlook.com ([40.107.92.55]:29188
+        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726316AbgKRXsS (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 18 Nov 2020 18:48:18 -0500
+        id S1726624AbgKRXsb (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 18 Nov 2020 18:48:31 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AqQZkrU3fExPp3wOkezJNag6Jr8T0/kjsfFO6g/1nHh88ipISQeuMxWs/U5lGJ48RVBgIeQFBAYiezskqjeE73LUlwwfNfciByxPunwoiY8c05Y/TF3vLcujP3A7vQnF7cUhyoiWzTfDczyA6Xg/dXdjrIKdzhHxQYuvzmVdKhUwWtYOmAaHoDaIgvF2tN3oDwSfA3MYPxsZW6/pepcgYIKmp3ZKRxNMt2OGRQWV7cnmQaOzK8y44T21r3oA55CQ8rNm2zd71Fz7sYpDOz4tJv7UpoI0Q1+RYY01M8cRDnfeLj/kKfEYqVRjcfBBbdcckXIa+bxBiu8XpooZIyICaw==
+ b=W7ddRjjAxDJsq6cVUJDz9iVw1icYFrZOkHZyPm5UqRxStyhxkmOcr3hqjq9bz3L190FtYC5d9eOgvl7ldvRjSNoZCn1NdAlJZvPasOUH7IlQpdTYo2PAZnvjeC9ifDOyefdCVRnZm2Eq/TjgBe1UPuPAEa2byVT6ySaDTsjsDffwwHm9QpEx8KX9wXVYegIbijpSq5thVjYS/MyB1dWF4U9AhvSI2nfbPD/kK/jQwic8tUb78SWddaO8gPOfjsmdTeQNTz3V6MJQ8adKymOjdg4v8EaGIAtHWfuWSPeAfvPbgf67XQb/D+mKpUwMmA6+e48B+gTsqfzuKKojqB98AQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GbLD9omk481VZRNloQ9307kXdtkzYxMCjfjVWTO/7pw=;
- b=VmMqbuV/jtQCvtSxSabEAFslyi/cG7vcYdni/BLyduH+xvKua/lsFjVdZwzx0fEIzZAblrBBmWVaUzviK5+fpgaaNFjrGUImzHKuApar6wHPE+4roEmVtVx09aWhV+/nwECH6rwMqYZ3jWDP1h7DGO+ZODuxUPbX/4sec1lmNzMn/5B2KiPZyUoRhhS+HROX9rAdECVsRlAPLGNctyuLGoOtQvmJR7EkpW4yH3ZYyiDuAdKzXA8QV9GTWMmUoDVpFQYT46dyyRA8LZODHAOnl8ARgz6KbbddCfKrfhl0QeiDJc6A5wA+xX0OWAp3RMh8vSHkz15nq8Y8lbSlLQlItg==
+ bh=s9/IsjCOTiTkt0pSphdZ4YBLSL+jBXL0pj09EddTBEY=;
+ b=Fmc1pGA6o95QqL4pMW5y6KYG/xgc3WhzWh61SAKnFQRW+JUX777vdRU/VgKyJKLFoWQPRK5InxG+M75wzA+erJf2H501ts4nQHtUoMWQLENaXTphnITwkI9EjgSa+oZ/nz4f12nogWpGt9Tk438cZU8y9s6jypPXf55eWz0YpUygLcjt/YF/tlI3neIc9AhIii3ExY2xW48PRU+Qziulzf+u7NCOF3NfevAipQBx+nKhoXv668DvduO89lJ6eWWIBxbexlnsQNWBaSD5l0q5frgUcjvJ5TfPMDkzxzGBRDBiSrSud71mKqqs8rhf40UsBFd2o7+wgqYYgM7iHKh84w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
  dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
@@ -36,17 +36,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GbLD9omk481VZRNloQ9307kXdtkzYxMCjfjVWTO/7pw=;
- b=rVrz0YRYo5iiwrfGbF04hXdR4P9DmACtjGSEt6paXqEOaNh4gfSRcOm5UTThsWjQimc5ALd9V+A/v8W2ZxjRG8K60Pdcei706Dz2qPxC/OM2RQa3TcbjG8YqdR2QgZU0YQx2afzEyHNoOVlc9ViZ5Juxo2xz8WRZRDI/nPAAtyk=
-Received: from DM5PR04CA0058.namprd04.prod.outlook.com (2603:10b6:3:ef::20) by
- BL0PR02MB4580.namprd02.prod.outlook.com (2603:10b6:208:40::27) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3589.20; Wed, 18 Nov 2020 23:48:14 +0000
-Received: from CY1NAM02FT064.eop-nam02.prod.protection.outlook.com
- (2603:10b6:3:ef:cafe::50) by DM5PR04CA0058.outlook.office365.com
- (2603:10b6:3:ef::20) with Microsoft SMTP Server (version=TLS1_2,
+ bh=s9/IsjCOTiTkt0pSphdZ4YBLSL+jBXL0pj09EddTBEY=;
+ b=tf2/XR1DF/9SrbUkCfPTQXnnO+0KKvITJoROt96bmvqXtUSungIMVOCRHMS05aFlD/egaOI53fzeAL7LUOdKpgYNH/SyLeZKDp/L3a3U74WLcTjAeunoG4Yh6ij67K+RyQvsjBZXCKzof4U6ou2AUZ19KcZUR3zdgjfDP19GrTk=
+Received: from DM6PR12CA0012.namprd12.prod.outlook.com (2603:10b6:5:1c0::25)
+ by BL0PR02MB6499.namprd02.prod.outlook.com (2603:10b6:208:1c5::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.20; Wed, 18 Nov
+ 2020 23:48:26 +0000
+Received: from CY1NAM02FT052.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:5:1c0:cafe::8a) by DM6PR12CA0012.outlook.office365.com
+ (2603:10b6:5:1c0::25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.20 via Frontend
- Transport; Wed, 18 Nov 2020 23:48:14 +0000
+ Transport; Wed, 18 Nov 2020 23:48:25 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
  smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=bestguesspass action=none
@@ -55,9 +56,9 @@ Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
  149.199.62.198 as permitted sender) receiver=protection.outlook.com;
  client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
 Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- CY1NAM02FT064.mail.protection.outlook.com (10.152.74.64) with Microsoft SMTP
+ CY1NAM02FT052.mail.protection.outlook.com (10.152.74.123) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.3589.20 via Frontend Transport; Wed, 18 Nov 2020 23:48:14 +0000
+ 15.20.3589.20 via Frontend Transport; Wed, 18 Nov 2020 23:48:25 +0000
 Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -72,6 +73,7 @@ Envelope-to: michal.simek@xilinx.com,
  tejas.patel@xilinx.com,
  manish.narani@xilinx.com,
  ravi.patel@xilinx.com,
+ nishad.saraf@xilinx.com,
  wendy.liang@xilinx.com,
  robh+dt@kernel.org,
  arnd@arndb.de,
@@ -86,7 +88,7 @@ Envelope-to: michal.simek@xilinx.com,
 Received: from [172.19.2.167] (port=36324 helo=xsjjliang50.xilinx.com)
         by smtp.xilinx.com with esmtp (Exim 4.90)
         (envelope-from <wendy.liang@xilinx.com>)
-        id 1kfXBL-0000Wz-5H; Wed, 18 Nov 2020 15:48:11 -0800
+        id 1kfXBL-0000Wz-CW; Wed, 18 Nov 2020 15:48:11 -0800
 From:   Wendy Liang <wendy.liang@xilinx.com>
 To:     <robh+dt@kernel.org>, <michal.simek@xilinx.com>, <arnd@arndb.de>,
         <gregkh@linuxfoundation.org>, <sumit.semwal@linaro.org>,
@@ -98,10 +100,11 @@ CC:     <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
         <dri-devel@lists.freedesktop.org>,
+        Nishad Saraf <nishad.saraf@xilinx.com>,
         Wendy Liang <wendy.liang@xilinx.com>
-Subject: [PATCH v2 1/9] dt-binding: soc: xilinx: ai-engine: Add AI engine binding
-Date:   Wed, 18 Nov 2020 15:48:01 -0800
-Message-ID: <1605743289-26575-2-git-send-email-wendy.liang@xilinx.com>
+Subject: [PATCH v2 7/9] misc: xilinx-ai-engine: Add support to request device management services
+Date:   Wed, 18 Nov 2020 15:48:07 -0800
+Message-ID: <1605743289-26575-8-git-send-email-wendy.liang@xilinx.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1605743289-26575-1-git-send-email-wendy.liang@xilinx.com>
 References: <1605743289-26575-1-git-send-email-wendy.liang@xilinx.com>
@@ -110,173 +113,137 @@ Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-Office365-Filtering-HT: Tenant
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fcd07c80-3aee-4ebf-a0bd-08d88c1c6a31
-X-MS-TrafficTypeDiagnostic: BL0PR02MB4580:
-X-Microsoft-Antispam-PRVS: <BL0PR02MB4580481DC77ABC434850D195B0E10@BL0PR02MB4580.namprd02.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: d5357e32-0bee-49d5-744c-08d88c1c7112
+X-MS-TrafficTypeDiagnostic: BL0PR02MB6499:
+X-Microsoft-Antispam-PRVS: <BL0PR02MB6499385D52A8A7AE4A339306B0E10@BL0PR02MB6499.namprd02.prod.outlook.com>
 X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Oob-TLC-OOBClassifiers: OLM:4502;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RWIjWU2XjumBmES5vkw//DNS3UxltSjISlrFY2XnpTVbYxnoAt3yfmh2e72ifLUo6KITHxNDHdkoCWY2JQofskY3qA6SzKboKnt4tr3CjxKFOsVX/egFGKsaat3fum8ZpkS0nC3f0WQzu0dg9ltrWYb95aiyQhWGV5dgG2dfG3FE7/FaWhr37oH+NpdP2R26NpBl4vvLjq3402qdSPHfm20i0LH+gNhKwtKqL0M+5f0k1E8ahpqCKSbYfP+Xy/1oJap05pY+TVO+gxWs78orRTdRHq0dWtQ4+wZf1wDnGvGGQuOaQpkzWa2+kgzxlgzLLxEB5kYsV8zaQogQOogETdiEHIyS8DhshyhT8Qzm13taC2uPrlR713k7JcAdSCrHJ+T6Ajlpb783Twr5zw2+xjGy3MrxCytNJkay8q17wk+QEX3r6PtCGB7fCbVH+PsOZ9JXHdQWMjMapNhBapqYXN2P9NZFNZwZwxVUPGYq5EgW1rgi6S9aXFClH18XuQfnOjFNGE83+rXcRsc3Fam1KA==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(346002)(396003)(136003)(39860400002)(376002)(46966005)(921005)(6666004)(2906002)(5660300002)(336012)(82310400003)(70206006)(26005)(7416002)(356005)(36756003)(7636003)(110136005)(4326008)(107886003)(2616005)(83380400001)(478600001)(70586007)(426003)(36906005)(966005)(186003)(9786002)(7696005)(44832011)(8936002)(8676002)(54906003)(316002)(82740400003)(6636002)(47076004)(102446001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 7XA7RaO5NqxjzaVkKVvJi2WKddUJDLkhJuEMKTqI+5iahLRODMsfQwidnvF7r6XgBIAiEV7n/7VsPKStqgT2L+9Y7H1pSgBjCH9V5g7GCwqdAxXgkULXV2Ch6g9JGqGVWsTXS0X6pBfoLOac3F3CJYHiz4uMyacymJmC/T8Y/KyUezvM9ziW5XjN/K4l5HIisg3AKb746eBV0yQDacV4hk57RIsHFnSl67/FcRpE0WfvuGdBck5ty1SdNffoLg1eoVr+iuqNnL0sYihrPFXR2pTLmFNGWhpDZfYIorNRLrug9rZlmVMjNLmS/FHm7Q3ixcWybZrFi5xgaxFb1x5tPmkD3VDnlQ8hcoqwxgNpdscYQq0RnevfA6ys3/hbx5twKpfRqPjdsCFkbGKZQ17wzECN7ZGbsXNxd9roUEmf7wDP+pQ3YRN2/w0gAg/yngLi
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(346002)(376002)(39860400002)(136003)(396003)(46966005)(6636002)(921005)(26005)(107886003)(7416002)(83380400001)(82740400003)(356005)(7636003)(36756003)(47076004)(82310400003)(70586007)(316002)(36906005)(478600001)(110136005)(5660300002)(44832011)(70206006)(2616005)(8676002)(54906003)(4326008)(8936002)(186003)(7696005)(426003)(6666004)(9786002)(336012)(2906002)(102446001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2020 23:48:14.0915
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2020 23:48:25.6293
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fcd07c80-3aee-4ebf-a0bd-08d88c1c6a31
+X-MS-Exchange-CrossTenant-Network-Message-Id: d5357e32-0bee-49d5-744c-08d88c1c7112
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY1NAM02FT064.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: CY1NAM02FT052.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB4580
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB6499
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Xilinx AI engine array can be partitioned statically for different
-applications. In the device tree, there will be device node for the AI
-engine device, and device nodes for the statically configured AI engine
-partitions. Each of the statically configured partition has a partition
-ID in the system.
+From: Nishad Saraf <nishad.saraf@xilinx.com>
 
+Platform management services like device control, resets, power
+management, etc. are provided by Platform, Loader and Manager(PLM)
+through firmware driver APIs. For requesting some of these services,
+this change reads AI Engine platform management node ID from DT node.
+Some other features like clearing interrupts in the NoC interconnect
+might only be valid for particular silicon revisions. For supporting
+such silicon specific features, AI Engine driver will query and store
+this information in device instance. While at it, this change makes
+EEMI operations accessible to all the other source files in the
+driver.
+
+Signed-off-by: Nishad Saraf <nishad.saraf@xilinx.com>
 Signed-off-by: Wendy Liang <wendy.liang@xilinx.com>
 ---
- .../bindings/soc/xilinx/xlnx,ai-engine.yaml        | 126 +++++++++++++++++++++
- 1 file changed, 126 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/soc/xilinx/xlnx,ai-engine.yaml
+ drivers/misc/xilinx-ai-engine/ai-engine-dev.c      | 25 +++++++++++++++++++++-
+ drivers/misc/xilinx-ai-engine/ai-engine-internal.h |  6 ++++++
+ 2 files changed, 30 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/soc/xilinx/xlnx,ai-engine.yaml b/Documentation/devicetree/bindings/soc/xilinx/xlnx,ai-engine.yaml
-new file mode 100644
-index 0000000..1de5623
---- /dev/null
-+++ b/Documentation/devicetree/bindings/soc/xilinx/xlnx,ai-engine.yaml
-@@ -0,0 +1,126 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/soc/xilinx/xlnx,ai-engine.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/misc/xilinx-ai-engine/ai-engine-dev.c b/drivers/misc/xilinx-ai-engine/ai-engine-dev.c
+index 7e69ff4..78eae90 100644
+--- a/drivers/misc/xilinx-ai-engine/ai-engine-dev.c
++++ b/drivers/misc/xilinx-ai-engine/ai-engine-dev.c
+@@ -11,6 +11,7 @@
+ #include <linux/device.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/file.h>
++#include <linux/firmware/xlnx-zynqmp.h>
+ #include <linux/fs.h>
+ #include <linux/idr.h>
+ #include <linux/list.h>
+@@ -25,7 +26,8 @@
+ 
+ #include "ai-engine-internal.h"
+ 
+-#define AIE_DEV_MAX	(MINORMASK + 1)
++#define AIE_DEV_MAX			(MINORMASK + 1)
++#define VERSAL_SILICON_REV_MASK		GENMASK(31, 28)
+ 
+ static dev_t aie_major;
+ struct class *aie_class;
+@@ -318,6 +320,7 @@ static int xilinx_ai_engine_probe(struct platform_device *pdev)
+ {
+ 	struct aie_device *adev;
+ 	struct device *dev;
++	u32 idcode, version, pm_reg[2];
+ 	int ret;
+ 
+ 	adev = devm_kzalloc(&pdev->dev, sizeof(*adev), GFP_KERNEL);
+@@ -345,6 +348,26 @@ static int xilinx_ai_engine_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
++	/*
++	 * AI Engine platform management node ID is required for requesting
++	 * services from firmware driver.
++	 */
++	ret = of_property_read_u32_array(pdev->dev.of_node, "power-domains",
++					 pm_reg, ARRAY_SIZE(pm_reg));
++	if (ret < 0) {
++		dev_err(&pdev->dev,
++			"Failed to read power management information\n");
++		return ret;
++	}
++	adev->pm_node_id = pm_reg[1];
 +
-+title: Xilinx AI Engine
++	ret = zynqmp_pm_get_chipid(&idcode, &version);
++	if (ret < 0) {
++		dev_err(&pdev->dev, "Failed to get chip ID\n");
++		return ret;
++	}
++	adev->version = FIELD_GET(VERSAL_SILICON_REV_MASK, idcode);
 +
-+maintainers:
-+  - Wendy Liang <wendy.liang@xilinx.com>
+ 	dev = &adev->dev;
+ 	device_initialize(dev);
+ 	dev->class = aie_class;
+diff --git a/drivers/misc/xilinx-ai-engine/ai-engine-internal.h b/drivers/misc/xilinx-ai-engine/ai-engine-internal.h
+index 131d22a..b21b7025 100644
+--- a/drivers/misc/xilinx-ai-engine/ai-engine-internal.h
++++ b/drivers/misc/xilinx-ai-engine/ai-engine-internal.h
+@@ -41,6 +41,10 @@
+ #define AIE_REGS_ATTR_PERM_MASK		GENMASK(15, \
+ 						AIE_REGS_ATTR_PERM_SHIFT)
+ 
++/* Silicon Engineering Sample(ES) revision ID */
++#define VERSAL_ES1_REV_ID		0x0
++#define VERSAL_ES2_REV_ID		0x1
 +
-+description: |+
-+  The Xilinx AI Engine is a tile processor with many cores (up to 400) that
-+  can run in parallel. The data routing between cores is configured through
-+  internal switches, and shim tiles interface with external interconnect, such
-+  as memory or PL.
-+
-+properties:
-+  compatible:
-+    const: xlnx,ai-engine-v1.0
-+
-+  reg:
-+    description: |
-+      Physical base address and length of the device registers.
-+      The AI engine address space assigned to Linux is defined by Xilinx
-+      platform design tool.
-+
-+  '#address-cells':
-+    enum: [2]
-+    description: |
-+      size of cell to describe AI engine range of tiles address.
-+      It is the location of the starting tile of the range.
-+      As the AI engine tiles are 2D array, the location of a tile
-+      is presented as (column, row), the address cell is 2.
-+
-+  '#size-cells':
-+    enum: [2]
-+    description: |
-+      size of cell to describe AI engine range of tiles size.
-+      As the AI engine tiles are 2D array, the size cell is 2.
-+
-+  power-domains:
-+    maxItems: 1
-+    description: phandle to the associated power domain
-+
-+  interrupts:
-+    maxItems: 3
-+
-+  interrupt-names:
-+    description: |
-+      Should be "interrupt1", "interrupt2" or "interrupt3".
-+
-+required:
-+  - compatible
-+  - reg
-+  - '#address-cells'
-+  - '#size-cells'
-+  - power-domains
-+  - interrupt-parent
-+  - interrupts
-+  - interrupt-names
-+
-+patternProperties:
-+  "^aie_partition@[0-9]+$":
-+    type: object
-+    description: |
-+      AI engine partition which is a group of column based tiles of the AI
-+      engine device. Each AI engine partition is isolated from the other
-+      AI engine partitions. An AI engine partition is defined by Xilinx
-+      platform design tools. Each partition has a SHIM row and core tiles rows.
-+      A SHIM row contains SHIM tiles which are the interface to external
-+      components. AXI master can access AI engine registers, push data to and
-+      fetch data from AI engine through the SHIM tiles. Core tiles are the
-+      compute tiles.
-+
-+    properties:
-+      reg:
-+        description: |
-+          It describes the group of tiles of the AI engine partition. It needs
-+          to include the SHIM row. The format is defined by the parent AI engine
-+          device node's '#address-cells' and '#size-cells' properties. e.g. a v1
-+          AI engine device has 2D tiles array, the first row is SHIM row. A
-+          partition which has 50 columns and 8 rows of core tiles and 1 row of
-+          SHIM tiles will be presented as <0 0 50 9>.
-+
-+      label:
-+        maxItems: 1
-+
-+      xlnx,partition-id:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        description: |
-+          AI engine partition ID, which is defined by Xilinx platform design
-+          tool to identify the AI engine partition in the system.
-+
-+    required:
-+      - reg
-+      - xlnx,partition-id
-+    additionalProperties: false
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    bus {
-+      #address-cells = <2>;
-+      #size-cells = <2>;
-+
-+      ai_engine: ai-engine@20000000000 {
-+        compatible = "xlnx,ai-engine-v1.0";
-+        reg = <0x200 0x0 0x1 0x0>;
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+        power-domains = <&versal_firmware 0x18224072>;
-+        interrupt-parent = <&gic>;
-+        interrupts = <0x0 0x94 0x4>,
-+                     <0x0 0x95 0x4>,
-+                     <0x0 0x96 0x4>;
-+        interrupt-names = "interrupt1", "interrupt2", "interrupt3";
-+
-+        aie_partition0: aie_partition@0 {
-+                /* 50 columns and 8 core tile rows + 1 SHIM row */
-+                reg = <0 0 50 9>;
-+                xlnx,partition-id = <1>;
-+        };
-+      };
-+    };
+ /**
+  * struct aie_tile_regs - contiguous range of AI engine register
+  *			  within an AI engine tile
+@@ -173,6 +177,7 @@ struct aie_resource {
+  *	      while columns are occupied by partitions.
+  * @num_kernel_regs: number of kernel only registers range
+  * @version: AI engine device version
++ * @pm_node_id: AI Engine platform management node ID
+  */
+ struct aie_device {
+ 	struct list_head partitions;
+@@ -193,6 +198,7 @@ struct aie_device {
+ 	u32 row_shift;
+ 	u32 num_kernel_regs;
+ 	int version;
++	u32 pm_node_id;
+ };
+ 
+ /**
 -- 
 2.7.4
 
