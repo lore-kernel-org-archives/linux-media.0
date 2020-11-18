@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1373DC64E75
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41708C64E7C
 	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 18:47:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D33FB246C3
+	by mail.kernel.org (Postfix) with ESMTP id 070432064B
 	for <linux-media@archiver.kernel.org>; Wed, 18 Nov 2020 18:47:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726772AbgKRSrV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 18 Nov 2020 13:47:21 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:37640 "EHLO
+        id S1726629AbgKRSrN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 18 Nov 2020 13:47:13 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:37612 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726700AbgKRSrU (ORCPT
+        with ESMTP id S1726224AbgKRSrN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 18 Nov 2020 13:47:20 -0500
+        Wed, 18 Nov 2020 13:47:13 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id EB2A81F4499B
+        with ESMTPSA id DE85F1F4499B
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
@@ -33,9 +33,9 @@ Cc:     kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Jernej Skrabec <jernej.skrabec@siol.net>,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v3 03/13] media: cedrus: h264: Support profile controls
-Date:   Wed, 18 Nov 2020 15:46:50 -0300
-Message-Id: <20201118184700.331213-4-ezequiel@collabora.com>
+Subject: [PATCH v3 01/13] media: ctrls: Add validate failure debug message
+Date:   Wed, 18 Nov 2020 15:46:48 -0300
+Message-Id: <20201118184700.331213-2-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201118184700.331213-1-ezequiel@collabora.com>
 References: <20201118184700.331213-1-ezequiel@collabora.com>
@@ -45,48 +45,34 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Cedrus supports H.264 profiles from Baseline to High,
-except for the Extended profile
-
-Expose the V4L2_CID_MPEG_VIDEO_H264_PROFILE so that
-userspace can query the driver for the supported
-profiles and levels.
+Add a debug message for control validation (validate_new)
+failures. This is useful to debug issues with ioctls such
+as VIDIOC_TRY_EXT_CTRLS and VIDIOC_S_EXT_CTRLS.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- drivers/staging/media/sunxi/cedrus/cedrus.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ drivers/media/v4l2-core/v4l2-ctrls.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/staging/media/sunxi/cedrus/cedrus.c
-index 9a102b7c1bb9..97000f0e0011 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
-@@ -103,6 +103,25 @@ static const struct cedrus_control cedrus_controls[] = {
- 		.codec		= CEDRUS_CODEC_H264,
- 		.required	= false,
- 	},
-+	/*
-+	 * We only expose supported profiles information,
-+	 * and not levels as it's not clear what is supported
-+	 * for each hardware/core version.
-+	 * In any case, TRY/S_FMT will clamp the format resolution
-+	 * to the maximum supported.
-+	 */
-+	{
-+		.cfg = {
-+			.id	= V4L2_CID_MPEG_VIDEO_H264_PROFILE,
-+			.min	= V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE,
-+			.def	= V4L2_MPEG_VIDEO_H264_PROFILE_MAIN,
-+			.max	= V4L2_MPEG_VIDEO_H264_PROFILE_HIGH,
-+			.menu_skip_mask =
-+				BIT(V4L2_MPEG_VIDEO_H264_PROFILE_EXTENDED),
-+		},
-+		.codec		= CEDRUS_CODEC_H264,
-+		.required	= false,
-+	},
- 	{
- 		.cfg = {
- 			.id	= V4L2_CID_MPEG_VIDEO_HEVC_SPS,
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
+index e4613fa61d31..3896da01320e 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls.c
+@@ -4115,8 +4115,13 @@ static int try_set_ext_ctrls_common(struct v4l2_fh *fh,
+ 			struct v4l2_ctrl *ctrl = helpers[idx].ref->ctrl;
+ 
+ 			ret = user_to_new(cs->controls + idx, ctrl);
+-			if (!ret && ctrl->is_ptr)
++			if (!ret && ctrl->is_ptr) {
+ 				ret = validate_new(ctrl, ctrl->p_new);
++				if (ret)
++					dprintk(vdev,
++						"failed to validate control %s (%d)\n",
++						v4l2_ctrl_get_name(ctrl->id), ret);
++			}
+ 			idx = helpers[idx].next;
+ 		} while (!ret && idx);
+ 
 -- 
 2.27.0
 
