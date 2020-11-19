@@ -2,131 +2,265 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19853C64E69
-	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 14:39:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51FE6C64EBC
+	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 14:42:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DD0FB246E1
-	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 14:39:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 003DE24695
+	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 14:42:17 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="Tmvma844"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728039AbgKSOiq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Nov 2020 09:38:46 -0500
-Received: from relay11.mail.gandi.net ([217.70.178.231]:55639 "EHLO
-        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727214AbgKSOim (ORCPT
+        id S1728230AbgKSOl7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Nov 2020 09:41:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37406 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728214AbgKSOl7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Nov 2020 09:38:42 -0500
-Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id D5ADB100003;
-        Thu, 19 Nov 2020 14:38:37 +0000 (UTC)
-Date:   Thu, 19 Nov 2020 15:38:41 +0100
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        laurent.pinchart+renesas@ideasonboard.com,
-        niklas.soderlund+renesas@ragnatech.se, geert@linux-m68k.org,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hyun Kwon <hyunk@xilinx.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        sergei.shtylyov@gmail.com
-Subject: Re: [PATCH v5 0/8] media: i2c: Add RDACM21 camera module
-Message-ID: <20201119143841.62hn535fj4rncblv@uno.localdomain>
-References: <20201116135305.81319-1-jacopo+renesas@jmondi.org>
- <53e43d23-483a-adc2-a3c4-3a2b821da832@ideasonboard.com>
+        Thu, 19 Nov 2020 09:41:59 -0500
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE8CC061A48
+        for <linux-media@vger.kernel.org>; Thu, 19 Nov 2020 06:41:58 -0800 (PST)
+Received: by mail-wm1-x344.google.com with SMTP id p19so6428673wmg.0
+        for <linux-media@vger.kernel.org>; Thu, 19 Nov 2020 06:41:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Y5IS9zO+A3hkVfBizqimayW2EOPvZzB5E7D6XaTqShg=;
+        b=Tmvma8449CWRIPSwzrWdAfeeME86a3dRP05TWVEclEqoumwe9I3vIW9GL0WbteU877
+         /ppVepjpmUGCvpd3mm2dpHNAdATtDnvaTZlA8fqWc/O71juR9Jfe0WafEOMiAkFV9SKI
+         mKJC6R+JJlnJcSfoMSE+8b2XMnflH0RWRfx+g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Y5IS9zO+A3hkVfBizqimayW2EOPvZzB5E7D6XaTqShg=;
+        b=tWjVbmiYQaX886gYAO/QnH0hKhYj9NhBGrkc67a/3fs3OuSMm7Eau+XxRsCDpOq8KC
+         BdOc0HffU2WBUU666NaiETpg7JF7krdYvLK3L60oxC5R9+wk3jCaHgGW//3UfEOb9zlt
+         Ai5K7HxPFLSBZr6fhDskw3G0FXI2YFu+pvUvYUWjAEm+me6MKmFZ5tmGZHJ6dPhVvXm2
+         l6vQHN20TNgYUYicU/mPLwwteT9TCFoIQTE+jWVKuCxrXLoOJoUe2clJlE3a4bFw2cI3
+         ve1Wfr7kMdi7ldMk1fP/Tyh4W5wh0dS5uV3KLmthmkGmWi6FStuAZfweh5+43asrf4DU
+         mLMA==
+X-Gm-Message-State: AOAM5339LLs+gQNM/KJdcs47Dvmvw5xxdhBBpDAj0gbVsoRX2MzpbiBC
+        SFki+EfYgy55PU5NQg/r6MjiPw==
+X-Google-Smtp-Source: ABdhPJyrHPaKzncpinZwmIZnJr8Axmv9p6u3ybyYZmEgmhikoWkCYML8KZfVW8G7rSzid75zXnVo6A==
+X-Received: by 2002:a05:600c:2512:: with SMTP id d18mr4984673wma.153.1605796917117;
+        Thu, 19 Nov 2020 06:41:57 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id x63sm51292wmb.48.2020.11.19.06.41.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Nov 2020 06:41:56 -0800 (PST)
+From:   Daniel Vetter <daniel.vetter@ffwll.ch>
+To:     DRI Development <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     kvm@vger.kernel.org, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-media@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        Jan Kara <jack@suse.cz>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>,
+        Omer Shpigelman <oshpigelman@habana.ai>,
+        Ofir Bitton <obitton@habana.ai>,
+        Tomer Tayar <ttayar@habana.ai>,
+        Moti Haimovski <mhaimovski@habana.ai>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Pawel Piskorski <ppiskorski@habana.ai>
+Subject: [PATCH v6 03/17] misc/habana: Stop using frame_vector helpers
+Date:   Thu, 19 Nov 2020 15:41:32 +0100
+Message-Id: <20201119144146.1045202-4-daniel.vetter@ffwll.ch>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20201119144146.1045202-1-daniel.vetter@ffwll.ch>
+References: <20201119144146.1045202-1-daniel.vetter@ffwll.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <53e43d23-483a-adc2-a3c4-3a2b821da832@ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Kieran
+All we need are a pages array, pin_user_pages_fast can give us that
+directly. Plus this avoids the entire raw pfn side of get_vaddr_frames.
 
-On Wed, Nov 18, 2020 at 01:34:54PM +0000, Kieran Bingham wrote:
-> Hi Jacopo,
->
-> On 16/11/2020 13:52, Jacopo Mondi wrote:
-> > Hello,
-> >    this v5 mostly changes how the rdacm21 driver handles writes to the
-> > OV490 chip by handling the 'high' part of the sensor register through an
-> > helper function as suggested by Kieran and Laurent.
-> >
-> > The diff is available at:
-> > https://paste.debian.net/1172700/
-> >
-> > Minor fixes in patches subjects and in bindings as reported by Sergei and
-> > Kieran.
-> >
-> > Bindings have now been sent to DT people now that they've been reviewed
-> > by Kieran.
-> >
-> > v4: https://patchwork.linuxtv.org/project/linux-media/list/?series=3847
-> > v3: https://patchwork.linuxtv.org/project/linux-media/list/?series=3657
-> >
-> > Background in v1 cover letter:
-> > https://www.spinics.net/lists/linux-renesas-soc/msg52886.html
-> >
-> > I have tested on Eagle V3M with 4 RDACM21, but the whole point of
-> > this series is to retain compatibility with RDACM20.
-> >
-> > For this reason I have included 2 patches on top, not intended for merge
-> > that re-propose DTS support for the MAXIM max9286 expansion board connected
-> > to Salvator-X and add the newly introduced property to the DTS file.
-> >
-> > Kieran, I know you have a working setup with RDACM20, the final patches are
-> > meant for ease your testing. Can you give this series a spin ?
->
->
-> After some rabbit-holes :-D:
->
-> A 5-camera capture on Salvator-X - https://pasteboard.co/JAW0PSr.png
-> For this series, on both Eagle-V3M and Salvator-X
->
-> Tested-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Note that pin_user_pages_fast is a safe replacement despite the
+seeming lack of checking for vma->vm_flasg & (VM_IO | VM_PFNMAP). Such
+ptes are marked with pte_mkspecial (which pup_fast rejects in the
+fastpath), and only architectures supporting that support the
+pin_user_pages_fast fastpath.
 
-Thanks!
+Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+Cc: Christoph Hellwig <hch@infradead.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: John Hubbard <jhubbard@nvidia.com>
+Cc: Jérôme Glisse <jglisse@redhat.com>
+Cc: Jan Kara <jack@suse.cz>
+Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: linux-mm@kvack.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-samsung-soc@vger.kernel.org
+Cc: linux-media@vger.kernel.org
+Cc: Oded Gabbay <oded.gabbay@gmail.com>
+Cc: Omer Shpigelman <oshpigelman@habana.ai>
+Cc: Ofir Bitton <obitton@habana.ai>
+Cc: Tomer Tayar <ttayar@habana.ai>
+Cc: Moti Haimovski <mhaimovski@habana.ai>
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Pawel Piskorski <ppiskorski@habana.ai>
+Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+--
+v2: Use unpin_user_pages_dirty_lock (John)
+v3: Update kerneldoc (Oded)
+v6: Explain why pup_fast is safe, after discussions with John and
+Christoph.
+---
+ drivers/misc/habanalabs/Kconfig             |  1 -
+ drivers/misc/habanalabs/common/habanalabs.h |  6 ++-
+ drivers/misc/habanalabs/common/memory.c     | 49 ++++++++-------------
+ 3 files changed, 22 insertions(+), 34 deletions(-)
 
->
->
->
-> > Series based on latest renesas-drivers tag: renesas-drivers-2020-11-10-v5.10-rc3
-> >
-> > Thanks
-> >   j
-> >
-> > Jacopo Mondi (7):
-> >   media: i2c: Add driver for RDACM21 camera module
-> >   dt-bindings: media: max9286: Document
-> >     'maxim,initial-reverse-channel-mV'
-> >   media: i2c: max9286: Break-out reverse channel setup
-> >   media: i2c: max9286: Make channel amplitude programmable
-> >   media: i2c: max9286: Configure reverse channel amplitude
-> >   [DNI] arm64: dts: renesas: salvator-x-max9286: Specify channel
-> >     amplitude
-> >   [DNI] arm64: dts: renesas: eagle: Specify channel amplitude
-> >
-> > Laurent Pinchart (1):
-> >   arm64: dts: renesas: salvator-x: Add MAX9286 expansion board
-> >
-> >  .../bindings/media/i2c/maxim,max9286.yaml     |  23 +
-> >  MAINTAINERS                                   |  12 +
-> >  .../arm64/boot/dts/renesas/r8a77970-eagle.dts |   1 +
-> >  .../boot/dts/renesas/salvator-x-max9286.dtsi  | 396 ++++++++++++
-> >  drivers/media/i2c/Kconfig                     |  13 +
-> >  drivers/media/i2c/Makefile                    |   2 +
-> >  drivers/media/i2c/max9286.c                   |  58 +-
-> >  drivers/media/i2c/rdacm21.c                   | 595 ++++++++++++++++++
-> >  8 files changed, 1087 insertions(+), 13 deletions(-)
-> >  create mode 100644 arch/arm64/boot/dts/renesas/salvator-x-max9286.dtsi
-> >  create mode 100644 drivers/media/i2c/rdacm21.c
-> >
-> > --
-> > 2.29.1
-> >
->
+diff --git a/drivers/misc/habanalabs/Kconfig b/drivers/misc/habanalabs/Kconfig
+index 1640340d3e62..293d79811372 100644
+--- a/drivers/misc/habanalabs/Kconfig
++++ b/drivers/misc/habanalabs/Kconfig
+@@ -6,7 +6,6 @@
+ config HABANA_AI
+ 	tristate "HabanaAI accelerators (habanalabs)"
+ 	depends on PCI && HAS_IOMEM
+-	select FRAME_VECTOR
+ 	select GENERIC_ALLOCATOR
+ 	select HWMON
+ 	help
+diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
+index 80d4d7385ffe..272aa3f29200 100644
+--- a/drivers/misc/habanalabs/common/habanalabs.h
++++ b/drivers/misc/habanalabs/common/habanalabs.h
+@@ -921,7 +921,8 @@ struct hl_ctx_mgr {
+  * struct hl_userptr - memory mapping chunk information
+  * @vm_type: type of the VM.
+  * @job_node: linked-list node for hanging the object on the Job's list.
+- * @vec: pointer to the frame vector.
++ * @pages: pointer to struct page array
++ * @npages: size of @pages array
+  * @sgt: pointer to the scatter-gather table that holds the pages.
+  * @dir: for DMA unmapping, the direction must be supplied, so save it.
+  * @debugfs_list: node in debugfs list of command submissions.
+@@ -932,7 +933,8 @@ struct hl_ctx_mgr {
+ struct hl_userptr {
+ 	enum vm_type_t		vm_type; /* must be first */
+ 	struct list_head	job_node;
+-	struct frame_vector	*vec;
++	struct page		**pages;
++	unsigned int		npages;
+ 	struct sg_table		*sgt;
+ 	enum dma_data_direction dir;
+ 	struct list_head	debugfs_list;
+diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
+index 84227819e4d1..0b220221873d 100644
+--- a/drivers/misc/habanalabs/common/memory.c
++++ b/drivers/misc/habanalabs/common/memory.c
+@@ -1291,45 +1291,41 @@ static int get_user_memory(struct hl_device *hdev, u64 addr, u64 size,
+ 		return -EFAULT;
+ 	}
+ 
+-	userptr->vec = frame_vector_create(npages);
+-	if (!userptr->vec) {
++	userptr->pages = kvmalloc_array(npages, sizeof(*userptr->pages),
++					GFP_KERNEL);
++	if (!userptr->pages) {
+ 		dev_err(hdev->dev, "Failed to create frame vector\n");
+ 		return -ENOMEM;
+ 	}
+ 
+-	rc = get_vaddr_frames(start, npages, FOLL_FORCE | FOLL_WRITE,
+-				userptr->vec);
++	rc = pin_user_pages_fast(start, npages, FOLL_FORCE | FOLL_WRITE,
++				 userptr->pages);
+ 
+ 	if (rc != npages) {
+ 		dev_err(hdev->dev,
+ 			"Failed to map host memory, user ptr probably wrong\n");
+ 		if (rc < 0)
+-			goto destroy_framevec;
++			goto destroy_pages;
++		npages = rc;
+ 		rc = -EFAULT;
+-		goto put_framevec;
+-	}
+-
+-	if (frame_vector_to_pages(userptr->vec) < 0) {
+-		dev_err(hdev->dev,
+-			"Failed to translate frame vector to pages\n");
+-		rc = -EFAULT;
+-		goto put_framevec;
++		goto put_pages;
+ 	}
++	userptr->npages = npages;
+ 
+ 	rc = sg_alloc_table_from_pages(userptr->sgt,
+-					frame_vector_pages(userptr->vec),
+-					npages, offset, size, GFP_ATOMIC);
++				       userptr->pages,
++				       npages, offset, size, GFP_ATOMIC);
+ 	if (rc < 0) {
+ 		dev_err(hdev->dev, "failed to create SG table from pages\n");
+-		goto put_framevec;
++		goto put_pages;
+ 	}
+ 
+ 	return 0;
+ 
+-put_framevec:
+-	put_vaddr_frames(userptr->vec);
+-destroy_framevec:
+-	frame_vector_destroy(userptr->vec);
++put_pages:
++	unpin_user_pages(userptr->pages, npages);
++destroy_pages:
++	kvfree(userptr->pages);
+ 	return rc;
+ }
+ 
+@@ -1415,8 +1411,6 @@ int hl_pin_host_memory(struct hl_device *hdev, u64 addr, u64 size,
+  */
+ void hl_unpin_host_memory(struct hl_device *hdev, struct hl_userptr *userptr)
+ {
+-	struct page **pages;
+-
+ 	hl_debugfs_remove_userptr(hdev, userptr);
+ 
+ 	if (userptr->dma_mapped)
+@@ -1424,15 +1418,8 @@ void hl_unpin_host_memory(struct hl_device *hdev, struct hl_userptr *userptr)
+ 							userptr->sgt->nents,
+ 							userptr->dir);
+ 
+-	pages = frame_vector_pages(userptr->vec);
+-	if (!IS_ERR(pages)) {
+-		int i;
+-
+-		for (i = 0; i < frame_vector_count(userptr->vec); i++)
+-			set_page_dirty_lock(pages[i]);
+-	}
+-	put_vaddr_frames(userptr->vec);
+-	frame_vector_destroy(userptr->vec);
++	unpin_user_pages_dirty_lock(userptr->pages, userptr->npages, true);
++	kvfree(userptr->pages);
+ 
+ 	list_del(&userptr->job_node);
+ 
+-- 
+2.29.2
+
