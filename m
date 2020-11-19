@@ -7,36 +7,34 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CB56C6379D
-	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 16:34:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2880CC64E7A
+	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 16:34:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CB6F522202
-	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 16:34:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C98ED20A8B
+	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 16:34:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728616AbgKSQdp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Nov 2020 11:33:45 -0500
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:43331 "EHLO
+        id S1728734AbgKSQd6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Nov 2020 11:33:58 -0500
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:51993 "EHLO
         relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728577AbgKSQdp (ORCPT
+        with ESMTP id S1726853AbgKSQd6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Nov 2020 11:33:45 -0500
+        Thu, 19 Nov 2020 11:33:58 -0500
 X-Originating-IP: 93.34.118.233
 Received: from localhost.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 9CF4840028;
-        Thu, 19 Nov 2020 16:33:41 +0000 (UTC)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 3A4E84002D;
+        Thu, 19 Nov 2020 16:33:53 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     linux-media@vger.kernel.org
 Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
         hverkuil@xs4all.nl, laurent.pinchart@ideasonboard.com,
         roman.kovalivskyi@globallogic.com, dafna.hirschfeld@collabora.com,
         dave.stevenson@raspberrypi.org, naush@raspberrypi.com,
-        erosca@de.adit-jv.com,
-        David Plowman <david.plowman@raspberrypi.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Subject: [PATCH v4 12/30] media: ov5647: Support gain, exposure and AWB controls
-Date:   Thu, 19 Nov 2020 17:32:31 +0100
-Message-Id: <20201119163238.783142-3-jacopo@jmondi.org>
+        erosca@de.adit-jv.com, Jacopo Mondi <jacopo@jmondi.org>
+Subject: [PATCH v4 17/30] media: ov5647: Add SGGBR10_1X10 modes
+Date:   Thu, 19 Nov 2020 17:32:36 +0100
+Message-Id: <20201119163238.783142-8-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.29.1
 In-Reply-To: <20201119163238.783142-1-jacopo@jmondi.org>
 References: <20201119161956.756455-1-jacopo@jmondi.org>
@@ -47,267 +45,488 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: David Plowman <david.plowman@raspberrypi.com>
+Add 4 additional sensor modes in SBGGR10_1X10 format.
 
-Add controls to support AWB, AEC and AGC. Also add control support to
-set exposure (in lines) and analogue gain (as a register code).
+Add the following resolutions:
+- 2592x1944 full resolution
+- 1920x1080 1080p cropped
+- 1296x972 2x2 binned
+- 640x480 2x2 binned, 2x2 subsampled
 
-Signed-off-by: David Plowman <david.plowman@raspberrypi.com>
-Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
+The register lists and modes definition have been upported from the
+RaspberryPi BSP at revision:
+commit 581dfda6d0a62 ("media: i2c: ov5647: Advertise the correct exposure range")
+
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- drivers/media/i2c/ov5647.c | 172 ++++++++++++++++++++++++++++++++++++-
- 1 file changed, 170 insertions(+), 2 deletions(-)
+ drivers/media/i2c/ov5647.c | 441 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 441 insertions(+)
 
 diff --git a/drivers/media/i2c/ov5647.c b/drivers/media/i2c/ov5647.c
-index 69a5e25dcd707..9ad1e3004ff18 100644
+index 0234aed43a10a..e206656a5e883 100644
 --- a/drivers/media/i2c/ov5647.c
 +++ b/drivers/media/i2c/ov5647.c
-@@ -21,6 +21,7 @@
- #include <linux/of_graph.h>
- #include <linux/slab.h>
- #include <linux/videodev2.h>
-+#include <media/v4l2-ctrls.h>
- #include <media/v4l2-device.h>
- #include <media/v4l2-fwnode.h>
- #include <media/v4l2-image-sizes.h>
-@@ -43,9 +44,16 @@
- #define OV5647_REG_CHIPID_H		0x300a
- #define OV5647_REG_CHIPID_L		0x300b
- #define OV5640_REG_PAD_OUT		0x300d
-+#define OV5647_REG_EXP_HI		0x3500
-+#define OV5647_REG_EXP_MID		0x3501
-+#define OV5647_REG_EXP_LO		0x3502
-+#define OV5647_REG_AEC_AGC		0x3503
-+#define OV5647_REG_GAIN_HI		0x350a
-+#define OV5647_REG_GAIN_LO		0x350b
- #define OV5647_REG_FRAME_OFF_NUMBER	0x4202
- #define OV5647_REG_MIPI_CTRL00		0x4800
- #define OV5647_REG_MIPI_CTRL14		0x4814
-+#define OV5647_REG_AWB			0x5001
- 
- #define REG_TERM 0xfffe
- #define VAL_TERM 0xfe
-@@ -87,6 +95,7 @@ struct ov5647 {
- 	struct clk			*xclk;
- 	struct gpio_desc		*pwdn;
- 	bool				clock_ncont;
-+	struct v4l2_ctrl_handler	ctrls;
+@@ -205,6 +205,367 @@ static const struct regval_list ov5647_640x480_8bpp[] = {
+ 	{0x0100, 0x01},
  };
  
- static inline struct ov5647 *to_state(struct v4l2_subdev *sd)
-@@ -121,7 +130,6 @@ static struct regval_list ov5647_640x480[] = {
- 	{0x3612, 0x59},
- 	{0x3618, 0x00},
- 	{0x5000, 0x06},
--	{0x5001, 0x01},
- 	{0x5002, 0x41},
- 	{0x5003, 0x08},
- 	{0x5a00, 0x08},
-@@ -313,6 +321,11 @@ static int ov5647_stream_on(struct v4l2_subdev *sd)
- 		return ret;
- 	}
- 
-+	/* Apply customized values from user when stream starts. */
-+	ret =  __v4l2_ctrl_handler_setup(sd->ctrl_handler);
-+	if (ret)
-+		return ret;
-+
- 	if (ov5647->clock_ncont)
- 		val |= MIPI_CTRL00_CLOCK_LANE_GATE |
- 		       MIPI_CTRL00_LINE_SYNC_ENABLE;
-@@ -594,6 +607,154 @@ static const struct v4l2_subdev_internal_ops ov5647_subdev_internal_ops = {
- 	.open = ov5647_open,
- };
- 
-+static int ov5647_s_auto_white_balance(struct v4l2_subdev *sd, u32 val)
-+{
-+	return ov5647_write(sd, OV5647_REG_AWB, val ? 1 : 0);
-+}
-+
-+static int ov5647_s_autogain(struct v4l2_subdev *sd, u32 val)
-+{
-+	int ret;
-+	u8 reg;
-+
-+	/* Non-zero turns on AGC by clearing bit 1.*/
-+	ret = ov5647_read(sd, OV5647_REG_AEC_AGC, &reg);
-+	if (ret)
-+		return ret;
-+
-+	return ov5647_write(sd, OV5647_REG_AEC_AGC, val ? reg & ~BIT(1)
-+							: reg | BIT(1));
-+}
-+
-+static int ov5647_s_exposure_auto(struct v4l2_subdev *sd, u32 val)
-+{
-+	int ret;
-+	u8 reg;
-+
-+	/*
-+	 * Everything except V4L2_EXPOSURE_MANUAL turns on AEC by
-+	 * clearing bit 0.
-+	 */
-+	ret = ov5647_read(sd, OV5647_REG_AEC_AGC, &reg);
-+	if (ret)
-+		return ret;
-+
-+	return ov5647_write(sd, OV5647_REG_AEC_AGC,
-+			    val == V4L2_EXPOSURE_MANUAL ? reg | BIT(0)
-+							: reg & ~BIT(0));
-+}
-+
-+static int ov5647_s_analogue_gain(struct v4l2_subdev *sd, u32 val)
-+{
-+	int ret;
-+
-+	/* 10 bits of gain, 2 in the high register. */
-+	ret = ov5647_write(sd, OV5647_REG_GAIN_HI, (val >> 8) & 3);
-+	if (ret)
-+		return ret;
-+
-+	return ov5647_write(sd, OV5647_REG_GAIN_LO, val & 0xff);
-+}
-+
-+static int ov5647_s_exposure(struct v4l2_subdev *sd, u32 val)
-+{
-+	int ret;
-+
-+	/*
-+	 * Sensor has 20 bits, but the bottom 4 bits are fractions of a line
-+	 * which we leave as zero (and don't receive in "val").
-+	 */
-+	ret = ov5647_write(sd, OV5647_REG_EXP_HI, (val >> 12) & 0xf);
-+	if (ret)
-+		return ret;
-+
-+	ret = ov5647_write(sd, OV5647_REG_EXP_MID, (val >> 4) & 0xff);
-+	if (ret)
-+		return ret;
-+
-+	return ov5647_write(sd, OV5647_REG_EXP_LO, (val & 0xf) << 4);
-+}
-+
-+static int ov5647_s_ctrl(struct v4l2_ctrl *ctrl)
-+{
-+	struct ov5647 *sensor = container_of(ctrl->handler,
-+					    struct ov5647, ctrls);
-+	struct v4l2_subdev *sd = &sensor->sd;
-+	struct i2c_client *client = v4l2_get_subdevdata(sd);
-+
-+	/* v4l2_ctrl_lock() locks our own mutex */
-+
-+	/*
-+	 * If the device is not powered up by the host driver do
-+	 * not apply any controls to H/W at this time. Instead
-+	 * the controls will be restored at s_stream(1) time.
-+	 */
-+	if (!sensor->power_count)
-+		return 0;
-+
-+	switch (ctrl->id) {
-+	case V4L2_CID_AUTO_WHITE_BALANCE:
-+		return ov5647_s_auto_white_balance(sd, ctrl->val);
-+	case V4L2_CID_AUTOGAIN:
-+		return ov5647_s_autogain(sd, ctrl->val);
-+	case V4L2_CID_EXPOSURE_AUTO:
-+		return ov5647_s_exposure_auto(sd, ctrl->val);
-+	case V4L2_CID_ANALOGUE_GAIN:
-+		return  ov5647_s_analogue_gain(sd, ctrl->val);
-+	case V4L2_CID_EXPOSURE:
-+		return ov5647_s_exposure(sd, ctrl->val);
-+	default:
-+		dev_info(&client->dev,
-+			 "Control (id:0x%x, val:0x%x) not supported\n",
-+			 ctrl->id, ctrl->val);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct v4l2_ctrl_ops ov5647_ctrl_ops = {
-+	.s_ctrl = ov5647_s_ctrl,
++static struct regval_list ov5647_2592x1944_10bpp[] = {
++	{0x0100, 0x00},
++	{0x0103, 0x01},
++	{0x3034, 0x1a},
++	{0x3035, 0x21},
++	{0x3036, 0x69},
++	{0x303c, 0x11},
++	{0x3106, 0xf5},
++	{0x3821, 0x06},
++	{0x3820, 0x00},
++	{0x3827, 0xec},
++	{0x370c, 0x03},
++	{0x3612, 0x5b},
++	{0x3618, 0x04},
++	{0x5000, 0x06},
++	{0x5002, 0x41},
++	{0x5003, 0x08},
++	{0x5a00, 0x08},
++	{0x3000, 0x00},
++	{0x3001, 0x00},
++	{0x3002, 0x00},
++	{0x3016, 0x08},
++	{0x3017, 0xe0},
++	{0x3018, 0x44},
++	{0x301c, 0xf8},
++	{0x301d, 0xf0},
++	{0x3a18, 0x00},
++	{0x3a19, 0xf8},
++	{0x3c01, 0x80},
++	{0x3b07, 0x0c},
++	{0x380c, 0x0b},
++	{0x380d, 0x1c},
++	{0x3814, 0x11},
++	{0x3815, 0x11},
++	{0x3708, 0x64},
++	{0x3709, 0x12},
++	{0x3808, 0x0a},
++	{0x3809, 0x20},
++	{0x380a, 0x07},
++	{0x380b, 0x98},
++	{0x3800, 0x00},
++	{0x3801, 0x00},
++	{0x3802, 0x00},
++	{0x3803, 0x00},
++	{0x3804, 0x0a},
++	{0x3805, 0x3f},
++	{0x3806, 0x07},
++	{0x3807, 0xa3},
++	{0x3811, 0x10},
++	{0x3813, 0x06},
++	{0x3630, 0x2e},
++	{0x3632, 0xe2},
++	{0x3633, 0x23},
++	{0x3634, 0x44},
++	{0x3636, 0x06},
++	{0x3620, 0x64},
++	{0x3621, 0xe0},
++	{0x3600, 0x37},
++	{0x3704, 0xa0},
++	{0x3703, 0x5a},
++	{0x3715, 0x78},
++	{0x3717, 0x01},
++	{0x3731, 0x02},
++	{0x370b, 0x60},
++	{0x3705, 0x1a},
++	{0x3f05, 0x02},
++	{0x3f06, 0x10},
++	{0x3f01, 0x0a},
++	{0x3a08, 0x01},
++	{0x3a09, 0x28},
++	{0x3a0a, 0x00},
++	{0x3a0b, 0xf6},
++	{0x3a0d, 0x08},
++	{0x3a0e, 0x06},
++	{0x3a0f, 0x58},
++	{0x3a10, 0x50},
++	{0x3a1b, 0x58},
++	{0x3a1e, 0x50},
++	{0x3a11, 0x60},
++	{0x3a1f, 0x28},
++	{0x4001, 0x02},
++	{0x4004, 0x04},
++	{0x4000, 0x09},
++	{0x4837, 0x19},
++	{0x4800, 0x24},
++	{0x3503, 0x03},
++	{0x0100, 0x01},
 +};
 +
-+static int ov5647_init_controls(struct ov5647 *sensor)
-+{
-+	struct i2c_client *client = v4l2_get_subdevdata(&sensor->sd);
++static struct regval_list ov5647_1080p30_10bpp[] = {
++	{0x0100, 0x00},
++	{0x0103, 0x01},
++	{0x3034, 0x1a},
++	{0x3035, 0x21},
++	{0x3036, 0x62},
++	{0x303c, 0x11},
++	{0x3106, 0xf5},
++	{0x3821, 0x06},
++	{0x3820, 0x00},
++	{0x3827, 0xec},
++	{0x370c, 0x03},
++	{0x3612, 0x5b},
++	{0x3618, 0x04},
++	{0x5000, 0x06},
++	{0x5002, 0x41},
++	{0x5003, 0x08},
++	{0x5a00, 0x08},
++	{0x3000, 0x00},
++	{0x3001, 0x00},
++	{0x3002, 0x00},
++	{0x3016, 0x08},
++	{0x3017, 0xe0},
++	{0x3018, 0x44},
++	{0x301c, 0xf8},
++	{0x301d, 0xf0},
++	{0x3a18, 0x00},
++	{0x3a19, 0xf8},
++	{0x3c01, 0x80},
++	{0x3b07, 0x0c},
++	{0x380c, 0x09},
++	{0x380d, 0x70},
++	{0x3814, 0x11},
++	{0x3815, 0x11},
++	{0x3708, 0x64},
++	{0x3709, 0x12},
++	{0x3808, 0x07},
++	{0x3809, 0x80},
++	{0x380a, 0x04},
++	{0x380b, 0x38},
++	{0x3800, 0x01},
++	{0x3801, 0x5c},
++	{0x3802, 0x01},
++	{0x3803, 0xb2},
++	{0x3804, 0x08},
++	{0x3805, 0xe3},
++	{0x3806, 0x05},
++	{0x3807, 0xf1},
++	{0x3811, 0x04},
++	{0x3813, 0x02},
++	{0x3630, 0x2e},
++	{0x3632, 0xe2},
++	{0x3633, 0x23},
++	{0x3634, 0x44},
++	{0x3636, 0x06},
++	{0x3620, 0x64},
++	{0x3621, 0xe0},
++	{0x3600, 0x37},
++	{0x3704, 0xa0},
++	{0x3703, 0x5a},
++	{0x3715, 0x78},
++	{0x3717, 0x01},
++	{0x3731, 0x02},
++	{0x370b, 0x60},
++	{0x3705, 0x1a},
++	{0x3f05, 0x02},
++	{0x3f06, 0x10},
++	{0x3f01, 0x0a},
++	{0x3a08, 0x01},
++	{0x3a09, 0x4b},
++	{0x3a0a, 0x01},
++	{0x3a0b, 0x13},
++	{0x3a0d, 0x04},
++	{0x3a0e, 0x03},
++	{0x3a0f, 0x58},
++	{0x3a10, 0x50},
++	{0x3a1b, 0x58},
++	{0x3a1e, 0x50},
++	{0x3a11, 0x60},
++	{0x3a1f, 0x28},
++	{0x4001, 0x02},
++	{0x4004, 0x04},
++	{0x4000, 0x09},
++	{0x4837, 0x19},
++	{0x4800, 0x34},
++	{0x3503, 0x03},
++	{0x0100, 0x01},
++};
 +
-+	v4l2_ctrl_handler_init(&sensor->ctrls, 5);
++static struct regval_list ov5647_2x2binned_10bpp[] = {
++	{0x0100, 0x00},
++	{0x0103, 0x01},
++	{0x3034, 0x1a},
++	{0x3035, 0x21},
++	{0x3036, 0x62},
++	{0x303c, 0x11},
++	{0x3106, 0xf5},
++	{0x3827, 0xec},
++	{0x370c, 0x03},
++	{0x3612, 0x59},
++	{0x3618, 0x00},
++	{0x5000, 0x06},
++	{0x5002, 0x41},
++	{0x5003, 0x08},
++	{0x5a00, 0x08},
++	{0x3000, 0x00},
++	{0x3001, 0x00},
++	{0x3002, 0x00},
++	{0x3016, 0x08},
++	{0x3017, 0xe0},
++	{0x3018, 0x44},
++	{0x301c, 0xf8},
++	{0x301d, 0xf0},
++	{0x3a18, 0x00},
++	{0x3a19, 0xf8},
++	{0x3c01, 0x80},
++	{0x3b07, 0x0c},
++	{0x3800, 0x00},
++	{0x3801, 0x00},
++	{0x3802, 0x00},
++	{0x3803, 0x00},
++	{0x3804, 0x0a},
++	{0x3805, 0x3f},
++	{0x3806, 0x07},
++	{0x3807, 0xa3},
++	{0x3808, 0x05},
++	{0x3809, 0x10},
++	{0x380a, 0x03},
++	{0x380b, 0xcc},
++	{0x380c, 0x07},
++	{0x380d, 0x68},
++	{0x3811, 0x0c},
++	{0x3813, 0x06},
++	{0x3814, 0x31},
++	{0x3815, 0x31},
++	{0x3630, 0x2e},
++	{0x3632, 0xe2},
++	{0x3633, 0x23},
++	{0x3634, 0x44},
++	{0x3636, 0x06},
++	{0x3620, 0x64},
++	{0x3621, 0xe0},
++	{0x3600, 0x37},
++	{0x3704, 0xa0},
++	{0x3703, 0x5a},
++	{0x3715, 0x78},
++	{0x3717, 0x01},
++	{0x3731, 0x02},
++	{0x370b, 0x60},
++	{0x3705, 0x1a},
++	{0x3f05, 0x02},
++	{0x3f06, 0x10},
++	{0x3f01, 0x0a},
++	{0x3a08, 0x01},
++	{0x3a09, 0x28},
++	{0x3a0a, 0x00},
++	{0x3a0b, 0xf6},
++	{0x3a0d, 0x08},
++	{0x3a0e, 0x06},
++	{0x3a0f, 0x58},
++	{0x3a10, 0x50},
++	{0x3a1b, 0x58},
++	{0x3a1e, 0x50},
++	{0x3a11, 0x60},
++	{0x3a1f, 0x28},
++	{0x4001, 0x02},
++	{0x4004, 0x04},
++	{0x4000, 0x09},
++	{0x4837, 0x16},
++	{0x4800, 0x24},
++	{0x3503, 0x03},
++	{0x3820, 0x41},
++	{0x3821, 0x07},
++	{0x350a, 0x00},
++	{0x350b, 0x10},
++	{0x3500, 0x00},
++	{0x3501, 0x1a},
++	{0x3502, 0xf0},
++	{0x3212, 0xa0},
++	{0x0100, 0x01},
++};
 +
-+	v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
-+			  V4L2_CID_AUTOGAIN, 0, 1, 1, 0);
++static struct regval_list ov5647_640x480_10bpp[] = {
++	{0x0100, 0x00},
++	{0x0103, 0x01},
++	{0x3035, 0x11},
++	{0x3036, 0x46},
++	{0x303c, 0x11},
++	{0x3821, 0x07},
++	{0x3820, 0x41},
++	{0x370c, 0x03},
++	{0x3612, 0x59},
++	{0x3618, 0x00},
++	{0x5000, 0x06},
++	{0x5003, 0x08},
++	{0x5a00, 0x08},
++	{0x3000, 0xff},
++	{0x3001, 0xff},
++	{0x3002, 0xff},
++	{0x301d, 0xf0},
++	{0x3a18, 0x00},
++	{0x3a19, 0xf8},
++	{0x3c01, 0x80},
++	{0x3b07, 0x0c},
++	{0x380c, 0x07},
++	{0x380d, 0x3c},
++	{0x3814, 0x35},
++	{0x3815, 0x35},
++	{0x3708, 0x64},
++	{0x3709, 0x52},
++	{0x3808, 0x02},
++	{0x3809, 0x80},
++	{0x380a, 0x01},
++	{0x380b, 0xe0},
++	{0x3800, 0x00},
++	{0x3801, 0x10},
++	{0x3802, 0x00},
++	{0x3803, 0x00},
++	{0x3804, 0x0a},
++	{0x3805, 0x2f},
++	{0x3806, 0x07},
++	{0x3807, 0x9f},
++	{0x3630, 0x2e},
++	{0x3632, 0xe2},
++	{0x3633, 0x23},
++	{0x3634, 0x44},
++	{0x3620, 0x64},
++	{0x3621, 0xe0},
++	{0x3600, 0x37},
++	{0x3704, 0xa0},
++	{0x3703, 0x5a},
++	{0x3715, 0x78},
++	{0x3717, 0x01},
++	{0x3731, 0x02},
++	{0x370b, 0x60},
++	{0x3705, 0x1a},
++	{0x3f05, 0x02},
++	{0x3f06, 0x10},
++	{0x3f01, 0x0a},
++	{0x3a08, 0x01},
++	{0x3a09, 0x2e},
++	{0x3a0a, 0x00},
++	{0x3a0b, 0xfb},
++	{0x3a0d, 0x02},
++	{0x3a0e, 0x01},
++	{0x3a0f, 0x58},
++	{0x3a10, 0x50},
++	{0x3a1b, 0x58},
++	{0x3a1e, 0x50},
++	{0x3a11, 0x60},
++	{0x3a1f, 0x28},
++	{0x4001, 0x02},
++	{0x4004, 0x02},
++	{0x4000, 0x09},
++	{0x3000, 0x00},
++	{0x3001, 0x00},
++	{0x3002, 0x00},
++	{0x3017, 0xe0},
++	{0x301c, 0xfc},
++	{0x3636, 0x06},
++	{0x3016, 0x08},
++	{0x3827, 0xec},
++	{0x3018, 0x44},
++	{0x3035, 0x21},
++	{0x3106, 0xf5},
++	{0x3034, 0x1a},
++	{0x301c, 0xf8},
++	{0x4800, 0x34},
++	{0x3503, 0x03},
++	{0x0100, 0x01},
++};
 +
-+	v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
-+			  V4L2_CID_AUTO_WHITE_BALANCE, 0, 1, 1, 0);
-+
-+	v4l2_ctrl_new_std_menu(&sensor->ctrls, &ov5647_ctrl_ops,
-+			       V4L2_CID_EXPOSURE_AUTO, V4L2_EXPOSURE_MANUAL,
-+			       0, V4L2_EXPOSURE_MANUAL);
-+
-+	/* min: 4 lines; max: 0xffff lines; default: 1000 lines. */
-+	v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
-+			  V4L2_CID_EXPOSURE, 4, 65535, 1, 1000);
-+
-+	/* min: 16 = 1.0x; max (10 bits); default: 32 = 2.0x. */
-+	v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
-+			  V4L2_CID_ANALOGUE_GAIN, 16, 1023, 1, 32);
-+
-+	if (sensor->ctrls.error) {
-+		dev_err(&client->dev,
-+			"%s Controls initialization failed (%d)\n",
-+			__func__, sensor->ctrls.error);
-+		v4l2_ctrl_handler_free(&sensor->ctrls);
-+
-+		return sensor->ctrls.error;
-+	}
-+
-+	sensor->sd.ctrl_handler = &sensor->ctrls;
-+
-+	return 0;
-+}
-+
- static int ov5647_parse_dt(struct ov5647 *sensor, struct device_node *np)
- {
- 	struct v4l2_fwnode_endpoint bus_cfg = {
-@@ -661,6 +822,10 @@ static int ov5647_probe(struct i2c_client *client)
+ static const struct ov5647_mode ov5647_8bpp_modes[] = {
+ 	/* 8-bit VGA mode: Uncentred crop 2x2 binned 1296x972 image. */
+ 	{
+@@ -226,12 +587,92 @@ static const struct ov5647_mode ov5647_8bpp_modes[] = {
+ 	},
+ };
  
- 	mutex_init(&sensor->lock);
- 
-+	ret = ov5647_init_controls(sensor);
-+	if (ret)
-+		goto mutex_destroy;
++static const struct ov5647_mode ov5647_10bpp_modes[] = {
++	/* 2592x1944 full resolution full FOV 10-bit mode. */
++	{
++		.format = {
++			.code		= MEDIA_BUS_FMT_SBGGR10_1X10,
++			.colorspace	= V4L2_COLORSPACE_SRGB,
++			.field		= V4L2_FIELD_NONE,
++			.width		= 2592,
++			.height		= 1944
++		},
++		.crop = {
++			.left		= OV5647_PIXEL_ARRAY_LEFT,
++			.top		= OV5647_PIXEL_ARRAY_TOP,
++			.width		= 2592,
++			.height		= 1944
++		},
++		.reg_list	= ov5647_2592x1944_10bpp,
++		.num_regs	= ARRAY_SIZE(ov5647_2592x1944_10bpp)
++	},
++	/* 1080p30 10-bit mode. Full resolution centre-cropped down to 1080p. */
++	{
++		.format = {
++			.code		= MEDIA_BUS_FMT_SBGGR10_1X10,
++			.colorspace	= V4L2_COLORSPACE_SRGB,
++			.field		= V4L2_FIELD_NONE,
++			.width		= 1920,
++			.height		= 1080
++		},
++		.crop = {
++			.left		= 348 + OV5647_PIXEL_ARRAY_LEFT,
++			.top		= 434 + OV5647_PIXEL_ARRAY_TOP,
++			.width		= 1928,
++			.height		= 1080,
++		},
++		.reg_list	= ov5647_1080p30_10bpp,
++		.num_regs	= ARRAY_SIZE(ov5647_1080p30_10bpp)
++	},
++	/* 2x2 binned full FOV 10-bit mode. */
++	{
++		.format = {
++			.code		= MEDIA_BUS_FMT_SBGGR10_1X10,
++			.colorspace	= V4L2_COLORSPACE_SRGB,
++			.field		= V4L2_FIELD_NONE,
++			.width		= 1296,
++			.height		= 972
++		},
++		.crop = {
++			.left		= OV5647_PIXEL_ARRAY_LEFT,
++			.top		= OV5647_PIXEL_ARRAY_TOP,
++			.width		= 2592,
++			.height		= 1944,
++		},
++		.reg_list	= ov5647_2x2binned_10bpp,
++		.num_regs	= ARRAY_SIZE(ov5647_2x2binned_10bpp)
++	},
++	/* 10-bit VGA full FOV 60fps. 2x2 binned and subsampled down to VGA. */
++	{
++		.format = {
++			.code		= MEDIA_BUS_FMT_SBGGR10_1X10,
++			.colorspace	= V4L2_COLORSPACE_SRGB,
++			.field		= V4L2_FIELD_NONE,
++			.width		= 640,
++			.height		= 480
++		},
++		.crop = {
++			.left		= 16 + OV5647_PIXEL_ARRAY_LEFT,
++			.top		= OV5647_PIXEL_ARRAY_TOP,
++			.width		= 2560,
++			.height		= 1920,
++		},
++		.reg_list	= ov5647_640x480_10bpp,
++		.num_regs	= ARRAY_SIZE(ov5647_640x480_10bpp)
++	},
++};
 +
- 	sd = &sensor->sd;
- 	v4l2_i2c_subdev_init(sd, client, &ov5647_subdev_ops);
- 	sd->internal_ops = &ov5647_subdev_internal_ops;
-@@ -670,7 +835,7 @@ static int ov5647_probe(struct i2c_client *client)
- 	sd->entity.function = MEDIA_ENT_F_CAM_SENSOR;
- 	ret = media_entity_pads_init(&sd->entity, 1, &sensor->pad);
- 	if (ret < 0)
--		goto mutex_destroy;
-+		goto ctrl_handler_free;
+ static const struct ov5647_format_list ov5647_formats[] = {
+ 	{
+ 		.mbus_code	= MEDIA_BUS_FMT_SBGGR8_1X8,
+ 		.modes		= ov5647_8bpp_modes,
+ 		.num_modes	= ARRAY_SIZE(ov5647_8bpp_modes),
+ 	},
++	{
++		.mbus_code	= MEDIA_BUS_FMT_SBGGR10_1X10,
++		.modes		= ov5647_10bpp_modes,
++		.num_modes	= ARRAY_SIZE(ov5647_10bpp_modes),
++	},
+ };
  
- 	if (sensor->pwdn) {
- 		gpiod_set_value_cansleep(sensor->pwdn, 0);
-@@ -692,6 +857,8 @@ static int ov5647_probe(struct i2c_client *client)
- 
- entity_cleanup:
- 	media_entity_cleanup(&sd->entity);
-+ctrl_handler_free:
-+	v4l2_ctrl_handler_free(&sensor->ctrls);
- mutex_destroy:
- 	mutex_destroy(&sensor->lock);
- 
-@@ -705,6 +872,7 @@ static int ov5647_remove(struct i2c_client *client)
- 
- 	v4l2_async_unregister_subdev(&ov5647->sd);
- 	media_entity_cleanup(&ov5647->sd.entity);
-+	v4l2_ctrl_handler_free(&ov5647->ctrls);
- 	v4l2_device_unregister_subdev(sd);
- 	mutex_destroy(&ov5647->lock);
- 
+ #define OV5647_NUM_FORMATS	(ARRAY_SIZE(ov5647_formats))
 -- 
 2.29.1
 
