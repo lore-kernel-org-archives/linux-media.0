@@ -7,77 +7,69 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BB05C64E7B
-	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 16:34:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B270BC56201
+	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 16:36:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0694E221F9
-	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 16:34:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5E2BD22202
+	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 16:36:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728735AbgKSQd7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Nov 2020 11:33:59 -0500
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:52137 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728727AbgKSQd6 (ORCPT
+        id S1728830AbgKSQfz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Nov 2020 11:35:55 -0500
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:5511 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728671AbgKSQfz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Nov 2020 11:33:58 -0500
+        Thu, 19 Nov 2020 11:35:55 -0500
 X-Originating-IP: 93.34.118.233
 Received: from localhost.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 7B4C340017;
-        Thu, 19 Nov 2020 16:33:55 +0000 (UTC)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id B07C7240089;
+        Thu, 19 Nov 2020 16:35:50 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     linux-media@vger.kernel.org
 Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
         hverkuil@xs4all.nl, laurent.pinchart@ideasonboard.com,
         roman.kovalivskyi@globallogic.com, dafna.hirschfeld@collabora.com,
         dave.stevenson@raspberrypi.org, naush@raspberrypi.com,
-        erosca@de.adit-jv.com, Jacopo Mondi <jacopo@jmondi.org>
-Subject: [PATCH v4 18/30] media: ov5647: Use SBGGR10_1X10 640x480 as default
-Date:   Thu, 19 Nov 2020 17:32:37 +0100
-Message-Id: <20201119163238.783142-9-jacopo@jmondi.org>
+        erosca@de.adit-jv.com,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Subject: [PATCH v4 20/30] media: ov5647: Set V4L2_SUBDEV_FL_HAS_EVENTS flag
+Date:   Thu, 19 Nov 2020 17:35:40 +0100
+Message-Id: <20201119163549.793282-1-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.29.1
-In-Reply-To: <20201119163238.783142-1-jacopo@jmondi.org>
+In-Reply-To: <20201119161956.756455-1-jacopo@jmondi.org>
 References: <20201119161956.756455-1-jacopo@jmondi.org>
- <20201119163238.783142-1-jacopo@jmondi.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The SBGGR10_1X10 formats supports more resolutions than SBGGR8_1X8.
-Make it the default sensor format and set 2x2 binned 640x480 resolution
-as default sensor size as it maximizes the FOV and framerate.
+From: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
+The ov5647 subdev can generate control events, therefore set
+the V4L2_SUBDEV_FL_HAS_EVENTS flag.
+
+Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- drivers/media/i2c/ov5647.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/media/i2c/ov5647.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/media/i2c/ov5647.c b/drivers/media/i2c/ov5647.c
-index e206656a5e883..bb570be487175 100644
+index bb85e9c53c9cc..45144a600c536 100644
 --- a/drivers/media/i2c/ov5647.c
 +++ b/drivers/media/i2c/ov5647.c
-@@ -677,8 +677,9 @@ static const struct ov5647_format_list ov5647_formats[] = {
+@@ -1416,7 +1416,7 @@ static int ov5647_probe(struct i2c_client *client)
+ 	sd = &sensor->sd;
+ 	v4l2_i2c_subdev_init(sd, client, &ov5647_subdev_ops);
+ 	sd->internal_ops = &ov5647_subdev_internal_ops;
+-	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
++	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE | V4L2_SUBDEV_FL_HAS_EVENTS;
  
- #define OV5647_NUM_FORMATS	(ARRAY_SIZE(ov5647_formats))
- 
--#define OV5647_DEFAULT_MODE	(&ov5647_formats[0].modes[0])
--#define OV5647_DEFAULT_FORMAT	(ov5647_formats[0].modes[0].format)
-+/* Default sensor mode is 2x2 binned 640x480 SBGGR10_1X10. */
-+#define OV5647_DEFAULT_MODE	(&ov5647_formats[1].modes[3])
-+#define OV5647_DEFAULT_FORMAT	(ov5647_formats[1].modes[3].format)
- 
- static int ov5647_write(struct v4l2_subdev *sd, u16 reg, u8 val)
- {
-@@ -1026,7 +1027,6 @@ static int ov5647_set_get_fmt(struct v4l2_subdev *sd,
- {
- 	struct v4l2_mbus_framefmt *fmt = &format->format;
- 
--	/* Only one format is supported, so return that. */
- 	*fmt = OV5647_DEFAULT_FORMAT;
- 
- 	return 0;
+ 	sensor->pad.flags = MEDIA_PAD_FL_SOURCE;
+ 	sd->entity.function = MEDIA_ENT_F_CAM_SENSOR;
 -- 
 2.29.1
 
