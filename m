@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-21.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CC7AC63697
-	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 16:20:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5A45C6369E
+	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 16:20:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3ACE224698
-	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 16:20:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 91CB2246AA
+	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 16:20:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727800AbgKSQUI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Nov 2020 11:20:08 -0500
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:57409 "EHLO
+        id S1727981AbgKSQUK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Nov 2020 11:20:10 -0500
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:43877 "EHLO
         relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727685AbgKSQUI (ORCPT
+        with ESMTP id S1727685AbgKSQUK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Nov 2020 11:20:08 -0500
+        Thu, 19 Nov 2020 11:20:10 -0500
 X-Originating-IP: 93.34.118.233
 Received: from localhost.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id B36311C001A;
-        Thu, 19 Nov 2020 16:20:02 +0000 (UTC)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 8B0AD1C0019;
+        Thu, 19 Nov 2020 16:20:06 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     linux-media@vger.kernel.org
 Cc:     Jacopo Mondi <jacopo@jmondi.org>, mchehab@kernel.org,
@@ -33,73 +33,45 @@ Cc:     Jacopo Mondi <jacopo@jmondi.org>, mchehab@kernel.org,
         roman.kovalivskyi@globallogic.com, dafna.hirschfeld@collabora.com,
         dave.stevenson@raspberrypi.org, naush@raspberrypi.com,
         erosca@de.adit-jv.com
-Subject: [PATCH v4 00/30]  media: ov5647: Support RaspberryPi Camera Module v1
-Date:   Thu, 19 Nov 2020 17:19:26 +0100
-Message-Id: <20201119161956.756455-1-jacopo@jmondi.org>
+Subject: [PATCH v4 01/30] dt-bindings: media: i2c: Rename ov5647.yaml
+Date:   Thu, 19 Nov 2020 17:19:27 +0100
+Message-Id: <20201119161956.756455-2-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.29.1
+In-Reply-To: <20201119161956.756455-1-jacopo@jmondi.org>
+References: <20201119161956.756455-1-jacopo@jmondi.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-v3: https://patchwork.linuxtv.org/project/linux-media/list/?series=3813
-v2: https://patchwork.linuxtv.org/project/linux-media/list/?series=3782
-v1: https://patchwork.linuxtv.org/project/linux-media/list/?series=2765
+Rename 'ov5647.yaml' as 'ovti,ov5647.yaml' and update the
+MAINTAINERS file entry accordingly.
 
-Address Sakari's comments which lead to a substantial rebase and a rework
-of set_pad_fmt()
-
-Last patch which removes the 8-bit mode can be left out if the mode is
-considered useful even if (locally) broken.
-
-Compliance output is the same as v3.
-
-Thanks
-  j
-
-Dave Stevenson (8):
-  media: ov5647: Add support for PWDN GPIO.
-  media: ov5647: Add support for non-continuous clock mode
-  media: ov5647: Add set_fmt and get_fmt calls.
-  media: ov5647: Add support for get_selection()
-  media: ov5647: Set V4L2_SUBDEV_FL_HAS_EVENTS flag
-  media: ov5647: Support V4L2_CID_PIXEL_RATE
-  media: ov5647: Support V4L2_CID_VBLANK control
-  media: ov5647: Advertise the correct exposure range
-
-David Plowman (1):
-  media: ov5647: Support gain, exposure and AWB controls
-
-Jacopo Mondi (21):
-  dt-bindings: media: i2c: Rename ov5647.yaml
-  media: ov5647: Fix format initialization
-  media: ov5647: Fix style issues
-  media: ov5647: Replace license with SPDX identifier
-  media: ov5647: Fix return value from read/write
-  media: ov5647: Program mode at s_stream(1) time
-  media: ov5647: Implement enum_frame_size()
-  media: ov5647: Protect s_stream() with mutex
-  media: ov5647: Rationalize driver structure name
-  media: ov5647: Break out format handling
-  media: ov5647: Rename SBGGR8 VGA mode
-  media: ov5647: Add SGGBR10_1X10 modes
-  media: ov5647: Use SBGGR10_1X10 640x480 as default
-  media: ov5647: Implement set_fmt pad operation
-  media: ov5647: Support V4L2_CID_HBLANK control
-  media: ov5647: Use pm_runtime infrastructure
-  media: ov5647: Rework s_stream() operation
-  media: ov5647: Apply controls only when powered
-  media: ov5647: Constify oe_enable/disable reglist
-  media: ov5647: Support VIDIOC_SUBSCRIBE_EVENT
-  media: ov5647: Remove 640x480 SBGGR8 mode
-
- .../i2c/{ov5647.yaml => ovti,ov5647.yaml}     |    0
- MAINTAINERS                                   |    2 +-
- drivers/media/i2c/ov5647.c                    | 1259 ++++++++++++++---
- 3 files changed, 1051 insertions(+), 210 deletions(-)
+Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+---
+ .../bindings/media/i2c/{ov5647.yaml => ovti,ov5647.yaml}        | 0
+ MAINTAINERS                                                     | 2 +-
+ 2 files changed, 1 insertion(+), 1 deletion(-)
  rename Documentation/devicetree/bindings/media/i2c/{ov5647.yaml => ovti,ov5647.yaml} (100%)
 
---
+diff --git a/Documentation/devicetree/bindings/media/i2c/ov5647.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov5647.yaml
+similarity index 100%
+rename from Documentation/devicetree/bindings/media/i2c/ov5647.yaml
+rename to Documentation/devicetree/bindings/media/i2c/ovti,ov5647.yaml
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 69d55ed67e1cf..3f2acc3a78687 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12928,7 +12928,7 @@ M:	Jacopo Mondi <jacopo@jmondi.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ T:	git git://linuxtv.org/media_tree.git
+-F:	Documentation/devicetree/bindings/media/i2c/ov5647.yaml
++F:	Documentation/devicetree/bindings/media/i2c/ovti,ov5647.yaml
+ F:	drivers/media/i2c/ov5647.c
+ 
+ OMNIVISION OV5670 SENSOR DRIVER
+-- 
 2.29.1
 
