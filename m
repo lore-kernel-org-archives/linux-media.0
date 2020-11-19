@@ -8,63 +8,62 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6D25C388F9
-	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 21:50:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABC42C63798
+	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 21:50:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5784722202
-	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 21:50:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6A23022242
+	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 21:50:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Kdyrh6+n"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="e+TgBvDq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726528AbgKSVuk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Nov 2020 16:50:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47428 "EHLO
+        id S1726735AbgKSVul (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Nov 2020 16:50:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726673AbgKSVue (ORCPT
+        with ESMTP id S1726618AbgKSVub (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Nov 2020 16:50:34 -0500
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B62C061A48
-        for <linux-media@vger.kernel.org>; Thu, 19 Nov 2020 13:50:32 -0800 (PST)
-Received: by mail-wm1-x341.google.com with SMTP id x13so1663467wmj.1
-        for <linux-media@vger.kernel.org>; Thu, 19 Nov 2020 13:50:32 -0800 (PST)
+        Thu, 19 Nov 2020 16:50:31 -0500
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B69C0613D4
+        for <linux-media@vger.kernel.org>; Thu, 19 Nov 2020 13:50:31 -0800 (PST)
+Received: by mail-wr1-x444.google.com with SMTP id p1so7942776wrf.12
+        for <linux-media@vger.kernel.org>; Thu, 19 Nov 2020 13:50:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6o1Ou2G94vWPGgDa7vE7BlpEg/YYM6h+IkH6qtxP0bg=;
-        b=Kdyrh6+nxeJf3epLaPBLEeuHCrTfJTqrHCoSj4RFGnHeRYmAAME+SyLvY2DgQQKZI9
-         NqsIZVyq664Nl2DAZHejyl67lcRQ3hnjdShxvJtRhPvKh3x/y+51e9CIfvkOZGPfFy8P
-         QUg7/U2Ex5nxODB9zQEov6F/CByP1IdYLkEN0=
+        bh=9hFAGsPQ1f3dZX6MQlxK0ovaxUymxj7xlgfb54asEEA=;
+        b=e+TgBvDqtULRLH3ChCnrOBah2+qJJMfDpXepynoE0OwkEZfjlUAIextXlmM+QhWjYO
+         iNd/CYZxcM/bToLCU5QlrAkaHT0dqOUHqKNr8hiCOIsmZRcOnPWpMDH81almP3vaITfw
+         bRBTH2FyBPcE5P8XQinrib6IHBkicuqcN9bv8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6o1Ou2G94vWPGgDa7vE7BlpEg/YYM6h+IkH6qtxP0bg=;
-        b=fEYmikqVpXgk11RkgdcpdIJvPPfVZJtNZfWQwqCWjpENIVXAPoXrtVwW7LUDgxpg1B
-         2NllbvwhhyDjPyJbwtP2KB37OuoQuA6Dc+1bPPZUrSUbFvMYeEZ/zTEwcnkJzWUeikjA
-         CutxwmQGLEitMo8wSzXtRQr8uC/wV0pMUuphSlaisHPdbNrBgCxigEQ9XTUVw2Dd6TX9
-         VHqoFYWRx98bLcbIdS01EmHJJi5QdTeg+QAj19aTC6SiaOf5jKmRhRfT2DhaTZMTZ2ne
-         HBZZvP6OMcZa0AFkvZckEmw2UBCI2IMrI4aN+9RppCy/dYzqS2CZ2x4r6HnduFDCKoPT
-         ZDrA==
-X-Gm-Message-State: AOAM531krG/e3GjpTf5kTCQrp1rc72SjwHhQ4gkdoQ0xaTagSZGZfn4B
-        zsd3wCZ7CcLqdmVYn3CYTmNneg==
-X-Google-Smtp-Source: ABdhPJyM79YqQXvIheed5+VdNbhL1VGegS3NpFJT5e79xD1CwrmIIhuGHRs3Ylmg9C4rHE8B0ahbvg==
-X-Received: by 2002:a1c:5946:: with SMTP id n67mr6488660wmb.162.1605822631439;
-        Thu, 19 Nov 2020 13:50:31 -0800 (PST)
+        bh=9hFAGsPQ1f3dZX6MQlxK0ovaxUymxj7xlgfb54asEEA=;
+        b=UTF63t6Rr1IyZ5Er3a1f/HmYOPkD8mZiU+3AxAwENGVaZRBFQWtsO/0tCeGeSqVc28
+         HqdVfYoMoOtKTLpO2qigcb+EOkbyzOr1ybyDn0nv+bzv1cTnShyeycudYq5lrJ5oxxmD
+         fNyi4OtaEf6ADQqSAcbXYivYqWe3zXuPUQ2G39GSsfiptSMENYphRcw+KJA7EPGuTiMe
+         00MxqY1ubjJNTmoxMQbuwTKBpna6BZqPV2NNFI4rE7JA0iurmZEArK1xlQSXSJ8+B9Q9
+         LI7lM1CPt7Yfgrk085ylrTCvsWrSVPN9LybZNGOvCZHDAaztERt5LixQvCgAvuYwzDHN
+         V/qg==
+X-Gm-Message-State: AOAM531W5d0Y2HIzuuxCURb9at875yiSx1D1yScUrvDaxoZqYGd/9KLv
+        8PG9db9dsR2kwQHILLWJs4mL8WTvJ/GGvBUL
+X-Google-Smtp-Source: ABdhPJx3kjSKsAJYMTcfuv4XuoPg+ZzP1+1NF0oBl1a9f7vwSI7C0ZfE8LrEwiYy4Y5hoEU3B7fl1Q==
+X-Received: by 2002:adf:e6c8:: with SMTP id y8mr12193634wrm.414.1605822629906;
+        Thu, 19 Nov 2020 13:50:29 -0800 (PST)
 Received: from alco.lan ([80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id t136sm1818859wmt.18.2020.11.19.13.50.30
+        by smtp.gmail.com with ESMTPSA id t136sm1818859wmt.18.2020.11.19.13.50.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2020 13:50:31 -0800 (PST)
+        Thu, 19 Nov 2020 13:50:29 -0800 (PST)
 From:   Ricardo Ribalda <ribalda@chromium.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Ricardo Ribalda <ribalda@chromium.org>,
-        Joe Perches <joe@perches.com>
-Subject: [PATCH v3 7/8] media: uvcvideo: Use dev_ printk aliases
-Date:   Thu, 19 Nov 2020 22:50:19 +0100
-Message-Id: <20201119215020.508487-8-ribalda@chromium.org>
+Cc:     Ricardo Ribalda <ribalda@chromium.org>
+Subject: [PATCH v3 5/8] media: uvcvideo: Implement UVC_EXT_GPIO_UNIT
+Date:   Thu, 19 Nov 2020 22:50:17 +0100
+Message-Id: <20201119215020.508487-6-ribalda@chromium.org>
 X-Mailer: git-send-email 2.29.2.299.gdc1121823c-goog
 In-Reply-To: <20201119215020.508487-1-ribalda@chromium.org>
 References: <20201119215020.508487-1-ribalda@chromium.org>
@@ -74,485 +73,288 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Replace all the uses of printk() and uvc_printk() with its
-equivalent dev_ alias macros.
+Some devices can implement a physical switch to disable the input of the
+camera on demand. Think of it like an elegant privacy sticker.
 
-They are more standard across the kernel tree and provide
-more context about the error.
+The system can read the status of the privacy switch via a GPIO.
 
-Suggested-by: Joe Perches <joe@perches.com>
+It is important to know the status of the switch, e.g. to notify the
+user when the camera will produce black frames and a videochat
+application is used.
+
+Since the uvc device is not aware of this pin (and it should't), we need
+to implement a virtual entity that can interact with such pin.
+
+The location of the GPIO is specified via acpi or DT. on the usb device Eg:
+
+  Scope (\_SB.PCI0.XHCI.RHUB.HS07)
+  {
+
+	  /.../
+
+    Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
+    {
+        GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
+            "\\_SB.PCI0.GPIO", 0x00, ResourceConsumer, ,
+            )
+            {   // Pin list
+                0x0064
+            }
+    })
+    Name (_DSD, Package (0x02)  // _DSD: Device-Specific Data
+    {
+        ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301") /* Device Properties for _DSD */,
+        Package (0x01)
+        {
+            Package (0x02)
+            {
+                "privacy-gpio",
+                Package (0x04)
+                {
+                    \_SB.PCI0.XHCI.RHUB.HS07,
+                    Zero,
+                    Zero,
+                    One
+                }
+            }
+        }
+    })
+  }
+
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/usb/uvc/uvc_ctrl.c   |  4 +-
- drivers/media/usb/uvc/uvc_driver.c | 80 ++++++++++++++++--------------
- drivers/media/usb/uvc/uvc_entity.c | 10 ++--
- drivers/media/usb/uvc/uvc_status.c | 13 ++---
- drivers/media/usb/uvc/uvc_video.c  | 51 ++++++++++---------
- drivers/media/usb/uvc/uvcvideo.h   | 25 ++++------
- 6 files changed, 95 insertions(+), 88 deletions(-)
+ drivers/media/usb/uvc/uvc_ctrl.c   |   6 ++
+ drivers/media/usb/uvc/uvc_driver.c | 106 +++++++++++++++++++++++++++++
+ drivers/media/usb/uvc/uvcvideo.h   |  12 ++++
+ 3 files changed, 124 insertions(+)
 
 diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-index 5826d06a90f5..a197452d3de5 100644
+index 492328cb470e..7d86ee4b4ff9 100644
 --- a/drivers/media/usb/uvc/uvc_ctrl.c
 +++ b/drivers/media/usb/uvc/uvc_ctrl.c
-@@ -1327,8 +1327,8 @@ static void uvc_ctrl_status_event_work(struct work_struct *work)
+@@ -1302,6 +1302,9 @@ static void uvc_ctrl_status_event_work(struct work_struct *work)
+ 
+ 	mutex_unlock(&chain->ctrl_mutex);
+ 
++	if (!w->urb)
++		return;
++
+ 	/* Resubmit the URB. */
  	w->urb->interval = dev->int_ep->desc.bInterval;
  	ret = usb_submit_urb(w->urb, GFP_KERNEL);
- 	if (ret < 0)
--		uvc_printk(KERN_ERR, "Failed to resubmit status URB (%d).\n",
--			   ret);
-+		dev_err(&dev->udev->dev,
-+			"Failed to resubmit status URB (%d).\n", ret);
- }
+@@ -2286,6 +2289,9 @@ int uvc_ctrl_init_device(struct uvc_device *dev)
+ 		} else if (UVC_ENTITY_TYPE(entity) == UVC_ITT_CAMERA) {
+ 			bmControls = entity->camera.bmControls;
+ 			bControlSize = entity->camera.bControlSize;
++		} else if (UVC_ENTITY_TYPE(entity) == UVC_EXT_GPIO_UNIT) {
++			bmControls = entity->gpio.bmControls;
++			bControlSize = entity->gpio.bControlSize;
+ 		}
  
- bool uvc_ctrl_status_event(struct urb *urb, struct uvc_video_chain *chain,
+ 		/* Remove bogus/blacklisted controls */
 diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 498de09da07e..4379916a6ac1 100644
+index 534629ecd60d..498de09da07e 100644
 --- a/drivers/media/usb/uvc/uvc_driver.c
 +++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -535,8 +535,8 @@ static int uvc_parse_format(struct uvc_device *dev,
- 				sizeof(format->name));
- 			format->fcc = fmtdesc->fcc;
- 		} else {
--			uvc_printk(KERN_INFO, "Unknown video format %pUl\n",
--				&buffer[5]);
-+			dev_info(&streaming->intf->dev,
-+				 "Unknown video format %pUl\n", &buffer[5]);
- 			snprintf(format->name, sizeof(format->name), "%pUl\n",
- 				&buffer[5]);
- 			format->fcc = 0;
-@@ -1594,7 +1594,7 @@ static int uvc_scan_chain_entity(struct uvc_video_chain *chain,
- 	switch (UVC_ENTITY_TYPE(entity)) {
- 	case UVC_VC_EXTENSION_UNIT:
- 		if (uvc_trace_param & UVC_TRACE_PROBE)
--			printk(KERN_CONT " <- XU %d", entity->id);
-+			pr_cont(" <- XU %d", entity->id);
+@@ -7,6 +7,7 @@
+  */
  
- 		if (entity->bNrInPins != 1) {
- 			uvc_trace(UVC_TRACE_DESCR, "Extension unit %d has more "
-@@ -1606,7 +1606,7 @@ static int uvc_scan_chain_entity(struct uvc_video_chain *chain,
+ #include <linux/atomic.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/kernel.h>
+ #include <linux/list.h>
+ #include <linux/module.h>
+@@ -1020,6 +1021,7 @@ static int uvc_parse_streaming(struct uvc_device *dev,
+ }
  
- 	case UVC_VC_PROCESSING_UNIT:
- 		if (uvc_trace_param & UVC_TRACE_PROBE)
--			printk(KERN_CONT " <- PU %d", entity->id);
-+			pr_cont(" <- PU %d", entity->id);
- 
- 		if (chain->processing != NULL) {
- 			uvc_trace(UVC_TRACE_DESCR, "Found multiple "
-@@ -1619,7 +1619,7 @@ static int uvc_scan_chain_entity(struct uvc_video_chain *chain,
- 
- 	case UVC_VC_SELECTOR_UNIT:
- 		if (uvc_trace_param & UVC_TRACE_PROBE)
--			printk(KERN_CONT " <- SU %d", entity->id);
-+			pr_cont(" <- SU %d", entity->id);
- 
- 		/* Single-input selector units are ignored. */
- 		if (entity->bNrInPins == 1)
-@@ -1638,7 +1638,7 @@ static int uvc_scan_chain_entity(struct uvc_video_chain *chain,
+ static const u8 uvc_camera_guid[16] = UVC_GUID_UVC_CAMERA;
++static const u8 uvc_gpio_guid[16] = UVC_GUID_EXT_GPIO_CONTROLLER;
+ static const u8 uvc_media_transport_input_guid[16] =
+ 	UVC_GUID_UVC_MEDIA_TRANSPORT_INPUT;
+ static const u8 uvc_processing_guid[16] = UVC_GUID_UVC_PROCESSING;
+@@ -1053,6 +1055,9 @@ static struct uvc_entity *uvc_alloc_entity(u16 type, u16 id,
+ 	 * is initialized by the caller.
+ 	 */
+ 	switch (type) {
++	case UVC_EXT_GPIO_UNIT:
++		memcpy(entity->guid, uvc_gpio_guid, 16);
++		break;
  	case UVC_ITT_CAMERA:
- 	case UVC_ITT_MEDIA_TRANSPORT_INPUT:
- 		if (uvc_trace_param & UVC_TRACE_PROBE)
--			printk(KERN_CONT " <- IT %d\n", entity->id);
-+			pr_cont(" <- IT %d\n", entity->id);
- 
+ 		memcpy(entity->guid, uvc_camera_guid, 16);
  		break;
- 
-@@ -1646,17 +1646,17 @@ static int uvc_scan_chain_entity(struct uvc_video_chain *chain,
- 	case UVC_OTT_DISPLAY:
- 	case UVC_OTT_MEDIA_TRANSPORT_OUTPUT:
- 		if (uvc_trace_param & UVC_TRACE_PROBE)
--			printk(KERN_CONT " OT %d", entity->id);
-+			pr_cont(" OT %d", entity->id);
- 
- 		break;
- 
- 	case UVC_TT_STREAMING:
- 		if (UVC_ENTITY_IS_ITERM(entity)) {
- 			if (uvc_trace_param & UVC_TRACE_PROBE)
--				printk(KERN_CONT " <- IT %d\n", entity->id);
-+				pr_cont(" <- IT %d\n", entity->id);
- 		} else {
- 			if (uvc_trace_param & UVC_TRACE_PROBE)
--				printk(KERN_CONT " OT %d", entity->id);
-+				pr_cont(" OT %d", entity->id);
- 		}
- 
- 		break;
-@@ -1706,9 +1706,9 @@ static int uvc_scan_chain_forward(struct uvc_video_chain *chain,
- 			list_add_tail(&forward->chain, &chain->entities);
- 			if (uvc_trace_param & UVC_TRACE_PROBE) {
- 				if (!found)
--					printk(KERN_CONT " (->");
-+					pr_cont(" (->");
- 
--				printk(KERN_CONT " XU %d", forward->id);
-+				pr_cont(" XU %d", forward->id);
- 				found = 1;
- 			}
- 			break;
-@@ -1726,16 +1726,16 @@ static int uvc_scan_chain_forward(struct uvc_video_chain *chain,
- 			list_add_tail(&forward->chain, &chain->entities);
- 			if (uvc_trace_param & UVC_TRACE_PROBE) {
- 				if (!found)
--					printk(KERN_CONT " (->");
-+					pr_cont(" (->");
- 
--				printk(KERN_CONT " OT %d", forward->id);
-+				pr_cont(" OT %d", forward->id);
- 				found = 1;
- 			}
- 			break;
- 		}
- 	}
- 	if (found)
--		printk(KERN_CONT ")");
-+		pr_cont(")");
- 
+@@ -1466,6 +1471,93 @@ static int uvc_parse_control(struct uvc_device *dev)
  	return 0;
  }
-@@ -1761,7 +1761,7 @@ static int uvc_scan_chain_backward(struct uvc_video_chain *chain,
- 		}
  
- 		if (uvc_trace_param & UVC_TRACE_PROBE)
--			printk(KERN_CONT " <- IT");
-+			pr_cont(" <- IT");
++static int uvc_gpio_get_cur(struct uvc_device *dev, struct uvc_entity *entity,
++			    u8 cs, void *data, u16 size)
++{
++	if (cs != UVC_CT_PRIVACY_CONTROL || size < 1)
++		return -EINVAL;
++
++	*(uint8_t *)data = gpiod_get_value(entity->gpio.gpio_privacy);
++	return 0;
++}
++
++static int uvc_gpio_get_info(struct uvc_device *dev, struct uvc_entity *entity,
++			     u8 cs, u8 *caps)
++{
++	if (cs != UVC_CT_PRIVACY_CONTROL)
++		return -EINVAL;
++
++	*caps = UVC_CONTROL_CAP_GET | UVC_CONTROL_CAP_AUTOUPDATE;
++	return 0;
++}
++
++static irqreturn_t uvc_privacy_gpio_irq(int irq, void *data)
++{
++	struct uvc_device *dev = data;
++	struct uvc_video_chain *chain;
++	struct uvc_entity *unit;
++	u8 value;
++
++	/* GPIO entities are always on the first chain */
++	chain = list_first_entry(&dev->chains, struct uvc_video_chain, list);
++	list_for_each_entry(unit, &dev->entities, list) {
++		if (UVC_ENTITY_TYPE(unit) != UVC_EXT_GPIO_UNIT)
++			continue;
++		value = gpiod_get_value(unit->gpio.gpio_privacy);
++		uvc_ctrl_status_event(NULL, chain, unit->controls, &value);
++		return IRQ_HANDLED;
++	}
++
++	return IRQ_HANDLED;
++}
++
++static int uvc_parse_gpio(struct uvc_device *dev)
++{
++	struct uvc_entity *unit;
++	struct gpio_desc *gpio_privacy;
++	int irq;
++	int ret;
++
++	gpio_privacy = devm_gpiod_get_optional(&dev->udev->dev, "privacy",
++					       GPIOD_IN);
++	if (IS_ERR(gpio_privacy))
++		return PTR_ERR(gpio_privacy);
++
++	if (!gpio_privacy)
++		return 0;
++
++	unit = uvc_alloc_entity(UVC_EXT_GPIO_UNIT, UVC_EXT_GPIO_UNIT_ID, 0, 1);
++	if (!unit)
++		return -ENOMEM;
++
++	unit->gpio.gpio_privacy = gpio_privacy;
++	unit->gpio.bControlSize = 1;
++	unit->gpio.bmControls = (u8 *)unit + sizeof(*unit);
++	unit->gpio.bmControls[0] = 1;
++	unit->get_cur = uvc_gpio_get_cur;
++	unit->get_info = uvc_gpio_get_info;
++
++	sprintf(unit->name, "GPIO Unit");
++
++	list_add_tail(&unit->list, &dev->entities);
++
++	irq = gpiod_to_irq(gpio_privacy);
++	if (irq == -EPROBE_DEFER)
++		return -EPROBE_DEFER;
++
++	if (irq < 0)
++		return 0;
++
++	ret = devm_request_irq(&dev->udev->dev, irq, uvc_privacy_gpio_irq,
++			       IRQF_TRIGGER_FALLING | IRQF_TRIGGER_RISING,
++			       "uvc_privacy_gpio", dev);
++	if (ret < 0)
++		dev_warn(&dev->udev->dev,
++		       "Unable to request uvc_privacy_gpio irq. Continuing\n");
++
++	return 0;
++}
++
+ /* ------------------------------------------------------------------------
+  * UVC device scan
+  */
+@@ -1917,6 +2009,7 @@ static int uvc_scan_device(struct uvc_device *dev)
+ {
+ 	struct uvc_video_chain *chain;
+ 	struct uvc_entity *term;
++	struct uvc_entity *unit;
  
- 		chain->selector = entity;
- 		for (i = 0; i < entity->bNrInPins; ++i) {
-@@ -1782,14 +1782,14 @@ static int uvc_scan_chain_backward(struct uvc_video_chain *chain,
- 			}
- 
- 			if (uvc_trace_param & UVC_TRACE_PROBE)
--				printk(KERN_CONT " %d", term->id);
-+				pr_cont(" %d", term->id);
- 
- 			list_add_tail(&term->chain, &chain->entities);
- 			uvc_scan_chain_forward(chain, term, entity);
- 		}
- 
- 		if (uvc_trace_param & UVC_TRACE_PROBE)
--			printk(KERN_CONT "\n");
-+			pr_cont("\n");
- 
- 		id = 0;
- 		break;
-@@ -2044,7 +2044,7 @@ static int uvc_scan_device(struct uvc_device *dev)
- 		uvc_scan_fallback(dev);
- 
- 	if (list_empty(&dev->chains)) {
--		uvc_printk(KERN_INFO, "No valid video chain found.\n");
-+		dev_info(&dev->udev->dev, "No valid video chain found.\n");
+ 	list_for_each_entry(term, &dev->entities, list) {
+ 		if (!UVC_ENTITY_IS_OTERM(term))
+@@ -1955,6 +2048,13 @@ static int uvc_scan_device(struct uvc_device *dev)
  		return -1;
  	}
  
-@@ -2203,8 +2203,9 @@ int uvc_register_video_device(struct uvc_device *dev,
++	/* Add GPIO entities to the first chain */
++	chain = list_first_entry(&dev->chains, struct uvc_video_chain, list);
++	list_for_each_entry(unit, &dev->entities, list) {
++		if (UVC_ENTITY_TYPE(unit) == UVC_EXT_GPIO_UNIT)
++			list_add_tail(&unit->chain, &chain->entities);
++	}
++
+ 	return 0;
+ }
  
- 	ret = video_register_device(vdev, VFL_TYPE_VIDEO, -1);
- 	if (ret < 0) {
--		uvc_printk(KERN_ERR, "Failed to register %s device (%d).\n",
--			   v4l2_type_names[type], ret);
-+		dev_err(&stream->intf->dev,
-+			"Failed to register %s device (%d).\n",
-+			v4l2_type_names[type], ret);
- 		return ret;
- 	}
- 
-@@ -2220,8 +2221,8 @@ static int uvc_register_video(struct uvc_device *dev,
- 	/* Initialize the streaming interface with default parameters. */
- 	ret = uvc_video_init(stream);
- 	if (ret < 0) {
--		uvc_printk(KERN_ERR, "Failed to initialize the device (%d).\n",
--			   ret);
-+		dev_err(&stream->intf->dev,
-+			"Failed to initialize the device (%d).\n", ret);
- 		return ret;
- 	}
- 
-@@ -2255,8 +2256,9 @@ static int uvc_register_terms(struct uvc_device *dev,
- 
- 		stream = uvc_stream_by_id(dev, term->id);
- 		if (stream == NULL) {
--			uvc_printk(KERN_INFO, "No streaming interface found "
--				   "for terminal %u.", term->id);
-+			dev_info(&dev->udev->dev,
-+				 "No streaming interface found for terminal %u.",
-+				 term->id);
- 			continue;
- 		}
- 
-@@ -2289,8 +2291,8 @@ static int uvc_register_chains(struct uvc_device *dev)
- #ifdef CONFIG_MEDIA_CONTROLLER
- 		ret = uvc_mc_register_entities(chain);
- 		if (ret < 0)
--			uvc_printk(KERN_INFO,
--				   "Failed to register entities (%d).\n", ret);
-+			dev_info(&dev->udev->dev,
-+				 "Failed to register entities (%d).\n", ret);
- #endif
- 	}
- 
-@@ -2393,17 +2395,19 @@ static int uvc_probe(struct usb_interface *intf,
+@@ -2287,6 +2387,12 @@ static int uvc_probe(struct usb_interface *intf,
  		goto error;
  	}
  
--	uvc_printk(KERN_INFO, "Found UVC %u.%02x device %s (%04x:%04x)\n",
--		dev->uvc_version >> 8, dev->uvc_version & 0xff,
--		udev->product ? udev->product : "<unnamed>",
--		le16_to_cpu(udev->descriptor.idVendor),
--		le16_to_cpu(udev->descriptor.idProduct));
-+	dev_info(&dev->udev->dev,
-+		 "Found UVC %u.%02x device %s (%04x:%04x)\n",
-+		 dev->uvc_version >> 8, dev->uvc_version & 0xff,
-+		 udev->product ? udev->product : "<unnamed>",
-+		 le16_to_cpu(udev->descriptor.idVendor),
-+		 le16_to_cpu(udev->descriptor.idProduct));
- 
- 	if (dev->quirks != dev->info->quirks) {
--		uvc_printk(KERN_INFO, "Forcing device quirks to 0x%x by module "
--			"parameter for testing purpose.\n", dev->quirks);
--		uvc_printk(KERN_INFO, "Please report required quirks to the "
--			"linux-uvc-devel mailing list.\n");
-+		dev_info(&dev->udev->dev,
-+			 "Forcing device quirks to 0x%x by module parameter for testing purpose.\n",
-+			 dev->quirks);
-+		dev_info(&dev->udev->dev,
-+			 "Please report required quirks to the linux-uvc-devel mailing list.\n");
- 	}
- 
- 	/* Register the V4L2 device. */
-@@ -2432,9 +2436,9 @@ static int uvc_probe(struct usb_interface *intf,
- 
- 	/* Initialize the interrupt URB. */
- 	if ((ret = uvc_status_init(dev)) < 0) {
--		uvc_printk(KERN_INFO, "Unable to initialize the status "
--			"endpoint (%d), status interrupt will not be "
--			"supported.\n", ret);
-+		dev_info(&dev->udev->dev,
-+			 "Unable to initialize the status endpoint (%d), status interrupt will not be supported.\n",
-+			 ret);
- 	}
- 
- 	uvc_trace(UVC_TRACE_PROBE, "UVC device initialized.\n");
-diff --git a/drivers/media/usb/uvc/uvc_entity.c b/drivers/media/usb/uvc/uvc_entity.c
-index ca3a9c2eec27..a13bee5aee56 100644
---- a/drivers/media/usb/uvc/uvc_entity.c
-+++ b/drivers/media/usb/uvc/uvc_entity.c
-@@ -139,8 +139,9 @@ int uvc_mc_register_entities(struct uvc_video_chain *chain)
- 	list_for_each_entry(entity, &chain->entities, chain) {
- 		ret = uvc_mc_init_entity(chain, entity);
- 		if (ret < 0) {
--			uvc_printk(KERN_INFO, "Failed to initialize entity for "
--				   "entity %u\n", entity->id);
-+			dev_info(&chain->dev->udev->dev,
-+				 "Failed to initialize entity for entity %u\n",
-+				 entity->id);
- 			return ret;
- 		}
- 	}
-@@ -148,8 +149,9 @@ int uvc_mc_register_entities(struct uvc_video_chain *chain)
- 	list_for_each_entry(entity, &chain->entities, chain) {
- 		ret = uvc_mc_create_links(chain, entity);
- 		if (ret < 0) {
--			uvc_printk(KERN_INFO, "Failed to create links for "
--				   "entity %u\n", entity->id);
-+			dev_info(&chain->dev->udev->dev,
-+				 "Failed to create links for entity %u\n",
-+				 entity->id);
- 			return ret;
- 		}
- 	}
-diff --git a/drivers/media/usb/uvc/uvc_status.c b/drivers/media/usb/uvc/uvc_status.c
-index 2bdb0ff203f8..36fa196a9258 100644
---- a/drivers/media/usb/uvc/uvc_status.c
-+++ b/drivers/media/usb/uvc/uvc_status.c
-@@ -208,8 +208,9 @@ static void uvc_status_complete(struct urb *urb)
- 		return;
- 
- 	default:
--		uvc_printk(KERN_WARNING, "Non-zero status (%d) in status "
--			"completion handler.\n", urb->status);
-+		dev_warn(&dev->udev->dev,
-+			 "Non-zero status (%d) in status completion handler.\n",
-+			 urb->status);
- 		return;
- 	}
- 
-@@ -243,10 +244,10 @@ static void uvc_status_complete(struct urb *urb)
- 
- 	/* Resubmit the URB. */
- 	urb->interval = dev->int_ep->desc.bInterval;
--	if ((ret = usb_submit_urb(urb, GFP_ATOMIC)) < 0) {
--		uvc_printk(KERN_ERR, "Failed to resubmit status URB (%d).\n",
--			ret);
--	}
-+	ret = usb_submit_urb(urb, GFP_ATOMIC);
-+	if (ret < 0)
-+		dev_err(&dev->udev->dev,
-+			"Failed to resubmit status URB (%d).\n", ret);
- }
- 
- int uvc_status_init(struct uvc_device *dev)
-diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-index a6a441d92b94..a4a0f3556986 100644
---- a/drivers/media/usb/uvc/uvc_video.c
-+++ b/drivers/media/usb/uvc/uvc_video.c
-@@ -76,9 +76,9 @@ int uvc_query_ctrl(struct uvc_device *dev, u8 query, u8 unit,
- 	if (likely(ret == size))
- 		return 0;
- 
--	uvc_printk(KERN_ERR,
--		   "Failed to query (%s) UVC control %u on unit %u: %d (exp. %u).\n",
--		   uvc_query_name(query), cs, unit, ret, size);
-+	dev_err(&dev->udev->dev,
-+		"Failed to query (%s) UVC control %u on unit %u: %d (exp. %u).\n",
-+		uvc_query_name(query), cs, unit, ret, size);
- 
- 	if (ret != -EPIPE)
- 		return ret;
-@@ -254,9 +254,9 @@ static int uvc_get_video_ctrl(struct uvc_streaming *stream,
- 		ret = -EIO;
- 		goto out;
- 	} else if (ret != size) {
--		uvc_printk(KERN_ERR, "Failed to query (%u) UVC %s control : "
--			"%d (exp. %u).\n", query, probe ? "probe" : "commit",
--			ret, size);
-+		dev_err(&stream->intf->dev,
-+			"Failed to query (%u) UVC %s control : %d (exp. %u).\n",
-+			query, probe ? "probe" : "commit", ret, size);
- 		ret = -EIO;
- 		goto out;
- 	}
-@@ -334,9 +334,9 @@ static int uvc_set_video_ctrl(struct uvc_streaming *stream,
- 		probe ? UVC_VS_PROBE_CONTROL : UVC_VS_COMMIT_CONTROL, data,
- 		size, uvc_timeout_param);
- 	if (ret != size) {
--		uvc_printk(KERN_ERR, "Failed to set UVC %s control : "
--			"%d (exp. %u).\n", probe ? "probe" : "commit",
--			ret, size);
-+		dev_err(&stream->intf->dev,
-+			"Failed to set UVC %s control : %d (exp. %u).\n",
-+			probe ? "probe" : "commit", ret, size);
- 		ret = -EIO;
- 	}
- 
-@@ -1119,9 +1119,10 @@ static void uvc_video_copy_data_work(struct work_struct *work)
- 	}
- 
- 	ret = usb_submit_urb(uvc_urb->urb, GFP_KERNEL);
--	if (ret < 0)
--		uvc_printk(KERN_ERR, "Failed to resubmit video URB (%d).\n",
--			   ret);
-+	if (ret < 0) {
-+		dev_err(&uvc_urb->stream->intf->dev,
-+			"Failed to resubmit video URB (%d).\n", ret);
++	/* Parse the associated GPIOs */
++	if (uvc_parse_gpio(dev) < 0) {
++		uvc_trace(UVC_TRACE_PROBE, "Unable to parse UVC GPIOs\n");
++		goto error;
 +	}
- }
- 
- static void uvc_video_decode_data(struct uvc_urb *uvc_urb,
-@@ -1507,8 +1508,9 @@ static void uvc_video_complete(struct urb *urb)
- 		break;
- 
- 	default:
--		uvc_printk(KERN_WARNING, "Non-zero status (%d) in video "
--			"completion handler.\n", urb->status);
-+		dev_warn(&stream->intf->dev,
-+			 "Non-zero status (%d) in video completion handler.\n",
-+			 urb->status);
- 		fallthrough;
- 	case -ENOENT:		/* usb_poison_urb() called. */
- 		if (stream->frozen)
-@@ -1545,9 +1547,8 @@ static void uvc_video_complete(struct urb *urb)
- 	if (!uvc_urb->async_operations) {
- 		ret = usb_submit_urb(uvc_urb->urb, GFP_ATOMIC);
- 		if (ret < 0)
--			uvc_printk(KERN_ERR,
--				   "Failed to resubmit video URB (%d).\n",
--				   ret);
-+			dev_err(&stream->intf->dev,
-+				"Failed to resubmit video URB (%d).\n", ret);
- 		return;
- 	}
- 
-@@ -1893,8 +1894,9 @@ static int uvc_video_start_transfer(struct uvc_streaming *stream,
- 	for_each_uvc_urb(uvc_urb, stream) {
- 		ret = usb_submit_urb(uvc_urb->urb, gfp_flags);
- 		if (ret < 0) {
--			uvc_printk(KERN_ERR, "Failed to submit URB %u (%d).\n",
--				   uvc_urb_index(uvc_urb), ret);
-+			dev_err(&stream->intf->dev,
-+				"Failed to submit URB %u (%d).\n",
-+				uvc_urb_index(uvc_urb), ret);
- 			uvc_video_stop_transfer(stream, 1);
- 			return ret;
- 		}
-@@ -1989,7 +1991,8 @@ int uvc_video_init(struct uvc_streaming *stream)
- 	int ret;
- 
- 	if (stream->nformats == 0) {
--		uvc_printk(KERN_INFO, "No supported video formats found.\n");
-+		dev_info(&stream->intf->dev,
-+			 "No supported video formats found.\n");
- 		return -EINVAL;
- 	}
- 
-@@ -2029,8 +2032,8 @@ int uvc_video_init(struct uvc_streaming *stream)
- 	}
- 
- 	if (format->nframes == 0) {
--		uvc_printk(KERN_INFO, "No frame descriptor found for the "
--			"default format.\n");
-+		dev_info(&stream->intf->dev,
-+			 "No frame descriptor found for the default format.\n");
- 		return -EINVAL;
- 	}
- 
-@@ -2064,8 +2067,8 @@ int uvc_video_init(struct uvc_streaming *stream)
- 		if (stream->intf->num_altsetting == 1)
- 			stream->decode = uvc_video_encode_bulk;
- 		else {
--			uvc_printk(KERN_INFO, "Isochronous endpoints are not "
--				"supported for video output devices.\n");
-+			dev_info(&stream->intf->dev,
-+				 "Isochronous endpoints are not supported for video output devices.\n");
- 			return -EINVAL;
- 		}
- 	}
++
+ 	uvc_printk(KERN_INFO, "Found UVC %u.%02x device %s (%04x:%04x)\n",
+ 		dev->uvc_version >> 8, dev->uvc_version & 0xff,
+ 		udev->product ? udev->product : "<unnamed>",
 diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index f87d14fb3f56..d8e2f27bf576 100644
+index ae464ba83f4f..f87d14fb3f56 100644
 --- a/drivers/media/usb/uvc/uvcvideo.h
 +++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -742,20 +742,17 @@ extern unsigned int uvc_trace_param;
- extern unsigned int uvc_timeout_param;
- extern unsigned int uvc_hw_timestamps_param;
+@@ -6,6 +6,7 @@
+ #error "The uvcvideo.h header is deprecated, use linux/uvcvideo.h instead."
+ #endif /* __KERNEL__ */
  
--#define uvc_trace(flag, msg...) \
--	do { \
--		if (uvc_trace_param & flag) \
--			printk(KERN_DEBUG "uvcvideo: " msg); \
--	} while (0)
--
--#define uvc_warn_once(dev, warn, msg...) \
--	do { \
--		if (!test_and_set_bit(warn, &dev->warnings)) \
--			printk(KERN_INFO "uvcvideo: " msg); \
--	} while (0)
--
--#define uvc_printk(level, msg...) \
--	printk(level "uvcvideo: " msg)
-+#define uvc_trace(flag, fmt, ...)					\
-+do {									\
-+	if (uvc_trace_param & flag)					\
-+		printk(KERN_DEBUG "uvcvideo: " fmt, ##__VA_ARGS__);	\
-+} while (0)
++#include <linux/gpio/consumer.h>
+ #include <linux/kernel.h>
+ #include <linux/poll.h>
+ #include <linux/usb.h>
+@@ -37,6 +38,8 @@
+ 	(UVC_ENTITY_IS_TERM(entity) && \
+ 	((entity)->type & 0x8000) == UVC_TERM_OUTPUT)
+ 
++#define UVC_EXT_GPIO_UNIT 0x7ffe
++#define UVC_EXT_GPIO_UNIT_ID 0x100
+ 
+ /* ------------------------------------------------------------------------
+  * GUIDs
+@@ -56,6 +59,9 @@
+ #define UVC_GUID_UVC_SELECTOR \
+ 	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
+ 	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x02}
++#define UVC_GUID_EXT_GPIO_CONTROLLER \
++	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
++	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03}
+ 
+ #define UVC_GUID_FORMAT_MJPEG \
+ 	{ 'M',  'J',  'P',  'G', 0x00, 0x00, 0x10, 0x00, \
+@@ -348,6 +354,12 @@ struct uvc_entity {
+ 			u8  *bmControls;
+ 			u8  *bmControlsType;
+ 		} extension;
 +
-+#define uvc_warn_once(_dev, warn, fmt, ...)				\
-+do {									\
-+	if (!test_and_set_bit(warn, &(_dev)->warnings))			\
-+		dev_info(&(_dev)->udev->dev, fmt, ##__VA_ARGS__);	\
-+} while (0)
++		struct {
++			u8  bControlSize;
++			u8  *bmControls;
++			struct gpio_desc *gpio_privacy;
++		} gpio;
+ 	};
  
- /* --------------------------------------------------------------------------
-  * Internal functions.
+ 	u8 bNrInPins;
 -- 
 2.29.2.299.gdc1121823c-goog
 
