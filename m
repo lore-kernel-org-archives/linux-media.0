@@ -2,859 +2,380 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB1CAC63697
-	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 14:43:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B7FCC64E7B
+	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 14:43:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5C52D20888
-	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 14:43:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 337F822248
+	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 14:43:21 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="OEFoRj4M"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728318AbgKSOmP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Nov 2020 09:42:15 -0500
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:35569 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728267AbgKSOmN (ORCPT
+        id S1728335AbgKSOmZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Nov 2020 09:42:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37508 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728267AbgKSOmT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Nov 2020 09:42:13 -0500
-X-Originating-IP: 93.34.118.233
-Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 2D1FA40014;
-        Thu, 19 Nov 2020 14:42:02 +0000 (UTC)
-Date:   Thu, 19 Nov 2020 15:42:06 +0100
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        laurent.pinchart+renesas@ideasonboard.com,
-        niklas.soderlund+renesas@ragnatech.se, geert@linux-m68k.org,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hyun Kwon <hyunk@xilinx.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        sergei.shtylyov@gmail.com
-Subject: Re: [PATCH v5 1/8] media: i2c: Add driver for RDACM21 camera module
-Message-ID: <20201119144206.c2ek76uyci2g6j32@uno.localdomain>
-References: <20201116135305.81319-1-jacopo+renesas@jmondi.org>
- <20201116135305.81319-2-jacopo+renesas@jmondi.org>
- <df3ad394-66d6-951a-1ddf-621151a4d581@ideasonboard.com>
- <20201117133634.s62i32hcwzikmhzb@uno.localdomain>
- <50b1f540-9289-b82b-e261-f549603556f7@ideasonboard.com>
+        Thu, 19 Nov 2020 09:42:19 -0500
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33B6C061A4D
+        for <linux-media@vger.kernel.org>; Thu, 19 Nov 2020 06:42:16 -0800 (PST)
+Received: by mail-wr1-x442.google.com with SMTP id u12so6748148wrt.0
+        for <linux-media@vger.kernel.org>; Thu, 19 Nov 2020 06:42:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=zkeb216dnttsANxMb1gEr5R+0ZdYRKKovGCL9yT1FAY=;
+        b=OEFoRj4M9E42bfq/iRIOsKl46YrbtiCBbjvTv/oig1APTLJQ4UtbX4FB0wq8nQR7DV
+         +1Z9xekE8CgurHze3jx2RuwGvnmCbykl11MfGozRAiKsp7Mbksai6QESttZp++mq8w27
+         9aqJwg0/tCaPIwA6nplaOLISr9nxhq33gSpzY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=zkeb216dnttsANxMb1gEr5R+0ZdYRKKovGCL9yT1FAY=;
+        b=bMJQnEVZ6xycYx/83doMXftw+J6wivWkYfdvU026YGu3OThbRfLKpeKRbyMd3RRPwh
+         6nVWh7Gihg6D2Vu3v3PDt0tfttLXkoIoIAnDksbBlQXpB6mF0WkDMl3v5bABw2xqZP4h
+         eH4+SIWRkQg5YLfncbWBX5dH4UNf8Oucsz6m/+QuHk7xojPv8Cq5KrwUTNz/jKwnibyG
+         sAwbVzeucivFoYb7OAuU5gvVwtajHVGTGinjgGUjuyspjjEL9Mws9vYxSsucNpNZw3OK
+         c5X31RvgNFWkFFiNMtgEj6mYhYzJCDbCKzMB6Ga1jmI7ASyPWIUuMclU4tjJSj5hNAmv
+         ocgg==
+X-Gm-Message-State: AOAM53192NQSEjdD+zfDPuIVbwLO1gwagDvgnZZnaOKbnmpd4T6QbCpZ
+        2Gi0aeKk6f+S4ssmlMW6Ef4qsA==
+X-Google-Smtp-Source: ABdhPJxvIRAgRrFES7wO+NepTS6cCQpwhrGHMzEzGdt8Kdan81c2b72TYQlZw04CiRWhUOLHuW1+1w==
+X-Received: by 2002:adf:8366:: with SMTP id 93mr10481140wrd.321.1605796935466;
+        Thu, 19 Nov 2020 06:42:15 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id x63sm51292wmb.48.2020.11.19.06.42.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Nov 2020 06:42:14 -0800 (PST)
+From:   Daniel Vetter <daniel.vetter@ffwll.ch>
+To:     DRI Development <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     kvm@vger.kernel.org, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-media@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kees Cook <keescook@chromium.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        Jan Kara <jack@suse.cz>
+Subject: [PATCH v6 16/17] RFC: kvm: pass kvm argument to follow_pfn callsites
+Date:   Thu, 19 Nov 2020 15:41:45 +0100
+Message-Id: <20201119144146.1045202-17-daniel.vetter@ffwll.ch>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20201119144146.1045202-1-daniel.vetter@ffwll.ch>
+References: <20201119144146.1045202-1-daniel.vetter@ffwll.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <50b1f540-9289-b82b-e261-f549603556f7@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Kieran,
+Both Christoph Hellwig and Jason Gunthorpe suggested that usage of
+follow_pfn by modules should be locked down more. To do so callers
+need to be able to pass the mmu_notifier subscription corresponding
+to the mm_struct to follow_pfn().
 
-On Tue, Nov 17, 2020 at 03:31:37PM +0000, Kieran Bingham wrote:
-> On 17/11/2020 13:36, Jacopo Mondi wrote:
-> > Hi Kieran,
-> >
-> > On Mon, Nov 16, 2020 at 02:47:49PM +0000, Kieran Bingham wrote:
-> >> On 16/11/2020 13:52, Jacopo Mondi wrote:
-> >>> The RDACM21 is a GMSL camera supporting 1280x1080 resolution images
-> >>> developed by IMI based on an Omnivision OV10640 sensor, an Omnivision
-> >>> OV490 ISP and a Maxim MAX9271 GMSL serializer.
-> >>>
-> >>> The driver uses the max9271 library module, to maximize code reuse with
-> >>> other camera module drivers using the same serializer, such as rdacm20.
-> >>>
-> >>> Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
-> >>> ---
-> >>>  MAINTAINERS                 |  12 +
-> >>>  drivers/media/i2c/Kconfig   |  13 +
-> >>>  drivers/media/i2c/Makefile  |   2 +
-> >>>  drivers/media/i2c/rdacm21.c | 595 ++++++++++++++++++++++++++++++++++++
-> >>>  4 files changed, 622 insertions(+)
-> >>>  create mode 100644 drivers/media/i2c/rdacm21.c
-> >>>
-> >>> diff --git a/MAINTAINERS b/MAINTAINERS
-> >>> index cef6b6090d76..9a5026fd6788 100644
-> >>> --- a/MAINTAINERS
-> >>> +++ b/MAINTAINERS
-> >>> @@ -14750,6 +14750,18 @@ F:	drivers/media/i2c/max9271.c
-> >>>  F:	drivers/media/i2c/max9271.h
-> >>>  F:	drivers/media/i2c/rdacm20.c
-> >>>
-> >>> +RDACM21 Camera Sensor
-> >>> +M:	Jacopo Mondi <jacopo+renesas@jmondi.org>
-> >>> +M:	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> >>> +M:	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-> >>> +M:	Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-> >>> +L:	linux-media@vger.kernel.org
-> >>> +S:	Maintained
-> >>> +F:	Documentation/devicetree/bindings/media/i2c/rdacm2x-gmsl.yaml
-> >>> +F:	drivers/media/i2c/max9271.c
-> >>> +F:	drivers/media/i2c/max9271.h
-> >>> +F:	drivers/media/i2c/rdacm21.c
-> >>> +
-> >>>  RDC R-321X SoC
-> >>>  M:	Florian Fainelli <florian@openwrt.org>
-> >>>  S:	Maintained
-> >>> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-> >>> index c64326ca331c..64f4316d11ad 100644
-> >>> --- a/drivers/media/i2c/Kconfig
-> >>> +++ b/drivers/media/i2c/Kconfig
-> >>> @@ -1185,6 +1185,19 @@ config VIDEO_RDACM20
-> >>>  	  This camera should be used in conjunction with a GMSL
-> >>>  	  deserialiser such as the MAX9286.
-> >>>
-> >>> +config VIDEO_RDACM21
-> >>> +	tristate "IMI RDACM21 camera support"
-> >>> +	depends on I2C
-> >>> +	select V4L2_FWNODE
-> >>> +	select VIDEO_V4L2_SUBDEV_API
-> >>> +	select MEDIA_CONTROLLER
-> >>> +	help
-> >>> +	  This driver supports the IMI RDACM21 GMSL camera, used in
-> >>> +	  ADAS systems.
-> >>> +
-> >>> +	  This camera should be used in conjunction with a GMSL
-> >>> +	  deserialiser such as the MAX9286.
-> >>> +
-> >>>  config VIDEO_RJ54N1
-> >>>  	tristate "Sharp RJ54N1CB0C sensor support"
-> >>>  	depends on I2C && VIDEO_V4L2
-> >>> diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
-> >>> index f0a77473979d..f3641b58929d 100644
-> >>> --- a/drivers/media/i2c/Makefile
-> >>> +++ b/drivers/media/i2c/Makefile
-> >>> @@ -122,6 +122,8 @@ obj-$(CONFIG_VIDEO_IMX355)	+= imx355.o
-> >>>  obj-$(CONFIG_VIDEO_MAX9286)	+= max9286.o
-> >>>  rdacm20-camera_module-objs	:= rdacm20.o max9271.o
-> >>>  obj-$(CONFIG_VIDEO_RDACM20)	+= rdacm20-camera_module.o
-> >>> +rdacm21-camera_module-objs	:= rdacm21.o max9271.o
-> >>> +obj-$(CONFIG_VIDEO_RDACM21)	+= rdacm21-camera_module.o
-> >>>  obj-$(CONFIG_VIDEO_ST_MIPID02) += st-mipid02.o
-> >>>
-> >>>  obj-$(CONFIG_SDR_MAX2175) += max2175.o
-> >>> diff --git a/drivers/media/i2c/rdacm21.c b/drivers/media/i2c/rdacm21.c
-> >>> new file mode 100644
-> >>> index 000000000000..5f9267e26258
-> >>> --- /dev/null
-> >>> +++ b/drivers/media/i2c/rdacm21.c
-> >>> @@ -0,0 +1,595 @@
-> >>> +// SPDX-License-Identifier: GPL-2.0+
-> >>> +/*
-> >>> + * IMI RDACM21 GMSL Camera Driver
-> >>> + *
-> >>> + * Copyright (C) 2017-2020 Jacopo Mondi
-> >>> + * Copyright (C) 2017-2019 Kieran Bingham
-> >>> + * Copyright (C) 2017-2019 Laurent Pinchart
-> >>> + * Copyright (C) 2017-2019 Niklas Söderlund
-> >>> + * Copyright (C) 2016 Renesas Electronics Corporation
-> >>> + * Copyright (C) 2015 Cogent Embedded, Inc.
-> >>> + */
-> >>> +
-> >>> +#include <linux/delay.h>
-> >>> +#include <linux/fwnode.h>
-> >>> +#include <linux/init.h>
-> >>> +#include <linux/i2c.h>
-> >>> +#include <linux/module.h>
-> >>> +#include <linux/slab.h>
-> >>> +#include <linux/videodev2.h>
-> >>> +
-> >>> +#include <media/v4l2-async.h>
-> >>> +#include <media/v4l2-ctrls.h>
-> >>> +#include <media/v4l2-subdev.h>
-> >>> +#include "max9271.h"
-> >>> +
-> >>> +#define OV10640_ID_LOW			0xa6
->
-> Should we keep the two OV10640 defines together?
->
-> >>> +
-> >>> +#define OV490_I2C_ADDRESS		0x24
-> >>> +
-> >>> +#define OV490_PAGE_HIGH_REG		0xfffd
-> >>> +#define OV490_PAGE_LOW_REG		0xfffe
-> >>> +
-> >>> +#define OV490_DVP_CTRL3			0x80286009
-> >>> +
-> >>> +#define OV490_ODS_CTRL_FRAME_OUTPUT_EN	0x0c
-> >>> +#define OV490_ODS_CTRL			0x8029d000
-> >>> +
-> >>> +#define OV490_ID_VAL			0x0490
-> >>> +#define OV490_ID(_p, _v)		((((_p) & 0xff) << 8) | ((_v) & 0xff))
-> >>> +#define OV490_PID			0x8080300a
-> >>> +#define OV490_VER			0x8080300b
-> >>> +
-> >>> +#define OV490_ISP_HSIZE_LOW		0x80820060
-> >>> +#define OV490_ISP_HSIZE_HIGH		0x80820061
-> >>> +#define OV490_ISP_VSIZE_LOW		0x80820062
-> >>> +#define OV490_ISP_VSIZE_HIGH		0x80820063
-> >>> +
-> >>> +#define OV10640_PIXEL_RATE		(55000000)
-> >>> +
-> >>> +struct rdacm21_device {
-> >>> +	struct device			*dev;
-> >>> +	struct max9271_device		*serializer;
-> >>> +	struct i2c_client		*isp;
-> >>> +	struct v4l2_subdev		sd;
-> >>> +	struct media_pad		pad;
-> >>> +	struct v4l2_mbus_framefmt	fmt;
-> >>> +	struct v4l2_ctrl_handler	ctrls;
-> >>> +	u32				addrs[32];
-> >>> +	u16				last_page;
-> >>> +};
-> >>> +
-> >>> +static inline struct rdacm21_device *sd_to_rdacm21(struct v4l2_subdev *sd)
-> >>> +{
-> >>> +	return container_of(sd, struct rdacm21_device, sd);
-> >>> +}
-> >>> +
-> >>> +static inline struct rdacm21_device *i2c_to_rdacm21(struct i2c_client *client)
-> >>> +{
-> >>> +	return sd_to_rdacm21(i2c_get_clientdata(client));
-> >>> +}
-> >>> +
-> >>> +static const struct ov490_reg {
-> >>> +	u16 reg;
-> >>> +	u8 val;
-> >>> +} ov490_regs_wizard[] = {
-> >>> +	{0xfffd, 0x80},
-> >>> +	{0xfffe, 0x82},
-> >>> +	{0x0071, 0x11},
-> >>> +	{0x0075, 0x11},
-> >>> +	{0xfffe, 0x29},
-> >>> +	{0x6010, 0x01},
-> >>> +	/*
-> >>> +	 * OV490 EMB line disable in YUV and RAW data,
-> >>> +	 * NOTE: EMB line is still used in ISP and sensor
-> >>> +	 */
-> >>> +	{0xe000, 0x14},
-> >>> +	{0xfffe, 0x28},
-> >>> +	{0x6000, 0x04},
-> >>> +	{0x6004, 0x00},
-> >>> +	/*
-> >>> +	 * PCLK polarity - useless due to silicon bug.
-> >>> +	 * Use 0x808000bb register instead.
-> >>> +	 */
-> >>> +	{0x6008, 0x00},
-> >>> +	{0xfffe, 0x80},
-> >>> +	{0x0091, 0x00},
-> >>> +	/* bit[3]=0 - PCLK polarity workaround. */
-> >>> +	{0x00bb, 0x1d},
-> >>> +	/* Ov490 FSIN: app_fsin_from_fsync */
-> >>> +	{0xfffe, 0x85},
-> >>> +	{0x0008, 0x00},
-> >>> +	{0x0009, 0x01},
-> >>> +	/* FSIN0 source. */
-> >>> +	{0x000A, 0x05},
-> >>> +	{0x000B, 0x00},
-> >>> +	/* FSIN0 delay. */
-> >>> +	{0x0030, 0x02},
-> >>> +	{0x0031, 0x00},
-> >>> +	{0x0032, 0x00},
-> >>> +	{0x0033, 0x00},
-> >>> +	/* FSIN1 delay. */
-> >>> +	{0x0038, 0x02},
-> >>> +	{0x0039, 0x00},
-> >>> +	{0x003A, 0x00},
-> >>> +	{0x003B, 0x00},
-> >>> +	/* FSIN0 length. */
-> >>> +	{0x0070, 0x2C},
-> >>> +	{0x0071, 0x01},
-> >>> +	{0x0072, 0x00},
-> >>> +	{0x0073, 0x00},
-> >>> +	/* FSIN1 length. */
-> >>> +	{0x0074, 0x64},
-> >>> +	{0x0075, 0x00},
-> >>> +	{0x0076, 0x00},
-> >>> +	{0x0077, 0x00},
-> >>> +	{0x0000, 0x14},
-> >>> +	{0x0001, 0x00},
-> >>> +	{0x0002, 0x00},
-> >>> +	{0x0003, 0x00},
-> >>> +	/*
-> >>> +	 * Load fsin0,load fsin1,load other,
-> >>> +	 * It will be cleared automatically.
-> >>> +	 */
-> >>> +	{0x0004, 0x32},
-> >>> +	{0x0005, 0x00},
-> >>> +	{0x0006, 0x00},
-> >>> +	{0x0007, 0x00},
-> >>> +	{0xfffe, 0x80},
-> >>> +	/* Sensor FSIN. */
-> >>> +	{0x0081, 0x00},
-> >>> +	/* ov10640 FSIN enable */
-> >>> +	{0xfffe, 0x19},
-> >>> +	{0x5000, 0x00},
-> >>> +	{0x5001, 0x30},
-> >>> +	{0x5002, 0x8c},
-> >>> +	{0x5003, 0xb2},
-> >>> +	{0xfffe, 0x80},
-> >>> +	{0x00c0, 0xc1},
-> >>> +	/* ov10640 HFLIP=1 by default */
-> >>> +	{0xfffe, 0x19},
-> >>> +	{0x5000, 0x01},
-> >>> +	{0x5001, 0x00},
-> >>> +	{0xfffe, 0x80},
-> >>> +	{0x00c0, 0xdc},
-> >>> +};
-> >>> +
-> >>> +static int ov490_read(struct rdacm21_device *dev, u16 reg, u8 *val)
-> >>> +{
-> >>> +	u8 buf[2] = { reg >> 8, reg };
-> >>> +	int ret;
-> >>> +
-> >>> +	ret = i2c_master_send(dev->isp, buf, 2);
-> >>> +	if (ret == 2)
-> >>> +		ret = i2c_master_recv(dev->isp, val, 1);
-> >>> +
-> >>> +	if (ret < 0) {
-> >>> +		dev_dbg(dev->dev, "%s: register 0x%04x read failed (%d)\n",
-> >>> +			__func__, reg, ret);
-> >>> +		return ret;
-> >>> +	}
-> >>> +
-> >>> +	return 0;
-> >>> +}
-> >>> +
-> >>> +static int ov490_write(struct rdacm21_device *dev, u16 reg, u8 val)
-> >>> +{
-> >>> +	u8 buf[3] = { reg >> 8, reg, val };
-> >>> +	int ret;
-> >>> +
-> >>> +	ret = i2c_master_send(dev->isp, buf, 3);
-> >>> +	if (ret < 0) {
-> >>> +		dev_err(dev->dev, "%s: register 0x%04x write failed (%d)\n",
-> >>> +			__func__, reg, ret);
-> >>> +		return ret;
-> >>> +	}
-> >>> +
-> >>> +	return 0;
-> >>> +}
-> >>> +
-> >>> +static int ov490_set_page(struct rdacm21_device *dev, u16 reg)
-> >>> +{
-> >>> +	bool page_new = false;
-> >>> +	u8 page_high = reg >> 8;
-> >>> +	u8 page_low = reg;
-> >>> +	int ret;
-> >>> +
-> >>> +	if (page_high != (dev->last_page >> 8)) {
-> >>> +		ret = ov490_write(dev, OV490_PAGE_HIGH_REG, page_high);
-> >>> +		if (ret)
-> >>> +			return ret;
-> >>> +		page_new = true;
-> >>> +	}
-> >>> +
-> >>> +	if (page_low != (u8)dev->last_page) {
-> >>> +		ret = ov490_write(dev, OV490_PAGE_LOW_REG, page_low);
-> >>> +		if (ret)
-> >>> +			return ret;
-> >>> +		page_new = true;
-> >>> +	}
-> >>> +
-> >>> +	if (page_new) {
-> >>> +		dev->last_page = reg;
-> >>> +		usleep_range(100, 150);
-> >>> +	}
-> >>> +
-> >>> +	return 0;
-> >>> +}
-> >>> +
-> >>> +static int ov490_read_reg(struct rdacm21_device *dev, u32 reg, u8 *val)
-> >>> +{
-> >>> +	int ret;
-> >>> +
-> >>> +	ret = ov490_set_page(dev, reg >> 16);
-> >>> +	if (ret)
-> >>> +		return ret;
-> >>> +
-> >>> +	ret = ov490_read(dev, (u16)reg, val);
-> >>> +	if (ret)
-> >>> +		return ret;
-> >>> +
-> >>> +	dev_dbg(dev->dev, "%s: 0x%08x = 0x%02x\n", __func__, reg, *val);
-> >>> +
-> >>> +	return 0;
-> >>> +}
-> >>> +
-> >>> +static int ov490_write_reg(struct rdacm21_device *dev, u32 reg, u8 val)
-> >>> +{
-> >>> +	int ret;
-> >>> +
-> >>> +	ret = ov490_set_page(dev, reg >> 16);
-> >>> +	if (ret)
-> >>> +		return ret;
-> >>> +
-> >>> +	ret = ov490_write(dev, (u16)reg, val);
-> >>> +	if (ret)
-> >>> +		return ret;
-> >>> +
-> >>> +	dev_dbg(dev->dev, "%s: 0x%08x = 0x%02x\n", __func__, reg, val);
-> >>> +
-> >>> +	return 0;
-> >>> +}
-> >>> +
-> >>> +static int rdacm21_s_stream(struct v4l2_subdev *sd, int enable)
-> >>> +{
-> >>> +	struct rdacm21_device *dev = sd_to_rdacm21(sd);
-> >>> +
-> >>> +	/*
-> >>> +	 * Enable serial link now that the ISP provides a valid pixel clock
-> >>> +	 * to start serializing video data on the GMSL link.
-> >>> +	 */
-> >>> +	return max9271_set_serial_link(dev->serializer, enable);
-> >>> +}
-> >>> +
-> >>> +static int rdacm21_enum_mbus_code(struct v4l2_subdev *sd,
-> >>> +				  struct v4l2_subdev_pad_config *cfg,
-> >>> +				  struct v4l2_subdev_mbus_code_enum *code)
-> >>> +{
-> >>> +	if (code->pad || code->index > 0)
-> >>> +		return -EINVAL;
-> >>> +
-> >>> +	code->code = MEDIA_BUS_FMT_YUYV8_1X16;
-> >>> +
-> >>> +	return 0;
-> >>> +}
-> >>> +
-> >>> +static int rdacm21_get_fmt(struct v4l2_subdev *sd,
-> >>> +			   struct v4l2_subdev_pad_config *cfg,
-> >>> +			   struct v4l2_subdev_format *format)
-> >>> +{
-> >>> +	struct v4l2_mbus_framefmt *mf = &format->format;
-> >>> +	struct rdacm21_device *dev = sd_to_rdacm21(sd);
-> >>> +
-> >>> +	if (format->pad)
-> >>> +		return -EINVAL;
-> >>> +
-> >>> +	mf->width		= dev->fmt.width;
-> >>> +	mf->height		= dev->fmt.height;
-> >>> +	mf->code		= MEDIA_BUS_FMT_YUYV8_1X16;
-> >>> +	mf->colorspace		= V4L2_COLORSPACE_SRGB;
-> >>> +	mf->field		= V4L2_FIELD_NONE;
-> >>> +	mf->ycbcr_enc		= V4L2_YCBCR_ENC_601;
-> >>> +	mf->quantization	= V4L2_QUANTIZATION_FULL_RANGE;
-> >>> +	mf->xfer_func		= V4L2_XFER_FUNC_NONE;
-> >>> +
-> >>> +	return 0;
-> >>> +}
-> >>> +
-> >>> +static struct v4l2_subdev_video_ops rdacm21_video_ops = {
-> >>> +	.s_stream	= rdacm21_s_stream,
-> >>> +};
-> >>> +
-> >>> +static const struct v4l2_subdev_pad_ops rdacm21_subdev_pad_ops = {
-> >>> +	.enum_mbus_code = rdacm21_enum_mbus_code,
-> >>> +	.get_fmt	= rdacm21_get_fmt,
-> >>> +	.set_fmt	= rdacm21_get_fmt,
-> >>> +};
-> >>> +
-> >>> +static struct v4l2_subdev_ops rdacm21_subdev_ops = {
-> >>> +	.video		= &rdacm21_video_ops,
-> >>> +	.pad		= &rdacm21_subdev_pad_ops,
-> >>> +};
-> >>> +
-> >>> +static int ov490_initialize(struct rdacm21_device *dev)
-> >>> +{
-> >>> +	unsigned int ov490_pid_retry = 20;
-> >>> +	unsigned int timeout;
-> >>> +	u8 pid, ver, val;
-> >>> +	unsigned int i;
-> >>> +	int ret;
-> >>> +
-> >>> +	/* Read OV490 Id to test communications. */
-> >>> +pid_retry:
-> >>> +	ret = ov490_read_reg(dev, OV490_PID, &pid);
-> >>> +	if (ret < 0) {
-> >>> +		/* Give OV490 a few more cycles to exit from reset. */
-> >>> +		if (ov490_pid_retry--) {
-> >>> +			usleep_range(1000, 2000);
-> >>> +			goto pid_retry;
-> >>> +		}
-> >>> +
-> >>> +		dev_err(dev->dev, "OV490 PID read failed (%d)\n", ret);
-> >>> +		return ret;
-> >>> +	}
-> >>> +
-> >>> +	ret = ov490_read_reg(dev, OV490_VER, &ver);
-> >>> +	if (ret < 0) {
-> >>> +		dev_err(dev->dev, "OV490 VERSION read failed (%d)\n", ret);
-> >>> +		return ret;
-> >>> +	}
-> >>> +
-> >>> +	if (OV490_ID(pid, ver) != OV490_ID_VAL) {
-> >>> +		dev_err(dev->dev, "OV490 ID mismatch: (0x%04x)\n",
-> >>> +			OV490_ID(pid, ver));
-> >>> +		return -ENODEV;
-> >>> +	}
-> >>> +
-> >>> +	/* Wait for firmware boot by reading streamon status. */
-> >>> +	for (timeout = 300; timeout > 0; timeout--) {
-> >>> +		ov490_read_reg(dev, OV490_ODS_CTRL, &val);
-> >>> +		if (val == OV490_ODS_CTRL_FRAME_OUTPUT_EN)
-> >>> +			break;
-> >>> +		mdelay(1);
-> >>> +	}
-> >>> +	if (!timeout) {
-> >>> +		dev_err(dev->dev, "Timeout firmware boot wait\n");
-> >>> +		return -ENODEV;
-> >>> +	}
-> >>> +	dev_dbg(dev->dev, "Firmware booted in %u msec\n", 300 - timeout);
-> >>> +
-> >>> +	/* Read OV10640 Id to test communications. */
-> >>> +	ov490_write(dev, 0xfffd, 0x80);
-> >>> +	ov490_write(dev, 0xfffe, 0x19);
-> >>> +	usleep_range(100, 150);
-> >>
-> >> Is that setting a page? Or doing something else?
-> >>
-> >>> +
-> >>> +	ov490_write(dev, 0x5000, 0x01);
-> >>> +	ov490_write(dev, 0x5001, 0x30);
-> >>> +	ov490_write(dev, 0x5002, 0x0a);
-> >>> +
-> >>> +	ov490_write(dev, 0xfffe, 0x80);
-> >>> +	usleep_range(100, 150);
-> >>> +	ov490_write(dev, 0xc0, 0xc1);
-> >>> +	ov490_write(dev, 0xfffe, 0x19);
-> >> And here?
-> >>
-> >> Can this not go through the new helpers?
-> >>
-> >> If the 'read_reg', 'write_reg', helpers are not appropriate, at least
-> >> setting the pages could be done with set_page() ... but I'd be surprised
-> >> if those couldn't be handled with ov490_write_reg() ?
-> >
-> > As I've said in previous reply, I prefer the comunication with ov10640
-> > to be kept explicit as long as we don't have more users and I don't
-> > better understand what register 0x5000 is for.
-> >
->
-> Ok, I understand, but we 'know' it's the register page for communicating
-> with the Sensor though?
->
-> Do we have any documentation on this at all?
->
->
-> > I can go through set_page() but the I have to pass 0x8019 which kind
-> > of defeat the purpose of defining registers by name
-> >
-> > I prefer to keep this as it is.
->
->
-> The issue I would have is you now have an invalid lastPage setting in
-> dev. So you're potentially letting yourself access registers on an
-> incorrect page, next time you use ov490_write_reg().
+This patch does the rote work of doing that in the kvm subsystem. In
+most places this is solved by passing struct kvm * down the call
+stacks as an additional parameter, since that contains the
+mmu_notifier.
 
-Correct, that's a very good point
+Compile tested on all affected arch.
 
->
->
-> You could quite easily define:
->
-> /*
->  * The OV10640 is interacted with through
->  * registers in page 0x8019 using registers from 0x5000 to 0x5003,
->  * However the definition of these is currently unknown.
->  */
-> #define SENSOR_REGISTER_0 0x80195000
-> #define SENSOR_REGISTER_1 0x80195001
-> #define SENSOR_REGISTER_2 0x80195002
->
-> To me that would be better than leaving some raw code inline
-> or maybe a short wrapper to make it even clearer that this talks to
-> /another component/:
->
-> #define SENSOR_PAGE 0x8019
->
-> sensor_write(dev, reg, val) {
-> 	reg |= (SENSOR_PAGE << 16);
-> 	return ov490_write_reg(dev, reg, val);
-> }
->
-> ..
-> 	sensor_write(dev, 0x5000, 0x01);
+Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+Cc: Christoph Hellwig <hch@infradead.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: John Hubbard <jhubbard@nvidia.com>
+Cc: Jérôme Glisse <jglisse@redhat.com>
+Cc: Jan Kara <jack@suse.cz>
+Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: linux-mm@kvack.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-samsung-soc@vger.kernel.org
+Cc: linux-media@vger.kernel.org
+Cc: kvm@vger.kernel.org
+Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+---
+ arch/powerpc/kvm/book3s_64_mmu_hv.c    |  2 +-
+ arch/powerpc/kvm/book3s_64_mmu_radix.c |  2 +-
+ arch/powerpc/kvm/e500_mmu_host.c       |  2 +-
+ arch/x86/kvm/mmu/mmu.c                 |  8 ++--
+ include/linux/kvm_host.h               |  9 +++--
+ virt/kvm/kvm_main.c                    | 52 +++++++++++++++-----------
+ 6 files changed, 45 insertions(+), 30 deletions(-)
 
-As long as I don't have more users and I don't know what 0x5000 is for
-I don't want to make a function and hardcode this.
+diff --git a/arch/powerpc/kvm/book3s_64_mmu_hv.c b/arch/powerpc/kvm/book3s_64_mmu_hv.c
+index 38ea396a23d6..86781ff76fcb 100644
+--- a/arch/powerpc/kvm/book3s_64_mmu_hv.c
++++ b/arch/powerpc/kvm/book3s_64_mmu_hv.c
+@@ -589,7 +589,7 @@ int kvmppc_book3s_hv_page_fault(struct kvm_vcpu *vcpu,
+ 		write_ok = true;
+ 	} else {
+ 		/* Call KVM generic code to do the slow-path check */
+-		pfn = __gfn_to_pfn_memslot(memslot, gfn, false, NULL,
++		pfn = __gfn_to_pfn_memslot(kvm, memslot, gfn, false, NULL,
+ 					   writing, &write_ok);
+ 		if (is_error_noslot_pfn(pfn))
+ 			return -EFAULT;
+diff --git a/arch/powerpc/kvm/book3s_64_mmu_radix.c b/arch/powerpc/kvm/book3s_64_mmu_radix.c
+index bb35490400e9..319a1a99153f 100644
+--- a/arch/powerpc/kvm/book3s_64_mmu_radix.c
++++ b/arch/powerpc/kvm/book3s_64_mmu_radix.c
+@@ -821,7 +821,7 @@ int kvmppc_book3s_instantiate_page(struct kvm_vcpu *vcpu,
+ 		unsigned long pfn;
+ 
+ 		/* Call KVM generic code to do the slow-path check */
+-		pfn = __gfn_to_pfn_memslot(memslot, gfn, false, NULL,
++		pfn = __gfn_to_pfn_memslot(kvm, memslot, gfn, false, NULL,
+ 					   writing, upgrade_p);
+ 		if (is_error_noslot_pfn(pfn))
+ 			return -EFAULT;
+diff --git a/arch/powerpc/kvm/e500_mmu_host.c b/arch/powerpc/kvm/e500_mmu_host.c
+index ed0c9c43d0cf..fd2b2d363559 100644
+--- a/arch/powerpc/kvm/e500_mmu_host.c
++++ b/arch/powerpc/kvm/e500_mmu_host.c
+@@ -446,7 +446,7 @@ static inline int kvmppc_e500_shadow_map(struct kvmppc_vcpu_e500 *vcpu_e500,
+ 
+ 	if (likely(!pfnmap)) {
+ 		tsize_pages = 1UL << (tsize + 10 - PAGE_SHIFT);
+-		pfn = gfn_to_pfn_memslot(slot, gfn);
++		pfn = gfn_to_pfn_memslot(kvm, slot, gfn);
+ 		if (is_error_noslot_pfn(pfn)) {
+ 			if (printk_ratelimit())
+ 				pr_err("%s: real page not found for gfn %lx\n",
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 1f96adff8dc4..a46e4ae4f8b0 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -2677,7 +2677,7 @@ static kvm_pfn_t pte_prefetch_gfn_to_pfn(struct kvm_vcpu *vcpu, gfn_t gfn,
+ 	if (!slot)
+ 		return KVM_PFN_ERR_FAULT;
+ 
+-	return gfn_to_pfn_memslot_atomic(slot, gfn);
++	return gfn_to_pfn_memslot_atomic(vcpu->kvm, slot, gfn);
+ }
+ 
+ static int direct_pte_prefetch_many(struct kvm_vcpu *vcpu,
+@@ -3655,7 +3655,8 @@ static bool try_async_pf(struct kvm_vcpu *vcpu, bool prefault, gfn_t gfn,
+ 	}
+ 
+ 	async = false;
+-	*pfn = __gfn_to_pfn_memslot(slot, gfn, false, &async, write, writable);
++	*pfn = __gfn_to_pfn_memslot(vcpu->kvm, slot, gfn,
++				    false, &async, write, writable);
+ 	if (!async)
+ 		return false; /* *pfn has correct page already */
+ 
+@@ -3669,7 +3670,8 @@ static bool try_async_pf(struct kvm_vcpu *vcpu, bool prefault, gfn_t gfn,
+ 			return true;
+ 	}
+ 
+-	*pfn = __gfn_to_pfn_memslot(slot, gfn, false, NULL, write, writable);
++	*pfn = __gfn_to_pfn_memslot(vcpu->kvm, slot, gfn,
++				    false, NULL, write, writable);
+ 	return false;
+ }
+ 
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index 7f2e2a09ebbd..864424ce6b6b 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -717,9 +717,12 @@ void kvm_set_page_accessed(struct page *page);
+ kvm_pfn_t gfn_to_pfn(struct kvm *kvm, gfn_t gfn);
+ kvm_pfn_t gfn_to_pfn_prot(struct kvm *kvm, gfn_t gfn, bool write_fault,
+ 		      bool *writable);
+-kvm_pfn_t gfn_to_pfn_memslot(struct kvm_memory_slot *slot, gfn_t gfn);
+-kvm_pfn_t gfn_to_pfn_memslot_atomic(struct kvm_memory_slot *slot, gfn_t gfn);
+-kvm_pfn_t __gfn_to_pfn_memslot(struct kvm_memory_slot *slot, gfn_t gfn,
++kvm_pfn_t gfn_to_pfn_memslot(struct kvm *kvm,
++			     struct kvm_memory_slot *slot, gfn_t gfn);
++kvm_pfn_t gfn_to_pfn_memslot_atomic(struct kvm *kvm,
++				    struct kvm_memory_slot *slot, gfn_t gfn);
++kvm_pfn_t __gfn_to_pfn_memslot(struct kvm *kvm,
++			       struct kvm_memory_slot *slot, gfn_t gfn,
+ 			       bool atomic, bool *async, bool write_fault,
+ 			       bool *writable);
+ 
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 2541a17ff1c4..417f3d470c3e 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -1883,7 +1883,7 @@ static bool vma_is_valid(struct vm_area_struct *vma, bool write_fault)
+ 	return true;
+ }
+ 
+-static int hva_to_pfn_remapped(struct vm_area_struct *vma,
++static int hva_to_pfn_remapped(struct kvm *kvm, struct vm_area_struct *vma,
+ 			       unsigned long addr, bool *async,
+ 			       bool write_fault, bool *writable,
+ 			       kvm_pfn_t *p_pfn)
+@@ -1946,8 +1946,9 @@ static int hva_to_pfn_remapped(struct vm_area_struct *vma,
+  * 2): @write_fault = false && @writable, @writable will tell the caller
+  *     whether the mapping is writable.
+  */
+-static kvm_pfn_t hva_to_pfn(unsigned long addr, bool atomic, bool *async,
+-			bool write_fault, bool *writable)
++static kvm_pfn_t hva_to_pfn(struct kvm *kvm, unsigned long addr,
++			    bool atomic, bool *async,
++			    bool write_fault, bool *writable)
+ {
+ 	struct vm_area_struct *vma;
+ 	kvm_pfn_t pfn = 0;
+@@ -1979,7 +1980,8 @@ static kvm_pfn_t hva_to_pfn(unsigned long addr, bool atomic, bool *async,
+ 	if (vma == NULL)
+ 		pfn = KVM_PFN_ERR_FAULT;
+ 	else if (vma->vm_flags & (VM_IO | VM_PFNMAP)) {
+-		r = hva_to_pfn_remapped(vma, addr, async, write_fault, writable, &pfn);
++		r = hva_to_pfn_remapped(kvm, vma, addr,
++					async, write_fault, writable, &pfn);
+ 		if (r == -EAGAIN)
+ 			goto retry;
+ 		if (r < 0)
+@@ -1994,7 +1996,8 @@ static kvm_pfn_t hva_to_pfn(unsigned long addr, bool atomic, bool *async,
+ 	return pfn;
+ }
+ 
+-kvm_pfn_t __gfn_to_pfn_memslot(struct kvm_memory_slot *slot, gfn_t gfn,
++kvm_pfn_t __gfn_to_pfn_memslot(struct kvm *kvm,
++			       struct kvm_memory_slot *slot, gfn_t gfn,
+ 			       bool atomic, bool *async, bool write_fault,
+ 			       bool *writable)
+ {
+@@ -2018,7 +2021,7 @@ kvm_pfn_t __gfn_to_pfn_memslot(struct kvm_memory_slot *slot, gfn_t gfn,
+ 		writable = NULL;
+ 	}
+ 
+-	return hva_to_pfn(addr, atomic, async, write_fault,
++	return hva_to_pfn(kvm, addr, atomic, async, write_fault,
+ 			  writable);
+ }
+ EXPORT_SYMBOL_GPL(__gfn_to_pfn_memslot);
+@@ -2026,38 +2029,43 @@ EXPORT_SYMBOL_GPL(__gfn_to_pfn_memslot);
+ kvm_pfn_t gfn_to_pfn_prot(struct kvm *kvm, gfn_t gfn, bool write_fault,
+ 		      bool *writable)
+ {
+-	return __gfn_to_pfn_memslot(gfn_to_memslot(kvm, gfn), gfn, false, NULL,
++	return __gfn_to_pfn_memslot(kvm, gfn_to_memslot(kvm, gfn), gfn,
++				    false, NULL,
+ 				    write_fault, writable);
+ }
+ EXPORT_SYMBOL_GPL(gfn_to_pfn_prot);
+ 
+-kvm_pfn_t gfn_to_pfn_memslot(struct kvm_memory_slot *slot, gfn_t gfn)
++kvm_pfn_t gfn_to_pfn_memslot(struct kvm *kvm,
++			     struct kvm_memory_slot *slot, gfn_t gfn)
+ {
+-	return __gfn_to_pfn_memslot(slot, gfn, false, NULL, true, NULL);
++	return __gfn_to_pfn_memslot(kvm, slot, gfn, false, NULL, true, NULL);
+ }
+ EXPORT_SYMBOL_GPL(gfn_to_pfn_memslot);
+ 
+-kvm_pfn_t gfn_to_pfn_memslot_atomic(struct kvm_memory_slot *slot, gfn_t gfn)
++kvm_pfn_t gfn_to_pfn_memslot_atomic(struct kvm *kvm,
++				    struct kvm_memory_slot *slot, gfn_t gfn)
+ {
+-	return __gfn_to_pfn_memslot(slot, gfn, true, NULL, true, NULL);
++	return __gfn_to_pfn_memslot(kvm, slot, gfn, true, NULL, true, NULL);
+ }
+ EXPORT_SYMBOL_GPL(gfn_to_pfn_memslot_atomic);
+ 
+ kvm_pfn_t kvm_vcpu_gfn_to_pfn_atomic(struct kvm_vcpu *vcpu, gfn_t gfn)
+ {
+-	return gfn_to_pfn_memslot_atomic(kvm_vcpu_gfn_to_memslot(vcpu, gfn), gfn);
++	return gfn_to_pfn_memslot_atomic(vcpu->kvm,
++					 kvm_vcpu_gfn_to_memslot(vcpu, gfn), gfn);
+ }
+ EXPORT_SYMBOL_GPL(kvm_vcpu_gfn_to_pfn_atomic);
+ 
+ kvm_pfn_t gfn_to_pfn(struct kvm *kvm, gfn_t gfn)
+ {
+-	return gfn_to_pfn_memslot(gfn_to_memslot(kvm, gfn), gfn);
++	return gfn_to_pfn_memslot(kvm, gfn_to_memslot(kvm, gfn), gfn);
+ }
+ EXPORT_SYMBOL_GPL(gfn_to_pfn);
+ 
+ kvm_pfn_t kvm_vcpu_gfn_to_pfn(struct kvm_vcpu *vcpu, gfn_t gfn)
+ {
+-	return gfn_to_pfn_memslot(kvm_vcpu_gfn_to_memslot(vcpu, gfn), gfn);
++	return gfn_to_pfn_memslot(vcpu->kvm,
++				  kvm_vcpu_gfn_to_memslot(vcpu, gfn), gfn);
+ }
+ EXPORT_SYMBOL_GPL(kvm_vcpu_gfn_to_pfn);
+ 
+@@ -2115,18 +2123,20 @@ void kvm_release_pfn(kvm_pfn_t pfn, bool dirty, struct gfn_to_pfn_cache *cache)
+ 		kvm_release_pfn_clean(pfn);
+ }
+ 
+-static void kvm_cache_gfn_to_pfn(struct kvm_memory_slot *slot, gfn_t gfn,
++static void kvm_cache_gfn_to_pfn(struct kvm *kvm,
++				 struct kvm_memory_slot *slot, gfn_t gfn,
+ 				 struct gfn_to_pfn_cache *cache, u64 gen)
+ {
+ 	kvm_release_pfn(cache->pfn, cache->dirty, cache);
+ 
+-	cache->pfn = gfn_to_pfn_memslot(slot, gfn);
++	cache->pfn = gfn_to_pfn_memslot(kvm, slot, gfn);
+ 	cache->gfn = gfn;
+ 	cache->dirty = false;
+ 	cache->generation = gen;
+ }
+ 
+-static int __kvm_map_gfn(struct kvm_memslots *slots, gfn_t gfn,
++static int __kvm_map_gfn(struct kvm *kvm,
++			 struct kvm_memslots *slots, gfn_t gfn,
+ 			 struct kvm_host_map *map,
+ 			 struct gfn_to_pfn_cache *cache,
+ 			 bool atomic)
+@@ -2145,13 +2155,13 @@ static int __kvm_map_gfn(struct kvm_memslots *slots, gfn_t gfn,
+ 			cache->generation != gen) {
+ 			if (atomic)
+ 				return -EAGAIN;
+-			kvm_cache_gfn_to_pfn(slot, gfn, cache, gen);
++			kvm_cache_gfn_to_pfn(kvm, slot, gfn, cache, gen);
+ 		}
+ 		pfn = cache->pfn;
+ 	} else {
+ 		if (atomic)
+ 			return -EAGAIN;
+-		pfn = gfn_to_pfn_memslot(slot, gfn);
++		pfn = gfn_to_pfn_memslot(kvm, slot, gfn);
+ 	}
+ 	if (is_error_noslot_pfn(pfn))
+ 		return -EINVAL;
+@@ -2184,14 +2194,14 @@ static int __kvm_map_gfn(struct kvm_memslots *slots, gfn_t gfn,
+ int kvm_map_gfn(struct kvm_vcpu *vcpu, gfn_t gfn, struct kvm_host_map *map,
+ 		struct gfn_to_pfn_cache *cache, bool atomic)
+ {
+-	return __kvm_map_gfn(kvm_memslots(vcpu->kvm), gfn, map,
++	return __kvm_map_gfn(vcpu->kvm, kvm_memslots(vcpu->kvm), gfn, map,
+ 			cache, atomic);
+ }
+ EXPORT_SYMBOL_GPL(kvm_map_gfn);
+ 
+ int kvm_vcpu_map(struct kvm_vcpu *vcpu, gfn_t gfn, struct kvm_host_map *map)
+ {
+-	return __kvm_map_gfn(kvm_vcpu_memslots(vcpu), gfn, map,
++	return __kvm_map_gfn(vcpu->kvm, kvm_vcpu_memslots(vcpu), gfn, map,
+ 		NULL, false);
+ }
+ EXPORT_SYMBOL_GPL(kvm_vcpu_map);
+-- 
+2.29.2
 
-> 	sensor_write(dev, 0x5001, 0x30);
-> 	sensor_write(dev, 0x5002, 0x0a);
-> ...
->
->
->
-> >>> +	usleep_range(1000, 1500);
-> >>> +	ov490_read(dev, 0x5000, &val);
-> >>> +	if (val != OV10640_ID_LOW) {
-> >>> +		dev_err(dev->dev, "OV10640 ID mismatch: (0x%02x)\n", val);
-> >>> +		return -ENODEV;
-> >>> +	}
-> >>> +
-> >>> +	dev_dbg(dev->dev, "OV10640 ID = 0x%2x\n", val);
-> >>> +
->
-> Even if you want to keep the register writes raw, we know this code
-> block is handling the OV10640, so I'd be at least tempted to move it all
-> to a
->
-> int ov10640_initialise(dev);
->
-> but it's your code, and you seem quite against this, so I won't push
-> anymore.
-
-It's just it feels adding functions for 5 lines of code called once
-it's not that strictly necessary
-
->
->
->
-> >>> +	for (i = 0; i < ARRAY_SIZE(ov490_regs_wizard); ++i) {
-> >>> +		ret = ov490_write(dev, ov490_regs_wizard[i].reg,
-> >>> +				  ov490_regs_wizard[i].val);
-> >>> +		if (ret < 0) {
-> >>> +			dev_err(dev->dev,
-> >>> +				"%s: register %u (0x%04x) write failed (%d)\n",
-> >>> +				__func__, i, ov490_regs_wizard[i].reg, ret);
-> >>> +
-> >>> +			return -EIO;
-> >>> +		}
-> >>> +
-> >>> +		usleep_range(100, 150);
-> >>> +	}
->
-> You should almost certainly mark dev->lastPage as something invalid here
-> anyway (0xFFFF?).
->
-> Otherwise the hardware page will be set to whatever was last used in the
-> ov490_regs_wizard table, and the ov490_read_reg() won't necessarily
-> update if it was on the same page last usage.
->
->
-> The incorrect lastPage is potentially a more critical issue though so
-> with that (if confirmed):
-
-Yes indeed, I'll make sure page changes go through the function in
-place to write 'regular' registers.
-
->
-> Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
->
-
-Thanks
-  j
-
->
->
-> >>> +
-> >>> +	/*
-> >>> +	 * The ISP is programmed with the content of a serial flash memory.
-> >>> +	 * Read the firmware configuration to reflect it through the V4L2 APIs.
-> >>> +	 */
-> >>> +	ov490_read_reg(dev, OV490_ISP_HSIZE_HIGH, &val);
-> >>> +	dev->fmt.width = (val & 0xf) << 8;
-> >>> +	ov490_read_reg(dev, OV490_ISP_HSIZE_LOW, &val);
-> >>> +	dev->fmt.width |= (val & 0xff);
-> >>> +
-> >>> +	ov490_read_reg(dev, OV490_ISP_VSIZE_HIGH, &val);
-> >>> +	dev->fmt.height = (val & 0xf) << 8;
-> >>> +	ov490_read_reg(dev, OV490_ISP_VSIZE_LOW, &val);
-> >>> +	dev->fmt.height |= val & 0xff;
-> >>> +
-> >>
-> >>
-> >> Hrm, these look like "ov490_read_reg_long()", but given they're the only
-> >> occurrences of a "long read" I think we could leave it as is.
-> >>
-> >>
-> >>> +	/* Set bus width to 12 bits with [0:11] ordering. */
-> >>> +	ov490_write_reg(dev, OV490_DVP_CTRL3, 0x10);
-> >>> +
-> >>> +	dev_info(dev->dev, "Identified RDACM21 camera module\n");
-> >>> +
-> >>> +	return 0;
-> >>> +}
-> >>> +
-> >>> +static int rdacm21_initialize(struct rdacm21_device *dev)
-> >>> +{
-> >>> +	int ret;
-> >>> +
-> >>> +	/* Verify communication with the MAX9271: ping to wakeup. */
-> >>> +	dev->serializer->client->addr = MAX9271_DEFAULT_ADDR;
-> >>> +	i2c_smbus_read_byte(dev->serializer->client);
-> >>> +
-> >>> +	/* Serial link disabled during config as it needs a valid pixel clock. */
-> >>> +	ret = max9271_set_serial_link(dev->serializer, false);
-> >>> +	if (ret)
-> >>> +		return ret;
-> >>> +
-> >>> +	/* Set GPO high to hold OV490 in reset during max9271 configuration. */
-> >>> +	ret = max9271_set_gpios(dev->serializer, MAX9271_GPO);
-> >>> +	if (ret)
-> >>> +		return ret;
-> >>> +
-> >>> +	/* Configure I2C bus at 105Kbps speed and configure GMSL link. */
-> >>> +	ret = max9271_configure_i2c(dev->serializer,
-> >>> +				    MAX9271_I2CSLVSH_469NS_234NS |
-> >>> +				    MAX9271_I2CSLVTO_1024US |
-> >>> +				    MAX9271_I2CMSTBT_105KBPS);
-> >>> +	if (ret)
-> >>> +		return ret;
-> >>> +
-> >>> +	ret = max9271_configure_gmsl_link(dev->serializer);
-> >>> +	if (ret)
-> >>> +		return ret;
-> >>> +
-> >>> +	ret = max9271_set_address(dev->serializer, dev->addrs[0]);
-> >>> +	if (ret)
-> >>> +		return ret;
-> >>> +	dev->serializer->client->addr = dev->addrs[0];
-> >>> +
-> >>> +	/*
-> >>> +	 * Release OV490 from reset and program address translation
-> >>> +	 * before performing OV490 configuration.
-> >>> +	 */
-> >>> +	ret = max9271_clear_gpios(dev->serializer, MAX9271_GPO);
-> >>> +	if (ret)
-> >>> +		return ret;
-> >>> +
-> >>> +	ret = max9271_set_translation(dev->serializer, dev->addrs[1],
-> >>> +				      OV490_I2C_ADDRESS);
-> >>> +	if (ret)
-> >>> +		return ret;
-> >>> +	dev->isp->addr = dev->addrs[1];
-> >>> +
-> >>> +	ret = ov490_initialize(dev);
-> >>> +	if (ret)
-> >>> +		return ret;
-> >>> +
-> >>> +	/*
-> >>> +	 * Set reverse channel high threshold to increase noise immunity.
-> >>> +	 *
-> >>> +	 * This should be compensated by increasing the reverse channel
-> >>> +	 * amplitude on the remote deserializer side.
-> >>> +	 */
-> >>> +	ret = max9271_set_high_threshold(dev->serializer, true);
-> >>> +	if (ret)
-> >>> +		return ret;
-> >>> +
-> >>> +	return 0;
-> >>> +}
-> >>> +
-> >>> +static int rdacm21_probe(struct i2c_client *client)
-> >>> +{
-> >>> +	struct rdacm21_device *dev;
-> >>> +	struct fwnode_handle *ep;
-> >>> +	int ret;
-> >>> +
-> >>> +	dev = devm_kzalloc(&client->dev, sizeof(*dev), GFP_KERNEL);
-> >>> +	if (!dev)
-> >>> +		return -ENOMEM;
-> >>> +	dev->dev = &client->dev;
-> >>> +
-> >>> +	dev->serializer = devm_kzalloc(&client->dev, sizeof(*dev->serializer),
-> >>> +				       GFP_KERNEL);
-> >>> +	if (!dev->serializer)
-> >>> +		return -ENOMEM;
-> >>> +
-> >>> +	dev->serializer->client = client;
-> >>> +
-> >>> +	ret = of_property_read_u32_array(client->dev.of_node, "reg",
-> >>> +					 dev->addrs, 2);
-> >>> +	if (ret < 0) {
-> >>> +		dev_err(dev->dev, "Invalid DT reg property: %d\n", ret);
-> >>> +		return -EINVAL;
-> >>> +	}
-> >>> +
-> >>> +	/* Create the dummy I2C client for the sensor. */
-> >>> +	dev->isp = i2c_new_dummy_device(client->adapter, OV490_I2C_ADDRESS);
-> >>> +	if (IS_ERR(dev->isp))
-> >>> +		return PTR_ERR(dev->isp);
-> >>> +
-> >>> +	ret = rdacm21_initialize(dev);
-> >>> +	if (ret < 0)
-> >>> +		goto error;
-> >>> +
-> >>> +	/* Initialize and register the subdevice. */
-> >>> +	v4l2_i2c_subdev_init(&dev->sd, client, &rdacm21_subdev_ops);
-> >>> +	dev->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-> >>> +
-> >>> +	v4l2_ctrl_handler_init(&dev->ctrls, 1);
-> >>> +	v4l2_ctrl_new_std(&dev->ctrls, NULL, V4L2_CID_PIXEL_RATE,
-> >>> +			  OV10640_PIXEL_RATE, OV10640_PIXEL_RATE, 1,
-> >>> +			  OV10640_PIXEL_RATE);
-> >>> +	dev->sd.ctrl_handler = &dev->ctrls;
-> >>> +
-> >>> +	ret = dev->ctrls.error;
-> >>> +	if (ret)
-> >>> +		goto error_free_ctrls;
-> >>> +
-> >>> +	dev->pad.flags = MEDIA_PAD_FL_SOURCE;
-> >>> +	dev->sd.entity.flags |= MEDIA_ENT_F_CAM_SENSOR;
-> >>> +	ret = media_entity_pads_init(&dev->sd.entity, 1, &dev->pad);
-> >>> +	if (ret < 0)
-> >>> +		goto error_free_ctrls;
-> >>> +
-> >>> +	ep = fwnode_graph_get_next_endpoint(dev_fwnode(&client->dev), NULL);
-> >>> +	if (!ep) {
-> >>> +		dev_err(&client->dev,
-> >>> +			"Unable to get endpoint in node %pOF\n",
-> >>> +			client->dev.of_node);
-> >>> +		ret = -ENOENT;
-> >>> +		goto error_free_ctrls;
-> >>> +	}
-> >>> +	dev->sd.fwnode = ep;
-> >>> +
-> >>> +	ret = v4l2_async_register_subdev(&dev->sd);
-> >>> +	if (ret)
-> >>> +		goto error_put_node;
-> >>> +
-> >>> +	return 0;
-> >>> +
-> >>> +error_put_node:
-> >>> +	fwnode_handle_put(dev->sd.fwnode);
-> >>> +error_free_ctrls:
-> >>> +	v4l2_ctrl_handler_free(&dev->ctrls);
-> >>> +error:
-> >>> +	i2c_unregister_device(dev->isp);
-> >>> +
-> >>> +	return ret;
-> >>> +}
-> >>> +
-> >>> +static int rdacm21_remove(struct i2c_client *client)
-> >>> +{
-> >>> +	struct rdacm21_device *dev = i2c_to_rdacm21(client);
-> >>> +
-> >>> +	fwnode_handle_put(dev->sd.fwnode);
-> >>> +	v4l2_async_unregister_subdev(&dev->sd);
-> >>> +	v4l2_ctrl_handler_free(&dev->ctrls);
-> >>> +	i2c_unregister_device(dev->isp);
-> >>> +
-> >>> +	return 0;
-> >>> +}
-> >>> +
-> >>> +static const struct of_device_id rdacm21_of_ids[] = {
-> >>> +	{ .compatible = "imi,rdacm21" },
-> >>> +	{ }
-> >>> +};
-> >>> +MODULE_DEVICE_TABLE(of, rdacm21_of_ids);
-> >>> +
-> >>> +static struct i2c_driver rdacm21_i2c_driver = {
-> >>> +	.driver	= {
-> >>> +		.name	= "rdacm21",
-> >>> +		.of_match_table = rdacm21_of_ids,
-> >>> +	},
-> >>> +	.probe_new	= rdacm21_probe,
-> >>> +	.remove		= rdacm21_remove,
-> >>> +};
-> >>> +
-> >>> +module_i2c_driver(rdacm21_i2c_driver);
-> >>> +
-> >>> +MODULE_DESCRIPTION("GMSL Camera driver for RDACM21");
-> >>> +MODULE_AUTHOR("Jacopo Mondi, Kieran Bingham, Laurent Pinchart, Niklas Söderlund, Vladimir Barinov");
-> >>> +MODULE_LICENSE("GPL v2");
-> >>>
-> >>
->
