@@ -2,262 +2,168 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2362C6369E
-	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 01:22:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B373FC63697
+	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 01:24:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6ED06246B8
-	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 01:22:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 535D6246C0
+	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 01:24:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="rVNLMNcs"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="vIgC+/bB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727127AbgKSBWS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 18 Nov 2020 20:22:18 -0500
-Received: from mailout1.samsung.com ([203.254.224.24]:13688 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726980AbgKSBWR (ORCPT
+        id S1727342AbgKSBX5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 18 Nov 2020 20:23:57 -0500
+Received: from mailout3.samsung.com ([203.254.224.33]:55415 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726098AbgKSBXy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 18 Nov 2020 20:22:17 -0500
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20201119012212epoutp01e34aef981369565101958dcedd1d22a3~IxCVnI0za2356923569epoutp01k
-        for <linux-media@vger.kernel.org>; Thu, 19 Nov 2020 01:22:12 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20201119012212epoutp01e34aef981369565101958dcedd1d22a3~IxCVnI0za2356923569epoutp01k
+        Wed, 18 Nov 2020 20:23:54 -0500
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20201119012352epoutp034699dd476aa0990123177d63c2821d82~IxDy-Hr640381803818epoutp03b
+        for <linux-media@vger.kernel.org>; Thu, 19 Nov 2020 01:23:52 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20201119012352epoutp034699dd476aa0990123177d63c2821d82~IxDy-Hr640381803818epoutp03b
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1605748932;
-        bh=vxqE+p60fec9P3mU3BLH0tQzmAL5GHNAl/LHPKOkVRE=;
+        s=mail20170921; t=1605749032;
+        bh=LeXwRNKcehHWUG2cdfOqOVbePlLQRsG7q4c4w5O9DBo=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=rVNLMNcsl4ORos8W9rYTBGnm3rBDlDmCJ5nubJwl/tuiOJf7rBGP1Y8Dehg8b3nkQ
-         P9Sdi0jRbECS9kqki/FQygmhJ8tLzYTq5lQNXzEWrQtO0RTwouaBYXLhNey3aTrjr0
-         6AyZ4+cH8Acp1SYehNmJZjAl6XwfTrdhW8ea8VXg=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        b=vIgC+/bB2SsZYPQNAKz+UaYencBwyO4Vn91vCb+HDsqZZhyryyIi6EVsv+DBKHfX7
+         v0pZB5aIZC53KmB0QVH5pFYtumTtsaDWHKAskokidmM3wiiBSXgPGZw+EhkLUSzX/u
+         Vur2v9pxlw38NaTnrT6TQIP6+MknB+pUpwyioVoU=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
         epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20201119012211epcas2p2bcea66fcc3261eaffc781f3c68c5d801~IxCU5qHRi1036710367epcas2p2K;
-        Thu, 19 Nov 2020 01:22:11 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.40.191]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4Cc2350myBzMqYlx; Thu, 19 Nov
-        2020 01:22:09 +0000 (GMT)
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        20201119012351epcas2p21508f0bcfb2b90afe2f956c8e62f590b~IxDyU4sfq1488314883epcas2p2j;
+        Thu, 19 Nov 2020 01:23:51 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.40.182]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4Cc2522LgqzMqYkr; Thu, 19 Nov
+        2020 01:23:50 +0000 (GMT)
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
         epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        4A.87.56312.0C8C5BF5; Thu, 19 Nov 2020 10:22:08 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        38.48.56312.429C5BF5; Thu, 19 Nov 2020 10:23:48 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
         epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
-        20201119012207epcas2p2435612fb5c51369269d6f65cb77a0df2~IxCRimgFO1274512745epcas2p2_;
-        Thu, 19 Nov 2020 01:22:07 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20201119012207epsmtrp27c3a348e03bf8dbef54889bd0a29ff30~IxCRhfuLu0211402114epsmtrp2g;
-        Thu, 19 Nov 2020 01:22:07 +0000 (GMT)
-X-AuditID: b6c32a46-1efff7000000dbf8-2f-5fb5c8c0329c
+        20201119012348epcas2p25300933258a716781298cff068eb973a~IxDvaXDuZ2421724217epcas2p2G;
+        Thu, 19 Nov 2020 01:23:48 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20201119012348epsmtrp1199b2fe640195f011894329191b00ad4~IxDvZlY9P1094210942epsmtrp1D;
+        Thu, 19 Nov 2020 01:23:48 +0000 (GMT)
+X-AuditID: b6c32a46-1d9ff7000000dbf8-e3-5fb5c924840f
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        8E.52.13470.FB8C5BF5; Thu, 19 Nov 2020 10:22:07 +0900 (KST)
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        C2.CE.08745.429C5BF5; Thu, 19 Nov 2020 10:23:48 +0900 (KST)
 Received: from KEI (unknown [12.36.155.227]) by epsmtip1.samsung.com
         (KnoxPortal) with ESMTPA id
-        20201119012207epsmtip112a09493bb13bce3911bee9aebd5ebfb~IxCRSNazB1393113931epsmtip1L;
-        Thu, 19 Nov 2020 01:22:07 +0000 (GMT)
-Date:   Thu, 19 Nov 2020 10:14:31 +0900
+        20201119012348epsmtip14dd99af005e62d55fbb42664e57008a2~IxDvRS-JD1546815468epsmtip1f;
+        Thu, 19 Nov 2020 01:23:48 +0000 (GMT)
+Date:   Thu, 19 Nov 2020 10:16:14 +0900
 From:   Hyesoo Yu <hyesoo.yu@samsung.com>
-To:     John Stultz <john.stultz@linaro.org>
+To:     Hillf Danton <hdanton@sina.com>
 Cc:     Minchan Kim <minchan@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Matthew Wilcox <willy@infradead.org>, david@redhat.com,
-        iamjoonsoo.kim@lge.com, vbabka@suse.cz,
-        Suren Baghdasaryan <surenb@google.com>,
-        KyongHo Cho <pullip.cho@samsung.com>,
-        John Dias <joaodias@google.com>,
-        Hridya Valsaraju <hridya@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Rob Herring <robh@kernel.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>
-Subject: Re: [PATCH 4/4] dma-heap: Devicetree binding for chunk heap
-Message-ID: <20201119011431.GA136599@KEI>
+        linux-mm <linux-mm@kvack.org>, john.stultz@linaro.org,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH 3/4] dma-buf: heaps: add chunk heap to dmabuf heaps
+Message-ID: <20201119011614.GB136599@KEI>
 MIME-Version: 1.0
-In-Reply-To: <CALAqxLWqDLHpOHNEayvhDjJeXjEk_uneH2=d9fy8M87EjKfReA@mail.gmail.com>
+In-Reply-To: <20201118090013.434-1-hdanton@sina.com>
 User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Tf0xTVxTHvX3te4Wk5FHRXiFsWKwbzcC2WvZQ2CQiexG34dRtcRldR9/4
-        VdqmLTLJxu9f45eOOTOBQVkUhBTLKh2IwqDyOzhAYH9MEClGFhUhIDBlwFoeS/jvc88533u+
-        59xcNsJNx9zZMSo9pVXJlXzUmfnbHR9/37Yei0zUNcsmykxGlLD1DQJiZuIWi1g0vUKIio4/
-        WMRc2jUGUZOfgRLLBhtC9K/4Ei9GJhnEcHMZShTUW1jEA+M6i6hanMWItcJ2QKzfbsKIvvEF
-        jPjhngElStOKALHyTxl62I3MureKksZyIyAN5gTyxjUhaa79DiXN88UYmTczwiDH/ryNkj0/
-        rTDJ+2tTCDnbOoqSRQ21gOw3dGDkgvm1cJczysBoSq6gtF6UKlKtiFFFBfHDTsqOyKT+IrGv
-        OIB4m++lksdTQfyQ4+G+oTFK+8R8r7NyZYI9FC7X6fj73gnUqhP0lFe0WqcP4lMahVIjFmv8
-        dPJ4XYIqyi9SHX9QLBJJpPbKL5TR84v1DM3NPV+3jlWCVJDvmQfYbIgfgOm9x/KAE5uLNwHY
-        ZfowDzjbeR7A7sE+Jn1YAjBruht1VDkErQ8nAJ1oAXC4+SmDPkwC+MhsxRxVTFwAn1/MZDoY
-        xd+APQ1VwMFu+Juw8srohgDBC1HY1GJDHInteAis+3Fho4iD+8AX+UaMZlfYe/nRxkVO+Alo
-        GrSwHL534Hvgk/YUxz0QL3WC1pw5Fm0vBNbWX8do3g6fdDdssjtceN6yOUIivJtpY9HiTACH
-        Lo1uJvbDksc5GyYQPAZeuZqL0Evyhh1/MemwC8y9s4rRYQ7MzebSSm/4e1U5k+Zd0FaXs2mH
-        hPnWAia930wGHBpTXACvl2yZrGRLM5rfgoZb82iJvQOCe8DqNTaNPtDUvM8AWLVgJ6XRxUdR
-        OolGsvWtzWDjMwhDm8DFmTk/K2CwgRVANsJ349T5WGRcjkJ+LonSqmXaBCWlswKp/Z2+R9x3
-        RKrtv0mll4mlEn9/UYCUkPpLCD6Pc7qmSMbFo+R6Ko6iNJT2fx2D7eSeyuBNtibGrnYaXZe3
-        4c2S5Om1kpGpb62v+C7KuuRLLy1OIlvA8ICWN30cOxiR75o+MMSLTXpYuVt7XXrq6mefTlkG
-        BEhmkkA4nnpqMaC3OuLzlL9L9WdvBI4thyn2Ngq4ncJGsu+jlcc1BbyM2t40CJYygk+upH/Z
-        5scW3OzVEJ2HInZ/nN7vcX/bhKkyb/FYx0COZ0PFs/3xxZz+LHbDzjPtR94fLzTcjfskeL2m
-        hnfZ6n6g61Cx178V/aEFX1XUzuaYGj29Tz8LrE6Oe+CRfSJY4RceNSP8dbrv3fPvCY7+kkYu
-        HX451Zq4N2wgO/xc3NPYtg++qdh1vviCT4pzedLP5VgZn6mLlouFiFYn/w84YYMTlQQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrGIsWRmVeSWpSXmKPExsWy7bCSnO7+E1vjDSZfVLaYs34Nm8WjUxcY
-        Ld7e381q8XX9L2aL+UfOsVp8aFzBZLGyu5nN4vuCR8wWZ37rWny58pDJ4vKuOWwWPRu2slrc
-        W/Of1WLZ1/fsFv96DzJa/N+zg93i1N3P7BaTLy1gs5jd2Mdo8fvHHDYHEY/WS3/ZPNbMW8Po
-        sWBTqcfmFVoem1Z1snls+jSJ3aPr7RUmjzvX9rB5nJjxm8Xj9r/HzB7v911l8+jbsorR48yC
-        I+wenzfJBfBFcdmkpOZklqUW6dslcGV0XnnDWvBNsWLZpoMsDYwPpboYOTkkBEwk9j24zwhi
-        CwnsZpR48zoAIi4pMevzSSYIW1jifssR1i5GLqCa+4wSG9ZNYANJsAioSryb0sICYrMJqEuc
-        2LIMbJCIgIbEwiVXwZqZBaazSTyZEgFiCwu4SKyd+hmshldAU+JL9xp2iMUtTBLzHypAxAUl
-        Ts58wgLRqyVx499LoDkcQLa0xPJ/HCBhToFAifUXtrKChEUFVCReHayfwCg4C0nzLCTNsxCa
-        FzAyr2KUTC0ozk3PLTYsMMxLLdcrTswtLs1L10vOz93ECI5qLc0djNtXfdA7xMjEwXiIUYKD
-        WUmEd63m1ngh3pTEyqrUovz4otKc1OJDjNIcLErivDcKF8YJCaQnlqRmp6YWpBbBZJk4OKUa
-        mCJ93eXijq1YOs3h2Mrljh3TV20yPnWap/r9EdGMlTOeHmDvnx9qov7UbdJ3h6Jzlbb3fzb2
-        vef80vHhgWycwxUGlYbXqzd7ilZMy7TJOxBgv6fglLraEvVn2/KsAv9NmNmZUGSy2b6dU3tB
-        wnUPZ4f1q2LY9s+6Ksq1648uo/zdtyuVHJ94fbySlLdtqox4LOvse/LRN45sP3710tJ7rxMV
-        Tpgt2fIoaNUF5zXTueee5XBb0/Jtk+7sGTq5lW8FXdXLdYxDSqczvihd1uO5KOf2W44d+UE7
-        Fs9OLbkYxlc5Ibz/MGv4qv/GPbcqyhs+KfmmTnVZVpJg3NHT80LR7rDMur88nHemfg11rr/T
-        d1CJpTgj0VCLuag4EQDGJSKfWQMAAA==
-X-CMS-MailID: 20201119012207epcas2p2435612fb5c51369269d6f65cb77a0df2
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJJsWRmVeSWpSXmKPExsWy7bCmua7Kya3xBk/vm1rMWb+GzeLAz+cs
+        Fmd+61pc3jWHzaJnw1ZWi3tr/rNaLPv6nt2B3WPTqk42j02fJrF73Lm2h83jxIzfLB6TXrh7
+        fN4kF8AWlWOTkZqYklqkkJqXnJ+SmZduq+QdHO8cb2pmYKhraGlhrqSQl5ibaqvk4hOg65aZ
+        A3SJkkJZYk4pUCggsbhYSd/Opii/tCRVISO/uMRWKbUgJafA0LBArzgxt7g0L10vOT/XytDA
+        wMgUqDIhJ2PV+X/MBRc4K9bs/8jcwPiQvYuRk0NCwETiw9m5zF2MXBxCAjsYJbpPzGMCSQgJ
+        fGKUuDNVHSLxmVGif+FRFpiOla2rGSESuxgltuzbywbhPGSU2Lz4GtAsDg4WAVWJo/+TQRrY
+        BNQlTmxZxghiiwgoS3RemMUKUs8scIZRYuZRkHpODmEBd4lJnw6ygPTyCmhK7DttARLmFRCU
+        ODnzCdhiTqDFyxbsYAUpERVQkXh1sB5kjIRAK4dE36lbrBDHuUjMfrUMyhaWeHV8C9SbUhIv
+        +9ug7HKJsy2PWCGaWxglLk67ygaRMJaY9awd7FBmgUyJ3w2Pwe6RADr6yC0WiDCfRMfhv+wQ
+        YV6JjjYhiE5lif3L5kHDR1Li0dp2qBM8JBq+H2GBBOh2RokFP8InMMrPQvLZLCTLIGwdiQW7
+        P7HNAtrALCAtsfwfB4SpKbF+l/4CRtZVjGKpBcW56anFRgVGyFG9iRGcRrXcdjBOeftB7xAj
+        EwfjIUYJDmYlEd61mlvjhXhTEiurUovy44tKc1KLDzGaAmNpIrOUaHI+MJHnlcQbmhqZmRlY
+        mlqYmhlZKInzhq7sixcSSE8sSc1OTS1ILYLpY+LglGpgYmx/HiO69l789re8ZTlHn9TGuaz9
+        m76y+La6d5HFquNMXd2VHgkbLPiN39yyflngMYPh6PTuTvFj1js9pttEzP3EdOro2p3CRte2
+        aBZIOF7oapETN+19aCEUUfxQ+9pOpTlsPw7LfmyWaPx+6dp5np+Z/098ai3w/7M3mr/lUYpg
+        8/28g3sXNdb06S1MObZwlrF3VVbU9LV95fzyl5smVn5d0lUnvu3Gm4gH6zawL3s362/Pmk9v
+        X2eKfXmh49KveMXFIYmLwbmp6CD75mCWnKbPPksWXv6murV/52XP2KnNIvfEW4u5sjbGT3xf
+        0CilLzBD4Lvc+Zw1GY/naNy4MtfsQ03vK3Who2cTuy7EKLEUZyQaajEXFScCAHpx/m8sBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrLLMWRmVeSWpSXmKPExsWy7bCSnK7Kya3xBt090hZz1q9hszjw8zmL
+        xZnfuhaXd81hs+jZsJXV4t6a/6wWy76+Z3dg99i0qpPNY9OnSewed67tYfM4MeM3i8ekF+4e
+        nzfJBbBFcdmkpOZklqUW6dslcGVsnvqRpaCXveLPw79sDYzbWbsYOTkkBEwkVrauZuxi5OIQ
+        EtjBKDHx/RyohKTErM8nmSBsYYn7LUdYIYruM0pMX3acvYuRg4NFQFXi6P9kkBo2AXWJE1uW
+        MYLYIgLKEp0XZoHVMwucY5RY/WsOWEJYwF1i0qeDLCC9vAKaEvtOW4CYQgLbGSXOMINU8AoI
+        Spyc+YQFxGYW0JK48e8lE0gJs4C0xPJ/HCBhTqCTly3YwQoSFhVQkXh1sH4Co+AsJM2zkDTP
+        QmhewMi8ilEytaA4Nz232LDAKC+1XK84Mbe4NC9dLzk/dxMjOAa0tHYw7ln1Qe8QIxMH4yFG
+        CQ5mJRHetZpb44V4UxIrq1KL8uOLSnNSiw8xSnOwKInzfp21ME5IID2xJDU7NbUgtQgmy8TB
+        KdXANHP9m+o/Dqtrhe6lMX/4E1n4z8yNc9eB+WZuKl/vt8p9f/Ncgz3k5syNG71UvunNPOj9
+        R0Iv8thM9yusaRMWv3o587VE1Gl2XRehqbsc5ufwZnw6fWnlxPssqvzBF2YIusoFic/PXBP5
+        +oZdd5wyk01GYJv8XVbPvA/y4ZWL7W5M7NqmoWLQ+nPVJ9Gcy3ElV2V5/WrTTUQVN3apNIrW
+        uJ7kCq29vGYO36T+jbu7NPcKNAmw/iyQ5Sr7sD9xjstttl2X46Wd6jVWvFXRz0yYwzf/dKP2
+        vSgx37MZ/g/cv+90E1zYrhg7Qa1vg3t41WH/zowXbernBF+u/Nn/cqVQ2b9jbSsWmpm+UX36
+        x49RiaU4I9FQi7moOBEAn5Cc1vACAAA=
+X-CMS-MailID: 20201119012348epcas2p25300933258a716781298cff068eb973a
 X-Msg-Generator: CA
 Content-Type: multipart/mixed;
-        boundary="----ssuDwjI424S4bj7G2h_rfOynkSmBh2yLu.l-i02n6WtkeA-i=_15f3df_"
+        boundary="----4WYzU9ra2zsysXCCwV9o7Bet81fjsxgzse5jnxws3Y-xTz8o=_15f447_"
 X-Sendblock-Type: AUTO_CONFIDENTIAL
 CMS-TYPE: 102P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20201118030110epcas2p1105a09711ea2c123f19f413b32372764
+X-CMS-RootMailID: 20201118090020epcas2p3244a130a7b02a42127213a0b99f90291
 References: <20201117181935.3613581-1-minchan@kernel.org>
-        <20201117181935.3613581-5-minchan@kernel.org>
-        <CGME20201118030110epcas2p1105a09711ea2c123f19f413b32372764@epcas2p1.samsung.com>
-        <CALAqxLWqDLHpOHNEayvhDjJeXjEk_uneH2=d9fy8M87EjKfReA@mail.gmail.com>
+        <CGME20201118090020epcas2p3244a130a7b02a42127213a0b99f90291@epcas2p3.samsung.com>
+        <20201118090013.434-1-hdanton@sina.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-------ssuDwjI424S4bj7G2h_rfOynkSmBh2yLu.l-i02n6WtkeA-i=_15f3df_
+------4WYzU9ra2zsysXCCwV9o7Bet81fjsxgzse5jnxws3Y-xTz8o=_15f447_
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
 
-On Tue, Nov 17, 2020 at 07:00:54PM -0800, John Stultz wrote:
-> On Tue, Nov 17, 2020 at 10:19 AM Minchan Kim <minchan@kernel.org> wrote:
-> >
-> > From: Hyesoo Yu <hyesoo.yu@samsung.com>
-> >
-> > Document devicetree binding for chunk heap on dma heap framework
-> >
-> > Signed-off-by: Hyesoo Yu <hyesoo.yu@samsung.com>
-> > Signed-off-by: Minchan Kim <minchan@kernel.org>
-> > ---
-> >  .../bindings/dma-buf/chunk_heap.yaml          | 52 +++++++++++++++++++
-> >  1 file changed, 52 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/dma-buf/chunk_heap.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/dma-buf/chunk_heap.yaml b/Documentation/devicetree/bindings/dma-buf/chunk_heap.yaml
-> > new file mode 100644
-> > index 000000000000..f382bee02778
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/dma-buf/chunk_heap.yaml
-> > @@ -0,0 +1,52 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: https://protect2.fireeye.com/v1/url?k=9020a1f6-cfbb98fd-90212ab9-002590f5b904-5057bc6b174b6a8e&q=1&e=76ff8b54-517c-4389-81b9-fa1446ad08bf&u=http%3A%2F%2Fdevicetree.org%2Fschemas%2Fdma-buf%2Fchunk_heap.yaml%23
-> > +$schema: https://protect2.fireeye.com/v1/url?k=876fa02f-d8f49924-876e2b60-002590f5b904-e220c9cf0d714704&q=1&e=76ff8b54-517c-4389-81b9-fa1446ad08bf&u=http%3A%2F%2Fdevicetree.org%2Fmeta-schemas%2Fcore.yaml%23
-> > +
-> > +title: Device tree binding for chunk heap on DMA HEAP FRAMEWORK
-> > +
-> > +maintainers:
-> > +  - Sumit Semwal <sumit.semwal@linaro.org>
-> > +
-> > +description: |
-> > +  The chunk heap is backed by the Contiguous Memory Allocator (CMA) and
-> > +  allocates the buffers that are made up to a list of fixed size chunks
-> > +  taken from CMA. Chunk sizes are configurated when the heaps are created.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - dma_heap,chunk
-> > +
-> > +  memory-region:
-> > +    maxItems: 1
-> > +
-> > +  alignment:
-> > +    maxItems: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - memory-region
-> > +  - alignment
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    reserved-memory {
-> > +        #address-cells = <2>;
-> > +        #size-cells = <1>;
-> > +
-> > +        chunk_memory: chunk_memory {
-> > +            compatible = "shared-dma-pool";
-> > +            reusable;
-> > +            size = <0x10000000>;
-> > +        };
-> > +    };
-> > +
-> > +    chunk_default_heap: chunk_default_heap {
-> > +        compatible = "dma_heap,chunk";
-> > +        memory-region = <&chunk_memory>;
-> > +        alignment = <0x10000>;
-> > +    };
+Hello, Hillf danton.
+
+On Wed, Nov 18, 2020 at 05:00:13PM +0800, Hillf Danton wrote:
+> On Tue, 17 Nov 2020 10:19:34 -0800 Minchan Kim wrote:
+> +
+> +static int chunk_heap_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma)
+> +{
+> +	struct chunk_heap_buffer *buffer = dmabuf->priv;
+> +	struct sg_table *table = &buffer->sg_table;
+> +	unsigned long addr = vma->vm_start;
+> +	struct sg_page_iter piter;
+> +	int ret;
+> +
+> +	for_each_sgtable_page(table, &piter, vma->vm_pgoff) {
+> +		struct page *page = sg_page_iter_page(&piter);
+> +
+> +		ret = remap_pfn_range(vma, addr, page_to_pfn(page), PAGE_SIZE,
+> +				      vma->vm_page_prot);
+> +		if (ret)
+> +			return ret;
+> +		addr = PAGE_SIZE;
 > 
+> Typo?
+> 		addr += PAGE_SIZE;
 > 
-> So I suspect Rob will push back on this as he has for other dt
-> bindings related to ion/dmabuf heaps (I tried to push a similar
-> solution to exporting multiple CMA areas via dmabuf heaps).
-> 
-> The proposal he seemed to like best was having an in-kernel function
-> that a driver would call to initialize the heap (associated with the
-> CMA region the driver is interested in). Similar to Kunihiko Hayashi's
-> patch here:
->   - https://lore.kernel.org/lkml/1594948208-4739-1-git-send-email-hayashi.kunihiko@socionext.com/
-> 
-> The one sticking point for that patch (which I think is a good one),
-> is that we don't have any in-tree users, so it couldn't be merged yet.
-> 
-> A similar approach might be good here, but again we probably need to
-> have at least one in-tree user which could call such a registration
-> function.
-> 
-> thanks
-> -john
->
+
+Yes, It is typo. I will change it.
 
 Thanks for your review.
-
-The chunk heap is not considered for device-specific reserved memory and specific driver.
-It is similar to system heap, but it only collects high-order pages by using specific cma-area for performance.
-
-It is strange that there is in-tree user who registers chunk heap.
-(Wouldn't it be strange for some users to register the system heap?)
-
-Is there a reason to use dma-heap framework to add cma-area for specific device ?
-
-Even if some in-tree users register dma-heap with cma-area, the buffers could be allocated in user-land and these could be shared among other devices.
-For exclusive access, I guess, the device don't need to register dma-heap for cma area.
-
-Please let me know if I misunderstood what you said.
-
-Thanks,
 Regards.
 
-------ssuDwjI424S4bj7G2h_rfOynkSmBh2yLu.l-i02n6WtkeA-i=_15f3df_
+> +		if (addr >= vma->vm_end)
+> +			return 0;
+> +	}
+> +	return 0;
+> +}
+> 
+
+------4WYzU9ra2zsysXCCwV9o7Bet81fjsxgzse5jnxws3Y-xTz8o=_15f447_
 Content-Type: text/plain; charset="utf-8"
 
 
-------ssuDwjI424S4bj7G2h_rfOynkSmBh2yLu.l-i02n6WtkeA-i=_15f3df_--
+------4WYzU9ra2zsysXCCwV9o7Bet81fjsxgzse5jnxws3Y-xTz8o=_15f447_--
