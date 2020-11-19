@@ -7,54 +7,54 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C52E3C64E7D
-	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 14:43:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D681C8301E
+	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 14:43:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6EF80246A5
-	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 14:43:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1A30C2085B
+	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 14:43:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="kks7RcxX"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="kT5hHVz2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728063AbgKSOm1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Nov 2020 09:42:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
+        id S1728109AbgKSOmL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Nov 2020 09:42:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728337AbgKSOmS (ORCPT
+        with ESMTP id S1728269AbgKSOmH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Nov 2020 09:42:18 -0500
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204CCC061A4E
-        for <linux-media@vger.kernel.org>; Thu, 19 Nov 2020 06:42:18 -0800 (PST)
-Received: by mail-wr1-x443.google.com with SMTP id r17so6750022wrw.1
-        for <linux-media@vger.kernel.org>; Thu, 19 Nov 2020 06:42:18 -0800 (PST)
+        Thu, 19 Nov 2020 09:42:07 -0500
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB29AC061A52
+        for <linux-media@vger.kernel.org>; Thu, 19 Nov 2020 06:42:03 -0800 (PST)
+Received: by mail-wr1-x441.google.com with SMTP id c17so6644990wrc.11
+        for <linux-media@vger.kernel.org>; Thu, 19 Nov 2020 06:42:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=xvuI20kUWQXCqNKlS04Giv3Gqte6cuBJUBar3LeScLM=;
-        b=kks7RcxXZVU2iXi660qUHlWY1Zld50yTUixBJz2F5NHOLR+z9C6DZL+xmYuFnYvpOi
-         yhFft9IPPjJwanMd6Ta77xuyCLwHTTIciU4IjN96NYab2LsscJvc34+rTa57DGLMgL6n
-         us4XcAqBE3egN85iQwtnDM0VONo+p434chF6Q=
+        bh=cz4UxMzNPVXjZbnTyayh/NWh/vgndlicpyEK5kDfcUM=;
+        b=kT5hHVz20ZLA+wBbKO3AP8hJ8BchOZR37nQ+YhO2rKi/6Q/B4Gn4706qqA1K6mIwSI
+         MFWvY5ZFFxn0TyGFSMyq3gKB0RpHwjt9N1XtWYNdrxgTqsw7d1hgXiNMXbWgkM4GTzuj
+         KaKJWvNU1jsezPYMJ/bMmUiAXzfdYlmUL0ggI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=xvuI20kUWQXCqNKlS04Giv3Gqte6cuBJUBar3LeScLM=;
-        b=rKe7SXwqTj5+MhnpQH8LLa4CHWiFltVyG0FntBmNJ/fP/HFfiWg3QZJvz7lRPJ//ql
-         bFOj2mu3afeiF74LK2p4+Evvm/TmJtLYbIq18YIVKrUR2ZKsBxip6Qu1iAGazD2vCBus
-         EvLsAM5u1Dzb0ypQQ4PvBCBulTZeug1l25Goihhj9xNsawEQNF6NhKn5xc1oS/0I62a5
-         j6Q2hDSZtE22OG10x2oYLcNJO8yINSaXmFd/99JcRoNMxee1p5mnT1iyCtiTbxkL2a4g
-         v7M/m7mXhOoz8j3ngNDk6CIOeRlbqPlx7+bnHN6oVFUSz96ugEbjGcdbKbChrV8pQJvC
-         U8xQ==
-X-Gm-Message-State: AOAM530pKF2qPfcVNZ7hqoDodG4kd3eIW4Ei2ODvx1rGUjmKNLuTrERW
-        CLI2sx4K11j2IkLjlRRuc7UzVg==
-X-Google-Smtp-Source: ABdhPJz+1WJ1GUtyki+3WZWIKnt42UcuR+CAEdjMThsSN8sAHF7ShVQXLqw14DG7ffmPM+1GROVD5w==
-X-Received: by 2002:adf:eb47:: with SMTP id u7mr10391494wrn.163.1605796936898;
-        Thu, 19 Nov 2020 06:42:16 -0800 (PST)
+        bh=cz4UxMzNPVXjZbnTyayh/NWh/vgndlicpyEK5kDfcUM=;
+        b=HLEb1HDNugqzmh+p9FZg30r4S8Bajx3ZW6O5j2sNIVVIOXHpyT7M6jg6YtpseCHgoy
+         f7tzI883i0LFpGF8y8FRgAvfJknDqqCiiPkOabnYO/ZFAi/p1c7uYhZek+20lPqqYBC0
+         /vQQsRgWiCH6WSP2mpVFrSAKpVBClSi0oSGP8C58lvJbGw0C8ElbNwcbTWMTyvcmFfNb
+         VjSemmyU4eSBdfgv84hPBdbALSD0seuPzS6FNadU27JjmCjfecyVnDOz7tA2sFqJJ/GL
+         O9N+OshXHBKKwg59qCZ0voLwtaGJxFlPR2nA9zdEkScLt+STGJGeDFRAZDHZRKU1kjSJ
+         e/SA==
+X-Gm-Message-State: AOAM530Wfn1K7HB+k1sj6etbAn4RNf76zADaDHieBFoj+6N03EvwkRz4
+        gqv4KGVlw/1+f+eN+2gNTq6NDw==
+X-Google-Smtp-Source: ABdhPJxdsnsKzIuN2DUGJztGT0GV3a40Dr4oWXaxmmy2SFvUCuLgCZjxA+UGLe180VGQQN2m8xQoLQ==
+X-Received: by 2002:adf:a3c1:: with SMTP id m1mr10245147wrb.28.1605796922738;
+        Thu, 19 Nov 2020 06:42:02 -0800 (PST)
 Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id x63sm51292wmb.48.2020.11.19.06.42.15
+        by smtp.gmail.com with ESMTPSA id x63sm51292wmb.48.2020.11.19.06.42.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2020 06:42:16 -0800 (PST)
+        Thu, 19 Nov 2020 06:42:02 -0800 (PST)
 From:   Daniel Vetter <daniel.vetter@ffwll.ch>
 To:     DRI Development <dri-devel@lists.freedesktop.org>,
         LKML <linux-kernel@vger.kernel.org>
@@ -63,17 +63,19 @@ Cc:     kvm@vger.kernel.org, linux-mm@kvack.org,
         linux-samsung-soc@vger.kernel.org, linux-media@vger.kernel.org,
         Daniel Vetter <daniel.vetter@ffwll.ch>,
         Daniel Vetter <daniel.vetter@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
         Jason Gunthorpe <jgg@ziepe.ca>,
-        Kees Cook <keescook@chromium.org>,
         Dan Williams <dan.j.williams@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Benjamin Herrensmidt <benh@kernel.crashing.org>,
+        Dave Airlie <airlied@linux.ie>,
         Andrew Morton <akpm@linux-foundation.org>,
         John Hubbard <jhubbard@nvidia.com>,
         =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-        Jan Kara <jack@suse.cz>
-Subject: [PATCH v6 17/17] RFC: mm: add mmu_notifier argument to follow_pfn
-Date:   Thu, 19 Nov 2020 15:41:46 +0100
-Message-Id: <20201119144146.1045202-18-daniel.vetter@ffwll.ch>
+        Jan Kara <jack@suse.cz>,
+        Chris Wilson <chris@chris-wilson.co.uk>
+Subject: [PATCH v6 07/17] mm: Close race in generic_access_phys
+Date:   Thu, 19 Nov 2020 15:41:36 +0100
+Message-Id: <20201119144146.1045202-8-daniel.vetter@ffwll.ch>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201119144146.1045202-1-daniel.vetter@ffwll.ch>
 References: <20201119144146.1045202-1-daniel.vetter@ffwll.ch>
@@ -84,20 +86,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The only safe way for non core/arch code to use follow_pfn() is
-together with an mmu_notifier subscription. follow_pfn() is already
-marked as _GPL and the kerneldoc explains this restriction.
+Way back it was a reasonable assumptions that iomem mappings never
+change the pfn range they point at. But this has changed:
 
-This patch here enforces all this by adding a mmu_notifier argument
-and verifying that it is registered for the correct mm_struct.
+- gpu drivers dynamically manage their memory nowadays, invalidating
+  ptes with unmap_mapping_range when buffers get moved
 
-Motivated by discussions with Christoph Hellwig and Jason Gunthorpe.
+- contiguous dma allocations have moved from dedicated carvetouts to
+  cma regions. This means if we miss the unmap the pfn might contain
+  pagecache or anon memory (well anything allocated with GFP_MOVEABLE)
 
+- even /dev/mem now invalidates mappings when the kernel requests that
+  iomem region when CONFIG_IO_STRICT_DEVMEM is set, see 3234ac664a87
+  ("/dev/mem: Revoke mappings when a driver claims the region")
+
+Accessing pfns obtained from ptes without holding all the locks is
+therefore no longer a good idea. Fix this.
+
+Since ioremap might need to manipulate pagetables too we need to drop
+the pt lock and have a retry loop if we raced.
+
+While at it, also add kerneldoc and improve the comment for the
+vma_ops->access function. It's for accessing, not for moving the
+memory from iomem to system memory, as the old comment seemed to
+suggest.
+
+References: 28b2ee20c7cb ("access_process_vm device memory infrastructure")
 Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-Cc: Christoph Hellwig <hch@infradead.org>
 Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Kees Cook <keescook@chromium.org>
 Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Benjamin Herrensmidt <benh@kernel.crashing.org>
+Cc: Dave Airlie <airlied@linux.ie>
 Cc: Andrew Morton <akpm@linux-foundation.org>
 Cc: John Hubbard <jhubbard@nvidia.com>
 Cc: Jérôme Glisse <jglisse@redhat.com>
@@ -107,185 +127,107 @@ Cc: linux-mm@kvack.org
 Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-samsung-soc@vger.kernel.org
 Cc: linux-media@vger.kernel.org
-Cc: kvm@vger.kernel.org
+Cc: Chris Wilson <chris@chris-wilson.co.uk>
 Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+--
+v2: Fix inversion in the retry check (John).
+
+v4: While at it, use offset_in_page (Chris Wilson)
 ---
- include/linux/mm.h  |  3 ++-
- mm/memory.c         | 39 ++++++++++++++++++++++++++-------------
- mm/nommu.c          | 23 ++++++++++++++++++-----
- virt/kvm/kvm_main.c |  4 ++--
- 4 files changed, 48 insertions(+), 21 deletions(-)
+ include/linux/mm.h |  3 ++-
+ mm/memory.c        | 46 +++++++++++++++++++++++++++++++++++++++++++---
+ 2 files changed, 45 insertions(+), 4 deletions(-)
 
 diff --git a/include/linux/mm.h b/include/linux/mm.h
-index aa0087feab24..14453f366efd 100644
+index b1a4a140863d..06cc6f30fc78 100644
 --- a/include/linux/mm.h
 +++ b/include/linux/mm.h
-@@ -1651,6 +1651,7 @@ void unmap_vmas(struct mmu_gather *tlb, struct vm_area_struct *start_vma,
- 		unsigned long start, unsigned long end);
+@@ -574,7 +574,8 @@ struct vm_operations_struct {
+ 	vm_fault_t (*pfn_mkwrite)(struct vm_fault *vmf);
  
- struct mmu_notifier_range;
-+struct mmu_notifier;
- 
- void free_pgd_range(struct mmu_gather *tlb, unsigned long addr,
- 		unsigned long end, unsigned long floor, unsigned long ceiling);
-@@ -1660,7 +1661,7 @@ int follow_pte_pmd(struct mm_struct *mm, unsigned long address,
- 		   struct mmu_notifier_range *range,
- 		   pte_t **ptepp, pmd_t **pmdpp, spinlock_t **ptlp);
- int follow_pfn(struct vm_area_struct *vma, unsigned long address,
--	unsigned long *pfn);
-+	unsigned long *pfn, struct mmu_notifier *subscription);
- int unsafe_follow_pfn(struct vm_area_struct *vma, unsigned long address,
- 		      unsigned long *pfn);
- int follow_phys(struct vm_area_struct *vma, unsigned long address,
+ 	/* called by access_process_vm when get_user_pages() fails, typically
+-	 * for use by special VMAs that can switch between memory and hardware
++	 * for use by special VMAs. See also generic_access_phys() for a generic
++	 * implementation useful for any iomem mapping.
+ 	 */
+ 	int (*access)(struct vm_area_struct *vma, unsigned long addr,
+ 		      void *buf, int len, int write);
 diff --git a/mm/memory.c b/mm/memory.c
-index 0db0c5e233fd..51fc0507663a 100644
+index c48f8df6e502..ac32039ce941 100644
 --- a/mm/memory.c
 +++ b/mm/memory.c
-@@ -4789,11 +4789,30 @@ int follow_pte_pmd(struct mm_struct *mm, unsigned long address,
+@@ -4847,28 +4847,68 @@ int follow_phys(struct vm_area_struct *vma,
+ 	return ret;
  }
- EXPORT_SYMBOL(follow_pte_pmd);
  
-+static int __follow_pfn(struct vm_area_struct *vma, unsigned long address,
-+			unsigned long *pfn)
-+{
-+	int ret = -EINVAL;
++/**
++ * generic_access_phys - generic implementation for iomem mmap access
++ * @vma: the vma to access
++ * @addr: userspace addres, not relative offset within @vma
++ * @buf: buffer to read/write
++ * @len: length of transfer
++ * @write: set to FOLL_WRITE when writing, otherwise reading
++ *
++ * This is a generic implementation for &vm_operations_struct.access for an
++ * iomem mapping. This callback is used by access_process_vm() when the @vma is
++ * not page based.
++ */
+ int generic_access_phys(struct vm_area_struct *vma, unsigned long addr,
+ 			void *buf, int len, int write)
+ {
+ 	resource_size_t phys_addr;
+ 	unsigned long prot = 0;
+ 	void __iomem *maddr;
+-	int offset = addr & (PAGE_SIZE-1);
++	pte_t *ptep, pte;
 +	spinlock_t *ptl;
-+	pte_t *ptep;
++	int offset = offset_in_page(addr);
++	int ret = -EINVAL;
 +
 +	if (!(vma->vm_flags & (VM_IO | VM_PFNMAP)))
-+		return ret;
++		return -EINVAL;
 +
-+	ret = follow_pte(vma->vm_mm, address, &ptep, &ptl);
-+	if (ret)
-+		return ret;
-+	*pfn = pte_pfn(*ptep);
++retry:
++	if (follow_pte(vma->vm_mm, addr, &ptep, &ptl))
++		return -EINVAL;
++	pte = *ptep;
 +	pte_unmap_unlock(ptep, ptl);
-+	return 0;
-+}
+ 
+-	if (follow_phys(vma, addr, write, &prot, &phys_addr))
++	prot = pgprot_val(pte_pgprot(pte));
++	phys_addr = (resource_size_t)pte_pfn(pte) << PAGE_SHIFT;
 +
- /**
-  * follow_pfn - look up PFN at a user virtual address
-  * @vma: memory mapping
-  * @address: user virtual address
-  * @pfn: location to store found PFN
-+ * @subscription: mmu_notifier subscription for the mm @vma is part of
-  *
-  * Only IO mappings and raw PFN mappings are allowed. Note that callers must
-  * ensure coherency with pte updates by using a &mmu_notifier to follow updates.
-@@ -4805,21 +4824,15 @@ EXPORT_SYMBOL(follow_pte_pmd);
-  * Return: zero and the pfn at @pfn on success, -ve otherwise.
-  */
- int follow_pfn(struct vm_area_struct *vma, unsigned long address,
--	unsigned long *pfn)
-+	unsigned long *pfn, struct mmu_notifier *subscription)
- {
--	int ret = -EINVAL;
--	spinlock_t *ptl;
--	pte_t *ptep;
-+	if (WARN_ON(!subscription->mm))
-+		return -EINVAL;
- 
--	if (!(vma->vm_flags & (VM_IO | VM_PFNMAP)))
--		return ret;
-+	if (WARN_ON(subscription->mm != vma->vm_mm))
-+		return -EINVAL;
- 
--	ret = follow_pte(vma->vm_mm, address, &ptep, &ptl);
--	if (ret)
--		return ret;
--	*pfn = pte_pfn(*ptep);
--	pte_unmap_unlock(ptep, ptl);
--	return 0;
-+	return __follow_pfn(vma, address, pfn);
- }
- EXPORT_SYMBOL_GPL(follow_pfn);
- 
-@@ -4844,7 +4857,7 @@ int unsafe_follow_pfn(struct vm_area_struct *vma, unsigned long address,
- 	WARN_ONCE(1, "unsafe follow_pfn usage\n");
- 	add_taint(TAINT_USER, LOCKDEP_STILL_OK);
- 
--	return follow_pfn(vma, address, pfn);
-+	return __follow_pfn(vma, address, pfn);
- }
- EXPORT_SYMBOL(unsafe_follow_pfn);
- 
-diff --git a/mm/nommu.c b/mm/nommu.c
-index 79fc98a6c94a..2a6b46fe1906 100644
---- a/mm/nommu.c
-+++ b/mm/nommu.c
-@@ -111,24 +111,37 @@ unsigned int kobjsize(const void *objp)
- 	return page_size(page);
- }
- 
-+static int __follow_pfn(struct vm_area_struct *vma, unsigned long address,
-+			unsigned long *pfn)
-+{
-+	if (!(vma->vm_flags & (VM_IO | VM_PFNMAP)))
-+		return -EINVAL;
-+
-+	*pfn = address >> PAGE_SHIFT;
-+	return 0;
-+}
-+
- /**
-  * follow_pfn - look up PFN at a user virtual address
-  * @vma: memory mapping
-  * @address: user virtual address
-  * @pfn: location to store found PFN
-+ * @subscription: mmu_notifier subscription for the mm @vma is part of
-  *
-  * Only IO mappings and raw PFN mappings are allowed.
-  *
-  * Returns zero and the pfn at @pfn on success, -ve otherwise.
-  */
- int follow_pfn(struct vm_area_struct *vma, unsigned long address,
--	unsigned long *pfn)
-+	unsigned long *pfn, struct mmu_notifier *subscription)
- {
--	if (!(vma->vm_flags & (VM_IO | VM_PFNMAP)))
-+	if (WARN_ON(!subscription->mm))
++	if ((write & FOLL_WRITE) && !pte_write(pte))
  		return -EINVAL;
  
--	*pfn = address >> PAGE_SHIFT;
--	return 0;
-+	if (WARN_ON(subscription->mm != vma->vm_mm))
-+		return -EINVAL;
+ 	maddr = ioremap_prot(phys_addr, PAGE_ALIGN(len + offset), prot);
+ 	if (!maddr)
+ 		return -ENOMEM;
+ 
++	if (follow_pte(vma->vm_mm, addr, &ptep, &ptl))
++		goto out_unmap;
 +
-+	return __follow_pfn(vma, address, pfn);
++	if (!pte_same(pte, *ptep)) {
++		pte_unmap_unlock(ptep, ptl);
++		iounmap(maddr);
++
++		goto retry;
++	}
++
+ 	if (write)
+ 		memcpy_toio(maddr + offset, buf, len);
+ 	else
+ 		memcpy_fromio(buf, maddr + offset, len);
++	ret = len;
++	pte_unmap_unlock(ptep, ptl);
++out_unmap:
+ 	iounmap(maddr);
+ 
+-	return len;
++	return ret;
  }
- EXPORT_SYMBOL_GPL(follow_pfn);
- 
-@@ -153,7 +166,7 @@ int unsafe_follow_pfn(struct vm_area_struct *vma, unsigned long address,
- 	WARN_ONCE(1, "unsafe follow_pfn usage\n");
- 	add_taint(TAINT_USER, LOCKDEP_STILL_OK);
- 
--	return follow_pfn(vma, address, pfn);
-+	return __follow_pfn(vma, address, pfn);
- }
- EXPORT_SYMBOL(unsafe_follow_pfn);
- 
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 417f3d470c3e..6f6786524eff 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -1891,7 +1891,7 @@ static int hva_to_pfn_remapped(struct kvm *kvm, struct vm_area_struct *vma,
- 	unsigned long pfn;
- 	int r;
- 
--	r = follow_pfn(vma, addr, &pfn);
-+	r = follow_pfn(vma, addr, &pfn, &kvm->mmu_notifier);
- 	if (r) {
- 		/*
- 		 * get_user_pages fails for VM_IO and VM_PFNMAP vmas and does
-@@ -1906,7 +1906,7 @@ static int hva_to_pfn_remapped(struct kvm *kvm, struct vm_area_struct *vma,
- 		if (r)
- 			return r;
- 
--		r = follow_pfn(vma, addr, &pfn);
-+		r = follow_pfn(vma, addr, &pfn, &kvm->mmu_notifier);
- 		if (r)
- 			return r;
- 
+ EXPORT_SYMBOL_GPL(generic_access_phys);
+ #endif
 -- 
 2.29.2
 
