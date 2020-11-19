@@ -7,36 +7,34 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48954C64E75
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95D37C64E7B
 	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 16:37:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0CEA322202
+	by mail.kernel.org (Postfix) with ESMTP id 69A5A22202
 	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 16:37:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727984AbgKSQgd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Nov 2020 11:36:33 -0500
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:26595 "EHLO
+        id S1729011AbgKSQgh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Nov 2020 11:36:37 -0500
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:37793 "EHLO
         relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725877AbgKSQgc (ORCPT
+        with ESMTP id S1725877AbgKSQgh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Nov 2020 11:36:32 -0500
+        Thu, 19 Nov 2020 11:36:37 -0500
 X-Originating-IP: 93.34.118.233
 Received: from localhost.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 5DC032400E4;
-        Thu, 19 Nov 2020 16:36:28 +0000 (UTC)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 3AD7B2400E4;
+        Thu, 19 Nov 2020 16:36:32 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     linux-media@vger.kernel.org
 Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
         hverkuil@xs4all.nl, laurent.pinchart@ideasonboard.com,
         roman.kovalivskyi@globallogic.com, dafna.hirschfeld@collabora.com,
         dave.stevenson@raspberrypi.org, naush@raspberrypi.com,
-        erosca@de.adit-jv.com,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Subject: [PATCH v4 23/30] media: ov5647: Support V4L2_CID_VBLANK control
-Date:   Thu, 19 Nov 2020 17:35:43 +0100
-Message-Id: <20201119163549.793282-4-jacopo@jmondi.org>
+        erosca@de.adit-jv.com, Jacopo Mondi <jacopo@jmondi.org>
+Subject: [PATCH v4 25/30] media: ov5647: Use pm_runtime infrastructure
+Date:   Thu, 19 Nov 2020 17:35:45 +0100
+Message-Id: <20201119163549.793282-6-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.29.1
 In-Reply-To: <20201119163549.793282-1-jacopo@jmondi.org>
 References: <20201119161956.756455-1-jacopo@jmondi.org>
@@ -47,182 +45,234 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Use the pm_runtime framework to replace the legacy s_power() operation.
 
-Adds vblank control to allow for frame rate control.
-
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- drivers/media/i2c/ov5647.c | 50 +++++++++++++++++++++++++++++++++++---
- 1 file changed, 46 insertions(+), 4 deletions(-)
+ drivers/media/i2c/ov5647.c | 142 ++++++++++++++++++-------------------
+ 1 file changed, 71 insertions(+), 71 deletions(-)
 
 diff --git a/drivers/media/i2c/ov5647.c b/drivers/media/i2c/ov5647.c
-index 2ffca9f658bfa..654009be0d110 100644
+index 70eafc5390e1f..777c7b30bafd7 100644
 --- a/drivers/media/i2c/ov5647.c
 +++ b/drivers/media/i2c/ov5647.c
-@@ -50,6 +50,8 @@
- #define OV5647_REG_AEC_AGC		0x3503
- #define OV5647_REG_GAIN_HI		0x350a
- #define OV5647_REG_GAIN_LO		0x350b
-+#define OV5647_REG_VTS_HI		0x380e
-+#define OV5647_REG_VTS_LO		0x380f
- #define OV5647_REG_FRAME_OFF_NUMBER	0x4202
- #define OV5647_REG_MIPI_CTRL00		0x4800
- #define OV5647_REG_MIPI_CTRL14		0x4814
-@@ -68,6 +70,9 @@
- #define OV5647_PIXEL_ARRAY_WIDTH	2592U
- #define OV5647_PIXEL_ARRAY_HEIGHT	1944U
+@@ -19,6 +19,7 @@
+ #include <linux/io.h>
+ #include <linux/module.h>
+ #include <linux/of_graph.h>
++#include <linux/pm_runtime.h>
+ #include <linux/slab.h>
+ #include <linux/videodev2.h>
+ #include <media/v4l2-ctrls.h>
+@@ -881,86 +882,75 @@ static int ov5647_stream_off(struct v4l2_subdev *sd)
+ 	return ov5647_write(sd, OV5640_REG_PAD_OUT, 0x01);
+ }
  
-+#define OV5647_VBLANK_MIN		4
-+#define OV5647_VTS_MAX			32767
-+
- struct regval_list {
- 	u16 addr;
- 	u8 data;
-@@ -78,6 +83,7 @@ struct ov5647_mode {
- 	struct v4l2_rect		crop;
- 	u64				pixel_rate;
- 	int				hts;
-+	int				vts;
- 	const struct regval_list	*reg_list;
- 	unsigned int			num_regs;
- };
-@@ -100,6 +106,7 @@ struct ov5647 {
- 	const struct ov5647_mode	*mode;
- 	struct v4l2_ctrl		*pixel_rate;
- 	struct v4l2_ctrl		*hblank;
-+	struct v4l2_ctrl		*vblank;
- };
- 
- static inline struct ov5647 *to_sensor(struct v4l2_subdev *sd)
-@@ -151,8 +158,6 @@ static const struct regval_list ov5647_640x480_8bpp[] = {
- 	{0x3b07, 0x0c},
- 	{0x380c, 0x07},
- 	{0x380d, 0x68},
--	{0x380e, 0x03},
--	{0x380f, 0xd8},
- 	{0x3814, 0x31},
- 	{0x3815, 0x31},
- 	{0x3708, 0x64},
-@@ -588,6 +593,7 @@ static const struct ov5647_mode ov5647_8bpp_modes[] = {
- 		},
- 		.pixel_rate	= 77291670,
- 		.hts		= 1896,
-+		.vts		= 0x3d8,
- 		.reg_list	= ov5647_640x480_8bpp,
- 		.num_regs	= ARRAY_SIZE(ov5647_640x480_8bpp)
- 	},
-@@ -611,6 +617,7 @@ static const struct ov5647_mode ov5647_10bpp_modes[] = {
- 		},
- 		.pixel_rate	= 87500000,
- 		.hts		= 2844,
-+		.vts		= 0x7b0,
- 		.reg_list	= ov5647_2592x1944_10bpp,
- 		.num_regs	= ARRAY_SIZE(ov5647_2592x1944_10bpp)
- 	},
-@@ -631,6 +638,7 @@ static const struct ov5647_mode ov5647_10bpp_modes[] = {
- 		},
- 		.pixel_rate	= 81666700,
- 		.hts		= 2416,
-+		.vts		= 0x450,
- 		.reg_list	= ov5647_1080p30_10bpp,
- 		.num_regs	= ARRAY_SIZE(ov5647_1080p30_10bpp)
- 	},
-@@ -651,6 +659,7 @@ static const struct ov5647_mode ov5647_10bpp_modes[] = {
- 		},
- 		.pixel_rate	= 81666700,
- 		.hts		= 1896,
-+		.vts		= 0x59b,
- 		.reg_list	= ov5647_2x2binned_10bpp,
- 		.num_regs	= ARRAY_SIZE(ov5647_2x2binned_10bpp)
- 	},
-@@ -671,6 +680,7 @@ static const struct ov5647_mode ov5647_10bpp_modes[] = {
- 		},
- 		.pixel_rate	= 55000000,
- 		.hts		= 1852,
-+		.vts		= 0x1f8,
- 		.reg_list	= ov5647_640x480_10bpp,
- 		.num_regs	= ARRAY_SIZE(ov5647_640x480_10bpp)
- 	},
-@@ -695,6 +705,22 @@ static const struct ov5647_format_list ov5647_formats[] = {
- #define OV5647_DEFAULT_MODE	(&ov5647_formats[1].modes[3])
- #define OV5647_DEFAULT_FORMAT	(ov5647_formats[1].modes[3].format)
- 
-+static int ov5647_write16(struct v4l2_subdev *sd, u16 reg, u16 val)
-+{
-+	unsigned char data[4] = { reg >> 8, reg & 0xff, val >> 8, val & 0xff};
-+	struct i2c_client *client = v4l2_get_subdevdata(sd);
-+	int ret;
-+
-+	ret = i2c_master_send(client, data, 4);
-+	if (ret < 0) {
-+		dev_dbg(&client->dev, "%s: i2c write error, reg: %x\n",
-+			__func__, reg);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
- static int ov5647_write(struct v4l2_subdev *sd, u16 reg, u8 val)
+-static int set_sw_standby(struct v4l2_subdev *sd, bool standby)
++static int ov5647_power_on(struct device *dev)
  {
- 	unsigned char data[3] = { reg >> 8, reg & 0xff, val};
-@@ -1097,7 +1123,7 @@ static int ov5647_set_pad_fmt(struct v4l2_subdev *sd,
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
- 		*v4l2_subdev_get_try_format(sd, cfg, format->pad) = mode->format;
- 	} else {
--		int hblank;
-+		int hblank, vblank;
++	struct ov5647 *sensor = dev_get_drvdata(dev);
+ 	int ret;
+-	u8 rdval;
  
- 		sensor->mode = mode;
- 		__v4l2_ctrl_modify_range(sensor->pixel_rate, mode->pixel_rate,
-@@ -1106,6 +1132,12 @@ static int ov5647_set_pad_fmt(struct v4l2_subdev *sd,
- 		hblank = mode->hts - mode->format.width;
- 		__v4l2_ctrl_modify_range(sensor->hblank, hblank, hblank, 1,
- 					 hblank);
+-	ret = ov5647_read(sd, OV5647_SW_STANDBY, &rdval);
+-	if (ret < 0)
+-		return ret;
++	dev_dbg(dev, "OV5647 power on\n");
+ 
+-	if (standby)
+-		rdval &= ~0x01;
+-	else
+-		rdval |= 0x01;
+-
+-	return ov5647_write(sd, OV5647_SW_STANDBY, rdval);
+-}
++	if (sensor->pwdn) {
++		gpiod_set_value_cansleep(sensor->pwdn, 0);
++		msleep(PWDN_ACTIVE_DELAY_MS);
++	}
+ 
+-static int ov5647_sensor_power(struct v4l2_subdev *sd, int on)
+-{
+-	struct i2c_client *client = v4l2_get_subdevdata(sd);
+-	struct ov5647 *sensor = to_sensor(sd);
+-	int ret = 0;
++	ret = clk_prepare_enable(sensor->xclk);
++	if (ret < 0) {
++		dev_err(dev, "clk prepare enable failed\n");
++		goto error_pwdn;
++	}
+ 
+-	mutex_lock(&sensor->lock);
++	ret = ov5647_write_array(&sensor->sd, sensor_oe_enable_regs,
++				 ARRAY_SIZE(sensor_oe_enable_regs));
++	if (ret < 0) {
++		dev_err(dev, "write sensor_oe_enable_regs error\n");
++		goto error_clk_disable;
++	}
+ 
+-	if (on && !sensor->power_count)	{
+-		dev_dbg(&client->dev, "OV5647 power on\n");
++	/* Stream off to coax lanes into LP-11 state. */
++	ret = ov5647_stream_off(&sensor->sd);
++	if (ret < 0) {
++		dev_err(dev, "camera not available, check power\n");
++		goto error_clk_disable;
++	}
+ 
+-		if (sensor->pwdn) {
+-			gpiod_set_value_cansleep(sensor->pwdn, 0);
+-			msleep(PWDN_ACTIVE_DELAY_MS);
+-		}
++	return 0;
+ 
+-		ret = clk_prepare_enable(sensor->xclk);
+-		if (ret < 0) {
+-			dev_err(&client->dev, "clk prepare enable failed\n");
+-			goto out;
+-		}
++error_clk_disable:
++	clk_disable_unprepare(sensor->xclk);
++error_pwdn:
++	gpiod_set_value_cansleep(sensor->pwdn, 1);
+ 
+-		ret = ov5647_write_array(sd, sensor_oe_enable_regs,
+-					 ARRAY_SIZE(sensor_oe_enable_regs));
+-		if (ret < 0) {
+-			clk_disable_unprepare(sensor->xclk);
+-			dev_err(&client->dev,
+-				"write sensor_oe_enable_regs error\n");
+-			goto out;
+-		}
++	return ret;
++}
+ 
+-		/* Stream off to coax lanes into LP-11 state. */
+-		ret = ov5647_stream_off(sd);
+-		if (ret < 0) {
+-			clk_disable_unprepare(sensor->xclk);
+-			dev_err(&client->dev,
+-				"Camera not available, check Power\n");
+-			goto out;
+-		}
+-	} else if (!on && sensor->power_count == 1) {
+-		dev_dbg(&client->dev, "OV5647 power off\n");
++static int ov5647_power_off(struct device *dev)
++{
++	struct ov5647 *sensor = dev_get_drvdata(dev);
++	u8 rdval;
++	int ret;
+ 
+-		ret = ov5647_write_array(sd, sensor_oe_disable_regs,
+-					 ARRAY_SIZE(sensor_oe_disable_regs));
+-		if (ret < 0)
+-			dev_dbg(&client->dev, "disable oe failed\n");
++	dev_dbg(dev, "OV5647 power off\n");
+ 
+-		ret = set_sw_standby(sd, true);
+-		if (ret < 0)
+-			dev_dbg(&client->dev, "soft stby failed\n");
++	ret = ov5647_write_array(&sensor->sd, sensor_oe_disable_regs,
++				 ARRAY_SIZE(sensor_oe_disable_regs));
++	if (ret < 0)
++		dev_dbg(dev, "disable oe failed\n");
+ 
+-		clk_disable_unprepare(sensor->xclk);
+-		gpiod_set_value_cansleep(sensor->pwdn, 1);
+-	}
++	/* Enter software standby */
++	ret = ov5647_read(&sensor->sd, OV5647_SW_STANDBY, &rdval);
++	if (ret < 0)
++		dev_dbg(dev, "software standby failed\n");
+ 
+-	/* Update the power count. */
+-	sensor->power_count += on ? 1 : -1;
+-	WARN_ON(sensor->power_count < 0);
++	rdval &= ~0x01;
++	ret = ov5647_write(&sensor->sd, OV5647_SW_STANDBY, rdval);
++	if (ret < 0)
++		dev_dbg(dev, "software standby failed\n");
+ 
+-out:
+-	mutex_unlock(&sensor->lock);
++	clk_disable_unprepare(sensor->xclk);
++	gpiod_set_value_cansleep(sensor->pwdn, 1);
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ #ifdef CONFIG_VIDEO_ADV_DEBUG
+@@ -989,7 +979,6 @@ static int ov5647_sensor_set_register(struct v4l2_subdev *sd,
+ 
+ /* Subdev core operations registration */
+ static const struct v4l2_subdev_core_ops ov5647_subdev_core_ops = {
+-	.s_power		= ov5647_sensor_power,
+ #ifdef CONFIG_VIDEO_ADV_DEBUG
+ 	.g_register		= ov5647_sensor_get_register,
+ 	.s_register		= ov5647_sensor_set_register,
+@@ -1543,24 +1532,29 @@ static int ov5647_probe(struct i2c_client *client)
+ 	if (ret < 0)
+ 		goto ctrl_handler_free;
+ 
+-	if (sensor->pwdn) {
+-		gpiod_set_value_cansleep(sensor->pwdn, 0);
+-		msleep(PWDN_ACTIVE_DELAY_MS);
+-	}
++	ret = ov5647_power_on(dev);
++	if (ret)
++		goto entity_cleanup;
+ 
+ 	ret = ov5647_detect(sd);
+-	gpiod_set_value_cansleep(sensor->pwdn, 1);
+ 	if (ret < 0)
+-		goto entity_cleanup;
++		goto power_off;
+ 
+ 	ret = v4l2_async_register_subdev(sd);
+ 	if (ret < 0)
+-		goto entity_cleanup;
++		goto power_off;
 +
-+		vblank = mode->vts - mode->format.height;
-+		__v4l2_ctrl_modify_range(sensor->vblank, OV5647_VBLANK_MIN,
-+					 OV5647_VTS_MAX - mode->format.height,
-+					 1, vblank);
-+		__v4l2_ctrl_s_ctrl(sensor->vblank, vblank);
- 	}
- 	*fmt = mode->format;
- 	mutex_unlock(&sensor->lock);
-@@ -1317,6 +1349,9 @@ static int ov5647_s_ctrl(struct v4l2_ctrl *ctrl)
- 	case V4L2_CID_HBLANK:
- 		/* Read-only, but we adjust it based on mode. */
- 		return 0;
-+	case V4L2_CID_VBLANK:
-+		return ov5647_write16(sd, OV5647_REG_VTS_HI,
-+				      sensor->mode->format.height + ctrl->val);
- 	default:
- 		dev_info(&client->dev,
- 			 "Control (id:0x%x, val:0x%x) not supported\n",
-@@ -1336,7 +1371,7 @@ static int ov5647_init_controls(struct ov5647 *sensor)
- 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->sd);
- 	int hblank;
++	/* Enable runtime PM and turn off the device */
++	pm_runtime_set_active(dev);
++	pm_runtime_enable(dev);
++	pm_runtime_idle(dev);
  
--	v4l2_ctrl_handler_init(&sensor->ctrls, 7);
-+	v4l2_ctrl_handler_init(&sensor->ctrls, 8);
+ 	dev_dbg(dev, "OmniVision OV5647 camera driver probed\n");
  
- 	v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
- 			  V4L2_CID_AUTOGAIN, 0, 1, 1, 0);
-@@ -1369,6 +1404,13 @@ static int ov5647_init_controls(struct ov5647 *sensor)
- 					   V4L2_CID_HBLANK, hblank, hblank, 1,
- 					   hblank);
+ 	return 0;
  
-+	sensor->vblank = v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
-+					   V4L2_CID_VBLANK, OV5647_VBLANK_MIN,
-+					   OV5647_VTS_MAX -
-+					   sensor->mode->format.height, 1,
-+					   sensor->mode->vts -
-+					   sensor->mode->format.height);
++power_off:
++	ov5647_power_off(dev);
+ entity_cleanup:
+ 	media_entity_cleanup(&sd->entity);
+ ctrl_handler_free:
+@@ -1580,11 +1574,16 @@ static int ov5647_remove(struct i2c_client *client)
+ 	media_entity_cleanup(&sensor->sd.entity);
+ 	v4l2_ctrl_handler_free(&sensor->ctrls);
+ 	v4l2_device_unregister_subdev(sd);
++	pm_runtime_disable(&client->dev);
+ 	mutex_destroy(&sensor->lock);
+ 
+ 	return 0;
+ }
+ 
++static const struct dev_pm_ops ov5647_pm_ops = {
++	SET_RUNTIME_PM_OPS(ov5647_power_off, ov5647_power_on, NULL)
++};
 +
- 	if (sensor->ctrls.error)
- 		goto handler_free;
- 
+ static const struct i2c_device_id ov5647_id[] = {
+ 	{ "ov5647", 0 },
+ 	{ /* sentinel */ }
+@@ -1603,6 +1602,7 @@ static struct i2c_driver ov5647_driver = {
+ 	.driver = {
+ 		.of_match_table = of_match_ptr(ov5647_of_match),
+ 		.name	= "ov5647",
++		.pm	= &ov5647_pm_ops,
+ 	},
+ 	.probe_new	= ov5647_probe,
+ 	.remove		= ov5647_remove,
 -- 
 2.29.1
 
