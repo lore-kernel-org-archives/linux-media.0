@@ -7,54 +7,54 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DFA9C8301D
-	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 14:43:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BB83C63697
+	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 14:44:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4B92420888
-	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 14:43:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B771A22253
+	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 14:44:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="CIIgMEJ/"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="K0vQCqnX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728393AbgKSOnB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Nov 2020 09:43:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37482 "EHLO
+        id S1728268AbgKSOmG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Nov 2020 09:42:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728281AbgKSOmM (ORCPT
+        with ESMTP id S1728243AbgKSOmB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Nov 2020 09:42:12 -0500
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE22BC061A52
-        for <linux-media@vger.kernel.org>; Thu, 19 Nov 2020 06:42:10 -0800 (PST)
-Received: by mail-wr1-x444.google.com with SMTP id k2so6743035wrx.2
-        for <linux-media@vger.kernel.org>; Thu, 19 Nov 2020 06:42:10 -0800 (PST)
+        Thu, 19 Nov 2020 09:42:01 -0500
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A92C0613D4
+        for <linux-media@vger.kernel.org>; Thu, 19 Nov 2020 06:41:59 -0800 (PST)
+Received: by mail-wm1-x344.google.com with SMTP id w24so6983166wmi.0
+        for <linux-media@vger.kernel.org>; Thu, 19 Nov 2020 06:41:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=lUo9ncFU/nKq3MG4mWQrX8BX1Csq/yukMRd1xs72MQA=;
-        b=CIIgMEJ/YZCJYqrr/Qtw//Z/EuYS19MxKYSZBAuaNm2O4riC4ia7lWBoP9fdOxE899
-         lfrakfIMVKfanEOJTQM/T9AeH3p6C/ndGvDvgquoWvteonENyQO4m2trca3rvVUBYdrV
-         pqSf5p+4Iw5KW2ru9wTswKE3C26aax9R920gc=
+        bh=BncYwQUXFPiR0GxLr1F9YwbgAzjEsk1wQx+9va+10MM=;
+        b=K0vQCqnXZ6T6woRBBjXZmIIJdRG14xxBAsTVTnG2u2ZM8n2LON/HqCY/q+zSCKvx7N
+         Nu3XAUPnIepU8dW4i9I0EOFOnT1NF/ZA7AZT9yjABQRD+aeNAyGECqg38VwZfV5MHM14
+         YYb5qtueEKaw+W0IY5/Kz7KzbN49c/cZD3gac=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=lUo9ncFU/nKq3MG4mWQrX8BX1Csq/yukMRd1xs72MQA=;
-        b=IsJKptJrmfmIRHHA6Z97GDluUjrzaXA0WtpoP+1bhni4sGqoIoW/LVd/UQ9tCEfLXf
-         as4eM20VI5fMPWZ82QoG78qbjgXk2P5Ec8xlOZc/qI5dm1U5hmvMRzEAEXPpLxcsvg1D
-         mvJzC1W+xAMkB4gbQgs6+Y3TuvpqdJfktQg8+uwfjcYnp8cWL1cARa9HAcgzg67w79FU
-         8RXEGPS2pwATRrxkiA71FJmFQ5K4L+U7gQJHGAxVXqbhBD2Ls/XEX32bDo79ygYkiblH
-         J9sG+7GeFMQle5l+OtxkxpmNB6scgkastBxEmF3B8Ev8ogH0iUKVonoUhI9UHgeYImB8
-         NiHA==
-X-Gm-Message-State: AOAM531+RnkgQbt9YuKv+dI1k+JlxVUNg/iRr13IczqLpvyYb02frHfl
-        nYkE34iqPIn+w5wvDBjBnaxDSQ==
-X-Google-Smtp-Source: ABdhPJwk5Y7yKnIhKFhsy0JLp99xQ3IuhlAonQX0yhhkN3nOXvFaqvGXi/lZAmUY0jINVS3Y2iOPTg==
-X-Received: by 2002:adf:f7c7:: with SMTP id a7mr11488760wrq.347.1605796929676;
-        Thu, 19 Nov 2020 06:42:09 -0800 (PST)
+        bh=BncYwQUXFPiR0GxLr1F9YwbgAzjEsk1wQx+9va+10MM=;
+        b=rqS9AjO4oqDiIoY/sw1xfJpLS7nxiItc/O91XungO6cJbX8WwSNLqUTWG0yMZto0a9
+         HE/isd2Ew52u2mU2nANsnQGk9oCYwLk4yGNrPjh3qmL8AIwW0iWlcqQujt+7X6HEUqip
+         IUNobF7jXmGlMnxeI5Z+WUJ5Ujw42ed33lIoQIn8A2UUaZ0HibhlcPnAIHPHPLMPOgCM
+         oHdBvlkuENwmsjrSyxHrFIllVCSrxLoLRw0JW+eRxUP/sggtdq43QtUS8nwOG/yjJU0S
+         CNo/PQjacnJqExg1IYvnxyQU2Etz3/dWLUokzNLNoRcLUEskaJVeI5rX24R9Mgv784E7
+         HaLw==
+X-Gm-Message-State: AOAM530pyNsrKpziCuZDhf6NhdHXXd3DuTCzW4H4BuYiFM309grEV6Sh
+        nQJHr8Nwp8d81mgO1nEISfVmLA==
+X-Google-Smtp-Source: ABdhPJyhXRwCszI545+qzFcrtkdIZyH4wA6LDl1U1AbXMoFGkAcaSUy085Lttme8fsx2zNmhvHco1g==
+X-Received: by 2002:a1c:7d10:: with SMTP id y16mr5125171wmc.142.1605796918578;
+        Thu, 19 Nov 2020 06:41:58 -0800 (PST)
 Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id x63sm51292wmb.48.2020.11.19.06.42.08
+        by smtp.gmail.com with ESMTPSA id x63sm51292wmb.48.2020.11.19.06.41.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2020 06:42:08 -0800 (PST)
+        Thu, 19 Nov 2020 06:41:57 -0800 (PST)
 From:   Daniel Vetter <daniel.vetter@ffwll.ch>
 To:     DRI Development <dri-devel@lists.freedesktop.org>,
         LKML <linux-kernel@vger.kernel.org>
@@ -64,15 +64,21 @@ Cc:     kvm@vger.kernel.org, linux-mm@kvack.org,
         Daniel Vetter <daniel.vetter@ffwll.ch>,
         Daniel Vetter <daniel.vetter@intel.com>,
         Jason Gunthorpe <jgg@ziepe.ca>,
-        Kees Cook <keescook@chromium.org>,
-        Dan Williams <dan.j.williams@intel.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         John Hubbard <jhubbard@nvidia.com>,
         =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-        Jan Kara <jack@suse.cz>
-Subject: [PATCH v6 12/17] /dev/mem: Only set filp->f_mapping
-Date:   Thu, 19 Nov 2020 15:41:41 +0100
-Message-Id: <20201119144146.1045202-13-daniel.vetter@ffwll.ch>
+        Jan Kara <jack@suse.cz>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>,
+        Omer Shpigelman <oshpigelman@habana.ai>,
+        Ofir Bitton <obitton@habana.ai>,
+        Tomer Tayar <ttayar@habana.ai>,
+        Moti Haimovski <mhaimovski@habana.ai>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Pawel Piskorski <ppiskorski@habana.ai>
+Subject: [PATCH v6 04/17] misc/habana: Use FOLL_LONGTERM for userptr
+Date:   Thu, 19 Nov 2020 15:41:33 +0100
+Message-Id: <20201119144146.1045202-5-daniel.vetter@ffwll.ch>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201119144146.1045202-1-daniel.vetter@ffwll.ch>
 References: <20201119144146.1045202-1-daniel.vetter@ffwll.ch>
@@ -83,20 +89,10 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When we care about pagecache maintenance, we need to make sure that
-both f_mapping and i_mapping point at the right mapping.
-
-But for iomem mappings we only care about the virtual/pte side of
-things, so f_mapping is enough. Also setting inode->i_mapping was
-confusing me as a driver maintainer, since in e.g. drivers/gpu we
-don't do that. Per Dan this seems to be copypasta from places which do
-care about pagecache consistency, but not needed. Hence remove it for
-slightly less confusion.
+These are persistent, not just for the duration of a dma operation.
 
 Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
 Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Dan Williams <dan.j.williams@intel.com>
 Cc: Andrew Morton <akpm@linux-foundation.org>
 Cc: John Hubbard <jhubbard@nvidia.com>
 Cc: Jérôme Glisse <jglisse@redhat.com>
@@ -106,24 +102,33 @@ Cc: linux-mm@kvack.org
 Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-samsung-soc@vger.kernel.org
 Cc: linux-media@vger.kernel.org
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Cc: Oded Gabbay <oded.gabbay@gmail.com>
+Cc: Omer Shpigelman <oshpigelman@habana.ai>
+Cc: Ofir Bitton <obitton@habana.ai>
+Cc: Tomer Tayar <ttayar@habana.ai>
+Cc: Moti Haimovski <mhaimovski@habana.ai>
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Pawel Piskorski <ppiskorski@habana.ai>
 Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 ---
- drivers/char/mem.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/misc/habanalabs/common/memory.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/char/mem.c b/drivers/char/mem.c
-index 94c2b556cf97..7dcf9e4ea79d 100644
---- a/drivers/char/mem.c
-+++ b/drivers/char/mem.c
-@@ -891,7 +891,6 @@ static int open_port(struct inode *inode, struct file *filp)
- 	 * revocations when drivers want to take over a /dev/mem mapped
- 	 * range.
- 	 */
--	inode->i_mapping = devmem_inode->i_mapping;
- 	filp->f_mapping = inode->i_mapping;
+diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
+index 0b220221873d..d08c41b90fec 100644
+--- a/drivers/misc/habanalabs/common/memory.c
++++ b/drivers/misc/habanalabs/common/memory.c
+@@ -1298,7 +1298,8 @@ static int get_user_memory(struct hl_device *hdev, u64 addr, u64 size,
+ 		return -ENOMEM;
+ 	}
  
- 	return 0;
+-	rc = pin_user_pages_fast(start, npages, FOLL_FORCE | FOLL_WRITE,
++	rc = pin_user_pages_fast(start, npages,
++				 FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
+ 				 userptr->pages);
+ 
+ 	if (rc != npages) {
 -- 
 2.29.2
 
