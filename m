@@ -7,34 +7,36 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE5F3C56201
-	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 16:37:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A469C64E69
+	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 16:37:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 95F1A246E4
-	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 16:37:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3940522264
+	for <linux-media@archiver.kernel.org>; Thu, 19 Nov 2020 16:37:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727985AbgKSQga (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Nov 2020 11:36:30 -0500
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:32977 "EHLO
+        id S1729003AbgKSQgf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Nov 2020 11:36:35 -0500
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:21093 "EHLO
         relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725877AbgKSQga (ORCPT
+        with ESMTP id S1725877AbgKSQge (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Nov 2020 11:36:30 -0500
+        Thu, 19 Nov 2020 11:36:34 -0500
 X-Originating-IP: 93.34.118.233
 Received: from localhost.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 3E2FA2400F9;
-        Thu, 19 Nov 2020 16:36:26 +0000 (UTC)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 9A35524000A;
+        Thu, 19 Nov 2020 16:36:30 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     linux-media@vger.kernel.org
 Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
         hverkuil@xs4all.nl, laurent.pinchart@ideasonboard.com,
         roman.kovalivskyi@globallogic.com, dafna.hirschfeld@collabora.com,
         dave.stevenson@raspberrypi.org, naush@raspberrypi.com,
-        erosca@de.adit-jv.com, Jacopo Mondi <jacopo@jmondi.org>
-Subject: [PATCH v4 22/30] media: ov5647: Support V4L2_CID_HBLANK control
-Date:   Thu, 19 Nov 2020 17:35:42 +0100
-Message-Id: <20201119163549.793282-3-jacopo@jmondi.org>
+        erosca@de.adit-jv.com,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Subject: [PATCH v4 24/30] media: ov5647: Advertise the correct exposure range
+Date:   Thu, 19 Nov 2020 17:35:44 +0100
+Message-Id: <20201119163549.793282-5-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.29.1
 In-Reply-To: <20201119163549.793282-1-jacopo@jmondi.org>
 References: <20201119161956.756455-1-jacopo@jmondi.org>
@@ -45,132 +47,116 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support for the V4L2_CID_HBLANK read-only control.
+From: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-The implementation has been upported from RaspberryPi BSP commit:
-commit d82f202156605 ("media: i2c: ov5647: Set V4L2_SUBDEV_FL_HAS_EVENTS flag")
+Exposure is clipped by the VTS of the mode, so it needs to be updated
+when this is changed.
 
+Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- drivers/media/i2c/ov5647.c | 27 ++++++++++++++++++++++++++-
- 1 file changed, 26 insertions(+), 1 deletion(-)
+ drivers/media/i2c/ov5647.c | 39 ++++++++++++++++++++++++++++++++++----
+ 1 file changed, 35 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/media/i2c/ov5647.c b/drivers/media/i2c/ov5647.c
-index 86612f941e891..2ffca9f658bfa 100644
+index 654009be0d110..70eafc5390e1f 100644
 --- a/drivers/media/i2c/ov5647.c
 +++ b/drivers/media/i2c/ov5647.c
-@@ -77,6 +77,7 @@ struct ov5647_mode {
- 	struct v4l2_mbus_framefmt	format;
- 	struct v4l2_rect		crop;
- 	u64				pixel_rate;
-+	int				hts;
- 	const struct regval_list	*reg_list;
- 	unsigned int			num_regs;
- };
-@@ -98,6 +99,7 @@ struct ov5647 {
- 	struct v4l2_ctrl_handler	ctrls;
- 	const struct ov5647_mode	*mode;
+@@ -73,6 +73,11 @@
+ #define OV5647_VBLANK_MIN		4
+ #define OV5647_VTS_MAX			32767
+ 
++#define OV5647_EXPOSURE_MIN		4
++#define OV5647_EXPOSURE_STEP		1
++#define OV5647_EXPOSURE_DEFAULT		1000
++#define OV5647_EXPOSURE_MAX		65535
++
+ struct regval_list {
+ 	u16 addr;
+ 	u8 data;
+@@ -107,6 +112,7 @@ struct ov5647 {
  	struct v4l2_ctrl		*pixel_rate;
-+	struct v4l2_ctrl		*hblank;
+ 	struct v4l2_ctrl		*hblank;
+ 	struct v4l2_ctrl		*vblank;
++	struct v4l2_ctrl		*exposure;
  };
  
  static inline struct ov5647 *to_sensor(struct v4l2_subdev *sd)
-@@ -585,6 +587,7 @@ static const struct ov5647_mode ov5647_8bpp_modes[] = {
- 			.height		= 960,
- 		},
- 		.pixel_rate	= 77291670,
-+		.hts		= 1896,
- 		.reg_list	= ov5647_640x480_8bpp,
- 		.num_regs	= ARRAY_SIZE(ov5647_640x480_8bpp)
- 	},
-@@ -607,6 +610,7 @@ static const struct ov5647_mode ov5647_10bpp_modes[] = {
- 			.height		= 1944
- 		},
- 		.pixel_rate	= 87500000,
-+		.hts		= 2844,
- 		.reg_list	= ov5647_2592x1944_10bpp,
- 		.num_regs	= ARRAY_SIZE(ov5647_2592x1944_10bpp)
- 	},
-@@ -626,6 +630,7 @@ static const struct ov5647_mode ov5647_10bpp_modes[] = {
- 			.height		= 1080,
- 		},
- 		.pixel_rate	= 81666700,
-+		.hts		= 2416,
- 		.reg_list	= ov5647_1080p30_10bpp,
- 		.num_regs	= ARRAY_SIZE(ov5647_1080p30_10bpp)
- 	},
-@@ -645,6 +650,7 @@ static const struct ov5647_mode ov5647_10bpp_modes[] = {
- 			.height		= 1944,
- 		},
- 		.pixel_rate	= 81666700,
-+		.hts		= 1896,
- 		.reg_list	= ov5647_2x2binned_10bpp,
- 		.num_regs	= ARRAY_SIZE(ov5647_2x2binned_10bpp)
- 	},
-@@ -664,6 +670,7 @@ static const struct ov5647_mode ov5647_10bpp_modes[] = {
- 			.height		= 1920,
- 		},
- 		.pixel_rate	= 55000000,
-+		.hts		= 1852,
- 		.reg_list	= ov5647_640x480_10bpp,
- 		.num_regs	= ARRAY_SIZE(ov5647_640x480_10bpp)
- 	},
-@@ -1090,9 +1097,15 @@ static int ov5647_set_pad_fmt(struct v4l2_subdev *sd,
+@@ -1092,6 +1098,7 @@ static int ov5647_set_pad_fmt(struct v4l2_subdev *sd,
+ 	struct v4l2_mbus_framefmt *fmt = &format->format;
+ 	const struct ov5647_mode *ov5647_mode_list;
+ 	struct ov5647 *sensor = to_sensor(sd);
++
+ 	const struct ov5647_mode *mode;
+ 	unsigned int num_modes;
+ 	unsigned int i;
+@@ -1123,6 +1130,7 @@ static int ov5647_set_pad_fmt(struct v4l2_subdev *sd,
  	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
  		*v4l2_subdev_get_try_format(sd, cfg, format->pad) = mode->format;
  	} else {
-+		int hblank;
-+
++		int exposure_max, exposure_def;
+ 		int hblank, vblank;
+ 
  		sensor->mode = mode;
- 		__v4l2_ctrl_modify_range(sensor->pixel_rate, mode->pixel_rate,
- 					 mode->pixel_rate, 1, mode->pixel_rate);
+@@ -1138,6 +1146,13 @@ static int ov5647_set_pad_fmt(struct v4l2_subdev *sd,
+ 					 OV5647_VTS_MAX - mode->format.height,
+ 					 1, vblank);
+ 		__v4l2_ctrl_s_ctrl(sensor->vblank, vblank);
 +
-+		hblank = mode->hts - mode->format.width;
-+		__v4l2_ctrl_modify_range(sensor->hblank, hblank, hblank, 1,
-+					 hblank);
++		exposure_max = mode->vts - 4;
++		exposure_def = min(exposure_max, OV5647_EXPOSURE_DEFAULT);
++		__v4l2_ctrl_modify_range(sensor->exposure,
++					 sensor->exposure->minimum,
++					 exposure_max, sensor->exposure->step,
++					 exposure_def);
  	}
  	*fmt = mode->format;
  	mutex_unlock(&sensor->lock);
-@@ -1301,6 +1314,9 @@ static int ov5647_s_ctrl(struct v4l2_ctrl *ctrl)
- 	case V4L2_CID_PIXEL_RATE:
- 		/* Read-only, but we adjust it based on mode. */
- 		return 0;
-+	case V4L2_CID_HBLANK:
-+		/* Read-only, but we adjust it based on mode. */
-+		return 0;
- 	default:
- 		dev_info(&client->dev,
- 			 "Control (id:0x%x, val:0x%x) not supported\n",
-@@ -1318,8 +1334,9 @@ static const struct v4l2_ctrl_ops ov5647_ctrl_ops = {
+@@ -1324,6 +1339,18 @@ static int ov5647_s_ctrl(struct v4l2_ctrl *ctrl)
+ 
+ 	/* v4l2_ctrl_lock() locks our own mutex */
+ 
++	if (ctrl->id == V4L2_CID_VBLANK) {
++		int exposure_max, exposure_def;
++
++		/* Update max exposure while meeting expected vblanking */
++		exposure_max = sensor->mode->format.height + ctrl->val - 4;
++		exposure_def = min(exposure_max, OV5647_EXPOSURE_DEFAULT);
++		__v4l2_ctrl_modify_range(sensor->exposure,
++					 sensor->exposure->minimum,
++					 exposure_max, sensor->exposure->step,
++					 exposure_def);
++	}
++
+ 	/*
+ 	 * If the device is not powered up by the host driver do
+ 	 * not apply any controls to H/W at this time. Instead
+@@ -1369,7 +1396,7 @@ static const struct v4l2_ctrl_ops ov5647_ctrl_ops = {
  static int ov5647_init_controls(struct ov5647 *sensor)
  {
  	struct i2c_client *client = v4l2_get_subdevdata(&sensor->sd);
-+	int hblank;
+-	int hblank;
++	int hblank, exposure_max, exposure_def;
  
--	v4l2_ctrl_handler_init(&sensor->ctrls, 6);
-+	v4l2_ctrl_handler_init(&sensor->ctrls, 7);
+ 	v4l2_ctrl_handler_init(&sensor->ctrls, 8);
  
+@@ -1383,9 +1410,13 @@ static int ov5647_init_controls(struct ov5647 *sensor)
+ 			       V4L2_CID_EXPOSURE_AUTO, V4L2_EXPOSURE_MANUAL,
+ 			       0, V4L2_EXPOSURE_MANUAL);
+ 
+-	/* min: 4 lines; max: 0xffff lines; default: 1000 lines. */
+-	v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
+-			  V4L2_CID_EXPOSURE, 4, 65535, 1, 1000);
++	exposure_max = sensor->mode->vts - 4;
++	exposure_def = min(exposure_max, OV5647_EXPOSURE_DEFAULT);
++	sensor->exposure = v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
++					     V4L2_CID_EXPOSURE,
++					     OV5647_EXPOSURE_MIN,
++					     exposure_max, OV5647_EXPOSURE_STEP,
++					     exposure_def);
+ 
+ 	/* min: 16 = 1.0x; max (10 bits); default: 32 = 2.0x. */
  	v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
- 			  V4L2_CID_AUTOGAIN, 0, 1, 1, 0);
-@@ -1345,10 +1362,18 @@ static int ov5647_init_controls(struct ov5647 *sensor)
- 					       sensor->mode->pixel_rate,
- 					       sensor->mode->pixel_rate, 1,
- 					       sensor->mode->pixel_rate);
-+
-+	/* By default, HBLANK is read only, but it does change per mode. */
-+	hblank = sensor->mode->hts - sensor->mode->format.width;
-+	sensor->hblank = v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
-+					   V4L2_CID_HBLANK, hblank, hblank, 1,
-+					   hblank);
-+
- 	if (sensor->ctrls.error)
- 		goto handler_free;
- 
- 	sensor->pixel_rate->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-+	sensor->hblank->flags |= V4L2_CTRL_FLAG_READ_ONLY;
- 	sensor->sd.ctrl_handler = &sensor->ctrls;
- 
- 	return 0;
 -- 
 2.29.1
 
