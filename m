@@ -2,60 +2,61 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E630C63777
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C357FC64E75
 	for <linux-media@archiver.kernel.org>; Fri, 20 Nov 2020 00:11:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D4D1522240
-	for <linux-media@archiver.kernel.org>; Fri, 20 Nov 2020 00:11:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 863D722254
+	for <linux-media@archiver.kernel.org>; Fri, 20 Nov 2020 00:11:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="i8GUgZ5X"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XPlXiw46"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725843AbgKTAKx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Nov 2020 19:10:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40896 "EHLO
+        id S1726837AbgKTAK5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Nov 2020 19:10:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726118AbgKTAKw (ORCPT
+        with ESMTP id S1726826AbgKTAK4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Nov 2020 19:10:52 -0500
+        Thu, 19 Nov 2020 19:10:56 -0500
 Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37736C061A04
-        for <linux-media@vger.kernel.org>; Thu, 19 Nov 2020 16:10:52 -0800 (PST)
-Received: by mail-ej1-x641.google.com with SMTP id gj5so10446985ejb.8
-        for <linux-media@vger.kernel.org>; Thu, 19 Nov 2020 16:10:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F0DC061A04
+        for <linux-media@vger.kernel.org>; Thu, 19 Nov 2020 16:10:56 -0800 (PST)
+Received: by mail-ej1-x641.google.com with SMTP id i19so10423393ejx.9
+        for <linux-media@vger.kernel.org>; Thu, 19 Nov 2020 16:10:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=7dG0dg4E3NLlKUFNDbFJJFxzbQvFvgfvzbTLirmjNk4=;
-        b=i8GUgZ5XXzaDNy811FBeq9/DdfF5OWAgeDJDJmcZiq9KhFIo1tNWkdVosgQ1BkN/Dq
-         yzxWnA2w2+bGqyIJ3dzGPf8T9uiFHq1pjKgRqb/jgMH5ZJtut++ejYtayHvfclowlhZR
-         DDNsq0PCzHC14EfgviGiflnDaQdHcuTcMJWkqiWG2ePa1OTYbi7j348s5eIEfCaczNkR
-         EZrzeIFGBoRyCKMOaTCBypxl3lq5wGSD0rGPtrkAGs4lcoKnupnB0EnpQr9kMpEnYsqH
-         tQXQj/kUZ1kNTsG15pZEbUxMiMd32weR2WJ5eKB4RCuSlhR5pjz2bGGw6Zda5yHL7WCk
-         xl7Q==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=XHTQ09ms588+UpKY9R43+BC+T+D0Aapxn3qmLnckRdI=;
+        b=XPlXiw46FSemcBKRoOKNNQnGUdTBhsiSyqgouYR1IbEKgCJYNMz/FXHvSq4dJ6P7Xj
+         pkwE7cCegNift3rcuFCdN+ArxEv6b1PbvvBebtRSBAUovmlY2fKenivK7xDb+E3LZEcA
+         MWil0sBIeGCBrewI6yZI9tKI/2QKqqZ9SrWQ/6cAuvT9PYGi9JlzxnlXxgOW60I/hdQb
+         uuuOiPXikS11Vj5bZ1zV2HvqD+f+XSaCx+Pw3WCNcTh5ub/B9Z+CqZAnTnCqYm9AH/Yd
+         wvvwkaR66lE33F1MLn7BLAMsNy+DsufZE3s8MdQ2eKrOItJBYn7Wnu4Lt47qpP8EGwKY
+         j+PQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=7dG0dg4E3NLlKUFNDbFJJFxzbQvFvgfvzbTLirmjNk4=;
-        b=gyuCAMXKX8gH1gIOWES8Paa/welDPyyv3wlI+M30Hn0SSekP+CVzbiFknxRo+Gn/x1
-         DxT9dw/r+T+VwHt9him2q5fxIXsl9Y9je1BGcouwr9+wEwzZzTbLRCMom1FUNUek8lDt
-         gzVm1z/bd1qRGhB9Veet+tX0o/ty5IxB374zGiEzOHeWCKDeMEQi5z/2kR7HpW+QIAGf
-         7Io9yMvq+ixj0t3r6JNtNCP1xw/Qy0VmkxMVul+MvWcU5Pd73/0cFNPkcpItr8js1hzf
-         dWO2IEZAM82l7Dt+f9eMluR6b63Zznq+7/6RQOl19R8HDTVpmD5UOMh4utJc28ZIiXV1
-         tonQ==
-X-Gm-Message-State: AOAM5326SnZQTuqu8ea+vJ52N++q0zia81tGXLKTPVo6n51eKGCyCfAS
-        AVW1QPvWnny1P9P6VLGgT5IbkwAgw/RN7PoE
-X-Google-Smtp-Source: ABdhPJz4wSwCpoWSimdFX3rb6VO9QZZLwOIpG3VZbypdf2mZjHX3BdpMPferAgvq2Ep9LxytE0gq7A==
-X-Received: by 2002:a17:906:5841:: with SMTP id h1mr29897557ejs.342.1605831050673;
-        Thu, 19 Nov 2020 16:10:50 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=XHTQ09ms588+UpKY9R43+BC+T+D0Aapxn3qmLnckRdI=;
+        b=nnYt1V4Vkse/GnpJ1FL79OAeToKdwB2GNXOewi9InbW/9oVAHPK7lfIobYFT/KdksT
+         r+DxUFWQ6hw6aQeVywleWEDh0+vxw+JWFRRwkFZwhJE8pSbefkZ8efhMcmF367bakUbK
+         s73D/xSPt/NSu0QqYTYvYNyzRNUyWTb/fUl+ZMT9P57exHsnLjnbjXsleHumOxXwQsgW
+         /xJhD3CrVMYqisHsy5beIeNJYCeLq0RvrIuZWjBxOOPi8FySqcGm7beuiUuI8zyftxYp
+         SsLI1k0KWOUsRPYMFk0GxRg0urju3K7AOBEWz1StZbO8AIajvA50AiDeK+Dv7I6Opd1x
+         7heA==
+X-Gm-Message-State: AOAM531OrVXNjRV9w2j8gJGoF405bzvxFb5gAcSYamhuLnomnAcANAbS
+        wxLOrypLUJipc8KY/XQgRASEErh/t5nf8oq1
+X-Google-Smtp-Source: ABdhPJzPi3Jx7MUnkqEKljskzOgWFThcO1Da5cfP8MZv//FMfGocVErt9cyG6x97pmaYOrtVcu2OwQ==
+X-Received: by 2002:a17:906:1b04:: with SMTP id o4mr17902421ejg.531.1605831054650;
+        Thu, 19 Nov 2020 16:10:54 -0800 (PST)
 Received: from localhost.localdomain (hst-221-4.medicom.bg. [84.238.221.4])
-        by smtp.gmail.com with ESMTPSA id k23sm383556edv.97.2020.11.19.16.10.49
+        by smtp.gmail.com with ESMTPSA id k23sm383556edv.97.2020.11.19.16.10.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2020 16:10:50 -0800 (PST)
+        Thu, 19 Nov 2020 16:10:54 -0800 (PST)
 From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
 To:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
@@ -63,43 +64,96 @@ Cc:     Vikash Garodia <vgarodia@codeaurora.org>,
         Mansur Alisha Shaik <mansur@codeaurora.org>,
         Dikshita Agarwal <dikshita@codeaurora.org>,
         Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH 0/3] Venus encoder improvements
-Date:   Fri, 20 Nov 2020 02:10:34 +0200
-Message-Id: <20201120001037.10032-1-stanimir.varbanov@linaro.org>
+Subject: [PATCH 2/3] venus: Limit HFI sessions to the maximum supported
+Date:   Fri, 20 Nov 2020 02:10:36 +0200
+Message-Id: <20201120001037.10032-3-stanimir.varbanov@linaro.org>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20201120001037.10032-1-stanimir.varbanov@linaro.org>
+References: <20201120001037.10032-1-stanimir.varbanov@linaro.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+Currently we rely on firmware to return error when we reach the maximum
+supported number of sessions. But this errors are happened at reqbuf
+time which is a bit later. The more reasonable way looks like is to
+return the error on driver open.
 
-Here is a series which aims to improve encoder staility.
+To achieve that modify hfi_session_create to return error when we reach
+maximum count of sessions and thus refuse open.
 
- * 1/3 makes encoder init session to be issued only once.
- * 2/3 refuse to open the encoders/decoders session beyond the
-   limit
- * 3/3 forces firmware to raise soft interrupt when acknowledge
-   a synchronous command 
-
-Comments are welcome!
-
-regards,
-Stan
-
-Stanimir Varbanov (2):
-  venus: venc: Init the session only once in queue_setup
-  venus: Limit HFI sessions to the maximum supported
-
-Vikash Garodia (1):
-  media: hfi_venus: Request interrupt for sync cmds
-
+Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+---
  drivers/media/platform/qcom/venus/core.h      |  1 +
- drivers/media/platform/qcom/venus/hfi.c       | 19 +++-
- .../media/platform/qcom/venus/hfi_parser.c    |  3 +
- drivers/media/platform/qcom/venus/hfi_venus.c | 74 +++++++-------
- drivers/media/platform/qcom/venus/venc.c      | 98 ++++++++++++++-----
- 5 files changed, 133 insertions(+), 62 deletions(-)
+ drivers/media/platform/qcom/venus/hfi.c       | 19 +++++++++++++++----
+ .../media/platform/qcom/venus/hfi_parser.c    |  3 +++
+ 3 files changed, 19 insertions(+), 4 deletions(-)
 
+diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
+index db0e6738281e..3a477fcdd3a8 100644
+--- a/drivers/media/platform/qcom/venus/core.h
++++ b/drivers/media/platform/qcom/venus/core.h
+@@ -96,6 +96,7 @@ struct venus_format {
+ #define MAX_CAP_ENTRIES		32
+ #define MAX_ALLOC_MODE_ENTRIES	16
+ #define MAX_CODEC_NUM		32
++#define MAX_SESSIONS		16
+ 
+ struct raw_formats {
+ 	u32 buftype;
+diff --git a/drivers/media/platform/qcom/venus/hfi.c b/drivers/media/platform/qcom/venus/hfi.c
+index 638ed5cfe05e..8420be6d3991 100644
+--- a/drivers/media/platform/qcom/venus/hfi.c
++++ b/drivers/media/platform/qcom/venus/hfi.c
+@@ -175,6 +175,7 @@ static int wait_session_msg(struct venus_inst *inst)
+ int hfi_session_create(struct venus_inst *inst, const struct hfi_inst_ops *ops)
+ {
+ 	struct venus_core *core = inst->core;
++	int ret;
+ 
+ 	if (!ops)
+ 		return -EINVAL;
+@@ -183,12 +184,22 @@ int hfi_session_create(struct venus_inst *inst, const struct hfi_inst_ops *ops)
+ 	init_completion(&inst->done);
+ 	inst->ops = ops;
+ 
+-	mutex_lock(&core->lock);
+-	list_add_tail(&inst->list, &core->instances);
+-	atomic_inc(&core->insts_count);
++	ret = mutex_lock_interruptible(&core->lock);
++	if (ret)
++		return ret;
++
++	ret = atomic_read(&core->insts_count);
++	if (ret + 1 > core->max_sessions_supported) {
++		ret = -EAGAIN;
++	} else {
++		atomic_inc(&core->insts_count);
++		list_add_tail(&inst->list, &core->instances);
++		ret = 0;
++	}
++
+ 	mutex_unlock(&core->lock);
+ 
+-	return 0;
++	return ret;
+ }
+ EXPORT_SYMBOL_GPL(hfi_session_create);
+ 
+diff --git a/drivers/media/platform/qcom/venus/hfi_parser.c b/drivers/media/platform/qcom/venus/hfi_parser.c
+index 363ee2a65453..52898633a8e6 100644
+--- a/drivers/media/platform/qcom/venus/hfi_parser.c
++++ b/drivers/media/platform/qcom/venus/hfi_parser.c
+@@ -276,6 +276,9 @@ u32 hfi_parser(struct venus_core *core, struct venus_inst *inst, void *buf,
+ 		words_count--;
+ 	}
+ 
++	if (!core->max_sessions_supported)
++		core->max_sessions_supported = MAX_SESSIONS;
++
+ 	parser_fini(inst, codecs, domain);
+ 
+ 	return HFI_ERR_NONE;
 -- 
 2.17.1
 
