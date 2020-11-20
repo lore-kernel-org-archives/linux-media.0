@@ -2,257 +2,254 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 447AFC6379D
-	for <linux-media@archiver.kernel.org>; Fri, 20 Nov 2020 09:35:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37AFAC63777
+	for <linux-media@archiver.kernel.org>; Fri, 20 Nov 2020 10:39:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DB5CC2222F
-	for <linux-media@archiver.kernel.org>; Fri, 20 Nov 2020 09:35:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BBE1322264
+	for <linux-media@archiver.kernel.org>; Fri, 20 Nov 2020 10:39:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="X4UHOJmN"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="kcuAXQ1B"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727461AbgKTJfF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 20 Nov 2020 04:35:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727355AbgKTJfD (ORCPT
+        id S1727238AbgKTKjL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 20 Nov 2020 05:39:11 -0500
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:41611 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725952AbgKTKjK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 20 Nov 2020 04:35:03 -0500
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5103C0617A7
-        for <linux-media@vger.kernel.org>; Fri, 20 Nov 2020 01:35:01 -0800 (PST)
-Received: by mail-oi1-x241.google.com with SMTP id l206so9707478oif.12
-        for <linux-media@vger.kernel.org>; Fri, 20 Nov 2020 01:35:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hgF4wfg69hNpww4OAKMoqR+eWE3jKpfJosXp9fxVBjI=;
-        b=X4UHOJmNLvGaGQarNMiO8EklXG6lG45+9sS//8PEIAcGFyr8tKX+5nnGXzRAbO6Ue6
-         3W839yCL3pKJT002ic0S4VGSLeiJV67iqE0XZrHk+eXI21jAtiOEXzLIkiE0kqevhGVR
-         MPDC0aauVbAhrazQEsofDf0TWh93oG9z4Np2U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hgF4wfg69hNpww4OAKMoqR+eWE3jKpfJosXp9fxVBjI=;
-        b=eopxH1cBU515sKeektMAw/9bpdGh3bC56U6zh2aQWRDwCMhS4E4rYbgTc83aMtVqKM
-         leoltWdPZ9vyqpE57QgiTtWPg8YlyyhlABpeYOebZsjeosr++URwLobiPU03CV89mxQ1
-         NT37EGGMTqF99+meVfqOi4pBFLj8WMNRjRixHGKM5CYLWENQEBNCZqurkIBKcKOEDGMn
-         vnyTKXJChb4t7hOh4fKOyemd5XgPHqUzvdmVu2yXvB9MGex1ZEHal5MsDrmUIu0drdMA
-         0ToiVDiy2oPJyKxS1fRbzRjklSETuD2/FGSUiwBKdDJP4OCCkgAvxRAik09GovKUaqoM
-         TEkA==
-X-Gm-Message-State: AOAM532mHpPFjWPYYI9NkmGNfOvKDCfm0ZuIY+YAGl43l+RZkHNHp5T1
-        uLbPXUjSxHL0g5mCHj4RLWp/w7yu6DP8tVxWawr8Q7pwzhQ=
-X-Google-Smtp-Source: ABdhPJwGdgkRwcd6PL3pN7daWCrNpgUvuP86thM6e5fGMCZGTC6PnlV9Y7Fldm85Rp0ewgPAUXlSIvmIrS0hPfBByDs=
-X-Received: by 2002:aca:7506:: with SMTP id q6mr5872181oic.128.1605864900943;
- Fri, 20 Nov 2020 01:35:00 -0800 (PST)
-MIME-Version: 1.0
-References: <20201110034934.70898-1-john.stultz@linaro.org>
- <CAO_48GHNE6AyKv4k=3=2EVjfSZsgz4pjuMJ1xJojbuFU9a90EQ@mail.gmail.com>
- <20201112093237.GS401619@phenom.ffwll.local> <CALAqxLWWBaOc3W1s3xBe-innHZ0pAon7UCfumjjQftPqf7bO0Q@mail.gmail.com>
- <20201113203933.GT401619@phenom.ffwll.local> <CALAqxLU886mjGaNx3cvXB0hyOd=tTo7G=tw6iQ1uAxcXShN+kg@mail.gmail.com>
- <CAKMK7uGew_sdw=NPrzuAQ_-5_kQnn-qvLHK9DGqSk=k22tQGDg@mail.gmail.com> <CAO_48GHLFJi+DKYf4fBs7NZr+f+Q0USoGEtL6nW_FQFv+OOJ5Q@mail.gmail.com>
-In-Reply-To: <CAO_48GHLFJi+DKYf4fBs7NZr+f+Q0USoGEtL6nW_FQFv+OOJ5Q@mail.gmail.com>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Fri, 20 Nov 2020 10:34:50 +0100
-Message-ID: <CAKMK7uFz6SbHqH_Q7f5v13-dSRokq16fy0z6YbPFY6X9sDAm1w@mail.gmail.com>
-Subject: Re: [PATCH v5 0/7] dma-buf: Performance improvements for system heap
- & a system-uncached implementation
-To:     Sumit Semwal <sumit.semwal@linaro.org>
-Cc:     John Stultz <john.stultz@linaro.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@kernel.org>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sandeep Patil <sspatil@google.com>,
-        Daniel Mentz <danielmentz@google.com>,
-        Chris Goldsworthy <cgoldswo@codeaurora.org>,
-        =?UTF-8?Q?=C3=98rjan_Eide?= <orjan.eide@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Simon Ser <contact@emersion.fr>,
-        James Jones <jajones@nvidia.com>,
+        Fri, 20 Nov 2020 05:39:10 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id g3odkqci3WTbog3ogkflSv; Fri, 20 Nov 2020 11:39:04 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1605868744; bh=UJbsoc+m2DQXtat1J+FSEFEQVZTUCPoXOGzxzQw644s=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=kcuAXQ1B/GTzWwQml12T3GbJXUhrFJRX5LaU3qV0GdLQGzXoDChd8SkjAllwPt3zH
+         lub6Gp+k/Kvre6ug0Fa5Abl8/Hrxr0ywrpyek9moKX8pNHcYfPWWCVh4VjaK2tgHsa
+         GkgnglWwjplRJEYBPSj2a8s+e4KZ/ySUEeABdvYY9EcNL3hnaU2R9DFQbBX4AvDwYl
+         v55zKKQOeWUtg0JTeDGQ/aETRbVDYpz0piVOHQi0i4kFvqiTbOOJRECUUwNxNUeFKx
+         yUK2HHoEGu/IzTAWVM6QKCSprtR9qfLYwNS6rKhxbvJQHHGoStiTaI9a0DXd7Pp9sP
+         p9N9Sjv3vSUGg==
+Subject: Re: [PATCH v6 09/17] media/videbuf1|2: Mark follow_pfn usage as
+ unsafe
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
         "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>,
-        DRI mailing list <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
+        <linux-media@vger.kernel.org>, Tomasz Figa <tfiga@chromium.org>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kees Cook <keescook@chromium.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Jan Kara <jack@suse.cz>, Pawel Osciak <pawel@osciak.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        Michel Lespinasse <walken@google.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <20201119144146.1045202-1-daniel.vetter@ffwll.ch>
+ <20201119144146.1045202-10-daniel.vetter@ffwll.ch>
+ <f1f3a1d8-d62a-6e93-afc1-87a8e51081e9@xs4all.nl>
+ <e1f7d30b-2012-0249-66c7-cf9d7d6246ad@xs4all.nl>
+ <CAKMK7uEzFAtr9yxjaxi-kiuZhb+hWT3q6E41OegJr+J2-zkT8w@mail.gmail.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <9035555a-af6b-e2dd-dbad-41ca70235e21@xs4all.nl>
+Date:   Fri, 20 Nov 2020 11:38:55 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
+MIME-Version: 1.0
+In-Reply-To: <CAKMK7uEzFAtr9yxjaxi-kiuZhb+hWT3q6E41OegJr+J2-zkT8w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfDss0FwL2fqdI2i/Ld6jk5YpMRTothqQOe/9Yd2P1xeqdCmohX7XXb96LZlza31qpcmNMYJwPa81XchZVa1S7q0JJklTc6tNeVGRAAYdr+AbM+yqKuxh
+ HYR4y9BVgxtQf4jgcpuWAISFzS9JO9asb6c6vsbpOUMsoZVmKvX3blng9eCgwzmJEFWVy6RFBjEP+YuywmY0Cbsra6piUdkAnXxA28LQBb4c4pANgMwK3/20
+ bqwtn2oqGhmwrstC4HjCP7+ky7n9e+nny11fIZoZXpYud8ngwlCvv3JO5DEhppBBMyU4wzh6wey7nRYMfQcZKL3tBnPLxG084wGKlaIDxqlPIqzON2yPqUtM
+ BdjovZp1X9w67sDw2YnPtJI+t5QjtH7wDE8HymLGzpo/iSWefSev4TB6DyT8z5q4VwW3nHLvv+AKe+XDfQUaFLrmIHckyHvzBresJqeVQNqozNuU1qToV+l/
+ ErEPsay/ueUS5Hj5b6jRplY77yT/PNOmchZCs7zBkOUY6YONev0nZYJIoJ6WsUMULo52xVhX1Tta1mgMr4SugcE1W1C9YPZPWPqPWe/3L6bhxjXGPcTMvgGG
+ EfWAwqzm38P0NR/GybtBl/gWm/ZJOCla09xasqa1HdLeHPFcGIUr2RcK8vk1M1FL+s1q9wqIJ1k+h51TQcL8ss+oalkYZ+Es/zXbGn8CGFesXujAIbbI9SeX
+ RbG5KoDDqiF0i/z9VR5/dyz1ChlFanbUWs7vGG6zLRPUB94JMiDLcyq0sgkrQslnPzRt5atIb4ACU1K5prEyGZXzYGJ67wH+5Ote3N/ZKwr9ZzDCJOlZyz1Y
+ 7NCIKU+LJw+dc7vff5v2/nfaydMU8yk1Sjiw2vMM60fyIjtgLWiysLdmBcHztcTuIRFp2fTCyaD4dNzasFyk6gZzUhJytpwVEiTZ4cIcT8wwnB8yzHSlynCb
+ PBnOPcalqnNL1YwgL4G+XJik3k/M6qqSrY43N1O21jk+k7JmerrFuMJh03HUnX+RhONUkg==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Nov 20, 2020 at 7:32 AM Sumit Semwal <sumit.semwal@linaro.org> wrote:
->
-> Hi Daniel,
->
->
-> On Wed, 18 Nov 2020 at 13:16, Daniel Vetter <daniel@ffwll.ch> wrote:
-> >
-> > On Wed, Nov 18, 2020 at 3:40 AM John Stultz <john.stultz@linaro.org> wrote:
-> > > On Fri, Nov 13, 2020 at 12:39 PM Daniel Vetter <daniel@ffwll.ch> wrote:
-> > > > On Thu, Nov 12, 2020 at 08:11:02PM -0800, John Stultz wrote:
-> > > > > On Thu, Nov 12, 2020 at 1:32 AM Daniel Vetter <daniel@ffwll.ch> wrote:
-> > > > > > On Thu, Nov 12, 2020 at 11:09:04AM +0530, Sumit Semwal wrote:
-> > > > > > > On Tue, 10 Nov 2020 at 09:19, John Stultz <john.stultz@linaro.org> wrote:
-> > > > > > > >
-> > > > > > > > Hey All,
-> > > > > > > >   So just wanted to send my last revision of my patch series
-> > > > > > > > of performance optimizations to the dma-buf system heap.
-> > > > > > >
-> > > > > > > Thanks very much for your patches - I think the first 5 patches look good to me.
-> > > > > > >
-> > > > > > > I know there was a bit of discussion over adding a new system-uncached
-> > > > > > > heap v/s using a flag to identify that; I think I prefer the separate
-> > > > > > > heap idea, but lets ask one last time if any one else has any real
-> > > > > > > objections to it.
-> > > > > > >
-> > > > > > > Daniel, Christian: any comments from your side on this?
-> > > > > >
-> > > > > > I do wonder a bit where the userspace stack for this all is, since tuning
-> > > > > > allocators without a full stack is fairly pointless. dma-buf heaps is a
-> > > > > > bit in a limbo situation here it feels like.
-> > > > >
-> > > > > As mentioned in the system-uncached patch:
-> > > > > Pending opensource users of this code include:
-> > > > > * AOSP HiKey960 gralloc:
-> > > > >   - https://android-review.googlesource.com/c/device/linaro/hikey/+/1399519
-> > > > >   - Visibly improves performance over the system heap
-> > > > > * AOSP Codec2 (possibly, needs more review):
-> > > > >   - https://android-review.googlesource.com/c/platform/frameworks/av/+/1360640/17/media/codec2/vndk/C2DmaBufAllocator.cpp#325
-> > > > >
-> > > > > Additionally both the HiKey, HiKey960 grallocs  and Codec2 are already
-> > > > > able to use the current dmabuf heaps instead of ION.
-> > > > >
-> > > > > So I'm not sure what you mean by limbo, other than it being in a
-> > > > > transition state where the interface is upstream and we're working on
-> > > > > moving vendors to it from ION (which is staged to be dropped in 5.11).
-> > > > > Part of that work is making sure we don't regress the performance
-> > > > > expectations.
-> > > >
-> > > > The mesa thing below, since if we test this with some downstream kernel
-> > > > drivers or at least non-mesa userspace I'm somewhat worried we're just
-> > > > creating a nice split world between the android gfx world and the
-> > > > mesa/linux desktop gfx world.
-> > > >
-> > > > But then that's kinda how android rolls, so *shrug*
-> > > >
-> > > > > > Plus I'm vary of anything related to leaking this kind of stuff beyond the
-> > > > > > dma-api because dma api maintainers don't like us doing that. But
-> > > > > > personally no concern on that front really, gpus need this. It's just that
-> > > > > > we do need solid justification I think if we land this. Hence back to
-> > > > > > first point.
-> > > > > >
-> > > > > > Ideally first point comes in the form of benchmarking on android together
-> > > > > > with a mesa driver (or mesa + some v4l driver or whatever it takes to
-> > > > > > actually show the benefits, I have no idea).
-> > > > >
-> > > > > Tying it with mesa is a little tough as the grallocs for mesa devices
-> > > > > usually use gbm (gralloc.gbm or gralloc.minigbm). Swapping the
-> > > > > allocation path for dmabuf heaps there gets a little complex as last I
-> > > > > tried that (when trying to get HiKey working with Lima graphics, as
-> > > > > gbm wouldn't allocate the contiguous buffers required by the display),
-> > > > > I ran into issues with the drm_hwcomposer and mesa expecting the gbm
-> > > > > private handle metadata in the buffer when it was passed in.
-> > > > >
-> > > > > But I might take a look at it again. I got a bit lost digging through
-> > > > > the mesa gbm allocation paths last time.
-> > > > >
-> > > > > I'll also try to see if I can find a benchmark for the codec2 code
-> > > > > (using dmabuf heaps with and without the uncached heap) on on db845c
-> > > > > (w/ mesa), as that is already working and I suspect that might be
-> > > > > close to what you're looking for.
-> > > >
-> > > > tbh I think trying to push for this long term is the best we can hope for.
-> > > >
-> > > > Media is also a lot more *meh* since it's deeply fragmented and a lot less
-> > > > of it upstream than on the gles/display side.
-> > > >
-> > > > I think confirming that this at least doesn't horrible blow up on a
-> > > > gralloc/gbm+mesa stack would be useful I think.
-> > >
-> > > Sorry, I'm still a little foggy on precisely what you're suggesting here.
-> > >
-> > > The patch stack I have has already been used with db845c (mesa +
-> > > gbm_grallloc), with the codec2 (sw decoders) using dmabuf heaps.
-> > > So no blowing up there. And I'm working with Hridya to find a
-> > > benchmark for codec2 so we can try to show the performance delta.
-> > >
-> > > However, if you're wanting a dma-buf gralloc implementation with mesa,
-> > > that may be a little tougher to do, but I guess I can give it a go.
-> > >
-> > > Hopefully this will address concerns about the system-uncached heap
-> > > patch (the last two patches in this series)?
-> > >
-> > > In the meantime I hope we can queue the first five patches, as it
-> > > would be nice to get the code rearranging in as there are others
-> > > trying to stage their own heaps, and I'd like to avoid dragging that
-> > > churn out for too long (in addition to improving the allocation
-> > > performance). Those changes have no ABI implications.
-> >
-> > Maybe I'm also misunderstanding what dma-buf heaps is used for in
-> > Android, at least usually. I thought it's used to allocate all the
-> > winsys/shared buffers through gralloc (at least in the blobby stacks),
-> > to handle the allocation constraints problem. In the open stacks we
-> > don't seem to have a platform with both mesa and v4l (or some other
-> > codec) with "interesting" allocations constraints, so no one using
-> > that gralloc+dma-buf heaps combo for what it was meant for. Hence why
-> > I'm a bit vary that we're creating something here which just misses
-> > the point a bit when we try to actually use it (in that glorious
-> > forever-future world where an android platform has enough drivers in
-> > upstream to do so).
-> >
-> > For other "this solves a system problem" we tend to be quite a bit
-> > more picky with the demonstration use case, to make sure we're
-> > actually creating something that solves the problem in reality.
-> >
-> > But it also looks like Android's just not there yet, so *shrug* ...
->
-> For me, looking at the first 5 patches (listed below, for quick
-> reference), they are only doing code reorganisation and minor updates
-> for already existing heaps, and no ABI change, I am not able to
-> clearly see your objection here. To me, these seem to be required
-> updates that the existing system heap users can benefit from.
->
-> dma-buf: system_heap: Rework system heap to use sgtables instead of
->     pagelists
->   dma-buf: heaps: Move heap-helper logic into the cma_heap
->     implementation
->   dma-buf: heaps: Remove heap-helpers code
->   dma-buf: heaps: Skip sync if not mapped
->   dma-buf: system_heap: Allocate higher order pages if available
->
-> If we talk about the last two patches - the ones that add system
-> uncached heap, I somewhat agree that we should be able to show the
-> performance gains with this approach (which has been in use on ION and
-> in devices) using dma-buf gralloc or similar.
->
-> We can discuss the system-uncached heap when the dma-buf gralloc or
-> similar demonstration for performance benefits is done, but I am
-> inclined to push these 5 patches listed above through.
+On 20/11/2020 10:18, Daniel Vetter wrote:
+> On Fri, Nov 20, 2020 at 9:28 AM Hans Verkuil <hverkuil@xs4all.nl> wrote:
+>>
+>> On 20/11/2020 09:06, Hans Verkuil wrote:
+>>> On 19/11/2020 15:41, Daniel Vetter wrote:
+>>>> The media model assumes that buffers are all preallocated, so that
+>>>> when a media pipeline is running we never miss a deadline because the
+>>>> buffers aren't allocated or available.
+>>>>
+>>>> This means we cannot fix the v4l follow_pfn usage through
+>>>> mmu_notifier, without breaking how this all works. The only real fix
+>>>> is to deprecate userptr support for VM_IO | VM_PFNMAP mappings and
+>>>> tell everyone to cut over to dma-buf memory sharing for zerocopy.
+>>>>
+>>>> userptr for normal memory will keep working as-is, this only affects
+>>>> the zerocopy userptr usage enabled in 50ac952d2263 ("[media]
+>>>> videobuf2-dma-sg: Support io userptr operations on io memory").
+>>>>
+>>>> Acked-by: Tomasz Figa <tfiga@chromium.org>
+>>>
+>>> Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+>>
+>> Actually, cancel this Acked-by.
+>>
+>> So let me see if I understand this right: VM_IO | VM_PFNMAP mappings can
+>> move around. There is a mmu_notifier that can be used to be notified when
+>> that happens, but that can't be used with media buffers since those buffers
+>> must always be available and in the same place.
+>>
+>> So follow_pfn is replaced by unsafe_follow_pfn to signal that what is attempted
+>> is unsafe and unreliable.
+>>
+>> If CONFIG_STRICT_FOLLOW_PFN is set, then unsafe_follow_pfn will fail, if it
+>> is unset, then it writes a warning to the kernel log but just continues while
+>> still unsafe.
+>>
+>> I am very much inclined to just drop VM_IO | VM_PFNMAP support in the media
+>> subsystem. For vb2 there is a working alternative in the form of dmabuf, and
+>> frankly for vb1 I don't care. If someone really needs this for a vb1 driver,
+>> then they can do the work to convert that driver to vb2.
+>>
+>> I've added Mauro to the CC list and I'll ping a few more people to see what
+>> they think, but in my opinion support for USERPTR + VM_IO | VM_PFNMAP
+>> should just be killed off.
+>>
+>> If others would like to keep it, then frame_vector.c needs a comment before
+>> the 'while' explaining why the unsafe_follow_pfn is there and that using
+>> dmabuf is the proper alternative to use. That will make it easier for
+>> developers to figure out why they see a kernel warning and what to do to
+>> fix it, rather than having to dig through the git history for the reason.
+> 
+> I'm happy to add a comment, but otherwise if you all want to ditch
+> this, can we do this as a follow up on top? There's quite a bit of
+> code that can be deleted and I'd like to not hold up this patch set
+> here on that - it's already a fairly sprawling pain touching about 7
+> different subsystems (ok only 6-ish now since the s390 patch landed).
+> For the comment, is the explanation next to unsafe_follow_pfn not good
+> enough?
 
-Yeah makes total sense - I was arguing about the new stuff, not the refactoring.
--Daniel
+No, because that doesn't mention that you should use dma-buf as a replacement.
+That's really the critical piece of information I'd like to see. That doesn't
+belong in unsafe_follow_pfn, it needs to be in frame_vector.c since it's
+vb2 specific.
 
->
-> Best,
-> Sumit.
->
-> > -Daniel
-> > --
-> > Daniel Vetter
-> > Software Engineer, Intel Corporation
-> > http://blog.ffwll.ch
+> 
+> So ... can I get you to un-cancel your ack?
 
+Hmm, I really would like to see support for this to be dropped completely.
 
+How about this: just replace follow_pfn() by -EINVAL instead of unsafe_follow_pfn().
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Add a TODO comment that this code now can be cleaned up a lot. Such a clean up patch
+can be added on top later, and actually that is something that I can do once this
+series has landed.
+
+Regardless, frame_vector.c should mention dma-buf as a replacement in a comment
+since I don't want users who hit this issue to have to dig through git logs
+to find that dma-buf is the right approach.
+
+BTW, nitpick: the subject line of this patch says 'videbuf' instead of 'videobuf'.
+
+Regards,
+
+	Hans
+
+> 
+> Thanks, Daniel
+> 
+>>
+>> Regards,
+>>
+>>         Hans
+>>
+>>>
+>>> Thanks!
+>>>
+>>>       Hans
+>>>
+>>>> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+>>>> Cc: Jason Gunthorpe <jgg@ziepe.ca>
+>>>> Cc: Kees Cook <keescook@chromium.org>
+>>>> Cc: Dan Williams <dan.j.williams@intel.com>
+>>>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>>>> Cc: John Hubbard <jhubbard@nvidia.com>
+>>>> Cc: Jérôme Glisse <jglisse@redhat.com>
+>>>> Cc: Jan Kara <jack@suse.cz>
+>>>> Cc: Dan Williams <dan.j.williams@intel.com>
+>>>> Cc: linux-mm@kvack.org
+>>>> Cc: linux-arm-kernel@lists.infradead.org
+>>>> Cc: linux-samsung-soc@vger.kernel.org
+>>>> Cc: linux-media@vger.kernel.org
+>>>> Cc: Pawel Osciak <pawel@osciak.com>
+>>>> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+>>>> Cc: Kyungmin Park <kyungmin.park@samsung.com>
+>>>> Cc: Tomasz Figa <tfiga@chromium.org>
+>>>> Cc: Laurent Dufour <ldufour@linux.ibm.com>
+>>>> Cc: Vlastimil Babka <vbabka@suse.cz>
+>>>> Cc: Daniel Jordan <daniel.m.jordan@oracle.com>
+>>>> Cc: Michel Lespinasse <walken@google.com>
+>>>> Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+>>>> --
+>>>> v3:
+>>>> - Reference the commit that enabled the zerocopy userptr use case to
+>>>>   make it abundandtly clear that this patch only affects that, and not
+>>>>   normal memory userptr. The old commit message already explained that
+>>>>   normal memory userptr is unaffected, but I guess that was not clear
+>>>>   enough.
+>>>> ---
+>>>>  drivers/media/common/videobuf2/frame_vector.c | 2 +-
+>>>>  drivers/media/v4l2-core/videobuf-dma-contig.c | 2 +-
+>>>>  2 files changed, 2 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/drivers/media/common/videobuf2/frame_vector.c b/drivers/media/common/videobuf2/frame_vector.c
+>>>> index a0e65481a201..1a82ec13ea00 100644
+>>>> --- a/drivers/media/common/videobuf2/frame_vector.c
+>>>> +++ b/drivers/media/common/videobuf2/frame_vector.c
+>>>> @@ -70,7 +70,7 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
+>>>>                      break;
+>>>>
+>>>>              while (ret < nr_frames && start + PAGE_SIZE <= vma->vm_end) {
+>>>> -                    err = follow_pfn(vma, start, &nums[ret]);
+>>>> +                    err = unsafe_follow_pfn(vma, start, &nums[ret]);
+>>>>                      if (err) {
+>>>>                              if (ret == 0)
+>>>>                                      ret = err;
+>>>> diff --git a/drivers/media/v4l2-core/videobuf-dma-contig.c b/drivers/media/v4l2-core/videobuf-dma-contig.c
+>>>> index 52312ce2ba05..821c4a76ab96 100644
+>>>> --- a/drivers/media/v4l2-core/videobuf-dma-contig.c
+>>>> +++ b/drivers/media/v4l2-core/videobuf-dma-contig.c
+>>>> @@ -183,7 +183,7 @@ static int videobuf_dma_contig_user_get(struct videobuf_dma_contig_memory *mem,
+>>>>      user_address = untagged_baddr;
+>>>>
+>>>>      while (pages_done < (mem->size >> PAGE_SHIFT)) {
+>>>> -            ret = follow_pfn(vma, user_address, &this_pfn);
+>>>> +            ret = unsafe_follow_pfn(vma, user_address, &this_pfn);
+>>>>              if (ret)
+>>>>                      break;
+>>>>
+>>>>
+>>>
+>>
+> 
+> 
+
