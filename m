@@ -2,28 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BDB2C6379D
-	for <linux-media@archiver.kernel.org>; Fri, 20 Nov 2020 16:15:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 318A3C2D0E4
+	for <linux-media@archiver.kernel.org>; Fri, 20 Nov 2020 16:16:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CFED0223BE
-	for <linux-media@archiver.kernel.org>; Fri, 20 Nov 2020 16:15:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E19BE223BE
+	for <linux-media@archiver.kernel.org>; Fri, 20 Nov 2020 16:16:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728446AbgKTQPh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 20 Nov 2020 11:15:37 -0500
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:53049 "EHLO
+        id S1728677AbgKTQPk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 20 Nov 2020 11:15:40 -0500
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:37437 "EHLO
         relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728131AbgKTQPh (ORCPT
+        with ESMTP id S1728131AbgKTQPk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 20 Nov 2020 11:15:37 -0500
+        Fri, 20 Nov 2020 11:15:40 -0500
 X-Originating-IP: 93.34.118.233
 Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 0B32040046;
-        Fri, 20 Nov 2020 16:15:33 +0000 (UTC)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id C8C9840064;
+        Fri, 20 Nov 2020 16:15:36 +0000 (UTC)
 From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
 To:     kieran.bingham+renesas@ideasonboard.com,
         laurent.pinchart+renesas@ideasonboard.com,
@@ -31,37 +32,64 @@ To:     kieran.bingham+renesas@ideasonboard.com,
 Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
         linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 0/2] media: max9271: Fix GPIO handling
-Date:   Fri, 20 Nov 2020 17:15:27 +0100
-Message-Id: <20201120161529.236447-1-jacopo+renesas@jmondi.org>
+Subject: [PATCH 1/2] media: max9271: Fix GPIO enable/disable
+Date:   Fri, 20 Nov 2020 17:15:28 +0100
+Message-Id: <20201120161529.236447-2-jacopo+renesas@jmondi.org>
 X-Mailer: git-send-email 2.29.1
+In-Reply-To: <20201120161529.236447-1-jacopo+renesas@jmondi.org>
+References: <20201120161529.236447-1-jacopo+renesas@jmondi.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-While working on RDACM21 camera integration I found the GPIO handling
-code in the max9271 library driver had a few bugs, that went un-noticed
-when the library has been used to upstream RDACM20 as the GPIO lines are
-not explicitly enabled.
+Fix GPIO enable/disable operations which wrongly read the 0x0f register
+to obtain the current mask of the enabled lines instead of using
+the correct 0x0e register.
 
-Fix the GPIO handling code in the max9271 library driver and make rdacm20
-a little more robust by enabling the GPIO1 line explicitly.
+Also fix access to bit 0 of the register which is marked as reserved.
 
-Tested on H3 Salvator-X with MAXIM GMLS expansion board.
+Fixes: 34009bffc1c6 ("media: i2c: Add RDACM20 driver")
+Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+---
+ drivers/media/i2c/max9271.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Thanks
-   j
-
-Jacopo Mondi (2):
-  media: max9271: Fix GPIO enable/disable
-  media: rdacm20: Enable GPIO1 explicitly
-
- drivers/media/i2c/max9271.c |  8 ++++----
- drivers/media/i2c/rdacm20.c | 13 +++++++++++--
- 2 files changed, 15 insertions(+), 6 deletions(-)
-
---
+diff --git a/drivers/media/i2c/max9271.c b/drivers/media/i2c/max9271.c
+index 0f6f7a092a46..c247db569bab 100644
+--- a/drivers/media/i2c/max9271.c
++++ b/drivers/media/i2c/max9271.c
+@@ -223,12 +223,12 @@ int max9271_enable_gpios(struct max9271_device *dev, u8 gpio_mask)
+ {
+ 	int ret;
+ 
+-	ret = max9271_read(dev, 0x0f);
++	ret = max9271_read(dev, 0x0e);
+ 	if (ret < 0)
+ 		return 0;
+ 
+ 	/* BIT(0) reserved: GPO is always enabled. */
+-	ret |= gpio_mask | BIT(0);
++	ret |= (gpio_mask & ~BIT(0));
+ 	ret = max9271_write(dev, 0x0e, ret);
+ 	if (ret < 0) {
+ 		dev_err(&dev->client->dev, "Failed to enable gpio (%d)\n", ret);
+@@ -245,12 +245,12 @@ int max9271_disable_gpios(struct max9271_device *dev, u8 gpio_mask)
+ {
+ 	int ret;
+ 
+-	ret = max9271_read(dev, 0x0f);
++	ret = max9271_read(dev, 0x0e);
+ 	if (ret < 0)
+ 		return 0;
+ 
+ 	/* BIT(0) reserved: GPO cannot be disabled */
+-	ret &= (~gpio_mask | BIT(0));
++	ret &= ~(gpio_mask | BIT(0));
+ 	ret = max9271_write(dev, 0x0e, ret);
+ 	if (ret < 0) {
+ 		dev_err(&dev->client->dev, "Failed to disable gpio (%d)\n", ret);
+-- 
 2.29.1
 
