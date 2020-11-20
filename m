@@ -2,116 +2,73 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E547C63777
-	for <linux-media@archiver.kernel.org>; Fri, 20 Nov 2020 15:55:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1735DC56201
+	for <linux-media@archiver.kernel.org>; Fri, 20 Nov 2020 15:58:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 584322245A
-	for <linux-media@archiver.kernel.org>; Fri, 20 Nov 2020 15:55:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AA19E22201
+	for <linux-media@archiver.kernel.org>; Fri, 20 Nov 2020 15:58:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="g9lD0bCx"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="q/moGA/b"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729949AbgKTPzI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 20 Nov 2020 10:55:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:57898 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729940AbgKTPzH (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 20 Nov 2020 10:55:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1605887705;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        id S1729966AbgKTP5m (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 20 Nov 2020 10:57:42 -0500
+Received: from mx2.suse.de ([195.135.220.15]:51608 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729911AbgKTP5m (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 20 Nov 2020 10:57:42 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1605887860; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=rY2Rec5SHAHV9d9Nn2wvBLT2el7uEj1Kc43gm3aG5HM=;
-        b=g9lD0bCxENPqcIGc2Z5tasWLJyAqqyHwdIWyhdE3T+gFEmncp1Z07rSQz1E2Gi3/qTwJ+3
-        skp0DCXX7dsULaSAGcfW7EiyaIfzVDY8pSkV/5a65pPivfHUbXb+ZLHeS7GQuCmhACXkH8
-        bIu4k/kvl7e+wNF5Tqkh0s8Olh/H8HQ=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-49-goanpVdjPp6MmQlfUe0Fgg-1; Fri, 20 Nov 2020 10:55:03 -0500
-X-MC-Unique: goanpVdjPp6MmQlfUe0Fgg-1
-Received: by mail-ej1-f72.google.com with SMTP id gr9so3612348ejb.19
-        for <linux-media@vger.kernel.org>; Fri, 20 Nov 2020 07:55:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=rY2Rec5SHAHV9d9Nn2wvBLT2el7uEj1Kc43gm3aG5HM=;
-        b=IAPQie0UJgm9fau1wG4e+zhCdVarD6Fmyp9xSvfaxhr9xCFfmPWnAu60dyrg8RIibQ
-         kwcYAAl3szrtSMyfostE+pVP6/kJ1BvLi4hq6GFKZmhmKsnPwbuHUlSEygT8IyNcv7tD
-         AJ3y6J7sUNzHLdVeEH04TMr1S9F/ABDRqCXtfdxpsq5nvG38wk53gtFjboxpYj+obBvl
-         EofGCdY0mOZOHSeplqCUSUZWNiElPylbni/JnlAb6AWKvHR0SJnqGpRHjirla55Xmvf6
-         RoF6qgGbTIoeVdV8vFfkRObzJx1/BZOvYELiQ23hiI534tBBhnz8CpNZuQgaHqlf3YMR
-         TkHw==
-X-Gm-Message-State: AOAM5323DNdT9EFw/j59k+y+nbl5N7SC4D/l5eYii0yZGWKzs8H0XEcM
-        FCaLlzt0YEXG3JT1AXKh2ucoBpLWe6SWusjlMc8b9SRzyK8wfTx3M0dxaGIHD5y1kmvJY5f3Pcm
-        +sjAqLiW69zabu0c3mAx9k9g=
-X-Received: by 2002:aa7:d2d9:: with SMTP id k25mr34928700edr.310.1605887702587;
-        Fri, 20 Nov 2020 07:55:02 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw3gVlgwW/bmEajthpJVdpMUNtgPUbi/HFUtFVuvcpkMu9pSTRR3a9KC3tEdlGleoOWxNajPA==
-X-Received: by 2002:aa7:d2d9:: with SMTP id k25mr34928681edr.310.1605887702427;
-        Fri, 20 Nov 2020 07:55:02 -0800 (PST)
-Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id r25sm1300693eji.8.2020.11.20.07.55.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Nov 2020 07:55:01 -0800 (PST)
-Subject: Re: [PATCH v6 16/17] RFC: kvm: pass kvm argument to follow_pfn
- callsites
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Kees Cook <keescook@chromium.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Jan Kara <jack@suse.cz>
-References: <20201119144146.1045202-1-daniel.vetter@ffwll.ch>
- <20201119144146.1045202-17-daniel.vetter@ffwll.ch>
- <cd56eb8a-fbec-e81f-9c14-d1256a193b68@redhat.com>
- <CAKMK7uHDrPDcsWyMgFgjf0+hdebSUT4hX5hKR=CnTH=soLU-Kg@mail.gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <3eca2dde-c78b-3eb4-8f61-7fdf16573419@redhat.com>
-Date:   Fri, 20 Nov 2020 16:55:00 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        bh=USMB2Oora/OLgO94kKepkF0GaoTAGWU9NisPoIPkkqg=;
+        b=q/moGA/bK2sKeDvBbfEkntpJdbns+bY/vXpEOE0JtTKwNwHvuxWKS9RVyq55QbKF/tpv7y
+        JABpMkFz69lxH2n+9ym1DvD9OWJTYiHQLxePs8ItANAKq2xetUg1AhTxa7bCeCuhBhnYCe
+        PKUwuTmFKMeZGvcANi4Bn4NNQQoZni0=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 3C3AFACBA;
+        Fri, 20 Nov 2020 15:57:40 +0000 (UTC)
+Date:   Fri, 20 Nov 2020 16:57:39 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        dri-devel@lists.freedesktop.org, hverkuil@xs4all.nl,
+        laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Joe Perches <joe@perches.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [PATCH v5 1/1] lib/vsprintf: Add support for printing V4L2 and
+ DRM fourccs
+Message-ID: <X7fnc+xsVXPg4Op6@alley>
+References: <20201113105441.1427-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <CAKMK7uHDrPDcsWyMgFgjf0+hdebSUT4hX5hKR=CnTH=soLU-Kg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201113105441.1427-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 20/11/20 16:44, Daniel Vetter wrote:
->> It's a bit of a pity, it's making an API more complex (the point of
->> gfn_to_pfn_memslot vs gfn_to_pfn is exactly that you don't need a
->> "struct kvm*" and it's clear that you've already done the lookup into
->> that struct kvm.
->
-> Yeah I noticed that, I think pushing the lookups down should work, but
-> that's a fairly large-scale change. I didn't want to do that for the
-> RFC since it would distract from the actual change/goal.
-> -Daniel
+On Fri 2020-11-13 12:54:41, Sakari Ailus wrote:
+> Add a printk modifier %p4cc (for pixel format) for printing V4L2 and DRM
+> pixel formats denoted by fourccs. The fourcc encoding is the same for both
+> so the same implementation can be used.
+> 
+> Suggested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-Pushing the lookups down would be worse code and possibly introduce 
-TOC/TOU races, so better avoid that.  Your patch is fine. :)
+The last version looks fine to me.
 
-Paolo
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
+Best Regards,
+Petr
