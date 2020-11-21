@@ -2,118 +2,166 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26199C64E90
-	for <linux-media@archiver.kernel.org>; Sat, 21 Nov 2020 18:02:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E59EDC56202
+	for <linux-media@archiver.kernel.org>; Sat, 21 Nov 2020 23:50:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 10A2222201
-	for <linux-media@archiver.kernel.org>; Sat, 21 Nov 2020 18:02:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B02AF20DD4
+	for <linux-media@archiver.kernel.org>; Sat, 21 Nov 2020 23:50:28 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hPqnU3xO"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727599AbgKUSC1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 21 Nov 2020 13:02:27 -0500
-Received: from smtprelay0210.hostedemail.com ([216.40.44.210]:53086 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726556AbgKUSC0 (ORCPT
+        id S1726562AbgKUXuI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 21 Nov 2020 18:50:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57386 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726175AbgKUXuH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 21 Nov 2020 13:02:26 -0500
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay07.hostedemail.com (Postfix) with ESMTP id AF7D7181D3025;
-        Sat, 21 Nov 2020 18:02:23 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-HE-Tag: uncle36_3402e8c27356
-X-Filterd-Recvd-Size: 3937
-Received: from XPS-9350.home (unknown [47.151.128.180])
-        (Authenticated sender: joe@perches.com)
-        by omf04.hostedemail.com (Postfix) with ESMTPA;
-        Sat, 21 Nov 2020 18:02:18 +0000 (UTC)
-Message-ID: <f7643c9cb0a896f3ead65e86084b7c143e21ef43.camel@perches.com>
-Subject: Re: [RFC] MAINTAINERS tag for cleanup robot
-From:   Joe Perches <joe@perches.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        trix@redhat.com, clang-built-linux@googlegroups.com
-Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xen-devel@lists.xenproject.org, tboot-devel@lists.sourceforge.net,
-        kvm@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-acpi@vger.kernel.org, devel@acpica.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, netdev@vger.kernel.org,
-        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
-        linux-scsi@vger.kernel.org, linux-wireless@vger.kernel.org,
-        ibm-acpi-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        ecryptfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        cluster-devel@redhat.com, linux-mtd@lists.infradead.org,
-        keyrings@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, alsa-devel@alsa-project.org,
-        bpf@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-nfs@vger.kernel.org, patches@opensource.cirrus.com
-Date:   Sat, 21 Nov 2020 10:02:17 -0800
-In-Reply-To: <5843ef910b0e86c00d9c0143dec20f93823b016b.camel@HansenPartnership.com>
-References: <20201121165058.1644182-1-trix@redhat.com>
-         <5843ef910b0e86c00d9c0143dec20f93823b016b.camel@HansenPartnership.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.38.1-1 
+        Sat, 21 Nov 2020 18:50:07 -0500
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2C0C0613CF
+        for <linux-media@vger.kernel.org>; Sat, 21 Nov 2020 15:50:05 -0800 (PST)
+Received: by mail-pf1-x442.google.com with SMTP id t8so11424931pfg.8
+        for <linux-media@vger.kernel.org>; Sat, 21 Nov 2020 15:50:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZdyhTvyVNa2fhAy8X/NHf9i/vBLLU68LSfcoVNt03w8=;
+        b=hPqnU3xOMWcdHJxE2WBRuowx+pM6mR9po/NLZ2+HG9as2e0p2M4myMeqQ/bGXW7Mbf
+         UAWBA5y72Sp07u1lRw3WoZlKIL9cb+4evqy3TEfUDr+clyQZCY7zsQbuRU6b0ZPQQQvA
+         IkkCVaWOdcm2RvBBlh4m/JbjuoP/iltPQqln9mW4DeT6sIfVW08ry4X6SFhunJGoIO9t
+         oK5HD1kteNpl83ql4n46c9fETkwM61Yq2I0ezzIHwzUvVDHR+AOmki884xaCWssQzM0M
+         rtWP6LIGU/d8apzl2D0Ah64PN4+rZ4kV5GBpA4JUlGTfYIPpcFCYhBUP1fYJetSy9l/w
+         jOEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZdyhTvyVNa2fhAy8X/NHf9i/vBLLU68LSfcoVNt03w8=;
+        b=U2FhNFJ3PkHHQUHVjVr25878vSPy/glQwZYH1d3aWmxUrKxfIzyb80EAnpAI3DkgzW
+         tsWTYwYUpmYYfGae2IC88RGRJaaoiK1u93YYSjXEIibXiwnzcaf0kpej441dTSEy9ns7
+         Pboxv9kGxdN8Z0K+7yRD+ufdgn+dSn+LYEworZGXYfrVLlxSsh5jPMkBtc8PeF+UELTF
+         T2hJguMyYtCXwECJLYgLp1vZHC27uqFuZEycBAcjvuGEv00lCh81n2g9UkKZD300wGKO
+         f0PF+y4WXwisN3h5Z/6O1zo4FKQtNn1WNUs6wotR/dAhytrj9BdWFQOfRARWZ+sYfo0I
+         7PSA==
+X-Gm-Message-State: AOAM533jpq+cJzoGbNEJcGudUoPMf318/T4nhDW3LM68HIWhnZ0yXv9i
+        TGJIf7NVetEBMzZy4Wm27rgQeA==
+X-Google-Smtp-Source: ABdhPJzR7eE8aKla6W64xhedCSmbj1FTLdSO3fp593xPplEFC+UFeaGglpeDqZNua7/tdBZdBDBHuw==
+X-Received: by 2002:a17:90a:1d47:: with SMTP id u7mr17839921pju.49.1606002605188;
+        Sat, 21 Nov 2020 15:50:05 -0800 (PST)
+Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
+        by smtp.gmail.com with ESMTPSA id v126sm7882525pfb.137.2020.11.21.15.50.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 Nov 2020 15:50:04 -0800 (PST)
+From:   John Stultz <john.stultz@linaro.org>
+To:     lkml <linux-kernel@vger.kernel.org>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@kernel.org>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sandeep Patil <sspatil@google.com>,
+        Daniel Mentz <danielmentz@google.com>,
+        Chris Goldsworthy <cgoldswo@codeaurora.org>,
+        =?UTF-8?q?=C3=98rjan=20Eide?= <orjan.eide@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Simon Ser <contact@emersion.fr>,
+        James Jones <jajones@nvidia.com>, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH v7 0/5] dma-buf: Code rework and performance improvements for system heap
+Date:   Sat, 21 Nov 2020 23:49:57 +0000
+Message-Id: <20201121235002.69945-1-john.stultz@linaro.org>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sat, 2020-11-21 at 09:18 -0800, James Bottomley wrote:
-> On Sat, 2020-11-21 at 08:50 -0800, trix@redhat.com wrote:
-> > A difficult part of automating commits is composing the subsystem
-> > preamble in the commit log.  For the ongoing effort of a fixer
-> > producing one or two fixes a release the use of 'treewide:' does
-> > not seem appropriate.
-> > 
-> > It would be better if the normal prefix was used.  Unfortunately
-> > normal is not consistent across the tree.
-> > 
-> > 	D: Commit subsystem prefix
-> > 
-> > ex/ for FPGA DFL DRIVERS
-> > 
-> > 	D: fpga: dfl:
-> 
-> I've got to bet this is going to cause more issues than it solves. 
-> SCSI uses scsi: <driver>: for drivers but not every driver has a
-> MAINTAINERS entry.  We use either scsi: or scsi: core: for mid layer
-> things, but we're not consistent.  Block uses blk-<something>: for all
-> of it's stuff but almost no <somtehing>s have a MAINTAINERS entry.  So
-> the next thing you're going to cause is an explosion of suggested
-> MAINTAINERs entries.
+Hey All,
+  So Sumit noted a flub I made in adapting the last series to
+the new dma-buf-map code that is in drm-misc-next. Thus I wanted
+to send this (hopefully) last revision of my patch series of
+performance optimizations to the dma-buf system heap, once again
+against drm-misc-next.
 
-As well as some changes require simultaneous changes across
-multiple subsystems.
+This series reworks the system heap to use sgtables, and then
+consolidates the pagelist method from the heap-helpers into the
+CMA heap. After which the heap-helpers logic is removed (as it
+is unused). I'd still like to find a better way to avoid some of
+the logic duplication in implementing the entire dma_buf_ops
+handlers per heap. But unfortunately that code is tied somewhat
+to how the buffer's memory is tracked. As more heaps show up I
+think we'll have a better idea how to best share code, so for
+now I think this is ok.
 
-> Has anyone actually complained about treewide:?
+After this, the series introduces an optimization that
+Ørjan Eide implemented for ION that avoids calling sync on
+attachments that don't have a mapping.
 
-It depends on what you mean by treewide:
+Finally, an optimization to use larger order pages for the system
+heap. This change brings us closer to the current performance
+of the ION allocation code (though there still is a gap due
+to ION using a mix of deferred-freeing and page pools, I'll be
+looking at integrating those eventually).
 
-If a treewide: patch is applied by some "higher level" maintainer,
-then generally, no.
+This version of the series does not include the system-uncached
+heap as Daniel wanted further demonstration that it is useful
+with devices that use the mesa stack. I'm working on such a
+justification but I don't want to hold up these rework patches
+in the meantime.
 
-If the treewide patch is also cc'd to many individual maintainers,
-then yes, many many times.
+thanks
+-john
 
-Mostly because patches cause what is in their view churn or that
-changes are not specific to their subsystem grounds.
+New in v7:
+* Fixed the incorrect adaptation to the dma-buf-map usage
 
-The treewide patch is sometimes dropped, sometimes broken up and
-generally not completely applied.
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: Liam Mark <lmark@codeaurora.org>
+Cc: Laura Abbott <labbott@kernel.org>
+Cc: Brian Starkey <Brian.Starkey@arm.com>
+Cc: Hridya Valsaraju <hridya@google.com>
+Cc: Suren Baghdasaryan <surenb@google.com>
+Cc: Sandeep Patil <sspatil@google.com>
+Cc: Daniel Mentz <danielmentz@google.com>
+Cc: Chris Goldsworthy <cgoldswo@codeaurora.org>
+Cc: Ørjan Eide <orjan.eide@arm.com>
+Cc: Robin Murphy <robin.murphy@arm.com>
+Cc: Ezequiel Garcia <ezequiel@collabora.com>
+Cc: Simon Ser <contact@emersion.fr>
+Cc: James Jones <jajones@nvidia.com>
+Cc: linux-media@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
 
-What would be useful in many cases like this is for a pre and post
-application of the treewide patch to be compiled and the object
-code verified for lack of any logic change.
 
-Unfortunately, gcc does not guarantee deterministic compilation so
-this isn't feasible with at least gcc.  Does clang guarantee this?
+John Stultz (5):
+  dma-buf: system_heap: Rework system heap to use sgtables instead of
+    pagelists
+  dma-buf: heaps: Move heap-helper logic into the cma_heap
+    implementation
+  dma-buf: heaps: Remove heap-helpers code
+  dma-buf: heaps: Skip sync if not mapped
+  dma-buf: system_heap: Allocate higher order pages if available
 
-I'm not sure it's possible:
-https://blog.llvm.org/2019/11/deterministic-builds-with-clang-and-lld.html
+ drivers/dma-buf/heaps/Makefile       |   1 -
+ drivers/dma-buf/heaps/cma_heap.c     | 329 +++++++++++++++++----
+ drivers/dma-buf/heaps/heap-helpers.c | 274 ------------------
+ drivers/dma-buf/heaps/heap-helpers.h |  53 ----
+ drivers/dma-buf/heaps/system_heap.c  | 414 ++++++++++++++++++++++++---
+ 5 files changed, 647 insertions(+), 424 deletions(-)
+ delete mode 100644 drivers/dma-buf/heaps/heap-helpers.c
+ delete mode 100644 drivers/dma-buf/heaps/heap-helpers.h
 
+-- 
+2.17.1
 
