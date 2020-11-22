@@ -2,207 +2,123 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E210EC63777
-	for <linux-media@archiver.kernel.org>; Sun, 22 Nov 2020 21:05:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FB7AC8300E
+	for <linux-media@archiver.kernel.org>; Sun, 22 Nov 2020 22:11:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9CA922078B
-	for <linux-media@archiver.kernel.org>; Sun, 22 Nov 2020 21:05:49 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="GDxmTI+d"
+	by mail.kernel.org (Postfix) with ESMTP id E688020757
+	for <linux-media@archiver.kernel.org>; Sun, 22 Nov 2020 22:11:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727717AbgKVVF3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Nov 2020 16:05:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55176 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727584AbgKVVF2 (ORCPT
+        id S1726598AbgKVWLB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Nov 2020 17:11:01 -0500
+Received: from asavdk4.altibox.net ([109.247.116.15]:51724 "EHLO
+        asavdk4.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725782AbgKVWK6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 22 Nov 2020 16:05:28 -0500
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E364C0613D3
-        for <linux-media@vger.kernel.org>; Sun, 22 Nov 2020 13:05:28 -0800 (PST)
-Received: by mail-ej1-x643.google.com with SMTP id o21so20502981ejb.3
-        for <linux-media@vger.kernel.org>; Sun, 22 Nov 2020 13:05:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6XSzxVxeSbH/63gH8EnsEI8ptPxCrAwPCCJTogBMOdI=;
-        b=GDxmTI+dpzXEMaq5v/HKs4J2pNx+qzMUhEcGM1qPzNYvXPNM3Bu4rGEHRZRB1nsHmO
-         qRs9Lly6XuyfjddXAbOTtZwcJVjldVaobF9AUI10EI3Zfeau0C0ZngnLzh0CZJ6P7JZn
-         dy2NGzlpAlj4mjE1oDc+2G5k64KNktlWLNpMs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6XSzxVxeSbH/63gH8EnsEI8ptPxCrAwPCCJTogBMOdI=;
-        b=qNlEUTqfrSb3K02QIUHckUd8avJZ+Uh6VMSibRG+NCnGJ12kGa0SYLK/pCFliBLlMn
-         BT+Umr+MAqFNk0lp6SVMkX8CtNUwycsuYtgC39V0pfLo/6zXdxXUCaeto36WyG8GJIVO
-         THmGRBaamxKYtIVk9Ytveb1JPIQ12MfZ/1P9JqYxOgDI0GwpbnwdJP0E7ONuxEVIU02S
-         y7c+QWb6vArIpnz3XZ75iD4LFr6Ns1YEJrlGkOJIbl3T+ptLNOMegNsFj+fNG5B5+nWf
-         uD4KAoGsHqopI5nRFTGcUrF/eajOH1Xr73pLuNQoUJwhVYrZdTjKTu7nrw50B87BufLn
-         BhqA==
-X-Gm-Message-State: AOAM533VgC0kX2adFKOFFPUqR89OiRufqNUG0Cf0vMxnVT9rR6DKF3qA
-        Hg/i3tlFVMGuNlcF1eEOlGnaclPyLWVmdA==
-X-Google-Smtp-Source: ABdhPJw/84WrI8BWCi4aIM3GhhIo/o1gsAgXXyvt+i70X8L5yrf9G2wUDhnBXs/V7ju4wC6Q7JJLpg==
-X-Received: by 2002:a17:906:76d3:: with SMTP id q19mr40356071ejn.162.1606079126796;
-        Sun, 22 Nov 2020 13:05:26 -0800 (PST)
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
-        by smtp.gmail.com with ESMTPSA id n22sm3964977edr.11.2020.11.22.13.05.25
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 Nov 2020 13:05:25 -0800 (PST)
-Received: by mail-wr1-f53.google.com with SMTP id 64so3235651wra.11
-        for <linux-media@vger.kernel.org>; Sun, 22 Nov 2020 13:05:25 -0800 (PST)
-X-Received: by 2002:adf:f9c6:: with SMTP id w6mr26892919wrr.273.1606079125259;
- Sun, 22 Nov 2020 13:05:25 -0800 (PST)
+        Sun, 22 Nov 2020 17:10:58 -0500
+Received: from ravnborg.org (unknown [188.228.123.71])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by asavdk4.altibox.net (Postfix) with ESMTPS id 2C52280567;
+        Sun, 22 Nov 2020 23:10:42 +0100 (CET)
+Date:   Sun, 22 Nov 2020 23:10:40 +0100
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Jakub Kicinski <kuba@kernel.org>, alsa-devel@alsa-project.org,
+        linux-atm-general@lists.sourceforge.net,
+        reiserfs-devel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        linux-ide@vger.kernel.org, dm-devel@redhat.com,
+        keyrings@vger.kernel.org, linux-mtd@lists.infradead.org,
+        GR-everest-linux-l2@marvell.com, wcn36xx@lists.infradead.org,
+        samba-technical@lists.samba.org, linux-i3c@lists.infradead.org,
+        linux1394-devel@lists.sourceforge.net,
+        linux-afs@lists.infradead.org,
+        usb-storage@lists.one-eyed-alien.net, drbd-dev@lists.linbit.com,
+        devel@driverdev.osuosl.org, linux-cifs@vger.kernel.org,
+        rds-devel@oss.oracle.com,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-scsi@vger.kernel.org, linux-rdma@vger.kernel.org,
+        oss-drivers@netronome.com, bridge@lists.linux-foundation.org,
+        linux-security-module@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org,
+        linux-stm32@st-md-mailman.stormreply.com, cluster-devel@redhat.com,
+        linux-acpi@vger.kernel.org, coreteam@netfilter.org,
+        intel-wired-lan@lists.osuosl.org, linux-input@vger.kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>,
+        tipc-discussion@lists.sourceforge.net, linux-ext4@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        selinux@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, linux-geode@lists.infradead.org,
+        linux-can@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-gpio@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        linux-mediatek@lists.infradead.org, xen-devel@lists.xenproject.org,
+        nouveau@lists.freedesktop.org, linux-hams@vger.kernel.org,
+        ceph-devel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        target-devel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-hwmon@vger.kernel.org, x86@kernel.org,
+        linux-nfs@vger.kernel.org, GR-Linux-NIC-Dev@marvell.com,
+        linux-mm@kvack.org, netdev@vger.kernel.org,
+        linux-decnet-user@lists.sourceforge.net, linux-mmc@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-renesas-soc@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-usb@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, patches@opensource.cirrus.com,
+        Joe Perches <joe@perches.com>, linux-integrity@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
+Message-ID: <20201122221040.GD566387@ravnborg.org>
+References: <cover.1605896059.git.gustavoars@kernel.org>
+ <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <202011201129.B13FDB3C@keescook>
+ <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <202011220816.8B6591A@keescook>
+ <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
 MIME-Version: 1.0
-References: <20201120001037.10032-1-stanimir.varbanov@linaro.org>
- <20201120001037.10032-3-stanimir.varbanov@linaro.org> <CAMfZQbwjRTuF7_joa9sL0HLTkFC70FqymPOmtxmETt38qey+NA@mail.gmail.com>
- <88838aa8-9c25-3fae-86dd-35b2a3df83d9@linaro.org>
-In-Reply-To: <88838aa8-9c25-3fae-86dd-35b2a3df83d9@linaro.org>
-From:   Fritz Koenig <frkoenig@chromium.org>
-Date:   Sun, 22 Nov 2020 13:05:12 -0800
-X-Gmail-Original-Message-ID: <CAMfZQbwF185dghLACYEktQiYDJXv+GHynsHrt1sq_qCZH7yC9w@mail.gmail.com>
-Message-ID: <CAMfZQbwF185dghLACYEktQiYDJXv+GHynsHrt1sq_qCZH7yC9w@mail.gmail.com>
-Subject: Re: [PATCH 2/3] venus: Limit HFI sessions to the maximum supported
-To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Cc:     Fritz Koenig <frkoenig@chromium.org>, linux-media@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vikash Garodia <vgarodia@codeaurora.org>,
-        Mansur Alisha Shaik <mansur@codeaurora.org>,
-        Dikshita Agarwal <dikshita@codeaurora.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
+X-CMAE-Score: 0
+X-CMAE-Analysis: v=2.3 cv=VafZwmh9 c=1 sm=1 tr=0
+        a=S6zTFyMACwkrwXSdXUNehg==:117 a=S6zTFyMACwkrwXSdXUNehg==:17
+        a=kj9zAlcOel0A:10 a=VwQbUJbxAAAA:8 a=pGLkceISAAAA:8
+        a=7T594MSkF3521FIrX4wA:9 a=CjuIK1q_8ugA:10 a=AjGcO6oz07-iQ99wixmX:22
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sun, Nov 22, 2020 at 6:48 AM Stanimir Varbanov
-<stanimir.varbanov@linaro.org> wrote:
->
->
->
-> On 11/21/20 3:14 AM, Fritz Koenig wrote:
-> > On Thu, Nov 19, 2020 at 4:12 PM Stanimir Varbanov
-> > <stanimir.varbanov@linaro.org> wrote:
-> >>
-> >> Currently we rely on firmware to return error when we reach the maximum
-> >> supported number of sessions. But this errors are happened at reqbuf
-> >> time which is a bit later. The more reasonable way looks like is to
-> >> return the error on driver open.
-> >>
-> >> To achieve that modify hfi_session_create to return error when we reach
-> >> maximum count of sessions and thus refuse open.
-> >>
-> >> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
-> >> ---
-> >>  drivers/media/platform/qcom/venus/core.h      |  1 +
-> >>  drivers/media/platform/qcom/venus/hfi.c       | 19 +++++++++++++++----
-> >>  .../media/platform/qcom/venus/hfi_parser.c    |  3 +++
-> >>  3 files changed, 19 insertions(+), 4 deletions(-)
-> >>
-> >> diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
-> >> index db0e6738281e..3a477fcdd3a8 100644
-> >> --- a/drivers/media/platform/qcom/venus/core.h
-> >> +++ b/drivers/media/platform/qcom/venus/core.h
-> >> @@ -96,6 +96,7 @@ struct venus_format {
-> >>  #define MAX_CAP_ENTRIES                32
-> >>  #define MAX_ALLOC_MODE_ENTRIES 16
-> >>  #define MAX_CODEC_NUM          32
-> >> +#define MAX_SESSIONS           16
-> >>
-> >>  struct raw_formats {
-> >>         u32 buftype;
-> >> diff --git a/drivers/media/platform/qcom/venus/hfi.c b/drivers/media/platform/qcom/venus/hfi.c
-> >> index 638ed5cfe05e..8420be6d3991 100644
-> >> --- a/drivers/media/platform/qcom/venus/hfi.c
-> >> +++ b/drivers/media/platform/qcom/venus/hfi.c
-> >> @@ -175,6 +175,7 @@ static int wait_session_msg(struct venus_inst *inst)
-> >>  int hfi_session_create(struct venus_inst *inst, const struct hfi_inst_ops *ops)
-> >>  {
-> >>         struct venus_core *core = inst->core;
-> >> +       int ret;
-> >>
-> >>         if (!ops)
-> >>                 return -EINVAL;
-> >> @@ -183,12 +184,22 @@ int hfi_session_create(struct venus_inst *inst, const struct hfi_inst_ops *ops)
-> >>         init_completion(&inst->done);
-> >>         inst->ops = ops;
-> >>
-> >> -       mutex_lock(&core->lock);
-> >> -       list_add_tail(&inst->list, &core->instances);
-> >> -       atomic_inc(&core->insts_count);
-> >> +       ret = mutex_lock_interruptible(&core->lock);
-> >> +       if (ret)
-> >> +               return ret;
-> >> +
-> >> +       ret = atomic_read(&core->insts_count);
-> >> +       if (ret + 1 > core->max_sessions_supported) {
-> >> +               ret = -EAGAIN;
-> >> +       } else {
-> >> +               atomic_inc(&core->insts_count);
-> >> +               list_add_tail(&inst->list, &core->instances);
-> >> +               ret = 0;
-> >> +       }
-> >> +
-> >>         mutex_unlock(&core->lock);
-> >>
-> >> -       return 0;
-> >> +       return ret;
-> >>  }
-> >>  EXPORT_SYMBOL_GPL(hfi_session_create);
-> >>
-> >> diff --git a/drivers/media/platform/qcom/venus/hfi_parser.c b/drivers/media/platform/qcom/venus/hfi_parser.c
-> >> index 363ee2a65453..52898633a8e6 100644
-> >> --- a/drivers/media/platform/qcom/venus/hfi_parser.c
-> >> +++ b/drivers/media/platform/qcom/venus/hfi_parser.c
-> >> @@ -276,6 +276,9 @@ u32 hfi_parser(struct venus_core *core, struct venus_inst *inst, void *buf,
-> >>                 words_count--;
-> >>         }
-> >>
-> >
-> > My understanding of the hardware is that there is a max number of
-> > macroblocks that can be worked on at a time.  That works out to
-> > nominally 16 clips.  But large clips can take more resources.  Does
-> > |max_sessions_supported| get updated with the amount that system can
-> > use?  Or is it always a constant?
->
-> The number of max sessions supported is constant.
->
-> >
-> > If it changes depending on system load, then couldn't
-> > be 0 if all of the resources have been
-> > used up?  If that is the case then the below check would appear to be
-> > incorrect.
->
-> No, this is not the case. Changing dynamically the number of max
-> sessions depending on session load is possible but it would be complex
-> to implement. For example, think of decoder dynamic resolution change
-> where we don't know in advance the new resolution (session load).
->
+Hi James.
 
-Sorry, I should have been more specific.  The complexity of
-dynamically changing the max sessions did not seem to be captured in
-the patch, so I wanted to make sure that
-|core->max_sessions_supported| was constant.  As it is constant, then
-this patch looks to capture everything.
+> > > If none of the 140 patches here fix a real bug, and there is no
+> > > change to machine code then it sounds to me like a W=2 kind of a
+> > > warning.
+> > 
+> > FWIW, this series has found at least one bug so far:
+> > https://lore.kernel.org/lkml/CAFCwf11izHF=g1mGry1fE5kvFFFrxzhPSM6qKAO8gxSp=Kr_CQ@mail.gmail.com/
+> 
+> 
+> Well, it's a problem in an error leg, sure, but it's not a really
+> compelling reason for a 141 patch series, is it?  All that fixing this
+> error will do is get the driver to print "oh dear there's a problem"
+> under four more conditions than it previously did.
 
-Reviewed-by: Fritz Koenig <frkoenig@chromium.org>
-> >
-> >> +       if (!core->max_sessions_supported)
-> >> +               core->max_sessions_supported = MAX_SESSIONS;
-> >> +
-> >>         parser_fini(inst, codecs, domain);
-> >>
-> >>         return HFI_ERR_NONE;
-> >> --
-> >> 2.17.1
-> >>
->
-> --
-> regards,
-> Stan
+You are asking the wrong question here.
+
+Yuo should ask  how many hours could have been saved by all the bugs
+people have been fighting with and then fixed *before* the code
+hit the kernel at all.
+
+My personal experience is that I, more than once, have had errors
+related to a missing break in my code. So this warnings is IMO a win.
+
+And if we are only ~100 patches to have it globally enabled then it is a
+no-brainer in my book.
+
+	Sam
