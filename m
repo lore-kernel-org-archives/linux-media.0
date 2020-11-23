@@ -2,248 +2,131 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2372C83013
-	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 13:08:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C784BC64E7B
+	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 13:29:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 869BB20773
-	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 13:08:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7FF9F20782
+	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 13:29:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=vanguardiasur-com-ar.20150623.gappssmtp.com header.i=@vanguardiasur-com-ar.20150623.gappssmtp.com header.b="xzdEz6kB"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="loC7jwFZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388696AbgKWNHv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 Nov 2020 08:07:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58680 "EHLO
+        id S1732408AbgKWN3B (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 23 Nov 2020 08:29:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732867AbgKWMtI (ORCPT
+        with ESMTP id S1730725AbgKWMaU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 23 Nov 2020 07:49:08 -0500
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69979C061A4E
-        for <linux-media@vger.kernel.org>; Mon, 23 Nov 2020 04:49:05 -0800 (PST)
-Received: by mail-ed1-x543.google.com with SMTP id y4so16936057edy.5
-        for <linux-media@vger.kernel.org>; Mon, 23 Nov 2020 04:49:05 -0800 (PST)
+        Mon, 23 Nov 2020 07:30:20 -0500
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85EDDC061A4E
+        for <linux-media@vger.kernel.org>; Mon, 23 Nov 2020 04:30:20 -0800 (PST)
+Received: by mail-wm1-x341.google.com with SMTP id 10so17725436wml.2
+        for <linux-media@vger.kernel.org>; Mon, 23 Nov 2020 04:30:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GyUtXV4I7oufOCmRehbSbZihfE2dNAsjJjjjrmEuICw=;
-        b=xzdEz6kB4zBik1uOatoshaBm6LaSKmUojijYt8h9dh2QGrUS76eruUvLIzkSH0eGEe
-         DOl+Li0VGvprWuzJGUffQBqShHCUBvn0FG05F8PWA7Ix6v7nmuwvqau9BuAUXtBuzc9P
-         biFtftXYWUdPL666mAAt48VYycPt4mDE/nFamResc8Jm6tepnfAiJpTSHUAnPk79ypk0
-         LDR50k++wjeWldDm+gC03roaoqPBQQqL0fsaZikOBH87K99u1MRrLTd13dwLHowdkXpQ
-         ztf6f/03UDNnrWdRmhDlhaGsgjm9AQ0a+uIiw96KobpddpBrzU5tcbP8H1dC1S7gVEf2
-         xPfg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=hQ9274cJRcisj/k1DnNRPg/AWzSpXOLuASkzuQMMEJk=;
+        b=loC7jwFZZxCVRUrWK3gkEV+nGPQO8gNgJHe9CO8Ho/sjQ+3TR3d9I8PAGUmT32DpLd
+         XF45t36teSRWCy5rRGkpKWWKho4bfob6jVR4z87QtSvdZY+PWwuEG6552uCFfZYGYwWM
+         TeYvw5BHHdArvuLvMR6+jWWE7Gf3wl5/CHG1ip4kmRu8V0NI08HHBZtzJx2Nzs78Lifm
+         ofQpQZSHatSAZOcoxUFcKOu45nQW820RNRa6+iq0oOol4VBdbXPNzbW6QVWqZLRfRJMu
+         8X1JkcflXcrN8J8rJ2VsTx30DouJ3eTevyQcQc/epohTycYBeGuQ+QjUC2P7tdgAjjFH
+         IThw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GyUtXV4I7oufOCmRehbSbZihfE2dNAsjJjjjrmEuICw=;
-        b=iVyl3rd/ZOje67NjPX8kc+wXBrV5qAY8ZNHOQ1qPmB7BQDfj3Hrc/mmtZD0EfyUEGd
-         eMnP64GaVzCy3lnhrHbiboNUVakqnTo1CMh8tO7HY2zJCWAd/XUyfjhX1QYR8zFiZswe
-         CIW4yyxVbz9WLoF9zfTqujZLCL2MFkGal1BY/NOUTntjf64dqh73VB2iV+Ufh66QNtCi
-         XKl/xewEwkUn+pqWqEifc+i+/Y+dpdfGCvzMqop04TI5xFft6dfrgYSnGtuKISZWqFW5
-         8s+Slad6br3V0XLnsDSHv24m5xBPkIs+gpaE/qr2+ZTvuDYiM6Jw5CQ2x1ldih6rPBub
-         2CWw==
-X-Gm-Message-State: AOAM532nkHWR3PvRhJfuThlXN74OFPXRIzuX+3KhazEb8TvUUN+fNkuw
-        AW1+6P4oLUrpo4CjrTZj4LMQr1u85DR8xJo4qsvqoQ==
-X-Google-Smtp-Source: ABdhPJzlanZtbb9BGdfii0DcE9OSCvj2yyVYSpep2MYBMNOh1SH5wMpSHxztxzQJLoz9y7yPdd5mKxJnY6cjP3OZ38I=
-X-Received: by 2002:aa7:cb52:: with SMTP id w18mr38774344edt.362.1606135744041;
- Mon, 23 Nov 2020 04:49:04 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=hQ9274cJRcisj/k1DnNRPg/AWzSpXOLuASkzuQMMEJk=;
+        b=YfRajqsvYMuCKE7J9ZpVPGI50KC7fA0bvHG75AOMUOHaHMjieah+ve5am+wb1//Pyf
+         4bF4kdIkEZdzg2hxEVX4e6grvXhOcCt+eMMycukqJw0w50sasNHyJctsQuTEAdrDCCgV
+         fGMpqy/pg6Yo1g+lNNVMgBZ1wwrSoacMRjObucyMiWkrXn2K0gWE+lav4KUG0y9XqkV9
+         0ktF29kghykEvcdrO08oiw80Z/0bu3UzNUXKa6wUGBpK/CeVjBRUqKD5ba7ql4E1hSCv
+         G6KCrx+TBlH3rYrD81X5osKUyrih4il2/hRZo6MDVTY4Kwzg0nTC+0SiVHW3S0k8t6dg
+         gCRQ==
+X-Gm-Message-State: AOAM533rtClwD6z5as8I+K06mFfNmV8803iz/qDQud+wHghPgugYjm7i
+        NL68RnxYwyfuIAxYRRbuY8LTCQ==
+X-Google-Smtp-Source: ABdhPJyDOBP0tlstfPSopOHwDgmQuvftD21pkr092ilv2i4DAaBWKV4gEPJF2xEJaLrKvkQTiu1XiQ==
+X-Received: by 2002:a1c:9804:: with SMTP id a4mr23315406wme.158.1606134619163;
+        Mon, 23 Nov 2020 04:30:19 -0800 (PST)
+Received: from dell ([91.110.221.218])
+        by smtp.gmail.com with ESMTPSA id q16sm19309395wrn.13.2020.11.23.04.30.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Nov 2020 04:30:18 -0800 (PST)
+Date:   Mon, 23 Nov 2020 12:30:16 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        amd-gfx@lists.freedesktop.org, Ben Skeggs <bskeggs@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Drew Davenport <ddavenport@chromium.org>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Fritz Koenig <frkoenig@google.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Huang Rui <ray.huang@amd.com>,
+        Jerome Glisse <glisse@freedesktop.org>,
+        Jiansong Chen <Jiansong.Chen@amd.com>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Kalyan Thota <kalyan_t@codeaurora.org>,
+        Likun Gao <Likun.Gao@amd.com>, linaro-mm-sig@lists.linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        nouveau@lists.freedesktop.org,
+        Qinglang Miao <miaoqinglang@huawei.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Sonny Jiang <sonny.jiang@amd.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Tao Zhou <tao.zhou1@amd.com>
+Subject: Re: [PATCH 00/40] [Set 8] Rid W=1 warnings from GPU
+Message-ID: <20201123123016.GA4716@dell>
+References: <20201123111919.233376-1-lee.jones@linaro.org>
+ <feda98c5-a677-7bf5-c1e7-2bf311ba8097@amd.com>
 MIME-Version: 1.0
-References: <20200922165535.1356622-1-maxime.chevallier@bootlin.com>
- <20200922165535.1356622-3-maxime.chevallier@bootlin.com> <CAAEAJfCcPRnyjPozXG9rjovO+cJ6ZZBadShs_X9DQCrjSj7mUw@mail.gmail.com>
- <20201123082122.49a08ebb@bootlin.com>
-In-Reply-To: <20201123082122.49a08ebb@bootlin.com>
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date:   Mon, 23 Nov 2020 09:48:51 -0300
-Message-ID: <CAAEAJfD9r=skAPAEZX50Y-EnbeZRy+LEnERR_rvkcoghESEn2w@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] media: rockchip: Introduce driver for Rockhip's
- camera interface
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Helen Koike <helen.koike@collabora.com>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <feda98c5-a677-7bf5-c1e7-2bf311ba8097@amd.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Maxime,
+On Mon, 23 Nov 2020, Christian König wrote:
 
-On Mon, 23 Nov 2020 at 04:21, Maxime Chevallier
-<maxime.chevallier@bootlin.com> wrote:
->
-> Hi Ezequiel, and thanks a lot for the review !
->
-> On Fri, 2 Oct 2020 14:35:28 -0300
-> Ezequiel Garcia <ezequiel@vanguardiasur.com.ar> wrote:
->
-> > Hi Maxime,
-> >
-> >Thanks to Dafna, I found the patch ^_^
-> >
-> >The driver looks real good. Just a few comments below.
-> >
-> >Is the driver passing latest v4l2-compliance tests?
->
-> I'll post them along with the next iteration of the series.
->
-> >> +config VIDEO_ROCKCHIP_VIP
-> >> +       tristate "Rockchip VIP (Video InPut) Camera Interface"
-> >> +       depends on VIDEO_DEV && VIDEO_V4L2
-> >> +       depends on ARCH_ROCKCHIP || COMPILE_TEST
-> >> +       select VIDEOBUF2_DMA_SG
-> >> +       select VIDEOBUF2_DMA_CONTIG
-> >> +       select V4L2_FWNODE
-> >> +       select V4L2_MEM2MEM_DEV
-> >> +       help
-> >> +         This is a v4l2 driver for Rockchip SOC Camera interface.
-> >> +
-> >> +         To compile this driver as a module choose m here.
-> >> +
-> >
-> >Please add ... "the module will be called {the name}".
->
-> Sure, I will do !
->
-> [...]
->
-> >> +#define VIP_REQ_BUFS_MIN       1
-> >
-> >I think you might want to have more than 1 buffer
-> >as minimum. How about 3? Two for the ping and pong,
-> >and one more in the queue.
->
-> Yes you're correct, 3 should be the strict minimum required buffers
-> here, I didn't update that after adding the dual-buffering mode.
->
-> >> +#define VIP_MIN_WIDTH          64
-> >> +#define VIP_MIN_HEIGHT         64
-> >> +#define VIP_MAX_WIDTH          8192
-> >> +#define VIP_MAX_HEIGHT         8192
-> >> +
-> >> +#define RK_VIP_PLANE_Y                 0
-> >> +#define RK_VIP_PLANE_CBCR              1
-> >> +
-> >> +#define VIP_FETCH_Y_LAST_LINE(VAL) ((VAL) & 0x1fff)
-> >> +/* Check if swap y and c in bt1120 mode */
-> >> +#define VIP_FETCH_IS_Y_FIRST(VAL) ((VAL) & 0xf)
-> >> +
-> >> +/* Get xsubs and ysubs for fourcc formats
-> >> + *
-> >> + * @xsubs: horizontal color samples in a 4*4 matrix, for yuv
-> >> + * @ysubs: vertical color samples in a 4*4 matrix, for yuv
-> >> + */
-> >> +static int fcc_xysubs(u32 fcc, u32 *xsubs, u32 *ysubs)
-> >
-> >See below, you should be using v4l2_fill_pixfmt_mp.
-> >
-> >> +{
-> >> +       switch (fcc) {
-> >> +       case V4L2_PIX_FMT_NV16:
-> >> +       case V4L2_PIX_FMT_NV61:
-> >> +               *xsubs = 2;
-> >> +               *ysubs = 1;
-> >> +               break;
-> >> +       case V4L2_PIX_FMT_NV21:
-> >> +       case V4L2_PIX_FMT_NV12:
-> >> +               *xsubs = 2;
-> >> +               *ysubs = 2;
-> >> +               break;
-> >> +       default:
-> >> +               return -EINVAL;
-> >> +       }
-> >> +
-> >> +       return 0;
-> >> +}
-> >> +
-> >> +static const struct vip_output_fmt out_fmts[] = {
-> >> +       {
-> >> +               .fourcc = V4L2_PIX_FMT_NV16,
-> >> +               .cplanes = 2,
-> >
-> >From what I can see, you are only using this
-> >information to calculate bytesperline and sizeimage,
-> >so you should be using the v4l2_fill_pixfmt_mp() helper.
->
-> You're correct, it indeed makes things much easier and allowed to
-> removed a lot of redundant info here !
->
->
-> >> +static void rk_vip_set_fmt(struct rk_vip_stream *stream,
-> >> +                          struct v4l2_pix_format_mplane *pixm,
-> >> +                          bool try)
-> >> +{
-> >> +       struct rk_vip_device *dev = stream->vipdev;
-> >> +       struct v4l2_subdev_format sd_fmt;
-> >> +       const struct vip_output_fmt *fmt;
-> >> +       struct v4l2_rect input_rect;
-> >> +       unsigned int planes, imagesize = 0;
-> >> +       u32 xsubs = 1, ysubs = 1;
-> >> +       int i;
-> >> +
-> >
-> >I was expecting to see some is_busy or is_streaming check
-> >here, have you tested what happens if you change the format
-> >while streaming, or after buffers are queued?
->
-> Yes correct. I used the stream->state private flag here, but I it was
-> also brought to my attention that there also exists a vb2_is_busy()
-> helper, but I'm unsure if it would be correct to use it here.
->
+> Only skimmed over them, but over all looks sane to me.
+> 
+> Series is Acked-by: Christian König <christian.koenig@amd.com>
 
-Long story, short: when the application creates buffers,
-with e.g. REQBUF (see vb2_core_reqbufs), it will call
-the driver (vb2_ops.queue_setup), to get the planes' sizes.
+Thanks Christian, much appreciated.
 
-In the current model, for a given vb2 queue, all the buffers
-are the same size. In practice, the simpler way to express
-this is not allowing S_FMT if there are buffers allocated
-in the queue (vb2_is_busy).
+> Am 23.11.20 um 12:18 schrieb Lee Jones:
+> > This set is part of a larger effort attempting to clean-up W=1
+> > kernel builds, which are currently overwhelmingly riddled with
+> > niggly little warnings.
+> > 
+> > Only 900 (from 5000) to go!
+> > 
+> > Lee Jones (40):
+> >    drm/radeon/radeon_device: Consume our own header where the prototypes
+> >      are located
+> >    drm/amd/amdgpu/amdgpu_ttm: Add description for 'page_flags'
+> >    drm/amd/amdgpu/amdgpu_ib: Provide docs for 'amdgpu_ib_schedule()'s
+> >      'job' param
+> >    drm/amd/amdgpu/amdgpu_virt: Correct possible copy/paste or doc-rot
+> >      misnaming issue
+> >    drm/amd/amdgpu/cik_ih: Supply description for 'ih' in
 
-You could relax the vb2_is_busy requirement in your driver,
-but I usually find it's not worth the trouble.
+[...]
 
->
-> >> +
-> >> +static int rk_vip_g_input(struct file *file, void *fh, unsigned int *i)
-> >> +{
-> >> +       *i = 0;
-> >> +       return 0;
-> >> +}
-> >> +
-> >> +static int rk_vip_s_input(struct file *file, void *fh, unsigned int i)
-> >> +{
-> >
-> >Only one input, why do you need to support this ioctl at all?
->
-> I actually saw a fair amount of existing drivers implementing these
-> callbacks even for only one input, so I don't really know if I should
-> remove it or not ?
->
-
-S_INPUT is used e.g. on capture devices that have multiple
-inputs and can capture from one input at a time.
-
-If the ioctl is empty like this, the driver can simply not support
-the ioctl.
-
-Best regards,
-Ezequiel
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
