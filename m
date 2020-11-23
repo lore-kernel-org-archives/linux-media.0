@@ -2,62 +2,61 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 370C5C64E7A
-	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 23:04:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08DCDC64E7C
+	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 23:04:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 03176206D8
-	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 23:04:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B851C20691
+	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 23:04:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="K5VTPWU2"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UpqUn136"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388153AbgKWXDY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 Nov 2020 18:03:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41136 "EHLO
+        id S2387724AbgKWXDa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 23 Nov 2020 18:03:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733244AbgKWXDX (ORCPT
+        with ESMTP id S2388150AbgKWXDY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 23 Nov 2020 18:03:23 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019FCC061A4E
-        for <linux-media@vger.kernel.org>; Mon, 23 Nov 2020 15:03:20 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id h21so1076216wmb.2
-        for <linux-media@vger.kernel.org>; Mon, 23 Nov 2020 15:03:20 -0800 (PST)
+        Mon, 23 Nov 2020 18:03:24 -0500
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77512C061A4E
+        for <linux-media@vger.kernel.org>; Mon, 23 Nov 2020 15:03:24 -0800 (PST)
+Received: by mail-wr1-x443.google.com with SMTP id l1so20426550wrb.9
+        for <linux-media@vger.kernel.org>; Mon, 23 Nov 2020 15:03:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=B8tFpClQae7S/QF6hyKYnJwDqktAypaLM7qcZTYY+Ko=;
-        b=K5VTPWU2nZ6WkSVaJgD8uOTRzCuIXJb9C8E6uKmsjlXITdRNnm+AsYkthh+ZJfXuD6
-         gq38WWzv0DP5lvBTmFe5oy1hLzfhwyGws1MLBQB2cTOVVPQv+7ux9EBO767jhF0yImuD
-         Tsv9SjFXWqPhK2iF04IjyzWXcE2cSGwheFwpiyzZUxtH+R593C+rPtfL3sP2E9/YQUbZ
-         HZQVly4smLGgDYKoLNs7ApHTUXkUfuuyeRkIXpR/je3lMOsxWyx661vv1XTPIU8VRNmC
-         MDEv8j1AqBdN/rw143NxPcUpEm8SuO9Ov0cX/1poeIpfuzB4rAkS2ZPbR3kSLrL3yp5v
-         457g==
+        bh=Ig5qutKRJGU1yXjmQCggg+HJKA/iCr5AyEcACinSfrY=;
+        b=UpqUn136TPn1vBGfXQ9TvI3oBkyqkcEE6GJqfE2pgB0KAB5lkuSHgzxEy5V3hUdSzT
+         MKI1YZyMdpR6DEmEpgpI6sfJ9paUDEmAZHKrpnBC8KcjANSVDJSPrwapCUqZRsx1HHYs
+         zp1BMzdQBqINhyJrE7XHlA2KbDBo9XXAOm4YZAhYETz/HdeH0q6u3vpksjMgZLl9Jm/f
+         22MWOyw5c5ycdQwTFH3YXH+px8GMMYkVIo8qxKfr8OHnjJz5qFPOCmbyRzBfhaZYubuG
+         DLUp1VO7kR/wZSWD2m82MwY7CI8VHap8AnpXvVU0gQb1JoHxRwUXe1l3BHKANPfvOONd
+         LNSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=B8tFpClQae7S/QF6hyKYnJwDqktAypaLM7qcZTYY+Ko=;
-        b=nAMjcw8se0MGUJA51OF9WszEdaJYGVqiMU3ufaIlZr9TZPfbDPSf1GG0lAo0AaMC9L
-         kV6+F3XKk9YySGPcjAFy9YSbv6SyAzKbsLdS3w2Kf+p54uZQr5y77ct4x2VMaVGcyEgu
-         4ZDL28f1NgXTVHhvyNO/NH4ca/E3nQDq98JylcqDaTDAXf90FAlrv3bkMM4+a+H6+7QI
-         X43InW4wn5QxWX/5Tldns9jGhJkAmyljomFU22XVUQ5v4N2KFc19FuEdqc+AOZB2PAAm
-         PUuxytte/8anR4etYcrZbVa5+wN/dz+dSvYk0ie/5ADCcjI/Xe3M5ZFp1yTYpZCjOUOR
-         I0TQ==
-X-Gm-Message-State: AOAM5314cx/FK64oCP2LacJlXS1qlHXMgfHSUtN7N+fBslWS4R8IM4OX
-        DB6YIme+6E7ri6dWHmgJBdIE87xwK4g/jo2e
-X-Google-Smtp-Source: ABdhPJxW8rLZ5frMnhpEXswnoKRMFK9KXwSTCbsfCI6PWj56BHQMpi3lWlqgA3HgH6XpXhSHDg9VwA==
-X-Received: by 2002:a1c:ddd7:: with SMTP id u206mr1160056wmg.27.1606172599393;
-        Mon, 23 Nov 2020 15:03:19 -0800 (PST)
+        bh=Ig5qutKRJGU1yXjmQCggg+HJKA/iCr5AyEcACinSfrY=;
+        b=ldmb9qCzzTH2ibjjNHzTDSaP0Eu86j5iq9HCGOgVdCXxho0M1TFgAe2aelyHzf1c4A
+         Fcm+QFNY2XfyMIdsFQghwgGNgn90VhAfhG+pzuwg/lHFWGM0tPuLJ8r6n0IeACQof3DZ
+         kQ9jKg4YcvGWRtX0LgKTjhikuHCQHugADfwqYe8ngVmpw3CbwnkJPUnW1MMzeAbtx2l5
+         JZnfo1/YFviLaZCPLnaLdZgwgCOTQ/d+FW1SdJ7Z56593u7MCVkyazln4WpEcwMm2Od6
+         WEtReVyrGlT5MQxStyPn5M09+mbj3aONKV0bG8NG391kC5yl8RnhZ/tRS6M11x2S7LK9
+         NLLg==
+X-Gm-Message-State: AOAM530R3kyMECSCWH7Otrg8Lsr5Pjbfa7aVnO4IjJ+tbIIcpAeeYOQ3
+        OFSHx+J6Ww98edTQu6cdVBNWDUxrK07G/Ayi
+X-Google-Smtp-Source: ABdhPJzP+4TrdLHqKkuXpQaBlPiMq0oU1TNFP4vuS9lGfoF7EYXhlAU8jknWpF9Jrczt3agiR0d2MQ==
+X-Received: by 2002:a5d:448b:: with SMTP id j11mr1965244wrq.236.1606172602975;
+        Mon, 23 Nov 2020 15:03:22 -0800 (PST)
 Received: from localhost.localdomain (hst-221-74.medicom.bg. [84.238.221.74])
-        by smtp.gmail.com with ESMTPSA id q66sm1501463wme.6.2020.11.23.15.03.18
+        by smtp.gmail.com with ESMTPSA id q66sm1501463wme.6.2020.11.23.15.03.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Nov 2020 15:03:18 -0800 (PST)
+        Mon, 23 Nov 2020 15:03:22 -0800 (PST)
 From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
@@ -65,9 +64,9 @@ Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Ezequiel Garcia <ezequiel@collabora.com>,
         Nicolas Dufresne <nicolas.dufresne@collabora.com>,
         Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH v2 1/3] v4l: Add HDR10 static metadata controls
-Date:   Tue, 24 Nov 2020 01:02:55 +0200
-Message-Id: <20201123230257.31690-2-stanimir.varbanov@linaro.org>
+Subject: [PATCH v2 3/3] venus: venc: Add support for CLL and Mastering display controls
+Date:   Tue, 24 Nov 2020 01:02:57 +0200
+Message-Id: <20201123230257.31690-4-stanimir.varbanov@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20201123230257.31690-1-stanimir.varbanov@linaro.org>
 References: <20201123230257.31690-1-stanimir.varbanov@linaro.org>
@@ -75,200 +74,170 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add Content light level and Mastering display colour volume v4l2
-compounf controls, relevant payload structures and validation.
+Create CLL and Mastering display colour volume v4l2 controls for
+encoder, add handling of HDR10 PQ SEI packet payloads for v4.
 
 Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 ---
- drivers/media/v4l2-core/v4l2-ctrls.c | 62 ++++++++++++++++++++++++++++
- include/media/hdr10-ctrls.h          | 55 ++++++++++++++++++++++++
- include/media/v4l2-ctrls.h           |  3 ++
- 3 files changed, 120 insertions(+)
- create mode 100644 include/media/hdr10-ctrls.h
+ drivers/media/platform/qcom/venus/core.h      |  3 ++
+ drivers/media/platform/qcom/venus/hfi_cmds.c  |  8 +++++
+ .../media/platform/qcom/venus/hfi_helper.h    | 20 +++++++++++++
+ drivers/media/platform/qcom/venus/venc.c      | 29 +++++++++++++++++++
+ .../media/platform/qcom/venus/venc_ctrls.c    | 16 +++++++++-
+ 5 files changed, 75 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index ad47d00e28d6..028630576401 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -1024,6 +1024,9 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_MPEG_VIDEO_HEVC_DECODE_MODE:		return "HEVC Decode Mode";
- 	case V4L2_CID_MPEG_VIDEO_HEVC_START_CODE:		return "HEVC Start Code";
+diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
+index 3bc129a4f817..3ae6cd2b8d31 100644
+--- a/drivers/media/platform/qcom/venus/core.h
++++ b/drivers/media/platform/qcom/venus/core.h
+@@ -245,6 +245,9 @@ struct venc_controls {
  
-+	case V4L2_CID_MPEG_VIDEO_HDR10_CLL_INFO:		return "HDR10 Content Light Info";
-+	case V4L2_CID_MPEG_VIDEO_HDR10_MASTERING_DISPLAY:	return "HDR10 Mastering Display";
+ 	u32 profile;
+ 	u32 level;
 +
- 	/* CAMERA controls */
- 	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
- 	case V4L2_CID_CAMERA_CLASS:		return "Camera Controls";
-@@ -1461,6 +1464,12 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
- 	case V4L2_CID_MPEG_VIDEO_HEVC_SLICE_PARAMS:
- 		*type = V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS;
- 		break;
-+	case V4L2_CID_MPEG_VIDEO_HDR10_CLL_INFO:
-+		*type = V4L2_CTRL_TYPE_HDR10_CLL_INFO;
-+		break;
-+	case V4L2_CID_MPEG_VIDEO_HDR10_MASTERING_DISPLAY:
-+		*type = V4L2_CTRL_TYPE_HDR10_MASTERING_DISPLAY;
-+		break;
- 	case V4L2_CID_UNIT_CELL_SIZE:
- 		*type = V4L2_CTRL_TYPE_AREA;
- 		*flags |= V4L2_CTRL_FLAG_READ_ONLY;
-@@ -1775,6 +1784,7 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 	struct v4l2_ctrl_hevc_sps *p_hevc_sps;
- 	struct v4l2_ctrl_hevc_pps *p_hevc_pps;
- 	struct v4l2_ctrl_hevc_slice_params *p_hevc_slice_params;
-+	struct v4l2_ctrl_hdr10_mastering_display *p_hdr10_mastering;
- 	struct v4l2_area *area;
- 	void *p = ptr.p + idx * ctrl->elem_size;
- 	unsigned int i;
-@@ -1934,6 +1944,52 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 		zero_padding(*p_hevc_slice_params);
- 		break;
++	struct v4l2_ctrl_hdr10_cll_info cll;
++	struct v4l2_ctrl_hdr10_mastering_display mastering;
+ };
  
-+	case V4L2_CTRL_TYPE_HDR10_CLL_INFO:
+ struct venus_buffer {
+diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.c b/drivers/media/platform/qcom/venus/hfi_cmds.c
+index 7022368c1e63..081e5a816bca 100644
+--- a/drivers/media/platform/qcom/venus/hfi_cmds.c
++++ b/drivers/media/platform/qcom/venus/hfi_cmds.c
+@@ -1205,6 +1205,14 @@ pkt_session_set_property_4xx(struct hfi_session_set_property_pkt *pkt,
+ 		pkt->shdr.hdr.size += sizeof(u32) + sizeof(*cu);
+ 		break;
+ 	}
++	case HFI_PROPERTY_PARAM_VENC_HDR10_PQ_SEI: {
++		struct hfi_hdr10_pq_sei *in = pdata, *hdr10 = prop_data;
++
++		memcpy(hdr10, in, sizeof(*hdr10));
++		pkt->shdr.hdr.size += sizeof(u32) + sizeof(*hdr10);
 +		break;
++	}
 +
-+	case V4L2_CTRL_TYPE_HDR10_MASTERING_DISPLAY:
-+		p_hdr10_mastering = p;
+ 	case HFI_PROPERTY_CONFIG_VENC_MAX_BITRATE:
+ 	case HFI_PROPERTY_CONFIG_VDEC_POST_LOOP_DEBLOCKER:
+ 	case HFI_PROPERTY_PARAM_BUFFER_ALLOC_MODE:
+diff --git a/drivers/media/platform/qcom/venus/hfi_helper.h b/drivers/media/platform/qcom/venus/hfi_helper.h
+index 60ee2479f7a6..8e8dc6b5c855 100644
+--- a/drivers/media/platform/qcom/venus/hfi_helper.h
++++ b/drivers/media/platform/qcom/venus/hfi_helper.h
+@@ -506,6 +506,7 @@
+ #define HFI_PROPERTY_PARAM_VENC_VPX_ERROR_RESILIENCE_MODE	0x2005029
+ #define HFI_PROPERTY_PARAM_VENC_HIER_B_MAX_NUM_ENH_LAYER	0x200502c
+ #define HFI_PROPERTY_PARAM_VENC_HIER_P_HYBRID_MODE		0x200502f
++#define HFI_PROPERTY_PARAM_VENC_HDR10_PQ_SEI			0x2005036
+ 
+ /*
+  * HFI_PROPERTY_CONFIG_VENC_COMMON_START
+@@ -791,6 +792,25 @@ struct hfi_ltr_mark {
+ 	u32 mark_frame;
+ };
+ 
++struct hfi_mastering_display_colour_sei_payload {
++	u32 display_primaries_x[3];
++	u32 display_primaries_y[3];
++	u32 white_point_x;
++	u32 white_point_y;
++	u32 max_display_mastering_luminance;
++	u32 min_display_mastering_luminance;
++};
 +
-+		for (i = 0; i < 3; ++i) {
-+			if (p_hdr10_mastering->display_primaries_x[i] <
-+				V4L2_HDR10_MASTERING_PRIMARIES_X_LOW ||
-+			    p_hdr10_mastering->display_primaries_x[i] >
-+				V4L2_HDR10_MASTERING_PRIMARIES_X_HIGH ||
-+			    p_hdr10_mastering->display_primaries_y[i] <
-+				V4L2_HDR10_MASTERING_PRIMARIES_Y_LOW ||
-+			    p_hdr10_mastering->display_primaries_y[i] >
-+				V4L2_HDR10_MASTERING_PRIMARIES_Y_HIGH)
-+				return -EINVAL;
++struct hfi_content_light_level_sei_payload {
++	u32 max_content_light;
++	u32 max_pic_average_light;
++};
++
++struct hfi_hdr10_pq_sei {
++	struct hfi_mastering_display_colour_sei_payload mastering;
++	struct hfi_content_light_level_sei_payload cll;
++};
++
+ struct hfi_framesize {
+ 	u32 buffer_type;
+ 	u32 width;
+diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
+index 0bf92cc21f3a..daeaca30e9e3 100644
+--- a/drivers/media/platform/qcom/venus/venc.c
++++ b/drivers/media/platform/qcom/venus/venc.c
+@@ -587,6 +587,35 @@ static int venc_set_properties(struct venus_inst *inst)
+ 			return ret;
+ 	}
+ 
++	if (inst->fmt_cap->pixfmt == V4L2_PIX_FMT_HEVC) {
++		struct hfi_hdr10_pq_sei hdr10;
++		unsigned int c;
++
++		ptype = HFI_PROPERTY_PARAM_VENC_HDR10_PQ_SEI;
++
++		for (c = 0; c < 3; c++) {
++			hdr10.mastering.display_primaries_x[c] =
++				ctr->mastering.display_primaries_x[c];
++			hdr10.mastering.display_primaries_y[c] =
++				ctr->mastering.display_primaries_y[c];
 +		}
 +
-+		if (p_hdr10_mastering->white_point_x <
-+			V4L2_HDR10_MASTERING_WHITE_POINT_X_LOW ||
-+		    p_hdr10_mastering->white_point_x >
-+			V4L2_HDR10_MASTERING_WHITE_POINT_X_HIGH ||
-+		    p_hdr10_mastering->white_point_y <
-+			V4L2_HDR10_MASTERING_WHITE_POINT_Y_LOW ||
-+		    p_hdr10_mastering->white_point_y >
-+			V4L2_HDR10_MASTERING_WHITE_POINT_Y_HIGH)
-+			return -EINVAL;
++		hdr10.mastering.white_point_x = ctr->mastering.white_point_x;
++		hdr10.mastering.white_point_y = ctr->mastering.white_point_y;
++		hdr10.mastering.max_display_mastering_luminance =
++			ctr->mastering.max_luminance;
++		hdr10.mastering.min_display_mastering_luminance =
++			ctr->mastering.min_luminance;
 +
-+		if (p_hdr10_mastering->max_luminance <
-+			V4L2_HDR10_MASTERING_MAX_LUMA_LOW ||
-+		    p_hdr10_mastering->max_luminance >
-+			V4L2_HDR10_MASTERING_MAX_LUMA_HIGH ||
-+		    p_hdr10_mastering->min_luminance <
-+			V4L2_HDR10_MASTERING_MIN_LUMA_LOW ||
-+		    p_hdr10_mastering->min_luminance >
-+			V4L2_HDR10_MASTERING_MIN_LUMA_HIGH)
-+			return -EINVAL;
++		hdr10.cll.max_content_light = ctr->cll.max_content_light_level;
++		hdr10.cll.max_pic_average_light =
++			ctr->cll.max_pic_average_light_level;
 +
-+		if (p_hdr10_mastering->max_luminance ==
-+			V4L2_HDR10_MASTERING_MAX_LUMA_LOW &&
-+		    p_hdr10_mastering->min_luminance ==
-+			V4L2_HDR10_MASTERING_MIN_LUMA_HIGH)
-+			return -EINVAL;
++		ret = hfi_session_set_property(inst, ptype, &hdr10);
++		if (ret)
++			return ret;
++	}
 +
-+		break;
-+
- 	case V4L2_CTRL_TYPE_AREA:
- 		area = p;
- 		if (!area->width || !area->height)
-@@ -2626,6 +2682,12 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
- 	case V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS:
- 		elem_size = sizeof(struct v4l2_ctrl_hevc_slice_params);
+ 	/* IDR periodicity, n:
+ 	 * n = 0 - only the first I-frame is IDR frame
+ 	 * n = 1 - all I-frames will be IDR frames
+diff --git a/drivers/media/platform/qcom/venus/venc_ctrls.c b/drivers/media/platform/qcom/venus/venc_ctrls.c
+index 0708b3b89d0c..87ba0cf9f37e 100644
+--- a/drivers/media/platform/qcom/venus/venc_ctrls.c
++++ b/drivers/media/platform/qcom/venus/venc_ctrls.c
+@@ -198,6 +198,12 @@ static int venc_op_s_ctrl(struct v4l2_ctrl *ctrl)
+ 	case V4L2_CID_MPEG_VIDEO_FRAME_SKIP_MODE:
+ 		ctr->frame_skip_mode = ctrl->val;
  		break;
-+	case V4L2_CTRL_TYPE_HDR10_CLL_INFO:
-+		elem_size = sizeof(struct v4l2_ctrl_hdr10_cll_info);
++	case V4L2_CID_MPEG_VIDEO_HDR10_CLL_INFO:
++		ctr->cll = *ctrl->p_new.p_hdr10_cll;
 +		break;
-+	case V4L2_CTRL_TYPE_HDR10_MASTERING_DISPLAY:
-+		elem_size = sizeof(struct v4l2_ctrl_hdr10_mastering_display);
++	case V4L2_CID_MPEG_VIDEO_HDR10_MASTERING_DISPLAY:
++		ctr->mastering = *ctrl->p_new.p_hdr10_mastering;
 +		break;
- 	case V4L2_CTRL_TYPE_AREA:
- 		elem_size = sizeof(struct v4l2_area);
- 		break;
-diff --git a/include/media/hdr10-ctrls.h b/include/media/hdr10-ctrls.h
-new file mode 100644
-index 000000000000..f6f77edc0b60
---- /dev/null
-+++ b/include/media/hdr10-ctrls.h
-@@ -0,0 +1,55 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * These are the HEVC state controls for use with stateless HEVC
-+ * codec drivers.
-+ *
-+ * It turns out that these structs are not stable yet and will undergo
-+ * more changes. So keep them private until they are stable and ready to
-+ * become part of the official public API.
-+ */
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -213,7 +219,7 @@ int venc_ctrl_init(struct venus_inst *inst)
+ {
+ 	int ret;
+ 
+-	ret = v4l2_ctrl_handler_init(&inst->ctrl_handler, 33);
++	ret = v4l2_ctrl_handler_init(&inst->ctrl_handler, 35);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -364,6 +370,14 @@ int venc_ctrl_init(struct venus_inst *inst)
+ 			       (1 << V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT)),
+ 			       V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_DISABLED);
+ 
++	v4l2_ctrl_new_std_compound(&inst->ctrl_handler, &venc_ctrl_ops,
++				   V4L2_CID_MPEG_VIDEO_HDR10_CLL_INFO,
++				   v4l2_ctrl_ptr_create(NULL));
 +
-+#ifndef _HDR10_CTRLS_H_
-+#define _HDR10_CTRLS_H_
++	v4l2_ctrl_new_std_compound(&inst->ctrl_handler, &venc_ctrl_ops,
++				   V4L2_CID_MPEG_VIDEO_HDR10_MASTERING_DISPLAY,
++				   v4l2_ctrl_ptr_create(NULL));
 +
-+/*
-+ * Content light level information.
-+ * Source Rec. ITU-T H.265 v7 (11/2019) HEVC; D.2.35
-+ */
-+#define V4L2_CID_MPEG_VIDEO_HDR10_CLL_INFO	(V4L2_CID_MPEG_BASE + 1017)
-+#define V4L2_CTRL_TYPE_HDR10_CLL_INFO		0x0123
-+
-+struct v4l2_ctrl_hdr10_cll_info {
-+	__u16 max_content_light_level;
-+	__u16 max_pic_average_light_level;
-+};
-+
-+/*
-+ * Mastering display colour volume.
-+ * Source Rec. ITU-T H.265 v7 (11/2019) HEVC; D.2.28
-+ */
-+#define V4L2_CID_MPEG_VIDEO_HDR10_MASTERING_DISPLAY (V4L2_CID_MPEG_BASE + 1018)
-+#define V4L2_CTRL_TYPE_HDR10_MASTERING_DISPLAY	0x0124
-+
-+#define V4L2_HDR10_MASTERING_PRIMARIES_X_LOW	5
-+#define V4L2_HDR10_MASTERING_PRIMARIES_X_HIGH	37000
-+#define V4L2_HDR10_MASTERING_PRIMARIES_Y_LOW	5
-+#define V4L2_HDR10_MASTERING_PRIMARIES_Y_HIGH	42000
-+#define V4L2_HDR10_MASTERING_WHITE_POINT_X_LOW	5
-+#define V4L2_HDR10_MASTERING_WHITE_POINT_X_HIGH	37000
-+#define V4L2_HDR10_MASTERING_WHITE_POINT_Y_LOW	5
-+#define V4L2_HDR10_MASTERING_WHITE_POINT_Y_HIGH	42000
-+#define V4L2_HDR10_MASTERING_MAX_LUMA_LOW	50000
-+#define V4L2_HDR10_MASTERING_MAX_LUMA_HIGH	100000000
-+#define V4L2_HDR10_MASTERING_MIN_LUMA_LOW	1
-+#define V4L2_HDR10_MASTERING_MIN_LUMA_HIGH	50000
-+
-+struct v4l2_ctrl_hdr10_mastering_display {
-+	__u16 display_primaries_x[3];
-+	__u16 display_primaries_y[3];
-+	__u16 white_point_x;
-+	__u16 white_point_y;
-+	__u32 max_luminance;
-+	__u32 min_luminance;
-+};
-+
-+#endif
-diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
-index 4fbace0fc7e5..81bd026fc1ea 100644
---- a/include/media/v4l2-ctrls.h
-+++ b/include/media/v4l2-ctrls.h
-@@ -19,6 +19,7 @@
-  */
- #include <media/mpeg2-ctrls.h>
- #include <media/fwht-ctrls.h>
-+#include <media/hdr10-ctrls.h>
- #include <media/h264-ctrls.h>
- #include <media/vp8-ctrls.h>
- #include <media/hevc-ctrls.h>
-@@ -80,6 +81,8 @@ union v4l2_ctrl_ptr {
- 	struct v4l2_ctrl_hevc_sps *p_hevc_sps;
- 	struct v4l2_ctrl_hevc_pps *p_hevc_pps;
- 	struct v4l2_ctrl_hevc_slice_params *p_hevc_slice_params;
-+	struct v4l2_ctrl_hdr10_cll_info *p_hdr10_cll;
-+	struct v4l2_ctrl_hdr10_mastering_display *p_hdr10_mastering;
- 	struct v4l2_area *p_area;
- 	void *p;
- 	const void *p_const;
+ 	ret = inst->ctrl_handler.error;
+ 	if (ret)
+ 		goto err;
 -- 
 2.17.1
 
