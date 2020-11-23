@@ -5,24 +5,24 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67D91C56202
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7772C63798
 	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 14:41:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 22DF52075A
+	by mail.kernel.org (Postfix) with ESMTP id 980D720782
 	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 14:41:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729310AbgKWOkb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 Nov 2020 09:40:31 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:34860 "EHLO
+        id S1729647AbgKWOki (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 23 Nov 2020 09:40:38 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:34888 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728872AbgKWOk2 (ORCPT
+        with ESMTP id S1729573AbgKWOkh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 23 Nov 2020 09:40:28 -0500
+        Mon, 23 Nov 2020 09:40:37 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id B53281F449A7
+        with ESMTPSA id 24CD71F449A7
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
@@ -33,9 +33,9 @@ Cc:     kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Jernej Skrabec <jernej.skrabec@siol.net>,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v4 03/13] media: cedrus: h264: Support profile controls
-Date:   Mon, 23 Nov 2020 11:39:50 -0300
-Message-Id: <20201123144000.81310-4-ezequiel@collabora.com>
+Subject: [PATCH v4 05/13] media: Clean stateless control includes
+Date:   Mon, 23 Nov 2020 11:39:52 -0300
+Message-Id: <20201123144000.81310-6-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201123144000.81310-1-ezequiel@collabora.com>
 References: <20201123144000.81310-1-ezequiel@collabora.com>
@@ -45,48 +45,47 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Cedrus supports H.264 profiles from Baseline to High,
-except for the Extended profile
+Avoid including h264-ctrls.h, vp8-ctrls.h, etc,
+and instead just include v4l2-ctrls.h which does the right
+thing.
 
-Expose the V4L2_CID_MPEG_VIDEO_H264_PROFILE so that
-userspace can query the driver for the supported
-profiles and levels.
+This is in preparation for moving the stateless controls
+out of staging, which will mean removing some of these headers.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- drivers/staging/media/sunxi/cedrus/cedrus.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ drivers/staging/media/hantro/hantro_hw.h | 4 +---
+ include/media/v4l2-h264.h                | 2 +-
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/staging/media/sunxi/cedrus/cedrus.c
-index 9a102b7c1bb9..97000f0e0011 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
-@@ -103,6 +103,25 @@ static const struct cedrus_control cedrus_controls[] = {
- 		.codec		= CEDRUS_CODEC_H264,
- 		.required	= false,
- 	},
-+	/*
-+	 * We only expose supported profiles information,
-+	 * and not levels as it's not clear what is supported
-+	 * for each hardware/core version.
-+	 * In any case, TRY/S_FMT will clamp the format resolution
-+	 * to the maximum supported.
-+	 */
-+	{
-+		.cfg = {
-+			.id	= V4L2_CID_MPEG_VIDEO_H264_PROFILE,
-+			.min	= V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE,
-+			.def	= V4L2_MPEG_VIDEO_H264_PROFILE_MAIN,
-+			.max	= V4L2_MPEG_VIDEO_H264_PROFILE_HIGH,
-+			.menu_skip_mask =
-+				BIT(V4L2_MPEG_VIDEO_H264_PROFILE_EXTENDED),
-+		},
-+		.codec		= CEDRUS_CODEC_H264,
-+		.required	= false,
-+	},
- 	{
- 		.cfg = {
- 			.id	= V4L2_CID_MPEG_VIDEO_HEVC_SPS,
+diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
+index 219283a06f52..34c9e4649a25 100644
+--- a/drivers/staging/media/hantro/hantro_hw.h
++++ b/drivers/staging/media/hantro/hantro_hw.h
+@@ -11,9 +11,7 @@
+ 
+ #include <linux/interrupt.h>
+ #include <linux/v4l2-controls.h>
+-#include <media/h264-ctrls.h>
+-#include <media/mpeg2-ctrls.h>
+-#include <media/vp8-ctrls.h>
++#include <media/v4l2-ctrls.h>
+ #include <media/videobuf2-core.h>
+ 
+ #define DEC_8190_ALIGN_MASK	0x07U
+diff --git a/include/media/v4l2-h264.h b/include/media/v4l2-h264.h
+index f08ba181263d..d2314f4d4490 100644
+--- a/include/media/v4l2-h264.h
++++ b/include/media/v4l2-h264.h
+@@ -10,7 +10,7 @@
+ #ifndef _MEDIA_V4L2_H264_H
+ #define _MEDIA_V4L2_H264_H
+ 
+-#include <media/h264-ctrls.h>
++#include <media/v4l2-ctrls.h>
+ 
+ /**
+  * struct v4l2_h264_reflist_builder - Reference list builder object
 -- 
 2.27.0
 
