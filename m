@@ -2,131 +2,80 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45B74C6379F
-	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 14:31:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 650EDC64E75
+	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 14:40:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E691020758
-	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 14:31:25 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="D01SUDy+"
+	by mail.kernel.org (Postfix) with ESMTP id 23B0D2080A
+	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 14:40:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389155AbgKWObN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 Nov 2020 09:31:13 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47610 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731426AbgKWObN (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 23 Nov 2020 09:31:13 -0500
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B75C52083E;
-        Mon, 23 Nov 2020 14:31:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606141872;
-        bh=vuZ+rah2hE0LNJaScoerOKwY3fCT0EUtYP8hbvGF1o8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=D01SUDy+AOXdGks3r6EavahhLVcEAH4UbH/COnWtfnARQswwUTjGU0Da4LEgSMvZH
-         5oEB+rRWqD+Zcj/oNJBNUMdgBA6MjM9JHYG/XC35GJLcUaxFbJmRHe11UtVWoZS7F0
-         NUCXLLEtcUvv8IS5a0O0Huvy08wnb3nk5Oy66jr4=
-Received: by mail-ed1-f52.google.com with SMTP id v22so17289665edt.9;
-        Mon, 23 Nov 2020 06:31:11 -0800 (PST)
-X-Gm-Message-State: AOAM53011dUGCEQg6RfuHas5TI3prA7pKP1OQNbwbIiUi0LF4rMNRIrV
-        UfSLtxddbm+LRN3h3ELTSgzQNxfE5aVV+dEaTQ==
-X-Google-Smtp-Source: ABdhPJwOmjtyvLkvrDJkqOOjZKJiyogKz1KZcoxRJRbT0kCAwbM+Un1KY6jBLjQqvchQiCiAbumdEjhrGCQBqzMb6+E=
-X-Received: by 2002:a50:f1d2:: with SMTP id y18mr13457355edl.166.1606141870269;
- Mon, 23 Nov 2020 06:31:10 -0800 (PST)
-MIME-Version: 1.0
-References: <20201113134938.4004947-1-lee.jones@linaro.org> <20201113134938.4004947-11-lee.jones@linaro.org>
-In-Reply-To: <20201113134938.4004947-11-lee.jones@linaro.org>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Mon, 23 Nov 2020 22:30:58 +0800
-X-Gmail-Original-Message-ID: <CAAOTY__N5E6TApkVomnvWpcsLAq4tpxZffpq+wxH6_q_0uNZ7g@mail.gmail.com>
-Message-ID: <CAAOTY__N5E6TApkVomnvWpcsLAq4tpxZffpq+wxH6_q_0uNZ7g@mail.gmail.com>
-Subject: Re: [PATCH 10/40] drm/mediatek/mtk_drm_drv: Staticise local function
- invoked by reference
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        id S1729076AbgKWOkX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 23 Nov 2020 09:40:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47840 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728771AbgKWOkW (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 23 Nov 2020 09:40:22 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A33C0613CF;
+        Mon, 23 Nov 2020 06:40:21 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id 9E2701F449A7
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        YT SHEN <yt.shen@mediatek.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Maxime Ripard <mripard@kernel.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: [PATCH v4 01/13] media: ctrls: Add validate failure debug message
+Date:   Mon, 23 Nov 2020 11:39:48 -0300
+Message-Id: <20201123144000.81310-2-ezequiel@collabora.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20201123144000.81310-1-ezequiel@collabora.com>
+References: <20201123144000.81310-1-ezequiel@collabora.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi, Lee:
+Add a debug message for control validation (validate_new)
+failures. This is useful to debug issues with ioctls such
+as VIDIOC_TRY_EXT_CTRLS and VIDIOC_S_EXT_CTRLS.
 
-Lee Jones <lee.jones@linaro.org> =E6=96=BC 2020=E5=B9=B411=E6=9C=8813=E6=97=
-=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=889:49=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> Fixes the following W=3D1 kernel build warning(s):
->
->  drivers/gpu/drm/mediatek/mtk_drm_drv.c:316:24: warning: no previous prot=
-otype for =E2=80=98mtk_drm_gem_prime_import=E2=80=99 [-Wmissing-prototypes]
->
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+---
+ drivers/media/v4l2-core/v4l2-ctrls.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Applied to mediatek-drm-next [1], thanks.
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
+index 7febfbb256a6..3979e7924007 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls.c
+@@ -4112,8 +4112,13 @@ static int try_set_ext_ctrls_common(struct v4l2_fh *fh,
+ 			struct v4l2_ctrl *ctrl = helpers[idx].ref->ctrl;
+ 
+ 			ret = user_to_new(cs->controls + idx, ctrl);
+-			if (!ret && ctrl->is_ptr)
++			if (!ret && ctrl->is_ptr) {
+ 				ret = validate_new(ctrl, ctrl->p_new);
++				if (ret)
++					dprintk(vdev,
++						"failed to validate control %s (%d)\n",
++						v4l2_ctrl_get_name(ctrl->id), ret);
++			}
+ 			idx = helpers[idx].next;
+ 		} while (!ret && idx);
+ 
+-- 
+2.27.0
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/=
-log/?h=3Dmediatek-drm-next
-
-Regards,
-Chun-Kuang.
-
-> Cc: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: David Airlie <airlied@linux.ie>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: Matthias Brugger <matthias.bgg@gmail.com>
-> Cc: Sumit Semwal <sumit.semwal@linaro.org>
-> Cc: "Christian K=C3=B6nig" <christian.koenig@amd.com>
-> Cc: YT SHEN <yt.shen@mediatek.com>
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-mediatek@lists.infradead.org
-> Cc: linux-media@vger.kernel.org
-> Cc: linaro-mm-sig@lists.linaro.org
-> Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> ---
->  drivers/gpu/drm/mediatek/mtk_drm_drv.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/med=
-iatek/mtk_drm_drv.c
-> index 2e8065b1e2bbc..401311453e7d0 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> @@ -313,8 +313,8 @@ static const struct file_operations mtk_drm_fops =3D =
-{
->   * We need to override this because the device used to import the memory=
- is
->   * not dev->dev, as drm_gem_prime_import() expects.
->   */
-> -struct drm_gem_object *mtk_drm_gem_prime_import(struct drm_device *dev,
-> -                                               struct dma_buf *dma_buf)
-> +static struct drm_gem_object *mtk_drm_gem_prime_import(struct drm_device=
- *dev,
-> +                                                      struct dma_buf *dm=
-a_buf)
->  {
->         struct mtk_drm_private *private =3D dev->dev_private;
->
-> --
-> 2.25.1
->
