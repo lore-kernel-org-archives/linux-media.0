@@ -5,59 +5,59 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F323EC71155
-	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 11:19:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 897AAC8300F
+	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 11:20:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9549620674
-	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 11:19:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4F0B02078E
+	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 11:20:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xSR30k//"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lNK83QJS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728929AbgKWLTp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 Nov 2020 06:19:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44920 "EHLO
+        id S1729139AbgKWLUi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 23 Nov 2020 06:20:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728921AbgKWLTo (ORCPT
+        with ESMTP id S1729074AbgKWLUP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 23 Nov 2020 06:19:44 -0500
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5E6C061A4E
-        for <linux-media@vger.kernel.org>; Mon, 23 Nov 2020 03:19:44 -0800 (PST)
-Received: by mail-wm1-x344.google.com with SMTP id 1so16862737wme.3
-        for <linux-media@vger.kernel.org>; Mon, 23 Nov 2020 03:19:44 -0800 (PST)
+        Mon, 23 Nov 2020 06:20:15 -0500
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0068CC061A4D
+        for <linux-media@vger.kernel.org>; Mon, 23 Nov 2020 03:20:14 -0800 (PST)
+Received: by mail-wr1-x442.google.com with SMTP id l1so18174324wrb.9
+        for <linux-media@vger.kernel.org>; Mon, 23 Nov 2020 03:20:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Q9nOuAyNuSnMvxG/2OuToweTEm0XWfNfEAno5/MOVLo=;
-        b=xSR30k//SbK/enLO3H8pSlIZr+qDnzQ4F182rUTLcw60ffjqKJ6/b+s0Q9PnW3SYXp
-         rcrwgNOW5QOKlBuRXUpBxmyYyIrkhr/rbJyigkVt+P7QphFULKRVhNaIu9czDJv5KROf
-         p0JjkrmLIAkXOFeIomlmVrCUR6DbjDeVrCla2G2wEdTqWlrh3QkuJu+tjetZXsybVkxP
-         OwD16s+yjEazWU7hgyhq1XqTwLKlNdTpvZYQJ2BVPTBABuNwDWNDgKeCJ2xwudYLvUQg
-         dDp70KjdGfIIVFJSuyv6TXu4MFfJlITpN06KDk5JzmYYBUAO7m1iKAwH2MQoDA9nE2SE
-         mN3w==
+        bh=x7j4MAG3aMMAv+exH325swHGJEpjCRvoAo6+eP0jclY=;
+        b=lNK83QJS2ndVONnSis4ixIX5b3SXdsncFYR912rIshpJ18Ac3nGF4AFjIcTh74QQTU
+         WluvQPGONjU4NiFHaL4NTrNzC5IHdE3V0VQdNQ3pNKFyj11k+WjmlKX89yB5dimcFiov
+         2f+MUMxY1HN5Z5LEbCTgklsEbN10IyQlYZBnA9RD3eqC9W6IzpjireyMxOiBAt9eA88J
+         Zj84a3y/mcHqA778ECrH8x2HuPUV/EFDP3URDRVk9vBqYxtzvTbcm587B2X6oGYOp9FV
+         L7vr57zATASuA1lLNskOEsiqrz50jCw1zFOMavSoUnLiKimFhQkVlXh0nOwOOG+ikK8b
+         XalA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Q9nOuAyNuSnMvxG/2OuToweTEm0XWfNfEAno5/MOVLo=;
-        b=nkR7guap9/E1Aoj0AN6l8DuqDmr/7a2CLyUfz/5Jk+W3p1YsX5MNo10BzjX/wQ0n9p
-         Sl//Joh02lZVdN4WN3NpEXdolk4XNPcRn1Q8IQIHZBG/iJfFo5PeIVL8CZo4D9O3m+eg
-         J8ASeOAvDAuJb3guTLjmMC0rVwF69HvJcZ6vfBvwk34me8uFrCy5oHs81F2Pv993cESR
-         PDX1q9426HLiOmijfiVwJ60OEnACYGI5rOIdN2C7EOwrn/xQ/ojZAng1RN5/zPOKaKCS
-         uHo6OwNy5Pe4c8wFXt7QrVEhssUKFLdspodLr381I1Rq3FyD+8YF0oe67vKukVp55PVP
-         dHmQ==
-X-Gm-Message-State: AOAM532KVLsdgAe+tjeijx8HrkVaygqP6RCHcLifLwrx2NSAn059kiii
-        Sr3yLQ56f7C/R5KiPCqTj5yqiQ==
-X-Google-Smtp-Source: ABdhPJxUpRdYurIcVkn8Ye5orOlel09O+wUB5od5cshSiFGQNoDMp700kYFgoQ8ZFbeS4FAuWafhxg==
-X-Received: by 2002:a1c:f612:: with SMTP id w18mr23805537wmc.11.1606130383174;
-        Mon, 23 Nov 2020 03:19:43 -0800 (PST)
+        bh=x7j4MAG3aMMAv+exH325swHGJEpjCRvoAo6+eP0jclY=;
+        b=Bd+Ij3PWRqdfMpSp7lAOsJy86DcUMHIFHSer0gYsU8NyABrnJZ0heBsxPM/6YBruCv
+         iRFqdVxD5nVR7jMmewNIvXdoqKINuCktOapUaCDX6Ezvyl2yvb+jUm4jVIodZA+OJgDl
+         ZeIrNsCwnCEfmAwmZ8W5ZgcjRPMXTd4mIsote/gqHxWvgwEfFd92jcHbhcJCancx5GfP
+         7o162wT/ihiYHaAhcI+bzamxkJT7hSxw0wpkalNCLm+qJz9imsTd95v2CeImdTO3Esxh
+         iZQUbfRpXu2/vo8hc3/1wiiGacLNwHmWW2Hkwwerjv5hCVmxEPZZiI27+RkOW/Zko1LH
+         +Ycw==
+X-Gm-Message-State: AOAM5311A88pCtzZUy9mWJZPbb7wIqHkNP4q0khrZ8qcAxqLQxOMcRfd
+        dyInnRTWQaHfCefWdU6CUCMyuA==
+X-Google-Smtp-Source: ABdhPJzPAspljYVUUQw5F7zFIQt0YEnWI6OkhToahK3/SXM47FmrLku1L0vKnxwWd6+xB4+RbhoiJw==
+X-Received: by 2002:a5d:6892:: with SMTP id h18mr30002591wru.49.1606130408851;
+        Mon, 23 Nov 2020 03:20:08 -0800 (PST)
 Received: from dell.default ([91.110.221.218])
-        by smtp.gmail.com with ESMTPSA id n9sm16317290wmd.4.2020.11.23.03.19.41
+        by smtp.gmail.com with ESMTPSA id n9sm16317290wmd.4.2020.11.23.03.20.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Nov 2020 03:19:42 -0800 (PST)
+        Mon, 23 Nov 2020 03:20:08 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -68,9 +68,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Sumit Semwal <sumit.semwal@linaro.org>,
         amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 16/40] drm/amd/amdgpu/si_dma: Fix a bunch of function documentation issues
-Date:   Mon, 23 Nov 2020 11:18:55 +0000
-Message-Id: <20201123111919.233376-17-lee.jones@linaro.org>
+Subject: [PATCH 33/40] drm/amd/amdgpu/cik_sdma: Add one and remove another function param description
+Date:   Mon, 23 Nov 2020 11:19:12 +0000
+Message-Id: <20201123111919.233376-34-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201123111919.233376-1-lee.jones@linaro.org>
 References: <20201123111919.233376-1-lee.jones@linaro.org>
@@ -83,20 +83,8 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/gpu/drm/amd/amdgpu/si_dma.c:92: warning: Function parameter or member 'addr' not described in 'si_dma_ring_emit_fence'
- drivers/gpu/drm/amd/amdgpu/si_dma.c:92: warning: Function parameter or member 'seq' not described in 'si_dma_ring_emit_fence'
- drivers/gpu/drm/amd/amdgpu/si_dma.c:92: warning: Function parameter or member 'flags' not described in 'si_dma_ring_emit_fence'
- drivers/gpu/drm/amd/amdgpu/si_dma.c:92: warning: Excess function parameter 'fence' description in 'si_dma_ring_emit_fence'
- drivers/gpu/drm/amd/amdgpu/si_dma.c:252: warning: Function parameter or member 'timeout' not described in 'si_dma_ring_test_ib'
- drivers/gpu/drm/amd/amdgpu/si_dma.c:408: warning: Function parameter or member 'ring' not described in 'si_dma_ring_pad_ib'
- drivers/gpu/drm/amd/amdgpu/si_dma.c:446: warning: Function parameter or member 'vmid' not described in 'si_dma_ring_emit_vm_flush'
- drivers/gpu/drm/amd/amdgpu/si_dma.c:446: warning: Function parameter or member 'pd_addr' not described in 'si_dma_ring_emit_vm_flush'
- drivers/gpu/drm/amd/amdgpu/si_dma.c:446: warning: Excess function parameter 'vm' description in 'si_dma_ring_emit_vm_flush'
- drivers/gpu/drm/amd/amdgpu/si_dma.c:781: warning: Function parameter or member 'ib' not described in 'si_dma_emit_copy_buffer'
- drivers/gpu/drm/amd/amdgpu/si_dma.c:781: warning: Function parameter or member 'tmz' not described in 'si_dma_emit_copy_buffer'
- drivers/gpu/drm/amd/amdgpu/si_dma.c:781: warning: Excess function parameter 'ring' description in 'si_dma_emit_copy_buffer'
- drivers/gpu/drm/amd/amdgpu/si_dma.c:804: warning: Function parameter or member 'ib' not described in 'si_dma_emit_fill_buffer'
- drivers/gpu/drm/amd/amdgpu/si_dma.c:804: warning: Excess function parameter 'ring' description in 'si_dma_emit_fill_buffer'
+ drivers/gpu/drm/amd/amdgpu/cik_sdma.c:282: warning: Function parameter or member 'flags' not described in 'cik_sdma_ring_emit_fence'
+ drivers/gpu/drm/amd/amdgpu/cik_sdma.c:282: warning: Excess function parameter 'fence' description in 'cik_sdma_ring_emit_fence'
 
 Cc: Alex Deucher <alexander.deucher@amd.com>
 Cc: "Christian König" <christian.koenig@amd.com>
@@ -109,72 +97,31 @@ Cc: linux-media@vger.kernel.org
 Cc: linaro-mm-sig@lists.linaro.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/gpu/drm/amd/amdgpu/si_dma.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/cik_sdma.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/si_dma.c b/drivers/gpu/drm/amd/amdgpu/si_dma.c
-index 7d2bbcbe547b2..540dced190f33 100644
---- a/drivers/gpu/drm/amd/amdgpu/si_dma.c
-+++ b/drivers/gpu/drm/amd/amdgpu/si_dma.c
-@@ -81,7 +81,9 @@ static void si_dma_ring_emit_ib(struct amdgpu_ring *ring,
-  * si_dma_ring_emit_fence - emit a fence on the DMA ring
-  *
+diff --git a/drivers/gpu/drm/amd/amdgpu/cik_sdma.c b/drivers/gpu/drm/amd/amdgpu/cik_sdma.c
+index f1e9966e7244e..28a64de8ae0e6 100644
+--- a/drivers/gpu/drm/amd/amdgpu/cik_sdma.c
++++ b/drivers/gpu/drm/amd/amdgpu/cik_sdma.c
+@@ -271,7 +271,7 @@ static void cik_sdma_ring_emit_hdp_flush(struct amdgpu_ring *ring)
   * @ring: amdgpu ring pointer
+  * @addr: address
+  * @seq: sequence number
 - * @fence: amdgpu fence object
-+ * @addr: address
-+ * @seq: sequence number
 + * @flags: fence related flags
   *
   * Add a DMA fence packet to the ring to write
   * the fence seq number and DMA trap packet to generate
-@@ -244,6 +246,7 @@ static int si_dma_ring_test_ring(struct amdgpu_ring *ring)
-  * si_dma_ring_test_ib - test an IB on the DMA engine
-  *
-  * @ring: amdgpu_ring structure holding ring information
-+ * @timeout: timeout value in jiffies, or MAX_SCHEDULE_TIMEOUT
-  *
-  * Test a simple IB in the DMA ring (VI).
-  * Returns 0 on success, error on failure.
-@@ -401,6 +404,7 @@ static void si_dma_vm_set_pte_pde(struct amdgpu_ib *ib,
- /**
-  * si_dma_pad_ib - pad the IB to the required number of dw
-  *
-+ * @ring: amdgpu_ring pointer
-  * @ib: indirect buffer to fill with padding
-  *
+@@ -279,7 +279,7 @@ static void cik_sdma_ring_emit_hdp_flush(struct amdgpu_ring *ring)
   */
-@@ -436,7 +440,8 @@ static void si_dma_ring_emit_pipeline_sync(struct amdgpu_ring *ring)
-  * si_dma_ring_emit_vm_flush - cik vm flush using sDMA
-  *
-  * @ring: amdgpu_ring pointer
-- * @vm: amdgpu_vm pointer
-+ * @vmid: vmid number to use
-+ * @pd_addr: address
-  *
-  * Update the page table base and flush the VM TLB
-  * using sDMA (VI).
-@@ -764,10 +769,11 @@ static void si_dma_set_irq_funcs(struct amdgpu_device *adev)
- /**
-  * si_dma_emit_copy_buffer - copy buffer using the sDMA engine
-  *
-- * @ring: amdgpu_ring structure holding ring information
-+ * @ib: indirect buffer to copy to
-  * @src_offset: src GPU address
-  * @dst_offset: dst GPU address
-  * @byte_count: number of bytes to xfer
-+ * @tmz: unused
-  *
-  * Copy GPU buffers using the DMA engine (VI).
-  * Used by the amdgpu ttm implementation to move pages if
-@@ -790,7 +796,7 @@ static void si_dma_emit_copy_buffer(struct amdgpu_ib *ib,
- /**
-  * si_dma_emit_fill_buffer - fill buffer using the sDMA engine
-  *
-- * @ring: amdgpu_ring structure holding ring information
-+ * @ib: indirect buffer to copy to
-  * @src_data: value to write to buffer
-  * @dst_offset: dst GPU address
-  * @byte_count: number of bytes to xfer
+ static void cik_sdma_ring_emit_fence(struct amdgpu_ring *ring, u64 addr, u64 seq,
+ 				     unsigned flags)
+-{
++  {
+ 	bool write64bit = flags & AMDGPU_FENCE_FLAG_64BIT;
+ 	/* write the fence */
+ 	amdgpu_ring_write(ring, SDMA_PACKET(SDMA_OPCODE_FENCE, 0, 0));
 -- 
 2.25.1
 
