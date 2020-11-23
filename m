@@ -2,290 +2,150 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-7.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B5D8C388F9
-	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 11:53:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C88E5C6379D
+	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 13:04:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E2EA5206FA
-	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 11:53:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 65BF82080A
+	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 13:04:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=amdcloud.onmicrosoft.com header.i=@amdcloud.onmicrosoft.com header.b="mc+/qOir"
+	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="huMDpxd3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729255AbgKWLw5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 Nov 2020 06:52:57 -0500
-Received: from mail-mw2nam12on2048.outbound.protection.outlook.com ([40.107.244.48]:21024
-        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728907AbgKWLw4 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 23 Nov 2020 06:52:56 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IbcARMEDh8LjJ6WVMIOSrNM0HVNjD1Ju+qhk+NVBx9A+yFTn2Yk7msEer39VZde/GCD0VfIPw7RhTz53i2HD0m+DqoXHvsir0ebGPx+E+dQnu3Sf0cirIRk4YkNZfZpww/gj652S1+K+UKzIRPvrTf1FosXcN55WKp3j7M9ddqf/LEizA/1TuPI/v1DwVBU4hEqpSpK9QSAxlJbbraN/0xdD9H8xSKea+TTHOK9rBuSgAXN+iUbAZkJ8rJ29NhuWYFTgSYlbitldM7GL79+GmbAZpWnt8I2bseM5JK28dXzhcbi05zsaQA9B/oxg9MqYtDOvHbklze5B6GSnpSaFGA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O2UqfUcJUN3AKI5fYjjOMDFx/xGxNzc+Dmq0EqpX1/s=;
- b=F3PkOxTyLTQ6ys/hZr9XkwoD4r1tzF0DBVgAo4zgnq0u4xjtzZuFMyTzchkEcPanykUuTYzV7qqTdhOU2KsYtHPraWjdmozThnvu7tdpw12L3RxSW5aZWVBNjLf/ev34HvFzXlJJl8csLNh4znuciXoLnuMh3D3ujBz04eAjysSWv57EGwcGjoYNJYnNsV6ACFZr9URrEP0uIjiZnla9XnYvM+Z+Gi3olt9PqSraPeCKemHCe0Q+LdjWU3GXr58lFkZbJFuh+brCWLWwPgurHH3iEK+lPNrCcDiK9YfhQFYdCFSxH10S8rBVPpObL+eYLek2MuPoomz65hgzzAyZHA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O2UqfUcJUN3AKI5fYjjOMDFx/xGxNzc+Dmq0EqpX1/s=;
- b=mc+/qOirh6MPN+QIg+xjn44/EfE2Yi9xnKXia7bETfU5N+KiW/jLFZoWLCRfCp1BKYHhcudps0lxsEXoa/nLIKdPzzGhGQ0jAenhmiiwglwDoNyO8G7hCUT5EulafcrEBQ5wQZplhpS1jFoZ+Hh2zNk4+3tIp2WRfvR4xM4j7cg=
-Authentication-Results: amd.com; dkim=none (message not signed)
- header.d=none;amd.com; dmarc=none action=none header.from=amd.com;
-Received: from MN2PR12MB3775.namprd12.prod.outlook.com (2603:10b6:208:159::19)
- by MN2PR12MB4253.namprd12.prod.outlook.com (2603:10b6:208:1de::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.22; Mon, 23 Nov
- 2020 11:52:51 +0000
-Received: from MN2PR12MB3775.namprd12.prod.outlook.com
- ([fe80::1ccc:8a9a:45d3:dd31]) by MN2PR12MB3775.namprd12.prod.outlook.com
- ([fe80::1ccc:8a9a:45d3:dd31%7]) with mapi id 15.20.3589.022; Mon, 23 Nov 2020
- 11:52:51 +0000
-Subject: Re: [PATCH 00/40] [Set 8] Rid W=1 warnings from GPU
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        amd-gfx@lists.freedesktop.org, Ben Skeggs <bskeggs@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Drew Davenport <ddavenport@chromium.org>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Fritz Koenig <frkoenig@google.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Huang Rui <ray.huang@amd.com>,
-        Jerome Glisse <glisse@freedesktop.org>,
-        Jiansong Chen <Jiansong.Chen@amd.com>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Kalyan Thota <kalyan_t@codeaurora.org>,
-        Likun Gao <Likun.Gao@amd.com>, linaro-mm-sig@lists.linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        nouveau@lists.freedesktop.org,
-        Qinglang Miao <miaoqinglang@huawei.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Sonny Jiang <sonny.jiang@amd.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Tao Zhou <tao.zhou1@amd.com>
-References: <20201123111919.233376-1-lee.jones@linaro.org>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Message-ID: <feda98c5-a677-7bf5-c1e7-2bf311ba8097@amd.com>
-Date:   Mon, 23 Nov 2020 12:52:42 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-In-Reply-To: <20201123111919.233376-1-lee.jones@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [2a02:908:1252:fb60:be8a:bd56:1f94:86e7]
-X-ClientProxiedBy: AM0PR10CA0096.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:208:15::49) To MN2PR12MB3775.namprd12.prod.outlook.com
- (2603:10b6:208:159::19)
+        id S2388385AbgKWNDs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 23 Nov 2020 08:03:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40738 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388335AbgKWNDp (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 23 Nov 2020 08:03:45 -0500
+Received: from embeddedor (187-162-31-110.static.axtel.net [187.162.31.110])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 191D120758;
+        Mon, 23 Nov 2020 13:03:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606136621;
+        bh=J/TET3MqSRKQBkZDLmw3offBuTNq8xblR6VPj5c7KTQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=huMDpxd34lY8zl81VJt6WrkzA8VbZ3WZKfCc+01YUsnQkEm+dvBfrNL343ZTscxgS
+         4cn7RRAIuR/6lyK6TO0qxACy3TNrSBuTodAx+s4Q2YpvApK9inZpqsbsSdtJmbV9Zx
+         YwwBYqtSxUH9kHvWkiEz2t98c4vnYVnAJ6qqQTEg=
+Date:   Mon, 23 Nov 2020 07:03:48 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     Joe Perches <joe@perches.com>, Kees Cook <keescook@chromium.org>,
+        Jakub Kicinski <kuba@kernel.org>, alsa-devel@alsa-project.org,
+        linux-atm-general@lists.sourceforge.net,
+        reiserfs-devel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        linux-ide@vger.kernel.org, dm-devel@redhat.com,
+        keyrings@vger.kernel.org, linux-mtd@lists.infradead.org,
+        GR-everest-linux-l2@marvell.com, wcn36xx@lists.infradead.org,
+        samba-technical@lists.samba.org, linux-i3c@lists.infradead.org,
+        linux1394-devel@lists.sourceforge.net,
+        linux-afs@lists.infradead.org,
+        usb-storage@lists.one-eyed-alien.net, drbd-dev@lists.linbit.com,
+        devel@driverdev.osuosl.org, linux-cifs@vger.kernel.org,
+        rds-devel@oss.oracle.com,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-scsi@vger.kernel.org, linux-rdma@vger.kernel.org,
+        oss-drivers@netronome.com, bridge@lists.linux-foundation.org,
+        linux-security-module@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org,
+        linux-stm32@st-md-mailman.stormreply.com, cluster-devel@redhat.com,
+        linux-acpi@vger.kernel.org, coreteam@netfilter.org,
+        intel-wired-lan@lists.osuosl.org, linux-input@vger.kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>,
+        tipc-discussion@lists.sourceforge.net, linux-ext4@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        selinux@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, linux-geode@lists.infradead.org,
+        linux-can@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-gpio@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        linux-mediatek@lists.infradead.org, xen-devel@lists.xenproject.org,
+        nouveau@lists.freedesktop.org, linux-hams@vger.kernel.org,
+        ceph-devel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        x86@kernel.org, linux-nfs@vger.kernel.org,
+        GR-Linux-NIC-Dev@marvell.com, linux-mm@kvack.org,
+        netdev@vger.kernel.org, linux-decnet-user@lists.sourceforge.net,
+        linux-mmc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-sctp@vger.kernel.org, linux-usb@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        patches@opensource.cirrus.com, linux-integrity@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: [Intel-wired-lan] [PATCH 000/141] Fix fall-through warnings for
+ Clang
+Message-ID: <20201123130348.GA3119@embeddedor>
+References: <cover.1605896059.git.gustavoars@kernel.org>
+ <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <202011201129.B13FDB3C@keescook>
+ <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <202011220816.8B6591A@keescook>
+ <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
+ <ca071decb87cc7e905411423c05a48f9fd2f58d7.camel@perches.com>
+ <0147972a72bc13f3629de8a32dee6f1f308994b5.camel@HansenPartnership.com>
+ <d8d1e9add08cdd4158405e77762d4946037208f8.camel@perches.com>
+ <dbd2cb703ed9eefa7dde9281ea26ab0f7acc8afe.camel@HansenPartnership.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2a02:908:1252:fb60:be8a:bd56:1f94:86e7] (2a02:908:1252:fb60:be8a:bd56:1f94:86e7) by AM0PR10CA0096.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:15::49) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.21 via Frontend Transport; Mon, 23 Nov 2020 11:52:46 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: b4545c6a-2257-4798-5d3f-08d88fa64dab
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4253:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <MN2PR12MB4253068F62324FA631365AFE83FC0@MN2PR12MB4253.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3631;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 01u/96N2kPMIwQk1vyLAenWpejMhU93MLr3wMYnxbPiTuNiIeRpCiUhMpbD5GG0b659s9p/QwLQqiOM27VUPLUFOe9LhRh49NLOi00ofaVFOSy0FxqIyevl9+mXyLezw3OCyLkwKAYmF7KUJ1nJ/aZZqWV8Urvytb/2fl4NyjXajNRVsMHg56jt2uICxZqfZsg1Ft0jn3QVaClQ5IrAOR3J/ZXjGCi/yuMrpMufyD9ZAdZUI1lxI0x1eamv1rEg6iibSc8L2kSi9CFjPWM+Y7Cp9aL0l9iSwe8IWN9pnJQ4J9Y9I/dn3vSg3RPAtUeTlJKQauazwv5w+xf1AIyo2qy57P/yL2UjqCKFxj5dCuA7sGac4SpDuNY4G3wT5w4JL
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3775.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(136003)(39860400002)(346002)(366004)(376002)(52116002)(8676002)(478600001)(8936002)(66946007)(36756003)(86362001)(4326008)(66476007)(66556008)(7416002)(6916009)(83380400001)(2906002)(2616005)(186003)(16526019)(5660300002)(6486002)(316002)(31686004)(6666004)(66574015)(54906003)(31696002)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?Z3RBU0JGY05odXZNVTlDb1J5OHJWV0lvSU1QVi9XNVBQUUhjOUZtRjB1L2VZ?=
- =?utf-8?B?WGZzaHpmMHpkck5jSmhqellsREJjZHJIK2poU21FaHYrRVFVWTIrNTkwSWR1?=
- =?utf-8?B?UGdxUXV3bXpLb0hIUnVUV1JWVTh3MHRlZ20waEE1SDVtQVRrWk9zckFlUUtn?=
- =?utf-8?B?V1d5U1pYZlJzdFg3RXozWmdEMUJCdXovY1JzSHlMWjFWblkyRldubjBnMFBT?=
- =?utf-8?B?a0JSbDIvLzVPUzJvdEpvbVl5NC9sa2hHUFVaZ1dEY1BZYlliVnMwL1JVc3pO?=
- =?utf-8?B?eURsMGQ0OWVQVEtLeXkxUDJ0bnBHUnJmV1FhVUF2a2ZKODZoeW9BQnk3eXFS?=
- =?utf-8?B?bXRDdVZmMXY0T2puV0czQW1jellzV1Exbks3M3dGYXpiUnU3R0phOVJZV3ZK?=
- =?utf-8?B?UldxY0pZSC95THRLdkQybFBsWTBrYlZVTWUrQmxHcm9iTTI0bUtLS0hMd0Zy?=
- =?utf-8?B?TkVYWWJHeUdFWVp6a0k1T096YVM0ZVRncU1DV0l0RXZadXNKMUhJVWlnSjEz?=
- =?utf-8?B?K2Q0MGhqQ2k2cUJXaUE1WFN3VzdWaTdtOCtmTHdPMHRjSnhiZmZlS0tzNk03?=
- =?utf-8?B?YkhTTCtPWmdLZHUvRkh5WDRWNlVNTWlXR0ZHaGN1RTV1ZmMva1ZtdVBnUGpC?=
- =?utf-8?B?OVdveFNwT1N4S25EZmRNU2tkZjAvUmxvRjhWQXErbFA2RG80WkNHMHJnRUFO?=
- =?utf-8?B?Mkdwak9BeGdld3JuVXM1YmZ3UDBSL2lrNE9yb2VCbEJEaFhUeXErZVJxMU5I?=
- =?utf-8?B?eUpkbFFnWitJZitqZjNSREM1K3NYK281NTZEU25ZZlF6ZWxzVnFCQWlsald3?=
- =?utf-8?B?UnplS0o0Vmd1bXVJTkZIdEZqdWZKSWhUWWhLOEVjQVBuVjN4N0s4VG5lM2x4?=
- =?utf-8?B?U1VLYUhmRzUwdjJyUUJoTGg2SUxKazh6SElvVk5pMWFXYnN5SE01bWxCVTVk?=
- =?utf-8?B?OTc0SzNvWVFwcXZQelFiUTRuTGlvbkNJb0Y2UCtGOS9QcUNqTGo1d25SRWZP?=
- =?utf-8?B?VXFtUkR4aVhmdldIbERoNFRGRU9TZ0xlOFNzUXlQa1RjdmwwSlpSQmtBTGhO?=
- =?utf-8?B?R0JKRDJydW1GZUtKS2VhRzBOTXR6SDd4THY1YktIMkpjRDlVSTNFVHhkWENq?=
- =?utf-8?B?bkJlc2JEQmhsNXNDZ2tYQkxpejFQZ2JrZC96VWZ4UE5xcHBqdlowczYwc0Zn?=
- =?utf-8?B?MXlqK0E5UndDMmxLQ05aRVVvckFPVEplQlY5UkV2SDlKeVRKbng1SXowR3FL?=
- =?utf-8?B?UmNNbDZpS3Y0K2J4VDBkNHFTcUJzbnlaT3BEYzEyaitCS2o3UT09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b4545c6a-2257-4798-5d3f-08d88fa64dab
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3775.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2020 11:52:50.7681
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 72ca23NHRM+6fJd1PNpDCwUfyIWtXq6ebyA/OMF5QifwEXoC8lFSFOHfxgr03dwq
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4253
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dbd2cb703ed9eefa7dde9281ea26ab0f7acc8afe.camel@HansenPartnership.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Only skimmed over them, but over all looks sane to me.
+On Sun, Nov 22, 2020 at 11:53:55AM -0800, James Bottomley wrote:
+> On Sun, 2020-11-22 at 11:22 -0800, Joe Perches wrote:
+> > On Sun, 2020-11-22 at 11:12 -0800, James Bottomley wrote:
+> > > On Sun, 2020-11-22 at 10:25 -0800, Joe Perches wrote:
+> > > > On Sun, 2020-11-22 at 10:21 -0800, James Bottomley wrote:
+> > > > > Please tell me our reward for all this effort isn't a single
+> > > > > missing error print.
+> > > > 
+> > > > There were quite literally dozens of logical defects found
+> > > > by the fallthrough additions.  Very few were logging only.
+> > > 
+> > > So can you give us the best examples (or indeed all of them if
+> > > someone is keeping score)?  hopefully this isn't a US election
+> > > situation ...
+> > 
+> > Gustavo?  Are you running for congress now?
+> > 
+> > https://lwn.net/Articles/794944/
+> 
+> That's 21 reported fixes of which about 50% seem to produce no change
+> in code behaviour at all, a quarter seem to have no user visible effect
+> with the remaining quarter producing unexpected errors on obscure
+> configuration parameters, which is why no-one really noticed them
+> before.
 
-Series is Acked-by: Christian König <christian.koenig@amd.com>
+The really important point here is the number of bugs this has prevented
+and will prevent in the future. See an example of this, below:
 
-Thanks,
-Christian.
+https://lore.kernel.org/linux-iio/20190813135802.GB27392@kroah.com/
 
-Am 23.11.20 um 12:18 schrieb Lee Jones:
-> This set is part of a larger effort attempting to clean-up W=1
-> kernel builds, which are currently overwhelmingly riddled with
-> niggly little warnings.
->
-> Only 900 (from 5000) to go!
->
-> Lee Jones (40):
->    drm/radeon/radeon_device: Consume our own header where the prototypes
->      are located
->    drm/amd/amdgpu/amdgpu_ttm: Add description for 'page_flags'
->    drm/amd/amdgpu/amdgpu_ib: Provide docs for 'amdgpu_ib_schedule()'s
->      'job' param
->    drm/amd/amdgpu/amdgpu_virt: Correct possible copy/paste or doc-rot
->      misnaming issue
->    drm/amd/amdgpu/cik_ih: Supply description for 'ih' in
->      'cik_ih_{get,set}_wptr()'
->    drm/amd/amdgpu/uvd_v4_2: Fix some kernel-doc misdemeanours
->    drm/amd/amdgpu/dce_v8_0: Supply description for 'async'
->    drm/amd/amdgpu/cik_sdma: Supply some missing function param
->      descriptions
->    drm/amd/amdgpu/gfx_v7_0: Clean-up a bunch of kernel-doc related issues
->    drm/msm/disp/dpu1/dpu_core_perf: Fix kernel-doc formatting issues
->    drm/msm/disp/dpu1/dpu_hw_blk: Add one missing and remove an extra
->      param description
->    drm/msm/disp/dpu1/dpu_formats: Demote non-conformant kernel-doc header
->    drm/msm/disp/dpu1/dpu_hw_catalog: Remove duplicated initialisation of
->      'max_linewidth'
->    drm/msm/disp/dpu1/dpu_hw_catalog: Move definitions to the only place
->      they are used
->    drm/nouveau/nvkm/subdev/bios/init: Demote obvious abuse of kernel-doc
->    drm/amd/amdgpu/si_dma: Fix a bunch of function documentation issues
->    drm/amd/amdgpu/gfx_v6_0: Supply description for
->      'gfx_v6_0_ring_test_ib()'s 'timeout' param
->    drm/msm/disp/dpu1/dpu_encoder: Fix a few parameter/member formatting
->      issues
->    drm/msm/disp/dpu1/dpu_hw_lm: Fix misnaming of parameter 'ctx'
->    drm/msm/disp/dpu1/dpu_hw_sspp: Fix kernel-doc formatting abuse
->    drm/amd/amdgpu/uvd_v3_1: Fix-up some documentation issues
->    drm/amd/amdgpu/dce_v6_0: Fix formatting and missing parameter
->      description issues
->    drm/amd/include/vega20_ip_offset: Mark top-level IP_BASE definition as
->      __maybe_unused
->    drm/amd/include/navi10_ip_offset: Mark top-level IP_BASE as
->      __maybe_unused
->    drm/amd/include/arct_ip_offset: Mark top-level IP_BASE definition as
->      __maybe_unused
->    drm/amd/include/navi14_ip_offset: Mark top-level IP_BASE as
->      __maybe_unused
->    drm/amd/include/navi12_ip_offset: Mark top-level IP_BASE as
->      __maybe_unused
->    drm/amd/include/sienna_cichlid_ip_offset: Mark top-level IP_BASE as
->      __maybe_unused
->    drm/amd/include/vangogh_ip_offset: Mark top-level IP_BASE as
->      __maybe_unused
->    drm/amd/include/dimgrey_cavefish_ip_offset: Mark top-level IP_BASE as
->      __maybe_unused
->    drm/msm/disp/dpu1/dpu_rm: Fix formatting issues and supply
->      'global_state' description
->    drm/msm/disp/dpu1/dpu_vbif: Fix a couple of function param
->      descriptions
->    drm/amd/amdgpu/cik_sdma: Add one and remove another function param
->      description
->    drm/amd/amdgpu/uvd_v4_2: Add one and remove another function param
->      description
->    drm/msm/disp/dpu1/dpu_plane: Fix some spelling and missing function
->      param descriptions
->    drm/amd/amdgpu/gmc_v7_0: Add some missing kernel-doc descriptions
->    drm/amd/amdgpu/gmc_v8_0: Fix more issues attributed to copy/paste
->    drm/msm/msm_drv: Make '_msm_ioremap()' static
->    drm/amd/amdgpu/gmc_v9_0: Remove unused table
->      'ecc_umc_mcumc_status_addrs'
->    drm/amd/amdgpu/gmc_v9_0: Suppy some missing function doc descriptions
->
->   drivers/gpu/drm/amd/amdgpu/amdgpu_ib.c        |   1 +
->   drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c       |   1 +
->   drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c      |  12 +-
->   drivers/gpu/drm/amd/amdgpu/cik_ih.c           |   2 +
->   drivers/gpu/drm/amd/amdgpu/cik_sdma.c         |  18 ++-
->   drivers/gpu/drm/amd/amdgpu/dce_v6_0.c         |   2 +-
->   drivers/gpu/drm/amd/amdgpu/dce_v8_0.c         |   1 +
->   drivers/gpu/drm/amd/amdgpu/gfx_v6_0.c         |   1 +
->   drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c         |  33 +++--
->   drivers/gpu/drm/amd/amdgpu/gmc_v7_0.c         |   7 +-
->   drivers/gpu/drm/amd/amdgpu/gmc_v8_0.c         |   5 +
->   drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c         |  38 +----
->   drivers/gpu/drm/amd/amdgpu/si_dma.c           |  14 +-
->   drivers/gpu/drm/amd/amdgpu/uvd_v3_1.c         |  10 +-
->   drivers/gpu/drm/amd/amdgpu/uvd_v4_2.c         |  10 +-
->   drivers/gpu/drm/amd/include/arct_ip_offset.h  |   4 +-
->   .../amd/include/dimgrey_cavefish_ip_offset.h  |   2 +-
->   .../gpu/drm/amd/include/navi10_ip_offset.h    |   2 +-
->   .../gpu/drm/amd/include/navi12_ip_offset.h    |   2 +-
->   .../gpu/drm/amd/include/navi14_ip_offset.h    |   2 +-
->   .../amd/include/sienna_cichlid_ip_offset.h    |   2 +-
->   .../gpu/drm/amd/include/vangogh_ip_offset.h   |   2 +-
->   .../gpu/drm/amd/include/vega20_ip_offset.h    |   2 +-
->   drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c |  17 +--
->   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c   |  15 +-
->   drivers/gpu/drm/msm/disp/dpu1/dpu_formats.c   |   2 +-
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_blk.c    |   2 +-
->   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    |  75 +++++++++-
->   .../drm/msm/disp/dpu1/dpu_hw_catalog_format.h |  88 ------------
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_lm.c     |   2 +-
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.c   |   4 +-
->   drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c     |  19 ++-
->   drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c        |   5 +-
->   drivers/gpu/drm/msm/disp/dpu1/dpu_vbif.c      |   2 +-
->   drivers/gpu/drm/msm/msm_drv.c                 |   4 +-
->   .../gpu/drm/nouveau/nvkm/subdev/bios/init.c   | 136 +++++++++---------
->   drivers/gpu/drm/radeon/radeon_device.c        |   1 +
->   37 files changed, 277 insertions(+), 268 deletions(-)
->   delete mode 100644 drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog_format.h
->
-> Cc: Alex Deucher <alexander.deucher@amd.com>
-> Cc: amd-gfx@lists.freedesktop.org
-> Cc: Ben Skeggs <bskeggs@redhat.com>
-> Cc: "Christian König" <christian.koenig@amd.com>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: David Airlie <airlied@linux.ie>
-> Cc: Drew Davenport <ddavenport@chromium.org>
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: freedreno@lists.freedesktop.org
-> Cc: Fritz Koenig <frkoenig@google.com>
-> Cc: Hawking Zhang <Hawking.Zhang@amd.com>
-> Cc: Huang Rui <ray.huang@amd.com>
-> Cc: Jerome Glisse <glisse@freedesktop.org>
-> Cc: Jiansong Chen <Jiansong.Chen@amd.com>
-> Cc: Jonathan Marek <jonathan@marek.ca>
-> Cc: Kalyan Thota <kalyan_t@codeaurora.org>
-> Cc: Likun Gao <Likun.Gao@amd.com>
-> Cc: linaro-mm-sig@lists.linaro.org
-> Cc: linux-arm-msm@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: Luben Tuikov <luben.tuikov@amd.com>
-> Cc: nouveau@lists.freedesktop.org
-> Cc: Qinglang Miao <miaoqinglang@huawei.com>
-> Cc: Rob Clark <robdclark@gmail.com>
-> Cc: Sean Paul <sean@poorly.run>
-> Cc: Sonny Jiang <sonny.jiang@amd.com>
-> Cc: Sumit Semwal <sumit.semwal@linaro.org>
-> Cc: Tao Zhou <tao.zhou1@amd.com>
+This work is still relevant, even if the total number of issues/bugs
+we find in the process is zero (which is not the case).
+
+"The sucky thing about doing hard work to deploy hardening is that the
+result is totally invisible by definition (things not happening) [..]"
+- Dmitry Vyukov
+
+Thanks
+--
+Gustavo
+
+
+
+
 
