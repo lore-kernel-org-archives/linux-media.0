@@ -2,158 +2,84 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61307C5519F
-	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 03:08:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B71B0C63798
+	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 03:19:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 10F9121D40
-	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 03:08:08 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=vanguardiasur-com-ar.20150623.gappssmtp.com header.i=@vanguardiasur-com-ar.20150623.gappssmtp.com header.b="y7kbd8EC"
+	by mail.kernel.org (Postfix) with ESMTP id 746542137B
+	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 03:19:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726955AbgKWDIH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Nov 2020 22:08:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725831AbgKWDIH (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sun, 22 Nov 2020 22:08:07 -0500
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9EBAC0613CF
-        for <linux-media@vger.kernel.org>; Sun, 22 Nov 2020 19:08:06 -0800 (PST)
-Received: by mail-ej1-x643.google.com with SMTP id mc24so151747ejb.6
-        for <linux-media@vger.kernel.org>; Sun, 22 Nov 2020 19:08:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=X/h8mnbAUuvIjH6Tba/THN9fIiEUryqxQTJ1lpmtNis=;
-        b=y7kbd8ECOpDrtxh6QBb19MEWdUVAFBR3AzXzNV6TFTaa8LQHh0waCoKoLOZTWu2Sz3
-         r9dEondUCP29tJNwj6XIO/inCY9Y/6X/7lmDcDCzsSyZxuWSpAZ6wWpkdqeUs0EbnQyy
-         Rdjm7CO7c/42wqJ1rpoy8eeLd7aHX4CR0DX0E39tnUZEnrUPvYW6F3QdHDP+wrhjAhtR
-         ZCPRPqVJlkwxTyk1+POJA00SiTh3g0rgvVMNLQwnCanPvuDAZ2O1K+/UpzaKUJm5HBaa
-         MkcgzVOlKha0NoNHEQOhSuvcCeQQ4fqujOG8aB/8EUjVhzfh0wCgmduKbA8laYIonyKQ
-         +dqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=X/h8mnbAUuvIjH6Tba/THN9fIiEUryqxQTJ1lpmtNis=;
-        b=qEfIAfA8o0xUBijrRZL+mRKZ3lem9lpawevZC7WbYldNvXxzllYXbOFqDoR2WNjuih
-         FcxXsI289Om9yPUoSYqu3KAga0uHtOc3sHai84sjGJbpjzbDrRN/eqRrk44RQwNKV2vB
-         RMh3uAM11imnpVlEFA+ETa09glhejWsRS2X3GvbuJ3y2OB4/Ct6zAWDJVlAh2KsxWmTD
-         8Rvdifjwhpay0W/EgqwDvTqmXLlHtjV0eetpv9uA6BTMN0a2Z+b88+AMybwSX2Fyfozg
-         kEfkP2y0t4HOr+WGEw+4vhaoJBD6U2ciLog/reOrbJghxGy+A7gm2/YRGHyo1zyo9RbD
-         2M1A==
-X-Gm-Message-State: AOAM533gvegWU4dtv80Ii59zHDL3DcGAEiVeaZE4f+FCoGVzthrdTUsn
-        iwaXS8PJaaQoxyaMDK3Vk7D+RMBvVtA9IVNXhmNrCg==
-X-Google-Smtp-Source: ABdhPJwU0MxV1+uBRTiVT8JVaHkd74D4cjl2EjekvPyzveVzCXAZrz8+0U9zue39xgA3JwkJ3gYm70Q/DXMwUnrD4QU=
-X-Received: by 2002:a17:906:8c7:: with SMTP id o7mr36471249eje.413.1606100885616;
- Sun, 22 Nov 2020 19:08:05 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1513038011.git.digetx@gmail.com> <3d565db80f8dccafd14224924305243b37b75a07.1513038011.git.digetx@gmail.com>
- <CAAEAJfBZD0u6MDxcp3See-agzyCSJS7dKpwK28LMJwPvE9DLtQ@mail.gmail.com> <5665b221-04d7-6be9-2377-8006b9563d4b@gmail.com>
-In-Reply-To: <5665b221-04d7-6be9-2377-8006b9563d4b@gmail.com>
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date:   Mon, 23 Nov 2020 00:07:57 -0300
-Message-ID: <CAAEAJfAdGeFK7DNY3QzRZEsZx+PGbQtxyyOPwawmMsx2JByt8g@mail.gmail.com>
-Subject: Re: [PATCH v5 2/4] staging: media: Introduce NVIDIA Tegra video
- decoder driver
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Stephen Warren <swarren@wwwdotorg.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1727741AbgKWDTD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Nov 2020 22:19:03 -0500
+Received: from mga02.intel.com ([134.134.136.20]:31117 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727690AbgKWDTD (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Nov 2020 22:19:03 -0500
+IronPort-SDR: kg7asXXsLhgCG+cuwZrufOP1mdS5AUJM+1VqfPjycRcsHCGY8ZEL/5xgtD1oteRsQPz32q+vwt
+ r76xUsM0eiyQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9813"; a="158737538"
+X-IronPort-AV: E=Sophos;i="5.78,361,1599548400"; 
+   d="scan'208";a="158737538"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2020 19:19:02 -0800
+IronPort-SDR: H4KwNxHQ4teJDChuX0cG4rz6msgqOpfVG+eiOWMjLidMKEogf5wX0XAAwOoC5PJ+IduJ7bVUML
+ 40qOkywKjaUQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,361,1599548400"; 
+   d="scan'208";a="342687886"
+Received: from lkp-server01.sh.intel.com (HELO ce8054c7261d) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 22 Nov 2020 19:19:00 -0800
+Received: from kbuild by ce8054c7261d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kh2NX-0000PQ-Fh; Mon, 23 Nov 2020 03:18:59 +0000
+Date:   Mon, 23 Nov 2020 11:18:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+Cc:     kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        devel@driverdev.osuosl.org,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-tegra@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        linux-media@vger.kernel.org, James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [RFC PATCH linux-next] EDAC/igen6: ecclog_llist can be static
+Message-ID: <20201123031850.GA20416@aef56166e5fc>
+References: <202011231120.nLkm6K9s-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202011231120.nLkm6K9s-lkp@intel.com>
+X-Patchwork-Hint: ignore
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sat, 21 Nov 2020 at 23:01, Dmitry Osipenko <digetx@gmail.com> wrote:
->
-> 22.11.2020 04:02, Ezequiel Garcia =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > Hi Dmitry,
-> >
-> ...
-> >> +++ b/drivers/staging/media/tegra-vde/TODO
-> >> @@ -0,0 +1,4 @@
-> >> +TODO:
-> >> +       - Implement V4L2 API once it gains support for stateless decod=
-ers.
-> >> +
-> >> +Contact: Dmitry Osipenko <digetx@gmail.com>
-> >
-> > The API for H264 stateless decoding is ready.
-> > See https://lkml.org/lkml/2020/11/18/795.
->
-> Hello Ezequiel,
->
-> Thank you for the notification! My last attempt at implementing V4L API
-> support was about a year ago and it stopped once I realized that there
-> is no userspace which uses that API. FFMPEG and chromium browser had
-> some kind of V4L support, but it all was oriented at downstream driver
-> stacks, and thus, not usable. Do you know what is the current status?
->
 
-The bulk of the API, which relies on the stateless decoder interface [1],
-and H264 stateless V4L2 controls has been ready for some time now,
-and there are various implementations supporting it.
+Fixes: 62a8cb0cbbfe ("EDAC/igen6: Add EDAC driver for Intel client SoCs using IBECC")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+---
+ igen6_edac.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Chromium supports it [2], and I've tested it on chromebooks,
-through chromeos builds. We haven't tried a non-chromeos build,
-and I would say it's quite some work.
-
-GStreamer support is available as well. See [3] which should
-work for the latest H264 controls (the ones being moved out of staging).
-
-LibreELEC developers maintain an Ffmpeg branch [4], I expect it will
-be updated for the latest H264 controls soon, and hopefully merged
-in mainline Ffmpeg.
-
-GStreamer and Ffmpeg are relatively straightforward to build and test.
-
-Thanks,
-Ezequiel
-
-[1] https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/dev-stat=
-eless-decoder.html
-[2] https://github.com/chromium/chromium/tree/master/media/gpu/v4l2
-[3] https://gitlab.freedesktop.org/ezequielgarcia/gst-plugins-bad/-/tree/h2=
-64_stable_uapi
-[4] https://github.com/Kwiboo/FFmpeg/tree/v4l2-request-hwaccel-4.3.
-
-
-> > One minor comment below.
-> >
-> ...
-> >> +       // PPS
-> >> +       __u8  pic_init_qp;
-> >> +       __u8  deblocking_filter_control_present_flag;
-> >> +       __u8  constrained_intra_pred_flag;
-> >> +       __u8  chroma_qp_index_offset;
-> >> +       __u8  pic_order_present_flag;
-> >> +
-> >
-> > This seems to be bottom_field_pic_order_in_frame_present_flag,
-> > as there is no "pic_order_present_flag" syntax element.
->
-> Correct, looks like I borrowed that name from the libvdpau API.
->
-> https://vdpau.pages.freedesktop.org/libvdpau/struct_vdp_picture_info_h264=
-.html#a405f7ef26ea76bb2c446e151062fc001
+diff --git a/drivers/edac/igen6_edac.c b/drivers/edac/igen6_edac.c
+index b8a6d692c1e4f9..71d29297221054 100644
+--- a/drivers/edac/igen6_edac.c
++++ b/drivers/edac/igen6_edac.c
+@@ -164,7 +164,7 @@ struct ecclog_node {
+  * to EDAC core in a worker.
+  */
+ #define ECCLOG_POOL_SIZE	PAGE_SIZE
+-LLIST_HEAD(ecclog_llist);
++static LLIST_HEAD(ecclog_llist);
+ static struct gen_pool *ecclog_pool;
+ static char ecclog_buf[ECCLOG_POOL_SIZE];
+ static struct irq_work ecclog_irq_work;
