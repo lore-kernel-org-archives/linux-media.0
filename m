@@ -5,27 +5,24 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A451C6379F
-	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 14:41:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC077C64E90
+	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 14:41:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4A38920782
-	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 14:41:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 871842078E
+	for <linux-media@archiver.kernel.org>; Mon, 23 Nov 2020 14:41:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730260AbgKWOkm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 Nov 2020 09:40:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47900 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730182AbgKWOkl (ORCPT
+        id S1731704AbgKWOkt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 23 Nov 2020 09:40:49 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:34924 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730700AbgKWOks (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 23 Nov 2020 09:40:41 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60B4C061A4D;
-        Mon, 23 Nov 2020 06:40:40 -0800 (PST)
+        Mon, 23 Nov 2020 09:40:48 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id ACE981F449A8
+        with ESMTPSA id CA80B1F449A8
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
@@ -36,9 +33,9 @@ Cc:     kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Jernej Skrabec <jernej.skrabec@siol.net>,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v4 06/13] media: uapi: h264: Add profile_idc macros
-Date:   Mon, 23 Nov 2020 11:39:53 -0300
-Message-Id: <20201123144000.81310-7-ezequiel@collabora.com>
+Subject: [PATCH v4 08/13] media: controls: Add the stateless codec control class
+Date:   Mon, 23 Nov 2020 11:39:55 -0300
+Message-Id: <20201123144000.81310-9-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201123144000.81310-1-ezequiel@collabora.com>
 References: <20201123144000.81310-1-ezequiel@collabora.com>
@@ -48,33 +45,63 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add some macros to document the profile_idc magic numbers.
-This will be used to validate the controls, but could
-also be used by drivers.
+Add a new control class to hold the stateless codecs controls
+that are ready to be moved out of staging.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- include/media/h264-ctrls.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/media/v4l2-core/v4l2-ctrls.c | 5 +++++
+ include/uapi/linux/v4l2-controls.h   | 7 +++++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/include/media/h264-ctrls.h b/include/media/h264-ctrls.h
-index f86345b8efd1..e14307f1a77c 100644
---- a/include/media/h264-ctrls.h
-+++ b/include/media/h264-ctrls.h
-@@ -98,6 +98,13 @@ enum v4l2_mpeg_video_h264_start_code {
- #define V4L2_H264_SPS_FLAG_MB_ADAPTIVE_FRAME_FIELD		0x20
- #define V4L2_H264_SPS_FLAG_DIRECT_8X8_INFERENCE			0x40
- 
-+#define V4L2_H264_PROFILE_IDC_BASELINE                          66
-+#define V4L2_H264_PROFILE_IDC_MAIN                              77
-+#define V4L2_H264_PROFILE_IDC_EXTENDED                          88
-+#define V4L2_H264_PROFILE_IDC_HIGH                              100
-+#define V4L2_H264_PROFILE_IDC_HIGH_422                          122
-+#define V4L2_H264_PROFILE_IDC_HIGH_444                          244
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
+index 7b4f5ca91b86..d340d415d01e 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls.c
+@@ -1181,6 +1181,10 @@ const char *v4l2_ctrl_get_name(u32 id)
+ 	case V4L2_CID_DETECT_MD_GLOBAL_THRESHOLD: return "MD Global Threshold";
+ 	case V4L2_CID_DETECT_MD_THRESHOLD_GRID:	return "MD Threshold Grid";
+ 	case V4L2_CID_DETECT_MD_REGION_GRID:	return "MD Region Grid";
 +
- /**
-  * struct v4l2_ctrl_h264_sps - H264 sequence parameter set
-  *
++	/* Stateless Codec controls */
++	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
++	case V4L2_CID_CODEC_STATELESS_CLASS:	return "Stateless Codec Controls";
+ 	default:
+ 		return NULL;
+ 	}
+@@ -1368,6 +1372,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
+ 	case V4L2_CID_FM_RX_CLASS:
+ 	case V4L2_CID_RF_TUNER_CLASS:
+ 	case V4L2_CID_DETECT_CLASS:
++	case V4L2_CID_CODEC_STATELESS_CLASS:
+ 		*type = V4L2_CTRL_TYPE_CTRL_CLASS;
+ 		/* You can neither read not write these */
+ 		*flags |= V4L2_CTRL_FLAG_READ_ONLY | V4L2_CTRL_FLAG_WRITE_ONLY;
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index 75cf87b9a377..90478ecc2f81 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -65,6 +65,7 @@
+ #define V4L2_CTRL_CLASS_FM_RX		0x00a10000	/* FM Receiver controls */
+ #define V4L2_CTRL_CLASS_RF_TUNER	0x00a20000	/* RF tuner controls */
+ #define V4L2_CTRL_CLASS_DETECT		0x00a30000	/* Detection controls */
++#define V4L2_CTRL_CLASS_CODEC_STATELESS 0x00a40000	/* Stateless codecs controls */
+ 
+ /* User-class control IDs */
+ 
+@@ -1177,6 +1178,12 @@ enum v4l2_detect_md_mode {
+ #define V4L2_CID_DETECT_MD_THRESHOLD_GRID	(V4L2_CID_DETECT_CLASS_BASE + 3)
+ #define V4L2_CID_DETECT_MD_REGION_GRID		(V4L2_CID_DETECT_CLASS_BASE + 4)
+ 
++
++/*  Stateless CODECs controls */
++#define V4L2_CID_CODEC_STATELESS_BASE          (V4L2_CTRL_CLASS_CODEC_STATELESS | 0x900)
++#define V4L2_CID_CODEC_STATELESS_CLASS         (V4L2_CTRL_CLASS_CODEC_STATELESS | 1)
++
++
+ /* MPEG-compression definitions kept for backwards compatibility */
+ #ifndef __KERNEL__
+ #define V4L2_CTRL_CLASS_MPEG            V4L2_CTRL_CLASS_CODEC
 -- 
 2.27.0
 
