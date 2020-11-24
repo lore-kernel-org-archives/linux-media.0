@@ -2,229 +2,116 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B4F3C56202
-	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 19:44:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C4B9C64E7C
+	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 19:45:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 00CD42137B
-	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 19:44:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3AAFD208DB
+	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 19:45:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="B9SSFTWY"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="OpNqFhKN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726593AbgKXToD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Nov 2020 14:44:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35596 "EHLO
+        id S1726935AbgKXToW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Nov 2020 14:44:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726357AbgKXToB (ORCPT
+        with ESMTP id S1726883AbgKXToT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Nov 2020 14:44:01 -0500
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF46FC0613D6
-        for <linux-media@vger.kernel.org>; Tue, 24 Nov 2020 11:44:00 -0800 (PST)
-Received: by mail-wr1-x444.google.com with SMTP id 64so10127785wra.11
-        for <linux-media@vger.kernel.org>; Tue, 24 Nov 2020 11:44:00 -0800 (PST)
+        Tue, 24 Nov 2020 14:44:19 -0500
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F532C061A4F
+        for <linux-media@vger.kernel.org>; Tue, 24 Nov 2020 11:44:17 -0800 (PST)
+Received: by mail-wr1-x441.google.com with SMTP id z7so7731211wrn.3
+        for <linux-media@vger.kernel.org>; Tue, 24 Nov 2020 11:44:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+qzn/zwustkhPmm6CPPvaOjBdBZotgdBHz7Gg1/2/58=;
-        b=B9SSFTWYkJpiwdzRTlbdHtktygIWmK53ASYuVZxUzuQ/n1vdExE4t/Iq2OQHpgTdWM
-         YlKwnbJKP5QefHzbj/myTyinENyhQsB7HoOOfzDWAp9aUzPFBBw0yI80nn/3vqXq5DVJ
-         ZobyMQYvz80ZlKbkAjM6KAwcpej9zSG6WeFQ0mKpsNjL0MZ7A+ScztanbQvNq36BAcFw
-         xIyC43sKRK8Vu7yEZdARdFcS7JjbTz8FDyCyw7Y1z02y7eDNahEd7L3cyWfRusNmXTI6
-         OQY8lpGqKcIfvMyPrWMx0AMt3UOBnf7ZmQBWnETACGzEEucHC04NgO66a6oIEu6A5zIY
-         ql4g==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Oqd4hAPXVQ3fy/lIhgm4S39do0C9n+Zmijh2vXrOwng=;
+        b=OpNqFhKNSt+HIPPv/t65OGpW81kQdUziPNC7wzPn6N1uU+n91qp0/9HKjWKZYETyfc
+         V5knlydZZ/sO9q6WaVzrlt4IywSYDcY1EnPjyk0ilr9JYGPi8KVLtsiBuUIfrHLDgmzY
+         TJHVghNbiCNVrZHFz7pg29bfo13wGjJyfLfrf12gpLu9Btn+LKxA0hPsCakSHb8mbKWy
+         9Mtn0PpQe3CoqS2o61k1dzAF0MtLjRTjXkBzQVOcc8PglXU2Pwe5U3/u/VKe8Hhgrl4o
+         Rvgz7tuOCLl8Lxy+GkfzfSuyRwLmZ+Vrzw21iIvVkL2T6Cc5U2PqX73FisBNlz4iA5l8
+         1o3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+qzn/zwustkhPmm6CPPvaOjBdBZotgdBHz7Gg1/2/58=;
-        b=CnwUrFG9fbGW8322PV4lWwWezVPFJqrR5RFLG2JfQvmlc4x71z8ZMeoFt4HUZMIa4w
-         mEsqkkGD0p9haGXvDXYUdK4qzcZUfov5QBF/zOUiX8g8URHhw2Q+a6bWX1QU3mGkl8bV
-         iPLEYc69zkgB147QGq2Q2ZcepCKrjQEu5aBz/UVPaIs3D2R+9ZucX76nl4Y0GVKvclpp
-         LQXp6XswSJKTzUA0DSLGyKovr+gteK8+tVq0PDvXMVKCH72BNBKERQizovAvS8srWZsJ
-         UY8WVyo8ZNveIyO5ar5jM/UPJUT0rri00OHJlUMEI9UgJm0LjSr1YtXcMXh/YrJCbzVu
-         1OiQ==
-X-Gm-Message-State: AOAM531z6RVxtrdADXR7auS8/2vKzSaaiQ/MYl9Vi9m6GKQjFHo9wvqf
-        5mDSjVDLNP0NCkMgx5JP9P7hmw==
-X-Google-Smtp-Source: ABdhPJxB3v/xbdSNDArOvs4rF9XodhyOQmc1MFnk/hbl5FOT2va6rX0FYDMtWYy+dDvrd7wwREzh8w==
-X-Received: by 2002:a5d:51c2:: with SMTP id n2mr92041wrv.326.1606247039596;
-        Tue, 24 Nov 2020 11:43:59 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Oqd4hAPXVQ3fy/lIhgm4S39do0C9n+Zmijh2vXrOwng=;
+        b=k7z9vRk6NHfJH2LmO8bLGjS6Swcx8lq8yR5z3lwbszAl2/qmJPhoWLdlFgbx1VxVH8
+         /P96zkKBQ4Om8YaUdriRrLrIOOgDGm+5Nc2nhvawvc2tZSZThyZ5JJzgHgh981VklB/2
+         zM12cRZsHLLrQ6tTDAD9s5mnQ5zn10wUThBAY7Ppy3S1qc3c2p75+XGUoschy2bd/DWW
+         FVl0Q2WPj7Z/OXtzQ0qBVta45YH8MT4bQEFTg+K71swvsxczGdYQw0f7rmDJUU2Vuttb
+         H/QaI7i4rx6RZTjbOllXWo+lmygz4j8oMoYZV3hnVYrmOyiBWuXIa7KbogE3zKVQl0Ar
+         GhSg==
+X-Gm-Message-State: AOAM530+aFpK+rjUbRE4XpryAD0ip1Dg34SGHQzPbxt21ZqCvo3OA1KR
+        jNP5SLCSuOsbELf3VbaSdu+w3A==
+X-Google-Smtp-Source: ABdhPJwku9UPnqBk6ZnYV6+qVhkZ9W9TpjwXx4rfs7TBedVlnAzDXNW94dPSR58L2x2Eey/ASl1Ogg==
+X-Received: by 2002:adf:f9cb:: with SMTP id w11mr83754wrr.1.1606247056420;
+        Tue, 24 Nov 2020 11:44:16 -0800 (PST)
 Received: from dell.default ([91.110.221.235])
-        by smtp.gmail.com with ESMTPSA id d134sm200511wmd.8.2020.11.24.11.43.57
+        by smtp.gmail.com with ESMTPSA id d134sm200511wmd.8.2020.11.24.11.44.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2020 11:43:58 -0800 (PST)
+        Tue, 24 Nov 2020 11:44:15 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org,
         Alex Deucher <alexander.deucher@amd.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        amd-gfx@lists.freedesktop.org,
-        Chandan Uddaraju <chandanu@codeaurora.org>,
         =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org, Evan Quan <evan.quan@amd.com>,
-        freedreno@lists.freedesktop.org,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Kuogee Hsieh <khsieh@codeaurora.org>,
-        linaro-mm-sig@lists.linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-media@vger.kernel.org, Luben Tuikov <luben.tuikov@amd.com>,
-        Nirmoy Das <nirmoy.das@amd.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Sumit Semwal <sumit.semwal@linaro.org>,
-        Veerabadhran G <vegopala@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Zhigang Luo <zhigang.luo@amd.com>
-Subject: [PATCH 00/40] [Set 9] Rid W=1 warnings from GPU
-Date:   Tue, 24 Nov 2020 19:37:44 +0000
-Message-Id: <20201124193824.1118741-1-lee.jones@linaro.org>
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Subject: [PATCH 14/40] drm/amd/amdgpu/gfx_v9_0: Make called-by-reference only function static
+Date:   Tue, 24 Nov 2020 19:37:58 +0000
+Message-Id: <20201124193824.1118741-15-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201124193824.1118741-1-lee.jones@linaro.org>
+References: <20201124193824.1118741-1-lee.jones@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This set is part of a larger effort attempting to clean-up W=1
-kernel builds, which are currently overwhelmingly riddled with
-niggly little warnings.
+Fixes the following W=1 kernel build warning(s):
 
-730 out of 5000 left.
-
-Lee Jones (40):
-  drm/msm/msm_gem_shrinker: Fix descriptions for 'drm_device'
-  drm/amd/amdgpu/gmc_v10_0: Suppy some missing function doc descriptions
-  drm/msm/adreno/a6xx_gpu_state: Make some local functions static
-  drm/amd/amdgpu/iceland_ih: Add missing function param descriptions for
-    'ih' and 'entry'
-  drm/amd/amdgpu/tonga_ih: Provide some missing descriptions for 'ih'
-    and 'entry'
-  drm/amd/amdgpu/cz_ih: Add missing function param descriptions for 'ih'
-    and 'entry'
-  drm/amd/amdgpu/amdgpu_psp: Make local function
-    'parse_ta_bin_descriptor' static
-  drm/msm/dp/dp_ctrl: Move 'tu' from the stack to the heap
-  drm/amd/amdgpu/vega10_ih: Add descriptions for 'ih' and 'entry'
-  drm/amd/amdgpu/navi10_ih: Add descriptions for 'ih' and 'entry'
-  drm/amd/amdgpu/psp_v11_0: Make local function
-    'psp_v11_0_wait_for_bootloader()' static
-  drm/amd/amdgpu/dce_v10_0: Supply description for function param
-    'async'
-  drm/amd/amdgpu/dce_v11_0: Supply description for function param
-    'async'
-  drm/amd/amdgpu/gfx_v9_0: Make called-by-reference only function static
-  drm/amd/amdgpu/gfx_v8_0: Functions must follow directly after their
-    headers
-  drm/amd/amdgpu/gfx_v10_0: Remove a bunch of set but unused variables
-  drm/amd/amdgpu/sdma_v2_4: Fix a bunch of kernel-doc function
-    documentation issues
-  drm/amd/amdgpu/sdma_v3_0: Fix a bunch of kernel-doc function
-    documentation issues
-  drm/amd/amdgpu/sdma_v3_0: Fix incorrect param doc-rot issue
-  drm/amd/amdgpu/uvd_v5_0: Fix a bunch of kernel-doc function
-    documentation issues
-  drm/amd/amdgpu/sdma_v4_0: Repair a bunch of kernel-doc problems
-  drm/amd/amdgpu/amdgpu_uvd: Fix some function documentation headers
-  drm/amd/amdgpu/sdma_v5_0: Provide some missing and repair other
-    function params
-  drm/amd/amdgpu/sdma_v5_2: Provide some missing and repair other
-    function params
-  drm/amd/amdgpu/amdgpu_vce: Provide some missing and repair other
-    function params
-  drm/amd/amdgpu/uvd_v6_0: Fix a bunch of kernel-doc function
-    documentation issues
-  drm/amd/amdgpu/uvd_v7_0: Fix a bunch of kernel-doc function
-    documentation issues
-  drm/amd/amdgpu/gfx_v10_0: Make local function 'gfx_v10_0_rlc_stop()'
-    static
-  drm/amd/amdgpu/vcn_v1_0: Fix a few kernel-doc misdemeanours
-  drm/amd/amdgpu/jpeg_v1_0: Add some missing function param descriptions
-  drm/amd/amdgpu/jpeg_v2_0: Add some missing kernel-doc descriptions
-  drm/amd/amdgpu/vcn_v2_0: Fix a few kernel-doc misdemeanours
-  drm/amd/amdgpu/vcn_v3_0: Remove unused variable 'direct_poll' from
-    'vcn_v3_0_start_sriov()'
-  drm/amd/amdgpu/amdgpu_acp: Fix doc-rot issues pertaining to a couple
-    of 'handle' params
-  drm/amd/pm/swsmu/smu11/vangogh_ppt: Make local function
-    'vangogh_set_default_dpm_tables()' static
-  drm/amd/pm/inc/smu_v11_0: Mark 'smu11_thermal_policy' as
-    __maybe_unused
-  drm/amd/pm/swsmu/smu12/renoir_ppt: Demote kernel-doc formatting abuse
-  drm/amd/pm/swsmu/smu11/navi10_ppt: Remove unused 'struct i2c_algorithm
-    navi10_i2c_algo'
-  drm/amd/pm/powerplay/smumgr/fiji_smumgr: Remove unused variable
-    'result'
-  drm/amd/amdgpu/amdgpu_uvd: Add description for
-    amdgpu_uvd_cs_msg_decode()'s 'buf_sizes' param
-
- drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c       |   4 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c       |   6 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c       |   7 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c       |  19 +-
- drivers/gpu/drm/amd/amdgpu/cz_ih.c            |   4 +
- drivers/gpu/drm/amd/amdgpu/dce_v10_0.c        |   1 +
- drivers/gpu/drm/amd/amdgpu/dce_v11_0.c        |   1 +
- drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c        |  11 +-
- drivers/gpu/drm/amd/amdgpu/gfx_v8_0.c         |   2 +-
- drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c         |   2 +-
- drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c        |   4 +
- drivers/gpu/drm/amd/amdgpu/iceland_ih.c       |   4 +
- drivers/gpu/drm/amd/amdgpu/jpeg_v1_0.c        |   7 +-
- drivers/gpu/drm/amd/amdgpu/jpeg_v2_0.c        |   6 +-
- drivers/gpu/drm/amd/amdgpu/navi10_ih.c        |   5 +
- drivers/gpu/drm/amd/amdgpu/psp_v11_0.c        |   2 +-
- drivers/gpu/drm/amd/amdgpu/sdma_v2_4.c        |  16 +-
- drivers/gpu/drm/amd/amdgpu/sdma_v3_0.c        |  16 +-
- drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c        |  22 +-
- drivers/gpu/drm/amd/amdgpu/sdma_v5_0.c        |  19 +-
- drivers/gpu/drm/amd/amdgpu/sdma_v5_2.c        |  19 +-
- drivers/gpu/drm/amd/amdgpu/tonga_ih.c         |   4 +
- drivers/gpu/drm/amd/amdgpu/uvd_v5_0.c         |  10 +-
- drivers/gpu/drm/amd/amdgpu/uvd_v6_0.c         |  21 +-
- drivers/gpu/drm/amd/amdgpu/uvd_v7_0.c         |  21 +-
- drivers/gpu/drm/amd/amdgpu/vcn_v1_0.c         |  14 +-
- drivers/gpu/drm/amd/amdgpu/vcn_v2_0.c         |  15 +-
- drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c         |   4 -
- drivers/gpu/drm/amd/amdgpu/vega10_ih.c        |   5 +
- drivers/gpu/drm/amd/pm/inc/smu_v11_0.h        |   3 +-
- .../drm/amd/pm/powerplay/smumgr/fiji_smumgr.c |  13 +-
- .../gpu/drm/amd/pm/swsmu/smu11/navi10_ppt.c   | 204 -----------
- .../gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c  |   9 +-
- .../gpu/drm/amd/pm/swsmu/smu12/renoir_ppt.c   |   4 +-
- drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c   |   6 +-
- drivers/gpu/drm/msm/dp/dp_ctrl.c              | 338 +++++++++---------
- drivers/gpu/drm/msm/msm_gem_shrinker.c        |   4 +-
- 37 files changed, 378 insertions(+), 474 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c:2998:6: warning: no previous prototype for ‘gfx_v9_0_rlc_stop’ [-Wmissing-prototypes]
 
 Cc: Alex Deucher <alexander.deucher@amd.com>
-Cc: Alex Sierra <alex.sierra@amd.com>
-Cc: amd-gfx@lists.freedesktop.org
-Cc: Chandan Uddaraju <chandanu@codeaurora.org>
 Cc: "Christian König" <christian.koenig@amd.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
 Cc: David Airlie <airlied@linux.ie>
-Cc: dri-devel@lists.freedesktop.org
-Cc: Evan Quan <evan.quan@amd.com>
-Cc: freedreno@lists.freedesktop.org
-Cc: Hawking Zhang <Hawking.Zhang@amd.com>
-Cc: Kuogee Hsieh <khsieh@codeaurora.org>
-Cc: linaro-mm-sig@lists.linaro.org
-Cc: linux-arm-msm@vger.kernel.org
-Cc: linux-media@vger.kernel.org
-Cc: Luben Tuikov <luben.tuikov@amd.com>
-Cc: Nirmoy Das <nirmoy.das@amd.com>
-Cc: Rob Clark <robdclark@gmail.com>
-Cc: Sean Paul <sean@poorly.run>
+Cc: Daniel Vetter <daniel@ffwll.ch>
 Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: Veerabadhran G <vegopala@amd.com>
-Cc: Xiaojian Du <Xiaojian.Du@amd.com>
-Cc: Zhigang Luo <zhigang.luo@amd.com>
+Cc: amd-gfx@lists.freedesktop.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-media@vger.kernel.org
+Cc: linaro-mm-sig@lists.linaro.org
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+---
+ drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c b/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
+index 8a6c050cb6caf..eae81fc412556 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
+@@ -2995,7 +2995,7 @@ static void gfx_v9_0_init_pg(struct amdgpu_device *adev)
+ 	}
+ }
+ 
+-void gfx_v9_0_rlc_stop(struct amdgpu_device *adev)
++static void gfx_v9_0_rlc_stop(struct amdgpu_device *adev)
+ {
+ 	WREG32_FIELD15(GC, 0, RLC_CNTL, RLC_ENABLE_F32, 0);
+ 	gfx_v9_0_enable_gui_idle_interrupt(adev, false);
 -- 
 2.25.1
 
