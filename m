@@ -7,137 +7,70 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DCCEC83014
-	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF139C83011
+	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 42BD72073C
-	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 775322073C
+	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731524AbgKXJin (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Nov 2020 04:38:43 -0500
-Received: from retiisi.eu ([95.216.213.190]:45030 "EHLO hillosipuli.retiisi.eu"
+        id S1731518AbgKXJil (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Nov 2020 04:38:41 -0500
+Received: from retiisi.eu ([95.216.213.190]:45008 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731501AbgKXJig (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Nov 2020 04:38:36 -0500
+        id S1731505AbgKXJih (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 24 Nov 2020 04:38:37 -0500
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id E2AD2634CBE;
-        Tue, 24 Nov 2020 11:37:52 +0200 (EET)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 385DC634CC1;
+        Tue, 24 Nov 2020 11:37:53 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, mchehab@kernel.org
-Subject: [PATCH 23/30] ccs: Use static data read-only registers
-Date:   Tue, 24 Nov 2020 11:32:19 +0200
-Message-Id: <20201124093226.23737-24-sakari.ailus@linux.intel.com>
+Subject: [PATCH 26/30] =?UTF-8?q?ccs:=20Use=20longer=20pre-I=C2=B2C=20slee?= =?UTF-8?q?p=20for=20CCS=20compliant=20devices?=
+Date:   Tue, 24 Nov 2020 11:32:22 +0200
+Message-Id: <20201124093226.23737-27-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201124093226.23737-1-sakari.ailus@linux.intel.com>
 References: <20201124093226.23737-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Access read-only registers from CCS static data.
+Longer idle period is required on I²C bus before the first transaction
+after lifting xshutdown.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-reg-access.c | 64 ++++++++++++++++++++++++--
- 1 file changed, 60 insertions(+), 4 deletions(-)
+ drivers/media/i2c/ccs/ccs-core.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/ccs/ccs-reg-access.c b/drivers/media/i2c/ccs/ccs-reg-access.c
-index 918bc98c226f..3de863e3bf26 100644
---- a/drivers/media/i2c/ccs/ccs-reg-access.c
-+++ b/drivers/media/i2c/ccs/ccs-reg-access.c
-@@ -198,11 +198,67 @@ static int __ccs_read_addr(struct ccs_sensor *sensor, u32 reg, u32 *val,
- 	return 0;
- }
- 
-+static int __ccs_read_data(struct ccs_reg *regs, size_t num_regs,
-+			   u32 reg, u32 *val)
-+{
-+	unsigned int width = ccs_reg_width(reg);
-+	size_t i;
-+
-+	for (i = 0; i < num_regs; i++, regs++) {
-+		uint8_t *data;
-+
-+		if (regs->addr + regs->len < CCS_REG_ADDR(reg) + width)
-+			continue;
-+
-+		if (regs->addr > CCS_REG_ADDR(reg))
-+			break;
-+
-+		data = &regs->value[CCS_REG_ADDR(reg) - regs->addr];
-+
-+		switch (width) {
-+		case sizeof(uint8_t):
-+			*val = *data;
-+			break;
-+		case sizeof(uint16_t):
-+			*val = get_unaligned_be16(data);
-+			break;
-+		case sizeof(uint32_t):
-+			*val = get_unaligned_be32(data);
-+			break;
-+		default:
-+			WARN_ON(1);
-+			return -EINVAL;
-+		}
-+
-+		return 0;
-+	}
-+
-+	return -ENOENT;
-+}
-+
-+static int ccs_read_data(struct ccs_sensor *sensor, u32 reg, u32 *val)
-+{
-+	if (!__ccs_read_data(sensor->sdata.sensor_read_only_regs,
-+			     sensor->sdata.num_sensor_read_only_regs,
-+			     reg, val))
-+		return 0;
-+
-+	return __ccs_read_data(sensor->mdata.module_read_only_regs,
-+			       sensor->mdata.num_module_read_only_regs,
-+			       reg, val);
-+}
-+
- static int ccs_read_addr_raw(struct ccs_sensor *sensor, u32 reg, u32 *val,
--			     bool force8, bool quirk, bool conv)
-+			     bool force8, bool quirk, bool conv, bool data)
- {
+diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
+index 863295b8fb5c..5014aa0d7969 100644
+--- a/drivers/media/i2c/ccs/ccs-core.c
++++ b/drivers/media/i2c/ccs/ccs-core.c
+@@ -1300,6 +1300,7 @@ static int ccs_power_on(struct device *dev)
+ 	 */
+ 	struct ccs_sensor *sensor =
+ 		container_of(ssd, struct ccs_sensor, ssds[0]);
++	const struct ccs_device *ccsdev = device_get_match_data(dev);
+ 	unsigned int sleep;
  	int rval;
  
-+	if (data) {
-+		rval = ccs_read_data(sensor, reg, val);
-+		if (!rval)
-+			return 0;
-+	}
+@@ -1320,7 +1321,11 @@ static int ccs_power_on(struct device *dev)
+ 	gpiod_set_value(sensor->reset, 0);
+ 	gpiod_set_value(sensor->xshutdown, 1);
+ 
+-	sleep = SMIAPP_RESET_DELAY(sensor->hwcfg.ext_clk);
++	if (ccsdev->flags & CCS_DEVICE_FLAG_IS_SMIA)
++		sleep = SMIAPP_RESET_DELAY(sensor->hwcfg.ext_clk);
++	else
++		sleep = 5000;
 +
- 	if (quirk) {
- 		*val = 0;
- 		rval = ccs_call_quirk(sensor, reg_access, false, &reg, val);
-@@ -223,17 +279,17 @@ static int ccs_read_addr_raw(struct ccs_sensor *sensor, u32 reg, u32 *val,
+ 	usleep_range(sleep, sleep);
  
- int ccs_read_addr(struct ccs_sensor *sensor, u32 reg, u32 *val)
- {
--	return ccs_read_addr_raw(sensor, reg, val, false, true, true);
-+	return ccs_read_addr_raw(sensor, reg, val, false, true, true, true);
- }
- 
- int ccs_read_addr_8only(struct ccs_sensor *sensor, u32 reg, u32 *val)
- {
--	return ccs_read_addr_raw(sensor, reg, val, true, true, true);
-+	return ccs_read_addr_raw(sensor, reg, val, true, true, true, true);
- }
- 
- int ccs_read_addr_noconv(struct ccs_sensor *sensor, u32 reg, u32 *val)
- {
--	return ccs_read_addr_raw(sensor, reg, val, false, true, false);
-+	return ccs_read_addr_raw(sensor, reg, val, false, true, false, true);
- }
- 
- static int ccs_write_retry(struct i2c_client *client, struct i2c_msg *msg)
+ 	/*
 -- 
 2.27.0
 
