@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64C13C71155
-	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 11:08:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73E6BC83010
+	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 11:08:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 081E620708
-	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 11:08:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 31BFE2073C
+	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 11:08:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="oFhJ5r/J"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="zktEnhA+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732783AbgKXLIL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Nov 2020 06:08:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33780 "EHLO mail.kernel.org"
+        id S1732805AbgKXLIQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Nov 2020 06:08:16 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33634 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732103AbgKXLGe (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Nov 2020 06:06:34 -0500
+        id S1732014AbgKXLGc (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 24 Nov 2020 06:06:32 -0500
 Received: from mail.kernel.org (ip5f5ad5c3.dynamic.kabel-deutschland.de [95.90.213.195])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DC5FF20897;
+        by mail.kernel.org (Postfix) with ESMTPSA id D0C4D20782;
         Tue, 24 Nov 2020 11:06:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1606215991;
-        bh=qYik9kN5fhkt2mY+5ReJQAGA6pDQ9UivcMsFS8hiGIE=;
+        bh=+o4sKZpfph5wf9xaM5xJDLWPdI132bLuOkXE3mw2ky4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oFhJ5r/Ji4XJtgx0PyDlUsgMp3CV8ev8ZoGXUWLJxEBuhIwC4eDem8I3PiJdSzjPi
-         J0yBhWlUSIemsiO3BcFTBslmeLp0gfw7Yf900IMTF7Xs9KUK9uCG/q2DKUTvNmoKS5
-         NDuF1wt0FgeVaxv3efDLjrOjdtsqlYBS9mkyAh6A=
+        b=zktEnhA++bfbTNFgMMRqQxjQ64qJdwPRoqZAXlNLV+mHNd+yREPRiaIAyd/lBkrS9
+         1BafuvA+Txaf/7etHlkUM31La2i/LptcE1wUNabF+6rNg7kudVrPEfjuuZ25mxS311
+         GXQxVtGDHV3hWrNtCJ7nl8Oa6b5CJGbjb1mUrF0k=
 Received: from mchehab by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1khW9U-000FZw-V1; Tue, 24 Nov 2020 12:06:28 +0100
+        id 1khW9U-000FZb-OF; Tue, 24 Nov 2020 12:06:28 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 14/31] media: vidtv: fix the network ID range
-Date:   Tue, 24 Nov 2020 12:06:10 +0100
-Message-Id: <05d375a7aac935dd364bac4125b84a416b7f1d19.1606215584.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 07/31] media: vidtv: avoid data copy when initializing the multiplexer
+Date:   Tue, 24 Nov 2020 12:06:03 +0100
+Message-Id: <b0c7c5788d4f717905adf7e0070f047aded2308b.1606215584.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <cover.1606215584.git.mchehab+huawei@kernel.org>
 References: <cover.1606215584.git.mchehab+huawei@kernel.org>
@@ -55,57 +55,134 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-As defined at ETSI TS 101 162, original network IDs up to 0xfebf
-are reserved for registration at dvb.org.
-
-Let's use, instead, an original network ID at the range
-0xff00-0xffff, as this is for private temporary usage.
-
-As the same value is also used for the network ID,
-the range 0xff01-0xffff also fits better, as values
-lower than that depend if the network is used for
-satellite, terrestrial, cable of CI.
-
-While here, move the TS ID to the bridge code, where it
-is used, and change its value, as it was identical to
-the value previously used by network ID. While we could
-keep the same value, let's change it, just to make easier
-to check for the new code while reading it with DVB tools
-like dvbinspector.
+Initialize the fields of the arguments directly when
+declaring it, and pass the args as a pointer, instead of
+copying them.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/test-drivers/vidtv/vidtv_bridge.c | 3 ++-
- drivers/media/test-drivers/vidtv/vidtv_common.h | 1 -
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../media/test-drivers/vidtv/vidtv_bridge.c   | 28 ++++++++++---------
+ drivers/media/test-drivers/vidtv/vidtv_mux.c  | 28 +++++++++----------
+ drivers/media/test-drivers/vidtv/vidtv_mux.h  |  2 +-
+ 3 files changed, 30 insertions(+), 28 deletions(-)
 
 diff --git a/drivers/media/test-drivers/vidtv/vidtv_bridge.c b/drivers/media/test-drivers/vidtv/vidtv_bridge.c
-index 807baf59db8d..ff9333dfa772 100644
+index e846aaab2c44..3fc7bf00a3e5 100644
 --- a/drivers/media/test-drivers/vidtv/vidtv_bridge.c
 +++ b/drivers/media/test-drivers/vidtv/vidtv_bridge.c
-@@ -29,8 +29,9 @@
- #define MUX_BUF_MAX_SZ (MUX_BUF_MIN_SZ * 10)
- #define TUNER_DEFAULT_ADDR 0x68
- #define DEMOD_DEFAULT_ADDR 0x60
--#define VIDTV_DEFAULT_NETWORK_ID 0x744
-+#define VIDTV_DEFAULT_NETWORK_ID 0xff44
- #define VIDTV_DEFAULT_NETWORK_NAME "LinuxTV.org"
-+#define VIDTV_DEFAULT_TS_ID 0x4081
+@@ -161,7 +161,17 @@ vidtv_bridge_on_new_pkts_avail(void *priv, u8 *buf, u32 npkts)
  
- /*
-  * The LNBf fake parameters here are the ranges used by an
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_common.h b/drivers/media/test-drivers/vidtv/vidtv_common.h
-index 818e7f2b9ec5..42f63fdee681 100644
---- a/drivers/media/test-drivers/vidtv/vidtv_common.h
-+++ b/drivers/media/test-drivers/vidtv/vidtv_common.h
-@@ -16,7 +16,6 @@
- #define CLOCK_UNIT_27MHZ 27000000
- #define VIDTV_SLEEP_USECS 10000
- #define VIDTV_MAX_SLEEP_USECS (2 * VIDTV_SLEEP_USECS)
--#define VIDTV_DEFAULT_TS_ID 0x744
+ static int vidtv_start_streaming(struct vidtv_dvb *dvb)
+ {
+-	struct vidtv_mux_init_args mux_args = {0};
++	struct vidtv_mux_init_args mux_args = {
++		.mux_rate_kbytes_sec         = mux_rate_kbytes_sec,
++		.on_new_packets_available_cb = vidtv_bridge_on_new_pkts_avail,
++		.pcr_period_usecs            = pcr_period_msec * USEC_PER_MSEC,
++		.si_period_usecs             = si_period_msec * USEC_PER_MSEC,
++		.pcr_pid                     = pcr_pid,
++		.transport_stream_id         = VIDTV_DEFAULT_TS_ID,
++		.network_id                  = VIDTV_DEFAULT_NETWORK_ID,
++		.network_name                = VIDTV_DEFAULT_NETWORK_NAME,
++		.priv                        = dvb,
++	};
+ 	struct device *dev = &dvb->pdev->dev;
+ 	u32 mux_buf_sz;
  
- u32 vidtv_memcpy(void *to,
- 		 size_t to_offset,
+@@ -170,21 +180,13 @@ static int vidtv_start_streaming(struct vidtv_dvb *dvb)
+ 		return 0;
+ 	}
+ 
+-	mux_buf_sz = (mux_buf_sz_pkts) ? mux_buf_sz_pkts : vidtv_bridge_mux_buf_sz_for_mux_rate();
++	mux_buf_sz = (mux_buf_sz_pkts) ? mux_buf_sz_pkts :
++					 vidtv_bridge_mux_buf_sz_for_mux_rate();
+ 
+-	mux_args.mux_rate_kbytes_sec         = mux_rate_kbytes_sec;
+-	mux_args.on_new_packets_available_cb = vidtv_bridge_on_new_pkts_avail;
+-	mux_args.mux_buf_sz                  = mux_buf_sz;
+-	mux_args.pcr_period_usecs            = pcr_period_msec * 1000;
+-	mux_args.si_period_usecs             = si_period_msec * 1000;
+-	mux_args.pcr_pid                     = pcr_pid;
+-	mux_args.transport_stream_id         = VIDTV_DEFAULT_TS_ID;
+-	mux_args.network_id                  = VIDTV_DEFAULT_NETWORK_ID,
+-	mux_args.network_name                = VIDTV_DEFAULT_NETWORK_NAME,
+-	mux_args.priv                        = dvb;
++	mux_args.mux_buf_sz  = mux_buf_sz;
+ 
+ 	dvb->streaming = true;
+-	dvb->mux = vidtv_mux_init(dvb->fe[0], dev, mux_args);
++	dvb->mux = vidtv_mux_init(dvb->fe[0], dev, &mux_args);
+ 	if (!dvb->mux)
+ 		return -ENOMEM;
+ 	vidtv_mux_start_thread(dvb->mux);
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_mux.c b/drivers/media/test-drivers/vidtv/vidtv_mux.c
+index bba3f2315531..89b19f0844b8 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_mux.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_mux.c
+@@ -466,7 +466,7 @@ void vidtv_mux_stop_thread(struct vidtv_mux *m)
+ 
+ struct vidtv_mux *vidtv_mux_init(struct dvb_frontend *fe,
+ 				 struct device *dev,
+-				 struct vidtv_mux_init_args args)
++				 struct vidtv_mux_init_args *args)
+ {
+ 	struct vidtv_mux *m;
+ 
+@@ -476,28 +476,28 @@ struct vidtv_mux *vidtv_mux_init(struct dvb_frontend *fe,
+ 
+ 	m->dev = dev;
+ 	m->fe = fe;
+-	m->timing.pcr_period_usecs = args.pcr_period_usecs;
+-	m->timing.si_period_usecs  = args.si_period_usecs;
++	m->timing.pcr_period_usecs = args->pcr_period_usecs;
++	m->timing.si_period_usecs  = args->si_period_usecs;
+ 
+-	m->mux_rate_kbytes_sec = args.mux_rate_kbytes_sec;
++	m->mux_rate_kbytes_sec = args->mux_rate_kbytes_sec;
+ 
+-	m->on_new_packets_available_cb = args.on_new_packets_available_cb;
++	m->on_new_packets_available_cb = args->on_new_packets_available_cb;
+ 
+-	m->mux_buf = vzalloc(args.mux_buf_sz);
++	m->mux_buf = vzalloc(args->mux_buf_sz);
+ 	if (!m->mux_buf)
+ 		goto free_mux;
+ 
+-	m->mux_buf_sz = args.mux_buf_sz;
++	m->mux_buf_sz = args->mux_buf_sz;
+ 
+-	m->pcr_pid = args.pcr_pid;
+-	m->transport_stream_id = args.transport_stream_id;
+-	m->priv = args.priv;
+-	m->network_id = args.network_id;
+-	m->network_name = kstrdup(args.network_name, GFP_KERNEL);
++	m->pcr_pid = args->pcr_pid;
++	m->transport_stream_id = args->transport_stream_id;
++	m->priv = args->priv;
++	m->network_id = args->network_id;
++	m->network_name = kstrdup(args->network_name, GFP_KERNEL);
+ 	m->timing.current_jiffies = get_jiffies_64();
+ 
+-	if (args.channels)
+-		m->channels = args.channels;
++	if (args->channels)
++		m->channels = args->channels;
+ 	else
+ 		if (vidtv_channels_init(m) < 0)
+ 			goto free_mux_buf;
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_mux.h b/drivers/media/test-drivers/vidtv/vidtv_mux.h
+index 005b707f1445..e186094c4fb7 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_mux.h
++++ b/drivers/media/test-drivers/vidtv/vidtv_mux.h
+@@ -170,7 +170,7 @@ struct vidtv_mux_init_args {
+ 
+ struct vidtv_mux *vidtv_mux_init(struct dvb_frontend *fe,
+ 				 struct device *dev,
+-				 struct vidtv_mux_init_args args);
++				 struct vidtv_mux_init_args *args);
+ void vidtv_mux_destroy(struct vidtv_mux *m);
+ 
+ void vidtv_mux_start_thread(struct vidtv_mux *m);
 -- 
 2.28.0
 
