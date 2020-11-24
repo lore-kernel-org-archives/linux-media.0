@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F6D3C83010
-	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DCCEC83014
+	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1D5312073C
-	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 42BD72073C
+	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731491AbgKXJil (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Nov 2020 04:38:41 -0500
-Received: from retiisi.eu ([95.216.213.190]:45026 "EHLO hillosipuli.retiisi.eu"
+        id S1731524AbgKXJin (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Nov 2020 04:38:43 -0500
+Received: from retiisi.eu ([95.216.213.190]:45030 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731513AbgKXJii (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Nov 2020 04:38:38 -0500
+        id S1731501AbgKXJig (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 24 Nov 2020 04:38:36 -0500
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 89049634CCF;
-        Tue, 24 Nov 2020 11:37:53 +0200 (EET)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id E2AD2634CBE;
+        Tue, 24 Nov 2020 11:37:52 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, mchehab@kernel.org
-Subject: [PATCH 30/30] ccs: Use all regulators
-Date:   Tue, 24 Nov 2020 11:32:26 +0200
-Message-Id: <20201124093226.23737-31-sakari.ailus@linux.intel.com>
+Subject: [PATCH 23/30] ccs: Use static data read-only registers
+Date:   Tue, 24 Nov 2020 11:32:19 +0200
+Message-Id: <20201124093226.23737-24-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201124093226.23737-1-sakari.ailus@linux.intel.com>
 References: <20201124093226.23737-1-sakari.ailus@linux.intel.com>
@@ -37,98 +37,107 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use regulators vio and vcore besides vana. The regulators were always
-there but on many boards they've been hard wired. Control them explicitly
-now.
+Access read-only registers from CCS static data.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 30 +++++++++++++++++++++++-------
- drivers/media/i2c/ccs/ccs.h      |  2 +-
- 2 files changed, 24 insertions(+), 8 deletions(-)
+ drivers/media/i2c/ccs/ccs-reg-access.c | 64 ++++++++++++++++++++++++--
+ 1 file changed, 60 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 89dc09587211..4447ca367a84 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -65,6 +65,8 @@ struct ccs_device {
- 	unsigned char flags;
- };
+diff --git a/drivers/media/i2c/ccs/ccs-reg-access.c b/drivers/media/i2c/ccs/ccs-reg-access.c
+index 918bc98c226f..3de863e3bf26 100644
+--- a/drivers/media/i2c/ccs/ccs-reg-access.c
++++ b/drivers/media/i2c/ccs/ccs-reg-access.c
+@@ -198,11 +198,67 @@ static int __ccs_read_addr(struct ccs_sensor *sensor, u32 reg, u32 *val,
+ 	return 0;
+ }
  
-+static const char * const ccs_regulators[] = { "vcore", "vio", "vana" };
++static int __ccs_read_data(struct ccs_reg *regs, size_t num_regs,
++			   u32 reg, u32 *val)
++{
++	unsigned int width = ccs_reg_width(reg);
++	size_t i;
 +
- /*
-  *
-  * Dynamic Capability Identification
-@@ -1304,7 +1306,8 @@ static int ccs_power_on(struct device *dev)
- 	unsigned int sleep;
++	for (i = 0; i < num_regs; i++, regs++) {
++		uint8_t *data;
++
++		if (regs->addr + regs->len < CCS_REG_ADDR(reg) + width)
++			continue;
++
++		if (regs->addr > CCS_REG_ADDR(reg))
++			break;
++
++		data = &regs->value[CCS_REG_ADDR(reg) - regs->addr];
++
++		switch (width) {
++		case sizeof(uint8_t):
++			*val = *data;
++			break;
++		case sizeof(uint16_t):
++			*val = get_unaligned_be16(data);
++			break;
++		case sizeof(uint32_t):
++			*val = get_unaligned_be32(data);
++			break;
++		default:
++			WARN_ON(1);
++			return -EINVAL;
++		}
++
++		return 0;
++	}
++
++	return -ENOENT;
++}
++
++static int ccs_read_data(struct ccs_sensor *sensor, u32 reg, u32 *val)
++{
++	if (!__ccs_read_data(sensor->sdata.sensor_read_only_regs,
++			     sensor->sdata.num_sensor_read_only_regs,
++			     reg, val))
++		return 0;
++
++	return __ccs_read_data(sensor->mdata.module_read_only_regs,
++			       sensor->mdata.num_module_read_only_regs,
++			       reg, val);
++}
++
+ static int ccs_read_addr_raw(struct ccs_sensor *sensor, u32 reg, u32 *val,
+-			     bool force8, bool quirk, bool conv)
++			     bool force8, bool quirk, bool conv, bool data)
+ {
  	int rval;
  
--	rval = regulator_enable(sensor->vana);
-+	rval = regulator_bulk_enable(ARRAY_SIZE(ccs_regulators),
-+				     sensor->regulators);
- 	if (rval) {
- 		dev_err(dev, "failed to enable vana regulator\n");
- 		return rval;
-@@ -1416,7 +1419,8 @@ static int ccs_power_on(struct device *dev)
- 	clk_disable_unprepare(sensor->ext_clk);
++	if (data) {
++		rval = ccs_read_data(sensor, reg, val);
++		if (!rval)
++			return 0;
++	}
++
+ 	if (quirk) {
+ 		*val = 0;
+ 		rval = ccs_call_quirk(sensor, reg_access, false, &reg, val);
+@@ -223,17 +279,17 @@ static int ccs_read_addr_raw(struct ccs_sensor *sensor, u32 reg, u32 *val,
  
- out_xclk_fail:
--	regulator_disable(sensor->vana);
-+	regulator_bulk_disable(ARRAY_SIZE(ccs_regulators),
-+			       sensor->regulators);
- 
- 	return rval;
+ int ccs_read_addr(struct ccs_sensor *sensor, u32 reg, u32 *val)
+ {
+-	return ccs_read_addr_raw(sensor, reg, val, false, true, true);
++	return ccs_read_addr_raw(sensor, reg, val, false, true, true, true);
  }
-@@ -1442,7 +1446,8 @@ static int ccs_power_off(struct device *dev)
- 	gpiod_set_value(sensor->xshutdown, 0);
- 	clk_disable_unprepare(sensor->ext_clk);
- 	usleep_range(5000, 5000);
--	regulator_disable(sensor->vana);
-+	regulator_bulk_disable(ARRAY_SIZE(ccs_regulators),
-+			       sensor->regulators);
- 	sensor->streaming = false;
  
- 	return 0;
-@@ -2981,10 +2986,21 @@ static int ccs_probe(struct i2c_client *client)
- 	v4l2_i2c_subdev_init(&sensor->src->sd, client, &ccs_ops);
- 	sensor->src->sd.internal_ops = &ccs_internal_src_ops;
+ int ccs_read_addr_8only(struct ccs_sensor *sensor, u32 reg, u32 *val)
+ {
+-	return ccs_read_addr_raw(sensor, reg, val, true, true, true);
++	return ccs_read_addr_raw(sensor, reg, val, true, true, true, true);
+ }
  
--	sensor->vana = devm_regulator_get(&client->dev, "vana");
--	if (IS_ERR(sensor->vana)) {
--		dev_err(&client->dev, "could not get regulator for vana\n");
--		return PTR_ERR(sensor->vana);
-+	sensor->regulators = devm_kcalloc(&client->dev,
-+					  ARRAY_SIZE(ccs_regulators),
-+					  sizeof(*sensor->regulators),
-+					  GFP_KERNEL);
-+	if (!sensor->regulators)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < ARRAY_SIZE(ccs_regulators); i++)
-+		sensor->regulators[i].supply = ccs_regulators[i];
-+
-+	rval = devm_regulator_bulk_get(&client->dev, ARRAY_SIZE(ccs_regulators),
-+				       sensor->regulators);
-+	if (rval) {
-+		dev_err(&client->dev, "could not get regulators\n");
-+		return rval;
- 	}
+ int ccs_read_addr_noconv(struct ccs_sensor *sensor, u32 reg, u32 *val)
+ {
+-	return ccs_read_addr_raw(sensor, reg, val, false, true, false);
++	return ccs_read_addr_raw(sensor, reg, val, false, true, false, true);
+ }
  
- 	sensor->ext_clk = devm_clk_get(&client->dev, NULL);
-diff --git a/drivers/media/i2c/ccs/ccs.h b/drivers/media/i2c/ccs/ccs.h
-index 6b07e4143ff0..356b87c33405 100644
---- a/drivers/media/i2c/ccs/ccs.h
-+++ b/drivers/media/i2c/ccs/ccs.h
-@@ -223,7 +223,7 @@ struct ccs_sensor {
- 	struct ccs_subdev *scaler;
- 	struct ccs_subdev *pixel_array;
- 	struct ccs_hwconfig hwcfg;
--	struct regulator *vana;
-+	struct regulator_bulk_data *regulators;
- 	struct clk *ext_clk;
- 	struct gpio_desc *xshutdown;
- 	struct gpio_desc *reset;
+ static int ccs_write_retry(struct i2c_client *client, struct i2c_msg *msg)
 -- 
 2.27.0
 
