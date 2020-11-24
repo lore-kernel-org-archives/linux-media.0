@@ -2,128 +2,162 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 791F5C64E90
-	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 19:48:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED8C6C56202
+	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 20:36:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 23D502086A
-	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 19:48:03 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ROnAYiAd"
+	by mail.kernel.org (Postfix) with ESMTP id A1E962076E
+	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 20:36:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726709AbgKXTrw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Nov 2020 14:47:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35614 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726599AbgKXToD (ORCPT
+        id S1728886AbgKXUg2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Nov 2020 15:36:28 -0500
+Received: from mailoutvs49.siol.net ([185.57.226.240]:51414 "EHLO
+        mail.siol.net" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727186AbgKXUg1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Nov 2020 14:44:03 -0500
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21AA6C061A4D
-        for <linux-media@vger.kernel.org>; Tue, 24 Nov 2020 11:44:03 -0800 (PST)
-Received: by mail-wm1-x342.google.com with SMTP id c198so90558wmd.0
-        for <linux-media@vger.kernel.org>; Tue, 24 Nov 2020 11:44:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=HQG7VvhLuLqLIiCO1wDsJUncEyILipv0iifGGhYNwBw=;
-        b=ROnAYiAd5qDaRM6zlXai5MEWDhk655E2E+vwaBBQzU3vLw++RLC4/Jub4Bt3Hvy0HW
-         pwVKhquuQdg0kk3tR1802CxvCaIcCwMmVQyiRfLJBffRMydYoXbNWu6QKx04FekT+/qp
-         qoL59FYT3twrWeZa+Kd9U45wg7C8HeQReGIsbPxd3eF+kBkgnRVKLMICmYUZVZZcSKcB
-         i3krnvNltBSKPhTsEx91aoglWLCC8evPXFNZ5CcQoBWLe40kKZ/NpidKAmX1NZFJSC5e
-         3429CPqWQ2HYM51EEndQBWcN+40LTgM9aL9qXD4DJTS4i3u5d6Y7QaI4+o6IYnURuma3
-         QtRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=HQG7VvhLuLqLIiCO1wDsJUncEyILipv0iifGGhYNwBw=;
-        b=q2lYPCsdO06Ry/Cu2XyM7tWcRQqXDsT5MDnWfxK7/h4YNyDg5PoO70Pg/j9AffCLhV
-         1EIpnk8O5UHiVivPMbDALxUTogtmL5qSgcXoA6QDPyf6ql/9dMYLwGZLndSHNW8xc072
-         OJ3gw0q9o9f/MI3V2YseVU6JSsvgKBx62qgcKXPW2VdSIIGpgPlg0ppBPPaPP5xmd10i
-         Mij64e1I8te0NkLfIfcC1hb/iOPxCjyIf1upjxiWX4YBD84o+EYciK05nn/9vCP77e5p
-         JYyFmJJxadqqTw53a4nZm8tQQU58Y/HQ+n1InSAXGZsl77aLAViTXs30nYk5LeFY0DqI
-         Fl7w==
-X-Gm-Message-State: AOAM530apKSTO4/NzXDBhzuQnfuybxy/fAmtFNiuy3YWNNDSdIztdXYr
-        eokaNB1ydoCiSxflupMN9alo/AuMmUoReFl6
-X-Google-Smtp-Source: ABdhPJxABCqmQpKoOyO33AaWgS8+y0qIF8skdrZlNoUJ266NV2fmZqe3GarA3FNS1UObzNFWwWwgCA==
-X-Received: by 2002:a1c:4b10:: with SMTP id y16mr22750wma.10.1606247041886;
-        Tue, 24 Nov 2020 11:44:01 -0800 (PST)
-Received: from dell.default ([91.110.221.235])
-        by smtp.gmail.com with ESMTPSA id d134sm200511wmd.8.2020.11.24.11.44.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2020 11:44:01 -0800 (PST)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 02/40] drm/amd/amdgpu/gmc_v10_0: Suppy some missing function doc descriptions
-Date:   Tue, 24 Nov 2020 19:37:46 +0000
-Message-Id: <20201124193824.1118741-3-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201124193824.1118741-1-lee.jones@linaro.org>
-References: <20201124193824.1118741-1-lee.jones@linaro.org>
+        Tue, 24 Nov 2020 15:36:27 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.siol.net (Postfix) with ESMTP id 9ECD952140B;
+        Tue, 24 Nov 2020 21:36:23 +0100 (CET)
+X-Virus-Scanned: amavisd-new at psrvmta09.zcs-production.pri
+Received: from mail.siol.net ([127.0.0.1])
+        by localhost (psrvmta09.zcs-production.pri [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id IfoQqw3X5caQ; Tue, 24 Nov 2020 21:36:23 +0100 (CET)
+Received: from mail.siol.net (localhost [127.0.0.1])
+        by mail.siol.net (Postfix) with ESMTPS id 1E14C52133C;
+        Tue, 24 Nov 2020 21:36:23 +0100 (CET)
+Received: from kista.localnet (cpe1-5-97.cable.triera.net [213.161.5.97])
+        (Authenticated sender: jernej.skrabec@siol.net)
+        by mail.siol.net (Postfix) with ESMTPA id 6472F52140B;
+        Tue, 24 Nov 2020 21:36:22 +0100 (CET)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@siol.net>
+To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Cc:     kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: Re: [PATCH v4 00/13] Stateless H.264 de-staging
+Date:   Tue, 24 Nov 2020 21:42:24 +0100
+Message-ID: <4354018.LnWUqtLeLf@kista>
+In-Reply-To: <20201123144000.81310-1-ezequiel@collabora.com>
+References: <20201123144000.81310-1-ezequiel@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fixes the following W=1 kernel build warning(s):
+Hi!
 
- drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c:278: warning: Function parameter or member 'vmhub' not described in 'gmc_v10_0_flush_gpu_tlb'
- drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c:278: warning: Function parameter or member 'flush_type' not described in 'gmc_v10_0_flush_gpu_tlb'
- drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c:371: warning: Function parameter or member 'flush_type' not described in 'gmc_v10_0_flush_gpu_tlb_pasid'
- drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c:371: warning: Function parameter or member 'all_hub' not described in 'gmc_v10_0_flush_gpu_tlb_pasid'
+Dne ponedeljek, 23. november 2020 ob 15:39:47 CET je Ezequiel Garcia 
+napisal(a):
+> Seems we are converging, as this iteration is really small.
+> 
+> Just like v3, this iteration (plus a patch for VP8 VP8_FRAME_HEADER 
+initialization,
+> which I'll send shortly) passes v4l2-compliance with no failures.
+> 
+> As an additional test, Fluendo's JVT-AVC_V1 conformance test [1] passes with
+> score 72/135, for the Hantro driver on i.MX8MQ (Hantro G1 VPU).
+> Considering the Hantro driver only supports 4:2:0 and 4:0:0, this score
+> looks quite good.
+> 
+> [1] https://github.com/fluendo/fluster/
 
-Cc: Alex Deucher <alexander.deucher@amd.com>
-Cc: "Christian König" <christian.koenig@amd.com>
-Cc: David Airlie <airlied@linux.ie>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: amd-gfx@lists.freedesktop.org
-Cc: dri-devel@lists.freedesktop.org
-Cc: linux-media@vger.kernel.org
-Cc: linaro-mm-sig@lists.linaro.org
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
----
- drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Tested with ffmpeg/kodi stack on Allwinner R40 with different samples which use 
+different H264 features and works without any problem.
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c b/drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c
-index d9399324be474..4887b0e66e975 100644
---- a/drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c
-@@ -270,6 +270,8 @@ static void gmc_v10_0_flush_vm_hub(struct amdgpu_device *adev, uint32_t vmid,
-  *
-  * @adev: amdgpu_device pointer
-  * @vmid: vm instance to flush
-+ * @vmhub: vmhub type
-+ * @flush_type: the flush type
-  *
-  * Flush the TLB for the requested page table.
-  */
-@@ -362,6 +364,8 @@ static void gmc_v10_0_flush_gpu_tlb(struct amdgpu_device *adev, uint32_t vmid,
-  *
-  * @adev: amdgpu_device pointer
-  * @pasid: pasid to be flush
-+ * @flush_type: the flush type
-+ * @all_hub: Used with PACKET3_INVALIDATE_TLBS_ALL_HUB()
-  *
-  * Flush the TLB for the requested pasid.
-  */
--- 
-2.25.1
+You can add
+
+Tested-by: Jernej Skrabec <jernej.skrabec@siol.net>
+
+for whole series.
+
+Best regards,
+Jernej
+
+> 
+> Thanks,
+> Ezequiel
+> 
+> v4:
+>   * Minor documentation fixes.
+>   * Remove media/h264-ctrls.h, which was missing before.
+>   * Thanks to feedback from Jernej, std_validation_compound
+>     is now more complete, initializing non-present syntax elements.
+> v3:
+>   * Dropped level control from Cedrus, as agreed.
+>   * Add support for H264 stateless controls in std_log and 
+std_validate_compound.
+>   * Added a ctrl debug error message, to help debug validation issues.
+>   * Style minor fixes as requested by Hans.
+> v2:
+>   * Split destage changes in several patches so it's easier to review.
+>   * Added missing changes to drivers/media/v4l2-core/v4l2-ctrls.c.
+>   * Renamed V4L2_CID_CODEC_CX2341X_ and V4L2_CID_MPEG_MFC51_
+>   * Moved the compatibility macros for MPEG to the end of the header.
+> 
+> Ezequiel Garcia (12):
+>   media: ctrls: Add validate failure debug message
+>   media: cedrus: h264: Support profile controls
+>   media: Rename stateful codec control macros
+>   media: Clean stateless control includes
+>   media: uapi: h264: Add profile_idc macros
+>   media: controls: Validate H264 stateless controls
+>   media: controls: Add the stateless codec control class
+>   media: uapi: Move parsed H264 pixel format out of staging
+>   media: uapi: Move the H264 stateless control types out of staging
+>   media: controls: Log H264 stateless controls in .std_log
+>   media: uapi: move H264 stateless controls out of staging
+>   media: docs: Move the H264 stateless codec uAPI
+> 
+> Jonas Karlman (1):
+>   media: rkvdec: h264: Support profile and level controls
+> 
+>  .../userspace-api/media/v4l/common.rst        |   1 +
+>  .../userspace-api/media/v4l/dev-mem2mem.rst   |   2 +-
+>  .../media/v4l/ext-ctrls-codec-stateless.rst   | 674 +++++++++++++++
+>  .../media/v4l/ext-ctrls-codec.rst             | 696 +--------------
+>  .../media/v4l/extended-controls.rst           |   9 +-
+>  .../media/v4l/pixfmt-compressed.rst           |  21 +-
+>  .../media/v4l/vidioc-g-ext-ctrls.rst          |   6 +-
+>  drivers/media/common/cx2341x.c                |   4 +-
+>  drivers/media/platform/s5p-mfc/s5p_mfc_dec.c  |   2 +-
+>  drivers/media/platform/s5p-mfc/s5p_mfc_enc.c  |   2 +-
+>  drivers/media/v4l2-core/v4l2-ctrls.c          | 198 ++++-
+>  drivers/staging/media/hantro/hantro_drv.c     |  26 +-
+>  drivers/staging/media/hantro/hantro_h264.c    |   8 +-
+>  drivers/staging/media/hantro/hantro_hw.h      |   4 +-
+>  drivers/staging/media/rkvdec/rkvdec-h264.c    |   8 +-
+>  drivers/staging/media/rkvdec/rkvdec.c         |  39 +-
+>  drivers/staging/media/sunxi/cedrus/cedrus.c   |  43 +-
+>  .../staging/media/sunxi/cedrus/cedrus_dec.c   |  12 +-
+>  include/media/fwht-ctrls.h                    |   2 +-
+>  include/media/h264-ctrls.h                    | 406 ---------
+>  include/media/hevc-ctrls.h                    |  10 +-
+>  include/media/mpeg2-ctrls.h                   |   4 +-
+>  include/media/v4l2-ctrls.h                    |   1 -
+>  include/media/v4l2-h264.h                     |   2 +-
+>  include/media/vp8-ctrls.h                     |   2 +-
+>  include/uapi/linux/v4l2-controls.h            | 804 +++++++++++++-----
+>  include/uapi/linux/videodev2.h                |   8 +
+>  27 files changed, 1582 insertions(+), 1412 deletions(-)
+>  create mode 100644 Documentation/userspace-api/media/v4l/ext-ctrls-codec-
+stateless.rst
+>  delete mode 100644 include/media/h264-ctrls.h
+> 
+> -- 
+> 2.27.0
+> 
+> 
+
 
