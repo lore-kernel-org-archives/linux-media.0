@@ -4,50 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19ACAC6379D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C916EC64E7D
 	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 11:08:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C2FBE20708
+	by mail.kernel.org (Postfix) with ESMTP id 8287D2073C
 	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 11:08:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="NhHDocT0"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="wecqf2iD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732776AbgKXLHr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Nov 2020 06:07:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33790 "EHLO mail.kernel.org"
+        id S1732772AbgKXLHq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Nov 2020 06:07:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33786 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732421AbgKXLGf (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1732398AbgKXLGf (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 24 Nov 2020 06:06:35 -0500
 Received: from mail.kernel.org (ip5f5ad5c3.dynamic.kabel-deutschland.de [95.90.213.195])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E9006208DB;
+        by mail.kernel.org (Postfix) with ESMTPSA id D925A20888;
         Tue, 24 Nov 2020 11:06:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1606215991;
-        bh=zqP2ZLOBN255u1tK6Ne0X9rdAbfRvEZ3u2d/BpSccko=;
+        bh=/HunhOVDxN0rAfQsnRYplsgded9ZPhM/rvVrXfIrbG8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NhHDocT0B4bzeifeaydbYu5uBZpjbvdqChfHQXXic4yyPu09QYN9j45zrY+LcrDhL
-         blYlBnkNP84KPc0u9waskDBhvCPq48BnS2JjFuDxr9d1rBNEb4Oo24Z0yRvwGeAZOj
-         qqYaksoMDdnXK9oFUhQ8L16G4HuJAqIFqPGmnq3g=
+        b=wecqf2iDsV7PWP6ErC9mB0LqNq+RpdRIgWtmdgztdP6PM19ZcPYKnvtEwlJp/AKbu
+         c4Aboeh6+P2yUG33e2xjByx2Ea2cOx1/9Ggmm3XNCaRv4zFIssK81t1pO07FNA6p84
+         MSPiWWGmkvVEjh7Q3daTaTlETOivpYDMaMewYHe0=
 Received: from mchehab by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1khW9U-000FZR-Kx; Tue, 24 Nov 2020 12:06:28 +0100
+        id 1khW9U-000FZu-UF; Tue, 24 Nov 2020 12:06:28 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 03/31] media: vidtv: don't use recursive functions
-Date:   Tue, 24 Nov 2020 12:05:59 +0100
-Message-Id: <319acceb592f0970448eaa81c26f3631b692ad07.1606215584.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 13/31] media: vidtv: improve EIT data
+Date:   Tue, 24 Nov 2020 12:06:09 +0100
+Message-Id: <297385af8494f8016ae6aa5eef6b7409e4d50315.1606215584.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <cover.1606215584.git.mchehab+huawei@kernel.org>
 References: <cover.1606215584.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 To:     unlisted-recipients:; (no To-header on input)
@@ -55,133 +56,29 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The Linux stack is too short. So, using recursive functions
-is a very bad idea. Convert those into non-recursive ones.
+Place some text at EIT data, and use ISO 8859-15 encoding for
+the German letter "ü" (u mit umlat) letter.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/test-drivers/vidtv/vidtv_psi.c | 75 +++++++++++---------
- 1 file changed, 41 insertions(+), 34 deletions(-)
+ drivers/media/test-drivers/vidtv/vidtv_channel.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_psi.c b/drivers/media/test-drivers/vidtv/vidtv_psi.c
-index b4bbd450fbe6..f92ff54fe19b 100644
---- a/drivers/media/test-drivers/vidtv/vidtv_psi.c
-+++ b/drivers/media/test-drivers/vidtv/vidtv_psi.c
-@@ -951,25 +951,29 @@ vidtv_psi_pat_program_assign(struct vidtv_psi_table_pat *pat,
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_channel.c b/drivers/media/test-drivers/vidtv/vidtv_channel.c
+index eba9d9dd0808..84c4f3f25f77 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_channel.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_channel.c
+@@ -53,8 +53,8 @@ struct vidtv_channel
+ *vidtv_channel_s302m_init(struct vidtv_channel *head, u16 transport_stream_id)
  {
- 	/* This function transfers ownership of p to the table */
- 
--	u16 program_count = 0;
--	struct vidtv_psi_table_pat_program *program = p;
-+	u16 program_count;
-+	struct vidtv_psi_table_pat_program *program;
- 
--	if (p == pat->program)
--		return;
-+	do {
-+		program_count = 0;
-+		program = p;
- 
--	while (program) {
--		++program_count;
--		program = program->next;
--	}
-+		if (p == pat->program)
-+			return;
- 
--	pat->programs = program_count;
--	pat->program  = p;
-+		while (program) {
-+			++program_count;
-+			program = program->next;
-+		}
- 
--	/* Recompute section length */
--	vidtv_psi_pat_table_update_sec_len(pat);
-+		pat->programs = program_count;
-+		pat->program  = p;
- 
--	if (vidtv_psi_get_sec_len(&pat->header) > MAX_SECTION_LEN)
--		vidtv_psi_pat_program_assign(pat, NULL);
-+		/* Recompute section length */
-+		vidtv_psi_pat_table_update_sec_len(pat);
-+
-+		p = NULL;
-+	} while (vidtv_psi_get_sec_len(&pat->header) > MAX_SECTION_LEN);
- 
- 	vidtv_psi_update_version_num(&pat->header);
- }
-@@ -1124,15 +1128,16 @@ void vidtv_psi_pmt_stream_destroy(struct vidtv_psi_table_pmt_stream *s)
- void vidtv_psi_pmt_stream_assign(struct vidtv_psi_table_pmt *pmt,
- 				 struct vidtv_psi_table_pmt_stream *s)
- {
--	/* This function transfers ownership of s to the table */
--	if (s == pmt->stream)
--		return;
-+	do {
-+		/* This function transfers ownership of s to the table */
-+		if (s == pmt->stream)
-+			return;
- 
--	pmt->stream = s;
--	vidtv_psi_pmt_table_update_sec_len(pmt);
-+		pmt->stream = s;
-+		vidtv_psi_pmt_table_update_sec_len(pmt);
- 
--	if (vidtv_psi_get_sec_len(&pmt->header) > MAX_SECTION_LEN)
--		vidtv_psi_pmt_stream_assign(pmt, NULL);
-+		s = NULL;
-+	} while (vidtv_psi_get_sec_len(&pmt->header) > MAX_SECTION_LEN);
- 
- 	vidtv_psi_update_version_num(&pmt->header);
- }
-@@ -1500,16 +1505,17 @@ void
- vidtv_psi_sdt_service_assign(struct vidtv_psi_table_sdt *sdt,
- 			     struct vidtv_psi_table_sdt_service *service)
- {
--	if (service == sdt->service)
--		return;
-+	do {
-+		if (service == sdt->service)
-+			return;
- 
--	sdt->service = service;
-+		sdt->service = service;
- 
--	/* recompute section length */
--	vidtv_psi_sdt_table_update_sec_len(sdt);
-+		/* recompute section length */
-+		vidtv_psi_sdt_table_update_sec_len(sdt);
- 
--	if (vidtv_psi_get_sec_len(&sdt->header) > MAX_SECTION_LEN)
--		vidtv_psi_sdt_service_assign(sdt, NULL);
-+		service = NULL;
-+	} while (vidtv_psi_get_sec_len(&sdt->header) > MAX_SECTION_LEN);
- 
- 	vidtv_psi_update_version_num(&sdt->header);
- }
-@@ -1832,14 +1838,15 @@ void vidtv_psi_eit_table_update_sec_len(struct vidtv_psi_table_eit *eit)
- void vidtv_psi_eit_event_assign(struct vidtv_psi_table_eit *eit,
- 				struct vidtv_psi_table_eit_event *e)
- {
--	if (e == eit->event)
--		return;
-+	do {
-+		if (e == eit->event)
-+			return;
- 
--	eit->event = e;
--	vidtv_psi_eit_table_update_sec_len(eit);
-+		eit->event = e;
-+		vidtv_psi_eit_table_update_sec_len(eit);
- 
--	if (vidtv_psi_get_sec_len(&eit->header) > EIT_MAX_SECTION_LEN)
--		vidtv_psi_eit_event_assign(eit, NULL);
-+		e = NULL;
-+	} while (vidtv_psi_get_sec_len(&eit->header) > EIT_MAX_SECTION_LEN);
- 
- 	vidtv_psi_update_version_num(&eit->header);
- }
+ 	const __be32 s302m_fid              = cpu_to_be32(VIDTV_S302M_FORMAT_IDENTIFIER);
+-	char *event_text = ENCODING_ISO8859_15 "Beethoven's Für Elise";
+-	char *event_name = ENCODING_ISO8859_15 "Beethoven Music";
++	char *event_text = ENCODING_ISO8859_15 "Bagatelle No. 25 in A minor for solo piano, also known as F\xfcr Elise, composed by Ludwig van Beethoven";
++	char *event_name = ENCODING_ISO8859_15 "Ludwig van Beethoven: F\xfcr Elise";
+ 	struct vidtv_s302m_encoder_init_args encoder_args = {};
+ 	char *iso_language_code = ENCODING_ISO8859_15 "eng";
+ 	char *provider = ENCODING_ISO8859_15 "LinuxTV.org";
 -- 
 2.28.0
 
