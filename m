@@ -2,63 +2,70 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52BFEC64E8A
-	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3BCCC56201
+	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:43:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0DFE12073C
-	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 786A120657
+	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:43:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731545AbgKXJiv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Nov 2020 04:38:51 -0500
-Received: from retiisi.eu ([95.216.213.190]:45010 "EHLO hillosipuli.retiisi.eu"
+        id S1731678AbgKXJm7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Nov 2020 04:42:59 -0500
+Received: from mga14.intel.com ([192.55.52.115]:6375 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731481AbgKXJic (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Nov 2020 04:38:32 -0500
-Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 4091F634C8E;
-        Tue, 24 Nov 2020 11:37:51 +0200 (EET)
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     hverkuil@xs4all.nl, mchehab@kernel.org
-Subject: [PATCH 05/30] ccs: Remove remaining support for platform data
-Date:   Tue, 24 Nov 2020 11:32:01 +0200
-Message-Id: <20201124093226.23737-6-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201124093226.23737-1-sakari.ailus@linux.intel.com>
-References: <20201124093226.23737-1-sakari.ailus@linux.intel.com>
+        id S1726105AbgKXJm6 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 24 Nov 2020 04:42:58 -0500
+IronPort-SDR: 13GKq5DjEpBS6O/D7vI4pNKw4E6ywYOnX7BNpcCXhVdzyVsi58DHeRDhPVW2cGEeq60Pof/GPs
+ 7y/SziuWcJNw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9814"; a="171137349"
+X-IronPort-AV: E=Sophos;i="5.78,365,1599548400"; 
+   d="scan'208";a="171137349"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2020 01:42:58 -0800
+IronPort-SDR: qEprpNnqc9rGcCvcI4GmqyK+Pq7MKuSCYEEZ3anIkwfBZ5kvbLxEGLlZ9/vXoFQEGFAHx8zzeA
+ 7vqf0bCs82MQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,365,1599548400"; 
+   d="scan'208";a="546768087"
+Received: from ipu5-build.bj.intel.com (HELO [10.238.232.196]) ([10.238.232.196])
+  by orsmga005.jf.intel.com with ESMTP; 24 Nov 2020 01:42:56 -0800
+Subject: Re: [PATCH] media: ov8856: Remove 3280x2464 mode
+To:     Robert Foss <robert.foss@linaro.org>, dongchun.zhu@mediatek.com,
+        mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Ben Kao <ben.kao@intel.com>
+References: <20201116155008.118124-1-robert.foss@linaro.org>
+From:   Bingbu Cao <bingbu.cao@linux.intel.com>
+Message-ID: <cf0b935d-3ccd-8360-1b52-89fab0b181eb@linux.intel.com>
+Date:   Tue, 24 Nov 2020 17:40:12 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201116155008.118124-1-robert.foss@linaro.org>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-No need to support platform data; remove support for conveying hardware
-configuration that way.
+Hi, Robert
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- drivers/media/i2c/ccs/ccs-core.c | 3 ---
- 1 file changed, 3 deletions(-)
+I remember that the full size of ov8856 image sensor is 3296x2480 and we can get the 3280x2464
+frames based on current settings.
 
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index bb3759e2534c..af79d80ebb59 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -2860,9 +2860,6 @@ static struct ccs_hwconfig *ccs_get_hwconfig(struct device *dev)
- 	int i;
- 	int rval;
- 
--	if (!fwnode)
--		return dev->platform_data;
--
- 	ep = fwnode_graph_get_next_endpoint(fwnode, NULL);
- 	if (!ep)
- 		return NULL;
+Do you have any issues with this mode?
+
+On 11/16/20 11:50 PM, Robert Foss wrote:
+> 0x3812, 0x00},
+> 236 {0x3813, 0x01},
+
 -- 
-2.27.0
-
+Best regards,
+Bingbu Cao
