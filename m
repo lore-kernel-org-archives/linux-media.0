@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18B9DC64E7C
-	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBC69C8300C
+	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C06D32073C
-	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8CCCF20897
+	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731493AbgKXJid (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Nov 2020 04:38:33 -0500
-Received: from retiisi.eu ([95.216.213.190]:45008 "EHLO hillosipuli.retiisi.eu"
+        id S1731514AbgKXJii (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Nov 2020 04:38:38 -0500
+Received: from retiisi.eu ([95.216.213.190]:45010 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731296AbgKXJib (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Nov 2020 04:38:31 -0500
+        id S1731496AbgKXJif (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 24 Nov 2020 04:38:35 -0500
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 0D717634C98;
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 8A1CE634CA5;
         Tue, 24 Nov 2020 11:37:52 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, mchehab@kernel.org
-Subject: [PATCH 14/30] ccs: Refactor register reading a little
-Date:   Tue, 24 Nov 2020 11:32:10 +0200
-Message-Id: <20201124093226.23737-15-sakari.ailus@linux.intel.com>
+Subject: [PATCH 19/30] ccs-pll: Fix MODULE_LICENSE
+Date:   Tue, 24 Nov 2020 11:32:15 +0200
+Message-Id: <20201124093226.23737-20-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201124093226.23737-1-sakari.ailus@linux.intel.com>
 References: <20201124093226.23737-1-sakari.ailus@linux.intel.com>
@@ -37,75 +37,23 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Rework quirk and 8-bit only access functions with a single function that
-takes arguments. This is later extensible to support yet more flags.
+Change MODULE_LICENSE to "GPL v2" as indicated by the SPDX tag.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-reg-access.c | 37 ++++++++++++--------------
- 1 file changed, 17 insertions(+), 20 deletions(-)
+ drivers/media/i2c/ccs-pll.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/ccs/ccs-reg-access.c b/drivers/media/i2c/ccs/ccs-reg-access.c
-index a8e9a235bfb3..abec746f3c93 100644
---- a/drivers/media/i2c/ccs/ccs-reg-access.c
-+++ b/drivers/media/i2c/ccs/ccs-reg-access.c
-@@ -168,39 +168,36 @@ static int __ccs_read_addr(struct ccs_sensor *sensor, u32 reg, u32 *val,
- 	return 0;
- }
+diff --git a/drivers/media/i2c/ccs-pll.c b/drivers/media/i2c/ccs-pll.c
+index d2f0f7375f5c..58f5fe7062ae 100644
+--- a/drivers/media/i2c/ccs-pll.c
++++ b/drivers/media/i2c/ccs-pll.c
+@@ -477,4 +477,4 @@ EXPORT_SYMBOL_GPL(ccs_pll_calculate);
  
--int ccs_read_addr_no_quirk(struct ccs_sensor *sensor, u32 reg, u32 *val)
--{
--	return __ccs_read_addr(
--		sensor, reg, val,
--		ccs_needs_quirk(sensor, CCS_QUIRK_FLAG_8BIT_READ_ONLY));
--}
--
--static int ccs_read_addr_quirk(struct ccs_sensor *sensor, u32 reg, u32 *val,
--			       bool force8)
-+static int ccs_read_addr_raw(struct ccs_sensor *sensor, u32 reg, u32 *val,
-+			     bool force8, bool quirk)
- {
- 	int rval;
- 
--	*val = 0;
--	rval = ccs_call_quirk(sensor, reg_access, false, &reg, val);
--	if (rval == -ENOIOCTLCMD)
--		return 0;
--	if (rval < 0)
--		return rval;
-+	if (quirk) {
-+		*val = 0;
-+		rval = ccs_call_quirk(sensor, reg_access, false, &reg, val);
-+		if (rval == -ENOIOCTLCMD)
-+			return 0;
-+		if (rval < 0)
-+			return rval;
- 
--	if (force8)
--		return __ccs_read_addr(sensor, reg, val, true);
-+		if (force8)
-+			return __ccs_read_addr(sensor, reg, val, true);
-+	}
- 
--	return ccs_read_addr_no_quirk(sensor, reg, val);
-+	return __ccs_read_addr(sensor, reg, val,
-+			       ccs_needs_quirk(sensor,
-+					       CCS_QUIRK_FLAG_8BIT_READ_ONLY));
- }
- 
- int ccs_read_addr(struct ccs_sensor *sensor, u32 reg, u32 *val)
- {
--	return ccs_read_addr_quirk(sensor, reg, val, false);
-+	return ccs_read_addr_raw(sensor, reg, val, false, true);
- }
- 
- int ccs_read_addr_8only(struct ccs_sensor *sensor, u32 reg, u32 *val)
- {
--	return ccs_read_addr_quirk(sensor, reg, val, true);
-+	return ccs_read_addr_raw(sensor, reg, val, true, true);
- }
- 
- int ccs_write_addr_no_quirk(struct ccs_sensor *sensor, u32 reg, u32 val)
+ MODULE_AUTHOR("Sakari Ailus <sakari.ailus@iki.fi>");
+ MODULE_DESCRIPTION("Generic MIPI CCS/SMIA/SMIA++ PLL calculator");
+-MODULE_LICENSE("GPL");
++MODULE_LICENSE("GPL v2");
 -- 
 2.27.0
 
