@@ -7,68 +7,92 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BDB8FC56201
-	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 505B0C56202
+	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 704532076B
-	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 017022073C
+	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731525AbgKXJio (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Nov 2020 04:38:44 -0500
-Received: from retiisi.eu ([95.216.213.190]:44964 "EHLO hillosipuli.retiisi.eu"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731499AbgKXJig (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1731509AbgKXJig (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 24 Nov 2020 04:38:36 -0500
+Received: from retiisi.eu ([95.216.213.190]:45006 "EHLO hillosipuli.retiisi.eu"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731490AbgKXJie (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 24 Nov 2020 04:38:34 -0500
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id B66A2634CAA;
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 3EB1B634CA1;
         Tue, 24 Nov 2020 11:37:52 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, mchehab@kernel.org
-Subject: [PATCH 21/30] =?UTF-8?q?ccs:=20Allow=20range=20in=20between=20I?= =?UTF-8?q?=C2=B2C=20retries?=
-Date:   Tue, 24 Nov 2020 11:32:17 +0200
-Message-Id: <20201124093226.23737-22-sakari.ailus@linux.intel.com>
+Subject: [PATCH 16/30] ccs: Move limit value real to integer conversion from read to access time
+Date:   Tue, 24 Nov 2020 11:32:12 +0200
+Message-Id: <20201124093226.23737-17-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201124093226.23737-1-sakari.ailus@linux.intel.com>
 References: <20201124093226.23737-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Make the delay between I²C access retries a range between 1 and 2 ms. Also
-make the number of retries 10 instead of 5, in order not to reduce the
-total amount of time.
+Instead of converting the limit values at register read time, do that at
+access time instead.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-reg-access.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/i2c/ccs/ccs-core.c | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/media/i2c/ccs/ccs-reg-access.c b/drivers/media/i2c/ccs/ccs-reg-access.c
-index aad2727570ec..79efed5e0dad 100644
---- a/drivers/media/i2c/ccs/ccs-reg-access.c
-+++ b/drivers/media/i2c/ccs/ccs-reg-access.c
-@@ -256,7 +256,7 @@ int ccs_write_addr_no_quirk(struct ccs_sensor *sensor, u32 reg, u32 val)
- 	put_unaligned_be16(CCS_REG_ADDR(reg), data);
- 	put_unaligned_be32(val << (8 * (sizeof(val) - len)), data + 2);
+diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
+index 70b4d2180971..57efc34fc67d 100644
+--- a/drivers/media/i2c/ccs/ccs-core.c
++++ b/drivers/media/i2c/ccs/ccs-core.c
+@@ -130,6 +130,7 @@ static u32 ccs_get_limit(struct ccs_sensor *sensor,
+ 			 unsigned int limit, unsigned int offset)
+ {
+ 	void *ptr;
++	u32 val;
+ 	int ret;
  
--	for (retries = 0; retries < 5; retries++) {
-+	for (retries = 0; retries < 10; retries++) {
- 		/*
- 		 * Due to unknown reason sensor stops responding. This
- 		 * loop is a temporaty solution until the root cause
-@@ -271,7 +271,7 @@ int ccs_write_addr_no_quirk(struct ccs_sensor *sensor, u32 reg, u32 val)
- 			return 0;
- 		}
+ 	ret = ccs_limit_ptr(sensor, limit, offset, &ptr);
+@@ -138,16 +139,20 @@ static u32 ccs_get_limit(struct ccs_sensor *sensor,
  
--		usleep_range(2000, 2000);
-+		usleep_range(1000, 2000);
+ 	switch (ccs_reg_width(ccs_limits[ccs_limit_offsets[limit].info].reg)) {
+ 	case sizeof(u8):
+-		return *(u8 *)ptr;
++		val = *(u8 *)ptr;
++		break;
+ 	case sizeof(u16):
+-		return *(u16 *)ptr;
++		val = *(u16 *)ptr;
++		break;
+ 	case sizeof(u32):
+-		return *(u32 *)ptr;
++		val = *(u32 *)ptr;
++		break;
++	default:
++		WARN_ON(1);
++		return 0;
  	}
  
- 	dev_err(&client->dev,
+-	WARN_ON(1);
+-
+-	return 0;
++	return ccs_reg_conv(sensor, ccs_limits[limit].reg, val);
+ }
+ 
+ #define CCS_LIM(sensor, limit) \
+@@ -188,7 +193,7 @@ static int ccs_read_all_limits(struct ccs_sensor *sensor)
+ 		     j++, reg += width, ptr += width) {
+ 			u32 val;
+ 
+-			ret = ccs_read_addr(sensor, reg, &val);
++			ret = ccs_read_addr_noconv(sensor, reg, &val);
+ 			if (ret)
+ 				goto out_err;
+ 
 -- 
 2.27.0
 
