@@ -2,85 +2,74 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33BAFC64E7B
-	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 08:44:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1145DC56201
+	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:21:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DCC022073C
-	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 08:44:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A33F720782
+	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:21:21 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="KALKaqVi"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730786AbgKXIns (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Nov 2020 03:43:48 -0500
-Received: from mga17.intel.com ([192.55.52.151]:15611 "EHLO mga17.intel.com"
+        id S1731002AbgKXJVU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Nov 2020 04:21:20 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34932 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730492AbgKXIns (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Nov 2020 03:43:48 -0500
-IronPort-SDR: V/EU4lDHnWahsvyPR0H0weK+DDJFq4ffq7VenD1VH8R/uCUEfriRn2Z19PVqSThfcuQhx+z67R
- IjkN7fQevLLg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9814"; a="151753019"
-X-IronPort-AV: E=Sophos;i="5.78,365,1599548400"; 
-   d="scan'208";a="151753019"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2020 00:43:48 -0800
-IronPort-SDR: 1j9zIiz75GIryTsdL/biK5K/G1r8KgHWpcRiZ46wjCIThr8WVk1V8hdaQVcapbctpn4qkhuZxs
- Hry9mfRMBKcg==
-X-IronPort-AV: E=Sophos;i="5.78,365,1599548400"; 
-   d="scan'208";a="358746299"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2020 00:43:45 -0800
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id E9A9D20461; Tue, 24 Nov 2020 10:43:43 +0200 (EET)
-Date:   Tue, 24 Nov 2020 10:43:43 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Dongchun Zhu <dongchun.zhu@mediatek.com>
-Cc:     Robert Foss <robert.foss@linaro.org>, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ben Kao <ben.kao@intel.com>, tfiga@google.com,
-        shengnan.wang@mediatek.com
-Subject: Re: [PATCH] media: ov8856: Remove 3280x2464 mode
-Message-ID: <20201124084343.GD3940@paasikivi.fi.intel.com>
-References: <20201116155008.118124-1-robert.foss@linaro.org>
- <1606203651.4733.134.camel@mhfsdcap03>
+        id S1727131AbgKXJVU (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 24 Nov 2020 04:21:20 -0500
+Received: from [192.168.0.50] (89-70-52-201.dynamic.chello.pl [89.70.52.201])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1C6172073C;
+        Tue, 24 Nov 2020 09:21:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606209679;
+        bh=oKt7lzKJIRzdykgXOv/jC03dAAOGoozvRQH79n/UDYM=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=KALKaqVitfJzX6OKPc7V/NtJ9SDSTEchUb0hztjVmmH3wc0/LtpQY5Zm7HUURuTrH
+         okD5QqjL40FeByHsjO2kKvNzFNBe0chpS93wi/zuuX7fQtv4UWyMW+NuRmPzyKj2G1
+         FMlnYcLLKoTzl05Luv5IM1Fa41OvDtx2tXOf1des=
+Subject: Re: [PATCH] media: platform: exynos4-is: remove all references to
+ physicall addresses
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-media@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>
+References: <CGME20201124084139eucas1p1f8a0e5c782b5706868bb3b5ea5de25e7@eucas1p1.samsung.com>
+ <20201124084128.12496-1-m.szyprowski@samsung.com>
+From:   Sylwester Nawrocki <snawrocki@kernel.org>
+Message-ID: <e00f36da-d838-f2d6-ee23-1ad189f85e2b@kernel.org>
+Date:   Tue, 24 Nov 2020 10:21:15 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1606203651.4733.134.camel@mhfsdcap03>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20201124084128.12496-1-m.szyprowski@samsung.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Dongchun,
 
-On Tue, Nov 24, 2020 at 03:40:51PM +0800, Dongchun Zhu wrote:
-> >  static const struct ov8856_mode supported_modes[] = {
-> > -	{
-> > -		.width = 3280,
-> > -		.height = 2464,
-> > -		.hts = 1928,
-> > -		.vts_def = 2488,
-> > -		.vts_min = 2488,
-> > -		.reg_list = {
-> > -			.num_of_regs = ARRAY_SIZE(mode_3280x2464_regs),
-> > -			.regs = mode_3280x2464_regs,
-> > -		},
-> > -		.link_freq_index = OV8856_LINK_FREQ_720MBPS,
-> > -	},
+On 11/24/20 09:41, Marek Szyprowski wrote:
+> This driver always operates on the DMA/IOVA addresses, so calling them
+> physicall addresses is misleading, although when no IOMMU is used they
+> equal each other. Fix this by renaming all such entries to 'addr' and
+> adjusting comments.
 > 
-> If 3280x2464 resolution is removed, bayer order needs to be updated in
-> the meantime. From OV8856's datasheet, bayer order turns to be BGGR if
-> sensor adopts full mode (3264x2448) or binning mode (1632x1224).
+> Signed-off-by: Marek Szyprowski<m.szyprowski@samsung.com>
+> ---
+> This patch was previously sent as part of "[PATCH 0/8] IOMMU-DMA -
+> support old allocation algorithm used on ARM" patchset:
+> https://lore.kernel.org/linux-samsung-soc/20200925141218.13550-1-m.szyprowski@samsung.com/
+> The IOMMU related changes are still under review, but this change is
+> unrelated and it makes sense to aplly it separately.
 
-How is this related to the patch?
-
-The next largest size is 16 by 16 less, so the Bayer order is the same. If
-it's wrong currently (as it would appear to), it should be a separate
-patch.
-
--- 
-Sakari Ailus
+Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
