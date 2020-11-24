@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 140C3C83013
-	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EB89C8300C
+	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D1A4520897
-	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 659812073C
+	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731523AbgKXJin (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Nov 2020 04:38:43 -0500
-Received: from retiisi.eu ([95.216.213.190]:45006 "EHLO hillosipuli.retiisi.eu"
+        id S1731537AbgKXJiu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Nov 2020 04:38:50 -0500
+Received: from retiisi.eu ([95.216.213.190]:45012 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731324AbgKXJih (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Nov 2020 04:38:37 -0500
+        id S1731483AbgKXJic (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 24 Nov 2020 04:38:32 -0500
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 04106634CBF;
-        Tue, 24 Nov 2020 11:37:53 +0200 (EET)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 6D6C4634C91;
+        Tue, 24 Nov 2020 11:37:51 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, mchehab@kernel.org
-Subject: [PATCH 24/30] ccs: Clean up runtime PM usage
-Date:   Tue, 24 Nov 2020 11:32:20 +0200
-Message-Id: <20201124093226.23737-25-sakari.ailus@linux.intel.com>
+Subject: [PATCH 07/30] ccs: Fix obtaining bus information from firmware
+Date:   Tue, 24 Nov 2020 11:32:03 +0200
+Message-Id: <20201124093226.23737-8-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201124093226.23737-1-sakari.ailus@linux.intel.com>
 References: <20201124093226.23737-1-sakari.ailus@linux.intel.com>
@@ -37,40 +37,59 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If pm_runtime_get_sync() fails, there's no need to set the device active
-again. Also, in the same case to return the usage_count to zero,
-pm_runtime_put_noidle() is enough.
+Let v4l2_fwnode_endpoint_alloc_parse to figure out the type of the data
+bus. As the old bindings did not require the "bus-type" property, we need
+to rely on guessing between CSI-2 D-PHY and CCP2. Setting the type to
+CSI-2 D-PHY will parse just that and succeed even if no data-lanes are
+set.
+
+Also add a comment on the matter to the driver to avoid breaking this in
+the future.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/media/i2c/ccs/ccs-core.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 5e01f22608d7..c3023570a620 100644
+index dcc71c8fe075..6fb546ca08f3 100644
 --- a/drivers/media/i2c/ccs/ccs-core.c
 +++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -1625,8 +1625,6 @@ static int ccs_pm_get_init(struct ccs_sensor *sensor)
+@@ -2853,7 +2853,7 @@ static int __maybe_unused ccs_resume(struct device *dev)
+ static int ccs_get_hwconfig(struct ccs_sensor *sensor, struct device *dev)
+ {
+ 	struct ccs_hwconfig *hwcfg = &sensor->hwcfg;
+-	struct v4l2_fwnode_endpoint bus_cfg = { .bus_type = 0 };
++	struct v4l2_fwnode_endpoint bus_cfg = { .bus_type = V4L2_MBUS_UNKNOWN };
+ 	struct fwnode_handle *ep;
+ 	struct fwnode_handle *fwnode = dev_fwnode(dev);
+ 	u32 rotation;
+@@ -2864,13 +2864,11 @@ static int ccs_get_hwconfig(struct ccs_sensor *sensor, struct device *dev)
+ 	if (!ep)
+ 		return -ENODEV;
  
- 	rval = pm_runtime_get_sync(&client->dev);
- 	if (rval < 0) {
--		if (rval != -EBUSY && rval != -EAGAIN)
--			pm_runtime_set_active(&client->dev);
- 		pm_runtime_put_noidle(&client->dev);
+-	bus_cfg.bus_type = V4L2_MBUS_CSI2_DPHY;
++	/*
++	 * Note that we do need to rely on detecting the bus type between CSI-2
++	 * D-PHY and CCP2 as the old bindings did not require it.
++	 */
+ 	rval = v4l2_fwnode_endpoint_alloc_parse(ep, &bus_cfg);
+-	if (rval == -ENXIO) {
+-		bus_cfg = (struct v4l2_fwnode_endpoint)
+-			{ .bus_type = V4L2_MBUS_CCP2 };
+-		rval = v4l2_fwnode_endpoint_alloc_parse(ep, &bus_cfg);
+-	}
+ 	if (rval)
+ 		goto out_err;
  
- 		return rval;
-@@ -2842,9 +2840,8 @@ static int __maybe_unused ccs_suspend(struct device *dev)
- 
- 	rval = pm_runtime_get_sync(dev);
- 	if (rval < 0) {
--		if (rval != -EBUSY && rval != -EAGAIN)
--			pm_runtime_set_active(&client->dev);
--		pm_runtime_put(dev);
-+		pm_runtime_put_noidle(dev);
-+
- 		return -EAGAIN;
- 	}
- 
+@@ -2879,6 +2877,7 @@ static int ccs_get_hwconfig(struct ccs_sensor *sensor, struct device *dev)
+ 		hwcfg->csi_signalling_mode = CCS_CSI_SIGNALING_MODE_CSI_2_DPHY;
+ 		hwcfg->lanes = bus_cfg.bus.mipi_csi2.num_data_lanes;
+ 		break;
++	case V4L2_MBUS_CSI1:
+ 	case V4L2_MBUS_CCP2:
+ 		hwcfg->csi_signalling_mode = (bus_cfg.bus.mipi_csi1.strobe) ?
+ 		SMIAPP_CSI_SIGNALLING_MODE_CCP2_DATA_STROBE :
 -- 
 2.27.0
 
