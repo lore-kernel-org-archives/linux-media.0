@@ -2,95 +2,113 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD6CCC56201
-	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 10:46:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B55CAC2D0E4
+	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 11:06:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 474142076E
-	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 10:46:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 49BE32076B
+	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 11:06:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="eiVKagnS"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="y9uII6tu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731735AbgKXKpm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Nov 2020 05:45:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36596 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731503AbgKXKpm (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Nov 2020 05:45:42 -0500
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CD8C0617A6
-        for <linux-media@vger.kernel.org>; Tue, 24 Nov 2020 02:45:42 -0800 (PST)
-Received: by mail-pf1-x442.google.com with SMTP id t8so18101431pfg.8
-        for <linux-media@vger.kernel.org>; Tue, 24 Nov 2020 02:45:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3kwegyRqAw46aqWt+s2hHGKYwjk1qlvqH33gfukWNu4=;
-        b=eiVKagnSnyv2tiR2Et7Ql7AZP/9w9jlLNqQTHS3fRI9E4/SO+rwqGhlA+DkIvTcsGL
-         GvP3Hbn/TFHAdKlTlh4r3TdYArZkggVbz9uC3/wr8TuEJkpUg77iFOhPRCSdFmL7yiFg
-         ccSP9+rsqwf7PsbDC0GfR7NOovBce7xUPfKYzxtdh2pq5mGIc7I68tx70c38KTIZn/Br
-         Rrz8Quw45lUlPaH+CWus9LpFO5surp/ggMPdemQ+8ijF5G5Ro3bqOV1Stf4zIeEXhJeI
-         oNkJglxsxCrPf8eDQ9NLYeb0jyZeBdT+rhxrJ4nMBDtV1qApdxlSoHDJH3LWPeObwOVa
-         IfSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3kwegyRqAw46aqWt+s2hHGKYwjk1qlvqH33gfukWNu4=;
-        b=k8uuTUzU7+gbLl75EVbIPHVU+xKFXEPWBXoC3s+3BgdM0mbMh6BRLgzSQAgGfvfJ7c
-         aW+cqcFvL2jvM7XbC3iawu/V29K9yWobDhPpjsPH8dQO8iXnG9TjVds3OlWv1WMl3W0u
-         t+XM6aOa79NFLJmnm1By9GxaYSrPaX1pyAa6SgTJm1X6EBVwa+MPLBoykLfHxnkc5ja1
-         4pXljTzEZLVJ/ZMGuT1R9vPl4U7m3d3cvC29KDcjFqQae9YlC4utLfPKoGWolRu7ie3y
-         it7DE4udDjuXWT1OVBpVCjN7dTZQMBewqSSBgX2i6MTk5+2I+yHVk7b/olNFVaft7vU9
-         pEiQ==
-X-Gm-Message-State: AOAM532GC/YApV0KfhdqcBQMXlpoOE77YsWwdPvtm207Z00zGsUglpu0
-        9b2E+ex2iHyyeerd/dcSc5C/00kmvjsfi84l2WSQgw==
-X-Google-Smtp-Source: ABdhPJwmGsSGTzfqADPhJaLR24JRKMUHU5sMY1UkaytHFUOVKZaQLOE6xRAFTRUNVPEkSd3eETejD2b4SxoTIHmKwtU=
-X-Received: by 2002:a65:6a04:: with SMTP id m4mr3118476pgu.265.1606214741881;
- Tue, 24 Nov 2020 02:45:41 -0800 (PST)
-MIME-Version: 1.0
-References: <20201116155008.118124-1-robert.foss@linaro.org>
- <1606203651.4733.134.camel@mhfsdcap03> <20201124084343.GD3940@paasikivi.fi.intel.com>
- <1606212616.4733.157.camel@mhfsdcap03>
-In-Reply-To: <1606212616.4733.157.camel@mhfsdcap03>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Tue, 24 Nov 2020 11:45:30 +0100
-Message-ID: <CAG3jFyuBvjpbhNUOqH1dOX=9WZG4avG7vAHgXThoim4LeruXyA@mail.gmail.com>
-Subject: Re: [PATCH] media: ov8856: Remove 3280x2464 mode
-To:     Dongchun Zhu <dongchun.zhu@mediatek.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        id S1732434AbgKXLGe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Nov 2020 06:06:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33626 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731911AbgKXLGb (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 24 Nov 2020 06:06:31 -0500
+Received: from mail.kernel.org (ip5f5ad5c3.dynamic.kabel-deutschland.de [95.90.213.195])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CE7212076B;
+        Tue, 24 Nov 2020 11:06:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606215991;
+        bh=kXtk9K9yAiPnSdLWAKHJSOrEjH0updRultC40wsPkKE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=y9uII6tuQ2VBmUUW9/zOG8yWeMNig2nBe1meDWZ1V+N51/VI/AOl9oMf5+xnVYmL6
+         kzmWfcjRVPrT086LMFeL122/pDMyGf/DIO2T20EN0mGVK/AO95TFzd80EME7Lwt8Li
+         p8zvOBQPgHWgNExG/uXAUX4C5j96ZjI/zMr7lPRM=
+Received: from mchehab by mail.kernel.org with local (Exim 4.94)
+        (envelope-from <mchehab@kernel.org>)
+        id 1khW9U-000FZl-Rn; Tue, 24 Nov 2020 12:06:28 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Ben Kao <ben.kao@intel.com>, Tomasz Figa <tfiga@google.com>,
-        =?UTF-8?B?U2hlbmduYW4gV2FuZyAo546L5Zyj55S3KQ==?= 
-        <shengnan.wang@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 10/31] media: vidtv: remove some unused functions
+Date:   Tue, 24 Nov 2020 12:06:06 +0100
+Message-Id: <b97f84bac798157e3cadafe5fbedc10e4121fe4c.1606215584.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <cover.1606215584.git.mchehab+huawei@kernel.org>
+References: <cover.1606215584.git.mchehab+huawei@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
->
-> OV8856 sensor array region consists of 3 main window settings.
-> The inner window is controlled by [H_win_off, V_win_off].
-> From the old unusual 3280x2464 and 1640x1232 setting,
-> H_win_off(R3810-R3811) is 0, V_win_off(R3812-R3813) is 1.
->
-> Considering that the register TEST_PATTERN_CTRL(R4320) controlling pixel
-> order is not set (default: 0x80, meaning BG/GR) and mirror/flip are both
-> OFF, the absolute coordinate of crop_start is expressed as:
-> [H_crop_start+H_win_off, V_crop_start+V_win_off] = [0, 7]
->
-> Thus the first pixel shall start with G channel(according to datasheet).
-> This is different with current resolutions (3264x2448 and 1632x1224).
->
+Right now, there's no need to access the length of some
+tables. So, drop the unused functions.
 
-Sakari: So this means that the patches introducing 3264x2448 and
-1632x1224 modes really should have included code for configuring BGGR
-format for those two specific modes only. Let me whip up another patch
-for that, and put a pin in the bayer mode part of this conversation.
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ drivers/media/test-drivers/vidtv/vidtv_psi.c | 35 --------------------
+ 1 file changed, 35 deletions(-)
+
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_psi.c b/drivers/media/test-drivers/vidtv/vidtv_psi.c
+index 375e01480d3d..341af312ad56 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_psi.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_psi.c
+@@ -89,41 +89,6 @@ static void vidtv_psi_update_version_num(struct vidtv_psi_table_header *h)
+ 	h->version++;
+ }
+ 
+-static u16
+-vidtv_psi_sdt_serv_get_desc_loop_len(struct vidtv_psi_table_sdt_service *s)
+-{
+-	u16 mask;
+-	u16 ret;
+-
+-	mask = GENMASK(11, 0);
+-
+-	ret = be16_to_cpu(s->bitfield) & mask;
+-	return ret;
+-}
+-
+-static u16
+-vidtv_psi_pmt_stream_get_desc_loop_len(struct vidtv_psi_table_pmt_stream *s)
+-{
+-	u16 mask;
+-	u16 ret;
+-
+-	mask = GENMASK(9, 0);
+-
+-	ret = be16_to_cpu(s->bitfield2) & mask;
+-	return ret;
+-}
+-
+-static u16 vidtv_psi_pmt_get_desc_loop_len(struct vidtv_psi_table_pmt *p)
+-{
+-	u16 mask;
+-	u16 ret;
+-
+-	mask = GENMASK(9, 0);
+-
+-	ret = be16_to_cpu(p->bitfield2) & mask;
+-	return ret;
+-}
+-
+ static u16 vidtv_psi_get_sec_len(struct vidtv_psi_table_header *h)
+ {
+ 	u16 mask;
+-- 
+2.28.0
+
