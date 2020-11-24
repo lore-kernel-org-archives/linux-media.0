@@ -2,83 +2,152 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31737C64E8A
-	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F35BC64E7A
+	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EE12A20897
+	by mail.kernel.org (Postfix) with ESMTP id 2ADFB2076B
 	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731494AbgKXJie (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Nov 2020 04:38:34 -0500
-Received: from retiisi.eu ([95.216.213.190]:45006 "EHLO hillosipuli.retiisi.eu"
+        id S1731476AbgKXJia (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Nov 2020 04:38:30 -0500
+Received: from retiisi.eu ([95.216.213.190]:44956 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731479AbgKXJib (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Nov 2020 04:38:31 -0500
+        id S1731183AbgKXJi3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 24 Nov 2020 04:38:29 -0500
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id EAEF0634C97;
-        Tue, 24 Nov 2020 11:37:51 +0200 (EET)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id C7B35634C24;
+        Tue, 24 Nov 2020 11:37:50 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, mchehab@kernel.org
-Subject: [PATCH 13/30] ccs: Replace somewhat harsh internal checks based on BUG with WARN_ON
-Date:   Tue, 24 Nov 2020 11:32:09 +0200
-Message-Id: <20201124093226.23737-14-sakari.ailus@linux.intel.com>
+Subject: [PATCH 00/30] Trivial MIPI CCS support
+Date:   Tue, 24 Nov 2020 11:31:56 +0200
+Message-Id: <20201124093226.23737-1-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201124093226.23737-1-sakari.ailus@linux.intel.com>
-References: <20201124093226.23737-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If an internal driver error was encountered, BUG was issued. Instead, do
-less harsh WARN_ON_ONCE and try to manage with the consequences.
+Hello everyone,
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- drivers/media/i2c/ccs/ccs-core.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+Here's a set of patches that turn the existing SMIA driver into a MIPI CCS
+driver while maintaining SMIA support. A number of bugs in the existing
+code are fixed in this set, too.
 
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 25b4c84524ff..70b4d2180971 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -546,6 +546,10 @@ static void ccs_update_mbus_formats(struct ccs_sensor *sensor)
- 		to_csi_format_idx(sensor->internal_csi_format) & ~3;
- 	unsigned int pixel_order = ccs_pixel_order(sensor);
- 
-+	if (WARN_ON_ONCE(max(internal_csi_format_idx, csi_format_idx) +
-+			 pixel_order >= ARRAY_SIZE(ccs_csi_data_formats)))
-+		return;
-+
- 	sensor->mbus_frame_fmts =
- 		sensor->default_mbus_frame_fmts << pixel_order;
- 	sensor->csi_format =
-@@ -554,9 +558,6 @@ static void ccs_update_mbus_formats(struct ccs_sensor *sensor)
- 		&ccs_csi_data_formats[internal_csi_format_idx
- 					 + pixel_order];
- 
--	BUG_ON(max(internal_csi_format_idx, csi_format_idx) + pixel_order
--	       >= ARRAY_SIZE(ccs_csi_data_formats));
--
- 	dev_dbg(&client->dev, "new pixel order %s\n",
- 		pixel_order_str[pixel_order]);
- }
-@@ -1806,7 +1807,7 @@ static void ccs_propagate(struct v4l2_subdev *subdev,
- 		*crops[CCS_PAD_SRC] = *comp;
- 		break;
- 	default:
--		BUG();
-+		WARN_ON_ONCE(1);
- 	}
- }
- 
+The changes at this point are primarily focused on dealing with new
+mandatory driver features related to PLL configuration (as CCS allows for
+much more variation there) and things such as integer conversion from
+U16.U16 format instead of float. There are some other new features as well
+such as digital gain and support for getting device specific analogue gain
+coefficients.
+
+A new feature in CCS is CCS static data which makes it possible to obtain
+sensor's capabilities and limits from a file chosen based on sensor
+identification. CCS static data is used also for storing MSR registers so
+supporting new, CCS compliant devices requires no driver changes.
+
+Note that the library as well as the register definitions are dual
+licensed under GNU GPL v2 OR BSD 3-clause licenses for use outside the
+Linux kernel.
+
+Also DT bindings are updated accordingly and converted to YAML format.
+
+More information on MIPI CCS can be found here:
+
+<URL:https://www.mipi.org/specifications/camera-command-set>
+
+Comments are welcome.
+
+since the big, big patchset (v2):
+
+- Split into more easily reviewable chunks (this is the second of maybe
+  three). The cover page describes the entire big set. This set contains
+  new DT compatible strings, CCS ACPI ID, rudimentary support for CCS
+  (without PLL changes most sensors need, that's for later), including CCS
+  static data.
+
+- Fix SPDX tags. Some were left accidentally with BSD-3-Clause license
+  only.
+
+- Remove WARN_ON() from snprintf(), but return an error instead.
+
+- Free loaded static data on error as well.
+
+- Add descriptions to ccs-data-defs.h and ccs-data.h to document the
+  difference between the two.
+
+- Make the delay after I²C transfer error a range.
+
+- Make better use of kernel support functions.
+
+- Depends on earlier pull request here:
+
+  <URL:https://patchwork.linuxtv.org/project/linux-media/patch/20201123231950.GD4351@valkosipuli.retiisi.org.uk/>
+
+Sakari Ailus (30):
+  ccs: Add MIPI CCS compatible strings
+  ccs: Add device compatible identifiers for telling SMIA and CCS apart
+  ccs: Add CCS ACPI device ID
+  ccs: Remove the I²C ID table
+  ccs: Remove remaining support for platform data
+  ccs: Make hwcfg part of the device specific struct
+  ccs: Fix obtaining bus information from firmware
+  ccs: Add CCS static data parser library
+  ccs: Combine revision number major and minor into one
+  ccs: Read CCS static data from firmware binaries
+  ccs: Stop reading arrays after the first zero
+  ccs: The functions to get compose or crop rectangle never return NULL
+  ccs: Replace somewhat harsh internal checks based on BUG with WARN_ON
+  ccs: Refactor register reading a little
+  ccs: Make real to integer number conversion optional
+  ccs: Move limit value real to integer conversion from read to access
+    time
+  ccs: Read ireal numbers correctly
+  smiapp-pll: Rename as ccs-pll
+  ccs-pll: Fix MODULE_LICENSE
+  ccs: Change my e-mail address
+  ccs: Allow range in between I²C retries
+  ccs: Add support for manufacturer regs from sensor and module files
+  ccs: Use static data read-only registers
+  ccs: Clean up runtime PM usage
+  ccs: Wrap long lines, unwrap short ones
+  ccs: Use longer pre-I²C sleep for CCS compliant devices
+  ccs: Remove unnecessary delays from power-up sequence
+  dt-bindings: mipi,ccs: Don't mention vana voltage
+  dt-bindings: mipi,ccs: Add vcore and vio supplies
+  ccs: Use all regulators
+
+ .../bindings/media/i2c/mipi-ccs.yaml          |  11 +-
+ MAINTAINERS                                   |   4 +-
+ drivers/media/i2c/Kconfig                     |   2 +-
+ drivers/media/i2c/Makefile                    |   2 +-
+ drivers/media/i2c/{smiapp-pll.c => ccs-pll.c} |  66 +-
+ drivers/media/i2c/{smiapp-pll.h => ccs-pll.h} |  42 +-
+ drivers/media/i2c/ccs/Kconfig                 |   2 +-
+ drivers/media/i2c/ccs/Makefile                |   2 +-
+ drivers/media/i2c/ccs/ccs-core.c              | 396 +++++---
+ drivers/media/i2c/ccs/ccs-data-defs.h         | 219 ++++
+ drivers/media/i2c/ccs/ccs-data.c              | 944 ++++++++++++++++++
+ drivers/media/i2c/ccs/ccs-data.h              | 120 +++
+ drivers/media/i2c/ccs/ccs-quirk.c             |  10 +-
+ drivers/media/i2c/ccs/ccs-quirk.h             |   2 +-
+ drivers/media/i2c/ccs/ccs-reg-access.c        | 227 ++++-
+ drivers/media/i2c/ccs/ccs-reg-access.h        |   6 +-
+ drivers/media/i2c/ccs/ccs.h                   |  24 +-
+ 17 files changed, 1805 insertions(+), 274 deletions(-)
+ rename drivers/media/i2c/{smiapp-pll.c => ccs-pll.c} (89%)
+ rename drivers/media/i2c/{smiapp-pll.h => ccs-pll.h} (66%)
+ create mode 100644 drivers/media/i2c/ccs/ccs-data-defs.h
+ create mode 100644 drivers/media/i2c/ccs/ccs-data.c
+ create mode 100644 drivers/media/i2c/ccs/ccs-data.h
+
 -- 
 2.27.0
-
