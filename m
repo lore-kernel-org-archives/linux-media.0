@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C08BC8300E
-	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 790A4C83017
+	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B823B2073C
-	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 445EE20888
+	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 09:38:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731515AbgKXJij (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Nov 2020 04:38:39 -0500
-Received: from retiisi.eu ([95.216.213.190]:45032 "EHLO hillosipuli.retiisi.eu"
+        id S1731535AbgKXJis (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Nov 2020 04:38:48 -0500
+Received: from retiisi.eu ([95.216.213.190]:45026 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731503AbgKXJih (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Nov 2020 04:38:37 -0500
+        id S1731502AbgKXJig (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 24 Nov 2020 04:38:36 -0500
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 1C186634CC0;
-        Tue, 24 Nov 2020 11:37:53 +0200 (EET)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id CB9A2634CBD;
+        Tue, 24 Nov 2020 11:37:52 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, mchehab@kernel.org
-Subject: [PATCH 25/30] ccs: Wrap long lines, unwrap short ones
-Date:   Tue, 24 Nov 2020 11:32:21 +0200
-Message-Id: <20201124093226.23737-26-sakari.ailus@linux.intel.com>
+Subject: [PATCH 22/30] ccs: Add support for manufacturer regs from sensor and module files
+Date:   Tue, 24 Nov 2020 11:32:18 +0200
+Message-Id: <20201124093226.23737-23-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201124093226.23737-1-sakari.ailus@linux.intel.com>
 References: <20201124093226.23737-1-sakari.ailus@linux.intel.com>
@@ -37,139 +37,198 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Over the years (and renaming) some lines that may well be wrapped ended up
-being over 80 characters, likewise there are shorter lines that can be
-merged. Do that.
+Write manufacturer specific registers (MSRs) from file to the sensor on
+sensor power-on.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 45 +++++++++++++-------------------
- 1 file changed, 18 insertions(+), 27 deletions(-)
+ drivers/media/i2c/ccs/ccs-core.c       | 23 +++++++
+ drivers/media/i2c/ccs/ccs-reg-access.c | 94 ++++++++++++++++++++------
+ drivers/media/i2c/ccs/ccs-reg-access.h |  2 +
+ 3 files changed, 97 insertions(+), 22 deletions(-)
 
 diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index c3023570a620..863295b8fb5c 100644
+index c53911b1c78b..5e01f22608d7 100644
 --- a/drivers/media/i2c/ccs/ccs-core.c
 +++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -657,8 +657,7 @@ static int ccs_set_ctrl(struct v4l2_ctrl *ctrl)
- 		break;
- 	case V4L2_CID_HBLANK:
- 		rval = ccs_write(sensor, LINE_LENGTH_PCK,
--				 sensor->pixel_array->crop[
--					 CCS_PA_PAD_SRC].width
-+				 sensor->pixel_array->crop[CCS_PA_PAD_SRC].width
- 				 + ctrl->val);
+@@ -1278,6 +1278,21 @@ static int ccs_setup_flash_strobe(struct ccs_sensor *sensor)
+  * Power management
+  */
  
- 		break;
-@@ -989,15 +988,13 @@ static void ccs_update_blanking(struct ccs_sensor *sensor)
++static int ccs_write_msr_regs(struct ccs_sensor *sensor)
++{
++	int rval;
++
++	rval = ccs_write_data_regs(sensor,
++				   sensor->sdata.sensor_manufacturer_regs,
++				   sensor->sdata.num_sensor_manufacturer_regs);
++	if (rval)
++		return rval;
++
++	return ccs_write_data_regs(sensor,
++				   sensor->mdata.module_manufacturer_regs,
++				   sensor->mdata.num_module_manufacturer_regs);
++}
++
+ static int ccs_power_on(struct device *dev)
+ {
+ 	struct v4l2_subdev *subdev = dev_get_drvdata(dev);
+@@ -1383,6 +1398,10 @@ static int ccs_power_on(struct device *dev)
+ 	if (rval < 0)
+ 		goto out_cci_addr_fail;
  
- 	min = max_t(int,
- 		    CCS_LIM(sensor, MIN_FRAME_BLANKING_LINES),
--		    min_fll -
--		    sensor->pixel_array->crop[CCS_PA_PAD_SRC].height);
-+		    min_fll - sensor->pixel_array->crop[CCS_PA_PAD_SRC].height);
- 	max = max_fll -	sensor->pixel_array->crop[CCS_PA_PAD_SRC].height;
++	rval = ccs_write_msr_regs(sensor);
++	if (rval)
++		goto out_cci_addr_fail;
++
+ 	rval = ccs_call_quirk(sensor, post_poweron);
+ 	if (rval) {
+ 		dev_err(dev, "post_poweron quirks failed\n");
+@@ -3220,6 +3239,10 @@ static int ccs_probe(struct i2c_client *client)
+ 	if (rval < 0)
+ 		goto out_media_entity_cleanup;
  
- 	__v4l2_ctrl_modify_range(vblank, min, max, vblank->step, min);
- 
- 	min = max_t(int,
--		    min_llp -
--		    sensor->pixel_array->crop[CCS_PA_PAD_SRC].width,
-+		    min_llp - sensor->pixel_array->crop[CCS_PA_PAD_SRC].width,
- 		    min_lbp);
- 	max = max_llp - sensor->pixel_array->crop[CCS_PA_PAD_SRC].width;
- 
-@@ -1784,7 +1781,8 @@ static void ccs_get_crop_compose(struct v4l2_subdev *subdev,
- 	} else {
- 		if (crops) {
- 			for (i = 0; i < subdev->entity.num_pads; i++)
--				crops[i] = v4l2_subdev_get_try_crop(subdev, cfg, i);
-+				crops[i] = v4l2_subdev_get_try_crop(subdev,
-+								    cfg, i);
- 		}
- 		if (comps)
- 			*comps = v4l2_subdev_get_try_compose(subdev, cfg,
-@@ -1809,8 +1807,7 @@ static void ccs_propagate(struct v4l2_subdev *subdev,
- 		comp->height = crops[CCS_PAD_SINK]->height;
- 		if (which == V4L2_SUBDEV_FORMAT_ACTIVE) {
- 			if (ssd == sensor->scaler) {
--				sensor->scale_m =
--					CCS_LIM(sensor, SCALER_N_MIN);
-+				sensor->scale_m = CCS_LIM(sensor, SCALER_N_MIN);
- 				sensor->scaling_mode =
- 					CCS_SCALING_MODE_NO_SCALING;
- 			} else if (ssd == sensor->binner) {
-@@ -2236,9 +2233,11 @@ static int ccs_set_crop(struct v4l2_subdev *subdev,
- 		if (sel->pad == ssd->sink_pad) {
- 			_r.left = 0;
- 			_r.top = 0;
--			_r.width = v4l2_subdev_get_try_format(subdev, cfg, sel->pad)
-+			_r.width = v4l2_subdev_get_try_format(subdev, cfg,
-+							      sel->pad)
- 				->width;
--			_r.height = v4l2_subdev_get_try_format(subdev, cfg, sel->pad)
-+			_r.height = v4l2_subdev_get_try_format(subdev, cfg,
-+							       sel->pad)
- 				->height;
- 			src_size = &_r;
- 		} else {
-@@ -2356,11 +2355,9 @@ static int ccs_set_selection(struct v4l2_subdev *subdev,
- 	sel->r.width = CCS_ALIGN_DIM(sel->r.width, sel->flags);
- 	sel->r.height =	CCS_ALIGN_DIM(sel->r.height, sel->flags);
- 
--	sel->r.width = max_t(unsigned int,
--			     CCS_LIM(sensor, MIN_X_OUTPUT_SIZE),
-+	sel->r.width = max_t(unsigned int, CCS_LIM(sensor, MIN_X_OUTPUT_SIZE),
- 			     sel->r.width);
--	sel->r.height = max_t(unsigned int,
--			      CCS_LIM(sensor, MIN_Y_OUTPUT_SIZE),
-+	sel->r.height = max_t(unsigned int, CCS_LIM(sensor, MIN_Y_OUTPUT_SIZE),
- 			      sel->r.height);
- 
- 	switch (sel->target) {
-@@ -2613,8 +2610,7 @@ static int ccs_identify_module(struct ccs_sensor *sensor)
- 		dev_warn(&client->dev,
- 			 "no quirks for this module; let's hope it's fully compliant\n");
- 
--	dev_dbg(&client->dev, "the sensor is called %s\n",
--		minfo->name);
-+	dev_dbg(&client->dev, "the sensor is called %s\n", minfo->name);
- 
- 	return 0;
++	rval = ccs_write_msr_regs(sensor);
++	if (rval)
++		goto out_media_entity_cleanup;
++
+ 	pm_runtime_set_active(&client->dev);
+ 	pm_runtime_get_noresume(&client->dev);
+ 	pm_runtime_enable(&client->dev);
+diff --git a/drivers/media/i2c/ccs/ccs-reg-access.c b/drivers/media/i2c/ccs/ccs-reg-access.c
+index 79efed5e0dad..918bc98c226f 100644
+--- a/drivers/media/i2c/ccs/ccs-reg-access.c
++++ b/drivers/media/i2c/ccs/ccs-reg-access.c
+@@ -236,12 +236,38 @@ int ccs_read_addr_noconv(struct ccs_sensor *sensor, u32 reg, u32 *val)
+ 	return ccs_read_addr_raw(sensor, reg, val, false, true, false);
  }
-@@ -2634,19 +2630,15 @@ static int ccs_register_subdev(struct ccs_sensor *sensor,
- 	if (!sink_ssd)
- 		return 0;
  
--	rval = media_entity_pads_init(&ssd->sd.entity,
--				      ssd->npads, ssd->pads);
-+	rval = media_entity_pads_init(&ssd->sd.entity, ssd->npads, ssd->pads);
- 	if (rval) {
--		dev_err(&client->dev,
--			"media_entity_pads_init failed\n");
-+		dev_err(&client->dev, "media_entity_pads_init failed\n");
- 		return rval;
- 	}
++static int ccs_write_retry(struct i2c_client *client, struct i2c_msg *msg)
++{
++	unsigned int retries;
++	int r;
++
++	for (retries = 0; retries < 10; retries++) {
++		/*
++		 * Due to unknown reason sensor stops responding. This
++		 * loop is a temporaty solution until the root cause
++		 * is found.
++		 */
++		r = i2c_transfer(client->adapter, msg, 1);
++		if (r != 1) {
++			usleep_range(1000, 2000);
++			continue;
++		}
++
++		if (retries)
++			dev_err(&client->dev,
++				"sensor i2c stall encountered. retries: %d\n",
++				retries);
++		return 0;
++	}
++
++	return r;
++}
++
+ int ccs_write_addr_no_quirk(struct ccs_sensor *sensor, u32 reg, u32 val)
+ {
+ 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
+ 	struct i2c_msg msg;
+ 	unsigned char data[6];
+-	unsigned int retries;
+ 	unsigned int len = ccs_reg_width(reg);
+ 	int r;
  
--	rval = v4l2_device_register_subdev(sensor->src->sd.v4l2_dev,
--					   &ssd->sd);
-+	rval = v4l2_device_register_subdev(sensor->src->sd.v4l2_dev, &ssd->sd);
- 	if (rval) {
--		dev_err(&client->dev,
--			"v4l2_device_register_subdev failed\n");
-+		dev_err(&client->dev, "v4l2_device_register_subdev failed\n");
- 		return rval;
- 	}
+@@ -256,27 +282,11 @@ int ccs_write_addr_no_quirk(struct ccs_sensor *sensor, u32 reg, u32 val)
+ 	put_unaligned_be16(CCS_REG_ADDR(reg), data);
+ 	put_unaligned_be32(val << (8 * (sizeof(val) - len)), data + 2);
  
-@@ -2654,8 +2646,7 @@ static int ccs_register_subdev(struct ccs_sensor *sensor,
- 				     &sink_ssd->sd.entity, sink_pad,
- 				     link_flags);
- 	if (rval) {
--		dev_err(&client->dev,
--			"media_create_pad_link failed\n");
-+		dev_err(&client->dev, "media_create_pad_link failed\n");
- 		v4l2_device_unregister_subdev(&ssd->sd);
- 		return rval;
- 	}
+-	for (retries = 0; retries < 10; retries++) {
+-		/*
+-		 * Due to unknown reason sensor stops responding. This
+-		 * loop is a temporaty solution until the root cause
+-		 * is found.
+-		 */
+-		r = i2c_transfer(client->adapter, &msg, 1);
+-		if (r == 1) {
+-			if (retries)
+-				dev_err(&client->dev,
+-					"sensor i2c stall encountered. retries: %d\n",
+-					retries);
+-			return 0;
+-		}
+-
+-		usleep_range(1000, 2000);
+-	}
+-
+-	dev_err(&client->dev,
+-		"wrote 0x%x to offset 0x%x error %d\n", val,
+-		CCS_REG_ADDR(reg), r);
++	r = ccs_write_retry(client, &msg);
++	if (r)
++		dev_err(&client->dev,
++			"wrote 0x%x to offset 0x%x error %d\n", val,
++			CCS_REG_ADDR(reg), r);
+ 
+ 	return r;
+ }
+@@ -297,3 +307,43 @@ int ccs_write_addr(struct ccs_sensor *sensor, u32 reg, u32 val)
+ 
+ 	return ccs_write_addr_no_quirk(sensor, reg, val);
+ }
++
++#define MAX_WRITE_LEN	32U
++
++int ccs_write_data_regs(struct ccs_sensor *sensor, struct ccs_reg *regs,
++			size_t num_regs)
++{
++	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
++	unsigned char buf[2 + MAX_WRITE_LEN];
++	struct i2c_msg msg = {
++		.addr = client->addr,
++		.buf = buf,
++	};
++	size_t i;
++
++	for (i = 0; i < num_regs; i++, regs++) {
++		unsigned char *regdata = regs->value;
++		unsigned int j;
++
++		for (j = 0; j < regs->len;
++		     j += msg.len - 2, regdata += msg.len - 2) {
++			int rval;
++
++			msg.len = min(regs->len - j, MAX_WRITE_LEN);
++
++			put_unaligned_be16(regs->addr + j, buf);
++			memcpy(buf + 2, regdata, msg.len);
++			msg.len += 2;
++
++			rval = ccs_write_retry(client, &msg);
++			if (rval) {
++				dev_err(&client->dev,
++					"error writing %u octets to address 0x%4.4x\n",
++					msg.len, regs->addr + j);
++				return rval;
++			}
++		}
++	}
++
++	return 0;
++}
+diff --git a/drivers/media/i2c/ccs/ccs-reg-access.h b/drivers/media/i2c/ccs/ccs-reg-access.h
+index cfad2e520fe2..78c43f92d99a 100644
+--- a/drivers/media/i2c/ccs/ccs-reg-access.h
++++ b/drivers/media/i2c/ccs/ccs-reg-access.h
+@@ -27,6 +27,8 @@ int ccs_read_addr_8only(struct ccs_sensor *sensor, u32 reg, u32 *val);
+ int ccs_read_addr_noconv(struct ccs_sensor *sensor, u32 reg, u32 *val);
+ int ccs_write_addr_no_quirk(struct ccs_sensor *sensor, u32 reg, u32 val);
+ int ccs_write_addr(struct ccs_sensor *sensor, u32 reg, u32 val);
++int ccs_write_data_regs(struct ccs_sensor *sensor, struct ccs_reg *regs,
++			size_t num_regs);
+ 
+ unsigned int ccs_reg_width(u32 reg);
+ u32 ccs_reg_conv(struct ccs_sensor *sensor, u32 reg, u32 val);
 -- 
 2.27.0
 
