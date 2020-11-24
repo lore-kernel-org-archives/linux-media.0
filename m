@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CE7DC8300C
-	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 11:06:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68C19C56201
+	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 11:07:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D1C2B2073C
-	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 11:06:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 022E32073C
+	for <linux-media@archiver.kernel.org>; Tue, 24 Nov 2020 11:07:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="JH6eT+V2"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="H6YEdQik"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732606AbgKXLGs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Nov 2020 06:06:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33794 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732509AbgKXLGg (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1732516AbgKXLGg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 24 Nov 2020 06:06:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33782 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732161AbgKXLGf (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 24 Nov 2020 06:06:35 -0500
 Received: from mail.kernel.org (ip5f5ad5c3.dynamic.kabel-deutschland.de [95.90.213.195])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5B2222223C;
-        Tue, 24 Nov 2020 11:06:31 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D1DE42083E;
+        Tue, 24 Nov 2020 11:06:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1606215991;
-        bh=SSmmz+Xv/F8F5bLjxjkNpqvU2LAL2wcRypsC4tIZuDE=;
+        bh=hD1Vhx1L0CW+jqKVmFJ1M40qK9KzgKonhEYNkY8EyPE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JH6eT+V23GaGrPli0+hmLc1RlXUfVZ5rdsKgUVotOQWbL62j0YlIVBfDhoub4DQGQ
-         3PXdG8mwQAXlA8ouQNkEH04zFw/zcCZJX81LxsYgb47Gr16kfwLTiKn9OBmIKRGx1D
-         XZL6tGBtbPHYl9P1wwopdVDkD4AY/qDzQJX68fWM=
+        b=H6YEdQik/F0uNI0viTe0vuf/QMgjq+OXPjTO136KjH0UC2fOEG9b9Bvc/JCUNZq4S
+         B2P8panH/U0VJW9f6CU1N6ejZfrcjvSFtwpUXFIadC2llxdtdi8WDT1iOF3+n8AxzA
+         njOqadrNc8T5jVkIZhHd9x4OSIgSa2C3ukJoR1Gk=
 Received: from mchehab by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1khW9V-000Faf-Cl; Tue, 24 Nov 2020 12:06:29 +0100
+        id 1khW9U-000FZN-I2; Tue, 24 Nov 2020 12:06:28 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 29/31] media: vidtv.rst: update vidtv documentation
-Date:   Tue, 24 Nov 2020 12:06:25 +0100
-Message-Id: <9fa911fbdf90343f49fc1f284ea47fe0407a2b81.1606215584.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 01/31] media: vidtv: reorganize includes
+Date:   Tue, 24 Nov 2020 12:05:57 +0100
+Message-Id: <b000ad1c906581688f1d4d8ce18258400b0f3616.1606215584.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <cover.1606215584.git.mchehab+huawei@kernel.org>
 References: <cover.1606215584.git.mchehab+huawei@kernel.org>
@@ -55,136 +55,374 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Update the vidtv documentation with the relevant changes
-after the last patches.
+- Place the includes on alphabetical order;
+- get rid of asm/byteorder.h;
+- add bug.h at vidtv_s302m.c, as it is needed by
+  inux/fixp-arith.h
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../driver-api/media/drivers/vidtv.rst        | 85 ++++++++++++++++---
- 1 file changed, 72 insertions(+), 13 deletions(-)
+ .../media/test-drivers/vidtv/vidtv_bridge.c   |  8 +++----
+ .../media/test-drivers/vidtv/vidtv_bridge.h   |  2 ++
+ .../media/test-drivers/vidtv/vidtv_channel.c  |  8 +++----
+ .../media/test-drivers/vidtv/vidtv_channel.h  |  3 ++-
+ .../media/test-drivers/vidtv/vidtv_demod.c    |  1 +
+ .../media/test-drivers/vidtv/vidtv_demod.h    |  1 +
+ drivers/media/test-drivers/vidtv/vidtv_mux.c  | 18 ++++++++--------
+ drivers/media/test-drivers/vidtv/vidtv_mux.h  |  3 ++-
+ drivers/media/test-drivers/vidtv/vidtv_pes.c  |  1 -
+ drivers/media/test-drivers/vidtv/vidtv_pes.h  |  1 -
+ drivers/media/test-drivers/vidtv/vidtv_psi.c  | 11 +++++-----
+ drivers/media/test-drivers/vidtv/vidtv_psi.h  |  1 -
+ .../media/test-drivers/vidtv/vidtv_s302m.c    | 21 +++++++++----------
+ .../media/test-drivers/vidtv/vidtv_s302m.h    |  1 -
+ drivers/media/test-drivers/vidtv/vidtv_ts.c   |  5 ++---
+ drivers/media/test-drivers/vidtv/vidtv_ts.h   |  1 -
+ .../media/test-drivers/vidtv/vidtv_tuner.c    |  5 +++--
+ .../media/test-drivers/vidtv/vidtv_tuner.h    |  1 +
+ 18 files changed, 46 insertions(+), 46 deletions(-)
 
-diff --git a/Documentation/driver-api/media/drivers/vidtv.rst b/Documentation/driver-api/media/drivers/vidtv.rst
-index edaceef2808c..52c201798d78 100644
---- a/Documentation/driver-api/media/drivers/vidtv.rst
-+++ b/Documentation/driver-api/media/drivers/vidtv.rst
-@@ -258,6 +258,42 @@ Using dvb-fe-tool
- The first step to check whether the demod loaded successfully is to run::
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_bridge.c b/drivers/media/test-drivers/vidtv/vidtv_bridge.c
+index 2f97ecf423ed..068fb4e9fafe 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_bridge.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_bridge.c
+@@ -9,20 +9,20 @@
+  * Copyright (C) 2020 Daniel W. S. Almeida
+  */
  
- 	$ dvb-fe-tool
-+	Device Dummy demod for DVB-T/T2/C/S/S2 (/dev/dvb/adapter0/frontend0) capabilities:
-+	    CAN_FEC_1_2
-+	    CAN_FEC_2_3
-+	    CAN_FEC_3_4
-+	    CAN_FEC_4_5
-+	    CAN_FEC_5_6
-+	    CAN_FEC_6_7
-+	    CAN_FEC_7_8
-+	    CAN_FEC_8_9
-+	    CAN_FEC_AUTO
-+	    CAN_GUARD_INTERVAL_AUTO
-+	    CAN_HIERARCHY_AUTO
-+	    CAN_INVERSION_AUTO
-+	    CAN_QAM_16
-+	    CAN_QAM_32
-+	    CAN_QAM_64
-+	    CAN_QAM_128
-+	    CAN_QAM_256
-+	    CAN_QAM_AUTO
-+	    CAN_QPSK
-+	    CAN_TRANSMISSION_MODE_AUTO
-+	DVB API Version 5.11, Current v5 delivery system: DVBC/ANNEX_A
-+	Supported delivery systems:
-+	    DVBT
-+	    DVBT2
-+	    [DVBC/ANNEX_A]
-+	    DVBS
-+	    DVBS2
-+	Frequency range for the current standard:
-+	From:            51.0 MHz
-+	To:              2.15 GHz
-+	Step:            62.5 kHz
-+	Tolerance:       29.5 MHz
-+	Symbol rate ranges for the current standard:
-+	From:            1.00 MBauds
-+	To:              45.0 MBauds
++#include <linux/dev_printk.h>
+ #include <linux/moduleparam.h>
+ #include <linux/mutex.h>
+ #include <linux/platform_device.h>
+-#include <linux/dev_printk.h>
+ #include <linux/time.h>
+ #include <linux/types.h>
+ #include <linux/workqueue.h>
  
- This should return what is currently set up at the demod struct, i.e.::
+ #include "vidtv_bridge.h"
++#include "vidtv_common.h"
+ #include "vidtv_demod.h"
+-#include "vidtv_tuner.h"
+-#include "vidtv_ts.h"
+ #include "vidtv_mux.h"
+-#include "vidtv_common.h"
++#include "vidtv_ts.h"
++#include "vidtv_tuner.h"
  
-@@ -316,7 +352,7 @@ For this, one should provide a configuration file known as a 'scan file',
- here's an example::
- 
- 	[Channel]
--	FREQUENCY = 330000000
-+	FREQUENCY = 474000000
- 	MODULATION = QAM/AUTO
- 	SYMBOL_RATE = 6940000
- 	INNER_FEC = AUTO
-@@ -337,6 +373,14 @@ You can browse scan tables online here: `dvb-scan-tables
- Assuming this channel is named 'channel.conf', you can then run::
- 
- 	$ dvbv5-scan channel.conf
-+	dvbv5-scan ~/vidtv.conf
-+	ERROR    command BANDWIDTH_HZ (5) not found during retrieve
-+	Cannot calc frequency shift. Either bandwidth/symbol-rate is unavailable (yet).
-+	Scanning frequency #1 330000000
-+	    (0x00) Signal= -68.00dBm
-+	Scanning frequency #2 474000000
-+	Lock   (0x1f) Signal= -34.45dBm C/N= 33.74dB UCB= 0
-+	Service Beethoven, provider LinuxTV.org: digital television
- 
- For more information on dvb-scan, check its documentation online here:
- `dvb-scan Documentation <https://www.linuxtv.org/wiki/index.php/Dvbscan>`_.
-@@ -346,23 +390,38 @@ Using dvb-zap
- 
- dvbv5-zap is a command line tool that can be used to record MPEG-TS to disk. The
- typical use is to tune into a channel and put it into record mode. The example
--below - which is taken from the documentation - illustrates that::
-+below - which is taken from the documentation - illustrates that\ [1]_::
- 
--	$ dvbv5-zap -c dvb_channel.conf "trilhas sonoras" -r
--	using demux '/dev/dvb/adapter0/demux0'
-+	$ dvbv5-zap -c dvb_channel.conf "beethoven" -o music.ts -P -t 10
-+	using demux 'dvb0.demux0'
- 	reading channels from file 'dvb_channel.conf'
--	service has pid type 05:  204
--	tuning to 573000000 Hz
--	audio pid 104
--	  dvb_set_pesfilter 104
--	Lock   (0x1f) Quality= Good Signal= 100.00% C/N= -13.80dB UCB= 70 postBER= 3.14x10^-3 PER= 0
--	DVR interface '/dev/dvb/adapter0/dvr0' can now be opened
-+	tuning to 474000000 Hz
-+	pass all PID's to TS
-+	dvb_set_pesfilter 8192
-+	dvb_dev_set_bufsize: buffer set to 6160384
-+	Lock   (0x1f) Quality= Good Signal= -34.66dBm C/N= 33.41dB UCB= 0 postBER= 0 preBER= 1.05x10^-3 PER= 0
-+	Lock   (0x1f) Quality= Good Signal= -34.57dBm C/N= 33.46dB UCB= 0 postBER= 0 preBER= 1.05x10^-3 PER= 0
-+	Record to file 'music.ts' started
-+	received 24587768 bytes (2401 Kbytes/sec)
-+	Lock   (0x1f) Quality= Good Signal= -34.42dBm C/N= 33.89dB UCB= 0 postBER= 0 preBER= 2.44x10^-3 PER= 0
- 
--The channel can be watched by playing the contents of the DVR interface, with
--some player that recognizes the MPEG-TS format, such as *mplayer* or *vlc*.
-+.. [1] In this example, it records 10 seconds with all program ID's stored
-+       at the music.ts file.
+ //#define MUX_BUF_MAX_SZ
+ //#define MUX_BUF_MIN_SZ
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_bridge.h b/drivers/media/test-drivers/vidtv/vidtv_bridge.h
+index 78fe8472fa37..a85068bffd0f 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_bridge.h
++++ b/drivers/media/test-drivers/vidtv/vidtv_bridge.h
+@@ -20,9 +20,11 @@
+ #include <linux/i2c.h>
+ #include <linux/platform_device.h>
+ #include <linux/types.h>
 +
+ #include <media/dmxdev.h>
+ #include <media/dvb_demux.h>
+ #include <media/dvb_frontend.h>
 +
-+The channel can be watched by playing the contents of the stream with some
-+player that  recognizes the MPEG-TS format, such as ``mplayer`` or ``vlc``.
+ #include "vidtv_mux.h"
  
- By playing the contents of the stream one can visually inspect the workings of
--vidtv, e.g.::
-+vidtv, e.g., to play a recorded TS file with::
-+
-+	$ mplayer music.ts
-+
-+or, alternatively, running this command on one terminal::
-+
-+	$ dvbv5-zap -c dvb_channel.conf "beethoven" -P -r &
-+
-+And, on a second terminal, playing the contents from DVR interface with::
+ /**
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_channel.c b/drivers/media/test-drivers/vidtv/vidtv_channel.c
+index 13e56544bb1e..683da9014064 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_channel.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_channel.c
+@@ -19,16 +19,16 @@
+  * Copyright (C) 2020 Daniel W. S. Almeida
+  */
  
- 	$ mplayer /dev/dvb/adapter0/dvr0
+-#include <linux/types.h>
+-#include <linux/slab.h>
+ #include <linux/dev_printk.h>
+ #include <linux/ratelimit.h>
++#include <linux/slab.h>
++#include <linux/types.h>
  
+ #include "vidtv_channel.h"
+-#include "vidtv_psi.h"
++#include "vidtv_common.h"
+ #include "vidtv_encoder.h"
+ #include "vidtv_mux.h"
+-#include "vidtv_common.h"
++#include "vidtv_psi.h"
+ #include "vidtv_s302m.h"
+ 
+ static void vidtv_channel_encoder_destroy(struct vidtv_encoder *e)
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_channel.h b/drivers/media/test-drivers/vidtv/vidtv_channel.h
+index 40ed7fcdc5a1..e1ba638ab77f 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_channel.h
++++ b/drivers/media/test-drivers/vidtv/vidtv_channel.h
+@@ -23,9 +23,10 @@
+ #define VIDTV_CHANNEL_H
+ 
+ #include <linux/types.h>
+-#include "vidtv_psi.h"
++
+ #include "vidtv_encoder.h"
+ #include "vidtv_mux.h"
++#include "vidtv_psi.h"
+ 
+ /**
+  * struct vidtv_channel - A 'channel' abstraction
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_demod.c b/drivers/media/test-drivers/vidtv/vidtv_demod.c
+index eba7fe1a1b48..63ac55b81f39 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_demod.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_demod.c
+@@ -19,6 +19,7 @@
+ #include <linux/slab.h>
+ #include <linux/string.h>
+ #include <linux/workqueue.h>
++
+ #include <media/dvb_frontend.h>
+ 
+ #include "vidtv_demod.h"
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_demod.h b/drivers/media/test-drivers/vidtv/vidtv_demod.h
+index 87651b0193e6..ab84044f33ba 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_demod.h
++++ b/drivers/media/test-drivers/vidtv/vidtv_demod.h
+@@ -12,6 +12,7 @@
+ #define VIDTV_DEMOD_H
+ 
+ #include <linux/dvb/frontend.h>
++
+ #include <media/dvb_frontend.h>
+ 
+ /**
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_mux.c b/drivers/media/test-drivers/vidtv/vidtv_mux.c
+index c3646dd269dd..465c5a6a3bc8 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_mux.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_mux.c
+@@ -12,23 +12,23 @@
+  * Copyright (C) 2020 Daniel W. S. Almeida
+  */
+ 
+-#include <linux/types.h>
+-#include <linux/slab.h>
++#include <linux/delay.h>
++#include <linux/dev_printk.h>
+ #include <linux/jiffies.h>
+ #include <linux/kernel.h>
+-#include <linux/dev_printk.h>
++#include <linux/math64.h>
+ #include <linux/ratelimit.h>
+-#include <linux/delay.h>
++#include <linux/slab.h>
++#include <linux/types.h>
+ #include <linux/vmalloc.h>
+-#include <linux/math64.h>
+ 
+-#include "vidtv_mux.h"
+-#include "vidtv_ts.h"
+-#include "vidtv_pes.h"
+-#include "vidtv_encoder.h"
+ #include "vidtv_channel.h"
+ #include "vidtv_common.h"
++#include "vidtv_encoder.h"
++#include "vidtv_mux.h"
++#include "vidtv_pes.h"
+ #include "vidtv_psi.h"
++#include "vidtv_ts.h"
+ 
+ static struct vidtv_mux_pid_ctx
+ *vidtv_mux_get_pid_ctx(struct vidtv_mux *m, u16 pid)
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_mux.h b/drivers/media/test-drivers/vidtv/vidtv_mux.h
+index 6eeb09fbfe4d..005b707f1445 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_mux.h
++++ b/drivers/media/test-drivers/vidtv/vidtv_mux.h
+@@ -15,9 +15,10 @@
+ #ifndef VIDTV_MUX_H
+ #define VIDTV_MUX_H
+ 
+-#include <linux/types.h>
+ #include <linux/hashtable.h>
++#include <linux/types.h>
+ #include <linux/workqueue.h>
++
+ #include <media/dvb_frontend.h>
+ 
+ #include "vidtv_psi.h"
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_pes.c b/drivers/media/test-drivers/vidtv/vidtv_pes.c
+index 1c75f88070e9..102352d398ed 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_pes.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_pes.c
+@@ -16,7 +16,6 @@
+ #include <linux/types.h>
+ #include <linux/printk.h>
+ #include <linux/ratelimit.h>
+-#include <asm/byteorder.h>
+ 
+ #include "vidtv_pes.h"
+ #include "vidtv_common.h"
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_pes.h b/drivers/media/test-drivers/vidtv/vidtv_pes.h
+index 0ea9e863024d..a152693233a9 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_pes.h
++++ b/drivers/media/test-drivers/vidtv/vidtv_pes.h
+@@ -14,7 +14,6 @@
+ #ifndef VIDTV_PES_H
+ #define VIDTV_PES_H
+ 
+-#include <asm/byteorder.h>
+ #include <linux/types.h>
+ 
+ #include "vidtv_common.h"
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_psi.c b/drivers/media/test-drivers/vidtv/vidtv_psi.c
+index 4dda5b0004a3..f4f6b90633db 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_psi.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_psi.c
+@@ -11,18 +11,17 @@
+ 
+ #define pr_fmt(fmt) KBUILD_MODNAME ":%s, %d: " fmt, __func__, __LINE__
+ 
+-#include <linux/kernel.h>
+-#include <linux/types.h>
+-#include <linux/slab.h>
+ #include <linux/crc32.h>
+-#include <linux/string.h>
++#include <linux/kernel.h>
+ #include <linux/printk.h>
+ #include <linux/ratelimit.h>
++#include <linux/slab.h>
+ #include <linux/string.h>
+-#include <asm/byteorder.h>
++#include <linux/string.h>
++#include <linux/types.h>
+ 
+-#include "vidtv_psi.h"
+ #include "vidtv_common.h"
++#include "vidtv_psi.h"
+ #include "vidtv_ts.h"
+ 
+ #define CRC_SIZE_IN_BYTES 4
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_psi.h b/drivers/media/test-drivers/vidtv/vidtv_psi.h
+index 118ba984f166..866fdf3d00e5 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_psi.h
++++ b/drivers/media/test-drivers/vidtv/vidtv_psi.h
+@@ -13,7 +13,6 @@
+ #define VIDTV_PSI_H
+ 
+ #include <linux/types.h>
+-#include <asm/byteorder.h>
+ 
+ /*
+  * all section lengths start immediately after the 'section_length' field
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_s302m.c b/drivers/media/test-drivers/vidtv/vidtv_s302m.c
+index aacf8110d874..ec88af63a74e 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_s302m.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_s302m.c
+@@ -17,23 +17,22 @@
+ 
+ #define pr_fmt(fmt) KBUILD_MODNAME ":%s, %d: " fmt, __func__, __LINE__
+ 
+-#include <linux/types.h>
+-#include <linux/slab.h>
++#include <linux/bug.h>
+ #include <linux/crc32.h>
+-#include <linux/vmalloc.h>
+-#include <linux/string.h>
+-#include <linux/kernel.h>
++#include <linux/fixp-arith.h>
+ #include <linux/jiffies.h>
++#include <linux/kernel.h>
++#include <linux/math64.h>
+ #include <linux/printk.h>
+ #include <linux/ratelimit.h>
+-#include <linux/fixp-arith.h>
++#include <linux/slab.h>
++#include <linux/string.h>
++#include <linux/types.h>
++#include <linux/vmalloc.h>
+ 
+-#include <linux/math64.h>
+-#include <asm/byteorder.h>
+-
+-#include "vidtv_s302m.h"
+-#include "vidtv_encoder.h"
+ #include "vidtv_common.h"
++#include "vidtv_encoder.h"
++#include "vidtv_s302m.h"
+ 
+ #define S302M_SAMPLING_RATE_HZ 48000
+ #define PES_PRIVATE_STREAM_1 0xbd  /* PES: private_stream_1 */
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_s302m.h b/drivers/media/test-drivers/vidtv/vidtv_s302m.h
+index b1bbe521e766..a0101734e758 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_s302m.h
++++ b/drivers/media/test-drivers/vidtv/vidtv_s302m.h
+@@ -19,7 +19,6 @@
+ #define VIDTV_S302M_H
+ 
+ #include <linux/types.h>
+-#include <asm/byteorder.h>
+ 
+ #include "vidtv_encoder.h"
+ 
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_ts.c b/drivers/media/test-drivers/vidtv/vidtv_ts.c
+index 190b9e4438dc..ca4bb9c40b78 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_ts.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_ts.c
+@@ -9,14 +9,13 @@
+ 
+ #define pr_fmt(fmt) KBUILD_MODNAME ":%s, %d: " fmt, __func__, __LINE__
+ 
++#include <linux/math64.h>
+ #include <linux/printk.h>
+ #include <linux/ratelimit.h>
+ #include <linux/types.h>
+-#include <linux/math64.h>
+-#include <asm/byteorder.h>
+ 
+-#include "vidtv_ts.h"
+ #include "vidtv_common.h"
++#include "vidtv_ts.h"
+ 
+ static u32 vidtv_ts_write_pcr_bits(u8 *to, u32 to_offset, u64 pcr)
+ {
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_ts.h b/drivers/media/test-drivers/vidtv/vidtv_ts.h
+index 83dcc9183b45..6b989a2c1433 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_ts.h
++++ b/drivers/media/test-drivers/vidtv/vidtv_ts.h
+@@ -11,7 +11,6 @@
+ #define VIDTV_TS_H
+ 
+ #include <linux/types.h>
+-#include <asm/byteorder.h>
+ 
+ #define TS_SYNC_BYTE 0x47
+ #define TS_PACKET_LEN 188
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_tuner.c b/drivers/media/test-drivers/vidtv/vidtv_tuner.c
+index 9bc49e099f65..14b6bc902ee1 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_tuner.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_tuner.c
+@@ -13,11 +13,12 @@
+ #include <linux/errno.h>
+ #include <linux/i2c.h>
+ #include <linux/module.h>
++#include <linux/printk.h>
++#include <linux/ratelimit.h>
+ #include <linux/slab.h>
+ #include <linux/types.h>
++
+ #include <media/dvb_frontend.h>
+-#include <linux/printk.h>
+-#include <linux/ratelimit.h>
+ 
+ #include "vidtv_tuner.h"
+ 
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_tuner.h b/drivers/media/test-drivers/vidtv/vidtv_tuner.h
+index 8455b2d564b3..fd55346a5c87 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_tuner.h
++++ b/drivers/media/test-drivers/vidtv/vidtv_tuner.h
+@@ -11,6 +11,7 @@
+ #define VIDTV_TUNER_H
+ 
+ #include <linux/types.h>
++
+ #include <media/dvb_frontend.h>
+ 
+ #define NUM_VALID_TUNER_FREQS 8
 -- 
 2.28.0
 
