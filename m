@@ -7,25 +7,25 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2756EC83010
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E75E8C63798
 	for <linux-media@archiver.kernel.org>; Wed, 25 Nov 2020 16:45:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EB23D21527
-	for <linux-media@archiver.kernel.org>; Wed, 25 Nov 2020 16:45:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A506E21527
+	for <linux-media@archiver.kernel.org>; Wed, 25 Nov 2020 16:45:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732132AbgKYQpf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 25 Nov 2020 11:45:35 -0500
-Received: from bin-mail-out-06.binero.net ([195.74.38.229]:60274 "EHLO
+        id S1732136AbgKYQph (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 25 Nov 2020 11:45:37 -0500
+Received: from bin-mail-out-06.binero.net ([195.74.38.229]:63836 "EHLO
         bin-mail-out-06.binero.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732127AbgKYQpe (ORCPT
+        by vger.kernel.org with ESMTP id S1732109AbgKYQpd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 25 Nov 2020 11:45:34 -0500
-X-Halon-ID: a0acf5e1-2f3d-11eb-a78a-0050569116f7
+        Wed, 25 Nov 2020 11:45:33 -0500
+X-Halon-ID: 9f117fc7-2f3d-11eb-a78a-0050569116f7
 Authorized-sender: niklas.soderlund@fsdn.se
 Received: from bismarck.berto.se (p4fca2458.dip0.t-ipconnect.de [79.202.36.88])
         by bin-vsp-out-03.atm.binero.net (Halon) with ESMTPA
-        id a0acf5e1-2f3d-11eb-a78a-0050569116f7;
-        Wed, 25 Nov 2020 17:45:30 +0100 (CET)
+        id 9f117fc7-2f3d-11eb-a78a-0050569116f7;
+        Wed, 25 Nov 2020 17:45:28 +0100 (CET)
 From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -33,9 +33,9 @@ To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
 Cc:     linux-renesas-soc@vger.kernel.org,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>
-Subject: [PATCH 4/5] rcar-vin: Rework CSI-2 firmware parsing
-Date:   Wed, 25 Nov 2020 17:44:49 +0100
-Message-Id: <20201125164450.2056963-5-niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH 2/5] rcar-vin: Rework parallel firmware parsing
+Date:   Wed, 25 Nov 2020 17:44:47 +0100
+Message-Id: <20201125164450.2056963-3-niklas.soderlund+renesas@ragnatech.se>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201125164450.2056963-1-niklas.soderlund+renesas@ragnatech.se>
 References: <20201125164450.2056963-1-niklas.soderlund+renesas@ragnatech.se>
@@ -46,45 +46,44 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Rework the CSI-2 firmware parsing code to not use the soon to be
+Rework the parallel firmware parsing code to not use the soon to be
 removed v4l2_async_notifier_parse_fwnode_endpoints_by_port() helper. The
 change only aims to prepare for the removing of the old helper and there
 are no functional change.
 
 Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 ---
- drivers/media/platform/rcar-vin/rcar-core.c | 67 ++++++++++++---------
- 1 file changed, 40 insertions(+), 27 deletions(-)
+ drivers/media/platform/rcar-vin/rcar-core.c | 50 +++++++++++++++------
+ 1 file changed, 36 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/media/platform/rcar-vin/rcar-core.c b/drivers/media/platform/rcar-vin/rcar-core.c
-index 830ab0865967310b..98bff765b02e67d9 100644
+index 07f250bfc0051135..396ff5531359f3f4 100644
 --- a/drivers/media/platform/rcar-vin/rcar-core.c
 +++ b/drivers/media/platform/rcar-vin/rcar-core.c
-@@ -812,37 +812,48 @@ static const struct v4l2_async_notifier_operations rvin_group_notify_ops = {
- 	.complete = rvin_group_notify_complete,
+@@ -604,32 +604,56 @@ static const struct v4l2_async_notifier_operations rvin_parallel_notify_ops = {
+ 	.complete = rvin_parallel_notify_complete,
  };
  
--static int rvin_mc_parse_of_endpoint(struct device *dev,
--				     struct v4l2_fwnode_endpoint *vep,
--				     struct v4l2_async_subdev *asd)
-+static int rvin_mc_parse_of(struct rvin_dev *vin, unsigned int id)
+-static int rvin_parallel_parse_v4l2(struct device *dev,
+-				    struct v4l2_fwnode_endpoint *vep,
+-				    struct v4l2_async_subdev *asd)
++static int rvin_parallel_parse_of(struct rvin_dev *vin)
  {
 -	struct rvin_dev *vin = dev_get_drvdata(dev);
--	int ret = 0;
 +	struct fwnode_handle *ep, *fwnode;
 +	struct v4l2_fwnode_endpoint vep = {
-+		.bus_type = V4L2_MBUS_CSI2_DPHY,
++		.bus_type = V4L2_MBUS_UNKNOWN,
 +	};
 +	struct v4l2_async_subdev *asd;
 +	int ret;
  
--	if (vep->base.port != 1 || vep->base.id >= RVIN_CSI_MAX)
--		return -EINVAL;
-+	ep = fwnode_graph_get_endpoint_by_id(dev_fwnode(vin->dev), 1, id, 0);
+-	if (vep->base.port || vep->base.id)
+-		return -ENOTCONN;
++	ep = fwnode_graph_get_endpoint_by_id(dev_fwnode(vin->dev), 0, 0, 0);
 +	if (!ep)
 +		return 0;
  
--	if (!of_device_is_available(to_of_node(asd->match.fwnode))) {
+-	vin->parallel.mbus_type = vep->bus_type;
 +	fwnode = fwnode_graph_get_remote_endpoint(ep);
 +	ret = v4l2_fwnode_endpoint_parse(ep, &vep);
 +	fwnode_handle_put(ep);
@@ -93,72 +92,53 @@ index 830ab0865967310b..98bff765b02e67d9 100644
 +		ret = -EINVAL;
 +		goto out;
 +	}
-+
-+	if (!of_device_is_available(to_of_node(fwnode))) {
- 		vin_dbg(vin, "OF device %pOF disabled, ignoring\n",
--			to_of_node(asd->match.fwnode));
--		return -ENOTCONN;
--	}
--
--	mutex_lock(&vin->group->lock);
--
--	if (vin->group->csi[vep->base.id].asd) {
--		vin_dbg(vin, "OF device %pOF already handled\n",
--			to_of_node(asd->match.fwnode));
-+			to_of_node(fwnode));
- 		ret = -ENOTCONN;
- 		goto out;
- 	}
  
--	vin->group->csi[vep->base.id].asd = asd;
-+	asd = v4l2_async_notifier_add_fwnode_subdev(&vin->group->notifier,
-+						    fwnode, sizeof(*asd));
-+	if (IS_ERR(asd)) {
-+		ret = PTR_ERR(asd);
+-	switch (vin->parallel.mbus_type) {
++	switch (vep.bus_type) {
+ 	case V4L2_MBUS_PARALLEL:
+ 	case V4L2_MBUS_BT656:
+ 		vin_dbg(vin, "Found %s media bus\n",
+-			vin->parallel.mbus_type == V4L2_MBUS_PARALLEL ?
++			vep.bus_type == V4L2_MBUS_PARALLEL ?
+ 			"PARALLEL" : "BT656");
+-		vin->parallel.bus = vep->bus.parallel;
++		vin->parallel.mbus_type = vep.bus_type;
++		vin->parallel.bus = vep.bus.parallel;
+ 		break;
+ 	default:
+ 		vin_err(vin, "Unknown media bus type\n");
+-		return -EINVAL;
++		ret = -EINVAL;
 +		goto out;
 +	}
 +
-+	vin->group->csi[vep.base.id].asd = asd;
- 
- 	vin_dbg(vin, "Add group OF device %pOF to slot %u\n",
--		to_of_node(asd->match.fwnode), vep->base.id);
-+		to_of_node(fwnode), vep.base.id);
- out:
--	mutex_unlock(&vin->group->lock);
-+	fwnode_handle_put(fwnode);
- 
- 	return ret;
- }
-@@ -850,7 +861,7 @@ static int rvin_mc_parse_of_endpoint(struct device *dev,
- static int rvin_mc_parse_of_graph(struct rvin_dev *vin)
- {
- 	unsigned int count = 0, vin_mask = 0;
--	unsigned int i;
-+	unsigned int i, id;
- 	int ret;
- 
- 	mutex_lock(&vin->group->lock);
-@@ -881,12 +892,14 @@ static int rvin_mc_parse_of_graph(struct rvin_dev *vin)
- 		if (!(vin_mask & BIT(i)))
- 			continue;
- 
--		ret = v4l2_async_notifier_parse_fwnode_endpoints_by_port(
--				vin->group->vin[i]->dev, &vin->group->notifier,
--				sizeof(struct v4l2_async_subdev), 1,
--				rvin_mc_parse_of_endpoint);
--		if (ret)
--			return ret;
-+		for (id = 0; id < RVIN_CSI_MAX; id++) {
-+			if (vin->group->csi[id].asd)
-+				continue;
-+
-+			ret = rvin_mc_parse_of(vin->group->vin[i], id);
-+			if (ret)
-+				return ret;
-+		}
++	asd = v4l2_async_notifier_add_fwnode_subdev(&vin->notifier, fwnode,
++						    sizeof(*asd));
++	if (IS_ERR(asd)) {
++		ret = PTR_ERR(asd);
++		goto out;
  	}
  
- 	if (list_empty(&vin->group->notifier.asd_list))
+ 	vin->parallel.asd = asd;
+ 
++	vin_dbg(vin, "Add parallel OF device %pOF\n", to_of_node(fwnode));
++out:
++	fwnode_handle_put(fwnode);
++
+ 	return 0;
+ }
+ 
+@@ -639,9 +663,7 @@ static int rvin_parallel_init(struct rvin_dev *vin)
+ 
+ 	v4l2_async_notifier_init(&vin->notifier);
+ 
+-	ret = v4l2_async_notifier_parse_fwnode_endpoints_by_port(
+-		vin->dev, &vin->notifier, sizeof(*vin->parallel.asd),
+-		0, rvin_parallel_parse_v4l2);
++	ret = rvin_parallel_parse_of(vin);
+ 	if (ret)
+ 		return ret;
+ 
 -- 
 2.29.2
 
