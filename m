@@ -2,59 +2,91 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=BAYES_20,
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23CEBC5519F
-	for <linux-media@archiver.kernel.org>; Wed, 25 Nov 2020 04:11:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41195C63777
+	for <linux-media@archiver.kernel.org>; Wed, 25 Nov 2020 04:14:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C0839206F8
-	for <linux-media@archiver.kernel.org>; Wed, 25 Nov 2020 04:11:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F11EB206F8
+	for <linux-media@archiver.kernel.org>; Wed, 25 Nov 2020 04:14:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726345AbgKYEKr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Nov 2020 23:10:47 -0500
-Received: from jpvw.nl ([80.127.100.2]:38118 "EHLO jpvw.nl"
+        id S1726477AbgKYENw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Nov 2020 23:13:52 -0500
+Received: from mga01.intel.com ([192.55.52.88]:11761 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726039AbgKYEKr (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Nov 2020 23:10:47 -0500
-X-Greylist: delayed 2095 seconds by postgrey-1.27 at vger.kernel.org; Tue, 24 Nov 2020 23:10:47 EST
-Received: from [127.0.0.1] (helo=jpvw.nl)
-        by jpvw.nl with esmtp (Exim 4.94)
-        (envelope-from <jp@jpvw.nl>)
-        id 1khlax-003iKg-Dg; Wed, 25 Nov 2020 04:35:51 +0100
-Subject: Re: Logitech MeetUp
-To:     Privacy <pirat@praes.eu>, linux-media@vger.kernel.org
-References: <7f97de0f-5be6-35c0-3a28-bac057a1cc36@praes.eu>
-From:   JP <jp@jpvw.nl>
-Message-ID: <e462645e-50e9-fe40-728e-44649d2e8081@jpvw.nl>
-Date:   Wed, 25 Nov 2020 04:35:51 +0100
+        id S1726039AbgKYENw (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 24 Nov 2020 23:13:52 -0500
+IronPort-SDR: Vzx/2VIthfBLn7U0hXNTflnipNJXgUd0fRBLyvSY6n2a8SZt6DjXi6n23GEyqbud2ekAVdRZyA
+ 3kL67hKpCGIg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9815"; a="190197757"
+X-IronPort-AV: E=Sophos;i="5.78,368,1599548400"; 
+   d="scan'208";a="190197757"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2020 20:13:52 -0800
+IronPort-SDR: 7RWNUNsw3OWCgMhVvjYE95BN2rhV8aUOIcuXCoo8xXcO/6EmmNUPF86MrCjrUnlzFuozMSo2+E
+ 9oAALJJPBYOw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,368,1599548400"; 
+   d="scan'208";a="362175730"
+Received: from ipu5-build.bj.intel.com (HELO [10.238.232.196]) ([10.238.232.196])
+  by fmsmga004.fm.intel.com with ESMTP; 24 Nov 2020 20:13:50 -0800
+Subject: Re: [PATCH] media: ov8856: Remove 3280x2464 mode
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     Dongchun Zhu <dongchun.zhu@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Ben Kao <ben.kao@intel.com>
+References: <20201116155008.118124-1-robert.foss@linaro.org>
+ <cf0b935d-3ccd-8360-1b52-89fab0b181eb@linux.intel.com>
+ <CAG3jFyssMMHpi4WgWmeDjuVYKz12UwJoBT0WoOsdB4PZxnuqSw@mail.gmail.com>
+From:   Bingbu Cao <bingbu.cao@linux.intel.com>
+Message-ID: <e132769f-cfb5-141a-6cd1-603d82a92b9e@linux.intel.com>
+Date:   Wed, 25 Nov 2020 12:11:07 +0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <7f97de0f-5be6-35c0-3a28-bac057a1cc36@praes.eu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <CAG3jFyssMMHpi4WgWmeDjuVYKz12UwJoBT0WoOsdB4PZxnuqSw@mail.gmail.com>
+Content-Type: text/plain; charset=windows-1252
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 
 
-On 11/24/20 11:07 PM, Privacy wrote:
-> Hallo,
->
-> die Loitech-Meetup Kamera funktioniert - aber leider nicht der Ton.
-> Die Deive IDs:
->
-> 046d:0867
-> 046d:0866
-> 046d:086a
->
-> Irgendeine Idee?
->
-> Skopeia
-try (as root) modprobe snd-usb-audio
+On 11/24/20 6:20 PM, Robert Foss wrote:
+> On Tue, 24 Nov 2020 at 10:42, Bingbu Cao <bingbu.cao@linux.intel.com> wrote:
+>>
+>> Hi, Robert
+>>
+>> I remember that the full size of ov8856 image sensor is 3296x2480 and we can get the 3280x2464
+>> frames based on current settings.
+>>
+>> Do you have any issues with this mode?
+> 
+> As far as I can tell using the 3280x2464 mode actually yields an
+> output resolution that is 3264x2448.
+> 
+> What does your hardware setup look like? And which revision of the
+> sensor are you using?
+> 
 
-Jan Pieter
+Robert, the sensor revision I am using is v1.1. I just checked the actual output pixels on our
+hardware, the output resolution with 2464 mode is 3280x2464, no black pixels.
+
+As Tomasz said, some ISP has the requirement of extra pixel padding, From the ov8856 datasheet,
+the central 3264x2448 pixels are *suggested* to be output from the pixel array and the boundary
+pixels can be used for additional processing. In my understanding, the 32 dummy lines are not
+black lines.
+
+-- 
+Best regards,
+Bingbu Cao
