@@ -7,25 +7,22 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E58E9C64E8A
-	for <linux-media@archiver.kernel.org>; Thu, 26 Nov 2020 09:37:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1CDBC8300B
+	for <linux-media@archiver.kernel.org>; Thu, 26 Nov 2020 09:37:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9C3A3206B2
-	for <linux-media@archiver.kernel.org>; Thu, 26 Nov 2020 09:37:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A33B921741
+	for <linux-media@archiver.kernel.org>; Thu, 26 Nov 2020 09:37:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389527AbgKZJgv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 Nov 2020 04:36:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730660AbgKZJgv (ORCPT
+        id S2389591AbgKZJhF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 Nov 2020 04:37:05 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:39312 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389572AbgKZJhF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 26 Nov 2020 04:36:51 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBF0C0613D4;
-        Thu, 26 Nov 2020 01:36:51 -0800 (PST)
+        Thu, 26 Nov 2020 04:37:05 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id 55E8B1F44FB5
+        with ESMTPSA id 02E0F1F450FA
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
@@ -36,9 +33,9 @@ Cc:     kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Jernej Skrabec <jernej.skrabec@siol.net>,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v5 03/14] media: rkvdec: h264: Support profile and level controls
-Date:   Thu, 26 Nov 2020 06:36:07 -0300
-Message-Id: <20201126093618.137292-4-ezequiel@collabora.com>
+Subject: [PATCH v5 06/14] media: Clean stateless control includes
+Date:   Thu, 26 Nov 2020 06:36:10 -0300
+Message-Id: <20201126093618.137292-7-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201126093618.137292-1-ezequiel@collabora.com>
 References: <20201126093618.137292-1-ezequiel@collabora.com>
@@ -48,49 +45,48 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Jonas Karlman <jonas@kwiboo.se>
+Avoid including h264-ctrls.h, vp8-ctrls.h, etc,
+and instead just include v4l2-ctrls.h which does the right
+thing.
 
-The Rockchip Video Decoder used in RK3399 supports H.264 profiles from
-Baseline to High 4:2:2 up to Level 5.1, except for the Extended profile.
+This is in preparation for moving the stateless controls
+out of staging, which will mean removing some of these headers.
 
-Expose the V4L2_CID_MPEG_VIDEO_H264_PROFILE and the
-V4L2_CID_MPEG_VIDEO_H264_LEVEL control, so that userspace can query the
-driver for the list of supported profiles and level.
-
-For now, we don't expose 4:2:2 since the driver doesn't
-implement the required support.
-
-Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
-[Ezequiel: Don't expose 4:2:2 profile for now]
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+Tested-by: Jernej Skrabec <jernej.skrabec@siol.net>
 ---
- drivers/staging/media/rkvdec/rkvdec.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ drivers/staging/media/hantro/hantro_hw.h | 4 +---
+ include/media/v4l2-h264.h                | 2 +-
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
-index 552e0bd12ecf..fe65f55d3b49 100644
---- a/drivers/staging/media/rkvdec/rkvdec.c
-+++ b/drivers/staging/media/rkvdec/rkvdec.c
-@@ -82,6 +82,19 @@ static const struct rkvdec_ctrl_desc rkvdec_h264_ctrl_descs[] = {
- 		.cfg.def = V4L2_MPEG_VIDEO_H264_START_CODE_ANNEX_B,
- 		.cfg.max = V4L2_MPEG_VIDEO_H264_START_CODE_ANNEX_B,
- 	},
-+	{
-+		.cfg.id = V4L2_CID_MPEG_VIDEO_H264_PROFILE,
-+		.cfg.min = V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE,
-+		.cfg.max = V4L2_MPEG_VIDEO_H264_PROFILE_HIGH,
-+		.cfg.menu_skip_mask =
-+			BIT(V4L2_MPEG_VIDEO_H264_PROFILE_EXTENDED),
-+		.cfg.def = V4L2_MPEG_VIDEO_H264_PROFILE_MAIN,
-+	},
-+	{
-+		.cfg.id = V4L2_CID_MPEG_VIDEO_H264_LEVEL,
-+		.cfg.min = V4L2_MPEG_VIDEO_H264_LEVEL_1_0,
-+		.cfg.max = V4L2_MPEG_VIDEO_H264_LEVEL_5_1,
-+	},
- };
+diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
+index 219283a06f52..34c9e4649a25 100644
+--- a/drivers/staging/media/hantro/hantro_hw.h
++++ b/drivers/staging/media/hantro/hantro_hw.h
+@@ -11,9 +11,7 @@
  
- static const struct rkvdec_ctrls rkvdec_h264_ctrls = {
+ #include <linux/interrupt.h>
+ #include <linux/v4l2-controls.h>
+-#include <media/h264-ctrls.h>
+-#include <media/mpeg2-ctrls.h>
+-#include <media/vp8-ctrls.h>
++#include <media/v4l2-ctrls.h>
+ #include <media/videobuf2-core.h>
+ 
+ #define DEC_8190_ALIGN_MASK	0x07U
+diff --git a/include/media/v4l2-h264.h b/include/media/v4l2-h264.h
+index f08ba181263d..d2314f4d4490 100644
+--- a/include/media/v4l2-h264.h
++++ b/include/media/v4l2-h264.h
+@@ -10,7 +10,7 @@
+ #ifndef _MEDIA_V4L2_H264_H
+ #define _MEDIA_V4L2_H264_H
+ 
+-#include <media/h264-ctrls.h>
++#include <media/v4l2-ctrls.h>
+ 
+ /**
+  * struct v4l2_h264_reflist_builder - Reference list builder object
 -- 
 2.27.0
 
