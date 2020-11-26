@@ -4,28 +4,28 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73027C64E7B
-	for <linux-media@archiver.kernel.org>; Thu, 26 Nov 2020 09:37:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F014C71156
+	for <linux-media@archiver.kernel.org>; Thu, 26 Nov 2020 09:37:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 38AFF20DD4
-	for <linux-media@archiver.kernel.org>; Thu, 26 Nov 2020 09:37:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 19C56206B2
+	for <linux-media@archiver.kernel.org>; Thu, 26 Nov 2020 09:37:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389650AbgKZJhW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 Nov 2020 04:37:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48858 "EHLO
+        id S2389674AbgKZJhb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 Nov 2020 04:37:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389572AbgKZJhW (ORCPT
+        with ESMTP id S2389633AbgKZJhb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 26 Nov 2020 04:37:22 -0500
+        Thu, 26 Nov 2020 04:37:31 -0500
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC7FC0613D4;
-        Thu, 26 Nov 2020 01:37:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD89C0613D4;
+        Thu, 26 Nov 2020 01:37:30 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id 5C4281F450FA
+        with ESMTPSA id 146A61F450FA
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
@@ -36,9 +36,9 @@ Cc:     kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Jernej Skrabec <jernej.skrabec@siol.net>,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v5 10/14] media: doc: Replace symbol for V4L2_CTRL_TYPE_H264_PRED_WEIGHTS
-Date:   Thu, 26 Nov 2020 06:36:14 -0300
-Message-Id: <20201126093618.137292-11-ezequiel@collabora.com>
+Subject: [PATCH v5 12/14] media: controls: Log H264 stateless controls in .std_log
+Date:   Thu, 26 Nov 2020 06:36:16 -0300
+Message-Id: <20201126093618.137292-13-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201126093618.137292-1-ezequiel@collabora.com>
 References: <20201126093618.137292-1-ezequiel@collabora.com>
@@ -48,28 +48,45 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When V4L2_CTRL_TYPE_H264_PRED_WEIGHTS was added, adding a replace
-symbol directive in videodev2.h.rst.exceptions was missed.
-
-Now that the control type is destaged, it's important to fix this.
+For now, only print the type of the control. In the future,
+we might want to be able to print the values of all
+the stateless codec controls currently set in the control handler,
+which should be useful for debugging reasons.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- Documentation/userspace-api/media/videodev2.h.rst.exceptions | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/v4l2-core/v4l2-ctrls.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/Documentation/userspace-api/media/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-index 121e396a2779..7f6a4cc2ac4e 100644
---- a/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-+++ b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-@@ -139,6 +139,7 @@ replace symbol V4L2_CTRL_TYPE_MPEG2_QUANTIZATION :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_H264_SPS :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_H264_PPS :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_H264_SCALING_MATRIX :c:type:`v4l2_ctrl_type`
-+replace symbol V4L2_CTRL_TYPE_H264_PRED_WEIGHTS :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_H264_SLICE_PARAMS :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_H264_DECODE_PARAMS :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_HEVC_SPS :c:type:`v4l2_ctrl_type`
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
+index fa96e6aa0a86..2a5e3d3cc756 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls.c
+@@ -1737,6 +1737,24 @@ static void std_log(const struct v4l2_ctrl *ctrl)
+ 	case V4L2_CTRL_TYPE_U32:
+ 		pr_cont("%u", (unsigned)*ptr.p_u32);
+ 		break;
++	case V4L2_CTRL_TYPE_H264_SPS:
++		pr_cont("H264_SPS");
++		break;
++	case V4L2_CTRL_TYPE_H264_PPS:
++		pr_cont("H264_PPS");
++		break;
++	case V4L2_CTRL_TYPE_H264_SCALING_MATRIX:
++		pr_cont("H264_SCALING_MATRIX");
++		break;
++	case V4L2_CTRL_TYPE_H264_SLICE_PARAMS:
++		pr_cont("H264_SLICE_PARAMS");
++		break;
++	case V4L2_CTRL_TYPE_H264_DECODE_PARAMS:
++		pr_cont("H264_DECODE_PARAMS");
++		break;
++	case V4L2_CTRL_TYPE_H264_PRED_WEIGHTS:
++		pr_cont("H264_PRED_WEIGHTS");
++		break;
+ 	default:
+ 		pr_cont("unknown type %d", ctrl->type);
+ 		break;
 -- 
 2.27.0
 
