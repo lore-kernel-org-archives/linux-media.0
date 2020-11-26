@@ -7,25 +7,25 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A88C8C56202
-	for <linux-media@archiver.kernel.org>; Thu, 26 Nov 2020 09:37:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37EF1C64E75
+	for <linux-media@archiver.kernel.org>; Thu, 26 Nov 2020 09:37:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 445C4206B2
+	by mail.kernel.org (Postfix) with ESMTP id CF4E4206B2
 	for <linux-media@archiver.kernel.org>; Thu, 26 Nov 2020 09:37:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389606AbgKZJhJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 Nov 2020 04:37:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48816 "EHLO
+        id S2389636AbgKZJhS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 Nov 2020 04:37:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389572AbgKZJhJ (ORCPT
+        with ESMTP id S2389572AbgKZJhR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 26 Nov 2020 04:37:09 -0500
+        Thu, 26 Nov 2020 04:37:17 -0500
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E04C0613D4;
-        Thu, 26 Nov 2020 01:37:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C437BC0613D4;
+        Thu, 26 Nov 2020 01:37:17 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id 1B49A1F4575B
+        with ESMTPSA id CA8041F4575B
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
@@ -36,9 +36,9 @@ Cc:     kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Jernej Skrabec <jernej.skrabec@siol.net>,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v5 07/14] media: controls: Validate H264 stateless controls
-Date:   Thu, 26 Nov 2020 06:36:11 -0300
-Message-Id: <20201126093618.137292-8-ezequiel@collabora.com>
+Subject: [PATCH v5 09/14] media: uapi: Move parsed H264 pixel format out of staging
+Date:   Thu, 26 Nov 2020 06:36:13 -0300
+Message-Id: <20201126093618.137292-10-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201126093618.137292-1-ezequiel@collabora.com>
 References: <20201126093618.137292-1-ezequiel@collabora.com>
@@ -48,202 +48,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Check that all the fields that correspond or are related
-to a H264 specification syntax element have legal values.
+Since we are ready to stabilize the H264 stateless API,
+start by first moving the parsed H264 pixel format.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 Tested-by: Jernej Skrabec <jernej.skrabec@siol.net>
 ---
- drivers/media/v4l2-core/v4l2-ctrls.c | 134 +++++++++++++++++++++++++++
- include/media/h264-ctrls.h           |   9 ++
- 2 files changed, 143 insertions(+)
+ include/media/h264-ctrls.h     | 3 ---
+ include/uapi/linux/videodev2.h | 1 +
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 88ad475bd716..6a17a7487459 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -1775,6 +1775,9 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- {
- 	struct v4l2_ctrl_mpeg2_slice_params *p_mpeg2_slice_params;
- 	struct v4l2_ctrl_vp8_frame_header *p_vp8_frame_header;
-+	struct v4l2_ctrl_h264_sps *p_h264_sps;
-+	struct v4l2_ctrl_h264_pps *p_h264_pps;
-+	struct v4l2_ctrl_h264_pred_weights *p_h264_pred_weights;
- 	struct v4l2_ctrl_h264_slice_params *p_h264_slice_params;
- 	struct v4l2_ctrl_h264_decode_params *p_h264_dec_params;
- 	struct v4l2_ctrl_hevc_sps *p_hevc_sps;
-@@ -1834,20 +1837,151 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 		break;
- 
- 	case V4L2_CTRL_TYPE_H264_SPS:
-+		p_h264_sps = p;
-+
-+		/* Some syntax elements are only conditionally valid */
-+		if (p_h264_sps->pic_order_cnt_type != 0) {
-+			p_h264_sps->log2_max_pic_order_cnt_lsb_minus4 = 0;
-+		} else if (p_h264_sps->pic_order_cnt_type != 1) {
-+			p_h264_sps->num_ref_frames_in_pic_order_cnt_cycle = 0;
-+			p_h264_sps->offset_for_non_ref_pic = 0;
-+			p_h264_sps->offset_for_top_to_bottom_field = 0;
-+			memset(&p_h264_sps->offset_for_ref_frame, 0,
-+			       sizeof(p_h264_sps->offset_for_ref_frame));
-+		}
-+
-+		if (!V4L2_H264_SPS_HAS_CHROMA_FORMAT(p_h264_sps)) {
-+			p_h264_sps->chroma_format_idc = 1;
-+			p_h264_sps->bit_depth_luma_minus8 = 0;
-+			p_h264_sps->bit_depth_chroma_minus8 = 0;
-+
-+			p_h264_sps->flags &=
-+				~V4L2_H264_SPS_FLAG_QPPRIME_Y_ZERO_TRANSFORM_BYPASS;
-+
-+			if (p_h264_sps->chroma_format_idc < 3)
-+				p_h264_sps->flags &=
-+					~V4L2_H264_SPS_FLAG_SEPARATE_COLOUR_PLANE;
-+		}
-+
-+		if (p_h264_sps->flags & V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY)
-+			p_h264_sps->flags &=
-+				~V4L2_H264_SPS_FLAG_MB_ADAPTIVE_FRAME_FIELD;
-+
-+		/*
-+		 * Chroma 4:2:2 format require at least High 4:2:2 profile.
-+		 *
-+		 * The H264 specification and well-known parser implementations
-+		 * use profile-idc values directly, as that is clearer and
-+		 * less ambiguous. We do the same here.
-+		 */
-+		if (p_h264_sps->profile_idc < 122 &&
-+		    p_h264_sps->chroma_format_idc > 1)
-+			return -EINVAL;
-+		/* Chroma 4:4:4 format require at least High 4:2:2 profile */
-+		if (p_h264_sps->profile_idc < 244 &&
-+		    p_h264_sps->chroma_format_idc > 2)
-+			return -EINVAL;
-+		if (p_h264_sps->chroma_format_idc > 3)
-+			return -EINVAL;
-+
-+		if (p_h264_sps->bit_depth_luma_minus8 > 6)
-+			return -EINVAL;
-+		if (p_h264_sps->bit_depth_chroma_minus8 > 6)
-+			return -EINVAL;
-+		if (p_h264_sps->log2_max_frame_num_minus4 > 12)
-+			return -EINVAL;
-+		if (p_h264_sps->pic_order_cnt_type > 2)
-+			return -EINVAL;
-+		if (p_h264_sps->log2_max_pic_order_cnt_lsb_minus4 > 12)
-+			return -EINVAL;
-+		if (p_h264_sps->max_num_ref_frames > V4L2_H264_REF_LIST_LEN)
-+			return -EINVAL;
-+		break;
-+
- 	case V4L2_CTRL_TYPE_H264_PPS:
-+		p_h264_pps = p;
-+
-+		if (p_h264_pps->num_slice_groups_minus1 > 7)
-+			return -EINVAL;
-+		if (p_h264_pps->num_ref_idx_l0_default_active_minus1 >
-+		    (V4L2_H264_REF_LIST_LEN - 1))
-+			return -EINVAL;
-+		if (p_h264_pps->num_ref_idx_l1_default_active_minus1 >
-+		    (V4L2_H264_REF_LIST_LEN - 1))
-+			return -EINVAL;
-+		if (p_h264_pps->weighted_bipred_idc > 2)
-+			return -EINVAL;
-+		/*
-+		 * pic_init_qp_minus26 shall be in the range of
-+		 * -(26 + QpBdOffset_y) to +25, inclusive,
-+		 *  where QpBdOffset_y is 6 * bit_depth_luma_minus8
-+		 */
-+		if (p_h264_pps->pic_init_qp_minus26 < -62 ||
-+		    p_h264_pps->pic_init_qp_minus26 > 25)
-+			return -EINVAL;
-+		if (p_h264_pps->pic_init_qs_minus26 < -26 ||
-+		    p_h264_pps->pic_init_qs_minus26 > 25)
-+			return -EINVAL;
-+		if (p_h264_pps->chroma_qp_index_offset < -12 ||
-+		    p_h264_pps->chroma_qp_index_offset > 12)
-+			return -EINVAL;
-+		if (p_h264_pps->second_chroma_qp_index_offset < -12 ||
-+		    p_h264_pps->second_chroma_qp_index_offset > 12)
-+			return -EINVAL;
-+		break;
-+
- 	case V4L2_CTRL_TYPE_H264_SCALING_MATRIX:
-+		break;
-+
- 	case V4L2_CTRL_TYPE_H264_PRED_WEIGHTS:
-+		p_h264_pred_weights = p;
-+
-+		if (p_h264_pred_weights->luma_log2_weight_denom > 7)
-+			return -EINVAL;
-+		if (p_h264_pred_weights->chroma_log2_weight_denom > 7)
-+			return -EINVAL;
- 		break;
- 
- 	case V4L2_CTRL_TYPE_H264_SLICE_PARAMS:
- 		p_h264_slice_params = p;
- 
-+		if (p_h264_slice_params->slice_type != V4L2_H264_SLICE_TYPE_B)
-+			p_h264_slice_params->flags &=
-+				~V4L2_H264_SLICE_FLAG_DIRECT_SPATIAL_MV_PRED;
-+
-+		if (p_h264_slice_params->colour_plane_id > 2)
-+			return -EINVAL;
-+		if (p_h264_slice_params->cabac_init_idc > 2)
-+			return -EINVAL;
-+		if (p_h264_slice_params->disable_deblocking_filter_idc > 2)
-+			return -EINVAL;
-+		if (p_h264_slice_params->slice_alpha_c0_offset_div2 < -6 ||
-+		    p_h264_slice_params->slice_alpha_c0_offset_div2 > 6)
-+			return -EINVAL;
-+		if (p_h264_slice_params->slice_beta_offset_div2 < -6 ||
-+		    p_h264_slice_params->slice_beta_offset_div2 > 6)
-+			return -EINVAL;
-+
-+		if (p_h264_slice_params->slice_type == V4L2_H264_SLICE_TYPE_I ||
-+		    p_h264_slice_params->slice_type == V4L2_H264_SLICE_TYPE_SI)
-+			p_h264_slice_params->num_ref_idx_l0_active_minus1 = 0;
-+		if (p_h264_slice_params->slice_type != V4L2_H264_SLICE_TYPE_B)
-+			p_h264_slice_params->num_ref_idx_l1_active_minus1 = 0;
-+
-+		if (p_h264_slice_params->num_ref_idx_l0_active_minus1 >
-+		    (V4L2_H264_REF_LIST_LEN - 1))
-+			return -EINVAL;
-+		if (p_h264_slice_params->num_ref_idx_l1_active_minus1 >
-+		    (V4L2_H264_REF_LIST_LEN - 1))
-+			return -EINVAL;
- 		zero_reserved(*p_h264_slice_params);
- 		break;
- 
- 	case V4L2_CTRL_TYPE_H264_DECODE_PARAMS:
- 		p_h264_dec_params = p;
- 
-+		if (p_h264_dec_params->nal_ref_idc > 3)
-+			return -EINVAL;
- 		for (i = 0; i < V4L2_H264_NUM_DPB_ENTRIES; i++) {
- 			struct v4l2_h264_dpb_entry *dpb_entry =
- 				&p_h264_dec_params->dpb[i];
 diff --git a/include/media/h264-ctrls.h b/include/media/h264-ctrls.h
-index f86345b8efd1..083899c3ea19 100644
+index 083899c3ea19..d98c5b885379 100644
 --- a/include/media/h264-ctrls.h
 +++ b/include/media/h264-ctrls.h
-@@ -98,6 +98,15 @@ enum v4l2_mpeg_video_h264_start_code {
- #define V4L2_H264_SPS_FLAG_MB_ADAPTIVE_FRAME_FIELD		0x20
- #define V4L2_H264_SPS_FLAG_DIRECT_8X8_INFERENCE			0x40
+@@ -21,9 +21,6 @@
  
-+#define V4L2_H264_SPS_HAS_CHROMA_FORMAT(sps) \
-+	((sps)->profile_idc == 100 || (sps)->profile_idc == 110 || \
-+	 (sps)->profile_idc == 122 || (sps)->profile_idc == 244 || \
-+	 (sps)->profile_idc == 44  || (sps)->profile_idc == 83  || \
-+	 (sps)->profile_idc == 86  || (sps)->profile_idc == 118 || \
-+	 (sps)->profile_idc == 128 || (sps)->profile_idc == 138 || \
-+	 (sps)->profile_idc == 139 || (sps)->profile_idc == 134 || \
-+	 (sps)->profile_idc == 135)
-+
- /**
-  * struct v4l2_ctrl_h264_sps - H264 sequence parameter set
-  *
+ #define V4L2_H264_REF_LIST_LEN (2 * V4L2_H264_NUM_DPB_ENTRIES)
+ 
+-/* Our pixel format isn't stable at the moment */
+-#define V4L2_PIX_FMT_H264_SLICE v4l2_fourcc('S', '2', '6', '4') /* H264 parsed slices */
+-
+ /*
+  * This is put insanely high to avoid conflicting with controls that
+  * would be added during the phase where those controls are not
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 761ac9da3ffd..ed6a85f1442e 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -703,6 +703,7 @@ struct v4l2_pix_format {
+ #define V4L2_PIX_FMT_HEVC     v4l2_fourcc('H', 'E', 'V', 'C') /* HEVC aka H.265 */
+ #define V4L2_PIX_FMT_FWHT     v4l2_fourcc('F', 'W', 'H', 'T') /* Fast Walsh Hadamard Transform (vicodec) */
+ #define V4L2_PIX_FMT_FWHT_STATELESS     v4l2_fourcc('S', 'F', 'W', 'H') /* Stateless FWHT (vicodec) */
++#define V4L2_PIX_FMT_H264_SLICE v4l2_fourcc('S', '2', '6', '4') /* H264 parsed slices */
+ 
+ /*  Vendor-specific formats   */
+ #define V4L2_PIX_FMT_CPIA1    v4l2_fourcc('C', 'P', 'I', 'A') /* cpia1 YUV */
 -- 
 2.27.0
 
