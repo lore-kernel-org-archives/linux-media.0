@@ -2,401 +2,162 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-22.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0055DC63697
-	for <linux-media@archiver.kernel.org>; Thu, 26 Nov 2020 13:27:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E53FAC64E90
+	for <linux-media@archiver.kernel.org>; Thu, 26 Nov 2020 13:43:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9CEFB21D1A
-	for <linux-media@archiver.kernel.org>; Thu, 26 Nov 2020 13:27:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7B25C2224A
+	for <linux-media@archiver.kernel.org>; Thu, 26 Nov 2020 13:43:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="uRa5V14L"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="IeM61rFR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390023AbgKZN1e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 Nov 2020 08:27:34 -0500
-Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:52513 "EHLO
-        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2390000AbgKZN1d (ORCPT
+        id S2390890AbgKZNnR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 Nov 2020 08:43:17 -0500
+Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:44353 "EHLO
+        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2390852AbgKZNnQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 26 Nov 2020 08:27:33 -0500
+        Thu, 26 Nov 2020 08:43:16 -0500
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id iHIrkPCQhN7XgiHJ3kYrXk; Thu, 26 Nov 2020 14:27:29 +0100
+        id iHYEkPGqVN7XgiHYIkYuBb; Thu, 26 Nov 2020 14:43:14 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1606397249; bh=olKj3jBdqoVnwJKmCSE4+nfPtoAjqAJpobGFSAia5vo=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=uRa5V14LP8MmqpOVy+F67IjiyEWBviwXLW/PPy+CdfCZMFMQ7cIWu3DjTL0EzUD/M
-         5tEj2t+QEczXrTmqChbYxjOZjNyLGrUUAnff8JTj+F5uZm1TJB3zN1uug/Om4SVT6I
-         6bjQ8PKcG804MueKkrh+wb2FjWUJ7/Zq6bSudPFa8A26dQeadGQcH1wuuLYqBKZkFh
-         nuxlxKNn9cWKB0f13AWkay3reD/RWa8CV7IIRq9axOYxbZ7mdOJCTjme8PEwxNClMs
-         4dFDczcksd7XbG4wCwO5CdDB/z0IOe09KBzFCXceG9kwDGsbUsGbmhTkomINPW+YL/
-         OD8TW/dItlvrg==
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 2/6] vicodec: mark the stateless FWHT API as stable
-Date:   Thu, 26 Nov 2020 14:27:13 +0100
-Message-Id: <20201126132717.1216907-3-hverkuil-cisco@xs4all.nl>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201126132717.1216907-1-hverkuil-cisco@xs4all.nl>
-References: <20201126132717.1216907-1-hverkuil-cisco@xs4all.nl>
+        t=1606398194; bh=n6ExoS7yvmPB1/EfgzBEXRHusmyGXXucfBRt/PjJREQ=;
+        h=From:Subject:To:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=IeM61rFREtgLlGiL2Ucj5sxwxbEwRwkhgEsiM9edWJjAXbfbQzkWRRuyJJnL9hL1v
+         N0CXDtG2uKs27OoKwQCo75rxscRvpBdJLU5b1yonYQIEp96Qah0RngNA17pzs+AwUG
+         BPVZsJRG3oI9epFbQCocStT3mtg/GVak4wBCPKWM27Lm3karDJzqgW+4B7Exydn96h
+         LANPVBKs21ae2IqlIVqxRRwHPEhUjTM733zzWKvQn0tt3huaZ7PFnQfWMDsDxZdN6P
+         PTKSnO2onPs3ND2elW8JwQue0yOV6ZfSY2/o23QPyPPdi8yCdeXxvEjrxLvPS0/rRP
+         9wkb7uogjzNqA==
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [GIT PULL FOR v5.11] De-stage H.264 and FWHT stateless codec APIs
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     Ezequiel Garcia <ezequiel@collabora.com>
+Message-ID: <d68da172-b251-000f-653d-38a8a4c7b715@xs4all.nl>
+Date:   Thu, 26 Nov 2020 14:43:10 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfPKsg8oJiWG9OdslvPLewlhgUU054b3LqQP4rktgPBMGRZ8Vt+F3eBeqw9An1OHSIcFptow873r56aX/AXRSfpyhXVJzRDqTBTgWN9Ju6qgMMGIUt7XO
- kwR0j9UCgbt4kSaXBB01jErLR3coCvr79UTQNEIWPSLLduvWok59M+dZdkaWIhYNcgMFW1t80qamJGURsRZukDP5QoxBOgU1+UTkZBdy9bdSm4AVcL5MMW9M
- eyW5ERt/fFhsJtsRcAaIWYi8fl1Ghq/Yr73IUxQFFHM=
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfAfmXei734nzcDDRZKXQMMzUIR0TLIi6TwSRQrA9qzddXNyemDc1tLNNL1z0K9yP/8zUjTgToC2bpbtPxA/X+ohrRACk9qlceQ4QAQiAVSfR3Ev0+pYz
+ yA1ecRgNFiSiglzUpq4a9hnrTKNoVLoQvXpi23IvL0g2YtNLReX4Rm9QwooES62kGQIw9/GOMgVyMCCCH0daHDlTG5IWc07bXEc45xnIkoopZWtwHgqk7elv
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch finalizes the move of the stateless FWHT to a
-stable public API:
+This series de-stages the H.264 and FWHT (as used in vicodec) stateless codec APIs.
 
-Rename V4L2_CID_MPEG_VIDEO_FWHT_PARAMS to V4L2_CID_STATELESS_FWHT_PARAMS.
+This means that the APIs for these stateless codecs are now considered stable.
 
-Move the contents of fwht-ctrls.h to v4l2-controls.h.
+Many thanks to Ezequiel and others who worked hard on making this possible.
+The H.264 is probably the most commonly used codec, so having this as part of
+the public API is a major step forward.
 
-Move the public parts of drivers/media/test-drivers/vicodec/codec-fwht.h
-to v4l2-controls.h.
+The de-staging of the FWHT codec is primarily useful for regression testing of
+the stateless codec API with the vicodec driver.
 
-Add V4L2_CTRL_TYPE_FWHT_PARAMS control initialization and validation.
+The expectation is that MPEG-2 and VP8 will follow soon (although likely not
+for 5.11). HEVC and VP9 will take (a lot?) longer.
 
-Add p_fwht_params to struct v4l2_ext_control.
+Besides the patches for H.264 and FWHT there are also some related patches
+for doc fixes and a fix for VP8 type initialization (fixes a compliance issue).
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- .../media/test-drivers/vicodec/codec-fwht.c   |  1 +
- .../media/test-drivers/vicodec/codec-fwht.h   | 32 ---------
- .../media/test-drivers/vicodec/vicodec-core.c |  6 +-
- drivers/media/v4l2-core/v4l2-ctrls.c          | 20 +++++-
- include/media/fwht-ctrls.h                    | 31 --------
- include/media/v4l2-ctrls.h                    |  1 -
- include/uapi/linux/v4l2-controls.h            | 70 +++++++++++++++++++
- include/uapi/linux/videodev2.h                |  3 +
- 8 files changed, 95 insertions(+), 69 deletions(-)
+Regards,
+
+	Hans
+
+The following changes since commit 4863b93cfd2dfe88557f820b3399c3fa2163ec43:
+
+  media: camss: csiphy: Set rate on csiX_phy clock on SDM630/660 (2020-11-25 15:02:44 +0100)
+
+are available in the Git repository at:
+
+  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.11b
+
+for you to fetch changes up to b7f6989ec69a25b37350a1a210a74c5823e1f090:
+
+  userspace-api/media: finalize stateless FWHT codec docs (2020-11-26 14:26:17 +0100)
+
+----------------------------------------------------------------
+Tag branch
+
+----------------------------------------------------------------
+Ezequiel Garcia (13):
+      media: controls: Add VP8 stateless type initialization
+      media: controls: Add validate failure debug message
+      media: cedrus: h264: Support profile controls
+      media: Rename stateful codec control macros
+      media: Clean stateless control includes
+      media: controls: Validate H264 stateless controls
+      media: controls: Add the stateless codec control class
+      media: uapi: Move parsed H264 pixel format out of staging
+      media: doc: Replace symbol for V4L2_CTRL_TYPE_H264_PRED_WEIGHTS
+      media: uapi: Move the H264 stateless control types out of staging
+      media: controls: Log H264 stateless controls in .std_log
+      media: uapi: move H264 stateless controls out of staging
+      media: docs: Move the H264 stateless codec uAPI
+
+Hans Verkuil (8):
+      media: vidioc-g-ext-ctrls.rst: document V4L2_CTRL_CLASS_DETECT
+      media: ext-ctrls-image-source.rst: document v4l2_area
+      vicodec: add V4L2_ prefix before FWHT_VERSION and FWHT_FL_*
+      vicodec: mark the stateless FWHT API as stable
+      ext-ctrls-codec.rst: move FWHT docs to ext-ctrls-codec-stateless.rst
+      pixfmt-compressed.rst: fix 'bullet' formatting
+      vidioc-g-ext-ctrls.rst: add missing 'struct' before the types
+      userspace-api/media: finalize stateless FWHT codec docs
+
+Helen Koike (1):
+      media: admin-guide/pixfmt-meta-rkisp1.rst: pixfmt reference conforming with macro
+
+Jonas Karlman (1):
+      media: rkvdec: h264: Support profile and level controls
+
+ Documentation/admin-guide/media/rkisp1.rst                          |   4 +-
+ Documentation/userspace-api/media/v4l/common.rst                    |   1 +
+ Documentation/userspace-api/media/v4l/dev-mem2mem.rst               |   2 +-
+ Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst | 793 +++++++++++++++++++++++++++++
+ Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst           | 817 +-----------------------------
+ Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst    |  16 +
+ Documentation/userspace-api/media/v4l/extended-controls.rst         |   8 +-
+ Documentation/userspace-api/media/v4l/pixfmt-compressed.rst         |  37 +-
+ Documentation/userspace-api/media/v4l/pixfmt-meta-rkisp1.rst        |   4 +-
+ Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst        |  44 +-
+ Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst          |   6 +
+ Documentation/userspace-api/media/videodev2.h.rst.exceptions        |   2 +
+ drivers/media/common/cx2341x.c                                      |   4 +-
+ drivers/media/platform/s5p-mfc/s5p_mfc_dec.c                        |   2 +-
+ drivers/media/platform/s5p-mfc/s5p_mfc_enc.c                        |   2 +-
+ drivers/media/test-drivers/vicodec/codec-fwht.c                     |  13 +-
+ drivers/media/test-drivers/vicodec/codec-fwht.h                     |  32 --
+ drivers/media/test-drivers/vicodec/codec-v4l2-fwht.c                |  88 ++--
+ drivers/media/test-drivers/vicodec/vicodec-core.c                   |  46 +-
+ drivers/media/v4l2-core/v4l2-ctrls.c                                | 229 ++++++++-
+ drivers/staging/media/hantro/hantro_drv.c                           |  26 +-
+ drivers/staging/media/hantro/hantro_h264.c                          |   8 +-
+ drivers/staging/media/hantro/hantro_hw.h                            |   4 +-
+ drivers/staging/media/rkvdec/rkvdec-h264.c                          |   8 +-
+ drivers/staging/media/rkvdec/rkvdec.c                               |  39 +-
+ drivers/staging/media/sunxi/cedrus/cedrus.c                         |  43 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_dec.c                     |  12 +-
+ include/media/fwht-ctrls.h                                          |  31 --
+ include/media/h264-ctrls.h                                          | 406 ---------------
+ include/media/hevc-ctrls.h                                          |  10 +-
+ include/media/mpeg2-ctrls.h                                         |   4 +-
+ include/media/v4l2-ctrls.h                                          |   2 -
+ include/media/v4l2-h264.h                                           |   2 +-
+ include/media/vp8-ctrls.h                                           |   2 +-
+ include/uapi/linux/v4l2-controls.h                                  | 867 ++++++++++++++++++++++++--------
+ include/uapi/linux/videodev2.h                                      |  17 +
+ 36 files changed, 1948 insertions(+), 1683 deletions(-)
+ create mode 100644 Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
  delete mode 100644 include/media/fwht-ctrls.h
-
-diff --git a/drivers/media/test-drivers/vicodec/codec-fwht.c b/drivers/media/test-drivers/vicodec/codec-fwht.c
-index 5dbf76fd8185..1ce682e1b85c 100644
---- a/drivers/media/test-drivers/vicodec/codec-fwht.c
-+++ b/drivers/media/test-drivers/vicodec/codec-fwht.c
-@@ -11,6 +11,7 @@
- 
- #include <linux/string.h>
- #include <linux/kernel.h>
-+#include <linux/videodev2.h>
- #include "codec-fwht.h"
- 
- #define OVERFLOW_BIT BIT(14)
-diff --git a/drivers/media/test-drivers/vicodec/codec-fwht.h b/drivers/media/test-drivers/vicodec/codec-fwht.h
-index 78e2841762fb..0eab24020e9e 100644
---- a/drivers/media/test-drivers/vicodec/codec-fwht.h
-+++ b/drivers/media/test-drivers/vicodec/codec-fwht.h
-@@ -56,38 +56,6 @@
- #define FWHT_MAGIC1 0x4f4f4f4f
- #define FWHT_MAGIC2 0xffffffff
- 
--#define V4L2_FWHT_VERSION 3
--
--/* Set if this is an interlaced format */
--#define V4L2_FWHT_FL_IS_INTERLACED		BIT(0)
--/* Set if this is a bottom-first (NTSC) interlaced format */
--#define V4L2_FWHT_FL_IS_BOTTOM_FIRST		BIT(1)
--/* Set if each 'frame' contains just one field */
--#define V4L2_FWHT_FL_IS_ALTERNATE		BIT(2)
--/*
-- * If V4L2_FWHT_FL_IS_ALTERNATE was set, then this is set if this
-- * 'frame' is the bottom field, else it is the top field.
-- */
--#define V4L2_FWHT_FL_IS_BOTTOM_FIELD		BIT(3)
--/* Set if this frame is uncompressed */
--#define V4L2_FWHT_FL_LUMA_IS_UNCOMPRESSED	BIT(4)
--#define V4L2_FWHT_FL_CB_IS_UNCOMPRESSED	BIT(5)
--#define V4L2_FWHT_FL_CR_IS_UNCOMPRESSED	BIT(6)
--#define V4L2_FWHT_FL_CHROMA_FULL_HEIGHT	BIT(7)
--#define V4L2_FWHT_FL_CHROMA_FULL_WIDTH	BIT(8)
--#define V4L2_FWHT_FL_ALPHA_IS_UNCOMPRESSED	BIT(9)
--#define V4L2_FWHT_FL_I_FRAME			BIT(10)
--
--/* A 4-values flag - the number of components - 1 */
--#define V4L2_FWHT_FL_COMPONENTS_NUM_MSK	GENMASK(18, 16)
--#define V4L2_FWHT_FL_COMPONENTS_NUM_OFFSET	16
--
--#define V4L2_FWHT_FL_PIXENC_MSK	GENMASK(20, 19)
--#define V4L2_FWHT_FL_PIXENC_OFFSET	19
--#define V4L2_FWHT_FL_PIXENC_YUV	(1 << V4L2_FWHT_FL_PIXENC_OFFSET)
--#define V4L2_FWHT_FL_PIXENC_RGB	(2 << V4L2_FWHT_FL_PIXENC_OFFSET)
--#define V4L2_FWHT_FL_PIXENC_HSV	(3 << V4L2_FWHT_FL_PIXENC_OFFSET)
--
- /*
-  * A macro to calculate the needed padding in order to make sure
-  * both luma and chroma components resolutions are rounded up to
-diff --git a/drivers/media/test-drivers/vicodec/vicodec-core.c b/drivers/media/test-drivers/vicodec/vicodec-core.c
-index 084b75c226c5..025f3ff77302 100644
---- a/drivers/media/test-drivers/vicodec/vicodec-core.c
-+++ b/drivers/media/test-drivers/vicodec/vicodec-core.c
-@@ -1746,7 +1746,7 @@ static int vicodec_try_ctrl(struct v4l2_ctrl *ctrl)
- 			V4L2_BUF_TYPE_VIDEO_CAPTURE);
- 
- 	switch (ctrl->id) {
--	case V4L2_CID_MPEG_VIDEO_FWHT_PARAMS:
-+	case V4L2_CID_STATELESS_FWHT_PARAMS:
- 		if (!q_dst->info)
- 			return -EINVAL;
- 		params = ctrl->p_new.p_fwht_params;
-@@ -1799,7 +1799,7 @@ static int vicodec_s_ctrl(struct v4l2_ctrl *ctrl)
- 	case V4L2_CID_FWHT_P_FRAME_QP:
- 		ctx->state.p_frame_qp = ctrl->val;
- 		return 0;
--	case V4L2_CID_MPEG_VIDEO_FWHT_PARAMS:
-+	case V4L2_CID_STATELESS_FWHT_PARAMS:
- 		params = ctrl->p_new.p_fwht_params;
- 		update_header_from_stateless_params(ctx, params);
- 		ctx->state.ref_frame_ts = params->backward_ref_ts;
-@@ -1815,7 +1815,7 @@ static const struct v4l2_ctrl_ops vicodec_ctrl_ops = {
- 
- static const struct v4l2_ctrl_config vicodec_ctrl_stateless_state = {
- 	.ops		= &vicodec_ctrl_ops,
--	.id		= V4L2_CID_MPEG_VIDEO_FWHT_PARAMS,
-+	.id		= V4L2_CID_STATELESS_FWHT_PARAMS,
- 	.elem_size      = sizeof(struct v4l2_ctrl_fwht_params),
- };
- 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 88231ba7b0fa..5cbe0ffbf501 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -943,7 +943,6 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME:		return "Force Key Frame";
- 	case V4L2_CID_MPEG_VIDEO_MPEG2_SLICE_PARAMS:		return "MPEG-2 Slice Parameters";
- 	case V4L2_CID_MPEG_VIDEO_MPEG2_QUANTIZATION:		return "MPEG-2 Quantization Matrices";
--	case V4L2_CID_MPEG_VIDEO_FWHT_PARAMS:			return "FWHT Stateless Parameters";
- 	case V4L2_CID_FWHT_I_FRAME_QP:				return "FWHT I-Frame QP Value";
- 	case V4L2_CID_FWHT_P_FRAME_QP:				return "FWHT P-Frame QP Value";
- 
-@@ -1185,6 +1184,7 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_STATELESS_H264_PRED_WEIGHTS:		return "H264 Prediction Weight Table";
- 	case V4L2_CID_STATELESS_H264_SLICE_PARAMS:		return "H264 Slice Parameters";
- 	case V4L2_CID_STATELESS_H264_DECODE_PARAMS:		return "H264 Decode Parameters";
-+	case V4L2_CID_STATELESS_FWHT_PARAMS:			return "FWHT Stateless Parameters";
- 	default:
- 		return NULL;
- 	}
-@@ -1433,7 +1433,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
- 	case V4L2_CID_MPEG_VIDEO_MPEG2_QUANTIZATION:
- 		*type = V4L2_CTRL_TYPE_MPEG2_QUANTIZATION;
- 		break;
--	case V4L2_CID_MPEG_VIDEO_FWHT_PARAMS:
-+	case V4L2_CID_STATELESS_FWHT_PARAMS:
- 		*type = V4L2_CTRL_TYPE_FWHT_PARAMS;
- 		break;
- 	case V4L2_CID_STATELESS_H264_SPS:
-@@ -1627,6 +1627,7 @@ static void std_init_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- {
- 	struct v4l2_ctrl_mpeg2_slice_params *p_mpeg2_slice_params;
- 	struct v4l2_ctrl_vp8_frame_header *p_vp8_frame_header;
-+	struct v4l2_ctrl_fwht_params *p_fwht_params;
- 	void *p = ptr.p + idx * ctrl->elem_size;
- 
- 	if (ctrl->p_def.p_const)
-@@ -1653,6 +1654,12 @@ static void std_init_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 		p_vp8_frame_header = p;
- 		p_vp8_frame_header->num_dct_parts = 1;
- 		break;
-+	case V4L2_CTRL_TYPE_FWHT_PARAMS:
-+		p_fwht_params = p;
-+		p_fwht_params->version = V4L2_FWHT_VERSION;
-+		p_fwht_params->width = 1280;
-+		p_fwht_params->height = 720;
-+		break;
- 	}
- }
- 
-@@ -1755,6 +1762,9 @@ static void std_log(const struct v4l2_ctrl *ctrl)
- 	case V4L2_CTRL_TYPE_H264_PRED_WEIGHTS:
- 		pr_cont("H264_PRED_WEIGHTS");
- 		break;
-+	case V4L2_CTRL_TYPE_FWHT_PARAMS:
-+		pr_cont("FWHT_PARAMS");
-+		break;
- 	default:
- 		pr_cont("unknown type %d", ctrl->type);
- 		break;
-@@ -1798,6 +1808,7 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- {
- 	struct v4l2_ctrl_mpeg2_slice_params *p_mpeg2_slice_params;
- 	struct v4l2_ctrl_vp8_frame_header *p_vp8_frame_header;
-+	struct v4l2_ctrl_fwht_params *p_fwht_params;
- 	struct v4l2_ctrl_h264_sps *p_h264_sps;
- 	struct v4l2_ctrl_h264_pps *p_h264_pps;
- 	struct v4l2_ctrl_h264_pred_weights *p_h264_pred_weights;
-@@ -1857,6 +1868,11 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 		break;
- 
- 	case V4L2_CTRL_TYPE_FWHT_PARAMS:
-+		p_fwht_params = p;
-+		if (p_fwht_params->version < V4L2_FWHT_VERSION)
-+			return -EINVAL;
-+		if (!p_fwht_params->width || !p_fwht_params->height)
-+			return -EINVAL;
- 		break;
- 
- 	case V4L2_CTRL_TYPE_H264_SPS:
-diff --git a/include/media/fwht-ctrls.h b/include/media/fwht-ctrls.h
-deleted file mode 100644
-index a918b49609e1..000000000000
---- a/include/media/fwht-ctrls.h
-+++ /dev/null
-@@ -1,31 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--/*
-- * These are the FWHT state controls for use with stateless FWHT
-- * codec drivers.
-- *
-- * It turns out that these structs are not stable yet and will undergo
-- * more changes. So keep them private until they are stable and ready to
-- * become part of the official public API.
-- */
--
--#ifndef _FWHT_CTRLS_H_
--#define _FWHT_CTRLS_H_
--
--#define V4L2_CTRL_TYPE_FWHT_PARAMS 0x0105
--
--#define V4L2_CID_MPEG_VIDEO_FWHT_PARAMS	(V4L2_CID_CODEC_BASE + 292)
--
--struct v4l2_ctrl_fwht_params {
--	__u64 backward_ref_ts;
--	__u32 version;
--	__u32 width;
--	__u32 height;
--	__u32 flags;
--	__u32 colorspace;
--	__u32 xfer_func;
--	__u32 ycbcr_enc;
--	__u32 quantization;
--};
--
--
--#endif
-diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
-index d25b38f78229..167ca8c8424f 100644
---- a/include/media/v4l2-ctrls.h
-+++ b/include/media/v4l2-ctrls.h
-@@ -18,7 +18,6 @@
-  * This will move to the public headers once this API is fully stable.
-  */
- #include <media/mpeg2-ctrls.h>
--#include <media/fwht-ctrls.h>
- #include <media/vp8-ctrls.h>
- #include <media/hevc-ctrls.h>
- 
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index 3f24663fba4a..823b214aac0c 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -1565,6 +1565,76 @@ struct v4l2_ctrl_h264_decode_params {
- };
- 
- 
-+/* Stateless FWHT control, used by the vicodec driver */
-+
-+/* Current FWHT version */
-+#define V4L2_FWHT_VERSION			3
-+
-+/* Set if this is an interlaced format */
-+#define V4L2_FWHT_FL_IS_INTERLACED		BIT(0)
-+/* Set if this is a bottom-first (NTSC) interlaced format */
-+#define V4L2_FWHT_FL_IS_BOTTOM_FIRST		BIT(1)
-+/* Set if each 'frame' contains just one field */
-+#define V4L2_FWHT_FL_IS_ALTERNATE		BIT(2)
-+/*
-+ * If V4L2_FWHT_FL_IS_ALTERNATE was set, then this is set if this
-+ * 'frame' is the bottom field, else it is the top field.
-+ */
-+#define V4L2_FWHT_FL_IS_BOTTOM_FIELD		BIT(3)
-+/* Set if the Y' plane is uncompressed */
-+#define V4L2_FWHT_FL_LUMA_IS_UNCOMPRESSED	BIT(4)
-+/* Set if the Cb plane is uncompressed */
-+#define V4L2_FWHT_FL_CB_IS_UNCOMPRESSED		BIT(5)
-+/* Set if the Cr plane is uncompressed */
-+#define V4L2_FWHT_FL_CR_IS_UNCOMPRESSED		BIT(6)
-+/* Set if the chroma plane is full height, if cleared it is half height */
-+#define V4L2_FWHT_FL_CHROMA_FULL_HEIGHT		BIT(7)
-+/* Set if the chroma plane is full width, if cleared it is half width */
-+#define V4L2_FWHT_FL_CHROMA_FULL_WIDTH		BIT(8)
-+/* Set if the alpha plane is uncompressed */
-+#define V4L2_FWHT_FL_ALPHA_IS_UNCOMPRESSED	BIT(9)
-+/* Set if this is an I Frame */
-+#define V4L2_FWHT_FL_I_FRAME			BIT(10)
-+
-+/* A 4-values flag - the number of components - 1 */
-+#define V4L2_FWHT_FL_COMPONENTS_NUM_MSK		GENMASK(18, 16)
-+#define V4L2_FWHT_FL_COMPONENTS_NUM_OFFSET	16
-+
-+/* A 4-values flag - the pixel encoding type */
-+#define V4L2_FWHT_FL_PIXENC_MSK			GENMASK(20, 19)
-+#define V4L2_FWHT_FL_PIXENC_OFFSET		19
-+#define V4L2_FWHT_FL_PIXENC_YUV			(1 << V4L2_FWHT_FL_PIXENC_OFFSET)
-+#define V4L2_FWHT_FL_PIXENC_RGB			(2 << V4L2_FWHT_FL_PIXENC_OFFSET)
-+#define V4L2_FWHT_FL_PIXENC_HSV			(3 << V4L2_FWHT_FL_PIXENC_OFFSET)
-+
-+#define V4L2_CID_STATELESS_FWHT_PARAMS		(V4L2_CID_CODEC_STATELESS_BASE + 100)
-+/**
-+ * struct v4l2_ctrl_fwht_params - FWHT parameters
-+ *
-+ * @backward_ref_ts: timestamp of the V4L2 capture buffer to use as reference.
-+ * The timestamp refers to the timestamp field in struct v4l2_buffer.
-+ * Use v4l2_timeval_to_ns() to convert the struct timeval to a __u64.
-+ * @version: must be V4L2_FWHT_VERSION.
-+ * @width: width of frame.
-+ * @height: height of frame.
-+ * @flags: FWHT flags (see V4L2_FWHT_FL_*).
-+ * @colorspace: the colorspace (enum v4l2_colorspace).
-+ * @xfer_func: the transfer function (enum v4l2_xfer_func).
-+ * @ycbcr_enc: the Y'CbCr encoding (enum v4l2_ycbcr_encoding).
-+ * @quantization: the quantization (enum v4l2_quantization).
-+ */
-+struct v4l2_ctrl_fwht_params {
-+	__u64 backward_ref_ts;
-+	__u32 version;
-+	__u32 width;
-+	__u32 height;
-+	__u32 flags;
-+	__u32 colorspace;
-+	__u32 xfer_func;
-+	__u32 ycbcr_enc;
-+	__u32 quantization;
-+};
-+
- /* MPEG-compression definitions kept for backwards compatibility */
- #ifndef __KERNEL__
- #define V4L2_CTRL_CLASS_MPEG            V4L2_CTRL_CLASS_CODEC
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 76231ca6e101..e40e95be79f9 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -1740,6 +1740,7 @@ struct v4l2_ext_control {
- 		struct v4l2_ctrl_h264_pred_weights __user *p_h264_pred_weights;
- 		struct v4l2_ctrl_h264_slice_params __user *p_h264_slice_params;
- 		struct v4l2_ctrl_h264_decode_params __user *p_h264_decode_params;
-+		struct v4l2_ctrl_fwht_params __user *p_fwht_params;
- 		void __user *ptr;
- 	};
- } __attribute__ ((packed));
-@@ -1793,6 +1794,8 @@ enum v4l2_ctrl_type {
- 	V4L2_CTRL_TYPE_H264_SLICE_PARAMS    = 0x0203,
- 	V4L2_CTRL_TYPE_H264_DECODE_PARAMS   = 0x0204,
- 	V4L2_CTRL_TYPE_H264_PRED_WEIGHTS    = 0x0205,
-+
-+	V4L2_CTRL_TYPE_FWHT_PARAMS	    = 0x0220,
- };
- 
- /*  Used in the VIDIOC_QUERYCTRL ioctl for querying controls */
--- 
-2.29.2
-
+ delete mode 100644 include/media/h264-ctrls.h
