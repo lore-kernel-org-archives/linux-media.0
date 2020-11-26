@@ -2,47 +2,50 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D96D6C64E7D
-	for <linux-media@archiver.kernel.org>; Thu, 26 Nov 2020 15:30:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3128EC64E90
+	for <linux-media@archiver.kernel.org>; Thu, 26 Nov 2020 15:30:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AD66921D46
+	by mail.kernel.org (Postfix) with ESMTP id 0127421D46
 	for <linux-media@archiver.kernel.org>; Thu, 26 Nov 2020 15:30:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391365AbgKZP3r (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 Nov 2020 10:29:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47266 "EHLO
+        id S2391366AbgKZP3s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 Nov 2020 10:29:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389808AbgKZP3r (ORCPT
+        with ESMTP id S1729947AbgKZP3r (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 26 Nov 2020 10:29:47 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36DCC061A04
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D002CC0613D4
         for <linux-media@vger.kernel.org>; Thu, 26 Nov 2020 07:29:46 -0800 (PST)
 Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1kiJDL-000806-It; Thu, 26 Nov 2020 16:29:45 +0100
+        id 1kiJDL-000809-MV; Thu, 26 Nov 2020 16:29:45 +0100
 Received: from mtr by dude03.red.stw.pengutronix.de with local (Exim 4.92)
         (envelope-from <mtr@dude03.red.stw.pengutronix.de>)
-        id 1kiJDK-00G3Fs-Tm; Thu, 26 Nov 2020 16:29:42 +0100
+        id 1kiJDL-00G3G0-1k; Thu, 26 Nov 2020 16:29:43 +0100
 From:   Michael Tretter <m.tretter@pengutronix.de>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org
 Cc:     kernel@pengutronix.de, robh+dt@kernel.org,
         hverkuil-cisco@xs4all.nl,
         Michael Tretter <m.tretter@pengutronix.de>
-Date:   Thu, 26 Nov 2020 16:29:37 +0100
-Message-Id: <20201126152941.3825721-1-m.tretter@pengutronix.de>
+Date:   Thu, 26 Nov 2020 16:29:40 +0100
+Message-Id: <20201126152941.3825721-4-m.tretter@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20201126152941.3825721-1-m.tretter@pengutronix.de>
+References: <20201126152941.3825721-1-m.tretter@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::39
 X-SA-Exim-Mail-From: mtr@pengutronix.de
-Subject: [PATCH 0/4] media: allegro: move driver out of staging
+Subject: [PATCH 3/4] media: allegro: remove custom drain state handling
 X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
 X-SA-Exim-Scanned: Yes (on metis.ext.pengutronix.de)
 X-PTX-Original-Recipient: linux-media@vger.kernel.org
@@ -50,153 +53,296 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+The v4l2-m2m has various helpers for correctly handle the draining. Drop
+the driver specific state machine and use the m2m helper functions.
 
-With the V4L2 stateful encoder spec being finished, the Allegro encoder driver
-is ready to be moved from staging to mainline.
+Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
+---
+ .../media/platform/allegro-dvt/allegro-core.c | 174 +++++-------------
+ 1 file changed, 45 insertions(+), 129 deletions(-)
 
-While not directly related, I used the opportunity to convert the dt-binding
-to YAML, to remove the custom draining state handling from the driver and to
-rename a badly named field in the MCU messages.
-
-Michael
-
-v4l2-compliance 1.21.0-4682, 64 bits, 64-bit time_t
-v4l2-compliance SHA: 11da65eee7a2 2020-11-14 12:41:14
-
-Compliance test for allegro device /dev/video3:
-
-Driver Info:
-	Driver name      : allegro
-	Card type        : Allegro DVT Video Encoder
-	Bus info         : platform:a0009000.video-codec
-	Driver version   : 5.10.0
-	Capabilities     : 0x84208000
-		Video Memory-to-Memory
-		Streaming
-		Extended Pix Format
-		Device Capabilities
-	Device Caps      : 0x04208000
-		Video Memory-to-Memory
-		Streaming
-		Extended Pix Format
-	Detected Stateful Encoder
-
-Required ioctls:
-	test VIDIOC_QUERYCAP: OK
-
-Allow for multiple opens:
-	test second /dev/video3 open: OK
-	test VIDIOC_QUERYCAP: OK
-	test VIDIOC_G/S_PRIORITY: OK
-	test for unlimited opens: OK
-
-	test invalid ioctls: OK
-Debug ioctls:
-	test VIDIOC_DBG_G/S_REGISTER: OK
-	test VIDIOC_LOG_STATUS: OK (Not Supported)
-
-Input ioctls:
-	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
-	test VIDIOC_ENUMAUDIO: OK (Not Supported)
-	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDIO: OK (Not Supported)
-	Inputs: 0 Audio Inputs: 0 Tuners: 0
-
-Output ioctls:
-	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
-	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
-	Outputs: 0 Audio Outputs: 0 Modulators: 0
-
-Input/Output configuration ioctls:
-	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
-	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
-	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
-	test VIDIOC_G/S_EDID: OK (Not Supported)
-
-Control ioctls:
-	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
-	test VIDIOC_QUERYCTRL: OK
-	test VIDIOC_G/S_CTRL: OK
-	test VIDIOC_G/S/TRY_EXT_CTRLS: OK
-	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
-	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
-	Standard Controls: 16 Private Controls: 0
-
-Format ioctls:
-	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
-	test VIDIOC_G/S_PARM: OK
-	test VIDIOC_G_FBUF: OK (Not Supported)
-	test VIDIOC_G_FMT: OK
-	test VIDIOC_TRY_FMT: OK
-	test VIDIOC_S_FMT: OK
-	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
-	test Cropping: OK (Not Supported)
-	test Composing: OK (Not Supported)
-	test Scaling: OK (Not Supported)
-
-Codec ioctls:
-	test VIDIOC_(TRY_)ENCODER_CMD: OK
-	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
-	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
-
-Buffer ioctls:
-	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
-	test VIDIOC_EXPBUF: OK
-	test Requests: OK (Not Supported)
-
-Test input 0:
-
-Streaming ioctls:
-	test read/write: OK (Not Supported)
-	test blocking wait: OK
-	Video Capture: Captured 60 buffers
-	test MMAP (select): OK
-	Video Capture: Captured 60 buffers
-	test MMAP (epoll): OK
-	test USERPTR (select): OK (Not Supported)
-	test DMABUF: Cannot test, specify --expbuf-device
-
-Total for allegro device /dev/video3: 50, Succeeded: 50, Failed: 0, Warnings: 0
-
-Michael Tretter (4):
-  media: allegro: move driver out of staging
-  dt-bindings: media: allegro,al5e: Convert to YAML
-  media: allegro: remove custom drain state handling
-  media: allegro: rename stream_id to dst_handle
-
- .../bindings/media/allegro,al5e.yaml          |  95 +++++++++
- .../devicetree/bindings/media/allegro.txt     |  43 -----
- MAINTAINERS                                   |   3 +-
- drivers/media/platform/Kconfig                |  15 ++
- drivers/media/platform/Makefile               |   1 +
- .../platform}/allegro-dvt/Makefile            |   0
- .../platform}/allegro-dvt/allegro-core.c      | 180 +++++-------------
- .../platform}/allegro-dvt/allegro-mail.c      |   8 +-
- .../platform}/allegro-dvt/allegro-mail.h      |   4 +-
- .../platform}/allegro-dvt/nal-h264.c          |   0
- .../platform}/allegro-dvt/nal-h264.h          |   0
- drivers/staging/media/Kconfig                 |   2 -
- drivers/staging/media/Makefile                |   1 -
- drivers/staging/media/allegro-dvt/Kconfig     |  16 --
- drivers/staging/media/allegro-dvt/TODO        |   4 -
- 15 files changed, 167 insertions(+), 205 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/media/allegro,al5e.yaml
- delete mode 100644 Documentation/devicetree/bindings/media/allegro.txt
- rename drivers/{staging/media => media/platform}/allegro-dvt/Makefile (100%)
- rename drivers/{staging/media => media/platform}/allegro-dvt/allegro-core.c (95%)
- rename drivers/{staging/media => media/platform}/allegro-dvt/allegro-mail.c (98%)
- rename drivers/{staging/media => media/platform}/allegro-dvt/allegro-mail.h (98%)
- rename drivers/{staging/media => media/platform}/allegro-dvt/nal-h264.c (100%)
- rename drivers/{staging/media => media/platform}/allegro-dvt/nal-h264.h (100%)
- delete mode 100644 drivers/staging/media/allegro-dvt/Kconfig
- delete mode 100644 drivers/staging/media/allegro-dvt/TODO
-
+diff --git a/drivers/media/platform/allegro-dvt/allegro-core.c b/drivers/media/platform/allegro-dvt/allegro-core.c
+index 9f718f43282b..902b8af90ac6 100644
+--- a/drivers/media/platform/allegro-dvt/allegro-core.c
++++ b/drivers/media/platform/allegro-dvt/allegro-core.c
+@@ -167,13 +167,6 @@ static struct regmap_config allegro_sram_config = {
+ 	.cache_type = REGCACHE_NONE,
+ };
+ 
+-enum allegro_state {
+-	ALLEGRO_STATE_ENCODING,
+-	ALLEGRO_STATE_DRAIN,
+-	ALLEGRO_STATE_WAIT_FOR_BUFFER,
+-	ALLEGRO_STATE_STOPPED,
+-};
+-
+ #define fh_to_channel(__fh) container_of(__fh, struct allegro_channel, fh)
+ 
+ struct allegro_channel {
+@@ -246,23 +239,8 @@ struct allegro_channel {
+ 	struct completion completion;
+ 
+ 	unsigned int error;
+-	enum allegro_state state;
+ };
+ 
+-static inline int
+-allegro_set_state(struct allegro_channel *channel, enum allegro_state state)
+-{
+-	channel->state = state;
+-
+-	return 0;
+-}
+-
+-static inline enum allegro_state
+-allegro_get_state(struct allegro_channel *channel)
+-{
+-	return channel->state;
+-}
+-
+ struct allegro_m2m_buffer {
+ 	struct v4l2_m2m_buffer buf;
+ 	struct list_head head;
+@@ -1392,45 +1370,13 @@ static ssize_t allegro_h264_write_pps(struct allegro_channel *channel,
+ 	return size;
+ }
+ 
+-static bool allegro_channel_is_at_eos(struct allegro_channel *channel)
+-{
+-	bool is_at_eos = false;
+-
+-	switch (allegro_get_state(channel)) {
+-	case ALLEGRO_STATE_STOPPED:
+-		is_at_eos = true;
+-		break;
+-	case ALLEGRO_STATE_DRAIN:
+-	case ALLEGRO_STATE_WAIT_FOR_BUFFER:
+-		mutex_lock(&channel->shadow_list_lock);
+-		if (v4l2_m2m_num_src_bufs_ready(channel->fh.m2m_ctx) == 0 &&
+-		    list_empty(&channel->source_shadow_list))
+-			is_at_eos = true;
+-		mutex_unlock(&channel->shadow_list_lock);
+-		break;
+-	default:
+-		break;
+-	}
+-
+-	return is_at_eos;
+-}
+-
+-static void allegro_channel_buf_done(struct allegro_channel *channel,
+-				     struct vb2_v4l2_buffer *buf,
+-				     enum vb2_buffer_state state)
++static void allegro_channel_eos_event(struct allegro_channel *channel)
+ {
+ 	const struct v4l2_event eos_event = {
+ 		.type = V4L2_EVENT_EOS
+ 	};
+ 
+-	if (allegro_channel_is_at_eos(channel)) {
+-		buf->flags |= V4L2_BUF_FLAG_LAST;
+-		v4l2_event_queue_fh(&channel->fh, &eos_event);
+-
+-		allegro_set_state(channel, ALLEGRO_STATE_STOPPED);
+-	}
+-
+-	v4l2_m2m_buf_done(buf, state);
++	v4l2_event_queue_fh(&channel->fh, &eos_event);
+ }
+ 
+ static u64 allegro_put_buffer(struct allegro_channel *channel,
+@@ -1500,6 +1446,12 @@ static void allegro_channel_finish_frame(struct allegro_channel *channel,
+ 	if (!src_buf || !dst_buf)
+ 		goto err;
+ 
++	if (v4l2_m2m_is_last_draining_src_buf(channel->fh.m2m_ctx, src_buf)) {
++		dst_buf->flags |= V4L2_BUF_FLAG_LAST;
++		allegro_channel_eos_event(channel);
++		v4l2_m2m_mark_stopped(channel->fh.m2m_ctx);
++	}
++
+ 	dst_buf->sequence = channel->csequence++;
+ 
+ 	if (msg->error_code & AL_ERROR) {
+@@ -1626,7 +1578,7 @@ static void allegro_channel_finish_frame(struct allegro_channel *channel,
+ 		v4l2_m2m_buf_done(src_buf, VB2_BUF_STATE_DONE);
+ 
+ 	if (dst_buf)
+-		allegro_channel_buf_done(channel, dst_buf, state);
++		v4l2_m2m_buf_done(dst_buf, state);
+ }
+ 
+ static int allegro_handle_init(struct allegro_dev *dev,
+@@ -2145,10 +2097,6 @@ static int allegro_buf_prepare(struct vb2_buffer *vb)
+ 	struct allegro_channel *channel = vb2_get_drv_priv(vb->vb2_queue);
+ 	struct allegro_dev *dev = channel->dev;
+ 
+-	if (allegro_get_state(channel) == ALLEGRO_STATE_DRAIN &&
+-	    V4L2_TYPE_IS_OUTPUT(vb->vb2_queue->type))
+-		return -EBUSY;
+-
+ 	if (V4L2_TYPE_IS_OUTPUT(vb->vb2_queue->type)) {
+ 		if (vbuf->field == V4L2_FIELD_ANY)
+ 			vbuf->field = V4L2_FIELD_NONE;
+@@ -2167,10 +2115,21 @@ static void allegro_buf_queue(struct vb2_buffer *vb)
+ {
+ 	struct allegro_channel *channel = vb2_get_drv_priv(vb->vb2_queue);
+ 	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++	struct vb2_queue *q = vb->vb2_queue;
++
++	if (V4L2_TYPE_IS_CAPTURE(q->type) &&
++	    vb2_is_streaming(q) &&
++	    v4l2_m2m_dst_buf_is_last(channel->fh.m2m_ctx)) {
++		unsigned int i;
++
++		for (i = 0; i < vb->num_planes; i++)
++			vb->planes[i].bytesused = 0;
+ 
+-	if (allegro_get_state(channel) == ALLEGRO_STATE_WAIT_FOR_BUFFER &&
+-	    vb->vb2_queue->type == V4L2_BUF_TYPE_VIDEO_CAPTURE) {
+-		allegro_channel_buf_done(channel, vbuf, VB2_BUF_STATE_DONE);
++		vbuf->field = V4L2_FIELD_NONE;
++		vbuf->sequence = channel->csequence++;
++
++		v4l2_m2m_last_buffer_done(channel->fh.m2m_ctx, vbuf);
++		allegro_channel_eos_event(channel);
+ 		return;
+ 	}
+ 
+@@ -2186,12 +2145,12 @@ static int allegro_start_streaming(struct vb2_queue *q, unsigned int count)
+ 		 "%s: start streaming\n",
+ 		 V4L2_TYPE_IS_OUTPUT(q->type) ? "output" : "capture");
+ 
+-	if (V4L2_TYPE_IS_OUTPUT(q->type)) {
++	v4l2_m2m_update_start_streaming_state(channel->fh.m2m_ctx, q);
++
++	if (V4L2_TYPE_IS_OUTPUT(q->type))
+ 		channel->osequence = 0;
+-		allegro_set_state(channel, ALLEGRO_STATE_ENCODING);
+-	} else if (q->type == V4L2_BUF_TYPE_VIDEO_CAPTURE) {
++	else
+ 		channel->csequence = 0;
+-	}
+ 
+ 	return 0;
+ }
+@@ -2216,10 +2175,9 @@ static void allegro_stop_streaming(struct vb2_queue *q)
+ 		}
+ 		mutex_unlock(&channel->shadow_list_lock);
+ 
+-		allegro_set_state(channel, ALLEGRO_STATE_STOPPED);
+ 		while ((buffer = v4l2_m2m_src_buf_remove(channel->fh.m2m_ctx)))
+ 			v4l2_m2m_buf_done(buffer, VB2_BUF_STATE_ERROR);
+-	} else if (q->type == V4L2_BUF_TYPE_VIDEO_CAPTURE) {
++	} else {
+ 		mutex_lock(&channel->shadow_list_lock);
+ 		list_for_each_entry_safe(shadow, tmp,
+ 					 &channel->stream_shadow_list, head) {
+@@ -2232,6 +2190,12 @@ static void allegro_stop_streaming(struct vb2_queue *q)
+ 		while ((buffer = v4l2_m2m_dst_buf_remove(channel->fh.m2m_ctx)))
+ 			v4l2_m2m_buf_done(buffer, VB2_BUF_STATE_ERROR);
+ 	}
++
++	v4l2_m2m_update_stop_streaming_state(channel->fh.m2m_ctx, q);
++
++	if (V4L2_TYPE_IS_OUTPUT(q->type) &&
++	    v4l2_m2m_has_stopped(channel->fh.m2m_ctx))
++		allegro_channel_eos_event(channel);
+ }
+ 
+ static const struct vb2_ops allegro_queue_ops = {
+@@ -2670,62 +2634,16 @@ static int allegro_s_fmt_vid_out(struct file *file, void *fh,
+ 
+ static int allegro_channel_cmd_stop(struct allegro_channel *channel)
+ {
+-	struct allegro_dev *dev = channel->dev;
+-	struct vb2_v4l2_buffer *dst_buf;
+-
+-	switch (allegro_get_state(channel)) {
+-	case ALLEGRO_STATE_DRAIN:
+-	case ALLEGRO_STATE_WAIT_FOR_BUFFER:
+-		return -EBUSY;
+-	case ALLEGRO_STATE_ENCODING:
+-		allegro_set_state(channel, ALLEGRO_STATE_DRAIN);
+-		break;
+-	default:
+-		return 0;
+-	}
+-
+-	/* If there are output buffers, they must be encoded */
+-	if (v4l2_m2m_num_src_bufs_ready(channel->fh.m2m_ctx) != 0) {
+-		v4l2_dbg(1, debug,  &dev->v4l2_dev,
+-			 "channel %d: CMD_STOP: continue encoding src buffers\n",
+-			 channel->mcu_channel_id);
+-		return 0;
+-	}
+-
+-	/* If there are capture buffers, use it to signal EOS */
+-	dst_buf = v4l2_m2m_dst_buf_remove(channel->fh.m2m_ctx);
+-	if (dst_buf) {
+-		v4l2_dbg(1, debug,  &dev->v4l2_dev,
+-			 "channel %d: CMD_STOP: signaling EOS\n",
+-			 channel->mcu_channel_id);
+-		allegro_channel_buf_done(channel, dst_buf, VB2_BUF_STATE_DONE);
+-		return 0;
+-	}
+-
+-	/*
+-	 * If there are no capture buffers, we need to wait for the next
+-	 * buffer to signal EOS.
+-	 */
+-	v4l2_dbg(1, debug,  &dev->v4l2_dev,
+-		 "channel %d: CMD_STOP: wait for CAPTURE buffer to signal EOS\n",
+-		 channel->mcu_channel_id);
+-	allegro_set_state(channel, ALLEGRO_STATE_WAIT_FOR_BUFFER);
++	if (v4l2_m2m_has_stopped(channel->fh.m2m_ctx))
++		allegro_channel_eos_event(channel);
+ 
+ 	return 0;
+ }
+ 
+ static int allegro_channel_cmd_start(struct allegro_channel *channel)
+ {
+-	switch (allegro_get_state(channel)) {
+-	case ALLEGRO_STATE_DRAIN:
+-	case ALLEGRO_STATE_WAIT_FOR_BUFFER:
+-		return -EBUSY;
+-	case ALLEGRO_STATE_STOPPED:
+-		allegro_set_state(channel, ALLEGRO_STATE_ENCODING);
+-		break;
+-	default:
+-		return 0;
+-	}
++	if (v4l2_m2m_has_stopped(channel->fh.m2m_ctx))
++		vb2_clear_last_buffer_dequeued(&channel->fh.m2m_ctx->cap_q_ctx.q);
+ 
+ 	return 0;
+ }
+@@ -2740,17 +2658,15 @@ static int allegro_encoder_cmd(struct file *file, void *fh,
+ 	if (err)
+ 		return err;
+ 
+-	switch (cmd->cmd) {
+-	case V4L2_ENC_CMD_STOP:
++	err = v4l2_m2m_ioctl_encoder_cmd(file, fh, cmd);
++	if (err)
++		return err;
++
++	if (cmd->cmd == V4L2_ENC_CMD_STOP)
+ 		err = allegro_channel_cmd_stop(channel);
+-		break;
+-	case V4L2_ENC_CMD_START:
++
++	if (cmd->cmd == V4L2_ENC_CMD_START)
+ 		err = allegro_channel_cmd_start(channel);
+-		break;
+-	default:
+-		err = -EINVAL;
+-		break;
+-	}
+ 
+ 	return err;
+ }
 -- 
 2.20.1
 
