@@ -2,104 +2,107 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C756AC63777
-	for <linux-media@archiver.kernel.org>; Thu, 26 Nov 2020 13:27:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF1D2C64E7A
+	for <linux-media@archiver.kernel.org>; Thu, 26 Nov 2020 13:27:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F2CEA21D1A
-	for <linux-media@archiver.kernel.org>; Thu, 26 Nov 2020 13:27:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4747521D1A
+	for <linux-media@archiver.kernel.org>; Thu, 26 Nov 2020 13:27:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="VlrA+gxX"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="Vwwadc/9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390009AbgKZN1b (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 Nov 2020 08:27:31 -0500
-Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:57765 "EHLO
-        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2389558AbgKZN1b (ORCPT
+        id S2390012AbgKZN1c (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 Nov 2020 08:27:32 -0500
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:39721 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2390005AbgKZN1c (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 26 Nov 2020 08:27:31 -0500
+        Thu, 26 Nov 2020 08:27:32 -0500
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id iHIrkPCQhN7XgiHJ2kYrWD; Thu, 26 Nov 2020 14:27:29 +0100
+        id iHIrkPCQhN7XgiHJ4kYrYJ; Thu, 26 Nov 2020 14:27:30 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1606397249; bh=dCQz//By4jQEl1k+Li7IHuXjXxaF1rPXRPP/nDZZb+A=;
+        t=1606397250; bh=umVGmAMS5xVVuV6te2/VUkV10EglMKeIiU/OYgQHDt4=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=VlrA+gxXyE0enrPBG8AeQw8pU3Dv2sxS1TS2zcOKcA8MdKcwxl4G6zhBBHbfC0VLB
-         qYR2aAC1X5MTD/Bx282cMcMDxJj9y8bQ5uHQGzlhYhztV8TzWrOg/gsrEJaJosfHvh
-         hLwTCmrxlHVQgSDwrBQtKT+G9CFh64RI/eIJhSa+Tksv8nTc/06CdGrsOZCfVmFC9J
-         VgwkmVtMl1NZ+rOIwGrNhLhC5Dl1UGqTJFV9vY8ZCcHqJSYwoLb6VzGhiHVP2fJUyu
-         KmIipLGVaY+s8o46HFtO1P0CcCn1tuLxq/WyDGWo/J8gOFJ01CiEs5WJ1Yo3Ekbjog
-         9FL9rkCRKLMaw==
+        b=Vwwadc/92PdwtVB6jz4LVHdz6qR1esQXRuG/2cgt1xtmydMm6NyKTQoBG/1RdHUf1
+         WLjEw9Omlj3umdngXqneY2w9NAz0PXxK4C7dq+RgTMNYzyBrhPVNOfvn7gAZONFgf9
+         zD51d87eAGJEEPDBs6/v8expA+Pi/w7zfIw2uXjpQlB3YFrugF3pvuKxNjGUlSQ6yj
+         ziZnoSMf33uXFbE0UJkJINxaWq/zr/2AQ8+54qx3bzlxVhqx03NrdMTPXcDlVfMVFZ
+         3PTBOLWY9nELQGuMLhLys6Bo2XiPogkRhKs5b/djHYh5nDjner8xjXcTnsQIyzFYEl
+         R7Bo/KdrnE2PQ==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Cc:     Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH 0/6] Stateless FWHT de-staging
-Date:   Thu, 26 Nov 2020 14:27:11 +0100
-Message-Id: <20201126132717.1216907-1-hverkuil-cisco@xs4all.nl>
+Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 5/6] vidioc-g-ext-ctrls.rst: add missing 'struct' before the types
+Date:   Thu, 26 Nov 2020 14:27:16 +0100
+Message-Id: <20201126132717.1216907-6-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20201126132717.1216907-1-hverkuil-cisco@xs4all.nl>
+References: <20201126132717.1216907-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfPKsg8oJiWG9OdslvPLewlhgUU054b3LqQP4rktgPBMGRZ8Vt+F3eBeqw9An1OHSIcFptow873r56aX/AXRSfpyhXVJzRDqTBTgWN9Ju6qgMMGIUt7XO
- kwR0j9UCgbt4kcopm48/NzppU36y+Q5wYVkU3Ox0so0eoTYMZhasq2hZJEJHTnp6fhsWXQOuIcKvjbrwHJr/NbaVRgGZjmNlqtwneSlfu6kC2RLULZjf8slu
- Ln5eonuYoEJ+8qukcZlq2A==
+X-CMAE-Envelope: MS4xfI2mYU/U22kBPRgdIV4rFhhBfw55xjWo5zsUQkgwONGtjwg1nWlRrYf/MrJQoHvJbLKYsi5QGNYkG+ulpk4vZ64bqHvJm7MQfqyIEhP5op/CaxfaPSEs
+ KNhiDZ2GQWRALvY/1ucE59gxB3rcgcudHXJ9WYO+jp+tfOzfBX5GBC6qASCiqJdFYLNHnZKzmty7x6R9VW+xQzlEmc74ztHq6NXr6tHANX+rzhgD9OGuut+T
+ jXcvYK25kfd7VwvryfEbgl0dbFQXVxeQJ3osXw4pNdw=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series sits on top of Ezequiel's H.264 de-staging series:
+Add 'struct' to clarify that these are pointers to structs.
 
-https://patchwork.linuxtv.org/project/linux-media/cover/20201126093618.137292-1-ezequiel@collabora.com/
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ .../userspace-api/media/v4l/vidioc-g-ext-ctrls.rst | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-The first patch does a rename of the FWHT version and FWHT flags,
-since these will become part of the public API. No other changes
-in this patch.
-
-The second patch moves all the FWHT-related API elements to the
-public headers and deletes include/media/fwht-ctrls.h.
-
-The third moves the FWHT stateless documentation to
-ext-ctrls-codec-stateless.rst (no other changes).
-
-The 4th and 5th patches clean up some formatting issues, not
-related to FWHT.
-
-The final patch documents V4L2_CTRL_TYPE_FWHT_PARAMS and p_fwht_params
-and improves the V4L2_PIX_FMT_FWHT_STATELESS description.
-
-Regards,
-
-        Hans
-
-Hans Verkuil (6):
-  vicodec: add V4L2_ prefix before FWHT_VERSION and FWHT_FL_*
-  vicodec: mark the stateless FWHT API as stable
-  ext-ctrls-codec.rst: move FWHT docs to ext-ctrls-codec-stateless.rst
-  pixfmt-compressed.rst: fix 'bullet' formatting
-  vidioc-g-ext-ctrls.rst: add missing 'struct' before the types
-  userspace-api/media: finalize stateless FWHT codec docs
-
- .../media/v4l/ext-ctrls-codec-stateless.rst   | 120 +++++++++++++++++
- .../media/v4l/ext-ctrls-codec.rst             | 121 ------------------
- .../media/v4l/pixfmt-compressed.rst           |  12 +-
- .../media/v4l/vidioc-g-ext-ctrls.rst          |  18 ++-
- .../media/v4l/vidioc-queryctrl.rst            |   6 +
- .../media/videodev2.h.rst.exceptions          |   1 +
- .../media/test-drivers/vicodec/codec-fwht.c   |  13 +-
- .../media/test-drivers/vicodec/codec-fwht.h   |  32 -----
- .../test-drivers/vicodec/codec-v4l2-fwht.c    |  88 ++++++-------
- .../media/test-drivers/vicodec/vicodec-core.c |  46 +++----
- drivers/media/v4l2-core/v4l2-ctrls.c          |  20 ++-
- include/media/fwht-ctrls.h                    |  31 -----
- include/media/v4l2-ctrls.h                    |   1 -
- include/uapi/linux/v4l2-controls.h            |  70 ++++++++++
- include/uapi/linux/videodev2.h                |   3 +
- 15 files changed, 310 insertions(+), 272 deletions(-)
- delete mode 100644 include/media/fwht-ctrls.h
-
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst b/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
+index 726d6a97325f..5b1fc62ade0d 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
+@@ -180,31 +180,31 @@ still cause this situation.
+       - ``p_u32``
+       - A pointer to a matrix control of unsigned 32-bit values. Valid if
+ 	this control is of type ``V4L2_CTRL_TYPE_U32``.
+-    * - :c:type:`v4l2_area` *
++    * - struct :c:type:`v4l2_area` *
+       - ``p_area``
+       - A pointer to a struct :c:type:`v4l2_area`. Valid if this control is
+         of type ``V4L2_CTRL_TYPE_AREA``.
+-    * - :c:type:`v4l2_ctrl_h264_sps` *
++    * - struct :c:type:`v4l2_ctrl_h264_sps` *
+       - ``p_h264_sps``
+       - A pointer to a struct :c:type:`v4l2_ctrl_h264_sps`. Valid if this control is
+         of type ``V4L2_CTRL_TYPE_H264_SPS``.
+-    * - :c:type:`v4l2_ctrl_h264_pps` *
++    * - struct :c:type:`v4l2_ctrl_h264_pps` *
+       - ``p_h264_pps``
+       - A pointer to a struct :c:type:`v4l2_ctrl_h264_pps`. Valid if this control is
+         of type ``V4L2_CTRL_TYPE_H264_PPS``.
+-    * - :c:type:`v4l2_ctrl_h264_scaling_matrix` *
++    * - struct :c:type:`v4l2_ctrl_h264_scaling_matrix` *
+       - ``p_h264_scaling_matrix``
+       - A pointer to a struct :c:type:`v4l2_ctrl_h264_scaling_matrix`. Valid if this control is
+         of type ``V4L2_CTRL_TYPE_H264_SCALING_MATRIX``.
+-    * - :c:type:`v4l2_ctrl_h264_pred_weights` *
++    * - struct :c:type:`v4l2_ctrl_h264_pred_weights` *
+       - ``p_h264_pred_weights``
+       - A pointer to a struct :c:type:`v4l2_ctrl_h264_pred_weights`. Valid if this control is
+         of type ``V4L2_CTRL_TYPE_H264_PRED_WEIGHTS``.
+-    * - :c:type:`v4l2_ctrl_h264_slice_params` *
++    * - struct :c:type:`v4l2_ctrl_h264_slice_params` *
+       - ``p_h264_slice_params``
+       - A pointer to a struct :c:type:`v4l2_ctrl_h264_slice_params`. Valid if this control is
+         of type ``V4L2_CTRL_TYPE_H264_SLICE_PARAMS``.
+-    * - :c:type:`v4l2_ctrl_h264_decode_params` *
++    * - struct :c:type:`v4l2_ctrl_h264_decode_params` *
+       - ``p_h264_decode_params``
+       - A pointer to a struct :c:type:`v4l2_ctrl_h264_decode_params`. Valid if this control is
+         of type ``V4L2_CTRL_TYPE_H264_DECODE_PARAMS``.
 -- 
 2.29.2
 
