@@ -4,25 +4,28 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 68FD1C64E75
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E58E9C64E8A
 	for <linux-media@archiver.kernel.org>; Thu, 26 Nov 2020 09:37:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 12FE7206B2
+	by mail.kernel.org (Postfix) with ESMTP id 9C3A3206B2
 	for <linux-media@archiver.kernel.org>; Thu, 26 Nov 2020 09:37:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389503AbgKZJgr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 Nov 2020 04:36:47 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:39252 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732332AbgKZJgr (ORCPT
+        id S2389527AbgKZJgv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 Nov 2020 04:36:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48766 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730660AbgKZJgv (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 26 Nov 2020 04:36:47 -0500
+        Thu, 26 Nov 2020 04:36:51 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBF0C0613D4;
+        Thu, 26 Nov 2020 01:36:51 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id 3A1CC1F450FA
+        with ESMTPSA id 55E8B1F44FB5
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
@@ -33,9 +36,9 @@ Cc:     kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Jernej Skrabec <jernej.skrabec@siol.net>,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v5 02/14] media: controls: Add validate failure debug message
-Date:   Thu, 26 Nov 2020 06:36:06 -0300
-Message-Id: <20201126093618.137292-3-ezequiel@collabora.com>
+Subject: [PATCH v5 03/14] media: rkvdec: h264: Support profile and level controls
+Date:   Thu, 26 Nov 2020 06:36:07 -0300
+Message-Id: <20201126093618.137292-4-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201126093618.137292-1-ezequiel@collabora.com>
 References: <20201126093618.137292-1-ezequiel@collabora.com>
@@ -45,34 +48,49 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a debug message for control validation (validate_new)
-failures. This is useful to debug issues with ioctls such
-as VIDIOC_TRY_EXT_CTRLS and VIDIOC_S_EXT_CTRLS.
+From: Jonas Karlman <jonas@kwiboo.se>
 
+The Rockchip Video Decoder used in RK3399 supports H.264 profiles from
+Baseline to High 4:2:2 up to Level 5.1, except for the Extended profile.
+
+Expose the V4L2_CID_MPEG_VIDEO_H264_PROFILE and the
+V4L2_CID_MPEG_VIDEO_H264_LEVEL control, so that userspace can query the
+driver for the list of supported profiles and level.
+
+For now, we don't expose 4:2:2 since the driver doesn't
+implement the required support.
+
+Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
+[Ezequiel: Don't expose 4:2:2 profile for now]
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- drivers/media/v4l2-core/v4l2-ctrls.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/staging/media/rkvdec/rkvdec.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 7febfbb256a6..3979e7924007 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -4112,8 +4112,13 @@ static int try_set_ext_ctrls_common(struct v4l2_fh *fh,
- 			struct v4l2_ctrl *ctrl = helpers[idx].ref->ctrl;
+diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
+index 552e0bd12ecf..fe65f55d3b49 100644
+--- a/drivers/staging/media/rkvdec/rkvdec.c
++++ b/drivers/staging/media/rkvdec/rkvdec.c
+@@ -82,6 +82,19 @@ static const struct rkvdec_ctrl_desc rkvdec_h264_ctrl_descs[] = {
+ 		.cfg.def = V4L2_MPEG_VIDEO_H264_START_CODE_ANNEX_B,
+ 		.cfg.max = V4L2_MPEG_VIDEO_H264_START_CODE_ANNEX_B,
+ 	},
++	{
++		.cfg.id = V4L2_CID_MPEG_VIDEO_H264_PROFILE,
++		.cfg.min = V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE,
++		.cfg.max = V4L2_MPEG_VIDEO_H264_PROFILE_HIGH,
++		.cfg.menu_skip_mask =
++			BIT(V4L2_MPEG_VIDEO_H264_PROFILE_EXTENDED),
++		.cfg.def = V4L2_MPEG_VIDEO_H264_PROFILE_MAIN,
++	},
++	{
++		.cfg.id = V4L2_CID_MPEG_VIDEO_H264_LEVEL,
++		.cfg.min = V4L2_MPEG_VIDEO_H264_LEVEL_1_0,
++		.cfg.max = V4L2_MPEG_VIDEO_H264_LEVEL_5_1,
++	},
+ };
  
- 			ret = user_to_new(cs->controls + idx, ctrl);
--			if (!ret && ctrl->is_ptr)
-+			if (!ret && ctrl->is_ptr) {
- 				ret = validate_new(ctrl, ctrl->p_new);
-+				if (ret)
-+					dprintk(vdev,
-+						"failed to validate control %s (%d)\n",
-+						v4l2_ctrl_get_name(ctrl->id), ret);
-+			}
- 			idx = helpers[idx].next;
- 		} while (!ret && idx);
- 
+ static const struct rkvdec_ctrls rkvdec_h264_ctrls = {
 -- 
 2.27.0
 
