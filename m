@@ -7,22 +7,25 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 035DCC6379D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73027C64E7B
 	for <linux-media@archiver.kernel.org>; Thu, 26 Nov 2020 09:37:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A056120DD4
-	for <linux-media@archiver.kernel.org>; Thu, 26 Nov 2020 09:37:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 38AFF20DD4
+	for <linux-media@archiver.kernel.org>; Thu, 26 Nov 2020 09:37:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389620AbgKZJhP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 Nov 2020 04:37:15 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:39334 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389572AbgKZJhO (ORCPT
+        id S2389650AbgKZJhW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 Nov 2020 04:37:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48858 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389572AbgKZJhW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 26 Nov 2020 04:37:14 -0500
+        Thu, 26 Nov 2020 04:37:22 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC7FC0613D4;
+        Thu, 26 Nov 2020 01:37:22 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id 8C27F1F450FA
+        with ESMTPSA id 5C4281F450FA
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
@@ -33,9 +36,9 @@ Cc:     kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Jernej Skrabec <jernej.skrabec@siol.net>,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v5 08/14] media: controls: Add the stateless codec control class
-Date:   Thu, 26 Nov 2020 06:36:12 -0300
-Message-Id: <20201126093618.137292-9-ezequiel@collabora.com>
+Subject: [PATCH v5 10/14] media: doc: Replace symbol for V4L2_CTRL_TYPE_H264_PRED_WEIGHTS
+Date:   Thu, 26 Nov 2020 06:36:14 -0300
+Message-Id: <20201126093618.137292-11-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201126093618.137292-1-ezequiel@collabora.com>
 References: <20201126093618.137292-1-ezequiel@collabora.com>
@@ -45,80 +48,28 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a new control class to hold the stateless codecs controls
-that are ready to be moved out of staging.
+When V4L2_CTRL_TYPE_H264_PRED_WEIGHTS was added, adding a replace
+symbol directive in videodev2.h.rst.exceptions was missed.
+
+Now that the control type is destaged, it's important to fix this.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-Tested-by: Jernej Skrabec <jernej.skrabec@siol.net>
 ---
- .../userspace-api/media/v4l/vidioc-g-ext-ctrls.rst         | 4 ++++
- drivers/media/v4l2-core/v4l2-ctrls.c                       | 5 +++++
- include/uapi/linux/v4l2-controls.h                         | 7 +++++++
- 3 files changed, 16 insertions(+)
+ Documentation/userspace-api/media/videodev2.h.rst.exceptions | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst b/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
-index 8b2029d1390b..0980190d6070 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
-@@ -362,6 +362,10 @@ still cause this situation.
-       - 0xa30000
-       - The class containing motion or object detection controls. These controls
-         are described in :ref:`detect-controls`.
-+    * - ``V4L2_CTRL_CLASS_CODEC_STATELESS``
-+      - 0xa40000
-+      - The class containing stateless codec controls. These controls are
-+	described in :ref:`codec-stateless-controls`.
- 
- Return Value
- ============
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 6a17a7487459..fa96e6aa0a86 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -1181,6 +1181,10 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_DETECT_MD_GLOBAL_THRESHOLD: return "MD Global Threshold";
- 	case V4L2_CID_DETECT_MD_THRESHOLD_GRID:	return "MD Threshold Grid";
- 	case V4L2_CID_DETECT_MD_REGION_GRID:	return "MD Region Grid";
-+
-+	/* Stateless Codec controls */
-+	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
-+	case V4L2_CID_CODEC_STATELESS_CLASS:	return "Stateless Codec Controls";
- 	default:
- 		return NULL;
- 	}
-@@ -1368,6 +1372,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
- 	case V4L2_CID_FM_RX_CLASS:
- 	case V4L2_CID_RF_TUNER_CLASS:
- 	case V4L2_CID_DETECT_CLASS:
-+	case V4L2_CID_CODEC_STATELESS_CLASS:
- 		*type = V4L2_CTRL_TYPE_CTRL_CLASS;
- 		/* You can neither read not write these */
- 		*flags |= V4L2_CTRL_FLAG_READ_ONLY | V4L2_CTRL_FLAG_WRITE_ONLY;
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index 75cf87b9a377..90478ecc2f81 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -65,6 +65,7 @@
- #define V4L2_CTRL_CLASS_FM_RX		0x00a10000	/* FM Receiver controls */
- #define V4L2_CTRL_CLASS_RF_TUNER	0x00a20000	/* RF tuner controls */
- #define V4L2_CTRL_CLASS_DETECT		0x00a30000	/* Detection controls */
-+#define V4L2_CTRL_CLASS_CODEC_STATELESS 0x00a40000	/* Stateless codecs controls */
- 
- /* User-class control IDs */
- 
-@@ -1177,6 +1178,12 @@ enum v4l2_detect_md_mode {
- #define V4L2_CID_DETECT_MD_THRESHOLD_GRID	(V4L2_CID_DETECT_CLASS_BASE + 3)
- #define V4L2_CID_DETECT_MD_REGION_GRID		(V4L2_CID_DETECT_CLASS_BASE + 4)
- 
-+
-+/*  Stateless CODECs controls */
-+#define V4L2_CID_CODEC_STATELESS_BASE          (V4L2_CTRL_CLASS_CODEC_STATELESS | 0x900)
-+#define V4L2_CID_CODEC_STATELESS_CLASS         (V4L2_CTRL_CLASS_CODEC_STATELESS | 1)
-+
-+
- /* MPEG-compression definitions kept for backwards compatibility */
- #ifndef __KERNEL__
- #define V4L2_CTRL_CLASS_MPEG            V4L2_CTRL_CLASS_CODEC
+diff --git a/Documentation/userspace-api/media/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+index 121e396a2779..7f6a4cc2ac4e 100644
+--- a/Documentation/userspace-api/media/videodev2.h.rst.exceptions
++++ b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+@@ -139,6 +139,7 @@ replace symbol V4L2_CTRL_TYPE_MPEG2_QUANTIZATION :c:type:`v4l2_ctrl_type`
+ replace symbol V4L2_CTRL_TYPE_H264_SPS :c:type:`v4l2_ctrl_type`
+ replace symbol V4L2_CTRL_TYPE_H264_PPS :c:type:`v4l2_ctrl_type`
+ replace symbol V4L2_CTRL_TYPE_H264_SCALING_MATRIX :c:type:`v4l2_ctrl_type`
++replace symbol V4L2_CTRL_TYPE_H264_PRED_WEIGHTS :c:type:`v4l2_ctrl_type`
+ replace symbol V4L2_CTRL_TYPE_H264_SLICE_PARAMS :c:type:`v4l2_ctrl_type`
+ replace symbol V4L2_CTRL_TYPE_H264_DECODE_PARAMS :c:type:`v4l2_ctrl_type`
+ replace symbol V4L2_CTRL_TYPE_HEVC_SPS :c:type:`v4l2_ctrl_type`
 -- 
 2.27.0
 
