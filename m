@@ -2,59 +2,60 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8954C8303A
-	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 16:43:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6EDEC82489
+	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 16:43:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8C15822240
-	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 16:43:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 80A86206DF
+	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 16:43:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="UsmTBv70"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="c21Xo6Rj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731661AbgK0QmG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 27 Nov 2020 11:42:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54004 "EHLO
+        id S1732158AbgK0QnW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 27 Nov 2020 11:43:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731631AbgK0QmF (ORCPT
+        with ESMTP id S1731554AbgK0QmB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 27 Nov 2020 11:42:05 -0500
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1878AC061A04
-        for <linux-media@vger.kernel.org>; Fri, 27 Nov 2020 08:42:04 -0800 (PST)
-Received: by mail-wr1-x442.google.com with SMTP id g14so6168506wrm.13
-        for <linux-media@vger.kernel.org>; Fri, 27 Nov 2020 08:42:04 -0800 (PST)
+        Fri, 27 Nov 2020 11:42:01 -0500
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6F3C0613D2
+        for <linux-media@vger.kernel.org>; Fri, 27 Nov 2020 08:42:01 -0800 (PST)
+Received: by mail-wr1-x441.google.com with SMTP id t4so6170764wrr.12
+        for <linux-media@vger.kernel.org>; Fri, 27 Nov 2020 08:42:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=WIwM+CgtjulX00So/rnZs3CK8iFlbmt4b5FI8jtD7Z0=;
-        b=UsmTBv70+0yVDRoJJ7S15WMQxg6E1LErgv9pqqIkQadtiUgYBrporCiAo60oAloUR0
-         hypKZlv6JVJHYO7NbUucNAxekNi/+UcXEeC0lL9RNeCmL4gLXd2f1Uvy8w0ttja7AT3u
-         fXbx7NQgScpue4f5z44auD2zsQqryDSerpCHY=
+        bh=MT1z3cj215AzOOgO3dPH+bq94VZWhyvFICSSDrawSRQ=;
+        b=c21Xo6Rj7estCGPrDTj8F/i7Yj+krVWD4HRtsgjJ5HM3ti0pxKMcUeJWhEPoFRCyxm
+         1A1kzXuYRFOR/X+6YDTzJXdBai011blJGvgmrkSXBVP5T5qkBuL2TX0c1GXUrVu68ZQV
+         7WLP8+TYoIE1YNuaBvjxsmSVUsTBXsc/v2np0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=WIwM+CgtjulX00So/rnZs3CK8iFlbmt4b5FI8jtD7Z0=;
-        b=doqLIrTzCQ88a+sAv2E0P5oDa1q0qBuIcQ8TwrsEaw+7CIZBI6VE0YlHDC6GzrG19D
-         lpCw7UD/MBE22VzTOhnA6VdZHkPk9YENAMWTC3pXqmFaP+eZfrk9NacsZTblNKRV28AA
-         wrsuLK2x2Fw2v3cuV112oEgl2HM/+wxdBvzEqY7yb3lghC+a9UJ+jmKXSaEk8xwL/hN7
-         5w3gIQHH7v3LmYVQywZ9l/PxZ9o6rbmcStw1c+4IoC9244mlEcSAxbZXhBe4udFDpsHu
-         gQt3OxI3mEyNTP5QgxRNvY3M9mOXS+bhaSpSVE4ThUBaazYlP5sAuf0fZBwH8aF4q5uJ
-         0mUQ==
-X-Gm-Message-State: AOAM533pl8SK4jo2dj8AAiBR8qwYqTn8bdCG4S76hTRFXx0WYIVDy9Bu
-        AqgGREWVJ9Ayot1LBdlM0ZuD4w==
-X-Google-Smtp-Source: ABdhPJyAXEAYiKOSNg8sjsJugGFFuhRB8ve58iZQChHUSl54iRJGMo2vJlzEY8x9JKPdy66sWXRf8w==
-X-Received: by 2002:adf:8284:: with SMTP id 4mr11448134wrc.386.1606495322891;
-        Fri, 27 Nov 2020 08:42:02 -0800 (PST)
+        bh=MT1z3cj215AzOOgO3dPH+bq94VZWhyvFICSSDrawSRQ=;
+        b=ujpvMF3lE00SipEK1xFT/a+D7RVVCTsiIjURieRkmjlzCwcCYyd//DfELeIA821UIu
+         G8EQsIZRkXWq6VGp5ycjWk7oVq+uVaiv/JPBtfEwGnEOWRnil7bmzQa36xVHb9tWijRj
+         Gm+1k3L7ahUQrvr0X4Oa7Bbbd1TM6GJ+RnptbOuTG11Vuf9/HemcNaF0jV1ZsOOVrrrq
+         hHJ+2S1Ezc5vVhua5TH6CA2sng2Ajl3zSlsOgl9HAoqGKrW8UUOO4KfYqupqH6xEY824
+         bsXAy5tV8jGl0gFNFDB+x8vINAGKHOtKPGp+ybba7/SIvV9b3CnyhymS/EdSn0CpyI4o
+         xz0A==
+X-Gm-Message-State: AOAM5315JKDmsVJeWRqnVjIbHa3D4W5dp1XO1W5QfeVrRQ+iGHGY1XDr
+        eBjjFKCjKPjKDIqIES6PQ3hyIg==
+X-Google-Smtp-Source: ABdhPJxJ+tJLOlH6yvpyDM4wsRPMg/i5xjzosEA83cZyFmOXcl5fGMh4eoZjxhHpFGJ3CymrXbGpNw==
+X-Received: by 2002:adf:f783:: with SMTP id q3mr11568497wrp.88.1606495319838;
+        Fri, 27 Nov 2020 08:41:59 -0800 (PST)
 Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id q12sm14859078wrx.86.2020.11.27.08.42.01
+        by smtp.gmail.com with ESMTPSA id q12sm14859078wrx.86.2020.11.27.08.41.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Nov 2020 08:42:02 -0800 (PST)
+        Fri, 27 Nov 2020 08:41:59 -0800 (PST)
 From:   Daniel Vetter <daniel.vetter@ffwll.ch>
 To:     DRI Development <dri-devel@lists.freedesktop.org>,
         LKML <linux-kernel@vger.kernel.org>
@@ -62,24 +63,22 @@ Cc:     kvm@vger.kernel.org, linux-mm@kvack.org,
         linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-media@vger.kernel.org,
         Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Oded Gabbay <ogabbay@kernel.org>,
         Daniel Vetter <daniel.vetter@intel.com>,
         Jason Gunthorpe <jgg@ziepe.ca>,
+        Inki Dae <inki.dae@samsung.com>,
+        Joonyoung Shim <jy0922.shim@samsung.com>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         John Hubbard <jhubbard@nvidia.com>,
         =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
         Jan Kara <jack@suse.cz>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>,
-        Omer Shpigelman <oshpigelman@habana.ai>,
-        Ofir Bitton <obitton@habana.ai>,
-        Tomer Tayar <ttayar@habana.ai>,
-        Moti Haimovski <mhaimovski@habana.ai>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pawel Piskorski <ppiskorski@habana.ai>
-Subject: [PATCH v7 04/17] misc/habana: Use FOLL_LONGTERM for userptr
-Date:   Fri, 27 Nov 2020 17:41:18 +0100
-Message-Id: <20201127164131.2244124-5-daniel.vetter@ffwll.ch>
+        Dan Williams <dan.j.williams@intel.com>
+Subject: [PATCH v7 02/17] drm/exynos: Use FOLL_LONGTERM for g2d cmdlists
+Date:   Fri, 27 Nov 2020 17:41:16 +0100
+Message-Id: <20201127164131.2244124-3-daniel.vetter@ffwll.ch>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201127164131.2244124-1-daniel.vetter@ffwll.ch>
 References: <20201127164131.2244124-1-daniel.vetter@ffwll.ch>
@@ -90,11 +89,17 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-These are persistent, not just for the duration of a dma operation.
+The exynos g2d interface is very unusual, but it looks like the
+userptr objects are persistent. Hence they need FOLL_LONGTERM.
 
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
 Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Inki Dae <inki.dae@samsung.com>
+Cc: Joonyoung Shim <jy0922.shim@samsung.com>
+Cc: Seung-Woo Kim <sw0312.kim@samsung.com>
+Cc: Kyungmin Park <kyungmin.park@samsung.com>
+Cc: Kukjin Kim <kgene@kernel.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>
 Cc: Andrew Morton <akpm@linux-foundation.org>
 Cc: John Hubbard <jhubbard@nvidia.com>
 Cc: Jérôme Glisse <jglisse@redhat.com>
@@ -104,33 +109,25 @@ Cc: linux-mm@kvack.org
 Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-samsung-soc@vger.kernel.org
 Cc: linux-media@vger.kernel.org
-Cc: Oded Gabbay <oded.gabbay@gmail.com>
-Cc: Omer Shpigelman <oshpigelman@habana.ai>
-Cc: Ofir Bitton <obitton@habana.ai>
-Cc: Tomer Tayar <ttayar@habana.ai>
-Cc: Moti Haimovski <mhaimovski@habana.ai>
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Pawel Piskorski <ppiskorski@habana.ai>
 Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 ---
- drivers/misc/habanalabs/common/memory.c | 3 ++-
+ drivers/gpu/drm/exynos/exynos_drm_g2d.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
-index 2c59fa869684..0d25ae1d5f3e 100644
---- a/drivers/misc/habanalabs/common/memory.c
-+++ b/drivers/misc/habanalabs/common/memory.c
-@@ -1296,7 +1296,8 @@ static int get_user_memory(struct hl_device *hdev, u64 addr, u64 size,
- 	if (!userptr->pages)
- 		return -ENOMEM;
+diff --git a/drivers/gpu/drm/exynos/exynos_drm_g2d.c b/drivers/gpu/drm/exynos/exynos_drm_g2d.c
+index ecede41af9b9..1e0c5a7f206e 100644
+--- a/drivers/gpu/drm/exynos/exynos_drm_g2d.c
++++ b/drivers/gpu/drm/exynos/exynos_drm_g2d.c
+@@ -475,7 +475,8 @@ static dma_addr_t *g2d_userptr_get_dma_addr(struct g2d_data *g2d,
+ 		goto err_free;
+ 	}
  
--	rc = pin_user_pages_fast(start, npages, FOLL_FORCE | FOLL_WRITE,
-+	rc = pin_user_pages_fast(start, npages,
-+				 FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
- 				 userptr->pages);
- 
- 	if (rc != npages) {
+-	ret = pin_user_pages_fast(start, npages, FOLL_FORCE | FOLL_WRITE,
++	ret = pin_user_pages_fast(start, npages,
++				  FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
+ 				  g2d_userptr->pages);
+ 	if (ret != npages) {
+ 		DRM_DEV_ERROR(g2d->dev,
 -- 
 2.29.2
 
