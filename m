@@ -5,56 +5,56 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A917AC8301B
-	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 16:43:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F1F7C83010
+	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 16:43:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7412420657
-	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 16:43:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2F729221F7
+	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 16:43:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="OtmAW3iO"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="cXE7uopd"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731949AbgK0QmW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 27 Nov 2020 11:42:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54092 "EHLO
+        id S1731859AbgK0QmP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 27 Nov 2020 11:42:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731917AbgK0QmV (ORCPT
+        with ESMTP id S1731805AbgK0QmM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 27 Nov 2020 11:42:21 -0500
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF7DC0613D2
-        for <linux-media@vger.kernel.org>; Fri, 27 Nov 2020 08:42:21 -0800 (PST)
-Received: by mail-wm1-x341.google.com with SMTP id u10so2045649wmm.0
-        for <linux-media@vger.kernel.org>; Fri, 27 Nov 2020 08:42:21 -0800 (PST)
+        Fri, 27 Nov 2020 11:42:12 -0500
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E98C0613D2
+        for <linux-media@vger.kernel.org>; Fri, 27 Nov 2020 08:42:12 -0800 (PST)
+Received: by mail-wr1-x444.google.com with SMTP id i2so6204687wrs.4
+        for <linux-media@vger.kernel.org>; Fri, 27 Nov 2020 08:42:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=IQJA1R0+ZH6n/mEKPADOgPQGKUArlTZB9O6d5bikysY=;
-        b=OtmAW3iOTc0HSyFQEwC0X0vHiCdbf0tuM40NfRGt+FHWZYtusfAnhybqEVYgX5kDKI
-         AwsRf7JPHaB7KR0lk+QvX0Rm3bB4VooWt/7DvonmcX64OLYl8a0EkJMkJpwUj9a2zhom
-         ogpnl2izGcaJ7n5DKWa46N9m9wCn2IMsyebDQ=
+        bh=0DCehF4zZ3fhQRejLB/8aYMpRa95wWTeDCqZJ49ug5U=;
+        b=cXE7uopdJpDCC9ukasYE1MZhOpMvCDOw8aBOn4lVUiCtBUjjkQL4YQNkQU2GdEP+/f
+         jKBNeBqyAeQdG9N2dLlqXY4tEG589CDZGtcv2LVit7mRQ+I4Fqyl8yl5HVnX0YnuUkJI
+         7vE4dDro3l523HNgaAbD76h80zfpoLzldEFFM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=IQJA1R0+ZH6n/mEKPADOgPQGKUArlTZB9O6d5bikysY=;
-        b=jHLHdoEbcyvgCxB4IBJGojdS8wyU9i3VzWr2w1Kk+zLQdWECGlW5VrIVlD0oSvY8U0
-         wv/HFjz/PA04cwqfZ0/uJNATsTLvYQEF41JLo9b2nMgHKf2zgSdk5k4CGCIuqe+85jpa
-         W9LwgaLhLSBSvbN2kDWSWE0m5XGflV5TiDKDb3FSClzPJVu89Tlyr2jyMHuKc6BmK4qw
-         9EH9xYSeINy1nXAbTQfpTy+xwHg+rjvJ4KWWdncqR8JqIWN9T5ebLq6xd3n1FVxlMARw
-         QWMTQFfqo2s1Q7bI2ST8NOv1pszL2o9QOGfvUPvvZFIh3DqFkhTNJlE5AZ/U4v/u3aS6
-         8mrg==
-X-Gm-Message-State: AOAM530HfdBBFGG5mA8QVRsuu6+BgE7pN1KN8LgnJQ7tAlyl3MV2FgPx
-        wqtyZKvcqQQSPV6QR+H7MdHl8Q==
-X-Google-Smtp-Source: ABdhPJy48zVCdGXpcjP3gsbBjW7jvfyFIGztqRyOmt6l9YLmPyEcfoLcyF0d5n5x9HOet3r6YUkIWQ==
-X-Received: by 2002:a1c:9c53:: with SMTP id f80mr9983697wme.19.1606495340315;
-        Fri, 27 Nov 2020 08:42:20 -0800 (PST)
+        bh=0DCehF4zZ3fhQRejLB/8aYMpRa95wWTeDCqZJ49ug5U=;
+        b=RwER297UpWB3LakT21A0ABGpybk77jrDu1bce20/DT9bH4GpsyUFB2vNirQQZd+jm0
+         YoHTTYHzaWORnb126oMkLTltSSAXlN8HRKVYI6OCv7tQ4svN/lbPa/XuxZ3op44Rf6p8
+         JdgIoTN//qgazE4tI9xS9TM6wGlOBgc1DJ2HgWxDnq3xUjvXL+JGv1P7rRNeCVn8y7ST
+         PKks9uwFrceu9Nhznxjd2bkHlP+UpMvGtL09ZctUyDje3kj30Sb87sto1L/RyawmLifV
+         kF3Q+7A3XK8db0GisC3mu15AjYRlnX0y1Af0yLFy9pkVfFZLheE/FzgEJ5Nec56rljeA
+         KkrA==
+X-Gm-Message-State: AOAM530TgIRb8FNGb9Y0yc99M6C2Hj0AgupAcxSsj/U4S0Cl682wBICy
+        MKQFP25YPw3mxu51cZ2/OGUZEQ==
+X-Google-Smtp-Source: ABdhPJwA6BKMRNSm//OZD0UDzoMNQD9CPizJ1Nvwa3DXYtenMXckQ1xp0BcV//DS0aC8S+EGVtYc6Q==
+X-Received: by 2002:adf:c147:: with SMTP id w7mr11889034wre.60.1606495330973;
+        Fri, 27 Nov 2020 08:42:10 -0800 (PST)
 Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id q12sm14859078wrx.86.2020.11.27.08.42.19
+        by smtp.gmail.com with ESMTPSA id q12sm14859078wrx.86.2020.11.27.08.42.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Nov 2020 08:42:19 -0800 (PST)
+        Fri, 27 Nov 2020 08:42:10 -0800 (PST)
 From:   Daniel Vetter <daniel.vetter@ffwll.ch>
 To:     DRI Development <dri-devel@lists.freedesktop.org>,
         LKML <linux-kernel@vger.kernel.org>
@@ -62,18 +62,20 @@ Cc:     kvm@vger.kernel.org, linux-mm@kvack.org,
         linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-media@vger.kernel.org,
         Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Daniel Vetter <daniel.vetter@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
         Jason Gunthorpe <jgg@ziepe.ca>,
         Kees Cook <keescook@chromium.org>,
         Dan Williams <dan.j.williams@intel.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         John Hubbard <jhubbard@nvidia.com>,
         =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-        Jan Kara <jack@suse.cz>
-Subject: [PATCH v7 17/17] mm: add mmu_notifier argument to follow_pfn
-Date:   Fri, 27 Nov 2020 17:41:31 +0100
-Message-Id: <20201127164131.2244124-18-daniel.vetter@ffwll.ch>
+        Jan Kara <jack@suse.cz>, Arnd Bergmann <arnd@arndb.de>,
+        David Hildenbrand <david@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH v7 10/17] resource: Move devmem revoke code to resource framework
+Date:   Fri, 27 Nov 2020 17:41:24 +0100
+Message-Id: <20201127164131.2244124-11-daniel.vetter@ffwll.ch>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201127164131.2244124-1-daniel.vetter@ffwll.ch>
 References: <20201127164131.2244124-1-daniel.vetter@ffwll.ch>
@@ -84,21 +86,22 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The only safe way for non core/arch code to use follow_pfn() is
-together with an mmu_notifier subscription. follow_pfn() is already
-marked as _GPL and the kerneldoc explains this restriction.
+We want all iomem mmaps to consistently revoke ptes when the kernel
+takes over and CONFIG_IO_STRICT_DEVMEM is enabled. This includes the
+pci bar mmaps available through procfs and sysfs, which currently do
+not revoke mappings.
 
-This patch here enforces all this by adding a mmu_notifier argument
-and verifying that it is registered for the correct mm_struct.
+To prepare for this, move the code from the /dev/kmem driver to
+kernel/resource.c.
 
-Motivated by discussions with Christoph Hellwig and Jason Gunthorpe.
+During review Jason spotted that barriers are used somewhat
+inconsistently. Fix that up while we shuffle this code, since it
+doesn't have an actual impact at runtime. Otherwise no semantic and
+behavioural changes intended, just code extraction and adjusting
+comments and names.
 
-Since requiring an mmu_notifier makes it very clear that follow_pfn()
-cannot be used on !CONFIG_MMU hardware, remove it from there. The sole
-user kvm not existing on such hardware also supports that.
-
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-Cc: Christoph Hellwig <hch@infradead.org>
 Cc: Jason Gunthorpe <jgg@ziepe.ca>
 Cc: Kees Cook <keescook@chromium.org>
 Cc: Dan Williams <dan.j.williams@intel.com>
@@ -111,177 +114,308 @@ Cc: linux-mm@kvack.org
 Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-samsung-soc@vger.kernel.org
 Cc: linux-media@vger.kernel.org
-Cc: kvm@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc: David Hildenbrand <david@redhat.com>
+Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
 Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 --
-v7: Comments from Jason:
-- ditch follow_pfn from nommu.c
-- simplify mmu_notifer->mm check
+v3:
+- add barrier for consistency and document why we don't have to check
+  for NULL (Jason)
+v4
+- Adjust comments to reflect the general nature of this iomem revoke
+  code now (Dan)
+v6:
+- An unintentional change which caused side-effects of this
+  refactoring is that iomem_get_mapping returned NULL for
+  !CONFIG_IO_STRICT_DEVMEM. But that makes core vfs code blow up,
+  which assumes a mapping always exists. Undo that accidentional
+  change. Reported by John.
+- Augment the commit message to explain what actually changed with
+  this extraction (also John).
 ---
- include/linux/mm.h  |  3 ++-
- mm/memory.c         | 38 ++++++++++++++++++++++++--------------
- mm/nommu.c          | 27 +++++----------------------
- virt/kvm/kvm_main.c |  4 ++--
- 4 files changed, 33 insertions(+), 39 deletions(-)
+ drivers/char/mem.c     | 85 +-----------------------------------
+ include/linux/ioport.h |  6 +--
+ kernel/resource.c      | 98 +++++++++++++++++++++++++++++++++++++++++-
+ 3 files changed, 99 insertions(+), 90 deletions(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index bb3e926afd91..2a564bfd818c 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1651,6 +1651,7 @@ void unmap_vmas(struct mmu_gather *tlb, struct vm_area_struct *start_vma,
- 		unsigned long start, unsigned long end);
+diff --git a/drivers/char/mem.c b/drivers/char/mem.c
+index 7dcf9e4ea79d..43c871dc7477 100644
+--- a/drivers/char/mem.c
++++ b/drivers/char/mem.c
+@@ -31,9 +31,6 @@
+ #include <linux/uio.h>
+ #include <linux/uaccess.h>
+ #include <linux/security.h>
+-#include <linux/pseudo_fs.h>
+-#include <uapi/linux/magic.h>
+-#include <linux/mount.h>
  
- struct mmu_notifier_range;
-+struct mmu_notifier;
- 
- void free_pgd_range(struct mmu_gather *tlb, unsigned long addr,
- 		unsigned long end, unsigned long floor, unsigned long ceiling);
-@@ -1660,7 +1661,7 @@ int follow_pte_pmd(struct mm_struct *mm, unsigned long address,
- 		   struct mmu_notifier_range *range,
- 		   pte_t **ptepp, pmd_t **pmdpp, spinlock_t **ptlp);
- int follow_pfn(struct vm_area_struct *vma, unsigned long address,
--	unsigned long *pfn);
-+	unsigned long *pfn, struct mmu_notifier *subscription);
- int unsafe_follow_pfn(struct vm_area_struct *vma, unsigned long address,
- 		      unsigned long *pfn);
- int follow_phys(struct vm_area_struct *vma, unsigned long address,
-diff --git a/mm/memory.c b/mm/memory.c
-index 0db0c5e233fd..a27b9b9c22c2 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -4789,11 +4789,30 @@ int follow_pte_pmd(struct mm_struct *mm, unsigned long address,
+ #ifdef CONFIG_IA64
+ # include <linux/efi.h>
+@@ -836,42 +833,6 @@ static loff_t memory_lseek(struct file *file, loff_t offset, int orig)
+ 	return ret;
  }
- EXPORT_SYMBOL(follow_pte_pmd);
  
-+static int __follow_pfn(struct vm_area_struct *vma, unsigned long address,
-+			unsigned long *pfn)
+-static struct inode *devmem_inode;
+-
+-#ifdef CONFIG_IO_STRICT_DEVMEM
+-void revoke_devmem(struct resource *res)
+-{
+-	/* pairs with smp_store_release() in devmem_init_inode() */
+-	struct inode *inode = smp_load_acquire(&devmem_inode);
+-
+-	/*
+-	 * Check that the initialization has completed. Losing the race
+-	 * is ok because it means drivers are claiming resources before
+-	 * the fs_initcall level of init and prevent /dev/mem from
+-	 * establishing mappings.
+-	 */
+-	if (!inode)
+-		return;
+-
+-	/*
+-	 * The expectation is that the driver has successfully marked
+-	 * the resource busy by this point, so devmem_is_allowed()
+-	 * should start returning false, however for performance this
+-	 * does not iterate the entire resource range.
+-	 */
+-	if (devmem_is_allowed(PHYS_PFN(res->start)) &&
+-	    devmem_is_allowed(PHYS_PFN(res->end))) {
+-		/*
+-		 * *cringe* iomem=relaxed says "go ahead, what's the
+-		 * worst that can happen?"
+-		 */
+-		return;
+-	}
+-
+-	unmap_mapping_range(inode->i_mapping, res->start, resource_size(res), 1);
+-}
+-#endif
+-
+ static int open_port(struct inode *inode, struct file *filp)
+ {
+ 	int rc;
+@@ -891,7 +852,7 @@ static int open_port(struct inode *inode, struct file *filp)
+ 	 * revocations when drivers want to take over a /dev/mem mapped
+ 	 * range.
+ 	 */
+-	filp->f_mapping = inode->i_mapping;
++	filp->f_mapping = iomem_get_mapping();
+ 
+ 	return 0;
+ }
+@@ -1023,48 +984,6 @@ static char *mem_devnode(struct device *dev, umode_t *mode)
+ 
+ static struct class *mem_class;
+ 
+-static int devmem_fs_init_fs_context(struct fs_context *fc)
+-{
+-	return init_pseudo(fc, DEVMEM_MAGIC) ? 0 : -ENOMEM;
+-}
+-
+-static struct file_system_type devmem_fs_type = {
+-	.name		= "devmem",
+-	.owner		= THIS_MODULE,
+-	.init_fs_context = devmem_fs_init_fs_context,
+-	.kill_sb	= kill_anon_super,
+-};
+-
+-static int devmem_init_inode(void)
+-{
+-	static struct vfsmount *devmem_vfs_mount;
+-	static int devmem_fs_cnt;
+-	struct inode *inode;
+-	int rc;
+-
+-	rc = simple_pin_fs(&devmem_fs_type, &devmem_vfs_mount, &devmem_fs_cnt);
+-	if (rc < 0) {
+-		pr_err("Cannot mount /dev/mem pseudo filesystem: %d\n", rc);
+-		return rc;
+-	}
+-
+-	inode = alloc_anon_inode(devmem_vfs_mount->mnt_sb);
+-	if (IS_ERR(inode)) {
+-		rc = PTR_ERR(inode);
+-		pr_err("Cannot allocate inode for /dev/mem: %d\n", rc);
+-		simple_release_fs(&devmem_vfs_mount, &devmem_fs_cnt);
+-		return rc;
+-	}
+-
+-	/*
+-	 * Publish /dev/mem initialized.
+-	 * Pairs with smp_load_acquire() in revoke_devmem().
+-	 */
+-	smp_store_release(&devmem_inode, inode);
+-
+-	return 0;
+-}
+-
+ static int __init chr_dev_init(void)
+ {
+ 	int minor;
+@@ -1086,8 +1005,6 @@ static int __init chr_dev_init(void)
+ 		 */
+ 		if ((minor == DEVPORT_MINOR) && !arch_has_dev_port())
+ 			continue;
+-		if ((minor == DEVMEM_MINOR) && devmem_init_inode() != 0)
+-			continue;
+ 
+ 		device_create(mem_class, NULL, MKDEV(MEM_MAJOR, minor),
+ 			      NULL, devlist[minor].name);
+diff --git a/include/linux/ioport.h b/include/linux/ioport.h
+index 5135d4b86cd6..02a5466245c0 100644
+--- a/include/linux/ioport.h
++++ b/include/linux/ioport.h
+@@ -307,11 +307,7 @@ struct resource *devm_request_free_mem_region(struct device *dev,
+ struct resource *request_free_mem_region(struct resource *base,
+ 		unsigned long size, const char *name);
+ 
+-#ifdef CONFIG_IO_STRICT_DEVMEM
+-void revoke_devmem(struct resource *res);
+-#else
+-static inline void revoke_devmem(struct resource *res) { };
+-#endif
++extern struct address_space *iomem_get_mapping(void);
+ 
+ #endif /* __ASSEMBLY__ */
+ #endif	/* _LINUX_IOPORT_H */
+diff --git a/kernel/resource.c b/kernel/resource.c
+index 3ae2f56cc79d..c3d71db7a40e 100644
+--- a/kernel/resource.c
++++ b/kernel/resource.c
+@@ -18,12 +18,15 @@
+ #include <linux/spinlock.h>
+ #include <linux/fs.h>
+ #include <linux/proc_fs.h>
++#include <linux/pseudo_fs.h>
+ #include <linux/sched.h>
+ #include <linux/seq_file.h>
+ #include <linux/device.h>
+ #include <linux/pfn.h>
+ #include <linux/mm.h>
++#include <linux/mount.h>
+ #include <linux/resource_ext.h>
++#include <uapi/linux/magic.h>
+ #include <asm/io.h>
+ 
+ 
+@@ -1115,6 +1118,55 @@ resource_size_t resource_alignment(struct resource *res)
+ 
+ static DECLARE_WAIT_QUEUE_HEAD(muxed_resource_wait);
+ 
++static struct inode *iomem_inode;
++
++#ifdef CONFIG_IO_STRICT_DEVMEM
++static void revoke_iomem(struct resource *res)
 +{
-+	int ret = -EINVAL;
-+	spinlock_t *ptl;
-+	pte_t *ptep;
++	/* pairs with smp_store_release() in iomem_init_inode() */
++	struct inode *inode = smp_load_acquire(&iomem_inode);
 +
-+	if (!(vma->vm_flags & (VM_IO | VM_PFNMAP)))
-+		return ret;
++	/*
++	 * Check that the initialization has completed. Losing the race
++	 * is ok because it means drivers are claiming resources before
++	 * the fs_initcall level of init and prevent iomem_get_mapping users
++	 * from establishing mappings.
++	 */
++	if (!inode)
++		return;
 +
-+	ret = follow_pte(vma->vm_mm, address, &ptep, &ptl);
-+	if (ret)
-+		return ret;
-+	*pfn = pte_pfn(*ptep);
-+	pte_unmap_unlock(ptep, ptl);
-+	return 0;
++	/*
++	 * The expectation is that the driver has successfully marked
++	 * the resource busy by this point, so devmem_is_allowed()
++	 * should start returning false, however for performance this
++	 * does not iterate the entire resource range.
++	 */
++	if (devmem_is_allowed(PHYS_PFN(res->start)) &&
++	    devmem_is_allowed(PHYS_PFN(res->end))) {
++		/*
++		 * *cringe* iomem=relaxed says "go ahead, what's the
++		 * worst that can happen?"
++		 */
++		return;
++	}
++
++	unmap_mapping_range(inode->i_mapping, res->start, resource_size(res), 1);
++}
++#else
++static void revoke_iomem(struct resource *res) {}
++#endif
++
++struct address_space *iomem_get_mapping(void)
++{
++	/*
++	 * This function is only called from file open paths, hence guaranteed
++	 * that fs_initcalls have completed and no need to check for NULL. But
++	 * since revoke_iomem can be called before the initcall we still need
++	 * the barrier to appease checkers.
++	 */
++	return smp_load_acquire(&iomem_inode)->i_mapping;
 +}
 +
  /**
-  * follow_pfn - look up PFN at a user virtual address
-  * @vma: memory mapping
-  * @address: user virtual address
-  * @pfn: location to store found PFN
-+ * @subscription: mmu_notifier subscription for the mm @vma is part of
-  *
-  * Only IO mappings and raw PFN mappings are allowed. Note that callers must
-  * ensure coherency with pte updates by using a &mmu_notifier to follow updates.
-@@ -4805,21 +4824,12 @@ EXPORT_SYMBOL(follow_pte_pmd);
-  * Return: zero and the pfn at @pfn on success, -ve otherwise.
-  */
- int follow_pfn(struct vm_area_struct *vma, unsigned long address,
--	unsigned long *pfn)
-+	unsigned long *pfn, struct mmu_notifier *subscription)
- {
--	int ret = -EINVAL;
--	spinlock_t *ptl;
--	pte_t *ptep;
--
--	if (!(vma->vm_flags & (VM_IO | VM_PFNMAP)))
--		return ret;
-+	if (WARN_ON(subscription->mm != vma->vm_mm))
-+		return -EINVAL;
+  * __request_region - create a new busy resource region
+  * @parent: parent resource descriptor
+@@ -1182,7 +1234,7 @@ struct resource * __request_region(struct resource *parent,
+ 	write_unlock(&resource_lock);
  
--	ret = follow_pte(vma->vm_mm, address, &ptep, &ptl);
--	if (ret)
--		return ret;
--	*pfn = pte_pfn(*ptep);
--	pte_unmap_unlock(ptep, ptl);
--	return 0;
-+	return __follow_pfn(vma, address, pfn);
+ 	if (res && orig_parent == &iomem_resource)
+-		revoke_devmem(res);
++		revoke_iomem(res);
+ 
+ 	return res;
  }
- EXPORT_SYMBOL_GPL(follow_pfn);
- 
-@@ -4844,7 +4854,7 @@ int unsafe_follow_pfn(struct vm_area_struct *vma, unsigned long address,
- 	WARN_ONCE(1, "unsafe follow_pfn usage\n");
- 	add_taint(TAINT_USER, LOCKDEP_STILL_OK);
- 
--	return follow_pfn(vma, address, pfn);
-+	return __follow_pfn(vma, address, pfn);
- }
- EXPORT_SYMBOL(unsafe_follow_pfn);
- 
-diff --git a/mm/nommu.c b/mm/nommu.c
-index 79fc98a6c94a..a1e178401146 100644
---- a/mm/nommu.c
-+++ b/mm/nommu.c
-@@ -111,27 +111,6 @@ unsigned int kobjsize(const void *objp)
- 	return page_size(page);
+@@ -1782,4 +1834,48 @@ static int __init strict_iomem(char *str)
+ 	return 1;
  }
  
--/**
-- * follow_pfn - look up PFN at a user virtual address
-- * @vma: memory mapping
-- * @address: user virtual address
-- * @pfn: location to store found PFN
-- *
-- * Only IO mappings and raw PFN mappings are allowed.
-- *
-- * Returns zero and the pfn at @pfn on success, -ve otherwise.
-- */
--int follow_pfn(struct vm_area_struct *vma, unsigned long address,
--	unsigned long *pfn)
--{
--	if (!(vma->vm_flags & (VM_IO | VM_PFNMAP)))
--		return -EINVAL;
--
--	*pfn = address >> PAGE_SHIFT;
--	return 0;
--}
--EXPORT_SYMBOL_GPL(follow_pfn);
--
- /**
-  * unsafe_follow_pfn - look up PFN at a user virtual address
-  * @vma: memory mapping
-@@ -153,7 +132,11 @@ int unsafe_follow_pfn(struct vm_area_struct *vma, unsigned long address,
- 	WARN_ONCE(1, "unsafe follow_pfn usage\n");
- 	add_taint(TAINT_USER, LOCKDEP_STILL_OK);
- 
--	return follow_pfn(vma, address, pfn);
-+	if (!(vma->vm_flags & (VM_IO | VM_PFNMAP)))
-+		return -EINVAL;
++static int iomem_fs_init_fs_context(struct fs_context *fc)
++{
++	return init_pseudo(fc, DEVMEM_MAGIC) ? 0 : -ENOMEM;
++}
 +
-+	*pfn = address >> PAGE_SHIFT;
++static struct file_system_type iomem_fs_type = {
++	.name		= "iomem",
++	.owner		= THIS_MODULE,
++	.init_fs_context = iomem_fs_init_fs_context,
++	.kill_sb	= kill_anon_super,
++};
++
++static int __init iomem_init_inode(void)
++{
++	static struct vfsmount *iomem_vfs_mount;
++	static int iomem_fs_cnt;
++	struct inode *inode;
++	int rc;
++
++	rc = simple_pin_fs(&iomem_fs_type, &iomem_vfs_mount, &iomem_fs_cnt);
++	if (rc < 0) {
++		pr_err("Cannot mount iomem pseudo filesystem: %d\n", rc);
++		return rc;
++	}
++
++	inode = alloc_anon_inode(iomem_vfs_mount->mnt_sb);
++	if (IS_ERR(inode)) {
++		rc = PTR_ERR(inode);
++		pr_err("Cannot allocate inode for iomem: %d\n", rc);
++		simple_release_fs(&iomem_vfs_mount, &iomem_fs_cnt);
++		return rc;
++	}
++
++	/*
++	 * Publish iomem revocation inode initialized.
++	 * Pairs with smp_load_acquire() in revoke_iomem().
++	 */
++	smp_store_release(&iomem_inode, inode);
++
 +	return 0;
- }
- EXPORT_SYMBOL(unsafe_follow_pfn);
- 
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 417f3d470c3e..6f6786524eff 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -1891,7 +1891,7 @@ static int hva_to_pfn_remapped(struct kvm *kvm, struct vm_area_struct *vma,
- 	unsigned long pfn;
- 	int r;
- 
--	r = follow_pfn(vma, addr, &pfn);
-+	r = follow_pfn(vma, addr, &pfn, &kvm->mmu_notifier);
- 	if (r) {
- 		/*
- 		 * get_user_pages fails for VM_IO and VM_PFNMAP vmas and does
-@@ -1906,7 +1906,7 @@ static int hva_to_pfn_remapped(struct kvm *kvm, struct vm_area_struct *vma,
- 		if (r)
- 			return r;
- 
--		r = follow_pfn(vma, addr, &pfn);
-+		r = follow_pfn(vma, addr, &pfn, &kvm->mmu_notifier);
- 		if (r)
- 			return r;
- 
++}
++
++fs_initcall(iomem_init_inode);
++
+ __setup("iomem=", strict_iomem);
 -- 
 2.29.2
 
