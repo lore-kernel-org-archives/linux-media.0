@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D23B1C8300E
-	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 10:38:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4DF3C2D0E4
+	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 10:38:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 82F4D2225A
-	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 10:38:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6392B22249
+	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 10:38:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729311AbgK0KiO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 27 Nov 2020 05:38:14 -0500
+        id S1729342AbgK0KiQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 27 Nov 2020 05:38:16 -0500
 Received: from retiisi.eu ([95.216.213.190]:44910 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729246AbgK0KiM (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 27 Nov 2020 05:38:12 -0500
+        id S1729118AbgK0KiK (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 27 Nov 2020 05:38:10 -0500
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 18604634CC1;
-        Fri, 27 Nov 2020 12:37:18 +0200 (EET)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id B1A0A634CBD;
+        Fri, 27 Nov 2020 12:37:17 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, mchehab@kernel.org
-Subject: [PATCH v2 26/29] dt-bindings: nokia,smia: Use better active polarity for reset
-Date:   Fri, 27 Nov 2020 12:33:22 +0200
-Message-Id: <20201127103325.29814-27-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 22/29] dt-bindings: nokia,smia: Fix link-frequencies documentation
+Date:   Fri, 27 Nov 2020 12:33:18 +0200
+Message-Id: <20201127103325.29814-23-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201127103325.29814-1-sakari.ailus@linux.intel.com>
 References: <20201127103325.29814-1-sakari.ailus@linux.intel.com>
@@ -37,37 +37,52 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Generally reset signal is active low on camera sensors. The example had it
-high. Make it low, and use GPIO_ACTIVE_LOW in gpio.h for that.
+The link-frequencies property belongs to the endpoint, not to the node
+representing the device.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Acked-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ .../devicetree/bindings/media/i2c/nokia,smia.txt          | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml b/Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml
-index ee552489fa2b..47df08338a42 100644
---- a/Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/nokia,smia.yaml
-@@ -80,6 +80,8 @@ additionalProperties: false
+diff --git a/Documentation/devicetree/bindings/media/i2c/nokia,smia.txt b/Documentation/devicetree/bindings/media/i2c/nokia,smia.txt
+index 10ece8108081..6c45c79ef91f 100644
+--- a/Documentation/devicetree/bindings/media/i2c/nokia,smia.txt
++++ b/Documentation/devicetree/bindings/media/i2c/nokia,smia.txt
+@@ -20,8 +20,6 @@ Mandatory properties
+   dependent).
+ - clocks: External clock to the sensor
+ - clock-frequency: Frequency of the external clock to the sensor
+-- link-frequencies: List of allowed data link frequencies. An array of
+-  64-bit elements.
  
- examples:
-   - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-     i2c2 {
-         #address-cells = <1>;
-         #size-cells = <0>;
-@@ -89,7 +91,7 @@ examples:
-         camera-sensor@10 {
-             compatible = "nokia,smia";
-             reg = <0x10>;
--            reset-gpios = <&gpio3 20 0>;
-+            reset-gpios = <&gpio3 20 GPIO_ACTIVE_LOW>;
-             vana-supply = <&vaux3>;
-             clocks = <&omap3_isp 0>;
-             clock-frequency = <9600000>;
+ 
+ Optional properties
+@@ -39,6 +37,8 @@ Endpoint node mandatory properties
+ ----------------------------------
+ 
+ - data-lanes: <1..n>
++- link-frequencies: List of allowed data link frequencies. An array of
++  64-bit elements.
+ 
+ 
+ Example
+@@ -55,11 +55,13 @@ Example
+ 		clocks = <&omap3_isp 0>;
+ 		clock-frequency = <9600000>;
+ 		nokia,nvm-size = <512>; /* 8 * 64 */
+-		link-frequencies = /bits/ 64 <199200000 210000000 499200000>;
+ 		port {
+ 			smiapp_ep: endpoint {
+ 				data-lanes = <1 2>;
+ 				remote-endpoint = <&csi2a_ep>;
++				link-frequencies =
++					/bits/ 64 <199200000 210000000
++						   499200000>;
+ 			};
+ 		};
+ 	};
 -- 
 2.27.0
 
