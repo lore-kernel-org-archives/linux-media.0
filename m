@@ -2,145 +2,154 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A349C64E7A
-	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 10:27:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C9A2C63777
+	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 10:38:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CAB2520885
-	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 10:27:07 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="I0vC7Pwp"
+	by mail.kernel.org (Postfix) with ESMTP id 52D3A221FF
+	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 10:38:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729342AbgK0K0x (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 27 Nov 2020 05:26:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52282 "EHLO
+        id S1728089AbgK0KiF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 27 Nov 2020 05:38:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727333AbgK0K0w (ORCPT
+        with ESMTP id S1727952AbgK0KiF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 27 Nov 2020 05:26:52 -0500
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE59C0613D4
-        for <linux-media@vger.kernel.org>; Fri, 27 Nov 2020 02:26:51 -0800 (PST)
-Received: by mail-ej1-x641.google.com with SMTP id mc24so6884073ejb.6
-        for <linux-media@vger.kernel.org>; Fri, 27 Nov 2020 02:26:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TkOHQKTJtQe0c6uHCNCzZuOlIoXCuox8ChgdYtvl4RE=;
-        b=I0vC7PwpEZCoL+lnpk/fcIdWjkizsXIdAAx6LJtXiXI4leglPhdLPhqlMA3icki53i
-         HyBgryTsqI560+oieoEt98fIs/iMG03u7BlRn1+Vey0aZDXZpYayYbNJ/T7j4nF4pCld
-         W+i8jO16z3gPu8VWqtP5HFsbuVLr7/0HxK3yc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TkOHQKTJtQe0c6uHCNCzZuOlIoXCuox8ChgdYtvl4RE=;
-        b=Sup/9ntaHRfXFp8roJoiwieMFUxINh+YSaB782aKPuJsRkW0JkTl1lHTewAJ0En9Fi
-         aFfWLaZkmmW8m8w8W3a/aCcSZYqP3u0m5sLyO9YXlljvAerrcd2+WB4OL6bVq4g+Rhf4
-         JrCaP24Sn/m4EcEeJhV2Ksl5YQGhIyMgvEM2AQjgI/S29WunrJfSINr7OCrLy7dEPOvV
-         Mjj6ovuMQCimvtxIUaOowiAIU7hRe5Q/ESCRd7Ei0xKzgii8dNN2pp9CdD1kSPxUCrpY
-         CZejuOEHJQSiPtqiAVJ0WaM8bLiaPC0CYPQxfrhX57EpdID+tJzp+eN1BhCkH90SsNrz
-         zUDQ==
-X-Gm-Message-State: AOAM532zJLR+AFvcqsGvB5FLZb7wguknlWwepU6ystgddONMdx2QAOKt
-        Kkel5nYySZruZ/JoNX2etDjdf1vz+yb0Tg==
-X-Google-Smtp-Source: ABdhPJxQAjGBrxupUsz+3La7eoulQPcimdnGou/eRcK5M4I2AjB/UvoQytaDBvFQUnrmpIp6QCkh8Q==
-X-Received: by 2002:a17:906:180b:: with SMTP id v11mr6827855eje.466.1606472809581;
-        Fri, 27 Nov 2020 02:26:49 -0800 (PST)
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
-        by smtp.gmail.com with ESMTPSA id q5sm4587336ejr.89.2020.11.27.02.26.48
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Nov 2020 02:26:48 -0800 (PST)
-Received: by mail-wr1-f45.google.com with SMTP id u12so5041373wrt.0
-        for <linux-media@vger.kernel.org>; Fri, 27 Nov 2020 02:26:48 -0800 (PST)
-X-Received: by 2002:adf:e54f:: with SMTP id z15mr9785451wrm.159.1606472807482;
- Fri, 27 Nov 2020 02:26:47 -0800 (PST)
+        Fri, 27 Nov 2020 05:38:05 -0500
+Received: from hillosipuli.retiisi.eu (unknown [IPv6:2a01:4f9:c010:4572::e8:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33075C0613D4
+        for <linux-media@vger.kernel.org>; Fri, 27 Nov 2020 02:38:05 -0800 (PST)
+Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 96740634C89;
+        Fri, 27 Nov 2020 12:37:15 +0200 (EET)
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     hverkuil@xs4all.nl, mchehab@kernel.org
+Subject: [PATCH v2 02/29] Documentation: ccs: Add CCS driver documentation
+Date:   Fri, 27 Nov 2020 12:32:58 +0200
+Message-Id: <20201127103325.29814-3-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20201127103325.29814-1-sakari.ailus@linux.intel.com>
+References: <20201127103325.29814-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-References: <20201116155008.118124-1-robert.foss@linaro.org>
- <cf0b935d-3ccd-8360-1b52-89fab0b181eb@linux.intel.com> <CAG3jFyssMMHpi4WgWmeDjuVYKz12UwJoBT0WoOsdB4PZxnuqSw@mail.gmail.com>
- <e132769f-cfb5-141a-6cd1-603d82a92b9e@linux.intel.com> <CAAFQd5A=kYufStO7ni4j6f+grDpsoigskcj1LdiG9NRN=cvviQ@mail.gmail.com>
- <CAG3jFyuzTPzgTWCHOc1cpXeSe7GyCET0cTYF9r3aOPXdCuZTsw@mail.gmail.com>
-In-Reply-To: <CAG3jFyuzTPzgTWCHOc1cpXeSe7GyCET0cTYF9r3aOPXdCuZTsw@mail.gmail.com>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Fri, 27 Nov 2020 19:26:35 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5AVs4EeV+q87SSdUW3uW_LComGV=HG5J2XaacDvbAgYXg@mail.gmail.com>
-Message-ID: <CAAFQd5AVs4EeV+q87SSdUW3uW_LComGV=HG5J2XaacDvbAgYXg@mail.gmail.com>
-Subject: Re: [PATCH] media: ov8856: Remove 3280x2464 mode
-To:     Robert Foss <robert.foss@linaro.org>
-Cc:     Bingbu Cao <bingbu.cao@linux.intel.com>,
-        Dongchun Zhu <dongchun.zhu@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Ben Kao <ben.kao@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Nov 26, 2020 at 7:00 PM Robert Foss <robert.foss@linaro.org> wrote:
->
-> On Wed, 25 Nov 2020 at 08:32, Tomasz Figa <tfiga@chromium.org> wrote:
-> >
-> > Hi Bingbu,
-> >
-> > On Wed, Nov 25, 2020 at 1:15 PM Bingbu Cao <bingbu.cao@linux.intel.com> wrote:
-> > >
-> > >
-> > >
-> > > On 11/24/20 6:20 PM, Robert Foss wrote:
-> > > > On Tue, 24 Nov 2020 at 10:42, Bingbu Cao <bingbu.cao@linux.intel.com> wrote:
-> > > >>
-> > > >> Hi, Robert
-> > > >>
-> > > >> I remember that the full size of ov8856 image sensor is 3296x2480 and we can get the 3280x2464
-> > > >> frames based on current settings.
-> > > >>
-> > > >> Do you have any issues with this mode?
-> > > >
-> > > > As far as I can tell using the 3280x2464 mode actually yields an
-> > > > output resolution that is 3264x2448.
-> > > >
-> > > > What does your hardware setup look like? And which revision of the
-> > > > sensor are you using?
-> > > >
-> > >
-> > > Robert, the sensor revision I am using is v1.1. I just checked the actual output pixels on our
-> > > hardware, the output resolution with 2464 mode is 3280x2464, no black pixels.
-> > >
-> > > As Tomasz said, some ISP has the requirement of extra pixel padding, From the ov8856 datasheet,
-> > > the central 3264x2448 pixels are *suggested* to be output from the pixel array and the boundary
-> > > pixels can be used for additional processing. In my understanding, the 32 dummy lines are not
-> > > black lines.
-> >
-> > The datasheet says that only 3264x2448 are active pixels. What pixel
-> > values are you seeing outside of that central area? In the datasheet,
-> > those look like "optically black" pixels, which are not 100% black,
-> > but rather as if the sensor cells didn't receive any light - noise can
-> > be still there.
-> >
->
-> I've been developing support for some Qcom ISP functionality, and
-> during the course of this I ran into the issue I was describing, where
-> the 3280x2464 mode actually outputs 3264x2448.
->
-> I can think of two reasons for this, either ISP driver bugs on my end
-> or the fact that the sensor is being run outside of the specification
-> and which could be resulting in differences between how the ov8856
-> sensors behave.
+Document the MIPI CCS driver and the C register definition generator.
 
-I just confirmed and we're indeed using this mode in a number of our
-projects based on the Intel ISP and it seems to be producing a proper
-image with all pixels of the 3280x2464 matrix having proper values.
-I'm now double checking whether this isn't some processing done by the
-ISP, but I suspect the quality would be bad if it stretched the
-central 3264x2448 part into the 3280x2464 frame.
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ .../driver-api/media/drivers/ccs/ccs.rst      | 82 +++++++++++++++++++
+ .../driver-api/media/drivers/index.rst        |  1 +
+ 2 files changed, 83 insertions(+)
+ create mode 100644 Documentation/driver-api/media/drivers/ccs/ccs.rst
 
-Best regards,
-Tomasz
+diff --git a/Documentation/driver-api/media/drivers/ccs/ccs.rst b/Documentation/driver-api/media/drivers/ccs/ccs.rst
+new file mode 100644
+index 000000000000..9164c9fa8b42
+--- /dev/null
++++ b/Documentation/driver-api/media/drivers/ccs/ccs.rst
+@@ -0,0 +1,82 @@
++.. SPDX-License-Identifier: GPL-2.0-only OR BSD-3-Clause
++
++.. include:: <isonum.txt>
++
++MIPI CCS camera sensor driver
++=============================
++
++The MIPI CCS camera sensor driver is a generic driver for `MIPI CCS
++<https://www.mipi.org/specifications/camera-command-set>`_ compliant
++camera sensors. It exposes three sub-devices representing the pixel array,
++the binner and the scaler.
++
++As the capabilities of individual devices vary, the driver exposes
++interfaces based on the capabilities that exist in hardware.
++
++Pixel Array sub-device
++----------------------
++
++The pixel array sub-device represents the camera sensor's pixel matrix, as well
++as analogue crop functionality present in many compliant devices. The analogue
++crop is configured using the ``V4L2_SEL_TGT_CROP`` on the source pad (0) of the
++entity. The size of the pixel matrix can be obtained by getting the
++``V4L2_SEL_TGT_NATIVE_SIZE`` target.
++
++Binner
++------
++
++The binner sub-device represents the binning functionality on the sensor. For
++that purpose, selection target ``V4L2_SEL_TGT_COMPOSE`` is supported on the
++sink pad (0).
++
++Additionally, if a device has no scaler or digital crop functionality, the
++source pad (1) expses another digital crop selection rectangle that can only
++crop at the end of the lines and frames.
++
++Scaler
++------
++
++The scaler sub-device represents the digital crop and scaling functionality of
++the sensor. The V4L2 selection target ``V4L2_SEL_TGT_CROP`` is used to
++configure the digital crop on the sink pad (0) when digital crop is supported.
++Scaling is configured using selection target ``V4L2_SEL_TGT_COMPOSE`` on the
++sink pad (0) as well.
++
++Additionally, if the scaler sub-device exists, its source pad (1) exposes
++another digital crop selection rectangle that can only crop at the end of the
++lines and frames.
++
++Digital and analogue crop
++-------------------------
++
++Digital crop functionality is referred to as cropping that effectively works by
++dropping some data on the floor. Analogue crop, on the other hand, means that
++the cropped information is never retrieved. In case of camera sensors, the
++analogue data is never read from the pixel matrix that are outside the
++configured selection rectangle that designates crop. The difference has an
++effect in device timing and likely also in power consumption.
++
++Register definition generator
++-----------------------------
++
++The ccs-regs.txt file contains MIPI CCS register definitions that are used
++to produce C source code files for definitions that can be better used by
++programs written in C language. As there are many dependencies between the
++produced files, please do not modify them manually as it's error-prone and
++in vain, but instead change the script producing them.
++
++Usage
++~~~~~
++
++Conventionally the script is called this way to update the CCS driver
++definitions:
++
++.. code-block:: none
++
++	$ Documentation/driver-api/media/drivers/ccs/mk-ccs-regs -k \
++		-e drivers/media/i2c/ccs/ccs-regs.h \
++		-L drivers/media/i2c/ccs/ccs-limits.h \
++		-l drivers/media/i2c/ccs/ccs-limits.c \
++		-c Documentation/driver-api/media/drivers/ccs/ccs-regs.txt
++
++**Copyright** |copy| 2020 Intel Corporation
+diff --git a/Documentation/driver-api/media/drivers/index.rst b/Documentation/driver-api/media/drivers/index.rst
+index eb7011782863..426cda633bf0 100644
+--- a/Documentation/driver-api/media/drivers/index.rst
++++ b/Documentation/driver-api/media/drivers/index.rst
+@@ -26,6 +26,7 @@ Video4Linux (V4L) drivers
+ 	tuners
+ 	vimc-devel
+ 	zoran
++	ccs/ccs
+ 
+ 
+ Digital TV drivers
+-- 
+2.27.0
+
