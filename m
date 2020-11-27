@@ -2,36 +2,32 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B928C63777
-	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 10:38:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51FABC64E75
+	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 10:38:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3D9142224A
-	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 10:38:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0ADCB2222A
+	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 10:38:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728863AbgK0KiH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 27 Nov 2020 05:38:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54026 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728493AbgK0KiH (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 27 Nov 2020 05:38:07 -0500
-Received: from hillosipuli.retiisi.eu (unknown [IPv6:2a01:4f9:c010:4572::e8:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2313CC0613D1
-        for <linux-media@vger.kernel.org>; Fri, 27 Nov 2020 02:38:07 -0800 (PST)
+        id S1729007AbgK0KiJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 27 Nov 2020 05:38:09 -0500
+Received: from retiisi.eu ([95.216.213.190]:44880 "EHLO hillosipuli.retiisi.eu"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728839AbgK0KiI (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 27 Nov 2020 05:38:08 -0500
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 14E8B634C91;
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 977FE634C97;
         Fri, 27 Nov 2020 12:37:16 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, mchehab@kernel.org
-Subject: [PATCH v2 07/29] smiapp: Add macros for accessing CCS registers
-Date:   Fri, 27 Nov 2020 12:33:03 +0200
-Message-Id: <20201127103325.29814-8-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 12/29] smiapp: Use CCS limits in reading data format descriptors
+Date:   Fri, 27 Nov 2020 12:33:08 +0200
+Message-Id: <20201127103325.29814-13-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201127103325.29814-1-sakari.ailus@linux.intel.com>
 References: <20201127103325.29814-1-sakari.ailus@linux.intel.com>
@@ -41,29 +37,69 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add two helper macros for reading and writing the CCS registers as defined
-in ccs-regs.h.
+The CCS limits have the information so use it instead.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/smiapp/smiapp-regs.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/media/i2c/smiapp/smiapp-core.c | 22 +++++++++-------------
+ 1 file changed, 9 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/media/i2c/smiapp/smiapp-regs.h b/drivers/media/i2c/smiapp/smiapp-regs.h
-index 7223f5f89109..dc946096f368 100644
---- a/drivers/media/i2c/smiapp/smiapp-regs.h
-+++ b/drivers/media/i2c/smiapp/smiapp-regs.h
-@@ -28,4 +28,10 @@ int smiapp_write(struct smiapp_sensor *sensor, u32 reg, u32 val);
+diff --git a/drivers/media/i2c/smiapp/smiapp-core.c b/drivers/media/i2c/smiapp/smiapp-core.c
+index daeff6186727..c332b6ecf0bd 100644
+--- a/drivers/media/i2c/smiapp/smiapp-core.c
++++ b/drivers/media/i2c/smiapp/smiapp-core.c
+@@ -842,10 +842,7 @@ static int smiapp_get_mbus_formats(struct smiapp_sensor *sensor)
+ 	unsigned int i, pixel_order;
+ 	int rval;
  
- unsigned int ccs_reg_width(u32 reg);
+-	rval = smiapp_read(
+-		sensor, SMIAPP_REG_U8_DATA_FORMAT_MODEL_TYPE, &type);
+-	if (rval)
+-		return rval;
++	type = CCS_LIM(sensor, DATA_FORMAT_MODEL_TYPE);
  
-+#define ccs_read(sensor, reg_name, val) \
-+	smiapp_read(sensor, CCS_R_##reg_name, val)
-+
-+#define ccs_write(sensor, reg_name, val) \
-+	smiapp_write(sensor, CCS_R_##reg_name, val)
-+
- #endif
+ 	dev_dbg(&client->dev, "data_format_model_type %d\n", type);
+ 
+@@ -863,11 +860,11 @@ static int smiapp_get_mbus_formats(struct smiapp_sensor *sensor)
+ 		pixel_order_str[pixel_order]);
+ 
+ 	switch (type) {
+-	case SMIAPP_DATA_FORMAT_MODEL_TYPE_NORMAL:
++	case CCS_DATA_FORMAT_MODEL_TYPE_NORMAL:
+ 		n = SMIAPP_DATA_FORMAT_MODEL_TYPE_NORMAL_N;
+ 		break;
+-	case SMIAPP_DATA_FORMAT_MODEL_TYPE_EXTENDED:
+-		n = SMIAPP_DATA_FORMAT_MODEL_TYPE_EXTENDED_N;
++	case CCS_DATA_FORMAT_MODEL_TYPE_EXTENDED:
++		n = CCS_LIM_DATA_FORMAT_DESCRIPTOR_MAX_N + 1;
+ 		break;
+ 	default:
+ 		return -EINVAL;
+@@ -879,11 +876,7 @@ static int smiapp_get_mbus_formats(struct smiapp_sensor *sensor)
+ 	for (i = 0; i < n; i++) {
+ 		unsigned int fmt, j;
+ 
+-		rval = smiapp_read(
+-			sensor,
+-			SMIAPP_REG_U16_DATA_FORMAT_DESCRIPTOR(i), &fmt);
+-		if (rval)
+-			return rval;
++		fmt = CCS_LIM_AT(sensor, DATA_FORMAT_DESCRIPTOR, i);
+ 
+ 		dev_dbg(&client->dev, "%u: bpp %u, compressed %u\n",
+ 			i, fmt >> 8, (u8)fmt);
+@@ -895,7 +888,10 @@ static int smiapp_get_mbus_formats(struct smiapp_sensor *sensor)
+ 			if (f->pixel_order != SMIAPP_PIXEL_ORDER_GRBG)
+ 				continue;
+ 
+-			if (f->width != fmt >> 8 || f->compressed != (u8)fmt)
++			if (f->width != fmt >>
++			    CCS_DATA_FORMAT_DESCRIPTOR_UNCOMPRESSED_SHIFT ||
++			    f->compressed !=
++			    (fmt & CCS_DATA_FORMAT_DESCRIPTOR_COMPRESSED_MASK))
+ 				continue;
+ 
+ 			dev_dbg(&client->dev, "jolly good! %d\n", j);
 -- 
 2.27.0
 
