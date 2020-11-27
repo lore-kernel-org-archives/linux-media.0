@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2A0EC8300B
-	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 10:38:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CE4CC64E90
+	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 10:38:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5CF2422257
-	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 10:38:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2D52722249
+	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 10:38:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729287AbgK0KiM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1729272AbgK0KiM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Fri, 27 Nov 2020 05:38:12 -0500
-Received: from retiisi.eu ([95.216.213.190]:44904 "EHLO hillosipuli.retiisi.eu"
+Received: from retiisi.eu ([95.216.213.190]:44882 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729250AbgK0KiM (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 27 Nov 2020 05:38:12 -0500
+        id S1729045AbgK0KiL (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 27 Nov 2020 05:38:11 -0500
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 485DD634CCC;
-        Fri, 27 Nov 2020 12:37:18 +0200 (EET)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 4BA70634CA5;
+        Fri, 27 Nov 2020 12:37:17 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, mchehab@kernel.org
-Subject: [PATCH v2 28/29] dt-bindings: mipi-ccs: Add bus-type for C-PHY support
-Date:   Fri, 27 Nov 2020 12:33:24 +0200
-Message-Id: <20201127103325.29814-29-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 18/29] smiapp: Differentiate CCS sensors from SMIA in subdev naming
+Date:   Fri, 27 Nov 2020 12:33:14 +0200
+Message-Id: <20201127103325.29814-19-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201127103325.29814-1-sakari.ailus@linux.intel.com>
 References: <20201127103325.29814-1-sakari.ailus@linux.intel.com>
@@ -37,48 +37,49 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The bus-type property is required for C-PHY support. Add it, including
-values for CCP2 and CSI-2 D-PHY.
-
-Also require the bus-type property. Effectively all new sensors are MIPI
-D-PHY or C-PHY that cannot be told apart without the bus-type property.
+Call CCS compliant sensors as "ccs" instead of "smiapp" in absence of a
+device specific name. This is done based on the value of the manufacturer
+ID register that is only present in CCS.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- .../devicetree/bindings/media/i2c/mipi-ccs.yaml          | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/media/i2c/smiapp/ccs-core.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml b/Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml
-index a386ee246956..1d90767a6196 100644
---- a/Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml
-@@ -77,9 +77,17 @@ properties:
-           data-lanes:
-             minItems: 1
-             maxItems: 8
-+          bus-type:
-+            description: The type of the data bus.
-+            oneOf:
-+              - const: 1 # CSI-2 C-PHY
-+              - const: 3 # CCP2
-+              - const: 4 # CSI-2 D-PHY
-+
-         required:
-           - link-frequencies
-           - data-lanes
-+          - bus-type
+diff --git a/drivers/media/i2c/smiapp/ccs-core.c b/drivers/media/i2c/smiapp/ccs-core.c
+index f9dbf1407a33..30c4d8edce9d 100644
+--- a/drivers/media/i2c/smiapp/ccs-core.c
++++ b/drivers/media/i2c/smiapp/ccs-core.c
+@@ -2437,8 +2437,6 @@ static int ccs_identify_module(struct ccs_sensor *sensor)
+ 	unsigned int i;
+ 	int rval = 0;
  
- required:
-   - compatible
-@@ -112,6 +120,7 @@ examples:
-                     remote-endpoint = <&csi2a_ep>;
-                     link-frequencies = /bits/ 64 <199200000 210000000
-                                                   499200000>;
-+                    bus-type = <4>;
-                 };
-             };
-         };
+-	minfo->name = SMIAPP_NAME;
+-
+ 	/* Module info */
+ 	rval = ccs_read(sensor, MODULE_MANUFACTURER_ID,
+ 			&minfo->mipi_manufacturer_id);
+@@ -2528,15 +2526,18 @@ static int ccs_identify_module(struct ccs_sensor *sensor)
+ 		"sensor revision 0x%2.2x firmware version 0x%2.2x\n",
+ 		minfo->sensor_revision_number, minfo->sensor_firmware_version);
+ 
+-	if (minfo->ccs_version)
++	if (minfo->ccs_version) {
+ 		dev_dbg(&client->dev, "MIPI CCS version %u.%u",
+ 			(minfo->ccs_version & CCS_MIPI_CCS_VERSION_MAJOR_MASK)
+ 			>> CCS_MIPI_CCS_VERSION_MAJOR_SHIFT,
+ 			(minfo->ccs_version & CCS_MIPI_CCS_VERSION_MINOR_MASK));
+-	else
++		minfo->name = CCS_NAME;
++	} else {
+ 		dev_dbg(&client->dev,
+ 			"smia version %2.2d smiapp version %2.2d\n",
+ 			minfo->smia_version, minfo->smiapp_version);
++		minfo->name = SMIAPP_NAME;
++	}
+ 
+ 	/*
+ 	 * Some modules have bad data in the lvalues below. Hope the
 -- 
 2.27.0
 
