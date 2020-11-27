@@ -2,193 +2,156 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DEA8C2D0E4
-	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 10:38:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 030A5C64E75
+	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 10:38:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 11DBF21D7F
+	by mail.kernel.org (Postfix) with ESMTP id B14C42222C
 	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 10:38:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728077AbgK0KiF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1728294AbgK0KiG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 27 Nov 2020 05:38:06 -0500
+Received: from retiisi.eu ([95.216.213.190]:44872 "EHLO hillosipuli.retiisi.eu"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727737AbgK0KiF (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Fri, 27 Nov 2020 05:38:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54016 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727913AbgK0KiF (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 27 Nov 2020 05:38:05 -0500
-X-Greylist: delayed 1676 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 27 Nov 2020 02:38:04 PST
-Received: from hillosipuli.retiisi.eu (unknown [IPv6:2a01:4f9:c010:4572::e8:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A6EC0613D1
-        for <linux-media@vger.kernel.org>; Fri, 27 Nov 2020 02:38:04 -0800 (PST)
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 536B3634C24;
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id BF95F634C8C;
         Fri, 27 Nov 2020 12:37:15 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, mchehab@kernel.org
-Subject: [PATCH v2 00/29] Linux CCS driver preparation
-Date:   Fri, 27 Nov 2020 12:32:56 +0200
-Message-Id: <20201127103325.29814-1-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 04/29] smiapp: Use CCS register flags
+Date:   Fri, 27 Nov 2020 12:33:00 +0200
+Message-Id: <20201127103325.29814-5-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20201127103325.29814-1-sakari.ailus@linux.intel.com>
+References: <20201127103325.29814-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello everyone,
+Use the CCS register flags instead of the old smia flags. The
+new flags include the register width information that was separate from
+the register flags previously.
 
-Here's a set of patches that turn the existing SMIA driver into a MIPI CCS
-driver while maintaining SMIA support. A number of bugs in the existing
-code are fixed in this set, too.
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ drivers/media/i2c/smiapp/smiapp-reg-defs.h |  8 ++++----
+ drivers/media/i2c/smiapp/smiapp-regs.c     | 20 +++++++++++++-------
+ drivers/media/i2c/smiapp/smiapp-regs.h     | 13 ++++---------
+ 3 files changed, 21 insertions(+), 20 deletions(-)
 
-The changes at this point are primarily focused on dealing with new
-mandatory driver features related to PLL configuration (as CCS allows for
-much more variation there) and things such as integer conversion from
-U16.U16 format instead of float. There are some other new features as well
-such as digital gain and support for getting device specific analogue gain
-coefficients.
-
-A new feature in CCS is CCS static data which makes it possible to obtain
-sensor's capabilities and limits from a file chosen based on sensor
-identification. CCS static data is used also for storing MSR registers so
-supporting new, CCS compliant devices requires no driver changes.
-
-Note that the library as well as the register definitions are dual
-licensed under GNU GPL v2 OR BSD 3-clause licenses for use outside the
-Linux kernel.
-
-Also DT bindings are updated accordingly and converted to YAML format.
-
-More information on MIPI CCS can be found here:
-
-<URL:https://www.mipi.org/specifications/camera-command-set>
-
-Comments are welcome.
-
-since v1:
-
-- Fix the SPDX tag in mk-ccs-regs script
-
-- Add support for producing kernel definitions including use of BIT macro
-  and kernel types in mk-ccs-regs (was C99 only)
-
-- Add MAINTAINERS entry for the documentation in the first documentation
-  patch.
-
-- Fix compilation issues due to ccs-limits.o missing from Makefile in a
-  few patches early in the set.
-
-since the big, big patchset (v2):
-
-- Split into more easily reviewable chunks (this is the first of maybe
-  three). The cover page describes the entire big set. This set contains
-  mostly cleanups for the smiapp driver that prepare for support for
-  additional features as well as DT bindings, as well as using CCS limits.
-
-- Fix SPDX tags. Some were left accidentally with BSD-3-Clause license
-  only.
-
-- Fix bus-type alignment in DT bindings.
-
-- Add CCS driver documentation
-
-- Add -u option to the CCS register definition generator.
-
-- Add static keyword for ccs_limit_offset array.
-
-- Add generated CCS register definitions, and do not generate the definitions as
-  part of the build process.
-
-- Remove ccs-os.h header.
-
-Sakari Ailus (29):
-  ccs: Add the generator for CCS register definitions and limits
-  Documentation: ccs: Add CCS driver documentation
-  smiapp: Import CCS definitions
-  smiapp: Use CCS register flags
-  smiapp: Calculate CCS limit offsets and limit buffer size
-  smiapp: Remove macros for defining registers, merge definitions
-  smiapp: Add macros for accessing CCS registers
-  smiapp: Use MIPI CCS version and manufacturer ID information
-  smiapp: Read CCS limit values
-  smiapp: Switch to CCS limits
-  smiapp: Obtain frame descriptor from CCS limits
-  smiapp: Use CCS limits in reading data format descriptors
-  smiapp: Use CCS limits in reading binning capabilities
-  smiapp: Use CCS registers
-  smiapp: Remove quirk function for writing a single 8-bit register
-  smiapp: Rename register access functions
-  smiapp: Internal rename to CCS
-  smiapp: Differentiate CCS sensors from SMIA in subdev naming
-  smiapp: Rename as "ccs"
-  ccs: Remove profile concept
-  ccs: Give all subdevs a function
-  dt-bindings: nokia,smia: Fix link-frequencies documentation
-  dt-bindings: nokia,smia: Make vana-supply optional
-  dt-bindings: nokia,smia: Remove nokia,nvm-size property
-  dt-bindings: nokia,smia: Convert to YAML
-  dt-bindings: nokia,smia: Use better active polarity for reset
-  dt-bindings: nokia,smia: Amend SMIA bindings with MIPI CCS support
-  dt-bindings: mipi-ccs: Add bus-type for C-PHY support
-  ccs: Request for "reset" GPIO
-
- .../bindings/media/i2c/mipi-ccs.yaml          |  128 ++
- .../bindings/media/i2c/nokia,smia.txt         |   66 -
- .../driver-api/media/drivers/ccs/ccs-regs.txt | 1041 ++++++++++
- .../driver-api/media/drivers/ccs/ccs.rst      |   82 +
- .../driver-api/media/drivers/ccs/mk-ccs-regs  |  433 ++++
- .../driver-api/media/drivers/index.rst        |    1 +
- MAINTAINERS                                   |   21 +-
- drivers/media/i2c/Kconfig                     |    2 +-
- drivers/media/i2c/Makefile                    |    2 +-
- drivers/media/i2c/{smiapp => ccs}/Kconfig     |    7 +-
- drivers/media/i2c/ccs/Makefile                |    6 +
- .../{smiapp/smiapp-core.c => ccs/ccs-core.c}  | 1828 +++++++++--------
- drivers/media/i2c/ccs/ccs-limits.c            |  239 +++
- drivers/media/i2c/ccs/ccs-limits.h            |  259 +++
- .../smiapp-quirk.c => ccs/ccs-quirk.c}        |   92 +-
- .../smiapp-quirk.h => ccs/ccs-quirk.h}        |   52 +-
- .../smiapp-regs.c => ccs/ccs-reg-access.c}    |   85 +-
- drivers/media/i2c/ccs/ccs-reg-access.h        |   38 +
- drivers/media/i2c/ccs/ccs-regs.h              |  954 +++++++++
- .../media/i2c/{smiapp/smiapp.h => ccs/ccs.h}  |  164 +-
- drivers/media/i2c/ccs/smiapp-reg-defs.h       |  580 ++++++
- drivers/media/i2c/smiapp/Makefile             |    6 -
- drivers/media/i2c/smiapp/smiapp-limits.c      |  118 --
- drivers/media/i2c/smiapp/smiapp-limits.h      |  114 -
- drivers/media/i2c/smiapp/smiapp-reg-defs.h    |  489 -----
- drivers/media/i2c/smiapp/smiapp-reg.h         |  116 --
- drivers/media/i2c/smiapp/smiapp-regs.h        |   36 -
- 27 files changed, 4947 insertions(+), 2012 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml
- delete mode 100644 Documentation/devicetree/bindings/media/i2c/nokia,smia.txt
- create mode 100644 Documentation/driver-api/media/drivers/ccs/ccs-regs.txt
- create mode 100644 Documentation/driver-api/media/drivers/ccs/ccs.rst
- create mode 100755 Documentation/driver-api/media/drivers/ccs/mk-ccs-regs
- rename drivers/media/i2c/{smiapp => ccs}/Kconfig (55%)
- create mode 100644 drivers/media/i2c/ccs/Makefile
- rename drivers/media/i2c/{smiapp/smiapp-core.c => ccs/ccs-core.c} (53%)
- create mode 100644 drivers/media/i2c/ccs/ccs-limits.c
- create mode 100644 drivers/media/i2c/ccs/ccs-limits.h
- rename drivers/media/i2c/{smiapp/smiapp-quirk.c => ccs/ccs-quirk.c} (66%)
- rename drivers/media/i2c/{smiapp/smiapp-quirk.h => ccs/ccs-quirk.h} (55%)
- rename drivers/media/i2c/{smiapp/smiapp-regs.c => ccs/ccs-reg-access.c} (66%)
- create mode 100644 drivers/media/i2c/ccs/ccs-reg-access.h
- create mode 100644 drivers/media/i2c/ccs/ccs-regs.h
- rename drivers/media/i2c/{smiapp/smiapp.h => ccs/ccs.h} (57%)
- create mode 100644 drivers/media/i2c/ccs/smiapp-reg-defs.h
- delete mode 100644 drivers/media/i2c/smiapp/Makefile
- delete mode 100644 drivers/media/i2c/smiapp/smiapp-limits.c
- delete mode 100644 drivers/media/i2c/smiapp/smiapp-limits.h
- delete mode 100644 drivers/media/i2c/smiapp/smiapp-reg-defs.h
- delete mode 100644 drivers/media/i2c/smiapp/smiapp-reg.h
- delete mode 100644 drivers/media/i2c/smiapp/smiapp-regs.h
-
+diff --git a/drivers/media/i2c/smiapp/smiapp-reg-defs.h b/drivers/media/i2c/smiapp/smiapp-reg-defs.h
+index 865488befc09..ec574007908b 100644
+--- a/drivers/media/i2c/smiapp/smiapp-reg-defs.h
++++ b/drivers/media/i2c/smiapp/smiapp-reg-defs.h
+@@ -7,11 +7,11 @@
+  * Copyright (C) 2011--2012 Nokia Corporation
+  * Contact: Sakari Ailus <sakari.ailus@iki.fi>
+  */
+-#define SMIAPP_REG_MK_U8(r) ((SMIAPP_REG_8BIT << 16) | (r))
+-#define SMIAPP_REG_MK_U16(r) ((SMIAPP_REG_16BIT << 16) | (r))
+-#define SMIAPP_REG_MK_U32(r) ((SMIAPP_REG_32BIT << 16) | (r))
++#define SMIAPP_REG_MK_U8(r)	(r)
++#define SMIAPP_REG_MK_U16(r)	(CCS_FL_16BIT | (r))
++#define SMIAPP_REG_MK_U32(r)	(CCS_FL_32BIT | (r))
+ 
+-#define SMIAPP_REG_MK_F32(r) (SMIAPP_REG_FLAG_FLOAT | (SMIAPP_REG_32BIT << 16) | (r))
++#define SMIAPP_REG_MK_F32(r)	(CCS_FL_FLOAT_IREAL | CCS_FL_32BIT | (r))
+ 
+ #define SMIAPP_REG_U16_MODEL_ID					SMIAPP_REG_MK_U16(0x0000)
+ #define SMIAPP_REG_U8_REVISION_NUMBER_MAJOR			SMIAPP_REG_MK_U8(0x0002)
+diff --git a/drivers/media/i2c/smiapp/smiapp-regs.c b/drivers/media/i2c/smiapp/smiapp-regs.c
+index 1b58b7c6c839..904054d303ba 100644
+--- a/drivers/media/i2c/smiapp/smiapp-regs.c
++++ b/drivers/media/i2c/smiapp/smiapp-regs.c
+@@ -133,6 +133,16 @@ static int ____smiapp_read_8only(struct smiapp_sensor *sensor, u16 reg,
+ 	return 0;
+ }
+ 
++unsigned int ccs_reg_width(u32 reg)
++{
++	if (reg & CCS_FL_16BIT)
++		return sizeof(uint16_t);
++	if (reg & CCS_FL_32BIT)
++		return sizeof(uint32_t);
++
++	return sizeof(uint8_t);
++}
++
+ /*
+  * Read a 8/16/32-bit i2c register.  The value is returned in 'val'.
+  * Returns zero if successful, or non-zero otherwise.
+@@ -141,13 +151,9 @@ static int __smiapp_read(struct smiapp_sensor *sensor, u32 reg, u32 *val,
+ 			 bool only8)
+ {
+ 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
+-	u8 len = SMIAPP_REG_WIDTH(reg);
++	unsigned int len = ccs_reg_width(reg);
+ 	int rval;
+ 
+-	if (len != SMIAPP_REG_8BIT && len != SMIAPP_REG_16BIT
+-	    && len != SMIAPP_REG_32BIT)
+-		return -EINVAL;
+-
+ 	if (!only8)
+ 		rval = ____smiapp_read(sensor, SMIAPP_REG_ADDR(reg), len, val);
+ 	else
+@@ -156,7 +162,7 @@ static int __smiapp_read(struct smiapp_sensor *sensor, u32 reg, u32 *val,
+ 	if (rval < 0)
+ 		return rval;
+ 
+-	if (reg & SMIAPP_REG_FLAG_FLOAT)
++	if (reg & CCS_FL_FLOAT_IREAL)
+ 		*val = float_to_u32_mul_1000000(client, *val);
+ 
+ 	return 0;
+@@ -204,7 +210,7 @@ int smiapp_write_no_quirk(struct smiapp_sensor *sensor, u32 reg, u32 val)
+ 	struct i2c_msg msg;
+ 	unsigned char data[6];
+ 	unsigned int retries;
+-	u8 len = SMIAPP_REG_WIDTH(reg);
++	unsigned int len = ccs_reg_width(reg);
+ 	int r;
+ 
+ 	if (len > sizeof(data) - 2)
+diff --git a/drivers/media/i2c/smiapp/smiapp-regs.h b/drivers/media/i2c/smiapp/smiapp-regs.h
+index 8fda6ed5668c..7223f5f89109 100644
+--- a/drivers/media/i2c/smiapp/smiapp-regs.h
++++ b/drivers/media/i2c/smiapp/smiapp-regs.h
+@@ -14,16 +14,9 @@
+ #include <linux/i2c.h>
+ #include <linux/types.h>
+ 
+-#define SMIAPP_REG_ADDR(reg)		((u16)reg)
+-#define SMIAPP_REG_WIDTH(reg)		((u8)(reg >> 16))
+-#define SMIAPP_REG_FLAGS(reg)		((u8)(reg >> 24))
+-
+-/* Use upper 8 bits of the type field for flags */
+-#define SMIAPP_REG_FLAG_FLOAT		(1 << 24)
++#include "ccs-regs.h"
+ 
+-#define SMIAPP_REG_8BIT			1
+-#define SMIAPP_REG_16BIT		2
+-#define SMIAPP_REG_32BIT		4
++#define SMIAPP_REG_ADDR(reg)		((u16)reg)
+ 
+ struct smiapp_sensor;
+ 
+@@ -33,4 +26,6 @@ int smiapp_read_8only(struct smiapp_sensor *sensor, u32 reg, u32 *val);
+ int smiapp_write_no_quirk(struct smiapp_sensor *sensor, u32 reg, u32 val);
+ int smiapp_write(struct smiapp_sensor *sensor, u32 reg, u32 val);
+ 
++unsigned int ccs_reg_width(u32 reg);
++
+ #endif
 -- 
 2.27.0
 
