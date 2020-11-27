@@ -2,87 +2,226 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5C63C5519F
-	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 20:53:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77EA1C3E8C5
+	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 20:59:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5A0CD22242
-	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 20:53:26 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=mrns.nl header.i=@mrns.nl header.b="BwHbkrsi"
+	by mail.kernel.org (Postfix) with ESMTP id 149032223F
+	for <linux-media@archiver.kernel.org>; Fri, 27 Nov 2020 20:59:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729755AbgK0Uvc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 27 Nov 2020 15:51:32 -0500
-Received: from smtpq4.tb.mail.iss.as9143.net ([212.54.42.167]:59508 "EHLO
-        smtpq4.tb.mail.iss.as9143.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729567AbgK0UuY (ORCPT
+        id S1732557AbgK0U67 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 27 Nov 2020 15:58:59 -0500
+Received: from smtp04.smtpout.orange.fr ([80.12.242.126]:41992 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731028AbgK0U6J (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 27 Nov 2020 15:50:24 -0500
-X-Greylist: delayed 986 seconds by postgrey-1.27 at vger.kernel.org; Fri, 27 Nov 2020 15:50:23 EST
-Received: from [212.54.42.137] (helo=smtp6.tb.mail.iss.as9143.net)
-        by smtpq4.tb.mail.iss.as9143.net with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <dick@mrns.nl>)
-        id 1kikR4-0004aJ-4F
-        for linux-media@vger.kernel.org; Fri, 27 Nov 2020 21:33:42 +0100
-Received: from ip-213-127-117-214.ip.prioritytelecom.net ([213.127.117.214] helo=routi.mrns.nl)
-        by smtp6.tb.mail.iss.as9143.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <dick@mrns.nl>)
-        id 1kikR2-00FprM-8x
-        for linux-media@vger.kernel.org; Fri, 27 Nov 2020 21:33:41 +0100
-Received: by routi.mrns.nl (sSMTP sendmail emulation); Fri, 27 Nov 2020 21:33:39 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mrns.nl;
- i=@mrns.nl; q=dns/txt; s=mail; t=1606509219; h=date : from : to :
- subject : message-id : mime-version : content-type : from;
- bh=DI7lAeDWF7gi/Jz/YBJ987QQAGqyId5HjJgrRN37cy0=;
- b=BwHbkrsiCuocIoBoMJMV9EKkkRKz66XoNlaTxaNpHfySh4o1gXEY3K8HJGN3CBSKq/qMy
- oRFu4cF29DIgPv5dLjIoitz5n/72UUVQRuJInQyTeK6MqKqOE8xvGVo/CTwfZpK7gYrKkgd
- CPQyh6Y1C1L2K6mbHdi9t8KOVCtx4t4=
-Date:   Fri, 27 Nov 2020 21:33:39 +0100
-From:   Dick <dick@mrns.nl>
-To:     linux-media@vger.kernel.org
-Subject: Use dvbv5-zap.c in mpv (LGPL)
-Message-ID: <20201127203339.GA68093@routi.mrns.nl>
+        Fri, 27 Nov 2020 15:58:09 -0500
+Received: from localhost.localdomain ([81.185.168.160])
+        by mwinf5d27 with ME
+        id xYy3230043Tyla903Yy370; Fri, 27 Nov 2020 21:58:05 +0100
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 27 Nov 2020 21:58:05 +0100
+X-ME-IP: 81.185.168.160
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     mchehab@kernel.org, baijiaju@tsinghua.edu.cn, sean@mess.org,
+        allen.lkml@gmail.com, gustavoars@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] media: ttpci: switch from 'pci_' to 'dma_' API
+Date:   Fri, 27 Nov 2020 21:58:01 +0100
+Message-Id: <20201127205801.1436239-1-christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-SourceIP: 213.127.117.214
-X-Authenticated-Sender: boeierlaan60@ziggo.nl (via SMTP)
-X-Ziggo-spambar: /
-X-Ziggo-spamscore: 0.0
-X-Ziggo-spamreport: CMAE Analysis: v=2.4 cv=eothcqlX c=1 sm=1 tr=0 ts=5fc162a5 a=/yqwS09Bd1mfwh02Zu0ZFA==:17 a=9+rZDBEiDlHhcck0kWbJtElFXBc=:19 a=kj9zAlcOel0A:10 a=nNwsprhYR40A:10 a=pMv7iQpq6FTc1qH51LQA:9 a=CjuIK1q_8ugA:10
-X-Ziggo-Spam-Status: No
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+The wrappers in include/linux/pci-dma-compat.h should go away.
 
-I've used dvbv5-zap.c as a base to replace the dvbstream based input
-stream for mpv-player. The header from dvbv5-zap.c stated that it's
-GPL-2 and I wonder if it could be changed to LGPL-2.
+The patch has been generated with the coccinelle script below and has been
+hand modified to replace GFP_ with a correct flag.
+It has been compile tested.
 
-I'm quite confused how libdvbv5 is licensed, v4l-utils seems GPL-2
-licensed and contain the sources for libdvbv5 which are on it's turn
-LGPL-2 licensed.
+When memory is allocated in 'av7110_attach()' GFP_KERNEL can be used
+because this flag is already used above in the same function and no lock is
+taken in the between.
 
-There are also some references from libdvbv5 to the v4l-utils DVB
-utilities stating that it's sample code. To be honest, for me that's an
-understatement. If you'd like to use libdvbv5 you'll essentially do
-exactly what's in these utilties for setting up an DVB device. I wish
-libdvbv5 contained that code as well (licensed as LGPL-2).
+@@
+@@
+-    PCI_DMA_BIDIRECTIONAL
++    DMA_BIDIRECTIONAL
 
-My questions are:
-* How are the DVB related v4l-utils licensed (GPL-2 or LGPL-2)?
-* Is libdvbv5 really LGPL-2 licensed? (some Linux distributions say
-  GPL-2)
-* Would it be possible to relicense the DVB related v4l-utils?
-* As an alternative, would it be possible to supply LGPL-2 licensed
-  examples with libdvbv5 or some higher level/helper functions?
+@@
+@@
+-    PCI_DMA_TODEVICE
++    DMA_TO_DEVICE
 
-Thanks in advance!
-Dick
+@@
+@@
+-    PCI_DMA_FROMDEVICE
++    DMA_FROM_DEVICE
+
+@@
+@@
+-    PCI_DMA_NONE
++    DMA_NONE
+
+@@
+expression e1, e2, e3;
+@@
+-    pci_alloc_consistent(e1, e2, e3)
++    dma_alloc_coherent(&e1->dev, e2, e3, GFP_)
+
+@@
+expression e1, e2, e3;
+@@
+-    pci_zalloc_consistent(e1, e2, e3)
++    dma_alloc_coherent(&e1->dev, e2, e3, GFP_)
+
+@@
+expression e1, e2, e3, e4;
+@@
+-    pci_free_consistent(e1, e2, e3, e4)
++    dma_free_coherent(&e1->dev, e2, e3, e4)
+
+@@
+expression e1, e2, e3, e4;
+@@
+-    pci_map_single(e1, e2, e3, e4)
++    dma_map_single(&e1->dev, e2, e3, e4)
+
+@@
+expression e1, e2, e3, e4;
+@@
+-    pci_unmap_single(e1, e2, e3, e4)
++    dma_unmap_single(&e1->dev, e2, e3, e4)
+
+@@
+expression e1, e2, e3, e4, e5;
+@@
+-    pci_map_page(e1, e2, e3, e4, e5)
++    dma_map_page(&e1->dev, e2, e3, e4, e5)
+
+@@
+expression e1, e2, e3, e4;
+@@
+-    pci_unmap_page(e1, e2, e3, e4)
++    dma_unmap_page(&e1->dev, e2, e3, e4)
+
+@@
+expression e1, e2, e3, e4;
+@@
+-    pci_map_sg(e1, e2, e3, e4)
++    dma_map_sg(&e1->dev, e2, e3, e4)
+
+@@
+expression e1, e2, e3, e4;
+@@
+-    pci_unmap_sg(e1, e2, e3, e4)
++    dma_unmap_sg(&e1->dev, e2, e3, e4)
+
+@@
+expression e1, e2, e3, e4;
+@@
+-    pci_dma_sync_single_for_cpu(e1, e2, e3, e4)
++    dma_sync_single_for_cpu(&e1->dev, e2, e3, e4)
+
+@@
+expression e1, e2, e3, e4;
+@@
+-    pci_dma_sync_single_for_device(e1, e2, e3, e4)
++    dma_sync_single_for_device(&e1->dev, e2, e3, e4)
+
+@@
+expression e1, e2, e3, e4;
+@@
+-    pci_dma_sync_sg_for_cpu(e1, e2, e3, e4)
++    dma_sync_sg_for_cpu(&e1->dev, e2, e3, e4)
+
+@@
+expression e1, e2, e3, e4;
+@@
+-    pci_dma_sync_sg_for_device(e1, e2, e3, e4)
++    dma_sync_sg_for_device(&e1->dev, e2, e3, e4)
+
+@@
+expression e1, e2;
+@@
+-    pci_dma_mapping_error(e1, e2)
++    dma_mapping_error(&e1->dev, e2)
+
+@@
+expression e1, e2;
+@@
+-    pci_set_dma_mask(e1, e2)
++    dma_set_mask(&e1->dev, e2)
+
+@@
+expression e1, e2;
+@@
+-    pci_set_consistent_dma_mask(e1, e2)
++    dma_set_coherent_mask(&e1->dev, e2)
+
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+If needed, see post from Christoph Hellwig on the kernel-janitors ML:
+   https://marc.info/?l=kernel-janitors&m=158745678307186&w=4
+---
+ drivers/media/pci/ttpci/av7110.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/media/pci/ttpci/av7110.c b/drivers/media/pci/ttpci/av7110.c
+index 2f7069e19b78..d74ee0ecfb36 100644
+--- a/drivers/media/pci/ttpci/av7110.c
++++ b/drivers/media/pci/ttpci/av7110.c
+@@ -1250,7 +1250,8 @@ static void vpeirq(struct tasklet_struct *t)
+ 		return;
+ 
+ 	/* Ensure streamed PCI data is synced to CPU */
+-	pci_dma_sync_sg_for_cpu(budget->dev->pci, budget->pt.slist, budget->pt.nents, PCI_DMA_FROMDEVICE);
++	dma_sync_sg_for_cpu(&budget->dev->pci->dev, budget->pt.slist,
++			    budget->pt.nents, DMA_FROM_DEVICE);
+ 
+ #if 0
+ 	/* track rps1 activity */
+@@ -2637,7 +2638,8 @@ static int av7110_attach(struct saa7146_dev* dev,
+ 	av7110->arm_thread = NULL;
+ 
+ 	/* allocate and init buffers */
+-	av7110->debi_virt = pci_alloc_consistent(pdev, 8192, &av7110->debi_bus);
++	av7110->debi_virt = dma_alloc_coherent(&pdev->dev, 8192,
++					       &av7110->debi_bus, GFP_KERNEL);
+ 	if (!av7110->debi_virt)
+ 		goto err_saa71466_vfree_4;
+ 
+@@ -2726,7 +2728,8 @@ static int av7110_attach(struct saa7146_dev* dev,
+ err_iobuf_vfree_6:
+ 	vfree(av7110->iobuf);
+ err_pci_free_5:
+-	pci_free_consistent(pdev, 8192, av7110->debi_virt, av7110->debi_bus);
++	dma_free_coherent(&pdev->dev, 8192, av7110->debi_virt,
++			  av7110->debi_bus);
+ err_saa71466_vfree_4:
+ 	if (av7110->grabbing)
+ 		saa7146_vfree_destroy_pgtable(pdev, av7110->grabbing, &av7110->pt);
+@@ -2779,8 +2782,8 @@ static int av7110_detach(struct saa7146_dev* saa)
+ 	av7110_av_exit(av7110);
+ 
+ 	vfree(av7110->iobuf);
+-	pci_free_consistent(saa->pci, 8192, av7110->debi_virt,
+-			    av7110->debi_bus);
++	dma_free_coherent(&saa->pci->dev, 8192, av7110->debi_virt,
++			  av7110->debi_bus);
+ 
+ 	i2c_del_adapter(&av7110->i2c_adap);
+ 
+-- 
+2.27.0
+
