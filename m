@@ -2,94 +2,81 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.9 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C387DC83010
-	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 17:59:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6623BC8301B
+	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 18:00:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A118C22456
-	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 17:59:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 36909246E7
+	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 18:00:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731890AbgK1R7X (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 28 Nov 2020 12:59:23 -0500
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:39010 "EHLO
+        id S1730134AbgK1SAR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 28 Nov 2020 13:00:17 -0500
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:40566 "EHLO
         mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728294AbgK1R5S (ORCPT
+        with ESMTP id S1729781AbgK1R6Q (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 28 Nov 2020 12:57:18 -0500
-Received: from relay2-d.mail.gandi.net (unknown [217.70.183.194])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id C4FF13AFF43;
-        Sat, 28 Nov 2020 14:29:44 +0000 (UTC)
+        Sat, 28 Nov 2020 12:58:16 -0500
+Received: from relay7-d.mail.gandi.net (unknown [217.70.183.200])
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id 922D53A2CF0;
+        Sat, 28 Nov 2020 11:07:02 +0000 (UTC)
 X-Originating-IP: 93.29.109.196
 Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
         (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 19CA44000C;
-        Sat, 28 Nov 2020 14:29:22 +0000 (UTC)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 3FE4B20007;
+        Sat, 28 Nov 2020 11:06:39 +0000 (UTC)
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-sunxi@googlegroups.com
-Cc:     Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        kevin.lhopital@hotmail.com
-Subject: [PATCH v2 15/19] MAINTAINERS: Add entry for the Allwinner A31 MIPI CSI-2 bridge
-Date:   Sat, 28 Nov 2020 15:28:35 +0100
-Message-Id: <20201128142839.517949-16-paul.kocialkowski@bootlin.com>
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH v3 0/2] media: i2c: OV5648 image sensor support
+Date:   Sat, 28 Nov 2020 12:06:24 +0100
+Message-Id: <20201128110626.456472-1-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201128142839.517949-1-paul.kocialkowski@bootlin.com>
-References: <20201128142839.517949-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add myself as maintainer of the A31 MIPI CSI-2 bridge media driver.
+This series adds support for the OV5648 image sensor,
+as a V4L2 subdev driver.
 
-Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
----
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Changes since v2:
+- Added link-frequencies endpoint property support;
+- Used NULL ctrl ops for pixel rate and link freq;
+- Extra cosmetic changes.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 0644128640fb..a1352171778b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -709,6 +709,14 @@ T:	git git://linuxtv.org/media_tree.git
- F:	Documentation/devicetree/bindings/media/allwinner,sun4i-a10-csi.yaml
- F:	drivers/media/platform/sunxi/sun4i-csi/
- 
-+ALLWINNER A31 MIPI CSI-2 BRIDGE
-+M:	Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-+L:	linux-media@vger.kernel.org
-+S:	Maintained
-+T:	git git://linuxtv.org/media_tree.git
-+F:	Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml
-+F:	drivers/media/platform/sunxi/sun6i-mipi-csi2/
-+
- ALLWINNER CPUFREQ DRIVER
- M:	Yangtao Li <tiny.windzz@gmail.com>
- L:	linux-pm@vger.kernel.org
+Changes since v1:
+- Used runtime pm;
+- Used assigned-clock-rate;
+- Removed clock name;
+- Returned closest size in set_fmt;
+- Removed unneeded references to v4l2 controls;
+- Removed i2c device table;
+- Dual-licensed bindings;
+- Used SPDX tags.
+
+Paul Kocialkowski (2):
+  dt-bindings: media: i2c: Add OV5648 bindings documentation
+  media: i2c: Add support for the OV5648 image sensor
+
+ .../bindings/media/i2c/ovti,ov5648.yaml       |  115 +
+ drivers/media/i2c/Kconfig                     |   14 +
+ drivers/media/i2c/Makefile                    |    1 +
+ drivers/media/i2c/ov5648.c                    | 2715 +++++++++++++++++
+ 4 files changed, 2845 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5648.yaml
+ create mode 100644 drivers/media/i2c/ov5648.c
+
 -- 
 2.29.2
 
