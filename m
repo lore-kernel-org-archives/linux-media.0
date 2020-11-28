@@ -2,32 +2,32 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-21.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC407C8302D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D159C8302B
 	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 22:21:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C2D7622268
-	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 22:21:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E0055222EA
+	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 22:21:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388301AbgK1Vte (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S2388314AbgK1Vte (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Sat, 28 Nov 2020 16:49:34 -0500
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:47762 "EHLO
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:54078 "EHLO
         mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727769AbgK1SEo (ORCPT
+        with ESMTP id S1730301AbgK1SIb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 28 Nov 2020 13:04:44 -0500
+        Sat, 28 Nov 2020 13:08:31 -0500
 Received: from relay2-d.mail.gandi.net (unknown [217.70.183.194])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id B3ACC3A4EFE;
-        Sat, 28 Nov 2020 14:29:16 +0000 (UTC)
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id 2B8073B1031;
+        Sat, 28 Nov 2020 14:29:53 +0000 (UTC)
 X-Originating-IP: 93.29.109.196
 Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
         (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id A1B0340009;
-        Sat, 28 Nov 2020 14:28:53 +0000 (UTC)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 63AEF4000E;
+        Sat, 28 Nov 2020 14:29:30 +0000 (UTC)
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -51,9 +51,9 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Hans Verkuil <hans.verkuil@cisco.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         kevin.lhopital@hotmail.com
-Subject: [PATCH v2 01/19] docs: phy: Add a part about PHY mode and submode
-Date:   Sat, 28 Nov 2020 15:28:21 +0100
-Message-Id: <20201128142839.517949-2-paul.kocialkowski@bootlin.com>
+Subject: [PATCH v2 19/19] MAINTAINERS: Add entry for the Allwinner A83T MIPI CSI-2 bridge
+Date:   Sat, 28 Nov 2020 15:28:39 +0100
+Message-Id: <20201128142839.517949-20-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201128142839.517949-1-paul.kocialkowski@bootlin.com>
 References: <20201128142839.517949-1-paul.kocialkowski@bootlin.com>
@@ -63,41 +63,32 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Besides giving pointers to the relevant functions for PHY mode and
-submode configuration, this clarifies the need to set them before
-powering on the PHY.
+Add myself as maintainer of the A83T MIPI CSI-2 bridge media driver.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
- Documentation/driver-api/phy/phy.rst | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/Documentation/driver-api/phy/phy.rst b/Documentation/driver-api/phy/phy.rst
-index 8fc1ce0bb905..6cbc72707a49 100644
---- a/Documentation/driver-api/phy/phy.rst
-+++ b/Documentation/driver-api/phy/phy.rst
-@@ -195,3 +195,21 @@ DeviceTree Binding
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a1352171778b..3b48612657b6 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -717,6 +717,14 @@ T:	git git://linuxtv.org/media_tree.git
+ F:	Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml
+ F:	drivers/media/platform/sunxi/sun6i-mipi-csi2/
  
- The documentation for PHY dt binding can be found @
- Documentation/devicetree/bindings/phy/phy-bindings.txt
++ALLWINNER A83T MIPI CSI-2 BRIDGE
++M:	Paul Kocialkowski <paul.kocialkowski@bootlin.com>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++T:	git git://linuxtv.org/media_tree.git
++F:	Documentation/devicetree/bindings/media/allwinner,sun8i-a83t-mipi-csi2.yaml
++F:	drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/
 +
-+PHY Mode and Submode
-+====================
-+
-+Once a reference to a PHY is obtained by a controller, the PHY can be configured
-+to a PHY mode and submode. PHY modes are described in the `phy_mode` enum while
-+submodes are specific to the selected PHY mode.
-+
-+Mode and submode configuration is done by calling::
-+
-+	int phy_set_mode_ext(struct phy *phy, enum phy_mode mode, int submode);
-+
-+If no submode is to be configured, users can call::
-+
-+	int phy_set_mode(struct phy *phy, enum phy_mode mode);
-+
-+The PHY mode and submode must not be configured after the PHY has already been
-+powered on.
+ ALLWINNER CPUFREQ DRIVER
+ M:	Yangtao Li <tiny.windzz@gmail.com>
+ L:	linux-pm@vger.kernel.org
 -- 
 2.29.2
 
