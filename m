@@ -2,229 +2,89 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 386D6C64E90
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6E04C83011
 	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 22:21:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0A0E32225E
+	by mail.kernel.org (Postfix) with ESMTP id 6D8732225A
 	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 22:21:03 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=mess.org header.i=@mess.org header.b="MGrYyjND"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388374AbgK1Vtg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 28 Nov 2020 16:49:36 -0500
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:57778 "EHLO
-        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732835AbgK1SKn (ORCPT
+        id S2388399AbgK1Vth (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 28 Nov 2020 16:49:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727756AbgK1SRx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 28 Nov 2020 13:10:43 -0500
-Received: from relay2-d.mail.gandi.net (unknown [217.70.183.194])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id D4F143B011F;
-        Sat, 28 Nov 2020 14:29:46 +0000 (UTC)
-X-Originating-IP: 93.29.109.196
-Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
-        (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 26C0C40006;
-        Sat, 28 Nov 2020 14:29:24 +0000 (UTC)
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-sunxi@googlegroups.com
-Cc:     Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        kevin.lhopital@hotmail.com
-Subject: [PATCH v2 16/19] dt-bindings: media: Add A83T MIPI CSI-2 bindings documentation
-Date:   Sat, 28 Nov 2020 15:28:36 +0100
-Message-Id: <20201128142839.517949-17-paul.kocialkowski@bootlin.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201128142839.517949-1-paul.kocialkowski@bootlin.com>
-References: <20201128142839.517949-1-paul.kocialkowski@bootlin.com>
+        Sat, 28 Nov 2020 13:17:53 -0500
+Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A3AC0254A9
+        for <linux-media@vger.kernel.org>; Sat, 28 Nov 2020 08:57:33 -0800 (PST)
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id ACEA8C6399; Sat, 28 Nov 2020 16:57:28 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
+        t=1606582648; bh=eAqe23DYmkptbH79ILXAJKq17HBlOB1iYajsLyc8gD8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MGrYyjNDp6kG3pvgtidigf/SH8eueh4HVoni8/bl7dHYzTpcWYQ3vMAytTvTog40E
+         ilyF95Mp63QSB7VrseRDL8O8scmo4SxFy4/sLgl8jinW8GN/dq6VDSOvLxeQGIvZU1
+         8zLFrflN+b9yQpR5ZqsnNU4/icj64JmcUneZMqkrpKi+LmsSkYjh2WG1AtRoIFoYLO
+         8VTpm6tGW4eDK+3V9/nNxNZc/9fj19awTll2EBv+eSlcIwxtdKp09HqMaZZ9d7U61Z
+         SiApLlCtSRBtVu0vcWaHHeyKhwDb8p97Frxyz3Bhf28DpF77ACU4mzfGV0kCuNmIzQ
+         q7M5tehVpaRNA==
+From:   Sean Young <sean@mess.org>
+To:     linux-media@vger.kernel.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>
+Subject: [PATCH] media: mtk-cir: fix calculation of chk period
+Date:   Sat, 28 Nov 2020 16:57:28 +0000
+Message-Id: <20201128165728.29756-1-sean@mess.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This introduces YAML bindings documentation for the A83T MIPI CSI-2
-controller.
+Since commit 528222d853f9 ("media: rc: harmonize infrared durations to
+microseconds"), the calculation of the chk period is wrong. As a result,
+all reported IR will have incorrect timings.
 
-Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Now that the calculations are done in microseconds rather than nanoseconds,
+we can fold the calculations in a simpler form with less rounding error.
+
+Cc: Frank Wunderlich <frank-w@public-files.de>
+Fixes: 528222d853f9 ("media: rc: harmonize infrared durations to microseconds")
+Signed-off-by: Sean Young <sean@mess.org>
 ---
- .../media/allwinner,sun8i-a83t-mipi-csi2.yaml | 147 ++++++++++++++++++
- 1 file changed, 147 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun8i-a83t-mipi-csi2.yaml
+ drivers/media/rc/mtk-cir.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/allwinner,sun8i-a83t-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/allwinner,sun8i-a83t-mipi-csi2.yaml
-new file mode 100644
-index 000000000000..78309084f904
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/allwinner,sun8i-a83t-mipi-csi2.yaml
-@@ -0,0 +1,147 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/allwinner,sun8i-a83t-mipi-csi2.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Allwinner A83T MIPI CSI-2 Device Tree Bindings
-+
-+maintainers:
-+  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-+
-+properties:
-+  compatible:
-+    const: allwinner,sun8i-a83t-mipi-csi2
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: Bus Clock
-+      - description: Module Clock
-+      - description: MIPI-specific Clock
-+      - description: Misc CSI Clock
-+
-+  clock-names:
-+    items:
-+      - const: bus
-+      - const: mod
-+      - const: mipi
-+      - const: misc
-+
-+  resets:
-+    maxItems: 1
-+
-+  # See ./video-interfaces.txt for details
-+  ports:
-+    type: object
-+
-+    properties:
-+      port@0:
-+        type: object
-+        description: Input port, connect to a MIPI CSI-2 sensor
-+
-+        properties:
-+          reg:
-+            const: 0
-+
-+          endpoint:
-+            type: object
-+
-+            properties:
-+              remote-endpoint: true
-+
-+              clock-lanes:
-+                maxItems: 1
-+
-+              data-lanes:
-+                minItems: 1
-+                maxItems: 4
-+
-+            required:
-+              - data-lanes
-+              - remote-endpoint
-+
-+        required:
-+          - endpoint
-+
-+        additionalProperties: false
-+
-+      port@1:
-+        type: object
-+        description: Output port, connect to a CSI controller
-+
-+        properties:
-+          reg:
-+            const: 1
-+
-+          endpoint:
-+            type: object
-+
-+            properties:
-+              remote-endpoint: true
-+
-+              bus-type:
-+                const: 4
-+
-+        required:
-+          - endpoint
-+
-+        additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - resets
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/sun8i-a83t-ccu.h>
-+    #include <dt-bindings/reset/sun8i-a83t-ccu.h>
-+
-+    mipi_csi2: csi@1cb1000 {
-+        compatible = "allwinner,sun8i-a83t-mipi-csi2";
-+        reg = <0x01cb1000 0x1000>;
-+        interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&ccu CLK_BUS_CSI>,
-+                 <&ccu CLK_CSI_SCLK>,
-+                 <&ccu CLK_MIPI_CSI>,
-+                 <&ccu CLK_CSI_MISC>;
-+        clock-names = "bus", "mod", "mipi", "misc";
-+        resets = <&ccu RST_BUS_CSI>;
-+
-+        ports {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            mipi_csi2_in: port@0 {
-+                reg = <0>;
-+
-+                mipi_csi2_in_ov8865: endpoint {
-+                    data-lanes = <1 2 3 4>;
-+
-+                    remote-endpoint = <&ov8865_out_mipi_csi2>;
-+                };
-+            };
-+
-+            mipi_csi2_out: port@1 {
-+                reg = <1>;
-+
-+                mipi_csi2_out_csi: endpoint {
-+                    remote-endpoint = <&csi_in_mipi_csi2>;
-+                };
-+            };
-+        };
-+    };
-+
-+...
+diff --git a/drivers/media/rc/mtk-cir.c b/drivers/media/rc/mtk-cir.c
+index 5051a5e5244b..cdfb1eded306 100644
+--- a/drivers/media/rc/mtk-cir.c
++++ b/drivers/media/rc/mtk-cir.c
+@@ -151,15 +151,12 @@ static inline u32 mtk_chk_period(struct mtk_ir *ir)
+ {
+ 	u32 val;
+ 
+-	/* Period of raw software sampling in ns */
+-	val = DIV_ROUND_CLOSEST(1000000000ul,
+-				clk_get_rate(ir->bus) / ir->data->div);
+-
+ 	/*
+ 	 * Period for software decoder used in the
+ 	 * unit of raw software sampling
+ 	 */
+-	val = DIV_ROUND_CLOSEST(MTK_IR_SAMPLE, val);
++	val = DIV_ROUND_CLOSEST(MTK_IR_SAMPLE * clk_get_rate(ir->bus),
++				USEC_PER_SEC * ir->data->div);
+ 
+ 	dev_dbg(ir->dev, "@pwm clk  = \t%lu\n",
+ 		clk_get_rate(ir->bus) / ir->data->div);
 -- 
-2.29.2
+2.28.0
 
