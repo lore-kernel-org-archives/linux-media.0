@@ -2,176 +2,116 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62791C63777
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94128C64E7B
 	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 22:19:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1DAF921D40
-	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 22:19:00 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="cneVrfCD"
+	by mail.kernel.org (Postfix) with ESMTP id 588062222C
+	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 22:19:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388670AbgK1Vtm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S2388652AbgK1Vtm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Sat, 28 Nov 2020 16:49:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43162 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732084AbgK1S57 (ORCPT
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:51224 "EHLO
+        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730955AbgK1Sql (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 28 Nov 2020 13:57:59 -0500
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4B6C08ED7E
-        for <linux-media@vger.kernel.org>; Fri, 27 Nov 2020 22:39:58 -0800 (PST)
-Received: by mail-pg1-x541.google.com with SMTP id f17so5970660pge.6
-        for <linux-media@vger.kernel.org>; Fri, 27 Nov 2020 22:39:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=a+PjjMNWnQqLDnUR6fnAoKWV02RdoJuew9jsZKELaNg=;
-        b=cneVrfCDK/noHc25kznwhuAPvpDD9uvhG3sZZFhAaMfOOle5wF+DJuLIgvO+UNGAwJ
-         5kbRszeKTgimtJqalm8oPpnfH9zwNp7XQdzgzBlv+D3vkEWvj+IdJUEExo74j41w7yWT
-         PjU1JAgYR5N0Ds55lRFLLcKPzGmRPm9Kp6RAM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=a+PjjMNWnQqLDnUR6fnAoKWV02RdoJuew9jsZKELaNg=;
-        b=VgHaGk/IDf6yU+BY7maq99QVib9TZmAGzuXiFjUYFOU23aNxnoAwHjUCwJ8SCnjIoB
-         ja42FlIMDlvFrw1KkwXNWdALGBVsdA0hjgfwJLwMfG2pAGFklEebfSMSvs486ciOFAkT
-         ZTJuKn+36FBN6F3fdh5XecqLkQU8d/FOgVINPk4Nh67BCU7OK2u4P1Bcrq4M7Yf4XhJz
-         vkm731xxe+fC5l58weA/vWXh97PGMxBqVl08qIOcRvu5/xBT9C7lXgAQdHpdWcYUfcWl
-         2jCJvyNl5puUNraP9XqWgzxpH8CmVLTXMsyJNJif3eWFnWnYqpV5+iBy9++W5VEx1LVS
-         WUhg==
-X-Gm-Message-State: AOAM530CbH8f4rhtHW2wUJhtnFdPiEcDnFyyh9k5/1bOycgvZwMcimf9
-        cy4//aEgZZB2xjgdSZRbOmG4k0WIdZ5Ozg==
-X-Google-Smtp-Source: ABdhPJxCcibo1ZR86OW9T96Z5wpejOumnpTZgUCw0xAe8HbpYVTWLgRf/S/kKsGfAQQSPopIXCZcIw==
-X-Received: by 2002:a65:64c9:: with SMTP id t9mr7455023pgv.418.1606545597516;
-        Fri, 27 Nov 2020 22:39:57 -0800 (PST)
-Received: from localhost (56.72.82.34.bc.googleusercontent.com. [34.82.72.56])
-        by smtp.gmail.com with ESMTPSA id j69sm9255942pfd.37.2020.11.27.22.39.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Nov 2020 22:39:56 -0800 (PST)
-From:   Fritz Koenig <frkoenig@chromium.org>
-To:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        stanimir.varbanov@linaro.org, vgarodia@codeaurora.org,
-        mansur@codeaurora.org, acourbot@chromium.org
-Cc:     Fritz Koenig <frkoenig@chromium.org>
-Subject: [PATCH] venus: vdec: Handle DRC after drain
-Date:   Sat, 28 Nov 2020 06:36:30 +0000
-Message-Id: <20201128063629.1830702-1-frkoenig@chromium.org>
-X-Mailer: git-send-email 2.29.2.454.gaff20da3a2-goog
+        Sat, 28 Nov 2020 13:46:41 -0500
+Received: from relay2-d.mail.gandi.net (unknown [217.70.183.194])
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id 045563B0BD1;
+        Sat, 28 Nov 2020 14:29:50 +0000 (UTC)
+X-Originating-IP: 93.29.109.196
+Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
+        (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 4EDB34000F;
+        Sat, 28 Nov 2020 14:29:28 +0000 (UTC)
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-sunxi@googlegroups.com
+Cc:     Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        kevin.lhopital@hotmail.com
+Subject: [PATCH v2 18/19] ARM: dts: sun8i: a83t: Add MIPI CSI-2 controller node
+Date:   Sat, 28 Nov 2020 15:28:38 +0100
+Message-Id: <20201128142839.517949-19-paul.kocialkowski@bootlin.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20201128142839.517949-1-paul.kocialkowski@bootlin.com>
+References: <20201128142839.517949-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If the DRC is near the end of the stream the client
-may send a V4L2_DEC_CMD_STOP before the DRC occurs.
-V4L2_DEC_CMD_STOP puts the driver into the
-VENUS_DEC_STATE_DRAIN state.  DRC must be aware so
-that after the DRC event the state can be restored
-correctly.
+MIPI CSI-2 is supported on the A83T with a dedicated controller that
+covers both the protocol and D-PHY. It can be connected to the CSI
+interface as a V4L2 subdev through the fwnode graph.
 
-Signed-off-by: Fritz Koenig <frkoenig@chromium.org>
+This is not done by default since connecting the bridge without a
+subdev attached to it will cause a failure on the CSI driver.
 
+Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
+ arch/arm/boot/dts/sun8i-a83t.dtsi | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-This is an attempt to fix the logic for when a DRC occurs
-after the driver is in VENUS_DEC_STATE_DRAIN state.  This
-works for me, but I'm not sure if I covered all the cases.
-Specifically I'm not sure if I reset |drain_active| in all
-the right places.
-
- drivers/media/platform/qcom/venus/core.h |  1 +
- drivers/media/platform/qcom/venus/vdec.c | 19 +++++++++++++++++--
- 2 files changed, 18 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
-index 2b0899bf5b05f..1680c936c06fb 100644
---- a/drivers/media/platform/qcom/venus/core.h
-+++ b/drivers/media/platform/qcom/venus/core.h
-@@ -406,6 +406,7 @@ struct venus_inst {
- 	unsigned int core_acquired: 1;
- 	unsigned int bit_depth;
- 	bool next_buf_last;
-+	bool drain_active;
- };
+diff --git a/arch/arm/boot/dts/sun8i-a83t.dtsi b/arch/arm/boot/dts/sun8i-a83t.dtsi
+index 3ce030f7e05d..ee19cbb565a6 100644
+--- a/arch/arm/boot/dts/sun8i-a83t.dtsi
++++ b/arch/arm/boot/dts/sun8i-a83t.dtsi
+@@ -1076,6 +1076,32 @@ csi_in_mipi_csi2_bridge: port@1 {
+ 			};
+ 		};
  
- #define IS_V1(core)	((core)->res->hfi_version == HFI_VERSION_1XX)
-diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-index 5671cf3458a68..7edbefbd75210 100644
---- a/drivers/media/platform/qcom/venus/vdec.c
-+++ b/drivers/media/platform/qcom/venus/vdec.c
-@@ -523,8 +523,10 @@ vdec_decoder_cmd(struct file *file, void *fh, struct v4l2_decoder_cmd *cmd)
- 
- 		ret = hfi_session_process_buf(inst, &fdata);
- 
--		if (!ret && inst->codec_state == VENUS_DEC_STATE_DECODING)
-+		if (!ret && inst->codec_state == VENUS_DEC_STATE_DECODING) {
- 			inst->codec_state = VENUS_DEC_STATE_DRAIN;
-+			inst->drain_active = true;
-+		}
- 	}
- 
- unlock:
-@@ -976,10 +978,14 @@ static int vdec_start_capture(struct venus_inst *inst)
- 
- 	inst->codec_state = VENUS_DEC_STATE_DECODING;
- 
-+	if (inst->drain_active)
-+		inst->codec_state = VENUS_DEC_STATE_DRAIN;
++		mipi_csi2: csi@1cb1000 {
++			compatible = "allwinner,sun8i-a83t-mipi-csi2";
++			reg = <0x01cb1000 0x1000>;
++			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&ccu CLK_BUS_CSI>,
++				 <&ccu CLK_CSI_SCLK>,
++				 <&ccu CLK_MIPI_CSI>,
++				 <&ccu CLK_CSI_MISC>;
++			clock-names = "bus", "mod", "mipi", "misc";
++			resets = <&ccu RST_BUS_CSI>;
++			status = "disabled";
 +
- 	inst->streamon_cap = 1;
- 	inst->sequence_cap = 0;
- 	inst->reconfig = false;
- 	inst->next_buf_last = false;
-+	inst->drain_active = false;
- 
- 	return 0;
- 
-@@ -1105,6 +1111,7 @@ static int vdec_stop_capture(struct venus_inst *inst)
- 		/* fallthrough */
- 	case VENUS_DEC_STATE_DRAIN:
- 		inst->codec_state = VENUS_DEC_STATE_STOPPED;
-+		inst->drain_active = false;
- 		/* fallthrough */
- 	case VENUS_DEC_STATE_SEEK:
- 		vdec_cancel_dst_buffers(inst);
-@@ -1304,8 +1311,10 @@ static void vdec_buf_done(struct venus_inst *inst, unsigned int buf_type,
- 
- 			v4l2_event_queue_fh(&inst->fh, &ev);
- 
--			if (inst->codec_state == VENUS_DEC_STATE_DRAIN)
-+			if (inst->codec_state == VENUS_DEC_STATE_DRAIN) {
-+				inst->drain_active = false;
- 				inst->codec_state = VENUS_DEC_STATE_STOPPED;
-+			}
- 		}
- 
- 		if (!bytesused)
-@@ -1429,11 +1438,17 @@ static void vdec_event_notify(struct venus_inst *inst, u32 event,
- 	case EVT_SYS_EVENT_CHANGE:
- 		switch (data->event_type) {
- 		case HFI_EVENT_DATA_SEQUENCE_CHANGED_SUFFICIENT_BUF_RESOURCES:
-+			if (inst->codec_state == VENUS_DEC_STATE_DRAIN)
-+				inst->codec_state = VENUS_DEC_STATE_DECODING;
- 			vdec_event_change(inst, data, true);
- 			break;
- 		case HFI_EVENT_DATA_SEQUENCE_CHANGED_INSUFFICIENT_BUF_RESOURCES:
-+			if (inst->codec_state == VENUS_DEC_STATE_DRAIN)
-+				inst->codec_state = VENUS_DEC_STATE_DECODING;
- 			vdec_event_change(inst, data, false);
- 			break;
-+		// TODO(fritz) : does HFI_EVENT_RELEASE_BUFFER_REFERENCE also need to
-+		// change the codec_state to VENUS_DEC_STATE_DECODING?
- 		case HFI_EVENT_RELEASE_BUFFER_REFERENCE:
- 			venus_helper_release_buf_ref(inst, data->tag);
- 			break;
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				mipi_csi2_in: port@0 {
++					reg = <0>;
++				};
++
++				mipi_csi2_out: port@1 {
++					reg = <1>;
++				};
++			};
++		};
++
+ 		hdmi: hdmi@1ee0000 {
+ 			compatible = "allwinner,sun8i-a83t-dw-hdmi";
+ 			reg = <0x01ee0000 0x10000>;
 -- 
-2.29.2.454.gaff20da3a2-goog
+2.29.2
 
