@@ -2,109 +2,172 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17CE3C64E8A
-	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 17:56:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4ADBCC63777
+	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 17:59:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D5F95246E7
-	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 17:56:13 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aHPcBfuV"
+	by mail.kernel.org (Postfix) with ESMTP id 13085246E4
+	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 17:59:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728636AbgK1FHf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 28 Nov 2020 00:07:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55420 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726400AbgK1FE6 (ORCPT
+        id S1730198AbgK1R6h (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 28 Nov 2020 12:58:37 -0500
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:38082 "EHLO
+        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732191AbgK1R4E (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 28 Nov 2020 00:04:58 -0500
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830AEC0613D1;
-        Fri, 27 Nov 2020 21:04:46 -0800 (PST)
-Received: by mail-pg1-x542.google.com with SMTP id t37so5829175pga.7;
-        Fri, 27 Nov 2020 21:04:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1wR2Kvfb5vjG8T/PCijsWnV5/Q6MbpEzV8Vjtc0CiDc=;
-        b=aHPcBfuVBnDc/UEbN7yMv5xeqS+GxfQGwavrxwH6cH4XS0raWlwle2tQKxQSUKmkN+
-         ovcJzX6Y4PIz6fLFX2fxop62ys7QHTYbs/aY0kduavQ4HiA+m210l88xCcG0TrY0B0Xm
-         lmQmrOENCW7G94Z2pZ765mi4uQqb1a7HPz8pyLn5vMtocTqCSfmnnk/Qri7m5VnMkItZ
-         ovINqEOaUi17LvC+LfoKIOhByqt8svCwXXmEgQ6cvZdzzygDmK09fMWf0iGCniTz4F8e
-         rHIvaVcboSMS+SweQeAfQOyp0TC1iUkw4teva/lt5tG2QUOiG9S7raHKEdoWNtD4Rv8D
-         7onA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1wR2Kvfb5vjG8T/PCijsWnV5/Q6MbpEzV8Vjtc0CiDc=;
-        b=VCaUBwWUK4LqxWUIkXjKGsHDLPvhoYrPqfdef8hP2ypjX0Pawy0Ft1NgWklxM/XSTi
-         lZzCSRSrbJmghyX6PUjpzhQqzHk1zMN9HX3YvtUZ+iU4bRtnPANREHeIAPiUZ3UXTN6u
-         bN7XnpdVIFuD4hDf/yJnSByNUwxDAfmXV6j6wXMQ7T/+xMfbPFeWzxsuwkQAmQ3AO+jM
-         IhEaP9i3+iwXozU4O5gW9O8jYwGN/yyKreIAqfzkxe+ryapyagmH2lXz1rE7cESgj96W
-         zVoj4jklusQtKxSFDp90Q35uJF/I53/HujNXshyOBAtoLKY/dCRN8kdw6PdfWa4bCTyO
-         YDFw==
-X-Gm-Message-State: AOAM530K1J7lQ2Tx+wX7980RyoNr8EY/htsoFgq8sZ3gsocogCLgjQx0
-        qOTyeT0h/OvnjBFRLK9be+s=
-X-Google-Smtp-Source: ABdhPJzsOXkBhwfr1TmkLRRXWfCd9IStAbkq9v8eVF37jWLr9Az9kmV3sWjW4/TAXnLRPPc+Up7oCQ==
-X-Received: by 2002:a17:90a:e386:: with SMTP id b6mr2978528pjz.134.1606539886076;
-        Fri, 27 Nov 2020 21:04:46 -0800 (PST)
-Received: from localhost ([2409:10:2e40:5100:6e29:95ff:fe2d:8f34])
-        by smtp.gmail.com with ESMTPSA id p14sm13192489pjo.53.2020.11.27.21.04.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Nov 2020 21:04:44 -0800 (PST)
-Date:   Sat, 28 Nov 2020 14:04:42 +0900
-From:   Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
-To:     Tomasz Figa <tfiga@chromium.org>
-Cc:     Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sat, 28 Nov 2020 12:56:04 -0500
+Received: from relay2-d.mail.gandi.net (unknown [217.70.183.194])
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id C9BA03AFE4D;
+        Sat, 28 Nov 2020 14:29:42 +0000 (UTC)
+X-Originating-IP: 93.29.109.196
+Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
+        (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 132404000A;
+        Sat, 28 Nov 2020 14:29:20 +0000 (UTC)
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-sunxi@googlegroups.com
+Cc:     Yong Deng <yong.deng@magewell.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: Re: [PATCH] media: vb2: always set buffer cache sync hints
-Message-ID: <X8HaalHqzUYiopAn@jagdpanzerIV.localdomain>
-References: <20201127094136.1051071-1-sergey.senozhatsky@gmail.com>
- <0dbfa509-8c82-7470-c18b-24ab5c92dc4b@xs4all.nl>
- <X8ENifLanjYuhF/r@jagdpanzerIV.localdomain>
- <509cc69b-39d7-4b13-f392-ebf25530c8fe@xs4all.nl>
- <X8Eq4V++hRsKuYSF@jagdpanzerIV.localdomain>
- <CAAFQd5D7V8hbdZv_VxAUHUBsbknJsWMaU=h=5j19Z-J8FL27FQ@mail.gmail.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        kevin.lhopital@hotmail.com
+Subject: [PATCH v2 14/19] ARM: dts: sun8i: v3s: Add nodes for MIPI CSI-2 support
+Date:   Sat, 28 Nov 2020 15:28:34 +0100
+Message-Id: <20201128142839.517949-15-paul.kocialkowski@bootlin.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20201128142839.517949-1-paul.kocialkowski@bootlin.com>
+References: <20201128142839.517949-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAFQd5D7V8hbdZv_VxAUHUBsbknJsWMaU=h=5j19Z-J8FL27FQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On (20/11/28 01:50), Tomasz Figa wrote:
-> On Sat, Nov 28, 2020 at 1:35 AM Sergey Senozhatsky
-> <sergey.senozhatsky@gmail.com> wrote:
-> >
-> > On (20/11/27 15:56), Hans Verkuil wrote:
-> > > Yes.
-> > >
-> > > BTW, wouldn't it be sufficient to change this code to:
-> > >
-> > >       if (!q->allow_cache_hints && q->memory != VB2_MEMORY_DMABUF) {
-> > >               vb->need_cache_sync_on_prepare = 1;
-> > >               vb->need_cache_sync_on_finish = 1;
-> > >       }
-> >
-> > I think it would be sufficient.
-> 
-> Does it matter at this point if allow_cache_hints is set or not?
+MIPI CSI-2 is supported on the V3s with an A31-based MIPI CSI-2 bridge
+controller. The controller uses a separate D-PHY, which is the same
+that is otherwise used for MIPI DSI, but used in Rx mode.
 
-That's a good question. I'd say that it'll probably make sense to set
-need_cache_sync for as many buffers as possible, regardless the queue
-configuration (except for ->memory type), just to stay on the safe side.
-I can spin another patch version.
+On the V3s, the CSI0 controller is dedicated to MIPI CSI-2 as it does
+not have access to any parallel interface pins.
 
-	-ss
+Add all the necessary nodes (CSI0, MIPI CSI-2 bridge and D-PHY) to
+support the MIPI CSI-2 interface.
+
+Note that a fwnode graph link is created between CSI0 and MIPI CSI-2
+even when no sensor is connected. This will result in a probe failure
+for the controller as long as no sensor is connected but this is fine
+since no other interface is available.
+
+Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+---
+ arch/arm/boot/dts/sun8i-v3s.dtsi | 68 ++++++++++++++++++++++++++++++++
+ 1 file changed, 68 insertions(+)
+
+diff --git a/arch/arm/boot/dts/sun8i-v3s.dtsi b/arch/arm/boot/dts/sun8i-v3s.dtsi
+index 7926c8b2ac5e..641da6c7bca0 100644
+--- a/arch/arm/boot/dts/sun8i-v3s.dtsi
++++ b/arch/arm/boot/dts/sun8i-v3s.dtsi
+@@ -530,6 +530,31 @@ spi0: spi@1c68000 {
+ 			#size-cells = <0>;
+ 		};
+ 
++		csi0: camera@1cb0000 {
++			compatible = "allwinner,sun8i-v3s-csi";
++			reg = <0x01cb0000 0x1000>;
++			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&ccu CLK_BUS_CSI>,
++				 <&ccu CLK_CSI1_SCLK>,
++				 <&ccu CLK_DRAM_CSI>;
++			clock-names = "bus", "mod", "ram";
++			resets = <&ccu RST_BUS_CSI>;
++			status = "disabled";
++
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				port@1 {
++					reg = <1>;
++
++					csi0_in_mipi_csi2: endpoint {
++						remote-endpoint = <&mipi_csi2_out_csi0>;
++					};
++				};
++			};
++		};
++
+ 		csi1: camera@1cb4000 {
+ 			compatible = "allwinner,sun8i-v3s-csi";
+ 			reg = <0x01cb4000 0x3000>;
+@@ -561,5 +586,48 @@ gic: interrupt-controller@1c81000 {
+ 			#interrupt-cells = <3>;
+ 			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
+ 		};
++
++		mipi_csi2: csi@1cb1000 {
++			compatible = "allwinner,sun8i-v3s-mipi-csi2",
++				     "allwinner,sun6i-a31-mipi-csi2";
++			reg = <0x01cb1000 0x1000>;
++			interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&ccu CLK_BUS_CSI>,
++				 <&ccu CLK_CSI1_SCLK>;
++			clock-names = "bus", "mod";
++			resets = <&ccu RST_BUS_CSI>;
++			status = "disabled";
++
++			phys = <&dphy>;
++			phy-names = "dphy";
++
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				mipi_csi2_in: port@0 {
++					reg = <0>;
++				};
++
++				mipi_csi2_out: port@1 {
++					reg = <1>;
++
++					mipi_csi2_out_csi0: endpoint {
++						remote-endpoint = <&csi0_in_mipi_csi2>;
++					};
++				};
++			};
++		};
++
++		dphy: d-phy@1cb2000 {
++			compatible = "allwinner,sun6i-a31-mipi-dphy";
++			reg = <0x01cb2000 0x1000>;
++			clocks = <&ccu CLK_BUS_CSI>,
++				 <&ccu CLK_MIPI_CSI>;
++			clock-names = "bus", "mod";
++			resets = <&ccu RST_BUS_CSI>;
++			status = "disabled";
++			#phy-cells = <0>;
++		};
+ 	};
+ };
+-- 
+2.29.2
+
