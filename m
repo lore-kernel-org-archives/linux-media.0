@@ -7,181 +7,224 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD4A7C83035
-	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 22:20:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 386D6C64E90
+	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 22:21:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 98AF1222B8
-	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 22:20:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0A0E32225E
+	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 22:21:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388436AbgK1Vti (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 28 Nov 2020 16:49:38 -0500
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:45362 "EHLO
+        id S2388374AbgK1Vtg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 28 Nov 2020 16:49:36 -0500
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:57778 "EHLO
         mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727913AbgK1SX0 (ORCPT
+        with ESMTP id S1732835AbgK1SKn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 28 Nov 2020 13:23:26 -0500
-Received: from relay7-d.mail.gandi.net (unknown [217.70.183.200])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id 5C4733A2DD1;
-        Sat, 28 Nov 2020 11:07:03 +0000 (UTC)
+        Sat, 28 Nov 2020 13:10:43 -0500
+Received: from relay2-d.mail.gandi.net (unknown [217.70.183.194])
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id D4F143B011F;
+        Sat, 28 Nov 2020 14:29:46 +0000 (UTC)
 X-Originating-IP: 93.29.109.196
 Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
         (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 6C4B820009;
-        Sat, 28 Nov 2020 11:06:41 +0000 (UTC)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 26C0C40006;
+        Sat, 28 Nov 2020 14:29:24 +0000 (UTC)
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-sunxi@googlegroups.com
+Cc:     Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v3 1/2] dt-bindings: media: i2c: Add OV5648 bindings documentation
-Date:   Sat, 28 Nov 2020 12:06:25 +0100
-Message-Id: <20201128110626.456472-2-paul.kocialkowski@bootlin.com>
+        kevin.lhopital@hotmail.com
+Subject: [PATCH v2 16/19] dt-bindings: media: Add A83T MIPI CSI-2 bindings documentation
+Date:   Sat, 28 Nov 2020 15:28:36 +0100
+Message-Id: <20201128142839.517949-17-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201128110626.456472-1-paul.kocialkowski@bootlin.com>
-References: <20201128110626.456472-1-paul.kocialkowski@bootlin.com>
+In-Reply-To: <20201128142839.517949-1-paul.kocialkowski@bootlin.com>
+References: <20201128142839.517949-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This introduces YAML bindings documentation for the OV5648
-image sensor.
+This introduces YAML bindings documentation for the A83T MIPI CSI-2
+controller.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- .../bindings/media/i2c/ovti,ov5648.yaml       | 115 ++++++++++++++++++
- 1 file changed, 115 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5648.yaml
+ .../media/allwinner,sun8i-a83t-mipi-csi2.yaml | 147 ++++++++++++++++++
+ 1 file changed, 147 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun8i-a83t-mipi-csi2.yaml
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov5648.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov5648.yaml
+diff --git a/Documentation/devicetree/bindings/media/allwinner,sun8i-a83t-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/allwinner,sun8i-a83t-mipi-csi2.yaml
 new file mode 100644
-index 000000000000..f8783f77cc54
+index 000000000000..78309084f904
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5648.yaml
-@@ -0,0 +1,115 @@
++++ b/Documentation/devicetree/bindings/media/allwinner,sun8i-a83t-mipi-csi2.yaml
+@@ -0,0 +1,147 @@
 +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/media/i2c/ovti,ov5648.yaml#
++$id: http://devicetree.org/schemas/media/allwinner,sun8i-a83t-mipi-csi2.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: OmniVision OV5648 Image Sensor Device Tree Bindings
++title: Allwinner A83T MIPI CSI-2 Device Tree Bindings
 +
 +maintainers:
 +  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 +
 +properties:
 +  compatible:
-+    const: ovti,ov5648
++    const: allwinner,sun8i-a83t-mipi-csi2
 +
 +  reg:
 +    maxItems: 1
 +
++  interrupts:
++    maxItems: 1
++
 +  clocks:
 +    items:
-+      - description: XVCLK Clock
++      - description: Bus Clock
++      - description: Module Clock
++      - description: MIPI-specific Clock
++      - description: Misc CSI Clock
 +
-+  assigned-clocks:
++  clock-names:
++    items:
++      - const: bus
++      - const: mod
++      - const: mipi
++      - const: misc
++
++  resets:
 +    maxItems: 1
 +
-+  assigned-clock-rates:
-+    maxItems: 1
-+
-+  dvdd-supply:
-+    description: Digital Domain Power Supply
-+
-+  avdd-supply:
-+    description: Analog Domain Power Supply (internal AVDD is used if missing)
-+
-+  dovdd-supply:
-+    description: I/O Domain Power Supply
-+
-+  powerdown-gpios:
-+    maxItems: 1
-+    description: Power Down Pin GPIO Control (active low)
-+
-+  reset-gpios:
-+    maxItems: 1
-+    description: Reset Pin GPIO Control (active low)
-+
-+  port:
++  # See ./video-interfaces.txt for details
++  ports:
 +    type: object
-+    description: MIPI CSI-2 transmitter port
 +
 +    properties:
-+      endpoint:
++      port@0:
 +        type: object
++        description: Input port, connect to a MIPI CSI-2 sensor
 +
 +        properties:
-+          remote-endpoint: true
++          reg:
++            const: 0
 +
-+          link-frequencies:
-+            $ref: /schemas/types.yaml#/definitions/uint64-array
-+            description: Allowed MIPI CSI-2 link frequencies
++          endpoint:
++            type: object
 +
-+          data-lanes:
-+            minItems: 1
-+            maxItems: 2
++            properties:
++              remote-endpoint: true
++
++              clock-lanes:
++                maxItems: 1
++
++              data-lanes:
++                minItems: 1
++                maxItems: 4
++
++            required:
++              - data-lanes
++              - remote-endpoint
 +
 +        required:
-+          - data-lanes
-+          - link-frequencies
-+          - remote-endpoint
++          - endpoint
 +
-+    required:
-+      - endpoint
++        additionalProperties: false
++
++      port@1:
++        type: object
++        description: Output port, connect to a CSI controller
++
++        properties:
++          reg:
++            const: 1
++
++          endpoint:
++            type: object
++
++            properties:
++              remote-endpoint: true
++
++              bus-type:
++                const: 4
++
++        required:
++          - endpoint
++
++        additionalProperties: false
 +
 +required:
 +  - compatible
 +  - reg
++  - interrupts
 +  - clocks
-+  - assigned-clocks
-+  - assigned-clock-rates
-+  - dvdd-supply
-+  - dovdd-supply
-+  - port
++  - clock-names
++  - resets
 +
 +additionalProperties: false
 +
 +examples:
 +  - |
-+    #include <dt-bindings/clock/sun8i-v3s-ccu.h>
-+    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/sun8i-a83t-ccu.h>
++    #include <dt-bindings/reset/sun8i-a83t-ccu.h>
 +
-+    i2c0 {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
++    mipi_csi2: csi@1cb1000 {
++        compatible = "allwinner,sun8i-a83t-mipi-csi2";
++        reg = <0x01cb1000 0x1000>;
++        interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
++        clocks = <&ccu CLK_BUS_CSI>,
++                 <&ccu CLK_CSI_SCLK>,
++                 <&ccu CLK_MIPI_CSI>,
++                 <&ccu CLK_CSI_MISC>;
++        clock-names = "bus", "mod", "mipi", "misc";
++        resets = <&ccu RST_BUS_CSI>;
 +
-+        ov5648: camera@36 {
-+            compatible = "ovti,ov5648";
-+            reg = <0x36>;
++        ports {
++            #address-cells = <1>;
++            #size-cells = <0>;
 +
-+            dvdd-supply = <&ov5648_dvdd>;
-+            avdd-supply = <&ov5648_avdd>;
-+            dovdd-supply = <&ov5648_dovdd>;
-+            clocks = <&ov5648_xvclk 0>;
-+            assigned-clocks = <&ov5648_xvclk 0>;
-+            assigned-clock-rates = <24000000>;
++            mipi_csi2_in: port@0 {
++                reg = <0>;
 +
++                mipi_csi2_in_ov8865: endpoint {
++                    data-lanes = <1 2 3 4>;
 +
-+            ov5648_out: port {
-+                ov5648_out_mipi_csi2: endpoint {
-+                    data-lanes = <1 2>;
-+                    link-frequencies = /bits/ 64 <210000000 168000000>;
++                    remote-endpoint = <&ov8865_out_mipi_csi2>;
++                };
++            };
 +
-+                    remote-endpoint = <&mipi_csi2_in_ov5648>;
++            mipi_csi2_out: port@1 {
++                reg = <1>;
++
++                mipi_csi2_out_csi: endpoint {
++                    remote-endpoint = <&csi_in_mipi_csi2>;
 +                };
 +            };
 +        };
 +    };
++
++...
 -- 
 2.29.2
 
