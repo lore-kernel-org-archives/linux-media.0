@@ -2,48 +2,63 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FC9BC8302F
-	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 22:20:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9068CC8302A
+	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 22:20:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3C56722265
-	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 22:20:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 75BC42225A
+	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 22:20:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388450AbgK1Vti (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 28 Nov 2020 16:49:38 -0500
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:45402 "EHLO
+        id S1729783AbgK1Vtj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 28 Nov 2020 16:49:39 -0500
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:47638 "EHLO
         mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727926AbgK1SX1 (ORCPT
+        with ESMTP id S1729051AbgK1SYq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 28 Nov 2020 13:23:27 -0500
-Received: from relay8-d.mail.gandi.net (unknown [217.70.183.201])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id 543A03B4AC7;
-        Sat, 28 Nov 2020 11:03:34 +0000 (UTC)
+        Sat, 28 Nov 2020 13:24:46 -0500
+Received: from relay2-d.mail.gandi.net (unknown [217.70.183.194])
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id 906213ADD1D;
+        Sat, 28 Nov 2020 14:29:24 +0000 (UTC)
 X-Originating-IP: 93.29.109.196
 Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
         (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 1F3151BF20F;
-        Sat, 28 Nov 2020 11:03:09 +0000 (UTC)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id B48BC4000D;
+        Sat, 28 Nov 2020 14:29:01 +0000 (UTC)
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-sunxi@googlegroups.com
+Cc:     Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Maxime Ripard <mripard@kernel.org>,
         Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@siol.net>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        kevin.lhopital@hotmail.com
-Subject: [PATCH v3 0/3] media: i2c: OV8865 image sensor support
-Date:   Sat, 28 Nov 2020 12:02:32 +0100
-Message-Id: <20201128110235.456124-1-paul.kocialkowski@bootlin.com>
+        kevin.lhopital@hotmail.com,
+        =?UTF-8?q?K=C3=A9vin=20L=27h=C3=B4pital?= 
+        <kevin.lhopital@bootlin.com>
+Subject: [PATCH v2 05/19] media: sun6i-csi: Only configure the interface data width for parallel
+Date:   Sat, 28 Nov 2020 15:28:25 +0100
+Message-Id: <20201128142839.517949-6-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20201128142839.517949-1-paul.kocialkowski@bootlin.com>
+References: <20201128142839.517949-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -51,51 +66,91 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series adds support for the OV8865 image sensor, as a V4L2 subdev
-driver. Although an initial series was submitted by Kévin L'hôpital some
-weeks ago, this version is significantly new and should be considered a
-new series.
+Bits related to the interface data width are only applicable to the
+parallel interface and are irrelevant when the CSI controller is taking
+input from the MIPI CSI-2 controller.
 
-The final patch (not for merge) shows how to enable the OV8865 on the
-Banana Pi Camera Board v2 with the Banana Pi M3.
+In prevision of adding support for this case, set these bits
+conditionally so there is no ambiguity. The conditional block is
+moved around before the interlaced conditional block for nicer code
+symmetry (conditional blocks first) while at it.
 
-Changes since v2:
-- Added link-frequencies endpoint property support;
-- Marked avdd-supply as non-optional (no internal regulator);
-- Used NULL ctrl ops for pixel rate and link freq;
-- Extra cosmetic changes;
+Co-developed-by: Kévin L'hôpital <kevin.lhopital@bootlin.com>
+Signed-off-by: Kévin L'hôpital <kevin.lhopital@bootlin.com>
+Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+---
+ .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 42 +++++++++++--------
+ 1 file changed, 25 insertions(+), 17 deletions(-)
 
-Changes since v1:
-- Used runtime pm;
-- Used assigned-clock-rate;
-- Removed clock name;
-- Returned closest size in set_fmt;
-- Removed unneeded references to v4l2 controls;
-- Removed unneeded structure packing attribute;
-- Removed i2c device table;
-- Dual-licensed bindings;
-- Used SPDX tags.
-
-Cheers,
-
-Paul
-
-Kévin L'hôpital (1):
-  ARM: dts: sun8i: a83t: bananapi-m3: Enable MIPI CSI-2 with OV8865
-
-Paul Kocialkowski (2):
-  dt-bindings: media: i2c: Add OV8865 bindings documentation
-  media: i2c: Add support for the OV8865 image sensor
-
- .../bindings/media/i2c/ovti,ov8865.yaml       |  124 +
- arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts  |   95 +
- drivers/media/i2c/Kconfig                     |   13 +
- drivers/media/i2c/Makefile                    |    1 +
- drivers/media/i2c/ov8865.c                    | 3066 +++++++++++++++++
- 5 files changed, 3299 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov8865.yaml
- create mode 100644 drivers/media/i2c/ov8865.c
-
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+index 531a4cccd14a..f1150de94e98 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+@@ -378,8 +378,13 @@ static void sun6i_csi_setup_bus(struct sun6i_csi_dev *sdev)
+ 	unsigned char bus_width;
+ 	u32 flags;
+ 	u32 cfg;
++	bool input_parallel = false;
+ 	bool input_interlaced = false;
+ 
++	if (endpoint->bus_type == V4L2_MBUS_PARALLEL ||
++	    endpoint->bus_type == V4L2_MBUS_BT656)
++		input_parallel = true;
++
+ 	if (csi->config.field == V4L2_FIELD_INTERLACED
+ 	    || csi->config.field == V4L2_FIELD_INTERLACED_TB
+ 	    || csi->config.field == V4L2_FIELD_INTERLACED_BT)
+@@ -395,6 +400,26 @@ static void sun6i_csi_setup_bus(struct sun6i_csi_dev *sdev)
+ 		 CSI_IF_CFG_HREF_POL_MASK | CSI_IF_CFG_FIELD_MASK |
+ 		 CSI_IF_CFG_SRC_TYPE_MASK);
+ 
++	if (input_parallel) {
++		switch (bus_width) {
++		case 8:
++			cfg |= CSI_IF_CFG_IF_DATA_WIDTH_8BIT;
++			break;
++		case 10:
++			cfg |= CSI_IF_CFG_IF_DATA_WIDTH_10BIT;
++			break;
++		case 12:
++			cfg |= CSI_IF_CFG_IF_DATA_WIDTH_12BIT;
++			break;
++		case 16: /* No need to configure DATA_WIDTH for 16bit */
++			break;
++		default:
++			dev_warn(sdev->dev, "Unsupported bus width: %u\n",
++				 bus_width);
++			break;
++		}
++	}
++
+ 	if (input_interlaced)
+ 		cfg |= CSI_IF_CFG_SRC_TYPE_INTERLACED;
+ 	else
+@@ -440,23 +465,6 @@ static void sun6i_csi_setup_bus(struct sun6i_csi_dev *sdev)
+ 		break;
+ 	}
+ 
+-	switch (bus_width) {
+-	case 8:
+-		cfg |= CSI_IF_CFG_IF_DATA_WIDTH_8BIT;
+-		break;
+-	case 10:
+-		cfg |= CSI_IF_CFG_IF_DATA_WIDTH_10BIT;
+-		break;
+-	case 12:
+-		cfg |= CSI_IF_CFG_IF_DATA_WIDTH_12BIT;
+-		break;
+-	case 16: /* No need to configure DATA_WIDTH for 16bit */
+-		break;
+-	default:
+-		dev_warn(sdev->dev, "Unsupported bus width: %u\n", bus_width);
+-		break;
+-	}
+-
+ 	regmap_write(sdev->regmap, CSI_IF_CFG_REG, cfg);
+ }
+ 
 -- 
 2.29.2
 
