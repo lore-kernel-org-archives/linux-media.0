@@ -2,32 +2,33 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.9 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4ADBCC63777
-	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 17:59:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C387DC83010
+	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 17:59:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 13085246E4
-	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 17:59:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A118C22456
+	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 17:59:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730198AbgK1R6h (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 28 Nov 2020 12:58:37 -0500
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:38082 "EHLO
+        id S1731890AbgK1R7X (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 28 Nov 2020 12:59:23 -0500
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:39010 "EHLO
         mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732191AbgK1R4E (ORCPT
+        with ESMTP id S1728294AbgK1R5S (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 28 Nov 2020 12:56:04 -0500
+        Sat, 28 Nov 2020 12:57:18 -0500
 Received: from relay2-d.mail.gandi.net (unknown [217.70.183.194])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id C9BA03AFE4D;
-        Sat, 28 Nov 2020 14:29:42 +0000 (UTC)
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id C4FF13AFF43;
+        Sat, 28 Nov 2020 14:29:44 +0000 (UTC)
 X-Originating-IP: 93.29.109.196
 Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
         (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 132404000A;
-        Sat, 28 Nov 2020 14:29:20 +0000 (UTC)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 19CA44000C;
+        Sat, 28 Nov 2020 14:29:22 +0000 (UTC)
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -51,9 +52,9 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Hans Verkuil <hans.verkuil@cisco.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         kevin.lhopital@hotmail.com
-Subject: [PATCH v2 14/19] ARM: dts: sun8i: v3s: Add nodes for MIPI CSI-2 support
-Date:   Sat, 28 Nov 2020 15:28:34 +0100
-Message-Id: <20201128142839.517949-15-paul.kocialkowski@bootlin.com>
+Subject: [PATCH v2 15/19] MAINTAINERS: Add entry for the Allwinner A31 MIPI CSI-2 bridge
+Date:   Sat, 28 Nov 2020 15:28:35 +0100
+Message-Id: <20201128142839.517949-16-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201128142839.517949-1-paul.kocialkowski@bootlin.com>
 References: <20201128142839.517949-1-paul.kocialkowski@bootlin.com>
@@ -63,111 +64,32 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-MIPI CSI-2 is supported on the V3s with an A31-based MIPI CSI-2 bridge
-controller. The controller uses a separate D-PHY, which is the same
-that is otherwise used for MIPI DSI, but used in Rx mode.
-
-On the V3s, the CSI0 controller is dedicated to MIPI CSI-2 as it does
-not have access to any parallel interface pins.
-
-Add all the necessary nodes (CSI0, MIPI CSI-2 bridge and D-PHY) to
-support the MIPI CSI-2 interface.
-
-Note that a fwnode graph link is created between CSI0 and MIPI CSI-2
-even when no sensor is connected. This will result in a probe failure
-for the controller as long as no sensor is connected but this is fine
-since no other interface is available.
+Add myself as maintainer of the A31 MIPI CSI-2 bridge media driver.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
- arch/arm/boot/dts/sun8i-v3s.dtsi | 68 ++++++++++++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/arch/arm/boot/dts/sun8i-v3s.dtsi b/arch/arm/boot/dts/sun8i-v3s.dtsi
-index 7926c8b2ac5e..641da6c7bca0 100644
---- a/arch/arm/boot/dts/sun8i-v3s.dtsi
-+++ b/arch/arm/boot/dts/sun8i-v3s.dtsi
-@@ -530,6 +530,31 @@ spi0: spi@1c68000 {
- 			#size-cells = <0>;
- 		};
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 0644128640fb..a1352171778b 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -709,6 +709,14 @@ T:	git git://linuxtv.org/media_tree.git
+ F:	Documentation/devicetree/bindings/media/allwinner,sun4i-a10-csi.yaml
+ F:	drivers/media/platform/sunxi/sun4i-csi/
  
-+		csi0: camera@1cb0000 {
-+			compatible = "allwinner,sun8i-v3s-csi";
-+			reg = <0x01cb0000 0x1000>;
-+			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&ccu CLK_BUS_CSI>,
-+				 <&ccu CLK_CSI1_SCLK>,
-+				 <&ccu CLK_DRAM_CSI>;
-+			clock-names = "bus", "mod", "ram";
-+			resets = <&ccu RST_BUS_CSI>;
-+			status = "disabled";
++ALLWINNER A31 MIPI CSI-2 BRIDGE
++M:	Paul Kocialkowski <paul.kocialkowski@bootlin.com>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++T:	git git://linuxtv.org/media_tree.git
++F:	Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml
++F:	drivers/media/platform/sunxi/sun6i-mipi-csi2/
 +
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@1 {
-+					reg = <1>;
-+
-+					csi0_in_mipi_csi2: endpoint {
-+						remote-endpoint = <&mipi_csi2_out_csi0>;
-+					};
-+				};
-+			};
-+		};
-+
- 		csi1: camera@1cb4000 {
- 			compatible = "allwinner,sun8i-v3s-csi";
- 			reg = <0x01cb4000 0x3000>;
-@@ -561,5 +586,48 @@ gic: interrupt-controller@1c81000 {
- 			#interrupt-cells = <3>;
- 			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
- 		};
-+
-+		mipi_csi2: csi@1cb1000 {
-+			compatible = "allwinner,sun8i-v3s-mipi-csi2",
-+				     "allwinner,sun6i-a31-mipi-csi2";
-+			reg = <0x01cb1000 0x1000>;
-+			interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&ccu CLK_BUS_CSI>,
-+				 <&ccu CLK_CSI1_SCLK>;
-+			clock-names = "bus", "mod";
-+			resets = <&ccu RST_BUS_CSI>;
-+			status = "disabled";
-+
-+			phys = <&dphy>;
-+			phy-names = "dphy";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				mipi_csi2_in: port@0 {
-+					reg = <0>;
-+				};
-+
-+				mipi_csi2_out: port@1 {
-+					reg = <1>;
-+
-+					mipi_csi2_out_csi0: endpoint {
-+						remote-endpoint = <&csi0_in_mipi_csi2>;
-+					};
-+				};
-+			};
-+		};
-+
-+		dphy: d-phy@1cb2000 {
-+			compatible = "allwinner,sun6i-a31-mipi-dphy";
-+			reg = <0x01cb2000 0x1000>;
-+			clocks = <&ccu CLK_BUS_CSI>,
-+				 <&ccu CLK_MIPI_CSI>;
-+			clock-names = "bus", "mod";
-+			resets = <&ccu RST_BUS_CSI>;
-+			status = "disabled";
-+			#phy-cells = <0>;
-+		};
- 	};
- };
+ ALLWINNER CPUFREQ DRIVER
+ M:	Yangtao Li <tiny.windzz@gmail.com>
+ L:	linux-pm@vger.kernel.org
 -- 
 2.29.2
 
