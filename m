@@ -7,58 +7,48 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9068CC8302A
-	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 22:20:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57718C83039
+	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 22:20:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 75BC42225A
-	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 22:20:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3773322268
+	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 22:20:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729783AbgK1Vtj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 28 Nov 2020 16:49:39 -0500
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:47638 "EHLO
+        id S2388428AbgK1Vti (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 28 Nov 2020 16:49:38 -0500
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:45284 "EHLO
         mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729051AbgK1SYq (ORCPT
+        with ESMTP id S1727892AbgK1SXZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 28 Nov 2020 13:24:46 -0500
-Received: from relay2-d.mail.gandi.net (unknown [217.70.183.194])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id 906213ADD1D;
-        Sat, 28 Nov 2020 14:29:24 +0000 (UTC)
+        Sat, 28 Nov 2020 13:23:25 -0500
+Received: from relay8-d.mail.gandi.net (unknown [217.70.183.201])
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id 5D4443B4CBB;
+        Sat, 28 Nov 2020 11:03:38 +0000 (UTC)
 X-Originating-IP: 93.29.109.196
 Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
         (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id B48BC4000D;
-        Sat, 28 Nov 2020 14:29:01 +0000 (UTC)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 6C1AD1BF210;
+        Sat, 28 Nov 2020 11:03:16 +0000 (UTC)
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-sunxi@googlegroups.com
-Cc:     Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Maxime Ripard <mripard@kernel.org>,
         Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@siol.net>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         kevin.lhopital@hotmail.com,
         =?UTF-8?q?K=C3=A9vin=20L=27h=C3=B4pital?= 
         <kevin.lhopital@bootlin.com>
-Subject: [PATCH v2 05/19] media: sun6i-csi: Only configure the interface data width for parallel
-Date:   Sat, 28 Nov 2020 15:28:25 +0100
-Message-Id: <20201128142839.517949-6-paul.kocialkowski@bootlin.com>
+Subject: [PATCH NOT FOR MERGE v3 3/3] ARM: dts: sun8i: a83t: bananapi-m3: Enable MIPI CSI-2 with OV8865
+Date:   Sat, 28 Nov 2020 12:02:35 +0100
+Message-Id: <20201128110235.456124-4-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201128142839.517949-1-paul.kocialkowski@bootlin.com>
-References: <20201128142839.517949-1-paul.kocialkowski@bootlin.com>
+In-Reply-To: <20201128110235.456124-1-paul.kocialkowski@bootlin.com>
+References: <20201128110235.456124-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -66,91 +56,160 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Bits related to the interface data width are only applicable to the
-parallel interface and are irrelevant when the CSI controller is taking
-input from the MIPI CSI-2 controller.
+From: Kévin L'hôpital <kevin.lhopital@bootlin.com>
 
-In prevision of adding support for this case, set these bits
-conditionally so there is no ambiguity. The conditional block is
-moved around before the interlaced conditional block for nicer code
-symmetry (conditional blocks first) while at it.
+The Bananapi M3 supports a camera module which includes an OV8865 sensor
+connected via the parallel CSI interface and an OV8865 sensor connected
+via MIPI CSI-2.
 
-Co-developed-by: Kévin L'hôpital <kevin.lhopital@bootlin.com>
+The I2C2 bus is shared by the two sensors as well as the (active-low)
+reset signal, but each sensor has it own shutdown line.
+
 Signed-off-by: Kévin L'hôpital <kevin.lhopital@bootlin.com>
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
- .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 42 +++++++++++--------
- 1 file changed, 25 insertions(+), 17 deletions(-)
+ arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts | 95 ++++++++++++++++++++
+ 1 file changed, 95 insertions(+)
 
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-index 531a4cccd14a..f1150de94e98 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-@@ -378,8 +378,13 @@ static void sun6i_csi_setup_bus(struct sun6i_csi_dev *sdev)
- 	unsigned char bus_width;
- 	u32 flags;
- 	u32 cfg;
-+	bool input_parallel = false;
- 	bool input_interlaced = false;
+diff --git a/arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts b/arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts
+index 431f70234d36..3cb75054889f 100644
+--- a/arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts
++++ b/arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts
+@@ -85,6 +85,30 @@ green {
+ 		};
+ 	};
  
-+	if (endpoint->bus_type == V4L2_MBUS_PARALLEL ||
-+	    endpoint->bus_type == V4L2_MBUS_BT656)
-+		input_parallel = true;
++	reg_ov8865_avdd: ov8865-avdd {
++		compatible = "regulator-fixed";
++		regulator-name = "ov8865-avdd";
++		regulator-min-microvolt = <2800000>;
++		regulator-max-microvolt = <2800000>;
++		vin-supply = <&reg_dldo4>;
++	};
 +
- 	if (csi->config.field == V4L2_FIELD_INTERLACED
- 	    || csi->config.field == V4L2_FIELD_INTERLACED_TB
- 	    || csi->config.field == V4L2_FIELD_INTERLACED_BT)
-@@ -395,6 +400,26 @@ static void sun6i_csi_setup_bus(struct sun6i_csi_dev *sdev)
- 		 CSI_IF_CFG_HREF_POL_MASK | CSI_IF_CFG_FIELD_MASK |
- 		 CSI_IF_CFG_SRC_TYPE_MASK);
- 
-+	if (input_parallel) {
-+		switch (bus_width) {
-+		case 8:
-+			cfg |= CSI_IF_CFG_IF_DATA_WIDTH_8BIT;
-+			break;
-+		case 10:
-+			cfg |= CSI_IF_CFG_IF_DATA_WIDTH_10BIT;
-+			break;
-+		case 12:
-+			cfg |= CSI_IF_CFG_IF_DATA_WIDTH_12BIT;
-+			break;
-+		case 16: /* No need to configure DATA_WIDTH for 16bit */
-+			break;
-+		default:
-+			dev_warn(sdev->dev, "Unsupported bus width: %u\n",
-+				 bus_width);
-+			break;
-+		}
-+	}
++	reg_ov8865_dovdd: ov8865-dovdd {
++		compatible = "regulator-fixed";
++		regulator-name = "ov8865-dovdd";
++		regulator-min-microvolt = <2800000>;
++		regulator-max-microvolt = <2800000>;
++		vin-supply = <&reg_dldo4>;
++	};
 +
- 	if (input_interlaced)
- 		cfg |= CSI_IF_CFG_SRC_TYPE_INTERLACED;
- 	else
-@@ -440,23 +465,6 @@ static void sun6i_csi_setup_bus(struct sun6i_csi_dev *sdev)
- 		break;
- 	}
++	reg_ov8865_dvdd: ov8865-dvdd {
++		compatible = "regulator-fixed";
++		regulator-name = "ov8865-dvdd";
++		regulator-min-microvolt = <1200000>;
++		regulator-max-microvolt = <1200000>;
++		vin-supply = <&reg_eldo1>;
++	};
++
+ 	reg_usb1_vbus: reg-usb1-vbus {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "usb1-vbus";
+@@ -115,6 +139,16 @@ &cpu100 {
+ 	cpu-supply = <&reg_dcdc3>;
+ };
  
--	switch (bus_width) {
--	case 8:
--		cfg |= CSI_IF_CFG_IF_DATA_WIDTH_8BIT;
--		break;
--	case 10:
--		cfg |= CSI_IF_CFG_IF_DATA_WIDTH_10BIT;
--		break;
--	case 12:
--		cfg |= CSI_IF_CFG_IF_DATA_WIDTH_12BIT;
--		break;
--	case 16: /* No need to configure DATA_WIDTH for 16bit */
--		break;
--	default:
--		dev_warn(sdev->dev, "Unsupported bus width: %u\n", bus_width);
--		break;
--	}
--
- 	regmap_write(sdev->regmap, CSI_IF_CFG_REG, cfg);
- }
++&csi {
++	status = "okay";
++};
++
++&csi_in_mipi_csi2_bridge {
++	csi_in_mipi_csi2: endpoint {
++		remote-endpoint = <&mipi_csi2_out_csi>;
++	};
++};
++
+ &de {
+ 	status = "okay";
+ };
+@@ -147,6 +181,36 @@ hdmi_out_con: endpoint {
+ 	};
+ };
  
++&i2c2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c2_pe_pins>;
++	status = "okay";
++
++	ov8865: camera@36 {
++		compatible = "ovti,ov8865";
++		reg = <0x36>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&csi_mclk_pin>;
++		clocks = <&ccu CLK_CSI_MCLK>;
++		assigned-clocks = <&ccu CLK_CSI_MCLK>;
++		assigned-clock-rates = <24000000>;
++		avdd-supply = <&reg_ov8865_avdd>;
++		dovdd-supply = <&reg_ov8865_dovdd>;
++		dvdd-supply = <&reg_ov8865_dvdd>;
++		powerdown-gpios = <&pio 4 17 GPIO_ACTIVE_LOW>; /* PE17 */
++		reset-gpios = <&pio 4 16 GPIO_ACTIVE_LOW>; /* PE16 */
++
++		port {
++			ov8865_out_mipi_csi2: endpoint {
++				data-lanes = <1 2 3 4>;
++				link-frequencies = /bits/ 64 <360000000>;
++
++				remote-endpoint = <&mipi_csi2_in_ov8865>;
++			};
++		};
++	};
++};
++
+ &mdio {
+ 	rgmii_phy: ethernet-phy@1 {
+ 		compatible = "ethernet-phy-ieee802.3-c22";
+@@ -154,6 +218,24 @@ rgmii_phy: ethernet-phy@1 {
+ 	};
+ };
+ 
++&mipi_csi2 {
++	status = "okay";
++};
++
++&mipi_csi2_in {
++	mipi_csi2_in_ov8865: endpoint {
++		data-lanes = <1 2 3 4>;
++
++		remote-endpoint = <&ov8865_out_mipi_csi2>;
++	};
++};
++
++&mipi_csi2_out {
++	mipi_csi2_out_csi: endpoint {
++		remote-endpoint = <&csi_in_mipi_csi2>;
++	};
++};
++
+ &mmc0 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&mmc0_pins>;
+@@ -327,11 +409,24 @@ &reg_dldo3 {
+ 	regulator-name = "vcc-pd";
+ };
+ 
++&reg_dldo4 {
++	regulator-always-on;
++	regulator-min-microvolt = <2800000>;
++	regulator-max-microvolt = <2800000>;
++	regulator-name = "avdd-csi";
++};
++
+ &reg_drivevbus {
+ 	regulator-name = "usb0-vbus";
+ 	status = "okay";
+ };
+ 
++&reg_eldo1 {
++	regulator-min-microvolt = <1200000>;
++	regulator-max-microvolt = <1200000>;
++	regulator-name = "dvdd-csi-r";
++};
++
+ &reg_fldo1 {
+ 	regulator-min-microvolt = <1080000>;
+ 	regulator-max-microvolt = <1320000>;
 -- 
 2.29.2
 
