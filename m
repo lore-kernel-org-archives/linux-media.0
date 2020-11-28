@@ -2,307 +2,233 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F2AFC8301E
-	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 22:21:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A7F9C83016
+	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 22:21:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E53642225A
-	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 22:21:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3593A2225A
+	for <linux-media@archiver.kernel.org>; Sat, 28 Nov 2020 22:21:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388346AbgK1Vtg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 28 Nov 2020 16:49:36 -0500
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:56884 "EHLO
-        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732892AbgK1SJs (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sat, 28 Nov 2020 13:09:48 -0500
-Received: from relay2-d.mail.gandi.net (unknown [217.70.183.194])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id 5B73C3A0379;
-        Sat, 28 Nov 2020 14:29:20 +0000 (UTC)
-X-Originating-IP: 93.29.109.196
-Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
-        (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id A1E6B4000C;
-        Sat, 28 Nov 2020 14:28:57 +0000 (UTC)
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-sunxi@googlegroups.com
-Cc:     Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        kevin.lhopital@hotmail.com
-Subject: [PATCH v2 03/19] phy: allwinner: phy-sun6i-mipi-dphy: Support D-PHY Rx mode for MIPI CSI-2
-Date:   Sat, 28 Nov 2020 15:28:23 +0100
-Message-Id: <20201128142839.517949-4-paul.kocialkowski@bootlin.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201128142839.517949-1-paul.kocialkowski@bootlin.com>
-References: <20201128142839.517949-1-paul.kocialkowski@bootlin.com>
+        id S2388419AbgK1Vti (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 28 Nov 2020 16:49:38 -0500
+Received: from mga07.intel.com ([134.134.136.100]:39736 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726992AbgK1SWE (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 28 Nov 2020 13:22:04 -0500
+IronPort-SDR: emnXehHApzPX6opKHZ8RNWAQIfvZOB93vC5hx2tput/nJJZnYzIzXEp45lKbgb5l+QoYFXNjtj
+ AJigrYL+T6ag==
+X-IronPort-AV: E=McAfee;i="6000,8403,9819"; a="236619635"
+X-IronPort-AV: E=Sophos;i="5.78,377,1599548400"; 
+   d="scan'208";a="236619635"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2020 10:21:23 -0800
+IronPort-SDR: fPxbv17UuSnPdgXA2hdOs0KJHAxK2jH9JptYq9VvW6ig1dSlxcCo4YICLWVa8gF3ScZz9W4dYx
+ 353hDdOwxvjQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,377,1599548400"; 
+   d="scan'208";a="328995817"
+Received: from lkp-server01.sh.intel.com (HELO b5888d13d5a5) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 28 Nov 2020 10:21:22 -0800
+Received: from kbuild by b5888d13d5a5 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kj4qX-0000VW-Bt; Sat, 28 Nov 2020 18:21:21 +0000
+Date:   Sun, 29 Nov 2020 02:20:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org
+Subject: [ragnatech:media-tree] BUILD SUCCESS
+ a3f132df0e5f25399c9592c2d14997975ddbf290
+Message-ID: <5fc294fb.FCZlVPntp7fucWnk%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The Allwinner A31 D-PHY supports both Rx and Tx modes. While the latter
-is already supported and used for MIPI DSI this adds support for the
-former, to be used with MIPI CSI-2.
+tree/branch: git://git.ragnatech.se/linux  media-tree
+branch HEAD: a3f132df0e5f25399c9592c2d14997975ddbf290  media: bttv: use generic power management
 
-This implementation is inspired by Allwinner's V3s Linux SDK
-implementation, which was used as a documentation base.
+elapsed time: 1733m
 
-Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+configs tested: 161
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                             rpc_defconfig
+mips                          rb532_defconfig
+sh                        sh7757lcr_defconfig
+sh                          rsk7264_defconfig
+xtensa                    xip_kc705_defconfig
+sh                         microdev_defconfig
+arm                        realview_defconfig
+mips                    maltaup_xpa_defconfig
+c6x                        evmc6472_defconfig
+mips                           ip28_defconfig
+sh                               allmodconfig
+m68k                         amcore_defconfig
+mips                            gpr_defconfig
+arm                          collie_defconfig
+powerpc                  mpc866_ads_defconfig
+arm                          moxart_defconfig
+mips                  decstation_64_defconfig
+arm                           efm32_defconfig
+powerpc                    sam440ep_defconfig
+m68k                       m5475evb_defconfig
+xtensa                    smp_lx200_defconfig
+arm                         mv78xx0_defconfig
+powerpc                 mpc836x_rdk_defconfig
+arm                         lpc18xx_defconfig
+mips                         db1xxx_defconfig
+arc                         haps_hs_defconfig
+mips                     loongson1c_defconfig
+alpha                               defconfig
+arm                         s3c2410_defconfig
+powerpc                        cell_defconfig
+sh                   rts7751r2dplus_defconfig
+xtensa                  cadence_csp_defconfig
+powerpc                      ppc40x_defconfig
+arm                            dove_defconfig
+arm                      jornada720_defconfig
+powerpc                 mpc837x_rdb_defconfig
+arm                         cm_x300_defconfig
+mips                          malta_defconfig
+arm                          pxa168_defconfig
+openrisc                 simple_smp_defconfig
+sh                                  defconfig
+ia64                      gensparse_defconfig
+s390                       zfcpdump_defconfig
+arc                 nsimosci_hs_smp_defconfig
+arm                            hisi_defconfig
+sh                           sh2007_defconfig
+powerpc                     mpc512x_defconfig
+mips                      malta_kvm_defconfig
+c6x                         dsk6455_defconfig
+arm                           h5000_defconfig
+powerpc                     ppa8548_defconfig
+powerpc                 mpc8315_rdb_defconfig
+mips                           jazz_defconfig
+mips                         rt305x_defconfig
+sh                             sh03_defconfig
+sparc64                             defconfig
+arm                  colibri_pxa300_defconfig
+arm                           corgi_defconfig
+sh                          kfr2r09_defconfig
+sh                          sdk7786_defconfig
+mips                           ip22_defconfig
+sh                           se7722_defconfig
+powerpc                 linkstation_defconfig
+arm                        oxnas_v6_defconfig
+riscv                          rv32_defconfig
+sh                          rsk7201_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a004-20201127
+i386                 randconfig-a003-20201127
+i386                 randconfig-a002-20201127
+i386                 randconfig-a005-20201127
+i386                 randconfig-a001-20201127
+i386                 randconfig-a006-20201127
+i386                 randconfig-a004-20201128
+i386                 randconfig-a003-20201128
+i386                 randconfig-a002-20201128
+i386                 randconfig-a005-20201128
+i386                 randconfig-a001-20201128
+i386                 randconfig-a006-20201128
+x86_64               randconfig-a015-20201127
+x86_64               randconfig-a011-20201127
+x86_64               randconfig-a014-20201127
+x86_64               randconfig-a016-20201127
+x86_64               randconfig-a012-20201127
+x86_64               randconfig-a013-20201127
+i386                 randconfig-a012-20201127
+i386                 randconfig-a013-20201127
+i386                 randconfig-a011-20201127
+i386                 randconfig-a016-20201127
+i386                 randconfig-a014-20201127
+i386                 randconfig-a015-20201127
+i386                 randconfig-a012-20201128
+i386                 randconfig-a013-20201128
+i386                 randconfig-a011-20201128
+i386                 randconfig-a016-20201128
+i386                 randconfig-a014-20201128
+i386                 randconfig-a015-20201128
+x86_64               randconfig-a003-20201128
+x86_64               randconfig-a006-20201128
+x86_64               randconfig-a004-20201128
+x86_64               randconfig-a005-20201128
+x86_64               randconfig-a001-20201128
+x86_64               randconfig-a002-20201128
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a006-20201127
+x86_64               randconfig-a003-20201127
+x86_64               randconfig-a004-20201127
+x86_64               randconfig-a005-20201127
+x86_64               randconfig-a002-20201127
+x86_64               randconfig-a001-20201127
+x86_64               randconfig-a015-20201128
+x86_64               randconfig-a011-20201128
+x86_64               randconfig-a016-20201128
+x86_64               randconfig-a014-20201128
+x86_64               randconfig-a012-20201128
+x86_64               randconfig-a013-20201128
+
 ---
- drivers/phy/allwinner/phy-sun6i-mipi-dphy.c | 164 +++++++++++++++++++-
- 1 file changed, 160 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/phy/allwinner/phy-sun6i-mipi-dphy.c b/drivers/phy/allwinner/phy-sun6i-mipi-dphy.c
-index 1fa761ba6cbb..0389b6b670d6 100644
---- a/drivers/phy/allwinner/phy-sun6i-mipi-dphy.c
-+++ b/drivers/phy/allwinner/phy-sun6i-mipi-dphy.c
-@@ -24,6 +24,14 @@
- #define SUN6I_DPHY_TX_CTL_REG		0x04
- #define SUN6I_DPHY_TX_CTL_HS_TX_CLK_CONT	BIT(28)
- 
-+#define SUN6I_DPHY_RX_CTL_REG		0x08
-+#define SUN6I_DPHY_RX_CTL_EN_DBC	BIT(31)
-+#define SUN6I_DPHY_RX_CTL_RX_CLK_FORCE	BIT(24)
-+#define SUN6I_DPHY_RX_CTL_RX_D3_FORCE	BIT(23)
-+#define SUN6I_DPHY_RX_CTL_RX_D2_FORCE	BIT(22)
-+#define SUN6I_DPHY_RX_CTL_RX_D1_FORCE	BIT(21)
-+#define SUN6I_DPHY_RX_CTL_RX_D0_FORCE	BIT(20)
-+
- #define SUN6I_DPHY_TX_TIME0_REG		0x10
- #define SUN6I_DPHY_TX_TIME0_HS_TRAIL(n)		(((n) & 0xff) << 24)
- #define SUN6I_DPHY_TX_TIME0_HS_PREPARE(n)	(((n) & 0xff) << 16)
-@@ -44,12 +52,29 @@
- #define SUN6I_DPHY_TX_TIME4_HS_TX_ANA1(n)	(((n) & 0xff) << 8)
- #define SUN6I_DPHY_TX_TIME4_HS_TX_ANA0(n)	((n) & 0xff)
- 
-+#define SUN6I_DPHY_RX_TIME0_REG		0x30
-+#define SUN6I_DPHY_RX_TIME0_HS_RX_SYNC(n)	(((n) & 0xff) << 24)
-+#define SUN6I_DPHY_RX_TIME0_HS_RX_CLK_MISS(n)	(((n) & 0xff) << 16)
-+#define SUN6I_DPHY_RX_TIME0_LP_RX(n)		(((n) & 0xff) << 8)
-+
-+#define SUN6I_DPHY_RX_TIME1_REG		0x34
-+#define SUN6I_DPHY_RX_TIME1_RX_DLY(n)		(((n) & 0xfff) << 20)
-+#define SUN6I_DPHY_RX_TIME1_LP_RX_ULPS_WP(n)	((n) & 0xfffff)
-+
-+#define SUN6I_DPHY_RX_TIME2_REG		0x38
-+#define SUN6I_DPHY_RX_TIME2_HS_RX_ANA1(n)	(((n) & 0xff) << 8)
-+#define SUN6I_DPHY_RX_TIME2_HS_RX_ANA0(n)	((n) & 0xff)
-+
-+#define SUN6I_DPHY_RX_TIME3_REG		0x40
-+#define SUN6I_DPHY_RX_TIME3_LPRST_DLY(n)	(((n) & 0xffff) << 16)
-+
- #define SUN6I_DPHY_ANA0_REG		0x4c
- #define SUN6I_DPHY_ANA0_REG_PWS			BIT(31)
- #define SUN6I_DPHY_ANA0_REG_DMPC		BIT(28)
- #define SUN6I_DPHY_ANA0_REG_DMPD(n)		(((n) & 0xf) << 24)
- #define SUN6I_DPHY_ANA0_REG_SLV(n)		(((n) & 7) << 12)
- #define SUN6I_DPHY_ANA0_REG_DEN(n)		(((n) & 0xf) << 8)
-+#define SUN6I_DPHY_ANA0_REG_SFB(n)		(((n) & 3) << 2)
- 
- #define SUN6I_DPHY_ANA1_REG		0x50
- #define SUN6I_DPHY_ANA1_REG_VTTMODE		BIT(31)
-@@ -92,6 +117,8 @@ struct sun6i_dphy {
- 
- 	struct phy				*phy;
- 	struct phy_configure_opts_mipi_dphy	config;
-+
-+	int					submode;
- };
- 
- static int sun6i_dphy_init(struct phy *phy)
-@@ -105,6 +132,18 @@ static int sun6i_dphy_init(struct phy *phy)
- 	return 0;
- }
- 
-+static int sun6i_dphy_set_mode(struct phy *phy, enum phy_mode mode, int submode)
-+{
-+	struct sun6i_dphy *dphy = phy_get_drvdata(phy);
-+
-+	if (mode != PHY_MODE_MIPI_DPHY)
-+		return -EINVAL;
-+
-+	dphy->submode = submode;
-+
-+	return 0;
-+}
-+
- static int sun6i_dphy_configure(struct phy *phy, union phy_configure_opts *opts)
- {
- 	struct sun6i_dphy *dphy = phy_get_drvdata(phy);
-@@ -119,9 +158,8 @@ static int sun6i_dphy_configure(struct phy *phy, union phy_configure_opts *opts)
- 	return 0;
- }
- 
--static int sun6i_dphy_power_on(struct phy *phy)
-+static int sun6i_dphy_tx_power_on(struct sun6i_dphy *dphy)
- {
--	struct sun6i_dphy *dphy = phy_get_drvdata(phy);
- 	u8 lanes_mask = GENMASK(dphy->config.lanes - 1, 0);
- 
- 	regmap_write(dphy->regs, SUN6I_DPHY_TX_CTL_REG,
-@@ -211,12 +249,129 @@ static int sun6i_dphy_power_on(struct phy *phy)
- 	return 0;
- }
- 
-+static int sun6i_dphy_rx_power_on(struct sun6i_dphy *dphy)
-+{
-+	/* Physical clock rate is actually half of symbol rate with DDR. */
-+	unsigned long mipi_symbol_rate = dphy->config.hs_clk_rate;
-+	unsigned long dphy_clk_rate;
-+	unsigned int rx_dly;
-+	unsigned int lprst_dly;
-+	u32 value;
-+
-+	dphy_clk_rate = clk_get_rate(dphy->mod_clk);
-+	if (!dphy_clk_rate)
-+		return -EINVAL;
-+
-+	/* Hardcoded timing parameters from the Allwinner BSP. */
-+	regmap_write(dphy->regs, SUN6I_DPHY_RX_TIME0_REG,
-+		     SUN6I_DPHY_RX_TIME0_HS_RX_SYNC(255) |
-+		     SUN6I_DPHY_RX_TIME0_HS_RX_CLK_MISS(255) |
-+		     SUN6I_DPHY_RX_TIME0_LP_RX(255));
-+
-+	/*
-+	 * Formula from the Allwinner BSP, with hardcoded coefficients
-+	 * (probably internal divider/multiplier).
-+	 */
-+	rx_dly = 8 * (unsigned int)(dphy_clk_rate / (mipi_symbol_rate / 8));
-+
-+	/*
-+	 * The Allwinner BSP has an alternative formula for LP_RX_ULPS_WP:
-+	 * lp_ulps_wp_cnt = lp_ulps_wp_ms * lp_clk / 1000
-+	 * but does not use it and hardcodes 255 instead.
-+	 */
-+	regmap_write(dphy->regs, SUN6I_DPHY_RX_TIME1_REG,
-+		     SUN6I_DPHY_RX_TIME1_RX_DLY(rx_dly) |
-+		     SUN6I_DPHY_RX_TIME1_LP_RX_ULPS_WP(255));
-+
-+	/* HS_RX_ANA0 value is hardcoded in the Allwinner BSP. */
-+	regmap_write(dphy->regs, SUN6I_DPHY_RX_TIME2_REG,
-+		     SUN6I_DPHY_RX_TIME2_HS_RX_ANA0(4));
-+
-+	/*
-+	 * Formula from the Allwinner BSP, with hardcoded coefficients
-+	 * (probably internal divider/multiplier).
-+	 */
-+	lprst_dly = 4 * (unsigned int)(dphy_clk_rate / (mipi_symbol_rate / 2));
-+
-+	regmap_write(dphy->regs, SUN6I_DPHY_RX_TIME3_REG,
-+		     SUN6I_DPHY_RX_TIME3_LPRST_DLY(lprst_dly));
-+
-+	/* Analog parameters are hardcoded in the Allwinner BSP. */
-+	regmap_write(dphy->regs, SUN6I_DPHY_ANA0_REG,
-+		     SUN6I_DPHY_ANA0_REG_PWS |
-+		     SUN6I_DPHY_ANA0_REG_SLV(7) |
-+		     SUN6I_DPHY_ANA0_REG_SFB(2));
-+
-+	regmap_write(dphy->regs, SUN6I_DPHY_ANA1_REG,
-+		     SUN6I_DPHY_ANA1_REG_SVTT(4));
-+
-+	regmap_write(dphy->regs, SUN6I_DPHY_ANA4_REG,
-+		     SUN6I_DPHY_ANA4_REG_DMPLVC |
-+		     SUN6I_DPHY_ANA4_REG_DMPLVD(1));
-+
-+	regmap_write(dphy->regs, SUN6I_DPHY_ANA2_REG,
-+		     SUN6I_DPHY_ANA2_REG_ENIB);
-+
-+	regmap_write(dphy->regs, SUN6I_DPHY_ANA3_REG,
-+		     SUN6I_DPHY_ANA3_EN_LDOR |
-+		     SUN6I_DPHY_ANA3_EN_LDOC |
-+		     SUN6I_DPHY_ANA3_EN_LDOD);
-+
-+	/*
-+	 * Delay comes from the Allwinner BSP, likely for internal regulator
-+	 * ramp-up.
-+	 */
-+	udelay(3);
-+
-+	value = SUN6I_DPHY_RX_CTL_EN_DBC | SUN6I_DPHY_RX_CTL_RX_CLK_FORCE;
-+
-+	/*
-+	 * Rx data lane force-enable bits are used as regular RX enable by the
-+	 * Allwinner BSP.
-+	 */
-+	if (dphy->config.lanes >= 1)
-+		value |= SUN6I_DPHY_RX_CTL_RX_D0_FORCE;
-+	if (dphy->config.lanes >= 2)
-+		value |= SUN6I_DPHY_RX_CTL_RX_D1_FORCE;
-+	if (dphy->config.lanes >= 3)
-+		value |= SUN6I_DPHY_RX_CTL_RX_D2_FORCE;
-+	if (dphy->config.lanes == 4)
-+		value |= SUN6I_DPHY_RX_CTL_RX_D3_FORCE;
-+
-+	regmap_write(dphy->regs, SUN6I_DPHY_RX_CTL_REG, value);
-+
-+	regmap_write(dphy->regs, SUN6I_DPHY_GCTL_REG,
-+		     SUN6I_DPHY_GCTL_LANE_NUM(dphy->config.lanes) |
-+		     SUN6I_DPHY_GCTL_EN);
-+
-+	return 0;
-+}
-+
-+static int sun6i_dphy_power_on(struct phy *phy)
-+{
-+	struct sun6i_dphy *dphy = phy_get_drvdata(phy);
-+
-+	switch (dphy->submode) {
-+	case PHY_MIPI_DPHY_SUBMODE_TX:
-+		return sun6i_dphy_tx_power_on(dphy);
-+	case PHY_MIPI_DPHY_SUBMODE_RX:
-+		return sun6i_dphy_rx_power_on(dphy);
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
- static int sun6i_dphy_power_off(struct phy *phy)
- {
- 	struct sun6i_dphy *dphy = phy_get_drvdata(phy);
- 
--	regmap_update_bits(dphy->regs, SUN6I_DPHY_ANA1_REG,
--			   SUN6I_DPHY_ANA1_REG_VTTMODE, 0);
-+	regmap_write(dphy->regs, SUN6I_DPHY_GCTL_REG, 0);
-+
-+	regmap_write(dphy->regs, SUN6I_DPHY_ANA0_REG, 0);
-+	regmap_write(dphy->regs, SUN6I_DPHY_ANA1_REG, 0);
-+	regmap_write(dphy->regs, SUN6I_DPHY_ANA2_REG, 0);
-+	regmap_write(dphy->regs, SUN6I_DPHY_ANA3_REG, 0);
-+	regmap_write(dphy->regs, SUN6I_DPHY_ANA4_REG, 0);
- 
- 	return 0;
- }
-@@ -234,6 +389,7 @@ static int sun6i_dphy_exit(struct phy *phy)
- 
- 
- static const struct phy_ops sun6i_dphy_ops = {
-+	.set_mode	= sun6i_dphy_set_mode,
- 	.configure	= sun6i_dphy_configure,
- 	.power_on	= sun6i_dphy_power_on,
- 	.power_off	= sun6i_dphy_power_off,
--- 
-2.29.2
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
