@@ -2,33 +2,33 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE19CC83013
-	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 07:49:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80354C83014
+	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 07:49:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A53BB2087D
-	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 07:49:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 13B242074A
+	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 07:49:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=xilinx.onmicrosoft.com header.i=@xilinx.onmicrosoft.com header.b="ORW+z8K/"
+	dkim=pass (1024-bit key) header.d=xilinx.onmicrosoft.com header.i=@xilinx.onmicrosoft.com header.b="gNxJLrVX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727370AbgK3Ht1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727245AbgK3Ht1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 30 Nov 2020 02:49:27 -0500
-Received: from mail-dm6nam12on2052.outbound.protection.outlook.com ([40.107.243.52]:23776
+Received: from mail-dm6nam12on2060.outbound.protection.outlook.com ([40.107.243.60]:49889
         "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726671AbgK3Ht0 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1725965AbgK3Ht0 (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Mon, 30 Nov 2020 02:49:26 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LQi0t2cA3Sn6lTgSfbV6JEUm+caV034YVPWT9dY5D1p7hGG2FBaRmTYhF7ura5N9WFaT3UhYOkC9ulREJqIi+RSt37aheU7SB8WxrPKfIU2zaVgXLSloE0ATICM2d4FL6ayMzF/xooXDCk1CVz6Oo92S2mHgxbcch2yUB4d1MALUdE/RJU9ennfnszVfPkDglCkMnsHMjUkrtMamn6aWabpy5i0QIgYUXdWTuRGLVzU8uqtzCRArcZfPD1hrzq0JlC9KZJbS/DTlGKyrQ0BgD4Sv/A4xg61aJfCCSz7jJKMM1QD6iEW3ElWWCWEs7C7d6+AO1UYK2kX46bDsoxpWWA==
+ b=WGL7tYBTNM71vvOmb/JPNM7czuNCTpep4Oc9SddJ142wL+8XzH2h75v7m430urQp6ODn9ujC3e7sor7dx0srNikL/4gwBvrm9gOSe6Jab3rd8l2K+0zXYuN29dWf/90tnbLDXWj/4ZnFwK8nHo8hjHzIc+mwD1zkrcumZSShISBWNEWMHxgVozrvuCyHtuojNeQAwesusvY15RHnYOorww3T00hG2AGJYIk0EZv8WfJBVVl8JfJPuthj4qS1/EXz0VnwN8QpkHFRlj2R9foZ6hICxplfiA6o3XXMxvE+HDvK+V2EuSsmv+yuFVXKh3h6+3GSf8yRRWeDcJD32rWUMQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xZK2pzjRvi4T7bRyKSpPaWs/p3o+GWQR8in59XQqeb0=;
- b=kq8uZtqVMCGpqpqglbP5x3jW4CFKWMN+fFKX+U/qp1MMqzInktCDeJieMDuoe7O5/cQ7+xAN/wrYM7ODYqhL3ATs6rMaZN/WRwfCWRDuszDCn8iM/D94491vkMQJaHILKcN95EGz9bv8e83a1pzBQFvvPMnzMgHBPMxFRPGB+28BGHIV0ZwdEyv37DwGjif7c+y/7M/s8bwshfG3viIq6wMe2yJdiKNxI8vMKvvvBDCmmbFqTh33+huQFXqhnB6OIntcICIoT9cjOOJSfPsslJO/HgRAwjHlmeeAS4WXqvA2kirgJ0T14E5xRUcb72hecvQpx1hHI+n3xgNzxvz37A==
+ bh=MXFSnrzUxbGFNY3WMQ8uNSDD2a4l5nIZ1U0M/z9Vbm0=;
+ b=Mm49VjV88jYgMmlsHQqLVn46CkMzIPAyrnDEVQ4J0Ge+SiUl1Kn2K1c+YFt6xbES9db0RwEKz4Y23PLDOOKZGnR9oXo+/duO15GOQ7GmeRlhdDSLKHtZX6s56Cx/0v/Rl9Bdsc7MSIplfZLuWYfexijk77tUBS9L6A2BsydlOGyiprCBsa6DsV9dchNOo1ZL55mG1TXLhes2qYdTVgeRjzx5WATfglWOIJ1xwkU62xXHXYvyYD0QgTTjuVB7Gsa7tjiQYcQZ4I0U69AWZzUNLXk7ygEDCOvqUBA/Q0oRL6wkIGfjcxkMxamz7NQ+cDRpFUkhZb9roLGSKH/EbBmQbw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
  dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
@@ -36,36 +36,36 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xZK2pzjRvi4T7bRyKSpPaWs/p3o+GWQR8in59XQqeb0=;
- b=ORW+z8K/FXcstpmwAKGB9hn4hOVr0J0n1QYr+THH5ynFvhq1+sm7RhmlXQdvfG0H/+smU3rgX9GPBciizsbbNLVfC0mQ6jc/RuF7twrnnipCVDQ04RkSIJ4moKlr5DKyrseJrUmrwM1hXJzO1pKsbDX0Z7bQQ/N/SU6DSAjIZq8=
-Received: from SA9PR10CA0023.namprd10.prod.outlook.com (2603:10b6:806:a7::28)
- by CY4PR02MB3270.namprd02.prod.outlook.com (2603:10b6:910:78::26) with
+ bh=MXFSnrzUxbGFNY3WMQ8uNSDD2a4l5nIZ1U0M/z9Vbm0=;
+ b=gNxJLrVXFBKAk9TxPGH7IPf7Z7LK3bJKsN3yXOh99Y/taNYBsMDHlrZnSvo/a260p3f6Ja8RoWPPJFn1ypfzTo2itUKW6m+hhPVecAdgFH13n6M0njKI/KjO4B1XDigGAYIlMEz/we5iwXHGWCBypj6R0CXDIAAsjNtzR22N+vk=
+Received: from CY4PR03CA0006.namprd03.prod.outlook.com (2603:10b6:903:33::16)
+ by MW4PR02MB7332.namprd02.prod.outlook.com (2603:10b6:303:79::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.25; Mon, 30 Nov
- 2020 07:48:33 +0000
-Received: from SN1NAM02FT057.eop-nam02.prod.protection.outlook.com
- (2603:10b6:806:a7:cafe::d7) by SA9PR10CA0023.outlook.office365.com
- (2603:10b6:806:a7::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.25 via Frontend
- Transport; Mon, 30 Nov 2020 07:48:31 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.20; Mon, 30 Nov
+ 2020 07:48:32 +0000
+Received: from CY1NAM02FT037.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:903:33:cafe::2a) by CY4PR03CA0006.outlook.office365.com
+ (2603:10b6:903:33::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.20 via Frontend
+ Transport; Mon, 30 Nov 2020 07:48:32 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
  smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=bestguesspass action=none
  header.from=xilinx.com;
 Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
  149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT057.mail.protection.outlook.com (10.152.73.105) with Microsoft SMTP
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ CY1NAM02FT037.mail.protection.outlook.com (10.152.75.77) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.3611.27 via Frontend Transport; Mon, 30 Nov 2020 07:48:31 +0000
+ 15.20.3611.27 via Frontend Transport; Mon, 30 Nov 2020 07:48:32 +0000
 Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Sun, 29 Nov 2020 23:48:30 -0800
+ 15.1.1913.5; Sun, 29 Nov 2020 23:48:31 -0800
 Received: from smtp.xilinx.com (172.19.127.96) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.1913.5 via Frontend Transport; Sun, 29 Nov 2020 23:48:30 -0800
+ 15.1.1913.5 via Frontend Transport; Sun, 29 Nov 2020 23:48:31 -0800
 Envelope-to: michal.simek@xilinx.com,
  derek.kiernan@xilinx.com,
  dragan.cvetic@xilinx.com,
@@ -87,7 +87,7 @@ Envelope-to: michal.simek@xilinx.com,
 Received: from [172.19.2.167] (port=48528 helo=xsjjliang50.xilinx.com)
         by smtp.xilinx.com with esmtp (Exim 4.90)
         (envelope-from <wendy.liang@xilinx.com>)
-        id 1kjdvC-0006Pm-PN; Sun, 29 Nov 2020 23:48:30 -0800
+        id 1kjdvC-0006Pm-Ur; Sun, 29 Nov 2020 23:48:30 -0800
 From:   Wendy Liang <wendy.liang@xilinx.com>
 To:     <robh+dt@kernel.org>, <michal.simek@xilinx.com>, <arnd@arndb.de>,
         <gregkh@linuxfoundation.org>, <sumit.semwal@linaro.org>,
@@ -100,116 +100,507 @@ CC:     <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
         <dri-devel@lists.freedesktop.org>,
         Wendy Liang <wendy.liang@xilinx.com>
-Subject: [PATCH v3 0/9] Xilinx AI engine kernel driver
-Date:   Sun, 29 Nov 2020 23:48:16 -0800
-Message-ID: <1606722505-16194-1-git-send-email-wendy.liang@xilinx.com>
+Subject: [PATCH v3 3/9] misc: xilinx-ai-engine: Implement AI engine cleanup sequence
+Date:   Sun, 29 Nov 2020 23:48:19 -0800
+Message-ID: <1606722505-16194-4-git-send-email-wendy.liang@xilinx.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1606722505-16194-1-git-send-email-wendy.liang@xilinx.com>
+References: <1606722505-16194-1-git-send-email-wendy.liang@xilinx.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-Office365-Filtering-HT: Tenant
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8fbdbc71-c7b9-41a8-a8e1-08d895045559
-X-MS-TrafficTypeDiagnostic: CY4PR02MB3270:
-X-Microsoft-Antispam-PRVS: <CY4PR02MB327096F9DA961D8506073E74B0F50@CY4PR02MB3270.namprd02.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: f421ea26-113d-431d-11b7-08d89504559f
+X-MS-TrafficTypeDiagnostic: MW4PR02MB7332:
+X-Microsoft-Antispam-PRVS: <MW4PR02MB73321E74DEADD8CBF3F30BF7B0F50@MW4PR02MB7332.namprd02.prod.outlook.com>
 X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:348;
+X-MS-Oob-TLC-OOBClassifiers: OLM:3173;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YKByB0YPIy92Mt++5bSfrg6Ho+2vFwc3lwFc9jNLcEN0VWPj3Y5Fs9rjy6xjXIfMfyhd6mIg78BsFvPx+LeSuNBXY8wECoNT3c+eShe/2yb0nJ2trUcIKoPzQ4XX0HrbEk2oo2n12cJkgoCpoL2pMFH6V704dkIYLQqCfCWgJESKBkIO8dvOw9yEoKbYTaJ02UDxH9qCBJ+ANQjJ65S1Ut1duo2NiL69XjYsJ5Ax8KX96kc0L8WObmkn1Ha4V528QB6sVGxAkBXZ8Y43zwJSc50pzzHDEwXNz4HeN31iXj1zoGj5F+H380DA7kEa1Cvuo9cdRPBZKvSz62TSmXnGlQ72Qd6f3Kr9J+WVNeVWoX8m8IrNrIvSZkuMi1xppYgC4RIBY8VkVNlxY1PqKBXgBL0nhVlm+lCvvJtU9NmhT7BjXI4q07m7QFJ23QUU/euPEIe7lm3hRse7b9370+kSoOhEFiEFC40CPDmi+itK7fFkNWNx2I9r/5IeOVRM6/HOEWK5xEeUsm4AcLQztvVtTQ==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(376002)(39850400004)(136003)(346002)(396003)(46966005)(2616005)(82740400003)(9786002)(7636003)(83380400001)(36906005)(6666004)(4326008)(36756003)(921005)(316002)(107886003)(336012)(54906003)(356005)(5660300002)(8676002)(82310400003)(7696005)(70586007)(7416002)(47076004)(70206006)(186003)(8936002)(26005)(478600001)(426003)(966005)(6636002)(44832011)(2906002)(110136005)(102446001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 5SAsY0p3v3q0g/IC/8FAmF04BrusR/2Av1M+6i++MbsNfnsIEGFZEKNxV7zxpkC8CC5gcdG1hp2UcX5XjzMma22AqRt2o0okT+EK4Md7t3heEOqlI1p9Lf3/hhtpAbzWoH4/L36l2RTunVGHYxd3BUsZCjraauFX4eyK5lfs0PixcF7mMWJFJ9+li6lmW+OO2GvrlaExHSKOKmYtWBrynC4yJMQ0QicZz5DdRY1Qa7qyRJnCM9wwPZXvCVckRNpcM8mJPd2LXtfsB5lgqp4jDwEU3fSC5edPHmo9ge7b2/5cixcx4VmCZNLG56z9ipWBtkJNvvb/FNWZW0SrMVvaxn/qEvIVLVECWeTA1xZr99tiKqfw46fB9OtDq4L7UtvbDA0NxX0fImyPH0RSZpZ6a26UdDdkkCtbzI0YH2cszqAsLPRqX4T3NZhOUw0DMhNW
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(136003)(376002)(346002)(39850400004)(396003)(46966005)(8676002)(7416002)(107886003)(426003)(26005)(54906003)(2906002)(110136005)(70586007)(186003)(4326008)(36906005)(8936002)(316002)(7696005)(70206006)(2616005)(5660300002)(44832011)(82310400003)(478600001)(7636003)(6666004)(921005)(30864003)(356005)(36756003)(336012)(9786002)(83380400001)(6636002)(47076004)(82740400003)(102446001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2020 07:48:31.6462
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2020 07:48:32.1131
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8fbdbc71-c7b9-41a8-a8e1-08d895045559
+X-MS-Exchange-CrossTenant-Network-Message-Id: f421ea26-113d-431d-11b7-08d89504559f
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT057.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY1NAM02FT037.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR02MB3270
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR02MB7332
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-AI engine is the acceleration engine provided by Xilinx. These engines
-provide high compute density for vector-based algorithms, and flexible
-custom compute and data movement. It has core tiles for compute and
-shim tiles to interface the FPGA fabric.
+When AI engine partition is released, that is if no one is using the AI
+engine partition, by default, it will cleanup the partition by doing the
+following:
+* reset the columns
+* reset the SHIMs
+* clear data and program memory
+* gate all the tiles
 
-You can check the AI engine architecture document for more hardware details:
-https://www.xilinx.com/support/documentation/architecture-manuals/am009-versal-ai-engine.pdf
+If user doesn't want the partition is reset when the partition is
+released, user can set the control flag to indicate not to reset the
+partition when the user requests the partition.
 
-This patch series adds a Linux kernel driver to manage the Xilinx AI
-engine array device and AI engine partitions (groups of AI engine tiles
-dedicated to an application).
+If partition the not to reset partition control flag is set, it will
+not execute the above cleanup sequence when the partition is released.
 
-v3:
-* unlock AIE dev mutex after failed to gain the partition lock in
-  errors handing
-* replace pointer with __u64 and enum with __u32 in ioctl
-
-v2:
-* Fix dtschema check errors
-* Fix test bot warning on interrupt implementation. Removed set but
-  unused  varaible.
-* Fix compilation unused function warning of firmware change in case
-  ZynqMP firmware is not configured
-* There are other warning on ZynqMP firmware reported from testbot
-  which is not introduced by this patch set.
-  "[PATCH] firmware: xlnx-zynqmp: fix compilation warning" is submitted
-  for those fixes.
-
-
-Izhar Ameer Shaikh (1):
-  firmware: xilinx: Add IOCTL support for AIE ISR Clear
-
-Nishad Saraf (2):
-  misc: xilinx-ai-engine: Add support to request device management
-    services
-  misc: xilinx-ai-engine: Add support for servicing error interrupts
-
-Wendy Liang (6):
-  dt-binding: soc: xilinx: ai-engine: Add AI engine binding
-  misc: Add Xilinx AI engine device driver
-  misc: xilinx-ai-engine: Implement AI engine cleanup sequence
-  misc: xilinx-ai-engine: expose AI engine tile memories to userspace
-  misc: xilinx-ai-engine: add setting shim dma bd operation
-  misc: xilinx-ai-engine: add request and release tiles
-
- .../bindings/soc/xilinx/xlnx,ai-engine.yaml        | 126 ++++
- MAINTAINERS                                        |   8 +
- drivers/firmware/xilinx/zynqmp.c                   |  14 +
- drivers/misc/Kconfig                               |  12 +
- drivers/misc/Makefile                              |   1 +
- drivers/misc/xilinx-ai-engine/Makefile             |  16 +
- drivers/misc/xilinx-ai-engine/ai-engine-aie.c      | 608 +++++++++++++++++++
- drivers/misc/xilinx-ai-engine/ai-engine-clock.c    | 245 ++++++++
- drivers/misc/xilinx-ai-engine/ai-engine-dev.c      | 496 ++++++++++++++++
- drivers/misc/xilinx-ai-engine/ai-engine-dma.c      | 481 +++++++++++++++
- drivers/misc/xilinx-ai-engine/ai-engine-internal.h | 519 ++++++++++++++++
- .../misc/xilinx-ai-engine/ai-engine-interrupt.c    | 659 +++++++++++++++++++++
- drivers/misc/xilinx-ai-engine/ai-engine-mem.c      | 275 +++++++++
- drivers/misc/xilinx-ai-engine/ai-engine-part.c     | 635 ++++++++++++++++++++
- drivers/misc/xilinx-ai-engine/ai-engine-res.c      | 219 +++++++
- drivers/misc/xilinx-ai-engine/ai-engine-reset.c    | 159 +++++
- include/linux/firmware/xlnx-zynqmp.h               |   8 +
- include/uapi/linux/xlnx-ai-engine.h                | 238 ++++++++
- 18 files changed, 4719 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/soc/xilinx/xlnx,ai-engine.yaml
- create mode 100644 drivers/misc/xilinx-ai-engine/Makefile
- create mode 100644 drivers/misc/xilinx-ai-engine/ai-engine-aie.c
- create mode 100644 drivers/misc/xilinx-ai-engine/ai-engine-clock.c
- create mode 100644 drivers/misc/xilinx-ai-engine/ai-engine-dev.c
- create mode 100644 drivers/misc/xilinx-ai-engine/ai-engine-dma.c
- create mode 100644 drivers/misc/xilinx-ai-engine/ai-engine-internal.h
- create mode 100644 drivers/misc/xilinx-ai-engine/ai-engine-interrupt.c
- create mode 100644 drivers/misc/xilinx-ai-engine/ai-engine-mem.c
- create mode 100644 drivers/misc/xilinx-ai-engine/ai-engine-part.c
- create mode 100644 drivers/misc/xilinx-ai-engine/ai-engine-res.c
+Signed-off-by: Wendy Liang <wendy.liang@xilinx.com>
+Reviewed-by: Hyun Kwon <hyun.kwon@xilinx.com>
+---
+ drivers/misc/xilinx-ai-engine/Makefile             |   3 +-
+ drivers/misc/xilinx-ai-engine/ai-engine-aie.c      |  92 ++++++++++++++++
+ drivers/misc/xilinx-ai-engine/ai-engine-dev.c      |   2 +
+ drivers/misc/xilinx-ai-engine/ai-engine-internal.h |  34 ++++++
+ drivers/misc/xilinx-ai-engine/ai-engine-part.c     |   7 +-
+ drivers/misc/xilinx-ai-engine/ai-engine-reset.c    | 121 +++++++++++++++++++++
+ include/uapi/linux/xlnx-ai-engine.h                |   6 +
+ 7 files changed, 259 insertions(+), 6 deletions(-)
  create mode 100644 drivers/misc/xilinx-ai-engine/ai-engine-reset.c
- create mode 100644 include/uapi/linux/xlnx-ai-engine.h
 
+diff --git a/drivers/misc/xilinx-ai-engine/Makefile b/drivers/misc/xilinx-ai-engine/Makefile
+index 7827a0a..39bec61 100644
+--- a/drivers/misc/xilinx-ai-engine/Makefile
++++ b/drivers/misc/xilinx-ai-engine/Makefile
+@@ -8,4 +8,5 @@ obj-$(CONFIG_XILINX_AIE)	+= xilinx-aie.o
+ xilinx-aie-$(CONFIG_XILINX_AIE) := ai-engine-aie.o \
+ 				   ai-engine-dev.o \
+ 				   ai-engine-part.o \
+-				   ai-engine-res.o
++				   ai-engine-res.o \
++				   ai-engine-reset.o
+diff --git a/drivers/misc/xilinx-ai-engine/ai-engine-aie.c b/drivers/misc/xilinx-ai-engine/ai-engine-aie.c
+index 319260f..36127f0 100644
+--- a/drivers/misc/xilinx-ai-engine/ai-engine-aie.c
++++ b/drivers/misc/xilinx-ai-engine/ai-engine-aie.c
+@@ -5,6 +5,9 @@
+  * Copyright (C) 2020 Xilinx, Inc.
+  */
+ 
++#include <linux/bitfield.h>
++#include <linux/firmware/xlnx-zynqmp.h>
++#include <linux/io.h>
+ #include <linux/slab.h>
+ 
+ #include "ai-engine-internal.h"
+@@ -24,9 +27,25 @@
+ #define AIE_SHIMPL_L1INTR_MASK_A_REGOFF		0x00035000U
+ #define AIE_SHIMPL_L1INTR_BLOCK_NORTH_B_REGOFF	0x00035050U
+ #define AIE_SHIMPL_CLKCNTR_REGOFF		0x00036040U
++#define AIE_SHIMPL_COLRESET_REGOFF		0x00036048U
+ #define AIE_SHIMPL_RESET_REGOFF			0x0003604cU
+ #define AIE_TILE_CORE_CLKCNTR_REGOFF		0x00036040U
+ 
++/*
++ * Register masks
++ */
++#define AIE_SHIMPL_SHIMRST_MASK			0x1U
++#define AIE_SHIMPL_COLRST_MASK			0x1U
++#define AIE_SHIMPL_CLKCNTR_COLBUF_MASK		0x1U
++
++/*
++ * AI engine SHIM reset ID.
++ * TODO: it should follow the Linux reset framework. The ID should be in the
++ * device tree. However, as versal resets is not ready, we hardcode it in the
++ * driver.
++ */
++#define VERSAL_PM_RST_AIE_SHIM_ID			0xc10405fU
++
+ static const struct aie_tile_regs aie_kernel_regs[] = {
+ 	/* SHIM AXI MM Config */
+ 	{.attribute = AIE_TILE_TYPE_SHIMNOC << AIE_REGS_ATTR_TILE_TYPE_SHIFT,
+@@ -49,6 +68,12 @@ static const struct aie_tile_regs aie_kernel_regs[] = {
+ 	 .soff = AIE_SHIMPL_L1INTR_MASK_A_REGOFF,
+ 	 .eoff = AIE_SHIMPL_L1INTR_BLOCK_NORTH_B_REGOFF,
+ 	},
++	/* SHIM column reset */
++	{.attribute = (AIE_TILE_TYPE_SHIMPL | AIE_TILE_TYPE_SHIMNOC) <<
++		      AIE_REGS_ATTR_TILE_TYPE_SHIFT,
++	 .soff = AIE_SHIMPL_COLRESET_REGOFF,
++	 .eoff = AIE_SHIMPL_COLRESET_REGOFF,
++	},
+ 	/* SHIM reset Enable */
+ 	{.attribute = (AIE_TILE_TYPE_SHIMPL | AIE_TILE_TYPE_SHIMNOC) <<
+ 		      AIE_REGS_ATTR_TILE_TYPE_SHIFT,
+@@ -68,6 +93,16 @@ static const struct aie_tile_regs aie_kernel_regs[] = {
+ 	},
+ };
+ 
++static const struct aie_single_reg_field aie_col_rst = {
++	.mask = AIE_SHIMPL_COLRST_MASK,
++	.regoff = AIE_SHIMPL_COLRESET_REGOFF,
++};
++
++static const struct aie_single_reg_field aie_col_clkbuf = {
++	.mask = AIE_SHIMPL_CLKCNTR_COLBUF_MASK,
++	.regoff = AIE_SHIMPL_CLKCNTR_REGOFF,
++};
++
+ static u32 aie_get_tile_type(struct aie_location *loc)
+ {
+ 	if (loc->row)
+@@ -79,8 +114,63 @@ static u32 aie_get_tile_type(struct aie_location *loc)
+ 	return AIE_TILE_TYPE_SHIMNOC;
+ }
+ 
++/**
++ * aie_set_shim_reset() - Set AI engine SHIM reset
++ * @adev: AI engine device
++ * @range: range of AI engine tiles
++ * @assert: true to set reset, false to unset reset
++ */
++static void aie_set_shim_reset(struct aie_device *adev,
++			       struct aie_range *range, bool assert)
++{
++	u32 c;
++	u32 val;
++	struct aie_location loc;
++
++	val = FIELD_PREP(AIE_SHIMPL_SHIMRST_MASK, (assert ? 1 : 0));
++	loc.row = 0;
++	for (c = range->start.col; c < range->start.col + range->size.col;
++	     c++) {
++		u32 regoff;
++
++		loc.col = c;
++		regoff = aie_cal_regoff(adev, loc, AIE_SHIMPL_RESET_REGOFF);
++		iowrite32(val, adev->base + regoff);
++	}
++}
++
++static int aie_reset_shim(struct aie_device *adev, struct aie_range *range)
++{
++	int ret;
++
++	/* Enable shim reset of each column */
++	aie_set_shim_reset(adev, range, true);
++
++	/* Assert shim reset of AI engine array */
++	ret = zynqmp_pm_reset_assert(VERSAL_PM_RST_AIE_SHIM_ID,
++				     PM_RESET_ACTION_ASSERT);
++	if (ret < 0) {
++		dev_err(&adev->dev, "failed to assert SHIM reset.\n");
++		return ret;
++	}
++
++	/* Release shim reset of AI engine array */
++	ret = zynqmp_pm_reset_assert(VERSAL_PM_RST_AIE_SHIM_ID,
++				     PM_RESET_ACTION_RELEASE);
++	if (ret < 0) {
++		dev_err(&adev->dev, "failed to release SHIM reset.\n");
++		return ret;
++	}
++
++	/* Disable shim reset of each column */
++	aie_set_shim_reset(adev, range, false);
++
++	return 0;
++}
++
+ static const struct aie_tile_operations aie_ops = {
+ 	.get_tile_type = aie_get_tile_type,
++	.reset_shim = aie_reset_shim,
+ };
+ 
+ /**
+@@ -104,6 +194,8 @@ int aie_device_init(struct aie_device *adev)
+ 	adev->ops = &aie_ops;
+ 	adev->num_kernel_regs = ARRAY_SIZE(aie_kernel_regs);
+ 	adev->kernel_regs = aie_kernel_regs;
++	adev->col_rst = &aie_col_rst;
++	adev->col_clkbuf = &aie_col_clkbuf;
+ 
+ 	/* Get the columns resource */
+ 	/* Get number of columns from AI engine memory resource */
+diff --git a/drivers/misc/xilinx-ai-engine/ai-engine-dev.c b/drivers/misc/xilinx-ai-engine/ai-engine-dev.c
+index 5a56a92..69f7216 100644
+--- a/drivers/misc/xilinx-ai-engine/ai-engine-dev.c
++++ b/drivers/misc/xilinx-ai-engine/ai-engine-dev.c
+@@ -212,6 +212,8 @@ struct aie_partition *aie_request_partition(struct aie_device *adev,
+ 		 * exported for user to access.
+ 		 */
+ 		apart->status = XAIE_PART_STATUS_INUSE;
++		apart->cntrflag = req->flag;
++
+ 		mutex_unlock(&apart->mlock);
+ 	}
+ 	mutex_unlock(&adev->mlock);
+diff --git a/drivers/misc/xilinx-ai-engine/ai-engine-internal.h b/drivers/misc/xilinx-ai-engine/ai-engine-internal.h
+index 6a69946..2acd34f 100644
+--- a/drivers/misc/xilinx-ai-engine/ai-engine-internal.h
++++ b/drivers/misc/xilinx-ai-engine/ai-engine-internal.h
+@@ -53,18 +53,30 @@ struct aie_tile_regs {
+ 	u32 attribute;
+ };
+ 
++/**
++ * struct aie_single_reg_field - AI engine single field register attribute
++ * @mask: field mask
++ * @regoff: register offset of the field
++ */
++struct aie_single_reg_field {
++	u32 mask;
++	u32 regoff;
++};
++
+ struct aie_device;
+ struct aie_partition;
+ 
+ /**
+  * struct aie_tile_operations - AI engine device operations
+  * @get_tile_type: get type of tile based on tile operation
++ * @reset_shim: reset shim, it will assert and then release SHIM reset
+  *
+  * Different AI engine device version has its own device
+  * operation.
+  */
+ struct aie_tile_operations {
+ 	u32 (*get_tile_type)(struct aie_location *loc);
++	int (*reset_shim)(struct aie_device *adev, struct aie_range *range);
+ };
+ 
+ /**
+@@ -87,6 +99,8 @@ struct aie_resource {
+  * @res: memory resource of AI engine device
+  * @kernel_regs: array of kernel only registers
+  * @ops: tile operations
++ * @col_rst: column reset attribute
++ * @col_clkbuf: column clock buffer attribute
+  * @size: size of the AI engine address space
+  * @array_shift: array address shift
+  * @col_shift: column address shift
+@@ -105,6 +119,8 @@ struct aie_device {
+ 	struct resource *res;
+ 	const struct aie_tile_regs *kernel_regs;
+ 	const struct aie_tile_operations *ops;
++	const struct aie_single_reg_field *col_rst;
++	const struct aie_single_reg_field *col_clkbuf;
+ 	size_t size;
+ 	struct aie_resource cols_res;
+ 	u32 array_shift;
+@@ -124,6 +140,8 @@ struct aie_device {
+  * @partition_id: partition id. Partition ID is the identifier
+  *		  of the AI engine partition in the system.
+  * @status: indicate if the partition is in use
++ * @cntrflag: partition control flag. e.g. whether to reset columns when
++ *	      the partition is released
+  */
+ struct aie_partition {
+ 	struct list_head node;
+@@ -133,6 +151,7 @@ struct aie_partition {
+ 	struct device dev;
+ 	u32 partition_id;
+ 	u32 status;
++	u32 cntrflag;
+ };
+ 
+ extern struct class *aie_class;
+@@ -168,6 +187,20 @@ extern const struct file_operations aie_part_fops;
+ 	aie_tile_reg_field_get(aie_tile_reg_mask(adev), 0, regoff))
+ 
+ /**
++ * aie_get_field_val() - calculate value of an AI engine register field
++ * @field: a field in a register
++ * @val: value of the field
++ * @return: value of a register field
++ */
++static inline u32 aie_get_field_val(const struct aie_single_reg_field *field,
++				    u32 val)
++{
++	long long mask = (long long)field->mask & 0x00000000ffffffff;
++
++	return (val << __bf_shf(mask)) & field->mask;
++}
++
++/**
+  * aie_cal_regoff() - calculate register offset to the whole AI engine
+  *		      device start address
+  * @adev: AI engine device
+@@ -221,6 +254,7 @@ struct aie_partition *aie_request_partition(struct aie_device *adev,
+ struct aie_partition *of_aie_part_probe(struct aie_device *adev,
+ 					struct device_node *nc);
+ void aie_part_remove(struct aie_partition *apart);
++int aie_part_clean(struct aie_partition *apart);
+ 
+ int aie_device_init(struct aie_device *adev);
+ #endif /* AIE_INTERNAL_H */
+diff --git a/drivers/misc/xilinx-ai-engine/ai-engine-part.c b/drivers/misc/xilinx-ai-engine/ai-engine-part.c
+index fc8f9f5..98f125b 100644
+--- a/drivers/misc/xilinx-ai-engine/ai-engine-part.c
++++ b/drivers/misc/xilinx-ai-engine/ai-engine-part.c
+@@ -217,14 +217,12 @@ static int aie_part_release(struct inode *inode, struct file *filp)
+ 	struct aie_partition *apart = filp->private_data;
+ 	int ret;
+ 
+-	/*
+-	 * TODO: It will need to reset the SHIM columns and gate the
+-	 * tiles of the partition.
+-	 */
+ 	ret = mutex_lock_interruptible(&apart->mlock);
+ 	if (ret)
+ 		return ret;
+ 
++	aie_part_clean(apart);
++
+ 	apart->status = 0;
+ 	mutex_unlock(&apart->mlock);
+ 
+@@ -413,7 +411,6 @@ static struct aie_partition *aie_create_partition(struct aie_device *adev,
+ 		put_device(dev);
+ 		return ERR_PTR(ret);
+ 	}
+-
+ 	list_add_tail(&apart->node, &adev->partitions);
+ 	mutex_unlock(&adev->mlock);
+ 	get_device(&adev->dev);
+diff --git a/drivers/misc/xilinx-ai-engine/ai-engine-reset.c b/drivers/misc/xilinx-ai-engine/ai-engine-reset.c
+new file mode 100644
+index 0000000..fc0262f7
+--- /dev/null
++++ b/drivers/misc/xilinx-ai-engine/ai-engine-reset.c
+@@ -0,0 +1,121 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Xilinx AI Engine device driver resets implementation
++ *
++ * Copyright (C) 2020 Xilinx, Inc.
++ */
++
++#include <linux/bitfield.h>
++#include <linux/io.h>
++
++#include "ai-engine-internal.h"
++
++/**
++ * aie_part_set_col_reset() - set AI engine column reset
++ * @apart: AI engine partition
++ * @col: column to reset
++ * @reset: true to assert reset, false to release reset
++ */
++static void aie_part_set_col_reset(struct aie_partition *apart, u32 col,
++				   bool reset)
++{
++	struct aie_device *adev = apart->adev;
++	const struct aie_single_reg_field *col_rst = adev->col_rst;
++	struct aie_location loc;
++	u32 regoff, val;
++
++	loc.row = 0;
++	loc.col = col;
++
++	val = aie_get_field_val(col_rst, (reset ? 1 : 0));
++	regoff = aie_cal_regoff(adev, loc, col_rst->regoff);
++	iowrite32(val, adev->base + regoff);
++}
++
++/**
++ * aie_part_set_col_clkbuf() - set AI engine column clock buffer
++ * @apart: AI engine partition
++ * @col: column to reset
++ * @enable: true to enable, false to disable
++ */
++static void aie_part_set_col_clkbuf(struct aie_partition *apart, u32 col,
++				    bool enable)
++{
++	struct aie_device *adev = apart->adev;
++	const struct aie_single_reg_field *col_clkbuf = adev->col_clkbuf;
++	struct aie_location loc;
++	u32 regoff, val;
++
++	loc.row = 0;
++	loc.col = col;
++
++	val = aie_get_field_val(col_clkbuf, (enable ? 1 : 0));
++	regoff = aie_cal_regoff(adev, loc, col_clkbuf->regoff);
++	iowrite32(val, adev->base + regoff);
++}
++
++/**
++ * aie_part_set_cols_reset() - set column reset of every column in a partition
++ * @apart: AI engine partition
++ * @reset: bool to assert reset, false to release reset
++ */
++static void aie_part_set_cols_reset(struct aie_partition *apart, bool reset)
++{
++	struct aie_range *range = &apart->range;
++	u32 c;
++
++	for (c = range->start.col; c < range->start.col + range->size.col;
++	     c++)
++		aie_part_set_col_reset(apart, c, reset);
++}
++
++/**
++ * aie_part_set_cols_clkbuf() - set column clock buffer of every column in a
++ *				partition
++ * @apart: AI engine partition
++ * @enable: true to enable, false to disable
++ */
++static void aie_part_set_cols_clkbuf(struct aie_partition *apart, bool enable)
++{
++	struct aie_range *range = &apart->range;
++	u32 c;
++
++	for (c = range->start.col; c < range->start.col + range->size.col;
++	     c++)
++		aie_part_set_col_clkbuf(apart, c, enable);
++}
++
++/**
++ * aie_part_clean() - reset and clear AI engine partition
++ * @apart: AI engine partition
++ * @return: 0 for success and negative value for failure
++ *
++ * This function will:
++ *  * gate all the columns
++ *  * reset AI engine partition columns
++ *  * reset AI engine shims
++ *  * clear the memories
++ *  * gate all the tiles in a partition.
++ *
++ * This function will not validate the partition, the caller will need to
++ * provide a valid AI engine partition.
++ */
++int aie_part_clean(struct aie_partition *apart)
++{
++	struct aie_device *adev = apart->adev;
++	int ret;
++
++	if (apart->cntrflag & XAIE_PART_NOT_RST_ON_RELEASE)
++		return 0;
++
++	aie_part_set_cols_clkbuf(apart, false);
++	aie_part_set_cols_reset(apart, true);
++
++	ret = apart->adev->ops->reset_shim(adev, &apart->range);
++	if (ret < 0)
++		return ret;
++
++	aie_part_set_cols_clkbuf(apart, false);
++
++	return 0;
++}
+diff --git a/include/uapi/linux/xlnx-ai-engine.h b/include/uapi/linux/xlnx-ai-engine.h
+index 2a0239b..0f46151 100644
+--- a/include/uapi/linux/xlnx-ai-engine.h
++++ b/include/uapi/linux/xlnx-ai-engine.h
+@@ -15,6 +15,12 @@
+ /* AI engine partition is in use */
+ #define XAIE_PART_STATUS_INUSE		(1U << 0)
+ 
++/*
++ * AI engine partition control flags
++ */
++/* Not reset when release AI engine partition */
++#define XAIE_PART_NOT_RST_ON_RELEASE	0x00000001U
++
+ /**
+  * struct aie_location - AIE location information
+  * @col: column id
 -- 
 2.7.4
 
