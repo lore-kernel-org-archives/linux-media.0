@@ -2,122 +2,156 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD899C83017
-	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 13:34:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51F7CC64E90
+	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 13:41:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 62486207BC
-	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 13:34:26 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ChBEr66A"
+	by mail.kernel.org (Postfix) with ESMTP id 07F67206D8
+	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 13:41:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727264AbgK3NeK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 Nov 2020 08:34:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38614 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726960AbgK3NdT (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 Nov 2020 08:33:19 -0500
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E523C061A4A;
-        Mon, 30 Nov 2020 05:32:09 -0800 (PST)
-Received: by mail-wr1-x442.google.com with SMTP id p8so16244124wrx.5;
-        Mon, 30 Nov 2020 05:32:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=lLPC5gReMpBQQOjOEOK+BC7l1m2aD+CFv1l1upZuyWU=;
-        b=ChBEr66AN5CJJiiJQBZ6+iTU5ba9fDPZ4wh6Y2LJroWiyvvs8jWWsSfm0nVsNTFrmm
-         iIQSQSR6mkP3DSzhsZPm1Trv4qs4G2OokUvsbt28cJozO1//Fg274H2TFE5azshO7AF9
-         MPuBmPPrPCyacfwX/hsbmd4RU+OaWnroJgJGw0gEOBGY2ojipKSGhoi4fAlyyv6FXlCv
-         JhNI+HHHoE5fiBND0/neF5o+s5b5/JL2G/oz5DlVFyxRpwTDZV6sdgREBOazot2Tcrjw
-         4oRRtTheATA05iC4gSyDYzEu/PGLZnT5YX7leawx/crhZQDDzywkqwyxdxiFcNUvG2up
-         aItQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=lLPC5gReMpBQQOjOEOK+BC7l1m2aD+CFv1l1upZuyWU=;
-        b=pxk2LtzwHt1rfUHyi4TZjzpXzHA1r45ZZ8TrmClBq5MRrfpwtVeLCnJKoxUzVg2lKF
-         mutHv/9ZRwbfPqAIlrA6OZJPf7eU4Xej/+D7KDD0nDhCv1Yc2nJUucpM8YbcyCL14Y9+
-         kSwzpyEBC9YEYc63zCn/8k23Ql2Qi/fLZ6AychxFStAUVyTLFq/0KXVpqBUY4EIy7WEm
-         5eSdNroW5v7ndf3YvJ+N1bnKNJv0Dg75R+9scf9l5pdq16YoU/7dktPnl0YgJDub2Y2/
-         20pPLtvyK7BBNd/1O9J9Gg7+zkbArt948eNcsFsdwF43+D64Fi2iFbptnK1wmQph6jHs
-         F9/w==
-X-Gm-Message-State: AOAM531r/F1dIhZwkOO1H8sgfyiGVQfMxvrOaGkzeX/AzXrOOxNKZxAW
-        hffdz41yWm+rxgWXgHqF5PTmARIP6Ai6dYEt
-X-Google-Smtp-Source: ABdhPJwdHT47DB4kBktF0O94g86AmqcC/kfAYNDEByp+i5WkpdWbz4M15u6JP6DBwO3wwJQKJfZhQw==
-X-Received: by 2002:a5d:4585:: with SMTP id p5mr28223911wrq.65.1606743127500;
-        Mon, 30 Nov 2020 05:32:07 -0800 (PST)
-Received: from valhalla.home ([2.31.224.80])
-        by smtp.gmail.com with ESMTPSA id g192sm7452333wme.48.2020.11.30.05.32.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Nov 2020 05:32:06 -0800 (PST)
-From:   Daniel Scally <djrscally@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-media@vger.kernel.org, devel@acpica.org
-Cc:     rjw@rjwysocki.net, lenb@kernel.org, gregkh@linuxfoundation.org,
-        mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        wsa@kernel.org, yong.zhi@intel.com, sakari.ailus@linux.intel.com,
-        bingbu.cao@intel.com, tian.shu.qiu@intel.com, mchehab@kernel.org,
-        robert.moore@intel.com, erik.kaneda@intel.com, pmladek@suse.com,
-        rostedt@goodmis.org, sergey.senozhatsky@gmail.com,
-        linux@rasmusvillemoes.dk, kieran.bingham+renesas@ideasonboard.com,
-        jacopo+renesas@jmondi.org,
-        laurent.pinchart+renesas@ideasonboard.com,
-        jorhand@linux.microsoft.com, kitakar@gmail.com,
-        heikki.krogerus@linux.intel.com,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCH 10/18] ipu3-cio2: Rename ipu3-cio2.c to allow module to be built from multiple source files retaining ipu3-cio2 name
-Date:   Mon, 30 Nov 2020 13:31:21 +0000
-Message-Id: <20201130133129.1024662-11-djrscally@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201130133129.1024662-1-djrscally@gmail.com>
-References: <20201130133129.1024662-1-djrscally@gmail.com>
+        id S1726326AbgK3Nld (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 Nov 2020 08:41:33 -0500
+Received: from mga07.intel.com ([134.134.136.100]:53734 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726220AbgK3Nlc (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 30 Nov 2020 08:41:32 -0500
+IronPort-SDR: gGytLDsimFrk50+dmk2X2EH1gsc4POSraJdWAo+KUi93MnbGqAk07Bvam6vsVxwGJf2oSz5wx1
+ ndocO2ORWxaA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9820"; a="236757839"
+X-IronPort-AV: E=Sophos;i="5.78,381,1599548400"; 
+   d="scan'208";a="236757839"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2020 05:39:51 -0800
+IronPort-SDR: N3ryU2U5GWh96LcV/5uY/T0DXkcqTsWwzyafOtJ4D1+SJiOaQwHrEApHPJPDZYHkHc/BT4ZAjg
+ zLwf7tvmHeMQ==
+X-IronPort-AV: E=Sophos;i="5.78,381,1599548400"; 
+   d="scan'208";a="404729837"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2020 05:39:49 -0800
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id C2BDD208FD; Mon, 30 Nov 2020 15:39:45 +0200 (EET)
+Date:   Mon, 30 Nov 2020 15:39:45 +0200
+From:   'Sakari Ailus' <sakari.ailus@linux.intel.com>
+To:     martinax.krasteva@linux.intel.com
+Cc:     'Jacopo Mondi' <jacopo@jmondi.org>, linux-media@vger.kernel.org,
+        mchehab@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
+        daniele.alessandrelli@linux.intel.com,
+        gjorgjix.rosikopulos@linux.intel.com
+Subject: Re: [PATCH 2/2] media: Add imx334 camera sensor driver
+Message-ID: <20201130133945.GV3940@paasikivi.fi.intel.com>
+References: <20201120142803.308-1-martinax.krasteva@linux.intel.com>
+ <20201120142803.308-3-martinax.krasteva@linux.intel.com>
+ <20201123111029.rcoxchzj332tu6y4@uno.localdomain>
+ <20201123140223.GZ3940@paasikivi.fi.intel.com>
+ <001f01d6c702$8b760d40$a26227c0$@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <001f01d6c702$8b760d40$a26227c0$@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-ipu3-cio2 driver needs extending with multiple files; rename the main
-source file and specify the renamed file in Makefile to accommodate that.
+Hi Martina,
 
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Daniel Scally <djrscally@gmail.com>
----
-Changes since RFC v3:
+On Mon, Nov 30, 2020 at 10:21:12AM -0000, martinax.krasteva@linux.intel.com wrote:
+> Hi Sakari, Jacopo,
+> 
+> Thank you for the review
+> 
+> > -----Original Message-----
+> > From: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > Sent: Monday, November 23, 2020 2:02 PM
+> > To: Jacopo Mondi <jacopo@jmondi.org>
+> > Cc: Martina Krasteva <martinax.krasteva@linux.intel.com>; linux-
+> > media@vger.kernel.org; mchehab@kernel.org; robh+dt@kernel.org;
+> > devicetree@vger.kernel.org; daniele.alessandrelli@linux.intel.com;
+> > gjorgjix.rosikopulos@linux.intel.com
+> > Subject: Re: [PATCH 2/2] media: Add imx334 camera sensor driver
+> > 
+> > Hi Jacopo,
+> > 
+> > On Mon, Nov 23, 2020 at 12:10:29PM +0100, Jacopo Mondi wrote:
+> > ...
+> > > > +#include <media/v4l2-fwnode.h>
+> > >
+> > > You only use v4l2_async_register_subdev_sensor_common() from fwnde.h
+> > > If you think you can replace it with v4l2_async_register_subdev() (see
+> > > below comment) this should be changed in v4l2-async.h
+> > 
+> > Either is fine in principle. I'd use
+> > v4l2_async_register_subdev_sensor_common() for sensors though, as it
+> allows
+> > connecting lens and flash sub-devices.
+> > 
+> > Regarding DT bindings --- I wonder if there's a way to say these are
+> relevant for
+> > all sensors. That'd be another discussion though.
+> > 
+> 
+> Should I add lens and flash in DT binding doc, so it is clear that
+> connecting such sub-devs is supported?
+> I thought the binding doc should include only the bare minimum for a certain
+> driver to be used, but it does make sense adding this info.
 
-	- None
+I wouldn't add them to bindings here as they're not related to this device
+but to other devices.
 
- drivers/media/pci/intel/ipu3/Makefile                          | 2 ++
- drivers/media/pci/intel/ipu3/{ipu3-cio2.c => ipu3-cio2-main.c} | 0
- 2 files changed, 2 insertions(+)
- rename drivers/media/pci/intel/ipu3/{ipu3-cio2.c => ipu3-cio2-main.c} (100%)
+I wonder what Rob thinks.
 
-diff --git a/drivers/media/pci/intel/ipu3/Makefile b/drivers/media/pci/intel/ipu3/Makefile
-index 98ddd5beafe0..429d516452e4 100644
---- a/drivers/media/pci/intel/ipu3/Makefile
-+++ b/drivers/media/pci/intel/ipu3/Makefile
-@@ -1,2 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0-only
- obj-$(CONFIG_VIDEO_IPU3_CIO2) += ipu3-cio2.o
-+
-+ipu3-cio2-y += ipu3-cio2-main.o
-diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
-similarity index 100%
-rename from drivers/media/pci/intel/ipu3/ipu3-cio2.c
-rename to drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
+...
+
+> > > > +static const struct media_entity_operations imx334_subdev_entity_ops
+> = {
+> > > > +	.link_validate = v4l2_subdev_link_validate, };
+> > >
+> > > Is link_validate called on sensor subdev ? My understanding is that
+> > > they're called on the sink entity, but I might be mistaken.
+> > 
+> > Correct.
+> > 
+> 
+> This is what I read in the v4l2-subdev.rst:
+> " If the subdev driver intends to process video and integrate with the media
+> framework, it must implement format related functionality using
+> :c:type:`v4l2_subdev_pad_ops` instead of :c:type:`v4l2_subdev_video_ops`.
+> 
+> In that case, the subdev driver may set the link_validate field to provide
+> its own link validation function. <<The link validation function is called
+> for
+> every link in the pipeline where both of the ends of the links are V4L2
+> sub-devices.>> The driver is still responsible for validating the
+> correctness
+> of the format configuration between sub-devices and video nodes."
+> 
+> I find it a bit misleading, however I checked the source code, so I will
+> remove it in the next version.
+> 
+> Something that is not clear to me is, do I have to explicitly set
+> link_validate for the sink pad's entity to trigger validation. According to
+> the doc
+> I don't need to, but I cannot find the place in the source code where the
+> default func is called even if the op is not set, neither setting default
+> ops in case they weren't set.
+>  
+> "If link_validate op is not set, the default function
+> :c:func:`v4l2_subdev_link_validate_default` is used instead. This function
+> ensures that width, height and the media bus pixel code are equal on both
+> source
+> and sink of the link. Subdev drivers are also free to use this function to
+> perform the checks mentioned above in addition to their own checks."
+
+When a link is validated, it's the link_validate callback of the sink pad
+that will be used for the purpose. This is currently not documented here
+but should be added.
+
 -- 
-2.25.1
+Kind regards,
 
+Sakari Ailus
