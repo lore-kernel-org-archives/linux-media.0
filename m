@@ -2,33 +2,33 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC012C83012
-	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 07:50:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07C32C83016
+	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 07:50:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8B49E20719
-	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 07:50:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A235F2087D
+	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 07:50:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=xilinx.onmicrosoft.com header.i=@xilinx.onmicrosoft.com header.b="ANi+vfko"
+	dkim=pass (1024-bit key) header.d=xilinx.onmicrosoft.com header.i=@xilinx.onmicrosoft.com header.b="LxhjF3RG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727685AbgK3Htm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 Nov 2020 02:49:42 -0500
-Received: from mail-co1nam11on2083.outbound.protection.outlook.com ([40.107.220.83]:6908
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        id S1727730AbgK3Htp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 Nov 2020 02:49:45 -0500
+Received: from mail-dm6nam12on2044.outbound.protection.outlook.com ([40.107.243.44]:39039
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727436AbgK3Htl (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 Nov 2020 02:49:41 -0500
+        id S1727529AbgK3Hto (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 30 Nov 2020 02:49:44 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kiGf1Q7cXlEtXS+Enxd7riqMaTCPBZJvyFwoD3zuf01/jMf+c2TNhKagiXS2iDfQjRumB0A6ZAtHyyBxwTUAg0XBtiA4gYZOvLc2mm5/boEMJwgPoeZ+y7AYFQPxfVW4zlAcaxVJaiMtU9/VDJoCrmo9Sx/nhyTTzO1VCWpTJI82jKe/5Yy+bH4Xbzdl7z1Je9ksNOu2JuC125NJXJp0w0GVbT//y1MdcKbobQfdC2gKs1ijOPswF9mFMwjH2BAhXMWtYj+xEM6rSCPpRAbYqB1GslUthbCimWP7ObLR78k1fRddZYcdwAjLADQuW45jb1QyV3oipceH5BtRoKvIdg==
+ b=ja0Obtxmhzyh//ELMsPchG/A45SRSRXsdD5j9UFQ4W2yR6xYCGz5eyEcOC4RLUWlQB4z88Zz7tscTSlW7dWtOoOj+2tLakzoPOVAQGLBt+G4X1MnIwLyvpPFXXDoIRL2X8qeaoQPiVvfFWhnm5Cc+Ry54xSYstR0hrH9ZQ7nqUnNJQWAGk2FGZTSBdpKR0ZDdSxWPdIxhD/mUsj+bNZDGOh3cJvtFfyfK/u/bih5zANzq08iQEAuB8yFyIAfuXABM32NPSXkZT3918oiQf8/7wksqwhOBSsnScaOLiEkM557MzHszuLtCU574AgENdBFePSnjyECAhYPIUj1IAC/Jw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WZYx4q2+VchgbQlZsJuflJIdqL9siZCf7G+SYDm/7oE=;
- b=nYidTDI6IHzfwgJL/SCRKZHzZVXXzqgfg2JprscyRXf03emsh3tbCR8o96ymOgSqm0+rirMsWEfsQ1zU1wYoEq+bJFKvU0Gu+sb/FgHQppD2y94piZouQcZ0DrUpXUNEYFs8VP2wMzNbNziUJ4U5mlPNUMt90Zv8RlZPQmIcy8EeB9iD7EvaRYnI+KcD3lwkaTOWsdlerklWeKTeTInJRXIAbGUgpD9HPuldiPWzYZCzVxHW/CP6eHaibweWXYMS0pQnUkyklx30mkMiNmZj14NAJGQYUrzqaZYsscOVgYsLJBD8afalMJlyo68ewtBZiPgx1ThtN9VDJri8/YwKsA==
+ bh=9ZE3ZCNPEV7TMpX+R3ta+xDCfgNoO26sYBPkGBXK/U0=;
+ b=ognTt7pukUkaAQfSuKIg9g96Hv91nOTgDnFRp+hMMYDvDaHu7e2Ek1pneu7VUrH0zocux/C+E6sRZwcMb0VU00VS4FN4C785KFcmpzoFqOoeVLPsQ60wXF7PkkHuOK9g0LHX+7QWyhLJwGHyG7gTLQh2e+7enNRHYmzVAhHxFzHrREiFkjCU1It/agjXga/ZZ3r4AhmUGhTbGRwthuVDve78YZVm5fW5rqx0wmAqyLTKlX0szhCauStnxH7V90xobDFf7h+oYR4Xn4bjQqwS2tTb4YWIvUOk8qe3pfKWo2YihAr3nRQlUKpm0zdCgEPzuoT035QtnC+kbMss+O6yLQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
  dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
@@ -36,31 +36,31 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WZYx4q2+VchgbQlZsJuflJIdqL9siZCf7G+SYDm/7oE=;
- b=ANi+vfkoOMwKYIK6iN5Hux9M635Gkicr634t9wrLZkNIP5KOWqme7mlJasO92TKNO4lC7Dajh7NKFnkoLlP8b13aFSqfLiK86zS7x0C1q6VA0NgBf4ousmMFI8xQOPsM2ynffOL37qKsp78Lr/jLzSqqMQ1BKkpg1CtRMJlU5tU=
-Received: from CY4PR03CA0022.namprd03.prod.outlook.com (2603:10b6:903:33::32)
- by SJ0PR02MB7343.namprd02.prod.outlook.com (2603:10b6:a03:29c::12) with
+ bh=9ZE3ZCNPEV7TMpX+R3ta+xDCfgNoO26sYBPkGBXK/U0=;
+ b=LxhjF3RGB5XrnLyZv0orGQJFnsUOMx3mvii/PRj87fj4wLsDCqIo3eY3NGPswoTkWplE4zDzo578wTXddkLQ0YZz+WkspCHOAZ/iB3g9EbMU6x2F6Nqp7Ln5jPgR/cFfvo92VJiNZBL22ksBh5+Czpq/vnO35e4w9znK3gSlNf4=
+Received: from SA9PR10CA0022.namprd10.prod.outlook.com (2603:10b6:806:a7::27)
+ by DM6PR02MB4203.namprd02.prod.outlook.com (2603:10b6:5:a3::32) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.23; Mon, 30 Nov
- 2020 07:48:43 +0000
-Received: from CY1NAM02FT037.eop-nam02.prod.protection.outlook.com
- (2603:10b6:903:33:cafe::e1) by CY4PR03CA0022.outlook.office365.com
- (2603:10b6:903:33::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.20 via Frontend
- Transport; Mon, 30 Nov 2020 07:48:43 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.25; Mon, 30 Nov
+ 2020 07:48:45 +0000
+Received: from SN1NAM02FT051.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:806:a7:cafe::df) by SA9PR10CA0022.outlook.office365.com
+ (2603:10b6:806:a7::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.25 via Frontend
+ Transport; Mon, 30 Nov 2020 07:48:45 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
  smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=bestguesspass action=none
  header.from=xilinx.com;
 Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
  149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- CY1NAM02FT037.mail.protection.outlook.com (10.152.75.77) with Microsoft SMTP
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT051.mail.protection.outlook.com (10.152.73.103) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.3611.27 via Frontend Transport; Mon, 30 Nov 2020 07:48:43 +0000
+ 15.20.3611.27 via Frontend Transport; Mon, 30 Nov 2020 07:48:45 +0000
 Received: from xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.1913.5; Sun, 29 Nov 2020 23:48:31 -0800
 Received: from smtp.xilinx.com (172.19.127.96) by
@@ -74,6 +74,7 @@ Envelope-to: michal.simek@xilinx.com,
  manish.narani@xilinx.com,
  ravi.patel@xilinx.com,
  wendy.liang@xilinx.com,
+ hyun.kwon@xilinx.com,
  robh+dt@kernel.org,
  arnd@arndb.de,
  gregkh@linuxfoundation.org,
@@ -87,7 +88,7 @@ Envelope-to: michal.simek@xilinx.com,
 Received: from [172.19.2.167] (port=48528 helo=xsjjliang50.xilinx.com)
         by smtp.xilinx.com with esmtp (Exim 4.90)
         (envelope-from <wendy.liang@xilinx.com>)
-        id 1kjdvD-0006Pm-0z; Sun, 29 Nov 2020 23:48:31 -0800
+        id 1kjdvC-0006Pm-SQ; Sun, 29 Nov 2020 23:48:30 -0800
 From:   Wendy Liang <wendy.liang@xilinx.com>
 To:     <robh+dt@kernel.org>, <michal.simek@xilinx.com>, <arnd@arndb.de>,
         <gregkh@linuxfoundation.org>, <sumit.semwal@linaro.org>,
@@ -99,10 +100,11 @@ CC:     <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
         <dri-devel@lists.freedesktop.org>,
-        Wendy Liang <wendy.liang@xilinx.com>
-Subject: [PATCH v3 5/9] misc: xilinx-ai-engine: add setting shim dma bd operation
-Date:   Sun, 29 Nov 2020 23:48:21 -0800
-Message-ID: <1606722505-16194-6-git-send-email-wendy.liang@xilinx.com>
+        Wendy Liang <wendy.liang@xilinx.com>,
+        "Hyun Kwon" <hyun.kwon@xilinx.com>
+Subject: [PATCH v3 2/9] misc: Add Xilinx AI engine device driver
+Date:   Sun, 29 Nov 2020 23:48:18 -0800
+Message-ID: <1606722505-16194-3-git-send-email-wendy.liang@xilinx.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1606722505-16194-1-git-send-email-wendy.liang@xilinx.com>
 References: <1606722505-16194-1-git-send-email-wendy.liang@xilinx.com>
@@ -111,813 +113,1678 @@ Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-Office365-Filtering-HT: Tenant
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a55a9d22-267b-40be-3627-08d895045c4f
-X-MS-TrafficTypeDiagnostic: SJ0PR02MB7343:
-X-Microsoft-Antispam-PRVS: <SJ0PR02MB7343D0F41DCEB0B0A419678FB0F50@SJ0PR02MB7343.namprd02.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: d35c1524-4856-4de5-6dce-08d895045d96
+X-MS-TrafficTypeDiagnostic: DM6PR02MB4203:
+X-Microsoft-Antispam-PRVS: <DM6PR02MB4203BD3AE4388D42A860B0E8B0F50@DM6PR02MB4203.namprd02.prod.outlook.com>
 X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:93;
+X-MS-Oob-TLC-OOBClassifiers: OLM:3826;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: J4rlNAc2C9WOA27xh6hi2ucyctOGlkvWbWfxibREJHkaP6XJtSAgaIv1PBy1yHiXozAueBo6QM4qdhZso6AjdiCx3c7P0sj09YQuYqdm3pAi0n/1egycZcr7h84ha4328QF+sfiaT8ofeOhFgErnTotSXYT4YJvlPhHKm/Q8qxzXr44t20RhyK8rgZBbCSjdenYrgddaoi3x3/dlsAv5shXBHsvnrssUbTaA3mH4RyKGOSUUfhv8GE5ue6wisezNgL0xi+p6kN8T3kQYXY4pFp3U/PgbCQpvN06Z1lntREfSJ3iUxsoS+vewzQkOKFj7wTH3T1lc+0yiLqaog1mSkaUAcmM7IvSMTwucTpcUYL2A7qZDkY4WQuodoai9hNngjYZjo7V2cnPpRPxFZRPD4zaqG2jzO1chlzo8kFC378QdTpWivxkW3hq8g8E4r0gG
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(136003)(346002)(396003)(376002)(39850400004)(46966005)(426003)(107886003)(186003)(30864003)(5660300002)(7636003)(6636002)(6666004)(356005)(336012)(478600001)(2616005)(70586007)(70206006)(2906002)(7696005)(83380400001)(44832011)(9786002)(82310400003)(82740400003)(8676002)(8936002)(110136005)(36756003)(316002)(54906003)(47076004)(921005)(4326008)(26005)(36906005)(7416002)(102446001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 2aEeS1DYyHjlCIDCA21SzVKVG9QJreymAyVFL0qysteUjgJ04V5DlCDXLIw6vMzODwEerzfUeH3KcLR7B7OIEmuxNS0+0WFxladvXrfloEvXfbkL/bk3vzhyZ7bWf7rCMrfM9LVcdZW6dE2UZYEQrr2QiYknG+SqmBuRl4OoyifGn0CYadhMHhRk/GZWgsbepRVjaDCdqBKW0GsIerAS5nNsUTmDdamxkuWRTOgxeclV1gemOmHs7WQr1a123BBPEp+yhx63YJk3R8uiuF6k0RBUZbsur44Eky4mjlsPDFX7DPZXaHRkgukvQJmktdKrjhigvHFXffSLCYuQmbLzVfEQA0cGpUw9RQ1G5f1eK1+l7Bp/2qCgysBndliiX0ohcLWcElM526EOAZYR8ZA2U44AS+hptuc6ztFiYEBE8VsM19ap+Vm6QJ8b9p3wlHzCVSQcfn4pNkTSTexK8k3OXk7aQJmnNcE9k0a90JI0KpZSa63p1JsRXOTndFkV3ZG+SdWJtStGWhB6BKS3Gs9P/w==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(136003)(39850400004)(376002)(346002)(396003)(46966005)(478600001)(6636002)(8936002)(8676002)(186003)(70206006)(7636003)(107886003)(4326008)(82740400003)(356005)(44832011)(47076004)(82310400003)(70586007)(7416002)(54906003)(336012)(110136005)(7696005)(26005)(5660300002)(30864003)(83380400001)(36906005)(9786002)(921005)(6666004)(2616005)(426003)(36756003)(2906002)(316002)(966005)(102446001)(579004);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2020 07:48:43.3398
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2020 07:48:45.4672
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a55a9d22-267b-40be-3627-08d895045c4f
+X-MS-Exchange-CrossTenant-Network-Message-Id: d35c1524-4856-4de5-6dce-08d895045d96
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY1NAM02FT037.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT051.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB7343
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB4203
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add operation to set SHIM DMA buffer descriptor.
+Create AI engine device/partition hierarchical structure.
 
-The following operations are added to set the buffer descriptors:
-* attach DMA buffer which enables AI engine device to access the DMA
-  buffer memory
-* detach DMA buffer which disables AI engine device to access the DMA
-  buffer memory
-* set DMA buffer descriptor, which takes buffer descriptor contents
-  pointer, the dmabuf fd, and the offset to the start of dmabuf as
-  as argument. It validates the dmabuf and the offset and size of the
-  buffer. And then it calculates the DMA address of the buffer and set
-  the buffer descriptor content to the hardware DMA buffer descriptor.
+Each AI engine device can have multiple logical partitions(groups of AI
+engine tiles). Each partition is column based and has its own node ID
+in the system. AI engine device driver manages its partitions.
 
-The main logic to control what's go into the buffer descriptor and which
-buffer descriptor to use is in the userspace AI engine library.
+Applications can access AI engine partition through the AI engine
+partition driver instance. AI engine registers write is moved to kernel
+as there are registers in the AI engine array needs privilege
+permission.
 
 Signed-off-by: Wendy Liang <wendy.liang@xilinx.com>
-Reviewed-by: Hyun Kwon <hyun.kwon@xilinx.com>
+Signed-off-by: Hyun Kwon <hyun.kwon@xilinx.com>
 ---
- drivers/misc/xilinx-ai-engine/Makefile             |   1 +
- drivers/misc/xilinx-ai-engine/ai-engine-aie.c      |  19 +
- drivers/misc/xilinx-ai-engine/ai-engine-dma.c      | 481 +++++++++++++++++++++
- drivers/misc/xilinx-ai-engine/ai-engine-internal.h |  45 ++
- drivers/misc/xilinx-ai-engine/ai-engine-part.c     |  17 +
- include/uapi/linux/xlnx-ai-engine.h                |  44 ++
- 6 files changed, 607 insertions(+)
- create mode 100644 drivers/misc/xilinx-ai-engine/ai-engine-dma.c
+ MAINTAINERS                                        |   8 +
+ drivers/misc/Kconfig                               |  12 +
+ drivers/misc/Makefile                              |   1 +
+ drivers/misc/xilinx-ai-engine/Makefile             |  11 +
+ drivers/misc/xilinx-ai-engine/ai-engine-aie.c      | 115 +++++
+ drivers/misc/xilinx-ai-engine/ai-engine-dev.c      | 452 +++++++++++++++++++
+ drivers/misc/xilinx-ai-engine/ai-engine-internal.h | 226 ++++++++++
+ drivers/misc/xilinx-ai-engine/ai-engine-part.c     | 498 +++++++++++++++++++++
+ drivers/misc/xilinx-ai-engine/ai-engine-res.c      | 114 +++++
+ include/uapi/linux/xlnx-ai-engine.h                | 107 +++++
+ 10 files changed, 1544 insertions(+)
+ create mode 100644 drivers/misc/xilinx-ai-engine/Makefile
+ create mode 100644 drivers/misc/xilinx-ai-engine/ai-engine-aie.c
+ create mode 100644 drivers/misc/xilinx-ai-engine/ai-engine-dev.c
+ create mode 100644 drivers/misc/xilinx-ai-engine/ai-engine-internal.h
+ create mode 100644 drivers/misc/xilinx-ai-engine/ai-engine-part.c
+ create mode 100644 drivers/misc/xilinx-ai-engine/ai-engine-res.c
+ create mode 100644 include/uapi/linux/xlnx-ai-engine.h
 
-diff --git a/drivers/misc/xilinx-ai-engine/Makefile b/drivers/misc/xilinx-ai-engine/Makefile
-index 2dbed42..1b743fa 100644
---- a/drivers/misc/xilinx-ai-engine/Makefile
-+++ b/drivers/misc/xilinx-ai-engine/Makefile
-@@ -7,6 +7,7 @@ obj-$(CONFIG_XILINX_AIE)	+= xilinx-aie.o
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 2daa6ee..1e36294 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19287,6 +19287,14 @@ T:	git https://github.com/Xilinx/linux-xlnx.git
+ F:	Documentation/devicetree/bindings/phy/xlnx,zynqmp-psgtr.yaml
+ F:	drivers/phy/xilinx/phy-zynqmp.c
  
- xilinx-aie-$(CONFIG_XILINX_AIE) := ai-engine-aie.o \
- 				   ai-engine-dev.o \
-+				   ai-engine-dma.o \
- 				   ai-engine-mem.o \
- 				   ai-engine-part.o \
- 				   ai-engine-res.o \
-diff --git a/drivers/misc/xilinx-ai-engine/ai-engine-aie.c b/drivers/misc/xilinx-ai-engine/ai-engine-aie.c
-index 7fce2f00..ac95aff 100644
---- a/drivers/misc/xilinx-ai-engine/ai-engine-aie.c
-+++ b/drivers/misc/xilinx-ai-engine/ai-engine-aie.c
-@@ -107,6 +107,24 @@ static const struct aie_single_reg_field aie_col_clkbuf = {
- 	.regoff = AIE_SHIMPL_CLKCNTR_REGOFF,
- };
- 
-+static const struct aie_dma_attr aie_shimdma = {
-+	.laddr = {
-+		.mask = 0xffffffffU,
-+		.regoff = 0U,
-+	},
-+	.haddr = {
-+		.mask = 0xffff0000U,
-+		.regoff = 0x8U,
-+	},
-+	.buflen = {
-+		.mask = 0xffffffffU,
-+		.regoff = 0x4U,
-+	},
-+	.bd_regoff = 0x0001d000U,
-+	.num_bds = 16,
-+	.bd_len = 0x14U,
-+};
++XILINX AI ENGINE DRIVER
++M:	Wendy Liang <wendy.liang@xilinx.com>
++S:	Supported
++F:	Documentation/devicetree/bindings/soc/xilinx/xlnx,ai-engine.yaml
++F:	drivers/misc/xilinx-ai-engine/
++F:	include/linux/xlnx-ai-engine.h
++F:	include/uapi/linux/xlnx-ai-engine.h
 +
- static u32 aie_get_tile_type(struct aie_location *loc)
- {
- 	if (loc->row)
-@@ -232,6 +250,7 @@ int aie_device_init(struct aie_device *adev)
- 	adev->kernel_regs = aie_kernel_regs;
- 	adev->col_rst = &aie_col_rst;
- 	adev->col_clkbuf = &aie_col_clkbuf;
-+	adev->shim_dma = &aie_shimdma;
+ XILLYBUS DRIVER
+ M:	Eli Billauer <eli.billauer@gmail.com>
+ L:	linux-kernel@vger.kernel.org
+diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+index fafa8b0..0b8ce4d 100644
+--- a/drivers/misc/Kconfig
++++ b/drivers/misc/Kconfig
+@@ -444,6 +444,18 @@ config XILINX_SDFEC
  
- 	/* Get the columns resource */
- 	/* Get number of columns from AI engine memory resource */
-diff --git a/drivers/misc/xilinx-ai-engine/ai-engine-dma.c b/drivers/misc/xilinx-ai-engine/ai-engine-dma.c
+ 	  If unsure, say N.
+ 
++config XILINX_AIE
++	tristate "Xilinx AI engine"
++	depends on ARM64 || COMPILE_TEST
++	help
++	  This option enables support for the Xilinx AI engine driver.
++	  One Xilinx AI engine device can have multiple partitions (groups of
++	  AI engine tiles). Xilinx AI engine device driver instance manages
++	  AI engine partitions. User application access its partitions through
++	  AI engine partition instance file operations.
++
++	  If unsure, say N
++
+ config MISC_RTSX
+ 	tristate
+ 	default MISC_RTSX_PCI || MISC_RTSX_USB
+diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+index d23231e..2176b18 100644
+--- a/drivers/misc/Makefile
++++ b/drivers/misc/Makefile
+@@ -57,3 +57,4 @@ obj-$(CONFIG_HABANA_AI)		+= habanalabs/
+ obj-$(CONFIG_UACCE)		+= uacce/
+ obj-$(CONFIG_XILINX_SDFEC)	+= xilinx_sdfec.o
+ obj-$(CONFIG_HISI_HIKEY_USB)	+= hisi_hikey_usb.o
++obj-$(CONFIG_XILINX_AIE)	+= xilinx-ai-engine/
+diff --git a/drivers/misc/xilinx-ai-engine/Makefile b/drivers/misc/xilinx-ai-engine/Makefile
 new file mode 100644
-index 0000000..863790b
+index 0000000..7827a0a
 --- /dev/null
-+++ b/drivers/misc/xilinx-ai-engine/ai-engine-dma.c
-@@ -0,0 +1,481 @@
++++ b/drivers/misc/xilinx-ai-engine/Makefile
+@@ -0,0 +1,11 @@
++# SPDX-License-Identifier: GPL-2.0-only
++#
++# Makefile for Xilinx AI engine device driver
++#
++
++obj-$(CONFIG_XILINX_AIE)	+= xilinx-aie.o
++
++xilinx-aie-$(CONFIG_XILINX_AIE) := ai-engine-aie.o \
++				   ai-engine-dev.o \
++				   ai-engine-part.o \
++				   ai-engine-res.o
+diff --git a/drivers/misc/xilinx-ai-engine/ai-engine-aie.c b/drivers/misc/xilinx-ai-engine/ai-engine-aie.c
+new file mode 100644
+index 0000000..319260f
+--- /dev/null
++++ b/drivers/misc/xilinx-ai-engine/ai-engine-aie.c
+@@ -0,0 +1,115 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Xilinx AI Engine driver DMA implementation
++ * Xilinx AI Engine driver AIE device specific implementation
 + *
 + * Copyright (C) 2020 Xilinx, Inc.
 + */
 +
-+#include "ai-engine-internal.h"
-+#include <linux/dma-buf.h>
-+#include <linux/kernel.h>
-+#include <linux/mm.h>
-+#include <linux/refcount.h>
 +#include <linux/slab.h>
-+#include <linux/types.h>
-+#include <linux/uaccess.h>
 +
-+/**
-+ * struct aie_dmabuf - AI engine dmabuf information
-+ * @attach: dmabuf attachment pointer
-+ * @sgt: scatter/gather table
-+ * @refs: refcount of the attached aie_dmabuf
-+ * @node: list node
++#include "ai-engine-internal.h"
++
++#define AIE_ARRAY_SHIFT		30U
++#define AIE_COL_SHIFT		23U
++#define AIE_ROW_SHIFT		18U
++
++/*
++ * Registers offsets
 + */
-+struct aie_dmabuf {
-+	struct dma_buf_attachment *attach;
-+	struct sg_table *sgt;
-+	refcount_t refs;
-+	struct list_head node;
++#define AIE_SHIMNOC_L2INTR_MASK_REGOFF		0x00015000U
++#define AIE_SHIMNOC_L2INTR_INTR_REGOFF		0x00015010U
++#define AIE_SHIMNOC_DMA_BD0_ADDRLOW_REGOFF	0x0001d000U
++#define AIE_SHIMNOC_DMA_BD15_PACKET_REGOFF	0x0001d13cU
++#define AIE_SHIMNOC_AXIMM_REGOFF		0x0001e020U
++#define AIE_SHIMPL_L1INTR_MASK_A_REGOFF		0x00035000U
++#define AIE_SHIMPL_L1INTR_BLOCK_NORTH_B_REGOFF	0x00035050U
++#define AIE_SHIMPL_CLKCNTR_REGOFF		0x00036040U
++#define AIE_SHIMPL_RESET_REGOFF			0x0003604cU
++#define AIE_TILE_CORE_CLKCNTR_REGOFF		0x00036040U
++
++static const struct aie_tile_regs aie_kernel_regs[] = {
++	/* SHIM AXI MM Config */
++	{.attribute = AIE_TILE_TYPE_SHIMNOC << AIE_REGS_ATTR_TILE_TYPE_SHIFT,
++	 .soff = AIE_SHIMNOC_AXIMM_REGOFF,
++	 .eoff = AIE_SHIMNOC_AXIMM_REGOFF,
++	},
++	/* SHIM DMA ADDRESS range */
++	{.attribute = AIE_TILE_TYPE_SHIMNOC << AIE_REGS_ATTR_TILE_TYPE_SHIFT,
++	 .soff = AIE_SHIMNOC_DMA_BD0_ADDRLOW_REGOFF,
++	 .eoff = AIE_SHIMNOC_DMA_BD15_PACKET_REGOFF,
++	},
++	/* SHIM 2nd level interrupt controller */
++	{.attribute = AIE_TILE_TYPE_SHIMNOC << AIE_REGS_ATTR_TILE_TYPE_SHIFT,
++	 .soff = AIE_SHIMNOC_L2INTR_MASK_REGOFF,
++	 .eoff = AIE_SHIMNOC_L2INTR_INTR_REGOFF,
++	},
++	/* SHIM 1st level interrupt controller */
++	{.attribute = (AIE_TILE_TYPE_SHIMPL | AIE_TILE_TYPE_SHIMNOC) <<
++		      AIE_REGS_ATTR_TILE_TYPE_SHIFT,
++	 .soff = AIE_SHIMPL_L1INTR_MASK_A_REGOFF,
++	 .eoff = AIE_SHIMPL_L1INTR_BLOCK_NORTH_B_REGOFF,
++	},
++	/* SHIM reset Enable */
++	{.attribute = (AIE_TILE_TYPE_SHIMPL | AIE_TILE_TYPE_SHIMNOC) <<
++		      AIE_REGS_ATTR_TILE_TYPE_SHIFT,
++	 .soff = AIE_SHIMPL_RESET_REGOFF,
++	 .eoff = AIE_SHIMPL_RESET_REGOFF,
++	},
++	/* SHIM clock control */
++	{.attribute = (AIE_TILE_TYPE_SHIMPL | AIE_TILE_TYPE_SHIMNOC) <<
++		      AIE_REGS_ATTR_TILE_TYPE_SHIFT,
++	 .soff = AIE_SHIMPL_CLKCNTR_REGOFF,
++	 .eoff = AIE_SHIMPL_CLKCNTR_REGOFF,
++	},
++	/* Tile clock control */
++	{.attribute = AIE_TILE_TYPE_TILE << AIE_REGS_ATTR_TILE_TYPE_SHIFT,
++	 .soff = AIE_TILE_CORE_CLKCNTR_REGOFF,
++	 .eoff = AIE_TILE_CORE_CLKCNTR_REGOFF,
++	},
++};
++
++static u32 aie_get_tile_type(struct aie_location *loc)
++{
++	if (loc->row)
++		return AIE_TILE_TYPE_TILE;
++	/* SHIM row */
++	if ((loc->col % 4) < 2)
++		return AIE_TILE_TYPE_SHIMPL;
++
++	return AIE_TILE_TYPE_SHIMNOC;
++}
++
++static const struct aie_tile_operations aie_ops = {
++	.get_tile_type = aie_get_tile_type,
 +};
 +
 +/**
-+ * aie_part_find_dmabuf() - find a attached dmabuf
-+ * @apart: AI engine partition
-+ * @dmabuf: pointer to dmabuf
-+ * @return: pointer to AI engine dmabuf struct of the found dmabuf, if dmabuf
-+ *	    is not found, returns NULL.
++ * aie_device_init() - Initialize AI engine device struct AIE specific
++ *		       properties
++ * @adev: AI engine device
++ * @return: 0 for success, negative value for failure.
 + *
-+ * This function scans all the attached dmabufs to see the input dmabuf is
-+ * in the list. if it is attached, return the corresponding struct aie_dmabuf
-+ * pointer.
++ * This function initialize the AI engine device structure device version
++ * specific elements such as register addressing related array shift,
++ * column shift, and row shift; AIE specific device operations, device
++ * columns resource.
 + */
-+static struct aie_dmabuf *
-+aie_part_find_dmabuf(struct aie_partition *apart, struct dma_buf *dmabuf)
++int aie_device_init(struct aie_device *adev)
 +{
-+	struct aie_dmabuf *adbuf;
++	int ret;
 +
-+	list_for_each_entry(adbuf, &apart->dbufs, node) {
-+		if (dmabuf == adbuf->attach->dmabuf)
-+			return adbuf;
++	adev->array_shift = AIE_ARRAY_SHIFT;
++	adev->col_shift = AIE_COL_SHIFT;
++	adev->row_shift = AIE_ROW_SHIFT;
++	adev->ops = &aie_ops;
++	adev->num_kernel_regs = ARRAY_SIZE(aie_kernel_regs);
++	adev->kernel_regs = aie_kernel_regs;
++
++	/* Get the columns resource */
++	/* Get number of columns from AI engine memory resource */
++	ret = aie_resource_initialize(&adev->cols_res, 50);
++	if (ret)
++		dev_err(&adev->dev, "failed to initialize columns resource.\n");
++
++	return ret;
++}
+diff --git a/drivers/misc/xilinx-ai-engine/ai-engine-dev.c b/drivers/misc/xilinx-ai-engine/ai-engine-dev.c
+new file mode 100644
+index 0000000..5a56a92
+--- /dev/null
++++ b/drivers/misc/xilinx-ai-engine/ai-engine-dev.c
+@@ -0,0 +1,452 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Xilinx AI Engine device driver
++ *
++ * Copyright (C) 2020 Xilinx, Inc.
++ */
++
++#include <linux/anon_inodes.h>
++#include <linux/cdev.h>
++#include <linux/delay.h>
++#include <linux/device.h>
++#include <linux/dma-mapping.h>
++#include <linux/file.h>
++#include <linux/fs.h>
++#include <linux/idr.h>
++#include <linux/kernel.h>
++#include <linux/list.h>
++#include <linux/module.h>
++#include <linux/mutex.h>
++#include <linux/of.h>
++#include <linux/of_device.h>
++#include <linux/platform_device.h>
++#include <linux/slab.h>
++#include <linux/uaccess.h>
++#include <uapi/linux/xlnx-ai-engine.h>
++
++#include "ai-engine-internal.h"
++
++#define AIE_DEV_MAX	(MINORMASK + 1)
++
++static dev_t aie_major;
++struct class *aie_class;
++
++static DEFINE_IDA(aie_device_ida);
++static DEFINE_IDA(aie_minor_ida);
++
++/**
++ * aie_get_partition_fd() - Get AI engine partition file descriptor
++ * @apart: AI engine partition
++ * @return: file descriptor for AI engine partition for success, or negative
++ *	    value for failure.
++ *
++ * This function gets a file descriptor for the AI engine partition.
++ */
++static int aie_get_partition_fd(struct aie_partition *apart)
++{
++	struct file *filep;
++	int ret;
++
++	/*
++	 * We can't use anon_inode_getfd() because we need to modify
++	 * the f_mode flags directly to allow more than just ioctls
++	 */
++	ret = get_unused_fd_flags(O_CLOEXEC);
++	if (ret < 0)
++		return ret;
++
++	filep = anon_inode_getfile(dev_name(&apart->dev), &aie_part_fops,
++				   apart, O_RDWR);
++	if (IS_ERR(filep)) {
++		put_unused_fd(ret);
++		ret = PTR_ERR(filep);
++		return ret;
++	}
++	filep->f_mode |= (FMODE_LSEEK | FMODE_PREAD | FMODE_PWRITE);
++	fd_install(ret, filep);
++
++	return ret;
++}
++
++/**
++ * aie_enquire_partitions() - get AI engine partitions information
++ * @adev: AI engine device
++ * @query: data struct to store the partition information
++ * @return: 0 for success, and negative value for failure.
++ */
++static int aie_enquire_partitions(struct aie_device *adev,
++				  struct aie_partition_query *query)
++{
++	struct aie_partition *apart;
++	u64 user_part;
++	u32 partition_cnt, i = 0;
++	int ret;
++
++	if (!query->partitions) {
++		/*
++		 * If partitions information buffer is NULL.
++		 * It is to get the number of partitions.
++		 */
++		query->partition_cnt = 0;
++		list_for_each_entry(apart, &adev->partitions, node)
++			query->partition_cnt++;
++		return 0;
++	}
++
++	partition_cnt = query->partition_cnt;
++	if (!partition_cnt)
++		return 0;
++
++	ret = mutex_lock_interruptible(&adev->mlock);
++	if (ret)
++		return ret;
++
++	user_part = query->partitions;
++	list_for_each_entry(apart, &adev->partitions, node) {
++		struct aie_range_args part;
++
++		if (i >= partition_cnt)
++			break;
++		part.partition_id = apart->partition_id;
++		/*
++		 * TBD: check with PLM that if the partition is programmed
++		 * and get the UID of the image which is loaded on the AI
++		 * engine partition.
++		 */
++		part.uid = 0;
++		part.range.start.col = apart->range.start.col;
++		part.range.start.row = apart->range.start.row;
++		part.range.size.col = apart->range.size.col;
++		part.range.size.row = apart->range.size.row;
++		/* Check if partition is in use */
++		part.status = apart->status;
++		if (copy_to_user(u64_to_user_ptr(user_part), &part,
++				 sizeof(part))) {
++			mutex_unlock(&adev->mlock);
++			return -EFAULT;
++		}
++		user_part += sizeof(part);
++		i++;
++	}
++	mutex_unlock(&adev->mlock);
++	query->partition_cnt = i;
++
++	return 0;
++}
++
++/**
++ * aie_get_partition_from_id() - get AI engine partition from id
++ * @adev: AI engine device
++ * @partition_id: partition id to check
++ * @return: partition pointer if partition exists, otherwise, NULL.
++ *
++ * This function checks defined partitions with partition id.
++ * This function expect the caller to lock mlock of @adev.
++ */
++struct aie_partition *aie_get_partition_from_id(struct aie_device *adev,
++						u32 partition_id)
++{
++	struct aie_partition *apart;
++
++	list_for_each_entry(apart, &adev->partitions, node) {
++		if (apart->partition_id == partition_id)
++			return apart;
 +	}
 +
 +	return NULL;
 +}
 +
 +/**
-+ * aie_part_get_dmabuf_da_from_off() - get DMA address from offset to a dmabuf
-+ * @apart: AI engine partition
-+ * @dmabuf_fd: dmabuf file descriptor
-+ * @off: offset to the start of a dmabuf
-+ * @len: memory length
-+ * @return: dma address, or 0 if @off or @len is invalid, or if @dmabuf_fd is
-+ *	    not attached.
++ * aie_request_partition() - request AI engine partition
++ * @adev: AI engine device
++ * @req: partition request, includes the requested AI engine information
++ *	 such as partition node ID and the UID of the image which is
++ *	 loaded on the partition.
++ * @return: partition pointer if partition exists, otherwise, NULL.
 + *
-+ * This function returns DMA address if has been mapped to a dmabuf which has
-+ * been attached to the AI engine partition.
++ * This function finds a defined partition which matches the specified
++ * partition id, request it if it hasn't been requested, and returns it.
 + */
-+static dma_addr_t
-+aie_part_get_dmabuf_da_from_off(struct aie_partition *apart, int dmabuf_fd,
-+				u64 off, size_t len)
++struct aie_partition *aie_request_partition(struct aie_device *adev,
++					    struct aie_partition_req *req)
 +{
-+	struct dma_buf *dbuf = dma_buf_get(dmabuf_fd);
-+	struct aie_dmabuf *adbuf;
++	struct aie_partition *apart;
++	int ret;
 +
-+	if (IS_ERR(dbuf)) {
-+		dev_err(&apart->dev,
-+			"failed to get dma address, not able to get dmabuf from %d.\n",
-+			dmabuf_fd);
-+		return 0;
++	ret = mutex_lock_interruptible(&adev->mlock);
++	if (ret)
++		return ERR_PTR(ret);
++
++	apart = aie_get_partition_from_id(adev, req->partition_id);
++	if (!apart) {
++		dev_err(&adev->dev,
++			"request partition %u failed, not exist.\n",
++			req->partition_id);
++		mutex_unlock(&adev->mlock);
++		return ERR_PTR(-EINVAL);
++	}
++	/*
++	 * TBD: It will check image UID too to see if the user matches
++	 * what's loaded in the AI engine partition. And check the meta
++	 * data to see which resources used by application.
++	 */
++
++	ret = mutex_lock_interruptible(&apart->mlock);
++	if (ret)
++		return ERR_PTR(ret);
++
++	if (apart->status & XAIE_PART_STATUS_INUSE) {
++		mutex_unlock(&apart->mlock);
++		dev_err(&adev->dev,
++			"request partition %u failed, partition in use.\n",
++			req->partition_id);
++		apart = ERR_PTR(-EBUSY);
++	} else {
++		/*
++		 * TBD:
++		 * 1. setup NOC AXI MM config to only generate error events
++		 *    for slave error and decode error.
++		 * 2. scan to see which tiles have been clock gated.
++		 *
++		 * This needs to be done before the AI engine partition is
++		 * exported for user to access.
++		 */
++		apart->status = XAIE_PART_STATUS_INUSE;
++		mutex_unlock(&apart->mlock);
++	}
++	mutex_unlock(&adev->mlock);
++
++	return apart;
++}
++
++static long xilinx_ai_engine_ioctl(struct file *filp, unsigned int cmd,
++				   unsigned long arg)
++{
++	struct inode *inode = file_inode(filp);
++	struct aie_device *adev = cdev_to_aiedev(inode->i_cdev);
++	void __user *argp = (void __user *)arg;
++	int ret;
++
++	switch (cmd) {
++	case AIE_ENQUIRE_PART_IOCTL:
++	{
++		struct aie_partition_query query;
++		struct aie_partition_query  __user *uquery_ptr = argp;
++
++		if (copy_from_user(&query, uquery_ptr, sizeof(query)))
++			return -EFAULT;
++		ret = aie_enquire_partitions(adev, &query);
++		if (ret < 0)
++			return ret;
++		if (copy_to_user((void __user *)&uquery_ptr->partition_cnt,
++				 &query.partition_cnt,
++				 sizeof(query.partition_cnt)))
++			return -EFAULT;
++		break;
++	}
++	case AIE_REQUEST_PART_IOCTL:
++	{
++		struct aie_partition_req req;
++		struct aie_partition *apart;
++
++		if (copy_from_user(&req, argp, sizeof(req)))
++			return -EFAULT;
++		apart = aie_request_partition(adev, &req);
++		if (IS_ERR(apart))
++			return PTR_ERR(apart);
++		ret = aie_get_partition_fd(apart);
++		if (ret < 0) {
++			dev_err(&apart->dev, "failed to get fd.\n");
++			break;
++		}
++		break;
++	}
++	default:
++		dev_err(&adev->dev, "Invalid ioctl command %u.\n", cmd);
++		ret = -EINVAL;
++		break;
 +	}
 +
-+	adbuf = aie_part_find_dmabuf(apart, dbuf);
-+	dma_buf_put(dbuf);
-+	if (!adbuf) {
-+		dev_err(&apart->dev,
-+			"failed to get dma address, dmabuf %d not attached.\n",
-+			dmabuf_fd);
-+		return 0;
-+	}
++	return ret;
++}
 +
-+	if (off >= dbuf->size || off + len >= dbuf->size) {
-+		dev_err(&apart->dev,
-+			"failed to get dma address from buf %d, off=0x%llx, len=0x%zx.\n",
-+			dmabuf_fd, off, len);
-+		return 0;
-+	}
++static const struct file_operations aie_device_fops = {
++	.owner		= THIS_MODULE,
++	.unlocked_ioctl	= xilinx_ai_engine_ioctl,
++};
 +
-+	return sg_dma_address(adbuf->sgt->sgl) + off;
++static void xilinx_ai_engine_release_device(struct device *dev)
++{
++	struct aie_device *adev = dev_to_aiedev(dev);
++
++	ida_simple_remove(&aie_device_ida, dev->id);
++	ida_simple_remove(&aie_minor_ida, MINOR(dev->devt));
++	cdev_del(&adev->cdev);
++	aie_resource_uninitialize(&adev->cols_res);
 +}
 +
 +/**
-+ * aie_part_set_shimdma_bd() - Set the buffer descriptor to AI engine partition
-+ *			       hardware
-+ * @apart: AI engine partition
-+ * @loc: AI engine tile location
-+ * @bd_id: buffer descriptor ID
-+ * @bd: pointer buffer descriptor content
-+ * @return: 0 for success, negative value for failure
++ * of_xilinx_ai_engine_part_probe() - probes for AI engine partition nodes
++ * @adev: AI engine device
 + *
-+ * This function sets the specified buffer descriptor content to the
-+ * specified buffer descriptor in the specified AI engine SHIM NOC tile.
++ * This function will probe for children AI engine partition nodes and create
++ * an AI engine partition instance for each node.
 + */
-+static int aie_part_set_shimdma_bd(struct aie_partition *apart,
-+				   struct aie_location loc, u32 bd_id, u32 *bd)
++static void of_xilinx_ai_engine_part_probe(struct aie_device *adev)
 +{
-+	const struct aie_dma_attr *shim_dma = apart->adev->shim_dma;
-+	struct aie_location loc_adjust;
-+	u32 i, regoff, intile_regoff;
++	struct device_node *nc;
 +
-+	intile_regoff = shim_dma->bd_regoff + shim_dma->bd_len * bd_id;
-+	loc_adjust.col = loc.col + apart->range.start.col;
-+	loc_adjust.row = loc.row + apart->range.start.row;
-+	regoff = aie_cal_regoff(apart->adev, loc_adjust, intile_regoff);
++	for_each_available_child_of_node(adev->dev.of_node, nc) {
++		struct aie_partition *apart;
 +
-+	for (i = 0; i < shim_dma->bd_len / (sizeof(*bd));
-+	     i++, regoff += sizeof(*bd))
-+		iowrite32(bd[i], apart->adev->base + regoff);
++		if (of_node_test_and_set_flag(nc, OF_POPULATED))
++			continue;
++		apart = of_aie_part_probe(adev, nc);
++		if (IS_ERR(apart)) {
++			dev_err(&adev->dev,
++				"Failed to probe AI engine part for %pOF\n",
++				nc);
++			of_node_clear_flag(nc, OF_POPULATED);
++		}
++	}
++}
++
++static int xilinx_ai_engine_probe(struct platform_device *pdev)
++{
++	struct aie_device *adev;
++	struct device *dev;
++	int ret;
++
++	adev = devm_kzalloc(&pdev->dev, sizeof(*adev), GFP_KERNEL);
++	if (!adev)
++		return -ENOMEM;
++	platform_set_drvdata(pdev, adev);
++	INIT_LIST_HEAD(&adev->partitions);
++	mutex_init(&adev->mlock);
++
++	adev->res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!adev->res) {
++		dev_err(&pdev->dev, "No memory resource.\n");
++		return -EINVAL;
++	}
++	adev->base = devm_ioremap_resource(&pdev->dev, adev->res);
++	if (IS_ERR(adev->base)) {
++		dev_err(&pdev->dev, "no io memory resource.\n");
++		return PTR_ERR(adev->base);
++	}
++
++	/* Initialize AIE device specific instance. */
++	ret = aie_device_init(adev);
++	if (ret < 0) {
++		dev_err(&pdev->dev, "failed to initialize device instance.\n");
++		return ret;
++	}
++
++	dev = &adev->dev;
++	device_initialize(dev);
++	dev->class = aie_class;
++	dev->parent = &pdev->dev;
++	dev->of_node = pdev->dev.of_node;
++
++	ret = ida_simple_get(&aie_minor_ida, 0, AIE_DEV_MAX, GFP_KERNEL);
++	if (ret < 0)
++		goto free_dev;
++	dev->devt = MKDEV(MAJOR(aie_major), ret);
++	ret = ida_simple_get(&aie_device_ida, 0, 0, GFP_KERNEL);
++	if (ret < 0)
++		goto free_minor_ida;
++	dev->id = ret;
++	dev_set_name(&adev->dev, "aie%d", dev->id);
++
++	cdev_init(&adev->cdev, &aie_device_fops);
++	adev->cdev.owner = THIS_MODULE;
++	ret = cdev_add(&adev->cdev, dev->devt, 1);
++	if (ret)
++		goto free_ida;
++	/* We can now rely on the release function for cleanup */
++	dev->release = xilinx_ai_engine_release_device;
++
++	ret = device_add(dev);
++	if (ret) {
++		dev_err(&pdev->dev, "device_add failed: %d\n", ret);
++		put_device(dev);
++		return ret;
++	}
++
++	of_xilinx_ai_engine_part_probe(adev);
++	dev_info(&pdev->dev, "Xilinx AI Engine device(cols=%u) probed\n",
++		 adev->cols_res.total);
++	return 0;
++
++free_ida:
++	ida_simple_remove(&aie_device_ida, dev->id);
++free_minor_ida:
++	ida_simple_remove(&aie_minor_ida, MINOR(dev->devt));
++free_dev:
++	put_device(dev);
++
++	return ret;
++}
++
++static int xilinx_ai_engine_remove(struct platform_device *pdev)
++{
++	struct aie_device *adev = platform_get_drvdata(pdev);
++	struct aie_partition *apart;
++
++	list_for_each_entry(apart, &adev->partitions, node)
++		aie_part_remove(apart);
++
++	device_del(&adev->dev);
++	put_device(&adev->dev);
++
 +	return 0;
 +}
 +
-+/**
-+ * aie_part_validate_bdloc() - Validate SHIM DMA buffer descriptor location
-+ * @apart: AI engine partition
-+ * @loc: tile location
-+ * @bd_id: buffer descriptor id
-+ *
-+ * @return: 0 for success, negative value for failure
-+ *
-+ * This function validate the SHIM DMA buffer descriptor base address.
-+ */
-+static int aie_part_validate_bdloc(struct aie_partition *apart,
-+				   struct aie_location loc, u32 bd_id)
++static const struct of_device_id xilinx_ai_engine_of_match[] = {
++	{ .compatible = "xlnx,ai-engine-v1.0", },
++	{ /* end of table */ },
++};
++MODULE_DEVICE_TABLE(of, xilinx_ai_engine_of_match);
++
++static struct platform_driver xilinx_ai_engine_driver = {
++	.probe			= xilinx_ai_engine_probe,
++	.remove			= xilinx_ai_engine_remove,
++	.driver			= {
++		.name		= "xilinx-ai-engine",
++		.of_match_table	= xilinx_ai_engine_of_match,
++	},
++};
++
++static int __init xilinx_ai_engine_init(void)
 +{
-+	const struct aie_dma_attr *shim_dma = apart->adev->shim_dma;
-+	struct aie_location loc_adjust;
-+	u32 ttype;
++	int ret;
 +
-+	loc_adjust.col = loc.col + apart->range.start.col;
-+	loc_adjust.row = loc.row + apart->range.start.row;
++	ret = alloc_chrdev_region(&aie_major, 0, AIE_DEV_MAX, "aie");
++	if (ret < 0) {
++		pr_err("aie: failed to allocate aie region\n");
++		return ret;
++	}
 +
-+	if (aie_validate_location(apart, loc_adjust) < 0) {
++	aie_class = class_create(THIS_MODULE, "aie");
++	if (IS_ERR(aie_class)) {
++		pr_err("failed to create aie class\n");
++		unregister_chrdev_region(aie_major, AIE_DEV_MAX);
++		return PTR_ERR(aie_class);
++	}
++
++	platform_driver_register(&xilinx_ai_engine_driver);
++
++	return 0;
++}
++postcore_initcall(xilinx_ai_engine_init);
++
++static void __exit xilinx_ai_engine_exit(void)
++{
++	platform_driver_unregister(&xilinx_ai_engine_driver);
++	class_destroy(aie_class);
++	unregister_chrdev_region(aie_major, AIE_DEV_MAX);
++}
++module_exit(xilinx_ai_engine_exit);
++
++MODULE_AUTHOR("Xilinx, Inc.");
++MODULE_LICENSE("GPL v2");
+diff --git a/drivers/misc/xilinx-ai-engine/ai-engine-internal.h b/drivers/misc/xilinx-ai-engine/ai-engine-internal.h
+new file mode 100644
+index 0000000..6a69946
+--- /dev/null
++++ b/drivers/misc/xilinx-ai-engine/ai-engine-internal.h
+@@ -0,0 +1,226 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Xilinx AI Engine driver internal header
++ *
++ * Copyright (C) 2020 Xilinx, Inc.
++ */
++
++#ifndef AIE_INTERNAL_H
++#define AIE_INTERNAL_H
++
++#include <linux/bitfield.h>
++#include <linux/bits.h>
++#include <linux/cdev.h>
++#include <linux/device.h>
++#include <linux/io.h>
++#include <linux/list.h>
++#include <linux/mutex.h>
++#include <linux/of.h>
++#include <linux/of_device.h>
++#include <uapi/linux/xlnx-ai-engine.h>
++
++/*
++ * Macros for AI engine tile type bitmasks
++ */
++#define AIE_TILE_TYPE_TILE	BIT(0)
++#define AIE_TILE_TYPE_SHIMPL	BIT(1)
++/* SHIM NOC tile includes SHIM PL and SHIM NOC modules */
++#define AIE_TILE_TYPE_SHIMNOC	BIT(2)
++
++/*
++ * Macros for attribute property of AI engine registers accessed by kernel
++ * 0 - 7 bits: tile type bits
++ * 8 - 15 bits: permission bits. If it is 1, it allows write from userspace
++ */
++#define AIE_REGS_ATTR_TILE_TYPE_SHIFT	0U
++#define AIE_REGS_ATTR_PERM_SHIFT	8U
++#define AIE_REGS_ATTR_TILE_TYPE_MASK	GENMASK(AIE_REGS_ATTR_PERM_SHIFT - 1, \
++						AIE_REGS_ATTR_TILE_TYPE_SHIFT)
++#define AIE_REGS_ATTR_PERM_MASK		GENMASK(15, \
++						AIE_REGS_ATTR_PERM_SHIFT)
++
++/**
++ * struct aie_tile_regs - contiguous range of AI engine register
++ *			  within an AI engine tile
++ * @soff: start offset of the range
++ * @eoff: end offset of the range
++ * @attribute: registers attribute. It uses AIE_REGS_ATTR_* macros defined
++ *	       above.
++ */
++struct aie_tile_regs {
++	size_t soff;
++	size_t eoff;
++	u32 attribute;
++};
++
++struct aie_device;
++struct aie_partition;
++
++/**
++ * struct aie_tile_operations - AI engine device operations
++ * @get_tile_type: get type of tile based on tile operation
++ *
++ * Different AI engine device version has its own device
++ * operation.
++ */
++struct aie_tile_operations {
++	u32 (*get_tile_type)(struct aie_location *loc);
++};
++
++/**
++ * struct aie_resource - AI engine resource structure
++ * @bitmap: resource bitmap
++ * @total: total number of resource
++ */
++struct aie_resource {
++	unsigned long *bitmap;
++	u32 total;
++};
++
++/**
++ * struct aie_device - AI engine device structure
++ * @partitions: list of partitions requested
++ * @cdev: cdev for the AI engine
++ * @dev: device for the AI engine device
++ * @mlock: protection for AI engine device operations
++ * @base: AI engine device base virtual address
++ * @res: memory resource of AI engine device
++ * @kernel_regs: array of kernel only registers
++ * @ops: tile operations
++ * @size: size of the AI engine address space
++ * @array_shift: array address shift
++ * @col_shift: column address shift
++ * @row_shift: row address shift
++ * @cols_res: AI engine columns resources to indicate
++ *	      while columns are occupied by partitions.
++ * @num_kernel_regs: number of kernel only registers range
++ * @version: AI engine device version
++ */
++struct aie_device {
++	struct list_head partitions;
++	struct cdev cdev;
++	struct device dev;
++	struct mutex mlock; /* protection for AI engine partitions */
++	void __iomem *base;
++	struct resource *res;
++	const struct aie_tile_regs *kernel_regs;
++	const struct aie_tile_operations *ops;
++	size_t size;
++	struct aie_resource cols_res;
++	u32 array_shift;
++	u32 col_shift;
++	u32 row_shift;
++	u32 num_kernel_regs;
++	int version;
++};
++
++/**
++ * struct aie_partition - AI engine partition structure
++ * @node: list node
++ * @adev: pointer to AI device instance
++ * @range: range of partition
++ * @mlock: protection for AI engine partition operations
++ * @dev: device for the AI engine partition
++ * @partition_id: partition id. Partition ID is the identifier
++ *		  of the AI engine partition in the system.
++ * @status: indicate if the partition is in use
++ */
++struct aie_partition {
++	struct list_head node;
++	struct aie_device *adev;
++	struct aie_range range;
++	struct mutex mlock; /* protection for AI engine partition operations */
++	struct device dev;
++	u32 partition_id;
++	u32 status;
++};
++
++extern struct class *aie_class;
++extern const struct file_operations aie_part_fops;
++
++#define cdev_to_aiedev(i_cdev) container_of((i_cdev), struct aie_device, cdev)
++#define dev_to_aiedev(_dev) container_of((_dev), struct aie_device, dev)
++#define dev_to_aiepart(_dev) container_of((_dev), struct aie_partition, dev)
++
++#define aie_col_mask(adev) ({ \
++	struct aie_device *_adev = (adev); \
++	GENMASK_ULL(_adev->array_shift - 1, _adev->col_shift);  \
++	})
++
++#define aie_row_mask(adev) ({ \
++	struct aie_device *_adev = (adev); \
++	GENMASK_ULL(_adev->col_shift - 1, _adev->row_shift);  \
++	})
++
++#define aie_tile_reg_mask(adev) ({ \
++	struct aie_device *_adev = (adev); \
++	GENMASK_ULL(_adev->row_shift - 1, 0);  \
++	})
++
++/*
++ * Need to define field get, as AI engine shift mask is not constant.
++ * Cannot use FIELD_GET()
++ */
++#define aie_tile_reg_field_get(mask, shift, regoff) ( \
++	((regoff) & (mask)) >> (shift))
++
++#define aie_cal_tile_reg(adev, regoff) ( \
++	aie_tile_reg_field_get(aie_tile_reg_mask(adev), 0, regoff))
++
++/**
++ * aie_cal_regoff() - calculate register offset to the whole AI engine
++ *		      device start address
++ * @adev: AI engine device
++ * @loc: AI engine tile location
++ * @regoff_intile: register offset within a tile
++ * @return: register offset to the whole AI engine device start address
++ */
++static inline u32 aie_cal_regoff(struct aie_device *adev,
++				 struct aie_location loc, u32 regoff_intile)
++{
++	return regoff_intile + (loc.col << adev->col_shift) +
++	       (loc.row << adev->row_shift);
++}
++
++/**
++ * aie_validate_location() - validate tile location within an AI engine
++ *			     partition
++ * @apart: AI engine partition
++ * @loc: AI engine tile location
++ * @return: return 0 if it is valid, negative value for errors.
++ *
++ * This function checks if the AI engine location is within the AI engine
++ * partition.
++ */
++static inline int aie_validate_location(struct aie_partition *apart,
++					struct aie_location loc)
++{
++	if (loc.col < apart->range.start.col ||
++	    loc.col >= apart->range.start.col + apart->range.size.col ||
++	    loc.row < apart->range.start.row ||
++	    loc.row >= apart->range.start.row + apart->range.size.row)
++		return -EINVAL;
++
++	return 0;
++}
++
++int aie_resource_initialize(struct aie_resource *res, int count);
++void aie_resource_uninitialize(struct aie_resource *res);
++int aie_resource_check_region(struct aie_resource *res, u32 start,
++			      u32 count);
++int aie_resource_get_region(struct aie_resource *res, u32 start,
++			    u32 count);
++void aie_resource_put_region(struct aie_resource *res, int start, u32 count);
++
++const struct file_operations *aie_part_get_fops(void);
++u8 aie_part_in_use(struct aie_partition *apart);
++struct aie_partition *aie_get_partition_from_id(struct aie_device *adev,
++						u32 partition_id);
++struct aie_partition *aie_request_partition(struct aie_device *adev,
++					    struct aie_partition_req *req);
++struct aie_partition *of_aie_part_probe(struct aie_device *adev,
++					struct device_node *nc);
++void aie_part_remove(struct aie_partition *apart);
++
++int aie_device_init(struct aie_device *adev);
++#endif /* AIE_INTERNAL_H */
+diff --git a/drivers/misc/xilinx-ai-engine/ai-engine-part.c b/drivers/misc/xilinx-ai-engine/ai-engine-part.c
+new file mode 100644
+index 0000000..fc8f9f5
+--- /dev/null
++++ b/drivers/misc/xilinx-ai-engine/ai-engine-part.c
+@@ -0,0 +1,498 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Xilinx AI Engine partition driver
++ *
++ * Copyright (C) 2020 Xilinx, Inc.
++ */
++
++#include <linux/cdev.h>
++#include <linux/delay.h>
++#include <linux/device.h>
++#include <linux/fs.h>
++#include <linux/kernel.h>
++#include <linux/list.h>
++#include <linux/mm.h>
++#include <linux/mman.h>
++#include <linux/mmu_context.h>
++#include <linux/mutex.h>
++#include <linux/of.h>
++#include <linux/of_device.h>
++#include <linux/slab.h>
++#include <linux/uaccess.h>
++#include <linux/uio.h>
++#include <uapi/linux/xlnx-ai-engine.h>
++
++#include "ai-engine-internal.h"
++
++/**
++ * aie_cal_loc() - calculate tile location from register offset to the AI
++ *		   engine device
++ * @adev: AI engine device
++ * @loc: memory pointer to restore returning location information
++ * @regoff: tile internal register offset
++ *
++ * This function returns the tile location.
++ */
++static void aie_cal_loc(struct aie_device *adev,
++			struct aie_location *loc, u64 regoff)
++{
++	loc->col = (u32)aie_tile_reg_field_get(aie_col_mask(adev),
++					       adev->col_shift, regoff);
++	loc->row = (u32)aie_tile_reg_field_get(aie_row_mask(adev),
++					       adev->row_shift, regoff);
++}
++
++/**
++ * aie_part_reg_validation() - validate AI engine partition register access
++ * @apart: AI engine partition
++ * @offset: AI engine register offset
++ * @len: len of data to write/read
++ * @is_write: is the access to write to register
++ * @return: 0 for success, or negative value for failure.
++ *
++ * This function validate if the register to access is within the AI engine
++ * partition. If it is write access, if the register is writable by user.
++ */
++static int aie_part_reg_validation(struct aie_partition *apart, size_t offset,
++				   size_t len, u8 is_write)
++{
++	struct aie_device *adev;
++	u32 regend32, ttype;
++	u64 regoff, regend64;
++	struct aie_location loc;
++	unsigned int i;
++
++	adev = apart->adev;
++	if (offset % sizeof(u32)) {
 +		dev_err(&apart->dev,
-+			"invalid loc (%u,%u) in (%u,%u).\n",
++			"Invalid reg off(0x%zx), not 32bit aligned.\n",
++			offset);
++		return -EINVAL;
++	}
++
++	if (len % sizeof(u32)) {
++		dev_err(&apart->dev, "Invalid reg operation len %zu.\n", len);
++		return -EINVAL;
++	}
++
++	regoff = aie_cal_tile_reg(adev, offset);
++	regend64 = regoff + len;
++	if (regend64 >= BIT_ULL(adev->row_shift)) {
++		dev_err(&apart->dev,
++			"Invalid reg operation len %zu.\n", len);
++		return -EINVAL;
++	}
++
++	aie_cal_loc(adev, &loc, offset);
++	if (aie_validate_location(apart, loc)) {
++		dev_err(&apart->dev,
++			"Invalid (%d,%d) out of part(%d,%d),(%d,%d)\n",
 +			loc.col, loc.row,
++			apart->range.start.col, apart->range.start.row,
 +			apart->range.size.col, apart->range.size.row);
 +		return -EINVAL;
 +	}
 +
-+	ttype = apart->adev->ops->get_tile_type(&loc_adjust);
-+	if (ttype != AIE_TILE_TYPE_SHIMNOC) {
-+		dev_err(&apart->dev,
-+			"failed to set bd, (%u,%u) is not SHIM NOC\n",
-+			loc.col, loc.row);
-+		return -EINVAL;
-+	}
++	if (!is_write)
++		return 0;
 +
-+	if (bd_id >= shim_dma->num_bds) {
-+		dev_err(&apart->dev,
-+			"invalid SHIM DMA bd id: %u.\n", bd_id);
-+		return -EINVAL;
-+	}
++	regend32 = lower_32_bits(regend64);
++	ttype = adev->ops->get_tile_type(&loc);
++	for (i = 0; i < adev->num_kernel_regs; i++) {
++		const struct aie_tile_regs *regs;
++		u32 rttype, writable;
 +
-+	return 0;
-+}
-+
-+/**
-+ * aie_part_attach_dmabuf() - Attach dmabuf to an AI engine
-+ * @apart: AI engine partition
-+ * @dbuf: pointer to the DMA buffer to attach
-+ * @return: pointer to AI engine dmabuf structure for success, or error value
-+ *	    for failure
-+ *
-+ * This function attaches a dmabuf to the specified AI engine partition.
-+ */
-+static struct aie_dmabuf *aie_part_attach_dmabuf(struct aie_partition *apart,
-+						 struct dma_buf *dbuf)
-+{
-+	struct aie_dmabuf *adbuf;
-+	struct dma_buf_attachment *attach;
-+	struct sg_table *sgt;
-+
-+	attach = dma_buf_attach(dbuf, &apart->dev);
-+	if (IS_ERR(attach)) {
-+		dev_err(&apart->dev, "failed to attach dmabuf\n");
-+		return ERR_CAST(attach);
-+	}
-+
-+	sgt = dma_buf_map_attachment(attach, DMA_BIDIRECTIONAL);
-+	if (IS_ERR(sgt)) {
-+		dev_err(&apart->dev, "failed to map dmabuf attachment\n");
-+		dma_buf_detach(dbuf, attach);
-+		return ERR_CAST(sgt);
-+	}
-+
-+	if (sgt->nents != 1) {
-+		dma_addr_t next_sg_addr = sg_dma_address(sgt->sgl);
-+		struct scatterlist *s;
-+		unsigned int i;
-+
-+		for_each_sg(sgt->sgl, s, sgt->nents, i) {
-+			if (sg_dma_address(s) != next_sg_addr) {
++		regs = &adev->kernel_regs[i];
++		rttype = (regs->attribute & AIE_REGS_ATTR_TILE_TYPE_MASK) >>
++			 AIE_REGS_ATTR_TILE_TYPE_SHIFT;
++		writable = (regs->attribute & AIE_REGS_ATTR_PERM_MASK) >>
++			   AIE_REGS_ATTR_PERM_SHIFT;
++		if (!(ttype & rttype))
++			continue;
++		if ((regoff >= regs->soff && regoff <= regs->eoff) ||
++		    (regend32 >= regs->soff && regend32 <= regs->eoff)) {
++			if (!writable) {
 +				dev_err(&apart->dev,
-+					"dmabuf not contiguous\n");
-+				dma_buf_unmap_attachment(attach, sgt,
-+							 attach->dir);
-+				dma_buf_detach(dbuf, attach);
-+				return ERR_PTR(-EINVAL);
++					"reg 0x%zx,0x%zx not writable.\n",
++					offset, len);
++				return -EINVAL;
 +			}
-+
-+			next_sg_addr = sg_dma_address(s) + sg_dma_len(s);
 +		}
 +	}
 +
-+	adbuf = devm_kzalloc(&apart->dev, sizeof(*adbuf), GFP_KERNEL);
-+	if (!adbuf) {
-+		dma_buf_unmap_attachment(attach, sgt, attach->dir);
-+		dma_buf_detach(dbuf, attach);
-+		return ERR_PTR(-ENOMEM);
++	return 0;
++}
++
++/**
++ * aie_part_write_register() - AI engine partition write register
++ * @apart: AI engine partition
++ * @offset: AI engine register offset
++ * @len: len of data to write
++ * @data: data to write
++ * @mask: mask, if it is non 0, it is mask write.
++ * @return: number of bytes write for success, or negative value for failure.
++ *
++ * This function writes data to the specified registers.
++ * If the mask is non 0, it is mask write.
++ */
++static int aie_part_write_register(struct aie_partition *apart, size_t offset,
++				   size_t len, void *data, u32 mask)
++{
++	int ret;
++	void __iomem *va;
++
++	if (mask && len > sizeof(u32)) {
++		/* For mask write, only allow 32bit. */
++		dev_err(&apart->dev,
++			"failed mask write, len is more that 32bit.\n");
++		return -EINVAL;
 +	}
 +
-+	adbuf->attach = attach;
++	/* offset is expected to be relative to the start of the partition */
++	offset += aie_cal_regoff(apart->adev, apart->range.start, 0);
++	ret = aie_part_reg_validation(apart, offset, len, 1);
++	if (ret < 0) {
++		dev_err(&apart->dev, "failed to write to 0x%zx,0x%zx.\n",
++			offset, len);
++		return ret;
++	}
++
++	va = apart->adev->base + offset;
++	if (!mask) {
++		if (len == sizeof(u32))
++			iowrite32(*((u32 *)data),  va);
++		else
++			memcpy_toio(va, data, len);
++	} else {
++		u32 val = ioread32(va);
++
++		val &= ~mask;
++		val |= *((u32 *)data) & mask;
++		iowrite32(val, va);
++	}
++
++	return (int)len;
++}
++
++/**
++ * aie_part_access_regs() - AI engine partition registers access
++ * @apart: AI engine partition
++ * @num_reqs: number of access requests
++ * @reqs: array of registers access
++ * @return: 0 for success, and negative value for failure.
++ *
++ * This function executes AI engine partition register access requests.
++ */
++static int aie_part_access_regs(struct aie_partition *apart, u32 num_reqs,
++				struct aie_reg_args *reqs)
++{
++	u32 i;
++
++	for (i = 0; i < num_reqs; i++) {
++		struct aie_reg_args *args = &reqs[i];
++		int ret;
++
++		if (args->op != AIE_REG_WRITE) {
++			dev_err(&apart->dev,
++				"Invalid register command type: %u.\n",
++				args->op);
++			return -EINVAL;
++		}
++		ret = aie_part_write_register(apart,
++					      (size_t)args->offset,
++					      sizeof(args->val),
++					      &args->val, args->mask);
++		if (ret < 0) {
++			dev_err(&apart->dev, "reg op %u failed: 0x%llx.\n",
++				args->op, args->offset);
++			return ret;
++		}
++	}
++
++	return 0;
++}
++
++static int aie_part_release(struct inode *inode, struct file *filp)
++{
++	struct aie_partition *apart = filp->private_data;
++	int ret;
++
 +	/*
-+	 * dmabuf attachment doesn't always include the sgt, store it in
-+	 * AI engine dma buf structure.
++	 * TODO: It will need to reset the SHIM columns and gate the
++	 * tiles of the partition.
 +	 */
-+	adbuf->sgt = sgt;
-+
-+	refcount_set(&adbuf->refs, 1);
-+
-+	list_add(&adbuf->node, &apart->dbufs);
-+	return adbuf;
-+}
-+
-+/**
-+ * aie_part_dmabuf_attach_get() - Get reference to an dmabuf attachment
-+ * @adbuf: AI engine partition attached dmabuf
-+ *
-+ * This call will increase the reference count by 1
-+ */
-+static void aie_part_dmabuf_attach_get(struct aie_dmabuf *adbuf)
-+{
-+	refcount_inc(&adbuf->refs);
-+}
-+
-+/**
-+ * aie_part_dmabuf_attach_put() - Put reference to an dmabuf attachment
-+ * @adbuf: AI engine partition attached dmabuf
-+ *
-+ * This call will decrease the reference count by 1. If the refcount reaches
-+ * 0, it will detach the dmabuf.
-+ */
-+static void aie_part_dmabuf_attach_put(struct aie_dmabuf *adbuf)
-+{
-+	struct dma_buf *dbuf;
-+
-+	if (!refcount_dec_and_test(&adbuf->refs))
-+		return;
-+
-+	dbuf = adbuf->attach->dmabuf;
-+	dma_buf_unmap_attachment(adbuf->attach, adbuf->sgt, adbuf->attach->dir);
-+	dma_buf_detach(dbuf, adbuf->attach);
-+	dma_buf_put(dbuf);
-+	list_del(&adbuf->node);
-+}
-+
-+/**
-+ * aie_part_release_dmabufs() - detach all the attached dmabufs from partition
-+ * @apart: AI engine partition
-+ */
-+void aie_part_release_dmabufs(struct aie_partition *apart)
-+{
-+	struct aie_dmabuf *adbuf, *tmpadbuf;
-+
-+	list_for_each_entry_safe(adbuf, tmpadbuf, &apart->dbufs, node) {
-+		struct dma_buf *dbuf = adbuf->attach->dmabuf;
-+
-+		dma_buf_unmap_attachment(adbuf->attach, adbuf->sgt,
-+					 adbuf->attach->dir);
-+		dma_buf_detach(dbuf, adbuf->attach);
-+		dma_buf_put(dbuf);
-+		list_del(&adbuf->node);
-+		devm_kfree(&apart->dev, adbuf);
-+	}
-+}
-+
-+/**
-+ * aie_part_attach_dmabuf_req() - Handle attaching dmabuf to an AI engine
-+ *				  partition request
-+ * @apart: AI engine partition
-+ * @user_args: user AI engine dmabuf argument
-+ *
-+ * @return: 0 for success, negative value for failure
-+ *
-+ * This function attaches a dmabuf to the specified AI engine partition and map
-+ * the attachment. It checks if the dmabuf is already attached, if it is not
-+ * attached, attach it. It returns the number of entries of the attachment to
-+ * the AI engine dmabuf user argument. If user wants to know the sg list, it
-+ * can use AI engine get sg ioctl.
-+ */
-+long aie_part_attach_dmabuf_req(struct aie_partition *apart,
-+				void __user *user_args)
-+{
-+	struct aie_dmabuf *adbuf;
-+	struct dma_buf *dbuf;
-+	long ret;
-+	int dmabuf_fd = (int)(uintptr_t)user_args;
-+
-+	dbuf = dma_buf_get(dmabuf_fd);
-+	if (IS_ERR(dbuf)) {
-+		dev_err(&apart->dev, "failed to get dmabuf from %d.\n",
-+			dmabuf_fd);
-+		return PTR_ERR(dbuf);
-+	}
-+
 +	ret = mutex_lock_interruptible(&apart->mlock);
-+	if (ret) {
-+		dma_buf_put(dbuf);
-+		return ret;
-+	}
-+
-+	adbuf = aie_part_find_dmabuf(apart, dbuf);
-+	if (!adbuf)
-+		adbuf = aie_part_attach_dmabuf(apart, dbuf);
-+	else
-+		aie_part_dmabuf_attach_get(adbuf);
-+
-+	mutex_unlock(&apart->mlock);
-+
-+	if (IS_ERR(adbuf)) {
-+		dev_err(&apart->dev, "failed to attach dmabuf\n");
-+		dma_buf_put(dbuf);
-+		return PTR_ERR(adbuf);
-+	}
-+
-+	return 0;
-+}
-+
-+/**
-+ * aie_part_detach_dmabuf_req() - Handle detaching dmabuf from an AI engine
-+ *				  partition request
-+ * @apart: AI engine partition
-+ * @user_args: user AI engine dmabuf argument
-+ *
-+ * @return: 0 for success, negative value for failure
-+ *
-+ * This function unmaps and detaches a dmabuf from the specified AI engine
-+ * partition.
-+ */
-+long aie_part_detach_dmabuf_req(struct aie_partition *apart,
-+				void __user *user_args)
-+{
-+	int dmabuf_fd;
-+	struct dma_buf *dbuf;
-+	struct aie_dmabuf *adbuf;
-+	int ret;
-+
-+	dmabuf_fd = (int)(uintptr_t)user_args;
-+
-+	dbuf = dma_buf_get(dmabuf_fd);
-+	if (IS_ERR(dbuf)) {
-+		dev_err(&apart->dev, "failed to get dmabuf %d.\n", dmabuf_fd);
-+		return PTR_ERR(dbuf);
-+	}
-+
-+	ret = mutex_lock_interruptible(&apart->mlock);
-+	if (ret) {
-+		dma_buf_put(dbuf);
-+		return ret;
-+	}
-+
-+	adbuf = aie_part_find_dmabuf(apart, dbuf);
-+	dma_buf_put(dbuf);
-+	if (!adbuf) {
-+		dev_err(&apart->dev, "failed to find dmabuf %d.\n", dmabuf_fd);
-+		mutex_unlock(&apart->mlock);
-+		return -EINVAL;
-+	}
-+
-+	aie_part_dmabuf_attach_put(adbuf);
-+
-+	mutex_unlock(&apart->mlock);
-+
-+	return 0;
-+}
-+
-+/**
-+ * aie_part_set_dmabuf_bd() - Set AI engine SHIM DMA dmabuf buffer descriptor
-+ * @apart: AI engine partition
-+ * @user_args: user AI engine dmabuf argument
-+ *
-+ * @return: 0 for success, negative value for failure
-+ *
-+ * This function set the user specified buffer descriptor into the SHIM DMA
-+ * buffer descriptor. The buffer descriptor contained in the @user_args has the
-+ * offset to the start of the buffer descriptor.
-+ */
-+long aie_part_set_dmabuf_bd(struct aie_partition *apart,
-+			    void __user *user_args)
-+{
-+	struct aie_device *adev = apart->adev;
-+	const struct aie_dma_attr *shim_dma = adev->shim_dma;
-+	struct aie_dmabuf_bd_args args;
-+	u32 *bd, *tmpbd, len, laddr, haddr, regval;
-+	u64 off;
-+	dma_addr_t addr;
-+	int ret;
-+
-+	if (copy_from_user(&args, user_args, sizeof(args)))
-+		return -EFAULT;
-+
-+	ret = aie_part_validate_bdloc(apart, args.loc, args.bd_id);
-+	if (ret) {
-+		dev_err(&apart->dev, "invalid SHIM DMA BD reg address.\n");
-+		return -EINVAL;
-+	}
-+
-+	bd = memdup_user(u64_to_user_ptr(args.bd), shim_dma->bd_len);
-+	if (IS_ERR(bd))
-+		return PTR_ERR(bd);
-+
-+	regval = bd[shim_dma->buflen.regoff / sizeof(u32)];
-+	len = aie_get_reg_field(&shim_dma->buflen, regval);
-+	if (!len) {
-+		dev_err(&apart->dev, "no buf length from shim dma bd.\n");
-+		kfree(bd);
-+		return -EINVAL;
-+	}
-+
-+	/* Get low 32bit address offset */
-+	tmpbd = (u32 *)((char *)bd + shim_dma->laddr.regoff);
-+	laddr = *tmpbd & shim_dma->laddr.mask;
-+	/* Get high 32bit address offset */
-+	tmpbd = (u32 *)((char *)bd + shim_dma->haddr.regoff);
-+	haddr = *tmpbd & shim_dma->haddr.mask;
-+	off = laddr | ((u64)haddr << 32);
-+
-+	ret = mutex_lock_interruptible(&apart->mlock);
-+	if (ret) {
-+		kfree(bd);
-+		return ret;
-+	}
-+
-+	/* Get device address from offset */
-+	addr = aie_part_get_dmabuf_da_from_off(apart, args.buf_fd, off, len);
-+	if (!addr) {
-+		dev_err(&apart->dev, "invalid buffer 0x%llx, 0x%x.\n",
-+			off, len);
-+		mutex_unlock(&apart->mlock);
-+		kfree(bd);
-+		return -EINVAL;
-+	}
-+
-+	/* Set low 32bit address */
-+	laddr = lower_32_bits(addr);
-+	tmpbd = (u32 *)((char *)bd + shim_dma->laddr.regoff);
-+	*tmpbd &= ~shim_dma->laddr.mask;
-+	*tmpbd |= aie_get_field_val(&shim_dma->laddr, laddr);
-+
-+	/* Set high 32bit address */
-+	haddr = upper_32_bits(addr);
-+	tmpbd = (u32 *)((char *)bd + shim_dma->haddr.regoff);
-+	*tmpbd &= ~shim_dma->haddr.mask;
-+	*tmpbd |= aie_get_field_val(&shim_dma->haddr, haddr);
-+
-+	ret = aie_part_set_shimdma_bd(apart, args.loc, args.bd_id, bd);
-+	mutex_unlock(&apart->mlock);
 +	if (ret)
-+		dev_err(&apart->dev, "failed to set to shim dma bd.\n");
++		return ret;
 +
-+	kfree(bd);
++	apart->status = 0;
++	mutex_unlock(&apart->mlock);
++
++	return 0;
++}
++
++static const struct vm_operations_struct aie_part_physical_vm_ops = {
++#ifdef CONFIG_HAVE_IOREMAP_PROT
++	.access = generic_access_phys,
++#endif
++};
++
++static int aie_part_mmap(struct file *fp, struct vm_area_struct *vma)
++{
++	struct aie_partition *apart = fp->private_data;
++	struct aie_device *adev = apart->adev;
++	unsigned long offset = vma->vm_pgoff * PAGE_SIZE;
++	phys_addr_t addr;
++	size_t size;
++
++	if (vma->vm_end < vma->vm_start)
++		return -EINVAL;
++	/* Only allow userspace directly read registers */
++	if (vma->vm_flags & VM_WRITE) {
++		dev_err(&apart->dev, "%s: do not support writable mmap.\n",
++			__func__);
++		return -EINVAL;
++	}
++	vma->vm_private_data = apart;
++	vma->vm_ops = &aie_part_physical_vm_ops;
++	size = apart->range.size.col << adev->col_shift;
++	if ((vma->vm_end - vma->vm_start) > (size - offset)) {
++		dev_err(&apart->dev,
++			"%s: size exceed.\n", __func__);
++		return -EINVAL;
++	}
++	vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
++	/* Calculate the partition address */
++	addr = adev->res->start;
++	addr += apart->range.start.col << adev->col_shift;
++	addr += apart->range.start.row << adev->row_shift;
++	addr += offset;
++	return remap_pfn_range(vma,
++			       vma->vm_start,
++			       addr >> PAGE_SHIFT,
++			       vma->vm_end - vma->vm_start,
++			       vma->vm_page_prot);
++}
++
++static long aie_part_ioctl(struct file *fp, unsigned int cmd, unsigned long arg)
++{
++	struct aie_partition *apart = fp->private_data;
++	void __user *argp = (void __user *)arg;
++	long ret;
++
++	switch (cmd) {
++	case AIE_REG_IOCTL:
++	{
++		struct aie_reg_args raccess;
++
++		if (copy_from_user(&raccess, argp, sizeof(raccess)))
++			return -EFAULT;
++
++		ret = mutex_lock_interruptible(&apart->mlock);
++		if (ret)
++			return ret;
++
++		ret = aie_part_access_regs(apart, 1, &raccess);
++		mutex_unlock(&apart->mlock);
++		break;
++	}
++	default:
++		dev_err(&apart->dev, "Invalid ioctl command %u.\n", cmd);
++		ret = -EINVAL;
++		break;
++	}
++
 +	return ret;
 +}
-diff --git a/drivers/misc/xilinx-ai-engine/ai-engine-internal.h b/drivers/misc/xilinx-ai-engine/ai-engine-internal.h
-index e84610b..bf3a09c 100644
---- a/drivers/misc/xilinx-ai-engine/ai-engine-internal.h
-+++ b/drivers/misc/xilinx-ai-engine/ai-engine-internal.h
-@@ -90,6 +90,24 @@ struct aie_part_mem {
- };
- 
- /**
-+ * struct aie_dma_attr - AI engine DMA attributes structure
-+ * @laddr: low address field attributes
-+ * @haddr: high address field attributes
-+ * @buflen: buffer length field attributes
-+ * @bd_regoff: SHIM DMA buffer descriptors register offset
-+ * @num_bds: number of buffer descriptors
-+ * @bd_len: length of a buffer descriptor in bytes
-+ */
-+struct aie_dma_attr {
-+	struct aie_single_reg_field laddr;
-+	struct aie_single_reg_field haddr;
-+	struct aie_single_reg_field buflen;
-+	u32 bd_regoff;
-+	u32 num_bds;
-+	u32 bd_len;
++
++const struct file_operations aie_part_fops = {
++	.owner		= THIS_MODULE,
++	.release	= aie_part_release,
++	.mmap		= aie_part_mmap,
++	.unlocked_ioctl	= aie_part_ioctl,
 +};
 +
 +/**
-  * struct aie_tile_operations - AI engine device operations
-  * @get_tile_type: get type of tile based on tile operation
-  * @get_mem_info: get different types of memories information
-@@ -127,6 +145,7 @@ struct aie_resource {
-  * @ops: tile operations
-  * @col_rst: column reset attribute
-  * @col_clkbuf: column clock buffer attribute
-+ * @shim_dma: SHIM DMA attribute
-  * @size: size of the AI engine address space
-  * @array_shift: array address shift
-  * @col_shift: column address shift
-@@ -147,6 +166,7 @@ struct aie_device {
- 	const struct aie_tile_operations *ops;
- 	const struct aie_single_reg_field *col_rst;
- 	const struct aie_single_reg_field *col_clkbuf;
-+	const struct aie_dma_attr *shim_dma;
- 	size_t size;
- 	struct aie_resource cols_res;
- 	u32 array_shift;
-@@ -159,6 +179,7 @@ struct aie_device {
- /**
-  * struct aie_partition - AI engine partition structure
-  * @node: list node
-+ * @dbufs: dmabufs list
-  * @adev: pointer to AI device instance
-  * @pmems: pointer to partition memories types
-  * @range: range of partition
-@@ -172,6 +193,7 @@ struct aie_device {
-  */
- struct aie_partition {
- 	struct list_head node;
-+	struct list_head dbufs;
- 	struct aie_device *adev;
- 	struct aie_part_mem *pmems;
- 	struct aie_range range;
-@@ -229,6 +251,20 @@ static inline u32 aie_get_field_val(const struct aie_single_reg_field *field,
- }
- 
- /**
-+ * aie_get_reg_field() - get value from a field from a register valuer
-+ * @field: a field in a register
-+ * @regval: register value
-+ * @return: value of a register field
++ * aie_part_release_device() - release an AI engine partition instance
++ * @dev: AI engine partition device
++ *
++ * It will be called by device driver core when no one holds a valid
++ * pointer to @dev anymore.
 + */
-+static inline u32 aie_get_reg_field(const struct aie_single_reg_field *field,
-+				    u32 regval)
++static void aie_part_release_device(struct device *dev)
 +{
-+	long long mask64 = (long long)field->mask & 0x00000000ffffffff;
++	struct aie_partition *apart = dev_to_aiepart(dev);
++	struct aie_device *adev = apart->adev;
++	int ret;
 +
-+	return (regval & field->mask) >> __bf_shf(mask64);
++	ret = mutex_lock_interruptible(&adev->mlock);
++	if (ret) {
++		dev_warn(&apart->dev,
++			 "getting adev->mlock is interrupted by signal\n");
++	}
++
++	aie_resource_put_region(&adev->cols_res, apart->range.start.col,
++				apart->range.size.col);
++	list_del(&apart->node);
++	mutex_unlock(&adev->mlock);
++	put_device(apart->dev.parent);
 +}
 +
 +/**
-  * aie_cal_regoff() - calculate register offset to the whole AI engine
-  *		      device start address
-  * @adev: AI engine device
-@@ -286,5 +322,14 @@ int aie_part_clean(struct aie_partition *apart);
- 
- int aie_mem_get_info(struct aie_partition *apart, unsigned long arg);
- 
-+long aie_part_attach_dmabuf_req(struct aie_partition *apart,
-+				void __user *user_args);
-+long aie_part_detach_dmabuf_req(struct aie_partition *apart,
-+				void __user *user_args);
-+long aie_part_set_bd(struct aie_partition *apart, void __user *user_args);
-+long aie_part_set_dmabuf_bd(struct aie_partition *apart,
-+			    void __user *user_args);
-+void aie_part_release_dmabufs(struct aie_partition *apart);
-+
- int aie_device_init(struct aie_device *adev);
- #endif /* AIE_INTERNAL_H */
-diff --git a/drivers/misc/xilinx-ai-engine/ai-engine-part.c b/drivers/misc/xilinx-ai-engine/ai-engine-part.c
-index 4be6d38..dcfb9ec 100644
---- a/drivers/misc/xilinx-ai-engine/ai-engine-part.c
-+++ b/drivers/misc/xilinx-ai-engine/ai-engine-part.c
-@@ -8,6 +8,7 @@
- #include <linux/cdev.h>
- #include <linux/delay.h>
- #include <linux/device.h>
-+#include <linux/dma-mapping.h>
- #include <linux/fs.h>
- #include <linux/kernel.h>
- #include <linux/list.h>
-@@ -221,6 +222,7 @@ static int aie_part_release(struct inode *inode, struct file *filp)
- 	if (ret)
- 		return ret;
- 
-+	aie_part_release_dmabufs(apart);
- 	aie_part_clean(apart);
- 
- 	apart->status = 0;
-@@ -296,6 +298,12 @@ static long aie_part_ioctl(struct file *fp, unsigned int cmd, unsigned long arg)
- 	}
- 	case AIE_GET_MEM_IOCTL:
- 		return aie_mem_get_info(apart, arg);
-+	case AIE_ATTACH_DMABUF_IOCTL:
-+		return aie_part_attach_dmabuf_req(apart, argp);
-+	case AIE_DETACH_DMABUF_IOCTL:
-+		return aie_part_detach_dmabuf_req(apart, argp);
-+	case AIE_SET_SHIMDMA_DMABUF_BD_IOCTL:
-+		return aie_part_set_dmabuf_bd(apart, argp);
- 	default:
- 		dev_err(&apart->dev, "Invalid ioctl command %u.\n", cmd);
- 		ret = -EINVAL;
-@@ -422,6 +430,7 @@ static struct aie_partition *aie_create_partition(struct aie_device *adev,
- 		return ERR_PTR(-ENOMEM);
- 
- 	apart->adev = adev;
-+	INIT_LIST_HEAD(&apart->dbufs);
- 	memcpy(&apart->range, range, sizeof(*range));
- 	mutex_init(&apart->mlock);
- 
-@@ -443,6 +452,10 @@ static struct aie_partition *aie_create_partition(struct aie_device *adev,
- 		return ERR_PTR(ret);
- 	}
- 
-+	/* Set up the DMA mask */
-+	dev->coherent_dma_mask = DMA_BIT_MASK(48);
-+	dev->dma_mask = &dev->coherent_dma_mask;
-+
- 	/*
- 	 * Create array to keep the information of the different types of tile
- 	 * memories information of the AI engine partition.
-@@ -521,6 +534,10 @@ of_aie_part_probe(struct aie_device *adev, struct device_node *nc)
- 	apart->dev.of_node = nc;
- 	apart->partition_id = partition_id;
- 
-+	ret = of_dma_configure(&apart->dev, nc, true);
-+	if (ret)
-+		dev_warn(&apart->dev, "Failed to configure DMA.\n");
-+
- 	dev_info(&adev->dev,
- 		 "AI engine part(%u,%u),(%u,%u), id %u is probed successfully.\n",
- 		 range.start.col, range.start.row,
-diff --git a/include/uapi/linux/xlnx-ai-engine.h b/include/uapi/linux/xlnx-ai-engine.h
-index 9faeebe..75d9dbf 100644
---- a/include/uapi/linux/xlnx-ai-engine.h
-+++ b/include/uapi/linux/xlnx-ai-engine.h
-@@ -130,6 +130,22 @@ struct aie_partition_req {
- 	__u32 flag;
- };
- 
-+/**
-+ * struct aie_dmabuf_bd_args - AIE dmabuf buffer descriptor information
-+ * @bd: DMA buffer descriptor, within the buffer descriptor, the address field
-+ *	will be the offset to the start of the dmabuf. It is an array of __u32
-+ *	words.
-+ * @buf_fd: DMA buffer handler which is dmabuf file descriptor
-+ * @loc: Tile location relative to the start of a partition
-+ * @bd_id: buffer descriptor id
++ * aie_create_partition() - create AI engine partition instance
++ * @adev: AI engine device
++ * @range: AI engine partition range to check. A range describes a group
++ *	   of AI engine tiles.
++ * @return: created AI engine partition pointer for success, and PTR_ERR
++ *	    for failure.
++ *
++ * This function creates an AI engine partition instance.
++ * It creates AI engine partition, the AI engine partition device and
++ * the AI engine partition character device.
 + */
-+struct aie_dmabuf_bd_args {
-+	__u64 bd;
-+	struct aie_location loc;
-+	int buf_fd;
-+	__u32 bd_id;
++static struct aie_partition *aie_create_partition(struct aie_device *adev,
++						  struct aie_range *range)
++{
++	struct aie_partition *apart;
++	struct device *dev;
++	char devname[32];
++	int ret;
++
++	ret = mutex_lock_interruptible(&adev->mlock);
++	if (ret)
++		return ERR_PTR(ret);
++
++	ret = aie_resource_check_region(&adev->cols_res, range->start.col,
++					range->size.col);
++	if (ret != range->start.col) {
++		dev_err(&adev->dev, "invalid partition (%u,%u)(%u,%u).\n",
++			range->start.col, range->start.row,
++			range->size.col, range->size.row);
++		mutex_unlock(&adev->mlock);
++		return ERR_PTR(-EINVAL);
++	}
++	ret = aie_resource_get_region(&adev->cols_res, range->start.col,
++				      range->size.col);
++	if (ret != range->start.col) {
++		dev_err(&adev->dev, "failed to get partition (%u,%u)(%u,%u).\n",
++			range->start.col, range->start.row,
++			range->size.col, range->size.row);
++		mutex_unlock(&adev->mlock);
++		return ERR_PTR(-EFAULT);
++	}
++	mutex_unlock(&adev->mlock);
++
++	apart = devm_kzalloc(&adev->dev, sizeof(*apart), GFP_KERNEL);
++	if (!apart)
++		return ERR_PTR(-ENOMEM);
++
++	apart->adev = adev;
++	memcpy(&apart->range, range, sizeof(*range));
++	mutex_init(&apart->mlock);
++
++	/* Create AI engine partition device */
++	dev = &apart->dev;
++	device_initialize(dev);
++	dev->parent = &adev->dev;
++	dev->class = aie_class;
++	dev_set_drvdata(dev, apart);
++	snprintf(devname, sizeof(devname) - 1, "aiepart_%d_%d",
++		 apart->range.start.col, apart->range.size.col);
++	dev_set_name(dev, devname);
++	/* We can now rely on the release function for cleanup */
++	dev->release = aie_part_release_device;
++	ret = device_add(dev);
++	if (ret) {
++		dev_err(dev, "device_add failed: %d\n", ret);
++		put_device(dev);
++		return ERR_PTR(ret);
++	}
++
++	ret = mutex_lock_interruptible(&adev->mlock);
++	if (ret) {
++		put_device(dev);
++		return ERR_PTR(ret);
++	}
++
++	list_add_tail(&apart->node, &adev->partitions);
++	mutex_unlock(&adev->mlock);
++	get_device(&adev->dev);
++	dev_dbg(dev, "created AIE partition device.\n");
++
++	return apart;
++}
++
++struct aie_partition *
++of_aie_part_probe(struct aie_device *adev, struct device_node *nc)
++{
++	struct aie_partition *apart;
++	struct aie_range range;
++	u32 partition_id, regs[4];
++	int ret;
++
++	/* Select device driver */
++	ret = of_property_read_u32_array(nc, "reg", regs, ARRAY_SIZE(regs));
++	if (ret < 0) {
++		dev_err(&adev->dev,
++			"probe %pOF failed, no tiles range information.\n",
++			nc);
++		return ERR_PTR(ret);
++	}
++	range.start.col = regs[0];
++	range.start.row = regs[1];
++	range.size.col = regs[2];
++	range.size.row = regs[3];
++
++	ret = of_property_read_u32_index(nc, "xlnx,partition-id", 0,
++					 &partition_id);
++	if (ret < 0) {
++		dev_err(&adev->dev,
++			"probe %pOF failed, no partition id.\n", nc);
++		return ERR_PTR(ret);
++	}
++
++	ret = mutex_lock_interruptible(&adev->mlock);
++	if (ret)
++		return ERR_PTR(ret);
++
++	apart = aie_get_partition_from_id(adev, partition_id);
++	mutex_unlock(&adev->mlock);
++	if (apart) {
++		dev_err(&adev->dev,
++			"probe failed: partition %u exists.\n",
++			partition_id);
++		return ERR_PTR(ret);
++	}
++
++	apart = aie_create_partition(adev, &range);
++	if (IS_ERR(apart)) {
++		dev_err(&adev->dev,
++			"%s: failed to create part(%u,%u),(%u,%u).\n",
++			__func__, range.start.col, range.start.row,
++			range.size.col, range.size.row);
++		return apart;
++	}
++
++	of_node_get(nc);
++	apart->dev.of_node = nc;
++	apart->partition_id = partition_id;
++
++	dev_info(&adev->dev,
++		 "AI engine part(%u,%u),(%u,%u), id %u is probed successfully.\n",
++		 range.start.col, range.start.row,
++		 range.size.col, range.size.row, apart->partition_id);
++
++	return apart;
++}
++
++/**
++ * aie_destroy_part() - destroy AI engine partition
++ * @apart: AI engine partition
++ *
++ * This function will remove AI engine partition.
++ */
++void aie_part_remove(struct aie_partition *apart)
++{
++	device_del(&apart->dev);
++	put_device(&apart->dev);
++}
+diff --git a/drivers/misc/xilinx-ai-engine/ai-engine-res.c b/drivers/misc/xilinx-ai-engine/ai-engine-res.c
+new file mode 100644
+index 0000000..36f08bf
+--- /dev/null
++++ b/drivers/misc/xilinx-ai-engine/ai-engine-res.c
+@@ -0,0 +1,114 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Xilinx AI Engine device driver
++ *
++ * Copyright (C) 2020 Xilinx, Inc.
++ */
++
++#include <linux/bitmap.h>
++
++#include "ai-engine-internal.h"
++
++/**
++ * aie_resource_initialize() - initialize AI engine resource
++ * @res: pointer to AI engine resource
++ * @count: total number of element of this resource
++ * @return: 0 for success, negative value for failure.
++ *
++ * This function will initialize the data structure for the
++ * resource.
++ */
++int aie_resource_initialize(struct aie_resource *res, int count)
++{
++	if (!res || !count)
++		return -EINVAL;
++	res->bitmap = bitmap_zalloc(count, GFP_KERNEL);
++	if (!res->bitmap)
++		return -ENOMEM;
++	res->total = count;
++
++	return 0;
++}
++
++/**
++ * aie_resource_uninitialize() - uninitialize AI engine resource
++ * @res: pointer to AI engine resource
++ *
++ * This function will release the AI engine resource data members.
++ */
++void aie_resource_uninitialize(struct aie_resource *res)
++{
++	res->total = 0;
++	if (res->bitmap)
++		bitmap_free(res->bitmap);
++}
++
++/**
++ * aie_resource_check() - check availability of requested resource
++ * @res: pointer to AI engine resource to check
++ * @start: start index of the required resource, it will only be used if
++ *	   @continuous is 1. It will check the available resource starting from
++ *	   @start
++ * @count: number of requested element
++ * @return: start resource id if the requested number of resources are available
++ *	    It will return negative value of errors.
++ *
++ * This function will check the availability. It will return start resource id
++ * if the requested number of resources are available.
++ */
++int aie_resource_check_region(struct aie_resource *res,
++			      u32 start, u32 count)
++{
++	unsigned long id;
++
++	if (!res || !res->bitmap || !count)
++		return -EINVAL;
++	id = bitmap_find_next_zero_area(res->bitmap, res->total, start,
++					count, 0);
++	if (id >= res->total)
++		return -ERANGE;
++
++	return (int)id;
++}
++
++/**
++ * aie_resource_get_region() - get requested AI engine resource
++ * @res: pointer to AI engine resource to check
++ * @count: number of requested element
++ * @start: start index of the required resource
++ * @return: start resource id for success, and negative value for failure.
++ *
++ * This function check if the requested AI engine resource is available.
++ * If it is available, mark it used and return the start resource id.
++ */
++int aie_resource_get_region(struct aie_resource *res, u32 start, u32 count)
++{
++	unsigned long off;
++
++	if (!res || !res->bitmap || !count)
++		return -EINVAL;
++	off = bitmap_find_next_zero_area(res->bitmap, res->total, start,
++					 count, 0);
++	if (off >= res->total) {
++		pr_err("Failed to get available AI engine resource.\n");
++		return -ERANGE;
++	}
++	bitmap_set(res->bitmap, off, count);
++
++	return (int)off;
++}
++
++/**
++ * aie_resource_put_region() - release requested AI engine resource
++ * @res: pointer to AI engine resource to check
++ * @start: start index of the resource to release
++ * @count: number of elements to release
++ *
++ * This function release the requested AI engine resource.
++ */
++void aie_resource_put_region(struct aie_resource *res, int start, u32 count)
++{
++	if (!res || !count)
++		return;
++	bitmap_clear(res->bitmap, start, count);
++}
+diff --git a/include/uapi/linux/xlnx-ai-engine.h b/include/uapi/linux/xlnx-ai-engine.h
+new file mode 100644
+index 0000000..2a0239b
+--- /dev/null
++++ b/include/uapi/linux/xlnx-ai-engine.h
+@@ -0,0 +1,107 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++/*
++ * Copyright (c) 2020, Xilinx Inc.
++ */
++
++#ifndef _UAPI_AI_ENGINE_H_
++#define _UAPI_AI_ENGINE_H_
++
++#include <linux/ioctl.h>
++#include <linux/types.h>
++
++/* AI engine register access operation */
++#define AIE_REG_WRITE 0
++
++/* AI engine partition is in use */
++#define XAIE_PART_STATUS_INUSE		(1U << 0)
++
++/**
++ * struct aie_location - AIE location information
++ * @col: column id
++ * @row: row id
++ */
++struct aie_location {
++	__u32 col;
++	__u32 row;
 +};
 +
- #define AIE_IOCTL_BASE 'A'
- 
- /* AI engine device IOCTL operations */
-@@ -160,4 +176,32 @@ struct aie_partition_req {
-  */
- #define AIE_GET_MEM_IOCTL		_IOWR(AIE_IOCTL_BASE, 0x9, \
- 					      struct aie_mem_args)
 +/**
-+ * DOC: AIE_ATTACH_DMABUF_IOCTL - attach a dmabuf to AI engine partition
-+ *
-+ * This ioctl is used to attach a dmabuf to the AI engine partition. AI engine
-+ * partition will return the number of scatter gather list elements of the
-+ * dmabuf.
++ * struct aie_range - AIE range information
++ * @start: start tile location
++ * @size: size of the range, number of columns and rows
 + */
-+#define AIE_ATTACH_DMABUF_IOCTL		_IOR(AIE_IOCTL_BASE, 0xa, int)
++struct aie_range {
++	struct aie_location start;
++	struct aie_location size;
++};
 +
 +/**
-+ * DOC: AIE_DETACH_DMABUF_IOCTL - dettach a dmabuf from AI engine partition
-+ *
-+ * This ioctl is used to detach a dmabuf from the AI engine partition
++ * struct aie_reg_args - AIE access register arguments
++ * @op: if this request is to read, write or poll register
++ * @mask: mask for mask write, 0 for not mask write
++ * @offset: offset of register to the start of an AI engine partition
++ * @val: value to write or get
 + */
-+#define AIE_DETACH_DMABUF_IOCTL		_IOR(AIE_IOCTL_BASE, 0xb, int)
++struct aie_reg_args {
++	__u32 op;
++	__u32 mask;
++	__u64 offset;
++	__u32 val;
++};
 +
 +/**
-+ * DOC: AIE_SET_SHIMDMA_DMABUF_BD_IOCTL - set buffer descriptor which contains
-+ *					  dmabuf to SHIM DMA
-+ *
-+ * This ioctl is used to set the buffer descriptor to SHIM DMA. The
-+ * aie_dmabuf_bd_args contains the dmabuf fd and the buffer descriptor contents.
-+ * The address field in the buffer descriptor contents should be the offset to
-+ * the start of the dmabuf.
++ * struct aie_range_args - AIE range request arguments
++ * @partition_id: partition id. It is used to identify the
++ *		  AI engine partition in the system.
++ * @uid: image identifier loaded on the AI engine partition
++ * @range: range of AIE tiles
++ * @status: indicate if the AI engine is in use.
++ *	    0 means not in used, otherwise, in use.
 + */
-+#define AIE_SET_SHIMDMA_DMABUF_BD_IOCTL	_IOW(AIE_IOCTL_BASE, 0x10, \
-+					     struct aie_dmabuf_bd_args)
++struct aie_range_args {
++	__u32 partition_id;
++	__u32 uid;
++	struct aie_range range;
++	__u32 status;
++};
 +
- #endif
++/**
++ * struct aie_partition_query - AIE partition query arguments
++ * @partition_cnt: number of defined partitions in the system
++ * @partitions: buffer to store defined partitions information.
++ *		It is an array of struct aie_range_args.
++ */
++struct aie_partition_query {
++	__u64 partitions;
++	__u32 partition_cnt;
++};
++
++/**
++ * struct aie_partition_req - AIE request partition arguments
++ * @partition_id: partition node id. It is used to identify the AI engine
++ *		  partition in the system.
++ * @uid: image identifier loaded on the AI engine partition
++ * @meta_data: meta data to indicate which resources used by application.
++ * @flag: used for application to indicate particular driver requirements
++ *	  application wants to have for the partition. e.g. do not clean
++ *	  resource when closing the partition.
++ */
++struct aie_partition_req {
++	__u32 partition_id;
++	__u32 uid;
++	__u64 meta_data;
++	__u32 flag;
++};
++
++#define AIE_IOCTL_BASE 'A'
++
++/* AI engine device IOCTL operations */
++#define AIE_ENQUIRE_PART_IOCTL		_IOWR(AIE_IOCTL_BASE, 0x1, \
++					      struct aie_partition_query)
++#define AIE_REQUEST_PART_IOCTL		_IOR(AIE_IOCTL_BASE, 0x2, \
++					     struct aie_partition_req)
++
++/* AI engine partition IOCTL operations */
++#define AIE_REG_IOCTL			_IOWR(AIE_IOCTL_BASE, 0x8, \
++					      struct aie_reg_args)
++#endif
 -- 
 2.7.4
 
