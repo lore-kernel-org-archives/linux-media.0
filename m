@@ -8,54 +8,54 @@ X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A064C64E8A
-	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 10:48:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A32ACC64E90
+	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 10:49:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2509A20727
-	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 10:48:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5814D20727
+	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 10:49:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="mxZ+YVsh"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="YE/Gewpr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728716AbgK3KsT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 Nov 2020 05:48:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41100 "EHLO
+        id S1728870AbgK3Ks7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 Nov 2020 05:48:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728313AbgK3KsS (ORCPT
+        with ESMTP id S1728214AbgK3Ks6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 Nov 2020 05:48:18 -0500
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D24DC0613D3
-        for <linux-media@vger.kernel.org>; Mon, 30 Nov 2020 02:47:38 -0800 (PST)
-Received: by mail-wm1-x342.google.com with SMTP id f190so21320176wme.1
-        for <linux-media@vger.kernel.org>; Mon, 30 Nov 2020 02:47:38 -0800 (PST)
+        Mon, 30 Nov 2020 05:48:58 -0500
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61045C061A48
+        for <linux-media@vger.kernel.org>; Mon, 30 Nov 2020 02:47:43 -0800 (PST)
+Received: by mail-wr1-x444.google.com with SMTP id r3so15518328wrt.2
+        for <linux-media@vger.kernel.org>; Mon, 30 Nov 2020 02:47:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kEyLf8LFch+KdsSp/Rnz95CvSLqxxYSUroQ+WOd06N4=;
-        b=mxZ+YVshPN8IDgC+Xd8VJSuhvuW+B1Vq1vEOVvhr69IYB6IWocC1WMBCPpZXbtWMu+
-         c7toL4IxZDaEPMYXB6KuB1ZZHDPxgCxu/yMOhnV0L+cWMh1gK4hhLBZ3/rGsqxxIrR6y
-         qFEqeGNKNm1kApxx2viLIZDmnm5XkEF2f7jxk=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=RYZ1hkfS6MVlnDkKB7H6fGdpoH+Li4bYtu5eHl0zDxE=;
+        b=YE/Gewpr2e2XHpelTU0ihPjr3QsOGDLEQa22/2YLQeATVTQoBdFYphKgwq/Dl8383g
+         EZiFvwM3ExStjHcXVJIit9Fo3JdE2NsYs1KLx9kZioVo6rUI8oaIEsJqJgkunCZ4E2pI
+         WOLpj1K+PSoKit20zWiMpU5fWZFZjstTTwwBU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kEyLf8LFch+KdsSp/Rnz95CvSLqxxYSUroQ+WOd06N4=;
-        b=B7WDW4Oqqpq46MvA0oQuliAYnY3QWXGQ6s/O2s6fp8oKBlwTdpCQe91qXu4cuPd0Ka
-         4pHjMKrS0YL2StaMm2fuHsZTig1v9AXwerbxQVGX+DPxYYOpM0klv/rgMsHlrULJP4/f
-         qOOXPgJILVfgWPU49awRfb1RejwWMp+/XdKUgVLYeUNT+fwzQxvCgN1gcj0+vJk20IEC
-         ad3ARokKbLFTBoKcCj//FFC0+5JoWc7j46VRIlw7plLOc+25dAQzUJUrZbn4p0/hlyeS
-         /LFbKqztGpTiO0F9O6wJdamlPLaqTLRO1rwFiLcOIH6dXU1Wrc0DYXDfgPCKPYlQiD9U
-         iANw==
-X-Gm-Message-State: AOAM5332Tpx4pc3mU9HkFvmfJpNGqDw6fyQQZpAp/4QUJF5AXA8FEwV+
-        z06qdS5P+TuCxh1MjvtVZGpOVQ==
-X-Google-Smtp-Source: ABdhPJyNfDQBtBUjLYivTubWHNNG5AjYFEAOzzMzgG9ljqqSdjJuJrr5gIZKubHTvUAbSLegBzpGUA==
-X-Received: by 2002:a1c:2d84:: with SMTP id t126mr22263460wmt.132.1606733256754;
-        Mon, 30 Nov 2020 02:47:36 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=RYZ1hkfS6MVlnDkKB7H6fGdpoH+Li4bYtu5eHl0zDxE=;
+        b=ktVzrPYar/GFj/IZzvISMfHUFNUTWbNR2jbDQDXlRzqHwystgbbtahKfDCE+uDCu8O
+         sG7SlMZT6e8JIar34pICwts9PNGM04pVtgwnT7+48wxj9v/EnYoBVO8SsEwPQD345rFA
+         xsJpOjcWEM64iXBRrViQiyjDzHhjjvLjuqbS7MeVQQqbRf3B+kadHJE7+juuJ0UgwLzK
+         /TauMqURjRqJHzYdoH93Dspl9QZF5dPWUhDHJKkykAYUa0zxxqg5EukR0J7m1Rn0XyqP
+         +nkA/jAUeLWUnbKHWsvnxSLoOPaYCfAGFp7/nQ6KkZ0peIMl2ptnxzK23bo/qUpGnC7I
+         4UFg==
+X-Gm-Message-State: AOAM533+qhfEztYqSXBBiS0c8z1HSubc8NTyse7zo92wYtYazqNULKgW
+        9b1RPJnxhXF9z6G/s0RmmihuYA==
+X-Google-Smtp-Source: ABdhPJwlPbcmHV/pNuy8TAufF2XpQZc2th+lBdVLOOSpbSO/YujoIdptksZ6nAeYFimiWUAsVL3WHA==
+X-Received: by 2002:adf:db8e:: with SMTP id u14mr26537310wri.233.1606733262011;
+        Mon, 30 Nov 2020 02:47:42 -0800 (PST)
 Received: from alco.lan ([80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id x9sm19719853wru.55.2020.11.30.02.47.35
+        by smtp.gmail.com with ESMTPSA id x9sm19719853wru.55.2020.11.30.02.47.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Nov 2020 02:47:36 -0800 (PST)
+        Mon, 30 Nov 2020 02:47:41 -0800 (PST)
 From:   Ricardo Ribalda <ribalda@chromium.org>
 To:     Marek Szyprowski <m.szyprowski@samsung.com>,
         Robin Murphy <robin.murphy@arm.com>,
@@ -68,146 +68,219 @@ To:     Marek Szyprowski <m.szyprowski@samsung.com>,
         Linux Media Mailing List <linux-media@vger.kernel.org>,
         Tomasz Figa <tfiga@chromium.org>,
         Sergey Senozhatsky <senozhatsky@google.com>
-Subject: [PATCH v4 1/4] dma-mapping: remove the {alloc,free}_noncoherent methods
-Date:   Mon, 30 Nov 2020 11:47:27 +0100
-Message-Id: <20201130104730.27655-1-ribalda@chromium.org>
+Cc:     Ricardo Ribalda <ribalda@chromium.org>
+Subject: [PATCH v4 3/4] media: uvcvideo: Use dma_alloc_noncontiguos API
+Date:   Mon, 30 Nov 2020 11:47:29 +0100
+Message-Id: <20201130104730.27655-3-ribalda@chromium.org>
 X-Mailer: git-send-email 2.29.2.454.gaff20da3a2-goog
+In-Reply-To: <20201130104730.27655-1-ribalda@chromium.org>
+References: <20201130104730.27655-1-ribalda@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+On architectures where the is no coherent caching such as ARM use the
+dma_alloc_noncontiguos API and handle manually the cache flushing using
+dma_sync_sgtable().
 
-It turns out allowing non-contigous allocations here was a rather bad
-idea, as we'll now need to define ways to get the pages for mmaping
-or dma_buf sharing.  Revert this change and stick to the original
-concept.  A different API for the use case of non-contigous allocations
-will be added back later.
+With this patch on the affected architectures we can measure up to 20x
+performance improvement in uvc_video_copy_data_work().
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/iommu/dma-iommu.c   | 30 ------------------------------
- include/linux/dma-map-ops.h |  5 -----
- kernel/dma/mapping.c        | 33 ++++++---------------------------
- 3 files changed, 6 insertions(+), 62 deletions(-)
+ drivers/media/usb/uvc/uvc_video.c | 92 +++++++++++++++++++++++--------
+ drivers/media/usb/uvc/uvcvideo.h  |  2 +
+ 2 files changed, 72 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-index 0cbcd3fc3e7e..73249732afd3 100644
---- a/drivers/iommu/dma-iommu.c
-+++ b/drivers/iommu/dma-iommu.c
-@@ -1054,34 +1054,6 @@ static void *iommu_dma_alloc(struct device *dev, size_t size,
- 	return cpu_addr;
+v4: Thanks to Crhistoph and Sergei
+
+- Remove the  CONFIG_DMA_NONCOHERENT path
+- Do not pass  __GFP_NOWARN
+
+diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+index a6a441d92b94..59ade244abfb 100644
+--- a/drivers/media/usb/uvc/uvc_video.c
++++ b/drivers/media/usb/uvc/uvc_video.c
+@@ -1097,6 +1097,11 @@ static int uvc_video_decode_start(struct uvc_streaming *stream,
+ 	return data[0];
  }
  
--#ifdef CONFIG_DMA_REMAP
--static void *iommu_dma_alloc_noncoherent(struct device *dev, size_t size,
--		dma_addr_t *handle, enum dma_data_direction dir, gfp_t gfp)
--{
--	if (!gfpflags_allow_blocking(gfp)) {
--		struct page *page;
--
--		page = dma_common_alloc_pages(dev, size, handle, dir, gfp);
--		if (!page)
--			return NULL;
--		return page_address(page);
--	}
--
--	return iommu_dma_alloc_remap(dev, size, handle, gfp | __GFP_ZERO,
--				     PAGE_KERNEL, 0);
--}
--
--static void iommu_dma_free_noncoherent(struct device *dev, size_t size,
--		void *cpu_addr, dma_addr_t handle, enum dma_data_direction dir)
--{
--	__iommu_dma_unmap(dev, handle, size);
--	__iommu_dma_free(dev, size, cpu_addr);
--}
++static inline struct device *stream_to_dmadev(struct uvc_streaming *stream)
++{
++	return stream->dev->udev->bus->controller->parent;
++}
++
+ /*
+  * uvc_video_decode_data_work: Asynchronous memcpy processing
+  *
+@@ -1118,6 +1123,9 @@ static void uvc_video_copy_data_work(struct work_struct *work)
+ 		uvc_queue_buffer_release(op->buf);
+ 	}
+ 
++	if (uvc_urb->pages)
++		dma_sync_sgtable_for_device(stream_to_dmadev(uvc_urb->stream),
++					    &uvc_urb->sgt, DMA_FROM_DEVICE);
+ 	ret = usb_submit_urb(uvc_urb->urb, GFP_KERNEL);
+ 	if (ret < 0)
+ 		uvc_printk(KERN_ERR, "Failed to resubmit video URB (%d).\n",
+@@ -1539,10 +1547,17 @@ static void uvc_video_complete(struct urb *urb)
+ 	 * Process the URB headers, and optionally queue expensive memcpy tasks
+ 	 * to be deferred to a work queue.
+ 	 */
++	if (uvc_urb->pages)
++		dma_sync_sgtable_for_cpu(stream_to_dmadev(stream),
++					 &uvc_urb->sgt, DMA_FROM_DEVICE);
+ 	stream->decode(uvc_urb, buf, buf_meta);
+ 
+ 	/* If no async work is needed, resubmit the URB immediately. */
+ 	if (!uvc_urb->async_operations) {
++		if (uvc_urb->pages)
++			dma_sync_sgtable_for_device(stream_to_dmadev(stream),
++						    &uvc_urb->sgt,
++						    DMA_FROM_DEVICE);
+ 		ret = usb_submit_urb(uvc_urb->urb, GFP_ATOMIC);
+ 		if (ret < 0)
+ 			uvc_printk(KERN_ERR,
+@@ -1565,18 +1580,61 @@ static void uvc_free_urb_buffers(struct uvc_streaming *stream)
+ 		if (!uvc_urb->buffer)
+ 			continue;
+ 
+-#ifndef CONFIG_DMA_NONCOHERENT
+-		usb_free_coherent(stream->dev->udev, stream->urb_size,
+-				  uvc_urb->buffer, uvc_urb->dma);
 -#else
--#define iommu_dma_alloc_noncoherent		NULL
--#define iommu_dma_free_noncoherent		NULL
--#endif /* CONFIG_DMA_REMAP */
--
- static int iommu_dma_mmap(struct device *dev, struct vm_area_struct *vma,
- 		void *cpu_addr, dma_addr_t dma_addr, size_t size,
- 		unsigned long attrs)
-@@ -1152,8 +1124,6 @@ static const struct dma_map_ops iommu_dma_ops = {
- 	.free			= iommu_dma_free,
- 	.alloc_pages		= dma_common_alloc_pages,
- 	.free_pages		= dma_common_free_pages,
--	.alloc_noncoherent	= iommu_dma_alloc_noncoherent,
--	.free_noncoherent	= iommu_dma_free_noncoherent,
- 	.mmap			= iommu_dma_mmap,
- 	.get_sgtable		= iommu_dma_get_sgtable,
- 	.map_page		= iommu_dma_map_page,
-diff --git a/include/linux/dma-map-ops.h b/include/linux/dma-map-ops.h
-index a5f89fc4d6df..3d1f91464bcf 100644
---- a/include/linux/dma-map-ops.h
-+++ b/include/linux/dma-map-ops.h
-@@ -22,11 +22,6 @@ struct dma_map_ops {
- 			gfp_t gfp);
- 	void (*free_pages)(struct device *dev, size_t size, struct page *vaddr,
- 			dma_addr_t dma_handle, enum dma_data_direction dir);
--	void *(*alloc_noncoherent)(struct device *dev, size_t size,
--			dma_addr_t *dma_handle, enum dma_data_direction dir,
--			gfp_t gfp);
--	void (*free_noncoherent)(struct device *dev, size_t size, void *vaddr,
--			dma_addr_t dma_handle, enum dma_data_direction dir);
- 	int (*mmap)(struct device *, struct vm_area_struct *,
- 			void *, dma_addr_t, size_t, unsigned long attrs);
+-		kfree(uvc_urb->buffer);
+-#endif
++		if (uvc_urb->pages) {
++			sg_free_table(&uvc_urb->sgt);
++			vunmap(uvc_urb->buffer);
++			dma_free_noncontiguous(stream_to_dmadev(stream),
++					       stream->urb_size,
++					       uvc_urb->pages, uvc_urb->dma);
++		} else {
++			usb_free_coherent(stream->dev->udev, stream->urb_size,
++					  uvc_urb->buffer, uvc_urb->dma);
++		}
+ 		uvc_urb->buffer = NULL;
+ 	}
  
-diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
-index 51bb8fa8eb89..d3032513c54b 100644
---- a/kernel/dma/mapping.c
-+++ b/kernel/dma/mapping.c
-@@ -514,40 +514,19 @@ EXPORT_SYMBOL_GPL(dma_free_pages);
- void *dma_alloc_noncoherent(struct device *dev, size_t size,
- 		dma_addr_t *dma_handle, enum dma_data_direction dir, gfp_t gfp)
- {
--	const struct dma_map_ops *ops = get_dma_ops(dev);
--	void *vaddr;
--
--	if (!ops || !ops->alloc_noncoherent) {
--		struct page *page;
--
--		page = dma_alloc_pages(dev, size, dma_handle, dir, gfp);
--		if (!page)
--			return NULL;
--		return page_address(page);
--	}
-+	struct page *page;
- 
--	size = PAGE_ALIGN(size);
--	vaddr = ops->alloc_noncoherent(dev, size, dma_handle, dir, gfp);
--	if (vaddr)
--		debug_dma_map_page(dev, virt_to_page(vaddr), 0, size, dir,
--				   *dma_handle);
--	return vaddr;
-+	page = dma_alloc_pages(dev, size, dma_handle, dir, gfp);
-+	if (!page)
-+		return NULL;
-+	return page_address(page);
+ 	stream->urb_size = 0;
  }
- EXPORT_SYMBOL_GPL(dma_alloc_noncoherent);
  
- void dma_free_noncoherent(struct device *dev, size_t size, void *vaddr,
- 		dma_addr_t dma_handle, enum dma_data_direction dir)
- {
--	const struct dma_map_ops *ops = get_dma_ops(dev);
--
--	if (!ops || !ops->free_noncoherent) {
--		dma_free_pages(dev, size, virt_to_page(vaddr), dma_handle, dir);
--		return;
--	}
--
--	size = PAGE_ALIGN(size);
--	debug_dma_unmap_page(dev, dma_handle, size, dir);
--	ops->free_noncoherent(dev, size, vaddr, dma_handle, dir);
-+	dma_free_pages(dev, size, virt_to_page(vaddr), dma_handle, dir);
- }
- EXPORT_SYMBOL_GPL(dma_free_noncoherent);
++static bool uvc_alloc_urb_buffer(struct uvc_streaming *stream,
++				 struct uvc_urb *uvc_urb, gfp_t gfp_flags)
++{
++	struct device *dma_dev = dma_dev = stream_to_dmadev(stream);
++
++	if (!dma_can_alloc_noncontiguous(dma_dev)) {
++		uvc_urb->buffer = usb_alloc_coherent(stream->dev->udev,
++						     stream->urb_size,
++						     gfp_flags | __GFP_NOWARN,
++						     &uvc_urb->dma);
++		return uvc_urb->buffer != NULL;
++	}
++
++	uvc_urb->pages = dma_alloc_noncontiguous(dma_dev, stream->urb_size,
++						 &uvc_urb->dma, gfp_flags, 0);
++	if (!uvc_urb->pages)
++		return false;
++
++	uvc_urb->buffer = vmap(uvc_urb->pages,
++			       PAGE_ALIGN(stream->urb_size) >> PAGE_SHIFT,
++			       VM_MAP, PAGE_KERNEL);
++	if (!uvc_urb->buffer) {
++		dma_free_noncontiguous(dma_dev, stream->urb_size,
++				       uvc_urb->pages, uvc_urb->dma);
++		return false;
++	}
++
++	if (sg_alloc_table_from_pages(&uvc_urb->sgt, uvc_urb->pages,
++				PAGE_ALIGN(stream->urb_size) >> PAGE_SHIFT, 0,
++				stream->urb_size, GFP_KERNEL)) {
++		vunmap(uvc_urb->buffer);
++		dma_free_noncontiguous(dma_dev, stream->urb_size,
++				       uvc_urb->pages, uvc_urb->dma);
++		return false;
++	}
++
++	return true;
++}
++
+ /*
+  * Allocate transfer buffers. This function can be called with buffers
+  * already allocated when resuming from suspend, in which case it will
+@@ -1607,19 +1665,11 @@ static int uvc_alloc_urb_buffers(struct uvc_streaming *stream,
  
+ 	/* Retry allocations until one succeed. */
+ 	for (; npackets > 1; npackets /= 2) {
++		stream->urb_size = psize * npackets;
+ 		for (i = 0; i < UVC_URBS; ++i) {
+ 			struct uvc_urb *uvc_urb = &stream->uvc_urb[i];
+ 
+-			stream->urb_size = psize * npackets;
+-#ifndef CONFIG_DMA_NONCOHERENT
+-			uvc_urb->buffer = usb_alloc_coherent(
+-				stream->dev->udev, stream->urb_size,
+-				gfp_flags | __GFP_NOWARN, &uvc_urb->dma);
+-#else
+-			uvc_urb->buffer =
+-			    kmalloc(stream->urb_size, gfp_flags | __GFP_NOWARN);
+-#endif
+-			if (!uvc_urb->buffer) {
++			if (!uvc_alloc_urb_buffer(stream, uvc_urb, gfp_flags)) {
+ 				uvc_free_urb_buffers(stream);
+ 				break;
+ 			}
+@@ -1728,12 +1778,8 @@ static int uvc_init_video_isoc(struct uvc_streaming *stream,
+ 		urb->context = uvc_urb;
+ 		urb->pipe = usb_rcvisocpipe(stream->dev->udev,
+ 				ep->desc.bEndpointAddress);
+-#ifndef CONFIG_DMA_NONCOHERENT
+ 		urb->transfer_flags = URB_ISO_ASAP | URB_NO_TRANSFER_DMA_MAP;
+ 		urb->transfer_dma = uvc_urb->dma;
+-#else
+-		urb->transfer_flags = URB_ISO_ASAP;
+-#endif
+ 		urb->interval = ep->desc.bInterval;
+ 		urb->transfer_buffer = uvc_urb->buffer;
+ 		urb->complete = uvc_video_complete;
+@@ -1793,10 +1839,8 @@ static int uvc_init_video_bulk(struct uvc_streaming *stream,
+ 
+ 		usb_fill_bulk_urb(urb, stream->dev->udev, pipe,	uvc_urb->buffer,
+ 				  size, uvc_video_complete, uvc_urb);
+-#ifndef CONFIG_DMA_NONCOHERENT
+ 		urb->transfer_flags = URB_NO_TRANSFER_DMA_MAP;
+ 		urb->transfer_dma = uvc_urb->dma;
+-#endif
+ 
+ 		uvc_urb->urb = urb;
+ 	}
+@@ -1891,6 +1935,10 @@ static int uvc_video_start_transfer(struct uvc_streaming *stream,
+ 
+ 	/* Submit the URBs. */
+ 	for_each_uvc_urb(uvc_urb, stream) {
++		if (uvc_urb->pages)
++			dma_sync_sgtable_for_device(stream_to_dmadev(stream),
++						    &uvc_urb->sgt,
++						    DMA_FROM_DEVICE);
+ 		ret = usb_submit_urb(uvc_urb->urb, gfp_flags);
+ 		if (ret < 0) {
+ 			uvc_printk(KERN_ERR, "Failed to submit URB %u (%d).\n",
+diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+index a3dfacf069c4..3e6618a2ac82 100644
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -532,6 +532,8 @@ struct uvc_urb {
+ 
+ 	char *buffer;
+ 	dma_addr_t dma;
++	struct page **pages;
++	struct sg_table sgt;
+ 
+ 	unsigned int async_operations;
+ 	struct uvc_copy_op copy_operations[UVC_MAX_PACKETS];
 -- 
 2.29.2.454.gaff20da3a2-goog
 
