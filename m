@@ -2,62 +2,147 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E340DC64E90
-	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 10:43:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5889EC64E90
+	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 10:44:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 887AC204EF
-	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 10:43:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E9091204EF
+	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 10:44:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727569AbgK3Knd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 Nov 2020 05:43:33 -0500
-Received: from www.linuxtv.org ([130.149.80.248]:44892 "EHLO www.linuxtv.org"
+        id S1728214AbgK3KoD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 Nov 2020 05:44:03 -0500
+Received: from retiisi.eu ([95.216.213.190]:60878 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726928AbgK3Knd (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 Nov 2020 05:43:33 -0500
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1kjgdv-00Gfwm-Qx; Mon, 30 Nov 2020 10:42:51 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1kjgh4-0001P9-J6; Mon, 30 Nov 2020 10:46:06 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT FIXES FOR v5.10] mtk-cir fixes (#69525)
-Date:   Mon, 30 Nov 2020 10:46:06 +0000
-Message-Id: <20201130104606.5358-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20201130102920.GA3319@gofer.mess.org>
-References: 
+        id S1726385AbgK3KoD (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 30 Nov 2020 05:44:03 -0500
+Received: from valkosipuli.localdomain (unknown [IPv6:fd35:1bc8:1a6:d3d5::80:2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id E670D634C24
+        for <linux-media@vger.kernel.org>; Mon, 30 Nov 2020 12:42:20 +0200 (EET)
+Received: from sailus by valkosipuli.localdomain with local (Exim 4.92)
+        (envelope-from <sakari.ailus@retiisi.org.uk>)
+        id 1kjgdR-0002aS-Dp
+        for linux-media@vger.kernel.org; Mon, 30 Nov 2020 12:42:21 +0200
+Date:   Mon, 30 Nov 2020 12:42:21 +0200
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     linux-media@vger.kernel.org
+Subject: [GIT PULL for 5.11] Camera sensor and CSI-2 patches (mostly)
+Message-ID: <20201130104221.GM4351@valkosipuli.retiisi.org.uk>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+Hi Mauro,
 
-Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/20201130102920.GA3319@gofer.mess.org/
-Build log: https://builder.linuxtv.org/job/patchwork/79270/
-Build time: 00:03:33
-Link: https://lore.kernel.org/linux-media/20201130102920.GA3319@gofer.mess.org
+Here's another set of camera sensor and other nice patches for 5.11. In
+particular, there's a driver a for ov02a10. Also a lot of DT bindings are
+improved to conform to the graph schema. Apart from these, it's cleanups
+and fixes.
 
-gpg: Signature made Mon 30 Nov 2020 10:23:46 AM UTC
-gpg:                using RSA key A624251A26084A9ED9E4C8B6425F639D3960FA9E
-gpg:                issuer "sean@mess.org"
-gpg: Good signature from "Sean Young <sean@mess.org>" [full]
-
-Summary: got 0/1 patches with issues, being 0 at build time, plus one error when buinding PDF document
-
-Error/warnings:
+Please pull.
 
 
-Error #512 when building PDF docs
+The following changes since commit a3f132df0e5f25399c9592c2d14997975ddbf290:
 
+  media: bttv: use generic power management (2020-11-27 14:11:26 +0100)
+
+are available in the Git repository at:
+
+  git://linuxtv.org/sailus/media_tree.git tags/for-5.11-4.1-signed
+
+for you to fetch changes up to 603e062d47bbca54226712afb6ee5e20c6f88f70:
+
+  media: i2c: imx219: Selection compliance fixes (2020-11-30 12:30:04 +0200)
+
+----------------------------------------------------------------
+V4L2 patches for 5.11
+
+----------------------------------------------------------------
+Bingbu Cao (1):
+      media: ov9734: hold lock to check streaming state
+
+Colin Ian King (1):
+      media: ov2740: fix dereference before null check on pointer nvm
+
+Dongchun Zhu (2):
+      media: dt-bindings: media: i2c: document OV02A10 DT bindings
+      media: i2c: add OV02A10 image sensor driver
+
+Hans Verkuil (1):
+      media: i2c: imx219: Selection compliance fixes
+
+Jacopo Mondi (2):
+      media: max9271: Fix GPIO enable/disable
+      media: rdacm20: Enable GPIO1 explicitly
+
+Niklas Söderlund (5):
+      rcar-vin: Only dynamically allocate v4l2_async_subdev
+      rcar-vin: Rework parallel firmware parsing
+      rcar-vin: Use v4l2_async_subdev instead of fwnode_handle to match subdevices
+      rcar-vin: Rework CSI-2 firmware parsing
+      v4l2-fwnode: Remove v4l2_async_notifier_parse_fwnode_endpoints_by_port()
+
+Rob Herring (1):
+      dt-bindings: media: Use OF graph schema
+
+Sakari Ailus (1):
+      v4l: subdev: Set sd->devnode before registering the subdev
+
+Thomas Gleixner (1):
+      media: omap3isp: Remove misleading comment
+
+ .../bindings/media/allwinner,sun4i-a10-csi.yaml    |    1 +
+ .../bindings/media/allwinner,sun6i-a31-csi.yaml    |    1 +
+ .../devicetree/bindings/media/i2c/adv7180.yaml     |   31 +-
+ .../devicetree/bindings/media/i2c/adv7604.yaml     |   32 +-
+ .../bindings/media/i2c/aptina,mt9v111.yaml         |    2 +-
+ .../bindings/media/i2c/imi,rdacm2x-gmsl.yaml       |   25 +-
+ .../devicetree/bindings/media/i2c/imx219.yaml      |    4 +
+ .../bindings/media/i2c/maxim,max9286.yaml          |   76 +-
+ .../devicetree/bindings/media/i2c/ov5647.yaml      |    5 +-
+ .../devicetree/bindings/media/i2c/ov8856.yaml      |    5 +-
+ .../bindings/media/i2c/ovti,ov02a10.yaml           |  159 +++
+ .../devicetree/bindings/media/i2c/ovti,ov772x.yaml |    1 +
+ .../devicetree/bindings/media/i2c/sony,imx214.yaml |    1 +
+ .../devicetree/bindings/media/i2c/sony,imx274.yaml |    3 +-
+ .../bindings/media/marvell,mmp2-ccic.yaml          |    1 +
+ .../devicetree/bindings/media/renesas,ceu.yaml     |    1 +
+ .../devicetree/bindings/media/renesas,csi2.yaml    |   36 +-
+ .../devicetree/bindings/media/renesas,vin.yaml     |    7 +-
+ .../devicetree/bindings/media/st,stm32-dcmi.yaml   |    7 +-
+ .../devicetree/bindings/media/ti,cal.yaml          |   15 +-
+ .../bindings/media/xilinx/xlnx,csi2rxss.yaml       |   21 +-
+ MAINTAINERS                                        |    8 +
+ drivers/media/i2c/Kconfig                          |   13 +
+ drivers/media/i2c/Makefile                         |    1 +
+ drivers/media/i2c/imx219.c                         |   17 +-
+ drivers/media/i2c/max9271.c                        |    8 +-
+ drivers/media/i2c/ov02a10.c                        | 1013 ++++++++++++++++++++
+ drivers/media/i2c/ov2740.c                         |    7 +-
+ drivers/media/i2c/ov9734.c                         |    6 +-
+ drivers/media/i2c/rdacm20.c                        |   13 +-
+ drivers/media/platform/omap3isp/ispccdc.c          |    5 +-
+ drivers/media/platform/rcar-vin/rcar-core.c        |  154 +--
+ drivers/media/platform/rcar-vin/rcar-dma.c         |   16 +-
+ drivers/media/platform/rcar-vin/rcar-v4l2.c        |   12 +-
+ drivers/media/platform/rcar-vin/rcar-vin.h         |    8 +-
+ drivers/media/v4l2-core/v4l2-device.c              |    3 +-
+ drivers/media/v4l2-core/v4l2-fwnode.c              |   14 -
+ include/media/v4l2-fwnode.h                        |   53 -
+ 38 files changed, 1404 insertions(+), 381 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov02a10.yaml
+ create mode 100644 drivers/media/i2c/ov02a10.c
+
+-- 
+Sakari Ailus
