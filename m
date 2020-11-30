@@ -5,60 +5,60 @@ X-Spam-Level:
 X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C69AEC64E90
-	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 13:32:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B1C2C83022
+	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 13:32:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 74EA720855
-	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 13:32:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D83E220825
+	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 13:32:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dFB1ezxP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aCL28tM5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726904AbgK3Ncr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 Nov 2020 08:32:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38492 "EHLO
+        id S1726822AbgK3Nci (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 Nov 2020 08:32:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726828AbgK3Ncj (ORCPT
+        with ESMTP id S1725939AbgK3Ncg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 Nov 2020 08:32:39 -0500
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70490C0613D4;
-        Mon, 30 Nov 2020 05:31:58 -0800 (PST)
-Received: by mail-wr1-x443.google.com with SMTP id z7so16225475wrn.3;
-        Mon, 30 Nov 2020 05:31:58 -0800 (PST)
+        Mon, 30 Nov 2020 08:32:36 -0500
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD8CC0613D2;
+        Mon, 30 Nov 2020 05:31:55 -0800 (PST)
+Received: by mail-wm1-x341.google.com with SMTP id a3so25181444wmb.5;
+        Mon, 30 Nov 2020 05:31:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Mt2fBAtoQbvZ5hTUX8F9k24XA25dZdnBW06oRQeyp3I=;
-        b=dFB1ezxPwnCdWAf6tGcY9k4y1dMIQqV37aQcyTmKo+ChI4FAn8cddNVe0AGbAj5wVR
-         nDSpSflBBGbemqkqKuAXsJBShrEB6yCD/7EEtaxB2YxiRSq3GEmuAy0xlerjftl8yaoT
-         DgpKgRwk8m6W/+m+FFx0FPZwsy6LTl7ciuxSUvSvWku6slFkRPkpz83vRSxhSNfEcf6M
-         m82SxlujXi6iMuANT8L3zlBzEz3f/STr8RfWVhjRbA0AkhoXNuSHDbQavOqdRRSiRgMl
-         9RTBoTebF3JgtQ45dng1RpuoEULMrKQFqzLT5mco1X/+RPLSleXuW+UXdNVA/iLxKpgx
-         GODA==
+        bh=RJsQiHGqEJvDI1A950rE2xj0EG8wzsrrAHbyxhByNz0=;
+        b=aCL28tM5Keans39iuF0yPmX8N2Zo6DPH4Ma7s7dw4MyY3eGABozdRLlf6DFDkUzn0k
+         HsURvPU0p1ZOQwfMSn1dPSl7KUl4VQsA+pBuvR2GZQWvLyLTETkYDpW4pB50dJGEDAVT
+         Gl6iinIuTEdutRdQFyoMROOJLR4pP0/11oJgm6QgsEmc0wK13XNqqHZKSO8HGXAOcBhP
+         4uCYVP6WetkhuOaHwSg9W0DMQni9jk5yjPGkx8IebTAGt+GcfUg9covZKsRMekzLILgF
+         3KA9ikRPV8GB3d3t7E+i3TsSm+P3yO8JCND8N8DtHxCJ8WPkOL/ZQN0kwVMVAMMUT/tV
+         tkIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Mt2fBAtoQbvZ5hTUX8F9k24XA25dZdnBW06oRQeyp3I=;
-        b=r+gWCC254ZW5yabiLoCJY+O/9bRO9ORqS+1Y29Sr1Bj+0rTRve27HUeWvzsCmFHpLK
-         h+brq/0rtaVHFKsRbUuV+yCbTIEFqAcKpJ3FK/iUDypsoC+8gWp3EI6Eaji5BMpuXjkr
-         89VFOYGeEO6rPzoVT4ucE6Z8vzF2fR+UKewm+TTyAPoBIgMFFsCt34y3/Qtvp3h4gl9O
-         RrwR56dL45p40Rh32OkgZiPg4WHl15YzACeX4bEhSGt/iFrwNBB538bHIDoFT85ms2eI
-         wsgpgQ3CcOcp3nUtmu5sK7xWE/Pp8hTbZd2R+nPSxbbXeIqKo5OPPsgFZI8lb2VGBMlM
-         ZsCw==
-X-Gm-Message-State: AOAM5313/PCo6TaP6N3g/qiGTwaPmYUtFWYnkdEfQM8WWyJnUllK9plH
-        sDnBiObgv6N+z16r8e79izhpEzY40xnuPzkl
-X-Google-Smtp-Source: ABdhPJyz97co4wzGWBGHdxBJZB5BhplZYCrWZgDWR717m1Ny05GyKxudg6DzlyUYknC3K2O2brL7nA==
-X-Received: by 2002:adf:f3c7:: with SMTP id g7mr28182991wrp.91.1606743116927;
-        Mon, 30 Nov 2020 05:31:56 -0800 (PST)
+        bh=RJsQiHGqEJvDI1A950rE2xj0EG8wzsrrAHbyxhByNz0=;
+        b=qkw/s5tU7x9ZX58R34bAXdSqcSsMcoCCbCx98ut4Kf3U7DUENYU/9oWNCyTP1WfwVG
+         K3qiC+0YOVwu81v4SfuJi9JHLu0yiq/NvyHeWKua2sTpuqoeZrwq2FEaFrSmWmOQ/in1
+         dTqRns3EOWr+9oD7r8JoccWTtIFKA14XwTs+XTeLuH/S53vw0eMB0m5AkT8bcHV4alAN
+         GBUWrFfNYpgIAoZPsETTyK+59mv8F1q2u27GAA6/ugV0RtpWaQvkaYUiVm5H+0ygrI48
+         22LYYyHe3Z8tJUMVJxHN8q8mLCKHWnR4are7A1c/MJQxFLpcC8StrNOQjCp52iKVhqYs
+         h9WQ==
+X-Gm-Message-State: AOAM532QGq0W4IKF71YQNxv3rMxukllk4Tl+nwAU6iICi5bAsghFmrKz
+        IPBNiRY0OVx9Wrr9WhXyX2UbvCWl89QW1hv4
+X-Google-Smtp-Source: ABdhPJwPbNSwrCgOQ0IMIpkzz/7n/VoBoBA1eGQ5Ii7+/pXicjg96dORtNIdGwUWRytKAvCDAttg9A==
+X-Received: by 2002:a1c:99d3:: with SMTP id b202mr23640950wme.0.1606743113991;
+        Mon, 30 Nov 2020 05:31:53 -0800 (PST)
 Received: from valhalla.home ([2.31.224.80])
-        by smtp.gmail.com with ESMTPSA id g192sm7452333wme.48.2020.11.30.05.31.55
+        by smtp.gmail.com with ESMTPSA id g192sm7452333wme.48.2020.11.30.05.31.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Nov 2020 05:31:56 -0800 (PST)
+        Mon, 30 Nov 2020 05:31:53 -0800 (PST)
 From:   Daniel Scally <djrscally@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
@@ -74,10 +74,11 @@ Cc:     rjw@rjwysocki.net, lenb@kernel.org, gregkh@linuxfoundation.org,
         jacopo+renesas@jmondi.org,
         laurent.pinchart+renesas@ideasonboard.com,
         jorhand@linux.microsoft.com, kitakar@gmail.com,
-        heikki.krogerus@linux.intel.com
-Subject: [PATCH 03/18] software_node: Fix failure to put() and get() references to children in software_node_get_next_child()
-Date:   Mon, 30 Nov 2020 13:31:14 +0000
-Message-Id: <20201130133129.1024662-4-djrscally@gmail.com>
+        heikki.krogerus@linux.intel.com,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [PATCH 01/18] property: Return true in fwnode_device_is_available for node types that do not implement this operation
+Date:   Mon, 30 Nov 2020 13:31:12 +0000
+Message-Id: <20201130133129.1024662-2-djrscally@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201130133129.1024662-1-djrscally@gmail.com>
 References: <20201130133129.1024662-1-djrscally@gmail.com>
@@ -87,44 +88,41 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The software_node_get_next_child() function currently does not hold
-references to the child software_node that it finds or put the ref that
-is held against the old child - fix that.
+Some types of fwnode_handle do not implement the device_is_available()
+check, such as those created by software_nodes. There isn't really a
+meaningful way to check for the availability of a device that doesn't
+actually exist, so if the check isn't implemented just assume that the
+"device" is present.
 
+Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Daniel Scally <djrscally@gmail.com>
 ---
 Changes since RFC v3:
 
-	Put reference to previous child.
+	patch introduced
 
- drivers/base/swnode.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/base/property.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/base/swnode.c b/drivers/base/swnode.c
-index 010828fc785b..615a0c93e116 100644
---- a/drivers/base/swnode.c
-+++ b/drivers/base/swnode.c
-@@ -443,14 +443,18 @@ software_node_get_next_child(const struct fwnode_handle *fwnode,
- 	struct swnode *c = to_swnode(child);
- 
- 	if (!p || list_empty(&p->children) ||
--	    (c && list_is_last(&c->entry, &p->children)))
-+	    (c && list_is_last(&c->entry, &p->children))) {
-+		fwnode_handle_put(child);
- 		return NULL;
-+	}
- 
- 	if (c)
- 		c = list_next_entry(c, entry);
- 	else
- 		c = list_first_entry(&p->children, struct swnode, entry);
--	return &c->fwnode;
-+
-+	fwnode_handle_put(child);
-+	return fwnode_handle_get(&c->fwnode);
+diff --git a/drivers/base/property.c b/drivers/base/property.c
+index 4c43d30145c6..a5ca2306796f 100644
+--- a/drivers/base/property.c
++++ b/drivers/base/property.c
+@@ -785,9 +785,14 @@ EXPORT_SYMBOL_GPL(fwnode_handle_put);
+ /**
+  * fwnode_device_is_available - check if a device is available for use
+  * @fwnode: Pointer to the fwnode of the device.
++ *
++ * For fwnode node types that don't implement the .device_is_available()
++ * operation, this function returns true.
+  */
+ bool fwnode_device_is_available(const struct fwnode_handle *fwnode)
+ {
++	if (!fwnode_has_op(fwnode, device_is_available))
++		return true;
+ 	return fwnode_call_bool_op(fwnode, device_is_available);
  }
- 
- static struct fwnode_handle *
+ EXPORT_SYMBOL_GPL(fwnode_device_is_available);
 -- 
 2.25.1
 
