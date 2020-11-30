@@ -2,130 +2,232 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5881C64E8A
-	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 11:00:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55D39C64E7B
+	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 11:18:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5E6192084C
-	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 11:00:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8C0FA2076E
+	for <linux-media@archiver.kernel.org>; Mon, 30 Nov 2020 11:18:17 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="t9Jfhe45"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726158AbgK3K7v (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 Nov 2020 05:59:51 -0500
-Received: from mga05.intel.com ([192.55.52.43]:42699 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725902AbgK3K7v (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 Nov 2020 05:59:51 -0500
-IronPort-SDR: GvVPByKf8K3jaHJxfV5YemHL0z6gF9Tk0XHZjyz0udFjSFcyG2epY2LXRdWuWD9UJvhL9WFzYm
- CDL5J8xcYUGA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9820"; a="257323531"
-X-IronPort-AV: E=Sophos;i="5.78,381,1599548400"; 
-   d="scan'208";a="257323531"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2020 02:58:10 -0800
-IronPort-SDR: PEgyR8oCbYwXxoE8fHTfNc0a0vm7YOTOFUh+RITcq9d+Juo3vh0LMuB8g4j/8M6N0AdsUnLSv0
- +FFs/VFcWIBw==
-X-IronPort-AV: E=Sophos;i="5.78,381,1599548400"; 
-   d="scan'208";a="549051814"
-Received: from mkrastex-mobl.ger.corp.intel.com (HELO mkrastexMOBL) ([10.104.71.12])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2020 02:58:08 -0800
-From:   <martinax.krasteva@linux.intel.com>
-To:     "'Rob Herring'" <robh@kernel.org>
-Cc:     <linux-media@vger.kernel.org>, <robh+dt@kernel.org>,
-        <mchehab@kernel.org>, <devicetree@vger.kernel.org>,
-        <daniele.alessandrelli@linux.intel.com>,
-        <gjorgjix.rosikopulos@linux.intel.com>,
-        <sakari.ailus@linux.intel.com>
-References: <20201120142803.308-1-martinax.krasteva@linux.intel.com> <20201120142803.308-2-martinax.krasteva@linux.intel.com> <20201120205858.GA1722419@robh.at.kernel.org>
-In-Reply-To: <20201120205858.GA1722419@robh.at.kernel.org>
-Subject: RE: [PATCH 1/2] dt-bindings: media: Add bindings for imx334
-Date:   Mon, 30 Nov 2020 10:58:05 -0000
-Message-ID: <002101d6c707$b103c0c0$130b4240$@linux.intel.com>
+        id S1726158AbgK3LSR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 Nov 2020 06:18:17 -0500
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:50055 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725902AbgK3LSQ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 30 Nov 2020 06:18:16 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id jhBRkmT1KkGBYjhBVkUelv; Mon, 30 Nov 2020 12:17:33 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1606735053; bh=OC9ea8HZxvPJi0Nvtju/i5YzA1QkLLog/ef02+Xbqo0=;
+        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=t9Jfhe45ZV44DM5DW3HYhcymd4joAMOC6LzCAGsUaEdnpXT+8V4bmhh/JRDXxUFha
+         hn2IPToxh2UCLnnUGwWiY4lfzXBOmETQkxeuomkYythOQN12iMSyaNe1UUfMKG1J0C
+         jPpsMF1358DyMQINGnoBlh423FOILZvZkNIBpaFWzKP1vWx7IPSLu+pS6A3exgvf4Z
+         f59S3u0c+npyY6nfRfRYKqDCc6MFwxuYhsp/K0VnCs+0ZtFRDGqq/i/3QV8geYqlqV
+         4ckkZzlqt2JZZ+w6yRIbmmb59Eol15Z3GB7zr0huqGjilBoJ6sEcdHPCRJya05f1Bb
+         t/OcaKkQveErw==
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH] vivid: fix 'disconnect' error injection
+Message-ID: <74c0afae-3925-29c2-fa73-6c773c8d10c6@xs4all.nl>
+Date:   Mon, 30 Nov 2020 12:17:29 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQGUhaCwHgQDECFXL9iGIzaOw1hzuAG/OI4XAeunsPKqR6xxoA==
-Content-Language: en-us
-dlp-product: dlpe-windows
-dlp-version: 11.5.1.3
-dlp-reaction: no-action
+X-CMAE-Envelope: MS4xfEDqp1/iRCTDi5ZvFr4mGu9lBwB+yJ3NYB382Oc88AwsOcKsOqmSjmj8DXXkgHyE2TSory/wkKEr4xa4Zh1j8JHFgmAGwB/jS+el9zLjhsMan5Cd4mw0
+ VWTKO43QgYn/eCYfUdwr/WdhCyDCZkwP8bGG9Fp9dlowCmk9+ZY/ZSAjLuSNL4Y5X7UBeRBlKQDd8RWW5o9pxFHE43BqFz4cfr4=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Rob,
+The 'disconnect' error injection functionality suffered from bit rot.
 
-> -----Original Message-----
-> From: Rob Herring <robh@kernel.org>
-> Sent: Friday, November 20, 2020 8:59 PM
-> To: Martina Krasteva <martinax.krasteva@linux.intel.com>
-> Cc: linux-media@vger.kernel.org; robh+dt@kernel.org; mchehab@kernel.org;
-> devicetree@vger.kernel.org; daniele.alessandrelli@linux.intel.com;
-> gjorgjix.rosikopulos@linux.intel.com; sakari.ailus@linux.intel.com
-> Subject: Re: [PATCH 1/2] dt-bindings: media: Add bindings for imx334
-> 
-> On Fri, 20 Nov 2020 14:28:02 +0000, Martina Krasteva wrote:
-> > From: Martina Krasteva <martinax.krasteva@intel.com>
-> >
-> > - Add dt-bindings documentation for Sony imx334 sensor driver.
-> > - Add MAINTAINERS entry for Sony imx334 binding documentation.
-> >
-> > Signed-off-by: Martina Krasteva <martinax.krasteva@intel.com>
-> > Reviewed-by: Gjorgji Rosikopulos <gjorgjix.rosikopulos@intel.com>
-> > Acked-by: Daniele Alessandrelli <daniele.alessandrelli@intel.com>
-> > ---
-> >  .../devicetree/bindings/media/i2c/sony,imx334.yaml | 59
-> ++++++++++++++++++++++
-> >  MAINTAINERS                                        |  7 +++
-> >  2 files changed, 66 insertions(+)
-> >  create mode 100644
-> > Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml
-> >
-> 
-> 
-> My bot found errors running 'make dt_binding_check' on your patch:
-> 
-> yamllint warnings/errors:
-> ./Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml:34:15:
-> [warning] wrong indentation: expected 12 but found 14 (indentation)
-> ./Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml:36:15:
-> [warning] wrong indentation: expected 12 but found 14 (indentation)
-> 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/linux-dt-
-> review/Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml:
-> 'additionalProperties' is a required property
-> /builds/robherring/linux-dt-
-> review/Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml:
-> ignoring, error in schema:
-> warning: no schema found in file:
-> ./Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml
-> 
-> 
-> See https://patchwork.ozlabs.org/patch/1403740
-> 
-> The base for the patch is generally the last rc1. Any dependencies should
-be
-> noted.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-error(s),
-> then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit.
+New device nodes were added without updating vivid_user_gen_s_ctrl(), so
+that function had to be updated for the new device nodes.
 
-Thank you, I will fix these warnings in the next version
+Also, vivid didn't check if specific device nodes were actually ever created,
+so the vivid_is_last_user() would fail on that (it would return true
+instead of false in that case).
 
-Best Regards,
-Martina
+Finally, selecting Disconnect, then unbind the vivid driver would fail since
+the remove() would think that the device nodes were already unregistered.
+Keep track of whether disconnect was pressed and re-register the device nodes
+in remove() before doing the real unregister.
 
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+diff --git a/drivers/media/test-drivers/vivid/vivid-core.c b/drivers/media/test-drivers/vivid/vivid-core.c
+index aa8d350fd682..5ddd31fdf102 100644
+--- a/drivers/media/test-drivers/vivid/vivid-core.c
++++ b/drivers/media/test-drivers/vivid/vivid-core.c
+@@ -547,11 +547,13 @@ static int vivid_s_fmt_cap_mplane(struct file *file, void *priv,
+ 	return vidioc_s_fmt_vid_cap_mplane(file, priv, f);
+ }
+
+-static bool vivid_is_in_use(struct video_device *vdev)
++static bool vivid_is_in_use(bool valid, struct video_device *vdev)
+ {
+ 	unsigned long flags;
+ 	bool res;
+
++	if (!valid)
++		return false;
+ 	spin_lock_irqsave(&vdev->fh_lock, flags);
+ 	res = !list_empty(&vdev->fh_list);
+ 	spin_unlock_irqrestore(&vdev->fh_lock, flags);
+@@ -560,20 +562,45 @@ static bool vivid_is_in_use(struct video_device *vdev)
+
+ static bool vivid_is_last_user(struct vivid_dev *dev)
+ {
+-	unsigned uses = vivid_is_in_use(&dev->vid_cap_dev) +
+-			vivid_is_in_use(&dev->vid_out_dev) +
+-			vivid_is_in_use(&dev->vbi_cap_dev) +
+-			vivid_is_in_use(&dev->vbi_out_dev) +
+-			vivid_is_in_use(&dev->sdr_cap_dev) +
+-			vivid_is_in_use(&dev->radio_rx_dev) +
+-			vivid_is_in_use(&dev->radio_tx_dev) +
+-			vivid_is_in_use(&dev->meta_cap_dev) +
+-			vivid_is_in_use(&dev->meta_out_dev) +
+-			vivid_is_in_use(&dev->touch_cap_dev);
++	unsigned uses = vivid_is_in_use(dev->has_vid_cap, &dev->vid_cap_dev) +
++			vivid_is_in_use(dev->has_vid_out, &dev->vid_out_dev) +
++			vivid_is_in_use(dev->has_vbi_cap, &dev->vbi_cap_dev) +
++			vivid_is_in_use(dev->has_vbi_out, &dev->vbi_out_dev) +
++			vivid_is_in_use(dev->has_radio_rx, &dev->radio_rx_dev) +
++			vivid_is_in_use(dev->has_radio_tx, &dev->radio_tx_dev) +
++			vivid_is_in_use(dev->has_sdr_cap, &dev->sdr_cap_dev) +
++			vivid_is_in_use(dev->has_meta_cap, &dev->meta_cap_dev) +
++			vivid_is_in_use(dev->has_meta_out, &dev->meta_out_dev) +
++			vivid_is_in_use(dev->has_touch_cap, &dev->touch_cap_dev);
+
+ 	return uses == 1;
+ }
+
++static void vivid_reconnect(struct vivid_dev *dev)
++{
++	if (dev->has_vid_cap)
++		set_bit(V4L2_FL_REGISTERED, &dev->vid_cap_dev.flags);
++	if (dev->has_vid_out)
++		set_bit(V4L2_FL_REGISTERED, &dev->vid_out_dev.flags);
++	if (dev->has_vbi_cap)
++		set_bit(V4L2_FL_REGISTERED, &dev->vbi_cap_dev.flags);
++	if (dev->has_vbi_out)
++		set_bit(V4L2_FL_REGISTERED, &dev->vbi_out_dev.flags);
++	if (dev->has_radio_rx)
++		set_bit(V4L2_FL_REGISTERED, &dev->radio_rx_dev.flags);
++	if (dev->has_radio_tx)
++		set_bit(V4L2_FL_REGISTERED, &dev->radio_tx_dev.flags);
++	if (dev->has_sdr_cap)
++		set_bit(V4L2_FL_REGISTERED, &dev->sdr_cap_dev.flags);
++	if (dev->has_meta_cap)
++		set_bit(V4L2_FL_REGISTERED, &dev->meta_cap_dev.flags);
++	if (dev->has_meta_out)
++		set_bit(V4L2_FL_REGISTERED, &dev->meta_out_dev.flags);
++	if (dev->has_touch_cap)
++		set_bit(V4L2_FL_REGISTERED, &dev->touch_cap_dev.flags);
++	dev->disconnect_error = false;
++}
++
+ static int vivid_fop_release(struct file *file)
+ {
+ 	struct vivid_dev *dev = video_drvdata(file);
+@@ -581,23 +608,15 @@ static int vivid_fop_release(struct file *file)
+
+ 	mutex_lock(&dev->mutex);
+ 	if (!no_error_inj && v4l2_fh_is_singular_file(file) &&
+-	    !video_is_registered(vdev) && vivid_is_last_user(dev)) {
++	    dev->disconnect_error && !video_is_registered(vdev) &&
++	    vivid_is_last_user(dev)) {
+ 		/*
+ 		 * I am the last user of this driver, and a disconnect
+ 		 * was forced (since this video_device is unregistered),
+ 		 * so re-register all video_device's again.
+ 		 */
+ 		v4l2_info(&dev->v4l2_dev, "reconnect\n");
+-		set_bit(V4L2_FL_REGISTERED, &dev->vid_cap_dev.flags);
+-		set_bit(V4L2_FL_REGISTERED, &dev->vid_out_dev.flags);
+-		set_bit(V4L2_FL_REGISTERED, &dev->vbi_cap_dev.flags);
+-		set_bit(V4L2_FL_REGISTERED, &dev->vbi_out_dev.flags);
+-		set_bit(V4L2_FL_REGISTERED, &dev->sdr_cap_dev.flags);
+-		set_bit(V4L2_FL_REGISTERED, &dev->radio_rx_dev.flags);
+-		set_bit(V4L2_FL_REGISTERED, &dev->radio_tx_dev.flags);
+-		set_bit(V4L2_FL_REGISTERED, &dev->meta_cap_dev.flags);
+-		set_bit(V4L2_FL_REGISTERED, &dev->meta_out_dev.flags);
+-		set_bit(V4L2_FL_REGISTERED, &dev->touch_cap_dev.flags);
++		vivid_reconnect(dev);
+ 	}
+ 	mutex_unlock(&dev->mutex);
+ 	if (file->private_data == dev->overlay_cap_owner)
+@@ -1968,6 +1987,8 @@ static int vivid_remove(struct platform_device *pdev)
+ 		if (!dev)
+ 			continue;
+
++		if (dev->disconnect_error)
++			vivid_reconnect(dev);
+ #ifdef CONFIG_MEDIA_CONTROLLER
+ 		media_device_unregister(&dev->mdev);
+ #endif
+diff --git a/drivers/media/test-drivers/vivid/vivid-core.h b/drivers/media/test-drivers/vivid/vivid-core.h
+index 99e69b8f770f..9c2d1470b597 100644
+--- a/drivers/media/test-drivers/vivid/vivid-core.h
++++ b/drivers/media/test-drivers/vivid/vivid-core.h
+@@ -303,6 +303,7 @@ struct vivid_dev {
+ 	struct fb_fix_screeninfo	fb_fix;
+
+ 	/* Error injection */
++	bool				disconnect_error;
+ 	bool				queue_setup_error;
+ 	bool				buf_prepare_error;
+ 	bool				start_streaming_error;
+diff --git a/drivers/media/test-drivers/vivid/vivid-ctrls.c b/drivers/media/test-drivers/vivid/vivid-ctrls.c
+index 334130568dcb..11e3b5617f52 100644
+--- a/drivers/media/test-drivers/vivid/vivid-ctrls.c
++++ b/drivers/media/test-drivers/vivid/vivid-ctrls.c
+@@ -107,14 +107,27 @@ static int vivid_user_gen_s_ctrl(struct v4l2_ctrl *ctrl)
+ 	switch (ctrl->id) {
+ 	case VIVID_CID_DISCONNECT:
+ 		v4l2_info(&dev->v4l2_dev, "disconnect\n");
+-		clear_bit(V4L2_FL_REGISTERED, &dev->vid_cap_dev.flags);
+-		clear_bit(V4L2_FL_REGISTERED, &dev->vid_out_dev.flags);
+-		clear_bit(V4L2_FL_REGISTERED, &dev->vbi_cap_dev.flags);
+-		clear_bit(V4L2_FL_REGISTERED, &dev->vbi_out_dev.flags);
+-		clear_bit(V4L2_FL_REGISTERED, &dev->sdr_cap_dev.flags);
+-		clear_bit(V4L2_FL_REGISTERED, &dev->radio_rx_dev.flags);
+-		clear_bit(V4L2_FL_REGISTERED, &dev->radio_tx_dev.flags);
+-		clear_bit(V4L2_FL_REGISTERED, &dev->meta_cap_dev.flags);
++		dev->disconnect_error = true;
++		if (dev->has_vid_cap)
++			clear_bit(V4L2_FL_REGISTERED, &dev->vid_cap_dev.flags);
++		if (dev->has_vid_out)
++			clear_bit(V4L2_FL_REGISTERED, &dev->vid_out_dev.flags);
++		if (dev->has_vbi_cap)
++			clear_bit(V4L2_FL_REGISTERED, &dev->vbi_cap_dev.flags);
++		if (dev->has_vbi_out)
++			clear_bit(V4L2_FL_REGISTERED, &dev->vbi_out_dev.flags);
++		if (dev->has_radio_rx)
++			clear_bit(V4L2_FL_REGISTERED, &dev->radio_rx_dev.flags);
++		if (dev->has_radio_tx)
++			clear_bit(V4L2_FL_REGISTERED, &dev->radio_tx_dev.flags);
++		if (dev->has_sdr_cap)
++			clear_bit(V4L2_FL_REGISTERED, &dev->sdr_cap_dev.flags);
++		if (dev->has_meta_cap)
++			clear_bit(V4L2_FL_REGISTERED, &dev->meta_cap_dev.flags);
++		if (dev->has_meta_out)
++			clear_bit(V4L2_FL_REGISTERED, &dev->meta_out_dev.flags);
++		if (dev->has_touch_cap)
++			clear_bit(V4L2_FL_REGISTERED, &dev->touch_cap_dev.flags);
+ 		break;
+ 	case VIVID_CID_BUTTON:
+ 		dev->button_pressed = 30;
