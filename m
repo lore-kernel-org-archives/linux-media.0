@@ -7,235 +7,117 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35E90C64E90
-	for <linux-media@archiver.kernel.org>; Tue,  1 Dec 2020 12:45:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B381C83014
+	for <linux-media@archiver.kernel.org>; Tue,  1 Dec 2020 12:45:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CC0D22087C
-	for <linux-media@archiver.kernel.org>; Tue,  1 Dec 2020 12:45:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C40682087C
+	for <linux-media@archiver.kernel.org>; Tue,  1 Dec 2020 12:45:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="aNw2u9WB"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="hPXZOzwn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387460AbgLAMpe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Dec 2020 07:45:34 -0500
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:45329 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726930AbgLAMpd (ORCPT
+        id S2387510AbgLAMpf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Dec 2020 07:45:35 -0500
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:53491 "EHLO
+        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728987AbgLAMpe (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 1 Dec 2020 07:45:33 -0500
+        Tue, 1 Dec 2020 07:45:34 -0500
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id k51SkssSADuFjk51Wk2RYB; Tue, 01 Dec 2020 13:44:50 +0100
+        id k51SkssSADuFjk51Xk2RYx; Tue, 01 Dec 2020 13:44:52 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1606826690; bh=lpFvz7FMsArL/DJgewT5bpfZA5TI4nFcVt2r/u2mcvw=;
+        t=1606826692; bh=BXusA+CIrGWKf3/SqjzlEkdnmGnMvYpEsKkSCTIgqf4=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=aNw2u9WBqlpu5whjbAnzPKBTLRoh0jwAQpKvYxMFFgRAupFlNVKjR4KRKa75Mql5a
-         N920PhMHPAAW/UiixdnXLd9WrOZpd/dE1vq7MrJGg55VtXJ827QJk36DSANDk+0Wu1
-         r3SKb4JphpChEcy5v1J1zU/penxlfHK6Ug+7ZUN3N5WZbEqnzXLonXhpe68wC77J1D
-         GvLWMCizZLaBNpm6vVTs9WdcH9hRz0Dni7WQUC/5RES/4/h5rgagj14pEqtXK2P6lG
-         wrtLRHr2tlRMqy1pVHhkS5ort2gmUC7/MQADZpWzHqiGuZAfAaDWhOnPPrgDY01Dg2
-         5HihPPD9masOg==
+        b=hPXZOzwnXkbSMENcwuqypNtDTdcNV+DfV300uarPRKeVyHLF/8/PyGIXnNHi99h/g
+         fZMwpgsThI5xOtG/uYwh6RCbHRFel/fpuzqnOOn641JDqqNAvq1fbh7fELbP/v/nrE
+         GWFT4SSqdP/2eygWjDa2xOOeUoLOa2OSWepfJTPoDOBIduBmJT8gH3EEo88gGQ1ab2
+         dUGhhtPi7YHT+KxC2qZwZuxvoUPJtwmUQ4sNrLA9bDMW+dfYmy4O5JFm8XIP91xSXZ
+         8l3FHpNFP2UcSWQQRIpRaXPEOxCh2xdoYgWnKfVWy9KjpqN7AEw0L+VAM4/+jEcMw5
+         NGT7X/5Coa8Pw==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Alexandre Courbot <gnurou@gmail.com>,
         Tomasz Figa <tfiga@chromium.org>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCHv3 1/7] vivid: fix 'disconnect' error injection
-Date:   Tue,  1 Dec 2020 13:44:40 +0100
-Message-Id: <20201201124446.448595-2-hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv3 5/7] vivid: call v4l2_event_wake_all() on disconnect
+Date:   Tue,  1 Dec 2020 13:44:44 +0100
+Message-Id: <20201201124446.448595-6-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201201124446.448595-1-hverkuil-cisco@xs4all.nl>
 References: <20201201124446.448595-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfFkHQGEe/WNE17j2Pqpap/I6PUyHGeDV+XAwspn8n04YoldWB3SG1os5YmmaHEO8O2DYHvzAsTuGAy9KEibQhJWP+8d2KtFBGo89vNSkFYVL3bNJ7Wns
- R+MjOyFFvIlFZW/IF5Vm/I/qmJaJUznueuAiax50umMA1t+Ab4zntMB743pKwzi2N1aoZ//PQXGFJcdTp92MGo7uu45RqhfnPfwrlzJFpgLP3EwO7ryrXONY
- wutBsthjqJGTxmb/ootsXemf7eR8V8OFCU7tJfTLTiHLNx/ouN4jgeNf/pIQiqVewUZeJIHWRXN2Te6Fx/DpW9dERVvRdNc9nCe9BUOoyKI=
+X-CMAE-Envelope: MS4xfMpvkjAk6HI2j3BveW2MEiCLvzzeRn4nnBO1V+ZM2q1Y2N6RUcSw8tTmOeRBj720LACdfRQKS6lKxmZf0IA1VBi176pkOz94HuIUN5ejM+oQDNve9s2j
+ FT/XqBztnHKZqx7uUyd4pwR0S6tIPGDzzwA7xgVn7c/LeKSY+gnXNsmLzw5HOTL2MWcXoaze0r0+PnSI3u3uZzUMrYLvah+1NqcbUsnrYnyw5CTF1POWvWj5
+ iIfUzUGIFnPwd+jQq6loI/HX7KoQKJSH8XtwhtS8rvKvtXsmn3pF17jScEBzdmH+8vlxZI1DG/o6rvgJBh72CtGC12ghXWXpvLxcfsX5P+A=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The 'disconnect' error injection functionality suffered from bit rot.
-
-New device nodes were added without updating vivid_user_gen_s_ctrl(), so
-that function had to be updated for the new device nodes.
-
-Also, vivid didn't check if specific device nodes were actually ever created,
-so the vivid_is_last_user() would fail on that (it would return true
-instead of false in that case).
-
-Finally, selecting Disconnect, then unbind the vivid driver would fail since
-the remove() would think that the device nodes were already unregistered.
-Keep track of whether disconnect was pressed and re-register the device nodes
-in remove() before doing the real unregister.
+When the disconnect error injection control is set, then besides
+faking unregistering the device nodes, also call v4l2_event_wake_all()
+to ensure any userspace applications will wake up as per a 'normal'
+unregister.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/test-drivers/vivid/vivid-core.c | 65 ++++++++++++-------
- drivers/media/test-drivers/vivid/vivid-core.h |  1 +
- .../media/test-drivers/vivid/vivid-ctrls.c    | 29 ++++++---
- 3 files changed, 65 insertions(+), 30 deletions(-)
+ .../media/test-drivers/vivid/vivid-ctrls.c    | 38 +++++++++----------
+ 1 file changed, 18 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/media/test-drivers/vivid/vivid-core.c b/drivers/media/test-drivers/vivid/vivid-core.c
-index aa8d350fd682..5ddd31fdf102 100644
---- a/drivers/media/test-drivers/vivid/vivid-core.c
-+++ b/drivers/media/test-drivers/vivid/vivid-core.c
-@@ -547,11 +547,13 @@ static int vivid_s_fmt_cap_mplane(struct file *file, void *priv,
- 	return vidioc_s_fmt_vid_cap_mplane(file, priv, f);
- }
- 
--static bool vivid_is_in_use(struct video_device *vdev)
-+static bool vivid_is_in_use(bool valid, struct video_device *vdev)
- {
- 	unsigned long flags;
- 	bool res;
- 
-+	if (!valid)
-+		return false;
- 	spin_lock_irqsave(&vdev->fh_lock, flags);
- 	res = !list_empty(&vdev->fh_list);
- 	spin_unlock_irqrestore(&vdev->fh_lock, flags);
-@@ -560,20 +562,45 @@ static bool vivid_is_in_use(struct video_device *vdev)
- 
- static bool vivid_is_last_user(struct vivid_dev *dev)
- {
--	unsigned uses = vivid_is_in_use(&dev->vid_cap_dev) +
--			vivid_is_in_use(&dev->vid_out_dev) +
--			vivid_is_in_use(&dev->vbi_cap_dev) +
--			vivid_is_in_use(&dev->vbi_out_dev) +
--			vivid_is_in_use(&dev->sdr_cap_dev) +
--			vivid_is_in_use(&dev->radio_rx_dev) +
--			vivid_is_in_use(&dev->radio_tx_dev) +
--			vivid_is_in_use(&dev->meta_cap_dev) +
--			vivid_is_in_use(&dev->meta_out_dev) +
--			vivid_is_in_use(&dev->touch_cap_dev);
-+	unsigned uses = vivid_is_in_use(dev->has_vid_cap, &dev->vid_cap_dev) +
-+			vivid_is_in_use(dev->has_vid_out, &dev->vid_out_dev) +
-+			vivid_is_in_use(dev->has_vbi_cap, &dev->vbi_cap_dev) +
-+			vivid_is_in_use(dev->has_vbi_out, &dev->vbi_out_dev) +
-+			vivid_is_in_use(dev->has_radio_rx, &dev->radio_rx_dev) +
-+			vivid_is_in_use(dev->has_radio_tx, &dev->radio_tx_dev) +
-+			vivid_is_in_use(dev->has_sdr_cap, &dev->sdr_cap_dev) +
-+			vivid_is_in_use(dev->has_meta_cap, &dev->meta_cap_dev) +
-+			vivid_is_in_use(dev->has_meta_out, &dev->meta_out_dev) +
-+			vivid_is_in_use(dev->has_touch_cap, &dev->touch_cap_dev);
- 
- 	return uses == 1;
- }
- 
-+static void vivid_reconnect(struct vivid_dev *dev)
-+{
-+	if (dev->has_vid_cap)
-+		set_bit(V4L2_FL_REGISTERED, &dev->vid_cap_dev.flags);
-+	if (dev->has_vid_out)
-+		set_bit(V4L2_FL_REGISTERED, &dev->vid_out_dev.flags);
-+	if (dev->has_vbi_cap)
-+		set_bit(V4L2_FL_REGISTERED, &dev->vbi_cap_dev.flags);
-+	if (dev->has_vbi_out)
-+		set_bit(V4L2_FL_REGISTERED, &dev->vbi_out_dev.flags);
-+	if (dev->has_radio_rx)
-+		set_bit(V4L2_FL_REGISTERED, &dev->radio_rx_dev.flags);
-+	if (dev->has_radio_tx)
-+		set_bit(V4L2_FL_REGISTERED, &dev->radio_tx_dev.flags);
-+	if (dev->has_sdr_cap)
-+		set_bit(V4L2_FL_REGISTERED, &dev->sdr_cap_dev.flags);
-+	if (dev->has_meta_cap)
-+		set_bit(V4L2_FL_REGISTERED, &dev->meta_cap_dev.flags);
-+	if (dev->has_meta_out)
-+		set_bit(V4L2_FL_REGISTERED, &dev->meta_out_dev.flags);
-+	if (dev->has_touch_cap)
-+		set_bit(V4L2_FL_REGISTERED, &dev->touch_cap_dev.flags);
-+	dev->disconnect_error = false;
-+}
-+
- static int vivid_fop_release(struct file *file)
- {
- 	struct vivid_dev *dev = video_drvdata(file);
-@@ -581,23 +608,15 @@ static int vivid_fop_release(struct file *file)
- 
- 	mutex_lock(&dev->mutex);
- 	if (!no_error_inj && v4l2_fh_is_singular_file(file) &&
--	    !video_is_registered(vdev) && vivid_is_last_user(dev)) {
-+	    dev->disconnect_error && !video_is_registered(vdev) &&
-+	    vivid_is_last_user(dev)) {
- 		/*
- 		 * I am the last user of this driver, and a disconnect
- 		 * was forced (since this video_device is unregistered),
- 		 * so re-register all video_device's again.
- 		 */
- 		v4l2_info(&dev->v4l2_dev, "reconnect\n");
--		set_bit(V4L2_FL_REGISTERED, &dev->vid_cap_dev.flags);
--		set_bit(V4L2_FL_REGISTERED, &dev->vid_out_dev.flags);
--		set_bit(V4L2_FL_REGISTERED, &dev->vbi_cap_dev.flags);
--		set_bit(V4L2_FL_REGISTERED, &dev->vbi_out_dev.flags);
--		set_bit(V4L2_FL_REGISTERED, &dev->sdr_cap_dev.flags);
--		set_bit(V4L2_FL_REGISTERED, &dev->radio_rx_dev.flags);
--		set_bit(V4L2_FL_REGISTERED, &dev->radio_tx_dev.flags);
--		set_bit(V4L2_FL_REGISTERED, &dev->meta_cap_dev.flags);
--		set_bit(V4L2_FL_REGISTERED, &dev->meta_out_dev.flags);
--		set_bit(V4L2_FL_REGISTERED, &dev->touch_cap_dev.flags);
-+		vivid_reconnect(dev);
- 	}
- 	mutex_unlock(&dev->mutex);
- 	if (file->private_data == dev->overlay_cap_owner)
-@@ -1968,6 +1987,8 @@ static int vivid_remove(struct platform_device *pdev)
- 		if (!dev)
- 			continue;
- 
-+		if (dev->disconnect_error)
-+			vivid_reconnect(dev);
- #ifdef CONFIG_MEDIA_CONTROLLER
- 		media_device_unregister(&dev->mdev);
- #endif
-diff --git a/drivers/media/test-drivers/vivid/vivid-core.h b/drivers/media/test-drivers/vivid/vivid-core.h
-index 99e69b8f770f..9c2d1470b597 100644
---- a/drivers/media/test-drivers/vivid/vivid-core.h
-+++ b/drivers/media/test-drivers/vivid/vivid-core.h
-@@ -303,6 +303,7 @@ struct vivid_dev {
- 	struct fb_fix_screeninfo	fb_fix;
- 
- 	/* Error injection */
-+	bool				disconnect_error;
- 	bool				queue_setup_error;
- 	bool				buf_prepare_error;
- 	bool				start_streaming_error;
 diff --git a/drivers/media/test-drivers/vivid/vivid-ctrls.c b/drivers/media/test-drivers/vivid/vivid-ctrls.c
-index 334130568dcb..11e3b5617f52 100644
+index 11e3b5617f52..7957eadf3e2b 100644
 --- a/drivers/media/test-drivers/vivid/vivid-ctrls.c
 +++ b/drivers/media/test-drivers/vivid/vivid-ctrls.c
-@@ -107,14 +107,27 @@ static int vivid_user_gen_s_ctrl(struct v4l2_ctrl *ctrl)
- 	switch (ctrl->id) {
+@@ -100,6 +100,14 @@
+ 
+ /* General User Controls */
+ 
++static void vivid_unregister_dev(bool valid, struct video_device *vdev)
++{
++	if (!valid)
++		return;
++	clear_bit(V4L2_FL_REGISTERED, &vdev->flags);
++	v4l2_event_wake_all(vdev);
++}
++
+ static int vivid_user_gen_s_ctrl(struct v4l2_ctrl *ctrl)
+ {
+ 	struct vivid_dev *dev = container_of(ctrl->handler, struct vivid_dev, ctrl_hdl_user_gen);
+@@ -108,26 +116,16 @@ static int vivid_user_gen_s_ctrl(struct v4l2_ctrl *ctrl)
  	case VIVID_CID_DISCONNECT:
  		v4l2_info(&dev->v4l2_dev, "disconnect\n");
--		clear_bit(V4L2_FL_REGISTERED, &dev->vid_cap_dev.flags);
--		clear_bit(V4L2_FL_REGISTERED, &dev->vid_out_dev.flags);
--		clear_bit(V4L2_FL_REGISTERED, &dev->vbi_cap_dev.flags);
--		clear_bit(V4L2_FL_REGISTERED, &dev->vbi_out_dev.flags);
--		clear_bit(V4L2_FL_REGISTERED, &dev->sdr_cap_dev.flags);
--		clear_bit(V4L2_FL_REGISTERED, &dev->radio_rx_dev.flags);
--		clear_bit(V4L2_FL_REGISTERED, &dev->radio_tx_dev.flags);
--		clear_bit(V4L2_FL_REGISTERED, &dev->meta_cap_dev.flags);
-+		dev->disconnect_error = true;
-+		if (dev->has_vid_cap)
-+			clear_bit(V4L2_FL_REGISTERED, &dev->vid_cap_dev.flags);
-+		if (dev->has_vid_out)
-+			clear_bit(V4L2_FL_REGISTERED, &dev->vid_out_dev.flags);
-+		if (dev->has_vbi_cap)
-+			clear_bit(V4L2_FL_REGISTERED, &dev->vbi_cap_dev.flags);
-+		if (dev->has_vbi_out)
-+			clear_bit(V4L2_FL_REGISTERED, &dev->vbi_out_dev.flags);
-+		if (dev->has_radio_rx)
-+			clear_bit(V4L2_FL_REGISTERED, &dev->radio_rx_dev.flags);
-+		if (dev->has_radio_tx)
-+			clear_bit(V4L2_FL_REGISTERED, &dev->radio_tx_dev.flags);
-+		if (dev->has_sdr_cap)
-+			clear_bit(V4L2_FL_REGISTERED, &dev->sdr_cap_dev.flags);
-+		if (dev->has_meta_cap)
-+			clear_bit(V4L2_FL_REGISTERED, &dev->meta_cap_dev.flags);
-+		if (dev->has_meta_out)
-+			clear_bit(V4L2_FL_REGISTERED, &dev->meta_out_dev.flags);
-+		if (dev->has_touch_cap)
-+			clear_bit(V4L2_FL_REGISTERED, &dev->touch_cap_dev.flags);
+ 		dev->disconnect_error = true;
+-		if (dev->has_vid_cap)
+-			clear_bit(V4L2_FL_REGISTERED, &dev->vid_cap_dev.flags);
+-		if (dev->has_vid_out)
+-			clear_bit(V4L2_FL_REGISTERED, &dev->vid_out_dev.flags);
+-		if (dev->has_vbi_cap)
+-			clear_bit(V4L2_FL_REGISTERED, &dev->vbi_cap_dev.flags);
+-		if (dev->has_vbi_out)
+-			clear_bit(V4L2_FL_REGISTERED, &dev->vbi_out_dev.flags);
+-		if (dev->has_radio_rx)
+-			clear_bit(V4L2_FL_REGISTERED, &dev->radio_rx_dev.flags);
+-		if (dev->has_radio_tx)
+-			clear_bit(V4L2_FL_REGISTERED, &dev->radio_tx_dev.flags);
+-		if (dev->has_sdr_cap)
+-			clear_bit(V4L2_FL_REGISTERED, &dev->sdr_cap_dev.flags);
+-		if (dev->has_meta_cap)
+-			clear_bit(V4L2_FL_REGISTERED, &dev->meta_cap_dev.flags);
+-		if (dev->has_meta_out)
+-			clear_bit(V4L2_FL_REGISTERED, &dev->meta_out_dev.flags);
+-		if (dev->has_touch_cap)
+-			clear_bit(V4L2_FL_REGISTERED, &dev->touch_cap_dev.flags);
++		vivid_unregister_dev(dev->has_vid_cap, &dev->vid_cap_dev);
++		vivid_unregister_dev(dev->has_vid_out, &dev->vid_out_dev);
++		vivid_unregister_dev(dev->has_vbi_cap, &dev->vbi_cap_dev);
++		vivid_unregister_dev(dev->has_vbi_out, &dev->vbi_out_dev);
++		vivid_unregister_dev(dev->has_radio_rx, &dev->radio_rx_dev);
++		vivid_unregister_dev(dev->has_radio_tx, &dev->radio_tx_dev);
++		vivid_unregister_dev(dev->has_sdr_cap, &dev->sdr_cap_dev);
++		vivid_unregister_dev(dev->has_meta_cap, &dev->meta_cap_dev);
++		vivid_unregister_dev(dev->has_meta_out, &dev->meta_out_dev);
++		vivid_unregister_dev(dev->has_touch_cap, &dev->touch_cap_dev);
  		break;
  	case VIVID_CID_BUTTON:
  		dev->button_pressed = 30;
