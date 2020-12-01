@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E15FC83019
-	for <linux-media@archiver.kernel.org>; Tue,  1 Dec 2020 17:52:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB7BCC64E7A
+	for <linux-media@archiver.kernel.org>; Tue,  1 Dec 2020 17:53:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E761D21741
-	for <linux-media@archiver.kernel.org>; Tue,  1 Dec 2020 17:52:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5CADE21D42
+	for <linux-media@archiver.kernel.org>; Tue,  1 Dec 2020 17:53:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GsNkioNR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cc5oZnGf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392044AbgLARwj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Dec 2020 12:52:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49504 "EHLO
+        id S2389778AbgLARwh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Dec 2020 12:52:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391855AbgLARwi (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Dec 2020 12:52:38 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB61C0613D4;
-        Tue,  1 Dec 2020 09:51:52 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id iq13so1678162pjb.3;
-        Tue, 01 Dec 2020 09:51:52 -0800 (PST)
+        with ESMTP id S1731128AbgLARwh (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Dec 2020 12:52:37 -0500
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D8CC0617A6;
+        Tue,  1 Dec 2020 09:51:57 -0800 (PST)
+Received: by mail-pf1-x443.google.com with SMTP id w6so1610518pfu.1;
+        Tue, 01 Dec 2020 09:51:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=AB/6a+0q1qLMuNjG8yRoZzr5m++qXs4+JpGB+h7ZvYE=;
-        b=GsNkioNRpEqEv4PmUEZ47G2Nsi0b1FGDOkL5c3BzhVvL5717koBsqxp5YyNaaes87O
-         ya6JejYb9FhEGAapd4adPgHU8ehu9r9XjKCJ0dd3iwRD9zsjS2RxEBLKMazdZRU2EEyZ
-         SoLfCeVpK1bwA5DMImwlFcR6UcGLh0mh2db7ZSnakc4jVBSYXBhgYMSinVpiQKiQ4KAt
-         OfsxLvd4Ugpn98m4QVvoejFLMyBP3CjdWqzFJfW6wvuxFxCdFmqAq+hhGxqw9CEX/1qW
-         XsI9jokfMcw3KxL0wtnRSJwrcOOV0mJN4u7KK4Ls1p0PEQ1bJ3eTFevIkdPGX0Ue1sYX
-         QhtQ==
+        bh=4zRLtJ0Q5wi/JJXSMnqzlxIlA9XB0kWpvTg/hxCouGQ=;
+        b=Cc5oZnGf3sYZSv66LApJ0Hgee277p8MonRA3s85p2F4XlF/n+VuGbl8fU1lW2bHbjK
+         VFN0bZnO7OxxcK23RWuO/DPEq3TRvvtTcqhdlvHY2d4aNv295MZTZ7bP0WiGEjaTnNST
+         6dwK8wsxn5QoaHaqieK4GfYhbB6bKqHjaUnaNae7j8jIQJPFdW8cgPhBmCGdDlfGyWgB
+         HkfsElLLP4bC+N3AQ7lBXPcGyLrKAmGUW5mJNOipjvY+6tty6wHAQ2pHxv8sdAjSNCuL
+         9s4EOkHKhk/10a9sYS4fOVfuSjatOufSFolSqFs5bDdbIaHPy588RglVWiRtg6LK+UyI
+         dtow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=AB/6a+0q1qLMuNjG8yRoZzr5m++qXs4+JpGB+h7ZvYE=;
-        b=ntkJtbNY8oY+RB5x9BADto8DYTjBmxNgqQmqLtbLUsZzcbH63/YhgP/Uo0lHEBofR6
-         lNBCdisHwuH9cxzxHSF6RPgkWQ+DX3j8zVcGt4JEkJtgWPmKPKwnwW9sFug6uuhDr/6G
-         4uus72Qa172PJhHUGnvFP06NiUITB9aKaWi6Kggp/IPDFuV1EbchqHO4cQI9/zMzI1FO
-         KStTBy/KJ81zsmLo8llc8Qlwii75TkYOjupBLIByDPq1F2WPUHVuh+F7E1inlM+HFtiQ
-         cwhZZhs6mwSvQupik53NWqT3bnyVqhuzss67BMNf3D/9amgJMP44KQSKvcmOh1J6PGDG
-         q0lQ==
-X-Gm-Message-State: AOAM530ZBm9MIjMFLYn9i5ghrVBzA8roM4NQfOL5BTtQkvNy8d35/2k6
-        Fp6/dj2OO5v+POd+udJ8LVo=
-X-Google-Smtp-Source: ABdhPJwfTISVlwcaeK8OrIVwQd2JJl5304YRCgPrnXjrKTiC7PJ93jeid5YnVZR3iY0PKrrG1rz9Sg==
-X-Received: by 2002:a17:902:8605:b029:da:14f6:a4ad with SMTP id f5-20020a1709028605b02900da14f6a4admr3760458plo.79.1606845112164;
-        Tue, 01 Dec 2020 09:51:52 -0800 (PST)
+        bh=4zRLtJ0Q5wi/JJXSMnqzlxIlA9XB0kWpvTg/hxCouGQ=;
+        b=Vo7eKO+3UyvaFK0UyYxEbi5WXgXH5TkXm4S1w8IpuuSSSbG0UUkG9j7ThmgOYiQJnn
+         51A5k2OBUw6LGPoZZFqEiGXNdKqkSQBr547j79fCahniOzds0YXsdcMplky0EDCrlUOb
+         Sr1H0FnbNLAbXCRBssLCQAHDmgSAXVWUxNka2hMzFaoHvG95It8NFbMnqbCbBFzJD+yf
+         nCTIxZ2T1bGSZjb4jZqwDsANBBjXMT1IL/KWUaSCXGCV+DpPf3yF38WLl//KiqfghCzd
+         LvZL+YpeuodhA1s0o5nG9ZuysFHrOrtRDGzNKge2CivWuZ8eAfYeTrEOWAiHjV2VRI8H
+         UC8Q==
+X-Gm-Message-State: AOAM530H1THXiW9K1mVe/L4wjin3H7mZHQdRirw3jIR6/tFZFaUvZodx
+        Nw15sIGKgY4P2QiEHvC0jE4=
+X-Google-Smtp-Source: ABdhPJzGe4cpt+aeqFv9FnQFMR/FJjDiGsrboHIU1DKsNNU7bUw3lkcdAv3MMGBbgCOWuQDUV/UPeQ==
+X-Received: by 2002:a63:fb42:: with SMTP id w2mr3229528pgj.354.1606845116922;
+        Tue, 01 Dec 2020 09:51:56 -0800 (PST)
 Received: from bbox-1.mtv.corp.google.com ([2620:15c:211:201:7220:84ff:fe09:5e58])
-        by smtp.gmail.com with ESMTPSA id q23sm390082pfg.192.2020.12.01.09.51.49
+        by smtp.gmail.com with ESMTPSA id q23sm390082pfg.192.2020.12.01.09.51.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Dec 2020 09:51:50 -0800 (PST)
+        Tue, 01 Dec 2020 09:51:55 -0800 (PST)
 Sender: Minchan Kim <minchan.kim@gmail.com>
 From:   Minchan Kim <minchan@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
@@ -69,9 +69,9 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
         devicetree@vger.kernel.org, robh@kernel.org,
         christian.koenig@amd.com, linaro-mm-sig@lists.linaro.org,
         Minchan Kim <minchan@kernel.org>
-Subject: [PATCH v2 1/4] mm: introduce alloc_contig_mode
-Date:   Tue,  1 Dec 2020 09:51:41 -0800
-Message-Id: <20201201175144.3996569-2-minchan@kernel.org>
+Subject: [PATCH v2 3/4] dma-buf: add export symbol for dma-heap
+Date:   Tue,  1 Dec 2020 09:51:43 -0800
+Message-Id: <20201201175144.3996569-4-minchan@kernel.org>
 X-Mailer: git-send-email 2.29.2.454.gaff20da3a2-goog
 In-Reply-To: <20201201175144.3996569-1-minchan@kernel.org>
 References: <20201201175144.3996569-1-minchan@kernel.org>
@@ -81,101 +81,97 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There are demands to control how hard alloc_contig_range try to
-increase allocation success ratio. This patch abstract it by
-adding new enum mode parameter in alloc_contig_range.
-New API in next patch will add up new mode there to control it.
+From: Hyesoo Yu <hyesoo.yu@samsung.com>
 
-This patch shouldn't change any existing behavior.
+The heaps could be added as module, so some functions should
+be exported to register dma-heaps. And dma-heap of module can use
+cma area to allocate and free. However the function related cma
+is not exported now. Let's export them for next patches.
 
-Suggested-by: David Hildenbrand <david@redhat.com>
+Signed-off-by: Hyesoo Yu <hyesoo.yu@samsung.com>
 Signed-off-by: Minchan Kim <minchan@kernel.org>
 ---
- drivers/virtio/virtio_mem.c | 2 +-
- include/linux/gfp.h         | 8 +++++++-
- mm/cma.c                    | 3 ++-
- mm/page_alloc.c             | 6 ++++--
- 4 files changed, 14 insertions(+), 5 deletions(-)
+ drivers/dma-buf/dma-heap.c | 2 ++
+ kernel/dma/contiguous.c    | 1 +
+ mm/cma.c                   | 5 +++++
+ 3 files changed, 8 insertions(+)
 
-diff --git a/drivers/virtio/virtio_mem.c b/drivers/virtio/virtio_mem.c
-index 9fc9ec4a25f5..5585fc67b65e 100644
---- a/drivers/virtio/virtio_mem.c
-+++ b/drivers/virtio/virtio_mem.c
-@@ -1148,7 +1148,7 @@ static int virtio_mem_fake_offline(unsigned long pfn, unsigned long nr_pages)
- 	 */
- 	for (retry_count = 0; retry_count < 5; retry_count++) {
- 		rc = alloc_contig_range(pfn, pfn + nr_pages, MIGRATE_MOVABLE,
--					GFP_KERNEL);
-+					GFP_KERNEL, ALLOC_CONTIG_NORMAL);
- 		if (rc == -ENOMEM)
- 			/* whoops, out of memory */
- 			return rc;
-diff --git a/include/linux/gfp.h b/include/linux/gfp.h
-index c603237e006c..ad5872699692 100644
---- a/include/linux/gfp.h
-+++ b/include/linux/gfp.h
-@@ -624,9 +624,15 @@ static inline bool pm_suspended_storage(void)
- #endif /* CONFIG_PM_SLEEP */
+diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
+index afd22c9dbdcf..cc6339cbca09 100644
+--- a/drivers/dma-buf/dma-heap.c
++++ b/drivers/dma-buf/dma-heap.c
+@@ -189,6 +189,7 @@ void *dma_heap_get_drvdata(struct dma_heap *heap)
+ {
+ 	return heap->priv;
+ }
++EXPORT_SYMBOL_GPL(dma_heap_get_drvdata);
  
- #ifdef CONFIG_CONTIG_ALLOC
-+enum alloc_contig_mode {
-+	/* try several ways to increase success ratio of memory allocation */
-+	ALLOC_CONTIG_NORMAL,
-+};
-+
- /* The below functions must be run on a range from a single zone. */
- extern int alloc_contig_range(unsigned long start, unsigned long end,
--			      unsigned migratetype, gfp_t gfp_mask);
-+			      unsigned migratetype, gfp_t gfp_mask,
-+			      enum alloc_contig_mode mode);
- extern struct page *alloc_contig_pages(unsigned long nr_pages, gfp_t gfp_mask,
- 				       int nid, nodemask_t *nodemask);
+ struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
+ {
+@@ -272,6 +273,7 @@ struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
+ 	kfree(heap);
+ 	return err_ret;
+ }
++EXPORT_SYMBOL_GPL(dma_heap_add);
+ 
+ static char *dma_heap_devnode(struct device *dev, umode_t *mode)
+ {
+diff --git a/kernel/dma/contiguous.c b/kernel/dma/contiguous.c
+index 3d63d91cba5c..7e9777119b29 100644
+--- a/kernel/dma/contiguous.c
++++ b/kernel/dma/contiguous.c
+@@ -58,6 +58,7 @@
  #endif
+ 
+ struct cma *dma_contiguous_default_area;
++EXPORT_SYMBOL_GPL(dma_contiguous_default_area);
+ 
+ /*
+  * Default global CMA area size can be defined in kernel's .config.
 diff --git a/mm/cma.c b/mm/cma.c
-index 3692a34e2353..8010c1ba04b0 100644
+index 4459045fa717..d39cb7066b9e 100644
 --- a/mm/cma.c
 +++ b/mm/cma.c
-@@ -454,7 +454,8 @@ struct page *cma_alloc(struct cma *cma, size_t count, unsigned int align,
+@@ -33,6 +33,7 @@
+ #include <linux/io.h>
+ #include <linux/kmemleak.h>
+ #include <linux/swap.h>
++#include <linux/module.h>
+ #include <trace/events/cma.h>
  
- 		pfn = cma->base_pfn + (bitmap_no << cma->order_per_bit);
- 		ret = alloc_contig_range(pfn, pfn + count, MIGRATE_CMA,
--				     GFP_KERNEL | (no_warn ? __GFP_NOWARN : 0));
-+				     GFP_KERNEL | (no_warn ? __GFP_NOWARN : 0),
-+				     ALLOC_CONTIG_NORMAL);
- 
- 		if (ret == 0) {
- 			page = pfn_to_page(pfn);
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index f91df593bf71..adfbfd95fbc3 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -8533,6 +8533,7 @@ static void __alloc_contig_clear_range(unsigned long start_pfn,
-  *			be either of the two.
-  * @gfp_mask:	GFP mask to use during compaction. __GFP_ZERO clears allocated
-  *		pages.
-+ * @mode:	how hard it will try to increase allocation success ratio
-  *
-  * The PFN range does not have to be pageblock or MAX_ORDER_NR_PAGES
-  * aligned.  The PFN range must belong to a single zone.
-@@ -8546,7 +8547,8 @@ static void __alloc_contig_clear_range(unsigned long start_pfn,
-  * need to be freed with free_contig_range().
-  */
- int alloc_contig_range(unsigned long start, unsigned long end,
--		       unsigned migratetype, gfp_t gfp_mask)
-+		       unsigned migratetype, gfp_t gfp_mask,
-+		       enum alloc_contig_mode mode)
+ #include "cma.h"
+@@ -54,6 +55,7 @@ const char *cma_get_name(const struct cma *cma)
  {
- 	unsigned long outer_start, outer_end;
- 	unsigned int order;
-@@ -8689,7 +8691,7 @@ static int __alloc_contig_pages(unsigned long start_pfn,
- 	unsigned long end_pfn = start_pfn + nr_pages;
- 
- 	return alloc_contig_range(start_pfn, end_pfn, MIGRATE_MOVABLE,
--				  gfp_mask);
-+				  gfp_mask, ALLOC_CONTIG_NORMAL);
+ 	return cma->name;
  }
++EXPORT_SYMBOL_GPL(cma_get_name);
  
- static bool pfn_range_valid_contig(struct zone *z, unsigned long start_pfn,
+ static unsigned long cma_bitmap_aligned_mask(const struct cma *cma,
+ 					     unsigned int align_order)
+@@ -499,6 +501,7 @@ struct page *cma_alloc(struct cma *cma, size_t count, unsigned int align,
+ 	pr_debug("%s(): returned %p\n", __func__, page);
+ 	return page;
+ }
++EXPORT_SYMBOL_GPL(cma_alloc);
+ 
+ /*
+  * cma_alloc_bulk() - allocate high order bulk pages from contiguous area with
+@@ -609,6 +612,7 @@ int cma_alloc_bulk(struct cma *cma, unsigned int align, bool fast,
+ 
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(cma_alloc_bulk);
+ 
+ /**
+  * cma_release() - release allocated pages
+@@ -642,6 +646,7 @@ bool cma_release(struct cma *cma, const struct page *pages, unsigned int count)
+ 
+ 	return true;
+ }
++EXPORT_SYMBOL_GPL(cma_release);
+ 
+ int cma_for_each_area(int (*it)(struct cma *cma, void *data), void *data)
+ {
 -- 
 2.29.2.454.gaff20da3a2-goog
 
