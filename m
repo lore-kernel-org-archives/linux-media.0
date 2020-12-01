@@ -7,27 +7,30 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8D89C71156
-	for <linux-media@archiver.kernel.org>; Tue,  1 Dec 2020 16:49:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45873C64E7B
+	for <linux-media@archiver.kernel.org>; Tue,  1 Dec 2020 16:49:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6E78720758
+	by mail.kernel.org (Postfix) with ESMTP id F03C720758
 	for <linux-media@archiver.kernel.org>; Tue,  1 Dec 2020 16:49:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403991AbgLAQtr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S2403992AbgLAQtr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 1 Dec 2020 11:49:47 -0500
-Received: from retiisi.eu ([95.216.213.190]:50180 "EHLO hillosipuli.retiisi.eu"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2403938AbgLAQtq (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 1 Dec 2020 11:49:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39686 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2403988AbgLAQtq (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Dec 2020 11:49:46 -0500
+Received: from hillosipuli.retiisi.eu (unknown [IPv6:2a01:4f9:c010:4572::e8:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA47C061A49
+        for <linux-media@vger.kernel.org>; Tue,  1 Dec 2020 08:48:06 -0800 (PST)
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id EC10C634CA9;
-        Tue,  1 Dec 2020 18:45:13 +0200 (EET)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 21140634CBD;
+        Tue,  1 Dec 2020 18:45:14 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, mchehab@kernel.org
-Subject: [PATCH v2 20/30] ccs: Change my e-mail address
-Date:   Tue,  1 Dec 2020 18:42:36 +0200
-Message-Id: <20201201164246.18003-21-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 22/30] ccs: Add support for manufacturer regs from sensor and module files
+Date:   Tue,  1 Dec 2020 18:42:38 +0200
+Message-Id: <20201201164246.18003-23-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201201164246.18003-1-sakari.ailus@linux.intel.com>
 References: <20201201164246.18003-1-sakari.ailus@linux.intel.com>
@@ -37,150 +40,198 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use my @linux.intel.com e-mail address in the CCS driver.
+Write manufacturer specific registers (MSRs) from file to the sensor on
+sensor power-on.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs-pll.c            | 4 ++--
- drivers/media/i2c/ccs-pll.h            | 2 +-
- drivers/media/i2c/ccs/ccs-core.c       | 6 +++---
- drivers/media/i2c/ccs/ccs-quirk.c      | 2 +-
- drivers/media/i2c/ccs/ccs-quirk.h      | 2 +-
- drivers/media/i2c/ccs/ccs-reg-access.c | 2 +-
- drivers/media/i2c/ccs/ccs-reg-access.h | 2 +-
- drivers/media/i2c/ccs/ccs.h            | 2 +-
- 8 files changed, 11 insertions(+), 11 deletions(-)
+ drivers/media/i2c/ccs/ccs-core.c       | 23 +++++++
+ drivers/media/i2c/ccs/ccs-reg-access.c | 94 ++++++++++++++++++++------
+ drivers/media/i2c/ccs/ccs-reg-access.h |  2 +
+ 3 files changed, 97 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/media/i2c/ccs-pll.c b/drivers/media/i2c/ccs-pll.c
-index 58f5fe7062ae..0d57bac1599a 100644
---- a/drivers/media/i2c/ccs-pll.c
-+++ b/drivers/media/i2c/ccs-pll.c
-@@ -6,7 +6,7 @@
-  *
-  * Copyright (C) 2020 Intel Corporation
-  * Copyright (C) 2011--2012 Nokia Corporation
-- * Contact: Sakari Ailus <sakari.ailus@iki.fi>
-+ * Contact: Sakari Ailus <sakari.ailus@linux.intel.com>
-  */
- 
- #include <linux/device.h>
-@@ -475,6 +475,6 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *limits,
- }
- EXPORT_SYMBOL_GPL(ccs_pll_calculate);
- 
--MODULE_AUTHOR("Sakari Ailus <sakari.ailus@iki.fi>");
-+MODULE_AUTHOR("Sakari Ailus <sakari.ailus@linux.intel.com>");
- MODULE_DESCRIPTION("Generic MIPI CCS/SMIA/SMIA++ PLL calculator");
- MODULE_LICENSE("GPL v2");
-diff --git a/drivers/media/i2c/ccs-pll.h b/drivers/media/i2c/ccs-pll.h
-index 88d641ee3fa1..07f7f9e8a1cc 100644
---- a/drivers/media/i2c/ccs-pll.h
-+++ b/drivers/media/i2c/ccs-pll.h
-@@ -6,7 +6,7 @@
-  *
-  * Copyright (C) 2020 Intel Corporation
-  * Copyright (C) 2012 Nokia Corporation
-- * Contact: Sakari Ailus <sakari.ailus@iki.fi>
-+ * Contact: Sakari Ailus <sakari.ailus@linux.intel.com>
-  */
- 
- #ifndef CCS_PLL_H
 diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 6c8528e6ac96..c53911b1c78b 100644
+index c53911b1c78b..5e01f22608d7 100644
 --- a/drivers/media/i2c/ccs/ccs-core.c
 +++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -6,7 +6,7 @@
-  *
-  * Copyright (C) 2020 Intel Corporation
-  * Copyright (C) 2010--2012 Nokia Corporation
-- * Contact: Sakari Ailus <sakari.ailus@iki.fi>
-+ * Contact: Sakari Ailus <sakari.ailus@linux.intel.com>
-  *
-  * Based on smiapp driver by Vimarsh Zutshi
-  * Based on jt8ev1.c by Vimarsh Zutshi
-@@ -1168,7 +1168,7 @@ static int ccs_setup_flash_strobe(struct ccs_sensor *sensor)
- 	 * do not change, or if you do at least know what you're
- 	 * doing. :-)
- 	 *
--	 * Sakari Ailus <sakari.ailus@iki.fi> 2010-10-25
-+	 * Sakari Ailus <sakari.ailus@linux.intel.com> 2010-10-25
- 	 *
- 	 * flash_strobe_length [us] / 10^6 = (tFlash_strobe_width_ctrl
- 	 *	/ EXTCLK freq [Hz]) * flash_strobe_adjustment
-@@ -3357,7 +3357,7 @@ static void ccs_module_cleanup(void)
- module_init(ccs_module_init);
- module_exit(ccs_module_cleanup);
- 
--MODULE_AUTHOR("Sakari Ailus <sakari.ailus@iki.fi>");
-+MODULE_AUTHOR("Sakari Ailus <sakari.ailus@linux.intel.com>");
- MODULE_DESCRIPTION("Generic MIPI CCS/SMIA/SMIA++ camera sensor driver");
- MODULE_LICENSE("GPL v2");
- MODULE_ALIAS("smiapp");
-diff --git a/drivers/media/i2c/ccs/ccs-quirk.c b/drivers/media/i2c/ccs/ccs-quirk.c
-index 8b4fa60044b2..4fe8c6f70579 100644
---- a/drivers/media/i2c/ccs/ccs-quirk.c
-+++ b/drivers/media/i2c/ccs/ccs-quirk.c
-@@ -6,7 +6,7 @@
-  *
-  * Copyright (C) 2020 Intel Corporation
-  * Copyright (C) 2011--2012 Nokia Corporation
-- * Contact: Sakari Ailus <sakari.ailus@iki.fi>
-+ * Contact: Sakari Ailus <sakari.ailus@linux.intel.com>
+@@ -1278,6 +1278,21 @@ static int ccs_setup_flash_strobe(struct ccs_sensor *sensor)
+  * Power management
   */
  
- #include <linux/delay.h>
-diff --git a/drivers/media/i2c/ccs/ccs-quirk.h b/drivers/media/i2c/ccs/ccs-quirk.h
-index 3e7779e2fc4b..6b4ec4beaba0 100644
---- a/drivers/media/i2c/ccs/ccs-quirk.h
-+++ b/drivers/media/i2c/ccs/ccs-quirk.h
-@@ -6,7 +6,7 @@
-  *
-  * Copyright (C) 2020 Intel Corporation
-  * Copyright (C) 2011--2012 Nokia Corporation
-- * Contact: Sakari Ailus <sakari.ailus@iki.fi>
-+ * Contact: Sakari Ailus <sakari.ailus@linux.intel.com>
-  */
++static int ccs_write_msr_regs(struct ccs_sensor *sensor)
++{
++	int rval;
++
++	rval = ccs_write_data_regs(sensor,
++				   sensor->sdata.sensor_manufacturer_regs,
++				   sensor->sdata.num_sensor_manufacturer_regs);
++	if (rval)
++		return rval;
++
++	return ccs_write_data_regs(sensor,
++				   sensor->mdata.module_manufacturer_regs,
++				   sensor->mdata.num_module_manufacturer_regs);
++}
++
+ static int ccs_power_on(struct device *dev)
+ {
+ 	struct v4l2_subdev *subdev = dev_get_drvdata(dev);
+@@ -1383,6 +1398,10 @@ static int ccs_power_on(struct device *dev)
+ 	if (rval < 0)
+ 		goto out_cci_addr_fail;
  
- #ifndef __CCS_QUIRK__
++	rval = ccs_write_msr_regs(sensor);
++	if (rval)
++		goto out_cci_addr_fail;
++
+ 	rval = ccs_call_quirk(sensor, post_poweron);
+ 	if (rval) {
+ 		dev_err(dev, "post_poweron quirks failed\n");
+@@ -3220,6 +3239,10 @@ static int ccs_probe(struct i2c_client *client)
+ 	if (rval < 0)
+ 		goto out_media_entity_cleanup;
+ 
++	rval = ccs_write_msr_regs(sensor);
++	if (rval)
++		goto out_media_entity_cleanup;
++
+ 	pm_runtime_set_active(&client->dev);
+ 	pm_runtime_get_noresume(&client->dev);
+ 	pm_runtime_enable(&client->dev);
 diff --git a/drivers/media/i2c/ccs/ccs-reg-access.c b/drivers/media/i2c/ccs/ccs-reg-access.c
-index 91ccbca11577..aad2727570ec 100644
+index 79efed5e0dad..918bc98c226f 100644
 --- a/drivers/media/i2c/ccs/ccs-reg-access.c
 +++ b/drivers/media/i2c/ccs/ccs-reg-access.c
-@@ -6,7 +6,7 @@
-  *
-  * Copyright (C) 2020 Intel Corporation
-  * Copyright (C) 2011--2012 Nokia Corporation
-- * Contact: Sakari Ailus <sakari.ailus@iki.fi>
-+ * Contact: Sakari Ailus <sakari.ailus@linux.intel.com>
-  */
+@@ -236,12 +236,38 @@ int ccs_read_addr_noconv(struct ccs_sensor *sensor, u32 reg, u32 *val)
+ 	return ccs_read_addr_raw(sensor, reg, val, false, true, false);
+ }
  
- #include <asm/unaligned.h>
++static int ccs_write_retry(struct i2c_client *client, struct i2c_msg *msg)
++{
++	unsigned int retries;
++	int r;
++
++	for (retries = 0; retries < 10; retries++) {
++		/*
++		 * Due to unknown reason sensor stops responding. This
++		 * loop is a temporaty solution until the root cause
++		 * is found.
++		 */
++		r = i2c_transfer(client->adapter, msg, 1);
++		if (r != 1) {
++			usleep_range(1000, 2000);
++			continue;
++		}
++
++		if (retries)
++			dev_err(&client->dev,
++				"sensor i2c stall encountered. retries: %d\n",
++				retries);
++		return 0;
++	}
++
++	return r;
++}
++
+ int ccs_write_addr_no_quirk(struct ccs_sensor *sensor, u32 reg, u32 val)
+ {
+ 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
+ 	struct i2c_msg msg;
+ 	unsigned char data[6];
+-	unsigned int retries;
+ 	unsigned int len = ccs_reg_width(reg);
+ 	int r;
+ 
+@@ -256,27 +282,11 @@ int ccs_write_addr_no_quirk(struct ccs_sensor *sensor, u32 reg, u32 val)
+ 	put_unaligned_be16(CCS_REG_ADDR(reg), data);
+ 	put_unaligned_be32(val << (8 * (sizeof(val) - len)), data + 2);
+ 
+-	for (retries = 0; retries < 10; retries++) {
+-		/*
+-		 * Due to unknown reason sensor stops responding. This
+-		 * loop is a temporaty solution until the root cause
+-		 * is found.
+-		 */
+-		r = i2c_transfer(client->adapter, &msg, 1);
+-		if (r == 1) {
+-			if (retries)
+-				dev_err(&client->dev,
+-					"sensor i2c stall encountered. retries: %d\n",
+-					retries);
+-			return 0;
+-		}
+-
+-		usleep_range(1000, 2000);
+-	}
+-
+-	dev_err(&client->dev,
+-		"wrote 0x%x to offset 0x%x error %d\n", val,
+-		CCS_REG_ADDR(reg), r);
++	r = ccs_write_retry(client, &msg);
++	if (r)
++		dev_err(&client->dev,
++			"wrote 0x%x to offset 0x%x error %d\n", val,
++			CCS_REG_ADDR(reg), r);
+ 
+ 	return r;
+ }
+@@ -297,3 +307,43 @@ int ccs_write_addr(struct ccs_sensor *sensor, u32 reg, u32 val)
+ 
+ 	return ccs_write_addr_no_quirk(sensor, reg, val);
+ }
++
++#define MAX_WRITE_LEN	32U
++
++int ccs_write_data_regs(struct ccs_sensor *sensor, struct ccs_reg *regs,
++			size_t num_regs)
++{
++	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
++	unsigned char buf[2 + MAX_WRITE_LEN];
++	struct i2c_msg msg = {
++		.addr = client->addr,
++		.buf = buf,
++	};
++	size_t i;
++
++	for (i = 0; i < num_regs; i++, regs++) {
++		unsigned char *regdata = regs->value;
++		unsigned int j;
++
++		for (j = 0; j < regs->len;
++		     j += msg.len - 2, regdata += msg.len - 2) {
++			int rval;
++
++			msg.len = min(regs->len - j, MAX_WRITE_LEN);
++
++			put_unaligned_be16(regs->addr + j, buf);
++			memcpy(buf + 2, regdata, msg.len);
++			msg.len += 2;
++
++			rval = ccs_write_retry(client, &msg);
++			if (rval) {
++				dev_err(&client->dev,
++					"error writing %u octets to address 0x%4.4x\n",
++					msg.len, regs->addr + j);
++				return rval;
++			}
++		}
++	}
++
++	return 0;
++}
 diff --git a/drivers/media/i2c/ccs/ccs-reg-access.h b/drivers/media/i2c/ccs/ccs-reg-access.h
-index 5f6ff9c57698..cfad2e520fe2 100644
+index cfad2e520fe2..78c43f92d99a 100644
 --- a/drivers/media/i2c/ccs/ccs-reg-access.h
 +++ b/drivers/media/i2c/ccs/ccs-reg-access.h
-@@ -6,7 +6,7 @@
-  *
-  * Copyright (C) 2020 Intel Corporation
-  * Copyright (C) 2011--2012 Nokia Corporation
-- * Contact: Sakari Ailus <sakari.ailus@iki.fi>
-+ * Contact: Sakari Ailus <sakari.ailus@linux.intel.com>
-  */
+@@ -27,6 +27,8 @@ int ccs_read_addr_8only(struct ccs_sensor *sensor, u32 reg, u32 *val);
+ int ccs_read_addr_noconv(struct ccs_sensor *sensor, u32 reg, u32 *val);
+ int ccs_write_addr_no_quirk(struct ccs_sensor *sensor, u32 reg, u32 val);
+ int ccs_write_addr(struct ccs_sensor *sensor, u32 reg, u32 val);
++int ccs_write_data_regs(struct ccs_sensor *sensor, struct ccs_reg *regs,
++			size_t num_regs);
  
- #ifndef SMIAPP_REGS_H
-diff --git a/drivers/media/i2c/ccs/ccs.h b/drivers/media/i2c/ccs/ccs.h
-index c8a9f4ee093e..6b07e4143ff0 100644
---- a/drivers/media/i2c/ccs/ccs.h
-+++ b/drivers/media/i2c/ccs/ccs.h
-@@ -6,7 +6,7 @@
-  *
-  * Copyright (C) 2020 Intel Corporation
-  * Copyright (C) 2010--2012 Nokia Corporation
-- * Contact: Sakari Ailus <sakari.ailus@iki.fi>
-+ * Contact: Sakari Ailus <sakari.ailus@linux.intel.com>
-  */
- 
- #ifndef __CCS_H__
+ unsigned int ccs_reg_width(u32 reg);
+ u32 ccs_reg_conv(struct ccs_sensor *sensor, u32 reg, u32 val);
 -- 
 2.27.0
 
