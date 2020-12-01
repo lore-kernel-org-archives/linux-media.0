@@ -2,88 +2,74 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE47CC64E90
-	for <linux-media@archiver.kernel.org>; Tue,  1 Dec 2020 16:48:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B7ADC83016
+	for <linux-media@archiver.kernel.org>; Tue,  1 Dec 2020 16:48:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7C4DC2076C
-	for <linux-media@archiver.kernel.org>; Tue,  1 Dec 2020 16:48:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4BCD2206B7
+	for <linux-media@archiver.kernel.org>; Tue,  1 Dec 2020 16:48:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388807AbgLAQsA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Dec 2020 11:48:00 -0500
-Received: from retiisi.eu ([95.216.213.190]:50022 "EHLO hillosipuli.retiisi.eu"
+        id S2388887AbgLAQsB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Dec 2020 11:48:01 -0500
+Received: from retiisi.eu ([95.216.213.190]:50034 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729070AbgLAQsA (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 1 Dec 2020 11:48:00 -0500
+        id S1729103AbgLAQsB (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 1 Dec 2020 11:48:01 -0500
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 793A9634C89;
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 9B8AA634C8C;
         Tue,  1 Dec 2020 18:45:12 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, mchehab@kernel.org
-Subject: [PATCH v2 02/30] ccs: Add device compatible identifiers for telling SMIA and CCS apart
-Date:   Tue,  1 Dec 2020 18:42:18 +0200
-Message-Id: <20201201164246.18003-3-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 04/30] =?UTF-8?q?ccs:=20Remove=20the=20I=C2=B2C=20ID=20?= =?UTF-8?q?table?=
+Date:   Tue,  1 Dec 2020 18:42:20 +0200
+Message-Id: <20201201164246.18003-5-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201201164246.18003-1-sakari.ailus@linux.intel.com>
 References: <20201201164246.18003-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add device data specific to DT compatible ID to tell SMIA and CCS devices
-apart already in power-up.
+The I²C ID table is no longer needed; remove it.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+ drivers/media/i2c/ccs/ccs-core.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
 diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 64bad5b678a3..1d365da570a6 100644
+index bb712d71b8c8..bb3759e2534c 100644
 --- a/drivers/media/i2c/ccs/ccs-core.c
 +++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -58,6 +58,12 @@ static const struct ccs_module_ident ccs_module_idents[] = {
- 	CCS_IDENT_LQ(0x10, 0x4241, -1, "imx125es", &smiapp_imx125es_quirk),
- };
- 
-+#define CCS_DEVICE_FLAG_IS_SMIA		BIT(0)
-+
-+struct ccs_device {
-+	unsigned char flags;
-+};
-+
- /*
-  *
-  * Dynamic Capability Identification
-@@ -3235,11 +3241,17 @@ static int ccs_remove(struct i2c_client *client)
- 	return 0;
- }
- 
-+static const struct ccs_device smia_device = {
-+	.flags = CCS_DEVICE_FLAG_IS_SMIA,
-+};
-+
-+static const struct ccs_device ccs_device = {};
-+
- static const struct of_device_id ccs_of_table[] = {
--	{ .compatible = "mipi-ccs-1.1" },
--	{ .compatible = "mipi-ccs-1.0" },
--	{ .compatible = "mipi-ccs" },
--	{ .compatible = "nokia,smia" },
-+	{ .compatible = "mipi-ccs-1.1", .data = &ccs_device },
-+	{ .compatible = "mipi-ccs-1.0", .data = &ccs_device },
-+	{ .compatible = "mipi-ccs", .data = &ccs_device },
-+	{ .compatible = "nokia,smia", .data = &smia_device },
- 	{ },
+@@ -3262,12 +3262,6 @@ static const struct of_device_id ccs_of_table[] = {
  };
  MODULE_DEVICE_TABLE(of, ccs_of_table);
+ 
+-static const struct i2c_device_id ccs_id_table[] = {
+-	{ SMIAPP_NAME, 0 },
+-	{ },
+-};
+-MODULE_DEVICE_TABLE(i2c, ccs_id_table);
+-
+ static const struct dev_pm_ops ccs_pm_ops = {
+ 	SET_SYSTEM_SLEEP_PM_OPS(ccs_suspend, ccs_resume)
+ 	SET_RUNTIME_PM_OPS(ccs_power_off, ccs_power_on, NULL)
+@@ -3282,7 +3276,6 @@ static struct i2c_driver ccs_i2c_driver = {
+ 	},
+ 	.probe_new = ccs_probe,
+ 	.remove	= ccs_remove,
+-	.id_table = ccs_id_table,
+ };
+ 
+ static int ccs_module_init(void)
 -- 
 2.27.0
 
