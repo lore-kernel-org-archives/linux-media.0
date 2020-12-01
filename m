@@ -2,32 +2,32 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3566CC83018
-	for <linux-media@archiver.kernel.org>; Tue,  1 Dec 2020 16:48:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E93F6C83014
+	for <linux-media@archiver.kernel.org>; Tue,  1 Dec 2020 16:48:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 063C120758
+	by mail.kernel.org (Postfix) with ESMTP id A18482076C
 	for <linux-media@archiver.kernel.org>; Tue,  1 Dec 2020 16:48:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389154AbgLAQsF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Dec 2020 11:48:05 -0500
-Received: from retiisi.eu ([95.216.213.190]:50080 "EHLO hillosipuli.retiisi.eu"
+        id S2389033AbgLAQsD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Dec 2020 11:48:03 -0500
+Received: from retiisi.eu ([95.216.213.190]:50038 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387795AbgLAQsF (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 1 Dec 2020 11:48:05 -0500
+        id S2388811AbgLAQsD (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 1 Dec 2020 11:48:03 -0500
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 1C294634C94;
-        Tue,  1 Dec 2020 18:45:13 +0200 (EET)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id AD38A634C8E;
+        Tue,  1 Dec 2020 18:45:12 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, mchehab@kernel.org
-Subject: [PATCH v2 10/30] ccs: Read CCS static data from firmware binaries
-Date:   Tue,  1 Dec 2020 18:42:26 +0200
-Message-Id: <20201201164246.18003-11-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 05/30] ccs: Remove remaining support for platform data
+Date:   Tue,  1 Dec 2020 18:42:21 +0200
+Message-Id: <20201201164246.18003-6-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201201164246.18003-1-sakari.ailus@linux.intel.com>
 References: <20201201164246.18003-1-sakari.ailus@linux.intel.com>
@@ -37,123 +37,28 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Read the CCS static data for sensors and modules. The files are expected
-to be found in "ccs" directory.
+No need to support platform data; remove support for conveying hardware
+configuration that way.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 47 +++++++++++++++++++++++++++++++-
- drivers/media/i2c/ccs/ccs.h      |  2 ++
- 2 files changed, 48 insertions(+), 1 deletion(-)
+ drivers/media/i2c/ccs/ccs-core.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
 diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 17287a8f539c..be27b002a772 100644
+index bb3759e2534c..af79d80ebb59 100644
 --- a/drivers/media/i2c/ccs/ccs-core.c
 +++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -16,6 +16,7 @@
- #include <linux/clk.h>
- #include <linux/delay.h>
- #include <linux/device.h>
-+#include <linux/firmware.h>
- #include <linux/gpio.h>
- #include <linux/gpio/consumer.h>
- #include <linux/module.h>
-@@ -2953,6 +2954,8 @@ static int ccs_get_hwconfig(struct ccs_sensor *sensor, struct device *dev)
- static int ccs_probe(struct i2c_client *client)
- {
- 	struct ccs_sensor *sensor;
-+	const struct firmware *fw;
-+	char filename[40];
- 	unsigned int i;
+@@ -2860,9 +2860,6 @@ static struct ccs_hwconfig *ccs_get_hwconfig(struct device *dev)
+ 	int i;
  	int rval;
  
-@@ -3042,9 +3045,43 @@ static int ccs_probe(struct i2c_client *client)
- 		goto out_power_off;
- 	}
- 
-+	rval = snprintf(filename, sizeof(filename),
-+			"ccs/ccs-sensor-%4.4x-%4.4x-%4.4x.fw",
-+			sensor->minfo.sensor_mipi_manufacturer_id,
-+			sensor->minfo.sensor_model_id,
-+			sensor->minfo.sensor_revision_number);
-+	if (rval >= sizeof(filename)) {
-+		rval = -ENOMEM;
-+		goto out_power_off;
-+	}
-+
-+	rval = request_firmware(&fw, filename, &client->dev);
-+	if (!rval) {
-+		ccs_data_parse(&sensor->sdata, fw->data, fw->size, &client->dev,
-+			       true);
-+		release_firmware(fw);
-+	}
-+
-+	rval = snprintf(filename, sizeof(filename),
-+			"ccs/ccs-module-%4.4x-%4.4x-%4.4x.fw",
-+			sensor->minfo.mipi_manufacturer_id,
-+			sensor->minfo.model_id,
-+			sensor->minfo.revision_number);
-+	if (rval >= sizeof(filename)) {
-+		rval = -ENOMEM;
-+		goto out_release_sdata;
-+	}
-+
-+	rval = request_firmware(&fw, filename, &client->dev);
-+	if (!rval) {
-+		ccs_data_parse(&sensor->mdata, fw->data, fw->size, &client->dev,
-+			       true);
-+		release_firmware(fw);
-+	}
-+
- 	rval = ccs_read_all_limits(sensor);
- 	if (rval)
--		goto out_power_off;
-+		goto out_release_mdata;
- 
- 	rval = ccs_read_frame_fmt(sensor);
- 	if (rval) {
-@@ -3208,6 +3245,12 @@ static int ccs_probe(struct i2c_client *client)
- out_cleanup:
- 	ccs_cleanup(sensor);
- 
-+out_release_mdata:
-+	kvfree(sensor->mdata.backing);
-+
-+out_release_sdata:
-+	kvfree(sensor->sdata.backing);
-+
- out_free_ccs_limits:
- 	kfree(sensor->ccs_limits);
- 
-@@ -3238,6 +3281,8 @@ static int ccs_remove(struct i2c_client *client)
- 	ccs_cleanup(sensor);
- 	mutex_destroy(&sensor->mutex);
- 	kfree(sensor->ccs_limits);
-+	kvfree(sensor->sdata.backing);
-+	kvfree(sensor->mdata.backing);
- 
- 	return 0;
- }
-diff --git a/drivers/media/i2c/ccs/ccs.h b/drivers/media/i2c/ccs/ccs.h
-index ad2ff5a74424..cbcd93b519da 100644
---- a/drivers/media/i2c/ccs/ccs.h
-+++ b/drivers/media/i2c/ccs/ccs.h
-@@ -16,6 +16,7 @@
- #include <media/v4l2-ctrls.h>
- #include <media/v4l2-subdev.h>
- 
-+#include "ccs-data.h"
- #include "ccs-quirk.h"
- #include "ccs-regs.h"
- #include "ccs-reg-access.h"
-@@ -227,6 +228,7 @@ struct ccs_sensor {
- 	const struct ccs_csi_data_format *internal_csi_format;
- 	u32 default_mbus_frame_fmts;
- 	int default_pixel_order;
-+	struct ccs_data_container sdata, mdata;
- 
- 	u8 binning_horizontal;
- 	u8 binning_vertical;
+-	if (!fwnode)
+-		return dev->platform_data;
+-
+ 	ep = fwnode_graph_get_next_endpoint(fwnode, NULL);
+ 	if (!ep)
+ 		return NULL;
 -- 
 2.27.0
 
