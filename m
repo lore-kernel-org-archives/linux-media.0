@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CCDEC71156
-	for <linux-media@archiver.kernel.org>; Tue,  1 Dec 2020 16:50:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F217DC83012
+	for <linux-media@archiver.kernel.org>; Tue,  1 Dec 2020 16:50:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D011520758
+	by mail.kernel.org (Postfix) with ESMTP id A6111206B7
 	for <linux-media@archiver.kernel.org>; Tue,  1 Dec 2020 16:50:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390709AbgLAQuh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Dec 2020 11:50:37 -0500
-Received: from retiisi.eu ([95.216.213.190]:50074 "EHLO hillosipuli.retiisi.eu"
+        id S2390658AbgLAQug (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Dec 2020 11:50:36 -0500
+Received: from retiisi.eu ([95.216.213.190]:50038 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387673AbgLAQuh (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 1 Dec 2020 11:50:37 -0500
+        id S2387673AbgLAQug (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 1 Dec 2020 11:50:36 -0500
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id AEBBF634CCD;
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 9C437634CCC;
         Tue,  1 Dec 2020 18:45:14 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, mchehab@kernel.org
-Subject: [PATCH v2 29/30] dt-bindings: mipi,ccs: Add vcore and vio supplies
-Date:   Tue,  1 Dec 2020 18:42:45 +0200
-Message-Id: <20201201164246.18003-30-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 28/30] dt-bindings: mipi,ccs: Don't mention vana voltage
+Date:   Tue,  1 Dec 2020 18:42:44 +0200
+Message-Id: <20201201164246.18003-29-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201201164246.18003-1-sakari.ailus@linux.intel.com>
 References: <20201201164246.18003-1-sakari.ailus@linux.intel.com>
@@ -37,34 +37,29 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Vcore and vio supplies are also part of the spec and used by many sensors.
-Do not specify the voltages as they are generally sensor dependent.
+It was mentioned vana voltage is typically 2,8 volts. This is truly sensor
+dependent, and nowadays 2,8 volts is a lot.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml b/Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml
-index 51426a950414..d94bd67ccea1 100644
+index 1d90767a6196..51426a950414 100644
 --- a/Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml
 +++ b/Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml
-@@ -40,6 +40,14 @@ properties:
-     description: Analogue voltage supply (VANA), sensor dependent.
+@@ -37,8 +37,7 @@ properties:
      maxItems: 1
  
-+  vcore-supply:
-+    description: Core voltage supply (VCore), sensor dependent.
-+    maxItems: 1
-+
-+  vio-supply:
-+    description: I/O voltage supply (VIO), sensor dependent.
-+    maxItems: 1
-+
-   clocks:
-     description: External clock to the sensor.
+   vana-supply:
+-    description: Analogue voltage supply (VANA), typically 2,8 volts (sensor
+-      dependent).
++    description: Analogue voltage supply (VANA), sensor dependent.
      maxItems: 1
+ 
+   clocks:
 -- 
 2.27.0
 
