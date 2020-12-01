@@ -7,30 +7,27 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6572C83017
-	for <linux-media@archiver.kernel.org>; Tue,  1 Dec 2020 16:48:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F214C83019
+	for <linux-media@archiver.kernel.org>; Tue,  1 Dec 2020 16:48:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 754E220758
+	by mail.kernel.org (Postfix) with ESMTP id CD8DE206B7
 	for <linux-media@archiver.kernel.org>; Tue,  1 Dec 2020 16:48:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388966AbgLAQsC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Dec 2020 11:48:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388874AbgLAQsC (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Dec 2020 11:48:02 -0500
-Received: from hillosipuli.retiisi.eu (unknown [IPv6:2a01:4f9:c010:4572::e8:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D36C0613D6
-        for <linux-media@vger.kernel.org>; Tue,  1 Dec 2020 08:46:22 -0800 (PST)
+        id S2389121AbgLAQsE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Dec 2020 11:48:04 -0500
+Received: from retiisi.eu ([95.216.213.190]:50074 "EHLO hillosipuli.retiisi.eu"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389076AbgLAQsE (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 1 Dec 2020 11:48:04 -0500
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id D3D83634C91;
-        Tue,  1 Dec 2020 18:45:12 +0200 (EET)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 15A9C634C93;
+        Tue,  1 Dec 2020 18:45:13 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, mchehab@kernel.org
-Subject: [PATCH v2 07/30] ccs: Fix obtaining bus information from firmware
-Date:   Tue,  1 Dec 2020 18:42:23 +0200
-Message-Id: <20201201164246.18003-8-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 09/30] ccs: Combine revision number major and minor into one
+Date:   Tue,  1 Dec 2020 18:42:25 +0200
+Message-Id: <20201201164246.18003-10-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201201164246.18003-1-sakari.ailus@linux.intel.com>
 References: <20201201164246.18003-1-sakari.ailus@linux.intel.com>
@@ -40,59 +37,126 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Let v4l2_fwnode_endpoint_alloc_parse to figure out the type of the data
-bus. As the old bindings did not require the "bus-type" property, we need
-to rely on guessing between CSI-2 D-PHY and CCP2. Setting the type to
-CSI-2 D-PHY will parse just that and succeed even if no data-lanes are
-set.
+The module revision number major and minor are both 8 bits while the
+sensor revision number is 16 bits. Combine the module revision into one
+number.
 
-Also add a comment on the matter to the driver to avoid breaking this in
-the future.
+This also adds printing the lowest 8 bits of the module version through
+the sysfs attribute.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ drivers/media/i2c/ccs/ccs-core.c  | 25 ++++++++++++++-----------
+ drivers/media/i2c/ccs/ccs-quirk.c |  2 +-
+ drivers/media/i2c/ccs/ccs.h       |  3 +--
+ 3 files changed, 16 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index dcc71c8fe075..6fb546ca08f3 100644
+index 6fb546ca08f3..17287a8f539c 100644
 --- a/drivers/media/i2c/ccs/ccs-core.c
 +++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -2853,7 +2853,7 @@ static int __maybe_unused ccs_resume(struct device *dev)
- static int ccs_get_hwconfig(struct ccs_sensor *sensor, struct device *dev)
+@@ -2427,11 +2427,11 @@ ccs_sysfs_ident_read(struct device *dev, struct device_attribute *attr,
+ 	if (minfo->mipi_manufacturer_id)
+ 		return snprintf(buf, PAGE_SIZE, "%4.4x%4.4x%2.2x\n",
+ 				minfo->mipi_manufacturer_id, minfo->model_id,
+-				minfo->revision_number_major) + 1;
++				minfo->revision_number) + 1;
+ 	else
+ 		return snprintf(buf, PAGE_SIZE, "%2.2x%4.4x%2.2x\n",
+ 				minfo->smia_manufacturer_id, minfo->model_id,
+-				minfo->revision_number_major) + 1;
++				minfo->revision_number) + 1;
+ }
+ 
+ static DEVICE_ATTR(ident, S_IRUGO, ccs_sysfs_ident_read, NULL);
+@@ -2445,6 +2445,7 @@ static int ccs_identify_module(struct ccs_sensor *sensor)
+ 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
+ 	struct ccs_module_info *minfo = &sensor->minfo;
+ 	unsigned int i;
++	u32 rev;
+ 	int rval = 0;
+ 
+ 	/* Module info */
+@@ -2460,11 +2461,13 @@ static int ccs_identify_module(struct ccs_sensor *sensor)
+ 	if (!rval)
+ 		rval = ccs_read_addr_8only(sensor,
+ 					   CCS_R_MODULE_REVISION_NUMBER_MAJOR,
+-					   &minfo->revision_number_major);
+-	if (!rval)
++					   &rev);
++	if (!rval) {
+ 		rval = ccs_read_addr_8only(sensor,
+ 					   CCS_R_MODULE_REVISION_NUMBER_MINOR,
+-					   &minfo->revision_number_minor);
++					   &minfo->revision_number);
++		minfo->revision_number |= rev << 8;
++	}
+ 	if (!rval)
+ 		rval = ccs_read_addr_8only(sensor, CCS_R_MODULE_DATE_YEAR,
+ 					   &minfo->module_year);
+@@ -2519,9 +2522,9 @@ static int ccs_identify_module(struct ccs_sensor *sensor)
+ 			minfo->smia_manufacturer_id, minfo->model_id);
+ 
+ 	dev_dbg(&client->dev,
+-		"module revision 0x%2.2x-0x%2.2x date %2.2d-%2.2d-%2.2d\n",
+-		minfo->revision_number_major, minfo->revision_number_minor,
+-		minfo->module_year, minfo->module_month, minfo->module_day);
++		"module revision 0x%4.4x date %2.2d-%2.2d-%2.2d\n",
++		minfo->revision_number, minfo->module_year, minfo->module_month,
++		minfo->module_day);
+ 
+ 	if (minfo->sensor_mipi_manufacturer_id)
+ 		dev_dbg(&client->dev, "MIPI CCS sensor 0x%4.4x-0x%4.4x\n",
+@@ -2559,7 +2562,7 @@ static int ccs_identify_module(struct ccs_sensor *sensor)
+ 		minfo->smia_manufacturer_id =
+ 			minfo->sensor_smia_manufacturer_id;
+ 		minfo->model_id = minfo->sensor_model_id;
+-		minfo->revision_number_major = minfo->sensor_revision_number;
++		minfo->revision_number = minfo->sensor_revision_number;
+ 	}
+ 
+ 	for (i = 0; i < ARRAY_SIZE(ccs_module_idents); i++) {
+@@ -2576,11 +2579,11 @@ static int ccs_identify_module(struct ccs_sensor *sensor)
+ 		if (ccs_module_idents[i].flags
+ 		    & CCS_MODULE_IDENT_FLAG_REV_LE) {
+ 			if (ccs_module_idents[i].revision_number_major
+-			    < minfo->revision_number_major)
++			    < (minfo->revision_number >> 8))
+ 				continue;
+ 		} else {
+ 			if (ccs_module_idents[i].revision_number_major
+-			    != minfo->revision_number_major)
++			    != (minfo->revision_number >> 8))
+ 				continue;
+ 		}
+ 
+diff --git a/drivers/media/i2c/ccs/ccs-quirk.c b/drivers/media/i2c/ccs/ccs-quirk.c
+index facec28f8447..07c5733b4244 100644
+--- a/drivers/media/i2c/ccs/ccs-quirk.c
++++ b/drivers/media/i2c/ccs/ccs-quirk.c
+@@ -35,7 +35,7 @@ static int ccs_write_addr_8s(struct ccs_sensor *sensor,
+ 
+ static int jt8ew9_limits(struct ccs_sensor *sensor)
  {
- 	struct ccs_hwconfig *hwcfg = &sensor->hwcfg;
--	struct v4l2_fwnode_endpoint bus_cfg = { .bus_type = 0 };
-+	struct v4l2_fwnode_endpoint bus_cfg = { .bus_type = V4L2_MBUS_UNKNOWN };
- 	struct fwnode_handle *ep;
- 	struct fwnode_handle *fwnode = dev_fwnode(dev);
- 	u32 rotation;
-@@ -2864,13 +2864,11 @@ static int ccs_get_hwconfig(struct ccs_sensor *sensor, struct device *dev)
- 	if (!ep)
- 		return -ENODEV;
+-	if (sensor->minfo.revision_number_major < 0x03)
++	if (sensor->minfo.revision_number < 0x0300)
+ 		sensor->frame_skip = 1;
  
--	bus_cfg.bus_type = V4L2_MBUS_CSI2_DPHY;
-+	/*
-+	 * Note that we do need to rely on detecting the bus type between CSI-2
-+	 * D-PHY and CCP2 as the old bindings did not require it.
-+	 */
- 	rval = v4l2_fwnode_endpoint_alloc_parse(ep, &bus_cfg);
--	if (rval == -ENXIO) {
--		bus_cfg = (struct v4l2_fwnode_endpoint)
--			{ .bus_type = V4L2_MBUS_CCP2 };
--		rval = v4l2_fwnode_endpoint_alloc_parse(ep, &bus_cfg);
--	}
- 	if (rval)
- 		goto out_err;
+ 	/* Below 24 gain doesn't have effect at all, */
+diff --git a/drivers/media/i2c/ccs/ccs.h b/drivers/media/i2c/ccs/ccs.h
+index 2d1e8339f663..ad2ff5a74424 100644
+--- a/drivers/media/i2c/ccs/ccs.h
++++ b/drivers/media/i2c/ccs/ccs.h
+@@ -107,8 +107,7 @@ struct ccs_module_info {
+ 	u32 smia_manufacturer_id;
+ 	u32 mipi_manufacturer_id;
+ 	u32 model_id;
+-	u32 revision_number_major;
+-	u32 revision_number_minor;
++	u32 revision_number;
  
-@@ -2879,6 +2877,7 @@ static int ccs_get_hwconfig(struct ccs_sensor *sensor, struct device *dev)
- 		hwcfg->csi_signalling_mode = CCS_CSI_SIGNALING_MODE_CSI_2_DPHY;
- 		hwcfg->lanes = bus_cfg.bus.mipi_csi2.num_data_lanes;
- 		break;
-+	case V4L2_MBUS_CSI1:
- 	case V4L2_MBUS_CCP2:
- 		hwcfg->csi_signalling_mode = (bus_cfg.bus.mipi_csi1.strobe) ?
- 		SMIAPP_CSI_SIGNALLING_MODE_CCP2_DATA_STROBE :
+ 	u32 module_year;
+ 	u32 module_month;
 -- 
 2.27.0
 
