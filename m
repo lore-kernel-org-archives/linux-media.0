@@ -2,35 +2,32 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 218BBC83013
-	for <linux-media@archiver.kernel.org>; Tue,  1 Dec 2020 16:48:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE47CC64E90
+	for <linux-media@archiver.kernel.org>; Tue,  1 Dec 2020 16:48:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D265020758
+	by mail.kernel.org (Postfix) with ESMTP id 7C4DC2076C
 	for <linux-media@archiver.kernel.org>; Tue,  1 Dec 2020 16:48:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388848AbgLAQsB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Dec 2020 11:48:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39380 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388811AbgLAQsA (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Dec 2020 11:48:00 -0500
-Received: from hillosipuli.retiisi.eu (unknown [IPv6:2a01:4f9:c010:4572::e8:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9DFC0613D4
-        for <linux-media@vger.kernel.org>; Tue,  1 Dec 2020 08:46:20 -0800 (PST)
+        id S2388807AbgLAQsA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Dec 2020 11:48:00 -0500
+Received: from retiisi.eu ([95.216.213.190]:50022 "EHLO hillosipuli.retiisi.eu"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729070AbgLAQsA (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 1 Dec 2020 11:48:00 -0500
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 89DD7634C8B;
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 793A9634C89;
         Tue,  1 Dec 2020 18:45:12 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, mchehab@kernel.org
-Subject: [PATCH v2 03/30] ccs: Add CCS ACPI device ID
-Date:   Tue,  1 Dec 2020 18:42:19 +0200
-Message-Id: <20201201164246.18003-4-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 02/30] ccs: Add device compatible identifiers for telling SMIA and CCS apart
+Date:   Tue,  1 Dec 2020 18:42:18 +0200
+Message-Id: <20201201164246.18003-3-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201201164246.18003-1-sakari.ailus@linux.intel.com>
 References: <20201201164246.18003-1-sakari.ailus@linux.intel.com>
@@ -40,39 +37,53 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The CCS compliant sensors use device ID "MIPI0200". Use this id for ACPI
-device matching.
+Add device data specific to DT compatible ID to tell SMIA and CCS devices
+apart already in power-up.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/media/i2c/ccs/ccs-core.c | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 1d365da570a6..bb712d71b8c8 100644
+index 64bad5b678a3..1d365da570a6 100644
 --- a/drivers/media/i2c/ccs/ccs-core.c
 +++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -3247,6 +3247,12 @@ static const struct ccs_device smia_device = {
+@@ -58,6 +58,12 @@ static const struct ccs_module_ident ccs_module_idents[] = {
+ 	CCS_IDENT_LQ(0x10, 0x4241, -1, "imx125es", &smiapp_imx125es_quirk),
+ };
  
- static const struct ccs_device ccs_device = {};
- 
-+static const struct acpi_device_id ccs_acpi_table[] = {
-+	{ .id = "MIPI0200", .driver_data = (unsigned long)&ccs_device },
-+	{ },
++#define CCS_DEVICE_FLAG_IS_SMIA		BIT(0)
++
++struct ccs_device {
++	unsigned char flags;
 +};
-+MODULE_DEVICE_TABLE(acpi, ccs_acpi_table);
++
+ /*
+  *
+  * Dynamic Capability Identification
+@@ -3235,11 +3241,17 @@ static int ccs_remove(struct i2c_client *client)
+ 	return 0;
+ }
+ 
++static const struct ccs_device smia_device = {
++	.flags = CCS_DEVICE_FLAG_IS_SMIA,
++};
++
++static const struct ccs_device ccs_device = {};
 +
  static const struct of_device_id ccs_of_table[] = {
- 	{ .compatible = "mipi-ccs-1.1", .data = &ccs_device },
- 	{ .compatible = "mipi-ccs-1.0", .data = &ccs_device },
-@@ -3269,6 +3275,7 @@ static const struct dev_pm_ops ccs_pm_ops = {
- 
- static struct i2c_driver ccs_i2c_driver = {
- 	.driver	= {
-+		.acpi_match_table = ccs_acpi_table,
- 		.of_match_table = ccs_of_table,
- 		.name = CCS_NAME,
- 		.pm = &ccs_pm_ops,
+-	{ .compatible = "mipi-ccs-1.1" },
+-	{ .compatible = "mipi-ccs-1.0" },
+-	{ .compatible = "mipi-ccs" },
+-	{ .compatible = "nokia,smia" },
++	{ .compatible = "mipi-ccs-1.1", .data = &ccs_device },
++	{ .compatible = "mipi-ccs-1.0", .data = &ccs_device },
++	{ .compatible = "mipi-ccs", .data = &ccs_device },
++	{ .compatible = "nokia,smia", .data = &smia_device },
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(of, ccs_of_table);
 -- 
 2.27.0
 
