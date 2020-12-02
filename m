@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B620C71156
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABBC1C8300F
 	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 18:15:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DC6E6206D5
-	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 18:15:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4F2B1205F4
+	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 18:15:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387793AbgLBSPY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Dec 2020 13:15:24 -0500
-Received: from retiisi.eu ([95.216.213.190]:33494 "EHLO hillosipuli.retiisi.eu"
+        id S2389298AbgLBSP0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Dec 2020 13:15:26 -0500
+Received: from retiisi.eu ([95.216.213.190]:33496 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728928AbgLBSPY (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 2 Dec 2020 13:15:24 -0500
+        id S2389384AbgLBSP0 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 2 Dec 2020 13:15:26 -0500
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 8C960634CD5;
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id B3D2F634CD8;
         Wed,  2 Dec 2020 20:08:33 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     mchehab@kernel.org
-Subject: [PATCH 35/38] ccs: Add support for DDR OP SYS and OP PIX clocks
-Date:   Wed,  2 Dec 2020 20:06:38 +0200
-Message-Id: <20201202180641.17401-36-sakari.ailus@linux.intel.com>
+Subject: [PATCH 37/38] ccs-pll: Print pixel rates
+Date:   Wed,  2 Dec 2020 20:06:40 +0200
+Message-Id: <20201202180641.17401-38-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201202180641.17401-1-sakari.ailus@linux.intel.com>
 References: <20201202180641.17401-1-sakari.ailus@linux.intel.com>
@@ -37,42 +37,31 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Support dual data rate operational system and pixel clocks by conveying
-the flags to the PLL calculator and updating how the link rate is
-calculated.
+Print pixel rates on CSI-2 bus as well as in pixel array as the variation
+allowed in PLL capabilities makes this non-trivial to figure out
+otherwise.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/media/i2c/ccs-pll.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 137d951b551a..c41c47b40e73 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -388,7 +388,8 @@ static int ccs_pll_configure(struct ccs_sensor *sensor)
- 			 DIV_ROUND_UP(pll->op_bk.sys_clk_freq_hz,
- 				      1000000 / 256 / 256) *
- 			 (pll->flags & CCS_PLL_FLAG_LANE_SPEED_MODEL ?
--			  sensor->pll.csi2.lanes : 1));
-+			  sensor->pll.csi2.lanes : 1) <<
-+			 (pll->flags & CCS_PLL_FLAG_OP_SYS_DDR ? 1 : 0));
- 	if (rval < 0 || sensor->pll.flags & CCS_PLL_FLAG_NO_OP_CLOCKS)
- 		return rval;
- 
-@@ -3274,6 +3275,12 @@ static int ccs_probe(struct i2c_client *client)
- 		} else {
- 			sensor->pll.flags |= CCS_PLL_FLAG_DUAL_PLL;
+diff --git a/drivers/media/i2c/ccs-pll.c b/drivers/media/i2c/ccs-pll.c
+index 5a0162347777..eb7b6f01f623 100644
+--- a/drivers/media/i2c/ccs-pll.c
++++ b/drivers/media/i2c/ccs-pll.c
+@@ -119,6 +119,11 @@ static void print_pll(struct device *dev, struct ccs_pll *pll)
  		}
-+		if (CCS_LIM(sensor, CLOCK_CALCULATION) &
-+		    CCS_CLOCK_CALCULATION_DUAL_PLL_OP_SYS_DDR)
-+			sensor->pll.flags |= CCS_PLL_FLAG_OP_SYS_DDR;
-+		if (CCS_LIM(sensor, CLOCK_CALCULATION) &
-+		    CCS_CLOCK_CALCULATION_DUAL_PLL_OP_PIX_DDR)
-+			sensor->pll.flags |= CCS_PLL_FLAG_OP_PIX_DDR;
  	}
- 	sensor->pll.op_bits_per_lane = CCS_LIM(sensor, OP_BITS_PER_LANE);
- 	sensor->pll.ext_clk_freq_hz = sensor->hwcfg.ext_clk;
+ 
++	dev_dbg(dev, "pixel rate in pixel array:\t%u\n",
++		pll->pixel_rate_pixel_array);
++	dev_dbg(dev, "pixel rate on CSI-2 bus:\t%u\n",
++		pll->pixel_rate_csi);
++
+ 	dev_dbg(dev, "flags%s%s%s%s%s%s%s%s%s\n",
+ 		pll->flags & PLL_FL(LANE_SPEED_MODEL) ? " lane-speed" : "",
+ 		pll->flags & PLL_FL(LINK_DECOUPLED) ? " link-decoupled" : "",
 -- 
 2.27.0
 
