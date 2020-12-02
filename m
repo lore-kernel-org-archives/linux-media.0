@@ -2,80 +2,196 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4163C71156
-	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 17:20:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9349C64E7C
+	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 17:39:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 72286221FB
-	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 17:20:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 718F1208FE
+	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 17:39:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730808AbgLBRUq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Dec 2020 12:20:46 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:39025 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S2387524AbgLBRUq (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Dec 2020 12:20:46 -0500
-Received: (qmail 1060128 invoked by uid 1000); 2 Dec 2020 12:20:04 -0500
-Date:   Wed, 2 Dec 2020 12:20:04 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     syzbot <syzbot+44e64397bd81d5e84cba@syzkaller.appspotmail.com>,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
-Subject: [PATCH v2] media: gspca: Fix memory leak in probe
-Message-ID: <20201202172004.GB1057740@rowland.harvard.edu>
-References: <20201123215345.GA721643@rowland.harvard.edu>
- <0000000000004b629f05b4cd7124@google.com>
- <20201123222428.GB721643@rowland.harvard.edu>
- <c2cf1a80-ec47-69ac-c3e2-1b0e32447ef2@xs4all.nl>
- <20201124160026.GA749809@rowland.harvard.edu>
- <eb89a572-3022-39a9-989c-f2f80cc69edf@xs4all.nl>
+        id S1726524AbgLBRit (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Dec 2020 12:38:49 -0500
+Received: from mailoutvs33.siol.net ([185.57.226.224]:38953 "EHLO
+        mail.siol.net" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726061AbgLBRit (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Dec 2020 12:38:49 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.siol.net (Postfix) with ESMTP id E2BA4520BC0;
+        Wed,  2 Dec 2020 18:38:06 +0100 (CET)
+X-Virus-Scanned: amavisd-new at psrvmta09.zcs-production.pri
+Received: from mail.siol.net ([127.0.0.1])
+        by localhost (psrvmta09.zcs-production.pri [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 9W8g8N5VEJ-i; Wed,  2 Dec 2020 18:38:06 +0100 (CET)
+Received: from mail.siol.net (localhost [127.0.0.1])
+        by mail.siol.net (Postfix) with ESMTPS id 6609D5208E4;
+        Wed,  2 Dec 2020 18:38:06 +0100 (CET)
+Received: from kista.localdomain (cpe1-5-97.cable.triera.net [213.161.5.97])
+        (Authenticated sender: 031275009)
+        by mail.siol.net (Postfix) with ESMTPSA id D8F2C520BC0;
+        Wed,  2 Dec 2020 18:38:05 +0100 (CET)
+From:   Jernej Skrabec <jernej.skrabec@siol.net>
+To:     mripard@kernel.org, hverkuil@xs4all.nl
+Cc:     paul.kocialkowski@bootlin.com, mchehab@kernel.org, wens@csie.org,
+        jernej.skrabec@siol.net, linux-media@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] media: cedrus: Make VP8 codec as capability
+Date:   Wed,  2 Dec 2020 18:44:13 +0100
+Message-Id: <20201202174413.303658-1-jernej.skrabec@siol.net>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <eb89a572-3022-39a9-989c-f2f80cc69edf@xs4all.nl>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The gspca driver leaks memory when a probe fails.  gspca_dev_probe2()
-calls v4l2_device_register(), which takes a reference to the
-underlying device node (in this case, a USB interface).  But the
-failure pathway neglects to call v4l2_device_unregister(), the routine
-responsible for dropping this reference.  Consequently the memory for
-the USB interface and its device never gets released.
+Commit 31d9b9ef8564 ("media: cedrus: Register all codecs as capability")
+makes separate capability flags for each codec. However, VP8 codec was
+merged at the same time as mentioned patch, so there is no capability
+flag for it.
 
-This patch adds the missing function call.
+This patch adds capability flag for VP8 and enables it for all variants
+except for V3s.
 
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Reported-and-tested-by: syzbot+44e64397bd81d5e84cba@syzkaller.appspotmail.com
-CC: <stable@vger.kernel.org>
-
+Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
 ---
+Note: this should be merged after both of these PRs:
+https://patchwork.linuxtv.org/project/linux-media/patch/8cf5021f-559c-5ea=
+8-f1f0-250c00bc119d@xs4all.nl/
+https://patchwork.linuxtv.org/project/linux-media/patch/5dbd468d-1d10-e0c=
+8-43f0-ebe8f17abef8@xs4all.nl/
 
-v2: Replace v4l2_device_disconnect() call with v4l2_device_unregister().
+ drivers/staging/media/sunxi/cedrus/cedrus.c   | 27 ++++++++++++-------
+ drivers/staging/media/sunxi/cedrus/cedrus.h   |  1 +
+ .../staging/media/sunxi/cedrus/cedrus_video.c |  1 +
+ 3 files changed, 20 insertions(+), 9 deletions(-)
 
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/stagin=
+g/media/sunxi/cedrus/cedrus.c
+index dce7cbc95872..c0f226d75feb 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
+@@ -495,26 +495,30 @@ static int cedrus_remove(struct platform_device *pd=
+ev)
+=20
+ static const struct cedrus_variant sun4i_a10_cedrus_variant =3D {
+ 	.capabilities	=3D CEDRUS_CAPABILITY_MPEG2_DEC |
+-			  CEDRUS_CAPABILITY_H264_DEC,
++			  CEDRUS_CAPABILITY_H264_DEC |
++			  CEDRUS_CAPABILITY_VP8_DEC,
+ 	.mod_rate	=3D 320000000,
+ };
+=20
+ static const struct cedrus_variant sun5i_a13_cedrus_variant =3D {
+ 	.capabilities	=3D CEDRUS_CAPABILITY_MPEG2_DEC |
+-			  CEDRUS_CAPABILITY_H264_DEC,
++			  CEDRUS_CAPABILITY_H264_DEC |
++			  CEDRUS_CAPABILITY_VP8_DEC,
+ 	.mod_rate	=3D 320000000,
+ };
+=20
+ static const struct cedrus_variant sun7i_a20_cedrus_variant =3D {
+ 	.capabilities	=3D CEDRUS_CAPABILITY_MPEG2_DEC |
+-			  CEDRUS_CAPABILITY_H264_DEC,
++			  CEDRUS_CAPABILITY_H264_DEC |
++			  CEDRUS_CAPABILITY_VP8_DEC,
+ 	.mod_rate	=3D 320000000,
+ };
+=20
+ static const struct cedrus_variant sun8i_a33_cedrus_variant =3D {
+ 	.capabilities	=3D CEDRUS_CAPABILITY_UNTILED |
+ 			  CEDRUS_CAPABILITY_MPEG2_DEC |
+-			  CEDRUS_CAPABILITY_H264_DEC,
++			  CEDRUS_CAPABILITY_H264_DEC |
++			  CEDRUS_CAPABILITY_VP8_DEC,
+ 	.mod_rate	=3D 320000000,
+ };
+=20
+@@ -522,7 +526,8 @@ static const struct cedrus_variant sun8i_h3_cedrus_va=
+riant =3D {
+ 	.capabilities	=3D CEDRUS_CAPABILITY_UNTILED |
+ 			  CEDRUS_CAPABILITY_MPEG2_DEC |
+ 			  CEDRUS_CAPABILITY_H264_DEC |
+-			  CEDRUS_CAPABILITY_H265_DEC,
++			  CEDRUS_CAPABILITY_H265_DEC |
++			  CEDRUS_CAPABILITY_VP8_DEC,
+ 	.mod_rate	=3D 402000000,
+ };
+=20
+@@ -535,7 +540,8 @@ static const struct cedrus_variant sun8i_v3s_cedrus_v=
+ariant =3D {
+ static const struct cedrus_variant sun8i_r40_cedrus_variant =3D {
+ 	.capabilities	=3D CEDRUS_CAPABILITY_UNTILED |
+ 			  CEDRUS_CAPABILITY_MPEG2_DEC |
+-			  CEDRUS_CAPABILITY_H264_DEC,
++			  CEDRUS_CAPABILITY_H264_DEC |
++			  CEDRUS_CAPABILITY_VP8_DEC,
+ 	.mod_rate	=3D 297000000,
+ };
+=20
+@@ -543,7 +549,8 @@ static const struct cedrus_variant sun50i_a64_cedrus_=
+variant =3D {
+ 	.capabilities	=3D CEDRUS_CAPABILITY_UNTILED |
+ 			  CEDRUS_CAPABILITY_MPEG2_DEC |
+ 			  CEDRUS_CAPABILITY_H264_DEC |
+-			  CEDRUS_CAPABILITY_H265_DEC,
++			  CEDRUS_CAPABILITY_H265_DEC |
++			  CEDRUS_CAPABILITY_VP8_DEC,
+ 	.mod_rate	=3D 402000000,
+ };
+=20
+@@ -551,7 +558,8 @@ static const struct cedrus_variant sun50i_h5_cedrus_v=
+ariant =3D {
+ 	.capabilities	=3D CEDRUS_CAPABILITY_UNTILED |
+ 			  CEDRUS_CAPABILITY_MPEG2_DEC |
+ 			  CEDRUS_CAPABILITY_H264_DEC |
+-			  CEDRUS_CAPABILITY_H265_DEC,
++			  CEDRUS_CAPABILITY_H265_DEC |
++			  CEDRUS_CAPABILITY_VP8_DEC,
+ 	.mod_rate	=3D 402000000,
+ };
+=20
+@@ -559,7 +567,8 @@ static const struct cedrus_variant sun50i_h6_cedrus_v=
+ariant =3D {
+ 	.capabilities	=3D CEDRUS_CAPABILITY_UNTILED |
+ 			  CEDRUS_CAPABILITY_MPEG2_DEC |
+ 			  CEDRUS_CAPABILITY_H264_DEC |
+-			  CEDRUS_CAPABILITY_H265_DEC,
++			  CEDRUS_CAPABILITY_H265_DEC |
++			  CEDRUS_CAPABILITY_VP8_DEC,
+ 	.quirks		=3D CEDRUS_QUIRK_NO_DMA_OFFSET,
+ 	.mod_rate	=3D 600000000,
+ };
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.h b/drivers/stagin=
+g/media/sunxi/cedrus/cedrus.h
+index 0bf1cbddac9c..e61c41853ba2 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus.h
++++ b/drivers/staging/media/sunxi/cedrus/cedrus.h
+@@ -31,6 +31,7 @@
+ #define CEDRUS_CAPABILITY_H265_DEC	BIT(1)
+ #define CEDRUS_CAPABILITY_H264_DEC	BIT(2)
+ #define CEDRUS_CAPABILITY_MPEG2_DEC	BIT(3)
++#define CEDRUS_CAPABILITY_VP8_DEC	BIT(4)
+=20
+ #define CEDRUS_QUIRK_NO_DMA_OFFSET	BIT(0)
+=20
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_video.c b/drivers/=
+staging/media/sunxi/cedrus/cedrus_video.c
+index 8a01e6b9bebb..b62eb8e84057 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_video.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+@@ -53,6 +53,7 @@ static struct cedrus_format cedrus_formats[] =3D {
+ 	{
+ 		.pixelformat	=3D V4L2_PIX_FMT_VP8_FRAME,
+ 		.directions	=3D CEDRUS_DECODE_SRC,
++		.capabilities	=3D CEDRUS_CAPABILITY_VP8_DEC,
+ 	},
+ 	{
+ 		.pixelformat	=3D V4L2_PIX_FMT_SUNXI_TILED_NV12,
+--=20
+2.29.2
 
-[as1949b]
-
-
- drivers/media/usb/gspca/gspca.c |    1 +
- 1 file changed, 1 insertion(+)
-
-Index: usb-devel/drivers/media/usb/gspca/gspca.c
-===================================================================
---- usb-devel.orig/drivers/media/usb/gspca/gspca.c
-+++ usb-devel/drivers/media/usb/gspca/gspca.c
-@@ -1575,6 +1575,7 @@ out:
- 		input_unregister_device(gspca_dev->input_dev);
- #endif
- 	v4l2_ctrl_handler_free(gspca_dev->vdev.ctrl_handler);
-+	v4l2_device_unregister(&gspca_dev->v4l2_dev);
- 	kfree(gspca_dev->usb_buf);
- 	kfree(gspca_dev);
- 	return ret;
