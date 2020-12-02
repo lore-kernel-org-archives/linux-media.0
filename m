@@ -2,158 +2,83 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96034C83013
-	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 10:29:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB7E7C71155
+	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 10:40:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 337DB2086A
-	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 10:29:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4E60922202
+	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 10:40:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388414AbgLBK2x (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Dec 2020 05:28:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
+        id S1729492AbgLBKkK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Dec 2020 05:40:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388076AbgLBK2x (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Dec 2020 05:28:53 -0500
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA88C0613D6
-        for <linux-media@vger.kernel.org>; Wed,  2 Dec 2020 02:28:07 -0800 (PST)
-Received: by mail-ed1-x543.google.com with SMTP id u19so3158642edx.2
-        for <linux-media@vger.kernel.org>; Wed, 02 Dec 2020 02:28:06 -0800 (PST)
+        with ESMTP id S1725971AbgLBKkJ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Dec 2020 05:40:09 -0500
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3140CC0613D6
+        for <linux-media@vger.kernel.org>; Wed,  2 Dec 2020 02:39:29 -0800 (PST)
+Received: by mail-lf1-x143.google.com with SMTP id z21so3709488lfe.12
+        for <linux-media@vger.kernel.org>; Wed, 02 Dec 2020 02:39:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=pOIFH2c7aUrVRRVYvlUc1syo0njMuyaej3dxXHicsn4=;
-        b=ty5mGyimYDzNAdXwX4p0YYa/HTJwKSg39bxZcVdfLzO5uBXF7g9TAzd3ltuq7gSK57
-         K6XqMTxW3lF+x5bN6nQzDY/rURK4j2m1C/B/9uYhnIcTDWTw2UZIREILi5FF70l4jRSf
-         RVLsuwHSioHJJpwEBEeksk54zPu+K9N7FfpKw7FSizTGbP+ok45jdcyZQxk5FmT5Iwcv
-         tT7JoKoCuOBEEHlkPo+GPSc1oVJSIBItWQDNyJho0YrUzsmWJi8qdQ/NuvUFrB0U8wsI
-         Fos44l+j/d5kJR7oQaYPodtpXkEn1ze/wWbL73hIK4hv/ZiRZgcqaSd0nhuUN6i5E7UY
-         khxQ==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PRdEsQP3FzAy9QvWmmQsl0Ey32GurWMdzYHxnZ9TFvk=;
+        b=AE6bLpRI5aQAWj0YhHisxqSI6vGjjEgkrSAAF5QzphcmDcS9rvPA01Q2+Wo55n5RrD
+         wLPgGQlRRZpvuNLGDbJFi3yefsae2N3gUaqvS/FtW/yuUkVhMREAE9eT46ftQafqFvea
+         iLyKCTAJKq0e7BueDynAikZSuND4/e2M+VhNgeG4LjJ9GdJQerzSNV4tVrfCZTo9hAuz
+         s9et7lASDzz3i1kiWApXOtrbRPTQO10cRygwHqBK0x/W0FeE15D/2KRPwMhOn66Sylu9
+         tz5h1hIsKS7nmKcF50hzl2nU0dXBwifQxfqjhipsS2vPM2jIMLispb3ZKpYKoN1M7K/T
+         fPzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=pOIFH2c7aUrVRRVYvlUc1syo0njMuyaej3dxXHicsn4=;
-        b=QQ32Lz5xVO1coJ0PVQ6KgR6VzBc0J7DAJZiGjD46mNp+JD7nyis0NxHE6o8yMe2i/t
-         W8ja30JZrwCr0pofE8RC/PO57aq4XAfneJnOYOCMS9qPP7vDdF9x+K2g5ZzApl7Iugkk
-         4ABxjjeW6dgcV0Q48M93vtLDiF7Q/2a9ATz3C0cfRNy0XIxbmAqqg1LyWzSnZe2qLozU
-         4nvwiCJfWEc9tZsyHT4qItdMA2tJZKBOY/FcNW8V0g16qnyCjktqOt9kLKnFxWx6eKC8
-         TyUBflolTnu8DP8LB1jf5synAzXP+TqWJRNBWY9OjeCKhfsDuo63VW2JbmCo4P7Zj58e
-         uPig==
-X-Gm-Message-State: AOAM532X8WZWn/lqMMCM8GZXcSMK/kVd3ELsk0WUQUoBogemM5ZlVTGN
-        LmrSlRtltLZ1vH+YAmehlIj2zeqLzu8Lrf9T
-X-Google-Smtp-Source: ABdhPJzzpjIL5eskPImxD4ZAPuWyPJAyD6Vtl15araHbU4xgAdWPTaamVhoHl/cKP4dVI8Fl6aes+w==
-X-Received: by 2002:a50:d8c8:: with SMTP id y8mr1878914edj.82.1606904885590;
-        Wed, 02 Dec 2020 02:28:05 -0800 (PST)
-Received: from [192.168.0.3] (hst-221-33.medicom.bg. [84.238.221.33])
-        by smtp.googlemail.com with ESMTPSA id n17sm779483ejh.49.2020.12.02.02.28.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Dec 2020 02:28:05 -0800 (PST)
-Subject: Re: [PATCH] media: venus: preserve DRC state across seeks
-To:     Alexandre Courbot <acourbot@chromium.org>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-References: <20201202053424.3286774-1-acourbot@chromium.org>
- <CAPBb6MXt4uL+VgxQs6ynf5LKae657QXmrjw6XYnL0vg_zuuDsw@mail.gmail.com>
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Message-ID: <89086086-c0d9-62b0-2819-a537fe92782f@linaro.org>
-Date:   Wed, 2 Dec 2020 12:28:03 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PRdEsQP3FzAy9QvWmmQsl0Ey32GurWMdzYHxnZ9TFvk=;
+        b=XMo7qd8DSw158D6KH5yBkuHkF89NwTZXlaNkHPZJHiPXkW9iRXAl3psIGufQGNZp+9
+         upNxH+19JpCgs8EomUqXXS4xRgkDDWF2KuV8CUUplakcWqieiRF3e6EHW+MFB3+nLizA
+         FVQA3jPNenDkd5ZrpXn1yqqajmttD5IGvFIzZVkZfytzi9p1KWyw/xckfy/9oJXOWaRI
+         EBuRECEGGlaGBTogeTgSldkt5t4OzhP8/PKYD7ZrxdzGms7IokPz7AfyYdqjdy8PaKdF
+         dHrPgLDOgz3QuZxdqv4B3AhzcwC87712XmznbI64lUAoNQ73/xKQAiqVvKNl4dvp9hbT
+         ym+g==
+X-Gm-Message-State: AOAM533EhUB2leeDDyFzEdjBi9t5mEfwO8afu6jWdZ1HBon09p+s1gZp
+        40I1Brb/Busa94YRdEXvENVN1kDYpflVUvZ91cWxHVyfLko=
+X-Google-Smtp-Source: ABdhPJw//PZdHNZ+6ZxvbfnV5dn4T5NjtBgfDeECu+Uky5LDTeP0g5nrczRk2DOpLj4Rk3xS6TkZkyzxVksNE3G8rn8=
+X-Received: by 2002:a19:8686:: with SMTP id i128mr976020lfd.333.1606905567648;
+ Wed, 02 Dec 2020 02:39:27 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAPBb6MXt4uL+VgxQs6ynf5LKae657QXmrjw6XYnL0vg_zuuDsw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20201124112822.29414-1-festevam@gmail.com> <f3820b3d-51c8-e58c-e11c-e8eb105636aa@xs4all.nl>
+In-Reply-To: <f3820b3d-51c8-e58c-e11c-e8eb105636aa@xs4all.nl>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Wed, 2 Dec 2020 07:39:15 -0300
+Message-ID: <CAOMZO5DMPNwoUBxBPxnBQZRJcQit6HC=BkXUDnBAAf+m-MrCOg@mail.gmail.com>
+Subject: Re: [PATCH] media: coda: Convert the driver to DT-only
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Hi Hans,
 
-On 12/2/20 12:24 PM, Alexandre Courbot wrote:
-> On Wed, Dec 2, 2020 at 2:34 PM Alexandre Courbot <acourbot@chromium.org> wrote:
->>
->> DRC events can happen virtually at anytime, including when we are
->> starting a seek. Should this happen, we must make sure to return to the
->> DRC state, otherwise the firmware will expect buffers of the new
->> resolution whereas userspace will still work with the old one.
->>
->> Returning to the DRC state upon resume for seeking makes sure that the
->> client will get the DRC event and will reallocate the buffers to fit the
->> firmware's expectations.
-> 
-> Oops, please ignore as this seems to depend on another patch... I will
-> repost once I can figure out the correct dependency chain, unless
-> Stanimir can find a better way to handle DRC during seek and flush.
+On Wed, Dec 2, 2020 at 5:50 AM Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
 
-This patch depends on [1] series which is still under review.
+> >       struct coda_platform_data *pdata = pdev->dev.platform_data;
+>
+> So this can be dropped as well (and all related code), right?
 
-[1] https://www.spinics.net/lists/linux-media/msg177801.html
+Yes, you are right.
 
-> 
->>
->> Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
->> ---
->>  drivers/media/platform/qcom/venus/vdec.c | 11 +++++++++--
->>  1 file changed, 9 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
->> index 8488411204c3..e3d0df7fd765 100644
->> --- a/drivers/media/platform/qcom/venus/vdec.c
->> +++ b/drivers/media/platform/qcom/venus/vdec.c
->> @@ -972,7 +972,10 @@ static int vdec_start_output(struct venus_inst *inst)
->>
->>         if (inst->codec_state == VENUS_DEC_STATE_SEEK) {
->>                 ret = venus_helper_process_initial_out_bufs(inst);
->> -               inst->codec_state = VENUS_DEC_STATE_DECODING;
->> +               if (inst->next_buf_last)
->> +                       inst->codec_state = VENUS_DEC_STATE_DRC;
->> +               else
->> +                       inst->codec_state = VENUS_DEC_STATE_DECODING;
->>                 goto done;
->>         }
->>
->> @@ -1077,8 +1080,10 @@ static int vdec_stop_capture(struct venus_inst *inst)
->>                 ret = hfi_session_flush(inst, HFI_FLUSH_ALL, true);
->>                 fallthrough;
->>         case VENUS_DEC_STATE_DRAIN:
->> -               vdec_cancel_dst_buffers(inst);
->>                 inst->codec_state = VENUS_DEC_STATE_STOPPED;
->> +               fallthrough;
->> +       case VENUS_DEC_STATE_SEEK:
->> +               vdec_cancel_dst_buffers(inst);
->>                 break;
->>         case VENUS_DEC_STATE_DRC:
->>                 WARN_ON(1);
->> @@ -1102,6 +1107,7 @@ static int vdec_stop_output(struct venus_inst *inst)
->>         case VENUS_DEC_STATE_DECODING:
->>         case VENUS_DEC_STATE_DRAIN:
->>         case VENUS_DEC_STATE_STOPPED:
->> +       case VENUS_DEC_STATE_DRC:
->>                 ret = hfi_session_flush(inst, HFI_FLUSH_ALL, true);
->>                 inst->codec_state = VENUS_DEC_STATE_SEEK;
->>                 break;
->> @@ -1371,6 +1377,7 @@ static void vdec_event_change(struct venus_inst *inst,
->>                         dev_dbg(dev, VDBGH "flush output error %d\n", ret);
->>         }
->>
->> +       inst->next_buf_last = true;
->>         inst->reconfig = true;
->>         v4l2_event_queue_fh(&inst->fh, &ev);
->>         wake_up(&inst->reconf_wait);
->> --
->> 2.29.2.454.gaff20da3a2-goog
->>
+> And you can also remove include/linux/platform_data/media/coda.h.
 
--- 
-regards,
-Stan
+Yes, thanks for the review. I have sent v2 with your suggestions.
+
+Cheers
