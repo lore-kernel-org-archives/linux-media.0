@@ -2,66 +2,175 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECEACC64E7B
-	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 15:43:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ACCADC83016
+	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 15:47:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9340621741
-	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 15:43:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6D96B21D42
+	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 15:47:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728295AbgLBPnF convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Dec 2020 10:43:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53982 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727677AbgLBPnE (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Dec 2020 10:43:04 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67354C0613CF
-        for <linux-media@vger.kernel.org>; Wed,  2 Dec 2020 07:42:24 -0800 (PST)
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1kkUGq-00024S-7A; Wed, 02 Dec 2020 16:42:20 +0100
-Received: from pza by lupine with local (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1kkUGp-0001Ms-MN; Wed, 02 Dec 2020 16:42:19 +0100
-Message-ID: <35963d7fdedfe05b569ac0faa88699fd39b1a876.camel@pengutronix.de>
-Subject: Re: [PATCH v4] media: coda: Convert the driver to DT-only
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        hverkuil-cisco@xs4all.nl, andy.shevchenko@gmail.com,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 02 Dec 2020 16:42:19 +0100
-In-Reply-To: <20201202141326.32645-1-festevam@gmail.com>
-References: <20201202141326.32645-1-festevam@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.30.5-1.1 
+        id S2388851AbgLBPqw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Dec 2020 10:46:52 -0500
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:44481 "EHLO
+        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387985AbgLBPqv (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 2 Dec 2020 10:46:51 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 3DE115802E3;
+        Wed,  2 Dec 2020 10:46:05 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Wed, 02 Dec 2020 10:46:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=jRoUn1Nixmx8fV7/eiqUN6Tsxsg
+        78St+eJ4PgOBSguI=; b=TQt9wzTEpAomumtEVyYfhBOFAMhYofunpmo1MYB5ub2
+        mygYpWsC8enY2HvcSTrkSd4kho0hsgZbPDmWPkwBNTji/y5p7pGWgXwXoWLCQql6
+        cgS7v/2fedN8fj99I/JEF0BuO4XrMRKCPl86BVk3aPzAzT/CWhTKFK0ZXnWX2jQX
+        8CDdFM7OVTyvvwnS22/bH67qUYbh4efacDPeGvP+5QC6ZLCJINM9WwLLDzYg3zyQ
+        rr9FwWd3Uk0UT3yqzOq1u8CQxFA/PhonDE7b6HM/BAuOPjQkBAhDQzQYEQEF/Fiz
+        vlqPsFvOipJbglqukQLaGUndk9cqsglBAk9G8ipAy6g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=jRoUn1
+        Nixmx8fV7/eiqUN6Tsxsg78St+eJ4PgOBSguI=; b=S7b+9A+BK+bXFoLMxHcUCK
+        2ml/FqmbCjgSCQ9lUP16UtpeBuFflkv0aVlTfRQANUmf5sQmH9FrwnH2/XYvQGYl
+        j7j/+NwdtpOTU3FjR5rnRSuFTcQxVdrxZ0GtiafXh0XkRK2iLRtN5KgW3fe4fUGL
+        v6ZFrkkQ1aZe7beWfpnxnEb4ir4lvXvq4K9mwkInDtOw75DQ7tgqJ4t4Ly5GBNYP
+        SxEJt9WF/MysoAs+Gtk41hOvThUw82c4zhmTpShEQgqRzwKgEY+VJ5nvCz/Oxote
+        srw0OhNwnN704qXyqf51YnYxMqB2R2ki/77k/+qP/P+FQdlCH9a9GgfVkppWn4PQ
+        ==
+X-ME-Sender: <xms:urbHX7mweWR1qljBr_MExWUkdMRV0tmFycoSy-4iG7shpRNcYcPjkA>
+    <xme:urbHX-2QGL3MuSS6ysrC0KGAkvZclRLfNn08313yojQTwbmq2USutfe5ngPBYww0n
+    6zPMrrDN7J34lD9fqs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrudeigedgkedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
+    gedunecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:urbHXxr7hq23eyK4HjadMXO7LlCY7uZVKhxqtnSUl-C0vBVuO3yI9Q>
+    <xmx:urbHXzmy7XQptpb2dVlgOp4l5d4xu9j9yP6iWT_47cXcDlUhVw4GJw>
+    <xmx:urbHX53cI05xHEVa_C_yRehMj6z3E2UgIWfHhH589jZvxQOIrflKaw>
+    <xmx:vbbHX482dsQIV9UiOVhgqRglb05zjpF5PLwLRAdB2fu23SuK7Wk7Ow>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 69B94240059;
+        Wed,  2 Dec 2020 10:46:02 -0500 (EST)
+Date:   Wed, 2 Dec 2020 16:46:01 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-sunxi@googlegroups.com, Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        kevin.lhopital@hotmail.com
+Subject: Re: [PATCH v2 09/19] ARM: dts: sunxi: h3/h5: Add CSI controller port
+ for parallel input
+Message-ID: <20201202154601.ws7wrx6msrp3u4pd@gilmour>
+References: <20201128142839.517949-1-paul.kocialkowski@bootlin.com>
+ <20201128142839.517949-10-paul.kocialkowski@bootlin.com>
+ <20201201121405.at4pwxon56ecwrx6@gilmour>
+ <X8escb4SZXEpiR0n@aptenodytes>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="btrg2f6ei6hzo3fh"
+Content-Disposition: inline
+In-Reply-To: <X8escb4SZXEpiR0n@aptenodytes>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, 2020-12-02 at 11:13 -0300, Fabio Estevam wrote:
-> Since 5.10-rc1 i.MX is a devicetree-only platform, so simplify the code
-> by removing the unused non-DT support.
-> 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
-Thank you, this looks fine to me now.
+--btrg2f6ei6hzo3fh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+On Wed, Dec 02, 2020 at 04:02:09PM +0100, Paul Kocialkowski wrote:
+> Hi,
+>=20
+> On Tue 01 Dec 20, 13:14, Maxime Ripard wrote:
+> > On Sat, Nov 28, 2020 at 03:28:29PM +0100, Paul Kocialkowski wrote:
+> > > Since the CSI controller binding is getting a bit more complex due
+> > > to the addition of MIPI CSI-2 bridge support, make the ports node
+> > > explicit with the parallel port.
+> > >=20
+> > > This way, it's clear that the controller only supports parallel
+> > > interface input and there's no confusion about the port number.
+> > >=20
+> > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > > ---
+> > >  arch/arm/boot/dts/sunxi-h3-h5.dtsi | 9 +++++++++
+> > >  1 file changed, 9 insertions(+)
+> > >=20
+> > > diff --git a/arch/arm/boot/dts/sunxi-h3-h5.dtsi b/arch/arm/boot/dts/s=
+unxi-h3-h5.dtsi
+> > > index 9be13378d4df..02b698cace6a 100644
+> > > --- a/arch/arm/boot/dts/sunxi-h3-h5.dtsi
+> > > +++ b/arch/arm/boot/dts/sunxi-h3-h5.dtsi
+> > > @@ -803,6 +803,15 @@ csi: camera@1cb0000 {
+> > >  			pinctrl-names =3D "default";
+> > >  			pinctrl-0 =3D <&csi_pins>;
+> > >  			status =3D "disabled";
+> > > +
+> > > +			ports {
+> > > +				#address-cells =3D <1>;
+> > > +				#size-cells =3D <0>;
+> > > +
+> > > +				csi_in_parallel: port@0 {
+> > > +					reg =3D <0>;
+> > > +				};
+> > > +			};
+> > >  		};
+> >=20
+> > This will create a DTC warning, since port@0 is the only node, and is
+> > equivalent to port
+>=20
+> I'm not seeing the warning when running dtbs_check.
 
-regards
-Philipp
+Some are silenced by the Linux build system. You can pass W=3D1 to your
+make command line enable all of them.
+
+> More generally, why is it a problem that there's only one node defined?
+>=20
+> One issue that I did see is that the port node doesn't have an endpoint
+> here, so I will remove the requirement to have an endpoint in the bindings
+> documentation to allow this kind of definition.
+
+We definitely want to have the endpoint required. If the CSI node is
+disabled, the error should be ignored by the dt-validate tool though
+
+Maxime
+
+--btrg2f6ei6hzo3fh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX8e2uQAKCRDj7w1vZxhR
+xYE3AP4u/RvuwgGW7PW013WC31Z7iECgCdFpXbQBo4FZEKym5wEAuygTLOqYLNTZ
+3TelATfMdZXOAbQq9j+JnNSVltFQLAk=
+=/zNa
+-----END PGP SIGNATURE-----
+
+--btrg2f6ei6hzo3fh--
