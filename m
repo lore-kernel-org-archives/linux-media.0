@@ -2,211 +2,71 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A587C64E8A
-	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 14:39:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E9E0C64E7C
+	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 14:44:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0F30F221FA
-	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 14:39:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CA737221FA
+	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 14:44:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387459AbgLBOiz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Dec 2020 09:38:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726071AbgLBOiy (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Dec 2020 09:38:54 -0500
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F6AC0613CF;
-        Wed,  2 Dec 2020 06:38:08 -0800 (PST)
-Received: by mail-pf1-x441.google.com with SMTP id t7so881776pfh.7;
-        Wed, 02 Dec 2020 06:38:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2ZFn9jj7ck1AeGmEuUzHYIIlYUJOzST9lxK0bajNvuY=;
-        b=cNQC3QRXG4RXBAA9H4ChKE2dtSOwnaaxBVEnhqkKUT7ycCK0dRpA38X9gid4c7Sif2
-         yQhPPBDur/QK+vH5gpBEfXLoIqrw2W8wC0lqnJcorbO4AEjNxtwsPl3TLTZ4c8poar5n
-         Yxx+/tjJSgnQvjTQb5KQo4VAjPFMgJOcAqi7Buq7rlfz5nCBKppZR5+lpHyqkuI/Wcef
-         6Za2Ck5N7j5Uz+uQBPTeM0AwrMKlSY7jB5JmhM9CUzqWQMmBG8lniwf+L15gR1WlY7vX
-         rjDC/jDq5oGsKh+EjwXY1ztViDySUbBxfqubgzobKPiv1XXALIU2yDDknSLJuGsy4nbN
-         TxPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2ZFn9jj7ck1AeGmEuUzHYIIlYUJOzST9lxK0bajNvuY=;
-        b=johpKokK4va5yeowCwmEtFbY8BtTKBQ40OIjNhcETgPxak8EqSpvdEAEep5gACAjRC
-         MUuQTkvQJ0vkRhd271YvDV8ynouWoKluat44Z/ubR1vTiq5qkch/3urD6nEMDZ9aUnfj
-         6zC2gwvwehesZODc5W4ZvHkpsPiidOVwxWINgzlLk/vP8Gk6n7TwtV1Ul/hlvqI1PZAq
-         ipQTAJWEQ+FtlCDL4mPfHhVCPP9shM20Q/V03QD6ARMfirSEmz+4tdzwL91IO66n7Rdo
-         gzXbSFSY8ps7p5cqSZhcktkHoeyNe6RA+Om9usoSVv8s/o775rSuIImnnEp42QKUYHNp
-         cJAQ==
-X-Gm-Message-State: AOAM530SAbhLrgux/9kHGIi/jna1nV8NZCaXDo7178wJFNLduymbne/s
-        HLCpsEk7E4+RR5w6PG3DvmL60DziIUp9E8OgBME=
-X-Google-Smtp-Source: ABdhPJylzVGibkJj/f5n4zO+bSXmbg48YiblB42Li+yDqb0AjyqZOKB2GSOQ9QzXc9o15FpPjMxnxr26iKt7h5fGVgQ=
-X-Received: by 2002:a62:445:0:b029:19c:162b:bbef with SMTP id
- 66-20020a6204450000b029019c162bbbefmr2940391pfe.40.1606919887806; Wed, 02 Dec
- 2020 06:38:07 -0800 (PST)
+        id S1728195AbgLBOoY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Dec 2020 09:44:24 -0500
+Received: from www.linuxtv.org ([130.149.80.248]:52138 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728030AbgLBOoY (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 2 Dec 2020 09:44:24 -0500
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1kkTM6-00272k-Ba; Wed, 02 Dec 2020 14:43:42 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1kkTPF-0003RL-UC; Wed, 02 Dec 2020 14:46:57 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL FOR v5.11] More fixes/enhancements (#69627)
+Date:   Wed,  2 Dec 2020 14:46:57 +0000
+Message-Id: <20201202144657.13182-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <8cf5021f-559c-5ea8-f1f0-250c00bc119d@xs4all.nl>
+References: 
 MIME-Version: 1.0
-References: <20201202141326.32645-1-festevam@gmail.com>
-In-Reply-To: <20201202141326.32645-1-festevam@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 2 Dec 2020 16:38:56 +0200
-Message-ID: <CAHp75VfZ7LGCKnBXXyyAXf5a+W3s4rWP=OMe8=LbAj2qeqXnQQ@mail.gmail.com>
-Subject: Re: [PATCH v4] media: coda: Convert the driver to DT-only
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Dec 2, 2020 at 4:15 PM Fabio Estevam <festevam@gmail.com> wrote:
->
-> Since 5.10-rc1 i.MX is a devicetree-only platform, so simplify the code
-> by removing the unused non-DT support.
+From: builder@linuxtv.org
 
-I haven't checked full context but from what I see the patch looks
-good to me, FWIW,
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/8cf5021f-559c-5ea8-f1f0-250c00bc119d@xs4all.nl/
+Build log: https://builder.linuxtv.org/job/patchwork/79581/
+Build time: 00:05:22
+Link: https://lore.kernel.org/linux-media/8cf5021f-559c-5ea8-f1f0-250c00bc119d@xs4all.nl
 
->
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
-> Changes since v3:
-> - Add a explicit OF dependency - Andy
->
->  drivers/media/platform/Kconfig            |  2 +-
->  drivers/media/platform/coda/coda-common.c | 27 ++---------------------
->  include/linux/platform_data/media/coda.h  | 14 ------------
->  3 files changed, 3 insertions(+), 40 deletions(-)
->  delete mode 100644 include/linux/platform_data/media/coda.h
->
-> diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-> index ffffef2267f4..9fdbfea06087 100644
-> --- a/drivers/media/platform/Kconfig
-> +++ b/drivers/media/platform/Kconfig
-> @@ -201,7 +201,7 @@ if V4L_MEM2MEM_DRIVERS
->
->  config VIDEO_CODA
->         tristate "Chips&Media Coda multi-standard codec IP"
-> -       depends on VIDEO_DEV && VIDEO_V4L2 && (ARCH_MXC || COMPILE_TEST)
-> +       depends on VIDEO_DEV && VIDEO_V4L2 && OF && (ARCH_MXC || COMPILE_TEST)
->         select SRAM
->         select VIDEOBUF2_DMA_CONTIG
->         select VIDEOBUF2_VMALLOC
-> diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
-> index d30eafea701d..995e95272e51 100644
-> --- a/drivers/media/platform/coda/coda-common.c
-> +++ b/drivers/media/platform/coda/coda-common.c
-> @@ -25,7 +25,6 @@
->  #include <linux/slab.h>
->  #include <linux/videodev2.h>
->  #include <linux/of.h>
-> -#include <linux/platform_data/media/coda.h>
->  #include <linux/ratelimit.h>
->  #include <linux/reset.h>
->
-> @@ -3102,13 +3101,6 @@ static const struct coda_devtype coda_devdata[] = {
->         },
->  };
->
-> -static const struct platform_device_id coda_platform_ids[] = {
-> -       { .name = "coda-imx27", .driver_data = CODA_IMX27 },
-> -       { /* sentinel */ }
-> -};
-> -MODULE_DEVICE_TABLE(platform, coda_platform_ids);
-> -
-> -#ifdef CONFIG_OF
->  static const struct of_device_id coda_dt_ids[] = {
->         { .compatible = "fsl,imx27-vpu", .data = &coda_devdata[CODA_IMX27] },
->         { .compatible = "fsl,imx51-vpu", .data = &coda_devdata[CODA_IMX51] },
-> @@ -3118,14 +3110,9 @@ static const struct of_device_id coda_dt_ids[] = {
->         { /* sentinel */ }
->  };
->  MODULE_DEVICE_TABLE(of, coda_dt_ids);
-> -#endif
->
->  static int coda_probe(struct platform_device *pdev)
->  {
-> -       const struct of_device_id *of_id =
-> -                       of_match_device(of_match_ptr(coda_dt_ids), &pdev->dev);
-> -       const struct platform_device_id *pdev_id;
-> -       struct coda_platform_data *pdata = pdev->dev.platform_data;
->         struct device_node *np = pdev->dev.of_node;
->         struct gen_pool *pool;
->         struct coda_dev *dev;
-> @@ -3135,14 +3122,7 @@ static int coda_probe(struct platform_device *pdev)
->         if (!dev)
->                 return -ENOMEM;
->
-> -       pdev_id = of_id ? of_id->data : platform_get_device_id(pdev);
-> -
-> -       if (of_id)
-> -               dev->devtype = of_id->data;
-> -       else if (pdev_id)
-> -               dev->devtype = &coda_devdata[pdev_id->driver_data];
-> -       else
-> -               return -EINVAL;
-> +       dev->devtype = of_device_get_match_data(&pdev->dev);
->
->         dev->dev = &pdev->dev;
->         dev->clk_per = devm_clk_get(&pdev->dev, "per");
-> @@ -3200,10 +3180,8 @@ static int coda_probe(struct platform_device *pdev)
->                 return ret;
->         }
->
-> -       /* Get IRAM pool from device tree or platform data */
-> +       /* Get IRAM pool from device tree */
->         pool = of_gen_pool_get(np, "iram", 0);
-> -       if (!pool && pdata)
-> -               pool = gen_pool_get(pdata->iram_dev, NULL);
->         if (!pool) {
->                 dev_err(&pdev->dev, "iram pool not available\n");
->                 return -ENOMEM;
-> @@ -3342,7 +3320,6 @@ static struct platform_driver coda_driver = {
->                 .of_match_table = of_match_ptr(coda_dt_ids),
->                 .pm     = &coda_pm_ops,
->         },
-> -       .id_table = coda_platform_ids,
->  };
->
->  module_platform_driver(coda_driver);
-> diff --git a/include/linux/platform_data/media/coda.h b/include/linux/platform_data/media/coda.h
-> deleted file mode 100644
-> index 293b61b60c9d..000000000000
-> --- a/include/linux/platform_data/media/coda.h
-> +++ /dev/null
-> @@ -1,14 +0,0 @@
-> -/* SPDX-License-Identifier: GPL-2.0-or-later */
-> -/*
-> - * Copyright (C) 2013 Philipp Zabel, Pengutronix
-> - */
-> -#ifndef PLATFORM_CODA_H
-> -#define PLATFORM_CODA_H
-> -
-> -struct device;
-> -
-> -struct coda_platform_data {
-> -       struct device *iram_dev;
-> -};
-> -
-> -#endif
-> --
-> 2.17.1
->
+gpg: Signature made Wed 02 Dec 2020 02:26:13 PM UTC
+gpg:                using RSA key AAA7FFBA4D2D77EF4CAEA1421326E0CD23ABDCE5
+gpg: Good signature from "Hans Verkuil <hverkuil-cisco@xs4all.nl>" [unknown]
+gpg:                 aka "Hans Verkuil <hverkuil@xs4all.nl>" [full]
+gpg: Note: This key has expired!
+Primary key fingerprint: 052C DE7B C215 053B 689F  1BCA BD2D 6148 6614 3B4C
+     Subkey fingerprint: AAA7 FFBA 4D2D 77EF 4CAE  A142 1326 E0CD 23AB DCE5
+
+Summary: got 1/8 patches with issues, being 0 at build time, plus one error when buinding PDF document
+
+Error/warnings:
+
+patches/0008-media-coda-Convert-the-driver-to-DT-only.patch:
+
+   checkpatch.pl:
+	$ cat patches/0008-media-coda-Convert-the-driver-to-DT-only.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:109: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
 
 
--- 
-With Best Regards,
-Andy Shevchenko
+Error #512 when building PDF docs
+
