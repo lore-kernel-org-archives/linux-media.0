@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C87F3C64E7C
-	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 18:12:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54C81C64E7B
+	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 18:13:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7851822240
-	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 18:12:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 09FFB22240
+	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 18:13:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729047AbgLBSMv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Dec 2020 13:12:51 -0500
-Received: from retiisi.eu ([95.216.213.190]:33504 "EHLO hillosipuli.retiisi.eu"
+        id S1730542AbgLBSNI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Dec 2020 13:13:08 -0500
+Received: from retiisi.eu ([95.216.213.190]:33612 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729035AbgLBSMv (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 2 Dec 2020 13:12:51 -0500
+        id S1728241AbgLBSNI (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 2 Dec 2020 13:13:08 -0500
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id B76EF634CBF;
-        Wed,  2 Dec 2020 20:08:32 +0200 (EET)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id D3B41634C97;
+        Wed,  2 Dec 2020 20:08:31 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     mchehab@kernel.org
-Subject: [PATCH 24/38] ccs-pll: Split off VT subtree calculation
-Date:   Wed,  2 Dec 2020 20:06:27 +0200
-Message-Id: <20201202180641.17401-25-sakari.ailus@linux.intel.com>
+Subject: [PATCH 13/38] ccs-pll: Fix comment on check against maximum PLL multiplier
+Date:   Wed,  2 Dec 2020 20:06:16 +0200
+Message-Id: <20201202180641.17401-14-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201202180641.17401-1-sakari.ailus@linux.intel.com>
 References: <20201202180641.17401-1-sakari.ailus@linux.intel.com>
@@ -37,328 +37,27 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Split off the VT sub clock tree calculation from the rest, into its own
-function. Also call the op_pll_fr argument pll_fr, since soon these may
-not be OP tree values.
-
-This paves way for additional features in the future such as dual PLL
-support.
+The comment is about minimum PLL multiplier but the related check really
+deals with the maximum PLL multiplier.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs-pll.c | 255 ++++++++++++++++++------------------
- 1 file changed, 131 insertions(+), 124 deletions(-)
+ drivers/media/i2c/ccs-pll.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/media/i2c/ccs-pll.c b/drivers/media/i2c/ccs-pll.c
-index 0fa7c6f67195..3d43e737155f 100644
+index 78897a7c1448..f4c41d61e332 100644
 --- a/drivers/media/i2c/ccs-pll.c
 +++ b/drivers/media/i2c/ccs-pll.c
-@@ -149,130 +149,18 @@ static int check_all_bounds(struct device *dev,
- #define DPHY_CONST		16
- #define PHY_CONST_DIV		16
- 
--/*
-- * Heuristically guess the PLL tree for a given common multiplier and
-- * divisor. Begin with the operational timing and continue to video
-- * timing once operational timing has been verified.
-- *
-- * @mul is the PLL multiplier and @div is the common divisor
-- * (pre_pll_clk_div and op_sys_clk_div combined). The final PLL
-- * multiplier will be a multiple of @mul.
-- *
-- * @return Zero on success, error code on error.
-- */
--static int
--__ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
--		    const struct ccs_pll_branch_limits_fr *op_lim_fr,
--		    const struct ccs_pll_branch_limits_bk *op_lim_bk,
--		    struct ccs_pll *pll, struct ccs_pll_branch_fr *op_pll_fr,
--		    struct ccs_pll_branch_bk *op_pll_bk, uint32_t mul,
--		    uint32_t div, uint32_t l, bool cphy, uint32_t phy_const)
-+static void
-+__ccs_pll_calculate_vt(struct device *dev, const struct ccs_pll_limits *lim,
-+		       const struct ccs_pll_branch_limits_bk *op_lim_bk,
-+		       struct ccs_pll *pll, struct ccs_pll_branch_fr *pll_fr,
-+		       struct ccs_pll_branch_bk *op_pll_bk, bool cphy,
-+		       uint32_t phy_const)
- {
- 	uint32_t sys_div;
- 	uint32_t best_pix_div = INT_MAX >> 1;
- 	uint32_t vt_op_binning_div;
--	/*
--	 * Higher multipliers (and divisors) are often required than
--	 * necessitated by the external clock and the output clocks.
--	 * There are limits for all values in the clock tree. These
--	 * are the minimum and maximum multiplier for mul.
--	 */
--	uint32_t more_mul_min, more_mul_max;
--	uint32_t more_mul_factor;
- 	uint32_t min_vt_div, max_vt_div, vt_div;
- 	uint32_t min_sys_div, max_sys_div;
--	uint32_t i;
--
--	/*
--	 * Get pre_pll_clk_div so that our pll_op_clk_freq_hz won't be
--	 * too high.
--	 */
--	dev_dbg(dev, "op_pre_pll_clk_div %u\n", op_pll_fr->pre_pll_clk_div);
--
--	/* Don't go above max pll multiplier. */
--	more_mul_max = op_lim_fr->max_pll_multiplier / mul;
--	dev_dbg(dev, "more_mul_max: max_op_pll_multiplier check: %u\n",
--		more_mul_max);
--	/* Don't go above max pll op frequency. */
--	more_mul_max =
--		min_t(uint32_t,
--		      more_mul_max,
--		      op_lim_fr->max_pll_op_clk_freq_hz
--		      / (pll->ext_clk_freq_hz /
--			 op_pll_fr->pre_pll_clk_div * mul));
--	dev_dbg(dev, "more_mul_max: max_pll_op_clk_freq_hz check: %u\n",
--		more_mul_max);
--	/* Don't go above the division capability of op sys clock divider. */
--	more_mul_max = min(more_mul_max,
--			   op_lim_bk->max_sys_clk_div * op_pll_fr->pre_pll_clk_div
--			   / div);
--	dev_dbg(dev, "more_mul_max: max_op_sys_clk_div check: %u\n",
--		more_mul_max);
--	/* Ensure we won't go above max_pll_multiplier. */
--	more_mul_max = min(more_mul_max, op_lim_fr->max_pll_multiplier / mul);
--	dev_dbg(dev, "more_mul_max: min_pll_multiplier check: %u\n",
--		more_mul_max);
--
--	/* Ensure we won't go below min_pll_op_clk_freq_hz. */
--	more_mul_min = DIV_ROUND_UP(op_lim_fr->min_pll_op_clk_freq_hz,
--				    pll->ext_clk_freq_hz /
--				    op_pll_fr->pre_pll_clk_div * mul);
--	dev_dbg(dev, "more_mul_min: min_op_pll_op_clk_freq_hz check: %u\n",
--		more_mul_min);
--	/* Ensure we won't go below min_pll_multiplier. */
--	more_mul_min = max(more_mul_min,
--			   DIV_ROUND_UP(op_lim_fr->min_pll_multiplier, mul));
--	dev_dbg(dev, "more_mul_min: min_op_pll_multiplier check: %u\n",
--		more_mul_min);
--
--	if (more_mul_min > more_mul_max) {
--		dev_dbg(dev,
--			"unable to compute more_mul_min and more_mul_max\n");
--		return -EINVAL;
--	}
--
--	more_mul_factor = lcm(div, op_pll_fr->pre_pll_clk_div) / div;
--	dev_dbg(dev, "more_mul_factor: %u\n", more_mul_factor);
--	more_mul_factor = lcm(more_mul_factor, op_lim_bk->min_sys_clk_div);
--	dev_dbg(dev, "more_mul_factor: min_op_sys_clk_div: %d\n",
--		more_mul_factor);
--	i = roundup(more_mul_min, more_mul_factor);
--	if (!is_one_or_even(i))
--		i <<= 1;
--
--	dev_dbg(dev, "final more_mul: %u\n", i);
--	if (i > more_mul_max) {
--		dev_dbg(dev, "final more_mul is bad, max %u\n", more_mul_max);
--		return -EINVAL;
--	}
--
--	op_pll_fr->pll_multiplier = mul * i;
--	op_pll_bk->sys_clk_div = div * i / op_pll_fr->pre_pll_clk_div;
--	dev_dbg(dev, "op_sys_clk_div: %u\n", op_pll_bk->sys_clk_div);
--
--	op_pll_fr->pll_ip_clk_freq_hz = pll->ext_clk_freq_hz
--		/ op_pll_fr->pre_pll_clk_div;
--
--	op_pll_fr->pll_op_clk_freq_hz = op_pll_fr->pll_ip_clk_freq_hz
--		* op_pll_fr->pll_multiplier;
--
--	if (pll->flags & CCS_PLL_FLAG_LANE_SPEED_MODEL)
--		op_pll_bk->pix_clk_div = pll->bits_per_pixel
--			* pll->op_lanes * phy_const
--			/ PHY_CONST_DIV / pll->csi2.lanes / l;
--	else
--		op_pll_bk->pix_clk_div =
--			pll->bits_per_pixel * phy_const / PHY_CONST_DIV / l;
--
--	op_pll_bk->pix_clk_freq_hz =
--		op_pll_bk->sys_clk_freq_hz / op_pll_bk->pix_clk_div;
--
--	dev_dbg(dev, "op_pix_clk_div: %u\n", op_pll_bk->pix_clk_div);
--
--	if (pll->flags & CCS_PLL_FLAG_NO_OP_CLOCKS) {
--		/* No OP clocks --- VT clocks are used instead. */
--		goto out_skip_vt_calc;
--	}
- 
- 	/*
- 	 * Some sensors perform analogue binning and some do this
-@@ -310,7 +198,7 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
- 	/* Find smallest and biggest allowed vt divisor. */
- 	dev_dbg(dev, "min_vt_div: %u\n", min_vt_div);
- 	min_vt_div = max(min_vt_div,
--			 DIV_ROUND_UP(op_pll_fr->pll_op_clk_freq_hz,
-+			 DIV_ROUND_UP(pll_fr->pll_op_clk_freq_hz,
- 				      lim->vt_bk.max_pix_clk_freq_hz));
- 	dev_dbg(dev, "min_vt_div: max_vt_pix_clk_freq_hz: %u\n",
- 		min_vt_div);
-@@ -322,7 +210,7 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
- 	max_vt_div = lim->vt_bk.max_sys_clk_div * lim->vt_bk.max_pix_clk_div;
- 	dev_dbg(dev, "max_vt_div: %u\n", max_vt_div);
- 	max_vt_div = min(max_vt_div,
--			 DIV_ROUND_UP(op_pll_fr->pll_op_clk_freq_hz,
-+			 DIV_ROUND_UP(pll_fr->pll_op_clk_freq_hz,
- 				      lim->vt_bk.min_pix_clk_freq_hz));
- 	dev_dbg(dev, "max_vt_div: min_vt_pix_clk_freq_hz: %u\n",
- 		max_vt_div);
-@@ -338,7 +226,7 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
- 				       lim->vt_bk.max_pix_clk_div));
- 	dev_dbg(dev, "min_sys_div: max_vt_pix_clk_div: %u\n", min_sys_div);
- 	min_sys_div = max(min_sys_div,
--			  op_pll_fr->pll_op_clk_freq_hz
-+			  pll_fr->pll_op_clk_freq_hz
- 			  / lim->vt_bk.max_sys_clk_freq_hz);
- 	dev_dbg(dev, "min_sys_div: max_pll_op_clk_freq_hz: %u\n", min_sys_div);
- 	min_sys_div = clk_div_even_up(min_sys_div);
-@@ -351,7 +239,7 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
- 				       lim->vt_bk.min_pix_clk_div));
- 	dev_dbg(dev, "max_sys_div: min_vt_pix_clk_div: %u\n", max_sys_div);
- 	max_sys_div = min(max_sys_div,
--			  DIV_ROUND_UP(op_pll_fr->pll_op_clk_freq_hz,
-+			  DIV_ROUND_UP(pll_fr->pll_op_clk_freq_hz,
- 				       lim->vt_bk.min_pix_clk_freq_hz));
- 	dev_dbg(dev, "max_sys_div: min_vt_pix_clk_freq_hz: %u\n", max_sys_div);
- 
-@@ -396,11 +284,130 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
- 	pll->vt_bk.pix_clk_div = best_pix_div;
- 
- 	pll->vt_bk.sys_clk_freq_hz =
--		op_pll_fr->pll_op_clk_freq_hz / pll->vt_bk.sys_clk_div;
-+		pll_fr->pll_op_clk_freq_hz / pll->vt_bk.sys_clk_div;
- 	pll->vt_bk.pix_clk_freq_hz =
- 		pll->vt_bk.sys_clk_freq_hz / pll->vt_bk.pix_clk_div;
-+}
-+
-+/*
-+ * Heuristically guess the PLL tree for a given common multiplier and
-+ * divisor. Begin with the operational timing and continue to video
-+ * timing once operational timing has been verified.
-+ *
-+ * @mul is the PLL multiplier and @div is the common divisor
-+ * (pre_pll_clk_div and op_sys_clk_div combined). The final PLL
-+ * multiplier will be a multiple of @mul.
-+ *
-+ * @return Zero on success, error code on error.
-+ */
-+static int
-+__ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
-+		    const struct ccs_pll_branch_limits_fr *op_lim_fr,
-+		    const struct ccs_pll_branch_limits_bk *op_lim_bk,
-+		    struct ccs_pll *pll, struct ccs_pll_branch_fr *op_pll_fr,
-+		    struct ccs_pll_branch_bk *op_pll_bk, uint32_t mul,
-+		    uint32_t div, uint32_t l, bool cphy, uint32_t phy_const)
-+{
-+	/*
-+	 * Higher multipliers (and divisors) are often required than
-+	 * necessitated by the external clock and the output clocks.
-+	 * There are limits for all values in the clock tree. These
-+	 * are the minimum and maximum multiplier for mul.
-+	 */
-+	uint32_t more_mul_min, more_mul_max;
-+	uint32_t more_mul_factor;
-+	uint32_t i;
-+
-+	/*
-+	 * Get pre_pll_clk_div so that our pll_op_clk_freq_hz won't be
-+	 * too high.
-+	 */
-+	dev_dbg(dev, "op_pre_pll_clk_div %u\n", op_pll_fr->pre_pll_clk_div);
-+
-+	/* Don't go above max pll multiplier. */
-+	more_mul_max = op_lim_fr->max_pll_multiplier / mul;
-+	dev_dbg(dev, "more_mul_max: max_op_pll_multiplier check: %u\n",
-+		more_mul_max);
-+	/* Don't go above max pll op frequency. */
-+	more_mul_max =
-+		min_t(uint32_t,
-+		      more_mul_max,
-+		      op_lim_fr->max_pll_op_clk_freq_hz
-+		      / (pll->ext_clk_freq_hz /
-+			 op_pll_fr->pre_pll_clk_div * mul));
-+	dev_dbg(dev, "more_mul_max: max_pll_op_clk_freq_hz check: %u\n",
-+		more_mul_max);
-+	/* Don't go above the division capability of op sys clock divider. */
-+	more_mul_max = min(more_mul_max,
-+			   op_lim_bk->max_sys_clk_div * op_pll_fr->pre_pll_clk_div
-+			   / div);
-+	dev_dbg(dev, "more_mul_max: max_op_sys_clk_div check: %u\n",
-+		more_mul_max);
+@@ -203,7 +203,7 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 			   / div);
+ 	dev_dbg(dev, "more_mul_max: max_op_sys_clk_div check: %u\n",
+ 		more_mul_max);
+-	/* Ensure we won't go above min_pll_multiplier. */
 +	/* Ensure we won't go above max_pll_multiplier. */
-+	more_mul_max = min(more_mul_max, op_lim_fr->max_pll_multiplier / mul);
-+	dev_dbg(dev, "more_mul_max: min_pll_multiplier check: %u\n",
-+		more_mul_max);
-+
-+	/* Ensure we won't go below min_pll_op_clk_freq_hz. */
-+	more_mul_min = DIV_ROUND_UP(op_lim_fr->min_pll_op_clk_freq_hz,
-+				    pll->ext_clk_freq_hz /
-+				    op_pll_fr->pre_pll_clk_div * mul);
-+	dev_dbg(dev, "more_mul_min: min_op_pll_op_clk_freq_hz check: %u\n",
-+		more_mul_min);
-+	/* Ensure we won't go below min_pll_multiplier. */
-+	more_mul_min = max(more_mul_min,
-+			   DIV_ROUND_UP(op_lim_fr->min_pll_multiplier, mul));
-+	dev_dbg(dev, "more_mul_min: min_op_pll_multiplier check: %u\n",
-+		more_mul_min);
-+
-+	if (more_mul_min > more_mul_max) {
-+		dev_dbg(dev,
-+			"unable to compute more_mul_min and more_mul_max\n");
-+		return -EINVAL;
-+	}
-+
-+	more_mul_factor = lcm(div, op_pll_fr->pre_pll_clk_div) / div;
-+	dev_dbg(dev, "more_mul_factor: %u\n", more_mul_factor);
-+	more_mul_factor = lcm(more_mul_factor, op_lim_bk->min_sys_clk_div);
-+	dev_dbg(dev, "more_mul_factor: min_op_sys_clk_div: %d\n",
-+		more_mul_factor);
-+	i = roundup(more_mul_min, more_mul_factor);
-+	if (!is_one_or_even(i))
-+		i <<= 1;
-+
-+	dev_dbg(dev, "final more_mul: %u\n", i);
-+	if (i > more_mul_max) {
-+		dev_dbg(dev, "final more_mul is bad, max %u\n", more_mul_max);
-+		return -EINVAL;
-+	}
-+
-+	op_pll_fr->pll_multiplier = mul * i;
-+	op_pll_bk->sys_clk_div = div * i / op_pll_fr->pre_pll_clk_div;
-+	dev_dbg(dev, "op_sys_clk_div: %u\n", op_pll_bk->sys_clk_div);
-+
-+	op_pll_fr->pll_ip_clk_freq_hz = pll->ext_clk_freq_hz
-+		/ op_pll_fr->pre_pll_clk_div;
-+
-+	op_pll_fr->pll_op_clk_freq_hz = op_pll_fr->pll_ip_clk_freq_hz
-+		* op_pll_fr->pll_multiplier;
-+
-+	if (pll->flags & CCS_PLL_FLAG_LANE_SPEED_MODEL)
-+		op_pll_bk->pix_clk_div = pll->bits_per_pixel
-+			* pll->op_lanes * phy_const
-+			/ PHY_CONST_DIV / pll->csi2.lanes / l;
-+	else
-+		op_pll_bk->pix_clk_div =
-+			pll->bits_per_pixel * phy_const / PHY_CONST_DIV / l;
-+
-+	op_pll_bk->pix_clk_freq_hz =
-+		op_pll_bk->sys_clk_freq_hz / op_pll_bk->pix_clk_div;
-+
-+	dev_dbg(dev, "op_pix_clk_div: %u\n", op_pll_bk->pix_clk_div);
-+
-+	if (!(pll->flags & CCS_PLL_FLAG_NO_OP_CLOCKS))
-+		__ccs_pll_calculate_vt(dev, lim, op_lim_bk, pll, op_pll_fr,
-+				       op_pll_bk, cphy, phy_const);
- 
--out_skip_vt_calc:
- 	pll->pixel_rate_pixel_array =
- 		pll->vt_bk.pix_clk_freq_hz * pll->vt_lanes;
- 
+ 	more_mul_max = min(more_mul_max,
+ 			   DIV_ROUND_UP(op_lim_fr->max_pll_multiplier, mul));
+ 	dev_dbg(dev, "more_mul_max: min_pll_multiplier check: %u\n",
 -- 
 2.27.0
 
