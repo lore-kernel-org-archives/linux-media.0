@@ -2,49 +2,46 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6639CC64E7C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8F4BC71156
 	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 13:31:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F2D1A22244
-	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 13:31:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8EBF2221FB
+	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 13:31:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727752AbgLBNbd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Dec 2020 08:31:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33638 "EHLO
+        id S1727939AbgLBNbf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Dec 2020 08:31:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727513AbgLBNbd (ORCPT
+        with ESMTP id S1727785AbgLBNbd (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Wed, 2 Dec 2020 08:31:33 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B21FC0613D4
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A41E4C0617A6
         for <linux-media@vger.kernel.org>; Wed,  2 Dec 2020 05:30:53 -0800 (PST)
 Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1kkSDb-0000LP-3J; Wed, 02 Dec 2020 14:30:51 +0100
+        id 1kkSDb-0000LL-1p; Wed, 02 Dec 2020 14:30:51 +0100
 Received: from mtr by dude03.red.stw.pengutronix.de with local (Exim 4.92)
         (envelope-from <mtr@dude03.red.stw.pengutronix.de>)
-        id 1kkSDa-008Ceb-BM; Wed, 02 Dec 2020 14:30:50 +0100
+        id 1kkSDa-008CeT-66; Wed, 02 Dec 2020 14:30:50 +0100
 From:   Michael Tretter <m.tretter@pengutronix.de>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org
 Cc:     kernel@pengutronix.de, robh+dt@kernel.org,
         hverkuil-cisco@xs4all.nl,
         Michael Tretter <m.tretter@pengutronix.de>
-Date:   Wed,  2 Dec 2020 14:30:40 +0100
-Message-Id: <20201202133040.1954837-5-m.tretter@pengutronix.de>
+Date:   Wed,  2 Dec 2020 14:30:36 +0100
+Message-Id: <20201202133040.1954837-1-m.tretter@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20201202133040.1954837-1-m.tretter@pengutronix.de>
-References: <20201202133040.1954837-1-m.tretter@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::39
 X-SA-Exim-Mail-From: mtr@pengutronix.de
-Subject: [PATCH v2 4/4] media: allegro: rename stream_id to dst_handle
+Subject: [PATCH v2 0/4] media: allegro: move driver out of staging
 X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
 X-SA-Exim-Scanned: Yes (on metis.ext.pengutronix.de)
 X-PTX-Original-Recipient: linux-media@vger.kernel.org
@@ -52,101 +49,163 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The dst_handle field in the PUT_STREAM_BUFFER and ENCODE_FRAME_RESPONSE
-is used to retrieve the V4L2 CAPTURE buffer. Calling it stream_id is
-confusing. Call it dst_handle inspired by src_handle for the OUTPUT
-buffer.
+Hello,
 
-Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
----
+With the V4L2 stateful encoder spec being finished, the Allegro encoder driver
+is ready to be moved from staging to mainline.
+
+While not directly related, I used the opportunity to convert the dt-binding
+to YAML, to remove the custom draining state handling from the driver and to
+rename a badly named field in the MCU messages.
+
+v2 fixes the reported warnings in the YAML dt-bindings.
+
+There are no functional changes in the actual driver since v1, but I am
+sending the updated v4l2-compliance result anyway.
+
+Michael
+
+v4l2-compliance 1.21.0-4683, 64 bits, 64-bit time_t
+v4l2-compliance SHA: 0aee9991e0c0 2020-12-01 09:48:02
+
+Compliance test for allegro device /dev/video3:
+
+Driver Info:
+	Driver name      : allegro
+	Card type        : Allegro DVT Video Encoder
+	Bus info         : platform:a0009000.video-codec
+	Driver version   : 5.10.0
+	Capabilities     : 0x84208000
+		Video Memory-to-Memory
+		Streaming
+		Extended Pix Format
+		Device Capabilities
+	Device Caps      : 0x04208000
+		Video Memory-to-Memory
+		Streaming
+		Extended Pix Format
+	Detected Stateful Encoder
+
+Required ioctls:
+	test VIDIOC_QUERYCAP: OK
+
+Allow for multiple opens:
+	test second /dev/video3 open: OK
+	test VIDIOC_QUERYCAP: OK
+	test VIDIOC_G/S_PRIORITY: OK
+	test for unlimited opens: OK
+
+	test invalid ioctls: OK
+Debug ioctls:
+	test VIDIOC_DBG_G/S_REGISTER: OK
+	test VIDIOC_LOG_STATUS: OK (Not Supported)
+
+Input ioctls:
+	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+	test VIDIOC_ENUMAUDIO: OK (Not Supported)
+	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+	test VIDIOC_G/S_AUDIO: OK (Not Supported)
+	Inputs: 0 Audio Inputs: 0 Tuners: 0
+
+Output ioctls:
+	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+	Outputs: 0 Audio Outputs: 0 Modulators: 0
+
+Input/Output configuration ioctls:
+	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+	test VIDIOC_G/S_EDID: OK (Not Supported)
+
+Control ioctls:
+	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
+	test VIDIOC_QUERYCTRL: OK
+	test VIDIOC_G/S_CTRL: OK
+	test VIDIOC_G/S/TRY_EXT_CTRLS: OK
+	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
+	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+	Standard Controls: 16 Private Controls: 0
+
+Format ioctls:
+	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+	test VIDIOC_G/S_PARM: OK
+	test VIDIOC_G_FBUF: OK (Not Supported)
+	test VIDIOC_G_FMT: OK
+	test VIDIOC_TRY_FMT: OK
+	test VIDIOC_S_FMT: OK
+	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+	test Cropping: OK (Not Supported)
+	test Composing: OK (Not Supported)
+	test Scaling: OK (Not Supported)
+
+Codec ioctls:
+	test VIDIOC_(TRY_)ENCODER_CMD: OK
+	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
+
+Buffer ioctls:
+	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+	test VIDIOC_EXPBUF: OK
+	test Requests: OK (Not Supported)
+
+Test input 0:
+
+Streaming ioctls:
+	test read/write: OK (Not Supported)
+	test blocking wait: OK
+	Video Capture: Captured 60 buffers
+	test MMAP (select): OK
+	Video Capture: Captured 60 buffers
+	test MMAP (epoll): OK
+	test USERPTR (select): OK (Not Supported)
+	test DMABUF: Cannot test, specify --expbuf-device
+
+Total for allegro device /dev/video3: 50, Succeeded: 50, Failed: 0, Warnings: 0
+
 Changelog:
 
-v2: none
----
- drivers/media/platform/allegro-dvt/allegro-core.c | 6 +++---
- drivers/media/platform/allegro-dvt/allegro-mail.c | 8 ++++----
- drivers/media/platform/allegro-dvt/allegro-mail.h | 4 ++--
- 3 files changed, 9 insertions(+), 9 deletions(-)
+v2:
+- Fix make dt_binding_check warnings
 
-diff --git a/drivers/media/platform/allegro-dvt/allegro-core.c b/drivers/media/platform/allegro-dvt/allegro-core.c
-index 902b8af90ac6..6b5cbee05040 100644
---- a/drivers/media/platform/allegro-dvt/allegro-core.c
-+++ b/drivers/media/platform/allegro-dvt/allegro-core.c
-@@ -1038,7 +1038,7 @@ static int allegro_mcu_send_put_stream_buffer(struct allegro_dev *dev,
- 					      struct allegro_channel *channel,
- 					      dma_addr_t paddr,
- 					      unsigned long size,
--					      u64 stream_id)
-+					      u64 dst_handle)
- {
- 	struct mcu_msg_put_stream_buffer msg;
- 
-@@ -1053,7 +1053,7 @@ static int allegro_mcu_send_put_stream_buffer(struct allegro_dev *dev,
- 	msg.size = size;
- 	msg.offset = ENCODER_STREAM_OFFSET;
- 	/* copied to mcu_msg_encode_frame_response */
--	msg.stream_id = stream_id;
-+	msg.dst_handle = dst_handle;
- 
- 	allegro_mbox_send(dev->mbox_command, &msg);
- 
-@@ -1437,7 +1437,7 @@ static void allegro_channel_finish_frame(struct allegro_channel *channel,
- 			  channel->mcu_channel_id);
- 
- 	dst_buf = allegro_get_buffer(channel, &channel->stream_shadow_list,
--				     msg->stream_id);
-+				     msg->dst_handle);
- 	if (!dst_buf)
- 		v4l2_warn(&dev->v4l2_dev,
- 			  "channel %d: invalid stream buffer\n",
-diff --git a/drivers/media/platform/allegro-dvt/allegro-mail.c b/drivers/media/platform/allegro-dvt/allegro-mail.c
-index 9286d2162377..993e16f06305 100644
---- a/drivers/media/platform/allegro-dvt/allegro-mail.c
-+++ b/drivers/media/platform/allegro-dvt/allegro-mail.c
-@@ -302,8 +302,8 @@ allegro_enc_put_stream_buffer(u32 *dst,
- 	dst[i++] = msg->mcu_addr;
- 	dst[i++] = msg->size;
- 	dst[i++] = msg->offset;
--	dst[i++] = lower_32_bits(msg->stream_id);
--	dst[i++] = upper_32_bits(msg->stream_id);
-+	dst[i++] = lower_32_bits(msg->dst_handle);
-+	dst[i++] = upper_32_bits(msg->dst_handle);
- 
- 	return i * sizeof(*dst);
- }
-@@ -406,8 +406,8 @@ allegro_dec_encode_frame(struct mcu_msg_encode_frame_response *msg, u32 *src)
- 
- 	msg->channel_id = src[i++];
- 
--	msg->stream_id = src[i++];
--	msg->stream_id |= (((u64)src[i++]) << 32);
-+	msg->dst_handle = src[i++];
-+	msg->dst_handle |= (((u64)src[i++]) << 32);
- 	msg->user_param = src[i++];
- 	msg->user_param |= (((u64)src[i++]) << 32);
- 	msg->src_handle = src[i++];
-diff --git a/drivers/media/platform/allegro-dvt/allegro-mail.h b/drivers/media/platform/allegro-dvt/allegro-mail.h
-index 486ecb12b098..f7485cf78c4f 100644
---- a/drivers/media/platform/allegro-dvt/allegro-mail.h
-+++ b/drivers/media/platform/allegro-dvt/allegro-mail.h
-@@ -191,7 +191,7 @@ struct mcu_msg_put_stream_buffer {
- 	u32 mcu_addr;
- 	u32 size;
- 	u32 offset;
--	u64 stream_id;
-+	u64 dst_handle;
- };
- 
- struct mcu_msg_encode_frame {
-@@ -233,7 +233,7 @@ struct mcu_msg_encode_frame {
- struct mcu_msg_encode_frame_response {
- 	struct mcu_msg_header header;
- 	u32 channel_id;
--	u64 stream_id;		/* see mcu_msg_put_stream_buffer */
-+	u64 dst_handle;		/* see mcu_msg_put_stream_buffer */
- 	u64 user_param;		/* see mcu_msg_encode_frame */
- 	u64 src_handle;		/* see mcu_msg_encode_frame */
- 	u16 skip;
+Michael Tretter (4):
+  media: allegro: move driver out of staging
+  dt-bindings: media: allegro,al5e: Convert to YAML
+  media: allegro: remove custom drain state handling
+  media: allegro: rename stream_id to dst_handle
+
+ .../bindings/media/allegro,al5e.yaml          | 105 ++++++++++
+ .../devicetree/bindings/media/allegro.txt     |  43 -----
+ MAINTAINERS                                   |   3 +-
+ drivers/media/platform/Kconfig                |  15 ++
+ drivers/media/platform/Makefile               |   1 +
+ .../platform}/allegro-dvt/Makefile            |   0
+ .../platform}/allegro-dvt/allegro-core.c      | 180 +++++-------------
+ .../platform}/allegro-dvt/allegro-mail.c      |   8 +-
+ .../platform}/allegro-dvt/allegro-mail.h      |   4 +-
+ .../platform}/allegro-dvt/nal-h264.c          |   0
+ .../platform}/allegro-dvt/nal-h264.h          |   0
+ drivers/staging/media/Kconfig                 |   2 -
+ drivers/staging/media/Makefile                |   1 -
+ drivers/staging/media/allegro-dvt/Kconfig     |  16 --
+ drivers/staging/media/allegro-dvt/TODO        |   4 -
+ 15 files changed, 177 insertions(+), 205 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/allegro,al5e.yaml
+ delete mode 100644 Documentation/devicetree/bindings/media/allegro.txt
+ rename drivers/{staging/media => media/platform}/allegro-dvt/Makefile (100%)
+ rename drivers/{staging/media => media/platform}/allegro-dvt/allegro-core.c (95%)
+ rename drivers/{staging/media => media/platform}/allegro-dvt/allegro-mail.c (98%)
+ rename drivers/{staging/media => media/platform}/allegro-dvt/allegro-mail.h (98%)
+ rename drivers/{staging/media => media/platform}/allegro-dvt/nal-h264.c (100%)
+ rename drivers/{staging/media => media/platform}/allegro-dvt/nal-h264.h (100%)
+ delete mode 100644 drivers/staging/media/allegro-dvt/Kconfig
+ delete mode 100644 drivers/staging/media/allegro-dvt/TODO
+
 -- 
 2.20.1
 
