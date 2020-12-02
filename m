@@ -2,246 +2,217 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3B0DC83013
-	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 13:32:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1FA6C64E7B
+	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 13:37:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 89241221FB
-	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 13:32:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7A34C22241
+	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 13:37:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728726AbgLBNcP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Dec 2020 08:32:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33762 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727991AbgLBNcO (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Dec 2020 08:32:14 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE83C061A4A
-        for <linux-media@vger.kernel.org>; Wed,  2 Dec 2020 05:30:54 -0800 (PST)
-Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mtr@pengutronix.de>)
-        id 1kkSDb-0000LN-79; Wed, 02 Dec 2020 14:30:53 +0100
-Received: from mtr by dude03.red.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mtr@dude03.red.stw.pengutronix.de>)
-        id 1kkSDa-008CeX-9s; Wed, 02 Dec 2020 14:30:50 +0100
-From:   Michael Tretter <m.tretter@pengutronix.de>
-To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     kernel@pengutronix.de, robh+dt@kernel.org,
-        hverkuil-cisco@xs4all.nl,
-        Michael Tretter <m.tretter@pengutronix.de>
-Date:   Wed,  2 Dec 2020 14:30:38 +0100
-Message-Id: <20201202133040.1954837-3-m.tretter@pengutronix.de>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20201202133040.1954837-1-m.tretter@pengutronix.de>
-References: <20201202133040.1954837-1-m.tretter@pengutronix.de>
+        id S1727274AbgLBNhi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Dec 2020 08:37:38 -0500
+Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:38709 "EHLO
+        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726063AbgLBNhh (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 2 Dec 2020 08:37:37 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id kSJOkELI0N7XgkSJSktGTp; Wed, 02 Dec 2020 14:36:54 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1606916214; bh=0p93BDswAy4jNORVIR/sbAsAJ8XI35uwObYCucjeNFU=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=OA4EMhrIWm5j/M8DVVuSRWPsUcifXI8imAbRTYoOBqgSH968xkZ8Z/itEHOKsiTm3
+         4VUMtsqY1CSlzsVruJ0HogYmaLGysIyw86hn/289BRohUAcn5EXGkfcwu1OgO3zOWb
+         49DPOK+6BqQuIHDoVcqOj9exrGMnm6gF/8JU9PYVWLJPhtMRBnEE5QswuXY6vkGSdE
+         181v6NHStKYTpXF0h5KY/SplTp1klfICJN1Q4paGIbliF/XNckgo64t65PNN+ArqtC
+         SIEc0TOuHqWrHC19/n/2HS/+g75VGfdfeAPHxBPyOhXwB0PJhgmIKwOSn2oZ0TU4DK
+         bvCG/X4g5Dtqw==
+Subject: Re: [PATCH v3 3/3] venus: venc: Add support for frame-specific
+ min/max qp controls
+To:     Dikshita Agarwal <dikshita@codeaurora.org>,
+        linux-media@vger.kernel.org, nicolas@ndufresne.ca,
+        stanimir.varbanov@linaro.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        vgarodia@codeaurora.org
+References: <1605682497-29273-1-git-send-email-dikshita@codeaurora.org>
+ <1605682497-29273-4-git-send-email-dikshita@codeaurora.org>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <a5f99684-54ff-6d09-eeb7-4748ed3c3271@xs4all.nl>
+Date:   Wed, 2 Dec 2020 14:36:50 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::39
-X-SA-Exim-Mail-From: mtr@pengutronix.de
-Subject: [PATCH v2 2/4] dt-bindings: media: allegro,al5e: Convert to YAML
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on metis.ext.pengutronix.de)
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+In-Reply-To: <1605682497-29273-4-git-send-email-dikshita@codeaurora.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfJCyZqR7dyovBx+dTvzQQXmQvFZKmbkyGAhGrBWWLn40ycWdbDIGr539lSV9UScf4eSh7ov4OqV1WhJoMmUIpFN6qgezYv6BoAYCdHkfM9gnBcR4AoID
+ MnHng437DzuLyFMKjT16M3I768eimb2lN1qAlqvuEaEEls2ZDSDvnrLx1j8/Q/BljSsw5+kZxc4RItAk2GVU5RSezNzN9oi3yLQ+8O4vAuMAvPp4HbXNiFb/
+ VCyzzDu9JUOuCrKuMz4DYoGEawuv5XyiOVf3Enmddg/iTrS+7+0ZRPmsCt01r1vkwPOrKLUln1lxg1GkXdLXxIJQB5DRKaxBP3r4/7mr0J0eB1rNdEY/MZoI
+ ygaQstbq2KhiWK7SfZTnikPuCouzzkGulPlwKTXR1vcvlJRSRj4nNzW3JljY3JikYc1JeVRGWlW3vi7i2NNH5szVMVzO4w==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Convert the Allegro DVT video IP codec text binding to Yaml.
+On 18/11/2020 07:54, Dikshita Agarwal wrote:
+> Add support for frame type specific min and max qp controls
+> for encoder.
+> 
+> Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
+> ---
+>  drivers/media/platform/qcom/venus/core.h       | 18 +++++++++
+>  drivers/media/platform/qcom/venus/venc.c       | 21 ++++++++---
+>  drivers/media/platform/qcom/venus/venc_ctrls.c | 51 ++++++++++++++++++++++++++
+>  3 files changed, 85 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
+> index 3bc129a..6a764c9 100644
+> --- a/drivers/media/platform/qcom/venus/core.h
+> +++ b/drivers/media/platform/qcom/venus/core.h
+> @@ -230,10 +230,28 @@ struct venc_controls {
+>  	u32 h264_b_qp;
+>  	u32 h264_min_qp;
+>  	u32 h264_max_qp;
+> +	u32 h264_i_min_qp;
+> +	u32 h264_i_max_qp;
+> +	u32 h264_p_min_qp;
+> +	u32 h264_p_max_qp;
+> +	u32 h264_b_min_qp;
+> +	u32 h264_b_max_qp;
+>  	u32 h264_loop_filter_mode;
+>  	s32 h264_loop_filter_alpha;
+>  	s32 h264_loop_filter_beta;
+>  
+> +	u32 hevc_i_qp;
+> +	u32 hevc_p_qp;
+> +	u32 hevc_b_qp;
+> +	u32 hevc_min_qp;
+> +	u32 hevc_max_qp;
+> +	u32 hevc_i_min_qp;
+> +	u32 hevc_i_max_qp;
+> +	u32 hevc_p_min_qp;
+> +	u32 hevc_p_max_qp;
+> +	u32 hevc_b_min_qp;
+> +	u32 hevc_b_max_qp;
+> +
+>  	u32 vp8_min_qp;
+>  	u32 vp8_max_qp;
+>  
+> diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
+> index 0bf92cc..f2f5a85 100644
+> --- a/drivers/media/platform/qcom/venus/venc.c
+> +++ b/drivers/media/platform/qcom/venus/venc.c
+> @@ -668,17 +668,28 @@ static int venc_set_properties(struct venus_inst *inst)
+>  		return ret;
+>  
+>  	ptype = HFI_PROPERTY_PARAM_VENC_SESSION_QP;
+> -	quant.qp_i = ctr->h264_i_qp;
+> -	quant.qp_p = ctr->h264_p_qp;
+> -	quant.qp_b = ctr->h264_b_qp;
+> +	if (inst->fmt_cap->pixfmt == V4L2_PIX_FMT_HEVC) {
+> +		quant.qp_i = ctr->hevc_i_qp;
+> +		quant.qp_p = ctr->hevc_p_qp;
+> +		quant.qp_b = ctr->hevc_b_qp;
+> +	} else {
+> +		quant.qp_i = ctr->h264_i_qp;
+> +		quant.qp_p = ctr->h264_p_qp;
+> +		quant.qp_b = ctr->h264_b_qp;
+> +	}
+>  	quant.layer_id = 0;
+>  	ret = hfi_session_set_property(inst, ptype, &quant);
+>  	if (ret)
+>  		return ret;
+>  
+>  	ptype = HFI_PROPERTY_PARAM_VENC_SESSION_QP_RANGE;
+> -	quant_range.min_qp = ctr->h264_min_qp;
+> -	quant_range.max_qp = ctr->h264_max_qp;
+> +	if (inst->fmt_cap->pixfmt == V4L2_PIX_FMT_HEVC) {
+> +		quant_range.min_qp = ctr->hevc_min_qp;
+> +		quant_range.max_qp = ctr->hevc_max_qp;
+> +	} else {
+> +		quant_range.min_qp = ctr->h264_min_qp;
+> +		quant_range.max_qp = ctr->h264_max_qp;
+> +	}
+>  	quant_range.layer_id = 0;
+>  	ret = hfi_session_set_property(inst, ptype, &quant_range);
+>  	if (ret)
+> diff --git a/drivers/media/platform/qcom/venus/venc_ctrls.c b/drivers/media/platform/qcom/venus/venc_ctrls.c
+> index 0708b3b..cd131e3 100644
+> --- a/drivers/media/platform/qcom/venus/venc_ctrls.c
+> +++ b/drivers/media/platform/qcom/venus/venc_ctrls.c
+> @@ -125,9 +125,60 @@ static int venc_op_s_ctrl(struct v4l2_ctrl *ctrl)
+>  	case V4L2_CID_MPEG_VIDEO_H264_MIN_QP:
+>  		ctr->h264_min_qp = ctrl->val;
+>  		break;
+> +	case V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MIN_QP:
+> +		ctr->h264_i_min_qp = ctrl->val;
+> +		break;
+> +	case V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MIN_QP:
+> +		ctr->h264_p_min_qp = ctrl->val;
+> +		break;
+> +	case V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MIN_QP:
+> +		ctr->h264_b_min_qp = ctrl->val;
+> +		break;
+>  	case V4L2_CID_MPEG_VIDEO_H264_MAX_QP:
+>  		ctr->h264_max_qp = ctrl->val;
+>  		break;
+> +	case V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MAX_QP:
+> +		ctr->h264_i_max_qp = ctrl->val;
+> +		break;
+> +	case V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MAX_QP:
+> +		ctr->h264_p_max_qp = ctrl->val;
+> +		break;
+> +	case V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MAX_QP:
+> +		ctr->h264_b_max_qp = ctrl->val;
+> +		break;
+> +	case V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_QP:
+> +		ctr->hevc_i_qp = ctrl->val;
+> +		break;
+> +	case V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_QP:
+> +		ctr->hevc_p_qp = ctrl->val;
+> +		break;
+> +	case V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_QP:
+> +		ctr->hevc_b_qp = ctrl->val;
+> +		break;
+> +	case V4L2_CID_MPEG_VIDEO_HEVC_MIN_QP:
+> +		ctr->hevc_min_qp = ctrl->val;
+> +		break;
+> +	case V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_MIN_QP:
+> +		ctr->hevc_i_min_qp = ctrl->val;
+> +		break;
+> +	case V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_MIN_QP:
+> +		ctr->hevc_p_min_qp = ctrl->val;
+> +		break;
+> +	case V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_MIN_QP:
+> +		ctr->hevc_b_min_qp = ctrl->val;
+> +		break;
+> +	case V4L2_CID_MPEG_VIDEO_HEVC_MAX_QP:
+> +		ctr->hevc_max_qp = ctrl->val;
+> +		break;
+> +	case V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_MAX_QP:
+> +		ctr->hevc_i_max_qp = ctrl->val;
+> +		break;
+> +	case V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_MAX_QP:
+> +		ctr->hevc_p_max_qp = ctrl->val;
+> +		break;
+> +	case V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_MAX_QP:
+> +		ctr->hevc_b_max_qp = ctrl->val;
+> +		break;
+>  	case V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MODE:
+>  		ctr->multi_slice_mode = ctrl->val;
+>  		break;
+> 
 
-Add the converted binding to the MAINTAINERS file.
+This looks incomplete: the new controls aren't actually added to the
+driver with v4l2_ctrl_new_std(). Did you test this?
 
-Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
----
-Changelog:
+Regards,
 
-v2:
-- Fix make dt_binding_check warnings
----
- .../bindings/media/allegro,al5e.yaml          | 105 ++++++++++++++++++
- .../devicetree/bindings/media/allegro.txt     |  43 -------
- MAINTAINERS                                   |   1 +
- 3 files changed, 106 insertions(+), 43 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/media/allegro,al5e.yaml
- delete mode 100644 Documentation/devicetree/bindings/media/allegro.txt
-
-diff --git a/Documentation/devicetree/bindings/media/allegro,al5e.yaml b/Documentation/devicetree/bindings/media/allegro,al5e.yaml
-new file mode 100644
-index 000000000000..135bea94b587
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/allegro,al5e.yaml
-@@ -0,0 +1,105 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/allegro,al5e.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Allegro DVT Video IP Codecs Device Tree Bindings
-+
-+maintainers:
-+  - Michael Tretter <m.tretter@pengutronix.de>
-+
-+description: |-
-+  Allegro DVT video IP codecs present in the Xilinx ZynqMP SoC. The IP core may
-+  either be a H.264/H.265 encoder or H.264/H.265 decoder ip core.
-+
-+  Each actual codec engine is controlled by a microcontroller (MCU). Host
-+  software uses a provided mailbox interface to communicate with the MCU. The
-+  MCUs share an interrupt.
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - items:
-+          - const: allegro,al5e-1.1
-+          - const: allegro,al5e
-+      - items:
-+          - const: allegro,al5d-1.1
-+          - const: allegro,al5d
-+
-+  reg:
-+    items:
-+      - description: The registers
-+      - description: The SRAM
-+
-+  reg-names:
-+    items:
-+      - const: regs
-+      - const: sram
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: Core clock
-+      - description: MCU clock
-+      - description: Core AXI master port clock
-+      - description: MCU AXI master port clock
-+      - description: AXI4-Lite slave port clock
-+
-+  clock-names:
-+    items:
-+      - const: core_clk
-+      - const: mcu_clk
-+      - const: m_axi_core_aclk
-+      - const: m_axi_mcu_aclk
-+      - const: s_axi_lite_aclk
-+
-+required:
-+  - compatible
-+  - reg
-+  - reg-names
-+  - interrupts
-+  - clocks
-+  - clock-names
-+
-+additionalProperties: False
-+
-+examples:
-+  - |
-+    fpga {
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+
-+        al5e: video-codec@a0009000 {
-+            compatible = "allegro,al5e-1.1", "allegro,al5e";
-+            reg = <0 0xa0009000 0 0x1000>,
-+            <0 0xa0000000 0 0x8000>;
-+            reg-names = "regs", "sram";
-+            interrupts = <0 96 4>;
-+            clocks = <&xlnx_vcu 0>, <&xlnx_vcu 1>,
-+            <&clkc 71>, <&clkc 71>, <&clkc 71>;
-+            clock-names = "core_clk", "mcu_clk", "m_axi_core_aclk",
-+            "m_axi_mcu_aclk", "s_axi_lite_aclk";
-+        };
-+    };
-+  - |
-+    fpga {
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+
-+        al5d: video-codec@a0029000 {
-+            compatible = "allegro,al5d-1.1", "allegro,al5d";
-+            reg = <0 0xa0029000 0 0x1000>,
-+                  <0 0xa0020000 0 0x8000>;
-+            reg-names = "regs", "sram";
-+            interrupts = <0 96 4>;
-+            clocks = <&xlnx_vcu 2>, <&xlnx_vcu 3>,
-+                     <&clkc 71>, <&clkc 71>, <&clkc 71>;
-+            clock-names = "core_clk", "mcu_clk", "m_axi_core_aclk",
-+            "m_axi_mcu_aclk", "s_axi_lite_aclk";
-+        };
-+    };
-+
-+...
-diff --git a/Documentation/devicetree/bindings/media/allegro.txt b/Documentation/devicetree/bindings/media/allegro.txt
-deleted file mode 100644
-index a92e2fbf26c9..000000000000
---- a/Documentation/devicetree/bindings/media/allegro.txt
-+++ /dev/null
-@@ -1,43 +0,0 @@
--Device-tree bindings for the Allegro DVT video IP codecs present in the Xilinx
--ZynqMP SoC. The IP core may either be a H.264/H.265 encoder or H.264/H.265
--decoder ip core.
--
--Each actual codec engines is controlled by a microcontroller (MCU). Host
--software uses a provided mailbox interface to communicate with the MCU. The
--MCU share an interrupt.
--
--Required properties:
--  - compatible: value should be one of the following
--    "allegro,al5e-1.1", "allegro,al5e": encoder IP core
--    "allegro,al5d-1.1", "allegro,al5d": decoder IP core
--  - reg: base and length of the memory mapped register region and base and
--    length of the memory mapped sram
--  - reg-names: must include "regs" and "sram"
--  - interrupts: shared interrupt from the MCUs to the processing system
--  - clocks: must contain an entry for each entry in clock-names
--  - clock-names: must include "core_clk", "mcu_clk", "m_axi_core_aclk",
--    "m_axi_mcu_aclk", "s_axi_lite_aclk"
--
--Example:
--	al5e: video-codec@a0009000 {
--		compatible = "allegro,al5e-1.1", "allegro,al5e";
--		reg = <0 0xa0009000 0 0x1000>,
--		      <0 0xa0000000 0 0x8000>;
--		reg-names = "regs", "sram";
--		interrupts = <0 96 4>;
--		clocks = <&xlnx_vcu 0>, <&xlnx_vcu 1>,
--			 <&clkc 71>, <&clkc 71>, <&clkc 71>;
--		clock-names = "core_clk", "mcu_clk", "m_axi_core_aclk",
--			      "m_axi_mcu_aclk", "s_axi_lite_aclk"
--	};
--	al5d: video-codec@a0029000 {
--		compatible = "allegro,al5d-1.1", "allegro,al5d";
--		reg = <0 0xa0029000 0 0x1000>,
--		      <0 0xa0020000 0 0x8000>;
--		reg-names = "regs", "sram";
--		interrupts = <0 96 4>;
--		clocks = <&xlnx_vcu 2>, <&xlnx_vcu 3>,
--			 <&clkc 71>, <&clkc 71>, <&clkc 71>;
--		clock-names = "core_clk", "mcu_clk", "m_axi_core_aclk",
--			      "m_axi_mcu_aclk", "s_axi_lite_aclk"
--	};
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 479b45878280..c7500b42af9a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -699,6 +699,7 @@ M:	Michael Tretter <m.tretter@pengutronix.de>
- R:	Pengutronix Kernel Team <kernel@pengutronix.de>
- L:	linux-media@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/media/allegro,al5e.yaml
- F:	drivers/media/platform/allegro-dvt/
- 
- ALLWINNER A10 CSI DRIVER
--- 
-2.20.1
-
+	Hans
