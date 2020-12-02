@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B86BEC83014
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75000C71155
 	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 18:15:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7F71F206D5
+	by mail.kernel.org (Postfix) with ESMTP id 1831C221FC
 	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 18:15:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389391AbgLBSP1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Dec 2020 13:15:27 -0500
-Received: from retiisi.eu ([95.216.213.190]:33490 "EHLO hillosipuli.retiisi.eu"
+        id S2389386AbgLBSP0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Dec 2020 13:15:26 -0500
+Received: from retiisi.eu ([95.216.213.190]:33498 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389385AbgLBSP1 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 2 Dec 2020 13:15:27 -0500
+        id S2389264AbgLBSP0 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 2 Dec 2020 13:15:26 -0500
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id C8819634CD9;
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 9FB65634CD7;
         Wed,  2 Dec 2020 20:08:33 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     mchehab@kernel.org
-Subject: [PATCH 38/38] ccs: Add support for obtaining C-PHY configuration from firmware
-Date:   Wed,  2 Dec 2020 20:06:41 +0200
-Message-Id: <20201202180641.17401-39-sakari.ailus@linux.intel.com>
+Subject: [PATCH 36/38] ccs: Print written register values
+Date:   Wed,  2 Dec 2020 20:06:39 +0200
+Message-Id: <20201202180641.17401-37-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201202180641.17401-1-sakari.ailus@linux.intel.com>
 References: <20201202180641.17401-1-sakari.ailus@linux.intel.com>
@@ -37,30 +37,28 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Try parsing the firmware also as C-PHY. Do this only after D-PHY as older
-firmware may not explicitly specify bus-type in which case D-PHY is the
-default.
+This helps debugging register writes.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 4 ++++
+ drivers/media/i2c/ccs/ccs-reg-access.c | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index c41c47b40e73..cd787155b698 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -2926,6 +2926,10 @@ static int ccs_get_hwconfig(struct ccs_sensor *sensor, struct device *dev)
- 		hwcfg->csi_signalling_mode = CCS_CSI_SIGNALING_MODE_CSI_2_DPHY;
- 		hwcfg->lanes = bus_cfg.bus.mipi_csi2.num_data_lanes;
- 		break;
-+	case V4L2_MBUS_CSI2_CPHY:
-+		hwcfg->csi_signalling_mode = CCS_CSI_SIGNALING_MODE_CSI_2_CPHY;
-+		hwcfg->lanes = bus_cfg.bus.mipi_csi2.num_data_lanes;
-+		break;
- 	case V4L2_MBUS_CSI1:
- 	case V4L2_MBUS_CCP2:
- 		hwcfg->csi_signalling_mode = (bus_cfg.bus.mipi_csi1.strobe) ?
+diff --git a/drivers/media/i2c/ccs/ccs-reg-access.c b/drivers/media/i2c/ccs/ccs-reg-access.c
+index 3de863e3bf26..b776af2a3c33 100644
+--- a/drivers/media/i2c/ccs/ccs-reg-access.c
++++ b/drivers/media/i2c/ccs/ccs-reg-access.c
+@@ -338,6 +338,10 @@ int ccs_write_addr_no_quirk(struct ccs_sensor *sensor, u32 reg, u32 val)
+ 	put_unaligned_be16(CCS_REG_ADDR(reg), data);
+ 	put_unaligned_be32(val << (8 * (sizeof(val) - len)), data + 2);
+ 
++	dev_dbg(&client->dev, "writing reg 0x%4.4x value 0x%*.*x (%u)\n",
++		CCS_REG_ADDR(reg), ccs_reg_width(reg) << 1,
++		ccs_reg_width(reg) << 1, val, val);
++
+ 	r = ccs_write_retry(client, &msg);
+ 	if (r)
+ 		dev_err(&client->dev,
 -- 
 2.27.0
 
