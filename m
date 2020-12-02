@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D34EC64E7B
-	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 18:13:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03D64C64E7C
+	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 18:14:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E397822248
-	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 18:13:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 99F32206D5
+	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 18:14:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387881AbgLBSNL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Dec 2020 13:13:11 -0500
-Received: from retiisi.eu ([95.216.213.190]:33628 "EHLO hillosipuli.retiisi.eu"
+        id S2389070AbgLBSOH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Dec 2020 13:14:07 -0500
+Received: from retiisi.eu ([95.216.213.190]:33494 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728241AbgLBSNL (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 2 Dec 2020 13:13:11 -0500
+        id S2387885AbgLBSOH (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 2 Dec 2020 13:14:07 -0500
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 5E301634CA5;
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id E6F4A634CC1;
         Wed,  2 Dec 2020 20:08:32 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     mchehab@kernel.org
-Subject: [PATCH 19/38] ccs-pll: Add support for extended input PLL clock divider
-Date:   Wed,  2 Dec 2020 20:06:22 +0200
-Message-Id: <20201202180641.17401-20-sakari.ailus@linux.intel.com>
+Subject: [PATCH 26/38] ccs-pll: Better separate OP and VT sub-tree calculation
+Date:   Wed,  2 Dec 2020 20:06:29 +0200
+Message-Id: <20201202180641.17401-27-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201202180641.17401-1-sakari.ailus@linux.intel.com>
 References: <20201202180641.17401-1-sakari.ailus@linux.intel.com>
@@ -37,57 +37,116 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-CCS allows odd PLL dividers other than 1, granted that the corresponding
-capability bit is set. Support this both in the PLL calculator and the CCS
-driver.
+Better separate OP PLL branch calculation from VT branch calculation.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs-pll.c      | 4 +++-
- drivers/media/i2c/ccs-pll.h      | 1 +
- drivers/media/i2c/ccs/ccs-core.c | 3 +++
- 3 files changed, 7 insertions(+), 1 deletion(-)
+ drivers/media/i2c/ccs-pll.c | 54 +++++++++++++++++++++----------------
+ 1 file changed, 31 insertions(+), 23 deletions(-)
 
 diff --git a/drivers/media/i2c/ccs-pll.c b/drivers/media/i2c/ccs-pll.c
-index cb19a36e54df..62939ca5b8e2 100644
+index 96eb71f16c81..e879c03a3d3b 100644
 --- a/drivers/media/i2c/ccs-pll.c
 +++ b/drivers/media/i2c/ccs-pll.c
-@@ -478,7 +478,9 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+@@ -162,11 +162,11 @@ static int check_all_bounds(struct device *dev,
+ #define PHY_CONST_DIV		16
  
- 	for (op_pll_fr->pre_pll_clk_div = min_op_pre_pll_clk_div;
- 	     op_pll_fr->pre_pll_clk_div <= max_op_pre_pll_clk_div;
--	     op_pll_fr->pre_pll_clk_div += 2 - (op_pll_fr->pre_pll_clk_div & 1)) {
-+	     op_pll_fr->pre_pll_clk_div +=
-+		     (pll->flags & CCS_PLL_FLAG_EXT_IP_PLL_DIVIDER) ? 1 :
-+		     2 - (op_pll_fr->pre_pll_clk_div & 1)) {
- 		rval = __ccs_pll_calculate(dev, lim, op_lim_fr, op_lim_bk, pll,
- 					   op_pll_fr, op_pll_bk, mul, div);
+ static void
+-__ccs_pll_calculate_vt(struct device *dev, const struct ccs_pll_limits *lim,
+-		       const struct ccs_pll_branch_limits_bk *op_lim_bk,
+-		       struct ccs_pll *pll, struct ccs_pll_branch_fr *pll_fr,
+-		       struct ccs_pll_branch_bk *op_pll_bk, bool cphy,
+-		       uint32_t phy_const)
++ccs_pll_calculate_vt(struct device *dev, const struct ccs_pll_limits *lim,
++		     const struct ccs_pll_branch_limits_bk *op_lim_bk,
++		     struct ccs_pll *pll, struct ccs_pll_branch_fr *pll_fr,
++		     struct ccs_pll_branch_bk *op_pll_bk, bool cphy,
++		     uint32_t phy_const)
+ {
+ 	uint32_t sys_div;
+ 	uint32_t best_pix_div = INT_MAX >> 1;
+@@ -174,6 +174,9 @@ __ccs_pll_calculate_vt(struct device *dev, const struct ccs_pll_limits *lim,
+ 	uint32_t min_vt_div, max_vt_div, vt_div;
+ 	uint32_t min_sys_div, max_sys_div;
+ 
++	if (pll->flags & CCS_PLL_FLAG_NO_OP_CLOCKS)
++		goto out_calc_pixel_rate;
++
+ 	/*
+ 	 * Find out whether a sensor supports derating. If it does not, VT and
+ 	 * OP domains are required to run at the same pixel rate.
+@@ -313,6 +316,10 @@ __ccs_pll_calculate_vt(struct device *dev, const struct ccs_pll_limits *lim,
+ 		pll_fr->pll_op_clk_freq_hz / pll->vt_bk.sys_clk_div;
+ 	pll->vt_bk.pix_clk_freq_hz =
+ 		pll->vt_bk.sys_clk_freq_hz / pll->vt_bk.pix_clk_div;
++
++out_calc_pixel_rate:
++	pll->pixel_rate_pixel_array =
++		pll->vt_bk.pix_clk_freq_hz * pll->vt_lanes;
+ }
+ 
+ /*
+@@ -327,12 +334,12 @@ __ccs_pll_calculate_vt(struct device *dev, const struct ccs_pll_limits *lim,
+  * @return Zero on success, error code on error.
+  */
+ static int
+-__ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+-		    const struct ccs_pll_branch_limits_fr *op_lim_fr,
+-		    const struct ccs_pll_branch_limits_bk *op_lim_bk,
+-		    struct ccs_pll *pll, struct ccs_pll_branch_fr *op_pll_fr,
+-		    struct ccs_pll_branch_bk *op_pll_bk, uint32_t mul,
+-		    uint32_t div, uint32_t l, bool cphy, uint32_t phy_const)
++ccs_pll_calculate_op(struct device *dev, const struct ccs_pll_limits *lim,
++		     const struct ccs_pll_branch_limits_fr *op_lim_fr,
++		     const struct ccs_pll_branch_limits_bk *op_lim_bk,
++		     struct ccs_pll *pll, struct ccs_pll_branch_fr *op_pll_fr,
++		     struct ccs_pll_branch_bk *op_pll_bk, uint32_t mul,
++		     uint32_t div, uint32_t l, bool cphy, uint32_t phy_const)
+ {
+ 	/*
+ 	 * Higher multipliers (and divisors) are often required than
+@@ -430,15 +437,7 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 
+ 	dev_dbg(dev, "op_pix_clk_div: %u\n", op_pll_bk->pix_clk_div);
+ 
+-	if (!(pll->flags & CCS_PLL_FLAG_NO_OP_CLOCKS))
+-		__ccs_pll_calculate_vt(dev, lim, op_lim_bk, pll, op_pll_fr,
+-				       op_pll_bk, cphy, phy_const);
+-
+-	pll->pixel_rate_pixel_array =
+-		pll->vt_bk.pix_clk_freq_hz * pll->vt_lanes;
+-
+-	return check_all_bounds(dev, lim, op_lim_fr, op_lim_bk, pll, op_pll_fr,
+-				op_pll_bk);
++	return 0;
+ }
+ 
+ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+@@ -558,13 +557,22 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 	     op_pll_fr->pre_pll_clk_div +=
+ 		     (pll->flags & CCS_PLL_FLAG_EXT_IP_PLL_DIVIDER) ? 1 :
+ 		     2 - (op_pll_fr->pre_pll_clk_div & 1)) {
+-		rval = __ccs_pll_calculate(dev, lim, op_lim_fr, op_lim_bk, pll,
+-					   op_pll_fr, op_pll_bk, mul, div, l,
+-					   cphy, phy_const);
++		rval = ccs_pll_calculate_op(dev, lim, op_lim_fr, op_lim_bk, pll,
++					    op_pll_fr, op_pll_bk, mul, div, l,
++					    cphy, phy_const);
++		if (rval)
++			continue;
++
++		ccs_pll_calculate_vt(dev, lim, op_lim_bk, pll, op_pll_fr,
++				     op_pll_bk, cphy, phy_const);
++
++		rval = check_all_bounds(dev, lim, op_lim_fr, op_lim_bk, pll,
++					op_pll_fr, op_pll_bk);
  		if (rval)
-diff --git a/drivers/media/i2c/ccs-pll.h b/drivers/media/i2c/ccs-pll.h
-index fe20af11a068..807ae7250aa2 100644
---- a/drivers/media/i2c/ccs-pll.h
-+++ b/drivers/media/i2c/ccs-pll.h
-@@ -25,6 +25,7 @@
- /* CCS PLL flags */
- #define CCS_PLL_FLAG_LANE_SPEED_MODEL				BIT(2)
- #define CCS_PLL_FLAG_LINK_DECOUPLED				BIT(3)
-+#define CCS_PLL_FLAG_EXT_IP_PLL_DIVIDER				BIT(4)
+ 			continue;
  
- /**
-  * struct ccs_pll_branch_fr - CCS PLL configuration (front)
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 41c006ad03c4..70f4f304fef6 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -3220,6 +3220,9 @@ static int ccs_probe(struct i2c_client *client)
- 			sensor->pll.op_lanes = sensor->pll.csi2.lanes;
- 		}
+ 		print_pll(dev, pll);
++
+ 		return 0;
  	}
-+	if (CCS_LIM(sensor, CLOCK_TREE_PLL_CAPABILITY) &
-+	    CCS_CLOCK_TREE_PLL_CAPABILITY_EXT_DIVIDER)
-+		sensor->pll.flags |= CCS_PLL_FLAG_EXT_IP_PLL_DIVIDER;
- 	sensor->pll.ext_clk_freq_hz = sensor->hwcfg.ext_clk;
- 	sensor->pll.scale_n = CCS_LIM(sensor, SCALER_N_MIN);
  
 -- 
 2.27.0
