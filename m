@@ -2,118 +2,242 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53046C64E7B
-	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 17:44:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3677CC64E8A
+	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 17:45:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EBA06217A0
-	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 17:44:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DA93B2086A
+	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 17:45:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730871AbgLBRos (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Dec 2020 12:44:48 -0500
-Received: from mga05.intel.com ([192.55.52.43]:24936 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730839AbgLBRor (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 2 Dec 2020 12:44:47 -0500
-IronPort-SDR: 8xTzN9F4y9o/bl8X96/nvpjUMM/ZQID9MSgVZpFe70zfsZZIJ30sTrKIg9dMYY5ZuehIrR+rov
- B3aCsy5KaWow==
-X-IronPort-AV: E=McAfee;i="6000,8403,9823"; a="257767777"
-X-IronPort-AV: E=Sophos;i="5.78,387,1599548400"; 
-   d="scan'208";a="257767777"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2020 09:43:07 -0800
-IronPort-SDR: qychsMVfKy34U+NLFupe0IXy4+L3o94mB61BUyJWp6qqfM7j0eBi9XWk8h3ZNKMQHybUCjkvSF
- esqaYXI9WlIw==
-X-IronPort-AV: E=Sophos;i="5.78,387,1599548400"; 
-   d="scan'208";a="315430906"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2020 09:43:05 -0800
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 9F99D20884; Wed,  2 Dec 2020 19:43:03 +0200 (EET)
-Date:   Wed, 2 Dec 2020 19:43:03 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linuxtv-commits@linuxtv.org, Jacopo Mondi <jacopo@jmondi.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: Re: [git:media_tree/master] media: dt-bindings: media: Use OF graph
- schema
-Message-ID: <20201202174303.GH852@paasikivi.fi.intel.com>
-References: <E1kkTsj-0029fe-8O@www.linuxtv.org>
- <CAL_JsqL5RQkgGEpVadZC-BOB02sMk81q6LvKevcCt-oqkMK-gA@mail.gmail.com>
- <20201202155210.GA13750@pendragon.ideasonboard.com>
- <CAL_Jsq+sN6y+LFoPPnBawdMZfK011fQrVaQ3m6BHOLewz1qDWg@mail.gmail.com>
+        id S1730967AbgLBRpK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Dec 2020 12:45:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44934 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730873AbgLBRpK (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Dec 2020 12:45:10 -0500
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08EE9C0617A7
+        for <linux-media@vger.kernel.org>; Wed,  2 Dec 2020 09:44:24 -0800 (PST)
+Received: by mail-wr1-x443.google.com with SMTP id e7so4966033wrv.6
+        for <linux-media@vger.kernel.org>; Wed, 02 Dec 2020 09:44:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=og2P49iViWEWzWwqprbc7YqWxuiFFqb2QXhaHJuh+Es=;
+        b=TI+ZiSjRRjp0Chxn742QSRKoZPM5yqr1orTfYREdY2t7DOMY81ZXUURWTjJazUdUlx
+         6PzIuNhj8u11aYjetMj3g+NHs9z3Ze/6JNL6KPB63VoDz1Cp8eizyXbJqC0R/+3lQk6W
+         agIXRv2okb7dzCE+NS3u0d0ie2d/GkFfWN9VaxNmsHizFug9A2WZt3A/ez8WnyN1cg11
+         Yy13fU1AnKWNKCZUmQJ5WjqMuIiN46GqmjtAlemHaf2V+usG+tgyPYH5rCKTMFT4FWep
+         qLZrEQUAcc3WwrovovPzlX6+LmU/NZiNhUigRkHsgDQs9yBLLRPk4uZ9Md7JfdflHw5B
+         fUEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=og2P49iViWEWzWwqprbc7YqWxuiFFqb2QXhaHJuh+Es=;
+        b=IC0p7zX24Z5rjbncYHCXigNfDrYoVFOZckhUO/iv1KhP+5DWH2emdn7fTg3IGg93dK
+         /Hw0aSKkuy9QBQMlZmhgv+DwNU/ge+YjRuJ8hfsyE6wHaAMpWX6t9qNZEtBfBA8DOETS
+         B/Tss35bF0OjeS50nP1RRREoihi1DpGCKDx8zQr9sp1mlsuMggw5uRfuDjgWQMHTizZ9
+         7pGJl3/sKRIerk4O2/WDPi84Y35uy4BEsx7FfthzOIP//WhCo5yHc4l8ulE69Dl7Lnee
+         hXv5ed6o5zF0cBdbM3keVDCuLueTVyxR1fTvrjWJYWi16FELU4L/NcwuY0l69iIF83PO
+         TULQ==
+X-Gm-Message-State: AOAM531HS5xlKBGXY+loFsJ3zS1WYrJfFFPr3PtpRD3bSVKF04XNFnx1
+        4RgxJYKAixG46HbRngd0q6KUnw==
+X-Google-Smtp-Source: ABdhPJyu/5eHl3rHLVtbq/BB4JwK3Cb8C+avo9c66STs6euPWenUunbw4GGp/0EpoZ1KpkFoxvgqVg==
+X-Received: by 2002:a5d:4ac1:: with SMTP id y1mr4781042wrs.366.1606931062420;
+        Wed, 02 Dec 2020 09:44:22 -0800 (PST)
+Received: from localhost.localdomain ([2a01:e35:2ec0:82b0:15b4:c668:8f06:1b99])
+        by smtp.gmail.com with ESMTPSA id q12sm2842915wrx.86.2020.12.02.09.44.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Dec 2020 09:44:21 -0800 (PST)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     hverkuil@xs4all.nl
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/4] media: meson: Add support for the Amlogic GE2D Accelerator Unit
+Date:   Wed,  2 Dec 2020 18:44:13 +0100
+Message-Id: <20201202174417.3778306-1-narmstrong@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_Jsq+sN6y+LFoPPnBawdMZfK011fQrVaQ3m6BHOLewz1qDWg@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Rob, Laurent,
+The GE2D is a 2D accelerator with various features like configurable blitter
+with alpha blending, frame rotation, scaling, format conversion and colorspace
+conversion.
 
-On Wed, Dec 02, 2020 at 09:30:27AM -0700, Rob Herring wrote:
-> On Wed, Dec 2, 2020 at 8:52 AM Laurent Pinchart
-> <laurent.pinchart@ideasonboard.com> wrote:
-> >
-> > On Wed, Dec 02, 2020 at 08:45:59AM -0700, Rob Herring wrote:
-> > > On Wed, Dec 2, 2020 at 8:17 AM Mauro Carvalho Chehab
-> > > <mchehab+huawei@kernel.org> wrote:
-> > > >
-> > > > This is an automatic generated email to let you know that the following patch were queued:
-> > > >
-> > > > Subject: media: dt-bindings: media: Use OF graph schema
-> > > > Author:  Rob Herring <robh@kernel.org>
-> > > > Date:    Tue Nov 17 02:39:47 2020 +0100
-> > > >
-> > > > Now that we have a graph schema, rework the media related schemas to
-> > > > use it. Mostly this is adding a reference to graph.yaml and dropping
-> > > > duplicate parts from schemas.
-> > > >
-> > > > Cc: Maxime Ripard <mripard@kernel.org>
-> > > > Cc: Jacopo Mondi <jacopo@jmondi.org>
-> > > > Cc: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-> > > > Signed-off-by: Rob Herring <robh@kernel.org>
-> > > > Acked-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > >
-> > > Laurent did not ack this. There was discussion on this and it needs a
-> > > v2. Please drop.
+The driver implements a Memory2Memory VB2 V4L2 streaming device permitting:
+- 0, 90, 180, 270deg rotation
+- horizontal/vertical flipping
+- source cropping
+- destination compositing
+- 32bit/24bit/16bit format conversion
 
-I noticed it had been there for a while with some comments from Laurent
-that didn't obviously result in any changes to the patch.
+This adds the support for the GE2D version found in the AXG SoCs Family.
 
-The patch is in Mauro's tree now. I can send a revert if you'd prefer that
-instead of making changes on top of this.
+The missing features are:
+- Source scaling
+- Colorspace conversion
+- Advanced alpha blending & blitting options
 
-> >
-> > I told Sakari in an IRC conversation I was fine with the patches, and he
-> > asked if that meant an ack. I said yes, but didn't realize he wanted to
-> > apply your v1. Sorry about the confusion :-S
-> 
-> Thinking about this some more, I think video-interfaces.txt is going
-> to need to be converted first as well. Otherwise, it's going to be 2
-> rounds of whack-a-mole. Also consider that everything applied after
-> this needs to be converted with whatever we end up with. Folks will
-> need to respin their patches, the maintainer has to do it, or we'll
-> need another round. So consider when is the best time in the cycle to
-> apply?
+Dependencies:
+- Patches 1-3: None
+- Patch 4: https://lkml.kernel.org/r/20200915124553.8056-1-narmstrong@baylibre.com (applied for 5.11)
 
-I don't think this would be a bad time (there will always be some binding
-patches around), but again hopefully we'd have video-interfaces.txt
-converted soon.
+Changes since v3:
+- Removed spinlock
+- Removed useless streamon_cap/streamon_out
+- Fixed probe failure path & remove path
+- Changed default size to 128x128
+- Removed useless pix.width/height test
+- Upgraded v4l2-compliance to 1.21.0 (11da65eee7a271bba3f21d8117cdac428fe3a91e)
+
+Changes since v2:
+- removed error check in and after get_frame()
+- moved the v4l2_file_operations lower in the code to avoid adding vidioc_setup_cap_fmt on top
+- removed all memcpy of pix_fmt
+- simplified & fixed ge2d_start_streaming
+- added local buffer type check in vidioc_g_selection instead of using get_frame error
+- removed impossible <0 rectangle check, fixed error string
+- added comment on condition after V4L2_CID_ROTATE
+
+Changes since v1:
+- Rebased on v5.10-rc1
+
+/ # v4l2-compliance -s
+v4l2-compliance 1.21.0-4682, 64 bits, 64-bit time_t
+v4l2-compliance SHA: 11da65eee7a2 2020-11-14 12:41:14
+
+Compliance test for meson-ge2d device /dev/video0:
+
+Driver Info:
+	Driver name      : meson-ge2d
+	Card type        : meson-ge2d
+	Bus info         : platform:meson-ge2d
+	Driver version   : 5.10.0
+	Capabilities     : 0x84208000
+		Video Memory-to-Memory
+		Streaming
+		Extended Pix Format
+		Device Capabilities
+	Device Caps      : 0x04208000
+		Video Memory-to-Memory
+		Streaming
+		Extended Pix Format
+
+Required ioctls:
+	test VIDIOC_QUERYCAP: OK
+
+Allow for multiple opens:
+	test second /dev/video0 open: OK
+	test VIDIOC_QUERYCAP: OK
+	test VIDIOC_G/S_PRIORITY: OK
+	test for unlimited opens: OK
+
+	test invalid ioctls: OK
+Debug ioctls:
+	test VIDIOC_DBG_G/S_REGISTER: OK
+	test VIDIOC_LOG_STATUS: OK (Not Supported)
+
+Input ioctls:
+	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+	test VIDIOC_ENUMAUDIO: OK (Not Supported)
+	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+	test VIDIOC_G/S_AUDIO: OK (Not Supported)
+	Inputs: 0 Audio Inputs: 0 Tuners: 0
+
+Output ioctls:
+	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+	Outputs: 0 Audio Outputs: 0 Modulators: 0
+
+Input/Output configuration ioctls:
+	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+	test VIDIOC_G/S_EDID: OK (Not Supported)
+
+Control ioctls:
+	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
+	test VIDIOC_QUERYCTRL: OK
+	test VIDIOC_G/S_CTRL: OK
+	test VIDIOC_G/S/TRY_EXT_CTRLS: OK
+	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
+	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+	Standard Controls: 4 Private Controls: 0
+
+Format ioctls:
+	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+	test VIDIOC_G/S_PARM: OK (Not Supported)
+	test VIDIOC_G_FBUF: OK (Not Supported)
+	test VIDIOC_G_FMT: OK
+	test VIDIOC_TRY_FMT: OK
+	test VIDIOC_S_FMT: OK
+	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+	test Cropping: OK
+	test Composing: OK
+	test Scaling: OK (Not Supported)
+
+Codec ioctls:
+	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
+
+Buffer ioctls:
+	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+	test VIDIOC_EXPBUF: OK
+	test Requests: OK (Not Supported)
+
+Test input 0:
+
+Streaming ioctls:
+	test read/write: OK (Not Supported)
+	test blocking wait: OK
+	Video Capture: Captured 58 buffers                
+	test MMAP (no poll): OK
+	Video Capture: Captured 58 buffers                
+	test MMAP (select): OK
+	Video Capture: Captured 58 buffers                
+	test MMAP (epoll): OK
+	test USERPTR (no poll): OK (Not Supported)
+	test USERPTR (select): OK (Not Supported)
+	test DMABUF: Cannot test, specify --expbuf-device
+
+Total for meson-ge2d device /dev/video0: 52, Succeeded: 52, Failed: 0, Warnings: 0
+
+Neil Armstrong (4):
+  dt-bindings: media: Add bindings for the Amlogic GE2D Accelerator Unit
+  media: meson: Add M2M driver for the Amlogic GE2D Accelerator Unit
+  MAINTAINERS: Add myself as maintainer of the Amlogic GE2D driver
+  arm64: dts: meson-axg: add GE2D node
+
+ .../bindings/media/amlogic,axg-ge2d.yaml      |   47 +
+ MAINTAINERS                                   |    9 +
+ arch/arm64/boot/dts/amlogic/meson-axg.dtsi    |    9 +
+ drivers/media/platform/Kconfig                |   13 +
+ drivers/media/platform/Makefile               |    2 +
+ drivers/media/platform/meson/ge2d/Makefile    |    3 +
+ drivers/media/platform/meson/ge2d/ge2d-regs.h |  360 ++++++
+ drivers/media/platform/meson/ge2d/ge2d.c      | 1066 +++++++++++++++++
+ 8 files changed, 1509 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/amlogic,axg-ge2d.yaml
+ create mode 100644 drivers/media/platform/meson/ge2d/Makefile
+ create mode 100644 drivers/media/platform/meson/ge2d/ge2d-regs.h
+ create mode 100644 drivers/media/platform/meson/ge2d/ge2d.c
 
 -- 
-Kind regards,
+2.25.1
 
-Sakari Ailus
