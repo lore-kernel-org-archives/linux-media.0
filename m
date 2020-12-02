@@ -2,178 +2,103 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0F66C64E7B
-	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 14:48:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 179F6C64E7B
+	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 14:49:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5ADEF221EB
-	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 14:48:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BC30E221FA
+	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 14:49:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728565AbgLBOrq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Dec 2020 09:47:46 -0500
-Received: from mga17.intel.com ([192.55.52.151]:35201 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728210AbgLBOrq (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 2 Dec 2020 09:47:46 -0500
-IronPort-SDR: mkNd88R+PrfAylmv8AQrx6CpT6pQzWFB9eL5101nhD/s8lz2pHA4ZDoiUKWZ4B6+Z8CA0ZUGIo
- 4J1ynDdUNDvw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9823"; a="152851762"
-X-IronPort-AV: E=Sophos;i="5.78,386,1599548400"; 
-   d="scan'208";a="152851762"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2020 06:46:03 -0800
-IronPort-SDR: p+PUmhZOKsy71anKQEUCMQCbKkpX4MYJ8zy3ZvwPEztsvj2iftNdfEtvgABsD7FVkeLxxnps6Z
- P+02poBM6fVA==
-X-IronPort-AV: E=Sophos;i="5.78,387,1599548400"; 
-   d="scan'208";a="330456767"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2020 06:46:02 -0800
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 8C2A320884; Wed,  2 Dec 2020 16:46:00 +0200 (EET)
-Date:   Wed, 2 Dec 2020 16:46:00 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, hverkuil@xs4all.nl
-Subject: Re: [PATCH v2 01/29] ccs: Add the generator for CCS register
- definitions and limits
-Message-ID: <20201202144600.GF852@paasikivi.fi.intel.com>
-References: <20201127103325.29814-1-sakari.ailus@linux.intel.com>
- <20201127103325.29814-2-sakari.ailus@linux.intel.com>
- <20201202151749.52f4258b@coco.lan>
+        id S1730285AbgLBOtO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Dec 2020 09:49:14 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:45136 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728030AbgLBOtO (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Dec 2020 09:49:14 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B2EcweO072239;
+        Wed, 2 Dec 2020 14:48:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=F94BZ6EiqRazcXmrkYEHvqtwAOcB7RoOXNSrA81tQlo=;
+ b=QItMScL+fPMJRfcJkmBP9gmz66ijgjc8ENM5sk+NE0rH5bdgf0BdBABiEQgWG2Y56ivB
+ x+tFSwU/wPZijO3zkdZgzLF+dK9hr0/a+ZvneMtv0Ptk4tnfjdgJFXaiGEUmqlfFiyNT
+ Xy7i4X8s9hKFAehPgOI7wU53c4B8dkpNgbdaD+PMGbzuBexnm5+bfAB2m1YsSkyFlexo
+ L3qOnT/no7oAfx07QsRE+iXsgwleV7IIyitnEEv/y2vGQcRIIWI4eBAHDXGi1y9yxwXH
+ 7FR+R7kNsYRHuxnNfehTY8k4n70b4/ORvP8LWdJCc14oB/k8QGxApPeoXmB93AHuNUk4 ag== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2120.oracle.com with ESMTP id 353egkrmq3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 02 Dec 2020 14:48:31 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B2EfN5V191281;
+        Wed, 2 Dec 2020 14:48:31 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3030.oracle.com with ESMTP id 3540fyuh3j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 02 Dec 2020 14:48:31 +0000
+Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0B2EmTNm028412;
+        Wed, 2 Dec 2020 14:48:30 GMT
+Received: from mwanda (/102.36.221.92)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 02 Dec 2020 06:48:27 -0800
+Date:   Wed, 2 Dec 2020 17:48:17 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     bingbu.cao@intel.com
+Cc:     linux-media@vger.kernel.org
+Subject: [bug report] media: ov2740: allow OTP data access during streaming
+Message-ID: <X8epMQZcpSx0xLiZ@mwanda>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201202151749.52f4258b@coco.lan>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9822 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=3
+ phishscore=0 mlxlogscore=791 adultscore=0 mlxscore=0 bulkscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012020090
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9822 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 suspectscore=3
+ phishscore=0 mlxlogscore=818 lowpriorityscore=0 malwarescore=0
+ priorityscore=1501 spamscore=0 impostorscore=0 clxscore=1011 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2012020090
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+Hello Bingbu Cao,
 
-On Wed, Dec 02, 2020 at 03:17:49PM +0100, Mauro Carvalho Chehab wrote:
-> Em Fri, 27 Nov 2020 12:32:57 +0200
-> Sakari Ailus <sakari.ailus@linux.intel.com> escreveu:
-> 
-> > Add register definitions of the MIPI CCS 1.1 standard.
-> > 
-> > The CCS driver makes extended use of device's capability registers that
-> > are dependent on CCS version. This involves having an in-memory data
-> > structure for limit and capability information, creating that data
-> > structure and accessing it.
-> > 
-> > The register definitions as well as the definitions of this data structure
-> > are generated from a text file using a Perl script. Add the generator
-> > script to make it easy to update the generated files.
-> > 
-> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > ---
-> >  .../driver-api/media/drivers/ccs/ccs-regs.txt | 1041 +++++++++++++++++
-> >  .../driver-api/media/drivers/ccs/mk-ccs-regs  |  433 +++++++
-> >  MAINTAINERS                                   |    1 +
-> >  3 files changed, 1475 insertions(+)
-> >  create mode 100644 Documentation/driver-api/media/drivers/ccs/ccs-regs.txt
-> >  create mode 100755 Documentation/driver-api/media/drivers/ccs/mk-ccs-regs
-> > 
-> > diff --git a/Documentation/driver-api/media/drivers/ccs/ccs-regs.txt b/Documentation/driver-api/media/drivers/ccs/ccs-regs.txt
-> > new file mode 100644
-> > index 000000000000..93f0131aa304
-> > --- /dev/null
-> > +++ b/Documentation/driver-api/media/drivers/ccs/ccs-regs.txt
-> > @@ -0,0 +1,1041 @@
-> > +# Copyright (C) 2019--2020 Intel Corporation
-> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-3-Clause
-> 
-> 
-> Whenever technically possible, the SPDX header should be the first
-> line.
+This is a semi-automatic email about new static checker warnings.
 
-I sent patches addressing this, as well as renaming it as ccs-regs.asc.
+The patch 5e6fd339b68d: "media: ov2740: allow OTP data access during 
+streaming" from Nov 13, 2020, leads to the following Smatch complaint:
 
-> 
-> -
-> 
-> With regards to css-regs.txt file itself, I think it should be
-> added on a css-specific ReST file (index.rst?) using the
-> 
-> 	.. include
-> 
-> directive (or a similar one).
-> 
-> Regards,
-> Mauro
-> 
-> > +
-> > +# register				rflags
-> > +# - f	field	LSB	MSB		rflags
-> > +# - e	enum	value			# after a field
-> > +# - e	enum	value	[LSB	MSB]
-> > +# - b	bool	bit
-> > +# - l	arg	name	min	max	elsize	[discontig...]
-> > +#
-> > +# rflags
-> > +#	8, 16, 32	register bits (default is 8)
-> > +#	v1.1		defined in version 1.1
-> > +#	f		formula
-> > +#	float_ireal	iReal or IEEE 754; 32 bits
-> > +#	ireal		unsigned iReal
-> 
-> 
-> > +
-> > +# general status registers
-> > +module_model_id				0x0000	16
-> > +module_revision_number_major		0x0002	8
-> > +frame_count				0x0005	8
-> > +pixel_order				0x0006	8
-> 
-> 
-> For instance, the above could be, instead:
-> 
-> 	.. general status registers
-> 
-> 	::
-> 
-> 	  module_model_id			0x0000	16
-> 	  module_revision_number_major		0x0002	8
-> 	  frame_count				0x0005	8
-> 	  pixel_order				0x0006	8
-> 
-> (which should be easy to parse)
-> 
-> or, even better:
-> 
-> 	  general status registers:
-> 
-> 	  ====================================  ======  ==
-> 	  module_model_id			0x0000	16
-> 	  module_revision_number_major		0x0002	8
-> 	  frame_count				0x0005	8
-> 	  pixel_order				0x0006	8
-> 	  ====================================  ======  ==
-> 
-> 
-> Parsing the later could be a little harder, although it would allow
-> placing the file inside the documentation, with could be interesting.
+    drivers/media/i2c/ov2740.c:609 ov2740_load_otp_data()
+    warn: variable dereferenced before check 'nvm' (see line 603)
 
-Driver implemented in C uses the macros in the generated header, so the
-documentation should make use of those macro names. Generating developer
-documentation to support a single driver seems overkill to me. I develop
-this driver and over a decade I have received very, very few patches to
-this driver, so I consider the primary audience of such document to be
-myself. And I can tell I'm happy looking at the source code.
+drivers/media/i2c/ov2740.c
+   601  static int ov2740_load_otp_data(struct nvm_data *nvm)
+   602	{
+   603		struct i2c_client *client = nvm->client;
+                                            ^^^^^^^^^^^
+Dereference
 
-If we'd still do that, then, instead of changing the format of this file,
-I'd generate the documentation using another script. Btw. mk-ccs-regs
-script isn't the only script interpreting this file, so changing the format
-requires changes elsewhere.
+   604		struct ov2740 *ov2740 = to_ov2740(i2c_get_clientdata(client));
+   605		u32 isp_ctrl00 = 0;
+   606		u32 isp_ctrl01 = 0;
+   607		int ret;
+   608	
+   609		if (!nvm)
+                    ^^^^
+Checked too late.
 
--- 
-Kind regards,
+   610			return -EINVAL;
+   611	
 
-Sakari Ailus
+regards,
+dan carpenter
