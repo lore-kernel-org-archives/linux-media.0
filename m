@@ -7,30 +7,27 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60A21C64E7C
-	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 18:12:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C302C64E7C
+	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 18:12:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E7CA2206D5
-	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 18:12:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CAE2B206D5
+	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 18:12:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387767AbgLBSMl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Dec 2020 13:12:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48898 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387531AbgLBSMl (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Dec 2020 13:12:41 -0500
-Received: from hillosipuli.retiisi.eu (unknown [IPv6:2a01:4f9:c010:4572::e8:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3CFC0613CF
-        for <linux-media@vger.kernel.org>; Wed,  2 Dec 2020 10:11:25 -0800 (PST)
+        id S2387616AbgLBSMu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Dec 2020 13:12:50 -0500
+Received: from retiisi.eu ([95.216.213.190]:33496 "EHLO hillosipuli.retiisi.eu"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729012AbgLBSMt (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 2 Dec 2020 13:12:49 -0500
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id E7009634C98;
-        Wed,  2 Dec 2020 20:08:31 +0200 (EET)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 9D4C4634CBD;
+        Wed,  2 Dec 2020 20:08:32 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     mchehab@kernel.org
-Subject: [PATCH 14/38] ccs-pll: Fix check for PLL multiplier upper bound
-Date:   Wed,  2 Dec 2020 20:06:17 +0200
-Message-Id: <20201202180641.17401-15-sakari.ailus@linux.intel.com>
+Subject: [PATCH 22/38] ccs-pll: Add sanity checks
+Date:   Wed,  2 Dec 2020 20:06:25 +0200
+Message-Id: <20201202180641.17401-23-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201202180641.17401-1-sakari.ailus@linux.intel.com>
 References: <20201202180641.17401-1-sakari.ailus@linux.intel.com>
@@ -40,30 +37,33 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The additional multiplier (for higher VT timing) of the PLL multiplier was
-checked against the upper limit but the result was rounded up, possibly
-producing too high additional multiplier. Round down instead to keep
-within hardware limits.
+Add sanity checks for fields that could cause division by zero.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs-pll.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/media/i2c/ccs-pll.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
 diff --git a/drivers/media/i2c/ccs-pll.c b/drivers/media/i2c/ccs-pll.c
-index f4c41d61e332..b23e959000a4 100644
+index e3a6493fd601..420d2c4d7b2c 100644
 --- a/drivers/media/i2c/ccs-pll.c
 +++ b/drivers/media/i2c/ccs-pll.c
-@@ -204,8 +204,7 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
- 	dev_dbg(dev, "more_mul_max: max_op_sys_clk_div check: %u\n",
- 		more_mul_max);
- 	/* Ensure we won't go above max_pll_multiplier. */
--	more_mul_max = min(more_mul_max,
--			   DIV_ROUND_UP(op_lim_fr->max_pll_multiplier, mul));
-+	more_mul_max = min(more_mul_max, op_lim_fr->max_pll_multiplier / mul);
- 	dev_dbg(dev, "more_mul_max: min_pll_multiplier check: %u\n",
- 		more_mul_max);
+@@ -421,6 +421,15 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 		pll->vt_lanes = 1;
+ 	}
  
++	if (!pll->op_lanes || !pll->vt_lanes || !pll->bits_per_pixel ||
++	    !pll->ext_clk_freq_hz || !pll->link_freq || !pll->scale_m ||
++	    !op_lim_fr->min_pll_ip_clk_freq_hz ||
++	    !op_lim_fr->max_pll_ip_clk_freq_hz ||
++	    !op_lim_fr->min_pll_op_clk_freq_hz ||
++	    !op_lim_fr->max_pll_op_clk_freq_hz ||
++	    !op_lim_bk->max_sys_clk_div || !op_lim_fr->max_pll_multiplier)
++		return -EINVAL;
++
+ 	/*
+ 	 * Make sure op_pix_clk_div will be integer --- unless flexible
+ 	 * op_pix_clk_div is supported
 -- 
 2.27.0
 
