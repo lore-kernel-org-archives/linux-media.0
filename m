@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 54C81C64E7B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF2D5C64E7C
 	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 18:13:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 09FFB22240
-	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 18:13:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7F788206D5
+	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 18:13:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730542AbgLBSNI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Dec 2020 13:13:08 -0500
-Received: from retiisi.eu ([95.216.213.190]:33612 "EHLO hillosipuli.retiisi.eu"
+        id S2387531AbgLBSNJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Dec 2020 13:13:09 -0500
+Received: from retiisi.eu ([95.216.213.190]:33622 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728241AbgLBSNI (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1729090AbgLBSNI (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 2 Dec 2020 13:13:08 -0500
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id D3B41634C97;
-        Wed,  2 Dec 2020 20:08:31 +0200 (EET)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 30519634CA3;
+        Wed,  2 Dec 2020 20:08:32 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     mchehab@kernel.org
-Subject: [PATCH 13/38] ccs-pll: Fix comment on check against maximum PLL multiplier
-Date:   Wed,  2 Dec 2020 20:06:16 +0200
-Message-Id: <20201202180641.17401-14-sakari.ailus@linux.intel.com>
+Subject: [PATCH 17/38] ccs: Add support for lane speed model
+Date:   Wed,  2 Dec 2020 20:06:20 +0200
+Message-Id: <20201202180641.17401-18-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201202180641.17401-1-sakari.ailus@linux.intel.com>
 References: <20201202180641.17401-1-sakari.ailus@linux.intel.com>
@@ -37,27 +37,44 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The comment is about minimum PLL multiplier but the related check really
-deals with the maximum PLL multiplier.
+Convey the relevant PLL flags to the PLL calculator. Also the lane speed
+model affects how the link rate is calculated on the CSI-2 bus, as the
+rate is total of all lanes.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs-pll.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/i2c/ccs/ccs-core.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/ccs-pll.c b/drivers/media/i2c/ccs-pll.c
-index 78897a7c1448..f4c41d61e332 100644
---- a/drivers/media/i2c/ccs-pll.c
-+++ b/drivers/media/i2c/ccs-pll.c
-@@ -203,7 +203,7 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
- 			   / div);
- 	dev_dbg(dev, "more_mul_max: max_op_sys_clk_div check: %u\n",
- 		more_mul_max);
--	/* Ensure we won't go above min_pll_multiplier. */
-+	/* Ensure we won't go above max_pll_multiplier. */
- 	more_mul_max = min(more_mul_max,
- 			   DIV_ROUND_UP(op_lim_fr->max_pll_multiplier, mul));
- 	dev_dbg(dev, "more_mul_max: min_pll_multiplier check: %u\n",
+diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
+index 591953cec6ec..f3d4209c818c 100644
+--- a/drivers/media/i2c/ccs/ccs-core.c
++++ b/drivers/media/i2c/ccs/ccs-core.c
+@@ -387,7 +387,9 @@ static int ccs_pll_configure(struct ccs_sensor *sensor)
+ 	/* Lane op clock ratio does not apply here. */
+ 	rval = ccs_write(sensor, REQUESTED_LINK_RATE,
+ 			 DIV_ROUND_UP(pll->op_bk.sys_clk_freq_hz,
+-				      1000000 / 256 / 256));
++				      1000000 / 256 / 256) *
++			 (pll->flags & CCS_PLL_FLAG_LANE_SPEED_MODEL ?
++			  sensor->pll.csi2.lanes : 1));
+ 	if (rval < 0 || sensor->pll.flags & CCS_PLL_FLAG_NO_OP_CLOCKS)
+ 		return rval;
+ 
+@@ -3203,6 +3205,13 @@ static int ccs_probe(struct i2c_client *client)
+ 	/* prepare PLL configuration input values */
+ 	sensor->pll.bus_type = CCS_PLL_BUS_TYPE_CSI2_DPHY;
+ 	sensor->pll.csi2.lanes = sensor->hwcfg.lanes;
++	if (CCS_LIM(sensor, CLOCK_CALCULATION) &
++	    CCS_CLOCK_CALCULATION_LANE_SPEED) {
++		sensor->pll.vt_lanes =
++			CCS_LIM(sensor, NUM_OF_VT_LANES) + 1;
++		sensor->pll.op_lanes = sensor->pll.vt_lanes;
++		sensor->pll.flags |= CCS_PLL_FLAG_LANE_SPEED_MODEL;
++	}
+ 	sensor->pll.ext_clk_freq_hz = sensor->hwcfg.ext_clk;
+ 	sensor->pll.scale_n = CCS_LIM(sensor, SCALER_N_MIN);
+ 
 -- 
 2.27.0
 
