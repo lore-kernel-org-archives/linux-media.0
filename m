@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CC2CC64E7B
-	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 18:12:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 083C1C71155
+	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 18:12:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1B92B22248
+	by mail.kernel.org (Postfix) with ESMTP id A3558206D5
 	for <linux-media@archiver.kernel.org>; Wed,  2 Dec 2020 18:12:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729033AbgLBSMu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S2387790AbgLBSMu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 2 Dec 2020 13:12:50 -0500
-Received: from retiisi.eu ([95.216.213.190]:33494 "EHLO hillosipuli.retiisi.eu"
+Received: from retiisi.eu ([95.216.213.190]:33498 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729032AbgLBSMt (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1729033AbgLBSMt (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 2 Dec 2020 13:12:49 -0500
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 735DE634CA9;
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id AF8D7634CBE;
         Wed,  2 Dec 2020 20:08:32 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     mchehab@kernel.org
-Subject: [PATCH 20/38] ccs-pll: Support two cycles per pixel on OP domain
-Date:   Wed,  2 Dec 2020 20:06:23 +0200
-Message-Id: <20201202180641.17401-21-sakari.ailus@linux.intel.com>
+Subject: [PATCH 23/38] ccs-pll: Add C-PHY support
+Date:   Wed,  2 Dec 2020 20:06:26 +0200
+Message-Id: <20201202180641.17401-24-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201202180641.17401-1-sakari.ailus@linux.intel.com>
 References: <20201202180641.17401-1-sakari.ailus@linux.intel.com>
@@ -37,115 +37,108 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The l parameter defines the number of clock cycles to process a single
-pixel per OP lane. It is calculated based on a new register
-op_bits_per_lane.
+Add C-PHY support for the CCS PLL calculator.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs-pll.c      | 19 +++++++++++++------
- drivers/media/i2c/ccs-pll.h      |  2 ++
- drivers/media/i2c/ccs/ccs-core.c |  1 +
- 3 files changed, 16 insertions(+), 6 deletions(-)
+ drivers/media/i2c/ccs-pll.c | 35 ++++++++++++++++++++++++++---------
+ 1 file changed, 26 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/media/i2c/ccs-pll.c b/drivers/media/i2c/ccs-pll.c
-index 62939ca5b8e2..60ab0c043c7a 100644
+index 420d2c4d7b2c..0fa7c6f67195 100644
 --- a/drivers/media/i2c/ccs-pll.c
 +++ b/drivers/media/i2c/ccs-pll.c
-@@ -162,7 +162,7 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+@@ -145,6 +145,10 @@ static int check_all_bounds(struct device *dev,
+ 	return rval;
+ }
+ 
++#define CPHY_CONST		7
++#define DPHY_CONST		16
++#define PHY_CONST_DIV		16
++
+ /*
+  * Heuristically guess the PLL tree for a given common multiplier and
+  * divisor. Begin with the operational timing and continue to video
+@@ -162,7 +166,7 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
  		    const struct ccs_pll_branch_limits_bk *op_lim_bk,
  		    struct ccs_pll *pll, struct ccs_pll_branch_fr *op_pll_fr,
  		    struct ccs_pll_branch_bk *op_pll_bk, uint32_t mul,
--		    uint32_t div)
-+		    uint32_t div, uint32_t l)
+-		    uint32_t div, uint32_t l)
++		    uint32_t div, uint32_t l, bool cphy, uint32_t phy_const)
  {
  	uint32_t sys_div;
  	uint32_t best_pix_div = INT_MAX >> 1;
-@@ -252,10 +252,15 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
- 	op_pll_fr->pll_op_clk_freq_hz = op_pll_fr->pll_ip_clk_freq_hz
- 		* op_pll_fr->pll_multiplier;
+@@ -254,9 +258,11 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
  
--	op_pll_bk->pix_clk_div = pll->bits_per_pixel
--		* pll->op_lanes / pll->csi2.lanes;
-+	if (pll->flags & CCS_PLL_FLAG_LANE_SPEED_MODEL)
-+		op_pll_bk->pix_clk_div = pll->bits_per_pixel
-+			* pll->op_lanes / pll->csi2.lanes / l;
-+	else
-+		op_pll_bk->pix_clk_div = pll->bits_per_pixel / l;
-+
+ 	if (pll->flags & CCS_PLL_FLAG_LANE_SPEED_MODEL)
+ 		op_pll_bk->pix_clk_div = pll->bits_per_pixel
+-			* pll->op_lanes / pll->csi2.lanes / l;
++			* pll->op_lanes * phy_const
++			/ PHY_CONST_DIV / pll->csi2.lanes / l;
+ 	else
+-		op_pll_bk->pix_clk_div = pll->bits_per_pixel / l;
++		op_pll_bk->pix_clk_div =
++			pll->bits_per_pixel * phy_const / PHY_CONST_DIV / l;
+ 
  	op_pll_bk->pix_clk_freq_hz =
  		op_pll_bk->sys_clk_freq_hz / op_pll_bk->pix_clk_div;
-+
- 	dev_dbg(dev, "op_pix_clk_div: %u\n", op_pll_bk->pix_clk_div);
- 
- 	if (pll->flags & CCS_PLL_FLAG_NO_OP_CLOCKS) {
-@@ -291,7 +296,7 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+@@ -295,10 +301,11 @@ __ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 	 */
  	dev_dbg(dev, "scale_m: %u\n", pll->scale_m);
- 	min_vt_div = DIV_ROUND_UP(op_pll_bk->pix_clk_div
- 				  * op_pll_bk->sys_clk_div * pll->scale_n
--				  * pll->vt_lanes,
-+				  * pll->vt_lanes * l,
- 				  pll->op_lanes * vt_op_binning_div
- 				  * pll->scale_m);
+ 	min_vt_div = DIV_ROUND_UP(pll->bits_per_pixel * op_pll_bk->sys_clk_div
+-				  * pll->scale_n * pll->vt_lanes,
++				  * pll->scale_n * pll->vt_lanes * phy_const,
+ 				  (pll->flags & CCS_PLL_FLAG_LANE_SPEED_MODEL ?
+ 				   pll->csi2.lanes : 1)
+-				  * vt_op_binning_div * pll->scale_m);
++				  * vt_op_binning_div * pll->scale_m
++				  * PHY_CONST_DIV);
  
-@@ -406,6 +411,8 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 	/* Find smallest and biggest allowed vt divisor. */
+ 	dev_dbg(dev, "min_vt_div: %u\n", min_vt_div);
+@@ -408,6 +415,8 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 	const struct ccs_pll_branch_limits_bk *op_lim_bk = &lim->op_bk;
+ 	struct ccs_pll_branch_fr *op_pll_fr = &pll->vt_fr;
+ 	struct ccs_pll_branch_bk *op_pll_bk = &pll->op_bk;
++	bool cphy = pll->bus_type == CCS_PLL_BUS_TYPE_CSI2_CPHY;
++	uint32_t phy_const = cphy ? CPHY_CONST : DPHY_CONST;
  	uint16_t min_op_pre_pll_clk_div;
  	uint16_t max_op_pre_pll_clk_div;
  	uint32_t mul, div;
-+	uint32_t l = (!pll->op_bits_per_lane ||
-+		      pll->op_bits_per_lane >= pll->bits_per_pixel) ? 1 : 2;
- 	uint32_t i;
- 	int rval = -EINVAL;
+@@ -465,14 +474,21 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+ 			* (pll->flags & CCS_PLL_FLAG_LANE_SPEED_MODEL ?
+ 			   1 : pll->csi2.lanes);
+ 		break;
++	case CCS_PLL_BUS_TYPE_CSI2_CPHY:
++		op_pll_bk->sys_clk_freq_hz =
++			pll->link_freq
++			* (pll->flags & CCS_PLL_FLAG_LANE_SPEED_MODEL ?
++			   1 : pll->csi2.lanes);
++		break;
+ 	default:
+ 		return -EINVAL;
+ 	}
  
-@@ -444,7 +451,7 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
  	pll->pixel_rate_csi =
- 		op_pll_bk->pix_clk_freq_hz
- 		* (pll->flags & CCS_PLL_FLAG_LANE_SPEED_MODEL ?
--		   pll->csi2.lanes : 1);
-+		   pll->csi2.lanes : 1) / l;
+-		op_pll_bk->sys_clk_freq_hz
+-		* (pll->flags & CCS_PLL_FLAG_LANE_SPEED_MODEL ?
+-		   pll->csi2.lanes : 1) / pll->bits_per_pixel / l;
++		div_u64((uint64_t)op_pll_bk->sys_clk_freq_hz
++			* (pll->flags & CCS_PLL_FLAG_LANE_SPEED_MODEL ?
++			   pll->csi2.lanes : 1) * PHY_CONST_DIV,
++			phy_const * pll->bits_per_pixel * l);
  
  	/* Figure out limits for OP pre-pll divider based on extclk */
  	dev_dbg(dev, "min / max op_pre_pll_clk_div: %u / %u\n",
-@@ -482,7 +489,7 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
+@@ -510,7 +526,8 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
  		     (pll->flags & CCS_PLL_FLAG_EXT_IP_PLL_DIVIDER) ? 1 :
  		     2 - (op_pll_fr->pre_pll_clk_div & 1)) {
  		rval = __ccs_pll_calculate(dev, lim, op_lim_fr, op_lim_bk, pll,
--					   op_pll_fr, op_pll_bk, mul, div);
-+					   op_pll_fr, op_pll_bk, mul, div, l);
+-					   op_pll_fr, op_pll_bk, mul, div, l);
++					   op_pll_fr, op_pll_bk, mul, div, l,
++					   cphy, phy_const);
  		if (rval)
  			continue;
- 
-diff --git a/drivers/media/i2c/ccs-pll.h b/drivers/media/i2c/ccs-pll.h
-index 807ae7250aa2..207822cf2324 100644
---- a/drivers/media/i2c/ccs-pll.h
-+++ b/drivers/media/i2c/ccs-pll.h
-@@ -76,6 +76,7 @@ struct ccs_pll_branch_bk {
-  * @scale_m: Downscaling factor, M component, [16, max] (input)
-  * @scale_n: Downscaling factor, N component, typically 16 (input)
-  * @bits_per_pixel: Bits per pixel on the output data bus (input)
-+ * @op_bits_per_lane: Number of bits per OP lane (input)
-  * @flags: CCS_PLL_FLAG_* (input)
-  * @link_freq: Chosen link frequency (input)
-  * @ext_clk_freq_hz: External clock frequency, i.e. the sensor's input clock
-@@ -100,6 +101,7 @@ struct ccs_pll {
- 	uint8_t scale_m;
- 	uint8_t scale_n;
- 	uint8_t bits_per_pixel;
-+	uint8_t op_bits_per_lane;
- 	uint16_t flags;
- 	uint32_t link_freq;
- 	uint32_t ext_clk_freq_hz;
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 70f4f304fef6..83de43fa1880 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -3223,6 +3223,7 @@ static int ccs_probe(struct i2c_client *client)
- 	if (CCS_LIM(sensor, CLOCK_TREE_PLL_CAPABILITY) &
- 	    CCS_CLOCK_TREE_PLL_CAPABILITY_EXT_DIVIDER)
- 		sensor->pll.flags |= CCS_PLL_FLAG_EXT_IP_PLL_DIVIDER;
-+	sensor->pll.op_bits_per_lane = CCS_LIM(sensor, OP_BITS_PER_LANE);
- 	sensor->pll.ext_clk_freq_hz = sensor->hwcfg.ext_clk;
- 	sensor->pll.scale_n = CCS_LIM(sensor, SCALER_N_MIN);
  
 -- 
 2.27.0
