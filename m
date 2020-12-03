@@ -7,21 +7,21 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABD08C64E7A
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DBE67C64E8A
 	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 12:52:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5DB1722245
+	by mail.kernel.org (Postfix) with ESMTP id 8BCED22206
 	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 12:52:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730523AbgLCMus (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1730514AbgLCMus (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 3 Dec 2020 07:50:48 -0500
-Received: from mout.kundenserver.de ([212.227.126.130]:52111 "EHLO
+Received: from mout.kundenserver.de ([212.227.126.131]:52313 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730506AbgLCMur (ORCPT
+        with ESMTP id S1730504AbgLCMur (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Thu, 3 Dec 2020 07:50:47 -0500
 Received: from orion.localdomain ([95.118.71.13]) by mrelayeu.kundenserver.de
  (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MQy0N-1kZRNh0hRX-00NvnC; Thu, 03 Dec 2020 13:48:06 +0100
+ 1MjBNV-1kHDye2uNp-00fBnI; Thu, 03 Dec 2020 13:48:09 +0100
 From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
 To:     linux-kernel@vger.kernel.org
 Cc:     rspringer@google.com, toddpoynor@google.com, benchan@chromium.org,
@@ -31,62 +31,47 @@ Cc:     rspringer@google.com, toddpoynor@google.com, benchan@chromium.org,
         nsaenzjulienne@suse.de, speakup@linux-speakup.org,
         devel@driverdev.osuosl.org, linux-media@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH 02/11] drivers: staging: gasket: remove unneeded MODULE_VERSION() call
-Date:   Thu,  3 Dec 2020 13:47:54 +0100
-Message-Id: <20201203124803.23390-2-info@metux.net>
+Subject: [PATCH 07/11] drivers: staging: vc04_services: remove unneeded MODULE_VERSION() call
+Date:   Thu,  3 Dec 2020 13:47:59 +0100
+Message-Id: <20201203124803.23390-7-info@metux.net>
 X-Mailer: git-send-email 2.11.0
 In-Reply-To: <20201203124803.23390-1-info@metux.net>
 References: <20201203124803.23390-1-info@metux.net>
-X-Provags-ID: V03:K1:5cNNaj3L1/oSaoHWBOWl0bfD/3mFxrG/x2hhKeTIwCx0/LVUkqJ
- 9NVSdVPi4tZ8L7wKa7HtR7+OYYkwTIuZXgExz+2yWHIHjzhMXdwkO221R8mu8e3PmZ3gxGh
- KVPomrKpJKUobLqzoQICc41cHBibPpHdW0AblAT4iJkB/TZQGkencXQEj2T/2HetV82Yyph
- PD7FG5NSALtrKTRLxAo+A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ch9o7BlYNY0=:PCQG1wY9TcGzs26MLv2lEQ
- JI/cf0W1LfysAd/VFg13X3YS5gKmsaf3j9MEDQEMb5cNyUKy4CQqjdekZG0SxCW2dE62/VfPl
- xTtXC5ypyvj/C1VNLHFuavsgs4xmO3lRF26k8gKGTS7ZSfW55AjQ7ntjoFWjrL2sU3W9C6Twj
- p3t2OVVPRHH0oqA5WWFfBeN77/Pk45kF5WCzNclG0FJgCz/S63wcjXL6GEUgga+or2MtkPUAY
- O9PygrJ8tBk+sDOpX6KMNbKyRm0tTc7fgdawzvC75cNjo+FsAmuj4uLwZ6QpQQuRwzXRniWaZ
- 2PnovUxiYTTcJuUu8cbmygnPsYvZmIcvCozRwU3nieAYD1UWyw16aZjcTwOxlaKrlIwZD521m
- OuxFxIWDTyckIpwES9kNKA3PhBhQ5QJHmLqZrgYwc2BIP/Y+i3wV8/W+qIVEk
+X-Provags-ID: V03:K1:9XsuyMzeLdDwbcF1TI1lSA8b7w/uiTMP9U8S++LIpCmkG+5ZaaW
+ OgfN0w5eaNjNrS6rtIwWQFSJXftdzj5xIg0/UIhrd617VcTOZ40OrmHIYfOV+1mIj+qWIhq
+ yt7IhsmUEbL4s7VgBNEBSW18KRm3jB+XOLxSehcPTHLTfcrCa8p2MfhX8b61wP9kUlRfibZ
+ dCcmwi7HtfBAWyW88U39g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:SMJMDEo01Sk=:cGETZ8DbR9yWxRgclj+NVN
+ 66P3jQpMHZjs2vP7ZF15Ab0MfDViev8Wlkohud50g1Y5imMvaRnyeLpmYCjkJ2xtk/ewoPvSB
+ yMI/lqFtNq6DkXiZl71X/Dn8r8kcNDHijlP6CAytUCHy4eDShv7/X4F2GQ4QC6oA6A5floJRc
+ B9KZA8dpiR1WYEXVxqtipv4mTAVWbg4TdOOWPE6XKha1gE33veEKTbu/f8LXj7CvS80zkELh1
+ mPv1m3Amm89j18y5onlwmBjNZ0I5ZhRyCEyNw2HLFaNGEZdYTYV3WKrS8VKtIxj/npquG+P/f
+ Q5JfYMej52+8Pur2tBZilUZRvbhaEgnqDs6uvS2B/kxdQmWdfkZRUgP2aiMcMZ+KNbtCFb2qz
+ LyjtOORKgEvU0J0fV+3Ss7pAQSdS5wfmWo7cWNidL3pPadq25hNGXyWQhcbga
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Remove MODULE_VERSION(), as it doesn't seem to serve any practical purpose.
-For in-tree drivers, the kernel version matters. The code has received lots
-of changes, w/o the versions being actively maintained, so it doesn't seem
-to have much practical meaning.
+Remove MODULE_VERSION(), as it doesn't seem to have any practical purpose.
+For in-tree drivers, the kernel version really matters. OTOH, the module
+version doesn't seem to be actively maintained - the code received changes
+while the version remained constant.
 
 Signed-off-by: Enrico Weigelt <info@metux.net>
 ---
- drivers/staging/gasket/apex_driver.c | 1 -
- drivers/staging/gasket/gasket_core.c | 1 -
- 2 files changed, 2 deletions(-)
+ drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/staging/gasket/apex_driver.c b/drivers/staging/gasket/apex_driver.c
-index f12f81c8dd2f..66ae99bebfd8 100644
---- a/drivers/staging/gasket/apex_driver.c
-+++ b/drivers/staging/gasket/apex_driver.c
-@@ -718,7 +718,6 @@ static void apex_exit(void)
- 	gasket_unregister_device(&apex_desc);
- }
- MODULE_DESCRIPTION("Google Apex driver");
--MODULE_VERSION(APEX_DRIVER_VERSION);
- MODULE_LICENSE("GPL v2");
- MODULE_AUTHOR("John Joseph <jnjoseph@google.com>");
- MODULE_DEVICE_TABLE(pci, apex_pci_ids);
-diff --git a/drivers/staging/gasket/gasket_core.c b/drivers/staging/gasket/gasket_core.c
-index 28dab302183b..763d5ea45e68 100644
---- a/drivers/staging/gasket/gasket_core.c
-+++ b/drivers/staging/gasket/gasket_core.c
-@@ -1809,7 +1809,6 @@ static int __init gasket_init(void)
- }
- 
- MODULE_DESCRIPTION("Google Gasket driver framework");
--MODULE_VERSION(GASKET_FRAMEWORK_VERSION);
- MODULE_LICENSE("GPL v2");
- MODULE_AUTHOR("Rob Springer <rspringer@google.com>");
- module_init(gasket_init);
+diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
+index df90c1f9d148..0b20dd51c340 100644
+--- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
++++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
+@@ -2011,5 +2011,4 @@ module_platform_driver(bcm2835_camera_driver)
+ MODULE_DESCRIPTION("Broadcom 2835 MMAL video capture");
+ MODULE_AUTHOR("Vincent Sanders");
+ MODULE_LICENSE("GPL");
+-MODULE_VERSION(BM2835_MMAL_VERSION);
+ MODULE_ALIAS("platform:bcm2835-camera");
 -- 
 2.11.0
 
