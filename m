@@ -7,21 +7,21 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AAB1EC83016
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B25DC83014
 	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 12:52:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5B03D20709
+	by mail.kernel.org (Postfix) with ESMTP id 2C33422261
 	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 12:52:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389058AbgLCMuy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S2389072AbgLCMuy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 3 Dec 2020 07:50:54 -0500
-Received: from mout.kundenserver.de ([212.227.126.187]:55711 "EHLO
+Received: from mout.kundenserver.de ([212.227.126.187]:39307 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389044AbgLCMuw (ORCPT
+        with ESMTP id S2389048AbgLCMuw (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Thu, 3 Dec 2020 07:50:52 -0500
 Received: from orion.localdomain ([95.118.71.13]) by mrelayeu.kundenserver.de
  (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MCoYS-1ktdjX0ukS-008w2z; Thu, 03 Dec 2020 13:48:11 +0100
+ 1MEUaQ-1kwMUn2U7W-00G3at; Thu, 03 Dec 2020 13:48:07 +0100
 From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
 To:     linux-kernel@vger.kernel.org
 Cc:     rspringer@google.com, toddpoynor@google.com, benchan@chromium.org,
@@ -31,48 +31,50 @@ Cc:     rspringer@google.com, toddpoynor@google.com, benchan@chromium.org,
         nsaenzjulienne@suse.de, speakup@linux-speakup.org,
         devel@driverdev.osuosl.org, linux-media@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH 09/11] drivers: staging: rtl8192e: remove unneeded MODULE_VERSION() call
-Date:   Thu,  3 Dec 2020 13:48:01 +0100
-Message-Id: <20201203124803.23390-9-info@metux.net>
+Subject: [PATCH 04/11] drivers: staging: goldfish: remove unneeded MODULE_VERSION() call
+Date:   Thu,  3 Dec 2020 13:47:56 +0100
+Message-Id: <20201203124803.23390-4-info@metux.net>
 X-Mailer: git-send-email 2.11.0
 In-Reply-To: <20201203124803.23390-1-info@metux.net>
 References: <20201203124803.23390-1-info@metux.net>
-X-Provags-ID: V03:K1:TWPmkvMRLe+RvSvuPagbKMS63HtX/xzJmb8w2MTfTkQSWtN8MuE
- d7qBVuYtmwsjFJW9rVHBB94Z/d4wpwb0RbxgZhF7DW1Pd4B5YrB7GVqudc3Okkrs/cbk0hb
- wpEPKqD7q5Npkh3McC87Qc2PnpfO4QTfipZwhrOTyZIuO3P4vIPgtk5IzMpWFUwIaYhfJLL
- KY9a+bUX9nduw5vCyGp8g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:K6oID9tUrnQ=:CM//xMqa9mV7ETaJ0BNeUg
- 6ZNSYbSTHSCeQ84menR9DiDAANTYKHy0oR5ehOCMfO7zii6wlMymLiOGzPGNVhBa7QX9CB+Bm
- UdErWAcIwvwTzBrpWc013DMY8ZreOtvRNI12e5bs7eOAYgEKgUPrLOGwgSFRyl8Ax0f9Ky+di
- 3abr8qqDymyiRc8Sqj5is7sSmWlmBY3tB6mwhcD0Zlk9PAdHJ1DPa1R+gxNfiVE3nPklz1Bcf
- CbJS3qDyEEpBDch0Hpx4EYGpl6daNjJN5z8xij/f1+KOYMXVMWNxzyNQPuJ+zw1oZ9EeO1C1w
- A9A8zAKnUSM5FKNxVSH9Fj3iWXTO8FJt1knNt4HCiwLmo5PVRaYghHwp2BHpSud9C+SFobpId
- UYYCDI/0DGBq/Mda6lfbUYujYw39f/VCvrjqEuQStLGT82Z/PGIgwe+XiLr02
+X-Provags-ID: V03:K1:4VMUivbUOMUD8OthMTSocKelq1MbRgHbaY3f/G6xITxz6Xk22M8
+ uEHUC/m7pcHhQN7/1teMHnGJ105bj2MFxIG8OKD8iMvw0OijeR18OxT+t8B0FkJvqbNflL2
+ kBIVNRlu9uGg7FSNGDM3EvhgOQpvUQ/ujKwC7A+tlDShQON10tV25yv0S6bLDTnEhdvdql7
+ Mi+EHZ1SnUSeR+e459RGA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:/ZThhDNRtBg=:nhBRCngE4HdS48BlApC8N0
+ ONTzsyy9ujSC4Xeo4w9hxz3+VWhpmVANsgQOAJXhGAbxAOONikbDE3xX3mM/8A1v7qv0GoM6u
+ qhcDtZyGVu9+gbScyuV0g7+9cqiYQhwEG5DTqQNb59qfKoSvttrPrX8Uffz5UwTNqtScGHHBF
+ IXtFSlwWy87137LwHju9B1fgIG+U87TnNu+8di0HDUUpRD8RgwUjOEOkAAYdQBmE6EDq4C7iY
+ ZYdyZ1IHuiCls74t1twRXYX8JX674vhxqqi1e1MaWLfxL5xqY18X7eH4TFkn75hWw3zPyLuig
+ vy7NQcwZDhyQCYwcRQoUUDmfmZIps7uRuz330L3JPoqP8CpqLeZKXdZgPkpWAuygzScxOZUmi
+ 9Gr9AGejryjR2VV6Qgia9N7SnlGfrYRyoQYAjJXxomK2+nxFUhlJ3QSHkbP7k
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Remove MODULE_VERSION(), as it doesn't seem to have any practical purpose:
-the driver has received lots of changes, while the module version remained
-constant. Unmaintained version numbers aren't actually useful.
+Remove MODULE_VERSION(), as it doesn't seem to have much practical purpose.
+For in-kernel drivers, the kernel version matters. The driver received lots
+of changes, but version number has remained the same since it's introducing
+into mainline, seven years ago. So, it doesn't seem to have much practical
+meaning anymore.
 
 Signed-off-by: Enrico Weigelt <info@metux.net>
 ---
- drivers/staging/rtl8192e/rtl8192e/rtl_core.c | 1 -
+ drivers/staging/goldfish/goldfish_audio.c | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-index 663675efcfe4..e316f920657b 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-@@ -2635,7 +2635,6 @@ void rtl92e_check_rfctrl_gpio_timer(struct timer_list *t)
-  ***************************************************************************/
- MODULE_DESCRIPTION("Linux driver for Realtek RTL819x WiFi cards");
- MODULE_AUTHOR(DRV_COPYRIGHT " " DRV_AUTHOR);
--MODULE_VERSION(DRV_VERSION);
+diff --git a/drivers/staging/goldfish/goldfish_audio.c b/drivers/staging/goldfish/goldfish_audio.c
+index 0c65a0121dde..4a23f40e549a 100644
+--- a/drivers/staging/goldfish/goldfish_audio.c
++++ b/drivers/staging/goldfish/goldfish_audio.c
+@@ -24,7 +24,6 @@
+ MODULE_AUTHOR("Google, Inc.");
+ MODULE_DESCRIPTION("Android QEMU Audio Driver");
  MODULE_LICENSE("GPL");
- MODULE_FIRMWARE(RTL8192E_BOOT_IMG_FW);
- MODULE_FIRMWARE(RTL8192E_MAIN_IMG_FW);
+-MODULE_VERSION("1.0");
+ 
+ struct goldfish_audio {
+ 	char __iomem *reg_base;
 -- 
 2.11.0
 
