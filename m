@@ -7,35 +7,35 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 027B9C64E8A
-	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 11:04:17 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A79D821D91
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2996EC71156
 	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 11:04:16 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id C732822201
+	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 11:04:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388786AbgLCLEN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Dec 2020 06:04:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35986 "EHLO
+        id S2388847AbgLCLEP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Dec 2020 06:04:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387738AbgLCLEM (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Dec 2020 06:04:12 -0500
+        with ESMTP id S2388810AbgLCLEO (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Dec 2020 06:04:14 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EBEDC061A55
-        for <linux-media@vger.kernel.org>; Thu,  3 Dec 2020 03:02:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77AF1C08E864
+        for <linux-media@vger.kernel.org>; Thu,  3 Dec 2020 03:02:55 -0800 (PST)
 Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1kkmNt-0002Kz-3E; Thu, 03 Dec 2020 12:02:51 +0100
+        id 1kkmNt-0002Kx-72; Thu, 03 Dec 2020 12:02:53 +0100
 Received: from mtr by dude03.red.stw.pengutronix.de with local (Exim 4.92)
         (envelope-from <mtr@dude03.red.stw.pengutronix.de>)
-        id 1kkmNs-00CKi5-0T; Thu, 03 Dec 2020 12:02:48 +0100
+        id 1kkmNr-00CKhz-Vh; Thu, 03 Dec 2020 12:02:47 +0100
 From:   Michael Tretter <m.tretter@pengutronix.de>
 To:     linux-media@vger.kernel.org
 Cc:     kernel@pengutronix.de, hverkuil-cisco@xs4all.nl,
         mchehab@kernel.org, Michael Tretter <m.tretter@pengutronix.de>
-Date:   Thu,  3 Dec 2020 12:01:01 +0100
-Message-Id: <20201203110106.2939463-14-m.tretter@pengutronix.de>
+Date:   Thu,  3 Dec 2020 12:00:59 +0100
+Message-Id: <20201203110106.2939463-12-m.tretter@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20201203110106.2939463-1-m.tretter@pengutronix.de>
 References: <20201203110106.2939463-1-m.tretter@pengutronix.de>
@@ -43,7 +43,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::39
 X-SA-Exim-Mail-From: mtr@pengutronix.de
-Subject: [PATCH 13/18] media: allegro: use accessor functions for QP values
+Subject: [PATCH 11/18] media: allegro: remove cpb_size and gop_size from channel
 X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
 X-SA-Exim-Scanned: Yes (on metis.ext.pengutronix.de)
 X-PTX-Original-Recipient: linux-media@vger.kernel.org
@@ -51,82 +51,125 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-V4L2 specifies different controls for the QP values of different codecs.
-
-Simplify users that just care for the QP values by providing accessor
-function that return the correct control based on the currently set
-codec.
+The cpb_size and the gop_size are straight copies of the values in the
+v4l2-ctrls. To avoid this duplication, directly get the values from the
+v4l2-ctrls and remove the copies.
 
 Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
 ---
- .../media/platform/allegro-dvt/allegro-core.c | 40 ++++++++++++++++---
- 1 file changed, 35 insertions(+), 5 deletions(-)
+ .../media/platform/allegro-dvt/allegro-core.c | 30 +++++++------------
+ 1 file changed, 11 insertions(+), 19 deletions(-)
 
 diff --git a/drivers/media/platform/allegro-dvt/allegro-core.c b/drivers/media/platform/allegro-dvt/allegro-core.c
-index c0519f7a67b8..004df6ea2430 100644
+index 4e5590e8f875..8cabc6ba9f7e 100644
 --- a/drivers/media/platform/allegro-dvt/allegro-core.c
 +++ b/drivers/media/platform/allegro-dvt/allegro-core.c
-@@ -264,6 +264,36 @@ struct allegro_channel {
- 	unsigned int error;
- };
+@@ -203,8 +203,6 @@ struct allegro_channel {
+ 	bool frame_rc_enable;
+ 	unsigned int bitrate;
+ 	unsigned int bitrate_peak;
+-	unsigned int cpb_size;
+-	unsigned int gop_size;
  
-+static inline int
-+allegro_channel_get_i_frame_qp(struct allegro_channel *channel)
-+{
-+	return v4l2_ctrl_g_ctrl(channel->mpeg_video_h264_i_frame_qp);
-+}
-+
-+static inline int
-+allegro_channel_get_p_frame_qp(struct allegro_channel *channel)
-+{
-+	return v4l2_ctrl_g_ctrl(channel->mpeg_video_h264_p_frame_qp);
-+}
-+
-+static inline int
-+allegro_channel_get_b_frame_qp(struct allegro_channel *channel)
-+{
-+	return v4l2_ctrl_g_ctrl(channel->mpeg_video_h264_b_frame_qp);
-+}
-+
-+static inline int
-+allegro_channel_get_min_qp(struct allegro_channel *channel)
-+{
-+	return v4l2_ctrl_g_ctrl(channel->mpeg_video_h264_min_qp);
-+}
-+
-+static inline int
-+allegro_channel_get_max_qp(struct allegro_channel *channel)
-+{
-+	return v4l2_ctrl_g_ctrl(channel->mpeg_video_h264_max_qp);
-+}
-+
- struct allegro_m2m_buffer {
- 	struct v4l2_m2m_buffer buf;
- 	struct list_head head;
-@@ -917,9 +947,9 @@ static s16 get_qp_delta(int minuend, int subtrahend)
- static int fill_create_channel_param(struct allegro_channel *channel,
- 				     struct create_channel_param *param)
- {
--	int i_frame_qp = v4l2_ctrl_g_ctrl(channel->mpeg_video_h264_i_frame_qp);
--	int p_frame_qp = v4l2_ctrl_g_ctrl(channel->mpeg_video_h264_p_frame_qp);
--	int b_frame_qp = v4l2_ctrl_g_ctrl(channel->mpeg_video_h264_b_frame_qp);
-+	int i_frame_qp = allegro_channel_get_i_frame_qp(channel);
-+	int p_frame_qp = allegro_channel_get_p_frame_qp(channel);
-+	int b_frame_qp = allegro_channel_get_b_frame_qp(channel);
+ 	struct allegro_buffer config_blob;
+ 
+@@ -925,6 +923,7 @@ static int fill_create_channel_param(struct allegro_channel *channel,
+ 	int p_frame_qp = v4l2_ctrl_g_ctrl(channel->mpeg_video_h264_p_frame_qp);
+ 	int b_frame_qp = v4l2_ctrl_g_ctrl(channel->mpeg_video_h264_b_frame_qp);
  	int bitrate_mode = v4l2_ctrl_g_ctrl(channel->mpeg_video_bitrate_mode);
- 	unsigned int cpb_size = v4l2_ctrl_g_ctrl(channel->mpeg_video_cpb_size);
- 	enum v4l2_mpeg_video_h264_profile profile;
-@@ -982,8 +1012,8 @@ static int fill_create_channel_param(struct allegro_channel *channel,
- 	param->target_bitrate = channel->bitrate;
- 	param->max_bitrate = channel->bitrate_peak;
- 	param->initial_qp = i_frame_qp;
--	param->min_qp = v4l2_ctrl_g_ctrl(channel->mpeg_video_h264_min_qp);
--	param->max_qp = v4l2_ctrl_g_ctrl(channel->mpeg_video_h264_max_qp);
-+	param->min_qp = allegro_channel_get_min_qp(channel);
-+	param->max_qp = allegro_channel_get_max_qp(channel);
- 	param->ip_delta = get_qp_delta(i_frame_qp, p_frame_qp);
- 	param->pb_delta = get_qp_delta(p_frame_qp, b_frame_qp);
- 	param->golden_ref = 0;
++	unsigned int cpb_size = v4l2_ctrl_g_ctrl(channel->mpeg_video_cpb_size);
+ 
+ 	param->width = channel->width;
+ 	param->height = channel->height;
+@@ -972,8 +971,7 @@ static int fill_create_channel_param(struct allegro_channel *channel,
+ 	param->rate_control_mode = channel->frame_rc_enable ?
+ 		v4l2_bitrate_mode_to_mcu_mode(bitrate_mode) : 0;
+ 
+-	param->cpb_size = v4l2_cpb_size_to_mcu(channel->cpb_size,
+-					       channel->bitrate_peak);
++	param->cpb_size = v4l2_cpb_size_to_mcu(cpb_size, channel->bitrate_peak);
+ 	/* Shall be ]0;cpb_size in 90 kHz units]. Use maximum value. */
+ 	param->initial_rem_delay = param->cpb_size;
+ 	param->framerate = DIV_ROUND_UP(channel->framerate.numerator,
+@@ -996,10 +994,10 @@ static int fill_create_channel_param(struct allegro_channel *channel,
+ 	param->max_pixel_value = 255;
+ 
+ 	param->gop_ctrl_mode = 0x00000002;
+-	param->freq_idr = channel->gop_size;
++	param->freq_idr = v4l2_ctrl_g_ctrl(channel->mpeg_video_gop_size);
+ 	param->freq_lt = 0;
+ 	param->gdr_mode = 0x00000000;
+-	param->gop_length = channel->gop_size;
++	param->gop_length = v4l2_ctrl_g_ctrl(channel->mpeg_video_gop_size);
+ 	param->subframe_latency = 0x00000000;
+ 
+ 	param->lda_factors[0] = 51;
+@@ -1342,7 +1340,7 @@ static ssize_t allegro_h264_write_sps(struct allegro_channel *channel,
+ 	sps->vui.vcl_hrd_parameters.bit_rate_value_minus1[0] =
+ 		channel->bitrate_peak / (1 << (6 + sps->vui.vcl_hrd_parameters.bit_rate_scale)) - 1;
+ 	/* See Rec. ITU-T H.264 (04/2017) p. 410 E-54 */
+-	cpb_size = channel->cpb_size;
++	cpb_size = v4l2_ctrl_g_ctrl(channel->mpeg_video_cpb_size);
+ 	cpb_size_scale = ffs(cpb_size) - 4;
+ 	sps->vui.vcl_hrd_parameters.cpb_size_scale = cpb_size_scale;
+ 	sps->vui.vcl_hrd_parameters.cpb_size_value_minus1[0] =
+@@ -2135,9 +2133,6 @@ static void allegro_set_default_params(struct allegro_channel *channel)
+ 	channel->profile = V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE;
+ 	channel->level =
+ 		select_minimum_h264_level(channel->width, channel->height);
+-
+-	channel->cpb_size = maximum_cpb_size(channel->level);
+-	channel->gop_size = ALLEGRO_GOP_SIZE_DEFAULT;
+ }
+ 
+ static int allegro_queue_setup(struct vb2_queue *vq,
+@@ -2394,12 +2389,6 @@ static int allegro_s_ctrl(struct v4l2_ctrl *ctrl)
+ 		v4l2_ctrl_activate(channel->mpeg_video_bitrate_peak,
+ 				   ctrl->val == V4L2_MPEG_VIDEO_BITRATE_MODE_VBR);
+ 		break;
+-	case V4L2_CID_MPEG_VIDEO_H264_CPB_SIZE:
+-		channel->cpb_size = ctrl->val;
+-		break;
+-	case V4L2_CID_MPEG_VIDEO_GOP_SIZE:
+-		channel->gop_size = ctrl->val;
+-		break;
+ 	case V4L2_CID_MPEG_VIDEO_H264_I_FRAME_QP:
+ 	case V4L2_CID_MPEG_VIDEO_H264_P_FRAME_QP:
+ 	case V4L2_CID_MPEG_VIDEO_H264_B_FRAME_QP:
+@@ -2425,6 +2414,8 @@ static int allegro_open(struct file *file)
+ 	int ret;
+ 	unsigned int bitrate_max;
+ 	unsigned int bitrate_def;
++	unsigned int cpb_size_max;
++	unsigned int cpb_size_def;
+ 
+ 	channel = kzalloc(sizeof(*channel), GFP_KERNEL);
+ 	if (!channel)
+@@ -2493,6 +2484,8 @@ static int allegro_open(struct file *file)
+ 
+ 	bitrate_max = maximum_bitrate(V4L2_MPEG_VIDEO_H264_LEVEL_5_1);
+ 	bitrate_def = maximum_bitrate(V4L2_MPEG_VIDEO_H264_LEVEL_5_1);
++	cpb_size_max = maximum_cpb_size(V4L2_MPEG_VIDEO_H264_LEVEL_5_1);
++	cpb_size_def = maximum_cpb_size(V4L2_MPEG_VIDEO_H264_LEVEL_5_1);
+ 	channel->mpeg_video_bitrate = v4l2_ctrl_new_std(handler,
+ 			&allegro_ctrl_ops,
+ 			V4L2_CID_MPEG_VIDEO_BITRATE,
+@@ -2504,13 +2497,12 @@ static int allegro_open(struct file *file)
+ 	channel->mpeg_video_cpb_size = v4l2_ctrl_new_std(handler,
+ 			&allegro_ctrl_ops,
+ 			V4L2_CID_MPEG_VIDEO_H264_CPB_SIZE,
+-			0, maximum_cpb_size(V4L2_MPEG_VIDEO_H264_LEVEL_5_1),
+-			1, channel->cpb_size);
++			0, cpb_size_max, 1, cpb_size_def);
+ 	channel->mpeg_video_gop_size = v4l2_ctrl_new_std(handler,
+ 			&allegro_ctrl_ops,
+ 			V4L2_CID_MPEG_VIDEO_GOP_SIZE,
+ 			0, ALLEGRO_GOP_SIZE_MAX,
+-			1, channel->gop_size);
++			1, ALLEGRO_GOP_SIZE_DEFAULT);
+ 	v4l2_ctrl_new_std(handler,
+ 			  &allegro_ctrl_ops,
+ 			  V4L2_CID_MIN_BUFFERS_FOR_OUTPUT,
 -- 
 2.20.1
 
