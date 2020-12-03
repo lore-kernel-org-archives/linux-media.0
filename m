@@ -5,24 +5,24 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D19FC433C1
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FC7EC001B0
 	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 14:04:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B6443206F9
-	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 14:04:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1F5D3206D8
+	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 14:04:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730572AbgLCOE3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Dec 2020 09:04:29 -0500
-Received: from mx2.suse.de ([195.135.220.15]:35306 "EHLO mx2.suse.de"
+        id S1730609AbgLCOEa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Dec 2020 09:04:30 -0500
+Received: from mx2.suse.de ([195.135.220.15]:35302 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726112AbgLCOE3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1726712AbgLCOE3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Thu, 3 Dec 2020 09:04:29 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id E2A74ADD7;
-        Thu,  3 Dec 2020 14:03:09 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id C2D9BADB3;
+        Thu,  3 Dec 2020 14:03:08 +0000 (UTC)
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     airlied@redhat.com, daniel@ffwll.ch,
         maarten.lankhorst@linux.intel.com, mripard@kernel.org,
@@ -31,139 +31,125 @@ To:     airlied@redhat.com, daniel@ffwll.ch,
 Cc:     dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
         linaro-mm-sig@lists.linaro.org,
         Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v2 7/7] dma-buf: Write down some rules for vmap usage
-Date:   Thu,  3 Dec 2020 15:02:59 +0100
-Message-Id: <20201203140259.26580-8-tzimmermann@suse.de>
+Subject: [PATCH v2 5/7] drm/vram-helper: Remove vmap reference counting
+Date:   Thu,  3 Dec 2020 15:02:57 +0100
+Message-Id: <20201203140259.26580-6-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201203140259.26580-1-tzimmermann@suse.de>
 References: <20201203140259.26580-1-tzimmermann@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Dma-buf's vmap and vunmap callbacks are undocumented and various
-exporters currently have slightly different semantics for them. Add
-documentation on how to implement and use these interfaces correctly.
+Overlapping or nested mappings of the same BO are not allowed by the
+semantics of the GEM vmap/vunmap operations. Concurent access to the
+GEM object is prevented by reservation locks.
 
-v2:
-	* document vmap semantics in struct dma_buf_ops
-	* add TODO item for reviewing and maybe fixing dma-buf exporters
+So we don't need the reference counter in the GEM VRAM object. Remove
+it.
 
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 ---
- Documentation/gpu/todo.rst | 15 +++++++++++++
- include/drm/drm_gem.h      |  4 ++++
- include/linux/dma-buf.h    | 45 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 64 insertions(+)
+ drivers/gpu/drm/drm_gem_vram_helper.c | 19 ++++---------------
+ include/drm/drm_gem_vram_helper.h     | 17 +++--------------
+ 2 files changed, 7 insertions(+), 29 deletions(-)
 
-diff --git a/Documentation/gpu/todo.rst b/Documentation/gpu/todo.rst
-index 009d8e6c7e3c..32bb797a84fc 100644
---- a/Documentation/gpu/todo.rst
-+++ b/Documentation/gpu/todo.rst
-@@ -505,6 +505,21 @@ Contact: Thomas Zimmermann <tzimmermann@suse.de>, Christian König, Daniel Vette
- Level: Intermediate
- 
- 
-+Enforce rules for dma-buf vmap and pin ops
-+------------------------------------------
-+
-+Exporter implementations of vmap and pin in struct dma_buf_ops (and consequently
-+struct drm_gem_object_funcs) use a variety of locking semantics. Some rely on
-+the caller holding the dma-buf's reservation lock, some do their own locking,
-+some don't require any locking. VRAM helpers even used to pin as part of vmap.
-+
-+We need to review each exporter and enforce the documented rules.
-+
-+Contact: Christian König, Daniel Vetter, Thomas Zimmermann <tzimmermann@suse.de>
-+
-+Level: Advanced
-+
-+
- Core refactorings
- =================
- 
-diff --git a/include/drm/drm_gem.h b/include/drm/drm_gem.h
-index 5e6daa1c982f..1864c6a721b1 100644
---- a/include/drm/drm_gem.h
-+++ b/include/drm/drm_gem.h
-@@ -138,6 +138,8 @@ struct drm_gem_object_funcs {
- 	 * drm_gem_dmabuf_vmap() helper.
- 	 *
- 	 * This callback is optional.
-+	 *
-+	 * See also struct dma_buf_ops.vmap
+diff --git a/drivers/gpu/drm/drm_gem_vram_helper.c b/drivers/gpu/drm/drm_gem_vram_helper.c
+index 760d77c6c3c0..276e8f8ea663 100644
+--- a/drivers/gpu/drm/drm_gem_vram_helper.c
++++ b/drivers/gpu/drm/drm_gem_vram_helper.c
+@@ -113,7 +113,6 @@ static void drm_gem_vram_cleanup(struct drm_gem_vram_object *gbo)
+ 	 * up; only release the GEM object.
  	 */
- 	int (*vmap)(struct drm_gem_object *obj, struct dma_buf_map *map);
  
-@@ -148,6 +150,8 @@ struct drm_gem_object_funcs {
- 	 * drm_gem_dmabuf_vunmap() helper.
- 	 *
- 	 * This callback is optional.
-+	 *
-+	 * See also struct dma_buf_ops.vunmap
- 	 */
- 	void (*vunmap)(struct drm_gem_object *obj, struct dma_buf_map *map);
+-	WARN_ON(gbo->vmap_use_count);
+ 	WARN_ON(dma_buf_map_is_set(&gbo->map));
  
-diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-index cf72699cb2bc..dc81fdc01dda 100644
---- a/include/linux/dma-buf.h
-+++ b/include/linux/dma-buf.h
-@@ -267,7 +267,52 @@ struct dma_buf_ops {
- 	 */
- 	int (*mmap)(struct dma_buf *, struct vm_area_struct *vma);
+ 	drm_gem_object_release(&gbo->bo.base);
+@@ -384,15 +383,10 @@ static int drm_gem_vram_kmap_locked(struct drm_gem_vram_object *gbo,
+ {
+ 	int ret;
  
-+	/**
-+	 * @vmap:
-+	 *
-+	 * Returns a virtual address for the buffer.
-+	 *
-+	 * Notes to callers:
-+	 *
-+	 * - Callers must hold the struct dma_buf.resv lock before calling
-+	 *   this interface.
-+	 *
-+	 * - Callers must provide means to prevent the mappings from going
-+	 *   stale, such as holding the reservation lock or providing a
-+	 *   move-notify callback to the exporter.
-+	 *
-+	 * Notes to implementors:
-+	 *
-+	 * - Implementations must expect pairs of @vmap and @vunmap to be
-+	 *   called frequently and should optimize for this case.
-+	 *
-+	 * - Implementations should avoid additional operations, such as
-+	 *   pinning.
-+	 *
-+	 * - Implementations may expect the caller to hold the dma-buf's
-+	 *   reservation lock to protect against concurrent calls and
-+	 *   relocation.
-+	 *
-+	 * - Implementations may provide additional guarantees, such as working
-+	 *   without holding the reservation lock.
-+	 *
-+	 * This callback is optional.
-+	 *
-+	 * Returns:
-+	 *
-+	 * 0 on success or a negative error code on failure.
-+	 */
- 	int (*vmap)(struct dma_buf *dmabuf, struct dma_buf_map *map);
-+
-+	/**
-+	 * @vunmap:
-+	 *
-+	 * Releases the address previously returned by @vmap.
-+	 *
-+	 * This callback is optional.
-+	 *
-+	 * See also @vmap()
-+	 */
- 	void (*vunmap)(struct dma_buf *dmabuf, struct dma_buf_map *map);
- };
+-	if (gbo->vmap_use_count > 0)
+-		goto out;
+-
+ 	ret = ttm_bo_vmap(&gbo->bo, &gbo->map);
+ 	if (ret)
+ 		return ret;
  
+-out:
+-	++gbo->vmap_use_count;
+ 	*map = gbo->map;
+ 
+ 	return 0;
+@@ -403,15 +397,9 @@ static void drm_gem_vram_kunmap_locked(struct drm_gem_vram_object *gbo,
+ {
+ 	struct drm_device *dev = gbo->bo.base.dev;
+ 
+-	if (drm_WARN_ON_ONCE(dev, !gbo->vmap_use_count))
+-		return;
+-
+ 	if (drm_WARN_ON_ONCE(dev, !dma_buf_map_is_equal(&gbo->map, map)))
+ 		return; /* BUG: map not mapped from this BO */
+ 
+-	if (--gbo->vmap_use_count > 0)
+-		return;
+-
+ 	/*
+ 	 * Permanently mapping and unmapping buffers adds overhead from
+ 	 * updating the page tables and creates debugging output. Therefore,
+@@ -545,12 +533,13 @@ static void drm_gem_vram_bo_driver_move_notify(struct drm_gem_vram_object *gbo,
+ 					       struct ttm_resource *new_mem)
+ {
+ 	struct ttm_buffer_object *bo = &gbo->bo;
+-	struct drm_device *dev = bo->base.dev;
++	struct dma_buf_map *map = &gbo->map;
+ 
+-	if (drm_WARN_ON_ONCE(dev, gbo->vmap_use_count))
++	if (dma_buf_map_is_null(map))
+ 		return;
+ 
+-	ttm_bo_vunmap(bo, &gbo->map);
++	ttm_bo_vunmap(bo, map);
++	dma_buf_map_clear(map);
+ }
+ 
+ static int drm_gem_vram_bo_driver_move(struct drm_gem_vram_object *gbo,
+diff --git a/include/drm/drm_gem_vram_helper.h b/include/drm/drm_gem_vram_helper.h
+index a4bac02249c2..48af238b5ca9 100644
+--- a/include/drm/drm_gem_vram_helper.h
++++ b/include/drm/drm_gem_vram_helper.h
+@@ -41,25 +41,14 @@ struct vm_area_struct;
+  * dedicated memory. The buffer object can be evicted to system memory if
+  * video memory becomes scarce.
+  *
+- * GEM VRAM objects perform reference counting for pin and mapping
+- * operations. So a buffer object that has been pinned N times with
+- * drm_gem_vram_pin() must be unpinned N times with
+- * drm_gem_vram_unpin(). The same applies to pairs of
+- * drm_gem_vram_kmap() and drm_gem_vram_kunmap(), as well as pairs of
+- * drm_gem_vram_vmap() and drm_gem_vram_vunmap().
++ * GEM VRAM objects perform reference counting for pin operations. So a
++ * buffer object that has been pinned N times with drm_gem_vram_pin() must
++ * be unpinned N times with drm_gem_vram_unpin().
+  */
+ struct drm_gem_vram_object {
+ 	struct ttm_buffer_object bo;
+ 	struct dma_buf_map map;
+ 
+-	/**
+-	 * @vmap_use_count:
+-	 *
+-	 * Reference count on the virtual address.
+-	 * The address are un-mapped when the count reaches zero.
+-	 */
+-	unsigned int vmap_use_count;
+-
+ 	/* Supported placements are %TTM_PL_VRAM and %TTM_PL_SYSTEM */
+ 	struct ttm_placement placement;
+ 	struct ttm_place placements[2];
 -- 
 2.29.2
 
