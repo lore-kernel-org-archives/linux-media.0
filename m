@@ -2,91 +2,69 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B35F6C83020
-	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 12:52:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F71CC83014
+	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 12:58:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8245D20709
-	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 12:52:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DD2AD20872
+	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 12:57:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730604AbgLCMvs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Dec 2020 07:51:48 -0500
-Received: from mout.kundenserver.de ([212.227.126.131]:32951 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730503AbgLCMur (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Dec 2020 07:50:47 -0500
-Received: from orion.localdomain ([95.118.71.13]) by mrelayeu.kundenserver.de
- (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1Mrfgi-1kPmZ03hwK-00nkW5; Thu, 03 Dec 2020 13:48:07 +0100
-From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     rspringer@google.com, toddpoynor@google.com, benchan@chromium.org,
-        rcy@google.com, laurent.pinchart@ideasonboard.com,
-        mchehab@kernel.org, f.fainelli@gmail.com, rjui@broadcom.com,
-        sbranden@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
-        nsaenzjulienne@suse.de, speakup@linux-speakup.org,
-        devel@driverdev.osuosl.org, linux-media@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH 03/11] drivers: staging: gdm724x: remove unneeded MODULE_VERSION() call
-Date:   Thu,  3 Dec 2020 13:47:55 +0100
-Message-Id: <20201203124803.23390-3-info@metux.net>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20201203124803.23390-1-info@metux.net>
-References: <20201203124803.23390-1-info@metux.net>
-X-Provags-ID: V03:K1:y/GRYT+te7Xvb7tqixaHWNKlrsFAQsktrzB4LZEe1ypwz1DoS68
- HNy5FLm7U6iklFSixKOCHtXY2kF48DiVaeuPrLGmy0DXsQZyGMBuHVtCM4C5T04ORFcmFb9
- 1QNyTCBTBB861jFXXj1JCfg22dQDfhM52ieKjGpOtFqygA1jxZCid554JQBNmBAL1CCYJAD
- Xllzu1X8tGbIRTfaM6k7w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:f24F5x+x0sk=:/niJrw9CbZxm8SsYM0Uqyt
- 54SI3myUUg/yESet1Neh6kEryUvzRVV3D0etBZG1U06WU041rOie57lSUYeSpCaCPH4n56OD8
- s9Lklkmj/Ci16AIN+3FKW8HBz1z41XUzntXRkm4uT6ZHah3Yq31iG8aXQLCQmmfVaRIwxZom9
- B4kCaZVaCKyWrxvVoVM814L+H+SJjk+qy7fStVwXdn1AlegP5MuSjQhNw7KJy7Z+a/nJoDVQL
- XHya0MD8jPFKQrJsem41b3YKrCluMZqOU9ZeXI7mIg8TDcQidGv/7ur3I/buC/U5nlZEGcX1z
- Watp+frjGAYm8TtIboTE9++3BRc/Rlbi77wRIro32Fwg9VjGRd9q3pS2srkwZLZKWOF9LjCQr
- bq3XFUNXcAOhVeYgObI7ew9jNXoEuYKcCVgbB85Zm+CLTJk+Ph9L3wBKvp68P
+        id S1730444AbgLCM5k (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Dec 2020 07:57:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55166 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729213AbgLCM5k (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 3 Dec 2020 07:57:40 -0500
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Helen Koike <helen.koike@collabora.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org
+Subject: [PATCH] media: pixfmt-meta-rkisp1.rst: fix two build warnings
+Date:   Thu,  3 Dec 2020 13:56:55 +0100
+Message-Id: <38d8dfe0a9e16c2260d1325afd7465215e4fd278.1607000212.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.28.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Remove MODULE_VERSION(), as it doesn't seem to serve any practical purpose.
-For in-kernel drivers, the kernel version matters. And the code has received
-lots of changes, without the version ever been touched (remained constant
-since landing in the mainline tree), so it doesn't seem to have any practical
-meaning anymore.
+With Sphinx 2.x: those two warnings are produced:
 
-Signed-off-by: Enrico Weigelt <info@metux.net>
+/devel/v4l/docs/sphinx2/Documentation/output/videodev2.h.rst:6: WARNING: undefined label: v4l2-meta-fmt-rk-isp1-params (if the link has no caption the label must precede a section header)
+/devel/v4l/docs/sphinx2/Documentation/output/videodev2.h.rst:6: WARNING: undefined label: v4l2-meta-fmt-rk-isp1-stat-3a (if the link has no caption the label must precede a section header)
+
+The reason is that there's no blank line between the two
+identifiers.
+
+Fixes: 3f46cac6787f ("media: admin-guide/pixfmt-meta-rkisp1.rst: pixfmt reference conforming with macro")
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/staging/gdm724x/gdm_lte.h | 1 -
- drivers/staging/gdm724x/gdm_usb.c | 1 -
- 2 files changed, 2 deletions(-)
+ Documentation/userspace-api/media/v4l/pixfmt-meta-rkisp1.rst | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/staging/gdm724x/gdm_lte.h b/drivers/staging/gdm724x/gdm_lte.h
-index f2143a6e0e99..bf6478ab05dd 100644
---- a/drivers/staging/gdm724x/gdm_lte.h
-+++ b/drivers/staging/gdm724x/gdm_lte.h
-@@ -11,7 +11,6 @@
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-meta-rkisp1.rst b/Documentation/userspace-api/media/v4l/pixfmt-meta-rkisp1.rst
+index 922fa1d59898..fa04f00bcd2e 100644
+--- a/Documentation/userspace-api/media/v4l/pixfmt-meta-rkisp1.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-meta-rkisp1.rst
+@@ -1,6 +1,7 @@
+ .. SPDX-License-Identifier: GPL-2.0
  
- #define MAX_NIC_TYPE		4
- #define MAX_RX_SUBMIT_COUNT	3
--#define DRIVER_VERSION		"3.7.17.0"
+ .. _v4l2-meta-fmt-rk-isp1-params:
++
+ .. _v4l2-meta-fmt-rk-isp1-stat-3a:
  
- enum TX_ERROR_CODE {
- 	TX_NO_ERROR = 0,
-diff --git a/drivers/staging/gdm724x/gdm_usb.c b/drivers/staging/gdm724x/gdm_usb.c
-index dc4da66c3695..aa6f08396396 100644
---- a/drivers/staging/gdm724x/gdm_usb.c
-+++ b/drivers/staging/gdm724x/gdm_usb.c
-@@ -1003,6 +1003,5 @@ static void __exit gdm_usb_lte_exit(void)
- module_init(gdm_usb_lte_init);
- module_exit(gdm_usb_lte_exit);
- 
--MODULE_VERSION(DRIVER_VERSION);
- MODULE_DESCRIPTION("GCT LTE USB Device Driver");
- MODULE_LICENSE("GPL");
+ *****************************************************************************
 -- 
-2.11.0
+2.28.0
 
