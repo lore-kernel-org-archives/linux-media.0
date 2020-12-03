@@ -2,265 +2,105 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0BA9C433FE
-	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 19:00:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 653BDC0007A
+	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 19:01:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 774CD2085B
-	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 19:00:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 29B23208A9
+	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 19:01:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726998AbgLCS7s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Dec 2020 13:59:48 -0500
-Received: from mx2.suse.de ([195.135.220.15]:39110 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726222AbgLCS7r (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 3 Dec 2020 13:59:47 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id F1275AC2E;
-        Thu,  3 Dec 2020 18:59:05 +0000 (UTC)
-To:     Daniel Vetter <daniel@ffwll.ch>
-Cc:     linaro-mm-sig@lists.linaro.org, hdegoede@redhat.com,
-        dri-devel@lists.freedesktop.org, airlied@redhat.com,
-        christian.koenig@amd.com, linux-media@vger.kernel.org
-References: <20201203140259.26580-1-tzimmermann@suse.de>
- <20201203140259.26580-8-tzimmermann@suse.de>
- <20201203152601.GB401619@phenom.ffwll.local>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-Subject: Re: [PATCH v2 7/7] dma-buf: Write down some rules for vmap usage
-Message-ID: <ee2abd93-0dfe-53a3-0038-5edc58c3ec92@suse.de>
-Date:   Thu, 3 Dec 2020 19:59:04 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        id S1729029AbgLCTAr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Dec 2020 14:00:47 -0500
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:18299 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727718AbgLCTAq (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Dec 2020 14:00:46 -0500
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5fc935b60001>; Thu, 03 Dec 2020 11:00:06 -0800
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 3 Dec
+ 2020 19:00:01 +0000
+Received: from skomatineni-linux.nvidia.com (172.20.13.39) by mail.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
+ Transport; Thu, 3 Dec 2020 19:00:00 +0000
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <hverkuil@xs4all.nl>,
+        <sakari.ailus@iki.fi>, <robh+dt@kernel.org>
+CC:     <bparrot@ti.com>, <mchehab@kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 01/13] media: tegra-video: Use zero crop settings if subdev has no get_selection
+Date:   Thu, 3 Dec 2020 10:59:50 -0800
+Message-ID: <1607022002-26575-2-git-send-email-skomatineni@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1607022002-26575-1-git-send-email-skomatineni@nvidia.com>
+References: <1607022002-26575-1-git-send-email-skomatineni@nvidia.com>
+X-NVConfidentiality: public
 MIME-Version: 1.0
-In-Reply-To: <20201203152601.GB401619@phenom.ffwll.local>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="VssPZWBOORIM5b9f8itA7ItuC8H1jqYO6"
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1607022006; bh=ERCkCneZmXlmcSkkK9fGRHPBppn9DardS4Sr/wZUI/E=;
+        h=From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
+         References:X-NVConfidentiality:MIME-Version:Content-Type;
+        b=hp+9vWAsmZRaQ5XaJvFVOeiNkH1BS6XZYb3wesU99yy5mVXOWBpTfJUn+34UhqgmC
+         34x1ftz3R/jeV56KvA7pIayHb8JHJMoD5jlvuln/zoCDdj2U160TYVI1WWxo0llggr
+         f4XPsEH0xeXUwkHLN/tD0N+Grpu4NIyaZ2GUvj/OCePIveScHtKFjzXDTE6aAnIbZX
+         zX6TL9okwMm5mXrc0QG9+KcXu9J9c8UdXJNc3+jbrM5xV1ZKfCH+rVWK4WOV97LyuA
+         lzRWXO0UcN0eZzAQaYasHBeHAvKR7Afmi8xUk50jMIe7Yh9ZuaW5RBl+ZzDqnRkKrP
+         KAXzoPMSmgrDQ==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---VssPZWBOORIM5b9f8itA7ItuC8H1jqYO6
-Content-Type: multipart/mixed; boundary="vmhedsiPmkJS4pKaUezB1f0518yO38X5q";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Daniel Vetter <daniel@ffwll.ch>
-Cc: linaro-mm-sig@lists.linaro.org, hdegoede@redhat.com,
- dri-devel@lists.freedesktop.org, airlied@redhat.com,
- christian.koenig@amd.com, linux-media@vger.kernel.org
-Message-ID: <ee2abd93-0dfe-53a3-0038-5edc58c3ec92@suse.de>
-Subject: Re: [PATCH v2 7/7] dma-buf: Write down some rules for vmap usage
-References: <20201203140259.26580-1-tzimmermann@suse.de>
- <20201203140259.26580-8-tzimmermann@suse.de>
- <20201203152601.GB401619@phenom.ffwll.local>
-In-Reply-To: <20201203152601.GB401619@phenom.ffwll.local>
+Currently try format implementation doesn't check if subdevice has
+get_selection ops implemented and returns -EINVAL on error from
+direct v4l2_subdev_call of get_selection.
 
---vmhedsiPmkJS4pKaUezB1f0518yO38X5q
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+Selection API's are not mandatory for all V4L2 subdevices.
 
-Hi
+This patch fixes it by adding v4l2_subdev_has_ops check prior to
+calling get_selection ops and continues with try or set format with
+zero crop settings for subdevices that don't have get_selection and
+returns -EINVAL only for subdevices that has get_selection ops.
 
-Am 03.12.20 um 16:26 schrieb Daniel Vetter:
-> On Thu, Dec 03, 2020 at 03:02:59PM +0100, Thomas Zimmermann wrote:
->> Dma-buf's vmap and vunmap callbacks are undocumented and various
->> exporters currently have slightly different semantics for them. Add
->> documentation on how to implement and use these interfaces correctly.
->>
->> v2:
->> 	* document vmap semantics in struct dma_buf_ops
->> 	* add TODO item for reviewing and maybe fixing dma-buf exporters
->>
->> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
->=20
-> I still don't think this works, we're breaking dma_buf_vmap for everyon=
-e
-> else here.
+Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+---
+ drivers/staging/media/tegra-video/vi.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
-I removed the text on the importer. These notes for callers in the docs=20
-are more or less a consequence of the exporter semantics.
+diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
+index 560d8b3..7edd35c 100644
+--- a/drivers/staging/media/tegra-video/vi.c
++++ b/drivers/staging/media/tegra-video/vi.c
+@@ -533,11 +533,18 @@ static int __tegra_channel_try_format(struct tegra_vi_channel *chan,
+ 	fse.code = fmtinfo->code;
+ 	ret = v4l2_subdev_call(subdev, pad, enum_frame_size, pad_cfg, &fse);
+ 	if (ret) {
+-		ret = v4l2_subdev_call(subdev, pad, get_selection, NULL, &sdsel);
+-		if (ret)
+-			return -EINVAL;
+-		pad_cfg->try_crop.width = sdsel.r.width;
+-		pad_cfg->try_crop.height = sdsel.r.height;
++		if (!v4l2_subdev_has_op(subdev, pad, get_selection)) {
++			pad_cfg->try_crop.width = 0;
++			pad_cfg->try_crop.height = 0;
++		} else {
++			ret = v4l2_subdev_call(subdev, pad, get_selection,
++					       NULL, &sdsel);
++			if (ret)
++				return -EINVAL;
++
++			pad_cfg->try_crop.width = sdsel.r.width;
++			pad_cfg->try_crop.height = sdsel.r.height;
++		}
+ 	} else {
+ 		pad_cfg->try_crop.width = fse.max_width;
+ 		pad_cfg->try_crop.height = fse.max_height;
+-- 
+2.7.4
 
-I thought we at least agreed on the exporter semantics in the other=20
-thread, didn't we?
-
-What I'm trying to do is to write dome some rules for exporters, even if =
-
-not all exporters follow them.
-
-Given the circumstances, we should leave out this patch from the patchset=
-=2E
-
-Best regards
-Thomas
-
->=20
->> ---
->>   Documentation/gpu/todo.rst | 15 +++++++++++++
->>   include/drm/drm_gem.h      |  4 ++++
->>   include/linux/dma-buf.h    | 45 ++++++++++++++++++++++++++++++++++++=
-++
->>   3 files changed, 64 insertions(+)
->>
->> diff --git a/Documentation/gpu/todo.rst b/Documentation/gpu/todo.rst
->> index 009d8e6c7e3c..32bb797a84fc 100644
->> --- a/Documentation/gpu/todo.rst
->> +++ b/Documentation/gpu/todo.rst
->> @@ -505,6 +505,21 @@ Contact: Thomas Zimmermann <tzimmermann@suse.de>,=
- Christian K=C3=B6nig, Daniel Vette
->>   Level: Intermediate
->>  =20
->>  =20
->> +Enforce rules for dma-buf vmap and pin ops
->> +------------------------------------------
->> +
->> +Exporter implementations of vmap and pin in struct dma_buf_ops (and c=
-onsequently
->> +struct drm_gem_object_funcs) use a variety of locking semantics. Some=
- rely on
->> +the caller holding the dma-buf's reservation lock, some do their own =
-locking,
->> +some don't require any locking. VRAM helpers even used to pin as part=
- of vmap.
->> +
->> +We need to review each exporter and enforce the documented rules.
->> +
->> +Contact: Christian K=C3=B6nig, Daniel Vetter, Thomas Zimmermann <tzim=
-mermann@suse.de>
->> +
->> +Level: Advanced
->> +
->> +
->>   Core refactorings
->>   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->>  =20
->> diff --git a/include/drm/drm_gem.h b/include/drm/drm_gem.h
->> index 5e6daa1c982f..1864c6a721b1 100644
->> --- a/include/drm/drm_gem.h
->> +++ b/include/drm/drm_gem.h
->> @@ -138,6 +138,8 @@ struct drm_gem_object_funcs {
->>   	 * drm_gem_dmabuf_vmap() helper.
->>   	 *
->>   	 * This callback is optional.
->> +	 *
->> +	 * See also struct dma_buf_ops.vmap
->>   	 */
->>   	int (*vmap)(struct drm_gem_object *obj, struct dma_buf_map *map);
->>  =20
->> @@ -148,6 +150,8 @@ struct drm_gem_object_funcs {
->>   	 * drm_gem_dmabuf_vunmap() helper.
->>   	 *
->>   	 * This callback is optional.
->> +	 *
->> +	 * See also struct dma_buf_ops.vunmap
->>   	 */
->>   	void (*vunmap)(struct drm_gem_object *obj, struct dma_buf_map *map)=
-;
->>  =20
->> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
->> index cf72699cb2bc..dc81fdc01dda 100644
->> --- a/include/linux/dma-buf.h
->> +++ b/include/linux/dma-buf.h
->> @@ -267,7 +267,52 @@ struct dma_buf_ops {
->>   	 */
->>   	int (*mmap)(struct dma_buf *, struct vm_area_struct *vma);
->>  =20
->> +	/**
->> +	 * @vmap:
->=20
-> There's already a @vmap and @vunamp kerneldoc at the top comment, that
-> needs to be removed.
-> -Daniel
->=20
->> +	 *
->> +	 * Returns a virtual address for the buffer.
->> +	 *
->> +	 * Notes to callers:
->> +	 *
->> +	 * - Callers must hold the struct dma_buf.resv lock before calling
->> +	 *   this interface.
->> +	 *
->> +	 * - Callers must provide means to prevent the mappings from going
->> +	 *   stale, such as holding the reservation lock or providing a
->> +	 *   move-notify callback to the exporter.
->> +	 *
->> +	 * Notes to implementors:
->> +	 *
->> +	 * - Implementations must expect pairs of @vmap and @vunmap to be
->> +	 *   called frequently and should optimize for this case.
->> +	 *
->> +	 * - Implementations should avoid additional operations, such as
->> +	 *   pinning.
->> +	 *
->> +	 * - Implementations may expect the caller to hold the dma-buf's
->> +	 *   reservation lock to protect against concurrent calls and
->> +	 *   relocation.
->> +	 *
->> +	 * - Implementations may provide additional guarantees, such as work=
-ing
->> +	 *   without holding the reservation lock.
->> +	 *
->> +	 * This callback is optional.
->> +	 *
->> +	 * Returns:
->> +	 *
->> +	 * 0 on success or a negative error code on failure.
->> +	 */
->>   	int (*vmap)(struct dma_buf *dmabuf, struct dma_buf_map *map);
->> +
->> +	/**
->> +	 * @vunmap:
->> +	 *
->> +	 * Releases the address previously returned by @vmap.
->> +	 *
->> +	 * This callback is optional.
->> +	 *
->> +	 * See also @vmap()
->> +	 */
->>   	void (*vunmap)(struct dma_buf *dmabuf, struct dma_buf_map *map);
->>   };
->>  =20
->> --=20
->> 2.29.2
->>
->=20
-
---=20
-Thomas Zimmermann
-Graphics Driver Developer
-SUSE Software Solutions Germany GmbH
-Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
-(HRB 36809, AG N=C3=BCrnberg)
-Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
-
-
---vmhedsiPmkJS4pKaUezB1f0518yO38X5q--
-
---VssPZWBOORIM5b9f8itA7ItuC8H1jqYO6
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAl/JNXgFAwAAAAAACgkQlh/E3EQov+Cf
-gg/8D7k2P90vQjC2lAAkzKYkD36iSszn6huMEMpsQ7D/GD+F4JleE/Y/qfaQZFb7l7HhogXc5eP2
-d8LHmR+i990GAi4a+Go9HWTNofUlQrlKRy+CV65Nrd1dnyFCuctBAjyZx1lpQlcH22vA6hmpMWjf
-vvySO/qfyMMYGxfgrD5X7zUYcNqF3ZgAGHcfCkELeGdynBEm+Y2dbOpH/JMMTU/pnJoJliBVD6p7
-m4PboAQDhB2vJ45HoykT4k+yn7oQpzW8mapTr5Fbs9A4UyvzLNnjB9mJmQaY1WiOCglsiObSznWs
-h27r8jOnl14OEux8MthEfzI8cSq/a+nsw3w+0DOuPxch11qv1q46mv+Bajy+fO0HUcQYZxPCYpb0
-dCuXNDUzGE1I4D54rdpVswRsOpqUzhtA/3FypVNOWy2jTbsY2m13rkIunE+ye8cFbsndWY5BvHSo
-lz3m4K39beVwS3PUgq3DuoDUHH4XDKym9Zqfe7rCoHVTZ/KE2WzZvrBojG+Pt4NFtIcwwrVKg6el
-JcYhMFEhuLh122GKYP/1v3r2dgA0b5HVFpndmZbS0s/pzXgSKMM2TTlVAiNAxmXWe75QoesYqsNs
-61X75D80IIYsuJhfgFkyVFlp+VztHlZK49YZPth71FEVytjLuNG3rhR80N/3J+Umcq7l7ZRtIqUW
-6Es=
-=aTrj
------END PGP SIGNATURE-----
-
---VssPZWBOORIM5b9f8itA7ItuC8H1jqYO6--
