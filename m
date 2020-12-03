@@ -7,21 +7,21 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBE67C64E8A
-	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 12:52:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AAB1EC83016
+	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 12:52:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8BCED22206
-	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 12:52:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B03D20709
+	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 12:52:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730514AbgLCMus (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Dec 2020 07:50:48 -0500
-Received: from mout.kundenserver.de ([212.227.126.131]:52313 "EHLO
+        id S2389058AbgLCMuy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Dec 2020 07:50:54 -0500
+Received: from mout.kundenserver.de ([212.227.126.187]:55711 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730504AbgLCMur (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Dec 2020 07:50:47 -0500
+        with ESMTP id S2389044AbgLCMuw (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Dec 2020 07:50:52 -0500
 Received: from orion.localdomain ([95.118.71.13]) by mrelayeu.kundenserver.de
  (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MjBNV-1kHDye2uNp-00fBnI; Thu, 03 Dec 2020 13:48:09 +0100
+ 1MCoYS-1ktdjX0ukS-008w2z; Thu, 03 Dec 2020 13:48:11 +0100
 From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
 To:     linux-kernel@vger.kernel.org
 Cc:     rspringer@google.com, toddpoynor@google.com, benchan@chromium.org,
@@ -31,47 +31,48 @@ Cc:     rspringer@google.com, toddpoynor@google.com, benchan@chromium.org,
         nsaenzjulienne@suse.de, speakup@linux-speakup.org,
         devel@driverdev.osuosl.org, linux-media@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH 07/11] drivers: staging: vc04_services: remove unneeded MODULE_VERSION() call
-Date:   Thu,  3 Dec 2020 13:47:59 +0100
-Message-Id: <20201203124803.23390-7-info@metux.net>
+Subject: [PATCH 09/11] drivers: staging: rtl8192e: remove unneeded MODULE_VERSION() call
+Date:   Thu,  3 Dec 2020 13:48:01 +0100
+Message-Id: <20201203124803.23390-9-info@metux.net>
 X-Mailer: git-send-email 2.11.0
 In-Reply-To: <20201203124803.23390-1-info@metux.net>
 References: <20201203124803.23390-1-info@metux.net>
-X-Provags-ID: V03:K1:9XsuyMzeLdDwbcF1TI1lSA8b7w/uiTMP9U8S++LIpCmkG+5ZaaW
- OgfN0w5eaNjNrS6rtIwWQFSJXftdzj5xIg0/UIhrd617VcTOZ40OrmHIYfOV+1mIj+qWIhq
- yt7IhsmUEbL4s7VgBNEBSW18KRm3jB+XOLxSehcPTHLTfcrCa8p2MfhX8b61wP9kUlRfibZ
- dCcmwi7HtfBAWyW88U39g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:SMJMDEo01Sk=:cGETZ8DbR9yWxRgclj+NVN
- 66P3jQpMHZjs2vP7ZF15Ab0MfDViev8Wlkohud50g1Y5imMvaRnyeLpmYCjkJ2xtk/ewoPvSB
- yMI/lqFtNq6DkXiZl71X/Dn8r8kcNDHijlP6CAytUCHy4eDShv7/X4F2GQ4QC6oA6A5floJRc
- B9KZA8dpiR1WYEXVxqtipv4mTAVWbg4TdOOWPE6XKha1gE33veEKTbu/f8LXj7CvS80zkELh1
- mPv1m3Amm89j18y5onlwmBjNZ0I5ZhRyCEyNw2HLFaNGEZdYTYV3WKrS8VKtIxj/npquG+P/f
- Q5JfYMej52+8Pur2tBZilUZRvbhaEgnqDs6uvS2B/kxdQmWdfkZRUgP2aiMcMZ+KNbtCFb2qz
- LyjtOORKgEvU0J0fV+3Ss7pAQSdS5wfmWo7cWNidL3pPadq25hNGXyWQhcbga
+X-Provags-ID: V03:K1:TWPmkvMRLe+RvSvuPagbKMS63HtX/xzJmb8w2MTfTkQSWtN8MuE
+ d7qBVuYtmwsjFJW9rVHBB94Z/d4wpwb0RbxgZhF7DW1Pd4B5YrB7GVqudc3Okkrs/cbk0hb
+ wpEPKqD7q5Npkh3McC87Qc2PnpfO4QTfipZwhrOTyZIuO3P4vIPgtk5IzMpWFUwIaYhfJLL
+ KY9a+bUX9nduw5vCyGp8g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:K6oID9tUrnQ=:CM//xMqa9mV7ETaJ0BNeUg
+ 6ZNSYbSTHSCeQ84menR9DiDAANTYKHy0oR5ehOCMfO7zii6wlMymLiOGzPGNVhBa7QX9CB+Bm
+ UdErWAcIwvwTzBrpWc013DMY8ZreOtvRNI12e5bs7eOAYgEKgUPrLOGwgSFRyl8Ax0f9Ky+di
+ 3abr8qqDymyiRc8Sqj5is7sSmWlmBY3tB6mwhcD0Zlk9PAdHJ1DPa1R+gxNfiVE3nPklz1Bcf
+ CbJS3qDyEEpBDch0Hpx4EYGpl6daNjJN5z8xij/f1+KOYMXVMWNxzyNQPuJ+zw1oZ9EeO1C1w
+ A9A8zAKnUSM5FKNxVSH9Fj3iWXTO8FJt1knNt4HCiwLmo5PVRaYghHwp2BHpSud9C+SFobpId
+ UYYCDI/0DGBq/Mda6lfbUYujYw39f/VCvrjqEuQStLGT82Z/PGIgwe+XiLr02
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Remove MODULE_VERSION(), as it doesn't seem to have any practical purpose.
-For in-tree drivers, the kernel version really matters. OTOH, the module
-version doesn't seem to be actively maintained - the code received changes
-while the version remained constant.
+Remove MODULE_VERSION(), as it doesn't seem to have any practical purpose:
+the driver has received lots of changes, while the module version remained
+constant. Unmaintained version numbers aren't actually useful.
 
 Signed-off-by: Enrico Weigelt <info@metux.net>
 ---
- drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c | 1 -
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-index df90c1f9d148..0b20dd51c340 100644
---- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-+++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-@@ -2011,5 +2011,4 @@ module_platform_driver(bcm2835_camera_driver)
- MODULE_DESCRIPTION("Broadcom 2835 MMAL video capture");
- MODULE_AUTHOR("Vincent Sanders");
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+index 663675efcfe4..e316f920657b 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+@@ -2635,7 +2635,6 @@ void rtl92e_check_rfctrl_gpio_timer(struct timer_list *t)
+  ***************************************************************************/
+ MODULE_DESCRIPTION("Linux driver for Realtek RTL819x WiFi cards");
+ MODULE_AUTHOR(DRV_COPYRIGHT " " DRV_AUTHOR);
+-MODULE_VERSION(DRV_VERSION);
  MODULE_LICENSE("GPL");
--MODULE_VERSION(BM2835_MMAL_VERSION);
- MODULE_ALIAS("platform:bcm2835-camera");
+ MODULE_FIRMWARE(RTL8192E_BOOT_IMG_FW);
+ MODULE_FIRMWARE(RTL8192E_MAIN_IMG_FW);
 -- 
 2.11.0
 
