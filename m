@@ -2,73 +2,217 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DF9FC63777
-	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 10:31:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79939C83012
+	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 10:33:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E8A4E206E3
-	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 10:31:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C37921527
+	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 10:33:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388920AbgLCKbr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Dec 2020 05:31:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59226 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388903AbgLCKbq (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Dec 2020 05:31:46 -0500
-Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41843C061A4E
-        for <linux-media@vger.kernel.org>; Thu,  3 Dec 2020 02:30:47 -0800 (PST)
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id CA6CFC6392; Thu,  3 Dec 2020 10:30:43 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
-        t=1606991443; bh=FFxTI7e9bNb9rI9/u38ncwXjjZ1eKGDdp/vekDQpE4U=;
-        h=Date:From:To:Subject:From;
-        b=qTf51f4DBtD2w8qlW1h4kkCJtyDE+n4R2JzbTqOQ6EWONIU+GTye9JvRa1U1DYA25
-         dVu/Xv8qbNzXrPNZ/ZLENOPNiicMoljedQFIF9HOSFYDgr0JOuAqpvxrJcZzqkZuMk
-         yUZL8AycBPFN4WNKcGcd66MXqBfi5v8vfjhqGwiBbVBIdJBeb5qTdeLr3uA981AGWM
-         f1h174M+fXJJXm1SETPbEGIDnkMGjA11lBfqvVOnwPJzg5vadk3VAEKad3CWuZ9Snr
-         IEb5cSF3P1BkZ73fqYAy9JkmFBMmfJrzSovct6+gn/GtxtOb+eJhHFz+HcSCrKF0kk
-         iFFW8Va55eu6A==
-Date:   Thu, 3 Dec 2020 10:30:43 +0000
-From:   Sean Young <sean@mess.org>
-To:     linux-media@vger.kernel.org
-Subject: [GIT PULL FOR v5.11] Add pine64 keymap
-Message-ID: <20201203103043.GA13676@gofer.mess.org>
+        id S2388948AbgLCKdW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Dec 2020 05:33:22 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:36077 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388706AbgLCKdV (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Dec 2020 05:33:21 -0500
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 03 Dec 2020 02:32:40 -0800
+X-QCInternal: smtphost
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 03 Dec 2020 02:32:38 -0800
+X-QCInternal: smtphost
+Received: from c-rojay-linux.qualcomm.com ([10.206.21.80])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 03 Dec 2020 16:02:00 +0530
+Received: by c-rojay-linux.qualcomm.com (Postfix, from userid 88981)
+        id 765FF2832; Thu,  3 Dec 2020 16:01:59 +0530 (IST)
+From:   Roja Rani Yarubandi <rojay@codeaurora.org>
+To:     wsa@kernel.org
+Cc:     swboyd@chromium.org, dianders@chromium.org,
+        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
+        mka@chromium.org, akashast@codeaurora.org,
+        msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
+        vkaur@codeaurora.org, pyarlaga@codeaurora.org,
+        rnayak@codeaurora.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
+        Roja Rani Yarubandi <rojay@codeaurora.org>
+Subject: [RESEND PATCH V6 1/2] i2c: i2c-qcom-geni: Store DMA mapping data in geni_i2c_dev struct
+Date:   Thu,  3 Dec 2020 16:01:55 +0530
+Message-Id: <20201203103156.32595-2-rojay@codeaurora.org>
+X-Mailer: git-send-email 2.29.0
+In-Reply-To: <20201203103156.32595-1-rojay@codeaurora.org>
+References: <20201203103156.32595-1-rojay@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The following changes since commit 42ad70c469665387e8f7b53cb6d4581492dff906:
+Store DMA mapping data in geni_i2c_dev struct to enhance DMA mapping
+data scope. For example during shutdown callback to unmap DMA mapping,
+this stored DMA mapping data can be used to call geni_se_tx_dma_unprep
+and geni_se_rx_dma_unprep functions.
 
-  media: rockchip: rkisp1: remove useless debugfs checks (2020-12-03 08:59:10 +0100)
+Add two helper functions geni_i2c_rx_msg_cleanup and
+geni_i2c_tx_msg_cleanup to unwrap the things after rx/tx FIFO/DMA
+transfers, so that the same can be used in geni_i2c_stop_xfer()
+function during shutdown callback.
 
-are available in the Git repository at:
+Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
+---
+Changes in V5:
+ - As per Stephen's comments separated this patch from shutdown
+   callback patch, gi2c->cur = NULL is not removed from
+   geni_i2c_abort_xfer(), and made a copy of gi2c->cur and passed
+   to cleanup functions.
 
-  git://linuxtv.org/syoung/media_tree.git tags/v5.11d
+Changes in V6:
+ - Added spin_lock/unlock in geni_i2c_rx_msg_cleanup() and
+   geni_i2c_tx_msg_cleanup() functions.
 
-for you to fetch changes up to 173ae11a204d6e2aaccdb82e8de851f1d361a34e:
+ drivers/i2c/busses/i2c-qcom-geni.c | 69 +++++++++++++++++++++++-------
+ 1 file changed, 53 insertions(+), 16 deletions(-)
 
-  media: rc: add keymap for pine64 remote (2020-12-03 10:21:37 +0000)
+diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+index dce75b85253c..bfbc80f65006 100644
+--- a/drivers/i2c/busses/i2c-qcom-geni.c
++++ b/drivers/i2c/busses/i2c-qcom-geni.c
+@@ -86,6 +86,9 @@ struct geni_i2c_dev {
+ 	u32 clk_freq_out;
+ 	const struct geni_i2c_clk_fld *clk_fld;
+ 	int suspended;
++	void *dma_buf;
++	size_t xfer_len;
++	dma_addr_t dma_addr;
+ };
+ 
+ struct geni_i2c_err_log {
+@@ -348,14 +351,49 @@ static void geni_i2c_tx_fsm_rst(struct geni_i2c_dev *gi2c)
+ 		dev_err(gi2c->se.dev, "Timeout resetting TX_FSM\n");
+ }
+ 
++static void geni_i2c_rx_msg_cleanup(struct geni_i2c_dev *gi2c,
++				     struct i2c_msg *cur)
++{
++	struct geni_se *se = &gi2c->se;
++	unsigned long flags;
++
++	spin_lock_irqsave(&gi2c->lock, flags);
++	gi2c->cur_rd = 0;
++	if (gi2c->dma_buf) {
++		if (gi2c->err)
++			geni_i2c_rx_fsm_rst(gi2c);
++		geni_se_rx_dma_unprep(se, gi2c->dma_addr, gi2c->xfer_len);
++		i2c_put_dma_safe_msg_buf(gi2c->dma_buf, cur, !gi2c->err);
++	}
++	spin_unlock_irqrestore(&gi2c->lock, flags);
++}
++
++static void geni_i2c_tx_msg_cleanup(struct geni_i2c_dev *gi2c,
++				     struct i2c_msg *cur)
++{
++	struct geni_se *se = &gi2c->se;
++	unsigned long flags;
++
++	spin_lock_irqsave(&gi2c->lock, flags);
++	gi2c->cur_wr = 0;
++	if (gi2c->dma_buf) {
++		if (gi2c->err)
++			geni_i2c_tx_fsm_rst(gi2c);
++		geni_se_tx_dma_unprep(se, gi2c->dma_addr, gi2c->xfer_len);
++		i2c_put_dma_safe_msg_buf(gi2c->dma_buf, cur, !gi2c->err);
++	}
++	spin_unlock_irqrestore(&gi2c->lock, flags);
++}
++
+ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ 				u32 m_param)
+ {
+-	dma_addr_t rx_dma;
++	dma_addr_t rx_dma = 0;
+ 	unsigned long time_left;
+ 	void *dma_buf = NULL;
+ 	struct geni_se *se = &gi2c->se;
+ 	size_t len = msg->len;
++	struct i2c_msg *cur;
+ 
+ 	if (!of_machine_is_compatible("lenovo,yoga-c630"))
+ 		dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
+@@ -372,19 +410,18 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ 		geni_se_select_mode(se, GENI_SE_FIFO);
+ 		i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
+ 		dma_buf = NULL;
++	} else {
++		gi2c->xfer_len = len;
++		gi2c->dma_addr = rx_dma;
++		gi2c->dma_buf = dma_buf;
+ 	}
+ 
++	cur = gi2c->cur;
+ 	time_left = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
+ 	if (!time_left)
+ 		geni_i2c_abort_xfer(gi2c);
+ 
+-	gi2c->cur_rd = 0;
+-	if (dma_buf) {
+-		if (gi2c->err)
+-			geni_i2c_rx_fsm_rst(gi2c);
+-		geni_se_rx_dma_unprep(se, rx_dma, len);
+-		i2c_put_dma_safe_msg_buf(dma_buf, msg, !gi2c->err);
+-	}
++	geni_i2c_rx_msg_cleanup(gi2c, cur);
+ 
+ 	return gi2c->err;
+ }
+@@ -392,11 +429,12 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ 				u32 m_param)
+ {
+-	dma_addr_t tx_dma;
++	dma_addr_t tx_dma = 0;
+ 	unsigned long time_left;
+ 	void *dma_buf = NULL;
+ 	struct geni_se *se = &gi2c->se;
+ 	size_t len = msg->len;
++	struct i2c_msg *cur;
+ 
+ 	if (!of_machine_is_compatible("lenovo,yoga-c630"))
+ 		dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
+@@ -413,22 +451,21 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ 		geni_se_select_mode(se, GENI_SE_FIFO);
+ 		i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
+ 		dma_buf = NULL;
++	} else {
++		gi2c->xfer_len = len;
++		gi2c->dma_addr = tx_dma;
++		gi2c->dma_buf = dma_buf;
+ 	}
+ 
+ 	if (!dma_buf) /* Get FIFO IRQ */
+ 		writel_relaxed(1, se->base + SE_GENI_TX_WATERMARK_REG);
+ 
++	cur = gi2c->cur;
+ 	time_left = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
+ 	if (!time_left)
+ 		geni_i2c_abort_xfer(gi2c);
+ 
+-	gi2c->cur_wr = 0;
+-	if (dma_buf) {
+-		if (gi2c->err)
+-			geni_i2c_tx_fsm_rst(gi2c);
+-		geni_se_tx_dma_unprep(se, tx_dma, len);
+-		i2c_put_dma_safe_msg_buf(dma_buf, msg, !gi2c->err);
+-	}
++	geni_i2c_tx_msg_cleanup(gi2c, cur);
+ 
+ 	return gi2c->err;
+ }
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
+of Code Aurora Forum, hosted by The Linux Foundation
 
-----------------------------------------------------------------
-v5.11d
-
-----------------------------------------------------------------
-Jonas Karlman (1):
-      media: rc: add keymap for pine64 remote
-
- Documentation/devicetree/bindings/media/rc.yaml |  1 +
- drivers/media/rc/keymaps/Makefile               |  1 +
- drivers/media/rc/keymaps/rc-pine64.c            | 65 +++++++++++++++++++++++++
- include/media/rc-map.h                          |  1 +
- 4 files changed, 68 insertions(+)
- create mode 100644 drivers/media/rc/keymaps/rc-pine64.c
