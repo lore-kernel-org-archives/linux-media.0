@@ -6,85 +6,114 @@ X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27867C4167B
-	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 17:52:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CCE2C0007A
+	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 18:01:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C9228207A2
-	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 17:52:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C40C420754
+	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 18:01:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731486AbgLCRwe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Dec 2020 12:52:34 -0500
-Received: from retiisi.eu ([95.216.213.190]:44012 "EHLO hillosipuli.retiisi.eu"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731012AbgLCRwc (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 3 Dec 2020 12:52:32 -0500
-Received: from valkosipuli.localdomain (unknown [IPv6:fd35:1bc8:1a6:d3d5::80:2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 37451634C24;
-        Thu,  3 Dec 2020 19:50:35 +0200 (EET)
-Received: from sailus by valkosipuli.localdomain with local (Exim 4.92)
-        (envelope-from <sakari.ailus@retiisi.org.uk>)
-        id 1kkskV-0003FO-L5; Thu, 03 Dec 2020 19:50:35 +0200
-Date:   Thu, 3 Dec 2020 19:50:35 +0200
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     linux-media@vger.kernel.org, naush@raspberrypi.com,
-        dave.stevenson@raspberrypi.com, laurent.pinchart@ideasonboard.com,
-        kieran.bingham@ideasonboard.com, niklas.soderlund@ragnatech.se,
-        dafna.hirschfeld@collabora.com, hverkuil@xs4all.nl,
-        nsaenzjulienne@suse.de, mchehab+huawei@kernel.org
-Subject: Re: [PATCH v4 2/5] dt-bindings: media: Document BCM283x CSI2/CCP2
- receiver
-Message-ID: <20201203175035.GI4351@valkosipuli.retiisi.org.uk>
-References: <20201110174036.220883-1-jacopo@jmondi.org>
- <20201110174036.220883-3-jacopo@jmondi.org>
- <20201202212031.GY4351@valkosipuli.retiisi.org.uk>
- <20201203164417.y3vrabzjhalhahmh@uno.localdomain>
- <20201203172519.GG4351@valkosipuli.retiisi.org.uk>
- <20201203173733.wmdjr2cpii3ab75s@uno.localdomain>
- <20201203174102.GH4351@valkosipuli.retiisi.org.uk>
- <20201203175027.e46qw4ildmaew6dz@uno.localdomain>
+        id S1727726AbgLCSBF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Dec 2020 13:01:05 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:33236 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731413AbgLCSBE (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Dec 2020 13:01:04 -0500
+Received: from 1.general.cking.uk.vpn ([10.172.193.212])
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <colin.king@canonical.com>)
+        id 1kkstx-0005Pt-3z; Thu, 03 Dec 2020 18:00:21 +0000
+To:     Dongchun Zhu <dongchun.zhu@mediatek.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-mediatek@lists.infradead.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+From:   Colin Ian King <colin.king@canonical.com>
+Subject: re: media: i2c: add OV02A10 image sensor driver
+Message-ID: <9af089ea-2532-68ac-5d22-97a669ccec91@canonical.com>
+Date:   Thu, 3 Dec 2020 18:00:20 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201203175027.e46qw4ildmaew6dz@uno.localdomain>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Dec 03, 2020 at 06:50:27PM +0100, Jacopo Mondi wrote:
-> Hi Sakari,
-> 
-> On Thu, Dec 03, 2020 at 07:41:02PM +0200, Sakari Ailus wrote:
-> 
-> [snip]
-> 
-> > >
-> > > Ah! maximum: 8. I was about to reply to Rob's video-interfaces
-> > > conversion and this might need to be pointed out.
-> > > I was also about to ask it it's an issue if the bindings validation
-> > > does not catch arrays as: [1, 3] as the constraint of being
-> > > monotonically increasing values is expressed in words only. I guess
-> > > it's fine, the alternative syntax is awful:
-> > >
-> > >             anyOf:
-> > >               - items:
-> > >                 - const: 1
-> > >                 - const: 2
-> > >               - items:
-> > >                 - const: 1
-> > >                 - const: 2
-> > >                 - const: 3
-> > >                 - const: 4
-> >
-> > The v4l2-fwnode framework doesn't do that, what it does check for, though,
-> 
-> I meant the dt-validation :)
+Hi,
 
-I think it'd be very nice to have that check there, too. :-)
+Static analysis on linux-next with Coverity has detected an issue with
+the following commit:
 
--- 
-Sakari Ailus
+529 static int ov02a10_s_stream(struct v4l2_subdev *sd, int on)
+530 {
+531        struct ov02a10 *ov02a10 = to_ov02a10(sd);
+532        struct i2c_client *client =
+v4l2_get_subdevdata(&ov02a10->subdev);
+
+   1. var_decl: Declaring variable ret without initializer.
+
+533        int ret;
+534
+535        mutex_lock(&ov02a10->mutex);
+536
+
+   2. Condition ov02a10->streaming == on, taking true branch.
+
+537        if (ov02a10->streaming == on)
+
+   3. Jumping to label unlock_and_return.
+
+538                goto unlock_and_return;
+539
+540        if (on) {
+541                ret = pm_runtime_get_sync(&client->dev);
+542                if (ret < 0) {
+543                        pm_runtime_put_noidle(&client->dev);
+544                        goto unlock_and_return;
+545                }
+546
+547                ret = __ov02a10_start_stream(ov02a10);
+548                if (ret) {
+549                        __ov02a10_stop_stream(ov02a10);
+550                        ov02a10->streaming = !on;
+551                        goto err_rpm_put;
+552                }
+553        } else {
+554                __ov02a10_stop_stream(ov02a10);
+555                pm_runtime_put(&client->dev);
+556        }
+557
+558        ov02a10->streaming = on;
+559        mutex_unlock(&ov02a10->mutex);
+560
+561        return 0;
+562
+563 err_rpm_put:
+564        pm_runtime_put(&client->dev);
+565 unlock_and_return:
+566        mutex_unlock(&ov02a10->mutex);
+567
+
+Uninitialized scalar variable (UNINIT)
+    4. uninit_use: Using uninitialized value ret.
+
+568        return ret;
+569 }
+
+Variable ret has not been initialized, so the error return value is a
+garbage value. It should be initialized with some appropriate negative
+error code, or ret could be removed and the return should return a
+literal value of a error code.
+
+I was unsure what value is appropriate to fix this, so instead I'm
+reporting this issue.
+
+Colin
