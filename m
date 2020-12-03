@@ -2,26 +2,27 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1C11C49360
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89F9BC00130
 	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 14:03:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5774E206F9
-	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 14:03:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2CEBD2079A
+	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 14:03:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729374AbgLCODr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Dec 2020 09:03:47 -0500
-Received: from mx2.suse.de ([195.135.220.15]:34634 "EHLO mx2.suse.de"
+        id S2436468AbgLCODt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Dec 2020 09:03:49 -0500
+Received: from mx2.suse.de ([195.135.220.15]:34768 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726111AbgLCODr (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 3 Dec 2020 09:03:47 -0500
+        id S2389078AbgLCODt (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 3 Dec 2020 09:03:49 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 00A33AC6A;
-        Thu,  3 Dec 2020 14:03:06 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 36AC4AD8D;
+        Thu,  3 Dec 2020 14:03:08 +0000 (UTC)
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     airlied@redhat.com, daniel@ffwll.ch,
         maarten.lankhorst@linux.intel.com, mripard@kernel.org,
@@ -30,68 +31,62 @@ To:     airlied@redhat.com, daniel@ffwll.ch,
 Cc:     dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
         linaro-mm-sig@lists.linaro.org,
         Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v2 0/7] drm/vram-helper: Lock GEM BOs while they are mapped
-Date:   Thu,  3 Dec 2020 15:02:52 +0100
-Message-Id: <20201203140259.26580-1-tzimmermann@suse.de>
+Subject: [PATCH v2 4/7] drm/vram-helper: Remove pinning from drm_gem_vram_{vmap,vunmap}()
+Date:   Thu,  3 Dec 2020 15:02:56 +0100
+Message-Id: <20201203140259.26580-5-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20201203140259.26580-1-tzimmermann@suse.de>
+References: <20201203140259.26580-1-tzimmermann@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-GEM VRAM helpers used to pin the BO in their implementation of vmap, so
-that they could not be relocated. In a recent discussion, [1] it became
-clear that this is incorrect and that vmap should rather repend on the
-reservation lock to prevent relocation. This patchset addresses the issue.
+BO pinning was never meant to be part of a GEM object's vmap operation.
+Remove it from the related code in VRAM helpers.
 
-Version 2 of the patchset is a significant rework. In particular, the
-helper function drm_gem_vram_vmap_unlocked() is gone and importers now
-acquire the reservation locks by themselves. I took Christian's A-bs only
-for patches that were not affected.
+Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+---
+ drivers/gpu/drm/drm_gem_vram_helper.c | 16 +---------------
+ 1 file changed, 1 insertion(+), 15 deletions(-)
 
-Patches 1 and 2 prepare the ast cursor code for the later changes.
-
-Patch 3 pushes the BO locking into callers of vmap and vunmap. Besides
-the VRAM helpers, this affects ast, vboxvideo and the generic fbdev
-emulation.
-
-Patches 4 to 6 clean up afterwards. BO pinning is not required any longer
-and the VRAM-internal helpers are not needed.
-
-Patch 7 adds documentation to vmap and vunmap in struct dma_buf_ops. It
-hopefully reflects the discussion on the patchset's version 1.
-
-Tested on ast with GEM VRAM and also on mgag200 to verify that the fbdev
-change does not interfere with GEM SHMEM.
-
-v2:
-	* make importers acquire resv locks by themselves
-	* document dma-buf vamp/vunmap ops
-
-Thomas Zimmermann (7):
-  drm/ast: Don't pin cursor source BO explicitly during update
-  drm/ast: Only map cursor BOs during updates
-  drm/vram-helper: Move BO locking from vmap code into callers
-  drm/vram-helper: Remove pinning from drm_gem_vram_{vmap,vunmap}()
-  drm/vram-helper: Remove vmap reference counting
-  drm/vram-helper: Simplify vmap implementation
-  dma-buf: Write down some rules for vmap usage
-
- Documentation/gpu/todo.rst            | 15 +++++
- drivers/gpu/drm/ast/ast_cursor.c      | 70 +++++++++++++---------
- drivers/gpu/drm/ast/ast_drv.h         |  2 -
- drivers/gpu/drm/drm_client.c          | 31 ++++++++++
- drivers/gpu/drm/drm_fb_helper.c       | 10 +++-
- drivers/gpu/drm/drm_gem_vram_helper.c | 85 ++++++---------------------
- drivers/gpu/drm/vboxvideo/vbox_mode.c | 11 ++--
- include/drm/drm_client.h              |  2 +
- include/drm/drm_gem.h                 |  4 ++
- include/drm/drm_gem_vram_helper.h     | 17 +-----
- include/linux/dma-buf.h               | 45 ++++++++++++++
- 11 files changed, 175 insertions(+), 117 deletions(-)
-
---
+diff --git a/drivers/gpu/drm/drm_gem_vram_helper.c b/drivers/gpu/drm/drm_gem_vram_helper.c
+index 35a30dafccce..760d77c6c3c0 100644
+--- a/drivers/gpu/drm/drm_gem_vram_helper.c
++++ b/drivers/gpu/drm/drm_gem_vram_helper.c
+@@ -438,22 +438,9 @@ static void drm_gem_vram_kunmap_locked(struct drm_gem_vram_object *gbo,
+  */
+ int drm_gem_vram_vmap(struct drm_gem_vram_object *gbo, struct dma_buf_map *map)
+ {
+-	int ret;
+-
+ 	dma_resv_assert_held(gbo->bo.base.resv);
+ 
+-	ret = drm_gem_vram_pin_locked(gbo, 0);
+-	if (ret)
+-		return ret;
+-	ret = drm_gem_vram_kmap_locked(gbo, map);
+-	if (ret)
+-		goto err_drm_gem_vram_unpin_locked;
+-
+-	return 0;
+-
+-err_drm_gem_vram_unpin_locked:
+-	drm_gem_vram_unpin_locked(gbo);
+-	return ret;
++	return drm_gem_vram_kmap_locked(gbo, map);
+ }
+ EXPORT_SYMBOL(drm_gem_vram_vmap);
+ 
+@@ -470,7 +457,6 @@ void drm_gem_vram_vunmap(struct drm_gem_vram_object *gbo, struct dma_buf_map *ma
+ 	dma_resv_assert_held(gbo->bo.base.resv);
+ 
+ 	drm_gem_vram_kunmap_locked(gbo, map);
+-	drm_gem_vram_unpin_locked(gbo);
+ }
+ EXPORT_SYMBOL(drm_gem_vram_vunmap);
+ 
+-- 
 2.29.2
 
