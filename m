@@ -7,21 +7,21 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CFB5C8301A
-	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 12:52:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B35F6C83020
+	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 12:52:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 590BB21D91
-	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 12:52:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8245D20709
+	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 12:52:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730589AbgLCMvk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Dec 2020 07:51:40 -0500
-Received: from mout.kundenserver.de ([212.227.126.131]:40453 "EHLO
+        id S1730604AbgLCMvs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Dec 2020 07:51:48 -0500
+Received: from mout.kundenserver.de ([212.227.126.131]:32951 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730509AbgLCMus (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Dec 2020 07:50:48 -0500
+        with ESMTP id S1730503AbgLCMur (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Dec 2020 07:50:47 -0500
 Received: from orion.localdomain ([95.118.71.13]) by mrelayeu.kundenserver.de
  (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1N8EdM-1k71GC1Duq-014BRB; Thu, 03 Dec 2020 13:48:08 +0100
+ 1Mrfgi-1kPmZ03hwK-00nkW5; Thu, 03 Dec 2020 13:48:07 +0100
 From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
 To:     linux-kernel@vger.kernel.org
 Cc:     rspringer@google.com, toddpoynor@google.com, benchan@chromium.org,
@@ -31,59 +31,62 @@ Cc:     rspringer@google.com, toddpoynor@google.com, benchan@chromium.org,
         nsaenzjulienne@suse.de, speakup@linux-speakup.org,
         devel@driverdev.osuosl.org, linux-media@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH 05/11] drivers: staging: media: remove unneeded MODULE_VERSION() call
-Date:   Thu,  3 Dec 2020 13:47:57 +0100
-Message-Id: <20201203124803.23390-5-info@metux.net>
+Subject: [PATCH 03/11] drivers: staging: gdm724x: remove unneeded MODULE_VERSION() call
+Date:   Thu,  3 Dec 2020 13:47:55 +0100
+Message-Id: <20201203124803.23390-3-info@metux.net>
 X-Mailer: git-send-email 2.11.0
 In-Reply-To: <20201203124803.23390-1-info@metux.net>
 References: <20201203124803.23390-1-info@metux.net>
-X-Provags-ID: V03:K1:A0wBouam6WJUm1DquNPVyfLSDZ7oZQEPiMGhLxEU02kxYrt9m/l
- qBaYNXzkuBPYnfZdW8HRf0++cDR7uTmElGWf3KjE7uInz+SGrk+9h+AQnZPoRL8Hs+Dc+E+
- cFw4h1W+AVq4Q/AAYW9K1Fo9wicqhgYFQMkEWjYd1AubvyrTkPx5S7XDYIgdFwxfSfvgjLk
- U7bFCMDUb4rW9NeFC2W9w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:sO9KKuke2Hw=:L60L84285TFxRIHYc21T8G
- K6rv60i1By+bQFmxPzrd+amNhMCSH/fOMA0FnRTzI8xOznEc/+GJNK4dVHB/f4sV/YE5rNAMD
- nymnQs+vfE1VDd2hXfHdqqWgdPD+HOaCsqGneIIYd7jJzZuUfKWwirR0QiOEwaOAbrdPudDQ1
- 0yUBlPieMWXwsPoIoYiIe7QbCS1Yweg5sNEUnSEpLsqCsbW+NpZaIVlxcV5l4q0kFNVPEKRbv
- KpHGkIFNC1FjlB4j2XltEq9p38IuJCnwjqOiTAzS+H3TxqJID5+bl0GCdJG+zs7fw/zP0fQiE
- 35TMb3zEINkZARbtpsi80OwVO3XSuJ7dpISmazmU3Vh1W2MMeGazJedw6boswoEzI3xkUFTzU
- rmt6EOwk693/LGqL0GJtzI1QuSdk4LnKISEtmcign/pMG1B073KFeqx+lw2De
+X-Provags-ID: V03:K1:y/GRYT+te7Xvb7tqixaHWNKlrsFAQsktrzB4LZEe1ypwz1DoS68
+ HNy5FLm7U6iklFSixKOCHtXY2kF48DiVaeuPrLGmy0DXsQZyGMBuHVtCM4C5T04ORFcmFb9
+ 1QNyTCBTBB861jFXXj1JCfg22dQDfhM52ieKjGpOtFqygA1jxZCid554JQBNmBAL1CCYJAD
+ Xllzu1X8tGbIRTfaM6k7w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:f24F5x+x0sk=:/niJrw9CbZxm8SsYM0Uqyt
+ 54SI3myUUg/yESet1Neh6kEryUvzRVV3D0etBZG1U06WU041rOie57lSUYeSpCaCPH4n56OD8
+ s9Lklkmj/Ci16AIN+3FKW8HBz1z41XUzntXRkm4uT6ZHah3Yq31iG8aXQLCQmmfVaRIwxZom9
+ B4kCaZVaCKyWrxvVoVM814L+H+SJjk+qy7fStVwXdn1AlegP5MuSjQhNw7KJy7Z+a/nJoDVQL
+ XHya0MD8jPFKQrJsem41b3YKrCluMZqOU9ZeXI7mIg8TDcQidGv/7ur3I/buC/U5nlZEGcX1z
+ Watp+frjGAYm8TtIboTE9++3BRc/Rlbi77wRIro32Fwg9VjGRd9q3pS2srkwZLZKWOF9LjCQr
+ bq3XFUNXcAOhVeYgObI7ew9jNXoEuYKcCVgbB85Zm+CLTJk+Ph9L3wBKvp68P
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 Remove MODULE_VERSION(), as it doesn't seem to serve any practical purpose.
-For in-tree drivers, the kernel version matters. The code received lots of
-changes, but module version remained constant, since the driver landed in
-mainline. So, this version doesn't seem have any practical meaning anymore.
+For in-kernel drivers, the kernel version matters. And the code has received
+lots of changes, without the version ever been touched (remained constant
+since landing in the mainline tree), so it doesn't seem to have any practical
+meaning anymore.
 
 Signed-off-by: Enrico Weigelt <info@metux.net>
 ---
- drivers/staging/media/omap4iss/iss.c       | 1 -
- drivers/staging/media/omap4iss/iss_video.h | 1 -
+ drivers/staging/gdm724x/gdm_lte.h | 1 -
+ drivers/staging/gdm724x/gdm_usb.c | 1 -
  2 files changed, 2 deletions(-)
 
-diff --git a/drivers/staging/media/omap4iss/iss.c b/drivers/staging/media/omap4iss/iss.c
-index e06ea7ea1e50..dae9073e7d3c 100644
---- a/drivers/staging/media/omap4iss/iss.c
-+++ b/drivers/staging/media/omap4iss/iss.c
-@@ -1349,4 +1349,3 @@ module_platform_driver(iss_driver);
- MODULE_DESCRIPTION("TI OMAP4 ISS driver");
- MODULE_AUTHOR("Sergio Aguirre <sergio.a.aguirre@gmail.com>");
+diff --git a/drivers/staging/gdm724x/gdm_lte.h b/drivers/staging/gdm724x/gdm_lte.h
+index f2143a6e0e99..bf6478ab05dd 100644
+--- a/drivers/staging/gdm724x/gdm_lte.h
++++ b/drivers/staging/gdm724x/gdm_lte.h
+@@ -11,7 +11,6 @@
+ 
+ #define MAX_NIC_TYPE		4
+ #define MAX_RX_SUBMIT_COUNT	3
+-#define DRIVER_VERSION		"3.7.17.0"
+ 
+ enum TX_ERROR_CODE {
+ 	TX_NO_ERROR = 0,
+diff --git a/drivers/staging/gdm724x/gdm_usb.c b/drivers/staging/gdm724x/gdm_usb.c
+index dc4da66c3695..aa6f08396396 100644
+--- a/drivers/staging/gdm724x/gdm_usb.c
++++ b/drivers/staging/gdm724x/gdm_usb.c
+@@ -1003,6 +1003,5 @@ static void __exit gdm_usb_lte_exit(void)
+ module_init(gdm_usb_lte_init);
+ module_exit(gdm_usb_lte_exit);
+ 
+-MODULE_VERSION(DRIVER_VERSION);
+ MODULE_DESCRIPTION("GCT LTE USB Device Driver");
  MODULE_LICENSE("GPL");
--MODULE_VERSION(ISS_VIDEO_DRIVER_VERSION);
-diff --git a/drivers/staging/media/omap4iss/iss_video.h b/drivers/staging/media/omap4iss/iss_video.h
-index 8b3dd92021e1..526281bf0051 100644
---- a/drivers/staging/media/omap4iss/iss_video.h
-+++ b/drivers/staging/media/omap4iss/iss_video.h
-@@ -18,7 +18,6 @@
- #include <media/videobuf2-dma-contig.h>
- 
- #define ISS_VIDEO_DRIVER_NAME		"issvideo"
--#define ISS_VIDEO_DRIVER_VERSION	"0.0.2"
- 
- struct iss_device;
- struct iss_video;
 -- 
 2.11.0
 
