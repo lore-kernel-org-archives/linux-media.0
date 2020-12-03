@@ -2,110 +2,87 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A198C43211
-	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 13:58:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08C74C433C1
+	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 14:03:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 03FB320769
-	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 13:58:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A89AE20709
+	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 14:03:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730750AbgLCN6P (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Dec 2020 08:58:15 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:43532 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726112AbgLCN6O (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Dec 2020 08:58:14 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B3Dt4S5149893;
-        Thu, 3 Dec 2020 13:56:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=+1N8mqMKsZKiLOq1eUSX0dnvawOP7u5ut7g73azXomY=;
- b=0dyHqQ1pMp4quGYHNjh3i9g8fesNeIdEzusvADrEG5XgmFsUlZaxIHa3JpFKb3dcI4zv
- SM8Wgl9InEv40buevN1Ohjyh2YzEKeBjEfLYQYD+FlKVmBTLowSPxR4psC9X1rjEUcTc
- d6THaS98YgnXnqYRZV2LGTntwCoW15nmzmx8ft2ZJKVLEIviU2ooSPORmtfJ7e8tS+Dw
- /sD7GEv8cVmuqkXSop8KX/KQzqeiGT0qmRidb4hIMDBDoLbWEwLfeEd01UA5fuYrzhzs
- VYqQ1jarH8v9h0YRYtmhNznG8s8dsTZ1AcXfTxm7zItCkfCXlsrEDtX1a3uILmB1dCt/ bw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 353egkx092-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 03 Dec 2020 13:56:58 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B3DuMfG036368;
-        Thu, 3 Dec 2020 13:56:58 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3020.oracle.com with ESMTP id 3540aw5muw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 03 Dec 2020 13:56:57 +0000
-Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0B3DuoaH011497;
-        Thu, 3 Dec 2020 13:56:50 GMT
-Received: from kadam (/102.36.221.92)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 03 Dec 2020 05:56:50 -0800
-Date:   Thu, 3 Dec 2020 16:56:40 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Greg KH <greg@kroah.com>
-Cc:     "Enrico Weigelt, metux IT consult" <info@metux.net>,
-        devel@driverdev.osuosl.org, f.fainelli@gmail.com,
-        sbranden@broadcom.com, rjui@broadcom.com, mchehab@kernel.org,
-        speakup@linux-speakup.org, linux-kernel@vger.kernel.org,
-        rcy@google.com, rspringer@google.com,
-        laurent.pinchart@ideasonboard.com, netdev@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, toddpoynor@google.com,
-        nsaenzjulienne@suse.de, linux-media@vger.kernel.org
-Subject: Re: [PATCH 01/11] drivers: staging: speakup: remove unneeded
- MODULE_VERSION() call
-Message-ID: <20201203135640.GS2767@kadam>
-References: <20201203124803.23390-1-info@metux.net>
- <X8jnO5cPUQGEK9cr@kroah.com>
+        id S1729909AbgLCODs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Dec 2020 09:03:48 -0500
+Received: from mx2.suse.de ([195.135.220.15]:34676 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726712AbgLCODr (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 3 Dec 2020 09:03:47 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 7D481AD6B;
+        Thu,  3 Dec 2020 14:03:06 +0000 (UTC)
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+To:     airlied@redhat.com, daniel@ffwll.ch,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        hdegoede@redhat.com, christian.koenig@amd.com,
+        sumit.semwal@linaro.org
+Cc:     dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH v2 1/7] drm/ast: Don't pin cursor source BO explicitly during update
+Date:   Thu,  3 Dec 2020 15:02:53 +0100
+Message-Id: <20201203140259.26580-2-tzimmermann@suse.de>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20201203140259.26580-1-tzimmermann@suse.de>
+References: <20201203140259.26580-1-tzimmermann@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <X8jnO5cPUQGEK9cr@kroah.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9823 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0
- phishscore=0 mlxscore=0 adultscore=0 malwarescore=0 suspectscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012030084
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9823 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 suspectscore=0
- phishscore=0 mlxlogscore=999 lowpriorityscore=0 malwarescore=0
- priorityscore=1501 spamscore=0 impostorscore=0 clxscore=1011 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012030084
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Dec 03, 2020 at 02:25:15PM +0100, Greg KH wrote:
-> On Thu, Dec 03, 2020 at 01:47:53PM +0100, Enrico Weigelt, metux IT consult wrote:
-> > Remove MODULE_VERSION(), as it doesn't seem to serve any practical
-> > purpose. For in-tree drivers, the kernel version matters.
-> > 
-> > The drivers have received lots of changes, without the module version
-> > (or the underlying DRV_VERSION macro) ever changed, since the code
-> > landed in the kernel tree. So, it doesn't seem to have any practical
-> > meaning anymore.
-> > 
-> > Signed-off-by: Enrico Weigelt <info@metux.net>
-> > ---
-> >  drivers/accessibility/speakup/main.c           | 1 -
-> 
-> <snip>
-> 
-> Yous subject line is odd, these are not "staging" drivers anymore, so
-> why do you say they are there?
+Vmapping the cursor source BO contains an implicit pin operation,
+so there's no need to do this manually.
 
-Also putting "drivers:" in the subject always seems superfluous.
+Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+---
+ drivers/gpu/drm/ast/ast_cursor.c | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
-regards,
-dan carpenter
+diff --git a/drivers/gpu/drm/ast/ast_cursor.c b/drivers/gpu/drm/ast/ast_cursor.c
+index 742d43a7edf4..68bf3d33f1ed 100644
+--- a/drivers/gpu/drm/ast/ast_cursor.c
++++ b/drivers/gpu/drm/ast/ast_cursor.c
+@@ -180,12 +180,9 @@ int ast_cursor_blit(struct ast_private *ast, struct drm_framebuffer *fb)
+ 
+ 	gbo = drm_gem_vram_of_gem(fb->obj[0]);
+ 
+-	ret = drm_gem_vram_pin(gbo, 0);
+-	if (ret)
+-		return ret;
+ 	ret = drm_gem_vram_vmap(gbo, &map);
+ 	if (ret)
+-		goto err_drm_gem_vram_unpin;
++		return ret;
+ 	src = map.vaddr; /* TODO: Use mapping abstraction properly */
+ 
+ 	dst = ast->cursor.map[ast->cursor.next_index].vaddr_iomem;
+@@ -194,13 +191,8 @@ int ast_cursor_blit(struct ast_private *ast, struct drm_framebuffer *fb)
+ 	update_cursor_image(dst, src, fb->width, fb->height);
+ 
+ 	drm_gem_vram_vunmap(gbo, &map);
+-	drm_gem_vram_unpin(gbo);
+ 
+ 	return 0;
+-
+-err_drm_gem_vram_unpin:
+-	drm_gem_vram_unpin(gbo);
+-	return ret;
+ }
+ 
+ static void ast_cursor_set_base(struct ast_private *ast, u64 address)
+-- 
+2.29.2
 
