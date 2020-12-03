@@ -2,151 +2,77 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 609E8C83016
-	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 12:38:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CFEAEC83012
+	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 12:51:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 236CB21D91
-	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 12:38:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7DC2B22206
+	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 12:51:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388939AbgLCMh5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Dec 2020 07:37:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50950 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730341AbgLCMh4 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Dec 2020 07:37:56 -0500
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10EF8C061A4E;
-        Thu,  3 Dec 2020 04:37:16 -0800 (PST)
-Received: by mail-wm1-x343.google.com with SMTP id f190so3793423wme.1;
-        Thu, 03 Dec 2020 04:37:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=uk5+3A50BKKrMe8dcsIhh3qZvhpNAaEd/JfhfBn8IXw=;
-        b=q7y+Vd47osGtMcv46hfU0vM/RbDSaK5XG42iKSzCOiu9jTUvjtxLUDMwhZrLQ1na2e
-         AzcBsrG6q3urJmJAldvuxEz26dhJ286yQhIr4YG0uQvh5gOBaQj/vmQ/FueJ3/x6EF0n
-         6MbyMQhJcEthlr8Jpvxq2wK0ps9MOOKoCuyU8vvADN/K9BdLQU16Pp6XPwOSD8mDpmKj
-         zumDDVtcLXw92FiCK9S4RbJ8wAxDxwTauSR+DTh5139KP0qwK8xcM4zDL/DeE+HUNLkD
-         ZpKW7Wtwcl8qFWPzLqUiXsKrbpihp4V+Ruh/zEOU06uTp4KY8wXEWITz3BcMtaSvj30I
-         FHnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=uk5+3A50BKKrMe8dcsIhh3qZvhpNAaEd/JfhfBn8IXw=;
-        b=Qdk1F5SMz3AMEUOLenKrP/sILWHLoRpvcNCIvjc4nLOSL7Rgc1/ZnLohfW5aGSO53L
-         jQ8OH8CnxtnXLCtjH+N3x8hw7vicvnOq8LxZammLswpbpAenl+YEnTVa5JUIszA7/PcQ
-         Ef901mIO69ZeEBSkbkMhQy8CMUUL/JYd0Ss2YYDtT2JZPqQfurH/0ZJP160FfTiUYyfS
-         Ddg1j0/tsjLlZlpS4aewQAyJ5BkJCm6TqyN3ZB6w1InHZhaItGhIoNolhXmZjlg2Zfgp
-         Xigl5gs25degtqC/n/mGzrBnNBlLqNKCxLw9oEKXz6qinUjfJum5QcGs2G/SwYjvh/B7
-         U1IA==
-X-Gm-Message-State: AOAM531glSq/l1vqBTVTITsolx1Q1Tc0qtVq6UvjuP8I21CxorSAsDLJ
-        GDjECh+z89kEn2wKCfuTS+Q=
-X-Google-Smtp-Source: ABdhPJxy6ahurwH+Xr2faCWCbOWV6UkZC4ykHZnhCc3dzsg8ESd5WoP1EG/9zXKnXzI5Dh07hLMiaA==
-X-Received: by 2002:a1c:2182:: with SMTP id h124mr3107484wmh.25.1606999034747;
-        Thu, 03 Dec 2020 04:37:14 -0800 (PST)
-Received: from [192.168.1.211] ([2.31.225.57])
-        by smtp.gmail.com with ESMTPSA id b4sm1623772wrr.30.2020.12.03.04.37.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Dec 2020 04:37:14 -0800 (PST)
-Subject: Re: [PATCH 18/18] ipu3: Add driver for dummy INT3472 ACPI device
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-media@vger.kernel.org, devel@acpica.org, rjw@rjwysocki.net,
-        lenb@kernel.org, gregkh@linuxfoundation.org,
-        mika.westerberg@linux.intel.com, linus.walleij@linaro.org,
-        bgolaszewski@baylibre.com, wsa@kernel.org, yong.zhi@intel.com,
-        bingbu.cao@intel.com, tian.shu.qiu@intel.com, mchehab@kernel.org,
-        robert.moore@intel.com, erik.kaneda@intel.com, pmladek@suse.com,
-        rostedt@goodmis.org, sergey.senozhatsky@gmail.com,
-        linux@rasmusvillemoes.dk, kieran.bingham+renesas@ideasonboard.com,
-        jacopo+renesas@jmondi.org,
-        laurent.pinchart+renesas@ideasonboard.com,
-        jorhand@linux.microsoft.com, kitakar@gmail.com,
-        heikki.krogerus@linux.intel.com
-References: <20201130133129.1024662-1-djrscally@gmail.com>
- <20201130133129.1024662-19-djrscally@gmail.com>
- <20201130200719.GB4077@smile.fi.intel.com>
- <20201130233232.GD25713@pendragon.ideasonboard.com>
- <20201201155513.GB852@paasikivi.fi.intel.com>
- <20201201183758.GE3085@pendragon.ideasonboard.com>
- <20201202110956.GD852@paasikivi.fi.intel.com>
- <20201202124228.GF4486@pendragon.ideasonboard.com>
- <20201202150858.GF4077@smile.fi.intel.com>
-From:   Dan Scally <djrscally@gmail.com>
-Message-ID: <8c9e8818-6b5b-d5a5-b091-dab2d34ee0ee@gmail.com>
-Date:   Thu, 3 Dec 2020 12:37:12 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20201202150858.GF4077@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S2389012AbgLCMuu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Dec 2020 07:50:50 -0500
+Received: from mout.kundenserver.de ([212.227.126.130]:37063 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730527AbgLCMut (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Dec 2020 07:50:49 -0500
+Received: from orion.localdomain ([95.118.71.13]) by mrelayeu.kundenserver.de
+ (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MsaeR-1jsPzT2mwF-00tyos; Thu, 03 Dec 2020 13:48:12 +0100
+From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     rspringer@google.com, toddpoynor@google.com, benchan@chromium.org,
+        rcy@google.com, laurent.pinchart@ideasonboard.com,
+        mchehab@kernel.org, f.fainelli@gmail.com, rjui@broadcom.com,
+        sbranden@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+        nsaenzjulienne@suse.de, speakup@linux-speakup.org,
+        devel@driverdev.osuosl.org, linux-media@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH 11/11] drivers: staging: rtl8723bs: remove unneeded MODULE_VERSION() call
+Date:   Thu,  3 Dec 2020 13:48:03 +0100
+Message-Id: <20201203124803.23390-11-info@metux.net>
+X-Mailer: git-send-email 2.11.0
+In-Reply-To: <20201203124803.23390-1-info@metux.net>
+References: <20201203124803.23390-1-info@metux.net>
+X-Provags-ID: V03:K1:K37+eyIhv0Jb/MzK3jnMGWBmLWepPJuiKdD1EOq0NyyZs+7YC10
+ jE5E0O/ntftFAhWSpM6FBNp32u3g80+Y4PIwebTKvt5maocGGGDlttLPphBTnwemY9iA8P0
+ Ea4YxF/NhpPtBLgkJnp+yOkmLcdgXZZYuMsiL86C1siiIxDdT7ySmroAcuRa8yKj912uvsa
+ qTDf9K/Ihh8mumSlgcyiQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:qfkFQp5hoTE=:VCgOPZqPOsCzjVT2ig9+gx
+ 7c88PXwrJDy9bnQNZJel1Drz5LJfxrl+YLIyLCB8nQVheLEW+gNWDMcmEQwWXw3ORRnqU5Hq9
+ sxLclY3Xas4uzGXxVbmNpsobNlDji0ie5fwBeZUeOUlIUWp6KHkpjwF/O96nj63n2iboEOxHB
+ yoco/hULUQ7NYOaBzmh79eg58EFKG9ijM2U8cvlOuy2ka96guUAbtEH/PhksJB42t5yjlk2+0
+ h9wzj7QMUnhvOt8yeRz0YoNUZf20XdOt43sKan/UTZ3uYMadWV5Bk+zOlwHNspxKsC1jPQCxZ
+ c1ApsrHuA4tWHmbvquJz4EVxZ6y0EOZ5XBQ/oOqqYTEbdgiJjLXeYe6Vd2YpEOG7JfmLamlFA
+ /7v8kDK1B2CRtvUIOY3nbiuHFwtwoBjCi9yJiiu19qWJnu4UieoAmFLxiKLUg
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 02/12/2020 15:08, Andy Shevchenko wrote:
-> On Wed, Dec 02, 2020 at 02:42:28PM +0200, Laurent Pinchart wrote:
->> On Wed, Dec 02, 2020 at 01:09:56PM +0200, Sakari Ailus wrote:
->>> On Tue, Dec 01, 2020 at 08:37:58PM +0200, Laurent Pinchart wrote:
-> 
-> ...
-> 
->> I think we should consider ACPI to be a hack in the first place :-)
-> 
-> I feel that about DT (and all chaos around it) but it's not a topic here.
-> 
->>> Could this be just one more platform device for each of the three cases (or
->>> one for the two latter; I'm not quite sure yet)?
->>
->> Using MFD for this seems a bit overkill to me. I won't care much as I
->> won't maintain those drivers, but the current situation is complex
->> enough, it was hard for me to understand how things worked. Adding yet
->> another layer with another platform device won't make it any simpler.
->>
->> If we want to split this in two, I'd rather have a tps68470 driver on
->> one side, without ACPI op region support, but registering regulators,
->> GPIOs and clocks (without using separate drivers and devices for these
->> three features), and an INT3472 driver on the other side, with all the
->> ACPI glue and hacks. The tps68470 code could possibly even be structured
->> in such a way that it would be used as a library by the INT3472 driver
->> instead of requiring a separate platform device.
-> 
-> I'm afraid TPS68470 is MFD in hardware and its representation in the MFD is
-> fine. What we need is to move IN3472 pieces out from it.
-> 
-> And I agree with your proposal in general.
+Remove MODULE_VERSION(), as it doesn't seem to serve any practical purpose.
+The driver received lots of changes, but module remained constant since
+it landed in mainline, several years ago.
 
-Way back when I first joined this project we thought we needed i2c
-drivers for driving the tps68470's clks and regulators. Tsuchiya found
-some in an old Intel tree; they needed some minor tweaks but nothing
-drastic. And I think they're designed to work with the mfd driver that's
-already in the kernel.
+Signed-off-by: Enrico Weigelt <info@metux.net>
+---
+ drivers/staging/rtl8723bs/os_dep/os_intfs.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-So, can we do this by just checking (in a new
-platform/x86/intel_skl_int3472.c) for a CLDB buffer in the PMIC, and
-calling devm_mfd_add_devices() with either the GPIO and OpRegion drivers
-(if no CLDB buffer found) or with the GPIO, clk and regulator drivers
-(If there's a CLDB and it's not a discrete PMIC). Or else, using the
-code from this patch directly in the platform driver if the CLDB says
-it's a discrete PMIC?
-
->>> The GPIO regulator case is relatively safe, but the real PMICs require
->>> regulator voltage control as well as enabling and disabling the regulators.
->>> That probably requires either schematics or checking the register values at
->>> runtime on Windows (i.e. finding out which system you're dealing with, at
->>> runtime).
-> 
+diff --git a/drivers/staging/rtl8723bs/os_dep/os_intfs.c b/drivers/staging/rtl8723bs/os_dep/os_intfs.c
+index 27f990a01a23..0a94bab4fdcb 100644
+--- a/drivers/staging/rtl8723bs/os_dep/os_intfs.c
++++ b/drivers/staging/rtl8723bs/os_dep/os_intfs.c
+@@ -13,7 +13,6 @@
+ MODULE_LICENSE("GPL");
+ MODULE_DESCRIPTION("Realtek Wireless Lan Driver");
+ MODULE_AUTHOR("Realtek Semiconductor Corp.");
+-MODULE_VERSION(DRIVERVERSION);
+ 
+ /* module param defaults */
+ static int rtw_chip_version;
+-- 
+2.11.0
 
