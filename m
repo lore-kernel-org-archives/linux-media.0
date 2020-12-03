@@ -2,139 +2,173 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E809C0018C
-	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 14:04:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3EE2C433C1
+	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 14:06:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E377D20709
-	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 14:04:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4541D206F6
+	for <linux-media@archiver.kernel.org>; Thu,  3 Dec 2020 14:06:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730737AbgLCOEa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Dec 2020 09:04:30 -0500
-Received: from mx2.suse.de ([195.135.220.15]:35304 "EHLO mx2.suse.de"
+        id S2389027AbgLCOGN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Dec 2020 09:06:13 -0500
+Received: from mx2.suse.de ([195.135.220.15]:36562 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727242AbgLCOE3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 3 Dec 2020 09:04:29 -0500
+        id S1727242AbgLCOGN (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 3 Dec 2020 09:06:13 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 5A9A1ADC1;
-        Thu,  3 Dec 2020 14:03:09 +0000 (UTC)
-From:   Thomas Zimmermann <tzimmermann@suse.de>
+        by mx2.suse.de (Postfix) with ESMTP id A03B6AC6A;
+        Thu,  3 Dec 2020 14:05:31 +0000 (UTC)
+Subject: Re: [PATCH v2 0/7] drm/vram-helper: Lock GEM BOs while they are
+ mapped
 To:     airlied@redhat.com, daniel@ffwll.ch,
         maarten.lankhorst@linux.intel.com, mripard@kernel.org,
         hdegoede@redhat.com, christian.koenig@amd.com,
         sumit.semwal@linaro.org
 Cc:     dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v2 6/7] drm/vram-helper: Simplify vmap implementation
-Date:   Thu,  3 Dec 2020 15:02:58 +0100
-Message-Id: <20201203140259.26580-7-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201203140259.26580-1-tzimmermann@suse.de>
+        linaro-mm-sig@lists.linaro.org
 References: <20201203140259.26580-1-tzimmermann@suse.de>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+Message-ID: <6665380f-34ab-1a12-5e91-ed2a3b08d58c@suse.de>
+Date:   Thu, 3 Dec 2020 15:05:30 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201203140259.26580-1-tzimmermann@suse.de>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="dkbQa55aa9CMLAyD29PlhVxn7ZNfWQLNf"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-After removing the pinning operations, the vmap/vunmap code as been
-reduced to what used to be an internal helper. Inline the helper to
-simplify the implementation.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--dkbQa55aa9CMLAyD29PlhVxn7ZNfWQLNf
+Content-Type: multipart/mixed; boundary="mwMelpGe05OU4EKH5oN38ktdQ0fNFbkcb";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: airlied@redhat.com, daniel@ffwll.ch, maarten.lankhorst@linux.intel.com,
+ mripard@kernel.org, hdegoede@redhat.com, christian.koenig@amd.com,
+ sumit.semwal@linaro.org
+Cc: dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+ linaro-mm-sig@lists.linaro.org
+Message-ID: <6665380f-34ab-1a12-5e91-ed2a3b08d58c@suse.de>
+Subject: Re: [PATCH v2 0/7] drm/vram-helper: Lock GEM BOs while they are
+ mapped
+References: <20201203140259.26580-1-tzimmermann@suse.de>
+In-Reply-To: <20201203140259.26580-1-tzimmermann@suse.de>
 
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Acked-by: Christian König <christian.koenig@amd.com>
----
- drivers/gpu/drm/drm_gem_vram_helper.c | 52 +++++++++++----------------
- 1 file changed, 20 insertions(+), 32 deletions(-)
+--mwMelpGe05OU4EKH5oN38ktdQ0fNFbkcb
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/gpu/drm/drm_gem_vram_helper.c b/drivers/gpu/drm/drm_gem_vram_helper.c
-index 276e8f8ea663..6159f5dc8f1f 100644
---- a/drivers/gpu/drm/drm_gem_vram_helper.c
-+++ b/drivers/gpu/drm/drm_gem_vram_helper.c
-@@ -378,36 +378,6 @@ int drm_gem_vram_unpin(struct drm_gem_vram_object *gbo)
- }
- EXPORT_SYMBOL(drm_gem_vram_unpin);
- 
--static int drm_gem_vram_kmap_locked(struct drm_gem_vram_object *gbo,
--				    struct dma_buf_map *map)
--{
--	int ret;
--
--	ret = ttm_bo_vmap(&gbo->bo, &gbo->map);
--	if (ret)
--		return ret;
--
--	*map = gbo->map;
--
--	return 0;
--}
--
--static void drm_gem_vram_kunmap_locked(struct drm_gem_vram_object *gbo,
--				       struct dma_buf_map *map)
--{
--	struct drm_device *dev = gbo->bo.base.dev;
--
--	if (drm_WARN_ON_ONCE(dev, !dma_buf_map_is_equal(&gbo->map, map)))
--		return; /* BUG: map not mapped from this BO */
--
--	/*
--	 * Permanently mapping and unmapping buffers adds overhead from
--	 * updating the page tables and creates debugging output. Therefore,
--	 * we delay the actual unmap operation until the BO gets evicted
--	 * from memory. See drm_gem_vram_bo_driver_move_notify().
--	 */
--}
--
- /**
-  * drm_gem_vram_vmap() - Pins and maps a GEM VRAM object into kernel address
-  *                       space
-@@ -426,9 +396,17 @@ static void drm_gem_vram_kunmap_locked(struct drm_gem_vram_object *gbo,
-  */
- int drm_gem_vram_vmap(struct drm_gem_vram_object *gbo, struct dma_buf_map *map)
- {
-+	int ret;
-+
- 	dma_resv_assert_held(gbo->bo.base.resv);
- 
--	return drm_gem_vram_kmap_locked(gbo, map);
-+	ret = ttm_bo_vmap(&gbo->bo, &gbo->map);
-+	if (ret)
-+		return ret;
-+
-+	*map = gbo->map;
-+
-+	return 0;
- }
- EXPORT_SYMBOL(drm_gem_vram_vmap);
- 
-@@ -442,9 +420,19 @@ EXPORT_SYMBOL(drm_gem_vram_vmap);
-  */
- void drm_gem_vram_vunmap(struct drm_gem_vram_object *gbo, struct dma_buf_map *map)
- {
-+	struct drm_device *dev = gbo->bo.base.dev;
-+
- 	dma_resv_assert_held(gbo->bo.base.resv);
- 
--	drm_gem_vram_kunmap_locked(gbo, map);
-+	if (drm_WARN_ON_ONCE(dev, !dma_buf_map_is_equal(&gbo->map, map)))
-+		return; /* BUG: map not mapped from this BO */
-+
-+	/*
-+	 * Permanently mapping and unmapping buffers adds overhead from
-+	 * updating the page tables and creates debugging output. Therefore,
-+	 * we delay the actual unmap operation until the BO gets evicted
-+	 * from memory. See drm_gem_vram_bo_driver_move_notify().
-+	 */
- }
- EXPORT_SYMBOL(drm_gem_vram_vunmap);
- 
--- 
-2.29.2
 
+
+Am 03.12.20 um 15:02 schrieb Thomas Zimmermann:
+> GEM VRAM helpers used to pin the BO in their implementation of vmap, so=
+
+> that they could not be relocated. In a recent discussion, [1] it became=
+
+
+Grrr, [1] was again supposed to point to the discussion at
+
+   https://patchwork.freedesktop.org/patch/400054/?series=3D83765&rev=3D1=
+
+
+> clear that this is incorrect and that vmap should rather repend on the
+> reservation lock to prevent relocation. This patchset addresses the iss=
+ue.
+>=20
+> Version 2 of the patchset is a significant rework. In particular, the
+> helper function drm_gem_vram_vmap_unlocked() is gone and importers now
+> acquire the reservation locks by themselves. I took Christian's A-bs on=
+ly
+> for patches that were not affected.
+>=20
+> Patches 1 and 2 prepare the ast cursor code for the later changes.
+>=20
+> Patch 3 pushes the BO locking into callers of vmap and vunmap. Besides
+> the VRAM helpers, this affects ast, vboxvideo and the generic fbdev
+> emulation.
+>=20
+> Patches 4 to 6 clean up afterwards. BO pinning is not required any long=
+er
+> and the VRAM-internal helpers are not needed.
+>=20
+> Patch 7 adds documentation to vmap and vunmap in struct dma_buf_ops. It=
+
+> hopefully reflects the discussion on the patchset's version 1.
+>=20
+> Tested on ast with GEM VRAM and also on mgag200 to verify that the fbde=
+v
+> change does not interfere with GEM SHMEM.
+>=20
+> v2:
+> 	* make importers acquire resv locks by themselves
+> 	* document dma-buf vamp/vunmap ops
+>=20
+> Thomas Zimmermann (7):
+>    drm/ast: Don't pin cursor source BO explicitly during update
+>    drm/ast: Only map cursor BOs during updates
+>    drm/vram-helper: Move BO locking from vmap code into callers
+>    drm/vram-helper: Remove pinning from drm_gem_vram_{vmap,vunmap}()
+>    drm/vram-helper: Remove vmap reference counting
+>    drm/vram-helper: Simplify vmap implementation
+>    dma-buf: Write down some rules for vmap usage
+>=20
+>   Documentation/gpu/todo.rst            | 15 +++++
+>   drivers/gpu/drm/ast/ast_cursor.c      | 70 +++++++++++++---------
+>   drivers/gpu/drm/ast/ast_drv.h         |  2 -
+>   drivers/gpu/drm/drm_client.c          | 31 ++++++++++
+>   drivers/gpu/drm/drm_fb_helper.c       | 10 +++-
+>   drivers/gpu/drm/drm_gem_vram_helper.c | 85 ++++++--------------------=
+-
+>   drivers/gpu/drm/vboxvideo/vbox_mode.c | 11 ++--
+>   include/drm/drm_client.h              |  2 +
+>   include/drm/drm_gem.h                 |  4 ++
+>   include/drm/drm_gem_vram_helper.h     | 17 +-----
+>   include/linux/dma-buf.h               | 45 ++++++++++++++
+>   11 files changed, 175 insertions(+), 117 deletions(-)
+>=20
+> --
+> 2.29.2
+>=20
+
+--=20
+Thomas Zimmermann
+Graphics Driver Developer
+SUSE Software Solutions Germany GmbH
+Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
+(HRB 36809, AG N=C3=BCrnberg)
+Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
+
+
+--mwMelpGe05OU4EKH5oN38ktdQ0fNFbkcb--
+
+--dkbQa55aa9CMLAyD29PlhVxn7ZNfWQLNf
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAl/I8KoFAwAAAAAACgkQlh/E3EQov+Bk
+5A/+OyMbzLG9nxTg4sZA2IKtd1zWhvcWLZZQloMtqM1aOmv5UHLpCP50SNnNOMk2VAtJxwk4hXxq
+iy0458/N26VpQ+7QQMGrqLAItXbTPwHAPMxuCqLUUgNvLyRZxlTqJCNRw1FuWfFXDPEXFFhD8Lfw
+NJlOgd3yhuAXJ6oFjowG1XdZotWrr+agF0X1KNxBXYLH/5FUN9CcqZd5sBLieYOOo0W5wTnotQY2
+8D9r9AAkuVaXNtkjoCDnJwNfNwBICBszmPP6DJ6fujED8uDyeSB2zGXaUJ1L9JAcu5zWyy2F2BQD
+UXvztibqEp56xJlcYu4dpcjELxv/8QhZcs+19Rn/5HyJpucEuZ3xiFbUnr5It/QPejUN9WS08GWf
+i/zHYPjEYqtFAR5ZRvGhhCZkafDrh7mW5F628tZitP6VVzwKOnbOFDb2r3kR2O4qd+uzB3ZfbjYu
+j1kBWM7w+VErk8gyFkqnij7RYgzsNq89mmZN4Y5sbwRtJq147GeU92Wl7c3m+uWSgPF2+yIDLO4/
+NE/qc9V9jD0n3aUb8Wzys+lOGc8eFJMZ11Ze4GVff6ClLkYrXo+DQ/YnGsnGJTqxd9vZyeW265se
+KwuIPFqTh/sNHU0vF5W7aGWPQ/qEuNTX7eD3ejt9rJTsJPE2rx+d7EUVRL4cs6xUpK9iFB0N7lxW
+les=
+=D+kl
+-----END PGP SIGNATURE-----
+
+--dkbQa55aa9CMLAyD29PlhVxn7ZNfWQLNf--
