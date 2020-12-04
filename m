@@ -2,48 +2,88 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3737C4361A
-	for <linux-media@archiver.kernel.org>; Fri,  4 Dec 2020 09:20:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F34CCC4361B
+	for <linux-media@archiver.kernel.org>; Fri,  4 Dec 2020 09:40:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 918C7225AB
-	for <linux-media@archiver.kernel.org>; Fri,  4 Dec 2020 09:20:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A46F9227C3
+	for <linux-media@archiver.kernel.org>; Fri,  4 Dec 2020 09:40:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729381AbgLDJUC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Dec 2020 04:20:02 -0500
-Received: from www.linuxtv.org ([130.149.80.248]:36506 "EHLO www.linuxtv.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728279AbgLDJUB (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 4 Dec 2020 04:20:01 -0500
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1kl7FI-004Yyf-7M; Fri, 04 Dec 2020 09:19:20 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1kl7IT-0005in-0D; Fri, 04 Dec 2020 09:22:37 +0000
-Date:   Fri, 4 Dec 2020 09:22:36 +0000 (UTC)
-From:   Jenkins Builder Robot <jenkins@linuxtv.org>
-To:     mchehab@kernel.org, linux-media@vger.kernel.org
-Message-ID: <34891699.8.1607073756997@builder.linuxtv.org>
-In-Reply-To: <1088277320.5.1606992557362@builder.linuxtv.org>
-References: <1088277320.5.1606992557362@builder.linuxtv.org>
-Subject: Jenkins build is back to normal : media-build #3316
+        id S2387531AbgLDJkg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Dec 2020 04:40:36 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:8652 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729671AbgLDJkg (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Dec 2020 04:40:36 -0500
+Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4CnSMx44wbz15XWc;
+        Fri,  4 Dec 2020 17:39:25 +0800 (CST)
+Received: from thunder-town.china.huawei.com (10.174.177.9) by
+ DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
+ 14.3.487.0; Fri, 4 Dec 2020 17:39:46 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Pawel Czarnecki <pczarnecki@internships.antmicro.com>,
+        Stafford Horne <shorne@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-mediatek <linux-mediatek@lists.infradead.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>
+Subject: [PATCH 4/5] dt-bindings: devapc: add the required property 'additionalProperties'
+Date:   Fri, 4 Dec 2020 17:38:12 +0800
+Message-ID: <20201204093813.1275-5-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
+In-Reply-To: <20201204093813.1275-1-thunder.leizhen@huawei.com>
+References: <20201204093813.1275-1-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
-X-Jenkins-Job: media-build
-X-Jenkins-Result: SUCCESS
-Auto-submitted: auto-generated
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.177.9]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-See <https://builder.linuxtv.org/job/media-build/3316/display/redirect>
+When I do dt_binding_check for any YAML file, below wanring is always
+reported:
+
+xxx/soc/mediatek/devapc.yaml: 'additionalProperties' is a required property
+xxx/soc/mediatek/devapc.yaml: ignoring, error in schema:
+warning: no schema found in file: xxx/soc/mediatek/devapc.yaml
+
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+---
+ Documentation/devicetree/bindings/soc/mediatek/devapc.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/soc/mediatek/devapc.yaml b/Documentation/devicetree/bindings/soc/mediatek/devapc.yaml
+index 6c763f873a632d2..31e4d3c339bfe72 100644
+--- a/Documentation/devicetree/bindings/soc/mediatek/devapc.yaml
++++ b/Documentation/devicetree/bindings/soc/mediatek/devapc.yaml
+@@ -44,6 +44,8 @@ required:
+   - clocks
+   - clock-names
+ 
++additionalProperties: false
++
+ examples:
+   - |
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
+-- 
+1.8.3
+
 
