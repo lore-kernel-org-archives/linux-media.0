@@ -2,107 +2,251 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 866CDC4361A
-	for <linux-media@archiver.kernel.org>; Fri,  4 Dec 2020 17:42:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7A40C4361B
+	for <linux-media@archiver.kernel.org>; Fri,  4 Dec 2020 18:17:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5111522B40
-	for <linux-media@archiver.kernel.org>; Fri,  4 Dec 2020 17:42:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 732F222D04
+	for <linux-media@archiver.kernel.org>; Fri,  4 Dec 2020 18:17:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731392AbgLDRmT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Dec 2020 12:42:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39994 "EHLO mail.kernel.org"
+        id S1727096AbgLDSQz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Dec 2020 13:16:55 -0500
+Received: from mga01.intel.com ([192.55.52.88]:59593 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731103AbgLDRmT (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 4 Dec 2020 12:42:19 -0500
-Date:   Fri, 4 Dec 2020 17:41:35 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607103698;
-        bh=WGPvh/m1la/6pEZ0tQ/GOgG68+E+LycRUiq+bD3Iwkk=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=g/TkCIMmBnQxPWxPF2qMZYVzCmn31CDUYt6k0CzRPEhcaQop/372ntwpVszp4hjIE
-         vIVuuPebp/OC1i7cGxGjhjvFCBH+ZOpJXrqSfBUsLkg92qAaqtHe1oRjW2/LiLKRoP
-         uV66KhSBbnh6OLWt+7k76XvCzSFsllU2Y5flxry9vND+O+lxolnf60O50XwwBPh+yq
-         SoPzZkAnY4VxswfQ2GzN2EHfELa7v8aeYr2tU6kH0grOPrleQ/frQmRoOuiQC9upQJ
-         YrsyZgnwacEkiNSykQCi1T9S/rE+RUrXs3/y3O5y2YsUSe/DVXEgxaJHuUZ1ya5ze9
-         iTXQfDZc1wffA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Ricardo Ribalda <ribalda@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mediatek <linux-mediatek@lists.infradead.org>,
-        alsa-devel <alsa-devel@alsa-project.org>
-Subject: Re: [PATCH 1/1] dt-bindings: eliminate yamllint warnings
-Message-ID: <20201204174135.GC4558@sirena.org.uk>
-References: <20201204024226.1222-1-thunder.leizhen@huawei.com>
- <20201204024226.1222-2-thunder.leizhen@huawei.com>
+        id S1726429AbgLDSQy (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 4 Dec 2020 13:16:54 -0500
+IronPort-SDR: nR/J24Ih9NzQFHFs+1zNV2qAHHLNIADcptTAmb181aSVzOpZ5+OMsTAajfIjIl/4uplStHNXiC
+ f6FpuMrjIuUw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9825"; a="191666414"
+X-IronPort-AV: E=Sophos;i="5.78,393,1599548400"; 
+   d="scan'208";a="191666414"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2020 10:16:11 -0800
+IronPort-SDR: YyerzVM28TwfoPIsXSLT9XiRzrkVBU+zxuH17OgWXusCW4ytZagzi4F+ASmtOWHgxvA/ZUawiC
+ qZ9AUFqk1Ywg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,393,1599548400"; 
+   d="scan'208";a="362257552"
+Received: from lkp-server02.sh.intel.com (HELO f74a175f0d75) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 04 Dec 2020 10:16:09 -0800
+Received: from kbuild by f74a175f0d75 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1klFcm-0000IS-TF; Fri, 04 Dec 2020 18:16:08 +0000
+Date:   Sat, 05 Dec 2020 02:15:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org
+Subject: [ragnatech:media-tree] BUILD SUCCESS
+ 63288c829b1a5991d8f8c15cab596108ed206ba6
+Message-ID: <5fca7cb8.NHWZN2PvfHeiogzJ%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="NU0Ex4SbNnrxsi6C"
-Content-Disposition: inline
-In-Reply-To: <20201204024226.1222-2-thunder.leizhen@huawei.com>
-X-Cookie: Not a flying toy.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+tree/branch: git://git.ragnatech.se/linux  media-tree
+branch HEAD: 63288c829b1a5991d8f8c15cab596108ed206ba6  media: pixfmt-compressed.rst: fix 'bullet' formatting
 
---NU0Ex4SbNnrxsi6C
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+elapsed time: 1841m
 
-On Fri, Dec 04, 2020 at 10:42:26AM +0800, Zhen Lei wrote:
-> All warnings are related only to "wrong indentation", except one:
-> Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml:4:1: \
-> [error] missing document start "---" (document-start)
+configs tested: 179
+configs skipped: 2
 
-It would make life easier (and be more normal practice) to split this up
-by driver/subsystem and send a bunch of separate patches to the relevant
-maintainers, this makes it much easier to review and handle things.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
---NU0Ex4SbNnrxsi6C
-Content-Type: application/pgp-signature; name="signature.asc"
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+mips                           mtx1_defconfig
+mips                        qi_lb60_defconfig
+arm                           omap1_defconfig
+arm                           h5000_defconfig
+nios2                               defconfig
+mips                  cavium_octeon_defconfig
+mips                      bmips_stb_defconfig
+arm                     am200epdkit_defconfig
+m68k                        mvme147_defconfig
+mips                         tb0226_defconfig
+arm                       aspeed_g5_defconfig
+riscv                            alldefconfig
+sh                             espt_defconfig
+sh                            hp6xx_defconfig
+arm                          pxa168_defconfig
+arm                         orion5x_defconfig
+powerpc                 xes_mpc85xx_defconfig
+sh                           se7724_defconfig
+riscv                            allyesconfig
+powerpc                     tqm8548_defconfig
+arc                        nsimosci_defconfig
+mips                         tb0219_defconfig
+m68k                       m5475evb_defconfig
+powerpc                     ep8248e_defconfig
+powerpc                     mpc512x_defconfig
+powerpc                      ep88xc_defconfig
+arm                         bcm2835_defconfig
+powerpc                      acadia_defconfig
+arm                         assabet_defconfig
+powerpc                     skiroot_defconfig
+powerpc                    socrates_defconfig
+um                             i386_defconfig
+ia64                          tiger_defconfig
+powerpc                      ppc64e_defconfig
+powerpc                       eiger_defconfig
+s390                       zfcpdump_defconfig
+powerpc                     mpc5200_defconfig
+powerpc                     pq2fads_defconfig
+arm                        cerfcube_defconfig
+mips                     loongson1b_defconfig
+arm                            pleb_defconfig
+mips                          ath79_defconfig
+arm                        multi_v7_defconfig
+xtensa                generic_kc705_defconfig
+sh                        edosk7760_defconfig
+arm                        mini2440_defconfig
+alpha                               defconfig
+arm                  colibri_pxa300_defconfig
+powerpc                      chrp32_defconfig
+sh                          urquell_defconfig
+arm                       netwinder_defconfig
+mips                            gpr_defconfig
+sh                          rsk7264_defconfig
+powerpc                     kilauea_defconfig
+arc                          axs103_defconfig
+arm                            zeus_defconfig
+arm                             pxa_defconfig
+mips                        workpad_defconfig
+mips                          ath25_defconfig
+arm                           sunxi_defconfig
+arm                         shannon_defconfig
+mips                           ip32_defconfig
+arm                         s3c2410_defconfig
+xtensa                              defconfig
+c6x                        evmc6474_defconfig
+mips                     decstation_defconfig
+arm                             ezx_defconfig
+sh                        sh7757lcr_defconfig
+sh                        edosk7705_defconfig
+arm                    vt8500_v6_v7_defconfig
+arm                        keystone_defconfig
+sh                           se7343_defconfig
+powerpc                     tqm8540_defconfig
+sh                          r7785rp_defconfig
+powerpc                     rainier_defconfig
+s390                             alldefconfig
+c6x                        evmc6472_defconfig
+powerpc                     tqm8560_defconfig
+powerpc                 mpc834x_itx_defconfig
+powerpc                      mgcoge_defconfig
+arm                        spear3xx_defconfig
+arm                           corgi_defconfig
+arm                        vexpress_defconfig
+sh                   rts7751r2dplus_defconfig
+mips                         db1xxx_defconfig
+powerpc                   lite5200b_defconfig
+powerpc64                        alldefconfig
+mips                       lemote2f_defconfig
+sh                     magicpanelr2_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                               tinyconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a004-20201204
+x86_64               randconfig-a006-20201204
+x86_64               randconfig-a002-20201204
+x86_64               randconfig-a001-20201204
+x86_64               randconfig-a005-20201204
+x86_64               randconfig-a003-20201204
+i386                 randconfig-a005-20201204
+i386                 randconfig-a004-20201204
+i386                 randconfig-a001-20201204
+i386                 randconfig-a002-20201204
+i386                 randconfig-a006-20201204
+i386                 randconfig-a003-20201204
+i386                 randconfig-a004-20201203
+i386                 randconfig-a005-20201203
+i386                 randconfig-a001-20201203
+i386                 randconfig-a002-20201203
+i386                 randconfig-a006-20201203
+i386                 randconfig-a003-20201203
+x86_64               randconfig-a016-20201203
+x86_64               randconfig-a012-20201203
+x86_64               randconfig-a014-20201203
+x86_64               randconfig-a013-20201203
+x86_64               randconfig-a015-20201203
+x86_64               randconfig-a011-20201203
+i386                 randconfig-a014-20201203
+i386                 randconfig-a013-20201203
+i386                 randconfig-a011-20201203
+i386                 randconfig-a015-20201203
+i386                 randconfig-a012-20201203
+i386                 randconfig-a016-20201203
+i386                 randconfig-a014-20201204
+i386                 randconfig-a013-20201204
+i386                 randconfig-a011-20201204
+i386                 randconfig-a015-20201204
+i386                 randconfig-a012-20201204
+i386                 randconfig-a016-20201204
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
 
------BEGIN PGP SIGNATURE-----
+clang tested configs:
+x86_64               randconfig-a016-20201204
+x86_64               randconfig-a012-20201204
+x86_64               randconfig-a014-20201204
+x86_64               randconfig-a013-20201204
+x86_64               randconfig-a015-20201204
+x86_64               randconfig-a011-20201204
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/KdM4ACgkQJNaLcl1U
-h9BGjQf/UZkJEtI4D/7Y6K4QlL3HTskWfvSDmZF26Ea+sD/TdJ91T1YJulT15TOK
-sKNLzMI5ERHHR+su1GGx0czMqpipoPYLvlULn6wLpL6fMbOx94cA+dc8Akr/JcjX
-EfMthdqAlA+5P1Lz5FivyeWRk/B2YgNQ4+Pa9bbLW4iZogcNL2jZmN55GvBHYlSa
-oyLVbN2YlJwy/t9b+c8mvlCGa5NyPDe5JmpplcFkCbn5DVZ9aFTHrGaQ0Ml1rv5W
-DyyLnw1kpVUck0Phs49+unaEOb88Mh7FY4Jtsqz6SuqZDkHYZuWCwod5VHJG7q53
-cpaFjB5+6e3/mAA/aRnxyzuOxLmoMA==
-=82J7
------END PGP SIGNATURE-----
-
---NU0Ex4SbNnrxsi6C--
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
