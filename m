@@ -2,137 +2,79 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4391C4361A
-	for <linux-media@archiver.kernel.org>; Fri,  4 Dec 2020 08:23:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60D47C433FE
+	for <linux-media@archiver.kernel.org>; Fri,  4 Dec 2020 08:25:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 83E0922581
-	for <linux-media@archiver.kernel.org>; Fri,  4 Dec 2020 08:23:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1426522582
+	for <linux-media@archiver.kernel.org>; Fri,  4 Dec 2020 08:25:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726122AbgLDIXB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Dec 2020 03:23:01 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34254 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725866AbgLDIXA (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 4 Dec 2020 03:23:00 -0500
-X-Gm-Message-State: AOAM533u8qp4warYnaliKs4L1gnxZT5uXjKYFLEHCxsov/e/vQxsaaWh
-        fwnTHEFW2XT4ZjvJsXOj0PuIKGgBcBHq3mvrfT4=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607070139;
-        bh=2hCU16u8xdgK+1WRUVeeUfn1ZGZIrA6XHXnWa4B43Ws=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=h4Q7Sa7DoFD2o2/4Tu0jkpK5D/EijEerH1ihEOloYkaFXaCVsUF23qNUERELqxG3G
-         bZvfwDXDP+VjTTqW20jYjz5Jw8ZR009/7IQ6dHfEZzbd+PUmj0GGb9prKqvyY0CW9Y
-         yV4g94/ccG0e/5dQoxJF4DAKP4eFQXUOhpkoilRSDoxR68czPx5Znoi9mRptSIHCwl
-         COBThqd/i8MdcDyCu7POFXJS9GknBKBfSEKvZuHy54AAInO9Gn6H6LfXoz10Wo4OXz
-         KZu6OkvnmiwTg+C2fFIJdUE+EM0bY1WiSrBfcfs47rKI7V6UztSPPP9OtpDv9HTksS
-         2ejQOYIS7mL+Q==
-X-Google-Smtp-Source: ABdhPJxs+Au9ZXbkEKqkIFc+iYxn/D/2u3KSa+IfdKMx2o4fDVnF4lOKi/heqBPu4O3BvmX7cKSQyOP8MbSTPeGfxR0=
-X-Received: by 2002:a05:6808:9a9:: with SMTP id e9mr2437405oig.4.1607070138915;
- Fri, 04 Dec 2020 00:22:18 -0800 (PST)
+        id S1728652AbgLDIZQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Dec 2020 03:25:16 -0500
+Received: from szxga07-in.huawei.com ([45.249.212.35]:9378 "EHLO
+        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727069AbgLDIZQ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Dec 2020 03:25:16 -0500
+Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4CnQj16RR5z73yZ;
+        Fri,  4 Dec 2020 16:24:05 +0800 (CST)
+Received: from compute.localdomain (10.175.112.70) by
+ DGGEMS411-HUB.china.huawei.com (10.3.19.211) with Microsoft SMTP Server (TLS)
+ id 14.3.487.0; Fri, 4 Dec 2020 16:24:23 +0800
+From:   Zhang Changzhong <zhangchangzhong@huawei.com>
+To:     Eddie James <eajames@linux.ibm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+CC:     Zhang Changzhong <zhangchangzhong@huawei.com>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] media: aspeed: fix error return code in aspeed_video_setup_video()
+Date:   Fri, 4 Dec 2020 16:27:58 +0800
+Message-ID: <1607070478-32465-1-git-send-email-zhangchangzhong@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-References: <20201203222956.1091606-1-arnd@kernel.org> <1607047828.4733.172.camel@mhfsdcap03>
-In-Reply-To: <1607047828.4733.172.camel@mhfsdcap03>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Fri, 4 Dec 2020 09:22:02 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0ZA4cLNL3kVN9qKjHyhWJXOA2LtsEakN0V9rcTBQaVNw@mail.gmail.com>
-Message-ID: <CAK8P3a0ZA4cLNL3kVN9qKjHyhWJXOA2LtsEakN0V9rcTBQaVNw@mail.gmail.com>
-Subject: Re: [PATCH] media: i2c: fix an uninitialized error code
-To:     Dongchun Zhu <dongchun.zhu@mediatek.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        tfiga@google.com, sj.huang@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.70]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Dec 4, 2020 at 3:10 AM Dongchun Zhu <dongchun.zhu@mediatek.com> wrote:
->
-> Hi Arnd,
->
-> Thanks for the patch.
->
-> On Thu, 2020-12-03 at 23:29 +0100, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > Clang points out that the error handling in ov02a10_s_stream() is
-> > broken, and just returns a random error code:
-> >
-> > drivers/media/i2c/ov02a10.c:537:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-> >         if (ov02a10->streaming == on)
-> >             ^~~~~~~~~~~~~~~~~~~~~~~~
-> > drivers/media/i2c/ov02a10.c:568:9: note: uninitialized use occurs here
-> >         return ret;
-> >                ^~~
-> > drivers/media/i2c/ov02a10.c:537:2: note: remove the 'if' if its condition is always false
-> >         if (ov02a10->streaming == on)
-> >         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > drivers/media/i2c/ov02a10.c:533:9: note: initialize the variable 'ret' to silence this warning
-> >         int ret;
-> >
-> > I assume that -EBUSY is the intended error code, so use that.
-> >
-> > Fixes: 91807efbe8ec ("media: i2c: add OV02A10 image sensor driver")
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > ---
-> >  drivers/media/i2c/ov02a10.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/media/i2c/ov02a10.c b/drivers/media/i2c/ov02a10.c
-> > index 391718136ade..7ee9c904d9b5 100644
-> > --- a/drivers/media/i2c/ov02a10.c
-> > +++ b/drivers/media/i2c/ov02a10.c
-> > @@ -534,8 +534,10 @@ static int ov02a10_s_stream(struct v4l2_subdev *sd, int on)
-> >
-> >       mutex_lock(&ov02a10->mutex);
-> >
-> > -     if (ov02a10->streaming == on)
-> > +     if (ov02a10->streaming == on) {
-> > +             ret = -EBUSY;
-> >               goto unlock_and_return;
-> > +     }
-> >
-> >       if (on) {
-> >               ret = pm_runtime_get_sync(&client->dev);
->
-> Only if sensor fails to stream on, ret can return a negative error code.
-> Thus ret above needs to be initialized to '0'.
+Fix to return a negative error code from the error handling
+case instead of 0, as done elsewhere in this function.
 
-Ok, I sent a version 2.
+Fixes: d2b4387f3bdf ("media: platform: Add Aspeed Video Engine driver")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+---
+ drivers/media/platform/aspeed-video.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> Also you could fix the clang error like this.
->
-> static int ov02a10_s_stream(struct v4l2_subdev *sd, int on)
-> {
->         struct ov02a10 *ov02a10 = to_ov02a10(sd);
->         ...
->         int ret = 0;
->
->         ...
->         if (ov02a10->streaming == on)
->                 goto unlock_and_return;
->
->         ...
-> }
+diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
+index c46a79e..f2c4dad 100644
+--- a/drivers/media/platform/aspeed-video.c
++++ b/drivers/media/platform/aspeed-video.c
+@@ -1551,12 +1551,12 @@ static int aspeed_video_setup_video(struct aspeed_video *video)
+ 			       V4L2_JPEG_CHROMA_SUBSAMPLING_420, mask,
+ 			       V4L2_JPEG_CHROMA_SUBSAMPLING_444);
+ 
+-	if (video->ctrl_handler.error) {
++	rc = video->ctrl_handler.error;
++	if (rc) {
+ 		v4l2_ctrl_handler_free(&video->ctrl_handler);
+ 		v4l2_device_unregister(v4l2_dev);
+ 
+-		dev_err(video->dev, "Failed to init controls: %d\n",
+-			video->ctrl_handler.error);
++		dev_err(video->dev, "Failed to init controls: %d\n", rc);
+ 		return rc;
+ 	}
+ 
+-- 
+2.9.5
 
-Sorry, I should have removed the last line of the output from
-clang that suggested doing that. Initializing a local variable
-in the declaration is generally a bad idea precisely because it
-prevents the compiler from warning about a case like this where
-the author forgot to set the correct error value.
-
-We should really fix clang to not propagate that nonsense.
-
-        Arnd
