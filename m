@@ -8,36 +8,35 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 984CBC4167B
-	for <linux-media@archiver.kernel.org>; Sat,  5 Dec 2020 18:40:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 077B6C1B087
+	for <linux-media@archiver.kernel.org>; Sat,  5 Dec 2020 18:40:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 737E422EBF
-	for <linux-media@archiver.kernel.org>; Sat,  5 Dec 2020 18:40:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CA23622EBF
+	for <linux-media@archiver.kernel.org>; Sat,  5 Dec 2020 18:40:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726839AbgLESjl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 5 Dec 2020 13:39:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43666 "EHLO
+        id S1726134AbgLESkM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 5 Dec 2020 13:40:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726241AbgLESja (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 5 Dec 2020 13:39:30 -0500
-X-Greylist: delayed 117 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 05 Dec 2020 10:38:43 PST
+        with ESMTP id S1726485AbgLESkE (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 5 Dec 2020 13:40:04 -0500
 Received: from mxf2.seznam.cz (mxf2.seznam.cz [IPv6:2a02:598:2::123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E54C061A4F;
-        Sat,  5 Dec 2020 10:38:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25D5C0613D1;
+        Sat,  5 Dec 2020 10:39:18 -0800 (PST)
 Received: from email.seznam.cz
-        by email-smtpc27a.ng.seznam.cz (email-smtpc27a.ng.seznam.cz [10.23.18.38])
-        id 7f888d572486d93e7e214109;
-        Sat, 05 Dec 2020 19:38:39 +0100 (CET)
+        by email-smtpc17b.ng.seznam.cz (email-smtpc17b.ng.seznam.cz [10.23.18.19])
+        id 506e15c20b6041ab51c7d99c;
+        Sat, 05 Dec 2020 19:39:15 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seznam.cz; s=beta;
-        t=1607193519; bh=ovobX8sOi5Y+dScdZ8OoMIVuBxTsi+gvOe2YjIqDOH0=;
-        h=Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:
-         References:MIME-Version:Content-Transfer-Encoding;
-        b=NHRElxwC6s4DBWOAcMfgaQkOlNaYcI+9kfE084S0YxabwEmZys3EArXkNn4X0ZIJ/
-         ZpMeo1ge540Yl84Y/DMJhHoQZsodsScVDX9a6/Y+vyiGZ1AteN491+2pQ64gR+oyyI
-         35/wzBP+LEkhZwIDBtZJZu2+qDBwlB3+cJm3hnpg=
+        t=1607193555; bh=kRxnW5M8mG/e0b0s9X4Em61KuMk0/r6ktKJxpd0JWZQ=;
+        h=Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
+         Content-Transfer-Encoding;
+        b=LA0q95CeBdFL7MnrFKJxWauD6+Vc+4jghVP5uRC00FAslPT9rkpORmrA3qq3mEeO3
+         Ipz7deGlXZ4Ugwoo2I4igEOT0qlzDnfAgibxWCN9bSvetSbu6suDbzL/SNUsB2x5P5
+         ko1o6fSFzWQOVJ3EajfD3tHbHmFPAHLU5NEthKyk=
 Received: from localhost.localdomain (ip-228-128.dynamic.ccinternet.cz [212.69.128.228])
         by email-relay3.ng.seznam.cz (Seznam SMTPD 1.3.122) with ESMTP;
-        Sat, 05 Dec 2020 19:36:23 +0100 (CET)  
+        Sat, 05 Dec 2020 19:36:21 +0100 (CET)  
 From:   michael.srba@seznam.cz
 To:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -53,12 +52,10 @@ Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
         linux-arm-kernel@lists.infradead.org,
         linux-renesas-soc@vger.kernel.org,
         Michael Srba <Michael.Srba@seznam.cz>
-Subject: [PATCH 3/3] arm64: dts: update device trees to specify clock-frequency in imx219 node
-Date:   Sat,  5 Dec 2020 19:33:55 +0100
-Message-Id: <20201205183355.6488-3-michael.srba@seznam.cz>
+Subject: [PATCH 1/3] media: i2c: imx219: add support for specifying clock-frequencies
+Date:   Sat,  5 Dec 2020 19:33:53 +0100
+Message-Id: <20201205183355.6488-1-michael.srba@seznam.cz>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201205183355.6488-1-michael.srba@seznam.cz>
-References: <20201205183355.6488-1-michael.srba@seznam.cz>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -67,40 +64,49 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Michael Srba <Michael.Srba@seznam.cz>
 
-This patch adds the clock-frequency property to all device trees that use
-the imx219 binding, with the value of exactly 24Mhz which was previously
-implicitly assumed.
+This patch adds 1% tolerance on input clock, similar to other camera sensor
+drivers. It also allows for specifying the actual clock in the device tree,
+instead of relying on it being already set to the right frequency (which is
+often not the case).
 
 Signed-off-by: Michael Srba <Michael.Srba@seznam.cz>
 ---
- arch/arm64/boot/dts/renesas/aistarvision-mipi-adapter-2.1.dtsi | 1 +
- arch/arm64/boot/dts/renesas/r8a774c0-ek874-mipi-2.1.dts        | 1 +
- 2 files changed, 2 insertions(+)
+ drivers/media/i2c/imx219.c | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/renesas/aistarvision-mipi-adapter-2.1.dtsi b/arch/arm64/boot/dts/renesas/aistarvision-mipi-adapter-2.1.dtsi
-index dac6ff49020f..986c6c1f7312 100644
---- a/arch/arm64/boot/dts/renesas/aistarvision-mipi-adapter-2.1.dtsi
-+++ b/arch/arm64/boot/dts/renesas/aistarvision-mipi-adapter-2.1.dtsi
-@@ -82,6 +82,7 @@ imx219: imx219@10 {
- 		compatible = "sony,imx219";
- 		reg = <0x10>;
- 		clocks = <&osc25250_clk>;
-+		clock-frequency = <24000000>;
- 		VANA-supply = <&imx219_vana_2v8>;
- 		VDIG-supply = <&imx219_vdig_1v8>;
- 		VDDL-supply = <&imx219_vddl_1v2>;
-diff --git a/arch/arm64/boot/dts/renesas/r8a774c0-ek874-mipi-2.1.dts b/arch/arm64/boot/dts/renesas/r8a774c0-ek874-mipi-2.1.dts
-index f0829e905506..db4b801b17b5 100644
---- a/arch/arm64/boot/dts/renesas/r8a774c0-ek874-mipi-2.1.dts
-+++ b/arch/arm64/boot/dts/renesas/r8a774c0-ek874-mipi-2.1.dts
-@@ -59,6 +59,7 @@ &imx219 {
- 	port {
- 		imx219_ep: endpoint {
- 			clock-lanes = <0>;
-+			clock-frequency = <24000000>;
- 			data-lanes = <1 2>;
- 			link-frequencies = /bits/ 64 <456000000>;
- 			/* uncomment remote-endpoint property to tie imx219 to
+diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
+index f64c0ef7a897..a8f05562d0af 100644
+--- a/drivers/media/i2c/imx219.c
++++ b/drivers/media/i2c/imx219.c
+@@ -1443,13 +1443,26 @@ static int imx219_probe(struct i2c_client *client)
+ 		return PTR_ERR(imx219->xclk);
+ 	}
+ 
+-	imx219->xclk_freq = clk_get_rate(imx219->xclk);
+-	if (imx219->xclk_freq != IMX219_XCLK_FREQ) {
++	ret = fwnode_property_read_u32(dev_fwnode(dev), "clock-frequency", &imx219->xclk_freq);
++	if (ret) {
++		dev_err(dev, "could not get xclk frequency\n");
++		return ret;
++	}
++
++	/* this driver currently expects 24MHz; allow 1% tolerance */
++	if (imx219->xclk_freq < 23760000 || imx219->xclk_freq > 24240000) {
+ 		dev_err(dev, "xclk frequency not supported: %d Hz\n",
+ 			imx219->xclk_freq);
+ 		return -EINVAL;
+ 	}
+ 
++	ret = clk_set_rate(imx219->xclk, imx219->xclk_freq);
++	if (ret) {
++		dev_err(dev, "could not set xclk frequency\n");
++		return ret;
++	}
++
++
+ 	ret = imx219_get_regulators(imx219);
+ 	if (ret) {
+ 		dev_err(dev, "failed to get regulators\n");
 -- 
 2.29.2
 
