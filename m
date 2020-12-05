@@ -2,58 +2,123 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E407C433FE
-	for <linux-media@archiver.kernel.org>; Sat,  5 Dec 2020 00:17:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F282AC4361A
+	for <linux-media@archiver.kernel.org>; Sat,  5 Dec 2020 02:45:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2C3C522D58
-	for <linux-media@archiver.kernel.org>; Sat,  5 Dec 2020 00:17:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BE2BA22DFB
+	for <linux-media@archiver.kernel.org>; Sat,  5 Dec 2020 02:45:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726512AbgLEARM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Dec 2020 19:17:12 -0500
-Received: from smtprelay0108.hostedemail.com ([216.40.44.108]:43710 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726151AbgLEARL (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 4 Dec 2020 19:17:11 -0500
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay03.hostedemail.com (Postfix) with ESMTP id D82A1837F24A;
-        Sat,  5 Dec 2020 00:16:30 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-HE-Tag: bone03_630ff5d273c8
-X-Filterd-Recvd-Size: 1253
-Received: from XPS-9350.home (unknown [47.151.137.21])
-        (Authenticated sender: joe@perches.com)
-        by omf20.hostedemail.com (Postfix) with ESMTPA;
-        Sat,  5 Dec 2020 00:16:29 +0000 (UTC)
-Message-ID: <8b81eed584f971b1dd61132ca4d04c0853653b31.camel@perches.com>
-Subject: Re: [PATCH] staging:rkvdec: Fixed "replace comma with semicolon"
- Warning:
-From:   Joe Perches <joe@perches.com>
-To:     Travis Carter <traviscarter2@gmail.com>, ezequiel@collabora.com,
-        mchehab@kernel.org, gregkh@linuxfoundation.org
-Cc:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org
-Date:   Fri, 04 Dec 2020 16:16:28 -0800
-In-Reply-To: <20201204233743.GA8530@linuxmint-midtower-pc>
-References: <20201204233743.GA8530@linuxmint-midtower-pc>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.38.1-1 
+        id S1726122AbgLECpG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Dec 2020 21:45:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38024 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726242AbgLECpF (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Dec 2020 21:45:05 -0500
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8692CC061A51
+        for <linux-media@vger.kernel.org>; Fri,  4 Dec 2020 18:44:25 -0800 (PST)
+Received: by mail-ej1-x642.google.com with SMTP id bo9so11411905ejb.13
+        for <linux-media@vger.kernel.org>; Fri, 04 Dec 2020 18:44:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IUPu2DUBMRAu12DXRp3pTRDt+ZwJx6w5SlC/8VGie84=;
+        b=X+/2zN4Bmhn0nBYGcOfIC1rXbVGY00KmZn0QEb9HMuQX8po0pu/eEMHACi+xSLRuqo
+         ZOsLL2CFmQlq41ARU5CRPgrW4QGNlnOHjnOqaKqVHKw5Qad+wFsDkQOHVsXNY3sdWl+U
+         qX07t+jEzroLTKWy2AtVuycW561wYPO9dugHU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IUPu2DUBMRAu12DXRp3pTRDt+ZwJx6w5SlC/8VGie84=;
+        b=o6HMB0kgX8MSGxdkHUV1zZCSXmNJlCUSoTETpR73IXeX41RpnsOHf+T6HK/QewNJ62
+         hhFe48noiwz1m+INoLFzC/2hO64rV35152ttmeVRInZXqZdfIyDAM4WHK4M9DG/Z4eNk
+         w6BSBiERz1S/yJO7JJGs4ecWcPygkuyXZWPlQJU9WNEj1KtFO1kTFCgzQrfw7dxtjC/e
+         y73J67q6NLalMILvXvK4ImcyKIUUs9PWIkbqn14z/ZvemSoLDKDy4yx4vDrGDSwsGYEj
+         k5Iyu/VyQOxN5i7ElzuLqaAQkdscroqZcYSsprTY5IddhK8Nf+ZudrOkS9FrnD+Et6LC
+         G7bw==
+X-Gm-Message-State: AOAM532lViw1HbHx+OSAPTYsnRElpJc4R1oo3uv6ufsP8eHDw9qrUrCr
+        Z5EV9NHjURcYt4b73eDOTMJ1enNlR4jXgA==
+X-Google-Smtp-Source: ABdhPJxXHvkiQ+G/ma8k1tAX/5JR3bMhtGPshGtWzQy+j6KV8Ox+6WBQy4hYeUXD9WsaSbaFyvdO7Q==
+X-Received: by 2002:a17:906:fb1a:: with SMTP id lz26mr9783631ejb.194.1607136263895;
+        Fri, 04 Dec 2020 18:44:23 -0800 (PST)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
+        by smtp.gmail.com with ESMTPSA id t26sm4655412edt.69.2020.12.04.18.44.22
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Dec 2020 18:44:23 -0800 (PST)
+Received: by mail-wr1-f43.google.com with SMTP id r3so7111445wrt.2
+        for <linux-media@vger.kernel.org>; Fri, 04 Dec 2020 18:44:22 -0800 (PST)
+X-Received: by 2002:a5d:4388:: with SMTP id i8mr8217348wrq.262.1607136262520;
+ Fri, 04 Dec 2020 18:44:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <20201204100139.6216-1-stanimir.varbanov@linaro.org>
+In-Reply-To: <20201204100139.6216-1-stanimir.varbanov@linaro.org>
+From:   Fritz Koenig <frkoenig@chromium.org>
+Date:   Fri, 4 Dec 2020 18:44:09 -0800
+X-Gmail-Original-Message-ID: <CAMfZQbw1GjxHbCfY2XCCw=o410ziBZndCQizh6fX7LTkhOq-nw@mail.gmail.com>
+Message-ID: <CAMfZQbw1GjxHbCfY2XCCw=o410ziBZndCQizh6fX7LTkhOq-nw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] Venus encoder improvements
+To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Dikshita Agarwal <dikshita@codeaurora.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Vikash Garodia <vgarodia@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, 2020-12-04 at 17:37 -0600, Travis Carter wrote:
-> drivers/staging/media/rkvdec/rkvdec.c
+On Fri, Dec 4, 2020 at 2:03 AM Stanimir Varbanov
+<stanimir.varbanov@linaro.org> wrote:
+>
+> Hello,
+>
+> Changes since v1:
+>   * 1/4 - fixed error handling in hfi_session_deinit (Alex)
+>         - keep venc_set_properties invocation from start_streaming (Dikshita)
+>   * 2/4 - keep original mutex_lock (Alex)
+>   * 3/4 - move msg queue inside if statement (Fritz)
+>         - move rx_req setting before triggering soft interrupt (Alex)
+>   * Add one more patch 4/4 to address comments for hfi_session_init
+>     EINVAL return error code (Alex)
+>
+> The v1 can be found at [1].
+>
+> regards,
+> Stan
+>
+> [1] https://www.spinics.net/lists/linux-media/msg181634.html
+>
+> Stanimir Varbanov (3):
+>   venus: venc: Init the session only once in queue_setup
+>   venus: Limit HFI sessions to the maximum supported
+>   venus: hfi: Correct session init return error
+>
+> Vikash Garodia (1):
+>   media: venus: request for interrupt from venus
+>
+>  drivers/media/platform/qcom/venus/core.h      |  1 +
+>  drivers/media/platform/qcom/venus/hfi.c       | 18 +++-
+>  .../media/platform/qcom/venus/hfi_parser.c    |  3 +
+>  drivers/media/platform/qcom/venus/hfi_venus.c | 77 ++++++++++-------
+>  drivers/media/platform/qcom/venus/vdec.c      |  2 +-
+>  drivers/media/platform/qcom/venus/venc.c      | 85 ++++++++++++++-----
+>  6 files changed, 127 insertions(+), 59 deletions(-)
+>
+> --
+> 2.17.1
+>
 
-You might consider using Julia Lawall's cocci script for all of
-drivers/staging or subsets of staging like drivers/staging/media/
+I haven't had a chance to review the code yet, I'll leave that for
+early next week.  In the meantime I have tested the patches and found
+them to be working well.
 
-https://lore.kernel.org/lkml/1601233948-11629-1-git-send-email-Julia.Lawall@inria.fr/
-
-
+Tested-by: Fritz Koenig <frkoenig@chromium.org>
