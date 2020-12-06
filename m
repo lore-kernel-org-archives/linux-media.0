@@ -2,114 +2,81 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8933C1B087
-	for <linux-media@archiver.kernel.org>; Sun,  6 Dec 2020 17:33:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61018C433FE
+	for <linux-media@archiver.kernel.org>; Sun,  6 Dec 2020 23:04:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C631823101
-	for <linux-media@archiver.kernel.org>; Sun,  6 Dec 2020 17:33:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1D45B2310B
+	for <linux-media@archiver.kernel.org>; Sun,  6 Dec 2020 23:04:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727389AbgLFRd0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 6 Dec 2020 12:33:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44838 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727264AbgLFRdX (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 6 Dec 2020 12:33:23 -0500
-Received: from mxf1.seznam.cz (mxf1.seznam.cz [IPv6:2a02:598:a::78:123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07999C0613D3;
-        Sun,  6 Dec 2020 09:32:37 -0800 (PST)
-Received: from email.seznam.cz
-        by email-smtpc12a.ko.seznam.cz (email-smtpc12a.ko.seznam.cz [10.53.11.105])
-        id 33927368689c2701323bbf36;
-        Sun, 06 Dec 2020 18:32:34 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seznam.cz; s=beta;
-        t=1607275954; bh=OsqIBbxu6dHOZRO3EWBlE2gBad2O349VxgymSsZsbuc=;
-        h=Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:
-         References:MIME-Version:Content-Transfer-Encoding;
-        b=BXoeWDuqgxmuSKf9kafBb8TjlOgNBXmz/9KWGBv4VXHxuDM/UQsITY3hETXOF+z5l
-         moTvUO0f9wzyFqsdys+ZJ1ofk2Rinz0CJMlB+jt5nc/UNwxVpNTLS11RD/R2NPwuKv
-         z8RFxhFyGt2WXousV4MENyoj0W/MOJpX0rZMk1Wo=
-Received: from localhost.localdomain (ip-228-128.dynamic.ccinternet.cz [212.69.128.228])
-        by email-relay23.ko.seznam.cz (Seznam SMTPD 1.3.122) with ESMTP;
-        Sun, 06 Dec 2020 18:29:46 +0100 (CET)  
-From:   michael.srba@seznam.cz
-To:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        Michael Srba <Michael.Srba@seznam.cz>
-Subject: [PATCH v2 2/3] media: dt-bindings: media: i2c: imx219: document clock-frequency property
-Date:   Sun,  6 Dec 2020 18:27:19 +0100
-Message-Id: <20201206172720.9406-2-michael.srba@seznam.cz>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201206172720.9406-1-michael.srba@seznam.cz>
-References: <20201206172720.9406-1-michael.srba@seznam.cz>
+        id S1727375AbgLFXEJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 6 Dec 2020 18:04:09 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:59778 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726046AbgLFXEJ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 6 Dec 2020 18:04:09 -0500
+Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B1B53EC;
+        Mon,  7 Dec 2020 00:03:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1607295807;
+        bh=oS1hxWifvTaTBqnbzCmiTcnRDf71R2MQvrkXcPvAtJo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=HzZv5Hup5uIj1L0JdBaXXUKcuQ3/9NcIqVs/wC8wDefgsXUTm8AYAM5gVbrLgIk5G
+         z9M639N5satUlj0v50cw5GA/7YhtQCRtQ/tX9AyKTGOVXoit8ssRbAmoBAjWA3C/a1
+         Fzh258eGXlshQxqeEWCLGGM6CjuHMA2IO36M4U/Y=
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Dylan Yip <dylany@xilinx.com>,
+        Vishal Sagar <vsagar@xilinx.com>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>
+Subject: [PATCH v4 01/16] media: videodev2.h: Remove unneeded comment about 4CC value
+Date:   Mon,  7 Dec 2020 01:03:01 +0200
+Message-Id: <20201206230316.1221-2-laurent.pinchart@ideasonboard.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20201206230316.1221-1-laurent.pinchart@ideasonboard.com>
+References: <20201206230316.1221-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Michael Srba <Michael.Srba@seznam.cz>
+The V4L2_PIX_FMT_BGRA444 format has a comment that explains why its 4CC
+value is GA12. This explains the development history and isn't of much
+interest to readers, it should have been part of a commit message
+instead. Drop the comment, anyone interested in history can turn to git.
 
-This patch documents the clock-frequency property, which allows the driver
-to change the clock frequency from it's default value.
-
-Signed-off-by: Michael Srba <Michael.Srba@seznam.cz>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
+ include/uapi/linux/videodev2.h | 6 ------
+ 1 file changed, 6 deletions(-)
 
-changes since v1: none
-
----
- Documentation/devicetree/bindings/media/i2c/imx219.yaml | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/media/i2c/imx219.yaml b/Documentation/devicetree/bindings/media/i2c/imx219.yaml
-index dfc4d29a4f04..666b8a9da5be 100644
---- a/Documentation/devicetree/bindings/media/i2c/imx219.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/imx219.yaml
-@@ -27,6 +27,10 @@ properties:
-   clocks:
-     maxItems: 1
- 
-+  clock-frequency:
-+    description:
-+      Frequency of the input clock in Hertz.
-+
-   VDIG-supply:
-     description:
-       Digital I/O voltage supply, 1.8 volts
-@@ -78,6 +82,7 @@ required:
-   - compatible
-   - reg
-   - clocks
-+  - clock-frequency
-   - VANA-supply
-   - VDIG-supply
-   - VDDL-supply
-@@ -95,6 +100,7 @@ examples:
-             compatible = "sony,imx219";
-             reg = <0x10>;
-             clocks = <&imx219_clk>;
-+            clock-frequency = <24000000>;
-             VANA-supply = <&imx219_vana>;   /* 2.8v */
-             VDIG-supply = <&imx219_vdig>;   /* 1.8v */
-             VDDL-supply = <&imx219_vddl>;   /* 1.2v */
- 
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index e40e95be79f9..3f58ab463f6c 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -524,12 +524,6 @@ struct v4l2_pix_format {
+ #define V4L2_PIX_FMT_RGBX444 v4l2_fourcc('R', 'X', '1', '2') /* 16  rrrrgggg bbbbxxxx */
+ #define V4L2_PIX_FMT_ABGR444 v4l2_fourcc('A', 'B', '1', '2') /* 16  aaaabbbb ggggrrrr */
+ #define V4L2_PIX_FMT_XBGR444 v4l2_fourcc('X', 'B', '1', '2') /* 16  xxxxbbbb ggggrrrr */
+-
+-/*
+- * Originally this had 'BA12' as fourcc, but this clashed with the older
+- * V4L2_PIX_FMT_SGRBG12 which inexplicably used that same fourcc.
+- * So use 'GA12' instead for V4L2_PIX_FMT_BGRA444.
+- */
+ #define V4L2_PIX_FMT_BGRA444 v4l2_fourcc('G', 'A', '1', '2') /* 16  bbbbgggg rrrraaaa */
+ #define V4L2_PIX_FMT_BGRX444 v4l2_fourcc('B', 'X', '1', '2') /* 16  bbbbgggg rrrrxxxx */
+ #define V4L2_PIX_FMT_RGB555  v4l2_fourcc('R', 'G', 'B', 'O') /* 16  RGB-5-5-5     */
 -- 
-2.29.2
+Regards,
+
+Laurent Pinchart
 
