@@ -5,55 +5,55 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5352DC4361B
-	for <linux-media@archiver.kernel.org>; Sun,  6 Dec 2020 10:28:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89832C433FE
+	for <linux-media@archiver.kernel.org>; Sun,  6 Dec 2020 10:29:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 24C9A22472
-	for <linux-media@archiver.kernel.org>; Sun,  6 Dec 2020 10:28:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 517EE2256F
+	for <linux-media@archiver.kernel.org>; Sun,  6 Dec 2020 10:29:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727343AbgLFK21 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 6 Dec 2020 05:28:27 -0500
+        id S1727357AbgLFK2s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 6 Dec 2020 05:28:48 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727290AbgLFK20 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 6 Dec 2020 05:28:26 -0500
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C3DC061A53
-        for <linux-media@vger.kernel.org>; Sun,  6 Dec 2020 02:27:42 -0800 (PST)
-Received: by mail-ed1-x544.google.com with SMTP id q16so10481771edv.10
-        for <linux-media@vger.kernel.org>; Sun, 06 Dec 2020 02:27:42 -0800 (PST)
+        with ESMTP id S1727202AbgLFK2r (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 6 Dec 2020 05:28:47 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4B7C08E861
+        for <linux-media@vger.kernel.org>; Sun,  6 Dec 2020 02:27:48 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id ce23so11411767ejb.8
+        for <linux-media@vger.kernel.org>; Sun, 06 Dec 2020 02:27:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=LkouQoHke2anJQVlx6D+TqgyIrZywjU7nWFfQMQRPxY=;
-        b=Zy6Na8/YzIOd0z/7FasMN5MglqMug1tF32Gc3OnmDlsGum7uvzEwyIB1CudNYNlfm2
-         crPc0ItSFBNqkP14lXbpricf+h5ZOmzALro36jKuD7eJbJsuRQhhzD571XiKthcnqnaw
-         mqxKWaNEq7NgN0MxK2iaKcKvfymAEw0aOqwKnSdtTrwlvfgO1etpd8y+nV0anyc4pE+4
-         iSAWeWIHp9Wy4XztzOuQer5beIpFrSGMuxvTqMivz27ohpdUxW8WKyev1eEExOGg8RkE
-         XLUAbmpSTbI3Xw0TiZAq8Q9odneYApw8nbLtXIOa/zoP9utaB1TZ1sbS4qfw3JlyVplZ
-         niSA==
+        bh=pU/BEnvHNZor0iOPVM1/S+HqmPaJIMs/busMwuezIyY=;
+        b=b5a/HopZcTOmVh+DQlV7Q5Fplz2QY6DKujQjBu/qcTQfqIS3A/E1426hN3+2sazCXs
+         m+UP0HIXmKSjeZcnkQJvNKFhVWfNHnc3BErhnyimNiyV23vaWhxknn4s9qfVhKBlA2CG
+         Q2uPXXJ8OCZx76afynB+N5ckWJM0/TXlOaWgSirqVHS6zX84xdlgI94UesSS1UVd5Xpz
+         CX3RKbO98vx++VHGbFVGU3hK2S0kaRrD+AdUltTQU7CI1FB/kIO618i02k9bXfPvJYRh
+         yURxoekvQjwLYaSazatZo//nVYImDQ6AQSBrEakYDFHLK1D7k1pfKYFOyspK/rIDew0I
+         Lj0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=LkouQoHke2anJQVlx6D+TqgyIrZywjU7nWFfQMQRPxY=;
-        b=IaoktVMbudr/fHrhE+CxpY1rBRqQTpcknDAhdzb1jJQ7JcXyt44IwAcGinmLmDdXK7
-         MnL/Rq4QViZrrv2XXBBZwRXJ9DBJv57DV3UqhgWcB6N2Dn78WG1GE5iaCwrjiRTqDe1b
-         LbaQoqRcqZ+RP9E9cg9v0iI7AlGMbWC3t8VIGYWwSDv1ORiXXMUsuMLg9oj6MjwE3FSv
-         jGE3/Z9U5KhIksGVru+/wltHZGLRzqBKbAnKXgRDk6wCAzeugwb+ve9NtHiMRzCtc10W
-         G3grDsCpQ5dNi6JkNVsFWEg1FgVaopBybnfb+Qh4qaUw6BEPUuDuSdl8dPbBYkOPBwCv
-         fTrw==
-X-Gm-Message-State: AOAM533+wYF8ODTZ5Nl/R3QIU/APLb83cDIat5P3y/TmV+bfaJe4RNTK
-        BgU6kh20r6sNwPQ7Cu4eSnMsG61qeDpQAyIV
-X-Google-Smtp-Source: ABdhPJyJ9Aq31+G1+lnPE1SoJrpmby5XBaFqfCWelPv22Qs8OsJUd5sgrtDCiioNfRvfhmWAbrZsdQ==
-X-Received: by 2002:a50:e083:: with SMTP id f3mr18754edl.223.1607250461360;
-        Sun, 06 Dec 2020 02:27:41 -0800 (PST)
+        bh=pU/BEnvHNZor0iOPVM1/S+HqmPaJIMs/busMwuezIyY=;
+        b=R7h1zRFM3ywU+CY0HvNMZ0jvcUQoKpsdPgah3f9XH6EwVHGXGM0cgEKoN0ntHOQXnQ
+         Eywdf1BzcE903BlfivHSGIrAgxkpYyhxv3AMDsZaIksIQhU2bxLU7UV9t72DLhD4jR7l
+         hUpQ+ROwaQIG/E16QucBjXmzp052eqY7b4/2AOnOYTD8OYMFTuBRUy0ym/2/FvmXYtIl
+         bqspOdwxfy4+YXHsdp7TAvmn9MU2zx34eTdHh9ZUozc9go8Mtdjwv183uqmBSdWtyNXl
+         E7MlkRLn8TpYTW8Nz/ipk04bDYONrnobPlY2xkWWYCWrRcTiArilheNOzzn3UN6KsuKe
+         r+kQ==
+X-Gm-Message-State: AOAM533xSLc8dAIogioLljxe1fhnNY1S9OdERHH6h+17V2tPPAJfQrSc
+        rixrszkD0BBAxsxx7a4npXCoOzCfj5/dqU2s
+X-Google-Smtp-Source: ABdhPJzXuBijI/Qs1l+neDIo/NCCBqMc6zjMVX1WW4Sj311JbA8DINf9lAsCJ0idkex36y7FaU+4OQ==
+X-Received: by 2002:a17:906:7ac7:: with SMTP id k7mr14437474ejo.454.1607250466782;
+        Sun, 06 Dec 2020 02:27:46 -0800 (PST)
 Received: from localhost.localdomain (hst-221-17.medicom.bg. [84.238.221.17])
-        by smtp.gmail.com with ESMTPSA id d4sm8464736edq.36.2020.12.06.02.27.40
+        by smtp.gmail.com with ESMTPSA id d4sm8464736edq.36.2020.12.06.02.27.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Dec 2020 02:27:40 -0800 (PST)
+        Sun, 06 Dec 2020 02:27:46 -0800 (PST)
 From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
@@ -62,9 +62,9 @@ Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
         Maheshwar Ajja <majja@codeaurora.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH v2 1/4] media: v4l2-ctrls: Add intra-refresh period control
-Date:   Sun,  6 Dec 2020 12:27:14 +0200
-Message-Id: <20201206102717.19000-2-stanimir.varbanov@linaro.org>
+Subject: [PATCH v2 4/4] venus: venc: Add support for AUD NALU control
+Date:   Sun,  6 Dec 2020 12:27:17 +0200
+Message-Id: <20201206102717.19000-5-stanimir.varbanov@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20201206102717.19000-1-stanimir.varbanov@linaro.org>
 References: <20201206102717.19000-1-stanimir.varbanov@linaro.org>
@@ -72,69 +72,85 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a control to set intra-refresh period.
+Add support for Access Unit Delimiter control into encoder.
 
 Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 ---
- .../userspace-api/media/v4l/ext-ctrls-codec.rst       | 11 +++++++++++
- drivers/media/v4l2-core/v4l2-ctrls.c                  |  2 ++
- include/uapi/linux/v4l2-controls.h                    |  1 +
- 3 files changed, 14 insertions(+)
+ drivers/media/platform/qcom/venus/core.h       |  1 +
+ drivers/media/platform/qcom/venus/venc.c       | 14 ++++++++++++++
+ drivers/media/platform/qcom/venus/venc_ctrls.c |  8 +++++++-
+ 3 files changed, 22 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index 454ecd9a0f83..d65d7c1381b7 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -1104,6 +1104,17 @@ enum v4l2_mpeg_video_h264_entropy_mode -
-     macroblocks is refreshed until the cycle completes and starts from
-     the top of the frame. Applicable to H264, H263 and MPEG4 encoder.
+diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
+index 097fca39eb79..f105a34ded5a 100644
+--- a/drivers/media/platform/qcom/venus/core.h
++++ b/drivers/media/platform/qcom/venus/core.h
+@@ -243,6 +243,7 @@ struct venc_controls {
  
-+``V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD (integer)``
-+    Intra macroblock refresh period. This sets the period to refresh
-+    the whole frame. With other words, this defines the number of frames
-+    for which the whole frame will be intra-refreshed.  An example:
-+    setting period to 1 means that the whole frame will be refreshed,
-+    setting period to 2 means that the half of macroblocks will be
-+    intra-refreshed on frameX and the other half of macroblocks
-+    will be refreshed in frameX + 1 and so on. Setting period to zero
-+    means no period is specified.
-+    Applicable to H264 and HEVC encoders.
+ 	u32 header_mode;
+ 	u32 intra_refresh_period;
++	bool aud_enable;
+ 
+ 	struct {
+ 		u32 h264;
+diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
+index 615d90612ebc..99e0a82a31e0 100644
+--- a/drivers/media/platform/qcom/venus/venc.c
++++ b/drivers/media/platform/qcom/venus/venc.c
+@@ -745,6 +745,20 @@ static int venc_set_properties(struct venus_inst *inst)
+ 			return ret;
+ 	}
+ 
++	if (inst->fmt_cap->pixfmt == V4L2_PIX_FMT_H264 ||
++	    inst->fmt_cap->pixfmt == V4L2_PIX_FMT_HEVC) {
++		struct hfi_enable en = {};
 +
- ``V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE (boolean)``
-     Frame level rate control enable. If this control is disabled then
-     the quantization parameter for each frame type is constant and set
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 5cbe0ffbf501..ac44848d2d6e 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -869,6 +869,7 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_MPEG_VIDEO_DECODER_SLICE_INTERFACE:	return "Decoder Slice Interface";
- 	case V4L2_CID_MPEG_VIDEO_DECODER_MPEG4_DEBLOCK_FILTER:	return "MPEG4 Loop Filter Enable";
- 	case V4L2_CID_MPEG_VIDEO_CYCLIC_INTRA_REFRESH_MB:	return "Number of Intra Refresh MBs";
-+	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD:		return "Intra Refresh Period";
- 	case V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE:		return "Frame Level Rate Control Enable";
- 	case V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE:			return "H264 MB Level Rate Control";
- 	case V4L2_CID_MPEG_VIDEO_HEADER_MODE:			return "Sequence Header Mode";
-@@ -1260,6 +1261,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
- 		break;
- 	case V4L2_CID_MPEG_VIDEO_MV_H_SEARCH_RANGE:
- 	case V4L2_CID_MPEG_VIDEO_MV_V_SEARCH_RANGE:
-+	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD:
- 		*type = V4L2_CTRL_TYPE_INTEGER;
- 		break;
- 	case V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME:
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index 823b214aac0c..54b9072ac49d 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -422,6 +422,7 @@ enum v4l2_mpeg_video_multi_slice_mode {
- #define V4L2_CID_MPEG_VIDEO_MV_H_SEARCH_RANGE		(V4L2_CID_CODEC_BASE+227)
- #define V4L2_CID_MPEG_VIDEO_MV_V_SEARCH_RANGE		(V4L2_CID_CODEC_BASE+228)
- #define V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME		(V4L2_CID_CODEC_BASE+229)
-+#define V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD	(V4L2_CID_CODEC_BASE+230)
++		ptype = HFI_PROPERTY_PARAM_VENC_H264_GENERATE_AUDNAL;
++
++		if (ctr->aud_enable)
++			en.enable = 1;
++
++		ret = hfi_session_set_property(inst, ptype, &en);
++		if (ret)
++			return ret;
++	}
++
+ 	return 0;
+ }
  
- /* CIDs for the MPEG-2 Part 2 (H.262) codec */
- #define V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL			(V4L2_CID_CODEC_BASE+270)
+diff --git a/drivers/media/platform/qcom/venus/venc_ctrls.c b/drivers/media/platform/qcom/venus/venc_ctrls.c
+index 801026fab89d..a1aa56c74bc5 100644
+--- a/drivers/media/platform/qcom/venus/venc_ctrls.c
++++ b/drivers/media/platform/qcom/venus/venc_ctrls.c
+@@ -211,6 +211,9 @@ static int venc_op_s_ctrl(struct v4l2_ctrl *ctrl)
+ 	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD:
+ 		ctr->intra_refresh_period = ctrl->val;
+ 		break;
++	case V4L2_CID_MPEG_VIDEO_AU_DELIMITER:
++		ctr->aud_enable = ctrl->val;
++		break;
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -226,7 +229,7 @@ int venc_ctrl_init(struct venus_inst *inst)
+ {
+ 	int ret;
+ 
+-	ret = v4l2_ctrl_handler_init(&inst->ctrl_handler, 34);
++	ret = v4l2_ctrl_handler_init(&inst->ctrl_handler, 35);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -381,6 +384,9 @@ int venc_ctrl_init(struct venus_inst *inst)
+ 			  V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD, 0,
+ 			  ((4096 * 2304) >> 8), 1, 0);
+ 
++	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
++			  V4L2_CID_MPEG_VIDEO_AU_DELIMITER, 0, 1, 1, 0);
++
+ 	ret = inst->ctrl_handler.error;
+ 	if (ret)
+ 		goto err;
 -- 
 2.17.1
 
