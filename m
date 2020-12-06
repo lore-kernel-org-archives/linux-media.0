@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43550C4361B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A593C19425
 	for <linux-media@archiver.kernel.org>; Sun,  6 Dec 2020 23:04:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0088423107
-	for <linux-media@archiver.kernel.org>; Sun,  6 Dec 2020 23:04:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3C6D92310E
+	for <linux-media@archiver.kernel.org>; Sun,  6 Dec 2020 23:04:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727350AbgLFXEI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 6 Dec 2020 18:04:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38846 "EHLO
+        id S1727661AbgLFXEJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 6 Dec 2020 18:04:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726400AbgLFXEI (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 6 Dec 2020 18:04:08 -0500
+        with ESMTP id S1726046AbgLFXEJ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 6 Dec 2020 18:04:09 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6B0C0613D0
-        for <linux-media@vger.kernel.org>; Sun,  6 Dec 2020 15:03:27 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A945C0613D1
+        for <linux-media@vger.kernel.org>; Sun,  6 Dec 2020 15:03:29 -0800 (PST)
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 08D788D;
-        Mon,  7 Dec 2020 00:03:25 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 547BF335;
+        Mon,  7 Dec 2020 00:03:27 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1607295806;
-        bh=XVdpIArv+ElsH2NjoiijiSGAT1EI1s6rvXGfzT1FsmE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=N7hawi6NvKQ9yxGW+o2arQUCBfW5thLZJzedqwQRiqLsVbvs5WaXLCt9TIQ79xcA+
-         g7vwuQ9jlN5NbMEdFTNgRmrB9xzmTp7JWMU+Yg5otsNBo/+0d8xJ+Z/uy+OHa4AFjo
-         4l5AMvFBWg4yuTdhqvl2FXGCM9CBw/XY3lj9ZJTk=
+        s=mail; t=1607295807;
+        bh=DUTopEqNhJ9EAtSosuXpav/CyRvQXwLcilWtqwLBIjQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=hHyxkmpeaL7VU6uA/+Q378+fBbPGz84z2gijXoUvj7LPTEhL+bclxNhoS7kNAhLjU
+         ROjAB0W8RqsPiBeT7K6WHoWL2Dgbo6PPn9lwUGyTBIcXl46avygR/8TyyPIS8j5M5Q
+         1HX9weW6VMO0onUlYpcGYJNvbM05ygUVqUC2rJlI=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -39,153 +39,47 @@ Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Dylan Yip <dylany@xilinx.com>,
         Vishal Sagar <vsagar@xilinx.com>,
         Nicolas Dufresne <nicolas@ndufresne.ca>
-Subject: [PATCH v4 00/16] media: Rework RGB and YUV pixel formats documentation
-Date:   Mon,  7 Dec 2020 01:03:00 +0200
-Message-Id: <20201206230316.1221-1-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v4 02/16] media: videodev2.h: Move HI240 format to vendor-specific section
+Date:   Mon,  7 Dec 2020 01:03:02 +0200
+Message-Id: <20201206230316.1221-3-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20201206230316.1221-1-laurent.pinchart@ideasonboard.com>
+References: <20201206230316.1221-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+V4L2_PIX_FMT_HI240 is a 8-bit dithered RGB format specific to BTTV. Move
+it from the packed YUV formats section where it was misplaced to the
+vendor-specific formats section.
 
-This patch series reworks the RGB and YUV pixel formats documentation to
-make it easier to read and easier to maintain (the only part that isn't
-quite easy is reviewing the patches :-)). It was previously part of the
-"[PATCH v3 00/21] media: Add new pixel formats for Xilinx v-frmbuf"
-([1]) series, and got split out as it can be merged on its own. The
-patches have been rebased on top of the latest media master tree, but
-are otherwise unchanged.
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ include/uapi/linux/videodev2.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Documentation of the pixel formats has grown organically in V4L2, and
-while it is fairly complete and detailed, it also duplicates lots of
-information. I've thus decided to bite the bullet, and try to
-consolidate the documentation first before adding new formats.
-
-The first three patches address minor issues in videodev2.h, removing a
-comment that belongs to a commit message instead (01/16) and moving two
-misplaced formats to where they belong (02/16 and 03/16).
-
-The next five patches refactor documentation for the RGB formats. Patch
-04/16 removes a confusing table (that likely made sense when it was
-added, but not anymore), 05/16 adds a section title for the deprecated
-RGB formats to increase clarity, and patch 06/16 documents the naming
-scheme followed by our RGB formats. There are two separate naming
-schemes, used by 8- and 16-bit formats on one side, and 24- and 32-bit
-formats on the other side. The former matches the naming conventions of
-DRM, while the latter doesn't, which has often led to confusion and
-errors. This can't be changed, but it's now clearly documented. Patch
-07/16 makes the 8bpc formats table more compact, and patch 08/16
-replaces '-' with 'x' to denote padding bits.
-
-Patch 09/16 then moves to the RGB formats, adding extra documentation
-about chroma subsampling. Patch 10/16 moves all the packed YUV formats
-to the file that carries that title, as documenting "Packed YUV formats"
-and UYVY/VYUY/YUYV/YVYU is confusing and can only be explained by
-historical reasons. These changes allow consolidating duplicated
-documentation that was copied in multiple files.
-
-Patch 11/16 makes the packed YUV table a bit less confusing by adding
-'X' characters to denote padding bits instead of leaving the
-corresponding cells blank. Patch 12/16 then consolidates the packed YUV
-4:4:4 format documentation in a more compact way, increasing readability
-by avoiding too wide tables. Patch 13/16 explains the packed YUV format
-naming scheme, similarly to what has been done for RGB formats earlier
-in the series.
-
-Next come the luma-only, semi-planar and planar YUV formats. Patches
-14/16, 15/16 and 16/16 consolidate them respectively in one file for the
-luma formats and one file for the planar and semi-planar formats,
-documenting them in consolidated tables. Navigation of the documentation
-becomes simpler as a result.
-
-[1] https://lore.kernel.org/linux-media/20201116185207.13208-1-laurent.pinchart@ideasonboard.com/
-
-Laurent Pinchart (16):
-  media: videodev2.h: Remove unneeded comment about 4CC value
-  media: videodev2.h: Move HI240 format to vendor-specific section
-  media: videodev2.h: Move HM12 format to YUV semi-planar section
-  media: doc: pixfmt-rgb: Remove layout table for packed RGB formats
-  media: doc: pixfmt-rgb: Add title for deprecated formats
-  media: doc: pixfmt-rgb: Clarify naming scheme for RGB formats
-  media: doc: pixfmt-rgb: Make 8 bits per component table more compact
-  media: doc: pixfmt-rgb: Replace '-' with 'X' to denote padding
-  media: doc: pixfmt-yuv: Document subsampling in more details
-  media: doc: pixfmt-yuv: Move all packed YUV formats to common file
-  media: doc: pixfmt-packed-yuv: Fill padding bits with 'X'
-  media: doc: pixfmt-packed-yuv: Express 4:4:4 formats in a more compact
-    way
-  media: doc: pixfmt-packed-yuv: Clarify naming scheme for 4:4:4 formats
-  media: doc: pixfmt-yuv: Move all luma-only YUV formats to common file
-  media: doc: pixfmt-yuv: Move all semi-planar YUV formats to common
-    file
-  media: doc: pixfmt-yuv: Move all planar YUV formats to common file
-
- .../userspace-api/media/v4l/pixfmt-grey.rst   |  44 -
- .../userspace-api/media/v4l/pixfmt-m420.rst   |  59 +-
- .../userspace-api/media/v4l/pixfmt-nv12.rst   | 129 ---
- .../userspace-api/media/v4l/pixfmt-nv12m.rst  | 144 ---
- .../userspace-api/media/v4l/pixfmt-nv12mt.rst |  60 --
- .../userspace-api/media/v4l/pixfmt-nv16.rst   | 153 ---
- .../userspace-api/media/v4l/pixfmt-nv16m.rst  | 157 ---
- .../userspace-api/media/v4l/pixfmt-nv24.rst   |  95 --
- .../media/v4l/pixfmt-packed-yuv.rst           | 420 ++++----
- .../userspace-api/media/v4l/pixfmt-rgb.rst    | 701 ++++---------
- .../userspace-api/media/v4l/pixfmt-uyvy.rst   | 110 --
- .../userspace-api/media/v4l/pixfmt-vyuy.rst   | 108 --
- .../userspace-api/media/v4l/pixfmt-y10.rst    |  65 --
- .../userspace-api/media/v4l/pixfmt-y10b.rst   |  33 -
- .../userspace-api/media/v4l/pixfmt-y10p.rst   |  43 -
- .../userspace-api/media/v4l/pixfmt-y12.rst    |  65 --
- .../userspace-api/media/v4l/pixfmt-y14.rst    |  65 --
- .../userspace-api/media/v4l/pixfmt-y16-be.rst |  69 --
- .../userspace-api/media/v4l/pixfmt-y16.rst    |  69 --
- .../userspace-api/media/v4l/pixfmt-y41p.rst   | 151 ---
- .../media/v4l/pixfmt-yuv-luma.rst             | 126 +++
- .../media/v4l/pixfmt-yuv-planar.rst           | 950 ++++++++++++++++++
- .../userspace-api/media/v4l/pixfmt-yuv410.rst | 127 ---
- .../media/v4l/pixfmt-yuv411p.rst              | 115 ---
- .../userspace-api/media/v4l/pixfmt-yuv420.rst | 143 ---
- .../media/v4l/pixfmt-yuv420m.rst              | 152 ---
- .../media/v4l/pixfmt-yuv422m.rst              | 141 ---
- .../media/v4l/pixfmt-yuv422p.rst              | 129 ---
- .../media/v4l/pixfmt-yuv444m.rst              | 141 ---
- .../userspace-api/media/v4l/pixfmt-yuyv.rst   | 118 ---
- .../userspace-api/media/v4l/pixfmt-yvyu.rst   | 108 --
- .../userspace-api/media/v4l/yuv-formats.rst   | 278 ++++-
- include/uapi/linux/videodev2.h                |  14 +-
- 33 files changed, 1733 insertions(+), 3549 deletions(-)
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-grey.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-nv12.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-nv12m.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-nv12mt.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-nv16.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-nv16m.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-nv24.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-uyvy.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-vyuy.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-y10.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-y10b.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-y10p.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-y12.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-y14.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-y16-be.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-y16.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-y41p.rst
- create mode 100644 Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
- create mode 100644 Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-yuv410.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-yuv411p.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-yuv420.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-yuv420m.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-yuv422m.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-yuv422p.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-yuv444m.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-yuyv.rst
- delete mode 100644 Documentation/userspace-api/media/v4l/pixfmt-yvyu.rst
-
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 3f58ab463f6c..01140ac57be2 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -589,7 +589,6 @@ struct v4l2_pix_format {
+ #define V4L2_PIX_FMT_XYUV32  v4l2_fourcc('X', 'Y', 'U', 'V') /* 32  XYUV-8-8-8-8  */
+ #define V4L2_PIX_FMT_VUYA32  v4l2_fourcc('V', 'U', 'Y', 'A') /* 32  VUYA-8-8-8-8  */
+ #define V4L2_PIX_FMT_VUYX32  v4l2_fourcc('V', 'U', 'Y', 'X') /* 32  VUYX-8-8-8-8  */
+-#define V4L2_PIX_FMT_HI240   v4l2_fourcc('H', 'I', '2', '4') /*  8  8-bit color   */
+ #define V4L2_PIX_FMT_HM12    v4l2_fourcc('H', 'M', '1', '2') /*  8  YUV 4:2:0 16x16 macroblocks */
+ #define V4L2_PIX_FMT_M420    v4l2_fourcc('M', '4', '2', '0') /* 12  YUV 4:2:0 2 lines y, 1 line uv interleaved */
+ 
+@@ -733,6 +732,7 @@ struct v4l2_pix_format {
+ #define V4L2_PIX_FMT_INZI     v4l2_fourcc('I', 'N', 'Z', 'I') /* Intel Planar Greyscale 10-bit and Depth 16-bit */
+ #define V4L2_PIX_FMT_SUNXI_TILED_NV12 v4l2_fourcc('S', 'T', '1', '2') /* Sunxi Tiled NV12 Format */
+ #define V4L2_PIX_FMT_CNF4     v4l2_fourcc('C', 'N', 'F', '4') /* Intel 4-bit packed depth confidence information */
++#define V4L2_PIX_FMT_HI240    v4l2_fourcc('H', 'I', '2', '4') /* BTTV 8-bit dithered RGB */
+ 
+ /* 10bit raw bayer packed, 32 bytes for every 25 pixels, last LSB 6 bits unused */
+ #define V4L2_PIX_FMT_IPU3_SBGGR10	v4l2_fourcc('i', 'p', '3', 'b') /* IPU3 packed 10-bit BGGR bayer */
 -- 
 Regards,
 
