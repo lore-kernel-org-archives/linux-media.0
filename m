@@ -7,74 +7,124 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88DFDC1B0D9
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6672DC0018C
 	for <linux-media@archiver.kernel.org>; Mon,  7 Dec 2020 21:27:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 68F762396D
+	by mail.kernel.org (Postfix) with ESMTP id 20AFF238EE
 	for <linux-media@archiver.kernel.org>; Mon,  7 Dec 2020 21:27:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727431AbgLGV0u (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727418AbgLGV0u (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 7 Dec 2020 16:26:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48794 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726061AbgLGV0t (ORCPT
+        with ESMTP id S1726241AbgLGV0t (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Mon, 7 Dec 2020 16:26:49 -0500
 Received: from hillosipuli.retiisi.eu (unknown [IPv6:2a01:4f9:c010:4572::e8:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E53C0611C5
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94889C0611CB
         for <linux-media@vger.kernel.org>; Mon,  7 Dec 2020 13:23:22 -0800 (PST)
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 15C59634C95;
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 3804F634C97;
         Mon,  7 Dec 2020 23:23:13 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     mchehab@kernel.org
-Subject: [PATCH 11/24] ccs: Add debug prints for MSR registers
-Date:   Mon,  7 Dec 2020 23:15:17 +0200
-Message-Id: <20201207211530.21180-12-sakari.ailus@linux.intel.com>
+Subject: [PATCH 13/24] ccs: Add shading correction and luminance correction level controls
+Date:   Mon,  7 Dec 2020 23:15:19 +0200
+Message-Id: <20201207211530.21180-14-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201207211530.21180-1-sakari.ailus@linux.intel.com>
 References: <20201207211530.21180-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Also print out MSR registers written to the sensor. This isn't entirely
-optimal as the debug strings are produced even if they're not used but
-that isn't really a grave issue --- the I²C bus is very slow anyway.
+Add controls for supporting lens shading correction, including colour
+shading and luminance correction level.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-reg-access.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/media/i2c/ccs/ccs-core.c | 46 ++++++++++++++++++++++++++++++++
+ drivers/media/i2c/ccs/ccs.h      |  1 +
+ 2 files changed, 47 insertions(+)
 
-diff --git a/drivers/media/i2c/ccs/ccs-reg-access.c b/drivers/media/i2c/ccs/ccs-reg-access.c
-index b776af2a3c33..5f0705952198 100644
---- a/drivers/media/i2c/ccs/ccs-reg-access.c
-+++ b/drivers/media/i2c/ccs/ccs-reg-access.c
-@@ -387,12 +387,20 @@ int ccs_write_data_regs(struct ccs_sensor *sensor, struct ccs_reg *regs,
+diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
+index 7591a52a41a4..12c30fb0f37a 100644
+--- a/drivers/media/i2c/ccs/ccs-core.c
++++ b/drivers/media/i2c/ccs/ccs-core.c
+@@ -756,6 +756,19 @@ static int ccs_set_ctrl(struct v4l2_ctrl *ctrl)
+ 	case V4L2_CID_TEST_PATTERN_GREENB:
+ 		rval = ccs_write(sensor, TEST_DATA_GREENB, ctrl->val);
  
- 		for (j = 0; j < regs->len;
- 		     j += msg.len - 2, regdata += msg.len - 2) {
-+			char printbuf[(MAX_WRITE_LEN << 1) +
-+				      1 /* \0 */] = { 0 };
- 			int rval;
- 
- 			msg.len = min(regs->len - j, MAX_WRITE_LEN);
- 
-+			bin2hex(printbuf, regdata, msg.len);
-+			dev_dbg(&client->dev,
-+				"writing msr reg 0x%4.4x value 0x%s\n",
-+				regs->addr + j, printbuf);
++		break;
++	case V4L2_CID_CCS_SHADING_CORRECTION:
++		rval = ccs_write(sensor, SHADING_CORRECTION_EN,
++				 ctrl->val ? CCS_SHADING_CORRECTION_EN_ENABLE :
++				 0);
 +
- 			put_unaligned_be16(regs->addr + j, buf);
- 			memcpy(buf + 2, regdata, msg.len);
++		if (!rval && sensor->luminance_level)
++			v4l2_ctrl_activate(sensor->luminance_level, ctrl->val);
 +
- 			msg.len += 2;
++		break;
++	case V4L2_CID_CCS_LUMINANCE_CORRECTION_LEVEL:
++		rval = ccs_write(sensor, LUMINANCE_CORRECTION_LEVEL, ctrl->val);
++
+ 		break;
+ 	case V4L2_CID_PIXEL_RATE:
+ 		/* For v4l2_ctrl_s_ctrl_int64() used internally. */
+@@ -877,6 +890,39 @@ static int ccs_init_controls(struct ccs_sensor *sensor)
+ 	}
+ 	}
  
- 			rval = ccs_write_retry(client, &msg);
++	if (CCS_LIM(sensor, SHADING_CORRECTION_CAPABILITY) &
++	    (CCS_SHADING_CORRECTION_CAPABILITY_COLOR_SHADING |
++	     CCS_SHADING_CORRECTION_CAPABILITY_LUMINANCE_CORRECTION)) {
++		const struct v4l2_ctrl_config ctrl_cfg = {
++			.name = "Shading Correction",
++			.type = V4L2_CTRL_TYPE_BOOLEAN,
++			.id = V4L2_CID_CCS_SHADING_CORRECTION,
++			.ops = &ccs_ctrl_ops,
++			.max = 1,
++			.step = 1,
++		};
++
++		v4l2_ctrl_new_custom(&sensor->pixel_array->ctrl_handler,
++				     &ctrl_cfg, NULL);
++	}
++
++	if (CCS_LIM(sensor, SHADING_CORRECTION_CAPABILITY) &
++	    CCS_SHADING_CORRECTION_CAPABILITY_LUMINANCE_CORRECTION) {
++		const struct v4l2_ctrl_config ctrl_cfg = {
++			.name = "Luminance Correction Level",
++			.type = V4L2_CTRL_TYPE_BOOLEAN,
++			.id = V4L2_CID_CCS_LUMINANCE_CORRECTION_LEVEL,
++			.ops = &ccs_ctrl_ops,
++			.max = 255,
++			.step = 1,
++			.def = 128,
++		};
++
++		sensor->luminance_level =
++			v4l2_ctrl_new_custom(&sensor->pixel_array->ctrl_handler,
++					     &ctrl_cfg, NULL);
++	}
++
+ 	if (CCS_LIM(sensor, DIGITAL_GAIN_CAPABILITY) ==
+ 	    CCS_DIGITAL_GAIN_CAPABILITY_GLOBAL ||
+ 	    CCS_LIM(sensor, DIGITAL_GAIN_CAPABILITY) ==
+diff --git a/drivers/media/i2c/ccs/ccs.h b/drivers/media/i2c/ccs/ccs.h
+index 9fc3333f6c4e..cc33c9ba3165 100644
+--- a/drivers/media/i2c/ccs/ccs.h
++++ b/drivers/media/i2c/ccs/ccs.h
+@@ -268,6 +268,7 @@ struct ccs_sensor {
+ 	struct v4l2_ctrl *vblank;
+ 	struct v4l2_ctrl *hblank;
+ 	struct v4l2_ctrl *pixel_rate_parray;
++	struct v4l2_ctrl *luminance_level;
+ 	/* src controls */
+ 	struct v4l2_ctrl *link_freq;
+ 	struct v4l2_ctrl *pixel_rate_csi;
 -- 
 2.29.2
 
