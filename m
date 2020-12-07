@@ -2,93 +2,142 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 640F2C352A2
-	for <linux-media@archiver.kernel.org>; Mon,  7 Dec 2020 16:35:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C143C4361B
+	for <linux-media@archiver.kernel.org>; Mon,  7 Dec 2020 16:48:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2C863238E5
-	for <linux-media@archiver.kernel.org>; Mon,  7 Dec 2020 16:35:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2EF6723884
+	for <linux-media@archiver.kernel.org>; Mon,  7 Dec 2020 16:48:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727776AbgLGQel (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Dec 2020 11:34:41 -0500
-Received: from mga12.intel.com ([192.55.52.136]:51450 "EHLO mga12.intel.com"
+        id S1727776AbgLGQr4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Dec 2020 11:47:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43076 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727787AbgLGQek (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 7 Dec 2020 11:34:40 -0500
-IronPort-SDR: QZJBdVm4QQdZzng+D4Haj/djl9+en+uOxh0UsT1GK1KyOsnYEiohQLyXWpE/QQRUiwgUcChmMb
- 1Q26I/lxxGVw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9827"; a="152970118"
-X-IronPort-AV: E=Sophos;i="5.78,400,1599548400"; 
-   d="scan'208";a="152970118"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2020 08:32:54 -0800
-IronPort-SDR: coNPy9GHDOkBDjLa82uh0mCydYyGFT5e8cF+5+dl1vrR0E0dThdvnumCB4Bqn+s9sGK+PF5jeU
- pPgSyaGEQxVQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,400,1599548400"; 
-   d="scan'208";a="317246201"
-Received: from maru.jf.intel.com ([10.54.51.77])
-  by fmsmga008.fm.intel.com with ESMTP; 07 Dec 2020 08:32:53 -0800
-From:   Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-To:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-        Eddie James <eajames@linux.ibm.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     linux-clk@vger.kernel.org, linux-media@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-aspeed@lists.ozlabs.org,
-        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Subject: [PATCH 0/2] Fix kernel panic issues caused by AST2500 Video Engine
-Date:   Mon,  7 Dec 2020 08:42:38 -0800
-Message-Id: <20201207164240.15436-1-jae.hyun.yoo@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
+        id S1725804AbgLGQr4 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 7 Dec 2020 11:47:56 -0500
+Date:   Mon, 7 Dec 2020 17:47:11 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607359635;
+        bh=WcdOsNuKeMvdD97qjOLJlLjaDKkTuzP98XaF2CP3RYI=;
+        h=From:To:Cc:Subject:From;
+        b=IIrhefoQZ/ZxayO2m3a9KW0KGdid0gZ1NR20g8WzmKbnulF5e18K3ACabamLkdb/J
+         Q6oD4zdMM4IfjG8QbEjewclmdmO33aMszE34cjZxXmae+jFz3mC8cmFZ4yOL0socxM
+         jOqJr7KhwBSm9lb8Q1StyRWYbKIJegy0D0+2ILPoV3Dn3S9pxX9t8KnTEAhEAGzHQ+
+         uzs+sPyjISOfeL2brCshrkipBnQ6uEnrNfE2IoOLM4t8QahyKWfLr6wz4J+StxX7Hj
+         UHurdO8dO+q+nfpJpBcY9pnZgFpNGT4jF5cXt+IHFlK//3H0wa9mbxnNWnO1tK5rnm
+         vPeE99Sr1DQkg==
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     linux-media@vger.kernel.org
+Subject: Bug on qv4l2
+Message-ID: <20201207174711.4ec44c8d@coco.lan>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Video engine uses eclk and vclk for its clock sources and its reset
-control is coupled with eclk so the current clock enabling sequence works
-like below.
+Hi Hans,
 
- Enable eclk
- De-assert Video Engine reset
- 10ms delay
- Enable vclk
+While trying to use the upstream version of qv4l2, I got a crash when trying to
+stream:
 
-It introduces improper reset on the Video Engine hardware and eventually
-the hardware generates unexpected DMA memory transfers that can corrupt
-memory region in random and sporadic patterns. This issue is observed
-very rarely on some specific AST2500 SoCs but it causes a critical
-kernel panic with making a various shape of signature so it's extremely
-hard to debug. Moreover, the issue is observed even when the video
-engine is not actively used because udevd turns on the video engine
-hardware for a short time to make a query in every boot.
+Thread 1 "qv4l2" received signal SIGSEGV, Segmentation fault.
+0x00007ffff741e350 in QScreen::availableSize() const () from /lib64/libQt5Gui.so.5
+(gdb) bt
+#0  0x00007ffff741e350 in QScreen::availableSize() const () at /lib64/libQt5Gui.so.5
+#1  0x0000000000442e48 in CaptureWin::setWindowSize(QSize) (this=0x671060, frameSize=frameSize@entry=...) at capture-win.cpp:247
+#2  0x000000000041c057 in ApplicationWindow::capStart(bool) (this=0x936800, start=<optimized out>) at qv4l2.cpp:1588
+#3  0x00007ffff7036290 in void doActivate<false>(QObject*, int, void**) () at /lib64/libQt5Core.so.5
+#4  0x00007ffff79f6bc2 in QAction::toggled(bool) () at /lib64/libQt5Widgets.so.5
+#5  0x00007ffff79f9272 in QAction::setChecked(bool) () at /lib64/libQt5Widgets.so.5
+#6  0x00007ffff79f9373 in QAction::activate(QAction::ActionEvent) () at /lib64/libQt5Widgets.so.5
+#7  0x00007ffff7aebfe2 in QAbstractButtonPrivate::click() () at /lib64/libQt5Widgets.so.5
+#8  0x00007ffff7aec101 in QAbstractButton::mouseReleaseEvent(QMouseEvent*) () at /lib64/libQt5Widgets.so.5
+#9  0x00007ffff7bdbada in QToolButton::mouseReleaseEvent(QMouseEvent*) () at /lib64/libQt5Widgets.so.5
+#10 0x00007ffff7a3cfbe in QWidget::event(QEvent*) () at /lib64/libQt5Widgets.so.5
+#11 0x00007ffff79fd15f in QApplicationPrivate::notify_helper(QObject*, QEvent*) () at /lib64/libQt5Widgets.so.5
+#12 0x00007ffff7a0404b in QApplication::notify(QObject*, QEvent*) () at /lib64/libQt5Widgets.so.5
+#13 0x00007ffff7007be8 in QCoreApplication::notifyInternal2(QObject*, QEvent*) () at /lib64/libQt5Core.so.5
+#14 0x00007ffff7a03076 in QApplicationPrivate::sendMouseEvent(QWidget*, QMouseEvent*, QWidget*, QWidget*, QWidget**, QPointer<QWidget>&, bool, bool) () at /lib64/libQt5Widgets.so.5
+#15 0x00007ffff7a55021 in QWidgetWindow::handleMouseEvent(QMouseEvent*) () at /lib64/libQt5Widgets.so.5
+#16 0x00007ffff7a5834e in QWidgetWindow::event(QEvent*) () at /lib64/libQt5Widgets.so.5
+#17 0x00007ffff79fd15f in QApplicationPrivate::notify_helper(QObject*, QEvent*) () at /lib64/libQt5Widgets.so.5
+#18 0x00007ffff7007be8 in QCoreApplication::notifyInternal2(QObject*, QEvent*) () at /lib64/libQt5Core.so.5
+#19 0x00007ffff73fb8f0 in QGuiApplicationPrivate::processMouseEvent(QWindowSystemInterfacePrivate::MouseEvent*) () at /lib64/libQt5Gui.so.5
+#20 0x00007ffff73dd94b in QWindowSystemInterface::sendWindowSystemEvents(QFlags<QEventLoop::ProcessEventsFlag>) () at /lib64/libQt5Gui.so.5
+#21 0x00007fffe65852aa in xcbSourceDispatch(_GSource*, int (*)(void*), void*) () at /lib64/libQt5XcbQpa.so.5
+#22 0x00007ffff5da67ef in g_main_dispatch (context=0x7fffe0005000) at ../glib/gmain.c:3325
+#23 g_main_context_dispatch (context=0x7fffe0005000) at ../glib/gmain.c:4043
+#24 0x00007ffff5df85d8 in g_main_context_iterate.constprop.0 (context=context@entry=0x7fffe0005000, block=block@entry=1, dispatch=dispatch@entry=1, self=<optimized out>) at ../glib/gmain.c:4119
+#25 0x00007ffff5da3bc3 in g_main_context_iteration (context=0x7fffe0005000, may_block=1) at ../glib/gmain.c:4184
+#26 0x00007ffff7052a2f in QEventDispatcherGlib::processEvents(QFlags<QEventLoop::ProcessEventsFlag>) () at /lib64/libQt5Core.so.5
+#27 0x00007ffff700664b in QEventLoop::exec(QFlags<QEventLoop::ProcessEventsFlag>) () at /lib64/libQt5Core.so.5
+#28 0x00007ffff700e010 in QCoreApplication::exec() () at /lib64/libQt5Core.so.5
+#29 0x0000000000414555 in main(int, char**) (argc=<optimized out>, argv=<optimized out>) at qv4l2.cpp:1930
 
-To fix this issue, this commit changes the clock handling logic to make
-the reset de-assertion triggered after enabling both eclk and vclk. Also,
-it adds clk_unprepare call for a case when probe fails.
+Qt version is 5.15.
 
-In case of AST2600, the video engine reset setting should be coupled with
-eclk to match it with the setting for previous Aspeed SoCs which is defined
-in clk-aspeed.c since all Aspeed SoCs are sharing a single video engine
-driver. Also, reset bit 6 is defined as 'Video Engine' reset in datasheet
-so it should be de-asserted when eclk is enabled. This commit fixes the
-setting too.
+The problem is here:
 
-Please review this patch series.
+	QScreen *screen = QGuiApplication::screenAt(mapToGlobal({width() / 2, 0}));
 
-Jae Hyun Yoo (2):
-  clk: ast2600: fix reset settings for eclk and vclk
-  media: aspeed: fix clock handling logic
+Basically, it returns nothing. I'm using two monitors here.
 
- drivers/clk/clk-ast2600.c             | 4 ++--
- drivers/media/platform/aspeed-video.c | 9 ++++++---
- 2 files changed, 8 insertions(+), 5 deletions(-)
+With the enclosed patch, it works. The patch prints the available
+screens there as:
 
--- 
-2.17.1
+	1 QRect(0,360 1920x1080)
+	2 QRect(1920,0 2560x1440)
+	1 QRect(0,360 1920x1080)
+	2 QRect(1920,0 2560x1440)
 
+not sure why it reports twice... perhaps setWindowSize() is called
+twice?
+
+The enclosed patch is actually a quick hack: if screen is NULL, it
+just use the first one unconditionally.
+
+Funny enough, the capture window always appear at the same screen as
+the main window.
+
+I suspect that you may need a more complex logic there, in order to
+use the right one, specially when using resolutions that are bigger
+than the smallest screen, but would fit fine at the big one.
+
+Regards,
+Mauro
+
+
+diff --git a/utils/qv4l2/capture-win.cpp b/utils/qv4l2/capture-win.cpp
+index 8d9692b5b69a..3012317e1a3e 100644
+--- a/utils/qv4l2/capture-win.cpp
++++ b/utils/qv4l2/capture-win.cpp
+@@ -29,6 +29,7 @@
+ #include <QApplication>
+ #include <QDesktopWidget>
+ #include <QScreen>
++#include <QDebug>
+ 
+ #include <math.h>
+ 
+@@ -244,6 +245,13 @@ void CaptureWin::setWindowSize(QSize frameSize)
+ 	QRect resolution = screen->screenGeometry();
+ #else
+ 	QScreen *screen = QGuiApplication::screenAt(mapToGlobal({width() / 2, 0}));
++	if (!screen) {
++		const auto screens = QGuiApplication::screens();
++		for (int ii = 0; ii < screens.count(); ++ii) {
++			qInfo() << ii + 1 << screens[ii]->geometry();
++		}
++		screen = screens[0];
++	}
+ 	QSize resolution = screen->availableSize();
+ #endif
+ 
