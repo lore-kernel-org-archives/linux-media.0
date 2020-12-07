@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36B15C2BBD4
-	for <linux-media@archiver.kernel.org>; Mon,  7 Dec 2020 21:25:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF379C2BBCF
+	for <linux-media@archiver.kernel.org>; Mon,  7 Dec 2020 21:25:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E22E0238E3
+	by mail.kernel.org (Postfix) with ESMTP id 8F03A2395B
 	for <linux-media@archiver.kernel.org>; Mon,  7 Dec 2020 21:25:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727008AbgLGVZO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Dec 2020 16:25:14 -0500
-Received: from retiisi.eu ([95.216.213.190]:34656 "EHLO hillosipuli.retiisi.eu"
+        id S1726935AbgLGVZJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Dec 2020 16:25:09 -0500
+Received: from retiisi.eu ([95.216.213.190]:34638 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727007AbgLGVZN (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 7 Dec 2020 16:25:13 -0500
+        id S1726494AbgLGVZJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 7 Dec 2020 16:25:09 -0500
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 1E84B634CBF;
-        Mon,  7 Dec 2020 23:23:14 +0200 (EET)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id A428B634CA5;
+        Mon,  7 Dec 2020 23:23:13 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     mchehab@kernel.org
-Subject: [PATCH 24/24] Revert "media: ccs-pll: Fix MODULE_LICENSE"
-Date:   Mon,  7 Dec 2020 23:15:30 +0200
-Message-Id: <20201207211530.21180-25-sakari.ailus@linux.intel.com>
+Subject: [PATCH 19/24] ccs: Add a sanity check for external clock frequency
+Date:   Mon,  7 Dec 2020 23:15:25 +0200
+Message-Id: <20201207211530.21180-20-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201207211530.21180-1-sakari.ailus@linux.intel.com>
 References: <20201207211530.21180-1-sakari.ailus@linux.intel.com>
@@ -37,27 +37,30 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This reverts commit b3c0115e34adcabe12fce8845e24ca6f04c1554e.
-
-As per Documentation/process/license-rules.rst "GPL v2" exists only for
-historical reasons and has the same meaning as "GPL". So revert this
-patch.
+The driver depends on the external clock frequency. Add a sanity check for
+the frequency, by returning an error from probe if it's zero.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs-pll.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/i2c/ccs/ccs-core.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/media/i2c/ccs-pll.c b/drivers/media/i2c/ccs-pll.c
-index 530085693a56..aeb87ba6fe37 100644
---- a/drivers/media/i2c/ccs-pll.c
-+++ b/drivers/media/i2c/ccs-pll.c
-@@ -883,4 +883,4 @@ EXPORT_SYMBOL_GPL(ccs_pll_calculate);
+diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
+index fae8ceded861..08fce285f73a 100644
+--- a/drivers/media/i2c/ccs/ccs-core.c
++++ b/drivers/media/i2c/ccs/ccs-core.c
+@@ -3275,6 +3275,11 @@ static int ccs_probe(struct i2c_client *client)
+ 		return -EINVAL;
+ 	}
  
- MODULE_AUTHOR("Sakari Ailus <sakari.ailus@linux.intel.com>");
- MODULE_DESCRIPTION("Generic MIPI CCS/SMIA/SMIA++ PLL calculator");
--MODULE_LICENSE("GPL v2");
-+MODULE_LICENSE("GPL");
++	if (!sensor->hwcfg.ext_clk) {
++		dev_err(&client->dev, "cannot work with xclk frequency 0\n");
++		return -EINVAL;
++	}
++
+ 	sensor->reset = devm_gpiod_get_optional(&client->dev, "reset",
+ 						GPIOD_OUT_HIGH);
+ 	if (IS_ERR(sensor->reset))
 -- 
 2.29.2
 
