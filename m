@@ -6,35 +6,35 @@ X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AE30C433FE
-	for <linux-media@archiver.kernel.org>; Mon,  7 Dec 2020 12:10:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B24D2C4361B
+	for <linux-media@archiver.kernel.org>; Mon,  7 Dec 2020 12:22:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 66F4323372
-	for <linux-media@archiver.kernel.org>; Mon,  7 Dec 2020 12:10:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 68687233E2
+	for <linux-media@archiver.kernel.org>; Mon,  7 Dec 2020 12:22:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726874AbgLGMKN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Dec 2020 07:10:13 -0500
-Received: from www.linuxtv.org ([130.149.80.248]:49104 "EHLO www.linuxtv.org"
+        id S1727210AbgLGMWT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Dec 2020 07:22:19 -0500
+Received: from www.linuxtv.org ([130.149.80.248]:50508 "EHLO www.linuxtv.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726821AbgLGMKM (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 7 Dec 2020 07:10:12 -0500
+        id S1726748AbgLGMWT (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 7 Dec 2020 07:22:19 -0500
 Received: from builder.linuxtv.org ([140.211.167.10])
         by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <jenkins@linuxtv.org>)
-        id 1kmFKd-0094JH-0c; Mon, 07 Dec 2020 12:09:31 +0000
+        id 1kmFWL-00957a-Df; Mon, 07 Dec 2020 12:21:37 +0000
 Received: from [127.0.0.1] (helo=builder.linuxtv.org)
         by builder.linuxtv.org with esmtp (Exim 4.92)
         (envelope-from <jenkins@linuxtv.org>)
-        id 1kmFNo-0006tC-D6; Mon, 07 Dec 2020 12:12:48 +0000
+        id 1kmFZX-0002ZA-5L; Mon, 07 Dec 2020 12:24:55 +0000
 From:   Jenkins <jenkins@linuxtv.org>
 To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
 Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL for 5.11] Some fixes to the recently merged stuff (#69768)
-Date:   Mon,  7 Dec 2020 12:12:48 +0000
-Message-Id: <20201207121248.26252-1-jenkins@linuxtv.org>
+Subject: Re: [GIT PULL FOR v5.11 or v5.12] Rework RGB and YUV pixel formats (#69836)
+Date:   Mon,  7 Dec 2020 12:24:55 +0000
+Message-Id: <20201207122455.9823-1-jenkins@linuxtv.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20201204120857.GJ4351@valkosipuli.retiisi.org.uk>
+In-Reply-To: <203c4f5f-8d4c-caad-9384-9f55d037ff9e@xs4all.nl>
 References: 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -44,23 +44,44 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: builder@linuxtv.org
 
-Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/20201204120857.GJ4351@valkosipuli.retiisi.org.uk/
+Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/203c4f5f-8d4c-caad-9384-9f55d037ff9e@xs4all.nl/
 Build log: https://builder.linuxtv.org/job/patchwork/80283/
-Build time: 00:02:25
-Link: https://lore.kernel.org/linux-media/20201204120857.GJ4351@valkosipuli.retiisi.org.uk
+Build time: 00:10:49
+Link: https://lore.kernel.org/linux-media/203c4f5f-8d4c-caad-9384-9f55d037ff9e@xs4all.nl
 
-gpg: Signature made Fri 04 Dec 2020 11:52:40 AM UTC
-gpg:                using DSA key 53AC58A5F5948636C04A1BF8141DFA54A1EC8DEA
-gpg:                issuer "sakari.ailus@linux.intel.com"
-gpg: Can't check signature: No public key
+gpg: Signature made Mon 07 Dec 2020 09:32:27 AM UTC
+gpg:                using RSA key AAA7FFBA4D2D77EF4CAEA1421326E0CD23ABDCE5
+gpg: Good signature from "Hans Verkuil <hverkuil-cisco@xs4all.nl>" [unknown]
+gpg:                 aka "Hans Verkuil <hverkuil@xs4all.nl>" [full]
+gpg: Note: This key has expired!
+Primary key fingerprint: 052C DE7B C215 053B 689F  1BCA BD2D 6148 6614 3B4C
+     Subkey fingerprint: AAA7 FFBA 4D2D 77EF 4CAE  A142 1326 E0CD 23AB DCE5
 
-Summary: got 1/3 patches with issues, being 0 at build time
+Summary: got 4/16 patches with issues, being 0 at build time
 
 Error/warnings:
 
-patches/0002-media-ccs-avoid-printing-an-uninitialized-variable.patch:
+patches/0010-media-doc-pixfmt-yuv-Move-all-packed-YUV-formats-to-.patch:
 
    checkpatch.pl:
-	$ cat patches/0002-media-ccs-avoid-printing-an-uninitialized-variable.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:6: WARNING: 'intialization' may be misspelled - perhaps 'initialization'?
+	$ cat patches/0010-media-doc-pixfmt-yuv-Move-all-packed-YUV-formats-to-.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:204: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+
+patches/0014-media-doc-pixfmt-yuv-Move-all-luma-only-YUV-formats-.patch:
+
+   checkpatch.pl:
+	$ cat patches/0014-media-doc-pixfmt-yuv-Move-all-luma-only-YUV-formats-.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:35: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+
+patches/0015-media-doc-pixfmt-yuv-Move-all-semi-planar-YUV-format.patch:
+
+   checkpatch.pl:
+	$ cat patches/0015-media-doc-pixfmt-yuv-Move-all-semi-planar-YUV-format.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:32: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+
+patches/0016-media-doc-pixfmt-yuv-Move-all-planar-YUV-formats-to-.patch:
+
+   checkpatch.pl:
+	$ cat patches/0016-media-doc-pixfmt-yuv-Move-all-planar-YUV-formats-to-.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:527: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
 
