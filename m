@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FA1BC2BB48
-	for <linux-media@archiver.kernel.org>; Mon,  7 Dec 2020 21:25:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13596C2BBCD
+	for <linux-media@archiver.kernel.org>; Mon,  7 Dec 2020 21:25:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3B9162395B
+	by mail.kernel.org (Postfix) with ESMTP id B948C2395A
 	for <linux-media@archiver.kernel.org>; Mon,  7 Dec 2020 21:25:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726718AbgLGVZI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Dec 2020 16:25:08 -0500
-Received: from retiisi.eu ([95.216.213.190]:34618 "EHLO hillosipuli.retiisi.eu"
+        id S1726998AbgLGVZK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Dec 2020 16:25:10 -0500
+Received: from retiisi.eu ([95.216.213.190]:34636 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726494AbgLGVZH (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 7 Dec 2020 16:25:07 -0500
+        id S1726761AbgLGVZK (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 7 Dec 2020 16:25:10 -0500
 Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 5F503634C99;
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 912CD634CA4;
         Mon,  7 Dec 2020 23:23:13 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     mchehab@kernel.org
-Subject: [PATCH 15/24] =?UTF-8?q?ccs:=20Don't=20change=20the=20I=C2=B2C=20?= =?UTF-8?q?address=20just=20for=20software=20reset?=
-Date:   Mon,  7 Dec 2020 23:15:21 +0200
-Message-Id: <20201207211530.21180-16-sakari.ailus@linux.intel.com>
+Subject: [PATCH 18/24] ccs: Hardware requires a delay after starting the clock of lifting reset
+Date:   Mon,  7 Dec 2020 23:15:24 +0200
+Message-Id: <20201207211530.21180-19-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201207211530.21180-1-sakari.ailus@linux.intel.com>
 References: <20201207211530.21180-1-sakari.ailus@linux.intel.com>
@@ -38,33 +38,69 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The sensor's address was changed before resetting and changing the
-address again. Don't do it before reset as it's useless.
+A CCS compliant device requires a delay before the first I²C transaction
+after pulling xshutdown up or starting the external clock. This is what
+the driver does. However, if neither is actually there, there's no need
+for the delay.
+
+This also has the effect of removing an unnecessary delay on ACPI systems
+where ACPI is responsible for the power-up sequence.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 8 --------
- 1 file changed, 8 deletions(-)
+ drivers/media/i2c/ccs/ccs-core.c | 29 ++++++++++++++++-------------
+ 1 file changed, 16 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 11c6de7f55aa..da7a6bd2c820 100644
+index e1b3c5693e01..fae8ceded861 100644
 --- a/drivers/media/i2c/ccs/ccs-core.c
 +++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -1552,14 +1552,6 @@ static int ccs_power_on(struct device *dev)
- 	 * is found.
- 	 */
+@@ -1515,7 +1515,6 @@ static int ccs_power_on(struct device *dev)
+ 	struct ccs_sensor *sensor =
+ 		container_of(ssd, struct ccs_sensor, ssds[0]);
+ 	const struct ccs_device *ccsdev = device_get_match_data(dev);
+-	unsigned int sleep;
+ 	int rval;
  
--	if (sensor->hwcfg.i2c_addr_alt) {
--		rval = ccs_change_cci_addr(sensor);
--		if (rval) {
--			dev_err(dev, "cci address change error\n");
--			goto out_cci_addr_fail;
--		}
+ 	rval = regulator_bulk_enable(ARRAY_SIZE(ccs_regulators),
+@@ -1525,21 +1524,25 @@ static int ccs_power_on(struct device *dev)
+ 		return rval;
+ 	}
+ 
+-	rval = clk_prepare_enable(sensor->ext_clk);
+-	if (rval < 0) {
+-		dev_dbg(dev, "failed to enable xclk\n");
+-		goto out_xclk_fail;
 -	}
--
- 	rval = ccs_write(sensor, SOFTWARE_RESET, CCS_SOFTWARE_RESET_ON);
- 	if (rval < 0) {
- 		dev_err(dev, "software reset failed\n");
++	if (sensor->reset || sensor->xshutdown || sensor->ext_clk) {
++		unsigned int sleep;
++
++		rval = clk_prepare_enable(sensor->ext_clk);
++		if (rval < 0) {
++			dev_dbg(dev, "failed to enable xclk\n");
++			goto out_xclk_fail;
++		}
+ 
+-	gpiod_set_value(sensor->reset, 0);
+-	gpiod_set_value(sensor->xshutdown, 1);
++		gpiod_set_value(sensor->reset, 0);
++		gpiod_set_value(sensor->xshutdown, 1);
+ 
+-	if (ccsdev->flags & CCS_DEVICE_FLAG_IS_SMIA)
+-		sleep = SMIAPP_RESET_DELAY(sensor->hwcfg.ext_clk);
+-	else
+-		sleep = 5000;
++		if (ccsdev->flags & CCS_DEVICE_FLAG_IS_SMIA)
++			sleep = SMIAPP_RESET_DELAY(sensor->hwcfg.ext_clk);
++		else
++			sleep = 5000;
+ 
+-	usleep_range(sleep, sleep);
++		usleep_range(sleep, sleep);
++	}
+ 
+ 	/*
+ 	 * Failures to respond to the address change command have been noticed.
 -- 
 2.29.2
 
