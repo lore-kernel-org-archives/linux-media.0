@@ -7,24 +7,24 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B42B6C2BB40
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 703AAC1B0D9
 	for <linux-media@archiver.kernel.org>; Mon,  7 Dec 2020 04:28:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 86209208C3
+	by mail.kernel.org (Postfix) with ESMTP id 433D120936
 	for <linux-media@archiver.kernel.org>; Mon,  7 Dec 2020 04:28:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728520AbgLGE1f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1728703AbgLGE1f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Sun, 6 Dec 2020 23:27:35 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:8704 "EHLO
+Received: from szxga04-in.huawei.com ([45.249.212.190]:8706 "EHLO
         szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726482AbgLGE1f (ORCPT
+        with ESMTP id S1726483AbgLGE1f (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Sun, 6 Dec 2020 23:27:35 -0500
 Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Cq9H94CQJzkmHd;
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Cq9H94xKTzkmHr;
         Mon,  7 Dec 2020 12:26:13 +0800 (CST)
 Received: from thunder-town.china.huawei.com (10.174.177.9) by
  DGGEMS401-HUB.china.huawei.com (10.3.19.201) with Microsoft SMTP Server id
- 14.3.487.0; Mon, 7 Dec 2020 12:26:42 +0800
+ 14.3.487.0; Mon, 7 Dec 2020 12:26:44 +0800
 From:   Zhen Lei <thunder.leizhen@huawei.com>
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -42,9 +42,9 @@ To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         devicetree <devicetree@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>
 CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH 1/4] dt-bindings: media: adv7604: eliminate yamllint warnings
-Date:   Mon, 7 Dec 2020 12:23:57 +0800
-Message-ID: <20201207042400.1498-2-thunder.leizhen@huawei.com>
+Subject: [PATCH 3/4] dt-bindings: media: ov772x: eliminate yamllint warnings
+Date:   Mon, 7 Dec 2020 12:23:59 +0800
+Message-ID: <20201207042400.1498-4-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20201207042400.1498-1-thunder.leizhen@huawei.com>
 References: <20201207042400.1498-1-thunder.leizhen@huawei.com>
@@ -58,29 +58,44 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 Eliminate the following yamllint warnings:
-./Documentation/devicetree/bindings/media/i2c/adv7604.yaml
-:24:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
+./Documentation/devicetree/bindings/media/i2c/ovti,ov772x.yaml
+:79:17: [warning] wrong indentation: expected 14 but found 16 (indentation)
+:88:17: [warning] wrong indentation: expected 14 but found 16 (indentation)
 
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- Documentation/devicetree/bindings/media/i2c/adv7604.yaml | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/media/i2c/ovti,ov772x.yaml | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/adv7604.yaml b/Documentation/devicetree/bindings/media/i2c/adv7604.yaml
-index 81f17e719d87da5..693f31daf5aa699 100644
---- a/Documentation/devicetree/bindings/media/i2c/adv7604.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/adv7604.yaml
-@@ -21,8 +21,8 @@ properties:
-   compatible:
-     items:
-       - enum:
--        - adi,adv7611
--        - adi,adv7612
-+          - adi,adv7611
-+          - adi,adv7612
+diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov772x.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov772x.yaml
+index 450e5bd64312ddf..eedc560837d2c80 100644
+--- a/Documentation/devicetree/bindings/media/i2c/ovti,ov772x.yaml
++++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov772x.yaml
+@@ -76,18 +76,18 @@ properties:
+                 bus-type:
+                   const: 6
+             then:
+-                properties:
+-                  hsync-active: false
+-                  vsync-active: false
++              properties:
++                hsync-active: false
++                vsync-active: false
  
-   reg:
-     minItems: 1
+           - if:
+               properties:
+                 bus-width:
+                   const: 10
+             then:
+-                properties:
+-                  data-shift:
+-                    const: 0
++              properties:
++                data-shift:
++                  const: 0
+ 
+         required:
+           - bus-type
 -- 
 1.8.3
 
