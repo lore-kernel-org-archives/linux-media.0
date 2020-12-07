@@ -2,32 +2,31 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B991C2BB48
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8076BC2BBCF
 	for <linux-media@archiver.kernel.org>; Mon,  7 Dec 2020 19:32:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 084E1238A0
-	for <linux-media@archiver.kernel.org>; Mon,  7 Dec 2020 19:32:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 57E55238A0
+	for <linux-media@archiver.kernel.org>; Mon,  7 Dec 2020 19:32:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726869AbgLGTbx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Dec 2020 14:31:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59146 "EHLO
+        id S1726949AbgLGTcE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Dec 2020 14:32:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726825AbgLGTbw (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Dec 2020 14:31:52 -0500
+        with ESMTP id S1725951AbgLGTcD (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Dec 2020 14:32:03 -0500
 Received: from faui03.informatik.uni-erlangen.de (faui03.informatik.uni-erlangen.de [IPv6:2001:638:a000:4130:131:188:30:103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716F0C061749;
-        Mon,  7 Dec 2020 11:31:12 -0800 (PST)
-Received: from cipterm0.informatik.uni-erlangen.de (cipterm0.cip.cs.fau.de [IPv6:2001:638:a000:4130:131:188:30:90])
-        by faui03.informatik.uni-erlangen.de (Postfix) with ESMTP id DFF20240EC0;
-        Mon,  7 Dec 2020 20:30:29 +0100 (CET)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 892D1C061794;
+        Mon,  7 Dec 2020 11:31:23 -0800 (PST)
+Received: from cipterm0.informatik.uni-erlangen.de (cipterm0.cip.cs.fau.de [131.188.30.90])
+        by faui03.informatik.uni-erlangen.de (Postfix) with ESMTP id 92F4624100E;
+        Mon,  7 Dec 2020 20:30:37 +0100 (CET)
 Received: by cipterm0.informatik.uni-erlangen.de (Postfix, from userid 67858)
-        id DCDE03280304; Mon,  7 Dec 2020 20:30:29 +0100 (CET)
+        id 8D30A3280304; Mon,  7 Dec 2020 20:30:36 +0100 (CET)
 From:   Philipp Gerlesberger <Philipp.Gerlesberger@fau.de>
 To:     linux-kernel@vger.kernel.org
 Cc:     Philipp Gerlesberger <Philipp.Gerlesberger@fau.de>,
@@ -35,46 +34,154 @@ Cc:     Philipp Gerlesberger <Philipp.Gerlesberger@fau.de>,
         mchehab@kernel.org, sakari.ailus@linux.intel.com,
         gregkh@linuxfoundation.org,
         ij72uhux@stud.informatik.uni-erlangen.de, linux-kernel@i4.cs.fau.de
-Subject: [PATCH 07/12] media: atomisp: Fix funciton decleration
-Date:   Mon,  7 Dec 2020 20:26:34 +0100
-Message-Id: <20201207192638.15219-8-Philipp.Gerlesberger@fau.de>
+Subject: [PATCH 11/12] media: atomisp: Write function decleration in one line
+Date:   Mon,  7 Dec 2020 20:26:38 +0100
+Message-Id: <20201207192638.15219-12-Philipp.Gerlesberger@fau.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20201207192638.15219-1-Philipp.Gerlesberger@fau.de>
 References: <20201207192638.15219-1-Philipp.Gerlesberger@fau.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Write return_type, function_name and parameters in one line
-because lines should not end with a '(' [OPEN_ENDED_LINE]
-Write open brace ’{’ on the next line to fix OPEN_BRACE Error
+CHECK:OPEN_ENDED_LINE: Lines should not end with a '('
+WARNING:LEADING_SPACE: please, no spaces at the start of a line
+Avoid these errors by writing the function decleration in one line.
 
 Co-developed-by: Andrey Khlopkov <ij72uhux@stud.informatik.uni-erlangen.de>
 Signed-off-by: Andrey Khlopkov <ij72uhux@stud.informatik.uni-erlangen.de>
 Signed-off-by: Philipp Gerlesberger <Philipp.Gerlesberger@fau.de>
 ---
- drivers/staging/media/atomisp/pci/runtime/timer/src/timer.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ .../atomisp/pci/runtime/queue/src/queue.c     | 44 +++++--------------
+ 1 file changed, 11 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/runtime/timer/src/timer.c b/drivers/staging/media/atomisp/pci/runtime/timer/src/timer.c
-index 679ef8242574..00b54a0613bb 100644
---- a/drivers/staging/media/atomisp/pci/runtime/timer/src/timer.c
-+++ b/drivers/staging/media/atomisp/pci/runtime/timer/src/timer.c
-@@ -19,9 +19,8 @@
- #include "gp_timer.h" /*gp_timer_read()*/
- #include "assert_support.h"
+diff --git a/drivers/staging/media/atomisp/pci/runtime/queue/src/queue.c b/drivers/staging/media/atomisp/pci/runtime/queue/src/queue.c
+index aea6c66a3cee..2f1c2df59f71 100644
+--- a/drivers/staging/media/atomisp/pci/runtime/queue/src/queue.c
++++ b/drivers/staging/media/atomisp/pci/runtime/queue/src/queue.c
+@@ -22,9 +22,7 @@
+ /*****************************************************************************
+  * Queue Public APIs
+  *****************************************************************************/
+-int ia_css_queue_local_init(
+-    ia_css_queue_t *qhandle,
+-    ia_css_queue_local_t *desc)
++int ia_css_queue_local_init(ia_css_queue_t *qhandle, ia_css_queue_local_t *desc)
+ {
+ 	if (NULL == qhandle || NULL == desc
+ 	    || NULL == desc->cb_elems || NULL == desc->cb_desc) {
+@@ -43,9 +41,7 @@ int ia_css_queue_local_init(
+ 	return 0;
+ }
  
--int
--ia_css_timer_get_current_tick(
--    struct ia_css_clock_tick *curr_ts) {
-+int ia_css_timer_get_current_tick(struct ia_css_clock_tick *curr_ts)
-+{
- 	assert(curr_ts);
- 	if (!curr_ts)
- 	{
+-int ia_css_queue_remote_init(
+-    ia_css_queue_t *qhandle,
+-    ia_css_queue_remote_t *desc)
++int ia_css_queue_remote_init(ia_css_queue_t *qhandle, ia_css_queue_remote_t *desc)
+ {
+ 	if (NULL == qhandle || NULL == desc) {
+ 		/* Invalid parameters, return error*/
+@@ -69,8 +65,7 @@ int ia_css_queue_remote_init(
+ 	return 0;
+ }
+ 
+-int ia_css_queue_uninit(
+-    ia_css_queue_t *qhandle)
++int ia_css_queue_uninit(ia_css_queue_t *qhandle)
+ {
+ 	if (!qhandle)
+ 		return -EINVAL;
+@@ -84,9 +79,7 @@ int ia_css_queue_uninit(
+ 	return 0;
+ }
+ 
+-int ia_css_queue_enqueue(
+-    ia_css_queue_t *qhandle,
+-    uint32_t item)
++int ia_css_queue_enqueue(ia_css_queue_t *qhandle, uint32_t item)
+ {
+ 	int error = 0;
+ 
+@@ -143,9 +136,7 @@ int ia_css_queue_enqueue(
+ 	return 0;
+ }
+ 
+-int ia_css_queue_dequeue(
+-    ia_css_queue_t *qhandle,
+-    uint32_t *item)
++int ia_css_queue_dequeue(ia_css_queue_t *qhandle, uint32_t *item)
+ {
+ 	int error = 0;
+ 
+@@ -200,9 +191,7 @@ int ia_css_queue_dequeue(
+ 	return 0;
+ }
+ 
+-int ia_css_queue_is_full(
+-    ia_css_queue_t *qhandle,
+-    bool *is_full)
++int ia_css_queue_is_full(ia_css_queue_t *qhandle, bool *is_full)
+ {
+ 	int error = 0;
+ 
+@@ -234,9 +223,7 @@ int ia_css_queue_is_full(
+ 	return -EINVAL;
+ }
+ 
+-int ia_css_queue_get_free_space(
+-    ia_css_queue_t *qhandle,
+-    uint32_t *size)
++int ia_css_queue_get_free_space(ia_css_queue_t *qhandle, uint32_t *size)
+ {
+ 	int error = 0;
+ 
+@@ -268,9 +255,7 @@ int ia_css_queue_get_free_space(
+ 	return -EINVAL;
+ }
+ 
+-int ia_css_queue_get_used_space(
+-    ia_css_queue_t *qhandle,
+-    uint32_t *size)
++int ia_css_queue_get_used_space(ia_css_queue_t *qhandle, uint32_t *size)
+ {
+ 	int error = 0;
+ 
+@@ -302,10 +287,7 @@ int ia_css_queue_get_used_space(
+ 	return -EINVAL;
+ }
+ 
+-int ia_css_queue_peek(
+-    ia_css_queue_t *qhandle,
+-    u32 offset,
+-    uint32_t *element)
++int ia_css_queue_peek(ia_css_queue_t *qhandle, u32 offset, uint32_t *element)
+ {
+ 	u32 num_elems = 0;
+ 	int error = 0;
+@@ -354,9 +336,7 @@ int ia_css_queue_peek(
+ 	return -EINVAL;
+ }
+ 
+-int ia_css_queue_is_empty(
+-    ia_css_queue_t *qhandle,
+-    bool *is_empty)
++int ia_css_queue_is_empty(ia_css_queue_t *qhandle, bool *is_empty)
+ {
+ 	int error = 0;
+ 
+@@ -388,9 +368,7 @@ int ia_css_queue_is_empty(
+ 	return -EINVAL;
+ }
+ 
+-int ia_css_queue_get_size(
+-    ia_css_queue_t *qhandle,
+-    uint32_t *size)
++int ia_css_queue_get_size(ia_css_queue_t *qhandle, uint32_t *size)
+ {
+ 	int error = 0;
+ 
 -- 
 2.20.1
 
