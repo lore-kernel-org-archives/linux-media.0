@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52D89C433FE
-	for <linux-media@archiver.kernel.org>; Tue,  8 Dec 2020 16:23:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08737C2BBCD
+	for <linux-media@archiver.kernel.org>; Tue,  8 Dec 2020 16:23:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2A51323A6C
+	by mail.kernel.org (Postfix) with ESMTP id E45DA23B00
 	for <linux-media@archiver.kernel.org>; Tue,  8 Dec 2020 16:23:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730169AbgLHQWo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Dec 2020 11:22:44 -0500
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:42802 "EHLO
+        id S1730247AbgLHQXI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Dec 2020 11:23:08 -0500
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:43448 "EHLO
         mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730157AbgLHQWo (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Dec 2020 11:22:44 -0500
+        with ESMTP id S1730237AbgLHQXI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Dec 2020 11:23:08 -0500
 Received: from relay9-d.mail.gandi.net (unknown [217.70.183.199])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id 31E833ADB5D;
-        Tue,  8 Dec 2020 16:16:21 +0000 (UTC)
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id AC1AB3A1D0B;
+        Tue,  8 Dec 2020 16:16:27 +0000 (UTC)
 X-Originating-IP: 90.76.70.27
 Received: from pc-2.home (lfbn-tou-1-1249-27.w90-76.abo.wanadoo.fr [90.76.70.27])
         (Authenticated sender: maxime.chevallier@bootlin.com)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 90A1DFF817;
-        Tue,  8 Dec 2020 16:15:17 +0000 (UTC)
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 7DE2CFF81B;
+        Tue,  8 Dec 2020 16:15:24 +0000 (UTC)
 From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -40,9 +40,9 @@ Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Subject: [PATCH v4 1/3] media: dt-bindings: media: Document Rockchip VIP bindings
-Date:   Tue,  8 Dec 2020 17:15:07 +0100
-Message-Id: <20201208161509.655862-2-maxime.chevallier@bootlin.com>
+Subject: [PATCH v4 3/3] arm64: dts: rockchip: Add the camera interface description of the PX30
+Date:   Tue,  8 Dec 2020 17:15:09 +0100
+Message-Id: <20201208161509.655862-4-maxime.chevallier@bootlin.com>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20201208161509.655862-1-maxime.chevallier@bootlin.com>
 References: <20201208161509.655862-1-maxime.chevallier@bootlin.com>
@@ -52,122 +52,41 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a documentation for the Rockchip Camera Interface controller
-binding.
-
-This controller can be found on platforms such as the PX30 or the
-RK3288, the PX30 being the only platform supported so far.
+The PX30 has a camera interface, supporting CSI2 and BT656
+modes. Add a DT description for this interface.
 
 Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 ---
-v3: Renmed the controller to "vip"
+V3 : Renamed the controlled
 
-v4: fixed the binding to get a compiling example
+V4: Fixed the clock names
 
- .../bindings/media/rockchip-vip.yaml          | 94 +++++++++++++++++++
- 1 file changed, 94 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/rockchip-vip.yaml
+ arch/arm64/boot/dts/rockchip/px30.dtsi | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/rockchip-vip.yaml b/Documentation/devicetree/bindings/media/rockchip-vip.yaml
-new file mode 100644
-index 000000000000..268dbc7662bf
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/rockchip-vip.yaml
-@@ -0,0 +1,94 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/rockchip-vip.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/arch/arm64/boot/dts/rockchip/px30.dtsi b/arch/arm64/boot/dts/rockchip/px30.dtsi
+index 2695ea8cda14..39987afe5ed5 100644
+--- a/arch/arm64/boot/dts/rockchip/px30.dtsi
++++ b/arch/arm64/boot/dts/rockchip/px30.dtsi
+@@ -1106,6 +1106,18 @@ vopl_mmu: iommu@ff470f00 {
+ 		status = "disabled";
+ 	};
+ 
++	vip: vip@ff490000 {
++		compatible = "rockchip,px30-vip";
++		reg = <0x0 0xff490000 0x0 0x200>;
++		interrupts = <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&cru ACLK_CIF>, <&cru HCLK_CIF>, <&cru PCLK_CIF>, <&cru SCLK_CIF_OUT>;
++		clock-names = "aclk", "hclk", "pclk";
++		power-domains = <&power PX30_PD_VI>;
++		resets = <&cru SRST_CIF_A>, <&cru SRST_CIF_H>, <&cru SRST_CIF_PCLKIN>;
++		reset-names = "axi", "ahb", "pclkin";
++		status = "disabled";
++	};
 +
-+title: Rockchip VIP Camera Interface
-+
-+maintainers:
-+  - Maxime Chevallier <maxime.chevallier@bootlin.com>
-+
-+description: |-
-+  Camera Interface for Rockcip platforms
-+
-+properties:
-+  compatible:
-+    const: rockchip,px30-vip
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: ACLK
-+      - description: HCLK
-+      - description: PCLK IN
-+
-+  clock-names:
-+    items:
-+      - const: aclk
-+      - const: hclkf
-+      - const: pclkin
-+
-+  resets:
-+    items:
-+      - description: AXI
-+      - description: AHB
-+      - description: PCLK IN
-+
-+  reset-names:
-+    items:
-+      - const: axi
-+      - const: ahb
-+      - const: pclkin
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  # See ./video-interfaces.txt for details
-+  port:
-+    type: object
-+    additionalProperties: false
-+    description: A connection to a sensor or decoder
-+
-+    properties:
-+        remote-endpoint: true
-+
-+        required:
-+          - remote-endpoint
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - port
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/px30-cru.h>
-+    #include <dt-bindings/power/px30-power.h>
-+
-+    vip: vip@ff490000 {
-+    	compatible = "rockchip,px30-vip";
-+    	reg = <0x0 0xff490000 0x0 0x200>;
-+    	interrupts = <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
-+    	clocks = <&cru ACLK_CIF>, <&cru HCLK_CIF>, <&cru PCLK_CIF>, <&cru SCLK_CIF_OUT>;
-+    	clock-names = "aclk", "hclk", "pclkin";
-+    	resets = <&cru SRST_CIF_A>, <&cru SRST_CIF_H>, <&cru SRST_CIF_PCLKIN>;
-+    	reset-names = "axi", "ahb", "pclkin";
-+    	power-domains = <&power PX30_PD_VI>;
-+        port {
-+            vip_in: endpoint {
-+                remote-endpoint = <&tw9900_out>;
-+            };
-+        };
-+    };
-+...
+ 	qos_gmac: qos@ff518000 {
+ 		compatible = "syscon";
+ 		reg = <0x0 0xff518000 0x0 0x20>;
 -- 
 2.25.4
 
