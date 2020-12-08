@@ -2,103 +2,81 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0042EC2D0E4
-	for <linux-media@archiver.kernel.org>; Tue,  8 Dec 2020 20:21:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD81FC2BB9A
+	for <linux-media@archiver.kernel.org>; Tue,  8 Dec 2020 20:23:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CEDA12388C
-	for <linux-media@archiver.kernel.org>; Tue,  8 Dec 2020 20:21:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 72BCA23A79
+	for <linux-media@archiver.kernel.org>; Tue,  8 Dec 2020 20:23:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731385AbgLHUQN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Dec 2020 15:16:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36796 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731138AbgLHUPD (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Dec 2020 15:15:03 -0500
-Received: from hillosipuli.retiisi.eu (unknown [IPv6:2a01:4f9:c010:4572::e8:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9777CC0613CF;
-        Tue,  8 Dec 2020 12:13:28 -0800 (PST)
-Received: from valkosipuli.localdomain (unknown [IPv6:fd35:1bc8:1a6:d3d5::80:2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 1B531634C87;
-        Tue,  8 Dec 2020 21:59:49 +0200 (EET)
-Received: from sailus by valkosipuli.localdomain with local (Exim 4.92)
-        (envelope-from <sakari.ailus@retiisi.org.uk>)
-        id 1kmj9J-0000XJ-8G; Tue, 08 Dec 2020 21:59:49 +0200
-Date:   Tue, 8 Dec 2020 21:59:49 +0200
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Sowjanya Komatineni <skomatineni@nvidia.com>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, robh+dt@kernel.org,
-        bparrot@ti.com, mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-tegra@vger.kernel.org, devicetree@vger.kernel.org,
+        id S1728745AbgLHUWi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Dec 2020 15:22:38 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:40152 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728257AbgLHUWg (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Dec 2020 15:22:36 -0500
+Received: by mail-ot1-f67.google.com with SMTP id j12so16995525ota.7;
+        Tue, 08 Dec 2020 12:22:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IemDVxzYa7kmtRFbPpD/3Ro3fB+xQRwobtjllZYqVA8=;
+        b=unSCZt9Hbeh0O2m4owjBV4lPjxUraDAHazMVSecCmawk73OrUh3yr1aYRFcPu7DiOx
+         ++xDPsmlI9os+vsDSRiK3GV9TU2pb63n4KxQBHkV5Jd19pMA2rsThK1MHkVPnpj7VTFy
+         PQbDpAdJZisa2ecfnIUOuKjZQiT60vE/aEIjjEBfyXgvV3gZ4XRJQrvTlTF+4wil/qkD
+         tGEwUJVBhg1NvAU5uB9p2NYrnZhgWQlujhv3fkbo+fk5ycw5vHthi6JMK/a7NOuspJdr
+         mxb/WzA977plbbSvJNnp4wKI4H/mbVP0AL1tZfayUO2yLL9cziUdqoA7j/JmF7Iqyk8r
+         lE5A==
+X-Gm-Message-State: AOAM530ShR48g+q1x3Y4MS9Fib0W8fAbdVblgH+tRx72u9YloBY/jsBi
+        KidjyL8kAxgsOVapJrwf3KJ00iQQpQ==
+X-Google-Smtp-Source: ABdhPJyBmFzeTk1FwCgWYJjznHH0+Nf+LhDGfslxgPCcIMQp8Ecc+U415pK0risvZR47J6iVFCavaA==
+X-Received: by 2002:a9d:7ac8:: with SMTP id m8mr17674643otn.86.1607457071031;
+        Tue, 08 Dec 2020 11:51:11 -0800 (PST)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id t5sm3628330oth.16.2020.12.08.11.51.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Dec 2020 11:51:09 -0800 (PST)
+Received: (nullmailer pid 2970461 invoked by uid 1000);
+        Tue, 08 Dec 2020 19:51:08 -0000
+Date:   Tue, 8 Dec 2020 13:51:08 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     kholk11@gmail.com
+Cc:     konrad.dybcio@somainline.org, linux-media@vger.kernel.org,
+        sakari.ailus@iki.fi, andrey.konovalov@linaro.org,
+        martin.botka@somainline.org, devicetree@vger.kernel.org,
+        mchehab@kernel.org, marijn.suijten@somainline.org,
         linux-kernel@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: Re: [PATCH v3 10/13] media: v4l2-fwnode: Update
- V4L2_FWNODE_CSI2_MAX_DATA_LANES to 8
-Message-ID: <20201208195949.GB1167@valkosipuli.retiisi.org.uk>
-References: <1607022002-26575-1-git-send-email-skomatineni@nvidia.com>
- <1607022002-26575-11-git-send-email-skomatineni@nvidia.com>
- <845dfd4a-fa11-625c-78a3-cc8adc68bfc7@xs4all.nl>
+        angelogioacchino.delregno@somainline.org, robh+dt@kernel.org,
+        phone-devel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] media: dt-bindings: media: i2c: Add IMX300 CMOS
+ sensor binding
+Message-ID: <20201208195108.GA2970383@robh.at.kernel.org>
+References: <20201127223047.2764643-1-kholk11@gmail.com>
+ <20201127223047.2764643-3-kholk11@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <845dfd4a-fa11-625c-78a3-cc8adc68bfc7@xs4all.nl>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20201127223047.2764643-3-kholk11@gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans,
-
-On Mon, Dec 07, 2020 at 11:47:38AM +0100, Hans Verkuil wrote:
-> On 03/12/2020 19:59, Sowjanya Komatineni wrote:
-> > Some CSI2 receivers support 8 data lanes.
-> > 
-> > So, this patch updates CSI2 maximum data lanes to be 8.
-> > 
-> > Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
-> > ---
-> >  drivers/media/platform/ti-vpe/cal-camerarx.c | 2 +-
-> >  include/media/v4l2-fwnode.h                  | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/media/platform/ti-vpe/cal-camerarx.c b/drivers/media/platform/ti-vpe/cal-camerarx.c
-> > index 806cbf1..47e2143 100644
-> > --- a/drivers/media/platform/ti-vpe/cal-camerarx.c
-> > +++ b/drivers/media/platform/ti-vpe/cal-camerarx.c
-> > @@ -534,7 +534,7 @@ static int cal_camerarx_parse_dt(struct cal_camerarx *phy)
-> >  {
-> >  	struct v4l2_fwnode_endpoint *endpoint = &phy->endpoint;
-> >  	struct device_node *ep_node;
-> > -	char data_lanes[V4L2_FWNODE_CSI2_MAX_DATA_LANES * 2];
-> > +	char data_lanes[V4L2_FWNODE_CSI2_MAX_DATA_LANES];
-> >  	unsigned int i;
-> >  	int ret;
-> >  
+On Fri, 27 Nov 2020 23:30:47 +0100, kholk11@gmail.com wrote:
+> From: AngeloGioacchino Del Regno <kholk11@gmail.com>
 > 
-> I'm not so sure about this change: it relies on the implicit knowledge that
-> this cal driver can handle only 4 lanes max, so that doubling
-> V4L2_FWNODE_CSI2_MAX_DATA_LANES is the same as the old 'V4L2_FWNODE_CSI2_MAX_DATA_LANES * 2'.
+> Add YAML device tree binding for IMX300 CMOS image sensor, and
+> the relevant MAINTAINERS entries.
 > 
-> I think we should either keep the existing code (which means data_lanes
-> is now larger than needed, so stack usage increases by 8 bytes), or perhaps
-> create a new define for this driver like CAL_MAX_DATA_LANES and use that.
+> Signed-off-by: AngeloGioacchino Del Regno <kholk11@gmail.com>
+> ---
+>  .../bindings/media/i2c/sony,imx300.yaml       | 112 ++++++++++++++++++
+>  MAINTAINERS                                   |   7 ++
+>  2 files changed, 119 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/sony,imx300.yaml
 > 
-> In my opinion the original code should just be kept, but I've CC-ed Laurent
-> on this to hear what he thinks.
 
-I further looked at the code there and it does *depend* on a particular
-value of V4L2_FWNODE_CSI2_MAX_DATA_LANES. That needs to be fixed. This part
-can (or should) be dropped from the patch though.
-
--- 
-Regards,
-
-Sakari Ailus
+Reviewed-by: Rob Herring <robh@kernel.org>
