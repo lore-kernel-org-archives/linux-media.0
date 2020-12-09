@@ -2,27 +2,27 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09A5FC1B0E3
-	for <linux-media@archiver.kernel.org>; Wed,  9 Dec 2020 14:26:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5ED6C4361B
+	for <linux-media@archiver.kernel.org>; Wed,  9 Dec 2020 14:27:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D148F22227
-	for <linux-media@archiver.kernel.org>; Wed,  9 Dec 2020 14:26:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A35EE20829
+	for <linux-media@archiver.kernel.org>; Wed,  9 Dec 2020 14:27:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732960AbgLIO02 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Dec 2020 09:26:28 -0500
-Received: from mx2.suse.de ([195.135.220.15]:39542 "EHLO mx2.suse.de"
+        id S1732981AbgLIO1D (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Dec 2020 09:27:03 -0500
+Received: from mx2.suse.de ([195.135.220.15]:40606 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732623AbgLIO0M (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 9 Dec 2020 09:26:12 -0500
+        id S1732976AbgLIO06 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 9 Dec 2020 09:26:58 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id C8C76AD57;
-        Wed,  9 Dec 2020 14:25:30 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 35C41AD12;
+        Wed,  9 Dec 2020 14:25:34 +0000 (UTC)
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     daniel@ffwll.ch, christian.koenig@amd.com, airlied@linux.ie,
         sumit.semwal@linaro.org, maarten.lankhorst@linux.intel.com,
@@ -32,95 +32,148 @@ Cc:     dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
         linaro-mm-sig@lists.linaro.org,
         virtualization@lists.linux-foundation.org,
         Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v3 0/8] drm: Support short-term vmap via vmap_local
-Date:   Wed,  9 Dec 2020 15:25:19 +0100
-Message-Id: <20201209142527.26415-1-tzimmermann@suse.de>
+Subject: [PATCH v3 5/8] drm/cma-helper: Provide a vmap function for short-term mappings
+Date:   Wed,  9 Dec 2020 15:25:24 +0100
+Message-Id: <20201209142527.26415-6-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20201209142527.26415-1-tzimmermann@suse.de>
+References: <20201209142527.26415-1-tzimmermann@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-(was: drm/vram-helper: Lock GEM BOs while they are mapped)
+Implementations of the vmap/vunmap GEM callbacks may perform pinning
+of the BO and may acquire the associated reservation object's lock.
+Callers that only require a mapping of the contained memory can thus
+interfere with other tasks that require exact pinning, such as scanout.
+This is less of an issue with private CMA buffers, but may happen
+with imported ones.
 
-GEM VRAM helpers used to pin the BO in their implementation of vmap, so
-that they could not be relocated. In recent discussions, [1][2] it became
-clear that this is incorrect for in-kernel use cases, such as fbdev
-emulation; which should rather depend on the reservation lock to prevent
-relocation.
+Therefore provide the new interface drm_gem_cma_vmap_local(), which only
+performs the vmap operations. Callers have to hold the reservation lock
+while the mapping persists.
 
-This patchset addresses the issue by introducing the new interfaces
-vmap_local and vunmap_local throughout dma-buf and GEM. It further adds
-support to DRM's CMA, SHMEM and VRAM helpers and finally converts fbdev
-emulation to the new interface.
+This patch also connects GEM CMA helpers to the GEM object function with
+equivalent functionality.
 
-Patches 1 and 2 prepare the ast cursor code for the later changes.
+Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+---
+ drivers/gpu/drm/drm_gem_cma_helper.c | 35 ++++++++++++++++++++++++++++
+ drivers/gpu/drm/vc4/vc4_bo.c         | 13 +++++++++++
+ drivers/gpu/drm/vc4/vc4_drv.h        |  1 +
+ include/drm/drm_gem_cma_helper.h     |  1 +
+ 4 files changed, 50 insertions(+)
 
-Patches 3 and 4 add the vmap_local infrastructure throughout dma-buf,
-GEM and PRIME.
-
-Patches 5 to 7 add implementations of vmap_local to DRM's various GEM
-helper libraries. Due to the simple nature of these libraries, existing
-vmap code can be reused easily. Several drivers are updateed as well to
-use the new interfaces.
-
-Patch 8 converts generic fbdev emulation to use vmap_local. Only DRM
-drivers that use GEM helpers currently use fbdev emulation, so patches
-5 to 7 covered all necessary instances.
-
-I smoke-tested the patchset with ast (VRAM helpers), mgag200 (SHMEM) and
-vc4 (CMA). I also tested with a version of radeon (raw TTM) that has been
-converted to generic fbdev emulation.
-
-v3:
-	* rewrite patchset around vmap_local
-v2:
-	* make importers acquire resv locks by themselves
-	* document dma-buf vamp/vunmap ops
-
-[1] https://patchwork.freedesktop.org/patch/400054/?series=83765&rev=1
-[2] https://patchwork.freedesktop.org/patch/405407/?series=84401&rev=2
-
-Thomas Zimmermann (8):
-  drm/ast: Don't pin cursor source BO explicitly during update
-  drm/ast: Only map cursor BOs during updates
-  dma-buf: Add vmap_local and vnumap_local operations
-  drm/gem: Create infrastructure for GEM vmap_local
-  drm/cma-helper: Provide a vmap function for short-term mappings
-  drm/shmem-helper: Provide a vmap function for short-term mappings
-  drm/vram-helper: Provide a vmap function for short-term mappings
-  drm/fb-helper: Move BO locking from DRM client to fbdev damage worker
-
- drivers/dma-buf/dma-buf.c              |  80 ++++++++++++++
- drivers/gpu/drm/ast/ast_cursor.c       |  70 +++++++-----
- drivers/gpu/drm/ast/ast_drv.h          |   2 -
- drivers/gpu/drm/drm_client.c           |  91 ++++++++++++++++
- drivers/gpu/drm/drm_fb_helper.c        |  41 +++----
- drivers/gpu/drm/drm_gem.c              |  28 +++++
- drivers/gpu/drm/drm_gem_cma_helper.c   |  35 ++++++
- drivers/gpu/drm/drm_gem_shmem_helper.c |  71 ++++++++++++-
- drivers/gpu/drm/drm_gem_vram_helper.c  | 142 ++++++++++++++++---------
- drivers/gpu/drm/drm_internal.h         |   2 +
- drivers/gpu/drm/drm_prime.c            |  39 +++++++
- drivers/gpu/drm/mgag200/mgag200_mode.c |  16 ++-
- drivers/gpu/drm/tiny/cirrus.c          |  10 +-
- drivers/gpu/drm/tiny/gm12u320.c        |  14 ++-
- drivers/gpu/drm/udl/udl_modeset.c      |  18 ++--
- drivers/gpu/drm/vboxvideo/vbox_mode.c  |  15 +--
- drivers/gpu/drm/vc4/vc4_bo.c           |  13 +++
- drivers/gpu/drm/vc4/vc4_drv.h          |   1 +
- drivers/gpu/drm/virtio/virtgpu_prime.c |   2 +
- include/drm/drm_client.h               |   4 +
- include/drm/drm_gem.h                  |  20 ++++
- include/drm/drm_gem_cma_helper.h       |   1 +
- include/drm/drm_gem_shmem_helper.h     |   2 +
- include/drm/drm_gem_vram_helper.h      |   2 +
- include/drm/drm_prime.h                |   2 +
- include/linux/dma-buf.h                |  34 ++++++
- 26 files changed, 635 insertions(+), 120 deletions(-)
-
---
+diff --git a/drivers/gpu/drm/drm_gem_cma_helper.c b/drivers/gpu/drm/drm_gem_cma_helper.c
+index 7942cf05cd93..40b3e8e3fc42 100644
+--- a/drivers/gpu/drm/drm_gem_cma_helper.c
++++ b/drivers/gpu/drm/drm_gem_cma_helper.c
+@@ -38,6 +38,7 @@ static const struct drm_gem_object_funcs drm_gem_cma_default_funcs = {
+ 	.print_info = drm_gem_cma_print_info,
+ 	.get_sg_table = drm_gem_cma_get_sg_table,
+ 	.vmap = drm_gem_cma_vmap,
++	.vmap_local = drm_gem_cma_vmap_local,
+ 	.mmap = drm_gem_cma_mmap,
+ 	.vm_ops = &drm_gem_cma_vm_ops,
+ };
+@@ -471,6 +472,40 @@ int drm_gem_cma_vmap(struct drm_gem_object *obj, struct dma_buf_map *map)
+ }
+ EXPORT_SYMBOL_GPL(drm_gem_cma_vmap);
+ 
++/**
++ * drm_gem_cma_vmap_local - map a CMA GEM object into the kernel's virtual
++ *     address space
++ * @obj: GEM object
++ * @map: Returns the kernel virtual address of the CMA GEM object's backing
++ *       store.
++ *
++ * This function maps a buffer into the kernel's
++ * virtual address space. Since the CMA buffers are already mapped into the
++ * kernel virtual address space this simply returns the cached virtual
++ * address. Drivers using the CMA helpers should set this as their DRM
++ * driver's &drm_gem_object_funcs.vmap_local callback.
++ *
++ * Returns:
++ * 0 on success, or a negative error code otherwise.
++ */
++int drm_gem_cma_vmap_local(struct drm_gem_object *obj, struct dma_buf_map *map)
++{
++	struct drm_gem_cma_object *cma_obj = to_drm_gem_cma_obj(obj);
++
++	/*
++	 * TODO: The code in drm_gem_cma_prime_import_sg_table_vmap()
++	 *       establishes this mapping. The correct solution would
++	 *       be to call dma_buf_vmap_local() here.
++	 *
++	 *       If we find a case where we absolutely have to call
++	 *       dma_buf_vmap_local(), the code needs to be restructured.
++	 */
++	dma_buf_map_set_vaddr(map, cma_obj->vaddr);
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(drm_gem_cma_vmap_local);
++
+ /**
+  * drm_gem_cma_mmap - memory-map an exported CMA GEM object
+  * @obj: GEM object
+diff --git a/drivers/gpu/drm/vc4/vc4_bo.c b/drivers/gpu/drm/vc4/vc4_bo.c
+index dc316cb79e00..ec57326c69c4 100644
+--- a/drivers/gpu/drm/vc4/vc4_bo.c
++++ b/drivers/gpu/drm/vc4/vc4_bo.c
+@@ -387,6 +387,7 @@ static const struct drm_gem_object_funcs vc4_gem_object_funcs = {
+ 	.export = vc4_prime_export,
+ 	.get_sg_table = drm_gem_cma_get_sg_table,
+ 	.vmap = vc4_prime_vmap,
++	.vmap_local = vc4_prime_vmap_local,
+ 	.vm_ops = &vc4_vm_ops,
+ };
+ 
+@@ -797,6 +798,18 @@ int vc4_prime_vmap(struct drm_gem_object *obj, struct dma_buf_map *map)
+ 	return drm_gem_cma_vmap(obj, map);
+ }
+ 
++int vc4_prime_vmap_local(struct drm_gem_object *obj, struct dma_buf_map *map)
++{
++	struct vc4_bo *bo = to_vc4_bo(obj);
++
++	if (bo->validated_shader) {
++		DRM_DEBUG("mmaping of shader BOs not allowed.\n");
++		return -EINVAL;
++	}
++
++	return drm_gem_cma_vmap_local(obj, map);
++}
++
+ struct drm_gem_object *
+ vc4_prime_import_sg_table(struct drm_device *dev,
+ 			  struct dma_buf_attachment *attach,
+diff --git a/drivers/gpu/drm/vc4/vc4_drv.h b/drivers/gpu/drm/vc4/vc4_drv.h
+index 43a1af110b3e..efb6c47d318f 100644
+--- a/drivers/gpu/drm/vc4/vc4_drv.h
++++ b/drivers/gpu/drm/vc4/vc4_drv.h
+@@ -812,6 +812,7 @@ struct drm_gem_object *vc4_prime_import_sg_table(struct drm_device *dev,
+ 						 struct dma_buf_attachment *attach,
+ 						 struct sg_table *sgt);
+ int vc4_prime_vmap(struct drm_gem_object *obj, struct dma_buf_map *map);
++int vc4_prime_vmap_local(struct drm_gem_object *obj, struct dma_buf_map *map);
+ int vc4_bo_cache_init(struct drm_device *dev);
+ int vc4_bo_inc_usecnt(struct vc4_bo *bo);
+ void vc4_bo_dec_usecnt(struct vc4_bo *bo);
+diff --git a/include/drm/drm_gem_cma_helper.h b/include/drm/drm_gem_cma_helper.h
+index 0a9711caa3e8..05122e71bc6d 100644
+--- a/include/drm/drm_gem_cma_helper.h
++++ b/include/drm/drm_gem_cma_helper.h
+@@ -99,6 +99,7 @@ drm_gem_cma_prime_import_sg_table(struct drm_device *dev,
+ 				  struct dma_buf_attachment *attach,
+ 				  struct sg_table *sgt);
+ int drm_gem_cma_vmap(struct drm_gem_object *obj, struct dma_buf_map *map);
++int drm_gem_cma_vmap_local(struct drm_gem_object *obj, struct dma_buf_map *map);
+ int drm_gem_cma_mmap(struct drm_gem_object *obj, struct vm_area_struct *vma);
+ 
+ /**
+-- 
 2.29.2
 
