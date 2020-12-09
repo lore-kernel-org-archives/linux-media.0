@@ -2,496 +2,181 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC12BC433FE
-	for <linux-media@archiver.kernel.org>; Wed,  9 Dec 2020 09:33:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AEAE6C433FE
+	for <linux-media@archiver.kernel.org>; Wed,  9 Dec 2020 09:52:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 83FF723B7B
-	for <linux-media@archiver.kernel.org>; Wed,  9 Dec 2020 09:33:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5553423433
+	for <linux-media@archiver.kernel.org>; Wed,  9 Dec 2020 09:52:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729260AbgLIJdV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Dec 2020 04:33:21 -0500
-Received: from mx2.suse.de ([195.135.220.15]:49328 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729010AbgLIJdV (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 9 Dec 2020 04:33:21 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 7BB1DAC94;
-        Wed,  9 Dec 2020 09:32:37 +0000 (UTC)
-To:     Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Cc:     dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        hdegoede@redhat.com, airlied@redhat.com,
-        linux-media@vger.kernel.org
-References: <20201203140259.26580-1-tzimmermann@suse.de>
- <20201203140259.26580-8-tzimmermann@suse.de>
- <20201203152601.GB401619@phenom.ffwll.local>
- <ee2abd93-0dfe-53a3-0038-5edc58c3ec92@suse.de>
- <20201203204129.GC401619@phenom.ffwll.local>
- <a253129d-c0e3-c864-fa0c-111338d25e25@suse.de>
- <4fc93de9-cd26-58b0-d398-ac97577ffa92@amd.com>
- <20201209001321.GF401619@phenom.ffwll.local>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-Subject: Re: [PATCH v2 7/7] dma-buf: Write down some rules for vmap usage
-Message-ID: <8ef5d69a-b5b3-31d0-b011-8860b60f35eb@suse.de>
-Date:   Wed, 9 Dec 2020 10:32:36 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        id S1729004AbgLIJwV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Dec 2020 04:52:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50114 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729128AbgLIJwP (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Dec 2020 04:52:15 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E84C0613CF
+        for <linux-media@vger.kernel.org>; Wed,  9 Dec 2020 01:51:35 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id jx16so1175459ejb.10
+        for <linux-media@vger.kernel.org>; Wed, 09 Dec 2020 01:51:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=mWaPsYTDL00+uiOyWpsc7v6fuctjoTRPvVHzTexun2Q=;
+        b=mcItWiyR/eA+Z7NMPS7PUzcWhsAkmsp/T9Q+MqcjBKQsK3RYWYJjPDH9Lu1JxLmxLk
+         zZ9VKd5PD2Zy3DYQN15ti3IAJA8RZ7yRsndRAXFHPZ/jqSpB6cU8HZQ/l4IFZXx4ct6l
+         WwlEnEQuxyRGvmWItS7aVtT4adJolkFFg4XaE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=mWaPsYTDL00+uiOyWpsc7v6fuctjoTRPvVHzTexun2Q=;
+        b=ufmVJ8JhdKCh1EInVNX1RfiTpMZPC/pVBjOSpn57BjNXRQpkm+gDaPfimhz+NoV4Xz
+         rConvWn5tiUahT6UDL5lFIZzteN1ecgCfoC/uVCYmqamEtBA5vqx/LNE26v5+7i/A0yM
+         GmKixJtgAEoYHhK+wjf75AatSDTlqY5f7KO6PA5d24dlAn46s1STNnSJmq8uBNwH46mI
+         g/4FnXpe7M80b0o9xB6//ts0ElKdeEcd7dwAKPBiaqqmwfLushvlpEqAWp56y0I0FUpI
+         rpVcvb3IE2kmY0YIhYl9CglN509CPsf0J3zCjsmzO256fwdwljOWNsaZ3b7kTVvqiisP
+         aPCw==
+X-Gm-Message-State: AOAM531MJalprVeVNVJAqV7voln0LMrjBVv5AnUL+3y9swWIXGIFYEk9
+        zz2JCvq0bj3VIfQdHxgc6zu/ZRwKjjweqA==
+X-Google-Smtp-Source: ABdhPJwkfWRHDchJHwXzRzg8Ow6CgoZDAM7yspdMCsB7QaEjg2+vKCkydMha3uYdizmR8LLpwkKY8w==
+X-Received: by 2002:a17:906:b745:: with SMTP id fx5mr1304875ejb.103.1607507493532;
+        Wed, 09 Dec 2020 01:51:33 -0800 (PST)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
+        by smtp.gmail.com with ESMTPSA id z10sm977137ejl.30.2020.12.09.01.51.32
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Dec 2020 01:51:32 -0800 (PST)
+Received: by mail-wr1-f43.google.com with SMTP id r3so1028467wrt.2
+        for <linux-media@vger.kernel.org>; Wed, 09 Dec 2020 01:51:32 -0800 (PST)
+X-Received: by 2002:adf:bb0e:: with SMTP id r14mr1745547wrg.159.1607507492288;
+ Wed, 09 Dec 2020 01:51:32 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20201209001321.GF401619@phenom.ffwll.local>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="bKxtXe23WBn7W6bDLD0sAcr6ipZTz5iZk"
+References: <CAO5uPHN-30N8Hv8exx6bzMQQDbLGJpfQobZ_pzDtqC83k3nCMQ@mail.gmail.com>
+ <CAPBb6MXQjG8p2dh9T+GpFncu8WAUwjsWw=ggSMW7QdP0NQrskQ@mail.gmail.com>
+ <CAO5uPHNGNwXadtRY6CYghsCYaPNCxOkxYR98CYvPfF0ZrqSPHw@mail.gmail.com> <3d557792606109728235db6b1a15d7313cce4096.camel@ndufresne.ca>
+In-Reply-To: <3d557792606109728235db6b1a15d7313cce4096.camel@ndufresne.ca>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Wed, 9 Dec 2020 18:51:20 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5BUsrjw8S_w1U03G8f-=93FFTBcCfu-Cg6bwxN9JPWnWg@mail.gmail.com>
+Message-ID: <CAAFQd5BUsrjw8S_w1U03G8f-=93FFTBcCfu-Cg6bwxN9JPWnWg@mail.gmail.com>
+Subject: Re: How to get last frames in encode sequence returned by v4l2
+ encoder driver without V4L2_ENC_CMD_STOP
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>
+Cc:     Hirokazu Honda <hiroh@chromium.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        J Kardatzke <jkardatzke@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---bKxtXe23WBn7W6bDLD0sAcr6ipZTz5iZk
-Content-Type: multipart/mixed; boundary="La2DN66lFLV4lealZBpFx55x3kQJCiryS";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Daniel Vetter <daniel@ffwll.ch>,
- =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Cc: dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
- hdegoede@redhat.com, airlied@redhat.com, linux-media@vger.kernel.org
-Message-ID: <8ef5d69a-b5b3-31d0-b011-8860b60f35eb@suse.de>
-Subject: Re: [PATCH v2 7/7] dma-buf: Write down some rules for vmap usage
-References: <20201203140259.26580-1-tzimmermann@suse.de>
- <20201203140259.26580-8-tzimmermann@suse.de>
- <20201203152601.GB401619@phenom.ffwll.local>
- <ee2abd93-0dfe-53a3-0038-5edc58c3ec92@suse.de>
- <20201203204129.GC401619@phenom.ffwll.local>
- <a253129d-c0e3-c864-fa0c-111338d25e25@suse.de>
- <4fc93de9-cd26-58b0-d398-ac97577ffa92@amd.com>
- <20201209001321.GF401619@phenom.ffwll.local>
-In-Reply-To: <20201209001321.GF401619@phenom.ffwll.local>
+On Wed, Dec 9, 2020 at 1:43 AM Nicolas Dufresne <nicolas@ndufresne.ca> wrot=
+e:
+>
+> Le vendredi 27 novembre 2020 =C3=A0 03:13 +0900, Hirokazu Honda a =C3=A9c=
+rit :
+> > HI Alexandre,
+> >
+> > On Tue, Nov 24, 2020 at 7:17 PM Alexandre Courbot <acourbot@chromium.or=
+g>
+> > wrote:
+> > >
+> > > Hi Hiro,
+> > >
+> > > On Fri, Nov 13, 2020 at 6:04 PM Hirokazu Honda <hiroh@chromium.org> w=
+rote:
+> > > >
+> > > > Hi,
+> > > >
+> > > > According to the official v4l2 encoder driver usage description [1]=
+,
+> > > > v4l2 steatful encoder driver doesn't have a guarantee when frames f=
+ed
+> > > > to a driver will be returned.
+> > > > To make sure all pending frames are output by the driver, an app mu=
+st
+> > > > call VIDIOC_ENCODER_CMD with cmd=3DV4L2_ENC_CMD_STOP.
+> > > > However, it is not mandatory to support the command in the current
+> > > > v4l2 stateful encoder API specification.
+> > > > An app can check it by VIDIOC_TRY_ENCODER_CMD beforehand.
+> > > > My question is when an app has to get all the frames of an encoder
+> > > > sequence, how we can achieve this without V4L2_ENC_CMD_STOP support=
+.
+> > > > This demand is natural and in fact WebCodecs [2] requires this.
+> > > >
+> > > > I think there are two options,
+> > > > 1.) Ensure that a driver will eventually output frames if it doesn'=
+t
+> > > > support V4L2_ENC_CMD_STOP.
+> > > > 2.) Change V4L2_ENC_CMD_STOP support to be mandatory
+> > >
+> > > Unless I am missing the part of the spec that says the contrary,
+> > > V4L2_ENC_CMD_STOP is part of the encoder specification, and thus is
+> > > mandatory. Some older drivers might not have support for it, in such
+> > > cases the correct course of action would be to fix them.
+> > >
+> >
+> > I researched the API documents.
+> > The statement that the support is mandatory to stateful encoders is
+> > added from the latest document v5.9 [1],
+> > It states optional in the API document of v4.19 and v5.8.
+> > Hence my question is obsolete.
+> >
+> > [1]
+> > https://www.kernel.org/doc/html/v5.9/userspace-api/media/v4l/vidioc-enc=
+oder-cmd.html
+> > [2]
+> > https://www.kernel.org/doc/html/v4.19/media/uapi/v4l/vidioc-encoder-cmd=
+.html
+> > [3]
+> > https://www.kernel.org/doc/html/v5.8/userspace-api/media/v4l/vidioc-enc=
+oder-cmd.html?highlight=3Dv4l2_enc_cmd_stop
+>
+> In historical drivers (Samsung MFC and perhaps Venus ?) an empty payload =
+buffer
+> was used to signal draining. This approach was never documented and had i=
+ssues.
+> It is still supported by MFC driver so that older Chromium / Android code=
+ don't
+> fail on it (even though I doubt it has ever been retested since).
+>
 
---La2DN66lFLV4lealZBpFx55x3kQJCiryS
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+FWIW, Chromium has not been relying on this for a long time already.
 
-Hi
+That said, I think the question here is about a different class of
+devices. I can imagine some encoders just simply always consuming the
+input buffers as they come and produce corresponding bitstream buffers
+as soon as possible, in a 1:1 relationship. In that case, there would
+be no need for any explicit drain, because one can track which buffers
+came already and infer whether the encoding completed for the source
+buffer of interest.
 
-Am 09.12.20 um 01:13 schrieb Daniel Vetter:
-> On Fri, Dec 04, 2020 at 09:47:08AM +0100, Christian K=C3=B6nig wrote:
->> Am 04.12.20 um 09:32 schrieb Thomas Zimmermann:
->>> Hi
->>>
->>> Am 03.12.20 um 21:41 schrieb Daniel Vetter:
->>>> On Thu, Dec 03, 2020 at 07:59:04PM +0100, Thomas Zimmermann wrote:
->>>>> Hi
->>>>>
->>>>> Am 03.12.20 um 16:26 schrieb Daniel Vetter:
->>>>>> On Thu, Dec 03, 2020 at 03:02:59PM +0100, Thomas Zimmermann wrote:=
+Best regards,
+Tomasz
 
->>>>>>> Dma-buf's vmap and vunmap callbacks are undocumented and various
->>>>>>> exporters currently have slightly different semantics for them. A=
-dd
->>>>>>> documentation on how to implement and use these interfaces correc=
-tly.
->>>>>>>
->>>>>>> v2:
->>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0* document vmap semantics in struct dma_=
-buf_ops
->>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0* add TODO item for reviewing and maybe =
-fixing dma-buf exporters
->>>>>>>
->>>>>>> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
->>>>>>
->>>>>> I still don't think this works, we're breaking dma_buf_vmap
->>>>>> for everyone
->>>>>> else here.
->>>>>
->>>>> I removed the text on the importer. These notes for callers in
->>>>> the docs are
->>>>> more or less a consequence of the exporter semantics.
->>>>
->>>> Callers are importers, so I'm not seeing how that fixes anything.
->>>>
->>>>> I thought we at least agreed on the exporter semantics in the
->>>>> other thread,
->>>>> didn't we?
->>>>>
->>>>> What I'm trying to do is to write dome some rules for exporters,
->>>>> even if not
->>>>> all exporters follow them.
->>>>
->>>> This is a standard interface, everyone needs to follow the same
->>>> rules. And
->>>> if they change, we need to make sure nothing breaks and we're not
->>>> creating
->>>> issues.
->>>>
->>>> In the past the rule was the dma_buf_vmap was allowed to take the
->>>> dma_resv_lock, and that the buffer should be pinned. Now some ttm
->>>> drivers
->>>> didn't ever bother with the pinning, and mostly got away with that
->>>> because
->>>> drm_prime helpers do the pinning by default at attach time, and most=
-
->>>> users
->>>> do call dma_buf_attach.
->>>>
->>>> But if you look through dma-buf docs nothing ever said you have to d=
-o a
->>>> dummy attachment before you call dma_buf_vmap, that's just slightly
->>>> crappy
->>>> implementations that didn't blow up yet.
->>>
->>> I had a patch for adding pin to radeon's implementation of vmap. [1]
->>> Christian told me to not do this; instead just get the lock in the fb=
-dev
->>> code. His advise almost seems the opposite of what you're telling me
->>> here.
->>
->> I think what Daniel suggests here is that we need to smoothly transiti=
-on the
->> code from making assumptions to having a straight interface where impo=
-rters
->> explicitly say when stuff is locked and when stuff is pinned.
->>
->> I've started this with the attach interface by adding a new dynamic ap=
-proach
->> to that, but you probably need to carry on here with that for vmap as =
-well.
->>
->> When that is done we can migrate every exporter over to the new dynami=
-c
->> approach.
->>
->>>
->>> For the GEM VRAM helpers, that implicit pin in vmap gave me headaches=
-=2E
->>> Because scanouts can only be done from VRAM, which is badly suited fo=
-r
->>> exporting. So I ended up with an implicit pin that pins the buffer to=
-
->>> whatever domain it currently is. I got away with it because GEM VRAM =
-BOs
->>> are not sharable among devices; fbdev is the only user of that
->>> functionality and only pins for short periods of time.
->>>
->>> I suspect that fixing TTM-based drivers by adding an implicit pin wou=
-ld
->>> result in a similar situation. Whatever domain it ends up pinning, so=
-me
->>> functionality might not be compatible with that.
->>
->> Correct, exactly that's the problem.
->>
->>>
->>>>
->>>>> Given the circumstances, we should leave out this patch from the
->>>>> patchset.
->>>>
->>>> So the defacto rules are already a big mess, but that's not a good
->>>> excuse
->>>> to make it worse.
->>>>
->>>> What I had in mind is that we split dma_buf_vmap up into two variant=
-s:
->>>>
->>>> - The current one, which should guarantee that the buffer is pinned.=
-
->>>>  =C2=A0=C2=A0 Because that's what all current callers wanted, before=
- the fbdev code
->>>>  =C2=A0=C2=A0 started allowing non-pinned buffers.
->>>
->>> Can we add an explicit pin operation to dma_buf_vmap() to enforce the=
-
->>> semantics?
->>
->> At least I would be fine with that. For now amdgpu is the only exporte=
-r who
->> implements the explicit pin/unpin semantics anyway.
->=20
-> Yup, I think that makes sense (if it works). Maybe we could use somethi=
-ng
-> like:
->=20
-> a) dma_buf pin exists, driver is dynamic. This means dma_buf_vmap needs=
- to
-> first pin, then call ->vmap. dma_buf_vmap_local otoh can directly call
-> ->vmap since the exporter relies on either a pin or dma_resv_lock.
->=20
-> b) dma_buf pin not implement, driver is a legacy pile. dma_buf_vmap wil=
-l
-> pin (somewhere at least, or rely on some implicit pin), dma_buf_vmap_lo=
-cal
-> doesn't work and should fail.
-
-I think I read in the dma-buf documentation that pin is supposed to put=20
-the BO in a domain that is suitable for scanout. Now I don't really=20
-trust this to work. Amdgpu, radeon and nouveau put it into the GTT=20
-region. Qxl appears to put it wherever it is.
-
->=20
-> I think for less transition work fbdev helpers could first try
-> dma_resv_lock + dma_buf_vmap_local, if that fails, drop the dma_resv_lo=
-ck
-> and do the pinning dma_buf_vmap. That way we don't have to convert shme=
-m
-> helpers over to dma_resv locking, which should help.
-
-I have meanwhile made a patchset that updates helpers for cma, shmem and =
-
-vram with vmap_local; and converts fbdev emulation as well. It needs a=20
-bit more testing before being posted.
-
-Best regards
-Thomas
-
->=20
-> And ttm drivers would do the new clean interface, so at least everyone
-> using dma_resv today is all fine. Intel's conversion to dma_resv lock i=
-s
-> in-flight, but that needs a conversion to the dynamic interface anyway,=
-
-> the current code splats. And dynamic brings means explicit pin/unpin
-> callbacks, so should be good too.
-> -Daniel
->=20
->>
->> Regards,
->> Christian.
->>
->>>
->>> Best regards
->>> Thomas
->>>
->>> [1] https://patchwork.freedesktop.org/patch/400054/?series=3D83765&re=
-v=3D1
->>>
->>>>
->>>> - The new one, which allows vmapping with just dma_resv locked, and
->>>> should
->>>>  =C2=A0=C2=A0 have some caching in exporters.
->>>>
->>>> Breaking code and then adding todos about that is kinda not so cool
->>>> approach here imo.
->>>>
->>>> Also I guess ttm_bo_vmap should have a check that either the buffer =
-is
->>>> pinned, or dma_resv_lock is held.
->>>>
->>>> Cheers, Daniel
->>>>
->>>>
->>>>
->>>>>
->>>>> Best regards
->>>>> Thomas
->>>>>
->>>>>>
->>>>>>> ---
->>>>>>>  =C2=A0=C2=A0 Documentation/gpu/todo.rst | 15 +++++++++++++
->>>>>>>  =C2=A0=C2=A0 include/drm/drm_gem.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- |=C2=A0 4 ++++
->>>>>>>  =C2=A0=C2=A0 include/linux/dma-buf.h=C2=A0=C2=A0=C2=A0 | 45
->>>>>>> ++++++++++++++++++++++++++++++++++++++
->>>>>>>  =C2=A0=C2=A0 3 files changed, 64 insertions(+)
->>>>>>>
->>>>>>> diff --git a/Documentation/gpu/todo.rst b/Documentation/gpu/todo.=
-rst
->>>>>>> index 009d8e6c7e3c..32bb797a84fc 100644
->>>>>>> --- a/Documentation/gpu/todo.rst
->>>>>>> +++ b/Documentation/gpu/todo.rst
->>>>>>> @@ -505,6 +505,21 @@ Contact: Thomas Zimmermann
->>>>>>> <tzimmermann@suse.de>, Christian K=C3=B6nig, Daniel Vette
->>>>>>>  =C2=A0=C2=A0 Level: Intermediate
->>>>>>> +Enforce rules for dma-buf vmap and pin ops
->>>>>>> +------------------------------------------
->>>>>>> +
->>>>>>> +Exporter implementations of vmap and pin in struct
->>>>>>> dma_buf_ops (and consequently
->>>>>>> +struct drm_gem_object_funcs) use a variety of locking
->>>>>>> semantics. Some rely on
->>>>>>> +the caller holding the dma-buf's reservation lock, some
->>>>>>> do their own locking,
->>>>>>> +some don't require any locking. VRAM helpers even used
->>>>>>> to pin as part of vmap.
->>>>>>> +
->>>>>>> +We need to review each exporter and enforce the documented rules=
-=2E
->>>>>>> +
->>>>>>> +Contact: Christian K=C3=B6nig, Daniel Vetter, Thomas
->>>>>>> Zimmermann <tzimmermann@suse.de>
->>>>>>> +
->>>>>>> +Level: Advanced
->>>>>>> +
->>>>>>> +
->>>>>>>  =C2=A0=C2=A0 Core refactorings
->>>>>>>  =C2=A0=C2=A0 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-
->>>>>>> diff --git a/include/drm/drm_gem.h b/include/drm/drm_gem.h
->>>>>>> index 5e6daa1c982f..1864c6a721b1 100644
->>>>>>> --- a/include/drm/drm_gem.h
->>>>>>> +++ b/include/drm/drm_gem.h
->>>>>>> @@ -138,6 +138,8 @@ struct drm_gem_object_funcs {
->>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * drm_gem_dmabuf_vmap=
-() helper.
->>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *
->>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * This callback is op=
-tional.
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 *
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * See also struct dma_buf_ops.vmap
->>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
->>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int (*vmap)(struct drm_gem_=
-object *obj, struct
->>>>>>> dma_buf_map *map);
->>>>>>> @@ -148,6 +150,8 @@ struct drm_gem_object_funcs {
->>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * drm_gem_dmabuf_vunm=
-ap() helper.
->>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *
->>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * This callback is op=
-tional.
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 *
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * See also struct dma_buf_ops.vunmap
->>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
->>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 void (*vunmap)(struct drm_g=
-em_object *obj, struct
->>>>>>> dma_buf_map *map);
->>>>>>> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
->>>>>>> index cf72699cb2bc..dc81fdc01dda 100644
->>>>>>> --- a/include/linux/dma-buf.h
->>>>>>> +++ b/include/linux/dma-buf.h
->>>>>>> @@ -267,7 +267,52 @@ struct dma_buf_ops {
->>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
->>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int (*mmap)(struct dma_buf =
-*, struct vm_area_struct *vma);
->>>>>>> +=C2=A0=C2=A0=C2=A0 /**
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * @vmap:
->>>>>>
->>>>>> There's already a @vmap and @vunamp kerneldoc at the top comment, =
-that
->>>>>> needs to be removed.
->>>>>> -Daniel
->>>>>>
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 *
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * Returns a virtual address for the buf=
-fer.
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 *
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * Notes to callers:
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 *
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * - Callers must hold the struct dma_bu=
-f.resv lock
->>>>>>> before calling
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 *=C2=A0=C2=A0 this interface.
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 *
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * - Callers must provide means to preve=
-nt the
->>>>>>> mappings from going
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 *=C2=A0=C2=A0 stale, such as holding th=
-e reservation lock or providing a
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 *=C2=A0=C2=A0 move-notify callback to t=
-he exporter.
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 *
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * Notes to implementors:
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 *
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * - Implementations must expect pairs o=
-f @vmap and
->>>>>>> @vunmap to be
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 *=C2=A0=C2=A0 called frequently and sho=
-uld optimize for this case.
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 *
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * - Implementations should avoid additi=
-onal operations, such as
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 *=C2=A0=C2=A0 pinning.
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 *
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * - Implementations may expect the call=
-er to hold the dma-buf's
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 *=C2=A0=C2=A0 reservation lock to prote=
-ct against concurrent calls and
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 *=C2=A0=C2=A0 relocation.
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 *
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * - Implementations may provide additio=
-nal
->>>>>>> guarantees, such as working
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 *=C2=A0=C2=A0 without holding the reser=
-vation lock.
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 *
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * This callback is optional.
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 *
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * Returns:
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 *
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * 0 on success or a negative error code=
- on failure.
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 */
->>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int (*vmap)(struct dma_buf =
-*dmabuf, struct dma_buf_map *map);
->>>>>>> +
->>>>>>> +=C2=A0=C2=A0=C2=A0 /**
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * @vunmap:
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 *
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * Releases the address previously retur=
-ned by @vmap.
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 *
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * This callback is optional.
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 *
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * See also @vmap()
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 */
->>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 void (*vunmap)(struct dma_b=
-uf *dmabuf, struct
->>>>>>> dma_buf_map *map);
->>>>>>>  =C2=A0=C2=A0 };
->>>>>>> --=20
->>>>>>> 2.29.2
->>>>>>>
->>>>>>
->>>>>
->>>>> --=20
->>>>> Thomas Zimmermann
->>>>> Graphics Driver Developer
->>>>> SUSE Software Solutions Germany GmbH
->>>>> Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
->>>>> (HRB 36809, AG N=C3=BCrnberg)
->>>>> Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
->>>>>
->>>>
->>>>
->>>>
->>>>
->>>
->>
->=20
-
---=20
-Thomas Zimmermann
-Graphics Driver Developer
-SUSE Software Solutions Germany GmbH
-Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
-(HRB 36809, AG N=C3=BCrnberg)
-Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
-
-
---La2DN66lFLV4lealZBpFx55x3kQJCiryS--
-
---bKxtXe23WBn7W6bDLD0sAcr6ipZTz5iZk
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAl/QmbQFAwAAAAAACgkQlh/E3EQov+Bo
-URAAmUc1ARG25ekIz7kVIVmppbSL/mYdv+NPCDgzGresfyNlJm9WUHGpFbCcls9ov67gz2IqpKIR
-8IAOaP/51f56FnOAsQyDA+XLbu7C7DK2Varb0q1m58QeFePai0WO2PvQk7ZxDWr6SleHs10YeVKq
-8t3MLX2jroJ8Ms3MsEDqJLNEJcA5jU3SlKKgukcDs8dg30XURsagL9oZopUzHQfZ0SKhtQ5210Ld
-Ohjz9hGWROxl404vusByLtxxobqeWYvyrb60wwJZBUC1NJO30SZra++LfAwRkCASDdSfmWMli0yd
-wCo7FIrV35daCmbefwNJUam4GQ4wtGZ3GDI2oYWU6YY4r1MmueDCqt4SSNXtwO9yUzz+VPgJTUWW
-OMCPosyJGuwxuRyw3wFS6hy6SIJ8rD5s9bF9OksVDS+A9hTm05Fq/yLLUpxmC/s6D856b0vYUgHc
-id5Y2B4yglH/fpJQYizF5JTTZaoQzRzzBDIZ0oj1pxvbmHmC0sW6btsRvrjIWinL/1y1HNbeRjmz
-o91VOyQKU1FWA6RpaSw4qJTqVnTRRBT4SUB1MUl+FtGcQLbheCIE1LPzKiCXO5TR6QYOhVbQOgUi
-G2El7mzcwPV+OmF96XQrEqbTJE7WKB0LckUzTYnSBJYMc3n/CQHUMFZdsQ58QwYmemOogzRKumUt
-OK0=
-=8Xgm
------END PGP SIGNATURE-----
-
---bKxtXe23WBn7W6bDLD0sAcr6ipZTz5iZk--
+> >
+> > Best Regards,
+> > -Hiro
+> > > >
+> > > > Any comments are appreciated.
+> > > > Thanks so much in advance.
+> > > >
+> > > > [1]
+> > > > https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/dev-=
+encoder.html#drain
+> > > > [2] https://web.dev/webcodecs/
+> > > >
+> > > > Sincerely,
+> > > > -Hiro
+>
+>
