@@ -2,67 +2,180 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D87A8C4361B
-	for <linux-media@archiver.kernel.org>; Wed,  9 Dec 2020 09:52:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EDD8C4361B
+	for <linux-media@archiver.kernel.org>; Wed,  9 Dec 2020 09:59:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 906CE23433
-	for <linux-media@archiver.kernel.org>; Wed,  9 Dec 2020 09:52:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 410862343F
+	for <linux-media@archiver.kernel.org>; Wed,  9 Dec 2020 09:59:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729514AbgLIJwi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Dec 2020 04:52:38 -0500
-Received: from mga02.intel.com ([134.134.136.20]:25777 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728504AbgLIJwi (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 9 Dec 2020 04:52:38 -0500
-IronPort-SDR: QyfpGewZpMlyb0dSmfIrsaoohGgw48rfVetoGuvRMqD52+S+Loh4sVJolh7Wc7gsCdvPJ/QzCx
- A1/nmR3ZYoNg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9829"; a="161102854"
-X-IronPort-AV: E=Sophos;i="5.78,405,1599548400"; 
-   d="scan'208";a="161102854"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 01:50:51 -0800
-IronPort-SDR: qwNuumCrCFLgqV0riMObJkx+LwSH6fP4Vsz3NfAHlfChMTmE5pddVVy+/zM7Sfcu/PB9I2NiWD
- mso/fMIqURzw==
-X-IronPort-AV: E=Sophos;i="5.78,405,1599548400"; 
-   d="scan'208";a="483954453"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 01:50:50 -0800
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 7A0442067A; Wed,  9 Dec 2020 11:50:48 +0200 (EET)
-Date:   Wed, 9 Dec 2020 11:50:48 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] media: ccs: Remove uninitialized, unused variable
-Message-ID: <20201209095048.GG25763@paasikivi.fi.intel.com>
-References: <X9B0NIm4Iv4uFlkT@mwanda>
+        id S1729559AbgLIJ6z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Dec 2020 04:58:55 -0500
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:16281 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729007AbgLIJ6z (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Dec 2020 04:58:55 -0500
+X-Originating-IP: 93.34.118.233
+Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id DA8FB240004;
+        Wed,  9 Dec 2020 09:58:09 +0000 (UTC)
+Date:   Wed, 9 Dec 2020 10:58:19 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     kholk11@gmail.com
+Cc:     mchehab@kernel.org, robh+dt@kernel.org,
+        marijn.suijten@somainline.org, konrad.dybcio@somainline.org,
+        martin.botka@somainline.org, devicetree@vger.kernel.org,
+        linux-media@vger.kernel.org, phone-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sakari.ailus@iki.fi,
+        andrey.konovalov@linaro.org,
+        angelogioacchino.delregno@somainline.org
+Subject: Re: [PATCH v3 1/2] media: i2c: Add driver for the Sony Exmor-RS
+ IMX300 camera sensor
+Message-ID: <20201209095819.w6lfpga2gqvu2ujn@uno.localdomain>
+References: <20201127223047.2764643-1-kholk11@gmail.com>
+ <20201127223047.2764643-2-kholk11@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <X9B0NIm4Iv4uFlkT@mwanda>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20201127223047.2764643-2-kholk11@gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Dan,
+Hello,
 
-On Wed, Dec 09, 2020 at 09:52:36AM +0300, Dan Carpenter wrote:
-> The "reg" value isn't used any more but it's still printed in the
-> debug code.  Delete it.
-> 
-> Fixes: fd9065812c7b ("media: smiapp: Obtain frame descriptor from CCS limits")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+On Fri, Nov 27, 2020 at 11:30:46PM +0100, kholk11@gmail.com wrote:
+> From: AngeloGioacchino Del Regno <kholk11@gmail.com>
+>
+> This is a custom multi-aspect 25MegaPixels sensor from Sony,
+> found in many Sony Xperia smartphones from various eras.
+>
+> The camera assembly for this sensor usually (at least in Xperia
+> phones) has a lens that does not cover the entire sensor area,
+> which means that the real corners are blind and that, in many
+> lighting conditions, some more pixels in the corners are very
+> getting obscured (as no decent amount of light can get in)...
+> so, the maximum resolution that can produce a good image is:
+> - In 4:3 aspect ratio, 5520x4160 (23.0MP)
+> - In 16:9 aspect ratio, 5984x3392 (20.3MP).
+>
+> This sensor supports high frame rates (>=60FPS) when in binning
+> mode and both RAW8 and RAW10 output modes.
+> In this version of the driver, support has been provided for the
+> following resolutions:
+>     W x H     SZ   MAX_FPS  BINNING
+> - 5520x4160 23.0MP   23       No
+> - 5984x3392 20.3MP   26       No
+> - 2992x1696  3.8MP   60       Yes
+> - 1424x800   1.2MP   120      Yes
+>
+> Note 1: The "standard" camera assy for IMX300 also contains an
+> actuator (to focus the image), but this driver only manages the
+> actual image sensor.
+>
+> Note 2: The command tables for this sensor were reverse
+> engineered from a downstream "userspace driver" that has been
+> released in various versions on various Xperia smartphones.
+> Register layout seems to be only vaguely similar to IMX219,
+> which has a public datasheet from where some names for the
+> figured out registers were taken and added to the driver:
+> these names are probably not the right ones, but they surely
+> represent the intended thing.
+>
+> Signed-off-by: AngeloGioacchino Del Regno <kholk11@gmail.com>
 
-Thank you for the patch. This has been already fixed by another patch:
+Just a few drive-by comments, as I'm looking at selection targets for
+other imx sensors and I've noticed this one on the list
 
-<URL:https://patchwork.linuxtv.org/project/linux-media/patch/20201203222828.1029943-1-arnd@kernel.org/>
+> ---
+>  drivers/media/i2c/Kconfig  |   13 +
+>  drivers/media/i2c/Makefile |    1 +
+>  drivers/media/i2c/imx300.c | 3081 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 3095 insertions(+)
+>  create mode 100644 drivers/media/i2c/imx300.c
+>
 
--- 
-Sakari Ailus
+[snip]
+
+> +/*
+> + * ** IMX300 native and active pixel array size **
+> + *
+> + * Being this a multi-aspect sensor, the following native W/H apply, but
+> + * beware: the module assembly usually has a (round) lens that is shadowing
+> + * or covering the corners of the (square) image sensor, so the maximum
+> + * output resolution must be lower than the maximum sensor resolution
+> + * otherwise we get something like a view from a porthole... :)
+> + *
+> + * For 4:3  aspect ratio, max is: 5984x4140 (25MP)
+> + * For 16:9 aspect ratio, max is: 5984x3392 (20.3MP)
+> + */
+
+These are the sizes
+
+> +#define IMX300_NATIVE_WIDTH		5980U
+> +#define IMX300_NATIVE_HEIGHT		4140U
+> +#define IMX300_PIXEL_ARRAY_LEFT		0U
+> +#define IMX300_PIXEL_ARRAY_TOP		0U
+> +#define IMX300_PIXEL_ARRAY_WIDTH	5520U
+> +#define IMX300_PIXEL_ARRAY_HEIGHT	4160U
+
+And here is how they are applied to selection targets
+
+> +	case V4L2_SEL_TGT_CROP: {
+> +		struct imx300 *imx300 = to_imx300(sd);
+> +
+> +		mutex_lock(&imx300->mutex);
+> +		sel->r = *__imx300_get_pad_crop(imx300, cfg, sel->pad,
+> +						sel->which);
+> +		mutex_unlock(&imx300->mutex);
+> +
+> +		return 0;
+> +	}
+> +
+> +	case V4L2_SEL_TGT_NATIVE_SIZE:
+> +		sel->r.top = 0;
+> +		sel->r.left = 0;
+> +		sel->r.width = IMX300_NATIVE_WIDTH;
+> +		sel->r.height = IMX300_NATIVE_HEIGHT;
+> +
+> +		return 0;
+> +
+> +	case V4L2_SEL_TGT_CROP_DEFAULT:
+> +		sel->r.top = IMX300_PIXEL_ARRAY_TOP;
+> +		sel->r.left = IMX300_PIXEL_ARRAY_LEFT;
+> +		sel->r.width = IMX300_PIXEL_ARRAY_WIDTH;
+> +		sel->r.height = IMX300_PIXEL_ARRAY_HEIGHT;
+> +
+> +		return 0;
+> +	}
+> +
+
+1) CROP_DEFAULT should be contained in NATIVE_SIZE (actually all
+targets are contained in NATIVE_SIZE, and are defined relatively to
+it). This means that IMX300_PIXEL_ARRAY_HEIGHT > IMX300_NATIVE_HEIGHT
+is probably wrong.
+
+2) You need to specify CROP_BOUNDS too. If the driver does not support
+reading optically black pixels using the selection API, it should be
+identical to CROP_DEFAULT (v4l2-compliance should report that, see
+https://git.linuxtv.org/media_tree.git/commit/?id=1ed36ecd1459b653cced8929bfb37dba94b64c5d
+
+3) CROP_DEFAULT (and BOUNDS) should report the sensor readable active
+area. You have one mode where the TGT_CROP rectangle width is bigger
+than the CROP_DEFAULT (and BOUNDS) rectangle width (5984 > 5520). I
+think 5984 should probably be made the CROP_DEFAULT (and BOUNDS) width
+then, as the 5984 mode's width implies the 464 pixels exceeding 5520
+are readable and valid for image capture.
+
+It's not easy to get these right with a datasheet sometimes, without
+one it quickly becomes a matter of guessing. But even if the values are
+computed as 'best effort' we should try to respect the relationships
+between the different selection targets.
+
+Thanks
+  j
