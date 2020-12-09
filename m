@@ -2,27 +2,27 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E97C1C19425
-	for <linux-media@archiver.kernel.org>; Wed,  9 Dec 2020 14:26:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09A5FC1B0E3
+	for <linux-media@archiver.kernel.org>; Wed,  9 Dec 2020 14:26:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B8B3B2222B
+	by mail.kernel.org (Postfix) with ESMTP id D148F22227
 	for <linux-media@archiver.kernel.org>; Wed,  9 Dec 2020 14:26:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732959AbgLIO02 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1732960AbgLIO02 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 9 Dec 2020 09:26:28 -0500
-Received: from mx2.suse.de ([195.135.220.15]:39640 "EHLO mx2.suse.de"
+Received: from mx2.suse.de ([195.135.220.15]:39542 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732952AbgLIO0N (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 9 Dec 2020 09:26:13 -0500
+        id S1732623AbgLIO0M (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 9 Dec 2020 09:26:12 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id F0EA6ACE1;
-        Wed,  9 Dec 2020 14:25:31 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id C8C76AD57;
+        Wed,  9 Dec 2020 14:25:30 +0000 (UTC)
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     daniel@ffwll.ch, christian.koenig@amd.com, airlied@linux.ie,
         sumit.semwal@linaro.org, maarten.lankhorst@linux.intel.com,
@@ -32,12 +32,10 @@ Cc:     dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
         linaro-mm-sig@lists.linaro.org,
         virtualization@lists.linux-foundation.org,
         Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v3 2/8] drm/ast: Only map cursor BOs during updates
-Date:   Wed,  9 Dec 2020 15:25:21 +0100
-Message-Id: <20201209142527.26415-3-tzimmermann@suse.de>
+Subject: [PATCH v3 0/8] drm: Support short-term vmap via vmap_local
+Date:   Wed,  9 Dec 2020 15:25:19 +0100
+Message-Id: <20201209142527.26415-1-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201209142527.26415-1-tzimmermann@suse.de>
-References: <20201209142527.26415-1-tzimmermann@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -45,174 +43,84 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The HW cursor's BO used to be mapped permanently into the kernel's
-address space. GEM's vmap operation will be protected by locks, and
-we don't want to lock the BO's for an indefinate period of time.
+(was: drm/vram-helper: Lock GEM BOs while they are mapped)
 
-Change the cursor code to map the HW BOs only during updates. The
-vmap operation in VRAM helpers is cheap, as a once estabished mapping
-is being reused until the BO actually moves. As the HW cursor BOs are
-permanently pinned, they never move at all.
+GEM VRAM helpers used to pin the BO in their implementation of vmap, so
+that they could not be relocated. In recent discussions, [1][2] it became
+clear that this is incorrect for in-kernel use cases, such as fbdev
+emulation; which should rather depend on the reservation lock to prevent
+relocation.
 
+This patchset addresses the issue by introducing the new interfaces
+vmap_local and vunmap_local throughout dma-buf and GEM. It further adds
+support to DRM's CMA, SHMEM and VRAM helpers and finally converts fbdev
+emulation to the new interface.
+
+Patches 1 and 2 prepare the ast cursor code for the later changes.
+
+Patches 3 and 4 add the vmap_local infrastructure throughout dma-buf,
+GEM and PRIME.
+
+Patches 5 to 7 add implementations of vmap_local to DRM's various GEM
+helper libraries. Due to the simple nature of these libraries, existing
+vmap code can be reused easily. Several drivers are updateed as well to
+use the new interfaces.
+
+Patch 8 converts generic fbdev emulation to use vmap_local. Only DRM
+drivers that use GEM helpers currently use fbdev emulation, so patches
+5 to 7 covered all necessary instances.
+
+I smoke-tested the patchset with ast (VRAM helpers), mgag200 (SHMEM) and
+vc4 (CMA). I also tested with a version of radeon (raw TTM) that has been
+converted to generic fbdev emulation.
+
+v3:
+	* rewrite patchset around vmap_local
 v2:
-	* fix typos in commit description
+	* make importers acquire resv locks by themselves
+	* document dma-buf vamp/vunmap ops
 
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Acked-by: Christian König <christian.koenig@amd.com>
----
- drivers/gpu/drm/ast/ast_cursor.c | 51 ++++++++++++++++++--------------
- drivers/gpu/drm/ast/ast_drv.h    |  2 --
- 2 files changed, 28 insertions(+), 25 deletions(-)
+[1] https://patchwork.freedesktop.org/patch/400054/?series=83765&rev=1
+[2] https://patchwork.freedesktop.org/patch/405407/?series=84401&rev=2
 
-diff --git a/drivers/gpu/drm/ast/ast_cursor.c b/drivers/gpu/drm/ast/ast_cursor.c
-index 68bf3d33f1ed..fac1ee79c372 100644
---- a/drivers/gpu/drm/ast/ast_cursor.c
-+++ b/drivers/gpu/drm/ast/ast_cursor.c
-@@ -39,7 +39,6 @@ static void ast_cursor_fini(struct ast_private *ast)
- 
- 	for (i = 0; i < ARRAY_SIZE(ast->cursor.gbo); ++i) {
- 		gbo = ast->cursor.gbo[i];
--		drm_gem_vram_vunmap(gbo, &ast->cursor.map[i]);
- 		drm_gem_vram_unpin(gbo);
- 		drm_gem_vram_put(gbo);
- 	}
-@@ -53,14 +52,13 @@ static void ast_cursor_release(struct drm_device *dev, void *ptr)
- }
- 
- /*
-- * Allocate cursor BOs and pins them at the end of VRAM.
-+ * Allocate cursor BOs and pin them at the end of VRAM.
-  */
- int ast_cursor_init(struct ast_private *ast)
- {
- 	struct drm_device *dev = &ast->base;
- 	size_t size, i;
- 	struct drm_gem_vram_object *gbo;
--	struct dma_buf_map map;
- 	int ret;
- 
- 	size = roundup(AST_HWC_SIZE + AST_HWC_SIGNATURE_SIZE, PAGE_SIZE);
-@@ -77,15 +75,7 @@ int ast_cursor_init(struct ast_private *ast)
- 			drm_gem_vram_put(gbo);
- 			goto err_drm_gem_vram_put;
- 		}
--		ret = drm_gem_vram_vmap(gbo, &map);
--		if (ret) {
--			drm_gem_vram_unpin(gbo);
--			drm_gem_vram_put(gbo);
--			goto err_drm_gem_vram_put;
--		}
--
- 		ast->cursor.gbo[i] = gbo;
--		ast->cursor.map[i] = map;
- 	}
- 
- 	return drmm_add_action_or_reset(dev, ast_cursor_release, NULL);
-@@ -94,7 +84,6 @@ int ast_cursor_init(struct ast_private *ast)
- 	while (i) {
- 		--i;
- 		gbo = ast->cursor.gbo[i];
--		drm_gem_vram_vunmap(gbo, &ast->cursor.map[i]);
- 		drm_gem_vram_unpin(gbo);
- 		drm_gem_vram_put(gbo);
- 	}
-@@ -168,31 +157,38 @@ static void update_cursor_image(u8 __iomem *dst, const u8 *src, int width, int h
- int ast_cursor_blit(struct ast_private *ast, struct drm_framebuffer *fb)
- {
- 	struct drm_device *dev = &ast->base;
--	struct drm_gem_vram_object *gbo;
--	struct dma_buf_map map;
--	int ret;
--	void *src;
-+	struct drm_gem_vram_object *dst_gbo = ast->cursor.gbo[ast->cursor.next_index];
-+	struct drm_gem_vram_object *src_gbo = drm_gem_vram_of_gem(fb->obj[0]);
-+	struct dma_buf_map src_map, dst_map;
- 	void __iomem *dst;
-+	void *src;
-+	int ret;
- 
- 	if (drm_WARN_ON_ONCE(dev, fb->width > AST_MAX_HWC_WIDTH) ||
- 	    drm_WARN_ON_ONCE(dev, fb->height > AST_MAX_HWC_HEIGHT))
- 		return -EINVAL;
- 
--	gbo = drm_gem_vram_of_gem(fb->obj[0]);
--
--	ret = drm_gem_vram_vmap(gbo, &map);
-+	ret = drm_gem_vram_vmap(src_gbo, &src_map);
- 	if (ret)
- 		return ret;
--	src = map.vaddr; /* TODO: Use mapping abstraction properly */
-+	src = src_map.vaddr; /* TODO: Use mapping abstraction properly */
- 
--	dst = ast->cursor.map[ast->cursor.next_index].vaddr_iomem;
-+	ret = drm_gem_vram_vmap(dst_gbo, &dst_map);
-+	if (ret)
-+		goto err_drm_gem_vram_vunmap;
-+	dst = dst_map.vaddr_iomem; /* TODO: Use mapping abstraction properly */
- 
- 	/* do data transfer to cursor BO */
- 	update_cursor_image(dst, src, fb->width, fb->height);
- 
--	drm_gem_vram_vunmap(gbo, &map);
-+	drm_gem_vram_vunmap(dst_gbo, &dst_map);
-+	drm_gem_vram_vunmap(src_gbo, &src_map);
- 
- 	return 0;
-+
-+err_drm_gem_vram_vunmap:
-+	drm_gem_vram_vunmap(src_gbo, &src_map);
-+	return ret;
- }
- 
- static void ast_cursor_set_base(struct ast_private *ast, u64 address)
-@@ -243,17 +239,26 @@ static void ast_cursor_set_location(struct ast_private *ast, u16 x, u16 y,
- void ast_cursor_show(struct ast_private *ast, int x, int y,
- 		     unsigned int offset_x, unsigned int offset_y)
- {
-+	struct drm_device *dev = &ast->base;
-+	struct drm_gem_vram_object *gbo = ast->cursor.gbo[ast->cursor.next_index];
-+	struct dma_buf_map map;
- 	u8 x_offset, y_offset;
- 	u8 __iomem *dst;
- 	u8 __iomem *sig;
- 	u8 jreg;
-+	int ret;
- 
--	dst = ast->cursor.map[ast->cursor.next_index].vaddr;
-+	ret = drm_gem_vram_vmap(gbo, &map);
-+	if (drm_WARN_ONCE(dev, ret, "drm_gem_vram_vmap() failed, ret=%d\n", ret))
-+		return;
-+	dst = map.vaddr_iomem; /* TODO: Use mapping abstraction properly */
- 
- 	sig = dst + AST_HWC_SIZE;
- 	writel(x, sig + AST_HWC_SIGNATURE_X);
- 	writel(y, sig + AST_HWC_SIGNATURE_Y);
- 
-+	drm_gem_vram_vunmap(gbo, &map);
-+
- 	if (x < 0) {
- 		x_offset = (-x) + offset_x;
- 		x = 0;
-diff --git a/drivers/gpu/drm/ast/ast_drv.h b/drivers/gpu/drm/ast/ast_drv.h
-index ccaff81924ee..f871fc36c2f7 100644
---- a/drivers/gpu/drm/ast/ast_drv.h
-+++ b/drivers/gpu/drm/ast/ast_drv.h
-@@ -28,7 +28,6 @@
- #ifndef __AST_DRV_H__
- #define __AST_DRV_H__
- 
--#include <linux/dma-buf-map.h>
- #include <linux/i2c.h>
- #include <linux/i2c-algo-bit.h>
- #include <linux/io.h>
-@@ -133,7 +132,6 @@ struct ast_private {
- 
- 	struct {
- 		struct drm_gem_vram_object *gbo[AST_DEFAULT_HWC_NUM];
--		struct dma_buf_map map[AST_DEFAULT_HWC_NUM];
- 		unsigned int next_index;
- 	} cursor;
- 
--- 
+Thomas Zimmermann (8):
+  drm/ast: Don't pin cursor source BO explicitly during update
+  drm/ast: Only map cursor BOs during updates
+  dma-buf: Add vmap_local and vnumap_local operations
+  drm/gem: Create infrastructure for GEM vmap_local
+  drm/cma-helper: Provide a vmap function for short-term mappings
+  drm/shmem-helper: Provide a vmap function for short-term mappings
+  drm/vram-helper: Provide a vmap function for short-term mappings
+  drm/fb-helper: Move BO locking from DRM client to fbdev damage worker
+
+ drivers/dma-buf/dma-buf.c              |  80 ++++++++++++++
+ drivers/gpu/drm/ast/ast_cursor.c       |  70 +++++++-----
+ drivers/gpu/drm/ast/ast_drv.h          |   2 -
+ drivers/gpu/drm/drm_client.c           |  91 ++++++++++++++++
+ drivers/gpu/drm/drm_fb_helper.c        |  41 +++----
+ drivers/gpu/drm/drm_gem.c              |  28 +++++
+ drivers/gpu/drm/drm_gem_cma_helper.c   |  35 ++++++
+ drivers/gpu/drm/drm_gem_shmem_helper.c |  71 ++++++++++++-
+ drivers/gpu/drm/drm_gem_vram_helper.c  | 142 ++++++++++++++++---------
+ drivers/gpu/drm/drm_internal.h         |   2 +
+ drivers/gpu/drm/drm_prime.c            |  39 +++++++
+ drivers/gpu/drm/mgag200/mgag200_mode.c |  16 ++-
+ drivers/gpu/drm/tiny/cirrus.c          |  10 +-
+ drivers/gpu/drm/tiny/gm12u320.c        |  14 ++-
+ drivers/gpu/drm/udl/udl_modeset.c      |  18 ++--
+ drivers/gpu/drm/vboxvideo/vbox_mode.c  |  15 +--
+ drivers/gpu/drm/vc4/vc4_bo.c           |  13 +++
+ drivers/gpu/drm/vc4/vc4_drv.h          |   1 +
+ drivers/gpu/drm/virtio/virtgpu_prime.c |   2 +
+ include/drm/drm_client.h               |   4 +
+ include/drm/drm_gem.h                  |  20 ++++
+ include/drm/drm_gem_cma_helper.h       |   1 +
+ include/drm/drm_gem_shmem_helper.h     |   2 +
+ include/drm/drm_gem_vram_helper.h      |   2 +
+ include/drm/drm_prime.h                |   2 +
+ include/linux/dma-buf.h                |  34 ++++++
+ 26 files changed, 635 insertions(+), 120 deletions(-)
+
+--
 2.29.2
 
