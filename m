@@ -2,149 +2,106 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-22.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_2 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 632E8C433FE
-	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 11:05:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 974DDC4361B
+	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 11:19:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 223EF23B85
-	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 11:05:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4099E23B26
+	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 11:19:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389177AbgLJK45 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 10 Dec 2020 05:56:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56190 "EHLO mail.kernel.org"
+        id S1728876AbgLJLTY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 10 Dec 2020 06:19:24 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37966 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389165AbgLJK4g (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 10 Dec 2020 05:56:36 -0500
+        id S2387474AbgLJLTI (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 10 Dec 2020 06:19:08 -0500
+Date:   Thu, 10 Dec 2020 12:18:18 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607599103;
+        bh=BIAsCliAqIddZptYimb/AB3OuSMn8q2vbSsyrx5/zyE=;
+        h=From:To:Cc:Subject:From;
+        b=OX+b3TsJPuk7ntvycWom/n6ehtu1Kxh1R5bCcomRNtFadwdY/9GtLx9qCCDsCaP42
+         RxXS2mlamDMZwHlUHJBw+dY06q1PiED19P6d6XFVwlsT0W48TE/lYw90hjh35nKLR5
+         eZlRulg3YAG5PUK/IZF/yTBoPaONhwKgg2UJX1KuepOypC3MQYJjEM0vd9LN8Z7Cva
+         NAIz2dxyXOiGs5b1iPCK4QePaP8MNA+ppzFigO2m3lvdEH1w0xtCuHzrjAquvvuXzp
+         f//fqda26fdGBhsYkHVg/Mu5J8UHHFmMklNmfpgC5qqk32N+AzhGy4Gk3Zhzqs8iFX
+         ewkMPoujfH/DA==
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 07/13] media: ext-ctrls-codec.rst: simplify a few tables
-Date:   Thu, 10 Dec 2020 11:55:46 +0100
-Message-Id: <3979524f134cf28fea77c9795266eca447a5b8c3.1607597287.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <cover.1607597287.git.mchehab+huawei@kernel.org>
-References: <cover.1607597287.git.mchehab+huawei@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL for v5.10] media fixes
+Message-ID: <20201210121818.2d5c0353@coco.lan>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Those tables nicely fits on PDF output without any hack.
-Yet, they are using a very small font, and have tabularcolumns.
+Hi Linus,
 
-Clean it up, and convert it to an ASCII artwork, as it
-makes easier to see that no hacks are needed to display it ;-)
+Please pull from:
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- .../media/v4l/ext-ctrls-codec.rst             | 78 +++++--------------
- 1 file changed, 19 insertions(+), 59 deletions(-)
+  git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v5.10-4
 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index 08c317ae0910..abf64e5500e0 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -2762,47 +2762,21 @@ enum v4l2_mpeg_video_hevc_profile -
- enum v4l2_mpeg_video_hevc_level -
-     Selects the desired level for HEVC encoder.
- 
--.. raw:: latex
--
--    \footnotesize
--
--.. tabularcolumns:: |p{9.0cm}|p{8.0cm}|
--
--.. flat-table::
--    :header-rows:  0
--    :stub-columns: 0
--
--    * - ``V4L2_MPEG_VIDEO_HEVC_LEVEL_1``
--      - Level 1.0
--    * - ``V4L2_MPEG_VIDEO_HEVC_LEVEL_2``
--      - Level 2.0
--    * - ``V4L2_MPEG_VIDEO_HEVC_LEVEL_2_1``
--      - Level 2.1
--    * - ``V4L2_MPEG_VIDEO_HEVC_LEVEL_3``
--      - Level 3.0
--    * - ``V4L2_MPEG_VIDEO_HEVC_LEVEL_3_1``
--      - Level 3.1
--    * - ``V4L2_MPEG_VIDEO_HEVC_LEVEL_4``
--      - Level 4.0
--    * - ``V4L2_MPEG_VIDEO_HEVC_LEVEL_4_1``
--      - Level 4.1
--    * - ``V4L2_MPEG_VIDEO_HEVC_LEVEL_5``
--      - Level 5.0
--    * - ``V4L2_MPEG_VIDEO_HEVC_LEVEL_5_1``
--      - Level 5.1
--    * - ``V4L2_MPEG_VIDEO_HEVC_LEVEL_5_2``
--      - Level 5.2
--    * - ``V4L2_MPEG_VIDEO_HEVC_LEVEL_6``
--      - Level 6.0
--    * - ``V4L2_MPEG_VIDEO_HEVC_LEVEL_6_1``
--      - Level 6.1
--    * - ``V4L2_MPEG_VIDEO_HEVC_LEVEL_6_2``
--      - Level 6.2
--
--.. raw:: latex
--
--    \normalsize
--
-+==================================	=========
-+``V4L2_MPEG_VIDEO_HEVC_LEVEL_1``	Level 1.0
-+``V4L2_MPEG_VIDEO_HEVC_LEVEL_2``	Level 2.0
-+``V4L2_MPEG_VIDEO_HEVC_LEVEL_2_1``	Level 2.1
-+``V4L2_MPEG_VIDEO_HEVC_LEVEL_3``	Level 3.0
-+``V4L2_MPEG_VIDEO_HEVC_LEVEL_3_1``	Level 3.1
-+``V4L2_MPEG_VIDEO_HEVC_LEVEL_4``	Level 4.0
-+``V4L2_MPEG_VIDEO_HEVC_LEVEL_4_1``	Level 4.1
-+``V4L2_MPEG_VIDEO_HEVC_LEVEL_5``	Level 5.0
-+``V4L2_MPEG_VIDEO_HEVC_LEVEL_5_1``	Level 5.1
-+``V4L2_MPEG_VIDEO_HEVC_LEVEL_5_2``	Level 5.2
-+``V4L2_MPEG_VIDEO_HEVC_LEVEL_6``	Level 6.0
-+``V4L2_MPEG_VIDEO_HEVC_LEVEL_6_1``	Level 6.1
-+``V4L2_MPEG_VIDEO_HEVC_LEVEL_6_2``	Level 6.2
-+==================================	=========
- 
- ``V4L2_CID_MPEG_VIDEO_HEVC_FRAME_RATE_RESOLUTION (integer)``
-     Indicates the number of evenly spaced subintervals, called ticks, within
-@@ -2821,24 +2795,10 @@ enum v4l2_mpeg_video_hevc_tier -
-     this flag to 1 indicates High tier. High tier is for applications requiring
-     high bit rates.
- 
--.. raw:: latex
--
--    \footnotesize
--
--.. tabularcolumns:: |p{9.0cm}|p{8.0cm}|
--
--.. flat-table::
--    :header-rows:  0
--    :stub-columns: 0
--
--    * - ``V4L2_MPEG_VIDEO_HEVC_TIER_MAIN``
--      - Main tier.
--    * - ``V4L2_MPEG_VIDEO_HEVC_TIER_HIGH``
--      - High tier.
--
--.. raw:: latex
--
--    \normalsize
-+==================================	==========
-+``V4L2_MPEG_VIDEO_HEVC_TIER_MAIN``	Main tier.
-+``V4L2_MPEG_VIDEO_HEVC_TIER_HIGH``	High tier.
-+==================================	==========
- 
- 
- ``V4L2_CID_MPEG_VIDEO_HEVC_MAX_PARTITION_DEPTH (integer)``
--- 
-2.29.2
+For a couple of fixes:
+
+- videobuf2: fix a DMABUF bug, preventing it to properly handle
+  cache sync/flush;
+- vidtv: an usage after free and a few sparse/smatch warning fixes;
+- pulse8-cec: a duplicate free and a bug related to new firmware usage;
+- mtk-cir: fix a regression on a clock setting.
+
+Thanks,
+Mauro
+
+The following changes since commit 44f28934af141149959c4e6495bb60c1903bda32:
+
+  media: vidtv.rst: add kernel-doc markups (2020-11-26 08:05:24 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v5.10-4
+
+for you to fetch changes up to 3d1387b3b8f6cc1ccdbb5f0d7af24df02f4baef9:
+
+  media: vidtv: fix some warnings (2020-12-08 08:15:49 +0100)
+
+----------------------------------------------------------------
+media fixes for v5.10-rc8
+
+----------------------------------------------------------------
+Colin Ian King (1):
+      media: [next] media: vidtv: fix a read from an object after it has been freed
+
+Hans Verkuil (2):
+      media: pulse8-cec: fix duplicate free at disconnect or probe error
+      media: pulse8-cec: add support for FW v10 and up
+
+Mauro Carvalho Chehab (2):
+      media: vidtv: fix kernel-doc markups
+      media: vidtv: fix some warnings
+
+Sean Young (1):
+      media: mtk-cir: fix calculation of chk period
+
+Sergey Senozhatsky (1):
+      media: vb2: set cache sync hints when init buffers
+
+ drivers/media/cec/usb/pulse8/pulse8-cec.c        | 52 ++++++++++++++++--------
+ drivers/media/common/videobuf2/videobuf2-core.c  | 11 +++++
+ drivers/media/rc/mtk-cir.c                       |  9 ++--
+ drivers/media/test-drivers/vidtv/vidtv_channel.c |  4 +-
+ drivers/media/test-drivers/vidtv/vidtv_psi.h     |  8 ++--
+ drivers/media/test-drivers/vidtv/vidtv_s302m.c   |  4 +-
+ drivers/media/test-drivers/vidtv/vidtv_ts.h      |  2 +-
+ 7 files changed, 58 insertions(+), 32 deletions(-)
 
