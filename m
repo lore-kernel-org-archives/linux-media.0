@@ -2,129 +2,182 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC036C4361B
-	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 10:56:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A49A2C0018C
+	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 10:57:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 61A4423D22
-	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 10:56:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 694EB23B70
+	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 10:57:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732648AbgLJK4G (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 10 Dec 2020 05:56:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54714 "EHLO mail.kernel.org"
+        id S1730998AbgLJK4v (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 10 Dec 2020 05:56:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56192 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389133AbgLJKz4 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 10 Dec 2020 05:55:56 -0500
-Date:   Thu, 10 Dec 2020 11:56:28 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1607597715;
-        bh=fIdtGp8vWJ8rg/wWH4ZsOydgwsBnqjqa6suyPx9CjfQ=;
-        h=From:To:Subject:References:In-Reply-To:From;
-        b=uNJUj8Xv/P5uwUw4YhKVzlwl51hpeBuON60UdAv3sBOhpHulQebDdtLbzFylGBF1t
-         9Lhwbxdf8pMSKN1m7Bbd1q2Jepska5L9E+yXMC8giviE+EG9nw8uIPi3IAzMimIIS0
-         27uyTunzMLLsj7WS9F3TRfBEkUkBZj9IUGJJysRY=
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        surenb@google.com, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        Hridya Valsaraju <hridya@google.com>, kernel-team@android.com,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH] dmabuf: Add the capability to expose DMA-BUF stats in
- sysfs
-Message-ID: <X9H+3AP1q39aMxeb@kroah.com>
-References: <20201210044400.1080308-1-hridya@google.com>
- <b5adfe46-8615-5821-d092-2b93feed5b79@amd.com>
- <X9H0JREcdxDsMtLX@kroah.com>
- <20201210102727.GE401619@phenom.ffwll.local>
+        id S2389166AbgLJK4h (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 10 Dec 2020 05:56:37 -0500
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: [PATCH 00/13] Address issues with PDF output at media uAPI docs
+Date:   Thu, 10 Dec 2020 11:55:39 +0100
+Message-Id: <cover.1607597287.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201210102727.GE401619@phenom.ffwll.local>
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Dec 10, 2020 at 11:27:27AM +0100, Daniel Vetter wrote:
-> On Thu, Dec 10, 2020 at 11:10:45AM +0100, Greg KH wrote:
-> > On Thu, Dec 10, 2020 at 10:58:50AM +0100, Christian König wrote:
-> > > In general a good idea, but I have a few concern/comments here.
-> > > 
-> > > Am 10.12.20 um 05:43 schrieb Hridya Valsaraju:
-> > > > This patch allows statistics to be enabled for each DMA-BUF in
-> > > > sysfs by enabling the config CONFIG_DMABUF_SYSFS_STATS.
-> > > > 
-> > > > The following stats will be exposed by the interface:
-> > > > 
-> > > > /sys/kernel/dmabuf/<inode_number>/exporter_name
-> > > > /sys/kernel/dmabuf/<inode_number>/size
-> > > > /sys/kernel/dmabuf/<inode_number>/dev_map_info
-> > > > 
-> > > > The inode_number is unique for each DMA-BUF and was added earlier [1]
-> > > > in order to allow userspace to track DMA-BUF usage across different
-> > > > processes.
-> > > > 
-> > > > Currently, this information is exposed in
-> > > > /sys/kernel/debug/dma_buf/bufinfo.
-> > > > However, since debugfs is considered unsafe to be mounted in production,
-> > > > it is being duplicated in sysfs.
-> > > 
-> > > Mhm, this makes it part of the UAPI. What is the justification for this?
-> > > 
-> > > In other words do we really need those debug information in a production
-> > > environment?
-> > 
-> > Production environments seem to want to know who is using up memory :)
-> 
-> This only shows shared memory, so it does smell a lot like $specific_issue
-> and we're designing a narrow solution for that and then have to carry it
-> forever.
+Keeping LaTeX/PDF output working is hard, as Sphinx require lots of
+manual adjusts, as it has several troubles:
 
-I think the "issue" is that this was a feature from ion that people
-"missed" in the dmabuf move.  Taking away the ability to see what kind
-of allocations were being made didn't make a lot of debugging tools
-happy :(
+- It can't compute properly table cell sizes when literals are used;
+- It doesn't break long literal words with hiphens when needed;
+- It easily write things out of tables and out of pages;
+- It doesn't have any tag that would allow changing the font size;
+- It doesn't re-scale tables.
 
-But Hridya knows more, she's been dealing with the transition for a long
-time now.
+So, from time to time, a manual (hard) work is needed in order to
+check what broke, fixing them.
 
-> E.g. why is the list of attachments not a sysfs link? That's how we
-> usually expose struct device * pointers in sysfs to userspace, not as a
-> list of things.
+This series address most of such issues that happen at the uAPI
+media documents.
 
-These aren't struct devices, so I don't understand the objection here.
-Where else could these go in sysfs?
+Jon,
 
-> Furthermore we don't have the exporter device covered anywhere, how is
-> that tracked? Yes Android just uses ion for all shared buffers, but that's
-> not how all of linux userspace works.
+Patch 1 actually fixes a bug at conf.py.  The remaining patches
+depend on it. My plan is to have this series merged for 5.11.
 
-Do we have the exporter device link in the dmabuf interface?  If so,
-great, let's use that, but for some reason I didn't think it was there.
+IMO, the best would be to have this patch applied via my tree,
+but I'm OK if you prefer to merge this one via yours.
 
-> Then I guess there's the mmaps, you can fish them out of procfs. A tool
-> which collects all that information might be useful, just as demonstration
-> of how this is all supposed to be used.
+Regards,
+Mauro
 
-There's a script somewhere that does this today, again, Hridya knows
-more.
+Mauro Carvalho Chehab (13):
+  docs: conf.py: fix sphinx version detection for margin set
+  media: colorspaces-details.rst: drop tabularcolumns
+  media: control.rst: use a table for V4L2_CID_POWER_LINE
+  media: docs: sliced-vbi: fix V4L2_SLICED_WSS_625 docs
+  media: ext-ctrls-codec-stateless.rst: change a FWHT flag description
+  media: ext-ctrls-codec.rst: add a missing profile description
+  media: ext-ctrls-codec.rst: simplify a few tables
+  media: ext-ctrls-jpeg.rst: cleanup V4L2_CID_JPEG_COMPRESSION_QUALITY
+    text
+  media: docs: pixfmt: use section titles for bayer formats
+  media: buffer.rst: fix a PDF output issue
+  media: ext-ctrls-codec-stateless.rst: fix an H-264 table format
+  media: pixfmt-yuv-planar.rst: fix PDF OUTPUT
+  media: docs: uAPI: fix table output in LaTeX/PDF format
 
-> There's also some things to make sure we're at least having thought about
-> how other things fit in here. E.d. dma_resv attached to the dma-buf
-> matters in general a lot. It doesn't matter on Android because
-> everything's pinned all the time anyway.
-> 
-> Also I thought sysfs was one value one file, dumping an entire list into
-> dev_info_map with properties we'll need to extend (once you care about
-> dma_resv you also want to know which attachments are dynamic) does not
-> smell like sysfs design at all.
+ Documentation/conf.py                         |   3 +-
+ .../media/cec/cec-ioc-adap-g-caps.rst         |   4 +-
+ .../media/cec/cec-ioc-adap-g-conn-info.rst    |   6 +-
+ .../media/cec/cec-ioc-adap-g-log-addrs.rst    |  12 +-
+ .../media/cec/cec-ioc-dqevent.rst             |  10 +-
+ .../media/cec/cec-ioc-g-mode.rst              |   4 +-
+ .../media/cec/cec-ioc-receive.rst             |   8 +-
+ .../userspace-api/media/dvb/fe-type-t.rst     |   2 +-
+ .../media/mediactl/media-ioc-device-info.rst  |   2 +-
+ .../mediactl/media-ioc-enum-entities.rst      |   2 +-
+ .../media/mediactl/media-ioc-enum-links.rst   |   6 +-
+ .../media/mediactl/media-ioc-g-topology.rst   |  12 +-
+ .../media/mediactl/media-types.rst            |   4 +-
+ .../userspace-api/media/rc/rc-tables.rst      |   2 +-
+ .../userspace-api/media/v4l/buffer.rst        |  22 +-
+ .../media/v4l/colorspaces-details.rst         |  31 --
+ .../userspace-api/media/v4l/control.rst       |  13 +-
+ .../userspace-api/media/v4l/dev-meta.rst      |   2 +-
+ .../userspace-api/media/v4l/dev-raw-vbi.rst   |   4 +-
+ .../userspace-api/media/v4l/dev-rds.rst       |   4 +-
+ .../userspace-api/media/v4l/dev-sdr.rst       |   2 +-
+ .../media/v4l/dev-sliced-vbi.rst              |  50 +--
+ .../userspace-api/media/v4l/dev-subdev.rst    |   6 +-
+ .../userspace-api/media/v4l/diff-v4l.rst      |  10 +-
+ .../media/v4l/ext-ctrls-camera.rst            |  14 +-
+ .../media/v4l/ext-ctrls-codec-stateless.rst   | 181 +++++++++--
+ .../media/v4l/ext-ctrls-codec.rst             | 288 ++++++++++++------
+ .../userspace-api/media/v4l/ext-ctrls-dv.rst  |   2 +-
+ .../media/v4l/ext-ctrls-flash.rst             |   7 +-
+ .../media/v4l/ext-ctrls-jpeg.rst              |  13 +-
+ .../userspace-api/media/v4l/field-order.rst   |   2 +-
+ .../media/v4l/pixfmt-compressed.rst           |  12 +-
+ .../media/v4l/pixfmt-packed-yuv.rst           |  26 +-
+ .../media/v4l/pixfmt-reserved.rst             |  10 +-
+ .../userspace-api/media/v4l/pixfmt-rgb.rst    |   9 +-
+ .../media/v4l/pixfmt-srggb10-ipu3.rst         |  12 +-
+ .../media/v4l/pixfmt-srggb10p.rst             |   2 +-
+ .../media/v4l/pixfmt-srggb12p.rst             |   2 +-
+ .../media/v4l/pixfmt-srggb14.rst              |   2 +
+ .../media/v4l/pixfmt-srggb14p.rst             |   6 +-
+ .../media/v4l/pixfmt-srggb16.rst              |   2 +
+ .../userspace-api/media/v4l/pixfmt-srggb8.rst |   3 +-
+ .../media/v4l/pixfmt-v4l2-mplane.rst          |   4 +-
+ .../userspace-api/media/v4l/pixfmt-v4l2.rst   |   4 +-
+ .../media/v4l/pixfmt-yuv-luma.rst             |  10 +
+ .../media/v4l/pixfmt-yuv-planar.rst           |  34 ++-
+ .../media/v4l/subdev-formats.rst              |  26 +-
+ .../media/v4l/v4l2-selection-flags.rst        |  14 +-
+ .../media/v4l/v4l2-selection-targets.rst      |  12 +-
+ .../media/v4l/vidioc-create-bufs.rst          |   2 +-
+ .../media/v4l/vidioc-cropcap.rst              |   4 +-
+ .../media/v4l/vidioc-dbg-g-chip-info.rst      |   6 +-
+ .../media/v4l/vidioc-dbg-g-register.rst       |   4 +-
+ .../media/v4l/vidioc-decoder-cmd.rst          |   8 +-
+ .../media/v4l/vidioc-dqevent.rst              |  21 +-
+ .../media/v4l/vidioc-dv-timings-cap.rst       |   6 +-
+ .../media/v4l/vidioc-encoder-cmd.rst          |   6 +-
+ .../media/v4l/vidioc-enum-dv-timings.rst      |   2 +-
+ .../media/v4l/vidioc-enum-fmt.rst             |  10 +-
+ .../media/v4l/vidioc-enum-frameintervals.rst  |   7 +-
+ .../media/v4l/vidioc-enum-framesizes.rst      |   8 +-
+ .../media/v4l/vidioc-enum-freq-bands.rst      |   4 +-
+ .../media/v4l/vidioc-enuminput.rst            |   8 +-
+ .../media/v4l/vidioc-enumoutput.rst           |   6 +-
+ .../media/v4l/vidioc-enumstd.rst              |   6 +-
+ .../userspace-api/media/v4l/vidioc-expbuf.rst |   2 +-
+ .../media/v4l/vidioc-g-audio.rst              |   6 +-
+ .../media/v4l/vidioc-g-audioout.rst           |   2 +-
+ .../userspace-api/media/v4l/vidioc-g-crop.rst |   2 +-
+ .../userspace-api/media/v4l/vidioc-g-ctrl.rst |   2 +-
+ .../media/v4l/vidioc-g-dv-timings.rst         |  20 +-
+ .../userspace-api/media/v4l/vidioc-g-edid.rst |   2 +-
+ .../media/v4l/vidioc-g-enc-index.rst          |   6 +-
+ .../media/v4l/vidioc-g-ext-ctrls.rst          |  20 +-
+ .../userspace-api/media/v4l/vidioc-g-fbuf.rst |   6 +-
+ .../userspace-api/media/v4l/vidioc-g-fmt.rst  |   2 +-
+ .../media/v4l/vidioc-g-frequency.rst          |   2 +-
+ .../media/v4l/vidioc-g-jpegcomp.rst           |   4 +-
+ .../media/v4l/vidioc-g-modulator.rst          |   9 +-
+ .../userspace-api/media/v4l/vidioc-g-parm.rst |  11 +-
+ .../media/v4l/vidioc-g-priority.rst           |   2 +-
+ .../media/v4l/vidioc-g-selection.rst          |   2 +-
+ .../media/v4l/vidioc-g-sliced-vbi-cap.rst     |  29 +-
+ .../media/v4l/vidioc-g-tuner.rst              |  12 +-
+ .../media/v4l/vidioc-querycap.rst             |   8 +-
+ .../media/v4l/vidioc-queryctrl.rst            |  21 +-
+ .../media/v4l/vidioc-reqbufs.rst              |  14 +-
+ .../media/v4l/vidioc-s-hw-freq-seek.rst       |   2 +-
+ .../v4l/vidioc-subdev-enum-frame-interval.rst |   2 +-
+ .../v4l/vidioc-subdev-enum-frame-size.rst     |   2 +-
+ .../v4l/vidioc-subdev-enum-mbus-code.rst      |  14 +-
+ .../media/v4l/vidioc-subdev-g-crop.rst        |   2 +-
+ .../media/v4l/vidioc-subdev-g-fmt.rst         |   4 +-
+ .../v4l/vidioc-subdev-g-frame-interval.rst    |   2 +-
+ .../media/v4l/vidioc-subdev-g-selection.rst   |   2 +-
+ .../media/v4l/vidioc-subdev-querycap.rst      |   4 +-
+ .../media/v4l/vidioc-subscribe-event.rst      |   4 +-
+ 97 files changed, 802 insertions(+), 446 deletions(-)
 
-sysfs is one value per file, what is being exported that is larger than
-that here?  Did I miss something on review?
+-- 
+2.29.2
 
-thanks,
 
-greg k-h
