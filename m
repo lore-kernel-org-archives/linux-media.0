@@ -7,62 +7,62 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85D5BC0018C
-	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 14:07:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85C00C4167B
+	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 14:07:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 416E323B85
-	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 14:07:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 411FA23C82
+	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 14:07:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389298AbgLJNso (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 10 Dec 2020 08:48:44 -0500
-Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:49761 "EHLO
+        id S2389612AbgLJNxV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 10 Dec 2020 08:53:21 -0500
+Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:38417 "EHLO
         wnew4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2389162AbgLJNsf (ORCPT
+        by vger.kernel.org with ESMTP id S2389342AbgLJNsx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 10 Dec 2020 08:48:35 -0500
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
-        by mailnew.west.internal (Postfix) with ESMTP id 41B95ED0;
-        Thu, 10 Dec 2020 08:46:59 -0500 (EST)
+        Thu, 10 Dec 2020 08:48:53 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.west.internal (Postfix) with ESMTP id E9AE6ECB;
+        Thu, 10 Dec 2020 08:47:09 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Thu, 10 Dec 2020 08:47:00 -0500
+  by compute6.internal (MEProxy); Thu, 10 Dec 2020 08:47:11 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm1; bh=zEz6d6/r2UCSq
-        DFjDfIPTijjbsA3ikvSmj5cNSEn5Sw=; b=qSoFGnUF0NO8W40Z+5kn/OejeVUTh
-        +KXpfLw2QTxbCPsoJMr6t2E+XtDn7aBrb6X6t01SzG55sXpqaaw318WKm0ZXTPqb
-        FSz5q0t+KWRaZTs2YDevVjL0Rlxk8LqasFAvVs8Z+Pz1an5zY0s4c9kbMXgGcY6H
-        27bIVbFgqizdOCOPNHigpN+A87cF12yjr+SJX/HzfGKNDxmA4pwxtzFODPSvdxAu
-        wTiSgYNW54akI+5ywWIBoJ0RvIkeJIetpUlExHcj3Xn5ToB9g6DMuSFiHxIqt6MH
-        rLRjBV3oPo9o7ILj36RrMIP//deTm4iJj6c2/LPf68bfjU9jX4yyD6HBQ==
+        :mime-version:content-transfer-encoding; s=fm1; bh=33oSiXdSZylYg
+        pfeTrEZ/L2Seb+RHHNfFg6qHXNR8Pk=; b=swk7Bi/P4wIR3VlSMdEv/9KS3rr4V
+        aq0v9ZpPbYSMmDq5AxKktSYa3PAGoqyeWzvu/h5dXmPeJ2lKnETbuSyVKolqW520
+        Qyfdiy8ox2lsaxuryW0yufCB+RFIg3pW+ElNlSHulWIFxqAEMbXKV+ZlEzZzZ08X
+        PcEKe7pwd6ZNL6423olam3aiFe6mEELvehMDkJqdLo7mSWlQUkf41EGEKdeI+Qyh
+        7g4WH9YhDyHN95cYMxRtILGAQKDXPQ4fQ3jXNtW5r/juPCfaV12HcnYOkBIbhKQm
+        vvCx7cQNe+9BiuKi0DujoMnX3G6psNuYvDNz4c0rIeVAdNS3tAJFMUtaA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:subject:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=zEz6d6/r2UCSqDFjDfIPTijjbsA3ikvSmj5cNSEn5Sw=; b=TLc97VWV
-        lCnIjKWXtUutJ+L70xDn3B8zv1CPNpAvYIT3SUbQz6ZpQZdrW3Jf7mJYXponQGZT
-        fvL6VNN/4RGt59WC13RppIxkSY0pkurMDFsqe777h/bIZiY7d986NwhH7jlrNXq2
-        i/VzBQXaeR5x/pv24DvfqlPHo4yxtGDfgOe6x318KaH/4fzfq1TB89NxeRqJ6kwW
-        dnvuucMphPneiVddq9yrt2wbXsBPCvTajhed5MDcWlLX6ZefNhmXiZtJTXAkGGK5
-        lblg8iX6zQjySqhFJ6QVnjkr5EzlY7vafXVp8mFk90z72+al6IiC5S7le4vtOr/9
-        M+fVdE76xtsxhQ==
-X-ME-Sender: <xms:0CbSXzT3n3kxTM-tSxzHrWhrGpn2n3KE8R7-O8wVC0x0g91BM1UbxA>
-    <xme:0CbSX5HkvBpE7eWX4t2pOMQj7xP6Zpc-1WBn_oCnHzhOvHOm6uO5TEfQTjmaYMfS4
-    uMRG_pwKL_3D2YEsUw>
+        fm1; bh=33oSiXdSZylYgpfeTrEZ/L2Seb+RHHNfFg6qHXNR8Pk=; b=XHheXdQB
+        6j/CQnuMdhrFYhCcbGlpXRn3IKOzI+vUPTHSstdi5oIx2Pw71rWt5FSKUby5FinS
+        xM/s57nXtFEyGeCVuj9jWzGyxVw8HO2J82KjwVLknKiD9askNNHxxFr/w6sbgaI+
+        1vCWLkQ8hYnwIE6RPJnE0wi/PEvNeutWWfTUynZ/5R/n5NcmW3pe3bXrzc+bWhvB
+        FfZ3K7N6p0W9FXnDZp9arWkjrHXOylaq5N+3NrDTsA4ZqOmB/MOoem+eWf7+fARD
+        UJ0+x4h1Pr50gqL+wwFjYXeW0XzJ+8RiOJld3vn8wQMUtKElnuipnCN+StIZ26p9
+        bom5bzNzItk52w==
+X-ME-Sender: <xms:3SbSX02saM-OZ7rau-hiS6q9JlleN-oxSilg-8VKD5SY3C0Cq2AtYw>
+    <xme:3SbSX5KVRJCbr1IezwmxG1rjmOVE-iAdmII-zuzSjYwE2YAY_SMS1qGJmDJER0DAn
+    ljAZD4cisQ6lfHt56s>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrudektddgheeiucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeforgigihhm
     vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
     htvghrnhepvdekleevfeffkeejhfffueelteelfeduieefheduudfggffhhfffheevveeh
-    hedvnecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
+    hedvnecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgepfeenuc
     frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:0CbSX39KCGdXKydDpHt57M_xHIZ-uVEE_51eLDot920tVwZa3F7g6w>
-    <xmx:0CbSX7LJW9LqlBENmVLA10F_ZyiUh6U53_JFGYODacp26GOO2DPMuQ>
-    <xmx:0CbSXybV4IjY1n4oNp7GON9TDLBLcWuh4w9IqQVPFmNWRtID283gwA>
-    <xmx:0ibSX6DVcTPnbfikAbItFnqrrrjzDmEm3Z3gE1N-zd4Qm1En4VJqq0jLv68>
+X-ME-Proxy: <xmx:3SbSXx0n15eoh-5_mO32jnYACWB-qNk-bLuBDuo-WTt8yjC6UIys-A>
+    <xmx:3SbSX1mYaaI99bClyRWzqckUvnZotM123AF54MfTpSa4KrUZ2KtFNQ>
+    <xmx:3SbSX0jHp0Mfa-eGAzVRxf5qZNy8QQ0yosmjf-ZFHu6STKM3OLHKeA>
+    <xmx:3SbSX8euGKauDykmwaWjhrex1jcbF1qMQP9DdaPaLDj0XENvihZ65cJGjbA>
 Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id A4B2D108005C;
-        Thu, 10 Dec 2020 08:46:56 -0500 (EST)
+        by mail.messagingengine.com (Postfix) with ESMTPA id 3E3CE108005B;
+        Thu, 10 Dec 2020 08:47:09 -0500 (EST)
 From:   Maxime Ripard <maxime@cerno.tech>
 To:     Eric Anholt <eric@anholt.net>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
@@ -80,10 +80,10 @@ Cc:     Jason Cooper <jason@lakedaemon.net>,
         Thomas Gleixner <tglx@linutronix.de>,
         Dave Stevenson <dave.stevenson@raspberrypi.com>,
         linux-rpi-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, Dom Cobley <popcornmix@gmail.com>
-Subject: [PATCH 05/15] drm/vc4: hdmi: Restore cec physical address on reconnect
-Date:   Thu, 10 Dec 2020 14:46:38 +0100
-Message-Id: <20201210134648.272857-6-maxime@cerno.tech>
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH 14/15] ARM: dts: bcm2711: Add the BSC interrupt controller
+Date:   Thu, 10 Dec 2020 14:46:47 +0100
+Message-Id: <20201210134648.272857-15-maxime@cerno.tech>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201210134648.272857-1-maxime@cerno.tech>
 References: <20201210134648.272857-1-maxime@cerno.tech>
@@ -93,66 +93,51 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dom Cobley <popcornmix@gmail.com>
+The BSC controllers used for the HDMI DDC have an interrupt controller
+shared between both instances. Let's add it to avoid polling.
 
-Currently we call cec_phys_addr_invalidate on a hotplug deassert.
-That may be due to a TV power cycling, or an AVR being switched
-on (and switching edid).
-
-This makes CEC unusable since our controller wouldn't have a physical
-address anymore.
-
-Set it back up again on the hotplug assert.
-
-Fixes: 15b4511a4af6 ("drm/vc4: add HDMI CEC support")
-Signed-off-by: Dom Cobley <popcornmix@gmail.com>
 Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 ---
- drivers/gpu/drm/vc4/vc4_hdmi.c | 25 +++++++++++++++++--------
- 1 file changed, 17 insertions(+), 8 deletions(-)
+ arch/arm/boot/dts/bcm2711.dtsi | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
-index 28b78ea885ea..eff3bac562c6 100644
---- a/drivers/gpu/drm/vc4/vc4_hdmi.c
-+++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-@@ -136,20 +136,29 @@ static enum drm_connector_status
- vc4_hdmi_connector_detect(struct drm_connector *connector, bool force)
- {
- 	struct vc4_hdmi *vc4_hdmi = connector_to_vc4_hdmi(connector);
-+	bool connected = false;
+diff --git a/arch/arm/boot/dts/bcm2711.dtsi b/arch/arm/boot/dts/bcm2711.dtsi
+index 4847dd305317..8bb46ae76a92 100644
+--- a/arch/arm/boot/dts/bcm2711.dtsi
++++ b/arch/arm/boot/dts/bcm2711.dtsi
+@@ -308,6 +308,14 @@ dvp: clock@7ef00000 {
+ 			#reset-cells = <1>;
+ 		};
  
- 	if (vc4_hdmi->hpd_gpio) {
- 		if (gpio_get_value_cansleep(vc4_hdmi->hpd_gpio) ^
- 		    vc4_hdmi->hpd_active_low)
--			return connector_status_connected;
--		cec_phys_addr_invalidate(vc4_hdmi->cec_adap);
--		return connector_status_disconnected;
--	}
--
--	if (drm_probe_ddc(vc4_hdmi->ddc))
--		return connector_status_connected;
--
-+			connected = true;
-+	} else if (drm_probe_ddc(vc4_hdmi->ddc))
-+		connected = true;
- 	if (HDMI_READ(HDMI_HOTPLUG) & VC4_HDMI_HOTPLUG_CONNECTED)
-+		connected = true;
-+	if (connected) {
-+		if (connector->status != connector_status_connected) {
-+			struct edid *edid = drm_get_edid(connector, vc4_hdmi->ddc);
++		bsc_intr: interrupt-controller@7ef00040 {
++			compatible = "brcm,bcm2711-l2-intc", "brcm,l2-intc";
++			reg = <0x7ef00040 0x30>;
++			interrupts = <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-controller;
++			#interrupt-cells = <1>;
++		};
 +
-+			if (edid) {
-+				cec_s_phys_addr_from_edid(vc4_hdmi->cec_adap, edid);
-+				vc4_hdmi->encoder.hdmi_monitor = drm_detect_hdmi_monitor(edid);
-+				drm_connector_update_edid_property(connector, edid);
-+				kfree(edid);
-+			}
-+		}
- 		return connector_status_connected;
-+	}
- 	cec_phys_addr_invalidate(vc4_hdmi->cec_adap);
- 	return connector_status_disconnected;
- }
+ 		hdmi0: hdmi@7ef00700 {
+ 			compatible = "brcm,bcm2711-hdmi0";
+ 			reg = <0x7ef00700 0x300>,
+@@ -341,6 +349,8 @@ ddc0: i2c@7ef04500 {
+ 			reg = <0x7ef04500 0x100>, <0x7ef00b00 0x300>;
+ 			reg-names = "bsc", "auto-i2c";
+ 			clock-frequency = <97500>;
++			interrupt-parent = <&bsc_intr>;
++			interrupts = <0>;
+ 			status = "disabled";
+ 		};
+ 
+@@ -377,6 +387,8 @@ ddc1: i2c@7ef09500 {
+ 			reg = <0x7ef09500 0x100>, <0x7ef05b00 0x300>;
+ 			reg-names = "bsc", "auto-i2c";
+ 			clock-frequency = <97500>;
++			interrupt-parent = <&bsc_intr>;
++			interrupts = <1>;
+ 			status = "disabled";
+ 		};
+ 	};
 -- 
 2.28.0
 
