@@ -2,74 +2,157 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,FSL_HELO_FAKE,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF45EC4361B
-	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 23:15:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79E0FC4361B
+	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 23:32:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8374F23C44
-	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 23:15:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 423E023E54
+	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 23:32:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392275AbgLJXOe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 10 Dec 2020 18:14:34 -0500
-Received: from mail-yb1-f194.google.com ([209.85.219.194]:42487 "EHLO
-        mail-yb1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392221AbgLJXNi (ORCPT
+        id S2390800AbgLJXcO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 10 Dec 2020 18:32:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47724 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389466AbgLJXbj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 10 Dec 2020 18:13:38 -0500
-Received: by mail-yb1-f194.google.com with SMTP id j17so6315470ybt.9;
-        Thu, 10 Dec 2020 15:13:22 -0800 (PST)
+        Thu, 10 Dec 2020 18:31:39 -0500
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E0FC0613D3;
+        Thu, 10 Dec 2020 15:30:59 -0800 (PST)
+Received: by mail-pg1-x541.google.com with SMTP id t37so5774001pga.7;
+        Thu, 10 Dec 2020 15:30:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=DxIVSUX2H6bimNutMDtAzIsDtpsebc1xO6PGsZ2Pwhk=;
+        b=GLRkf6JQL1ptO05KUdb29Wdoj51vQzqeflF1WXIJFrnJiwxWUSO6LD5UW/dQri2ULl
+         7QOrSSeGEpb68pcn9L/fFd7hRoRiQmwg8YgLf8weoubgjcOYqqNfrBP7As0weMoHsLb2
+         Zeqzs1Nx4Ah8yomvfrQovm/gEB2hH8COhGfUw5mePmVVZHlDl5VB9aEWYON4en+DoZNT
+         ucf2LpDwtCCrDkkDUAnzEXyFHS9+g6RjvwNliWU4NjPEiWvamrvarJsaCapXe5qDkMW2
+         L5RBqKjX91B0sL0cgHvra3sfXHRhGTBpdfZjvcXf8y94yWyoX2I4Eg9FF7HsRrDbHGlb
+         8Ozw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8kKmMiWcyzbiGl28UHvT780ogwdpkH+Z7+Rdd1Jmvvc=;
-        b=NH4URcFzPmTQFJMkYDfLt9mFIZXi4IfC7WwpmFZ7ix9RItNB852AGCcvoV73wglCwk
-         bzlObcHbvT6ug9Ua1BjJwZtBCdYURD7QcYqv/UvfhW858LCvFfq7yfyRRuiTr2ITigBB
-         2DMthBp9TxBsM9yQcKG1Ak4RjgLgA235CbqDx6h3aAUWgEmLtUxwzC2LNdK3XtBopnrd
-         /9fnrrOyG3qhK4H4685hqxSK5X5AywIAFgclkcoqJOjXi+b4bLW2R6tSC4zTNVBtSt6r
-         4drC5L54fujpMqdudAB2lxo14SjVSHtS3ArOiZ+IC42qNxh+m6wqXY4dIeo7Q1vQN0vq
-         0jsQ==
-X-Gm-Message-State: AOAM5313Q5zWcjwZ4Ilre/S4IajEu7cqY05KdvC55EPhUvJiQNvg5cg3
-        k0tcsuR6TnRtF5qLHO3wYSLg7XtYmQ==
-X-Google-Smtp-Source: ABdhPJytBQRjROhKJFf7zPzfAlUi28CwvvAbDU5KoLfTI0t8eT7ORR6YE3rrdzFZ6SLGEaJ+uhrkwQ==
-X-Received: by 2002:a05:6830:717:: with SMTP id y23mr7914339ots.268.1607639987153;
-        Thu, 10 Dec 2020 14:39:47 -0800 (PST)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id x72sm1327886oia.16.2020.12.10.14.39.45
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=DxIVSUX2H6bimNutMDtAzIsDtpsebc1xO6PGsZ2Pwhk=;
+        b=ZnCiRPP7TOrCOGdN4Qv4Ohsu601uaeIRY8WNR3AZXjukhIcKX8ZGkLWVjyE9uyH+fv
+         ePSa4lAQQ6X2X1vNNylQB/vPq48FPQ4LCGhlCZklSWV5QP/mbFGCVGMMg4MSEWrSvrxr
+         iQk9Q+7gB9jCy/exd6VOPZ4tP17ajTjjJ1t3Dw7MEeCeCbqKwH73T3YKh+5k425qQ3/r
+         4tEyDsz0aiF+TrtpMw+biKoyfSIScrKFVJ//+zOnEm8Mo4n8PANKCdbcbwyPldNHW+Ba
+         590cp++jUKFqSsdTEXg5o7DWDRfqehrOYOQQG9Cf14TnEJU1wlr5pv80KoiLe5xkUOEt
+         UZig==
+X-Gm-Message-State: AOAM532TXtH2rKQ+g9mCynahIGj3W/s+uASwil+Ypy8tfLXUjHljuyNO
+        Hdp9xwUj9R24nHg1UVM1RZM=
+X-Google-Smtp-Source: ABdhPJzQ34O5574nawCtthvGcN4o4HywTqDu4/7/e/5QfeGCNPMRhSxX4RTQEVQMyXAdO/WoAlfGnw==
+X-Received: by 2002:a62:19ca:0:b029:19d:cd0d:af83 with SMTP id 193-20020a6219ca0000b029019dcd0daf83mr9006284pfz.51.1607643058804;
+        Thu, 10 Dec 2020 15:30:58 -0800 (PST)
+Received: from google.com ([2620:15c:211:201:7220:84ff:fe09:5e58])
+        by smtp.gmail.com with ESMTPSA id e24sm5119240pjt.16.2020.12.10.15.30.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Dec 2020 14:39:46 -0800 (PST)
-Received: (nullmailer pid 3187190 invoked by uid 1000);
-        Thu, 10 Dec 2020 22:39:45 -0000
-Date:   Thu, 10 Dec 2020 16:39:45 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Guennadi Liakhovetski <g.liakhovetski@gmx.de>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] dt-bindings: media: Convert video-interfaces.txt
- to schemas
-Message-ID: <20201210223945.GA651087@robh.at.kernel.org>
-References: <20201210211625.3070388-1-robh@kernel.org>
+        Thu, 10 Dec 2020 15:30:57 -0800 (PST)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Thu, 10 Dec 2020 15:30:54 -0800
+From:   Minchan Kim <minchan@kernel.org>
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     Hyesoo Yu <hyesoo.yu@samsung.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        Matthew Wilcox <willy@infradead.org>, david@redhat.com,
+        iamjoonsoo.kim@lge.com, vbabka@suse.cz,
+        Suren Baghdasaryan <surenb@google.com>,
+        KyongHo Cho <pullip.cho@samsung.com>,
+        John Dias <joaodias@google.com>,
+        Hridya Valsaraju <hridya@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Rob Herring <robh@kernel.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Subject: Re: [PATCH 4/4] dma-heap: Devicetree binding for chunk heap
+Message-ID: <X9KvruEuDsuuqlfA@google.com>
+References: <20201117181935.3613581-1-minchan@kernel.org>
+ <20201117181935.3613581-5-minchan@kernel.org>
+ <CGME20201118030110epcas2p1105a09711ea2c123f19f413b32372764@epcas2p1.samsung.com>
+ <CALAqxLWqDLHpOHNEayvhDjJeXjEk_uneH2=d9fy8M87EjKfReA@mail.gmail.com>
+ <20201119011431.GA136599@KEI>
+ <CALAqxLV=r-V6u8hq2fTmxq855nT7QPkkjyAYdPeZRkYPBi_CKg@mail.gmail.com>
+ <X9Fjd+eSStUJskOV@google.com>
+ <CALAqxLWthd8bEDRMWmuOf8dOCW8=cFao9HBawKGuRhQZkdgXXw@mail.gmail.com>
+ <X9JHjPTdxv6Z7lCW@google.com>
+ <CALAqxLVz5bCYxehjVtCJ5eEJ-Wz81=fe30sqRtYtZpXWMkXZiw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201210211625.3070388-1-robh@kernel.org>
+In-Reply-To: <CALAqxLVz5bCYxehjVtCJ5eEJ-Wz81=fe30sqRtYtZpXWMkXZiw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Dec 10, 2020 at 03:16:20PM -0600, Rob Herring wrote:
-> This series converts video-interfaces.txt to DT schema which in turn is
-> based on converting the graph binding to a schema. All the media users
-> are converted to use the graph and video-interfaces schemas.
+On Thu, Dec 10, 2020 at 02:40:38PM -0800, John Stultz wrote:
+> On Thu, Dec 10, 2020 at 8:06 AM Minchan Kim <minchan@kernel.org> wrote:
+> > On Thu, Dec 10, 2020 at 12:15:15AM -0800, John Stultz wrote:
+> > > Well, while I agree that conceptually the dmabuf heaps allow for
+> > > allocations for multi-device pipelines, and thus are not tied to
+> > > specific devices. I do think that the memory types exposed are likely
+> > > to have specific devices/drivers in the pipeline that it matters most
+> > > to. So I don't see a big issue with the in-kernel driver registering a
+> > > specific CMA region as a dmabuf heap.
+> >
+> > Then, I am worry about that we spread out dma_heap_add_cma to too many
+> > drivers since kernel doesn't how userspace will use it.
+> > For example, system 1 could have device A-B-C pipeline so they added
+> > it A driver. After that, system 2 could have device B-C-D pipeline
+> > so they add dma_heap_add_cma into B device.
 > 
-> Based on media tree commit a3f132df0e5f. This is dependent on dt-schema
-> changes not yet committed[1]. Please review those too.
+> I'm not sure I see this as a major issue? If the drivers add it based
+> on the dt memory reference, those will be configured to not add
+> duplicate heaps (and even so the heap driver can also ensure we don't
+> try to add a heap twice).
 
-Sigh, ignore the v2 patches...
+Sure, it doesn't have any problem to work but design ponint of view,
+it looks werid to me in that one of random driver in the specific
+scenario should have the heap registration and then we propagate
+the heap registeration logics to other drivers day by day. To avoid DT
+binding with dmabuf directy but it seems we have bad design.
+To me, it sounds like to toss DT with anonymous dmabuf binding problem
+to device drivers.
+
+> 
+> > > Yea, an un-upstreamable dummy driver is maybe what it devolves to in
+> > > the worst case. But I suspect it would be cleaner for a display or ISP
+> > > driver that benefits most from the heap type to add the reserved
+> > > memory reference to their DT node, and on init for them to register
+> > > the region with the dmabuf heap code.
+> >
+> > As I mentioned above, it could be a display at this moment but it could
+> > be different driver next time. If I miss your point, let me know.
+> >
+> 
+> I guess I just don't see potentially having the registration calls
+> added to multiple drivers as a big problem.
+> 
+> Ideally, yes, I'd probably rather see a DT node that would allow the
+> heap driver to register specified regions, but that's been NACKed
+> multiple times. Given that, having hooks in device drivers to export
+> the region seems to me like the next best approach, as it avoids DT
+> ABI ( if ends up its a bad approach, its not something we have to
+> keep).
+> 
+> The bigger problem right now is not that there are too many places the
+> registration call would be made from, but that there aren't upstream
+> drivers which I'm aware of where it would currently make sense to add
+> specific dma_heap_add_cma() registration hooks to.  We need an
+> upstream user of Kunihiko Hayashi's patch.
+
+Hmm, if that's only way to proceed, Hyesoo, do you have any specifid
+driver in your mind to bind the CMA area?
