@@ -6,28 +6,31 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9208C4361B
-	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 11:02:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B6EDC433FE
+	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 11:03:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 82C1623CD4
-	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 11:02:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4744123CD4
+	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 11:03:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389251AbgLJK5e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 10 Dec 2020 05:57:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56392 "EHLO mail.kernel.org"
+        id S2389241AbgLJK5d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 10 Dec 2020 05:57:33 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56398 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389220AbgLJK5V (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S2389164AbgLJK5V (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Thu, 10 Dec 2020 05:57:21 -0500
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Bingbu Cao <bingbu.cao@intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 03/13] media: control.rst: use a table for V4L2_CID_POWER_LINE
-Date:   Thu, 10 Dec 2020 11:55:42 +0100
-Message-Id: <da0267fcfd377cdbb47938ac524955eb811746c3.1607597287.git.mchehab+huawei@kernel.org>
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Yong Zhi <yong.zhi@intel.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH 09/13] media: docs: pixfmt: use section titles for bayer formats
+Date:   Thu, 10 Dec 2020 11:55:48 +0100
+Message-Id: <835582a357e5e7fa298ace9eb02984b7d0eba0b7.1607597287.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <cover.1607597287.git.mchehab+huawei@kernel.org>
 References: <cover.1607597287.git.mchehab+huawei@kernel.org>
@@ -38,38 +41,75 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The default way to document control enums is via tables.
-
-Use one here too. As the table is simple, just use ASCII
-artwork.
+The bayer formats have a subtitle, specifying how many bits
+they use. Add a title markup to those, as otherwise they
+look weird, specially at the PDF output.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/userspace-api/media/v4l/control.rst | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ Documentation/userspace-api/media/v4l/pixfmt-srggb10-ipu3.rst | 2 ++
+ Documentation/userspace-api/media/v4l/pixfmt-srggb14.rst      | 2 ++
+ Documentation/userspace-api/media/v4l/pixfmt-srggb16.rst      | 2 ++
+ Documentation/userspace-api/media/v4l/pixfmt-srggb8.rst       | 3 ++-
+ 4 files changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/control.rst b/Documentation/userspace-api/media/v4l/control.rst
-index 4e5652eb6126..ed5154700308 100644
---- a/Documentation/userspace-api/media/v4l/control.rst
-+++ b/Documentation/userspace-api/media/v4l/control.rst
-@@ -154,10 +154,13 @@ Control IDs
- ``V4L2_CID_POWER_LINE_FREQUENCY`` ``(enum)``
-     Enables a power line frequency filter to avoid flicker. Possible
-     values for ``enum v4l2_power_line_frequency`` are:
--    ``V4L2_CID_POWER_LINE_FREQUENCY_DISABLED`` (0),
--    ``V4L2_CID_POWER_LINE_FREQUENCY_50HZ`` (1),
--    ``V4L2_CID_POWER_LINE_FREQUENCY_60HZ`` (2) and
--    ``V4L2_CID_POWER_LINE_FREQUENCY_AUTO`` (3).
-+
-+    ==========================================  ==
-+    ``V4L2_CID_POWER_LINE_FREQUENCY_DISABLED``   0
-+    ``V4L2_CID_POWER_LINE_FREQUENCY_50HZ``	 1
-+    ``V4L2_CID_POWER_LINE_FREQUENCY_60HZ``	 2
-+    ``V4L2_CID_POWER_LINE_FREQUENCY_AUTO``	 3
-+    ==========================================  ==
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-srggb10-ipu3.rst b/Documentation/userspace-api/media/v4l/pixfmt-srggb10-ipu3.rst
+index 15f1900cd914..5d4d260db7b5 100644
+--- a/Documentation/userspace-api/media/v4l/pixfmt-srggb10-ipu3.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-srggb10-ipu3.rst
+@@ -9,7 +9,9 @@
+ V4L2_PIX_FMT_IPU3_SBGGR10 ('ip3b'), V4L2_PIX_FMT_IPU3_SGBRG10 ('ip3g'), V4L2_PIX_FMT_IPU3_SGRBG10 ('ip3G'), V4L2_PIX_FMT_IPU3_SRGGB10 ('ip3r')
+ **********************************************************************************************************************************************
  
- ``V4L2_CID_HUE_AUTO`` ``(boolean)``
-     Enables automatic hue control by the device. The effect of setting
++====================
+ 10-bit Bayer formats
++====================
+ 
+ Description
+ ===========
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-srggb14.rst b/Documentation/userspace-api/media/v4l/pixfmt-srggb14.rst
+index 7e5d45f30cab..4f5120a6c678 100644
+--- a/Documentation/userspace-api/media/v4l/pixfmt-srggb14.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-srggb14.rst
+@@ -11,7 +11,9 @@ V4L2_PIX_FMT_SRGGB14 ('RG14'), V4L2_PIX_FMT_SGRBG14 ('GR14'), V4L2_PIX_FMT_SGBRG
+ ***************************************************************************************************************************
+ 
+ 
++========================================
+ 14-bit Bayer formats expanded to 16 bits
++========================================
+ 
+ 
+ Description
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-srggb16.rst b/Documentation/userspace-api/media/v4l/pixfmt-srggb16.rst
+index 93a210e22592..2f2f1ef430d9 100644
+--- a/Documentation/userspace-api/media/v4l/pixfmt-srggb16.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-srggb16.rst
+@@ -11,7 +11,9 @@ V4L2_PIX_FMT_SRGGB16 ('RG16'), V4L2_PIX_FMT_SGRBG16 ('GR16'), V4L2_PIX_FMT_SGBRG
+ ***************************************************************************************************************************
+ 
+ 
++====================
+ 16-bit Bayer formats
++====================
+ 
+ 
+ Description
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-srggb8.rst b/Documentation/userspace-api/media/v4l/pixfmt-srggb8.rst
+index 81e72f115994..02061c5a9778 100644
+--- a/Documentation/userspace-api/media/v4l/pixfmt-srggb8.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-srggb8.rst
+@@ -10,8 +10,9 @@ V4L2_PIX_FMT_SRGGB8 ('RGGB'), V4L2_PIX_FMT_SGRBG8 ('GRBG'), V4L2_PIX_FMT_SGBRG8
+ ***************************************************************************************************************************
+ 
+ 
++===================
+ 8-bit Bayer formats
+-
++===================
+ 
+ Description
+ ===========
 -- 
 2.29.2
 
