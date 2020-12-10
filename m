@@ -2,112 +2,129 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38DFAC433FE
-	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 14:00:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8A7EC433FE
+	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 14:06:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E808A23C18
-	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 14:00:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9FECF22BF5
+	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 14:06:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389767AbgLJN5U (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 10 Dec 2020 08:57:20 -0500
-Received: from mga12.intel.com ([192.55.52.136]:31178 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389761AbgLJN5T (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 10 Dec 2020 08:57:19 -0500
-IronPort-SDR: ax8s0qgw/LucKMSCGW16dRaY+YcxxtjuVaSM6N+nhcf3ml9mf5sSYRXS2WCnNXl/XNa/dglCgz
- NkahukKm0y7A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9830"; a="153489126"
-X-IronPort-AV: E=Sophos;i="5.78,408,1599548400"; 
-   d="scan'208";a="153489126"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2020 05:55:32 -0800
-IronPort-SDR: do9N5KAms1qR1BOwmxto6A9gdtKSLM0DRNag1vpRcF0IUs+o5GUMiJyk2pQIUo7Qq+z5wAtONr
- 3hHkpPXoLG1w==
-X-IronPort-AV: E=Sophos;i="5.78,408,1599548400"; 
-   d="scan'208";a="371650813"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2020 05:55:29 -0800
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 1BFBB20867; Thu, 10 Dec 2020 15:55:27 +0200 (EET)
-Date:   Thu, 10 Dec 2020 15:55:27 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        id S2389616AbgLJNxV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 10 Dec 2020 08:53:21 -0500
+Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:38063 "EHLO
+        wnew4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2389348AbgLJNsx (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 10 Dec 2020 08:48:53 -0500
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.west.internal (Postfix) with ESMTP id 13008F3E;
+        Thu, 10 Dec 2020 08:47:07 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Thu, 10 Dec 2020 08:47:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-transfer-encoding; s=fm1; bh=fklFVIL4Y1AJE
+        O4W9nFqNlVOvqBIEiPSfsqHHscTIBE=; b=nNO2RIx/astgzAlXENxsKURrTJJSI
+        UHXJnswJvUqviJv1BEOPeVTq3+uU0ymAP96TDRugvCTVE4YHFqj73fSPr3T+MGyB
+        lNWYQ3kXMnjIFHOEylnZP7FvBFx9BrCHSUWV0u0trgPJR8eNu+Loo6pbNBpkZCUj
+        WnchPKPM7ou8mN6/7dm33q47hJdXN2UbdgmtlzgUDyazt3pQ81OT4cHLXFE/rthJ
+        w1QMZ5KL6xXfVZSiJrsY0t52dJhVp+8MiVT0fe9/CxNnCn6Z8QRZjg+UNeKGK1QR
+        HmAgeLKe3pc8MH7FZlctlxJccshFC1oyA6fn6El2jTqz4NqBuk0bn0PlA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :in-reply-to:message-id:mime-version:references:subject:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; bh=fklFVIL4Y1AJEO4W9nFqNlVOvqBIEiPSfsqHHscTIBE=; b=mRPoa3CL
+        DaxFOvTVB6EdXe2MJe/edKYP9BDX7tzRiiK9uQSq//RMTH2TYdZQRLZ/jpXaayqx
+        TgDyUEf5hOqmM3hN4iSUEbSkqCcg+bytIBHuXoTROEssM4jx3fULZy915qwLGDIs
+        e/8TvPv+2Ly3ntSgWscW8zizBNJ8FJdUvTX8Ch/XAxfzAYrILzh+0sm4KAzgbhlm
+        orPCL2H7lHdHkpi8l1CsCgHjaOpnZpnFE/MIJRmTtwvXFU/YFj6sLEBndTMwBeyv
+        CxTR+gJiI55nRDmql4fZQm5H52fPu4KnxetReOUHPIUvd3MVRWLVRhGph/n0+kDz
+        uYQAHnb4jsJWjw==
+X-ME-Sender: <xms:2ibSX9mH94HI6WwMkHJ1GchPuosLfHB3xQe59PjAoflQzfN9IEQeyg>
+    <xme:2ibSXxlppsHHlVlGXg3MW8KcmejKnG9ei_izcDU8vLCTQWB2wySKMf04eJHI_eFeA
+    ZdcVlM8UmYfgvjxzBM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrudektddgheeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepvdekleevfeffkeejhfffueelteelfeduieefheduudfggffhhfffheevveeh
+    hedvnecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgepfeenuc
+    frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:2ibSXyVV8tFiVZ37_xZ_eNy4hLtkebRoLuW5j-fGUgKIg8INQvECqw>
+    <xmx:2ibSX_8V5BKgBklSGzpJOHbBLinD3L8GLx2_f-Yvi7TgCkO2e_0nYw>
+    <xmx:2ibSX_o2q_v30l___fIGEZ3JzWJcEume39X23uiig5fBRmJWlIpDhQ>
+    <xmx:2ibSX2vWFJECfjf8Qq-LJFjJ4jKm01wj0L7gs5DERdcXUie8fwHUl_eVODM>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 73253108006B;
+        Thu, 10 Dec 2020 08:47:06 -0500 (EST)
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Eric Anholt <eric@anholt.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        David Airlie <airlied@linux.ie>
+Cc:     Jason Cooper <jason@lakedaemon.net>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-arm-kernel@lists.infradead.org,
+        Marc Zyngier <maz@kernel.org>, linux-media@vger.kernel.org,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-kernel@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Joe Perches <joe@perches.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [PATCH v5 1/1] lib/vsprintf: Add support for printing V4L2 and
- DRM fourccs
-Message-ID: <20201210135526.GH25763@paasikivi.fi.intel.com>
-References: <20201113105441.1427-1-sakari.ailus@linux.intel.com>
- <X9Hdg3lJm+TZAQGX@alley>
- <CAHp75VcY_b7uaGWoEa1Y6YDk0MmmzC4hV2yx8zVT7J-fD67Hyg@mail.gmail.com>
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-rpi-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH 12/15] drm/vc4: hdmi: Don't register the CEC adapter if there's no interrupts
+Date:   Thu, 10 Dec 2020 14:46:45 +0100
+Message-Id: <20201210134648.272857-13-maxime@cerno.tech>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20201210134648.272857-1-maxime@cerno.tech>
+References: <20201210134648.272857-1-maxime@cerno.tech>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75VcY_b7uaGWoEa1Y6YDk0MmmzC4hV2yx8zVT7J-fD67Hyg@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Andy,
+We introduced the BCM2711 support to the vc4 HDMI controller with 5.10,
+but this was lacking any of the interrupts of the CEC controller so we
+have to deal with the backward compatibility.
 
-On Thu, Dec 10, 2020 at 03:05:02PM +0200, Andy Shevchenko wrote:
-> On Thu, Dec 10, 2020 at 2:16 PM Petr Mladek <pmladek@suse.com> wrote:
-> > On Fri 2020-11-13 12:54:41, Sakari Ailus wrote:
-> > > Add a printk modifier %p4cc (for pixel format) for printing V4L2 and DRM
-> > > pixel formats denoted by fourccs. The fourcc encoding is the same for both
-> > > so the same implementation can be used.
-> > >
-> > > Suggested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> >
-> > Andy, Rasmus,
-> >
-> > the last version looks fine to me. I am going to push it.
-> > Please, speak up if you are against it.
-> 
-> My concerns are:
-> - not so standard format of representation (why not to use
-> string_escape_mem() helper?) or is it?
+Do so by simply ignoring the CEC setup if the DT doesn't have the
+interrupts property.
 
-The format string may contain spaces that are not meant to be printed.
-Other unprintable chacaters should not be present (at least not in V4L2
-pixelformats). The hexadecimal representation is there to convey the
-numerical value and that originally came from DRM, not V4L2.
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+---
+ drivers/gpu/drm/vc4/vc4_hdmi.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> - no compatibility with generic 4cc
->   (I would rather have an additional specifier here for v4l2 cases.
-
-What do you mean by "generic 4cc"? There are two users of 4cc codes in the
-kernel that I know of: V4L2 and DRM. Something that does not refer to
-in-memory pixel formats?
-
-> OTOH generic %p4cc to me sounds like an equivalent to %4pEh (but we
-> have similar cases with MAC where %6ph is the same as %pM).
-> 
-> But I'm not insisting on them, consider it like just my 2 cents to the
-> discussion.
-
-Ack.
-
+diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
+index 327638d93032..69217c68d3a4 100644
+--- a/drivers/gpu/drm/vc4/vc4_hdmi.c
++++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+@@ -1655,9 +1655,15 @@ static int vc4_hdmi_cec_init(struct vc4_hdmi *vc4_hdmi)
+ {
+ 	struct cec_connector_info conn_info;
+ 	struct platform_device *pdev = vc4_hdmi->pdev;
++	struct device *dev = &pdev->dev;
+ 	u32 value;
+ 	int ret;
+ 
++	if (!of_find_property(dev->of_node, "interrupts", NULL)) {
++		dev_warn(dev, "'interrupts' DT property is missing, no CEC\n");
++		return 0;
++	}
++
+ 	vc4_hdmi->cec_adap = cec_allocate_adapter(&vc4_hdmi_cec_adap_ops,
+ 						  vc4_hdmi, "vc4",
+ 						  CEC_CAP_DEFAULTS |
 -- 
-Kind regards,
+2.28.0
 
-Sakari Ailus
