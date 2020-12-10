@@ -2,183 +2,112 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA2A1C2BB40
-	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 13:53:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38DFAC433FE
+	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 14:00:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 741D223BAB
-	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 13:53:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E808A23C18
+	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 14:00:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389623AbgLJNxW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 10 Dec 2020 08:53:22 -0500
-Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:52827 "EHLO
-        wnew4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2389331AbgLJNsv (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 10 Dec 2020 08:48:51 -0500
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.west.internal (Postfix) with ESMTP id 060F642D;
-        Thu, 10 Dec 2020 08:46:59 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 10 Dec 2020 08:47:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm1; bh=GnMDKUbYk1SWY
-        yZetGWDdJskWJOGEDSUZizDVtCEfAo=; b=Omnj0xdM/OiaRxShbBIW4aFeaaRa9
-        4Ib3cLiJ29OyceCsrvFP3eiRNZcs/HPszUD9/ukJXiP0IlEJs1+DnOOQ4/N6h1Sp
-        r4fsXDlMxqdyIx6laZwxMUfgd5N80E2wbBdQHgLp7gNiraOJvOLwxth4kXW65jXD
-        VPGDXTayRawqTjX144lJMvDsQmbCEknYNNeY65MrHtBEs5lny1wFoLMUMpqlqmWC
-        TXX6aSLY1SuuPHCSfjf54hBoi37X6AxP8EwGZJaJ8gEXdg87CQkYnHRImXL7e1kY
-        kr3klWULgU7IxDcLA/TxVE5tmBe57+edAHA00Tgc3rz9OjpsRFrMyTPRQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=GnMDKUbYk1SWYyZetGWDdJskWJOGEDSUZizDVtCEfAo=; b=gCa43CV7
-        uj4WkRzFvbg5OzFv72wwcYqk003p3HQElHwH82Kc8IesIE1HOdD57EU/7fTofamA
-        zKaR95/2Jrli7RrZWfP0IRqWY5aMid1jIAa9w1MgQkIAFvy3LhzR1BtcrKHkGC3o
-        4bc29xBEuzYPd002RNr2eDlGTAy/eDbWQZ0RAJMGgIXpMWd6aNMD2pIUPKDUiPKo
-        cdTRYox5otctKooC0zstwIthlMpFltI91KKDBVX90CMhUQWXbxUVvQLp4R7DV0Tk
-        VjhZHOOBafwCXCQb4p7VnR8iXZuIuk5adn9ooYwdEGaeG/wZQm8iYkHJ0wNBQrlo
-        gPsXzMn017OOYg==
-X-ME-Sender: <xms:0ybSXx6d5_y_03w-HRxg-Yc1D3m5aYCRtXiP-JJUmTi3ytPCtEccRA>
-    <xme:0ybSX80hqPdTLNee_m6iot9jwRnIN7rMfgdck1mHJzZUkmY9vJmezZE_OkAUPdT_D
-    V6D2vLp1SjQ1ywnxhY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrudektddgheeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepvdekleevfeffkeejhfffueelteelfeduieefheduudfggffhhfffheevveeh
-    hedvnecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:0ybSX6zTYWdZCBOezOwAJddd0q1Y4yxquYLfPkK2bxotiOolNvb19A>
-    <xmx:0ybSX-sCJ3wPqozOnHu5ypsps-LMuSVIlSj0LPFjtiusgNijrKMo-w>
-    <xmx:0ybSX8zPzEeXZA8oYSq0C05eWuOtIrTA0S-xvm7K5DloQZT3kDpbHg>
-    <xmx:0ybSXyhQ0JriouV5tjpCS48WGd8pmOW797XTrEPjmo4PVx0g1nnQw8qiGYE>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 66AF81080059;
-        Thu, 10 Dec 2020 08:46:59 -0500 (EST)
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Eric Anholt <eric@anholt.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        David Airlie <airlied@linux.ie>
-Cc:     Jason Cooper <jason@lakedaemon.net>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-arm-kernel@lists.infradead.org,
-        Marc Zyngier <maz@kernel.org>, linux-media@vger.kernel.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        id S2389767AbgLJN5U (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 10 Dec 2020 08:57:20 -0500
+Received: from mga12.intel.com ([192.55.52.136]:31178 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389761AbgLJN5T (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 10 Dec 2020 08:57:19 -0500
+IronPort-SDR: ax8s0qgw/LucKMSCGW16dRaY+YcxxtjuVaSM6N+nhcf3ml9mf5sSYRXS2WCnNXl/XNa/dglCgz
+ NkahukKm0y7A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9830"; a="153489126"
+X-IronPort-AV: E=Sophos;i="5.78,408,1599548400"; 
+   d="scan'208";a="153489126"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2020 05:55:32 -0800
+IronPort-SDR: do9N5KAms1qR1BOwmxto6A9gdtKSLM0DRNag1vpRcF0IUs+o5GUMiJyk2pQIUo7Qq+z5wAtONr
+ 3hHkpPXoLG1w==
+X-IronPort-AV: E=Sophos;i="5.78,408,1599548400"; 
+   d="scan'208";a="371650813"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2020 05:55:29 -0800
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id 1BFBB20867; Thu, 10 Dec 2020 15:55:27 +0200 (EET)
+Date:   Thu, 10 Dec 2020 15:55:27 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-rpi-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH 07/15] drm/vc4: hdmi: Update the CEC clock divider on HSM rate change
-Date:   Thu, 10 Dec 2020 14:46:40 +0100
-Message-Id: <20201210134648.272857-8-maxime@cerno.tech>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201210134648.272857-1-maxime@cerno.tech>
-References: <20201210134648.272857-1-maxime@cerno.tech>
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Joe Perches <joe@perches.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [PATCH v5 1/1] lib/vsprintf: Add support for printing V4L2 and
+ DRM fourccs
+Message-ID: <20201210135526.GH25763@paasikivi.fi.intel.com>
+References: <20201113105441.1427-1-sakari.ailus@linux.intel.com>
+ <X9Hdg3lJm+TZAQGX@alley>
+ <CAHp75VcY_b7uaGWoEa1Y6YDk0MmmzC4hV2yx8zVT7J-fD67Hyg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHp75VcY_b7uaGWoEa1Y6YDk0MmmzC4hV2yx8zVT7J-fD67Hyg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-As part of the enable sequence we might change the HSM clock rate if the
-pixel rate is different than the one we were already dealing with.
+Hi Andy,
 
-On the BCM2835 however, the CEC clock derives from the HSM clock so any
-rate change will need to be reflected in the CEC clock divider to output
-40kHz.
+On Thu, Dec 10, 2020 at 03:05:02PM +0200, Andy Shevchenko wrote:
+> On Thu, Dec 10, 2020 at 2:16 PM Petr Mladek <pmladek@suse.com> wrote:
+> > On Fri 2020-11-13 12:54:41, Sakari Ailus wrote:
+> > > Add a printk modifier %p4cc (for pixel format) for printing V4L2 and DRM
+> > > pixel formats denoted by fourccs. The fourcc encoding is the same for both
+> > > so the same implementation can be used.
+> > >
+> > > Suggested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> >
+> > Andy, Rasmus,
+> >
+> > the last version looks fine to me. I am going to push it.
+> > Please, speak up if you are against it.
+> 
+> My concerns are:
+> - not so standard format of representation (why not to use
+> string_escape_mem() helper?) or is it?
 
-Fixes: cd4cb49dc5bb ("drm/vc4: hdmi: Adjust HSM clock rate depending on pixel rate")
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
----
- drivers/gpu/drm/vc4/vc4_hdmi.c | 39 +++++++++++++++++++++++++---------
- 1 file changed, 29 insertions(+), 10 deletions(-)
+The format string may contain spaces that are not meant to be printed.
+Other unprintable chacaters should not be present (at least not in V4L2
+pixelformats). The hexadecimal representation is there to convey the
+numerical value and that originally came from DRM, not V4L2.
 
-diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
-index 0c53d7427d15..b93ee3e26e2b 100644
---- a/drivers/gpu/drm/vc4/vc4_hdmi.c
-+++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-@@ -132,6 +132,27 @@ static void vc5_hdmi_reset(struct vc4_hdmi *vc4_hdmi)
- 		   HDMI_READ(HDMI_CLOCK_STOP) | VC4_DVP_HT_CLOCK_STOP_PIXEL);
- }
- 
-+#ifdef CONFIG_DRM_VC4_HDMI_CEC
-+static void vc4_hdmi_cec_update_clk_div(struct vc4_hdmi *vc4_hdmi)
-+{
-+	u16 clk_cnt;
-+	u32 value;
-+
-+	value = HDMI_READ(HDMI_CEC_CNTRL_1);
-+	value &= ~VC4_HDMI_CEC_DIV_CLK_CNT_MASK;
-+
-+	/*
-+	 * Set the clock divider: the hsm_clock rate and this divider
-+	 * setting will give a 40 kHz CEC clock.
-+	 */
-+	clk_cnt = clk_get_rate(vc4_hdmi->hsm_clock) / CEC_CLOCK_FREQ;
-+	value |= clk_cnt << VC4_HDMI_CEC_DIV_CLK_CNT_SHIFT;
-+	HDMI_WRITE(HDMI_CEC_CNTRL_1, value);
-+}
-+#else
-+static void vc4_hdmi_cec_update_clk_div(struct vc4_hdmi *vc4_hdmi) {}
-+#endif
-+
- static enum drm_connector_status
- vc4_hdmi_connector_detect(struct drm_connector *connector, bool force)
- {
-@@ -761,6 +782,8 @@ static void vc4_hdmi_encoder_pre_crtc_configure(struct drm_encoder *encoder,
- 		return;
- 	}
- 
-+	vc4_hdmi_cec_update_clk_div(vc4_hdmi);
-+
- 	/*
- 	 * FIXME: When the pixel freq is 594MHz (4k60), this needs to be setup
- 	 * at 300MHz.
-@@ -1586,7 +1609,6 @@ static int vc4_hdmi_cec_init(struct vc4_hdmi *vc4_hdmi)
- {
- 	struct cec_connector_info conn_info;
- 	struct platform_device *pdev = vc4_hdmi->pdev;
--	u16 clk_cnt;
- 	u32 value;
- 	int ret;
- 
-@@ -1605,17 +1627,14 @@ static int vc4_hdmi_cec_init(struct vc4_hdmi *vc4_hdmi)
- 	cec_s_conn_info(vc4_hdmi->cec_adap, &conn_info);
- 
- 	HDMI_WRITE(HDMI_CEC_CPU_MASK_SET, 0xffffffff);
-+
- 	value = HDMI_READ(HDMI_CEC_CNTRL_1);
--	value &= ~VC4_HDMI_CEC_DIV_CLK_CNT_MASK;
--	/*
--	 * Set the logical address to Unregistered and set the clock
--	 * divider: the hsm_clock rate and this divider setting will
--	 * give a 40 kHz CEC clock.
--	 */
--	clk_cnt = clk_get_rate(vc4_hdmi->hsm_clock) / CEC_CLOCK_FREQ;
--	value |= VC4_HDMI_CEC_ADDR_MASK |
--		 (clk_cnt << VC4_HDMI_CEC_DIV_CLK_CNT_SHIFT);
-+	/* Set the logical address to Unregistered */
-+	value |= VC4_HDMI_CEC_ADDR_MASK;
- 	HDMI_WRITE(HDMI_CEC_CNTRL_1, value);
-+
-+	vc4_hdmi_cec_update_clk_div(vc4_hdmi);
-+
- 	ret = devm_request_threaded_irq(&pdev->dev, platform_get_irq(pdev, 0),
- 					vc4_cec_irq_handler,
- 					vc4_cec_irq_handler_thread, 0,
+> - no compatibility with generic 4cc
+>   (I would rather have an additional specifier here for v4l2 cases.
+
+What do you mean by "generic 4cc"? There are two users of 4cc codes in the
+kernel that I know of: V4L2 and DRM. Something that does not refer to
+in-memory pixel formats?
+
+> OTOH generic %p4cc to me sounds like an equivalent to %4pEh (but we
+> have similar cases with MAC where %6ph is the same as %pM).
+> 
+> But I'm not insisting on them, consider it like just my 2 cents to the
+> discussion.
+
+Ack.
+
 -- 
-2.28.0
+Kind regards,
 
+Sakari Ailus
