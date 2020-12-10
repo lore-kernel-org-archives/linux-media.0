@@ -2,72 +2,114 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.2 required=3.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EF06C433FE
-	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 11:44:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6136DC433FE
+	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 12:07:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DDA7B23D5A
-	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 11:44:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0604123D9B
+	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 12:07:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728457AbgLJLno (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 10 Dec 2020 06:43:44 -0500
-Received: from mx2.suse.de ([195.135.220.15]:40654 "EHLO mx2.suse.de"
+        id S1732048AbgLJMHK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 10 Dec 2020 07:07:10 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54830 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727043AbgLJLnj (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 10 Dec 2020 06:43:39 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1607600572; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=b5dIRaLNX6aRE22CFde/Fg59anE9N6upllD4rSYJw5o=;
-        b=ELHSvPFtseK9UMLnXhb2ow62vSI8w05u9PAFKm0KHoq7zWYpKtNbKhCKd2pll+hOhQ75zx
-        bjPzNTc8x/ZG965OrAustYCiXDFh654zaDVSi9AQziGZaluHdplpaSHI9z3FVvpRax9iwT
-        j9BmKFaFHeu+K3MqOUpbqM24+9jN8zI=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 339BAAD6B;
-        Thu, 10 Dec 2020 11:42:51 +0000 (UTC)
-Date:   Thu, 10 Dec 2020 09:34:11 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        dri-devel@lists.freedesktop.org, hverkuil@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Joe Perches <joe@perches.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [PATCH v5 1/1] lib/vsprintf: Add support for printing V4L2 and
- DRM fourccs
-Message-ID: <X9Hdg3lJm+TZAQGX@alley>
-References: <20201113105441.1427-1-sakari.ailus@linux.intel.com>
+        id S1726158AbgLJMG6 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 10 Dec 2020 07:06:58 -0500
+Date:   Thu, 10 Dec 2020 13:07:32 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1607601977;
+        bh=7+XUs0NKgoibxWSzN421h7xPCAuuCw7byH4TQnvEGNw=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oLeFeqt1pFET44DeiiSlhpvd2a6K2KZr6n0cBqcNsNx771+9H5PVIOkPbJucQu4u/
+         tqbg1OacZoFarVqzvGXDaM3wAp3VMknJUO2TG5c+1KksB3zFrWz7f6ra6xII51BqSz
+         sT8IhGsd63xCbp3XdM5LTVkVLgdSi4atIBmDoym0=
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Android Kernel Team <kernel-team@android.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>
+Subject: Re: [PATCH] dmabuf: Add the capability to expose DMA-BUF stats in
+ sysfs
+Message-ID: <X9IPhEkcZO+Ut5RH@kroah.com>
+References: <20201210044400.1080308-1-hridya@google.com>
+ <b5adfe46-8615-5821-d092-2b93feed5b79@amd.com>
+ <X9H0JREcdxDsMtLX@kroah.com>
+ <20201210102727.GE401619@phenom.ffwll.local>
+ <X9H+3AP1q39aMxeb@kroah.com>
+ <CAKMK7uFD3fE01Li3JOpHpzP7313OT3xpcjBwzSVjrCGAmab2Zg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20201113105441.1427-1-sakari.ailus@linux.intel.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKMK7uFD3fE01Li3JOpHpzP7313OT3xpcjBwzSVjrCGAmab2Zg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri 2020-11-13 12:54:41, Sakari Ailus wrote:
-> Add a printk modifier %p4cc (for pixel format) for printing V4L2 and DRM
-> pixel formats denoted by fourccs. The fourcc encoding is the same for both
-> so the same implementation can be used.
+On Thu, Dec 10, 2020 at 12:26:01PM +0100, Daniel Vetter wrote:
+> On Thu, Dec 10, 2020 at 11:55 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Thu, Dec 10, 2020 at 11:27:27AM +0100, Daniel Vetter wrote:
+> > > On Thu, Dec 10, 2020 at 11:10:45AM +0100, Greg KH wrote:
+> > > > On Thu, Dec 10, 2020 at 10:58:50AM +0100, Christian König wrote:
+> > > > > In general a good idea, but I have a few concern/comments here.
+> > > > >
+> > > > > Am 10.12.20 um 05:43 schrieb Hridya Valsaraju:
+> > > > > > This patch allows statistics to be enabled for each DMA-BUF in
+> > > > > > sysfs by enabling the config CONFIG_DMABUF_SYSFS_STATS.
+> > > > > >
+> > > > > > The following stats will be exposed by the interface:
+> > > > > >
+> > > > > > /sys/kernel/dmabuf/<inode_number>/exporter_name
+> > > > > > /sys/kernel/dmabuf/<inode_number>/size
+> > > > > > /sys/kernel/dmabuf/<inode_number>/dev_map_info
+> > > > > >
+> > > > > > The inode_number is unique for each DMA-BUF and was added earlier [1]
+> > > > > > in order to allow userspace to track DMA-BUF usage across different
+> > > > > > processes.
+> > > > > >
+> > > > > > Currently, this information is exposed in
+> > > > > > /sys/kernel/debug/dma_buf/bufinfo.
+> > > > > > However, since debugfs is considered unsafe to be mounted in production,
+> > > > > > it is being duplicated in sysfs.
+> > > > >
+> > > > > Mhm, this makes it part of the UAPI. What is the justification for this?
+> > > > >
+> > > > > In other words do we really need those debug information in a production
+> > > > > environment?
+> > > >
+> > > > Production environments seem to want to know who is using up memory :)
+> > >
+> > > This only shows shared memory, so it does smell a lot like $specific_issue
+> > > and we're designing a narrow solution for that and then have to carry it
+> > > forever.
+> >
+> > I think the "issue" is that this was a feature from ion that people
+> > "missed" in the dmabuf move.  Taking away the ability to see what kind
+> > of allocations were being made didn't make a lot of debugging tools
+> > happy :(
 > 
-> Suggested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> If this is just for dma-heaps then why don't we add the stuff back
+> over there? It reinforces more that the android gpu stack and the
+> non-android gpu stack on linux are fairly different in fundamental
+> ways, but that's not really new.
 
-Andy, Rasmus,
+Back "over where"?
 
-the last version looks fine to me. I am going to push it.
-Please, speak up if you are against it.
+dma-bufs are not only used for the graphics stack on android from what I
+can tell, so this shouldn't be a gpu-specific issue.
 
-Best Regards,
-Petr
+confused,
+
+greg k-h
