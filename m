@@ -6,17 +6,17 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACAF5C4361B
-	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 10:57:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37588C4361B
+	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 10:58:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5291923B70
-	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 10:57:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E86AC23C44
+	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 10:58:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389227AbgLJK5c (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 10 Dec 2020 05:57:32 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56396 "EHLO mail.kernel.org"
+        id S2389246AbgLJK5d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 10 Dec 2020 05:57:33 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56386 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389223AbgLJK5V (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S2389221AbgLJK5V (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Thu, 10 Dec 2020 05:57:21 -0500
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
@@ -25,9 +25,9 @@ Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 12/13] media: pixfmt-yuv-planar.rst: fix PDF OUTPUT
-Date:   Thu, 10 Dec 2020 11:55:51 +0100
-Message-Id: <2f46882c4f60a9353ead5630293e6245ffed9e6a.1607597287.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 08/13] media: ext-ctrls-jpeg.rst: cleanup V4L2_CID_JPEG_COMPRESSION_QUALITY text
+Date:   Thu, 10 Dec 2020 11:55:47 +0100
+Message-Id: <b24f9196a55475eb91be693e5be1b38032ce23cf.1607597287.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <cover.1607597287.git.mchehab+huawei@kernel.org>
 References: <cover.1607597287.git.mchehab+huawei@kernel.org>
@@ -38,87 +38,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add missing format macros for the tables there to be properly
-output.
+The text is repeating the name of the control, which causes
+it to be displayed outside the page with PDF output.
 
-While here, also remove the empty ".. note::" markup.
-
-It should be noticed that ".. [1]" markups will generate footnotes,
-and not a note within the main text body.
+Besides that, this is the only JPEG control doing that. Removing
+the name duplication doesn't affect the description, but, instead,
+make it nicer.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../media/v4l/pixfmt-yuv-planar.rst           | 34 ++++++++++++++-----
- 1 file changed, 25 insertions(+), 9 deletions(-)
+ .../userspace-api/media/v4l/ext-ctrls-jpeg.rst      | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-index 7d4d39201a3f..77744d6e5745 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-@@ -48,6 +48,12 @@ relationship between the luma and chroma line padding and stride.
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-jpeg.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-jpeg.rst
+index e07a2dbcd65d..60f9a09422d6 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-jpeg.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-jpeg.rst
+@@ -64,13 +64,12 @@ JPEG Control IDs
+ .. _jpeg-quality-control:
  
- All components are stored with the same number of bits per component.
+ ``V4L2_CID_JPEG_COMPRESSION_QUALITY (integer)``
+-    ``V4L2_CID_JPEG_COMPRESSION_QUALITY`` control determines trade-off
+-    between image quality and size. It provides simpler method for
+-    applications to control image quality, without a need for direct
+-    reconfiguration of luminance and chrominance quantization tables. In
+-    cases where a driver uses quantization tables configured directly by
+-    an application, using interfaces defined elsewhere,
+-    ``V4L2_CID_JPEG_COMPRESSION_QUALITY`` control should be set by
++    Determines trade-off between image quality and size.
++    It provides simpler method for applications to control image quality,
++    without a need for direct reconfiguration of luminance and chrominance
++    quantization tables. In cases where a driver uses quantization tables
++    configured directly by an application, using interfaces defined
++    elsewhere, ``V4L2_CID_JPEG_COMPRESSION_QUALITY`` control should be set by
+     driver to 0.
  
-+.. raw:: latex
-+
-+    \footnotesize
-+
-+.. tabularcolumns:: |p{5.2cm}|p{1.0cm}|p{1.5cm}|p{1.9cm}|p{1.2cm}|p{1.8cm}|p{2.7cm}|
-+
- .. flat-table:: Overview of Semi-Planar YUV Formats
-     :header-rows:  1
-     :stub-columns: 0
-@@ -146,12 +152,14 @@ All components are stored with the same number of bits per component.
-       - Yes
-       - Linear
- 
--.. note::
-+.. raw:: latex
- 
--   .. [1] Order of chroma samples in the second plane
--   .. [2] Indicates if planes have to be contiguous in memory or can be
--      disjoint
--   .. [3] Macroblock size in pixels
-+    \normalsize
-+
-+.. [1] Order of chroma samples in the second plane
-+.. [2] Indicates if planes have to be contiguous in memory or can be
-+       disjoint
-+.. [3] Macroblock size in pixels
- 
- 
- **Color Sample Location:**
-@@ -481,6 +489,12 @@ relationship between the luma and chroma line padding and stride.
- 
- All components are stored with the same number of bits per component.
- 
-+.. raw:: latex
-+
-+    \small
-+
-+.. tabularcolumns:: |p{5.0cm}|p{1.1cm}|p{1.5cm}|p{2.2cm}|p{1.2cm}|p{3.7cm}|
-+
- .. flat-table:: Overview of Fully Planar YUV Formats
-     :header-rows:  1
-     :stub-columns: 0
-@@ -565,11 +579,13 @@ All components are stored with the same number of bits per component.
-       - Y, Cr, Cb
-       - No
- 
--.. note::
-+.. raw:: latex
- 
--   .. [4] Order of luma and chroma planes
--   .. [5] Indicates if planes have to be contiguous in memory or can be
--      disjoint
-+    \normalsize
-+
-+.. [4] Order of luma and chroma planes
-+.. [5] Indicates if planes have to be contiguous in memory or can be
-+       disjoint
- 
- 
- **Color Sample Location:**
+     The value range of this control is driver-specific. Only positive,
 -- 
 2.29.2
 
