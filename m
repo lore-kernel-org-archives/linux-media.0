@@ -2,91 +2,80 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABCF4C4167B
-	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 02:13:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB0FEC0018C
+	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 03:53:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 745C5233EF
-	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 02:13:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 730A323A6C
+	for <linux-media@archiver.kernel.org>; Thu, 10 Dec 2020 03:53:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728044AbgLJCNm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Dec 2020 21:13:42 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:54393 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728040AbgLJCNm (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Dec 2020 21:13:42 -0500
-X-UUID: 218d533b9366481e9e0dfa640a4f36bf-20201210
-X-UUID: 218d533b9366481e9e0dfa640a4f36bf-20201210
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <irui.wang@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 468575324; Thu, 10 Dec 2020 10:07:47 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 10 Dec 2020 10:07:45 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 10 Dec 2020 10:07:45 +0800
-From:   Irui Wang <irui.wang@mediatek.com>
-List-Id: <linux-firmware.lore.kernel.org>
-To:     <linux-firmware@kernel.org>
-CC:     <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-media@vger.kernel.org>, <tiffany.lin@mediatek.com>,
-        <Maoguang.Meng@mediatek.com>, <Longfei.Wang@mediatek.com>,
-        <Yunfei.Dong@mediatek.com>, <Andrew-CT.Chen@mediatek.com>,
-        <erin.lo@mediatek.com>, <PoChun.Lin@mediatek.com>,
-        <irui.wang@mediatek.com>, <srv_heupstream@mediatek.com>
-Subject: [PATCH] mediatek: update MT8173 VPU firmware to v1.1.6
-Date:   Thu, 10 Dec 2020 10:07:40 +0800
-Message-ID: <20201210020740.21467-2-irui.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20201210020740.21467-1-irui.wang@mediatek.com>
-References: <20201210020740.21467-1-irui.wang@mediatek.com>
+        id S1730983AbgLJDwj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Dec 2020 22:52:39 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:34636 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730646AbgLJDw0 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Dec 2020 22:52:26 -0500
+Received: by mail-ot1-f65.google.com with SMTP id a109so3667914otc.1;
+        Wed, 09 Dec 2020 19:52:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1C2ZgD4c3kwcJxmbh6urjWdWq47a37O1f912W2JHtI4=;
+        b=l/GY40VrgdGdwJHE1lub1MazvLo48qvbix//AGLk7nwtgogyYlSlUT1YifLfPCEN5i
+         JNC8H7KAahsKfT6rZJSFSPxEozWJLEfFqED4sBr1iKGb/ovcohrJ7t3N0sdX0zFFOlUD
+         25OKTYcsFVt58O8EmElsgi8Vhr/mYhUjbTcczyssV3r9k5vWIh8bXgwlGnyiK1jDCS5E
+         f1u8DjE3zLfczvke4umn13KNvi2cq2SNaQ08nwv8+Dk5XA1LmSqcQeCl6MO1zDOfJc2g
+         kkWhiKLWOyiwFZLc5ICfp3ACyei2hpH690DjTOJxt8lwsoXXOwfvFqFuHiq9WwVGH05S
+         ZGSQ==
+X-Gm-Message-State: AOAM530XUtuOcbXAXufgHOGzGrDSYO/3R4us1XIIrd1M+CZ6rxHiYG9Z
+        icQcD1mujxOMijpjs14KL5wZonoc3A==
+X-Google-Smtp-Source: ABdhPJzDMICehYF9zigVG2Heo0ODRVDoGVIedP1fHdVuyKntdE0VyoGj96p5QS6QYKA5W4Z7G+XzEA==
+X-Received: by 2002:a9d:2643:: with SMTP id a61mr4503929otb.353.1607572305780;
+        Wed, 09 Dec 2020 19:51:45 -0800 (PST)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id h26sm44171ots.9.2020.12.09.19.51.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Dec 2020 19:51:45 -0800 (PST)
+Received: (nullmailer pid 1627297 invoked by uid 1000);
+        Thu, 10 Dec 2020 03:51:43 -0000
+Date:   Wed, 9 Dec 2020 21:51:43 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Martina Krasteva <martinax.krasteva@linux.intel.com>
+Cc:     robh+dt@kernel.org, mchehab@kernel.org,
+        linux-media@vger.kernel.org, daniele.alessandrelli@linux.intel.com,
+        gjorgjix.rosikopulos@linux.intel.com, devicetree@vger.kernel.org,
+        sakari.ailus@linux.intel.com, paul.j.murphy@linux.intel.com
+Subject: Re: [PATCH v3 1/2] dt-bindings: media: Add bindings for imx334
+Message-ID: <20201210035143.GA1627250@robh.at.kernel.org>
+References: <20201207160109.490-1-martinax.krasteva@linux.intel.com>
+ <20201207160109.490-2-martinax.krasteva@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201207160109.490-2-martinax.krasteva@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-[encoder h264]
-set buffer pitch to encoder hardware
+On Mon, 07 Dec 2020 16:01:07 +0000, Martina Krasteva wrote:
+> From: Martina Krasteva <martinax.krasteva@intel.com>
+> 
+> - Add dt-bindings documentation for Sony imx334 sensor driver.
+> - Add MAINTAINERS entry for Sony imx334 binding documentation.
+> 
+> Signed-off-by: Martina Krasteva <martinax.krasteva@intel.com>
+> Reviewed-by: Gjorgji Rosikopulos <gjorgjix.rosikopulos@intel.com>
+> Acked-by: Daniele Alessandrelli <daniele.alessandrelli@intel.com>
+> Acked-by: Paul J. Murphy <paul.j.murphy@intel.com>
+> ---
+>  .../devicetree/bindings/media/i2c/sony,imx334.yaml | 62 ++++++++++++++++++++++
+>  MAINTAINERS                                        |  8 +++
+>  2 files changed, 70 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml
+> 
 
-Release Version: 1.1.6
-
-Signed-off-by: Irui Wang <irui.wang@mediatek.com>
----
- mediatek/mt8173/vpu_d.bin | Bin 2977184 -> 2977184 bytes
- mediatek/mt8173/vpu_p.bin | Bin 131180 -> 131180 bytes
- 2 files changed, 0 insertions(+), 0 deletions(-)
-
-diff --git a/mediatek/mt8173/vpu_d.bin b/mediatek/mt8173/vpu_d.bin
-index 00d9c47d19a1dfa10244a5b030d171982333bbb8..45e214dd4aac4c54b8dc2778c7de3de69c6f41a6 100644
-GIT binary patch
-delta 198
-zcmWN=w++HT002OloO8}OnwI`+T09X2YcK*0Vi=a;PP*6c6TN)jLv(#4;hBWUlxZ_&
-z&6&4g(UN5=R;^jLVbhjvJ9h2aci_;GV<%3XId|dGm1{R{-MRPR(UWK6ZxSxI_z!i>
-BJ;MM1
-
-delta 198
-zcmWN=w++HT002OloO8}Onvwy&ro|Icum&U0AckQX?xcJDKGDnfJw(?>5}rwjOqn)g
-z)|`0@7A;w}V%3^;8#Zm(wqw_xeFqL5Id<aInR6E|UAcDS)}4C~9zA(B{wCpai~n^K
-BJ;DG0
-
-diff --git a/mediatek/mt8173/vpu_p.bin b/mediatek/mt8173/vpu_p.bin
-index c3a6678ec4eabbdacd9504988f01fb3dbaf6c1de..96f1c632972cb068d0c1aacbc78b5cc0da07bf4a 100644
-GIT binary patch
-delta 20
-ccmaFU!11PmV}tZm#x2b<Q@6`ZWems$0AGv<RsaA1
-
-delta 20
-ccmaFU!11PmV}tZm#ud#nQ@6`ZWems$0ACacN&o-=
-
--- 
-2.18.0
-
+Reviewed-by: Rob Herring <robh@kernel.org>
