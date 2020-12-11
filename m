@@ -7,194 +7,112 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD5D9C4361B
-	for <linux-media@archiver.kernel.org>; Fri, 11 Dec 2020 16:44:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC7EAC433FE
+	for <linux-media@archiver.kernel.org>; Fri, 11 Dec 2020 16:57:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 86E2D23106
-	for <linux-media@archiver.kernel.org>; Fri, 11 Dec 2020 16:44:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6E5562310E
+	for <linux-media@archiver.kernel.org>; Fri, 11 Dec 2020 16:57:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404443AbgLKPpv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Dec 2020 10:45:51 -0500
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:34881 "EHLO
-        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392907AbgLKPp1 (ORCPT
+        id S2404871AbgLKP6e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Dec 2020 10:58:34 -0500
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:44087 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2393785AbgLKP6H (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 11 Dec 2020 10:45:27 -0500
+        Fri, 11 Dec 2020 10:58:07 -0500
 X-Originating-IP: 93.29.109.196
 Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
         (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 1B1A720005;
-        Fri, 11 Dec 2020 15:44:39 +0000 (UTC)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id AF37160002;
+        Fri, 11 Dec 2020 15:57:22 +0000 (UTC)
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-sunxi@googlegroups.com
+Cc:     Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Maxime Ripard <mripard@kernel.org>,
         Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@siol.net>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        kevin.lhopital@hotmail.com,
-        =?UTF-8?q?K=C3=A9vin=20L=27h=C3=B4pital?= 
-        <kevin.lhopital@bootlin.com>, Rob Herring <robh@kernel.org>
-Subject: [PATCH v4 1/3] dt-bindings: media: i2c: Add OV8865 bindings documentation
-Date:   Fri, 11 Dec 2020 16:44:26 +0100
-Message-Id: <20201211154428.153762-2-paul.kocialkowski@bootlin.com>
+        kevin.lhopital@hotmail.com
+Subject: [PATCH v3 02/15] phy: Distinguish between Rx and Tx for MIPI D-PHY with submodes
+Date:   Fri, 11 Dec 2020 16:56:55 +0100
+Message-Id: <20201211155708.154710-3-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201211154428.153762-1-paul.kocialkowski@bootlin.com>
-References: <20201211154428.153762-1-paul.kocialkowski@bootlin.com>
+In-Reply-To: <20201211155708.154710-1-paul.kocialkowski@bootlin.com>
+References: <20201211155708.154710-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This introduces YAML bindings documentation for the OV8865
-image sensor.
+As some D-PHY controllers support both Rx and Tx mode, we need a way for
+users to explicitly request one or the other. For instance, Rx mode can
+be used along with MIPI CSI-2 while Tx mode can be used with MIPI DSI.
 
-Co-developed-by: Kévin L'hôpital <kevin.lhopital@bootlin.com>
-Signed-off-by: Kévin L'hôpital <kevin.lhopital@bootlin.com>
+Introduce new MIPI D-PHY PHY submodes to use with PHY_MODE_MIPI_DPHY.
+The default (zero value) is kept to Tx so only the rkisp1 driver, which
+uses D-PHY in Rx mode, needs to be adapted.
+
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Helen Koike <helen.koike@collabora.com>
 ---
- .../bindings/media/i2c/ovti,ov8865.yaml       | 124 ++++++++++++++++++
- 1 file changed, 124 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov8865.yaml
+ drivers/staging/media/rkisp1/rkisp1-isp.c |  3 ++-
+ include/linux/phy/phy-mipi-dphy.h         | 13 +++++++++++++
+ 2 files changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov8865.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov8865.yaml
-new file mode 100644
-index 000000000000..c0ba28aa30c4
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov8865.yaml
-@@ -0,0 +1,124 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/ovti,ov8865.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/staging/media/rkisp1/rkisp1-isp.c b/drivers/staging/media/rkisp1/rkisp1-isp.c
+index a9715b0b7264..f1167995688a 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-isp.c
++++ b/drivers/staging/media/rkisp1/rkisp1-isp.c
+@@ -914,7 +914,8 @@ static int rkisp1_mipi_csi2_start(struct rkisp1_isp *isp,
+ 
+ 	phy_mipi_dphy_get_default_config(pixel_clock, isp->sink_fmt->bus_width,
+ 					 sensor->lanes, cfg);
+-	phy_set_mode(sensor->dphy, PHY_MODE_MIPI_DPHY);
++	phy_set_mode_ext(cdev->dphy, PHY_MODE_MIPI_DPHY,
++			 PHY_MIPI_DPHY_SUBMODE_RX);
+ 	phy_configure(sensor->dphy, &opts);
+ 	phy_power_on(sensor->dphy);
+ 
+diff --git a/include/linux/phy/phy-mipi-dphy.h b/include/linux/phy/phy-mipi-dphy.h
+index a877ffee845d..0f57ef46a8b5 100644
+--- a/include/linux/phy/phy-mipi-dphy.h
++++ b/include/linux/phy/phy-mipi-dphy.h
+@@ -6,6 +6,19 @@
+ #ifndef __PHY_MIPI_DPHY_H_
+ #define __PHY_MIPI_DPHY_H_
+ 
++/**
++ * enum phy_mipi_dphy_submode - MIPI D-PHY sub-mode
++ *
++ * A MIPI D-PHY can be used to transmit or receive data.
++ * Since some controllers can support both, the direction to enable is specified
++ * with the PHY sub-mode. Transmit is assumed by default with phy_set_mode.
++ */
 +
-+title: OmniVision OV8865 Image Sensor Device Tree Bindings
++enum phy_mipi_dphy_submode {
++	PHY_MIPI_DPHY_SUBMODE_TX = 0,
++	PHY_MIPI_DPHY_SUBMODE_RX,
++};
 +
-+maintainers:
-+  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-+
-+properties:
-+  compatible:
-+    const: ovti,ov8865
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: EXTCLK Clock
-+
-+  assigned-clocks:
-+    maxItems: 1
-+
-+  assigned-clock-rates:
-+    maxItems: 1
-+
-+  dvdd-supply:
-+    description: Digital Domain Power Supply
-+
-+  avdd-supply:
-+    description: Analog Domain Power Supply
-+
-+  dovdd-supply:
-+    description: I/O Domain Power Supply
-+
-+  powerdown-gpios:
-+    maxItems: 1
-+    description: Power Down Pin GPIO Control (active low)
-+
-+  reset-gpios:
-+    maxItems: 1
-+    description: Reset Pin GPIO Control (active low)
-+
-+  port:
-+    type: object
-+    description: MIPI CSI-2 transmitter port
-+
-+    properties:
-+      endpoint:
-+        type: object
-+
-+        properties:
-+          remote-endpoint: true
-+
-+          link-frequencies:
-+            $ref: /schemas/types.yaml#/definitions/uint64-array
-+            description: Allowed MIPI CSI-2 link frequencies
-+
-+          data-lanes:
-+            minItems: 1
-+            maxItems: 4
-+
-+        required:
-+          - data-lanes
-+          - link-frequencies
-+          - remote-endpoint
-+
-+    required:
-+      - endpoint
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - assigned-clocks
-+  - assigned-clock-rates
-+  - dvdd-supply
-+  - avdd-supply
-+  - dovdd-supply
-+  - port
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/sun8i-a83t-ccu.h>
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    i2c2 {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        ov8865: camera@36 {
-+            compatible = "ovti,ov8865";
-+            reg = <0x36>;
-+
-+            pinctrl-names = "default";
-+            pinctrl-0 = <&csi_mclk_pin>;
-+
-+            clocks = <&ccu CLK_CSI_MCLK>;
-+            assigned-clocks = <&ccu CLK_CSI_MCLK>;
-+            assigned-clock-rates = <24000000>;
-+
-+            avdd-supply = <&reg_ov8865_avdd>;
-+            dovdd-supply = <&reg_ov8865_dovdd>;
-+            dvdd-supply = <&reg_ov8865_dvdd>;
-+
-+            powerdown-gpios = <&pio 4 17 GPIO_ACTIVE_LOW>; /* PE17 */
-+            reset-gpios = <&pio 4 16 GPIO_ACTIVE_LOW>; /* PE16 */
-+
-+            port {
-+                ov8865_out_mipi_csi2: endpoint {
-+                    data-lanes = <1 2 3 4>;
-+                    link-frequencies = /bits/ 64 <360000000>;
-+
-+                    remote-endpoint = <&mipi_csi2_in_ov8865>;
-+                };
-+            };
-+        };
-+    };
-+
-+...
+ /**
+  * struct phy_configure_opts_mipi_dphy - MIPI D-PHY configuration set
+  *
 -- 
 2.29.2
 
