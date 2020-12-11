@@ -2,33 +2,33 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-15.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD055C4361B
-	for <linux-media@archiver.kernel.org>; Fri, 11 Dec 2020 18:34:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1B4EC433FE
+	for <linux-media@archiver.kernel.org>; Fri, 11 Dec 2020 18:38:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AAF0623EF6
-	for <linux-media@archiver.kernel.org>; Fri, 11 Dec 2020 18:34:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 60DC523EF3
+	for <linux-media@archiver.kernel.org>; Fri, 11 Dec 2020 18:38:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393760AbgLKREN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Dec 2020 12:04:13 -0500
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:2291 "EHLO
+        id S2394216AbgLKRFS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Dec 2020 12:05:18 -0500
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:2531 "EHLO
         hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389598AbgLKRD3 (ORCPT
+        with ESMTP id S2393748AbgLKREM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 11 Dec 2020 12:03:29 -0500
+        Fri, 11 Dec 2020 12:04:12 -0500
 Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5fd3a6390000>; Fri, 11 Dec 2020 09:02:49 -0800
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 11 Dec
- 2020 17:02:48 +0000
+        id <B5fd3a63e0001>; Fri, 11 Dec 2020 09:02:54 -0800
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 11 Dec
+ 2020 17:02:54 +0000
 Received: from skomatineni-linux.nvidia.com (172.20.145.6) by mail.nvidia.com
  (172.20.187.15) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
- Transport; Fri, 11 Dec 2020 17:02:48 +0000
+ Transport; Fri, 11 Dec 2020 17:02:53 +0000
 From:   Sowjanya Komatineni <skomatineni@nvidia.com>
 To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
         <jonathanh@nvidia.com>, <hverkuil@xs4all.nl>,
@@ -36,9 +36,9 @@ To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
 CC:     <mchehab@kernel.org>, <linux-media@vger.kernel.org>,
         <linux-tegra@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 02/13] media: tegra-video: Enable VI pixel transform for YUV and RGB formats
-Date:   Fri, 11 Dec 2020 09:02:31 -0800
-Message-ID: <1607706162-1548-3-git-send-email-skomatineni@nvidia.com>
+Subject: [PATCH v4 10/13] media: v4l2-fwnode: Update V4L2_FWNODE_CSI2_MAX_DATA_LANES to 8
+Date:   Fri, 11 Dec 2020 09:02:39 -0800
+Message-ID: <1607706162-1548-11-git-send-email-skomatineni@nvidia.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1607706162-1548-1-git-send-email-skomatineni@nvidia.com>
 References: <1607706162-1548-1-git-send-email-skomatineni@nvidia.com>
@@ -46,65 +46,42 @@ X-NVConfidentiality: public
 MIME-Version: 1.0
 Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1607706169; bh=3KvReLIRXcuW/kRnBsqtVyD+GiWXJeSQRRku54/yeMg=;
+        t=1607706174; bh=T2kKcHbh237nA+bLfoyfA+byZop0LilULPGoxcKxFf4=;
         h=From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
          References:X-NVConfidentiality:MIME-Version:Content-Type;
-        b=dT0/BYwE9AfZF5CrldrAWJVtDVccMVBbJIay7rjv18tiGJtmGnc6QH3T/ikiX90kQ
-         BiOtVxUHJRvUrO5JPlmAJ9HxTfBmHbX4lIj+XBHx3a58RYKktnvUcjoNa9ytlVPxqV
-         yu3bT20c6i26/337HRkJMH1A+89cMUAynmRWsu5cvXxAuF6w4b1IjU+F8pJb0KI3E3
-         bTiqlWL1wverKjK+D7KMq1mm5RHKx4PloCbFSivzp8kOVQCoktFTbyCGNAjMejPN5o
-         xucLh8z4vBoFALe9cjtrjmKU4CEfg5kAs++ZbeVzPnV9+kjGFXFavTrekuw0W3HasJ
-         kdBpI72ejumCg==
+        b=hfdETD9cA7/O9qBR/62R03oztZy6DA1uEbRUNfV/p+dLUivHdvdT6vR0MmkeuQHp9
+         wCKbXZskM2AXdVLxDFDS1unHBILKs06rbabMTkMVSDP5+xToohggP57FMR1fsPCzFb
+         qf8Hgh+WHDvPms3khlPV78dvDXps6S9LaZ1rPvCmY72kPAyrBXQb4SWOLuHf19+CQF
+         z6Sh24p7DopoqRt/zvIGUVI5o+BDQZjlxm/DMbS+QJ1iRoTKk0Vg/m0k3K5rOqy1kP
+         saqPq2T6WPsidhWk76KW8scfWYC4eXcPA61V3V84XruBTJJjjNK5c9jP2Srpc22jKi
+         5RxO/a91hsVMw==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-VI Pixel transforms converts source pixel data to selected
-destination pixel formats in memory and aligns properly.
+Some CSI2 receivers support 8 data lanes.
 
-YUV and RGB formats need this pixel transform to be enabled.
+So, this patch updates CSI2 maximum data lanes to be 8.
 
-RAW formats use T_R16_I destination pixel format in memory and
-does not need pixel transform as they support direct write to
-memory.
-
-So, this patch enables pixel transform for YUV and RGB and keeps
-it bypass for RAW formats.
-
+Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
 ---
- drivers/staging/media/tegra-video/tegra210.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+ include/media/v4l2-fwnode.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/tegra-video/tegra210.c b/drivers/staging/media/tegra-video/tegra210.c
-index ac066c0..6b23aa7 100644
---- a/drivers/staging/media/tegra-video/tegra210.c
-+++ b/drivers/staging/media/tegra-video/tegra210.c
-@@ -178,10 +178,23 @@ static int tegra_channel_capture_setup(struct tegra_vi_channel *chan)
- 	u32 format = chan->fmtinfo->img_fmt;
- 	u32 data_type = chan->fmtinfo->img_dt;
- 	u32 word_count = (width * chan->fmtinfo->bit_width) / 8;
-+	u32 bypass_pixel_transform = BIT(BYPASS_PXL_TRANSFORM_OFFSET);
-+
-+	/*
-+	 * VI Pixel transformation unit converts source pixels data format
-+	 * into selected destination pixel format and aligns properly while
-+	 * interfacing with memory packer.
-+	 * This pixel transformation should be enabled for YUV and RGB
-+	 * formats and should be bypassed for RAW formats as RAW formats
-+	 * only support direct to memory.
-+	 */
-+	if (chan->pg_mode || data_type == TEGRA_IMAGE_DT_YUV422_8 ||
-+	    data_type == TEGRA_IMAGE_DT_RGB888)
-+		bypass_pixel_transform = 0;
+diff --git a/include/media/v4l2-fwnode.h b/include/media/v4l2-fwnode.h
+index 4e1f6e1d..92401c1 100644
+--- a/include/media/v4l2-fwnode.h
++++ b/include/media/v4l2-fwnode.h
+@@ -25,7 +25,7 @@ struct fwnode_handle;
+ struct v4l2_async_notifier;
+ struct v4l2_async_subdev;
  
- 	vi_csi_write(chan, TEGRA_VI_CSI_ERROR_STATUS, 0xffffffff);
- 	vi_csi_write(chan, TEGRA_VI_CSI_IMAGE_DEF,
--		     ((chan->pg_mode ? 0 : 1) << BYPASS_PXL_TRANSFORM_OFFSET) |
-+		     bypass_pixel_transform |
- 		     (format << IMAGE_DEF_FORMAT_OFFSET) |
- 		     IMAGE_DEF_DEST_MEM);
- 	vi_csi_write(chan, TEGRA_VI_CSI_IMAGE_DT, data_type);
+-#define V4L2_FWNODE_CSI2_MAX_DATA_LANES	4
++#define V4L2_FWNODE_CSI2_MAX_DATA_LANES	8
+ 
+ /**
+  * struct v4l2_fwnode_bus_mipi_csi2 - MIPI CSI-2 bus data structure
 -- 
 2.7.4
 
