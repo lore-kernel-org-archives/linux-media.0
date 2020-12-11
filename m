@@ -5,26 +5,26 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BB4EC433FE
-	for <linux-media@archiver.kernel.org>; Fri, 11 Dec 2020 16:57:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54408C4361B
+	for <linux-media@archiver.kernel.org>; Fri, 11 Dec 2020 16:58:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 184B223E26
-	for <linux-media@archiver.kernel.org>; Fri, 11 Dec 2020 16:57:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 23DF22310E
+	for <linux-media@archiver.kernel.org>; Fri, 11 Dec 2020 16:58:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405100AbgLKP6f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Dec 2020 10:58:35 -0500
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:45585 "EHLO
+        id S2405430AbgLKP6g (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Dec 2020 10:58:36 -0500
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:54663 "EHLO
         relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393835AbgLKP6Q (ORCPT
+        with ESMTP id S2393877AbgLKP6X (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 11 Dec 2020 10:58:16 -0500
+        Fri, 11 Dec 2020 10:58:23 -0500
 X-Originating-IP: 93.29.109.196
 Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
         (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id F3A4D60012;
-        Fri, 11 Dec 2020 15:57:30 +0000 (UTC)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 97C2B60009;
+        Fri, 11 Dec 2020 15:57:38 +0000 (UTC)
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -47,107 +47,183 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Hans Verkuil <hans.verkuil@cisco.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        kevin.lhopital@hotmail.com,
-        =?UTF-8?q?K=C3=A9vin=20L=27h=C3=B4pital?= 
-        <kevin.lhopital@bootlin.com>
-Subject: [PATCH v3 05/15] media: sun6i-csi: Only configure the interface data width for parallel
-Date:   Fri, 11 Dec 2020 16:56:58 +0100
-Message-Id: <20201211155708.154710-6-paul.kocialkowski@bootlin.com>
+        kevin.lhopital@hotmail.com
+Subject: [PATCH v3 08/15] dt-bindings: media: Add A31 MIPI CSI-2 bindings documentation
+Date:   Fri, 11 Dec 2020 16:57:01 +0100
+Message-Id: <20201211155708.154710-9-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201211155708.154710-1-paul.kocialkowski@bootlin.com>
 References: <20201211155708.154710-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Bits related to the interface data width are only applicable to the
-parallel interface and are irrelevant when the CSI controller is taking
-input from the MIPI CSI-2 controller.
+This introduces YAML bindings documentation for the A31 MIPI CSI-2
+controller.
 
-In prevision of adding support for this case, set these bits
-conditionally so there is no ambiguity. The conditional block is
-moved around before the interlaced conditional block for nicer code
-symmetry (conditional blocks first) while at it.
-
-Co-developed-by: Kévin L'hôpital <kevin.lhopital@bootlin.com>
-Signed-off-by: Kévin L'hôpital <kevin.lhopital@bootlin.com>
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
- .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 42 +++++++++++--------
- 1 file changed, 25 insertions(+), 17 deletions(-)
+ .../media/allwinner,sun6i-a31-mipi-csi2.yaml  | 149 ++++++++++++++++++
+ 1 file changed, 149 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml
 
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-index 531a4cccd14a..f1150de94e98 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-@@ -378,8 +378,13 @@ static void sun6i_csi_setup_bus(struct sun6i_csi_dev *sdev)
- 	unsigned char bus_width;
- 	u32 flags;
- 	u32 cfg;
-+	bool input_parallel = false;
- 	bool input_interlaced = false;
- 
-+	if (endpoint->bus_type == V4L2_MBUS_PARALLEL ||
-+	    endpoint->bus_type == V4L2_MBUS_BT656)
-+		input_parallel = true;
+diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml
+new file mode 100644
+index 000000000000..4d0bab541da1
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml
+@@ -0,0 +1,149 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/allwinner,sun6i-a31-mipi-csi2.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- 	if (csi->config.field == V4L2_FIELD_INTERLACED
- 	    || csi->config.field == V4L2_FIELD_INTERLACED_TB
- 	    || csi->config.field == V4L2_FIELD_INTERLACED_BT)
-@@ -395,6 +400,26 @@ static void sun6i_csi_setup_bus(struct sun6i_csi_dev *sdev)
- 		 CSI_IF_CFG_HREF_POL_MASK | CSI_IF_CFG_FIELD_MASK |
- 		 CSI_IF_CFG_SRC_TYPE_MASK);
- 
-+	if (input_parallel) {
-+		switch (bus_width) {
-+		case 8:
-+			cfg |= CSI_IF_CFG_IF_DATA_WIDTH_8BIT;
-+			break;
-+		case 10:
-+			cfg |= CSI_IF_CFG_IF_DATA_WIDTH_10BIT;
-+			break;
-+		case 12:
-+			cfg |= CSI_IF_CFG_IF_DATA_WIDTH_12BIT;
-+			break;
-+		case 16: /* No need to configure DATA_WIDTH for 16bit */
-+			break;
-+		default:
-+			dev_warn(sdev->dev, "Unsupported bus width: %u\n",
-+				 bus_width);
-+			break;
-+		}
-+	}
++title: Allwinner A31 MIPI CSI-2 Device Tree Bindings
 +
- 	if (input_interlaced)
- 		cfg |= CSI_IF_CFG_SRC_TYPE_INTERLACED;
- 	else
-@@ -440,23 +465,6 @@ static void sun6i_csi_setup_bus(struct sun6i_csi_dev *sdev)
- 		break;
- 	}
- 
--	switch (bus_width) {
--	case 8:
--		cfg |= CSI_IF_CFG_IF_DATA_WIDTH_8BIT;
--		break;
--	case 10:
--		cfg |= CSI_IF_CFG_IF_DATA_WIDTH_10BIT;
--		break;
--	case 12:
--		cfg |= CSI_IF_CFG_IF_DATA_WIDTH_12BIT;
--		break;
--	case 16: /* No need to configure DATA_WIDTH for 16bit */
--		break;
--	default:
--		dev_warn(sdev->dev, "Unsupported bus width: %u\n", bus_width);
--		break;
--	}
--
- 	regmap_write(sdev->regmap, CSI_IF_CFG_REG, cfg);
- }
- 
++maintainers:
++  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
++
++properties:
++  compatible:
++    oneOf:
++      - const: allwinner,sun6i-a31-mipi-csi2
++      - items:
++          - const: allwinner,sun8i-v3s-mipi-csi2
++          - const: allwinner,sun6i-a31-mipi-csi2
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: Bus Clock
++      - description: Module Clock
++
++  clock-names:
++    items:
++      - const: bus
++      - const: mod
++
++  phys:
++    items:
++      - description: MIPI D-PHY
++
++  resets:
++    maxItems: 1
++
++  # See ./video-interfaces.txt for details
++  ports:
++    type: object
++
++    properties:
++      port@0:
++        type: object
++        description: Input port, connect to a MIPI CSI-2 sensor
++
++        properties:
++          reg:
++            const: 0
++
++          endpoint:
++            type: object
++
++            properties:
++              remote-endpoint: true
++
++              data-lanes:
++                minItems: 1
++                maxItems: 4
++
++            required:
++              - data-lanes
++              - remote-endpoint
++
++        required:
++          - endpoint
++
++        additionalProperties: false
++
++      port@1:
++        type: object
++        description: Output port, connect to a CSI controller
++
++        properties:
++          reg:
++            const: 1
++
++          endpoint:
++            type: object
++
++            properties:
++              remote-endpoint: true
++
++            required:
++              - remote-endpoint
++
++        required:
++          - endpoint
++
++        additionalProperties: false
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++  - resets
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/sun8i-v3s-ccu.h>
++    #include <dt-bindings/reset/sun8i-v3s-ccu.h>
++
++    mipi_csi2: csi@1cb1000 {
++        compatible = "allwinner,sun8i-v3s-mipi-csi2",
++                     "allwinner,sun6i-a31-mipi-csi2";
++        reg = <0x01cb1000 0x1000>;
++        interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
++        clocks = <&ccu CLK_BUS_CSI>,
++                 <&ccu CLK_CSI1_SCLK>;
++        clock-names = "bus", "mod";
++        resets = <&ccu RST_BUS_CSI>;
++
++        phys = <&dphy>;
++
++        ports {
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            mipi_csi2_in: port@0 {
++                reg = <0>;
++
++                mipi_csi2_in_ov5648: endpoint {
++                    data-lanes = <1 2 3 4>;
++
++                    remote-endpoint = <&ov5648_out_mipi_csi2>;
++                };
++            };
++
++            mipi_csi2_out: port@1 {
++                reg = <1>;
++
++                mipi_csi2_out_csi0: endpoint {
++                    remote-endpoint = <&csi0_in_mipi_csi2>;
++                };
++            };
++        };
++    };
++
++...
 -- 
 2.29.2
 
