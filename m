@@ -2,168 +2,171 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79A02C4361B
-	for <linux-media@archiver.kernel.org>; Fri, 11 Dec 2020 17:13:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 295ACC433FE
+	for <linux-media@archiver.kernel.org>; Fri, 11 Dec 2020 17:13:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4FEFF23D97
-	for <linux-media@archiver.kernel.org>; Fri, 11 Dec 2020 17:13:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E8DD823137
+	for <linux-media@archiver.kernel.org>; Fri, 11 Dec 2020 17:13:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406236AbgLKP7M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Dec 2020 10:59:12 -0500
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:35771 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393883AbgLKP6r (ORCPT
+        id S2406661AbgLKQAr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Dec 2020 11:00:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58576 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406345AbgLKP7i (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 11 Dec 2020 10:58:47 -0500
-X-Originating-IP: 93.29.109.196
-Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
-        (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id C8F3260017;
-        Fri, 11 Dec 2020 15:57:44 +0000 (UTC)
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-sunxi@googlegroups.com
-Cc:     Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        kevin.lhopital@hotmail.com
-Subject: [PATCH v3 10/15] ARM: dts: sun8i: v3s: Add nodes for MIPI CSI-2 support
-Date:   Fri, 11 Dec 2020 16:57:03 +0100
-Message-Id: <20201211155708.154710-11-paul.kocialkowski@bootlin.com>
+        Fri, 11 Dec 2020 10:59:38 -0500
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 536EDC061793
+        for <linux-media@vger.kernel.org>; Fri, 11 Dec 2020 07:58:54 -0800 (PST)
+Received: by mail-wm1-x344.google.com with SMTP id q75so9047193wme.2
+        for <linux-media@vger.kernel.org>; Fri, 11 Dec 2020 07:58:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=243Gvg3EOSmTTvBu4o4RKVn/UX2SWUWrVcKX752oh38=;
+        b=Id21eySxih7XsO5kncW+YAXadbd1FJRP3AnY8TzDzyRyz5vVVokfWt6LARnKv+mD6i
+         xuXPXb4DkBzcRfsCwW9KZQ9udP/p+NrzbHAjO1Qv2ykiye5kdGDuJOGNzC/uPI1NH/0R
+         gPKG1sdfMW2SydMRmu4eAZjGA3/gSSRFu/ySs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=243Gvg3EOSmTTvBu4o4RKVn/UX2SWUWrVcKX752oh38=;
+        b=iYp42eROacNZwaOCfNuxWtYZsguygyU5wZ2QlKkiH5yWcvCBHYipfpD1vlV4y3fyrL
+         I4fyquFlC/ms5S0++A46YcfHcTVHe5J40q4+oJzYwwKi3DGTISsXCrLYmUoE+GMk4uQH
+         ld+XHyztnKzq0jc0Q2APbRwu3GvaJSMv4sVCH/03d4vkW4QX6f8XRzIuFZ7HkSSyN1lf
+         NSiZ8bpDvejoMq2W8XTZLi1DlwrPB18Zup7Osia7VkBlRxRe+uEjkzaTQFuAmpEGlWJf
+         KkvmqLuJqtpnhoH3/YBeLAyi11tsPYJyc2blBpPXd2QaFZv7M3/VzdFmgME7g7Xb6YT2
+         XvYg==
+X-Gm-Message-State: AOAM533DHh9qs911qbWCP3ETYp3cC1keouAi9u+Ra0OY9wkSdTZ8ZGZH
+        xYPsmct6uEOlEAa95dosoQmucg==
+X-Google-Smtp-Source: ABdhPJyuJvI2Mjy8AtPGb0Iyw00NTdMFlmVvHC+yg+8Gjr8dEU+KJmhpBUiwqBVmfmlnpv1AVmn/+w==
+X-Received: by 2002:a1c:4904:: with SMTP id w4mr13987630wma.140.1607702333034;
+        Fri, 11 Dec 2020 07:58:53 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id z21sm14828241wmk.20.2020.12.11.07.58.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Dec 2020 07:58:52 -0800 (PST)
+From:   Daniel Vetter <daniel.vetter@ffwll.ch>
+To:     DRI Development <dri-devel@lists.freedesktop.org>
+Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Subject: [PATCH 4/4] dma-buf: doc polish for pin/unpin
+Date:   Fri, 11 Dec 2020 16:58:43 +0100
+Message-Id: <20201211155843.3348718-4-daniel.vetter@ffwll.ch>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201211155708.154710-1-paul.kocialkowski@bootlin.com>
-References: <20201211155708.154710-1-paul.kocialkowski@bootlin.com>
+In-Reply-To: <20201211155843.3348718-1-daniel.vetter@ffwll.ch>
+References: <20201211155843.3348718-1-daniel.vetter@ffwll.ch>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-MIPI CSI-2 is supported on the V3s with an A31-based MIPI CSI-2 bridge
-controller. The controller uses a separate D-PHY, which is the same
-that is otherwise used for MIPI DSI, but used in Rx mode.
+Motivated by a discussion with Christian and Thomas: Try to untangle a
+bit what's relevant for importers and what's relevant for exporters.
 
-On the V3s, the CSI0 controller is dedicated to MIPI CSI-2 as it does
-not have access to any parallel interface pins.
+Also add an assert that really only dynamic importers use the api
+function, anything else doesn't make sense.
 
-Add all the necessary nodes (CSI0, MIPI CSI-2 bridge and D-PHY) to
-support the MIPI CSI-2 interface.
-
-Note that a fwnode graph link is created between CSI0 and MIPI CSI-2
-even when no sensor is connected. This will result in a probe failure
-for the controller as long as no sensor is connected but this is fine
-since no other interface is available.
-
-Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: "Christian König" <christian.koenig@amd.com>
+Cc: linux-media@vger.kernel.org
+Cc: linaro-mm-sig@lists.linaro.org
 ---
- arch/arm/boot/dts/sun8i-v3s.dtsi | 67 ++++++++++++++++++++++++++++++++
- 1 file changed, 67 insertions(+)
+ drivers/dma-buf/dma-buf.c | 19 ++++++++++++++++---
+ include/linux/dma-buf.h   |  8 +++++---
+ 2 files changed, 21 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm/boot/dts/sun8i-v3s.dtsi b/arch/arm/boot/dts/sun8i-v3s.dtsi
-index 7b2d684aeb97..b7f2bcd25c86 100644
---- a/arch/arm/boot/dts/sun8i-v3s.dtsi
-+++ b/arch/arm/boot/dts/sun8i-v3s.dtsi
-@@ -530,6 +530,31 @@ spi0: spi@1c68000 {
- 			#size-cells = <0>;
- 		};
+diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+index 00d5afe904cc..1065545e9ca1 100644
+--- a/drivers/dma-buf/dma-buf.c
++++ b/drivers/dma-buf/dma-buf.c
+@@ -809,9 +809,15 @@ EXPORT_SYMBOL_GPL(dma_buf_detach);
  
-+		csi0: camera@1cb0000 {
-+			compatible = "allwinner,sun8i-v3s-csi";
-+			reg = <0x01cb0000 0x1000>;
-+			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&ccu CLK_BUS_CSI>,
-+				 <&ccu CLK_CSI1_SCLK>,
-+				 <&ccu CLK_DRAM_CSI>;
-+			clock-names = "bus", "mod", "ram";
-+			resets = <&ccu RST_BUS_CSI>;
-+			status = "disabled";
+ /**
+  * dma_buf_pin - Lock down the DMA-buf
+- *
+  * @attach:	[in]	attachment which should be pinned
+  *
++ * Only dynamic importers (who set up @attach with dma_buf_dynamic_attach()) may
++ * call this, and only for limited use cases like scanout and not for temporary
++ * pin operations. It is not permitted to allow userspace to pin arbitrary
++ * amounts of buffers through this interface.
++ *
++ * Buffers must be unpinned by calling dma_buf_unpin().
++ *
+  * Returns:
+  * 0 on success, negative error code on failure.
+  */
+@@ -820,6 +826,8 @@ int dma_buf_pin(struct dma_buf_attachment *attach)
+ 	struct dma_buf *dmabuf = attach->dmabuf;
+ 	int ret = 0;
+ 
++	WARN_ON(!dma_buf_attachment_is_dynamic(attach));
 +
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
+ 	dma_resv_assert_held(dmabuf->resv);
+ 
+ 	if (dmabuf->ops->pin)
+@@ -830,14 +838,19 @@ int dma_buf_pin(struct dma_buf_attachment *attach)
+ EXPORT_SYMBOL_GPL(dma_buf_pin);
+ 
+ /**
+- * dma_buf_unpin - Remove lock from DMA-buf
+- *
++ * dma_buf_unpin - Unpin a DMA-buf
+  * @attach:	[in]	attachment which should be unpinned
++ *
++ * This unpins a buffer pinned by dma_buf_pin() and allows the exporter to move
++ * any mapping of @attach again and inform the importer through
++ * &dma_buf_attach_ops.move_notify.
+  */
+ void dma_buf_unpin(struct dma_buf_attachment *attach)
+ {
+ 	struct dma_buf *dmabuf = attach->dmabuf;
+ 
++	WARN_ON(!dma_buf_attachment_is_dynamic(attach));
 +
-+				port@1 {
-+					reg = <1>;
-+
-+					csi0_in_mipi_csi2: endpoint {
-+						remote-endpoint = <&mipi_csi2_out_csi0>;
-+					};
-+				};
-+			};
-+		};
-+
- 		csi1: camera@1cb4000 {
- 			compatible = "allwinner,sun8i-v3s-csi";
- 			reg = <0x01cb4000 0x3000>;
-@@ -552,5 +577,47 @@ gic: interrupt-controller@1c81000 {
- 			#interrupt-cells = <3>;
- 			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
- 		};
-+
-+		mipi_csi2: csi@1cb1000 {
-+			compatible = "allwinner,sun8i-v3s-mipi-csi2",
-+				     "allwinner,sun6i-a31-mipi-csi2";
-+			reg = <0x01cb1000 0x1000>;
-+			interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&ccu CLK_BUS_CSI>,
-+				 <&ccu CLK_CSI1_SCLK>;
-+			clock-names = "bus", "mod";
-+			resets = <&ccu RST_BUS_CSI>;
-+			status = "disabled";
-+
-+			phys = <&dphy>;
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				mipi_csi2_in: port@0 {
-+					reg = <0>;
-+				};
-+
-+				mipi_csi2_out: port@1 {
-+					reg = <1>;
-+
-+					mipi_csi2_out_csi0: endpoint {
-+						remote-endpoint = <&csi0_in_mipi_csi2>;
-+					};
-+				};
-+			};
-+		};
-+
-+		dphy: d-phy@1cb2000 {
-+			compatible = "allwinner,sun6i-a31-mipi-dphy";
-+			reg = <0x01cb2000 0x1000>;
-+			clocks = <&ccu CLK_BUS_CSI>,
-+				 <&ccu CLK_MIPI_CSI>;
-+			clock-names = "bus", "mod";
-+			resets = <&ccu RST_BUS_CSI>;
-+			status = "disabled";
-+			#phy-cells = <0>;
-+		};
- 	};
- };
+ 	dma_resv_assert_held(dmabuf->resv);
+ 
+ 	if (dmabuf->ops->unpin)
+diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
+index 43802a31b25d..628681bf6c99 100644
+--- a/include/linux/dma-buf.h
++++ b/include/linux/dma-buf.h
+@@ -86,13 +86,15 @@ struct dma_buf_ops {
+ 	 * @pin:
+ 	 *
+ 	 * This is called by dma_buf_pin() and lets the exporter know that the
+-	 * DMA-buf can't be moved any more.
++	 * DMA-buf can't be moved any more. The exporter should pin the buffer
++	 * into system memory to make sure it is generally accessible by other
++	 * devices.
+ 	 *
+ 	 * This is called with the &dmabuf.resv object locked and is mutual
+ 	 * exclusive with @cache_sgt_mapping.
+ 	 *
+-	 * This callback is optional and should only be used in limited use
+-	 * cases like scanout and not for temporary pin operations.
++	 * This is called automatically for non-dynamic importers from
++	 * dma_buf_attach().
+ 	 *
+ 	 * Returns:
+ 	 *
 -- 
 2.29.2
 
