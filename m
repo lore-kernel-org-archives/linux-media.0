@@ -2,70 +2,183 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C09EC4361B
-	for <linux-media@archiver.kernel.org>; Fri, 11 Dec 2020 15:05:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49380C433FE
+	for <linux-media@archiver.kernel.org>; Fri, 11 Dec 2020 16:34:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E7A2822581
-	for <linux-media@archiver.kernel.org>; Fri, 11 Dec 2020 15:05:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F16002225E
+	for <linux-media@archiver.kernel.org>; Fri, 11 Dec 2020 16:34:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405833AbgLKOid (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Dec 2020 09:38:33 -0500
-Received: from mga07.intel.com ([134.134.136.100]:20182 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391980AbgLKOiN (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 11 Dec 2020 09:38:13 -0500
-IronPort-SDR: myzDJyZm+6hgniYpYwPA7YxXP1/GV4+fSbWLM7KWdwWbRURxkkuDRqDlS4laRHFXIDkmw+0Buj
- 4YbPAEDwyyHA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9831"; a="238543982"
-X-IronPort-AV: E=Sophos;i="5.78,411,1599548400"; 
-   d="scan'208";a="238543982"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2020 06:36:27 -0800
-IronPort-SDR: MqTNuqq+3L6eu16x8ue2Wf0ste6ZbJR0iuoHT6mArdvDhJlQ8NtID3uAuAkIZb2RULjYmA1jVa
- aPwX6f0ajr1Q==
-X-IronPort-AV: E=Sophos;i="5.78,411,1599548400"; 
-   d="scan'208";a="441205225"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2020 06:36:25 -0800
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1knjXz-00Dg3K-8E; Fri, 11 Dec 2020 16:37:27 +0200
-Date:   Fri, 11 Dec 2020 16:37:27 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, clang-built-linux@googlegroups.com,
-        linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: Re: drivers/media/pci/intel/ipu3/ipu3-cio2.c:163:56: warning:
- implicit conversion from 'unsigned long' to 'u16' (aka 'unsigned short')
- changes value from 524288 to 0
-Message-ID: <20201211143727.GS4077@smile.fi.intel.com>
-References: <202012112151.6XlgQJKM-lkp@intel.com>
+        id S2392336AbgLKPl3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Dec 2020 10:41:29 -0500
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:45471 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391067AbgLKPlV (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 11 Dec 2020 10:41:21 -0500
+X-Originating-IP: 93.29.109.196
+Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
+        (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 4FAEFE0012;
+        Fri, 11 Dec 2020 15:40:37 +0000 (UTC)
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v5 1/2] dt-bindings: media: i2c: Add OV5648 bindings documentation
+Date:   Fri, 11 Dec 2020 16:40:26 +0100
+Message-Id: <20201211154027.153535-2-paul.kocialkowski@bootlin.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20201211154027.153535-1-paul.kocialkowski@bootlin.com>
+References: <20201211154027.153535-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202012112151.6XlgQJKM-lkp@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Dec 11, 2020 at 09:20:55PM +0800, kernel test robot wrote:
-> Hi Andy,
-> 
-> FYI, the error/warning still remains.
+This introduces YAML bindings documentation for the OV5648
+image sensor.
 
-Already commented on previous message with Message-ID:
-<202011211600.bZyprrVg-lkp@intel.com>
+Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+ .../bindings/media/i2c/ovti,ov5648.yaml       | 115 ++++++++++++++++++
+ 1 file changed, 115 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5648.yaml
 
+diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov5648.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov5648.yaml
+new file mode 100644
+index 000000000000..f8783f77cc54
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5648.yaml
+@@ -0,0 +1,115 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/ovti,ov5648.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: OmniVision OV5648 Image Sensor Device Tree Bindings
++
++maintainers:
++  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
++
++properties:
++  compatible:
++    const: ovti,ov5648
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: XVCLK Clock
++
++  assigned-clocks:
++    maxItems: 1
++
++  assigned-clock-rates:
++    maxItems: 1
++
++  dvdd-supply:
++    description: Digital Domain Power Supply
++
++  avdd-supply:
++    description: Analog Domain Power Supply (internal AVDD is used if missing)
++
++  dovdd-supply:
++    description: I/O Domain Power Supply
++
++  powerdown-gpios:
++    maxItems: 1
++    description: Power Down Pin GPIO Control (active low)
++
++  reset-gpios:
++    maxItems: 1
++    description: Reset Pin GPIO Control (active low)
++
++  port:
++    type: object
++    description: MIPI CSI-2 transmitter port
++
++    properties:
++      endpoint:
++        type: object
++
++        properties:
++          remote-endpoint: true
++
++          link-frequencies:
++            $ref: /schemas/types.yaml#/definitions/uint64-array
++            description: Allowed MIPI CSI-2 link frequencies
++
++          data-lanes:
++            minItems: 1
++            maxItems: 2
++
++        required:
++          - data-lanes
++          - link-frequencies
++          - remote-endpoint
++
++    required:
++      - endpoint
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - assigned-clocks
++  - assigned-clock-rates
++  - dvdd-supply
++  - dovdd-supply
++  - port
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/sun8i-v3s-ccu.h>
++    #include <dt-bindings/gpio/gpio.h>
++
++    i2c0 {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        ov5648: camera@36 {
++            compatible = "ovti,ov5648";
++            reg = <0x36>;
++
++            dvdd-supply = <&ov5648_dvdd>;
++            avdd-supply = <&ov5648_avdd>;
++            dovdd-supply = <&ov5648_dovdd>;
++            clocks = <&ov5648_xvclk 0>;
++            assigned-clocks = <&ov5648_xvclk 0>;
++            assigned-clock-rates = <24000000>;
++
++
++            ov5648_out: port {
++                ov5648_out_mipi_csi2: endpoint {
++                    data-lanes = <1 2>;
++                    link-frequencies = /bits/ 64 <210000000 168000000>;
++
++                    remote-endpoint = <&mipi_csi2_in_ov5648>;
++                };
++            };
++        };
++    };
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.29.2
 
