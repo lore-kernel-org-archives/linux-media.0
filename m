@@ -5,29 +5,29 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A747BC4361B
-	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:13:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFD6DC4361B
+	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:14:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7F7BF229C5
-	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:13:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 658DA22C97
+	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:14:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393552AbgLNLMh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Dec 2020 06:12:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42754 "EHLO
+        id S1729500AbgLNLMg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Dec 2020 06:12:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730550AbgLNLLU (ORCPT
+        with ESMTP id S1730519AbgLNLLU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 14 Dec 2020 06:11:20 -0500
 Received: from faui03.informatik.uni-erlangen.de (faui03.informatik.uni-erlangen.de [IPv6:2001:638:a000:4130:131:188:30:103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09CAEC0613D3;
-        Mon, 14 Dec 2020 03:10:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90FEC0613CF;
+        Mon, 14 Dec 2020 03:10:21 -0800 (PST)
 Received: from cipterm0.informatik.uni-erlangen.de (cipterm0.cip.cs.fau.de [IPv6:2001:638:a000:4130:131:188:30:90])
-        by faui03.informatik.uni-erlangen.de (Postfix) with ESMTP id 75EA12409E1;
+        by faui03.informatik.uni-erlangen.de (Postfix) with ESMTP id 77CBE240AC7;
         Mon, 14 Dec 2020 12:10:20 +0100 (CET)
 Received: by cipterm0.informatik.uni-erlangen.de (Postfix, from userid 67858)
-        id 6720B328043D; Mon, 14 Dec 2020 12:03:00 +0100 (CET)
+        id 28C22328043C; Mon, 14 Dec 2020 12:02:59 +0100 (CET)
 From:   Philipp Gerlesberger <Philipp.Gerlesberger@fau.de>
 To:     linux-kernel@vger.kernel.org
 Cc:     Philipp Gerlesberger <Philipp.Gerlesberger@fau.de>,
@@ -35,9 +35,9 @@ Cc:     Philipp Gerlesberger <Philipp.Gerlesberger@fau.de>,
         linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
         linux-kernel@i4.cs.fau.de, gregkh@linuxfoundation.org,
         sakari.ailus@linux.intel.com, mchehab@kernel.org
-Subject: [PATCH v2 12/12] media: atomisp: Fix LOGICAL_CONTINUATIONS
-Date:   Mon, 14 Dec 2020 12:01:56 +0100
-Message-Id: <20201214110156.6152-13-Philipp.Gerlesberger@fau.de>
+Subject: [PATCH v2 11/12] media: atomisp: Write function decleration in one line
+Date:   Mon, 14 Dec 2020 12:01:55 +0100
+Message-Id: <20201214110156.6152-12-Philipp.Gerlesberger@fau.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20201214110156.6152-1-Philipp.Gerlesberger@fau.de>
 References: <20201214110156.6152-1-Philipp.Gerlesberger@fau.de>
@@ -47,30 +47,142 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Logical continuations should be on the previous line
+CHECK:OPEN_ENDED_LINE: Lines should not end with a '('
+WARNING:LEADING_SPACE: please, no spaces at the start of a line
+Avoid these errors by writing the function decleration in one line.
 
 Co-developed-by: Andrey Khlopkov <ij72uhux@stud.informatik.uni-erlangen.de>
 Signed-off-by: Andrey Khlopkov <ij72uhux@stud.informatik.uni-erlangen.de>
 Signed-off-by: Philipp Gerlesberger <Philipp.Gerlesberger@fau.de>
 ---
- drivers/staging/media/atomisp/pci/runtime/queue/src/queue.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../atomisp/pci/runtime/queue/src/queue.c     | 44 +++++--------------
+ 1 file changed, 11 insertions(+), 33 deletions(-)
 
 diff --git a/drivers/staging/media/atomisp/pci/runtime/queue/src/queue.c b/drivers/staging/media/atomisp/pci/runtime/queue/src/queue.c
-index 2f1c2df59f71..7d44070c7114 100644
+index aea6c66a3cee..2f1c2df59f71 100644
 --- a/drivers/staging/media/atomisp/pci/runtime/queue/src/queue.c
 +++ b/drivers/staging/media/atomisp/pci/runtime/queue/src/queue.c
-@@ -24,8 +24,8 @@
+@@ -22,9 +22,7 @@
+ /*****************************************************************************
+  * Queue Public APIs
   *****************************************************************************/
- int ia_css_queue_local_init(ia_css_queue_t *qhandle, ia_css_queue_local_t *desc)
+-int ia_css_queue_local_init(
+-    ia_css_queue_t *qhandle,
+-    ia_css_queue_local_t *desc)
++int ia_css_queue_local_init(ia_css_queue_t *qhandle, ia_css_queue_local_t *desc)
  {
--	if (NULL == qhandle || NULL == desc
--	    || NULL == desc->cb_elems || NULL == desc->cb_desc) {
-+	if (NULL == qhandle || NULL == desc ||
-+	    NULL == desc->cb_elems || NULL == desc->cb_desc) {
+ 	if (NULL == qhandle || NULL == desc
+ 	    || NULL == desc->cb_elems || NULL == desc->cb_desc) {
+@@ -43,9 +41,7 @@ int ia_css_queue_local_init(
+ 	return 0;
+ }
+ 
+-int ia_css_queue_remote_init(
+-    ia_css_queue_t *qhandle,
+-    ia_css_queue_remote_t *desc)
++int ia_css_queue_remote_init(ia_css_queue_t *qhandle, ia_css_queue_remote_t *desc)
+ {
+ 	if (NULL == qhandle || NULL == desc) {
  		/* Invalid parameters, return error*/
+@@ -69,8 +65,7 @@ int ia_css_queue_remote_init(
+ 	return 0;
+ }
+ 
+-int ia_css_queue_uninit(
+-    ia_css_queue_t *qhandle)
++int ia_css_queue_uninit(ia_css_queue_t *qhandle)
+ {
+ 	if (!qhandle)
  		return -EINVAL;
- 	}
+@@ -84,9 +79,7 @@ int ia_css_queue_uninit(
+ 	return 0;
+ }
+ 
+-int ia_css_queue_enqueue(
+-    ia_css_queue_t *qhandle,
+-    uint32_t item)
++int ia_css_queue_enqueue(ia_css_queue_t *qhandle, uint32_t item)
+ {
+ 	int error = 0;
+ 
+@@ -143,9 +136,7 @@ int ia_css_queue_enqueue(
+ 	return 0;
+ }
+ 
+-int ia_css_queue_dequeue(
+-    ia_css_queue_t *qhandle,
+-    uint32_t *item)
++int ia_css_queue_dequeue(ia_css_queue_t *qhandle, uint32_t *item)
+ {
+ 	int error = 0;
+ 
+@@ -200,9 +191,7 @@ int ia_css_queue_dequeue(
+ 	return 0;
+ }
+ 
+-int ia_css_queue_is_full(
+-    ia_css_queue_t *qhandle,
+-    bool *is_full)
++int ia_css_queue_is_full(ia_css_queue_t *qhandle, bool *is_full)
+ {
+ 	int error = 0;
+ 
+@@ -234,9 +223,7 @@ int ia_css_queue_is_full(
+ 	return -EINVAL;
+ }
+ 
+-int ia_css_queue_get_free_space(
+-    ia_css_queue_t *qhandle,
+-    uint32_t *size)
++int ia_css_queue_get_free_space(ia_css_queue_t *qhandle, uint32_t *size)
+ {
+ 	int error = 0;
+ 
+@@ -268,9 +255,7 @@ int ia_css_queue_get_free_space(
+ 	return -EINVAL;
+ }
+ 
+-int ia_css_queue_get_used_space(
+-    ia_css_queue_t *qhandle,
+-    uint32_t *size)
++int ia_css_queue_get_used_space(ia_css_queue_t *qhandle, uint32_t *size)
+ {
+ 	int error = 0;
+ 
+@@ -302,10 +287,7 @@ int ia_css_queue_get_used_space(
+ 	return -EINVAL;
+ }
+ 
+-int ia_css_queue_peek(
+-    ia_css_queue_t *qhandle,
+-    u32 offset,
+-    uint32_t *element)
++int ia_css_queue_peek(ia_css_queue_t *qhandle, u32 offset, uint32_t *element)
+ {
+ 	u32 num_elems = 0;
+ 	int error = 0;
+@@ -354,9 +336,7 @@ int ia_css_queue_peek(
+ 	return -EINVAL;
+ }
+ 
+-int ia_css_queue_is_empty(
+-    ia_css_queue_t *qhandle,
+-    bool *is_empty)
++int ia_css_queue_is_empty(ia_css_queue_t *qhandle, bool *is_empty)
+ {
+ 	int error = 0;
+ 
+@@ -388,9 +368,7 @@ int ia_css_queue_is_empty(
+ 	return -EINVAL;
+ }
+ 
+-int ia_css_queue_get_size(
+-    ia_css_queue_t *qhandle,
+-    uint32_t *size)
++int ia_css_queue_get_size(ia_css_queue_t *qhandle, uint32_t *size)
+ {
+ 	int error = 0;
+ 
 -- 
 2.20.1
 
