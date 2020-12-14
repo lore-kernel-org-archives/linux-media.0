@@ -2,193 +2,222 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D2D0C4361B
-	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:43:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E16ECC4361B
+	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:52:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 56E9322C97
-	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:43:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A0B99233F6
+	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:52:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438369AbgLNLnJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Dec 2020 06:43:09 -0500
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:44129 "EHLO
-        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2438197AbgLNLnA (ORCPT
+        id S2438751AbgLNLwx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Dec 2020 06:52:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49192 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2438719AbgLNLwx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Dec 2020 06:43:00 -0500
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 9EE8D580221;
-        Mon, 14 Dec 2020 06:42:03 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Mon, 14 Dec 2020 06:42:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=iiNPNEsEdF7Sa6z6H7UqKpT5vMo
-        rbcrmTtDuIlLvEU4=; b=RN/KPZJLbZUrIVLVJ15R6PZNwGxCLjllTmX0dIGshPf
-        edyIZgGDaZnTjoVRG2liqsZqNq+dmK82bPHAXQ4RKULMMt6CZjFU4LXSqjHgmOCj
-        3Uczwke2H1jFuzQl4dsxtyBV1eik6yynUuN3SaDLcf1rnjfYP1ZXZhCg0+7IM8xn
-        81gYE72n1AYxiX6OWMC6ufOvVzAbSX4OPP3knpXNgUAoWrFKd2UbRgLCn3ktEQWU
-        VuqUGMWUobtehHXLgx1Dp2wyLX3nLDmOkN4mCxGYvMaL7IfOusUWVCVgCAQOufHa
-        WrN1IEi7rJbwXrwuNjtEsfz0e4bVD1ceVYRNtHc4yMg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=iiNPNE
-        sEdF7Sa6z6H7UqKpT5vMorbcrmTtDuIlLvEU4=; b=hd+YVbqjLPb+gC6M725zkX
-        9ADb7veUpmM90bjfm5IouUVZ1vhOdWgSD0LeXfoE6aRFcJ6Qw7nrPhVhlFI801c0
-        TMaTSfqcGYzVzbvnT4NsXdbh2ZfHfUk//51KbTbq11pfY5NRNiWxHPDIaBR/nRYI
-        MysKjNwoO8q+bUxiSwstVL+fLsawdzrLzUyHAXLRMQTpW3NRFRNFXOOBZM/C94YG
-        cAeo06MVX6U6K6mVGlJc4TFZQRK62uhwpPG3NdXvT3iHYA2nb6OS9/JI/ZyLsLBq
-        +fhRIbbK2IRqYBxR3Mh1W7E4/IgaCcvIu9o9hemWb62hWeLD4gUl93Hj1yve3oNg
-        ==
-X-ME-Sender: <xms:iU_XX_y-9g3mxklumCmKFHoIfXXjXJS76JHfDJ8SK3VzkeyLK7YXSg>
-    <xme:iU_XX3M6a6IRyRz2IMkWyH9ZCYJtKrOA_V7ET2xZ0LgUBMsBoH__xJZaZiHiE1Ypq
-    Xhfm9c3m4mrR_LrA0o>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrudekkedgfeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddunecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepuddvudfhkeekhefgffetffelgffftdehffduffegveetffehueeivddvjedv
-    gfevnecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:iU_XX2MqVLuVF4MpwOwxCkO_V3YG1JP24FO-OCQl_8HbKkVXYQNzLA>
-    <xmx:iU_XXxTr2Q9Z-UPC4_k4ZD-VIs11YoJgmrh00oHwf8p6LJRg9TNEew>
-    <xmx:iU_XXwAZbKZbWAUR4T6_NLiHguhYMfXchvRx0X1d4-UYU4WbTqrmig>
-    <xmx:i0_XXyR35CFHCWDVHKvW10Ec97Mx_QwG3a1DlqqdyxhQ_AWDyE5h2Q>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 7DDE124005D;
-        Mon, 14 Dec 2020 06:42:01 -0500 (EST)
-Date:   Mon, 14 Dec 2020 12:41:59 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-sunxi@googlegroups.com, Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        kevin.lhopital@hotmail.com
-Subject: Re: [PATCH v3 13/15] media: sunxi: Add support for the A83T MIPI
- CSI-2 controller
-Message-ID: <20201214114159.oqb4o5fdnnmr4n5q@gilmour>
-References: <20201211155708.154710-1-paul.kocialkowski@bootlin.com>
- <20201211155708.154710-14-paul.kocialkowski@bootlin.com>
+        Mon, 14 Dec 2020 06:52:53 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A41C2C0613CF
+        for <linux-media@vger.kernel.org>; Mon, 14 Dec 2020 03:52:12 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: koike)
+        with ESMTPSA id 852481F44C2C
+Subject: Re: [PATCH v3] media: rkisp1: isp: Add the enum_frame_size ioctl
+To:     Sebastian Fricke <sebastian.fricke.linux@gmail.com>,
+        linux-media@vger.kernel.org
+Cc:     dafna.hirschfeld@collabora.com
+References: <20201212185306.19135-1-sebastian.fricke.linux@gmail.com>
+From:   Helen Koike <helen.koike@collabora.com>
+Message-ID: <f1c6b292-1a89-6283-ec6d-ee540719b359@collabora.com>
+Date:   Mon, 14 Dec 2020 08:52:04 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="luqjk2un2nyifiz3"
-Content-Disposition: inline
-In-Reply-To: <20201211155708.154710-14-paul.kocialkowski@bootlin.com>
+In-Reply-To: <20201212185306.19135-1-sebastian.fricke.linux@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 
---luqjk2un2nyifiz3
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 11, 2020 at 04:57:06PM +0100, Paul Kocialkowski wrote:
-> The A83T supports MIPI CSI-2 with a composite controller, covering
-> both the protocol logic and the D-PHY implementation. This controller
-> seems to be found on the A83T only and probably was abandoned since.
->=20
-> This implementation splits the protocol and D-PHY registers and
-> uses the PHY framework internally. The D-PHY is not registered as a
-> standalone PHY driver since it cannot be used with any other
-> controller.
->=20
-> There are a few notable points about the controller:
-> - The initialisation sequence involes writing specific magic init
->   values that do not seem to make any particular sense given the
->   concerned register fields;
-> - Interrupts appear to be hitting regardless of the interrupt mask
->   registers, which can cause a serious flood when transmission errors
->   occur.
->=20
-> Only 8-bit and 10-bit Bayer formats are currently supported.
-> While up to 4 internal channels to the CSI controller exist, only one
-> is currently supported by this implementation.
->=20
-> This work is based on the first version of the driver submitted by
-> K=E9vin L'h=F4pital, which was adapted to mainline from the Allwinner BSP.
-> This version integrates MIPI CSI-2 support as a standalone V4L2 subdev
-> instead of merging it in the sun6i-csi driver.
->=20
-> It was tested on a Banana Pi M3 board with an OV8865 sensor in a 4-lane
-> configuration.
->=20
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+On 12/12/20 3:53 PM, Sebastian Fricke wrote:
+> Implement the VIDIOC_SUBDEV_ENUM_FRAME_SIZE ioctl for the isp entity,
+> check if the mbus code is valid for the given pad.
+> This call is not available for the parameter or metadata pads of the RkISP1.
+> 
+> Signed-off-by: Sebastian Fricke <sebastian.fricke.linux@gmail.com>
+
+lgtm
+
+Acked-by: Helen Koike <helen.koike@collabora.com>
+
+Thanks
+Helen
+
 > ---
->  arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts  |   2 +-
->  drivers/media/platform/sunxi/Kconfig          |   1 +
->  drivers/media/platform/sunxi/Makefile         |   1 +
->  .../sunxi/sun8i-a83t-mipi-csi2/Kconfig        |  11 +
->  .../sunxi/sun8i-a83t-mipi-csi2/Makefile       |   4 +
->  .../sun8i-a83t-mipi-csi2/sun8i_a83t_dphy.c    |  92 +++
->  .../sun8i-a83t-mipi-csi2/sun8i_a83t_dphy.h    |  39 ++
->  .../sun8i_a83t_mipi_csi2.c                    | 657 ++++++++++++++++++
->  .../sun8i_a83t_mipi_csi2.h                    | 197 ++++++
->  9 files changed, 1003 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/Kco=
-nfig
->  create mode 100644 drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/Mak=
-efile
->  create mode 100644 drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun=
-8i_a83t_dphy.c
->  create mode 100644 drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun=
-8i_a83t_dphy.h
->  create mode 100644 drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun=
-8i_a83t_mipi_csi2.c
->  create mode 100644 drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun=
-8i_a83t_mipi_csi2.h
->=20
-> diff --git a/arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts b/arch/arm/boot=
-/dts/sun8i-a83t-bananapi-m3.dts
-> index b437eaeb91e9..bebe843a069b 100644
-> --- a/arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts
-> +++ b/arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts
-> @@ -151,7 +151,7 @@ port@1 {
-> =20
->  			csi_in_mipi_csi2: endpoint {
->  				remote-endpoint =3D <&mipi_csi2_out_csi>;
-> -			}
-> +			};
->  		};
->  	};
->  };
-
-This looks unrelated?
-
-(and there's the same issue with the macros)
-
-Maxime
-
---luqjk2un2nyifiz3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX9dPhwAKCRDj7w1vZxhR
-xcPdAP9q/q7r3QMKBCP+VcvAh9TUKqtz+e1Ae6scNCnvC2TD4gD/QJvT4IfRkQ73
-koqE0XhbpldU7zAAxee4lM8ofAEFhQw=
-=ZA9r
------END PGP SIGNATURE-----
-
---luqjk2un2nyifiz3--
+> 
+> v1: https://patchwork.kernel.org/project/linux-media/patch/20201206053935.24028-1-sebastian.fricke.linux@gmail.com/
+> v2: https://patchwork.kernel.org/project/linux-media/patch/20201207184358.3793-1-sebastian.fricke.linux@gmail.com/ 
+> 
+> Changes since v2:
+>     - Change the return code for the parameter and metadata pads to -ENOTTY instead of -EINVAL
+>       as this reports that the pad doesn't support the ioctl
+>     - Highlight more clearly that this patch is for the isp entity of the rkisp1, within the commit description
+>       as well as in the commit title
+>     - Add the correct v4l2-complience output to the patch mail
+> 
+> Changes since v1:
+>     - Replace the custom bus code check with the `rkisp1_isp_mbus_info_get`
+>       function
+>     - Add a missing line break above the function
+> 
+> I have tested this patch with the following script:
+> http://paste.debian.net/1176614/
+> 
+> The results on my NanoPC-T4 (Linux nanopct4 5.10.0-rc6-rockchip64):
+> 
+> pad 0 = RKISP1_ISP_PAD_SINK_VIDEO
+> pad 1 = RKISP1_ISP_PAD_SINK_PARAMS
+> pad 2 = RKISP1_ISP_PAD_SOURCE_VIDEO
+> pad 3 = RKISP1_ISP_PAD_SOURCE_STATS
+> 
+> basti@nanopct4:~$ python3 rkisp1_enum_frame_size_test.py
+> TEST  0: pad 0 - code 0x300f - size 32x32 - 4032x3024
+> TEST  1: pad 0 - code 0x3007 - size 32x32 - 4032x3024
+> TEST  2: pad 0 - code 0x300e - size 32x32 - 4032x3024
+> TEST  3: pad 0 - code 0x300a - size 32x32 - 4032x3024
+> TEST  4: pad 0 - code 0x3012 - size 32x32 - 4032x3024
+> TEST  5: pad 0 - code 0x3008 - size 32x32 - 4032x3024
+> TEST  6: pad 0 - code 0x3010 - size 32x32 - 4032x3024
+> TEST  7: pad 0 - code 0x3011 - size 32x32 - 4032x3024
+> TEST  8: pad 0 - code 0x3014 - size 32x32 - 4032x3024
+> TEST  9: pad 0 - code 0x3001 - size 32x32 - 4032x3024
+> TEST 10: pad 0 - code 0x3013 - size 32x32 - 4032x3024
+> TEST 11: pad 0 - code 0x3002 - size 32x32 - 4032x3024
+> TEST 12: pad 0 - code 0x2011 - size 32x32 - 4032x3024
+> TEST 13: pad 0 - code 0x2012 - size 32x32 - 4032x3024
+> TEST 14: pad 0 - code 0x200f - size 32x32 - 4032x3024
+> TEST 15: pad 0 - code 0x2010 - size 32x32 - 4032x3024
+> TEST 16: pad 1 - code 0x7001 - size /
+> TEST 17: pad 2 - code 0x2008 - size 32x32 - 4032x3024
+> TEST 18: pad 2 - code 0x300f - size 32x32 - 4032x3024
+> TEST 19: pad 2 - code 0x3007 - size 32x32 - 4032x3024
+> TEST 20: pad 2 - code 0x300e - size 32x32 - 4032x3024
+> TEST 21: pad 2 - code 0x300a - size 32x32 - 4032x3024
+> TEST 22: pad 2 - code 0x3012 - size 32x32 - 4032x3024
+> TEST 23: pad 2 - code 0x3008 - size 32x32 - 4032x3024
+> TEST 24: pad 2 - code 0x3010 - size 32x32 - 4032x3024
+> TEST 25: pad 2 - code 0x3011 - size 32x32 - 4032x3024
+> TEST 26: pad 2 - code 0x3014 - size 32x32 - 4032x3024
+> TEST 27: pad 2 - code 0x3001 - size 32x32 - 4032x3024
+> TEST 28: pad 2 - code 0x3013 - size 32x32 - 4032x3024
+> TEST 29: pad 2 - code 0x3002 - size 32x32 - 4032x3024
+> TEST 30: pad 3 - code 0x7001 - size /
+> TEST 31: pad 0 - code 0xdead - size / (test with an invalid media bus code)
+> TEST 32: pad 6 - code 0x300f - size / (test with an invalid pad)
+> TEST 33: pad 0 - code 0x2008 - size / (test with a format that is not supported by the pad)
+> TEST 34: pad 2 - code 0x2010 - size / (test with a format that is not supported by the pad)
+> 
+> And here is the output from `v4l2-compliance --device /dev/v4l-subdev0`:
+> Media Driver Info:
+> 	Driver name      : rkisp1
+> ...
+> 	Name             : rkisp1_isp
+> 
+> ...
+> 
+> Sub-Device ioctls (Sink Pad 0):
+> 	test Try VIDIOC_SUBDEV_ENUM_MBUS_CODE/FRAME_SIZE/FRAME_INTERVAL: OK
+> 	test Active VIDIOC_SUBDEV_ENUM_MBUS_CODE/FRAME_SIZE/FRAME_INTERVAL: OK
+>     ...
+> 
+> Sub-Device ioctls (Sink Pad 1):
+> 	test Try VIDIOC_SUBDEV_ENUM_MBUS_CODE/FRAME_SIZE/FRAME_INTERVAL: OK
+> 		fail: v4l2-test-subdevs.cpp(303): fmt.width == 0 || fmt.width > 65536
+> 		fail: v4l2-test-subdevs.cpp(348): checkMBusFrameFmt(node, fmt.format)
+> 	test Active VIDIOC_SUBDEV_ENUM_MBUS_CODE/FRAME_SIZE/FRAME_INTERVAL: OK
+> 		fail: v4l2-test-subdevs.cpp(303): fmt.width == 0 || fmt.width > 65536
+> 		fail: v4l2-test-subdevs.cpp(348): checkMBusFrameFmt(node, fmt.format)
+>     ...
+> 
+> Sub-Device ioctls (Source Pad 2):
+> 	test Try VIDIOC_SUBDEV_ENUM_MBUS_CODE/FRAME_SIZE/FRAME_INTERVAL: OK
+> 	test Active VIDIOC_SUBDEV_ENUM_MBUS_CODE/FRAME_SIZE/FRAME_INTERVAL: OK
+>     ...
+> 
+> Sub-Device ioctls (Source Pad 3):
+> 	test Try VIDIOC_SUBDEV_ENUM_MBUS_CODE/FRAME_SIZE/FRAME_INTERVAL: OK
+> 		fail: v4l2-test-subdevs.cpp(303): fmt.width == 0 || fmt.width > 65536
+> 		fail: v4l2-test-subdevs.cpp(348): checkMBusFrameFmt(node, fmt.format)
+> 	test Active VIDIOC_SUBDEV_ENUM_MBUS_CODE/FRAME_SIZE/FRAME_INTERVAL: OK
+> 		fail: v4l2-test-subdevs.cpp(303): fmt.width == 0 || fmt.width > 65536
+> 		fail: v4l2-test-subdevs.cpp(348): checkMBusFrameFmt(node, fmt.format)
+>     ...
+> ...
+> As reported by Dafna Hirschfeld from v2 the errors on pad 1 & 3 are caused by a
+> problem within v4l2-utils.
+> 
+> ---
+>  .../platform/rockchip/rkisp1/rkisp1-isp.c     | 34 +++++++++++++++++++
+>  1 file changed, 34 insertions(+)
+> 
+> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
+> index 889982d8ca41..2e5b57e3aedc 100644
+> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
+> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
+> @@ -600,6 +600,39 @@ static int rkisp1_isp_enum_mbus_code(struct v4l2_subdev *sd,
+>  	return -EINVAL;
+>  }
+>  
+> +static int rkisp1_isp_enum_frame_size(struct v4l2_subdev *sd,
+> +				      struct v4l2_subdev_pad_config *cfg,
+> +				      struct v4l2_subdev_frame_size_enum *fse)
+> +{
+> +	const struct rkisp1_isp_mbus_info *mbus_info;
+> +
+> +	if (fse->pad == RKISP1_ISP_PAD_SINK_PARAMS ||
+> +	    fse->pad == RKISP1_ISP_PAD_SOURCE_STATS)
+> +		return -ENOTTY;
+> +
+> +	if (fse->index > 0)
+> +		return -EINVAL;
+> +
+> +	mbus_info = rkisp1_isp_mbus_info_get(fse->code);
+> +	if (!mbus_info)
+> +		return -EINVAL;
+> +
+> +	if (!(mbus_info->direction & RKISP1_ISP_SD_SINK) &&
+> +	    fse->pad == RKISP1_ISP_PAD_SINK_VIDEO)
+> +		return -EINVAL;
+> +
+> +	if (!(mbus_info->direction & RKISP1_ISP_SD_SRC) &&
+> +	    fse->pad == RKISP1_ISP_PAD_SOURCE_VIDEO)
+> +		return -EINVAL;
+> +
+> +	fse->min_width = RKISP1_ISP_MIN_WIDTH;
+> +	fse->max_width = RKISP1_ISP_MAX_WIDTH;
+> +	fse->min_height = RKISP1_ISP_MIN_HEIGHT;
+> +	fse->max_height = RKISP1_ISP_MAX_HEIGHT;
+> +
+> +	return 0;
+> +}
+> +
+>  static int rkisp1_isp_init_config(struct v4l2_subdev *sd,
+>  				  struct v4l2_subdev_pad_config *cfg)
+>  {
+> @@ -880,6 +913,7 @@ static int rkisp1_subdev_link_validate(struct media_link *link)
+>  
+>  static const struct v4l2_subdev_pad_ops rkisp1_isp_pad_ops = {
+>  	.enum_mbus_code = rkisp1_isp_enum_mbus_code,
+> +	.enum_frame_size = rkisp1_isp_enum_frame_size,
+>  	.get_selection = rkisp1_isp_get_selection,
+>  	.set_selection = rkisp1_isp_set_selection,
+>  	.init_cfg = rkisp1_isp_init_config,
+> 
