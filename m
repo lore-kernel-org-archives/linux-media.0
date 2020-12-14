@@ -5,26 +5,27 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 395F9C1B0E3
-	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:11:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E81AC1B0D8
+	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:12:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E710A229C5
-	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:11:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 69675229C6
+	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:12:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389880AbgLNLLU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Dec 2020 06:11:20 -0500
-Received: from faui03.informatik.uni-erlangen.de ([131.188.30.103]:36574 "EHLO
+        id S2388111AbgLNLLe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Dec 2020 06:11:34 -0500
+Received: from faui03.informatik.uni-erlangen.de ([131.188.30.103]:36556 "EHLO
         faui03.informatik.uni-erlangen.de" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729843AbgLNLLN (ORCPT
+        by vger.kernel.org with ESMTP id S1729479AbgLNLLV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Dec 2020 06:11:13 -0500
-Received: from cipterm0.informatik.uni-erlangen.de (cipterm0.cip.cs.fau.de [131.188.30.90])
-        by faui03.informatik.uni-erlangen.de (Postfix) with ESMTP id 8077F240B5A
-        for <linux-media@vger.kernel.org>; Mon, 14 Dec 2020 12:10:20 +0100 (CET)
+        Mon, 14 Dec 2020 06:11:21 -0500
+X-Greylist: delayed 483 seconds by postgrey-1.27 at vger.kernel.org; Mon, 14 Dec 2020 06:11:06 EST
+Received: from cipterm0.informatik.uni-erlangen.de (cipterm0.cip.cs.fau.de [IPv6:2001:638:a000:4130:131:188:30:90])
+        by faui03.informatik.uni-erlangen.de (Postfix) with ESMTP id 7D615240B55;
+        Mon, 14 Dec 2020 12:10:20 +0100 (CET)
 Received: by cipterm0.informatik.uni-erlangen.de (Postfix, from userid 67858)
-        id DE9123280146; Mon, 14 Dec 2020 12:02:54 +0100 (CET)
+        id D1D893280440; Mon, 14 Dec 2020 12:05:05 +0100 (CET)
 From:   Philipp Gerlesberger <Philipp.Gerlesberger@fau.de>
 To:     linux-kernel@vger.kernel.org
 Cc:     Philipp Gerlesberger <Philipp.Gerlesberger@fau.de>,
@@ -32,41 +33,40 @@ Cc:     Philipp Gerlesberger <Philipp.Gerlesberger@fau.de>,
         linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
         linux-kernel@i4.cs.fau.de, gregkh@linuxfoundation.org,
         sakari.ailus@linux.intel.com, mchehab@kernel.org
-Subject: [PATCH v2 08/12] media: atomisp: Delete braces
-Date:   Mon, 14 Dec 2020 12:01:52 +0100
-Message-Id: <20201214110156.6152-9-Philipp.Gerlesberger@fau.de>
+Subject: [PATCH v2 09/12] media: atomisp: Fix PARENTHESIS_ALIGNMENT
+Date:   Mon, 14 Dec 2020 12:03:55 +0100
+Message-Id: <20201214110358.7102-10-Philipp.Gerlesberger@fau.de>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20201214110156.6152-1-Philipp.Gerlesberger@fau.de>
-References: <20201214110156.6152-1-Philipp.Gerlesberger@fau.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-WARNING:BRACES: braces {} are not necessary for single statement blocks
+You can sum up the two lines, because the maximum line length of
+100 columns is not exceeded.
 
 Co-developed-by: Andrey Khlopkov <ij72uhux@stud.informatik.uni-erlangen.de>
 Signed-off-by: Andrey Khlopkov <ij72uhux@stud.informatik.uni-erlangen.de>
 Signed-off-by: Philipp Gerlesberger <Philipp.Gerlesberger@fau.de>
 ---
- drivers/staging/media/atomisp/pci/runtime/timer/src/timer.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/staging/media/atomisp/pci/runtime/spctrl/src/spctrl.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/runtime/timer/src/timer.c b/drivers/staging/media/atomisp/pci/runtime/timer/src/timer.c
-index 00b54a0613bb..08f5c3ea6d29 100644
---- a/drivers/staging/media/atomisp/pci/runtime/timer/src/timer.c
-+++ b/drivers/staging/media/atomisp/pci/runtime/timer/src/timer.c
-@@ -23,9 +23,7 @@ int ia_css_timer_get_current_tick(struct ia_css_clock_tick *curr_ts)
+diff --git a/drivers/staging/media/atomisp/pci/runtime/spctrl/src/spctrl.c b/drivers/staging/media/atomisp/pci/runtime/spctrl/src/spctrl.c
+index 753a99703f1e..38f86764ccfc 100644
+--- a/drivers/staging/media/atomisp/pci/runtime/spctrl/src/spctrl.c
++++ b/drivers/staging/media/atomisp/pci/runtime/spctrl/src/spctrl.c
+@@ -37,8 +37,7 @@ static struct spctrl_context_info spctrl_cofig_info[N_SP_ID];
+ static bool spctrl_loaded[N_SP_ID] = {0};
+ 
+ /* Load firmware */
+-int ia_css_spctrl_load_fw(sp_ID_t sp_id,
+-				      ia_css_spctrl_cfg *spctrl_cfg)
++int ia_css_spctrl_load_fw(sp_ID_t sp_id, ia_css_spctrl_cfg *spctrl_cfg)
  {
- 	assert(curr_ts);
- 	if (!curr_ts)
--	{
- 		return -EINVAL;
--	}
- 	curr_ts->ticks = (clock_value_t)gp_timer_read(GP_TIMER_SEL);
- 	return 0;
- }
+ 	ia_css_ptr code_addr = mmgr_NULL;
+ 	struct ia_css_sp_init_dmem_cfg *init_dmem_cfg;
 -- 
 2.20.1
 
