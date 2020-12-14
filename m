@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00E4AC4361B
-	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:04:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 987D3C4361B
+	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:05:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C031F22BEF
-	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:04:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 545CC22202
+	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:05:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405695AbgLNLEW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Dec 2020 06:04:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41658 "EHLO
+        id S2407284AbgLNLEm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Dec 2020 06:04:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726640AbgLNLEN (ORCPT
+        with ESMTP id S2404547AbgLNLEc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Dec 2020 06:04:13 -0500
+        Mon, 14 Dec 2020 06:04:32 -0500
 Received: from faui03.informatik.uni-erlangen.de (faui03.informatik.uni-erlangen.de [IPv6:2001:638:a000:4130:131:188:30:103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB61DC0613D6;
-        Mon, 14 Dec 2020 03:03:58 -0800 (PST)
-Received: from cipterm0.informatik.uni-erlangen.de (cipterm0.cip.cs.fau.de [IPv6:2001:638:a000:4130:131:188:30:90])
-        by faui03.informatik.uni-erlangen.de (Postfix) with ESMTP id 3E3AA240ABF;
-        Mon, 14 Dec 2020 12:02:51 +0100 (CET)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16494C0613D3;
+        Mon, 14 Dec 2020 03:03:52 -0800 (PST)
+Received: from cipterm0.informatik.uni-erlangen.de (cipterm0.cip.cs.fau.de [131.188.30.90])
+        by faui03.informatik.uni-erlangen.de (Postfix) with ESMTP id A3901240B67;
+        Mon, 14 Dec 2020 12:02:47 +0100 (CET)
 Received: by cipterm0.informatik.uni-erlangen.de (Postfix, from userid 67858)
-        id 3C3193280146; Mon, 14 Dec 2020 12:02:51 +0100 (CET)
+        id A19363280146; Mon, 14 Dec 2020 12:02:47 +0100 (CET)
 From:   Philipp Gerlesberger <Philipp.Gerlesberger@fau.de>
 To:     linux-kernel@vger.kernel.org
 Cc:     Philipp Gerlesberger <Philipp.Gerlesberger@fau.de>,
@@ -35,9 +35,9 @@ Cc:     Philipp Gerlesberger <Philipp.Gerlesberger@fau.de>,
         linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
         linux-kernel@i4.cs.fau.de, gregkh@linuxfoundation.org,
         sakari.ailus@linux.intel.com, mchehab@kernel.org
-Subject: [PATCH v2 05/12] media: atomisp: Fix overlong line
-Date:   Mon, 14 Dec 2020 12:01:49 +0100
-Message-Id: <20201214110156.6152-6-Philipp.Gerlesberger@fau.de>
+Subject: [PATCH v2 03/12] media: atomisp: Fix EMBEDDED_FUNCTION_NAME warning
+Date:   Mon, 14 Dec 2020 12:01:47 +0100
+Message-Id: <20201214110156.6152-4-Philipp.Gerlesberger@fau.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20201214110156.6152-1-Philipp.Gerlesberger@fau.de>
 References: <20201214110156.6152-1-Philipp.Gerlesberger@fau.de>
@@ -47,29 +47,43 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Line length of 105 exceeds 100 columns.
+Use the automatically defined __func__ macro instead of the function name,
+so it stays correct when the function is renamed.
 
 Co-developed-by: Andrey Khlopkov <ij72uhux@stud.informatik.uni-erlangen.de>
 Signed-off-by: Andrey Khlopkov <ij72uhux@stud.informatik.uni-erlangen.de>
 Signed-off-by: Philipp Gerlesberger <Philipp.Gerlesberger@fau.de>
 ---
- drivers/staging/media/atomisp/pci/runtime/rmgr/src/rmgr_vbuf.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ .../media/atomisp/pci/runtime/rmgr/src/rmgr_vbuf.c        | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/staging/media/atomisp/pci/runtime/rmgr/src/rmgr_vbuf.c b/drivers/staging/media/atomisp/pci/runtime/rmgr/src/rmgr_vbuf.c
-index 75e2d3da5969..d96aaa4bc75d 100644
+index 2e5c9addd9c5..92d67557e516 100644
 --- a/drivers/staging/media/atomisp/pci/runtime/rmgr/src/rmgr_vbuf.c
 +++ b/drivers/staging/media/atomisp/pci/runtime/rmgr/src/rmgr_vbuf.c
-@@ -282,7 +282,8 @@ void ia_css_rmgr_acq_vbuf(struct ia_css_rmgr_vbuf_pool *pool,
- 			}
- 			if ((*handle)->vptr == 0x0) {
- 				/* we need to allocate */
--				(*handle)->vptr = hmm_alloc((*handle)->size, HMM_BO_PRIVATE, 0, NULL, 0);
-+				(*handle)->vptr = hmm_alloc((*handle)->size,
-+							     HMM_BO_PRIVATE, 0, NULL, 0);
- 			} else {
- 				/* we popped a buffer */
- 				return;
+@@ -107,8 +107,7 @@ void ia_css_rmgr_refcount_retain_vbuf(struct ia_css_rmgr_vbuf_handle **handle)
+ void ia_css_rmgr_refcount_release_vbuf(struct ia_css_rmgr_vbuf_handle **handle)
+ {
+ 	if ((!handle) || ((*handle) == NULL) || (((*handle)->count) == 0)) {
+-		ia_css_debug_dtrace(IA_CSS_DEBUG_ERROR,
+-				    "ia_css_rmgr_refcount_release_vbuf() invalid arguments!\n");
++		ia_css_debug_dtrace(IA_CSS_DEBUG_ERROR, "%s invalid arguments!\n", __func__);
+ 		return;
+ 	}
+ 	/* decrease reference count */
+@@ -163,10 +162,9 @@ void ia_css_rmgr_uninit_vbuf(struct ia_css_rmgr_vbuf_pool *pool)
+ {
+ 	u32 i;
+ 
+-	ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE, "ia_css_rmgr_uninit_vbuf()\n");
++	ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE, "%s\n", __func__);
+ 	if (!pool) {
+-		ia_css_debug_dtrace(IA_CSS_DEBUG_ERROR,
+-				    "ia_css_rmgr_uninit_vbuf(): NULL argument\n");
++		ia_css_debug_dtrace(IA_CSS_DEBUG_ERROR, "%s NULL argument\n", __func__);
+ 		return;
+ 	}
+ 	if (pool->handles) {
 -- 
 2.20.1
 
