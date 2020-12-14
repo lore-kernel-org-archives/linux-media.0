@@ -2,87 +2,125 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2511C2BB40
-	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 15:31:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1E17C2BB40
+	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 15:34:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9750422B3B
-	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 15:31:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 99AC02246B
+	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 15:34:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732964AbgLNPa2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Dec 2020 10:30:28 -0500
-Received: from mga12.intel.com ([192.55.52.136]:59093 "EHLO mga12.intel.com"
+        id S2407329AbgLNPeK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Dec 2020 10:34:10 -0500
+Received: from mga04.intel.com ([192.55.52.120]:30982 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731592AbgLNPaZ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Dec 2020 10:30:25 -0500
-IronPort-SDR: TbMPaZEbh+QAOvHnN0j5NfTDUwv79hYSNO2ssajlLF7P55MdDC3FnHlxTaHzxR5E3v0y/BmI2Z
- GkYF0MhV+jiw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9834"; a="153956403"
+        id S2393522AbgLNPeA (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 14 Dec 2020 10:34:00 -0500
+IronPort-SDR: gVNBJJXkFZzNdbQbxUzAs5ewxYV324hQS7eyIwpMU1yulLOdGXV4i3Af+fiZWJ33tR1WudOkgX
+ vpVaJZoFUK/g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9834"; a="172158481"
 X-IronPort-AV: E=Sophos;i="5.78,420,1599548400"; 
-   d="scan'208";a="153956403"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2020 07:28:36 -0800
-IronPort-SDR: Naemgtj/MnnhEZYSls6Ue1vYQiUAFQlhRHv4cRLHQf/KwqDmaU95sZnpVYrGRq/Y4BZ83+OwHu
- QMaDGVprXE2g==
-X-ExtLoop1: 1
+   d="scan'208";a="172158481"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2020 07:32:14 -0800
+IronPort-SDR: /HG8w61mTEl4KCXsgO03xHjFiK4b90Og4EnBaLT5jruDhCYt3dgNTnMCqVWOM3o59KCNoNzbR4
+ 8HLWPKW8qunQ==
 X-IronPort-AV: E=Sophos;i="5.78,420,1599548400"; 
-   d="scan'208";a="556066302"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 14 Dec 2020 07:28:34 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id A01312A7; Mon, 14 Dec 2020 17:28:33 +0200 (EET)
+   d="scan'208";a="411288740"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2020 07:32:05 -0800
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1kopqU-00EIeN-LK; Mon, 14 Dec 2020 17:33:06 +0200
+Date:   Mon, 14 Dec 2020 17:33:06 +0200
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Yong Zhi <yong.zhi@intel.com>, Bingbu Cao <bingbu.cao@intel.com>,
-        linux-media@vger.kernel.org, Tianshu Qiu <tian.shu.qiu@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        kernel test robot <lkp@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: [PATCH v1] media: ipu3-cio2: Build only for x86
-Date:   Mon, 14 Dec 2020 17:28:32 +0200
-Message-Id: <20201214152832.39463-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.29.2
+To:     Daniel Scally <djrscally@gmail.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-media@vger.kernel.org, devel@acpica.org, rjw@rjwysocki.net,
+        lenb@kernel.org, gregkh@linuxfoundation.org,
+        mika.westerberg@linux.intel.com, linus.walleij@linaro.org,
+        bgolaszewski@baylibre.com, wsa@kernel.org, yong.zhi@intel.com,
+        sakari.ailus@linux.intel.com, bingbu.cao@intel.com,
+        tian.shu.qiu@intel.com, mchehab@kernel.org, robert.moore@intel.com,
+        erik.kaneda@intel.com, pmladek@suse.com, rostedt@goodmis.org,
+        sergey.senozhatsky@gmail.com, linux@rasmusvillemoes.dk,
+        kieran.bingham+renesas@ideasonboard.com, jacopo+renesas@jmondi.org,
+        laurent.pinchart+renesas@ideasonboard.com,
+        jorhand@linux.microsoft.com, kitakar@gmail.com,
+        heikki.krogerus@linux.intel.com
+Subject: Re: [PATCH 18/18] ipu3: Add driver for dummy INT3472 ACPI device
+Message-ID: <20201214153306.GI4077@smile.fi.intel.com>
+References: <20201130133129.1024662-1-djrscally@gmail.com>
+ <20201130133129.1024662-19-djrscally@gmail.com>
+ <20201130200719.GB4077@smile.fi.intel.com>
+ <20201130233232.GD25713@pendragon.ideasonboard.com>
+ <20201201184925.GJ4077@smile.fi.intel.com>
+ <6f3b0d7b-1ce7-aaf1-63c6-08a22dc77791@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6f3b0d7b-1ce7-aaf1-63c6-08a22dc77791@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-According to the original code in the driver it was never assumed to work
-with big page sizes: unsigned short type followed by PAGE_SHIFT and PAGE_MASK
-which may be different on non-x86 architectures.
+On Sun, Dec 13, 2020 at 10:48:39PM +0000, Daniel Scally wrote:
+> On 01/12/2020 18:49, Andy Shevchenko wrote:
+> >>>> +	table_entry = (struct gpiod_lookup)GPIO_LOOKUP_IDX(acpi_dev_name(adev),
+> >>>> +							   ares->data.gpio.pin_table[0],
+> >>>> +							   func, 0, GPIO_ACTIVE_HIGH);
+> >>>
+> >>> You won't need this if you have regular INT3472 platform driver.
+> >>> Simple call there _DSM to map resources to the type and use devm_gpiod_get on
+> >>> consumer behalf. Thus, previous patch is not needed.
+> >>
+> >> How does the consumer (the camera sensor) retrieve the GPIO though ? The
+> >> _DSM is in the PMIC device object, while the real consumer is the camera
+> >> sensor.
+> > 
+> > 1. A GPIO proxy
+> > 2. A custom GPIO lookup tables
+> > 3. An fwnode passing to the sensor (via swnodes graph)
+> > 
+> > First may issue deferred probe, while second needs some ordering tricks I guess.
+> > Third one should also provide an ACPI GPIO mapping table or so to make the
+> > consumer rely on names rather than custom numbers.
+> > 
+> > Perhaps someone may propose other solutions.
+> 
+> Hi Andy
+> 
+> Sorry; some more clarification here if you have time please:
 
-Recently LKP found an issue on non-x86 architectures due to above mentioned
-limitations. Since Sakari acknowledges that it's not really useful to be able
-to compile this elsewhere, mark it x86 only.
+No problem, thanks for discussing this.
 
-Fixes: a31d19f88932 ("media: ipu3: allow building it with COMPILE_TEST on non-x86 archs")
-Reported-by: kernel test robot <lkp@intel.com>
-Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/media/pci/intel/ipu3/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> 1. Do you mean here, register a new gpio_chip providing GPIOs to the
+> sensors, and just have the .set() callback for that function set the
+> corresponding line against the INT3472 device?
 
-diff --git a/drivers/media/pci/intel/ipu3/Kconfig b/drivers/media/pci/intel/ipu3/Kconfig
-index 82d7f17e6a02..7a805201034b 100644
---- a/drivers/media/pci/intel/ipu3/Kconfig
-+++ b/drivers/media/pci/intel/ipu3/Kconfig
-@@ -2,7 +2,8 @@
- config VIDEO_IPU3_CIO2
- 	tristate "Intel ipu3-cio2 driver"
- 	depends on VIDEO_V4L2 && PCI
--	depends on (X86 && ACPI) || COMPILE_TEST
-+	depends on ACPI || COMPILE_TEST
-+	depends on X86
- 	select MEDIA_CONTROLLER
- 	select VIDEO_V4L2_SUBDEV_API
- 	select V4L2_FWNODE
+Yes. On one hand it should be a consumer (*gpiod_get*() family of APIs),
+on the other it should be provider of known (artificial) GPIO chip.
+
+> 2. I thought custom GPIO lookup tables was what I was doing, are you
+> referring to something else?
+
+I think so, i.e. nothing else from high point of view.
+
+> 3. I guess you mean something like of_find_gpio() and acpi_find_gpio()
+> here? As far as I can see there isn't currently a swnodes
+> equivalent...we could just pass it via reference of course but it would
+> mean the sensor drivers would all need to account for that.
+
+Theoretically we may provide GPIOs as swnodes. In that case the consumer will
+get them as usual But I think it may be too complicated / over engineered.
+
 -- 
-2.29.2
+With Best Regards,
+Andy Shevchenko
+
 
