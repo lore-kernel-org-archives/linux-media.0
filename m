@@ -5,26 +5,29 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 695CCC1B0E3
-	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:12:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D429C4361B
+	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:13:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2DD1D229C6
-	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:12:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 45A6F229C5
+	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:13:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2395543AbgLNLLc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Dec 2020 06:11:32 -0500
-Received: from faui03.informatik.uni-erlangen.de ([131.188.30.103]:36600 "EHLO
-        faui03.informatik.uni-erlangen.de" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731490AbgLNLLV (ORCPT
+        id S2404657AbgLNLMh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Dec 2020 06:12:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42756 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730967AbgLNLLU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Dec 2020 06:11:21 -0500
-Received: from cipterm0.informatik.uni-erlangen.de (cipterm0.cip.cs.fau.de [131.188.30.90])
-        by faui03.informatik.uni-erlangen.de (Postfix) with ESMTP id 8115D240B92;
+        Mon, 14 Dec 2020 06:11:20 -0500
+Received: from faui03.informatik.uni-erlangen.de (faui03.informatik.uni-erlangen.de [IPv6:2001:638:a000:4130:131:188:30:103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A10C0613D6;
+        Mon, 14 Dec 2020 03:10:22 -0800 (PST)
+Received: from cipterm0.informatik.uni-erlangen.de (cipterm0.cip.cs.fau.de [IPv6:2001:638:a000:4130:131:188:30:90])
+        by faui03.informatik.uni-erlangen.de (Postfix) with ESMTP id 7D43A240B54;
         Mon, 14 Dec 2020 12:10:20 +0100 (CET)
 Received: by cipterm0.informatik.uni-erlangen.de (Postfix, from userid 67858)
-        id 4E5803280453; Mon, 14 Dec 2020 12:05:07 +0100 (CET)
+        id 5BBAC3280228; Mon, 14 Dec 2020 12:02:57 +0100 (CET)
 From:   Philipp Gerlesberger <Philipp.Gerlesberger@fau.de>
 To:     linux-kernel@vger.kernel.org
 Cc:     Philipp Gerlesberger <Philipp.Gerlesberger@fau.de>,
@@ -33,11 +36,11 @@ Cc:     Philipp Gerlesberger <Philipp.Gerlesberger@fau.de>,
         linux-kernel@i4.cs.fau.de, gregkh@linuxfoundation.org,
         sakari.ailus@linux.intel.com, mchehab@kernel.org
 Subject: [PATCH v2 10/12] media: atomisp: Fix BLOCK_COMMENT_STYLE
-Date:   Mon, 14 Dec 2020 12:03:56 +0100
-Message-Id: <20201214110358.7102-11-Philipp.Gerlesberger@fau.de>
+Date:   Mon, 14 Dec 2020 12:01:54 +0100
+Message-Id: <20201214110156.6152-11-Philipp.Gerlesberger@fau.de>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20201214110358.7102-10-Philipp.Gerlesberger@fau.de>
-References: <20201214110358.7102-10-Philipp.Gerlesberger@fau.de>
+In-Reply-To: <20201214110156.6152-1-Philipp.Gerlesberger@fau.de>
+References: <20201214110156.6152-1-Philipp.Gerlesberger@fau.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
