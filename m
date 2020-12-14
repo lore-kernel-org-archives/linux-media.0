@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D429C4361B
-	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:13:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A747BC4361B
+	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:13:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 45A6F229C5
-	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:13:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7F7BF229C5
+	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:13:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404657AbgLNLMh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S2393552AbgLNLMh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 14 Dec 2020 06:12:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42756 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730967AbgLNLLU (ORCPT
+        with ESMTP id S1730550AbgLNLLU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 14 Dec 2020 06:11:20 -0500
 Received: from faui03.informatik.uni-erlangen.de (faui03.informatik.uni-erlangen.de [IPv6:2001:638:a000:4130:131:188:30:103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A10C0613D6;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09CAEC0613D3;
         Mon, 14 Dec 2020 03:10:22 -0800 (PST)
 Received: from cipterm0.informatik.uni-erlangen.de (cipterm0.cip.cs.fau.de [IPv6:2001:638:a000:4130:131:188:30:90])
-        by faui03.informatik.uni-erlangen.de (Postfix) with ESMTP id 7D43A240B54;
+        by faui03.informatik.uni-erlangen.de (Postfix) with ESMTP id 75EA12409E1;
         Mon, 14 Dec 2020 12:10:20 +0100 (CET)
 Received: by cipterm0.informatik.uni-erlangen.de (Postfix, from userid 67858)
-        id 5BBAC3280228; Mon, 14 Dec 2020 12:02:57 +0100 (CET)
+        id 6720B328043D; Mon, 14 Dec 2020 12:03:00 +0100 (CET)
 From:   Philipp Gerlesberger <Philipp.Gerlesberger@fau.de>
 To:     linux-kernel@vger.kernel.org
 Cc:     Philipp Gerlesberger <Philipp.Gerlesberger@fau.de>,
@@ -35,9 +35,9 @@ Cc:     Philipp Gerlesberger <Philipp.Gerlesberger@fau.de>,
         linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
         linux-kernel@i4.cs.fau.de, gregkh@linuxfoundation.org,
         sakari.ailus@linux.intel.com, mchehab@kernel.org
-Subject: [PATCH v2 10/12] media: atomisp: Fix BLOCK_COMMENT_STYLE
-Date:   Mon, 14 Dec 2020 12:01:54 +0100
-Message-Id: <20201214110156.6152-11-Philipp.Gerlesberger@fau.de>
+Subject: [PATCH v2 12/12] media: atomisp: Fix LOGICAL_CONTINUATIONS
+Date:   Mon, 14 Dec 2020 12:01:56 +0100
+Message-Id: <20201214110156.6152-13-Philipp.Gerlesberger@fau.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20201214110156.6152-1-Philipp.Gerlesberger@fau.de>
 References: <20201214110156.6152-1-Philipp.Gerlesberger@fau.de>
@@ -47,30 +47,30 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Block comments should align the * on each line
+Logical continuations should be on the previous line
 
 Co-developed-by: Andrey Khlopkov <ij72uhux@stud.informatik.uni-erlangen.de>
 Signed-off-by: Andrey Khlopkov <ij72uhux@stud.informatik.uni-erlangen.de>
 Signed-off-by: Philipp Gerlesberger <Philipp.Gerlesberger@fau.de>
 ---
- drivers/staging/media/atomisp/pci/runtime/spctrl/src/spctrl.c | 4 ++--
+ drivers/staging/media/atomisp/pci/runtime/queue/src/queue.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/runtime/spctrl/src/spctrl.c b/drivers/staging/media/atomisp/pci/runtime/spctrl/src/spctrl.c
-index 38f86764ccfc..7f4592565af6 100644
---- a/drivers/staging/media/atomisp/pci/runtime/spctrl/src/spctrl.c
-+++ b/drivers/staging/media/atomisp/pci/runtime/spctrl/src/spctrl.c
-@@ -105,8 +105,8 @@ int ia_css_spctrl_load_fw(sp_ID_t sp_id, ia_css_spctrl_cfg *spctrl_cfg)
- void sh_css_spctrl_reload_fw(sp_ID_t sp_id)
+diff --git a/drivers/staging/media/atomisp/pci/runtime/queue/src/queue.c b/drivers/staging/media/atomisp/pci/runtime/queue/src/queue.c
+index 2f1c2df59f71..7d44070c7114 100644
+--- a/drivers/staging/media/atomisp/pci/runtime/queue/src/queue.c
++++ b/drivers/staging/media/atomisp/pci/runtime/queue/src/queue.c
+@@ -24,8 +24,8 @@
+  *****************************************************************************/
+ int ia_css_queue_local_init(ia_css_queue_t *qhandle, ia_css_queue_local_t *desc)
  {
- 	/* now we program the base address into the icache and
--	* invalidate the cache.
--	*/
-+	 * invalidate the cache.
-+	 */
- 	sp_ctrl_store(sp_id, SP_ICACHE_ADDR_REG,
- 		      (hrt_data)spctrl_cofig_info[sp_id].code_addr);
- 	sp_ctrl_setbit(sp_id, SP_ICACHE_INV_REG, SP_ICACHE_INV_BIT);
+-	if (NULL == qhandle || NULL == desc
+-	    || NULL == desc->cb_elems || NULL == desc->cb_desc) {
++	if (NULL == qhandle || NULL == desc ||
++	    NULL == desc->cb_elems || NULL == desc->cb_desc) {
+ 		/* Invalid parameters, return error*/
+ 		return -EINVAL;
+ 	}
 -- 
 2.20.1
 
