@@ -2,187 +2,184 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D31FAC1B0D8
-	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:15:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3C13C4361B
+	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:36:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A8708229C5
-	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:15:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8F85022B47
+	for <linux-media@archiver.kernel.org>; Mon, 14 Dec 2020 11:36:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730535AbgLNLPV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Dec 2020 06:15:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42760 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731621AbgLNLLU (ORCPT
+        id S2437958AbgLNLf4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Dec 2020 06:35:56 -0500
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:46749 "EHLO
+        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2438197AbgLNLfn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Dec 2020 06:11:20 -0500
-Received: from faui03.informatik.uni-erlangen.de (faui03.informatik.uni-erlangen.de [IPv6:2001:638:a000:4130:131:188:30:103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868EAC061793;
-        Mon, 14 Dec 2020 03:10:23 -0800 (PST)
-Received: from cipterm0.informatik.uni-erlangen.de (cipterm0.cip.cs.fau.de [131.188.30.90])
-        by faui03.informatik.uni-erlangen.de (Postfix) with ESMTP id 821C2240BAA;
-        Mon, 14 Dec 2020 12:10:20 +0100 (CET)
-Received: by cipterm0.informatik.uni-erlangen.de (Postfix, from userid 67858)
-        id 82BFD3280535; Mon, 14 Dec 2020 12:05:08 +0100 (CET)
-From:   Philipp Gerlesberger <Philipp.Gerlesberger@fau.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     Philipp Gerlesberger <Philipp.Gerlesberger@fau.de>,
-        ij72uhux@stud.informatik.uni-erlangen.de,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kernel@i4.cs.fau.de, gregkh@linuxfoundation.org,
-        sakari.ailus@linux.intel.com, mchehab@kernel.org
-Subject: [PATCH v2 11/12] media: atomisp: Write function decleration in one line
-Date:   Mon, 14 Dec 2020 12:03:57 +0100
-Message-Id: <20201214110358.7102-12-Philipp.Gerlesberger@fau.de>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20201214110358.7102-10-Philipp.Gerlesberger@fau.de>
-References: <20201214110358.7102-10-Philipp.Gerlesberger@fau.de>
+        Mon, 14 Dec 2020 06:35:43 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 46A28580503;
+        Mon, 14 Dec 2020 06:34:28 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Mon, 14 Dec 2020 06:34:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=HC54RztzNa/cUR9WRuFCupTCs1r
+        TPzZoY9HGRsF4LiI=; b=rkERmi/aXqC6mQzJ61vf3C3Gi6JCObZe75f83T/WCmU
+        aedCWfySN3evAloO4lsWRfTU6x2ZKTLDZpUXXodbgUyCYscu5LCQpBuJ6ZCdr/+O
+        Yq+RskwpX34p+dMKshf2qu+WdPdjeVkUMmWWbDFLql7VOjI3kRcJ5f40P2aS+5bN
+        FErOfZ0bb8klWGisErEe78bHsMbn+YQlOakRMaNUIEVtJ9JBYZjrxjX7BAeg2ExU
+        cbwyaqCBF0tzBqiSRnPFbLZdLHGnyylDvxgCQMTif7KsabqBCP1J0LKHeDQ8mYf1
+        m4EC9ho2+Ap5/VKxMPEhAm39B19gFK0ePP6J501EHSQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=HC54Rz
+        tzNa/cUR9WRuFCupTCs1rTPzZoY9HGRsF4LiI=; b=Ky4mL77zz6E4sqY+AzhWRU
+        AvjJ2uJdZ8O3SkPFPakiQajlS79CHgbkh7gxhEgFJz66I/AMrCiIqEjltO1EBrNV
+        N5IeUy5MMSlhtJmmNWUesL1orqkxjgXj/fJYc69QmFSUWu8paUPHMkCxcOQtqN6V
+        kpXGJUGqOS8UilntQ/4xansxMJ+b1b4xJpPkREv8r+pX4QFHSeUlr6cW2GKgpdkb
+        Wq4Q9g5KH6/G5GQojaL7x3RXhfZNESRLZBfXmiI9xnMS1lZ3mIHVVRLMjv8fk8Ri
+        xosJUpBj5W/9FzHmz3F7fa+krWBF8CThkO6irqw7tUAL1MmMjJAt/m7YvOeco9dA
+        ==
+X-ME-Sender: <xms:wk3XX30nB47orHKr2_L_Ww9cZ_UdQOjgAVROSpmEE6x7KZt9NPPPbQ>
+    <xme:wk3XX2E6uPvG0LmZ917PpqR8-9So1L4BbZTMVrekBPm_0OT4iaj47qDQXlp8F-wiP
+    2ggXM5A0m8MqpBOWw0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrudekkedgvdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
+    gedunecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:wk3XX35ZsJjqmuVmJ-LXfBkEDRwRaYCWcZe8XXUREfxDHCRWJy8seQ>
+    <xmx:wk3XX826iHwWE7vLS2-RhLWbt0dp1F1E7I6jNut9WZSqmitooCgOjg>
+    <xmx:wk3XX6F7SxWwjV-YcpHFsX7k1NURvP6_d32ntpAZ6HgXVMvbT3oNNg>
+    <xmx:xE3XX-PXjHGA_t162XmWWhoc9J0Ll5i2BUkdRCwzS3Hy1XQp-_Pqlw>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id C30F1240057;
+        Mon, 14 Dec 2020 06:34:25 -0500 (EST)
+Date:   Mon, 14 Dec 2020 12:34:24 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-sunxi@googlegroups.com, Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        kevin.lhopital@hotmail.com
+Subject: Re: [PATCH v3 07/15] media: sun6i-csi: Add support for MIPI CSI-2
+ bridge input
+Message-ID: <20201214113424.cx7ox6i5bm7lszhb@gilmour>
+References: <20201211155708.154710-1-paul.kocialkowski@bootlin.com>
+ <20201211155708.154710-8-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="q5rb2agebcwu6woe"
+Content-Disposition: inline
+In-Reply-To: <20201211155708.154710-8-paul.kocialkowski@bootlin.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-CHECK:OPEN_ENDED_LINE: Lines should not end with a '('
-WARNING:LEADING_SPACE: please, no spaces at the start of a line
-Avoid these errors by writing the function decleration in one line.
 
-Co-developed-by: Andrey Khlopkov <ij72uhux@stud.informatik.uni-erlangen.de>
-Signed-off-by: Andrey Khlopkov <ij72uhux@stud.informatik.uni-erlangen.de>
-Signed-off-by: Philipp Gerlesberger <Philipp.Gerlesberger@fau.de>
----
- .../atomisp/pci/runtime/queue/src/queue.c     | 44 +++++--------------
- 1 file changed, 11 insertions(+), 33 deletions(-)
+--q5rb2agebcwu6woe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/staging/media/atomisp/pci/runtime/queue/src/queue.c b/drivers/staging/media/atomisp/pci/runtime/queue/src/queue.c
-index aea6c66a3cee..2f1c2df59f71 100644
---- a/drivers/staging/media/atomisp/pci/runtime/queue/src/queue.c
-+++ b/drivers/staging/media/atomisp/pci/runtime/queue/src/queue.c
-@@ -22,9 +22,7 @@
- /*****************************************************************************
-  * Queue Public APIs
-  *****************************************************************************/
--int ia_css_queue_local_init(
--    ia_css_queue_t *qhandle,
--    ia_css_queue_local_t *desc)
-+int ia_css_queue_local_init(ia_css_queue_t *qhandle, ia_css_queue_local_t *desc)
- {
- 	if (NULL == qhandle || NULL == desc
- 	    || NULL == desc->cb_elems || NULL == desc->cb_desc) {
-@@ -43,9 +41,7 @@ int ia_css_queue_local_init(
- 	return 0;
- }
- 
--int ia_css_queue_remote_init(
--    ia_css_queue_t *qhandle,
--    ia_css_queue_remote_t *desc)
-+int ia_css_queue_remote_init(ia_css_queue_t *qhandle, ia_css_queue_remote_t *desc)
- {
- 	if (NULL == qhandle || NULL == desc) {
- 		/* Invalid parameters, return error*/
-@@ -69,8 +65,7 @@ int ia_css_queue_remote_init(
- 	return 0;
- }
- 
--int ia_css_queue_uninit(
--    ia_css_queue_t *qhandle)
-+int ia_css_queue_uninit(ia_css_queue_t *qhandle)
- {
- 	if (!qhandle)
- 		return -EINVAL;
-@@ -84,9 +79,7 @@ int ia_css_queue_uninit(
- 	return 0;
- }
- 
--int ia_css_queue_enqueue(
--    ia_css_queue_t *qhandle,
--    uint32_t item)
-+int ia_css_queue_enqueue(ia_css_queue_t *qhandle, uint32_t item)
- {
- 	int error = 0;
- 
-@@ -143,9 +136,7 @@ int ia_css_queue_enqueue(
- 	return 0;
- }
- 
--int ia_css_queue_dequeue(
--    ia_css_queue_t *qhandle,
--    uint32_t *item)
-+int ia_css_queue_dequeue(ia_css_queue_t *qhandle, uint32_t *item)
- {
- 	int error = 0;
- 
-@@ -200,9 +191,7 @@ int ia_css_queue_dequeue(
- 	return 0;
- }
- 
--int ia_css_queue_is_full(
--    ia_css_queue_t *qhandle,
--    bool *is_full)
-+int ia_css_queue_is_full(ia_css_queue_t *qhandle, bool *is_full)
- {
- 	int error = 0;
- 
-@@ -234,9 +223,7 @@ int ia_css_queue_is_full(
- 	return -EINVAL;
- }
- 
--int ia_css_queue_get_free_space(
--    ia_css_queue_t *qhandle,
--    uint32_t *size)
-+int ia_css_queue_get_free_space(ia_css_queue_t *qhandle, uint32_t *size)
- {
- 	int error = 0;
- 
-@@ -268,9 +255,7 @@ int ia_css_queue_get_free_space(
- 	return -EINVAL;
- }
- 
--int ia_css_queue_get_used_space(
--    ia_css_queue_t *qhandle,
--    uint32_t *size)
-+int ia_css_queue_get_used_space(ia_css_queue_t *qhandle, uint32_t *size)
- {
- 	int error = 0;
- 
-@@ -302,10 +287,7 @@ int ia_css_queue_get_used_space(
- 	return -EINVAL;
- }
- 
--int ia_css_queue_peek(
--    ia_css_queue_t *qhandle,
--    u32 offset,
--    uint32_t *element)
-+int ia_css_queue_peek(ia_css_queue_t *qhandle, u32 offset, uint32_t *element)
- {
- 	u32 num_elems = 0;
- 	int error = 0;
-@@ -354,9 +336,7 @@ int ia_css_queue_peek(
- 	return -EINVAL;
- }
- 
--int ia_css_queue_is_empty(
--    ia_css_queue_t *qhandle,
--    bool *is_empty)
-+int ia_css_queue_is_empty(ia_css_queue_t *qhandle, bool *is_empty)
- {
- 	int error = 0;
- 
-@@ -388,9 +368,7 @@ int ia_css_queue_is_empty(
- 	return -EINVAL;
- }
- 
--int ia_css_queue_get_size(
--    ia_css_queue_t *qhandle,
--    uint32_t *size)
-+int ia_css_queue_get_size(ia_css_queue_t *qhandle, uint32_t *size)
- {
- 	int error = 0;
- 
--- 
-2.20.1
+On Fri, Dec 11, 2020 at 04:57:00PM +0100, Paul Kocialkowski wrote:
+> The A31 CSI controller supports a MIPI CSI-2 bridge input, which has
+> its own dedicated port in the fwnode graph.
+>=20
+> Support for this input is added with this change:
+> - two pads are defined for the media entity instead of one
+>   and only one needs to be connected at a time;
+> - the pads currently match the fwnode graph representation;
+> - links are created between our pads and the subdevs for each
+>   interface and are no longer immutable so that userspace can select
+>   which interface to use in case both are bound to a subdev;
+> - fwnode endpoints are parsed and stored for each interface;
+> - the active subdev (and fwnode endpoint) is retrieved when validating
+>   the media link at stream on time and cleared at stream off;
+> - an error is raised if both links are active at the same time;
+> - the MIPI interface bit is set if the MIPI CSI-2 bridge endpoint is
+>   active.
+>=20
+> In the future, the media entity representation might evolve to:
+> - distinguish the internal parallel bridge and data formatter;
+> - represent each of the 4 internal channels that can exist between
+>   the parallel bridge (for BT656 time-multiplex) and MIPI CSI-2
+>   (internal channels can be mapped to virtual channels);
+> - connect the controller's output to the ISP instead of its
+>   DMA engine.
+>=20
+> Finally note that the MIPI CSI-2 bridges should not be linked in
+> the fwnode graph unless they have a sensor subdev attached.
+>=20
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> ---
+>  .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 123 ++++++++++++++----
+>  .../platform/sunxi/sun6i-csi/sun6i_csi.h      |   3 -
+>  .../platform/sunxi/sun6i-csi/sun6i_video.c    |  53 ++++----
+>  .../platform/sunxi/sun6i-csi/sun6i_video.h    |   7 +-
+>  4 files changed, 135 insertions(+), 51 deletions(-)
+>=20
+> diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers=
+/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> index f1150de94e98..481181038e1e 100644
+> --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> @@ -52,15 +52,16 @@ bool sun6i_csi_is_format_supported(struct sun6i_csi *=
+csi,
+>  				   u32 pixformat, u32 mbus_code)
+>  {
+>  	struct sun6i_csi_dev *sdev =3D sun6i_csi_to_dev(csi);
+> +	struct v4l2_fwnode_endpoint *endpoint =3D sdev->csi.video.source_endpoi=
+nt;
+> =20
+>  	/*
+>  	 * Some video receivers have the ability to be compatible with
+>  	 * 8bit and 16bit bus width.
+>  	 * Identify the media bus format from device tree.
+>  	 */
+> -	if ((sdev->csi.v4l2_ep.bus_type =3D=3D V4L2_MBUS_PARALLEL
+> -	     || sdev->csi.v4l2_ep.bus_type =3D=3D V4L2_MBUS_BT656)
+> -	     && sdev->csi.v4l2_ep.bus.parallel.bus_width =3D=3D 16) {
+> +	if ((endpoint->bus_type =3D=3D V4L2_MBUS_PARALLEL
+> +	     || endpoint->bus_type =3D=3D V4L2_MBUS_BT656)
+> +	     && endpoint->bus.parallel.bus_width =3D=3D 16) {
 
+The operators should be at the end of the previous line, not at the beginni=
+ng
+
+Maxime
+
+--q5rb2agebcwu6woe
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX9dNwAAKCRDj7w1vZxhR
+xU1FAQCe7tGabmV5/A5Z5LxuElH4dianoBeoE4wLIaT/n63r+AD+IT8rCnQclTCB
+sMoAwM/wMKeqVEflw4FhFI2POaza5QQ=
+=gZ/r
+-----END PGP SIGNATURE-----
+
+--q5rb2agebcwu6woe--
