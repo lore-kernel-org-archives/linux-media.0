@@ -2,42 +2,41 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44F80C2BBCA
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 635E3C2BB9A
 	for <linux-media@archiver.kernel.org>; Tue, 15 Dec 2020 02:59:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1FB46223D6
+	by mail.kernel.org (Postfix) with ESMTP id 3475C223E0
 	for <linux-media@archiver.kernel.org>; Tue, 15 Dec 2020 02:59:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726174AbgLOC5H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Dec 2020 21:57:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48628 "EHLO
+        id S1726004AbgLOC5B (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Dec 2020 21:57:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725825AbgLOC4v (ORCPT
+        with ESMTP id S1725927AbgLOC4v (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 14 Dec 2020 21:56:51 -0500
-X-Greylist: delayed 606 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Dec 2020 18:56:06 PST
 Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFFEBC061793;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08F6C0617A6;
         Mon, 14 Dec 2020 18:56:06 -0800 (PST)
 Received: from hatter.bewilderbeest.net (unknown [IPv6:2600:6c44:7f:ba20:1c66:ab2d:5a3:5a9e])
         (using TLSv1.2 with cipher DHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 5E5F4806FA;
-        Mon, 14 Dec 2020 18:46:01 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 thorn.bewilderbeest.net 5E5F4806FA
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 6D3E5806F8;
+        Mon, 14 Dec 2020 18:46:00 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 thorn.bewilderbeest.net 6D3E5806F8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1608000362;
-        bh=iD+Q0HRdZJ6dUnWWVt4Ox1KAVYD8O2LC2E8h+jcXdtk=;
+        s=thorn; t=1608000361;
+        bh=xR8CLmhYhW7l9AVRInyVC7PTJeDKCJBNFlHVTPgUQAg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TW8je8Fa6vSq7loNGgeQy6xxa+1RFxe9mTStlSgYxecdpopU6M/oBenuqVeNCjTBL
-         dN4oNz/ty4nN4z8lzg5DqZObramnu8OyyUBJwryJFVsCbwEUnfrJhs/jW1dyz3OLGC
-         BwXvYeQLr+dugo36VnguK1G800qStEl/rY3sKNC4=
+        b=PgdqqfbXNy4kDvfuNujcew/oE4ykMgotbUQZD640u/xW+xSgkjvUrhwSy2IFYIAw5
+         n26ZJP8lr5i/iRccf0ndGIWxFaV62XCB2xKQ0La7ICWRgPBR+Z6MLlLSW8xuzXdBBR
+         eB3gNUYRsk91y4I4wyVfGtIY7sjP7rVJIxJC2JIQ=
 From:   Zev Weiss <zev@bewilderbeest.net>
 To:     Eddie James <eajames@linux.ibm.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -47,9 +46,9 @@ To:     Eddie James <eajames@linux.ibm.com>,
         linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
 Cc:     Zev Weiss <zev@bewilderbeest.net>,
         Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Subject: [PATCH 2/3] aspeed-video: clear spurious interrupt bits unconditionally
-Date:   Mon, 14 Dec 2020 20:45:41 -0600
-Message-Id: <20201215024542.18888-3-zev@bewilderbeest.net>
+Subject: [PATCH 1/3] aspeed-video: add error message for unhandled interrupts
+Date:   Mon, 14 Dec 2020 20:45:40 -0600
+Message-Id: <20201215024542.18888-2-zev@bewilderbeest.net>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201215024542.18888-1-zev@bewilderbeest.net>
 References: <20201215024542.18888-1-zev@bewilderbeest.net>
@@ -59,51 +58,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Instead of testing and conditionally clearing them one by one, we can
-instead just unconditionally clear them all at once.
+This device seems to have a propensity for asserting interrupts that
+aren't enabled -- in addition to the CAPTURE_COMPLETE and FRAME_COMPLETE
+interrupts squashed in commit 65d270acb2d662c3346793663ac3a759eb4491b8,
+COMP_READY has also been observed.  Adding a message diagnosing what
+happened in the event of unhandled interrupt status bits should
+hopefully make the debugging process simpler for any others that pop up
+in the future.
 
 Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
 ---
- drivers/media/platform/aspeed-video.c | 19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
+ drivers/media/platform/aspeed-video.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
-index eb02043532e3..218aae3be809 100644
+index 7d98db1d9b52..eb02043532e3 100644
 --- a/drivers/media/platform/aspeed-video.c
 +++ b/drivers/media/platform/aspeed-video.c
-@@ -558,6 +558,14 @@ static void aspeed_video_irq_res_change(struct aspeed_video *video, ulong delay)
- 	schedule_delayed_work(&video->res_work, delay);
- }
- 
-+/*
-+ * Interrupts that we don't use but have to explicitly ignore because the
-+ * hardware asserts them even when they're disabled in the VE_INTERRUPT_CTRL
-+ * register.
-+ */
-+#define VE_SPURIOUS_IRQS \
-+	(VE_INTERRUPT_CAPTURE_COMPLETE | VE_INTERRUPT_FRAME_COMPLETE)
-+
- static irqreturn_t aspeed_video_irq(int irq, void *arg)
+@@ -562,6 +562,7 @@ static irqreturn_t aspeed_video_irq(int irq, void *arg)
  {
  	struct aspeed_video *video = arg;
-@@ -630,15 +638,8 @@ static irqreturn_t aspeed_video_irq(int irq, void *arg)
- 			aspeed_video_start_frame(video);
- 	}
+ 	u32 sts = aspeed_video_read(video, VE_INTERRUPT_STATUS);
++	u32 orig_sts = sts;
  
--	/*
--	 * CAPTURE_COMPLETE and FRAME_COMPLETE interrupts come even when these
--	 * are disabled in the VE_INTERRUPT_CTRL register so clear them to
--	 * prevent unnecessary interrupt calls.
--	 */
--	if (sts & VE_INTERRUPT_CAPTURE_COMPLETE)
--		sts &= ~VE_INTERRUPT_CAPTURE_COMPLETE;
--	if (sts & VE_INTERRUPT_FRAME_COMPLETE)
--		sts &= ~VE_INTERRUPT_FRAME_COMPLETE;
-+	/* Squash known bogus interrupts */
-+	sts &= ~VE_SPURIOUS_IRQS;
+ 	/*
+ 	 * Resolution changed or signal was lost; reset the engine and
+@@ -639,6 +640,10 @@ static irqreturn_t aspeed_video_irq(int irq, void *arg)
+ 	if (sts & VE_INTERRUPT_FRAME_COMPLETE)
+ 		sts &= ~VE_INTERRUPT_FRAME_COMPLETE;
  
- 	if (sts)
- 		dev_err_ratelimited(video->dev, "unexpected interrupt asserted:"
++	if (sts)
++		dev_err_ratelimited(video->dev, "unexpected interrupt asserted:"
++				    " sts=%08x, orig_sts=%08x", sts, orig_sts);
++
+ 	return sts ? IRQ_NONE : IRQ_HANDLED;
+ }
+ 
 -- 
 2.29.2
 
