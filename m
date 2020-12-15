@@ -2,215 +2,301 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE390C2BB48
-	for <linux-media@archiver.kernel.org>; Tue, 15 Dec 2020 09:13:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DBEBC4361B
+	for <linux-media@archiver.kernel.org>; Tue, 15 Dec 2020 09:17:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 59C3222255
-	for <linux-media@archiver.kernel.org>; Tue, 15 Dec 2020 09:13:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C7DD622225
+	for <linux-media@archiver.kernel.org>; Tue, 15 Dec 2020 09:17:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727526AbgLOJDc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 15 Dec 2020 04:03:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727320AbgLOJDS (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 15 Dec 2020 04:03:18 -0500
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E942FC06179C
-        for <linux-media@vger.kernel.org>; Tue, 15 Dec 2020 01:02:37 -0800 (PST)
-Received: by mail-ej1-x644.google.com with SMTP id w1so21884932ejf.11
-        for <linux-media@vger.kernel.org>; Tue, 15 Dec 2020 01:02:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/uXVPucjHR3fNKbq750a3yKPPn2iWB1iP3/avDQ0gbk=;
-        b=W6Y0rt+9Pmp4l5AMg/qdvmD6BD9OxEqcIpX4G+t9eJ9k9d8H/hrnB4WS6FZM14gtyq
-         dDZ71P4jHFA+uFczi6yvXZmpMtdEZtfJHRpYjkIU1X+3fbTe7KZr82CDx2bgii4P/XqN
-         tVbhVjOwMcRr8LBAuQxP0YEBsyZd84LWI2ud8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/uXVPucjHR3fNKbq750a3yKPPn2iWB1iP3/avDQ0gbk=;
-        b=EKh+aGIaBSRZcT2nq0GHqIARltXgk1ijFLAfPUzBlMG71YAWzOjAenjQjIGTSfpUQB
-         3vhqliscgkY6cDp3v3OEdO+nsO5YtIs9OrjTHWmLb2c4LFpgwgVEciDKMIL+KI3rXOls
-         GuU+c8cZKgItOenaHQeSm8tdRnIdsubdhU3SZMEJtRRWpci+ydR3BMTiBSrtk5bpmk2W
-         /R1+Q5hmxX9qpIhLhofPfCu/Gp+kaFlsOTLizeFb/eexGB+s4xbu6ab6X5UO7dsz7i0B
-         opNyz36k7eCmabDHqWTECil+xlv5nAe3fZ1DSnDYzGfy5F7GZRehfezCgT4tvkTWk4k9
-         QM3Q==
-X-Gm-Message-State: AOAM530cGi3QA8ZUZj5O7HrBk1+EeSZ+5NCqUNdwV7AIHUr1dhj6VW/p
-        uLkG23u5myHRu1KRp1kL90Vl176eR+or/A==
-X-Google-Smtp-Source: ABdhPJyY2uL4obMNe5YyCXxNdZ90Yp9PFPwVpbji5/NA9pSjodQDJCfI6HWfK1ayQRDbELmrycZeCQ==
-X-Received: by 2002:a17:907:4332:: with SMTP id ni2mr4939467ejb.422.1608022956435;
-        Tue, 15 Dec 2020 01:02:36 -0800 (PST)
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
-        by smtp.gmail.com with ESMTPSA id x9sm866045ejd.99.2020.12.15.01.02.35
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Dec 2020 01:02:35 -0800 (PST)
-Received: by mail-wr1-f42.google.com with SMTP id c5so15391569wrp.6
-        for <linux-media@vger.kernel.org>; Tue, 15 Dec 2020 01:02:35 -0800 (PST)
-X-Received: by 2002:adf:bb0e:: with SMTP id r14mr33806266wrg.159.1608022954669;
- Tue, 15 Dec 2020 01:02:34 -0800 (PST)
+        id S1728092AbgLOJQu convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 15 Dec 2020 04:16:50 -0500
+Received: from www.linuxtv.org ([130.149.80.248]:35018 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727779AbgLOJQh (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 15 Dec 2020 04:16:37 -0500
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1kp6Qy-003ruB-JD; Tue, 15 Dec 2020 09:15:52 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1kp6UD-0000aA-5i; Tue, 15 Dec 2020 09:19:13 +0000
+Date:   Tue, 15 Dec 2020 09:19:12 +0000 (UTC)
+From:   Jenkins Builder Robot <jenkins@linuxtv.org>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org
+Message-ID: <1104894381.11.1608023953169@builder.linuxtv.org>
+Subject: Build failed in Jenkins: media-build #3328
 MIME-Version: 1.0
-References: <20201214125703.866998-1-acourbot@chromium.org>
-In-Reply-To: <20201214125703.866998-1-acourbot@chromium.org>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Tue, 15 Dec 2020 18:02:22 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5BSTnVzGHRV1-H-vS-Ez=yC2He=-diaE_yYuBXiT549+A@mail.gmail.com>
-Message-ID: <CAAFQd5BSTnVzGHRV1-H-vS-Ez=yC2He=-diaE_yYuBXiT549+A@mail.gmail.com>
-Subject: Re: [PATCH] media: venus: use contig vb2 ops
-To:     Alexandre Courbot <acourbot@chromium.org>
-Cc:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
+X-Jenkins-Job: media-build
+X-Jenkins-Result: FAILURE
+Auto-submitted: auto-generated
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Dec 14, 2020 at 9:57 PM Alexandre Courbot <acourbot@chromium.org> wrote:
->
-> This driver uses the SG vb2 ops, but effectively only ever accesses the
-> first entry of the SG table, indicating that it expects a flat layout.
-> Switch it to use the contiguous ops to make sure this expected invariant
-> is always enforced. Since the device is supposed to be behind an IOMMU
-> this should have little to none practical consequences beyond making the
-> driver not rely on a particular behavior of the SG implementation.
->
-> Reported-by: Tomasz Figa <tfiga@chromium.org>
-> Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
-> ---
-> Hi everyone,
->
-> It probably doesn't hurt to fix this issue before some actual issue happens.
-> I have tested this patch on Chrome OS and playback was just as fine as with
-> the SG ops.
->
->  drivers/media/platform/Kconfig              | 2 +-
->  drivers/media/platform/qcom/venus/helpers.c | 9 ++-------
->  drivers/media/platform/qcom/venus/vdec.c    | 6 +++---
->  drivers/media/platform/qcom/venus/venc.c    | 6 +++---
->  4 files changed, 9 insertions(+), 14 deletions(-)
->
+See <https://builder.linuxtv.org/job/media-build/3328/display/redirect>
 
-Reviewed-by: Tomasz Figa <tfiga@chromium.org>
+Changes:
 
-Best regards,
-Tomasz
 
-> diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-> index 35a18d388f3f..d9d7954111f2 100644
-> --- a/drivers/media/platform/Kconfig
-> +++ b/drivers/media/platform/Kconfig
-> @@ -533,7 +533,7 @@ config VIDEO_QCOM_VENUS
->         depends on INTERCONNECT || !INTERCONNECT
->         select QCOM_MDT_LOADER if ARCH_QCOM
->         select QCOM_SCM if ARCH_QCOM
-> -       select VIDEOBUF2_DMA_SG
-> +       select VIDEOBUF2_DMA_CONTIG
->         select V4L2_MEM2MEM_DEV
->         help
->           This is a V4L2 driver for Qualcomm Venus video accelerator
-> diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
-> index 50439eb1ffea..859d260f002b 100644
-> --- a/drivers/media/platform/qcom/venus/helpers.c
-> +++ b/drivers/media/platform/qcom/venus/helpers.c
-> @@ -7,7 +7,7 @@
->  #include <linux/mutex.h>
->  #include <linux/slab.h>
->  #include <linux/kernel.h>
-> -#include <media/videobuf2-dma-sg.h>
-> +#include <media/videobuf2-dma-contig.h>
->  #include <media/v4l2-mem2mem.h>
->  #include <asm/div64.h>
->
-> @@ -1284,14 +1284,9 @@ int venus_helper_vb2_buf_init(struct vb2_buffer *vb)
->         struct venus_inst *inst = vb2_get_drv_priv(vb->vb2_queue);
->         struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
->         struct venus_buffer *buf = to_venus_buffer(vbuf);
-> -       struct sg_table *sgt;
-> -
-> -       sgt = vb2_dma_sg_plane_desc(vb, 0);
-> -       if (!sgt)
-> -               return -EFAULT;
->
->         buf->size = vb2_plane_size(vb, 0);
-> -       buf->dma_addr = sg_dma_address(sgt->sgl);
-> +       buf->dma_addr = vb2_dma_contig_plane_dma_addr(vb, 0);
->
->         if (vb->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE)
->                 list_add_tail(&buf->reg_list, &inst->registeredbufs);
-> diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-> index 8488411204c3..3fb277c81aca 100644
-> --- a/drivers/media/platform/qcom/venus/vdec.c
-> +++ b/drivers/media/platform/qcom/venus/vdec.c
-> @@ -13,7 +13,7 @@
->  #include <media/v4l2-event.h>
->  #include <media/v4l2-ctrls.h>
->  #include <media/v4l2-mem2mem.h>
-> -#include <media/videobuf2-dma-sg.h>
-> +#include <media/videobuf2-dma-contig.h>
->
->  #include "hfi_venus_io.h"
->  #include "hfi_parser.h"
-> @@ -1461,7 +1461,7 @@ static int m2m_queue_init(void *priv, struct vb2_queue *src_vq,
->         src_vq->io_modes = VB2_MMAP | VB2_DMABUF;
->         src_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
->         src_vq->ops = &vdec_vb2_ops;
-> -       src_vq->mem_ops = &vb2_dma_sg_memops;
-> +       src_vq->mem_ops = &vb2_dma_contig_memops;
->         src_vq->drv_priv = inst;
->         src_vq->buf_struct_size = sizeof(struct venus_buffer);
->         src_vq->allow_zero_bytesused = 1;
-> @@ -1475,7 +1475,7 @@ static int m2m_queue_init(void *priv, struct vb2_queue *src_vq,
->         dst_vq->io_modes = VB2_MMAP | VB2_DMABUF;
->         dst_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
->         dst_vq->ops = &vdec_vb2_ops;
-> -       dst_vq->mem_ops = &vb2_dma_sg_memops;
-> +       dst_vq->mem_ops = &vb2_dma_contig_memops;
->         dst_vq->drv_priv = inst;
->         dst_vq->buf_struct_size = sizeof(struct venus_buffer);
->         dst_vq->allow_zero_bytesused = 1;
-> diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
-> index 1c61602c5de1..a09550cd1dba 100644
-> --- a/drivers/media/platform/qcom/venus/venc.c
-> +++ b/drivers/media/platform/qcom/venus/venc.c
-> @@ -10,7 +10,7 @@
->  #include <linux/pm_runtime.h>
->  #include <linux/slab.h>
->  #include <media/v4l2-mem2mem.h>
-> -#include <media/videobuf2-dma-sg.h>
-> +#include <media/videobuf2-dma-contig.h>
->  #include <media/v4l2-ioctl.h>
->  #include <media/v4l2-event.h>
->  #include <media/v4l2-ctrls.h>
-> @@ -1001,7 +1001,7 @@ static int m2m_queue_init(void *priv, struct vb2_queue *src_vq,
->         src_vq->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
->         src_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
->         src_vq->ops = &venc_vb2_ops;
-> -       src_vq->mem_ops = &vb2_dma_sg_memops;
-> +       src_vq->mem_ops = &vb2_dma_contig_memops;
->         src_vq->drv_priv = inst;
->         src_vq->buf_struct_size = sizeof(struct venus_buffer);
->         src_vq->allow_zero_bytesused = 1;
-> @@ -1017,7 +1017,7 @@ static int m2m_queue_init(void *priv, struct vb2_queue *src_vq,
->         dst_vq->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
->         dst_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
->         dst_vq->ops = &venc_vb2_ops;
-> -       dst_vq->mem_ops = &vb2_dma_sg_memops;
-> +       dst_vq->mem_ops = &vb2_dma_contig_memops;
->         dst_vq->drv_priv = inst;
->         dst_vq->buf_struct_size = sizeof(struct venus_buffer);
->         dst_vq->allow_zero_bytesused = 1;
-> --
-> 2.29.2.684.gfbc64c5ab5-goog
->
+------------------------------------------
+[...truncated 3.63 KB...]
+Saving to: ‘linux-media.tar.bz2.md5.tmp’
+
+     0K                                                       100%  123M=0s
+
+2020-12-15 09:16:42 (123 MB/s) - ‘linux-media.tar.bz2.md5.tmp’ saved [105/105]
+
+--2020-12-15 09:16:42--  http://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2
+Resolving linuxtv.org (linuxtv.org)... 130.149.80.248
+Connecting to linuxtv.org (linuxtv.org)|130.149.80.248|:80... connected.
+HTTP request sent, awaiting response... 301 Moved Permanently
+Location: https://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2 [following]
+--2020-12-15 09:16:43--  https://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2
+Connecting to linuxtv.org (linuxtv.org)|130.149.80.248|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 7186772 (6.9M) [application/x-bzip2]
+Saving to: ‘linux-media.tar.bz2’
+
+     0K .......... .......... .......... .......... ..........  0%  163K 43s
+    50K .......... .......... .......... .......... ..........  1%  327K 32s
+   100K .......... .......... .......... .......... ..........  2% 15.1M 21s
+   150K .......... .......... .......... .......... ..........  2% 13.5M 16s
+   200K .......... .......... .......... .......... ..........  3%  337K 17s
+   250K .......... .......... .......... .......... ..........  4% 15.6M 14s
+   300K .......... .......... .......... .......... ..........  4% 14.4M 12s
+   350K .......... .......... .......... .......... ..........  5% 14.1M 10s
+   400K .......... .......... .......... .......... ..........  6%  351K 11s
+   450K .......... .......... .......... .......... ..........  7% 14.5M 10s
+   500K .......... .......... .......... .......... ..........  7% 18.6M 9s
+   550K .......... .......... .......... .......... ..........  8% 19.7M 8s
+   600K .......... .......... .......... .......... ..........  9% 19.3M 8s
+   650K .......... .......... .......... .......... ..........  9% 22.5M 7s
+   700K .......... .......... .......... .......... .......... 10% 21.4M 7s
+   750K .......... .......... .......... .......... .......... 11% 14.2M 6s
+   800K .......... .......... .......... .......... .......... 12% 16.0M 6s
+   850K .......... .......... .......... .......... .......... 12%  384K 6s
+   900K .......... .......... .......... .......... .......... 13% 23.3M 6s
+   950K .......... .......... .......... .......... .......... 14% 23.0M 6s
+  1000K .......... .......... .......... .......... .......... 14% 21.6M 5s
+  1050K .......... .......... .......... .......... .......... 15% 26.8M 5s
+  1100K .......... .......... .......... .......... .......... 16% 22.1M 5s
+  1150K .......... .......... .......... .......... .......... 17% 30.0M 5s
+  1200K .......... .......... .......... .......... .......... 17% 18.3M 4s
+  1250K .......... .......... .......... .......... .......... 18% 25.9M 4s
+  1300K .......... .......... .......... .......... .......... 19% 25.9M 4s
+  1350K .......... .......... .......... .......... .......... 19% 28.9M 4s
+  1400K .......... .......... .......... .......... .......... 20% 23.9M 4s
+  1450K .......... .......... .......... .......... .......... 21% 25.0M 3s
+  1500K .......... .......... .......... .......... .......... 22% 28.6M 3s
+  1550K .......... .......... .......... .......... .......... 22% 25.8M 3s
+  1600K .......... .......... .......... .......... .......... 23% 19.3M 3s
+  1650K .......... .......... .......... .......... .......... 24% 25.5M 3s
+  1700K .......... .......... .......... .......... .......... 24% 24.4M 3s
+  1750K .......... .......... .......... .......... .......... 25%  422K 3s
+  1800K .......... .......... .......... .......... .......... 26% 38.5M 3s
+  1850K .......... .......... .......... .......... .......... 27% 40.7M 3s
+  1900K .......... .......... .......... .......... .......... 27% 42.9M 3s
+  1950K .......... .......... .......... .......... .......... 28% 44.8M 3s
+  2000K .......... .......... .......... .......... .......... 29% 30.3M 3s
+  2050K .......... .......... .......... .......... .......... 29% 39.5M 3s
+  2100K .......... .......... .......... .......... .......... 30% 43.1M 2s
+  2150K .......... .......... .......... .......... .......... 31% 49.7M 2s
+  2200K .......... .......... .......... .......... .......... 32% 27.5M 2s
+  2250K .......... .......... .......... .......... .......... 32% 62.3M 2s
+  2300K .......... .......... .......... .......... .......... 33% 20.5M 2s
+  2350K .......... .......... .......... .......... .......... 34% 32.3M 2s
+  2400K .......... .......... .......... .......... .......... 34% 18.1M 2s
+  2450K .......... .......... .......... .......... .......... 35% 24.1M 2s
+  2500K .......... .......... .......... .......... .......... 36% 25.1M 2s
+  2550K .......... .......... .......... .......... .......... 37% 24.1M 2s
+  2600K .......... .......... .......... .......... .......... 37% 22.9M 2s
+  2650K .......... .......... .......... .......... .......... 38% 24.7M 2s
+  2700K .......... .......... .......... .......... .......... 39% 24.1M 2s
+  2750K .......... .......... .......... .......... .......... 39% 25.1M 2s
+  2800K .......... .......... .......... .......... .......... 40% 18.7M 2s
+  2850K .......... .......... .......... .......... .......... 41% 24.8M 2s
+  2900K .......... .......... .......... .......... .......... 42% 24.8M 2s
+  2950K .......... .......... .......... .......... .......... 42% 23.5M 1s
+  3000K .......... .......... .......... .......... .......... 43% 23.0M 1s
+  3050K .......... .......... .......... .......... .......... 44% 25.4M 1s
+  3100K .......... .......... .......... .......... .......... 44% 26.5M 1s
+  3150K .......... .......... .......... .......... .......... 45% 25.6M 1s
+  3200K .......... .......... .......... .......... .......... 46% 20.0M 1s
+  3250K .......... .......... .......... .......... .......... 47% 25.6M 1s
+  3300K .......... .......... .......... .......... .......... 47% 25.2M 1s
+  3350K .......... .......... .......... .......... .......... 48% 25.5M 1s
+  3400K .......... .......... .......... .......... .......... 49% 24.6M 1s
+  3450K .......... .......... .......... .......... .......... 49% 26.7M 1s
+  3500K .......... .......... .......... .......... .......... 50% 23.4M 1s
+  3550K .......... .......... .......... .......... .......... 51%  556K 1s
+  3600K .......... .......... .......... .......... .......... 52% 52.5M 1s
+  3650K .......... .......... .......... .......... .......... 52% 54.5M 1s
+  3700K .......... .......... .......... .......... .......... 53% 52.6M 1s
+  3750K .......... .......... .......... .......... .......... 54% 43.0M 1s
+  3800K .......... .......... .......... .......... .......... 54% 42.9M 1s
+  3850K .......... .......... .......... .......... .......... 55% 60.3M 1s
+  3900K .......... .......... .......... .......... .......... 56% 50.5M 1s
+  3950K .......... .......... .......... .......... .......... 56% 46.7M 1s
+  4000K .......... .......... .......... .......... .......... 57% 44.1M 1s
+  4050K .......... .......... .......... .......... .......... 58% 64.6M 1s
+  4100K .......... .......... .......... .......... .......... 59% 44.5M 1s
+  4150K .......... .......... .......... .......... .......... 59% 57.8M 1s
+  4200K .......... .......... .......... .......... .......... 60% 52.1M 1s
+  4250K .......... .......... .......... .......... .......... 61% 63.3M 1s
+  4300K .......... .......... .......... .......... .......... 61% 48.5M 1s
+  4350K .......... .......... .......... .......... .......... 62% 51.1M 1s
+  4400K .......... .......... .......... .......... .......... 63% 49.4M 1s
+  4450K .......... .......... .......... .......... .......... 64% 55.1M 1s
+  4500K .......... .......... .......... .......... .......... 64% 60.9M 1s
+  4550K .......... .......... .......... .......... .......... 65% 52.8M 1s
+  4600K .......... .......... .......... .......... .......... 66% 49.3M 1s
+  4650K .......... .......... .......... .......... .......... 66% 52.1M 1s
+  4700K .......... .......... .......... .......... .......... 67% 62.4M 1s
+  4750K .......... .......... .......... .......... .......... 68% 55.3M 1s
+  4800K .......... .......... .......... .......... .......... 69% 47.2M 1s
+  4850K .......... .......... .......... .......... .......... 69% 57.4M 1s
+  4900K .......... .......... .......... .......... .......... 70% 52.0M 1s
+  4950K .......... .......... .......... .......... .......... 71% 59.9M 1s
+  5000K .......... .......... .......... .......... .......... 71% 50.9M 0s
+  5050K .......... .......... .......... .......... .......... 72% 57.9M 0s
+  5100K .......... .......... .......... .......... .......... 73% 58.6M 0s
+  5150K .......... .......... .......... .......... .......... 74% 63.6M 0s
+  5200K .......... .......... .......... .......... .......... 74% 44.3M 0s
+  5250K .......... .......... .......... .......... .......... 75% 62.7M 0s
+  5300K .......... .......... .......... .......... .......... 76% 55.9M 0s
+  5350K .......... .......... .......... .......... .......... 76% 64.0M 0s
+  5400K .......... .......... .......... .......... .......... 77% 52.0M 0s
+  5450K .......... .......... .......... .......... .......... 78% 61.5M 0s
+  5500K .......... .......... .......... .......... .......... 79% 57.4M 0s
+  5550K .......... .......... .......... .......... .......... 79% 69.1M 0s
+  5600K .......... .......... .......... .......... .......... 80% 45.1M 0s
+  5650K .......... .......... .......... .......... .......... 81% 5.38M 0s
+  5700K .......... .......... .......... .......... .......... 81% 30.5M 0s
+  5750K .......... .......... .......... .......... .......... 82% 22.1M 0s
+  5800K .......... .......... .......... .......... .......... 83% 21.1M 0s
+  5850K .......... .......... .......... .......... .......... 84% 20.5M 0s
+  5900K .......... .......... .......... .......... .......... 84% 22.1M 0s
+  5950K .......... .......... .......... .......... .......... 85% 20.2M 0s
+  6000K .......... .......... .......... .......... .......... 86% 17.5M 0s
+  6050K .......... .......... .......... .......... .......... 86% 21.8M 0s
+  6100K .......... .......... .......... .......... .......... 87% 23.2M 0s
+  6150K .......... .......... .......... .......... .......... 88% 23.4M 0s
+  6200K .......... .......... .......... .......... .......... 89% 21.7M 0s
+  6250K .......... .......... .......... .......... .......... 89% 25.0M 0s
+  6300K .......... .......... .......... .......... .......... 90% 24.1M 0s
+  6350K .......... .......... .......... .......... .......... 91% 23.6M 0s
+  6400K .......... .......... .......... .......... .......... 91% 18.3M 0s
+  6450K .......... .......... .......... .......... .......... 92% 23.8M 0s
+  6500K .......... .......... .......... .......... .......... 93% 23.7M 0s
+  6550K .......... .......... .......... .......... .......... 94% 22.7M 0s
+  6600K .......... .......... .......... .......... .......... 94% 22.2M 0s
+  6650K .......... .......... .......... .......... .......... 95%  757K 0s
+  6700K .......... .......... .......... .......... .......... 96% 52.5M 0s
+  6750K .......... .......... .......... .......... .......... 96% 36.7M 0s
+  6800K .......... .......... .......... .......... .......... 97% 61.3M 0s
+  6850K .......... .......... .......... .......... .......... 98% 64.8M 0s
+  6900K .......... .......... .......... .......... .......... 99% 44.2M 0s
+  6950K .......... .......... .......... .......... .......... 99% 42.8M 0s
+  7000K .......... ........                                   100% 52.3M=1.4s
+
+2020-12-15 09:16:45 (4.94 MB/s) - ‘linux-media.tar.bz2’ saved [7186772/7186772]
+
+make: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+make: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+tar xfj linux-media.tar.bz2
+rm -f .patches_applied .linked_dir .git_log.md5
+make: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+**********************************************************
+* Downloading firmwares from linuxtv.org.                *
+**********************************************************
+firmware/dvb-usb-vp702x-01.fw
+firmware/dvb-usb-vp7045-01.fw
+firmware/dvb-fe-bcm3510-01.fw
+firmware/as102_data2_st.hex
+firmware/dvb-usb-terratec-h7-drxk.fw
+firmware/isdbt_nova_12mhz.inp
+firmware/Boot.S
+firmware/dvb_nova_12mhz_b0.inp
+firmware/dvb-fe-xc4000-1.4.1.fw
+firmware/sms1xxx-hcw-55xxx-isdbt-02.fw
+firmware/sms1xxx-nova-a-dvbt-01.fw
+firmware/dvb-usb-avertv-a800-02.fw
+firmware/cmmb_venice_12mhz.inp
+firmware/dvb-fe-xc5000c-4.1.30.7.fw
+firmware/v4l-cx23418-cpu.fw
+firmware/v4l-cx23885-enc-broken.fw
+firmware/dvb-fe-drxj-mc-vsb-1.0.8.fw
+firmware/dvb_nova_12mhz.inp
+firmware/dvb-usb-dib0700-1.20.fw
+firmware/tdmb_nova_12mhz.inp
+firmware/as102_data1_st.hex
+firmware/dvb-fe-or51132-vsb.fw
+firmware/dvb-usb-it9135-02.fw
+firmware/v4l-cx23418-apu.fw
+firmware/dvb-ttpci-01.fw-261f
+firmware/v4l-cx23418-dig.fw
+firmware/dvb-ttpci-01.fw-261c
+firmware/dvb-usb-bluebird-01.fw
+firmware/dvb-fe-or51211.fw
+firmware/dvb-fe-or51132-qam.fw
+firmware/sms1xxx-stellar-dvbt-01.fw
+firmware/dvb-usb-dibusb-5.0.0.11.fw
+firmware/dvb-fe-drxj-mc-vsb-qam-1.0.8.fw
+firmware/dvb-usb-terratec-h5-drxk.fw
+firmware/dvb-usb-wt220u-02.fw
+firmware/v4l-cx23885-enc.fw
+firmware/dvb-ttpci-01.fw-2622
+firmware/dvb-usb-wt220u-01.fw
+firmware/v4l-cx25840.fw
+firmware/dvb-fe-drxj-mc-1.0.8.fw
+firmware/v4l-cx231xx-avcore-01.fw
+firmware/dvb-usb-dtt200u-01.fw
+firmware/dvb-usb-dibusb-6.0.0.8.fw
+firmware/sms1xxx-nova-b-dvbt-01.fw
+firmware/dvb-fe-xc5000-1.6.114.fw
+firmware/cmmb_vega_12mhz.inp
+firmware/dvb-usb-it9135-01.fw
+firmware/isdbt_nova_12mhz_b0.inp
+firmware/dvb-ttpci-01.fw-261a
+firmware/dvb-ttpci-01.fw-261b
+firmware/dvb-ttpci-01.fw-261d
+firmware/README
+firmware/isdbt_rio.inp
+firmware/dvb-usb-umt-010-02.fw
+firmware/sms1xxx-hcw-55xxx-dvbt-02.fw
+firmware/dvb-usb-terratec-h7-az6007.fw
+firmware/v4l-cx23885-avcore-01.fw
+******************
+* Start building *
+******************
+make -C <https://builder.linuxtv.org/job/media-build/ws/v4l> allyesconfig
+make[1]: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
+make[2]: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+Applying patches for kernel 4.19.0-5-amd64
+patch -s -f -N -p1 -i ../backports/api_version.patch
+patch -s -f -N -p1 -i ../backports/pr_fmt.patch
+patch -s -f -N -p1 -i ../backports/debug.patch
+patch -s -f -N -p1 -i ../backports/drx39xxj.patch
+patch -s -f -N -p1 -i ../backports/ccs.patch
+patch -s -f -N -p1 -i ../backports/v5.9_tasklet.patch
+patch -s -f -N -p1 -i ../backports/v5.7_mmap_read_lock.patch
+patch -s -f -N -p1 -i ../backports/v5.7_vm_map_ram.patch
+1 out of 1 hunk FAILED
+make[2]: *** [Makefile:132: apply_patches] Error 1
+make[2]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+make[1]: *** [Makefile:378: allyesconfig] Error 2
+make[1]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
+make: *** [Makefile:26: allyesconfig] Error 2
+can't select all drivers at ./build line 531
+Build step 'Execute shell' marked build as failure
