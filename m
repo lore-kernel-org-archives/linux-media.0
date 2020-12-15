@@ -2,190 +2,213 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BFBBC2BB48
-	for <linux-media@archiver.kernel.org>; Tue, 15 Dec 2020 11:25:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2A26C4361B
+	for <linux-media@archiver.kernel.org>; Tue, 15 Dec 2020 11:36:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3856022285
-	for <linux-media@archiver.kernel.org>; Tue, 15 Dec 2020 11:25:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9D52E22255
+	for <linux-media@archiver.kernel.org>; Tue, 15 Dec 2020 11:36:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728747AbgLOLUb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 15 Dec 2020 06:20:31 -0500
-Received: from mail-eopbgr130083.outbound.protection.outlook.com ([40.107.13.83]:62016
-        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725535AbgLOLUX (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 15 Dec 2020 06:20:23 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=njh0hlS8SarXhbMTKEk5+TLSaIMLqc2fxHKSZh+pkcgeXsVZDEQ+nWvqmbFy8rW3gnPMGjPwEbwaz2P8aaR93giSoX7S9XZkxoAOB+tYfreWavAPE8ddTpI7SlbwlIyGRPIqYexhgq6geVm8syVcXLp2G8dVaVVR/+r6QUAWL+YOU+StOBEIjFVuuMevRfQ+1W49AyxXuo659ZBhH4oY5D+3xcPBQRiC54aDgZMcnA9Q4TucabS+NdsmZkeI4RdD3mjjqYXWqIn2O0YiOdomme9Sr4BL/qx/SCj1Gj4SdauSLGrdbTfSrxS1ExPLRT2p1eN5OOQibikwZYvF4FPzNw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4fjSSztFyXmrWlXW+9CELpnV1LCInU/n3kAg5nfEWgI=;
- b=bpiMFH7ejxjkxf2B5nw8+D8HlCSVmYRDudA2oA4JLgsrCi6BMv9HuiRF9rJRa6HTZMz9BpkMtkxy4gTxbFJz5GpCBFvZNvAAvIRshNC8FQAV6Mx3V2JzZwyEX+P07bwUws8vSVSpAbzLDFL1jlR9dw62Bp4mOgyJaucZdznTyEdKlxmpxvnr4GcoZRjrapWAn9/XZHhE4tq5vIvizgTaKon9qaB64NIQS7uzN2PwwMLUuvJcLn9JjK6X0/su2zWhfCCoU/ijKftSvK7eKyuDDJo14aVKCy7yYHSTo7S+HrPmswXqCx7fBV/+C2q1RICnxpm75frDNUaEoseR6Jx4RQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4fjSSztFyXmrWlXW+9CELpnV1LCInU/n3kAg5nfEWgI=;
- b=BnvbBlfYb7QSDhKC+5xSh4OjjmLZ9xNwYnyEi+j8RcqTgNlg5+rj/eg2Qa3y9L4I28JAauUNKYiRpiMWU68PPBr5E4DToxUu2O2ucVTsQBUEQfxqeWO5z9pU7YlxaJnu0r7S+lyonG7FAPJzBwq2NxQbjMa2Yws1I1Vi5N+5zqg=
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=oss.nxp.com;
-Received: from AM5PR04MB3137.eurprd04.prod.outlook.com (2603:10a6:206:c::18)
- by AM5PR0402MB2737.eurprd04.prod.outlook.com (2603:10a6:203:95::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.17; Tue, 15 Dec
- 2020 11:19:09 +0000
-Received: from AM5PR04MB3137.eurprd04.prod.outlook.com
- ([fe80::2d75:aaf5:5aa6:5de9]) by AM5PR04MB3137.eurprd04.prod.outlook.com
- ([fe80::2d75:aaf5:5aa6:5de9%6]) with mapi id 15.20.3654.024; Tue, 15 Dec 2020
- 11:19:09 +0000
-From:   "Mirela Rabulea (OSS)" <mirela.rabulea@oss.nxp.com>
-To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl, shawnguo@kernel.org,
-        robh+dt@kernel.org, p.zabel@pengutronix.de
-Cc:     paul.kocialkowski@bootlin.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
-        s.hauer@pengutronix.de, aisheng.dong@nxp.com,
-        daniel.baluta@nxp.com, robert.chiras@nxp.com,
-        laurentiu.palcu@nxp.com, mark.rutland@arm.com,
-        devicetree@vger.kernel.org, ezequiel@collabora.com,
-        laurent.pinchart+renesas@ideasonboard.com,
-        niklas.soderlund+renesas@ragnatech.se,
-        dafna.hirschfeld@collabora.com,
-        Mirela Rabulea <mirela.rabulea@nxp.com>
-Subject: [PATCH v6 1/9] media: v4l: Add packed YUV444 24bpp pixel format
-Date:   Tue, 15 Dec 2020 13:18:35 +0200
-Message-Id: <20201215111843.30269-2-mirela.rabulea@oss.nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201215111843.30269-1-mirela.rabulea@oss.nxp.com>
-References: <20201215111843.30269-1-mirela.rabulea@oss.nxp.com>
-Content-Type: text/plain
-X-Originating-IP: [79.115.51.151]
-X-ClientProxiedBy: VI1PR09CA0178.eurprd09.prod.outlook.com
- (2603:10a6:800:120::32) To AM5PR04MB3137.eurprd04.prod.outlook.com
- (2603:10a6:206:c::18)
+        id S1728252AbgLOLfk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 15 Dec 2020 06:35:40 -0500
+Received: from foss.arm.com ([217.140.110.172]:35446 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726176AbgLOLfZ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 15 Dec 2020 06:35:25 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C642D1FB;
+        Tue, 15 Dec 2020 03:34:39 -0800 (PST)
+Received: from [10.57.34.90] (unknown [10.57.34.90])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 857D33F66E;
+        Tue, 15 Dec 2020 03:34:38 -0800 (PST)
+Subject: Re: [PATCH] media: venus: use contig vb2 ops
+To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20201214125703.866998-1-acourbot@chromium.org>
+ <5319c101-f4a4-9c99-b15d-4999366f7a63@linaro.org>
+From:   Robin Murphy <robin.murphy@arm.com>
+Message-ID: <20d8bf0e-c15a-ffc8-4bcc-376dc5f6e414@arm.com>
+Date:   Tue, 15 Dec 2020 11:34:34 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from fsr-ub1664-134.ea.freescale.net (79.115.51.151) by VI1PR09CA0178.eurprd09.prod.outlook.com (2603:10a6:800:120::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.12 via Frontend Transport; Tue, 15 Dec 2020 11:19:08 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: b6e7f218-79bf-4b30-d6f9-08d8a0eb3e72
-X-MS-TrafficTypeDiagnostic: AM5PR0402MB2737:
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM5PR0402MB2737277FDB53BAD8C526F21ACEC60@AM5PR0402MB2737.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:238;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0UGXzk4bAVB8DydHAtREkjZ1CdeJXLGIkQuGm2ywZYAFnlf79aAI1CZFvdmXSVtDfAuimTaymU/8XRdYrvqe8WKW5dpfRm1eT0Gf3UCGq+P0zz5oKxIZ+uwd9ewMJA/uuY+K7Tq8QIXGowA/LKDmB2XkJg0NH8S6lS4mS0E3G5joVP81YCVeRQIBlqzPqjqvmQEAGVHI9o5ZEtaDGnDAKLROsSOSnn6phNQcpEbeJhXEeWjSI6LVdHx6q4k7hM5rB6T3TwhaeWJi1qwOnL3FE2vAr2rS4vQ5EiAjLcAuFiHNYTUnxBcPoU2gwowjgby3FHSHK6G/TxuUJJaGEaE19Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM5PR04MB3137.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6666004)(2616005)(16526019)(8936002)(52116002)(2906002)(1076003)(19627235002)(956004)(66946007)(6486002)(66556008)(66476007)(498600001)(6512007)(86362001)(8676002)(7416002)(83380400001)(6506007)(186003)(4326008)(26005)(5660300002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?OMKowvX+lw+/KUuFmzL/k0JqJPEItHwfbgKkG8e4C2PbaZWcD4cqNuVYNzWR?=
- =?us-ascii?Q?bcT19/rEhH/HQXVFNHnQmKVZL6H8iGnyUi++CnBrPlhO7PxaRffrT+KCFQg0?=
- =?us-ascii?Q?ebquZLl5xnU1lBUmxD9zwW9Zgb3fEbIPKqHQwpOPtqydcLG+BfamzD3sjueE?=
- =?us-ascii?Q?Nsqan6UOI7GZPZ5tr2uJp0TfnM6/iW04eahPa7lS3mu9uR40Q0gBX/oElXwt?=
- =?us-ascii?Q?BBYQXo5HIX92eDBC+dZvpyEmAUMcZD6baVt+QQKchRy0AMt7LX7QdqfXs9Lh?=
- =?us-ascii?Q?DRW6ktBx31+vDvVDdMdO354MYOtCMwfWzhItbJ0xaZR/a9zqV0yt26db1ACX?=
- =?us-ascii?Q?evj1tJU9FQ/CPUCOsEDBj/XWUvbkuZyQEYGsWiTWmxnrJYNvQJxt0YhOdCu5?=
- =?us-ascii?Q?APP2HAqv+gylEl9EZ71JOEQ73qhf+XHXzw8D2HH8WX0uj+sfjp3WJMldppPZ?=
- =?us-ascii?Q?R2738L7JLGQO4HoWlPOEjliwETr6GoVjtdoEvGzhYje3Avgx9McJZhcoOBRz?=
- =?us-ascii?Q?+uSzYUsvr0YxDzohE7Vc54265Z3yTDPN8QIjz6vHIReq6OjOgv/JfW7grra5?=
- =?us-ascii?Q?bqF5/aa/hbE1i+sw4VVMlVGTo1wq9q87BeuWy64SBuNvRAlJ4YM7DOMbFmm5?=
- =?us-ascii?Q?vLwPKc0U2WoNHmHVwq3Iz2strNxfDrAhoYXKhcZqlKr+pUO3tzB/pYFHkJk5?=
- =?us-ascii?Q?Xv+QRK7XgWiMnv5nIUS+CW8yTrEePI95361t24eGIxzy2PN/Ormq6cqBvDmL?=
- =?us-ascii?Q?FWb+6NieVZdQqgndc907cCB2qfotRmBOy8uMqsVRSnQ1V41XIVGaYTvyLhC1?=
- =?us-ascii?Q?ofMwWFlBnAy68GWGPOSF06FGoEURD5eV0WpCl39Y9JapMmo1/rraF8JGEZra?=
- =?us-ascii?Q?tgOjClZu752DNRaEh3ah2NNQy3QJAnlfqxyArAeCD5+cuYk64Q1uDpKrc9r9?=
- =?us-ascii?Q?oqGiEkIV6XV1RFyAEAokvZt8aIRuLnID/SHctVhgggEJgPzJvk2QVikvSn8N?=
- =?us-ascii?Q?R4aa?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-AuthSource: AM5PR04MB3137.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2020 11:19:09.7178
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-Network-Message-Id: b6e7f218-79bf-4b30-d6f9-08d8a0eb3e72
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CmW9yZoVjZxrm+TwGG7aQJMSTQUCeP1oy7/QSGANRFktD9whJd+3P9nnoAsNLGwqgXU5dJq1IjFvf45ceUgx7w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0402MB2737
+In-Reply-To: <5319c101-f4a4-9c99-b15d-4999366f7a63@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Mirela Rabulea <mirela.rabulea@nxp.com>
+On 2020-12-15 11:16, Stanimir Varbanov wrote:
+> Hi,
+> 
+> Cc: Robin
+> 
+> On 12/14/20 2:57 PM, Alexandre Courbot wrote:
+>> This driver uses the SG vb2 ops, but effectively only ever accesses the
+>> first entry of the SG table, indicating that it expects a flat layout.
+>> Switch it to use the contiguous ops to make sure this expected invariant
+> 
+> Under what circumstances the sg table will has nents > 1? I came down to
+> [1] but not sure I got it right.
+> 
+> I'm afraid that for systems with low amount of system memory and when
+> the memory become fragmented, the driver will not work. That's why I
+> started with sg allocator.
 
-The added format is V4L2_PIX_FMT_YUV24, this is a packed
-YUV 4:4:4 format, with 8 bits for each component, 24 bits
-per sample.
+Despite what videobuf-dma-contig seems to assume, dma_alloc_coherent() 
+makes no guarantee of providing physically contiguous memory. What it 
+provides is *DMA contiguous* memory, i.e. from the point of view of the 
+device. When an IOMMU is present and managed by the DMA API, such 
+buffers may be assembled out of physically-scattered pages (particularly 
+under memory pressure/fragmentation).
 
-This format is used by the i.MX 8QuadMax and i.MX 8DualXPlus/8QuadXPlus
-JPEG encoder/decoder.
+Robin.
 
-Signed-off-by: Mirela Rabulea <mirela.rabulea@nxp.com>
-Reviewed-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
----
-Changes in v6:
-  Updates due to Laurent Pinchart's commit:
-  2f2a387e9fa4 media: doc: pixfmt-packed-yuv: Express 4:4:4 formats in a more compact way
-
-  Added V4L2_PIX_FMT_YUV24 in the "Packed YUV Image Formats (8bpc)" table
-
- .../userspace-api/media/v4l/pixfmt-packed-yuv.rst      | 10 ++++++++++
- drivers/media/v4l2-core/v4l2-ioctl.c                   |  1 +
- include/uapi/linux/videodev2.h                         |  1 +
- 3 files changed, 12 insertions(+)
-
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-packed-yuv.rst b/Documentation/userspace-api/media/v4l/pixfmt-packed-yuv.rst
-index eb551b57557e..4515f713decf 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-packed-yuv.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-packed-yuv.rst
-@@ -220,6 +220,16 @@ the second byte and Y'\ :sub:`7-0` in the third byte.
-       - Y'\ :sub:`7-0`
-       - X\ :sub:`7-0`
- 
-+    * .. _V4L2-PIX-FMT-YUV24:
-+
-+      - ``V4L2_PIX_FMT_YUV24``
-+      - 'YUV3'
-+
-+      - Y'\ :sub:`7-0`
-+      - Cb\ :sub:`7-0`
-+      - Cr\ :sub:`7-0`
-+      - -\
-+
- .. note::
- 
-     - The alpha component is expected to contain a meaningful value that can be
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index 3198abdd538c..611768409d0b 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -1304,6 +1304,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
- 	case V4L2_PIX_FMT_YUV444:	descr = "16-bit A/XYUV 4-4-4-4"; break;
- 	case V4L2_PIX_FMT_YUV555:	descr = "16-bit A/XYUV 1-5-5-5"; break;
- 	case V4L2_PIX_FMT_YUV565:	descr = "16-bit YUV 5-6-5"; break;
-+	case V4L2_PIX_FMT_YUV24:	descr = "24-bit YUV 4:4:4 8-8-8"; break;
- 	case V4L2_PIX_FMT_YUV32:	descr = "32-bit A/XYUV 8-8-8-8"; break;
- 	case V4L2_PIX_FMT_AYUV32:	descr = "32-bit AYUV 8-8-8-8"; break;
- 	case V4L2_PIX_FMT_XYUV32:	descr = "32-bit XYUV 8-8-8-8"; break;
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 79dbde3bcf8d..9e4359be04eb 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -586,6 +586,7 @@ struct v4l2_pix_format {
- #define V4L2_PIX_FMT_YUV444  v4l2_fourcc('Y', '4', '4', '4') /* 16  xxxxyyyy uuuuvvvv */
- #define V4L2_PIX_FMT_YUV555  v4l2_fourcc('Y', 'U', 'V', 'O') /* 16  YUV-5-5-5     */
- #define V4L2_PIX_FMT_YUV565  v4l2_fourcc('Y', 'U', 'V', 'P') /* 16  YUV-5-6-5     */
-+#define V4L2_PIX_FMT_YUV24   v4l2_fourcc('Y', 'U', 'V', '3') /* 24  YUV-8-8-8     */
- #define V4L2_PIX_FMT_YUV32   v4l2_fourcc('Y', 'U', 'V', '4') /* 32  YUV-8-8-8-8   */
- #define V4L2_PIX_FMT_AYUV32  v4l2_fourcc('A', 'Y', 'U', 'V') /* 32  AYUV-8-8-8-8  */
- #define V4L2_PIX_FMT_XYUV32  v4l2_fourcc('X', 'Y', 'U', 'V') /* 32  XYUV-8-8-8-8  */
--- 
-2.17.1
-
+> 
+> [1]
+> https://elixir.bootlin.com/linux/v5.10.1/source/drivers/iommu/dma-iommu.c#L782
+> 
+>> is always enforced. Since the device is supposed to be behind an IOMMU
+>> this should have little to none practical consequences beyond making the
+>> driver not rely on a particular behavior of the SG implementation.
+>>
+>> Reported-by: Tomasz Figa <tfiga@chromium.org>
+>> Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
+>> ---
+>> Hi everyone,
+>>
+>> It probably doesn't hurt to fix this issue before some actual issue happens.
+>> I have tested this patch on Chrome OS and playback was just as fine as with
+>> the SG ops.
+>>
+>>   drivers/media/platform/Kconfig              | 2 +-
+>>   drivers/media/platform/qcom/venus/helpers.c | 9 ++-------
+>>   drivers/media/platform/qcom/venus/vdec.c    | 6 +++---
+>>   drivers/media/platform/qcom/venus/venc.c    | 6 +++---
+>>   4 files changed, 9 insertions(+), 14 deletions(-)
+>>
+>> diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
+>> index 35a18d388f3f..d9d7954111f2 100644
+>> --- a/drivers/media/platform/Kconfig
+>> +++ b/drivers/media/platform/Kconfig
+>> @@ -533,7 +533,7 @@ config VIDEO_QCOM_VENUS
+>>   	depends on INTERCONNECT || !INTERCONNECT
+>>   	select QCOM_MDT_LOADER if ARCH_QCOM
+>>   	select QCOM_SCM if ARCH_QCOM
+>> -	select VIDEOBUF2_DMA_SG
+>> +	select VIDEOBUF2_DMA_CONTIG
+>>   	select V4L2_MEM2MEM_DEV
+>>   	help
+>>   	  This is a V4L2 driver for Qualcomm Venus video accelerator
+>> diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
+>> index 50439eb1ffea..859d260f002b 100644
+>> --- a/drivers/media/platform/qcom/venus/helpers.c
+>> +++ b/drivers/media/platform/qcom/venus/helpers.c
+>> @@ -7,7 +7,7 @@
+>>   #include <linux/mutex.h>
+>>   #include <linux/slab.h>
+>>   #include <linux/kernel.h>
+>> -#include <media/videobuf2-dma-sg.h>
+>> +#include <media/videobuf2-dma-contig.h>
+>>   #include <media/v4l2-mem2mem.h>
+>>   #include <asm/div64.h>
+>>   
+>> @@ -1284,14 +1284,9 @@ int venus_helper_vb2_buf_init(struct vb2_buffer *vb)
+>>   	struct venus_inst *inst = vb2_get_drv_priv(vb->vb2_queue);
+>>   	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
+>>   	struct venus_buffer *buf = to_venus_buffer(vbuf);
+>> -	struct sg_table *sgt;
+>> -
+>> -	sgt = vb2_dma_sg_plane_desc(vb, 0);
+>> -	if (!sgt)
+>> -		return -EFAULT;
+>>   
+>>   	buf->size = vb2_plane_size(vb, 0);
+>> -	buf->dma_addr = sg_dma_address(sgt->sgl);
+> 
+> Can we do it:
+> 
+> 	if (WARN_ON(sgt->nents > 1))
+> 		return -EFAULT;
+> 
+> I understand that logically using dma-sg when the flat layout is
+> expected by the hardware is wrong, but I haven't seen issues until now.
+> 
+>> +	buf->dma_addr = vb2_dma_contig_plane_dma_addr(vb, 0);
+>>   
+>>   	if (vb->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE)
+>>   		list_add_tail(&buf->reg_list, &inst->registeredbufs);
+>> diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+>> index 8488411204c3..3fb277c81aca 100644
+>> --- a/drivers/media/platform/qcom/venus/vdec.c
+>> +++ b/drivers/media/platform/qcom/venus/vdec.c
+>> @@ -13,7 +13,7 @@
+>>   #include <media/v4l2-event.h>
+>>   #include <media/v4l2-ctrls.h>
+>>   #include <media/v4l2-mem2mem.h>
+>> -#include <media/videobuf2-dma-sg.h>
+>> +#include <media/videobuf2-dma-contig.h>
+>>   
+>>   #include "hfi_venus_io.h"
+>>   #include "hfi_parser.h"
+>> @@ -1461,7 +1461,7 @@ static int m2m_queue_init(void *priv, struct vb2_queue *src_vq,
+>>   	src_vq->io_modes = VB2_MMAP | VB2_DMABUF;
+>>   	src_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
+>>   	src_vq->ops = &vdec_vb2_ops;
+>> -	src_vq->mem_ops = &vb2_dma_sg_memops;
+>> +	src_vq->mem_ops = &vb2_dma_contig_memops;
+>>   	src_vq->drv_priv = inst;
+>>   	src_vq->buf_struct_size = sizeof(struct venus_buffer);
+>>   	src_vq->allow_zero_bytesused = 1;
+>> @@ -1475,7 +1475,7 @@ static int m2m_queue_init(void *priv, struct vb2_queue *src_vq,
+>>   	dst_vq->io_modes = VB2_MMAP | VB2_DMABUF;
+>>   	dst_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
+>>   	dst_vq->ops = &vdec_vb2_ops;
+>> -	dst_vq->mem_ops = &vb2_dma_sg_memops;
+>> +	dst_vq->mem_ops = &vb2_dma_contig_memops;
+>>   	dst_vq->drv_priv = inst;
+>>   	dst_vq->buf_struct_size = sizeof(struct venus_buffer);
+>>   	dst_vq->allow_zero_bytesused = 1;
+>> diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
+>> index 1c61602c5de1..a09550cd1dba 100644
+>> --- a/drivers/media/platform/qcom/venus/venc.c
+>> +++ b/drivers/media/platform/qcom/venus/venc.c
+>> @@ -10,7 +10,7 @@
+>>   #include <linux/pm_runtime.h>
+>>   #include <linux/slab.h>
+>>   #include <media/v4l2-mem2mem.h>
+>> -#include <media/videobuf2-dma-sg.h>
+>> +#include <media/videobuf2-dma-contig.h>
+>>   #include <media/v4l2-ioctl.h>
+>>   #include <media/v4l2-event.h>
+>>   #include <media/v4l2-ctrls.h>
+>> @@ -1001,7 +1001,7 @@ static int m2m_queue_init(void *priv, struct vb2_queue *src_vq,
+>>   	src_vq->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
+>>   	src_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
+>>   	src_vq->ops = &venc_vb2_ops;
+>> -	src_vq->mem_ops = &vb2_dma_sg_memops;
+>> +	src_vq->mem_ops = &vb2_dma_contig_memops;
+>>   	src_vq->drv_priv = inst;
+>>   	src_vq->buf_struct_size = sizeof(struct venus_buffer);
+>>   	src_vq->allow_zero_bytesused = 1;
+>> @@ -1017,7 +1017,7 @@ static int m2m_queue_init(void *priv, struct vb2_queue *src_vq,
+>>   	dst_vq->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
+>>   	dst_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
+>>   	dst_vq->ops = &venc_vb2_ops;
+>> -	dst_vq->mem_ops = &vb2_dma_sg_memops;
+>> +	dst_vq->mem_ops = &vb2_dma_contig_memops;
+>>   	dst_vq->drv_priv = inst;
+>>   	dst_vq->buf_struct_size = sizeof(struct venus_buffer);
+>>   	dst_vq->allow_zero_bytesused = 1;
+>>
+> 
