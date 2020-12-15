@@ -5,110 +5,142 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F241C2BB48
-	for <linux-media@archiver.kernel.org>; Tue, 15 Dec 2020 17:13:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92A8AC4361B
+	for <linux-media@archiver.kernel.org>; Tue, 15 Dec 2020 18:09:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CF6702224C
-	for <linux-media@archiver.kernel.org>; Tue, 15 Dec 2020 17:13:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 550F420578
+	for <linux-media@archiver.kernel.org>; Tue, 15 Dec 2020 18:09:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730422AbgLORNU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 15 Dec 2020 12:13:20 -0500
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:48335 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728878AbgLORKn (ORCPT
+        id S1730333AbgLOSJq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 15 Dec 2020 13:09:46 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:44072 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727664AbgLOSJf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 15 Dec 2020 12:10:43 -0500
-X-Originating-IP: 93.34.118.233
-Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id BB9A71C0007;
-        Tue, 15 Dec 2020 17:09:59 +0000 (UTC)
-From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
-To:     kieran.bingham+renesas@ideasonboard.com,
-        laurent.pinchart+renesas@ideasonboard.com,
-        niklas.soderlund+renesas@ragnatech.se, geert@linux-m68k.org
-Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hyun Kwon <hyunk@xilinx.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        sergei.shtylyov@gmail.com,
-        Kieran Bingham <kieran.bingham+renesasa@ideasonboard.com>
-Subject: [PATCH v6 3/5] media: i2c: max9286: Break-out reverse channel setup
-Date:   Tue, 15 Dec 2020 18:09:55 +0100
-Message-Id: <20201215170957.92761-4-jacopo+renesas@jmondi.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201215170957.92761-1-jacopo+renesas@jmondi.org>
-References: <20201215170957.92761-1-jacopo+renesas@jmondi.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Tue, 15 Dec 2020 13:09:35 -0500
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 15 Dec 2020 10:08:54 -0800
+X-QCInternal: smtphost
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 15 Dec 2020 10:08:52 -0800
+X-QCInternal: smtphost
+Received: from dikshita-linux.qualcomm.com ([10.204.65.237])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 15 Dec 2020 23:38:39 +0530
+Received: by dikshita-linux.qualcomm.com (Postfix, from userid 347544)
+        id 10A7421427; Tue, 15 Dec 2020 23:38:37 +0530 (IST)
+From:   Dikshita Agarwal <dikshita@codeaurora.org>
+To:     linux-media@vger.kernel.org, stanimir.varbanov@linaro.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        vgarodia@codeaurora.org, Dikshita Agarwal <dikshita@codeaurora.org>
+Subject: [PATCH v5] venus: core: add support to dump FW region
+Date:   Tue, 15 Dec 2020 23:38:36 +0530
+Message-Id: <1608055716-14796-1-git-send-email-dikshita@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Break out the reverse channel setup configuration procedure to its own
-function.
+Add support to dump video FW region during FW crash
+using devcoredump helpers.
 
-This change prepares for configuring the reverse channel conditionally
-to the remote side high threshold configuration.
+Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Reviewed-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 
-No functional changes intended.
-
-Reviewed-by: Kieran Bingham <kieran.bingham+renesasa@ideasonboard.com>
-Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+Major changes since v1:
+- update the name of function (Stephen)
+- store start address and size in resource structure during
+  probe and reuse while dumping (Stephen, Stanimir)
 ---
- drivers/media/i2c/max9286.c | 30 +++++++++++++++++-------------
- 1 file changed, 17 insertions(+), 13 deletions(-)
+ drivers/media/platform/qcom/venus/core.c     | 30 ++++++++++++++++++++++++++++
+ drivers/media/platform/qcom/venus/core.h     |  2 ++
+ drivers/media/platform/qcom/venus/firmware.c |  3 +++
+ 3 files changed, 35 insertions(+)
 
-diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
-index c82c1493e099..1cfc8801c0b2 100644
---- a/drivers/media/i2c/max9286.c
-+++ b/drivers/media/i2c/max9286.c
-@@ -336,6 +336,22 @@ static void max9286_configure_i2c(struct max9286_priv *priv, bool localack)
- 	usleep_range(3000, 5000);
- }
+diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+index bdd293f..1cc57ee 100644
+--- a/drivers/media/platform/qcom/venus/core.c
++++ b/drivers/media/platform/qcom/venus/core.c
+@@ -7,6 +7,7 @@
+ #include <linux/interconnect.h>
+ #include <linux/ioctl.h>
+ #include <linux/delay.h>
++#include <linux/devcoredump.h>
+ #include <linux/list.h>
+ #include <linux/module.h>
+ #include <linux/of_device.h>
+@@ -22,6 +23,33 @@
+ #include "firmware.h"
+ #include "pm_helpers.h"
  
-+static void max9286_reverse_channel_setup(struct max9286_priv *priv)
++static void venus_coredump(struct venus_core *core)
 +{
-+	/*
-+	 * Reverse channel setup.
-+	 *
-+	 * - Enable custom reverse channel configuration (through register 0x3f)
-+	 *   and set the first pulse length to 35 clock cycles.
-+	 * - Increase the reverse channel amplitude to 170mV to accommodate the
-+	 *   high threshold enabled by the serializer driver.
-+	 */
-+	max9286_write(priv, 0x3f, MAX9286_EN_REV_CFG | MAX9286_REV_FLEN(35));
-+	max9286_write(priv, 0x3b, MAX9286_REV_TRF(1) | MAX9286_REV_AMP(70) |
-+		      MAX9286_REV_AMP_X);
-+	usleep_range(2000, 2500);
++	struct device *dev;
++	phys_addr_t mem_phys;
++	size_t mem_size;
++	void *mem_va;
++	void *data;
++
++	dev = core->dev;
++	mem_phys = core->fw.mem_phys;
++	mem_size = core->fw.mem_size;
++
++	mem_va = memremap(mem_phys, mem_size, MEMREMAP_WC);
++	if (!mem_va)
++		return;
++
++	data = vmalloc(mem_size);
++	if (!data) {
++		memunmap(mem_va);
++		return;
++	}
++
++	memcpy(data, mem_va, mem_size);
++	memunmap(mem_va);
++	dev_coredumpv(dev, data, mem_size, GFP_KERNEL);
 +}
 +
- /*
-  * max9286_check_video_links() - Make sure video links are detected and locked
-  *
-@@ -941,19 +957,7 @@ static int max9286_setup(struct max9286_priv *priv)
- 	 * only. This should be disabled after the mux is initialised.
- 	 */
- 	max9286_configure_i2c(priv, true);
--
--	/*
--	 * Reverse channel setup.
--	 *
--	 * - Enable custom reverse channel configuration (through register 0x3f)
--	 *   and set the first pulse length to 35 clock cycles.
--	 * - Increase the reverse channel amplitude to 170mV to accommodate the
--	 *   high threshold enabled by the serializer driver.
--	 */
--	max9286_write(priv, 0x3f, MAX9286_EN_REV_CFG | MAX9286_REV_FLEN(35));
--	max9286_write(priv, 0x3b, MAX9286_REV_TRF(1) | MAX9286_REV_AMP(70) |
--		      MAX9286_REV_AMP_X);
--	usleep_range(2000, 2500);
-+	max9286_reverse_channel_setup(priv);
+ static void venus_event_notify(struct venus_core *core, u32 event)
+ {
+ 	struct venus_inst *inst;
+@@ -67,6 +95,8 @@ static void venus_sys_error_handler(struct work_struct *work)
  
- 	/*
- 	 * Enable GMSL links, mask unused ones and autodetect link
+ 	venus_shutdown(core);
+ 
++	venus_coredump(core);
++
+ 	pm_runtime_put_sync(core->dev);
+ 
+ 	while (core->pmdomains[0] && pm_runtime_active(core->pmdomains[0]))
+diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
+index 3a477fc..b37de95 100644
+--- a/drivers/media/platform/qcom/venus/core.h
++++ b/drivers/media/platform/qcom/venus/core.h
+@@ -178,6 +178,8 @@ struct venus_core {
+ 		struct device *dev;
+ 		struct iommu_domain *iommu_domain;
+ 		size_t mapped_mem_size;
++		phys_addr_t mem_phys;
++		size_t mem_size;
+ 	} fw;
+ 	struct mutex lock;
+ 	struct list_head instances;
+diff --git a/drivers/media/platform/qcom/venus/firmware.c b/drivers/media/platform/qcom/venus/firmware.c
+index d03e2dd..89defc2 100644
+--- a/drivers/media/platform/qcom/venus/firmware.c
++++ b/drivers/media/platform/qcom/venus/firmware.c
+@@ -201,6 +201,9 @@ int venus_boot(struct venus_core *core)
+ 		return -EINVAL;
+ 	}
+ 
++	core->fw.mem_size = mem_size;
++	core->fw.mem_phys = mem_phys;
++
+ 	if (core->use_tz)
+ 		ret = qcom_scm_pas_auth_and_reset(VENUS_PAS_ID);
+ 	else
 -- 
-2.29.2
+2.7.4
 
