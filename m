@@ -2,143 +2,82 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3666DC4361B
-	for <linux-media@archiver.kernel.org>; Wed, 16 Dec 2020 17:58:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E89D5C1B0D8
+	for <linux-media@archiver.kernel.org>; Wed, 16 Dec 2020 22:00:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F029A23EB2
-	for <linux-media@archiver.kernel.org>; Wed, 16 Dec 2020 17:58:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A5296238A0
+	for <linux-media@archiver.kernel.org>; Wed, 16 Dec 2020 22:00:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728613AbgLPR6d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Dec 2020 12:58:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44356 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728608AbgLPR6c (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Dec 2020 12:58:32 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041C9C061794
-        for <linux-media@vger.kernel.org>; Wed, 16 Dec 2020 09:57:51 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id l11so50611691lfg.0
-        for <linux-media@vger.kernel.org>; Wed, 16 Dec 2020 09:57:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=3ZAA26HLG36Xvu0N7Lw9uUcJ1NvzFfW1dGKLX9h8st0=;
-        b=JCF0T0BdODPAh9sgJ0Dbubl6gNI0wTOnfeA1T8bbhNeo4Vdg0ZcFBOsPWNhOsF0Nrb
-         1uxgjazlpeN28DWB8onxe+uttiZ4WdgiQF/Z/hkz0JVHGKR8LveLBh3U6msHCD6KzhAE
-         Kpo+GSw98uqa7eMuQ4zw7Bkai/n2qV0oPMn3ACiMf9UFrVlUv47zskfzOpBbKST+Tg2i
-         xA6/UXlcrTrl3Xj7jEzqmU9/zq4GX81slNt0zdoGXz2DGwVxjt1rz7o+fOTdcHpstuB+
-         l8kcyn+4nf19fOG7jXArN0uKS+OAoyWkx28Qo1ZNAQzARyAPJj1YgL1Slows/ghyHmNU
-         13fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=3ZAA26HLG36Xvu0N7Lw9uUcJ1NvzFfW1dGKLX9h8st0=;
-        b=QgA5sytngbjfee5MKOmeVj+HoDR1d6B2qHGi4A+Rzzk1KQTYES64RJZiMsooORiA59
-         p5EPR+tRhCvDWtRAQjAxoHTOKiKUCP0ukP8QnOTiG5d/mVe7Fxnegmw2d/vfs1Nf3fpt
-         W5yUgvtcZ4jWNEUAFqUHZ34vToo1f8piCRbDutMKpKlid93xsn/kgZy7/fd660P5DYyB
-         Qw6FCoM2TTUz+9aQiv/dwOPicrYtLflF9O+uACCmNozFrq8V22rOY7jifTw76JjQyOGd
-         V3bVnibIGsgC4CvuvK9MWRx6I7CbY5qaymiX2iKW0VuSO15isy6WmB0l6BLV3ayqHF4W
-         flIQ==
-X-Gm-Message-State: AOAM53245a6WBmwD0CyZsfN+dFRK5f0rjDnKL9+V6SVNs2PqXsBMxy6P
-        x9zLCBaecj5eayc2zHZ0RVpQPgUDrKyPUke8Imodng==
-X-Google-Smtp-Source: ABdhPJw5c3OCJIuoNhHcuvnrQn7/ICbS3gk2kd2nIfl23ui/Q3VovlTktYiHjFn9OPyAOKgVVUNg5KEldFqYcRrHNvQ=
-X-Received: by 2002:a19:8c8:: with SMTP id 191mr12977544lfi.492.1608141469335;
- Wed, 16 Dec 2020 09:57:49 -0800 (PST)
+        id S1729984AbgLPWAc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Dec 2020 17:00:32 -0500
+Received: from mga05.intel.com ([192.55.52.43]:8298 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729966AbgLPWAc (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 16 Dec 2020 17:00:32 -0500
+IronPort-SDR: tAsTYMUp6MhYDV4v4nbITbnktxA7zzub86sK4hj2rTphr+PgXJ3TBPZzM8r2baUGYHE+LEbETp
+ pAy2GNATjVUQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9837"; a="259868418"
+X-IronPort-AV: E=Sophos;i="5.78,425,1599548400"; 
+   d="scan'208";a="259868418"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2020 13:58:46 -0800
+IronPort-SDR: g6StFyQyNI6oqus3+ogWUBPUnZzHoq6z1zKSGaGYnEB/jpQHAqtKlwbg+pLHIYu61oTWezrZ+O
+ //vTJhsbLJBA==
+X-IronPort-AV: E=Sophos;i="5.78,425,1599548400"; 
+   d="scan'208";a="379412408"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2020 13:58:42 -0800
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id F2B6820726; Wed, 16 Dec 2020 23:58:40 +0200 (EET)
+Date:   Wed, 16 Dec 2020 23:58:40 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Guennadi Liakhovetski <g.liakhovetski@gmx.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] media: dt-bindings: Convert video-interfaces.txt
+ properties to schemas
+Message-ID: <20201216215840.GM26370@paasikivi.fi.intel.com>
+References: <20201210211625.3070388-1-robh@kernel.org>
+ <20201210211625.3070388-5-robh@kernel.org>
+ <X9ofJMIivzPzi8x7@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-References: <20201215235334.GA227480@roeck-us.net> <20201216004931.113505-1-john.stultz@linaro.org>
-In-Reply-To: <20201216004931.113505-1-john.stultz@linaro.org>
-From:   Sumit Semwal <sumit.semwal@linaro.org>
-Date:   Wed, 16 Dec 2020 23:27:37 +0530
-Message-ID: <CAO_48GGgK8uAVb7pBvusX8ZkQ1B0op4PmqYt7246ZH62aM7J8A@mail.gmail.com>
-Subject: Re: [PATCH] dma-buf: cma_heap: Include linux/vmalloc.h to fix build
- failures on MIPS
-To:     John Stultz <john.stultz@linaro.org>
-Cc:     lkml <linux-kernel@vger.kernel.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@kernel.org>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sandeep Patil <sspatil@google.com>,
-        Daniel Mentz <danielmentz@google.com>,
-        Chris Goldsworthy <cgoldswo@codeaurora.org>,
-        =?UTF-8?Q?=C3=98rjan_Eide?= <orjan.eide@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Simon Ser <contact@emersion.fr>,
-        James Jones <jajones@nvidia.com>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>,
-        DRI mailing list <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <X9ofJMIivzPzi8x7@pendragon.ideasonboard.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi John,
+Hi Laurent,
 
+On Wed, Dec 16, 2020 at 04:52:20PM +0200, Laurent Pinchart wrote:
+> > +  clock-lanes:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    # Assume up to 9 physical lane indices
+> > +    maximum: 8
+> > +    description:
+> > +      Physical clock lane index. Position of an entry determines
+> 
+> s/index/indexes/ (or indices) as there are potentially multiple entries
+> (even if in practice, for all bus types we currently support, only one
+> clock lane is supported) ?
 
-On Wed, 16 Dec 2020 at 06:19, John Stultz <john.stultz@linaro.org> wrote:
->
-> We need to include <linux/vmalloc.h> in order for MIPS to find
-> vmap(), as it doesn't otherwise get included there.
->
-> Without this patch, one can hit the following build error:
->   drivers/dma-buf/heaps/cma_heap.c: In function 'cma_heap_do_vmap':
->   drivers/dma-buf/heaps/cma_heap.c:195:10: error: implicit declaration of=
- function 'vmap'
+We could easily change it if that appears.
 
-Thanks for the patch; I've merged it to drm-misc-next-fixes.
+The property was named in plural to align with data-lanes, without
+intention of having more clock lanes. We could of course allow more if that
+happens, but I doubt it.
 
->
-> Cc: Sumit Semwal <sumit.semwal@linaro.org>
-> Cc: Liam Mark <lmark@codeaurora.org>
-> Cc: Laura Abbott <labbott@kernel.org>
-> Cc: Brian Starkey <Brian.Starkey@arm.com>
-> Cc: Hridya Valsaraju <hridya@google.com>
-> Cc: Suren Baghdasaryan <surenb@google.com>
-> Cc: Sandeep Patil <sspatil@google.com>
-> Cc: Daniel Mentz <danielmentz@google.com>
-> Cc: Chris Goldsworthy <cgoldswo@codeaurora.org>
-> Cc: =C3=98rjan Eide <orjan.eide@arm.com>
-> Cc: Robin Murphy <robin.murphy@arm.com>
-> Cc: Ezequiel Garcia <ezequiel@collabora.com>
-> Cc: Simon Ser <contact@emersion.fr>
-> Cc: James Jones <jajones@nvidia.com>
-> Cc: linux-media@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Fixes: a5d2d29e24be ("dma-buf: heaps: Move heap-helper logic into the cma=
-_heap implementation")
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: John Stultz <john.stultz@linaro.org>
-> ---
->  drivers/dma-buf/heaps/cma_heap.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/dma-buf/heaps/cma_heap.c b/drivers/dma-buf/heaps/cma=
-_heap.c
-> index 5e7c3436310c..3c4e34301172 100644
-> --- a/drivers/dma-buf/heaps/cma_heap.c
-> +++ b/drivers/dma-buf/heaps/cma_heap.c
-> @@ -20,6 +20,7 @@
->  #include <linux/module.h>
->  #include <linux/scatterlist.h>
->  #include <linux/slab.h>
-> +#include <linux/vmalloc.h>
->
->
->  struct cma_heap {
-> --
-> 2.17.1
->
-Best,
-Sumit.
+-- 
+Sakari Ailus
