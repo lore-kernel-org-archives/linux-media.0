@@ -5,34 +5,36 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC20EC4361B
-	for <linux-media@archiver.kernel.org>; Wed, 16 Dec 2020 13:21:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4760BC0018C
+	for <linux-media@archiver.kernel.org>; Wed, 16 Dec 2020 13:22:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8F8DE2339F
-	for <linux-media@archiver.kernel.org>; Wed, 16 Dec 2020 13:21:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EFF3A233E2
+	for <linux-media@archiver.kernel.org>; Wed, 16 Dec 2020 13:22:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726326AbgLPNVl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Dec 2020 08:21:41 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:9622 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725550AbgLPNVl (ORCPT
+        id S1726350AbgLPNWa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Dec 2020 08:22:30 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:10047 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726333AbgLPNW3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Dec 2020 08:21:41 -0500
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4CwwjK6sdjz15cRM;
-        Wed, 16 Dec 2020 21:20:21 +0800 (CST)
+        Wed, 16 Dec 2020 08:22:29 -0500
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4Cwwk22H1dzM3x2;
+        Wed, 16 Dec 2020 21:20:58 +0800 (CST)
 Received: from ubuntu.network (10.175.138.68) by
- DGGEMS405-HUB.china.huawei.com (10.3.19.205) with Microsoft SMTP Server id
- 14.3.498.0; Wed, 16 Dec 2020 21:20:51 +0800
+ DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
+ 14.3.498.0; Wed, 16 Dec 2020 21:21:40 +0800
 From:   Zheng Yongjun <zhengyongjun3@huawei.com>
-To:     <p.zabel@pengutronix.de>, <mchehab@kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+To:     <mripard@kernel.org>, <mchehab@kernel.org>, <wens@csie.org>,
+        <jernej.skrabec@siol.net>, <linux-media@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
 CC:     Zheng Yongjun <zhengyongjun3@huawei.com>
-Subject: [PATCH -next] media/platform/coda: convert comma to semicolon
-Date:   Wed, 16 Dec 2020 21:21:23 +0800
-Message-ID: <20201216132123.15099-1-zhengyongjun3@huawei.com>
+Subject: [PATCH -next] media/platform/sunxi: convert comma to semicolon
+Date:   Wed, 16 Dec 2020 21:22:12 +0800
+Message-ID: <20201216132212.15152-1-zhengyongjun3@huawei.com>
 X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
@@ -47,22 +49,22 @@ Replace a comma between expression statements by a semicolon.
 
 Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
 ---
- drivers/media/platform/coda/coda-common.c | 2 +-
+ drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
-index 87a2c706f747..547ad34b1424 100644
---- a/drivers/media/platform/coda/coda-common.c
-+++ b/drivers/media/platform/coda/coda-common.c
-@@ -2861,7 +2861,7 @@ static int coda_register_device(struct coda_dev *dev, int i)
- 	strscpy(vfd->name, dev->devtype->vdevs[i]->name, sizeof(vfd->name));
- 	vfd->fops	= &coda_fops;
- 	vfd->ioctl_ops	= &coda_ioctl_ops;
--	vfd->release	= video_device_release_empty,
-+	vfd->release	= video_device_release_empty;
- 	vfd->lock	= &dev->dev_mutex;
- 	vfd->v4l2_dev	= &dev->v4l2_dev;
- 	vfd->vfl_dir	= VFL_DIR_M2M;
+diff --git a/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c b/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
+index 8f4e254b6a41..1a2f65d83a6c 100644
+--- a/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
++++ b/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
+@@ -363,7 +363,7 @@ int sun4i_csi_v4l2_register(struct sun4i_csi *csi)
+ 	vdev->lock = &csi->lock;
+ 
+ 	/* Set a default format */
+-	csi->fmt.pixelformat = sun4i_csi_formats[0].fourcc,
++	csi->fmt.pixelformat = sun4i_csi_formats[0].fourcc;
+ 	csi->fmt.width = CSI_DEFAULT_WIDTH;
+ 	csi->fmt.height = CSI_DEFAULT_HEIGHT;
+ 	_sun4i_csi_try_fmt(csi, &csi->fmt);
 -- 
 2.22.0
 
