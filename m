@@ -8,55 +8,55 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C04E3C352A2
-	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:12:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A710DC2BBD5
+	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:12:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8FB602396F
-	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:12:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 831102388E
+	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:12:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731637AbgLQSLm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Dec 2020 13:11:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42076 "EHLO
+        id S1730788AbgLQSJD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Dec 2020 13:09:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730867AbgLQSJJ (ORCPT
+        with ESMTP id S1730728AbgLQSJA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Dec 2020 13:09:09 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE56EC0619D2;
-        Thu, 17 Dec 2020 10:07:38 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id a9so59799937lfh.2;
-        Thu, 17 Dec 2020 10:07:38 -0800 (PST)
+        Thu, 17 Dec 2020 13:09:00 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177EAC0619E0;
+        Thu, 17 Dec 2020 10:07:56 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id a12so59838968lfl.6;
+        Thu, 17 Dec 2020 10:07:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=NlDMl6XjPevCn3rRvWT/f1VR4LdbuUD4/E02zVLuVCI=;
-        b=RTWkhu3VqMqpDCA4Qo24BTJf+2HuJmLcparbZ+4myGwK1DNAzIGrgipPwwDKIIjrKS
-         ePerczxp+6zHrPN6Dqn9OXFrwkqgqVZKTxDtaFeEELTEv5tlBstMf0P3QwYRzM20vWTM
-         BliaLVxvI1nhJVyskHZ3FMESXBjgr+oWdWqVqRNm2rlei11rc3wpmZbdQ4odalL2zKWD
-         GwaPJoY/LSJ0dqPxg3Bq/HrsjDS7nXr5Uxa2HsKYjBt0fe7/MWnpeLhAWQ//k18Hkb4W
-         Qgu8Q7C+KU3jCZyrFKxqARUQD6npMHl2BNPx+eMXU587ADHJ5fD/w80+TTFH/cNU5wLn
-         gbKQ==
+        bh=G4bkjkogJjxhucwk91y1cMW03U1PPlta2j9gVHq9Ll8=;
+        b=rCQoU2/mmvaocNvlxnid7FO29LSc024mSugBl0tdXdcytFbXH2gOlnpwvt8N+30PAg
+         yb7ttQI7FzhzKZR924B0d/3R9LNPoRgpBoGk0IOcVJPsgsWCQsxmEeE2TiSNUf6U2zEk
+         UAcyUD0vHfvlRRaoHCc/jZeM8FZ6u+jxT5WvXS4q07C3L49UI1+T4YyeAM47/km2IUMY
+         +h1CezyjEzhVg+SazrlVF4o2uUgbBVRUzc6A6H4zBIs3ZtIXUR4lCvTjP1X8Ma8ljpX9
+         s1nx5sADEfu0hG1dR8Px9QD2KFwkR1jqfRP1a8gQc0nLBI4Jl41CHBYNpt0S5HTVpgKO
+         Zxqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=NlDMl6XjPevCn3rRvWT/f1VR4LdbuUD4/E02zVLuVCI=;
-        b=G7jf1bFIuhwN4SatgeYauYCcWNpDkKAKZNP4v/Br7tH1xLeMZ73g8EE6aD/gr+hs3V
-         43EPV509HSnhBqughvICoAv6R9DLoAnWkmgKmov3SN0/KJDz0ThAZxaw2rk+nonJI0l5
-         waYM3D1WI5vAeEuPQVqgfnVBqLWWQkfGGKaLWRm7EfaMbeUoRIbdXYw1ypsXEsFpnMhH
-         m0R1Vs9pgTPFKLR5H4q8izPBET7sKT/FXJhOvYwppSMyDfXcmUl1u1RzX9Q3i+f3dO6q
-         MVde+pMTcKlzrWg0G+KibpZMsUKEkKYoCLlxOaxfAtKSvvPAUuw9ZKmueVpJJR9c8fry
-         hIbg==
-X-Gm-Message-State: AOAM533yqW7Sf1lcW9m+t8tw9RIBsK5kfxphR/VoRt7hZI712xxyA1ks
-        9aYzSAEmyArtFM+ZXFmvKrk=
-X-Google-Smtp-Source: ABdhPJwLHLuEJNjyRdVPWt6WXEB6a0huo4TKPk5vwaRTMIFRcOi8N+JmP0jdXRGsy84KSAUugIUQMQ==
-X-Received: by 2002:a05:651c:2dc:: with SMTP id f28mr207871ljo.13.1608228457280;
-        Thu, 17 Dec 2020 10:07:37 -0800 (PST)
+        bh=G4bkjkogJjxhucwk91y1cMW03U1PPlta2j9gVHq9Ll8=;
+        b=D8mfas+qbdsqplY0WMy08me3O0uooIHO6iiB1FkvJlAfES8mUOi9NvOk0RkAf5xMpz
+         oE3zwYm7A0FX0pe26tweC/WYXQaDJ4jHFYD+n67WQjb9Aj1PuXHM0BLO2zm1gok8RroD
+         bpBhuPUI8Zx4rpxgfDeRrmxJrSoiOypJ136acS4jLLmawr/anCzl7sVxYxhoccLY4frf
+         92Jwglv0zRD5sIvD4RhRhSyZB08hyp77mgpaFSnyeUU8g9u/oDDwtEOB9q0zFMkWTDxo
+         g0FUB8OH9X9l91irRJsolz92RrLFGHY+AfvgJffd3cJ+HaE2hZk6IbagyQb5pAjTGFEN
+         gQrA==
+X-Gm-Message-State: AOAM5303lGJv+QknzbRmuwWLXWxTMe8BGXykk5fznRQqkvKpsg9Q4yKJ
+        rUW1E1CftrZKbnKIbvbWnqfL/dc/Tn8=
+X-Google-Smtp-Source: ABdhPJyqYsSi5e5FbU0bmUx3znLJH35GGikhngE/ppL8K7VwQ0KK0y3SqjiWzxI9i0uAFK/MRB0qlg==
+X-Received: by 2002:a2e:9b4d:: with SMTP id o13mr200509ljj.163.1608228474656;
+        Thu, 17 Dec 2020 10:07:54 -0800 (PST)
 Received: from localhost.localdomain (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.gmail.com with ESMTPSA id u5sm655596lff.78.2020.12.17.10.07.36
+        by smtp.gmail.com with ESMTPSA id u5sm655596lff.78.2020.12.17.10.07.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Dec 2020 10:07:36 -0800 (PST)
+        Thu, 17 Dec 2020 10:07:54 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -78,9 +78,9 @@ Cc:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-clk@vger.kernel.org
-Subject: [PATCH v2 15/48] opp: Support set_opp() customization without requiring to use regulators
-Date:   Thu, 17 Dec 2020 21:06:05 +0300
-Message-Id: <20201217180638.22748-16-digetx@gmail.com>
+Subject: [PATCH v2 30/48] soc/tegra: regulators: Fix locking up when voltage-spread is out of range
+Date:   Thu, 17 Dec 2020 21:06:20 +0300
+Message-Id: <20201217180638.22748-31-digetx@gmail.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201217180638.22748-1-digetx@gmail.com>
 References: <20201217180638.22748-1-digetx@gmail.com>
@@ -90,54 +90,34 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Support set_opp() customization without requiring to use regulators. This
-is needed by drivers which want to use dev_pm_opp_set_rate() for changing
-rates of a multiple clocks and don't need to touch regulator.
+Fix voltage coupler lockup which happens when voltage-spread is out
+of range due to a bug in the code. The max-spread requirement shall be
+accounted when CPU regulator doesn't have consumers. This problem is
+observed on Tegra30 Ouya game console once system-wide DVFS is enabled
+in a device-tree.
 
-One example is NVIDIA Tegra30/114 SoCs which have two sibling 3D hardware
-units which should be use to the same clock rate, meanwhile voltage
-scaling is done using a power domain. In this case OPP table doesn't have
-a regulator, causing a NULL dereference in _set_opp_custom().
-
+Fixes: 783807436f36 ("soc/tegra: regulators: Add regulators coupler for Tegra30")
+Cc: stable@vger.kernel.org
+Tested-by: Peter Geis <pgwipeout@gmail.com>
+Reported-by: Peter Geis <pgwipeout@gmail.com>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/opp/core.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+ drivers/soc/tegra/regulators-tegra30.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 3d02fe33630b..625dae7a5ecb 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -828,17 +828,25 @@ static int _set_opp_custom(const struct opp_table *opp_table,
- 			   struct dev_pm_opp_supply *old_supply,
- 			   struct dev_pm_opp_supply *new_supply)
- {
--	struct dev_pm_set_opp_data *data;
-+	struct dev_pm_set_opp_data *data, tmp_data;
-+	unsigned int regulator_count;
- 	int size;
+diff --git a/drivers/soc/tegra/regulators-tegra30.c b/drivers/soc/tegra/regulators-tegra30.c
+index 7f21f31de09d..0e776b20f625 100644
+--- a/drivers/soc/tegra/regulators-tegra30.c
++++ b/drivers/soc/tegra/regulators-tegra30.c
+@@ -178,7 +178,7 @@ static int tegra30_voltage_update(struct tegra_regulator_coupler *tegra,
+ 	 * survive the voltage drop if it's running on a higher frequency.
+ 	 */
+ 	if (!cpu_min_uV_consumers)
+-		cpu_min_uV = cpu_uV;
++		cpu_min_uV = max(cpu_uV, cpu_min_uV);
  
--	data = opp_table->set_opp_data;
-+	if (opp_table->set_opp_data) {
-+		data = opp_table->set_opp_data;
-+		regulator_count = opp_table->regulator_count;
-+	} else {
-+		data = &tmp_data;
-+		regulator_count = 0;
-+	}
-+
- 	data->regulators = opp_table->regulators;
--	data->regulator_count = opp_table->regulator_count;
-+	data->regulator_count = regulator_count;
- 	data->clk = opp_table->clk;
- 	data->dev = dev;
- 
- 	data->old_opp.rate = old_freq;
--	size = sizeof(*old_supply) * opp_table->regulator_count;
-+	size = sizeof(*old_supply) * regulator_count;
- 	if (!old_supply)
- 		memset(data->old_opp.supplies, 0, size);
- 	else
+ 	/*
+ 	 * Bootloader shall set up voltages correctly, but if it
 -- 
 2.29.2
 
