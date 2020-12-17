@@ -2,248 +2,183 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2B3DC2D0E4
-	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 23:07:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 475FEC2BBD4
+	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 23:44:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D486723A6C
-	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 23:07:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 219BC22511
+	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 23:44:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732166AbgLQXHA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Dec 2020 18:07:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59780 "EHLO
+        id S1732351AbgLQXoj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Dec 2020 18:44:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729402AbgLQXHA (ORCPT
+        with ESMTP id S1732337AbgLQXoj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Dec 2020 18:07:00 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F00C0617B0
-        for <linux-media@vger.kernel.org>; Thu, 17 Dec 2020 15:06:19 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id z21so130931pgj.4
-        for <linux-media@vger.kernel.org>; Thu, 17 Dec 2020 15:06:19 -0800 (PST)
+        Thu, 17 Dec 2020 18:44:39 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17B1C061282;
+        Thu, 17 Dec 2020 15:43:58 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id w5so210717wrm.11;
+        Thu, 17 Dec 2020 15:43:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=uAZMFvhVb6Eal/4evY++sNk0jscaxGLqs718IzEgtfA=;
-        b=v83XWYa2YNnPD7aec5PNdxseR1Y/sUisiPYfR8FyqDAFb2zErOKxJgtsQUmOqyjedz
-         NGiZ+FhC+mwAcIfB2l2m9WN7be9bU+vNtCNDiKnjvMFk5vZQaGF1mkSLePMo+oepC9Cn
-         IFk7GlCNU5CfZ5ux4nzNStixNyFV5EDh/qEvSv+y6+1Sqw/THn1pc4kTu79MZA0pQsLz
-         Dla5S7ftQ5RrH0hpPgrfoLldX9wzx/Vq92GVt8J+TvwFWKboHOOyiP9R7RsZZ6kS+vOn
-         3NB+xMDwPW7mVzTt6i8ll05ptaILp7GY1I5t0aAtjZKJnKUQ/KUpSQdpA7MEZmpe9B21
-         vxug==
+        bh=ZRG6Du2Q5gaJecr0crPPKYS4mZ7zwOVeReLwF06dy8c=;
+        b=R+U8hHBVOD1dvXrSoEvLCKxYu3++5n4YZ2k3P4lwKlX4SZ7F46ClpBb9F/YER/1WwL
+         4oRx7vRZYnNXfQMX17iB9DpJHjMKRI2rODDS5quQ/+umxqg69V5hJSQcCwpzCCzLwMhr
+         dx2UIHoiI2lNRhpsstpR0reE1k8dn3KFvj835qp+C8kJe2G72jcom+f/QIkpXdaBrUrp
+         DC94LUztpChvH/lDnHz6CgvK11muVctOTSin4ClAkp4H+YgyaK5Z20iD053EOC9Vdjt7
+         KQJUSmbRd7f7AYpNj9M1SjxndEbsp4ZKDHu2nM3ZEDZE+97/TARte/nS1oQy4FiQ5U9i
+         psdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=uAZMFvhVb6Eal/4evY++sNk0jscaxGLqs718IzEgtfA=;
-        b=EZMO4ZKUlNUXQKB/2450oeYde04lxE9yjWso0UhhANYRsT4raBR06HucKBJH0lPJ5J
-         2WhVyQBa4NjWGh08z+ab6IzJifKZM8RehHLIAbIi8N6XhIpObruecH2phXsY+Ve1ISYD
-         ng372/y4hTv95WvgAdxB0sbB7paCyUzbZPfZsDVCIQl0ZM5dUEkgOQm2ggLNop6ABnV7
-         vymXp5+vG67ki/6RNJ8xlL0I0+tz4APsDvSDy+cxYQItq13B0e8FhUeZlymYY9AVZMZ/
-         FGHQQw3zKBCKkNClYTdvXxaqJOV/g/m0sn1AELHvfwxyI94blwmkuoLTLxvyPqm6HL1x
-         1YxQ==
-X-Gm-Message-State: AOAM530Jvc4cdWOfHYLYRVn6PO8crIu92NXaQW/ubN7kYgIYCg0Nn412
-        tC/eylXLieO0hqRH19DWHbhAPA==
-X-Google-Smtp-Source: ABdhPJwymKjQzvxQu0BjSpaG0P1NH7tVHLKT/pmV+W4uevA6LHyp/eohg7UcoVWSSb/68o0OizIdXQ==
-X-Received: by 2002:a63:1b58:: with SMTP id b24mr1505551pgm.38.1608246379486;
-        Thu, 17 Dec 2020 15:06:19 -0800 (PST)
-Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
-        by smtp.gmail.com with ESMTPSA id q9sm7074036pgb.82.2020.12.17.15.06.17
+        bh=ZRG6Du2Q5gaJecr0crPPKYS4mZ7zwOVeReLwF06dy8c=;
+        b=nC1nwKKARnX6tHJlkCE1MAgDJGYoHxFq4NY8GvW+A9RP4LNZYkYG7rFgseCMDlBygu
+         e8Xz3ctIOlPgfdNLsNJzZiu4yIGDKkRAqoqWWXCqiiuzooTQIJKRIqzaMFnlCK5x1Hsk
+         lHyXwas7iUwt3cVMWOuNVGFjX2uQQTEuwbMMGvLPHULi3pWFd0mJW1L4U7zM6+RXHWUV
+         StKbyJD6AQKFbQxHt82bpg68j+nzYXjIr1uZVQVaxXrbptUm0N83iQM9UlHw+Yv1Jg0G
+         RSUrlsM1CyktOukPoyfq7SO+4GjE0s7Wa4KPxc8h8lQzv6YRxULwh6CcqiDcPT/oX0QW
+         iyeA==
+X-Gm-Message-State: AOAM531Pg58q2AwXcYtYw8lM/5GJ1ADajHtL2piYtScggHzhvPTKRrql
+        eKLkXf0SEXl6blB6GKAGHKN4kVMH7ZKSI4XI
+X-Google-Smtp-Source: ABdhPJw7/NIJWKtof/Iqcc4Lel2jeNJDl8wRWMDmfXSr1kBk/rln+Zxy4omURinH+gaxl7UvniPhKw==
+X-Received: by 2002:a5d:42d0:: with SMTP id t16mr1255839wrr.230.1608248637431;
+        Thu, 17 Dec 2020 15:43:57 -0800 (PST)
+Received: from valhalla.home ([2.29.208.56])
+        by smtp.gmail.com with ESMTPSA id o3sm1873575wrc.93.2020.12.17.15.43.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Dec 2020 15:06:18 -0800 (PST)
-From:   John Stultz <john.stultz@linaro.org>
-To:     lkml <linux-kernel@vger.kernel.org>
-Cc:     John Stultz <john.stultz@linaro.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Chris Goldsworthy <cgoldswo@codeaurora.org>,
-        Laura Abbott <labbott@kernel.org>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sandeep Patil <sspatil@google.com>,
-        Daniel Mentz <danielmentz@google.com>,
-        =?UTF-8?q?=C3=98rjan=20Eide?= <orjan.eide@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Simon Ser <contact@emersion.fr>,
-        James Jones <jajones@nvidia.com>, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: [RFC][PATCH 2/3] dma-buf: system_heap: Add pagepool support to system heap
-Date:   Thu, 17 Dec 2020 23:06:11 +0000
-Message-Id: <20201217230612.32397-2-john.stultz@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201217230612.32397-1-john.stultz@linaro.org>
-References: <20201217230612.32397-1-john.stultz@linaro.org>
+        Thu, 17 Dec 2020 15:43:56 -0800 (PST)
+From:   Daniel Scally <djrscally@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-media@vger.kernel.org, devel@acpica.org
+Cc:     rjw@rjwysocki.net, lenb@kernel.org, gregkh@linuxfoundation.org,
+        yong.zhi@intel.com, sakari.ailus@linux.intel.com,
+        bingbu.cao@intel.com, tian.shu.qiu@intel.com, mchehab@kernel.org,
+        robert.moore@intel.com, erik.kaneda@intel.com, pmladek@suse.com,
+        rostedt@goodmis.org, sergey.senozhatsky@gmail.com,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        laurent.pinchart+renesas@ideasonboard.com,
+        jacopo+renesas@jmondi.org, kieran.bingham+renesas@ideasonboard.com,
+        linus.walleij@linaro.org, heikki.krogerus@linux.intel.com,
+        kitakar@gmail.com, jorhand@linux.microsoft.com
+Subject: [PATCH v2 04/12] software_node: Enforce parent before child ordering of nodes arrays
+Date:   Thu, 17 Dec 2020 23:43:29 +0000
+Message-Id: <20201217234337.1983732-5-djrscally@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201217234337.1983732-1-djrscally@gmail.com>
+References: <20201217234337.1983732-1-djrscally@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Reuse/abuse the pagepool code from the network code to speed
-up allocation performance.
+Registering software_nodes with the .parent member set to point to a
+currently unregistered software_node has the potential for problems,
+so enforce parent -> child ordering in arrays passed in to
+software_node_register_nodes().
 
-This is similar to the ION pagepool usage, but tries to
-utilize generic code instead of a custom implementation.
+Software nodes that are children of another software node should be
+unregistered before their parent. To allow easy unregistering of an array
+of software_nodes ordered parent to child, reverse the order in which
+software_node_unregister_nodes() unregisters software_nodes.
 
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: Liam Mark <lmark@codeaurora.org>
-Cc: Chris Goldsworthy <cgoldswo@codeaurora.org>
-Cc: Laura Abbott <labbott@kernel.org>
-Cc: Brian Starkey <Brian.Starkey@arm.com>
-Cc: Hridya Valsaraju <hridya@google.com>
-Cc: Suren Baghdasaryan <surenb@google.com>
-Cc: Sandeep Patil <sspatil@google.com>
-Cc: Daniel Mentz <danielmentz@google.com>
-Cc: Ørjan Eide <orjan.eide@arm.com>
-Cc: Robin Murphy <robin.murphy@arm.com>
-Cc: Ezequiel Garcia <ezequiel@collabora.com>
-Cc: Simon Ser <contact@emersion.fr>
-Cc: James Jones <jajones@nvidia.com>
-Cc: linux-media@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org
-Signed-off-by: John Stultz <john.stultz@linaro.org>
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Daniel Scally <djrscally@gmail.com>
 ---
- drivers/dma-buf/heaps/Kconfig       |  1 +
- drivers/dma-buf/heaps/system_heap.c | 68 +++++++++++++++++++++++++++--
- 2 files changed, 65 insertions(+), 4 deletions(-)
+Changes in v2:
 
-diff --git a/drivers/dma-buf/heaps/Kconfig b/drivers/dma-buf/heaps/Kconfig
-index ecf65204f714..fa5e1c330cce 100644
---- a/drivers/dma-buf/heaps/Kconfig
-+++ b/drivers/dma-buf/heaps/Kconfig
-@@ -4,6 +4,7 @@ config DMABUF_HEAPS_DEFERRED_FREE
- config DMABUF_HEAPS_SYSTEM
- 	bool "DMA-BUF System Heap"
- 	depends on DMABUF_HEAPS
-+	select PAGE_POOL
- 	help
- 	  Choose this option to enable the system dmabuf heap. The system heap
- 	  is backed by pages from the buddy allocator. If in doubt, say Y.
-diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heaps/system_heap.c
-index 17e0e9a68baf..885e30894b77 100644
---- a/drivers/dma-buf/heaps/system_heap.c
-+++ b/drivers/dma-buf/heaps/system_heap.c
-@@ -20,6 +20,7 @@
- #include <linux/scatterlist.h>
- #include <linux/slab.h>
- #include <linux/vmalloc.h>
-+#include <net/page_pool.h>
- 
- static struct dma_heap *sys_heap;
- 
-@@ -53,6 +54,7 @@ static gfp_t order_flags[] = {HIGH_ORDER_GFP, LOW_ORDER_GFP, LOW_ORDER_GFP};
+	- Squashed the patches that originally touched these separately
+	- Updated documentation
+
+ drivers/base/swnode.c | 43 ++++++++++++++++++++++++++++++-------------
+ 1 file changed, 30 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/base/swnode.c b/drivers/base/swnode.c
+index 615a0c93e116..cfd1faea48a7 100644
+--- a/drivers/base/swnode.c
++++ b/drivers/base/swnode.c
+@@ -692,7 +692,10 @@ swnode_register(const struct software_node *node, struct swnode *parent,
+  * software_node_register_nodes - Register an array of software nodes
+  * @nodes: Zero terminated array of software nodes to be registered
+  *
+- * Register multiple software nodes at once.
++ * Register multiple software nodes at once. If any node in the array
++ * has it's .parent pointer set, then it's parent **must** have been
++ * registered before it is; either outside of this function or by
++ * ordering the array such that parent comes before child.
   */
- static const unsigned int orders[] = {8, 4, 0};
- #define NUM_ORDERS ARRAY_SIZE(orders)
-+struct page_pool *pools[NUM_ORDERS];
- 
- static struct sg_table *dup_sg_table(struct sg_table *table)
+ int software_node_register_nodes(const struct software_node *nodes)
  {
-@@ -281,18 +283,59 @@ static void system_heap_vunmap(struct dma_buf *dmabuf, struct dma_buf_map *map)
- 	dma_buf_map_clear(map);
- }
+@@ -700,33 +703,47 @@ int software_node_register_nodes(const struct software_node *nodes)
+ 	int i;
  
-+static int system_heap_clear_pages(struct page **pages, int num, pgprot_t pgprot)
-+{
-+	void *addr = vmap(pages, num, VM_MAP, pgprot);
+ 	for (i = 0; nodes[i].name; i++) {
+-		ret = software_node_register(&nodes[i]);
+-		if (ret) {
+-			software_node_unregister_nodes(nodes);
+-			return ret;
++		const struct software_node *parent = nodes[i].parent;
 +
-+	if (!addr)
-+		return -ENOMEM;
-+	memset(addr, 0, PAGE_SIZE * num);
-+	vunmap(addr);
-+	return 0;
-+}
++		if (parent && !software_node_to_swnode(parent)) {
++			ret = -EINVAL;
++			goto err_unregister_nodes;
+ 		}
 +
-+static int system_heap_zero_buffer(struct system_heap_buffer *buffer)
-+{
-+	struct sg_table *sgt = &buffer->sg_table;
-+	struct sg_page_iter piter;
-+	struct page *pages[32];
-+	int p = 0;
-+	int ret = 0;
-+
-+	for_each_sgtable_page(sgt, &piter, 0) {
-+		pages[p++] = sg_page_iter_page(&piter);
-+		if (p == ARRAY_SIZE(pages)) {
-+			ret = system_heap_clear_pages(pages, p, PAGE_KERNEL);
-+			if (ret)
-+				return ret;
-+			p = 0;
-+		}
-+	}
-+	if (p)
-+		ret = system_heap_clear_pages(pages, p, PAGE_KERNEL);
-+
-+	return ret;
-+}
-+
- static void system_heap_dma_buf_release(struct dma_buf *dmabuf)
- {
- 	struct system_heap_buffer *buffer = dmabuf->priv;
- 	struct sg_table *table;
- 	struct scatterlist *sg;
--	int i;
-+	int i, j;
-+
-+	/* Zero the buffer pages before adding back to the pool */
-+	system_heap_zero_buffer(buffer);
- 
- 	table = &buffer->sg_table;
- 	for_each_sg(table->sgl, sg, table->nents, i) {
- 		struct page *page = sg_page(sg);
- 
--		__free_pages(page, compound_order(page));
-+		for (j = 0; j < NUM_ORDERS; j++) {
-+			if (compound_order(page) == orders[j])
-+				break;
-+		}
-+		page_pool_put_full_page(pools[j], page, false);
++		ret = software_node_register(&nodes[i]);
++		if (ret)
++			goto err_unregister_nodes;
  	}
- 	sg_free_table(table);
- 	kfree(buffer);
-@@ -322,8 +365,7 @@ static struct page *alloc_largest_available(unsigned long size,
- 			continue;
- 		if (max_order < orders[i])
- 			continue;
--
--		page = alloc_pages(order_flags[i], orders[i]);
-+		page = page_pool_alloc_pages(pools[i], order_flags[i]);
- 		if (!page)
- 			continue;
- 		return page;
-@@ -428,6 +470,24 @@ static const struct dma_heap_ops system_heap_ops = {
- static int system_heap_create(void)
- {
- 	struct dma_heap_export_info exp_info;
-+	int i;
-+
-+	for (i = 0; i < NUM_ORDERS; i++) {
-+		struct page_pool_params pp;
-+
-+		memset(&pp, 0, sizeof(pp));
-+		pp.order = orders[i];
-+		pools[i] = page_pool_create(&pp);
-+
-+		if (IS_ERR(pools[i])) {
-+			int j;
-+
-+			pr_err("%s: page pool creation failed!\n", __func__);
-+			for (j = 0; j < i; j++)
-+				page_pool_destroy(pools[j]);
-+			return PTR_ERR(pools[i]);
-+		}
-+	}
  
- 	exp_info.name = "system";
- 	exp_info.ops = &system_heap_ops;
+ 	return 0;
++
++err_unregister_nodes:
++	software_node_unregister_nodes(nodes);
++	return ret;
+ }
+ EXPORT_SYMBOL_GPL(software_node_register_nodes);
+ 
+ /**
+  * software_node_unregister_nodes - Unregister an array of software nodes
+- * @nodes: Zero terminated array of software nodes to be unregistered
++ * @nodes: Zero terminated array of software nodes to be unregistered.
+  *
+- * Unregister multiple software nodes at once.
++ * Unregister multiple software nodes at once. If parent pointers are set up
++ * in any of the software nodes then the array MUST be ordered such that
++ * parents come before their children.
+  *
+- * NOTE: Be careful using this call if the nodes had parent pointers set up in
+- * them before registering.  If so, it is wiser to remove the nodes
+- * individually, in the correct order (child before parent) instead of relying
+- * on the sequential order of the list of nodes in the array.
++ * NOTE: If you are uncertain whether the array is ordered such that
++ * parents will be unregistered before their children, it is wiser to
++ * remove the nodes individually, in the correct order (child before
++ * parent).
+  */
+ void software_node_unregister_nodes(const struct software_node *nodes)
+ {
+-	int i;
++	unsigned int i = 0;
++
++	while (nodes[i].name)
++		i++;
+ 
+-	for (i = 0; nodes[i].name; i++)
++	while (i--)
+ 		software_node_unregister(&nodes[i]);
+ }
+ EXPORT_SYMBOL_GPL(software_node_unregister_nodes);
 -- 
-2.17.1
+2.25.1
 
