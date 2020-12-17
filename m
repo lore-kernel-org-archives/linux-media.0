@@ -8,55 +8,55 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE5CBC2BBCF
-	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:13:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C593C3526A
+	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:13:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C10872395A
-	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:13:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 10F05238EF
+	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:13:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729839AbgLQSMv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1731562AbgLQSMv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 17 Dec 2020 13:12:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42010 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730214AbgLQSIo (ORCPT
+        with ESMTP id S1730210AbgLQSIo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 17 Dec 2020 13:08:44 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E165C0611CE;
-        Thu, 17 Dec 2020 10:07:34 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id 23so59802044lfg.10;
-        Thu, 17 Dec 2020 10:07:34 -0800 (PST)
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75A2C0611BB;
+        Thu, 17 Dec 2020 10:07:37 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id l11so59858859lfg.0;
+        Thu, 17 Dec 2020 10:07:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ONUdIoYLvrymxxGuA1rEkpRERKvXdxShg+niqiRuWWw=;
-        b=p2/N6zxOWQ1TNgCgwvZcMNpOSboPM0BuGbUpXZAXVfrMIdLcbf/m3p1KC2nQL3v0I6
-         wH1TSHHk9uUDfjeo0lwnQ0kiY1X7T1gJ0S/JHcoaGZ4DP/tjco2gS2i2yzvshR66pv8H
-         o7Ot28qeR/sxxzMguphR4oIYAhkMO1eRB0/hIWpVDKS1QyUuLObjGKCKgnRASusUidVU
-         zxN0pLs8ZQtIA8ikRgKkDPtzOC4nV6kqtQoNiegpJLjHVQYfklIPYqMmLIHmcd5+/Oej
-         3yksetlAGp6u9VKhXKgNKCbMKS7HuKmgo1KBLhzMJFWqIiExd6/+V5ueg7KJkhXGyUiJ
-         Ddig==
+        bh=pyhIAorEBtf9lvlliXp3a/E9KosdNviFUVTLwzCMWu4=;
+        b=KBFsuU+VjlIdBBBqzZxU8fjyUNxV2GYS1K8Z7YQLuOAUMr50erguvS8eg5lipX2IzF
+         wUJXnioL5pZGD/Km96I24RKaP0oAWM4mVWYg5Lwi1t+/D5N5Jk9k/aWAJCSWNgl+6Ag9
+         Ul+TTXmwIB4/L6tLNavF1vvHuiaDPvO1IYmGAGIQ6IjffbXmmXs+G+t+xYVRe1XCiLUT
+         TTtBHS6GvMaXs7btcbzdBpOt1vRgkH9ELTMrtOzYa5YunqIgyj0rI6fTA1UyrDJBGKzG
+         NsTRPdNroHWqtup4JrKq4hCihZ/I8rG1hzY9GLcahCmccGNQRN37v+O1tg2GPp/B1ZlZ
+         I1Bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ONUdIoYLvrymxxGuA1rEkpRERKvXdxShg+niqiRuWWw=;
-        b=Ai0OUCwtGd75S3PxhIZ8j3oLnXziBX9+r1w5G2qK8DJuqS4dCh4jN+5eCLXxbAH5rz
-         3CiZpyEZgNeR0z3jYjn70cBWUI0Re7iq5Apo6F6Tp1aAy/1GpP4o68G7w5Rj/TSz6w/A
-         ajid0N3WJvmWn3oDhrK2G7JJydLnLdQwCfN8fvgpm/tsmo/LpsN7LkG4ElqrHKQXrIpz
-         39R/RFekUV+njkff/dEv88Bn9rYla0pHVflzkKfXvCdQoxQg99AGVyG/Ma5w6jvk+6J0
-         GHbN1ELwBfVoF4CI5nFK2E/JP9otshDpwvxNQ62poKWWXRiYmJWtJwFmBP6d9W1pQuQw
-         4Ftw==
-X-Gm-Message-State: AOAM532AxL10n0bi+MjAtVA+lvC2i7SixUKXT8P8BoNb0G3ncpU8vYYj
-        l9qiObTQu4va/kTBSgyhdGw=
-X-Google-Smtp-Source: ABdhPJx4DSg+fZJTBkNxhuc6g3ezsqDW5hpdLf96cj7krLJwspxwSptzE1H7fpBWtPpK43NibJSC9A==
-X-Received: by 2002:a2e:82d0:: with SMTP id n16mr210409ljh.474.1608228452689;
-        Thu, 17 Dec 2020 10:07:32 -0800 (PST)
+        bh=pyhIAorEBtf9lvlliXp3a/E9KosdNviFUVTLwzCMWu4=;
+        b=qazeeqAqkk3nGSFgJo2u9bTYNJgThLRwEEItIadJncK6WT5gLMnUzZ+xUk7pN2lXX5
+         W5KKgKxeepZ+qL8D3HoWwBfF9v1XgpJTCDSc7C+YX/jc56Rdgah2mHVaYPEpF0Zu0wxg
+         8RQvPtnlKz+4gyOWz09IeYZo0Z2q+PSR6Bv+RBlDMoyzYe44C/l/A5Af020/vOGh5oTC
+         6bYvh3yK8nR8W8YALHDSuNTtWTmgiOOlI7NLbnTf4gD+c3HZ6ElksydP3sQyNunLcK2N
+         0KncuCxSaQV2K0PLByzuf3xAI6jFMMgTxnBcE4+sD/4NNoc1dP4zCpB9iZGV6O+ZWtM2
+         lO4A==
+X-Gm-Message-State: AOAM530U0T0ccDI8TMMiQidAJGKjGDJyCmt5/E5815f9ubYwKif5zfuw
+        UWIFCqQHMbkXtj/gzdMkzDU=
+X-Google-Smtp-Source: ABdhPJyLU/4FC56tDazvyGbryuQ04uANev9KjoowVlnl0s+BVYhQ5t9V+9Mz7a+xus7YmajAeqhwKw==
+X-Received: by 2002:ac2:54b9:: with SMTP id w25mr1838lfk.8.1608228456153;
+        Thu, 17 Dec 2020 10:07:36 -0800 (PST)
 Received: from localhost.localdomain (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.gmail.com with ESMTPSA id u5sm655596lff.78.2020.12.17.10.07.31
+        by smtp.gmail.com with ESMTPSA id u5sm655596lff.78.2020.12.17.10.07.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Dec 2020 10:07:32 -0800 (PST)
+        Thu, 17 Dec 2020 10:07:35 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -78,9 +78,9 @@ Cc:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-clk@vger.kernel.org
-Subject: [PATCH v2 11/48] opp: Add dev_pm_opp_find_level_ceil()
-Date:   Thu, 17 Dec 2020 21:06:01 +0300
-Message-Id: <20201217180638.22748-12-digetx@gmail.com>
+Subject: [PATCH v2 14/48] opp: Filter out OPPs based on availability of a required-OPP
+Date:   Thu, 17 Dec 2020 21:06:04 +0300
+Message-Id: <20201217180638.22748-15-digetx@gmail.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201217180638.22748-1-digetx@gmail.com>
 References: <20201217180638.22748-1-digetx@gmail.com>
@@ -90,102 +90,43 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a ceil version of the dev_pm_opp_find_level(). It's handy to have if
-levels don't start from 0 in OPP table and zero usually means a minimal
-level.
+A required OPP may not be available, and thus, all OPPs which are using
+this required OPP should be unavailable too.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/opp/core.c     | 49 ++++++++++++++++++++++++++++++++++++++++++
- include/linux/pm_opp.h |  8 +++++++
- 2 files changed, 57 insertions(+)
+ drivers/opp/core.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index eab37b3a27bb..0783a4ac819a 100644
+index d9feb7639598..3d02fe33630b 100644
 --- a/drivers/opp/core.c
 +++ b/drivers/opp/core.c
-@@ -449,6 +449,55 @@ struct dev_pm_opp *dev_pm_opp_find_level_exact(struct device *dev,
- }
- EXPORT_SYMBOL_GPL(dev_pm_opp_find_level_exact);
+@@ -1588,7 +1588,7 @@ int _opp_add(struct device *dev, struct dev_pm_opp *new_opp,
+ 	     struct opp_table *opp_table, bool rate_not_available)
+ {
+ 	struct list_head *head;
+-	int ret;
++	int i, ret;
  
-+/**
-+ * dev_pm_opp_find_level_ceil() - search for an rounded up level
-+ * @dev:		device for which we do this operation
-+ * @level:		level to search for
-+ *
-+ * Return: Searches for rounded up match in the opp table and returns pointer
-+ * to the  matching opp if found, else returns ERR_PTR in case of error and
-+ * should be handled using IS_ERR. Error return values can be:
-+ * EINVAL:	for bad pointer
-+ * ERANGE:	no match found for search
-+ * ENODEV:	if device not found in list of registered devices
-+ *
-+ * The callers are required to call dev_pm_opp_put() for the returned OPP after
-+ * use.
-+ */
-+struct dev_pm_opp *dev_pm_opp_find_level_ceil(struct device *dev,
-+					      unsigned int *level)
-+{
-+	struct opp_table *opp_table;
-+	struct dev_pm_opp *temp_opp, *opp = ERR_PTR(-ERANGE);
+ 	mutex_lock(&opp_table->lock);
+ 	head = &opp_table->opp_list;
+@@ -1615,6 +1615,15 @@ int _opp_add(struct device *dev, struct dev_pm_opp *new_opp,
+ 			 __func__, new_opp->rate);
+ 	}
+ 
++	for (i = 0; i < opp_table->required_opp_count && new_opp->available; i++) {
++		if (new_opp->required_opps[i]->available)
++			continue;
 +
-+	opp_table = _find_opp_table(dev);
-+	if (IS_ERR(opp_table)) {
-+		int r = PTR_ERR(opp_table);
-+
-+		dev_err(dev, "%s: OPP table not found (%d)\n", __func__, r);
-+		return ERR_PTR(r);
++		new_opp->available = false;
++		dev_warn(dev, "%s: OPP not supported by required OPP %pOF (%lu)\n",
++			 __func__, new_opp->required_opps[i]->np, new_opp->rate);
 +	}
 +
-+	mutex_lock(&opp_table->lock);
-+
-+	list_for_each_entry(temp_opp, &opp_table->opp_list, node) {
-+		if (temp_opp->available && temp_opp->level >= *level) {
-+			opp = temp_opp;
-+			*level = opp->level;
-+
-+			/* Increment the reference count of OPP */
-+			dev_pm_opp_get(opp);
-+			break;
-+		}
-+	}
-+
-+	mutex_unlock(&opp_table->lock);
-+	dev_pm_opp_put_opp_table(opp_table);
-+
-+	return opp;
-+}
-+EXPORT_SYMBOL_GPL(dev_pm_opp_find_level_ceil);
-+
- static noinline struct dev_pm_opp *_find_freq_ceil(struct opp_table *opp_table,
- 						   unsigned long *freq)
- {
-diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
-index f311a8b2ca04..a17d92d923cc 100644
---- a/include/linux/pm_opp.h
-+++ b/include/linux/pm_opp.h
-@@ -111,6 +111,8 @@ struct dev_pm_opp *dev_pm_opp_find_freq_exact(struct device *dev,
- 					      bool available);
- struct dev_pm_opp *dev_pm_opp_find_level_exact(struct device *dev,
- 					       unsigned int level);
-+struct dev_pm_opp *dev_pm_opp_find_level_ceil(struct device *dev,
-+					      unsigned int *level);
- 
- struct dev_pm_opp *dev_pm_opp_find_freq_floor(struct device *dev,
- 					      unsigned long *freq);
-@@ -228,6 +230,12 @@ static inline struct dev_pm_opp *dev_pm_opp_find_level_exact(struct device *dev,
- 	return ERR_PTR(-ENOTSUPP);
+ 	return 0;
  }
  
-+static inline struct dev_pm_opp *dev_pm_opp_find_level_ceil(struct device *dev,
-+					unsigned int *level)
-+{
-+	return ERR_PTR(-ENOTSUPP);
-+}
-+
- static inline struct dev_pm_opp *dev_pm_opp_find_freq_floor(struct device *dev,
- 					unsigned long *freq)
- {
 -- 
 2.29.2
 
