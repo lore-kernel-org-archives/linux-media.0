@@ -8,55 +8,55 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C1FEC4361B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E154BC3526A
 	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 23:45:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F0B8A22511
-	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 23:45:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B2F0F23A63
+	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 23:45:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732429AbgLQXpS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Dec 2020 18:45:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37432 "EHLO
+        id S1732483AbgLQXpb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Dec 2020 18:45:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732404AbgLQXpP (ORCPT
+        with ESMTP id S1732422AbgLQXpS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Dec 2020 18:45:15 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B017CC061257;
-        Thu, 17 Dec 2020 15:44:02 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id y23so572821wmi.1;
-        Thu, 17 Dec 2020 15:44:02 -0800 (PST)
+        Thu, 17 Dec 2020 18:45:18 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28DAC0611CB;
+        Thu, 17 Dec 2020 15:44:06 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id r3so250744wrt.2;
+        Thu, 17 Dec 2020 15:44:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=NhV0D9xuOLKxtzOWkibLn3uvxzcSBCPiXhXcwXUTilM=;
-        b=g2TSU9X4omWopl89Jo0LZ6GhwCl0vy3NOdWDxlgJzd9MJ4kD23p2lAXsB1ak/v9AYP
-         p6bRMhpmRYZBdJeolDOkLPzHHvX/pTgW9VVmlM0Wu+bgvzoCI25B2SAJ5/o+0DDFRUH0
-         H3I86/Y7jKjQwjjWJ/Ph6ltdqzuWCO90o56tQ3/3YuuLvtuhL8SLBKO2rZVzzFzsp+b0
-         z88YNdTY+tW0TrDTHOfkgXS8to2MevQ3b4iZTRzqOyQKHVWs8x2xRrFqkjfxPPIqqbpP
-         FVOuj99pHEpHNo+sT8r8SjpA6v9iNRevjFEd65ABKnSmx2wBIDucrf29f/+CM3svwdIl
-         Z+1Q==
+        bh=QxoF/I7GjnQos9P0XrAdNbghzE7MUAe2eW4mMwyagRA=;
+        b=qV0/mL37jO+KmDWIDMJcAcXwHiw6GUsCZZiX1E1mWbt+CKDKTUCjsimECFkCHzU2xb
+         oGgP7dOOxVuIJpccmebUs9NRjf9NNvsI/RofiS+YjbDKr7hgei+RcTOpK+TCDZyK1Y8e
+         DGqI28OmbcFkYN8WtlnjDiyg1OsInh9sE2+YjGpxtgzttirRMtkQF+H8uiigNA5QOfp5
+         MLlROH2wqE3nBhBWGwM+k/hDR6MpHE82OKZdidjcTO8kKgK3Lcihw/p6DZPHe+JwiFM5
+         8ARI+hheGuzK/OkoxoULcPGtzhihQLLLk9AdcrDyrBmYlBhDcr//dEKC0DljJu7hFXRb
+         DGGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=NhV0D9xuOLKxtzOWkibLn3uvxzcSBCPiXhXcwXUTilM=;
-        b=P5nO0nCbqTZ6IhFN9TdP9s7xMW76l/UtEtE39oBW6VWhX/I6w5IzcHcyTx/2TXpA3F
-         BZ3deKqAIC3WTlpzfVt4z0CoEJ/sDxs4+hNGt6NsNt27/ND0vJET9TAT8rp/ZlBgeW8A
-         9hrP4CqPXU1IIN+QdnRcK+jKguhIvUjZ7W/t2uHJSaGSQRnSdfDpjQwkZbw0hvwztLZb
-         xZn+kNf3moBhTvljLPv0uVveH/ho9A1io2lBWqj4OLkKM6Dh6r+3Gl9iSy6HoCPkK4HG
-         Pph2yvFme2W8ZXr2fSOQ7prgNQD+a3HbB9KgcjZjGmm8/lyn/hlhhFxq/gg+JKLvicK8
-         nZog==
-X-Gm-Message-State: AOAM532pZEihYpKRu6QJuz9qH89m6gTscCy+qMW5ypFd0XY1oOrkuxeN
-        ZT6A+n0ruLyUpDk8axy5zww47ENtpdJ9qn/9
-X-Google-Smtp-Source: ABdhPJzs3MQAOJ62JKkc1AKPkounfyMsx9EiBFgBKAjwzggxEJ3tQ2zekKlfhxG7zlgfn4K0wTcz4w==
-X-Received: by 2002:a1c:6446:: with SMTP id y67mr1580311wmb.144.1608248641472;
-        Thu, 17 Dec 2020 15:44:01 -0800 (PST)
+        bh=QxoF/I7GjnQos9P0XrAdNbghzE7MUAe2eW4mMwyagRA=;
+        b=kBbiAxDxcmhcoJzCbkcr1OARK7m/uRvQrzEEewCOpPfG2d9VueYfmUiuidTkz2/JxM
+         TcdlTsiLKoP28f+sKn7Cqex5BIplwMSxa+Ffncdn9HDB4oem/I0Yuq9k+g+dOaZI0dnd
+         wMDh6vxwXUJsIIHO09UjtbTz98MCO2aqF8O8oAkRkxhzTcB3jV7MZSpbqL/asKBeZ6Tg
+         UkY6ejC9PYgai37y0sYXOoULOykqfzfHvgQqUkhhTqRplmzDvFQFVSGDs3QuN2ZkHoLb
+         hhI+BkR1EqS48wuQGvZNneAdJb18HwhmKIX8F6D9UOCsa6RnXJ4DjzhNBpp21fNt+hs7
+         i5pg==
+X-Gm-Message-State: AOAM530c8Thzn5XgEp04g+ITUBJUUxflKSjb0oka29AQvwrDd+DeCOMy
+        RtzXY+MjFLw+TaamGRTRtIXlF0lpwiBW2dP/
+X-Google-Smtp-Source: ABdhPJzDyKCaJKHq6s9CdN5vYZ6BgtJ6VkOwN/2pZfZtcYbibNIvU/g2usqcXUqHxdpUex5JmyGIuQ==
+X-Received: by 2002:adf:9d49:: with SMTP id o9mr1218180wre.413.1608248645403;
+        Thu, 17 Dec 2020 15:44:05 -0800 (PST)
 Received: from valhalla.home ([2.29.208.56])
-        by smtp.gmail.com with ESMTPSA id o3sm1873575wrc.93.2020.12.17.15.44.00
+        by smtp.gmail.com with ESMTPSA id o3sm1873575wrc.93.2020.12.17.15.44.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Dec 2020 15:44:00 -0800 (PST)
+        Thu, 17 Dec 2020 15:44:04 -0800 (PST)
 From:   Daniel Scally <djrscally@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-media@vger.kernel.org, devel@acpica.org
@@ -71,9 +71,9 @@ Cc:     rjw@rjwysocki.net, lenb@kernel.org, gregkh@linuxfoundation.org,
         linus.walleij@linaro.org, heikki.krogerus@linux.intel.com,
         kitakar@gmail.com, jorhand@linux.microsoft.com,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCH v2 07/12] lib/test_printf.c: Use helper function to unwind array of software_nodes
-Date:   Thu, 17 Dec 2020 23:43:32 +0000
-Message-Id: <20201217234337.1983732-8-djrscally@gmail.com>
+Subject: [PATCH v2 10/12] media: v4l2-core: v4l2-async: Check sd->fwnode->secondary in match_fwnode()
+Date:   Thu, 17 Dec 2020 23:43:35 +0000
+Message-Id: <20201217234337.1983732-11-djrscally@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201217234337.1983732-1-djrscally@gmail.com>
 References: <20201217234337.1983732-1-djrscally@gmail.com>
@@ -83,38 +83,41 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use the software_node_unregister_nodes() helper function to unwind this
-array in a cleaner way.
+Where the fwnode graph is comprised of software_nodes, these will be
+assigned as the secondary to dev->fwnode. Check the v4l2_subdev's fwnode
+for a secondary and attempt to match against it during match_fwnode() to
+accommodate that possibility.
 
-Acked-by: Petr Mladek <pmladek@suse.com>
 Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Daniel Scally <djrscally@gmail.com>
 ---
 Changes in v2:
 
 	- None
 
- lib/test_printf.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/media/v4l2-core/v4l2-async.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/lib/test_printf.c b/lib/test_printf.c
-index 7ac87f18a10f..7d60f24240a4 100644
---- a/lib/test_printf.c
-+++ b/lib/test_printf.c
-@@ -644,9 +644,7 @@ static void __init fwnode_pointer(void)
- 	test(second_name, "%pfwP", software_node_fwnode(&softnodes[1]));
- 	test(third_name, "%pfwP", software_node_fwnode(&softnodes[2]));
+diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+index e3ab003a6c85..9dd896d085ec 100644
+--- a/drivers/media/v4l2-core/v4l2-async.c
++++ b/drivers/media/v4l2-core/v4l2-async.c
+@@ -87,6 +87,14 @@ static bool match_fwnode(struct v4l2_async_notifier *notifier,
+ 	if (sd->fwnode == asd->match.fwnode)
+ 		return true;
  
--	software_node_unregister(&softnodes[2]);
--	software_node_unregister(&softnodes[1]);
--	software_node_unregister(&softnodes[0]);
-+	software_node_unregister_nodes(softnodes);
- }
- 
- static void __init
++	/*
++	 * Check the same situation for any possible secondary assigned to the
++	 * subdev's fwnode
++	 */
++	if (!IS_ERR_OR_NULL(sd->fwnode->secondary) &&
++	    sd->fwnode->secondary == asd->match.fwnode)
++		return true;
++
+ 	/*
+ 	 * Otherwise, check if the sd fwnode and the asd fwnode refer to an
+ 	 * endpoint or a device. If they're of the same type, there's no match.
 -- 
 2.25.1
 
