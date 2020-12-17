@@ -8,55 +8,55 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D559C4743D
-	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:11:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BDEDEC2BB9A
+	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:12:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 595FD238EF
-	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:11:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 92548238EF
+	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:12:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730913AbgLQSJM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Dec 2020 13:09:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42084 "EHLO
+        id S1731580AbgLQSLM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Dec 2020 13:11:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730874AbgLQSJL (ORCPT
+        with ESMTP id S1730885AbgLQSJM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Dec 2020 13:09:11 -0500
+        Thu, 17 Dec 2020 13:09:12 -0500
 Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0100C0619D7;
-        Thu, 17 Dec 2020 10:07:43 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id y19so59728949lfa.13;
-        Thu, 17 Dec 2020 10:07:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395A0C0619FF;
+        Thu, 17 Dec 2020 10:08:04 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id 23so59806431lfg.10;
+        Thu, 17 Dec 2020 10:08:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=O54hHe3GwNNHKPGqkz2B7DU6dvwXex7DZOGprtr/GmM=;
-        b=OeNoXEbagvqP4DcdFhxII/42gkuzezO/PqnbWTRx0INOXQdREbZ9WUQtGqRW9XC4zu
-         qwqGe/LBGPelVABYeoE0DFhmP9frBpJpDLpxjZNEzjx2+8qfHOLYxleJzaXHkyivn7MV
-         5Wx+7w3s6l4rWpcim8ghNJ6etTTkdS0O3EKA3rmH4m0vpOdsClXW+OmZRnXCmX54UcIZ
-         YIzRp3emr7EG0FQVREe03LqbyinxlxDppx97t00aAoZs/8z1kq05RI6LRx430jN4MrGe
-         yKib5DtjYjwWT1KHHaTrKl53ri2GUuh6aSw6+bQaGldmbatKakYdHzLHJ4nT9jbN9T1g
-         77OA==
+        bh=/iJ0B7r+mpUQZW1i1h5+IfDMfw4DAGq9J8zYCndrZHI=;
+        b=ExWKxj5QIut3nA25Da7CecMiBE6Co0EUXUaYa7EDsuufeFK9vSA+MhI677Lvw9pnY6
+         flwb85bLxAI+Xhf9X5Jjrv/OzhgzY6Qr6OJAo385beFQg2JtqdkNkJ7gFIP//KnsZ3VC
+         G53ibKuOUf3j7BAO36IpfgdArAKtszZFpsCZGJxERdCPUIXqSplxqvTK/USoVQaTAjRy
+         195+umeDmwwxOBfUeNKqAwfUoE36+5BoA5loGfJpKHRDTmWJchvit5GJeclCvEwkWMY9
+         6dpFR4KTNetWh9Voiby3i5kyGUGo9HeX/IEwz7trvafihsWSUyWxDLOCwbk/ZpqX6MXV
+         2+TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=O54hHe3GwNNHKPGqkz2B7DU6dvwXex7DZOGprtr/GmM=;
-        b=QyBlJhfWtHDb6VUtK0HLs59bqn28Kxm78/cg6st1yPVGzdw7lRZav3BZiGjcHVjR62
-         QhuCMDIUD9uoGzgretaYaH83Ms9Z3Lkffn7ysAd8gfPfOrKwneOXe1wJAokmL/NeqymG
-         zvxASxwPpyjwChwMRDSnsJPIC/VLZ2FN2Pl90iLHZwp9mQ5fhJWyn6NcJ7VBA0zLc0uP
-         OY0kZ8WcxRgbWx1zdkl0141+gKSn/Ahtlp72G0vEw/6/nQMsDHOOLa8piCKTgLbfYuYC
-         NFj04QFyjEjAKgztcO/k8A5+Hwctmjv5Mdiq6dtUoxQMgGIK/ioOdqYx4Pu+QBCWkZJ2
-         jGng==
-X-Gm-Message-State: AOAM5327XMVfl4WMdKrCk2kzGKShDUFpsDzOEhnGfNWw6D2eAKu5J3+F
-        vQW9sDmi4DIzq+YLZs/uzKQ=
-X-Google-Smtp-Source: ABdhPJwgr1JYd3dkFtKpuRIk58HS8VFkfsWUOGAgiyXDw3hUSYyQyK1uR0tRGdUSz8JFZo5ENDfzNg==
-X-Received: by 2002:a2e:b80d:: with SMTP id u13mr209747ljo.143.1608228460744;
-        Thu, 17 Dec 2020 10:07:40 -0800 (PST)
+        bh=/iJ0B7r+mpUQZW1i1h5+IfDMfw4DAGq9J8zYCndrZHI=;
+        b=E1RizdYSMKtQq6Il2MZF9mcjb10mNykAXtRGNaED8WYcWeppmrKUP1lm/LKYUZbrdp
+         wH+vwRENyzngW3VKNx7JOpZhcFU7CNhjTWAud3G/8FVEoFzr4+m5RBSvhDaus5TSiDyx
+         CuHCWEC+333D9eEV6DCLtYH5CG3OqtKdO+japfG/vUqEE5hzjjL1YDxtiC6fk1EpuQS6
+         eyt6AQhQn8Ur8o9iqWZljudMx4zYqSwghhbeJSS8xdSnTCFZ/Qn/N88ZkCg8egQ3fMTc
+         oRM7gsHUNuQD6a2WgiJwcA4YUdeID4COP1ebFfH3Mk8hu9vFqZ0xIv/sIDJDNjzV7/vr
+         ee6A==
+X-Gm-Message-State: AOAM530T+2xVsB1ZsLTZPAe1geg9Hn6sZKqJMtZAS80FSNAPEgq3taFE
+        jAS3WSCsQZBYTh6MrtJDzC8=
+X-Google-Smtp-Source: ABdhPJzdw43MgdozgmwwfnsGmn12MpmVira1PDFRjrinDosvUczBNvUTOPwdtYFG4TtdwHo7+9B/5w==
+X-Received: by 2002:a19:58e:: with SMTP id 136mr2356lff.98.1608228482755;
+        Thu, 17 Dec 2020 10:08:02 -0800 (PST)
 Received: from localhost.localdomain (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.gmail.com with ESMTPSA id u5sm655596lff.78.2020.12.17.10.07.39
+        by smtp.gmail.com with ESMTPSA id u5sm655596lff.78.2020.12.17.10.08.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Dec 2020 10:07:40 -0800 (PST)
+        Thu, 17 Dec 2020 10:08:02 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -78,9 +78,9 @@ Cc:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-clk@vger.kernel.org
-Subject: [PATCH v2 18/48] opp: Print OPP level in debug message of _opp_add_static_v2()
-Date:   Thu, 17 Dec 2020 21:06:08 +0300
-Message-Id: <20201217180638.22748-19-digetx@gmail.com>
+Subject: [PATCH v2 37/48] drm/tegra: gr2d: Support OPP and power management
+Date:   Thu, 17 Dec 2020 21:06:27 +0300
+Message-Id: <20201217180638.22748-38-digetx@gmail.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201217180638.22748-1-digetx@gmail.com>
 References: <20201217180638.22748-1-digetx@gmail.com>
@@ -90,32 +90,157 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Print OPP level in debug message of _opp_add_static_v2(). This helps to
-chase GENPD bugs.
+Add OPP and PM support to the GR2D driver. This is required for enabling
+system-wide DVFS and supporting dynamic power management using a generic
+power domain.
 
+Tested-by: Peter Geis <pgwipeout@gmail.com>
+Tested-by: Nicolas Chauvet <kwizart@gmail.com>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/opp/of.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/tegra/gr2d.c | 73 +++++++++++++++++++++++++++++++++---
+ 1 file changed, 67 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-index 1f2038a4420b..56b153ea5c56 100644
---- a/drivers/opp/of.c
-+++ b/drivers/opp/of.c
-@@ -822,10 +822,11 @@ static struct dev_pm_opp *_opp_add_static_v2(struct opp_table *opp_table,
- 	if (new_opp->clock_latency_ns > opp_table->clock_latency_ns_max)
- 		opp_table->clock_latency_ns_max = new_opp->clock_latency_ns;
+diff --git a/drivers/gpu/drm/tegra/gr2d.c b/drivers/gpu/drm/tegra/gr2d.c
+index f30aa86e4c9f..689554ef81a8 100644
+--- a/drivers/gpu/drm/tegra/gr2d.c
++++ b/drivers/gpu/drm/tegra/gr2d.c
+@@ -7,6 +7,9 @@
+ #include <linux/iommu.h>
+ #include <linux/module.h>
+ #include <linux/of_device.h>
++#include <linux/pm_runtime.h>
++
++#include <soc/tegra/common.h>
  
--	pr_debug("%s: turbo:%d rate:%lu uv:%lu uvmin:%lu uvmax:%lu latency:%lu\n",
-+	pr_debug("%s: turbo:%d rate:%lu uv:%lu uvmin:%lu uvmax:%lu latency:%lu level:%u\n",
- 		 __func__, new_opp->turbo, new_opp->rate,
- 		 new_opp->supplies[0].u_volt, new_opp->supplies[0].u_volt_min,
--		 new_opp->supplies[0].u_volt_max, new_opp->clock_latency_ns);
-+		 new_opp->supplies[0].u_volt_max, new_opp->clock_latency_ns,
-+		 new_opp->level);
+ #include "drm.h"
+ #include "gem.h"
+@@ -185,8 +188,15 @@ static const u32 gr2d_addr_regs[] = {
+ 	GR2D_VA_BASE_ADDR_SB,
+ };
  
- 	/*
- 	 * Notify the changes in the availability of the operable
++static void gr2d_pm_runtime_release(void *dev)
++{
++	pm_runtime_put(dev);
++	pm_runtime_disable(dev);
++}
++
+ static int gr2d_probe(struct platform_device *pdev)
+ {
++	struct tegra_core_opp_params opp_params = {};
+ 	struct device *dev = &pdev->dev;
+ 	struct host1x_syncpt **syncpts;
+ 	struct gr2d *gr2d;
+@@ -197,6 +207,8 @@ static int gr2d_probe(struct platform_device *pdev)
+ 	if (!gr2d)
+ 		return -ENOMEM;
+ 
++	platform_set_drvdata(pdev, gr2d);
++
+ 	gr2d->soc = of_device_get_match_data(dev);
+ 
+ 	syncpts = devm_kzalloc(dev, sizeof(*syncpts), GFP_KERNEL);
+@@ -209,12 +221,23 @@ static int gr2d_probe(struct platform_device *pdev)
+ 		return PTR_ERR(gr2d->clk);
+ 	}
+ 
+-	err = clk_prepare_enable(gr2d->clk);
+-	if (err) {
+-		dev_err(dev, "cannot turn on clock\n");
++	opp_params.init_state = true;
++
++	err = devm_tegra_core_dev_init_opp_table(dev, &opp_params);
++	if (err && err != -ENODEV)
++		return err;
++
++	pm_runtime_enable(dev);
++	err = pm_runtime_get_sync(dev);
++	if (err < 0) {
++		gr2d_pm_runtime_release(dev);
+ 		return err;
+ 	}
+ 
++	err = devm_add_action_or_reset(dev, gr2d_pm_runtime_release, dev);
++	if (err)
++		return err;
++
+ 	INIT_LIST_HEAD(&gr2d->client.base.list);
+ 	gr2d->client.base.ops = &gr2d_client_ops;
+ 	gr2d->client.base.dev = dev;
+@@ -229,7 +252,6 @@ static int gr2d_probe(struct platform_device *pdev)
+ 	err = host1x_client_register(&gr2d->client.base);
+ 	if (err < 0) {
+ 		dev_err(dev, "failed to register host1x client: %d\n", err);
+-		clk_disable_unprepare(gr2d->clk);
+ 		return err;
+ 	}
+ 
+@@ -237,8 +259,6 @@ static int gr2d_probe(struct platform_device *pdev)
+ 	for (i = 0; i < ARRAY_SIZE(gr2d_addr_regs); i++)
+ 		set_bit(gr2d_addr_regs[i], gr2d->addr_regs);
+ 
+-	platform_set_drvdata(pdev, gr2d);
+-
+ 	return 0;
+ }
+ 
+@@ -254,15 +274,56 @@ static int gr2d_remove(struct platform_device *pdev)
+ 		return err;
+ 	}
+ 
++	return 0;
++}
++
++static int __maybe_unused gr2d_runtime_suspend(struct device *dev)
++{
++	struct gr2d *gr2d = dev_get_drvdata(dev);
++
+ 	clk_disable_unprepare(gr2d->clk);
+ 
+ 	return 0;
+ }
+ 
++static int __maybe_unused gr2d_runtime_resume(struct device *dev)
++{
++	struct gr2d *gr2d = dev_get_drvdata(dev);
++	int err;
++
++	err = clk_prepare_enable(gr2d->clk);
++	if (err) {
++		dev_err(dev, "failed to enable clock: %d\n", err);
++		return err;
++	}
++
++	return 0;
++}
++
++static __maybe_unused int gr2d_suspend(struct device *dev)
++{
++	struct gr2d *gr2d = dev_get_drvdata(dev);
++	int err;
++
++	host1x_channel_stop(gr2d->channel);
++
++	err = pm_runtime_force_suspend(dev);
++	if (err < 0)
++		return err;
++
++	return 0;
++}
++
++static const struct dev_pm_ops tegra_gr2d_pm = {
++	SET_RUNTIME_PM_OPS(gr2d_runtime_suspend, gr2d_runtime_resume, NULL)
++	SET_SYSTEM_SLEEP_PM_OPS(gr2d_suspend, pm_runtime_force_resume)
++};
++
+ struct platform_driver tegra_gr2d_driver = {
+ 	.driver = {
+ 		.name = "tegra-gr2d",
+ 		.of_match_table = gr2d_match,
++		.pm = &tegra_gr2d_pm,
+ 	},
+ 	.probe = gr2d_probe,
+ 	.remove = gr2d_remove,
 -- 
 2.29.2
 
