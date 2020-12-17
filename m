@@ -8,55 +8,55 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB5ACC3526C
-	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:09:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B671C3526F
+	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:09:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B8F2F2388E
-	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:09:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 10FE02389E
+	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:09:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731303AbgLQSJ3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Dec 2020 13:09:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42114 "EHLO
+        id S1731275AbgLQSJ2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Dec 2020 13:09:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731125AbgLQSJW (ORCPT
+        with ESMTP id S1731128AbgLQSJW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 17 Dec 2020 13:09:22 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F5EC0619DB;
-        Thu, 17 Dec 2020 10:07:48 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id m25so59780833lfc.11;
-        Thu, 17 Dec 2020 10:07:47 -0800 (PST)
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C26AC0619DD;
+        Thu, 17 Dec 2020 10:07:52 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id o13so36634335lfr.3;
+        Thu, 17 Dec 2020 10:07:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=PvpcuwVOPMLvQDnLlBwHPl2O7D8LMz4lLmWlObCh8qc=;
-        b=QON1Gl9s1kkROvQY9whWnwGgcnaB4YIR1fgk8dSyGOoCf7hTlJgAN9HZsgUyD+dKDe
-         3q5wAqAi82gbM8t3Kg60W2QZvCqEJ4mZCkWVxXXUsHSy6meM8yVP2/afMaiKrpyx4gZO
-         /zjzP5nmXt88kR7btX7zCTEao3FMB2pXwQXGXx4Fe1t/7t81y7lIgIMKsoJ7qHrvQtpw
-         BA/UP6RzIbd2R9fpk+APa1SZfRIaSGEN9q/0joRs/GfYdpL0EBRFqNkY9DjaQIrww6eB
-         6AfE7k+LCj8fUbWfERHHDHMMRLHabE/QJBtxHTsCbNF8/r9FazasHiPJgwj5/7QgpoEO
-         WSjQ==
+        bh=AcH1FS/cY17dY1GS/AeJ9Cc6wg6/sJS1m+8NI+VLW6c=;
+        b=A/eiWrTzy624Z6SUVpbBNu2n18qIJdY5Eb7ta7XoYimzF9bE9itZS3TwXefOcE0CwO
+         VuLLv6FI+f5Tisz7MYHdpbsRVGTzVJI0+PSZWYZ0hbjRnsd/5JZBmTMQA40ME9yJZJJV
+         2G7HlZGPklEWcsYRfdD0dH5i12hL+dCLLtkRCBkQw0w3eBS2p8ucEHB85Jtby/AcTmVA
+         uAtgew++vYSM8SMj54+2UwVVMiYlrAQmnslILrkpRq2yKBLbZRNRdG8m6pjq9evQNTTx
+         zjdgSA+2yT0D0q228HIWP7xI++hWpUzNn8NBp/6YsGm3ujIljxovE+HsNK2ug4boY0nm
+         DkUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=PvpcuwVOPMLvQDnLlBwHPl2O7D8LMz4lLmWlObCh8qc=;
-        b=Mr0RtMQEq1NxAKhD371Yb0b1udNSg1oqICqc9Wb8eVBfnhmbQi+445tc5pAedcqujl
-         NOmxzH3m8GyJuIn9mSrrpITOcWKhmfonJoBsvVuxbN7fEh1qh4hXEknf1Qts1BK1wk5d
-         vjEeb7AqsaZpIb4S7lfHj5OqB/H9ZwoH1Vgk+GymvkHv0Pslk5wM5ASaF42mJ6Nu1EEr
-         vdsl19OUusH5eXKPS9DKL5MioTY6hqLFICvWqz91JnUXkxPHz/zNdWc0oU8BBExFJ2Jc
-         XORFOPjwiYCblt9CM3J+rgRyR6DkkPEyWrdEbbEzjqqMNhX+FLDynEUT95k8UpXz9+kR
-         dh7A==
-X-Gm-Message-State: AOAM531hbZVT91IFzkMtB+l7Ev1b5eWwytpBbV2tjjyXBjxd7tjmm6KZ
-        4Dn47ui6cuXTIcPN51rDZzo=
-X-Google-Smtp-Source: ABdhPJwYSeEwcJLgnqbgKFMXoU0x9dR+BGXQt30RblfxNKDPJUGaANO1daCN6cf8hc1/VZhaI4+xBA==
-X-Received: by 2002:a2e:8e63:: with SMTP id t3mr233593ljk.88.1608228466606;
-        Thu, 17 Dec 2020 10:07:46 -0800 (PST)
+        bh=AcH1FS/cY17dY1GS/AeJ9Cc6wg6/sJS1m+8NI+VLW6c=;
+        b=d2cKGKA6UZ21XBgoOUsiv/+cYf6dViX1j8NI0gHxOqhLdLZdCqSTsm1h9cQogz5Tc0
+         dkWW4P/zIBQkttWurTK/ka/tD/Z5oPZaEc83iBrh8XXe4RzQbCOMl6h9xqqEqJo0C8Ij
+         as0qwLevOF1eME5kfKg6olrTpWLyNXiM+57tiB96MhKcQ8cmXdyLDk9L/psD5myVP+1l
+         9XEhcuFx9CeuvDA6gveXEp/hNOXECnGRPpivoWkdN0l0GDGBlnKXDEgph1q9Txo5BFjz
+         e4EPpLCYmNmVepjKDCK0+eJ7vfrOMzkp+gGhPpizmyQPgwANKuwW52tnwNNmWqz3hDP9
+         ShNQ==
+X-Gm-Message-State: AOAM532+IbEoZ8jqClhCrIUmJ2E/QoJ3TvwXd7e86T1L6QODbiGcbJ8x
+        cIqgM0q/3ZA11+/uErUUSJY=
+X-Google-Smtp-Source: ABdhPJxDAKi/w9xlyE0C+sGYBCXZ9YXsrV/Esex76tZjt69/6MpbZ3TUi8oDE2wG4nj3u41A5rs3sw==
+X-Received: by 2002:a05:6512:687:: with SMTP id t7mr14836899lfe.432.1608228471133;
+        Thu, 17 Dec 2020 10:07:51 -0800 (PST)
 Received: from localhost.localdomain (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.gmail.com with ESMTPSA id u5sm655596lff.78.2020.12.17.10.07.45
+        by smtp.gmail.com with ESMTPSA id u5sm655596lff.78.2020.12.17.10.07.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Dec 2020 10:07:46 -0800 (PST)
+        Thu, 17 Dec 2020 10:07:50 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -78,9 +78,9 @@ Cc:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-clk@vger.kernel.org
-Subject: [PATCH v2 23/48] soc/tegra: pmc: Pulse resets after removing power clamp
-Date:   Thu, 17 Dec 2020 21:06:13 +0300
-Message-Id: <20201217180638.22748-24-digetx@gmail.com>
+Subject: [PATCH v2 27/48] soc/tegra: Add CONFIG_SOC_TEGRA_COMMON and select PM_OPP by default
+Date:   Thu, 17 Dec 2020 21:06:17 +0300
+Message-Id: <20201217180638.22748-28-digetx@gmail.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201217180638.22748-1-digetx@gmail.com>
 References: <20201217180638.22748-1-digetx@gmail.com>
@@ -90,36 +90,103 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The GR3D1 hardware unit needs to pulse hardware reset after removing power
-clamp, otherwise reset won't be deasserted. Hence give reset a pulse after
-removing the clamp. This stayed unnoticed previously because power
-management wasn't supported by the 3D driver until recently and all power
-gates are usually ungated after bootloader by default.
+Add new Kconfig SOC_TEGRA_COMMON option which selects configuration
+options that are common for all Tegra SoCs. Select PM_OPP by default
+since from now on OPPs will be used by Tegra drivers which present on
+all SoC generations, like display controller driver for example.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/soc/tegra/pmc.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/soc/tegra/Kconfig | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
-index fd2ba3c59178..985373ce52b1 100644
---- a/drivers/soc/tegra/pmc.c
-+++ b/drivers/soc/tegra/pmc.c
-@@ -654,6 +654,14 @@ static int tegra_powergate_power_up(struct tegra_powergate *pg,
+diff --git a/drivers/soc/tegra/Kconfig b/drivers/soc/tegra/Kconfig
+index 976dee036470..bcd61ae59ba3 100644
+--- a/drivers/soc/tegra/Kconfig
++++ b/drivers/soc/tegra/Kconfig
+@@ -13,6 +13,7 @@ config ARCH_TEGRA_2x_SOC
+ 	select PINCTRL_TEGRA20
+ 	select PL310_ERRATA_727915 if CACHE_L2X0
+ 	select PL310_ERRATA_769419 if CACHE_L2X0
++	select SOC_TEGRA_COMMON
+ 	select SOC_TEGRA_FLOWCTRL
+ 	select SOC_TEGRA_PMC
+ 	select SOC_TEGRA20_VOLTAGE_COUPLER
+@@ -27,6 +28,7 @@ config ARCH_TEGRA_3x_SOC
+ 	select ARM_ERRATA_764369 if SMP
+ 	select PINCTRL_TEGRA30
+ 	select PL310_ERRATA_769419 if CACHE_L2X0
++	select SOC_TEGRA_COMMON
+ 	select SOC_TEGRA_FLOWCTRL
+ 	select SOC_TEGRA_PMC
+ 	select SOC_TEGRA30_VOLTAGE_COUPLER
+@@ -40,6 +42,7 @@ config ARCH_TEGRA_114_SOC
+ 	select ARM_ERRATA_798181 if SMP
+ 	select HAVE_ARM_ARCH_TIMER
+ 	select PINCTRL_TEGRA114
++	select SOC_TEGRA_COMMON
+ 	select SOC_TEGRA_FLOWCTRL
+ 	select SOC_TEGRA_PMC
+ 	select TEGRA_TIMER
+@@ -51,6 +54,7 @@ config ARCH_TEGRA_124_SOC
+ 	bool "Enable support for Tegra124 family"
+ 	select HAVE_ARM_ARCH_TIMER
+ 	select PINCTRL_TEGRA124
++	select SOC_TEGRA_COMMON
+ 	select SOC_TEGRA_FLOWCTRL
+ 	select SOC_TEGRA_PMC
+ 	select TEGRA_TIMER
+@@ -66,6 +70,7 @@ if ARM64
+ config ARCH_TEGRA_132_SOC
+ 	bool "NVIDIA Tegra132 SoC"
+ 	select PINCTRL_TEGRA124
++	select SOC_TEGRA_COMMON
+ 	select SOC_TEGRA_FLOWCTRL
+ 	select SOC_TEGRA_PMC
+ 	help
+@@ -77,6 +82,7 @@ config ARCH_TEGRA_132_SOC
+ config ARCH_TEGRA_210_SOC
+ 	bool "NVIDIA Tegra210 SoC"
+ 	select PINCTRL_TEGRA210
++	select SOC_TEGRA_COMMON
+ 	select SOC_TEGRA_FLOWCTRL
+ 	select SOC_TEGRA_PMC
+ 	select TEGRA_TIMER
+@@ -99,6 +105,7 @@ config ARCH_TEGRA_186_SOC
+ 	select TEGRA_BPMP
+ 	select TEGRA_HSP_MBOX
+ 	select TEGRA_IVC
++	select SOC_TEGRA_COMMON
+ 	select SOC_TEGRA_PMC
+ 	help
+ 	  Enable support for the NVIDIA Tegar186 SoC. The Tegra186 features a
+@@ -115,6 +122,7 @@ config ARCH_TEGRA_194_SOC
+ 	select TEGRA_BPMP
+ 	select TEGRA_HSP_MBOX
+ 	select TEGRA_IVC
++	select SOC_TEGRA_COMMON
+ 	select SOC_TEGRA_PMC
+ 	help
+ 	  Enable support for the NVIDIA Tegra194 SoC.
+@@ -125,6 +133,7 @@ config ARCH_TEGRA_234_SOC
+ 	select TEGRA_BPMP
+ 	select TEGRA_HSP_MBOX
+ 	select TEGRA_IVC
++	select SOC_TEGRA_COMMON
+ 	select SOC_TEGRA_PMC
+ 	help
+ 	  Enable support for the NVIDIA Tegra234 SoC.
+@@ -132,6 +141,10 @@ config ARCH_TEGRA_234_SOC
+ endif
+ endif
  
- 	usleep_range(10, 20);
- 
-+	/*
-+	 * Some hardware blocks may need a 0->1->0 reset pulse in order
-+	 * to propagate the reset, Tegra30 3D1 is one example.
-+	 */
-+	err = reset_control_reset(pg->reset);
-+	if (err)
-+		goto powergate_off;
++config SOC_TEGRA_COMMON
++	bool
++	select PM_OPP
 +
- 	if (pg->pmc->soc->needs_mbist_war)
- 		err = tegra210_clk_handle_mbist_war(pg->id);
- 	if (err)
+ config SOC_TEGRA_FUSE
+ 	def_bool y
+ 	depends on ARCH_TEGRA
 -- 
 2.29.2
 
