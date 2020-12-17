@@ -8,55 +8,55 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 652B3C2BBCF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB5ACC3526C
 	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:09:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2190C2395A
+	by mail.kernel.org (Postfix) with ESMTP id B8F2F2388E
 	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:09:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731286AbgLQSJ2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Dec 2020 13:09:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42112 "EHLO
+        id S1731303AbgLQSJ3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Dec 2020 13:09:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731119AbgLQSJW (ORCPT
+        with ESMTP id S1731125AbgLQSJW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 17 Dec 2020 13:09:22 -0500
 Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA84C0619D9;
-        Thu, 17 Dec 2020 10:07:45 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id a12so59837505lfl.6;
-        Thu, 17 Dec 2020 10:07:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F5EC0619DB;
+        Thu, 17 Dec 2020 10:07:48 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id m25so59780833lfc.11;
+        Thu, 17 Dec 2020 10:07:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4FYxQew+p18AO5FBSec7kTxg/87GRcpO76q4A6IgDv4=;
-        b=cOKXXBVSpDRg0y9isOFdN9ypZc0EDS0wcBFXXnpHA5gHfe4rMBp0KSj+DDdWOL11DO
-         14H+OQC2eE39/MWECC9kqvFurVIqFvJ2WndhK/heNmgpBhaBuetfvjX3bSbDChUGYlOl
-         M03g7jnK6aEYOl3VVMYqgb92F5jHXviJ0kadHsCvkB6DjdIkY3a6/yN0ivwTWZMQPNas
-         0wbcDxjvzueYloI0q/vTGlIggkOTjoKgB+9h6hdCf1lTJRXhHWJAjOP8NmnXryCCK0tq
-         y7aL9Gb5rsb/CvF+4IQm84UqG1pgiogHxaF3WzjOcQgVdkCBNmmODR0H0IjN3ODbgQKH
-         YcOA==
+        bh=PvpcuwVOPMLvQDnLlBwHPl2O7D8LMz4lLmWlObCh8qc=;
+        b=QON1Gl9s1kkROvQY9whWnwGgcnaB4YIR1fgk8dSyGOoCf7hTlJgAN9HZsgUyD+dKDe
+         3q5wAqAi82gbM8t3Kg60W2QZvCqEJ4mZCkWVxXXUsHSy6meM8yVP2/afMaiKrpyx4gZO
+         /zjzP5nmXt88kR7btX7zCTEao3FMB2pXwQXGXx4Fe1t/7t81y7lIgIMKsoJ7qHrvQtpw
+         BA/UP6RzIbd2R9fpk+APa1SZfRIaSGEN9q/0joRs/GfYdpL0EBRFqNkY9DjaQIrww6eB
+         6AfE7k+LCj8fUbWfERHHDHMMRLHabE/QJBtxHTsCbNF8/r9FazasHiPJgwj5/7QgpoEO
+         WSjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4FYxQew+p18AO5FBSec7kTxg/87GRcpO76q4A6IgDv4=;
-        b=krr/kRgNcDpPqORYEt3/6UET9Ups7ctNVJseTeiI0CUrf7cbiKYO/r8YYgW9Ybwdp6
-         +BLqCoQaQTFojJjGbQJCXuLbkkXS0Q58sVeFl994SAwx5mXcdwblxnh/9AHcROB2rKy2
-         ldLpr9pIN228gNec5LGgKl3DoVD3LNZ8OMdwszU1uXyr0wjxDKgJhdQj4eo7n3IKmFQi
-         VLWNPWLIuNhJ/mNJXkM1wb5MkRJmInH4tD2miU07Dr6dBNiAMJohD8q8DMffAUNKuCyc
-         It/DUn/jQ30HSITjm/Pka1bPMMiXHndpkam59E+gngGpszsGyQcqsmqsLLGecOV/x9cS
-         lGuQ==
-X-Gm-Message-State: AOAM532zw9ofK+NCqzJHVGJHefeUqI4ijVVWqHmeaPIfsJ4ZbkvN9M1G
-        y+bVLhME9G63gTwY90O5Y54=
-X-Google-Smtp-Source: ABdhPJwJR2PqCRmXe5Tfarwrq+QmAbDDyYK3hcoSttNokb6f8iiftpP/z20ln6MtYTWY0f0cfPKVTg==
-X-Received: by 2002:a2e:712:: with SMTP id 18mr205136ljh.165.1608228464322;
-        Thu, 17 Dec 2020 10:07:44 -0800 (PST)
+        bh=PvpcuwVOPMLvQDnLlBwHPl2O7D8LMz4lLmWlObCh8qc=;
+        b=Mr0RtMQEq1NxAKhD371Yb0b1udNSg1oqICqc9Wb8eVBfnhmbQi+445tc5pAedcqujl
+         NOmxzH3m8GyJuIn9mSrrpITOcWKhmfonJoBsvVuxbN7fEh1qh4hXEknf1Qts1BK1wk5d
+         vjEeb7AqsaZpIb4S7lfHj5OqB/H9ZwoH1Vgk+GymvkHv0Pslk5wM5ASaF42mJ6Nu1EEr
+         vdsl19OUusH5eXKPS9DKL5MioTY6hqLFICvWqz91JnUXkxPHz/zNdWc0oU8BBExFJ2Jc
+         XORFOPjwiYCblt9CM3J+rgRyR6DkkPEyWrdEbbEzjqqMNhX+FLDynEUT95k8UpXz9+kR
+         dh7A==
+X-Gm-Message-State: AOAM531hbZVT91IFzkMtB+l7Ev1b5eWwytpBbV2tjjyXBjxd7tjmm6KZ
+        4Dn47ui6cuXTIcPN51rDZzo=
+X-Google-Smtp-Source: ABdhPJwYSeEwcJLgnqbgKFMXoU0x9dR+BGXQt30RblfxNKDPJUGaANO1daCN6cf8hc1/VZhaI4+xBA==
+X-Received: by 2002:a2e:8e63:: with SMTP id t3mr233593ljk.88.1608228466606;
+        Thu, 17 Dec 2020 10:07:46 -0800 (PST)
 Received: from localhost.localdomain (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.gmail.com with ESMTPSA id u5sm655596lff.78.2020.12.17.10.07.43
+        by smtp.gmail.com with ESMTPSA id u5sm655596lff.78.2020.12.17.10.07.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Dec 2020 10:07:43 -0800 (PST)
+        Thu, 17 Dec 2020 10:07:46 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -78,9 +78,9 @@ Cc:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-clk@vger.kernel.org
-Subject: [PATCH v2 21/48] PM: domains: Add "performance" column to debug summary
-Date:   Thu, 17 Dec 2020 21:06:11 +0300
-Message-Id: <20201217180638.22748-22-digetx@gmail.com>
+Subject: [PATCH v2 23/48] soc/tegra: pmc: Pulse resets after removing power clamp
+Date:   Thu, 17 Dec 2020 21:06:13 +0300
+Message-Id: <20201217180638.22748-24-digetx@gmail.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201217180638.22748-1-digetx@gmail.com>
 References: <20201217180638.22748-1-digetx@gmail.com>
@@ -90,76 +90,36 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add "performance" column to debug summary which shows performance state
-of all power domains and theirs devices.
+The GR3D1 hardware unit needs to pulse hardware reset after removing power
+clamp, otherwise reset won't be deasserted. Hence give reset a pulse after
+removing the clamp. This stayed unnoticed previously because power
+management wasn't supported by the 3D driver until recently and all power
+gates are usually ungated after bootloader by default.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/base/power/domain.c | 22 +++++++++++++++++-----
- 1 file changed, 17 insertions(+), 5 deletions(-)
+ drivers/soc/tegra/pmc.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index a3e1bfc233d4..1c60dae8540c 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -2951,7 +2951,15 @@ static void rtpm_status_str(struct seq_file *s, struct device *dev)
- 	else
- 		WARN_ON(1);
+diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
+index fd2ba3c59178..985373ce52b1 100644
+--- a/drivers/soc/tegra/pmc.c
++++ b/drivers/soc/tegra/pmc.c
+@@ -654,6 +654,14 @@ static int tegra_powergate_power_up(struct tegra_powergate *pg,
  
--	seq_puts(s, p);
-+	seq_printf(s, "%-25s  ", p);
-+}
+ 	usleep_range(10, 20);
+ 
++	/*
++	 * Some hardware blocks may need a 0->1->0 reset pulse in order
++	 * to propagate the reset, Tegra30 3D1 is one example.
++	 */
++	err = reset_control_reset(pg->reset);
++	if (err)
++		goto powergate_off;
 +
-+static void perf_status_str(struct seq_file *s, struct device *dev)
-+{
-+	struct generic_pm_domain_data *gpd_data;
-+
-+	gpd_data = to_gpd_data(dev->power.subsys_data->domain_data);
-+	seq_put_decimal_ull(s, "", gpd_data->performance_state);
- }
- 
- static int genpd_summary_one(struct seq_file *s,
-@@ -2979,7 +2987,7 @@ static int genpd_summary_one(struct seq_file *s,
- 	else
- 		snprintf(state, sizeof(state), "%s",
- 			 status_lookup[genpd->status]);
--	seq_printf(s, "%-30s  %-15s ", genpd->name, state);
-+	seq_printf(s, "%-30s  %-50s %u", genpd->name, state, genpd->performance_state);
- 
- 	/*
- 	 * Modifications on the list require holding locks on both
-@@ -2987,7 +2995,10 @@ static int genpd_summary_one(struct seq_file *s,
- 	 * Also genpd->name is immutable.
- 	 */
- 	list_for_each_entry(link, &genpd->parent_links, parent_node) {
--		seq_printf(s, "%s", link->child->name);
-+		if (list_is_first(&link->parent_node, &genpd->parent_links))
-+			seq_printf(s, "\n%50s ", link->child->name);
-+		else
-+			seq_printf(s, "%s", link->child->name);
- 		if (!list_is_last(&link->parent_node, &genpd->parent_links))
- 			seq_puts(s, ", ");
- 	}
-@@ -3001,6 +3012,7 @@ static int genpd_summary_one(struct seq_file *s,
- 
- 		seq_printf(s, "\n    %-50s  ", kobj_path);
- 		rtpm_status_str(s, pm_data->dev);
-+		perf_status_str(s, pm_data->dev);
- 		kfree(kobj_path);
- 	}
- 
-@@ -3016,9 +3028,9 @@ static int summary_show(struct seq_file *s, void *data)
- 	struct generic_pm_domain *genpd;
- 	int ret = 0;
- 
--	seq_puts(s, "domain                          status          children\n");
-+	seq_puts(s, "domain                          status          children                           performance\n");
- 	seq_puts(s, "    /device                                             runtime status\n");
--	seq_puts(s, "----------------------------------------------------------------------\n");
-+	seq_puts(s, "----------------------------------------------------------------------------------------------\n");
- 
- 	ret = mutex_lock_interruptible(&gpd_list_lock);
- 	if (ret)
+ 	if (pg->pmc->soc->needs_mbist_war)
+ 		err = tegra210_clk_handle_mbist_war(pg->id);
+ 	if (err)
 -- 
 2.29.2
 
