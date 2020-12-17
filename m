@@ -8,55 +8,55 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99A34C35273
-	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:09:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A288C47434
+	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:09:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 764E1239CF
-	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:09:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4E6B02388E
+	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:09:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731391AbgLQSJr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Dec 2020 13:09:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42084 "EHLO
+        id S1731169AbgLQSJ0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Dec 2020 13:09:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731168AbgLQSJ1 (ORCPT
+        with ESMTP id S1731127AbgLQSJW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Dec 2020 13:09:27 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BD2C061A4D;
-        Thu, 17 Dec 2020 10:08:17 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id l11so59864645lfg.0;
-        Thu, 17 Dec 2020 10:08:17 -0800 (PST)
+        Thu, 17 Dec 2020 13:09:22 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83379C0619DC;
+        Thu, 17 Dec 2020 10:07:51 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id m12so59850711lfo.7;
+        Thu, 17 Dec 2020 10:07:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=dKHTaUqpc9+qnQDklHnbuyOfX2r5BRRRR5K6s2ucz2U=;
-        b=Z/3072D8/T/ty624y/Y3fzZ4jDHFKHMiM8Puk81C8hVAIESVtNYFGrhY1j91vcZIjE
-         X9pYxViGd/drXaOMeiO03C94pqe0NUAIdPEzUPg7/baXADcPcw0MywpuMA/Af8v2L3JF
-         YYJPps/fM0KR2BDKsk6Jh/nu6atzjZi+/Qjyh1NdEhRzIxzuzNvI0ZekJYPghXXJV2Kx
-         V10TKhm0SSOl8Cihy6JHBf3ogDQRcQ0CbbCJogpbFv704LJOPOZyq5ADGrMW4TfZ9+M8
-         ZS2aqdaM/ACpx1+4CmVJGtjLu2NfZZYPG13hiBP/iVkg3oJvV1O/9KFPXJDqaEV+LQIb
-         JiAw==
+        bh=PmBu9E2lIeozw0QkYWqe3D4pOekliocLu8JrWl5nny4=;
+        b=EPS29kv9Q9vOe6wgqe5DONcXtk0sVSUx85ZiXeHamtvdS3wv4XQD1m8FcHhtjA4J0u
+         WJ7s/9fectY4VCJGti53BT0w5BHKjdWK5DG/6uPZajKUSJ+QfKB1xTT3bWx8nnZ/6YEx
+         R1uOLMI3v7r0/KODn3O75mFfr7WU/WYV92H/GFIJE+LDOnXf//43yvBJUkqYK3LFc3yS
+         za1YN9CBQLJMiQDmt96cJVJ9ptT9MDoybRZaEARxn65Hhx9NuakJbAMrFhxFYgQAi/Tj
+         q5Ox90eUTSlb/QofCCJ+/nBR6XF3NdVQkxIlzbCHxOcPsjp2ug7KBulB9karp77fy0WD
+         NyRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=dKHTaUqpc9+qnQDklHnbuyOfX2r5BRRRR5K6s2ucz2U=;
-        b=UJRB4QLjc/eSV67gm2DMcLV0oBReR809rnjGNZzD1CvM6JlaFnrWYVFMDSyf0Ko04q
-         dT9AknZNi23QqlzO29FpKHzHuyb1bu1OP1ClKVi2tJ3ZlsC1evizEXRT/8iTPJbklYNt
-         GsDcMGqy23/Ge1LTlbR6wAmzm5pgncbP/Cct+ScaveD2se1q+HB7jH27sa2AHSiXDwj7
-         ii8SHtM3EJdsPxTaAPM2WhifXB+wBaIizSHCpQmoYam68j4Za/kPes0hSkC9z3QTLZQ7
-         GtljYMNZrJLb6uncA2M/Ku6+YO6EyDoLfgonU7UlX2HnNpuC4zb9xv4akH+a1qzk50hI
-         64UQ==
-X-Gm-Message-State: AOAM530s5AzlHyaXhXBOSh3LbQdnJ+GHLiODbzS7YXlLUDl01wHRX2Oe
-        ZCcl2xkV9mtb2zpxkQhcRss=
-X-Google-Smtp-Source: ABdhPJyA0nTTMUEGxiyKEV0G3HcIN8F0c417daftUmLQYrZ/StuJHmuOFKZCKF5VoAB7IsqXITN4Aw==
-X-Received: by 2002:a2e:8512:: with SMTP id j18mr213822lji.31.1608228495787;
-        Thu, 17 Dec 2020 10:08:15 -0800 (PST)
+        bh=PmBu9E2lIeozw0QkYWqe3D4pOekliocLu8JrWl5nny4=;
+        b=V1daioFMNiOkYQ+B0XwMSIOKWB85l3vWVyZsfWRo/nW5j6VJnmwOK6OfvXOZZXfaIi
+         RqgkuMYNM5DuyafyTOIMhw3pOu8tJ0pSWuZpLceJU+NW6rCW+oUGJSWvtgawE+4wuywn
+         K+hlD6BkLE369AtGGB0gc0gDIODrJCdW7VNek22+HdtLEuRf0Et449A3yuSg+jTpiKRx
+         klIp5zldMZ/rB6AA1U3igqomXMZqChU5DJ7LQLoqCT/HF36gdkhRhtZ3Df2y5aGMbqFu
+         vsge6vdsc741y3KRZaBymQxF9oiAxctJtC0vf127R/8D3VYiPiJE1CeyLX5l9N/gKMUU
+         1tjQ==
+X-Gm-Message-State: AOAM532WyJnhUhwL02ff9Sr5bgFTfThMoyChevDGm84gevNY+6g9AJbX
+        0KmZdmMyHqgvOpn5edU3dHg=
+X-Google-Smtp-Source: ABdhPJwuD/q1ABQNnsDhwwbsY4LvwtjnLoFCXaYG1DCAoLzU2SaJeA+CHarpqRnPA6WcuWUQ7qagqw==
+X-Received: by 2002:ac2:4946:: with SMTP id o6mr14552075lfi.412.1608228470017;
+        Thu, 17 Dec 2020 10:07:50 -0800 (PST)
 Received: from localhost.localdomain (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.gmail.com with ESMTPSA id u5sm655596lff.78.2020.12.17.10.08.14
+        by smtp.gmail.com with ESMTPSA id u5sm655596lff.78.2020.12.17.10.07.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Dec 2020 10:08:15 -0800 (PST)
+        Thu, 17 Dec 2020 10:07:49 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -78,9 +78,9 @@ Cc:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-clk@vger.kernel.org
-Subject: [PATCH v2 48/48] ARM: tegra: cardhu: Support CPU voltage scaling and thermal throttling
-Date:   Thu, 17 Dec 2020 21:06:38 +0300
-Message-Id: <20201217180638.22748-49-digetx@gmail.com>
+Subject: [PATCH v2 26/48] soc/tegra: Add devm_tegra_core_dev_init_opp_table()
+Date:   Thu, 17 Dec 2020 21:06:16 +0300
+Message-Id: <20201217180638.22748-27-digetx@gmail.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201217180638.22748-1-digetx@gmail.com>
 References: <20201217180638.22748-1-digetx@gmail.com>
@@ -90,111 +90,215 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Enable CPU voltage scaling and thermal throttling on Tegra30 Cardhu board.
+Add common helper which initializes OPP table for Tegra SoC core devices.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- arch/arm/boot/dts/tegra30-cardhu.dtsi | 61 ++++++++++++++++++++++++++-
- 1 file changed, 60 insertions(+), 1 deletion(-)
+ drivers/soc/tegra/common.c | 137 +++++++++++++++++++++++++++++++++++++
+ include/soc/tegra/common.h |  35 ++++++++++
+ 2 files changed, 172 insertions(+)
 
-diff --git a/arch/arm/boot/dts/tegra30-cardhu.dtsi b/arch/arm/boot/dts/tegra30-cardhu.dtsi
-index d74c9ca78a7f..08c0ea4e6228 100644
---- a/arch/arm/boot/dts/tegra30-cardhu.dtsi
-+++ b/arch/arm/boot/dts/tegra30-cardhu.dtsi
-@@ -1,6 +1,9 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <dt-bindings/input/input.h>
-+#include <dt-bindings/thermal/thermal.h>
- #include "tegra30.dtsi"
-+#include "tegra30-cpu-opp.dtsi"
-+#include "tegra30-cpu-opp-microvolt.dtsi"
+diff --git a/drivers/soc/tegra/common.c b/drivers/soc/tegra/common.c
+index 3dc54f59cafe..1339d46f494d 100644
+--- a/drivers/soc/tegra/common.c
++++ b/drivers/soc/tegra/common.c
+@@ -3,9 +3,16 @@
+  * Copyright (C) 2014 NVIDIA CORPORATION.  All rights reserved.
+  */
  
- /**
-  * This file contains common DT entry for all fab version of Cardhu.
-@@ -339,12 +342,13 @@ ldo8_reg: ldo8 {
- 			};
- 		};
++#define dev_fmt(fmt)	"tegra-soc: " fmt
++
++#include <linux/clk.h>
++#include <linux/device.h>
++#include <linux/export.h>
+ #include <linux/of.h>
++#include <linux/pm_opp.h>
  
--		temperature-sensor@4c {
-+		nct1008: temperature-sensor@4c {
- 			compatible = "onnn,nct1008";
- 			reg = <0x4c>;
- 			vcc-supply = <&sys_3v3_reg>;
- 			interrupt-parent = <&gpio>;
- 			interrupts = <TEGRA_GPIO(CC, 2) IRQ_TYPE_LEVEL_LOW>;
-+			#thermal-sensor-cells = <1>;
- 		};
+ #include <soc/tegra/common.h>
++#include <soc/tegra/fuse.h>
  
- 		vdd_core: tps62361@60 {
-@@ -438,6 +442,29 @@ clk32k_in: clock@0 {
- 		#clock-cells = <0>;
- 	};
+ static const struct of_device_id tegra_machine_match[] = {
+ 	{ .compatible = "nvidia,tegra20", },
+@@ -31,3 +38,133 @@ bool soc_is_tegra(void)
  
-+	cpus {
-+		cpu0: cpu@0 {
-+			cpu-supply = <&vddctrl_reg>;
-+			operating-points-v2 = <&cpu0_opp_table>;
-+			#cooling-cells = <2>;
-+		};
+ 	return match != NULL;
+ }
 +
-+		cpu@1 {
-+			cpu-supply = <&vddctrl_reg>;
-+			operating-points-v2 = <&cpu0_opp_table>;
-+		};
++static int tegra_core_dev_init_opp_state(struct device *dev)
++{
++	struct dev_pm_opp *opp;
++	unsigned long rate;
++	struct clk *clk;
++	int err;
 +
-+		cpu@2 {
-+			cpu-supply = <&vddctrl_reg>;
-+			operating-points-v2 = <&cpu0_opp_table>;
-+		};
++	clk = devm_clk_get(dev, NULL);
++	if (IS_ERR(clk)) {
++		dev_err(dev, "failed to get clk: %pe\n", clk);
++		return PTR_ERR(clk);
++	}
 +
-+		cpu@3 {
-+			cpu-supply = <&vddctrl_reg>;
-+			operating-points-v2 = <&cpu0_opp_table>;
-+		};
-+	};
++	/*
++	 * If voltage regulator presents, then we could select the fastest
++	 * clock rate, but driver doesn't support power management and
++	 * frequency scaling yet, hence the top freq OPP will vote for a
++	 * very high voltage that will produce lot's of heat.  Let's select
++	 * OPP for the current/default rate for now.
++	 *
++	 * Clock rate should be pre-initialized (i.e. it's non-zero) either
++	 * by clock driver or by assigned clocks in a device-tree.
++	 */
++	rate = clk_get_rate(clk);
++	if (!rate) {
++		dev_err(dev, "failed to get clk rate\n");
++		return -EINVAL;
++	}
 +
- 	panel: panel {
- 		compatible = "chunghwa,claa101wb01";
- 		ddc-i2c-bus = <&panelddc>;
-@@ -617,6 +644,38 @@ sound {
- 					 <&tegra_car TEGRA30_CLK_EXTERN1>;
- 	};
++	/* find suitable OPP for the clock rate and supportable by hardware */
++	opp = dev_pm_opp_find_freq_ceil(dev, &rate);
++
++	/*
++	 * dev_pm_opp_set_rate() doesn't search for a floor clock rate and it
++	 * will error out if default clock rate is too high, i.e. unsupported
++	 * by a SoC hardware version.  Hence will find floor rate by ourselves.
++	 */
++	if (opp == ERR_PTR(-ERANGE))
++		opp = dev_pm_opp_find_freq_floor(dev, &rate);
++
++	err = PTR_ERR_OR_ZERO(opp);
++	if (err) {
++		dev_err(dev, "failed to get OPP for %ld Hz: %d\n",
++			rate, err);
++		return err;
++	}
++
++	dev_pm_opp_put(opp);
++
++	/*
++	 * First dummy rate-set initializes voltage vote by setting voltage
++	 * in accordance to the clock rate.  We need to do this because some
++	 * drivers currently don't support power management and clock is
++	 * permanently enabled.
++	 */
++	err = dev_pm_opp_set_rate(dev, rate);
++	if (err) {
++		dev_err(dev, "failed to initialize OPP clock: %d\n", err);
++		return err;
++	}
++
++	return 0;
++}
++
++/**
++ * devm_tegra_core_dev_init_opp_table() - initialize OPP table
++ * @cfg: pointer to the OPP table configuration
++ *
++ * This function will initialize OPP table and sync OPP state of a Tegra SoC
++ * core device.
++ *
++ * Return: 0 on success or errorno.
++ */
++int devm_tegra_core_dev_init_opp_table(struct device *dev,
++				       struct tegra_core_opp_params *params)
++{
++	struct opp_table *opp_table;
++	u32 hw_version;
++	int err;
++
++	opp_table = devm_pm_opp_set_clkname(dev, NULL);
++	if (IS_ERR(opp_table)) {
++		dev_err(dev, "failed to set OPP clk %pe\n", opp_table);
++		return PTR_ERR(opp_table);
++	}
++
++	/* Tegra114+ don't support OPP yet */
++	if (!of_machine_is_compatible("nvidia,tegra20") &&
++	    !of_machine_is_compatible("nvidia,tegra30"))
++		return -ENODEV;
++
++	if (of_machine_is_compatible("nvidia,tegra20"))
++		hw_version = BIT(tegra_sku_info.soc_process_id);
++	else
++		hw_version = BIT(tegra_sku_info.soc_speedo_id);
++
++	opp_table = devm_pm_opp_set_supported_hw(dev, &hw_version, 1);
++	if (IS_ERR(opp_table)) {
++		dev_err(dev, "failed to set OPP supported HW: %pe\n", opp_table);
++		return PTR_ERR(opp_table);
++	}
++
++	/*
++	 * Older device-trees have an empty OPP table, hence we will get
++	 * -ENODEV from devm_pm_opp_of_add_table() for the older DTBs.
++	 *
++	 * The OPP table presence also varies per-device and depending
++	 * on a SoC generation, hence -ENODEV is expected to happen for
++	 * the newer DTs as well.
++	 */
++	err = devm_pm_opp_of_add_table(dev);
++	if (err) {
++		if (err == -ENODEV)
++			dev_err_once(dev, "OPP table not found, please update device-tree\n");
++		else
++			dev_err(dev, "failed to add OPP table: %d\n", err);
++
++		return err;
++	}
++
++	if (params->init_state) {
++		err = tegra_core_dev_init_opp_state(dev);
++		if (err)
++			return err;
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(devm_tegra_core_dev_init_opp_table);
+diff --git a/include/soc/tegra/common.h b/include/soc/tegra/common.h
+index 98027a76ce3d..57b56793a9e5 100644
+--- a/include/soc/tegra/common.h
++++ b/include/soc/tegra/common.h
+@@ -6,6 +6,41 @@
+ #ifndef __SOC_TEGRA_COMMON_H__
+ #define __SOC_TEGRA_COMMON_H__
  
-+	thermal-zones {
-+		cpu-thermal {
-+			polling-delay-passive = <1000>; /* milliseconds */
-+			polling-delay = <5000>; /* milliseconds */
++#include <linux/errno.h>
++#include <linux/types.h>
 +
-+			thermal-sensors = <&nct1008 1>;
++struct clk;
++struct device;
 +
-+			trips {
-+				trip0: cpu-alert0 {
-+					/* throttle at 57C until temperature drops to 56.8C */
-+					temperature = <57000>;
-+					hysteresis = <200>;
-+					type = "passive";
-+				};
++/**
++ * Tegra SoC core device OPP table configuration
++ *
++ * @dev: pointer to the core device
++ * @clkname: name of clock used for DVFS
++ * @init_state: pre-initialize OPP state of a device
++ */
++struct tegra_core_opp_params {
++	struct device *dev;
++	const char *clkname;
++	bool init_state;
++};
 +
-+				trip1: cpu-crit {
-+					/* shut down at 60C */
-+					temperature = <60000>;
-+					hysteresis = <2000>;
-+					type = "critical";
-+				};
-+			};
++#ifdef CONFIG_ARCH_TEGRA
+ bool soc_is_tegra(void);
++int devm_tegra_core_dev_init_opp_table(struct device *dev,
++				       struct tegra_core_opp_params *cfg);
++#else
++static inline bool soc_is_tegra(void)
++{
++	return false;
++}
 +
-+			cooling-maps {
-+				map0 {
-+					trip = <&trip0>;
-+					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
-+		};
-+	};
-+
- 	gpio-keys {
- 		compatible = "gpio-keys";
++static inline int
++devm_tegra_core_dev_init_opp_table(struct device *dev,
++				   struct tegra_core_opp_params *cfg)
++{
++	return -ENODEV;
++}
++#endif
  
+ #endif /* __SOC_TEGRA_COMMON_H__ */
 -- 
 2.29.2
 
