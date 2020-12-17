@@ -2,60 +2,61 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16997C4361B
-	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 23:45:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C1FEC4361B
+	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 23:45:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CC09522511
-	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 23:45:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F0B8A22511
+	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 23:45:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732212AbgLQXoe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Dec 2020 18:44:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
+        id S1732429AbgLQXpS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Dec 2020 18:45:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732201AbgLQXoe (ORCPT
+        with ESMTP id S1732404AbgLQXpP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Dec 2020 18:44:34 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7F9C061794;
-        Thu, 17 Dec 2020 15:43:53 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id t16so246741wra.3;
-        Thu, 17 Dec 2020 15:43:53 -0800 (PST)
+        Thu, 17 Dec 2020 18:45:15 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B017CC061257;
+        Thu, 17 Dec 2020 15:44:02 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id y23so572821wmi.1;
+        Thu, 17 Dec 2020 15:44:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UBqa0Lp+3ygWF6OGkOP1uHW2xoysiDViqe/7uQy1Q2c=;
-        b=cEYYIywkMDxTUX7cW4KSyTS2FP1Gm5u6zdbSRyz9XE5nFKnajH0cak8KW6FwfluVn4
-         qlZQw5PljRD+nMQIVe3vIx5UOxbVfNaV5oBef1CBnMWSj3YCutyw/hRY7p6Kq9l+ID+4
-         LI8X/TLt1ntdFeXyqmORSPBDFYr9c3nayM2xoUOfuqEaMWK+u+nFNfvP++rMGm6y+6FW
-         tTcF14+5gBOmMB8UmMqbDL82ob6pz/AwIH4JXdYzm6paYc3xSRDSCLLqa+lg571loPU6
-         ylQraO6B0PDL3azcn+VFc8iIR9Q3IdLhWiAIc5MkmTdchxXo5uc1ynkLy8LEjLH4HVcZ
-         6/oA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=NhV0D9xuOLKxtzOWkibLn3uvxzcSBCPiXhXcwXUTilM=;
+        b=g2TSU9X4omWopl89Jo0LZ6GhwCl0vy3NOdWDxlgJzd9MJ4kD23p2lAXsB1ak/v9AYP
+         p6bRMhpmRYZBdJeolDOkLPzHHvX/pTgW9VVmlM0Wu+bgvzoCI25B2SAJ5/o+0DDFRUH0
+         H3I86/Y7jKjQwjjWJ/Ph6ltdqzuWCO90o56tQ3/3YuuLvtuhL8SLBKO2rZVzzFzsp+b0
+         z88YNdTY+tW0TrDTHOfkgXS8to2MevQ3b4iZTRzqOyQKHVWs8x2xRrFqkjfxPPIqqbpP
+         FVOuj99pHEpHNo+sT8r8SjpA6v9iNRevjFEd65ABKnSmx2wBIDucrf29f/+CM3svwdIl
+         Z+1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UBqa0Lp+3ygWF6OGkOP1uHW2xoysiDViqe/7uQy1Q2c=;
-        b=P5gNUgsL5DQMq/zhm57qhNMu4POti8OkOOX43MEcsctblnUKVbZ4hT1yk53QzIariE
-         CAlDB3ll6/9lquPOKhkatUbt8wu1W0Kf6L3dlgaXxkubm3r/yMZ4Axq+pXDk2MyVAFPa
-         rioyTESBK7fOYKqNFsboRqVvXGHJ1je7s3vcWKKh7KzBC0AhAq/tF1FWexg/gfnqjSDu
-         LayJONumkmBxVPMDXqPKger8hktssAbL08yBfLLGd1V3qD74FzWZ04XKsWKhpkARQI7S
-         L8iKCFPIUrkB8DHpLlAcIWk59yRJcA+NWJF650jX7g5JFNlNjicXU6b/kCIDXYrk1yde
-         D6DQ==
-X-Gm-Message-State: AOAM530o54+/7oUZpR5P7uhIbKGOBtuTxJz6CSyy6Ony8KkFELOMF1Q5
-        EJXK2lcfJqHoxMLrMWePePC5c3RCGAPG+ds6
-X-Google-Smtp-Source: ABdhPJyKudBgqFd03IKg8iG672BcNf9NNDeb5mtZkBsdWzUVc+LJ4BDY6PIukgM8KKWdQkM+Y48bWQ==
-X-Received: by 2002:a5d:4905:: with SMTP id x5mr1207091wrq.75.1608248632136;
-        Thu, 17 Dec 2020 15:43:52 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=NhV0D9xuOLKxtzOWkibLn3uvxzcSBCPiXhXcwXUTilM=;
+        b=P5nO0nCbqTZ6IhFN9TdP9s7xMW76l/UtEtE39oBW6VWhX/I6w5IzcHcyTx/2TXpA3F
+         BZ3deKqAIC3WTlpzfVt4z0CoEJ/sDxs4+hNGt6NsNt27/ND0vJET9TAT8rp/ZlBgeW8A
+         9hrP4CqPXU1IIN+QdnRcK+jKguhIvUjZ7W/t2uHJSaGSQRnSdfDpjQwkZbw0hvwztLZb
+         xZn+kNf3moBhTvljLPv0uVveH/ho9A1io2lBWqj4OLkKM6Dh6r+3Gl9iSy6HoCPkK4HG
+         Pph2yvFme2W8ZXr2fSOQ7prgNQD+a3HbB9KgcjZjGmm8/lyn/hlhhFxq/gg+JKLvicK8
+         nZog==
+X-Gm-Message-State: AOAM532pZEihYpKRu6QJuz9qH89m6gTscCy+qMW5ypFd0XY1oOrkuxeN
+        ZT6A+n0ruLyUpDk8axy5zww47ENtpdJ9qn/9
+X-Google-Smtp-Source: ABdhPJzs3MQAOJ62JKkc1AKPkounfyMsx9EiBFgBKAjwzggxEJ3tQ2zekKlfhxG7zlgfn4K0wTcz4w==
+X-Received: by 2002:a1c:6446:: with SMTP id y67mr1580311wmb.144.1608248641472;
+        Thu, 17 Dec 2020 15:44:01 -0800 (PST)
 Received: from valhalla.home ([2.29.208.56])
-        by smtp.gmail.com with ESMTPSA id o3sm1873575wrc.93.2020.12.17.15.43.50
+        by smtp.gmail.com with ESMTPSA id o3sm1873575wrc.93.2020.12.17.15.44.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Dec 2020 15:43:51 -0800 (PST)
+        Thu, 17 Dec 2020 15:44:00 -0800 (PST)
 From:   Daniel Scally <djrscally@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-media@vger.kernel.org, devel@acpica.org
@@ -68,116 +69,52 @@ Cc:     rjw@rjwysocki.net, lenb@kernel.org, gregkh@linuxfoundation.org,
         laurent.pinchart+renesas@ideasonboard.com,
         jacopo+renesas@jmondi.org, kieran.bingham+renesas@ideasonboard.com,
         linus.walleij@linaro.org, heikki.krogerus@linux.intel.com,
-        kitakar@gmail.com, jorhand@linux.microsoft.com
-Subject: [PATCH v2 00/12] Add functionality to ipu3-cio2 driver allowing software_node connections to sensors on platforms designed for Windows
-Date:   Thu, 17 Dec 2020 23:43:25 +0000
-Message-Id: <20201217234337.1983732-1-djrscally@gmail.com>
+        kitakar@gmail.com, jorhand@linux.microsoft.com,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 07/12] lib/test_printf.c: Use helper function to unwind array of software_nodes
+Date:   Thu, 17 Dec 2020 23:43:32 +0000
+Message-Id: <20201217234337.1983732-8-djrscally@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201217234337.1983732-1-djrscally@gmail.com>
+References: <20201217234337.1983732-1-djrscally@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello all
+Use the software_node_unregister_nodes() helper function to unwind this
+array in a cleaner way.
 
-Previous version:
-https://lore.kernel.org/linux-media/20201130133129.1024662-1-djrscally@gmail.com/T/#m91934e12e3d033da2e768e952ea3b4a125ee3e67
-The RFC version before that:
-https://lore.kernel.org/linux-media/20201019225903.14276-1-djrscally@gmail.com/
+Acked-by: Petr Mladek <pmladek@suse.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Daniel Scally <djrscally@gmail.com>
+---
+Changes in v2:
 
-This series is to start adding support for webcams on laptops with ACPI tables
-designed for use with CIO2 on Windows. This problem has two main parts; the
-first part, which is handled in this series, is extending the ipu3-cio2
-driver to allow for patching the firmware via software_nodes if endpoints
-aren't defined by ACPI. The second is adding a new driver to handle power,
-clocks and GPIO pins defined in DSDT tables in an awkward way. I decided to
-split that second part out from this series, and instead give it its own
-series (a v2 of which should land "soon"). The reasons for that are:
+	- None
 
-1. It's a logically separate change anyway
-2. The recipients list was getting really long and
-3. That probably meant that handling merge for all of this in one go was
-   going to be impractically awkward.
+ lib/test_printf.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Given how few comments the remaining patches of this series received in the
-last posting, I'm hopeful that most or all of it could get picked up for 5.12.
-We touch a few different areas:
-
-lib (with an ack already)
-  lib/test_printf.c: Use helper function to unwind array of
-    software_nodes
-
-drivers/base
-  software_node: Fix refcounts in software_node_get_next_child()
-  property: Return true in fwnode_device_is_available for NULL ops
-  property: Call fwnode_graph_get_endpoint_by_id() for fwnode->secondary
-  software_node: Enforce parent before child ordering of nodes arrays
-  software_node: unregister software_nodes in reverse order
-
-drivers/acpi
-  acpi: Add acpi_dev_get_next_match_dev() and helper macro
-
-drivers/media
-  media: v4l2-core: v4l2-async: Check sd->fwnode->secondary in
-    match_fwnode()
-  ipu3-cio2: Add T: entry to MAINTAINERS
-  ipu3-cio2: Rename ipu3-cio2.c
-  ipu3-cio2: Add cio2-bridge to ipu3-cio2 driver
-
-Given that, it feels sensible to me to try and merge them all through a single
-tree; I was hoping the other maintainers would be amenable to having everything
-merged through the media tree. Mauro; if that plan is ok (and of course assuming
-that the rest of the patches are acked by their respective maintainers too),
-could we get a dedicated feature branch just in case the following series ends
-up being ready in time too? 
-
-Series-level changelog:
-	- Squashed the patches enforcing ordering in register/unregister_nodes()
-
-More details of changes on each patch.
-
-Comments as always very welcome - and thanks to everyone for all your help on
-this so far, hope I've addressed everything from last time.
-
-Dan
-
-Daniel Scally (11):
-  software_node: Fix refcounts in software_node_get_next_child()
-  property: Return true in fwnode_device_is_available for NULL ops
-  property: Call fwnode_graph_get_endpoint_by_id() for fwnode->secondary
-  software_node: Enforce parent before child ordering of nodes arrays
-  software_node: unregister software_nodes in reverse order
-  lib/test_printf.c: Use helper function to unwind array of
-    software_nodes
-  ipu3-cio2: Add T: entry to MAINTAINERS
-  ipu3-cio2: Rename ipu3-cio2.c
-  media: v4l2-core: v4l2-async: Check sd->fwnode->secondary in
-    match_fwnode()
-  acpi: Add acpi_dev_get_next_match_dev() and helper macro
-  ipu3-cio2: Add cio2-bridge to ipu3-cio2 driver
-
-Heikki Krogerus (1):
-  software_node: Add support for fwnode_graph*() family of functions
-
- MAINTAINERS                                   |   2 +
- drivers/acpi/utils.c                          |  30 +-
- drivers/base/property.c                       |  15 +-
- drivers/base/swnode.c                         | 173 +++++++++--
- drivers/media/pci/intel/ipu3/Kconfig          |  18 ++
- drivers/media/pci/intel/ipu3/Makefile         |   3 +
- drivers/media/pci/intel/ipu3/cio2-bridge.c    | 274 ++++++++++++++++++
- drivers/media/pci/intel/ipu3/cio2-bridge.h    | 122 ++++++++
- .../ipu3/{ipu3-cio2.c => ipu3-cio2-main.c}    |  34 +++
- drivers/media/pci/intel/ipu3/ipu3-cio2.h      |   6 +
- drivers/media/v4l2-core/v4l2-async.c          |   8 +
- include/acpi/acpi_bus.h                       |   7 +
- lib/test_printf.c                             |   4 +-
- 13 files changed, 669 insertions(+), 27 deletions(-)
- create mode 100644 drivers/media/pci/intel/ipu3/cio2-bridge.c
- create mode 100644 drivers/media/pci/intel/ipu3/cio2-bridge.h
- rename drivers/media/pci/intel/ipu3/{ipu3-cio2.c => ipu3-cio2-main.c} (98%)
-
+diff --git a/lib/test_printf.c b/lib/test_printf.c
+index 7ac87f18a10f..7d60f24240a4 100644
+--- a/lib/test_printf.c
++++ b/lib/test_printf.c
+@@ -644,9 +644,7 @@ static void __init fwnode_pointer(void)
+ 	test(second_name, "%pfwP", software_node_fwnode(&softnodes[1]));
+ 	test(third_name, "%pfwP", software_node_fwnode(&softnodes[2]));
+ 
+-	software_node_unregister(&softnodes[2]);
+-	software_node_unregister(&softnodes[1]);
+-	software_node_unregister(&softnodes[0]);
++	software_node_unregister_nodes(softnodes);
+ }
+ 
+ static void __init
 -- 
 2.25.1
 
