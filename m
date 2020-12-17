@@ -5,58 +5,58 @@ X-Spam-Level:
 X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2058BC47435
-	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:12:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DBE1FC47434
+	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:12:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 005E423998
+	by mail.kernel.org (Postfix) with ESMTP id B9B9B23998
 	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:12:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730256AbgLQSMa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Dec 2020 13:12:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41998 "EHLO
+        id S1730385AbgLQSI5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Dec 2020 13:08:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730362AbgLQSI5 (ORCPT
+        with ESMTP id S1730357AbgLQSI5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 17 Dec 2020 13:08:57 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7B8C0617A7;
-        Thu, 17 Dec 2020 10:07:50 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id o17so56901752lfg.4;
-        Thu, 17 Dec 2020 10:07:50 -0800 (PST)
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E992EC0619DA;
+        Thu, 17 Dec 2020 10:07:46 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id 23so59803909lfg.10;
+        Thu, 17 Dec 2020 10:07:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6bihTvUOG89oM9Y/xPaskNMPx8lkVh3OwDTHQ+rUz0Q=;
-        b=YgQsVYInkk2m03hroKiBAdfDFB0PzOxzZdQWbW80OhGLnIy3SbqjhUVrhoSZeXa/0W
-         QptR34QOdICKwEMJUmDxpjneCiq75Y7dTMq7ocCew51i7k6af4lsmH5StFCUi9OTDhVb
-         fkffM7TvBqgMrqtPjxPVzHIrvwZiJjnMgj7xb07gyClRUZltKNMvyRF6okcKk1aStAZd
-         mp728vEPg8JQCyoih6cV4ja0h8WnBc1s6FIBhCFwdaw3v0fMvuWj2P6nkduHjFPSOjQS
-         keUpNhEJqrXcP7lE7tFFikb8lcCmKC63UC7B+C+1vO13XTwgbK+khXS51cmtHSOxZQKa
-         Bzbw==
+        bh=NX+MS+anU76BlhEILutoJiS/7/Thy1nqdrl3kCzllJ4=;
+        b=m+RcrvCN5SVrC4E9GsHQPZphjjmtSgb6vuW0wmrHP3sg/7u7V+Hka3Yz10nHRBIxUV
+         8UV768vcIQ+01fjn0PkPPxF+oLpCfOhdiGMGBDnrsILzLvxYhOSOifjhnRxs/HVEVyn6
+         3ZsI83oqk77uAHPWY8AhNT3DQe6YpD0gs1NFWahq0b0q9n4yDXnm7aBZCe5eDJG1LvpP
+         zjMk/P17UXO40lcqYkyijOIomLa1G4M0uXMPS0E9EQAbEU49va0WIVYn6oBBujqzciPE
+         QaxGQKnyhWyxfVKhKid9wYcl1G+4A72GGTAmGaMdNzjWKaK3YvR+eOFL4SdIEwRHHc65
+         RtZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6bihTvUOG89oM9Y/xPaskNMPx8lkVh3OwDTHQ+rUz0Q=;
-        b=di3oLX7dDgGVCI5lsfOBXq10DP5clK2XOB6EjRflxBPDSRffBPqf2Nu6bG3wyHtnsk
-         apuxOhVVErbOrrbOUqxrm3V1vhWOAfRvTazzFbsL6k90eBaWrV08T5ai5XzWN/KqDEfu
-         K47dcx7C5XA1bIoRdsNUM1GsL7ISMktlaG+X9WmMMbp3dXewO/wfv/0JsbipN+Gbk9cc
-         xFgF/bGMqjm0qfKiGpADb/XvinuTQbQu+PQd5BJ9sXfLTi6ffTE/gLuKuulYGXZtKIdC
-         jXIx3djUNM4NV64dGz7bxy5EUtcK9/oAXTa6UHCps58xfJUoZarSNzvCOp0NK6350ZTq
-         7eng==
-X-Gm-Message-State: AOAM530LY0pQlcEdt7lPKKuapRBdLEdWe0XtlcVtp2Snt0mQTSGtXj6C
-        xA36ZyQfDoxQC8zov4ZYE9SprQ3Gp9w=
-X-Google-Smtp-Source: ABdhPJzce1teuxCCTBwGEaaplQ9RyWEJB7D0DJvqSLoeEK+KGIZsCfWwh4vgsDqV4p/wJQUKuj+Jzg==
-X-Received: by 2002:ac2:5547:: with SMTP id l7mr7724553lfk.313.1608228468872;
-        Thu, 17 Dec 2020 10:07:48 -0800 (PST)
+        bh=NX+MS+anU76BlhEILutoJiS/7/Thy1nqdrl3kCzllJ4=;
+        b=OTdRJT9dgggE+dza9KYYUaAd41+CCj08bQtLi5drzxwxe7ZHUPvSH4ccPNQMjT2FWR
+         FMJ1mu+C+Q5uea0RjCoCpFAEh/8Yd1cyCY+ecBiAnXRN2XeepKvcCmGvuu/Z7ZYUT4ag
+         eA7VhXgHiFeg4FlFGzyW9iPx3EU7ooHTf1tmrkN4GDXpfc+UjSUoyQyLqeyAX3gEQ3A3
+         bQTpf/pMDI9LTjNn1y5bwVILY0TckSEyDi37/mjVcT/0oqf1rwyoTxYtTZ5QGJJIj4X6
+         2H5noTmCWLlfwZNwEUbfuWRDNDynnm1wQUL5RTKnOO/vMCByvwVTQuLYZQSXLVjppSNH
+         7zbg==
+X-Gm-Message-State: AOAM532SZqG6yRIj/Wn42FOLKFpwLmcMrdNzCz8GH146OK2RjvhSjXp+
+        ro+OAGgX45AscyeAV/BDli8=
+X-Google-Smtp-Source: ABdhPJzZPdbXPbkUp1eRbNGTe1GkWb+tswPD3NA3JbqvyYw4q06czICReBowWtbbVUqPBOhPjZBhXQ==
+X-Received: by 2002:a19:9d8:: with SMTP id 207mr8275690lfj.581.1608228465466;
+        Thu, 17 Dec 2020 10:07:45 -0800 (PST)
 Received: from localhost.localdomain (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.gmail.com with ESMTPSA id u5sm655596lff.78.2020.12.17.10.07.47
+        by smtp.gmail.com with ESMTPSA id u5sm655596lff.78.2020.12.17.10.07.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Dec 2020 10:07:48 -0800 (PST)
+        Thu, 17 Dec 2020 10:07:45 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -78,9 +78,9 @@ Cc:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-clk@vger.kernel.org
-Subject: [PATCH v2 25/48] soc/tegra: pmc: Print out domain name when reset fails to acquire
-Date:   Thu, 17 Dec 2020 21:06:15 +0300
-Message-Id: <20201217180638.22748-26-digetx@gmail.com>
+Subject: [PATCH v2 22/48] soc/tegra: pmc: Fix imbalanced clock disabling in error code path
+Date:   Thu, 17 Dec 2020 21:06:12 +0300
+Message-Id: <20201217180638.22748-23-digetx@gmail.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201217180638.22748-1-digetx@gmail.com>
 References: <20201217180638.22748-1-digetx@gmail.com>
@@ -90,27 +90,27 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Print out domain name when reset fails to acquire for debugging purposes
-and to make formatting of GENPD errors consistent in the driver.
+The tegra_powergate_power_up() has a typo in the error code path where it
+will try to disable clocks twice, fix it. In practice that error never
+happens, so this is a minor correction.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/soc/tegra/pmc.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/soc/tegra/pmc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
-index 8edcd5b319f6..4f96dc7745c4 100644
+index df9a5ca8c99c..fd2ba3c59178 100644
 --- a/drivers/soc/tegra/pmc.c
 +++ b/drivers/soc/tegra/pmc.c
-@@ -821,7 +821,8 @@ static int tegra_genpd_power_off(struct generic_pm_domain *domain)
+@@ -638,7 +638,7 @@ static int tegra_powergate_power_up(struct tegra_powergate *pg,
  
- 	err = reset_control_acquire(pg->reset);
- 	if (err < 0) {
--		pr_err("failed to acquire resets: %d\n", err);
-+		dev_err(dev, "failed to acquire resets for PM domain %s: %d\n",
-+			pg->genpd.name, err);
- 		return err;
- 	}
+ 	err = tegra_powergate_enable_clocks(pg);
+ 	if (err)
+-		goto disable_clks;
++		goto powergate_off;
+ 
+ 	usleep_range(10, 20);
  
 -- 
 2.29.2
