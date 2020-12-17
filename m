@@ -5,58 +5,58 @@ X-Spam-Level:
 X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9156C2BBD4
-	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:10:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1F74C35273
+	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:10:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B7C062389E
-	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:10:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CC8332388E
+	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:10:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731417AbgLQSJz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Dec 2020 13:09:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42074 "EHLO
+        id S1731462AbgLQSKO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Dec 2020 13:10:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731143AbgLQSJ0 (ORCPT
+        with ESMTP id S1726548AbgLQSJZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Dec 2020 13:09:26 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A791C061A4C;
-        Thu, 17 Dec 2020 10:08:16 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id a12so59841861lfl.6;
-        Thu, 17 Dec 2020 10:08:15 -0800 (PST)
+        Thu, 17 Dec 2020 13:09:25 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D6FC0619DF;
+        Thu, 17 Dec 2020 10:07:54 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id o19so34210094lfo.1;
+        Thu, 17 Dec 2020 10:07:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4BCi2FA9cuc84aB3j2Dtgj2hYIKTYzldBGMNPDQ+ziE=;
-        b=r2zTV0LhxvbLLcRE/Q6upA3jHFFoIHhmeTHZH8k7Nfo6TEPtghv24CkOqquv0+y9xP
-         6+FZ+MXgdTx2ytHtR7Sk7W1UA2CPz43wyzcL6eN3hopQk/E3YteFKOLhzUro4h8CbQNU
-         +fgzGRIhTqgs+WbaL3TqMhWkuNzse6BJ4C/8X7Ixe3FMp1bc0jGwx6igCKOSE5vPOnJl
-         gKxDySx0IGEHosYP6Q0PXPEXhoddkGXNRY8r2Ow5AL11IX4RdEBmmxMv3sTV6ncFWhYG
-         PEoo8YrrVqcuWZEFkH1nd5jPACS2AUeM4P0FHx1ROikt0gKyKm/OLrSZrtjiGzDY2xKO
-         o/CA==
+        bh=Aa+hChpvs0JDUl0QCouhA8Ook0AiIGpyBFoUGyXOUQI=;
+        b=RhneqMMMFpT/rGzIIf7uEiGIehQLF+olyu6ZCNFX+oOHPVy1WdgNHVxT9bn1QlEeo8
+         4n1SHThx55TK/bXvX0IGfRJ7GoL37rHD2WNc4lkOGHcBMZgFaWTsQ9+uAXZOE3rZqdlW
+         hfAUUX5oiGE3CHjG6mziJsZz3/TzHP2qGv3tDSd1VA2XvrZn95KaGn/ZcVxL0pHAGh2t
+         BFZLKfM9Wp2fxoMv38KrZ/YCEFInQqRvmkF2W5ssdGnXmVqNYh1slRuTRPDfy7h9LqfK
+         9Ij69AfbaRxeblxSU7zdqyMpXBplESP2BswsvcjWDhIg3J1BrpiApycEtaMy4FtWjgRf
+         UY9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4BCi2FA9cuc84aB3j2Dtgj2hYIKTYzldBGMNPDQ+ziE=;
-        b=Q0L24Z/kgQyW0HIBSOJ3RS4hnctEy1pP8flBXnbUxbQ9PpymV6os6iIcyHCW6JSrv2
-         T7K6QfmAZywPmu+siJ/GzZYXn0I2jgFRs8SaQ2p5j1MktqmfaPn3fSsYVTWjblNd/HaB
-         CS9woxMK71Ehnha/Um1q4osa51tLjNwC5WAL71MiKr+yWga3j6eznrXa0JEyS+VUgXfT
-         Aoarp3oE2uQn/TUbQRRC6rECWvlj0HW6NB9bQ1bxTURCLnZboq+0978SAnNB8Y0g5pkG
-         1y8Ag4v62dgvB6Kf2qQdIPJ52kDMvgTxNEd8RIytL+hOyD3bQ58QXbmud/MncuFgtYmp
-         asIQ==
-X-Gm-Message-State: AOAM532hHzUozQ+LpY3gmMhfYvWbVVHmd4ricAGSvKhQ35Vg41D6jXCo
-        jK0Rs2Wjgx8suyUK5dEaum4=
-X-Google-Smtp-Source: ABdhPJxWWr3saixXg4MMgzNRzLC4JnQkjYvJetomHe6o2KMKNy5SgOY8ZxCeWHixZTKkqqyu60wiaQ==
-X-Received: by 2002:a05:651c:2dc:: with SMTP id f28mr208929ljo.13.1608228494555;
-        Thu, 17 Dec 2020 10:08:14 -0800 (PST)
+        bh=Aa+hChpvs0JDUl0QCouhA8Ook0AiIGpyBFoUGyXOUQI=;
+        b=O2GQeMhEejaKkh9GeCd8kVmJHV+QeGKNZOFrXqSy/LQJI3iaBqTQ/aadKB2p7Fqslm
+         yp16vmfQbPU6SMsIk/zzbULfXDSG9bsLIdKFvjV0eyWN4FtYMiejPI+JKWKlC9gZlnVe
+         gaKZ5XEqd1DfVTPoZtSunDQB/3s6vXP9L89S4A58eaeFULppHPGS4kQQRpYEeOlmgWkU
+         ro8vT8WdNaSFOqtlYYUlfwylsHu0K6+dBmFUpLC2gZuqCM9EB2nfIF9GOwnzBVGnzcdR
+         wdlcesr87773XqVocAKJYrcmsvyFQl96k7Uib7chazCWJNa7p7T/lZm5rD74FCJhMFxA
+         NIdw==
+X-Gm-Message-State: AOAM530nEDra3DWvsdcUW8d3kUVqA5yQI/hVNBzRRSRsr3qiOAlzb9UG
+        PeDAfF2YKTlax9bL5/zF/Bg=
+X-Google-Smtp-Source: ABdhPJxL85GcfJiXMkymH7isdZq+CnfDmDZN1MReJJCcpfCArlmNTx0/MjgW8Yls8T8+SwJfWzuMqQ==
+X-Received: by 2002:a19:5e5b:: with SMTP id z27mr16037203lfi.143.1608228473454;
+        Thu, 17 Dec 2020 10:07:53 -0800 (PST)
 Received: from localhost.localdomain (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.gmail.com with ESMTPSA id u5sm655596lff.78.2020.12.17.10.08.13
+        by smtp.gmail.com with ESMTPSA id u5sm655596lff.78.2020.12.17.10.07.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Dec 2020 10:08:14 -0800 (PST)
+        Thu, 17 Dec 2020 10:07:52 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -78,9 +78,9 @@ Cc:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-clk@vger.kernel.org
-Subject: [PATCH v2 47/48] ARM: tegra: ventana: Support CPU voltage scaling and thermal throttling
-Date:   Thu, 17 Dec 2020 21:06:37 +0300
-Message-Id: <20201217180638.22748-48-digetx@gmail.com>
+Subject: [PATCH v2 29/48] soc/tegra: pmc: Link domains to the parent Core domain
+Date:   Thu, 17 Dec 2020 21:06:19 +0300
+Message-Id: <20201217180638.22748-30-digetx@gmail.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201217180638.22748-1-digetx@gmail.com>
 References: <20201217180638.22748-1-digetx@gmail.com>
@@ -90,91 +90,55 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Enable CPU voltage scaling and thermal throttling on Tegra20 Ventana board.
+The Core domain is a parent of PMC power domains, hence PMC domains
+should be set up as a sub-domains of the parent (Core) domain if
+"power-domains" phandle presents in a device-tree node of PMC domain.
+
+This allows to propagate GENPD performance changes to the parent Core
+domain if performance change is applied to PMC domain.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- arch/arm/boot/dts/tegra20-ventana.dts | 40 ++++++++++++++++++++++++++-
- 1 file changed, 39 insertions(+), 1 deletion(-)
+ drivers/soc/tegra/pmc.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/arch/arm/boot/dts/tegra20-ventana.dts b/arch/arm/boot/dts/tegra20-ventana.dts
-index 14ace2ef749c..c2d9f38960bc 100644
---- a/arch/arm/boot/dts/tegra20-ventana.dts
-+++ b/arch/arm/boot/dts/tegra20-ventana.dts
-@@ -2,8 +2,10 @@
- /dts-v1/;
+diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
+index 4f96dc7745c4..1a659d1c06d7 100644
+--- a/drivers/soc/tegra/pmc.c
++++ b/drivers/soc/tegra/pmc.c
+@@ -1236,6 +1236,7 @@ static int tegra_powergate_add(struct tegra_pmc *pmc, struct device_node *np)
+ static int tegra_powergate_init(struct tegra_pmc *pmc,
+ 				struct device_node *parent)
+ {
++	struct of_phandle_args child_args, parent_args;
+ 	struct device_node *np, *child;
+ 	int err = 0;
  
- #include <dt-bindings/input/input.h>
-+#include <dt-bindings/thermal/thermal.h>
- #include "tegra20.dtsi"
- #include "tegra20-cpu-opp.dtsi"
-+#include "tegra20-cpu-opp-microvolt.dtsi"
- 
- / {
- 	model = "NVIDIA Tegra20 Ventana evaluation board";
-@@ -527,9 +529,10 @@ ldo_rtc {
- 			};
- 		};
- 
--		temperature-sensor@4c {
-+		nct1008: temperature-sensor@4c {
- 			compatible = "onnn,nct1008";
- 			reg = <0x4c>;
-+			#thermal-sensor-cells = <1>;
- 		};
- 	};
- 
-@@ -615,10 +618,13 @@ clk32k_in: clock@0 {
- 
- 	cpus {
- 		cpu0: cpu@0 {
-+			cpu-supply = <&vdd_cpu>;
- 			operating-points-v2 = <&cpu0_opp_table>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		cpu@1 {
-+			cpu-supply = <&vdd_cpu>;
- 			operating-points-v2 = <&cpu0_opp_table>;
- 		};
- 	};
-@@ -717,4 +723,36 @@ sound {
- 			 <&tegra_car TEGRA20_CLK_CDEV1>;
- 		clock-names = "pll_a", "pll_a_out0", "mclk";
- 	};
+@@ -1249,6 +1250,24 @@ static int tegra_powergate_init(struct tegra_pmc *pmc,
+ 			of_node_put(child);
+ 			break;
+ 		}
 +
-+	thermal-zones {
-+		cpu-thermal {
-+			polling-delay-passive = <1000>; /* milliseconds */
-+			polling-delay = <5000>; /* milliseconds */
++		if (of_parse_phandle_with_args(child, "power-domains",
++					       "#power-domain-cells",
++					       0, &parent_args))
++			continue;
 +
-+			thermal-sensors = <&nct1008 1>;
++		child_args.np = child;
++		child_args.args_count = 0;
 +
-+			trips {
-+				trip0: cpu-alert0 {
-+					/* start throttling at 50C */
-+					temperature = <50000>;
-+					hysteresis = <200>;
-+					type = "passive";
-+				};
++		err = of_genpd_add_subdomain(&parent_args, &child_args);
++		of_node_put(parent_args.np);
++		if (err) {
++			if (err == -ENOENT)
++				err = -EPROBE_DEFER;
 +
-+				trip1: cpu-crit {
-+					/* shut down at 60C */
-+					temperature = <60000>;
-+					hysteresis = <2000>;
-+					type = "critical";
-+				};
-+			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&trip0>;
-+					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
-+		};
-+	};
- };
++			of_node_put(child);
++			break;
++		}
+ 	}
+ 
+ 	of_node_put(np);
 -- 
 2.29.2
 
