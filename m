@@ -8,55 +8,55 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B389C3526E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 496A3C3526F
 	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 23:45:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E528B2255F
-	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 23:45:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1EF472255F
+	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 23:45:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732476AbgLQXp2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1732471AbgLQXp2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 17 Dec 2020 18:45:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37446 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732423AbgLQXpS (ORCPT
+        with ESMTP id S1732426AbgLQXpS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 17 Dec 2020 18:45:18 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE244C0611CC;
-        Thu, 17 Dec 2020 15:44:07 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id r4so551955wmh.5;
-        Thu, 17 Dec 2020 15:44:07 -0800 (PST)
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5101DC0611CA;
+        Thu, 17 Dec 2020 15:44:05 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id m5so218712wrx.9;
+        Thu, 17 Dec 2020 15:44:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=oGCJxAGqtJJ26HP8mxtKtxXBUimDrY8TQdEbrQWGOTg=;
-        b=SFKd7hJPiwwsi9WxaJalVzeYPdp+dyQu0SMIC1mFQ+rt/VYCT+mMRcT9mq9jklkUan
-         Y2XxG4ie+mZEI6InRkZ52Sle2uCPIj067Tm0L7ITq67+DgaZyiu32VgZ2pYAXaomH/m9
-         4pBDx6hSho5NuOmutzoKS5jw3UPNem+/ci0QCUJ7Gmh7hozSkuJE6kySOndrvGcR5IDb
-         Ri7nC5iBd/vtcj/XzcJt/eyRXRwR+qNywYwXKvYArjY4F7oTKp+oKOFMkTmJ8HsLVB03
-         1MfBIxTwZDixSQlIeler7NOI2Xfdfs2XsI9wbH/XJ95znl6ei4We3cUH7wSbRili9Cov
-         Mqew==
+        bh=HAUVeFRGMPGgWvoUIsXf/Ln2ZywCD/ZCvvMD4gyiyPw=;
+        b=iRdYYEJbUgqpwQ6789Qs5EnCQIgdSi6OxHIEn98Yw7+TRgBCFPq348rXB7361XD28I
+         Vj6kjUp20tygynb2BSeBF3o32AbR/PkJ3kxr3ImO1BhrEMoE0VPZLYTX8iuSz2pgLrZt
+         SnZYXF5NEdfPilw2VkIhULR70yzsLxkzaJGMb9om6wO8DHClc22WLUO9cOP71PPr8mTg
+         23RkwWFyA/Zp5akQRkl074H9cm2h8cCinFTDn+VUnQ6xNsVT1K6JZzL8EZk03HpnksPl
+         EujHkBWeSz92RmKFgw3+hRCYUhrIGyBksue0EyveIEsUslxrSZLSryDR8+ZAwTHAhwgI
+         +ZYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=oGCJxAGqtJJ26HP8mxtKtxXBUimDrY8TQdEbrQWGOTg=;
-        b=jRI/9e1KfvUqhGgq2K9FxQxZ02qkaieWRs1g3H5iJf30Qc3eB9cBwmuPcDlbuVsFAq
-         R4gZkVFlZ8YL0JlSWAXGl6sA/SGUJji7fcj19eTH9lOQ2WZYbCVQwtXxPpwAwBHx6sp6
-         VqlEO65TJIy9gfdl3xPdg16KJ5wxahEuYe/WCMrnVdLtccSZkHpUOv/PnhQmco9krOkh
-         CEvwSZALJVz6euIbsiec0baflvprWo/tzrni8eU1veUp3s7zBhe5Z5SZp2IrI5EWIcwu
-         vsBu92h2Rzx3nRxukcFRelqxfQ+0IzQIZ2EBUeB1lN4B78zF5cwF/MSx3sYmvxSm/EkI
-         cgfw==
-X-Gm-Message-State: AOAM53139wW9Hflh9nR2RuX90aup4i1lZpymG0J2d0XystEt9vnPKU84
-        IVHIBJ/4AVYlo9Fy1M0+N6nHPwdniHkIwURl
-X-Google-Smtp-Source: ABdhPJw8hXsE5DE2NHFLgnTB0R2jFYnUCfoREgxu17Q/Mason9sp6mst0v0EUFDx0fr9CB2mheLXZQ==
-X-Received: by 2002:a1c:220a:: with SMTP id i10mr1533796wmi.93.1608248646708;
-        Thu, 17 Dec 2020 15:44:06 -0800 (PST)
+        bh=HAUVeFRGMPGgWvoUIsXf/Ln2ZywCD/ZCvvMD4gyiyPw=;
+        b=Ar99MfJP5Cu6CNgJgzsLdLCDySgcF073TBm+yWwLUlJe6beJcWP9V5MsqFK0bDUZH0
+         n1E2s1Vp6/K6GszaO+BaealqFqVvBCn2/YNBetYriCin7ud4gsUUJGTDwBTApgr6nMId
+         caZf2eBWMqHgKEQJsE4lIAu20Wx+ojcfiYrz+F+wbUlpsgVH7rJyqlyreJDfvkcOBO90
+         kInW2fWLHAQdwLJzxgtt6t37cGXJbqS9XPmDTWACzmkeSCxPOQQHT8MWK8Sa/MqnYaEL
+         xeANKjYlWNU7/mHlrTd/9+P74FbP++cg5sOILAu3eIEaN7UoBXipSm7OOHg34oKJsKAC
+         mYGQ==
+X-Gm-Message-State: AOAM531HFmT9kk3vZv9QZuW3kqJkA6jl6AYJ4gF4ga0BjnGsJjQTmJW0
+        68WR9TlgpBYXwvKAq7M/ochyCjQLR2yrTtYq
+X-Google-Smtp-Source: ABdhPJzbp7Bd6bq61B3TPkoEHQkDOgyhtHhMLCgAUVlPnnabYOsofHDRP4oCXOI8EZxmggJ5uH2TUw==
+X-Received: by 2002:a05:6000:101:: with SMTP id o1mr1206735wrx.211.1608248644128;
+        Thu, 17 Dec 2020 15:44:04 -0800 (PST)
 Received: from valhalla.home ([2.29.208.56])
-        by smtp.gmail.com with ESMTPSA id o3sm1873575wrc.93.2020.12.17.15.44.05
+        by smtp.gmail.com with ESMTPSA id o3sm1873575wrc.93.2020.12.17.15.44.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Dec 2020 15:44:06 -0800 (PST)
+        Thu, 17 Dec 2020 15:44:03 -0800 (PST)
 From:   Daniel Scally <djrscally@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-media@vger.kernel.org, devel@acpica.org
@@ -69,10 +69,11 @@ Cc:     rjw@rjwysocki.net, lenb@kernel.org, gregkh@linuxfoundation.org,
         laurent.pinchart+renesas@ideasonboard.com,
         jacopo+renesas@jmondi.org, kieran.bingham+renesas@ideasonboard.com,
         linus.walleij@linaro.org, heikki.krogerus@linux.intel.com,
-        kitakar@gmail.com, jorhand@linux.microsoft.com
-Subject: [PATCH v2 11/12] acpi: Add acpi_dev_get_next_match_dev() and helper macro
-Date:   Thu, 17 Dec 2020 23:43:36 +0000
-Message-Id: <20201217234337.1983732-12-djrscally@gmail.com>
+        kitakar@gmail.com, jorhand@linux.microsoft.com,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 09/12] ipu3-cio2: Rename ipu3-cio2.c
+Date:   Thu, 17 Dec 2020 23:43:34 +0000
+Message-Id: <20201217234337.1983732-10-djrscally@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201217234337.1983732-1-djrscally@gmail.com>
 References: <20201217234337.1983732-1-djrscally@gmail.com>
@@ -82,108 +83,36 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-To ensure we handle situations in which multiple sensors of the same
-model (and therefore _HID) are present in a system, we need to be able
-to iterate over devices matching a known _HID but unknown _UID and _HRV
- - add acpi_dev_get_next_match_dev() to accommodate that possibility and
-change acpi_dev_get_first_match_dev() to simply call the new function
-with a NULL starting point. Add an iterator macro for convenience.
+ipu3-cio2 driver needs extending with multiple files; rename the main
+source file and specify the renamed file in Makefile to accommodate that.
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Daniel Scally <djrscally@gmail.com>
 ---
 Changes in v2:
 
 	- None
 
- drivers/acpi/utils.c    | 30 ++++++++++++++++++++++++++----
- include/acpi/acpi_bus.h |  7 +++++++
- 2 files changed, 33 insertions(+), 4 deletions(-)
+ drivers/media/pci/intel/ipu3/Makefile                          | 2 ++
+ drivers/media/pci/intel/ipu3/{ipu3-cio2.c => ipu3-cio2-main.c} | 0
+ 2 files changed, 2 insertions(+)
+ rename drivers/media/pci/intel/ipu3/{ipu3-cio2.c => ipu3-cio2-main.c} (100%)
 
-diff --git a/drivers/acpi/utils.c b/drivers/acpi/utils.c
-index d5411a166685..c177165c8db2 100644
---- a/drivers/acpi/utils.c
-+++ b/drivers/acpi/utils.c
-@@ -843,12 +843,13 @@ bool acpi_dev_present(const char *hid, const char *uid, s64 hrv)
- EXPORT_SYMBOL(acpi_dev_present);
- 
- /**
-- * acpi_dev_get_first_match_dev - Return the first match of ACPI device
-+ * acpi_dev_get_next_match_dev - Return the next match of ACPI device
-+ * @adev: Pointer to the previous acpi_device matching this hid, uid and hrv
-  * @hid: Hardware ID of the device.
-  * @uid: Unique ID of the device, pass NULL to not check _UID
-  * @hrv: Hardware Revision of the device, pass -1 to not check _HRV
-  *
-- * Return the first match of ACPI device if a matching device was present
-+ * Return the next match of ACPI device if another matching device was present
-  * at the moment of invocation, or NULL otherwise.
-  *
-  * The caller is responsible to call put_device() on the returned device.
-@@ -856,8 +857,9 @@ EXPORT_SYMBOL(acpi_dev_present);
-  * See additional information in acpi_dev_present() as well.
-  */
- struct acpi_device *
--acpi_dev_get_first_match_dev(const char *hid, const char *uid, s64 hrv)
-+acpi_dev_get_next_match_dev(struct acpi_device *adev, const char *hid, const char *uid, s64 hrv)
- {
-+	struct device *start = adev ? &adev->dev : NULL;
- 	struct acpi_dev_match_info match = {};
- 	struct device *dev;
- 
-@@ -865,9 +867,29 @@ acpi_dev_get_first_match_dev(const char *hid, const char *uid, s64 hrv)
- 	match.uid = uid;
- 	match.hrv = hrv;
- 
--	dev = bus_find_device(&acpi_bus_type, NULL, &match, acpi_dev_match_cb);
-+	dev = bus_find_device(&acpi_bus_type, start, &match, acpi_dev_match_cb);
- 	return dev ? to_acpi_device(dev) : NULL;
- }
-+EXPORT_SYMBOL(acpi_dev_get_next_match_dev);
+diff --git a/drivers/media/pci/intel/ipu3/Makefile b/drivers/media/pci/intel/ipu3/Makefile
+index 98ddd5beafe0..429d516452e4 100644
+--- a/drivers/media/pci/intel/ipu3/Makefile
++++ b/drivers/media/pci/intel/ipu3/Makefile
+@@ -1,2 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ obj-$(CONFIG_VIDEO_IPU3_CIO2) += ipu3-cio2.o
 +
-+/**
-+ * acpi_dev_get_first_match_dev - Return the first match of ACPI device
-+ * @hid: Hardware ID of the device.
-+ * @uid: Unique ID of the device, pass NULL to not check _UID
-+ * @hrv: Hardware Revision of the device, pass -1 to not check _HRV
-+ *
-+ * Return the first match of ACPI device if a matching device was present
-+ * at the moment of invocation, or NULL otherwise.
-+ *
-+ * The caller is responsible to call put_device() on the returned device.
-+ *
-+ * See additional information in acpi_dev_present() as well.
-+ */
-+struct acpi_device *
-+acpi_dev_get_first_match_dev(const char *hid, const char *uid, s64 hrv)
-+{
-+	return acpi_dev_get_next_match_dev(NULL, hid, uid, hrv);
-+}
- EXPORT_SYMBOL(acpi_dev_get_first_match_dev);
- 
- /*
-diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
-index a3abcc4b7d9f..0a028ba967d3 100644
---- a/include/acpi/acpi_bus.h
-+++ b/include/acpi/acpi_bus.h
-@@ -688,9 +688,16 @@ static inline bool acpi_device_can_poweroff(struct acpi_device *adev)
- 
- bool acpi_dev_hid_uid_match(struct acpi_device *adev, const char *hid2, const char *uid2);
- 
-+struct acpi_device *
-+acpi_dev_get_next_match_dev(struct acpi_device *adev, const char *hid, const char *uid, s64 hrv);
- struct acpi_device *
- acpi_dev_get_first_match_dev(const char *hid, const char *uid, s64 hrv);
- 
-+#define for_each_acpi_dev_match(adev, hid, uid, hrv)			\
-+	for (adev = acpi_dev_get_first_match_dev(hid, uid, hrv);	\
-+	     adev;							\
-+	     adev = acpi_dev_get_next_match_dev(adev, hid, uid, hrv))
-+
- static inline void acpi_dev_put(struct acpi_device *adev)
- {
- 	put_device(&adev->dev);
++ipu3-cio2-y += ipu3-cio2-main.o
+diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
+similarity index 100%
+rename from drivers/media/pci/intel/ipu3/ipu3-cio2.c
+rename to drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
 -- 
 2.25.1
 
