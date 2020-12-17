@@ -8,55 +8,55 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B4C6C3526D
-	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:09:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1875C47435
+	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:09:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 762C7239EC
-	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:09:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9A2E523975
+	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:09:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730267AbgLQSIt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Dec 2020 13:08:49 -0500
+        id S1730830AbgLQSJE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Dec 2020 13:09:04 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730247AbgLQSIq (ORCPT
+        with ESMTP id S1730772AbgLQSJB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Dec 2020 13:08:46 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05872C0619D4;
-        Thu, 17 Dec 2020 10:07:40 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id s26so25134272lfc.8;
-        Thu, 17 Dec 2020 10:07:39 -0800 (PST)
+        Thu, 17 Dec 2020 13:09:01 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0617FC0617B0;
+        Thu, 17 Dec 2020 10:08:02 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id h205so16304239lfd.5;
+        Thu, 17 Dec 2020 10:08:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=vhvv1h1Ziyi3xIAcsdjZjVcJ6AYQzdZqyFUMLjoR+gU=;
-        b=mCQHS9XkKqyMibnw8kWGhj0y5I5wUfHzs6EhcQAYTQrcxVGcZQ4sqpiS8Cn8Tx/Vgc
-         K8vwNkiSYNNJLkRBebbt09t3sVsBqdUNSNtsPjqMLKXOGXGV4dlGjyEDXXYRM2cC+SVU
-         bE7Bn38TobzyFp1dohD8XSvG7rfjlxqF8Sm5uiY7d0VEfNNCo7wJa0PKHjj81i2bPo2J
-         WJzx7XbQlxIrFuM2MUM/VGJ6PIZV7KS/8a4B0rV1qmtskhY18YraI8ioH6itChj/t1k5
-         +kj1PiLcFY2+E3YsGxSymTnxRSL+MsXiAZJ6U7ldnz2pCqgj8mOKqfeXFPi+Xs7hEWeL
-         jjKA==
+        bh=iUM33vHLNZtsJPVk9A+84cGK/qMnFIOLUNLoWSdi5PE=;
+        b=li6sWcps0Q20F/zs74GUHWU1rU3vlb04ApDelSlLDh/E0oz6QSPlp8aG4PB/Ot0zmV
+         Q39ydjkjjzhVz4JxTb5Fhl0OpiGVtztulOFN9e7MH4QdpeQPD4Zu71i+ydlWvG84Yheq
+         fgdEZ6mhHzVyc+CNrv0X8acaJsUF94TsK1KPJa2qJUAk/ijlpCvgJz24Ab9aESiV1Y+t
+         X2Vmb8eL6RWSuRIpEbbgr9nBNRLIaHqWNB3qgb7MVzlAyYPBhnHQ9bvdiz5aJNLoDw9Z
+         rJKEodpQ61oklJiE+Uxlkq4UoYdJ82FYGaMZNfM7nJdppa20Lt2sfDrWQ4ds+Y3CMd4/
+         s+kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vhvv1h1Ziyi3xIAcsdjZjVcJ6AYQzdZqyFUMLjoR+gU=;
-        b=gMogBSHEtcDuNnUycg4LEnp6vSpNE2cJaaSeP//rloM7+KayMkgn4FwkfuSRQyc2az
-         JdefHj8HEYgUPnBvSySi4fHYnn/sf2gT1KChcMBBeCEpO0wK/E2jc7e6xdJJzbMCq3xs
-         4mFRN/c7EXcZgMRUrr9d2QSNh9rkrqPDhaUyCN4+Q8x0zccgp3dLWpOEeM2zzXsm58El
-         rSC3B1hK5FMseSnWz0c+oDFVyRS+oSFAmU3W0rY3227wdEB1yAQFWajfkN379X45P4z6
-         RtdrrWK9po0NHNfMAqtRqTW3s+gDbfrKnAb7inqD4Nld2IuLZ7jSh55BAboNpgP9hxaJ
-         mCcQ==
-X-Gm-Message-State: AOAM533LuRdI3ul44QKuThJZZS5K4gOvSAdZn455GYXbUFPgdhXm08Lb
-        JUynWd7/sfqN6nnh0i4HSRs=
-X-Google-Smtp-Source: ABdhPJwSqAw1lTij00AzVyWzgJA9yaLaIRHjYRL5G+gORDC0ff9W8dsUk7apucQlnXvHedXq3oMDVQ==
-X-Received: by 2002:a2e:8512:: with SMTP id j18mr212691lji.31.1608228458488;
-        Thu, 17 Dec 2020 10:07:38 -0800 (PST)
+        bh=iUM33vHLNZtsJPVk9A+84cGK/qMnFIOLUNLoWSdi5PE=;
+        b=dLMw+QP0TKpOsM3uQc+S/immDH5rLrINRYlC9rNHMGh4tF+IW4Z7FjMIRGry75VDpx
+         1XH5Wmsygs8N5OtstOGcXQHvkLv/CZr4WCQZmHXeq+ZuTGrjl5d2ru1S3NNz0lR46es/
+         6DYUyZdK2czuMsLtPKpnTKTtLubo29b6tDNxgG1x/jvbSiCjjDsboBBihb3eILDu7qtz
+         H7yVUSwn6ilo080j5p/6nmQqdE2urXjZNk7ryhniEpF/o/jP/rFE7g8x+6ASc2H0fxIO
+         9/hY97XHT9AUbTSq+Tt+aAHUTkPDiFs1hA9IpIFuJpJ98Jy99hwWEx7EJf7zHp8GL1D2
+         uZgA==
+X-Gm-Message-State: AOAM533Jz34QreZu3NCaZSjOFEoiOsgLS/aKc5wmE8Z+P3PrfVkAFIRm
+        KeeUEa/LjYeGv2sxmkAyHYg=
+X-Google-Smtp-Source: ABdhPJyUG/ZcFCjkb6RTKaSoldzBmwDKOzmClpf4O3p6ruD35zpWUUUeoWGbOBPqW7cQqlBJDK/7Fw==
+X-Received: by 2002:ac2:5486:: with SMTP id t6mr16345900lfk.265.1608228480486;
+        Thu, 17 Dec 2020 10:08:00 -0800 (PST)
 Received: from localhost.localdomain (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.gmail.com with ESMTPSA id u5sm655596lff.78.2020.12.17.10.07.37
+        by smtp.gmail.com with ESMTPSA id u5sm655596lff.78.2020.12.17.10.07.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Dec 2020 10:07:38 -0800 (PST)
+        Thu, 17 Dec 2020 10:08:00 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -78,9 +78,9 @@ Cc:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-clk@vger.kernel.org
-Subject: [PATCH v2 16/48] opp: Handle missing OPP table in dev_pm_opp_xlate_performance_state()
-Date:   Thu, 17 Dec 2020 21:06:06 +0300
-Message-Id: <20201217180638.22748-17-digetx@gmail.com>
+Subject: [PATCH v2 35/48] drm/tegra: dc: Support OPP and SoC core voltage scaling
+Date:   Thu, 17 Dec 2020 21:06:25 +0300
+Message-Id: <20201217180638.22748-36-digetx@gmail.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201217180638.22748-1-digetx@gmail.com>
 References: <20201217180638.22748-1-digetx@gmail.com>
@@ -90,35 +90,139 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-NVIDIA Tegra SoCs have a power domains topology such that child domains
-only clamp a power rail, while parent domain controls shared performance
-state of the multiple child domains. In this case child's domain doesn't
-need to have OPP table. Hence we want to allow children power domains to
-pass performance state to the parent domain if child's domain doesn't have
-OPP table.
+Add OPP and SoC core voltage scaling support to the display controller
+driver. This is required for enabling system-wide DVFS on pre-Tegra186
+SoCs.
 
-The dev_pm_opp_xlate_performance_state() gets src_table=NULL if a child
-power domain doesn't have OPP table and in this case we should pass the
-performance state to the parent domain.
-
+Tested-by: Peter Geis <pgwipeout@gmail.com>
+Tested-by: Nicolas Chauvet <kwizart@gmail.com>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/opp/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/tegra/dc.c | 66 +++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 65 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 625dae7a5ecb..34f7e530d941 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -2255,7 +2255,7 @@ int dev_pm_opp_xlate_performance_state(struct opp_table *src_table,
- 	 * and so none of them have the "required-opps" property set. Return the
- 	 * pstate of the src_table as it is in such cases.
- 	 */
--	if (!src_table->required_opp_count)
-+	if (!src_table || !src_table->required_opp_count)
- 		return pstate;
+diff --git a/drivers/gpu/drm/tegra/dc.c b/drivers/gpu/drm/tegra/dc.c
+index b6676f1fe358..105ad786e432 100644
+--- a/drivers/gpu/drm/tegra/dc.c
++++ b/drivers/gpu/drm/tegra/dc.c
+@@ -11,9 +11,12 @@
+ #include <linux/interconnect.h>
+ #include <linux/module.h>
+ #include <linux/of_device.h>
++#include <linux/pm_domain.h>
++#include <linux/pm_opp.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/reset.h>
  
- 	for (i = 0; i < src_table->required_opp_count; i++) {
++#include <soc/tegra/common.h>
+ #include <soc/tegra/pmc.h>
+ 
+ #include <drm/drm_atomic.h>
+@@ -1699,6 +1702,48 @@ int tegra_dc_state_setup_clock(struct tegra_dc *dc,
+ 	return 0;
+ }
+ 
++static void tegra_dc_update_voltage_state(struct tegra_dc *dc,
++					  struct tegra_dc_state *state)
++{
++	unsigned long rate, pstate;
++	struct dev_pm_opp *opp;
++	int err;
++
++	/* calculate actual pixel clock rate which depends on internal divider */
++	rate = DIV_ROUND_UP(clk_get_rate(dc->clk) * 2, state->div + 2);
++
++	/* find suitable OPP for the rate */
++	opp = dev_pm_opp_find_freq_ceil(dc->dev, &rate);
++
++	if (opp == ERR_PTR(-ERANGE))
++		opp = dev_pm_opp_find_freq_floor(dc->dev, &rate);
++
++	/* -ENOENT means that this device-tree doesn't have OPP table */
++	if (opp == ERR_PTR(-ENOENT))
++		return;
++
++	if (IS_ERR(opp)) {
++		dev_err(dc->dev, "failed to find OPP for %luHz: %pe\n",
++			rate, opp);
++		return;
++	}
++
++	pstate = dev_pm_opp_get_voltage(opp);
++	dev_pm_opp_put(opp);
++
++	/*
++	 * The minimum core voltage depends on the pixel clock rate (which
++	 * depends on internal clock divider of the CRTC) and not on the
++	 * rate of the display controller clock. This is why we're not using
++	 * dev_pm_opp_set_rate() API and instead controlling the power domain
++	 * directly.
++	 */
++	err = dev_pm_genpd_set_performance_state(dc->dev, pstate);
++	if (err)
++		dev_err(dc->dev, "failed to set power domain state to %lu: %d\n",
++			pstate, err);
++}
++
+ static void tegra_dc_commit_state(struct tegra_dc *dc,
+ 				  struct tegra_dc_state *state)
+ {
+@@ -1738,6 +1783,8 @@ static void tegra_dc_commit_state(struct tegra_dc *dc,
+ 	if (err < 0)
+ 		dev_err(dc->dev, "failed to set clock %pC to %lu Hz: %d\n",
+ 			dc->clk, state->pclk, err);
++
++	tegra_dc_update_voltage_state(dc, state);
+ }
+ 
+ static void tegra_dc_stop(struct tegra_dc *dc)
+@@ -1931,6 +1978,8 @@ static void tegra_crtc_atomic_disable(struct drm_crtc *crtc,
+ 	err = host1x_client_suspend(&dc->client);
+ 	if (err < 0)
+ 		dev_err(dc->dev, "failed to suspend: %d\n", err);
++
++	dev_pm_genpd_set_performance_state(dc->dev, 0);
+ }
+ 
+ static void tegra_crtc_atomic_enable(struct drm_crtc *crtc,
+@@ -2523,7 +2572,6 @@ static int tegra_dc_runtime_suspend(struct host1x_client *client)
+ 
+ 	clk_disable_unprepare(dc->clk);
+ 	pm_runtime_put_sync(dev);
+-
+ 	return 0;
+ }
+ 
+@@ -2881,6 +2929,18 @@ static int tegra_dc_couple(struct tegra_dc *dc)
+ 	return 0;
+ }
+ 
++static int tegra_dc_init_opp_table(struct tegra_dc *dc)
++{
++	struct tegra_core_opp_params opp_params = {};
++	int err;
++
++	err = devm_tegra_core_dev_init_opp_table(dc->dev, &opp_params);
++	if (err && err != -ENODEV)
++		return err;
++
++	return 0;
++}
++
+ static int tegra_dc_probe(struct platform_device *pdev)
+ {
+ 	struct tegra_dc *dc;
+@@ -2939,6 +2999,10 @@ static int tegra_dc_probe(struct platform_device *pdev)
+ 		tegra_powergate_power_off(dc->powergate);
+ 	}
+ 
++	err = tegra_dc_init_opp_table(dc);
++	if (err < 0)
++		return err;
++
+ 	dc->regs = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(dc->regs))
+ 		return PTR_ERR(dc->regs);
 -- 
 2.29.2
 
