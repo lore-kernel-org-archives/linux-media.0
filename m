@@ -8,55 +8,55 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B792AC4361B
-	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:13:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DA67C3527E
+	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:13:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8691E238EF
-	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:13:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 41CBE23A1D
+	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:13:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730317AbgLQSIy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Dec 2020 13:08:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41964 "EHLO
+        id S1731666AbgLQSMw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Dec 2020 13:12:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730248AbgLQSIq (ORCPT
+        with ESMTP id S1729977AbgLQSIo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Dec 2020 13:08:46 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B31C0619D5;
-        Thu, 17 Dec 2020 10:07:42 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id s26so25134640lfc.8;
-        Thu, 17 Dec 2020 10:07:42 -0800 (PST)
+        Thu, 17 Dec 2020 13:08:44 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8B1C0611D0;
+        Thu, 17 Dec 2020 10:07:36 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id m25so59779180lfc.11;
+        Thu, 17 Dec 2020 10:07:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=FMQPVkzhrHffuF4mwShq8rfapz+oLLOiBA35EvDkN1g=;
-        b=T6C/xdTyr28sjOcJqBGBh+2bCLRgFaTIcBewPv/x+1L1QOyKReuP1MfG2tkzSw/dwF
-         83LYY12BDsUDtf5UsTlPOdvdoSknRLL4Ub7pCG7DrdRyrNQWwS4h2r1LZTkODsd2kCpm
-         u/tYnt96D3DAW0wWnLMhHeI2ukJZsL5LRAR7Z0BKq5dc256IqLpTzp3LPwjXw+Ia/TAQ
-         LRe2WyKapRKlf2YaXsf6Z3H30F5rC5i6iHfKfaF7tBIKlrsio1o5JMMvvWxaNqwdeWSd
-         tDMz+vhqPBWL72wWDyYqY3O2tJDobLVBzsYu5+PxlLFQWd3q52ONqjCl1uZ2LI6KEKTH
-         ixzQ==
+        bh=hbxvYRbm+qHovJ5Bd8gaI9FGWNmpZH6jYdB85zhzP8c=;
+        b=RcuUW6tjagcGLt0JVEzp/bxthI8GUxwuNBiCXvFCkAbgvDKS9y9wdk97W/gzcUMn3E
+         aEf7AcoFWbTfg4scDxr2IjKklb/dmsJVrjW/kKZ72HFcoaqwjTd7OqHhJhWaF5CN6nZw
+         Q/DwEQlowQVp9Rbz1UgsfLeHJYBBWEv8w26dHTlF/Bf9M9E0Jxv8tKVHj+bk5nJHM3To
+         i0WtZEJc/jCxaHmWoNX1b2UVyQn9P/7VJn30S6lh7GeOaDAn/ccTQ80jCyY34MBPOHaU
+         o3LOXIt1OQKqOgMa093fZLjrXTW6mBRn6pnnL4tIyftM4s6H96K50bDK2F0m2usQymp0
+         cPGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=FMQPVkzhrHffuF4mwShq8rfapz+oLLOiBA35EvDkN1g=;
-        b=QzCHnEJ66nWLSu/yedfQBacKHPeMjRtuU+Qihpm9quKiPJjHgtQjPqqOg2iLJFKbPx
-         OgM4/ETR1pL9L1JmldeF8IDvtWwLmlvTOYsTVPYB/GNUFQ0yTJO7s0428fv/VuNH8uzj
-         p9L/LkK63TtAvgdanzdpNCI6A8ysKbCCrHKha1GeTyo/2N3NdL0Lo+hJ2npgrttcdDct
-         hpwvOamQx+xSLbxyQwct+xgqPHpdLgJADJE8Wljvlmqfh8LaRRS6RFhJvWz3nkLhByB/
-         wHTjoGzKItBiXh2p7wUioBqtn1KGAWeM6RCaooza9GL3a9pmulvojYDIWsj7cMXki7Kv
-         E/hQ==
-X-Gm-Message-State: AOAM5332v78k/iPo4M9IwxngLUWdKoYOBnANvd6+GetAtJHdGymJzJS6
-        fmjBrIpEu3s3qBpw6a0ljDY=
-X-Google-Smtp-Source: ABdhPJyWgcRAhgB2jbviKjj3cRVPK5uBYXP0sKAFflQv0Ic12rG9QDo0/dmYvrRqWl5AtvkglHHK6w==
-X-Received: by 2002:a2e:58f:: with SMTP id 137mr196424ljf.469.1608228459627;
-        Thu, 17 Dec 2020 10:07:39 -0800 (PST)
+        bh=hbxvYRbm+qHovJ5Bd8gaI9FGWNmpZH6jYdB85zhzP8c=;
+        b=FsL6DADFWc9ahB7zssXxPxk4bwG7H0KbH58mQ1l1fvMP0ewqlvLVmm2MogBmCX1BDP
+         F/Bg4grt83voEk8yqUWDVaZ42WTsu/7S9kZtjyXPM8iEbhp4AXc7oIEOTloWDI+0qPSJ
+         u7sYEvx2cThFuBPH6qhFyWqfoY8hV4d/xhmEo7Pfibkz22pxXqLcQQ8ngUI2FyNi1qtC
+         uO7i/AmIy1vQxNj1ac6biwYg74uXIDhFvFoZk6l1IqLb4EiV76p8VO/jlDGsHjN7sEMJ
+         V+Hw1jsGqfptxULceOoX0/yhCQqYJwrCpD5IDe1/Yu5n53ERp+tRuJF3oardp/7kj74I
+         xXSw==
+X-Gm-Message-State: AOAM531AhnpEwsG7Z9lgAeTj0953c8eQbUdjiEgqSC+U1R9AzEXaoUhc
+        K4Dyuf5+J8OCIZS9EKDb8V4=
+X-Google-Smtp-Source: ABdhPJxCgrKrbtjoSxSSQjtIU8Nv/gsZyLfuGnObK/F/pPmmqJzu4QT8VQAcZqL/Wb1Eiigfx+s0AQ==
+X-Received: by 2002:a2e:9195:: with SMTP id f21mr209650ljg.191.1608228454992;
+        Thu, 17 Dec 2020 10:07:34 -0800 (PST)
 Received: from localhost.localdomain (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.gmail.com with ESMTPSA id u5sm655596lff.78.2020.12.17.10.07.38
+        by smtp.gmail.com with ESMTPSA id u5sm655596lff.78.2020.12.17.10.07.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Dec 2020 10:07:39 -0800 (PST)
+        Thu, 17 Dec 2020 10:07:34 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -78,9 +78,9 @@ Cc:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-clk@vger.kernel.org
-Subject: [PATCH v2 17/48] opp: Correct debug message in _opp_add_static_v2()
-Date:   Thu, 17 Dec 2020 21:06:07 +0300
-Message-Id: <20201217180638.22748-18-digetx@gmail.com>
+Subject: [PATCH v2 13/48] opp: Add resource-managed versions of OPP API functions
+Date:   Thu, 17 Dec 2020 21:06:03 +0300
+Message-Id: <20201217180638.22748-14-digetx@gmail.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201217180638.22748-1-digetx@gmail.com>
 References: <20201217180638.22748-1-digetx@gmail.com>
@@ -90,35 +90,309 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The debug message always prints rate=0 instead of a proper value, fix it.
+Add resource-managed versions of OPP API functions. This removes a need
+from drivers to store and manage OPP table pointers.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/opp/of.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/opp/core.c     | 173 +++++++++++++++++++++++++++++++++++++++++
+ drivers/opp/of.c       |  25 ++++++
+ include/linux/pm_opp.h |  51 ++++++++++++
+ 3 files changed, 249 insertions(+)
 
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 4774701ec82d..d9feb7639598 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -2664,3 +2664,176 @@ int dev_pm_opp_set_voltage(struct device *dev, struct dev_pm_opp *opp)
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(dev_pm_opp_set_voltage);
++
++/**
++ * devm_pm_opp_get_opp_table() - Get OPP table of a device
++ * @dev:	device for which we do this operation
++ *
++ * This is a resource-managed version of dev_pm_opp_get_opp_table().
++ *
++ * Return: pointer to 'struct opp_table' if found and -ENODEV otherwise.
++ */
++struct opp_table *devm_pm_opp_get_opp_table(struct device *dev)
++{
++	struct opp_table *opp_table;
++	int err;
++
++	opp_table = dev_pm_opp_get_opp_table(dev);
++	if (IS_ERR(opp_table))
++		return opp_table;
++
++	err = devm_add_action_or_reset(dev, (void *)dev_pm_opp_put_opp_table,
++				       opp_table);
++	if (err)
++		return ERR_PTR(err);
++
++	return opp_table;
++}
++EXPORT_SYMBOL_GPL(devm_pm_opp_get_opp_table);
++
++/**
++ * devm_pm_opp_set_regulators() - Set regulator names for the device
++ * @dev: Device for which regulator name is being set.
++ * @names: Array of pointers to the names of the regulator.
++ * @count: Number of regulators.
++ *
++ * This is a resource-managed version of dev_pm_opp_set_regulators().
++ *
++ * Return: pointer to 'struct opp_table' on success and errorno otherwise.
++ */
++struct opp_table *
++devm_pm_opp_set_regulators(struct device *dev, const char * const names[],
++			   unsigned int count)
++{
++	struct opp_table *opp_table;
++	int err;
++
++	opp_table = dev_pm_opp_set_regulators(dev, names, count);
++	if (IS_ERR(opp_table))
++		return opp_table;
++
++	err = devm_add_action_or_reset(dev, (void *)dev_pm_opp_put_regulators,
++				       opp_table);
++	if (err)
++		return ERR_PTR(err);
++
++	return opp_table;
++}
++EXPORT_SYMBOL_GPL(devm_pm_opp_set_regulators);
++
++/**
++ * devm_pm_opp_set_supported_hw() - Set supported platforms
++ * @dev: Device for which supported-hw has to be set.
++ * @versions: Array of hierarchy of versions to match.
++ * @count: Number of elements in the array.
++ *
++ * This is a resource-managed version of dev_pm_opp_set_supported_hw().
++ *
++ * Return: pointer to 'struct opp_table' on success and errorno otherwise.
++ */
++struct opp_table *
++devm_pm_opp_set_supported_hw(struct device *dev, const u32 *versions,
++			     unsigned int count)
++{
++	struct opp_table *opp_table;
++	int err;
++
++	opp_table = dev_pm_opp_set_supported_hw(dev, versions, count);
++	if (IS_ERR(opp_table))
++		return opp_table;
++
++	err = devm_add_action_or_reset(dev, (void *)dev_pm_opp_put_supported_hw,
++				       opp_table);
++	if (err)
++		return ERR_PTR(err);
++
++	return opp_table;
++}
++EXPORT_SYMBOL_GPL(devm_pm_opp_set_supported_hw);
++
++/**
++ * devm_pm_opp_set_clkname() - Set clk name for the device
++ * @dev: Device for which clk name is being set.
++ * @name: Clk name.
++ *
++ * This is a resource-managed version of dev_pm_opp_set_clkname().
++ *
++ * Return: pointer to 'struct opp_table' on success and errorno otherwise.
++ */
++struct opp_table *
++devm_pm_opp_set_clkname(struct device *dev, const char *name)
++{
++	struct opp_table *opp_table;
++	int err;
++
++	opp_table = dev_pm_opp_set_clkname(dev, name);
++	if (IS_ERR(opp_table))
++		return opp_table;
++
++	err = devm_add_action_or_reset(dev, (void *)dev_pm_opp_put_clkname,
++				       opp_table);
++	if (err)
++		return ERR_PTR(err);
++
++	return opp_table;
++}
++EXPORT_SYMBOL_GPL(devm_pm_opp_set_clkname);
++
++/**
++ * devm_pm_opp_register_set_opp_helper() - Register custom set OPP helper
++ * @dev: Device for which the helper is getting registered.
++ * @set_opp: Custom set OPP helper.
++ *
++ * This is a resource-managed version of dev_pm_opp_register_set_opp_helper().
++ *
++ * Return: pointer to 'struct opp_table' on success and errorno otherwise.
++ */
++struct opp_table *
++devm_pm_opp_register_set_opp_helper(struct device *dev,
++				    int (*set_opp)(struct dev_pm_set_opp_data *data))
++{
++	struct opp_table *opp_table;
++	int err;
++
++	opp_table = dev_pm_opp_register_set_opp_helper(dev, set_opp);
++	if (IS_ERR(opp_table))
++		return opp_table;
++
++	err = devm_add_action_or_reset(dev, (void *)dev_pm_opp_unregister_set_opp_helper,
++				       opp_table);
++	if (err)
++		return ERR_PTR(err);
++
++	return opp_table;
++}
++EXPORT_SYMBOL_GPL(devm_pm_opp_register_set_opp_helper);
++
++/**
++ * devm_pm_opp_attach_genpd - Attach genpd(s) for the device and save virtual device pointer
++ * @dev: Consumer device for which the genpd is getting attached.
++ * @names: Null terminated array of pointers containing names of genpd to attach.
++ * @virt_devs: Pointer to return the array of virtual devices.
++ *
++ * This is a resource-managed version of dev_pm_opp_attach_genpd().
++ *
++ * Return: pointer to 'struct opp_table' on success and errorno otherwise.
++ */
++struct opp_table *
++devm_pm_opp_attach_genpd(struct device *dev, const char **names,
++			 struct device ***virt_devs)
++{
++	struct opp_table *opp_table;
++	int err;
++
++	opp_table = dev_pm_opp_attach_genpd(dev, names, virt_devs);
++	if (IS_ERR(opp_table))
++		return opp_table;
++
++	err = devm_add_action_or_reset(dev, (void *)dev_pm_opp_detach_genpd,
++				       opp_table);
++	if (err)
++		return ERR_PTR(err);
++
++	return opp_table;
++}
++EXPORT_SYMBOL_GPL(devm_pm_opp_attach_genpd);
 diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-index 3b5a4c8bc62f..1f2038a4420b 100644
+index 03cb387236c4..3b5a4c8bc62f 100644
 --- a/drivers/opp/of.c
 +++ b/drivers/opp/of.c
-@@ -755,7 +755,6 @@ static struct dev_pm_opp *_opp_add_static_v2(struct opp_table *opp_table,
- 		struct device *dev, struct device_node *np)
+@@ -1350,3 +1350,28 @@ int dev_pm_opp_of_register_em(struct device *dev, struct cpumask *cpus)
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(dev_pm_opp_of_register_em);
++
++/**
++ * devm_pm_opp_of_add_table() - Initialize opp table from device tree
++ * @dev:	device pointer used to lookup OPP table.
++ *
++ * This is a resource-managed version of dev_pm_opp_of_add_table().
++ *
++ * Return: 0 on success and errorno otherwise.
++ */
++int devm_pm_opp_of_add_table(struct device *dev)
++{
++	int err;
++
++	err = dev_pm_opp_of_add_table(dev);
++	if (err)
++		return err;
++
++	err = devm_add_action_or_reset(dev, (void *)dev_pm_opp_remove_table,
++				       dev);
++	if (err)
++		return err;
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(devm_pm_opp_of_add_table);
+diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
+index 0298b426fba3..0d42fbda0134 100644
+--- a/include/linux/pm_opp.h
++++ b/include/linux/pm_opp.h
+@@ -163,6 +163,12 @@ void dev_pm_opp_remove_table(struct device *dev);
+ void dev_pm_opp_cpumask_remove_table(const struct cpumask *cpumask);
+ int dev_pm_opp_sync_regulators(struct device *dev);
+ int dev_pm_opp_set_voltage(struct device *dev, struct dev_pm_opp *opp);
++struct opp_table *devm_pm_opp_get_opp_table(struct device *dev);
++struct opp_table *devm_pm_opp_set_regulators(struct device *dev, const char * const names[], unsigned int count);
++struct opp_table *devm_pm_opp_set_supported_hw(struct device *dev, const u32 *versions, unsigned int count);
++struct opp_table *devm_pm_opp_set_clkname(struct device *dev, const char *name);
++struct opp_table *devm_pm_opp_register_set_opp_helper(struct device *dev, int (*set_opp)(struct dev_pm_set_opp_data *data));
++struct opp_table *devm_pm_opp_attach_genpd(struct device *dev, const char **names, struct device ***virt_devs);
+ #else
+ static inline struct opp_table *dev_pm_opp_get_opp_table(struct device *dev)
  {
- 	struct dev_pm_opp *new_opp;
--	u64 rate = 0;
- 	u32 val;
- 	int ret;
- 	bool rate_not_available = false;
-@@ -772,7 +771,8 @@ static struct dev_pm_opp *_opp_add_static_v2(struct opp_table *opp_table,
+@@ -396,9 +402,49 @@ static inline int dev_pm_opp_set_voltage(struct device *dev, struct dev_pm_opp *
+ 	return -ENOTSUPP;
+ }
  
- 	/* Check if the OPP supports hardware's hierarchy of versions or not */
- 	if (!_opp_is_supported(dev, opp_table, np)) {
--		dev_dbg(dev, "OPP not supported by hardware: %llu\n", rate);
-+		dev_dbg(dev, "OPP not supported by hardware: %lu\n",
-+			new_opp->rate);
- 		goto free_opp;
- 	}
++static inline struct opp_table *devm_pm_opp_get_opp_table(struct device *dev)
++{
++	return ERR_PTR(-ENOTSUPP);
++}
++
++static inline struct opp_table *
++devm_pm_opp_set_regulators(struct device *dev, const char * const names[],
++			   unsigned int count)
++{
++	return ERR_PTR(-ENOTSUPP);
++}
++
++static inline struct opp_table *
++devm_pm_opp_set_supported_hw(struct device *dev, const u32 *versions,
++			     unsigned int count)
++{
++	return ERR_PTR(-ENOTSUPP);
++}
++
++static inline struct opp_table *
++devm_pm_opp_set_clkname(struct device *dev, const char *name)
++{
++	return ERR_PTR(-ENOTSUPP);
++}
++
++static inline struct opp_table *
++devm_pm_opp_register_set_opp_helper(struct device *dev,
++				    int (*set_opp)(struct dev_pm_set_opp_data *data))
++{
++	return ERR_PTR(-ENOTSUPP);
++}
++
++static inline struct opp_table *
++devm_pm_opp_attach_genpd(struct device *dev, const char **names,
++			 struct device ***virt_devs)
++{
++	return ERR_PTR(-ENOTSUPP);
++}
++
+ #endif		/* CONFIG_PM_OPP */
  
+ #if defined(CONFIG_PM_OPP) && defined(CONFIG_OF)
++int devm_pm_opp_of_add_table(struct device *dev);
+ int dev_pm_opp_of_add_table(struct device *dev);
+ int dev_pm_opp_of_add_table_indexed(struct device *dev, int index);
+ void dev_pm_opp_of_remove_table(struct device *dev);
+@@ -472,6 +518,11 @@ static inline int dev_pm_opp_of_find_icc_paths(struct device *dev, struct opp_ta
+ {
+ 	return -ENOTSUPP;
+ }
++
++static inline int devm_pm_opp_of_add_table(struct device *dev)
++{
++	return -ENOTSUPP;
++}
+ #endif
+ 
+ #endif		/* __LINUX_OPP_H__ */
 -- 
 2.29.2
 
