@@ -5,58 +5,58 @@ X-Spam-Level:
 X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93E79C2BBCD
-	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:12:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18A5BC3526A
+	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:12:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6C71A2395A
+	by mail.kernel.org (Postfix) with ESMTP id EC6AD2388E
 	for <linux-media@archiver.kernel.org>; Thu, 17 Dec 2020 18:12:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730773AbgLQSJC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Dec 2020 13:09:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
+        id S1729984AbgLQSMI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Dec 2020 13:12:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730712AbgLQSJA (ORCPT
+        with ESMTP id S1730762AbgLQSJA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 17 Dec 2020 13:09:00 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF875C0619DE;
-        Thu, 17 Dec 2020 10:07:53 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id a12so59838649lfl.6;
-        Thu, 17 Dec 2020 10:07:53 -0800 (PST)
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FDCBC0619E3;
+        Thu, 17 Dec 2020 10:07:59 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id o17so56903129lfg.4;
+        Thu, 17 Dec 2020 10:07:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=bHniUYIC3s+k3bu1Qnu+MOLqvOW7d/pOGBAO2KOC4eA=;
-        b=uyTPt3dTAOtio3Q4NAJ4Z0YybbATSRHTCh8HpAY/Eu4LK4PUhsPlGKqW4dJnhb+IDP
-         tW2Y1Q/Lll+p5BwmipqU1EzkYsJXtiQcqoOKiOXvdTX8EGyfDHXBhkVwvaSmMiyp7oHj
-         AzoYD+oyTadKTv8y2n0hVlHEPKPgL7CQ7H5EitqIHdqwB+7vXmeSA20EExoZDou/rk8/
-         3pszAgXm5Tr/JXw7+pzEp6uQinGjYJSFk2KpAvdUl/JA01IMqiubTo0hcAO+KuKl3FGn
-         KhJHFzblBETwHb+X0VkTDTsdbUebrRCpSSajZUC0hLBVby5icXfuSLAkJ2AOMEw6szBz
-         dEgQ==
+        bh=KswnK2pgrRw2QhZvB/Use4T7bnltjrNj3eLqWqZME28=;
+        b=mhiowlBu7ET0N7ZefbXZKe0CF67YMU9S7y4YnHN8AKhj9s+K5Q308qgF56a33giJy1
+         2Fr67/ffjz5Qb2QcopQwJ25hdtsHN2y4ysAlnDh+m38HGkk4tbkttwhclxEN3nXOkVZa
+         d3l+w/smldQi/xnydW0v7hAlsL3c4c8tWuqVTNzv87bvmWX3drPVnj3Ijn5IWHHKppzK
+         co2En3pXyzyTWa+PrC+QSFAyn3yy2Y0YIDa+mecXU7ZlSClJTqx77dveS49A+Uyd4Jkm
+         bFtyJ4s1bqSumabh4r7n6k6wE8+jJqhgzd7qrY4Vq5HGMI9zgWz6GAYDMwKf0RqFvSFS
+         8KFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=bHniUYIC3s+k3bu1Qnu+MOLqvOW7d/pOGBAO2KOC4eA=;
-        b=iji4sE0IX2Dboy6x16rdMWKKvFkX94psuhIcGdzJdFBhJGDiJuPVIAuzxXAaAMeeHV
-         uDgpVUcNxhp6wTeN84MhUxgDQyCujY0Q3x7ZZ/N250dN3UKhGHBsmehfsxzDJJGUHLyy
-         ISl3zzqIwKBRjjPM0o64lMm0wDMnJ5lJeNbmT/46Mvg9R9CMj13N4RxYo8skFXqrDW2B
-         etPnr/08jDlFgVX831S+cX84ovpJYIrxMMVFL0cCNXB+ubH2LaJ7bs3bBysiSfajRsiv
-         kH1ooc0DHT0acH7BDSf3MGlrSYp6iPEwjwCali7GmQb/mnzrcM7ZDU1siHJmjPiqF+zV
-         a3OA==
-X-Gm-Message-State: AOAM530cW5VZ99US85rywB57SvG0NBTsgcc4W2OpdBZcLoefnnu3lYEd
-        6xBhehqiMR0AfsUPRWfRzf0=
-X-Google-Smtp-Source: ABdhPJwV7p2vBwRldveNzj95D69TS6C2l85vxj9Rch0UjiklDD/asa0D4/HG83X80kUYfR0+2BJxCA==
-X-Received: by 2002:a2e:b012:: with SMTP id y18mr212347ljk.396.1608228472293;
-        Thu, 17 Dec 2020 10:07:52 -0800 (PST)
+        bh=KswnK2pgrRw2QhZvB/Use4T7bnltjrNj3eLqWqZME28=;
+        b=kVY6y3qeSop4sSM/6Iptyj+yAIsrAsfc7lP9zJAcGGRAys7zIDsARi1RoP3fzL2YAk
+         riKP2QtmvL1xiwtGRywDw8TILLk2sJTCw1zv4VW1G3T4o0fSwXrQgn8VV+UdZ8UN7ABp
+         fnH+bGofs8zlpOs01CCdCuskMvqas/VcJtcclhxtQa2W+NJA/Nsg61wRWsxNK5x++8el
+         RMEAqX/Y/yw/KNq0twbOGQVLuPDUurrlcUbKVZReIH8ru6sNIQXgkDF2m+xdpeJx7x4V
+         LmAyIpgrG0qdO4x83Dsb596hD7pOS4R5ZVxQlBf8ebshg2Kp9cE7b9RlPGo+V/cIm4Ta
+         aAyA==
+X-Gm-Message-State: AOAM53004qX3wWDC0Cc0z4R15gsrpLvBVJAqLyq7ynn9RpL/46WyqYQn
+        7mYco5wnkorjvz3vn7xiaI4=
+X-Google-Smtp-Source: ABdhPJyuCr3Uz6wXHF/lbttUt7A2z6j3C/VIP45WsYuNIaAuGMcBlIRrrIe5fhI+HWJqsB4/YZ1NfA==
+X-Received: by 2002:a19:904:: with SMTP id 4mr2339lfj.64.1608228478227;
+        Thu, 17 Dec 2020 10:07:58 -0800 (PST)
 Received: from localhost.localdomain (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.gmail.com with ESMTPSA id u5sm655596lff.78.2020.12.17.10.07.51
+        by smtp.gmail.com with ESMTPSA id u5sm655596lff.78.2020.12.17.10.07.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Dec 2020 10:07:51 -0800 (PST)
+        Thu, 17 Dec 2020 10:07:57 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -78,9 +78,9 @@ Cc:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-clk@vger.kernel.org
-Subject: [PATCH v2 28/48] soc/tegra: Introduce core power domain driver
-Date:   Thu, 17 Dec 2020 21:06:18 +0300
-Message-Id: <20201217180638.22748-29-digetx@gmail.com>
+Subject: [PATCH v2 33/48] gpu: host1x: Add host1x_channel_stop()
+Date:   Thu, 17 Dec 2020 21:06:23 +0300
+Message-Id: <20201217180638.22748-34-digetx@gmail.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201217180638.22748-1-digetx@gmail.com>
 References: <20201217180638.22748-1-digetx@gmail.com>
@@ -90,214 +90,48 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-NVIDIA Tegra SoCs have multiple power domains, each domain corresponds
-to an external SoC power rail. Core power domain covers vast majority of
-hardware blocks within a Tegra SoC. The voltage of a power domain should
-be set to a value which satisfies all devices within a power domain. Add
-driver for the core power domain in order to manage the voltage state of
-the domain. This allows us to support a system-wide DVFS on Tegra.
+Add host1x_channel_stop() which waits till channel becomes idle and then
+stops the channel hardware. This is needed for supporting suspend/resume
+by host1x drivers since the hardware state is lost after power-gating,
+thus the channel needs to be stopped before entering into suspend.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/soc/tegra/Kconfig             |   6 ++
- drivers/soc/tegra/Makefile            |   1 +
- drivers/soc/tegra/core-power-domain.c | 125 ++++++++++++++++++++++++++
- include/soc/tegra/common.h            |   6 ++
- 4 files changed, 138 insertions(+)
- create mode 100644 drivers/soc/tegra/core-power-domain.c
+ drivers/gpu/host1x/channel.c | 8 ++++++++
+ include/linux/host1x.h       | 1 +
+ 2 files changed, 9 insertions(+)
 
-diff --git a/drivers/soc/tegra/Kconfig b/drivers/soc/tegra/Kconfig
-index bcd61ae59ba3..fccbc168dd87 100644
---- a/drivers/soc/tegra/Kconfig
-+++ b/drivers/soc/tegra/Kconfig
-@@ -16,6 +16,7 @@ config ARCH_TEGRA_2x_SOC
- 	select SOC_TEGRA_COMMON
- 	select SOC_TEGRA_FLOWCTRL
- 	select SOC_TEGRA_PMC
-+	select SOC_TEGRA_CORE_POWER_DOMAIN
- 	select SOC_TEGRA20_VOLTAGE_COUPLER
- 	select TEGRA_TIMER
- 	help
-@@ -31,6 +32,7 @@ config ARCH_TEGRA_3x_SOC
- 	select SOC_TEGRA_COMMON
- 	select SOC_TEGRA_FLOWCTRL
- 	select SOC_TEGRA_PMC
-+	select SOC_TEGRA_CORE_POWER_DOMAIN
- 	select SOC_TEGRA30_VOLTAGE_COUPLER
- 	select TEGRA_TIMER
- 	help
-@@ -170,3 +172,7 @@ config SOC_TEGRA20_VOLTAGE_COUPLER
- config SOC_TEGRA30_VOLTAGE_COUPLER
- 	bool "Voltage scaling support for Tegra30 SoCs"
- 	depends on ARCH_TEGRA_3x_SOC || COMPILE_TEST
-+
-+config SOC_TEGRA_CORE_POWER_DOMAIN
-+	bool
-+	select PM_GENERIC_DOMAINS
-diff --git a/drivers/soc/tegra/Makefile b/drivers/soc/tegra/Makefile
-index 9c809c1814bd..8f1294f954b4 100644
---- a/drivers/soc/tegra/Makefile
-+++ b/drivers/soc/tegra/Makefile
-@@ -7,3 +7,4 @@ obj-$(CONFIG_SOC_TEGRA_PMC) += pmc.o
- obj-$(CONFIG_SOC_TEGRA_POWERGATE_BPMP) += powergate-bpmp.o
- obj-$(CONFIG_SOC_TEGRA20_VOLTAGE_COUPLER) += regulators-tegra20.o
- obj-$(CONFIG_SOC_TEGRA30_VOLTAGE_COUPLER) += regulators-tegra30.o
-+obj-$(CONFIG_SOC_TEGRA_CORE_POWER_DOMAIN) += core-power-domain.o
-diff --git a/drivers/soc/tegra/core-power-domain.c b/drivers/soc/tegra/core-power-domain.c
-new file mode 100644
-index 000000000000..7c0cec8c79fd
---- /dev/null
-+++ b/drivers/soc/tegra/core-power-domain.c
-@@ -0,0 +1,125 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * NVIDIA Tegra SoC Core Power Domain Driver
-+ */
-+
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_domain.h>
-+#include <linux/pm_opp.h>
-+#include <linux/slab.h>
-+
-+#include <soc/tegra/common.h>
-+
-+static struct lock_class_key tegra_core_domain_lock_class;
-+static bool tegra_core_domain_state_synced;
-+
-+static int tegra_genpd_set_performance_state(struct generic_pm_domain *genpd,
-+					     unsigned int level)
-+{
-+	struct dev_pm_opp *opp;
-+	int err;
-+
-+	opp = dev_pm_opp_find_level_ceil(&genpd->dev, &level);
-+	if (IS_ERR(opp)) {
-+		dev_err(&genpd->dev, "failed to find OPP for level %u: %pe\n",
-+			level, opp);
-+		return PTR_ERR(opp);
-+	}
-+
-+	err = dev_pm_opp_set_voltage(&genpd->dev, opp);
-+	dev_pm_opp_put(opp);
-+
-+	if (err) {
-+		dev_err(&genpd->dev, "failed to set voltage to %duV: %d\n",
-+			level, err);
-+		return err;
-+	}
-+
-+	return 0;
-+}
-+
-+static unsigned int
-+tegra_genpd_opp_to_performance_state(struct generic_pm_domain *genpd,
-+				     struct dev_pm_opp *opp)
-+{
-+	return dev_pm_opp_get_level(opp);
-+}
-+
-+static int tegra_core_domain_probe(struct platform_device *pdev)
-+{
-+	struct generic_pm_domain *genpd;
-+	struct opp_table *opp_table;
-+	const char *rname = "power";
-+	int err;
-+
-+	genpd = devm_kzalloc(&pdev->dev, sizeof(*genpd), GFP_KERNEL);
-+	if (!genpd)
-+		return -ENOMEM;
-+
-+	genpd->name = pdev->dev.of_node->name;
-+	genpd->set_performance_state = tegra_genpd_set_performance_state;
-+	genpd->opp_to_performance_state = tegra_genpd_opp_to_performance_state;
-+
-+	opp_table = devm_pm_opp_set_regulators(&pdev->dev, &rname, 1);
-+	if (IS_ERR(opp_table))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(opp_table),
-+				     "failed to set OPP regulator\n");
-+
-+	err = pm_genpd_init(genpd, NULL, false);
-+	if (err) {
-+		dev_err(&pdev->dev, "failed to init genpd: %d\n", err);
-+		return err;
-+	}
-+
-+	/*
-+	 * We have a "PMC -> Core" hierarchy of the power domains where
-+	 * PMC needs to resume and change performance (voltage) of the
-+	 * Core domain from the PMC GENPD on/off callbacks, hence we need
-+	 * to annotate the lock in order to remove confusion from the
-+	 * lockdep checker when a nested access happens.
-+	 */
-+	lockdep_set_class(&genpd->mlock, &tegra_core_domain_lock_class);
-+
-+	err = of_genpd_add_provider_simple(pdev->dev.of_node, genpd);
-+	if (err) {
-+		dev_err(&pdev->dev, "failed to add genpd: %d\n", err);
-+		goto remove_genpd;
-+	}
-+
-+	return 0;
-+
-+remove_genpd:
-+	pm_genpd_remove(genpd);
-+
-+	return err;
-+}
-+
-+bool tegra_soc_core_domain_state_synced(void)
-+{
-+	return tegra_core_domain_state_synced;
-+}
-+
-+static void tegra_core_domain_sync_state(struct device *dev)
-+{
-+	tegra_core_domain_state_synced = true;
-+
-+	dev_pm_opp_sync_regulators(dev);
-+}
-+
-+static const struct of_device_id tegra_core_domain_match[] = {
-+	{ .compatible = "nvidia,tegra20-core-domain", },
-+	{ .compatible = "nvidia,tegra30-core-domain", },
-+	{ }
-+};
-+
-+static struct platform_driver tegra_core_domain_driver = {
-+	.driver = {
-+		.name = "tegra-core-power",
-+		.of_match_table = tegra_core_domain_match,
-+		.suppress_bind_attrs = true,
-+		.sync_state = tegra_core_domain_sync_state,
-+	},
-+	.probe = tegra_core_domain_probe,
-+};
-+builtin_platform_driver(tegra_core_domain_driver);
-diff --git a/include/soc/tegra/common.h b/include/soc/tegra/common.h
-index 57b56793a9e5..6c2ccbbbf073 100644
---- a/include/soc/tegra/common.h
-+++ b/include/soc/tegra/common.h
-@@ -27,6 +27,7 @@ struct tegra_core_opp_params {
- 
- #ifdef CONFIG_ARCH_TEGRA
- bool soc_is_tegra(void);
-+bool tegra_soc_core_domain_state_synced(void);
- int devm_tegra_core_dev_init_opp_table(struct device *dev,
- 				       struct tegra_core_opp_params *cfg);
- #else
-@@ -35,6 +36,11 @@ static inline bool soc_is_tegra(void)
- 	return false;
+diff --git a/drivers/gpu/host1x/channel.c b/drivers/gpu/host1x/channel.c
+index 4cd212bb570d..2a9a3a8d5931 100644
+--- a/drivers/gpu/host1x/channel.c
++++ b/drivers/gpu/host1x/channel.c
+@@ -75,6 +75,14 @@ struct host1x_channel *host1x_channel_get_index(struct host1x *host,
+ 	return ch;
  }
  
-+static inline bool tegra_soc_core_domain_state_synced(void)
++void host1x_channel_stop(struct host1x_channel *channel)
 +{
-+	return false;
-+}
++	struct host1x *host = dev_get_drvdata(channel->dev->parent);
 +
- static inline int
- devm_tegra_core_dev_init_opp_table(struct device *dev,
- 				   struct tegra_core_opp_params *cfg)
++	host1x_hw_cdma_stop(host, &channel->cdma);
++}
++EXPORT_SYMBOL(host1x_channel_stop);
++
+ static void release_channel(struct kref *kref)
+ {
+ 	struct host1x_channel *channel =
+diff --git a/include/linux/host1x.h b/include/linux/host1x.h
+index ce59a6a6a008..565833689be2 100644
+--- a/include/linux/host1x.h
++++ b/include/linux/host1x.h
+@@ -167,6 +167,7 @@ struct host1x_job;
+ 
+ struct host1x_channel *host1x_channel_request(struct host1x_client *client);
+ struct host1x_channel *host1x_channel_get(struct host1x_channel *channel);
++void host1x_channel_stop(struct host1x_channel *channel);
+ void host1x_channel_put(struct host1x_channel *channel);
+ int host1x_job_submit(struct host1x_job *job);
+ 
 -- 
 2.29.2
 
