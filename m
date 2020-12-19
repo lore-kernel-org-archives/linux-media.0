@@ -2,104 +2,123 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44CC9C3526E
-	for <linux-media@archiver.kernel.org>; Sat, 19 Dec 2020 11:28:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBD22C0018C
+	for <linux-media@archiver.kernel.org>; Sat, 19 Dec 2020 13:15:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2E0A6233CE
-	for <linux-media@archiver.kernel.org>; Sat, 19 Dec 2020 11:28:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B8BB323B17
+	for <linux-media@archiver.kernel.org>; Sat, 19 Dec 2020 13:15:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726472AbgLSL1m (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 19 Dec 2020 06:27:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54726 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726456AbgLSL1m (ORCPT
+        id S1726801AbgLSNOx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 19 Dec 2020 08:14:53 -0500
+Received: from mail-io1-f70.google.com ([209.85.166.70]:46593 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726482AbgLSNOv (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 19 Dec 2020 06:27:42 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15900C0617B0;
-        Sat, 19 Dec 2020 03:27:02 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id x16so6945108ejj.7;
-        Sat, 19 Dec 2020 03:27:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=w7bfMZw3OlzVmdxPUhFwa+L05rVOJFwc17cC0KrbB70=;
-        b=F9RtDOYXu0jJz54KjSoV1lnH2k/gT7gWse7vPCb66cSSJNaMIXUyTuWKtiRZl7/U3t
-         6YRBwFwZLfyDqg3xraL55Q4kDFhNWIGvNRns7TMl+K8YXoQsCVBQt7rTi/3ncugYtWrx
-         b0M0akUOlAjaukWeZn6Nk4i67DzZcm5xTcUDkn2QFZ0hwQYqmCtKM8lfKHlv9t4i35jc
-         TE6IPU+JcWrOLPeooudYVq1cm+kxxmRkotT0D7JDqm5Ac2XvWp71HjoYzXX4+ja0Mp9s
-         16HXh25Uy13BdxjM67wa1sB1C6ck0lu+mlUWSdhC6e7z1EzBgILMZtfCtFSPv0khHVap
-         6Wpw==
+        Sat, 19 Dec 2020 08:14:51 -0500
+Received: by mail-io1-f70.google.com with SMTP id a2so3809039iod.13
+        for <linux-media@vger.kernel.org>; Sat, 19 Dec 2020 05:14:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=w7bfMZw3OlzVmdxPUhFwa+L05rVOJFwc17cC0KrbB70=;
-        b=ZVMBOX/EEhgWdm9OJVXs7RxV5VUHQZhswKcvZ+IRUVNeLzGxgz3Kl14dAf2c8zZBbd
-         yDrj6ZJwHmVqLpq1U/e+eiEjxZMLlTwJJwooqZKnKkNE3yCrATJDESvPs9sUB0VYjOKk
-         XF+WwSjl5mNC9RmVIXZpEQEiQIQTIcvKlJXgpxzgdXQnTQxlYlzkBMzHNfws4l9RPE5G
-         eBuPuXGGqsA0A89l6xCTEh+Rs0ZGrKR4zYK1c4vIcKqlnIUlGDZ3AQfyQaBQFKblKpc0
-         3sD1kiQNXTrFaJeQu+W921euvuwNl5dTkfrZDWK8jV7KVztY4+ylOLSmzGuss6wrP1+A
-         ocGQ==
-X-Gm-Message-State: AOAM532A2nonrtHoxqv5TL95n2R7BOjzbrzBwbQTyqJyGFC8Xy3hP5sK
-        FUzwjkklLZ6Rf5pMna7VO6E=
-X-Google-Smtp-Source: ABdhPJxTO3GxjEeEfGLDh17vpE4kocndXhPi43Oo7WFCNnSItdhXmIQN6UWABtBYcBAG6gkhp4x4pg==
-X-Received: by 2002:a17:907:6e6:: with SMTP id yh6mr8197457ejb.512.1608377220767;
-        Sat, 19 Dec 2020 03:27:00 -0800 (PST)
-Received: from debian.home (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id n17sm6651785ejh.49.2020.12.19.03.26.59
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 19 Dec 2020 03:27:00 -0800 (PST)
-From:   Johan Jonker <jbx6244@gmail.com>
-To:     heiko@sntech.de
-Cc:     robh+dt@kernel.org, mchehab@kernel.org, jacob-chen@iotwrt.com,
-        ezequiel@collabora.com, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v1 1/4] media: dt-bindings: rockchip-rga: add more rga compatible properties
-Date:   Sat, 19 Dec 2020 12:26:50 +0100
-Message-Id: <20201219112653.10705-1-jbx6244@gmail.com>
-X-Mailer: git-send-email 2.11.0
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=Cu2aYISGQPzLf0fZUerl33lGzRiwpaY7H+fv9PeBU0Q=;
+        b=LPqcs+3a8bD3Ot0S6u45/gtx8p/PuRvwZKB3EhYCI8IZvzl9dHtVFXdSpDVU8VyYWI
+         4c2SuY/xYIELlVImDzlMWoeWdyVGDrhqSshVhJudTLYTewNDCiP6webmC1nRUju5o+Vt
+         r77etbRwCFTU/mw+AGt+gstXisFXdZap2P/M3ZLGDx7/l7RwC7RrldE1BmFlbmvAcbn/
+         kz9q/kVQDgQABbfJFA/FnJuWp0BCMrg2NpLOHxSGwyBTVqZDznxOLeGwSlauvNmOk4gb
+         6IR605q8HibMcKy/KAdiLkzACQzZ/7uUizRidBf2q0+B9p2Xmfa/shionuF/yt2D2d2t
+         5UDg==
+X-Gm-Message-State: AOAM531bLjTc5GfdOxk5kLvAeI5qGTQo4sMbO2RRFM8JQaOjXKw9qqgP
+        45M4BlgiZiX6ReuP6c11Pfr2/EGznZKVDZL641enJqe/MtUD
+X-Google-Smtp-Source: ABdhPJz5xeNYdQX8k5KLaYB+tapLYOA3m44Hc9edbJK7QCmrpplYFGIQ/mwzsr4Xa/25jQ0P0TbV7Y3LFHbf+db6znhfiooUKqQp
+MIME-Version: 1.0
+X-Received: by 2002:a02:cf30:: with SMTP id s16mr8209401jar.144.1608383650402;
+ Sat, 19 Dec 2020 05:14:10 -0800 (PST)
+Date:   Sat, 19 Dec 2020 05:14:10 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000025169705b6d100fa@google.com>
+Subject: memory leak in video_usercopy
+From:   syzbot <syzbot+1115e79c8df6472c612b@syzkaller.appspotmail.com>
+To:     arnd@arndb.de, hverkuil-cisco@xs4all.nl,
+        laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, mchehab@kernel.org,
+        sakari.ailus@linux.intel.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add more rga compatible properties.
+Hello,
 
-"rockchip,px30-rga", "rockchip,rk3288-rga"
-"rockchip,rk3328-rga", "rockchip,rk3288-rga"
-"rockchip,rk3368-rga", "rockchip,rk3288-rga"
+syzbot found the following issue on:
 
-make ARCH=arm64 dt_binding_check
-DT_SCHEMA_FILES=Documentation/devicetree/bindings/media/rockchip-rga.yaml
+HEAD commit:    a409ed15 Merge tag 'gpio-v5.11-1' of git://git.kernel.org/..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=10a5880f500000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=37c889fb8b2761af
+dashboard link: https://syzkaller.appspot.com/bug?extid=1115e79c8df6472c612b
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14d18f9b500000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=106a2c13500000
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+1115e79c8df6472c612b@syzkaller.appspotmail.com
+
+Debian GNU/Linux 9 syzkaller ttyS0
+Warning: Permanently added '10.128.10.29' (ECDSA) to the list of known hosts.
+executing program
+executing program
+BUG: memory leak
+unreferenced object 0xffff88810fb12300 (size 256):
+  comm "syz-executor399", pid 8472, jiffies 4294942333 (age 13.960s)
+  hex dump (first 32 bytes):
+    03 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<000000009fd00995>] kmalloc_node include/linux/slab.h:575 [inline]
+    [<000000009fd00995>] kvmalloc_node+0x61/0xf0 mm/util.c:575
+    [<0000000096a57c4a>] kvmalloc include/linux/mm.h:773 [inline]
+    [<0000000096a57c4a>] video_usercopy+0x991/0xa50 drivers/media/v4l2-core/v4l2-ioctl.c:3303
+    [<00000000f7529cc2>] v4l2_ioctl+0x77/0x90 drivers/media/v4l2-core/v4l2-dev.c:360
+    [<0000000061b5e6a9>] vfs_ioctl fs/ioctl.c:48 [inline]
+    [<0000000061b5e6a9>] __do_sys_ioctl fs/ioctl.c:753 [inline]
+    [<0000000061b5e6a9>] __se_sys_ioctl fs/ioctl.c:739 [inline]
+    [<0000000061b5e6a9>] __x64_sys_ioctl+0xfc/0x140 fs/ioctl.c:739
+    [<000000000139479b>] do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+    [<00000000d6de1c9c>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
+
+BUG: memory leak
+unreferenced object 0xffff88810f934300 (size 256):
+  comm "syz-executor399", pid 8473, jiffies 4294942927 (age 8.030s)
+  hex dump (first 32 bytes):
+    03 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<000000009fd00995>] kmalloc_node include/linux/slab.h:575 [inline]
+    [<000000009fd00995>] kvmalloc_node+0x61/0xf0 mm/util.c:575
+    [<0000000096a57c4a>] kvmalloc include/linux/mm.h:773 [inline]
+    [<0000000096a57c4a>] video_usercopy+0x991/0xa50 drivers/media/v4l2-core/v4l2-ioctl.c:3303
+    [<00000000f7529cc2>] v4l2_ioctl+0x77/0x90 drivers/media/v4l2-core/v4l2-dev.c:360
+    [<0000000061b5e6a9>] vfs_ioctl fs/ioctl.c:48 [inline]
+    [<0000000061b5e6a9>] __do_sys_ioctl fs/ioctl.c:753 [inline]
+    [<0000000061b5e6a9>] __se_sys_ioctl fs/ioctl.c:739 [inline]
+    [<0000000061b5e6a9>] __x64_sys_ioctl+0xfc/0x140 fs/ioctl.c:739
+    [<000000000139479b>] do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+    [<00000000d6de1c9c>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
+
+
+
 ---
- Documentation/devicetree/bindings/media/rockchip-rga.yaml | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/Documentation/devicetree/bindings/media/rockchip-rga.yaml b/Documentation/devicetree/bindings/media/rockchip-rga.yaml
-index dd645ddcc..a609b63bb 100644
---- a/Documentation/devicetree/bindings/media/rockchip-rga.yaml
-+++ b/Documentation/devicetree/bindings/media/rockchip-rga.yaml
-@@ -21,7 +21,11 @@ properties:
-       - const: rockchip,rk3288-rga
-       - const: rockchip,rk3399-rga
-       - items:
--          - const: rockchip,rk3228-rga
-+          - enum:
-+              - rockchip,px30-rga
-+              - rockchip,rk3228-rga
-+              - rockchip,rk3328-rga
-+              - rockchip,rk3368-rga
-           - const: rockchip,rk3288-rga
- 
-   reg:
--- 
-2.11.0
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
