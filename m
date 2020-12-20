@@ -5,65 +5,65 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99B13C3526E
-	for <linux-media@archiver.kernel.org>; Sun, 20 Dec 2020 09:34:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DA77C35296
+	for <linux-media@archiver.kernel.org>; Sun, 20 Dec 2020 09:34:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5865B23121
-	for <linux-media@archiver.kernel.org>; Sun, 20 Dec 2020 09:34:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 128B523124
+	for <linux-media@archiver.kernel.org>; Sun, 20 Dec 2020 09:34:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727444AbgLTJeV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 20 Dec 2020 04:34:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59302 "EHLO
+        id S1727550AbgLTJeb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 20 Dec 2020 04:34:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727391AbgLTJeP (ORCPT
+        with ESMTP id S1727519AbgLTJea (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 20 Dec 2020 04:34:15 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E05C0611CE
-        for <linux-media@vger.kernel.org>; Sun, 20 Dec 2020 01:32:55 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id p22so6714969edu.11
-        for <linux-media@vger.kernel.org>; Sun, 20 Dec 2020 01:32:55 -0800 (PST)
+        Sun, 20 Dec 2020 04:34:30 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A000C0619D4
+        for <linux-media@vger.kernel.org>; Sun, 20 Dec 2020 01:32:58 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id c7so6740699edv.6
+        for <linux-media@vger.kernel.org>; Sun, 20 Dec 2020 01:32:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=xJWHNxMCkDCEyrMRNKllf8ulu4dBqb0sn+GPkcIS48k=;
-        b=F4B8GnMtgYPmuWkyGKdO+mCwavMP7yX8XX8leC8vRBx6ryHCxdwHnB5xhAa8IGmsrw
-         1wKmH2uyBlf86AIAwJANVDnEe/4XF9IH6vcJ97OjaSVc8uvR/DujyaytMaUYiupB0K16
-         MqDdLk+qZmpj81I7IWzUz6AWPEgNvfWeyfl/+ZkSzG2WMMLVbvO0KXlA2Aueh+CVpV0m
-         unsIJUixZU7n75wbXhtGnwhl33pcyYNa2m3lu3fbdBwrRZybM5J/lxUGDGDHSJx21KQJ
-         NoD4q4Nj5YhHpGh40Hlc3OmSIgG6qJNkfeZAXUgJp+Fvl+L39n+y8LMDw3ws/Q8derws
-         8MMg==
+        bh=FN/bEnipr2y9sCYb7N5bkHhgN7bbMj0oywhCqcGevOA=;
+        b=v8peECqPJNg/N1Yfh3YW+bJ2bILnI7awKKkhkrReWPnl/5fCBwvh+TNnZL67PVh4Kn
+         XSAEFs4KQysDNHgmyqYGHyUw9GcCBRNi1aPsjDTCeVlZATkgeAjb+lT79oiyCzXQ/9cR
+         xscBUogVFwPiyRmtTZVALTDMzdaDCcOASaVV16cYXs0Sev/lOcwrihNeYZz0iM6rlqMv
+         bQdRfPQBffPJG8gSggx//jcGxC7PYp65g0iXUT5Uf6/wINmN4ZbWmA3a4eXu+qPI8nbT
+         DfY0pWzvnr0zzb05kzuox4X9DfH5M7uCS7OBQf3tn+Sn1PPAhi/TBPLK/G0bft3s7/JR
+         rdjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=xJWHNxMCkDCEyrMRNKllf8ulu4dBqb0sn+GPkcIS48k=;
-        b=ROS1/7QTYQxqVwQciB1++fRVm9LGXtI5+2sdoNFpcmjmI16TFyJH7dgNEAYXnzgpph
-         yeA4nH0/5lZtErfeNKe2b1iA5dRKW66htcY4oV+n6jGFFzzUQHVO7FfNJAEbuv2I6oBz
-         XhRujU1x7YHrmADVF3Ghy/1Psfz0Zq2+5cQMrXrj0n0Vv76edDdyQChk8hLsvDaUkKUl
-         oUiB4E5zdJHlR7dUZTME0unvoi+sW/6h8kG4WlUrB7AJCENcPTUfYsQrAd5n6icooHkd
-         tsqNc6g1Zv0EnuvZHbgEV+bRWHuMVWB7DG8Myr/jMZUlO31oOb9SE7Mxx7s7ZXNX2Exn
-         L9ig==
-X-Gm-Message-State: AOAM533PjOX49FZVRdtYDFfQZno+fjmez4wwUZchMPYwxCYf2lP3kN25
-        k4ZQTOp32KxtyzljPZrc9Jx2WmBnDEOF9TkJ
-X-Google-Smtp-Source: ABdhPJxr2vhEN0iJvtSS0+v3ybxAE/PDGojn5P72QUuDhfNqlV0hZEz8m4srPO/70HzDfhu36ulLsQ==
-X-Received: by 2002:a05:6402:491:: with SMTP id k17mr6139719edv.342.1608456774044;
-        Sun, 20 Dec 2020 01:32:54 -0800 (PST)
+        bh=FN/bEnipr2y9sCYb7N5bkHhgN7bbMj0oywhCqcGevOA=;
+        b=AheTnc3uXNGe6dASHh4r8XlBW8bEPDkNSroq0hssrQJlYnwGl6T9DU9Clx5uUDpQTg
+         zpyqcbjPv4Dmm4/ddlWapFnJh92dTFKg9z+CV6ZKKIuzR4xGkoK8u/WiPTO27e0pdYru
+         hAPOTxL3hofc7x6m4hvqE9pBY7to5SD89r09bg5aMib5YruVNVhFFjItLCvnsKv/ojnk
+         kVrhmcMOKito/xM5cXt2TyOiPr9tLkRSpa/vYdnwBmTsVnd6uDHSJgSUTwiJAokggkOk
+         3bWSaeZqnL16C0ZtczxeRHTC+5pp15drquInON+ZiEr+aR0YXBomY1J5JC7wjcfeg+xf
+         6udg==
+X-Gm-Message-State: AOAM532s8jUn29eJL6yq1UbhvhiRWunvykJr3I0UzPSwOAkTn7AmZNzl
+        KBkyHSJ7RIfbqgD7T+yQNtpoXebOTguYwmyp
+X-Google-Smtp-Source: ABdhPJwIq0fpyvaSJl94muY+RZpxPYGkdSjzDhObLqGyYZFmguawYXQVibjrORbz3oIU2JcDnXSFEA==
+X-Received: by 2002:a05:6402:2292:: with SMTP id cw18mr11885156edb.336.1608456777231;
+        Sun, 20 Dec 2020 01:32:57 -0800 (PST)
 Received: from localhost.localdomain (hst-221-118.medicom.bg. [84.238.221.118])
-        by smtp.gmail.com with ESMTPSA id z12sm7769814ejr.17.2020.12.20.01.32.53
+        by smtp.gmail.com with ESMTPSA id z12sm7769814ejr.17.2020.12.20.01.32.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Dec 2020 01:32:53 -0800 (PST)
+        Sun, 20 Dec 2020 01:32:56 -0800 (PST)
 From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
 To:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     vgarodia@codeaurora.org, acourbot@chromium.org,
         Fritz Koenig <frkoenig@chromium.org>,
         Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH v2 3/5] venus: helpers: Lock outside of buffer queue helper
-Date:   Sun, 20 Dec 2020 11:31:28 +0200
-Message-Id: <20201220093130.10177-4-stanimir.varbanov@linaro.org>
+Subject: [PATCH v2 5/5] venus: vdec: Handle DRC after drain
+Date:   Sun, 20 Dec 2020 11:31:30 +0200
+Message-Id: <20201220093130.10177-6-stanimir.varbanov@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20201220093130.10177-1-stanimir.varbanov@linaro.org>
 References: <20201220093130.10177-1-stanimir.varbanov@linaro.org>
@@ -71,103 +71,96 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-After adding more logic in vdec buf_queue vb2 op it is not
-practical to have two lock/unlock for one decoder buf_queue.
-So move the instance lock in encoder and decoder vb2 buf_queue
-operations.
+From: Fritz Koenig <frkoenig@chromium.org>
 
+If the DRC is near the end of the stream the client
+may send a V4L2_DEC_CMD_STOP before the DRC occurs.
+V4L2_DEC_CMD_STOP puts the driver into the
+VENUS_DEC_STATE_DRAIN state.  DRC must be aware so
+that after the DRC event the state can be restored
+correctly.
+
+Signed-off-by: Fritz Koenig <frkoenig@chromium.org>
 Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 ---
- drivers/media/platform/qcom/venus/helpers.c | 11 +++--------
- drivers/media/platform/qcom/venus/vdec.c    |  3 +--
- drivers/media/platform/qcom/venus/venc.c    | 11 ++++++++++-
- 3 files changed, 14 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
-index 5ca3920237c5..2b6925b6c274 100644
---- a/drivers/media/platform/qcom/venus/helpers.c
-+++ b/drivers/media/platform/qcom/venus/helpers.c
-@@ -1343,34 +1343,29 @@ void venus_helper_vb2_buf_queue(struct vb2_buffer *vb)
- 	struct v4l2_m2m_ctx *m2m_ctx = inst->m2m_ctx;
- 	int ret;
- 
--	mutex_lock(&inst->lock);
--
- 	v4l2_m2m_buf_queue(m2m_ctx, vbuf);
- 
- 	/* Skip processing queued capture buffers after LAST flag */
- 	if (inst->session_type == VIDC_SESSION_TYPE_DEC &&
- 	    V4L2_TYPE_IS_CAPTURE(vb->vb2_queue->type) &&
- 	    inst->codec_state == VENUS_DEC_STATE_DRC)
--		goto unlock;
-+		return;
- 
- 	cache_payload(inst, vb);
- 
- 	if (inst->session_type == VIDC_SESSION_TYPE_ENC &&
- 	    !(inst->streamon_out && inst->streamon_cap))
--		goto unlock;
-+		return;
- 
- 	if (vb2_start_streaming_called(vb->vb2_queue)) {
- 		ret = is_buf_refed(inst, vbuf);
- 		if (ret)
--			goto unlock;
-+			return;
- 
- 		ret = session_process_buf(inst, vbuf);
- 		if (ret)
- 			return_buf_error(inst, vbuf);
- 	}
--
--unlock:
--	mutex_unlock(&inst->lock);
- }
- EXPORT_SYMBOL_GPL(venus_helper_vb2_buf_queue);
- 
-diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-index 4ce23c2fc6eb..9f2c7b3e7d4c 100644
---- a/drivers/media/platform/qcom/venus/vdec.c
-+++ b/drivers/media/platform/qcom/venus/vdec.c
-@@ -1241,9 +1241,8 @@ static void vdec_vb2_buf_queue(struct vb2_buffer *vb)
- 		return;
- 	}
- 
--	mutex_unlock(&inst->lock);
--
- 	venus_helper_vb2_buf_queue(vb);
-+	mutex_unlock(&inst->lock);
- }
- 
- static const struct vb2_ops vdec_vb2_ops = {
-diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
-index 1c61602c5de1..4ecf78e30b59 100644
---- a/drivers/media/platform/qcom/venus/venc.c
-+++ b/drivers/media/platform/qcom/venus/venc.c
-@@ -929,13 +929,22 @@ static int venc_start_streaming(struct vb2_queue *q, unsigned int count)
- 	return ret;
- }
- 
-+static void venc_vb2_buf_queue(struct vb2_buffer *vb)
-+{
-+	struct venus_inst *inst = vb2_get_drv_priv(vb->vb2_queue);
-+
-+	mutex_lock(&inst->lock);
-+	venus_helper_vb2_buf_queue(vb);
-+	mutex_unlock(&inst->lock);
-+}
-+
- static const struct vb2_ops venc_vb2_ops = {
- 	.queue_setup = venc_queue_setup,
- 	.buf_init = venus_helper_vb2_buf_init,
- 	.buf_prepare = venus_helper_vb2_buf_prepare,
- 	.start_streaming = venc_start_streaming,
- 	.stop_streaming = venus_helper_vb2_stop_streaming,
--	.buf_queue = venus_helper_vb2_buf_queue,
-+	.buf_queue = venc_vb2_buf_queue,
+Changes since v2 (from Fritz):
+ - moved state transition from vdec_event_notify to vdec_event_change. 
+
+ drivers/media/platform/qcom/venus/core.h |  1 +
+ drivers/media/platform/qcom/venus/vdec.c | 14 ++++++++++++--
+ 2 files changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
+index db0e6738281e..765ab7ed881b 100644
+--- a/drivers/media/platform/qcom/venus/core.h
++++ b/drivers/media/platform/qcom/venus/core.h
+@@ -413,6 +413,7 @@ struct venus_inst {
+ 	unsigned int core_acquired: 1;
+ 	unsigned int bit_depth;
+ 	bool next_buf_last;
++	bool drain_active;
  };
  
- static void venc_buf_done(struct venus_inst *inst, unsigned int buf_type,
+ #define IS_V1(core)	((core)->res->hfi_version == HFI_VERSION_1XX)
+diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+index d27f4fd0ca01..6cc35ffe2d6e 100644
+--- a/drivers/media/platform/qcom/venus/vdec.c
++++ b/drivers/media/platform/qcom/venus/vdec.c
+@@ -519,8 +519,10 @@ vdec_decoder_cmd(struct file *file, void *fh, struct v4l2_decoder_cmd *cmd)
+ 
+ 		ret = hfi_session_process_buf(inst, &fdata);
+ 
+-		if (!ret && inst->codec_state == VENUS_DEC_STATE_DECODING)
++		if (!ret && inst->codec_state == VENUS_DEC_STATE_DECODING) {
+ 			inst->codec_state = VENUS_DEC_STATE_DRAIN;
++			inst->drain_active = true;
++		}
+ 	}
+ 
+ unlock:
+@@ -969,9 +971,13 @@ static int vdec_start_capture(struct venus_inst *inst)
+ 
+ 	inst->codec_state = VENUS_DEC_STATE_DECODING;
+ 
++	if (inst->drain_active)
++		inst->codec_state = VENUS_DEC_STATE_DRAIN;
++
+ 	inst->streamon_cap = 1;
+ 	inst->sequence_cap = 0;
+ 	inst->reconfig = false;
++	inst->drain_active = false;
+ 
+ 	return 0;
+ 
+@@ -1097,6 +1103,7 @@ static int vdec_stop_capture(struct venus_inst *inst)
+ 		fallthrough;
+ 	case VENUS_DEC_STATE_DRAIN:
+ 		inst->codec_state = VENUS_DEC_STATE_STOPPED;
++		inst->drain_active = false;
+ 		fallthrough;
+ 	case VENUS_DEC_STATE_SEEK:
+ 		vdec_cancel_dst_buffers(inst);
+@@ -1296,8 +1303,10 @@ static void vdec_buf_done(struct venus_inst *inst, unsigned int buf_type,
+ 
+ 			v4l2_event_queue_fh(&inst->fh, &ev);
+ 
+-			if (inst->codec_state == VENUS_DEC_STATE_DRAIN)
++			if (inst->codec_state == VENUS_DEC_STATE_DRAIN) {
++				inst->drain_active = false;
+ 				inst->codec_state = VENUS_DEC_STATE_STOPPED;
++			}
+ 		}
+ 
+ 		if (!bytesused)
+@@ -1373,6 +1382,7 @@ static void vdec_event_change(struct venus_inst *inst,
+ 		inst->codec_state = VENUS_DEC_STATE_CAPTURE_SETUP;
+ 		break;
+ 	case VENUS_DEC_STATE_DECODING:
++	case VENUS_DEC_STATE_DRAIN:
+ 		inst->codec_state = VENUS_DEC_STATE_DRC;
+ 		break;
+ 	default:
 -- 
 2.17.1
 
