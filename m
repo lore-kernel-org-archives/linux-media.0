@@ -2,102 +2,158 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BD87C3526C
-	for <linux-media@archiver.kernel.org>; Sun, 20 Dec 2020 09:33:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C524C3526C
+	for <linux-media@archiver.kernel.org>; Sun, 20 Dec 2020 09:34:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2F13B23124
-	for <linux-media@archiver.kernel.org>; Sun, 20 Dec 2020 09:33:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DCAD523124
+	for <linux-media@archiver.kernel.org>; Sun, 20 Dec 2020 09:34:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727077AbgLTJdf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 20 Dec 2020 04:33:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59178 "EHLO
+        id S1727429AbgLTJeQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 20 Dec 2020 04:34:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727010AbgLTJdd (ORCPT
+        with ESMTP id S1727377AbgLTJeO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 20 Dec 2020 04:33:33 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D031CC061282
-        for <linux-media@vger.kernel.org>; Sun, 20 Dec 2020 01:32:48 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id q22so9414202eja.2
-        for <linux-media@vger.kernel.org>; Sun, 20 Dec 2020 01:32:48 -0800 (PST)
+        Sun, 20 Dec 2020 04:34:14 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6CBC0611CB
+        for <linux-media@vger.kernel.org>; Sun, 20 Dec 2020 01:32:53 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id cm17so6763204edb.4
+        for <linux-media@vger.kernel.org>; Sun, 20 Dec 2020 01:32:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=jklOUP9ssYI5rCKfQqUWTyc0nST/IJQQMgqRWUIHnaY=;
-        b=fPIzdur7KvtXX2fZntnE0EcI5FcOc4zAS+Z2K4tsC7H9yoEuX4kCK7RejvMUm10Tyf
-         iC+G8D7sM4MSMNnstHIM88+vwiDXh7UbTvGILykhEdsMyNZyPOoljj3Yp65fzI3/Klln
-         7Qk0yOi1Hr1tDvu2oB6VnNv1bDFPdnW0h3cLdZxuz+v+uRvDxCyEZm7cIEPsm2BQLpkz
-         7uZ2uIEFh2eiofPhQ3eZI0QBf3btaRDWKsnBGeMs1kRVTr0P5sALqXK04/1yxTsEeO9B
-         3TeMzPx4I86g+2OMjRBIq44NAnQxFKgFcoRckX66IoWA7WJCn3+pgUhSHwWSby28iqnP
-         p++g==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=DEs1jlqfRpmRp1QgU14zLhiXveVi1mzRfOntspJCdks=;
+        b=orl0kZnme9l+fSwfq5e9A2EEgrbjubKmvQbOTNY8CScosT9Xk5vgZWmBaHn1kkj5my
+         9xFP52PSre+xRstUWHc7lghm5waUTIV+WnKSO7SoICuRuzYMHl5K316J3LNsCiY54wLU
+         sZ7xd/0C0yVaZyEYVpBmNlsAuM4xF5SdwXY4GOdUHi1jzHB+W7V9TAhIZXeyzSb8SmG5
+         vhM2Kix9934u3reP40/XW70vqV8/226ex5Wg/ElA6WBrCiJqHPZ+4OMlkspgnN9HbOP4
+         JppWLFoek7j7nulrzeZhm9FkGLAZZpAIXmZZ54DP3FZ17YTJJ0Y9QGk3Or/8K93jVGFG
+         F3OQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=jklOUP9ssYI5rCKfQqUWTyc0nST/IJQQMgqRWUIHnaY=;
-        b=bjrn3NEHX0StQ1Fuu9rqkIJH3lIBd2qDf8O7YdK07fkreWcUyWKdO2/sVXZ+Vzqa5K
-         9cQcNYjVUQQ+g9XEHAaQUYONIZIz2dqF6UdGKDhalM/TUEX3wjt2ksUE8T22jucD6mOb
-         Z9HZsE9OYytXGCFQe6c16CrjT3zaEk+woBYB5S57zKLsKGnKZZo+rglKiXQ3ijCyJ0Wk
-         ZD+spkK/zHGu6sQ7TYxwK2dBVpE2+W39PF5fJKo1q6qYTKr6CmtOL+eIQNNGF9pqyNYr
-         5YjyuVnm/jhq8oJtKZq8krQROGF5TJ3zjnJ0sKwfY68low0fQt8mL8n1cNUKRGl8xZ30
-         yzYQ==
-X-Gm-Message-State: AOAM5339E6wbM8q7jzTnbyO0diX9jLxOYvHVgDAQzaLRPWdHi/s+SIdp
-        lWP8qhC5R59tCUe8mx+O6fDwNDqTTiHqWrQa
-X-Google-Smtp-Source: ABdhPJxQq5F0rTvT9tIkwiwbtVBwaCKhgp6mh+xz5rtq3xE/1jU7AJz53f1h9lWSIXUugJfBzss1qA==
-X-Received: by 2002:a17:906:1a19:: with SMTP id i25mr11104489ejf.206.1608456766811;
-        Sun, 20 Dec 2020 01:32:46 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=DEs1jlqfRpmRp1QgU14zLhiXveVi1mzRfOntspJCdks=;
+        b=GemXLE8suX5xoJurczeIvuvs/NzN/RPYk7V2TbbjPm25xQ8pJuXhnZenffh8bwcemN
+         55GcvDLRimu/IbbC25Oxs5aDETj9x286UIplhMIss+78LKIrna0d/NfEFpkwCiLxXDOr
+         Z0NxghU2nQgluZVHBhSkfJ8dUUBuvHiIoO61D+ctZgR7HUf4uMV2dkV33i0Vj09Fs062
+         xHHS8JIMG+NRGyXV0n9qzpImZQM+78KrPEakOL9a4qM3n5+In2cU3e22IHbHtKmRo4qt
+         nZYhd+ErIyIloC/m6yy6mmHJ5puQ7pHRknjZgOPq57BnQytQ/stUdCbMKuSaJXUciClH
+         GzXg==
+X-Gm-Message-State: AOAM530WFqaV33Vdu80m2Z2POVgwTgXZ7yVeQYcbu/xhVvGQ0UUhU/f2
+        VEVoeMjnpKxYuqQpUHi8Hlh1TfKY6xjOPnCu
+X-Google-Smtp-Source: ABdhPJwKCJfuE5gPB9LQhweSaMJDe4afawS0kzSQhreFVyFx9S1EYlAUCVal/CwuGJ+f5r5H5x8SYg==
+X-Received: by 2002:aa7:cac2:: with SMTP id l2mr11618071edt.141.1608456772331;
+        Sun, 20 Dec 2020 01:32:52 -0800 (PST)
 Received: from localhost.localdomain (hst-221-118.medicom.bg. [84.238.221.118])
-        by smtp.gmail.com with ESMTPSA id z12sm7769814ejr.17.2020.12.20.01.32.45
+        by smtp.gmail.com with ESMTPSA id z12sm7769814ejr.17.2020.12.20.01.32.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Dec 2020 01:32:46 -0800 (PST)
+        Sun, 20 Dec 2020 01:32:51 -0800 (PST)
 From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
 To:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     vgarodia@codeaurora.org, acourbot@chromium.org,
         Fritz Koenig <frkoenig@chromium.org>,
         Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH v2 0/5] Venus dynamic resolution change fixes
-Date:   Sun, 20 Dec 2020 11:31:25 +0200
-Message-Id: <20201220093130.10177-1-stanimir.varbanov@linaro.org>
+Subject: [PATCH v2 2/5] venus: vdec: Make decoder return LAST flag for sufficient event
+Date:   Sun, 20 Dec 2020 11:31:27 +0200
+Message-Id: <20201220093130.10177-3-stanimir.varbanov@linaro.org>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20201220093130.10177-1-stanimir.varbanov@linaro.org>
+References: <20201220093130.10177-1-stanimir.varbanov@linaro.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+This makes the decoder to behaives equally for sufficient and
+insufficient events. After this change the LAST buffer flag will be set
+when the new resolution (in dynamic-resolution-change state) is smaller
+then the old bitstream resolution.
 
-Changes since v1:
- * In 1/5
-   - clear next_buf_last flag before session_continue in vdec_start_capture
-   - on event, flush output buffers unconditiannly
- * Added two more patches from Alex (4/5) and Fritz (5/5)
+Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+---
+ drivers/media/platform/qcom/venus/vdec.c | 41 ++++++++++++++++--------
+ 1 file changed, 27 insertions(+), 14 deletions(-)
 
-v1 can be found at: https://www.spinics.net/lists/linux-media/msg177801.html 
-
-regards,
-Stan
-
-Alexandre Courbot (1):
-  media: venus: preserve DRC state across seeks
-
-Fritz Koenig (1):
-  venus: vdec: Handle DRC after drain
-
-Stanimir Varbanov (3):
-  venus: vdec: Fix non reliable setting of LAST flag
-  venus: vdec: Make decoder return LAST flag for sufficient event
-  venus: helpers: Lock outside of buffer queue helper
-
- drivers/media/platform/qcom/venus/core.h    |   6 +-
- drivers/media/platform/qcom/venus/helpers.c |  15 +--
- drivers/media/platform/qcom/venus/vdec.c    | 110 +++++++++++++-------
- drivers/media/platform/qcom/venus/venc.c    |  11 +-
- 4 files changed, 93 insertions(+), 49 deletions(-)
-
+diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+index eb94e167e282..4ce23c2fc6eb 100644
+--- a/drivers/media/platform/qcom/venus/vdec.c
++++ b/drivers/media/platform/qcom/venus/vdec.c
+@@ -637,6 +637,7 @@ static int vdec_output_conf(struct venus_inst *inst)
+ {
+ 	struct venus_core *core = inst->core;
+ 	struct hfi_enable en = { .enable = 1 };
++	struct hfi_buffer_requirements bufreq;
+ 	u32 width = inst->out_width;
+ 	u32 height = inst->out_height;
+ 	u32 out_fmt, out2_fmt;
+@@ -712,6 +713,22 @@ static int vdec_output_conf(struct venus_inst *inst)
+ 	}
+ 
+ 	if (IS_V3(core) || IS_V4(core)) {
++		ret = venus_helper_get_bufreq(inst, HFI_BUFFER_OUTPUT, &bufreq);
++		if (ret)
++			return ret;
++
++		if (bufreq.size > inst->output_buf_size)
++			return -EINVAL;
++
++		if (inst->dpb_fmt) {
++			ret = venus_helper_get_bufreq(inst, HFI_BUFFER_OUTPUT2, &bufreq);
++			if (ret)
++				return ret;
++
++			if (bufreq.size > inst->output2_buf_size)
++				return -EINVAL;
++		}
++
+ 		if (inst->output2_buf_size) {
+ 			ret = venus_helper_set_bufsize(inst,
+ 						       inst->output2_buf_size,
+@@ -1346,19 +1363,15 @@ static void vdec_event_change(struct venus_inst *inst,
+ 	dev_dbg(dev, VDBGM "event %s sufficient resources (%ux%u)\n",
+ 		sufficient ? "" : "not", ev_data->width, ev_data->height);
+ 
+-	if (sufficient) {
+-		hfi_session_continue(inst);
+-	} else {
+-		switch (inst->codec_state) {
+-		case VENUS_DEC_STATE_INIT:
+-			inst->codec_state = VENUS_DEC_STATE_CAPTURE_SETUP;
+-			break;
+-		case VENUS_DEC_STATE_DECODING:
+-			inst->codec_state = VENUS_DEC_STATE_DRC;
+-			break;
+-		default:
+-			break;
+-		}
++	switch (inst->codec_state) {
++	case VENUS_DEC_STATE_INIT:
++		inst->codec_state = VENUS_DEC_STATE_CAPTURE_SETUP;
++		break;
++	case VENUS_DEC_STATE_DECODING:
++		inst->codec_state = VENUS_DEC_STATE_DRC;
++		break;
++	default:
++		break;
+ 	}
+ 
+ 	/*
+@@ -1367,7 +1380,7 @@ static void vdec_event_change(struct venus_inst *inst,
+ 	 * itself doesn't mark the last decoder output buffer with HFI EOS flag.
+ 	 */
+ 
+-	if (!sufficient && inst->codec_state == VENUS_DEC_STATE_DRC) {
++	if (inst->codec_state == VENUS_DEC_STATE_DRC) {
+ 		int ret;
+ 
+ 		inst->next_buf_last = true;
 -- 
 2.17.1
 
