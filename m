@@ -2,158 +2,455 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28026C433E0
-	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 22:24:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E297C433DB
+	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 22:31:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D1D1622B51
-	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 22:24:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E4BB5225AA
+	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 22:31:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725892AbgLUWYy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Dec 2020 17:24:54 -0500
-Received: from mga05.intel.com ([192.55.52.43]:42712 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725833AbgLUWYx (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Dec 2020 17:24:53 -0500
-IronPort-SDR: DjRs2oC3rv8AG+HYecHsUV6M/aLYkYXU5amBjvfhcsnZCOUmLSnvnLKr08mKwU8W4FGkCsaOOZ
- O3tXH3hmBZfg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9842"; a="260521917"
-X-IronPort-AV: E=Sophos;i="5.78,437,1599548400"; 
-   d="scan'208";a="260521917"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2020 14:21:47 -0800
-IronPort-SDR: kFcfjsqV4Pipj84NLphvf/feutzypujI19wIr2o7BwQHvoHcKKjGsLchUG81EFSNvrHwNx2BOJ
- lCy4h/germcg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,437,1599548400"; 
-   d="scan'208";a="372892712"
-Received: from maru.jf.intel.com ([10.54.51.77])
-  by orsmga008.jf.intel.com with ESMTP; 21 Dec 2020 14:21:47 -0800
-From:   Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-To:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-        Eddie James <eajames@linux.ibm.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     linux-clk@vger.kernel.org, linux-media@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-aspeed@lists.ozlabs.org,
-        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Subject: [PATCH v2 1/1] media: aspeed: fix clock handling logic
-Date:   Mon, 21 Dec 2020 14:32:25 -0800
-Message-Id: <20201221223225.14723-2-jae.hyun.yoo@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201221223225.14723-1-jae.hyun.yoo@linux.intel.com>
-References: <20201221223225.14723-1-jae.hyun.yoo@linux.intel.com>
+        id S1725899AbgLUWam (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Dec 2020 17:30:42 -0500
+Received: from mail-oi1-f180.google.com ([209.85.167.180]:43927 "EHLO
+        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725783AbgLUWam (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 21 Dec 2020 17:30:42 -0500
+Received: by mail-oi1-f180.google.com with SMTP id q25so12824828oij.10;
+        Mon, 21 Dec 2020 14:30:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=sisPDAs9i+2uMX2z7wDDD4p5KFYrHxtdzjTUQaGvK4Y=;
+        b=VEJAJAgGsEhmxpIZ797ySMo5XZfi+Ju09YCFS6SvA5/32ELFv4C5lNjOwHBtc2z6kl
+         My3kfzlwHwaGlnkSGPUqvJ4ENluHPy1L+N/sas9Ef2nF4ASuq6gzeTjnHZB3N/oWYmE9
+         mrR/MFKCHd7PYVo314FdSyInKL/s+80rfJNc1MvHBquAvStz1RMZToDZshR9Tgq5gqtE
+         sCjctwKx2RnUs/F35uZn7eGxPRm0etOxPVVmqGacdEQ0ObytMDQJtbGXvq9nFGNCUfHo
+         pouK3Oj1QGTRPkJuf4VRtkzJbW+jdg811uOKxkub05ovUm92RTG1TlW6Fg9/DqE7Fr73
+         0A/g==
+X-Gm-Message-State: AOAM532ib8jKhl9c91fw7BSc2760Htidl2AA3PxmCsFHdc59v8Kb0PhO
+        /tjJnkBHqyyb6hEVTf2v+w==
+X-Google-Smtp-Source: ABdhPJxjLw2QGOVawHNevZU/xGhb5ustZhRIXB3BEerBKxzlV1lf8sqU/vPE+py1Q1soeVfWVpic4Q==
+X-Received: by 2002:aca:ec43:: with SMTP id k64mr12714690oih.43.1608589800845;
+        Mon, 21 Dec 2020 14:30:00 -0800 (PST)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id p18sm3914243ood.48.2020.12.21.14.29.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Dec 2020 14:29:59 -0800 (PST)
+Received: (nullmailer pid 687179 invoked by uid 1000);
+        Mon, 21 Dec 2020 22:29:55 -0000
+Date:   Mon, 21 Dec 2020 15:29:55 -0700
+From:   Rob Herring <robh@kernel.org>
+To:     Liu Ying <victor.liu@nxp.com>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, airlied@linux.ie, daniel@ffwll.ch,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, mchehab@kernel.org,
+        a.hajda@samsung.com, narmstrong@baylibre.com,
+        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@siol.net, kishon@ti.com, vkoul@kernel.org
+Subject: Re: [PATCH 07/14] drm/bridge: imx: Add i.MX8qm/qxp display pixel
+ link support
+Message-ID: <20201221222955.GA652934@robh.at.kernel.org>
+References: <1608199173-28760-1-git-send-email-victor.liu@nxp.com>
+ <1608199173-28760-8-git-send-email-victor.liu@nxp.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1608199173-28760-8-git-send-email-victor.liu@nxp.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Video engine uses eclk and vclk for its clock sources and its reset
-control is coupled with eclk so the current clock enabling sequence works
-like below.
+On Thu, Dec 17, 2020 at 05:59:26PM +0800, Liu Ying wrote:
+> This patch adds a drm bridge driver for i.MX8qm/qxp display pixel link.
+> The pixel link forms a standard asynchronous linkage between
+> pixel sources(display controller or camera module) and pixel
+> consumers(imaging or displays).  It consists of two distinct
+> functions, a pixel transfer function and a control interface.
+> 
+> Signed-off-by: Liu Ying <victor.liu@nxp.com>
+> ---
+>  drivers/gpu/drm/bridge/imx/Kconfig              |   8 +
+>  drivers/gpu/drm/bridge/imx/Makefile             |   1 +
+>  drivers/gpu/drm/bridge/imx/imx8qxp-pixel-link.c | 411 ++++++++++++++++++++++++
+>  3 files changed, 420 insertions(+)
+>  create mode 100644 drivers/gpu/drm/bridge/imx/imx8qxp-pixel-link.c
+> 
+> diff --git a/drivers/gpu/drm/bridge/imx/Kconfig b/drivers/gpu/drm/bridge/imx/Kconfig
+> index f1c91b6..4d1f027 100644
+> --- a/drivers/gpu/drm/bridge/imx/Kconfig
+> +++ b/drivers/gpu/drm/bridge/imx/Kconfig
+> @@ -6,3 +6,11 @@ config DRM_IMX8QXP_PIXEL_COMBINER
+>  	help
+>  	  Choose this to enable pixel combiner found in
+>  	  Freescale i.MX8qm/qxp processors.
+> +
+> +config DRM_IMX8QXP_PIXEL_LINK
+> +	tristate "Freescale i.MX8QM/QXP display pixel link"
+> +	depends on OF
+> +	select DRM_KMS_HELPER
+> +	help
+> +	  Choose this to enable display pixel link found in
+> +	  Freescale i.MX8qm/qxp processors.
+> diff --git a/drivers/gpu/drm/bridge/imx/Makefile b/drivers/gpu/drm/bridge/imx/Makefile
+> index 7d7c8d6..c15469f 100644
+> --- a/drivers/gpu/drm/bridge/imx/Makefile
+> +++ b/drivers/gpu/drm/bridge/imx/Makefile
+> @@ -1 +1,2 @@
+>  obj-$(CONFIG_DRM_IMX8QXP_PIXEL_COMBINER) += imx8qxp-pixel-combiner.o
+> +obj-$(CONFIG_DRM_IMX8QXP_PIXEL_LINK) += imx8qxp-pixel-link.o
+> diff --git a/drivers/gpu/drm/bridge/imx/imx8qxp-pixel-link.c b/drivers/gpu/drm/bridge/imx/imx8qxp-pixel-link.c
+> new file mode 100644
+> index 00000000..1af7467
+> --- /dev/null
+> +++ b/drivers/gpu/drm/bridge/imx/imx8qxp-pixel-link.c
+> @@ -0,0 +1,411 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +
+> +/*
+> + * Copyright 2020 NXP
+> + */
+> +
+> +#include <linux/firmware/imx/svc/misc.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_graph.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include <drm/drm_atomic_state_helper.h>
+> +#include <drm/drm_bridge.h>
+> +#include <drm/drm_print.h>
+> +
+> +#include <dt-bindings/firmware/imx/rsrc.h>
+> +
+> +#define DRIVER_NAME		"imx8qxp-display-pixel-link"
+> +#define PL_MAX_MST_ADDR		3
+> +
+> +struct imx8qxp_pixel_link {
+> +	struct drm_bridge bridge;
+> +	struct drm_bridge *next_bridge;
+> +	struct device *dev;
+> +	struct imx_sc_ipc *ipc_handle;
+> +	int id;
+> +	int stream_id;
+> +	int dc_id;
+> +	u32 sink_rsc;
+> +	u32 mst_addr;
+> +	u8 mst_addr_ctrl;
+> +	u8 mst_en_ctrl;
+> +	u8 mst_vld_ctrl;
+> +	u8 sync_ctrl;
+> +};
+> +
+> +#define DEFINE_IMX8QXP_PIXEL_LINK_ENABLE_CTRL(name)			\
+> +static void								\
+> +imx8qxp_pixel_link_enable_##name(struct imx8qxp_pixel_link *pl)		\
+> +{									\
+> +	int ret = imx_sc_misc_set_control(pl->ipc_handle, pl->sink_rsc,	\
+> +					  pl->name##_ctrl, true);	\
+> +	if (ret)							\
+> +		DRM_DEV_ERROR(pl->dev,					\
+> +			"failed to enable DC%d stream%d pixel link "	\
+> +			#name ": %d\n",	pl->dc_id, pl->stream_id, ret);	\
+> +}
+> +
+> +DEFINE_IMX8QXP_PIXEL_LINK_ENABLE_CTRL(mst_en)
+> +DEFINE_IMX8QXP_PIXEL_LINK_ENABLE_CTRL(mst_vld)
+> +DEFINE_IMX8QXP_PIXEL_LINK_ENABLE_CTRL(sync)
+> +
+> +#define DEFINE_IMX8QXP_PIXEL_LINK_DISABLE_CTRL(name)			\
+> +static int								\
+> +imx8qxp_pixel_link_disable_##name(struct imx8qxp_pixel_link *pl)	\
+> +{									\
+> +	int ret = imx_sc_misc_set_control(pl->ipc_handle, pl->sink_rsc,	\
+> +					  pl->name##_ctrl, false);	\
+> +	if (ret)							\
+> +		DRM_DEV_ERROR(pl->dev,					\
+> +			"failed to disable DC%d stream%d pixel link "	\
+> +			#name ": %d\n",	pl->dc_id, pl->stream_id, ret);	\
+> +									\
+> +	return ret;							\
+> +}
+> +
+> +DEFINE_IMX8QXP_PIXEL_LINK_DISABLE_CTRL(mst_en)
+> +DEFINE_IMX8QXP_PIXEL_LINK_DISABLE_CTRL(mst_vld)
+> +DEFINE_IMX8QXP_PIXEL_LINK_DISABLE_CTRL(sync)
+> +
+> +static void imx8qxp_pixel_link_set_mst_addr(struct imx8qxp_pixel_link *pl)
+> +{
+> +	int ret;
+> +
+> +	ret = imx_sc_misc_set_control(pl->ipc_handle,
+> +				      pl->sink_rsc, pl->mst_addr_ctrl,
+> +				      pl->mst_addr);
+> +	if (ret)
+> +		DRM_DEV_ERROR(pl->dev,
+> +		    "failed to set DC%d stream%d pixel link mst addr(%u): %d\n",
+> +		    pl->dc_id, pl->stream_id, pl->mst_addr, ret);
+> +}
+> +
+> +static int imx8qxp_pixel_link_bridge_attach(struct drm_bridge *bridge,
+> +					    enum drm_bridge_attach_flags flags)
+> +{
+> +	struct imx8qxp_pixel_link *pl = bridge->driver_private;
+> +
+> +	if (!(flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR)) {
+> +		DRM_DEV_ERROR(pl->dev,
+> +			      "do not support creating a drm_connector\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (!bridge->encoder) {
+> +		DRM_DEV_ERROR(pl->dev, "missing encoder\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	return drm_bridge_attach(bridge->encoder,
+> +				 pl->next_bridge, bridge,
+> +				 DRM_BRIDGE_ATTACH_NO_CONNECTOR);
+> +}
+> +
+> +static void
+> +imx8qxp_pixel_link_bridge_mode_set(struct drm_bridge *bridge,
+> +				   const struct drm_display_mode *mode,
+> +				   const struct drm_display_mode *adjusted_mode)
+> +{
+> +	struct imx8qxp_pixel_link *pl = bridge->driver_private;
+> +
+> +	imx8qxp_pixel_link_set_mst_addr(pl);
+> +}
+> +
+> +static void imx8qxp_pixel_link_bridge_atomic_enable(struct drm_bridge *bridge,
+> +			      struct drm_bridge_state *old_bridge_state)
+> +{
+> +	struct imx8qxp_pixel_link *pl = bridge->driver_private;
+> +
+> +	imx8qxp_pixel_link_enable_mst_en(pl);
+> +	imx8qxp_pixel_link_enable_mst_vld(pl);
+> +	imx8qxp_pixel_link_enable_sync(pl);
+> +}
+> +
+> +static void imx8qxp_pixel_link_bridge_atomic_disable(struct drm_bridge *bridge,
+> +				struct drm_bridge_state *old_bridge_state)
+> +{
+> +	struct imx8qxp_pixel_link *pl = bridge->driver_private;
+> +
+> +	imx8qxp_pixel_link_disable_mst_en(pl);
+> +	imx8qxp_pixel_link_disable_mst_vld(pl);
+> +	imx8qxp_pixel_link_disable_sync(pl);
+> +}
+> +
+> +static const u32 imx8qxp_pixel_link_bus_output_fmts[] = {
+> +	MEDIA_BUS_FMT_RGB888_1X36_CPADLO,
+> +	MEDIA_BUS_FMT_RGB666_1X36_CPADLO,
+> +};
+> +
+> +static bool imx8qxp_pixel_link_bus_output_fmt_supported(u32 fmt)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(imx8qxp_pixel_link_bus_output_fmts); i++) {
+> +		if (imx8qxp_pixel_link_bus_output_fmts[i] == fmt)
+> +			return true;
+> +	}
+> +
+> +	return false;
+> +}
+> +
+> +static u32 *
+> +imx8qxp_pixel_link_bridge_atomic_get_input_bus_fmts(struct drm_bridge *bridge,
+> +					struct drm_bridge_state *bridge_state,
+> +					struct drm_crtc_state *crtc_state,
+> +					struct drm_connector_state *conn_state,
+> +					u32 output_fmt,
+> +					unsigned int *num_input_fmts)
+> +{
+> +	u32 *input_fmts;
+> +
+> +	if (!imx8qxp_pixel_link_bus_output_fmt_supported(output_fmt))
+> +		return NULL;
+> +
+> +	*num_input_fmts = 1;
+> +
+> +	input_fmts = kmalloc(sizeof(*input_fmts), GFP_KERNEL);
+> +	if (!input_fmts)
+> +		return NULL;
+> +
+> +	input_fmts[0] = output_fmt;
+> +
+> +	return input_fmts;
+> +}
+> +
+> +static u32 *
+> +imx8qxp_pixel_link_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
+> +					struct drm_bridge_state *bridge_state,
+> +					struct drm_crtc_state *crtc_state,
+> +					struct drm_connector_state *conn_state,
+> +					unsigned int *num_output_fmts)
+> +{
+> +	*num_output_fmts = ARRAY_SIZE(imx8qxp_pixel_link_bus_output_fmts);
+> +	return kmemdup(imx8qxp_pixel_link_bus_output_fmts,
+> +			sizeof(imx8qxp_pixel_link_bus_output_fmts), GFP_KERNEL);
+> +}
+> +
+> +static const struct drm_bridge_funcs imx8qxp_pixel_link_bridge_funcs = {
+> +	.atomic_duplicate_state	= drm_atomic_helper_bridge_duplicate_state,
+> +	.atomic_destroy_state	= drm_atomic_helper_bridge_destroy_state,
+> +	.atomic_reset		= drm_atomic_helper_bridge_reset,
+> +	.attach			= imx8qxp_pixel_link_bridge_attach,
+> +	.mode_set		= imx8qxp_pixel_link_bridge_mode_set,
+> +	.atomic_enable		= imx8qxp_pixel_link_bridge_atomic_enable,
+> +	.atomic_disable		= imx8qxp_pixel_link_bridge_atomic_disable,
+> +	.atomic_get_input_bus_fmts =
+> +			imx8qxp_pixel_link_bridge_atomic_get_input_bus_fmts,
+> +	.atomic_get_output_bus_fmts =
+> +			imx8qxp_pixel_link_bridge_atomic_get_output_bus_fmts,
+> +};
+> +
+> +static struct drm_bridge *
+> +imx8qxp_pixel_link_find_next_bridge(struct imx8qxp_pixel_link *pl)
+> +{
+> +	struct device_node *np = pl->dev->of_node;
+> +	struct device_node *port, *ep, *remote;
+> +	struct of_endpoint endpoint;
+> +	struct drm_bridge *next_bridge[2], *err_bridge;
+> +	u32 port_id, vld_port_id;
+> +	int port_cnt = 0, ep_cnt = 0;
+> +	int bridge_sel = 0;	/* select the first next bridge by default */
+> +	int ret;
+> +
+> +	for (port_id = 1; port_id <= PL_MAX_MST_ADDR + 1; port_id++) {
+> +		port = of_graph_get_port_by_id(np, port_id);
+> +		if (!port)
+> +			continue;
+> +
+> +		if (of_device_is_available(port)) {
+> +			port_cnt++;
+> +			vld_port_id = port_id;
+> +		}
+> +
+> +		of_node_put(port);
+> +	}
+> +
+> +	/* check the number of available output ports */
+> +	if (port_cnt == 0) {
+> +		DRM_DEV_ERROR(pl->dev, "no available output port\n");
+> +		return ERR_PTR(-ENODEV);
+> +	} else if (port_cnt > 1) {
+> +		DRM_DEV_ERROR(pl->dev, "invalid available output ports: %d\n",
+> +								port_cnt);
+> +		return ERR_PTR(-ENOTSUPP);
+> +	}
+> +
+> +	port = of_graph_get_port_by_id(np, vld_port_id);
+> +	if (!port) {
+> +		DRM_DEV_ERROR(pl->dev, "failed to get output port\n");
+> +		return ERR_PTR(-ENODEV);
+> +	}
+> +
+> +	for_each_available_child_of_node(port, ep) {
 
- Enable eclk
- De-assert Video Engine reset
- 10ms delay
- Enable vclk
+for_each_endpoint_of_node
 
-It introduces improper reset on the Video Engine hardware and eventually
-the hardware generates unexpected DMA memory transfers that can corrupt
-memory region in random and sporadic patterns. This issue is observed
-very rarely on some specific AST2500 SoCs but it causes a critical
-kernel panic with making a various shape of signature so it's extremely
-hard to debug. Moreover, the issue is observed even when the video
-engine is not actively used because udevd turns on the video engine
-hardware for a short time to make a query in every boot.
+> +		/* 2 available endpoints at most */
+> +		if (++ep_cnt > 2) {
+> +			DRM_DEV_ERROR(pl->dev,
+> +				      "invalid available endpoints: %d\n",
+> +									ep_cnt);
 
-To fix this issue, this commit changes the clock handling logic to make
-the reset de-assertion triggered after enabling both eclk and vclk. Also,
-it adds clk_unprepare call for a case when probe fails.
+Not really the kernel's job to validate the DT. Just get endpoints 0 and 
+1 if those are the 2 you want.
 
-Fixes: d2b4387f3bdf ("media: platform: Add Aspeed Video Engine driver")
-Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Reviewed-by: Joel Stanley <joel@jms.id.au>
-Reviewed-by: Eddie James <eajames@linux.ibm.com>
+> +			err_bridge = ERR_PTR(-ENOTSUPP);
+> +			of_node_put(ep);
+> +			goto err;
+> +		}
+> +
+> +		ret = of_graph_parse_endpoint(ep, &endpoint);
+> +		if (ret) {
+> +			DRM_DEV_ERROR(pl->dev, "failed to parse endpoint: %d\n",
+> +									ret);
+> +			err_bridge = ERR_PTR(ret);
+> +			of_node_put(ep);
+> +			goto err;
+> +		}
+> +
+> +		remote = of_graph_get_remote_port_parent(ep);
+> +		if (!remote || !of_device_is_available(remote)) {
+> +			DRM_DEV_ERROR(pl->dev,
+> +				      "endpoint%u has no available remote\n",
+> +								endpoint.id);
+> +			of_node_put(remote);
+> +			of_node_put(ep);
+> +			err_bridge = ERR_PTR(-ENODEV);
+> +			goto err;
+> +		} else if (!of_device_is_available(remote->parent)) {
+> +			DRM_DEV_ERROR(pl->dev,
+> +				"endpoint%u remote parent is not available\n",
+> +								endpoint.id);
+> +			of_node_put(remote);
+> +			of_node_put(ep);
+> +			err_bridge = ERR_PTR(-ENODEV);
+> +			goto err;
+> +		}
 
-clk: ast2600: fix reset settings for eclk and vclk
+Rewrite all this in terms of of_graph_get_remote_node(). It takes care 
+of of_device_is_available checking for you.
 
-Video engine reset setting should be coupled with eclk to match it
-with the setting for previous Aspeed SoCs which is defined in
-clk-aspeed.c since all Aspeed SoCs are sharing a single video engine
-driver. Also, reset bit 6 is defined as 'Video Engine' reset in
-datasheet so it should be de-asserted when eclk is enabled. This
-commit fixes the setting.
+> +
+> +		next_bridge[ep_cnt - 1] = of_drm_find_bridge(remote);
+> +		if (!next_bridge[ep_cnt - 1]) {
+> +			of_node_put(remote);
+> +			of_node_put(ep);
+> +			err_bridge = ERR_PTR(-EPROBE_DEFER);
+> +			goto err;
+> +		}
+> +
+> +		/* specially select the next bridge with companion PXL2DPI */
+> +		if (of_find_property(remote, "fsl,companion-pxl2dpi", NULL))
+> +			bridge_sel = ep_cnt - 1;
+> +
+> +		of_node_put(remote);
+> +	}
+> +
+> +	pl->mst_addr = vld_port_id - 1;
+> +
+> +	of_node_put(port);
+> +
+> +	return next_bridge[bridge_sel];
+> +err:
+> +	of_node_put(port);
+> +
+> +	return err_bridge;
+> +}
+> +
+> +static int imx8qxp_pixel_link_bridge_probe(struct platform_device *pdev)
+> +{
+> +	struct imx8qxp_pixel_link *pl;
+> +	struct device *dev = &pdev->dev;
+> +	struct device_node *np = dev->of_node;
+> +	int ret;
+> +
+> +	pl = devm_kzalloc(dev, sizeof(*pl), GFP_KERNEL);
+> +	if (!pl)
+> +		return -ENOMEM;
+> +
+> +	ret = imx_scu_get_handle(&pl->ipc_handle);
+> +	if (ret) {
+> +		if (ret != -EPROBE_DEFER)
+> +			DRM_DEV_ERROR(dev, "failed to get SCU ipc handle: %d\n",
+> +									ret);
+> +		return ret;
+> +	}
+> +
+> +	pl->id = of_alias_get_id(np, "dc_pl");
 
-Fixes: d3d04f6c330a ("clk: Add support for AST2600 SoC")
-Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Reviewed-by: Joel Stanley <joel@jms.id.au>
----
-Changes since v1:
-- Squashed two patches due to dependency.
+What's this needed for? I doubt aliases is the right thing to use here.
 
- drivers/clk/clk-ast2600.c             | 4 ++--
- drivers/media/platform/aspeed-video.c | 9 ++++++---
- 2 files changed, 8 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/clk/clk-ast2600.c b/drivers/clk/clk-ast2600.c
-index 177368cac6dd..882da16575d4 100644
---- a/drivers/clk/clk-ast2600.c
-+++ b/drivers/clk/clk-ast2600.c
-@@ -60,10 +60,10 @@ static void __iomem *scu_g6_base;
- static const struct aspeed_gate_data aspeed_g6_gates[] = {
- 	/*				    clk rst  name		parent	 flags */
- 	[ASPEED_CLK_GATE_MCLK]		= {  0, -1, "mclk-gate",	"mpll",	 CLK_IS_CRITICAL }, /* SDRAM */
--	[ASPEED_CLK_GATE_ECLK]		= {  1, -1, "eclk-gate",	"eclk",	 0 },	/* Video Engine */
-+	[ASPEED_CLK_GATE_ECLK]		= {  1,  6, "eclk-gate",	"eclk",	 0 },	/* Video Engine */
- 	[ASPEED_CLK_GATE_GCLK]		= {  2,  7, "gclk-gate",	NULL,	 0 },	/* 2D engine */
- 	/* vclk parent - dclk/d1clk/hclk/mclk */
--	[ASPEED_CLK_GATE_VCLK]		= {  3,  6, "vclk-gate",	NULL,	 0 },	/* Video Capture */
-+	[ASPEED_CLK_GATE_VCLK]		= {  3, -1, "vclk-gate",	NULL,	 0 },	/* Video Capture */
- 	[ASPEED_CLK_GATE_BCLK]		= {  4,  8, "bclk-gate",	"bclk",	 0 }, /* PCIe/PCI */
- 	/* From dpll */
- 	[ASPEED_CLK_GATE_DCLK]		= {  5, -1, "dclk-gate",	NULL,	 CLK_IS_CRITICAL }, /* DAC */
-diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
-index c46a79eace98..db072ff2df70 100644
---- a/drivers/media/platform/aspeed-video.c
-+++ b/drivers/media/platform/aspeed-video.c
-@@ -514,8 +514,8 @@ static void aspeed_video_off(struct aspeed_video *video)
- 	aspeed_video_write(video, VE_INTERRUPT_STATUS, 0xffffffff);
- 
- 	/* Turn off the relevant clocks */
--	clk_disable(video->vclk);
- 	clk_disable(video->eclk);
-+	clk_disable(video->vclk);
- 
- 	clear_bit(VIDEO_CLOCKS_ON, &video->flags);
- }
-@@ -526,8 +526,8 @@ static void aspeed_video_on(struct aspeed_video *video)
- 		return;
- 
- 	/* Turn on the relevant clocks */
--	clk_enable(video->eclk);
- 	clk_enable(video->vclk);
-+	clk_enable(video->eclk);
- 
- 	set_bit(VIDEO_CLOCKS_ON, &video->flags);
- }
-@@ -1719,8 +1719,11 @@ static int aspeed_video_probe(struct platform_device *pdev)
- 		return rc;
- 
- 	rc = aspeed_video_setup_video(video);
--	if (rc)
-+	if (rc) {
-+		clk_unprepare(video->vclk);
-+		clk_unprepare(video->eclk);
- 		return rc;
-+	}
- 
- 	return 0;
- }
--- 
-2.17.1
-
+Rob
