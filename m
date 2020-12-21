@@ -2,211 +2,168 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AAC1C433E9
-	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 12:40:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A25D4C433DB
+	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 12:41:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0FC68223E4
-	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 12:40:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5A025224D3
+	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 12:41:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727005AbgLUMj5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Dec 2020 07:39:57 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:8429 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726881AbgLUMj5 (ORCPT
+        id S1726026AbgLUMkw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Dec 2020 07:40:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54778 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725807AbgLUMkw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Dec 2020 07:39:57 -0500
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 21 Dec 2020 04:38:49 -0800
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 21 Dec 2020 04:38:47 -0800
-X-QCInternal: smtphost
-Received: from c-rojay-linux.qualcomm.com ([10.206.21.80])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 21 Dec 2020 18:08:07 +0530
-Received: by c-rojay-linux.qualcomm.com (Postfix, from userid 88981)
-        id BD4B52D70; Mon, 21 Dec 2020 18:08:06 +0530 (IST)
-From:   Roja Rani Yarubandi <rojay@codeaurora.org>
-To:     wsa@kernel.org
-Cc:     swboyd@chromium.org, dianders@chromium.org,
-        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
-        mka@chromium.org, akashast@codeaurora.org,
-        msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
-        pyarlaga@codeaurora.org, rnayak@codeaurora.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
-        Roja Rani Yarubandi <rojay@codeaurora.org>
-Subject: [PATCH V7 1/2] i2c: i2c-qcom-geni: Store DMA mapping data in geni_i2c_dev struct
-Date:   Mon, 21 Dec 2020 18:08:00 +0530
-Message-Id: <20201221123801.26643-2-rojay@codeaurora.org>
-X-Mailer: git-send-email 2.29.0
-In-Reply-To: <20201221123801.26643-1-rojay@codeaurora.org>
-References: <20201221123801.26643-1-rojay@codeaurora.org>
+        Mon, 21 Dec 2020 07:40:52 -0500
+Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D885C0613D6
+        for <linux-media@vger.kernel.org>; Mon, 21 Dec 2020 04:40:11 -0800 (PST)
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 3CEF5C638A; Mon, 21 Dec 2020 12:40:09 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
+        t=1608554409; bh=DDMO1CPqYNQPalknJKs1UpjmlJAHsh8Yt0nCfzgP1b0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kMI2IU8D6U+PT7DApy7t1ybqhgqR+TSkN0XZ3HblVfg+SP9n8Mpz/E+S2r7W0b7St
+         8IuZXz/TQmhbeLsN3jGJemzS4qNDg6pgDLhn6oGkSBbdVocs9d72l3L5UhlTWOSUcn
+         itRsqALhpHWy7XA+lpD8tXruXDRfceFtia9rX8eYjmfrOZuSwurbnvstI7jbwMwMHd
+         ShjJuIOFh2wWpjJlEyxRl+biWOdR68OmKB3yIDeY13T5uI4rm0jmwQxt2pi+yC6fa1
+         1oo7ytbRX4VaF0D+l1KJsWDKS+d/Cybgu+pHTAXOa8KVDxrSPpFsYB1/I3IKBzr7yk
+         MXXDYQU17xn5g==
+Date:   Mon, 21 Dec 2020 12:40:09 +0000
+From:   Sean Young <sean@mess.org>
+To:     Jesus <observer1@hotmail.es>
+Cc:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
+Subject: Re: Help with harmony remote
+Message-ID: <20201221124009.GA29869@gofer.mess.org>
+References: <VI1P193MB0160CDD11C1487D57A4B795081C30@VI1P193MB0160.EURP193.PROD.OUTLOOK.COM>
+ <20201218100710.GA29317@gofer.mess.org>
+ <VI1P193MB016010B2B176FE481020913881C30@VI1P193MB0160.EURP193.PROD.OUTLOOK.COM>
+ <20201219092703.GA14414@gofer.mess.org>
+ <VI1P193MB0160CD42CE45DFEC2361043081C10@VI1P193MB0160.EURP193.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <VI1P193MB0160CD42CE45DFEC2361043081C10@VI1P193MB0160.EURP193.PROD.OUTLOOK.COM>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Store DMA mapping data in geni_i2c_dev struct to enhance DMA mapping
-data scope. For example during shutdown callback to unmap DMA mapping,
-this stored DMA mapping data can be used to call geni_se_tx_dma_unprep
-and geni_se_rx_dma_unprep functions.
+Hi,
 
-Add two helper functions geni_i2c_rx_msg_cleanup and
-geni_i2c_tx_msg_cleanup to unwrap the things after rx/tx FIFO/DMA
-transfers, so that the same can be used in geni_i2c_stop_xfer()
-function during shutdown callback.
+First of all, your email is unreadable. It is very to see what I wrote
+and what you wrote. Please fix this.
 
-Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
----
-Changes in V5:
- - As per Stephen's comments separated this patch from shutdown
-   callback patch, gi2c->cur = NULL is not removed from
-   geni_i2c_abort_xfer(), and made a copy of gi2c->cur and passed
-   to cleanup functions.
+On Sun, Dec 20, 2020 at 07:24:28PM +0000, Jesus wrote:
+> Hi
+> 
+> ________________________________
+> De: Sean Young <sean@mess.org>
+> Enviado: sábado, 19 de diciembre de 2020 9:27
+> Para: Jesus <observer1@hotmail.es>
+> Cc: linux-media@vger.kernel.org <linux-media@vger.kernel.org>
+> Asunto: Re: Help with harmony remote
+> 
+> Hi,
+> 
+> On Sat, Dec 19, 2020 at 01:56:50AM +0000, Jesus wrote:
+> > It's a Universal Harmony 350
+> >
+> > This one:
+> > https://support.myharmony.com/en-us/350
+> > https://assets.logitech.com/assets/54199/gallery-1.png
+> >
+> > It's programable, the remote selected for the mouse is named Media Center PC SE i believe is the mce, and for the other functions of the pc part I use a remote named Intel Media Player I believe is mce too but diferent set of keys selectable
+> > I've managed to make work every button I use in the intel media player remote, for the Media Center PC SE, I only use the mouse part thats what I have tested, the mouse movement works, the left and right click are the ones not working
+> 
+> That's interesting, I did not know there was any other device that generates
+> this IR.
+> 
+> > Some recording of the ir using "ir-ctl -r" would be useful too.
+> >
+> > this is the output for the left click:
+> >
+> > +2800 -200 +300 -300 +300 -250 +300 -300 +600 -600 +300 -400 +200 -350 +300 -200 +350 -300 +300 -300 +600 -300 +300 -600 +300 -250 +400 -200 +400 -200 +400 -250 +350 -300 +300 -400 +200 -300 +300 -300 +300 -300 +300 -300 +300 -300 +300 -300 +350 -250 +350 -300 +600 -250 +350 -350 +250 -300 +300 -600 +350 -250 +350 -75800 +2800 -200 +350 -200 +400 -250 +350 -300 +650 -600 +300 -300 +300 -300 +300 -250 +300 -300 +300 -300 +600 -250 +400 -600 +350 -200 +350 -250 +350 -250 +350 -250 +350 -250 +400 -200 +350 -250 +350 -250 +350 -250 +350 -300 +300 -300 +300 -250 +350 -300 +300 -300 +600 -250 +350 -200 +400 -250 +350 -600 +300 -250 +400 -75800 +2800 -200 +350 -200 +400 -250 +300 -250 +700 -550 +350 -200 +350 -250 +350 -250 +350 -250 +300 -350 +550 -250 +400 -600 +300 -300 +250 -300 +300 -300 +300 -350 +300 -250 +400 -250 +350 -250 +350 -400 +200 -350 +300 -300 +300 -300 +300 -250 +350 -200 +400 -250 +650 -200 +400 -250 +350 -250 +350 -600 +300 -300 +300 # timeout 101600
+> 
+> Actually, that is the right IR for a left mouse button.
+> 
+> > > 688888.335099: lirc protocol(mcir2-mse): scancode = 0x3c
+> > > 688888.335117: event type EV_MSC(0x04): scancode = 0x3c
+> > > 688888.335117: event type EV_SYN(0x00).
+> > > 688888.475123: lirc protocol(mcir2-mse): scancode = 0x3c
+> > > 688888.475142: event type EV_MSC(0x04): scancode = 0x3c
+> > > 688888.475142: event type EV_SYN(0x00).
+> 
+> This is also the right scancode.
+> 
+> I think something else is going on. Please can you do the following:
+> 
+> echo 'file ir-mce_kbd-decoder.c +p' > /sys/kernel/debug/dynamic_debug/control
+> 
+> Now press the left mouse button and see what there is in dmesg.
+> 
+> I hope it says something like:
+> 
+>         rc rc0: mouse: x = 0, y = 0, btns = L
+> 
+> This is what found in dmesg:
+> 
+> 
+> [754581.285199] rc rc0: started at state 4 (600us space)
+> [754581.285202] rc rc0: started at state 3 (267us space)
+> [754581.285208] rc rc0: started at state 4 (300us pulse)
+> [754581.285211] rc rc0: started at state 3 (0us pulse)
+> [754581.285221] rc rc0: started at state 3 (300us space)
+> [754581.285225] rc rc0: started at state 4 (350us pulse)
+> [754581.285229] rc rc0: started at state 5 (17us pulse)
+> [754581.390933] rc rc0: started at state 5 (101600us space)
+> [754581.390938] rc rc0: mouse data 0x00003c
+> [754581.390941] rc rc0: mouse: x = 0, y = 0, btns = L
 
-Changes in V6:
- - Added spin_lock/unlock in geni_i2c_rx_msg_cleanup() and
-   geni_i2c_tx_msg_cleanup() functions.
+I'm guessing you wrote this last thing, it all has the same quotation
+level.
 
-Changes in V7:
- - As per Akash's comments analysed the race chances and removed
-   spin lock in cleanup functions.
+So the mouse press is decoded; the issue is in the delivery.
 
- drivers/i2c/busses/i2c-qcom-geni.c | 59 ++++++++++++++++++++++--------
- 1 file changed, 43 insertions(+), 16 deletions(-)
+> Please can you test the following patch.
+> 
+> I applied the patch and this is the output, it didn't worked:
+> 
+> 292.578486: lirc protocol(mcir2-mse): scancode = 0x3c
+> 274.264540: event type EV_KEY(0x01) key_down: BTN_MOUSE(0x0110)
+> 274.264540: event type EV_MSC(0x04): scancode = 0x3c
+> 274.264540: event type EV_SYN(0x00).
+> 292.676628: lirc protocol(mcir2-mse): scancode = 0x3c
+> 292.676647: event type EV_MSC(0x04): scancode = 0x3c
+> 292.676647: event type EV_SYN(0x00).
+> 292.816663: lirc protocol(mcir2-mse): scancode = 0x3c
+> 292.816687: event type EV_MSC(0x04): scancode = 0x3c
+> 292.816687: event type EV_SYN(0x00).
+> 293.080537: event type EV_KEY(0x01) key_down: BTN_MOUSE(0x0110)
+> 293.080537: event type EV_SYN(0x00).
+> 293.208540: event type EV_KEY(0x01) key_down: BTN_MOUSE(0x0110)
+> 293.208540: event type EV_SYN(0x00).
+> 293.336535: event type EV_KEY(0x01) key_down: BTN_MOUSE(0x0110)
+> 293.336535: event type EV_SYN(0x00).
+> 293.464540: event type EV_KEY(0x01) key_down: BTN_MOUSE(0x0110)
+> 293.464540: event type EV_SYN(0x00).
 
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-index 046d241183c5..214b4c913a13 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -86,6 +86,9 @@ struct geni_i2c_dev {
- 	u32 clk_freq_out;
- 	const struct geni_i2c_clk_fld *clk_fld;
- 	int suspended;
-+	void *dma_buf;
-+	size_t xfer_len;
-+	dma_addr_t dma_addr;
- };
- 
- struct geni_i2c_err_log {
-@@ -348,14 +351,39 @@ static void geni_i2c_tx_fsm_rst(struct geni_i2c_dev *gi2c)
- 		dev_err(gi2c->se.dev, "Timeout resetting TX_FSM\n");
- }
- 
-+static void geni_i2c_rx_msg_cleanup(struct geni_i2c_dev *gi2c,
-+				     struct i2c_msg *cur)
-+{
-+	gi2c->cur_rd = 0;
-+	if (gi2c->dma_buf) {
-+		if (gi2c->err)
-+			geni_i2c_rx_fsm_rst(gi2c);
-+		geni_se_rx_dma_unprep(&gi2c->se, gi2c->dma_addr, gi2c->xfer_len);
-+		i2c_put_dma_safe_msg_buf(gi2c->dma_buf, cur, !gi2c->err);
-+	}
-+}
-+
-+static void geni_i2c_tx_msg_cleanup(struct geni_i2c_dev *gi2c,
-+				     struct i2c_msg *cur)
-+{
-+	gi2c->cur_wr = 0;
-+	if (gi2c->dma_buf) {
-+		if (gi2c->err)
-+			geni_i2c_tx_fsm_rst(gi2c);
-+		geni_se_tx_dma_unprep(&gi2c->se, gi2c->dma_addr, gi2c->xfer_len);
-+		i2c_put_dma_safe_msg_buf(gi2c->dma_buf, cur, !gi2c->err);
-+	}
-+}
-+
- static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 				u32 m_param)
- {
--	dma_addr_t rx_dma;
-+	dma_addr_t rx_dma = 0;
- 	unsigned long time_left;
- 	void *dma_buf;
- 	struct geni_se *se = &gi2c->se;
- 	size_t len = msg->len;
-+	struct i2c_msg *cur;
- 
- 	dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
- 	if (dma_buf)
-@@ -370,19 +398,18 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 		geni_se_select_mode(se, GENI_SE_FIFO);
- 		i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
- 		dma_buf = NULL;
-+	} else {
-+		gi2c->xfer_len = len;
-+		gi2c->dma_addr = rx_dma;
-+		gi2c->dma_buf = dma_buf;
- 	}
- 
-+	cur = gi2c->cur;
- 	time_left = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
- 	if (!time_left)
- 		geni_i2c_abort_xfer(gi2c);
- 
--	gi2c->cur_rd = 0;
--	if (dma_buf) {
--		if (gi2c->err)
--			geni_i2c_rx_fsm_rst(gi2c);
--		geni_se_rx_dma_unprep(se, rx_dma, len);
--		i2c_put_dma_safe_msg_buf(dma_buf, msg, !gi2c->err);
--	}
-+	geni_i2c_rx_msg_cleanup(gi2c, cur);
- 
- 	return gi2c->err;
- }
-@@ -390,11 +417,12 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 				u32 m_param)
- {
--	dma_addr_t tx_dma;
-+	dma_addr_t tx_dma = 0;
- 	unsigned long time_left;
- 	void *dma_buf;
- 	struct geni_se *se = &gi2c->se;
- 	size_t len = msg->len;
-+	struct i2c_msg *cur;
- 
- 	dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
- 	if (dma_buf)
-@@ -409,22 +437,21 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 		geni_se_select_mode(se, GENI_SE_FIFO);
- 		i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
- 		dma_buf = NULL;
-+	} else {
-+		gi2c->xfer_len = len;
-+		gi2c->dma_addr = tx_dma;
-+		gi2c->dma_buf = dma_buf;
- 	}
- 
- 	if (!dma_buf) /* Get FIFO IRQ */
- 		writel_relaxed(1, se->base + SE_GENI_TX_WATERMARK_REG);
- 
-+	cur = gi2c->cur;
- 	time_left = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
- 	if (!time_left)
- 		geni_i2c_abort_xfer(gi2c);
- 
--	gi2c->cur_wr = 0;
--	if (dma_buf) {
--		if (gi2c->err)
--			geni_i2c_tx_fsm_rst(gi2c);
--		geni_se_tx_dma_unprep(se, tx_dma, len);
--		i2c_put_dma_safe_msg_buf(dma_buf, msg, !gi2c->err);
--	}
-+	geni_i2c_tx_msg_cleanup(gi2c, cur);
- 
- 	return gi2c->err;
- }
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-of Code Aurora Forum, hosted by The Linux Foundation
+This shows that the button press has been decoded, and sent to the input
+layer. Possibly it is being ignored by libinput.
 
+> It didn't change, I'm quite sure I applied the patch correctly, is there a way to know at runtime?
+
+You can check uname -r, it should the exact commit if you commited the patch.
+
+So how are you loading the mce_keyboard.toml? It should be loaded by putting
+an entry in /etc/rc_maps.cfg
+
+Thanks
+
+Sean
