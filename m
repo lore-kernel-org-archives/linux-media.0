@@ -2,333 +2,186 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE5FEC433E0
-	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 02:09:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C16A0C433E0
+	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 04:31:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9D2C2223DB
-	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 02:09:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 86FC822CB2
+	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 04:31:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726146AbgLUCJb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 20 Dec 2020 21:09:31 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:55620 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725497AbgLUCJa (ORCPT
+        id S1726547AbgLUEbG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 20 Dec 2020 23:31:06 -0500
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:43557 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725308AbgLUEbG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 20 Dec 2020 21:09:30 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D2AE0BA4;
-        Mon, 21 Dec 2020 03:08:47 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1608516528;
-        bh=VFyuhu0C7PhDkhFxK1Zip8BGGnGNNPiL7CZvji/Sc6w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Wemrd4Izn0WTK0ulNwIq3y0+WEwH8rh5hfHyjxqZ1ik+pU7XNDOJgQ7Nxu1cMxECe
-         Mn3Fa4K3FQ9KHtqbDNi+hTb2T3n1cOFyV30baZe/hc5JUsLtghHKU+OHxBJIyzcbVc
-         0OGy9iJQkaqkGJEEUFUXFfIjm1fwC0IDT8tqQxf0=
-Date:   Mon, 21 Dec 2020 04:08:39 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 9/9] media: uvcvideo: Implement
- UVC_QUIRK_PRIVACY_DURING_STREAM
-Message-ID: <X+ADp39sCVv0Jnzs@pendragon.ideasonboard.com>
-References: <20201215154439.69062-1-ribalda@chromium.org>
- <20201215154439.69062-10-ribalda@chromium.org>
- <X9+IMF9yIdzPrkgg@pendragon.ideasonboard.com>
- <CANiDSCtSuHFnS85xUsfv9KSKFzaT-KLHeadCzr+5bBRRYZ-arQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CANiDSCtSuHFnS85xUsfv9KSKFzaT-KLHeadCzr+5bBRRYZ-arQ@mail.gmail.com>
+        Sun, 20 Dec 2020 23:31:06 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id rCpyk95q8flvjrCpzkZLkR; Mon, 21 Dec 2020 05:30:23 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1608525023; bh=p/E6IG8FyowURyUkNWb/GouxGHM+ALmooWZ5p08r3pQ=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=rivfPbxbkK+gXEEXh3R++l99AGd26E6RLtGLyybhdlcApsN2vCi+zBLjXtb2oDWC6
+         uRABV2Hmk9z2HVMJq/i6jR0FAZLSEWJuLeSwvz2/Q6GmDhFcwlGS1YhwHtAOjaJ9aH
+         3H5Eukvlt02yaLD8FF76DPjp/Dhs1V3xHqQFHFj+IIwDrl2vmtv7KVkYGWlni9R52m
+         vAbgXSV2QHYP44LOYg0PzDw53FT78/ifU39y908lk8mHRV6igpVwQyayFL53CVNYyP
+         n4WtOw2ecH9DD1RHka2lA+jEsUKUhimrO6zfM8lEz4Fh/oskTU+55stqcHzDL2DW+6
+         9u6pr8Ldu78TA==
+Message-ID: <1bf3773dd4db145b6dd6895e93a01809@smtp-cloud9.xs4all.net>
+Date:   Mon, 21 Dec 2020 05:30:22 +0100
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: ERRORS
+X-CMAE-Envelope: MS4xfLnYSCdPgaQXFxFKTU6z1UOqZCNa7OQFCr3P+/6B8DjW5+2P2t56sfqQBAxCG+5yiZVWEpAEPRcbW6J0nWvJacpqnAxyTp4qDyOXWtLROY9/WlF3v9ak
+ wv8LtqX8JejaIQkbwfnvl+kEevuCY4tJ/xNNtynprGYPvUxnU6PYuczSNwRbEuJ0FrjiufsJzXXgkG61Qojs+C0SbwGp0H1Oa42hgvML8JsycMXkFsSTVBR8
+ H7cBl3CC2P9d5qR2fLltUg==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Ricardo,
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-On Mon, Dec 21, 2020 at 02:10:18AM +0100, Ricardo Ribalda wrote:
-> On Sun, Dec 20, 2020 at 6:22 PM Laurent Pinchart wrote:
-> > On Tue, Dec 15, 2020 at 04:44:39PM +0100, Ricardo Ribalda wrote:
-> > > Some devices, can only read the privacy_pin if the device is
-> > > streaming.
-> >
-> > :-(
-> 
-> :"-(
-> 
-> > > This patch implement a quirk for such devices, in order to avoid invalid
-> > > reads and/or spurious events.
-> > >
-> > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > > ---
-> > >  drivers/media/usb/uvc/uvc_driver.c | 97 ++++++++++++++++++++++++++----
-> > >  drivers/media/usb/uvc/uvc_queue.c  |  3 +
-> > >  drivers/media/usb/uvc/uvcvideo.h   |  6 ++
-> > >  3 files changed, 94 insertions(+), 12 deletions(-)
-> > >
-> > > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> > > index e49491250e87..61313019e226 100644
-> > > --- a/drivers/media/usb/uvc/uvc_driver.c
-> > > +++ b/drivers/media/usb/uvc/uvc_driver.c
-> > > @@ -7,6 +7,7 @@
-> > >   */
-> > >
-> > >  #include <linux/atomic.h>
-> > > +#include <linux/dmi.h>
-> > >  #include <linux/gpio/consumer.h>
-> > >  #include <linux/kernel.h>
-> > >  #include <linux/list.h>
-> > > @@ -1471,13 +1472,39 @@ static int uvc_parse_control(struct uvc_device *dev)
-> > >       return 0;
-> > >  }
-> > >
-> > > +static bool uvc_ext_gpio_is_streaming(struct uvc_device *dev)
-> > > +{
-> > > +     struct uvc_streaming *streaming;
-> > > +
-> > > +     list_for_each_entry(streaming, &dev->streams, list) {
-> > > +             if (uvc_queue_streaming(&streaming->queue))
-> > > +                     return true;
-> > > +     }
-> > > +
-> > > +     return false;
-> > > +}
-> > > +
-> > > +/* Update the cached value and return true if it has changed */
-> > > +static bool uvc_gpio_update_value(struct uvc_entity *unit, u8 *new_val)
-> > > +{
-> > > +     *new_val = gpiod_get_value(unit->gpio.gpio_privacy);
-> > > +
-> > > +     return atomic_xchg(&unit->gpio.gpio_privacy_value, *new_val) !=
-> > > +                                                                   *new_val;
-> >
-> > That's a weird indentation. Also, as the left hand side modifies
-> > *new_val, does C guarantee the order in which the two operands to != are
-> > evaluated ? Could the code be written in an easier to read way ?
-> >
-> > > +}
-> > > +
-> > >  static int uvc_gpio_get_cur(struct uvc_device *dev, struct uvc_entity *entity,
-> > >                           u8 cs, void *data, u16 size)
-> > >  {
-> > >       if (cs != UVC_CT_PRIVACY_CONTROL || size < 1)
-> > >               return -EINVAL;
-> > >
-> > > -     *(uint8_t *)data = gpiod_get_value(entity->gpio.gpio_privacy);
-> > > +     if ((dev->quirks & UVC_QUIRK_PRIVACY_DURING_STREAM) &&
-> > > +         !uvc_ext_gpio_is_streaming(dev))
-> > > +             return -EBUSY;
-> > > +
-> > > +     uvc_gpio_update_value(entity, (uint8_t *)data);
-> > > +
-> > >       return 0;
-> > >  }
-> > >
-> > > @@ -1491,26 +1518,69 @@ static int uvc_gpio_get_info(struct uvc_device *dev, struct uvc_entity *entity,
-> > >       return 0;
-> > >  }
-> > >
-> > > -static irqreturn_t uvc_privacy_gpio_irq(int irq, void *data)
-> > > +static struct uvc_entity *uvc_find_ext_gpio_unit(struct uvc_device *dev)
-> > >  {
-> > > -     struct uvc_device *dev = data;
-> > > -     struct uvc_video_chain *chain;
-> > >       struct uvc_entity *unit;
-> > > -     u8 value;
-> > >
-> > > -     /* GPIO entities are always on the first chain */
-> > > -     chain = list_first_entry(&dev->chains, struct uvc_video_chain, list);
-> > >       list_for_each_entry(unit, &dev->entities, list) {
-> > > -             if (UVC_ENTITY_TYPE(unit) != UVC_EXT_GPIO_UNIT)
-> > > -                     continue;
-> > > -             value = gpiod_get_value(unit->gpio.gpio_privacy);
-> > > -             uvc_ctrl_status_event(NULL, chain, unit->controls, &value);
-> > > -             return IRQ_HANDLED;
-> > > +             if (UVC_ENTITY_TYPE(unit) == UVC_EXT_GPIO_UNIT)
-> > > +                     return unit;
-> > >       }
-> > >
-> > > +     return unit;
-> > > +}
-> > > +
-> > > +void uvc_privacy_gpio_event(struct uvc_device *dev)
-> > > +{
-> > > +     struct uvc_entity *unit;
-> > > +     struct uvc_video_chain *chain;
-> > > +     u8 new_value;
-> > > +
-> > > +     unit = uvc_find_ext_gpio_unit(dev);
-> > > +     if (WARN_ONCE(!unit, "Unable to find entity ext_gpio_unit"))
-> > > +             return;
-> > > +
-> > > +     if (!uvc_gpio_update_value(unit, &new_value))
-> > > +             return;
-> >
-> > If VIDIOC_G_CTRL() is called before the IRQ is processed, this
-> > uvc_gpio_update_value() call will return false, and no event will be
-> > generated. I don't think that's right, and even should be generated
-> > every time the control changes.
-> >
-> I was almost sure that get_cur had also the events wired.... but no.
-> 
-> > > +
-> > > +     /* GPIO entities are always on the first chain */
-> > > +     chain = list_first_entry(&dev->chains, struct uvc_video_chain, list);
-> > > +     uvc_ctrl_status_event(NULL, chain, unit->controls, &new_value);
-> > > +}
-> > > +
-> > > +static irqreturn_t uvc_privacy_gpio_irq(int irq, void *data)
-> > > +{
-> > > +     struct uvc_device *dev = data;
-> > > +
-> > > +     /* Ignore privacy events during streamoff */
-> > > +     if (dev->quirks & UVC_QUIRK_PRIVACY_DURING_STREAM)
-> > > +             if (!uvc_ext_gpio_is_streaming(dev))
-> > > +                     return IRQ_HANDLED;
-> >
-> >         if (dev->quirks & UVC_QUIRK_PRIVACY_DURING_STREAM) {
-> >                 if (!uvc_ext_gpio_is_streaming(dev))
-> >                         return IRQ_HANDLED;
-> >         }
-> >
-> > There's a potential race condition with VIDIOC_STREAMON and
-> > VIDIOC_STREAMOFF. Could you explain what the device does exactly when
-> > not streaming ? As the GPIO isn't tied to the UVC controller, how comes
-> > the streaming state influences it ? Any hope the firmware could be fixed
-> > instead ?
-> 
-> In the affected devices, the privacy_pin is an output of the camera
-> module instead of an independent pin.
+Results of the daily build of media_tree:
 
-So the privacy switch is an input of a camera module, which then output
-its state on a GPIO instead of exposing it through the UVC privacy
-control ? Amazing design !
+date:			Mon Dec 21 05:00:17 CET 2020
+media-tree git hash:	fab0fca1da5cdc48be051715cd9787df04fdce3a
+media_build git hash:	174c4cc0037aed1f719b91dfc9e9cc09d53de87c
+v4l-utils git hash:	e0e4114f971407acfdf1e8173c86e2e08fa01077
+edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
+gcc version:		i686-linux-gcc (GCC) 10.2.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		v0.6.3-1-g58d3c1ca
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		v0.5.0-7047-g72fa1e990
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 77c8542b1c2caa2a7e96c4dad0335336b522c616
+host hardware:		x86_64
+host os:		5.7.0-1-amd64
 
-> When the camera is not streaming, the camera does not drive the pin,
-> so the system reads whatever pull-up, pull-down the pin is configured
-> by default in the firmware/hardware.
-> 
-> Unfortunately the only way to fix it would be to change the module, or
-> the firmware of the module, and neigher things are not feasable :(. So
-> we have to use a quirk for them.
-> Future models have this fixed.
+linux-git-sh: OK
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-powerpc64: OK
+linux-git-arm-stm32: OK
+linux-git-arm-pxa: OK
+linux-git-mips: OK
+linux-git-arm64: OK
+linux-git-arm-multi: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: ERRORS
+linux-3.10.108-x86_64: ERRORS
+linux-3.11.10-i686: ERRORS
+linux-3.11.10-x86_64: ERRORS
+linux-3.12.74-i686: ERRORS
+linux-3.12.74-x86_64: ERRORS
+linux-3.13.11-i686: ERRORS
+linux-3.13.11-x86_64: ERRORS
+linux-3.14.79-i686: ERRORS
+linux-3.14.79-x86_64: ERRORS
+linux-3.15.10-i686: ERRORS
+linux-3.15.10-x86_64: ERRORS
+linux-3.16.81-i686: ERRORS
+linux-3.16.81-x86_64: ERRORS
+linux-3.17.8-i686: ERRORS
+linux-3.17.8-x86_64: ERRORS
+linux-3.18.136-i686: ERRORS
+linux-3.18.136-x86_64: ERRORS
+linux-3.19.8-i686: ERRORS
+linux-3.19.8-x86_64: ERRORS
+linux-4.0.9-i686: ERRORS
+linux-4.0.9-x86_64: ERRORS
+linux-4.1.52-i686: ERRORS
+linux-4.1.52-x86_64: ERRORS
+linux-4.2.8-i686: ERRORS
+linux-4.2.8-x86_64: ERRORS
+linux-4.3.6-i686: ERRORS
+linux-4.3.6-x86_64: ERRORS
+linux-4.4.238-i686: ERRORS
+linux-4.4.238-x86_64: ERRORS
+linux-4.5.7-i686: ERRORS
+linux-4.5.7-x86_64: ERRORS
+linux-4.6.7-i686: ERRORS
+linux-4.6.7-x86_64: ERRORS
+linux-4.7.10-i686: ERRORS
+linux-4.7.10-x86_64: ERRORS
+linux-4.8.17-i686: ERRORS
+linux-4.8.17-x86_64: ERRORS
+linux-4.9.238-i686: ERRORS
+linux-4.9.238-x86_64: ERRORS
+linux-4.10.17-i686: ERRORS
+linux-4.10.17-x86_64: ERRORS
+linux-4.11.12-i686: ERRORS
+linux-4.11.12-x86_64: ERRORS
+linux-4.12.14-i686: ERRORS
+linux-4.12.14-x86_64: ERRORS
+linux-4.13.16-i686: ERRORS
+linux-4.13.16-x86_64: ERRORS
+linux-4.14.200-i686: ERRORS
+linux-4.14.200-x86_64: ERRORS
+linux-4.15.18-i686: ERRORS
+linux-4.15.18-x86_64: ERRORS
+linux-4.16.18-i686: ERRORS
+linux-4.16.18-x86_64: ERRORS
+linux-4.17.19-i686: ERRORS
+linux-4.17.19-x86_64: ERRORS
+linux-4.18.20-i686: ERRORS
+linux-4.18.20-x86_64: ERRORS
+linux-4.19.149-i686: ERRORS
+linux-4.19.149-x86_64: ERRORS
+linux-4.20.17-i686: ERRORS
+linux-4.20.17-x86_64: ERRORS
+linux-5.0.21-i686: ERRORS
+linux-5.0.21-x86_64: ERRORS
+linux-5.1.21-i686: ERRORS
+linux-5.1.21-x86_64: ERRORS
+linux-5.2.21-i686: ERRORS
+linux-5.2.21-x86_64: ERRORS
+linux-5.3.18-i686: ERRORS
+linux-5.3.18-x86_64: ERRORS
+linux-5.4.69-i686: ERRORS
+linux-5.4.69-x86_64: ERRORS
+linux-5.5.19-i686: ERRORS
+linux-5.5.19-x86_64: ERRORS
+linux-5.6.19-i686: ERRORS
+linux-5.6.19-x86_64: ERRORS
+linux-5.7.19-i686: ERRORS
+linux-5.7.19-x86_64: ERRORS
+linux-5.8.13-i686: ERRORS
+linux-5.8.13-x86_64: ERRORS
+linux-5.9.1-i686: ERRORS
+linux-5.9.1-x86_64: ERRORS
+linux-5.10.1-i686: ERRORS
+linux-5.10.1-x86_64: ERRORS
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 2943, Succeeded: 2943, Failed: 0, Warnings: 0
+virtme-32: WARNINGS: Final Summary: 2779, Succeeded: 2779, Failed: 0, Warnings: 3
+sparse: WARNINGS
+smatch: ERRORS
 
-Changing the hardware, obviously. Changing the firmware of the module...
-Someone needs to be scolded along the development chain, can you take
-care of that at least ? ;-)
+Detailed results are available here:
 
-Thinking more about this, do you have a use case for knowing the state
-of the privacy switch when not streaming ?
+http://www.xs4all.nl/~hverkuil/logs/Monday.log
 
-> Regarding the race condition... The use of the atomic_t was to avoid
-> that race, but what I did not realise was that by default get_cur does
-> not send an event... So I am working on a new series, which also
-> includes a fix for the async_control wq.
-> 
-> Thanks for your review!!!
-> 
-> > > +
-> > > +     uvc_privacy_gpio_event(dev);
-> > > +
-> > >       return IRQ_HANDLED;
-> > >  }
-> > >
-> > > +static const struct dmi_system_id privacy_valid_during_streamon[] = {
-> > > +     {
-> > > +             .ident = "HP Elite c1030 Chromebook",
-> > > +             .matches = {
-> > > +                     DMI_MATCH(DMI_SYS_VENDOR, "HP"),
-> > > +                     DMI_MATCH(DMI_PRODUCT_NAME, "Jinlon"),
-> > > +             },
-> > > +     },
-> > > +     {
-> > > +             .ident = "HP Pro c640 Chromebook",
-> > > +             .matches = {
-> > > +                     DMI_MATCH(DMI_SYS_VENDOR, "HP"),
-> > > +                     DMI_MATCH(DMI_PRODUCT_NAME, "Dratini"),
-> > > +             },
-> > > +     },
-> > > +     { } /* terminate list */
-> > > +};
-> > > +
-> > > +
-> > >  static int uvc_parse_gpio(struct uvc_device *dev)
-> > >  {
-> > >       struct uvc_entity *unit;
-> > > @@ -1545,6 +1615,9 @@ static int uvc_parse_gpio(struct uvc_device *dev)
-> > >       if (irq == -EPROBE_DEFER)
-> > >               return -EPROBE_DEFER;
-> > >
-> > > +     if (dmi_check_system(privacy_valid_during_streamon))
-> > > +             dev->quirks |= UVC_QUIRK_PRIVACY_DURING_STREAM;
-> > > +
-> > >       if (irq < 0)
-> > >               return 0;
-> > >
-> > > diff --git a/drivers/media/usb/uvc/uvc_queue.c b/drivers/media/usb/uvc/uvc_queue.c
-> > > index cd60c6c1749e..e800d491303f 100644
-> > > --- a/drivers/media/usb/uvc/uvc_queue.c
-> > > +++ b/drivers/media/usb/uvc/uvc_queue.c
-> > > @@ -337,9 +337,12 @@ int uvc_dequeue_buffer(struct uvc_video_queue *queue, struct v4l2_buffer *buf,
-> > >  int uvc_queue_streamon(struct uvc_video_queue *queue, enum v4l2_buf_type type)
-> > >  {
-> > >       int ret;
-> > > +     struct uvc_streaming *stream = uvc_queue_to_stream(queue);
-> > >
-> > >       mutex_lock(&queue->mutex);
-> > >       ret = vb2_streamon(&queue->queue, type);
-> > > +     if (stream->dev->quirks & UVC_QUIRK_PRIVACY_DURING_STREAM)
-> > > +             uvc_privacy_gpio_event(stream->dev);
-> > >       mutex_unlock(&queue->mutex);
-> > >
-> > >       return ret;
-> > > diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> > > index 2b5ba4b02d3a..2a95b3ed3ea8 100644
-> > > --- a/drivers/media/usb/uvc/uvcvideo.h
-> > > +++ b/drivers/media/usb/uvc/uvcvideo.h
-> > > @@ -6,6 +6,7 @@
-> > >  #error "The uvcvideo.h header is deprecated, use linux/uvcvideo.h instead."
-> > >  #endif /* __KERNEL__ */
-> > >
-> > > +#include <linux/atomic.h>
-> > >  #include <linux/gpio/consumer.h>
-> > >  #include <linux/kernel.h>
-> > >  #include <linux/poll.h>
-> > > @@ -209,6 +210,7 @@
-> > >  #define UVC_QUIRK_RESTORE_CTRLS_ON_INIT      0x00000400
-> > >  #define UVC_QUIRK_FORCE_Y8           0x00000800
-> > >  #define UVC_QUIRK_FORCE_BPP          0x00001000
-> > > +#define UVC_QUIRK_PRIVACY_DURING_STREAM      0x00002000
-> > >
-> > >  /* Format flags */
-> > >  #define UVC_FMT_FLAG_COMPRESSED              0x00000001
-> > > @@ -359,6 +361,7 @@ struct uvc_entity {
-> > >                       u8  bControlSize;
-> > >                       u8  *bmControls;
-> > >                       struct gpio_desc *gpio_privacy;
-> > > +                     atomic_t  gpio_privacy_value;
-> > >               } gpio;
-> > >       };
-> > >
-> > > @@ -815,6 +818,9 @@ extern const struct v4l2_file_operations uvc_fops;
-> > >  int uvc_mc_register_entities(struct uvc_video_chain *chain);
-> > >  void uvc_mc_cleanup_entity(struct uvc_entity *entity);
-> > >
-> > > +/* Privacy gpio */
-> > > +void uvc_privacy_gpio_event(struct uvc_device *dev);
-> > > +
-> > >  /* Video */
-> > >  int uvc_video_init(struct uvc_streaming *stream);
-> > >  int uvc_video_suspend(struct uvc_streaming *stream);
+Detailed regression test results are available here:
 
--- 
-Regards,
+http://www.xs4all.nl/~hverkuil/logs/Monday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Monday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Monday-test-media-dmesg.log
 
-Laurent Pinchart
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Monday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
