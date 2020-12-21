@@ -2,138 +2,95 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBE41C433E0
-	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 22:12:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B1C6C433E0
+	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 22:23:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6E95222AAA
-	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 22:12:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4147322CB2
+	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 22:23:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726256AbgLUWMN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Dec 2020 17:12:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725892AbgLUWMM (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Dec 2020 17:12:12 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5319EC0613D6
-        for <linux-media@vger.kernel.org>; Mon, 21 Dec 2020 14:11:32 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id b73so11033402edf.13
-        for <linux-media@vger.kernel.org>; Mon, 21 Dec 2020 14:11:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=kNGqROiacfcmcUXowv+ZZ8ynNfZ1+ApYSqleLuaCMpw=;
-        b=YSofHheEMuxcvORf+W/Jxb1Lod8YHz02lgj/4BBiBuK5NgWJAYyc3+p34IM7vfLp/E
-         qQBOyLJAkrwBZizYBfJEFToRp1v9s2u7QG7cIFUWRn0xLPAEfFYiCwNaE2wTJ0r3WVH7
-         0G74he4noi7SBD947yCdpwHm89rnmy871XOvmT2pBN0K2meiOM/vW+Br70CD3vsWJtn1
-         BeUjO+5HsrmoZ709IfwONT4YC/Nur/r17j5cUoKQkpodIJxnDy7vuwBMiefCoBgBRLK5
-         UK2PA/k245Iz1553QjfDzd+2yBQgIBih4ZhXzMMc3vVcOe8kW4UkumWhP3A+EiwdaJiN
-         ylEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=kNGqROiacfcmcUXowv+ZZ8ynNfZ1+ApYSqleLuaCMpw=;
-        b=meAPueAkn3YjvEQz0VhUqf3JhTiBRW6OcSr8dtXPao3lrZkBSMk4P6DoHFmqdvelKp
-         7HEVhX2AchehnUi+lW//QYpMVQwMlRRPmbb6SN9rYQoNMhfjSgLJmO7BMXQdayswSqQ3
-         li+Qq2QhgDaXIQhQDtQ3HD2zB7RIQ65/nh6vdCnrfztcPiAbeCX9kTVeUp8oltPw8b4v
-         QtIjnX3OBYbhZmriff2o2O7ojxlRnrIg6SwDJJbpjOptGXBnOor3ddOv/VKjyn1JBVUj
-         T9WP21g3XgjPlIwXcyaARfklz00a4lXdTQzcz7opCTKm/uzqNkV3dZJ1h218WPkYUEoQ
-         Sy1A==
-X-Gm-Message-State: AOAM533s3v+tToeU5A0LvGqGjr+LhlwRlQx6rX/WRb+kjU5umy14h0HM
-        IOWBBVSkL7qJN0SI0AIfOjryTnsgGs1osa+/
-X-Google-Smtp-Source: ABdhPJwoqxhhE4HMXehMSz/tbVtbcPVNbmvTTLjFChvxwTaxvvgkaT3/qsPbS+pnxOys0lWXvwOWtQ==
-X-Received: by 2002:a50:bb44:: with SMTP id y62mr17753680ede.103.1608588691072;
-        Mon, 21 Dec 2020 14:11:31 -0800 (PST)
-Received: from [192.168.0.4] (hst-221-116.medicom.bg. [84.238.221.116])
-        by smtp.googlemail.com with ESMTPSA id k21sm30267696edq.26.2020.12.21.14.11.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Dec 2020 14:11:30 -0800 (PST)
-Subject: Re: [PATCH v2] venus: venc: set inband mode property to FW.
-To:     Dikshita Agarwal <dikshita@codeaurora.org>,
-        linux-media@vger.kernel.org, stanimir.varbanov@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        vgarodia@codeaurora.org
-References: <1608101388-31810-1-git-send-email-dikshita@codeaurora.org>
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Message-ID: <09c794e2-24a8-f545-dac4-39d425a1ddd3@linaro.org>
-Date:   Tue, 22 Dec 2020 00:11:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <1608101388-31810-1-git-send-email-dikshita@codeaurora.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1726016AbgLUWXd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Dec 2020 17:23:33 -0500
+Received: from mga05.intel.com ([192.55.52.43]:42712 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725892AbgLUWXd (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 21 Dec 2020 17:23:33 -0500
+IronPort-SDR: 8YOe3Oxoy3Ggwa95nGUMSGVd2jSI/s7NGzTaZOYlE/A7Wo2WDd8sYsF4ZIC5H/XweJ1iYeEZti
+ WXs7XF2OVDFg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9842"; a="260521913"
+X-IronPort-AV: E=Sophos;i="5.78,437,1599548400"; 
+   d="scan'208";a="260521913"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2020 14:21:46 -0800
+IronPort-SDR: PS9v6jx1y4Zk2+CT4iwry61c5UoDxY0SjTCemykD8hVs6PLfnxgfHftbemXJiNYLxzqdOrImj9
+ MYZA6Z2eiSiQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,437,1599548400"; 
+   d="scan'208";a="372892687"
+Received: from maru.jf.intel.com ([10.54.51.77])
+  by orsmga008.jf.intel.com with ESMTP; 21 Dec 2020 14:21:45 -0800
+From:   Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+To:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+        Eddie James <eajames@linux.ibm.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     linux-clk@vger.kernel.org, linux-media@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-aspeed@lists.ozlabs.org,
+        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Subject: [PATCH v2 0/1] Fix kernel panic issues caused by AST2500 Video Engine
+Date:   Mon, 21 Dec 2020 14:32:24 -0800
+Message-Id: <20201221223225.14723-1-jae.hyun.yoo@linux.intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Video engine uses eclk and vclk for its clock sources and its reset
+control is coupled with eclk so the current clock enabling sequence works
+like below.
 
+ Enable eclk
+ De-assert Video Engine reset
+ 10ms delay
+ Enable vclk
 
-On 12/16/20 8:49 AM, Dikshita Agarwal wrote:
-> set HFI_PROPERTY_CONFIG_VENC_SYNC_FRAME_SEQUENCE_HEADER to FW
-> to support inband sequence header mode.
-> 
-> Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
-> 
-> Changes since v1:
-> - added codec check 
-> - fixed the mask while initializing the control
-> 
-> ---
->  drivers/media/platform/qcom/venus/venc_ctrls.c | 15 +++++++++++++--
->  1 file changed, 13 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/media/platform/qcom/venus/venc_ctrls.c b/drivers/media/platform/qcom/venus/venc_ctrls.c
-> index cf860e6..a94f5fd 100644
-> --- a/drivers/media/platform/qcom/venus/venc_ctrls.c
-> +++ b/drivers/media/platform/qcom/venus/venc_ctrls.c
-> @@ -157,7 +157,17 @@ static int venc_op_s_ctrl(struct v4l2_ctrl *ctrl)
->  		ctr->h264_loop_filter_mode = ctrl->val;
->  		break;
->  	case V4L2_CID_MPEG_VIDEO_HEADER_MODE:
-> -		ctr->header_mode = ctrl->val;
-> +		if (inst->fmt_cap->pixfmt == V4L2_PIX_FMT_H264 ||
-> +		    inst->fmt_cap->pixfmt == V4L2_PIX_FMT_HEVC) {
-> +			if (ctrl->val == V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE)
-> +				en.enable = 0;
-> +			else
-> +				en.enable = 1;
-> +			ptype = HFI_PROPERTY_CONFIG_VENC_SYNC_FRAME_SEQUENCE_HEADER;
-> +			ret = hfi_session_set_property(inst, ptype, &en);
-> +			if (ret)
-> +				return ret;
-> +		}
+It introduces improper reset on the Video Engine hardware and eventually
+the hardware generates unexpected DMA memory transfers that can corrupt
+memory region in random and sporadic patterns. This issue is observed
+very rarely on some specific AST2500 SoCs but it causes a critical
+kernel panic with making a various shape of signature so it's extremely
+hard to debug. Moreover, the issue is observed even when the video
+engine is not actively used because udevd turns on the video engine
+hardware for a short time to make a query in every boot.
 
-I see NULL pointer dereference in this code snippet.  Please take as
-reference the implementation of V4L2_CID_MPEG_VIDEO_BITRATE from the
-same function (venc_op_s_ctrl).
+To fix this issue, this commit changes the clock handling logic to make
+the reset de-assertion triggered after enabling both eclk and vclk. Also,
+it adds clk_unprepare call for a case when probe fails.
 
->  		break;
->  	case V4L2_CID_MPEG_VIDEO_CYCLIC_INTRA_REFRESH_MB:
->  		break;
-> @@ -289,7 +299,8 @@ int venc_ctrl_init(struct venus_inst *inst)
->  	v4l2_ctrl_new_std_menu(&inst->ctrl_handler, &venc_ctrl_ops,
->  		V4L2_CID_MPEG_VIDEO_HEADER_MODE,
->  		V4L2_MPEG_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME,
-> -		1 << V4L2_MPEG_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME,
-> +		~((1 << V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE) |
-> +		(1 << V4L2_MPEG_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME)),
->  		V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE);
->  
->  	v4l2_ctrl_new_std_menu(&inst->ctrl_handler, &venc_ctrl_ops,
-> 
+In case of AST2600, the video engine reset setting should be coupled with
+eclk to match it with the setting for previous Aspeed SoCs which is defined
+in clk-aspeed.c since all Aspeed SoCs are sharing a single video engine
+driver. Also, reset bit 6 is defined as 'Video Engine' reset in datasheet
+so it should be de-asserted when eclk is enabled. This commit fixes the
+setting too.
+
+Please review this squashed patch.
+
+Changes since v1:
+- Squashed two patches due to dependency.
+
+Jae Hyun Yoo (1):
+  media: aspeed: fix clock handling logic
+
+ drivers/clk/clk-ast2600.c             | 4 ++--
+ drivers/media/platform/aspeed-video.c | 9 ++++++---
+ 2 files changed, 8 insertions(+), 5 deletions(-)
 
 -- 
-regards,
-Stan
+2.17.1
+
