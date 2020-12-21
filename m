@@ -5,119 +5,230 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF5B8C433DB
-	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 18:19:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1E09C433E0
+	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 18:20:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9414022D08
-	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 18:19:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9370E22D08
+	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 18:20:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725937AbgLUSSm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Dec 2020 13:18:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50994 "EHLO
+        id S1726144AbgLUSUR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Dec 2020 13:20:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725891AbgLUSSl (ORCPT
+        with ESMTP id S1725898AbgLUSUQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Dec 2020 13:18:41 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3DCC061285
-        for <linux-media@vger.kernel.org>; Mon, 21 Dec 2020 10:18:00 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id e25so11868698wme.0
-        for <linux-media@vger.kernel.org>; Mon, 21 Dec 2020 10:18:00 -0800 (PST)
+        Mon, 21 Dec 2020 13:20:16 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E01C0613D3
+        for <linux-media@vger.kernel.org>; Mon, 21 Dec 2020 10:19:36 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id 3so11842421wmg.4
+        for <linux-media@vger.kernel.org>; Mon, 21 Dec 2020 10:19:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=nrR9WDuqpZ4La0kb0TH5GDl9XnLQA1hKY10137zFkno=;
-        b=LDOBybMZF3sIbVRykwkewM3vK28vBCZgO4ssvTMLn7WaQ/7EoJhG7LoraIa6BrXVX+
-         TD6VOKiY9f3+eXENNuaRwO2m6Z8GnVMJCLZQb5Nk5KDofjsfKmJ2Cb1zqUPYdMFe4RFM
-         Zqeg5N2GAnoAsZ4KNn+f8K8WIzsyVoZPotykc=
+        bh=Dw71v3CL2kM3raQJeeszspBPFX2F58JASjvYTnrWOCM=;
+        b=XOv3mP7zUK4jneYBbu/i4GBH/kEqUFHETXAhDBUJrLmK6HUbonxcaTAu8F6Ohru5UX
+         rAwsaNimKdp05wcbnmOu2XsGfPhqgup77quWUSS7RUvUrIC5KaJoj1wTz3ChGWOBMAyZ
+         nHwzAKxwOKTYmMRmeebWMQueyrhZ3SqPLyluU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=nrR9WDuqpZ4La0kb0TH5GDl9XnLQA1hKY10137zFkno=;
-        b=hX0iY3ctNaS7R/IiWHYNdD3eSAT1gLiKrXOPdFftJNyuOgUquAzHUzaKJLiEp+2UC+
-         lXkZcBjZaK/Sul+PMTi/JgWgThrdJ1L/MvWNuyB2uct/a24NVxAuwFTAiE/S3zRqSk3r
-         Bo8iCtDCQ1dbrG+vvkfR9vIEhADjIYPF7T3rPZSR4LeHFekYExxoZmg9jRjNL+guDDMI
-         T8ErYTrjmSiastXjxxByQOtgbVgLvxL11/XOvybts7eY390JHTEx5JmjNMh/yupPM0cG
-         I4uG70p92euDlKyCub13lcBO6KXzDoWUP21FzmrfEvejECk+TjAYvS3/NWYrdyYBPIDW
-         qf7g==
-X-Gm-Message-State: AOAM533jxnqTeczLy4UN/YIO7CIT/qulRuHKFSDfgPkKX9JXyY1mtyxb
-        Zg/vIaqvuORMr9TGC70Hj/iDEw==
-X-Google-Smtp-Source: ABdhPJzppDtHHWrSNToUgdtCSdftcvo3RHHcW+vUbYsJiyNo4fnI7+Jw4GXQ+zlOxqzWhRtB+UT6pw==
-X-Received: by 2002:a1c:23d5:: with SMTP id j204mr18052023wmj.130.1608574679359;
-        Mon, 21 Dec 2020 10:17:59 -0800 (PST)
+        bh=Dw71v3CL2kM3raQJeeszspBPFX2F58JASjvYTnrWOCM=;
+        b=IaXPbRzRttU8vTZKdTCn35N9PgVHyWUTDW4msUjdTjWnRKk3TXourQAMyatlT96hLk
+         Nl9mYOzyiJK2O9tdzjj/u64Y/vj10kLk20KReIxd5EupwizYbbBW4tjUTw9ntzzyFBI8
+         O6wWEOYkwCwUAIGuJA/AVF+9QuyCl0zEpyrbHKZ9YHmrpy5TuEqEUbFnKFxZq/ig3RsS
+         EviEWSfv1MijH+VdYvIXE3mHDVWRRtUxsMojIJRXnMUc17illqXHdV01p+IYjomZMBHe
+         lTzqirImYVktULeemm3I+tWxHDGdppRVAoLy/Dfibuckz0b4kME/bDIchetU5lhSYJww
+         x4+A==
+X-Gm-Message-State: AOAM533axUA0kNDn/TdAY1XqNldii6TLiSvU8VkvAWFzPKsrHbqoFoPp
+        9zK0CSApGVp2Jf9ZIZM3YQjj2wqHOUBVpkBq5hk=
+X-Google-Smtp-Source: ABdhPJydw13iQ9B5q81Px8W3R+OZXO2wPlxvontCOvnnKaWO5tOhYWFAenan2mUZOZgLkc6o+nEe5Q==
+X-Received: by 2002:a1c:7f8c:: with SMTP id a134mr15711577wmd.184.1608569308687;
+        Mon, 21 Dec 2020 08:48:28 -0800 (PST)
 Received: from alco.lan ([80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id n17sm23559282wmc.33.2020.12.21.10.17.58
+        by smtp.gmail.com with ESMTPSA id o125sm24581109wmo.30.2020.12.21.08.48.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Dec 2020 10:17:58 -0800 (PST)
+        Mon, 21 Dec 2020 08:48:28 -0800 (PST)
 From:   Ricardo Ribalda <ribalda@chromium.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v5 04/12] media: uvcvideo: Allow extra entities
-Date:   Mon, 21 Dec 2020 19:17:57 +0100
-Message-Id: <20201221181757.814417-1-ribalda@chromium.org>
+Subject: [PATCH v5 09/12] media: uvcvideo: Implement UVC_QUIRK_PRIVACY_DURING_STREAM
+Date:   Mon, 21 Dec 2020 17:48:16 +0100
+Message-Id: <20201221164819.792019-10-ribalda@chromium.org>
 X-Mailer: git-send-email 2.29.2.684.gfbc64c5ab5-goog
-In-Reply-To: <20201221164819.792019-5-ribalda@chromium.org>
-References: <20201221164819.792019-5-ribalda@chromium.org>
+In-Reply-To: <20201221164819.792019-1-ribalda@chromium.org>
+References: <20201221164819.792019-1-ribalda@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Increase the size of the id, to avoid collisions with entities
-implemented by the driver that are not part of the UVC device.
+Some devices, can only read the privacy_pin if the device is
+streaming.
 
-Entities exposed by the UVC device use IDs 0-255, extra entities
-implemented by the driver (such as the GPIO entity) use IDs 256 and
-up.
+This patch implement a quirk for such devices, in order to avoid invalid
+reads and/or spurious events.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
-Sorry for a duplicated patch, the previous one the spacing was wrong :(
-
- drivers/media/usb/uvc/uvc_driver.c | 2 +-
- drivers/media/usb/uvc/uvcvideo.h   | 7 ++++++-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ drivers/media/usb/uvc/uvc_driver.c | 57 ++++++++++++++++++++++++++++--
+ drivers/media/usb/uvc/uvc_queue.c  |  3 ++
+ drivers/media/usb/uvc/uvcvideo.h   |  4 +++
+ 3 files changed, 61 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index bfbc5a4d4ca6..82cdd1bb28dc 100644
+index 72516101fdd0..7af37d4bd60a 100644
 --- a/drivers/media/usb/uvc/uvc_driver.c
 +++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -1024,7 +1024,7 @@ static const u8 uvc_media_transport_input_guid[16] =
- 	UVC_GUID_UVC_MEDIA_TRANSPORT_INPUT;
- static const u8 uvc_processing_guid[16] = UVC_GUID_UVC_PROCESSING;
+@@ -7,6 +7,7 @@
+  */
  
--static struct uvc_entity *uvc_alloc_entity(u16 type, u8 id,
-+static struct uvc_entity *uvc_alloc_entity(u16 type, u16 id,
- 		unsigned int num_pads, unsigned int extra_size)
+ #include <linux/atomic.h>
++#include <linux/dmi.h>
+ #include <linux/gpio/consumer.h>
+ #include <linux/kernel.h>
+ #include <linux/list.h>
+@@ -1472,6 +1473,17 @@ static int uvc_parse_control(struct uvc_device *dev)
+ /* -----------------------------------------------------------------------------
+  * Privacy GPIO
+  */
++static bool uvc_gpio_is_streaming(struct uvc_device *dev)
++{
++	struct uvc_streaming *streaming;
++
++	list_for_each_entry(streaming, &dev->streams, list) {
++		if (uvc_queue_streaming(&streaming->queue))
++			return true;
++	}
++
++	return false;
++}
+ 
+ 
+ static u8 uvc_gpio_update_value(struct uvc_device *dev,
+@@ -1499,7 +1511,12 @@ static int uvc_gpio_get_cur(struct uvc_device *dev, struct uvc_entity *entity,
+ 	if (cs != UVC_CT_PRIVACY_CONTROL || size < 1)
+ 		return -EINVAL;
+ 
++	if ((dev->quirks & UVC_QUIRK_PRIVACY_DURING_STREAM) &&
++	    !uvc_gpio_is_streaming(dev))
++		return -EBUSY;
++
+ 	*(uint8_t *)data = uvc_gpio_update_value(dev, entity);
++
+ 	return 0;
+ }
+ 
+@@ -1528,19 +1545,50 @@ static struct uvc_entity *uvc_gpio_find_entity(struct uvc_device *dev)
+ 	return NULL;
+ }
+ 
+-static irqreturn_t uvc_gpio_irq(int irq, void *data)
++void uvc_privacy_gpio_event(struct uvc_device *dev)
  {
- 	struct uvc_entity *entity;
+-	struct uvc_device *dev = data;
+ 	struct uvc_entity *unit;
+ 
++
+ 	unit = uvc_gpio_find_entity(dev);
+ 	if (!unit)
+-		return IRQ_HANDLED;
++		return;
+ 
+ 	uvc_gpio_update_value(dev, unit);
++}
++
++static irqreturn_t uvc_gpio_irq(int irq, void *data)
++{
++	struct uvc_device *dev = data;
++
++	/* Ignore privacy events during streamoff */
++	if (dev->quirks & UVC_QUIRK_PRIVACY_DURING_STREAM)
++		if (!uvc_gpio_is_streaming(dev))
++			return IRQ_HANDLED;
++
++	uvc_privacy_gpio_event(dev);
++
+ 	return IRQ_HANDLED;
+ }
+ 
++static const struct dmi_system_id privacy_valid_during_streamon[] = {
++	{
++		.ident = "HP Elite c1030 Chromebook",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "HP"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "Jinlon"),
++		},
++	},
++	{
++		.ident = "HP Pro c640 Chromebook",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "HP"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "Dratini"),
++		},
++	},
++	{ } /* terminate list */
++};
++
+ static int uvc_gpio_parse(struct uvc_device *dev)
+ {
+ 	struct uvc_entity *unit;
+@@ -1577,6 +1625,9 @@ static int uvc_gpio_parse(struct uvc_device *dev)
+ 
+ 	list_add_tail(&unit->list, &dev->entities);
+ 
++	if (dmi_check_system(privacy_valid_during_streamon))
++		dev->quirks |= UVC_QUIRK_PRIVACY_DURING_STREAM;
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/media/usb/uvc/uvc_queue.c b/drivers/media/usb/uvc/uvc_queue.c
+index cd60c6c1749e..e800d491303f 100644
+--- a/drivers/media/usb/uvc/uvc_queue.c
++++ b/drivers/media/usb/uvc/uvc_queue.c
+@@ -337,9 +337,12 @@ int uvc_dequeue_buffer(struct uvc_video_queue *queue, struct v4l2_buffer *buf,
+ int uvc_queue_streamon(struct uvc_video_queue *queue, enum v4l2_buf_type type)
+ {
+ 	int ret;
++	struct uvc_streaming *stream = uvc_queue_to_stream(queue);
+ 
+ 	mutex_lock(&queue->mutex);
+ 	ret = vb2_streamon(&queue->queue, type);
++	if (stream->dev->quirks & UVC_QUIRK_PRIVACY_DURING_STREAM)
++		uvc_privacy_gpio_event(stream->dev);
+ 	mutex_unlock(&queue->mutex);
+ 
+ 	return ret;
 diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index 0a3404091665..aa96e54b8896 100644
+index 079a407ebba5..32c1ba246d97 100644
 --- a/drivers/media/usb/uvc/uvcvideo.h
 +++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -301,7 +301,12 @@ struct uvc_entity {
- 					 * chain. */
- 	unsigned int flags;
+@@ -209,6 +209,7 @@
+ #define UVC_QUIRK_RESTORE_CTRLS_ON_INIT	0x00000400
+ #define UVC_QUIRK_FORCE_Y8		0x00000800
+ #define UVC_QUIRK_FORCE_BPP		0x00001000
++#define UVC_QUIRK_PRIVACY_DURING_STREAM	0x00002000
  
--	u8 id;
-+	/*
-+	 * Entities exposed by the UVC device use IDs 0-255, extra entities
-+	 * implemented by the driver (such as the GPIO entity) use IDs 256 and
-+	 * up.
-+	 */
-+	u16 id;
- 	u16 type;
- 	char name[64];
- 	u8 guid[16];
+ /* Format flags */
+ #define UVC_FMT_FLAG_COMPRESSED		0x00000001
+@@ -826,6 +827,9 @@ extern const struct v4l2_file_operations uvc_fops;
+ int uvc_mc_register_entities(struct uvc_video_chain *chain);
+ void uvc_mc_cleanup_entity(struct uvc_entity *entity);
+ 
++/* Privacy gpio */
++void uvc_privacy_gpio_event(struct uvc_device *dev);
++
+ /* Video */
+ int uvc_video_init(struct uvc_streaming *stream);
+ int uvc_video_suspend(struct uvc_streaming *stream);
 -- 
 2.29.2.684.gfbc64c5ab5-goog
 
