@@ -2,78 +2,82 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00E5FC433DB
-	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 10:16:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4048AC433DB
+	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 10:17:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B4632207FF
-	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 10:16:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0543C207FF
+	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 10:17:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726261AbgLUKQf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Dec 2020 05:16:35 -0500
-Received: from gofer.mess.org ([88.97.38.141]:47285 "EHLO gofer.mess.org"
+        id S1726194AbgLUKRg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Dec 2020 05:17:36 -0500
+Received: from mga01.intel.com ([192.55.52.88]:56311 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725796AbgLUKQf (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Dec 2020 05:16:35 -0500
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id BF8C0C6072; Mon, 21 Dec 2020 09:19:29 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
-        t=1608542369; bh=HTC3kxFkMUWtdsdj515NTqKH1aEU1tnSAMGU2ptXm2M=;
-        h=From:To:Subject:Date:From;
-        b=p2Exu3qKoFAok69L8fNAAujMIHFUH3x68tJD7Y7uiyXAif2BrUZiZ8A6vTez7WEHz
-         AFtoMLrJwpGEPlFlY2aj970chrijvgV8RMlttJfgERFf1RRaYhnmXofVE1mcgG/56t
-         4ES51vEIXWfofiAy3G0bpw8dIt8HwWFJ9eZ7oM4M0uT3Pn8HMYX8E7c+yOqexRuyRL
-         SngfWwqGFyvnaYOU6pa03rXmASBZeQOXkkuwSdkX0jq3QACQi8ajqaTxFkQ11H61l+
-         LMahEP32zTEAG2dHMu2K4Ry4ROnipMRcsKvSBdgQVv2yMQ/4nWWcAEUZNWbLAVfH8x
-         H2tR+/rzmmKvA==
-From:   Sean Young <sean@mess.org>
-To:     linux-media@vger.kernel.org
-Subject: [PATCH] media: rc: ensure that uevent can be read directly after rc device register
-Date:   Mon, 21 Dec 2020 09:19:29 +0000
-Message-Id: <20201221091929.26504-1-sean@mess.org>
-X-Mailer: git-send-email 2.20.1
+        id S1725796AbgLUKRg (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 21 Dec 2020 05:17:36 -0500
+IronPort-SDR: gjpNBE3/R3CCDOKD4FonVip97m/uQfB6MV1UtFlUtIrh6XxyNJNlOBzEP2K8HgIVG7FjYaDZq/
+ 4Er9ZO+7nitQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9841"; a="194126669"
+X-IronPort-AV: E=Sophos;i="5.78,436,1599548400"; 
+   d="scan'208";a="194126669"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2020 01:08:45 -0800
+IronPort-SDR: WduyTp7C+aVCXgMvXhJHG1hdkhhpgWZO1Q1877ueLG/KahFhsxjv5EeiTwNF0Gw/h9hITL6rhT
+ 5J2bbCHSe2tA==
+X-IronPort-AV: E=Sophos;i="5.78,436,1599548400"; 
+   d="scan'208";a="337348305"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2020 01:08:39 -0800
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id 4717F205F7; Mon, 21 Dec 2020 11:08:37 +0200 (EET)
+Date:   Mon, 21 Dec 2020 11:08:37 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Daniel Scally <djrscally@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-media@vger.kernel.org, devel@acpica.org, rjw@rjwysocki.net,
+        lenb@kernel.org, gregkh@linuxfoundation.org, yong.zhi@intel.com,
+        bingbu.cao@intel.com, tian.shu.qiu@intel.com, mchehab@kernel.org,
+        robert.moore@intel.com, erik.kaneda@intel.com, pmladek@suse.com,
+        rostedt@goodmis.org, sergey.senozhatsky@gmail.com,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        laurent.pinchart+renesas@ideasonboard.com,
+        jacopo+renesas@jmondi.org, kieran.bingham+renesas@ideasonboard.com,
+        linus.walleij@linaro.org, heikki.krogerus@linux.intel.com,
+        kitakar@gmail.com, jorhand@linux.microsoft.com,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: Re: [PATCH v2 01/12] software_node: Fix refcounts in
+ software_node_get_next_child()
+Message-ID: <20201221090837.GE26370@paasikivi.fi.intel.com>
+References: <20201217234337.1983732-1-djrscally@gmail.com>
+ <20201217234337.1983732-2-djrscally@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201217234337.1983732-2-djrscally@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There is a race condition where if the /sys/class/rc0/uevent file is read
-before rc_dev->registered is set to true, -ENODEV will be returned.
+Hi Daniel,
 
-Fixes: a2e2d73fa281 ("media: rc: do not access device via sysfs after rc_unregister_device()")
+Thanks for the update.
 
-Signed-off-by: Sean Young <sean@mess.org>
----
- drivers/media/rc/rc-main.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Thu, Dec 17, 2020 at 11:43:26PM +0000, Daniel Scally wrote:
+> The software_node_get_next_child() function currently does not hold
+> references to the child software_node that it finds or put the ref that
+> is held against the old child - fix that.
+> 
+> Fixes: 59abd83672f7 ("drivers: base: Introducing software nodes to the firmware node framework")
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Signed-off-by: Daniel Scally <djrscally@gmail.com>
 
-diff --git a/drivers/media/rc/rc-main.c b/drivers/media/rc/rc-main.c
-index 1d811e5ffb55..29d4d01896ff 100644
---- a/drivers/media/rc/rc-main.c
-+++ b/drivers/media/rc/rc-main.c
-@@ -1928,6 +1928,8 @@ int rc_register_device(struct rc_dev *dev)
- 			goto out_raw;
- 	}
- 
-+	dev->registered = true;
-+
- 	rc = device_add(&dev->dev);
- 	if (rc)
- 		goto out_rx_free;
-@@ -1937,8 +1939,6 @@ int rc_register_device(struct rc_dev *dev)
- 		 dev->device_name ?: "Unspecified device", path ?: "N/A");
- 	kfree(path);
- 
--	dev->registered = true;
--
- 	/*
- 	 * once the the input device is registered in rc_setup_rx_device,
- 	 * userspace can open the input device and rc_open() will be called
+Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+
 -- 
-2.29.2
-
+Sakari Ailus
