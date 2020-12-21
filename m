@@ -2,131 +2,119 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55465C433DB
-	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 18:30:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 513B3C433DB
+	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 18:31:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 10D6722D49
-	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 18:30:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 020B322D08
+	for <linux-media@archiver.kernel.org>; Mon, 21 Dec 2020 18:31:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726327AbgLUSak (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Dec 2020 13:30:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52920 "EHLO
+        id S1726697AbgLUSbN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Dec 2020 13:31:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725892AbgLUSak (ORCPT
+        with ESMTP id S1726514AbgLUSbN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Dec 2020 13:30:40 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9CCC0613D3
-        for <linux-media@vger.kernel.org>; Mon, 21 Dec 2020 10:29:59 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id n16so216778wmc.0
-        for <linux-media@vger.kernel.org>; Mon, 21 Dec 2020 10:29:59 -0800 (PST)
+        Mon, 21 Dec 2020 13:31:13 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3018C061793
+        for <linux-media@vger.kernel.org>; Mon, 21 Dec 2020 10:30:32 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id 190so10781169wmz.0
+        for <linux-media@vger.kernel.org>; Mon, 21 Dec 2020 10:30:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vJuLPvN2RTSNyr6LApzw+/OhfeYw5gbFBvw/kpJgHjI=;
-        b=DQyB82We6HV18Ka32uGMj6H2J+bJdM7Y3zVVCfkuJOaodSSJNWB/8GqFOdELB7k+KS
-         DUxjF69Dfb8bXn4RpaOvWr6M3LUO5KWekB+4gvw9cu3biW6KB/9jwvbyX3HSRGsyN/+G
-         z1Y83YcMUDAVWO6uoxRYfbM7FagtC2CYHd8L0=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=qPSq8Qf3oa+zDwHMEyCyB9kgDU9ZtwoI+tmmh5RXbH8=;
+        b=HlnjMoT59rU/B9gGWIQ7KZMrB3raq1PufLD3CQG7Ag9LG8pc0bzeCx9BeWI4n5aOzT
+         MyegdMcpsXln4DMElmsRTXDAj727kvyHsfD6qMoruL4BiPqpj9FTMDkFUS1nPvsSR/Hx
+         atALFDOSSa1m4CR1QxF0psYtrdZbAr7jEPfSo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vJuLPvN2RTSNyr6LApzw+/OhfeYw5gbFBvw/kpJgHjI=;
-        b=ozZAGtve7KQeFHGRmW1iWC3/lI3LZszx9G+fUsiMXC1iFrSuhBBLeQ0Q0k8yR1x8D3
-         dSPgADF0lGQ7NxfVG1NYrgiwL9oB286wJQgVUMxOG8LXkZre8a/kbsvKee+je8PRE50m
-         yDNkinDoa/PBqXOGoVdnVaxHlh9Hjq+4mWm8cY9f1k9Y3113/GSI+0Vwc+leKnsj8F5e
-         bCg+rj1+7SloviAPcGzgY56IxQNGUqJiOpULa8qmGr4S6STEHxw4ThS85oD9CKNrYuSB
-         +Uud1zHltUR1TduPwpPYo717ZaaJ3IOEtq7GtMZZ5ygWv8zWVzSVvK1JBUP/0h0rtCFQ
-         qiqg==
-X-Gm-Message-State: AOAM533WWoPPLVkTb0RKbSuMSiMogskifMh/Ydq3WQA4fkrgb/RQpM2o
-        3UrJh2g4aTIPj20AsrvRFJ6CJoILZwm0sxBn4LI=
-X-Google-Smtp-Source: ABdhPJwL72OqtKMahlwApirIUX+DUcjXJsr/D1CeeqHILBPP03aucCZhCea9miDoTCBiJ9an+V6J2A==
-X-Received: by 2002:a05:600c:2306:: with SMTP id 6mr17698261wmo.53.1608569302238;
-        Mon, 21 Dec 2020 08:48:22 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=qPSq8Qf3oa+zDwHMEyCyB9kgDU9ZtwoI+tmmh5RXbH8=;
+        b=ghc8mp2lTM1hJyfpzt66U5akEBc1nXlgWb9owWYLinaELWrd7crFJDBaraqaeEakys
+         jXjLMB1HIarqOg/uPurnJ2GHWWHPD7bfbxmD+zbsKUi5y28ZrEhLbHUOXH8U7hWpem4/
+         z+0tvbJ85FunSlKQxvDdEGq+znF7fCghdzTxurUFJLEm8xVY9RAZwVds5AlPR4GGe9PF
+         chQKsoB7OkiJ2W+4CgNw7UCNvANeCGcyhmcDkmPq2JRnd+mGV/T5umgyQLytHRlI8cfv
+         WNkdv2Iftt49PS3aQbSQwhJSPoSSW6VwSK3Mf3zu9IBGN9GBcLQGEDrG1fKUAjV9+kL4
+         H7Vw==
+X-Gm-Message-State: AOAM53335oTulKaKHoRdQRH3xwmrigZhIK1V0gxQW5SFbDr7cy6Riafz
+        K5fA3pQvXAoUItAUjzGxlrNIkTcEEKvVQ1RiB2k=
+X-Google-Smtp-Source: ABdhPJzwr+Ql4FgZh2mD5Zb+KIel/a8kyCyrrS8u7Yhn3O0hJGqu71Zn8JBJfVPSL3UGIsGS3Gat2A==
+X-Received: by 2002:a1c:3c09:: with SMTP id j9mr17557080wma.180.1608569308037;
+        Mon, 21 Dec 2020 08:48:28 -0800 (PST)
 Received: from alco.lan ([80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id o125sm24581109wmo.30.2020.12.21.08.48.21
+        by smtp.gmail.com with ESMTPSA id o125sm24581109wmo.30.2020.12.21.08.48.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Dec 2020 08:48:21 -0800 (PST)
+        Mon, 21 Dec 2020 08:48:27 -0800 (PST)
 From:   Ricardo Ribalda <ribalda@chromium.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v5 00/12]Show privacy_gpio as a v4l2_ctrl
-Date:   Mon, 21 Dec 2020 17:48:07 +0100
-Message-Id: <20201221164819.792019-1-ribalda@chromium.org>
+Subject: [PATCH v5 08/12] media: uvcvideo: Add Privacy control based on EXT_GPIO
+Date:   Mon, 21 Dec 2020 17:48:15 +0100
+Message-Id: <20201221164819.792019-9-ribalda@chromium.org>
 X-Mailer: git-send-email 2.29.2.684.gfbc64c5ab5-goog
+In-Reply-To: <20201221164819.792019-1-ribalda@chromium.org>
+References: <20201221164819.792019-1-ribalda@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Some devices can implement a physical switch to disable the input of the
-camera on demand. Think of it like an elegant privacy sticker.
+Add a new control and mapping for Privacy controls connected to
+UVC_GUID_EXT_GPIO_CONTROLLERs.
 
-The system can read the status of the privacy switch via a GPIO.
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+ drivers/media/usb/uvc/uvc_ctrl.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-The ACPI table maps this GPIO to the USB device via _CRS and _DSD
-descriptors, so the kernel can find it.
-
-The userspace applications need to know if the privacy pin is enabled
-or not.
-
-The obvious way to show it to userspace is via the V4L2_CID_PRIVACY control.
-
-This patchset implement this functionality.
-
-v5: Thanks to all the comments from Laurent!
-  - Allow multiple async_ctrls
-  - Use dev_dbg() for uvc_trace
-  - Major redesing of "Implement UVC_EXT_GPIO_UNIT"
-  - Major redesing of "Implement UVC_QUIRK_PRIVACY_DURING_STREAM"
-
-v4: Implement UVC_QUIRK_PRIVACY_DURING_STREAM
-
-v3: Thanks to all the comments from Joe Perches
-  - Rework of printk macros
-
-v2: Thanks to all the comments from Laurent!
-  - move guid to unit
-  - support entities with no pads
-  - CodeStyle
-  - Irq handling
-  - pr_cont
-  - new ids
-
-Ricardo Ribalda (12):
-  media: uvcvideo: Fix race condition handling events
-  media: uvcvideo: Allow more that one asyc_ctrl
-  media: uvcvideo: Move guid to entity
-  media: uvcvideo: Allow extra entities
-  media: uvcvideo: Allow entities with no pads
-  media: uvcvideo: Allow entity-defined get_info and get_cur
-  media: uvcvideo: Implement UVC_EXT_GPIO_UNIT
-  media: uvcvideo: Add Privacy control based on EXT_GPIO
-  media: uvcvideo: Implement UVC_QUIRK_PRIVACY_DURING_STREAM
-  media: uvcvideo: Use dev_ printk aliases
-  media: uvcvideo: New macro uvc_trace_cont
-  media: uvcvideo: use dev_dbg() for uvc_trace()
-
- drivers/media/usb/uvc/uvc_ctrl.c   | 204 +++++----
- drivers/media/usb/uvc/uvc_driver.c | 644 +++++++++++++++++++----------
- drivers/media/usb/uvc/uvc_entity.c |  11 +-
- drivers/media/usb/uvc/uvc_isight.c |  16 +-
- drivers/media/usb/uvc/uvc_queue.c  |  12 +-
- drivers/media/usb/uvc/uvc_status.c |  32 +-
- drivers/media/usb/uvc/uvc_v4l2.c   |  53 ++-
- drivers/media/usb/uvc/uvc_video.c  | 120 +++---
- drivers/media/usb/uvc/uvcvideo.h   |  91 ++--
- 9 files changed, 767 insertions(+), 416 deletions(-)
-
+diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+index a430fa666897..374822b1ee94 100644
+--- a/drivers/media/usb/uvc/uvc_ctrl.c
++++ b/drivers/media/usb/uvc/uvc_ctrl.c
+@@ -347,6 +347,14 @@ static const struct uvc_control_info uvc_ctrls[] = {
+ 				| UVC_CTRL_FLAG_RESTORE
+ 				| UVC_CTRL_FLAG_AUTO_UPDATE,
+ 	},
++	{
++		.entity		= UVC_GUID_EXT_GPIO_CONTROLLER,
++		.selector	= UVC_CT_PRIVACY_CONTROL,
++		.index		= 0,
++		.size		= 1,
++		.flags		= UVC_CTRL_FLAG_GET_CUR
++				| UVC_CTRL_FLAG_AUTO_UPDATE,
++	},
+ };
+ 
+ static const struct uvc_menu_info power_line_frequency_controls[] = {
+@@ -735,6 +743,16 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
+ 		.v4l2_type	= V4L2_CTRL_TYPE_BOOLEAN,
+ 		.data_type	= UVC_CTRL_DATA_TYPE_BOOLEAN,
+ 	},
++	{
++		.id		= V4L2_CID_PRIVACY,
++		.name		= "Privacy",
++		.entity		= UVC_GUID_EXT_GPIO_CONTROLLER,
++		.selector	= UVC_CT_PRIVACY_CONTROL,
++		.size		= 1,
++		.offset		= 0,
++		.v4l2_type	= V4L2_CTRL_TYPE_BOOLEAN,
++		.data_type	= UVC_CTRL_DATA_TYPE_BOOLEAN,
++	},
+ };
+ 
+ /* ------------------------------------------------------------------------
 -- 
 2.29.2.684.gfbc64c5ab5-goog
 
