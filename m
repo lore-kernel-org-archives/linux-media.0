@@ -5,62 +5,63 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 331FAC433E6
-	for <linux-media@archiver.kernel.org>; Tue, 22 Dec 2020 23:06:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4389EC43381
+	for <linux-media@archiver.kernel.org>; Tue, 22 Dec 2020 23:06:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F2DFF2313F
-	for <linux-media@archiver.kernel.org>; Tue, 22 Dec 2020 23:06:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1D2D5230FC
+	for <linux-media@archiver.kernel.org>; Tue, 22 Dec 2020 23:06:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728157AbgLVXGM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 22 Dec 2020 18:06:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34472 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728123AbgLVXGL (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
+        id S1728135AbgLVXGL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 22 Dec 2020 18:06:11 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CE3C0611CB
-        for <linux-media@vger.kernel.org>; Tue, 22 Dec 2020 15:04:53 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id 91so16664967wrj.7
-        for <linux-media@vger.kernel.org>; Tue, 22 Dec 2020 15:04:53 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34462 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728123AbgLVXGK (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 22 Dec 2020 18:06:10 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5830FC061248
+        for <linux-media@vger.kernel.org>; Tue, 22 Dec 2020 15:04:52 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id r7so16646112wrc.5
+        for <linux-media@vger.kernel.org>; Tue, 22 Dec 2020 15:04:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=06MDz+xB7KNYGGW1OIf0dRikIOLIKAmW3UNXPIs7AXg=;
-        b=QmtaeuPPMC0PXX9txoGp+OXSv8kwMX+dNhPKNdYqpFV7FxbPoVV5QSzEp8zfMjigRd
-         P5Q0AVOXNjor9XoLQZF9E9re3+DrZ8/HcaqENbfRrDaxm3bFw/ik2w9PT2XuNRqAC+UP
-         agXz2fp6vHK1W4jHCSmvzm9Rki9RC1UX4Aews=
+        bh=UvpyONwNGFK1cqijvX/a2/5UzH+LaYn5TNyYwWHAtHU=;
+        b=PfQsqWri/hKgNl0nF1hq5MvL9I4M8x+jpaWzsXDrHWHdnwxMlSc1a9K2+IirTsCI6P
+         QTalWNKVslAkaSv2t/Wd3RFMhMTXc69ox9W00Ft4l2+yUqXt03IdaXBnBEjcsKkWsynT
+         DJWLxKUtWk0jq829P9coHpWV95N050r+4Gus0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=06MDz+xB7KNYGGW1OIf0dRikIOLIKAmW3UNXPIs7AXg=;
-        b=XYov3oQlpv3KpbZiMJ4QbmKUdWXhKQlirnmInPuMTglLv1/ewO0NSAQqZqeG1hOhal
-         v32zxIl85xBAhV8IFicpJlmuGjaGw4o2E5YVvzDZj5FBW0xpHfxS7ZDXMIfr23GBcNxr
-         v+L4j7fHjYILljKJI6DQ/VNPOwOLZzsSXgtky+sEQ8XlTxusWCsazVv+UbJRMwFvWt8k
-         02vi/FnXgJRhbzlwbLwelEVteN85a+T9hqh8DbpDiXOAZOS7sU5grtQICiUO9nW613+/
-         b0aamfmtLAUC3lKeJP02dISO+1ovcWEgwRKCL/r/xRAS4s41tSZz/68A2SY4UtifgBaw
-         1zpA==
-X-Gm-Message-State: AOAM532dvjyaR84KDPXNR5Pe8OhDGn5/MPsMARhyyqlOYbLl05/8y1CW
-        5QsNXTbg24zfSBFyUDSK/AZv3A==
-X-Google-Smtp-Source: ABdhPJzkQ4XJIW9XHEY9OOjyJgSaYjZiKltQ9esyYUckW6XMaKKZVZ1z4kYSERYIGS7wCkSG9j1FMw==
-X-Received: by 2002:a5d:4987:: with SMTP id r7mr27069125wrq.352.1608678292437;
-        Tue, 22 Dec 2020 15:04:52 -0800 (PST)
-Received: from alco.lan ([80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id r16sm34463401wrx.36.2020.12.22.15.04.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        bh=UvpyONwNGFK1cqijvX/a2/5UzH+LaYn5TNyYwWHAtHU=;
+        b=OP7O/Nnz/dpLJndbWLxPCF+jRXbVWS59VXAwrJll9cb2XtXeV5DHzvPXQZJgJaUg2N
+         VJR/qyZYI22ce7unvD8gojb7T3+IF1iXIxf40m/cM3jfK80OQ0Xx59Pmqj93iFLHzO8a
+         ai2UAVHffwhGYiQu3bxwjdBm0zsuZvv0TOC+c8BIGivHlax+e0PyigQdakN+iJfa82G7
+         T59wDLBwnHatRPlLO5aJHErwOoy8EGd3S6tBmfQBVB8x/k37ZldQ+Ve9+lYK23NEd0fG
+         ePbxi9kYewUSUNB8X1LI59wX/y3gYYsPp6ejNplR098ObGGCm0CM+6qH4/39e6AMA/8V
+         p2qg==
+X-Gm-Message-State: AOAM5326w/Ht1KAOQqHEnB+xiH/5b63ztEaxTymteAikM7n5+9um8x06
+        242Mt96YjiU3v1/6RZHLIUKm+g==
+X-Google-Smtp-Source: ABdhPJzAMjgZKZ5YBCR64KDyR43RuN7gKzJmCyrynQQv81rVO5TYtW9pt+bF0SFcpFEr3F0xt6xO6Q==
+X-Received: by 2002:a5d:60ca:: with SMTP id x10mr27092842wrt.242.1608678291064;
         Tue, 22 Dec 2020 15:04:51 -0800 (PST)
+Received: from alco.lan ([80.71.134.83])
+        by smtp.gmail.com with ESMTPSA id r16sm34463401wrx.36.2020.12.22.15.04.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Dec 2020 15:04:50 -0800 (PST)
 From:   Ricardo Ribalda <ribalda@chromium.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v6 05/11] media: uvcvideo: Allow entity-defined get_info and get_cur
-Date:   Wed, 23 Dec 2020 00:04:40 +0100
-Message-Id: <20201222230446.1027916-6-ribalda@chromium.org>
+Subject: [PATCH v6 03/11] media: uvcvideo: Allow entities with no pads
+Date:   Wed, 23 Dec 2020 00:04:38 +0100
+Message-Id: <20201222230446.1027916-4-ribalda@chromium.org>
 X-Mailer: git-send-email 2.29.2.729.g45daf8777d-goog
 In-Reply-To: <20201222230446.1027916-1-ribalda@chromium.org>
 References: <20201222230446.1027916-1-ribalda@chromium.org>
@@ -70,75 +71,40 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Allows controls to get their properties and current value
-from an entity-defined function instead of via a query to the USB
-device.
+Avoid an underflow while calculating the number of inputs for entities
+with zero pads.
 
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/usb/uvc/uvc_ctrl.c | 22 ++++++++++++++++++----
- drivers/media/usb/uvc/uvcvideo.h |  5 +++++
- 2 files changed, 23 insertions(+), 4 deletions(-)
+ drivers/media/usb/uvc/uvc_driver.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-index 5fe228a3213b..acdc9b032306 100644
---- a/drivers/media/usb/uvc/uvc_ctrl.c
-+++ b/drivers/media/usb/uvc/uvc_ctrl.c
-@@ -980,10 +980,20 @@ static int __uvc_ctrl_get(struct uvc_video_chain *chain,
- 		return -EACCES;
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index 82cdd1bb28dc..c0c5f75ade40 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -1033,7 +1033,10 @@ static struct uvc_entity *uvc_alloc_entity(u16 type, u16 id,
+ 	unsigned int i;
  
- 	if (!ctrl->loaded) {
--		ret = uvc_query_ctrl(chain->dev, UVC_GET_CUR, ctrl->entity->id,
--				chain->dev->intfnum, ctrl->info.selector,
-+		if (ctrl->entity->get_cur) {
-+			ret = ctrl->entity->get_cur(chain->dev,
-+				ctrl->entity,
-+				ctrl->info.selector,
- 				uvc_ctrl_data(ctrl, UVC_CTRL_DATA_CURRENT),
- 				ctrl->info.size);
-+		} else {
-+			ret = uvc_query_ctrl(chain->dev, UVC_GET_CUR,
-+				ctrl->entity->id,
-+				chain->dev->intfnum,
-+				ctrl->info.selector,
-+				uvc_ctrl_data(ctrl, UVC_CTRL_DATA_CURRENT),
-+				ctrl->info.size);
-+		}
- 		if (ret < 0)
- 			return ret;
- 
-@@ -1712,8 +1722,12 @@ static int uvc_ctrl_get_flags(struct uvc_device *dev,
- 	if (data == NULL)
- 		return -ENOMEM;
- 
--	ret = uvc_query_ctrl(dev, UVC_GET_INFO, ctrl->entity->id, dev->intfnum,
--			     info->selector, data, 1);
-+	if (ctrl->entity->get_info)
-+		ret = ctrl->entity->get_info(dev, ctrl->entity,
-+					     ctrl->info.selector, data);
+ 	extra_size = roundup(extra_size, sizeof(*entity->pads));
+-	num_inputs = (type & UVC_TERM_OUTPUT) ? num_pads : num_pads - 1;
++	if (num_pads)
++		num_inputs = type & UVC_TERM_OUTPUT ? num_pads : num_pads - 1;
 +	else
-+		ret = uvc_query_ctrl(dev, UVC_GET_INFO, ctrl->entity->id,
-+				     dev->intfnum, info->selector, data, 1);
- 	if (!ret)
- 		info->flags |= (data[0] & UVC_CONTROL_CAP_GET ?
- 				UVC_CTRL_FLAG_GET_CUR : 0)
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index d7954dcc2b60..64a3d901db19 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -358,6 +358,11 @@ struct uvc_entity {
- 	u8 bNrInPins;
- 	u8 *baSourceID;
++		num_inputs = 0;
+ 	size = sizeof(*entity) + extra_size + sizeof(*entity->pads) * num_pads
+ 	     + num_inputs;
+ 	entity = kzalloc(size, GFP_KERNEL);
+@@ -1065,7 +1068,7 @@ static struct uvc_entity *uvc_alloc_entity(u16 type, u16 id,
  
-+	int (*get_info)(struct uvc_device *dev, struct uvc_entity *entity,
-+			u8 cs, u8 *caps);
-+	int (*get_cur)(struct uvc_device *dev, struct uvc_entity *entity,
-+		       u8 cs, void *data, u16 size);
-+
- 	unsigned int ncontrols;
- 	struct uvc_control *controls;
- };
+ 	for (i = 0; i < num_inputs; ++i)
+ 		entity->pads[i].flags = MEDIA_PAD_FL_SINK;
+-	if (!UVC_ENTITY_IS_OTERM(entity))
++	if (!UVC_ENTITY_IS_OTERM(entity) && num_pads)
+ 		entity->pads[num_pads-1].flags = MEDIA_PAD_FL_SOURCE;
+ 
+ 	entity->bNrInPins = num_inputs;
 -- 
 2.29.2.729.g45daf8777d-goog
 
