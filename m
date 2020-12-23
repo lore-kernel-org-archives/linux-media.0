@@ -8,61 +8,60 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF6D7C433E0
-	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 13:37:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22095C433E9
+	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 13:37:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9F65622517
+	by mail.kernel.org (Postfix) with ESMTP id E3CA3224D3
 	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 13:37:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728847AbgLWNhf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1728853AbgLWNhf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 23 Dec 2020 08:37:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55178 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728593AbgLWNhd (ORCPT
+        with ESMTP id S1728844AbgLWNhe (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Dec 2020 08:37:33 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D20C0611E4
-        for <linux-media@vger.kernel.org>; Wed, 23 Dec 2020 05:35:39 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id d13so18612694wrc.13
-        for <linux-media@vger.kernel.org>; Wed, 23 Dec 2020 05:35:38 -0800 (PST)
+        Wed, 23 Dec 2020 08:37:34 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39A1C0619D7
+        for <linux-media@vger.kernel.org>; Wed, 23 Dec 2020 05:35:41 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id q18so18674063wrn.1
+        for <linux-media@vger.kernel.org>; Wed, 23 Dec 2020 05:35:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=WhLb6YEyHwrOqQmqk1DfxxcKaubqjfT3yk59f4tyNrg=;
-        b=coviEdr6k+TMkbLssys3vcXiH0H19eMqKwfZlw0TMmHAg+EarrsY9i9DPIFglr/4Fz
-         vwRyb+++MV1UMbPVXBZpJhTowMs81E/c675nPQCLrbVgXRtXShLLRlRVTU5/EqCqryfy
-         yX/DvAefMhi1E6oQ5ywN/MHDIw3MYc3N5al1I=
+        bh=5UDVhGAE7V5njhjBmj73xbdjwyTUWtm0VUTGNSFrvIA=;
+        b=dqxdmqPoQUPR3p8cfifkew5nJuVMxuuavT1eLvSGCGSB1oSHEFsKiIz5M+chA2P0K4
+         /fvsnMwlwkEHmu8nFdwuVftoZNSu2TIE9J79AiMm+3uErsa8l6bsuhlmh+ZmX5feBl2o
+         WmFllxm5piMEOEQEaZUS65GtMPLrURaqtpICQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=WhLb6YEyHwrOqQmqk1DfxxcKaubqjfT3yk59f4tyNrg=;
-        b=NMh3UEQSupG001+DOBkjuoCEBErPDuHVxs/gRfMte+krYU2t5/WuxsRYHJOYxHbe6N
-         eTgsXsW+hUlb2wDa19Y9oZfUEYmmK1PYFefYf+DsQTDsLVd1gg3wExg9JGDAA8321kaY
-         ksLuaE4ACWvtrCeuIim51qFAaBostJ2zitjB9B4fJKP31fF8MA2sQsuDdlIClw8VgrK2
-         N1BMEqDOO+l6zc18fcm0OQ0Z0fcBLzvJg7+KVUiR7baoMr3+mWaxt3jdUawVBnYV/frB
-         cSatLq4pnyBcKjsEJluFozQBadr+bb6j6tKRYUc/XrHJDKjJ9z1BlfY6IxLQy+Ie8TEC
-         WX5Q==
-X-Gm-Message-State: AOAM532/+tgrgdbGJKBFZEHcwl0Udwl6687hxnTcSEPePhpgW7EtuS4T
-        mewUzaktUSY0QY+JV0z6ISVmpQ==
-X-Google-Smtp-Source: ABdhPJzTctbIfPnML6LuIvgSIeDPTQ8xXjXTSSxIPiDaRSaOK0lIgCSVbk7ZJKCSKHLr63xi2IYlEg==
-X-Received: by 2002:a5d:5005:: with SMTP id e5mr28782686wrt.279.1608730537773;
-        Wed, 23 Dec 2020 05:35:37 -0800 (PST)
+        bh=5UDVhGAE7V5njhjBmj73xbdjwyTUWtm0VUTGNSFrvIA=;
+        b=RBRG7ZcHiAHXF7C63htnauMVvDVpQ9D1iNYBt0SKKXRXFKXdqs/KMCuDxsm4lL1U5O
+         Ue3DjwQYVNBG7lxjPs/V4zY6umgcKMpjowt2BwxeIAE0xcxhN+xPFlu4cQKb08eOezXM
+         96WbXSQ0Y2Y/srbIliZBDclbW5ghjA9EZgR5UlsL5X8L4zZBHT7/guCcodd89OIBEuvk
+         QlGhhenGD4kE4ApVVSX8BhadoFnnO1M4mkfyQ3kiT3lLDpq0dGoAg5YxxcTtk7IDGP8j
+         SUGj4h2aAwPNw9HhZtHRw/ke+UrawbTQbo7ZEcbBr218Z2iurlKnk/pYuCCFzrAvu9pZ
+         88tg==
+X-Gm-Message-State: AOAM533u2R+XTqScj9o+MI1C9bvteYFsROFMFvgv+EcgqVxZt9fUEcUo
+        mxdnDHwuBAM6Yl40w/m1YuLXcQ==
+X-Google-Smtp-Source: ABdhPJxN+QiLFqaaEwCejwEa45JKCttRzZgdbhrrTo7+307NxXeh0T5DoXnWd9CdzHucWBmlPRlLwg==
+X-Received: by 2002:adf:ca0c:: with SMTP id o12mr29774100wrh.154.1608730540425;
+        Wed, 23 Dec 2020 05:35:40 -0800 (PST)
 Received: from alco.lan ([80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id q143sm31572247wme.28.2020.12.23.05.35.37
+        by smtp.gmail.com with ESMTPSA id q143sm31572247wme.28.2020.12.23.05.35.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Dec 2020 05:35:37 -0800 (PST)
+        Wed, 23 Dec 2020 05:35:39 -0800 (PST)
 From:   Ricardo Ribalda <ribalda@chromium.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Ricardo Ribalda <ribalda@chromium.org>,
-        Joe Perches <joe@perches.com>
-Subject: [PATCH v7 09/12] media: uvcvideo: New macro uvc_trace_cont
-Date:   Wed, 23 Dec 2020 14:35:25 +0100
-Message-Id: <20201223133528.55014-10-ribalda@chromium.org>
+Cc:     Ricardo Ribalda <ribalda@chromium.org>
+Subject: [PATCH v7 12/12] media: uvcvideo: Implement UVC_QUIRK_PRIVACY_DURING_STREAM
+Date:   Wed, 23 Dec 2020 14:35:28 +0100
+Message-Id: <20201223133528.55014-13-ribalda@chromium.org>
 X-Mailer: git-send-email 2.29.2.729.g45daf8777d-goog
 In-Reply-To: <20201223133528.55014-1-ribalda@chromium.org>
 References: <20201223133528.55014-1-ribalda@chromium.org>
@@ -72,171 +71,217 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Remove all the duplicated code around printk(KERN_CONT, with a new macro.
+Some devices can only read the privacy_pin if the device is
+streaming.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Suggested-by: Joe Perches <joe@perches.com>
+This patch implement a quirk for such devices, in order to avoid invalid
+reads and/or spurious events.
+
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/usb/uvc/uvc_driver.c | 57 +++++++++++-------------------
- drivers/media/usb/uvc/uvcvideo.h   |  6 ++++
- 2 files changed, 27 insertions(+), 36 deletions(-)
+ drivers/media/usb/uvc/uvc_driver.c | 55 +++++++++++++++++++++++++++---
+ drivers/media/usb/uvc/uvc_video.c  | 27 +++++++++++++++
+ drivers/media/usb/uvc/uvcvideo.h   |  7 ++++
+ 3 files changed, 84 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 9ca9fcdb7b3d..b4b47cc35af9 100644
+index f1f6b9cfa676..4ec14c7fb5c4 100644
 --- a/drivers/media/usb/uvc/uvc_driver.c
 +++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -1606,8 +1606,7 @@ static int uvc_scan_chain_entity(struct uvc_video_chain *chain,
+@@ -7,6 +7,7 @@
+  */
+ 
+ #include <linux/atomic.h>
++#include <linux/dmi.h>
+ #include <linux/gpio/consumer.h>
+ #include <linux/kernel.h>
+ #include <linux/list.h>
+@@ -1478,7 +1479,7 @@ static int uvc_parse_control(struct uvc_device *dev)
+  * Privacy GPIO
+  */
+ 
+-static void uvc_gpio_event(struct uvc_device *dev)
++void uvc_gpio_event(struct uvc_device *dev)
  {
- 	switch (UVC_ENTITY_TYPE(entity)) {
- 	case UVC_VC_EXTENSION_UNIT:
--		if (uvc_trace_param & UVC_TRACE_PROBE)
--			printk(KERN_CONT " <- XU %d", entity->id);
-+		uvc_trace_cont(UVC_TRACE_PROBE, " <- XU %d", entity->id);
+ 	struct uvc_entity *unit = dev->gpio_unit;
+ 	struct uvc_video_chain *chain;
+@@ -1487,19 +1488,29 @@ static void uvc_gpio_event(struct uvc_device *dev)
+ 	if (!unit)
+ 		return;
  
- 		if (entity->bNrInPins != 1) {
- 			uvc_trace(UVC_TRACE_DESCR, "Extension unit %d has more "
-@@ -1618,8 +1617,7 @@ static int uvc_scan_chain_entity(struct uvc_video_chain *chain,
- 		break;
++	mutex_lock(&unit->gpio.event_mutex);
++
+ 	new_val = gpiod_get_value_cansleep(unit->gpio.gpio_privacy);
++	if (unit->gpio.last_event_val != new_val) {
++		/* GPIO entities are always on the first chain. */
++		chain = list_first_entry(&dev->chains,
++					 struct uvc_video_chain, list);
++		uvc_ctrl_status_event(chain, unit->controls, &new_val);
++	}
++	unit->gpio.last_event_val = new_val;
  
- 	case UVC_VC_PROCESSING_UNIT:
--		if (uvc_trace_param & UVC_TRACE_PROBE)
--			printk(KERN_CONT " <- PU %d", entity->id);
-+		uvc_trace_cont(UVC_TRACE_PROBE, " <- PU %d", entity->id);
+-	/* GPIO entities are always on the first chain. */
+-	chain = list_first_entry(&dev->chains, struct uvc_video_chain, list);
+-	uvc_ctrl_status_event(chain, unit->controls, &new_val);
++	mutex_unlock(&unit->gpio.event_mutex);
+ }
  
- 		if (chain->processing != NULL) {
- 			uvc_trace(UVC_TRACE_DESCR, "Found multiple "
-@@ -1631,8 +1629,7 @@ static int uvc_scan_chain_entity(struct uvc_video_chain *chain,
- 		break;
+ static int uvc_gpio_get_cur(struct uvc_device *dev, struct uvc_entity *entity,
+ 			    u8 cs, void *data, u16 size)
+ {
+-	if (cs != UVC_CT_PRIVACY_CONTROL || size < 1)
++	if (cs != UVC_CT_PRIVACY_CONTROL || size < 1 || !dev->gpio_unit)
+ 		return -EINVAL;
  
- 	case UVC_VC_SELECTOR_UNIT:
--		if (uvc_trace_param & UVC_TRACE_PROBE)
--			printk(KERN_CONT " <- SU %d", entity->id);
-+		uvc_trace_cont(UVC_TRACE_PROBE, " <- SU %d", entity->id);
- 
- 		/* Single-input selector units are ignored. */
- 		if (entity->bNrInPins == 1)
-@@ -1650,27 +1647,22 @@ static int uvc_scan_chain_entity(struct uvc_video_chain *chain,
- 	case UVC_ITT_VENDOR_SPECIFIC:
- 	case UVC_ITT_CAMERA:
- 	case UVC_ITT_MEDIA_TRANSPORT_INPUT:
--		if (uvc_trace_param & UVC_TRACE_PROBE)
--			printk(KERN_CONT " <- IT %d\n", entity->id);
-+		uvc_trace_cont(UVC_TRACE_PROBE, " <- IT %d\n", entity->id);
- 
- 		break;
- 
- 	case UVC_OTT_VENDOR_SPECIFIC:
- 	case UVC_OTT_DISPLAY:
- 	case UVC_OTT_MEDIA_TRANSPORT_OUTPUT:
--		if (uvc_trace_param & UVC_TRACE_PROBE)
--			printk(KERN_CONT " OT %d", entity->id);
-+		uvc_trace_cont(UVC_TRACE_PROBE, " OT %d", entity->id);
- 
- 		break;
- 
- 	case UVC_TT_STREAMING:
--		if (UVC_ENTITY_IS_ITERM(entity)) {
--			if (uvc_trace_param & UVC_TRACE_PROBE)
--				printk(KERN_CONT " <- IT %d\n", entity->id);
--		} else {
--			if (uvc_trace_param & UVC_TRACE_PROBE)
--				printk(KERN_CONT " OT %d", entity->id);
--		}
-+		if (UVC_ENTITY_IS_ITERM(entity))
-+			uvc_trace_cont(UVC_TRACE_PROBE, " <- IT %d\n", entity->id);
-+		else
-+			uvc_trace_cont(UVC_TRACE_PROBE, " OT %d", entity->id);
- 
- 		break;
- 
-@@ -1717,13 +1709,11 @@ static int uvc_scan_chain_forward(struct uvc_video_chain *chain,
- 			}
- 
- 			list_add_tail(&forward->chain, &chain->entities);
--			if (uvc_trace_param & UVC_TRACE_PROBE) {
--				if (!found)
--					printk(KERN_CONT " (->");
-+			if (!found)
-+				uvc_trace_cont(UVC_TRACE_PROBE, " (->");
- 
--				printk(KERN_CONT " XU %d", forward->id);
--				found = 1;
--			}
-+			uvc_trace_cont(UVC_TRACE_PROBE, " XU %d", forward->id);
-+			found = 1;
- 			break;
- 
- 		case UVC_OTT_VENDOR_SPECIFIC:
-@@ -1737,18 +1727,16 @@ static int uvc_scan_chain_forward(struct uvc_video_chain *chain,
- 			}
- 
- 			list_add_tail(&forward->chain, &chain->entities);
--			if (uvc_trace_param & UVC_TRACE_PROBE) {
--				if (!found)
--					printk(KERN_CONT " (->");
-+			if (!found)
-+				uvc_trace_cont(UVC_TRACE_PROBE, " (->");
- 
--				printk(KERN_CONT " OT %d", forward->id);
--				found = 1;
--			}
-+			uvc_trace_cont(UVC_TRACE_PROBE, " OT %d", forward->id);
-+			found = 1;
- 			break;
- 		}
- 	}
- 	if (found)
--		printk(KERN_CONT ")");
-+		uvc_trace_cont(UVC_TRACE_PROBE, ")");
++	if (!dev->gpio_unit->gpio.is_gpio_ready)
++		return -EBUSY;
++
+ 	*(u8 *)data = gpiod_get_value_cansleep(entity->gpio.gpio_privacy);
  
  	return 0;
+@@ -1519,10 +1530,31 @@ static irqreturn_t uvc_gpio_irq(int irq, void *data)
+ {
+ 	struct uvc_device *dev = data;
+ 
++	if (!dev->gpio_unit->gpio.is_gpio_ready)
++		return IRQ_HANDLED;
++
+ 	uvc_gpio_event(dev);
+ 	return IRQ_HANDLED;
  }
-@@ -1773,8 +1761,7 @@ static int uvc_scan_chain_backward(struct uvc_video_chain *chain,
- 			break;
- 		}
  
--		if (uvc_trace_param & UVC_TRACE_PROBE)
--			printk(KERN_CONT " <- IT");
-+		uvc_trace_cont(UVC_TRACE_PROBE, " <- IT");
++static const struct dmi_system_id privacy_valid_during_streamon[] = {
++	{
++		.ident = "HP Elite c1030 Chromebook",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "HP"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "Jinlon"),
++		},
++	},
++	{
++		.ident = "HP Pro c640 Chromebook",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "HP"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "Dratini"),
++		},
++	},
++	{ } /* terminate list */
++};
++
+ static int uvc_gpio_parse(struct uvc_device *dev)
+ {
+ 	struct uvc_entity *unit;
+@@ -1547,6 +1579,7 @@ static int uvc_gpio_parse(struct uvc_device *dev)
+ 	}
  
- 		chain->selector = entity;
- 		for (i = 0; i < entity->bNrInPins; ++i) {
-@@ -1794,15 +1781,13 @@ static int uvc_scan_chain_backward(struct uvc_video_chain *chain,
- 				return -EINVAL;
- 			}
+ 	unit->gpio.gpio_privacy = gpio_privacy;
++	unit->gpio.last_event_val = -1;
+ 	unit->gpio.irq = irq;
+ 	unit->gpio.bControlSize = 1;
+ 	unit->gpio.bmControls = (u8 *)unit + sizeof(*unit);
+@@ -1554,6 +1587,18 @@ static int uvc_gpio_parse(struct uvc_device *dev)
+ 	unit->get_cur = uvc_gpio_get_cur;
+ 	unit->get_info = uvc_gpio_get_info;
+ 	strncpy(unit->name, "GPIO", sizeof(unit->name) - 1);
++	mutex_init(&unit->gpio.event_mutex);
++
++	/*
++	 * Note: This quirk will not match external UVC cameras,
++	 * as they will not have the corresponding ACPI GPIO entity.
++	 */
++	if (dmi_check_system(privacy_valid_during_streamon)) {
++		dev->quirks |= UVC_QUIRK_PRIVACY_DURING_STREAM;
++		unit->gpio.is_gpio_ready = false;
++	} else {
++		unit->gpio.is_gpio_ready = true;
++	}
  
--			if (uvc_trace_param & UVC_TRACE_PROBE)
--				printk(KERN_CONT " %d", term->id);
-+			uvc_trace_cont(UVC_TRACE_PROBE, " %d", term->id);
+ 	list_add_tail(&unit->list, &dev->entities);
  
- 			list_add_tail(&term->chain, &chain->entities);
- 			uvc_scan_chain_forward(chain, term, entity);
- 		}
+diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+index f2f565281e63..b333c54d18c1 100644
+--- a/drivers/media/usb/uvc/uvc_video.c
++++ b/drivers/media/usb/uvc/uvc_video.c
+@@ -2083,6 +2083,29 @@ int uvc_video_init(struct uvc_streaming *stream)
+ 	return 0;
+ }
  
--		if (uvc_trace_param & UVC_TRACE_PROBE)
--			printk(KERN_CONT "\n");
-+		uvc_trace_cont(UVC_TRACE_PROBE, "\n");
++static void uvc_gpio_privacy_quirks(struct uvc_streaming *stream, bool enable)
++{
++	struct uvc_device *dev = stream->dev;
++	struct uvc_video_chain *first_chain;
++
++	if (!(dev->quirks & UVC_QUIRK_PRIVACY_DURING_STREAM))
++		return;
++
++	if (!dev->gpio_unit)
++		return;
++
++	first_chain = list_first_entry(&dev->chains,
++				       struct uvc_video_chain, list);
++	/* GPIO entities are always on the first chain. */
++	if (stream->chain != first_chain)
++		return;
++
++	dev->gpio_unit->gpio.is_gpio_ready = enable;
++
++	if (enable)
++		uvc_gpio_event(stream->dev);
++}
++
+ int uvc_video_start_streaming(struct uvc_streaming *stream)
+ {
+ 	int ret;
+@@ -2100,6 +2123,8 @@ int uvc_video_start_streaming(struct uvc_streaming *stream)
+ 	if (ret < 0)
+ 		goto error_video;
  
- 		id = 0;
- 		break;
++	uvc_gpio_privacy_quirks(stream, true);
++
+ 	return 0;
+ 
+ error_video:
+@@ -2112,6 +2137,8 @@ int uvc_video_start_streaming(struct uvc_streaming *stream)
+ 
+ void uvc_video_stop_streaming(struct uvc_streaming *stream)
+ {
++	uvc_gpio_privacy_quirks(stream, false);
++
+ 	uvc_video_stop_transfer(stream, 1);
+ 
+ 	if (stream->intf->num_altsetting > 1) {
 diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index a8c2766f3d6a..fb01d52eed39 100644
+index 3273d03aca9a..a9290e2d1762 100644
 --- a/drivers/media/usb/uvc/uvcvideo.h
 +++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -757,6 +757,12 @@ do {									\
- 		printk(KERN_DEBUG "uvcvideo: " fmt, ##__VA_ARGS__);	\
- } while (0)
+@@ -209,6 +209,7 @@
+ #define UVC_QUIRK_RESTORE_CTRLS_ON_INIT	0x00000400
+ #define UVC_QUIRK_FORCE_Y8		0x00000800
+ #define UVC_QUIRK_FORCE_BPP		0x00001000
++#define UVC_QUIRK_PRIVACY_DURING_STREAM	0x00002000
  
-+#define uvc_trace_cont(flag, fmt, ...)					\
-+do {									\
-+	if (uvc_trace_param & flag)					\
-+		pr_cont(fmt, ##__VA_ARGS__);				\
-+} while (0)
+ /* Format flags */
+ #define UVC_FMT_FLAG_COMPRESSED		0x00000001
+@@ -366,6 +367,9 @@ struct uvc_entity {
+ 			u8  *bmControls;
+ 			struct gpio_desc *gpio_privacy;
+ 			int irq;
++			struct mutex event_mutex;
++			int last_event_val;
++			bool is_gpio_ready;
+ 		} gpio;
+ 	};
+ 
+@@ -831,6 +835,9 @@ extern const struct v4l2_file_operations uvc_fops;
+ int uvc_mc_register_entities(struct uvc_video_chain *chain);
+ void uvc_mc_cleanup_entity(struct uvc_entity *entity);
+ 
++/* Privacy gpio */
++void uvc_gpio_event(struct uvc_device *dev);
 +
- #define uvc_warn_once(_dev, warn, fmt, ...)				\
- do {									\
- 	if (!test_and_set_bit(warn, &(_dev)->warnings))			\
+ /* Video */
+ int uvc_video_init(struct uvc_streaming *stream);
+ int uvc_video_suspend(struct uvc_streaming *stream);
 -- 
 2.29.2.729.g45daf8777d-goog
 
