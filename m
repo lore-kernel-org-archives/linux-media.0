@@ -2,87 +2,171 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02CD9C432C3
-	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 02:51:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69A5FC43381
+	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 02:55:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B3D882256F
-	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 02:51:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 41016205CA
+	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 02:55:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729652AbgLWCu0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 22 Dec 2020 21:50:26 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49842 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729516AbgLWCV4 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 22 Dec 2020 21:21:56 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EFFDD22AAF;
-        Wed, 23 Dec 2020 02:21:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608690100;
-        bh=HBFKJRUNnuRB3+JHTHYEaqddBshl2Ypix3QmFmjnWHQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QtT8ljVGhI3wsoJ301a7f8Re+Ivo2Kn/CXik4Gw1BOvDOOJbfaNYnFFXszgKeEPc1
-         oZTJj5zKh/HG3/kjPrxeIgNRyjOprctbjqrXGo1/og+j2gFokz2xs0jkuUeIVQB34d
-         B5skUwyNJta+L0WB4bqBtj/SOenweOE4Nzfle5P+pHj//klR/6CLoB0LVhLRzvvBvj
-         9LtPUMkZjfTR4t4iVNsPdZxzae/Ht3FopUYjdXsunry5X2mw9bVpB8TtTWh1HM5WBT
-         nxEU8d9Ov9WVlF4ky1SH2PP/6P23oe/PvWMIA7sK5kpJPIGXnGqpPZKbmf35paGWRE
-         m+jbZxtfeidbA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Qinglang Miao <miaoqinglang@huawei.com>,
-        Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 30/87] media: usb: dvb-usb-v2: zd1301: fix missing platform_device_unregister()
-Date:   Tue, 22 Dec 2020 21:20:06 -0500
-Message-Id: <20201223022103.2792705-30-sashal@kernel.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201223022103.2792705-1-sashal@kernel.org>
-References: <20201223022103.2792705-1-sashal@kernel.org>
+        id S1731319AbgLWCzN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 22 Dec 2020 21:55:13 -0500
+Received: from mail-eopbgr1320131.outbound.protection.outlook.com ([40.107.132.131]:8560
+        "EHLO APC01-PU1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730680AbgLWCzJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 22 Dec 2020 21:55:09 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WHvLoe42KLDKORJLYEBN5h331MDauaDs0W8NNvodLnQNQTFKw+4/0Vlb6wtlCjxZxPhuKGpek2oROejhXjTp9LqGX9atPSUw2x2hsgLSGClkrgqJ/ZrnODrPDnltjr491Nf05lfd9sNNMI3b0AlUIhX1c4d61rT3EecyFJR9NFYbncRPvAv07cX/JEqPDMWmpcetMz+JxAyU3qhnnTA8f/V4joT62rQLVOOAyvN8fHcIpd6ylSgiN+Ql+H/I+f3JSqFosjJmI0s3k9HSjA3oPYpo6tzoc5+PEJbjxw+fAodJ20+YKJNEiOxVTSCiEXaljScstiwke4MzUuADSiRR3A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3XUryfeBTbwswIYaPLLPAI61M7IESWWlMnzZa4JArUA=;
+ b=HKBni15tlCM1kXVMPAud3GSv9242I985UuPI5cdJ+jbgJDg2VF9BtluzuPnCnMmyd/apFe4aSseT7GZfBNAwxNLGkRbDt6BwF3Y/Zg8gRwjZHKVUrDF+KGVvUZXW07ZGpj3clJkKo1d1MI04id6KGBnEmqV7R5eeOW7grN8YdR6tPhub2cW/KFtbExbnvmnwfK2bkZ8bNJJOFYRflN2ynGRc1w0kEE1hJqvx6sCUg3E8MbRAt3RiA1XWXy5iptmWXSPH6CXxd7LkZE4vMZCnjAf9jpD/upzvuo4Fe27v1j0nmQ5hdGUsQNdussxizvn0et1qoHH/LcVHIAvaGBaJhQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+Received: from HK0PR06MB3380.apcprd06.prod.outlook.com (2603:1096:203:82::18)
+ by HK0PR06MB2916.apcprd06.prod.outlook.com (2603:1096:203:66::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3676.25; Wed, 23 Dec
+ 2020 02:53:33 +0000
+Received: from HK0PR06MB3380.apcprd06.prod.outlook.com
+ ([fe80::59b4:743d:1470:306f]) by HK0PR06MB3380.apcprd06.prod.outlook.com
+ ([fe80::59b4:743d:1470:306f%7]) with mapi id 15.20.3676.033; Wed, 23 Dec 2020
+ 02:53:33 +0000
+From:   Ryan Chen <ryan_chen@aspeedtech.com>
+To:     Joel Stanley <joel@jms.id.au>, Zev Weiss <zev@bewilderbeest.net>
+CC:     Eddie James <eajames@linux.ibm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Subject: RE: [PATCH 2/3] aspeed-video: clear spurious interrupt bits
+ unconditionally
+Thread-Topic: [PATCH 2/3] aspeed-video: clear spurious interrupt bits
+ unconditionally
+Thread-Index: AQHW0o5SCt/jQG9HJ0aOoNGkwIAV56oClgeAgADyOICAAGKHAIAAG/Ig
+Date:   Wed, 23 Dec 2020 02:53:33 +0000
+Message-ID: <HK0PR06MB338018668005D679C51EF69AF2DE0@HK0PR06MB3380.apcprd06.prod.outlook.com>
+References: <20201215024542.18888-1-zev@bewilderbeest.net>
+ <20201215024542.18888-3-zev@bewilderbeest.net>
+ <CACPK8XczCUgqOENABoDbc-qwbMxOh=1OUyBtuHSmDG_Zo571Wg@mail.gmail.com>
+ <20201222191433.3dgnfwyrod4tnvaf@hatter.bewilderbeest.net>
+ <CACPK8XeOZEkpAKcyhZLeMdGzbwtFmdGEnL6QXp0VK1HL_O2pSg@mail.gmail.com>
+In-Reply-To: <CACPK8XeOZEkpAKcyhZLeMdGzbwtFmdGEnL6QXp0VK1HL_O2pSg@mail.gmail.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: jms.id.au; dkim=none (message not signed)
+ header.d=none;jms.id.au; dmarc=none action=none header.from=aspeedtech.com;
+x-originating-ip: [211.20.114.70]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b11aa684-af89-41f1-1433-08d8a6edefcb
+x-ms-traffictypediagnostic: HK0PR06MB2916:
+x-microsoft-antispam-prvs: <HK0PR06MB291604D4A530E99D7972C2BAF2DE0@HK0PR06MB2916.apcprd06.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6430;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +rLPD5J85P913GMCRKN2gQ7F15gmPWwlk4FdEwhBzTCxkZ29lDZi7344vztIw4WSJyvhfaExM0IFlP6JgSuU1KDdqksta3Y3LNeatjmwg42fUPwermRrNndgBFhv+gDUvqFiGlSTy5wlO9Bman1RyH32mOEm5gBjpZ5O+NnX5Zh72UpqLb43Hm5Ooehgd3VvxZzCCKnbXHIDM6/z3iywwkVhsdLyjDZwbL7YGP5KKdNOzZAWqbwp9hXBJKEzkvkPEhRsVBb3b0/a3YF9IX3t/Pj1Y83W88EBGHi70mW/TEKKMSvENb/iEr28DxIi4zeVGDl8rH+tJ5lXTKHBm099phCzoq4Q8RXYBaanI2SUWEnIwcH5DeUNApd3CcqHD7K8HZHLSE8ZfTMYWGklnWLMxA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3380.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(136003)(346002)(366004)(39840400004)(396003)(6506007)(54906003)(76116006)(53546011)(110136005)(9686003)(2906002)(86362001)(316002)(83380400001)(66446008)(66476007)(8936002)(55016002)(66556008)(66946007)(64756008)(7696005)(52536014)(8676002)(33656002)(5660300002)(7416002)(4326008)(55236004)(71200400001)(26005)(186003)(478600001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?utf-8?B?Vmc0WUE3ZFhoZjFaT1IvRm53czJnY0gxM1pDS1BCMVQ1S1U0VXBweGJwRW5i?=
+ =?utf-8?B?YXJlWkVpbUJ2OXFxRlBLMVRZVnF3Qm44WlVqWm84czJmSm15T2F6Ty82clVT?=
+ =?utf-8?B?QkkvNzlqdDd0UVE0ZVNTdUxoSlVqazhjeitYUkVMZ1plTDBaN2JIc0dnaHcx?=
+ =?utf-8?B?ZnFpRDVBSGRUc1hlZ3NQdmExL3RvMytvWFZTd2VEWXNWTmZhTzB6VURMZHk2?=
+ =?utf-8?B?STJLM3BXV3V1MVEvYTkzTmJPOFBGbm5SYnBnL3RBU3hSbzc4RDVuSUp3eDhC?=
+ =?utf-8?B?OTRJbmZ0RTRaL3NnQ0FlSW1jMG52MlA3eVVmdlk3RDN0NWtoZVE2eXdTRm5T?=
+ =?utf-8?B?M0NCamJoWlErVXN3NVdlUlhhYXl3MEpJcWlMQ1REODc2aUNwU29wdjBROHJ4?=
+ =?utf-8?B?U3lJaGVvbUdhZEhzamd2MkF0L0JGZzVibGIzcDlRbnU0cUh1aDRsQ2t4cUg0?=
+ =?utf-8?B?aUN1SUp3Qno1VER2SXUwbFRpQ1VDc3JCemFEek1ZYXpUWWkxQ3JyTGxydlBq?=
+ =?utf-8?B?RzFLV2xmSmFOcnV6anROekIwdzdubkw0VVFObVJMYkNJNENxWm5UOVV0Ykhj?=
+ =?utf-8?B?V0hZU09nTUVMY1VKaTZ5YjhvTGFTaVlXbDNacGZNZDBGRS9WV3hhWWkrR2xF?=
+ =?utf-8?B?YmR0UW5JSzBDSVhIRFhaSDRCZi9DY282aEJLVkRXQmQ2dld0MlJRbVozNUFI?=
+ =?utf-8?B?UWdIUXdCL3haUmhHUldXdDdmQzg2dEMxTlBNc0Q5TENqVVFDKzQ5WU96cllk?=
+ =?utf-8?B?THlkRVNpMHFJSXZldU5vSzZyQmxsdVlDRU1WdDllT0FPd0lXS3hkc0RBMU0r?=
+ =?utf-8?B?SDd0aDY2UG8vZ3k4UkhkbFRGaHJnSDlnSGVJTW1mb3hLSnZrMlJDcWRuNlhE?=
+ =?utf-8?B?TStWcmdDNjlzYWlKVlQyQzJONUJ6bW12cG4vWGhNK1Z6L3NVVGJHVGhyMzdD?=
+ =?utf-8?B?OU1aQ2QxdHNBZzBUektDdmM3Z25VNXRjK1RrM0dINWtXRGhRNm1iS0xCZmpo?=
+ =?utf-8?B?S0tuT211OEwvcDlKbXU5a0EzcGkyK1RRUnNkV0ZaWkZZeG1IdHJFZWRSVkJW?=
+ =?utf-8?B?TkNvUDkxRmUxSTduSnNidWNzU1NUOHBadEcwY0kycnpZeldvcjRhYkV1Y2Ft?=
+ =?utf-8?B?aDRpTEhUUVpVdVlSNEJNTUVzdlZYWDczUVdxQTUwVHJEZ1FkWFhlQTEvb2Nz?=
+ =?utf-8?B?MkhVdkZjYndaR1F1NitZZ0ZjcXR1cU5pOGFBeVpsMHhUWWFqdU8zUTRVM0lO?=
+ =?utf-8?B?MWwyQlF6VEtrcWorcnAwWjdMUEJGUzBTZFVWUWFva2hyMFRyMDlDV0hncXRM?=
+ =?utf-8?Q?iKUK0lKQUHXPk=3D?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3380.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b11aa684-af89-41f1-1433-08d8a6edefcb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Dec 2020 02:53:33.2009
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0CV9o6qBITE7nZKk1QMG9BLi26KiWKtHieNxFTOTnNqAg39ArYacmrgMGCBTdbKZsDb+07CPQ8cMcaOTHK+DZrylCHlG1rApvVF0TKDahQk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR06MB2916
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Qinglang Miao <miaoqinglang@huawei.com>
-
-[ Upstream commit ee50d6e60d9a8e110e984cdd9e788d93eff540ba ]
-
-Add the missing platform_device_unregister() before return
-from zd1301_frontend_attach in the error handling case when
-pdev->dev.driver is empty.
-
-There's an error handling route named err_platform_device_unregister,
-so just reuse it.
-
-Signed-off-by: Qinglang Miao <miaoqinglang@huawei.com>
-Signed-off-by: Sean Young <sean@mess.org>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/media/usb/dvb-usb-v2/zd1301.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/media/usb/dvb-usb-v2/zd1301.c b/drivers/media/usb/dvb-usb-v2/zd1301.c
-index d1eb4b7bc0519..563d11fb6c18c 100644
---- a/drivers/media/usb/dvb-usb-v2/zd1301.c
-+++ b/drivers/media/usb/dvb-usb-v2/zd1301.c
-@@ -159,7 +159,7 @@ static int zd1301_frontend_attach(struct dvb_usb_adapter *adap)
- 	}
- 	if (!pdev->dev.driver) {
- 		ret = -ENODEV;
--		goto err;
-+		goto err_platform_device_unregister;
- 	}
- 	if (!try_module_get(pdev->dev.driver->owner)) {
- 		ret = -ENODEV;
--- 
-2.27.0
-
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBKb2VsIFN0YW5sZXkgPGpvZWxA
+am1zLmlkLmF1Pg0KPiBTZW50OiBXZWRuZXNkYXksIERlY2VtYmVyIDIzLCAyMDIwIDk6MDcgQU0N
+Cj4gVG86IFpldiBXZWlzcyA8emV2QGJld2lsZGVyYmVlc3QubmV0PjsgUnlhbiBDaGVuDQo+IDxy
+eWFuX2NoZW5AYXNwZWVkdGVjaC5jb20+DQo+IENjOiBFZGRpZSBKYW1lcyA8ZWFqYW1lc0BsaW51
+eC5pYm0uY29tPjsgTWF1cm8gQ2FydmFsaG8gQ2hlaGFiDQo+IDxtY2hlaGFiQGtlcm5lbC5vcmc+
+OyBBbmRyZXcgSmVmZmVyeSA8YW5kcmV3QGFqLmlkLmF1PjsNCj4gbGludXgtbWVkaWFAdmdlci5r
+ZXJuZWwub3JnOyBPcGVuQk1DIE1haWxsaXN0IDxvcGVuYm1jQGxpc3RzLm96bGFicy5vcmc+Ow0K
+PiBMaW51eCBBUk0gPGxpbnV4LWFybS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZz47IGxpbnV4
+LWFzcGVlZA0KPiA8bGludXgtYXNwZWVkQGxpc3RzLm96bGFicy5vcmc+OyBMaW51eCBLZXJuZWwg
+TWFpbGluZyBMaXN0DQo+IDxsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnPjsgSmFlIEh5dW4g
+WW9vIDxqYWUuaHl1bi55b29AbGludXguaW50ZWwuY29tPg0KPiBTdWJqZWN0OiBSZTogW1BBVENI
+IDIvM10gYXNwZWVkLXZpZGVvOiBjbGVhciBzcHVyaW91cyBpbnRlcnJ1cHQgYml0cw0KPiB1bmNv
+bmRpdGlvbmFsbHkNCj4gDQo+IE9uIFR1ZSwgMjIgRGVjIDIwMjAgYXQgMTk6MTQsIFpldiBXZWlz
+cyA8emV2QGJld2lsZGVyYmVlc3QubmV0PiB3cm90ZToNCj4gPg0KPiA+IE9uIE1vbiwgRGVjIDIx
+LCAyMDIwIGF0IDEwOjQ3OjM3UE0gQ1NULCBKb2VsIFN0YW5sZXkgd3JvdGU6DQo+ID4gPk9uIFR1
+ZSwgMTUgRGVjIDIwMjAgYXQgMDI6NDYsIFpldiBXZWlzcyA8emV2QGJld2lsZGVyYmVlc3QubmV0
+PiB3cm90ZToNCj4gPiA+Pg0KPiA+ID4+IEluc3RlYWQgb2YgdGVzdGluZyBhbmQgY29uZGl0aW9u
+YWxseSBjbGVhcmluZyB0aGVtIG9uZSBieSBvbmUsIHdlDQo+ID4gPj4gY2FuIGluc3RlYWQganVz
+dCB1bmNvbmRpdGlvbmFsbHkgY2xlYXIgdGhlbSBhbGwgYXQgb25jZS4NCj4gPiA+Pg0KPiA+ID4+
+IFNpZ25lZC1vZmYtYnk6IFpldiBXZWlzcyA8emV2QGJld2lsZGVyYmVlc3QubmV0Pg0KPiA+ID4N
+Cj4gPiA+SSBoYWQgYSBwb2tlIGF0IHRoZSBhc3NlbWJseSBhbmQgaXQgbG9va3MgbGlrZSBHQ0Mg
+aXMgY2xlYXJpbmcgdGhlDQo+ID4gPmJpdHMgdW5jb25kaXRpb25hbGx5IGFueXdheSwgc28gcmVt
+b3ZpbmcgdGhlIHRlc3RzIHByb3ZpZGVzIG5vIGNoYW5nZS4NCj4gPiA+DQo+ID4gPkNvbWJpbmlu
+ZyB0aGVtIGlzIGEgZ29vZCBmdXJ0aGVyIG9wdGltaXphdGlvbi4NCj4gPiA+DQo+ID4gPlJldmll
+d2VkLWJ5OiBKb2VsIFN0YW5sZXkgPGpvZWxAam1zLmlkLmF1Pg0KPiA+ID4NCj4gPiA+QSBxdWVz
+dGlvbiB1bnJlbGF0ZWQgdG8gdGhpcyBwYXRjaDogRG8geW91IGtub3cgd2h5IHRoZSBkcml2ZXIN
+Cj4gPiA+ZG9lc24ndCBjbGVhciB0aGUgc3RhdHVzIGJpdHMgaW4gdGhlIGludGVycnVwdCBoYW5k
+bGVyPyBJIHdvdWxkDQo+ID4gPmV4cGVjdCBpdCB0byB3cml0ZSB0aGUgdmFsdWUgb2Ygc3RzIGJh
+Y2sgdG8gdGhlIHJlZ2lzdGVyIHRvIGFjayB0aGUNCj4gPiA+cGVuZGluZyBpbnRlcnJ1cHQuDQo+
+ID4gPg0KPiA+DQo+ID4gTm8sIEkgZG9uJ3QsIGFuZCBJIHdhcyBzb3J0IG9mIHdvbmRlcmluZyB0
+aGUgc2FtZSB0aGluZyBhY3R1YWxseSAtLQ0KPiA+IEknbSBub3QgZGVlcGx5IGZhbWlsaWFyIHdp
+dGggdGhpcyBoYXJkd2FyZSBvciBkcml2ZXIgdGhvdWdoLCBzbyBJIHdhcw0KPiA+IGEgYml0IGhl
+c2l0YW50IHRvIHN0YXJ0IG1lc3Npbmcgd2l0aCB0aGluZ3MuICAoVGhvdWdoIG1heWJlIGRvaW5n
+IHNvDQo+ID4gd291bGQgYWRkcmVzcyB0aGUgInN0aWNraW5lc3MiIGFzcGVjdCB3aGVuIGl0IGRv
+ZXMgbWFuaWZlc3QuKSAgUGVyaGFwcw0KPiA+IEVkZGllIG9yIEphZSBjYW4gc2hlZCBzb21lIGxp
+Z2h0IGhlcmU/DQo+IA0KPiBJIHRoaW5rIHlvdSdyZSBvbnRvIHNvbWV0aGluZyBoZXJlIC0gdGhp
+cyB3b3VsZCBiZSB3aHkgdGhlIHN0YXR1cyBiaXRzIHNlZW0gdG8NCj4gc3RpY2sgdW50aWwgdGhl
+IGRldmljZSBpcyByZXNldC4NCj4gDQo+IFVudGlsIEFzcGVlZCBjYW4gY2xhcmlmeSBpZiB0aGlz
+IGlzIGEgaGFyZHdhcmUgb3Igc29mdHdhcmUgaXNzdWUsIEkgc3VnZ2VzdCB3ZSBhY2sNCj4gdGhl
+IGJpdHMgYW5kIGxvZyBhIG1lc3NhZ2Ugd2hlbiB3ZSBzZWUgdGhlbSwgaW5zdGVhZCBvZiBhbHdh
+eXMgaWdub3JpbmcgdGhlbQ0KPiB3aXRob3V0IHRha2luZyBhbnkgYWN0aW9uLg0KPiANCj4gQ2Fu
+IHlvdSB3cml0ZSBhIHBhdGNoIHRoYXQgY2hhbmdlcyB0aGUgaW50ZXJydXB0IGhhbmRsZXIgdG8g
+YWNrIHN0YXR1cyBiaXRzIGFzIGl0DQo+IGhhbmRsZXMgZWFjaCBvZiB0aGVtPw0KPiANCkhlbGxv
+IFpldiwgYmVmb3JlIHRoZSBwYXRjaCwgZG8geW91IG1ldCBpc3N1ZSB3aXRoIGlycSBoYW5kbGVy
+PyBbY29udGludW91cyBpbmNvbWluZz9dDQoNCkluIGFzcGVlZF92aWRlb19pcnEgaGFuZGxlciBz
+aG91bGQgb25seSBoYW5kbGUgZW5hYmxlIGludGVycnVwdCBleHBlY3RlZC4NCiAgIHUzMiBzdHMg
+PSBhc3BlZWRfdmlkZW9fcmVhZCh2aWRlbywgVkVfSU5URVJSVVBUX1NUQVRVUyk7DQogKyBzdHMg
+Jj0gYXNwZWVkX3ZpZGVvX3JlYWQodmlkZW8sIFZFX0lOVEVSUlVQVF9DVFJMKTsNCg0KUnlhbg0K
+DQo+ID4NCj4gPg0KPiA+IFpldg0KPiA+DQo=
