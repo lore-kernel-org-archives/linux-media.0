@@ -7,38 +7,39 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10896C4361A
-	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 02:32:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DFE23C433E0
+	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 02:33:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E507D22257
-	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 02:32:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B673C221F0
+	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 02:33:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729124AbgLWCcY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 22 Dec 2020 21:32:24 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55712 "EHLO mail.kernel.org"
+        id S1729861AbgLWCcj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 22 Dec 2020 21:32:39 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55618 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729539AbgLWCZU (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 22 Dec 2020 21:25:20 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 235F4221E5;
-        Wed, 23 Dec 2020 02:24:39 +0000 (UTC)
+        id S1730448AbgLWCZS (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 22 Dec 2020 21:25:18 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C20932339D;
+        Wed, 23 Dec 2020 02:24:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608690279;
-        bh=MtdmVI51KGlsdcDnJIWYE1WKTLsMFbdiPwdG4XWsvfw=;
+        s=k20201202; t=1608690277;
+        bh=bfortx+wnC+TGOCt//qZ8vIqwkv0I4jomBOictlh65k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tcaykQt5s61GqumNDR2XJ79sSYUEH2JvJ48DYKBsJku0k1RK4ggPs9Ls59kcqDw5l
-         WwooNXD+zs3+br4FuHNAeEQlYozc+NBm0C0tVMo+rfiGTEXcbdT+B9U/2cHCq6w7yE
-         NedJeFvc7X2U8lnazV4mYQ2YtxPvc5DYnzslnHLwFGFL7K2jw/ItAnvan/EpLZ2K8U
-         o67FPld7xUJqTZNQOOZA/vyNt6QjWyNRl58bHm/pPMvRcvoyNj1gvG7yReGPOShWmJ
-         V0Iuaj3Wbq3brdPpnknizkoUcFWNFvvJVetvZBxv/g424R+XvlSZhSxmn3eqBIq+Nw
-         DE3GE6c5hlT6w==
+        b=AMUBVodX/eEFEhjI3HFLzCM9ZdHdFPBWNUpacerZWjqdi/CaHRzwIOqbovKCbIlL8
+         KMxDzneSX37Kx2IoSWthv97RWWq5RGpETcE5Vtfi9cpcOSQFlZaNahnq5M99j0La4m
+         yNlBR2RzMKSH3Irdx6si6woQ593rIncw8IBf6otIFGsDtGBY4UzI7o2gpTbWhM1I6L
+         ORYODpHVd1bRRGDIg3alJQaLW0WlC5ZEQpKg3N943bqx22nAHxqg4TfnZh7JteovpY
+         d9vaSCd+cGUnAVHEOQiCoJly9+BZ3JhWiyFx0qKAO93nwNW4s6/Z5lMnrY/0mZyuav
+         //k9uMxriHH5g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dinghao Liu <dinghao.liu@zju.edu.cn>, Sean Young <sean@mess.org>,
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 19/48] media: dvbdev: Fix memleak in dvb_register_device
-Date:   Tue, 22 Dec 2020 21:23:47 -0500
-Message-Id: <20201223022417.2794032-19-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        devel@driverdev.osuosl.org
+Subject: [PATCH AUTOSEL 4.9 17/48] media: cec-core: first mark device unregistered, then wake up fhs
+Date:   Tue, 22 Dec 2020 21:23:45 -0500
+Message-Id: <20201223022417.2794032-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201223022417.2794032-1-sashal@kernel.org>
 References: <20201223022417.2794032-1-sashal@kernel.org>
@@ -50,35 +51,43 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dinghao Liu <dinghao.liu@zju.edu.cn>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit 167faadfcf9339088910e9e85a1b711fcbbef8e9 ]
+[ Upstream commit e91c255733d9bbb4978a372f44fb5ed689ccdbd1 ]
 
-When device_create() fails, dvbdev and dvbdevfops should
-be freed just like when dvb_register_media_device() fails.
+If a CEC device node is unregistered, then it should be marked as
+unregistered before waking up any filehandles that are waiting for
+an event.
 
-Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
-Signed-off-by: Sean Young <sean@mess.org>
+This ensures that there is no race condition where an application can
+call CEC_DQEVENT and have the ioctl return 0 instead of ENODEV.
+
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/dvb-core/dvbdev.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/staging/media/cec/cec-core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/dvb-core/dvbdev.c b/drivers/media/dvb-core/dvbdev.c
-index a1cc1c1e53182..ffd01d54edca8 100644
---- a/drivers/media/dvb-core/dvbdev.c
-+++ b/drivers/media/dvb-core/dvbdev.c
-@@ -515,6 +515,9 @@ int dvb_register_device(struct dvb_adapter *adap, struct dvb_device **pdvbdev,
- 	if (IS_ERR(clsdev)) {
- 		printk(KERN_ERR "%s: failed to create device dvb%d.%s%d (%ld)\n",
- 		       __func__, adap->num, dnames[type], id, PTR_ERR(clsdev));
-+		dvb_media_device_free(dvbdev);
-+		kfree(dvbdevfops);
-+		kfree(dvbdev);
- 		return PTR_ERR(clsdev);
+diff --git a/drivers/staging/media/cec/cec-core.c b/drivers/staging/media/cec/cec-core.c
+index b0137e247dc9a..bb189f753c3ac 100644
+--- a/drivers/staging/media/cec/cec-core.c
++++ b/drivers/staging/media/cec/cec-core.c
+@@ -183,12 +183,12 @@ static void cec_devnode_unregister(struct cec_devnode *devnode)
+ 		mutex_unlock(&devnode->lock);
+ 		return;
  	}
- 	dprintk(KERN_DEBUG "DVB: register adapter%d/%s%d @ minor: %i (0x%02x)\n",
++	devnode->registered = false;
++	devnode->unregistered = true;
+ 
+ 	list_for_each_entry(fh, &devnode->fhs, list)
+ 		wake_up_interruptible(&fh->wait);
+ 
+-	devnode->registered = false;
+-	devnode->unregistered = true;
+ 	mutex_unlock(&devnode->lock);
+ 
+ 	device_del(&devnode->dev);
 -- 
 2.27.0
 
