@@ -7,42 +7,42 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0CD6C43332
-	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 02:34:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E724C433DB
+	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 02:38:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C2D7A22482
-	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 02:34:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2A15D2256F
+	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 02:38:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730154AbgLWCeW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 22 Dec 2020 21:34:22 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52234 "EHLO mail.kernel.org"
+        id S1730125AbgLWCYF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 22 Dec 2020 21:24:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52560 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729472AbgLWCYy (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 22 Dec 2020 21:24:54 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F09B223137;
-        Wed, 23 Dec 2020 02:24:37 +0000 (UTC)
+        id S1730109AbgLWCYD (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 22 Dec 2020 21:24:03 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CED8622A83;
+        Wed, 23 Dec 2020 02:23:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608690278;
-        bh=THXEJ2+KwvgBooBQ7/cKKxZhDPTzR9NF/UkHJgtdvjg=;
+        s=k20201202; t=1608690228;
+        bh=zvHpdA/aaAM/Q8Xg09xdN/QJh90o+FNkzC4xz4v4IB4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B8XifmyNiJPpcQhU5aLxVsdZcAxJJyUgqevxMN7kQsP3wz69+eD2QWPB9TDIFpmK8
-         KzumC7YQ6K7XqjdBjiEcWtraRp7tEb37IV/2L12Ynj6Nm3PuNEewGdTA84uqKakaJ3
-         eAK9LNcad0JTkqHuC9cEIJk6OlQLUEX+kvb6jQX7Ejcdi3khhAKnKD9s/bhNnVRD+8
-         CP/8D9m7TgY5ICAmDcDskxCrUOAm9ExPR4l/GMv9ZkBU7wXYs6Yag5i46mLbSjb5oI
-         RTvxr5BqOV39ucdF1dLlwVq0TYNH5F3YczHHwMOmJTngKPBB4jKjOJ/fa2WWPz47oI
-         qztz7fMWEGZew==
+        b=IrfH72gwNlW35sXN8mrWCmQ5tlz8wuvPwD43nt9LyOQoEdY3RpyADcII5zpsCG0Z4
+         zuNWj2F29v3kFKpTrw7kTwW+iWyWzE9hBS+S8cjvn9gJTpAGUQKArqb5J+quxuAHLB
+         9IbRe+XsoqA+sjLrGsG5ncUxnqwkABaRxEcNF+Mts2ui/OA04ppvsNP7Mpzz0TWg7s
+         EALpkPCX333OszzF+qpQeYKYd5tzP3Hzt/9Nyx6SheZevh8QpMPsIfIrwWJ0vnmSFB
+         r7XnjJh1/cU2HKgrb5620OY7YR8YwKVr9xBQKNkqBVbnMBV3+l7lveMzJjGpeMV2Ux
+         m7t2mv1xC1/eA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Evgeny Novikov <novikov@ispras.ru>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        syzbot <syzkaller@googlegroups.com>,
+        Willem de Bruijn <willemb@google.com>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 18/48] media: isif: reset global state
-Date:   Tue, 22 Dec 2020 21:23:46 -0500
-Message-Id: <20201223022417.2794032-18-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 44/66] media: gp8psk: initialize stats at power control logic
+Date:   Tue, 22 Dec 2020 21:22:30 -0500
+Message-Id: <20201223022253.2793452-44-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201223022417.2794032-1-sashal@kernel.org>
-References: <20201223022417.2794032-1-sashal@kernel.org>
+In-Reply-To: <20201223022253.2793452-1-sashal@kernel.org>
+References: <20201223022253.2793452-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -51,58 +51,47 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Evgeny Novikov <novikov@ispras.ru>
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit 6651dba2bd838f34cf5a1e84229aaa579b1a94fe ]
+[ Upstream commit d0ac1a26ed5943127cb0156148735f5f52a07075 ]
 
-isif_probe() invokes iounmap() on error handling paths, but it does not
-reset the global state. So, later it can invoke iounmap() even when
-ioremap() fails. This is the case also for isif_remove(). The patch
-resets the global state after invoking iounmap() to avoid this.
+As reported on:
+	https://lore.kernel.org/linux-media/20190627222020.45909-1-willemdebruijn.kernel@gmail.com/
 
-Found by Linux Driver Verification project (linuxtesting.org).
+if gp8psk_usb_in_op() returns an error, the status var is not
+initialized. Yet, this var is used later on, in order to
+identify:
+	- if the device was already started;
+	- if firmware has loaded;
+	- if the LNBf was powered on.
 
-Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Using status = 0 seems to ensure that everything will be
+properly powered up.
+
+So, instead of the proposed solution, let's just set
+status = 0.
+
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Reported-by: Willem de Bruijn <willemb@google.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/davinci/isif.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/media/usb/dvb-usb/gp8psk.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/davinci/isif.c b/drivers/media/platform/davinci/isif.c
-index b51b875c5a612..3507aa867ba12 100644
---- a/drivers/media/platform/davinci/isif.c
-+++ b/drivers/media/platform/davinci/isif.c
-@@ -1090,10 +1090,14 @@ static int isif_probe(struct platform_device *pdev)
- 	release_mem_region(res->start, resource_size(res));
- 	i--;
- fail_nobase_res:
--	if (isif_cfg.base_addr)
-+	if (isif_cfg.base_addr) {
- 		iounmap(isif_cfg.base_addr);
--	if (isif_cfg.linear_tbl0_addr)
-+		isif_cfg.base_addr = NULL;
-+	}
-+	if (isif_cfg.linear_tbl0_addr) {
- 		iounmap(isif_cfg.linear_tbl0_addr);
-+		isif_cfg.linear_tbl0_addr = NULL;
-+	}
+diff --git a/drivers/media/usb/dvb-usb/gp8psk.c b/drivers/media/usb/dvb-usb/gp8psk.c
+index 37f062225ed21..aac677f6aaa4f 100644
+--- a/drivers/media/usb/dvb-usb/gp8psk.c
++++ b/drivers/media/usb/dvb-usb/gp8psk.c
+@@ -185,7 +185,7 @@ static int gp8psk_load_bcm4500fw(struct dvb_usb_device *d)
  
- 	while (i >= 0) {
- 		res = platform_get_resource(pdev, IORESOURCE_MEM, i);
-@@ -1111,8 +1115,11 @@ static int isif_remove(struct platform_device *pdev)
- 	int i = 0;
+ static int gp8psk_power_ctrl(struct dvb_usb_device *d, int onoff)
+ {
+-	u8 status, buf;
++	u8 status = 0, buf;
+ 	int gp_product_id = le16_to_cpu(d->udev->descriptor.idProduct);
  
- 	iounmap(isif_cfg.base_addr);
-+	isif_cfg.base_addr = NULL;
- 	iounmap(isif_cfg.linear_tbl0_addr);
-+	isif_cfg.linear_tbl0_addr = NULL;
- 	iounmap(isif_cfg.linear_tbl1_addr);
-+	isif_cfg.linear_tbl1_addr = NULL;
- 	while (i < 3) {
- 		res = platform_get_resource(pdev, IORESOURCE_MEM, i);
- 		if (res)
+ 	if (onoff) {
 -- 
 2.27.0
 
