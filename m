@@ -2,119 +2,148 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 058F5C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53F18C433E9
 	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 13:36:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B3055224B8
-	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 13:36:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0D67C224B2
+	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 13:36:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728690AbgLWNgQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Dec 2020 08:36:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54952 "EHLO
+        id S1728641AbgLWNgN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Dec 2020 08:36:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728666AbgLWNgO (ORCPT
+        with ESMTP id S1728595AbgLWNgM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Dec 2020 08:36:14 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE21C06179C
-        for <linux-media@vger.kernel.org>; Wed, 23 Dec 2020 05:35:33 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id c133so5386768wme.4
-        for <linux-media@vger.kernel.org>; Wed, 23 Dec 2020 05:35:33 -0800 (PST)
+        Wed, 23 Dec 2020 08:36:12 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E475C0613D6
+        for <linux-media@vger.kernel.org>; Wed, 23 Dec 2020 05:35:32 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id 190so5402020wmz.0
+        for <linux-media@vger.kernel.org>; Wed, 23 Dec 2020 05:35:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=u758tc6qPeylpt3SsVLMdt+s9OHLjZNVgsX5L88s2r0=;
-        b=Q0erJBz9hqoU0oD9aLjCvmVU/bI2+F5SMwPkvpY74SU1tcoH70Y42Yd/eDOGArUPkJ
-         Z65XOrGr/mdJja7UDE9DWusMG+ymQy7jOFXAU/8eQpS1VPf6t85xBuVOZ8aEQPEdmGf3
-         JlcPpqsqvZ/BLRWiQlzvgHyyKC+X3PUQhDfRc=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xj6OmJsCRi+/nSFF99ojwxyR8UdFFK7nIZiW36FGx6w=;
+        b=dwd53kQgekz8cwTSW1TheZUxeuVMqDtKXDhzEYQTsvNtYMWJhHD1qVlLP/HTJdj+6k
+         dn3Y48l/FkzU+lf9zUBW+F4hQ1j8Br0ts9FJC8WKCPc90XomClM+kGUcvRHYsayMm6EB
+         F3ZP0cnA0owtr13/7WVkmX66u9fB0qkMTBqz8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=u758tc6qPeylpt3SsVLMdt+s9OHLjZNVgsX5L88s2r0=;
-        b=orxZkdUs03D6QFc03REQrPFfROQL2v1Xb5UaNVM9Y0bUE2xRmXxouIRejS8nz05cEx
-         TYuOB63T1nOMm0IVrAryiNBTJfM6x9igVBhzfIuFg1VGvSRuaQDR95q0m/0NbjkFjY9Y
-         qOsXXGQT8KqZGAhvzEcaq8scuRP+YGp/G32IJ3AuW0Qa3QJkR7IYHtlQULeu05G5oJRH
-         ugLs3b7wvgSWX0e112o4vU5hGUy08H1Ddkkr9c67IspR3RpzrYNwJpB8zvY58/N+0nWd
-         d3DxYvhq+PeKkDTl/RTD67uVjK34EGrC/raVzCZB63/gWYxIEt0qI31Quhl/75oXYKdG
-         zaDg==
-X-Gm-Message-State: AOAM532ZvgdBH66R6KoE/N3t4DCeKwkikoFeiPH5Osg7lVpzFCV7/w9m
-        zCxNPAW/lPS1YJwqV29i9itcXw==
-X-Google-Smtp-Source: ABdhPJz8winmAgCoMmDxTaaGOOK1awTyCxupK+2oMN7iwvjZPJ7/d+008qZp+DukJfSj1R8ZD/AC1Q==
-X-Received: by 2002:a1c:67c5:: with SMTP id b188mr27091865wmc.147.1608730532583;
-        Wed, 23 Dec 2020 05:35:32 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xj6OmJsCRi+/nSFF99ojwxyR8UdFFK7nIZiW36FGx6w=;
+        b=UlKGoOmfjbnGfY8jsVp3k82LBentUa+evHLzDEPGEGgSVHlFmXamglDAVp0u+SK5hK
+         r+oerwVGzD/ZnZWLTeRdQ1XFkDmPa/7omG6UrPgA/AzAAm61EAV8AcGOlhd+sY5ERy0x
+         4CycYjHUaZqEf4laHlwFXKyI7LnrAjZhP+o0YboNMfYcpp/FlkNm6s+goWfDQFVhtADX
+         Nel7aA8e+P6w8h9BBKXnxcMTzBv1ZM751jqcyl8tus0Cn6dsahisXFu2m+fZiLeKsPjx
+         TJbXgb5SWK4YZ/7+vrcJW/UGHm6GXGJz+n1h7/YjZRJK3RwaoowkHxIOAVGHagnvVSlm
+         QFJw==
+X-Gm-Message-State: AOAM533euc2FdjUeuRcrYmbJol0ikyfDDETEcaEKdDS1D/Hhui/+qse7
+        GJF5cyBw7RGs39b1lUPdlXnrtjrMnw8bIYPKERM=
+X-Google-Smtp-Source: ABdhPJwRnPvCNi6WrYB/oQP7ITPfqbnnX+d8iTODsyP+l2VgCpZSJGjTw8bC81Q81xvfIajX0yuANQ==
+X-Received: by 2002:a1c:4954:: with SMTP id w81mr26533986wma.60.1608730530684;
+        Wed, 23 Dec 2020 05:35:30 -0800 (PST)
 Received: from alco.lan ([80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id q143sm31572247wme.28.2020.12.23.05.35.31
+        by smtp.gmail.com with ESMTPSA id q143sm31572247wme.28.2020.12.23.05.35.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Dec 2020 05:35:32 -0800 (PST)
+        Wed, 23 Dec 2020 05:35:30 -0800 (PST)
 From:   Ricardo Ribalda <ribalda@chromium.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v7 02/12] media: uvcvideo: Allow extra entities
-Date:   Wed, 23 Dec 2020 14:35:18 +0100
-Message-Id: <20201223133528.55014-3-ribalda@chromium.org>
+Subject: [PATCH v7 00/12] Show privacy_gpio as a v4l2_ctrl
+Date:   Wed, 23 Dec 2020 14:35:16 +0100
+Message-Id: <20201223133528.55014-1-ribalda@chromium.org>
 X-Mailer: git-send-email 2.29.2.729.g45daf8777d-goog
-In-Reply-To: <20201223133528.55014-1-ribalda@chromium.org>
-References: <20201223133528.55014-1-ribalda@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Increase the size of the id, to avoid collisions with entities
-implemented by the driver that are not part of the UVC device.
+Some devices can implement a physical switch to disable the input of the
+camera on demand. Think of it like an elegant privacy sticker.
 
-Entities exposed by the UVC device use IDs 0-255, extra entities
-implemented by the driver (such as the GPIO entity) use IDs 256 and
-up.
+The system can read the status of the privacy switch via a GPIO.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
- drivers/media/usb/uvc/uvc_driver.c | 2 +-
- drivers/media/usb/uvc/uvcvideo.h   | 7 ++++++-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+The ACPI table maps this GPIO to the USB device via _CRS and _DSD
+descriptors, so the kernel can find it.
 
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index bfbc5a4d4ca6..82cdd1bb28dc 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -1024,7 +1024,7 @@ static const u8 uvc_media_transport_input_guid[16] =
- 	UVC_GUID_UVC_MEDIA_TRANSPORT_INPUT;
- static const u8 uvc_processing_guid[16] = UVC_GUID_UVC_PROCESSING;
- 
--static struct uvc_entity *uvc_alloc_entity(u16 type, u8 id,
-+static struct uvc_entity *uvc_alloc_entity(u16 type, u16 id,
- 		unsigned int num_pads, unsigned int extra_size)
- {
- 	struct uvc_entity *entity;
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index df7bf2d104a3..c50b0546901f 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -301,7 +301,12 @@ struct uvc_entity {
- 					 * chain. */
- 	unsigned int flags;
- 
--	u8 id;
-+	/*
-+	 * Entities exposed by the UVC device use IDs 0-255, extra entities
-+	 * implemented by the driver (such as the GPIO entity) use IDs 256 and
-+	 * up.
-+	 */
-+	u16 id;
- 	u16 type;
- 	char name[64];
- 	u8 guid[16];
+The userspace applications need to know if the privacy pin is enabled
+or not.
+
+The obvious way to show it to userspace is via the V4L2_CID_PRIVACY
+control.
+
+This patchset implement this functionality.
+
+v7: Thanks to all the comments from Laurent, Sakari and Joe
+  - New patch from Joe: Rename debug functions
+  - Rename direct handler to sync/async handler
+  - Only launch events with IRQ
+  - Use mutex on the stream_quirk
+  - CodeStyle, spaces are my friends
+
+v6: Thanks to all the comments from Laurent!
+  - Remove multiple async_ctrls from v5, it is not needed
+  - Split event handling in two parts, so it can be triggered without wq
+  - Save pointer to the privacy entity in the main structure
+  - Handle the quirk in a different location to avoid races
+  - CodeStyle
+
+v5: Thanks to all the comments from Laurent!
+  - Allow multiple async_ctrls
+  - Use dev_dbg() for uvc_trace
+  - Major redesing of "Implement UVC_EXT_GPIO_UNIT"
+  - Major redesing of "Implement UVC_QUIRK_PRIVACY_DURING_STREAM"
+
+v4: Implement UVC_QUIRK_PRIVACY_DURING_STREAM
+
+v3: Thanks to all the comments from Joe Perches
+  - Rework of printk macros
+
+v2: Thanks to all the comments from Laurent!
+  - move guid to unit
+  - support entities with no pads
+  - CodeStyle
+  - Irq handling
+  - pr_cont
+  - new ids
+
+Joe Perches (1):
+  media: uvcvideo: Rename debug functions
+
+Ricardo Ribalda (11):
+  media: uvcvideo: Move guid to entity
+  media: uvcvideo: Allow extra entities
+  media: uvcvideo: Allow entities with no pads
+  media: uvcvideo: Provide sync and async uvc_ctrl_status_event
+  media: uvcvideo: Allow entity-defined get_info and get_cur
+  media: uvcvideo: Implement UVC_EXT_GPIO_UNIT
+  media: uvcvideo: Add Privacy control based on EXT_GPIO
+  media: uvcvideo: Use dev_ printk aliases
+  media: uvcvideo: New macro uvc_trace_cont
+  media: uvcvideo: use dev_printk() for uvc_trace()
+  media: uvcvideo: Implement UVC_QUIRK_PRIVACY_DURING_STREAM
+
+ drivers/media/usb/uvc/uvc_ctrl.c   | 179 +++++----
+ drivers/media/usb/uvc/uvc_driver.c | 580 +++++++++++++++++++----------
+ drivers/media/usb/uvc/uvc_entity.c |  11 +-
+ drivers/media/usb/uvc/uvc_isight.c |  17 +-
+ drivers/media/usb/uvc/uvc_queue.c  |   9 +-
+ drivers/media/usb/uvc/uvc_status.c |  44 +--
+ drivers/media/usb/uvc/uvc_v4l2.c   |  48 +--
+ drivers/media/usb/uvc/uvc_video.c  | 189 ++++++----
+ drivers/media/usb/uvc/uvcvideo.h   | 105 ++++--
+ 9 files changed, 736 insertions(+), 446 deletions(-)
+
 -- 
 2.29.2.729.g45daf8777d-goog
 
