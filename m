@@ -7,39 +7,38 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3393C04AAA
-	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 02:30:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10896C4361A
+	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 02:32:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A1D0B22573
-	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 02:30:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E507D22257
+	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 02:32:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727741AbgLWCZj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 22 Dec 2020 21:25:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55968 "EHLO mail.kernel.org"
+        id S1729124AbgLWCcY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 22 Dec 2020 21:32:24 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55712 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730552AbgLWCZi (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 22 Dec 2020 21:25:38 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C9BA723137;
-        Wed, 23 Dec 2020 02:24:56 +0000 (UTC)
+        id S1729539AbgLWCZU (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 22 Dec 2020 21:25:20 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 235F4221E5;
+        Wed, 23 Dec 2020 02:24:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608690297;
-        bh=AgZvK6kCVgfHtGMHRqLxijiPlj8q5oRs/sXYlnUtpdQ=;
+        s=k20201202; t=1608690279;
+        bh=MtdmVI51KGlsdcDnJIWYE1WKTLsMFbdiPwdG4XWsvfw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jq/wvrelZHpBpai0AIyXiGQhLuSs8fAF4CPUUjw+ilzfLb6jGTBz1B4MmTy4awI+Y
-         iA5e4iBtfPTME5+wqv2Li0GDTDsaM3VZTfeeBwe6ull4iMGAVGFyGU7t4D+DV4Md7h
-         j78X8S0Pr5HUV/CoBAlojkN96OXLu5qwHr42wu1d3RDLZAQr1fymmyBun9kCcdn++N
-         yJ3nahwxpwBj3hpLhVRC0fleaR7vQEyK+HUYOG7BJKJTWlQFfYJnyX3WB+qVL8ilKq
-         4ae3wTvwcCFQaeyRJFPgERmOwWV1S8y6JXO20nVdzrqS42sL6h7HuxQ63JN7N/zzLo
-         PPNZytO99G9hA==
+        b=tcaykQt5s61GqumNDR2XJ79sSYUEH2JvJ48DYKBsJku0k1RK4ggPs9Ls59kcqDw5l
+         WwooNXD+zs3+br4FuHNAeEQlYozc+NBm0C0tVMo+rfiGTEXcbdT+B9U/2cHCq6w7yE
+         NedJeFvc7X2U8lnazV4mYQ2YtxPvc5DYnzslnHLwFGFL7K2jw/ItAnvan/EpLZ2K8U
+         o67FPld7xUJqTZNQOOZA/vyNt6QjWyNRl58bHm/pPMvRcvoyNj1gvG7yReGPOShWmJ
+         V0Iuaj3Wbq3brdPpnknizkoUcFWNFvvJVetvZBxv/g424R+XvlSZhSxmn3eqBIq+Nw
+         DE3GE6c5hlT6w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        syzbot <syzkaller@googlegroups.com>,
-        Willem de Bruijn <willemb@google.com>,
+Cc:     Dinghao Liu <dinghao.liu@zju.edu.cn>, Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 33/48] media: gp8psk: initialize stats at power control logic
-Date:   Tue, 22 Dec 2020 21:24:01 -0500
-Message-Id: <20201223022417.2794032-33-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 19/48] media: dvbdev: Fix memleak in dvb_register_device
+Date:   Tue, 22 Dec 2020 21:23:47 -0500
+Message-Id: <20201223022417.2794032-19-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201223022417.2794032-1-sashal@kernel.org>
 References: <20201223022417.2794032-1-sashal@kernel.org>
@@ -51,47 +50,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+From: Dinghao Liu <dinghao.liu@zju.edu.cn>
 
-[ Upstream commit d0ac1a26ed5943127cb0156148735f5f52a07075 ]
+[ Upstream commit 167faadfcf9339088910e9e85a1b711fcbbef8e9 ]
 
-As reported on:
-	https://lore.kernel.org/linux-media/20190627222020.45909-1-willemdebruijn.kernel@gmail.com/
+When device_create() fails, dvbdev and dvbdevfops should
+be freed just like when dvb_register_media_device() fails.
 
-if gp8psk_usb_in_op() returns an error, the status var is not
-initialized. Yet, this var is used later on, in order to
-identify:
-	- if the device was already started;
-	- if firmware has loaded;
-	- if the LNBf was powered on.
-
-Using status = 0 seems to ensure that everything will be
-properly powered up.
-
-So, instead of the proposed solution, let's just set
-status = 0.
-
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Reported-by: Willem de Bruijn <willemb@google.com>
+Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+Signed-off-by: Sean Young <sean@mess.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/dvb-usb/gp8psk.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/dvb-core/dvbdev.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/media/usb/dvb-usb/gp8psk.c b/drivers/media/usb/dvb-usb/gp8psk.c
-index 993bb7a72985f..170a177653c9f 100644
---- a/drivers/media/usb/dvb-usb/gp8psk.c
-+++ b/drivers/media/usb/dvb-usb/gp8psk.c
-@@ -186,7 +186,7 @@ static int gp8psk_load_bcm4500fw(struct dvb_usb_device *d)
- 
- static int gp8psk_power_ctrl(struct dvb_usb_device *d, int onoff)
- {
--	u8 status, buf;
-+	u8 status = 0, buf;
- 	int gp_product_id = le16_to_cpu(d->udev->descriptor.idProduct);
- 
- 	if (onoff) {
+diff --git a/drivers/media/dvb-core/dvbdev.c b/drivers/media/dvb-core/dvbdev.c
+index a1cc1c1e53182..ffd01d54edca8 100644
+--- a/drivers/media/dvb-core/dvbdev.c
++++ b/drivers/media/dvb-core/dvbdev.c
+@@ -515,6 +515,9 @@ int dvb_register_device(struct dvb_adapter *adap, struct dvb_device **pdvbdev,
+ 	if (IS_ERR(clsdev)) {
+ 		printk(KERN_ERR "%s: failed to create device dvb%d.%s%d (%ld)\n",
+ 		       __func__, adap->num, dnames[type], id, PTR_ERR(clsdev));
++		dvb_media_device_free(dvbdev);
++		kfree(dvbdevfops);
++		kfree(dvbdev);
+ 		return PTR_ERR(clsdev);
+ 	}
+ 	dprintk(KERN_DEBUG "DVB: register adapter%d/%s%d @ minor: %i (0x%02x)\n",
 -- 
 2.27.0
 
