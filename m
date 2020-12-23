@@ -2,48 +2,52 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-24.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70295C433E0
-	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 02:41:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73B00C432C3
+	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 02:43:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 47841229C5
-	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 02:41:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5A9252256F
+	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 02:43:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730239AbgLWCkW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 22 Dec 2020 21:40:22 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51348 "EHLO mail.kernel.org"
+        id S1729990AbgLWCnb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 22 Dec 2020 21:43:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52452 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730022AbgLWCXi (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 22 Dec 2020 21:23:38 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 011BE22482;
-        Wed, 23 Dec 2020 02:23:20 +0000 (UTC)
+        id S1729873AbgLWCXE (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 22 Dec 2020 21:23:04 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2F14F22248;
+        Wed, 23 Dec 2020 02:22:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608690201;
-        bh=5drJtqNzWD0rLt1kAjtVy6gjml1j8+udDTDEYpdbkJk=;
+        s=k20201202; t=1608690143;
+        bh=qF9l755odwp307/T/N4iq49b/ec7+MuRGg7fKtWJgkU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a1kdaWxO29qVw9qWuQPhz1JUK0GKAmhM3i3glD/eiU4pTcU8ST5/s2T/dRQN1gNZa
-         rHJd+Wd4UmyFLvAE04g9248zx7qj/VSqQd2mi131631dXtWaYRKJBLgEdEKjYAi21N
-         OFMbrzox4/QDeZSyOZhKEru6bknWbxgZ1DDwTnt1/YrHArLC05RdHWGglzh9KDTUqc
-         t5y8bOKT1+DOu+5YZ4jVCk65vhTTO55TXllw9vuogXtqPvbdiBHXdC/IDPYw8QJ1oE
-         sL660GLX29SA/C16jtjTjvZKcyYLq/+aij68S4+hx+wAlgRF3b/blykYFbpf6dEdLD
-         3F6tqki19pSDQ==
+        b=GG3fI/0uKfXHDg7UO1rqpzI3WHly6c8nyu0srm88rM2uu4/lBxP5v3dOonIWMRRYu
+         EwZwLtMN0j4LXXR2F6Npfi3uRvq3RPWkWSPK3SgRUiWqrxG68CDPwAjxog9aaJ7nNP
+         ZR0lQaxXHOU55mj41ukWT9GbtDA0lJ4e0WRmddIocmeOZyjDh5KvUsmYY0+zOF+sZV
+         l2Pr+x+3vpYtouj7KsCnwCAy5AXcZZnTh7JheUX49J6f06RtlXUnku+u3aA3iBuT47
+         CUmJtQvLygv4+OlJGseV+KazpZdpU+ZJKKFMMcLAoP7Ct5hFOF6n0JBhVNx4KKj/Xr
+         9BxTLNRoQ1WNA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Evgeny Novikov <novikov@ispras.ru>,
+Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 23/66] media: isif: reset global state
-Date:   Tue, 22 Dec 2020 21:22:09 -0500
-Message-Id: <20201223022253.2793452-23-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 64/87] media: rcar-vin: Mask VNCSI_IFMD register
+Date:   Tue, 22 Dec 2020 21:20:40 -0500
+Message-Id: <20201223022103.2792705-64-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201223022253.2793452-1-sashal@kernel.org>
-References: <20201223022253.2793452-1-sashal@kernel.org>
+In-Reply-To: <20201223022103.2792705-1-sashal@kernel.org>
+References: <20201223022103.2792705-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -51,58 +55,84 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Evgeny Novikov <novikov@ispras.ru>
+From: Jacopo Mondi <jacopo+renesas@jmondi.org>
 
-[ Upstream commit 6651dba2bd838f34cf5a1e84229aaa579b1a94fe ]
+[ Upstream commit fb25ca37317200fa97ea6b8952e07958f06da7a6 ]
 
-isif_probe() invokes iounmap() on error handling paths, but it does not
-reset the global state. So, later it can invoke iounmap() even when
-ioremap() fails. This is the case also for isif_remove(). The patch
-resets the global state after invoking iounmap() to avoid this.
+The VNCSI_IFMD register controls the data expansion mode and the
+channel routing between the CSI-2 receivers and VIN instances.
 
-Found by Linux Driver Verification project (linuxtesting.org).
+According to the chip manual revision 2.20 not all fields are available
+for all the SoCs:
+- V3M, V3H and E3 do not support the DES1 field has they do not feature
+  a CSI20 receiver.
+- D3 only supports parallel input, and the whole register shall always
+  be written as 0.
 
-Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
+Inspect the per-SoC channel routing table where the available CSI-2
+instances are reported and configure VNCSI_IFMD accordingly.
+
+This patch supports this BSP change commit:
+
+https://github.com/renesas-rcar/linux-bsp/commit/f54697394457
+("media: rcar-vin: Fix VnCSI_IFMD register access for r8a77990")
+
+[hverkuil: replace BSP commit ID with BSP URL]
+
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Suggested-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/davinci/isif.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/media/platform/rcar-vin/rcar-dma.c | 25 +++++++++++++++++++---
+ 1 file changed, 22 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/davinci/isif.c b/drivers/media/platform/davinci/isif.c
-index 12065ad1ac457..e7372319de80d 100644
---- a/drivers/media/platform/davinci/isif.c
-+++ b/drivers/media/platform/davinci/isif.c
-@@ -1086,10 +1086,14 @@ static int isif_probe(struct platform_device *pdev)
- 	release_mem_region(res->start, resource_size(res));
- 	i--;
- fail_nobase_res:
--	if (isif_cfg.base_addr)
-+	if (isif_cfg.base_addr) {
- 		iounmap(isif_cfg.base_addr);
--	if (isif_cfg.linear_tbl0_addr)
-+		isif_cfg.base_addr = NULL;
+diff --git a/drivers/media/platform/rcar-vin/rcar-dma.c b/drivers/media/platform/rcar-vin/rcar-dma.c
+index 70a8cc433a03f..4fee9132472bb 100644
+--- a/drivers/media/platform/rcar-vin/rcar-dma.c
++++ b/drivers/media/platform/rcar-vin/rcar-dma.c
+@@ -1319,7 +1319,9 @@ int rvin_dma_register(struct rvin_dev *vin, int irq)
+  */
+ int rvin_set_channel_routing(struct rvin_dev *vin, u8 chsel)
+ {
+-	u32 ifmd, vnmc;
++	const struct rvin_group_route *route;
++	u32 ifmd = 0;
++	u32 vnmc;
+ 	int ret;
+ 
+ 	ret = pm_runtime_get_sync(vin->dev);
+@@ -1332,9 +1334,26 @@ int rvin_set_channel_routing(struct rvin_dev *vin, u8 chsel)
+ 	vnmc = rvin_read(vin, VNMC_REG);
+ 	rvin_write(vin, vnmc & ~VNMC_VUP, VNMC_REG);
+ 
+-	ifmd = VNCSI_IFMD_DES1 | VNCSI_IFMD_DES0 | VNCSI_IFMD_CSI_CHSEL(chsel);
++	/*
++	 * Set data expansion mode to "pad with 0s" by inspecting the routes
++	 * table to find out which bit fields are available in the IFMD
++	 * register. IFMD_DES1 controls data expansion mode for CSI20/21,
++	 * IFMD_DES0 controls data expansion mode for CSI40/41.
++	 */
++	for (route = vin->info->routes; route->mask; route++) {
++		if (route->csi == RVIN_CSI20 || route->csi == RVIN_CSI21)
++			ifmd |= VNCSI_IFMD_DES1;
++		else
++			ifmd |= VNCSI_IFMD_DES0;
+ 
+-	rvin_write(vin, ifmd, VNCSI_IFMD_REG);
++		if (ifmd == (VNCSI_IFMD_DES0 | VNCSI_IFMD_DES1))
++			break;
 +	}
-+	if (isif_cfg.linear_tbl0_addr) {
- 		iounmap(isif_cfg.linear_tbl0_addr);
-+		isif_cfg.linear_tbl0_addr = NULL;
++
++	if (ifmd) {
++		ifmd |= VNCSI_IFMD_CSI_CHSEL(chsel);
++		rvin_write(vin, ifmd, VNCSI_IFMD_REG);
 +	}
  
- 	while (i >= 0) {
- 		res = platform_get_resource(pdev, IORESOURCE_MEM, i);
-@@ -1107,8 +1111,11 @@ static int isif_remove(struct platform_device *pdev)
- 	int i = 0;
+ 	vin_dbg(vin, "Set IFMD 0x%x\n", ifmd);
  
- 	iounmap(isif_cfg.base_addr);
-+	isif_cfg.base_addr = NULL;
- 	iounmap(isif_cfg.linear_tbl0_addr);
-+	isif_cfg.linear_tbl0_addr = NULL;
- 	iounmap(isif_cfg.linear_tbl1_addr);
-+	isif_cfg.linear_tbl1_addr = NULL;
- 	while (i < 3) {
- 		res = platform_get_resource(pdev, IORESOURCE_MEM, i);
- 		if (res)
 -- 
 2.27.0
 
