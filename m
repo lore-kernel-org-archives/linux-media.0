@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35EDBC4332E
-	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 03:03:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E7ECC4321A
+	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 03:03:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1C506206D6
-	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 03:03:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C39620757
+	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 03:03:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728968AbgLWDCS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 22 Dec 2020 22:02:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46404 "EHLO mail.kernel.org"
+        id S1729052AbgLWDCu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 22 Dec 2020 22:02:50 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46290 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728716AbgLWCTj (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 22 Dec 2020 21:19:39 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 785AF225AB;
-        Wed, 23 Dec 2020 02:19:07 +0000 (UTC)
+        id S1727525AbgLWCTe (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 22 Dec 2020 21:19:34 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 48F04225AC;
+        Wed, 23 Dec 2020 02:19:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608689948;
-        bh=PtJXlG+7otVt3v+1uuqmlPy/lhsqk23d0pMQ5jDpIjI=;
+        s=k20201202; t=1608689942;
+        bh=UXq0LZfpd6ooODibQK/KgNlqWEtnJY6cHmBeQMYx+2s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k/UwJOPgC+gHV3LGv3b2Yy8iyDKyeSVOkUsoMp1xf8r8ffAw+wJvfwiDMNgQpCf0+
-         e4I9ojo5trxEUMZFCkB4l3T95ucVXLj5zMB0TY670Z/Tj6tbNUjhtGN3Ut7rIthCud
-         i2aq+mAIYAXYECaPepM28+QYgFJpNltYpLyCVmrMikVqsR6lmhFE02TTLDw9mOUZoh
-         oLyQqg2jiX5pH5VIWb4c9VWYRZXmFgpInweycYM1AC8lVAOKzV/iPD/RmHPbAn4vEl
-         CdA27Zt50LueR4q4zAjy1qpAVmXBTcmUeU0v0vQnlKpiicdzI17YluYgoWpHbBzV9b
-         KxNTD46MOaPDg==
+        b=maLFT5pQwEv+bSeu4yCfE9HRLR54QQp29o/fLPZmy+yy/8cnEHJ6QytVyIfSiIya4
+         h+40jjoITTP9sd4dbcZm4yG09aIqDC5NyETR7gUh0iEAdc3kyqJLthu+pz+FDcffwO
+         8yfflI6TWBn6xIAZjnByhHZ8w8toUrlULaOaTESMfGFF6IZuh1ZS+6p50rLJOH44ma
+         prd0twHUhUfIY3efmlVQ4c/g78+uYU54ixWrMfvYzvYj4UYZD1lbCpB6JvQstrlKLk
+         dSeq7BejmGy7fG5ai7n+mjo18E9h06tVzVUkXpaWrAo3paCueL9VjM7fJF3eDkkcJz
+         e0QSh+2hD51xA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mansur Alisha Shaik <mansur@codeaurora.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+Cc:     Evgeny Novikov <novikov@ispras.ru>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 042/130] media: venus: handle use after free for iommu_map/iommu_unmap
-Date:   Tue, 22 Dec 2020 21:16:45 -0500
-Message-Id: <20201223021813.2791612-42-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 037/130] media: zr364xx: propagate errors from zr364xx_start_readpipe()
+Date:   Tue, 22 Dec 2020 21:16:40 -0500
+Message-Id: <20201223021813.2791612-37-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201223021813.2791612-1-sashal@kernel.org>
 References: <20201223021813.2791612-1-sashal@kernel.org>
@@ -52,87 +52,90 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Mansur Alisha Shaik <mansur@codeaurora.org>
+From: Evgeny Novikov <novikov@ispras.ru>
 
-[ Upstream commit de15e6231e6a3ca58d58d7e2c614a76c940dbb38 ]
+[ Upstream commit af0321a5be3e5647441eb6b79355beaa592df97a ]
 
-In concurrency usecase and reboot scenario we are seeing muliple
-crashes related to iommu_map/iommu_unamp of core->fw.iommu_domain.
+zr364xx_start_readpipe() can fail but callers do not care about that.
+This can result in various negative consequences. The patch adds missed
+error handling.
 
-In one case we are seeing "Unable to handle kernel NULL pointer
-dereference at virtual address 0000000000000008" crash, this is
-because of core->fw.iommu_domain in venus_firmware_deinit() and
-trying to map in venus_boot() during venus_sys_error_handler()
+Found by Linux Driver Verification project (linuxtesting.org).
 
-Call trace:
- __iommu_map+0x4c/0x348
- iommu_map+0x5c/0x70
- venus_boot+0x184/0x230 [venus_core]
- venus_sys_error_handler+0xa0/0x14c [venus_core]
- process_one_work+0x210/0x3d0
- worker_thread+0x248/0x3f4
- kthread+0x11c/0x12c
- ret_from_fork+0x10/0x18
-
-In second case we are seeing "Unable to handle kernel paging request
-at virtual address 006b6b6b6b6b6b9b" crash, this is because of
-unmapping iommu domain which is already unmapped.
-
-Call trace:
- venus_remove+0xf8/0x108 [venus_core]
- venus_core_shutdown+0x1c/0x34 [venus_core]
- platform_drv_shutdown+0x28/0x34
- device_shutdown+0x154/0x1fc
- kernel_restart_prepare+0x40/0x4c
- kernel_restart+0x1c/0x64
- __arm64_sys_reboot+0x190/0x238
- el0_svc_common+0xa4/0x154
- el0_svc_compat_handler+0x2c/0x38
- el0_svc_compat+0x8/0x10
-
-Signed-off-by: Mansur Alisha Shaik <mansur@codeaurora.org>
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/qcom/venus/firmware.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+ drivers/media/usb/zr364xx/zr364xx.c | 31 ++++++++++++++++++++++-------
+ 1 file changed, 24 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/firmware.c b/drivers/media/platform/qcom/venus/firmware.c
-index 33f70e1def943..9a9c0979e7bbb 100644
---- a/drivers/media/platform/qcom/venus/firmware.c
-+++ b/drivers/media/platform/qcom/venus/firmware.c
-@@ -172,9 +172,14 @@ static int venus_shutdown_no_tz(struct venus_core *core)
+diff --git a/drivers/media/usb/zr364xx/zr364xx.c b/drivers/media/usb/zr364xx/zr364xx.c
+index 637962825d7a8..32f463f05eacd 100644
+--- a/drivers/media/usb/zr364xx/zr364xx.c
++++ b/drivers/media/usb/zr364xx/zr364xx.c
+@@ -1330,6 +1330,7 @@ static int zr364xx_board_init(struct zr364xx_camera *cam)
+ {
+ 	struct zr364xx_pipeinfo *pipe = cam->pipe;
+ 	unsigned long i;
++	int err;
  
- 	iommu = core->fw.iommu_domain;
+ 	DBG("board init: %p\n", cam);
+ 	memset(pipe, 0, sizeof(*pipe));
+@@ -1362,9 +1363,8 @@ static int zr364xx_board_init(struct zr364xx_camera *cam)
  
--	unmapped = iommu_unmap(iommu, VENUS_FW_START_ADDR, mapped);
--	if (unmapped != mapped)
--		dev_err(dev, "failed to unmap firmware\n");
-+	if (core->fw.mapped_mem_size && iommu) {
-+		unmapped = iommu_unmap(iommu, VENUS_FW_START_ADDR, mapped);
+ 	if (i == 0) {
+ 		printk(KERN_INFO KBUILD_MODNAME ": out of memory. Aborting\n");
+-		kfree(cam->pipe->transfer_buffer);
+-		cam->pipe->transfer_buffer = NULL;
+-		return -ENOMEM;
++		err = -ENOMEM;
++		goto err_free;
+ 	} else
+ 		cam->buffer.dwFrames = i;
+ 
+@@ -1379,9 +1379,17 @@ static int zr364xx_board_init(struct zr364xx_camera *cam)
+ 	/*** end create system buffers ***/
+ 
+ 	/* start read pipe */
+-	zr364xx_start_readpipe(cam);
++	err = zr364xx_start_readpipe(cam);
++	if (err)
++		goto err_free;
 +
-+		if (unmapped != mapped)
-+			dev_err(dev, "failed to unmap firmware\n");
-+		else
-+			core->fw.mapped_mem_size = 0;
-+	}
- 
+ 	DBG(": board initialized\n");
  	return 0;
- }
-@@ -289,7 +294,11 @@ void venus_firmware_deinit(struct venus_core *core)
- 	iommu = core->fw.iommu_domain;
- 
- 	iommu_detach_device(iommu, core->fw.dev);
--	iommu_domain_free(iommu);
 +
-+	if (core->fw.iommu_domain) {
-+		iommu_domain_free(iommu);
-+		core->fw.iommu_domain = NULL;
-+	}
- 
- 	platform_device_unregister(to_platform_device(core->fw.dev));
++err_free:
++	kfree(cam->pipe->transfer_buffer);
++	cam->pipe->transfer_buffer = NULL;
++	return err;
  }
+ 
+ static int zr364xx_probe(struct usb_interface *intf,
+@@ -1578,10 +1586,19 @@ static int zr364xx_resume(struct usb_interface *intf)
+ 	if (!cam->was_streaming)
+ 		return 0;
+ 
+-	zr364xx_start_readpipe(cam);
++	res = zr364xx_start_readpipe(cam);
++	if (res)
++		return res;
++
+ 	res = zr364xx_prepare(cam);
+-	if (!res)
+-		zr364xx_start_acquire(cam);
++	if (res)
++		goto err_prepare;
++
++	zr364xx_start_acquire(cam);
++	return 0;
++
++err_prepare:
++	zr364xx_stop_readpipe(cam);
+ 	return res;
+ }
+ #endif
 -- 
 2.27.0
 
