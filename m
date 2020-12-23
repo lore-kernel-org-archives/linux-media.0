@@ -2,72 +2,122 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7500BC433DB
-	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 21:51:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 211AAC433DB
+	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 22:25:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3C18B2247F
-	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 21:51:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E1B4F22288
+	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 22:25:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726036AbgLWVvf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Dec 2020 16:51:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
+        id S1726288AbgLWWYu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Dec 2020 17:24:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725270AbgLWVvf (ORCPT
+        with ESMTP id S1725811AbgLWWYu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Dec 2020 16:51:35 -0500
-X-Greylist: delayed 390 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 23 Dec 2020 13:50:54 PST
-Received: from forward105o.mail.yandex.net (forward105o.mail.yandex.net [IPv6:2a02:6b8:0:1a2d::608])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95148C06179C;
-        Wed, 23 Dec 2020 13:50:54 -0800 (PST)
-Received: from sas1-37a29cf4dc11.qloud-c.yandex.net (sas1-37a29cf4dc11.qloud-c.yandex.net [IPv6:2a02:6b8:c08:121b:0:640:37a2:9cf4])
-        by forward105o.mail.yandex.net (Yandex) with ESMTP id 819B3420081C;
-        Thu, 24 Dec 2020 00:44:20 +0300 (MSK)
-Received: from sas1-27140bb19246.qloud-c.yandex.net (sas1-27140bb19246.qloud-c.yandex.net [2a02:6b8:c08:1803:0:640:2714:bb1])
-        by sas1-37a29cf4dc11.qloud-c.yandex.net (mxback/Yandex) with ESMTP id 2Dwue1xLO2-iKD0coLt;
-        Thu, 24 Dec 2020 00:44:20 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ratijas.tk; s=mail; t=1608759860;
-        bh=WVqFJHRGsDCBhTAXGq9W8zmkCx1Mc8HIn2cmVud7A1U=;
-        h=Date:Subject:To:From:Message-Id:Cc;
-        b=tNgo0/c8EADSQhLeg8euIyeStDTboG04n1ybEXRoongwRBs7t2V7AIDrc6T3mK8X4
-         yGYcFB/j6R8puYQfvs9Exe1n0Zc199vEEkUzU7FeVXKXEkaRbEo+n4/xPaQRTtyV4U
-         9/zOKmwj1KXSIh/PL5vWMR/NJVMOei/tGT2XDgHs=
-Authentication-Results: sas1-37a29cf4dc11.qloud-c.yandex.net; dkim=pass header.i=@ratijas.tk
-Received: by sas1-27140bb19246.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id PYqbrm6b1O-iJHOKBf7;
-        Thu, 24 Dec 2020 00:44:19 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-From:   ivan tkachenko <me@ratijas.tk>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     ivan tkachenko <me@ratijas.tk>
-Subject: [PATCH 0/1] media: hdmi: cec: replace broken link to HDMI specs
-Date:   Thu, 24 Dec 2020 00:43:53 +0300
-Message-Id: <20201223214354.588382-1-me@ratijas.tk>
-X-Mailer: git-send-email 2.29.2
+        Wed, 23 Dec 2020 17:24:50 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3FFC061794;
+        Wed, 23 Dec 2020 14:24:09 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id y23so188201wmi.1;
+        Wed, 23 Dec 2020 14:24:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=sCveDTAqg2krVZsKdg4haeDPpG4bCY8xxdMqSu4hHV0=;
+        b=SPXs4ihQVtEbUsfzq1Hqda/oybQY2OvK1F30H3bW7uhyexY2dCo/M5s+KEqAlT8DTW
+         NnUQ9UXiunXMMi0M/eSQKDqEZEfiNBr1AbSwHWYkLlz8pczbU+5Tln/W4HkHt6nXHVOk
+         JvqZjlFk2wtYTvfmArSUIGFqo7SjZZlF1AgW91N23aj+UeKxUYhqAFbtrP8F9jyQZIek
+         6kmuBfpl9J1B8095HEd4jGDE13OPDjOv3FNwztMx/fZUtdr96EczLM8hw7yZE+s8g2/G
+         gwubldFpGI2S/aB9kwz8INnewVxAaiIygY7VJk9yOHY3aXU0sz1TtfKcheVq1dFtJaeP
+         UPNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=sCveDTAqg2krVZsKdg4haeDPpG4bCY8xxdMqSu4hHV0=;
+        b=VijRwiKzVIdnv8U4pauT6KuJYwFpyLDQOZsLjbGH3btc6ecj8AO64wfrPUQsEst9bF
+         IwQ0sngdS1S8f7gSBmnOaup+bwSkO2weR8vX4U9IPaybXCMb4s4i6vmfDQFCMwjYCpRP
+         Y5mzVWWf2Qwss9zEmocp6XAJEWbG4zYQ2TgNLH4+JuIoIFAjK48vktaxtXaoAJjNtm53
+         yRvtFUHxAuFEQTez7F3c/hm+H092JtF3vhfwrhAU3g00/L1OgkdQ6g9dEd4zSG9pvIBb
+         /H4jhkTjklN9oFB+fa5eKel0Ww9v4t+I+vqfrcOvil2dzjsub8B322d+kZ4p9TWKqS02
+         7WpQ==
+X-Gm-Message-State: AOAM532akjqOdBtEkS5OVBFNGKIP64LodJRRRPV0AS9bgtw9pbLBAR13
+        RT/knrVtaK2y2ufAOC36ZbQ=
+X-Google-Smtp-Source: ABdhPJz0hRrU9c/emexZj08cKNt3M2dVcETfPsmlBzq1aTSLke8hhuX43Ushz9NCnDUdmU5bPhVtIw==
+X-Received: by 2002:a1c:bc02:: with SMTP id m2mr1548175wmf.59.1608762248064;
+        Wed, 23 Dec 2020 14:24:08 -0800 (PST)
+Received: from [192.168.1.158] ([2.31.224.116])
+        by smtp.gmail.com with ESMTPSA id c20sm1217971wmb.38.2020.12.23.14.24.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Dec 2020 14:24:07 -0800 (PST)
+Subject: Re: [PATCH v2 05/12] software_node: unregister software_nodes in
+ reverse order
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-media@vger.kernel.org, devel@acpica.org, rjw@rjwysocki.net,
+        lenb@kernel.org, gregkh@linuxfoundation.org, yong.zhi@intel.com,
+        bingbu.cao@intel.com, tian.shu.qiu@intel.com, mchehab@kernel.org,
+        robert.moore@intel.com, erik.kaneda@intel.com, pmladek@suse.com,
+        rostedt@goodmis.org, sergey.senozhatsky@gmail.com,
+        linux@rasmusvillemoes.dk,
+        laurent.pinchart+renesas@ideasonboard.com,
+        jacopo+renesas@jmondi.org, kieran.bingham+renesas@ideasonboard.com,
+        linus.walleij@linaro.org, heikki.krogerus@linux.intel.com,
+        kitakar@gmail.com, jorhand@linux.microsoft.com,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+References: <20201217234337.1983732-1-djrscally@gmail.com>
+ <20201217234337.1983732-6-djrscally@gmail.com>
+ <20201221092116.GG26370@paasikivi.fi.intel.com>
+ <20201221112644.GJ4077@smile.fi.intel.com>
+From:   Daniel Scally <djrscally@gmail.com>
+Message-ID: <9fbd8234-6cc3-ac3c-7273-854e965a4794@gmail.com>
+Date:   Wed, 23 Dec 2020 22:24:03 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201221112644.GJ4077@smile.fi.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+On 21/12/2020 11:26, Andy Shevchenko wrote:
+> On Mon, Dec 21, 2020 at 11:21:16AM +0200, Sakari Ailus wrote:
+>> On Thu, Dec 17, 2020 at 11:43:30PM +0000, Daniel Scally wrote:
+>>> To maintain consistency with software_node_unregister_nodes(), reverse
+>>> the order in which the software_node_unregister_node_group() function
+>>> unregisters nodes.
+> 
+> ...
+> 
+>>>  void software_node_unregister_node_group(const struct software_node **node_group)
+>>>  {
+>>> -	unsigned int i;
+>>> +	unsigned int i = 0;
+>>>  
+>>>  	if (!node_group)
+>>>  		return;
+>>>  
+>>> -	for (i = 0; node_group[i]; i++)
+>>> +	while (node_group[i]->name)
+>>
+>> Why is this change made? node_group is a NULL-terminated array, and the
+>> above accesses the name pointer on each entry before checking the entry is
+>> non-NULL. Or do I miss something here?
+> 
+> I believe it's a copy'n'paste typo.
 
-It's my first patch. I read a lot of materials on this topic, and tried
-hard to do things by the books. If, after all that trouble, I still
-managed to mess up, please let me know in the least polite way possible.
-
-ivan tkachenko (1):
-  media: hdmi: cec: replace broken link to HDMI specs
-
- Documentation/driver-api/media/cec-core.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
--- 
-2.29.2
-
+Careless copy and paste yeah, my bad. I was doing it for consistency but
+really should've just changed the ordering; I'll just drop that part.
