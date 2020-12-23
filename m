@@ -2,140 +2,153 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E7ECC4321A
-	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 03:03:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 128FDC433E0
+	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 03:55:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0C39620757
-	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 03:03:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D0AEA224D4
+	for <linux-media@archiver.kernel.org>; Wed, 23 Dec 2020 03:55:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729052AbgLWDCu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 22 Dec 2020 22:02:50 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46290 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727525AbgLWCTe (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 22 Dec 2020 21:19:34 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 48F04225AC;
-        Wed, 23 Dec 2020 02:19:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608689942;
-        bh=UXq0LZfpd6ooODibQK/KgNlqWEtnJY6cHmBeQMYx+2s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=maLFT5pQwEv+bSeu4yCfE9HRLR54QQp29o/fLPZmy+yy/8cnEHJ6QytVyIfSiIya4
-         h+40jjoITTP9sd4dbcZm4yG09aIqDC5NyETR7gUh0iEAdc3kyqJLthu+pz+FDcffwO
-         8yfflI6TWBn6xIAZjnByhHZ8w8toUrlULaOaTESMfGFF6IZuh1ZS+6p50rLJOH44ma
-         prd0twHUhUfIY3efmlVQ4c/g78+uYU54ixWrMfvYzvYj4UYZD1lbCpB6JvQstrlKLk
-         dSeq7BejmGy7fG5ai7n+mjo18E9h06tVzVUkXpaWrAo3paCueL9VjM7fJF3eDkkcJz
-         e0QSh+2hD51xA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Evgeny Novikov <novikov@ispras.ru>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 037/130] media: zr364xx: propagate errors from zr364xx_start_readpipe()
-Date:   Tue, 22 Dec 2020 21:16:40 -0500
-Message-Id: <20201223021813.2791612-37-sashal@kernel.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201223021813.2791612-1-sashal@kernel.org>
-References: <20201223021813.2791612-1-sashal@kernel.org>
+        id S1727261AbgLWDyk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 22 Dec 2020 22:54:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50462 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726756AbgLWDyk (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 22 Dec 2020 22:54:40 -0500
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8F3C0613D3;
+        Tue, 22 Dec 2020 19:54:00 -0800 (PST)
+Received: from hatter.bewilderbeest.net (unknown [IPv6:2600:6c44:7f:ba20:1c66:ab2d:5a3:5a9e])
+        (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id B2D99806F7;
+        Tue, 22 Dec 2020 19:53:58 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 thorn.bewilderbeest.net B2D99806F7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1608695639;
+        bh=UkEGylhrdt8z9hX+GY1d6wW/RLqoqo23ET3G6KBW12A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EuqG2WVFsZMIebMeVg+hIzhIuIBAWpjuaouck7qEvF+MZ4Knw2bS2SxoWuw+Gf2pF
+         Lpc901GW0brm5cmwHVKXs+GqZuK+BLqwsmWLZ0EVI7umLbp5Vl6x5e4oRCIpjSposk
+         NYe/dao6uzh8gknvwxu/Bo3+7Lx1mioJfQ4hVIBo=
+Date:   Tue, 22 Dec 2020 21:53:53 -0600
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Ryan Chen <ryan_chen@aspeedtech.com>
+Cc:     Joel Stanley <joel@jms.id.au>, Eddie James <eajames@linux.ibm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Subject: Re: [PATCH 2/3] aspeed-video: clear spurious interrupt bits
+ unconditionally
+Message-ID: <20201223035353.omn5ebut62sb7mxh@hatter.bewilderbeest.net>
+References: <20201215024542.18888-1-zev@bewilderbeest.net>
+ <20201215024542.18888-3-zev@bewilderbeest.net>
+ <CACPK8XczCUgqOENABoDbc-qwbMxOh=1OUyBtuHSmDG_Zo571Wg@mail.gmail.com>
+ <20201222191433.3dgnfwyrod4tnvaf@hatter.bewilderbeest.net>
+ <CACPK8XeOZEkpAKcyhZLeMdGzbwtFmdGEnL6QXp0VK1HL_O2pSg@mail.gmail.com>
+ <HK0PR06MB338018668005D679C51EF69AF2DE0@HK0PR06MB3380.apcprd06.prod.outlook.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <HK0PR06MB338018668005D679C51EF69AF2DE0@HK0PR06MB3380.apcprd06.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Evgeny Novikov <novikov@ispras.ru>
+On Tue, Dec 22, 2020 at 08:53:33PM CST, Ryan Chen wrote:
+>> -----Original Message-----
+>> From: Joel Stanley <joel@jms.id.au>
+>> Sent: Wednesday, December 23, 2020 9:07 AM
+>> To: Zev Weiss <zev@bewilderbeest.net>; Ryan Chen
+>> <ryan_chen@aspeedtech.com>
+>> Cc: Eddie James <eajames@linux.ibm.com>; Mauro Carvalho Chehab
+>> <mchehab@kernel.org>; Andrew Jeffery <andrew@aj.id.au>;
+>> linux-media@vger.kernel.org; OpenBMC Maillist <openbmc@lists.ozlabs.org>;
+>> Linux ARM <linux-arm-kernel@lists.infradead.org>; linux-aspeed
+>> <linux-aspeed@lists.ozlabs.org>; Linux Kernel Mailing List
+>> <linux-kernel@vger.kernel.org>; Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+>> Subject: Re: [PATCH 2/3] aspeed-video: clear spurious interrupt bits
+>> unconditionally
+>>
+>> On Tue, 22 Dec 2020 at 19:14, Zev Weiss <zev@bewilderbeest.net> wrote:
+>> >
+>> > On Mon, Dec 21, 2020 at 10:47:37PM CST, Joel Stanley wrote:
+>> > >On Tue, 15 Dec 2020 at 02:46, Zev Weiss <zev@bewilderbeest.net> wrote:
+>> > >>
+>> > >> Instead of testing and conditionally clearing them one by one, we
+>> > >> can instead just unconditionally clear them all at once.
+>> > >>
+>> > >> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+>> > >
+>> > >I had a poke at the assembly and it looks like GCC is clearing the
+>> > >bits unconditionally anyway, so removing the tests provides no change.
+>> > >
+>> > >Combining them is a good further optimization.
+>> > >
+>> > >Reviewed-by: Joel Stanley <joel@jms.id.au>
+>> > >
+>> > >A question unrelated to this patch: Do you know why the driver
+>> > >doesn't clear the status bits in the interrupt handler? I would
+>> > >expect it to write the value of sts back to the register to ack the
+>> > >pending interrupt.
+>> > >
+>> >
+>> > No, I don't, and I was sort of wondering the same thing actually --
+>> > I'm not deeply familiar with this hardware or driver though, so I was
+>> > a bit hesitant to start messing with things.  (Though maybe doing so
+>> > would address the "stickiness" aspect when it does manifest.)  Perhaps
+>> > Eddie or Jae can shed some light here?
+>>
+>> I think you're onto something here - this would be why the status bits seem to
+>> stick until the device is reset.
+>>
+>> Until Aspeed can clarify if this is a hardware or software issue, I suggest we ack
+>> the bits and log a message when we see them, instead of always ignoring them
+>> without taking any action.
+>>
+>> Can you write a patch that changes the interrupt handler to ack status bits as it
+>> handles each of them?
+>>
+>Hello Zev, before the patch, do you met issue with irq handler? [continuous incoming?]
+>
+>In aspeed_video_irq handler should only handle enable interrupt expected.
+>   u32 sts = aspeed_video_read(video, VE_INTERRUPT_STATUS);
+> + sts &= aspeed_video_read(video, VE_INTERRUPT_CTRL);
+>
+>Ryan
+>
 
-[ Upstream commit af0321a5be3e5647441eb6b79355beaa592df97a ]
+Hi Ryan,
 
-zr364xx_start_readpipe() can fail but callers do not care about that.
-This can result in various negative consequences. The patch adds missed
-error handling.
+Prior to any of these patches I encountered a problem pretty much 
+exactly like what Jae described in his commit message in 65d270acb2d 
+(but the kernel I was running included that patch).  Adding the 
+diagnostic in patch #1 of this series showed that it was apparently the 
+same problem, just with a different interrupt that Jae's patch didn't 
+include.
 
-Found by Linux Driver Verification project (linuxtesting.org).
+ From what you wrote above, I gather that it is in fact expected for the 
+hardware to assert interrupts that aren't enabled in VE_INTERRUPT_CTRL?  
+If so, I guess something like that would obviate the need for both Jae's 
+earlier patch and this whole series.
 
-Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/media/usb/zr364xx/zr364xx.c | 31 ++++++++++++++++++++++-------
- 1 file changed, 24 insertions(+), 7 deletions(-)
+I think the question Joel raised is somewhat independent though -- if 
+the VE_INTERRUPT_STATUS register asserts interrupts we're not actually 
+using, should the driver acknowledge them anyway or just leave them 
+alone?  (Though if we're just going to ignore them anyway maybe it 
+doesn't ultimately matter very much.)
 
-diff --git a/drivers/media/usb/zr364xx/zr364xx.c b/drivers/media/usb/zr364xx/zr364xx.c
-index 637962825d7a8..32f463f05eacd 100644
---- a/drivers/media/usb/zr364xx/zr364xx.c
-+++ b/drivers/media/usb/zr364xx/zr364xx.c
-@@ -1330,6 +1330,7 @@ static int zr364xx_board_init(struct zr364xx_camera *cam)
- {
- 	struct zr364xx_pipeinfo *pipe = cam->pipe;
- 	unsigned long i;
-+	int err;
- 
- 	DBG("board init: %p\n", cam);
- 	memset(pipe, 0, sizeof(*pipe));
-@@ -1362,9 +1363,8 @@ static int zr364xx_board_init(struct zr364xx_camera *cam)
- 
- 	if (i == 0) {
- 		printk(KERN_INFO KBUILD_MODNAME ": out of memory. Aborting\n");
--		kfree(cam->pipe->transfer_buffer);
--		cam->pipe->transfer_buffer = NULL;
--		return -ENOMEM;
-+		err = -ENOMEM;
-+		goto err_free;
- 	} else
- 		cam->buffer.dwFrames = i;
- 
-@@ -1379,9 +1379,17 @@ static int zr364xx_board_init(struct zr364xx_camera *cam)
- 	/*** end create system buffers ***/
- 
- 	/* start read pipe */
--	zr364xx_start_readpipe(cam);
-+	err = zr364xx_start_readpipe(cam);
-+	if (err)
-+		goto err_free;
-+
- 	DBG(": board initialized\n");
- 	return 0;
-+
-+err_free:
-+	kfree(cam->pipe->transfer_buffer);
-+	cam->pipe->transfer_buffer = NULL;
-+	return err;
- }
- 
- static int zr364xx_probe(struct usb_interface *intf,
-@@ -1578,10 +1586,19 @@ static int zr364xx_resume(struct usb_interface *intf)
- 	if (!cam->was_streaming)
- 		return 0;
- 
--	zr364xx_start_readpipe(cam);
-+	res = zr364xx_start_readpipe(cam);
-+	if (res)
-+		return res;
-+
- 	res = zr364xx_prepare(cam);
--	if (!res)
--		zr364xx_start_acquire(cam);
-+	if (res)
-+		goto err_prepare;
-+
-+	zr364xx_start_acquire(cam);
-+	return 0;
-+
-+err_prepare:
-+	zr364xx_stop_readpipe(cam);
- 	return res;
- }
- #endif
--- 
-2.27.0
+
+Zev
 
