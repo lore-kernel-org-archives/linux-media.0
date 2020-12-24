@@ -2,120 +2,110 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 258FAC4332B
-	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 15:05:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A55FC433E6
+	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 18:38:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 05A6D23129
-	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 15:05:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3AD2522AAC
+	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 18:38:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728439AbgLXPEz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Dec 2020 10:04:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34876 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727114AbgLXPEy (ORCPT
+        id S1728791AbgLXShw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 24 Dec 2020 13:37:52 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:30417 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728266AbgLXShw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Dec 2020 10:04:54 -0500
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C7AC061573;
-        Thu, 24 Dec 2020 07:04:29 -0800 (PST)
-Received: by mail-qk1-x733.google.com with SMTP id p14so2250170qke.6;
-        Thu, 24 Dec 2020 07:04:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=o/IisbDukaJFzBqxu964rS+3N2VqdxzPbVgg8PjT41o=;
-        b=l/9LME7nqH0Bw4sD3e3OW3OYmn8PVvlAM8FrWFi0owdacStKQQzqou2ivQ+gp+XmtI
-         +uPWhI8E9VHPlqKrp8E+QV870z0FVM34Z087dI3kF6nFJolS8Y4RIYK/dzAVHzyGz9yu
-         X+Gav/mNAEf7/oOlSWlmPgo2SJtsHPAOtxIFCjIbLJGspKWkLtIUn+GG0zsGolxowkjX
-         JbJJmNihGxKyNSGvIJPImHVnC2KVuaOfUKALsYdEidWNZ4/Rh/yjtv5BWslSmsR4BLpD
-         Odsq0vdp6+XAyJaYYtWU0Hb49j/7RRSSH7AmUm9sm5pBxuvCWQ0SJKyMjRuLNF7GK097
-         kDYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=o/IisbDukaJFzBqxu964rS+3N2VqdxzPbVgg8PjT41o=;
-        b=hGGKJowxpbVac4rJQ8g7Ys9AoMQ+rzSZXoIwbXzpCytgjl/R/9VBbPdQXvWXKj+DHP
-         AkeC7rpnCuF4ZAbuH/XsrvkxE/DDyRhFoXpGI50HUY7h7BAtNfqU/5TDDbdnzjGa7ZmG
-         Z9sB+aPsBxO97jUqpwqmaAXAzT68MkQrTfw3G1aJgXH2l6HkCLCGRRzXY2T0kfE/EZek
-         iLqwOHJtp9ni9v//PMJT2GW8YimwrwpY9fMYIDU7XFsDOxZSmfU5OfSAHKM/uOyAasHR
-         Xe4cds+V7YcUjCHet6bATSzXmb2U8Uby4m+9h0IMWkqqxIZkCQOabFRAyYIE3bBQqFG5
-         Y/Dw==
-X-Gm-Message-State: AOAM5318gZUKA5chVUZ7JcIc39DIpxgmvHI/OcHAYNV0uQdPC17w545G
-        7qGksAAd7dEGtf66N1QOyWI=
-X-Google-Smtp-Source: ABdhPJzdhDLVpyNwY49XuT1FiQcBgGQ2QXFo8AlFeIwbOfbdet6zNRD61EB9U7VVGajz/ebsb1uZQA==
-X-Received: by 2002:a05:620a:544:: with SMTP id o4mr32244012qko.19.1608822268280;
-        Thu, 24 Dec 2020 07:04:28 -0800 (PST)
-Received: from localhost.localdomain ([2804:14d:72b1:8920:74c8:8f67:61c5:55b9])
-        by smtp.gmail.com with ESMTPSA id e38sm10322215qtb.30.2020.12.24.07.04.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Dec 2020 07:04:27 -0800 (PST)
-From:   "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
-X-Google-Original-From: Daniel W. S. Almeida
-To:     mchehab@kernel.org, "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     linux-media@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.o,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] vidtv: psi: fix missing crc for PMT
-Date:   Thu, 24 Dec 2020 12:04:00 -0300
-Message-Id: <20201224150402.1945788-1-dwlsalmeida@gmail.com>
-X-Mailer: git-send-email 2.29.2
+        Thu, 24 Dec 2020 13:37:52 -0500
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-277-gYu6pb9aP32_rumPVp6FPw-1; Thu, 24 Dec 2020 18:36:12 +0000
+X-MC-Unique: gYu6pb9aP32_rumPVp6FPw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Thu, 24 Dec 2020 18:36:11 +0000
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Thu, 24 Dec 2020 18:36:11 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Daniel Scally' <djrscally@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "ACPI Devel Maling List" <linux-acpi@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        "devel@acpica.org" <devel@acpica.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Yong Zhi <yong.zhi@intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Tian Shu Qiu <tian.shu.qiu@intel.com>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        "Erik Kaneda" <erik.kaneda@intel.com>,
+        Petr Mladek <pmladek@suse.com>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        "kieran.bingham+renesas@ideasonboard.com" 
+        <kieran.bingham+renesas@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        "niklas.soderlund+renesas@ragnatech.se" 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: RE: [PATCH v3 05/14] software_node: unregister software_nodes in
+ reverse order
+Thread-Topic: [PATCH v3 05/14] software_node: unregister software_nodes in
+ reverse order
+Thread-Index: AQHW2f9YHWzUalHOOk+Pd50vjly8GaoGkhDQ
+Date:   Thu, 24 Dec 2020 18:36:10 +0000
+Message-ID: <fcb07dea193b4b99b11f2a8e684d8acf@AcuMS.aculab.com>
+References: <20201224010907.263125-1-djrscally@gmail.com>
+ <20201224010907.263125-6-djrscally@gmail.com>
+ <CAHp75VdF5NdjrSxcOafh7KNNDteYEUDk9otA0HKX-iks7G0D4g@mail.gmail.com>
+ <de478ef0-0b4d-df1d-2651-9cc35bf2f45b@gmail.com>
+ <CAHp75VdWuowLenNPQRNc+QXeyuvwKqh_bjw=1WvmFrzoygXFRw@mail.gmail.com>
+ <2b415312-fe30-c73b-0077-4ec2a07116df@gmail.com>
+In-Reply-To: <2b415312-fe30-c73b-0077-4ec2a07116df@gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
-
-The PMT write function was refactored and this broke the CRC computation.
-
-Fix it.
-
-Fixes: db9569f67e2e ("media: vidtv: cleanup PMT write table function")
-Signed-off-by: Daniel W. S. Almeida <dwlsalmeida@gmail.com>
----
- drivers/media/test-drivers/vidtv/vidtv_psi.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_psi.c b/drivers/media/test-drivers/vidtv/vidtv_psi.c
-index 4511a2a98405..1724bb485e67 100644
---- a/drivers/media/test-drivers/vidtv/vidtv_psi.c
-+++ b/drivers/media/test-drivers/vidtv/vidtv_psi.c
-@@ -1164,6 +1164,8 @@ u32 vidtv_psi_pmt_write_into(struct vidtv_psi_pmt_write_args *args)
- 	struct vidtv_psi_desc *table_descriptor   = args->pmt->descriptor;
- 	struct vidtv_psi_table_pmt_stream *stream = args->pmt->stream;
- 	struct vidtv_psi_desc *stream_descriptor;
-+	u32 crc = INITIAL_CRC;
-+	u32 nbytes = 0;
- 	struct header_write_args h_args = {
- 		.dest_buf           = args->buf,
- 		.dest_offset        = args->offset,
-@@ -1181,6 +1183,7 @@ u32 vidtv_psi_pmt_write_into(struct vidtv_psi_pmt_write_args *args)
- 		.new_psi_section    = false,
- 		.is_crc             = false,
- 		.dest_buf_sz        = args->buf_sz,
-+		.crc                = &crc,
- 	};
- 	struct desc_write_args d_args   = {
- 		.dest_buf           = args->buf,
-@@ -1193,8 +1196,6 @@ u32 vidtv_psi_pmt_write_into(struct vidtv_psi_pmt_write_args *args)
- 		.pid                = args->pid,
- 		.dest_buf_sz        = args->buf_sz,
- 	};
--	u32 crc = INITIAL_CRC;
--	u32 nbytes = 0;
- 
- 	vidtv_psi_pmt_table_update_sec_len(args->pmt);
- 
--- 
-2.29.2
+RnJvbTogRGFuaWVsIFNjYWxseSANCj4gU2VudDogMjQgRGVjZW1iZXIgMjAyMCAxNDoxNA0KLi4u
+DQo+ID4+IFRoZSBhcnJheSB3aWxsIGJlIHVud291bmQgaW4gcmV2ZXJzZSBvcmRlciAoaS5lLiBs
+YXN0IGVudHJ5IGZpcnN0KS4gSWYNCj4gPj4gYW55IG1lbWJlciBvZiB0aGUgYXJyYXkgaXMgYSBj
+aGlsZCBvZiBhbm90aGVyIG1lbWJlciB0aGVuIHRoZSBjaGlsZCBtdXN0DQo+ID4gY2hpbGRyZW4g
+Pw0KPiANCj4gWWVzLCB5b3UgYXJlIHJpZ2h0IG9mIGNvdXJzZS4NCg0KVGhlIHNlY29uZCAnY2hp
+bGQnIGlzIGEgYmFjay1yZWZlcmVuY2UgdG8gJ2FueSBtZW1iZXInIHNvIGlzIHNpbmd1bGFyDQpz
+byAnY2hpbGQnIGlzIGNvcnJlY3QuDQondGhlIGNoaWxkJyBjb3VsZCBiZSByZXBsYWNlZCBieSAn
+aXQnDQoNCllvdSBjb3VsZCBoYXZlOg0KICAgSWYgYW55IG1lbWJlcnMgb2YgdGhlIGFycmF5IGFy
+ZSBjaGlsZHJlbiBvZiBhbm90aGVyIG1lbWJlciB0aGVuIHRoZQ0KICAgY2hpbGRyZW4gbXVzdCBh
+cHBlYXIgbGF0ZXIgaW4gdGhlIGxpc3QuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJl
+c3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsx
+IDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
