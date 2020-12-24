@@ -5,58 +5,58 @@ X-Spam-Level:
 X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0239FC43332
-	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 01:10:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 738BFC433E0
+	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 01:11:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B6029225AC
-	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 01:10:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3DC6A2251F
+	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 01:11:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728979AbgLXBKx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Dec 2020 20:10:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48344 "EHLO
+        id S1728774AbgLXBKq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Dec 2020 20:10:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728908AbgLXBKt (ORCPT
+        with ESMTP id S1728754AbgLXBKp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Dec 2020 20:10:49 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2EAC0611CE;
-        Wed, 23 Dec 2020 17:09:40 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id k10so366365wmi.3;
-        Wed, 23 Dec 2020 17:09:40 -0800 (PST)
+        Wed, 23 Dec 2020 20:10:45 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3541C0611C5;
+        Wed, 23 Dec 2020 17:09:33 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id r3so855081wrt.2;
+        Wed, 23 Dec 2020 17:09:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=RN4eZW0P5zJGQ+ExnLjE8F4o1z5DWe8tjmYcqAjmd8g=;
-        b=Z6KH8ThAa3j0w+iK1ZWRecYUgVX8cXs+S51zqeJ/CN878vHMwmwiEqMENCQ4xAG2eN
-         3Fbe72iHm8xFtQGOVWN6S+7i67QHptesp0QbE+X71pJgcbUHGeZQ4eC50Afixx1M2hle
-         EG842ywAsfa/K/W2nqMP2SwZaOCPi1sWTZVstX5GW5nWIkJm4/BpBT4mX/sUyLj3EgI7
-         a2cxNPJ3M+UzY74EEf10CLOTxP+Y4rhSRtHNgf7TrYyVce1solCdF8fqtC4hnKx/TVjy
-         1c2kchPO2KOFyiyD9erRtCixY9OSER3jbNmQr+Wl0ToOSWFSaJZuZfzvK19xTU8NooMW
-         ul5Q==
+        bh=nrWZ4vmWcGXVMa9R5napfQoQ5FKRFGqI2Uo6ZMQnL+A=;
+        b=pDz5hfUnX3AukEgHxPyP0Yq8OUi6Zp/bNcXsxPhO66zFsjLrP1fV/j1eUNX6voZ4i7
+         DMEaFgPx2i2cmSkfqbfZHy11gGvhRYHw5ajKseo36FYzexoqyI/SThOrnYzyAZd4Qn2O
+         nXVQtKVQenYpSz9nrEiC/eq7UWkm+R3ngLOQXyjNQksjy/9wBuAbLifh3AVnlT0a7Ysv
+         D7RRpuXbE5L+JspyD5vwzlC7l2vIytcbPg6EvCcdzkg0/8CedztiWlqcGJkcAla/Dvu+
+         jn288IWVoFBt+RMD6ibjfecPCYfvHYuXSUK27jzxPKATJ7l+AQSZ468egv4RprYP7/up
+         dCzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=RN4eZW0P5zJGQ+ExnLjE8F4o1z5DWe8tjmYcqAjmd8g=;
-        b=Jt1zIPu7tQU3ryw+bUeJ0zhar2bJx+IhtXDE+evmjf1fbKez0aoZ0sGTOSR5MAdLMo
-         7KC0oCVM5TOKYAJaSPa6aEuUIGUNmnXjmVofiZQAfmmqfPKS9oTF4Hmx7oL1KydHnWyD
-         xy2B5DezhWmph5M5wyJJbk5vTZ/2k6Wf62SZKleCpBdniXq9p25WkFk7nA0CN1YCzvIk
-         LZhDRY17uvTR4YzOsHy5zmGyAU1+O9UbBQMEkB7Zt57zib5qBjWO7iTsTb2ja1ghgy6/
-         allfgb55Sl6/4a6etZRFdS99+jX/Jpdnd/qJyUOv4nLLf7Gj3B/+Qbr+1ZAYCYSOImoK
-         JDug==
-X-Gm-Message-State: AOAM5307gBn6qdcKs60AV5fab43nB9c+kbnItyTEHPGfUy5A6CalcU6y
-        jhvUnmsVnCFm1h7IWxpsXuA5vkTAMsGw7pUL
-X-Google-Smtp-Source: ABdhPJzJmNQdMwNpl7s31MtXZuCE6vhgnmsG9jR4VzJsq0ZYiSdT3Fafrgp5fgpG01d9QefPnL0fAg==
-X-Received: by 2002:a1c:dc87:: with SMTP id t129mr1977147wmg.52.1608772179190;
-        Wed, 23 Dec 2020 17:09:39 -0800 (PST)
+        bh=nrWZ4vmWcGXVMa9R5napfQoQ5FKRFGqI2Uo6ZMQnL+A=;
+        b=XNE885t3+UvxJM0wNyemLnrCWAOalRN9YF5s2b56BEclx+mVQfV6HK60XFKLiOZX4g
+         UJCnWXa3ffFbOMVg2BxQhJmaQOj5v6hICfWTDb3//JIti1HHbdabYvjI3kdVAIkKH65o
+         s+x4oaPdXAWFWiWHIxOinzLroWTpynfCRsn542j2ul03D+9NHeJIslhsZCiWV5Z6JR7v
+         5nWrFg0463P/f62F5kg5N75juoNMZh5fDB/f56gNcYmN+B7KcTmEkid/mOczb3p76qud
+         VSNoExUvrwdLBhjWH47uDqlNBA2iQW8pdgH5QxVnAXyEvyhTovY0glC+k4wrfm91EgGe
+         la8g==
+X-Gm-Message-State: AOAM531tuRsAJ5ni1lDCMa+PxLpIo86X+r4vpytyHMMOqgTu6/nWFUEI
+        l8PzL25OxNyY1lNBiS9CowyDFiUQz0YvMCfP
+X-Google-Smtp-Source: ABdhPJxITjMGrsegwYlQ4qrtkCCofATTFjbq1HCR2i/1CDLo89l6mdFEp2nUewaJ590N3Ndjh0wEGg==
+X-Received: by 2002:adf:e443:: with SMTP id t3mr31495512wrm.366.1608772172496;
+        Wed, 23 Dec 2020 17:09:32 -0800 (PST)
 Received: from valhalla.home ([2.31.224.116])
-        by smtp.gmail.com with ESMTPSA id b200sm1598653wmb.10.2020.12.23.17.09.37
+        by smtp.gmail.com with ESMTPSA id b200sm1598653wmb.10.2020.12.23.17.09.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Dec 2020 17:09:38 -0800 (PST)
+        Wed, 23 Dec 2020 17:09:32 -0800 (PST)
 From:   Daniel Scally <djrscally@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-media@vger.kernel.org, devel@acpica.org
@@ -70,10 +70,11 @@ Cc:     rjw@rjwysocki.net, lenb@kernel.org, gregkh@linuxfoundation.org,
         jacopo+renesas@jmondi.org, kieran.bingham+renesas@ideasonboard.com,
         hverkuil-cisco@xs4all.nl, m.felsch@pengutronix.de,
         niklas.soderlund+renesas@ragnatech.se, slongerbeam@gmail.com,
-        heikki.krogerus@linux.intel.com, linus.walleij@linaro.org
-Subject: [PATCH v3 13/14] include: media: v4l2-fwnode: Include v4l2_fwnode_bus_type
-Date:   Thu, 24 Dec 2020 01:09:06 +0000
-Message-Id: <20201224010907.263125-14-djrscally@gmail.com>
+        heikki.krogerus@linux.intel.com, linus.walleij@linaro.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v3 08/14] lib/test_printf.c: Use helper function to unwind array of software_nodes
+Date:   Thu, 24 Dec 2020 01:09:01 +0000
+Message-Id: <20201224010907.263125-9-djrscally@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201224010907.263125-1-djrscally@gmail.com>
 References: <20201224010907.263125-1-djrscally@gmail.com>
@@ -83,75 +84,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-V4L2 fwnode bus types are enumerated in v4l2-fwnode.c, meaning they aren't
-available to the rest of the kernel. Move the enum to the corresponding
-header so that I can use the label to refer to those values.
+Use the software_node_unregister_nodes() helper function to unwind this
+array in a cleaner way.
 
+Acked-by: Petr Mladek <pmladek@suse.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
 Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Daniel Scally <djrscally@gmail.com>
 ---
 Changes in v3
-	- Patch introduced
+	- None
 
- drivers/media/v4l2-core/v4l2-fwnode.c | 11 -----------
- include/media/v4l2-fwnode.h           | 22 ++++++++++++++++++++++
- 2 files changed, 22 insertions(+), 11 deletions(-)
+ lib/test_printf.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
-index 5353e37eb950..c1c2b3060532 100644
---- a/drivers/media/v4l2-core/v4l2-fwnode.c
-+++ b/drivers/media/v4l2-core/v4l2-fwnode.c
-@@ -28,17 +28,6 @@
- #include <media/v4l2-fwnode.h>
- #include <media/v4l2-subdev.h>
+diff --git a/lib/test_printf.c b/lib/test_printf.c
+index 7ac87f18a10f..7d60f24240a4 100644
+--- a/lib/test_printf.c
++++ b/lib/test_printf.c
+@@ -644,9 +644,7 @@ static void __init fwnode_pointer(void)
+ 	test(second_name, "%pfwP", software_node_fwnode(&softnodes[1]));
+ 	test(third_name, "%pfwP", software_node_fwnode(&softnodes[2]));
  
--enum v4l2_fwnode_bus_type {
--	V4L2_FWNODE_BUS_TYPE_GUESS = 0,
--	V4L2_FWNODE_BUS_TYPE_CSI2_CPHY,
--	V4L2_FWNODE_BUS_TYPE_CSI1,
--	V4L2_FWNODE_BUS_TYPE_CCP2,
--	V4L2_FWNODE_BUS_TYPE_CSI2_DPHY,
--	V4L2_FWNODE_BUS_TYPE_PARALLEL,
--	V4L2_FWNODE_BUS_TYPE_BT656,
--	NR_OF_V4L2_FWNODE_BUS_TYPE,
--};
--
- static const struct v4l2_fwnode_bus_conv {
- 	enum v4l2_fwnode_bus_type fwnode_bus_type;
- 	enum v4l2_mbus_type mbus_type;
-diff --git a/include/media/v4l2-fwnode.h b/include/media/v4l2-fwnode.h
-index 4365430eea6f..d306a28bda96 100644
---- a/include/media/v4l2-fwnode.h
-+++ b/include/media/v4l2-fwnode.h
-@@ -213,6 +213,28 @@ struct v4l2_fwnode_connector {
- 	} connector;
- };
+-	software_node_unregister(&softnodes[2]);
+-	software_node_unregister(&softnodes[1]);
+-	software_node_unregister(&softnodes[0]);
++	software_node_unregister_nodes(softnodes);
+ }
  
-+/**
-+ * enum v4l2_fwnode_bus_type - Video bus types defined by firmware properties
-+ * @V4L2_FWNODE_BUS_TYPE_GUESS: Default value if no bus-type fwnode property
-+ * @V4L2_FWNODE_BUS_TYPE_CSI2_CPHY: MIPI CSI-2 bus, C-PHY physical layer
-+ * @V4L2_FWNODE_BUS_TYPE_CSI1: MIPI CSI-1 bus
-+ * @V4L2_FWNODE_BUS_TYPE_CCP2: SMIA Compact Camera Port 2 bus
-+ * @V4L2_FWNODE_BUS_TYPE_CSI2_DPHY: MIPI CSI-2 bus, D-PHY physical layer
-+ * @V4L2_FWNODE_BUS_TYPE_PARALLEL: Camera Parallel Interface bus
-+ * @V4L2_FWNODE_BUS_TYPE_BT656: BT656 video format bus-type
-+ * @NR_OF_V4L2_FWNODE_BUS_TYPE: Number of bus-types
-+ */
-+enum v4l2_fwnode_bus_type {
-+	V4L2_FWNODE_BUS_TYPE_GUESS = 0,
-+	V4L2_FWNODE_BUS_TYPE_CSI2_CPHY,
-+	V4L2_FWNODE_BUS_TYPE_CSI1,
-+	V4L2_FWNODE_BUS_TYPE_CCP2,
-+	V4L2_FWNODE_BUS_TYPE_CSI2_DPHY,
-+	V4L2_FWNODE_BUS_TYPE_PARALLEL,
-+	V4L2_FWNODE_BUS_TYPE_BT656,
-+	NR_OF_V4L2_FWNODE_BUS_TYPE,
-+};
-+
- /**
-  * v4l2_fwnode_endpoint_parse() - parse all fwnode node properties
-  * @fwnode: pointer to the endpoint's fwnode handle
+ static void __init
 -- 
 2.25.1
 
