@@ -2,60 +2,61 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0657DC433DB
-	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 01:10:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0239FC43332
+	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 01:10:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BF7DA2251F
-	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 01:10:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B6029225AC
+	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 01:10:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728439AbgLXBKE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Dec 2020 20:10:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48202 "EHLO
+        id S1728979AbgLXBKx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Dec 2020 20:10:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728292AbgLXBKD (ORCPT
+        with ESMTP id S1728908AbgLXBKt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Dec 2020 20:10:03 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2449CC061794;
-        Wed, 23 Dec 2020 17:09:23 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id 190so372654wmz.0;
-        Wed, 23 Dec 2020 17:09:22 -0800 (PST)
+        Wed, 23 Dec 2020 20:10:49 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2EAC0611CE;
+        Wed, 23 Dec 2020 17:09:40 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id k10so366365wmi.3;
+        Wed, 23 Dec 2020 17:09:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=85WAM78v6JpSpQw5CQB3+QefTnZy1zV7OaxgUpVrsFU=;
-        b=SeOWlAxL+Aka8nQP3YUEgbZLsCxR3VvdGadAd8ffa4W53Kcp3KLj3VVoSWm7O0PuNL
-         qXjnAj5XYRmYkCW+RIqghDyrcIDCDDtRlBglb0QAvtDCU4ZX4kSrjJRKr5MV2CHOZdhZ
-         7uSDbODohq8jmh+fLsxeZD6Q10qLkutL9qCZD8gvcJcSK0qG69HGPMdKQCwlsOA69DxN
-         B6O4YHuEdFa98jz0wpJbxqplzgspQ84PgoH1qWQa2Zs6Vij255cEO40DJGFtMH9gpLfC
-         ijXNlLVPh52aNkzwPR5W8aH/HVP1EJoDDZp4VnX/q/3JxF15YoF9IKFx8xPf6YSSetSn
-         iLwg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=RN4eZW0P5zJGQ+ExnLjE8F4o1z5DWe8tjmYcqAjmd8g=;
+        b=Z6KH8ThAa3j0w+iK1ZWRecYUgVX8cXs+S51zqeJ/CN878vHMwmwiEqMENCQ4xAG2eN
+         3Fbe72iHm8xFtQGOVWN6S+7i67QHptesp0QbE+X71pJgcbUHGeZQ4eC50Afixx1M2hle
+         EG842ywAsfa/K/W2nqMP2SwZaOCPi1sWTZVstX5GW5nWIkJm4/BpBT4mX/sUyLj3EgI7
+         a2cxNPJ3M+UzY74EEf10CLOTxP+Y4rhSRtHNgf7TrYyVce1solCdF8fqtC4hnKx/TVjy
+         1c2kchPO2KOFyiyD9erRtCixY9OSER3jbNmQr+Wl0ToOSWFSaJZuZfzvK19xTU8NooMW
+         ul5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=85WAM78v6JpSpQw5CQB3+QefTnZy1zV7OaxgUpVrsFU=;
-        b=EDouQFgf/nQjSfKxULJik4Zt7M4BeWNgvLgMz7qSsPDcr+1tmGJScbFKa9EkFLyyEm
-         WwXaofPoRJ6wDsjo/GxwVD0r7VPmP/yd9CilELZLIZmOnD/aG837SkwH+9iUJ3TkP9/s
-         jENAyc1zfCWI7H4XfRT2pu/A/WfckoSK5QcUx6TzacQ1gHCWvLFdaxgUEm/sPP8+pHyP
-         9vPcgLothFOtMqt8UMStiPRfaYE9lwNwe6wHNKoXy/rJmaVZzZAmtU1trPtsbpPNXNMZ
-         k/sH5r9ZSWJ7yY6z1yGiKhJATKbhYfCufx/eUcA8pu9wJjcspRh6+rBZe/qj46wzAbSM
-         caOA==
-X-Gm-Message-State: AOAM530QZ4jSNfyFAVHpzqNiYIoJ3HRxCcHsTwvTqkLQAhJ4x20VQnzf
-        d2JaOBVCp6ddlgMzX/PzvA6wtXB4ga5mwFMz
-X-Google-Smtp-Source: ABdhPJwfnIA+Rhup+TZGpkaH1UkB17g8NtYGyHonyHM8Z/MuMP0XWi52q+P1UlQBdFc1wcm6GD1sDQ==
-X-Received: by 2002:a1c:4904:: with SMTP id w4mr1933092wma.140.1608772161726;
-        Wed, 23 Dec 2020 17:09:21 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=RN4eZW0P5zJGQ+ExnLjE8F4o1z5DWe8tjmYcqAjmd8g=;
+        b=Jt1zIPu7tQU3ryw+bUeJ0zhar2bJx+IhtXDE+evmjf1fbKez0aoZ0sGTOSR5MAdLMo
+         7KC0oCVM5TOKYAJaSPa6aEuUIGUNmnXjmVofiZQAfmmqfPKS9oTF4Hmx7oL1KydHnWyD
+         xy2B5DezhWmph5M5wyJJbk5vTZ/2k6Wf62SZKleCpBdniXq9p25WkFk7nA0CN1YCzvIk
+         LZhDRY17uvTR4YzOsHy5zmGyAU1+O9UbBQMEkB7Zt57zib5qBjWO7iTsTb2ja1ghgy6/
+         allfgb55Sl6/4a6etZRFdS99+jX/Jpdnd/qJyUOv4nLLf7Gj3B/+Qbr+1ZAYCYSOImoK
+         JDug==
+X-Gm-Message-State: AOAM5307gBn6qdcKs60AV5fab43nB9c+kbnItyTEHPGfUy5A6CalcU6y
+        jhvUnmsVnCFm1h7IWxpsXuA5vkTAMsGw7pUL
+X-Google-Smtp-Source: ABdhPJzJmNQdMwNpl7s31MtXZuCE6vhgnmsG9jR4VzJsq0ZYiSdT3Fafrgp5fgpG01d9QefPnL0fAg==
+X-Received: by 2002:a1c:dc87:: with SMTP id t129mr1977147wmg.52.1608772179190;
+        Wed, 23 Dec 2020 17:09:39 -0800 (PST)
 Received: from valhalla.home ([2.31.224.116])
-        by smtp.gmail.com with ESMTPSA id b200sm1598653wmb.10.2020.12.23.17.09.19
+        by smtp.gmail.com with ESMTPSA id b200sm1598653wmb.10.2020.12.23.17.09.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Dec 2020 17:09:20 -0800 (PST)
+        Wed, 23 Dec 2020 17:09:38 -0800 (PST)
 From:   Daniel Scally <djrscally@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-media@vger.kernel.org, devel@acpica.org
@@ -70,123 +71,87 @@ Cc:     rjw@rjwysocki.net, lenb@kernel.org, gregkh@linuxfoundation.org,
         hverkuil-cisco@xs4all.nl, m.felsch@pengutronix.de,
         niklas.soderlund+renesas@ragnatech.se, slongerbeam@gmail.com,
         heikki.krogerus@linux.intel.com, linus.walleij@linaro.org
-Subject: [PATCH v3 00/14] Add functionality to ipu3-cio2 driver allowing software_node connections to sensors on platforms designed for Windows
-Date:   Thu, 24 Dec 2020 01:08:53 +0000
-Message-Id: <20201224010907.263125-1-djrscally@gmail.com>
+Subject: [PATCH v3 13/14] include: media: v4l2-fwnode: Include v4l2_fwnode_bus_type
+Date:   Thu, 24 Dec 2020 01:09:06 +0000
+Message-Id: <20201224010907.263125-14-djrscally@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201224010907.263125-1-djrscally@gmail.com>
+References: <20201224010907.263125-1-djrscally@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello all
+V4L2 fwnode bus types are enumerated in v4l2-fwnode.c, meaning they aren't
+available to the rest of the kernel. Move the enum to the corresponding
+header so that I can use the label to refer to those values.
 
-v2:
-https://lore.kernel.org/linux-media/20201217234337.1983732-1-djrscally@gmail.com/T/#md93fd090009b42a6a98aed892aff0d38cf07e0cd
-v1:
-https://lore.kernel.org/linux-media/20201130133129.1024662-1-djrscally@gmail.com/T/#m91934e12e3d033da2e768e952ea3b4a125ee3e67
-The RFC version before that:
-https://lore.kernel.org/linux-media/20201019225903.14276-1-djrscally@gmail.com/
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Daniel Scally <djrscally@gmail.com>
+---
+Changes in v3
+	- Patch introduced
 
-This series is to start adding support for webcams on laptops with ACPI tables
-designed for use with CIO2 on Windows. This problem has two main parts; the
-first part, which is handled in this series, is extending the ipu3-cio2
-driver to allow for patching the firmware via software_nodes if endpoints
-aren't defined by ACPI. The second is adding a new driver to handle power,
-clocks and GPIO pins defined in DSDT tables in an awkward way. I decided to
-split that second part out from this series, and instead give it its own
-series (a v2 of which should land "soon"). The reasons for that are:
+ drivers/media/v4l2-core/v4l2-fwnode.c | 11 -----------
+ include/media/v4l2-fwnode.h           | 22 ++++++++++++++++++++++
+ 2 files changed, 22 insertions(+), 11 deletions(-)
 
-1. It's a logically separate change anyway
-2. The recipients list was getting really long and
-3. That probably meant that handling merge for all of this in one go was
-   going to be impractically awkward.
-
-I'm hopeful that most or all of this series could get picked up for 5.12.
-We touch a few different areas (listed below), but I think the easiest
-approach would be to merge everything through media tree. Rafael, Greg,
-Mauro and Sergey; are you ok with that plan, or would you prefer a
-different approach? Mauro; if that plan is ok (and of course assuming that
-the rest of the patches are acked by their respective maintainers) could
-we get a dedicated feature branch just in case the following series ends
-up being ready in time too?
-
-lib (with an ack already)
-  lib/test_printf.c: Use helper function to unwind array of
-    software_nodes
-
-base
-  software_node: Fix refcounts in software_node_get_next_child()
-  property: Return true in fwnode_device_is_available for NULL ops
-  property: Call fwnode_graph_get_endpoint_by_id() for fwnode->secondary
-  software_node: Enforce parent before child ordering of nodes arrays
-  software_node: unregister software_nodes in reverse order
-  include: fwnode.h: Define format macros for ports and endpoints
-
-acpi
-  acpi: Add acpi_dev_get_next_match_dev() and helper macro
-
-media
-  media: v4l2-core: v4l2-async: Check sd->fwnode->secondary in
-    match_fwnode()
-  ipu3-cio2: Add T: entry to MAINTAINERS
-  ipu3-cio2: Rename ipu3-cio2.c
-  ipu3-cio2: Add cio2-bridge to ipu3-cio2 driver
-  include: media: v4l2-fwnode: Include v4l2_fwnode_bus_type
-
-Series-level changelog:
-	- Added patch 13/14 to define an enum in media/v4l2-fwnode.h
-	- Added patch 06/14 to define name formats for fwnode graph
-	  ports and endpoints
-
-More details of changes on each patch.
-
-Merry Christmas everyone!
-
-Dan
-
-Daniel Scally (13):
-  software_node: Fix refcounts in software_node_get_next_child()
-  property: Return true in fwnode_device_is_available for NULL ops
-  property: Call fwnode_graph_get_endpoint_by_id() for fwnode->secondary
-  software_node: Enforce parent before child ordering of nodes arrays
-  software_node: unregister software_nodes in reverse order
-  include: fwnode.h: Define format macros for ports and endpoints
-  lib/test_printf.c: Use helper function to unwind array of
-    software_nodes
-  ipu3-cio2: Add T: entry to MAINTAINERS
-  ipu3-cio2: Rename ipu3-cio2.c
-  media: v4l2-core: v4l2-async: Check sd->fwnode->secondary in
-    match_fwnode()
-  acpi: Add acpi_dev_get_next_match_dev() and helper macro
-  include: media: v4l2-fwnode: Include v4l2_fwnode_bus_type
-  ipu3-cio2: Add cio2-bridge to ipu3-cio2 driver
-
-Heikki Krogerus (1):
-  software_node: Add support for fwnode_graph*() family of functions
-
- MAINTAINERS                                   |   2 +
- drivers/acpi/utils.c                          |  30 +-
- drivers/base/property.c                       |  15 +-
- drivers/base/swnode.c                         | 174 +++++++++--
- drivers/media/pci/intel/ipu3/Kconfig          |  18 ++
- drivers/media/pci/intel/ipu3/Makefile         |   3 +
- drivers/media/pci/intel/ipu3/cio2-bridge.c    | 272 ++++++++++++++++++
- drivers/media/pci/intel/ipu3/cio2-bridge.h    | 122 ++++++++
- .../ipu3/{ipu3-cio2.c => ipu3-cio2-main.c}    |  34 +++
- drivers/media/pci/intel/ipu3/ipu3-cio2.h      |   6 +
- drivers/media/v4l2-core/v4l2-async.c          |   8 +
- drivers/media/v4l2-core/v4l2-fwnode.c         |  11 -
- include/acpi/acpi_bus.h                       |   7 +
- include/linux/fwnode.h                        |  13 +
- include/media/v4l2-fwnode.h                   |  22 ++
- lib/test_printf.c                             |   4 +-
- 16 files changed, 704 insertions(+), 37 deletions(-)
- create mode 100644 drivers/media/pci/intel/ipu3/cio2-bridge.c
- create mode 100644 drivers/media/pci/intel/ipu3/cio2-bridge.h
- rename drivers/media/pci/intel/ipu3/{ipu3-cio2.c => ipu3-cio2-main.c} (98%)
-
+diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
+index 5353e37eb950..c1c2b3060532 100644
+--- a/drivers/media/v4l2-core/v4l2-fwnode.c
++++ b/drivers/media/v4l2-core/v4l2-fwnode.c
+@@ -28,17 +28,6 @@
+ #include <media/v4l2-fwnode.h>
+ #include <media/v4l2-subdev.h>
+ 
+-enum v4l2_fwnode_bus_type {
+-	V4L2_FWNODE_BUS_TYPE_GUESS = 0,
+-	V4L2_FWNODE_BUS_TYPE_CSI2_CPHY,
+-	V4L2_FWNODE_BUS_TYPE_CSI1,
+-	V4L2_FWNODE_BUS_TYPE_CCP2,
+-	V4L2_FWNODE_BUS_TYPE_CSI2_DPHY,
+-	V4L2_FWNODE_BUS_TYPE_PARALLEL,
+-	V4L2_FWNODE_BUS_TYPE_BT656,
+-	NR_OF_V4L2_FWNODE_BUS_TYPE,
+-};
+-
+ static const struct v4l2_fwnode_bus_conv {
+ 	enum v4l2_fwnode_bus_type fwnode_bus_type;
+ 	enum v4l2_mbus_type mbus_type;
+diff --git a/include/media/v4l2-fwnode.h b/include/media/v4l2-fwnode.h
+index 4365430eea6f..d306a28bda96 100644
+--- a/include/media/v4l2-fwnode.h
++++ b/include/media/v4l2-fwnode.h
+@@ -213,6 +213,28 @@ struct v4l2_fwnode_connector {
+ 	} connector;
+ };
+ 
++/**
++ * enum v4l2_fwnode_bus_type - Video bus types defined by firmware properties
++ * @V4L2_FWNODE_BUS_TYPE_GUESS: Default value if no bus-type fwnode property
++ * @V4L2_FWNODE_BUS_TYPE_CSI2_CPHY: MIPI CSI-2 bus, C-PHY physical layer
++ * @V4L2_FWNODE_BUS_TYPE_CSI1: MIPI CSI-1 bus
++ * @V4L2_FWNODE_BUS_TYPE_CCP2: SMIA Compact Camera Port 2 bus
++ * @V4L2_FWNODE_BUS_TYPE_CSI2_DPHY: MIPI CSI-2 bus, D-PHY physical layer
++ * @V4L2_FWNODE_BUS_TYPE_PARALLEL: Camera Parallel Interface bus
++ * @V4L2_FWNODE_BUS_TYPE_BT656: BT656 video format bus-type
++ * @NR_OF_V4L2_FWNODE_BUS_TYPE: Number of bus-types
++ */
++enum v4l2_fwnode_bus_type {
++	V4L2_FWNODE_BUS_TYPE_GUESS = 0,
++	V4L2_FWNODE_BUS_TYPE_CSI2_CPHY,
++	V4L2_FWNODE_BUS_TYPE_CSI1,
++	V4L2_FWNODE_BUS_TYPE_CCP2,
++	V4L2_FWNODE_BUS_TYPE_CSI2_DPHY,
++	V4L2_FWNODE_BUS_TYPE_PARALLEL,
++	V4L2_FWNODE_BUS_TYPE_BT656,
++	NR_OF_V4L2_FWNODE_BUS_TYPE,
++};
++
+ /**
+  * v4l2_fwnode_endpoint_parse() - parse all fwnode node properties
+  * @fwnode: pointer to the endpoint's fwnode handle
 -- 
 2.25.1
 
