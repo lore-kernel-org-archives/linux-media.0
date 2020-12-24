@@ -2,126 +2,66 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B5FCC433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 899C5C43381
 	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 11:27:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1AC3F208A9
+	by mail.kernel.org (Postfix) with ESMTP id 60E81208A9
 	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 11:27:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727865AbgLXL1C (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Dec 2020 06:27:02 -0500
+        id S1727114AbgLXL1R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 24 Dec 2020 06:27:17 -0500
 Received: from alexa-out.qualcomm.com ([129.46.98.28]:27632 "EHLO
         alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727114AbgLXL1C (ORCPT
+        with ESMTP id S1726591AbgLXL1R (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Dec 2020 06:27:02 -0500
+        Thu, 24 Dec 2020 06:27:17 -0500
 Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 24 Dec 2020 03:26:22 -0800
+  by alexa-out.qualcomm.com with ESMTP; 24 Dec 2020 03:26:23 -0800
 X-QCInternal: smtphost
 Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 24 Dec 2020 03:26:20 -0800
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 24 Dec 2020 03:26:21 -0800
 X-QCInternal: smtphost
 Received: from dikshita-linux.qualcomm.com ([10.204.65.237])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 24 Dec 2020 16:56:17 +0530
+  by ironmsg01-blr.qualcomm.com with ESMTP; 24 Dec 2020 16:56:03 +0530
 Received: by dikshita-linux.qualcomm.com (Postfix, from userid 347544)
-        id 03B7D2146B; Thu, 24 Dec 2020 16:56:15 +0530 (IST)
+        id E3A502146B; Thu, 24 Dec 2020 16:56:01 +0530 (IST)
 From:   Dikshita Agarwal <dikshita@codeaurora.org>
 To:     linux-media@vger.kernel.org, hverkuil-cisco@xs4all.nl,
         nicolas@ndufresne.ca, stanimir.varbanov@linaro.org
 Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         vgarodia@codeaurora.org, Dikshita Agarwal <dikshita@codeaurora.org>
-Subject: [PATCH v4 2/3] media: v4l2-ctrl: Add layer wise bitrate controls for h264
-Date:   Thu, 24 Dec 2020 16:55:34 +0530
-Message-Id: <1608809135-26061-3-git-send-email-dikshita@codeaurora.org>
+Subject: [PATCH v4 0/3] Add new controls for QP and layer bitrate
+Date:   Thu, 24 Dec 2020 16:55:32 +0530
+Message-Id: <1608809135-26061-1-git-send-email-dikshita@codeaurora.org>
 X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1608809135-26061-1-git-send-email-dikshita@codeaurora.org>
-References: <1608809135-26061-1-git-send-email-dikshita@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Adds bitrate control for all coding layers for h264
-same as hevc.
+This series adds frame specific min/max qp controls for hevc and layer
+wise bitrate control for h264.
 
-Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
----
- .../userspace-api/media/v4l/ext-ctrls-codec.rst      | 20 ++++++++++++++++++++
- drivers/media/v4l2-core/v4l2-ctrls.c                 |  7 +++++++
- include/uapi/linux/v4l2-controls.h                   |  7 +++++++
- 3 files changed, 34 insertions(+)
+Chnages since v2:
+ - Rebased the changes on latest media tree
+ - Added driver side implementation for new controls.
 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index 90c60ad..400774c 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -1513,6 +1513,26 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
-     * - Bit 16:32
-       - Layer number
- 
-+``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L0_BR (integer)``
-+    Indicates bit rate (bps) for hierarchical coding layer 0 for H264 encoder.
-+
-+``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L1_BR (integer)``
-+    Indicates bit rate (bps) for hierarchical coding layer 1 for H264 encoder.
-+
-+``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L2_BR (integer)``
-+    Indicates bit rate (bps) for hierarchical coding layer 2 for H264 encoder.
-+
-+``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L3_BR (integer)``
-+    Indicates bit rate (bps) for hierarchical coding layer 3 for H264 encoder.
-+
-+``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L4_BR (integer)``
-+    Indicates bit rate (bps) for hierarchical coding layer 4 for H264 encoder.
-+
-+``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L5_BR (integer)``
-+    Indicates bit rate (bps) for hierarchical coding layer 5 for H264 encoder.
-+
-+``V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L6_BR (integer)``
-+    Indicates bit rate (bps) for hierarchical coding layer 6 for H264 encoder.
- 
- .. _v4l2-mpeg-mpeg2:
- 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 410e541..16ab54f 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -922,6 +922,13 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MAX_QP:		return "H264 P-Frame Maximum QP Value";
- 	case V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MIN_QP:		return "H264 B-Frame Minimum QP Value";
- 	case V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MAX_QP:		return "H264 B-Frame Maximum QP Value";
-+	case V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L0_BR:	return "H264 Hierarchical Lay 0 Bitrate";
-+	case V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L1_BR:	return "H264 Hierarchical Lay 1 Bitrate";
-+	case V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L2_BR:	return "H264 Hierarchical Lay 2 Bitrate";
-+	case V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L3_BR:	return "H264 Hierarchical Lay 3 Bitrate";
-+	case V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L4_BR:	return "H264 Hierarchical Lay 4 Bitrate";
-+	case V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L5_BR:	return "H264 Hierarchical Lay 5 Bitrate";
-+	case V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L6_BR:	return "H264 Hierarchical Lay 6 Bitrate";
- 	case V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL:			return "MPEG2 Level";
- 	case V4L2_CID_MPEG_VIDEO_MPEG2_PROFILE:			return "MPEG2 Profile";
- 	case V4L2_CID_MPEG_VIDEO_MPEG4_I_FRAME_QP:		return "MPEG4 I-Frame QP Value";
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index d0a69a8..af8dda2 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -587,6 +587,13 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type {
- #define V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MAX_QP	(V4L2_CID_CODEC_BASE+388)
- #define V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MIN_QP	(V4L2_CID_CODEC_BASE+389)
- #define V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MAX_QP	(V4L2_CID_CODEC_BASE+390)
-+#define V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L0_BR	(V4L2_CID_CODEC_BASE+391)
-+#define V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L1_BR	(V4L2_CID_CODEC_BASE+392)
-+#define V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L2_BR	(V4L2_CID_CODEC_BASE+393)
-+#define V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L3_BR	(V4L2_CID_CODEC_BASE+394)
-+#define V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L4_BR	(V4L2_CID_CODEC_BASE+395)
-+#define V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L5_BR	(V4L2_CID_CODEC_BASE+396)
-+#define V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L6_BR	(V4L2_CID_CODEC_BASE+397)
- #define V4L2_CID_MPEG_VIDEO_MPEG4_I_FRAME_QP	(V4L2_CID_CODEC_BASE+400)
- #define V4L2_CID_MPEG_VIDEO_MPEG4_P_FRAME_QP	(V4L2_CID_CODEC_BASE+401)
- #define V4L2_CID_MPEG_VIDEO_MPEG4_B_FRAME_QP	(V4L2_CID_CODEC_BASE+402)
+Dikshita Agarwal (3):
+  media: v4l2-ctrl: Add frame-specific min/max qp controls for hevc
+  media: v4l2-ctrl: Add layer wise bitrate controls for h264
+  venus: venc: Add support for frame-specific min/max qp controls
+
+ .../userspace-api/media/v4l/ext-ctrls-codec.rst    |  72 ++++++++++++-
+ drivers/media/platform/qcom/venus/core.h           |  18 ++++
+ drivers/media/platform/qcom/venus/venc.c           |  21 +++-
+ drivers/media/platform/qcom/venus/venc_ctrls.c     | 114 +++++++++++++++++++--
+ drivers/media/v4l2-core/v4l2-ctrls.c               |  15 +++
+ include/uapi/linux/v4l2-controls.h                 |  16 +++
+ 6 files changed, 243 insertions(+), 13 deletions(-)
+
 -- 
 2.7.4
 
