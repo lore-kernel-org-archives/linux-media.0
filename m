@@ -2,126 +2,105 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C138C433E6
-	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 01:12:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B7FAC433E9
+	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 04:11:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E4B222253D
-	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 01:12:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 45E2D22C9D
+	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 04:11:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728729AbgLXBKo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Dec 2020 20:10:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48314 "EHLO
+        id S1726650AbgLXELK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Dec 2020 23:11:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728341AbgLXBKo (ORCPT
+        with ESMTP id S1725897AbgLXELJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Dec 2020 20:10:44 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 169E6C061248;
-        Wed, 23 Dec 2020 17:09:31 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id 3so382472wmg.4;
-        Wed, 23 Dec 2020 17:09:31 -0800 (PST)
+        Wed, 23 Dec 2020 23:11:09 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2BCC06179C
+        for <linux-media@vger.kernel.org>; Wed, 23 Dec 2020 20:10:29 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id z21so848664pgj.4
+        for <linux-media@vger.kernel.org>; Wed, 23 Dec 2020 20:10:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=gb2dOp+BlQhkJy4jaAUNLb3VFWY7zuTuzj9/U8tOxQc=;
-        b=lE6qJaKLgW7ClKBMnibRkDaSRDaYBdzr3yC/JtukcWTsIgjrB/ovAlfChWKyrUSbd0
-         /4Apxj3xrTXRG2xRD/pwae+oAPA7TEzaNJABewKhEs6oL86wwmuCGgenaHwZxPBy0qtD
-         WnOC4zG7d/rPPXNePGO5n44xF2+EafnKt1VhTIlPNOmapdw11AkjvaI6Ce0zoOW7ODhj
-         pcObVOvul1cDMYNwHGJRFzqsch8f+4ARqcJ7wsx1bZssG6+pf14hiAQRDZzkAn5AHCbG
-         j7s9G3Z1PQIbqOXePk1snh+A+8TrNgakE0u276GkuUqIQmjqz1NI7EKV5nXo5bVp1TUG
-         SGCQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ikVtzUE4uXfeBqBtO4dtx3e4Xq8je8+SD0cDc4uZBxs=;
+        b=xKGy+n1lH2OICjFJVUJHiGY8JDjFs+zA4vzxAXCrDFU5l1ZTdld+A8Dk+fxxlBFKgV
+         E5eTKopVBqQdPsabWi5F9J/MB+2RweNkKJA1c0sbK6mCgzTnGBOjkv+GqmMLoGYyu06a
+         ttpiVX3Z/L0LrlZD/4+woKfb/vMPCPF3T1xEccKhgioNE8CzX8igBpfeY1gMcA4Qg9rv
+         Ss6rrRCqT7Sk981NvHHGrFAi9IRp2TL7qu6Ba/gO3G7fUcc4yRkVj93tiPezXSd9aNKo
+         dnFyrclYl+eyqxmrRvvK1Bya4PdheEaOLJsOwz+YPu0I+RU1N2lZffE0lmArD5KkOuec
+         MNVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gb2dOp+BlQhkJy4jaAUNLb3VFWY7zuTuzj9/U8tOxQc=;
-        b=ELx4fU3t6qcCl8xm5883M0MMz45v75a1bA27si+cVMAdJdfXHqctkKTqoziUYbZALG
-         F9yA9DO9hsIUWyLZ+y4izrGNffT7401HgNgaA/R/kV7VXtiXIGY4WvvIlXh6Lk19DUIt
-         +UNJIx6pVhkfxnoE1e5N7vJRAsiXrkpbo9ms6+nDSBj91H7HWXAQhQ5BQ8H7q4VINH+a
-         QVKTXYb0+abyd5ov2zX98YEdqxBuZHoU1RE9HM1cVs+U3wsXn6v0XXmKZaOH2CUzpLjd
-         l8x/PeXapzLu/ptYo6pU1HvBY8/R0sYM1FWrAoZ2gr/AzppawFr5kjt994SZbQpAKrB4
-         jgxQ==
-X-Gm-Message-State: AOAM531BINojp/rRe704+NYjCA7t3Q8XBEufqNRdo4jVbVgx7Dh1HKrk
-        Rzv6FW2EJe9csAtv+2j2d6EgECTS28wRX33U
-X-Google-Smtp-Source: ABdhPJxaaD2Wz/omnEa5F/In+7imoucZcLAoXctoxjEnj7kUCgw5GI+bxHWUsJMXzc079l0UnqqrCA==
-X-Received: by 2002:a7b:c182:: with SMTP id y2mr1953635wmi.57.1608772169900;
-        Wed, 23 Dec 2020 17:09:29 -0800 (PST)
-Received: from valhalla.home ([2.31.224.116])
-        by smtp.gmail.com with ESMTPSA id b200sm1598653wmb.10.2020.12.23.17.09.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Dec 2020 17:09:29 -0800 (PST)
-From:   Daniel Scally <djrscally@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-media@vger.kernel.org, devel@acpica.org
-Cc:     rjw@rjwysocki.net, lenb@kernel.org, gregkh@linuxfoundation.org,
-        yong.zhi@intel.com, sakari.ailus@linux.intel.com,
-        bingbu.cao@intel.com, tian.shu.qiu@intel.com, mchehab@kernel.org,
-        robert.moore@intel.com, erik.kaneda@intel.com, pmladek@suse.com,
-        rostedt@goodmis.org, sergey.senozhatsky@gmail.com,
-        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
-        laurent.pinchart+renesas@ideasonboard.com,
-        jacopo+renesas@jmondi.org, kieran.bingham+renesas@ideasonboard.com,
-        hverkuil-cisco@xs4all.nl, m.felsch@pengutronix.de,
-        niklas.soderlund+renesas@ragnatech.se, slongerbeam@gmail.com,
-        heikki.krogerus@linux.intel.com, linus.walleij@linaro.org
-Subject: [PATCH v3 06/14] include: fwnode.h: Define format macros for ports and endpoints
-Date:   Thu, 24 Dec 2020 01:08:59 +0000
-Message-Id: <20201224010907.263125-7-djrscally@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201224010907.263125-1-djrscally@gmail.com>
-References: <20201224010907.263125-1-djrscally@gmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ikVtzUE4uXfeBqBtO4dtx3e4Xq8je8+SD0cDc4uZBxs=;
+        b=h6428cqeShoiTNhqCgbxWwcPaIysbfuFyQ9x8bMrG23xBo8jauTugqrW1kV2DNlGgW
+         Yy0HyVwUcsDQ5goZrODdG2pHOP+/0AGzid5Rbc1J4nxJbZQ23Pj7GgrSxyRHj5BHZhYd
+         pJyLh9vmjfY3Q9kCQ5D85hrMPOcgKIWD1xodZsmcGP41iKNhveUOK4ndqheXngl5l1w4
+         Es89qCyzzj+4jVLkITPbFdKy0Chenyzlfk3rgVLzzyZNO8Ws7pH0z/S90YZB2ra8ZACj
+         lgR/5shIjet4OxhYoLA7zVWbri1tmZRlhNpsSYaph8JHP/hYtgwoiCOA/4BLmIeN/owF
+         W9kA==
+X-Gm-Message-State: AOAM532Ubfxs68yDJbZi6axmhIe38qW+fEe+0htHUyc9tvVpPyBaVdl4
+        pCaTovwQttOh5pDrI1thTqSN8w==
+X-Google-Smtp-Source: ABdhPJxF6QsBhYJyHEedTrrFWO0Opl0+2E1UHe5wyQBjNtRXMjwHp5sAJCn6P8PZcaaJH8z8YxT1Gw==
+X-Received: by 2002:a62:644c:0:b029:1a1:f568:d2d9 with SMTP id y73-20020a62644c0000b02901a1f568d2d9mr26738163pfb.64.1608783028602;
+        Wed, 23 Dec 2020 20:10:28 -0800 (PST)
+Received: from localhost ([122.172.20.109])
+        by smtp.gmail.com with ESMTPSA id s5sm1012447pju.9.2020.12.23.20.10.27
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 23 Dec 2020 20:10:27 -0800 (PST)
+Date:   Thu, 24 Dec 2020 09:40:25 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH v2 15/48] opp: Support set_opp() customization without
+ requiring to use regulators
+Message-ID: <20201224041025.mlxsbl2yrxyqt7yh@vireshk-i7>
+References: <20201217180638.22748-1-digetx@gmail.com>
+ <20201217180638.22748-16-digetx@gmail.com>
+ <20201223060101.v2qihvvgsmpahg24@vireshk-i7>
+ <ea025b0f-bb2a-d075-4c8e-45831fa9cd93@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ea025b0f-bb2a-d075-4c8e-45831fa9cd93@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-OF, ACPI and software_nodes all implement graphs including nodes for ports
-and endpoints. These are all intended to be named with a common schema,
-as "port@n" and "endpoint@n" where n is an unsigned int representing the
-index of the node. To ensure commonality across the subsystems, provide a
-set of macros to define the format.
+On 23-12-20, 23:38, Dmitry Osipenko wrote:
+> Well, there is no "same structure", the opp_table->set_opp_data is NULL
+> there.
 
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Daniel Scally <djrscally@gmail.com>
----
-Changes in v3
-	- Patch introduced
+Right, I saw that yesterday. What I meant was that we need to start allocating
+the structure for this case now.
 
- include/linux/fwnode.h | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
-
-diff --git a/include/linux/fwnode.h b/include/linux/fwnode.h
-index 9506f8ec0974..52889efceb7d 100644
---- a/include/linux/fwnode.h
-+++ b/include/linux/fwnode.h
-@@ -32,6 +32,19 @@ struct fwnode_endpoint {
- 	const struct fwnode_handle *local_fwnode;
- };
- 
-+/*
-+ * ports and endpoints defined in OF, ACPI and as software_nodes should all
-+ * follow a common naming scheme; use these macros to ensure commonality across
-+ * the subsystems.
-+ *
-+ * The *PREFIX_LEN macros refer to the length of the "port@" and "endpoint@"
-+ * sections of the naming scheme.
-+ */
-+#define FWNODE_GRAPH_PORT_NAME_FORMAT		"port@%u"
-+#define FWNODE_GRAPH_PORT_NAME_PREFIX_LEN	5
-+#define FWNODE_GRAPH_ENDPOINT_NAME_FORMAT	"endpoint@%u"
-+#define FWNODE_GRAPH_ENDPOINT_PREFIX_LEN	9
-+
- #define NR_FWNODE_REFERENCE_ARGS	8
- 
- /**
 -- 
-2.25.1
-
+viresh
