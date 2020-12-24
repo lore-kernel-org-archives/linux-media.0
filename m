@@ -2,140 +2,105 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B47A1C433DB
-	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 14:25:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0244EC433E9
+	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 15:05:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 77144224B0
-	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 14:25:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CD2C122288
+	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 15:05:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727778AbgLXOZE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Dec 2020 09:25:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56938 "EHLO
+        id S1728718AbgLXPFL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 24 Dec 2020 10:05:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727144AbgLXOZD (ORCPT
+        with ESMTP id S1727114AbgLXPE5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Dec 2020 09:25:03 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A00C0617A6;
-        Thu, 24 Dec 2020 06:24:22 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id y23so1756858wmi.1;
-        Thu, 24 Dec 2020 06:24:22 -0800 (PST)
+        Thu, 24 Dec 2020 10:04:57 -0500
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264E6C061574;
+        Thu, 24 Dec 2020 07:04:32 -0800 (PST)
+Received: by mail-qk1-x735.google.com with SMTP id n142so2264453qkn.2;
+        Thu, 24 Dec 2020 07:04:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=M+N06EmcJFVLj4CN44KRnLg8MB/99NEOfhbL1AkgPbo=;
-        b=mdsMzpeGWDSWXjAkbEs6+T3MmkZvHv2GGN3947O4nVnpNrCxD69QpTVwbicNf6/qif
-         G7ncpLa4Lv1ixIMDxGgvlDwcbXo60ZlEB7sTj52pkdq5BF8cCHmKTfvhih26z4yv7iL5
-         GqPyjm1SOTEXfefif6TaRUxcMU7N2SlT1XYeZ09BPU6iChnAV5eD1x5ckspI9bhhy6PN
-         oMLqZFp3MZ2R6DyAC0gHa6jupqL+5+xiL33/AVVNc1GD+90hniALIg8+I/lqfn9NYVqy
-         WNoh5Hmym/iBeXUe9RDOw3/MYy6eb+8K2I0li60yydia1IjC+kf+IKSbVX2cwlmJQP1s
-         azmw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vvMA8bX63vd3Ymb+LaUwA4e5HkoEGBYe8nKfJwpf4Tk=;
+        b=D0joYuMYLhfIQ/U4LE6/7xhuIjZFq+Q+W1sihuNqG1fKLw8Io3zCMeWN5HbNFS6nH1
+         eygpZ4lmiukmpei341SUv2uMs+ieJoJg/Y5jjOWlQVxVE7YE1FqVW1Xqqf9rN2O7LkU/
+         6eoSzImDWwdH5W+oRGBSmD5Qqdw6LLxuhFJoQfdbd7tT2BwwnNF+XmzD4sDpQjFLkBeN
+         1iOMwVUWIdkKr8HDQrga8+FDsA09ON919ruyEeQVQft2ltlzMZe6iCi81MZ53sZx/m+H
+         2ePAY1FyhkEVTDhN2zS+PCCel4ukc5hnlIn+xgju7vj/WLCsYrkZa9ifW496uZtmCOAw
+         9E8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=M+N06EmcJFVLj4CN44KRnLg8MB/99NEOfhbL1AkgPbo=;
-        b=GuElCHoPMvwOsjDadmjSoA27dfzGXt/3HNaCBNHIMlRTsyS4fxeDYAEQtXA2y+WkpK
-         48DO2dal7hLx93hktaYUkkuDfEFzoFeaAfhmzkkhXmNWv8f/MiappJeL2+BEwHRE3UMV
-         6ADebZvdEmrVsveOmSooiiZ5s8J+n+QNaRz3aEXuQTei9SRzacDarcCOne3IlBO2aLRZ
-         5Tn0fKfau8lzyw29NlvlavHQguZc4Cz6gQ1AdCgQA+32aThBwnjxI3w+D07EsSHPzG7h
-         I0atE35Vsv0QArPaHBazkvZ/xDcXASUTHgQWZUHUIbMGGcleeFNh/lTbh/0TZOdVub8N
-         70oQ==
-X-Gm-Message-State: AOAM533hHUQ8R8oCYGofgO214r0oMtYVXF2LeaLH0ihTO2c5kCBXAAu3
-        Zug2K3bwI59xJ21v+IREc2A=
-X-Google-Smtp-Source: ABdhPJyyPU4z/SYA/lIq8JzuBtX0l1hBD+x/9V9HufAJW1hUEnYBubQAF3jSek3Rg2I3dccWrin6sQ==
-X-Received: by 2002:a7b:c8c5:: with SMTP id f5mr4604917wml.106.1608819861647;
-        Thu, 24 Dec 2020 06:24:21 -0800 (PST)
-Received: from [192.168.1.211] ([2.31.224.116])
-        by smtp.gmail.com with ESMTPSA id o17sm40499882wrg.32.2020.12.24.06.24.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Dec 2020 06:24:20 -0800 (PST)
-Subject: Re: [PATCH v3 07/14] software_node: Add support for fwnode_graph*()
- family of functions
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-media@vger.kernel.org, devel@acpica.org, rjw@rjwysocki.net,
-        lenb@kernel.org, gregkh@linuxfoundation.org, yong.zhi@intel.com,
-        sakari.ailus@linux.intel.com, bingbu.cao@intel.com,
-        tian.shu.qiu@intel.com, mchehab@kernel.org, robert.moore@intel.com,
-        erik.kaneda@intel.com, pmladek@suse.com, rostedt@goodmis.org,
-        sergey.senozhatsky@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk,
-        laurent.pinchart+renesas@ideasonboard.com,
-        jacopo+renesas@jmondi.org, kieran.bingham+renesas@ideasonboard.com,
-        hverkuil-cisco@xs4all.nl, m.felsch@pengutronix.de,
-        niklas.soderlund+renesas@ragnatech.se, slongerbeam@gmail.com,
-        heikki.krogerus@linux.intel.com, linus.walleij@linaro.org
-References: <20201224010907.263125-1-djrscally@gmail.com>
- <20201224010907.263125-8-djrscally@gmail.com>
- <X+SPUTDn+lPdV4ny@pendragon.ideasonboard.com>
-From:   Daniel Scally <djrscally@gmail.com>
-Message-ID: <fcb0d5b6-db28-ff0a-b998-c46ebad8e759@gmail.com>
-Date:   Thu, 24 Dec 2020 14:24:19 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        bh=vvMA8bX63vd3Ymb+LaUwA4e5HkoEGBYe8nKfJwpf4Tk=;
+        b=PJEGa7/q/JZv7hxT1Mz4wZiPyCZP6rM7GPnLVe76Uh3QvL4NLbWL6BA3A/oc+50rkX
+         W5fKoGlLmZZ+QwRv2UUoQsmYv+ZtnjxcTInPxr2KymPusY6RV9vYqJqoh9UZqXkgVcok
+         yjOqx0ed4734584wPf2TqYg3qiI3GzwKsQBPFY8TVrPTMLYI0by9C3sXWQ4/lRYIzFhZ
+         TCYyUJr/YMylFYK0rb2JdQOcCdY9T7GyBxwBv5aveDhey4AtJMU1j067NaMfsGIVkXSE
+         LzelhBfFJBI2lbepeCWkQMMhd1Spxack7R6J54OVa3maPeF9FFUZnohz/zBDrffVdksF
+         AUiQ==
+X-Gm-Message-State: AOAM530iEc6SuxsXrv3suyeg5hlMWwoBp3rGMxGJb0j96WrwcA5PV94d
+        l0SdgkijHiRbs4jvlEJ/J2JNnejxiKg=
+X-Google-Smtp-Source: ABdhPJygKPdyNW3PkvudVTH57eTPs0iXS23Es2WWxWeKNkJL+0qAr2rKgNMim5RlAt6p7mC6MKyXnQ==
+X-Received: by 2002:a05:620a:140c:: with SMTP id d12mr31889804qkj.340.1608822271431;
+        Thu, 24 Dec 2020 07:04:31 -0800 (PST)
+Received: from localhost.localdomain ([2804:14d:72b1:8920:74c8:8f67:61c5:55b9])
+        by smtp.gmail.com with ESMTPSA id e38sm10322215qtb.30.2020.12.24.07.04.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Dec 2020 07:04:30 -0800 (PST)
+From:   "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
+X-Google-Original-From: Daniel W. S. Almeida
+To:     mchehab@kernel.org, "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     linux-media@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.o,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 2/3] media: vidtv: remove unused field from 'struct vidtv_mpeg_ts'
+Date:   Thu, 24 Dec 2020 12:04:01 -0300
+Message-Id: <20201224150402.1945788-2-dwlsalmeida@gmail.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-In-Reply-To: <X+SPUTDn+lPdV4ny@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 24/12/2020 12:53, Laurent Pinchart wrote:
->> +	while ((port = software_node_get_next_child(parent, old))) {
->> +		/*
->> +		 * ports have naming style "port@n", so we search for children
->> +		 * that follow that convention (but without assuming anything
->> +		 * about the index number)
->> +		 */
->> +		if (!strncmp(to_swnode(port)->node->name, "port@",
->> +			     FWNODE_GRAPH_PORT_NAME_PREFIX_LEN))
-> 
-> I would either add a macro to replace the prefix ("port@"), or drop
-> FWNODE_GRAPH_PORT_NAME_PREFIX_LEN. I think this is the worst of both
-> worlds, the string and its length are defined in two different places
-> :-)
-> 
-> I would personally drop the macro, but I don't mind either way as long
-> as the string and its length are defined in the same place.
+From: "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
 
-OK, pending outcome of the discussion in the other thread I'll do both
-things the same way - whatever the decision there is.
+Commit 3d1387b3b8f6 ("media: vidtv: fix some warnings") replaced
+the unused flexible array member at the end of struct vidtv_mpeg_ts
+with a pointer. This broke the 188-byte alignment since the struct
+no longer was 4 bytes in size.
 
+Fix this by removing this field entirely.
 
->> +static int
->> +software_node_graph_parse_endpoint(const struct fwnode_handle *fwnode,
->> +				   struct fwnode_endpoint *endpoint)
->> +{
->> +	struct swnode *swnode = to_swnode(fwnode);
->> +	int ret;
->> +
->> +	/* Ports have naming style "port@n", we need to select the n */
->> +	ret = kstrtou32(swnode->parent->node->name + FWNODE_GRAPH_PORT_NAME_PREFIX_LEN,
->> +			10, &endpoint->port);
-> 
-> Same here.
-> 
-> I wonder if we should add a check to ensure parent->node->name is long
-> enough (and possibly even start with the right prefix), as otherwise the
-> pointer passed to kstrtou32() may be past the end of the string. Maybe
-> this is overkill, if we can rely on the fact that software nodes have
-> correct names.
+Fixes: 3d1387b3b8f6 ("media: vidtv: fix some warnings")
+Signed-off-by: Daniel W. S. Almeida <dwlsalmeida@gmail.com>
+---
+ drivers/media/test-drivers/vidtv/vidtv_ts.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-Not necessarily actually; ports yes but endpoints no, so I think the
-danger is there. I'll add the check.
-
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-Thanks!
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_ts.h b/drivers/media/test-drivers/vidtv/vidtv_ts.h
+index f5e8e1f37f05..09b4ffd02829 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_ts.h
++++ b/drivers/media/test-drivers/vidtv/vidtv_ts.h
+@@ -44,7 +44,6 @@ struct vidtv_mpeg_ts {
+ 		u8 adaptation_field:1;
+ 		u8 scrambling:2;
+ 	} __packed;
+-	struct vidtv_mpeg_ts_adaption *adaption;
+ } __packed;
+ 
+ /**
+-- 
+2.29.2
 
