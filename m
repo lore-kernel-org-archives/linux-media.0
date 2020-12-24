@@ -2,92 +2,184 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0823FC433E0
-	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 00:19:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97BB0C4332B
+	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 01:10:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B18C022512
-	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 00:19:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 73B8222517
+	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 01:10:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727435AbgLXASq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Dec 2020 19:18:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40364 "EHLO
+        id S1728681AbgLXBKK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Dec 2020 20:10:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727029AbgLXASp (ORCPT
+        with ESMTP id S1728292AbgLXBKJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Dec 2020 19:18:45 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53206C06179C
-        for <linux-media@vger.kernel.org>; Wed, 23 Dec 2020 16:18:05 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id b26so1273873lff.9
-        for <linux-media@vger.kernel.org>; Wed, 23 Dec 2020 16:18:05 -0800 (PST)
+        Wed, 23 Dec 2020 20:10:09 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA03C061282;
+        Wed, 23 Dec 2020 17:09:28 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id a6so367993wmc.2;
+        Wed, 23 Dec 2020 17:09:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3tGU0z0AqDDHU99JkAg/4X/GiVi4av+BXoNuTlysXGA=;
-        b=Rm27h0qdQR26ng8W9ruC7ZGBjhwyLItCVFqmC9Syx67/4gphU6VwC84HAJ0amRCL0A
-         smmDVEwuXSbcjwb0uQP7oRoOUMHKZsRms2reidN0ruliAoPFlA7AhRBrrvcMvQFYW1If
-         1SC9ZJ/sXdPyo0yiDF91nq/1222Y0o/0F4P27KfmFbikoMqKCasxQpHq6DwrrtYxzu+v
-         kkcQSKmux2uxQu28yHpivY3cdLRSHZM3gfzF34XEGe8RoPk6/bURp1L7y/OdhD1rUKhJ
-         02WojIO/2nmT3M1B8W8pc7sdYRDuxrv/7rh961SJ8ek6DSI9+RM31YvGmoAHZyT0QKjX
-         N+zA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=wLRZYS/XiFpA/R+VzuFliJ0iKwXJ0mePFvVmHUGHhWQ=;
+        b=aKcyi/CgywK90dDzZFtZ/njuCWzotaIGtsSYSRuoHC+plDqIPX0WDn40fCdVK52yNH
+         Kgg8YDTW+zOgrCpG28FLB2UdS8wa6K/v7VnkPInvmVrsX3gIMLV1FI8o3vG+wv8Ig7bJ
+         RtyAFKMafLWmJaP48it1UYSS4zZIa83X4Phwnk2uFN1zh+lywKinGmnJvX2WSBUqUgwj
+         3mYzDSBlIjVs01apC7euovzWmbltt2X65BMUIbeERDh2j1PirWyz6L6D0ldMvj/eTTRY
+         EOHjsR8vTSUh6B41lZBkqg+orZdKDFTbplSQX0gppOPnZ3Baxc9mdZqB3IjTxnoo0lu/
+         wtzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3tGU0z0AqDDHU99JkAg/4X/GiVi4av+BXoNuTlysXGA=;
-        b=qeNoCnbRzzGV+EcSqyWWK0vZHXyx3L56bDidRucD5zRO1zCILgp/ciXGN9Y4XrHXY3
-         LDhOCtS9kMywS6t9vD7WL/5h6/qxvLf/iasvKe8xnbK5Q5ILVzuFBTlSGAjxLcvY0gTD
-         kJ2UdZOnLkddWQudaz9J0kCaZkwW+Mp4yhCaN6C1TRvKzONVIe+WESqRI/PhnsRtpOqf
-         Kck53v5WQhk46PVE5cET0fqEiUuiZis6LxE8LhGqJsRhk+oeVVG2MRt9DcW/TBu0m1Ql
-         sBTiAIVQtQJY5YXknNEvk822NE2Et8iB2EnnjKYVgbi+LF31vgAMKBqkggv+7QyaCjrv
-         cKYQ==
-X-Gm-Message-State: AOAM530K6EYyisTMwLVdghYKoj5zl2Ykumcmh7v+krZECaQw4QG7baaP
-        G6LeY/wnTt+hiQLri3hKajlZnLRE7kDLI69n+ow=
-X-Google-Smtp-Source: ABdhPJxEr335Ac/QtOyhzleanQPBp9uQSRloLamezFsp/F/Ph/UaMrXPD6knhS1sec6LdLdMXucUe3IeO/3bnU8JUS4=
-X-Received: by 2002:ac2:5fe2:: with SMTP id s2mr12703553lfg.539.1608769083885;
- Wed, 23 Dec 2020 16:18:03 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=wLRZYS/XiFpA/R+VzuFliJ0iKwXJ0mePFvVmHUGHhWQ=;
+        b=JdklmcNd0wGmh+pcNvDPwPZZMU8Gmnmdh4GNspnvjKIPWDRWa21P2GS3dM9jfnOxXS
+         WcY8h3LAhA/uF3SG4zHSFWK41uPBPyQiqD1gSUYHWRqcERFc75k3ttLjB9K9RjjjK8c3
+         nFl3soXPPUO5IzHYizkChvA9N/jFcAD2R1d9pwGFumvQdhGrdybOoov0xonvnYPxTX/o
+         dZb9xfT/IojodzjaPVHEYA8iJ/6ast4kgMgDFs7zXmi/23ytW1AX1gCRhVQNWnJFfHr5
+         vdXW6rAe5SwoqE6jntiYQNYFqYtr+Ux+FRgUlLOrKix40z5ksma9J5/Tl6Pz2EGIUlFr
+         48+g==
+X-Gm-Message-State: AOAM533UpplNIrH5C5LXX72M/2W07MU2YiABxSLLL9uXg9J7mOUpeCRi
+        Cq055bJMWBLenE0U9oHSqKA8Xv6eVSjrV5Iv
+X-Google-Smtp-Source: ABdhPJx1zBodos95DtqoTr9JbuG6zQ6De8U6dLDJudQOFpHdRJ2p5ZuAkxs3B3U2ES5FDevopyB5Tw==
+X-Received: by 2002:a05:600c:218a:: with SMTP id e10mr1944501wme.27.1608772167161;
+        Wed, 23 Dec 2020 17:09:27 -0800 (PST)
+Received: from valhalla.home ([2.31.224.116])
+        by smtp.gmail.com with ESMTPSA id b200sm1598653wmb.10.2020.12.23.17.09.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Dec 2020 17:09:26 -0800 (PST)
+From:   Daniel Scally <djrscally@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-media@vger.kernel.org, devel@acpica.org
+Cc:     rjw@rjwysocki.net, lenb@kernel.org, gregkh@linuxfoundation.org,
+        yong.zhi@intel.com, sakari.ailus@linux.intel.com,
+        bingbu.cao@intel.com, tian.shu.qiu@intel.com, mchehab@kernel.org,
+        robert.moore@intel.com, erik.kaneda@intel.com, pmladek@suse.com,
+        rostedt@goodmis.org, sergey.senozhatsky@gmail.com,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        laurent.pinchart+renesas@ideasonboard.com,
+        jacopo+renesas@jmondi.org, kieran.bingham+renesas@ideasonboard.com,
+        hverkuil-cisco@xs4all.nl, m.felsch@pengutronix.de,
+        niklas.soderlund+renesas@ragnatech.se, slongerbeam@gmail.com,
+        heikki.krogerus@linux.intel.com, linus.walleij@linaro.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v3 04/14] software_node: Enforce parent before child ordering of nodes arrays
+Date:   Thu, 24 Dec 2020 01:08:57 +0000
+Message-Id: <20201224010907.263125-5-djrscally@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201224010907.263125-1-djrscally@gmail.com>
+References: <20201224010907.263125-1-djrscally@gmail.com>
 MIME-Version: 1.0
-References: <CAJ+vNU0TxUVDoi--tB=5AOYzkXOwhBTQ4MyOgX6_Q515yXTM8g@mail.gmail.com>
-In-Reply-To: <CAJ+vNU0TxUVDoi--tB=5AOYzkXOwhBTQ4MyOgX6_Q515yXTM8g@mail.gmail.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Wed, 23 Dec 2020 21:17:52 -0300
-Message-ID: <CAOMZO5DZq9tX-UBP5XWNTZfTLq__A5fOxX03vGcS14YWm6i+Qw@mail.gmail.com>
-Subject: Re: ADV7280 capture
-To:     Tim Harvey <tharvey@gateworks.com>
-Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-media <linux-media@vger.kernel.org>,
-        Discussion of the development of and with GStreamer 
-        <gstreamer-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Tim,
+Registering software_nodes with the .parent member set to point to a
+currently unregistered software_node has the potential for problems,
+so enforce parent -> child ordering in arrays passed in to
+software_node_register_nodes().
 
-I missed one comment:
+Software nodes that are children of another software node should be
+unregistered before their parent. To allow easy unregistering of an array
+of software_nodes ordered parent to child, reverse the order in which
+software_node_unregister_nodes() unregisters software_nodes.
 
-On Wed, Dec 23, 2020 at 7:43 PM Tim Harvey <tharvey@gateworks.com> wrote:
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Daniel Scally <djrscally@gmail.com>
+---
+Changes in v3
+	- kerneldoc comment cleanup
 
-> I have found that using the adv7280 on an imx6q/dl does not work
-> without a patch [1] to make the output format of the adv7280 the same
-> as the adv7180. I'm not sure what the best solution for this issue is
-> as the patch was nak'd because it may break existing users of the
-> adv7280. I suspect perhaps the best approach is to add a kernel module
-> parameter or device-tree property to configure the adv7280 for
-> compatibility with the imx6 CSI.
+ drivers/base/swnode.c | 42 ++++++++++++++++++++++++++++++------------
+ 1 file changed, 30 insertions(+), 12 deletions(-)
 
-Yes, a devicetree property may be a good approach to avoid potential
-regressions.
+diff --git a/drivers/base/swnode.c b/drivers/base/swnode.c
+index 615a0c93e116..ade49173ff8d 100644
+--- a/drivers/base/swnode.c
++++ b/drivers/base/swnode.c
+@@ -692,7 +692,11 @@ swnode_register(const struct software_node *node, struct swnode *parent,
+  * software_node_register_nodes - Register an array of software nodes
+  * @nodes: Zero terminated array of software nodes to be registered
+  *
+- * Register multiple software nodes at once.
++ * Register multiple software nodes at once. If any node in the array
++ * has its .parent pointer set (which can only be to another software_node),
++ * then its parent **must** have been registered before it is; either outside
++ * of this function or by ordering the array such that parent comes before
++ * child.
+  */
+ int software_node_register_nodes(const struct software_node *nodes)
+ {
+@@ -700,14 +704,23 @@ int software_node_register_nodes(const struct software_node *nodes)
+ 	int i;
+ 
+ 	for (i = 0; nodes[i].name; i++) {
+-		ret = software_node_register(&nodes[i]);
+-		if (ret) {
+-			software_node_unregister_nodes(nodes);
+-			return ret;
++		const struct software_node *parent = nodes[i].parent;
++
++		if (parent && !software_node_to_swnode(parent)) {
++			ret = -EINVAL;
++			goto err_unregister_nodes;
+ 		}
++
++		ret = software_node_register(&nodes[i]);
++		if (ret)
++			goto err_unregister_nodes;
+ 	}
+ 
+ 	return 0;
++
++err_unregister_nodes:
++	software_node_unregister_nodes(nodes);
++	return ret;
+ }
+ EXPORT_SYMBOL_GPL(software_node_register_nodes);
+ 
+@@ -715,18 +728,23 @@ EXPORT_SYMBOL_GPL(software_node_register_nodes);
+  * software_node_unregister_nodes - Unregister an array of software nodes
+  * @nodes: Zero terminated array of software nodes to be unregistered
+  *
+- * Unregister multiple software nodes at once.
++ * Unregister multiple software nodes at once. If parent pointers are set up
++ * in any of the software nodes then the array **must** be ordered such that
++ * parents come before their children.
+  *
+- * NOTE: Be careful using this call if the nodes had parent pointers set up in
+- * them before registering.  If so, it is wiser to remove the nodes
+- * individually, in the correct order (child before parent) instead of relying
+- * on the sequential order of the list of nodes in the array.
++ * NOTE: If you are uncertain whether the array is ordered such that
++ * parents will be unregistered before their children, it is wiser to
++ * remove the nodes individually, in the correct order (child before
++ * parent).
+  */
+ void software_node_unregister_nodes(const struct software_node *nodes)
+ {
+-	int i;
++	unsigned int i = 0;
++
++	while (nodes[i].name)
++		i++;
+ 
+-	for (i = 0; nodes[i].name; i++)
++	while (i--)
+ 		software_node_unregister(&nodes[i]);
+ }
+ EXPORT_SYMBOL_GPL(software_node_unregister_nodes);
+-- 
+2.25.1
 
-In case you submit a patch for this, please keep me in Cc.
-
-Thanks
