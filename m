@@ -8,55 +8,55 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA9BDC43219
-	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 01:11:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB8A6C433DB
+	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 01:12:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C043722517
-	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 01:11:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B4ADA22517
+	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 01:12:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729060AbgLXBLO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Dec 2020 20:11:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48326 "EHLO
+        id S1728737AbgLXBKo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Dec 2020 20:10:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728782AbgLXBKq (ORCPT
+        with ESMTP id S1728303AbgLXBKo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Dec 2020 20:10:46 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8A3C0611CB;
-        Wed, 23 Dec 2020 17:09:36 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id v14so369590wml.1;
-        Wed, 23 Dec 2020 17:09:36 -0800 (PST)
+        Wed, 23 Dec 2020 20:10:44 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C40D9C061285;
+        Wed, 23 Dec 2020 17:09:29 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id r3so854998wrt.2;
+        Wed, 23 Dec 2020 17:09:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=DC+NLOANmww3T3T6FI3ieRdm/85Fv6Eh0JyetCBXwV4=;
-        b=cBItcV9jWQXipn3WCxoTbgTcHjQjNqJt8eMmHA45Op5N+YcPE0dsIvL1+E5DhU8FfA
-         g04YM40AiUOGlAv5JNW1Ju/pxD1jB3xrwiZsvn19qgQa7ogFmiGzvqIKx31Ifv0pcIkd
-         f3DN8EAYPhby3VKDyk8kBitGzvtgRC7MDqXyBbm8026TjZcDjO3WNeZ2gojNB7Zpzhc3
-         GQSzLlJt2A7jyhWQj0UAkRw3J42kDqy9X3UcETAmYfId84s5kFdYGA5x+7tE689BqaHv
-         QGgqBEh4k38I/qnYeS4EZqIRcg3BN3IH6/njfDiP6pgASiMmG9GebQXFkZxi49L9PL9q
-         NXfw==
+        bh=V/1UKUJyr0qiUwLluVPA0tlSbSlnFJi05vFYlT35hz4=;
+        b=g+km3icySyD/RWdDXjNZc3Loy9M6goJpitJnbHTBEjhGtac7n4yhri+GDfMWTIl5KD
+         ezdbublcXNDYBcF0TcHHdnYtQfoed6WWeM0b1ZOWN7v48QvbjW6Fpv0mxOKhKHrXWJR2
+         6Arn+1Q0kbJLVfuO1mTXJZ8rUx2DjG17iqaFOeCaNLjKegwiEvyrpoUcGSiPY68YHOnP
+         v/bAHxJRun4m77pTkRhBIGIs7TcppEKNMLV/nk4LWpaDdrwtbxjIYe6NtueCWv4FS0A4
+         HJ6D0oh0vWSseLvG8ndh1N5kSIW7d5Llvb60uXE+Hj6xZfozw3v2SgjaQZo/+coPAoGY
+         MRmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=DC+NLOANmww3T3T6FI3ieRdm/85Fv6Eh0JyetCBXwV4=;
-        b=n8l6Q3E1GWE2X/nKdL41TqIe3PSKNTNngEYG7lStLWVChpyCG52c91BSus++hVvr2w
-         3FDzO9j330vncCKMX7kMlAFDeRUYf9sHp6CvDIJ5aSENQ0CevZfCwK1GzwI2O4mWMj90
-         GJ6m45pass2vNEiLUXupTh9/yOm2tiJ9CVdahzkAUjzJdud1y9eqiMo7YBNMZbc90e4G
-         blvMKPSg/Uornrpu6ntjPhX387URoWmMFuzbtsQR+36rgCXeU0Zh/y2hrfSoW54lOTAo
-         /c9HIFWT27TfeUl8UCB3WADtBSPSUqkhuE7eqm1j4Zbq5gherXgkF8juAuyEYUOZhw83
-         Ef4A==
-X-Gm-Message-State: AOAM531rPEycgNDgxykDXqaRnRqibNb11XP0NSdqdlGl1KB5sRvl8z9z
-        pDTWhwS9ksdyIJIlhdzhnTgTGI8B+pCXH2rB
-X-Google-Smtp-Source: ABdhPJwgEuI4ANZ1CSAJuas3ECnzDt7MDzM+aOw12nrks8JMkEUzdOdIHTuxBTCJ0na0XlL6Mzfukw==
-X-Received: by 2002:a1c:6446:: with SMTP id y67mr1955521wmb.144.1608772175252;
-        Wed, 23 Dec 2020 17:09:35 -0800 (PST)
+        bh=V/1UKUJyr0qiUwLluVPA0tlSbSlnFJi05vFYlT35hz4=;
+        b=pje/9SlhNq7csigvchkflw8HvCIXVKiHySiGWjuy9keiMxSqERCvAjCCWvRPjJCTM4
+         zaHNXrjufys95gCLIFbmUmaoJM/ctyVZIJNwDT31ERPW0Y/u1BnSjrAKv5TOfaF6Oc9c
+         8YX7yih/SeCA6b1QzGV7c4PD1970Qzt6I0fBoNsSzlw1Bhua4Hn7ysDKogx4guszT5ji
+         cYj58BrscHc0B/VwpD6wq9FhYWQge51h+6ic8aZtjIXRPLTwxoMr490Iv0x8nsOQfIED
+         aNGnKrtVzGr3H5zD+5tOTLX0HeGOq1E+o7BHqpRM7xGukxBQbMscEWR5u5sXtTNbREpd
+         BnMQ==
+X-Gm-Message-State: AOAM533CzUIHOgx+9/iSxDp0npylSOMUFGEw3TaBofh/aHveJPq7XlCA
+        7uuNFrwampqa/uuSylgR507Aony2q7J+dXZA
+X-Google-Smtp-Source: ABdhPJzMoFd7p+QiYEuqc5Pon1T5wPy9pHd4RsygkYw1VGKzelRl8YrfcH400px+thmA4ArsxkatHA==
+X-Received: by 2002:adf:d843:: with SMTP id k3mr32177295wrl.346.1608772168630;
+        Wed, 23 Dec 2020 17:09:28 -0800 (PST)
 Received: from valhalla.home ([2.31.224.116])
-        by smtp.gmail.com with ESMTPSA id b200sm1598653wmb.10.2020.12.23.17.09.33
+        by smtp.gmail.com with ESMTPSA id b200sm1598653wmb.10.2020.12.23.17.09.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Dec 2020 17:09:34 -0800 (PST)
+        Wed, 23 Dec 2020 17:09:28 -0800 (PST)
 From:   Daniel Scally <djrscally@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-media@vger.kernel.org, devel@acpica.org
@@ -71,10 +71,12 @@ Cc:     rjw@rjwysocki.net, lenb@kernel.org, gregkh@linuxfoundation.org,
         hverkuil-cisco@xs4all.nl, m.felsch@pengutronix.de,
         niklas.soderlund+renesas@ragnatech.se, slongerbeam@gmail.com,
         heikki.krogerus@linux.intel.com, linus.walleij@linaro.org,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCH v3 10/14] ipu3-cio2: Rename ipu3-cio2.c
-Date:   Thu, 24 Dec 2020 01:09:03 +0000
-Message-Id: <20201224010907.263125-11-djrscally@gmail.com>
+Subject: [PATCH v3 05/14] software_node: unregister software_nodes in reverse order
+Date:   Thu, 24 Dec 2020 01:08:58 +0000
+Message-Id: <20201224010907.263125-6-djrscally@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201224010907.263125-1-djrscally@gmail.com>
 References: <20201224010907.263125-1-djrscally@gmail.com>
@@ -84,35 +86,53 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-ipu3-cio2 driver needs extending with multiple files; rename the main
-source file and specify the renamed file in Makefile to accommodate that.
+To maintain consistency with software_node_unregister_nodes(), reverse
+the order in which the software_node_unregister_node_group() function
+unregisters nodes.
 
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Daniel Scally <djrscally@gmail.com>
 ---
 Changes in v3
-	- None
+	- Fixed the dereference of the terminating NULL entry
+	- Comment cleanup
 
- drivers/media/pci/intel/ipu3/Makefile                          | 2 ++
- drivers/media/pci/intel/ipu3/{ipu3-cio2.c => ipu3-cio2-main.c} | 0
- 2 files changed, 2 insertions(+)
- rename drivers/media/pci/intel/ipu3/{ipu3-cio2.c => ipu3-cio2-main.c} (100%)
+ drivers/base/swnode.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/pci/intel/ipu3/Makefile b/drivers/media/pci/intel/ipu3/Makefile
-index 98ddd5beafe0..429d516452e4 100644
---- a/drivers/media/pci/intel/ipu3/Makefile
-+++ b/drivers/media/pci/intel/ipu3/Makefile
-@@ -1,2 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0-only
- obj-$(CONFIG_VIDEO_IPU3_CIO2) += ipu3-cio2.o
+diff --git a/drivers/base/swnode.c b/drivers/base/swnode.c
+index ade49173ff8d..2d07eb04c6c8 100644
+--- a/drivers/base/swnode.c
++++ b/drivers/base/swnode.c
+@@ -779,16 +779,22 @@ EXPORT_SYMBOL_GPL(software_node_register_node_group);
+  * software_node_unregister_node_group - Unregister a group of software nodes
+  * @node_group: NULL terminated array of software node pointers to be unregistered
+  *
+- * Unregister multiple software nodes at once.
++ * Unregister multiple software nodes at once. The array will be unwound in
++ * reverse order (i.e. last entry first) and thus if any member of the array
++ * has its .parent member set then they should appear later in the array such
++ * that they are unregistered first.
+  */
+ void software_node_unregister_node_group(const struct software_node **node_group)
+ {
+-	unsigned int i;
++	unsigned int i = 0;
+ 
+ 	if (!node_group)
+ 		return;
+ 
+-	for (i = 0; node_group[i]; i++)
++	while (node_group[i])
++		i++;
 +
-+ipu3-cio2-y += ipu3-cio2-main.o
-diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
-similarity index 100%
-rename from drivers/media/pci/intel/ipu3/ipu3-cio2.c
-rename to drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
++	while (i--)
+ 		software_node_unregister(node_group[i]);
+ }
+ EXPORT_SYMBOL_GPL(software_node_unregister_node_group);
 -- 
 2.25.1
 
