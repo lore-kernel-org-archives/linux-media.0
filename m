@@ -2,110 +2,186 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A55FC433E6
-	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 18:38:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F98EC433DB
+	for <linux-media@archiver.kernel.org>; Fri, 25 Dec 2020 04:29:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3AD2522AAC
-	for <linux-media@archiver.kernel.org>; Thu, 24 Dec 2020 18:38:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1F66A230FA
+	for <linux-media@archiver.kernel.org>; Fri, 25 Dec 2020 04:29:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728791AbgLXShw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Dec 2020 13:37:52 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:30417 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728266AbgLXShw (ORCPT
+        id S1729145AbgLYE3q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 24 Dec 2020 23:29:46 -0500
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:56563 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729122AbgLYE3q (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Dec 2020 13:37:52 -0500
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-277-gYu6pb9aP32_rumPVp6FPw-1; Thu, 24 Dec 2020 18:36:12 +0000
-X-MC-Unique: gYu6pb9aP32_rumPVp6FPw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Thu, 24 Dec 2020 18:36:11 +0000
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Thu, 24 Dec 2020 18:36:11 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Daniel Scally' <djrscally@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "ACPI Devel Maling List" <linux-acpi@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        "devel@acpica.org" <devel@acpica.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Yong Zhi <yong.zhi@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Tian Shu Qiu <tian.shu.qiu@intel.com>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        "Erik Kaneda" <erik.kaneda@intel.com>,
-        Petr Mladek <pmladek@suse.com>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        "kieran.bingham+renesas@ideasonboard.com" 
-        <kieran.bingham+renesas@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        "niklas.soderlund+renesas@ragnatech.se" 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: RE: [PATCH v3 05/14] software_node: unregister software_nodes in
- reverse order
-Thread-Topic: [PATCH v3 05/14] software_node: unregister software_nodes in
- reverse order
-Thread-Index: AQHW2f9YHWzUalHOOk+Pd50vjly8GaoGkhDQ
-Date:   Thu, 24 Dec 2020 18:36:10 +0000
-Message-ID: <fcb07dea193b4b99b11f2a8e684d8acf@AcuMS.aculab.com>
-References: <20201224010907.263125-1-djrscally@gmail.com>
- <20201224010907.263125-6-djrscally@gmail.com>
- <CAHp75VdF5NdjrSxcOafh7KNNDteYEUDk9otA0HKX-iks7G0D4g@mail.gmail.com>
- <de478ef0-0b4d-df1d-2651-9cc35bf2f45b@gmail.com>
- <CAHp75VdWuowLenNPQRNc+QXeyuvwKqh_bjw=1WvmFrzoygXFRw@mail.gmail.com>
- <2b415312-fe30-c73b-0077-4ec2a07116df@gmail.com>
-In-Reply-To: <2b415312-fe30-c73b-0077-4ec2a07116df@gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+        Thu, 24 Dec 2020 23:29:46 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id seiskCQb4LGy3seitk6bOu; Fri, 25 Dec 2020 05:29:03 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1608870543; bh=Z2GXCEu31RROfk7gJUFk+F/LR5hNICrgR41pUI6O8G8=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=P7VLW6kIOiHnAOzuxFm3gxhbqj2y6WNjocOUn4agFz+LbtqYwvndBun6MAyErfk3o
+         uKTQ5R3KKbvk6SEwhHu8OKc1g/v+ZhCsZnZwLxwNr8NsJEh8r04JAkwU3LgRUDqLik
+         O9c4aPBG969+vM8YyUy9aTa1J3rwe8+VKEuE4IufDVIqGNn/HDcyHm+u5sAacig7sC
+         Q91mYVD1RIfi76U1ePxasGworXabxf1RM/FRRbKmXWt8/5jnUaYvRafX8Sdg/ZqWap
+         eFuQcUnwSqlKMEmmBxfFIhueS83VgXD4p/a2h0IQX/nE6N4u8PDLN/fB34pFyH4+rn
+         TTAT928loBjrA==
+Message-ID: <1557b15df05fc56718dfb8d3d3e78302@smtp-cloud7.xs4all.net>
+Date:   Fri, 25 Dec 2020 05:29:02 +0100
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: ERRORS
+X-CMAE-Envelope: MS4xfEgnvNkMClavUKUIaApuWErddE+fYOTm7tT4GsYUmmIfgPRKGTeOXiEBNm9dtrBP/uzlIX0YV4d7ALAxhQkGRJDSKc5crH1lIGVuDvaCXTR5k3242MXQ
+ IGjPUv8FMshMuzVUVDyVWKNkejUUd9q8Haa1ui/MLdOgKpkylr87eEmTTLrJn1+YyqMPsUbc4JxKzaA3qycksmK/qvIns8SS3w9yay0qi/eHR0K0bHd7JeZv
+ W1hBWiG8+SsYODpSSBIKEg==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-RnJvbTogRGFuaWVsIFNjYWxseSANCj4gU2VudDogMjQgRGVjZW1iZXIgMjAyMCAxNDoxNA0KLi4u
-DQo+ID4+IFRoZSBhcnJheSB3aWxsIGJlIHVud291bmQgaW4gcmV2ZXJzZSBvcmRlciAoaS5lLiBs
-YXN0IGVudHJ5IGZpcnN0KS4gSWYNCj4gPj4gYW55IG1lbWJlciBvZiB0aGUgYXJyYXkgaXMgYSBj
-aGlsZCBvZiBhbm90aGVyIG1lbWJlciB0aGVuIHRoZSBjaGlsZCBtdXN0DQo+ID4gY2hpbGRyZW4g
-Pw0KPiANCj4gWWVzLCB5b3UgYXJlIHJpZ2h0IG9mIGNvdXJzZS4NCg0KVGhlIHNlY29uZCAnY2hp
-bGQnIGlzIGEgYmFjay1yZWZlcmVuY2UgdG8gJ2FueSBtZW1iZXInIHNvIGlzIHNpbmd1bGFyDQpz
-byAnY2hpbGQnIGlzIGNvcnJlY3QuDQondGhlIGNoaWxkJyBjb3VsZCBiZSByZXBsYWNlZCBieSAn
-aXQnDQoNCllvdSBjb3VsZCBoYXZlOg0KICAgSWYgYW55IG1lbWJlcnMgb2YgdGhlIGFycmF5IGFy
-ZSBjaGlsZHJlbiBvZiBhbm90aGVyIG1lbWJlciB0aGVuIHRoZQ0KICAgY2hpbGRyZW4gbXVzdCBh
-cHBlYXIgbGF0ZXIgaW4gdGhlIGxpc3QuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJl
-c3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsx
-IDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
+Results of the daily build of media_tree:
+
+date:			Fri Dec 25 05:00:14 CET 2020
+media-tree git hash:	fab0fca1da5cdc48be051715cd9787df04fdce3a
+media_build git hash:	174c4cc0037aed1f719b91dfc9e9cc09d53de87c
+v4l-utils git hash:	e0e4114f971407acfdf1e8173c86e2e08fa01077
+edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
+gcc version:		i686-linux-gcc (GCC) 10.2.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		v0.6.3-1-g58d3c1ca
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		v0.5.0-7047-g72fa1e990
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 77c8542b1c2caa2a7e96c4dad0335336b522c616
+host hardware:		x86_64
+host os:		5.7.0-1-amd64
+
+linux-git-sh: OK
+linux-git-arm-davinci: OK
+linux-git-arm-at91: OK
+linux-git-powerpc64: OK
+linux-git-arm-stm32: OK
+linux-git-arm-pxa: OK
+linux-git-mips: OK
+linux-git-arm64: OK
+linux-git-arm-multi: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: ERRORS
+linux-3.10.108-x86_64: ERRORS
+linux-3.11.10-i686: ERRORS
+linux-3.11.10-x86_64: ERRORS
+linux-3.12.74-i686: ERRORS
+linux-3.12.74-x86_64: ERRORS
+linux-3.13.11-i686: ERRORS
+linux-3.13.11-x86_64: ERRORS
+linux-3.14.79-i686: ERRORS
+linux-3.14.79-x86_64: ERRORS
+linux-3.15.10-i686: ERRORS
+linux-3.15.10-x86_64: ERRORS
+linux-3.16.81-i686: ERRORS
+linux-3.16.81-x86_64: ERRORS
+linux-3.17.8-i686: ERRORS
+linux-3.17.8-x86_64: ERRORS
+linux-3.18.136-i686: ERRORS
+linux-3.18.136-x86_64: ERRORS
+linux-3.19.8-i686: ERRORS
+linux-3.19.8-x86_64: ERRORS
+linux-4.0.9-i686: ERRORS
+linux-4.0.9-x86_64: ERRORS
+linux-4.1.52-i686: ERRORS
+linux-4.1.52-x86_64: ERRORS
+linux-4.2.8-i686: ERRORS
+linux-4.2.8-x86_64: ERRORS
+linux-4.3.6-i686: ERRORS
+linux-4.3.6-x86_64: ERRORS
+linux-4.4.238-i686: ERRORS
+linux-4.4.238-x86_64: ERRORS
+linux-4.5.7-i686: ERRORS
+linux-4.5.7-x86_64: ERRORS
+linux-4.6.7-i686: ERRORS
+linux-4.6.7-x86_64: ERRORS
+linux-4.7.10-i686: ERRORS
+linux-4.7.10-x86_64: ERRORS
+linux-4.8.17-i686: ERRORS
+linux-4.8.17-x86_64: ERRORS
+linux-4.9.238-i686: ERRORS
+linux-4.9.238-x86_64: ERRORS
+linux-4.10.17-i686: ERRORS
+linux-4.10.17-x86_64: ERRORS
+linux-4.11.12-i686: ERRORS
+linux-4.11.12-x86_64: ERRORS
+linux-4.12.14-i686: ERRORS
+linux-4.12.14-x86_64: ERRORS
+linux-4.13.16-i686: ERRORS
+linux-4.13.16-x86_64: ERRORS
+linux-4.14.200-i686: ERRORS
+linux-4.14.200-x86_64: ERRORS
+linux-4.15.18-i686: ERRORS
+linux-4.15.18-x86_64: ERRORS
+linux-4.16.18-i686: ERRORS
+linux-4.16.18-x86_64: ERRORS
+linux-4.17.19-i686: ERRORS
+linux-4.17.19-x86_64: ERRORS
+linux-4.18.20-i686: ERRORS
+linux-4.18.20-x86_64: ERRORS
+linux-4.19.149-i686: ERRORS
+linux-4.19.149-x86_64: ERRORS
+linux-4.20.17-i686: ERRORS
+linux-4.20.17-x86_64: ERRORS
+linux-5.0.21-i686: ERRORS
+linux-5.0.21-x86_64: ERRORS
+linux-5.1.21-i686: ERRORS
+linux-5.1.21-x86_64: ERRORS
+linux-5.2.21-i686: ERRORS
+linux-5.2.21-x86_64: ERRORS
+linux-5.3.18-i686: ERRORS
+linux-5.3.18-x86_64: ERRORS
+linux-5.4.69-i686: ERRORS
+linux-5.4.69-x86_64: ERRORS
+linux-5.5.19-i686: ERRORS
+linux-5.5.19-x86_64: ERRORS
+linux-5.6.19-i686: ERRORS
+linux-5.6.19-x86_64: ERRORS
+linux-5.7.19-i686: ERRORS
+linux-5.7.19-x86_64: ERRORS
+linux-5.8.13-i686: ERRORS
+linux-5.8.13-x86_64: ERRORS
+linux-5.9.1-i686: ERRORS
+linux-5.9.1-x86_64: ERRORS
+linux-5.10.1-i686: ERRORS
+linux-5.10.1-x86_64: ERRORS
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 2943, Succeeded: 2943, Failed: 0, Warnings: 0
+virtme-32: WARNINGS: Final Summary: 2779, Succeeded: 2779, Failed: 0, Warnings: 5
+sparse: WARNINGS
+smatch: ERRORS
+
+Detailed results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Friday.log
+
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Friday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Friday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Friday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Friday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
