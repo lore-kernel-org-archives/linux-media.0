@@ -2,241 +2,120 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.7 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D51AC433E0
-	for <linux-media@archiver.kernel.org>; Mon, 28 Dec 2020 18:37:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA393C433E0
+	for <linux-media@archiver.kernel.org>; Mon, 28 Dec 2020 23:00:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4A748229C4
-	for <linux-media@archiver.kernel.org>; Mon, 28 Dec 2020 18:37:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B21A32222A
+	for <linux-media@archiver.kernel.org>; Mon, 28 Dec 2020 23:00:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727941AbgL1ShK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 28 Dec 2020 13:37:10 -0500
-Received: from mga04.intel.com ([192.55.52.120]:65156 "EHLO mga04.intel.com"
+        id S1729104AbgL1XAW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 28 Dec 2020 18:00:22 -0500
+Received: from mga03.intel.com ([134.134.136.65]:26745 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727803AbgL1ShK (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 28 Dec 2020 13:37:10 -0500
-IronPort-SDR: l3hyhcJ3ncblzdwEFpewfsdsaW2PhnRjtcJnekRzokqchsQ13ui1El4S5H9hDCZ1WgDBgAMVEM
- 0uGgbuEjNNgg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9848"; a="173835367"
-X-IronPort-AV: E=Sophos;i="5.78,455,1599548400"; 
-   d="scan'208";a="173835367"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2020 10:35:24 -0800
-IronPort-SDR: TQniySVsNlhRodUnD1r08/zqAV7Xd0G2CY/nuSfJ7f+YXq8muzVI3zVPwl/1wxgJp/0Ja6dMgE
- sL0IBWzHtlEg==
-X-IronPort-AV: E=Sophos;i="5.78,455,1599548400"; 
-   d="scan'208";a="375742402"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2020 10:35:22 -0800
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id DE993207BF; Mon, 28 Dec 2020 20:35:20 +0200 (EET)
-Date:   Mon, 28 Dec 2020 20:35:20 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Ezequiel Garcia <ezequiel@collabora.com>
-Cc:     linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
-        kernel@collabora.com,
+        id S1731775AbgL1W4W (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 28 Dec 2020 17:56:22 -0500
+IronPort-SDR: CibDkYV6HPQ8IvcRrUfyqyR2b7Rv+OiZBORwJ6Rgs7MkcpdOYEPqiy3dYyPZNKO+S9OPK3Tfv+
+ 4U1D0Ns/qdjw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9848"; a="176529384"
+X-IronPort-AV: E=Sophos;i="5.78,456,1599548400"; 
+   d="scan'208";a="176529384"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2020 14:55:41 -0800
+IronPort-SDR: RDA/+I/5GKfDFCkIf6tVgGIakOFgulH3t0Bbr6Yuf4NZbXXydFd6LHfppPZxTVQ6QxynaeSWuG
+ XYBcblFDj7aA==
+X-IronPort-AV: E=Sophos;i="5.78,456,1599548400"; 
+   d="scan'208";a="562962395"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2020 14:55:34 -0800
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andy.shevchenko@gmail.com>)
+        id 1ku1RL-000Iqk-5E; Tue, 29 Dec 2020 00:56:35 +0200
+Date:   Tue, 29 Dec 2020 00:56:35 +0200
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Daniel Scally <djrscally@gmail.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        devel@acpica.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yong Zhi <yong.zhi@intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Tian Shu Qiu <tian.shu.qiu@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Erik Kaneda <erik.kaneda@intel.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        kieran.bingham+renesas@ideasonboard.com,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        niklas.soderlund+renesas@ragnatech.se,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jordan Hand <jorhand@linux.microsoft.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: Re: [PATCH] media: v4l2-async: Add waiting subdevices debugfs
-Message-ID: <20201228183520.GB26370@paasikivi.fi.intel.com>
-References: <20201228180511.43486-1-ezequiel@collabora.com>
+Subject: Re: [PATCH v3 14/14] ipu3-cio2: Add cio2-bridge to ipu3-cio2 driver
+Message-ID: <20201228225635.GI4077@smile.fi.intel.com>
+References: <20201224010907.263125-1-djrscally@gmail.com>
+ <20201224010907.263125-15-djrscally@gmail.com>
+ <CAHp75VeXN6PnV7Mzz6UMpD+m-yjPi6XK0kx1=+-M5mci=Vb=YQ@mail.gmail.com>
+ <20201228170521.GZ26370@paasikivi.fi.intel.com>
+ <2d37df3d-f04c-6679-6e27-6c7f82e9b158@gmail.com>
+ <20201228225544.GH4077@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201228180511.43486-1-ezequiel@collabora.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20201228225544.GH4077@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Ezequiel,
+On Tue, Dec 29, 2020 at 12:55:45AM +0200, Andy Shevchenko wrote:
+> On Mon, Dec 28, 2020 at 10:37:38PM +0000, Daniel Scally wrote:
+> > On 28/12/2020 17:05, Sakari Ailus wrote:
+> > > On Thu, Dec 24, 2020 at 02:54:44PM +0200, Andy Shevchenko wrote:
+> 
+> ...
+> 
+> > >>> +#include <linux/property.h>
+> > >>> +
+> > >>> +#define CIO2_HID                               "INT343E"
+> > >>> +#define CIO2_NUM_PORTS                         4
+> > > 
+> > > This is already defined in ipu3-cio2.h. Could you include that instead?
+> > 
+> > Yes; but I'd need to also include media/v4l2-device.h and
+> > media/videobuf2-dma-sg.h (they're included in ipu3-cio2-main.c at the
+> > moment). It didn't seem worth it; but I can move those two includes from
+> > the .c to the .h and then include ipu3-cio2.h in cio2-bridge.h
+> > 
+> > Which do you prefer?
+> 
+> Actually ipu3-cio2.h misses a lot of inclusions (like mutex.h which I
+> immediately noticed when scrolled over data types). I think here should be a
+> compromise variant, split out something like ipu3-cio2-defs.h which can be
 
-Thanks for the patch.
+Seems like cio2-defs.h more plausible name.
 
-On Mon, Dec 28, 2020 at 03:05:11PM -0300, Ezequiel Garcia wrote:
-> There is currently little to none information available
-> about the reasons why a v4l2-async device hasn't
-> probed completely.
+> included in both ipu3-cio2.h and cio2-bridge.h.
 > 
-> Inspired by the "devices_deferred" debugfs file,
-> add a file to list information about the subdevices
-> that are on waiting lists, for each notifier.
-> 
-> This is useful to debug v4l2-async subdevices
-> and notifiers, for instance when doing device bring-up.
-> 
-> For instance, a typical output would be:
-> 
-> $ cat /sys/kernel/debug/video4linux/waiting_subdevices
-> [fwnode] 1-003c
-> [fwnode] 20e0000.iomuxc-gpr:ipu1_csi1_mux
-> [fwnode] 20e0000.iomuxc-gpr:ipu1_csi0_mux
-> 
-> It's possible to provide some more information, detecting
-> the type of fwnode and printing of-specific or acpi-specific
-> details. For now, the implementation is kept simple.
-
-The rest of the debug information we're effectively providing through
-kernel messages on DEBUG level (pr_debug/dev_dbg). Could we do the same
-here?
-
-Would just printing the names of the pending sub-devices at notifier
-register and async subdevice register time be sufficient? That way you'd
-also be fine with just dmesg output if you're asking someone to provide you
-information from another system.
-
-> 
-> Also, note that match-type "custom" prints no information.
-> Since there are no in-tree users of this match-type,
-> the implementation doesn't bother.
-
-Lines up to 74 characters are fine. Only in Gerrit it's 60 or 40 or
-whatever characters. ;-)
-
-> 
-> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> ---
->  drivers/media/v4l2-core/v4l2-async.c | 54 ++++++++++++++++++++++++++++
->  drivers/media/v4l2-core/v4l2-dev.c   |  5 +++
->  include/media/v4l2-async.h           |  7 ++++
->  3 files changed, 66 insertions(+)
-> 
-> diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
-> index e3ab003a6c85..32cd1ecced97 100644
-> --- a/drivers/media/v4l2-core/v4l2-async.c
-> +++ b/drivers/media/v4l2-core/v4l2-async.c
-> @@ -5,6 +5,7 @@
->   * Copyright (C) 2012-2013, Guennadi Liakhovetski <g.liakhovetski@gmx.de>
->   */
->  
-> +#include <linux/debugfs.h>
->  #include <linux/device.h>
->  #include <linux/err.h>
->  #include <linux/i2c.h>
-> @@ -14,6 +15,7 @@
->  #include <linux/mutex.h>
->  #include <linux/of.h>
->  #include <linux/platform_device.h>
-> +#include <linux/seq_file.h>
->  #include <linux/slab.h>
->  #include <linux/types.h>
->  
-> @@ -837,3 +839,55 @@ void v4l2_async_unregister_subdev(struct v4l2_subdev *sd)
->  	mutex_unlock(&list_lock);
->  }
->  EXPORT_SYMBOL(v4l2_async_unregister_subdev);
-> +
-> +static void print_waiting_subdev(struct seq_file *s,
-> +				 struct v4l2_async_subdev *asd)
-> +{
-> +	switch (asd->match_type) {
-> +	case V4L2_ASYNC_MATCH_CUSTOM:
-> +		seq_puts(s, "[custom]\n");
-> +		break;
-> +	case V4L2_ASYNC_MATCH_DEVNAME:
-> +		seq_printf(s, "[devname] %s\n",
-> +			   asd->match.device_name);
-> +		break;
-> +	case V4L2_ASYNC_MATCH_I2C:
-> +		seq_printf(s, "[i2c] %d-%04x\n",
-> +			   asd->match.i2c.adapter_id,
-> +			   asd->match.i2c.address);
-> +		break;
-> +	case V4L2_ASYNC_MATCH_FWNODE: {
-> +		struct fwnode_handle *fwnode = asd->match.fwnode;
-> +
-> +		if (fwnode_graph_is_endpoint(fwnode))
-> +			fwnode = fwnode_graph_get_port_parent(fwnode);
-> +
-> +		seq_printf(s, "[fwnode] %s\n",
-> +			   fwnode->dev ? dev_name(fwnode->dev) : "nil");
-> +		break;
-> +	}
-> +	}
-> +}
-> +
-> +static int waiting_subdevs_show(struct seq_file *s, void *data)
-> +{
-> +	struct v4l2_async_notifier *notifier;
-> +	struct v4l2_async_subdev *asd;
-> +
-> +	mutex_lock(&list_lock);
-> +
-> +	list_for_each_entry(notifier, &notifier_list, list)
-> +		list_for_each_entry(asd, &notifier->waiting, list)
-> +			print_waiting_subdev(s, asd);
-> +
-> +	mutex_unlock(&list_lock);
-> +
-> +	return 0;
-> +}
-> +DEFINE_SHOW_ATTRIBUTE(waiting_subdevs);
-> +
-> +void v4l2_async_debug_init(struct dentry *debugfs_dir)
-> +{
-> +	debugfs_create_file("waiting_subdevices", 0444, debugfs_dir, NULL,
-> +			    &waiting_subdevs_fops);
-> +}
-> diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
-> index a593ea0598b5..8d3813e6ab56 100644
-> --- a/drivers/media/v4l2-core/v4l2-dev.c
-> +++ b/drivers/media/v4l2-core/v4l2-dev.c
-> @@ -14,6 +14,7 @@
->  
->  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
->  
-> +#include <linux/debugfs.h>
->  #include <linux/module.h>
->  #include <linux/types.h>
->  #include <linux/kernel.h>
-> @@ -37,6 +38,7 @@
->  		       __func__, ##arg);				\
->  } while (0)
->  
-> +static struct dentry *v4l2_debugfs_dir;
->  
->  /*
->   *	sysfs stuff
-> @@ -1113,6 +1115,8 @@ static int __init videodev_init(void)
->  		return -EIO;
->  	}
->  
-> +	v4l2_debugfs_dir = debugfs_create_dir("video4linux", NULL);
-> +	v4l2_async_debug_init(v4l2_debugfs_dir);
->  	return 0;
->  }
->  
-> @@ -1120,6 +1124,7 @@ static void __exit videodev_exit(void)
->  {
->  	dev_t dev = MKDEV(VIDEO_MAJOR, 0);
->  
-> +	debugfs_remove_recursive(v4l2_debugfs_dir);
->  	class_unregister(&video_class);
->  	unregister_chrdev_region(dev, VIDEO_NUM_DEVICES);
->  }
-> diff --git a/include/media/v4l2-async.h b/include/media/v4l2-async.h
-> index d6e31234826f..312ab421aa40 100644
-> --- a/include/media/v4l2-async.h
-> +++ b/include/media/v4l2-async.h
-> @@ -137,6 +137,13 @@ struct v4l2_async_notifier {
->  	struct list_head list;
->  };
->  
-> +/**
-> + * v4l2_async_debug_init - Initialize debugging tools.
-> + *
-> + * @debugfs_dir: pointer to the parent debugfs &struct dentry
-> + */
-> +void v4l2_async_debug_init(struct dentry *debugfs_dir);
-> +
->  /**
->   * v4l2_async_notifier_init - Initialize a notifier.
->   *
+> And cio2-bridge.h needs more inclusions like types.h.
 
 -- 
-Kind regards,
+With Best Regards,
+Andy Shevchenko
 
-Sakari Ailus
+
