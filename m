@@ -2,59 +2,76 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E9D5C433DB
-	for <linux-media@archiver.kernel.org>; Mon, 28 Dec 2020 11:55:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADBEDC433E0
+	for <linux-media@archiver.kernel.org>; Mon, 28 Dec 2020 12:18:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D9F0222B4B
-	for <linux-media@archiver.kernel.org>; Mon, 28 Dec 2020 11:55:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 737C620897
+	for <linux-media@archiver.kernel.org>; Mon, 28 Dec 2020 12:18:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726874AbgL1LzM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 28 Dec 2020 06:55:12 -0500
-Received: from mx2.suse.de ([195.135.220.15]:60422 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726603AbgL1LzM (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 28 Dec 2020 06:55:12 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1609156465; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WG4xhXQYAczlY0vFiOrBXXA0TnTJFStA1UMY67oHyQ0=;
-        b=eHDfIlI5bzYKS1yXhTEsHix18HPkct5wllAFHfNNZIHoInj0VWjFmryTTqbf7L5TxtM4gg
-        7/1chnPmsifRVHJ+oqKGPBIuyLopCZb9hyPM5Ynj9n7hp3i2eNc26cFnzS/sAFCy/dZ+1Q
-        v4JOIu8lw9u/7aAylVEeq1tiYfYOZpc=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 5E57CAB8B;
-        Mon, 28 Dec 2020 11:54:25 +0000 (UTC)
-Message-ID: <f00f7739d0b796a3ba2a36ae462e49a806e17843.camel@suse.com>
-Subject: Re: [PATCH 2/2] cdc-acm: blacklist another IR Droid device
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     Georgi Bakalski <georgi.bakalski@gmail.com>
-Date:   Mon, 28 Dec 2020 12:53:57 +0100
-In-Reply-To: <20201227134502.4548-2-sean@mess.org>
-References: <20201227134502.4548-1-sean@mess.org>
-         <20201227134502.4548-2-sean@mess.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S1727287AbgL1MSR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 28 Dec 2020 07:18:17 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:58756 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726847AbgL1MSR (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 28 Dec 2020 07:18:17 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id 749891F44439
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kernel@collabora.com, Hans Verkuil <hverkuil@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: [PATCH] media: v4l2-async: Put fwnode after last access
+Date:   Mon, 28 Dec 2020 09:17:25 -0300
+Message-Id: <20201228121725.133898-1-ezequiel@collabora.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Am Sonntag, den 27.12.2020, 13:45 +0000 schrieb Sean Young:
-> This device is supported by the IR Toy driver.
-> 
-> Reported-by: Georgi Bakalski <georgi.bakalski@gmail.com>
-> Signed-off-by: Sean Young <sean@mess.org>
-Acked-by: Oliver Neukum <oneukum@suse.com>
+fwnode_handle_put() should be called after the fwnode
+is last accessed. Fix it.
+
+Fixes: b98158d837ef ("media: v4l2-async: Accept endpoints and devices for fwnode matching")
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+---
+ drivers/media/v4l2-core/v4l2-async.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+index e3ab003a6c85..1303c9b83138 100644
+--- a/drivers/media/v4l2-core/v4l2-async.c
++++ b/drivers/media/v4l2-core/v4l2-async.c
+@@ -78,6 +78,7 @@ static bool match_fwnode(struct v4l2_async_notifier *notifier,
+ 	bool asd_fwnode_is_ep;
+ 	bool sd_fwnode_is_ep;
+ 	struct device *dev;
++	bool match;
+ 
+ 	/*
+ 	 * Both the subdev and the async subdev can provide either an endpoint
+@@ -113,9 +114,10 @@ static bool match_fwnode(struct v4l2_async_notifier *notifier,
+ 		other_fwnode = sd->fwnode;
+ 	}
+ 
+-	fwnode_handle_put(dev_fwnode);
++	match = (dev_fwnode == other_fwnode);
+ 
+-	if (dev_fwnode != other_fwnode)
++	fwnode_handle_put(dev_fwnode);
++	if (!match)
+ 		return false;
+ 
+ 	/*
+-- 
+2.29.2
 
