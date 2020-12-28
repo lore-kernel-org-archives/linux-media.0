@@ -2,143 +2,155 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95082C433E9
-	for <linux-media@archiver.kernel.org>; Mon, 28 Dec 2020 15:17:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7477EC433E6
+	for <linux-media@archiver.kernel.org>; Mon, 28 Dec 2020 15:29:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5E21A225AB
-	for <linux-media@archiver.kernel.org>; Mon, 28 Dec 2020 15:17:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4AB3A22475
+	for <linux-media@archiver.kernel.org>; Mon, 28 Dec 2020 15:29:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437296AbgL1PRg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 28 Dec 2020 10:17:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57420 "EHLO
+        id S2392765AbgL1P3R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 28 Dec 2020 10:29:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437278AbgL1OEH (ORCPT
+        with ESMTP id S2392762AbgL1P3O (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 28 Dec 2020 09:04:07 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA96C06179B;
-        Mon, 28 Dec 2020 06:03:26 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id b26so24049748lff.9;
-        Mon, 28 Dec 2020 06:03:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=4qvAPOSnb3gCPzAXuw8OIJYZA27uuHy18ix0nvJW1CU=;
-        b=bl3r2U9yXYFzTcL+MMt8/u3WC03Tv2y9aGpfMDF+N5t5SOd8te41chnr2P+tYXgxap
-         qwi67ZrMGeBXFF6i2U1/h8fpFscRnAJlA+bG6BE++9jg1sJirjaO75C7ygUTfOp9iHPc
-         Yars2YYOMCQH/+4lrFdWgHgHubxtlUGfSVWkGmuTDRDCNETQoRFqyJm1yOemv2j+fOXU
-         5/WBa1SGMKBukcACZnAJkY1bpWqyZu0kDtPBWL8qeKDNz7QV8CxI3OuE7812UUrxl/Ya
-         aAvrf8QxKJLq4+dD8I+H5iaFUT2AaRAEOFTZRmLcbpirb4b1hMFAXt64Gu5605ULqSGz
-         0zSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=4qvAPOSnb3gCPzAXuw8OIJYZA27uuHy18ix0nvJW1CU=;
-        b=na61UGSU/DZ0aenfWKJYKOyIzvSAOVDZiPphjqKuOeplwGhHkrph8xmMg/IZuyCQL5
-         hSGAWhJnZcSSoOf3Bql9CR9O3aL1Z5P73a7Wh8UUAECogRSe4BsWwM6b/I21U6qEAxy/
-         lRCrRg76Qf2RTEUzzbfw0o2C2jlcS+WGwSQNrOr2pMbcNyXff2wB7e9m5EQ96qFm8vFa
-         HbfWYnlmuJ9Ra2A7iDKOucMrj+cmrKdI9MXglVP1Yi3J3RDXJaz4Y+zFXWch7Wbet0vj
-         QcHmNgVXUu5iqG6K+JqKuFOd5mTPDS22jaLMoMASXxwOD3uX+5ZitXGkpQdokxUZRNSo
-         v8CQ==
-X-Gm-Message-State: AOAM531MIWHKrI2gdOXoPt8jjktN5MgdJUjd5RnmPmBssS0GUpbaIMXS
-        cyq2Mu57A0isWLm/5Vo5dKKBWfGWEIQ=
-X-Google-Smtp-Source: ABdhPJzUpl1/di7tj7MASZGrGRvUabOdas4lVkZNDhVFRvZuxbYB/Sicx781pXRzuHaMyLMY0tnsEQ==
-X-Received: by 2002:a19:ccc9:: with SMTP id c192mr12718066lfg.98.1609164205141;
-        Mon, 28 Dec 2020 06:03:25 -0800 (PST)
-Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.googlemail.com with ESMTPSA id d23sm5324052lfl.115.2020.12.28.06.03.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Dec 2020 06:03:24 -0800 (PST)
-Subject: Re: [PATCH v2 11/48] opp: Add dev_pm_opp_find_level_ceil()
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <20201217180638.22748-1-digetx@gmail.com>
- <20201217180638.22748-12-digetx@gmail.com>
- <20201222064253.x7vsurh7q5k7qzb5@vireshk-i7>
- <fd7b9f42-d0a7-45eb-2a17-d46779011c58@gmail.com>
- <20201223041931.klnppy4fu3sdgtsz@vireshk-i7>
- <f00e0c74-8d9a-d3d3-81bb-3ac25a74175d@gmail.com>
- <20201224064339.zngidobhstnlu2a3@vireshk-i7>
- <780db190-d93d-3bca-4819-790010f82c62@gmail.com>
- <20201228062254.ui727ka2ftijov4m@vireshk-i7>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <c4a6336f-e7e6-b23e-4d60-a41d8e09aef3@gmail.com>
-Date:   Mon, 28 Dec 2020 17:03:23 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.2
+        Mon, 28 Dec 2020 10:29:14 -0500
+X-Greylist: delayed 436 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Dec 2020 07:28:34 PST
+Received: from mail.turbocat.net (turbocat.net [IPv6:2a01:4f8:c17:6c4b::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37AA3C061796
+        for <linux-media@vger.kernel.org>; Mon, 28 Dec 2020 07:28:33 -0800 (PST)
+Received: from hps2020.home.selasky.org (unknown [178.17.145.105])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.turbocat.net (Postfix) with ESMTPSA id 8651826009E
+        for <linux-media@vger.kernel.org>; Mon, 28 Dec 2020 16:21:16 +0100 (CET)
+To:     linux-media@vger.kernel.org
+From:   Hans Petter Selasky <hps@selasky.org>
+Subject: [PATCH] Bad IOCTLs - time to fix them?
+Message-ID: <a957de07-96f9-b1cd-31e5-19c096e5f974@selasky.org>
+Date:   Mon, 28 Dec 2020 16:21:05 +0100
+User-Agent: Mozilla/5.0 (X11; FreeBSD amd64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-In-Reply-To: <20201228062254.ui727ka2ftijov4m@vireshk-i7>
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-28.12.2020 09:22, Viresh Kumar пишет:
-> On 24-12-20, 16:00, Dmitry Osipenko wrote:
->> In a device driver I want to set PD to the lowest performance state by
->> removing the performance vote when dev_pm_opp_set_rate(dev, 0) is
->> invoked by the driver.
->>
->> The OPP core already does this, but if OPP levels don't start from 0 in
->> a device-tree for PD, then it currently doesn't work since there is a
->> need to get a rounded-up performance state because
->> dev_pm_opp_set_voltage() takes OPP entry for the argument (patches 9 and
->> 28).
->>
->> The PD powering off and performance-changes are separate from each other
->> in the GENPD core. The GENPD core automatically turns off domain when
->> all devices within the domain are suspended by system-suspend or RPM.
->>
->> The performance state of a power domain is controlled solely by a device
->> driver. GENPD core only aggregates the performance requests, it doesn't
->> change the performance state of a domain by itself when device is
->> suspended or resumed, IIUC this is intentional. And I want to put domain
->> into lowest performance state when device is suspended.
-> 
-> Right, so if you really want to just drop the performance vote, then with a
-> value of 0 for the performance state the call will reach to your genpd's
-> callback ->set_performance_state(). Just as dev_pm_opp_set_rate() accepts the
-> frequency to be 0, I would expect dev_pm_opp_set_rate() to accept opp argument
-> as NULL and in that case set voltage to 0 and do regulator_disable() as well.
-> Won't that work better than going for the lowest voltage ?
-> 
+Hi,
 
-We can make dev_pm_opp_set_voltage() to accept OPP=NULL in order to
-disable the regulator, like it's done for dev_pm_opp_set_rate(dev, 0).
-Although, I don't need this kind of behaviour for the Tegra PD driver,
-and thus, would prefer to leave this for somebody else to implement in
-the future, once it will be really needed.
+For some years now, FreeBSD's webcamd project at GitHub has carried 
+patches to fix up IOCTL's in the Linux Kernel and I'm reaching out once 
+again, that the bad read/write bits for certain IOCTLs may be seen as a 
+security issue and should be fixed. These are:
 
-Still we need the dev_pm_opp_find_level_ceil() because level=0 means
-that we want to set PD to the lowest (minimal) performance state, i.e.
-it doesn't necessarily mean that we want to set the voltage to 0 and
-disable the PD entirely. GENPD has a separate controls for on/off.
+diff --git a/include/uapi/linux/dvb/ca.h b/include/uapi/linux/dvb/ca.h
+index dffa59e95ebb..c4533a16d93e 100644
+--- a/include/uapi/linux/dvb/ca.h
++++ b/include/uapi/linux/dvb/ca.h
+@@ -134,9 +134,17 @@ struct ca_descr {
+
+  #define CA_RESET          _IO('o', 128)
+  #define CA_GET_CAP        _IOR('o', 129, struct ca_caps)
++/*
++ * At least CA_GET_SLOT_INFO and CA_GET_MSG need to be _IOWR not _IOR.
++ * This is wrong on Linux too but there the driver doesn't care.
++ *
+  #define CA_GET_SLOT_INFO  _IOR('o', 130, struct ca_slot_info)
+  #define CA_GET_DESCR_INFO _IOR('o', 131, struct ca_descr_info)
+  #define CA_GET_MSG        _IOR('o', 132, struct ca_msg)
++*/
++#define CA_GET_SLOT_INFO  _IOWR('o', 130, struct ca_slot_info)
++#define CA_GET_DESCR_INFO _IOR('o', 131, struct ca_descr_info)
++#define CA_GET_MSG        _IOWR('o', 132, struct ca_msg)
+  #define CA_SEND_MSG       _IOW('o', 133, struct ca_msg)
+  #define CA_SET_DESCR      _IOW('o', 134, struct ca_descr)
+
+diff --git a/include/uapi/linux/dvb/frontend.h 
+b/include/uapi/linux/dvb/frontend.h
+index 4f9b4551c534..a5e950404072 100644
+--- a/include/uapi/linux/dvb/frontend.h
++++ b/include/uapi/linux/dvb/frontend.h
+@@ -908,7 +908,8 @@ struct dtv_properties {
+  #define FE_DISHNETWORK_SEND_LEGACY_CMD _IO('o', 80) /* unsigned int */
+
+  #define FE_SET_PROPERTY		   _IOW('o', 82, struct dtv_properties)
+-#define FE_GET_PROPERTY		   _IOR('o', 83, struct dtv_properties)
++#define FE_GET_PROPERTY		   _IOW('o', 83, struct dtv_properties)
++#define FE_GET_PROPERTY_OLD	   _IOR('o', 83, struct dtv_properties)
+
+  #if defined(__DVB_CORE__) || !defined(__KERNEL__)
+
+diff --git a/include/uapi/linux/input.h b/include/uapi/linux/input.h
+index 9a61c28ed3ae..94cc0a7cb0a5 100644
+--- a/include/uapi/linux/input.h
++++ b/include/uapi/linux/input.h
+@@ -131,8 +131,12 @@ struct input_mask {
+  #define EVIOCGREP		_IOR('E', 0x03, unsigned int[2])	/* get repeat 
+settings */
+  #define EVIOCSREP		_IOW('E', 0x03, unsigned int[2])	/* set repeat 
+settings */
+
+-#define EVIOCGKEYCODE		_IOR('E', 0x04, unsigned int[2])        /* get 
+keycode */
+-#define EVIOCGKEYCODE_V2	_IOR('E', 0x04, struct input_keymap_entry)
++/*
++ * These two need to be _IOWR not _IOR (they're wrong on Linux too but
++ * there the driver doesn't care.)
++ */
++#define EVIOCGKEYCODE		_IOWR('E', 0x04, unsigned int[2])       /* get 
+keycode */
++#define EVIOCGKEYCODE_V2	_IOWR('E', 0x04, struct input_keymap_entry)
+  #define EVIOCSKEYCODE		_IOW('E', 0x04, unsigned int[2])        /* set 
+keycode */
+  #define EVIOCSKEYCODE_V2	_IOW('E', 0x04, struct input_keymap_entry)
+
+@@ -165,7 +169,7 @@ struct input_mask {
+   *
+   * If the request code is not an ABS_MT value, -EINVAL is returned.
+   */
+-#define EVIOCGMTSLOTS(len)	_IOC(_IOC_READ, 'E', 0x0a, len)
++#define EVIOCGMTSLOTS(len)	_IOC(_IOC_READ|_IOC_WRITE, 'E', 0x0a, len)
+
+  #define EVIOCGKEY(len)		_IOC(_IOC_READ, 'E', 0x18, len)		/* get global 
+key state */
+  #define EVIOCGLED(len)		_IOC(_IOC_READ, 'E', 0x19, len)		/* get all 
+LEDs */
+@@ -177,11 +181,11 @@ struct input_mask {
+  #define EVIOCSABS(abs)		_IOW('E', 0xc0 + (abs), struct input_absinfo) 
+/* set abs value/limits */
+
+  #define EVIOCSFF		_IOW('E', 0x80, struct ff_effect)	/* send a force 
+effect to a force feedback device */
+-#define EVIOCRMFF		_IOW('E', 0x81, int)			/* Erase a force effect */
++#define EVIOCRMFF		_IOWINT('E', 0x81)			/* Erase a force effect */
+  #define EVIOCGEFFECTS		_IOR('E', 0x84, int)			/* Report number of 
+effects playable at the same time */
+
+-#define EVIOCGRAB		_IOW('E', 0x90, int)			/* Grab/Release device */
+-#define EVIOCREVOKE		_IOW('E', 0x91, int)			/* Revoke device access */
++#define EVIOCGRAB		_IOWINT('E', 0x90)			/* Grab/Release device */
++#define EVIOCREVOKE		_IOWINT('E', 0x91)			/* Revoke device access */
+
+  /**
+   * EVIOCGMASK - Retrieve current event mask
+@@ -212,7 +216,7 @@ struct input_mask {
+   * if the receive-buffer points to invalid memory, or EINVAL if the kernel
+   * does not implement the ioctl.
+   */
+-#define EVIOCGMASK		_IOR('E', 0x92, struct input_mask)	/* Get 
+event-masks */
++#define EVIOCGMASK		_IOW('E', 0x92, struct input_mask)	/* Get 
+event-masks */
+
+  /**
+   * EVIOCSMASK - Set event mask
+-- 
+2.29.2
