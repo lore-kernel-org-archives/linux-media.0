@@ -7,71 +7,83 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AF72C4332B
-	for <linux-media@archiver.kernel.org>; Mon, 28 Dec 2020 15:38:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97B04C43381
+	for <linux-media@archiver.kernel.org>; Mon, 28 Dec 2020 16:25:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 610DE20776
-	for <linux-media@archiver.kernel.org>; Mon, 28 Dec 2020 15:38:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 63B6C2084D
+	for <linux-media@archiver.kernel.org>; Mon, 28 Dec 2020 16:25:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391527AbgL1Pdp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 28 Dec 2020 10:33:45 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:10084 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404961AbgL1NvS (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 28 Dec 2020 08:51:18 -0500
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4D4JnV63rnzMBTF;
-        Mon, 28 Dec 2020 21:49:34 +0800 (CST)
-Received: from ubuntu.network (10.175.138.68) by
- DGGEMS407-HUB.china.huawei.com (10.3.19.207) with Microsoft SMTP Server id
- 14.3.498.0; Mon, 28 Dec 2020 21:50:26 +0800
-From:   Zheng Yongjun <zhengyongjun3@huawei.com>
-To:     <prabhakar.csengg@gmail.com>, <mchehab@kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Zheng Yongjun <zhengyongjun3@huawei.com>
-Subject: [PATCH -next] media: platform: davinci: Use DEFINE_SPINLOCK() for spinlock
-Date:   Mon, 28 Dec 2020 21:51:04 +0800
-Message-ID: <20201228135104.28566-1-zhengyongjun3@huawei.com>
-X-Mailer: git-send-email 2.22.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.138.68]
-X-CFilter-Loop: Reflected
+        id S2437321AbgL1QZS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 28 Dec 2020 11:25:18 -0500
+Received: from mail.zju.edu.cn ([61.164.42.155]:45116 "EHLO zju.edu.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1731173AbgL1NJv (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 28 Dec 2020 08:09:51 -0500
+X-Greylist: delayed 396 seconds by postgrey-1.27 at vger.kernel.org; Mon, 28 Dec 2020 08:09:43 EST
+Received: from localhost.localdomain (unknown [222.205.25.254])
+        by mail-app4 (Coremail) with SMTP id cS_KCgBnIzhO1+lfx9EiAA--.57389S4;
+        Mon, 28 Dec 2020 21:02:10 +0800 (CST)
+From:   Dinghao Liu <dinghao.liu@zju.edu.cn>
+To:     dinghao.liu@zju.edu.cn, kjlu@umn.edu
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: em28xx: Fix use-after-free in em28xx_alloc_urbs
+Date:   Mon, 28 Dec 2020 21:02:05 +0800
+Message-Id: <20201228130205.14381-1-dinghao.liu@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cS_KCgBnIzhO1+lfx9EiAA--.57389S4
+X-Coremail-Antispam: 1UD129KBjvdXoWrKF1ftrWUJFyxXw15Ary7Wrg_yoWkCrb_Cr
+        4UXrW7Xr1rJ3Z3Xw1DGw1Yyr9Fyr43Xr4xWFyrtas5GryUKa4jg3Z8Wrn3GanrZasrZw15
+        Xr1qqF4q9rn8CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbI8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
+        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
+        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4UJVW0owA2z4x0Y4vEx4A2
+        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52
+        x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWU
+        GwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
+        8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Xr4l42xK82IYc2Ij64vIr41l
+        42xK82IY6x8ErcxFaVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+        8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWU
+        twCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+        0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AK
+        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+        fUnpnQUUUUU
+X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAgYEBlZdtRrnPgAesl
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-spinlock can be initialized automatically with DEFINE_SPINLOCK()
-rather than explicitly calling spin_lock_init().
+When kzalloc() fails, em28xx_uninit_usb_xfer() will free
+usb_bufs->buf and set it to NULL. Thus the later access
+to usb_bufs->buf[i] will lead to null pointer dereference.
+Also the kfree(usb_bufs->buf) after that is redundant.
 
-Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
+Fixes: d571b592c6206 ("media: em28xx: don't use coherent buffer for DMA transfers")
+Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
 ---
- drivers/media/platform/davinci/vpif.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/media/usb/em28xx/em28xx-core.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/drivers/media/platform/davinci/vpif.c b/drivers/media/platform/davinci/vpif.c
-index 5e67994e62cc..f1ce10828b8e 100644
---- a/drivers/media/platform/davinci/vpif.c
-+++ b/drivers/media/platform/davinci/vpif.c
-@@ -41,7 +41,7 @@ MODULE_ALIAS("platform:" VPIF_DRIVER_NAME);
- #define VPIF_CH2_MAX_MODES	15
- #define VPIF_CH3_MAX_MODES	2
+diff --git a/drivers/media/usb/em28xx/em28xx-core.c b/drivers/media/usb/em28xx/em28xx-core.c
+index e6088b5d1b80..3daa64bb1e1d 100644
+--- a/drivers/media/usb/em28xx/em28xx-core.c
++++ b/drivers/media/usb/em28xx/em28xx-core.c
+@@ -956,14 +956,10 @@ int em28xx_alloc_urbs(struct em28xx *dev, enum em28xx_mode mode, int xfer_bulk,
  
--spinlock_t vpif_lock;
-+DEFINE_SPINLOCK(vpif_lock);
- EXPORT_SYMBOL_GPL(vpif_lock);
+ 		usb_bufs->buf[i] = kzalloc(sb_size, GFP_KERNEL);
+ 		if (!usb_bufs->buf[i]) {
+-			em28xx_uninit_usb_xfer(dev, mode);
+-
+ 			for (i--; i >= 0; i--)
+ 				kfree(usb_bufs->buf[i]);
  
- void __iomem *vpif_base;
-@@ -437,7 +437,6 @@ static int vpif_probe(struct platform_device *pdev)
- 	pm_runtime_enable(&pdev->dev);
- 	pm_runtime_get(&pdev->dev);
+-			kfree(usb_bufs->buf);
+-			usb_bufs->buf = NULL;
+-
++			em28xx_uninit_usb_xfer(dev, mode);
+ 			return -ENOMEM;
+ 		}
  
--	spin_lock_init(&vpif_lock);
- 	dev_info(&pdev->dev, "vpif probe success\n");
- 
- 	/*
 -- 
-2.22.0
+2.17.1
 
