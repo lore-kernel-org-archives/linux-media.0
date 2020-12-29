@@ -2,179 +2,216 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B64ECC43217
-	for <linux-media@archiver.kernel.org>; Tue, 29 Dec 2020 16:18:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD721C433DB
+	for <linux-media@archiver.kernel.org>; Tue, 29 Dec 2020 17:53:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 88FB2225AC
-	for <linux-media@archiver.kernel.org>; Tue, 29 Dec 2020 16:18:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 81B9D22225
+	for <linux-media@archiver.kernel.org>; Tue, 29 Dec 2020 17:53:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726260AbgL2QSP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 29 Dec 2020 11:18:15 -0500
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:47525 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726156AbgL2QSM (ORCPT
+        id S1726144AbgL2Rxo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 29 Dec 2020 12:53:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33322 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726126AbgL2Rxn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 29 Dec 2020 11:18:12 -0500
-X-Originating-IP: 90.55.97.122
-Received: from pc-2.home (apoitiers-259-1-26-122.w90-55.abo.wanadoo.fr [90.55.97.122])
-        (Authenticated sender: maxime.chevallier@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 6C0CAE0004;
-        Tue, 29 Dec 2020 16:17:28 +0000 (UTC)
-From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Subject: [PATCH v5 1/3] media: dt-bindings: media: Document Rockchip VIP bindings
-Date:   Tue, 29 Dec 2020 17:17:22 +0100
-Message-Id: <20201229161724.511102-2-maxime.chevallier@bootlin.com>
-X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20201229161724.511102-1-maxime.chevallier@bootlin.com>
-References: <20201229161724.511102-1-maxime.chevallier@bootlin.com>
+        Tue, 29 Dec 2020 12:53:43 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD78C061574
+        for <linux-media@vger.kernel.org>; Tue, 29 Dec 2020 09:53:03 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id 215501F446A9
+Message-ID: <91034a368adcd53691de2b814f5c929e8ccba061.camel@collabora.com>
+Subject: Re: [PATCH] media: v4l2-async: Add waiting subdevices debugfs
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
+        kernel@collabora.com
+Date:   Tue, 29 Dec 2020 14:52:52 -0300
+In-Reply-To: <X+s53z5vB0hiZY2E@pendragon.ideasonboard.com>
+References: <20201228180511.43486-1-ezequiel@collabora.com>
+         <20201228183520.GB26370@paasikivi.fi.intel.com>
+         <X+pN4Z3eCIV9cjNV@pendragon.ideasonboard.com>
+         <faa537997323c4c6e7e21e0edcc2fbc63e03725c.camel@collabora.com>
+         <X+s53z5vB0hiZY2E@pendragon.ideasonboard.com>
+Organization: Collabora
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.2-1 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a documentation for the Rockchip Camera Interface controller
-binding.
+On Tue, 2020-12-29 at 16:14 +0200, Laurent Pinchart wrote:
+> Hi Ezequiel,
+> 
+> On Tue, Dec 29, 2020 at 07:16:41AM -0300, Ezequiel Garcia wrote:
+> > On Mon, 2020-12-28 at 23:28 +0200, Laurent Pinchart wrote:
+> > > On Mon, Dec 28, 2020 at 08:35:20PM +0200, Sakari Ailus wrote:
+> > > > On Mon, Dec 28, 2020 at 03:05:11PM -0300, Ezequiel Garcia wrote:
+> > > > > There is currently little to none information available
+> > > > > about the reasons why a v4l2-async device hasn't
+> > > > > probed completely.
+> > > > > 
+> > > > > Inspired by the "devices_deferred" debugfs file,
+> > > > > add a file to list information about the subdevices
+> > > > > that are on waiting lists, for each notifier.
+> > > > > 
+> > > > > This is useful to debug v4l2-async subdevices
+> > > > > and notifiers, for instance when doing device bring-up.
+> > > > > 
+> > > > > For instance, a typical output would be:
+> > > > > 
+> > > > > $ cat /sys/kernel/debug/video4linux/waiting_subdevices
+> > > > > [fwnode] 1-003c
+> > > > > [fwnode] 20e0000.iomuxc-gpr:ipu1_csi1_mux
+> > > > > [fwnode] 20e0000.iomuxc-gpr:ipu1_csi0_mux
+> > > > > 
+> > > > > It's possible to provide some more information, detecting
+> > > > > the type of fwnode and printing of-specific or acpi-specific
+> > > > > details. For now, the implementation is kept simple.
+> > > > 
+> > > > The rest of the debug information we're effectively providing through
+> > > > kernel messages on DEBUG level (pr_debug/dev_dbg). Could we do the same
+> > > > here?
+> > > > 
+> > > > Would just printing the names of the pending sub-devices at notifier
+> > > > register and async subdevice register time be sufficient? That way you'd
+> > > > also be fine with just dmesg output if you're asking someone to provide you
+> > > > information from another system.
+> > > 
+> > > I think debugfs would be better. It can show the current state of an
+> > > async notifier in a single place, which is easier to parse than
+> > > reconstructing it from kernel messages and implicit knowledge of the
+> > > code. I'd expect users to have an easier time debugging probe issues
+> > > with such centralized information.
+> > > 
+> > > > > Also, note that match-type "custom" prints no information.
+> > > > > Since there are no in-tree users of this match-type,
+> > > > > the implementation doesn't bother.
+> > > > 
+> > > > Lines up to 74 characters are fine. Only in Gerrit it's 60 or 40 or
+> > > > whatever characters. ;-)
+> > > > 
+> > > > > Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> > > > > ---
+> > > > >  drivers/media/v4l2-core/v4l2-async.c | 54 ++++++++++++++++++++++++++++
+> > > > >  drivers/media/v4l2-core/v4l2-dev.c   |  5 +++
+> > > > >  include/media/v4l2-async.h           |  7 ++++
+> > > > >  3 files changed, 66 insertions(+)
+> > > > > 
+> > > > > diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+> > > > > index e3ab003a6c85..32cd1ecced97 100644
+> > > > > --- a/drivers/media/v4l2-core/v4l2-async.c
+> > > > > +++ b/drivers/media/v4l2-core/v4l2-async.c
+> > > > > @@ -5,6 +5,7 @@
+> > > > >   * Copyright (C) 2012-2013, Guennadi Liakhovetski <g.liakhovetski@gmx.de>
+> > > > >   */
+> > > > >  
+> > > > > +#include <linux/debugfs.h>
+> > > > >  #include <linux/device.h>
+> > > > >  #include <linux/err.h>
+> > > > >  #include <linux/i2c.h>
+> > > > > @@ -14,6 +15,7 @@
+> > > > >  #include <linux/mutex.h>
+> > > > >  #include <linux/of.h>
+> > > > >  #include <linux/platform_device.h>
+> > > > > +#include <linux/seq_file.h>
+> > > > >  #include <linux/slab.h>
+> > > > >  #include <linux/types.h>
+> > > > >  
+> > > > > @@ -837,3 +839,55 @@ void v4l2_async_unregister_subdev(struct v4l2_subdev *sd)
+> > > > >         mutex_unlock(&list_lock);
+> > > > >  }
+> > > > >  EXPORT_SYMBOL(v4l2_async_unregister_subdev);
+> > > > > +
+> > > > > +static void print_waiting_subdev(struct seq_file *s,
+> > > > > +                                struct v4l2_async_subdev *asd)
+> > > > > +{
+> > > > > +       switch (asd->match_type) {
+> > > > > +       case V4L2_ASYNC_MATCH_CUSTOM:
+> > > > > +               seq_puts(s, "[custom]\n");
+> > > > > +               break;
+> > > > > +       case V4L2_ASYNC_MATCH_DEVNAME:
+> > > > > +               seq_printf(s, "[devname] %s\n",
+> > > > > +                          asd->match.device_name);
+> > > > > +               break;
+> > > > > +       case V4L2_ASYNC_MATCH_I2C:
+> > > > > +               seq_printf(s, "[i2c] %d-%04x\n",
+> > > > > +                          asd->match.i2c.adapter_id,
+> > > > > +                          asd->match.i2c.address);
+> > > > > +               break;
+> > > > > +       case V4L2_ASYNC_MATCH_FWNODE: {
+> > > > > +               struct fwnode_handle *fwnode = asd->match.fwnode;
+> > > > > +
+> > > > > +               if (fwnode_graph_is_endpoint(fwnode))
+> > > > > +                       fwnode = fwnode_graph_get_port_parent(fwnode);
+> > > 
+> > > Can we also print endpoint information ?
+> > 
+> > What endpoint information do you have in mind? I'm asking this
+> > because I printed endpoint OF node full names, only to find
+> > so many of them named "endpoint" :)
+> 
+> The port name and endpoint name would be useful. The full fwnode name
+> would be an acceptable way to print that I think.
+> 
 
-This controller can be found on platforms such as the PX30 or the
-RK3288, the PX30 being the only platform supported so far.
+Makes sense, and since we'd be parsing the fwnode subtype,
+we'll be able to do something like:
 
-Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
----
-v3: Renamed the controller to "vip"
+[of] dev=%s, node=%s
+[swnode] ...
+[acpi] ...
 
-v4: fixed the binding to get a compiling example
+> > > > > +
+> > > > > +               seq_printf(s, "[fwnode] %s\n",
+> > > > > +                          fwnode->dev ? dev_name(fwnode->dev) : "nil");
+> > > 
+> > > Having no device created for a fwnode is an issue that could explain
+> > > probe problems, so we should print the node name as well, not just the
+> > > device.
+> > 
+> > Sure.
+> > 
+> > AFAICS, there's not fwnode generic name, so we need to move one level
+> > down. For OF and software-node devices we have some name field.
+> > 
+> > However ACPI device nodes don't seem to have one. Any idea
+> > what name we should print there? I'm also unsure if ACPI nodes
+> > will typically be ACPI device or ACPI data nodes.
+> 
+> I'll let Sakari, our ACPI expert, shime in on that :-)
+> 
+> > > > > +               break;
+> > > > > +       }
+> > > 
+> > > For all of those cases, the state of the asd (matched or not matched)
+> > > would be useful too, to figure out which ones are missing.
+> > 
+> > The matched state is not kept in struct v4l2_async_subdev, or is it?
+> > 
+> > AFAICS, when the asd matches, it's removed from the waiting list.
+> > You suggest to iterate over the done list and print that as well?
+> 
+> Good point and good question. I suppose there's less practical value in
+> doing that. Maybe we could print a header at the top to mention that the
+> list contains unmatched asds ?
+> 
 
-v5: Fixed the binding even more, the 'endpoint' description was missing
+I was under the impression that the name of the file implied
+it was only unmatched/waiting subdevices.
 
- .../bindings/media/rockchip-vip.yaml          | 101 ++++++++++++++++++
- 1 file changed, 101 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/rockchip-vip.yaml
+We can rename this as "unmatched_devices" or "pending_devices"
+if that makes things clearer.
 
-diff --git a/Documentation/devicetree/bindings/media/rockchip-vip.yaml b/Documentation/devicetree/bindings/media/rockchip-vip.yaml
-new file mode 100644
-index 000000000000..93055273b32f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/rockchip-vip.yaml
-@@ -0,0 +1,101 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/rockchip-vip.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Rockchip VIP Camera Interface
-+
-+maintainers:
-+  - Maxime Chevallier <maxime.chevallier@bootlin.com>
-+
-+description: |-
-+  Camera Interface for Rockchip platforms
-+
-+properties:
-+  compatible:
-+    const: rockchip,px30-vip
-+
-+  reg:
-+    maxItems: 2
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: ACLK
-+      - description: HCLK
-+      - description: PCLK IN
-+
-+  clock-names:
-+    items:
-+      - const: aclk
-+      - const: hclk
-+      - const: pclkin
-+
-+  resets:
-+    items:
-+      - description: AXI
-+      - description: AHB
-+      - description: PCLK IN
-+
-+  reset-names:
-+    items:
-+      - const: axi
-+      - const: ahb
-+      - const: pclkin
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  # See ./video-interfaces.txt for details
-+  port:
-+    type: object
-+    additionalProperties: false
-+    description: A connection to a sensor or decoder
-+
-+    properties:
-+      endpoint:
-+        type: object
-+
-+        properties:
-+          remote-endpoint: true
-+
-+        required:
-+          - remote-endpoint
-+
-+    required:
-+      - endpoint
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - port
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/px30-cru.h>
-+    #include <dt-bindings/power/px30-power.h>
-+
-+    vip: vip@ff490000 {
-+        compatible = "rockchip,px30-vip";
-+        reg = <0x0 0xff490000>, <0x0 0x200>;
-+        interrupts = <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&cru ACLK_CIF>, <&cru HCLK_CIF>, <&cru PCLK_CIF>;
-+        clock-names = "aclk", "hclk", "pclkin";
-+        resets = <&cru SRST_CIF_A>, <&cru SRST_CIF_H>, <&cru SRST_CIF_PCLKIN>;
-+        reset-names = "axi", "ahb", "pclkin";
-+        power-domains = <&power PX30_PD_VI>;
-+        port {
-+            vip_in: endpoint {
-+                remote-endpoint = <&tw9900_out>;
-+            };
-+        };
-+    };
-+...
--- 
-2.25.4
+Thanks,
+Ezequiel
 
