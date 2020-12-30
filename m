@@ -2,68 +2,67 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18F3CC433DB
-	for <linux-media@archiver.kernel.org>; Wed, 30 Dec 2020 17:46:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A123DC433E0
+	for <linux-media@archiver.kernel.org>; Wed, 30 Dec 2020 18:46:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DC1F42220B
-	for <linux-media@archiver.kernel.org>; Wed, 30 Dec 2020 17:46:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5D71B22242
+	for <linux-media@archiver.kernel.org>; Wed, 30 Dec 2020 18:46:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726486AbgL3Rqf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Dec 2020 12:46:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55342 "EHLO
+        id S1726487AbgL3Sqe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Dec 2020 13:46:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726214AbgL3Rqf (ORCPT
+        with ESMTP id S1726185AbgL3Sqe (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Dec 2020 12:46:35 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E6DC061573
-        for <linux-media@vger.kernel.org>; Wed, 30 Dec 2020 09:45:54 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id b26so39200122lff.9
-        for <linux-media@vger.kernel.org>; Wed, 30 Dec 2020 09:45:54 -0800 (PST)
+        Wed, 30 Dec 2020 13:46:34 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F280C061799
+        for <linux-media@vger.kernel.org>; Wed, 30 Dec 2020 10:45:53 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id s26so39493986lfc.8
+        for <linux-media@vger.kernel.org>; Wed, 30 Dec 2020 10:45:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:from:date:message-id:subject:to:cc;
-        bh=lsMpuSlk+JgQDEfP7dT55M3ksvKCeDlSL4FBnQFCTII=;
-        b=SFODHa+kqT5pT7AZ1XwvAxbkLMaU9B6jTqqO4n1va86iIEVz3sH6eSl/idrc/RBT3E
-         gTNbX9jviWbd/QmP9QocOsTwu6shvkrO0Bo5/C+MzZVb+SABSuJ98r1GVnA8nY+pHzLp
-         Im0CKsuemb7FM2T4IiyR0uCXnHqU7fH67tvp7PpHVFqpLLBVCiq5WVg/CbqHecRtc/6G
-         2vUJyuC5wqn6CwHRJKL3mKbcdcW+YnCxmZWaZVCgJmWkYzUYrFHYCBNJ79GhgcO2fsG4
-         OaPUqnL7j4omyAvJpAL/H0juG5R05psu2uCXgPAlSkv0HjpqpXgntvEJ5dUvLmDvypSW
-         IuWg==
+        bh=QeENytF3F7ahVCLpGopKzQFJvc07A4bGjJONLwUaPDc=;
+        b=locakoSPmrgMQW2aLxQyQNPW9PwuYvqTaoZqJb8mbCCsxWuYlpaEhfq1QWxtTNyUXU
+         cV1pHm92cHSnlSQafgxeACLEGUDe8m4ujjyPQ0P1NFlNkMgGZPwDWzFQD3GFZQiXPR2b
+         wMi1IIU37Cr/AEVK5LiE1wuZDfnWBjHjDOSw+fXBQe61ty0VpSy3l+vH5Y2RjH9I8fQM
+         OdFUZfbMXd0ceaUTH1G5/fnaU9qhlaPYwOwZj8C1bmMI8WOS/EBfrPmpXrADW20IKnaf
+         jJFweeF44LoppYkisbE32vGX2rsm2O4ZzwUzMN+EXM5VB7cczz/+fNhgXWShNP7xbslz
+         nTNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=lsMpuSlk+JgQDEfP7dT55M3ksvKCeDlSL4FBnQFCTII=;
-        b=gwxI9Fvlsxlm+bti0kqHwVn6DDHTjoKtjMiuSmDRBJaLTMMFgDBzt8uOsrlkUVOyk/
-         pvqmFtSQ1qPOEHvgY3cVmhPInooq59l+dyxxsE7XKdiZl/Za8XydcsOaMFX65HcDLiiX
-         0Hnq9ehVVWFqjH7g0hVN2KyDMA6WgldSbRNJXVUEeYdOCicqzPFRM3ayCAt8xhCRLA2I
-         F+J0VFLhCIZMqlwzo+FjgJaL+APP+GbO1PPhFfW4fsbtc2WDKJOmn1GcB29OQunKlTGF
-         HGAqJvn5QOUl6GU5IhuYdfAvt3dv/7vO1kx6dzcp3FQdacIFCiTQgVMxwg32U/Xqgu1A
-         TDeA==
-X-Gm-Message-State: AOAM532tCKxr6NcCREN0zzwPevVOtgDyPQWZrh/weAmfS89Kf53D1WU2
-        1d3PAFTLLS4aL6v61jNYJBMMKsfDsFOhSiJkhkM=
-X-Google-Smtp-Source: ABdhPJyZZR67fNYTA9g44/Or8IA78R4K3penA1chr55HBoF/W1EQeQob0M9rwd72aLKctfz4O0bWdw5fVnmC281sswo=
-X-Received: by 2002:a2e:b80c:: with SMTP id u12mr25777529ljo.490.1609350352853;
- Wed, 30 Dec 2020 09:45:52 -0800 (PST)
+        bh=QeENytF3F7ahVCLpGopKzQFJvc07A4bGjJONLwUaPDc=;
+        b=LozvDAPE/i3ACD9gId5egryGjVzOpJHtuemMzFO4MuTF2crlI9WsfK8h8ye2yoeC3s
+         tcixSQxIoz4wn2ed5H6VWj5H71Z0BarjQFt53bdKNnx1Vs/3JZHrlU2z3/FwIc4nXjp6
+         p5PXV1mdvDlDhN+xpjqKbvFf4DOWvmqcOuzlMPzDGgr7wPjIAC+66AVdqhiLKhTBsZYs
+         W/MgdnA/sfTqmiKP00JwTzq4rDmdMaeAGnq54JmUhia6jTT89LOVQ9RqMSeu++KStzSf
+         qscdI9EeP4/hqJnsDJfGb7T6jHQ9jxB1HE34iTcBRVqvhI0t0atd8tkUvYxGlAWpX1mb
+         ZB4g==
+X-Gm-Message-State: AOAM533MeBnqjYD74EQQJO9gFGieX0Y6aO6DHfAoN3MDUg7Zz8WbYFYR
+        H7B96zoxo16gdPSkZQfvYUlLCZhzKGCTm8nJcvs=
+X-Google-Smtp-Source: ABdhPJyBa5wz8bDeLukAxi+86kMAUPIw7jIUbCWI72Sq9uYwqnHMps0RirZdyw0sA4lZUDhru+jVTL8pfIpuaGM/ass=
+X-Received: by 2002:a19:4856:: with SMTP id v83mr22524045lfa.583.1609353951993;
+ Wed, 30 Dec 2020 10:45:51 -0800 (PST)
 MIME-Version: 1.0
 From:   Fabio Estevam <festevam@gmail.com>
-Date:   Wed, 30 Dec 2020 14:45:41 -0300
-Message-ID: <CAOMZO5DTW_YgVgyXqtccxQUm0A2kLLVcw_EhfsN0kZ9s2hgt7Q@mail.gmail.com>
-Subject: imx6ull capture from OV5640
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
+Date:   Wed, 30 Dec 2020 15:45:40 -0300
+Message-ID: <CAOMZO5D2bEc+g=OVs_cQjcFkurzk6Hj8pZP3F9U8Kdqc4_FP0A@mail.gmail.com>
+Subject: Using kmssink with mxsfb-drm
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>
+Cc:     Discussion of the development of and with GStreamer 
+        <gstreamer-devel@lists.freedesktop.org>,
         Philipp Zabel <p.zabel@pengutronix.de>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        linux-media <linux-media@vger.kernel.org>,
+        Gary Bisson <bisson.gary@gmail.com>,
         Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     linux-media <linux-media@vger.kernel.org>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        =?UTF-8?Q?S=C3=A9bastien_Szymanski?= 
-        <sebastien.szymanski@armadeus.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -71,121 +70,93 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Hi,
 
-I am trying to capture from a parallel OV5640 on a imx6ull-evk board.
+I am trying to run a simple videotestsrc pipeline on a imx6ull-evk
+board running kernel 5.10 and Gstreamer 1.18.2, but it fails as shown
+below.
 
-Here are the device tree changes:
-https://pastebin.com/raw/PZpJjagJ
-
-First, I got the following warning:
-
-[    7.788866] csi: Registered csi capture as /dev/video1
-[    7.797382] ------------[ cut here ]------------
-[    7.802141] WARNING: CPU: 0 PID: 1 at
-drivers/staging/media/imx/imx7-media-csi.c:1168
-imx7_csi_notify_bound+0x40/0x50
-[    7.813116] Modules linked in:
-[    7.816436] CPU: 0 PID: 1 Comm: swapper/0 Not tainted
-5.10.0-next-20201223-00003-gaaee78ed150-dirty #304
-[    7.826015] Hardware name: Freescale i.MX6 Ultralite (Device Tree)
-[    7.832281] [<c0111a68>] (unwind_backtrace) from [<c010c068>]
-(show_stack+0x10/0x14)
-[    7.840151] [<c010c068>] (show_stack) from [<c0e14570>]
-(dump_stack+0xe0/0x10c)
-[    7.847570] [<c0e14570>] (dump_stack) from [<c0125a7c>] (__warn+0x104/0x118)
-[    7.854734] [<c0125a7c>] (__warn) from [<c0125b38>]
-(warn_slowpath_fmt+0xa8/0xb8)
-[    7.862326] [<c0125b38>] (warn_slowpath_fmt) from [<c0a66e0c>]
-(imx7_csi_notify_bound+0x40/0x50)
-[    7.871227] [<c0a66e0c>] (imx7_csi_notify_bound) from [<c09ae084>]
-(v4l2_async_match_notify+0x50/0x124)
-
-To avoid the warning I did:
-
---- a/drivers/staging/media/imx/imx7-media-csi.c
-+++ b/drivers/staging/media/imx/imx7-media-csi.c
-@@ -1164,12 +1164,14 @@ static int imx7_csi_notify_bound(struct
-v4l2_async_notifier *notifier,
-        struct imx7_csi *csi = imx7_csi_notifier_to_dev(notifier);
-        struct media_pad *sink = &csi->sd.entity.pads[IMX7_CSI_PAD_SINK];
-
--       /* The bound subdev must always be the CSI mux */
--       if (WARN_ON(sd->entity.function != MEDIA_ENT_F_VID_MUX))
--               return -ENXIO;
-+       if (csi->is_csi2) {
-+               /* The bound subdev must always be the CSI mux */
-+               if (WARN_ON(sd->entity.function != MEDIA_ENT_F_VID_MUX))
-+                       return -ENXIO;
-
--       /* Mark it as such via its group id */
--       sd->grp_id = IMX_MEDIA_GRP_ID_CSI_MUX;
-+               /* Mark it as such via its group id */
-+               sd->grp_id = IMX_MEDIA_GRP_ID_CSI_MUX;
-+       }
-
-        return v4l2_create_fwnode_links_to_pad(sd, sink);
- }
-
-# media-ctl -p
-Media controller API version 5.10.0
-
-Media device information
-------------------------
-driver          imx7-csi
-model           imx-media
-serial
-bus info
-hw revision     0x0
-driver version  5.10.0
-
-Device topology
-- entity 1: csi (2 pads, 2 links)
-            type V4L2 subdev subtype Unknown flags 0
-            device node name /dev/v4l-subdev0
-        pad0: Sink
-                [fmt:UYVY8_2X8/800x600 field:none colorspace:srgb
-xfer:srgb ycbcr:601 quantization:lim-range]
-                <- "ov5640 1-003c":0 []
-        pad1: Source
-                [fmt:UYVY8_2X8/800x600 field:none colorspace:srgb
-xfer:srgb ycbcr:601 quantization:lim-range]
-                -> "csi capture":0 []
-
-- entity 4: csi capture (1 pad, 1 link)
-            type Node subtype V4L flags 0
-            device node name /dev/video1
-        pad0: Sink
-                <- "csi":1 []
-
-- entity 10: ov5640 1-003c (1 pad, 1 link)
-             type V4L2 subdev subtype Sensor flags 0
-             device node name /dev/v4l-subdev1
-        pad0: Source
-                [fmt:UYVY8_2X8/640x480@1/30 field:none colorspace:srgb
-xfer:srgb ycbcr:601 quantization:full-range]
-                -> "csi":0 []
-And then:
-
-media-ctl -l "'ov5640 1-003c':0 -> 'csi':0[1]"
-media-ctl -l "'csi':1 -> 'csi capture':0[1]"
-media-ctl -V "'ov5640 1-003c':0 [fmt:UYVY2X8/640x480]"
-media-ctl -V "'csi':0 [fmt:AYUV32/640x480]"
-
-When trying to capture via v42-ctl:
-# v4l2-ctl --stream-mmap -d /dev/video1
-[  411.627032] csi: capture format not valid
-
-Or with gstreamer:
-
-# gst-launch-1.0 v4l2src device=/dev/video1 ! fakesink
-Setting pipeline to PAUSED ...
-Pipeline is live and does not need PREROLL ...
-Pipeline is PREROLLED ...
-Setting pipeline to PLAYING ...
-New clock: GstSystemClock
-[  439.933324] csi: pipeline start failed with -19
-
-Any suggestions?
+Any ideas?
 
 Thanks,
 
 Fabio Estevam
+
+# modetest -M mxsfb-drm
+Encoders:
+id      crtc    type    possible crtcs  possible clones
+34      33      none    0x00000001      0x00000000
+
+Connectors:
+id      encoder status          name            size (mm)       modes   encoders
+31      34      connected       unknown-1       95x54           1       34
+  modes:
+        index name refresh (Hz) hdisp hss hse htot vdisp vss vse vtot)
+  #0 480x272 59.94 480 482 523 525 272 274 284 286 9000 flags: nhsync,
+nvsync; type: preferred, driver
+  props:
+        1 EDID:
+                flags: immutable blob
+                blobs:
+
+                value:
+        2 DPMS:
+                flags: enum
+                enums: On=0 Standby=1 Suspend=2 Off=3
+                value: 0
+        5 link-status:
+                flags: enum
+                enums: Good=0 Bad=1
+                value: 0
+        6 non-desktop:
+                flags: immutable range
+                values: 0 1
+                value: 0
+        4 TILE:
+                flags: immutable blob
+                blobs:
+
+                value:
+
+CRTCs:
+id      fb      pos     size
+33      35      (0,0)   (480x272)
+  #0 480x272 59.94 480 482 523 525 272 274 284 286 9000 flags: nhsync,
+nvsync; type: preferred, driver
+  props:
+        24 VRR_ENABLED:
+                flags: range
+                values: 0 1
+                value: 0
+
+Planes:
+id      crtc    fb      CRTC x,y        x,y     gamma size      possible crtcs
+32      33      35      0,0             0,0     0               0x00000001
+  formats: XR24 RG16
+  props:
+        8 type:
+                flags: immutable enum
+                enums: Overlay=0 Primary=1 Cursor=2
+                value: 1
+
+Frame buffers:
+id      size    pitch
+
+# gst-launch-1.0 videotestsrc ! kmssink connector-id=31 name=mxsfb-drm
+Setting pipeline to PAUSED ...
+Pipeline is PREROLLING ...
+ERROR: from element /GstPipeline:pipeline0/GstKMSSink:mxsfb-drm:
+GStreamer encountered a general resource error.
+Additional debug info:
+../sys/kms/gstkmssink.c(1711): gst_kms_sink_show_frame ():
+/GstPipeline:pipeline0/GstKMSSink:mxsfb-drm:
+drmModeSetPlane failed: Invalid argument (22)
+ERROR: pipeline doesn't want to preroll.
+Setting pipeline to NULL ...
+ERROR: from element
+/GstPipeline:pipeline0/GstVideoTestSrc:videotestsrc0: Internal data
+stream error.
+Additional debug info:
+../libs/gst/base/gstbasesrc.c(3127): gst_base_src_loop ():
+/GstPipeline:pipeline0/GstVideoTestSrc:videotestsrc0:
+streaming stopped, reason error (-5)
+ERROR: pipeline doesn't want to preroll.
+Freeing pipeline ...
