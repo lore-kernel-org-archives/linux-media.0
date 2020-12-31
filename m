@@ -2,83 +2,113 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,FROM_LOCAL_HEX,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2FDAC433E6
-	for <linux-media@archiver.kernel.org>; Wed, 30 Dec 2020 21:21:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58B9FC433E0
+	for <linux-media@archiver.kernel.org>; Thu, 31 Dec 2020 01:54:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9865D21973
-	for <linux-media@archiver.kernel.org>; Wed, 30 Dec 2020 21:21:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1D885221FA
+	for <linux-media@archiver.kernel.org>; Thu, 31 Dec 2020 01:54:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726354AbgL3VVK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Dec 2020 16:21:10 -0500
-Received: from mga14.intel.com ([192.55.52.115]:49725 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726197AbgL3VVK (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Dec 2020 16:21:10 -0500
-IronPort-SDR: 2Bdnn53VdhywFtcq85D6llMVnZ0qS3o4Or/8lSBkxk4IXsuSko4VbCY9EcAyrDtKe4nUNh1zAt
- XGuOV9Jx8ZDQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9850"; a="175865009"
-X-IronPort-AV: E=Sophos;i="5.78,462,1599548400"; 
-   d="scan'208";a="175865009"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2020 13:19:22 -0800
-IronPort-SDR: XfwVTHI3K3p6FkpXHUcg3SRmTV2YXjmKahhbfNIml3vifI/BjVCAnoA6v7JyjXELzEoksi39FD
- 4Ki4keUCiUdw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,462,1599548400"; 
-   d="scan'208";a="495034277"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 30 Dec 2020 13:19:20 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 981B2DE; Wed, 30 Dec 2020 23:19:19 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        royale@zerezo.com, USB <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        syzbot+b4d54814b339b5c6bbd4@syzkaller.appspotmail.com
-Subject: [RFT][PATCH v1] media: zr364xx: Fix memory leak in ->probe()
-Date:   Wed, 30 Dec 2020 23:19:18 +0200
-Message-Id: <20201230211918.63508-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.29.2
+        id S1726509AbgLaByg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Dec 2020 20:54:36 -0500
+Received: from mail-io1-f72.google.com ([209.85.166.72]:39405 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726492AbgLaByf (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 30 Dec 2020 20:54:35 -0500
+Received: by mail-io1-f72.google.com with SMTP id n9so7781494iog.6
+        for <linux-media@vger.kernel.org>; Wed, 30 Dec 2020 17:54:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to:cc;
+        bh=FdZTn6oLt2h1f5MhJVFstju7o/Z0EftaGAcqBWG7ncY=;
+        b=GujM0+sPqH+nSr/GCymxdIS6rdjoluHlN+oG+UCvnZvSxIFddaPU7PMgZ0JvOjLOTR
+         W5vclE9cT886tMFRN/geNLac0qgTjYuzlcY6X2uf5UK0D1l/84kK9ZW0oEicTBwAEhbZ
+         NFJImlXbqD2oAn+kXurw1h0bGcE8noIUaoOBDUk4N3shY+zSryM8wMbCiT3W4tRXt+xE
+         vss4frSTq6h9sStLUl8AcD+kWjKXOFcP48z66KYtmlrx5nLAPqaUPW9MCvhjn221BkzA
+         x0kIGs9Qg9X8HNMA+SOFeMwlbXFh398TvBSYtbbL58x5/kEB5E5CWXKvtuzPSJuowBbF
+         qPzg==
+X-Gm-Message-State: AOAM532bKYMaWRdw4cv2p9xNMTMlzTaY93ovdCqiBw8T9bjsxmdMZ3JN
+        zKjMtDZXs4bgmpv2cB/8Po9NidtEJJppUCYR5LAg0qTjz+Rs
+X-Google-Smtp-Source: ABdhPJy/+c5PxXndhI52KzY/wHMyn6U0qATIbhO7SwFEiBz9oJu3s57OASzyLH4AS5ZUKKQmR2T508uqUp4ZAhFV60iXvdn/Y0c4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a92:bb84:: with SMTP id x4mr54012722ilk.298.1609379634982;
+ Wed, 30 Dec 2020 17:53:54 -0800 (PST)
+Date:   Wed, 30 Dec 2020 17:53:54 -0800
+In-Reply-To: <CAAEAJfCiUx+NepjxBvoupShks9MTpN9ihzBywqt0at4ekkFASQ@mail.gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000073b51105b7b8e52d@google.com>
+Subject: Re: Re: [RFT][PATCH v1] media: zr364xx: Fix memory leak in ->probe()
+From:   syzbot <syzbot+b4d54814b339b5c6bbd4@syzkaller.appspotmail.com>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Cc:     andriy.shevchenko@linux.intel.com, ezequiel@vanguardiasur.com.ar,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, royale@zerezo.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When ->probe() fails in some cases it may not free resources.
-Replace few separated calls by v4l2_device_put() to clean up
-everything.
+> Hey Andy,
+>
+> Thank you for the patch.
+>
+> On Wed, 30 Dec 2020 at 18:22, Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+>>
+>> When ->probe() fails in some cases it may not free resources.
+>> Replace few separated calls by v4l2_device_put() to clean up
+>> everything.
+>>
+>> Reported-by: syzbot+b4d54814b339b5c6bbd4@syzkaller.appspotmail.com
+>> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>> ---
+>> I have no hardware and hadn't done any test of this.
+>>
+>
+> For bugs with reproducers such as this one, syzbot will test your
+> patches really quickly.
+> Just push the patch somewhere and then reply to syzbot bug report mail with
+>
+> #syz test: git://repo/address.git commit-hash
 
-Reported-by: syzbot+b4d54814b339b5c6bbd4@syzkaller.appspotmail.com
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-I have no hardware and hadn't done any test of this.
+"git://repo/address.git" does not look like a valid git repo address.
 
- drivers/media/usb/zr364xx/zr364xx.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/media/usb/zr364xx/zr364xx.c b/drivers/media/usb/zr364xx/zr364xx.c
-index 1e1c6b4d1874..5b9e31af57cf 100644
---- a/drivers/media/usb/zr364xx/zr364xx.c
-+++ b/drivers/media/usb/zr364xx/zr364xx.c
-@@ -1533,9 +1533,7 @@ static int zr364xx_probe(struct usb_interface *intf,
- 	return 0;
- 
- fail:
--	v4l2_ctrl_handler_free(hdl);
--	v4l2_device_unregister(&cam->v4l2_dev);
--	kfree(cam);
-+	v4l2_device_put(&cam->v4l2_dev);
- 	return err;
- }
- 
--- 
-2.29.2
-
+>
+> You can experiment with syzbot by replying only to syzbot's mail address.
+>
+> See https://github.com/google/syzkaller/blob/master/docs/syzbot.md#testing-patches
+> for more details.
+>
+> Cheers,
+> Ezequiel
+>
+>
+>>  drivers/media/usb/zr364xx/zr364xx.c | 4 +---
+>>  1 file changed, 1 insertion(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/media/usb/zr364xx/zr364xx.c b/drivers/media/usb/zr364xx/zr364xx.c
+>> index 1e1c6b4d1874..5b9e31af57cf 100644
+>> --- a/drivers/media/usb/zr364xx/zr364xx.c
+>> +++ b/drivers/media/usb/zr364xx/zr364xx.c
+>> @@ -1533,9 +1533,7 @@ static int zr364xx_probe(struct usb_interface *intf,
+>>         return 0;
+>>
+>>  fail:
+>> -       v4l2_ctrl_handler_free(hdl);
+>> -       v4l2_device_unregister(&cam->v4l2_dev);
+>> -       kfree(cam);
+>> +       v4l2_device_put(&cam->v4l2_dev);
+>>         return err;
+>>  }
+>>
+>> --
+>> 2.29.2
+>>
