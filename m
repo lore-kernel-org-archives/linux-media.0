@@ -7,23 +7,23 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C31EC43217
-	for <linux-media@archiver.kernel.org>; Thu, 31 Dec 2020 14:31:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0865C433E0
+	for <linux-media@archiver.kernel.org>; Thu, 31 Dec 2020 14:31:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 01ED5223E8
-	for <linux-media@archiver.kernel.org>; Thu, 31 Dec 2020 14:31:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 94731207A5
+	for <linux-media@archiver.kernel.org>; Thu, 31 Dec 2020 14:31:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727233AbgLaObF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 31 Dec 2020 09:31:05 -0500
-Received: from relay12.mail.gandi.net ([217.70.178.232]:50589 "EHLO
+        id S1727078AbgLaOav (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 31 Dec 2020 09:30:51 -0500
+Received: from relay12.mail.gandi.net ([217.70.178.232]:51917 "EHLO
         relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727202AbgLaObE (ORCPT
+        with ESMTP id S1727042AbgLaOav (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 31 Dec 2020 09:31:04 -0500
+        Thu, 31 Dec 2020 09:30:51 -0500
 Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
         (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id A203F200004;
-        Thu, 31 Dec 2020 14:30:19 +0000 (UTC)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id ABECD200008;
+        Thu, 31 Dec 2020 14:30:06 +0000 (UTC)
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -47,9 +47,9 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Hans Verkuil <hans.verkuil@cisco.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         kevin.lhopital@hotmail.com
-Subject: [PATCH v4 08/15] dt-bindings: media: Add A31 MIPI CSI-2 bindings documentation
-Date:   Thu, 31 Dec 2020 15:29:41 +0100
-Message-Id: <20201231142948.3241780-9-paul.kocialkowski@bootlin.com>
+Subject: [PATCH v4 02/15] phy: Distinguish between Rx and Tx for MIPI D-PHY with submodes
+Date:   Thu, 31 Dec 2020 15:29:35 +0100
+Message-Id: <20201231142948.3241780-3-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201231142948.3241780-1-paul.kocialkowski@bootlin.com>
 References: <20201231142948.3241780-1-paul.kocialkowski@bootlin.com>
@@ -59,170 +59,59 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This introduces YAML bindings documentation for the A31 MIPI CSI-2
-controller.
+As some D-PHY controllers support both Rx and Tx mode, we need a way for
+users to explicitly request one or the other. For instance, Rx mode can
+be used along with MIPI CSI-2 while Tx mode can be used with MIPI DSI.
+
+Introduce new MIPI D-PHY PHY submodes to use with PHY_MODE_MIPI_DPHY.
+The default (zero value) is kept to Tx so only the rkisp1 driver, which
+uses D-PHY in Rx mode, needs to be adapted.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Acked-by: Helen Koike <helen.koike@collabora.com>
 ---
- .../media/allwinner,sun6i-a31-mipi-csi2.yaml  | 149 ++++++++++++++++++
- 1 file changed, 149 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml
+ drivers/staging/media/rkisp1/rkisp1-isp.c |  3 ++-
+ include/linux/phy/phy-mipi-dphy.h         | 13 +++++++++++++
+ 2 files changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml
-new file mode 100644
-index 000000000000..bb05105c45b7
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml
-@@ -0,0 +1,149 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/allwinner,sun6i-a31-mipi-csi2.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/staging/media/rkisp1/rkisp1-isp.c b/drivers/staging/media/rkisp1/rkisp1-isp.c
+index a9715b0b7264..f1167995688a 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-isp.c
++++ b/drivers/staging/media/rkisp1/rkisp1-isp.c
+@@ -914,7 +914,8 @@ static int rkisp1_mipi_csi2_start(struct rkisp1_isp *isp,
+ 
+ 	phy_mipi_dphy_get_default_config(pixel_clock, isp->sink_fmt->bus_width,
+ 					 sensor->lanes, cfg);
+-	phy_set_mode(sensor->dphy, PHY_MODE_MIPI_DPHY);
++	phy_set_mode_ext(cdev->dphy, PHY_MODE_MIPI_DPHY,
++			 PHY_MIPI_DPHY_SUBMODE_RX);
+ 	phy_configure(sensor->dphy, &opts);
+ 	phy_power_on(sensor->dphy);
+ 
+diff --git a/include/linux/phy/phy-mipi-dphy.h b/include/linux/phy/phy-mipi-dphy.h
+index a877ffee845d..0f57ef46a8b5 100644
+--- a/include/linux/phy/phy-mipi-dphy.h
++++ b/include/linux/phy/phy-mipi-dphy.h
+@@ -6,6 +6,19 @@
+ #ifndef __PHY_MIPI_DPHY_H_
+ #define __PHY_MIPI_DPHY_H_
+ 
++/**
++ * enum phy_mipi_dphy_submode - MIPI D-PHY sub-mode
++ *
++ * A MIPI D-PHY can be used to transmit or receive data.
++ * Since some controllers can support both, the direction to enable is specified
++ * with the PHY sub-mode. Transmit is assumed by default with phy_set_mode.
++ */
 +
-+title: Allwinner A31 MIPI CSI-2 Device Tree Bindings
++enum phy_mipi_dphy_submode {
++	PHY_MIPI_DPHY_SUBMODE_TX = 0,
++	PHY_MIPI_DPHY_SUBMODE_RX,
++};
 +
-+maintainers:
-+  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - const: allwinner,sun6i-a31-mipi-csi2
-+      - items:
-+          - const: allwinner,sun8i-v3s-mipi-csi2
-+          - const: allwinner,sun6i-a31-mipi-csi2
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: Bus Clock
-+      - description: Module Clock
-+
-+  clock-names:
-+    items:
-+      - const: bus
-+      - const: mod
-+
-+  phys:
-+    maxItems: 1
-+    description: MIPI D-PHY
-+
-+  resets:
-+    maxItems: 1
-+
-+  # See ./video-interfaces.txt for details
-+  ports:
-+    type: object
-+
-+    properties:
-+      port@0:
-+        type: object
-+        description: Input port, connect to a MIPI CSI-2 sensor
-+
-+        properties:
-+          reg:
-+            const: 0
-+
-+          endpoint:
-+            type: object
-+
-+            properties:
-+              remote-endpoint: true
-+
-+              data-lanes:
-+                minItems: 1
-+                maxItems: 4
-+
-+            required:
-+              - data-lanes
-+              - remote-endpoint
-+
-+        required:
-+          - endpoint
-+
-+        additionalProperties: false
-+
-+      port@1:
-+        type: object
-+        description: Output port, connect to a CSI controller
-+
-+        properties:
-+          reg:
-+            const: 1
-+
-+          endpoint:
-+            type: object
-+
-+            properties:
-+              remote-endpoint: true
-+
-+            required:
-+              - remote-endpoint
-+
-+        required:
-+          - endpoint
-+
-+        additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - resets
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/sun8i-v3s-ccu.h>
-+    #include <dt-bindings/reset/sun8i-v3s-ccu.h>
-+
-+    mipi_csi2: csi@1cb1000 {
-+        compatible = "allwinner,sun8i-v3s-mipi-csi2",
-+                     "allwinner,sun6i-a31-mipi-csi2";
-+        reg = <0x01cb1000 0x1000>;
-+        interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&ccu CLK_BUS_CSI>,
-+                 <&ccu CLK_CSI1_SCLK>;
-+        clock-names = "bus", "mod";
-+        resets = <&ccu RST_BUS_CSI>;
-+
-+        phys = <&dphy>;
-+
-+        ports {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            mipi_csi2_in: port@0 {
-+                reg = <0>;
-+
-+                mipi_csi2_in_ov5648: endpoint {
-+                    data-lanes = <1 2 3 4>;
-+
-+                    remote-endpoint = <&ov5648_out_mipi_csi2>;
-+                };
-+            };
-+
-+            mipi_csi2_out: port@1 {
-+                reg = <1>;
-+
-+                mipi_csi2_out_csi0: endpoint {
-+                    remote-endpoint = <&csi0_in_mipi_csi2>;
-+                };
-+            };
-+        };
-+    };
-+
-+...
+ /**
+  * struct phy_configure_opts_mipi_dphy - MIPI D-PHY configuration set
+  *
 -- 
 2.29.2
 
