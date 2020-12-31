@@ -2,111 +2,183 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 234E1C433E0
-	for <linux-media@archiver.kernel.org>; Thu, 31 Dec 2020 12:55:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 480AFC433DB
+	for <linux-media@archiver.kernel.org>; Thu, 31 Dec 2020 14:19:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DF562223E0
-	for <linux-media@archiver.kernel.org>; Thu, 31 Dec 2020 12:55:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 17112223DB
+	for <linux-media@archiver.kernel.org>; Thu, 31 Dec 2020 14:19:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726739AbgLaMzS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 31 Dec 2020 07:55:18 -0500
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:35679 "EHLO
+        id S1726659AbgLaOTb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 31 Dec 2020 09:19:31 -0500
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:41139 "EHLO
         relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726128AbgLaMzQ (ORCPT
+        with ESMTP id S1726352AbgLaOTb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 31 Dec 2020 07:55:16 -0500
+        Thu, 31 Dec 2020 09:19:31 -0500
 X-Originating-IP: 93.29.109.196
-Received: from aptenodytes (196.109.29.93.rev.sfr.net [93.29.109.196])
+Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
         (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 75D64E0003;
-        Thu, 31 Dec 2020 12:54:28 +0000 (UTC)
-Date:   Thu, 31 Dec 2020 13:54:28 +0100
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id C822EE0009;
+        Thu, 31 Dec 2020 14:18:47 +0000 (UTC)
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-sunxi@googlegroups.com, Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        kevin.lhopital@hotmail.com
-Subject: Re: [PATCH v3 09/15] media: sunxi: Add support for the A31 MIPI
- CSI-2 controller
-Message-ID: <X+3KBO6o5HVRh12e@aptenodytes>
-References: <20201211155708.154710-1-paul.kocialkowski@bootlin.com>
- <20201211155708.154710-10-paul.kocialkowski@bootlin.com>
- <20201214113904.v6j7z3yrvjv74dcd@gilmour>
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v6 1/2] dt-bindings: media: i2c: Add OV5648 bindings documentation
+Date:   Thu, 31 Dec 2020 15:18:32 +0100
+Message-Id: <20201231141833.2634838-2-paul.kocialkowski@bootlin.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20201231141833.2634838-1-paul.kocialkowski@bootlin.com>
+References: <20201231141833.2634838-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="UZSCC+lhIG3E1TOG"
-Content-Disposition: inline
-In-Reply-To: <20201214113904.v6j7z3yrvjv74dcd@gilmour>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+This introduces YAML bindings documentation for the OV5648
+image sensor.
 
---UZSCC+lhIG3E1TOG
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+ .../bindings/media/i2c/ovti,ov5648.yaml       | 115 ++++++++++++++++++
+ 1 file changed, 115 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5648.yaml
 
-Hi,
+diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov5648.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov5648.yaml
+new file mode 100644
+index 000000000000..f8783f77cc54
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5648.yaml
+@@ -0,0 +1,115 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/ovti,ov5648.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: OmniVision OV5648 Image Sensor Device Tree Bindings
++
++maintainers:
++  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
++
++properties:
++  compatible:
++    const: ovti,ov5648
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: XVCLK Clock
++
++  assigned-clocks:
++    maxItems: 1
++
++  assigned-clock-rates:
++    maxItems: 1
++
++  dvdd-supply:
++    description: Digital Domain Power Supply
++
++  avdd-supply:
++    description: Analog Domain Power Supply (internal AVDD is used if missing)
++
++  dovdd-supply:
++    description: I/O Domain Power Supply
++
++  powerdown-gpios:
++    maxItems: 1
++    description: Power Down Pin GPIO Control (active low)
++
++  reset-gpios:
++    maxItems: 1
++    description: Reset Pin GPIO Control (active low)
++
++  port:
++    type: object
++    description: MIPI CSI-2 transmitter port
++
++    properties:
++      endpoint:
++        type: object
++
++        properties:
++          remote-endpoint: true
++
++          link-frequencies:
++            $ref: /schemas/types.yaml#/definitions/uint64-array
++            description: Allowed MIPI CSI-2 link frequencies
++
++          data-lanes:
++            minItems: 1
++            maxItems: 2
++
++        required:
++          - data-lanes
++          - link-frequencies
++          - remote-endpoint
++
++    required:
++      - endpoint
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - assigned-clocks
++  - assigned-clock-rates
++  - dvdd-supply
++  - dovdd-supply
++  - port
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/sun8i-v3s-ccu.h>
++    #include <dt-bindings/gpio/gpio.h>
++
++    i2c0 {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        ov5648: camera@36 {
++            compatible = "ovti,ov5648";
++            reg = <0x36>;
++
++            dvdd-supply = <&ov5648_dvdd>;
++            avdd-supply = <&ov5648_avdd>;
++            dovdd-supply = <&ov5648_dovdd>;
++            clocks = <&ov5648_xvclk 0>;
++            assigned-clocks = <&ov5648_xvclk 0>;
++            assigned-clock-rates = <24000000>;
++
++
++            ov5648_out: port {
++                ov5648_out_mipi_csi2: endpoint {
++                    data-lanes = <1 2>;
++                    link-frequencies = /bits/ 64 <210000000 168000000>;
++
++                    remote-endpoint = <&mipi_csi2_in_ov5648>;
++                };
++            };
++        };
++    };
+-- 
+2.29.2
 
-On Mon 14 Dec 20, 12:39, Maxime Ripard wrote:
-> On Fri, Dec 11, 2020 at 04:57:02PM +0100, Paul Kocialkowski wrote:
-> > +#define sun6i_mipi_csi2_subdev_video(subdev) \
-> > +	container_of(subdev, struct sun6i_mipi_csi2_video, subdev)
-> > +
-> > +#define sun6i_mipi_csi2_video_dev(video) \
-> > +	container_of(video, struct sun6i_mipi_csi2_dev, video)
->=20
-> Isn't it a bit unsafe?
->=20
-> The second subdev and video here is not the variable passed in the macro
-> but the field in the structure, so any attempt at using those two macros
-> with anything but a variable named subdev or video will result in a
-> compilation issue?
-
-Yep you're totally right. Will fix in the next revision!
-
-Cheers,
-
-Paul
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---UZSCC+lhIG3E1TOG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAl/tygMACgkQ3cLmz3+f
-v9Gp0Qf9Hfjq6i2KFmaJ6VFCJGzJSNnxgEPWekzxZsKrMDphbOVlEpz/VH+lLz6I
-UIDtiIhRqxp5j3WH0lU61Ysfd+Dl9SFinxRm4UXDzhGXrK8Bi1W3V30n//pWlA1t
-fHgDXXWcjZ2iEB/lnwa8KmR06JbDW6F2TS7j9Bstxoaxya4uGrQHejHoj6hfO+pr
-p8EvkYsBTVlhRi0meK8bFIfdvW6yT7ijmTFb/yK41Hm3TX3//AZiexLaEasvlFuH
-qUp2sZjEziH3ah6cuVjUQaUgzjxGPdp54/sDK6VRGATnSDmkSOvcTq03JMgdAJtx
-mwoTJPVY3a2Iid1xnqiJA6BzQCGFSA==
-=ofsU
------END PGP SIGNATURE-----
-
---UZSCC+lhIG3E1TOG--
