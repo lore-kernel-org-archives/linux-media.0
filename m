@@ -2,124 +2,188 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C44DC433E6
-	for <linux-media@archiver.kernel.org>; Thu, 31 Dec 2020 01:54:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50641C433DB
+	for <linux-media@archiver.kernel.org>; Thu, 31 Dec 2020 04:31:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 59B2A2220B
-	for <linux-media@archiver.kernel.org>; Thu, 31 Dec 2020 01:54:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 11129207C7
+	for <linux-media@archiver.kernel.org>; Thu, 31 Dec 2020 04:31:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726514AbgLaByg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Dec 2020 20:54:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45426 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726509AbgLaByf (ORCPT
+        id S1726284AbgLaEat (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Dec 2020 23:30:49 -0500
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:60819 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726244AbgLaEat (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Dec 2020 20:54:35 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64971C061575
-        for <linux-media@vger.kernel.org>; Wed, 30 Dec 2020 17:53:55 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id qw4so23912364ejb.12
-        for <linux-media@vger.kernel.org>; Wed, 30 Dec 2020 17:53:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=l5RnW5MfeIeSRSrKh76K7AjTpXxgx5uRGRT87Sb/M7k=;
-        b=GmSv+VBBi3t2aFfvIArlLItl/50GVmlDot1OCgNqQIHfYU5C15sC7e1T6Ya9L0lcmX
-         +NTX+nOo1CbjyS0dfavEgXI1Amni1F2lLX+zHfG07R0A7ISSUzUWrjxxa/A89CZnrsRM
-         sC9IDmQyyY7regbTLT/M3xoZ3Ch0cnmhWLqSExNyqhoC8OSconT4hIciXU6akPBywyiT
-         NPronYSAsn+XBAnzDzhtMLkd13hBg9W5qYfThzintsPqaPhDFWy7X3LM24pRWwlSV/4G
-         CmYIcLDZwKfBj+fgd/eU8whq14eGHV/M8sCDkJz6nB9UzuP4bcc6dTaVp/EwTb3+X7YM
-         Ldvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=l5RnW5MfeIeSRSrKh76K7AjTpXxgx5uRGRT87Sb/M7k=;
-        b=cvuHBw7bZPMkKMxwjZSRTraHqRJ86DtMUF5teSfJT6L3mhHRd9J7ZkqUwcbkLkuBQL
-         G2PwMHU8TrtFkh+jtvLB5YrrgoP24wAUHbAvAJQgYdGDS5H3qtenz3I5ZL7l8M0qApRW
-         M8IGy5bgnOVEgSikeAQW5Kfk08QcE2Nt2UB1K1ZBgp4ZMMa0pzlBi8SNbD24nuSUM22x
-         pzJtEn3Euc9VVeQFUNrHkDgb2fOXXwxOFO+jFXLeW+F98WOKoAJM/+ScVmQr1eC4JEjI
-         LfIqbsO7vtgSx23ADC1Jr5lLcrW76WtnRoje4BNeHiBzwIumyFUYAqd5fiEDRp7SMlbe
-         cQdg==
-X-Gm-Message-State: AOAM532HqFp+tTYFnuXxBE1XtzmbiPkoO2TgmVuFwVrIo8SasHt1ZIpM
-        mmyyBeaAr/cMV5Pvs/Pnp3bVTrqESbYZqAcmf2QCEw==
-X-Google-Smtp-Source: ABdhPJxz6GHroCCd8RghHLfGAMqA4gDhhU6xQITNRnw+X4rDzpgCfFD62pdQH9DV4Nfbq7UP1ZrCOzgTmUzAi+XiOdo=
-X-Received: by 2002:a17:906:5182:: with SMTP id y2mr52769429ejk.92.1609379633910;
- Wed, 30 Dec 2020 17:53:53 -0800 (PST)
-MIME-Version: 1.0
-References: <20201230211918.63508-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20201230211918.63508-1-andriy.shevchenko@linux.intel.com>
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date:   Wed, 30 Dec 2020 22:53:42 -0300
-Message-ID: <CAAEAJfCiUx+NepjxBvoupShks9MTpN9ihzBywqt0at4ekkFASQ@mail.gmail.com>
-Subject: Re: [RFT][PATCH v1] media: zr364xx: Fix memory leak in ->probe()
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        royale@zerezo.com, USB <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        syzbot <syzbot+b4d54814b339b5c6bbd4@syzkaller.appspotmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 30 Dec 2020 23:30:49 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id upbBkqmuojgqfupbCkJLWh; Thu, 31 Dec 2020 05:30:06 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1609389006; bh=dVxkWNGJroP0HHCs9r4WeCm0+YibO+tTYFwxDwwDlrI=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=NiDTjEUqSxG8wdiPrlBQ+NHWuTFuWk3zd2SSB30Dfo5ZXZK1ONcVrv7yFS7GzSRZ5
+         EZEUEUJIKTKjRGV4xM9qL/pxCUWlSivecla9Wq6CUPO7vVhTQKuz7rMNNjGXEOS3V2
+         4SdUcrVCLVaN2Xn04zBh3kFRuxelvvO7s1Qw6mCNqCOzreMKpwvj6oXPzMuMf5qo+K
+         WfCxUE6DHAD2/2JihTnnAzLeTU6old0/TH4eYC8G7JbtiUo6JUYGO22z/LT+jxl91r
+         e+lVqSpUnJjQfc7KfeaG6apHyAlqtUsRiKgp8nbeSnTL2yRN3E+uKJpHmhWz6AU5H8
+         6dEUyg14/xQlw==
+Message-ID: <b724d34c0a8d38e3335eafe2de1f7e5e@smtp-cloud9.xs4all.net>
+Date:   Thu, 31 Dec 2020 05:30:05 +0100
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: ERRORS
+X-CMAE-Envelope: MS4xfILrskWzAkUXm3Qmqa5tS+o6nanJj4RhtxY+s8rL6tmSRlpmaQBZTfq+HUlFCkQMsdnB8QqEVHtLoLuWMbK6mTfDavn39ScWFMpwzjsS4Zoh6xR3rdz5
+ a/X2oieqJ5EC43DOBSshc6qP036Y3wEUF87qAGixoBFDob63a4EreLmbRXgWLUrPI2MQ0Cyd0/MVHaGZ3qzt3xm6XQAh0SIKhLKZ8+tkomdbf3MQlP6yhVhS
+ bnGRLfVSe6U5ywHeTzqHyA==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hey Andy,
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Thank you for the patch.
+Results of the daily build of media_tree:
 
-On Wed, 30 Dec 2020 at 18:22, Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> When ->probe() fails in some cases it may not free resources.
-> Replace few separated calls by v4l2_device_put() to clean up
-> everything.
->
-> Reported-by: syzbot+b4d54814b339b5c6bbd4@syzkaller.appspotmail.com
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> I have no hardware and hadn't done any test of this.
->
+date:			Thu Dec 31 05:00:15 CET 2020
+media-tree git hash:	fab0fca1da5cdc48be051715cd9787df04fdce3a
+media_build git hash:	174c4cc0037aed1f719b91dfc9e9cc09d53de87c
+v4l-utils git hash:	e0e4114f971407acfdf1e8173c86e2e08fa01077
+edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
+gcc version:		i686-linux-gcc (GCC) 10.2.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		v0.6.3-1-g58d3c1ca
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		v0.5.0-7047-g72fa1e990
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 77c8542b1c2caa2a7e96c4dad0335336b522c616
+host hardware:		x86_64
+host os:		5.7.0-1-amd64
 
-For bugs with reproducers such as this one, syzbot will test your
-patches really quickly.
-Just push the patch somewhere and then reply to syzbot bug report mail with
+linux-git-arm-at91: OK
+linux-git-sh: OK
+linux-git-arm-davinci: OK
+linux-git-powerpc64: OK
+linux-git-arm-stm32: OK
+linux-git-arm-pxa: OK
+linux-git-mips: OK
+linux-git-arm64: OK
+linux-git-arm-multi: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: ERRORS
+linux-3.10.108-x86_64: ERRORS
+linux-3.11.10-i686: ERRORS
+linux-3.11.10-x86_64: ERRORS
+linux-3.12.74-i686: ERRORS
+linux-3.12.74-x86_64: ERRORS
+linux-3.13.11-i686: ERRORS
+linux-3.13.11-x86_64: ERRORS
+linux-3.14.79-i686: ERRORS
+linux-3.14.79-x86_64: ERRORS
+linux-3.15.10-i686: ERRORS
+linux-3.15.10-x86_64: ERRORS
+linux-3.16.81-i686: ERRORS
+linux-3.16.81-x86_64: ERRORS
+linux-3.17.8-i686: ERRORS
+linux-3.17.8-x86_64: ERRORS
+linux-3.18.136-i686: ERRORS
+linux-3.18.136-x86_64: ERRORS
+linux-3.19.8-i686: ERRORS
+linux-3.19.8-x86_64: ERRORS
+linux-4.0.9-i686: ERRORS
+linux-4.0.9-x86_64: ERRORS
+linux-4.1.52-i686: ERRORS
+linux-4.1.52-x86_64: ERRORS
+linux-4.2.8-i686: ERRORS
+linux-4.2.8-x86_64: ERRORS
+linux-4.3.6-i686: ERRORS
+linux-4.3.6-x86_64: ERRORS
+linux-4.4.238-i686: ERRORS
+linux-4.4.238-x86_64: ERRORS
+linux-4.5.7-i686: ERRORS
+linux-4.5.7-x86_64: ERRORS
+linux-4.6.7-i686: ERRORS
+linux-4.6.7-x86_64: ERRORS
+linux-4.7.10-i686: ERRORS
+linux-4.7.10-x86_64: ERRORS
+linux-4.8.17-i686: ERRORS
+linux-4.8.17-x86_64: ERRORS
+linux-4.9.238-i686: ERRORS
+linux-4.9.238-x86_64: ERRORS
+linux-4.10.17-i686: ERRORS
+linux-4.10.17-x86_64: ERRORS
+linux-4.11.12-i686: ERRORS
+linux-4.11.12-x86_64: ERRORS
+linux-4.12.14-i686: ERRORS
+linux-4.12.14-x86_64: ERRORS
+linux-4.13.16-i686: ERRORS
+linux-4.13.16-x86_64: ERRORS
+linux-4.14.200-i686: ERRORS
+linux-4.14.200-x86_64: ERRORS
+linux-4.15.18-i686: ERRORS
+linux-4.15.18-x86_64: ERRORS
+linux-4.16.18-i686: ERRORS
+linux-4.16.18-x86_64: ERRORS
+linux-4.17.19-i686: ERRORS
+linux-4.17.19-x86_64: ERRORS
+linux-4.18.20-i686: ERRORS
+linux-4.18.20-x86_64: ERRORS
+linux-4.19.149-i686: ERRORS
+linux-4.19.149-x86_64: ERRORS
+linux-4.20.17-i686: ERRORS
+linux-4.20.17-x86_64: ERRORS
+linux-5.0.21-i686: ERRORS
+linux-5.0.21-x86_64: ERRORS
+linux-5.1.21-i686: ERRORS
+linux-5.1.21-x86_64: ERRORS
+linux-5.2.21-i686: ERRORS
+linux-5.2.21-x86_64: ERRORS
+linux-5.3.18-i686: ERRORS
+linux-5.3.18-x86_64: ERRORS
+linux-5.4.69-i686: ERRORS
+linux-5.4.69-x86_64: ERRORS
+linux-5.5.19-i686: ERRORS
+linux-5.5.19-x86_64: ERRORS
+linux-5.6.19-i686: ERRORS
+linux-5.6.19-x86_64: ERRORS
+linux-5.7.19-i686: ERRORS
+linux-5.7.19-x86_64: ERRORS
+linux-5.8.13-i686: ERRORS
+linux-5.8.13-x86_64: ERRORS
+linux-5.9.1-i686: ERRORS
+linux-5.9.1-x86_64: ERRORS
+linux-5.10.1-i686: ERRORS
+linux-5.10.1-x86_64: ERRORS
+linux-5.11-rc1-i686: OK
+linux-5.11-rc1-x86_64: ERRORS
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 2943, Succeeded: 2943, Failed: 0, Warnings: 0
+virtme-32: OK: Final Summary: 2779, Succeeded: 2779, Failed: 0, Warnings: 0
+sparse: WARNINGS
+smatch: ERRORS
 
-#syz test: git://repo/address.git commit-hash
+Detailed results are available here:
 
-You can experiment with syzbot by replying only to syzbot's mail address.
+http://www.xs4all.nl/~hverkuil/logs/Thursday.log
 
-See https://github.com/google/syzkaller/blob/master/docs/syzbot.md#testing-patches
-for more details.
+Detailed regression test results are available here:
 
-Cheers,
-Ezequiel
+http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media-dmesg.log
 
+Full logs are available here:
 
->  drivers/media/usb/zr364xx/zr364xx.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/drivers/media/usb/zr364xx/zr364xx.c b/drivers/media/usb/zr364xx/zr364xx.c
-> index 1e1c6b4d1874..5b9e31af57cf 100644
-> --- a/drivers/media/usb/zr364xx/zr364xx.c
-> +++ b/drivers/media/usb/zr364xx/zr364xx.c
-> @@ -1533,9 +1533,7 @@ static int zr364xx_probe(struct usb_interface *intf,
->         return 0;
->
->  fail:
-> -       v4l2_ctrl_handler_free(hdl);
-> -       v4l2_device_unregister(&cam->v4l2_dev);
-> -       kfree(cam);
-> +       v4l2_device_put(&cam->v4l2_dev);
->         return err;
->  }
->
-> --
-> 2.29.2
->
+http://www.xs4all.nl/~hverkuil/logs/Thursday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
