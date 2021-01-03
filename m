@@ -8,54 +8,54 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4058FC43219
-	for <linux-media@archiver.kernel.org>; Sun,  3 Jan 2021 23:15:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1ADF4C072A4
+	for <linux-media@archiver.kernel.org>; Sun,  3 Jan 2021 23:15:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 18BC62078D
+	by mail.kernel.org (Postfix) with ESMTP id E9071221F0
 	for <linux-media@archiver.kernel.org>; Sun,  3 Jan 2021 23:15:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727993AbhACXOT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 3 Jan 2021 18:14:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59488 "EHLO
+        id S1728137AbhACXPJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 3 Jan 2021 18:15:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727810AbhACXOS (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 3 Jan 2021 18:14:18 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05AD5C0617A0;
-        Sun,  3 Jan 2021 15:13:07 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id w5so29983006wrm.11;
-        Sun, 03 Jan 2021 15:13:06 -0800 (PST)
+        with ESMTP id S1727970AbhACXOR (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 3 Jan 2021 18:14:17 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1F7C06179E;
+        Sun,  3 Jan 2021 15:13:04 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id r3so30037538wrt.2;
+        Sun, 03 Jan 2021 15:13:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=dAqkkyYwyPFHbEmWCS3R50YVCMCYrcz4Bx/nBN7je3I=;
-        b=bAsLflULZRXQExGUX+0UdEP0a1Ns96fYqj/jUjmNEL05faFv6FTb705JQeLXVn7s3t
-         ecximccKmAAKVt8gbGlJiPzIkmKk41bfc56zCWYOvCUtEqSNDRVXgjlhleyDua26Zer6
-         7iJ1ChFyFnCUtPTK/igfH+UOFQtiSY9RzxtJ9lswzZiIuumuf4V1mE1Gpm0mbMilrZeT
-         7OXcZSvywIZ/RLVRh8oYnIvWiooQY8ghXOBEZp1oqsbNqAkGR2yEZinbsHkC5qKwPiQk
-         VCuMujgaceVSzKV49Xs+RKOFi9OtWtb/erMNWqif7Hgoampo7Tgk785EMUq6qTVMlz8I
-         79Fg==
+        bh=J7c99QcP7HJtqxvOuQihWzIRVYdHKam5Z74CI2HeAVA=;
+        b=JfoOOZ8IkpzEPCxgjfCDrBk/cQtWQOqHhzKYo1iy1kUtShLUec9PZPlo0/7PzDlQst
+         FX48joZmVxkL9TglDpGNcnHKBuy+E6QaLxNpGd6ywS75mXT1nofTojgey/h+/OqdSAH7
+         AHT7OURrasf+Bpl7QEohZfUfEme8MfalBpPUgwiixSOmbaBI78QWmac/HEAi3Z2OxRqG
+         jpWZIgVsusrEeR0OArOmpYJJiYzLBmtLQ6Rz07XH2tJx+ptTPavLwfBi5k28dTI5v1Bq
+         NBysZFCFoMaagGJp5wOzGXeR2nFJP4fFiNlqHSK4DkqMn/O33SkjaUZQAdRqNzlZZdjW
+         GFOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=dAqkkyYwyPFHbEmWCS3R50YVCMCYrcz4Bx/nBN7je3I=;
-        b=azxe/0qdTCDXMoaER2B3EC/qr6qr6uAiGVbSJijCY054yzD641+UtqbPZI7KroqyfS
-         BYge+43AtMB0KVB1SPNaDFbU7Crlt8FwOl79kcI505F3DXF/ha5613M2K7l7nDkHfL5b
-         2K5R919RZudjjftpmjiskMC9vQJ+8STHE6zYnprxuQaM5PSH9XkiekXsLxuryu/H7Zld
-         /QpaODAJi3O5ZwgRC+fEGZKqWMt/j2g2fu640H3TXxBB32jOmzL7enIxUtLnK2YRKhZw
-         6mKzZ1YuJmcS7C+9RsAaxm1HQV77PlCO0l9eMFckrZ/bTKwgDca2HATjw2mRFyBZpDUn
-         QxHA==
-X-Gm-Message-State: AOAM531ry4n/8ZCJ+9EIwIhuyE6zxmiTW7QjEdvOdfTyq/x6LlEfF2Vd
-        JcLuAE/dARlURx1v6Jpu1LVzmnz5Y30uxMXS
-X-Google-Smtp-Source: ABdhPJwZpbVvZoi1jbn1ZAbjJknVkdcChkUJA5YNjBA3Xr6NErCmPZlCJwZt4JXAvXELiWprKM15+g==
-X-Received: by 2002:a5d:54cc:: with SMTP id x12mr77599309wrv.132.1609715585852;
-        Sun, 03 Jan 2021 15:13:05 -0800 (PST)
+        bh=J7c99QcP7HJtqxvOuQihWzIRVYdHKam5Z74CI2HeAVA=;
+        b=P8qO/QP8jyunAE9BWpKDxDCMvKdxvTYfPoUjYpBZexEKtHQN6WKajbXmDneGxbCAyi
+         nB9v0dleIGwNJWCLWsE18RpOkcfsFOTJxtjPnd98VM9bPXjh6nzJn8tCM9QArosTG0mo
+         lByRPOrlLlB3q3C9GxBlljH2MYS1h+tCby8ExncgMMna6H9iNnwrLOj1xLfKVydD1AIF
+         X7w/5OpD+FtntzNbTZpptkxkC2qRJW/59TWYexQOxT3OyGQOg4P1YRt25xd36tvR8huh
+         aRUxMG6EQv7CS1pm/1CIR9/Y/upr6eonbmKOJUAh72aaE0xWOnIztA9Etu9f1N60NmAr
+         hKYg==
+X-Gm-Message-State: AOAM531kw9YDY3pZUGTh/RmsBq2ZgsIi7CxDvDc715ExvSSmFwZSAPo0
+        BU7s/Ytl5Waq7eKzWUxdCdGLNZ6ViYSiq7qB
+X-Google-Smtp-Source: ABdhPJwxfydTdYllGAbyvdzh8uTljbgULINJBK7gOn5JXFtw6wWHAN4DHkz+7z6+ckh2mpDu1yGV+Q==
+X-Received: by 2002:adf:eec6:: with SMTP id a6mr76921433wrp.239.1609715583202;
+        Sun, 03 Jan 2021 15:13:03 -0800 (PST)
 Received: from valhalla.home ([2.29.208.120])
-        by smtp.gmail.com with ESMTPSA id h9sm32571018wme.11.2021.01.03.15.13.04
+        by smtp.gmail.com with ESMTPSA id h9sm32571018wme.11.2021.01.03.15.13.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Jan 2021 15:13:05 -0800 (PST)
+        Sun, 03 Jan 2021 15:13:02 -0800 (PST)
 From:   Daniel Scally <djrscally@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-media@vger.kernel.org, devel@acpica.org,
@@ -71,10 +71,11 @@ Cc:     lenb@kernel.org, yong.zhi@intel.com, sakari.ailus@linux.intel.com,
         hverkuil-cisco@xs4all.nl, m.felsch@pengutronix.de,
         niklas.soderlund+renesas@ragnatech.se, slongerbeam@gmail.com,
         heikki.krogerus@linux.intel.com, linus.walleij@linaro.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCH v4 09/15] lib/test_printf.c: Use helper function to unwind array of software_nodes
-Date:   Sun,  3 Jan 2021 23:12:29 +0000
-Message-Id: <20210103231235.792999-10-djrscally@gmail.com>
+Subject: [PATCH v4 07/15] include: fwnode.h: Define format macros for ports and endpoints
+Date:   Sun,  3 Jan 2021 23:12:27 +0000
+Message-Id: <20210103231235.792999-8-djrscally@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210103231235.792999-1-djrscally@gmail.com>
 References: <20210103231235.792999-1-djrscally@gmail.com>
@@ -84,38 +85,44 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use the software_node_unregister_nodes() helper function to unwind this
-array in a cleaner way.
+OF, ACPI and software_nodes all implement graphs including nodes for ports
+and endpoints. These are all intended to be named with a common schema,
+as "port@n" and "endpoint@n" where n is an unsigned int representing the
+index of the node. To ensure commonality across the subsystems, provide a
+set of macros to define the format.
 
-Acked-by: Petr Mladek <pmladek@suse.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
 Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Daniel Scally <djrscally@gmail.com>
 ---
 Changes in v4:
 
-	- None
+	- FORMAT -> FMT
+	- Dropped the *_LEN macros, since we settled on using
+	  strlen("port@") instead
 
- lib/test_printf.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ include/linux/fwnode.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/lib/test_printf.c b/lib/test_printf.c
-index 7ac87f18a10f..7d60f24240a4 100644
---- a/lib/test_printf.c
-+++ b/lib/test_printf.c
-@@ -644,9 +644,7 @@ static void __init fwnode_pointer(void)
- 	test(second_name, "%pfwP", software_node_fwnode(&softnodes[1]));
- 	test(third_name, "%pfwP", software_node_fwnode(&softnodes[2]));
+diff --git a/include/linux/fwnode.h b/include/linux/fwnode.h
+index 9506f8ec0974..72d36d46287d 100644
+--- a/include/linux/fwnode.h
++++ b/include/linux/fwnode.h
+@@ -32,6 +32,13 @@ struct fwnode_endpoint {
+ 	const struct fwnode_handle *local_fwnode;
+ };
  
--	software_node_unregister(&softnodes[2]);
--	software_node_unregister(&softnodes[1]);
--	software_node_unregister(&softnodes[0]);
-+	software_node_unregister_nodes(softnodes);
- }
++/*
++ * ports and endpoints defined as software_nodes should all follow a common
++ * naming scheme; use these macros to ensure commonality.
++ */
++#define SWNODE_GRAPH_PORT_NAME_FMT		"port@%u"
++#define SWNODE_GRAPH_ENDPOINT_NAME_FMT		"endpoint@%u"
++
+ #define NR_FWNODE_REFERENCE_ARGS	8
  
- static void __init
+ /**
 -- 
 2.25.1
 
