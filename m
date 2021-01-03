@@ -2,119 +2,130 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AC92C433DB
-	for <linux-media@archiver.kernel.org>; Sun,  3 Jan 2021 15:51:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE1B4C433E0
+	for <linux-media@archiver.kernel.org>; Sun,  3 Jan 2021 23:14:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CF64F20795
-	for <linux-media@archiver.kernel.org>; Sun,  3 Jan 2021 15:51:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A71302078D
+	for <linux-media@archiver.kernel.org>; Sun,  3 Jan 2021 23:14:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725840AbhACPvh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 3 Jan 2021 10:51:37 -0500
-Received: from mail.schramp.com ([188.166.64.204]:56436 "EHLO mail.schramp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725765AbhACPvg (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 3 Jan 2021 10:51:36 -0500
-Received: by mail.schramp.com (Postfix, from userid 114)
-        id 7715C43AC1; Sun,  3 Jan 2021 15:50:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=schramp.com; s=mail;
-        t=1609689054; bh=9KhVk9IwBIRzWRUyoac1IK/+jSwU9d0qh6pPNbiKi2c=;
-        h=From:To:Subject:Date:In-Reply-To:References:Reply-To:From;
-        b=HZPIODcOQF8uTKG7XTTFIkPrMz9AkuQrsBX9JzFvUSlzyohV+SkjQEgoMsRtLXJZJ
-         yez0o+FpYv52uBO5FD4YylW5qxuCxdrKpVG36EBO8Ayx+ICNV6E496Ke1SFcRXshGt
-         YR2hTWPVoOxFqaURx6POtEoqKhDBwjj+MDAOtG5cyqltRT0bwpZNzRKJVUdFEfxU3t
-         +dS00/+H50zUA+A5LS7oX+sSXwd1W+589/4vDv61dNtzUaM/gk4GNZmam72P6ENxM3
-         LRDhWsbM4P6TeNrPsMFcN2i0C1gRlfiqRGT3o1/3IWo9oJD0kC7DJhOtknZf5afZLy
-         mqlnGwuiFVoBA==
-Received: from [192.168.178.42] (94-209-128-102.cable.dynamic.v4.ziggo.nl [94.209.128.102])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: ruud)
-        by mail.schramp.com (Postfix) with ESMTPSA id 1853D3F152
-        for <linux-media@vger.kernel.org>; Sun,  3 Jan 2021 15:50:53 +0000 (UTC)
-From:   "Ruud Schramp" <ruud@schramp.com>
-To:     linux-media@vger.kernel.org
-Subject: Re: USB Microscope, Manufacturer: Winmax Corp. (ION Slides Forever)
-Date:   Sun, 03 Jan 2021 15:50:51 +0000
-Message-Id: <ema5af2fc1-8db3-4b0c-808a-fe48b5b3dc8e@thor>
-In-Reply-To: <em1c6e7844-98f5-422e-b73c-588532718690@thor>
-References: <em1c6e7844-98f5-422e-b73c-588532718690@thor>
-Reply-To: "Ruud Schramp" <ruud@schramp.com>
-User-Agent: eM_Client/7.2.37929.0
-Mime-Version: 1.0
-Content-Type: text/plain; format=flowed; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        id S1727844AbhACXNh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 3 Jan 2021 18:13:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59368 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726019AbhACXNg (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 3 Jan 2021 18:13:36 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B525C0613C1;
+        Sun,  3 Jan 2021 15:12:56 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id t16so30019144wra.3;
+        Sun, 03 Jan 2021 15:12:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=lj8Kk41KDbEvFLR6VVSK7iwBFdicxvK1tQNgP1oE8J8=;
+        b=LOqr2nPjnGwuOf6I0blQ6EE2xh+NavKW8DbropEelg4A/lD4K7NDpbL1mH7X+fpS9T
+         vsVUlFtwiEQztq1lH7G2h97l6XsS+Fd3L9/sdwx2LqByoA7fBK+cGzM+rMOjEcDV7ls4
+         30V+44nZB7C3nfj0tX+QvsYRTd67lRq72IxAvHMI3PJPiuHCfAqNrAhtM7O1O/Bgku5Z
+         2BoD+sy63Rr6xBpxzhGnQ0H/J6+aYCN+6ZFBY93n2L6K4F2qTgl+UqBsgm0V606+cB0a
+         XCdk6jqT0xX+CXXBU5P/P8Q3pa8YF2sDhTzfcuVh9jSyQbTICEKbcJYCoBrAvHHAtHwq
+         +aUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=lj8Kk41KDbEvFLR6VVSK7iwBFdicxvK1tQNgP1oE8J8=;
+        b=bJgkAB9umsj2v6EyzX0S1y8xCWGRaN6v0jAC3ZXR8bXHxlEjFcqWjJn/R7wb4CpGja
+         zUQ+yKAiJuDbQIyxd/ukbm9FBDEB8nH/UDVKCeykjiXUAm0z5z5nyur2KLNB7xeeNUXs
+         sQ5RsNcAwKwGJwDXl3mBwUTemaJlrii2e1UZDGDty3MhEuQLdl7LbRajRAr0VqjbP5YQ
+         11yZ7nf6wCakw3TVGVObAyVjMrKLgAqXmwR8fseiSLtpgo6VsZ8aICqy+RO1GFeaM9gO
+         bQTFbmjfXpYyOdURPvQd8K3RYK9pkjRolKsHMnJy8reVFael75cFMVgUY/0GkwOPvdGA
+         vTxA==
+X-Gm-Message-State: AOAM532+d2bkMUbKfgF/I99rvI6oQNUTG5/lR2Znh9Le4naGAntkTRan
+        70WAqmHEfwltu55lB6hpmIof4J1sFhu2ihEf
+X-Google-Smtp-Source: ABdhPJxyoycOlujBIr+fRlhxn+S2GEHyrNdgui7hSt2Zg5gWSbLuUvqNH9J/w1b2BMP95YTNSj8fEA==
+X-Received: by 2002:adf:e704:: with SMTP id c4mr77855006wrm.355.1609715575108;
+        Sun, 03 Jan 2021 15:12:55 -0800 (PST)
+Received: from valhalla.home ([2.29.208.120])
+        by smtp.gmail.com with ESMTPSA id h9sm32571018wme.11.2021.01.03.15.12.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Jan 2021 15:12:54 -0800 (PST)
+From:   Daniel Scally <djrscally@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-media@vger.kernel.org, devel@acpica.org,
+        gregkh@linuxfoundation.org, rjw@rjwysocki.net,
+        sergey.senozhatsky@gmail.com, mchehab@kernel.org
+Cc:     lenb@kernel.org, yong.zhi@intel.com, sakari.ailus@linux.intel.com,
+        bingbu.cao@intel.com, tian.shu.qiu@intel.com,
+        robert.moore@intel.com, erik.kaneda@intel.com, pmladek@suse.com,
+        rostedt@goodmis.org, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk,
+        laurent.pinchart+renesas@ideasonboard.com,
+        jacopo+renesas@jmondi.org, kieran.bingham+renesas@ideasonboard.com,
+        hverkuil-cisco@xs4all.nl, m.felsch@pengutronix.de,
+        niklas.soderlund+renesas@ragnatech.se, slongerbeam@gmail.com,
+        heikki.krogerus@linux.intel.com, linus.walleij@linaro.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v4 01/15] software_node: Fix refcounts in software_node_get_next_child()
+Date:   Sun,  3 Jan 2021 23:12:21 +0000
+Message-Id: <20210103231235.792999-2-djrscally@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210103231235.792999-1-djrscally@gmail.com>
+References: <20210103231235.792999-1-djrscally@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
->Hello All,
->
->This email is just to document my in-vane efforts to add support for my=20
->ION Slider Forever film scanner.
->
->Its USB Id:  0c45:6353
->
->The weirdness of the UVC device is that is publishes 2 modes. Both in=20
->YUYV, however closer inspection of the data shows that the=20
->high-resolution frame is a Bayer BGGR patern, and the low-resolution is=20
->YUVY. At the USB level (inspected with wireshark) this is what the=20
->device tells the driver  so its a bug in the device itself. The low-res=20
->is actually working fine.
->
->I made a QUIRK setting that would hopefully reverse the high-res and=20
->low-res behaviour making the high-res work and the low-res broken.
->
->Its published on:=20
->https://github.com/Schramp/linux-writeblock/commit/34f8efd8db41aa90baf944b=
-0371c9c015bc4d34f
->
->Unfortunately it works only a bit: the decoding and formatting is fine,=20
->but the white balance in the camera is moving away from the correct=20
->colours in a matter of a few seconds. I haven't found a way to correct=20
->that behaviour.
->
->For all your reference:
->
->The dmesg on a standard kernel:
->[  416.066239] usb 3-2: new high-speed USB device number 7 using=20
->xhci_hcd
->[  416.433911] usb 3-2: New USB device found, idVendor=3D0c45,=20
->idProduct=3D6353, bcdDevice=3D 1.50
->[  416.433913] usb 3-2: New USB device strings: Mfr=3D2, Product=3D1,=20
->SerialNumber=3D0
->[  416.433914] usb 3-2: Product: USB Microscope
->[  416.433914] usb 3-2: Manufacturer: Winmax Corp.
->[  416.439710] uvcvideo: Probing generic UVC device 2
->[  416.441702] uvcvideo: Found format YUV 4:2:2 (YUYV).
->[  416.441703] uvcvideo: - 592x392 (30.0 fps)
->[  416.441703] uvcvideo: - 1184x1576 (5.0 fps)
->
->After the patch:
->[ 7608.448727] usb 3-2: new high-speed USB device number 15 using=20
->xhci_hcd
->[ 7608.815179] usb 3-2: New USB device found, idVendor=3D0c45,=20
->idProduct=3D6353, bcdDevice=3D 1.50
->[ 7608.815184] usb 3-2: New USB device strings: Mfr=3D2, Product=3D1,=20
->SerialNumber=3D0
->[ 7608.815185] usb 3-2: Product: USB Microscope
->[ 7608.815186] usb 3-2: Manufacturer: Winmax Corp.
->[ 7608.823248] uvcvideo: Probing known UVC device 2 (0c45:6353)
->[ 7608.825550] uvcvideo: Forcing UVC_QUIRK_FORCE_BA81
->[ 7608.825552] uvcvideo: Found format BGGR Bayer (BA81).
->[ 7608.825552] uvcvideo: - 1184x392 (30.0 fps)
->[ 7608.825554] uvcvideo: - 2368x1576 (5.0 fps)
->
->
->I hope the information helps the community (or at least saves them from=20
->re-inventing this broken wheel).
->
->Best regards,
->
->Ruud Schramp
->
+The software_node_get_next_child() function currently does not hold
+references to the child software_node that it finds or put the ref that
+is held against the old child - fix that.
+
+Fixes: 59abd83672f7 ("drivers: base: Introducing software nodes to the firmware node framework")
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Daniel Scally <djrscally@gmail.com>
+---
+Changes in v4:
+
+	- None
+
+ drivers/base/swnode.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/base/swnode.c b/drivers/base/swnode.c
+index 010828fc785b..615a0c93e116 100644
+--- a/drivers/base/swnode.c
++++ b/drivers/base/swnode.c
+@@ -443,14 +443,18 @@ software_node_get_next_child(const struct fwnode_handle *fwnode,
+ 	struct swnode *c = to_swnode(child);
+ 
+ 	if (!p || list_empty(&p->children) ||
+-	    (c && list_is_last(&c->entry, &p->children)))
++	    (c && list_is_last(&c->entry, &p->children))) {
++		fwnode_handle_put(child);
+ 		return NULL;
++	}
+ 
+ 	if (c)
+ 		c = list_next_entry(c, entry);
+ 	else
+ 		c = list_first_entry(&p->children, struct swnode, entry);
+-	return &c->fwnode;
++
++	fwnode_handle_put(child);
++	return fwnode_handle_get(&c->fwnode);
+ }
+ 
+ static struct fwnode_handle *
+-- 
+2.25.1
 
