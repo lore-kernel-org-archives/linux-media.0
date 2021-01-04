@@ -2,140 +2,63 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9649C433E9
-	for <linux-media@archiver.kernel.org>; Sun,  3 Jan 2021 23:15:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73815C433E6
+	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 05:10:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 888C12078D
-	for <linux-media@archiver.kernel.org>; Sun,  3 Jan 2021 23:15:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 37C732225E
+	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 05:10:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727959AbhACXOR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 3 Jan 2021 18:14:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59476 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727810AbhACXOP (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 3 Jan 2021 18:14:15 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2671CC061795;
-        Sun,  3 Jan 2021 15:13:03 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id r7so29993301wrc.5;
-        Sun, 03 Jan 2021 15:13:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=qIiMKxUvrjl1v7PNLYMNnZ+IQw+wXLswE4tV60P7O7c=;
-        b=q54/Th1nebndyhOhnssyFvAlCk+0BCmU+1jKZoBXWnAQP5ArzGWKFnGIQQkToFcV7o
-         MvMEUnGVElzdwilD1r6djbEKvu2EtlInLk/aq0W3nC0/t3RfyBd++MhMn+850cdQbCNw
-         R2DJf28q75KjtKnggvE5x1tSt6tpCi9SVySrMx9Puxb13/b4pikvnqpa3LGzEx3/+Tgh
-         5A5+KK6SIQOxnk9z7a89RiA6X8e5dGH3nYm203O9w67+lGTofvCMvEX/X1BwGe99iJ/o
-         jrBss5YOhBxsqlv4slE1MB88E+ibX5eAtdpL0iax/dMBbVW5bRO0UlwREml1gIZ2ARSt
-         t+dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=qIiMKxUvrjl1v7PNLYMNnZ+IQw+wXLswE4tV60P7O7c=;
-        b=d7KKO5RFEAYIu47Vw2OUs71hl00cN4wKdxkdL3XJ5XPaa2a/x5WEwz+RrTN3gFUq8Y
-         uZgBPMdy3Z4FYzPMYabY8vXrLAZ6a5F7BveIbMlnOqKFN4M4ylbNmR2vvuLvdySN6sgh
-         dTUXpfDmNA8RIOc4VLmWqNQWfNLGEc3FiOD/k9BAINyslr5kFqut/Kg2XyW8MQ3XfnwH
-         3VK3FRrQevfi0DL5Ocd1JgRxy12ZB+omEJ3DxdCnBI3VtoltjBPPVu5p7pLzfCNZhkJD
-         wL7clVneXppZ+OhrKF/mMqUnKmJCTIgIIW+TX8/GCREP62TkYHgX4Vn9UbQURsSXzenp
-         auSA==
-X-Gm-Message-State: AOAM533/bpOCUBL0T1QnfWEfxJhaLfzdPZg8vrs0BYa5WYxB5MszOyzx
-        38WBIpCQq8fwfpQikJB68pbhxT0MPgfQcPnl
-X-Google-Smtp-Source: ABdhPJxDD2mO6ozmKkVDU6qf2Z4SddS6R29MIl4ljgQ0zWXu272tmjtXCZUFkEyJpKbtMhEGwCEYqQ==
-X-Received: by 2002:adf:e802:: with SMTP id o2mr79458221wrm.251.1609715581875;
-        Sun, 03 Jan 2021 15:13:01 -0800 (PST)
-Received: from valhalla.home ([2.29.208.120])
-        by smtp.gmail.com with ESMTPSA id h9sm32571018wme.11.2021.01.03.15.13.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Jan 2021 15:13:01 -0800 (PST)
-From:   Daniel Scally <djrscally@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-media@vger.kernel.org, devel@acpica.org,
-        gregkh@linuxfoundation.org, rjw@rjwysocki.net,
-        sergey.senozhatsky@gmail.com, mchehab@kernel.org
-Cc:     lenb@kernel.org, yong.zhi@intel.com, sakari.ailus@linux.intel.com,
-        bingbu.cao@intel.com, tian.shu.qiu@intel.com,
-        robert.moore@intel.com, erik.kaneda@intel.com, pmladek@suse.com,
-        rostedt@goodmis.org, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk,
-        laurent.pinchart+renesas@ideasonboard.com,
-        jacopo+renesas@jmondi.org, kieran.bingham+renesas@ideasonboard.com,
-        hverkuil-cisco@xs4all.nl, m.felsch@pengutronix.de,
-        niklas.soderlund+renesas@ragnatech.se, slongerbeam@gmail.com,
-        heikki.krogerus@linux.intel.com, linus.walleij@linaro.org,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCH v4 06/15] software_node: unregister software_nodes in reverse order
-Date:   Sun,  3 Jan 2021 23:12:26 +0000
-Message-Id: <20210103231235.792999-7-djrscally@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210103231235.792999-1-djrscally@gmail.com>
-References: <20210103231235.792999-1-djrscally@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1727357AbhADFKc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 Jan 2021 00:10:32 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:7178 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725830AbhADFKc (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Jan 2021 00:10:32 -0500
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 03 Jan 2021 21:09:52 -0800
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 03 Jan 2021 21:09:50 -0800
+X-QCInternal: smtphost
+Received: from dikshita-linux.qualcomm.com ([10.204.65.237])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 04 Jan 2021 10:39:34 +0530
+Received: by dikshita-linux.qualcomm.com (Postfix, from userid 347544)
+        id 164EE214AA; Mon,  4 Jan 2021 10:39:34 +0530 (IST)
+From:   Dikshita Agarwal <dikshita@codeaurora.org>
+To:     linux-media@vger.kernel.org, hverkuil-cisco@xs4all.nl,
+        stanimir.varbanov@linaro.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        vgarodia@codeaurora.org, Dikshita Agarwal <dikshita@codeaurora.org>
+Subject: [PATCH v5 0/2] Add encoder ctrls for long term reference
+Date:   Mon,  4 Jan 2021 10:39:29 +0530
+Message-Id: <1609736971-14454-1-git-send-email-dikshita@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-To maintain consistency with software_node_unregister_nodes(), reverse
-the order in which the software_node_unregister_node_group() function
-unregisters nodes.
+This series add the encoder controls for long term reference (LTR)
+and support for the same in venus driver.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Daniel Scally <djrscally@gmail.com>
----
-Changes in v4:
+changes since v4:
+- Rebased the changes on latest media tree
+- Addressed the comments
+- Added driver side implementation for new controls.
 
-	- Changed the language of the comment to be easier to follow
+Dikshita Agarwal (2):
+  media: v4l2-ctrl: add control for long term reference.
+  venus: venc: Add support for Long Term Reference (LTR) controls
 
- drivers/base/swnode.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ .../userspace-api/media/v4l/ext-ctrls-codec.rst    | 18 ++++++++
+ drivers/media/platform/qcom/venus/venc_ctrls.c     | 49 +++++++++++++++++++++-
+ drivers/media/v4l2-core/v4l2-ctrls.c               | 14 +++++++
+ include/uapi/linux/v4l2-controls.h                 |  3 ++
+ 4 files changed, 83 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/base/swnode.c b/drivers/base/swnode.c
-index ade49173ff8d..1f43c51b431e 100644
---- a/drivers/base/swnode.c
-+++ b/drivers/base/swnode.c
-@@ -779,16 +779,23 @@ EXPORT_SYMBOL_GPL(software_node_register_node_group);
-  * software_node_unregister_node_group - Unregister a group of software nodes
-  * @node_group: NULL terminated array of software node pointers to be unregistered
-  *
-- * Unregister multiple software nodes at once.
-+ * Unregister multiple software nodes at once. The array will be unwound in
-+ * reverse order (i.e. last entry first) and thus if any members of the array are
-+ * children of another member then the children must appear later in the list such
-+ * that they are unregistered first.
-  */
--void software_node_unregister_node_group(const struct software_node **node_group)
-+void software_node_unregister_node_group(
-+		const struct software_node **node_group)
- {
--	unsigned int i;
-+	unsigned int i = 0;
- 
- 	if (!node_group)
- 		return;
- 
--	for (i = 0; node_group[i]; i++)
-+	while (node_group[i])
-+		i++;
-+
-+	while (i--)
- 		software_node_unregister(node_group[i]);
- }
- EXPORT_SYMBOL_GPL(software_node_unregister_node_group);
 -- 
-2.25.1
+2.7.4
 
