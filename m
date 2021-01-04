@@ -2,181 +2,118 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 630FAC433E6
-	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 12:43:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99E12C433DB
+	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 12:46:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1C88C21D93
-	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 12:43:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6F2C721D93
+	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 12:46:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726893AbhADMnU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 Jan 2021 07:43:20 -0500
-Received: from mga07.intel.com ([134.134.136.100]:18371 "EHLO mga07.intel.com"
+        id S1726671AbhADMqa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 Jan 2021 07:46:30 -0500
+Received: from www.linuxtv.org ([130.149.80.248]:42364 "EHLO www.linuxtv.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726789AbhADMnU (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 4 Jan 2021 07:43:20 -0500
-IronPort-SDR: 5pu6/Y+350I0eB63FcMdgH2pJAXZpYG58KeIk+Xcjr3qiCy+S/OmwiJ7/ozsZK2JYsMw3oNO5R
- 651eAV6+RZSw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9853"; a="241029868"
-X-IronPort-AV: E=Sophos;i="5.78,474,1599548400"; 
-   d="scan'208";a="241029868"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2021 04:41:33 -0800
-IronPort-SDR: BZJ0vJPCKSGEmCqRobP/9fXL4Hzw8UC6X/HWbkGKiYRna9+20Xa7UNo6F1J6X0Zby9o87oh7Hv
- 8AWg9dDfckww==
-X-IronPort-AV: E=Sophos;i="5.78,474,1599548400"; 
-   d="scan'208";a="401958746"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2021 04:41:27 -0800
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kwPBs-001ZNb-71; Mon, 04 Jan 2021 14:42:28 +0200
-Date:   Mon, 4 Jan 2021 14:42:28 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Daniel Scally <djrscally@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-media@vger.kernel.org, devel@acpica.org,
-        gregkh@linuxfoundation.org, rjw@rjwysocki.net,
-        sergey.senozhatsky@gmail.com, mchehab@kernel.org, lenb@kernel.org,
-        yong.zhi@intel.com, sakari.ailus@linux.intel.com,
-        bingbu.cao@intel.com, tian.shu.qiu@intel.com,
-        robert.moore@intel.com, erik.kaneda@intel.com, pmladek@suse.com,
-        rostedt@goodmis.org, linux@rasmusvillemoes.dk,
-        laurent.pinchart+renesas@ideasonboard.com,
-        jacopo+renesas@jmondi.org, kieran.bingham+renesas@ideasonboard.com,
-        hverkuil-cisco@xs4all.nl, m.felsch@pengutronix.de,
-        niklas.soderlund+renesas@ragnatech.se, slongerbeam@gmail.com,
-        heikki.krogerus@linux.intel.com, linus.walleij@linaro.org
-Subject: Re: [PATCH v4 13/15] acpi: Add acpi_dev_get_next_match_dev() and
- helper macro
-Message-ID: <20210104124228.GU4077@smile.fi.intel.com>
-References: <20210103231235.792999-1-djrscally@gmail.com>
- <20210103231235.792999-14-djrscally@gmail.com>
+        id S1726586AbhADMq1 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 4 Jan 2021 07:46:27 -0500
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1kwPF3-000JX0-7R; Mon, 04 Jan 2021 12:45:45 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1kwPIP-0007u5-SD; Mon, 04 Jan 2021 12:49:13 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL for 5.12] V4L2 camera sensor and other patches (#70394)
+Date:   Mon,  4 Jan 2021 12:49:13 +0000
+Message-Id: <20210104124913.30338-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210104120612.GB850@valkosipuli.retiisi.org.uk>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210103231235.792999-14-djrscally@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sun, Jan 03, 2021 at 11:12:33PM +0000, Daniel Scally wrote:
-> To ensure we handle situations in which multiple sensors of the same
-> model (and therefore _HID) are present in a system, we need to be able
-> to iterate over devices matching a known _HID but unknown _UID and _HRV
->  - add acpi_dev_get_next_match_dev() to accommodate that possibility and
-> change acpi_dev_get_first_match_dev() to simply call the new function
-> with a NULL starting point. Add an iterator macro for convenience.
+From: builder@linuxtv.org
 
-I guess we need Rafael's blessing on this.
+Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/20210104120612.GB850@valkosipuli.retiisi.org.uk/
+Build log: https://builder.linuxtv.org/job/patchwork/84315/
+Build time: 00:24:32
+Link: https://lore.kernel.org/linux-media/20210104120612.GB850@valkosipuli.retiisi.org.uk
 
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Daniel Scally <djrscally@gmail.com>
-> ---
-> Changes in v4:
-> 
-> 	- None
-> 
->  drivers/acpi/utils.c    | 30 ++++++++++++++++++++++++++----
->  include/acpi/acpi_bus.h |  7 +++++++
->  2 files changed, 33 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/acpi/utils.c b/drivers/acpi/utils.c
-> index d5411a166685..ddca1550cce6 100644
-> --- a/drivers/acpi/utils.c
-> +++ b/drivers/acpi/utils.c
-> @@ -843,12 +843,13 @@ bool acpi_dev_present(const char *hid, const char *uid, s64 hrv)
->  EXPORT_SYMBOL(acpi_dev_present);
->  
->  /**
-> - * acpi_dev_get_first_match_dev - Return the first match of ACPI device
-> + * acpi_dev_get_next_match_dev - Return the next match of ACPI device
-> + * @adev: Pointer to the previous acpi_device matching this @hid, @uid and @hrv
->   * @hid: Hardware ID of the device.
->   * @uid: Unique ID of the device, pass NULL to not check _UID
->   * @hrv: Hardware Revision of the device, pass -1 to not check _HRV
->   *
-> - * Return the first match of ACPI device if a matching device was present
-> + * Return the next match of ACPI device if another matching device was present
->   * at the moment of invocation, or NULL otherwise.
->   *
->   * The caller is responsible to call put_device() on the returned device.
-> @@ -856,8 +857,9 @@ EXPORT_SYMBOL(acpi_dev_present);
->   * See additional information in acpi_dev_present() as well.
->   */
->  struct acpi_device *
-> -acpi_dev_get_first_match_dev(const char *hid, const char *uid, s64 hrv)
-> +acpi_dev_get_next_match_dev(struct acpi_device *adev, const char *hid, const char *uid, s64 hrv)
->  {
-> +	struct device *start = adev ? &adev->dev : NULL;
->  	struct acpi_dev_match_info match = {};
->  	struct device *dev;
->  
-> @@ -865,9 +867,29 @@ acpi_dev_get_first_match_dev(const char *hid, const char *uid, s64 hrv)
->  	match.uid = uid;
->  	match.hrv = hrv;
->  
-> -	dev = bus_find_device(&acpi_bus_type, NULL, &match, acpi_dev_match_cb);
-> +	dev = bus_find_device(&acpi_bus_type, start, &match, acpi_dev_match_cb);
->  	return dev ? to_acpi_device(dev) : NULL;
->  }
-> +EXPORT_SYMBOL(acpi_dev_get_next_match_dev);
-> +
-> +/**
-> + * acpi_dev_get_first_match_dev - Return the first match of ACPI device
-> + * @hid: Hardware ID of the device.
-> + * @uid: Unique ID of the device, pass NULL to not check _UID
-> + * @hrv: Hardware Revision of the device, pass -1 to not check _HRV
-> + *
-> + * Return the first match of ACPI device if a matching device was present
-> + * at the moment of invocation, or NULL otherwise.
-> + *
-> + * The caller is responsible to call put_device() on the returned device.
-> + *
-> + * See additional information in acpi_dev_present() as well.
-> + */
-> +struct acpi_device *
-> +acpi_dev_get_first_match_dev(const char *hid, const char *uid, s64 hrv)
-> +{
-> +	return acpi_dev_get_next_match_dev(NULL, hid, uid, hrv);
-> +}
->  EXPORT_SYMBOL(acpi_dev_get_first_match_dev);
->  
->  /*
-> diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
-> index a3abcc4b7d9f..0a028ba967d3 100644
-> --- a/include/acpi/acpi_bus.h
-> +++ b/include/acpi/acpi_bus.h
-> @@ -688,9 +688,16 @@ static inline bool acpi_device_can_poweroff(struct acpi_device *adev)
->  
->  bool acpi_dev_hid_uid_match(struct acpi_device *adev, const char *hid2, const char *uid2);
->  
-> +struct acpi_device *
-> +acpi_dev_get_next_match_dev(struct acpi_device *adev, const char *hid, const char *uid, s64 hrv);
->  struct acpi_device *
->  acpi_dev_get_first_match_dev(const char *hid, const char *uid, s64 hrv);
->  
-> +#define for_each_acpi_dev_match(adev, hid, uid, hrv)			\
-> +	for (adev = acpi_dev_get_first_match_dev(hid, uid, hrv);	\
-> +	     adev;							\
-> +	     adev = acpi_dev_get_next_match_dev(adev, hid, uid, hrv))
-> +
->  static inline void acpi_dev_put(struct acpi_device *adev)
->  {
->  	put_device(&adev->dev);
-> -- 
-> 2.25.1
-> 
+gpg: Signature made Mon 04 Jan 2021 11:51:32 AM UTC
+gpg:                using DSA key 53AC58A5F5948636C04A1BF8141DFA54A1EC8DEA
+gpg:                issuer "sakari.ailus@linux.intel.com"
+gpg: Can't check signature: No public key
 
--- 
-With Best Regards,
-Andy Shevchenko
+Summary: got 7/47 patches with issues, being 0 at build time, plus one error when buinding PDF document
 
+Error/warnings:
+
+patches/0020-media-ov5647-Add-SGGBR10_1X10-modes.patch:
+
+   checkpatch.pl:
+	$ cat patches/0020-media-ov5647-Add-SGGBR10_1X10-modes.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:16: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+	-:16: WARNING: Unknown commit id '581dfda6d0a62', maybe rebased or not pulled?
+
+patches/0025-media-ov5647-Support-V4L2_CID_HBLANK-control.patch:
+
+   checkpatch.pl:
+	$ cat patches/0025-media-ov5647-Support-V4L2_CID_HBLANK-control.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:9: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+	-:9: WARNING: Unknown commit id 'd82f202156605', maybe rebased or not pulled?
+
+patches/0037-v4l-ioctl-Fix-memory-leak-in-video_usercopy.patch:
+
+   checkpatch.pl:
+	$ cat patches/0037-v4l-ioctl-Fix-memory-leak-in-video_usercopy.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:53: CHECK: Comparison to NULL could be written "!array_buf"
+
+patches/0043-dt-bindings-media-i2c-Add-OV5648-bindings-documentat.patch:
+
+   checkpatch.pl:
+	$ cat patches/0043-dt-bindings-media-i2c-Add-OV5648-bindings-documentat.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:18: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+
+patches/0044-media-i2c-Add-support-for-the-OV5648-image-sensor.patch:
+
+   checkpatch.pl:
+	$ cat patches/0044-media-i2c-Add-support-for-the-OV5648-image-sensor.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:65: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+	-:567: CHECK: Macro argument 'c' may be better as '(c)' to avoid precedence issues
+	-:726: CHECK: struct mutex definition without comment
+	-:2375: CHECK: multiple assignments should be avoided
+	-:2376: CHECK: multiple assignments should be avoided
+
+patches/0045-dt-bindings-media-i2c-Add-OV8865-bindings-documentat.patch:
+
+   checkpatch.pl:
+	$ cat patches/0045-dt-bindings-media-i2c-Add-OV8865-bindings-documentat.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:23: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+
+patches/0046-media-i2c-Add-support-for-the-OV8865-image-sensor.patch:
+
+   checkpatch.pl:
+	$ cat patches/0046-media-i2c-Add-support-for-the-OV8865-image-sensor.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:73: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+	-:172: CHECK: Prefer using the BIT macro
+	-:303: CHECK: Please don't use multiple blank lines
+	-:349: CHECK: Prefer using the BIT macro
+	-:539: CHECK: Macro argument 'c' may be better as '(c)' to avoid precedence issues
+	-:750: CHECK: struct mutex definition without comment
+	-:1678: CHECK: Alignment should match open parenthesis
+	-:2739: CHECK: multiple assignments should be avoided
+	-:2740: CHECK: multiple assignments should be avoided
+
+
+Error #512 when building PDF docs
 
