@@ -2,77 +2,87 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2ED40C433E0
-	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 13:06:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DDF86C433E0
+	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 13:09:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DB90121BE5
-	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 13:06:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A017621D93
+	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 13:09:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726655AbhADNGB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 Jan 2021 08:06:01 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:55468 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725830AbhADNGA (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Jan 2021 08:06:00 -0500
+        id S1726345AbhADNJy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 Jan 2021 08:09:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47270 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725830AbhADNJy (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Jan 2021 08:09:54 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A4EC061793
+        for <linux-media@vger.kernel.org>; Mon,  4 Jan 2021 05:09:13 -0800 (PST)
 Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 603A32E0;
-        Mon,  4 Jan 2021 14:05:18 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 500762E0;
+        Mon,  4 Jan 2021 14:09:11 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1609765518;
-        bh=LeUgmzK02rGP594z5IuZe3KBuMlXz5W/G2fbXG8ZY0A=;
+        s=mail; t=1609765751;
+        bh=ytzEZPMjImbs14xCLsXgpNvQ805jokY97SYanJCiK+A=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ozvbUQw7em6gEZPtfNPtc8NPE+Jic8tslaHQH2rcB/tHlLWxcMl5tdPOD7y3o1dYM
-         RqFejtElnIZZgWfDxgDrJwSmfT+EEorjofiM7ilms9r+r1TBB+Y77fKAtDlI4LyrhQ
-         CqdE1h91uCQrSRRj9/5q4w6BEC0mnbp40L3tKlPk=
-Date:   Mon, 4 Jan 2021 15:05:05 +0200
+        b=Xs/0tyWizN3yykZmNfc9uI5hExNdpkR2hsw2iQYYwDP5H8AqagE9q0eDHOw6UszwI
+         0nNIuJV+1rfDzwN/JFU+RG6V4kOODdRVglgIhFTQoeb7wySl13vW8iqPBFgVxLzPqx
+         /FgqWomQCjds+8157ZDqI00nDC/FTzFZkTf3wGjs=
+Date:   Mon, 4 Jan 2021 15:08:58 +0200
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-media@vger.kernel.org, Benoit Parrot <bparrot@ti.com>
-Subject: Re: [PATCH 2/2] media: i2c: Add OV1063x sensor driver
-Message-ID: <X/MSgbOQ3ATJH5At@pendragon.ideasonboard.com>
-References: <20210104053945.12409-1-laurent.pinchart@ideasonboard.com>
- <20210104053945.12409-3-laurent.pinchart@ideasonboard.com>
- <20210104124700.GL11878@paasikivi.fi.intel.com>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        linux-media <linux-media@vger.kernel.org>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        =?utf-8?Q?S=C3=A9bastien?= Szymanski 
+        <sebastien.szymanski@armadeus.com>
+Subject: Re: imx6ull capture from OV5640
+Message-ID: <X/MTatdI+tDQ/PQI@pendragon.ideasonboard.com>
+References: <CAOMZO5DTW_YgVgyXqtccxQUm0A2kLLVcw_EhfsN0kZ9s2hgt7Q@mail.gmail.com>
+ <X/KwKikMayH8AHnG@pendragon.ideasonboard.com>
+ <CAOMZO5Dh-AKveQneMy5cuvWAX2PwTuC9Xq9rXMfAMD3WUoVGsg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210104124700.GL11878@paasikivi.fi.intel.com>
+In-Reply-To: <CAOMZO5Dh-AKveQneMy5cuvWAX2PwTuC9Xq9rXMfAMD3WUoVGsg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sakari,
+Hi Fabio,
 
-On Mon, Jan 04, 2021 at 02:47:00PM +0200, Sakari Ailus wrote:
-> Hi Laurent,
+On Mon, Jan 04, 2021 at 08:34:48AM -0300, Fabio Estevam wrote:
+> On Mon, Jan 4, 2021 at 3:05 AM Laurent Pinchart wrote:
 > 
-> On Mon, Jan 04, 2021 at 07:39:45AM +0200, Laurent Pinchart wrote:
-> > diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-> > index 878f66ef2719..84a97989775e 100644
-> > --- a/drivers/media/i2c/Kconfig
-> > +++ b/drivers/media/i2c/Kconfig
-> > @@ -1050,6 +1050,18 @@ config VIDEO_OV9650
-> >  	  This is a V4L2 sensor driver for the Omnivision
-> >  	  OV9650 and OV9652 camera sensors.
-> >  
-> > +config VIDEO_OV10633
-> > +	tristate "OmniVision OV10633/OV10635 sensor support"
-> > +	depends on I2C && VIDEO_V4L2
-> > +	depends on GPIOLIB && OF
-> > +	select MEDIA_CONTROLLER
-> > +	select REGMAP_I2C
+> > That's not right, csi->is_csi2 is a flag that indicates if the current
+> > input to the CSI comes from the CSI-2 receiver.
+> >
+> > It looks like the i.MX6ULL is missing the MIPI CSI-2 receiver and thus
+> > also the corresponding video mux. The WARN_ON() should thus indeed by
+> > bypassed, but only for devices that don't have the video mux. I wouldn't
 > 
-> Should this be SCCB instead?
+> Unlike i.MX7, i.MX6UL/i.MX6ULL do not have a MIPI CSI-2 IP block.
 > 
-> Likewise for the driver.
+> They only have a parallel CSI interface, and no video mux is present.
+> 
+> So the csi->is_csi2 check I did seems correct, right?
 
-The OV1063x has 16-bit register addresses, and, unless I'm mistaken,
-regmap_sccb assumes register addresses to be 8-bit long.
+I don't think so. csi->is_csi2 tells if the currently selected input of
+the video mux is the CSI-2 receiver, not if there's a CSI-2 receiver
+present in the device. csi->is_csi2 should of course always be false
+when there's no CSI-2 receiver, but it can be false when a CSI-2
+receiver is present and the currently selected input is the parallel
+input.
+
+> > be surprised if other adaptations would be needed in the code.
+> 
+> Yes, I found other paths that miss the csi->is_csi2 check too.
 
 -- 
 Regards,
