@@ -2,110 +2,185 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3CEAC4361A
-	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 16:59:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0615FC4332B
+	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 17:01:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 703C522513
-	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 16:59:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C71BD224DE
+	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 17:01:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727395AbhADQ6v (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 Jan 2021 11:58:51 -0500
-Received: from mail-io1-f46.google.com ([209.85.166.46]:46126 "EHLO
-        mail-io1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727192AbhADQ6v (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Jan 2021 11:58:51 -0500
-Received: by mail-io1-f46.google.com with SMTP id 81so25553054ioc.13;
-        Mon, 04 Jan 2021 08:58:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=oIJoHkuufEgXto+IHpHbDIhmP0P1hFczaPsDARxMm/Y=;
-        b=NCaGOSigt+CcJPuxCTqfVlsAd/E1GSWXiRJwncNESMharoRxWckZrCslwODZtW8pn4
-         y/7zfxYM2PaKws8jPwl8dOwQAVioX4fc0esHybABhlZVRZy1S52nZZ/4fYGjzHSqzxNy
-         GAYsxD9b+jwuJTmonEEpDt6nGCYHaxMQAEQjByCTbFCraZ7NSFwTZC+tN5i8Pd8QA774
-         bH1gpT0jZ0U5vZ27M0rkHcZB2ketQ8TDvktfBOUAne0kXD0YQZNllht0b7N3X+xxL/mW
-         npQ/SIrVafuX5sS0GIeYlYGnBRMazx+Aq/dpfU9iDNLg1uNxEd5Z/+oqkKqPo7W5vuox
-         TAuA==
-X-Gm-Message-State: AOAM533pAFwRSFKXHwH8lwc65DIAggRUdphZzk1PFXNFxGjDTxJl2CoV
-        2Sfg/uqkhGhpDQ+sxhzRGQ==
-X-Google-Smtp-Source: ABdhPJw5uQ0G+vrbECx0JZGCERzbN5kMX+g/hNZb29bE0UzKPVUbNaNps40SOGI+YU3YrwiOjyaziw==
-X-Received: by 2002:a02:6a0e:: with SMTP id l14mr63411370jac.58.1609779490082;
-        Mon, 04 Jan 2021 08:58:10 -0800 (PST)
-Received: from xps15.herring.priv ([64.188.179.253])
-        by smtp.googlemail.com with ESMTPSA id a18sm42381528ilt.52.2021.01.04.08.58.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jan 2021 08:58:09 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     Guennadi Liakhovetski <g.liakhovetski@gmx.de>,
-        Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH v4 0/2] dt-bindings: media: Convert video-interfaces.txt to schemas
-Date:   Mon,  4 Jan 2021 09:58:06 -0700
-Message-Id: <20210104165808.2166686-1-robh@kernel.org>
-X-Mailer: git-send-email 2.27.0
+        id S1728056AbhADRA7 convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 Jan 2021 12:00:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55194 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728049AbhADRA6 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Jan 2021 12:00:58 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4BC3C061574
+        for <linux-media@vger.kernel.org>; Mon,  4 Jan 2021 09:00:17 -0800 (PST)
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1kwTDF-0002Ic-Sc; Mon, 04 Jan 2021 18:00:09 +0100
+Received: from pza by lupine with local (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1kwTD7-00075O-Sl; Mon, 04 Jan 2021 18:00:01 +0100
+Message-ID: <b394a7592a67a12f73f6bb758b6b8fda0e88ae97.camel@pengutronix.de>
+Subject: Re: [PATCH v6 6/9] media: Add parsing for APP14 data segment in
+ jpeg helpers
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     "Mirela Rabulea (OSS)" <mirela.rabulea@oss.nxp.com>,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl, shawnguo@kernel.org,
+        robh+dt@kernel.org
+Cc:     paul.kocialkowski@bootlin.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
+        s.hauer@pengutronix.de, aisheng.dong@nxp.com,
+        daniel.baluta@nxp.com, robert.chiras@nxp.com,
+        laurentiu.palcu@nxp.com, mark.rutland@arm.com,
+        devicetree@vger.kernel.org, ezequiel@collabora.com,
+        laurent.pinchart+renesas@ideasonboard.com,
+        niklas.soderlund+renesas@ragnatech.se,
+        dafna.hirschfeld@collabora.com,
+        Mirela Rabulea <mirela.rabulea@nxp.com>
+Date:   Mon, 04 Jan 2021 18:00:01 +0100
+In-Reply-To: <20201215111843.30269-7-mirela.rabulea@oss.nxp.com>
+References: <20201215111843.30269-1-mirela.rabulea@oss.nxp.com>
+         <20201215111843.30269-7-mirela.rabulea@oss.nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.30.5-1.1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series converts video-interfaces.txt to DT schema which in turn is
-based on converting the graph binding to a schema. All the media users
-are converted to use the graph and video-interfaces schemas.
+Hi Mirela,
 
-Based on v5.11-rc2. Ideally this should be applied before anything else
-for 5.12 and subsequent schemas use the graph and video-interfaces schemas.
+thank you for the update. Just two issues below:
 
-Rob
+On Tue, 2020-12-15 at 13:18 +0200, Mirela Rabulea (OSS) wrote:
+> From: Mirela Rabulea <mirela.rabulea@nxp.com>
+> 
+> According to Rec. ITU-T T.872 (06/2012) 6.5.3
+> APP14 segment is for color encoding, it contains a transform flag, which
+> may have values of 0, 1 and 2 and are interpreted as follows:
+> 0 - CMYK for images that are encoded with four components
+>   - RGB for images that are encoded with three components
+> 1 - An image encoded with three components using YCbCr colour encoding.
+> 2 - An image encoded with four components using YCCK colour encoding.
+> 
+> This is used in imx-jpeg decoder, to distinguish between
+> YUV444 and RGB24.
+> 
+> Signed-off-by: Mirela Rabulea <mirela.rabulea@nxp.com>
+> ---
+> Changes in v6:
+>   Switch variable to lowercase Lp->lp
+>   Check for "Adobe\0" in Ap1..6
+>   Make the transform flag an enum
+>   Removed a change in comment section, a leftover from a previous version
+>   Thanks Philipp for feedback.
+> 
+>  drivers/media/v4l2-core/v4l2-jpeg.c | 43 +++++++++++++++++++++++++++--
+>  include/media/v4l2-jpeg.h           | 18 ++++++++++++
+>  2 files changed, 59 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/media/v4l2-core/v4l2-jpeg.c b/drivers/media/v4l2-core/v4l2-jpeg.c
+> index 8947fd95c6f1..d1483e7a775c 100644
+> --- a/drivers/media/v4l2-core/v4l2-jpeg.c
+> +++ b/drivers/media/v4l2-core/v4l2-jpeg.c
+> @@ -45,6 +45,7 @@ MODULE_LICENSE("GPL");
+>  #define DHP	0xffde	/* hierarchical progression */
+>  #define EXP	0xffdf	/* expand reference */
+>  #define APP0	0xffe0	/* application data */
+> +#define APP14	0xffee	/* application data for colour encoding */
+>  #define APP15	0xffef
+>  #define JPG0	0xfff0	/* extensions */
+>  #define JPG13	0xfffd
+> @@ -444,8 +445,41 @@ static int jpeg_skip_segment(struct jpeg_stream *stream)
+>  	return jpeg_skip(stream, len - 2);
+>  }
+>  
+> +/* Rec. ITU-T T.872 (06/2012) 6.5.3 */
+> +static int jpeg_parse_app14_data(struct jpeg_stream *stream)
+> +{
+> +	int ret;
+> +	int lp;
+> +	int skip;
+> +	int tf;
+> +
+> +	lp = jpeg_get_word_be(stream);
+> +	if (lp < 0)
+> +		return lp;
 
+Here we should check that there are still 6 bytes available to compare:
 
-Rob Herring (2):
-  media: dt-bindings: Convert video-interfaces.txt properties to schemas
-  dt-bindings: media: Use graph and video-interfaces schemas
+	if (stream->curr + 6 > stream->end)
+		return -EINVAL;
 
- .../media/allwinner,sun4i-a10-csi.yaml        |  11 +-
- .../media/allwinner,sun6i-a31-csi.yaml        |  12 +-
- .../bindings/media/i2c/adv7180.yaml           |  36 +-
- .../bindings/media/i2c/adv7604.yaml           |  37 +-
- .../bindings/media/i2c/aptina,mt9v111.yaml    |   4 +-
- .../bindings/media/i2c/imi,rdacm2x-gmsl.yaml  |  30 +-
- .../devicetree/bindings/media/i2c/imx219.yaml |  21 +-
- .../bindings/media/i2c/maxim,max9286.yaml     | 101 +--
- .../bindings/media/i2c/mipi-ccs.yaml          |  17 +-
- .../devicetree/bindings/media/i2c/ov5647.yaml |  20 +-
- .../devicetree/bindings/media/i2c/ov8856.yaml |  22 +-
- .../bindings/media/i2c/ovti,ov02a10.yaml      |  29 +-
- .../bindings/media/i2c/ovti,ov2680.yaml       |   6 +-
- .../bindings/media/i2c/ovti,ov772x.yaml       |   9 +-
- .../bindings/media/i2c/sony,imx214.yaml       |  25 +-
- .../bindings/media/i2c/sony,imx274.yaml       |   3 +-
- .../bindings/media/marvell,mmp2-ccic.yaml     |  15 +-
- .../bindings/media/nxp,imx7-csi.yaml          |   5 +-
- .../bindings/media/nxp,imx7-mipi-csi2.yaml    |  32 +-
- .../bindings/media/renesas,ceu.yaml           |  17 +-
- .../bindings/media/renesas,csi2.yaml          |  54 +-
- .../bindings/media/renesas,vin.yaml           | 113 +---
- .../bindings/media/rockchip-isp1.yaml         |  40 +-
- .../bindings/media/st,stm32-dcmi.yaml         |  18 +-
- .../devicetree/bindings/media/ti,cal.yaml     |  55 +-
- .../media/video-interface-devices.yaml        | 406 +++++++++++
- .../bindings/media/video-interfaces.txt       | 640 +-----------------
- .../bindings/media/video-interfaces.yaml      | 344 ++++++++++
- .../bindings/media/xilinx/xlnx,csi2rxss.yaml  |  39 +-
- 29 files changed, 923 insertions(+), 1238 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/media/video-interface-devices.yaml
- create mode 100644 Documentation/devicetree/bindings/media/video-interfaces.yaml
+> +	/* Check for "Adobe\0" in Ap1..6 */
+> +	if (strncmp(stream->curr, "Adobe\0", 6))
+> +		return -EINVAL;
+> +
+> +	/* get to Ap12 */
+> +	ret = jpeg_skip(stream, 11);
+> +	if (ret < 0)
+> +		return -EINVAL;
+> +
+> +	tf = jpeg_get_byte(stream);
+> +	if (tf < 0)
+> +		return tf;
+> +
+> +	skip = lp - 2 - 11;
+> +	ret = jpeg_skip(stream, skip);
+> +	if (ret < 0)
+> +		return -EINVAL;
+> +	else
+> +		return tf;
+> +}
+> +
+>  /**
+> - * jpeg_parse_header - locate marker segments and optionally parse headers
+> + * v4l2_jpeg_parse_header - locate marker segments and optionally parse headers
+>   * @buf: address of the JPEG buffer, should start with a SOI marker
+>   * @len: length of the JPEG buffer
+>   * @out: returns marker segment positions and optionally parsed headers
+> @@ -476,6 +510,9 @@ int v4l2_jpeg_parse_header(void *buf, size_t len, struct v4l2_jpeg_header *out)
+>  	if (marker != SOI)
+>  		return -EINVAL;
+>  
+> +	/* init value to signal if this marker is not present */
+> +	out->app14_tf = -EINVAL;
+> +
 
---
-2.27.0
+Here we set app14_tf to a value that is not part of the enum.
+You could define a value V4L2_JPEG_APP14_TF_UNKNOWN for the
+uninitialized / error state.
+
+>  	/* loop through marker segments */
+>  	while ((marker = jpeg_next_marker(&stream)) >= 0) {
+>  		switch (marker) {
+> @@ -519,7 +556,9 @@ int v4l2_jpeg_parse_header(void *buf, size_t len, struct v4l2_jpeg_header *out)
+>  			ret = jpeg_parse_restart_interval(&stream,
+>  							&out->restart_interval);
+>  			break;
+> -
+> +		case APP14:
+> +			out->app14_tf = jpeg_parse_app14_data(&stream);
+
+Same as above in case of -EINVAL return. Apart from this,
+
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+
+regards
+Philipp
