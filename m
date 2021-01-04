@@ -2,99 +2,197 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFD9BC4332E
-	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 05:43:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D535C433DB
+	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 06:06:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8BC992151B
-	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 05:43:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C039B20DD4
+	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 06:06:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727786AbhADFmz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 Jan 2021 00:42:55 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:26488 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725830AbhADFmy (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Jan 2021 00:42:54 -0500
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 03 Jan 2021 21:42:14 -0800
-X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 03 Jan 2021 21:42:12 -0800
-X-QCInternal: smtphost
-Received: from dikshita-linux.qualcomm.com ([10.204.65.237])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 04 Jan 2021 11:11:58 +0530
-Received: by dikshita-linux.qualcomm.com (Postfix, from userid 347544)
-        id ECE5E214AD; Mon,  4 Jan 2021 11:11:57 +0530 (IST)
-From:   Dikshita Agarwal <dikshita@codeaurora.org>
-To:     linux-media@vger.kernel.org, hverkuil-cisco@xs4all.nl,
-        stanimir.varbanov@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        vgarodia@codeaurora.org, Dikshita Agarwal <dikshita@codeaurora.org>
-Subject: [PATCH v4 1/2] media: v4l2-ctrl: Add base layer priority id control.
-Date:   Mon,  4 Jan 2021 11:11:53 +0530
-Message-Id: <1609738914-22769-2-git-send-email-dikshita@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1609738914-22769-1-git-send-email-dikshita@codeaurora.org>
-References: <1609738914-22769-1-git-send-email-dikshita@codeaurora.org>
+        id S1726918AbhADGGY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 Jan 2021 01:06:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725830AbhADGGX (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Jan 2021 01:06:23 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78990C061574
+        for <linux-media@vger.kernel.org>; Sun,  3 Jan 2021 22:05:43 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DF2BF2E0;
+        Mon,  4 Jan 2021 07:05:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1609740342;
+        bh=FmMDEG141I5exVxr2DRp+PB0DvR+WuVjay6dtE0XoA4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B1GLgaTcb/oUoy3w/B1lG8n/yJpLaczfbaPj+hqXjtVwfFZXx+r/x0ydPFWBzWTWa
+         IyVDMbFEuza1bJHHhuBammhkpYXkVxEMiwWlAl0yXvca33jvAprN9sBjk989D1LTfG
+         N3VQVAXZkYMM2YNXr3LPwQabDyEm7t34app/DnTc=
+Date:   Mon, 4 Jan 2021 08:05:30 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        linux-media <linux-media@vger.kernel.org>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        =?utf-8?Q?S=C3=A9bastien?= Szymanski 
+        <sebastien.szymanski@armadeus.com>
+Subject: Re: imx6ull capture from OV5640
+Message-ID: <X/KwKikMayH8AHnG@pendragon.ideasonboard.com>
+References: <CAOMZO5DTW_YgVgyXqtccxQUm0A2kLLVcw_EhfsN0kZ9s2hgt7Q@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAOMZO5DTW_YgVgyXqtccxQUm0A2kLLVcw_EhfsN0kZ9s2hgt7Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This control indicates the priority id to be applied
-to base layer.
+Hi Fabio,
 
-Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
----
- Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 9 +++++++++
- drivers/media/v4l2-core/v4l2-ctrls.c                      | 1 +
- include/uapi/linux/v4l2-controls.h                        | 1 +
- 3 files changed, 11 insertions(+)
+On Wed, Dec 30, 2020 at 02:45:41PM -0300, Fabio Estevam wrote:
+> Hi,
+> 
+> I am trying to capture from a parallel OV5640 on a imx6ull-evk board.
+> 
+> Here are the device tree changes:
+> https://pastebin.com/raw/PZpJjagJ
+> 
+> First, I got the following warning:
+> 
+> [    7.788866] csi: Registered csi capture as /dev/video1
+> [    7.797382] ------------[ cut here ]------------
+> [    7.802141] WARNING: CPU: 0 PID: 1 at
+> drivers/staging/media/imx/imx7-media-csi.c:1168
+> imx7_csi_notify_bound+0x40/0x50
+> [    7.813116] Modules linked in:
+> [    7.816436] CPU: 0 PID: 1 Comm: swapper/0 Not tainted
+> 5.10.0-next-20201223-00003-gaaee78ed150-dirty #304
+> [    7.826015] Hardware name: Freescale i.MX6 Ultralite (Device Tree)
+> [    7.832281] [<c0111a68>] (unwind_backtrace) from [<c010c068>]
+> (show_stack+0x10/0x14)
+> [    7.840151] [<c010c068>] (show_stack) from [<c0e14570>]
+> (dump_stack+0xe0/0x10c)
+> [    7.847570] [<c0e14570>] (dump_stack) from [<c0125a7c>] (__warn+0x104/0x118)
+> [    7.854734] [<c0125a7c>] (__warn) from [<c0125b38>]
+> (warn_slowpath_fmt+0xa8/0xb8)
+> [    7.862326] [<c0125b38>] (warn_slowpath_fmt) from [<c0a66e0c>]
+> (imx7_csi_notify_bound+0x40/0x50)
+> [    7.871227] [<c0a66e0c>] (imx7_csi_notify_bound) from [<c09ae084>]
+> (v4l2_async_match_notify+0x50/0x124)
+> 
+> To avoid the warning I did:
+> 
+> --- a/drivers/staging/media/imx/imx7-media-csi.c
+> +++ b/drivers/staging/media/imx/imx7-media-csi.c
+> @@ -1164,12 +1164,14 @@ static int imx7_csi_notify_bound(struct
+> v4l2_async_notifier *notifier,
+>         struct imx7_csi *csi = imx7_csi_notifier_to_dev(notifier);
+>         struct media_pad *sink = &csi->sd.entity.pads[IMX7_CSI_PAD_SINK];
+> 
+> -       /* The bound subdev must always be the CSI mux */
+> -       if (WARN_ON(sd->entity.function != MEDIA_ENT_F_VID_MUX))
+> -               return -ENXIO;
+> +       if (csi->is_csi2) {
+> +               /* The bound subdev must always be the CSI mux */
+> +               if (WARN_ON(sd->entity.function != MEDIA_ENT_F_VID_MUX))
+> +                       return -ENXIO;
+> 
+> -       /* Mark it as such via its group id */
+> -       sd->grp_id = IMX_MEDIA_GRP_ID_CSI_MUX;
+> +               /* Mark it as such via its group id */
+> +               sd->grp_id = IMX_MEDIA_GRP_ID_CSI_MUX;
+> +       }
+> 
+>         return v4l2_create_fwnode_links_to_pad(sd, sink);
+>  }
 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index 1675bcf..24df818 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -3655,3 +3655,12 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
-        This provides a bitmask which consists of bits [0, LTR_COUNT-1].
-        This is applicable to H264 and HEVC encoder and can be applied using
-        Request Api.
-+
-+``V4L2_CID_MPEG_VIDEO_BASELAYER_PRIORITY_ID (integer)``
-+    Specifies a priority identifier for the NAL unit, which will be applied to
-+    the base layer. By default this value is set to 0 for the base layer,
-+    and the next layer will have the priority ID assigned as 1, 2, 3 and so on.
-+    The video encoder can't decide the priority id to be applied to a layer,
-+    so this has to come from client.
-+    This is applicable to H264 and valid Range is from 0 to 63.
-+    Source Rec. ITU-T H.264 (06/2019); G.7.4.1.1, G.8.8.1
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 2ad6b5a..9bd795f 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -953,6 +953,7 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_MPEG_VIDEO_LTR_COUNT:			return "LTR Count";
- 	case V4L2_CID_MPEG_VIDEO_FRAME_LTR_INDEX:		return "frame LTR index";
- 	case V4L2_CID_MPEG_VIDEO_USE_LTR_FRAMES:		return "Use LTR Frames";
-+	case V4L2_CID_MPEG_VIDEO_BASELAYER_PRIORITY_ID:		return "Base Layer Priority ID";
- 	case V4L2_CID_MPEG_VIDEO_MPEG2_SLICE_PARAMS:		return "MPEG-2 Slice Parameters";
- 	case V4L2_CID_MPEG_VIDEO_MPEG2_QUANTIZATION:		return "MPEG-2 Quantization Matrices";
- 	case V4L2_CID_FWHT_I_FRAME_QP:				return "FWHT I-Frame QP Value";
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index c0bb87b..404e69c 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -425,6 +425,7 @@ enum v4l2_mpeg_video_multi_slice_mode {
- #define V4L2_CID_MPEG_VIDEO_LTR_COUNT			(V4L2_CID_CODEC_BASE+230)
- #define V4L2_CID_MPEG_VIDEO_FRAME_LTR_INDEX		(V4L2_CID_CODEC_BASE+231)
- #define V4L2_CID_MPEG_VIDEO_USE_LTR_FRAMES		(V4L2_CID_CODEC_BASE+232)
-+#define V4L2_CID_MPEG_VIDEO_BASELAYER_PRIORITY_ID	(V4L2_CID_CODEC_BASE+233)
- 
- /* CIDs for the MPEG-2 Part 2 (H.262) codec */
- #define V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL			(V4L2_CID_CODEC_BASE+270)
+That's not right, csi->is_csi2 is a flag that indicates if the current
+input to the CSI comes from the CSI-2 receiver.
+
+It looks like the i.MX6ULL is missing the MIPI CSI-2 receiver and thus
+also the corresponding video mux. The WARN_ON() should thus indeed by
+bypassed, but only for devices that don't have the video mux. I wouldn't
+be surprised if other adaptations would be needed in the code.
+
+On a side note, the driver is a bit hard to read, mixing i.MX6 and i.MX7
+support leads to quite a bit of spaghetti code (and i.MX6 is a misnommer
+to start with, as shown by the i.MX6ULL that has a CSI, not an IPUv3).
+We should split the driver in two, rename i.MX7 support to CSI and i.MX6
+to IPUv3, but that will be a large effort.
+
+> # media-ctl -p
+> Media controller API version 5.10.0
+> 
+> Media device information
+> ------------------------
+> driver          imx7-csi
+> model           imx-media
+> serial
+> bus info
+> hw revision     0x0
+> driver version  5.10.0
+> 
+> Device topology
+> - entity 1: csi (2 pads, 2 links)
+>             type V4L2 subdev subtype Unknown flags 0
+>             device node name /dev/v4l-subdev0
+>         pad0: Sink
+>                 [fmt:UYVY8_2X8/800x600 field:none colorspace:srgb
+> xfer:srgb ycbcr:601 quantization:lim-range]
+>                 <- "ov5640 1-003c":0 []
+>         pad1: Source
+>                 [fmt:UYVY8_2X8/800x600 field:none colorspace:srgb
+> xfer:srgb ycbcr:601 quantization:lim-range]
+>                 -> "csi capture":0 []
+> 
+> - entity 4: csi capture (1 pad, 1 link)
+>             type Node subtype V4L flags 0
+>             device node name /dev/video1
+>         pad0: Sink
+>                 <- "csi":1 []
+> 
+> - entity 10: ov5640 1-003c (1 pad, 1 link)
+>              type V4L2 subdev subtype Sensor flags 0
+>              device node name /dev/v4l-subdev1
+>         pad0: Source
+>                 [fmt:UYVY8_2X8/640x480@1/30 field:none colorspace:srgb
+> xfer:srgb ycbcr:601 quantization:full-range]
+>                 -> "csi":0 []
+> And then:
+> 
+> media-ctl -l "'ov5640 1-003c':0 -> 'csi':0[1]"
+> media-ctl -l "'csi':1 -> 'csi capture':0[1]"
+> media-ctl -V "'ov5640 1-003c':0 [fmt:UYVY2X8/640x480]"
+> media-ctl -V "'csi':0 [fmt:AYUV32/640x480]"
+> 
+> When trying to capture via v42-ctl:
+> # v4l2-ctl --stream-mmap -d /dev/video1
+> [  411.627032] csi: capture format not valid
+> 
+> Or with gstreamer:
+> 
+> # gst-launch-1.0 v4l2src device=/dev/video1 ! fakesink
+> Setting pipeline to PAUSED ...
+> Pipeline is live and does not need PREROLL ...
+> Pipeline is PREROLLED ...
+> Setting pipeline to PLAYING ...
+> New clock: GstSystemClock
+> [  439.933324] csi: pipeline start failed with -19
+> 
+> Any suggestions?
+> 
+> Thanks,
+> 
+> Fabio Estevam
+
 -- 
-2.7.4
+Regards,
 
+Laurent Pinchart
