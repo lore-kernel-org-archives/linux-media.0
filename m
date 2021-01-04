@@ -2,146 +2,189 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-23.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EEBEC433E9
-	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 05:11:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF8D3C433E0
+	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 05:41:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E09FC21D79
-	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 05:11:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 89BF72151B
+	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 05:41:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727590AbhADFLF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 Jan 2021 00:11:05 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:7178 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725830AbhADFLE (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Jan 2021 00:11:04 -0500
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 03 Jan 2021 21:09:55 -0800
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 03 Jan 2021 21:09:54 -0800
-X-QCInternal: smtphost
-Received: from dikshita-linux.qualcomm.com ([10.204.65.237])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 04 Jan 2021 10:39:38 +0530
-Received: by dikshita-linux.qualcomm.com (Postfix, from userid 347544)
-        id C7BB7214AA; Mon,  4 Jan 2021 10:39:38 +0530 (IST)
-From:   Dikshita Agarwal <dikshita@codeaurora.org>
-To:     linux-media@vger.kernel.org, hverkuil-cisco@xs4all.nl,
-        stanimir.varbanov@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        vgarodia@codeaurora.org, Dikshita Agarwal <dikshita@codeaurora.org>
-Subject: [PATCH v5 2/2] venus: venc: Add support for Long Term Reference (LTR) controls
-Date:   Mon,  4 Jan 2021 10:39:31 +0530
-Message-Id: <1609736971-14454-3-git-send-email-dikshita@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1609736971-14454-1-git-send-email-dikshita@codeaurora.org>
-References: <1609736971-14454-1-git-send-email-dikshita@codeaurora.org>
+        id S1727733AbhADFkp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 Jan 2021 00:40:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33836 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727317AbhADFkp (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Jan 2021 00:40:45 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5A1C061795;
+        Sun,  3 Jan 2021 21:40:04 -0800 (PST)
+Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9C3025B4;
+        Mon,  4 Jan 2021 06:40:01 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1609738802;
+        bh=kP98S8lkebWLhqEgkmSsmpb34HDFpNGDG2kO6EP1xeM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ia6LTt6R9IQUyduyqOSmcLHx29uAPk2GtTBdS3kVkeV4ivSUiFBj3vl06ZP2ZH4uX
+         gbcTTo2xO+cnonHTsqUknL9Yncn8TBUkmO1N5KPHtGHHzkaQxJFpFEtYqIQohqJYhW
+         9jkBs7QFP8IsccVfU+MiMia7IVNaEEpY4sI2Lyxw=
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Benoit Parrot <bparrot@ti.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: [PATCH 1/2] dt-bindings: media: Add bindings for OmniVision OV1063x sensors
+Date:   Mon,  4 Jan 2021 07:39:44 +0200
+Message-Id: <20210104053945.12409-2-laurent.pinchart@ideasonboard.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210104053945.12409-1-laurent.pinchart@ideasonboard.com>
+References: <20210104053945.12409-1-laurent.pinchart@ideasonboard.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support for below LTR controls in encoder:
-- V4L2_CID_MPEG_VIDEO_LTR_COUNT
-- V4L2_CID_MPEG_VIDEO_FRAME_LTR_INDEX
-- V4L2_CID_MPEG_VIDEO_USE_LTR_FRAMES
+From: Benoit Parrot <bparrot@ti.com>
 
-Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
+Add device tree bindings for the OmniVision OV10633 and OV10635 camera
+sensors.
+
+Signed-off-by: Benoit Parrot <bparrot@ti.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/platform/qcom/venus/venc_ctrls.c | 49 +++++++++++++++++++++++++-
- 1 file changed, 48 insertions(+), 1 deletion(-)
+ .../bindings/media/i2c/ov1063x.yaml           | 97 +++++++++++++++++++
+ MAINTAINERS                                   |  7 ++
+ 2 files changed, 104 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ov1063x.yaml
 
-diff --git a/drivers/media/platform/qcom/venus/venc_ctrls.c b/drivers/media/platform/qcom/venus/venc_ctrls.c
-index 496ad4d..7d010d8 100644
---- a/drivers/media/platform/qcom/venus/venc_ctrls.c
-+++ b/drivers/media/platform/qcom/venus/venc_ctrls.c
-@@ -20,6 +20,7 @@
- #define INTRA_REFRESH_MBS_MAX	300
- #define AT_SLICE_BOUNDARY	\
- 	V4L2_MPEG_VIDEO_H264_LOOP_FILTER_MODE_DISABLED_AT_SLICE_BOUNDARY
-+#define MAX_LTR_FRAME_COUNT 4
- 
- static int venc_calc_bpframes(u32 gop_size, u32 conseq_b, u32 *bf, u32 *pf)
- {
-@@ -72,6 +73,9 @@ static int venc_op_s_ctrl(struct v4l2_ctrl *ctrl)
- 	struct venc_controls *ctr = &inst->controls.enc;
- 	struct hfi_enable en = { .enable = 1 };
- 	struct hfi_bitrate brate;
-+	struct hfi_ltr_use ltr_use;
-+	struct hfi_ltr_mark ltr_mark;
-+	struct hfi_ltr_mode ltr_mode;
- 	u32 bframes;
- 	u32 ptype;
- 	int ret;
-@@ -259,6 +263,37 @@ static int venc_op_s_ctrl(struct v4l2_ctrl *ctrl)
- 	case V4L2_CID_MPEG_VIDEO_FRAME_SKIP_MODE:
- 		ctr->frame_skip_mode = ctrl->val;
- 		break;
-+	case V4L2_CID_MPEG_VIDEO_LTR_COUNT:
-+		ptype = HFI_PROPERTY_PARAM_VENC_LTRMODE;
-+		ltr_mode.ltr_count = ctrl->val;
-+		ltr_mode.ltr_mode = HFI_LTR_MODE_MANUAL;
-+		ltr_mode.trust_mode = 1;
-+		ret = hfi_session_set_property(inst, ptype, &ltr_mode);
-+		if (ret) {
-+			mutex_unlock(&inst->lock);
-+			return ret;
-+		}
-+		break;
-+	case V4L2_CID_MPEG_VIDEO_FRAME_LTR_INDEX:
-+		ptype = HFI_PROPERTY_CONFIG_VENC_MARKLTRFRAME;
-+		ltr_mark.mark_frame = ctrl->val;
-+		ret = hfi_session_set_property(inst, ptype, &ltr_mark);
-+		if (ret) {
-+			mutex_unlock(&inst->lock);
-+			return ret;
-+		}
-+		break;
-+	case V4L2_CID_MPEG_VIDEO_USE_LTR_FRAMES:
-+		ptype = HFI_PROPERTY_CONFIG_VENC_USELTRFRAME;
-+		ltr_use.ref_ltr = ctrl->val;
-+		ltr_use.use_constrnt = true;
-+		ltr_use.frames = 0;
-+		ret = hfi_session_set_property(inst, ptype, &ltr_use);
-+		if (ret) {
-+			mutex_unlock(&inst->lock);
-+			return ret;
-+		}
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -274,7 +309,7 @@ int venc_ctrl_init(struct venus_inst *inst)
- {
- 	int ret;
- 
--	ret = v4l2_ctrl_handler_init(&inst->ctrl_handler, 50);
-+	ret = v4l2_ctrl_handler_init(&inst->ctrl_handler, 53);
- 	if (ret)
- 		return ret;
- 
-@@ -476,6 +511,18 @@ int venc_ctrl_init(struct venus_inst *inst)
- 			       (1 << V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT)),
- 			       V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_DISABLED);
- 
-+	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
-+			  V4L2_CID_MPEG_VIDEO_USE_LTR_FRAMES, 0,
-+			  (MAX_LTR_FRAME_COUNT - 1), 1, 0);
+diff --git a/Documentation/devicetree/bindings/media/i2c/ov1063x.yaml b/Documentation/devicetree/bindings/media/i2c/ov1063x.yaml
+new file mode 100644
+index 000000000000..b5e08dd2f496
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/ov1063x.yaml
+@@ -0,0 +1,97 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/ov1063x.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
-+			  V4L2_CID_MPEG_VIDEO_LTR_COUNT, 0,
-+			  MAX_LTR_FRAME_COUNT, 1, 0);
++title: OmniVision OV10633/OV1035 Camera Sensor
 +
-+	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
-+			  V4L2_CID_MPEG_VIDEO_FRAME_LTR_INDEX, 0,
-+			  (MAX_LTR_FRAME_COUNT - 1), 1, 0);
++maintainers:
++  - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 +
- 	ret = inst->ctrl_handler.error;
- 	if (ret)
- 		goto err;
++description: |-
++  The OmniVision OV1063x is a 720p camera sensor which supports resolutions up
++  to 1280x800 and 8- and 10-bit YUV output formats.
++
++properties:
++  compatible:
++    enum:
++      - ovti,ov10633
++      - ovti,ov10635
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  clocks-names:
++    const: xvclk
++
++  reset-gpios:
++    maxItems: 1
++    description:
++      Specifier for the GPIO connected to the RESETB pin.
++
++  powerdown-gpios:
++    maxItems: 1
++    description:
++      Specifier for the GPIO connected to the PWDN pin.
++
++  port:
++    $ref: /schemas/graph.yaml#/properties/port
++    additionalProperties: false
++
++    properties:
++      endpoint:
++        $ref: ../video-interfaces.yaml#
++        unevaluatedProperties: false
++
++        properties:
++          hsync-active: true
++          vsync-active: true
++          pclk-sample: true
++          bus-width:
++            enum: [ 8, 10 ]
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clocks-names
++  - port
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    i2c {
++        clock-frequency = <400000>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        camera@37 {
++            compatible = "ovti,ov10633";
++            reg = <0x37>;
++
++            clocks = <&fixed_clock>;
++            clocks-names = "xvclk";
++
++            reset-gpios = <&gpio4 17 GPIO_ACTIVE_HIGH>;
++            powerdown-gpios = <&gpio5 11 GPIO_ACTIVE_HIGH>;
++
++            port {
++                camera1: endpoint {
++                     remote-endpoint = <&vin1a_ep>;
++                     hsync-active = <1>;
++                     vsync-active = <1>;
++                     pclk-sample = <0>;
++                     bus-width = <8>;
++                };
++            };
++        };
++    };
++
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 281de213ef47..9dc3a7d75460 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12867,6 +12867,13 @@ M:	Harald Welte <laforge@gnumonks.org>
+ S:	Maintained
+ F:	drivers/char/pcmcia/cm4040_cs.*
+ 
++OMNIVISION OV10633 SENSOR DRIVER
++M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++T:	git git://linuxtv.org/media_tree.git
++F:	Documentation/devicetree/bindings/media/i2c/ov1063x.yaml
++
+ OMNIVISION OV13858 SENSOR DRIVER
+ M:	Sakari Ailus <sakari.ailus@linux.intel.com>
+ L:	linux-media@vger.kernel.org
 -- 
-2.7.4
+Regards,
+
+Laurent Pinchart
 
