@@ -2,101 +2,90 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6879DC433E0
-	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 23:16:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0607C433DB
+	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 23:18:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 25A342253A
-	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 23:16:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A81C522473
+	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 23:18:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727394AbhADXQu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 Jan 2021 18:16:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56416 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727379AbhADXQu (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Jan 2021 18:16:50 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB812C061795
-        for <linux-media@vger.kernel.org>; Mon,  4 Jan 2021 15:16:09 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id y19so68205177lfa.13
-        for <linux-media@vger.kernel.org>; Mon, 04 Jan 2021 15:16:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=70qboDYiqMfhk39mVT02XFhsqh0dkF0ZUdwKovtXAuw=;
-        b=UxIQlBL1c1QKWojy4wGDvvWbDohos1p7AC4PYyH0WAQgR8JWeW8mCbEhfiI9Tw41Dq
-         4tGhrgyjVgHEBEmXMiYhnIxPk+0CRntFvXC0avfdVVH5B07F+N/00PExNZAkh4DM5ayu
-         v9mxrXY3bS702898xWFhoR5S4jYpEl454Ye4r+O1F79WxEhkS5O3fIGGnaoNjbK7j3EB
-         l3LFO1vd1S924DFmMZ0wZ4Qo8q1tfsrs4aA+Ll8S7ziUMgXeUgj+/1esWoP484S4t/g1
-         N/XMWpifz1Ok8QAI+kIihC0h2ply+7yNOBsFQUY4Mv7cdmQrZNPsy4Gs0QXNsmoyieoy
-         SpDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=70qboDYiqMfhk39mVT02XFhsqh0dkF0ZUdwKovtXAuw=;
-        b=ZTjO2gCNd29ght1ddBBEiYjVDGyQ0ozhLwDfJMdXRQSmVS8d2TU1WZQKy7X941G0L3
-         Q45iXII5ltiGkTc43+91zudlLSL/xg5p1Shor19Hq8uoh0fADlMTLJ6otwe4Wxm9MrSe
-         /QQfnRIayq2OCRmGwfFA8GrD9s82rY83V3R7A6Go1gLGIe4dTJi5iFW5Nc153aU6Lykd
-         +5hOL28DZXqW3N+2d77BJutWBF9xw0Hy3W5FwcKWQX02SO5J6A3ueCzE64RR+JlCZYOZ
-         gc2l7rrtRe7upDRETSmu5fibcwWRyJsv5qpiWFhfGIxtLZC3urX5j/dbfUoxrRCPOnfp
-         94gA==
-X-Gm-Message-State: AOAM532Ac7QxFb3f8YR3E3r3ZnFNL0S1TqaOy8+JG/jc8ZC66IHRNHdG
-        Ezsr73Lb0gp0HgXpBKDpz7CNtGQE+NtyDXD/c80=
-X-Google-Smtp-Source: ABdhPJzvEtszRG/3HsrgcDH8n7v2YFMw13OQU6Az2wEdCDf152/kekwQGRyg+aGdnXmOpF+btc2W8eVFNhq4p0ljpAQ=
-X-Received: by 2002:a2e:b556:: with SMTP id a22mr35014636ljn.264.1609802168358;
- Mon, 04 Jan 2021 15:16:08 -0800 (PST)
-MIME-Version: 1.0
-References: <CAOMZO5DTW_YgVgyXqtccxQUm0A2kLLVcw_EhfsN0kZ9s2hgt7Q@mail.gmail.com>
- <3c42e0cc-0e47-9e8e-993f-f67e9d2924ca@armadeus.com>
-In-Reply-To: <3c42e0cc-0e47-9e8e-993f-f67e9d2924ca@armadeus.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Mon, 4 Jan 2021 20:15:56 -0300
-Message-ID: <CAOMZO5AU2x_a0=UgJM598mAojY-QmgHW61KAo-ePBn08zNFGOA@mail.gmail.com>
+        id S1727148AbhADXR5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 Jan 2021 18:17:57 -0500
+Received: from 4.mo5.mail-out.ovh.net ([178.33.111.247]:40035 "EHLO
+        4.mo5.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727136AbhADXR5 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Jan 2021 18:17:57 -0500
+X-Greylist: delayed 16800 seconds by postgrey-1.27 at vger.kernel.org; Mon, 04 Jan 2021 18:17:56 EST
+Received: from player795.ha.ovh.net (unknown [10.108.4.183])
+        by mo5.mail-out.ovh.net (Postfix) with ESMTP id 284972A6FA2
+        for <linux-media@vger.kernel.org>; Mon,  4 Jan 2021 18:19:16 +0100 (CET)
+Received: from armadeus.com (lfbn-str-1-77-132.w92-140.abo.wanadoo.fr [92.140.204.132])
+        (Authenticated sender: sebastien.szymanski@armadeus.com)
+        by player795.ha.ovh.net (Postfix) with ESMTPSA id 76C6C197EDB40;
+        Mon,  4 Jan 2021 17:19:08 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-103G0050978a4d9-5f78-4547-b4df-003e9e764a6f,
+                    1A05C619342D3EFD487FC4258F6FF4F8486F3843) smtp.auth=sebastien.szymanski@armadeus.com
+X-OVh-ClientIp: 92.140.204.132
 Subject: Re: imx6ull capture from OV5640
-To:     =?UTF-8?Q?S=C3=A9bastien_Szymanski?= 
-        <sebastien.szymanski@armadeus.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+To:     Fabio Estevam <festevam@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Rui Miguel Silva <rmfrfs@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        linux-media <linux-media@vger.kernel.org>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     linux-media <linux-media@vger.kernel.org>,
         Steve Longerbeam <slongerbeam@gmail.com>,
         Ezequiel Garcia <ezequiel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+References: <CAOMZO5DTW_YgVgyXqtccxQUm0A2kLLVcw_EhfsN0kZ9s2hgt7Q@mail.gmail.com>
+From:   =?UTF-8?Q?S=c3=a9bastien_Szymanski?= 
+        <sebastien.szymanski@armadeus.com>
+Message-ID: <3c42e0cc-0e47-9e8e-993f-f67e9d2924ca@armadeus.com>
+Date:   Mon, 4 Jan 2021 18:19:22 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
+MIME-Version: 1.0
+In-Reply-To: <CAOMZO5DTW_YgVgyXqtccxQUm0A2kLLVcw_EhfsN0kZ9s2hgt7Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 5626121835884139584
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedujedrvdeffedguddtvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefuvfhfhffkffgfgggjtgfgsehtkeertddtfeejnecuhfhrohhmpefurogsrghsthhivghnpgfuiiihmhgrnhhskhhiuceoshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmqeenucggtffrrghtthgvrhhnpeeiieekfedtfefgteffueekveekhfetfeevjeefgfelgfevgfefgfehveefudehveenucffohhmrghinhepphgrshhtvggsihhnrdgtohhmnecukfhppedtrddtrddtrddtpdelvddrudegtddrvddtgedrudefvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphdqohhuthdphhgvlhhopehplhgrhigvrhejleehrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmpdhrtghpthhtoheplhhinhhugidqmhgvughirgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi S=C3=A9bastien,
+Hi Fabio,
 
-On Mon, Jan 4, 2021 at 2:19 PM S=C3=A9bastien Szymanski
-<sebastien.szymanski@armadeus.com> wrote:
+On 12/30/20 6:45 PM, Fabio Estevam wrote:
+> Hi,
+> 
+> I am trying to capture from a parallel OV5640 on a imx6ull-evk board.
+> 
+> Here are the device tree changes:
+> https://pastebin.com/raw/PZpJjagJ
 
-> Don't you need
->
-> bus-type =3D <5>; // V4L2_FWNODE_BUS_TYPE_PARALLEL
->
-> in the parallel_from_ov5640 endpoint node ?
+Don't you need
 
-Thanks for your suggestion, but I still get the warning and csi does not pr=
-obe.
+bus-type = <5>; // V4L2_FWNODE_BUS_TYPE_PARALLEL
 
-The modified dts is:
-https://pastebin.com/raw/xENc5M5q
+in the parallel_from_ov5640 endpoint node ?
 
-Could you please share your imx6ul board dts file that you used to
-test camera capture?
+Regards,
 
-Were you able to capture via Gstreamer? If so, please also share the
-media-ctl and gst pipelines that you used.
+> 
+> Any suggestions?
+> 
+> Thanks,
+> 
+> Fabio Estevam
+> 
 
-Thanks,
 
-Fabio Estevam
+-- 
+Sébastien Szymanski, Armadeus Systems
+Software engineer
