@@ -2,75 +2,100 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33CD2C433E9
-	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 12:48:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CE2DC433DB
+	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 12:58:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1762F221E5
-	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 12:48:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CB9FF221F9
+	for <linux-media@archiver.kernel.org>; Mon,  4 Jan 2021 12:58:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726642AbhADMst (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 Jan 2021 07:48:49 -0500
-Received: from mga03.intel.com ([134.134.136.65]:51236 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726246AbhADMst (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 4 Jan 2021 07:48:49 -0500
-IronPort-SDR: +i6q2zT7QfwlJa8H/OYObz2J9u56ljd/AZ6xZzjkVXE6J705QZLMhIrSiYaxpxx0OFn2xPMzky
- fgzduFETtZgg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9853"; a="177048168"
-X-IronPort-AV: E=Sophos;i="5.78,474,1599548400"; 
-   d="scan'208";a="177048168"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2021 04:47:03 -0800
-IronPort-SDR: MCkc6M0T3fftpo9h7mmSQGRSYf6x8gO+7ru9BZoUohrL5FPgGF+yufjPUxlo7oYj2JUNztVxSH
- R7notaB45t7w==
-X-IronPort-AV: E=Sophos;i="5.78,474,1599548400"; 
-   d="scan'208";a="378408865"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2021 04:47:02 -0800
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 32152206FD; Mon,  4 Jan 2021 14:47:00 +0200 (EET)
-Date:   Mon, 4 Jan 2021 14:47:00 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, Benoit Parrot <bparrot@ti.com>
-Subject: Re: [PATCH 2/2] media: i2c: Add OV1063x sensor driver
-Message-ID: <20210104124700.GL11878@paasikivi.fi.intel.com>
-References: <20210104053945.12409-1-laurent.pinchart@ideasonboard.com>
- <20210104053945.12409-3-laurent.pinchart@ideasonboard.com>
+        id S1726693AbhADM6T (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 Jan 2021 07:58:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45478 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726502AbhADM6T (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Jan 2021 07:58:19 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2DCCC061574;
+        Mon,  4 Jan 2021 04:57:38 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id d26so32018389wrb.12;
+        Mon, 04 Jan 2021 04:57:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=ggZkcYC9h5eVQbnMgWr/AEjs49D98jiYmnWX9w592LA=;
+        b=RthGD3EnZ0QY82azYylIrogBzOuAAMaMnijfhP1X2DdqXrhTEPiIcU5VrcujCuQL2q
+         DCZqVEgCC54uR3LGvnOpFgEiwvcn11L2tFFx2I0GPDi2TUH0RMMeAdxeHcu6zwt8JGnS
+         0YcdUq/y/Gp9AaGaNkMI755ZU5ZrLg54gSfaa8rzEaurBFDeuABmcUtMxq/Cq5cZXwd6
+         1LDeB9CrRVwxUsgOXI5/y2T89JyLiyz7yvAdDAoLz4eQ/uAnZJgCnKm8G/Zf34K5mXPH
+         6De2HngJjL8JhC2ku8v8oSb5pUQCfAcRJiWOcweeWqk9ueua30ZTSHvuordU73FUkKTE
+         tu7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=ggZkcYC9h5eVQbnMgWr/AEjs49D98jiYmnWX9w592LA=;
+        b=Naqk4RitQDKG+S+EIsuL9m43TcKQv1j6JlsAbvHt9gC1PhltPs9f+OzCFGIe8AFI1V
+         2SucSP2NOYxo3KWAjDIWLs0E1ylNm2/3s8FxuxcDVw5Gu/uGkmi3aLXSDZ1eIrQfl/tU
+         xE26lRoGSggqDg3wuS9ay4Bl9LHcyGQz8fEOLVti+1rdfL7pEPMfTftVtasIjz+dWNgs
+         5qIX6PFVv+PW7BHtYSxboJlh+nohqPgVJZLN2Quv+dr4kppEyZjKLOUPpVoFj0fNzfPG
+         pO+yTH0SZ7ztsGITqR0Okkab6oZaCwyb9UtWg2Qfv9uPDl7BqP143pGoSupd3Vb8Y843
+         f0Kw==
+X-Gm-Message-State: AOAM5335z8iIus/83o8+i9tDqjj/bR09l3n+wl4fGG2Ma9spUwqknlb5
+        JmH9TBAZa+5Xk1hkdvfrBhw=
+X-Google-Smtp-Source: ABdhPJybuSzgoyfe7x0voEhgCYurOZwxvWtHX/XkD78yXa/Fkmh73V1dqnivY+FCfRVigb88QV50iA==
+X-Received: by 2002:a05:6000:144f:: with SMTP id v15mr65709613wrx.138.1609765056599;
+        Mon, 04 Jan 2021 04:57:36 -0800 (PST)
+Received: from [192.168.1.211] ([2.29.208.120])
+        by smtp.gmail.com with ESMTPSA id i16sm87087466wrx.89.2021.01.04.04.57.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Jan 2021 04:57:36 -0800 (PST)
+Subject: Re: [PATCH v4 13/15] acpi: Add acpi_dev_get_next_match_dev() and
+ helper macro
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-media@vger.kernel.org, devel@acpica.org,
+        gregkh@linuxfoundation.org, rjw@rjwysocki.net,
+        sergey.senozhatsky@gmail.com, mchehab@kernel.org, lenb@kernel.org,
+        yong.zhi@intel.com, sakari.ailus@linux.intel.com,
+        bingbu.cao@intel.com, tian.shu.qiu@intel.com,
+        robert.moore@intel.com, erik.kaneda@intel.com, pmladek@suse.com,
+        rostedt@goodmis.org, linux@rasmusvillemoes.dk,
+        laurent.pinchart+renesas@ideasonboard.com,
+        jacopo+renesas@jmondi.org, kieran.bingham+renesas@ideasonboard.com,
+        hverkuil-cisco@xs4all.nl, m.felsch@pengutronix.de,
+        niklas.soderlund+renesas@ragnatech.se, slongerbeam@gmail.com,
+        heikki.krogerus@linux.intel.com, linus.walleij@linaro.org
+References: <20210103231235.792999-1-djrscally@gmail.com>
+ <20210103231235.792999-14-djrscally@gmail.com>
+ <20210104124228.GU4077@smile.fi.intel.com>
+From:   Daniel Scally <djrscally@gmail.com>
+Message-ID: <589d7078-60e6-ae2b-dbb2-bbe5b8ef7775@gmail.com>
+Date:   Mon, 4 Jan 2021 12:57:34 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210104053945.12409-3-laurent.pinchart@ideasonboard.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210104124228.GU4077@smile.fi.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent,
-
-On Mon, Jan 04, 2021 at 07:39:45AM +0200, Laurent Pinchart wrote:
-> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-> index 878f66ef2719..84a97989775e 100644
-> --- a/drivers/media/i2c/Kconfig
-> +++ b/drivers/media/i2c/Kconfig
-> @@ -1050,6 +1050,18 @@ config VIDEO_OV9650
->  	  This is a V4L2 sensor driver for the Omnivision
->  	  OV9650 and OV9652 camera sensors.
->  
-> +config VIDEO_OV10633
-> +	tristate "OmniVision OV10633/OV10635 sensor support"
-> +	depends on I2C && VIDEO_V4L2
-> +	depends on GPIOLIB && OF
-> +	select MEDIA_CONTROLLER
-> +	select REGMAP_I2C
-
-Should this be SCCB instead?
-
-Likewise for the driver.
-
--- 
-Sakari Ailus
+On 04/01/2021 12:42, Andy Shevchenko wrote:
+> On Sun, Jan 03, 2021 at 11:12:33PM +0000, Daniel Scally wrote:
+>> To ensure we handle situations in which multiple sensors of the same
+>> model (and therefore _HID) are present in a system, we need to be able
+>> to iterate over devices matching a known _HID but unknown _UID and _HRV
+>>  - add acpi_dev_get_next_match_dev() to accommodate that possibility and
+>> change acpi_dev_get_first_match_dev() to simply call the new function
+>> with a NULL starting point. Add an iterator macro for convenience.
+> I guess we need Rafael's blessing on this.
+For this one yes
