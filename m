@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D46CAC433E0
-	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 15:30:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BFE34C43381
+	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 15:31:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AB96E22AAA
-	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 15:30:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9396222B4B
+	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 15:31:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727328AbhAEPaz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Jan 2021 10:30:55 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:37698 "EHLO
+        id S1727334AbhAEPbC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Jan 2021 10:31:02 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:38064 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725835AbhAEPay (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jan 2021 10:30:54 -0500
+        with ESMTP id S1727414AbhAEPbC (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jan 2021 10:31:02 -0500
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id AC8DC8A0;
-        Tue,  5 Jan 2021 16:29:39 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 852B3878;
+        Tue,  5 Jan 2021 16:29:38 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1609860580;
-        bh=6u38c5JUaWykWN8WCpEgLQKRnRCVG8mlyhovyReyzuo=;
+        s=mail; t=1609860578;
+        bh=sjUC8h2lBeGDVLvxPKTR/OWGPMim+tAWpsptZOpC2NA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PQi0orLAn253msv/r81QqAfLDElps9xHctd3HLP6FHWYU2Z81eTMiFoDoAYSQozuK
-         Z9bvudNELnlMWFbqa1M3K6TgBD79wRSyrjVA33IpT8AvuJK9Khwl8FO8WghYZncClD
-         Yy4d2mQ4i5HzVrG9MPDF6K/8yzhGb8/jxov6QhjA=
+        b=DGlkMjLpEAt3zHeHBrtFq6ga/XMmemb6rz7TJzZSbe9Zn5xdcQO26DD9MIIsXt9m2
+         PF3mB+sGQ6XgAQXlbQ2VFLqlU7rRBbmdIThcgtWdwj+/rlgNrj0fKO5ppv4kWRQxKR
+         4JOdnCbowQOyhGMeBz2AVTxtCma60F9CAEV6hJpw=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
         Steve Longerbeam <slongerbeam@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH 05/75] media: imx: Compile imx6-media-objs only for CONFIG_VIDEO_IMX_CSI
-Date:   Tue,  5 Jan 2021 17:27:42 +0200
-Message-Id: <20210105152852.5733-6-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH 03/75] media: imx: Drop manual dependency on VIDEO_IMX_MEDIA
+Date:   Tue,  5 Jan 2021 17:27:40 +0200
+Message-Id: <20210105152852.5733-4-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210105152852.5733-1-laurent.pinchart@ideasonboard.com>
 References: <20210105152852.5733-1-laurent.pinchart@ideasonboard.com>
@@ -47,40 +47,34 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-imx6-media-objs contains a set of objects that are specific to the i.MX6
-IPU-based media subsystem. They're not needed for the i.MX7 CSI. Only
-compile them if CONFIG_VIDEO_IMX_CSI is selected.
+The VIDEO_IMX_CSI and VIDEO_IMX7_CSI symbols are defined in a section
+guarded by VIDEO_IMX_MEDIA. There's no need to duplicate that with a
+"depends on" statement. Drop it.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/staging/media/imx/Makefile | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/staging/media/imx/Kconfig | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/staging/media/imx/Makefile b/drivers/staging/media/imx/Makefile
-index 9bd9e873ba7c..6ac33275cc97 100644
---- a/drivers/staging/media/imx/Makefile
-+++ b/drivers/staging/media/imx/Makefile
-@@ -1,16 +1,16 @@
- # SPDX-License-Identifier: GPL-2.0
-+imx-media-common-objs := imx-media-capture.o imx-media-dev-common.o \
-+	imx-media-of.o imx-media-utils.o
-+
- imx6-media-objs := imx-media-dev.o imx-media-internal-sd.o \
- 	imx-ic-common.o imx-ic-prp.o imx-ic-prpencvf.o imx-media-vdic.o \
- 	imx-media-csc-scaler.o
+diff --git a/drivers/staging/media/imx/Kconfig b/drivers/staging/media/imx/Kconfig
+index 76a9111c189c..ce270627a7c4 100644
+--- a/drivers/staging/media/imx/Kconfig
++++ b/drivers/staging/media/imx/Kconfig
+@@ -19,14 +19,12 @@ menu "i.MX5/6/7 Media Sub devices"
  
--imx-media-common-objs := imx-media-capture.o imx-media-dev-common.o \
--	imx-media-of.o imx-media-utils.o
--
- imx6-media-csi-objs := imx-media-csi.o imx-media-fim.o
+ config VIDEO_IMX_CSI
+ 	tristate "i.MX5/6 Camera Sensor Interface driver"
+-	depends on VIDEO_IMX_MEDIA
+ 	default y
+ 	help
+ 	  A video4linux camera sensor interface driver for i.MX5/6.
  
--obj-$(CONFIG_VIDEO_IMX_MEDIA) += imx6-media.o
- obj-$(CONFIG_VIDEO_IMX_MEDIA) += imx-media-common.o
- 
-+obj-$(CONFIG_VIDEO_IMX_CSI) += imx6-media.o
- obj-$(CONFIG_VIDEO_IMX_CSI) += imx6-media-csi.o
- obj-$(CONFIG_VIDEO_IMX_CSI) += imx6-mipi-csi2.o
- 
+ config VIDEO_IMX7_CSI
+ 	tristate "i.MX6UL/L / i.MX7 Camera Sensor Interface driver"
+-	depends on VIDEO_IMX_MEDIA
+ 	default y
+ 	help
+ 	  Enable support for video4linux camera sensor interface driver for
 -- 
 Regards,
 
