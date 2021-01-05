@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDD43C433E0
-	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 15:31:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A60EC433E0
+	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 15:31:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 99C8822B45
-	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 15:31:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4B8CA22B45
+	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 15:31:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727989AbhAEPbf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Jan 2021 10:31:35 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:38064 "EHLO
+        id S1726313AbhAEPbp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Jan 2021 10:31:45 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:37698 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726020AbhAEPbe (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jan 2021 10:31:34 -0500
+        with ESMTP id S1726177AbhAEPbp (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jan 2021 10:31:45 -0500
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 061C38B5;
-        Tue,  5 Jan 2021 16:29:41 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 98FDC8B6;
+        Tue,  5 Jan 2021 16:29:42 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1609860582;
-        bh=1ImEPN+/+vYwJDVp8ecM7B9arGIIFvPXvAUQ3fmAjmM=;
+        s=mail; t=1609860583;
+        bh=9eoD/6BxcGafDdXR7m5ZiNw1IG7lkLOGveWIlaOsrXI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P68L0RypVpE1fHq72OpbWTN4VneX1DHZo8X3Ryd7Uo99svp7lfijq0iyx9y0ELkBV
-         gqIwXB46tkhCkR4dDGqTs3kFKtFHyit9bXce2iZUjbl0PByBcz0fylxn2hOunNH/rL
-         OnJbs9phBAT1b7zDHxn4vqGbLqQtq8sPkCP17Iyg=
+        b=Bg7/SjPhF86gvXgyPbZmMrqw/eX0BLgigfJI8b+jKlu3SpmWcjR4Asy1GeCCqsnSh
+         4CTvuyhjgGoWfe7pA4WuPufRaEA1dopGD/jMsL+ljBYHqk3eGi4uYlhGmMTG9Si3+0
+         Rz/CsCg0P06FNzuiyit+G3E30YTYlv1ys4A72wjU=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
         Steve Longerbeam <slongerbeam@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH 09/75] media: imx: capture: Use device name to construct bus_info
-Date:   Tue,  5 Jan 2021 17:27:46 +0200
-Message-Id: <20210105152852.5733-10-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH 10/75] media: imx: capture: Remove forward declaration of capture_qops
+Date:   Tue,  5 Jan 2021 17:27:47 +0200
+Message-Id: <20210105152852.5733-11-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210105152852.5733-1-laurent.pinchart@ideasonboard.com>
 References: <20210105152852.5733-1-laurent.pinchart@ideasonboard.com>
@@ -47,28 +47,26 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The v4l2_capability bus_info field is meant to locate the device in the
-system. Using a subdev name isn't a good fit, the device name is a much
-better option. Use it.
+The forward declaration of capture_qops isn't needed, remove it.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/staging/media/imx/imx-media-capture.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/staging/media/imx/imx-media-capture.c | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/drivers/staging/media/imx/imx-media-capture.c b/drivers/staging/media/imx/imx-media-capture.c
-index 21f01ec56bd5..8efe3d753967 100644
+index 8efe3d753967..0b1dbff198a2 100644
 --- a/drivers/staging/media/imx/imx-media-capture.c
 +++ b/drivers/staging/media/imx/imx-media-capture.c
-@@ -74,7 +74,7 @@ static int vidioc_querycap(struct file *file, void *fh,
- 	strscpy(cap->driver, IMX_CAPTURE_NAME, sizeof(cap->driver));
- 	strscpy(cap->card, IMX_CAPTURE_NAME, sizeof(cap->card));
- 	snprintf(cap->bus_info, sizeof(cap->bus_info),
--		 "platform:%s", priv->src_sd->name);
-+		 "platform:%s", dev_name(priv->dev));
+@@ -60,8 +60,6 @@ struct capture_priv {
+ /* In bytes, per queue */
+ #define VID_MEM_LIMIT	SZ_64M
  
- 	return 0;
- }
+-static const struct vb2_ops capture_qops;
+-
+ /*
+  * Video ioctls follow
+  */
 -- 
 Regards,
 
