@@ -2,147 +2,195 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4C46C433E6
-	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 17:21:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0971C4332B
+	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 17:41:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A15DA22D01
-	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 17:21:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7B03122D50
+	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 17:41:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730520AbhAERVI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Jan 2021 12:21:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55628 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728044AbhAERVI (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jan 2021 12:21:08 -0500
-Received: from hillosipuli.retiisi.eu (unknown [IPv6:2a01:4f9:c010:4572::e8:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C54C061574
-        for <linux-media@vger.kernel.org>; Tue,  5 Jan 2021 09:19:22 -0800 (PST)
-Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id B7DB3634C87;
-        Tue,  5 Jan 2021 19:19:06 +0200 (EET)
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH v2 1/1] ccs: Make (non-)use of uninitialised variables more robust
-Date:   Tue,  5 Jan 2021 19:12:28 +0200
-Message-Id: <20210105171228.5011-1-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.29.2
+        id S1730604AbhAERk5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Jan 2021 12:40:57 -0500
+Received: from mail-io1-f47.google.com ([209.85.166.47]:38559 "EHLO
+        mail-io1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729802AbhAERk4 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jan 2021 12:40:56 -0500
+Received: by mail-io1-f47.google.com with SMTP id y5so121844iow.5;
+        Tue, 05 Jan 2021 09:40:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8QCUqXr2bzGc5ddkxZAj8Vxc5oTvsGwo9juSuaK/DNc=;
+        b=dpiv0CpJakEgMYIkHp0lhaNf0d461HGJWH+aCceAtiK06rRDsTcTMmlKY49hvYeBLh
+         7Ty71HBKHYeiO7tR4vDt/nbyfS3So6W770LrQdh92+7tJttY7v6bNEPz9K6DyPt4FMLd
+         PIt1LLKtkEtRi0UIF/SrTqyc8+lLr/NyjHzBXZIkwKKYOWTnsle1FsD/3tdAJzYQHLJ8
+         5Wa4nrxHRmF4wbzaj7iiS8vhXcoFeE1qz694yyOGkLCUx5hT7HoR59vm5/MhqoPl6WyI
+         nwHivuhmthkX8gk5c3+LEXbUBtsKZCYBaNRO66SiQA1AkHaiy4ksJgdTlgLtAmm1z8Vq
+         VM5g==
+X-Gm-Message-State: AOAM5321qcVRq9N6s7VVvE3mTC6HsP7wLE0n3Y4SZ+nWozJ+Mbu4gJm/
+        A2rP/pRkkVNdQnfCttBO7A==
+X-Google-Smtp-Source: ABdhPJxCW42aLPbGC5oVtd7TRg3rkrFk+Qrm1SC6TjLARKSfiB9JNiyQ7YL2gLDjCHBjUScpozxZgA==
+X-Received: by 2002:a02:7692:: with SMTP id z140mr666018jab.21.1609868414264;
+        Tue, 05 Jan 2021 09:40:14 -0800 (PST)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id y15sm121208ili.65.2021.01.05.09.40.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jan 2021 09:40:13 -0800 (PST)
+Received: (nullmailer pid 426116 invoked by uid 1000);
+        Tue, 05 Jan 2021 17:40:08 -0000
+Date:   Tue, 5 Jan 2021 10:40:08 -0700
+From:   Rob Herring <robh@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Add missing array size constraints
+Message-ID: <20210105174008.GB1875909@robh.at.kernel.org>
+References: <20210104230253.2805217-1-robh@kernel.org>
+ <X/RjziK30y56uZUj@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <X/RjziK30y56uZUj@kroah.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-GCC with W=2 level of kernel compiler warnings warns about the use of
-uninitialised variables in a few locations. While these uninitialised
-variables were not used in reality, this still produced compiler warnings.
+On Tue, Jan 05, 2021 at 02:04:14PM +0100, Greg Kroah-Hartman wrote:
+> On Mon, Jan 04, 2021 at 04:02:53PM -0700, Rob Herring wrote:
+> > DT properties which can have multiple entries need to specify what the
+> > entries are and define how many entries there can be. In the case of
+> > only a single entry, just 'maxItems: 1' is sufficient.
+> > 
+> > Add the missing entry constraints. These were found with a modified
+> > meta-schema. Unfortunately, there are a few cases where the size
+> > constraints are not defined such as common bindings, so the meta-schema
+> > can't be part of the normal checks.
+> > 
+> > Cc: Jens Axboe <axboe@kernel.dk>
+> > Cc: Stephen Boyd <sboyd@kernel.org>
+> > Cc: Thierry Reding <thierry.reding@gmail.com>
+> > Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
+> > Cc: Chanwoo Choi <cw00.choi@samsung.com>
+> > Cc: Linus Walleij <linus.walleij@linaro.org>
+> > Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> > Cc: Jonathan Cameron <jic23@kernel.org>
+> > Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Marc Zyngier <maz@kernel.org>
+> > Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> > Cc: Chen-Yu Tsai <wens@csie.org>
+> > Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: Jakub Kicinski <kuba@kernel.org>
+> > Cc: Sebastian Reichel <sre@kernel.org>
+> > Cc: Ohad Ben-Cohen <ohad@wizery.com>
+> > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> 
+> <snip>
+> 
+> > diff --git a/Documentation/devicetree/bindings/usb/generic-ehci.yaml b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> > index 247ef00381ea..f76b25f7fc7a 100644
+> > --- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> > @@ -83,6 +83,7 @@ properties:
+> >        Phandle of a companion.
+> >  
+> >    phys:
+> > +    maxItems: 1
+> >      description: PHY specifier for the USB PHY
+> >  
+> >    phy-names:
+> > diff --git a/Documentation/devicetree/bindings/usb/generic-ohci.yaml b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> > index 2178bcc401bc..8e2bd61f2075 100644
+> > --- a/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> > @@ -71,6 +71,7 @@ properties:
+> >        Overrides the detected port count
+> >  
+> >    phys:
+> > +    maxItems: 1
+> >      description: PHY specifier for the USB PHY
+> >  
+> >    phy-names:
+> > diff --git a/Documentation/devicetree/bindings/usb/ingenic,musb.yaml b/Documentation/devicetree/bindings/usb/ingenic,musb.yaml
+> > index 678396eeeb78..f506225a4d57 100644
+> > --- a/Documentation/devicetree/bindings/usb/ingenic,musb.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/ingenic,musb.yaml
+> > @@ -40,7 +40,7 @@ properties:
+> >        - const: mc
+> >  
+> >    phys:
+> > -    description: PHY specifier for the USB PHY
+> > +    maxItems: 1
+> >  
+> >    usb-role-switch:
+> >      type: boolean
+> 
+> Any reason you dropped the description for this entry, but not the other
+> ones above?
 
-Address this by assigning the variables to NULL and checking for NULL in
-places it is not expected, returning -EPROTO in that case. This provides
-at least some sanity checking at runtime as the compiler appears unable to
-do that at compile time.
+No, I should have dropped those too. I dropped cases of genericish 
+descriptions on common properties. There's nothing specific to this 
+binding here really.
 
-Reported-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
-since v1:
+> 
+> > diff --git a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> > index 388245b91a55..adce36e48bc9 100644
+> > --- a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> > @@ -15,13 +15,14 @@ properties:
+> >        - const: ti,j721e-usb
+> >  
+> >    reg:
+> > -    description: module registers
+> > +    maxItems: 1
+> >  
+> >    power-domains:
+> >      description:
+> >        PM domain provider node and an args specifier containing
+> >        the USB device id value. See,
+> >        Documentation/devicetree/bindings/soc/ti/sci-pm-domain.txt
+> > +    maxItems: 1
+> >  
+> >    clocks:
+> >      description: Clock phandles to usb2_refclk and lpm_clk
+> 
+> Same here, why remove the description?
 
-- Use -EIO instead as -EPROTO is already in use.
+Really, the question is why keep 'description' on power-domains. Perhaps 
+there's a little value in the reference to sci-pm-domain.txt, so I left 
+it.
 
- drivers/media/i2c/ccs/ccs-data.c | 24 ++++++++++++++++++++----
- 1 file changed, 20 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/media/i2c/ccs/ccs-data.c b/drivers/media/i2c/ccs/ccs-data.c
-index 59338a6704af..8444be7247b2 100644
---- a/drivers/media/i2c/ccs/ccs-data.c
-+++ b/drivers/media/i2c/ccs/ccs-data.c
-@@ -214,7 +214,7 @@ static int ccs_data_parse_regs(struct bin_container *bin,
- 			       size_t *__num_regs, const void *payload,
- 			       const void *endp, struct device *dev)
- {
--	struct ccs_reg *regs_base, *regs;
-+	struct ccs_reg *regs_base = NULL, *regs = NULL;
- 	size_t num_regs = 0;
- 	u16 addr = 0;
- 
-@@ -285,6 +285,9 @@ static int ccs_data_parse_regs(struct bin_container *bin,
- 		if (!bin->base) {
- 			bin_reserve(bin, len);
- 		} else if (__regs) {
-+			if (!regs)
-+				return -EIO;
-+
- 			regs->addr = addr;
- 			regs->len = len;
- 			regs->value = bin_alloc(bin, len);
-@@ -305,8 +308,12 @@ static int ccs_data_parse_regs(struct bin_container *bin,
- 	if (__num_regs)
- 		*__num_regs = num_regs;
- 
--	if (bin->base && __regs)
-+	if (bin->base && __regs) {
-+		if (!regs_base)
-+			return -EIO;
-+
- 		*__regs = regs_base;
-+	}
- 
- 	return 0;
- }
-@@ -425,7 +432,7 @@ static int ccs_data_parse_rules(struct bin_container *bin,
- 				size_t *__num_rules, const void *payload,
- 				const void *endp, struct device *dev)
- {
--	struct ccs_rule *rules_base, *rules = NULL, *next_rule;
-+	struct ccs_rule *rules_base = NULL, *rules = NULL, *next_rule = NULL;
- 	size_t num_rules = 0;
- 	const void *__next_rule = payload;
- 	int rval;
-@@ -483,6 +490,9 @@ static int ccs_data_parse_rules(struct bin_container *bin,
- 			} else {
- 				unsigned int i;
- 
-+				if (!next_rule)
-+					return -EIO;
-+
- 				rules = next_rule;
- 				next_rule++;
- 
-@@ -555,6 +565,9 @@ static int ccs_data_parse_rules(struct bin_container *bin,
- 		bin_reserve(bin, sizeof(*rules) * num_rules);
- 		*__num_rules = num_rules;
- 	} else {
-+		if (!rules_base)
-+			return -EIO;
-+
- 		*__rules = rules_base;
- 	}
- 
-@@ -690,7 +703,7 @@ static int ccs_data_parse_pdaf(struct bin_container *bin, struct ccs_pdaf_pix_lo
- 	}
- 
- 	for (i = 0; i < max_block_type_id; i++) {
--		struct ccs_pdaf_pix_loc_pixel_desc_group *pdgroup;
-+		struct ccs_pdaf_pix_loc_pixel_desc_group *pdgroup = NULL;
- 		unsigned int j;
- 
- 		if (!is_contained(__num_pixel_descs, endp))
-@@ -721,6 +734,9 @@ static int ccs_data_parse_pdaf(struct bin_container *bin, struct ccs_pdaf_pix_lo
- 			if (!bin->base)
- 				continue;
- 
-+			if (!pdgroup)
-+				return -EIO;
-+
- 			pdesc = &pdgroup->descs[j];
- 			pdesc->pixel_type = __pixel_desc->pixel_type;
- 			pdesc->small_offset_x = __pixel_desc->small_offset_x;
--- 
-2.29.2
-
+Rob
