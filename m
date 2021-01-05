@@ -2,164 +2,82 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD5F9C433E0
-	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 14:37:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CAA4C433E0
+	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 14:38:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8570D22B49
-	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 14:37:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 13D5B225AC
+	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 14:38:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726864AbhAEOhv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Jan 2021 09:37:51 -0500
-Received: from m43-15.mailgun.net ([69.72.43.15]:47284 "EHLO
-        m43-15.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726618AbhAEOhu (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jan 2021 09:37:50 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1609857445; h=Content-Transfer-Encoding: Content-Type:
- MIME-Version: Message-Id: Date: Subject: Cc: To: From: Sender;
- bh=4DiNJfGzzRCDF2FL02HtG0SOdr7LDb46DzlmbUJfV6s=; b=X45A930qsyotc7/AD+4OMqx7f3foVhfJ7jUfObJQTt8ghcmLls1hQ4Mvgq58UmK+qXqvyUBt
- Aq4WBL9vEYpQD9iXanVarK1oExM2NmjDs7zLV6WSUX54dDTWCV98XCEpQxZZzgsTEPj/Ml7v
- JVDstBAXK/rtN2L16vX18hvQ/M8=
-X-Mailgun-Sending-Ip: 69.72.43.15
-X-Mailgun-Sid: WyI3ZjU0NiIsICJsaW51eC1tZWRpYUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n08.prod.us-west-2.postgun.com with SMTP id
- 5ff47988b73be0303d2da1d0 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 05 Jan 2021 14:36:56
- GMT
-Sender: charante=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id AF37CC433C6; Tue,  5 Jan 2021 14:36:56 +0000 (UTC)
-Received: from charante-linux.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: charante)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id E3526C433CA;
-        Tue,  5 Jan 2021 14:36:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org E3526C433CA
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=charante@codeaurora.org
-From:   Charan Teja Reddy <charante@codeaurora.org>
-To:     sumit.semwal@linaro.org, christian.koenig@amd.com, arnd@arndb.de
-Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        Charan Teja Reddy <charante@codeaurora.org>,
-        "# 5 . 4+" <stable@vger.kernel.org>
-Subject: [PATCH V2] dmabuf: fix use-after-free of dmabuf's file->f_inode
-Date:   Tue,  5 Jan 2021 20:06:39 +0530
-Message-Id: <1609857399-31549-1-git-send-email-charante@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
+        id S1726499AbhAEOi0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Jan 2021 09:38:26 -0500
+Received: from mga01.intel.com ([192.55.52.88]:57659 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725813AbhAEOi0 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 5 Jan 2021 09:38:26 -0500
+IronPort-SDR: ghmvNdBy06irSH4WRRKRKdARjwmcLXbz38TcyvfglAPXacga9zETnXxYSsCtBS87ghbgrCGcUd
+ J0ynkg3eLc9Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9854"; a="195646289"
+X-IronPort-AV: E=Sophos;i="5.78,477,1599548400"; 
+   d="scan'208";a="195646289"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2021 06:36:41 -0800
+IronPort-SDR: qs68RqcxE++HLA1JoCBuYLhRaVpiDBCQ1s4MR2iSPmAdQVkVQPeXRAMKZw6AuSGJ+E7VZKqoWy
+ QYk627pVAIMQ==
+X-IronPort-AV: E=Sophos;i="5.78,477,1599548400"; 
+   d="scan'208";a="402345974"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2021 06:36:39 -0800
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1kwnSv-002Ctb-Bx; Tue, 05 Jan 2021 16:37:41 +0200
+Date:   Tue, 5 Jan 2021 16:37:41 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        royale@zerezo.com, USB <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        syzbot+b4d54814b339b5c6bbd4@syzkaller.appspotmail.com
+Subject: Re: [RFT][PATCH v1] media: zr364xx: Fix memory leak in ->probe()
+Message-ID: <20210105143741.GK4077@smile.fi.intel.com>
+References: <20201230211918.63508-1-andriy.shevchenko@linux.intel.com>
+ <20210105140045.GF2809@kadam>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210105140045.GF2809@kadam>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-It is observed 'use-after-free' on the dmabuf's file->f_inode with the
-race between closing the dmabuf file and reading the dmabuf's debug
-info.
+On Tue, Jan 05, 2021 at 05:00:45PM +0300, Dan Carpenter wrote:
+> On Wed, Dec 30, 2020 at 11:19:18PM +0200, Andy Shevchenko wrote:
+> > When ->probe() fails in some cases it may not free resources.
+> > Replace few separated calls by v4l2_device_put() to clean up
+> > everything.
+> > 
+> 
+> The clean up everything style of error handling is always buggy.
+> 
+> For example, in this case, all the early error paths will now crash
+> instead of leaking.  The __videobuf_free() function will Oops when it
+> dereferences "q->int_ops->magic".
+> 
+> 	MAGIC_CHECK(q->int_ops->magic, MAGIC_QTYPE_OPS);
+> 
+> The "q->int_ops" pointer is set in videobuf_queue_vmalloc_init().  There
+> are probably other bugs as well.  It's almost impossible to audit this
+> style of error handling either for completeness or for crashyness.
 
-Consider the below scenario where P1 is closing the dma_buf file
-and P2 is reading the dma_buf's debug info in the system:
+Feel free to submit better fix, thanks!
 
-P1						P2
-					dma_buf_debug_show()
-dma_buf_put()
-  __fput()
-    file->f_op->release()
-    dput()
-    ....
-      dentry_unlink_inode()
-        iput(dentry->d_inode)
-        (where the inode is freed)
-					mutex_lock(&db_list.lock)
-					read 'dma_buf->file->f_inode'
-					(the same inode is freed by P1)
-					mutex_unlock(&db_list.lock)
-      dentry->d_op->d_release()-->
-        dma_buf_release()
-          .....
-          mutex_lock(&db_list.lock)
-          removes the dmabuf from the list
-          mutex_unlock(&db_list.lock)
-
-In the above scenario, when dma_buf_put() is called on a dma_buf, it
-first frees the dma_buf's file->f_inode(=dentry->d_inode) and then
-removes this dma_buf from the system db_list. In between P2 traversing
-the db_list tries to access this dma_buf's file->f_inode that was freed
-by P1 which is a use-after-free case.
-
-Since, __fput() calls f_op->release first and then later calls the
-d_op->d_release, move the dma_buf's db_list removal from d_release() to
-f_op->release(). This ensures that dma_buf's file->f_inode is not
-accessed after it is released.
-
-Cc: <stable@vger.kernel.org> # 5.4+
-Fixes: 4ab59c3c638c ("dma-buf: Move dma_buf_release() from fops to dentry_ops")
-Acked-by: Christian König <christian.koenig@amd.com>
-Signed-off-by: Charan Teja Reddy <charante@codeaurora.org>
----
- V2: Resending with stable tags and Acks
-
- V1: https://lore.kernel.org/patchwork/patch/1360118/
-
- drivers/dma-buf/dma-buf.c | 21 +++++++++++++++++----
- 1 file changed, 17 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index 0eb80c1..a14dcbb 100644
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -76,10 +76,6 @@ static void dma_buf_release(struct dentry *dentry)
- 
- 	dmabuf->ops->release(dmabuf);
- 
--	mutex_lock(&db_list.lock);
--	list_del(&dmabuf->list_node);
--	mutex_unlock(&db_list.lock);
--
- 	if (dmabuf->resv == (struct dma_resv *)&dmabuf[1])
- 		dma_resv_fini(dmabuf->resv);
- 
-@@ -88,6 +84,22 @@ static void dma_buf_release(struct dentry *dentry)
- 	kfree(dmabuf);
- }
- 
-+static int dma_buf_file_release(struct inode *inode, struct file *file)
-+{
-+	struct dma_buf *dmabuf;
-+
-+	if (!is_dma_buf_file(file))
-+		return -EINVAL;
-+
-+	dmabuf = file->private_data;
-+
-+	mutex_lock(&db_list.lock);
-+	list_del(&dmabuf->list_node);
-+	mutex_unlock(&db_list.lock);
-+
-+	return 0;
-+}
-+
- static const struct dentry_operations dma_buf_dentry_ops = {
- 	.d_dname = dmabuffs_dname,
- 	.d_release = dma_buf_release,
-@@ -413,6 +425,7 @@ static void dma_buf_show_fdinfo(struct seq_file *m, struct file *file)
- }
- 
- static const struct file_operations dma_buf_fops = {
-+	.release	= dma_buf_file_release,
- 	.mmap		= dma_buf_mmap_internal,
- 	.llseek		= dma_buf_llseek,
- 	.poll		= dma_buf_poll,
 -- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a
-member of the Code Aurora Forum, hosted by The Linux Foundation
+With Best Regards,
+Andy Shevchenko
+
 
