@@ -2,395 +2,124 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52E82C433DB
-	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 15:44:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8299C433E0
+	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 16:05:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1264222BE8
-	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 15:44:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A671922C9D
+	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 16:05:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728041AbhAEPoY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Jan 2021 10:44:24 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:38284 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727989AbhAEPoY (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jan 2021 10:44:24 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BA34B3D7;
-        Tue,  5 Jan 2021 16:43:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1609861421;
-        bh=nhstVHHWOEEMLzQ92yAPy5JAoJxo1w88iRoV9MIBG7Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O0py2Qd1NANGjVgcDchvk8WzIIS65uvtVReUAHWjDdS7UYSXWXITTI1Pok4Jn0eHg
-         /CdaFESQzMnvtWh3oy2QfU3uUZjxi5WKeeoq97tJ4NhvUn5rgTVP2tq233IVmTyOXl
-         +ecIjcmWuzepSu6OfLXW9FfTDoU/0WlWdP34BGas=
-Date:   Tue, 5 Jan 2021 17:43:29 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     linux-media@vger.kernel.org
-Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH 57/75] dt-bindings: media: Convert i.MX7 MIPI CSI-2
- receiver binding to YAML
-Message-ID: <X/SJIU7+pw91ZIAM@pendragon.ideasonboard.com>
-References: <20210105152852.5733-1-laurent.pinchart@ideasonboard.com>
- <20210105152852.5733-58-laurent.pinchart@ideasonboard.com>
+        id S1728127AbhAEQF3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Jan 2021 11:05:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43328 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727019AbhAEQF3 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jan 2021 11:05:29 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B55DC061574
+        for <linux-media@vger.kernel.org>; Tue,  5 Jan 2021 08:04:49 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id ce23so532247ejb.8
+        for <linux-media@vger.kernel.org>; Tue, 05 Jan 2021 08:04:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=0CgS+kCgd4dLgBriIsTwKPjdzyys2aenK8AUWl4yZts=;
+        b=okTn1YUZcRZyEp6jUymriIkwYtM0Z0ayh4ZHYXTmceus5TIhZS4oSZDwbOy1ks/wO1
+         bypPCoK802bKTCD+fzBZ0CEl7RE9S39z+y2PBG+NRVzoGzE/9foIWwXA+BYEuici2Xw8
+         XigUfSRGMYnxUeShWVVVu1KRBjiMSMKQQ2fBqvVqbgAcdEm1J6QbMT3rlRC/qdfXuCCe
+         x8NIxRBPTLBMNXyNT9V4A7baEEqve4KKnUMEnm0S0jrQrR1Ja4WVM8tJxgZr8cHRmZI0
+         pWVYyaDuH4UicbqRZ+NB7DqnEJ2bp6RyCL50FH4xz5BxWSgCCMWhPh4BmZCw1RdZR4yw
+         plag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=0CgS+kCgd4dLgBriIsTwKPjdzyys2aenK8AUWl4yZts=;
+        b=XdVuvjfGAnTXfGV5wntHLqIo3xrYCQ8kjFBQ8YO8ogWMI4icFd25N4AYAC/cP2/Zax
+         QaSel0zu4VbbSKXtQvliI8penkLIVbJKv0924Um+Yb22HHUBo9Y7ASKmwxpFVNRI8R5z
+         SpaxK4KXyUZtwMhayXL3Bda5AioMYxQ8SwPsQAZfHo+QUc4d50JQXwOJJzai8cQ6PRXi
+         SYE/6pnYOFkyr9aIvRO2eC8X5qpwsD6DQTXhs2FsBicqq+loaTW4cvmRLsmJWPMIegwH
+         6Hqe7insGOrN0CcXGF/XzniQKeVh3oWmlVO/NkfgSaVaDVmg28rhQWLMmTB4DDXUOQYm
+         4REA==
+X-Gm-Message-State: AOAM5302d2AhybSUixypktC1mABfRtsafCXc1AdYccOP/Ub1ZULG8bhg
+        nhdwdfhxV2uIf/kGvF/8uJE=
+X-Google-Smtp-Source: ABdhPJwkzlWrC/ohK57WI9zeCH/U1GUIj92bX2ICDdHEiIo6WJUBmckQqSmByVflq7fOypDNFQWuIA==
+X-Received: by 2002:a17:906:7f11:: with SMTP id d17mr70162656ejr.534.1609862688029;
+        Tue, 05 Jan 2021 08:04:48 -0800 (PST)
+Received: from kontron.lan (2001-1ae9-1e8-b200-9c26-b1f7-3f54-fb94.ip6.tmcz.cz. [2001:1ae9:1e8:b200:9c26:b1f7:3f54:fb94])
+        by smtp.gmail.com with ESMTPSA id u16sm46054580eds.10.2021.01.05.08.04.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jan 2021 08:04:47 -0800 (PST)
+Subject: Re: [PATCH 0/6] Remove last users of v4l2-clk and remove v4l2-clk
+To:     Ezequiel Garcia <ezequiel@collabora.com>,
+        linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     kernel@collabora.com, Arnd Bergmann <arnd@arndb.de>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+References: <20210104165739.116404-1-ezequiel@collabora.com>
+From:   Petr Cvek <petrcvekcz@gmail.com>
+Message-ID: <59dcd2fd-79db-fdd1-820b-5d3c5ea6446a@gmail.com>
+Date:   Tue, 5 Jan 2021 17:08:38 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210105152852.5733-58-laurent.pinchart@ideasonboard.com>
+In-Reply-To: <20210104165739.116404-1-ezequiel@collabora.com>
+Content-Type: text/plain; charset=iso-8859-2
+Content-Language: cs
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This isn't applicable anymore as Rui had already converted the DT
-bindings. Sorry for the noise.
+I don't have a working magician setup at the moment, so I can only test the compilation (which works).
 
-(I may however send additional patches, for instance to add descriptions
-for the clocks).
+Petr
 
-On Tue, Jan 05, 2021 at 05:28:34PM +0200, Laurent Pinchart wrote:
-> Convert the DT binding for the i.MX7 MIPI CSI-2 receiver to YAML. Add
-> Rui to the maintainers list as he's the original author of the binding.
+Dne 04. 01. 21 v 17:57 Ezequiel Garcia napsal(a):
+> The V4L2 temporary clock helper API is used by just one last capture
+> driver, pxa-camera, which registers a dummy clock; and then by just
+> a few sensor drivers, consuming clocks through the v4l2-clk API.
 > 
-> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> ---
->  .../bindings/media/fsl,imx7-mipi-csi2.yaml    | 204 ++++++++++++++++++
->  .../bindings/media/imx7-mipi-csi2.txt         |  90 --------
->  MAINTAINERS                                   |   2 +-
->  3 files changed, 205 insertions(+), 91 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/media/fsl,imx7-mipi-csi2.yaml
->  delete mode 100644 Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt
+> It's possible to convert these few last users, and so remove
+> the v4l2-clk API, which hasn't been used for a few years.
 > 
-> diff --git a/Documentation/devicetree/bindings/media/fsl,imx7-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/fsl,imx7-mipi-csi2.yaml
-> new file mode 100644
-> index 000000000000..2df997293780
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/fsl,imx7-mipi-csi2.yaml
-> @@ -0,0 +1,204 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/fsl,imx7-mipi-csi2.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: NXP i.MX7 MIPI CSI-2 receiver
-> +
-> +maintainers:
-> +  - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> +  - Rui Miguel Silva <rui.silva@linaro.org>
-> +
-> +description: |-
-> +  The NXP i.MX7 SoC family includes a MIPI CSI-2 receiver IP core, documented
-> +  as "CSIS V3.3". The IP core seems to originate from Samsung, and may be
-> +  compatible with some of the Exynos4 ad S5P SoCs.
-> +
-> +  While the CSI-2 receiver is separate from the MIPI D-PHY IP core, the PHY is
-> +  completely wrapped by the CSIS and doesn't expose a control interface of its
-> +  own. This binding thus covers both IP cores.
-> +
-> +properties:
-> +  compatible:
-> +    const: fsl,imx7-mipi-csi2
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: The peripheral clock (a.k.a. APB clock)
-> +      - description: The external clock (optionally used as the pixel clock)
-> +      - description: The MIPI D-PHY clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: pclk
-> +      - const: wrap
-> +      - const: phy
-> +
-> +  resets:
-> +    items:
-> +      - description: MIPI D-PHY slave reset
-> +
-> +  reset-names:
-> +    items:
-> +      - const: mrst
-> +
-> +  power-domains: true
-> +
-> +  phy-supply:
-> +    description: The MIPI D-PHY digital power supply
-> +
-> +  clock-frequency:
-> +    description: The desired external clock ("wrap") frequency, in Hz
-> +    default: 166000000
-> +
-> +  fsl,csis-hs-settle:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: HS-SETTLE time (unit unknown)
-> +
-> +  ports:
-> +    # See ./video-interfaces.txt for details
-> +    type: object
-> +
-> +    properties:
-> +      "#address-cells":
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        const: 1
-> +
-> +      "#size-cells":
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        const: 0
-> +
-> +      port@0:
-> +        type: object
-> +        description: The input port, connected to the CSI-2 source
-> +
-> +        properties:
-> +          reg:
-> +            const: 0
-> +
-> +          endpoint:
-> +            type: object
-> +
-> +            properties:
-> +              data-lanes:
-> +                $ref: /schemas/types.yaml#/definitions/uint32-array
-> +                items:
-> +                  minItems: 1
-> +                  maxItems: 2
-> +                  items:
-> +                    - const: 1
-> +                    - const: 2
-> +
-> +              remote-endpoint:
-> +                $ref: /schemas/types.yaml#/definitions/phandle
-> +
-> +            required:
-> +              - data-lanes
-> +              - remote-endpoint
-> +
-> +            additionalProperties: false
-> +
-> +        required:
-> +          - reg
-> +
-> +        additionalProperties: false
-> +
-> +      port@1:
-> +        type: object
-> +        description: The output port
-> +
-> +        properties:
-> +          reg:
-> +            const: 1
-> +
-> +          endpoint:
-> +            type: object
-> +
-> +            properties:
-> +              remote-endpoint:
-> +                $ref: /schemas/types.yaml#/definitions/phandle
-> +
-> +            required:
-> +              - remote-endpoint
-> +
-> +            additionalProperties: false
-> +
-> +        required:
-> +          - reg
-> +
-> +        additionalProperties: false
-> +
-> +    required:
-> +      - "#address-cells"
-> +      - "#size-cells"
-> +      - port@0
-> +      - port@1
-> +
-> +    additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - resets
-> +  - reset-names
-> +  - power-domains
-> +  - phy-supply
-> +  - ports
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/imx7d-clock.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/reset/imx7-reset.h>
-> +
-> +    mipi_csi: mipi-csi@30750000 {
-> +        compatible = "fsl,imx7-mipi-csi2";
-> +        reg = <0x30750000 0x10000>;
-> +        interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
-> +        clocks = <&clks IMX7D_IPG_ROOT_CLK>,
-> +                 <&clks IMX7D_MIPI_CSI_ROOT_CLK>,
-> +                 <&clks IMX7D_MIPI_DPHY_ROOT_CLK>;
-> +        clock-names = "pclk", "wrap", "phy";
-> +        clock-frequency = <166000000>;
-> +        power-domains = <&pgc_mipi_phy>;
-> +        phy-supply = <&reg_1p0d>;
-> +        resets = <&src IMX7_RESET_MIPI_PHY_MRST>;
-> +        reset-names = "mrst";
-> +        fsl,csis-hs-settle = <3>;
-> +
-> +        ports {
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            port@0 {
-> +                reg = <0>;
-> +
-> +                mipi_csi_in: endpoint {
-> +                    remote-endpoint = <&ov2680_out>;
-> +                    data-lanes = <1>;
-> +                };
-> +            };
-> +
-> +            port@1 {
-> +                reg = <1>;
-> +
-> +                mipi_csi_out: endpoint {
-> +                    remote-endpoint = <&csi_mux_from_mipi_vc0>;
-> +                };
-> +            };
-> +        };
-> +    };
-> +
-> +...
-> diff --git a/Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt b/Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt
-> deleted file mode 100644
-> index 71fd74ed3ec8..000000000000
-> --- a/Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt
-> +++ /dev/null
-> @@ -1,90 +0,0 @@
-> -Freescale i.MX7 Mipi CSI2
-> -=========================
-> -
-> -mipi_csi2 node
-> ---------------
-> -
-> -This is the device node for the MIPI CSI-2 receiver core in i.MX7 SoC. It is
-> -compatible with previous version of Samsung D-phy.
-> -
-> -Required properties:
-> -
-> -- compatible    : "fsl,imx7-mipi-csi2";
-> -- reg           : base address and length of the register set for the device;
-> -- interrupts    : should contain MIPI CSIS interrupt;
-> -- clocks        : list of clock specifiers, see
-> -        Documentation/devicetree/bindings/clock/clock-bindings.txt for details;
-> -- clock-names   : must contain "pclk", "wrap" and "phy" entries, matching
-> -                  entries in the clock property;
-> -- power-domains : a phandle to the power domain, see
-> -          Documentation/devicetree/bindings/power/power_domain.txt for details.
-> -- reset-names   : should include following entry "mrst";
-> -- resets        : a list of phandle, should contain reset entry of
-> -                  reset-names;
-> -- phy-supply    : from the generic phy bindings, a phandle to a regulator that
-> -	          provides power to MIPI CSIS core;
-> -
-> -Optional properties:
-> -
-> -- clock-frequency : The IP's main (system bus) clock frequency in Hz, default
-> -		    value when this property is not specified is 166 MHz;
-> -- fsl,csis-hs-settle : differential receiver (HS-RX) settle time;
-> -
-> -The device node should contain two 'port' child nodes with one child 'endpoint'
-> -node, according to the bindings defined in:
-> - Documentation/devicetree/bindings/ media/video-interfaces.txt.
-> - The following are properties specific to those nodes.
-> -
-> -port node
-> ----------
-> -
-> -- reg		  : (required) can take the values 0 or 1, where 0 shall be
-> -                     related to the sink port and port 1 shall be the source
-> -                     one;
-> -
-> -endpoint node
-> --------------
-> -
-> -- data-lanes    : (required) an array specifying active physical MIPI-CSI2
-> -		    data input lanes and their mapping to logical lanes; this
-> -                    shall only be applied to port 0 (sink port), the array's
-> -                    content is unused only its length is meaningful,
-> -                    in this case the maximum length supported is 2;
-> -
-> -example:
-> -
-> -        mipi_csi: mipi-csi@30750000 {
-> -                #address-cells = <1>;
-> -                #size-cells = <0>;
-> -
-> -                compatible = "fsl,imx7-mipi-csi2";
-> -                reg = <0x30750000 0x10000>;
-> -                interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
-> -                clocks = <&clks IMX7D_IPG_ROOT_CLK>,
-> -                                <&clks IMX7D_MIPI_CSI_ROOT_CLK>,
-> -                                <&clks IMX7D_MIPI_DPHY_ROOT_CLK>;
-> -                clock-names = "pclk", "wrap", "phy";
-> -                clock-frequency = <166000000>;
-> -                power-domains = <&pgc_mipi_phy>;
-> -                phy-supply = <&reg_1p0d>;
-> -                resets = <&src IMX7_RESET_MIPI_PHY_MRST>;
-> -                reset-names = "mrst";
-> -                fsl,csis-hs-settle = <3>;
-> -
-> -                port@0 {
-> -                        reg = <0>;
-> -
-> -                        mipi_from_sensor: endpoint {
-> -                                remote-endpoint = <&ov2680_to_mipi>;
-> -                                data-lanes = <1>;
-> -                        };
-> -                };
-> -
-> -                port@1 {
-> -                        reg = <1>;
-> -
-> -                        mipi_vc0_to_csi_mux: endpoint {
-> -                                remote-endpoint = <&csi_mux_from_mipi_vc0>;
-> -                        };
-> -                };
-> -        };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 970d9cee509d..584ea2116c38 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -10842,8 +10842,8 @@ L:	linux-media@vger.kernel.org
->  S:	Maintained
->  T:	git git://linuxtv.org/media_tree.git
->  F:	Documentation/admin-guide/media/imx7.rst
-> +F:	Documentation/devicetree/bindings/media/fsl,imx7-mipi-csi2.yaml
->  F:	Documentation/devicetree/bindings/media/imx7-csi.txt
-> -F:	Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt
->  F:	drivers/staging/media/imx/imx7-media-csi.c
->  F:	drivers/staging/media/imx/imx7-mipi-csis.c
->  
-
--- 
-Regards,
-
-Laurent Pinchart
+> The sensor drivers are already using the CCF API,
+> which v4l2-clk API uses as fallback.
+> 
+> To convert the pxa-camera driver, a fixed-rate clock
+> is registered for the mach-based platforms that still exist,
+> for mt9m111 to work (the only sensor that PXA currently
+> registers).
+> 
+> Ezequiel Garcia (6):
+>   media: mach-pxa: Register the camera sensor fixed-rate clock
+>   media: pxa_camera: Drop the v4l2-clk clock register
+>   media: ov9640: Use the generic clock framework
+>   media: mt9m111: Use the generic clock framework
+>   media: ov6650: Use the generic clock framework
+>   media: Remove the legacy v4l2-clk API
+> 
+>  .../driver-api/media/v4l2-clocks.rst          |  31 --
+>  Documentation/driver-api/media/v4l2-core.rst  |   1 -
+>  arch/arm/mach-pxa/devices.c                   |   8 +
+>  drivers/media/i2c/mt9m111.c                   |  17 +-
+>  drivers/media/i2c/ov6650.c                    |  26 +-
+>  drivers/media/i2c/ov9640.c                    |  15 +-
+>  drivers/media/i2c/ov9640.h                    |   4 +-
+>  drivers/media/platform/pxa_camera.c           |  30 +-
+>  drivers/media/v4l2-core/Makefile              |   2 +-
+>  drivers/media/v4l2-core/v4l2-clk.c            | 321 ------------------
+>  include/media/v4l2-clk.h                      |  73 ----
+>  11 files changed, 37 insertions(+), 491 deletions(-)
+>  delete mode 100644 Documentation/driver-api/media/v4l2-clocks.rst
+>  delete mode 100644 drivers/media/v4l2-core/v4l2-clk.c
+>  delete mode 100644 include/media/v4l2-clk.h
+> 
