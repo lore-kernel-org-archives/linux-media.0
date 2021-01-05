@@ -2,114 +2,97 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67E4EC433DB
-	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 16:07:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51FE6C433E6
+	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 16:15:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 320F222C9E
-	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 16:07:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 24C1722C9E
+	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 16:15:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728041AbhAEQHq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Jan 2021 11:07:46 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:51480 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727996AbhAEQHp (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jan 2021 11:07:45 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 105FtMe7137932;
-        Tue, 5 Jan 2021 16:06:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=27lyL6V97rY2W/IgCdTTMc5DSG0km/flclLx6kdUVyU=;
- b=hLC3hRLS1FA0qEoLdU5KJx4WJG2F/FiownHEiLnIG4ngzGuU4v8Z19SN8HCaCvjvzYHk
- shD+/5zbExURIS4GvrL8/CgqRDFy+MtpCzK0L8O8KXqIelVGX0NrIJu6sUzvNm4FYLge
- efVb/ttXmOlZloCjEVM70EB/DUfMDcGW03TtX2sgkOgCSXjygX2Mp/uzuIJKzOZ/kppV
- 14h12Y0v8RBwGe8QnbXuECj4b5KsfTRNTY+ndXzCmtrIzHmn6XQjiVQmi1Gbee2/ltED
- NbN4zud+XyLUBVFgMUT/GybDnIsKLBZy9patWFILN8MsxlPqR7wPFFCfMq2yTpxlq+nt tQ== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2130.oracle.com with ESMTP id 35tg8r1gnc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 05 Jan 2021 16:06:59 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 105FuQ9w026613;
-        Tue, 5 Jan 2021 16:04:58 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 35v4rbj7g8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 05 Jan 2021 16:04:58 +0000
-Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 105G4uYO015851;
-        Tue, 5 Jan 2021 16:04:56 GMT
-Received: from kadam (/102.36.221.92)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 05 Jan 2021 16:04:56 +0000
-Date:   Tue, 5 Jan 2021 19:04:48 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        royale@zerezo.com, USB <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        syzbot+b4d54814b339b5c6bbd4@syzkaller.appspotmail.com
-Subject: Re: [RFT][PATCH v1] media: zr364xx: Fix memory leak in ->probe()
-Message-ID: <20210105160448.GY2831@kadam>
-References: <20201230211918.63508-1-andriy.shevchenko@linux.intel.com>
- <20210105140045.GF2809@kadam>
- <20210105143741.GK4077@smile.fi.intel.com>
+        id S1728245AbhAEQOy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Jan 2021 11:14:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44818 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728097AbhAEQOy (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jan 2021 11:14:54 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F85AC061574
+        for <linux-media@vger.kernel.org>; Tue,  5 Jan 2021 08:14:13 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id j16so851104edr.0
+        for <linux-media@vger.kernel.org>; Tue, 05 Jan 2021 08:14:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=B2XI9Y2wlyHiEShnQJz2HRGu3YR6k36r4B9FvaQe2v8=;
+        b=YaJOy/HjCwM7OcV7prVs8bCAb5x7TlFfJpi1tuXRpUGOxWKA5zOXRpJY6jvPonBBsY
+         5LE+qXM7gfTmUWKte2mTjSTv19saQ5X/JPU3J9jRe970hhpw5e+oIB1iIkubwoSdrRNj
+         Hil3h4xXaKqON1Vq+BphcOTepo4zTA+HJT20AXIuzlj0g3B6Mik8DWlx8no0d0UqSoOM
+         pNXjc7t53JpCwU5bJ3o/Yo85MGFn4QxP4JRTJ/EEMwcHO8w27ohLvVqwY1IBm7XJfVsT
+         DxNw99rQIrBlWbZny8NBPr5e2toi0zjQTCxwQsCZEXtR56kkfGV/OkjpfTDthxYGK5Lz
+         jRbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=B2XI9Y2wlyHiEShnQJz2HRGu3YR6k36r4B9FvaQe2v8=;
+        b=E7OVDbMJzQoCFuQ0AJ/tWM4w0OyXoObOrg3/2nbo/HMiz3ALK04N8Jhce5yn4CMHVc
+         dnwqR/rzANUsw5G8Ik84907j8h147Z+7AAqQeM4r2zSgy4Tsg+eM89jUBkBI3NgnBu/M
+         d+ntEmR+MwuBXfDyGDuh7t2C4+wxR+ExiLhK3LPP73/wjd6pmggHKyjRNL0bI+VBhMZj
+         iTTIK+vxGndktX0Isd+RIdlpnPu8V4RjTHKmmMcYWJ7slDI3Q96G1j1lIIi6vXoEA3go
+         RIdXL0+2WOLUU7etRIfeY+qn31J3gv7Y0SeOMV6ugOEY74mr/oncLaCui5LXc8c6G9gV
+         M1/A==
+X-Gm-Message-State: AOAM5304WyLSqME8V4rwT7YvJ4L49EO7RnElgDSAD8jP9xg2K/UGell1
+        IzVOtsedjEvjTTR/s15h3RM=
+X-Google-Smtp-Source: ABdhPJzD8DsR/a8w1W08UJoEMY1hsQICAvOTT60gQ5DXupklDi5lRTeaHlxTd6Tmo31Q+ZEBAC/gtA==
+X-Received: by 2002:a05:6402:c4:: with SMTP id i4mr502209edu.152.1609863252367;
+        Tue, 05 Jan 2021 08:14:12 -0800 (PST)
+Received: from kontron.lan (2001-1ae9-1e8-b200-9c26-b1f7-3f54-fb94.ip6.tmcz.cz. [2001:1ae9:1e8:b200:9c26:b1f7:3f54:fb94])
+        by smtp.gmail.com with ESMTPSA id c23sm45724192eds.88.2021.01.05.08.14.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jan 2021 08:14:11 -0800 (PST)
+Subject: Re: [PATCH 3/6] media: ov9640: Use the generic clock framework
+To:     Ezequiel Garcia <ezequiel@collabora.com>,
+        linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     kernel@collabora.com, Arnd Bergmann <arnd@arndb.de>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+References: <20210104165739.116404-1-ezequiel@collabora.com>
+ <20210104165739.116404-4-ezequiel@collabora.com>
+From:   Petr Cvek <petrcvekcz@gmail.com>
+Message-ID: <ade9d36d-fb0f-7979-96a3-da550680c7ea@gmail.com>
+Date:   Tue, 5 Jan 2021 17:18:03 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210105143741.GK4077@smile.fi.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9855 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=896 mlxscore=0 bulkscore=0
- suspectscore=0 spamscore=0 adultscore=0 malwarescore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2101050099
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9855 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1015 phishscore=0 bulkscore=0
- spamscore=0 impostorscore=0 suspectscore=0 adultscore=0 mlxlogscore=903
- mlxscore=0 malwarescore=0 lowpriorityscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2101050099
+In-Reply-To: <20210104165739.116404-4-ezequiel@collabora.com>
+Content-Type: text/plain; charset=iso-8859-2
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Jan 05, 2021 at 04:37:41PM +0200, Andy Shevchenko wrote:
-> On Tue, Jan 05, 2021 at 05:00:45PM +0300, Dan Carpenter wrote:
-> > On Wed, Dec 30, 2020 at 11:19:18PM +0200, Andy Shevchenko wrote:
-> > > When ->probe() fails in some cases it may not free resources.
-> > > Replace few separated calls by v4l2_device_put() to clean up
-> > > everything.
-> > > 
-> > 
-> > The clean up everything style of error handling is always buggy.
-> > 
-> > For example, in this case, all the early error paths will now crash
-> > instead of leaking.  The __videobuf_free() function will Oops when it
-> > dereferences "q->int_ops->magic".
-> > 
-> > 	MAGIC_CHECK(q->int_ops->magic, MAGIC_QTYPE_OPS);
-> > 
-> > The "q->int_ops" pointer is set in videobuf_queue_vmalloc_init().  There
-> > are probably other bugs as well.  It's almost impossible to audit this
-> > style of error handling either for completeness or for crashyness.
-> 
-> Feel free to submit better fix, thanks!
+> diff --git a/drivers/media/i2c/ov9640.h b/drivers/media/i2c/ov9640.h
+> index a8ed6992c1a8..a1f9150b2050 100644
+> --- a/drivers/media/i2c/ov9640.h
+> +++ b/drivers/media/i2c/ov9640.h
+> @@ -180,6 +180,8 @@ enum {
+>  };
+>  #define	H_SXGA	960
+>  
+> +struct clk;
+> +
 
-Sure.  I'm too tired to think straight today.
+Seems to be unnecessary as struct clk will be included from ov9640.c (the same way struct v4l2_clk was).
 
-I see now that syzbot actually discovered the Oops in __videobuf_free()
-as well...  I'm sort of surprised that the original code never called
-zr364xx_release().  We might have another reference leak somewhere...
+The rest seems fine by me.
 
-regards,
-dan carpenter
-
-
+Petr
