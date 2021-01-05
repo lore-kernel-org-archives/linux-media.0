@@ -5,40 +5,39 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D83CC4332B
-	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 15:39:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B489C43331
+	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 15:39:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4F04422B49
-	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 15:39:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 51EAB22AAD
+	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 15:39:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727987AbhAEPiq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Jan 2021 10:38:46 -0500
+        id S1727514AbhAEPjD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Jan 2021 10:39:03 -0500
 Received: from perceval.ideasonboard.com ([213.167.242.64]:38190 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726957AbhAEPiq (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jan 2021 10:38:46 -0500
+        with ESMTP id S1725817AbhAEPjC (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jan 2021 10:39:02 -0500
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9239F1BEF;
-        Tue,  5 Jan 2021 16:30:16 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DFDAF1BF4;
+        Tue,  5 Jan 2021 16:30:17 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1609860617;
-        bh=QijKmJDIjOo7MKVny8M7NUeZo6zYDFwqShZIVrpphus=;
+        s=mail; t=1609860618;
+        bh=BoRUolJW2RV5JG7cd9x+fen4kfoDk0I2bOZoSp+7zmA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G3nTtbEb4p+HJQEX16g6HeL+Qv+xBUbsrb/FecMQUZPlAtrNMOp9HPm4/vrviJDoN
-         lAR5dUBe+jhxZmURhMHyS4L8e5/MuU9Tdlh3Y91cKWxbMLR0ts3IGwZC0jtgvFeU7f
-         xaUEUJ+rp1k6LRthMjNRBQj+JUQETJRJWGO3ycPg=
+        b=KL/9ecdjHeF7mXbimKfhLs+ky6VnS8oNJSKipLLxwBmCYVoVhN94wCU8xYfiadSuO
+         /BA2pWGaG1+K/5kTzK4fl0mrhICiRL15V334v6PNEei185btoBLW5fSExKk8PTwCbu
+         jaRAJs8ROlHtIimSn/LUqXYzyiPjSUsjuvYJo34s=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
         Steve Longerbeam <slongerbeam@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: [PATCH 59/75] dt-bindings: media: fsl,imx7-mipi-csi2: Drop fsl,csis-hs-settle property
-Date:   Tue,  5 Jan 2021 17:28:36 +0200
-Message-Id: <20210105152852.5733-60-laurent.pinchart@ideasonboard.com>
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: [PATCH 61/75] media: imx: imx7_mipi_csis: Fix input size alignment
+Date:   Tue,  5 Jan 2021 17:28:38 +0200
+Message-Id: <20210105152852.5733-62-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210105152852.5733-1-laurent.pinchart@ideasonboard.com>
 References: <20210105152852.5733-1-laurent.pinchart@ideasonboard.com>
@@ -48,29 +47,50 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The fsl,csis-hs-settle property isn't used by the driver anymore. Drop
-it.
+The alignments given to the v4l_bound_align_image() are expressed in
+bytes, while the function expects them to be expressed as a power of
+two. Fix it.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- .../devicetree/bindings/media/fsl,imx7-mipi-csi2.yaml         | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/staging/media/imx/imx7-mipi-csis.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/fsl,imx7-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/fsl,imx7-mipi-csi2.yaml
-index d8918ba3b06c..656aac67470d 100644
---- a/Documentation/devicetree/bindings/media/fsl,imx7-mipi-csi2.yaml
-+++ b/Documentation/devicetree/bindings/media/fsl,imx7-mipi-csi2.yaml
-@@ -54,10 +54,6 @@ properties:
-     description: The desired external clock ("wrap") frequency, in Hz
-     default: 166000000
+diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
+index b6a808cddb37..fe8f3fdab832 100644
+--- a/drivers/staging/media/imx/imx7-mipi-csis.c
++++ b/drivers/staging/media/imx/imx7-mipi-csis.c
+@@ -831,25 +831,25 @@ static int mipi_csis_set_fmt(struct v4l2_subdev *mipi_sd,
+ 	 */
+ 	switch (csis_fmt->width % 8) {
+ 	case 0:
+-		align = 1;
++		align = 0;
+ 		break;
+ 	case 4:
+-		align = 2;
++		align = 1;
+ 		break;
+ 	case 2:
+ 	case 6:
+-		align = 4;
++		align = 2;
+ 		break;
+ 	case 1:
+ 	case 3:
+ 	case 5:
+ 	case 7:
+-		align = 8;
++		align = 3;
+ 		break;
+ 	}
  
--  fsl,csis-hs-settle:
--    $ref: /schemas/types.yaml#/definitions/uint32
--    description: HS-SETTLE time (unit unknown)
--
-   ports:
-     # See ./video-interfaces.txt for details
-     type: object
+ 	v4l_bound_align_image(&fmt->width, 1, CSIS_MAX_PIX_WIDTH, align,
+-			      &fmt->height, 1, CSIS_MAX_PIX_HEIGHT, 1, 0);
++			      &fmt->height, 1, CSIS_MAX_PIX_HEIGHT, 0, 0);
+ 
+ 	sdformat->format = *fmt;
+ 
 -- 
 Regards,
 
