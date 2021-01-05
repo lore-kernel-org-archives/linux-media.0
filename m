@@ -5,57 +5,57 @@ X-Spam-Level:
 X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 916B8C433E9
-	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 13:10:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CDC62C433DB
+	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 13:11:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5F51122AAB
-	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 13:10:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9C89F22240
+	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 13:11:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729884AbhAENKm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Jan 2021 08:10:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44472 "EHLO
+        id S1729953AbhAENKx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Jan 2021 08:10:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729854AbhAENKl (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jan 2021 08:10:41 -0500
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63902C061793;
-        Tue,  5 Jan 2021 05:10:16 -0800 (PST)
-Received: by mail-qk1-x72a.google.com with SMTP id c7so26324265qke.1;
-        Tue, 05 Jan 2021 05:10:16 -0800 (PST)
+        with ESMTP id S1729933AbhAENKw (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jan 2021 08:10:52 -0500
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA51C061798;
+        Tue,  5 Jan 2021 05:10:27 -0800 (PST)
+Received: by mail-qv1-xf32.google.com with SMTP id s6so14571149qvn.6;
+        Tue, 05 Jan 2021 05:10:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=xWMInHwooADPJ2IZX0gau/tRDi3Ku0nsq1jMdbuuQKQ=;
-        b=SdhR7VUy+XjFkEKy+ZENOGPqEwiWxcOsrKd97ZPeDuCgVYQkBIbyHfeE/J8irEsRr3
-         +G20pgigqE3jjNzti2RfX0/sOrY5Zfu8PwkkinqvbdO8/cN0VncSKij7WFb3Za9dZ7L6
-         MASA7Iy5Ep6k4dYJAXJNx4Rwl2Ey4E3BZNCmNL1aiEjgsZYdq8QQWgA05KyjoiM3Niif
-         mOjRy9M1JX/IRdbCIW1HaaTA/XJ7bGsm8NrkZ/ADYWv8TMGPSCT7EO5hGlxjXCuxTaJr
-         KYaqU72iaMPoNZwA4/gp5FIsqk2qGxBDp8HTURCD7DvLwUKM4V0vWjtBMAX3uxnofIqo
-         Jazw==
+        bh=ZQ0OJEOn97+wjoYhHmOVVLzYGUU35WOQxdoz8BzVbpo=;
+        b=MOXVvFSD/yTZYfKFMRSRsdSzpkq0MFYG+RVMJriLzxtNntn2B7msayxE5Y3YFooiWW
+         WqkXn229ZHIL/6D6iI1Z3NDTO0/1dD7nr0aCfwV1hB7Vsw5Dt0lfzGAsayY6KB6A+DPf
+         hqPFPwm0p4C104afa5xcNhDrsV7YMs89a1gc08GTjA/capXtEAU91M8dbAKLEkT64Emw
+         y+5ziOnoT4tMxp2RBfNqwfaOIkyXHcw+z26rPhWn/Dx8Pl+s1O6ltamZJ+tyw7JRlZyf
+         vxwTGPiPZmCqykUQsQE3QV09VIo1MwZQ2wVwiaYsk+7VCetOx0F5et/wDE7bR2RzscgC
+         pEYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=xWMInHwooADPJ2IZX0gau/tRDi3Ku0nsq1jMdbuuQKQ=;
-        b=OCFfY5s9Yy/Y3wAkNcdn8FV/00yBPBGsOOScpoVRg9GVkifGvod0GqRPuZsR5nbMEo
-         jWxHlTfY2aH5MqqenxsspdSybaraVzYevPzdrRPGnzymGktP9QnRe16I2QvMzczQOBUk
-         rZPUx2YRFAHt9nJ8uHDRBcsRuQHWsVrpzZGgfkwKUDdQWKR2n1C7a0ntcX4m98++9jpe
-         sSjciiSy30aZdtjOsUQaSYnc2o0BSK5bLasFFPwOqAvbVvbcp68h1K1GZyalmOl70P3o
-         f8f7lxaCm0+AW9k6EhVg3Erc503enXnMkSdgyCzvgyn0UwdCNChmO817NvsUt7E4gE83
-         1qsA==
-X-Gm-Message-State: AOAM532abO2aGnVTlASOzOr8o2KtxPxBMV0K8hwDbbQgpnCmuwOsdnYJ
-        ZF9CGIl4RjfeCnx9b8JaPR0=
-X-Google-Smtp-Source: ABdhPJzNxGB1ZxuonbrbvEtm2nD0Hxg5iIdcjLEO90KcVsUW1uaNMzqeanW9pJWVLbrfHhYTLAHYQw==
-X-Received: by 2002:a05:620a:13c2:: with SMTP id g2mr74182513qkl.174.1609852215608;
-        Tue, 05 Jan 2021 05:10:15 -0800 (PST)
+        bh=ZQ0OJEOn97+wjoYhHmOVVLzYGUU35WOQxdoz8BzVbpo=;
+        b=GQcpPOrs7b0Dx7TCBv78cRWj2eukTUo1uv7Ghs7kGVFfJsIAyLrn1VlrddEvfjJOoj
+         wVkUa8wX9VL/MEigBFBCMpdYb3NgpdrqeL8krXkJVK9pHJ6kI+zMNMp810szOUhnQmoM
+         UAXHwxmR+oomjGyBf6MFydeyrSd0J21zkZ/jOSUkg/7g3nJ8cHufWKs+NexzB9YpTSMW
+         35umRWlSrb7mNNAyrIruBnDJnZtO+oEfdzQ98j7wLtlyjwuOQM+uGdeRh/d/4Gge4jeq
+         nDfyN+ZcBHCAiIercu01nOXDpcp9qeGR+EUdgE6/lINeRtYFy/h+E4+ggQ8vJTUUi+Tc
+         FQTA==
+X-Gm-Message-State: AOAM531s8lOE4SSaFIgwcAR1pDVkRcX2FtX3QVElZuViVQS22mPupRzJ
+        ob/WgdCBCK60GGnlrV6LuUoFe43lZ3ObJQ==
+X-Google-Smtp-Source: ABdhPJzIdycboSnJXvhU3084nK5JgJmsz2hiAgBIyXo6VNMIKZuwfEthdweT4BdmbAlpdoTKMfGU3Q==
+X-Received: by 2002:a0c:f2cd:: with SMTP id c13mr81734677qvm.11.1609852226332;
+        Tue, 05 Jan 2021 05:10:26 -0800 (PST)
 Received: from localhost.localdomain ([2804:14d:72b1:8920:77d4:6fb0:85b3:b6f7])
-        by smtp.gmail.com with ESMTPSA id s14sm19877804qke.45.2021.01.05.05.10.10
+        by smtp.gmail.com with ESMTPSA id s14sm19877804qke.45.2021.01.05.05.10.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jan 2021 05:10:14 -0800 (PST)
+        Tue, 05 Jan 2021 05:10:25 -0800 (PST)
 From:   "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
 X-Google-Original-From: Daniel W. S. Almeida
 To:     mchehab@kernel.org, hverkuil@xs4all.nl
@@ -63,9 +63,9 @@ Cc:     "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
         linux-media@vger.kernel.org,
         linux-kernel-mentees@lists.linuxfoundation.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/4] media: vidtv: Add media controller support
-Date:   Tue,  5 Jan 2021 10:09:53 -0300
-Message-Id: <20210105130956.1133222-2-dwlsalmeida@gmail.com>
+Subject: [PATCH 3/4] media: vidtv: use a simpler name in platform_{device|driver}
+Date:   Tue,  5 Jan 2021 10:09:55 -0300
+Message-Id: <20210105130956.1133222-4-dwlsalmeida@gmail.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210105130956.1133222-1-dwlsalmeida@gmail.com>
 References: <20210105130956.1133222-1-dwlsalmeida@gmail.com>
@@ -77,101 +77,47 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
 
-Add media controller support when CONFIG_MEDIA_CONTROLLER_DVB is set
-so that, in the future, a test sequence in v4l-utils can be written
-without having to know which /dev/fooX device should be used.
+Change from "vidtv_bridge" to simply "vidtv" so that vidtv looks
+more similar to the other media virtual drivers in /sys/bus/platform.
 
 Signed-off-by: Daniel W. S. Almeida <dwlsalmeida@gmail.com>
 ---
- .../media/test-drivers/vidtv/vidtv_bridge.c   | 26 +++++++++++++++++++
- .../media/test-drivers/vidtv/vidtv_bridge.h   |  6 +++++
- 2 files changed, 32 insertions(+)
+ drivers/media/test-drivers/vidtv/vidtv_bridge.c | 4 ++--
+ drivers/media/test-drivers/vidtv/vidtv_bridge.h | 1 +
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/test-drivers/vidtv/vidtv_bridge.c b/drivers/media/test-drivers/vidtv/vidtv_bridge.c
-index fc64d0c8492a..4424f9585f86 100644
+index 4ccaa0f00639..11ee87399375 100644
 --- a/drivers/media/test-drivers/vidtv/vidtv_bridge.c
 +++ b/drivers/media/test-drivers/vidtv/vidtv_bridge.c
-@@ -17,6 +17,8 @@
- #include <linux/time.h>
- #include <linux/types.h>
- #include <linux/workqueue.h>
-+#include <media/dvbdev.h>
-+#include <media/media-device.h>
+@@ -562,13 +562,13 @@ static void vidtv_bridge_dev_release(struct device *dev)
+ }
  
- #include "vidtv_bridge.h"
- #include "vidtv_common.h"
-@@ -501,9 +503,28 @@ static int vidtv_bridge_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, dvb);
- 
-+#ifdef CONFIG_MEDIA_CONTROLLER_DVB
-+	dvb->mdev.dev = &pdev->dev;
-+
-+	strscpy(dvb->mdev.model, "vidtv", sizeof(dvb->mdev.model));
-+	strscpy(dvb->mdev.bus_info, "platform:vidtv", sizeof(dvb->mdev.bus_info));
-+
-+	media_device_init(&dvb->mdev);
-+	ret = media_device_register(&dvb->mdev);
-+	if (ret) {
-+		dev_err(dvb->mdev.dev,
-+			"media device register failed (err=%d)\n", ret);
-+		goto err_media_device_register;
-+	}
-+
-+	dvb_register_media_controller(&dvb->adapter, &dvb->mdev);
-+#endif //CONFIG_MEDIA_CONTROLLER_DVB
-+
- 	dev_info(&pdev->dev, "Successfully initialized vidtv!\n");
- 	return ret;
- 
-+err_media_device_register:
-+	media_device_cleanup(&dvb->mdev);
- err_dvb:
- 	kfree(dvb);
- 	return ret;
-@@ -516,6 +537,11 @@ static int vidtv_bridge_remove(struct platform_device *pdev)
- 
- 	dvb = platform_get_drvdata(pdev);
- 
-+#ifdef CONFIG_MEDIA_CONTROLLER_DVB
-+	media_device_unregister(&dvb->mdev);
-+	media_device_cleanup(&dvb->mdev);
-+#endif //CONFIG_MEDIA_CONTROLLER_DVB
-+
- 	mutex_destroy(&dvb->feed_lock);
- 
- 	for (i = 0; i < NUM_FE; ++i) {
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_bridge.h b/drivers/media/test-drivers/vidtv/vidtv_bridge.h
-index 2528adaee27d..d42899a31295 100644
---- a/drivers/media/test-drivers/vidtv/vidtv_bridge.h
-+++ b/drivers/media/test-drivers/vidtv/vidtv_bridge.h
-@@ -24,6 +24,7 @@
- #include <media/dmxdev.h>
- #include <media/dvb_demux.h>
- #include <media/dvb_frontend.h>
-+#include <media/media-device.h>
- 
- #include "vidtv_mux.h"
- 
-@@ -42,6 +43,7 @@
-  * @feed_lock: Protects access to the start/stop stream logic/data.
-  * @streaming: Whether we are streaming now.
-  * @mux: The abstraction responsible for delivering MPEG TS packets to the bridge.
-+ * @mdev: The media_device struct for media controller support.
-  */
- struct vidtv_dvb {
- 	struct platform_device *pdev;
-@@ -60,6 +62,10 @@ struct vidtv_dvb {
- 	bool streaming;
- 
- 	struct vidtv_mux *mux;
-+
-+#ifdef CONFIG_MEDIA_CONTROLLER_DVB
-+	struct media_device mdev;
-+#endif //CONFIG_MEDIA_CONTROLLER_DVB
+ static struct platform_device vidtv_bridge_dev = {
+-	.name		= "vidtv_bridge",
++	.name		= VIDTV_PDEV_NAME,
+ 	.dev.release	= vidtv_bridge_dev_release,
  };
  
- #endif // VIDTV_BRIDG_H
+ static struct platform_driver vidtv_bridge_driver = {
+ 	.driver = {
+-		.name                = "vidtv_bridge",
++		.name = VIDTV_PDEV_NAME,
+ 	},
+ 	.probe    = vidtv_bridge_probe,
+ 	.remove   = vidtv_bridge_remove,
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_bridge.h b/drivers/media/test-drivers/vidtv/vidtv_bridge.h
+index d42899a31295..101a26a4415f 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_bridge.h
++++ b/drivers/media/test-drivers/vidtv/vidtv_bridge.h
+@@ -16,6 +16,7 @@
+  * For now, only one frontend is supported. See vidtv_start_streaming()
+  */
+ #define NUM_FE 1
++#define VIDTV_PDEV_NAME "vidtv"
+ 
+ #include <linux/i2c.h>
+ #include <linux/platform_device.h>
 -- 
 2.30.0
 
