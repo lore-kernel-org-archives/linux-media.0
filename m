@@ -2,107 +2,78 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65B5CC433E6
-	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 17:12:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02D27C433DB
+	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 17:19:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3A8EE22CE3
-	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 17:12:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C9B5822D58
+	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 17:19:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728833AbhAERL5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Jan 2021 12:11:57 -0500
-Received: from mail-wr1-f48.google.com ([209.85.221.48]:40751 "EHLO
-        mail-wr1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727036AbhAERL5 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jan 2021 12:11:57 -0500
-Received: by mail-wr1-f48.google.com with SMTP id 91so36879706wrj.7;
-        Tue, 05 Jan 2021 09:11:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VnFj1rkcJWvtzQFI6dETJ2tJwVrz2a5nNVgi09YeJXc=;
-        b=BGBqSKaeWeXo3Dc8mD/CH0CHrKflfbFzeWfE9TPNPjpijohQnUpIEuibf+xKRFMpNs
-         pbwFutUp7GomgmRT8G+sKFiSyF15wbZobs3khI0aJU8abZFkqkGDgxgXBhXi6K1J+cwf
-         YSzuHaBplD4EtLHiDxDGt0PsEkU1zjnlyyjN5ulBhSs1B1oLEQsVllwtHOdDgWcrg64o
-         /soa/DcMhWQhwUFRxnmd+s6sdGd5cocrdzmqDiJF4csgEhQ5OKuetLKtET8KPMreh0ZT
-         mt5D77cqmSm7e3XOrwvqblGuPayifgSSG51CcgVe6y8+bj6hOB2wWXmvrljR5u20bZwr
-         H6Pg==
-X-Gm-Message-State: AOAM5311dMQZS7WTcWWR5o/DBgY2/g33m+tLzpkFJ1fSgHfsnVYyqgRh
-        8w1ckSCVFGA9F292VxTCp1g=
-X-Google-Smtp-Source: ABdhPJzS2tnUNQsATQJa8H0cqybMnT7xhuS0Tkf5JkW0sqRFgMdJGyc8820QQRayohYw3nqJBZqzFA==
-X-Received: by 2002:adf:94c7:: with SMTP id 65mr492225wrr.423.1609866674773;
-        Tue, 05 Jan 2021 09:11:14 -0800 (PST)
-Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.googlemail.com with ESMTPSA id n12sm632321wrg.76.2021.01.05.09.11.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jan 2021 09:11:13 -0800 (PST)
-Date:   Tue, 5 Jan 2021 18:11:11 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH v2 00/48] Introduce core voltage scaling for NVIDIA
- Tegra20/30 SoCs
-Message-ID: <20210105171111.GC26301@kozik-lap>
-References: <20201217180638.22748-1-digetx@gmail.com>
+        id S1729536AbhAERTY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Jan 2021 12:19:24 -0500
+Received: from mga12.intel.com ([192.55.52.136]:22675 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729242AbhAERTY (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 5 Jan 2021 12:19:24 -0500
+IronPort-SDR: wGgag4AiFFvF0isKkTN5YH7Tebdf23Uxk+kwrwZfnYwIuCgDDgwiyPCFSyOopFlSgptQ4ywvUq
+ +GMxmgWpRGBg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9855"; a="156338285"
+X-IronPort-AV: E=Sophos;i="5.78,477,1599548400"; 
+   d="scan'208";a="156338285"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2021 09:17:38 -0800
+IronPort-SDR: u4DGOaxng84q7iXd7QVyqEabe4yyA+Ql/9INcaEvRx7Kdtdes+kNYJV5zRAHe+Iui37vN2eE26
+ WpNOj1WjpORg==
+X-IronPort-AV: E=Sophos;i="5.78,477,1599548400"; 
+   d="scan'208";a="361239554"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2021 09:17:37 -0800
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id 7EF8620757; Tue,  5 Jan 2021 19:17:35 +0200 (EET)
+Date:   Tue, 5 Jan 2021 19:17:35 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     linux-media@vger.kernel.org
+Subject: Re: [PATCH 1/1] ccs: Make (non-)use of uninitialised variables more
+ robust
+Message-ID: <20210105171735.GT11878@paasikivi.fi.intel.com>
+References: <20210105124914.22900-1-sakari.ailus@linux.intel.com>
+ <9ea0a248-a317-6536-0786-d85ceb585928@xs4all.nl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201217180638.22748-1-digetx@gmail.com>
+In-Reply-To: <9ea0a248-a317-6536-0786-d85ceb585928@xs4all.nl>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Dec 17, 2020 at 09:05:50PM +0300, Dmitry Osipenko wrote:
-> Introduce core voltage scaling for NVIDIA Tegra20/30 SoCs, which reduces
-> power consumption and heating of the Tegra chips. Tegra SoC has multiple
-> hardware units which belong to a core power domain of the SoC and share
-> the core voltage. The voltage must be selected in accordance to a minimum
-> requirement of every core hardware unit.
+On Tue, Jan 05, 2021 at 05:18:08PM +0100, Hans Verkuil wrote:
+> On 05/01/2021 13:49, Sakari Ailus wrote:
+> > GCC with W=2 level of kernel compiler warnings warns about the use of
+> > uninitialised variables in a few locations. While these uninitialised
+> > variables were not used in reality, this still produced compiler warnings.
+> > 
+> > Address this by assigning the variables to NULL and checking for NULL in
+> > places it is not expected, returning -EPROTO in that case. This provides
+> > at least some sanity checking at runtime as the compiler appears unable to
+> > do that at compile time.
+> > 
+> > Reported-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 > 
-> The minimum core voltage requirement depends on:
+> Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 > 
->   1. Clock enable state of a hardware unit.
->   2. Clock frequency.
->   3. Unit's internal idling/active state.
-> 
-> This series is tested on Acer A500 (T20), AC100 (T20), Nexus 7 (T30),
-> Ouya (T30), TK1 (T124) and some others. I also added voltage scaling to
-> the Ventana (T20) and Cardhu (T30) boards which are tested by NVIDIA's CI
-> farm. Tegra30 is now couple degrees cooler on Nexus 7 and stays cool on
-> Ouya (instead of becoming burning hot) while system is idling. It should
-> be possible to improve this further by implementing a more advanced power
-> management features for the kernel drivers.
-> 
-> The DVFS support is opt-in for all boards, meaning that older DTBs will
-> continue to work like they did it before this series. It should be possible
-> to easily add the core voltage scaling support for Tegra114+ SoCs based on
-> this grounding work later on, if anyone will want to implement it.
+> This fixes the warnings!
 
-The same comment as for your interconnect work: for sets touching
-multiple systems please mention the dependencies between patches in the
-cover letter. Not as a reply to such remark like I make here, but as a
-separate entry in the cover letter.
+Thanks!
 
-Best regards,
-Krzysztof
+I think I'll switch the error code to something else. -EPROTO is already in
+use, so I'll send v2 with -EIO.
+
+-- 
+Sakari Ailus
