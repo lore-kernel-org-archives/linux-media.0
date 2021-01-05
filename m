@@ -2,118 +2,97 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02DF5C433DB
-	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 09:37:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6995C433DB
+	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 09:39:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A08C4225AC
-	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 09:37:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8277622482
+	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 09:39:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728120AbhAEJhI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Jan 2021 04:37:08 -0500
-Received: from mail.horus.com ([78.46.148.228]:43089 "EHLO mail.horus.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726189AbhAEJhI (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 5 Jan 2021 04:37:08 -0500
-X-Greylist: delayed 355 seconds by postgrey-1.27 at vger.kernel.org; Tue, 05 Jan 2021 04:37:07 EST
-Received: from [192.168.1.20] (62-116-63-217.adsl.highway.telekom.at [62.116.63.217])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "E-Mail Matthias Reichl", Issuer "HiassofT CA 2014" (not verified))
-        by mail.horus.com (Postfix) with ESMTPSA id 721C16409C;
-        Tue,  5 Jan 2021 10:30:31 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=horus.com;
-        s=20180324; t=1609839031;
-        bh=3uAvaYTnJj70a1j5/nbACq1hfSa4h3BkSIn2baVHKCQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=BhQ/TMsiDA8acfiLQl9uyymIShy00rP9MAfjgqo1qOsudIx8y0YD2I95WAPQz3Ait
-         mec3N5BxGsH8BoeiV1mAEIb2LTuQWOPkFMnsOSNxgno6B847X+aB518VlK+SKXUXJr
-         zxfj471wavgSJYd+DrROpqmos0hn2iMn09jGDsn0=
-Received: by camel2.lan (Postfix, from userid 1000)
-        id D4B941C7374; Tue,  5 Jan 2021 10:30:30 +0100 (CET)
-From:   Matthias Reichl <hias@horus.com>
-To:     Sean Young <sean@mess.org>
-Cc:     linux-media@vger.kernel.org
-Subject: [PATCH] media: rc: fix timeout handling after switch to microsecond durations
-Date:   Tue,  5 Jan 2021 10:30:23 +0100
-Message-Id: <20210105093023.5212-1-hias@horus.com>
-X-Mailer: git-send-email 2.20.1
+        id S1728081AbhAEJi7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Jan 2021 04:38:59 -0500
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:40657 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727796AbhAEJi7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jan 2021 04:38:59 -0500
+X-Originating-IP: 93.29.109.196
+Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
+        (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 6768E60010;
+        Tue,  5 Jan 2021 09:38:16 +0000 (UTC)
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Subject: [PATCH] media: i2c: ov5648/ov8865: Minor cosmetic fixes
+Date:   Tue,  5 Jan 2021 10:38:03 +0100
+Message-Id: <20210105093803.5247-1-paul.kocialkowski@bootlin.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Commit 528222d853f92 ("media: rc: harmonize infrared durations to
-microseconds") missed to switch some timeout calculations from
-nanoseconds to microseconds. This resulted in spurious key_up+key_down
-events at the last scancode if the rc device uses a long timeout
-(eg 100ms on nuvoton-cir) as the device timeout wasn't properly
-accounted for in the keyup timeout calculation.
+This solves a few minor cosmetic issues picked up by checkpatch for
+the OV5648 and OV8865 drivers.
 
-Fix this by applying the proper conversion functions.
-
-Fixes: 528222d853f92 ("media: rc: harmonize infrared durations to microseconds")
-Signed-off-by: Matthias Reichl <hias@horus.com>
+Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
- drivers/media/rc/ir-mce_kbd-decoder.c | 2 +-
- drivers/media/rc/rc-main.c            | 4 ++--
- drivers/media/rc/serial_ir.c          | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/media/i2c/ov5648.c | 2 +-
+ drivers/media/i2c/ov8865.c | 7 +++----
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/rc/ir-mce_kbd-decoder.c b/drivers/media/rc/ir-mce_kbd-decoder.c
-index be8f2756a444..1524dc0fc566 100644
---- a/drivers/media/rc/ir-mce_kbd-decoder.c
-+++ b/drivers/media/rc/ir-mce_kbd-decoder.c
-@@ -320,7 +320,7 @@ static int ir_mce_kbd_decode(struct rc_dev *dev, struct ir_raw_event ev)
- 				data->body);
- 			spin_lock(&data->keylock);
- 			if (scancode) {
--				delay = nsecs_to_jiffies(dev->timeout) +
-+				delay = usecs_to_jiffies(dev->timeout) +
- 					msecs_to_jiffies(100);
- 				mod_timer(&data->rx_timeout, jiffies + delay);
- 			} else {
-diff --git a/drivers/media/rc/rc-main.c b/drivers/media/rc/rc-main.c
-index 29d4d01896ff..1fd62c1dac76 100644
---- a/drivers/media/rc/rc-main.c
-+++ b/drivers/media/rc/rc-main.c
-@@ -737,7 +737,7 @@ static unsigned int repeat_period(int protocol)
- void rc_repeat(struct rc_dev *dev)
- {
- 	unsigned long flags;
--	unsigned int timeout = nsecs_to_jiffies(dev->timeout) +
-+	unsigned int timeout = usecs_to_jiffies(dev->timeout) +
- 		msecs_to_jiffies(repeat_period(dev->last_protocol));
- 	struct lirc_scancode sc = {
- 		.scancode = dev->last_scancode, .rc_proto = dev->last_protocol,
-@@ -855,7 +855,7 @@ void rc_keydown(struct rc_dev *dev, enum rc_proto protocol, u64 scancode,
- 	ir_do_keydown(dev, protocol, scancode, keycode, toggle);
+diff --git a/drivers/media/i2c/ov5648.c b/drivers/media/i2c/ov5648.c
+index 609aa67b54ce..752a2e035c49 100644
+--- a/drivers/media/i2c/ov5648.c
++++ b/drivers/media/i2c/ov5648.c
+@@ -496,7 +496,7 @@
+ 	container_of(s, struct ov5648_sensor, subdev)
  
- 	if (dev->keypressed) {
--		dev->keyup_jiffies = jiffies + nsecs_to_jiffies(dev->timeout) +
-+		dev->keyup_jiffies = jiffies + usecs_to_jiffies(dev->timeout) +
- 			msecs_to_jiffies(repeat_period(protocol));
- 		mod_timer(&dev->timer_keyup, dev->keyup_jiffies);
- 	}
-diff --git a/drivers/media/rc/serial_ir.c b/drivers/media/rc/serial_ir.c
-index 8cc28c92d05d..96ae0294ac10 100644
---- a/drivers/media/rc/serial_ir.c
-+++ b/drivers/media/rc/serial_ir.c
-@@ -385,7 +385,7 @@ static irqreturn_t serial_ir_irq_handler(int i, void *blah)
- 	} while (!(sinp(UART_IIR) & UART_IIR_NO_INT)); /* still pending ? */
+ #define ov5648_ctrl_subdev(c) \
+-	(&container_of(c->handler, struct ov5648_sensor, ctrls.handler)->subdev)
++	(&container_of((c)->handler, struct ov5648_sensor, ctrls.handler)->subdev)
  
- 	mod_timer(&serial_ir.timeout_timer,
--		  jiffies + nsecs_to_jiffies(serial_ir.rcdev->timeout));
-+		  jiffies + usecs_to_jiffies(serial_ir.rcdev->timeout));
+ /* Data structures */
  
- 	ir_raw_event_handle(serial_ir.rcdev);
+diff --git a/drivers/media/i2c/ov8865.c b/drivers/media/i2c/ov8865.c
+index fda5a55979aa..704d75b601e3 100644
+--- a/drivers/media/i2c/ov8865.c
++++ b/drivers/media/i2c/ov8865.c
+@@ -223,7 +223,6 @@
+ #define OV8865_FORMAT2_FLIP_HORZ_SENSOR_EN	BIT(1)
+ #define OV8865_FORMAT2_SYNC_HBIN_EN		BIT(0)
+ 
+-
+ #define OV8865_INC_Y_ODD_REG			0x382a
+ #define OV8865_INC_Y_ODD(v)			((v) & GENMASK(4, 0))
+ #define OV8865_INC_Y_EVEN_REG			0x382b
+@@ -460,7 +459,7 @@
+ 	container_of(s, struct ov8865_sensor, subdev)
+ 
+ #define ov8865_ctrl_subdev(c) \
+-	(&container_of(c->handler, struct ov8865_sensor, ctrls.handler)->subdev)
++	(&container_of((c)->handler, struct ov8865_sensor, ctrls.handler)->subdev)
+ 
+ /* Data structures */
+ 
+@@ -1598,8 +1597,8 @@ static int ov8865_mode_pll1_configure(struct ov8865_sensor *sensor,
+ 		return ret;
+ 
+ 	ret = ov8865_update_bits(sensor, OV8865_PCLK_SEL_REG,
+-			   OV8865_PCLK_SEL_PCLK_DIV_MASK,
+-			   OV8865_PCLK_SEL_PCLK_DIV(config->pclk_div));
++				 OV8865_PCLK_SEL_PCLK_DIV_MASK,
++				 OV8865_PCLK_SEL_PCLK_DIV(config->pclk_div));
+ 	if (ret)
+ 		return ret;
  
 -- 
-2.20.1
+2.29.2
 
