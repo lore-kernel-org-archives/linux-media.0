@@ -2,42 +2,46 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8D6FC432C3
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7367C43332
 	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 15:36:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C42A822B45
+	by mail.kernel.org (Postfix) with ESMTP id ACBD822AAB
 	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 15:36:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728250AbhAEPgP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Jan 2021 10:36:15 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:38190 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726145AbhAEPgP (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jan 2021 10:36:15 -0500
+        id S1728105AbhAEPgO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Jan 2021 10:36:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38776 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726145AbhAEPgN (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jan 2021 10:36:13 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6E6C061793
+        for <linux-media@vger.kernel.org>; Tue,  5 Jan 2021 07:35:33 -0800 (PST)
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CCD3D1AFC;
-        Tue,  5 Jan 2021 16:30:00 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6176A1A62;
+        Tue,  5 Jan 2021 16:29:59 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1609860601;
-        bh=IGHk6heKBskiySdFPG0ZP9hXwbsxuNiUiq2+QptZSlQ=;
+        s=mail; t=1609860599;
+        bh=wHKIYPYfZgWKfKPI+uUEIwHHGTk8dqVvTXRHtpyhb0A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tNfJdGEY8KdeS3U7hMakmcaTNOZxkyERYAxRnn3jZAYt++w+kZiemReSjq8ui1mi9
-         +f1/lD5FlNCjBPiyqCa9FBRT8gj14ZZ1vDJIRw0fBzkoE5VBKjO2NN98T42yVvL8Nr
-         AyWJH1WzehXUzBPxgHBelOuX/KQs6dHKlPlsRqeg=
+        b=FGn7kRRD4TZPdYaxDrkcGWpOcbihq/tVi5lXDIa/lutcld2ZwrfyvR2vAIuyCbM7G
+         1vKl+dGWwKcKTbh+sLXy0xo5RrKHtYZUn4GkK+fyKtSQ5XVeI1yMsPLA/rW8qqot8s
+         /uhxplvsevxaPvzBRO4zg2DITf4UJIJv1iuRDNSw=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
         Steve Longerbeam <slongerbeam@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH 40/75] media: imx: imx7-media-csi: Split imx7_csi_dma_stop()
-Date:   Tue,  5 Jan 2021 17:28:17 +0200
-Message-Id: <20210105152852.5733-41-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH 38/75] media: imx: imx7-media-csi: Validate capture format in .link_validate()
+Date:   Tue,  5 Jan 2021 17:28:15 +0200
+Message-Id: <20210105152852.5733-39-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210105152852.5733-1-laurent.pinchart@ideasonboard.com>
 References: <20210105152852.5733-1-laurent.pinchart@ideasonboard.com>
@@ -47,51 +51,122 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The imx7_csi_dma_stop() function performs two operations, it waits for
-DMA to be complete, and then cleans up and frees buffers. Split the
-second part out to a new imx7_csi_dma_cleanup() function to match
-imx7_csi_dma_setup(), in preparation for a stream start refactoring.
+Move capture format validation from imx7_csi_configure() to
+.link_validate(). This simplifies error handling at stream on time, as
+imx7_csi_configure) now becomes a void function.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/staging/media/imx/imx7-media-csi.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ drivers/staging/media/imx/imx7-media-csi.c | 45 +++++++++++++---------
+ 1 file changed, 26 insertions(+), 19 deletions(-)
 
 diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-index eb13dfd82def..b7e4d83bbbfc 100644
+index 26ac4bf95e85..bc45dc5d0275 100644
 --- a/drivers/staging/media/imx/imx7-media-csi.c
 +++ b/drivers/staging/media/imx/imx7-media-csi.c
-@@ -462,6 +462,12 @@ static int imx7_csi_dma_setup(struct imx7_csi *csi)
+@@ -489,7 +489,7 @@ static void imx7_csi_dma_stop(struct imx7_csi *csi)
+ 	imx_media_free_dma_buf(csi->dev, &csi->underrun_buf);
+ }
+ 
+-static int imx7_csi_configure(struct imx7_csi *csi)
++static void imx7_csi_configure(struct imx7_csi *csi)
+ {
+ 	struct imx_media_video_dev *vdev = csi->vdev;
+ 	struct v4l2_pix_format *out_pix = &vdev->fmt;
+@@ -518,7 +518,7 @@ static int imx7_csi_configure(struct imx7_csi *csi)
+ 			BIT_BASEADDR_CHG_ERR_EN);
+ 		imx7_csi_reg_write(csi, cr18, CSI_CSICR18);
+ 
+-		return 0;
++		return;
+ 	}
+ 
+ 	imx7_csi_set_imagpara(csi, width, out_pix->height);
+@@ -562,14 +562,10 @@ static int imx7_csi_configure(struct imx7_csi *csi)
+ 			cr18 |= BIT_MIPI_DATA_FORMAT_RAW14;
+ 		cr1 |= BIT_PIXEL_BIT;
+ 		break;
+-	default:
+-		return -EINVAL;
+ 	}
+ 
+ 	imx7_csi_reg_write(csi, cr1, CSI_CSICR1);
+ 	imx7_csi_reg_write(csi, cr18, CSI_CSICR18);
+-
+-	return 0;
+ }
+ 
+ static int imx7_csi_init(struct imx7_csi *csi)
+@@ -622,18 +618,10 @@ static int imx7_csi_streaming_start(struct imx7_csi *csi)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	ret = imx7_csi_configure(csi);
+-	if (ret < 0)
+-		goto dma_stop;
+-
++	imx7_csi_configure(csi);
+ 	imx7_csi_enable(csi);
+ 
+ 	return 0;
+-
+-dma_stop:
+-	imx7_csi_dma_stop(csi);
+-
+-	return ret;
+ }
+ 
+ static int imx7_csi_streaming_stop(struct imx7_csi *csi)
+@@ -1010,9 +998,15 @@ static int imx7_csi_pad_link_validate(struct v4l2_subdev *sd,
+ 				      struct v4l2_subdev_format *sink_fmt)
+ {
+ 	struct imx7_csi *csi = v4l2_get_subdevdata(sd);
++	struct imx_media_video_dev *vdev = csi->vdev;
++	const struct v4l2_pix_format *out_pix = &vdev->fmt;
+ 	struct media_pad *pad;
+ 	int ret;
+ 
++	/*
++	 * Validate the source link, and record whether the CSI mux selects the
++	 * parallel input or the CSI-2 receiver.
++	 */
+ 	ret = v4l2_subdev_link_validate_default(sd, link, source_fmt, sink_fmt);
+ 	if (ret)
+ 		return ret;
+@@ -1020,10 +1014,6 @@ static int imx7_csi_pad_link_validate(struct v4l2_subdev *sd,
+ 	if (!csi->src_sd)
+ 		return -EPIPE;
+ 
+-	/*
+-	 * find the entity that is selected by the CSI mux. This is needed
+-	 * to distinguish between a parallel or CSI-2 pipeline.
+-	 */
+ 	pad = imx_media_pipeline_pad(&csi->src_sd->entity, 0, 0, true);
+ 	if (!pad)
+ 		return -ENODEV;
+@@ -1034,6 +1024,23 @@ static int imx7_csi_pad_link_validate(struct v4l2_subdev *sd,
+ 
+ 	mutex_unlock(&csi->lock);
+ 
++	/* Validate the sink link, ensure the pixel format is supported. */
++	switch (out_pix->pixelformat) {
++	case V4L2_PIX_FMT_UYVY:
++	case V4L2_PIX_FMT_YUYV:
++	case V4L2_PIX_FMT_GREY:
++	case V4L2_PIX_FMT_Y10:
++	case V4L2_PIX_FMT_Y12:
++	case V4L2_PIX_FMT_SBGGR8:
++	case V4L2_PIX_FMT_SBGGR16:
++		break;
++
++	default:
++		dev_dbg(csi->dev, "Invalid capture pixel format 0x%08x\n",
++			out_pix->pixelformat);
++		return -EINVAL;
++	}
++
  	return 0;
  }
- 
-+static void imx7_csi_dma_cleanup(struct imx7_csi *csi)
-+{
-+	imx7_csi_dma_unsetup_vb2_buf(csi, VB2_BUF_STATE_ERROR);
-+	imx_media_free_dma_buf(csi->dev, &csi->underrun_buf);
-+}
-+
- static void imx7_csi_dma_stop(struct imx7_csi *csi)
- {
- 	unsigned long timeout_jiffies;
-@@ -483,10 +489,6 @@ static void imx7_csi_dma_stop(struct imx7_csi *csi)
- 		v4l2_warn(&csi->sd, "wait last EOF timeout\n");
- 
- 	imx7_csi_hw_disable_irq(csi);
--
--	imx7_csi_dma_unsetup_vb2_buf(csi, VB2_BUF_STATE_ERROR);
--
--	imx_media_free_dma_buf(csi->dev, &csi->underrun_buf);
- }
- 
- static void imx7_csi_configure(struct imx7_csi *csi)
-@@ -627,6 +629,7 @@ static int imx7_csi_streaming_start(struct imx7_csi *csi)
- static int imx7_csi_streaming_stop(struct imx7_csi *csi)
- {
- 	imx7_csi_dma_stop(csi);
-+	imx7_csi_dma_cleanup(csi);
- 
- 	imx7_csi_disable(csi);
  
 -- 
 Regards,
