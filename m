@@ -2,107 +2,141 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 487F9C433DB
-	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 14:21:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98C71C433E0
+	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 14:33:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 07DE722AAD
-	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 14:21:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6AFE722AAE
+	for <linux-media@archiver.kernel.org>; Tue,  5 Jan 2021 14:33:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726939AbhAEOVy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Jan 2021 09:21:54 -0500
-Received: from mga03.intel.com ([134.134.136.65]:40199 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726701AbhAEOVy (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 5 Jan 2021 09:21:54 -0500
-IronPort-SDR: SYQdZLoy8QZ9gKp0QtNVeOPhgnVpLWDatmKGHiL6N7gglX0IU4NPMEJbUl8Jgo55Oey5EzK8py
- V/7jGITWRtgw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9854"; a="177211577"
-X-IronPort-AV: E=Sophos;i="5.78,477,1599548400"; 
-   d="scan'208";a="177211577"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2021 06:20:07 -0800
-IronPort-SDR: 2YWWHRaNdRdoqc7vMvkZ2TSm//9sf96cc60Ub1PzSok1REUS7woIYsVP4Haa2Ey5Z3o/xpline
- sNrnY5lI2m7Q==
-X-IronPort-AV: E=Sophos;i="5.78,477,1599548400"; 
-   d="scan'208";a="378884127"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2021 06:20:06 -0800
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 60F5D206FD; Tue,  5 Jan 2021 16:20:04 +0200 (EET)
-Date:   Tue, 5 Jan 2021 16:20:04 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Ezequiel Garcia <ezequiel@collabora.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
-        kernel@collabora.com
-Subject: Re: [PATCH v2] media: v4l2-async: Add waiting subdevices debugfs
-Message-ID: <20210105142004.GR11878@paasikivi.fi.intel.com>
-References: <20210104174840.144958-1-ezequiel@collabora.com>
- <X/PhA5xsuHfSE1R/@pendragon.ideasonboard.com>
- <ba227fd79a0e0921b68365a4d636926b7c8b14ef.camel@collabora.com>
+        id S1726734AbhAEOdX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Jan 2021 09:33:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57284 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726231AbhAEOdX (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jan 2021 09:33:23 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07751C061574
+        for <linux-media@vger.kernel.org>; Tue,  5 Jan 2021 06:32:43 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id o13so73066898lfr.3
+        for <linux-media@vger.kernel.org>; Tue, 05 Jan 2021 06:32:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RFz3s6uFRgUugW1okZRtJ1a8yuoGhyvmE74H8rFnYgQ=;
+        b=pr0a39u7G1U/UKBhNQuPJnPvKKC9ymGrSsLnSM/t8rNaK9mq9xns0qtO3HTROEJbT/
+         /KNtHSdUlVCYRl5PKdM2bukE73cvMKLNSHUgLEKxqnKConvdFfyJrlMFF9AA+PoCde7e
+         D7IAzTaQK91slOqpR3DSQ1grWlvLPxvy7XqCsZVDIWmf+xo4+/Ijy+LCW6WtArYhRI8M
+         LKV5pKo+VKd/Z0MyjjjpiuX7TjcgX9RoBrcZWKUMl0xopMTDDTakcItBnGqe9/QlEbDq
+         dVnKJNJNJ1D9Pvn9LFwLfm77O7/wUvFqiyUmka7wieO5CeHwqqkpmhhH4QkVJMYUAjod
+         VLlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RFz3s6uFRgUugW1okZRtJ1a8yuoGhyvmE74H8rFnYgQ=;
+        b=MqwJBFiCDDEOCrT/N7ChPSwvM3NBPI1TFQ70Sziah/nnGmipV4EyUlBC9HxIoz+oLm
+         AafYf3VFhyYgJE8L6625B7LIfRb9rLoUwHZsyPmAXlaItQiD3rvOVicwuTbIvuSsLZaE
+         rRl3D+xSI77460siiU1f/xOqoVqfqXvyCHe72Q6XDPOzFNteVp734uY6dV8mTvxYUWpV
+         OuTk4Om9MBT/gJhsoZSAJoEAvzm5qrcT2QcqfnbIJzQ+yEZ24hO23j6MxN8ptT8TzKuS
+         jsZj1m57ZrqQaLYZTThFhGsmo4R3SFU07lqtaT0WIO/jqF24PIeSh8rIpAjmzYIX61zM
+         ebXg==
+X-Gm-Message-State: AOAM530EZE4KMd4LR1/9DU5MhZ6cEXohU7FH/aVJyM0lWvBnsujzt3mF
+        npgP2DFn9xf3q1z7cc859eD7upFieKCyJHD5MQ0=
+X-Google-Smtp-Source: ABdhPJwZXP4pqjxO1Qq4WVj38Or6vTy0XvJDzV9UYkR8PczkW4Ske/QqTaFRhJnQ8suUJp1AVhcQ5x6shM3/bUcG8gk=
+X-Received: by 2002:ac2:4431:: with SMTP id w17mr32450860lfl.223.1609857161504;
+ Tue, 05 Jan 2021 06:32:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ba227fd79a0e0921b68365a4d636926b7c8b14ef.camel@collabora.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <CAOMZO5DTW_YgVgyXqtccxQUm0A2kLLVcw_EhfsN0kZ9s2hgt7Q@mail.gmail.com>
+ <3c42e0cc-0e47-9e8e-993f-f67e9d2924ca@armadeus.com> <CAOMZO5AU2x_a0=UgJM598mAojY-QmgHW61KAo-ePBn08zNFGOA@mail.gmail.com>
+ <CAOMZO5A_WgkOotkALDhfCjhRRxBJ6f6RmUS-yF_YcZV593JWGQ@mail.gmail.com>
+ <d89a5263-6806-4290-4c24-b433a0b8fdeb@armadeus.com> <CAOMZO5BvOH=wTxRufzGMSB+uwzzN_MpgbWvWvL6awdew6DjeOw@mail.gmail.com>
+ <CAOMZO5BkbB7KHP3pz1SLgD1Vth-BcZAEuxsaSQJ83Y6O=DDPdg@mail.gmail.com>
+In-Reply-To: <CAOMZO5BkbB7KHP3pz1SLgD1Vth-BcZAEuxsaSQJ83Y6O=DDPdg@mail.gmail.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Tue, 5 Jan 2021 11:32:29 -0300
+Message-ID: <CAOMZO5D1Lk6evyRZ08erQ3DaVgSHubGjGbK8dcKao=NS+m-PUA@mail.gmail.com>
+Subject: Re: imx6ull capture from OV5640
+To:     =?UTF-8?Q?S=C3=A9bastien_Szymanski?= 
+        <sebastien.szymanski@armadeus.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        linux-media <linux-media@vger.kernel.org>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Julien Boibessot <julien.boibessot@armadeus.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Ezequiel,
+On Tue, Jan 5, 2021 at 10:45 AM Fabio Estevam <festevam@gmail.com> wrote:
 
-On Tue, Jan 05, 2021 at 10:34:14AM -0300, Ezequiel Garcia wrote:
-> Hi Sakari, Laurent,
-> 
-> On Tue, 2021-01-05 at 05:46 +0200, Laurent Pinchart wrote:
-> > Hi Ezequiel,
-> > 
-> > Thank you for the patch.
-> > 
-> > On Mon, Jan 04, 2021 at 02:48:40PM -0300, Ezequiel Garcia wrote:
-> > > There is currently little to none information available
-> > > about the reasons why a v4l2-async device hasn't
-> > > probed completely.
-> > > 
-> > > Inspired by the "devices_deferred" debugfs file,
-> > > add a file to list information about the subdevices
-> > > that are on waiting lists, for each notifier.
-> > > 
-> > > This is useful to debug v4l2-async subdevices
-> > > and notifiers, for instance when doing device bring-up.
-> > > 
-> > > For instance, a typical output would be:
-> > > 
-> > > $ cat /sys/kernel/debug/video4linux/pending_async_subdevices
-> > > ipu1_csi1:
-> > >  [fwnode] dev=20e0000.iomuxc-gpr:ipu1_csi1_mux, node=/soc/bus@2000000/iomuxc-gpr@20e0000/ipu1_csi1_mux
-> > > ipu1_csi0:
-> > >  [fwnode] dev=20e0000.iomuxc-gpr:ipu1_csi0_mux, node=/soc/bus@2000000/iomuxc-gpr@20e0000/ipu1_csi0_mux
-> > > imx6-mipi-csi2:
-> > >  [fwnode] dev=1-003c, node=/soc/bus@2100000/i2c@21a4000/camera@3c
-> > > imx-media:
-> > > 
-> > > Note that match-type "custom" prints no information.
-> > > Since there are no in-tree users of this match-type,
-> > > the implementation doesn't bother.
-> > 
-> > I wonder if we should drop it.
-> > 
-> 
-> That would make sense, unless we have some out-of-tree
-> users, and we want to support that.
-> 
-> Sakari, what do you think?
+> Just tested against next-20210105 and the original warning happens and
+> csi is no longer probed.
+>
+> I am using the same dtb that worked on 5.4.84.
+>
+> It looks like we have a regression.
 
-I think we could drop it. But I'd do that in a separate patch from this
-one.
+And here is a fix that allows csi to probe:
+https://pastebin.com/raw/g6ijDf2N
 
--- 
-Regards,
+Makes sense?
 
-Sakari Ailus
+There is another error though: I do not see the message below as seen
+on 5.4 kernel:
+[   10.690711] imx-media: ov5640 1-003c:0 -> csi:0
+
+And the same pipeline that worked with 5.4 does not work with linux-next:
+
+# media-ctl -l "'ov5640 1-003c':0 -> 'csi':0[1]"
+media-ctl -l "'csi':1 -> 'csi capture':0[1]"
+media-ctl -v -V "'ov5640 1-003c':0 [fmt:UYVY8_2X8/320x240 field:none]"
+
+# gst-launch-1.0 -v  v4l2src device=/dev/video1 ! v4l2convert ! fbdevsink
+Setting pipeline to PAUSED ...
+Pipeline is live and does not need PREROLL ...
+Pipeline is PREROLLED ...
+Setting pipeline to PLAYING ...
+New clock: GstSystemClock
+/GstPipeline:pipeline0/GstV4l2Src:v4l2src0.GstPad:src: caps =
+video/x-raw, format=(string)UYVY, width=(int)320, height=(int)240,
+framerate=(fraction)30000/1001, interlace-mode=(string)progressive,
+colorim
+etry=(string)1:4:7:1
+/GstPipeline:pipeline0/v4l2convert:v4l2convert0.GstPad:src: caps =
+video/x-raw, format=(string)BGRx, width=(int)320, height=(int)240,
+framerate=(fraction)30000/1001, interlace-mode=(string)progressive
+/GstPipeline:pipeline0/GstFBDEVSink:fbdevsink0.GstPad:sink: caps =
+video/[  421.495561] alloc_contig_range: [9c480, 9c4a6) PFNs busy
+x-raw, format=(string)BGRx, width=(int)320, height=(int)240, fra[
+421.504399] alloc_contig_range: [9c480, 9c4a6) PFNs busy
+merate=(fraction)30000/1001, interlace-mode=(string)progressive
+/GstPipeline:pipeline0/v4l2convert:v4l2convert0.GstPad:sink: c[
+421.520989] alloc_contig_range: [9c480, 9c4a6) PFNs busy
+aps = video/x-raw, format=(string)UYVY, width=(int)320, height=([
+421.533523] csi: pipeline start failed with -19
+int)240, framerate=(fraction)30000/1001,
+interlace-mode=(string)progressive, colorimetry=(string)1:4:7:1
+ERROR: from element /GstPipeline:pipeline0/GstV4l2Src:v4l2src0: Failed
+to allocate required memory.
+Additional debug info:
+../sys/v4l2/gstv4l2src.c(659): gst_v4l2src_decide_allocation ():
+/GstPipeline:pipeline0/GstV4l2Src:v4l2src0:
+Buffer pool activation failed
+Execution ended after 0:00:00.106613417
+Setting pipeline to NULL ...
+Freeing pipeline ...
+#
+
+Any ideas?
+
+Thanks
