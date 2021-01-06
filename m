@@ -2,125 +2,85 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+X-Spam-Status: No, score=-10.6 required=3.0 tests=BAYES_00,
+	CHARSET_FARAWAY_HEADER,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F17F3C433DB
-	for <linux-media@archiver.kernel.org>; Wed,  6 Jan 2021 13:26:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32596C433E6
+	for <linux-media@archiver.kernel.org>; Wed,  6 Jan 2021 13:31:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ACE262311C
-	for <linux-media@archiver.kernel.org>; Wed,  6 Jan 2021 13:26:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D4A7A23120
+	for <linux-media@archiver.kernel.org>; Wed,  6 Jan 2021 13:31:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725828AbhAFN05 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 6 Jan 2021 08:26:57 -0500
-Received: from 9.mo4.mail-out.ovh.net ([46.105.40.176]:58617 "EHLO
-        9.mo4.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725788AbhAFN04 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Jan 2021 08:26:56 -0500
-X-Greylist: delayed 157737 seconds by postgrey-1.27 at vger.kernel.org; Wed, 06 Jan 2021 08:26:55 EST
-Received: from player773.ha.ovh.net (unknown [10.108.42.88])
-        by mo4.mail-out.ovh.net (Postfix) with ESMTP id 14FC725EFC6
-        for <linux-media@vger.kernel.org>; Wed,  6 Jan 2021 09:38:10 +0100 (CET)
-Received: from armadeus.com (lfbn-str-1-215-46.w86-243.abo.wanadoo.fr [86.243.176.46])
-        (Authenticated sender: sebastien.szymanski@armadeus.com)
-        by player773.ha.ovh.net (Postfix) with ESMTPSA id C0F6319D498C6;
-        Wed,  6 Jan 2021 08:38:01 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-99G00352f35390-87ca-435a-8d60-2ccb68778e48,
-                    2877095AE5B00A1DD94A508FAF09BB9C3E952DE9) smtp.auth=sebastien.szymanski@armadeus.com
-X-OVh-ClientIp: 86.243.176.46
-Subject: Re: imx6ull capture from OV5640
-To:     Rui Miguel Silva <rmfrfs@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        linux-media <linux-media@vger.kernel.org>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Julien Boibessot <julien.boibessot@armadeus.com>
-References: <CAOMZO5DTW_YgVgyXqtccxQUm0A2kLLVcw_EhfsN0kZ9s2hgt7Q@mail.gmail.com>
- <3c42e0cc-0e47-9e8e-993f-f67e9d2924ca@armadeus.com>
- <CAOMZO5AU2x_a0=UgJM598mAojY-QmgHW61KAo-ePBn08zNFGOA@mail.gmail.com>
- <CAOMZO5A_WgkOotkALDhfCjhRRxBJ6f6RmUS-yF_YcZV593JWGQ@mail.gmail.com>
- <d89a5263-6806-4290-4c24-b433a0b8fdeb@armadeus.com>
- <CAOMZO5BvOH=wTxRufzGMSB+uwzzN_MpgbWvWvL6awdew6DjeOw@mail.gmail.com>
- <CAOMZO5BkbB7KHP3pz1SLgD1Vth-BcZAEuxsaSQJ83Y6O=DDPdg@mail.gmail.com>
- <CAOMZO5D1Lk6evyRZ08erQ3DaVgSHubGjGbK8dcKao=NS+m-PUA@mail.gmail.com>
- <20210105150129.fresebmib75htyl5@arch-thunder.localdomain>
- <CAOMZO5D+GGM_QPc0=nWEYe=XV1EBgUS7ff+t+0aER-fg+a4PKA@mail.gmail.com>
- <20210105193248.hegbxct4kiurdnzq@arch-thunder.localdomain>
-From:   =?UTF-8?Q?S=c3=a9bastien_Szymanski?= 
-        <sebastien.szymanski@armadeus.com>
-Message-ID: <ba571299-8c63-dc07-ddc9-f8d80f93edb1@armadeus.com>
-Date:   Wed, 6 Jan 2021 09:38:15 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        id S1726503AbhAFNav (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 6 Jan 2021 08:30:51 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:2941 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726501AbhAFNau (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Jan 2021 08:30:50 -0500
+Received: from dggeme762-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4D9qvl3Dq1z5F1p;
+        Wed,  6 Jan 2021 21:29:07 +0800 (CST)
+Received: from dggeme760-chm.china.huawei.com (10.3.19.106) by
+ dggeme762-chm.china.huawei.com (10.3.19.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1913.5; Wed, 6 Jan 2021 21:30:02 +0800
+Received: from dggeme760-chm.china.huawei.com ([10.6.80.70]) by
+ dggeme760-chm.china.huawei.com ([10.6.80.70]) with mapi id 15.01.1913.007;
+ Wed, 6 Jan 2021 21:30:02 +0800
+From:   zhengyongjun <zhengyongjun3@huawei.com>
+To:     "clabbe@baylibre.com" <clabbe@baylibre.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "mjpeg-users@lists.sourceforge.net" 
+        <mjpeg-users@lists.sourceforge.net>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "devel@driverdev.osuosl.org" <devel@driverdev.osuosl.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Subject: =?gb2312?B?tPC4tDogW1BBVENIIC1uZXh0XSBtZWRpYTogem9yYW46IHVzZSByZXNvdXJj?=
+ =?gb2312?Q?e=5Fsize?=
+Thread-Topic: [PATCH -next] media: zoran: use resource_size
+Thread-Index: AQHW5C4k5dTBnbfL/0ecILiTVyuNR6oal3pw
+Date:   Wed, 6 Jan 2021 13:30:02 +0000
+Message-ID: <f6368bef56b54bdf94c2fdb1fa0752d1@huawei.com>
+References: <20210106131702.32507-1-zhengyongjun3@huawei.com>
+In-Reply-To: <20210106131702.32507-1-zhengyongjun3@huawei.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.174.178.249]
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <20210105193248.hegbxct4kiurdnzq@arch-thunder.localdomain>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 8570913041387508766
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedujedrvdefkedguddvudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefuvfhfhffkffgfgggjtgfgsehtkeertddtfeejnecuhfhrohhmpefurogsrghsthhivghnpgfuiiihmhgrnhhskhhiuceoshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmqeenucggtffrrghtthgvrhhnpeeltdelheelhffgvdevuefggeffhfdvgfekteefhffgveeludeuhfekkeefueekheenucfkpheptddrtddrtddrtddpkeeirddvgeefrddujeeirdegieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphdqohhuthdphhgvlhhopehplhgrhigvrhejjeefrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmpdhrtghpthhtoheplhhinhhugidqmhgvughirgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Rui,
-
-On 1/5/21 8:32 PM, Rui Miguel Silva wrote:
-> Oi Fabio,
-> On Tue, Jan 05, 2021 at 01:05:52PM -0300, Fabio Estevam wrote:
->> Hi Rui,
->>
->> On Tue, Jan 5, 2021 at 12:01 PM Rui Miguel Silva <rmfrfs@gmail.com>
->> wrote:
->>
->>> can you see if the following patch make it work again?
->>
->> Yes, with your patch and mine I can capture the same way as with the
->> 5.4 kernel :-)
-> 
-> Great that it worked.
-> 
->>
->> The pink color issue is still present but it is orthogonal to this
->> problem.
->>
->> Could you please submit your patch formally to the list? Please
->> include my attached patch as 1/2 and yours as 2/2.
-> 
-> yes, I will create a series with the correct fix tags also.
-> 
->>
->> Also, please add the following tag to your patch:
->>
->> Tested-by: Fabio Estevam <festevam@gmail.com>
-
-Please add my tag too:
-
-Tested-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
-
-Thanks!
-
-Regards,
-
-
-> 
-> will do, thanks and sorry about your issue, I really thought that all
-> imx, including imx5,6 and 7 had a mux. I need to get my hand in a
-> imx6ull full documentation.
-> 
-> ------
-> Cheers,
->      Rui
-> 
-
-
--- 
-Sébastien Szymanski, Armadeus Systems
-Software engineer
+U29ycnksIHRoaXMgaXMgbXkgZmF1bHQsIGFsbCB0aGlzIG1lZGlhIHJlbGF0ZWQgcGF0Y2ggY29t
+bWl0IG1zZyBpcyB3cm9uZywgSSB3aWxsIHNlbmQgcGF0Y2ggdjIsIHBsZWFzZSBpZ25vcmUgaXQu
+DQoNCi0tLS0t08q8/tStvP4tLS0tLQ0Kt6K8/sjLOiB6aGVuZ3lvbmdqdW4gDQq3osvNyrG85Dog
+MjAyMcTqMdTCNsjVIDIxOjE3DQrK1bz+yMs6IGNsYWJiZUBiYXlsaWJyZS5jb207IG1jaGVoYWJA
+a2VybmVsLm9yZzsgbWpwZWctdXNlcnNAbGlzdHMuc291cmNlZm9yZ2UubmV0OyBsaW51eC1tZWRp
+YUB2Z2VyLmtlcm5lbC5vcmc7IGRldmVsQGRyaXZlcmRldi5vc3Vvc2wub3JnOyBsaW51eC1rZXJu
+ZWxAdmdlci5rZXJuZWwub3JnDQqzrcvNOiBncmVna2hAbGludXhmb3VuZGF0aW9uLm9yZzsgemhl
+bmd5b25nanVuIDx6aGVuZ3lvbmdqdW4zQGh1YXdlaS5jb20+DQrW98ziOiBbUEFUQ0ggLW5leHRd
+IG1lZGlhOiB6b3JhbjogdXNlIHJlc291cmNlX3NpemUNCg0KVXNlIHJlc291cmNlX3NpemUgcmF0
+aGVyIHRoYW4gYSB2ZXJib3NlIGNvbXB1dGF0aW9uIG9uIHRoZSBlbmQgYW5kIHN0YXJ0IGZpZWxk
+cy4NCg0KU2lnbmVkLW9mZi1ieTogWmhlbmcgWW9uZ2p1biA8emhlbmd5b25nanVuM0BodWF3ZWku
+Y29tPg0KLS0tDQogZHJpdmVycy9zdGFnaW5nL21lZGlhL3pvcmFuL3pvcmFuX2RyaXZlci5jIHwg
+MiArLQ0KIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KDQpk
+aWZmIC0tZ2l0IGEvZHJpdmVycy9zdGFnaW5nL21lZGlhL3pvcmFuL3pvcmFuX2RyaXZlci5jIGIv
+ZHJpdmVycy9zdGFnaW5nL21lZGlhL3pvcmFuL3pvcmFuX2RyaXZlci5jDQppbmRleCA4MDgxOTZl
+YTViODEuLmQ2MGI0YzczZWE4MCAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvc3RhZ2luZy9tZWRpYS96
+b3Jhbi96b3Jhbl9kcml2ZXIuYw0KKysrIGIvZHJpdmVycy9zdGFnaW5nL21lZGlhL3pvcmFuL3pv
+cmFuX2RyaXZlci5jDQpAQCAtMTAyMCw3ICsxMDIwLDcgQEAgaW50IHpvcmFuX3F1ZXVlX2luaXQo
+c3RydWN0IHpvcmFuICp6ciwgc3RydWN0IHZiMl9xdWV1ZSAqdnEpDQogCXZxLT5idWZfc3RydWN0
+X3NpemUgPSBzaXplb2Yoc3RydWN0IHpyX2J1ZmZlcik7DQogCXZxLT5vcHMgPSAmenJfdmlkZW9f
+cW9wczsNCiAJdnEtPm1lbV9vcHMgPSAmdmIyX2RtYV9jb250aWdfbWVtb3BzOw0KLQl2cS0+Z2Zw
+X2ZsYWdzID0gR0ZQX0RNQTMyLA0KKwl2cS0+Z2ZwX2ZsYWdzID0gR0ZQX0RNQTMyOw0KIAl2cS0+
+dGltZXN0YW1wX2ZsYWdzID0gVjRMMl9CVUZfRkxBR19USU1FU1RBTVBfTU9OT1RPTklDOw0KIAl2
+cS0+bWluX2J1ZmZlcnNfbmVlZGVkID0gOTsNCiAJdnEtPmxvY2sgPSAmenItPmxvY2s7DQotLQ0K
+Mi4yMi4wDQoNCg==
