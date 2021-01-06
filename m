@@ -2,109 +2,69 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 976D0C433E0
-	for <linux-media@archiver.kernel.org>; Wed,  6 Jan 2021 10:59:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BADB3C433E6
+	for <linux-media@archiver.kernel.org>; Wed,  6 Jan 2021 13:17:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 44D9023105
-	for <linux-media@archiver.kernel.org>; Wed,  6 Jan 2021 10:59:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8E60D23110
+	for <linux-media@archiver.kernel.org>; Wed,  6 Jan 2021 13:17:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726497AbhAFK7N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 6 Jan 2021 05:59:13 -0500
-Received: from 2.mo2.mail-out.ovh.net ([188.165.53.149]:38223 "EHLO
-        2.mo2.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726460AbhAFK7N (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Jan 2021 05:59:13 -0500
-X-Greylist: delayed 7805 seconds by postgrey-1.27 at vger.kernel.org; Wed, 06 Jan 2021 05:59:12 EST
-Received: from player731.ha.ovh.net (unknown [10.108.42.228])
-        by mo2.mail-out.ovh.net (Postfix) with ESMTP id 8A7391F3994
-        for <linux-media@vger.kernel.org>; Wed,  6 Jan 2021 09:30:00 +0100 (CET)
-Received: from armadeus.com (lfbn-str-1-215-46.w86-243.abo.wanadoo.fr [86.243.176.46])
-        (Authenticated sender: sebastien.szymanski@armadeus.com)
-        by player731.ha.ovh.net (Postfix) with ESMTPSA id 9AC8C1989445D;
-        Wed,  6 Jan 2021 08:29:51 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-106R0069a15d81f-91ea-4d59-a361-0fc6ed66905c,
-                    2877095AE5B00A1DD94A508FAF09BB9C3E952DE9) smtp.auth=sebastien.szymanski@armadeus.com
-X-OVh-ClientIp: 86.243.176.46
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        linux-media <linux-media@vger.kernel.org>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Julien Boibessot <julien.boibessot@armadeus.com>
-References: <CAOMZO5DTW_YgVgyXqtccxQUm0A2kLLVcw_EhfsN0kZ9s2hgt7Q@mail.gmail.com>
- <3c42e0cc-0e47-9e8e-993f-f67e9d2924ca@armadeus.com>
- <CAOMZO5AU2x_a0=UgJM598mAojY-QmgHW61KAo-ePBn08zNFGOA@mail.gmail.com>
- <CAOMZO5A_WgkOotkALDhfCjhRRxBJ6f6RmUS-yF_YcZV593JWGQ@mail.gmail.com>
- <d89a5263-6806-4290-4c24-b433a0b8fdeb@armadeus.com>
- <CAOMZO5BvOH=wTxRufzGMSB+uwzzN_MpgbWvWvL6awdew6DjeOw@mail.gmail.com>
-From:   =?UTF-8?Q?S=c3=a9bastien_Szymanski?= 
-        <sebastien.szymanski@armadeus.com>
-Subject: Re: imx6ull capture from OV5640
-Message-ID: <7b099949-607e-2357-1035-9da92db634ea@armadeus.com>
-Date:   Wed, 6 Jan 2021 09:30:05 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        id S1726281AbhAFNRS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 6 Jan 2021 08:17:18 -0500
+Received: from szxga07-in.huawei.com ([45.249.212.35]:10396 "EHLO
+        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726262AbhAFNRS (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Jan 2021 08:17:18 -0500
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4D9qc55Rr9z7R0j;
+        Wed,  6 Jan 2021 21:15:33 +0800 (CST)
+Received: from ubuntu.network (10.175.138.68) by
+ DGGEMS404-HUB.china.huawei.com (10.3.19.204) with Microsoft SMTP Server id
+ 14.3.498.0; Wed, 6 Jan 2021 21:16:19 +0800
+From:   Zheng Yongjun <zhengyongjun3@huawei.com>
+To:     <clabbe@baylibre.com>, <mchehab@kernel.org>,
+        <mjpeg-users@lists.sourceforge.net>, <linux-media@vger.kernel.org>,
+        <devel@driverdev.osuosl.org>, <linux-kernel@vger.kernel.org>
+CC:     <gregkh@linuxfoundation.org>,
+        Zheng Yongjun <zhengyongjun3@huawei.com>
+Subject: [PATCH -next] media: zoran: use resource_size
+Date:   Wed, 6 Jan 2021 21:17:02 +0800
+Message-ID: <20210106131702.32507-1-zhengyongjun3@huawei.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-In-Reply-To: <CAOMZO5BvOH=wTxRufzGMSB+uwzzN_MpgbWvWvL6awdew6DjeOw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 8432990305012306974
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedujedrvdefkedguddvtdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefvfhfhuffkffgfgggjtgfgsehtkeertddtfeejnecuhfhrohhmpefurogsrghsthhivghnpgfuiiihmhgrnhhskhhiuceoshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmqeenucggtffrrghtthgvrhhnpeeftdejudffgeefvdegfeffhffgffejjeefveehkefghfekhffgteejgfeludduudenucfkpheptddrtddrtddrtddpkeeirddvgeefrddujeeirdegieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphdqohhuthdphhgvlhhopehplhgrhigvrhejfedurdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmpdhrtghpthhtoheplhhinhhugidqmhgvughirgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.138.68]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Fabio,
+Use resource_size rather than a verbose computation on
+the end and start fields.
 
-On 1/5/21 2:19 PM, Fabio Estevam wrote:
-> Hi Sébastien,
-> 
-> On Tue, Jan 5, 2021 at 6:49 AM Sébastien Szymanski
-> <sebastien.szymanski@armadeus.com> wrote:
-> 
->> I used the following gstreamer pipeline to stream on the framebuffer:
->>
->> gst-launch-1.0 v4l2src device=/dev/video1 ! v4l2convert ! fbdevsink
-> 
-> Thanks, this helps and now the pipeline starts and I do see the camera
-> image on the LCD.
-> 
-> I switched to the same 5.4 you used just to make sure we are in the
-> same codebase.
-> 
-> I am getting the wrong colors though. The captured image is too pinky.
-> 
-> Do you get the correct colors on your test?
+Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
+---
+ drivers/staging/media/zoran/zoran_driver.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yes, the colors are correct on my test.
-
-Regards,
-
-> 
-> Also, I had to describe like the polarities like this:
-> 
-> hsync-active = <0>;
-> vsync-active = <1>;
-> pclk-sample = <0>;
-> 
-> because if I used the same polarities from your patch, then the
-> pipeline does not start.
-> 
-> Thanks for your help!
-> 
-
-
+diff --git a/drivers/staging/media/zoran/zoran_driver.c b/drivers/staging/media/zoran/zoran_driver.c
+index 808196ea5b81..d60b4c73ea80 100644
+--- a/drivers/staging/media/zoran/zoran_driver.c
++++ b/drivers/staging/media/zoran/zoran_driver.c
+@@ -1020,7 +1020,7 @@ int zoran_queue_init(struct zoran *zr, struct vb2_queue *vq)
+ 	vq->buf_struct_size = sizeof(struct zr_buffer);
+ 	vq->ops = &zr_video_qops;
+ 	vq->mem_ops = &vb2_dma_contig_memops;
+-	vq->gfp_flags = GFP_DMA32,
++	vq->gfp_flags = GFP_DMA32;
+ 	vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
+ 	vq->min_buffers_needed = 9;
+ 	vq->lock = &zr->lock;
 -- 
-Sébastien Szymanski, Armadeus Systems
-Software engineer
+2.22.0
+
