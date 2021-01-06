@@ -2,60 +2,59 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03D3FC4332D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C0C6C4332E
 	for <linux-media@archiver.kernel.org>; Wed,  6 Jan 2021 03:05:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E14EA22D6F
-	for <linux-media@archiver.kernel.org>; Wed,  6 Jan 2021 03:05:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1AE3822D6E
+	for <linux-media@archiver.kernel.org>; Wed,  6 Jan 2021 03:05:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726536AbhAFDF2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Jan 2021 22:05:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35104 "EHLO
+        id S1726151AbhAFDFW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Jan 2021 22:05:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725808AbhAFDF1 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jan 2021 22:05:27 -0500
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0702C061357;
-        Tue,  5 Jan 2021 19:05:02 -0800 (PST)
-Received: by mail-qk1-x72d.google.com with SMTP id z11so1438597qkj.7;
-        Tue, 05 Jan 2021 19:05:02 -0800 (PST)
+        with ESMTP id S1725808AbhAFDFW (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jan 2021 22:05:22 -0500
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6781EC06134C;
+        Tue,  5 Jan 2021 19:04:57 -0800 (PST)
+Received: by mail-qk1-x731.google.com with SMTP id 186so1469424qkj.3;
+        Tue, 05 Jan 2021 19:04:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=bAQRTpcE0bBbk84O+D0aHdAZGl9TgRNlPD0z6hqS3fA=;
-        b=rRQCiBkacLhYaAcIUequ8V5qg0BGgkN3XK2heHfDYK/Iyp0HrfQX6KMtzU+hlIVn9l
-         l7Cvtj+yxUQBcpEh7vzJgyUAT4IEmFBbKvzoq00LLUx9hUmRjDqnQN3IAHuh2Bsz8BY7
-         0XWJTCoeOFdQDjd3UhTf+yadTrcWNodGDgtXMcldJiQJtlN4YmsYSqRJLzIOEg7sLkPO
-         HdALWME8ol6IQuF6i5ZPYWAfFscPSpCafJfaYwQhB0ExGG9O5QXsGF8HbWiFsfdGRCaS
-         E1rek/BxvZoJTAYcXjb34kdoiZOwv0QGqlShemGRS6AW9H2KYTFgaU9e5vEJ7i2rSrAo
-         6PPg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=s6kPsdrQGFtRIW15gnjfxayTfIR6vKrZhwi28iuMhA0=;
+        b=dzwj0vmBYlMtkdxj6zzOPVRBCaUVvyHQ7MXQj4ItQJ6V1nI4vb8NJwfksMbPpvFVak
+         nEGOhe0LjlPvvHH1CPMLCV5fM1P3KDYLUBS8qOQzmeR1h27v7Qg9E+yer0seApXtWOQY
+         IA4Y7dyB+n/6LXPSDYl832rLDx2d2fGj4Hg8jUyTR1lxIddgc+B4frfQSvpa43d9N2fX
+         Ugz3BFg3TOaxKByvkrtrzx+kfXKfXK6LE/R+c+uPZ61m4MBx/nepftaVQ/nYQgltzCjE
+         5hXBftcAG+TfBuGT/lxEq5h80q4hUaKje/Pm30jgC77tolZX/fpF4IZUsyvZLItF6Kk/
+         mwqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=bAQRTpcE0bBbk84O+D0aHdAZGl9TgRNlPD0z6hqS3fA=;
-        b=UnIdtlQPVfDZ8hJUQJKVLYyyI1QZ/fjd5HJ0fCBo/16Y9CUcfrsbIiVpoEDx01fLVC
-         zmWAnDSdamSLgehup5zI8naJ3k4TgRItI4tjn5lnPneJPUKnzUegtDEUo3KoOwPDwJWp
-         kccHV2PJqzKhvTpnR1tJJ1BwuvRofQ2b4x0nPW/SI7K+ylvY0qut5hbcsu2rkFgausV0
-         bUEg5F7v5RWkLHbcD/JY+nnAGQ53jqn7SbvptLEiY8MJQr9m5iziYvw1iMY+VnPhaU5p
-         lPQO+vL6lC9woKaN6iBluyt8hQgrn+hxpc1iY66oQQtprpkfA3HSCzNpDFggKrXSOwkd
-         hiwQ==
-X-Gm-Message-State: AOAM533tCepGcUWECEzSUpMaRqPeyOeUtOOv0YmiIh1oCmw89RjYe1Xb
-        GO0aVGyicJOfm7CX1GNpnTM=
-X-Google-Smtp-Source: ABdhPJwaE8CpXtIGHeZXNN4dGm3LTqFO8v45yl7BNIGgIyzmOWKbWaneY5QGFXBU8sTG6Jmc+GevDQ==
-X-Received: by 2002:a37:8e06:: with SMTP id q6mr2642195qkd.402.1609902301928;
-        Tue, 05 Jan 2021 19:05:01 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=s6kPsdrQGFtRIW15gnjfxayTfIR6vKrZhwi28iuMhA0=;
+        b=ouAobOzYRZ+RAJvRXdPJcBfQlDGAcA4d5EcRygTv2S+Haq4bLWXW+K2gHf9hAMtUeA
+         9KwAchoBshiKiXNKzT2dpPPiFu7PjXxChw+JrraFNpSnvdfNQQHyF9xvLcXYEuAGDUJY
+         F70y8CXRCtZCP/2CxNhZ+CDSmt3MM0vfvjiHWERVaStckDClKKRPUqdnVxiyewxB8XhV
+         RPMC+xDbVXrlKSB6AJV+XHYZtEWinCzLe+PA0MNHxTT5Yd8tUOMSQv60vcn9JQuYOIuf
+         ER91Uq4kEf8LEjQjoNuPXLsxNe5+7mCQYqKIpZbT6BcCjOId9Fu09NqzpeXw5pMmhODG
+         tvhg==
+X-Gm-Message-State: AOAM531miFJnT9u0zS0CVf7wKpcB6QAfScdmd8kvJjaPy6WZOzFWRmyZ
+        0ZdGb6NuarGLVYXwIg5vUj4=
+X-Google-Smtp-Source: ABdhPJyF4RtXgEU36C8YgcHsJ2JHyUGpVT62dayZsGYyv3EN3ffcQBVbB1GZWw7K6UYtY2KrRnhhCA==
+X-Received: by 2002:a05:620a:13c2:: with SMTP id g2mr2532569qkl.174.1609902296433;
+        Tue, 05 Jan 2021 19:04:56 -0800 (PST)
 Received: from localhost.localdomain ([2804:14d:72b1:8920:77d4:6fb0:85b3:b6f7])
-        by smtp.gmail.com with ESMTPSA id n195sm730019qke.20.2021.01.05.19.04.59
+        by smtp.gmail.com with ESMTPSA id n195sm730019qke.20.2021.01.05.19.04.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jan 2021 19:05:01 -0800 (PST)
+        Tue, 05 Jan 2021 19:04:55 -0800 (PST)
 From:   "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
 X-Google-Original-From: Daniel W. S. Almeida
 To:     mchehab@kernel.org, hverkuil@xs4all.nl
@@ -63,12 +62,10 @@ Cc:     "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
         linux-media@vger.kernel.org,
         linux-kernel-mentees@lists.linuxfoundation.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/4] media: vidtv: reinstate sysfs bind attrs
-Date:   Wed,  6 Jan 2021 00:04:47 -0300
-Message-Id: <20210106030449.3223172-3-dwlsalmeida@gmail.com>
+Subject: [PATCH v2 0/4] media: vidtv: add media controller support
+Date:   Wed,  6 Jan 2021 00:04:45 -0300
+Message-Id: <20210106030449.3223172-1-dwlsalmeida@gmail.com>
 X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210106030449.3223172-1-dwlsalmeida@gmail.com>
-References: <20210106030449.3223172-1-dwlsalmeida@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -77,27 +74,26 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
 
-Reinstate sysfs bind attrs so that vidtv can be bound and unbound
-via sysfs. This is useful for automated regression testing in
-userspace.
+This series adds media controller support for vidtv so that we can
+support this driver at the test-media script in v4l-utils.
 
-Signed-off-by: Daniel W. S. Almeida <dwlsalmeida@gmail.com>
----
- drivers/media/test-drivers/vidtv/vidtv_bridge.c | 1 -
- 1 file changed, 1 deletion(-)
+I based my implementation on vim2m's.
 
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_bridge.c b/drivers/media/test-drivers/vidtv/vidtv_bridge.c
-index a2fa9b58174d..405e89f62b5a 100644
---- a/drivers/media/test-drivers/vidtv/vidtv_bridge.c
-+++ b/drivers/media/test-drivers/vidtv/vidtv_bridge.c
-@@ -571,7 +571,6 @@ static struct platform_device vidtv_bridge_dev = {
- static struct platform_driver vidtv_bridge_driver = {
- 	.driver = {
- 		.name                = "vidtv_bridge",
--		.suppress_bind_attrs = true,
- 	},
- 	.probe    = vidtv_bridge_probe,
- 	.remove   = vidtv_bridge_remove,
+changes in v2:
+	added missing #ifdef that otherwise prevented this
+	code from compilling if CONFIG_MEDIA_CONTROLLER_DVB 
+	was not set.
+
+Daniel W. S. Almeida (4):
+  media: vidtv: Add media controller support
+  media: vidtv: reinstate sysfs bind attrs
+  media: vidtv: use a simpler name in platform_{device|driver}
+  media: vidtv: print message when driver is removed
+
+ .../media/test-drivers/vidtv/vidtv_bridge.c   | 34 +++++++++++++++++--
+ .../media/test-drivers/vidtv/vidtv_bridge.h   |  7 ++++
+ 2 files changed, 38 insertions(+), 3 deletions(-)
+
 -- 
 2.30.0
 
