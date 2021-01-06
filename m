@@ -2,96 +2,128 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1B69C4332B
-	for <linux-media@archiver.kernel.org>; Wed,  6 Jan 2021 18:13:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67577C4332B
+	for <linux-media@archiver.kernel.org>; Wed,  6 Jan 2021 18:18:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AC23E23130
-	for <linux-media@archiver.kernel.org>; Wed,  6 Jan 2021 18:13:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 382A923138
+	for <linux-media@archiver.kernel.org>; Wed,  6 Jan 2021 18:18:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727412AbhAFSNQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 6 Jan 2021 13:13:16 -0500
-Received: from mailoutvs25.siol.net ([185.57.226.216]:37814 "EHLO
-        mail.siol.net" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727148AbhAFSNP (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Jan 2021 13:13:15 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.siol.net (Postfix) with ESMTP id 924535233EB;
-        Wed,  6 Jan 2021 19:12:32 +0100 (CET)
-X-Virus-Scanned: amavisd-new at psrvmta09.zcs-production.pri
-Received: from mail.siol.net ([127.0.0.1])
-        by localhost (psrvmta09.zcs-production.pri [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id x-kJU5SuPU1p; Wed,  6 Jan 2021 19:12:32 +0100 (CET)
-Received: from mail.siol.net (localhost [127.0.0.1])
-        by mail.siol.net (Postfix) with ESMTPS id 5151B5233E6;
-        Wed,  6 Jan 2021 19:12:32 +0100 (CET)
-Received: from kista.localdomain (cpe-86-58-58-53.static.triera.net [86.58.58.53])
-        (Authenticated sender: 031275009)
-        by mail.siol.net (Postfix) with ESMTPSA id 091645233EB;
-        Wed,  6 Jan 2021 19:12:30 +0100 (CET)
-From:   Jernej Skrabec <jernej.skrabec@siol.net>
-To:     robh+dt@kernel.org, mripard@kernel.org, wens@csie.org
-Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, jernej.skrabec@siol.net,
-        linux-sunxi@googlegroups.com
-Subject: [PATCH 2/2] ARM: dts: sun8i: r40: Add deinterlace node
-Date:   Wed,  6 Jan 2021 19:19:01 +0100
-Message-Id: <20210106181901.1324075-3-jernej.skrabec@siol.net>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210106181901.1324075-1-jernej.skrabec@siol.net>
-References: <20210106181901.1324075-1-jernej.skrabec@siol.net>
+        id S1726661AbhAFSS3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 6 Jan 2021 13:18:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36192 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725789AbhAFSS2 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Jan 2021 13:18:28 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EDC1C061575;
+        Wed,  6 Jan 2021 10:17:48 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id b26so8604119lff.9;
+        Wed, 06 Jan 2021 10:17:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=HYWLWTmJNILkmHihZoZqMnAVOHO5Z+JPD1TRn5rR9L8=;
+        b=GYiaiaGEtT4BPqTlK0KXvA/lu341yArrXOfwIqhkoVUJgJS2obaAQT2iqcnRMLlEj2
+         86dYKLxag/6o7FFGTh1Vt5TIkPdSdG+zPtevOxa7j54gud87De0pnPPNNbmeyzFcKIe1
+         4YIh5yiiCYo2x6drTLogG5BS1FtgZ7nId5Q/AwMgojxtj5XPEyq3STR1fkLiu+XesnUc
+         QU5ia5w8dG/71l1Z55HnJQmRQInADBb1sNl7x6aeuUT/y6q1BPYSDCvgpmBhWeM+Z+mh
+         AXVxDGWhMUV9j3VOAFcsUFiIntWY+dOOFoXQpYyyfUUEdyjbQguMaGGbtpj5p1vrw984
+         ODXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=HYWLWTmJNILkmHihZoZqMnAVOHO5Z+JPD1TRn5rR9L8=;
+        b=gUHBZ8U2efQmGA2O1aY6esLBhZl22SEnXW8Fg6IvFjlC6YPcI6t4svX7qrsllTpKY2
+         qnqBhZHo9dzi7Ik0Na8bh5zb9ngAq7jr9blVbuTAFs/XjqypBbdvPyMehnhMrUvuYjc2
+         7w+AKcDQhk69mFYiwD7Eixso8A68MAROJ4XwUC99aO7jA1eApLZOGYODtcvsU6grjkUX
+         H5gfZmIvNCgFu7rq9TL2ay0hnjzMQ+M/idp4lEwYrYwlpAuUe6Y1zpD312uSDwdQWg2p
+         VZnSUJUCEgj+QJCly0ojIyZeywW5CFSp29LVpDN6Rg6fKmmHf3tSGqcRl0ePd8BhhuQ6
+         eiyg==
+X-Gm-Message-State: AOAM531UAHmQL5aOHOBQbGkx5C0zo0uWUwMB5HTWi2i0fvlFY/fbiVkB
+        NqZO05oBgz0pc6OV8rZGinuEvNvNm+A=
+X-Google-Smtp-Source: ABdhPJyPxFIsokqex0tU1bZCyssoNhQcXmbMg7xmBfVSnpJHRzc1xaOuhg1qqDeBQDzHj7VlWoc+4Q==
+X-Received: by 2002:a19:2358:: with SMTP id j85mr2490159lfj.264.1609957066448;
+        Wed, 06 Jan 2021 10:17:46 -0800 (PST)
+Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
+        by smtp.googlemail.com with ESMTPSA id q7sm556364ljp.77.2021.01.06.10.17.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jan 2021 10:17:45 -0800 (PST)
+Subject: Re: [PATCH 26/31] PM / devfreq: tegra30: convert to use devm_pm_opp_*
+ API
+To:     cwchoi00@gmail.com, Yangtao Li <tiny.windzz@gmail.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>, yuq825@gmail.com,
+        David Airlie <airlied@linux.ie>, daniel@ffwll.ch,
+        robdclark@gmail.com, sean@poorly.run,
+        Rob Herring <robh@kernel.org>, tomeu.vizoso@collabora.com,
+        steven.price@arm.com, alyssa.rosenzweig@collabora.com,
+        stanimir.varbanov@linaro.org, agross@kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        mchehab@kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
+        adrian.hunter@intel.com, Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>, jirislaby@kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, jcrouse@codeaurora.org,
+        hoegsberg@google.com, eric@anholt.net, tzimmermann@suse.de,
+        marijn.suijten@somainline.org, gustavoars@kernel.org,
+        emil.velikov@collabora.com, jonathan@marek.ca,
+        akhilpo@codeaurora.org, smasetty@codeaurora.org,
+        airlied@redhat.com, masneyb@onstation.org, kalyan_t@codeaurora.org,
+        tanmay@codeaurora.org, ddavenport@chromium.org,
+        jsanka@codeaurora.org, rnayak@codeaurora.org,
+        tongtiangen@huawei.com, miaoqinglang@huawei.com,
+        khsieh@codeaurora.org, abhinavk@codeaurora.org,
+        chandanu@codeaurora.org, Guenter Roeck <groeck@chromium.org>,
+        varar@codeaurora.org, Matthias Kaehlcke <mka@chromium.org>,
+        harigovi@codeaurora.org, rikard.falkeborn@gmail.com,
+        natechancellor@gmail.com, Georgi Djakov <georgi.djakov@linaro.org>,
+        akashast@codeaurora.org, parashar@codeaurora.org,
+        Doug Anderson <dianders@chromium.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-tegra@vger.kernel.org,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        lima@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org
+References: <20210103035445.23696-1-tiny.windzz@gmail.com>
+ <CAGTfZH0sLh=8XhBVOzUr9qO2w_=jp-OuWoh5vgNpnmXq6EzYHA@mail.gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <e49d60f3-f753-6679-7148-f7ea72973197@gmail.com>
+Date:   Wed, 6 Jan 2021 21:17:42 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAGTfZH0sLh=8XhBVOzUr9qO2w_=jp-OuWoh5vgNpnmXq6EzYHA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-R40 contains deinterlace core compatible to that in H3. One peculiarity
-is that RAM gate is shared with CSI1. User manual states it's separate
-but that's not true. Shared gate was verified with BSP Linux code check
-and with runtime tests (CPU crashed if CSI1 gate was not ungated).
+05.01.2021 06:47, Chanwoo Choi пишет:
+> You might remove the 'devm_pm_opp_remove_all_dynamic(&pdev->dev)
+> under ' remove_opp' goto statement.kkkk
 
-Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
----
- arch/arm/boot/dts/sun8i-r40.dtsi | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
-
-diff --git a/arch/arm/boot/dts/sun8i-r40.dtsi b/arch/arm/boot/dts/sun8i-r=
-40.dtsi
-index 7907569e7b5c..d5ad3b9efd12 100644
---- a/arch/arm/boot/dts/sun8i-r40.dtsi
-+++ b/arch/arm/boot/dts/sun8i-r40.dtsi
-@@ -190,6 +190,25 @@ mixer1_out_tcon_top: endpoint {
- 			};
- 		};
-=20
-+		deinterlace: deinterlace@1400000 {
-+			compatible =3D "allwinner,sun8i-r40-deinterlace",
-+				     "allwinner,sun8i-h3-deinterlace";
-+			reg =3D <0x01400000 0x20000>;
-+			clocks =3D <&ccu CLK_BUS_DEINTERLACE>,
-+				 <&ccu CLK_DEINTERLACE>,
-+				 /*
-+				  * NOTE: Contrary to what datasheet claims,
-+				  * DRAM deinterlace gate doesn't exist and
-+				  * it's shared with CSI1.
-+				  */
-+				 <&ccu CLK_DRAM_CSI1>;
-+			clock-names =3D "bus", "mod", "ram";
-+			resets =3D <&ccu RST_BUS_DEINTERLACE>;
-+			interrupts =3D <GIC_SPI 93 IRQ_TYPE_LEVEL_HIGH>;
-+			interconnects =3D <&mbus 9>;
-+			interconnect-names =3D "dma-mem";
-+		};
-+
- 		syscon: system-control@1c00000 {
- 			compatible =3D "allwinner,sun8i-r40-system-control",
- 				     "allwinner,sun4i-a10-system-control";
---=20
-2.30.0
-
+Good catch, thank you.
