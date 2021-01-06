@@ -2,76 +2,59 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E524DC433DB
-	for <linux-media@archiver.kernel.org>; Wed,  6 Jan 2021 10:20:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 006F7C433DB
+	for <linux-media@archiver.kernel.org>; Wed,  6 Jan 2021 10:32:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9F9482310E
-	for <linux-media@archiver.kernel.org>; Wed,  6 Jan 2021 10:20:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BC85C23110
+	for <linux-media@archiver.kernel.org>; Wed,  6 Jan 2021 10:32:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726052AbhAFKUk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 6 Jan 2021 05:20:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46406 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725960AbhAFKUk (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Jan 2021 05:20:40 -0500
-Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B981EC061358
-        for <linux-media@vger.kernel.org>; Wed,  6 Jan 2021 02:19:59 -0800 (PST)
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 6255EC63F3; Wed,  6 Jan 2021 10:19:57 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
-        t=1609928397; bh=n4NQencnqG4nCobEQTPMingGoBYl21eysZNqqHo650Q=;
-        h=Date:From:To:Subject:From;
-        b=Oqb7kM4E38xFu9ctJp9MeT+o8od4wt+SSdF7MJgZKsiTLEL4dpP+4SX8NVpjBRdVH
-         CMY+QRFLXG18OHX/pCLxoKj0nwKxRf72gw2SJnRakatpcmd2ncuzg9yTpIPcwa4Xb6
-         9RBhyM1IbgRWSdoG0WYEAU3U8quI48+wAO5KREaJjvdQUZyKh8AbsgN9ZAxsmXRWqI
-         7NfNeUqAUwvh91uWPsL43ELJjQfccZjEo6uMJQNjjheRH4aksUg+DbW6/VR/uSBqAn
-         HhAhf/Ngw/pAPxH6frtevU80H6xrqPiJxF811PKqp896x9iGY6rOK+Cw1gCBO3QH+I
-         OPiCha4Ftt5Hw==
-Date:   Wed, 6 Jan 2021 10:19:57 +0000
-From:   Sean Young <sean@mess.org>
-To:     linux-media@vger.kernel.org
-Subject: [GIT FIXES FOR v5.11] rc nsec to usec fix
-Message-ID: <20210106101957.GA29145@gofer.mess.org>
+        id S1725884AbhAFKcF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 6 Jan 2021 05:32:05 -0500
+Received: from www.linuxtv.org ([130.149.80.248]:50106 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725828AbhAFKcE (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 6 Jan 2021 05:32:04 -0500
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1kx666-002yFq-5J; Wed, 06 Jan 2021 10:31:22 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1kx69T-0006Uq-Km; Wed, 06 Jan 2021 10:34:51 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT FIXES FOR v5.11] rc nsec to usec fix (#70509)
+Date:   Wed,  6 Jan 2021 10:34:51 +0000
+Message-Id: <20210106103451.24931-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210106101957.GA29145@gofer.mess.org>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+From: builder@linuxtv.org
 
-Here is a fix for the nsec to usec change in rc-core. 
+Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/20210106101957.GA29145@gofer.mess.org/
+Build log: https://builder.linuxtv.org/job/patchwork/84590/
+Build time: 00:03:09
+Link: https://lore.kernel.org/linux-media/20210106101957.GA29145@gofer.mess.org
 
-Thanks,
+error: FETCH_HEAD: cannot verify a non-tag object of type commit.
 
-Sean
+Summary: got 0/1 patches with issues, being 0 at build time, plus one error when buinding PDF document
 
-The following changes since commit 896111dc4bcf887b835b3ef54f48b450d4692a1d:
+Error/warnings:
 
-  media: rc: ensure that uevent can be read directly after rc device register (2021-01-04 11:00:25 +0100)
 
-are available in the Git repository at:
+Error #512 when building PDF docs
 
-  git://linuxtv.org/syoung/media_tree.git for-v5.11f
-
-for you to fetch changes up to 38ba369ca12bad5ed0a01d6a966f865219857415:
-
-  media: rc: fix timeout handling after switch to microsecond durations (2021-01-05 10:03:01 +0000)
-
-----------------------------------------------------------------
-Matthias Reichl (1):
-      media: rc: fix timeout handling after switch to microsecond durations
-
- drivers/media/rc/ir-mce_kbd-decoder.c | 2 +-
- drivers/media/rc/rc-main.c            | 4 ++--
- drivers/media/rc/serial_ir.c          | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
