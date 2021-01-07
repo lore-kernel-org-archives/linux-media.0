@@ -6,56 +6,56 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A08C1C433E9
-	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 13:30:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 954DBC43333
+	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 13:30:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 56A5522B4B
-	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 13:30:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6C49422BE8
+	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 13:30:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728564AbhAGN3x (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Jan 2021 08:29:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47070 "EHLO
+        id S1728591AbhAGNaQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Jan 2021 08:30:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728449AbhAGN3i (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Jan 2021 08:29:38 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C27C0612F6;
-        Thu,  7 Jan 2021 05:28:57 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id g25so4927857wmh.1;
-        Thu, 07 Jan 2021 05:28:57 -0800 (PST)
+        with ESMTP id S1728277AbhAGNaP (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Jan 2021 08:30:15 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AA8C0612FB;
+        Thu,  7 Jan 2021 05:29:03 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id q18so5674136wrn.1;
+        Thu, 07 Jan 2021 05:29:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6C6kuEO6ZOy8iBiVf6SkIqCFNPL2B2+QHOoh8Z905lA=;
-        b=jGE2yeAj7Gyp1cOJclHkNVfF3QY4E8qJU8VO0AYdqNgszGSyFyIuviiq5BjwGiDfck
-         fpYSuEcbJGOM/j58eNei83+dFhxnZJ5/BOvoYRovOM9XlFJIjOjnwkVmIFrQi3+4bqq6
-         Z7jEJcSTYw5rT5V1DMG/uT5UbMEk/DP1O/UbpMfiKy6ijipE9m9uj4VGMwwClMJkBgiX
-         NCxqUa5+gnt4aFZDnbeRejodLZYfaBmm32qwnQdBo4TBABMxn3jELaXTjCWnoryGmOwB
-         cUOHvs2Xa9BFFCVYOMOTDpfQDjveDWnzi99nnIf9CwoXbhzSMzlFnlSWXEd4ioHXm3C6
-         TmYw==
+        bh=q35SKEhUngO2dvKOfSrhZ/DM/hFpMmcFqtJ+mEN4BGI=;
+        b=ndhqm8M61RIfCAsPSYD7AISOXvrSOUA3WIdr+dM1k5PTYAm55MN3hvFU3WWDWlPVkY
+         932AENhVAyhCL+5XflBKuSsxqLKG06G/eFED3/cdwf3cIeFK/k13qaA2u4RZo+rYr46d
+         8lzVgFqoshpd20lxvPlcofVCsCRe7knHTA2ymz1iyKfQMM6BX5TnWoQNgYinVxDehwu7
+         Y4qhY5c3LPPPQzVT47WmhbG9snPdR8m+Iuf2QkYCNtRhIJRyQZUVjFE8VadhtvX37gQk
+         RlKzLS+W8n1dHMs9qZH+wpN7HxbPl5lrv0Sr2iINHIO26mldoIAIlipy8aRWayQ4oSYH
+         /BOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6C6kuEO6ZOy8iBiVf6SkIqCFNPL2B2+QHOoh8Z905lA=;
-        b=A1igGgQ4rrbqEvdXdmkGyjZnuU9fbShpvSbcsYHvOejMhMMB+yPbIUxmFp+K9VGoGB
-         /MvrUWEtyirWI1UgJhhLCNwXmKOMTWK+XCnRhGUyE7Wp8jsUCpvCOs3tdyxfBtLsLOFL
-         wFivMfpm5c6RApeJVBugbCW95P+40ecWUixe+X6n426LWT9IL8f2bnhc0WmM6mgytn+p
-         GnOfTRwUq5+RIChntMINSDd57lCKZT8cX6lIKYGDoxGdqPVHUtoeWmCvPjuke/tOGK/B
-         KMkv694m1fyIjui5BtNnjhHl/AbGz2PbAhUCQgL+pS6pbK3OYTBQq9X7WI8uNdSuWdJ6
-         oA6w==
-X-Gm-Message-State: AOAM532xNDb4WRMOUA+DMrn6x2wVCddEx41+UhzfZ299AI3rGPB8xdEd
-        /B1oU806QY9dOnW1x1kfapCmkSD6Gz2Snv0F
-X-Google-Smtp-Source: ABdhPJyABZO3JssHe1Fthw9hYtFczcA33XfMYIFFbi3qTfZWf/IOkh7oWwi2ee0Cmckbzx5doLkAbg==
-X-Received: by 2002:a7b:c8c5:: with SMTP id f5mr8065254wml.106.1610026136322;
-        Thu, 07 Jan 2021 05:28:56 -0800 (PST)
+        bh=q35SKEhUngO2dvKOfSrhZ/DM/hFpMmcFqtJ+mEN4BGI=;
+        b=CwOQvRXtdC0maXnZdPA1CGpoAoNUaW00y/txrkqMgYFItgvIJhdPnO4Ja1uk+T2vt6
+         VCM7qEwjKuTHUFvwjRAYNlbsE4Lrw2QgglTIDRijoVAS/5OuzcpK9dJS+2IYjfCc4SCQ
+         Afrs5dpRevxbs1tIgU3qeV6o18iLJ+mh2pscWIXEZ1hPCdAvr9I12ZxEZau7NKhi20X0
+         05miRLNn8uFQNujDmlFo9O57TCeLlysM1Rk5epYkOYy1YxEEBC//AjDJfun1BKcHmDGu
+         8OlDM6hHwsBZPBSn5T3Y+zptkdCnOA6/Ge5mvCOHfaYlE6Fe0JTlkEsENfWJg81C+Dz6
+         1Oyg==
+X-Gm-Message-State: AOAM5338I10SDsKrVFL8qMTYDTWetYfxJFzfxOsk8NWfxCmRJVM0Rr9R
+        MhPFU+0g8NtxBzQV3DI73UvgWoGke9qVUZjq
+X-Google-Smtp-Source: ABdhPJy7HnqQWMd1WTCWgoR8XrxcIXCcyUNUYXkzZTFW9qT79mLG9hrG+DE28kxd3DPnyi4gxydXIA==
+X-Received: by 2002:a5d:4cd1:: with SMTP id c17mr9086921wrt.49.1610026141885;
+        Thu, 07 Jan 2021 05:29:01 -0800 (PST)
 Received: from valhalla.home ([2.29.208.120])
-        by smtp.gmail.com with ESMTPSA id o83sm7660125wme.21.2021.01.07.05.28.54
+        by smtp.gmail.com with ESMTPSA id o83sm7660125wme.21.2021.01.07.05.29.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jan 2021 05:28:55 -0800 (PST)
+        Thu, 07 Jan 2021 05:29:01 -0800 (PST)
 From:   Daniel Scally <djrscally@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-media@vger.kernel.org, devel@acpica.org, rjw@rjwysocki.net,
@@ -71,11 +71,12 @@ Cc:     yong.zhi@intel.com, sakari.ailus@linux.intel.com,
         hverkuil-cisco@xs4all.nl, m.felsch@pengutronix.de,
         niklas.soderlund+renesas@ragnatech.se,
         prabhakar.mahadev-lad.rj@bp.renesas.com, slongerbeam@gmail.com,
-        heikki.krogerus@linux.intel.com,
+        heikki.krogerus@linux.intel.com, kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCH v5 02/15] media: ipu3-cio2: Add headers that ipu3-cio2.h is direct user of
-Date:   Thu,  7 Jan 2021 13:28:25 +0000
-Message-Id: <20210107132838.396641-3-djrscally@gmail.com>
+Subject: [PATCH v5 06/15] software_node: unregister software_nodes in reverse order
+Date:   Thu,  7 Jan 2021 13:28:29 +0000
+Message-Id: <20210107132838.396641-7-djrscally@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210107132838.396641-1-djrscally@gmail.com>
 References: <20210107132838.396641-1-djrscally@gmail.com>
@@ -85,54 +86,56 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To maintain consistency with software_node_unregister_nodes(), reverse
+the order in which the software_node_unregister_node_group() function
+unregisters nodes.
 
-Add headers that ipu3-cio2.h is direct user of.
-
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Daniel Scally <djrscally@gmail.com>
-Tested-by: Daniel Scally <djrscally@gmail.com>
+Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Daniel Scally <djrscally@gmail.com>
 ---
 Changes in v5:
 
-	- Added my Signed-off-by this time, apparently I need to do that.
+	- None
 
- drivers/media/pci/intel/ipu3/ipu3-cio2.h | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ drivers/base/swnode.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.h b/drivers/media/pci/intel/ipu3/ipu3-cio2.h
-index ccf0b85ae36f..62187ab5ae43 100644
---- a/drivers/media/pci/intel/ipu3/ipu3-cio2.h
-+++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.h
-@@ -4,8 +4,26 @@
- #ifndef __IPU3_CIO2_H
- #define __IPU3_CIO2_H
+diff --git a/drivers/base/swnode.c b/drivers/base/swnode.c
+index 166c5cc73f39..6f7443c6d3b5 100644
+--- a/drivers/base/swnode.c
++++ b/drivers/base/swnode.c
+@@ -779,16 +779,23 @@ EXPORT_SYMBOL_GPL(software_node_register_node_group);
+  * software_node_unregister_node_group - Unregister a group of software nodes
+  * @node_group: NULL terminated array of software node pointers to be unregistered
+  *
+- * Unregister multiple software nodes at once.
++ * Unregister multiple software nodes at once. The array will be unwound in
++ * reverse order (i.e. last entry first) and thus if any members of the array are
++ * children of another member then the children must appear later in the list such
++ * that they are unregistered first.
+  */
+-void software_node_unregister_node_group(const struct software_node **node_group)
++void software_node_unregister_node_group(
++		const struct software_node **node_group)
+ {
+-	unsigned int i;
++	unsigned int i = 0;
  
-+#include <linux/bits.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/kernel.h>
-+#include <linux/mutex.h>
- #include <linux/types.h>
+ 	if (!node_group)
+ 		return;
  
-+#include <asm/page.h>
+-	for (i = 0; node_group[i]; i++)
++	while (node_group[i])
++		i++;
 +
-+#include <media/media-device.h>
-+#include <media/media-entity.h>
-+#include <media/v4l2-async.h>
-+#include <media/v4l2-dev.h>
-+#include <media/v4l2-device.h>
-+#include <media/v4l2-subdev.h>
-+#include <media/videobuf2-core.h>
-+#include <media/videobuf2-v4l2.h>
-+
-+struct cio2_fbpt_entry;		/* defined here, after the first usage */
-+struct pci_dev;
-+
- #define CIO2_NAME					"ipu3-cio2"
- #define CIO2_DEVICE_NAME				"Intel IPU3 CIO2"
- #define CIO2_ENTITY_NAME				"ipu3-csi2"
++	while (i--)
+ 		software_node_unregister(node_group[i]);
+ }
+ EXPORT_SYMBOL_GPL(software_node_unregister_node_group);
 -- 
 2.25.1
 
