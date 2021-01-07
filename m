@@ -8,54 +8,54 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 954DBC43333
-	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 13:30:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AE54C43603
+	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 13:30:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6C49422BE8
-	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 13:30:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 380A123343
+	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 13:30:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728591AbhAGNaQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Jan 2021 08:30:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47174 "EHLO
+        id S1728692AbhAGNa3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Jan 2021 08:30:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728277AbhAGNaP (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Jan 2021 08:30:15 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AA8C0612FB;
-        Thu,  7 Jan 2021 05:29:03 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id q18so5674136wrn.1;
-        Thu, 07 Jan 2021 05:29:03 -0800 (PST)
+        with ESMTP id S1728642AbhAGNaV (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Jan 2021 08:30:21 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8872C061290;
+        Thu,  7 Jan 2021 05:29:12 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id k10so5174835wmi.3;
+        Thu, 07 Jan 2021 05:29:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=q35SKEhUngO2dvKOfSrhZ/DM/hFpMmcFqtJ+mEN4BGI=;
-        b=ndhqm8M61RIfCAsPSYD7AISOXvrSOUA3WIdr+dM1k5PTYAm55MN3hvFU3WWDWlPVkY
-         932AENhVAyhCL+5XflBKuSsxqLKG06G/eFED3/cdwf3cIeFK/k13qaA2u4RZo+rYr46d
-         8lzVgFqoshpd20lxvPlcofVCsCRe7knHTA2ymz1iyKfQMM6BX5TnWoQNgYinVxDehwu7
-         Y4qhY5c3LPPPQzVT47WmhbG9snPdR8m+Iuf2QkYCNtRhIJRyQZUVjFE8VadhtvX37gQk
-         RlKzLS+W8n1dHMs9qZH+wpN7HxbPl5lrv0Sr2iINHIO26mldoIAIlipy8aRWayQ4oSYH
-         /BOA==
+        bh=6Le4zT3Fvpu6jC0cQUY4eirqzD42KUANZUESAszTPTg=;
+        b=HtFPlwNQuwXeaXYVP5hW0BjqCDbNoiZ6QLsp2B3fIhxEgKbZk7lYAacvLabRP089xb
+         2J+KLQ8RK1DoCZ37RlfwZOxG8FkraiPiJXabQSPWIBQS0zVW2mktLD/3JvKfZA0miyGN
+         MFfdvbPGypqeixq+zkdFnXL80nhVfFDSGY0Ia5MI3VzhE4NDJIK19KCqxE7uvBjLaXau
+         xyPe37HjFdwEAmWXpOYOeECYLnoDxY9SO6sPZvBEVheEx6hcbGhu/ySxYAJJeTsE1xqM
+         d66TRphF5A4ht0RBu/xa9n/H934s2Sti+5QGbD6yx5FE9QzUbvNco7v0FY7jeiQfVEJH
+         xUKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=q35SKEhUngO2dvKOfSrhZ/DM/hFpMmcFqtJ+mEN4BGI=;
-        b=CwOQvRXtdC0maXnZdPA1CGpoAoNUaW00y/txrkqMgYFItgvIJhdPnO4Ja1uk+T2vt6
-         VCM7qEwjKuTHUFvwjRAYNlbsE4Lrw2QgglTIDRijoVAS/5OuzcpK9dJS+2IYjfCc4SCQ
-         Afrs5dpRevxbs1tIgU3qeV6o18iLJ+mh2pscWIXEZ1hPCdAvr9I12ZxEZau7NKhi20X0
-         05miRLNn8uFQNujDmlFo9O57TCeLlysM1Rk5epYkOYy1YxEEBC//AjDJfun1BKcHmDGu
-         8OlDM6hHwsBZPBSn5T3Y+zptkdCnOA6/Ge5mvCOHfaYlE6Fe0JTlkEsENfWJg81C+Dz6
-         1Oyg==
-X-Gm-Message-State: AOAM5338I10SDsKrVFL8qMTYDTWetYfxJFzfxOsk8NWfxCmRJVM0Rr9R
-        MhPFU+0g8NtxBzQV3DI73UvgWoGke9qVUZjq
-X-Google-Smtp-Source: ABdhPJy7HnqQWMd1WTCWgoR8XrxcIXCcyUNUYXkzZTFW9qT79mLG9hrG+DE28kxd3DPnyi4gxydXIA==
-X-Received: by 2002:a5d:4cd1:: with SMTP id c17mr9086921wrt.49.1610026141885;
-        Thu, 07 Jan 2021 05:29:01 -0800 (PST)
+        bh=6Le4zT3Fvpu6jC0cQUY4eirqzD42KUANZUESAszTPTg=;
+        b=dYpK46xss4q3raL/o6KbeuJO0oVOdmWVt+L2ybYRgURdbQG8PVGmL+5scBrN82WOu3
+         HrdK5DArofCMQL46zIeKMvsvz2c4Wh8Lefyuiu5EBGJU2WVzn5/u2ts0q/zT00fydx4S
+         y+wMURfn+8HGEtwzZZd2JwHfg79a+dDKdUV7rpPnTRPgMHXaIZXAILQJeuXVRMkt/amQ
+         GYzVTyjQ1HUc0cZiKdLha5p3lvbmD5TWrLuJa4/OzibnVvkwSaUhQYjGlIypRU+/MGOI
+         n52Gsv+8vb/J14MDZGM+UGds44wrL6DTfnV9G2KOGf2GpgNQppHA4S4/cJaJaJpOV/1F
+         +vTA==
+X-Gm-Message-State: AOAM531lS7Q/drVDWCa/+Qx/rkPkeZVViOXk/vCfXIq6QL0TW2kyQdZk
+        BPB5Kjs8fNjEe6Chybpb3RYBm3txPEFvjsH7
+X-Google-Smtp-Source: ABdhPJzpphvQaYUCv7zu7KbvBeIE/lsrkpM4p/nQAIOPeAVuizqNkgO1M3PLRHLuu+yfq/fmtvmnDg==
+X-Received: by 2002:a7b:ce96:: with SMTP id q22mr8049722wmj.164.1610026151613;
+        Thu, 07 Jan 2021 05:29:11 -0800 (PST)
 Received: from valhalla.home ([2.29.208.120])
-        by smtp.gmail.com with ESMTPSA id o83sm7660125wme.21.2021.01.07.05.29.00
+        by smtp.gmail.com with ESMTPSA id o83sm7660125wme.21.2021.01.07.05.29.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jan 2021 05:29:01 -0800 (PST)
+        Thu, 07 Jan 2021 05:29:11 -0800 (PST)
 From:   Daniel Scally <djrscally@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-media@vger.kernel.org, devel@acpica.org, rjw@rjwysocki.net,
@@ -71,12 +71,10 @@ Cc:     yong.zhi@intel.com, sakari.ailus@linux.intel.com,
         hverkuil-cisco@xs4all.nl, m.felsch@pengutronix.de,
         niklas.soderlund+renesas@ragnatech.se,
         prabhakar.mahadev-lad.rj@bp.renesas.com, slongerbeam@gmail.com,
-        heikki.krogerus@linux.intel.com, kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCH v5 06/15] software_node: unregister software_nodes in reverse order
-Date:   Thu,  7 Jan 2021 13:28:29 +0000
-Message-Id: <20210107132838.396641-7-djrscally@gmail.com>
+        heikki.krogerus@linux.intel.com
+Subject: [PATCH v5 13/15] ACPI / bus: Add acpi_dev_get_next_match_dev() and helper macro
+Date:   Thu,  7 Jan 2021 13:28:36 +0000
+Message-Id: <20210107132838.396641-14-djrscally@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210107132838.396641-1-djrscally@gmail.com>
 References: <20210107132838.396641-1-djrscally@gmail.com>
@@ -86,56 +84,109 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-To maintain consistency with software_node_unregister_nodes(), reverse
-the order in which the software_node_unregister_node_group() function
-unregisters nodes.
+To ensure we handle situations in which multiple sensors of the same
+model (and therefore _HID) are present in a system, we need to be able
+to iterate over devices matching a known _HID but unknown _UID and _HRV
+ - add acpi_dev_get_next_match_dev() to accommodate that possibility and
+change acpi_dev_get_first_match_dev() to simply call the new function
+with a NULL starting point. Add an iterator macro for convenience.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Daniel Scally <djrscally@gmail.com>
 ---
 Changes in v5:
 
-	- None
+	- Changed commit subject
 
- drivers/base/swnode.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ drivers/acpi/utils.c    | 30 ++++++++++++++++++++++++++----
+ include/acpi/acpi_bus.h |  7 +++++++
+ 2 files changed, 33 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/base/swnode.c b/drivers/base/swnode.c
-index 166c5cc73f39..6f7443c6d3b5 100644
---- a/drivers/base/swnode.c
-+++ b/drivers/base/swnode.c
-@@ -779,16 +779,23 @@ EXPORT_SYMBOL_GPL(software_node_register_node_group);
-  * software_node_unregister_node_group - Unregister a group of software nodes
-  * @node_group: NULL terminated array of software node pointers to be unregistered
+diff --git a/drivers/acpi/utils.c b/drivers/acpi/utils.c
+index d5411a166685..ddca1550cce6 100644
+--- a/drivers/acpi/utils.c
++++ b/drivers/acpi/utils.c
+@@ -843,12 +843,13 @@ bool acpi_dev_present(const char *hid, const char *uid, s64 hrv)
+ EXPORT_SYMBOL(acpi_dev_present);
+ 
+ /**
+- * acpi_dev_get_first_match_dev - Return the first match of ACPI device
++ * acpi_dev_get_next_match_dev - Return the next match of ACPI device
++ * @adev: Pointer to the previous acpi_device matching this @hid, @uid and @hrv
+  * @hid: Hardware ID of the device.
+  * @uid: Unique ID of the device, pass NULL to not check _UID
+  * @hrv: Hardware Revision of the device, pass -1 to not check _HRV
   *
-- * Unregister multiple software nodes at once.
-+ * Unregister multiple software nodes at once. The array will be unwound in
-+ * reverse order (i.e. last entry first) and thus if any members of the array are
-+ * children of another member then the children must appear later in the list such
-+ * that they are unregistered first.
+- * Return the first match of ACPI device if a matching device was present
++ * Return the next match of ACPI device if another matching device was present
+  * at the moment of invocation, or NULL otherwise.
+  *
+  * The caller is responsible to call put_device() on the returned device.
+@@ -856,8 +857,9 @@ EXPORT_SYMBOL(acpi_dev_present);
+  * See additional information in acpi_dev_present() as well.
   */
--void software_node_unregister_node_group(const struct software_node **node_group)
-+void software_node_unregister_node_group(
-+		const struct software_node **node_group)
+ struct acpi_device *
+-acpi_dev_get_first_match_dev(const char *hid, const char *uid, s64 hrv)
++acpi_dev_get_next_match_dev(struct acpi_device *adev, const char *hid, const char *uid, s64 hrv)
  {
--	unsigned int i;
-+	unsigned int i = 0;
++	struct device *start = adev ? &adev->dev : NULL;
+ 	struct acpi_dev_match_info match = {};
+ 	struct device *dev;
  
- 	if (!node_group)
- 		return;
+@@ -865,9 +867,29 @@ acpi_dev_get_first_match_dev(const char *hid, const char *uid, s64 hrv)
+ 	match.uid = uid;
+ 	match.hrv = hrv;
  
--	for (i = 0; node_group[i]; i++)
-+	while (node_group[i])
-+		i++;
-+
-+	while (i--)
- 		software_node_unregister(node_group[i]);
+-	dev = bus_find_device(&acpi_bus_type, NULL, &match, acpi_dev_match_cb);
++	dev = bus_find_device(&acpi_bus_type, start, &match, acpi_dev_match_cb);
+ 	return dev ? to_acpi_device(dev) : NULL;
  }
- EXPORT_SYMBOL_GPL(software_node_unregister_node_group);
++EXPORT_SYMBOL(acpi_dev_get_next_match_dev);
++
++/**
++ * acpi_dev_get_first_match_dev - Return the first match of ACPI device
++ * @hid: Hardware ID of the device.
++ * @uid: Unique ID of the device, pass NULL to not check _UID
++ * @hrv: Hardware Revision of the device, pass -1 to not check _HRV
++ *
++ * Return the first match of ACPI device if a matching device was present
++ * at the moment of invocation, or NULL otherwise.
++ *
++ * The caller is responsible to call put_device() on the returned device.
++ *
++ * See additional information in acpi_dev_present() as well.
++ */
++struct acpi_device *
++acpi_dev_get_first_match_dev(const char *hid, const char *uid, s64 hrv)
++{
++	return acpi_dev_get_next_match_dev(NULL, hid, uid, hrv);
++}
+ EXPORT_SYMBOL(acpi_dev_get_first_match_dev);
+ 
+ /*
+diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
+index 6d1879bf9440..02a716a0af5d 100644
+--- a/include/acpi/acpi_bus.h
++++ b/include/acpi/acpi_bus.h
+@@ -683,9 +683,16 @@ static inline bool acpi_device_can_poweroff(struct acpi_device *adev)
+ 
+ bool acpi_dev_hid_uid_match(struct acpi_device *adev, const char *hid2, const char *uid2);
+ 
++struct acpi_device *
++acpi_dev_get_next_match_dev(struct acpi_device *adev, const char *hid, const char *uid, s64 hrv);
+ struct acpi_device *
+ acpi_dev_get_first_match_dev(const char *hid, const char *uid, s64 hrv);
+ 
++#define for_each_acpi_dev_match(adev, hid, uid, hrv)			\
++	for (adev = acpi_dev_get_first_match_dev(hid, uid, hrv);	\
++	     adev;							\
++	     adev = acpi_dev_get_next_match_dev(adev, hid, uid, hrv))
++
+ static inline void acpi_dev_put(struct acpi_device *adev)
+ {
+ 	put_device(&adev->dev);
 -- 
 2.25.1
 
