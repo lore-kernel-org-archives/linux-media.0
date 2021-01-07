@@ -2,60 +2,60 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9DC5C43381
-	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 13:31:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F7D5C4332E
+	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 13:31:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AE96722BE8
-	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 13:31:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1F22522BE8
+	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 13:31:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728751AbhAGNaz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Jan 2021 08:30:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47186 "EHLO
+        id S1728784AbhAGNbK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Jan 2021 08:31:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728628AbhAGNaS (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Jan 2021 08:30:18 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB43C0612FF;
-        Thu,  7 Jan 2021 05:29:08 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id r4so5518340wmh.5;
-        Thu, 07 Jan 2021 05:29:08 -0800 (PST)
+        with ESMTP id S1728609AbhAGNaR (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Jan 2021 08:30:17 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B62C0612FC;
+        Thu,  7 Jan 2021 05:29:04 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id c5so5633098wrp.6;
+        Thu, 07 Jan 2021 05:29:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=5JGyD3hkdJmnqfda58CfnRRt8A27y2P17+ogpq3Ke0k=;
-        b=d/DQ9wOXKQ+qi4Ft4lpUYczdF56IZocYPZ1DC5JNHHIJexOrr6kxvoZU0NW/hPrQDy
-         2K54DMUlIGxR4i0A12dGic8KVpLCAG7o1SiWrfzqMZv96AbXGXcbPrjs+khYRN/Vgrv5
-         WyKRLX9TtnHMhSodsp47tdRRI/Pv1LN0wp2yQQqpOFaE2zvrXabQ09pq/l4yDEFaEJH/
-         BzcOmJUJtL3ySIsY7qUOm1vhEFDUgIARUUnwdLuGUPl8ji8UctzDQN+tSySTRbzPNpi+
-         AzgYzLQwIWaUwhLjLBOMGH7hpv8Rb9gq+WwNgSYRXC5vz8Prwi6RJfyjBZArWBFgYpZq
-         NWXA==
+        bh=V6vQkmHN3rEByvF+1Dwoxbe+Td104EXLxBMpWJRgs3M=;
+        b=GAT28sG0CqFj02Lq/lJA5nmhXJouikb/xqpXwlHSBNTMHlbKLh/B/cqkQ2+GoAev38
+         1mbipa0mepAo6bV0PkdR+2HkY+2x+0BML4FR0dAlmsh9c7JcHpDOXreSDANzPegvY4mn
+         9ZKjXi+FkX//EsRV1I3oLGdQ7otJAgwi7a/wBsbEwQ5oShDH9E9oDoAPokrtGUmmoobc
+         9ez4npFh9UdPR4CmepxoO2qId8SLS7WgOnlSo3DWmvzt8CycYjCaiEA4Srn0p79IXUaP
+         HgqD4BEE+FAfVWseKe9AWqtoRFZLteb48sUSmXfwhOmCAfdVZ18KQkQst0NI7ncu/EV/
+         KH2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5JGyD3hkdJmnqfda58CfnRRt8A27y2P17+ogpq3Ke0k=;
-        b=NPoJNJcVsuJ4j3l6NIG1Sm5HhaosxNcyF7Xwwe9KLIL1vnXYdbfw01Ho7TLIBgDyou
-         32rrymPZ9GO4FiqoMLmT8+CIHNdGdnD0ZKo/vDDpAwVX3ozgb8Bo9+y/VQPUl114RHGg
-         f74HtgsGLnJqTk3kSCYB3w3pLq19qOLCbEga5X+3fMZWkP+wRHrufSsZK4j0S+ITqNz9
-         K042zuJTSw1VaCv8fMgIHe+wUSKb7w4ks/GGzOPSdR9uAWlKMOcfrpgwVppALNhYjxdU
-         wlp2esKedPRUp9FydmHqoMjsoO9PzmkxwzLnHoYnmlFVex+6M4N1WrTHzsxv6r0SojDW
-         iBdg==
-X-Gm-Message-State: AOAM530Cva1QwMhzt3XhLnwh4Xo2eY4jCumXZmdYmHj+vG1I4J93dEVT
-        bwkXZAbRbrCuC0cB3AskuDMNlSLkd8aNtGPv
-X-Google-Smtp-Source: ABdhPJwqziNHSBuuiilYRk59tWjXNnZELM2SRFY3MWLfDTUKakbrUnC1FeE2G6OcXLO8ZDBXK9WI0Q==
-X-Received: by 2002:a1c:6287:: with SMTP id w129mr7904442wmb.71.1610026147499;
-        Thu, 07 Jan 2021 05:29:07 -0800 (PST)
+        bh=V6vQkmHN3rEByvF+1Dwoxbe+Td104EXLxBMpWJRgs3M=;
+        b=SloElMxfYRU7I+8si4LQQWJlSuxca9MSoMAG+3vIs5QzmYpUhnAIvwVFQDLsxZmPgc
+         57lgTcrMz19uWH3qfarnnD1+QGktBsRlmmsz7CFpPpvj8y+V2QzAq/sqhv8YO4zIO37f
+         bxYzrmib0D7kbsShDz5owzDGsNHvGDS2nF4RRNm00HHEnelgUsDSXMb352nCS/ciAams
+         s//Tncn495iLKHdyL1anFBrcr/zab8L5X09Cn+YGpLUQ7gMX3Uh2T4e28+bDIIx3tC/A
+         xiut04Et5uh++M1nuHNblE0oHUkgnO7afKjUxepBghgL6AdFKg3WR/e5i85f9au0jmSa
+         sTGg==
+X-Gm-Message-State: AOAM533G7G74YCjvB92AfHyM57XS6ohRZA+1fOCRL45mc0dXzzL6id/x
+        XxgI84QQ7pGzBjAu9eVYu+T99LaKY7aXvETy
+X-Google-Smtp-Source: ABdhPJxhs7L7BLf8T98Cge4AvjwO7uqxG8kfQotuyB4U2SJjiKuG6XogCTkoiMqZIqNpKRPRj8hZeA==
+X-Received: by 2002:adf:ce82:: with SMTP id r2mr9064064wrn.181.1610026143303;
+        Thu, 07 Jan 2021 05:29:03 -0800 (PST)
 Received: from valhalla.home ([2.29.208.120])
-        by smtp.gmail.com with ESMTPSA id o83sm7660125wme.21.2021.01.07.05.29.06
+        by smtp.gmail.com with ESMTPSA id o83sm7660125wme.21.2021.01.07.05.29.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jan 2021 05:29:06 -0800 (PST)
+        Thu, 07 Jan 2021 05:29:02 -0800 (PST)
 From:   Daniel Scally <djrscally@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-media@vger.kernel.org, devel@acpica.org, rjw@rjwysocki.net,
@@ -72,10 +72,11 @@ Cc:     yong.zhi@intel.com, sakari.ailus@linux.intel.com,
         niklas.soderlund+renesas@ragnatech.se,
         prabhakar.mahadev-lad.rj@bp.renesas.com, slongerbeam@gmail.com,
         heikki.krogerus@linux.intel.com,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCH v5 10/15] ipu3-cio2: Add T: entry to MAINTAINERS
-Date:   Thu,  7 Jan 2021 13:28:33 +0000
-Message-Id: <20210107132838.396641-11-djrscally@gmail.com>
+Subject: [PATCH v5 07/15] device property: Define format macros for ports and endpoints
+Date:   Thu,  7 Jan 2021 13:28:30 +0000
+Message-Id: <20210107132838.396641-8-djrscally@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210107132838.396641-1-djrscally@gmail.com>
 References: <20210107132838.396641-1-djrscally@gmail.com>
@@ -85,32 +86,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Development for the ipu3-cio2 driver is taking place in media_tree, but
-there's no T: entry in MAINTAINERS to denote that - rectify that oversight
+OF, ACPI and software_nodes all implement graphs including nodes for ports
+and endpoints. These are all intended to be named with a common schema,
+as "port@n" and "endpoint@n" where n is an unsigned int representing the
+index of the node. To ensure commonality across the subsystems, provide a
+set of macros to define the format.
 
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Daniel Scally <djrscally@gmail.com>
 ---
 Changes in v5:
 
-	- None
+	- Changed commit subject
 
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+ include/linux/fwnode.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 471561d9d55f..92228e8dd868 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9017,6 +9017,7 @@ M:	Bingbu Cao <bingbu.cao@intel.com>
- R:	Tianshu Qiu <tian.shu.qiu@intel.com>
- L:	linux-media@vger.kernel.org
- S:	Maintained
-+T:	git git://linuxtv.org/media_tree.git
- F:	Documentation/userspace-api/media/v4l/pixfmt-srggb10-ipu3.rst
- F:	drivers/media/pci/intel/ipu3/
+diff --git a/include/linux/fwnode.h b/include/linux/fwnode.h
+index fde4ad97564c..77414e431e89 100644
+--- a/include/linux/fwnode.h
++++ b/include/linux/fwnode.h
+@@ -50,6 +50,13 @@ struct fwnode_endpoint {
+ 	const struct fwnode_handle *local_fwnode;
+ };
  
++/*
++ * ports and endpoints defined as software_nodes should all follow a common
++ * naming scheme; use these macros to ensure commonality.
++ */
++#define SWNODE_GRAPH_PORT_NAME_FMT		"port@%u"
++#define SWNODE_GRAPH_ENDPOINT_NAME_FMT		"endpoint@%u"
++
+ #define NR_FWNODE_REFERENCE_ARGS	8
+ 
+ /**
 -- 
 2.25.1
 
