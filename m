@@ -2,186 +2,130 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A15B4C43333
-	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 13:31:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F8DAC433E9
+	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 13:42:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6DDB922B4B
-	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 13:31:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6D2C723383
+	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 13:42:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728600AbhAGNaR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Jan 2021 08:30:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47172 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728585AbhAGNaP (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Jan 2021 08:30:15 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA5BC0612FA;
-        Thu,  7 Jan 2021 05:29:01 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id r3so5660982wrt.2;
-        Thu, 07 Jan 2021 05:29:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=SoQRyLJn4HZP02GVt4BbpkjI446/7MndnoeDuXQdaLY=;
-        b=B/r6+OoleWGiyRkTVXU3BM4qFszVckAJZAhgfWRBaYALy5OJCfd9udz79qvn7zrd+Q
-         mkNfX1wep/YJfubivi/Z+H1c92yvJkXiIvlROPk5Bii4NiWMtw2M3wrQOYimnnlKunsW
-         ha8sFmpcC8YWVWvaDCF4MwCUxhsgDbRF22/ruzKL+zsidW16K0W9J/zw4b0ASddQHy7c
-         V35J71/YsTl/rgFgvUNk27jMjZPchT33eInnkefK+vJ9+IqUUdTCvwwJiRnHTR9SuT5c
-         3oWhzO3+Wm9h+hbKBZyRA+dmNFXBwxRisFS0xTmcF2KWrSvBF0N3YiEhp1RIegewtOej
-         gr9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=SoQRyLJn4HZP02GVt4BbpkjI446/7MndnoeDuXQdaLY=;
-        b=N+DUIh0X/r2cI0fb5MU35BsF/4G6afp16AevFOQVs+9Ub77mYPbLqkd3uANw11I/ql
-         AOYAN6m+0Sf75ZtxmKfdZC2Ai8TA7u3Q3FnrUtn4YAfo2V5Y4HP8lg3Zn1Gx3Z5MN9QW
-         pwNkeGgKXDVq2vS4Rb/Ja8G6Gw3m1XL+3IbNcS0tXc593J1p91CVOLyry4OtaxdEB+wC
-         4qFWxqZMjw1YhpRcu1g+mR+w/tV4+kUAm9ed9slNIodKDTI7lvOFpI6M85+qrc5nZAtr
-         CROco/XjUbH6EcgRz/k5Znv+KSdZ4ttcQdmffi0rgeY0PTXh6ZIEu460BR0ghRaz/Nve
-         K6vA==
-X-Gm-Message-State: AOAM530TOWO33rA5PcVQWC65luMs+f+wmWLPoFhrFsCnxu57TSZAVGLp
-        rJ79cAFXdjCYFsV2dVWI8+2u8vOS+7rRuova
-X-Google-Smtp-Source: ABdhPJxDJek+JC0RYDWgMEwdVAKNskeIQx7EzhapycQhzKkZJ8UzWky8izjrk8B5LCq/s+LfbB/j6Q==
-X-Received: by 2002:a5d:54cc:: with SMTP id x12mr9132835wrv.132.1610026140455;
-        Thu, 07 Jan 2021 05:29:00 -0800 (PST)
-Received: from valhalla.home ([2.29.208.120])
-        by smtp.gmail.com with ESMTPSA id o83sm7660125wme.21.2021.01.07.05.28.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jan 2021 05:28:59 -0800 (PST)
-From:   Daniel Scally <djrscally@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-media@vger.kernel.org, devel@acpica.org, rjw@rjwysocki.net,
-        lenb@kernel.org, gregkh@linuxfoundation.org, mchehab@kernel.org,
-        sergey.senozhatsky@gmail.com
-Cc:     yong.zhi@intel.com, sakari.ailus@linux.intel.com,
-        bingbu.cao@intel.com, tian.shu.qiu@intel.com,
-        robert.moore@intel.com, erik.kaneda@intel.com, pmladek@suse.com,
-        rostedt@goodmis.org, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk,
-        laurent.pinchart+renesas@ideasonboard.com,
-        jacopo+renesas@jmondi.org, kieran.bingham+renesas@ideasonboard.com,
-        hverkuil-cisco@xs4all.nl, m.felsch@pengutronix.de,
-        niklas.soderlund+renesas@ragnatech.se,
-        prabhakar.mahadev-lad.rj@bp.renesas.com, slongerbeam@gmail.com,
-        heikki.krogerus@linux.intel.com,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCH v5 05/15] software_node: Enforce parent before child ordering of nodes arrays
-Date:   Thu,  7 Jan 2021 13:28:28 +0000
-Message-Id: <20210107132838.396641-6-djrscally@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210107132838.396641-1-djrscally@gmail.com>
-References: <20210107132838.396641-1-djrscally@gmail.com>
+        id S1728681AbhAGNmE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Jan 2021 08:42:04 -0500
+Received: from relay6-d.mail.gandi.net ([217.70.183.198]:56825 "EHLO
+        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728642AbhAGNmD (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Jan 2021 08:42:03 -0500
+X-Originating-IP: 93.29.109.196
+Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
+        (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 37DC0C0003;
+        Thu,  7 Jan 2021 13:41:20 +0000 (UTC)
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jacob Chen <jacob-chen@iotwrt.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Subject: [PATCH 5/5] media: hantro: Add support for the Rockchip PX30
+Date:   Thu,  7 Jan 2021 14:41:01 +0100
+Message-Id: <20210107134101.195426-6-paul.kocialkowski@bootlin.com>
+X-Mailer: git-send-email 2.30.0
+In-Reply-To: <20210107134101.195426-1-paul.kocialkowski@bootlin.com>
+References: <20210107134101.195426-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Registering software_nodes with the .parent member set to point to a
-currently unregistered software_node has the potential for problems,
-so enforce parent -> child ordering in arrays passed in to
-software_node_register_nodes().
+The PX30 SoC includes both the VDPU2 and VEPU2 blocks which are similar
+to the RK3399 (Hantro G1/H1 with shuffled registers).
 
-Software nodes that are children of another software node should be
-unregistered before their parent. To allow easy unregistering of an array
-of software_nodes ordered parent to child, reverse the order in which
-software_node_unregister_nodes() unregisters software_nodes.
+Besides taking an extra clock, it also shares an interrupt with the IOMMU
+so it's necessary to request the interrupt shared.
 
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Daniel Scally <djrscally@gmail.com>
+Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
-Changes in v5:
+ drivers/staging/media/hantro/hantro_drv.c    |  5 +++--
+ drivers/staging/media/hantro/hantro_hw.h     |  1 +
+ drivers/staging/media/hantro/rk3399_vpu_hw.c | 21 ++++++++++++++++++++
+ 3 files changed, 25 insertions(+), 2 deletions(-)
 
-	- None
-
- drivers/base/swnode.c | 42 ++++++++++++++++++++++++++++++------------
- 1 file changed, 30 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/base/swnode.c b/drivers/base/swnode.c
-index 4fcc1a6fb724..166c5cc73f39 100644
---- a/drivers/base/swnode.c
-+++ b/drivers/base/swnode.c
-@@ -692,7 +692,11 @@ swnode_register(const struct software_node *node, struct swnode *parent,
-  * software_node_register_nodes - Register an array of software nodes
-  * @nodes: Zero terminated array of software nodes to be registered
-  *
-- * Register multiple software nodes at once.
-+ * Register multiple software nodes at once. If any node in the array
-+ * has its .parent pointer set (which can only be to another software_node),
-+ * then its parent **must** have been registered before it is; either outside
-+ * of this function or by ordering the array such that parent comes before
-+ * child.
-  */
- int software_node_register_nodes(const struct software_node *nodes)
- {
-@@ -700,14 +704,23 @@ int software_node_register_nodes(const struct software_node *nodes)
- 	int i;
+diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+index e5f200e64993..076a7782b476 100644
+--- a/drivers/staging/media/hantro/hantro_drv.c
++++ b/drivers/staging/media/hantro/hantro_drv.c
+@@ -472,6 +472,7 @@ static const struct v4l2_file_operations hantro_fops = {
  
- 	for (i = 0; nodes[i].name; i++) {
--		ret = software_node_register(&nodes[i]);
--		if (ret) {
--			software_node_unregister_nodes(nodes);
--			return ret;
-+		const struct software_node *parent = nodes[i].parent;
-+
-+		if (parent && !software_node_to_swnode(parent)) {
-+			ret = -EINVAL;
-+			goto err_unregister_nodes;
- 		}
-+
-+		ret = software_node_register(&nodes[i]);
-+		if (ret)
-+			goto err_unregister_nodes;
- 	}
+ static const struct of_device_id of_hantro_match[] = {
+ #ifdef CONFIG_VIDEO_HANTRO_ROCKCHIP
++	{ .compatible = "rockchip,px30-vpu", .data = &px30_vpu_variant, },
+ 	{ .compatible = "rockchip,rk3399-vpu", .data = &rk3399_vpu_variant, },
+ 	{ .compatible = "rockchip,rk3328-vpu", .data = &rk3328_vpu_variant, },
+ 	{ .compatible = "rockchip,rk3288-vpu", .data = &rk3288_vpu_variant, },
+@@ -796,8 +797,8 @@ static int hantro_probe(struct platform_device *pdev)
+ 			return -ENXIO;
  
- 	return 0;
-+
-+err_unregister_nodes:
-+	software_node_unregister_nodes(nodes);
-+	return ret;
- }
- EXPORT_SYMBOL_GPL(software_node_register_nodes);
+ 		ret = devm_request_irq(vpu->dev, irq,
+-				       vpu->variant->irqs[i].handler, 0,
+-				       dev_name(vpu->dev), vpu);
++				       vpu->variant->irqs[i].handler,
++				       IRQF_SHARED, dev_name(vpu->dev), vpu);
+ 		if (ret) {
+ 			dev_err(vpu->dev, "Could not request %s IRQ.\n",
+ 				irq_name);
+diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
+index 34c9e4649a25..07f516fd7a2e 100644
+--- a/drivers/staging/media/hantro/hantro_hw.h
++++ b/drivers/staging/media/hantro/hantro_hw.h
+@@ -148,6 +148,7 @@ enum hantro_enc_fmt {
+ 	RK3288_VPU_ENC_FMT_UYVY422 = 3,
+ };
  
-@@ -715,18 +728,23 @@ EXPORT_SYMBOL_GPL(software_node_register_nodes);
-  * software_node_unregister_nodes - Unregister an array of software nodes
-  * @nodes: Zero terminated array of software nodes to be unregistered
-  *
-- * Unregister multiple software nodes at once.
-+ * Unregister multiple software nodes at once. If parent pointers are set up
-+ * in any of the software nodes then the array **must** be ordered such that
-+ * parents come before their children.
-  *
-- * NOTE: Be careful using this call if the nodes had parent pointers set up in
-- * them before registering.  If so, it is wiser to remove the nodes
-- * individually, in the correct order (child before parent) instead of relying
-- * on the sequential order of the list of nodes in the array.
-+ * NOTE: If you are uncertain whether the array is ordered such that
-+ * parents will be unregistered before their children, it is wiser to
-+ * remove the nodes individually, in the correct order (child before
-+ * parent).
-  */
- void software_node_unregister_nodes(const struct software_node *nodes)
- {
--	int i;
-+	unsigned int i = 0;
++extern const struct hantro_variant px30_vpu_variant;
+ extern const struct hantro_variant rk3399_vpu_variant;
+ extern const struct hantro_variant rk3328_vpu_variant;
+ extern const struct hantro_variant rk3288_vpu_variant;
+diff --git a/drivers/staging/media/hantro/rk3399_vpu_hw.c b/drivers/staging/media/hantro/rk3399_vpu_hw.c
+index 7a7962cf771e..4112f98baa60 100644
+--- a/drivers/staging/media/hantro/rk3399_vpu_hw.c
++++ b/drivers/staging/media/hantro/rk3399_vpu_hw.c
+@@ -220,3 +220,24 @@ const struct hantro_variant rk3328_vpu_variant = {
+ 	.clk_names = rk3399_clk_names,
+ 	.num_clocks = ARRAY_SIZE(rk3399_clk_names),
+ };
 +
-+	while (nodes[i].name)
-+		i++;
- 
--	for (i = 0; nodes[i].name; i++)
-+	while (i--)
- 		software_node_unregister(&nodes[i]);
- }
- EXPORT_SYMBOL_GPL(software_node_unregister_nodes);
++static const char * const px30_clk_names[] = {
++	"aclk", "hclk", "sclk"
++};
++
++const struct hantro_variant px30_vpu_variant = {
++	.enc_offset = 0x0,
++	.enc_fmts = rk3399_vpu_enc_fmts,
++	.num_enc_fmts = ARRAY_SIZE(rk3399_vpu_enc_fmts),
++	.dec_offset = 0x400,
++	.dec_fmts = rk3399_vpu_dec_fmts,
++	.num_dec_fmts = ARRAY_SIZE(rk3399_vpu_dec_fmts),
++	.codec = HANTRO_JPEG_ENCODER | HANTRO_MPEG2_DECODER |
++		 HANTRO_VP8_DECODER,
++	.codec_ops = rk3399_vpu_codec_ops,
++	.irqs = rk3399_irqs,
++	.num_irqs = ARRAY_SIZE(rk3399_irqs),
++	.init = rk3399_vpu_hw_init,
++	.clk_names = px30_clk_names,
++	.num_clocks = ARRAY_SIZE(px30_clk_names)
++};
 -- 
-2.25.1
+2.30.0
 
