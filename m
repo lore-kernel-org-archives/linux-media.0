@@ -2,59 +2,59 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6387EC433DB
-	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 10:48:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94D50C433DB
+	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 10:48:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 36B2F2313B
-	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 10:48:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 56C6C23142
+	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 10:48:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727730AbhAGKsP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Jan 2021 05:48:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50036 "EHLO
+        id S1727739AbhAGKsT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Jan 2021 05:48:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726151AbhAGKsP (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Jan 2021 05:48:15 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0131BC0612F4
-        for <linux-media@vger.kernel.org>; Thu,  7 Jan 2021 02:47:35 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id c124so4745746wma.5
-        for <linux-media@vger.kernel.org>; Thu, 07 Jan 2021 02:47:34 -0800 (PST)
+        with ESMTP id S1727733AbhAGKsT (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Jan 2021 05:48:19 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7C3C0612F6
+        for <linux-media@vger.kernel.org>; Thu,  7 Jan 2021 02:47:39 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id m5so5146772wrx.9
+        for <linux-media@vger.kernel.org>; Thu, 07 Jan 2021 02:47:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bS+vhAr9OyNDy63R+BmmS5C+XOX+43iUswKsMjwBylg=;
-        b=ti18d5XkLr6r5zd1gC5uzLgTDfUwFPHpHalX6H+JL92xleDu0Fg1/OFzUa7fovjW+h
-         eDO52hStBgUMXR/5yYR4CokBSeI6UNypd9WhOBsnBnbIdTc+rH8Utl2fKtYeYgvM7xVl
-         HsXZcHJqK/ShBXELSX4pwcxv423s/tJ5mzQXjsMfDbLxuIrinst+Fm3whkhbKuEHIzIv
-         KkVZ6iVVPjs/j5LE7YUX61MXbRTuB8MVWGxYt+XflxjQh4Ut6mqTQH15I+Nm+Iq4XgdP
-         LVqC5QEq0PMPjqqRqH6mjTNzb68nJCu74/Fe30w9IfGC3iHtsME0vu8Ejy/Ea+++Vtjn
-         0bXQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=HEF8U1LOFMDOS1nZx7wQJSKi4/nl2du1Hlm0oy+YxHI=;
+        b=xgm4666IVk3QgwOVfJ1Oks+VCUpbhpOFW3kY5vTqQ47Rrmtcir5GAJO8EtRwPSY+p3
+         W0YLCe+7b8PNaQIQuPvlKA5oWBg/eVUgPBsVkOlyJmiVcSQpQ0JsjHaZyJhflpunnSph
+         VjRJMoTnECOkltxG7WMOvHg9BeMZuOJ4wkeM0kedrRT6OOaJ6cx36DuJuV+La4Ly858O
+         xSauSEm/apLKUnwDGTPipWwNi1/Ov/YQf4MH9E31bdE3oNG/PZ4OwBFsOw+C6eau9Eif
+         bd/NlcoHgZ4qDfesckZAhYchWoX3psu5kuz0trro6zkXiKBNr+QtHzuLH1/PBCAKgcXj
+         UJLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bS+vhAr9OyNDy63R+BmmS5C+XOX+43iUswKsMjwBylg=;
-        b=mJCsRo3e2kz4fpT1lYuZXMyC3el0fYAG2B+avJ4rlv4d1fw7fZxDRxoZ4uwbfJ+ITh
-         YalAQ1smF4T0jWipOoFJ7MiiBed6KQpUsAa8EH84M2Pw4IXC08ttfE1mvg2TWJ3DA68r
-         2GBoi4vyVdCFLCu0DLj//+p903lmgGGG/h7CEVKbGNUBbA/MElkE5N3yi+RML05UYFS8
-         Mr12jtD8v3J/FwhrCco37Nptxx2tPX8ch6OecXPRR6u4kPfOAqFhWdse9WGkmYceSc1j
-         +k6B9KUnt//j3wYCPr/Gji7Y9snCyZxSd4j9JGk/oXA98laLwanVx9nnd9p8aPWqJlYT
-         Iwag==
-X-Gm-Message-State: AOAM5330GfOoUZ2hKxRKpBoQEXiTbWuJ+/n9nK6iopO1Nu2Rjhr9Le7/
-        McBgahEVyljDrlpBv3Jzy17Hzg==
-X-Google-Smtp-Source: ABdhPJyJZb+k2r1YITMPGd3KN7G/BAtSMF3WAwiTvWvYz6i73fIB/NY7/K339ZvFcMZp+j6V+bjAHQ==
-X-Received: by 2002:a7b:cd91:: with SMTP id y17mr7169355wmj.171.1610016453190;
-        Thu, 07 Jan 2021 02:47:33 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=HEF8U1LOFMDOS1nZx7wQJSKi4/nl2du1Hlm0oy+YxHI=;
+        b=ov3bwH6cfD0OJJe9DUvwl0MuySNbNnEmrXBIu6TWgfx11x4rhNck7dpxccRgNRBb/u
+         Ino65uTV4yXM5Hhz7BZD53EX7gW84diGXw/9AiNxyyY6iVmmpu89DSLgH8OkW3wyewgV
+         8LJTRW+MwLOb3i6SdvLK2oo5poUVKyHTcN/RXDNnSU5Uv2rR2BlH1n4gE5E+ibSPo1UQ
+         r4Pgy2q6qh0pH5HlV04jkrGex5uLVWu+eequ7SK5Bw+R4bWuAv6mxCJj+y6qSIxV33WI
+         umh6DhEKiq7sDgpM+HFhTg1zJpwi88eWJ2dXEbZHlvfLh9f3BTSGAfx4pP6ArdsFjZ4h
+         ejyA==
+X-Gm-Message-State: AOAM531OoB97BGyhS4xA3RksX74CAp86ZHePYdfYRQgfrhw7dCdE3ndZ
+        qnxR4i4whCwIEmE/561h3B6bYA==
+X-Google-Smtp-Source: ABdhPJy5l0lSs7me0aW9ay6GYyxXm+OAwYTvxXTZ9ndOvNCfjpaPzTzGSJ2TmsjHxLqzqMSsDaOvoA==
+X-Received: by 2002:adf:9d48:: with SMTP id o8mr8437704wre.408.1610016457896;
+        Thu, 07 Jan 2021 02:47:37 -0800 (PST)
 Received: from arch-thunder.local (a109-49-46-234.cpe.netcabo.pt. [109.49.46.234])
-        by smtp.gmail.com with ESMTPSA id o74sm7841449wme.36.2021.01.07.02.47.32
+        by smtp.gmail.com with ESMTPSA id o74sm7841449wme.36.2021.01.07.02.47.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jan 2021 02:47:32 -0800 (PST)
+        Thu, 07 Jan 2021 02:47:37 -0800 (PST)
 From:   Rui Miguel Silva <rui.silva@linaro.org>
 X-Google-Original-From: Rui Miguel Silva <rmfrfs@gmail.com>
 To:     sakari.ailus@linux.intel.com, Hans Verkuil <hverkuil@xs4all.nl>
@@ -62,10 +62,12 @@ Cc:     linux-media@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
         =?UTF-8?q?S=C3=A9bastien=20Szymanski?= 
         <sebastien.szymanski@armadeus.com>,
         Rui Miguel Silva <rmfrfs@gmail.com>
-Subject: [PATCH 0/2] media: im7: csi: fix csi for i.MX6UL/i.MX6ULL
-Date:   Thu,  7 Jan 2021 10:47:24 +0000
-Message-Id: <20210107104726.1294538-1-rmfrfs@gmail.com>
+Subject: [PATCH 2/2] media: imx7: csi: Fix pad link validation
+Date:   Thu,  7 Jan 2021 10:47:26 +0000
+Message-Id: <20210107104726.1294538-3-rmfrfs@gmail.com>
 X-Mailer: git-send-email 2.30.0
+In-Reply-To: <20210107104726.1294538-1-rmfrfs@gmail.com>
+References: <20210107104726.1294538-1-rmfrfs@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -73,29 +75,55 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fabio during the testing of i.MX6UL using a sensor detected a regression in the
-imx7 CSI driver which have the same IP but do not have a CSI MUX like the
-others platforms that share the same block.
+We can not make the assumption that the bound subdev is always a CSI
+mux, in i.MX6UL/i.MX6ULL that is not the case. So, just get the entity
+selected by source directly upstream from the CSI.
 
-The commit:
-86e02d07871c ("media: imx5/6/7: csi: Mark a bound video mux as a CSI mux")
+Fixes: 86e02d07871c ("media: imx5/6/7: csi: Mark a bound video mux as a CSI mux")
+Reported-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Rui Miguel Silva <rmfrfs@gmail.com>
+Tested-by: Fabio Estevam <festevam@gmail.com>
+Tested-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
+---
+ drivers/staging/media/imx/imx7-media-csi.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
-made the assumption that this would not happen. This series make it work again
-for the i.MX6UL/i.MX6ULL platforms.
-
-Cheers,
-   Rui
-
-
-Fabio Estevam (1):
-  media: imx7: csi: Fix regression for parallel cameras on i.MX6UL
-
-Rui Miguel Silva (1):
-  media: imx7: csi: Fix pad link validation
-
- drivers/staging/media/imx/imx7-media-csi.c | 27 +++++++++++++++-------
- 1 file changed, 19 insertions(+), 8 deletions(-)
-
+diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
+index 31e36168f9d0..ac52b1daf991 100644
+--- a/drivers/staging/media/imx/imx7-media-csi.c
++++ b/drivers/staging/media/imx/imx7-media-csi.c
+@@ -499,6 +499,7 @@ static int imx7_csi_pad_link_validate(struct v4l2_subdev *sd,
+ 				      struct v4l2_subdev_format *sink_fmt)
+ {
+ 	struct imx7_csi *csi = v4l2_get_subdevdata(sd);
++	struct media_entity *src;
+ 	struct media_pad *pad;
+ 	int ret;
+ 
+@@ -509,11 +510,21 @@ static int imx7_csi_pad_link_validate(struct v4l2_subdev *sd,
+ 	if (!csi->src_sd)
+ 		return -EPIPE;
+ 
++	src = &csi->src_sd->entity;
++
++	/*
++	 * if the source is neither a CSI MUX or CSI-2 get the one directly
++	 * upstream from this CSI
++	 */
++	if (src->function != MEDIA_ENT_F_VID_IF_BRIDGE &&
++	    src->function != MEDIA_ENT_F_VID_MUX)
++		src = &csi->sd.entity;
++
+ 	/*
+-	 * find the entity that is selected by the CSI mux. This is needed
++	 * find the entity that is selected by the source. This is needed
+ 	 * to distinguish between a parallel or CSI-2 pipeline.
+ 	 */
+-	pad = imx_media_pipeline_pad(&csi->src_sd->entity, 0, 0, true);
++	pad = imx_media_pipeline_pad(src, 0, 0, true);
+ 	if (!pad)
+ 		return -ENODEV;
+ 
 -- 
 2.30.0
 
