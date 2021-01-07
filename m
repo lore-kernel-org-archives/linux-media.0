@@ -2,85 +2,98 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B0C3C433DB
-	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 15:05:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44E1FC433DB
+	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 15:48:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9F1E422B2B
-	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 15:05:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0844223428
+	for <linux-media@archiver.kernel.org>; Thu,  7 Jan 2021 15:48:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727213AbhAGPFe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Jan 2021 10:05:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33704 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726319AbhAGPFd (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Jan 2021 10:05:33 -0500
-Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA28C0612F4
-        for <linux-media@vger.kernel.org>; Thu,  7 Jan 2021 07:04:53 -0800 (PST)
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 96B18C6378; Thu,  7 Jan 2021 15:04:49 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
-        t=1610031889; bh=qzhj+WHJBAQUUVGfftvBVYLo2ZV+Gb02Ou0iytKdJe4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kpg0aYmXdklf46xKq85X2PohjdzkWGuJP45t64qqLw5fo93goAdF3beL5uUV9Nko4
-         +fb58MHINQLdS+VZP1KuZ9JQLhGHHVcXkmT4nciIbG6zi0iJoARswF0ytTmj6klNta
-         MM/v9WS13+H/zq+UEX/lQAueMzraGf+xSHzBS2FVdSR4lCgtvcIvvDsrIoUuvyKQQx
-         VAuPN1pw6cW0eWvaEfHrLaQCHLaa162FvS6lKrIyUBhBwhuXdnsiTyC3kAzmlzGCIN
-         HpZwWqKWkLU/w/b+jE3cenbFYFct77HpCmkmcKDXxrsRhYMFTtH9PASMX9C9Vt7des
-         RRsFW65IBXnBQ==
-Date:   Thu, 7 Jan 2021 15:04:49 +0000
-From:   Sean Young <sean@mess.org>
-To:     tom@tomdaley.org
-Cc:     linux-media@vger.kernel.org
-Subject: Re: lirc serial_ir homebrew breakage
-Message-ID: <20210107150449.GA19336@gofer.mess.org>
-References: <4d2b514731852e392be29048ff2e2cf3@tomdaley.org>
- <20210107102557.GA16279@gofer.mess.org>
- <3449ade8bbd996a34b2b73f57cd2757b@tomdaley.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3449ade8bbd996a34b2b73f57cd2757b@tomdaley.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1728055AbhAGPry (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Jan 2021 10:47:54 -0500
+Received: from mail-il1-f172.google.com ([209.85.166.172]:38951 "EHLO
+        mail-il1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726165AbhAGPrx (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Jan 2021 10:47:53 -0500
+Received: by mail-il1-f172.google.com with SMTP id q1so7143965ilt.6;
+        Thu, 07 Jan 2021 07:47:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=EFvubgNg2DnmOPkDfoaERPy8UEjZfnIKtkw4s3eQ4y8=;
+        b=sG216gqm6cWxCBpp/Fe2MgfVhF6mNyWyc6ZAP7+c/GoELLk9MZA1uLrimTEjLWekdN
+         Ys5FLgKGYbhy5ZWnOEgYlxWy/bRZNkYC0GwFz5I6CrO3FJkRTcSqF50e91Q4dYQYf6uV
+         NeSQg+BTqRSuOpRFphDmPTokSjVa1QLYIYmKPeouW5/GCw3bhN3Z8kxqA/Z0A8x6u8F9
+         3L+GWCa/K0QuGT5XufNxsST0CywuCs1ogv1Cqhmw79c/J2wPjZJd7/3Rdg7WV0w59nZM
+         ggecY4kTnNiLHqmqYwGc69nm6bK8abM5kcG7RDw+6ZFu/2XIhEzy0XumhzT4uXmW+zpt
+         fdzw==
+X-Gm-Message-State: AOAM533vc2/+k1RZ9G8Ijfmul3pYL1InbUiJ8/YU4s979BDzS6iBPOgX
+        jztodFvGvKV1J/GshyF0kHWUHZcnmA==
+X-Google-Smtp-Source: ABdhPJzWIw7GRMQcaSe+m/tRZb/B+liDGhOIlES2tHNkuZBjMlXU4n/TvVLDxcrPd++qzPI4GJCjSw==
+X-Received: by 2002:a92:cccb:: with SMTP id u11mr9488057ilq.44.1610034432686;
+        Thu, 07 Jan 2021 07:47:12 -0800 (PST)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id x3sm3510521ila.29.2021.01.07.07.47.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jan 2021 07:47:11 -0800 (PST)
+Received: (nullmailer pid 907945 invoked by uid 1000);
+        Thu, 07 Jan 2021 15:47:05 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Jacob Chen <jacob-chen@iotwrt.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-rockchip@lists.infradead.org,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+In-Reply-To: <20210107134101.195426-4-paul.kocialkowski@bootlin.com>
+References: <20210107134101.195426-1-paul.kocialkowski@bootlin.com> <20210107134101.195426-4-paul.kocialkowski@bootlin.com>
+Subject: Re: [PATCH 3/5] dt-bindings: media: rockchip-vpu: Add PX30 compatible
+Date:   Thu, 07 Jan 2021 08:47:05 -0700
+Message-Id: <1610034425.207068.907944.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Jan 07, 2021 at 07:47:02AM -0700, tom@tomdaley.org wrote:
-> On 2021-01-07 03:25, Sean Young wrote:
-> > One issue has already been found in this change, which hasn't been
-> > upstreamed
-> > yet:
-> > 
-> > https://patchwork.linuxtv.org/project/linux-media/patch/20210105093023.5212-1-hias@horus.com/
-> > 
-> > Would you mind testing this patch out please?
-> > 
-> > Admittedly I'm not convinced that this is the problem though. I'm not
-> > sure
-> > what is; the function frbwrite() contains two if statements to filter
-> > out
-> > noise, maybe something is wrong there. You could try by commenting those
-> > two if statements out and see if there is a problem there.
-> > 
-> > Your help is appreciated!
-> > 
-> > Thanks,
-> > 
-> > Sean
+On Thu, 07 Jan 2021 14:40:59 +0100, Paul Kocialkowski wrote:
+> The Rockchip PX30 SoC has a Hantro VPU that features a decoder (VDPU2)
+> and an encoder (VEPU2). It is similar to the RK3399's VPU but takes an
+> extra clock (SCLK).
 > 
-> Hi Sean,
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> ---
+>  .../bindings/media/rockchip-vpu.yaml          | 25 +++++++++++++------
+>  1 file changed, 17 insertions(+), 8 deletions(-)
 > 
-> The patch fixes the problem I was seeing.  I have tested both receive and
-> transmit on my homebrew IR, both are working.
 
-Perfect, thank you very much. The patch should make its way into the stable
-tree (at some point).
+My bot found errors running 'make dt_binding_check' on your patch:
 
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/media/rockchip-vpu.yaml:23:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
+./Documentation/devicetree/bindings/media/rockchip-vpu.yaml:47:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
+./Documentation/devicetree/bindings/media/rockchip-vpu.yaml:50:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
 
-Sean
+dtschema/dtc warnings/errors:
+
+See https://patchwork.ozlabs.org/patch/1423300
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
